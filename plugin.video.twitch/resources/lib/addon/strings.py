@@ -127,5 +127,15 @@ STRINGS = {
     'revoke_confirmation': 30228,
     'token_revoked': 30229,
     'token_updated': 30230,
-    'started_streaming': 30231
+    'started_streaming': 30231,
+    'new_search': 30235,
+    'clear_search_history_': 30237,
+    'remove_from_search_history_': 30238,
+    'remove_': 30239,
+    'clear_search_history': 30240,
+    'search_history_cleared': 30241,
+    'removed_from_search_history': 30242,
+    'confirm_file_delete_': 30251,
+    'delete_succeeded_': 30252,
+    'delete_failed_': 30253
 }

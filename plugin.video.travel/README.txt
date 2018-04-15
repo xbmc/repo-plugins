@@ -3,6 +3,7 @@ plugin.video.travel
 
 XBMC Addon for Travel Network Video website
 
+Version 3.0.8 website change
 Version 3.0.7 website change
 Version 3.0.6 website change
 Version 3.0.5 website change

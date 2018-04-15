@@ -39,7 +39,7 @@
     <!-- General -->
     <category label="30076">
         <!-- Video Quality -->
-        <setting id="video_quality" type="enum" label="30040" lvalues="30102|30136|30201" default="0"/>
+        <setting id="video_quality" type="enum" label="30040" lvalues="30102|30136|30201|30254" default="0"/>
         <setting id="bandwidth" type="number" label="30201" default="2500000" enable="eq(-1,2)" visible="eq(-1,2)"/>
         <setting id="video_support_ia_builtin" type="bool" label="" visible="false" enable="true" default="false"/>
         <setting id="video_support_ia_addon" type="bool" label="" visible="false" enable="true" default="false"/>
@@ -53,6 +53,7 @@
         <setting id="vodcast_highlight" type="enum" label="30222" values="aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgrey|lightgreen|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|none|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen" default="79"/>
 
         <setting label="30123" type="slider" id="items_per_page" default="25" range="10,100" option="int"/>
+        <setting label="30236" type="slider" id="search_history_size" default="25" range="0,200" option="int"/>
 
         <setting label="30210" id="live_reconnect" type="bool" default="false"/>
 
@@ -65,6 +66,10 @@
         <setting label="30090" type="lsep"/>
         <setting label="30189" id="add_language" type="action" action="RunPlugin(plugin://$ID/?mode=edit_languages&amp;action=add)"/>
         <setting label="30190" id="remove_language" type="action" action="RunPlugin(plugin://$ID/?mode=edit_languages&amp;action=remove)"/>
+
+        <setting label="30120" type="lsep"/>
+        <setting label="30234" id="refresh_cache" type="bool" default="false"/>
+        <setting label="30121" type="slider" id="cache_expire_time" default="3" range="0,60" option="int"/>
     </category>
     <!-- Lists -->
     <category label="30167">
@@ -113,11 +118,17 @@
         <setting id="notify_refresh" type="bool" label="30087" default="true"
                  enable="eq(-6,true)" visible="eq(-6,true)"/>
     </category>
-    <!-- Cache -->
-    <category label="30120">
-        <setting label="30234" id="refresh_cache" type="bool" default="false"/>
-        <setting label="30121" type="slider" id="cache_expire_time" default="3" range="0,60" option="int"/>
+    <!-- Maintenance -->
+    <category label="30243">
+        <setting label="30120" type="lsep"/>
         <setting label="30122" id="reset_cache" type="action" action="RunPlugin(plugin://$ID/?mode=reset_cache)"/>
+        <setting label="30244" type="lsep"/>
+        <setting label="30245" id="delete_streams_search" type="action" action="RunPlugin(plugin://$ID/?mode=maintain&amp;sub_mode=delete&amp;file_type=streams_search)"/>
+        <setting label="30246" id="delete_channels_search" type="action" action="RunPlugin(plugin://$ID/?mode=maintain&amp;sub_mode=delete&amp;file_type=channels_search)"/>
+        <setting label="30247" id="delete_games_search" type="action" action="RunPlugin(plugin://$ID/?mode=maintain&amp;sub_mode=delete&amp;file_type=games_search)"/>
+        <setting label="30248" id="delete_idurl_search" type="action" action="RunPlugin(plugin://$ID/?mode=maintain&amp;sub_mode=delete&amp;file_type=id_url_search)"/>
+        <setting label="30249" type="lsep"/>
+        <setting label="30250" id="delete_storage_json" type="action" action="RunPlugin(plugin://$ID/?mode=maintain&amp;sub_mode=delete&amp;file_type=storage_json)"/>
     </category>
     <!-- Developer -->
     <category label="30118">

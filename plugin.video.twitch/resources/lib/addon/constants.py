@@ -64,7 +64,11 @@ MODES = __enum(
     CONFIGUREIA='configure_ia',
     REVOKETOKEN='revoke_token',
     UPDATETOKEN='update_token',
-    REFRESH='refresh'
+    REFRESH='refresh',
+    LISTSEARCH='list_search',
+    CLEARSEARCHHISTORY='clear_search_history',
+    REMOVESEARCHHISTORY='remove_search_history',
+    MAINTAIN='maintain'
 )
 
 LINE_LENGTH = 60

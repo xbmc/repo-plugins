@@ -162,16 +162,64 @@ def browse():
 @error_handler
 def search():
     kodi.set_view('files', set_sort=False)
+    history_size = utils.get_search_history_size()
+    use_history = history_size > 0
+    if use_history:
+        context_menu = list()
+        context_menu.extend(menu_items.clear_previews())
+        context_menu.extend(menu_items.clear_search_history('streams', do_refresh=False))
+        kodi.create_item({'label': i18n('streams'), 'path': {'mode': MODES.LISTSEARCH, 'content': 'streams'}, 'context_menu': context_menu,
+                          'info': {'plot': '%s - %s' % (i18n('search'), i18n('streams'))}})
+        context_menu = list()
+        context_menu.extend(menu_items.clear_search_history('channels', do_refresh=False))
+        kodi.create_item({'label': i18n('channels'), 'path': {'mode': MODES.LISTSEARCH, 'content': 'channels'}, 'context_menu': context_menu,
+                          'info': {'plot': '%s - %s' % (i18n('search'), i18n('channels'))}})
+        context_menu = list()
+        context_menu.extend(menu_items.clear_search_history('games', do_refresh=False))
+        kodi.create_item({'label': i18n('games'), 'path': {'mode': MODES.LISTSEARCH, 'content': 'games'}, 'context_menu': context_menu,
+                          'info': {'plot': '%s - %s' % (i18n('search'), i18n('games'))}})
+        context_menu = list()
+        context_menu.extend(menu_items.clear_search_history('id_url', do_refresh=False))
+        kodi.create_item({'label': i18n('video_id_url'), 'path': {'mode': MODES.LISTSEARCH, 'content': 'id_url'}, 'context_menu': context_menu,
+                          'info': {'plot': '%s - %s[CR]%s' % (i18n('search'), i18n('video_id_url'), i18n('search_id_url_description'))}})
+    else:
+        context_menu = list()
+        context_menu.extend(menu_items.clear_previews())
+        kodi.create_item({'label': i18n('streams'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'streams'}, 'context_menu': context_menu,
+                          'info': {'plot': '%s - %s' % (i18n('search'), i18n('streams'))}})
+        kodi.create_item({'label': i18n('channels'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'channels'},
+                          'info': {'plot': '%s - %s' % (i18n('search'), i18n('channels'))}})
+        kodi.create_item({'label': i18n('games'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'games'},
+                          'info': {'plot': '%s - %s' % (i18n('search'), i18n('games'))}})
+        kodi.create_item({'label': i18n('video_id_url'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'id_url'},
+                          'info': {'plot': '%s - %s[CR]%s' % (i18n('search'), i18n('video_id_url'), i18n('search_id_url_description'))}})
+
+    kodi.end_of_directory(cache_to_disc=True)
+
+
+@dispatcher.register(MODES.LISTSEARCH, args=['content'])
+@error_handler
+def list_search(content):
+    kodi.set_view('files', set_sort=False)
     context_menu = list()
-    context_menu.extend(menu_items.clear_previews())
-    kodi.create_item({'label': i18n('streams'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'streams'}, 'context_menu': context_menu,
-                      'info': {'plot': '%s - %s' % (i18n('search'), i18n('streams'))}})
-    kodi.create_item({'label': i18n('channels'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'channels'},
-                      'info': {'plot': '%s - %s' % (i18n('search'), i18n('channels'))}})
-    kodi.create_item({'label': i18n('games'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'games'},
-                      'info': {'plot': '%s - %s' % (i18n('search'), i18n('games'))}})
-    kodi.create_item({'label': i18n('video_id_url'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'id_url'},
-                      'info': {'plot': '%s - %s[CR]%s' % (i18n('search'), i18n('video_id_url'), i18n('search_id_url_description'))}})
+    if content == 'streams':
+        context_menu.extend(menu_items.clear_previews())
+    context_menu.extend(menu_items.clear_search_history(content, do_refresh=True))
+    kodi.create_item({'label': '[B]%s[/B]' % i18n('new_search'), 'path': {'mode': MODES.NEWSEARCH, 'content': content},
+                      'info': {'plot': i18n('new_search')}, 'context_menu': context_menu})
+    history = utils.get_search_history(content)
+    history_items = list()
+    if history:
+        history_items = history.list()
+    if len(history_items) > 0:
+        for item in history_items:
+            context_menu = list()
+            if content == 'streams':
+                context_menu.extend(menu_items.clear_previews())
+            context_menu.extend(menu_items.clear_search_history(content, do_refresh=True))
+            context_menu.extend(menu_items.remove_search_history(content, item, do_refresh=True))
+            kodi.create_item({'label': item, 'path': {'mode': MODES.SEARCHRESULTS, 'content': content, 'query': item},
+                              'info': {'plot': item}, 'context_menu': context_menu})
     kodi.end_of_directory(cache_to_disc=True)
 
 
@@ -193,56 +241,68 @@ def new_search(content):
 @dispatcher.register(MODES.SEARCHRESULTS, args=['content', 'query'], kwargs=['index'])
 @error_handler
 def search_results(content, query, index=0):
+    history_size = utils.get_search_history_size()
+    use_history = history_size > 0
     if content == 'streams':
         utils.refresh_previews()
         kodi.set_view('videos', set_sort=True)
         index, offset, limit = utils.calculate_pagination_values(index)
         results = twitch.get_stream_search(search_query=query, offset=offset, limit=limit)
         if (results[Keys.TOTAL] > 0) and (Keys.STREAMS in results):
+            if use_history:
+                history = utils.get_search_history(content)
+                if history:
+                    history.update(query)
             for stream in results[Keys.STREAMS]:
                 kodi.create_item(converter.stream_to_listitem(stream))
             if results[Keys.TOTAL] > (offset + limit):
                 kodi.create_item(utils.link_to_next_page({'mode': MODES.SEARCHRESULTS, 'content': content, 'query': query, 'index': index}))
-            kodi.end_of_directory()
-        else:
-            kodi.update_container(kodi.get_plugin_url({'mode': MODES.SEARCH}))
+        kodi.end_of_directory()
     elif content == 'channels':
         kodi.set_view('files', set_sort=False)
         index, offset, limit = utils.calculate_pagination_values(index)
         results = twitch.get_channel_search(search_query=query, offset=offset, limit=limit)
         if (results[Keys.TOTAL] > 0) and (Keys.CHANNELS in results):
+            if use_history:
+                history = utils.get_search_history(content)
+                if history:
+                    history.update(query)
             for channel in results[Keys.CHANNELS]:
                 kodi.create_item(converter.channel_to_listitem(channel))
             if results[Keys.TOTAL] > (offset + limit):
                 kodi.create_item(utils.link_to_next_page({'mode': MODES.SEARCHRESULTS, 'content': content, 'query': query, 'index': index}))
-            kodi.end_of_directory()
-        else:
-            kodi.update_container(kodi.get_plugin_url({'mode': MODES.SEARCH}))
+        kodi.end_of_directory()
     elif content == 'games':
         kodi.set_view('files', set_sort=False)
         results = twitch.get_game_search(search_query=query)
         if (Keys.GAMES in results) and (results[Keys.GAMES]):
+            if use_history:
+                history = utils.get_search_history(content)
+                if history:
+                    history.update(query)
             for game in results[Keys.GAMES]:
                 kodi.create_item(converter.game_to_listitem(game))
-            kodi.end_of_directory()
-        else:
-            kodi.update_container(kodi.get_plugin_url({'mode': MODES.SEARCH}))
+        kodi.end_of_directory()
     elif content == 'id_url':
         kodi.set_view('videos', set_sort=True)
         video_id, seek_time = utils.extract_video(query)
-        results = twitch.get_video_by_id(video_id)
-        if video_id.startswith('a') or video_id.startswith('c') or video_id.startswith('v'):
-            window = kodi.Window(10000)
-            if seek_time > 0:
-                window.setProperty(kodi.get_id() + '-_seek', '%s,%d' % (video_id, seek_time))
-            else:
-                window.clearProperty(kodi.get_id() + '-_seek')
-            kodi.create_item(converter.video_list_to_listitem(results))
-            kodi.end_of_directory()
-        else:
-            kodi.update_container(kodi.get_plugin_url({'mode': MODES.SEARCH}))
-    else:
-        kodi.update_container(kodi.get_plugin_url({'mode': MODES.SEARCH}))
+        try:
+            results = twitch.get_video_by_id(video_id)
+        except TwitchException:
+            results = None
+        if results:
+            if video_id.startswith('a') or video_id.startswith('c') or video_id.startswith('v'):
+                if use_history:
+                    history = utils.get_search_history(content)
+                    if history:
+                        history.update(query)
+                window = kodi.Window(10000)
+                if seek_time > 0:
+                    window.setProperty(kodi.get_id() + '-_seek', '%s,%d' % (video_id, seek_time))
+                else:
+                    window.clearProperty(kodi.get_id() + '-_seek')
+                kodi.create_item(converter.video_list_to_listitem(results))
+        kodi.end_of_directory()
 
 
 @dispatcher.register(MODES.FOLLOWING)
@@ -1197,9 +1257,36 @@ def clear_list(list_type, list_name):
             kodi.notify(msg=i18n('cleared_list') % (list_type, list_name), sound=False)
 
 
+@dispatcher.register(MODES.REMOVESEARCHHISTORY, args=['search_type', 'query'], kwargs=['refresh'])
+@error_handler
+def remove_search_history(search_type, query, refresh=True):
+    query_label = '\'[B]%s[/B]\'' % query
+    confirmed = kodi.Dialog().yesno(i18n('confirm'), i18n('remove_from_search_history_') % query_label)
+    if confirmed:
+        history = utils.get_search_history(search_type)
+        if history:
+            history.remove(query)
+            kodi.notify(msg=i18n('removed_from_search_history') % query_label, sound=False)
+            if refresh:
+                kodi.refresh_container()
+
+
+@dispatcher.register(MODES.CLEARSEARCHHISTORY, args=['search_type'], kwargs=['refresh'])
+@error_handler
+def clear_search_history(search_type, refresh=False):
+    confirmed = kodi.Dialog().yesno(i18n('confirm'), i18n('clear_search_history_'))
+    if confirmed:
+        history = utils.get_search_history(search_type)
+        if history:
+            history.clear()
+            kodi.notify(msg=i18n('search_history_cleared'), sound=False)
+            if refresh:
+                kodi.refresh_container()
+
+
 @dispatcher.register(MODES.REFRESH)
 @error_handler
-def refresh():
+def do_refresh():
     do_cache_reset = kodi.get_setting('refresh_cache') == 'true'
     if do_cache_reset:
         result = cache.reset_cache()
@@ -1291,6 +1378,34 @@ def revoke_token():
 def update_token(oauth_token):
     kodi.set_setting('oauth_token', oauth_token)
     kodi.notify(msg=i18n('token_updated'))
+
+
+@dispatcher.register(MODES.MAINTAIN, args=['sub_mode', 'file_type'])
+@error_handler
+def maintain(sub_mode, file_type):
+    shortname = None
+    filename = None
+    if sub_mode == 'delete':
+        if file_type.endswith('_search'):
+            if file_type in ['streams_search', 'channels_search', 'games_search', 'id_url_search']:
+                path = 'special://profile/addon_data/plugin.video.twitch/search/'
+                shortname = file_type + '.sqlite'
+                filename = kodi.translate_path(path + shortname)
+        elif file_type.endswith('_json'):
+            if file_type == 'storage_json':
+                path = 'special://profile/addon_data/plugin.video.twitch/'
+                shortname = 'storage.json'
+                filename = kodi.translate_path(path + shortname)
+
+    if filename and shortname:
+        shortname = '\'[B]' + shortname + '[/B]\''
+        confirmed = kodi.Dialog().yesno(i18n('confirm'), i18n('confirm_file_delete_') % shortname)
+        if confirmed:
+            result = kodi.delete_file(filename)
+            if result:
+                kodi.notify(msg=i18n('delete_succeeded_') % shortname, sound=False)
+            else:
+                kodi.notify(msg=i18n('delete_failed_') % shortname, sound=False)
 
 
 def run(argv=None):

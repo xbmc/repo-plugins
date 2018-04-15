@@ -278,7 +278,7 @@ class JsonListItemConverter(object):
         logo = channel.get(Keys.LOGO) if channel.get(Keys.LOGO) else Images.VIDEOTHUMB
         image = preview if preview else logo
         title = self.get_title_for_stream(stream)
-        if stream.get(Keys.STREAM_TYPE) == 'watch_party':
+        if stream.get(Keys.STREAM_TYPE) != 'live':
             color = get_vodcast_color()
             title = u'[COLOR={color}]{title}[/COLOR]'.format(title=title, color=color)
         info = self.get_plot_for_stream(stream)
@@ -642,6 +642,7 @@ class JsonListItemConverter(object):
             source = video_quality == '0'
             ask = video_quality == '1'
             bandwidth = video_quality == '2'
+            adaptive = video_quality == '3'
             try:
                 bandwidth_value = int(kodi.get_setting('bandwidth'))
             except:
@@ -653,7 +654,11 @@ class JsonListItemConverter(object):
             if ask:
                 return self.select_video_for_quality(videos)
 
-            if source:
+            if adaptive:
+                for video in videos:
+                    if 'hls' in video['id']:
+                        return video
+            elif source:
                 for video in videos:
                     if 'chunked' in video['id']:
                         return video

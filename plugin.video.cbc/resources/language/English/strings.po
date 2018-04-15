@@ -1,70 +1,41 @@
 # Kodi Media Center language file
-# Addon Name: CBC Canada
+# Addon Name: CBC
 # Addon id: plugin.video.cbc
-# Addon Provider: t1m
+# Addon Provider: micahg
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC Addons\n"
-"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Kodi Translation Team\n"
-"Language-Team: Amharic (http://www.transifex.com/projects/p/xbmc-addons/language/am/)\n"
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
+"POT-Creation-Date: 2018-02-23 12:00-0500\n"
+"PO-Revision-Date: 2018-02-23 12:00-0500\n"
+"Last-Translator: micahg\n"
+"Language-Team: en_CA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: am\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-
-msgctxt "#30012"
-msgid "Meta Data Cache"
+msgctxt "#30001"
+msgid "Authorizing Device"
 msgstr ""
 
-msgctxt "#30013"
-msgid "Enable Metadata Cache"
+msgctxt "#30002"
+msgid "Authorizatoin Failed"
 msgstr ""
 
-msgctxt "#30014"
-msgid "Reset Metadata Cache"
+msgctxt "#30003"
+msgid "Retrieving show list"
 msgstr ""
 
-msgctxt "#30040"
-msgid "Metadata"
+msgctxt "#30004"
+msgid "Live Channels"
 msgstr ""
 
-msgctxt "#30041"
-msgid "Initialize Metadata Next Start"
+msgctxt "#30005"
+msgid "Live Programs"
 msgstr ""
 
-msgctxt "#30042"
-msgid "Initializing ...."
-msgstr ""
-
-msgctxt "#30070"
-msgid "Proxy IP"
-msgstr ""
-
-msgctxt "#30071"
-msgid "Port"
-msgstr ""
-
-msgctxt "#30072"
-msgid "Enable Proxy"
-msgstr ""
-
-msgctxt "#30073"
-msgid "User Name"
-msgstr ""
-
-msgctxt "#30074"
-msgid "Password"
-msgstr ""
-
-msgctxt "#30075"
-msgid "Proxy"
-msgstr ""
-
-msgctxt "#30101"
-msgid "Initializing ...."
+msgctxt "#30006"
+msgid "Shows"
 msgstr ""

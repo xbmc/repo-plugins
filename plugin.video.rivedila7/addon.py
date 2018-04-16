@@ -46,7 +46,7 @@ def show_root_menu():
     ''' Show the plugin root menu '''
     liStyle = xbmcgui.ListItem('[B]'+language(32002)+'[/B]')
     liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'direttalivela7.jpg'), 'fanart' : fanart_path })
-    addDirectoryItem({"mode": "diretta_live"},liStyle)
+    addDirectoryItem({"mode": "diretta_live"},liStyle, folder=False)
     liStyle = xbmcgui.ListItem('[B]'+language(32007)+'[/B]')
     liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'tgmeteo.jpg'), 'fanart' : fanart_path })
     addDirectoryItem({"mode": "tg_meteo"},liStyle)    
@@ -63,9 +63,11 @@ def show_root_menu():
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 
-def addDirectoryItem(parameters, li):
+def addDirectoryItem(parameters, li, folder=True):
     url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-    return xbmcplugin.addDirectoryItem(handle=handle, url=url, listitem=li, isFolder=True)
+    if not folder:
+        li.setProperty('isPlayable', 'true')
+    return xbmcplugin.addDirectoryItem(handle=handle, url=url, listitem=li, isFolder=folder)
 
 
 def addDirectoryItem_nodup(parameters, li, title):
@@ -113,8 +115,8 @@ def play_video(video,live):
         if xbmcgui.Dialog().ok(addon.getAddonInfo('name'), language(32005)):
             return
     else:
-        xbmc.Player().play(link_video, listitem)
-
+        listitem.setPath(link_video)
+        xbmcplugin.setResolvedUrl(handle, True, listitem)
 
 def rivedi(url, thumb):
     req = urllib2.Request(url,headers=headers) 
@@ -158,8 +160,10 @@ def rivedi_giorno():
             liStyle = xbmcgui.ListItem(orario+" "+nome)
             liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
             liStyle.setInfo('video', { 'plot': plot })
+            liStyle.setProperty('isPlayable', 'true')
             url2 = sys.argv[0] + '?' + urllib.urlencode({"mode": mode,"play": urll,"titolo": nome,"thumb":thumb,"plot":plot.encode('utf-8')})
             xbmcplugin.addDirectoryItem(handle=handle, url=url2, listitem=liStyle, isFolder=False)
+        xbmcplugin.setContent(handle, 'episodes')
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 
@@ -378,6 +382,7 @@ def video_programma():
                 liStyle = xbmcgui.ListItem('[B]'+language(32003)+'[/B]')
                 liStyle.setArt({ 'fanart' : fanart_path })
                 addDirectoryItem({"mode": mode,"link":link_global,"page":pagenum+1}, liStyle)
+            xbmcplugin.setContent(handle, 'episodes')
             xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
     #Tg La7d
     else:
@@ -409,7 +414,7 @@ def first_video(first, titolo, filtro):
         liStyle = xbmcgui.ListItem(titolo+data)
         liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
         liStyle.setInfo('video', { 'plot': plot })
-        addDirectoryItem({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle)
+        addDirectoryItem({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle, folder=False)
 
 
 def video_list(div, titolo, filtro):
@@ -421,7 +426,7 @@ def video_list(div, titolo, filtro):
         liStyle = xbmcgui.ListItem(titolo+data)
         liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
         liStyle.setInfo('video', { 'plot': plot })
-        addDirectoryItem({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle)
+        addDirectoryItem({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle, folder=False)
 
 
 def get_rows_video(video):
@@ -445,7 +450,7 @@ def get_rows_video_tgla7d(video):
         liStyle = xbmcgui.ListItem(titolo)
         liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
         liStyle.setInfo('video', { 'plot': plot })
-        addDirectoryItem({"mode": mode,"play": link,"titolo": titolo,"thumb":thumb,"plot":plot}, liStyle)              
+        addDirectoryItem({"mode": mode,"play": link,"titolo": titolo,"thumb":thumb,"plot":plot}, liStyle, folder=False)              
         
         
         

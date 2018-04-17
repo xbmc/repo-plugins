@@ -28,7 +28,7 @@ from menu_functions import displaySections, showMovieAlphaList, showGenreList, s
 from translation import i18n
 from server_sessions import showServerSessions
 from action_menu import ActionMenu
-from widgets import getWidgetContent, getWidgetContentCast, getWidgetContentSimilar, getWidgetContentNextUp, getSuggestions, getWidgetUrlContent, checkForNewContent
+from widgets import getWidgetContent, get_widget_content_cast, getWidgetContentSimilar, getWidgetContentNextUp, getSuggestions, getWidgetUrlContent, checkForNewContent
 import trakttokodi
 from item_functions import add_gui_item, extract_item_info, ItemDetails, add_context_menu
 
@@ -140,7 +140,7 @@ def mainEntryPoint():
     elif mode == "WIDGET_CONTENT":
         getWidgetContent(int(sys.argv[1]), params)
     elif mode == "WIDGET_CONTENT_CAST":
-        getWidgetContentCast(int(sys.argv[1]), params)
+        get_widget_content_cast(int(sys.argv[1]), params)
     elif mode == "WIDGET_CONTENT_SIMILAR":
         getWidgetContentSimilar(int(sys.argv[1]), params)
     elif mode == "WIDGET_CONTENT_NEXTUP":
@@ -446,6 +446,8 @@ def processDirectory(results, progress, params):
     display_options["addResumePercent"] = settings.getSetting("addResumePercent") == 'true'
     display_options["addSubtitleAvailable"] = settings.getSetting("addSubtitleAvailable") == 'true'
 
+    show_empty_folders = settings.getSetting("show_empty_folders") == 'true'
+
     item_count = len(results)
     current_item = 1
     first_season_item = None
@@ -499,7 +501,7 @@ def processDirectory(results, progress, params):
                      '&Fields={field_filters}' +
                      '&format=json')
 
-            if item["RecursiveItemCount"] != 0:
+            if show_empty_folders or item["RecursiveItemCount"] != 0:
                 dirItems.append(add_gui_item(u, item_details, display_options))
 
         elif item_details.item_type == "MusicArtist":
@@ -537,6 +539,7 @@ def processDirectory(results, progress, params):
 
         item_details = ItemDetails()
 
+        item_details.id = first_season_item.get("Id")
         item_details.name = i18n('all')
         item_details.art = getArt(first_season_item, server)
         item_details.play_count = played

@@ -1,3 +1,6 @@
+v2.5.33
+Fixed problem with episodes that are not available in standard format.
+
 v2.5.32
 Fixed pagination for Categories.
 

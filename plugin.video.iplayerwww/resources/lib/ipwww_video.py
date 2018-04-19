@@ -1321,9 +1321,9 @@ def AddAvailableStreamItem(name, url, iconimage, description):
         iconimage = stream_ids['image']
     if stream_ids['description']:
         description = stream_ids['description']
-    if stream_ids['stream_id_ad']:
+    if ((not stream_ids['stream_id_st']) or (ADDON.getSetting('search_ad') == 'true')) and stream_ids['stream_id_ad']:
         streams_all = ParseStreams(stream_ids['stream_id_ad'])
-    elif stream_ids['stream_id_sl']:
+    elif ((not stream_ids['stream_id_st']) or (ADDON.getSetting('search_signed') == 'true')) and stream_ids['stream_id_sl']:
         streams_all = ParseStreams(stream_ids['stream_id_sl'])
     else:
         streams_all = ParseStreams(stream_ids['stream_id_st'])
@@ -1388,12 +1388,14 @@ def GetAvailableStreams(name, url, iconimage, description):
         iconimage = stream_ids['image']
     if stream_ids['description']:
         description = stream_ids['description']
-    AddAvailableStreamsDirectory(name, stream_ids['stream_id_st'], iconimage, description)
+    # If we found standard streams, append them to the list.
+    if stream_ids['stream_id_st']:
+        AddAvailableStreamsDirectory(name, stream_ids['stream_id_st'], iconimage, description)
     # If we searched for Audio Described programmes and they have been found, append them to the list.
-    if stream_ids['stream_id_ad']:
+    if stream_ids['stream_id_ad'] or not stream_ids['stream_id_st']:
         AddAvailableStreamsDirectory(name + ' - (Audio Described)', stream_ids['stream_id_ad'], iconimage, description)
     # If we search for Signed programmes and they have been found, append them to the list.
-    if stream_ids['stream_id_sl']:
+    if stream_ids['stream_id_sl'] or not stream_ids['stream_id_st']:
         AddAvailableStreamsDirectory(name + ' - (Signed)', stream_ids['stream_id_sl'], iconimage, description)
 
 
@@ -1761,11 +1763,9 @@ def ScrapeAvailableStreams(url):
                (stream['kind'] == 'webcast')):
                 stream_id_st = stream['id']
             elif (stream['kind'] == 'signed'):
-                if (ADDON.getSetting('search_signed') == 'true'):
-                    stream_id_sl = stream['id']
+                stream_id_sl = stream['id']
             elif (stream['kind'] == 'audio-described'):
-                if (ADDON.getSetting('search_ad') == 'true'):
-                    stream_id_ad = stream['id']
+                stream_id_ad = stream['id']
             else:
                 print "iPlayer WWW warning: New stream kind: %s" % stream['kind']
                 stream_id_st = stream['id']

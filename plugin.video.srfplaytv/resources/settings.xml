@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30010">
+        <setting id="Prefer_HD" type="bool" label="30002" default="true" />
+        <setting id="Enable_Show_Segments" type="bool" label="30001" default="true" />
+        <setting id="Enable_Segments_Topics" type="bool" label="30003" default="false" />
+        <setting id="Extract_Subtitles" type="bool" label="30004" default="false" />
+        <setting id="Enable_Debugging" type="bool" label="30000" default="false" />
+    </category>
+    <category label="30011">
+        <setting label="30005" type="action" action="RunPlugin(plugin://plugin.video.srfplaytv?mode=19)" />        
+    </category>
+</settings>

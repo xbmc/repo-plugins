@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.srfplaytv" name="SRF Play TV" version="0.9.2" provider-name="Alexander Seiler">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.simplecache" version="1.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">SRF Play television video library</summary>
+    <summary lang="de">SRF Play Videobibliothek</summary>
+    <description lang="en_GB">SRF Play TV allows you to watch the content from the video library of Swiss Radio and Television (SRF).</description>
+    <description lang="de">Mit SRF Play TV können Sie den Inhalt der SRF Play Videobibliothek des Schweizer Fernsehens anschauen.</description>
+    <disclaimer lang="en_GB">Some content is geo-blocked and only available in Switzerland.</disclaimer>
+    <disclaimer lang="de">Einige Inhalte sind nur in der Schweiz verfügbar.</disclaimer>
+    <summery lang="de"></summery>
+    <language>de en</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <forum></forum>
+    <website>https://www.srf.ch/play/tv</website>
+    <email>seileralex@gmail.com</email>
+    <source>https://github.com/goggle/plugin.video.srfplaytv</source>
+    <news>v0.9.2 (2018-04-19)
+     - Move selection of favourite shows into the addon settings.
+     - Enable segments for most recent favourite shows.
+     
+    v0.9.1 (2018-04-18)
+     - Make building of show overview menu faster.
+
+    v0.9.0 (2018-04-18)
+    First release of the addon.
+     - Overview over all the shows.
+     - Manage list of favourite shows.
+     - List topics (newest and most clicked), trending and soon offline shows.
+     - List shows by date.
+     - Choose between SD and HD quality.
+     - Subtitle support.
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.png</fanart>
+        <banner></banner>
+        <clearlogo></clearlogo>
+        <screenshot>resources/screenshot-01.png</screenshot>
+        <screenshot>resources/screenshot-02.png</screenshot>
+        <screenshot>resources/screenshot-03.png</screenshot>
+        <screenshot>resources/screenshot-04.png</screenshot>
+        <screenshot>resources/screenshot-05.png</screenshot>
+    </assets>
+  </extension>
+</addon>

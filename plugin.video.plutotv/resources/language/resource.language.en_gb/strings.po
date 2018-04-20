@@ -55,3 +55,11 @@ msgstr ""
 msgctxt "#30010"
 msgid "Sign-In"
 msgstr ""
+
+msgctxt "#30011"
+msgid "/../../Users/*/AppData/Local/Packages/XBMCFoundation.Kodi_*"
+msgstr "
+
+msgctxt "#30012"
+msgid "/../../Program Files/WindowsApps/XBMCFoundation.Kodi_*"
+msgstr "

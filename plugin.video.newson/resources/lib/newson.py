@@ -41,8 +41,8 @@ TIMEOUT       = 30
 CONTENT_TYPE  = 'episodes'
 DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 BASE_API      = 'http://watchnewson.com/api/linear/channels'
-MENU          = [("Newscasts"  , '0', 0, False, {"thumb":NEWSART,"poster":NEWSART,"fanart":FANART,"icon":ICON,"logo":ICON}),
-                 ("Video Clips", '2', 2, False, {"thumb":CLIPART,"poster":CLIPART,"fanart":FANART,"icon":ICON,"logo":ICON})]
+MENU          = [(LANGUAGE(30002), '0', 0, False, {"thumb":NEWSART,"poster":NEWSART,"fanart":FANART,"icon":ICON,"logo":ICON}),
+                 (LANGUAGE(30003), '2', 2, False, {"thumb":CLIPART,"poster":CLIPART,"fanart":FANART,"icon":ICON,"logo":ICON})]
            
 def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == False and level != xbmc.LOGERROR: return
@@ -62,25 +62,27 @@ class NewsOn(object):
         
     def openURL(self, url):
         try:
-            cacheResponce = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
-            if not cacheResponce:
+            cacheResponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
+            if not cacheResponse:
                 request = urllib2.Request(url)
                 request.add_header('Accept-encoding', 'gzip')
                 request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
-                responce = urllib2.urlopen(request, timeout = TIMEOUT)
-                log(responce.headers['content-type'])
-                log(responce.headers['content-encoding'])
-                if responce.info().get('content-encoding') == 'gzip':
-                    buf = StringIO(responce.read())
+                response = urllib2.urlopen(request, timeout = TIMEOUT)
+                log(response.headers['content-type'])
+                log(response.headers['content-encoding'])
+                if response.info().get('content-encoding') == 'gzip':
+                    buf = StringIO(response.read())
                     f = gzip.GzipFile(fileobj=buf)
-                    results = json.loads(f.read())
-                else: results = json.load(responce)
-                responce.close()
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, results, expiration=datetime.timedelta(hours=1))
-            return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
-        except Exception as e: log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
-        return ''
+                    cacheResponse = f.read()
+                else: cacheResponse = response
+                response.close()
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheResponse, expiration=datetime.timedelta(hours=1))
+            if isinstance(cacheResponse, basestring): cacheResponse = json.loads(cacheResponse)
+            return cacheResponse
+        except Exception as e: 
+            log("openURL Failed! " + str(e), xbmc.LOGERROR)
+            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
+            return ''
         
         
     def mainMenu(self):
@@ -99,8 +101,10 @@ class NewsOn(object):
         state     = []
         stateLST  = []
         data = self.openURL(BASE_API)
-        if len(data) == 0: return
-        for channel in data: state.append(channel['config']['state'])
+        if len(data) == 0: return []
+        for channel in data: 
+            try: state.append(channel['config']['state'])
+            except: pass
         states = collections.Counter(state)
         for key, value in sorted(states.iteritems()): stateLST.append(("%s"%(key), key , '{}'))
         return stateLST
@@ -112,7 +116,9 @@ class NewsOn(object):
         data = self.openURL(BASE_API)
         if len(data) == 0: return
         for channel in data:
-            if state in channel['config']['state']:
+            try: states = channel['config']['state']
+            except: continue
+            if state in states:
                 chid   = channel['identifier']
                 title  = channel['title']
                 icon   = (channel['icon'] or ICON)
@@ -138,7 +144,9 @@ class NewsOn(object):
         data = self.openURL(BASE_API)
         if len(data) == 0: return
         for channel in data:
-            if state in channel['config']['state']:
+            try: states = channel['config']['state']
+            except: continue
+            if state in states:
                 chid   = channel['identifier']
                 title  = channel['title']
                 icon   = (channel['icon'] or ICON)
@@ -149,7 +157,7 @@ class NewsOn(object):
                     infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":ICON,"logo":ICON} 
                     self.addDir(label, vidURL, 4, infoLabels, infoArt)
 
-                    
+
     def parseclips(self, url):
         log('parseclips, url = ' + url)
         feed = feedparser.parse(url)

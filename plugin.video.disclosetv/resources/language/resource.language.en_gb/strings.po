@@ -27,3 +27,19 @@ msgstr ""
 msgctxt "#30002"
 msgid "Select Preferred Quality"
 msgstr ""
+
+msgctxt "#30003"
+msgid "Browse"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Browse Youtube"
+msgstr ""
+
+msgctxt "#30011"
+msgid "/../../Users/*/AppData/Local/Packages/XBMCFoundation.Kodi_*"
+msgstr "
+
+msgctxt "#30012"
+msgid "/../../Program Files/WindowsApps/XBMCFoundation.Kodi_*"
+msgstr "

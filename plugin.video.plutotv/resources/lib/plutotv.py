@@ -17,12 +17,11 @@
 # along with PlutoTV.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, net, re, traceback
+import os, sys, time, datetime, net, re, traceback, fnmatch, glob
 import urlparse, urllib, socket, json, collections
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
 
 from simplecache import SimpleCache
-from YDStreamExtractor import getVideoInfo
 
 # Plugin Info
 ADDON_ID      = 'plugin.video.plutotv'
@@ -41,23 +40,27 @@ CONTENT_TYPE = 'files'
 USER_EMAIL   = REAL_SETTINGS.getSetting('User_Email')
 PASSWORD     = REAL_SETTINGS.getSetting('User_Password')
 USER_REGION  = REAL_SETTINGS.getSetting("Select_Country")
+HIDE_PLUTO   = True
 FIT_REGION   = False if USER_REGION == 'US' else True
 DEBUG        = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 COOKIE_JAR   = xbmc.translatePath(os.path.join(SETTINGS_LOC, "cookiejar.lwp"))
 PTVL_RUN     = xbmcgui.Window(10000).getProperty('PseudoTVRunning') == 'True'
-HIDE_PLUTO   = True
 IGNORE_KEYS  = ['Pluto TV Device Promo 15s prod','Space Station 10s - Promo','Pluto TV Device Promo 15s prod','Exploding Logo 5s','Pluto TV 5 Minute Spot Promo','vibes promo 5s']
 YTURL        = 'plugin://plugin.video.youtube/play/?video_id='
 VMURL        = 'plugin://plugin.video.vimeo/play/?video_id='
 BASE_URL     = 'http://pluto.tv/'#'http://silo.pluto.tv/'
-BASE_API     = 'https://api.pluto.tv/v1'
-BASE_LINEUP  = 'https://api.pluto.tv/v1/channels.json'
-BASE_GUIDE   = 'https://api.pluto.tv/v1/timelines/%s.000Z/%s.000Z/matrix.json'
-BASE_CLIPS   = 'https://api.pluto.tv/v2/episodes/%s/clips.json'
+BASE_API     = 'https://api.pluto.tv'
+BASE_LINEUP  = BASE_API + '/v1/channels.json'
+BASE_GUIDE   = BASE_API + '/v1/timelines/%s.000Z/%s.000Z/matrix.json'
+LOGIN_URL    = BASE_API + '/v1/auth/local'
+BASE_CLIPS   = BASE_API + '/v2/episodes/%s/clips.json'
 PLUTO_MENU   = [("Browse Channels" , BASE_LINEUP, 0),
                 ("Browse OnDemand" , BASE_LINEUP, 1),
                 ("Channel Guide"   , BASE_LINEUP, 20)]
               
+def isUWP():
+    return len(fnmatch.filter(glob.glob(LANGUAGE(30011)),'*.*') + fnmatch.filter(glob.glob(LANGUAGE(30012)),'*.*')) > 0
+    
 def inputDialog(heading=ADDON_NAME, default='', key=xbmcgui.INPUT_ALPHANUM, opt=0, close=0):
     retval = xbmcgui.Dialog().input(heading, default, key, opt, close)
     if len(retval) > 0:
@@ -74,7 +77,6 @@ def busyDialog(percent=0, control=None):
 def yesnoDialog(str1, str2='', str3='', header=ADDON_NAME, yes='', no='', autoclose=0):
     return xbmcgui.Dialog().yesno(header, str1, str2, str3, no, yes, autoclose)
      
-
 def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == False and level != xbmc.LOGERROR: return
     if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
@@ -97,7 +99,7 @@ class PlutoTV():
         log('login')
         #ignore guest login
         if USER_EMAIL == LANGUAGE(30009): return
-            
+        
         if len(USER_EMAIL) > 0:
             header_dict               = {}
             header_dict['Accept']     = 'application/json, text/javascript, */*; q=0.01'
@@ -109,7 +111,7 @@ class PlutoTV():
             
             try: xbmcvfs.rmdir(COOKIE_JAR)
             except: pass
-                
+
             if xbmcvfs.exists(COOKIE_JAR) == False:
                 try:
                     xbmcvfs.mkdirs(SETTINGS_LOC)
@@ -120,7 +122,7 @@ class PlutoTV():
             form_data = ({'optIn': 'true', 'password': PASSWORD,'synced': 'false', 'userIdentity': USER_EMAIL})
             self.net.set_cookies(COOKIE_JAR)
             try:
-                loginlink = json.loads(self.net.http_POST(BASE_API + '/auth/local', form_data=form_data, headers=header_dict).content.encode("utf-8").rstrip())
+                loginlink = json.loads(self.net.http_POST(LOGIN_URL, form_data=form_data, headers=header_dict).content.encode("utf-8").rstrip())
                 if loginlink and loginlink['email'].lower() == USER_EMAIL.lower():
                     xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30006) + loginlink['displayName'], ICON, 4000)
                     self.net.save_cookies(COOKIE_JAR)
@@ -150,13 +152,12 @@ class PlutoTV():
             trans_table   = ''.join( [chr(i) for i in range(128)] + [' '] * 128 )
             cacheResponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
             if not cacheResponse:
-                try: req = self.net.http_GET(url, headers=header_dict).content.encode("utf-8", 'ignore')
-                except: req = (self.net.http_GET(url, headers=header_dict).content.translate(trans_table)).encode("utf-8")
+                try: cacheResponse = self.net.http_GET(url, headers=header_dict).content.encode("utf-8", 'ignore')
+                except: cacheResponse = (self.net.http_GET(url, headers=header_dict).content.translate(trans_table)).encode("utf-8")
                 self.net.save_cookies(COOKIE_JAR)
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, req, expiration=datetime.timedelta(hours=1))
-            response = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
-            if isinstance(response, basestring): response = json.loads(response)
-            return response
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheResponse, expiration=datetime.timedelta(hours=1))
+            if isinstance(cacheResponse, basestring): cacheResponse = json.loads(cacheResponse)
+            return cacheResponse
         except Exception as e:
             log('openURL, Unable to open url ' + str(e), xbmc.LOGERROR)
             xbmcgui.Dialog().notification(ADDON_NAME, 'Unable to Connect, Check User Credentials', ICON, 4000)
@@ -304,7 +305,10 @@ class PlutoTV():
         elif provider == 'vimeo':
             if len(re.findall('http[s]?://vimeo.com/', url)) > 0: return VMURL + url.split('/vimeo.com/')[1]
         else:
-            info = getVideoInfo(url,3,True)
+            info = None
+            if isUWP() == False: 
+                from YDStreamExtractor import getVideoInfo
+                info = getVideoInfo(url,3,True)
             if info is None: return YTURL + 'W6FjQgmtt0k'
             info = info.streams()
             return info[0]['xbmc_url']
@@ -312,13 +316,8 @@ class PlutoTV():
      
     def playChannel(self, name, url):
         log('playChannel')
-        if PTVL_RUN == True:
-            return
-            
         origurl  = url
-        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-        playlist.clear()
-        
+        if PTVL_RUN: self.playContent(name, url)
         t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
         t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
         link = (self.openURL(BASE_GUIDE % (t1,t2)))
@@ -326,9 +325,11 @@ class PlutoTV():
         id = item['episode']['_id']
         ch_start = datetime.datetime.fromtimestamp(time.mktime(time.strptime((item["start"].split('.')[0]), "%Y-%m-%dT%H:%M:%S")))
         ch_timediff = (datetime.datetime.now() - ch_start).seconds
-
         data = (self.openURL(BASE_CLIPS %(id)))
         dur_sum  = 0
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.clear()
+        xbmc.sleep(100)
         for idx, field in enumerate(data):
             url       = (field['url'] or field['code'])
             name      = field['name']
@@ -338,7 +339,6 @@ class PlutoTV():
             dur       = int(field['duration'] or '0') // 1000
             dur_start = dur_sum
             dur_sum  += dur
-
             liz=xbmcgui.ListItem(name, path=url)
             infoList = {"mediatype":"video","label":name,"title":name,"duration":dur}
             infoArt  = {"thumb":thumb,"poster":thumb,"icon":ICON,"fanart":FANART}
@@ -346,12 +346,14 @@ class PlutoTV():
             liz.setArt(infoArt)
             liz.setProperty("IsPlayable","true")
             liz.setProperty("IsInternetStream",str(field['liveBroadcast']).lower())
+            if 'm3u8' in url:
+                liz.setProperty('inputstreamaddon','inputstream.adaptive')
+                liz.setProperty('inputstream.adaptive.manifest_type','hls')
             if dur_start < ch_timediff and dur_sum > ch_timediff:
                 vid_offset = ch_timediff - dur_start
                 liz.setProperty('ResumeTime', str(vid_offset))
-            if len(data) > 1: playlist.add(url, liz, idx)
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
-        xbmc.executebuiltin('ActivateWindow(fullscreenvideo)')
+            playlist.add(url, liz, idx)
+            if idx == 0: xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
      
      
     def playContent(self, name, url):
@@ -367,7 +369,6 @@ class PlutoTV():
         ch_timediff = (datetime.datetime.now() - ch_start).seconds
         data = (self.openURL(BASE_CLIPS %(id)))
         dur_sum  = 0
-        
         for idx, field in enumerate(data):
             url       = (field['url'] or field['code'])
             name      = field['name']
@@ -378,23 +379,18 @@ class PlutoTV():
             dur_start = dur_sum
             dur_sum  += dur
             if any(k.lower().startswith(name.lower()) for k in IGNORE_KEYS): continue
-            liz=xbmcgui.ListItem(name, path=url)
             infoList = {"mediatype":"video","label":name,"title":name,"duration":dur}
             infoArt  = {"thumb":thumb,"poster":thumb,"icon":ICON,"fanart":FANART}
-            liz.setInfo(type="Video", infoLabels=infoList)
-            liz.setArt(infoArt)
-            liz.setProperty("IsPlayable","true")
-            liz.setProperty("IsInternetStream",str(field['liveBroadcast']).lower())
-
-            if dur_start < ch_timediff and dur_sum > ch_timediff:
-                vid_offset = ch_timediff - dur_start
-                liz.setProperty('ResumeTime', str(vid_offset) )
-            self.addLink(name, url, 7, infoList, infoArt, len(data))
+            if PTVL_RUN: self.playVideo(name, url)
+            else: self.addLink(name, url, 7, infoList, infoArt, len(data))
             
            
     def playVideo(self, name, url, liz=None):
         log('playVideo')
         if liz is None: liz = xbmcgui.ListItem(name, path=url)
+        if 'm3u8' in url:
+            liz.setProperty('inputstreamaddon','inputstream.adaptive')
+            liz.setProperty('inputstream.adaptive.manifest_type','hls')
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 
            

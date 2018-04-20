@@ -9,13 +9,12 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">SRF Play television video library</summary>
-    <summary lang="de">SRF Play Videobibliothek</summary>
+    <summary lang="de_DE">SRF Play Videobibliothek</summary>
     <description lang="en_GB">SRF Play TV allows you to watch the content from the video library of Swiss Radio and Television (SRF).</description>
-    <description lang="de">Mit SRF Play TV können Sie den Inhalt der SRF Play Videobibliothek des Schweizer Fernsehens anschauen.</description>
+    <description lang="de_DE">Mit SRF Play TV können Sie den Inhalt der SRF Play Videobibliothek des Schweizer Fernsehens anschauen.</description>
     <disclaimer lang="en_GB">Some content is geo-blocked and only available in Switzerland.</disclaimer>
-    <disclaimer lang="de">Einige Inhalte sind nur in der Schweiz verfügbar.</disclaimer>
-    <summery lang="de"></summery>
-    <language>de en</language>
+    <disclaimer lang="de_DE">Einige Inhalte sind nur in der Schweiz verfügbar.</disclaimer>
+    <language>de</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <forum></forum>

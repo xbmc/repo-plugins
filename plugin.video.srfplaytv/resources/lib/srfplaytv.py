@@ -390,11 +390,11 @@ class SRFPlayTV(object):
                     response,
                     expiration=datetime.timedelta(hours=2))
             return self.cache.get(ADDON_NAME + '.openURL, url = %s' % url)
-        except urllib2.URLError, e:
+        except urllib2.URLError as e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except socket.timeout, e:
+        except socket.timeout as e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except Exception, e:
+        except Exception as e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
             xbmcgui.Dialog().notification(
                 ADDON_NAME, LANGUAGE(30100), ICON, 4000)

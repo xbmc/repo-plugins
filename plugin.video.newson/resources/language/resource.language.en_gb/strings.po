@@ -23,3 +23,11 @@ msgstr ""
 msgctxt "#30001"
 msgid "Site unreachable, try again later..."
 msgstr ""
+
+msgctxt "#30002"
+msgid "Newscasts"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Video Clips"
+msgstr ""

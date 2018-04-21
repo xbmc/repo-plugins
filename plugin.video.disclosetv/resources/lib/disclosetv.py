@@ -22,7 +22,6 @@ import urlparse, urllib, urllib2, socket, json
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 from bs4 import BeautifulSoup
-from YDStreamExtractor import getVideoInfo
 from simplecache import SimpleCache, use_cache
 
 # Plugin Info
@@ -43,6 +42,8 @@ DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 QUALITY       = int(REAL_SETTINGS.getSetting('Quality'))
 BASE_URL      = 'http://www.disclose.tv/'
 BASE_VID      = BASE_URL + 'videos'
+YTURL        = 'plugin://plugin.video.youtube/play/?video_id='
+VMURL        = 'plugin://plugin.video.vimeo/play/?video_id='
 
 def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == False and level != xbmc.LOGERROR: return
@@ -52,6 +53,9 @@ def log(msg, level=xbmc.LOGDEBUG):
 def getParams():
     return dict(urlparse.parse_qsl(sys.argv[2][1:]))
     
+def isUWP():
+    return len(fnmatch.filter(glob.glob(LANGUAGE(30011)),'*.*') + fnmatch.filter(glob.glob(LANGUAGE(30012)),'*.*')) > 0
+     
 socket.setdefaulttimeout(TIMEOUT)
 class Disclose(object):
     def __init__(self):
@@ -76,8 +80,8 @@ class Disclose(object):
          
          
     def buildMenu(self):
-        self.addDir('Browse', BASE_VID, 1)
-        self.addYoutube("Browse Youtube" , 'plugin://plugin.video.youtube/channel/UCA-Ls4dkRBXHMjRjeTDTdjg/')
+        self.addDir(LANGUAGE(30003), BASE_VID, 1)
+        self.addYoutube(LANGUAGE(30004), 'plugin://plugin.video.youtube/channel/UCA-Ls4dkRBXHMjRjeTDTdjg/')
             
             
     def browse(self, url):
@@ -113,8 +117,24 @@ class Disclose(object):
         self.addDir(next_label, next_url, 1)
             
             
-    def playVideo(self, name, url, liz=None):
-        log('playVideo')
+    def resolveURL(self, name, url):
+        try:
+            data = json.loads(re.findall('"drupal-settings-json">(.+?)</script>',self.openURL(url), flags=re.DOTALL)[0])['dtv_video']
+            provider = data['provider']
+            log('resolveURL, provider = ' + provider)
+            url = re.findall('src="(.+?)"',(data['player_code']), flags=re.DOTALL)[0].split('?')[0]
+            if provider == 'youtube':
+                if len(re.findall('http[s]?://www.youtube.com/embed', url)) > 0: url = YTURL + url.split('/embed/')[1]
+                elif len(re.findall('http[s]?://www.youtube.com/watch', url)) > 0: url = YTURL + url.split('/watch?v=')[1]
+                elif len(re.findall('http[s]?://youtu.be/', url)) > 0: url = YTURL + url.split('/youtu.be/')[1]
+            elif provider == 'vimeo':
+                if len(re.findall('http[s]?://vimeo.com/', url)) > 0: url = VMURL + url.split('/vimeo.com/')[1]
+            else: raise Exception('resolveURL, unknown provider; data =' + json.dumps(data))
+            log('resolveURL, url = ' + url)
+            return xbmcgui.ListItem(name, path=url)
+        except Exception as e: log("resolveURL Failed! " + str(e), xbmc.LOGERROR)
+        if isUWP(): return ''
+        from YDStreamExtractor import getVideoInfo
         info = getVideoInfo(url,QUALITY,True)
         if info is None: return
         info = info.streams()
@@ -123,7 +143,12 @@ class Disclose(object):
         try: 
             if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])
         except: pass
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+        return liz
+            
+            
+    def playVideo(self, name, url):
+        log('playVideo')
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, self.resolveURL(name, url))
         
         
     def addYoutube(self, name, url):

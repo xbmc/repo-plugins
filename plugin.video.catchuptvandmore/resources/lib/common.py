@@ -21,6 +21,7 @@
 """
 
 import os
+import sys
 from resources.lib import simpleplugin as sp
 
 PLUGIN = sp.Plugin()
@@ -29,6 +30,38 @@ ADDON = sp.Addon()
 CACHE_TIME = 10
 
 PLUGIN_NAME = 'Catch-up TV & More'
+
+# Initialize GNU gettext emulation in addon
+# This allows to use UI strings from addon’s English
+# strings.po file instead of numeric codes
+GETTEXT = ADDON.initialize_gettext()
+
+FILESYSTEM_CODING = sys.getfilesystemencoding()
+if sys.getfilesystemencoding() is None:
+    FILESYSTEM_CODING = "utf-8"
+
+ADDON_DATA = sp.xbmc.translatePath(
+    os.path.join(
+        'special://profile/addon_data',
+        ADDON.id
+    )
+)
+
+MEDIA_PATH = sp.xbmc.translatePath(
+    os.path.join(
+        ADDON.path,
+        "resources",
+        "media"
+    )
+)
+
+LIB_PATH = sp.xbmc.translatePath(
+    os.path.join(
+        ADDON.path,
+        "resources",
+        "lib"
+    )
+)
 
 
 def get_window_title():

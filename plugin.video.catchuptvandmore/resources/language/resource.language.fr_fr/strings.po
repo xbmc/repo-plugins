@@ -16,17 +16,17 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# Settings categories (from 30000 to 30009)
+# Settings tabs/categories (from 30000 to 30019)
 msgctxt "#30000"
 msgid "Main menu"
 msgstr "Menu principal"
 
 msgctxt "#30001"
-msgid "Channels"
-msgstr "Chaînes"
+msgid "Countries"
+msgstr "Pays"
 
 msgctxt "#30002"
-msgid "Quality and Content"
+msgid "Quality and content"
 msgstr "Qualité et Contenu"
 
 msgctxt "#30003"
@@ -37,158 +37,301 @@ msgctxt "#30004"
 msgid "Accounts"
 msgstr "Comptes"
 
-# Settings line separators (from 30010 to 30019)
+msgctxt "#30005"
+msgid "Advanced settings"
+msgstr "Paramètres avancés"
+
+msgctxt "#30006"
+msgid "Channels"
+msgstr "Chaînes"
+
+msgctxt "#30007"
+msgid "Websites"
+msgstr "Sites internet"
+
+
+
+# Settings line separators (from 30010 to 30029)
 msgctxt "#30010"
 msgid "Hide main menu categories"
 msgstr "Masquer des catégories du menu principal"
 
 msgctxt "#30011"
-msgid "Hide channels from categories"
-msgstr "Masquer des chaînes des catégories"
+msgid "Hide channels"
+msgstr "Masquer des chaînes"
 
 msgctxt "#30012"
 msgid "To configure YTDL go settings of script.module.youtube.dl"
 msgstr "Pour configurer YTDL aller dans la configuration de script.module.youtube.dl"
 
-# Main categories (from 30020 to 30039)
-msgctxt "#30020"
-msgid "French channels"
-msgstr "Chaînes françaises"
+msgctxt "#30013"
+msgid "Hide countries"
+msgstr "Masquer des pays"
 
-msgctxt "#30021"
-msgid "Belgian channels"
-msgstr "Chaînes belges"
-
-msgctxt "#30022"
-msgid "Japanese channels"
-msgstr "Chaînes japonaises"
-
-msgctxt "#30023"
-msgid "European channels"
-msgstr "Chaînes européennes"
-
-msgctxt "#30024"
-msgid "United Kingdom channels"
-msgstr "Chaînes anglaises"
-
-msgctxt "#30025"
-msgid "United States channels"
-msgstr "Chaînes américaines"
-
-msgctxt "#30026"
-msgid "Websites"
-msgstr "Sites Web"
-
-# Context menu (from 30040 to 30049)
-msgctxt "#30040"
-msgid "Move down"
-msgstr "Descendre"
-
-msgctxt "#30041"
-msgid "Move up"
-msgstr "Monter"
-
-msgctxt "#30042"
-msgid "Hide"
-msgstr "Masquer"
-
-msgctxt "#30043"
-msgid "Download"
-msgstr "Télécharger"
+msgctxt "#30014"
+msgid "Hide websites"
+msgstr "Masquer des sites internet"
 
 
-# Dialog boxes (from 30050 to 30069)
-msgctxt "#30050"
-msgid "Information"
-msgstr "Information"
-
-msgctxt "#30051"
-msgid "To re-enable hidden items go to the plugin settings"
-msgstr "Pour réactiver les éléments masqués rendez-vous dans les réglages du plugin"
-
-
-# Settings quality and content (from 30070 to 30099)
-msgctxt "#30070"
-msgid "Video quality"
-msgstr "Qualité vidéo"
-
-msgctxt "#30071"
-msgid "Contents"
-msgstr "Contenus"
-
-msgctxt "#30080"
-msgid "Arte: Choose Channel"
-msgstr "Arte: Choix de la chaîne"
-
-msgctxt "#30081"
-msgid "France 24: Choose Channel"
-msgstr "France 24: Choix de la chaîne"
-
-msgctxt "#30082"
-msgid "Euronews: Choose Channel"
-msgstr "Euronews: Choix de la chaîne"
-
-msgctxt "#30087"
-msgid "Video quality (BEST|DEFAULT|DIALOG)"
-msgstr "Qualité Vidéo (BEST|DEFAULT|DIALOG)"
-
-# Others (from 30100 to 30140)
-msgctxt "#30100"
-msgid "More videos..."
-msgstr "Plus de vidéos..."
-
-msgctxt "#30101"
-msgid "All videos"
-msgstr "Toutes les vidéos"
-
-msgctxt "#30102"
-msgid "DRM protected video"
-msgstr "Vidéo protégée par DRM"
-
-msgctxt "#30103"
-msgid "Search"
-msgstr "Rechercher"
-
-msgctxt "#30104"
-msgid "Last videos"
-msgstr "Dernières vidéos"
-
-msgctxt "#30105"
-msgid "From A to Z"
-msgstr "De A à Z"
-
-msgctxt "#30106"
-msgid "Ascending"
-msgstr "Ascendant"
-
-msgctxt "#30107"
-msgid "Descending"
-msgstr "Descendant"
-
-msgctxt "#30108"
-msgid "More programs..."
-msgstr "Plus de programmes..."
-
-msgctxt "#30109"
+# Main menu (from 30030 to 30049)
+msgctxt "#30030"
 msgid "Live TV"
 msgstr "TV en direct"
 
-msgctxt "#30110"
-msgid "Choose video quality"
-msgstr "Choisir la qualité vidéo"
+msgctxt "#30031"
+msgid "Catch-up TV"
+msgstr "Replay TV"
 
-msgctxt "#30111"
-msgid "Video stream no longer exists"
-msgstr "Le flux vidéo n'existe plus"
+msgctxt "#30032"
+msgid "Websites"
+msgstr "Sites internet"
 
-msgctxt "#30112"
-msgid "Video with an account needed"
-msgstr "Vidéo avec un compte requis"
 
-# Download (from 30200 to 30240)
+
+# Countries (from 30050 to 30079)
+msgctxt "#30050"
+msgid "France"
+msgstr "France"
+
+msgctxt "#30051"
+msgid "Switzerland"
+msgstr "Suisse"
+
+msgctxt "#30052"
+msgid "United Kingdom"
+msgstr "Royaume-Uni"
+
+msgctxt "#30053"
+msgid "International"
+msgstr "International"
+
+msgctxt "#30054"
+msgid "Belgium"
+msgstr "Belgique"
+
+msgctxt "#30055"
+msgid "Japan"
+msgstr "Japon"
+
+msgctxt "#30056"
+msgid "Canada"
+msgstr "Canada"
+
+
+# Channels (from 30080 to 30129)
+msgctxt "#30080"
+msgid "French channels"
+msgstr "Chaînes françaises"
+
+msgctxt "#30081"
+msgid "Belgian channels"
+msgstr "Chaînes belges"
+
+msgctxt "#30082"
+msgid "Japanese channels"
+msgstr "Chaînes japonaises"
+
+msgctxt "#30083"
+msgid "Switzerland channels"
+msgstr "Chaînes suisses"
+
+msgctxt "#30084"
+msgid "United Kingdom channels"
+msgstr "Chaînes anglaises"
+
+msgctxt "#30085"
+msgid "International channels"
+msgstr "Chaînes internationales"
+
+msgctxt "#30086"
+msgid "Canadian channels"
+msgstr "Chaînes canadiennes"
+
+msgctxt "#30087"
+msgid "United States channels"
+msgstr "Chaînes américaines"
+
+
+# Websites (from 30130 to 30149)
+
+
+
+# Quality and content (from 30150 to 30199)
+msgctxt "#30150"
+msgid "Video quality"
+msgstr "Qualité vidéo"
+
+msgctxt "#30151"
+msgid "Video quality (BEST|DEFAULT|DIALOG)"
+msgstr "Qualité vidéo (BEST|DEFAULT|DIALOG)"
+
+msgctxt "#30152"
+msgid "Contents"
+msgstr "Contenus"
+
+msgctxt "#30153"
+msgid "Arte: Choose Channel"
+msgstr "Arte : Choix de la chaîne"
+
+msgctxt "#30154"
+msgid "France 24: Choose Channel"
+msgstr "France 24 : Choix de la chaîne"
+
+msgctxt "#30155"
+msgid "Euronews: Choose Channel"
+msgstr "Euronews : Choix de la chaîne"
+
+msgctxt "#30156"
+msgid "MTV: Choose Channel"
+msgstr "MTV : Choix de la chaîne"
+
+msgctxt "#30157"
+msgid "DW: Choose Channel"
+msgstr "DW : Choix de la chaîne"
+
+msgctxt "#30158"
+msgid "France 3 Régions: Choose region"
+msgstr "France 3 Régions : Choix de la région"
+
+msgctxt "#30159"
+msgid "La 1ère: Choose region"
+msgstr "La 1ère : Choix de la région"
+
+
+# Download (from 30200 to 30239)
 
 msgctxt "#30200"
 msgid "Folder to Download"
 msgstr "Répertoire de téléchargement"
 
+msgctxt "#30201"
+msgid "Quality of the video to download"
+msgstr "Qualité de la vidéo à télécharger"
+
+msgctxt "#30202"
+msgid "Download in background"
+msgstr "Télécharger en arrière plan"
+
+
+
+# Accounts (from 30240 to 30259)
+
+msgctxt "#30240"
+msgid "NRJ Login"
+msgstr "Login NRJ"
+
+msgctxt "#30241"
+msgid "NRJ Password"
+msgstr "Mot de passe NRJ"
+
+msgctxt "#30242"
+msgid "VRT NU Login"
+msgstr "Login VRT NU"
+
+msgctxt "#30243"
+msgid "VRT NU Password"
+msgstr "Mot de passe VRT NU"
+
+
+# Reserved space for other tab/category in settins (from 30260 to 30339)
+
+
+# OpenVPN (not present in official Kodi repo) (from 30340 to 30369)
+
+
+# Advanced settings (from 30370 to 30399)
+
+msgctxt "#30370"
+msgid "Clear cache"
+msgstr "Vider le cache"
+
+msgctxt "#30371"
+msgid "Cache cleared"
+msgstr "Cache vidé"
+
+
+# Reserved space for other tab/category in settins (from 30400 to 30499)
+
+
+# Context menu (from 30500 to 30599)
+msgctxt "#30500"
+msgid "Move down"
+msgstr "Descendre"
+
+msgctxt "#30501"
+msgid "Move up"
+msgstr "Monter"
+
+msgctxt "#30502"
+msgid "Hide"
+msgstr "Masquer"
+
+msgctxt "#30503"
+msgid "Download"
+msgstr "Télécharger"
+
+
+# Dialog boxes (from 30600 to 30699)
+msgctxt "#30600"
+msgid "Information"
+msgstr "Information"
+
+msgctxt "#30601"
+msgid "To re-enable hidden items go to the plugin settings"
+msgstr "Pour réactiver les éléments masqués rendez-vous dans les réglages du plugin"
+
+
+
+# Others (from 30700 to 30799)
+msgctxt "#30700"
+msgid "More videos..."
+msgstr "Plus de vidéos..."
+
+msgctxt "#30701"
+msgid "All videos"
+msgstr "Toutes les vidéos"
+
+msgctxt "#30702"
+msgid "DRM protected video"
+msgstr "Vidéo protégée par DRM"
+
+msgctxt "#30703"
+msgid "Search"
+msgstr "Rechercher"
+
+msgctxt "#30704"
+msgid "Last videos"
+msgstr "Dernières vidéos"
+
+msgctxt "#30705"
+msgid "From A to Z"
+msgstr "De A à Z"
+
+msgctxt "#30706"
+msgid "Ascending"
+msgstr "Ascendant"
+
+msgctxt "#30707"
+msgid "Descending"
+msgstr "Descendant"
+
+msgctxt "#30708"
+msgid "More programs..."
+msgstr "Plus de programmes..."
+
+msgctxt "#30709"
+msgid "Choose video quality"
+msgstr "Choisir la qualité vidéo"
+
+msgctxt "#30710"
+msgid "Video stream no longer exists"
+msgstr "Le flux vidéo n'existe plus"
+
+msgctxt "#30711"
+msgid "Authentication failed"
+msgstr "Echec de l'authentification"
+
+msgctxt "#30712"
+msgid "Video with an account needed"
+msgstr "Vidéo avec un compte requis"
 

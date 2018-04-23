@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.bcf" name="British Council Film" version="1.0.0" provider-name="fraser">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2" />
+        <import addon="script.module.requests" version="2.12.4"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Search and play free movies from the British Council Film website</summary>
+        <description lang="en_GB">This add-on enables playing of videos and movies from the British Council Film website. It is not created, maintained or in any way affiliated with the British Council. The add-on only provides an interface to access the free content on the British Council Film website from Kodi.</description>
+        <language>en</language>
+        <platform>all</platform>
+        <license>MIT</license>
+        <forum></forum>
+        <website>www.fraserchapman.co.uk</website>
+        <email>fraser.chapman@gmail.com</email>
+        <source>https://github.com/FraserChapman/plugin.video.bfc</source>
+        <news>v1.0.0 (23-4-18)
+        - Initial version</news>
+        <disclaimer>Neither this addon nor its author are in anyway affiliated with the British Council</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/media/ss1.jpg</screenshot>
+            <screenshot>resources/media/ss2.jpg</screenshot>
+            <screenshot>resources/media/ss3.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

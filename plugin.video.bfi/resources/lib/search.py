@@ -3,6 +3,7 @@
 __author__ = "fraser"
 
 import json
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -37,7 +38,8 @@ def query_decode(query):
 
 def html_to_text(text):
     # type (str) -> str
-    return '\n'.join(BeautifulSoup(text, "html.parser").stripped_strings)
+    soup = BeautifulSoup(text, "html.parser")
+    return '\n'.join(soup.stripped_strings)
 
 
 def text_to_int(text):
@@ -140,11 +142,11 @@ def cache_clear():
 def recent_clear():
     # type: () -> None
     with Cache(CACHE_URI) as c:
-      data = c.domain(RECENT_URI, 99999)
-      for item in data:
-          c.delete(item["uri"])
-      
-    
+        data = c.domain(RECENT_URI, 99999)
+        for item in data:
+            c.delete(item["uri"])
+
+
 def get_m3u8(url):
     # type: (str) -> str
     """
@@ -188,7 +190,7 @@ def get_html(url):
             soup = BeautifulSoup(r.content, "html.parser")
             # pre-cache clean-up
             for x in soup(["script", "style"]):
-                x.extract() 
+                x.extract()
             c.set(url, str(soup), r.headers)
             return soup
         if 304 == r.status_code:
@@ -208,7 +210,7 @@ def get_json(url):
         if cached:
             add_cache_headers(headers, cached)
             if cached["fresh"]:
-                return json.loads(cached)
+                return json.loads(cached["blob"])
         r = requests.get(url, headers=headers, timeout=SEARCH_TIMEOUT)
         if 200 == r.status_code:
             c.set(url, r.json(), r.headers)

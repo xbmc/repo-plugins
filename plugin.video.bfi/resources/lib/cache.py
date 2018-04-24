@@ -4,7 +4,9 @@ __author__ = "fraser"
 
 import sqlite3
 import time
+import xbmcvfs
 from datetime import datetime, timedelta, tzinfo
+from os import path
 
 try:
     import _pickle as cpickle
@@ -46,6 +48,7 @@ def datetime_to_httpdate(input_date):
 
 class GMT(tzinfo):
     """GMT Time Zone"""
+
     def utcoffset(self, dt):
         return timedelta(0)
 
@@ -58,6 +61,7 @@ class GMT(tzinfo):
 
 class Blob(object):
     """Blob serialisation class"""
+
     def __init__(self, data):
         self.data = data
 
@@ -78,13 +82,16 @@ class Cache(object):
     https://docs.python.org/2/library/sqlite3.html
     https://tools.ietf.org/html/rfc7234
     """
+
     def __init__(self, name=None):
         self.connection = None
+        if not xbmcvfs.exists(name):
+            xbmcvfs.mkdirs(path.dirname(name))
         if name:
             self._open(name)
 
     def get(self, uri):
-        # type: (str) -> Union[dict, None]
+        # type: (str) -> Union[sqlite3.Row, None]
         """Retrieve a partial entry from the cache"""
         query = ("select blob, last_modified, etag, immutable, "
                  "case"

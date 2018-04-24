@@ -17,14 +17,15 @@ MEDIA_URI = "special://home/addons/{}/resources/media/".format(ADDON_ID)
 
 def art(image):
     return ({
-        "thumb": image.get("data-img-800", ""),
-        "fanart": image.get("data-img-1440", ""),
-        "poster": image.get("src")
-    } if "src" in image else {
+                "thumb": image.get("data-img-800", ""),
+                "fanart": image.get("data-img-1440", ""),
+                "poster": image.get("src")
+            } if "src" in image else {
         "thumb": image,
         "fanart": image,
         "poster": image
     })
+
 
 def icon(image):
     return {"icon": translate_path("{}{}".format(MEDIA_URI, image))}
@@ -103,4 +104,3 @@ def kodi_json_request(params):
         logger.warn("[%s] %s" %
                     (params["method"], response["error"]["message"]))
         return None
-

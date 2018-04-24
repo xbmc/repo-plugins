@@ -7,6 +7,18 @@
         <setting id="Extract_Subtitles" type="bool" label="30004" default="false" />
         <setting id="Enable_Debugging" type="bool" label="30000" default="false" />
     </category>
+    <category label="30012">
+        <setting id="All_Shows" type="bool" label="30050" default="true" />
+        <setting id="Favourite_Shows" type="bool" label="30051" default="true" />
+        <setting id="Newest_Favourite_Shows" type="bool" label="30052" default="true" />
+        <setting id="Recommendations" type="bool" label="30053" default="true" />
+        <setting id="Newest_Shows" type="bool" label="30054" default="true" />
+        <setting id="Most_Clicked_Shows" type="bool" label="30055" default="true" />
+        <setting id="Soon_Offline" type="bool" label="30056" default="true" />
+        <setting id="Shows_By_Date" type="bool" label="30057" default="true" />
+        <setting id="Live_TV" type="bool" label="30070" default="true" />
+        <setting id="SRF_Live" type="bool" label="30072" default="true" />
+    </category>
     <category label="30011">
         <setting label="30005" type="action" action="RunPlugin(plugin://plugin.video.srfplaytv?mode=19)" />        
     </category>

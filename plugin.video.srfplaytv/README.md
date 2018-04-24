@@ -2,6 +2,8 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1aae1595af1f4f75bd805bc03cc17215)](https://www.codacy.com/app/goggle/plugin.video.srfplaytv?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=goggle/plugin.video.srfplaytv&amp;utm_campaign=Badge_Grade)
 
+<img src="https://github.com/goggle/plugin.video.srfplaytv/raw/master/resources/icon.png" width="256">
+
 **SRF Play TV** (plugin.video.srfplaytv) is a Kodi plugin to access the video library of the Swiss Radio and Television (SRF).
 
 ## Goals of the plugin
@@ -14,12 +16,18 @@ Bring the full power of the [SRF Play TV media library](https://www.srf.ch/play/
  - [x] Various lists: Newest and most clicked shows by topic (e.g. News, Documentaries, etc.), trending shows, soon offline shows, shows by date. 
  - [x] Choose between SD and HD quality.
  - [x] Subtitle support.
- - [ ] Livestreams that are exclusively broadcasted on SRF.ch (will be available in the 1.0.0 release).
+ - [x] Livestreams that are exclusively broadcasted on SRF.ch (only available in Switzerland).
+ - [x] Live TV support: SRF 1, SRF 2 and SRF info (only available in Switzerland).
 
 ## Planned features
  - [ ] Twitter integration: For shows with a SRF hashtag (e.g. #srfarena) get the tweets which were emitted during the show on the screen.
  - [ ] Download episodes for personal archiving purposes (probably through an additional Kodi script).
 
+## Installation
+
+ - The plugin is available in the official "Kodi Add-on repository". This is the recommended way to get the plugin.
+ - It is also available in "Goggle Addon Repository", which can be found [here](https://github.com/goggle/repository.goggle.addons).
+ - Furthermore, you can download the newest release as a zip file from the [release section](https://github.com/goggle/plugin.video.srfplaytv/releases) on github and manually install the plugin from the zip file. Keep in mind that you won't get any automatic updates if you choose this method.
 
 ## Support this plugin
 How you can help improving this plugin:

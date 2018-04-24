@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.eurosportplayer" version="2.0.6" name="Eurosport Player" provider-name="Jin">
+<addon id="plugin.video.eurosportplayer" version="2.0.10" name="Eurosport Player" provider-name="Jin">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
-        <import addon="script.module.inputstreamhelper" version="0.2.4"/>
+        <import addon="script.module.inputstreamhelper" version="0.3.3"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
         <news>
-- code improvement
-- removed pydes as dependency (user credentials will not be saved)
-- removed inputstream dependency, added inputstreamhelper as dependency
-- unique id check only once at addon startup
-- added screenshots
+- workaround for _strptime import bug
+- add view options
+- fix type error in schedule
+- prefer non-linear stream (with timeshift) via schedule
         </news>
         <assets>
             <icon>resources/icon.png</icon>

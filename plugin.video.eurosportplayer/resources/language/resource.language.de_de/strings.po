@@ -37,12 +37,20 @@ msgid "Override View"
 msgstr "Ansicht überschreiben"
 
 msgctxt "#30012"
-msgid "View: Content"
-msgstr "Ansicht: Inhalt"
+msgid "Content Type"
+msgstr "Inhaltstyp"
 
 msgctxt "#30013"
-msgid "View: ID"
-msgstr "Ansicht: ID"
+msgid "View: Folders"
+msgstr "Ansicht: Ordner"
+
+msgctxt "#30014"
+msgid "View: Videos"
+msgstr "Ansicht: Videos"
+
+msgctxt "#30015"
+msgid "View: Schedule"
+msgstr "Ansicht: Programm"
 
 msgctxt "#30020"
 msgid "Videoplayer"

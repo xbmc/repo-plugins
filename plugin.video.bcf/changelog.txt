@@ -1,0 +1,6 @@
+v1.0.1
+- Tiny bug fixes (localised strings)
+- Housekeeping (documentation)
+
+v1.0.0
+- Initial version

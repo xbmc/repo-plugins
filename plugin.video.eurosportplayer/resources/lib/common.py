@@ -8,6 +8,7 @@ import uuid
 import xbmc
 import xbmcaddon
 import xbmcgui
+import _strptime
 from inputstreamhelper import Helper
 from resources import resources
 
@@ -30,6 +31,8 @@ class Common:
         self.addon_fanart = addon.getAddonInfo('fanart')
         self.content = addon.getSetting('content')
         self.view_id = addon.getSetting('view_id')
+        self.view_id_videos = addon.getSetting('view_id_videos')
+        self.view_id_epg = addon.getSetting('view_id_epg')
         self.force_view = addon.getSetting('force_view') == 'true'
         self.startup = addon.getSetting('startup') == 'true'
 
@@ -60,7 +63,7 @@ class Common:
     def get_resource(self, string):
         result = self.utfenc(string)
         id_ = resources(string)
-        if id_ != 0:
+        if isinstance(id_, int) and id_ != 0:
             result = self.get_string(id_)
         return result
 

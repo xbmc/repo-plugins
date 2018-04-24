@@ -111,7 +111,7 @@ class Hits:
             id_ = i['href']
             if self.linear and not self.epg and i['rel'] == 'linear':
                 break
-            elif self.epg and i['rel'] == 'video':
+            elif self.epg and not i['rel'] == 'linear':
                 break
         return id_
 

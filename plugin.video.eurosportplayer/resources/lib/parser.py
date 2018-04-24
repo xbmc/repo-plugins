@@ -111,7 +111,7 @@ class Parser:
         for i in hits:
             self.items.add_item(Hits(self.plugin, i, epg=True).item)
         self.items.add_item(date_item(self.plugin.epg_date(date), self.plugin.get_next_day(self.plugin.epg_date(date))))
-        self.items.list_items(upd=update)
+        self.items.list_items(upd=update, epg=True)
 
     def play(self, data):
         if data.get('stream'):

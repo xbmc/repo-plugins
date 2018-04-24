@@ -42,6 +42,10 @@ msgctxt "#32007"
 msgid "Search"
 msgstr ""
 
+msgctxt "#32008"
+msgid "Error playing"
+msgstr ""
+
 msgctxt "#32010"
 msgid "Settings"
 msgstr ""
@@ -72,4 +76,105 @@ msgstr ""
 
 msgctxt "#32022"
 msgid "Are you sure?"
+msgstr ""
+
+# BCF_THEMES
+
+msgctxt "#32030"
+msgid "Architecture"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Arts"
+msgstr ""
+
+msgctxt "#32032"
+msgid "Agriculture"
+msgstr ""
+
+msgctxt "#32033"
+msgid "Biology"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Education"
+msgstr ""
+
+msgctxt "#32035"
+msgid "Industry and Commerce"
+msgstr ""
+
+msgctxt "#32036"
+msgid "London"
+msgstr ""
+
+msgctxt "#32037"
+msgid "Maritime"
+msgstr ""
+
+msgctxt "#32038"
+msgid "Military"
+msgstr ""
+
+msgctxt "#32039"
+msgid "Public Services"
+msgstr ""
+
+msgctxt "#32040"
+msgid "Public Utilities"
+msgstr ""
+
+msgctxt "#32041"
+msgid "Second World War"
+msgstr ""
+
+msgctxt "#32042"
+msgid "Science and Technology"
+msgstr ""
+
+msgctxt "#32043"
+msgid "Scotland"
+msgstr ""
+
+msgctxt "#32044"
+msgid "Sport"
+msgstr ""
+
+msgctxt "#32045"
+msgid "Town and Country"
+msgstr ""
+
+msgctxt "#32046"
+msgid "Leisure"
+msgstr ""
+
+msgctxt "#32047"
+msgid "Landscapes and Scenery"
+msgstr ""
+
+
+# BCF_SERIES
+
+msgctxt "#32050"
+msgid "Scenes from Shakespeare"
+msgstr ""
+
+msgctxt "#32051"
+msgid "Junior Biology"
+msgstr ""
+
+msgctxt "#32052"
+msgid "Senior Biology"
+msgstr ""
+
+msgctxt "#32053"
+msgid "Human Geography"
+msgstr ""
+
+msgctxt "#32054"
+msgid "Technical Geography"
+msgstr ""
+
+msgctxt "#32055"
+msgid "British News"
 msgstr ""

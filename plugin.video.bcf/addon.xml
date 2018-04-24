@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.bcf" name="British Council Film" version="1.0.0" provider-name="fraser">
+<addon id="plugin.video.bcf" name="British Council Film" version="1.0.1" provider-name="fraser">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.routing" version="0.2.0"/>
@@ -16,11 +16,11 @@
         <platform>all</platform>
         <license>MIT</license>
         <forum></forum>
-        <website>www.fraserchapman.co.uk</website>
+        <website>http://film.britishcouncil.org/british-council-film-collection</website>
         <email>fraser.chapman@gmail.com</email>
         <source>https://github.com/FraserChapman/plugin.video.bfc</source>
-        <news>v1.0.0 (23-4-18)
-        - Initial version</news>
+        <news>v1.0.1 (24-4-18)
+        - Small bug fixes and localisation</news>
         <disclaimer>Neither this addon nor its author are in anyway affiliated with the British Council</disclaimer>
         <assets>
             <icon>resources/icon.png</icon>

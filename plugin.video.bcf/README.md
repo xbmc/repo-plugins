@@ -18,7 +18,7 @@ It only provides an interface to access the free content on the British Council 
 
 # Licence 
 
-All art work, code and data is provided under an [MIT License](https://github.com/FraserChapman/plugin.video.bfi/blob/master/LICENSE.txt)
+All art work, code and data is provided under an [MIT License](https://github.com/FraserChapman/plugin.video.bcf/blob/master/LICENSE.txt)
 
 Except the image fanart.jpg
 

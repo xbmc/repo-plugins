@@ -4,7 +4,9 @@ __author__ = "fraser"
 
 import sqlite3
 import time
+import xbmcvfs
 from datetime import datetime, timedelta, tzinfo
+from os import path
 
 try:
     import _pickle as cpickle
@@ -65,6 +67,7 @@ class Blob(object):
 
     def __conform__(self, protocol):
         if protocol is sqlite3.PrepareProtocol:
+            # return cpickle.dumps(self.data, 1)
             return sqlite3.Binary(cpickle.dumps(self.data, -1))
 
     @staticmethod
@@ -76,18 +79,19 @@ class Blob(object):
 class Cache(object):
     """
     HTTP control directive based cache
-    NBL: Should be used as a context manager
     https://docs.python.org/2/library/sqlite3.html
     https://tools.ietf.org/html/rfc7234
     """
 
     def __init__(self, name=None):
         self.connection = None
+        if not xbmcvfs.exists(name):
+            xbmcvfs.mkdirs(path.dirname(name))
         if name:
             self._open(name)
 
     def get(self, uri):
-        # type: (str) -> Union[dict, None]
+        # type: (str) -> Union[sqlite3.Row, None]
         """Retrieve a partial entry from the cache"""
         query = ("select blob, last_modified, etag, immutable, "
                  "case"
@@ -156,16 +160,14 @@ class Cache(object):
 
     def clear(self):
         # type: () -> None
-        """Truncates the cache data and vacuums
-        see: """
+        """Truncates the cache data and vacuums"""
         self._execute("DELETE FROM data")
         self._execute("VACUUM")
 
     @staticmethod
     def _parse_cache_control(header):
         # type: (str) -> dict
-        """Extracts the directives from a cache-control header
-        see: https://tools.ietf.org/html/rfc7234#section-5.2"""
+        # format: https://tools.ietf.org/html/rfc7234#section-5.2
         if header is None:
             return {}
         return {
@@ -175,13 +177,18 @@ class Cache(object):
             for parts in [directive.split("=")]
         }
 
+    @staticmethod
+    def _row_factory(cursor, row):
+        # type: (sqlite3.Cursor, tuple) -> dict
+        """Alternative row format as opposed to tuple or (Cache default) sqlite3.Row"""
+        return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
+
     def _execute(self, query, values=None):
         # type (str, tuple) -> sqlite3.cursor
-        """Executes a query, automatically commits or rolls back on exception"""
         if values is None:
             values = ()
         try:
-            # see: https://docs.python.org/2/library/sqlite3.html#using-the-connection-as-a-context-manager
+            # Automatically commits or rolls back on exception
             with self.connection:
                 return self.connection.execute(query, values)
         except (sqlite3.IntegrityError, sqlite3.OperationalError) as e:
@@ -190,7 +197,6 @@ class Cache(object):
 
     def _open(self, name):
         # type: (str) -> None
-        """Opens an configures the db connection"""
         sqlite3.enable_callback_tracebacks(True)
         sqlite3.register_converter("BLOB", Blob.deserialise)
         try:
@@ -200,6 +206,7 @@ class Cache(object):
         except sqlite3.Error as e:
             logger.debug(e.message)
             return
+        # see: https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.row_factory
         self.connection.row_factory = sqlite3.Row
         self.connection.text_factory = sqlite3.OptimizedUnicode
         self._create_table()
@@ -213,7 +220,6 @@ class Cache(object):
 
     def _create_table(self):
         # type: () -> None
-        """Creates the main data table if it doesn't exist"""
         data = ("CREATE TABLE IF NOT EXISTS data ("
                 "uri TEXT PRIMARY KEY NOT NULL,"
                 "blob BLOB NOT NULL,"

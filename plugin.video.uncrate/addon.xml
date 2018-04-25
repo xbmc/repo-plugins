@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.uncrate" version="1.0.0" name="Uncrate" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.youtube.dl" version="17.0.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <description lang="en_GB">Uncrate is the leading buyer's guide for men. With over 9,000 items covered and more than 1.5 million monthly readers, Uncrate is widely known for digging up the best of the best men's products. With new gear posted every weekday, Uncrate has quickly become one of the largest men's publications, both online and in print, with over 10 million page views each month. Since 2005, Uncrate's dedicated readers have visited multiple times per day to find out about the latest stuff for guys. Uncrate's insightful and daily updates, with near real-time coverage of new product launches, has gained the site an audience of discerning men who turn to Uncrate for the next great thing.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/KODI_ADDONS/tree/master/plugin.video.uncrate</source>
+        <website>https://www.uncrate.com</website>
+        <news></news>
+        <forum>https://forum.kodi.tv/showthread.php?tid=331316</forum>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+            <screenshot>resources/images/screenshot03.png</screenshot>
+        </assets>
+    </extension>
+</addon>

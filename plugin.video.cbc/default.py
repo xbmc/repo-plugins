@@ -12,24 +12,34 @@ LIVE_CHANNELS = getString(30004)
 LIVE_PROGRAMS = getString(30005)
 SHOWS = getString(30006)
 
-addon_handle = int(sys.argv[1])
+# handle logout before using argv[1] as the addon handle
+if sys.argv[1] == 'logout':
+    log('Logging out... {}'.format(sys.argv[1]), True)
+    os.remove(getAuthorizationFile())
+    sys.exit(0)
 
+addon_handle = int(sys.argv[1])
 
 def authorize():
         prog = xbmcgui.DialogProgress()
         prog.create(getString(30001))
         cbc = CBC()
-        prog.update(33)
-        reg_url = cbc.getRegistrationURL()
-        prog.update(66)
-        result = cbc.registerDevice(reg_url) 
-        if not result :
-            # display error window
+
+        username = xbmcaddon.Addon().getSetting("username")
+        if len(username) == 0:
+            username = None
+
+        password = xbmcaddon.Addon().getSetting("password")
+        if len(password) == 0:
+            password = None
+            username = None
+
+        if not cbc.authorize(username, password, prog.update):
             log('(authorize) unable to authorize', True)
             prog.close()
             xbmcgui.Dialog().ok(getString(30002), getString(30002))
             return False
-        prog.update(100)
+
         prog.close()
         return True
 
@@ -62,9 +72,14 @@ def playShow(values):
         try:
             res = shows.getStream(smil)
         except CBCAuthError as e:
-            log('(playShows) getStream failed despite successful auth retry', True)
+            if e.payment:
+                log('(playShows) getStream failed because login required', True)
+                xbmcgui.Dialog().ok(getString(30010), getString(30011))
+            else:
+                log('(playShows) getStream failed despite successful auth retry', True)
+                xbmcgui.Dialog().ok(getString(30010), getString(30012))
             return
-        
+
     item = xbmcgui.ListItem(labels['title'], path=res['url'])
 
     item.setInfo(type="Video", infoLabels=labels)
@@ -193,6 +208,7 @@ def mainMenu():
                                     url=sys.argv[0] + "?" + urlencode(values),
                                     listitem=item,
                                     isFolder=True)
+
     xbmcplugin.endOfDirectory(addon_handle)
 
 

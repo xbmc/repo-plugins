@@ -3,8 +3,9 @@ from xml.dom.minidom import *
 from utils import saveCookies, loadCookies, loadAuthorization, log
 
 class CBCAuthError(Exception):
-    def __init__(self, value):
+    def __init__(self, value, payment):
         self.value = value
+        self.payment = payment
     def __str__(self):
         return repr(self.value)
 
@@ -15,7 +16,7 @@ class Shows:
         """
         Init constants 
         """
-        self.SHOW_LIST_URL = 'https://api-cbc.cloud.clearleap.com/cloffice/client/android/browse/babb23ae-fe47-40a0-b3ed-cdc91e31f3d6'
+        self.SHOW_LIST_URL = 'https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/babb23ae-fe47-40a0-b3ed-cdc91e31f3d6'
         self.IMAGE_PROFILES = [ 'CBC-POSTER-1X', 'CBC-BANNER-1X' ]
         self.SHOW_TAGS = [ 'title', 'clearleap:series', 'clearleap:season',
                            'clearleap:episodeInSeason', 'media:keywords',
@@ -33,7 +34,7 @@ class Shows:
             'X-Clearleap-DeviceToken': auth['token'],
             'X-Client-Version': '9.9.9',
             'X-Client-Name': 'Android',
-            'X-Clearleap-DeviceId': auth['id']
+            'X-Clearleap-DeviceId': auth['devid']
         }
 
 
@@ -95,7 +96,7 @@ class Shows:
         if r.status_code == 401 or r.status_code == 500:
             log('({}) {} returns {} status. Signaling authorization failure'\
                 .format('getShows', show_url, r.status_code), True)
-            raise CBCAuthError('getShows')
+            raise CBCAuthError('getShows', False)
         elif not r.status_code == 200:
             log('(getShows) {} returns {} status'.format(url, r.status_code), True)
             return None
@@ -137,9 +138,11 @@ class Shows:
         if r.status_code == 500:
             log('({}) {} returns {} status. Signaling authorization failure'\
                 .format('getStream', url, r.status_code), True)
-            raise CBCAuthError('getStream')
+            raise CBCAuthError('getStream', False)
         elif r.status_code == 401:
-            raise CBCAuthError('getStream')
+            raise CBCAuthError('getStream', False)
+        elif r.status_code == 402:
+            raise CBCAuthError('getStream', True)
         elif not r.status_code == 200:
             log('(getStream) {} returns {} status code'.format(url, r.status_code), True)
             return None

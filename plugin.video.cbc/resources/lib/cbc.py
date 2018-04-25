@@ -1,4 +1,4 @@
-import requests, uuid
+import requests, uuid, urllib, json
 from xml.dom.minidom import *
 import xml.etree.ElementTree as ET
 
@@ -8,35 +8,76 @@ from operator import itemgetter
 class CBC:
 
     def __init__(self):
+        self.ENV_JS = 'https://watch.cbc.ca/public/js/env.js'
+        self.API_KEY = '3f4beddd-2061-49b0-ae80-6f1f2ed65b37'
+        self.RADIUS_LOGIN_FMT = 'https://api.loginradius.com/identity/v2/auth/login?{}'
+        self.RADIUS_JWT_FMT = 'https://cloud-api.loginradius.com/sso/jwt/api/token?{}'
         self.IDENTITIES_URL='https://api-cbc.cloud.clearleap.com/cloffice/client/identities'
-        self.DEVICE_XML_FMT = """<device>
-<deviceId>{}</deviceId>
-<type>flounder</type>
-<deviceModel>Nexus 9</deviceModel>
-<deviceName>Nexus 9</deviceName>
+        self.DEVICE_XML_FMT = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<device>
+  <type>web</type>
 </device>"""
+        self.LOGIN_XML_FMT = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<login>
+  <token>{}</token>
+  <device>
+    <deviceId>{}</deviceId>
+    <type>web</type>
+  </device>
+</login>"""
         # Create requests session object
         self.session = requests.Session()
         session_cookies = loadCookies()
         if not session_cookies == None: 
             self.session.cookies = session_cookies 
 
-
-    def getRegistrationURL(self):
+    def authorize(self, username = None, password = None, callback = None):
+        full_auth = not username == None and not password == None
         r = self.session.get(self.IDENTITIES_URL)
+        callback(20 if full_auth else 50)
         if not r.status_code == 200:
             log('ERROR: {} returns status of {}'.format(self.IDENTITIES_URL, r.status_code), True)
             return None
-        saveCookies(self.session.cookies)
 
         dom = parseString(r.content)
-        url = dom.getElementsByTagName('registerDeviceUrl')[0]
-        return url.firstChild.nodeValue
+        reg_url = dom.getElementsByTagName('registerDeviceUrl')[0].firstChild.nodeValue
+        login_url = dom.getElementsByTagName('loginUrl')[0].firstChild.nodeValue
+
+        auth = self.registerDevice(reg_url)
+        callback(40 if full_auth else 100)
+        if auth == None:
+            log('Device registration failed', True)
+            return False
+
+
+        if full_auth:
+            token = self.radiusLogin(username, password)
+            callback(60)
+            if token == None:
+                log('Radius Login failed', True)
+                return False
+
+            jwt = self.radiusJWT(token)
+            callback(80)
+            if jwt == None:
+                log('Radius JWT retrieval failed', True)
+                return False
+
+            token = self.login(login_url, auth['devid'], jwt)
+            callback(100)
+            if token == None:
+                log('Final login failed', True)
+                return False
+            auth['token'] = token
+
+        saveAuthorization(auth)
+        saveCookies(self.session.cookies)
+
+        return True
 
 
     def registerDevice(self, url):
-        xml = self.DEVICE_XML_FMT.format(str(uuid.uuid4()))
-        r = self.session.post(url, data=xml)
+        r = self.session.post(url, data=self.DEVICE_XML_FMT)
         if not r.status_code == 200:
             log('ERROR: {} returns status of {}'.format(url, r.status_code), True)
             return None
@@ -47,13 +88,60 @@ class CBC:
         status = dom.getElementsByTagName('status')[0].firstChild.nodeValue
         if status != "Success":
             log('Error: Unable to authorize device', True)
-            return False
+            return None
         auth = {
-            'id': dom.getElementsByTagName('deviceId')[0].firstChild.nodeValue,
+            'devid': dom.getElementsByTagName('deviceId')[0].firstChild.nodeValue,
             'token': dom.getElementsByTagName('deviceToken')[0].firstChild.nodeValue
         }
-        saveAuthorization(auth)
-        return True
+
+        return auth
+
+
+    def radiusLogin(self, username, password):
+        query = urllib.urlencode({'apikey': self.API_KEY})
+
+        data = {
+            'email': username,
+            'password': password
+        }
+        url = self.RADIUS_LOGIN_FMT.format(query)
+        r = self.session.post(url, json = data)
+        if not r.status_code == 200:
+            log('{} returns status {}'.format(r.url, r.status_code))
+            return None
+
+        token = json.loads(r.content)['access_token']
+
+        return token
+
+
+    def radiusJWT(self, token):
+        query = urllib.urlencode({
+            'access_token': token,
+            'apikey': self.API_KEY,
+            'jwtapp': 'jwt'
+        })
+        url = self.RADIUS_JWT_FMT.format(query)
+        r = self.session.get(url)
+        if not r.status_code == 200:
+            log('{} returns status {}'.format(r.url, r.status_code))
+            return None
+        return json.loads(r.content)['signature']
+
+
+    def login(self, url, devid, jwt):
+        data = self.LOGIN_XML_FMT.format(jwt, devid)
+        headers = {'Content-type': 'content_type_value'}
+        r = self.session.post(url, data = data, headers = headers)
+        if not r.status_code == 200:
+            log('{} returns status {}'.format(r.url, r.status_code))
+            return None
+
+        dom = parseString(r.content)
+        res = dom.getElementsByTagName('result')[0]
+        token = res.getElementsByTagName('token')[0].firstChild.nodeValue
+
+        return token
 
 
     def getImage(self, item):

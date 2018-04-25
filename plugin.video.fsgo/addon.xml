@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.fsgo"
-       version="1.1.6"
+       version="1.1.7"
        name="FOX Sports GO"
        provider-name="emilsvennesson">
   <requires>

@@ -2,7 +2,6 @@
 """
 A Kodi plugin for FOX Sports GO
 """
-import sys
 import os
 import urllib
 import urlparse
@@ -26,8 +25,9 @@ logging_prefix = '[%s-%s]' % (addon.getAddonInfo('id'), addon.getAddonInfo('vers
 if not xbmcvfs.exists(addon_profile):
     xbmcvfs.mkdir(addon_profile)
 
-_url = sys.argv[0]  # get the plugin url in plugin:// notation
-_handle = int(sys.argv[1])  # get the plugin handle as an integer number
+_url = None
+_handle = None
+
 if addon.getSetting('verify_ssl') == 'false':
     verify_ssl = False
 else:
@@ -418,7 +418,13 @@ def router(paramstring):
         main_menu()
 
 
-def run():
+def run(argv):
+    global _url
+    _url = argv[0]
+
+    global _handle
+    _handle= int(argv[1])
+
     if not fsgo.valid_session:
         authenticate()
-    router(sys.argv[2][1:])  # trim the leading '?' from the plugin call paramstring
+    router(argv[2][1:])  # trim the leading '?' from the plugin call paramstring

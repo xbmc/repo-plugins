@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
-"""BFI  searcher and helpers"""
+
+"""BCF searcher and helpers"""
 __author__ = "fraser"
 
 import json

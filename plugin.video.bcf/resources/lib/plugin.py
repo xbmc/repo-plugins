@@ -15,38 +15,41 @@ from resources.lib import search as bcfs
 plugin = routing.Plugin()
 ADDON = xa.Addon()
 ADDON_ID = ADDON.getAddonInfo("id")  # plugin.video.bcf
-ADDON_NAME = ADDON.getAddonInfo("name")  # British Council Film Player
+ADDON_NAME = ADDON.getAddonInfo("name")  # British Council Film
 MEDIA_URI = "special://home/addons/{}/resources/media/".format(ADDON_ID)
 
 BCF_THEMES = [
     "Any",
-    "Architecture",
-    "Arts",
-    "Agriculture",
-    "Biology",
-    "Education",
-    "Industry and Commerce",
-    "London",
-    "Maritime",
-    "Military",
-    "Public Services",
-    "Public Utilities",
-    "Second World War",
-    "Science and Technology",
-    "Scotland",
-    "Sport",
-    "Town and Country",
-    "Leisure",
-    "Landscapes and Scenery"]
+    ku.get_string(32030),  # Architecture
+    ku.get_string(32031),  # Arts
+    ku.get_string(32032),  # Agriculture
+    ku.get_string(32033),  # Biology
+    ku.get_string(32034),  # Education
+    ku.get_string(32035),  # Industry and Commerce
+    ku.get_string(32036),  # London
+    ku.get_string(32037),  # Maritime
+    ku.get_string(32038),  # Military
+    ku.get_string(32039),  # Public Services
+    ku.get_string(32040),  # Public Utilities
+    ku.get_string(32041),  # Second World War
+    ku.get_string(32042),  # Science and Technology
+    ku.get_string(32043),  # Scotland
+    ku.get_string(32044),  # Sport
+    ku.get_string(32045),  # Town and Country
+    ku.get_string(32046),  # Leisure
+    ku.get_string(32047),  # Landscapes and Scenery
+    ]
 
 BCF_SERIES = [
     "Any",
-    "Scenes from Shakespeare",
-    "Junior Biology",
-    "Senior Biology",
-    "Human Geography",
-    "Technical Geography",
-    "British News"]
+    ku.get_string(32050),  # Scenes from Shakespeare
+    ku.get_string(32051),  # Junior Biology
+    ku.get_string(32052),  # Senior Biology
+    ku.get_string(32053),  # Human Geography
+    ku.get_string(32054),  # Technical Geography
+    # TODO: "British News" links don't work - contact BCF
+    ku.get_string(32055),  # British News 
+    ]
 
 # no 1949?
 BCF_YEARS = [

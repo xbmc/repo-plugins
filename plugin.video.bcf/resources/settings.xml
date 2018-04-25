@@ -4,7 +4,6 @@
         <setting id="debug" type="bool" label="32001" default="false" />
         <setting type="sep"/>
         <setting id="cache_use" type="bool" label="32017" default="true" />
-        <setting id="cache_history" type="bool" label="32021" default="true" />
         <setting type="sep"/>
         <setting id="cache_clear" label="32018" type="action" action="RunPlugin(plugin://plugin.video.bfi/clear/cache)"/>
     </category>

@@ -39,3 +39,27 @@ msgstr ""
 msgctxt "#30006"
 msgid "Shows"
 msgstr ""
+
+msgctxt "#30007"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Log out"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Authorization Failure"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Please visit watch.cbc.ca, create your account, and enter your credential in the settings"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Please logout in settings and try again"
+msgstr ""

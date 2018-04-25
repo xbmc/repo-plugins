@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import logging
 
 import xbmc
 import xbmcaddon
+
 from resources.lib.kodiutils import get_setting_as_bool
 
 

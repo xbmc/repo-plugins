@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 """Main plugin file - Handles the various routes"""
+
 __author__ = "fraser"
 
 import routing
 import xbmc
 import xbmcaddon as xa
 import xbmcplugin as xp
+from xbmcgui import ListItem
+
 from resources.lib import kodiutils as ku
 from resources.lib import search as bfis
-from xbmcgui import ListItem
 
 plugin = routing.Plugin()
 ADDON = xa.Addon()
@@ -70,7 +72,6 @@ def get_arg(key, default=None):
     if default is None:
         default = ""
     return plugin.args.get(key, [default])[0]
-
 
 
 def paginate(query, count, total, offset):
@@ -138,6 +139,7 @@ def settings():
     """Plugin setting config"""
     ku.show_settings()
     xbmc.executebuiltin("Container.Refresh()")
+
 
 @plugin.route("/recent")
 def recent():

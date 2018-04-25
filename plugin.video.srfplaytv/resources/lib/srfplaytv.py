@@ -45,6 +45,16 @@ except NameError:
     CompatStr = str  # Python3
 
 
+def get_boolean_setting(label):
+    """
+    Retrieve the boolean value of a setting switch.
+
+    Keyword arguments:
+    label -- the settings label
+    """
+    return REAL_SETTINGS.getSetting(label) == 'true'
+
+
 ADDON_ID = 'plugin.video.srfplaytv'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
 ADDON_NAME = REAL_SETTINGS.getAddonInfo('name')
@@ -52,10 +62,10 @@ ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
 ICON = REAL_SETTINGS.getAddonInfo('icon')
 FANART = REAL_SETTINGS.getAddonInfo('fanart')
 LANGUAGE = REAL_SETTINGS.getLocalizedString
-SEGMENTS = REAL_SETTINGS.getSetting('Enable_Show_Segments') == 'true'
-SEGMENTS_TOPICS = REAL_SETTINGS.getSetting('Enable_Settings_Topics') == 'true'
-PREFER_HD = REAL_SETTINGS.getSetting('Prefer_HD') == 'true'
-SUBTITLES = REAL_SETTINGS.getSetting('Extract_Subtitles') == 'true'
+SEGMENTS = get_boolean_setting('Enable_Show_Segments')
+SEGMENTS_TOPICS = get_boolean_setting('Enable_Settings_Topics')
+PREFER_HD = get_boolean_setting('Prefer_HD')
+SUBTITLES = get_boolean_setting('Extract_Subtitles')
 
 PROFILE = xbmc.translatePath(
     REAL_SETTINGS.getAddonInfo('profile')).decode("utf-8")
@@ -64,7 +74,7 @@ BU = 'srf'
 HOST_URL = 'https://www.srf.ch'
 TIMEOUT = 30
 CONTENT_TYPE = 'videos'
-DEBUG = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
+DEBUG = get_boolean_setting('Enable_Debugging')
 NUMBER_OF_EPISODES = 10
 
 FAVOURITE_SHOWS_FILENAME = 'favourite_shows.json'
@@ -73,14 +83,19 @@ YESTERDAY = LANGUAGE(30059)
 WEEKDAYS = (LANGUAGE(30060), LANGUAGE(30061), LANGUAGE(30062), LANGUAGE(30063),
             LANGUAGE(30064), LANGUAGE(30065), LANGUAGE(30066))
 
-
 socket.setdefaulttimeout(TIMEOUT)
 
 
-# General helper function:
-# Put these into a seperate script.
+# General helper functions:
 
 def log(msg, level=xbmc.LOGDEBUG):
+    """
+    Logs a message using Kodi's logging interface.
+
+    Keyword arguments:
+    msg   -- the message to log
+    level -- the logging level
+    """
     if DEBUG:
         if level == xbmc.LOGERROR:
             msg += ' ,' + traceback.format_exc()
@@ -92,16 +107,33 @@ def get_params():
 
 
 def str_or_none(inp, default=None):
-    # return default if inp is None else CompatStr(inp)
+    """
+    Convert an input to a string (if possible), otherwise
+    return a default value.
+
+    Keyword arguments:
+    inp     -- input
+    default -- the default value to return (default: None)
+    """
     if inp is None:
         return default
     try:
-        return unicode(inp, 'utf-8')
+        return CompatStr(inp, 'utf-8')
     except TypeError:
         return inp
 
 
 def float_or_none(val, scale=1, invscale=1, default=None):
+    """
+    Convert an input value to a float (if possible), otherwise
+    return a default value.
+
+    Keyword arguments:
+    val      -- input value
+    scale    -- divide the input by this value (default: 1)
+    invscale -- multiply the input by this value (default: 1)
+    default  -- the default return value (default: None)
+    """
     if val == '':
         val = None
     if val is None:
@@ -113,6 +145,16 @@ def float_or_none(val, scale=1, invscale=1, default=None):
 
 
 def int_or_none(val, scale=1, invscale=1, default=None):
+    """
+    Convert an input value to an integer (if possible), otherwise
+    return a default value.
+
+    Keyword arguments:
+    val      -- input value
+    scale    -- divide the input by this value (default: 1)
+    invscale -- multiply the input by this value (default: 1)
+    default  -- the default return value (default: None)
+    """
     if val == '':
         val = None
     if val is None:
@@ -124,6 +166,12 @@ def int_or_none(val, scale=1, invscale=1, default=None):
 
 
 def assemble_query_string(query_list):
+    """
+    Assembles a query for an URL and returns the assembled query string.
+
+    Keyword arguments:
+    query_list -- a list of queries
+    """
     return '&'.join(['{}={}'.format(k, v) for (k, v) in query_list])
 
 
@@ -142,6 +190,8 @@ def get_duration(duration_string):
     Keyword arguments:
     duration_string -- a string of the above Form.
     """
+    if not isinstance(duration_string, CompatStr):
+        return None
     durrex = r'(((?P<hour>\d+):)?(?P<minute>\d+):)?(?P<second>\d+)'
     match = re.match(durrex, duration_string)
     if match:
@@ -170,6 +220,8 @@ def parse_datetime(input_string):
     if date_time:
         return date_time
     date_time = _parse_date_time_tz(input_string)
+    if not date_time:
+        log('parse_datetime: Could not parse input string %s', input_string)
     return date_time
 
 
@@ -254,7 +306,6 @@ def _parse_weekday_time(input_string):
         today = datetime.date.today()
         wdl = [x for x in weekdays if input_string.startswith(x)]
         if not wdl:
-            log('No weekday match found for date string: %s' % input_string)
             return None
         index = weekdays.index(wdl[0])
         if index == 9:  # tomorrow
@@ -271,7 +322,6 @@ def _parse_weekday_time(input_string):
             minute = int(recent_date_match.group('minute'))
             time = datetime.time(hour, minute)
         except ValueError:
-            log('Could not parse time for date string: %s' % input_string)
             return None
         try:
             second = int(recent_date_match.group('second'))
@@ -280,7 +330,6 @@ def _parse_weekday_time(input_string):
             pass
         date_time = datetime.datetime.combine(today, time) + offset
     else:
-        log('No match found for date string: %s' % input_string)
         return None
     return date_time
 
@@ -320,7 +369,6 @@ def _parse_date_time(input_string):
             minute = int(full_date_match.group('minute'))
             date_time = datetime.datetime(year, month, day, hour, minute)
         except ValueError:
-            log('Could not convert date string: %s' % input_string)
             return None
         try:
             second = int(full_date_match.group('second'))
@@ -357,10 +405,10 @@ class SRFPlayTV(object):
         queries = (url, mode, name, page_hash, page)
         query_names = ('url', 'mode', 'name', 'page_hash', 'page')
         purl = sys.argv[0]
-        for query, name in zip(queries, query_names):
+        for query, qname in zip(queries, query_names):
             if query:
                 add = '?' if not added else '&'
-                purl += '%s%s=%s' % (add, name, urllib.quote_plus(query))
+                purl += '%s%s=%s' % (add, qname, urllib.quote_plus(query))
                 added = True
         return purl
 
@@ -390,12 +438,12 @@ class SRFPlayTV(object):
                     response,
                     expiration=datetime.timedelta(hours=2))
             return self.cache.get(ADDON_NAME + '.openURL, url = %s' % url)
-        except urllib2.URLError as e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except socket.timeout as e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except Exception as e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
+        except urllib2.URLError as err:
+            log("openURL Failed! " + str(err), xbmc.LOGERROR)
+        except socket.timeout as err:
+            log("openURL Failed! " + str(err), xbmc.LOGERROR)
+        except Exception as err:
+            log("openURL Failed! " + str(err), xbmc.LOGERROR)
             xbmcgui.Dialog().notification(
                 ADDON_NAME, LANGUAGE(30100), ICON, 4000)
             return ''
@@ -473,12 +521,13 @@ class SRFPlayTV(object):
         All shows
         Favourite shows
         Newest favourite shows
-        Recommodations
+        Recommendations
         Newest shows (by topic)
         Most clicked shows (by topic)
         Soon offline
         Shows by date
-        (SRF.ch live)
+        Live TV
+        SRF.ch live
         """
         log('build_main_menu')
         main_menu_list = [
@@ -487,52 +536,73 @@ class SRFPlayTV(object):
                 'name': LANGUAGE(30050),
                 'mode': 10,
                 'isFolder': True,
+                'displayItem': get_boolean_setting('All_Shows')
             }, {
                 # Favourite shows
                 'name': LANGUAGE(30051),
                 'mode': 11,
                 'isFolder': True,
+                'displayItem': get_boolean_setting('Favourite_Shows')
             }, {
                 # Newest favourite shows
                 'name': LANGUAGE(30052),
                 'mode': 12,
                 'isFolder': True,
+                'displayItem': get_boolean_setting('Newest_Favourite_Shows')
             }, {
-                # Recommodations
+                # Recommendations
                 'name': LANGUAGE(30053),
                 'mode': 16,
                 'isFolder': True,
+                'displayItem': get_boolean_setting('Recommendations')
             }, {
                 # Newest shows
                 'name': LANGUAGE(30054),
                 'mode': 13,
                 'isFolder': True,
+                'displayItem': get_boolean_setting('Newest_Shows')
             }, {
                 # Most clicked shows
                 'name': LANGUAGE(30055),
                 'mode': 14,
                 'isFolder': True,
+                'displayItem': get_boolean_setting('Most_Clicked_Shows')
             }, {
                 # Soon offline
                 'name': LANGUAGE(30056),
                 'mode': 15,
                 'isFolder': True,
+                'displayItem': get_boolean_setting('Soon_Offline')
             }, {
                 # Shows by date
                 'name': LANGUAGE(30057),
                 'mode': 17,
                 'isFolder': True,
-            },
-            # {'name': LANGUAGE(30070), 'mode': 18},  # SRF.ch live
+                'displayItem': get_boolean_setting('Shows_By_Date')
+            }, {
+                # Live TV
+                'name': LANGUAGE(30072),
+                'mode': 26,
+                'isFolder': True,
+                'displayItem': get_boolean_setting('Live_TV')
+            }, {
+                # SRF.ch live
+                'name': LANGUAGE(30070),
+                'mode': 18,
+                'isFolder': True,
+                'displayItem': get_boolean_setting('SRF_Live')
+            }
         ]
         for menu_item in main_menu_list:
-            list_item = xbmcgui.ListItem(menu_item['name'])
-            list_item.setProperty('IsPlayable', 'false')
-            list_item.setArt({'thumb': ICON})
-            u = self.build_url(mode=menu_item['mode'], name=menu_item['name'])
-            xbmcplugin.addDirectoryItem(
-                handle=int(sys.argv[1]), url=u,
-                listitem=list_item, isFolder=menu_item['isFolder'])
+            if menu_item['displayItem']:
+                list_item = xbmcgui.ListItem(menu_item['name'])
+                list_item.setProperty('IsPlayable', 'false')
+                list_item.setArt({'thumb': ICON})
+                purl = self.build_url(
+                    mode=menu_item['mode'], name=menu_item['name'])
+                xbmcplugin.addDirectoryItem(
+                    handle=int(sys.argv[1]), url=purl,
+                    listitem=list_item, isFolder=menu_item['isFolder'])
 
     def build_dates_overview_menu(self):
         """
@@ -541,28 +611,65 @@ class SRFPlayTV(object):
         """
         log('build_dates_overview_menu')
 
-        def folder_name(d):
+        def folder_name(dato):
+            """
+            Generates a Kodi folder name from an date object.
+
+            Keyword arguments:
+            dato -- a date object
+            """
             today = datetime.date.today()
-            if d == today:
+            if dato == today:
                 name = TODAY
-            elif d == today + datetime.timedelta(-1):
+            elif dato == today + datetime.timedelta(-1):
                 name = YESTERDAY
             else:
-                name = WEEKDAYS[d.weekday()] + ', %s' % d.strftime('%d.%m.%Y')
+                name = '%s, %s' % (WEEKDAYS[dato.weekday()],
+                                   dato.strftime('%d.%m.%Y'))
             return name
 
         current_date = datetime.date.today()
-        number_of_days = 10
+        number_of_days = 7
 
         for i in range(number_of_days):
-            d = current_date + datetime.timedelta(-i)
-            list_item = xbmcgui.ListItem(label=folder_name(d))
+            dato = current_date + datetime.timedelta(-i)
+            list_item = xbmcgui.ListItem(label=folder_name(dato))
             list_item.setArt({'thumb': ICON})
-            name = d.strftime('%d-%m-%Y')
-            u = self.build_url(mode=24, name=name)
+            name = dato.strftime('%d-%m-%Y')
+            purl = self.build_url(mode=24, name=name)
             xbmcplugin.addDirectoryItem(
-                handle=int(sys.argv[1]), url=u,
+                handle=int(sys.argv[1]), url=purl,
                 listitem=list_item, isFolder=True)
+
+        choose_item = xbmcgui.ListItem(label=LANGUAGE(30071))
+        choose_item.setArt({'thumb': ICON})
+        purl = self.build_url(mode=25)
+        xbmcplugin.addDirectoryItem(
+            handle=int(sys.argv[1]), url=purl,
+            listitem=choose_item, isFolder=True)
+
+    def pick_date(self):
+        """
+        Opens a date choosing dialog and lets the user input a date.
+        Redirects to the date menu of the chosen date.
+        In case of failure or abortion redirects to the date
+        overview menu.
+        """
+        date_picker = xbmcgui.Dialog().numeric(1, LANGUAGE(30071), None)
+        if date_picker is not None:
+            date_elems = date_picker.split('/')
+            try:
+                day = int(date_elems[0])
+                month = int(date_elems[1])
+                year = int(date_elems[2])
+                chosen_date = datetime.date(year, month, day)
+                name = chosen_date.strftime('%d-%m-%Y')
+                self.build_date_menu(name)
+            except (ValueError, IndexError):
+                log('pick_date: Invalid date chosen.')
+                self.build_dates_overview_menu()
+        else:
+            self.build_dates_overview_menu()
 
     def build_date_menu(self, date_string):
         """
@@ -610,9 +717,9 @@ class SRFPlayTV(object):
             list_item.setArt({'thumb': ICON})
             name = elem.get('id')
             if name:
-                u = self.build_url(mode=mode, name=name)
+                purl = self.build_url(mode=mode, name=name)
                 xbmcplugin.addDirectoryItem(
-                    handle=int(sys.argv[1]), url=u,
+                    handle=int(sys.argv[1]), url=purl,
                     listitem=list_item, isFolder=True)
 
     def build_topics_menu(self, name, topic_id=None, page=1):
@@ -666,9 +773,9 @@ class SRFPlayTV(object):
             next_item = xbmcgui.ListItem(label='>> Next')
             next_item.setProperty('IsPlayable', 'false')
             name = topic_id if topic_id else ''
-            u = self.build_url(mode=mode, name=name, page=page+1)
+            purl = self.build_url(mode=mode, name=name, page=page+1)
             xbmcplugin.addDirectoryItem(
-                handle=int(sys.argv[1]), url=u,
+                handle=int(sys.argv[1]), url=purl,
                 listitem=next_item, isFolder=True)
         except IndexError:
             return
@@ -735,11 +842,14 @@ class SRFPlayTV(object):
         if len(sorted_list_of_episodes_dict) > page * NUMBER_OF_EPISODES:
             next_item = xbmcgui.ListItem(label='>> Next')
             next_item.setProperty('IsPlayable', 'false')
-            u = self.build_url(mode=12, page=page+1)
+            purl = self.build_url(mode=12, page=page+1)
             xbmcplugin.addDirectoryItem(
-                int(sys.argv[1]), u, next_item, isFolder=True)
+                int(sys.argv[1]), purl, next_item, isFolder=True)
 
     def read_all_available_shows(self):
+        """
+        Downloads a list of all available SRF shows and returns this list.
+        """
         json_url = ('http://il.srgssr.ch/integrationlayer/1.0/ue/%s/tv/'
                     'assetGroup/editorialPlayerAlphabetical.json') % BU
         json_response = json.loads(self.open_url(json_url))
@@ -754,6 +864,10 @@ class SRFPlayTV(object):
         return show_list
 
     def manage_favourite_shows(self):
+        """
+        Opens a Kodi multiselect dialog to let the user choose
+        his/her personal favourite show list.
+        """
         show_list = self.read_all_available_shows()
         stored_favids = self.read_favourite_show_ids()
         names = [x['title'] for x in show_list]
@@ -837,10 +951,73 @@ class SRFPlayTV(object):
         xbmcplugin.addDirectoryItems(
             int(sys.argv[1]), list_items, totalItems=len(list_items))
 
+    def build_tv_menu(self):
+        """
+        Builds the overview over the SRF TV channels (SRF 1, SRF 2, SRF info).
+        """
+        def extract_channel_id(webpage):
+            """
+            Extracts the TV channel id from the webpage of the channel.
+
+            Keyword arguments:
+            webpage -- the content of the webpage of a TV channel
+            """
+            channel_id_regex = r'''(?x)
+                                   <iframe.+src\s*=\s*.+
+                                   (?P<channel_id>
+                                       [a-f0-9]{8}-
+                                       [a-f0-9]{4}-
+                                       [a-f0-9]{4}-
+                                       [a-f0-9]{4}-
+                                       [a-f0-9]{12}
+                                    )
+                                '''
+            match = re.search(channel_id_regex, webpage)
+            if match:
+                return match.group('channel_id')
+            return None
+
+        channels = ['srf-1', 'srf-2', 'srf-info']
+        for channel in channels:
+            url = 'https://www.srf.ch/livestream/player/%s' % channel
+            webpage = self.open_url(url, use_cache=False)
+            channel_id = extract_channel_id(webpage)
+            if not channel_id:
+                log('build_tv_menu: Could not extract channel id for %s.'
+                    % channel)
+                continue
+            urn = 'urn:srf:video:%s' % channel_id
+            json_url = ('https://il.srgssr.ch/integrationlayer/2.0/'
+                        'mediaComposition/byUrn/%s.json') % urn
+            info_json = json.loads(self.open_url(json_url, use_cache=False))
+            try:
+                json_entry = info_json['chapterList'][0]
+            except (KeyError, IndexError):
+                log('build_tv_menu: Unexpected json structure for channel %s'
+                    % channel)
+                continue
+            self.build_entry(json_entry)
+
     def build_live_menu(self):
+        """
+        Builds the menu listing the currently available SRF.ch livestreams.
+        """
         def get_live_ids():
-            # TODO: implement this
-            return ['386514', '386460']
+            """
+            Downloads the webpage 'https://www.srf.ch' and scrapes it for
+            possible livestreams. If some live events were found, a list
+            of live ids will be returned, otherwise an empty list.
+            """
+            url = 'https://www.%s.ch' % BU
+            webpage = self.open_url(url, use_cache=False)
+            id_regex = r'data-sport-id=\"(?P<live_id>\d+)\"'
+            live_ids = []
+            try:
+                for match in re.finditer(id_regex, webpage):
+                    live_ids.append(match.group('live_id'))
+            except StopIteration:
+                pass
+            return live_ids
 
         live_ids = get_live_ids()
         for lid in live_ids:
@@ -858,11 +1035,17 @@ class SRFPlayTV(object):
             item = xbmcgui.ListItem(label=title)
             item.setProperty('IsPlayable', 'true')
             item.setArt({'thumb': image})
-            u = self.build_url(mode=51, name=stream_url)
+            purl = self.build_url(mode=51, name=stream_url)
             xbmcplugin.addDirectoryItem(
-                int(sys.argv[1]), u, item, isFolder=False)
+                int(sys.argv[1]), purl, item, isFolder=False)
 
     def play_livestream(self, stream_url):
+        """
+        Plays a livestream, given a unauthenticated stream url.
+
+        Keyword arguments:
+        stream_url -- the stream url
+        """
         auth_url = self.get_auth_url(stream_url)
         play_item = xbmcgui.ListItem('Live', path=auth_url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, play_item)
@@ -933,6 +1116,8 @@ class SRFPlayTV(object):
         """
         Builds a list entry for a episode by a given video id.
         The segment entries for that episode can be included too.
+        The video id can be an id of a segment. In this case an
+        entry for the segment will be created.
 
         Keyword arguments:
         video_id         -- the SRF id of the video
@@ -1061,11 +1246,11 @@ class SRFPlayTV(object):
         Keyword arguments:
         url -- a given stream URL
         """
-        sp = urlparse.urlparse(url).path.split('/')
+        spl = urlparse.urlparse(url).path.split('/')
         token = json.loads(
             self.open_url(
                 'http://tp.srgssr.ch/akahd/token?acl=/%s/%s/*' %
-                (sp[1], sp[2]))) or {}
+                (spl[1], spl[2]), use_cache=False)) or {}
         auth_params = token.get('token', {}).get('authparams')
         if segment_data:
             # timestep_string = self._get_timestep_token(segment_data)
@@ -1082,20 +1267,20 @@ class SRFPlayTV(object):
         Keyword arguments:
         video_id -- the SRF video of the video to play
         """
-        log('Playing video %s.' % video_id)
+        log('play_video, video_id = %s' % video_id)
         json_url = ('https://il.srgssr.ch/integrationlayer/2.0/%s/'
                     'mediaComposition/video/%s.json') % (BU, video_id)
         json_response = json.loads(self.open_url(json_url))
 
         chapter_list = json_response.get('chapterList', [])
         if not chapter_list:
-            log('No stream URL found.')  # TODO: Error (Notification)
+            log('play_video: no stream URL found.')
             return
 
         first_chapter = chapter_list[0]
         resource_list = first_chapter.get('resourceList', [])
         if not resource_list:
-            log('No stream URL found.')  # TODO: Error (Notification)
+            log('play_video: no stream URL found.')
             return
 
         stream_urls = {
@@ -1109,11 +1294,12 @@ class SRFPlayTV(object):
                         stream_urls[key] = resource.get('url')
 
         if not stream_urls['SD'] and not stream_urls['HD']:
-            log('No stream URL found.')  # TODO: Error (Notification)
+            log('play_video: no stream URL found.')
             return
 
         stream_url = stream_urls['HD'] if (stream_urls['HD'] and PREFER_HD)\
             or not stream_urls['SD'] else stream_urls['SD']
+        log('play_video, stream_url = %s' % stream_url)
         auth_url = self.get_auth_url(stream_url)
 
         start_time = end_time = None
@@ -1143,12 +1329,15 @@ class SRFPlayTV(object):
                     parsed_url.path, parsed_url.params,
                     new_query, parsed_url.fragment)
                 auth_url = surl_result.geturl()
-
+        log('play_video, auth_url = %s' % auth_url)
         play_item = xbmcgui.ListItem(video_id, path=auth_url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, play_item)
 
 
 def run():
+    """
+    Run the plugin.
+    """
     params = get_params()
     try:
         url = urllib.unquote_plus(params["url"])
@@ -1207,6 +1396,10 @@ def run():
         SRFPlayTV().build_topics_menu('Most clicked', name, page=page)
     elif mode == 24:
         SRFPlayTV().build_date_menu(name)
+    elif mode == 25:
+        SRFPlayTV().pick_date()
+    elif mode == 26:
+        SRFPlayTV().build_tv_menu()
     elif mode == 50:
         SRFPlayTV().play_video(name)
     elif mode == 51:

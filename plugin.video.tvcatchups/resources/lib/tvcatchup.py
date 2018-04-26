@@ -21,6 +21,7 @@ import os, sys, time, datetime, re, traceback
 import urlparse, urllib, urllib2, socket, json
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
+from pytz import timezone
 from bs4 import BeautifulSoup
 from simplecache import SimpleCache, use_cache
 
@@ -60,23 +61,26 @@ def cleanString(string1):
               
 def trimString(string1):
     return re.sub('[\s+]', '', string1.strip(' \t\n\r'))
-              
+
 socket.setdefaulttimeout(TIMEOUT)  
 class TVCatchup(object):
     def __init__(self):
         log('__init__')
         self.cache   = SimpleCache()
+        
+        
+    def getTVCtime(self):
+        return datetime.datetime.now(timezone('Europe/London'))
 
-           
+        
     def openURL(self, url):
-        log('openURL, url = ' + str(url))
         try:
+            log('openURL, url = ' + str(url))
             cacheresponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
             if not cacheresponse:
-                request = urllib2.Request(url)
-                response = urllib2.urlopen(request, timeout = TIMEOUT).read()
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(minutes=5))
-            return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
+                cacheresponse = urllib2.urlopen(urllib2.Request(url), timeout=TIMEOUT).read()
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheresponse, expiration=datetime.timedelta(minutes=5))
+            return cacheresponse
         except Exception as e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
             xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
@@ -111,19 +115,20 @@ class TVCatchup(object):
             if name is None:
                 infoLabels = {"mediatype":"episode","label":chname ,"title":chname}
                 infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":thumb,"logo":thumb}
-                self.addDir(chname, link, 3, infoLabels, infoArt)
+                self.addDir(chname, chname, 2, infoLabels, infoArt)
             elif name.lower() == chname.lower():
                 try:
                     date = soup('a' , {'class': 'last'})[0].attrs['href']
                     aired = re.findall('/tv-guide/(.+?)/00',date, flags=re.DOTALL)[0]
-                except: aired = datetime.datetime.now().strftime('%Y-%m-%d')
+                except: aired = self.getTVCtime().strftime('%Y-%m-%d')
                 items = channel('div' , {'class': 'hide'})
                 for item in items:
                     try: 
                         time  = trimString(item.find_all('span')[0].get_text())
                         dur   = int((abs(eval(time.replace(':','.'))) * 60) * 60)
+                        start = datetime.datetime.strptime(time.split('-')[0], '%H:%M').strftime('%I:%M %p')
                     except: continue
-                    label = '%s - %s'%(chname,cleanString(item.get_text()).split('\n')[0])
+                    label = '%s: %s - %s'%(start,chname,cleanString(item.get_text()).split('\n')[0])
                     try: desc = trimString(item.find_all('br')[0].get_text())
                     except: desc = ''
                     infoLabels = {"mediatype":"episode","label":label ,"title":label,"plot":desc,"duration":dur,"aired":aired}
@@ -131,6 +136,54 @@ class TVCatchup(object):
                     self.addLink(label, link, 9, infoLabels, infoArt, len(items))
                 break
             
+
+    def uEPG(self):
+        log('uEPG')
+        #support for upcoming uEPG universal epg framework module, module will be available from the Kodi repository.
+        #https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
+        soup    = BeautifulSoup(self.openURL(GUIDE_URL), "html.parser")
+        results = soup('div' , {'class': 'row'})
+        return (self.buildGuide(idx, channel) for idx, channel in enumerate(results))
+        
+        
+    def buildGuide(self, idx, channel):
+        log('buildGuide')
+        chname     = cleanString(channel.find_all('img')[0].attrs['alt'])
+        link       = cleanString(channel.find_all('a')[0].attrs['href'])
+        chlogo     = LOGO%chname
+        chnum      = idx + 1
+        isFavorite = False 
+        newChannel = {}
+        guidedata  = []
+        newChannel['channelname']   = chname
+        newChannel['channelnumber'] = chnum
+        newChannel['channellogo']   = chlogo
+        newChannel['isfavorite']    = isFavorite
+        try:
+            date  = soup('a' , {'class': 'last'})[0].attrs['href']
+            aired = re.findall('/tv-guide/(.+?)/00',date, flags=re.DOTALL)[0]
+        except: aired = self.getTVCtime().strftime('%Y-%m-%d')
+        items = channel('div' , {'class': 'hide'})
+        for item in items:
+            try: 
+                ttime = trimString(item.find_all('span')[0].get_text())
+                dur   = int((abs(eval(ttime.replace(':','.'))) * 60) * 60)
+                start = datetime.datetime.strptime(ttime.split('-')[0], '%H:%M').strftime('%I:%M %p')
+                title = cleanString(item.get_text()).split('\n')[0]
+                label = '%s - %s'%(chname,title)
+                starttime = (datetime.datetime.strptime('%s - %s'%(aired,start), '%Y-%m-%d - %I:%M %p'))
+                starttime = time.mktime(starttime.timetuple())
+            except: continue
+            try: desc = trimString(item.find_all('br')[0].get_text())
+            except: desc = ''
+            tmpdata = {"mediatype":"episode","label":title,"title":label,"originaltitle":label,"plot":desc,"duration":dur}
+            tmpdata['starttime'] = starttime
+            tmpdata['url'] = sys.argv[0]+'?mode=9&name=%s&url=%s'%(label,link)
+            tmpdata['art'] ={"thumb":chlogo,"clearart":chlogo,"fanart":FANART,"icon":chlogo,"clearlogo":chlogo}
+            guidedata.append(tmpdata)
+        newChannel['guidedata'] = guidedata
+        return newChannel
+
             
     def resolverURL(self, url):
         return re.compile('<source src="(.+?)" type="application/x-mpegURL">').findall(self.openURL(BASE_URL + url))[0]
@@ -140,9 +193,8 @@ class TVCatchup(object):
         log('playVideo')
         liz  = xbmcgui.ListItem(name, path=self.resolverURL(url))
         liz.setMimeType('application/x-mpegURL')
-        if url.endswith('m3u8'):
-            liz.setProperty('inputstreamaddon','inputstream.adaptive')
-            liz.setProperty('inputstream.adaptive.manifest_type','hls')
+        liz.setProperty('inputstreamaddon','inputstream.adaptive')
+        liz.setProperty('inputstream.adaptive.manifest_type','hls')
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 
 
@@ -184,10 +236,9 @@ log("Name: "+str(name))
 
 if mode==None:  TVCatchup().buildMenu(MAIN_MENU)
 elif mode == 1: TVCatchup().buildLive()
-elif mode == 2: TVCatchup().buildLineup()
-elif mode == 3: TVCatchup().buildLineup(name)
-elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,listitem=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(sys.argv[0]+"?mode=2"),urllib.quote(json.dumps(sys.argv[0]+"?mode=20")),urllib.quote(json.dumps("7200")),urllib.quote(json.dumps("7"))))
+elif mode == 2: TVCatchup().buildLineup(url)
 elif mode == 9: TVCatchup().playVideo(name, url)
+elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(json.dumps(list(TVCatchup().uEPG()))),urllib.quote(json.dumps(sys.argv[0]+"?mode=20")),urllib.quote(json.dumps("7200")),urllib.quote(json.dumps("7"))))
 
 xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
 xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)

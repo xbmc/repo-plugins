@@ -17,11 +17,11 @@
 # along with PlutoTV.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, net, re, traceback, fnmatch, glob
+import os, sys, time, datetime, net, re, traceback
 import urlparse, urllib, socket, json, collections
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
 
-from simplecache import SimpleCache
+from simplecache import use_cache, SimpleCache
 
 # Plugin Info
 ADDON_ID      = 'plugin.video.plutotv'
@@ -39,9 +39,7 @@ TIMEOUT      = 15
 CONTENT_TYPE = 'files'
 USER_EMAIL   = REAL_SETTINGS.getSetting('User_Email')
 PASSWORD     = REAL_SETTINGS.getSetting('User_Password')
-USER_REGION  = REAL_SETTINGS.getSetting("Select_Country")
 HIDE_PLUTO   = True
-FIT_REGION   = False if USER_REGION == 'US' else True
 DEBUG        = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 COOKIE_JAR   = xbmc.translatePath(os.path.join(SETTINGS_LOC, "cookiejar.lwp"))
 PTVL_RUN     = xbmcgui.Window(10000).getProperty('PseudoTVRunning') == 'True'
@@ -54,12 +52,13 @@ BASE_LINEUP  = BASE_API + '/v1/channels.json'
 BASE_GUIDE   = BASE_API + '/v1/timelines/%s.000Z/%s.000Z/matrix.json'
 LOGIN_URL    = BASE_API + '/v1/auth/local'
 BASE_CLIPS   = BASE_API + '/v2/episodes/%s/clips.json'
+REGION_URL   = 'http://ip-api.com/json'
 PLUTO_MENU   = [("Browse Channels" , BASE_LINEUP, 0),
                 ("Browse OnDemand" , BASE_LINEUP, 1),
                 ("Channel Guide"   , BASE_LINEUP, 20)]
               
 def isUWP():
-    return len(fnmatch.filter(glob.glob(LANGUAGE(30011)),'*.*') + fnmatch.filter(glob.glob(LANGUAGE(30012)),'*.*')) > 0
+    return (bool(xbmc.getCondVisibility("system.platform.uwp")) or sys.platform == "win10")
     
 def inputDialog(heading=ADDON_NAME, default='', key=xbmcgui.INPUT_ALPHANUM, opt=0, close=0):
     retval = xbmcgui.Dialog().input(heading, default, key, opt, close)
@@ -88,18 +87,24 @@ def getParams():
 socket.setdefaulttimeout(TIMEOUT)
 class PlutoTV():
     def __init__(self):
-        log('__init__')
-        self.net   = net.Net()
-        self.cache = SimpleCache()
+        self.net     = net.Net()
+        self.cache   = SimpleCache()
+        self.region  = self.getRegion()
+        self.filter  = False if self.region == 'US' else True
         self.categoryMenu = self.getCategories()
         self.mediaType = self.getMediaTypes()
+        log('__init__, region = ' + self.region)
+        
+        
+    @use_cache(1)
+    def getRegion(self):
+        return (self.openURL(REGION_URL).get('countryCode','') or 'US')
         
         
     def login(self):
         log('login')
         #ignore guest login
         if USER_EMAIL == LANGUAGE(30009): return
-        
         if len(USER_EMAIL) > 0:
             header_dict               = {}
             header_dict['Accept']     = 'application/json, text/javascript, */*; q=0.01'
@@ -111,7 +116,6 @@ class PlutoTV():
             
             try: xbmcvfs.rmdir(COOKIE_JAR)
             except: pass
-
             if xbmcvfs.exists(COOKIE_JAR) == False:
                 try:
                     xbmcvfs.mkdirs(SETTINGS_LOC)
@@ -128,7 +132,6 @@ class PlutoTV():
                     self.net.save_cookies(COOKIE_JAR)
                 else: xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30007), ICON, 4000)
             except Exception as e: log('login, Unable to create the storage directory ' + str(e), xbmc.LOGERROR)
-        
         else:
             #firstrun wizard
             if yesnoDialog(LANGUAGE(30008),no=LANGUAGE(30009), yes=LANGUAGE(30010)):
@@ -161,7 +164,7 @@ class PlutoTV():
         except Exception as e:
             log('openURL, Unable to open url ' + str(e), xbmc.LOGERROR)
             xbmcgui.Dialog().notification(ADDON_NAME, 'Unable to Connect, Check User Credentials', ICON, 4000)
-            return []
+            return ''
             
 
     def mainMenu(self):
@@ -202,7 +205,7 @@ class PlutoTV():
     def browse(self, chname, url):
         log('browse, chname = ' + chname)
         geowarn = False
-        data    = (self.openURL(url))
+        data = (self.openURL(url))
         for channel in data:
             id      = channel['_id']
             cat     = channel['category']
@@ -213,7 +216,7 @@ class PlutoTV():
             plot    = channel['description']
             feat    = (channel.get('featured','') or 0) == -1
      
-            if FIT_REGION == True and (USER_REGION in exclude or USER_REGION not in region):
+            if self.filter == True and (self.region in exclude or self.region not in region):
                 if geowarn == False:
                     geowarn = True
                     xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30004), ICON, 4000)
@@ -250,10 +253,9 @@ class PlutoTV():
         log('browseGuide')
         geowarn = False
         start   = 0 if start == BASE_LINEUP else int(start)
-        data    = (self.openURL(BASE_LINEUP))
-        data    = list(self.pagination(data, end))
+        data    = list(self.pagination((self.openURL(BASE_LINEUP)), end))
         start   = 0 if start >= len(data) else start
-        
+        link    = (self.openURL(BASE_GUIDE % (datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00'),(datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00'))))
         for channel in data[start]:
             chid    = channel['_id']
             chcat   = channel['category']
@@ -265,18 +267,13 @@ class PlutoTV():
             chthumb = ICON
             if 'thumbnail' in channel: chthumb = (channel['thumbnail'].get('path',ICON) or ICON)
             feat = (channel.get('featured','') or 0) == -1
-            
-            if FIT_REGION == True and (USER_REGION in exclude or USER_REGION not in region):
+            if self.filter == True and (self.region in exclude or self.region not in region):
                 if geowarn == False:
                     geowarn = True
                     xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30004), ICON, 4000)
                 continue
 
-            t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
-            t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
-            link = (self.openURL(BASE_GUIDE % (t1,t2)))
             item = link[chid]
-            
             if len(item) == 0: continue
             item      = item[0]
             epid      = (item['episode']['_id'])
@@ -294,43 +291,21 @@ class PlutoTV():
         start += 1
         self.addDir('>> Next', '%s'%(start), 0)
     
-
-    def resolveURL(self, provider, url):
-        log('resolveURL, provider = ' + provider + ', url = ' + url)
-        if provider == 'jwplatform' or url[-4:] == 'm3u8': return url
-        elif provider == 'youtube':
-            url = url.replace('feature=player_embedded&','')
-            if len(re.findall('http[s]?://www.youtube.com/watch', url)) > 0: return YTURL + url.split('/watch?v=')[1]
-            elif len(re.findall('http[s]?://youtu.be/', url)) > 0: return YTURL + url.split('/youtu.be/')[1]
-        elif provider == 'vimeo':
-            if len(re.findall('http[s]?://vimeo.com/', url)) > 0: return VMURL + url.split('/vimeo.com/')[1]
-        else:
-            info = None
-            if isUWP() == False: 
-                from YDStreamExtractor import getVideoInfo
-                info = getVideoInfo(url,3,True)
-            if info is None: return YTURL + 'W6FjQgmtt0k'
-            info = info.streams()
-            return info[0]['xbmc_url']
-
-     
+    
     def playChannel(self, name, url):
         log('playChannel')
         origurl  = url
         if PTVL_RUN: self.playContent(name, url)
-        t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
-        t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
-        link = (self.openURL(BASE_GUIDE % (t1,t2)))
+        link = (self.openURL(BASE_GUIDE % (datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00'),(datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00'))))
         item = link[origurl][0]
         id = item['episode']['_id']
         ch_start = datetime.datetime.fromtimestamp(time.mktime(time.strptime((item["start"].split('.')[0]), "%Y-%m-%dT%H:%M:%S")))
         ch_timediff = (datetime.datetime.now() - ch_start).seconds
-        data = (self.openURL(BASE_CLIPS %(id)))
         dur_sum  = 0
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
         xbmc.sleep(100)
-        for idx, field in enumerate(data):
+        for idx, field in enumerate(self.openURL(BASE_CLIPS %(id))):
             url       = (field['url'] or field['code'])
             name      = field['name']
             thumb     = (field['thumbnail'] or ICON)
@@ -346,7 +321,7 @@ class PlutoTV():
             liz.setArt(infoArt)
             liz.setProperty("IsPlayable","true")
             liz.setProperty("IsInternetStream",str(field['liveBroadcast']).lower())
-            if 'm3u8' in url:
+            if 'm3u8' in url.lower():
                 liz.setProperty('inputstreamaddon','inputstream.adaptive')
                 liz.setProperty('inputstream.adaptive.manifest_type','hls')
             if dur_start < ch_timediff and dur_sum > ch_timediff:
@@ -373,8 +348,8 @@ class PlutoTV():
             url       = (field['url'] or field['code'])
             name      = field['name']
             thumb     = (field['thumbnail'] or ICON)
-            provider  = field['provider']
-            url       = self.resolveURL(provider, url)
+            provider  = (field['provider']  or None)
+            url       = urllib.quote(json.dumps({"provider":provider,"url":url}))
             dur       = int(field['duration'] or '0') // 1000
             dur_start = dur_sum
             dur_sum  += dur
@@ -385,10 +360,33 @@ class PlutoTV():
             else: self.addLink(name, url, 7, infoList, infoArt, len(data))
             
            
+    @use_cache(28)
+    def resolveURL(self, provider, url):
+        log('resolveURL, provider = ' + str(provider) + ', url = ' + url)
+        if provider == 'jwplatform' or 'm3u8' in url.lower() or url is None: return url
+        elif provider == 'youtube':
+            url = url.replace('feature=player_embedded&','')
+            if len(re.findall('http[s]?://www.youtube.com/watch', url)) > 0: return YTURL + url.split('/watch?v=')[1]
+            elif len(re.findall('http[s]?://youtu.be/', url)) > 0: return YTURL + url.split('/youtu.be/')[1]
+        elif provider == 'vimeo':
+            if len(re.findall('http[s]?://vimeo.com/', url)) > 0: return VMURL + url.split('/vimeo.com/')[1]
+        else:
+            info = None
+            if isUWP() == False: 
+                from YDStreamExtractor import getVideoInfo
+                info = getVideoInfo(url,3,True)
+            if info is None: return YTURL + 'W6FjQgmtt0k'
+            info = info.streams()
+            return info[0]['xbmc_url']
+
+            
     def playVideo(self, name, url, liz=None):
         log('playVideo')
-        if liz is None: liz = xbmcgui.ListItem(name, path=url)
-        if 'm3u8' in url:
+        url = json.loads(urllib.unquote(url))
+        provider = url['provider']
+        url = url['url']
+        if liz is None: liz = xbmcgui.ListItem(name, path=self.resolveURL(provider, url))
+        if 'm3u8' in url.lower():
             liz.setProperty('inputstreamaddon','inputstream.adaptive')
             liz.setProperty('inputstream.adaptive.manifest_type','hls')
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
@@ -419,87 +417,73 @@ class PlutoTV():
         u=sys.argv[0]+"?url="+urllib.quote(u)+"&mode="+str(mode)+"&name="+urllib.quote(name)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
 
-        
+
     def uEPG(self):
         log('uEPG')
-        #support for upcoming uEPG universal epg framework module, module will be available from the Kodi repository.
+        #support for uEPG universal epg framework module, available from the Kodi repository.
         #https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
-        data = (self.openURL(BASE_LINEUP))
-        prog = busyDialog(0)
-        for cnt, channel in enumerate(data):
-            chthumb    = ''
-            chlogo     = ''
-            chid       = channel['_id']
-            chcat      = channel['category']
-            chnum      = channel['number']
-            region     = channel['regionFilter']['include']
-            exclude    = channel['regionFilter']['exclude']
-            chname     = channel['name']
-            chplot     = channel['description']
-            isFavorite = False #(channel.get('featured','') or 0) == -1
+        data      = (self.openURL(BASE_LINEUP))
+        self.link = (self.openURL(BASE_GUIDE % (datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00'),(datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00'))))
+        return (self.buildGuide(channel) for channel in data)
+        
+        
+    def buildGuide(self, channel):
+        chthumb    = ''
+        chlogo     = ''
+        chid       = channel['_id']
+        chcat      = channel['category']
+        chnum      = channel['number']
+        region     = channel['regionFilter']['include']
+        exclude    = channel['regionFilter']['exclude']
+        chname     = channel['name']
+        chplot     = channel['description']
+        isFavorite = False #(channel.get('featured','') or 0) == -1
+        if self.filter == True and (self.region in exclude or self.region not in region): return
+        if 'thumbnail' in channel: chthumb = (channel['thumbnail'].get('path','') or '')
+        if 'logo' in channel: chlogo = (channel['logo'].get('path','') or '')
+        log('buildGuide, channel = ' + str(chnum))
             
-            if FIT_REGION == True and (USER_REGION in exclude or USER_REGION not in region):
-                continue
-            if 'thumbnail' in channel:
-                chthumb = (channel['thumbnail'].get('path','') or '')
-            if 'logo' in channel:
-                chlogo = (channel['logo'].get('path','') or '')
-                
-            newChannel = {}
-            guidedata  = []
-            newChannel['channelname']   = chname
-            newChannel['channelnumber'] = chnum
-            newChannel['channellogo']   = chlogo
-            newChannel['isfavorite']    = isFavorite
+        newChannel = {}
+        guidedata  = []
+        newChannel['channelname']   = chname
+        newChannel['channelnumber'] = chnum
+        newChannel['channellogo']   = chlogo
+        newChannel['isfavorite']    = isFavorite
+        for i in range(len(self.link.get(chid,[]))):
+            item      = self.link[chid][i]
+            epname    = item['episode']['name']
+            epid      = (item['episode']['_id'])
+            epplot    = (item['episode'].get('description',epname) or epname)
+            epgenre   = (item['episode'].get('genre',chcat)        or chcat)
+            epsubgenre= (item['episode'].get('subGenre','')        or '')
+            genre     = '%s + %s'%(epgenre, epsubgenre) if len(epsubgenre) > 0 else epgenre
+            epdur     = int(item['episode'].get('duration','0') or '0') // 1000
+            live      = item['episode']['liveBroadcast'] == "true"
+            thumb     = chthumb
+            poster    = (item['episode'].get('thumbnail','').get('path',chthumb) or chthumb)
+            clips     = self.link[chid]
             
-            t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
-            t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
-            link = (self.openURL(BASE_GUIDE % (t1,t2)))
-
-            for i in range(len(link.get(chid,[]))):
-                item      = link[chid][i]
-                epname    = item['episode']['name']
-                epid      = (item['episode']['_id'])
-                epplot    = (item['episode'].get('description',epname) or epname)
-                epgenre   = (item['episode'].get('genre',chcat)        or chcat)
-                epsubgenre= (item['episode'].get('subGenre','')        or '')
-                genre     = '%s + %s'%(epgenre, epsubgenre) if len(epsubgenre) > 0 else epgenre
-                epdur     = int(item['episode'].get('duration','0') or '0') // 1000
-                live      = item['episode']['liveBroadcast'] == "true"
-                thumb     = chthumb
-                poster    = (item['episode'].get('thumbnail','').get('path',chthumb) or chthumb)
-                clips     = link[chid]
-                
-                if len(clips) == 0: continue
-                clips   = clips[0]
-                id      = clips['episode']['_id']
-                data    = (self.openURL(BASE_CLIPS %(id)))
-                tmpdata = {}
-                for idx, field in enumerate(data):
-                    url       = (field['url'] or field['code'])
-                    name      = field['name']
-                    thumb     = (field['thumbnail'] or ICON)
-                    provider  = field['provider']
-                    url       = self.resolveURL(provider, url)
-                    dur       = int(field['duration'] or '0') // 1000
-                    title     = "%s: %s" %(chname, epname)
-                    if any(k.lower().startswith(title.lower()) for k in IGNORE_KEYS): continue
-                    # #remove promos
-                    # if any(k.lower().startswith(name.lower()) for k in IGNORE_KEYS):
-                        # continue
-                        
-                    tmpdata            = {"mediatype":self.mediaType[chcat],"label":title,"title":chname,"originaltitle":epname,"plot":epplot, "code":epid, "genre":chcat, "imdbnumber":chid, "duration":dur}
-                    #remove duplicates
-                    # if any(x['code'] in epid for x in guidedata):
-                        # continue
-                    
-                    tmpdata['starttime'] = time.time() #int(time.mktime(time.strptime((item["start"].split('.')[0]), "%Y-%m-%dT%H:%M:%S")))
-                    tmpdata['url']       = sys.argv[0]+'?mode=7&name=%s&url=%s'%(title,url)
-                    tmpdata['art']       ={"thumb":thumb,"clearart":poster,"fanart":FANART,"icon":chthumb,"clearlogo":chlogo}
-                    guidedata.append(tmpdata)
-                busyDialog(int(cnt + 1 * 100 // 100), prog)
-            newChannel['guidedata'] = guidedata
-            yield newChannel
+            if len(clips) == 0: return
+            tmpdata = {}
+            clips   = clips[0]
+            id      = clips['episode']['_id']
+            data    = (self.openURL(BASE_CLIPS %(id)))
+            for field in data:
+                url       = (field['url'] or field['code'])
+                name      = field['name']
+                thumb     = (field['thumbnail'] or ICON)
+                provider  = (field['provider']  or None)
+                url       = urllib.quote(json.dumps({"provider":provider,"url":url}))
+                dur       = int(field['duration'] or '0') // 1000
+                title     = "%s: %s" %(chname, epname)
+                if any(k.lower().startswith(title.lower()) for k in IGNORE_KEYS): return
+                tmpdata = {"mediatype":self.mediaType[chcat],"label":title,"title":chname,"originaltitle":epname,"plot":epplot, "code":epid, "genre":chcat, "imdbnumber":chid, "duration":dur}
+                tmpdata['starttime'] = int(time.mktime(time.strptime((item["start"].split('.')[0]), "%Y-%m-%dT%H:%M:%S")))
+                tmpdata['url']       = sys.argv[0]+'?mode=7&name=%s&url=%s'%(title,url)
+                tmpdata['art']       = {"thumb":thumb,"clearart":poster,"fanart":FANART,"icon":chthumb,"clearlogo":chlogo}
+                guidedata.append(tmpdata)
+        newChannel['guidedata'] = guidedata
+        return newChannel
 
 params=getParams()
 try: url=urllib.unquote(params["url"])

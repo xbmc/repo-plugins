@@ -42,9 +42,14 @@ DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 QUALITY       = int(REAL_SETTINGS.getSetting('Quality'))
 BASE_URL      = 'http://www.disclose.tv/'
 BASE_VID      = BASE_URL + 'videos'
-YTURL        = 'plugin://plugin.video.youtube/play/?video_id='
-VMURL        = 'plugin://plugin.video.vimeo/play/?video_id='
-
+YTURL        = 'plugin://plugin.video.youtube/play/?video_id=%s'
+VMURL        = 'plugin://plugin.video.vimeo/play/?video_id=%s'
+MAIN_MENU    = [(LANGUAGE(30003), BASE_VID, 1),
+                (LANGUAGE(30004), BASE_VID+"/new", 1),
+                (LANGUAGE(30005), BASE_VID+"/popular", 1),
+                (LANGUAGE(30006), BASE_VID+"/long", 1),
+                (LANGUAGE(30007), BASE_VID+"/documentaries", 1)]
+                
 def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == False and level != xbmc.LOGERROR: return
     if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
@@ -54,7 +59,7 @@ def getParams():
     return dict(urlparse.parse_qsl(sys.argv[2][1:]))
     
 def isUWP():
-    return len(fnmatch.filter(glob.glob(LANGUAGE(30011)),'*.*') + fnmatch.filter(glob.glob(LANGUAGE(30012)),'*.*')) > 0
+    return (bool(xbmc.getCondVisibility("system.platform.uwp")) or sys.platform == "win10")
      
 socket.setdefaulttimeout(TIMEOUT)
 class Disclose(object):
@@ -70,18 +75,17 @@ class Disclose(object):
             if not cacheresponse:
                 request = urllib2.Request(url)
                 request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
-                response = urllib2.urlopen(request, timeout = TIMEOUT).read()
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(hours=1))
-            return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
-        except Exception as e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
-            return ''
+                cacheresponse = urllib2.urlopen(request, timeout = TIMEOUT).read()
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheresponse, expiration=datetime.timedelta(hours=1))
+            return cacheresponse
+        except Exception as e: log("openURL Failed! " + str(e), xbmc.LOGERROR)
+        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
+        return ''
          
          
     def buildMenu(self):
-        self.addDir(LANGUAGE(30003), BASE_VID, 1)
-        self.addYoutube(LANGUAGE(30004), 'plugin://plugin.video.youtube/channel/UCA-Ls4dkRBXHMjRjeTDTdjg/')
+        for item in MAIN_MENU: self.addDir(*item)
+        self.addYoutube(LANGUAGE(30008), 'plugin://plugin.video.youtube/channel/UCA-Ls4dkRBXHMjRjeTDTdjg/')
             
             
     def browse(self, url):
@@ -89,27 +93,25 @@ class Disclose(object):
         soup   = BeautifulSoup(self.openURL(url), "html.parser")
         videos = soup('div', {'class': 'teaser teaser--third'})
         for video in videos:
-            try:
-                try: thumb = 'http:%s'%(video('div', {'class': 'ratio-container ratio16_9'})[0].find('img').attrs['data-src'])
-                except: thumb = FANART
-                items   = video('div', {'class': 'teaser__caption'})
-                vid_url = BASE_URL + (items[0]('a', {'class': 'article-link'})[0].attrs['href'])
-                label   = items[0]('a', {'class': 'article-link'})[0].get_text()
-                timeago = items[0]('span', {'class': 'meta-timeago'})[0].get_text()
-                plot    = '%s - %s'%(timeago, label)
-                try: genre = video('span', {'class': 'teaser-figure__cat'})[0].get_text()
-                except: genre = 'Unknown'
-                runtime = (video('span', {'class': 'teaser-figure__len'})[0].get_text()).split(':')
-                if len(runtime) == 3:
-                    h, m, s = runtime
-                    duration  = int(h) * 3600 + int(m) * 60 + int(s)
-                else:
-                    m, s = runtime
-                    duration  = (int(m) * 60) + int(s)
-                infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":duration,"plot":plot}
-                infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
-                self.addLink(label, vid_url, 9, infoLabels, infoArt, len(videos))
-            except Exception as e: log("browse Failed! " + str(e), xbmc.LOGERROR)
+            try: thumb = 'http:%s'%(video('div', {'class': 'ratio-container ratio16_9'})[0].find('img').attrs['data-src'])
+            except: thumb = FANART
+            items   = video('div', {'class': 'teaser__caption'})
+            vid_url = BASE_URL + (items[0]('a', {'class': 'article-link'})[0].attrs['href'])
+            label   = items[0]('a', {'class': 'article-link'})[0].get_text()
+            timeago = items[0]('span', {'class': 'meta-timeago'})[0].get_text()
+            plot    = '%s - %s'%(timeago, label)
+            try: genre = video('span', {'class': 'teaser-figure__cat'})[0].get_text()
+            except: genre = 'Unknown'
+            runtime = (video('span', {'class': 'teaser-figure__len'})[0].get_text()).split(':')
+            if len(runtime) == 3:
+                h, m, s = runtime
+                duration  = int(h) * 3600 + int(m) * 60 + int(s)
+            else:
+                m, s = runtime
+                duration  = (int(m) * 60) + int(s)
+            infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":duration,"plot":plot}
+            infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
+            self.addLink(label, vid_url, 9, infoLabels, infoArt, len(videos))
         next = soup('li', {'class': 'more-container__button m-auto'})
         if len(next) == 0: return
         next_url   = BASE_URL + next[0].find('a').attrs['href']
@@ -124,11 +126,11 @@ class Disclose(object):
             log('resolveURL, provider = ' + provider)
             url = re.findall('src="(.+?)"',(data['player_code']), flags=re.DOTALL)[0].split('?')[0]
             if provider == 'youtube':
-                if len(re.findall('http[s]?://www.youtube.com/embed', url)) > 0: url = YTURL + url.split('/embed/')[1]
-                elif len(re.findall('http[s]?://www.youtube.com/watch', url)) > 0: url = YTURL + url.split('/watch?v=')[1]
-                elif len(re.findall('http[s]?://youtu.be/', url)) > 0: url = YTURL + url.split('/youtu.be/')[1]
+                if len(re.findall('http[s]?://www.youtube.com/embed', url)) > 0: url = YTURL%(url.split('/embed/')[1])
+                elif len(re.findall('http[s]?://www.youtube.com/watch', url)) > 0: url = YTURL%(url.split('/watch?v=')[1])
+                elif len(re.findall('http[s]?://youtu.be/', url)) > 0: url = YTURL%(url.split('/youtu.be/')[1])
             elif provider == 'vimeo':
-                if len(re.findall('http[s]?://vimeo.com/', url)) > 0: url = VMURL + url.split('/vimeo.com/')[1]
+                if len(re.findall('http[s]?://vimeo.com/', url)) > 0: url = VMURL%(url.split('/vimeo.com/')[1])
             else: raise Exception('resolveURL, unknown provider; data =' + json.dumps(data))
             log('resolveURL, url = ' + url)
             return xbmcgui.ListItem(name, path=url)

@@ -29,17 +29,25 @@ msgid "Select Preferred Quality"
 msgstr ""
 
 msgctxt "#30003"
-msgid "Browse"
+msgid "Hot"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Browse Youtube"
+msgid "New"
 msgstr ""
 
-msgctxt "#30011"
-msgid "/../../Users/*/AppData/Local/Packages/XBMCFoundation.Kodi_*"
-msgstr "
+msgctxt "#30005"
+msgid "Popular"
+msgstr ""
 
-msgctxt "#30012"
-msgid "/../../Program Files/WindowsApps/XBMCFoundation.Kodi_*"
-msgstr "
+msgctxt "#30006"
+msgid "Long"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Documentaries"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Youtube"
+msgstr ""

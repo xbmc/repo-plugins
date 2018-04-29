@@ -6,6 +6,7 @@ import hashlib
 from numbers import Number 	# to check whether a certain variable is numeric
 from loginfailedexception import LoginFailedException
 import os
+import operator # it's for use sort with operator
 
 class PCloudApi:
 	PCLOUD_BASE_URL = 'https://api.pcloud.com/'
@@ -112,6 +113,9 @@ class PCloudApi:
 				if errCode != 0:
 					errorMessage = self.GetErrorMessage(errCode)
 					raise Exception("Error calling listfolder or listpublinks: {0} ({1})".format(errorMessage, errCode))
+				# We will sort contents by name
+				elif not isMyShares:
+					response["metadata"]["contents"].sort(key=operator.itemgetter('name'))
 		return response
 
 	def GetStreamingUrl(self, fileID):

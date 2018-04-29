@@ -70,7 +70,7 @@ def start(args):
                            "lasturl":  "/"})
 
     # POST to login page
-    response = urlopen(args, "https://www.watchbox.de/login/", post_data.encode("utf-8"))
+    response = urlopen("https://www.watchbox.de/login/", post_data.encode("utf-8"))
     html = response.read()
 
     # check for login string

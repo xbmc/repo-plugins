@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.watchbox" name="Watchbox" version="0.4.2" provider-name="MrKrabat">
+<addon id="plugin.video.watchbox" name="Watchbox" version="0.4.3" provider-name="MrKrabat">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
-        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+        <import addon="script.module.beautifulsoup4" version="4.5.3"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
@@ -16,7 +16,7 @@
         <description lang="de_DE">Ob Anime, Horror, Action oder Komödie! Stöber durch unsere Top Genres! Alle Filme und Serien kostenlos im Online-Stream bei WATCHBOX.</description>
         <disclaimer lang="en_GB">WARNING: This plugin is only available from Germany by geo blocking!</disclaimer>
         <disclaimer lang="de_DE">HINWEIS: Dieses Plugin ist durch Geoblocking nur von Deutschland aus verfügbar!</disclaimer>
-        <news>v0.4.2 (2018.03.24)[CR]- Added Python3 support[CR]- Refactoring</news>
+        <news>v0.4.3 (2018.04.29)[CR]- Fix website changes[CR]- Fix login</news>
         <license>GNU Affero General Public License, v3</license>
         <forum>https://www.kodinerds.net/index.php/Thread/58398-Release-Watchbox-de/</forum>
         <website>https://www.watchbox.de/</website>

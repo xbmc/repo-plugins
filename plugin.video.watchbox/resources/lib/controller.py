@@ -126,7 +126,7 @@ def genre_view(mode, args):
             duration = duration.strip()[:-5]
             duration = str(int(duration) * 60)
             year = year.strip()
-        except TypeError:
+        except (TypeError, ValueError) as e:
             duration = ""
             year = ""
         thumb = item.img["src"].replace(" ", "%20")
@@ -190,7 +190,7 @@ def mylist(args):
             meta = item.find("div", {"class": "text_teaser-portrait-meta"}).string.strip()
             country, year, fsk = meta.split("|")
             year = year.strip()
-        except TypeError:
+        except (TypeError, ValueError) as e:
             year = ""
         thumb = item.img["src"].replace(" ", "%20")
         if thumb[:4] != "http":
@@ -377,12 +377,12 @@ def startplayback(args):
         return
 
     # get stream file
-    regex = r"hls\: '(.*?)',"
+    regex = r"\"hls\"\:\"(.*?)\","
     matches = re.search(regex, html).group(1)
 
     if matches:
         # play stream
-        item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=matches + api.getCookies(args))
+        item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=matches.replace("\\", "") + api.getCookies(args))
         item.setMimeType("application/vnd.apple.mpegurl")
         item.setContentLookup(False)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)

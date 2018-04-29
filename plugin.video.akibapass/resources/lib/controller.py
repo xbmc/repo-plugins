@@ -378,9 +378,6 @@ def startplayback(args):
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, item)
         return
 
-    # parse html
-    soup = BeautifulSoup(html, "html.parser")
-
     # check if not premium
     if u"Dieses Video ist nur f&#252;r Nutzer eines Abos verf&#252;gbar" in html:
         xbmc.log("[PLUGIN] %s: You need to own this video or be a premium member '%s'" % (args._addonname, args.url), xbmc.LOGERROR)
@@ -389,6 +386,9 @@ def startplayback(args):
 
     # check if we have to reactivate video
     if u"reactivate" in html:
+        # parse html
+        soup = BeautifulSoup(html, "html.parser")
+
         # reactivate video
         a = soup.find("div", {"id": "jwplayer-container"}).a["href"]
         html = api.getPage(args, "https://www.akibapass.de" + a)

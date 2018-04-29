@@ -32,7 +32,7 @@ msgstr "Γενικά"
 
 msgctxt "#30001"
 msgid "Username"
-msgstr "Όνομα Χρήστη"
+msgstr "Όνομα χρήστη"
 
 msgctxt "#30002"
 msgid "Password"
@@ -42,8 +42,9 @@ msgstr "Κωδικός"
 msgctxt "#30007"
 msgid "Use MPEG-DASH"
 msgstr "Χρησιμοποίησε το MPEG-DASH"
+
 msgctxt "#30008"
-msgid "Configure inputstream.adaptive"
+msgid "Configure InputStream Adaptive"
 msgstr "Ρύθμιση πελάτη MPEG-DASH Inputstream"
 
 msgctxt "#30009"
@@ -51,8 +52,8 @@ msgid "Always ask for the video quality"
 msgstr "Πάντα ερώτηση για την ποιότητα του βίντεο"
 
 msgctxt "#30010"
-msgid "Video Quality"
-msgstr "Ποιότητα Βίντεο"
+msgid "Video quality"
+msgstr "Ποιότητα βίντεο"
 
 msgctxt "#30011"
 msgid "480p"
@@ -93,27 +94,27 @@ msgid "Allow 3D"
 msgstr "Επιτρέψτε το 3Δ"
 
 msgctxt "#30021"
-msgid "Show Fanart"
-msgstr "Δείξε τις εικόνες Fanart"
+msgid "Show fanart"
+msgstr "Δείξε τις εικόνες fanart"
 
 msgctxt "#30022"
 msgid "Items per page"
 msgstr "Αντικείμενα ανά σελίδα"
 
 msgctxt "#30023"
-msgid "Search History Size"
-msgstr "Μέγεθος Ιστορικού Αναζήτησης"
+msgid "Search history size"
+msgstr "Μέγεθος ιστορικού αναζήτησης"
 
 msgctxt "#30024"
-msgid "Cache Size (MB)"
-msgstr "Λανθάνουσα Μνήμη σε (MB)"
+msgid "Cache size (MB)"
+msgstr "Λανθάνουσα μνήμη σε (MB)"
 
 msgctxt "#30025"
 msgid "Enable setup-wizard"
 msgstr "Επιτρέψτε τον οδηγό ρυθμίσεων"
 
 msgctxt "#30026"
-msgid "Override View"
+msgid "Override view"
 msgstr "Επιβολή τρόπου απεικόνισης"
 
 msgctxt "#30027"
@@ -157,11 +158,11 @@ msgid "Support alternative player"
 msgstr "Υποστήριξη εναλλακτικού αναπαραγωγέα"
 
 msgctxt "#30037"
-msgid "Custom Watch Later Playlist ID"
+msgid "Custom Watch Later playlist id"
 msgstr "Τροποποιημένη λίστα αναπαραγωγής παρακολούθησης αργότερα"
 
 msgctxt "#30038"
-msgid "Custom History Playlist ID"
+msgid "Custom History playlist id"
 msgstr "Τροποποιημένο ID λίστας αναπαραγωγής"
 
 #Kodion Common
@@ -205,11 +206,11 @@ msgstr "Αφαίρεση"
 
 msgctxt "#30109"
 msgid "Latest Videos"
-msgstr "Τελευταία Βίντεο"
+msgstr "Τελευταία βίντεο"
 
 msgctxt "#30110"
 msgid "New Search"
-msgstr "Νέα Αναζήτηση"
+msgstr "Νέα αναζήτηση"
 
 msgctxt "#30111"
 msgid "Sign In"
@@ -271,7 +272,7 @@ msgid "API Secret"
 msgstr "Μυστικό API"
 
 msgctxt "#30204"
-msgid "Enable Personal API Keys"
+msgid "Enable personal API keys"
 msgstr "Ενεργοποίηση προσωπικών κλειδιών API"
 
 msgctxt "#30205"
@@ -287,7 +288,7 @@ msgstr "Κανάλια"
 
 msgctxt "#30501"
 msgid "Playlists"
-msgstr "Λίστες Αναπαραγωγής"
+msgstr "Λίστες αναπαραγωγής"
 
 msgctxt "#30502"
 msgid "Go to %s"
@@ -331,7 +332,7 @@ msgstr "Προσθήκη βίντεο στην ουρά"
 
 msgctxt "#30512"
 msgid "Browse Channels"
-msgstr "Περιήγηση Καναλιών"
+msgstr "Περιήγηση καναλιών"
 
 msgctxt "#30513"
 msgid "Popular right now"
@@ -339,11 +340,11 @@ msgstr "Δημοφιλή αυτήν την στιγμή"
 
 msgctxt "#30514"
 msgid "Related Videos"
-msgstr "Σχετικά Βίντεο"
+msgstr "Σχετικά βίντεο"
 
 msgctxt "#30515"
 msgid "Auto-Remove from 'Watch Later'"
-msgstr "Αυτόματη αφαίρεση από την λίστα 'Δείτε Αργότερα'"
+msgstr "Αυτόματη αφαίρεση από την λίστα 'Δείτε αργότερα'"
 
 msgctxt "#30516"
 msgid "Folders"
@@ -594,11 +595,11 @@ msgid "Settings"
 msgstr "Ρυθμίσεις"
 
 msgctxt "#30578"
-msgid "Force SSL Certificate verification"
+msgid "Force SSL certificate verification"
 msgstr "Επιβολή επιβεβαίωσης πιστοποιητικού SSL"
 
 msgctxt "#30579"
-msgid "MPEG-DASH is enabled in the YouTube settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgid "MPEG-DASH is enabled in the YouTube settings, however InputStream Adaptive appears to be disabled. Would you like to enable InputStream Adaptive now?"
 msgstr "Το MPEG-DASH είναι ενεργοποιημένο στις ρυθμίσεις, αλλά το inputstream.adaptive φαίνεται να είναι απενεργοποιημένο. Επιθυμείτε την ενεργοποίησή του inputstream.adaptive τώρα;"
 
 msgctxt "#30580"
@@ -613,70 +614,158 @@ msgctxt "#30582"
 msgid "Autoplay suggested videos"
 msgstr "Αυτόματη αναπαραγωγή προτεινόμενων βίντεο"
 
-msgctxt "#31583"
+msgctxt "#30583"
 msgid "Automatic"
 msgstr "Αυτόματο"
 
-msgctxt "#31584"
+msgctxt "#30584"
 msgid "My Subscriptions (Filtered)"
 msgstr "Οι συνδρομές μου (Φιλτραρισμένες)"
 
-msgctxt "#31585"
+msgctxt "#30585"
 msgid "Filtered channel list (comma delimited)"
 msgstr "Φιλτραρισμένη λίστα καναλιών (οριοθετημένα με κόμμα)"
 
-msgctxt "#31586"
+msgctxt "#30586"
 msgid "Blacklist"
 msgstr "Μαύρη λίστα"
 
-msgctxt "#31587"
+msgctxt "#30587"
 msgid "Add to My Subscriptions filter"
 msgstr "Προσθήκη στο φίλτρο των συνδρομών μου"
 
-msgctxt "#31588"
+msgctxt "#30588"
 msgid "Remove from My Subscriptions filter"
 msgstr "Αφαίρεση από το φίλτρο των συνδρομών μου"
 
-msgctxt "#31589"
+msgctxt "#30589"
 msgid "Added %s to My Subscriptions filter"
 msgstr "Προσθήκη %s φίλτρο των συνδρομών μου"
 
-msgctxt "#31590"
+msgctxt "#30590"
 msgid "Removed %s from My Subscriptions filter"
 msgstr "Αφαίρεση %s από το φίλτρο των εγγραφών μου"
 
-msgctxt "#31591"
+msgctxt "#30591"
 msgid "Thumbnail size"
-msgstr "Μέγεθος εικονιδίων προεσκόπισης"
+msgstr "Μέγεθος εικονιδίων προεπισκόπησης"
 
-msgctxt "#31592"
+msgctxt "#30592"
 msgid "Medium (16:9)"
 msgstr "Μέτριο (16:9)"
 
-msgctxt "#31593"
+msgctxt "#30593"
 msgid "High (4:3)"
 msgstr "Υψηλό (4:3)"
 
-msgctxt "#31594"
-msgid "Safe Search"
+msgctxt "#30594"
+msgid "Safe search"
 msgstr "Ασφαλής αναζήτηση"
 
-msgctxt "#31595"
+msgctxt "#30595"
 msgid "Moderate"
 msgstr "Μέτρια"
 
-msgctxt "#31596"
+msgctxt "#30596"
 msgid "Strict"
 msgstr "Αυστηρή"
 
-msgctxt "#31597"
+msgctxt "#30597"
 msgid "Updated: %s"
 msgstr "Ενημερωθηκε: %s"
 
-msgctxt "#31598"
+msgctxt "#30598"
 msgid "Personal API keys enabled"
-msgstr "Ενεργοποιήθηκαν τα προσωπικά κλειδιά API"
+msgstr "Προσωπικά κλειδιά API ενεργοποιήθηκαν"
 
-msgctxt "#31599"
+msgctxt "#30599"
 msgid "Failed to enable personal API keys. Missing: %s"
 msgstr "Αποτυχία ενεργοποίησης προσωπικών κλειδιών API. Λείπει: %s"
+
+msgctxt "#30600"
+msgid "Configure subtitles"
+msgstr "Ρύθμιση υποτίτλων"
+
+msgctxt "#30601"
+msgid "%s with %s fallback"
+msgstr "%s με %s ως υπαναχώρηση"
+
+msgctxt "#30602"
+msgid "No auto-generated"
+msgstr "Χωρίς αυτο-δημιουργημένους"
+
+msgctxt "#30603"
+msgid "Age gate"
+msgstr "Ηλικιακή πύλη"
+
+msgctxt "#30604"
+msgid "Allow offensive content"
+msgstr "Επέτρεψε προσβλητικό περιεχόμενο"
+
+msgctxt "#30605"
+msgid "Quick Search"
+msgstr "Γρήγορη Αναζήτηση"
+
+msgctxt "#30606"
+msgid "Quick Search (Incognito)"
+msgstr "Γρήγορη Αναζήτηση (Κρυφή)"
+
+msgctxt "#30607"
+msgid "Audio only"
+msgstr "Ήχος μόνο"
+
+msgctxt "#30608"
+msgid "Allow developer keys"
+msgstr "Επέτρεψε την χρήση κλειδιών από προγραμματιστές"
+
+msgctxt "#30609"
+msgid "Clear watch history"
+msgstr "Καθαρισμός ιστορικού παρακολούθησης"
+
+msgctxt "#30610"
+msgid "This will clear your account's watch history from all devices. You can't undo this."
+msgstr "Αυτό θα καθαρίσει το ιστορικό παρακολούθησης από τον λογαριασμό, από όλες τις συσκευές. Δεν μπορείτε να το επαναφέρετε."
+
+msgctxt "#30611"
+msgid "Saved Playlists"
+msgstr "Αποθηκευμένες λίστες αναπαραγωγής"
+
+msgctxt "#30612"
+msgid "Retry"
+msgstr "Ξαναπροσπάθησε"
+
+msgctxt "#30613"
+msgid "Retrieve Watch Later playlist id"
+msgstr "Ανάκτηση αναγνωριστικού λίστας παρακολούθησης αργότερα"
+
+msgctxt "#30614"
+msgid "Failed to retrieve Watch Later playlist id. Add a few videos to Watch Later via the web/app and retry."
+msgstr "Αποτυχία ανάκτησης αναγνωριστικού λίστας παρακολούθησης αργότερα. Πρόσθεσε μερικά βίντεο σε αυτήν την λίστα μέσω εφαρμογής android ή φυλλομετρητή και ξαναπροσπαθήστε"
+
+msgctxt "#30615"
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+msgctxt "#30616"
+msgid "Must be signed in."
+msgstr "Πρέπει να είστε συνδεδεμένοι"
+
+msgctxt "#30617"
+msgid "MPEG-DASH"
+msgstr "MPEG-DASH"
+
+msgctxt "#30618"
+msgid "Enable mpeg-dash proxy"
+msgstr "Ενεργοποίηση μεσολαβητή mpeg-dash"
+
+msgctxt "#30619"
+msgid "Proxy port"
+msgstr "Θύρα μεσολαβητή"
+
+msgctxt "#30620"
+msgid "Port %s already in use. Cannot start proxy server."
+msgstr "Η θύρα %s χρησιμοποιείται ήδη. Αδυναμία έναρξης μεσολαβητή."
+
+msgctxt "#30621"
+msgid "Proxy is required for mpeg-dash vods"
+msgstr "Ο μεσολαβητής απαιτείται για την αναπαραγωγή mpeg-dash"

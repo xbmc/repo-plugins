@@ -1,12 +1,12 @@
 __author__ = 'bromix'
 
+import sys
 from .. import constants
 
 
 class AbstractSettings(object):
     def __init__(self):
         object.__init__(self)
-        pass
 
     def get_string(self, setting_id, default_value=None):
         raise NotImplementedError()
@@ -20,7 +20,6 @@ class AbstractSettings(object):
     def get_int(self, setting_id, default_value, converter=None):
         if not converter:
             converter = lambda x: x
-            pass
 
         value = self.get_string(setting_id)
         if value is None or value == '':
@@ -32,13 +31,11 @@ class AbstractSettings(object):
             from . import log
 
             log("Failed to get setting '%s' as 'int' (%s)" % setting_id, ex.__str__())
-            pass
 
         return default_value
 
     def set_int(self, setting_id, value):
         self.set_string(setting_id, str(value))
-        pass
 
     def set_bool(self, setting_id, value):
         if value:
@@ -64,13 +61,10 @@ class AbstractSettings(object):
                    1: 360,
                    2: 480,  # 576 seems not to work well
                    3: 720,
-                   4: 1080,
-                   5: 2160,
-                   6: 4320}
+                   4: 1080}
 
         if quality_map_override is not None:
             vq_dict = quality_map_override
-            pass
 
         vq = self.get_int(constants.setting.VIDEO_QUALITY, 1)
         return vq_dict[vq]
@@ -102,9 +96,11 @@ class AbstractSettings(object):
     def subtitle_languages(self):
         return self.get_int(constants.setting.SUBTITLE_LANGUAGE, 0)
 
-    def requires_dual_login(self):
-        return self.get_bool('youtube.folder.my_subscriptions.show', True) or \
-               self.get_bool('youtube.folder.my_subscriptions_filtered.show', True)
+    def audio_only(self):
+        return self.get_bool(constants.setting.AUDIO_ONLY, False)
+
+    def set_subtitle_languages(self, value):
+        return self.set_int(constants.setting.SUBTITLE_LANGUAGE, value)
 
     def use_thumbnail_size(self):
         size = self.get_int(constants.setting.THUMB_SIZE, 0)
@@ -115,3 +111,21 @@ class AbstractSettings(object):
         index = self.get_int(constants.setting.SAFE_SEARCH, 0)
         values = {0: 'moderate', 1: 'none', 2: 'strict'}
         return values[index]
+
+    def age_gate(self):
+        return self.get_bool(constants.setting.AGE_GATE, True)
+
+    def verify_ssl(self):
+        verify = self.get_bool(constants.setting.VERIFY_SSL, False)
+        if sys.version_info <= (2, 7, 9):
+            verify = False
+        return verify
+
+    def allow_dev_keys(self):
+        return self.get_bool(constants.setting.ALLOW_DEV_KEYS, True)
+
+    def use_dash_proxy(self):
+        return self.get_bool(constants.setting.DASH_PROXY, True)
+
+    def dash_proxy_port(self):
+        return self.get_int(constants.setting.DASH_PROXY_PORT, 50152)

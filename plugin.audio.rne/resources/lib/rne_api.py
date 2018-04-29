@@ -189,7 +189,7 @@ def get_program_list(menu_url, all_programmes_flag=False, localized=lambda x: x)
                 url, canal, title, genre, date))
 
         program_entry     = {
-                'url'     : root_url + url,
+                'url'     : url,
                 'title'   : "%s (%s | %s | %s)" % (
                              title,
                              canal,
@@ -241,7 +241,7 @@ def get_audio_list(program_url, localized=lambda x: x):
     page_num_pattern      = 'pbq=([0-9]+)'
     page_url_pattern      = '<a name="paginaIR" href="([^"]*?)"><span>%s'
     page_num_url_pattern  = '<a name="paginaIR" href=".*?pbq=([0-9]+)[^"]*?"><span>%s'
-    url_pref              = 'tlvl.dovm'[::-1]
+    url_options           = ')ung-xunil(02%4.91.1F2%tegW=tnegA-resU|'[::-1]
 
     buffer_url            = l.carga_web(program_url)
 
@@ -254,22 +254,30 @@ def get_audio_list(program_url, localized=lambda x: x):
         previous_page_url = l.find_first(buffer_url, page_url_pattern % 'Anterior')
         prev_page_num     = l.find_first(previous_page_url, page_num_pattern)
         audio_entry       = {
-                'url'        : root_url + previous_page_url.replace('&amp;', '&'),
+                'url'        : root_url + previous_page_url.replace('&amp;', '&').replace(' ', '%20'),
                 'title'      : '<< %s (%s)' % (localized('Previous page'), prev_page_num),
                 'action'     : 'audio_list',
                 'IsPlayable' : False
                 }
         audio_list.append(audio_entry)
         reset_cache = True
+    else:
+        first_page_url = l.find_first(buffer_url, page_url_pattern % 'Primero')
+        if not 'titleFilter' in first_page_url:
+            audio_entry       = {
+                    'url'        : root_url + first_page_url.replace('&amp;', '&') + '&titleFilter=%s',
+                    'title'      : localized('Search'),
+                    'action'     : 'search_program',
+                    'IsPlayable' : False
+                    }
+            audio_list.append(audio_entry)
 
     for audio_section in buffer_url.split(audio_section_sep)[1:]:
         date              = l.find_first(audio_section, audio_fecha_pattern)
         duration          = l.find_first(audio_section, audio_dur_pattern) or '00:00:00'
         title             = l.find_first(audio_section, audio_title_pattern)
         desc              = l.find_first(audio_section, audio_desc_pattern)
-        # This is a workaround to use the coriginal links as the current ones
-        # refuse the HTTP HEAD method required by Kodi to play the file.
-        url               = l.find_first(audio_section, audio_link_pattern).replace(url_pref, 'www')
+        url               = l.find_first(audio_section, audio_link_pattern)
         rtlabel, rating   = l.find_first(audio_section, audio_rating_pattern) or ('', '1')
         year              = int(l.find_first(date, audio_year_pattern) or '0') or this_year
 
@@ -285,7 +293,7 @@ def get_audio_list(program_url, localized=lambda x: x):
                 url, duration, seconds, title, rating, date))
 
         audio_entry       = {
-                'url'        : url,
+                'url'        : url + url_options,
                 'title'      : "%s (%s)" % (
                                 get_clean_title(title),
                                 date,
@@ -310,7 +318,7 @@ def get_audio_list(program_url, localized=lambda x: x):
         next_page_url = l.find_first(buffer_url, page_url_pattern % 'Siguiente')
         next_page_num = l.find_first(next_page_url, page_num_pattern)
         audio_entry   = {
-                'url'        : root_url + next_page_url.replace('&amp;', '&'),
+                'url'        : root_url + next_page_url.replace('&amp;', '&').replace(' ', '%20'),
                 'title'      : '>> %s (%s/%s)' % (localized('Next page'), next_page_num, last_page_num),
                 'action'     : 'audio_list',
                 'IsPlayable' : False
@@ -323,18 +331,15 @@ def get_audio_list(program_url, localized=lambda x: x):
 def get_direct_channels():
     """This function makes the direct channels menu."""
 
-    direct_url    = (
-                    '8u3m.evil/_tsnifed_/0lgmoa3vls%enr-0lgenr/'[::-1] +\
-                    'evil-slh/ten.3level.evitpada.sdh.evil-evtr//:ptth'[::-1]
-                    )
+    direct_url = 'u3m.3pm.s%/evtr/moc.noitomulf.evtr-3pm-eviloidar//:ptth'[::-1]
 
     channel_list  = (
-            ( 'Radio Nacional',   '1'),
-            ( 'Radio Clásica',    '2'),
-            ( 'Radio 3',          '3'),
-            ( 'Ràdio 4',          '4'),
-            ( 'Radio 5',          '5'),
-            ( 'Radio Exterior',   'e'),
+            ( 'Radio Nacional',   'rtve-rne'),
+            ( 'Radio Clásica',    'rtve-radioclasica'),
+            ( 'Radio 3',          'rtve-radio3'),
+            ( 'Ràdio 4',          'rtve-radio4'),
+            ( 'Radio 5',          'rtve-radio5'),
+            ( 'Radio Exterior',   'radioexterior'),
             )
 
     menu_entries  = []
@@ -352,7 +357,7 @@ def get_direct_channels():
 def get_playable_url(url):
     """This function gets the stream url for direct channels."""
 
-    playable_url_pattern = '))3pm|oidua.tsaceci:?(?*.ptth('[::-1]
+    playable_url_pattern = '(http[^#]+)'
 
     buffer_url           = l.carga_web(url)
     stream_url           = l.find_first(buffer_url, playable_url_pattern)
@@ -365,12 +370,13 @@ def get_playable_search_url(url):
     """This function gets the media url from the search url link."""
 
     playable_url_pattern = '<link rel="audio_src" href="([^"]*?)"'
+    url_options          = ')ung-xunil(02%4.91.1F2%tegW=tnegA-resU|'[::-1]
 
     buffer_url           = l.carga_web(url)
     media_url            = l.find_first(buffer_url, playable_url_pattern)
     l.log('get_playable_search_url has found this URL for playback. url: "%s"' % media_url)
 
-    return media_url
+    return media_url + url_options
 
 
 def get_search_url(searchtext):

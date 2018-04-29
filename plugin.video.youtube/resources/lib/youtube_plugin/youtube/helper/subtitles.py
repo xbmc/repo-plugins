@@ -6,15 +6,16 @@ import requests
 
 class Subtitles(object):
     LANG_NONE = 0
-    LANG_AUTO = 1
-    LANG_CURR = 2
-    LANG_PROMPT = 3
+    LANG_PROMPT = 1
+    LANG_CURR_FALLBACK = 2
+    LANG_CURR = 3
+    LANG_CURR_NO_ASR = 4
 
     SRT_FILE = 'special://temp/temp/%s.%s.srt'
 
     def __init__(self, context, video_id, captions):
         self.context = context
-        self._verify = context.get_settings().get_bool('simple.requests.ssl.verify', False)
+        self._verify = context.get_settings().verify_ssl()
         self.video_id = video_id
         self.language = context.get_settings().get_string('youtube.language', 'en_US').replace('_', '-')
         self.headers = {'Host': 'www.youtube.com',
@@ -78,6 +79,7 @@ class Subtitles(object):
 
     def get_subtitles(self):
         languages = self.context.get_settings().subtitle_languages()
+        self.context.log_debug('Subtitle get_subtitles: for setting |%s|' % str(languages))
         if languages == self.LANG_NONE:
             return []
         elif languages == self.LANG_CURR:
@@ -85,9 +87,14 @@ class Subtitles(object):
             list_of_subs.extend(self._get(self.language))
             list_of_subs.extend(self._get(language=self.language.split('-')[0]))
             return list(set(list_of_subs))
+        elif languages == self.LANG_CURR_NO_ASR:
+            list_of_subs = []
+            list_of_subs.extend(self._get(self.language, no_asr=True))
+            list_of_subs.extend(self._get(language=self.language.split('-')[0], no_asr=True))
+            return list(set(list_of_subs))
         elif languages == self.LANG_PROMPT:
             return self._prompt()
-        elif languages == self.LANG_AUTO:
+        elif languages == self.LANG_CURR_FALLBACK:
             list_of_subs = []
             list_of_subs.extend(self._get(language=self.language))
             list_of_subs.extend(self._get(language=self.language.split('-')[0]))
@@ -111,7 +118,7 @@ class Subtitles(object):
         if languages:
             choice = self.context.get_ui().on_select(self.context.localize(30560), [language_name for language, language_name in languages])
             if choice != -1:
-                return self._get(languages[choice][0])
+                return self._get(language=languages[choice][0], simple_text=languages[choice][1])
             else:
                 self.context.log_debug('Subtitle selection cancelled')
                 return []
@@ -119,37 +126,48 @@ class Subtitles(object):
             self.context.log_debug('No subtitles found for prompt')
             return []
 
-    def _get(self, language='en'):
+    def _get(self, language='en', simple_text=None, no_asr=False):
         fname = self.srt_filename(language)
         if xbmcvfs.exists(fname):
             self.context.log_debug('Subtitle exists for: %s, filename: %s' % (language, fname))
             return [fname]
 
-        is_caption_track = is_translation = False
+        caption_track = None
+        asr_track = None
+        has_translation = False
         for track in self.caption_tracks:
             if language == track.get('languageCode'):
-                is_caption_track = True
-                break
+                if simple_text is not None:
+                    if simple_text == track.get('name', {}).get('simpleText'):
+                        caption_track = track
+                        break
+                else:
+                    if no_asr and (track.get('kind') == 'asr'):
+                        continue
+                    elif track.get('kind') == 'asr':
+                        asr_track = track
+                    else:
+                        caption_track = track
+
+        if (caption_track is None) and (asr_track is not None):
+            caption_track = asr_track
+
         for lang in self.translation_langs:
             if language == lang.get('languageCode'):
-                is_translation = True
+                has_translation = True
                 break
 
-        if (self.caption_track.get('languageCode') != language) and (not is_translation) and (not is_caption_track):
+        if (self.caption_track.get('languageCode') != language) and (not has_translation) and (caption_track is None):
             self.context.log_debug('No subtitles found for: %s' % language)
             return []
 
         subtitle_url = None
-        if not is_caption_track and is_translation:
+        if (caption_track is None) and has_translation:
             base_url = self.caption_track.get('baseUrl')
             if base_url:
                 subtitle_url = base_url + '&fmt=vtt&type=track&tlang=%s' % language
-        elif is_caption_track:
-            base_url = None
-            for track in self.caption_tracks:
-                if track.get('languageCode') == language:
-                    base_url = track.get('baseUrl')
-                    break
+        elif caption_track is not None:
+            base_url = caption_track.get('baseUrl')
             if base_url:
                 subtitle_url = base_url + '&fmt=vtt&type=track'
 

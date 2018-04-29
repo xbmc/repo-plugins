@@ -1,32 +1,37 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib
-import urllib2
+
+from __future__ import division
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from builtins import object
+import urllib.request, urllib.parse, urllib.error
 import re
 import xbmcplugin
 import xbmcgui
 import sys
 import xbmcaddon
-import socket
 import xbmc
 import os
+import requests
 
-addon = "plugin.video.ign_com"
-socket.setdefaulttimeout(30)
-pluginhandle = int(sys.argv[1])
-settings = xbmcaddon.Addon()
-translation = settings.getLocalizedString
-base_url = "http://www.ign.com"
-images_path = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
-date = "2017-05-30"
-version = "2.3.3"
+ADDON = "plugin.video.ign_com"
+SETTINGS = xbmcaddon.Addon(id=ADDON)
+LANGUAGE = SETTINGS.getLocalizedString
+IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'resources', 'images')
+PLUGIN_HANDLE = int(sys.argv[1])
+BASE_URL = "http://www.ign.com"
+HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+COOKIES = {'i18n-ccpref': '15-US-www-1'}
+DATE = "2018-01-31"
+VERSION = "2.3.5"
 
-max_video_quality = settings.getSetting("maxVideoQualityRes")
-
-force_view_mode = bool(settings.getSetting("force_view_mode"))
-live_stream_setting = bool(settings.getSetting("LiveStream"))
-
-viewMode = str(settings.getSetting("viewMode"))
+max_video_quality = SETTINGS.getSetting("maxVideoQualityRes")
+force_view_mode = bool(SETTINGS.getSetting("force_view_mode"))
+live_stream_setting = bool(SETTINGS.getSetting("LiveStream"))
+viewMode = str(SETTINGS.getSetting("viewMode"))
 
 video_height = [360, 480, 540, 720, 1080]
 max_video_height = video_height[int(max_video_quality)]
@@ -35,44 +40,43 @@ max_video_quality = [640, 853, 960, 1280, 1920]
 
 def index():
     if live_stream_setting:
-        content = get_url("")
-        match = re.compile('"m3uUrl":"(.+?).m3u8"}', re.DOTALL).findall(content)
+        html_source = get_url("")
+        match = re.compile('"m3uUrl":"(.+?).m3u8"}', re.DOTALL).findall(html_source)
         if len(match) > 0:
             video_url = match[0].replace("\\", "")
-            title = re.compile('data-video-title="(.+?)"', re.DOTALL).findall(content)
+            title = re.compile('data-video-title="(.+?)"', re.DOTALL).findall(html_source)
             add_link("***IGN-LIVESTREAM: " + title[0] + "***", video_url + ".m3u8", 'play_live_stream', "", "", "LIVE")
-    add_dir(translation(30002), "/videos/all/filtergalleryajax?filter=all", 'list_videos', "")
-    add_dir("IGN Daily Fix", "/watch/daily-fix?category=videos&page=1", 'list_series_episodes', "")
-    add_dir(translation(30003), "/videos/all/filtergalleryajax?filter=games-review", 'list_videos',
-            "")
-    add_dir(translation(30004), "/videos/all/filtergalleryajax?filter=games-trailer", 'list_videos',
-            "")
-    add_dir(translation(30005), "/videos/all/filtergalleryajax?filter=movies-trailer", 'list_videos',
-            "")
-    add_dir("Podcasts", "", 'podcast_index', "")
 
-    add_dir(translation(30008), "", 'search', "")
-    xbmcplugin.endOfDirectory(pluginhandle)
+    add_dir(LANGUAGE(30002), "/videos/all/filtergalleryajax?filter=all", 'list_videos', "")
+    add_dir("IGN Daily Fix", "/watch/daily-fix?category=videos&page=1", 'list_series_episodes', "")
+    add_dir(LANGUAGE(30003), "/videos/all/filtergalleryajax?filter=games-review", 'list_videos', "")
+    add_dir(LANGUAGE(30004), "/videos/all/filtergalleryajax?filter=games-trailer", 'list_videos', "")
+    add_dir(LANGUAGE(30005), "/videos/all/filtergalleryajax?filter=movies-trailer", 'list_videos', "")
+    add_dir("Podcasts", "", 'podcast_index', "")
+    add_dir(LANGUAGE(30008), "", 'search', "")
+
+    xbmcplugin.endOfDirectory(PLUGIN_HANDLE)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode(' + viewMode + ')')
 
 
 def podcast_index():
-    content = get_url("/")
+    html_source = get_url("/")
     match = re.compile(
         '<li class="ign-shows-list-container ign-transition">(.+?)</li>\s*<li class="ign-show ign-transition">',
-        re.DOTALL).findall(content)
+        re.DOTALL).findall(html_source)
     podcasts = re.compile('<li><a href="(.+?)">(.+?)</a></li>', re.DOTALL).findall(match[0])
     for pod in podcasts:
         add_dir(pod[1], pod[0] + "?category=videos&page=1", 'list_series_episodes', "", pod[1])
-    xbmcplugin.endOfDirectory(pluginhandle)
+
+    xbmcplugin.endOfDirectory(PLUGIN_HANDLE)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode(' + viewMode + ')')
 
 
 def list_videos(url):
-    content = get_url(url)
-    spl = content.split('<div class="grid_16 alpha bottom_2">')
+    html_source = get_url(url)
+    spl = html_source.split('<div class="grid_16 alpha bottom_2">')
     for i in range(1, len(spl), 1):
         entry = spl[i]
         match = re.compile('<li>(.+?)</li>', re.DOTALL).findall(entry)
@@ -96,22 +100,24 @@ def list_videos(url):
             if match:
                 thumb = match[0].replace("_small.jpg", ".jpg")
             add_link(title, url, 'play_video', thumb, date + "\n" + desc, length)
-    match_page = re.compile('<a id="moreVideos" href="(.+?)"', re.DOTALL).findall(content)
-    page_count = re.compile('<a id="moreVideos" href=".+?page=(.+?)\&.+?"', re.DOTALL).findall(content)
+
+    match_page = re.compile('<a id="moreVideos" href="(.+?)"', re.DOTALL).findall(html_source)
+    # page_count = re.compile('<a id="moreVideos" href=".+?page=(.+?)\&.+?"', re.DOTALL).findall(html_source)
     if len(match_page) > 0:
         url_next = match_page[0]
-        add_dir(translation(30001), url_next, 'list_videos', os.path.join(images_path, 'next-page.png'))
-    xbmcplugin.endOfDirectory(pluginhandle)
+        add_dir(LANGUAGE(30001), url_next, 'list_videos', os.path.join(IMAGES_PATH, 'next-page.png'))
+
+    xbmcplugin.endOfDirectory(PLUGIN_HANDLE)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode(' + viewMode + ')')
 
 
 def list_series_episodes(url):
-    content = get_url(url)
+    html_source = get_url(url)
     match = re.compile(
         '<a.+?class="video-link".+?href="(.+?)".+?data-title="(.+?)".+?>.+?<img src="(.+?)" />.+?'
         '<div class="video-title">(.+?)</div>.+?<div class="video-duration">(.+?)</div>.+?<div class="ago">(.+?)</div>',
-        re.DOTALL).findall(content)
+        re.DOTALL).findall(html_source)
     for i in range(0, len(match), 1):
         vidurl = "http://www.ign.com/" + match[i][0]
         description = match[i][1]
@@ -121,19 +127,21 @@ def list_series_episodes(url):
         duration = int(dur_split[0]) * 60 + int(dur_split[1])
         date = match[i][5]
         add_link(title, vidurl, 'play_video', thumb, date + "\n" + description, duration)
-    match_page = re.compile('<a class="next" href="://(.+?)">Next&nbsp;&raquo;</a>', re.DOTALL).findall(content)
-    page_count = re.compile('<a class="next" href="://.+?page=(.+?)">Next&nbsp;&raquo;</a>', re.DOTALL).findall(content)
+
+    match_page = re.compile('<a class="next" href="://(.+?)">Next&nbsp;&raquo;</a>', re.DOTALL).findall(html_source)
+    page_count = re.compile('<a class="next" href="://.+?page=(.+?)">Next&nbsp;&raquo;</a>', re.DOTALL).findall(html_source)
     if len(page_count) > 0:
-        add_dir(translation(30001),
-                match_page[0] + "&category=videos", 'list_series_episodes', os.path.join(images_path, 'next-page.png'))
-    xbmcplugin.endOfDirectory(pluginhandle)
+        add_dir(LANGUAGE(30001),
+                match_page[0] + "&category=videos", 'list_series_episodes', os.path.join(IMAGES_PATH, 'next-page.png'))
+
+    xbmcplugin.endOfDirectory(PLUGIN_HANDLE)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode(' + viewMode + ')')
 
 
 def list_series(url):
-    content = get_url(url)
-    spl = content.split('<div class="grid_16 alpha bottom_2">')
+    html_source = get_url(url)
+    spl = html_source.split('<div class="grid_16 alpha bottom_2">')
     for i in range(1, len(spl), 1):
         entry = spl[i]
         match = re.compile('<li>(.+?)</li>', re.DOTALL).findall(entry)
@@ -148,13 +156,14 @@ def list_series(url):
         if len(match) > 0:
             thumb = match[0].replace("_small.jpg", ".jpg")
         add_dir(title, url, 'list_videos', thumb, date)
-    xbmcplugin.endOfDirectory(pluginhandle)
+
+    xbmcplugin.endOfDirectory(PLUGIN_HANDLE)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode(' + viewMode + ')')
 
 
 def search():
-    keyboard = xbmc.Keyboard('', translation(30008))
+    keyboard = xbmc.Keyboard('', LANGUAGE(30008))
     keyboard.doModal()
     if keyboard.isConfirmed() and keyboard.getText():
         search_string = keyboard.getText().replace(" ", "+")
@@ -163,8 +172,8 @@ def search():
 
 def list_search_results(url):
     url_main = url
-    content = get_url(url)
-    spl = content.split('<div class="search-item"')
+    html_source = get_url(url)
+    spl = html_source.split('<div class="search-item"')
     for i in range(1, len(spl), 1):
         entry = spl[i]
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
@@ -181,66 +190,60 @@ def list_search_results(url):
         title = match[0][1]
         title = clean_title(title)
         add_link(title, url, 'play_video', thumb, "", length)
-    match = re.compile('data-page="(.+?)"', re.DOTALL).findall(content)
+    match = re.compile('data-page="(.+?)"', re.DOTALL).findall(html_source)
     page = int(match[0])
-    match = re.compile('data-total="(.+?)"', re.DOTALL).findall(content)
-    max_page = int(int(match[0]) / 10)
+    match = re.compile('data-total="(.+?)"', re.DOTALL).findall(html_source)
+    max_page = int(int(match[0])/ 10)
     url_next = url_main.replace("page=" + str(page), "page=" + str(page + 1))
     if page < max_page:
-        add_dir(translation(30001), url_next, 'list_search_results', os.path.join(images_path, 'next-page.png'))
-    xbmcplugin.endOfDirectory(pluginhandle)
+        add_dir(LANGUAGE(30001), url_next, 'list_search_results', os.path.join(IMAGES_PATH, 'next-page.png'))
+
+    xbmcplugin.endOfDirectory(PLUGIN_HANDLE)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode(' + viewMode + ')')
 
 
 def play_video(page_url):
-    match = re.compile(base_url + "(.+)", re.DOTALL).findall(page_url)
+    html_source = get_url(page_url)
+    match = re.compile(BASE_URL + "(.+)", re.DOTALL).findall(page_url)
     vid = Video(match[0])
     final_url = vid.get_vid_url(max_video_height)
     list_item = xbmcgui.ListItem(path=final_url)
-    return xbmcplugin.setResolvedUrl(pluginhandle, True, list_item)
+    return xbmcplugin.setResolvedUrl(PLUGIN_HANDLE, True, list_item)
 
 
-class Video:
+class Video(object):
     def __init__(self, vid_url):
         self.url = vid_url
         self.video_type = ""
         self.urls = {}
 
     def _detect(self):
-        content = get_url(self.url)
-        has_video_url = False
+        html_source = get_url(self.url)
 
-        if "data-settings" in content:
-            has_video_url = True;
-            self._get_data_settings(content)
+        if "data-settings" in html_source:
+            self._get_data_SETTINGS(html_source)
 
-        if "hero-unit-container" in content:
-            has_video_url = True;
-            self._get_hero_unit_container(content)
+        if "hero-unit-container" in html_source:
+            self._get_hero_unit_container(html_source)
 
-        if not has_video_url:
-            show_dialog("Unknown Video", "The IGN-Plugin does not know how to handle the selected video. "
-                                       "Please report the name of the video on the Kodi-Forums so it can be fixed. "
-                                       "http://forum.kodi.tv/showthread.php?tid=136353")
-
-    def _get_data_settings(self, content):
-        match = re.compile('data-settings="(.+?)"').findall(content)
+    def _get_data_SETTINGS(self, html_source):
+        match = re.compile('data-settings="(.+?)"').findall(html_source)
         match = re.compile('&quot;(\d+?)&quot;:{&quot;url&quot;:&quot;(.+?)&quot;,.+?}').findall(match[0])
         for res in match:
             self.urls[res[0]] = res[1].replace("\\", "")
 
-    def _get_hero_unit_container(self, content):
+    def _get_hero_unit_container(self, html_source):
         match = re.compile('class="hero-poster instant-play hidden"\n\s.+?\n\s.+?data-id="(.+?)"', re.DOTALL)\
-            .findall(content)
+            .findall(html_source)
         config = get_url("/videos/configs/id/" + match[0] + ".config").replace("\\", "")
         temp_matches = re.compile('"url":"(.+?)/zencoder/(.+?)/(.+?)/(.+?)/(.+?)/(.+?)-(.+?)-(.+?)"', re.DOTALL)\
             .findall(config)
         start_url = temp_matches[0][0]
         date = temp_matches[0][1] + "/" + temp_matches[0][2] + "/" + temp_matches[0][3]
-        resolution = int(temp_matches[0][4])
+        # resolution = int(temp_matches[0][4])
         vid_id = temp_matches[0][5]
-        bitrate = temp_matches[0][6]
+        # bitrate = temp_matches[0][6]
         ext = temp_matches[0][7]
 
         for i in range(0, len(video_height), 1):
@@ -248,18 +251,18 @@ class Video:
             temp_url = start_url + "/zencoder/" + date + "/" + str(max_video_quality[i]) + "/" + vid_id + "-" + str(
                 max_video_bitrate[i]) + "-" + ext
             try:
-                ret = urllib2.urlopen(temp_url)
+                ret = urllib.request.urlopen(temp_url)
                 if ret.code == 200:
                     self.urls[video_height[i]] = temp_url
-            except urllib2.HTTPError, e:
+            except urllib.error.HTTPError as e:
                 xbmc.log('HTTPError: ' + temp_url)
-            except urllib2.URLError, e:
+            except urllib.error.URLError as e:
                 xbmc.log('URLError: ' + temp_url)
 
     def get_vid_url(self, res):
         self._detect()
         final_url = ""
-        for u in self.urls.keys():
+        for u in list(self.urls.keys()):
             if int(u) >= res:
                 final_url = self.urls[u]
         return final_url
@@ -272,14 +275,12 @@ def show_dialog(title, text):
 
 def play_live_stream(url):
     listitem = xbmcgui.ListItem(path=url)
-    return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+    return xbmcplugin.setResolvedUrl(PLUGIN_HANDLE, True, listitem)
 
 
 def clean_title(title):
     title = title.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&#039;", "'").replace(
-        "&quot;", "\"").replace("&szlig;", "ß").replace("&ndash;", "-")
-    title = title.replace("&Auml;", "Ä").replace("&Uuml;", "Ü").replace("&Ouml;", "Ö").replace("&auml;", "ä").replace(
-        "&uuml;", "ü").replace("&ouml;", "ö")
+        "&quot;", "\"").replace("&ndash;", "-")
     title = title.replace("<em>", "").replace("</em>", "").strip()
     return title
 
@@ -290,15 +291,17 @@ def clean_url(title):
 
 
 def get_url(url):
-    req = urllib2.Request(base_url + url)
-    req.add_header('User-Agent',
-                   'Mozilla/5.0 (X11; CrOS i686 2268.111.0) '
-                   'AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11')
-    req.add_header('Cookie', 'i18n-ccpref=15-US-www-1')
-    response = urllib2.urlopen(req)
-    link = response.read()
-    response.close()
-    return link
+    if url.find(BASE_URL) >= 0:
+        complete_url = url
+    else:
+        complete_url = BASE_URL + url
+
+    log("complete_url", complete_url)
+
+    response = requests.get(complete_url, headers=HEADERS, cookies=COOKIES)
+    html_source = response.text
+    html_source = convertToUnicodeString(html_source)
+    return html_source
 
 
 def parameters_string_to_dict(parameters):
@@ -314,7 +317,7 @@ def parameters_string_to_dict(parameters):
 
 
 def add_link(name, url, mode, iconimage, desc="", duration=""):
-    u = sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode)
+    u = sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=" + str(mode)
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Duration": duration})
     liz.setProperty('IsPlayable', 'true')
@@ -325,7 +328,7 @@ def add_link(name, url, mode, iconimage, desc="", duration=""):
 
 
 def add_dir(name, url, mode, iconimage, desc=""):
-    u = sys.argv[0] + '?url=' + urllib.quote_plus(url) + '&mode=' + str(mode)
+    u = sys.argv[0] + '?url=' + urllib.parse.quote_plus(url) + '&mode=' + str(mode)
     liz = xbmcgui.ListItem(name, iconImage='DefaultFolder.png', thumbnailImage=iconimage)
     liz.setInfo(type='video', infoLabels={'title': name, 'plot': desc, 'plotoutline': desc})
     # Add refresh option to context menu
@@ -334,29 +337,62 @@ def add_dir(name, url, mode, iconimage, desc=""):
     return ok
 
 
+if sys.version_info[0] > 2:
+    unicode = str
+
+
+def convertToUnicodeString(s, encoding='utf-8'):
+    """Safe decode byte strings to Unicode"""
+    if isinstance(s, bytes):  # This works in Python 2.7 and 3+
+        s = s.decode(encoding)
+    return s
+
+
+def convertToByteString(s, encoding='utf-8'):
+    """Safe encode Unicode strings to bytes"""
+    if isinstance(s, unicode):
+        s = s.encode(encoding)
+    return s
+
+
+def log(name_object, object):
+    try:
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, name_object, convertToUnicodeString(object)), xbmc.LOGDEBUG)
+    except:
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, name_object, "Unable to log the object due to an error while converting it to an unicode string"), xbmc.LOGDEBUG)
+
+
 params = parameters_string_to_dict(sys.argv[2])
 mode = params.get('mode')
 url = params.get('url')
-if isinstance(url, str):
-    url = urllib.unquote_plus(url)
+
 
 if mode == 'list_videos':
+    url = urllib.parse.unquote_plus(url)
     list_videos(url)
 elif mode == 'list_series':
+    url = urllib.parse.unquote_plus(url)
     list_series(url)
 elif mode == 'list_search_results':
+    url = urllib.parse.unquote_plus(url)
     list_search_results(url)
 elif mode == 'play_video':
+    url = urllib.parse.unquote_plus(url)
     play_video(url)
 elif mode == 'list_series_episodes':
+    url = urllib.parse.unquote_plus(url)
     list_series_episodes(url)
 elif mode == 'podcast_index':
     podcast_index()
 elif mode == 'play_live_stream':
+    url = urllib.parse.unquote_plus(url)
     play_live_stream(url)
 elif mode == 'search':
     search()
 else:
-    xbmc.log("[ADDON] %s debug mode, Python Version %s" % (addon, str(sys.version)), xbmc.LOGDEBUG)
-    xbmc.log("[ADDON] %s v%s (%s) debug mode, is starting, ARGV = %s" % (addon, version, date, repr(sys.argv)), xbmc.LOGDEBUG)
+    xbmc.log("[ADDON] %s debug mode, Python Version %s" % (ADDON, convertToUnicodeString(sys.version)), xbmc.LOGDEBUG)
+    xbmc.log("[ADDON] %s v%s (%s) debug mode, is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)), xbmc.LOGDEBUG)
     index()
+

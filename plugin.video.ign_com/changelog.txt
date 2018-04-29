@@ -1,3 +1,11 @@
+v2.3.5 (2018-01-31)
+- small fix (not using future's old_div anymore) that hopefully prevents crashing on android.
+
+v2.3.4 (2018-01-20)
+- using requests
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+
 v2.3.3 (2017-05-30) by Skipmode A1
 - I (Skipmode A1) haven taken over addon by request of Twister
 - Adjusted video detection to new page structure

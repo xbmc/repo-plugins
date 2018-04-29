@@ -7,6 +7,8 @@ from ...youtube.helper import v3
 
 
 def _process_add_video(provider, context, re_match):
+    client = provider.get_client(context)
+
     playlist_id = context.get_param('playlist_id', '')
     if not playlist_id:
         raise kodion.KodionException('Playlist/Remove: missing playlist_id')
@@ -14,7 +16,7 @@ def _process_add_video(provider, context, re_match):
     if not video_id:
         raise kodion.KodionException('Playlist/Remove: missing video_id')
 
-    json_data = provider.get_client(context).add_video_to_playlist(playlist_id=playlist_id, video_id=video_id)
+    json_data = client.add_video_to_playlist(playlist_id=playlist_id, video_id=video_id)
     if not v3.handle_error(provider, context, json_data):
         return False
 
@@ -41,7 +43,6 @@ def _process_remove_video(provider, context, re_match):
             return False
 
         context.get_ui().refresh_container()
-        pass
     return True
 
 
@@ -60,7 +61,6 @@ def _process_remove_playlist(provider, context, re_match):
             return False
 
         context.get_ui().refresh_container()
-        pass
     return True
 
 
@@ -81,7 +81,6 @@ def _process_select_playlist(provider, context, re_match):
         watch_later_playlist_id = my_playlists.get('watchLater', '')
         items.append(
             ('[B]' + context.localize(provider.LOCAL_MAP['youtube.watch_later']) + '[/B]', watch_later_playlist_id))
-        pass
 
     for playlist in playlists:
         snippet = playlist.get('snippet', {})
@@ -89,8 +88,6 @@ def _process_select_playlist(provider, context, re_match):
         playlist_id = playlist.get('id', '')
         if title and playlist_id:
             items.append((title, playlist_id))
-            pass
-        pass
 
     result = context.get_ui().on_select(context.localize(provider.LOCAL_MAP['youtube.playlist.select']), items)
     if result == 'playlist.create':
@@ -108,17 +105,12 @@ def _process_select_playlist(provider, context, re_match):
                 new_params['playlist_id'] = playlist_id
                 new_context = context.clone(new_params=new_params)
                 _process_add_video(provider, new_context, re_match)
-                pass
-            pass
-        pass
     elif result != -1:
         new_params = {}
         new_params.update(context.get_params())
         new_params['playlist_id'] = result
         new_context = context.clone(new_params=new_params)
         _process_add_video(provider, new_context, re_match)
-        pass
-    pass
 
 
 def _process_rename_playlist(provider, context, re_match):
@@ -135,8 +127,6 @@ def _process_rename_playlist(provider, context, re_match):
             return
 
         context.get_ui().refresh_container()
-        pass
-    pass
 
 
 def _watchlater_playlist_id_change(provider, context, re_match, method):

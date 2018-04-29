@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.br3" name="Bayerisches Fernsehen" version="0.7.8" provider-name="L0RE">
+<addon id="plugin.video.br3" name="Bayerisches Fernsehen" version="0.7.9" provider-name="L0RE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -17,5 +17,6 @@
     <forum>http://www.kodinerds.net/index.php/Thread/46598-Bayrisches-Fernsehen/</forum>
     <email>andreas at vogler dot name</email>
     <platform>all</platform>
+    <broken>Broken, not supported anymore</broken>
   </extension>
 </addon>

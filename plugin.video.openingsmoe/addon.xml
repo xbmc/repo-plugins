@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.openingsmoe"
+version="2.3.1"
+name="OpeningsMoe"
+provider-name="Rucadi">
+<requires>
+  <import addon="xbmc.python" version="2.25.0"/>
+</requires>
+<extension point="xbmc.python.pluginsource" library="main.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en">OpeningsMoe viewer for KODI</summary>
+  <description lang="en_GB">Made by Rucadi. Follow my channel on telegram!! @Kemonomimi</description>
+  <disclaimer lang="en_GB">All videos are from Openings.moe.</disclaimer>
+  <assets>
+    <icon>icon.png</icon>
+    <fanart>fanart.jpg</fanart>
+    <screenshot>resources\screenshot-01.jpg</screenshot>
+    <screenshot>resources\screenshot-02.jpg</screenshot>
+    <screenshot>resources\screenshot-03.jpg</screenshot>    
+  </assets>
+  <news>You can check the name of the opening!</news>
+</extension>
+</addon>

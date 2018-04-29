@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.seedr" name="Seedr Torrent Cloud" version="0.0.1" provider-name="Seedr.cc">
+    <requires>
+        <import addon="xbmc.python" version="2.24.0" />
+        <import addon="script.module.simplejson" version="3.3.0"/>
+        <import addon="script.module.requests" version="1.1.0" />
+    </requires>
+
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Download Torrents to the cloud -- Stream them through Kodi, your phone, your PC, your lawnmower :-) www.seedr.cc Account required</summary>
+        <description lang="en_GB"></description>
+        <language>en_GB</language>
+        <platform>all</platform>
+        <license>GPL-3.0</license>
+        <forum></forum>
+        <website>https://www.seedr.cc/</website>
+        <email>admin@seedr.cc</email>
+        <source>https://github.com/dannyzb/seedr_kodi</source>
+        <news>https://www.facebook.com/seedrcc/</news>
+        <disclaimer>This plugin and all it's content, unless otherwise specified, is property of Seedr.cc</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

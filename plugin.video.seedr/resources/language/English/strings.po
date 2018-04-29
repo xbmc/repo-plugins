@@ -1,0 +1,61 @@
+# Kodi Media Center language file
+# Addon Name: Seedr Torrent Cloud
+# Addon id: plugin.video.seedr
+# Addon Provider: Seedr.cc
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.seedr\n"
+"Report-Msgid-Bugs-To: support@seedr.cc\n"
+"POT-Creation-Date: 2018-04-21 16:15+0000\n"
+"PO-Revision-Date: 2018-04-21 16:15+0000\n"
+"Last-Translator: Seedr Team\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Summary"
+msgid "Seedr Torrent Cloud"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Download Torrents Online and Stream them from the cloud on any Kodi device"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "By installing this addon you agree to the Seedr Terms of Service and Privacy Policy -- Available at https://www.seedr.cc/dynamic/terms https://www.seedr.cc/dynamic/privacy"
+msgstr ""
+
+msgctxt "#32000"
+msgid "Kindly go to"
+msgstr ""
+
+msgctxt "#32001"
+msgid "And input the following code"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Then press \"OK\" below"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Waiting for authorization ..."
+msgstr ""
+
+msgctxt "#32004"
+msgid "An error occured ..."
+msgstr ""
+
+msgctxt "#32005"
+msgid "Received Access Token: "
+msgstr ""
+
+msgctxt "#32006"
+msgid "⟳ Refresh"
+msgstr ""
+
+msgctxt "#32007"
+msgid "▲ Go Up"
+msgstr ""

@@ -26,7 +26,11 @@ msgstr "Пароль"
 
 msgctxt "#30003"
 msgid "Configure InputStream Adaptive"
-msgstr "конфигурировать InputStream Adaptive"
+msgstr "Настройки InputStream Adaptive"
+
+msgctxt "#30004"
+msgid "Synchronize play time progress"
+msgstr "Синхронизация времени воспроизведения"
 
 msgctxt "#30010"
 msgid "Region"

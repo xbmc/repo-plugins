@@ -93,8 +93,10 @@ class HDHR(object):
         self.setDevice(tunerkey)
         progs  = self.pyHDHR.getWhatsOn()
         for channel in progs:
-            label, liz = self.buildChannelListItem(channel, progs[channel])
-            self.addLink(label, json.dumps({"tunerkey":tunerkey,"channel":channel}), 9, liz, len(progs))
+            try:
+                label, liz = self.buildChannelListItem(channel, progs[channel])
+                self.addLink(label, json.dumps({"tunerkey":tunerkey,"channel":channel}), 9, liz, len(progs))
+            except: pass
             
             
     def browseGuide(self, mydata):
@@ -116,14 +118,18 @@ class HDHR(object):
             hasCC       = True
             chlogo      = (chan.getImageURL() or ICON)
             if chnum is None:
-                label, liz = self.buildChannelListItem(channel, None, '%s %s'%(channel,channelname))
-                self.addDir(label,json.dumps({"tunerkey":tunerkey,"chnum":str(channel)}),4,liz)
+                try:
+                    label, liz = self.buildChannelListItem(channel, None, '%s %s'%(channel,channelname))
+                    self.addDir(label,json.dumps({"tunerkey":tunerkey,"chnum":str(channel)}),4,liz)
+                except: pass
             else:
                 programs = chan.getProgramInfos()
                 for program in programs:
                     if chnum != str(channel): continue
-                    label, liz = self.buildChannelListItem(chnum, program, opt='Lineup')
-                    self.addLink(label, json.dumps({"tunerkey":tunerkey,"channel":chnum}), 9, liz, len(programs))
+                    try:
+                        label, liz = self.buildChannelListItem(chnum, program, opt='Lineup')
+                        self.addLink(label, json.dumps({"tunerkey":tunerkey,"channel":chnum}), 9, liz, len(programs))
+                    except: pass
 
                     
     def browseRecordings(self):
@@ -140,13 +146,17 @@ class HDHR(object):
             starttime  = (datetime.datetime.fromtimestamp(float(prog.getStartTime())))
             if show[1] > 1:
                 label = '%s (%d)'%(title, show[1])
-                label, liz = self.buildRecordListItem(prog, label, opt='show')
-                self.addDir(label, prog.getSeriesID(), 3, liz)
+                try:
+                    label, liz = self.buildRecordListItem(prog, label, opt='show')
+                    self.addDir(label, prog.getSeriesID(), 3, liz)
+                except: pass
             else:
                 if len(eptitle) > 0: label = '%s: %s - %s'%(starttime.strftime('%I:%M %p').lstrip('0'),title,eptitle)
                 else: label = '%s: %s'%(starttime.strftime('%I:%M %p').lstrip('0'),title)
-                label, liz = self.buildRecordListItem(prog, label)
-                self.addLink(label, prog.getPlayURL(), 8, liz)
+                try:
+                    label, liz = self.buildRecordListItem(prog, label)
+                    self.addLink(label, prog.getPlayURL(), 8, liz)
+                except: pass
 
             
     def browseSeries(self, seriesid):
@@ -177,14 +187,17 @@ class HDHR(object):
                 self.addLink(label, prog, 9, liz, len(progs))
             progs = self.pyHDHR.search(query)
             for prog in progs:
-                label, liz = self.buildChannelListItem(prog, progs[prog], opt='search')
-                self.addLink(label, prog, 9, liz, len(progs))
+                try:
+                    label, liz = self.buildChannelListItem(prog, progs[prog], opt='search')
+                    self.addLink(label, prog, 9, liz, len(progs))
+                except: pass
             if not self.hasDVR: return
             progs = self.pyHDHR.searchRecorded(query)
             for prog in progs:
-                label, liz = self.buildRecordListItem(progs[prog], opt='searchRecorded')
-                self.addLink(label, prog, 9, liz, len(progs))
-            
+                try:
+                    label, liz = self.buildRecordListItem(progs[prog], opt='searchRecorded')
+                    s=elf.addLink(label, prog, 9, liz, len(progs))
+                except: pass
             
     def buildRecordListItem(self, prog, label=None, opt='Live'):
         return self.buildChannelListItem(prog.getChannelNumber(), prog, label, opt)
@@ -192,6 +205,7 @@ class HDHR(object):
         
     def buildChannelListItem(self, channel, item=None, label=None, opt='Live'):
         info   = self.getChannelInfo(channel)
+        if info is None: return
         chlogo = (info.getImageURL() or ICON)
         chname = (info.getAffiliate() or info.getGuideName() or info.getGuideNumber() or 'N/A')
         liz    = xbmcgui.ListItem(label)

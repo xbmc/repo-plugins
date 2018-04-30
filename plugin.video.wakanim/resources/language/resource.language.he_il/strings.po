@@ -29,6 +29,10 @@ msgctxt "#30003"
 msgid "Configure InputStream Adaptive"
 msgstr "הגדרת inputstream.adaptive"
 
+msgctxt "#30004"
+msgid "Synchronize play time progress"
+msgstr "סנכרן את התקדמות זמן ההפעלה"
+
 msgctxt "#30010"
 msgid "Region"
 msgstr "אזור"

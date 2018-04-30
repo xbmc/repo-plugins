@@ -28,6 +28,10 @@ msgctxt "#30003"
 msgid "Configure InputStream Adaptive"
 msgstr "InputStream Adaptive konfigurieren"
 
+msgctxt "#30004"
+msgid "Synchronize play time progress"
+msgstr "Synchronisieren Sie den Fortschritt der Spielzeit"
+
 msgctxt "#30010"
 msgid "Region"
 msgstr "Region"
@@ -107,3 +111,7 @@ msgstr "Fehlgeschlagen das Video abzuspielen"
 msgctxt "#30045"
 msgid "Do you want to continue watching at %s%%?"
 msgstr "Möchtest du das Video bei %s%% fortsetzen?"
+
+msgctxt "#30046"
+msgid "You need to be logged in"
+msgstr "Du musst eingeloggt sein"

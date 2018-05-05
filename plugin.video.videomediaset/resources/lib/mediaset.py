@@ -34,8 +34,8 @@ class Mediaset(rutils.RUtils):
         page = 1
         arrdata=[]
         maxpage = 200
-       	if not url.startswith("http"):
-       		url="http://www.video.mediaset.it"+url
+        if not url.startswith("http"):
+            url="http://www.video.mediaset.it"+url
         url=url.replace("archivio-news.shtml","archivio-video.shtml")
         soup=self.getSoup(url)
         container=soup.find("div", class_="page brandpage")
@@ -47,7 +47,7 @@ class Mediaset(rutils.RUtils):
             slider=subpart.find("div", class_="slider")
             if slider:
               clips=slider.find_all("div", class_="clip")
-              for clip in clips:				
+              for clip in clips:                
                 data0=clip.find("div", class_="clip__info")
                 data1=data0.find('a')
                 data2=clip.find('img')
@@ -101,13 +101,14 @@ class Mediaset(rutils.RUtils):
     def get_canali_live(self):
         self.log('Getting the list of live channels', 4)
         
-        url = "http://live1.msf.ticdn.it/Content/HLS/Live/Channel(CH{ch}HA)/Stream(04)/index.m3u8"
+        url = "https://live1-mediaset-it.akamaized.net/content/hls_clr_xo/live/channel(ch{ch})/index.m3u8"
 
         arrdata = []
 
         arrdata.append({'title':"Canale 5", 'url':url.format(ch='01'),'thumbs': "Canale_5.png"})
         arrdata.append({'title':"Italia 1", 'url':url.format(ch='02'),'thumbs': "Italia_1.png"})
         arrdata.append({'title':"Rete 4", 'url':url.format(ch='03'),'thumbs': "Rete_4.png"})
+        arrdata.append({'title':"Mediaset 20", 'url':url.format(ch='25'),'thumbs': "Mediaset_20.png"})
         arrdata.append({'title':"La 5", 'url':url.format(ch='04'),'thumbs': "La_5.png"})
         arrdata.append({'title':"Italia 2", 'url':url.format(ch='05'),'thumbs': "Italia_2.png"})
         arrdata.append({'title':"Iris", 'url':url.format(ch='06'),'thumbs': "Iris.png"})
@@ -119,7 +120,18 @@ class Mediaset(rutils.RUtils):
     def get_stream(self, id):
         self.log('Trying to get the stream with id ' + str(id), 4)
 
-        url = "http://cdnsel01.mediaset.net/GetCdn.aspx?streamid={id}&format=json".format(id=id)
+        tempurl="http://www.video.mediaset.it/html/metainfo.sjson?id={id}".format(id=id)
+        jsn = self.getJson(tempurl)
+        
+        if not (jsn and 'video' in jsn):
+            return False;
+        
+        if ('guid' in jsn['video']):
+            vid = jsn['video']['guid']
+        else:
+            vid = jsn['video']['id']
+            
+        url = "http://cdnsel01.mediaset.net/GetCdn.aspx?streamid={id}&format=json".format(id=vid)
 
         jsn = self.getJson(url)
 

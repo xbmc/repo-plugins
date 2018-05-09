@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='2.2.1' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.2.2' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
         <import addon="script.module.python.twitch" version="2.0.0"/>
@@ -8,17 +8,17 @@
     <extension point='xbmc.python.pluginsource' library='resources/lib/routes.py'>
         <provides>video</provides>
     </extension>
-    <extension point="xbmc.service" library="resources/lib/service.py"/>
+    <extension point="xbmc.service" library="resources/lib/service.py" start="login"/>
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
         <news>
+2.2.2
+[add] refresh item to streams search when there are no results
+[upd] close chat on playback stopped [ccope]
+[upd] service start parameter to login
+
 2.2.1
 [add] allow Adaptive as default quality
-
-2.2.0
-[add] Search history
-[add] Settings - Maintenance
-[fix] VodCast highlighting
         </news>
         <assets>
             <icon>icon.png</icon>

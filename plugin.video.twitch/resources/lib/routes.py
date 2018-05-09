@@ -257,6 +257,8 @@ def search_results(content, query, index=0):
                 kodi.create_item(converter.stream_to_listitem(stream))
             if results[Keys.TOTAL] > (offset + limit):
                 kodi.create_item(utils.link_to_next_page({'mode': MODES.SEARCHRESULTS, 'content': content, 'query': query, 'index': index}))
+        else:
+            kodi.create_item({'path': kodi.get_plugin_url({'mode': MODES.REFRESH}), 'label': i18n('refresh')})
         kodi.end_of_directory()
     elif content == 'channels':
         kodi.set_view('files', set_sort=False)

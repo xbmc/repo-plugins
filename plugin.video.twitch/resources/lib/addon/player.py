@@ -46,9 +46,20 @@ class TwitchPlayer(xbmc.Player):
         self.reset()
 
     def reset(self):
+        self.close_chat()
         self.reset_player()
         self.reset_seek()
         self.reset_reconnect()
+
+    def close_chat(self):
+        win_dialog_id = kodi.get_current_window_dialog_id()
+        if utils.irc_enabled() and \
+                self.window.getProperty(key=self.player_keys['twitch_playing']) == 'True' and \
+                win_dialog_id != 9999:
+            xbmc.executebuiltin('Dialog.Close(%s,true)' % win_dialog_id)
+            win_dialog_id = kodi.get_current_window_dialog_id()
+            if win_dialog_id != 9999:
+                xbmc.executebuiltin('Dialog.Close(all,true)')
 
     def reset_seek(self):
         for k in self.seek_keys.keys():
@@ -89,6 +100,7 @@ class TwitchPlayer(xbmc.Player):
             if reconnect:
                 live_channel = self.window.getProperty(self.reconnect_keys['stream'])
                 if live_channel:
+                    self.close_chat()
                     channel_id, name, display_name, quality = live_channel.split(',')
                     retries = 0
                     max_retries = 5

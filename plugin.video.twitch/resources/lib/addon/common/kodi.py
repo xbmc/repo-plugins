@@ -275,6 +275,10 @@ def close_all():
     xbmc.executebuiltin('Dialog.Close(all)')
 
 
+def get_current_window_dialog_id():
+    return xbmcgui.getCurrentWindowDialogId()
+
+
 def get_current_view():
     skinPath = translate_path('special://skin/')
     xml = os.path.join(skinPath, 'addon.xml')

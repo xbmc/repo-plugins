@@ -1,0 +1,140 @@
+# Kodi Media Center language file
+# Addon Name: TeleUp
+# Addon id: plugin.video.teleup
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.teleup\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lunatixz Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Enter User Email"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Enter User Password"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Please visit www.teleup.com to activate your account."
+msgstr ""
+
+msgctxt "#30004"
+msgid "Select Quality"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Something went wrong, visit www.teleup.com for support."
+msgstr ""
+
+msgctxt "#30006"
+msgid "Welcome Back "
+msgstr ""
+
+msgctxt "#30007"
+msgid "Something went wrong, please check user credentials and try again."
+msgstr ""
+
+msgctxt "#30008"
+msgid "Already have a TeleUp account?"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Exit"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Sign-In"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Account"
+msgstr ""
+
+msgctxt "#30012"
+msgid "General"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Email Activated:"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Plan Type:"
+msgstr ""
+
+msgctxt "#30015"
+msgid "DVR Credit:"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Your account has expired, visit www.teleup.com"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Account Information:"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Subscription expiration - "
+msgstr ""
+
+msgctxt "#30019"
+msgid "Insufficient DVR credits, visit www.teleup.com"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Subscription plan - "
+msgstr ""
+
+msgctxt "#30021"
+msgid "DVR credits updated "
+msgstr ""
+
+msgctxt "#30022"
+msgid "Email requires Activation, visit www.teleup.com"
+msgstr ""
+
+msgctxt "#30023"
+msgid "%s Recording Failed!"
+msgstr ""
+
+msgctxt "#30024"
+msgid "%s Recording Successful"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Preferred Playback Method"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Preferred Stream Quality"
+msgstr ""
+
+msgctxt "#30027"
+msgid "%s - Enter Search Term"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Found No Results for %s"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Video Rentals Coming Soon!"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Open Guide Settings"
+msgstr ""

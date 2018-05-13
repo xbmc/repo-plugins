@@ -101,7 +101,7 @@ msgid "Subscription plan - "
 msgstr ""
 
 msgctxt "#30021"
-msgid "DVR credits updated"
+msgid "DVR credits updated "
 msgstr ""
 
 msgctxt "#30022"

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.teleup" name="TeleUp" provider-name="Lunatixz" version="2018.05.04">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/> 
+        <import addon="script.module.requests" version="2.7.0"/> 
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.uepg" version="1.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">The Official plugin for the TeleUp Service.</summary>
+        <description lang="en_GB">Entirely Legal and Free! Start watching instantly or record shows for later. Signup for one of three packages today!</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/KODI_Addons/tree/master/plugin.video.teleup</source>
+        <website>http://teleup.com</website>
+        <forum>https://forum.kodi.tv/showthread.php?tid=331599</forum>
+        <news></news>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+            <screenshot>resources/images/screenshot03.png</screenshot>
+            <screenshot>resources/images/screenshot04.png</screenshot>
+        </assets>
+    </extension>
+</addon>

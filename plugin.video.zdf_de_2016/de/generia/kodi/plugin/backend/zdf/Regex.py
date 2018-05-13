@@ -3,6 +3,9 @@ import re
 def getTagPattern(tag, class_):
     return re.compile('<' + tag + '[^>]*class="([^"]*' + class_ + '[^"]*)"[^>]*>', re.DOTALL)
 
+def getAttrPattern(attr):
+    return re.compile(attr + '="([^"]*)"', re.DOTALL)
+
 def getTag(tag, string, match):
     if match is None:
         return None

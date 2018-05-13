@@ -1,6 +1,7 @@
 import xbmcgui
 
 from de.generia.kodi.plugin.backend.zdf.RubricResource import RubricResource       
+from de.generia.kodi.plugin.backend.zdf.TeaserLazyloadResolver import TeaserLazyloadResolver       
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 
 from de.generia.kodi.plugin.frontend.base.Pagelet import Item        
@@ -22,7 +23,8 @@ class RubricPage(AbstractPage):
 
         rubricResource = RubricResource(Constants.baseUrl + rubricUrl, listType, listStart, listEnd)
         self._parse(rubricResource)
-
+        self._resolveLazyloadTeasers(rubricResource)
+        
         if rubricResource.isRedirect:
             self.info("redirect detected to url='{}', skipping ...", rubricResource.responseLocation)
             dialog = xbmcgui.Dialog()
@@ -41,7 +43,12 @@ class RubricPage(AbstractPage):
             self._renderTeasers(rubricResource.teasers, response)
             self._renderClusters(clusters, response, rubricUrl)
             
-        
+    
+    def _resolveLazyloadTeasers(self, rubricResource):
+        teaserLazyloadResolver = TeaserLazyloadResolver(self.log)
+        for cluster in rubricResource.clusters:
+            cluster.teasers.extend(teaserLazyloadResolver.resolveTeasers(cluster.lazyloadTeasers))
+   
     def _renderClusters(self, clusters, response, rubricUrl):
         for cluster in clusters:
             clusterTitle = cluster.title #.encode('ascii', 'ignore')

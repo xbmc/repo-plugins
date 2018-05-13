@@ -6,6 +6,7 @@ from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
+from de.generia.kodi.plugin.backend.zdf.TeaserLazyload import TeaserLazyload
 
 fallbackTitlePattern = compile('<li\s*class="item current"[^>]*>[^<]*<a[^>]*>([^<]*)</a>')
 fallbackTitlePattern2 = compile('<h\d\s*class="[^"]*stage-title[^"]*"[^>]*>([^<]*)</h\d>')
@@ -25,7 +26,7 @@ sectionTitlePattern = compile('<h2\s*class="[^"]*title[^"]*"[^>]*>([^<]*)</h2>')
 sectionItemPattern = getTagPattern('article', 'b-content-teaser-item')
 
 clusterTitlePattern = compile('<h2\s*class="[^"]*cluster-title[^"]*"[^>]*>([^<]*)</h2>')
-clusterItemPattern = getTagPattern('article', 'b-cluster-teaser')
+clusterItemPattern = compile('<[^>]*class="([^"]*b-cluster-teaser[^"]*)"[^>]*>')
 
 topicsModuleTitlePattern = compile('x-notitle|<h2\s*class="[^"]*big-headline[^"]*"[^>]*>([^<]*)</h2>')
 newsStreamTitlePattern = compile('<h2\s*class="[^"]*visuallyhidden[^"]*"[^>]*>([^<]*)</h2>')
@@ -39,6 +40,7 @@ class Cluster(object):
         self.listEnd = listEnd
         self.image = image
         self.teasers = []
+        self.lazyloadTeasers = []
                         
     def __str__(self):
         return "<Cluster '%s' teasers='%d'>" % (self.title, len(self.teasers))
@@ -208,13 +210,24 @@ class RubricResource(AbstractPageResource):
                 return
 
         while pos < cluster.listEnd and itemMatch is not None:
-            teaser = Teaser()
+            teaser = self._createTeaser(itemMatch, itemPattern)
             pos = teaser.parse(self.content, pos, self._getBaseUrl(), itemMatch)
             if teaser.valid():
-                cluster.teasers.append(teaser)
+                if isinstance(teaser, TeaserLazyload):
+                    cluster.lazyloadTeasers.append(teaser)
+                else:
+                    cluster.teasers.append(teaser)
                 if firstTeaserOnly:
                     return
-
             itemMatch = itemPattern.search(self.content, pos)
             if itemMatch is not None:
                 pos = itemMatch.start(0)
+
+    def _createTeaser(self, itemMatch, itemPattern):
+        class_ = itemMatch.group(1)
+        teaser = None
+        if class_.find('lazyload') != -1:
+            teaser = TeaserLazyload(itemPattern)
+        else:
+            teaser = Teaser()
+        return teaser

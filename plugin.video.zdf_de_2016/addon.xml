@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="1.0.10" provider-name="Generia">
+<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="1.0.11" provider-name="Generia">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>
   </requires>
@@ -25,6 +25,10 @@ Siehe auch https://github.com/generia/plugin.video.zdf_de_2016
 	<website>http://www.zdf.de</website>
     <platform>all</platform>
     <news>
+1.0.11 (2018-05-13)
+- fix for handling lazyload teasers newly introduced by zdf.de
+- performance improvements for long lists
+
 1.0.10 (2018-01-11)
 - fix for rest-api url structure after change by zdf.de (see https://github.com/generia/plugin.video.zdf_de_2016/issues/14)
 

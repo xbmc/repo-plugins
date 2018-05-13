@@ -9,8 +9,10 @@ class Client:
 
         self.DEVICE_ID = self.plugin.get_setting('device_id')
         self.TOKEN = self.plugin.get_setting('token')
+        self.MPX = self.plugin.get_setting('mpx')
         self.COUNTRY = self.plugin.get_setting('country')
         self.LANGUAGE = self.plugin.get_setting('language')
+        self.PORTABILITY = self.plugin.get_setting('portability')
         self.POST_DATA = {}
         self.ERRORS = 0
 
@@ -23,15 +25,15 @@ class Client:
             '$format': 'json'
         }
 
-        self.STARTUP = self.plugin.api_base + 'v2/Startup'
+        self.STARTUP = self.plugin.api_base + 'v4/Startup'
         self.RAIL = self.plugin.api_base + 'v2/Rail'
-        self.RAILS = self.plugin.api_base + 'v3/Rails'
+        self.RAILS = self.plugin.api_base + 'v4/Rails'
         self.EPG = self.plugin.api_base + 'v1/Epg'
         self.EVENT = self.plugin.api_base + 'v2/Event'
-        self.PLAYBACK = self.plugin.api_base + 'v1/Playback'
-        self.SIGNIN = self.plugin.api_base + 'v3/SignIn'
+        self.PLAYBACK = self.plugin.api_base + 'v2/Playback'
+        self.SIGNIN = self.plugin.api_base + 'v4/SignIn'
         self.SIGNOUT = self.plugin.api_base + 'v1/SignOut'
-        self.REFRESH = self.plugin.api_base + 'v3/RefreshAccessToken'
+        self.REFRESH = self.plugin.api_base + 'v4/RefreshAccessToken'
         self.PROFILE = self.plugin.api_base + 'v1/UserProfile'
 
     def content_data(self, url):
@@ -59,15 +61,15 @@ class Client:
         return self.content_data(self.EVENT)
 
     def playback_data(self, id_):
-        self.POST_DATA = {
+        params = {
             'AssetId': id_,
             'Format': 'MPEG-DASH',
             'PlayerId': 'DAZN-' + self.DEVICE_ID,
             'Secure': 'true',
             'PlayReadyInitiator': 'false',
-            'BadManifests': [],
-            'LanguageCode': self.LANGUAGE,
+            'LanguageCode': self.LANGUAGE
         }
+        self.PARAMS.update(params)
         return self.request(self.PLAYBACK)
 
     def playback(self, id_):
@@ -83,17 +85,22 @@ class Client:
         if data.get('odata.error', None):
             self.errorHandler(data)
         else:
+            if 'PortabilityAvailable' in self.PORTABILITY:
+                self.COUNTRY = self.plugin.portability_country(self.COUNTRY, data['UserCountryCode'])
+                self.plugin.set_setting('country', self.COUNTRY)
             self.plugin.set_setting('viewer_id', data['ViewerId'])
 
     def setToken(self, auth, result):
         self.plugin.log('[{0}] signin: {1}'.format(self.plugin.addon_id, result))
         if auth and result == 'SignedIn':
             self.TOKEN = auth['Token']
+            self.MPX = self.plugin.get_mpx(self.TOKEN)
         else:
             if result == 'HardOffer':
                 self.plugin.dialog_ok(30161)
             self.signOut()
         self.plugin.set_setting('token', self.TOKEN)
+        self.plugin.set_setting('mpx', self.MPX)
 
     def signIn(self):
         credentials = self.plugin.get_credentials()
@@ -109,7 +116,6 @@ class Client:
                 self.errorHandler(data)
             else:
                 self.setToken(data['AuthToken'], data.get('Result', 'SignInError'))
-                self.userProfile()
         else:
             self.plugin.dialog_ok(30004)
 
@@ -144,6 +150,7 @@ class Client:
         data = self.request(self.STARTUP)
         region = data.get('Region', {})
         if region.get('isAllowed', False):
+            self.PORTABILITY = region['CountryPortabilityStatus']
             self.COUNTRY = region['Country']
             self.LANGUAGE = region['Language']
             languages = data['SupportedLanguages']
@@ -153,12 +160,14 @@ class Client:
                     break
             self.plugin.set_setting('language', self.LANGUAGE)
             self.plugin.set_setting('country', self.COUNTRY)
+            self.plugin.set_setting('portability', self.PORTABILITY)
             if self.TOKEN:
                 self.refreshToken()
             else:
                 self.signIn()
         else:
             self.TOKEN = ''
+            self.plugin.log('[{0}] version: {1} region: {2}'.format(self.plugin.addon_id, self.plugin.addon_version, str(region)))
             self.plugin.dialog_ok(30101)
 
     def request(self, url):
@@ -183,7 +192,7 @@ class Client:
         self.ERRORS += 1
         msg  = data['odata.error']['message']['value']
         code = str(data['odata.error']['code'])
-        self.plugin.log('[{0}] version: {1} country: {2} language: {3}'.format(self.plugin.addon_id, self.plugin.addon_version, self.COUNTRY, self.LANGUAGE))
+        self.plugin.log('[{0}] version: {1} country: {2} language: {3} portability: {4}'.format(self.plugin.addon_id, self.plugin.addon_version, self.COUNTRY, self.LANGUAGE, self.PORTABILITY))
         self.plugin.log('[{0}] error: {1} ({2})'.format(self.plugin.addon_id, msg, code))
         if code == '10000' and self.ERRORS < 3:
             self.refreshToken()

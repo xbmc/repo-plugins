@@ -37,12 +37,20 @@ msgid "Override View"
 msgstr "Vue de priorité"
 
 msgctxt "#30012"
-msgid "View: Content"
-msgstr "Vue: Content"
+msgid "Content Type"
+msgstr "Type De Contenu"
 
 msgctxt "#30013"
-msgid "View: ID"
-msgstr "Vue: ID"
+msgid "View: Folders"
+msgstr "Vue: Dossier"
+
+msgctxt "#30014"
+msgid "View: Videos"
+msgstr "Vue: Vidéos"
+
+msgctxt "#30015"
+msgid "View: Schedule"
+msgstr "Vue: Horaire"
 
 msgctxt "#30020"
 msgid "Videoplayer"
@@ -75,6 +83,10 @@ msgstr "Votre adresse courriel ou votre mot de passe est incorrect. Veuillez ré
 msgctxt "#30161"
 msgid "Continue watching sport on DAZN by reactivating your subscription in 'My Account'."
 msgstr "Continuez à regarder le sport sur DAZN en réactivant votre abonnement dans Mon compte."
+
+msgctxt "#30200"
+msgid "Don't Miss"
+msgstr "À ne pas manquer"
 
 msgctxt "#30201"
 msgid "Catch Up"

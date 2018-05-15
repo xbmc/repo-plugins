@@ -27,7 +27,7 @@ class AbstractSettings(object):
 
         try:
             return converter(int(value))
-        except Exception, ex:
+        except Exception as ex:
             from . import log
 
             log("Failed to get setting '%s' as 'int' (%s)" % setting_id, ex.__str__())
@@ -87,12 +87,6 @@ class AbstractSettings(object):
     def use_dash(self):
         return self.get_bool(constants.setting.USE_DASH, False)
 
-    def dash_support_builtin(self):
-        return self.get_bool(constants.setting.DASH_SUPPORT_BUILTIN, False)
-
-    def dash_support_addon(self):
-        return self.get_bool(constants.setting.DASH_SUPPORT_ADDON, False)
-
     def subtitle_languages(self):
         return self.get_int(constants.setting.SUBTITLE_LANGUAGE, 0)
 
@@ -127,5 +121,17 @@ class AbstractSettings(object):
     def use_dash_proxy(self):
         return self.get_bool(constants.setting.DASH_PROXY, True)
 
-    def dash_proxy_port(self):
-        return self.get_int(constants.setting.DASH_PROXY_PORT, 50152)
+    def httpd_port(self):
+        return self.get_int(constants.setting.HTTPD_PORT, 50152)
+
+    def httpd_listen(self):
+        return self.get_string(constants.setting.HTTPD_LISTEN, '0.0.0.0')
+
+    def set_httpd_listen(self, value):
+        return self.set_string(constants.setting.HTTPD_LISTEN, value)
+
+    def httpd_whitelist(self):
+        return self.get_string(constants.setting.HTTPD_WHITELIST, '')
+
+    def api_config_page(self):
+        return self.get_bool(constants.setting.API_CONFIG_PAGE, False)

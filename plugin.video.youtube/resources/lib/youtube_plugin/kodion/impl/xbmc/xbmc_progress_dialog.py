@@ -1,5 +1,7 @@
 __author__ = 'bromix'
 
+from six import string_types
+
 import xbmcgui
 from ..abstract_progress_dialog import AbstractProgressDialog
 
@@ -21,9 +23,9 @@ class XbmcProgressDialog(AbstractProgressDialog):
 
     def update(self, steps=1, text=None):
         self._position += steps
-        position = int(float(100.0 / self._total) * self._position)
+        position = int(float((100.0 // self._total)) * self._position)
 
-        if isinstance(text, basestring):
+        if isinstance(text, string_types):
             self._dialog.update(position, text)
         else:
             self._dialog.update(position)

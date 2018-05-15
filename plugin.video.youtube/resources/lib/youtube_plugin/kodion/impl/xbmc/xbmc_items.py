@@ -1,19 +1,25 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'bromix'
 
 import xbmcgui
 
 from ...items import VideoItem, AudioItem, UriItem
+from ... import utils
 from . import info_labels
 
 
 def to_video_item(context, video_item):
-    context.log_debug('Converting VideoItem')
+    context.log_debug('Converting VideoItem |%s|' % video_item.get_uri())
     major_version = context.get_system_version().get_version()[0]
     thumb = video_item.get_image() if video_item.get_image() else u'DefaultVideo.png'
     title = video_item.get_title() if video_item.get_title() else video_item.get_name()
     fanart = ''
     settings = context.get_settings()
-    item = xbmcgui.ListItem(label=title)
+    if major_version > 17:
+        item = xbmcgui.ListItem(label=utils.to_unicode(title), offscreen=True)
+    else:
+        item = xbmcgui.ListItem(label=utils.to_unicode(title))
     if video_item.get_fanart() and settings.show_fanart():
         fanart = video_item.get_fanart()
     if major_version <= 12:
@@ -30,13 +36,18 @@ def to_video_item(context, video_item):
 
     item.setProperty('inputstreamaddon', '')
     item.setProperty('inputstream.adaptive.manifest_type', '')
-    if video_item.use_dash() and settings.dash_support_addon():
+    if video_item.use_dash() and context.addon_enabled('inputstream.adaptive'):
         item.setContentLookup(False)
         item.setMimeType('application/xml+dash')
         item.setProperty('inputstreamaddon', 'inputstream.adaptive')
         item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
         if video_item.get_headers():
             item.setProperty('inputstream.adaptive.stream_headers', video_item.get_headers())
+
+        if video_item.get_license_key():
+            item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
+            item.setProperty('inputstream.adaptive.license_key', video_item.get_license_key())
+
         # item.setProperty('inputstream.adaptive.manifest_update_parameter', '&start_seq=$START_NUMBER$')
 
     item.setProperty(u'IsPlayable', u'true')
@@ -57,13 +68,16 @@ def to_video_item(context, video_item):
 
 
 def to_audio_item(context, audio_item):
-    context.log_debug('Converting AudioItem')
+    context.log_debug('Converting AudioItem |%s|' % audio_item.get_uri())
     major_version = context.get_system_version().get_version()[0]
     thumb = audio_item.get_image() if audio_item.get_image() else u'DefaultAudio.png'
     title = audio_item.get_name()
     fanart = ''
     settings = context.get_settings()
-    item = xbmcgui.ListItem(label=title)
+    if major_version > 17:
+        item = xbmcgui.ListItem(label=utils.to_unicode(title), offscreen=True)
+    else:
+        item = xbmcgui.ListItem(label=utils.to_unicode(title))
     if audio_item.get_fanart() and settings.show_fanart():
         fanart = audio_item.get_fanart()
     if major_version <= 12:
@@ -86,7 +100,11 @@ def to_audio_item(context, audio_item):
 
 def to_uri_item(context, base_item):
     context.log_debug('Converting UriItem')
-    item = xbmcgui.ListItem(path=base_item.get_uri())
+    major_version = context.get_system_version().get_version()[0]
+    if major_version > 17:
+        item = xbmcgui.ListItem(path=base_item.get_uri(), offscreen=True)
+    else:
+        item = xbmcgui.ListItem(path=base_item.get_uri())
     item.setProperty(u'IsPlayable', u'true')
     return item
 

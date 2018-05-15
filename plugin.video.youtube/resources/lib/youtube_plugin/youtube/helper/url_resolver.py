@@ -1,8 +1,9 @@
-import re
-
 __author__ = 'bromix'
 
-import urlparse
+from six.moves import urllib
+
+import re
+
 from ...kodion.utils import FunctionCache
 from ...kodion import Context as _Context
 import requests
@@ -10,7 +11,7 @@ import requests
 
 class AbstractResolver(object):
     def __init__(self):
-        self._verify = _Context().get_settings().verify_ssl()
+        self._verify = _Context(plugin_id='plugin.video.youtube').get_settings().verify_ssl()
 
     def supports_url(self, url, url_components):
         raise NotImplementedError()
@@ -64,7 +65,7 @@ class YouTubeResolver(AbstractResolver):
             return _url
 
         if url_components.path.lower() == '/redirect':
-            params = dict(urlparse.parse_qsl(url_components.query))
+            params = dict(urllib.parse.parse_qsl(url_components.query))
             return params['q']
 
         if url_components.path.lower().startswith('/user'):
@@ -105,7 +106,7 @@ class CommonResolver(AbstractResolver, list):
                     location = headers.get('location', '')
 
                     # validate the location - some server returned garbage
-                    _url_components = urlparse.urlparse(location)
+                    _url_components = urllib.parse.urlparse(location)
                     if not _url_components.scheme and not _url_components.hostname:
                         return url
 
@@ -147,7 +148,7 @@ class UrlResolver(object):
 
     def _resolve(self, url):
         # try one of the resolver
-        url_components = urlparse.urlparse(url)
+        url_components = urllib.parse.urlparse(url)
         for resolver in self._resolver:
             if resolver.supports_url(url, url_components):
                 resolved_url = resolver.resolve(url, url_components)
@@ -155,7 +156,7 @@ class UrlResolver(object):
 
                 # one last check...sometimes the resolved url is YouTube-specific and can be resolved again or
                 # simplified.
-                url_components = urlparse.urlparse(resolved_url)
+                url_components = urllib.parse.urlparse(resolved_url)
                 if resolver is not self._youtube_resolver and self._youtube_resolver.supports_url(resolved_url, url_components):
                     return self._youtube_resolver.resolve(resolved_url, url_components)
 

@@ -1,9 +1,9 @@
 __author__ = 'bromix'
+from six import PY2
 
 from ... import kodion
 from ...youtube.helper import utils
 from ...kodion.items.video_item import VideoItem
-import yt_context_menu
 
 
 def my_subscriptions_to_items(provider, context, json_data, do_filter=False):
@@ -25,6 +25,8 @@ def my_subscriptions_to_items(provider, context, json_data, do_filter=False):
     for item in items:
         channel = item['channel'].lower()
         channel = channel.replace(',', '')
+        if PY2:
+            channel = channel.encode('utf-8', 'ignore')
         if not do_filter or (do_filter and (not black_list) and (channel in filter_list)) or \
                 (do_filter and black_list and (channel not in filter_list)):
             video_id = item['id']
@@ -60,7 +62,7 @@ def my_subscriptions_to_items(provider, context, json_data, do_filter=False):
     return result
 
 
-def watch_history_to_items(provider, context, json_data):
+def tv_videos_to_items(provider, context, json_data):
     result = []
     video_id_dict = {}
 

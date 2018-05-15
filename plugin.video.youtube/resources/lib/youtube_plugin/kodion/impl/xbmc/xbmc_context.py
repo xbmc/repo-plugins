@@ -1,6 +1,6 @@
+from six.moves import urllib
+
 import sys
-import urllib
-import urlparse
 import weakref
 import datetime
 import json
@@ -26,7 +26,7 @@ class XbmcContext(AbstractContext):
         if plugin_id:
             self._addon = xbmcaddon.Addon(id=plugin_id)
         else:
-            self._addon = xbmcaddon.Addon()
+            self._addon = xbmcaddon.Addon(id='plugin.video.youtube')
 
         self._system_version = None
 
@@ -38,8 +38,8 @@ class XbmcContext(AbstractContext):
         # first the path of the uri
         if override:
             self._uri = sys.argv[0]
-            comps = urlparse.urlparse(self._uri)
-            self._path = urllib.unquote(comps.path).decode('utf-8')
+            comps = urllib.parse.urlparse(self._uri)
+            self._path = urllib.parse.unquote(comps.path)
 
             # after that try to get the params
             if len(sys.argv) > 2:
@@ -48,10 +48,10 @@ class XbmcContext(AbstractContext):
                     self._uri = self._uri + '?' + params
 
                     self._params = {}
-                    params = dict(urlparse.parse_qsl(params))
+                    params = dict(urllib.parse.parse_qsl(params))
                     for _param in params:
                         item = params[_param]
-                        self._params[_param] = item.decode('utf-8')
+                        self._params[_param] = item
 
         self._ui = None
         self._video_playlist = None
@@ -70,7 +70,7 @@ class XbmcContext(AbstractContext):
         """
         self._data_path = xbmc.translatePath('special://profile/addon_data/%s' % self._plugin_id)
         if isinstance(self._data_path, str):
-            self._data_path = self._data_path.decode('utf-8')
+            self._data_path = self._data_path
         if not xbmcvfs.exists(self._data_path):
             xbmcvfs.mkdir(self._data_path)
 
@@ -238,3 +238,55 @@ class XbmcContext(AbstractContext):
             error = 'Requested |%s| received error |%s| and code: |%s|' % (rpc_request, message, code)
             xbmc.log(error, xbmc.LOGDEBUG)
             return False
+
+    def send_notification(self, method, data):
+        data = json.dumps(data)
+        self.log_debug('send_notification: |%s| -> |%s|' % (method, data))
+        data = '\\"[\\"%s\\"]\\"' % urllib.parse.quote(data)
+        self.execute('NotifyAll(plugin.video.youtube,%s,%s)' % (method, data))
+
+    def use_inputstream_adaptive(self):
+        addon_enabled = self.addon_enabled('inputstream.adaptive')
+        if self._settings.use_dash() and not addon_enabled:
+            if self._ui.on_yes_no_input(self.get_name(), self.localize(30579)):
+                use_dash = self.set_addon_enabled('inputstream.adaptive')
+            else:
+                use_dash = False
+        elif self._settings.use_dash() and addon_enabled:
+            use_dash = True
+        else:
+            use_dash = False
+        return use_dash
+
+    def inputstream_adaptive_capabilities(self, capability=None):
+        # return a list inputstream.adaptive capabilities, if capability set return version required
+
+        use_dash = self.use_inputstream_adaptive()
+        if not use_dash and capability is not None:
+            return None
+        if not use_dash and capability is None:
+            return []
+
+        if capability is None:
+            try:
+                inputstream_version = xbmcaddon.Addon('inputstream.adaptive').getAddonInfo('version')
+            except RuntimeError:
+                return []
+
+            capabilities = []
+            ia_loose_version = utils.loose_version(inputstream_version)
+            if ia_loose_version >= utils.loose_version('2.0.12'):
+                capabilities.append('live')
+            if ia_loose_version >= utils.loose_version('2.2.12'):
+                capabilities.append('drm')
+            if ia_loose_version >= utils.loose_version('2.2.0'):
+                capabilities.append('webm')
+            return capabilities
+        elif capability == 'live':
+            return '2.0.12'
+        elif capability == 'drm':
+            return '2.2.12'
+        elif capability == 'webm':
+            return '2.2.0'
+        else:
+            return None

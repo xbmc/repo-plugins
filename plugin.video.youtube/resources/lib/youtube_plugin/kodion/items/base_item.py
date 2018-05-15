@@ -1,15 +1,19 @@
+from six import python_2_unicode_compatible
+from six import string_types
+
 import hashlib
 import datetime
 
 
+@python_2_unicode_compatible
 class BaseItem(object):
     VERSION = 3
     INFO_DATE = 'date'  # (string) iso 8601
 
     def __init__(self, name, uri, image=u'', fanart=u''):
         self._version = BaseItem.VERSION
-        self._name = unicode(name)
-        self._uri = str(uri)
+        self._name = name
+        self._uri = uri
 
         self._image = u''
         self.set_image(image)
@@ -20,13 +24,10 @@ class BaseItem(object):
         self._date = None
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
         name = self._name
         uri = self._uri
-        obj_str = "------------------------------\n'%s'\nURI: %s\nImage: %s\n------------------------------" % (
-            name, uri, self._image)
+        image = self._image
+        obj_str = "------------------------------\n'%s'\nURI: %s\nImage: %s\n------------------------------" % (name, uri, image)
         return obj_str
 
     def get_id(self):
@@ -47,7 +48,7 @@ class BaseItem(object):
         return self._name
 
     def set_uri(self, uri):
-        if isinstance(uri, str):
+        if isinstance(uri, string_types):
             self._uri = uri
         else:
             self._uri = ''

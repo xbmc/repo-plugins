@@ -2,68 +2,73 @@ import hashlib
 import time
 
 from .. import constants
+from ..json_store import LoginTokenStore
 
 __author__ = 'bromix'
 
 
 class AccessManager(object):
-    def __init__(self, settings):
-        self._settings = settings
+    def __init__(self, context):
+        self._settings = context.get_settings()
+        self._jstore = LoginTokenStore()
+        self._json = self._jstore.get_data()
+        self._user = self._json['access_manager'].get('current_user', '')
+        self._last_origin = self._json['access_manager'].get('last_origin', 'plugin.video.youtube')
 
-    def has_login_credentials(self):
+    def set_user(self, user, switch_to=False):
         """
-        Returns True if we have a username and password.
-        :return: True if username and password exists
-        """
-        username = self._settings.get_string(constants.setting.LOGIN_USERNAME, '')
-        password = self._settings.get_string(constants.setting.LOGIN_PASSWORD, '')
-        return username != '' and password != ''
-
-    def remove_login_credentials(self):
-        self._settings.set_string(constants.setting.LOGIN_USERNAME, '')
-        self._settings.set_string(constants.setting.LOGIN_PASSWORD, '')
-
-    def get_login_credentials(self):
-        """
-        Returns the username and password (Tuple)
-        :return: (username, password)
-        """
-        username = self._settings.get_string(constants.setting.LOGIN_USERNAME, '')
-        password = self._settings.get_string(constants.setting.LOGIN_PASSWORD, '')
-        return username, password
-
-    def is_new_login_credential(self, update_hash=True):
-        """
-        Returns True if username or/and password are new.
+        Updates the user
+        :param user: string, username
+        :param switch_to: boolean, change current user
         :return:
         """
-        username = self._settings.get_string(constants.setting.LOGIN_USERNAME, '')
-        password = self._settings.get_string(constants.setting.LOGIN_PASSWORD, '')
+        self._user = user
+        if switch_to:
+            self._json = self._jstore.get_data()
+            self._json['access_manager']['current_user'] = user
+            self._jstore.save(self._json)
 
-        m = hashlib.md5()
-        m.update(username.encode('utf-8') + password.encode('utf-8'))
-        current_hash = m.hexdigest()
-        old_hash = self._settings.get_string(constants.setting.LOGIN_HASH, '')
-        if current_hash != old_hash:
-            if update_hash:
-                self._settings.set_string(constants.setting.LOGIN_HASH, current_hash)
-            return True
+    def get_user(self):
+        """
+        Returns the current user
+        :return: user
+        """
+        return self._user
 
-        return False
+    def set_last_origin(self, origin):
+        """
+        Updates the origin
+        :param user: string, origin
+        :param switch_to: boolean, change last origin
+        :return:
+        """
+        self._last_origin = origin
+        self._json = self._jstore.get_data()
+        self._json['access_manager']['last_origin'] = origin
+        self._jstore.save(self._json)
+
+    def get_last_origin(self):
+        """
+        Returns the last origin
+        :return:
+        """
+        return self._last_origin
 
     def get_access_token(self):
         """
         Returns the access token for some API
         :return: access_token
         """
-        return self._settings.get_string(constants.setting.ACCESS_TOKEN, '')
+        self._json = self._jstore.get_data()
+        return self._json['access_manager'].get(self._user, {}).get('access_token', '')
 
     def get_refresh_token(self):
         """
         Returns the refresh token
         :return: refresh token
         """
-        return self._settings.get_string(constants.setting.REFRESH_TOKEN, '')
+        self._json = self._jstore.get_data()
+        return self._json['access_manager'].get(self._user, {}).get('refresh_token', '')
 
     def has_refresh_token(self):
         return self.get_refresh_token() != ''
@@ -75,13 +80,15 @@ class AccessManager(object):
         this method will always return True
         :return:
         """
+        self._json = self._jstore.get_data()
+        access_token = self._json['access_manager'].get(self._user, {}).get('access_token', '')
+        expires = int(self._json['access_manager'].get(self._user, {}).get('token_expires', -1))
 
         # with no access_token it must be expired
-        if not self._settings.get_string(constants.setting.ACCESS_TOKEN, ''):
+        if not access_token:
             return True
 
         # in this case no expiration date was set
-        expires = self._settings.get_int(constants.setting.ACCESS_TOKEN_EXPIRES, -1)
         if expires == -1:
             return False
 
@@ -94,9 +101,13 @@ class AccessManager(object):
         :param access_token:
         :return:
         """
-        self._settings.set_string(constants.setting.ACCESS_TOKEN, access_token)
+        self._json = self._jstore.get_data()
+        self._json['access_manager'][self._user]['access_token'] = access_token
+
         if unix_timestamp is not None:
-            self._settings.set_int(constants.setting.ACCESS_TOKEN_EXPIRES, int(unix_timestamp))
+            self._json['access_manager'][self._user]['token_expires'] = int(unix_timestamp)
 
         if refresh_token is not None:
-            self._settings.set_string(constants.setting.REFRESH_TOKEN, refresh_token)
+            self._json['access_manager'][self._user]['refresh_token'] = refresh_token
+
+        self._jstore.save(self._json)

@@ -8,15 +8,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: 2015-09-21 11:01+0000\n"
 "PO-Revision-Date: 2016-05-22 14:52+0200\n"
-"Last-Translator: \n"
+"Last-Translator: bubuleur\n"
 "Language-Team: Guilouz\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-
-# Updated by bubuleur.
 
 msgctxt "Addon Summary"
 msgid "Plugin for YouTube"
@@ -108,7 +106,7 @@ msgstr "Taille du cache (Mo)"
 
 msgctxt "#30025"
 msgid "Enable setup-wizard"
-msgstr "Activer l'assistant de démarrage"
+msgstr "Activer l'assistance de démarrage"
 
 msgctxt "#30026"
 msgid "Override view"
@@ -128,7 +126,7 @@ msgstr "Affichage par films"
 
 msgctxt "#30030"
 msgid "Execute setup-wizard?"
-msgstr "Exécuter l'assistant de démarrage ?"
+msgstr "Exécuter l'assistance de démarrage ?"
 
 msgctxt "#30031"
 msgid "Advanced"
@@ -180,7 +178,7 @@ msgstr "Bibliothèque"
 
 msgctxt "#30104"
 msgid "Highlights"
-msgstr "En vedette"
+msgstr "Points forts"
 
 msgctxt "#30105"
 msgid "Archive"
@@ -627,12 +625,12 @@ msgid "Remove from My Subscriptions filter"
 msgstr "Supprimer de mes abonnements filtré"
 
 msgctxt "#30589"
-msgid "Added %s to My Subscriptions filter"
-msgstr "Ajouté %s pour mes abonnements filtré"
+msgid "Added to My Subscriptions filter"
+msgstr "Ajouté pour mes abonnements filtré"
 
 msgctxt "#30590"
-msgid "Removed %s from My Subscriptions filter"
-msgstr "Supprimer %s de mes abonnements filtré"
+msgid "Removed from My Subscriptions filter"
+msgstr "Supprimer de mes abonnements filtré"
 
 msgctxt "#30591"
 msgid "Thumbnail size"
@@ -660,100 +658,193 @@ msgstr "Stricte"
 
 msgctxt "#30597"
 msgid "Updated: %s"
-msgstr ""
+msgstr "Actualisé: %s"
 
 msgctxt "#30598"
 msgid "Personal API keys enabled"
-msgstr ""
+msgstr "Clés API personnelles activées"
 
 msgctxt "#30599"
 msgid "Failed to enable personal API keys. Missing: %s"
-msgstr ""
+msgstr "Impossible d'activer les clés API personnelles. Disparu: %s"
 
 msgctxt "#30600"
 msgid "Configure subtitles"
-msgstr ""
+msgstr "Configurer les sous-titres"
 
 msgctxt "#30601"
 msgid "%s with %s fallback"
-msgstr ""
+msgstr "%s avec %s retiré"
 
 msgctxt "#30602"
 msgid "No auto-generated"
-msgstr ""
+msgstr "Non généré automatiquement"
 
 msgctxt "#30603"
 msgid "Age gate"
-msgstr ""
+msgstr "Barrière d'âge"
 
 msgctxt "#30604"
 msgid "Allow offensive content"
-msgstr ""
+msgstr "Autoriser le contenu choquant"
 
 msgctxt "#30605"
 msgid "Quick Search"
-msgstr ""
+msgstr "Recherche rapide"
 
 msgctxt "#30606"
 msgid "Quick Search (Incognito)"
-msgstr ""
+msgstr "Recherche rapide (Incognito)"
 
 msgctxt "#30607"
 msgid "Audio only"
-msgstr ""
+msgstr "Audio seulement"
 
 msgctxt "#30608"
 msgid "Allow developer keys"
-msgstr ""
+msgstr "Autoriser les clés de développeur"
 
 msgctxt "#30609"
 msgid "Clear watch history"
-msgstr ""
+msgstr "Effacer l'historique des vidéos"
 
 msgctxt "#30610"
 msgid "This will clear your account's watch history from all devices. You can't undo this."
-msgstr ""
+msgstr "Cela effacera l'historique des vidéos de votre compte sur tous les appareils. Vous ne pouvez pas annuler ceci"
 
 msgctxt "#30611"
 msgid "Saved Playlists"
-msgstr ""
+msgstr "Sauvegarder Playlists"
 
 msgctxt "#30612"
 msgid "Retry"
-msgstr ""
+msgstr "Recommencez"
 
 msgctxt "#30613"
 msgid "Retrieve Watch Later playlist id"
-msgstr ""
+msgstr "Récupérer le contenu de la playlist de la dernière écoute"
 
 msgctxt "#30614"
 msgid "Failed to retrieve Watch Later playlist id. Add a few videos to Watch Later via the web/app and retry."
-msgstr ""
+msgstr "Échec de l'extraction de l'ID de la playlist (Regarder plus tard). Ajouter quelques vidéos à regarder plus tard via le web/app et réessayez"
 
 msgctxt "#30615"
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 msgctxt "#30616"
 msgid "Must be signed in."
-msgstr ""
+msgstr "Doit être signé"
 
 msgctxt "#30617"
 msgid "MPEG-DASH"
-msgstr ""
+msgstr "MPEG-DASH"
 
 msgctxt "#30618"
 msgid "Enable mpeg-dash proxy"
-msgstr ""
+msgstr "Activer le proxy MPEG-DASH"
 
 msgctxt "#30619"
-msgid "Proxy port"
-msgstr ""
+msgid "Port"
+msgstr "Port"
 
 msgctxt "#30620"
-msgid "Port %s already in use. Cannot start proxy server."
-msgstr ""
+msgid "Port %s already in use. Cannot start http server."
+msgstr "Port %s est déjà en cours d'utilisation. Impossible de démarrer le serveur http"
 
 msgctxt "#30621"
 msgid "Proxy is required for mpeg-dash vods"
-msgstr ""
+msgstr "Un proxy est nécessaire pour MPEG-Dash vidéos"
+
+msgctxt "#30622"
+msgid "Purchases"
+msgstr "Achats"
+
+msgctxt "#30623"
+msgid "Install InputStream Helper"
+msgstr "Installez l'aide d'InputStream"
+
+msgctxt "#30624"
+msgid "Requires Kodi 17+"
+msgstr "Nécessite Kodi 17+"
+
+msgctxt "#30625"
+msgid "InputStream Helper is already installed."
+msgstr "L'aide d'InputStream est déjà installé"
+
+msgctxt "#30626"
+msgid "Delete temporary files"
+msgstr "Supprimer les fichiers temporaires"
+
+msgctxt "#30627"
+msgid "Rate video after watching"
+msgstr "Notez la vidéo après l'avoir regardé"
+
+msgctxt "#30628"
+msgid "HTTP Server"
+msgstr "Serveur HTTP"
+
+msgctxt "#30629"
+msgid "IP whitelist (comma delimited)"
+msgstr "Liste IP blanche (délimitée par des virgules)"
+
+msgctxt "#30630"
+msgid "Save"
+msgstr "Sauvegarder"
+
+msgctxt "#30631"
+msgid "Successfully updated: %s"
+msgstr "Mise à jour réussie: %s"
+
+msgctxt "#30632"
+msgid "Enable API configuration page"
+msgstr "Activer la page de configuration de l'API"
+
+msgctxt "#30633"
+msgid "http://<ipaddress>:<port>/api (see HTTP Server)"
+msgstr "http://<ipaddress>:<port>/api (voir serveur HTTP)"
+
+msgctxt "#30634"
+msgid "YouTube Add-on API Configuration"
+msgstr "Configuration de l'API des modules complémentaires YouTube"
+
+msgctxt "#30635"
+msgid "No changes detected, API keys were not updated."
+msgstr "Aucun changement détecté, les clés API n'ont pas été mises à jour"
+
+msgctxt "#30636"
+msgid "Personal API keys are enabled."
+msgstr "Les clés API personnelles sont activées"
+
+msgctxt "#30637"
+msgid "Personal API keys are disabled."
+msgstr "Les clés API personnelles sont désactivées"
+
+msgctxt "#30638"
+msgid "Bookmark this page to quickly add your keys in the future."
+msgstr "Ajoutez cette page aux favoris pour ajouter rapidement vos clés dans le futur"
+
+msgctxt "#30639"
+msgid "Found personal API keys in api_keys.json, would you like to restore them? Choosing no will overwrite them."
+msgstr "Clés API personnelles trouvées dans api_keys.json, voulez-vous les restaurer? Choisir non va les remplacer"
+
+msgctxt "#30640"
+msgid "Restore"
+msgstr "Restaurer"
+
+msgctxt "#30641"
+msgid "Delete api_keys.json"
+msgstr "Supprimer api_keys.json"
+
+msgctxt "#30642"
+msgid "Delete access_manager.json"
+msgstr "Supprimer access_manager.json"
+
+msgctxt "#30643"
+msgid "Listen on IP"
+msgstr "Écoute sur IP"
+
+msgctxt "#30644"
+msgid "Select listen IP"
+msgstr "Sélectionnez l'écoute IP"
+

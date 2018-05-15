@@ -23,8 +23,8 @@ class MockContextUI(AbstractContextUI):
         return 'skin.kodion.dummy'
 
     def on_keyboard_input(self, title, default='', hidden=False):
-        print '[' + title + ']'
-        print "Returning 'Hello World'"
+        print('[' + title + ']')
+        print("Returning 'Hello World'")
         # var = raw_input("Please enter something: ")
         var = u'Hello World'
         if var:

@@ -1,14 +1,13 @@
 __author__ = 'bromix'
 
+from six import PY2
+from six.moves import range
+from six.moves import cPickle as pickle
+
 import datetime
 import os
 import sqlite3
 import time
-
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
 
 
 class Storage(object):
@@ -58,15 +57,15 @@ class Storage(object):
 
         """
         Tests revealed that sqlite has problems to release the database in time. This happens no so often, but just to
-        be sure, we try at least 5 times to execute out statement.
+        be sure, we try at least 3 times to execute out statement.
         """
-        for tries in range(5):
+        for tries in range(3):
             try:
                 return self._cursor.execute(query, values)
             except TypeError:
                 return None
             except:
-                time.sleep(2)
+                time.sleep(0.1)
         else:
             return None
 
@@ -92,9 +91,12 @@ class Storage(object):
         if not os.path.exists(self._filename):
             return
 
-        file_size_kb = os.path.getsize(self._filename) / 1024
-        if file_size_kb >= self._max_file_size_kb:
-            os.remove(self._filename)
+        try:
+            file_size_kb = (os.path.getsize(self._filename) // 1024)
+            if file_size_kb >= self._max_file_size_kb:
+                os.remove(self._filename)
+        except OSError:
+            pass
 
     def _create_table(self):
         self._open()
@@ -170,7 +172,9 @@ class Storage(object):
 
     def _get(self, item_id):
         def _decode(obj):
-            return pickle.loads(bytes(obj))
+            if PY2:
+                obj = str(obj)
+            return pickle.loads(obj)
 
         self._open()
         query = 'SELECT time, value FROM %s WHERE key=?' % self._table_name

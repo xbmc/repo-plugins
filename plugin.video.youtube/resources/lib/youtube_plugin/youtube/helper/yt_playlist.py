@@ -1,6 +1,6 @@
-from ...kodion.utils.function_cache import FunctionCache
-
 __author__ = 'bromix'
+
+from ...kodion.utils.function_cache import FunctionCache
 
 from ... import kodion
 from ...youtube.helper import v3
@@ -65,7 +65,7 @@ def _process_remove_playlist(provider, context, re_match):
 
 
 def _process_select_playlist(provider, context, re_match):
-    json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE / 3,
+    json_data = context.get_function_cache().get((FunctionCache.ONE_MINUTE // 3),
                                                  provider.get_client(context).get_playlists_of_channel,
                                                  channel_id='mine')
     playlists = json_data.get('items', [])
@@ -99,7 +99,7 @@ def _process_select_playlist(provider, context, re_match):
                 return
 
             playlist_id = json_data.get('id', '')
-            if playlist:
+            if playlist_id:
                 new_params = {}
                 new_params.update(context.get_params())
                 new_params['playlist_id'] = playlist_id

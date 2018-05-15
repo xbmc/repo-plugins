@@ -11,7 +11,7 @@ class XbmcSystemVersion(AbstractSystemVersion):
         try:
             json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Application.GetProperties", '
                                              '"params": {"properties": ["version", "name"]}, "id": 1 }')
-            json_query = unicode(json_query, 'utf-8', errors='ignore')
+            json_query = str(json_query)
             json_query = json.loads(json_query)
 
             version_installed = json_query['result']['version']

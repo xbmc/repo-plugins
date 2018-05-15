@@ -27,3 +27,127 @@ msgstr ""
 msgctxt "#30002"
 msgid "Select Preferred Quality"
 msgstr ""
+
+msgctxt "#30003"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Browse"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Shows"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Originals"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Cheddar"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Cheddar - Big News"
+msgstr ""
+
+msgctxt "#30010"
+msgid "http://feed00.pluto.tv/feed04/ngrp:cheddar.stream_all/playlist.m3u8"
+msgstr ""
+
+msgctxt "#30011"
+msgid "https://wowzaprod124-i.akamaihd.net/hls/live/505691/261805b7/playlist.m3u8"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Latest"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Best of"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Business"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Technology"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Politics"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Culture"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Science"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Free Clips"
+msgstr ""
+
+msgctxt "#30021"
+msgid "CannaBiz"
+msgstr ""
+
+msgctxt "#30022"
+msgid "The Crypto Craze"
+msgstr ""
+
+msgctxt "#30023"
+msgid "The Long and the Short"
+msgstr ""
+
+msgctxt "#30024"
+msgid "VF Hive"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Your Cheddar"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Your Future Home"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Cheddar Explains"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Cheddar Features"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Cheddar Tries"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Money Menu"
+msgstr ""
+
+msgctxt "#30031"
+msgid "The Business of Going Viral"
+msgstr ""
+
+msgctxt "#30032"
+msgid "The Point with Jon Steinberg"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Youtube"
+msgstr ""

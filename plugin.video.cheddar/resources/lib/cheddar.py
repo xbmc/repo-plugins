@@ -38,13 +38,44 @@ LANGUAGE      = REAL_SETTINGS.getLocalizedString
 
 ## GLOBALS ##
 TIMEOUT       = 30
+CONTENT_TYPE  = 'episodes'
 BASEURL       = 'http://cheddar.com/'
 DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 QUALITY       = int(REAL_SETTINGS.getSetting('Quality'))
-CONTENT_TYPE  = 'episodes'
 
-Cheddar_MENU  = [("Latest" , 'collections/latest', 1),
-                 ("Browse" , 'collections'       , 1)]
+Cheddar_MENU  = [(LANGUAGE(30003), 'Cheddar_LIVE'   , 0),
+                 (LANGUAGE(30004), 'Cheddar_BROWSE' , 0),
+                 # (LANGUAGE(30005), 'Cheddar_CATS'   , 0),
+                 (LANGUAGE(30006), 'Cheddar_SHOWS'  , 0),
+                 (LANGUAGE(30007), 'Cheddar_ORG'    , 0)]
+                 
+Cheddar_LIVE  = [(LANGUAGE(30008), LANGUAGE(30010)  , 9),
+                 (LANGUAGE(30009), LANGUAGE(30011)  , 9)]
+
+Cheddar_BROWSE= [(LANGUAGE(30012), 'collections/latest'                 , 1),
+                 (LANGUAGE(30013), 'collections/best-of-cheddar'        , 1)]
+                 
+Cheddar_CATS  = [(LANGUAGE(30014), 'collections/business'               , 1),
+                 (LANGUAGE(30015), 'collections/sports'                 , 1),
+                 (LANGUAGE(30016), 'collections/technology'             , 1),
+                 (LANGUAGE(30017), 'collections/politics'               , 1),
+                 (LANGUAGE(30018), 'collections/culture'                , 1),
+                 (LANGUAGE(30019), 'collections/science'                , 1)]
+                 
+Cheddar_SHOWS = [(LANGUAGE(30020), 'collections/free-clips'             , 1),
+                 # (LANGUAGE(30021), 'collections/CannaBiz'               , 1),
+                 (LANGUAGE(30022), 'collections/the-crypto-craze'       , 1),
+                 (LANGUAGE(30023), 'collections/the-long-and-the-short' , 1),
+                 (LANGUAGE(30024), 'collections/vf-hive'                , 1),
+                 (LANGUAGE(30025), 'collections/your-cheddar'           , 1),
+                 (LANGUAGE(30026), 'collections/your-future-home'       , 1)]
+                 
+Cheddar_ORG   = [(LANGUAGE(30027), 'collections/cheddar-explains'       , 1),
+                 (LANGUAGE(30028), 'collections/cheddar-features'       , 1),
+                 (LANGUAGE(30029), 'collections/cheddar-tries'          , 1),
+                 (LANGUAGE(30030), 'collections/money-menu'             , 1),
+                 (LANGUAGE(30031), 'collections/the-business-of-going-viral'  , 1),
+                 (LANGUAGE(30032), 'collections/the-point-with-jon-steinberg' , 1)]
             
 def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == False and level != xbmc.LOGERROR: return
@@ -68,30 +99,25 @@ class Cheddar(object):
                 request = urllib2.Request(url)
                 request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
                 response = urllib2.urlopen(request, timeout=TIMEOUT)
-                results = response.read()
+                cacheResponce = response.read()
                 response.close()
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, results, expiration=datetime.timedelta(hours=12))
-            return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheResponce, expiration=datetime.timedelta(hours=1))
+            return cacheResponce
         except urllib2.URLError as e: log("openURL Failed! " + str(e), xbmc.LOGERROR)
         except socket.timeout as e: log("openURL Failed! " + str(e), xbmc.LOGERROR)
         xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
         return ''
         
         
-    def mainMenu(self):
-        log('mainMenu')
-        self.addLink('Live', '', 0)
-        for item in Cheddar_MENU: self.addDir(*item)
-        self.addYoutube("Browse Youtube" , 'plugin://plugin.video.youtube/channel/UC04KsGq3npibMCE9Td3mVDg/')
+    def buildMenu(self, items):
+        log('buildMenu')
+        if items == Cheddar_LIVE:
+            for item in items: self.addLink(*item)
+        else: 
+            for item in items: self.addDir(*item)
+        if items == Cheddar_MENU: self.addYoutube(LANGUAGE(30033), 'plugin://plugin.video.youtube/channel/UC04KsGq3npibMCE9Td3mVDg/')
         
-        
-    def browseLive(self):
-        log('browseLive')
-        soup = BeautifulSoup(self.openURL(BASEURL), "html.parser")
-        liveLink = soup('div', {'class': 'hero_video'})[0].find('source').get('src')
-        self.playVideo('Live', liveLink)
 
-        
     def browse(self, link):
         log('browse')
         soup = BeautifulSoup(self.openURL(BASEURL + link), "html.parser")
@@ -109,18 +135,21 @@ class Cheddar(object):
             infoList = {"mediatype":"episode","label":label,"title":label,"plot":plot,'genre':'News',"studio":"cheddar","aired":airdate}
             infoArt  = {"thumb":thumb,"poster":thumb,"fanart":FANART}
             self.addLink(label, uri, 9, infoList, infoArt)
-                
 
+            
     def playVideo(self, name, url):
         log('playVideo, name = ' + name)
-        if name == 'Live': liz = xbmcgui.ListItem(name, path=url)
+        if url.endswith('m3u8'): 
+            liz = xbmcgui.ListItem(name, path=url)
+            liz.setProperty('inputstreamaddon','inputstream.adaptive')
+            liz.setProperty('inputstream.adaptive.manifest_type','hls') 
         else:
             info = getVideoInfo(url,QUALITY,True)
             if info is None: return
             info = info.streams()
             url  = info[0]['xbmc_url']
             liz  = xbmcgui.ListItem(name, path=url)
-            if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])   
+            if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])  
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
             
                    
@@ -168,8 +197,8 @@ log("Mode: "+str(mode))
 log("URL : "+str(url))
 log("Name: "+str(name))
 
-if mode==None:  Cheddar().mainMenu()
-elif mode == 0: Cheddar().browseLive()
+if mode==None:  Cheddar().buildMenu(Cheddar_MENU)
+elif mode == 0: Cheddar().buildMenu(eval(url))
 elif mode == 1: Cheddar().browse(url)
 elif mode == 9: Cheddar().playVideo(name, url)
 

@@ -40,13 +40,14 @@ def router(paramstring):
         plugin.open_is_settings()
 
 if __name__ == '__main__':
-    if plugin.startup:
+    if plugin.startup or not client.TOKEN:
         playable = plugin.start_is_helper()
         client.DEVICE_ID = plugin.uniq_id()
         if client.DEVICE_ID and playable:
             client.startUp()
             if client.TOKEN:
                 plugin.set_setting('startup', 'false')
+                client.userProfile()
         else:
             client.TOKEN = ''
 

@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
+import base64
 import datetime
 import hashlib
+import json
 import time
 import urllib
 import uuid
 import xbmc
 import xbmcaddon
 import xbmcgui
+import _strptime
 from inputstreamhelper import Helper
 from resources import resources
 
@@ -17,6 +20,7 @@ class Common:
         self.api_base = 'https://isl.dazn.com/misl/'
         self.time_format = '%Y-%m-%dT%H:%M:%SZ'
         self.date_format = '%Y-%m-%d'
+        self.portability_list = ['AT', 'DE']
 
         addon = self.get_addon()
         self.addon_handle = addon_handle
@@ -28,6 +32,8 @@ class Common:
         self.addon_fanart = addon.getAddonInfo('fanart')
         self.content = addon.getSetting('content')
         self.view_id = addon.getSetting('view_id')
+        self.view_id_videos = addon.getSetting('view_id_videos')
+        self.view_id_epg = addon.getSetting('view_id_epg')
         self.force_view = addon.getSetting('force_view') == 'true'
         self.startup = addon.getSetting('startup') == 'true'
 
@@ -36,6 +42,12 @@ class Common:
         if isinstance(text, unicode):
             result = text.encode('utf-8')
         return result
+
+    def b64dec(self, data):
+        missing_padding = len(data) % 4
+        if missing_padding != 0:
+            data += b'='* (4 - missing_padding)
+        return base64.b64decode(data)
 
     def get_addon(self):
         return xbmcaddon.Addon()
@@ -58,7 +70,7 @@ class Common:
     def get_resource(self, string):
         result = self.utfenc(string)
         id_ = resources(string)
-        if id_ != 0:
+        if isinstance(id_, int) and id_ != 0:
             result = self.get_string(id_)
         return result
 
@@ -156,3 +168,12 @@ class Common:
             spl = dlg.split('/')
             date = '%s-%s-%s' % (spl[2], spl[1], spl[0])
         return date
+
+    def get_mpx(self, token):
+        token_data = json.loads(self.b64dec(token.split('.')[1]))
+        return token_data['mpx']
+
+    def portability_country(self, country, user_country):
+        if user_country in self.portability_list:
+            country = user_country
+        return country

@@ -29,7 +29,7 @@ class Parser:
             self.items.add_item(item)
         self.items.list_items()
 
-    def rail_items(self, data, mode, list=True):
+    def rail_items(self, data, mode, list_=True):
         highlights = True if 'highlights' in mode else False
         focus = data.get('StartPosition', False)
         for i in data.get('Tiles', []):
@@ -54,7 +54,7 @@ class Parser:
                     context.related(cm_items)
                 item['cm'] = context.goto(item)
                 self.items.add_item(item)
-        if list:
+        if list_:
             self.items.list_items(focus)
 
     def epg_items(self, data, params, mode):
@@ -73,9 +73,9 @@ class Parser:
                 }
 
             self.items.add_item(date_item(self.plugin.get_prev_day(date)))
-            self.rail_items(data, mode, list=False)
+            self.rail_items(data, mode, list_=False)
             self.items.add_item(date_item(self.plugin.get_next_day(date)))
-        self.items.list_items(upd=update)
+        self.items.list_items(upd=update, epg=True)
 
     def playback(self, data, name=False, context=False):
-        self.items.play_item(Playback(data), name, context)
+        self.items.play_item(Playback(self.plugin, data), name, context)

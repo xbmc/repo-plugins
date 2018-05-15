@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 def resources(string):
-    if string == 'CatchUp':
+    if string == 'Promo':
+        return 30200
+    elif string == 'CatchUp':
         return 30201
     elif string == 'ComingUp':
         return 30202

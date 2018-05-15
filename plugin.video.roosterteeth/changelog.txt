@@ -1,3 +1,8 @@
+1.3.9 (2018-05-15)
+- renamed series category
+- prefix the titles of sponsor-only videos with an asterisk
+- using news tag in addon.xml
+
 1.3.8 (2018-03-30)
 - major rewrite due to revamped website
 

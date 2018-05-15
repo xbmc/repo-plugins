@@ -120,7 +120,7 @@ msgid "Roosterteeth Recently Added Episodes"
 msgstr ""
 
 msgctxt "#30302"
-msgid "Roosterteeth Series"
+msgid "Series"
 msgstr ""
 
 msgctxt "#30303"

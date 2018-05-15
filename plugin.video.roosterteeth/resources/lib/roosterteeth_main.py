@@ -44,7 +44,7 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Roosterteeth Series
+        # Series
         #
         parameters = {"action": "list-series", "plugin_category": LANGUAGE(30302), "url": ROOSTERTEETH_SERIES_URL,
                       "show_serie_name": "True", "next_page_possible": "False"}

@@ -27,3 +27,11 @@ msgstr ""
 msgctxt "#30002"
 msgid "Select Preferred Quality"
 msgstr ""
+
+msgctxt "#30003"
+msgid "Latest"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Youtube"
+msgstr ""

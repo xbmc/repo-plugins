@@ -66,9 +66,9 @@ class MultiChannel(object):
             if not cacheresponse:
                 request = urllib2.Request(url)
                 request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
-                response = urllib2.urlopen(request, timeout = TIMEOUT).read()
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(hours=1))
-            return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
+                cacheresponse = urllib2.urlopen(request, timeout = TIMEOUT).read()
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheresponse, expiration=datetime.timedelta(hours=1))
+            return cacheresponse
         except Exception as e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
             xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
@@ -76,26 +76,25 @@ class MultiChannel(object):
          
          
     def buildMenu(self):
-        self.addDir('Browse', BASE_VID, 1)
-        self.addYoutube("Browse Youtube" , 'plugin://plugin.video.youtube/channel/UC0VOh1nD6Tlq_5gjkpSecWA/')
+        self.addDir(LANGUAGE(30003), BASE_VID, 1)
+        self.addYoutube(LANGUAGE(30004), 'plugin://plugin.video.youtube/channel/UC0VOh1nD6Tlq_5gjkpSecWA/')
             
             
     def browse(self, url):
         log('browse')
         soup   = BeautifulSoup(self.openURL(url), "html.parser")
-        videos = soup('div', {'class': 'screen'})
+        videos = soup('div', {'class': 'l-grid--item'})
         for video in videos:
-            try: thumb = (video('a', {'class': 'thumb'})[0].find('img').attrs['src'])
-            except: thumb = ICON
-            vid_url = BASE_URL + video.find_all('a')[1].attrs['href']
-            plot   = video.find_all('a')[1].get_text()
-            try: label  = plot.split(' -- ')[1]
-            except: pass
-            try: aired = (datetime.datetime.strptime(video.find('time').get_text(), '%m/%d/%Y')).strftime('%Y-%m-%d')
-            except: aired = (datetime.datetime.now()).strftime('%Y-%m-%d')
-            infoLabels = {"mediatype":"episode","label":label,"title":label,"plot":plot,"genre":'News',"aired":aired}
+            link = video('div', {'class': 'm-card--media'})[0].find('a').attrs['href']
+            if not link.startswith('/video/'): continue
+            link  = BASE_URL+link
+            label = video('div', {'class': 'm-card--media'})[0].find('a').attrs['title']
+            thumb = video('div', {'class': 'm-card--media'})[0].find('source').attrs['data-srcset']
+            try: plot = video('div', {'class': 'm-card--content'})[0].find('p').get_text()
+            except: plot = label
+            infoLabels = {"mediatype":"episode","label":label,"title":label,"plot":plot,"genre":'News'}
             infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
-            self.addLink(label, vid_url, 9, infoLabels, infoArt, len(videos))
+            self.addLink(label, link, 9, infoLabels, infoArt, len(videos))
         next = soup('li', {'class': 'pager-next'})
         if len(next) == 0: return
         next_url   = BASE_URL + next[0].find('a').attrs['href']

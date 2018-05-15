@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.multichannel" version="1.0.1" name="MultiChannel News" provider-name="Lunatixz">
+<addon id="plugin.video.multichannel" version="1.0.2" name="MultiChannel News" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -12,11 +12,11 @@
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Multichannel News covers stories from multiple online media providers like Hulu, Netflix.</summary>
         <description lang="en_GB">Multichannel News covers multichannel television and communications providers, such as cable operators, satellite television firms and telephone companies, as well as emerging Internet video and communication services.</description>
-        <platform>all</platform>
+        <platform>android freebsd ios linux osx windows</platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
         <source>https://github.com/Lunatixz/KODI_Addons/tree/master/plugin.video.multichannel</source>
         <website>http://multichannel.com</website>
-        <news>v.1.0.1[CR]-Fixed Parsing Error</news>
+        <news>v.1.0.2[CR]-Fixed Parsing Error[CR]v.1.0.1[CR]-Fixed Parsing Error</news>
         <forum>https://forum.kodi.tv/showthread.php?tid=326555</forum>
         <assets>
             <icon>resources/images/icon.png</icon>

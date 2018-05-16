@@ -3,6 +3,8 @@
 import socket
 import json
 from urlparse import urlparse
+import time
+import hashlib
 
 import xbmcaddon
 import xbmcgui
@@ -61,6 +63,7 @@ def checkServer(force=False, change_user=False, notify=False):
 
     settings = xbmcaddon.Addon()
     serverUrl = ""
+    something_changed = False
 
     if force is False:
         # if not forcing use server details from settings
@@ -104,6 +107,7 @@ def checkServer(force=False, change_user=False, notify=False):
         else:
             settings.setSetting("use_https", "false")
 
+        something_changed = True
         if notify:
             xbmcgui.Dialog().ok(i18n('server_detect_succeeded'), i18n('found_server'),
                                 i18n('address:') + server_address, i18n('server_port:') + server_port)
@@ -118,6 +122,9 @@ def checkServer(force=False, change_user=False, notify=False):
         log.debug("Getting user list")
         jsonData = downloadUtils.downloadUrl(serverUrl + "/emby/Users/Public?format=json", authenticate=False)
 
+        # TODO: add a setting to enable this
+        show_manual = False
+
         log.debug("jsonData: {0}", jsonData)
         try:
             result = json.loads(jsonData)
@@ -129,6 +136,7 @@ def checkServer(force=False, change_user=False, notify=False):
                                 i18n('unable_connect_server'),
                                 i18n('address:') + serverUrl)
         else:
+            selected_id = 0
             names = []
             user_list = []
             secured = []
@@ -144,23 +152,33 @@ def checkServer(force=False, change_user=False, notify=False):
                         else:
                             secured.append(False)
                         names.append(name)
+                        if current_username == name:
+                            selected_id = len(names) - 1
 
             if (len(current_username) > 0) and (not any(n == current_username for n in user_list)):
                 names.insert(0, i18n('username_userdefined') % current_username)
                 user_list.insert(0, current_username)
                 secured.insert(0, True)
 
-            names.insert(0, i18n('username_userinput'))
-            user_list.insert(0, '')
-            secured.insert(0, True)
+            if show_manual:
+                names.append(i18n('username_userinput'))
+                user_list.append('')
+                secured.append(True)
+
             log.debug("User List: {0}", names)
             log.debug("User List: {0}", user_list)
 
-            return_value = xbmcgui.Dialog().select(i18n('select_user'), names)
+            if current_username:
+                selection_title = i18n('select_user') + " (" + current_username + ")"
+            else:
+                selection_title = i18n('select_user')
 
-            if (return_value > -1):
+            return_value = xbmcgui.Dialog().select(selection_title, names, preselect=selected_id)
+
+            if return_value > -1 and return_value != selected_id:
+
                 log.debug("Selected User Index: {0}", return_value)
-                if return_value == 0:
+                if show_manual and return_value == (len(user_list) -1):
                     kb = xbmc.Keyboard()
                     kb.setHeading(i18n('username:'))
                     kb.doModal()
@@ -174,22 +192,49 @@ def checkServer(force=False, change_user=False, notify=False):
                 log.debug("Selected User Name: {0}", selected_user)
 
                 if selected_user:
+                    something_changed = True
                     # we have a user so save it
-                    log.debug("Saving Username: {0}", selected_user)
-                    settings.setSetting("username", selected_user)
                     if secured[return_value] is True:
-                        kb = xbmc.Keyboard()
-                        kb.setHeading(i18n('password:'))
-                        kb.setHiddenInput(True)
-                        kb.doModal()
-                        if kb.isConfirmed():
-                            log.debug("Saving Password for Username: {0}", selected_user)
-                            settings.setSetting('password', kb.getText())
+                        # we need a password, check the settings first
+                        m = hashlib.md5()
+                        m.update(selected_user)
+                        hashed_username = m.hexdigest()
+                        saved_password = settings.getSetting("saved_user_password_" + hashed_username)
+
+                        if saved_password:
+                            log.debug("Saving username and password: {0}", selected_user)
+                            log.debug("Using stored password for user: {0}", hashed_username)
+                            settings.setSetting("username", selected_user)
+                            settings.setSetting('password', saved_password)
+                        else:
+                            kb = xbmc.Keyboard()
+                            kb.setHeading(i18n('password:'))
+                            kb.setHiddenInput(True)
+                            kb.doModal()
+                            if kb.isConfirmed():
+                                log.debug("Saving username and password: {0}", selected_user)
+                                settings.setSetting("username", selected_user)
+                                settings.setSetting('password', kb.getText())
+
+                                # should we save the password
+                                save_password = xbmcgui.Dialog().yesno( "Save Password?",
+                                                                        "Do you want to save the password?")
+                                if save_password:
+                                    log.debug("Saving password for fast user switching: {0}", hashed_username)
+                                    settings.setSetting("saved_user_password_" + hashed_username, kb.getText())
                     else:
+                        log.debug("Saving username is no password: {0}", selected_user)
+                        settings.setSetting("username", selected_user)
                         settings.setSetting('password', '')
 
-        home_window = HomeWindow()
-        home_window.clearProperty("userid")
-        home_window.clearProperty("AccessToken")
+        if something_changed:
+            home_window = HomeWindow()
+            home_window.clearProperty("userid")
+            home_window.clearProperty("AccessToken")
+            home_window.setProperty("embycon_widget_reload", str(time.time()))
+            download_utils = DownloadUtils()
+            download_utils.authenticate()
+            download_utils.getUserId()
+            xbmc.executebuiltin("ActivateWindow(Home)")
+            xbmc.executebuiltin("ReloadSkin()")
 
-        xbmc.executebuiltin("ActivateWindow(Home)")

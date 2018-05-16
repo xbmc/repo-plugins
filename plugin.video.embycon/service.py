@@ -31,6 +31,7 @@ download_utils = DownloadUtils()
 # auth the service
 try:
     download_utils.authenticate()
+    download_utils.getUserId()
 except Exception as error:
     log.error("Error with initial service auth: {0}", error)
 
@@ -54,15 +55,10 @@ remote_control = settings.getSetting('remoteControl') == "true"
 if remote_control:
     websocket_client.start()
 
-def check_version():
-    download_utils.checkVersion()
-
-t = Timer(5.0, check_version)
-t.start()
-
 # monitor.abortRequested() is causes issues, it currently triggers for all addon cancelations which causes
 # the service to exit when a user cancels an addon load action. This is a bug in Kodi.
 # I am switching back to xbmc.abortRequested approach until kodi is fixed or I find a work arround
+prev_user_id = home_window.getProperty("userid")
 
 while not xbmc.abortRequested:
 
@@ -80,6 +76,13 @@ while not xbmc.abortRequested:
                 last_background_update = time.time()
                 set_library_window_values()
                 set_background_image()
+
+            if remote_control and prev_user_id != home_window.getProperty("userid"):
+                prev_user_id = home_window.getProperty("userid")
+                websocket_client.stop_client()
+                websocket_client = WebSocketClient()
+                websocket_client.start()
+
 
     except Exception as error:
         log.error("Exception in Playback Monitor: {0}", error)

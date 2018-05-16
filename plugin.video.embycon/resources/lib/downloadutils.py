@@ -29,7 +29,7 @@ def getDetailsString():
     include_people = addonSettings.getSetting("include_people") == "true"
     include_overview = addonSettings.getSetting("include_overview") == "true"
 
-    detailsString = "DateCreated,EpisodeCount,SeasonCount,Path,Genres,Studios,Etag"
+    detailsString = "DateCreated,EpisodeCount,SeasonCount,Path,Genres,Studios,Etag,Taglines"
 
     if include_media:
         detailsString += ",MediaStreams"
@@ -49,90 +49,47 @@ class DownloadUtils():
         addon = xbmcaddon.Addon()
         self.addon_name = addon.getAddonInfo('name')
 
-    def checkVersion(self):
-        server_info = {}
-        activity = {}
-        try:
-            settings = xbmcaddon.Addon()
-            check_version = settings.getSetting('checkVersion') == 'true'
-            if check_version == False:
-                log.debug("Version Check: Not Enabled")
-                return
-
-            path = xbmc.translatePath(settings.getAddonInfo('profile')) + "activity.json"
-            f = xbmcvfs.File(path)
-            activity_data = f.read()
-            f.close()
-            activity = json.loads(activity_data)
-
-            if len(activity) == 0:
-                log.debug("Version Check: No Activity")
-                return
-
-            url = "{server}/emby/system/info/public"
-            jsonData = self.downloadUrl(url, suppress=True, authenticate=False)
-            server_info = json.loads(jsonData)
-
-        except Exception as error:
-            log.debug("Version Check Error: DATA: {0}", error)
-            return
-
-        try:
-            utcnow = datetime.utcnow()
-            today = "%s-%s-%s" % (utcnow.year, utcnow.month, utcnow.day)
-            client_info = ClientInformation()
-            version_info = {
-                "client_id": client_info.getDeviceId(),
-                "server_id": server_info.get("Id", ""),
-                "version_kodi": xbmc.getInfoLabel('System.BuildVersion'),
-                "version_emby": server_info.get("Version", ""),
-                "version_addon": client_info.getVersion(),
-                "activity": activity,
-                "client_utc_date": today
-            }
-            conn = httplib.HTTPConnection("allthedata.pythonanywhere.com", timeout=15)
-            head = {}
-            head["Content-Type"] = "application/json"
-            postBody = json.dumps(version_info)
-            log.debug("Version Check Data: {0}", postBody)
-            conn.request(method="POST", url="/version", body=postBody, headers=head)
-            data = conn.getresponse()
-            if int(data.status) == 200:
-                xbmcvfs.delete(path)
-                ret_data = data.read()
-                log.debug("VERSION_CHECK: RESPONCE: {0}", ret_data)
-                message = json.loads(ret_data)
-                message_text = message.get("message")
-                if message_text is not None and message_text != "OK":
-                    xbmcgui.Dialog().ok(self.addon_name, message_text)
-
-        except Exception as error:
-            log.debug("Version Check Error: SEND: {0}", error)
-
     def getServer(self):
         settings = xbmcaddon.Addon()
         host = settings.getSetting('ipaddress')
-        port = settings.getSetting('port')
-        if (len(host) == 0) or (host == "<none>") or (len(port) == 0):
+
+        if len(host) == 0 or host == "<none>":
             return None
+
+        port = settings.getSetting('port')
+        use_https = settings.getSetting('use_https') == 'true'
+
+        if not port and use_https:
+            port = "443"
+            settings.setSetting("port", port)
+        elif not port and not use_https:
+            port = "80"
+            settings.setSetting("port", port)
 
         # if user entered a full path i.e. http://some_host:port
         if host.lower().strip().startswith("http://") or host.lower().strip().startswith("https://"):
             log.debug("Extracting host info from url: {0}", host)
             url_bits = urlparse(host.strip())
+
+            if host.lower().strip().startswith("http://"):
+                settings.setSetting('use_https', 'false')
+                use_https = False
+            elif host.lower().strip().startswith("https://"):
+                settings.setSetting('use_https', 'true')
+                use_https = True
+
             if url_bits.hostname is not None and len(url_bits.hostname) > 0:
                 host = url_bits.hostname
                 settings.setSetting("ipaddress", host)
+
             if url_bits.port is not None and url_bits.port > 0:
                 port = str(url_bits.port)
                 settings.setSetting("port", port)
 
-        server = host + ":" + port
-        use_https = settings.getSetting('use_https') == 'true'
         if use_https:
-            server = "https://" + server
+            server = "https://" + host + ":" + port
         else:
-            server = "http://" + server
+            server = "http://" + host + ":" + port
 
         return server
 
@@ -185,13 +142,14 @@ class DownloadUtils():
                 imageTag = parent_image_tag
                 log.debug("Parent Image Tag: {0}", imageTag)
 
-        if (imageTag == "" or imageTag == None) and (art_type != 'Banner'):  # ParentTag not passed for Banner
+
+        if not imageTag and not ((art_type == 'Banner' or art_type == 'Art') and parent is True):  # ParentTag not passed for Banner and Art
             log.debug("No Image Tag for request:{0} item:{1} parent:{2}", art_type, item_type, parent)
             return ""
 
         artwork = "%s/emby/Items/%s/Images/%s/%s?Format=original&Tag=%s" % (server, id, art_type, index, imageTag)
 
-        log.debug("getArtwork: {0}", artwork)
+        log.debug("getArtwork: request:{0} item:{1} parent:{2} link:{3}", art_type, item_type, parent, artwork)
 
         '''
         # do not return non-existing images
@@ -510,6 +468,16 @@ class DownloadUtils():
                 log.debug("====== 200 finished ======")
 
             elif int(data.status) >= 400:
+
+                if int(data.status) == 401:
+                    # remove any saved password
+                    username = settings.getSetting("username")
+                    m = hashlib.md5()
+                    m.update(username)
+                    hashed_username = m.hexdigest()
+                    log.error("HTTP response error 401 auth error, removing any saved passwords for user: {0}", hashed_username)
+                    settings.setSetting("saved_user_password_" + hashed_username, "")
+
                 log.error("HTTP response error: {0} {1}", data.status, data.reason)
                 if suppress is False:
                     xbmcgui.Dialog().notification(i18n("connection_error"),

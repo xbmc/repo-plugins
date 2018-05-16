@@ -11,7 +11,6 @@ from datetime import timedelta
 from datetime import datetime
 import json
 
-from resources.lib.error import catch_except
 from simple_logging import SimpleLogging
 from downloadutils import DownloadUtils
 from resume_dialog import ResumeDialog
@@ -27,7 +26,6 @@ from functions import delete
 log = SimpleLogging(__name__)
 download_utils = DownloadUtils()
 
-@catch_except()
 def playAllFiles(items, monitor):
     log.debug("playAllFiles called with items: {0}", items)
     server = download_utils.getServer()
@@ -626,7 +624,6 @@ def sendProgress(monitor):
     download_utils.downloadUrl(url, postBody=postdata, method="POST")
 
 
-@catch_except()
 def promptForStopActions(item_id, current_possition):
 
     settings = xbmcaddon.Addon()
@@ -700,7 +697,6 @@ def promptForStopActions(item_id, current_possition):
                 send_event_notification("embycon_play_action", play_info)
 
 
-@catch_except()
 def stopAll(played_information):
     if len(played_information) == 0:
         return
@@ -848,6 +844,12 @@ class PlaybackService(xbmc.Monitor):
 
     def onNotification(self, sender, method, data):
         log.debug("PlaybackService:onNotification:{0}:{1}:{2}", sender, method, data)
+
+        #if method == 'GUI.OnScreensaverDeactivated':
+        if method == 'GUI.OnScreensaverActivated':
+            self.screensaver_deactivated()
+            return
+
         if sender[-7:] != '.SIGNAL':
             return
 
@@ -861,3 +863,11 @@ class PlaybackService(xbmc.Monitor):
         decoded_data = binascii.unhexlify(hex_data)
         play_info = json.loads(decoded_data)
         playFile(play_info, self.monitor)
+
+    def screensaver_deactivated(self):
+        log.debug("Screen Saver Deactivated")
+
+        settings = xbmcaddon.Addon()
+        show_change_user = settings.getSetting('changeUserOnScreenSaver') == 'true'
+        if show_change_user:
+            xbmc.executebuiltin("RunScript(plugin.video.embycon,0,?mode=CHANGE_USER)")

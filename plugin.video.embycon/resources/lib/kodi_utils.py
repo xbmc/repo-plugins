@@ -37,15 +37,13 @@ class HomeWindow():
         self.window.clearProperty(key)
 
 
-def addMenuDirectoryItem(label, path, folder=True, thumbnail=None):
+def addMenuDirectoryItem(label, path, folder=True, art=None):
     li = xbmcgui.ListItem(label, path=path)
-    if thumbnail is None:
-        thumbnail = addon.getAddonInfo('icon')
-    artLinks = {}
-    artLinks["thumb"] = thumbnail
-    artLinks["icon"] = thumbnail
-    artLinks["poster"] = thumbnail
-    li.setArt(artLinks)
+    if art is None:
+        art = {}
+        art["thumb"] = addon.getAddonInfo('icon')
+    li.setArt(art)
+
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=path, listitem=li, isFolder=folder)
 
 

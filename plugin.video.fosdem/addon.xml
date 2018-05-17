@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.fosdem" name="FOSDEM Videos" version="0.0.1" provider-name="Jelle van der Waa">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Videos of FOSDEM talks</summary>
+        <description lang="en_GB">This addon provides access to videos published on https://video.fosdem.org</description>
+        <language>en</language>
+        <platform>linux</platform>
+        <license>MIT</license>
+        <forum></forum>
+        <website>https://fosdem.org</website>
+        <email>jelle@vdwaa.nl</email>
+        <source>https://github.com/jelly/plugin.fosdem.org</source>
+	<news>v0.0.1 (2018-5-17)
+        - Initial release
+	</news>
+        <disclaimer></disclaimer>
+        <assets>
+	    <icon>resources/icon.png</icon>
+	    <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

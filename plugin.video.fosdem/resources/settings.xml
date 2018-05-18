@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="format" type="enum" label="32001" lvalues="mp4|webm" default="0"/>
+</settings>

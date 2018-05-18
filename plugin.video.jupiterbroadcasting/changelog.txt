@@ -1,3 +1,9 @@
+[B]Version 3.6.3 May 12th, 2018[/B]
+- Added default encoding to file parsing rss feeds
+  - By @rickyphewitt
+- Updated Audio Feed URLs and moved Tech Talk Today to active show list
+  - By @Xmetalfanx
+
 [B]Version 3.6.2 March 6th, 2018[/B]
 - Restore script.module.requests as a dependency
 

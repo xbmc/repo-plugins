@@ -23,10 +23,11 @@ LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'resources', 'images')
 PLUGIN_HANDLE = int(sys.argv[1])
 BASE_URL = "http://www.ign.com"
+LATEST_VIDEOS_URL = "http://www.ign.com/videos?page=1&filter=all"
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 COOKIES = {'i18n-ccpref': '15-US-www-1'}
-DATE = "2018-01-31"
-VERSION = "2.3.5"
+DATE = "2018-05-17"
+VERSION = "2.3.6"
 
 max_video_quality = SETTINGS.getSetting("maxVideoQualityRes")
 force_view_mode = bool(SETTINGS.getSetting("force_view_mode"))
@@ -52,22 +53,7 @@ def index():
     add_dir(LANGUAGE(30003), "/videos/all/filtergalleryajax?filter=games-review", 'list_videos', "")
     add_dir(LANGUAGE(30004), "/videos/all/filtergalleryajax?filter=games-trailer", 'list_videos', "")
     add_dir(LANGUAGE(30005), "/videos/all/filtergalleryajax?filter=movies-trailer", 'list_videos', "")
-    add_dir("Podcasts", "", 'podcast_index', "")
     add_dir(LANGUAGE(30008), "", 'search', "")
-
-    xbmcplugin.endOfDirectory(PLUGIN_HANDLE)
-    if force_view_mode:
-        xbmc.executebuiltin('Container.SetViewMode(' + viewMode + ')')
-
-
-def podcast_index():
-    html_source = get_url("/")
-    match = re.compile(
-        '<li class="ign-shows-list-container ign-transition">(.+?)</li>\s*<li class="ign-show ign-transition">',
-        re.DOTALL).findall(html_source)
-    podcasts = re.compile('<li><a href="(.+?)">(.+?)</a></li>', re.DOTALL).findall(match[0])
-    for pod in podcasts:
-        add_dir(pod[1], pod[0] + "?category=videos&page=1", 'list_series_episodes', "", pod[1])
 
     xbmcplugin.endOfDirectory(PLUGIN_HANDLE)
     if force_view_mode:
@@ -204,7 +190,7 @@ def list_search_results(url):
 
 
 def play_video(page_url):
-    html_source = get_url(page_url)
+    #html_source = get_url(page_url)
     match = re.compile(BASE_URL + "(.+)", re.DOTALL).findall(page_url)
     vid = Video(match[0])
     final_url = vid.get_vid_url(max_video_height)
@@ -316,21 +302,27 @@ def parameters_string_to_dict(parameters):
     return param_dict
 
 
-def add_link(name, url, mode, iconimage, desc="", duration=""):
+def add_link(title, url, mode, iconimage, desc="", duration=""):
     u = sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=" + str(mode)
-    liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Duration": duration})
+    liz = xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    liz.setInfo(type="Video", infoLabels={"Title": title, "Plot": desc, "Duration": duration})
     liz.setProperty('IsPlayable', 'true')
+    # let's remove any non-ascii characters from the title, to prevent errors with urllib.parse.parse_qs
+    # of the parameters
+    title = title.encode('ascii', 'ignore')
     # Add refresh option to context menu
     liz.addContextMenuItems([('Refresh', 'Container.Refresh')])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 
 
-def add_dir(name, url, mode, iconimage, desc=""):
+def add_dir(title, url, mode, iconimage, desc=""):
     u = sys.argv[0] + '?url=' + urllib.parse.quote_plus(url) + '&mode=' + str(mode)
-    liz = xbmcgui.ListItem(name, iconImage='DefaultFolder.png', thumbnailImage=iconimage)
-    liz.setInfo(type='video', infoLabels={'title': name, 'plot': desc, 'plotoutline': desc})
+    liz = xbmcgui.ListItem(title, iconImage='DefaultFolder.png', thumbnailImage=iconimage)
+    liz.setInfo(type='video', infoLabels={'title': title, 'plot': desc, 'plotoutline': desc})
+    # let's remove any non-ascii characters from the title, to prevent errors with urllib.parse.parse_qs
+    # of the parameters
+    title = title.encode('ascii', 'ignore')
     # Add refresh option to context menu
     liz.addContextMenuItems([('Refresh', 'Container.Refresh')])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
@@ -357,6 +349,12 @@ def convertToByteString(s, encoding='utf-8'):
 
 def log(name_object, object):
     try:
+        # Let's try and remove any non-ascii stuff first
+        object = object.encode('ascii', 'ignore')
+    except:
+        pass
+
+    try:
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
             ADDON, VERSION, DATE, name_object, convertToUnicodeString(object)), xbmc.LOGDEBUG)
     except:
@@ -368,13 +366,17 @@ params = parameters_string_to_dict(sys.argv[2])
 mode = params.get('mode')
 url = params.get('url')
 
+if url is None:
+    if SETTINGS.getSetting('onlyshownewvideocategory') == 'true':
+        mode = 'list_videos'
+        url = urllib.parse.quote_plus(LATEST_VIDEOS_URL)
 
 if mode == 'list_videos':
     url = urllib.parse.unquote_plus(url)
     list_videos(url)
 elif mode == 'list_series':
     url = urllib.parse.unquote_plus(url)
-    list_series(url)
+    list_videos(url)
 elif mode == 'list_search_results':
     url = urllib.parse.unquote_plus(url)
     list_search_results(url)
@@ -384,8 +386,6 @@ elif mode == 'play_video':
 elif mode == 'list_series_episodes':
     url = urllib.parse.unquote_plus(url)
     list_series_episodes(url)
-elif mode == 'podcast_index':
-    podcast_index()
 elif mode == 'play_live_stream':
     url = urllib.parse.unquote_plus(url)
     play_live_stream(url)

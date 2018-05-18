@@ -55,8 +55,12 @@ msgstr "View erzwingen"
 
 msgctxt "#30103
 msgid "View"
-msgstr ""
+msgstr "View"
 
 msgctxt "#30104"
 msgid "Live-Stream Feature"
-msgstr ""
+msgstr "Live-Stream Feature"
+
+msgctxt "#30610"
+msgid "Only show New video category"
+msgstr "Nur die neue video categorie anzeigen"

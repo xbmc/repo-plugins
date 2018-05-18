@@ -38,3 +38,11 @@ class TestFeedParser(unittest.TestCase):
         paragraph_string = expected_string
 
         self.assertEquals(expected_string, ml_stripper.html_to_text(paragraph_string))
+
+    def test_unicode_character(self):
+        """
+        Verify a unicode character does not cause the html_to_text method to throw an error
+        """
+
+        unicode_string =  u'\u0420\u0024'
+        ml_stripper.html_to_text(unicode_string)

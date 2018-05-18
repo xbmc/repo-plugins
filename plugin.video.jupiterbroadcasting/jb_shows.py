@@ -130,7 +130,7 @@ def _shows():
     shows[30016] = {
         'feed': JUPITER_COM + 'feeds/unfilterHD.xml',
         'feed-low': JUPITER_COM + 'feeds/unfilterMob.xml',
-        'feed-audio': JUPITER_COM + 'feeds/unfilterMP3.xml',
+        'feed-audio': 'http://unfilter.show/rss',
         'image': 'unfilter.jpg',
         'plot': 30216,
         'genre': 'Technology',
@@ -218,7 +218,7 @@ def _shows():
     shows[30017] = {
         'feed': FEED_BURNER + 'coderradiovideo?format=xml',
         'feed-low': FEED_BURNER + 'coderradiomp3?format=xml',
-        'feed-audio': FEED_BURNER + 'coderradiomp3?format=xml',
+        'feed-audio': 'http://coder.show/rss',
         'image': 'coder-radio.jpg',
         'plot': 30217,
         'genre': 'Technology',
@@ -240,7 +240,7 @@ def _shows():
     shows[30019] = {
         'feed': FEED_BURNER + 'linuxunvid?format=xml',
         'feed-low': FEED_BURNER + 'linuxunplugged?format=xml',
-        'feed-audio': FEED_BURNER + 'linuxunplugged?format=xml',
+        'feed-audio': 'http://linuxunplugged.com/rss',
         'image': 'linux-unplugged.jpg',
         'plot': 30219,
         'genre': 'Technology',
@@ -273,11 +273,11 @@ def _shows():
     shows[30022] = {
         'feed': FEED_PRESS + 't3mob',
         'feed-low': FEED_PRESS + 't3ogg',
-        'feed-audio': FEED_PRESS + 't3ogg',
+        'feed-audio': 'http://techtalk.today/rss',
         'image': 'tech-talk-today.png',
         'plot': 30222,
         'genre': 'Technology',
-        'archived': True
+        'archived': False
     }
 
     # Women's Tech Radio
@@ -314,7 +314,7 @@ def _shows():
     shows[30026] = {
         'feed': FEED_PRESS + 'AskNoahHD',
         'feed-low': FEED_PRESS + 'AskNoahHD',
-        'feed-audio': 'https://asknoah.fireside.fm/rss',
+        'feed-audio': 'http://podcast.asknoahshow.com/rss',
         'image': 'asknoah.png',
         'plot': 30226,
         'genre': 'Technology',
@@ -325,7 +325,7 @@ def _shows():
     shows[30027] = {
         'feed': 'http://linuxactionnews.com/rss',
         'feed-low': 'http://linuxactionnews.com/rss',
-        'feed-audio': 'https://linuxactionnews.fireside.fm/rss',
+        'feed-audio': 'http://linuxactionnews.com/rss',
         'image': 'linux-action-news.jpg',
         'plot': 30227,
         'genre': 'Technology',

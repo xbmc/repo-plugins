@@ -16,10 +16,10 @@ SETTINGS = xbmcaddon.Addon()
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
 BASE_URL_GAMEKINGS_TV = "https://www.gamekings.tv/"
+PREMIUM_ONLY_VIDEO_TITLE_PREFIX = '* '
 LOGIN_URL = 'https://www.gamekings.tv/wp-login.php'
-TWITCH_URL = 'plugin://plugin.video.twitch/playLive/gamekings/'
-DATE = "2018-03-24"
-VERSION = "1.2.12"
+DATE = "2018-05-18"
+VERSION = "1.2.13"
 
 
 if sys.version_info[0] > 2:
@@ -41,6 +41,12 @@ def convertToByteString(s, encoding='utf-8'):
 
 
 def log(name_object, object):
+    try:
+        # Let's try and remove any non-ascii stuff first
+        object = object.encode('ascii', 'ignore')
+    except:
+        pass
+
     try:
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
             ADDON, VERSION, DATE, name_object, convertToUnicodeString(object)), xbmc.LOGDEBUG)

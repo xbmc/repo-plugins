@@ -16,15 +16,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "Addon Summary"
-msgid "Watch videos from Gamekings.nl (dutch)"
+msgid "Watch videos from Gamekings.tv (dutch)"
 msgstr ""
 
 msgctxt "Addon Description"
-msgid "Watch videos from Gamekings.nl (dutch)"
+msgid "Watch videos from Gamekings.tv (dutch)"
 msgstr ""
 
 msgctxt "Addon Disclaimer"
-msgid "For bugs, requests or general questions visit the Gamekings.nl thread on the XBMC forum."
+msgid "For bugs, requests or general questions visit the Gamekings.tv thread on the Kodi forum."
 msgstr ""
 
 msgctxt "#30000"
@@ -161,4 +161,8 @@ msgstr ""
 
 msgctxt "#30610"
 msgid "Only show Videos category"
+msgstr ""
+
+msgctxt "#30611"
+msgid "Start the Kodi twitch video addon and go to the Gamekings channel to see the live stream."
 msgstr ""

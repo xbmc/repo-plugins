@@ -15,7 +15,7 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from gamekings_const import ADDON, SETTINGS, LANGUAGE, DATE, VERSION, LOGIN_URL, TWITCH_URL, convertToUnicodeString, log, getSoup
+from gamekings_const import SETTINGS, LANGUAGE, LOGIN_URL, convertToUnicodeString, log
 
 #
 # Main class
@@ -280,12 +280,8 @@ class Main(object):
         # Check if it's a twitch live stream
         #
         elif str(html_source).find("twitch") > 0:
-            video_url = TWITCH_URL
-
-            log("trying twitch channel", video_url)
-
-            list_item = xbmcgui.ListItem(path=video_url)
-            xbmcplugin.setResolvedUrl(self.plugin_handle, False, list_item)
+            #example of a live stream: video_url = 'plugin://plugin.video.twitch/?channel_id=57330659&amp;mode=play;'
+            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30611))
         #
         # Alert user
         #

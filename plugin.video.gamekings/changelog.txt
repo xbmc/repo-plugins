@@ -1,3 +1,8 @@
+v1.2.13 (2018-05-18)
+- prefix the titles of premium-only videos with an asterisk
+- using news-tag in addon.xml
+- showing a popup when it's a twitch live stream
+
 v1.2.12 (2018-03-24)
 - fixed video category (website changes)
 

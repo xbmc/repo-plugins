@@ -12,8 +12,14 @@ def get_video(html_page):
   for link in match: return link 
     
 def get_jw(html_page):
-  match = re.compile('406p.+?"file": "(.+?)",\n          "height": 720', re.DOTALL).findall(html_page)  
-  for link in match: return "http:" + link
+  match = re.compile('"playlist": "(.+?)"', re.DOTALL).findall(html_page)  
+  for link in match:
+    return link
+
+def get_jw2(html_page):
+  match = re.compile('height":1080,"type":"video/mp4","file":"(.+?)"', re.DOTALL).findall(html_page)
+  for link in match:
+    return link
 
 def get_links(html_page):
   videos = []
@@ -24,12 +30,12 @@ def get_links(html_page):
   return videos
 
 def get_live(html_page):
-  match = re.compile('class="x-video embed.+?embed/(.+?)" frameborder=',re.DOTALL).findall(html_page)
+  match = re.compile('.+?youtube.com/embed/(.+?)"',re.DOTALL).findall(html_page)
   for link in match:
     return link
         
 def get_members_live(html_page):
-  match = re.compile('entry-content content.+?x-video-inner"><iframe width.+?youtube.com/embed/(.+?)"',re.DOTALL).findall(html_page)
+  match = re.compile('.+?youtube.com/embed/(.+?)"',re.DOTALL).findall(html_page)
   for link in match:
     return link
 

@@ -253,7 +253,9 @@ def router(paramstring):
         if video_url[0] == "/":
           page = jw_website("http:" + video_url)
           video_url = type1.get_jw(page)
-        play_video(video_url)
+          page = jw_website("http:" + video_url)
+          video_url = type1.get_jw2(page)
+          play_video(video_url)
       else:
         popup(__language__(30004)) # "Video doesn't exist on website."
   else:

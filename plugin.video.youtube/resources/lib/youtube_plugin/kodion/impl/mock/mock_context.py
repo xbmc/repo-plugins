@@ -1,7 +1,6 @@
-import time
-
 __author__ = 'bromix'
 
+import time
 import tempfile
 
 from ..abstract_context import AbstractContext
@@ -86,4 +85,4 @@ class MockContext(AbstractContext):
         log("execute '%s'" % command)
 
     def sleep(self, milli_seconds):
-        time.sleep(milli_seconds / 1000.0)
+        time.sleep((milli_seconds // 1000.0))

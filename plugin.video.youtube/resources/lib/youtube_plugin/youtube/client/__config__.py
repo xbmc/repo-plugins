@@ -1,202 +1,228 @@
 # -*- coding: utf-8 -*-
+
 from base64 import b64decode
 from hashlib import md5
+from ...kodion.json_store import APIKeyStore, LoginTokenStore
 from ...kodion import Context as __Context
+from ... import key_sets
 
 DEFAULT_SWITCH = 1
 
 __context = __Context(plugin_id='plugin.video.youtube')
 __settings = __context.get_settings()
 
-_own_key = __settings.get_string('youtube.api.key', '')
-_own_id = __settings.get_string('youtube.api.id', '')
-_own_secret = __settings.get_string('youtube.api.secret', '')
 
-_stripped_key = ''.join(_own_key.split())
-_stripped_id = ''.join(_own_id.replace('.apps.googleusercontent.com', '').split())
-_stripped_secret = ''.join(_own_secret.split())
+class APICheck(object):
 
-if _own_key != _stripped_key:
-    if _stripped_key not in _own_key:
-        __context.log_debug('Personal API setting: |Key| Skipped: potentially mangled by stripping')
-    else:
-        __context.log_debug('Personal API setting: |Key| had whitespace removed')
-        _own_key = _stripped_key
-        __settings.set_string('youtube.api.key', _own_key)
+    def __init__(self, context, settings):
+        self._context = context
+        self._settings = settings
+        self._ui = context.get_ui()
+        self._api_jstore = APIKeyStore()
+        self._json_api = self._api_jstore.get_data()
+        self._am_jstore = LoginTokenStore()
+        self._json_am = self._am_jstore.get_data()
+        self.changed = False
 
-if _own_id != _stripped_id:
-    if _stripped_id not in _own_id:
-        __context.log_debug('Personal API setting: |Id| Skipped: potentially mangled by stripping')
-    else:
-        googleusercontent = ''
-        if '.apps.googleusercontent.com' in _own_id:
-            googleusercontent = ' and .apps.googleusercontent.com'
-        __context.log_debug('Personal API setting: |Id| had whitespace%s removed' % googleusercontent)
-        _own_id = _stripped_id
-        __settings.set_string('youtube.api.id', _own_id)
+        self._on_init()
 
-if _own_secret != _stripped_secret:
-    if _stripped_secret not in _own_secret:
-        __context.log_debug('Personal API setting: |Secret| Skipped: potentially mangled by stripping')
-    else:
-        __context.log_debug('Personal API setting: |Secret| had whitespace removed')
-        _own_secret = _stripped_secret
-        __settings.set_string('youtube.api.secret', _own_secret)
+    def _on_init(self):
+        self._json_api = self._api_jstore.get_data()
+
+        j_key = self._json_api['keys']['personal'].get('api_key', '')
+        j_id = self._json_api['keys']['personal'].get('client_id', '')
+        j_secret = self._json_api['keys']['personal'].get('client_secret', '')
+
+        original_key = self._settings.get_string('youtube.api.key')
+        original_id = self._settings.get_string('youtube.api.id')
+        original_secret = self._settings.get_string('youtube.api.secret')
+        if original_key and original_id and original_secret:
+            own_key, own_id, own_secret = self._strip_api_keys(original_key, original_id, original_secret)
+            if own_key and own_id and own_secret:
+                if (original_key != own_key) or (original_id != own_id) or (original_secret != own_secret):
+                    self._settings.set_string('youtube.api.key', own_key)
+                    self._settings.set_string('youtube.api.id', own_id)
+                    self._settings.set_string('youtube.api.secret', own_secret)
+
+                if (j_key != own_key) or (j_id != own_id) or (j_secret != own_secret):
+                    self._json_api['keys']['personal'] = {'api_key': own_key, 'client_id': own_id, 'client_secret': own_secret}
+                    self._api_jstore.save(self._json_api)
+
+                self._json_api = self._api_jstore.get_data()
+                j_key = self._json_api['keys']['personal'].get('api_key', '')
+                j_id = self._json_api['keys']['personal'].get('client_id', '')
+                j_secret = self._json_api['keys']['personal'].get('client_secret', '')
+
+        if not original_key or not original_id or not original_secret and (j_key and j_secret and j_id):
+            self._settings.set_string('youtube.api.key', j_key)
+            self._settings.set_string('youtube.api.id', j_id)
+            self._settings.set_string('youtube.api.secret', j_secret)
+            self._settings.set_bool('youtube.api.enable', True)
+
+        switch = self.get_current_switch()
+        user = self.get_current_user()
+
+        access_token = self._settings.get_string('kodion.access_token', '')
+        refresh_token = self._settings.get_string('kodion.refresh_token', '')
+        token_expires = self._settings.get_int('kodion.access_token.expires', -1)
+        last_hash = self._settings.get_string('youtube.api.last.hash', '')
+        if not self._json_am['access_manager'].get(user, {}).get('access_token') or \
+                not self._json_am['access_manager'].get(user, {}).get('refresh_token'):
+            if access_token and refresh_token:
+                self._json_am['access_manager'][user]['access_token'] = access_token
+                self._json_am['access_manager'][user]['refresh_token'] = refresh_token
+                self._json_am['access_manager'][user]['token_expires'] = token_expires
+                if switch == 'own':
+                    own_key_hash = self._get_key_set_hash('own')
+                    if last_hash == self._get_key_set_hash('own', True) or \
+                            last_hash == own_key_hash:
+                        self._json_am['access_manager'][user]['last_key_hash'] = own_key_hash
+                self._am_jstore.save(self._json_am)
+        if access_token or refresh_token or last_hash:
+            self._settings.set_string('kodion.access_token', '')
+            self._settings.set_string('kodion.refresh_token', '')
+            self._settings.set_int('kodion.access_token.expires', -1)
+            self._settings.set_string('youtube.api.last.hash', '')
+
+        updated_hash = self._api_keys_changed(switch)
+        if updated_hash:
+            self._context.log_warning('User: |%s| Switching API key set to |%s|' % (user, switch))
+            self._json_am['access_manager'][user]['last_key_hash'] = updated_hash
+            self._am_jstore.save(self._json_am)
+            self._context.log_debug('API key set changed: Signing out')
+            self._context.execute('RunPlugin(plugin://plugin.video.youtube/sign/out/?confirmed=true)')
+        else:
+            self._context.log_debug('User: |%s| Using API key set: |%s|' % (user, switch))
+
+    def get_current_switch(self):
+        return 'own' if self.has_own_api_keys() else self._settings.get_string('youtube.api.key.switch', str(DEFAULT_SWITCH))
+
+    def get_current_user(self):
+        self._json_am = self._am_jstore.get_data()
+        return self._json_am['access_manager'].get('current_user', 'default')
+
+    def has_own_api_keys(self):
+        self._json_api = self._api_jstore.get_data()
+        own_key = self._json_api['keys']['personal']['api_key']
+        own_id = self._json_api['keys']['personal']['client_id']
+        own_secret = self._json_api['keys']['personal']['client_secret']
+        return False if not own_key or \
+                        not own_id or \
+                        not own_secret or \
+                        not self._settings.get_string('youtube.api.enable') == 'true' else True
+
+    def get_api_keys(self, switch):
+        self._json_api = self._api_jstore.get_data()
+        if not switch or (switch == 'own' and not self.has_own_api_keys()):
+            switch = '1'
+        if switch == 'youtube-tv':
+            api_key = b64decode(key_sets['youtube-tv']['key']).decode('utf-8'),
+            client_id = b64decode(key_sets['youtube-tv']['id']).decode('utf-8') + u'.apps.googleusercontent.com'
+            client_secret = b64decode(key_sets['youtube-tv']['secret']).decode('utf-8')
+        elif switch == 'developer':
+            self._json_api = self._api_jstore.get_data()
+            return self._json_api['keys']['developer']
+        elif switch == 'own':
+            api_key = self._json_api['keys']['personal']['api_key']
+            client_id = self._json_api['keys']['personal']['client_id'] + u'.apps.googleusercontent.com'
+            client_secret = self._json_api['keys']['personal']['client_secret']
+        else:
+            api_key = b64decode(key_sets['provided'][switch]['key']).decode('utf-8')
+            client_id = b64decode(key_sets['provided'][switch]['id']).decode('utf-8') + u'.apps.googleusercontent.com'
+            client_secret = b64decode(key_sets['provided'][switch]['secret']).decode('utf-8')
+        return api_key, client_id, client_secret
+
+    def _api_keys_changed(self, switch):
+        self._json_am = self._am_jstore.get_data()
+        if not switch or (switch == 'own' and not self.has_own_api_keys()):
+            switch = '1'
+        user = self.get_current_user()
+        last_set_hash = self._json_am['access_manager'].get(user, {}).get('last_key_hash', '')
+        current_set_hash = self._get_key_set_hash(switch)
+        if last_set_hash != current_set_hash:
+            self.changed = True
+            return current_set_hash
+        else:
+            self.changed = False
+            return None
+
+    def _get_key_set_hash(self, switch, old=False):
+        if not switch or (switch == 'own' and not self.has_own_api_keys()):
+            switch = '1'
+        api_key, client_id, client_secret = self.get_api_keys(switch)
+        if old and switch == 'own':
+            client_id = client_id.replace(u'.apps.googleusercontent.com', u'')
+        m = md5()
+        m.update(api_key.encode('utf-8'))
+        m.update(client_id.encode('utf-8'))
+        m.update(client_secret.encode('utf-8'))
+
+        return m.hexdigest()
+
+    def _strip_api_keys(self, api_key, client_id, client_secret):
+
+        stripped_key = ''.join(api_key.split())
+        stripped_id = ''.join(client_id.replace('.apps.googleusercontent.com', '').split())
+        stripped_secret = ''.join(client_secret.split())
+
+        if api_key != stripped_key:
+            if stripped_key not in api_key:
+                self._context.log_debug('Personal API setting: |Key| Skipped: potentially mangled by stripping')
+                return_key = api_key
+            else:
+                self._context.log_debug('Personal API setting: |Key| had whitespace removed')
+                return_key = stripped_key
+        else:
+            return_key = api_key
+
+        if client_id != stripped_id:
+            if stripped_id not in client_id:
+                self._context.log_debug('Personal API setting: |Id| Skipped: potentially mangled by stripping')
+                return_id = client_id
+            else:
+                googleusercontent = ''
+                if '.apps.googleusercontent.com' in client_id:
+                    googleusercontent = ' and .apps.googleusercontent.com'
+                self._context.log_debug('Personal API setting: |Id| had whitespace%s removed' % googleusercontent)
+                return_id = stripped_id
+        else:
+            return_id = client_id
+
+        if client_secret != stripped_secret:
+            if stripped_secret not in client_secret:
+                self._context.log_debug('Personal API setting: |Secret| Skipped: potentially mangled by stripping')
+                return_secret = client_secret
+            else:
+                self._context.log_debug('Personal API setting: |Secret| had whitespace removed')
+                return_secret = stripped_secret
+        else:
+            return_secret = client_secret
+
+        return return_key, return_id, return_secret
 
 
-def _has_own_keys():
-    return False if not _own_key or \
-                    not _own_id or \
-                    not _own_secret or \
-                    not __settings.get_bool('youtube.api.enable', False) else True
+notification_data = {'use_httpd': (__settings.use_dash_proxy() and
+                                   __settings.use_dash()) or
+                                  (__settings.api_config_page()),
+                     'httpd_port': __settings.httpd_port(),
+                     'whitelist': __settings.httpd_whitelist(),
+                     'httpd_address': __settings.httpd_listen()
+                     }
 
+__context.send_notification('check_settings', notification_data)
 
-has_own_keys = _has_own_keys()
+_api_check = APICheck(__context, __settings)
 
+keys_changed = _api_check.changed
+current_user = _api_check.get_current_user()
 
-def __get_key_switch():
-    switch = __settings.get_string('youtube.api.key.switch', str(DEFAULT_SWITCH))
-    use_switch = __settings.get_string('youtube.api.key.switch.use', '')
-    if not use_switch and switch:
-        switch = 'own' if has_own_keys else str(DEFAULT_SWITCH)
-        __settings.set_string('youtube.api.key.switch', switch)
-        __settings.set_string('youtube.api.key.switch.use', switch)
-        return switch
-    elif use_switch != switch:
-        __settings.set_string('youtube.api.key.switch.use', switch)
-        return switch
-    else:
-        return use_switch
+api = dict()
+youtube_tv = dict()
 
+_current_switch = _api_check.get_current_switch()
 
-key_sets = {
-    'youtube-tv': {
-        'id': 'ODYxNTU2NzA4NDU0LWQ2ZGxtM2xoMDVpZGQ4bnBlazE4azZiZThiYTNvYzY4',
-        'key': 'QUl6YVN5QzZmdlpTSkhBN1Z6NWo4akNpS1J0N3RVSU9xakUyTjNn',
-        'secret': 'U2JvVmhvRzlzMHJOYWZpeENTR0dLWEFU'
-    },
-    'own': {
-        'key': _own_key,
-        'id': _own_id,
-        'secret': _own_secret
-    },
-    'provided': {
-        'switch': __get_key_switch(),
-        '0': {  # youtube-plugin-for-kodi-2
-            'id': 'NDMwNTcyNzE0ODgyLTlqcDdjYzVvMmZkZGdhZGM2bWM4anB1a2JmYjlsczdv',
-            'key': 'QUl6YVN5REIxVGU4MElUejdYR3ZXVGRzazhVMjVlVHY5WWlDS2Zz',
-            'secret': 'ekE5d2lqLWZsSXRZMzVrSHBsN3NmZWt4'
-        },
-        '1': {  # youtube-plugin-for-kodi
-            'id': 'Mjk0ODk5MDY0NDg4LWE4a2MxazFqZDAwa2FtcXJlMHZkMm5mdHVpaWZyZjZh',
-            'key': 'QUl6YVN5Q1p3UXVvc0ZKYlF6bnFucXBxcFlsYUpXVk1uMTZ3QnZz',
-            'secret': 'S1RrQktJTk41dmY0T3dqMU5ZeVhMemJl',
-        },
-        '2': {  # youtube-plugin-for-kodi-3
-            'id': 'NjM5NjIwMzY5MzYxLWJvYW9qNDM1dDJncDRybjNyNHFyNm52aW8yOXAwZnJi',
-            'key': 'QUl6YVN5QVA0eFJteU5KcndXcTFwNm5KUy1Wd25yY2dIWGxZT3Fr',
-            'secret': 'V1luZGxUQWxLaU1lZjhRT2N5UENkZ1dF'
-        },
-        '3': {  # youtube-plugin-for-kodi-4
-            'id': 'NTMxNTEzODY4MDE5LWk1aGJoMDh1aWY4OWhrM2tzNnRmOGR1aTlndWl0dWVn',
-            'key': 'QUl6YVN5REJBRzB0ZXRrblVralo4b3QzRW95MEltUXFYNzRXWU1n',
-            'secret': 'VHpsZ2lkZXlNdmhCcFdiZTAyWi0xQzVy'
-        },
-        '4': {  # youtube-plugin-for-kodi-5
-            'id': 'NzYxMjUyMTUxMDQ3LXN1ZGNpMjMyNzBhZjM2cWdpcDg0ZHYxaWM3dXZkYzhi',
-            'key': 'QUl6YVN5RFo1ZXk0T1JueGpHQTI1RkRCRGFteVVJakRTLTZKRUhR',
-            'secret': 'VzNad0psdko0U2VRaEkza0tqbFhBRFk3'
-        },
-        '5': {  # youtube-plugin-for-kodi-6
-            'id': 'ODY1MTkxMjg0NTM0LXNzMDlvbzBhMDg1c3BmNHVvbnAzcmdmb2hqc2hzNGUy',
-            'key': 'QUl6YVN5QXc2VWtjREJpVk14ZXZxaGs3WE9la1BRU3dSaWNKaThR',
-            'secret': 'Q1IxOGd6VWlNTi1XRVNVdGc0dE1LNWdz'
-        }
-    }
-}
+api['key'], api['id'], api['secret'] = _api_check.get_api_keys(_current_switch)
 
+youtube_tv['key'], youtube_tv['id'], youtube_tv['secret'] = _api_check.get_api_keys('youtube-tv')
 
-def get_current_switch():
-    return 'own' if has_own_keys else key_sets['provided']['switch']
-
-
-def get_last_switch():
-    return __settings.get_string('youtube.api.last.switch', '')
-
-
-def set_last_switch(value):
-    __settings.set_string('youtube.api.last.switch', value)
-
-
-def get_key_set_hash(value):
-    m = md5()
-    if value == 'own':
-        m.update('%s%s%s' % (key_sets[value]['key'], key_sets[value]['id'], key_sets[value]['secret']))
-    else:
-        m.update('%s%s%s' % \
-                 (key_sets['provided'][value]['key'], key_sets['provided'][value]['id'],
-                  key_sets['provided'][value]['secret']))
-    return m.hexdigest()
-
-
-def set_last_hash(value):
-    __settings.set_string('youtube.api.last.hash', get_key_set_hash(value))
-
-
-def get_last_hash():
-    return __settings.get_string('youtube.api.last.hash', '')
-
-
-def _resolve_old_login():
-    __context.log_debug('API key set changed: Signing out')
-    __context.execute('RunPlugin(%s)' % __context.create_uri(['sign', 'out'], {'confirmed': 'true'}))
-
-
-# make sure we have a valid switch, if not use default
-if not has_own_keys:
-    if not key_sets['provided'].get(key_sets['provided']['switch'], None):
-        __settings.set_string('youtube.api.key.switch', str(DEFAULT_SWITCH))
-        key_sets['provided']['switch'] = __get_key_switch()
-
-
-def check_for_key_changes():
-    last_switch = get_last_switch()
-    current_switch = get_current_switch()
-    __context.log_debug('Using API key set: %s' % current_switch)
-    last_set_hash = get_last_hash()
-    current_set_hash = get_key_set_hash(current_switch)
-    if (last_switch != current_switch) or (last_set_hash != current_set_hash):
-        __context.log_warning('Switching API key set from %s to %s' % (last_switch, current_switch))
-        set_last_switch(current_switch)
-        set_last_hash(current_switch)
-        _resolve_old_login()
-        return True
-    return False
-
-
-api = {
-    'key':
-        key_sets['own']['key']
-        if has_own_keys
-        else
-        b64decode(key_sets['provided'][key_sets['provided']['switch']]['key']),
-    'id':
-        '%s.apps.googleusercontent.com' %
-        (key_sets['own']['id']
-         if has_own_keys
-         else
-         b64decode(key_sets['provided'][key_sets['provided']['switch']]['id'])),
-    'secret':
-        key_sets['own']['secret']
-        if has_own_keys
-        else
-        b64decode(key_sets['provided'][key_sets['provided']['switch']]['secret'])
-}
-
-youtube_tv = {
-    'key': b64decode(key_sets['youtube-tv']['key']),
-    'id': '%s.apps.googleusercontent.com' % b64decode(key_sets['youtube-tv']['id']),
-    'secret': b64decode(key_sets['youtube-tv']['secret'])
-}
-
-keys_changed = check_for_key_changes()
+developer_keys = _api_check.get_api_keys('developer')

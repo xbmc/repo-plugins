@@ -1,5 +1,7 @@
 __author__ = 'bromix'
 
+from six.moves import range
+
 import unittest
 
 from .. import kodion
@@ -27,7 +29,7 @@ class TestClient(unittest.TestCase):
         token = client.calculate_next_page_token(2, 1)
         for i in range(2, 50):
             token = client.calculate_next_page_token(i, 50)
-            print 'Page=%d token=%s' % (i, token)
+            print('Page=%d token=%s' % (i, token))
 
     def test_my_subscriptions_tv(self):
         client = YouTube(items_per_page=5, access_token_tv=self.TEST_ACCESS_TOKEN)

@@ -8,8 +8,6 @@ SEARCH_SIZE = 'kodion.search.size'  # (int)
 CACHE_SIZE = 'kodion.cache.size'  # (int)
 VIDEO_QUALITY = 'kodion.video.quality'  # (int)
 VIDEO_QUALITY_ASK = 'kodion.video.quality.ask'  # (bool)
-DASH_SUPPORT_BUILTIN = 'kodion.video.support.mpd.builtin'  # (bool)
-DASH_SUPPORT_ADDON = 'kodion.video.support.mpd.addon'  # (bool)
 USE_DASH = 'kodion.video.quality.mpd'  # (bool)
 AUDIO_ONLY = 'kodion.audio_only'  # (bool)
 AGE_GATE = 'kodion.age.gate'  # (bool)
@@ -19,15 +17,11 @@ VERIFY_SSL = 'simple.requests.ssl.verify'  # (bool)
 
 SUPPORT_ALTERNATIVE_PLAYER = 'kodion.support.alternative_player'  # (bool)
 
-LOGIN_USERNAME = 'kodion.login.username'
-LOGIN_PASSWORD = 'kodion.login.password'
-LOGIN_HASH = 'kodion.login.hash'
-
-ACCESS_TOKEN = 'kodion.access_token'
-REFRESH_TOKEN = 'kodion.refresh_token'
-ACCESS_TOKEN_EXPIRES = 'kodion.access_token.expires'
-
 ALLOW_DEV_KEYS = 'youtube.allow.dev.keys'  # (bool)
 
 DASH_PROXY = 'kodion.mpd.proxy'  # (bool)
-DASH_PROXY_PORT = 'kodion.mpd.proxy.port'  # (number)
+HTTPD_PORT = 'kodion.mpd.proxy.port'  # (number)
+HTTPD_LISTEN = 'kodion.http.listen'  # (string)
+HTTPD_WHITELIST = 'kodion.http.ip.whitelist'  # (string)
+
+API_CONFIG_PAGE = 'youtube.api.config.page'  # (bool)

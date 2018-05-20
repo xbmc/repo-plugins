@@ -1,6 +1,8 @@
-import json
-
 __author__ = 'bromix'
+
+from six import string_types
+
+import json
 
 from .video_item import VideoItem
 from .directory_item import DirectoryItem
@@ -38,7 +40,7 @@ def from_json(json_data):
 
         return item
 
-    if isinstance(json_data, basestring):
+    if isinstance(json_data, string_types):
         json_data = json.loads(json_data)
     return _from_json(json_data)
 

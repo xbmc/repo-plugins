@@ -1,6 +1,5 @@
 __author__ = 'bromix'
 
-import xbmc
 import xbmcgui
 import xbmcplugin
 
@@ -22,7 +21,7 @@ class XbmcRunner(AbstractProviderRunner):
         results = None
         try:
             results = provider.navigate(context)
-        except KodionException, ex:
+        except KodionException as ex:
             if provider.handle_exception(context, ex):
                 context.log_error(ex.__str__())
                 xbmcgui.Dialog().ok("Exception in ContentProvider", ex.__str__())
@@ -78,9 +77,16 @@ class XbmcRunner(AbstractProviderRunner):
         """
 
     def _add_directory(self, context, directory_item, item_count=0):
-        item = xbmcgui.ListItem(label=directory_item.get_name(),
-                                iconImage=u'DefaultFolder.png',
-                                thumbnailImage=directory_item.get_image())
+        major_version = context.get_system_version().get_version()[0]
+        if major_version > 17:
+            item = xbmcgui.ListItem(label=directory_item.get_name(),
+                                    iconImage=u'DefaultFolder.png',
+                                    thumbnailImage=directory_item.get_image(),
+                                    offscreen=True)
+        else:
+            item = xbmcgui.ListItem(label=directory_item.get_name(),
+                                    iconImage=u'DefaultFolder.png',
+                                    thumbnailImage=directory_item.get_image())
 
         # only set fanart is enabled
 
@@ -107,9 +113,16 @@ class XbmcRunner(AbstractProviderRunner):
                                     totalItems=item_count)
 
     def _add_image(self, context, image_item, item_count):
-        item = xbmcgui.ListItem(label=image_item.get_name(),
-                                iconImage=u'DefaultPicture.png',
-                                thumbnailImage=image_item.get_image())
+        major_version = context.get_system_version().get_version()[0]
+        if major_version > 17:
+            item = xbmcgui.ListItem(label=image_item.get_name(),
+                                    iconImage=u'DefaultPicture.png',
+                                    thumbnailImage=image_item.get_image(),
+                                    offscreen=True)
+        else:
+            item = xbmcgui.ListItem(label=image_item.get_name(),
+                                    iconImage=u'DefaultPicture.png',
+                                    thumbnailImage=image_item.get_image())
 
         # only set fanart is enabled
         if image_item.get_fanart() and self.settings.show_fanart():

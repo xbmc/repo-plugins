@@ -2,7 +2,7 @@ from functools import partial
 import hashlib
 import datetime
 
-from storage import Storage
+from .storage import Storage
 
 
 class FunctionCache(Storage):
@@ -12,8 +12,10 @@ class FunctionCache(Storage):
     ONE_WEEK = 7 * ONE_DAY
     ONE_MONTH = 4 * ONE_WEEK
 
-    def __init__(self, filename, max_file_size_kb=-1):
-        Storage.__init__(self, filename, max_file_size_kb=max_file_size_kb)
+    def __init__(self, filename, max_file_size_mb=5):
+        max_file_size_kb = max_file_size_mb * 1024
+        max_item_count = max_file_size_mb * 250
+        Storage.__init__(self, filename, max_item_count=max_item_count, max_file_size_kb=max_file_size_kb)
 
         self._enabled = True
 
@@ -41,10 +43,10 @@ class FunctionCache(Storage):
         :return: id for the given function
         """
         m = hashlib.md5()
-        m.update(partial_func.func.__module__)
-        m.update(partial_func.func.__name__)
-        m.update(str(partial_func.args))
-        m.update(str(partial_func.keywords))
+        m.update(partial_func.func.__module__.encode('utf-8'))
+        m.update(partial_func.func.__name__.encode('utf-8'))
+        m.update(str(partial_func.args).encode('utf-8'))
+        m.update(str(partial_func.keywords).encode('utf-8'))
         return m.hexdigest()
 
     def _get_cached_data(self, partial_func):
@@ -68,7 +70,7 @@ class FunctionCache(Storage):
     def get(self, seconds, func, *args, **keywords):
         def _seconds_difference(_first, _last):
             _delta = _last - _first
-            return 24 * 60 * 60 * _delta.days + _delta.seconds + _delta.microseconds / 1000000.
+            return 24 * 60 * 60 * _delta.days + _delta.seconds + (_delta.microseconds // 1000000.)
 
         """
         Returns the cached data of the given function.
@@ -102,3 +104,18 @@ class FunctionCache(Storage):
             self._set(cache_id, cached_data)
 
         return cached_data
+
+    def _optimize_item_count(self):
+        clear = False
+        self._open()
+        query = 'SELECT count(*) from %s' % self._table_name
+        result = self._execute(False, query)
+        if result is not None:
+            result_one = result.fetchone()
+            if result_one is not None:
+                count = result_one[0]
+                if count >= self._max_item_count:
+                    clear = True
+        self._close()
+        if clear:
+            self._clear()

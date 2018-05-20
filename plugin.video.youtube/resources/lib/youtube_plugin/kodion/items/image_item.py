@@ -9,7 +9,7 @@ class ImageItem(BaseItem):
         self._title = None
 
     def set_title(self, title):
-        self._title = unicode(title)
+        self._title = title
 
     def get_title(self):
         return self._title

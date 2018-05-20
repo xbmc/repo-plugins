@@ -1,12 +1,18 @@
-from ...kodion.items import VideoItem
-
 __author__ = 'bromix'
+from six import PY2
 
 import re
+import time
 
 from ... import kodion
 from ...kodion import utils
 from ...youtube.helper import yt_context_menu
+
+try:
+    import inputstreamhelper
+except ImportError:
+    inputstreamhelper = None
+
 
 __RE_SEASON_EPISODE_MATCHES__ = [re.compile(r'Part (?P<episode>\d+)'),
                                  re.compile(r'#(?P<episode>\d+)'),
@@ -27,6 +33,10 @@ def extract_urls(text):
     return result
 
 
+def get_thumb_timestamp(minutes=15):
+    return str(time.mktime(time.gmtime(minutes * 60 * (round(time.time() / (minutes * 60))))))
+
+
 def update_channel_infos(provider, context, channel_id_dict, subscription_id_dict={}, channel_items_dict=None):
     channel_ids = list(channel_id_dict.keys())
     if len(channel_ids) == 0:
@@ -43,7 +53,7 @@ def update_channel_infos(provider, context, channel_id_dict, subscription_id_dic
         filter_list = [x.lower() for x in filter_list]
 
     thumb_size = context.get_settings().use_thumbnail_size()
-    for channel_id in channel_data.keys():
+    for channel_id in list(channel_data.keys()):
         yt_item = channel_data[channel_id]
         channel_item = channel_id_dict[channel_id]
 
@@ -70,6 +80,8 @@ def update_channel_infos(provider, context, channel_id_dict, subscription_id_dic
         if context.get_path() == '/subscriptions/list/':
             channel = title.lower()
             channel = channel.replace(',', '')
+            if PY2:
+                channel = channel.encode('utf-8', 'ignore')
             if channel in filter_list:
                 yt_context_menu.append_remove_my_subscriptions_filter(context_menu, provider, context, title)
             else:
@@ -96,7 +108,7 @@ def update_playlist_infos(provider, context, playlist_id_dict, channel_items_dic
     custom_history_id = context.get_settings().get_string('youtube.folder.history.playlist', '').strip()
 
     thumb_size = context.get_settings().use_thumbnail_size()
-    for playlist_id in playlist_data.keys():
+    for playlist_id in list(playlist_data.keys()):
         yt_item = playlist_data[playlist_id]
         playlist_item = playlist_id_dict[playlist_id]
 
@@ -168,7 +180,8 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         my_playlists = resource_manager.get_related_playlists(channel_id='mine')
 
     thumb_size = settings.use_thumbnail_size()
-    for video_id in video_data.keys():
+    thumb_stamp = get_thumb_timestamp()
+    for video_id in list(video_data.keys()):
         yt_item = video_data[video_id]
         video_item = video_id_dict[video_id]
 
@@ -181,9 +194,11 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         video_item.set_mediatype('video')  # using video
 
         # set the title
-        video_item.set_title(snippet['title'])
+        if not video_item.get_title():
+            video_item.set_title(snippet['title'])
 
-        if not video_item.use_dash() and video_item.get_headers() and video_item.get_uri().startswith('http'):
+        if not video_item.use_dash() and not settings.is_support_alternative_player_enabled() and \
+                video_item.get_headers() and video_item.get_uri().startswith('http'):
             video_item.set_uri(video_item.get_uri() + '|' + video_item.get_headers())
 
         """
@@ -229,6 +244,8 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
 
         # try to find a better resolution for the image
         image = get_thumbnail(thumb_size, snippet.get('thumbnails', {}))
+        if image.endswith('_live.jpg'):
+            image += '?ct=' + thumb_stamp
         video_item.set_image(image)
 
         # set fanart
@@ -245,8 +262,8 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         replace_context_menu = False
 
         # Refresh ('My Subscriptions')
-        if context.get_path() == '/special/new_uploaded_videos_tv/' or context.get_path().startswith(
-                '/channel/mine/playlist/'):
+        if context.get_path().startswith('/special/new_uploaded_videos_tv') or \
+                context.get_path().startswith('/channel/mine/playlist/'):
             yt_context_menu.append_refresh(context_menu, provider, context)
 
         # Queue Video
@@ -309,14 +326,116 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
             yt_context_menu.append_subscribe_to_channel(context_menu, provider, context, channel_id, channel_name)
 
         # more...
-        refresh_container = context.get_path().startswith(
-            '/channel/mine/playlist/LL') or context.get_path() == '/special/disliked_videos/'
+        refresh_container = context.get_path().startswith('/channel/mine/playlist/LL') or \
+                            context.get_path() == '/special/disliked_videos/'
         yt_context_menu.append_more_for_video(context_menu, provider, context, video_id,
                                               is_logged_in=provider.is_logged_in(),
                                               refresh_container=refresh_container)
 
         if len(context_menu) > 0:
             video_item.set_context_menu(context_menu, replace=replace_context_menu)
+
+
+def update_play_info(provider, context, video_id, video_item, video_stream):
+    settings = context.get_settings()
+    ui = context.get_ui()
+    resource_manager = provider.get_resource_manager(context)
+    video_data = resource_manager.get_videos([video_id])
+
+    meta_data = video_stream.get('meta', None)
+    live = video_stream.get('Live', False)
+
+    thumb_size = settings.use_thumbnail_size()
+    image = None
+
+    if meta_data:
+        video_item.set_subtitles(meta_data.get('subtitles', None))
+        video_item.set_headers(meta_data.get('headers', ''))
+        image = get_thumbnail(thumb_size, meta_data.get('images', {}))
+
+    yt_item = video_data[video_id]
+
+    snippet = yt_item['snippet']  # crash if not conform
+
+    # set uses_dash
+    video_item.set_use_dash(settings.use_dash())
+
+    # set mediatype
+    video_item.set_mediatype('video')  # using video
+
+    license_info = video_stream.get('license_info', {})
+
+    if inputstreamhelper and \
+            license_info.get('proxy') and \
+            license_info.get('url') and \
+            license_info.get('token'):
+        ishelper = inputstreamhelper.Helper('mpd', drm='com.widevine.alpha')
+        ishelper.check_inputstream()
+
+    video_item.set_license_key(license_info.get('proxy'))
+    ui.set_home_window_property('license_url', license_info.get('url'))
+    ui.set_home_window_property('license_token', license_info.get('token'))
+
+    # set the title
+    if not video_item.get_title():
+        video_item.set_title(snippet['title'])
+
+    if not video_item.use_dash() and not settings.is_support_alternative_player_enabled() and \
+            video_item.get_headers() and video_item.get_uri().startswith('http'):
+        video_item.set_uri(video_item.get_uri() + '|' + video_item.get_headers())
+
+    """
+    This is experimental. We try to get the most information out of the title of a video.
+    This is not based on any language. In some cases this won't work at all.
+    TODO: via language and settings provide the regex for matching episode and season.
+    """
+    # video_item.set_season(1)
+    # video_item.set_episode(1)
+    for regex in __RE_SEASON_EPISODE_MATCHES__:
+        re_match = regex.search(video_item.get_name())
+        if re_match:
+            if 'season' in re_match.groupdict():
+                video_item.set_season(int(re_match.group('season')))
+
+            if 'episode' in re_match.groupdict():
+                video_item.set_episode(int(re_match.group('episode')))
+            break
+
+    # plot
+    channel_name = snippet.get('channelTitle', '')
+    description = kodion.utils.strip_html_from_text(snippet['description'])
+    if channel_name and settings.get_bool('youtube.view.description.show_channel_name', True):
+        description = '[UPPERCASE][B]%s[/B][/UPPERCASE][CR][CR]%s' % (channel_name, description)
+    video_item.set_studio(channel_name)
+    # video_item.add_cast(channel_name)
+    video_item.add_artist(channel_name)
+    video_item.set_plot(description)
+
+    # date time
+    if 'publishedAt' in snippet:
+        date_time = utils.datetime_parser.parse(snippet['publishedAt'])
+        video_item.set_year_from_datetime(date_time)
+        video_item.set_aired_from_datetime(date_time)
+        video_item.set_premiered_from_datetime(date_time)
+        video_item.set_date_from_datetime(date_time)
+
+    # duration
+    duration = yt_item.get('contentDetails', {}).get('duration', '')
+    duration = utils.datetime_parser.parse(duration)
+    # we subtract 1 seconds because YouTube returns +1 second to much
+    video_item.set_duration_from_seconds(duration.seconds - 1)
+
+    if not image:
+        image = get_thumbnail(thumb_size, snippet.get('thumbnails', {}))
+
+    if live and image:
+        image += '?ct=' + get_thumb_timestamp()
+    video_item.set_image(image)
+
+    # set fanart
+    video_item.set_fanart(provider.get_fanart(context))
+
+    return video_item
 
 
 def update_fanarts(provider, context, channel_items_dict):
@@ -344,7 +463,10 @@ def get_thumbnail(thumb_size, thumbnails):
 
     image = ''
     for thumbnail_size in thumbnail_sizes:
-        image = thumbnails.get(thumbnail_size, {}).get('url', '')
+        try:
+            image = thumbnails.get(thumbnail_size, {}).get('url', '')
+        except AttributeError:
+            image = thumbnails.get(thumbnail_size, '')
         if image:
             break
     return image

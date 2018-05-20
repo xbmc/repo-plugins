@@ -2,6 +2,9 @@ __author__ = 'bromix'
 
 from ..abstract_settings import AbstractSettings
 
+import xbmc
+import xbmcgui
+
 
 class XbmcPluginSettings(AbstractSettings):
     def __init__(self, xbmc_addon):

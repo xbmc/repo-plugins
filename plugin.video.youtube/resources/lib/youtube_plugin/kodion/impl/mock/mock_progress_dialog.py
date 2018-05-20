@@ -8,12 +8,12 @@ class MockProgressDialog(AbstractProgressDialog):
         AbstractProgressDialog.__init__(self, 100)
 
     def close(self):
-        print 'Closing progress dialog'
+        print('Closing progress dialog')
 
     def update(self, steps=1, text=None):
         self._position += steps
 
-        print 'Progress: %d/%d - %s' % (self._position, self._total, text)
+        print('Progress: %d/%d - %s' % (self._position, self._total, text))
 
     def is_aborted(self):
         return False

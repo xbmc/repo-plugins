@@ -1,8 +1,9 @@
+from six.moves import urllib
+
 import os
-import urllib
 
 from .. import constants
-from ..logging import *
+from ..logging import log
 from ..utils import *
 
 
@@ -19,7 +20,7 @@ class AbstractContext(object):
         self._watch_later_list = None
         self._access_manager = None
 
-        self._plugin_name = unicode(plugin_name)
+        self._plugin_name = str(plugin_name)
         self._version = 'UNKNOWN'
         self._plugin_id = plugin_id
         self._path = create_path(path)
@@ -51,7 +52,7 @@ class AbstractContext(object):
         if not self._function_cache:
             max_cache_size_mb = self.get_settings().get_int(constants.setting.CACHE_SIZE, 5)
             self._function_cache = FunctionCache(os.path.join(self._get_cache_path(), 'cache'),
-                                                 max_file_size_kb=max_cache_size_mb * 1024)
+                                                 max_file_size_mb=max_cache_size_mb)
         return self._function_cache
 
     def get_search_history(self):
@@ -73,7 +74,7 @@ class AbstractContext(object):
 
     def get_access_manager(self):
         if not self._access_manager:
-            self._access_manager = AccessManager(self.get_settings())
+            self._access_manager = AccessManager(self)
         return self._access_manager
 
     def get_video_playlist(self):
@@ -100,9 +101,9 @@ class AbstractContext(object):
 
         uri = create_uri_path(path)
         if uri:
-            uri = "%s://%s%s" % ('plugin', self._plugin_id.encode('utf-8'), uri)
+            uri = "%s://%s%s" % ('plugin', str(self._plugin_id), uri)
         else:
-            uri = "%s://%s/" % ('plugin', self._plugin_id.encode('utf-8'))
+            uri = "%s://%s/" % ('plugin', str(self._plugin_id))
 
         if len(params) > 0:
             # make a copy of the map
@@ -115,18 +116,24 @@ class AbstractContext(object):
                     params[param] = str(params[param])
 
                 uri_params[param] = to_utf8(params[param])
-            uri += '?' + urllib.urlencode(uri_params)
+            uri += '?' + urllib.parse.urlencode(uri_params)
 
         return uri
 
     def get_path(self):
         return self._path
 
+    def set_path(self, value):
+        self._path = value
+
     def get_params(self):
         return self._params
 
     def get_param(self, name, default=None):
         return self.get_params().get(name, default)
+
+    def set_param(self, name, value):
+        self._params[name] = value
 
     def get_data_path(self):
         """
@@ -180,7 +187,6 @@ class AbstractContext(object):
 
     def log(self, text, log_level=constants.log.NOTICE):
         log_line = '[%s] %s' % (self.get_id(), text)
-
         log(log_line, log_level)
 
     def log_warning(self, text):

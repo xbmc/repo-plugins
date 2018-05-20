@@ -34,7 +34,6 @@ def index():
 		dvr = "Not available"
 		progimg = ""
 		for _, key, img, prog in match:
-			print "CARALHOOOOOOOOOOOOOOO",key
 			if key.lower() == rtp_channel["id"]:
 				dvr = prog
 				if img.startswith("/"):

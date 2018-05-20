@@ -12,5 +12,3 @@ ADDON = xbmcaddon.Addon()
 kodilogging.config()
 
 plugin.run()
-
-

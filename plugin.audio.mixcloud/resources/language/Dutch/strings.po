@@ -94,6 +94,10 @@ msgctxt "#30116"
 msgid "Account..."
 msgstr "Profiel..."
 
+msgctxt "#30117"
+msgid "Logoff Account"
+msgstr "Account Uitloggen"
+
 
 #search menu
 

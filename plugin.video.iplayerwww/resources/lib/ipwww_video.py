@@ -480,6 +480,9 @@ def ScrapeEpisodes(page_url):
                 name = json_data['initialState']['header']['title']
 
             for item in json_data['initialState']['entities']:
+                item = item.get("props")
+                if not item:
+                    continue
 
                 main_url = None
                 if 'href' in item:
@@ -849,7 +852,9 @@ def ListCategoryFilters(url):
     """Parses the available category filters (if available) and creates directories for selcting them.
     If there are no filters available, all programmes will be listed using GetFilteredCategory.
     """
+    url = url.split('/')[0]
     NEW_URL = 'https://www.bbc.co.uk/iplayer/categories/%s/all?sort=atoz' % url
+
     # Read selected category's page.
     html = OpenURL(NEW_URL)
     # Some categories offer filters, we want to provide these filters as options.

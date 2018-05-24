@@ -35,3 +35,27 @@ msgstr ""
 msgctxt "#30005"
 msgid "New Search"
 msgstr ""
+
+msgctxt "#30011"
+msgid "Login Error"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Check login credentials"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Playback Error"
+msgstr ""
+
+msgctxt "#30101"
+msgid "BT ID"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Credentials"
+msgstr ""

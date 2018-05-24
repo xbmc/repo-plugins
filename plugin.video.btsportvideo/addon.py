@@ -25,12 +25,12 @@
 ###############################################################################
 
 import traceback
-# Workaround for 'Failed to import _strptime because the import lock is held by another thread.'
 from datetime import datetime
 import operator
+# Workaround for 'Failed to import _strptime because the import lock is held by another thread.'
 import _strptime  # pylint: disable=unused-import
 
-from kodiswift import Plugin
+from kodiswift import Plugin, xbmcgui  # pylint: disable=wrong-import-order
 
 from resources.lib import api
 
@@ -40,20 +40,23 @@ PAGE_SIZE = 9
 plugin = Plugin(addon_id='plugin.video.btsportvideo')
 
 
-def categories():
+def category_items():
+    yield {'label': u'[B]{}[/B]'.format('Live Channels'),
+           'path': plugin.url_for('channels')}
     yield {'label': u'[B]{}[/B]'.format(plugin.get_string(30002)),
            'path': plugin.url_for('search')}
+
+    categories = list(api.categories())
     yield {'label': u'[B]{}[/B]'.format(plugin.get_string(30001)),
-           'path': plugin.url_for('show_videos_by_category_first_page', category='all')}
-    for category in api.categories():
-        yield {'label': category,
+           'path': plugin.url_for('show_videos_by_category_first_page',
+                                  path=categories[0].path)}
+    for category in categories[1:]:
+        yield {'label': category.title,
                'path': plugin.url_for('show_videos_by_category_first_page',
-                                      category=category)}
+                                      path=category.path)}
 
 
-def items(func, route, page, **kwargs):
-    videos, npages = func(page=page, page_size=PAGE_SIZE, **kwargs)
-
+def page_link_items(route, page, npages, **kwargs):
     if page > 1:
         yield {
             'label': u'[B]<< {} ({})[/B]'.format(plugin.get_string(30003), page - 1),
@@ -65,6 +68,8 @@ def items(func, route, page, **kwargs):
             'path': plugin.url_for(route, page=page + 1, **kwargs)
         }
 
+
+def video_items(videos):
     for video in videos:
         yield {
             'label': video.title,
@@ -78,9 +83,9 @@ def items(func, route, page, **kwargs):
         }
 
 
-def show_videos(func, route, page, update_listing, **kwargs):
+def show_videos(links, videos, update_listing):
     return plugin.finish(
-        items(func, route, page, **kwargs),
+        list(links) + list(video_items(videos)),
         sort_methods=['playlist_order', 'date', 'title', 'duration'],
         update_listing=update_listing
     )
@@ -96,17 +101,35 @@ def previous_search_items():
         }
 
 
-@plugin.cached_route('/')
+@plugin.cached(ttl=30)
+def avs_session(user, password):
+    if not all((user, password)):
+        plugin.open_settings()
+
+    session = api.login(user, password)
+    if session is None:
+        xbmcgui.Dialog().ok(plugin.get_string(30011), plugin.get_string(30012))
+        return None
+    return api.sport_login(session)
+
+
+@plugin.cached(ttl=7*24*60) # Cache query text for a week
+def query_text(path):
+    return api.query_text(path)
+
+
+@plugin.route('/')
 def index():
-    return list(categories())
+    return list(category_items())
 
 
-@plugin.route('/videos/<category>', name='show_videos_by_category_first_page',
+@plugin.route('/videos/<path>', name='show_videos_by_category_first_page',
               options={'update_listing': False})
-@plugin.route('/videos/<category>/<page>')
-def show_videos_by_category(category, page='1', update_listing=True):
-    return show_videos(api.videos, 'show_videos_by_category', int(page),
-                       update_listing, category=category)
+@plugin.route('/videos/<path>/<page>')
+def show_videos_by_category(path, page='1', update_listing=True):
+    results, npages = api.video_results(query_text(path), int(page), PAGE_SIZE)
+    links = page_link_items('show_videos_by_category', int(page), npages, path=path)
+    return show_videos(links, results, update_listing)
 
 
 @plugin.route('/search/term/<term>', name='show_search_results_first_page',
@@ -114,8 +137,9 @@ def show_videos_by_category(category, page='1', update_listing=True):
 @plugin.route('/search/term/<term>/<page>')
 def show_search_results(term, page='1', update_listing=True):
     plugin.get_storage('searches')[term] = datetime.now()
-    return show_videos(api.search_results, 'show_search_results', int(page),
-                       update_listing, term=term)
+    results, npages = api.search_results(term, int(page), PAGE_SIZE)
+    links = page_link_items('show_search_results', int(page), npages, term=term)
+    return show_videos(links, results, update_listing)
 
 
 @plugin.route('/search/input')
@@ -136,6 +160,30 @@ def search():
     }
     for item in previous_search_items():
         yield item
+
+
+@plugin.cached_route('/channels')
+def channels():
+    return [
+        {
+            'label': u'[B]{}[/B]'.format(channel.name),
+            'path': plugin.url_for('play_channel', channel_id=channel.channel_id),
+            'thumbnail': channel.thumbnail,
+            'is_playable': True
+        }
+        for channel in api.CHANNELS
+    ]
+
+
+@plugin.route('/channels/play/<channel_id>')
+def play_channel(channel_id):
+    session = avs_session(plugin.get_setting('user'), plugin.get_setting('password'))
+    try:
+        url = api.hls_url(session, channel_id=channel_id)
+    except api.BTError as exc:
+        xbmcgui.Dialog().ok(plugin.get_string(30013), "[COLOR=red]{}[/COLOR]".format(exc))
+        url = None
+    plugin.set_resolved_url(url)
 
 
 if __name__ == '__main__':

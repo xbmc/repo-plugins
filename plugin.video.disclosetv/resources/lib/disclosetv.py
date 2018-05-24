@@ -126,8 +126,7 @@ class Disclose(object):
             log('resolveURL, provider = ' + provider)
             url = re.findall('src="(.+?)"',(data['player_code']), flags=re.DOTALL)[0].split('?')[0]
             if provider == 'youtube':
-                if len(re.findall('http[s]?://www.youtube.com/embed', url)) > 0: url = YTURL%(url.split('/embed/')[1])
-                elif len(re.findall('http[s]?://www.youtube.com/watch', url)) > 0: url = YTURL%(url.split('/watch?v=')[1])
+                if len(re.findall('http[s]?://www.youtube', url)) > 0: url = YTURL%(url.rsplit('/',1)[1])
                 elif len(re.findall('http[s]?://youtu.be/', url)) > 0: url = YTURL%(url.split('/youtu.be/')[1])
             elif provider == 'vimeo':
                 if len(re.findall('http[s]?://vimeo.com/', url)) > 0: url = VMURL%(url.split('/vimeo.com/')[1])

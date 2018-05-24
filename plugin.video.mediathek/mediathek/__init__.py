@@ -16,7 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sys, urllib2,urllib, time;
-import socket
+import socket;
+import requests;
 socket.setdefaulttimeout(1);
 
 class SimpleLink(object):
@@ -51,18 +52,21 @@ class DisplayObject(object):
 
 class Mediathek(object):
   def loadPage(self,url, values = None, maxTimeout = None):
-    try:
+    #try:
       safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
-
-      if(values is not None):
-        data = urllib.urlencode(values)
-        req = urllib2.Request(safe_url, data)
-      else:
-        req = urllib2.Request(safe_url)
-      req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20100101 Firefox/15.0.1')
-      req.add_header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
-      req.add_header('Accept-Language', 'de-de,de;q=0.8,en-us;q=0.5,en;q=0.3')
-      req.add_header('Accept-Charset', 'utf-8')
+      self.gui.log("download %s"%(safe_url));
+      #if(values is not None):
+      #  data = urllib.urlencode(values)
+      #  req = urllib2.Request(safe_url, data)
+      #else:
+      #  req = urllib2.Request(safe_url)
+      #req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20100101 Firefox/15.0.1')
+      #req.add_header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+      #req.add_header('Accept-Language', 'de-de,de;q=0.8,en-us;q=0.5,en;q=0.3')
+      #req.add_header('Accept-Charset', 'utf-8')
+      self.gui.log("download %s"%(safe_url));
+      content = requests.get(safe_url);
+      return content.text.encode(content.encoding);
 
       if maxTimeout == None:
         maxTimeout = 60;
@@ -74,9 +78,9 @@ class Mediathek(object):
           if waittime > 0:
             time.sleep(waittime);
           self.gui.log("download %s %d"%(safe_url,waittime));
-          sock = urllib2.urlopen( req )
-          doc = sock.read();
-          sock.close()
+          #sock = urllib2.urlopen( req )
+          doc = requests.get(sage_url);
+          #sock.close()
         except:
           if(waittime == 0):
             waittime = 1;
@@ -90,8 +94,9 @@ class Mediathek(object):
           return doc;
       else:
         return ''
-    except:
-      return ''
+    ##except:
+     # self.gui.log("gnaaa %s"%(safe_url));
+     # return ''
 
   def buildMenu(self, path, treeNode = None):
     if(isinstance(path, (str,unicode))):

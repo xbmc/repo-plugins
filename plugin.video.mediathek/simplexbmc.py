@@ -71,7 +71,10 @@ class SimpleXbmcGui(object):
         listItem.setProperty('IsPlayable', 'true');
         xbmcplugin.addDirectoryItem(int(sys.argv[1]),link.basePath,listItem,False,objectCount)
     else:
-      url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(displayObject.link))
+      try:
+        url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(displayObject.link))
+      except:
+        url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(displayObject.link.encode('utf-8')))
       xbmcplugin.addDirectoryItem(int(sys.argv[1]),url,listItem,True,objectCount)
 
   def BuildMeteData(self, displayObject):

@@ -127,13 +127,13 @@ class KIKA(Mediathek):
     count = initCount + len(videoLinks)
 
     self.extractSubFolders(htmlPage,count);
-    displayObects = set()
+    displayObjects = set()
     for link in videoLinks:
       displayObject = self.buildVideoLink(link);
-      displayObects.add(displayObject);
-    displayObects_sorted = sorted(displayObects, key=lambda displayObject: displayObject.date)
-    self.gui.log("found %d display obj "%len(displayObects))
-    for displayObject in displayObects_sorted:
+      displayObjects.add(displayObject);
+    displayObjects_sorted = sorted(displayObjects, key=lambda displayObject: displayObject.date)
+    self.gui.log("found %d display obj "%len(displayObjects))
+    for displayObject in displayObjects_sorted:
       self.gui.buildVideoLink(displayObject,self, count);
 
   def extractVideoLinks(self,videoLinks,htmlElements):
@@ -158,7 +158,7 @@ class KIKA(Mediathek):
     htmlElements = htmlPage.select(self.selector_seriesPages) + htmlPage.select(self.selector_allVideoPage);
     self.gui.log("found %d page links"%len(htmlElements))
     count = initCount + len(htmlElements)
-    displayObects = set()
+    displayObjects = set()
     for item in htmlElements:
       link = self.rootLink+item['href'];
       title = item['title'];
@@ -169,8 +169,8 @@ class KIKA(Mediathek):
       if(title == ""):
         continue;
       displayObject = DisplayObject("Alle Videos",title,"","",link,False);
-      displayObects.add(displayObject);
-    displayObects_sorted = sorted(displayObects, key=lambda displayObject: displayObject.title)
-    for displayObject in displayObects_sorted:
+      displayObjects.add(displayObject);
+    displayObjects_sorted = sorted(displayObjects, key=lambda displayObject: displayObject.title)
+    for displayObject in displayObjects_sorted:
       self.gui.buildVideoLink(displayObject,self, count);
     return count;

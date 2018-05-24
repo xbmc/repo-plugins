@@ -77,7 +77,7 @@ else:
   mediathek = factory.getMediathek(mediathekName,gui);
     
   if(action == "openTopicPage"):
-    link = urllib.unquote_plus(params.get("link", ""));
+    link = urllib.unquote_plus(params.get("link", "")).decode('UTF-8');
     gui.log(link);
     mediathek.buildPageMenu(link, 0);
   elif(action == "openPlayList"):

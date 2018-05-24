@@ -89,7 +89,7 @@ class TUFFTV(object):
                 
     def buildGuide(self, live=False):
         log('buildGuide, live = ' + str(live))
-        skip  = 0
+        idx   = 0
         url   = self.buildLive()
         now   = datetime.datetime.now()
         tnow  = datetime.datetime.strptime((datetime.datetime.time(now)).strftime('%I:%M %p'), '%I:%M %p')
@@ -100,7 +100,8 @@ class TUFFTV(object):
         for item in items:
             item = item.find_all('td')
             try: 
-                AMPM = 'AM' if skip < 12 else 'PM'
+                stime = int((item[0].get_text()).split(':')[0])
+                AMPM = 'PM' if idx > 3 and stime >= 12 else 'AM'
                 starttime = '%s %s'%(item[0].get_text(),AMPM)
                 title = item[dayofweek].get_text().replace('[block]2','').replace('[block]4','')
                 if title == '[/block]': continue
@@ -108,7 +109,7 @@ class TUFFTV(object):
                 startDate  = (datetime.datetime.strptime(starttime, '%I:%M %p'))
                 endDate1   = (startDate + datetime.timedelta(minutes=30))
                 endDate2   = (startDate + datetime.timedelta(minutes=60))
-                skip += 1
+                idx += 1
                 if live and (tnow >= startDate and (tnow <= endDate1 or tnow <= endDate2)): return label
                 elif live: continue
                 airdate    = now.strftime('%Y-%m-%d')

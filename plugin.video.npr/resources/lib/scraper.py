@@ -78,7 +78,7 @@ class myAddon(t1mAddon):
       a = re.compile("data-jwplayer='(.+?)'>", re.DOTALL).search(html)
       if a is not None:
            a = json.loads(a.group(1))
-           finalurl = a['sources'][1]['file']
+           finalurl = a['sources'][0]['file']
       else:
            videoid = re.compile('<div class="video-wrap">.+?src="https://www\.youtube\.com/embed/(.+?)\?',re.DOTALL).search(html)
            if videoid is not None:

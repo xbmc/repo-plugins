@@ -72,7 +72,9 @@ class myAddon(t1mAddon):
      m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
      a = json.loads(html[m.start(1):m.end(1)+1])
      a = a.get('data',{'x':None}).get('programmedContent',{'x':None}).get('videoPlayer',{'x':None}).get('mediaDTO',{'x':None})
-     suburl = a.get('captions',[{'x':None}])[0].get('URL')
+     suburl = a.get('captions',[{'x':None}])
+     if not suburl is None:
+         suburl = suburl[0].get('URL')
      b = a.get('IOSRenditions',[])
      u = None
      rate = 0

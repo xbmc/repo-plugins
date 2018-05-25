@@ -17,11 +17,11 @@
 # along with TVCatchup.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, re, traceback
+import os, sys, time, datetime, re, traceback, tzlocal
 import urlparse, urllib, urllib2, socket, json
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
-from pytz import timezone
+from pytz import timezone,utc
 from bs4 import BeautifulSoup
 from simplecache import SimpleCache, use_cache
 
@@ -41,6 +41,7 @@ TIMEOUT       = 15
 CONTENT_TYPE  = 'episodes'
 DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 BASE_URL      = 'http://www.tvcatchup.com'
+ICON_URL      = 'http://images-cache.tvcatchup.com/NEW/images/channels/hover/channel_%d.png'
 LIVE_URL      = BASE_URL + '/channels'
 GUIDE_URL     = BASE_URL + '/tv-guide'
 LOGO          = os.path.join(ADDON_PATH,'resources','images','%s.png')
@@ -69,6 +70,14 @@ class TVCatchup(object):
         self.cache   = SimpleCache()
         
         
+    def getLocaltime(self, timeString):
+        ltime = datetime.datetime.strptime(timeString, '%H:%M').time()
+        ldate = datetime.datetime.now(timezone('Europe/London')).date()
+        lTime = (datetime.datetime.combine(ldate, ltime))
+        lTime = utc.localize(lTime)
+        return lTime.astimezone(timezone(str(tzlocal.get_localzone())))
+
+
     def getTVCtime(self):
         return datetime.datetime.now(timezone('Europe/London'))
 
@@ -123,10 +132,11 @@ class TVCatchup(object):
                 except: aired = self.getTVCtime().strftime('%Y-%m-%d')
                 items = channel('div' , {'class': 'hide'})
                 for item in items:
-                    try: 
-                        time  = trimString(item.find_all('span')[0].get_text())
-                        dur   = int((abs(eval(time.replace(':','.'))) * 60) * 60)
-                        start = datetime.datetime.strptime(time.split('-')[0], '%H:%M').strftime('%I:%M %p')
+                    try:  
+                        stime = trimString(item.find_all('span')[0].get_text())
+                        dur   = int((abs(eval(stime.replace(':','.'))) * 60) * 60)
+                        start = self.getLocaltime(stime.split('-')[0])
+                        start = start.strftime('%I:%M %p')
                     except: continue
                     label = '%s: %s - %s'%(start,chname,cleanString(item.get_text()).split('\n')[0])
                     try: desc = trimString(item.find_all('br')[0].get_text())
@@ -165,14 +175,13 @@ class TVCatchup(object):
         except: aired = self.getTVCtime().strftime('%Y-%m-%d')
         items = channel('div' , {'class': 'hide'})
         for item in items:
-            try: 
-                ttime = trimString(item.find_all('span')[0].get_text())
-                dur   = int((abs(eval(ttime.replace(':','.'))) * 60) * 60)
-                start = datetime.datetime.strptime(ttime.split('-')[0], '%H:%M').strftime('%I:%M %p')
+            try:  
+                stime  = trimString(item.find_all('span')[0].get_text())
+                dur   = int((abs(eval(stime.replace(':','.'))) * 60) * 60)
                 title = cleanString(item.get_text()).split('\n')[0]
                 label = '%s - %s'%(chname,title)
-                starttime = (datetime.datetime.strptime('%s - %s'%(aired,start), '%Y-%m-%d - %I:%M %p'))
-                starttime = time.mktime(starttime.timetuple())
+                start = self.getLocaltime(stime.split('-')[0])
+                starttime = time.mktime(start.timetuple())
             except: continue
             try: desc = trimString(item.find_all('br')[0].get_text())
             except: desc = ''

@@ -169,7 +169,10 @@ def channels():
             'label': u'[B]{}[/B]'.format(channel.name),
             'path': plugin.url_for('play_channel', channel_id=channel.channel_id),
             'thumbnail': channel.thumbnail,
-            'is_playable': True
+            'is_playable': True,
+            'info': {
+                'title': channel.name
+            }
         }
         for channel in api.CHANNELS
     ]

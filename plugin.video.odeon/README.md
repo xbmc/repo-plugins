@@ -14,6 +14,6 @@ CINE.AR PLAY is the free video on demand platform where you will find the best A
 CINE.AR PLAY es la plataforma de video a demanda gratuita para ver todos los contenidos nacionales donde quieras, cuando quieras. Las películas y las series, los documentales y los cortos, las nuevas miradas y los clásicos de siempre para disfrutarlos desde cualquier dispositivo.
 
 ### Addtional information
-- https://www.cine.ar/play
+- https://play.cine.ar/
 - https://arsat.github.io/odeon-kodi/
 - http://forum.kodi.tv/showthread.php?tid=296742

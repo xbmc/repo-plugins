@@ -76,26 +76,6 @@ msgctxt "#30015"
 msgid "Featured"
 msgstr ""
 
-msgctxt "#30016"
-msgid "Play from here"
-msgstr ""
-
-msgctxt "#30017"
-msgid "Continue playing"
-msgstr ""
-
-msgctxt "#30018"
-msgid "Show info"
-msgstr ""
-
-msgctxt "#30019"
-msgid "Mark as watched"
-msgstr ""
-
-msgctxt "#30020"
-msgid "Mark as unwatched"
-msgstr ""
-
 msgctxt "#30021"
 msgid "Add to mi sala"
 msgstr ""
@@ -150,6 +130,10 @@ msgstr ""
 
 msgctxt "#30034"
 msgid "To rent a production, please do so from the webpage."
+msgstr ""
+
+msgctxt "#30035"
+msgid "Movie unavailable. Please retry later."
 msgstr ""
 
 msgctxt "#30100"

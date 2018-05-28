@@ -109,6 +109,14 @@ def list_profiles():
     xbmcplugin.endOfDirectory(addon_handle)
 
 
+def get_media(title):
+    media = {"culas": "movies.png", "Serie": "series.png", "Corto": "shorts.png", "Especial": "specials.png", "Estreno": "premieres.png"}
+    for k, v in media.iteritems():
+        if k in title:
+            return v
+    return "movies.png"
+
+
 def root_menu(params):
     if params['conclave'] == 'True':
         pin = xbmcgui.Dialog().input(translation(30006) + params['alias'], type=xbmcgui.INPUT_NUMERIC)
@@ -122,17 +130,17 @@ def root_menu(params):
             return
 
     # Home / Inicio
-    add_directory_item(translation(30009), 'list_tiras', 'folder.png')
+    add_directory_item(translation(30009), 'list_tiras', 'explore.png')
     # Últimas vistas
-    add_directory_item(translation(30010), 'list_prods&url=%s' % quote('tira/histoprods'), 'folder-movies.png')
+    add_directory_item(translation(30010), 'list_prods&url=%s' % quote('tira/histoprods'), 'last-seen.png')
     # Películas, Series, Cortos, Especiales para perfiles no infantiles
     categories = json_request('navbar?perfil={0}'.format(PID))
     for tipo in sorted(categories['tipos'], key=lambda cat: cat['orden']):
-        add_directory_item(tipo['text'], 'list_prods&url=%s' % quote('tipo/' + tipo['tag']), 'folder-movies.png')
+        add_directory_item(tipo['text'], 'list_prods&url=%s' % quote('tipo/' + tipo['tag']), get_media(tipo['text']))
     # Explorar
-    add_directory_item(translation(30011), 'list_generos', 'folder.png')
+    add_directory_item(translation(30011), 'list_generos', 'explore.png')
     # Mi sala
-    add_directory_item(translation(30012), 'list_prods&url=%s' % quote('tira/misala'), 'folder-movies.png')
+    add_directory_item(translation(30012), 'list_prods&url=%s' % quote('tira/misala'), 'mi-sala.png')
     # Búsqueda
     add_directory_item(translation(30013), 'search', 'search.png')
     # Cerrar sesión
@@ -144,11 +152,11 @@ def root_menu(params):
 def list_tiras(params):
     """ Explorar por tiras """
     # primero los destacados, aka banner
-    add_directory_item(translation(30015), 'list_prods&url=%s' % quote('tira/banner'), 'folder-movies.png')
+    add_directory_item(translation(30015), 'list_prods&url=%s' % quote('tira/banner'), 'movies.png')
 
     # tiras dinámicas
     for tira in json_request('tiras?perfil={0}'.format(PID)):
-        add_directory_item(tira['titulo'], 'list_prods&url=%s' % quote('tira/' + str(tira['id'])), 'folder-movies.png')
+        add_directory_item(tira['titulo'], 'list_prods&url=%s' % quote('tira/' + str(tira['id'])), get_media(tira['titulo']))
 
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -158,7 +166,7 @@ def list_generos(params):
     categories = json_request('navbar?perfil={0}'.format(PID))
     for tipo in categories['generos']:
         iurl = quote('genre/' + quote(tipo['nom'].encode('utf8', 'ignore')))
-        add_directory_item(tipo['nom'], 'list_prods&url=%s' % iurl, 'folder-movies.png')
+        add_directory_item(tipo['nom'], 'list_prods&url=%s' % iurl, 'movies.png')
 
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -190,7 +198,7 @@ def list_prods(params):
     if len(prod_list['prods']) == items:
         query = 'list_prods&url={0}&pag={1}'.format(quote(params['url']), page+1)
         if orden: query += '&orden={0}'.format(orden)
-        add_directory_item(translation(30031), query, 'folder-movies.png')
+        add_directory_item(translation(30031), query, 'movies.png')
 
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -219,7 +227,7 @@ def list_subprods(params):
             for season in sorted(seasons):
                 query = 'list_subprods&source={0}&sid={1}&season={2}&full={3}'.format(params['source'], params['sid'], season, 1)
                 art = {'fanart': image_url(prod_list.get('ban'), 'odeon_slider')}
-                add_directory_item('Temporada {0}'.format(season), query, 'folder-movies.png', art=art, info=get_info(prod_list))
+                add_directory_item('Temporada {0}'.format(season), query, 'series.png', art=art, info=get_info(prod_list))
         else:
             # hay una sola temporada
             params['full'] = '1'
@@ -305,19 +313,6 @@ def add_film_item(prod, params):
 
     context_menu = []
 
-    # reproducir/continuar viendo: por menu contextual
-    if not has_subprods:
-        menu_text = translation(30016) if percen < 2 else translation(30017)
-        context_menu.append((menu_text, run_plugin('play&context=1', prod, params)))
-
-    # ficha técnica: Action(Info) no siempre está disponible por teclado
-    context_menu.append((translation(30018), run_plugin('show_info', prod, params)))
-
-    # marcar como vista: no para cabeceras de series y compilados
-    if not has_subprods:
-        menu_text = translation(30019) if not prod['vista']['completa'] else translation(30020)
-        context_menu.append((menu_text, run_plugin('toggle_setview', prod, params)))
-
     # agregar/quitar a mi sala: no para capitulos, sí para todos los demás
     if 'serie' not in prod['tags']:
         menu_text = translation(30021) if not prod.get('misala') else translation(30022)
@@ -352,12 +347,6 @@ def add_film_item(prod, params):
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=item, isFolder=is_folder)
 
 
-def toggle_setview(params):
-    path = '{0}/vista/{1}/{2}'.format(params['source'], PID, params['sid'])
-    json_request(path)
-    xbmc.executebuiltin("Container.Refresh")
-
-
 def toggle_misala(params):
     path = '{0}/amisala/{1}/{2}'.format(params['source'], PID, params['sid'])
     json_request(path)
@@ -375,10 +364,6 @@ def user_qualify(params):
     else:
         xbmcgui.Dialog().ok('Error ({0})'.format(response.status_code), response.content)
         sys.exit(0)
-
-
-def show_info(params):
-    xbmc.executebuiltin('Action(Info)')
 
 
 def sort(params):
@@ -406,7 +391,7 @@ def heartbeat(source, sid, currentTime, totalTime):
     # xbmc.executebuiltin('Notification(%s, %s, %d, %s)'%(addon_name, 'Beat ' + str(currentTime/60), 1000, addon_icon))
 
 
-def monitor(source, sid, seek=None):
+def monitor(source, sid):
     player = xbmc.Player()
     monitor = xbmc.Monitor()
 
@@ -421,10 +406,6 @@ def monitor(source, sid, seek=None):
         xbmcgui.Dialog().ok(addon_name, translation(30028))
         return
 
-    if seek: player.seekTime(float(seek))
-    if monitor.waitForAbort(3): return
-    if not player.isPlayingVideo(): return
-
     lastTime = player.getTime()
     beatTime = lastTime - 60
     totalTime = player.getTotalTime()
@@ -432,7 +413,7 @@ def monitor(source, sid, seek=None):
     while player.isPlayingVideo() and not monitor.abortRequested():
         currentTime = player.getTime()
         if abs(currentTime - lastTime) > 15:
-            # seek
+            # user seek
             heartbeat(source, sid, currentTime, totalTime)
             beatTime = currentTime
 
@@ -452,28 +433,14 @@ def play(params):
     response = requests.get(url, headers=get_headers(auth=utils.digest(clave)))
     data, errmsg = decode_json(response)
     if data:
-        if params.has_key('context'):
-            # acceso por menu contextual debe setear metadata
-            path = '{0}/prod/{1}?perfil={2}'.format(params['source'], params['sid'], PID)
-            prod = json_request(path)
-
-            info = get_info(prod)
-            item = xbmcgui.ListItem(label=info['title'], path=data["url"])
-            item.setInfo('video', info)
-            item.setArt(get_art(prod))
-
-            item.addStreamInfo('video', {'codec': 'h264'})
-            item.addStreamInfo('audio', {'codec': 'aac', 'language' : 'es'})
-
-            xbmc.Player().play(data["url"], item)
-            seek = data.get('seek')
-        else:
-            # player normal Kodi
+        response = requests.get(data["url"], headers=get_headers(auth=utils.digest(clave)))
+        if response.status_code == 200:
             item = xbmcgui.ListItem(path=data["url"])
             xbmcplugin.setResolvedUrl(addon_handle, True, item)
-            seek = None # es automático
-
-        monitor(params['source'], params['sid'], seek)
+            monitor(params['source'], params['sid'])
+        else:
+            show_error('Error Player', response.status_code, translation(30035))
+            xbmc.sleep(1000)
     else:
         show_error('Error Player', response.status_code, errmsg)
 

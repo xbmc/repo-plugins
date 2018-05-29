@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.odeon"
-       name="Odeon" version="1.3.2"
+       name="Odeon" version="1.3.4"
        provider-name="ARSAT">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
@@ -20,10 +20,10 @@
         <license>GNU General Public License, Version 3</license>
         <source>https://github.com/arsat/odeon-kodi</source>
         <forum>http://forum.kodi.tv/showthread.php?tid=296742</forum>
-        <website>http://www.cine.ar/play</website>
+        <website>https://play.cine.ar/</website>
         <email>ayuda.play@cine.ar</email>
-        <news>v1.3.2  (2017-12-01)
-        - Rebranding to Cine.ar Play.
+        <news>v1.3.4  (2018-05-29)
+        - New icon set.
         - Minor bug fix.</news>
     </extension>
 </addon>

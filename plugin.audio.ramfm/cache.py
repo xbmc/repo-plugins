@@ -1,5 +1,5 @@
 
-#       Copyright (C) 2013-2014
+#       Copyright (C)
 #       Sean Poyser (seanpoyser@gmail.com)
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -18,54 +18,75 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 
-import xbmc
-import xbmcaddon
 
 import os
 import time
+import glob
 import urllib2
 
+
 import sfile
+import xbmc
+import xbmcaddon
 
 
 ADDONID  = 'plugin.audio.ramfm'
 ADDON    = xbmcaddon.Addon(ADDONID)
 
 CacheDir  = os.path.join(ADDON.getAddonInfo('profile'), 'cache')
-CacheSize = 100
+CacheSize = 200
+
+
+sfile.makedirs(CacheDir)
 
 
 def clearCache():
-    sfile.rmtree(CacheDir)
-    while sfile.exists(CacheDir):
-        xbmc.sleep(50)
+    try:
+        sfile.rmtree(CacheDir)
+        while sfile.isdir(CacheDir):
+            xbmc.sleep(50)        
+    except:
+        pass
+
     checkCacheDir()
 
 
 def checkCacheDir():
+    try:
+        if sfile.isdir(CacheDir):
+            return
+    except:
+        pass
+
     sfile.makedirs(CacheDir)
 
 
-def getURLNoCache(url, agent=None, tidy=True):
+
+def getURLNoCache(url, agent=None):
     req = urllib2.Request(url)
+
     if agent:
         req.add_header('User-Agent', agent)
 
-    response = urllib2.urlopen(req)
-    html     = response.read()
-    response.close()
+    try:
+        response = urllib2.urlopen(req)
+        html     = response.read()
+        response.close()
+    except:
+        html = ''
 
-    if tidy:
-        html = html.replace('\r', '').replace('\n', '').replace('\t', '')
+    html = html.replace('&apos;', '\'')
 
     return html
 
 
-def getURL(url, maxSec=0, agent=None, tidy=True):
+def getURL(url, maxSec=0, agent=None):
     purgeCache()
     
     if url == None:
         return None
+
+    #return getCachedData(url)
 
     if maxSec > 0:
         timestamp = getTimestamp(url)
@@ -73,38 +94,42 @@ def getURL(url, maxSec=0, agent=None, tidy=True):
             if (time.time() - timestamp) <= maxSec:
                 return getCachedData(url)
 			
-    data = getURLNoCache(url, agent, tidy)
+    data = getURLNoCache(url, agent)
     addToCache(url, data)
     return data
 
 
-def getTimestamp(url):
+def getCacheName(url):
     cacheKey  = createKey(url)
     cachePath = os.path.join(CacheDir, cacheKey)
+    return cachePath
 
-    try:    return sfile.mtime(cachePath)
-    except: pass
+
+
+def getTimestamp(url):
+    cachePath = getCacheName(url)
+
+    if sfile.isfile(cachePath):
+        try:    return sfile.mtime(cachePath)
+        except: pass
 
     return 0
 
 
 def getCachedData(url):
-    cacheKey  = createKey(url)
-    cachePath = os.path.join(CacheDir, cacheKey)
-    data      = sfile.read(cachePath)
-
+    cachePath = getCacheName(url)
+    data = sfile.read(cachePath)
     return data
 
 
 def addToCache(url, data):
+    if len(data) < 100:
+        return
+
     checkCacheDir()
 
-    cacheKey  = createKey(url)
-    cachePath = os.path.join(CacheDir, cacheKey)
-    f         = sfile.file(cachePath, 'w')
-
-    f.write(data)
-    f.close()
+    cachePath = getCacheName(url)
+    sfile.write(cachePath, data)
 
     purgeCache()
 
@@ -119,19 +144,19 @@ def createKey(url):
 
         
 def purgeCache():
-    files   = sfile.glob(CacheDir)
+    files  = sfile.glob(CacheDir)
     nFiles = len(files)
 
     try:
-        while nFiles > gCacheSize:            
+        while nFiles > CacheSize:   
             oldestFile = getOldestFile(files)
+            path       = os.path.join(CacheDir, oldestFile)
  
-            while sfile.exists(oldestFile):
-                try:    sfile.remove(oldestFile)
-                except: pass
+            sfile.remove(path)
 
             files  = sfile.glob(CacheDir)
             nFiles = len(files)
+
     except:
         pass
 
@@ -141,11 +166,11 @@ def getOldestFile(files):
         return None
     
     now    = time.time()
-    oldest = (files[0], now - sfile.ctime(files[0]))
+    oldest = [files[0], now - sfile.ctime(files[0])]
 
     for f in files[1:]:
         age = now - sfile.ctime(f)
         if age > oldest[1]:
-            oldest = (f, age)
+            oldest = [f, age]
 
     return oldest[0]

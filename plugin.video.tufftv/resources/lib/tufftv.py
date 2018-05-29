@@ -90,6 +90,7 @@ class TUFFTV(object):
     def buildGuide(self, live=False):
         log('buildGuide, live = ' + str(live))
         idx   = 0
+        AMPM  = 'AM'
         url   = self.buildLive()
         now   = datetime.datetime.now()
         tnow  = datetime.datetime.strptime((datetime.datetime.time(now)).strftime('%I:%M %p'), '%I:%M %p')
@@ -101,7 +102,7 @@ class TUFFTV(object):
             item = item.find_all('td')
             try: 
                 stime = int((item[0].get_text()).split(':')[0])
-                AMPM = 'PM' if idx > 3 and stime >= 12 else 'AM'
+                if idx > 6 and stime == 12: AMPM = 'PM'
                 starttime = '%s %s'%(item[0].get_text(),AMPM)
                 title = item[dayofweek].get_text().replace('[block]2','').replace('[block]4','')
                 if title == '[/block]': continue

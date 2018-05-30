@@ -25,6 +25,8 @@ import xbmcgui
 import urllib
 import urllib2
 
+import json
+
 import re
 
 import datetime
@@ -32,7 +34,7 @@ import time
 
 import os
 
-import quicknet
+import cache
 
 
 ADDONID  = 'plugin.audio.ramfm'
@@ -75,11 +77,21 @@ MODE_ARTIST = 1200
 MODE_IGNORE = 1300
 
 
-URL_320 = 'http://josvermeer.shoutcaststream.com:8591'
+URL_320 = 'http://ramfm.shoutcaststream.com:8513'
+URL_192 = 'http://uk1-vn.mixstream.net:9866'
+URL_128 = 'http://uk2-vn.webcast-server.net:8018'
+URL_64  = 'http://usa3-vn.mixstream.net:8018'
+
+DEFAULTS = {}
+DEFAULTS['URL_320'] = URL_320
+DEFAULTS['URL_192'] = URL_192
+DEFAULTS['URL_128'] = URL_128
+DEFAULTS['URL_64']  = URL_64
 
 
-def DialogOK(title, line1, line2='', line3=''):
-    xbmcgui.Dialog().ok(title, line1, line2, line3)
+def DialogOK(title, line1='', line2='', line3=''):
+    xbmcgui.Dialog().ok(title, str(line1), str(line2), str(line3))
+
 
 def CheckVersion():
     prev = ADDON.getSetting('VERSION')
@@ -91,7 +103,7 @@ def CheckVersion():
     ADDON.setSetting('VERSION', curr)
 
     #if prev == '0.0.0':
-    DialogOK(TITLE + ' - ' + VERSION, GETTEXT(30017), GETTEXT(30018) , GETTEXT(30019)+' :-)')
+    DialogOK('%s - %s' % (TITLE, VERSION), GETTEXT(30017), GETTEXT(30018), '%s :-)' % GETTEXT(30019))
 
 
 def DownloaderClass(url, dest, dp): 
@@ -261,7 +273,7 @@ def IsPlayingRAM():
         if not xbmc.Player().isPlayingAudio():
             return False
 
-        resp = quicknet.getURL(URL, 1800)
+        resp = cache.getURL(URL, 1800)
 
         pl       = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)[0]
         filename = pl.getfilename()
@@ -301,11 +313,11 @@ def RequestLetter(letter):
         return
 
     if letter == '0-9':
-        url = 'http://ramfm.org/momentum/cyan/playlist0.php'
+        url = 'http://ramfm.org/momentum/cyan/playlist.php?q=0'
     else:
-        url = 'http://ramfm.org/momentum/cyan/playlist%s.php' % letter
+        url = 'http://ramfm.org/momentum/cyan/playlist.php?q=%s' % letter
 
-    response = quicknet.getURL(url, 1800)
+    response = cache.getURL(url, 1800)
 
     hide = ADDON.getSetting('HIDE').lower() == 'true'
 
@@ -316,10 +328,10 @@ def RequestLetter(letter):
     for item in items:
         item = item.replace(' (& ', ' (& ')
 
-        while '&nbsp;&nbsp;' in item:
-            item = item.replace('&nbsp;&nbsp;', '&nbsp;')
-
         item = item.replace('&nbsp;', ' ')
+
+        while '  ' in item:
+            item = item.replace('  ', ' ')
 
         mode = MODE_FREE
 
@@ -330,21 +342,31 @@ def RequestLetter(letter):
 
         title = None
 
-        if mode == MODE_FREE:                      
-            match     = re.compile('.+?<a href="javascript:request\((.+?)\)" title="(.+?)">.+?<h2>(.+?)</h2>.+?-->').findall(item)[0]
-            info      = match[0]
-            title     = match[1]
-            artist    = match[2].split('-', 1)[0].strip()
-            image     = ''
-            available = True
-            
+        if mode == MODE_FREE:
+            try:                    
+                match     = re.compile('<a href="javascript:request\((.+?)\)" title="(.+?)">').findall(item)[0]
+                title     = match[1]
+                info      = match[0]
+                match     = re.compile('<h2>(.+?)</h2>').findall(item)
+                artist    = match[0].split(' - ', 1)[0].strip()
+                image     = ''
+                available = True
+            except:
+                continue
+
         if mode == MODE_ARTIST or mode == MODE_SONG:
-            match     = re.compile('.+?title="(.+?)">.+?<p>(.+?)</p></header></a></section><!-- end song recently played / artists recently played -->').findall(item)[0]
-            info      = match[0]
-            title     = match[1].rsplit('(', 1)[0].strip()
-            artist    = match[1].split('-', 1)[0].strip()
-            image     = ''
-            available = False
+            try:
+                match         = re.compile('title="(.+?)">').findall(item) #.+?<p>(.+?)</p></header></a></section><!-- end song recently played /  artists recently played -->').findall(item)[0]
+                info          = match[0]
+                match         = re.compile('<p>(.+?)</p>').findall(item)[0]
+                title         = match.rsplit('(', 1)[0].strip()
+                artist, title = title.split(' - ', 1)
+                artist        = artist.strip()    
+                title         = title.strip()    
+                image     = ''
+                available = False
+            except:
+                continue
 
         if not title:
             continue
@@ -380,6 +402,7 @@ def RequestLetter(letter):
             addUnavailable(title, artist, image, info)
 
 
+
 def clean(name):
     name = name.replace('&#233;', 'e')
     name = name.replace('&amp;',  '&')
@@ -389,13 +412,13 @@ def clean(name):
 
 
 def addAvailable(title, artist, image, request):
-    #image = 'http://ramfm.org/artistpic/%s' % image.replace(' ', '%20')
     image = ICON   
     name  = title
 
     if name.startswith('Request'):
         name  = name.split('Request', 1)[-1]
 
+    name = '%s - %s' % (artist, name)
     name = clean(name)
     
     id   = request.split(',')[0]
@@ -411,15 +434,12 @@ def addAvailable(title, artist, image, request):
 
 
 def addUnavailable(title, artist, image, reason):
-    xbmc.log('title %s'  % title)
-    xbmc.log('artist %s' % artist)
-    xbmc.log('image %s'  % image)
-    xbmc.log('reason %s' % reason)
-    #image  = 'http://ramfm.org/artistpic/%s' % image.replace(' ', '%20')
     image = ICON   
     name   = title + '[I] (%s)[/I]' % reason
+
+    name = '%s - %s' % (artist, name)
+    name   = clean(name)
     name   = '[COLOR=FFFF0000]' + name + '[/COLOR]'
-    name   = clean(name)  
         
     u    = sys.argv[0] 
     u   += '?mode=' + str(mode)
@@ -435,31 +455,19 @@ def getURL():
     if kbps == 'false': # for backward compatible
         kbps = '64'
 
-    try:
-        if kbps == '320':
-            return URL_320
+    response = cache.getURL('http://ramfm.org/sam_files/streams.txt', maxSec=86400)
 
-        lines = urllib2.urlopen(URL).readlines()
+    streams = json.loads(response)
 
-        for line in lines:
-            try:
-                items = line.split('=', 1)
-                attr  = items[0].lower()
+    key = 'URL_%s' % kbps
 
-                if attr.startswith('title') and kbps in items[1]:
-                    attr = attr.replace('title', 'file')
-                    for line in lines:
-                        if line.lower().startswith(attr):
-                            return line.split('=', 1)[-1].strip()                
+    if key in streams:
+        return streams[key]
 
-            except:
-                pass
+    try:    return DEFAULTS[key]
+    except: pass
 
-    except:
-        pass
-
-    return URL
-
+    return ''
 
 
 def RequestURL(url):  

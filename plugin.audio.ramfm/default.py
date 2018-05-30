@@ -89,7 +89,6 @@ DEFAULTS['URL_128'] = URL_128
 DEFAULTS['URL_64']  = URL_64
 
 
-
 def DialogOK(title, line1='', line2='', line3=''):
     xbmcgui.Dialog().ok(title, str(line1), str(line2), str(line3))
 

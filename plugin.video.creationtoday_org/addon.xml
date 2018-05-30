@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.creationtoday_org" version="1.0.1" name="Creation Today" provider-name="Romans I XVI">
+<addon id="plugin.video.creationtoday_org" version="1.0.2" name="Creation Today" provider-name="Romans I XVI">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
-        <import addon="script.module.urlresolver" version="2.1.2"/>
 	<import addon="script.module.t0mm0.common" version="2.1.0"/>
 	<import addon="script.module.beautifulsoup4" version="4.3.1"/>
     </requires>
@@ -11,8 +10,8 @@
     </extension>
     <extension point="xbmc.addon.metadata">
 	<language />
-        <summary>Creation Today</summary>
-        <description>Creation Today is a leading Christian-apologetics ministry, defending the literal interpretation of the Genesis creation account from the theory of evolution.[CR][CR]This add-on gives access to all of the videos available on creationtoday.org. [CR][CR]The Creation Today Show, Creation Minute, Creation Bytes, and Kent Hovind's seminars and debates.</description>
+        <summary lang="en">Creation Today</summary>
+        <description lang="en">Creation Today is a leading Christian-apologetics ministry, defending the literal interpretation of the Genesis creation account from the theory of evolution.[CR][CR]This add-on gives access to all of the videos available on creationtoday.org. [CR][CR]The Creation Today Show, Creation Minute, Creation Bytes, and Kent Hovind's seminars and debates.</description>
         <platform>all</platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
         <forum>http://forum.xbmc.org/showthread.php?tid=183376</forum>

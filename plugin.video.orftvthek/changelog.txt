@@ -1,3 +1,9 @@
+0.8.2
+- fixed 403 errors caused by uncommon UA
+
+0.8.1
+- fixed issue #56: db entries for the addon now start with plugin://
+
 0.8.0
 - Restart Option working (inputstream.adaptive needed)
 - minor changes and optimizations for the serviceAPI Scraper

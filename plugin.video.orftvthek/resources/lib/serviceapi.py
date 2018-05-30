@@ -24,6 +24,7 @@ class serviceAPI(Scraper):
 	__urlTips       = 'page/startpage/tips'
 	__urlTopics     = 'topics/overview?limit=1000'
 
+
 	serviceAPIEpisode    = 'episode/%s'
 	serviceAPIDate       = 'schedule/%s?limit=1000'
 	serviceAPIDateFrom   = 'schedule/%s/%d?limit=1000'
@@ -121,14 +122,14 @@ class serviceAPI(Scraper):
 		if jsonVideos.get('progressive_download') != None:
 			for streamingUrl in jsonVideos.get('progressive_download'):
 				if streamingUrl.get('quality_key') == self.videoQuality:
-					return streamingUrl.get('src')
+					return generateAddonVideoUrl(streamingUrl.get('src'))
 				source = streamingUrl.get('src')
 
 		for streamingUrl in jsonVideos.get('hls'):
 			if streamingUrl.get('quality_key') == self.videoQuality:
-				return streamingUrl.get('src')
+				return generateAddonVideoUrl(streamingUrl.get('src'))
 			source = streamingUrl.get('src')
-		return source
+		return generateAddonVideoUrl(source)
 
 	# list all Categories
 	def getCategories(self):
@@ -292,7 +293,7 @@ class serviceAPI(Scraper):
 					continue
 				# already playing
 				elif livestreamStart < time.localtime():
-					link = self.JSONStreamingURL(result.get('sources')) + '|User-Agent=Mozilla'
+					link = self.JSONStreamingURL(result.get('sources'))
 					if inputstreamAdaptive and result.get('restart'):
 						contextMenuItems.append(('Restart', 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (xbmcaddon.Addon().getAddonInfo('id'), result.get('id'))))
 				else:

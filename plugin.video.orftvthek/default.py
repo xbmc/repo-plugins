@@ -25,9 +25,7 @@ except ImportError:
 socket.setdefaulttimeout(30)
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.8.0"
-plugin = "ORF-TVthek-" + version
-author = "sofaking,Rechi"
+plugin = "ORF-TVthek-" + xbmcaddon.Addon().getAddonInfo('version')
 
 #initial
 common.plugin = plugin
@@ -35,6 +33,7 @@ settings = xbmcaddon.Addon()
 pluginhandle = int(sys.argv[1])
 basepath = settings.getAddonInfo('path')
 translation = settings.getLocalizedString
+userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
 
 #video playback
 tvthekplayer = xbmc.Player()
@@ -81,7 +80,6 @@ else:
 params=parameters_string_to_dict(sys.argv[2])
 mode=params.get('mode')
 link=params.get('link')
-title=params.get('title')
 banner=params.get('banner')
 videourl=params.get('videourl')
 url=params.get('url')
@@ -95,8 +93,6 @@ if url:
     debugLog("Url: %s" % urllib.unquote(url),'Info')
 if videourl:
     debugLog("Videourl: %s" % urllib.unquote(videourl),'Info')
-if title:
-    debugLog("Title: %s" % title.encode('UTF-8'),'Info')
 
 
 def getMainMenu():
@@ -153,8 +149,7 @@ elif mode == 'unblacklistShow':
         unblacklistItem(link)
         xbmc.executebuiltin('Container.Refresh')
 elif mode == 'blacklistShow':
-    title=params.get('title')
-    blacklistItem(title)
+    blacklistItem(link)
     xbmc.executebuiltin('Container.Refresh')
 if mode == 'openBlacklist':
     printBlacklist(defaultbanner,defaultbackdrop,translation,pluginhandle)
@@ -229,6 +224,12 @@ elif mode == 'liveStreamRestart':
     scraper.liveStreamRestart(link)
 elif mode == 'playlist':
     startPlaylist(tvthekplayer,playlist)
+elif mode == 'play':
+    videourl = "%s|User-Agent=%s" % (videourl,userAgent)
+    debugLog(videourl,'Info')
+    play_item = xbmcgui.ListItem(path=videourl)
+    xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
+    listCallback(False,pluginhandle)                         
 elif sys.argv[2] == '':
     getMainMenu()
 else:

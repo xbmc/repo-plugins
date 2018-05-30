@@ -2,3 +2,5 @@ Version 1.0.0
 - Initial version
 Version 1.0.1
 - Fixed breakage caused by website changes.
+Version 1.0.2
+- Update resolution of youtube urls

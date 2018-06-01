@@ -57,7 +57,7 @@ msgid "Cheddar - Big News"
 msgstr ""
 
 msgctxt "#30010"
-msgid "http://feed00.pluto.tv/feed04/ngrp:cheddar.stream_all/playlist.m3u8"
+msgid "https://content.uplynk.com/channel/4ee18bd581dc4d3b90303e0cb9beeb0f.m3u8"
 msgstr ""
 
 msgctxt "#30011"

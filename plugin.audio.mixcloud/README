@@ -13,7 +13,8 @@ Contributors:
 
 ============================================
 
-Current version: 2.4.0
+Current version: 2.4.1
+  - Krypton
   - Jarvis
   - Isengard
   - Helix
@@ -39,8 +40,8 @@ Features:
     - Users
   - Play cloudcasts
     - Local resolver
-    - Offliberty resolver (broken)
-    - Mixcloud-Downloader resolver (broken)
+    - Offliberty resolver
+    - Mixcloud-Downloader resolver
     - Low quality m4a resolver (broken)
   - Thumbnails
   - History

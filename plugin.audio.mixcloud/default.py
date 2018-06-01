@@ -109,6 +109,7 @@ STR_IMAGE=          u'image'
 STR_FORMAT=         u'format'
 STR_KEY=            u'key'
 STR_LIMIT=          u'limit'
+STR_MAGICSTRING=    u'IFYOUWANTTHEARTISTSTOGETPAIDDONOTDOWNLOADFROMMIXCLOUD'
 STR_MESSAGE=        u'message'
 STR_MODE=           u'mode'
 STR_MP3=            u'mp3'
@@ -429,7 +430,7 @@ def check_profile_state():
                                }
                         headers={
                                  'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
-                                 'Referer' : 'http://offliberty.com/'
+                                 'Referer' : 'https://www.mixcloud.com/'
                                 }
                         postdata = urllib.urlencode(values)
                         log_if_debug('Getting access token ' + URL_TOKEN + '?' + postdata)
@@ -599,88 +600,76 @@ def add_cloudcast(index,json_cloudcast,total,forinfo=False):
 def get_stream_offliberty(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
     log_if_debug('Resolving offliberty cloudcast stream for '+ck)
-##    for retry in range(1, 10):
-#    for retry in range(1, 2):
-#        try:
-##            values={
-##                    'track' : ck,
-##                    'refext' : 'https://www.google.be/'
-##                   }
-#            values={
-#                    'url' : ck,
-#                   }
-#            headers={
-#                     'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
-#                     'Referer' : 'http://offliberty.com/'
-#                    }
-#            postdata = urllib.urlencode(values)
-##            request = urllib2.Request('http://offliberty.com/off54.php', postdata, headers, 'http://offliberty.com/')
-#            request = urllib2.Request('http://offliberty.com/download/', postdata, headers, 'http://offliberty.com/')
-#            response = urllib2.urlopen(request)
-#            data=response.read()
-#            log_if_debug('*************************')
-#            log_if_debug(data)
-#            log_if_debug('*************************')
-#            match=re.search('HREF="(.*)" class="download"', data)
-#            if match:
-#                return match.group(1)
-#            else:
-#                log_if_debug('Wrong response try=%s code=%s len=%s, trying again...' % (retry, response.getcode(), len(data)))
-#        except:
-#            log_always('Unexpected error try=%s error=%s, trying again...' % (retry, sys.exc_info()[0]))
+    for retry in range(1, 2):
+        try:
+            values={
+                    'track' : ck,
+                    'refext' : 'https://www.google.com/'
+                   }
+            headers={
+                     'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+                     'Referer' : 'http://offliberty.com/'
+                    }
+            postdata = urllib.urlencode(values)
+            request = urllib2.Request('http://offliberty.com/off04.php', postdata, headers, 'http://offliberty.com/')
+            response = urllib2.urlopen(request)
+            data=response.read()
+            match=re.search('href="(.*)" class="download"', data)
+            if match:
+                return match.group(1)
+            else:
+                log_if_debug('Wrong response try=%s code=%s len=%s, trying again...' % (retry, response.getcode(), len(data)))
+        except:
+            log_always('Unexpected error try=%s error=%s, trying again...' % (retry, sys.exc_info()[0]))
 
 
 
 def get_stream_local(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
     log_if_debug('Locally resolving cloudcast stream for '+ck)
-    headers={
-             'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
-             'Referer' : URL_MIXCLOUD
-            }
-    request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
-    response = urllib2.urlopen(request)
-    data=response.read()
-#    log_if_debug('read: '+data)
-    match=re.search('<script id="relay-data" type="text/x-mixcloud">(.*)', data)
-    if match:
-        match=re.search('(.*)</script>', match.group(1))
+    try:
+        headers={
+                 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+                 'Referer' : URL_MIXCLOUD
+                }
+        request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
+        response = urllib2.urlopen(request)
+        data=response.read()
+        match=re.search('<script id="relay-data" type="text/x-mixcloud">(.*)', data)
         if match:
-#            try:
-            decoded=match.group(1).replace('&quot;','"')
-#            log_if_debug('decoded: '+decoded)
-            json_content=json.loads(decoded)
-            for json_item in json_content:
-                if STR_CLOUDCAST in json_item and json_item[STR_CLOUDCAST]:
-                    json_cloudcast=json_item[STR_CLOUDCAST]
-                    if STR_DATA in json_cloudcast and json_cloudcast[STR_DATA]:
-                        json_data=json_cloudcast[STR_DATA]
-                        if STR_CLOUDCASTLOOKUP in json_data and json_data[STR_CLOUDCASTLOOKUP]:
-                            json_cloudcastlookup=json_data[STR_CLOUDCASTLOOKUP]
-                            if STR_STREAMINFO in json_cloudcastlookup and json_cloudcastlookup[STR_STREAMINFO]:
-                                json_streaminfo=json_cloudcastlookup[STR_STREAMINFO]
-                                if STR_URL in json_streaminfo and json_streaminfo[STR_URL]:
-                                    json_url=json_streaminfo[STR_URL]
-                                elif STR_HLSURL in json_streaminfo and json_streaminfo[STR_HLSURL]:
-                                    json_url=json_streaminfo[STR_HLSURL]
-                                elif STR_DASHURL in json_streaminfo and json_streaminfo[STR_DASHURL]:
-                                    json_url=json_streaminfo[STR_DASHURL]
-            if json_url:
-                log_if_debug('encoded url: '+json_url)
-                decoded_url=base64.b64decode(json_url)
-#                log_if_debug('decoded url: '+decoded_url)
-                magicString='IFYOUWANTTHEARTISTSTOGETPAIDDONOTDOWNLOADFROMMIXCLOUD'
-                url=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(decoded_url,cycle(magicString)))
-                log_if_debug('url: '+url)
-                return url
+            match=re.search('(.*)</script>', match.group(1))
+            if match:
+                decoded=match.group(1).replace('&quot;','"')
+                json_content=json.loads(decoded)
+                for json_item in json_content:
+                    if STR_CLOUDCAST in json_item and json_item[STR_CLOUDCAST]:
+                        json_cloudcast=json_item[STR_CLOUDCAST]
+                        if STR_DATA in json_cloudcast and json_cloudcast[STR_DATA]:
+                            json_data=json_cloudcast[STR_DATA]
+                            if STR_CLOUDCASTLOOKUP in json_data and json_data[STR_CLOUDCASTLOOKUP]:
+                                json_cloudcastlookup=json_data[STR_CLOUDCASTLOOKUP]
+                                if STR_STREAMINFO in json_cloudcastlookup and json_cloudcastlookup[STR_STREAMINFO]:
+                                    json_streaminfo=json_cloudcastlookup[STR_STREAMINFO]
+                                    if STR_URL in json_streaminfo and json_streaminfo[STR_URL]:
+                                        json_url=json_streaminfo[STR_URL]
+                                    elif STR_HLSURL in json_streaminfo and json_streaminfo[STR_HLSURL]:
+                                        json_url=json_streaminfo[STR_HLSURL]
+                                    elif STR_DASHURL in json_streaminfo and json_streaminfo[STR_DASHURL]:
+                                        json_url=json_streaminfo[STR_DASHURL]
+                if json_url:
+                    log_if_debug('encoded url: '+json_url)
+                    decoded_url=base64.b64decode(json_url)
+                    url=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(decoded_url,cycle(STR_MAGICSTRING)))
+                    log_if_debug('url: '+url)
+                    return url
+                else:
+                    log_if_debug('Unable to find url in json')
             else:
-                log_if_debug('Unable to find url in json')
-#            except:
-#                log_always('Unexpected error resolving local error=%s' % (sys.exc_info()[0]))
+                log_if_debug('Unable to resolve (match 2)')
         else:
-            log_if_debug('Unable to resolve (match 2)')
-    else:
-        log_if_debug('Unable to resolve (match 1)')
+            log_if_debug('Unable to resolve (match 1)')
+    except Exception, e:
+        log_if_debug('Unable to resolve: ' + str(e))
 
 
 
@@ -715,28 +704,32 @@ def get_stream_mixclouddownloader(cloudcast_key,linknr):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
     log_if_debug('Resolving mixcloud-downloader cloudcast stream for '+ck)
     log_if_debug('Link version %d' % linknr)
-#    try:
-#        headers={
-#                    'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
-#                    'Referer' : 'http://www.mixcloud-downloader.com/'
-#                }
-#        request = urllib2.Request('http://www.mixcloud-downloader.com/dl/mixcloud'+cloudcast_key, headers=headers, origin_req_host='http://www.mixcloud-downloader.com/')
-#        response = urllib2.urlopen(request)
-#        data=response.read()
-#        log_if_debug('**************************')
-#        log_if_debug(data)
-#        log_if_debug('**************************')
-#        if linknr==1:
-#            match=re.search('a class="btn btn-secondary btn-sm" href="(.*)"', data)
-#        if linknr==2:
-#            match=re.search('from Mixcloud: <br /> <a href="(.*)"', data)
-#        if match:
-#            log_if_debug('match found ' + match.group(1))
-#            return match.group(1)
-#        else:
-#            log_if_debug('Wrong response code=%s len=%s' % (response.getcode(), len(data)))
-#    except Exception, e:
-#        log_if_debug('Unable to resolve: ' + str(e))
+    try:
+        headers={
+                    'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+                    'Referer' : 'http://www.mixcloud-downloader.com/'
+                }
+
+        values={
+                    'url' : ck,
+               }
+        postdata = urllib.urlencode(values)
+        request = urllib2.Request('http://www.mixcloud-downloader.com/download/', postdata, headers, 'http://www.mixcloud-downloader.com/')
+        response = urllib2.urlopen(request)
+        data=response.read()
+        if linknr==1:
+            match=re.search('a class="btn btn-secondary btn-sm"(.*)', data, re.DOTALL)
+            if match:
+                match=re.search('href="(.*)"', match.group(1))
+        if linknr==2:
+            match=re.search('URL from Mixcloud: <br /> <a href="(.*)"', data)
+        if match:
+            log_if_debug('match found ' + match.group(1))
+            return match.group(1)
+        else:
+            log_if_debug('Wrong response code=%s len=%s' % (response.getcode(), len(data)))
+    except Exception, e:
+        log_if_debug('Unable to resolve: ' + str(e))
 
 
 

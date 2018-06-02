@@ -115,6 +115,7 @@ class Mediaset(rutils.RUtils):
         arrdata.append({'title':"Top Crime", 'url':url.format(ch='07'),'thumbs': "Top_Crime.png"})
         arrdata.append({'title':"Mediaset Extra", 'url':url.format(ch='09'),'thumbs': "Mediaset_Extra.png"})
         arrdata.append({'title':"TGCOM24", 'url':url.format(ch='10'),'thumbs': "TGCOM24.png"})
+        arrdata.append({'title':"Focus", 'url':url.format(ch='26'),'thumbs': "Focus.png"})
         return arrdata
 
     def get_stream(self, id):

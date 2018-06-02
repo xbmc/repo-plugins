@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from resources.lib.mediaset import Mediaset
 from phate89lib import kodiutils, staticutils
 

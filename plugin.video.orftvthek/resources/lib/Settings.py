@@ -17,6 +17,9 @@ def serviceAPI():
 def subtitles():
 	return __addon__.getSetting('useSubtitles') == 'true'
 
+def userAgent():
+	return __addon__.getSetting('userAgent')
+
 def videoQuality(quality_list):
 	default_return_index = 2
 	videoQuality = __addon__.getSetting('videoQuality')

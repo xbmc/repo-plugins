@@ -97,7 +97,7 @@ class htmlScraper(Scraper):
             if date != "":
                 title = "%s - %s" % (title,date)
 
-            parameters = {"link" : link,"title" : title,"banner" : image, "mode" : "openSeries"}
+            parameters = {"link" : link, "banner" : image, "mode" : "openSeries"}
 
             url = sys.argv[0] + '?' + urllib.urlencode(parameters)
             self.html2ListItem(title,image,"",desc,"","","",url,None,True, False);
@@ -129,7 +129,7 @@ class htmlScraper(Scraper):
             banner = common.parseDOM(teaser.replace('>"', '"'), name='img', ret='src')
             banner = common.replaceHTMLCodes(banner[1]).encode("utf-8")
 
-            parameters = {"link" : link,"title" : title,"banner" : banner, "mode" : "openSeries"}
+            parameters = {"link" : link, "banner" : banner, "mode" : "openSeries"}
             url = sys.argv[0] + '?' + urllib.urlencode(parameters)
             self.html2ListItem(title,banner,"",description,"","","",url,None,True, False);
 
@@ -154,7 +154,7 @@ class htmlScraper(Scraper):
             image = common.parseDOM(teasers,name='img',ret="src")
             image = common.replaceHTMLCodes(image[0]).encode('UTF-8')
 
-            parameters = {"link" : link,"title" : title,"banner" : image, "mode" : "openSeries"}
+            parameters = {"link" : link, "banner" : image, "mode" : "openSeries"}
             url = sys.argv[0] + '?' + urllib.urlencode(parameters)
             self.html2ListItem(title,image,"",desc,"","","",url,None,True, False);
 
@@ -175,7 +175,7 @@ class htmlScraper(Scraper):
             image = common.parseDOM(item,name='img',ret="src")
             image = common.replaceHTMLCodes(image[0]).encode('UTF-8')
 
-            parameters = {"link" : link,"title" : title,"banner" : image, "mode" : "getSendungenDetail"}
+            parameters = {"link" : link, "banner" : image, "mode" : "getSendungenDetail"}
             url = sys.argv[0] + '?' + urllib.urlencode(parameters)
             self.html2ListItem(title,image,"", None,"","","",url,None,True, False);
 
@@ -210,7 +210,7 @@ class htmlScraper(Scraper):
                     current_desc = '%s %s - %s\n%s: %s' % (self.translation(30009), current_date, current_time[0], self.translation(30011), current_duration[0])
                 except:
                     current_desc = None
-                parameters = {"link" :  current_link,"title" :current_title,"banner" : banner,"mode" : "openSeries"}
+                parameters = {"link" :  current_link, "banner" : banner,"mode" : "openSeries"}
                 url = sys.argv[0] + '?' + urllib.urlencode(parameters)
                 self.html2ListItem(current_title,banner,"",current_desc,"","","",url,None,True, False);
             else:
@@ -235,7 +235,7 @@ class htmlScraper(Scraper):
                     desc = '%s %s - %s\n%s: %s' % (self.translation(30009), date, time[0], self.translation(30011), duration[0])
                 except:
                     desc = None
-                parameters = {"link" :  link[0],"title" :title,"banner" : banner, "mode" : "openSeries"}
+                parameters = {"link" :  link[0], "banner" : banner, "mode" : "openSeries"}
                 url = sys.argv[0] + '?' + urllib.urlencode(parameters)
                 self.html2ListItem(title,banner,"",desc,"","","",url,None,True, False);
 
@@ -264,7 +264,7 @@ class htmlScraper(Scraper):
 
             title = day + " - " + date
 
-            parameters = {"link" : link,"title" : title,"banner" : "", "mode" : "getScheduleDetail"}
+            parameters = {"link" : link, "mode" : "getScheduleDetail"}
             url = sys.argv[0] + '?' + urllib.urlencode(parameters)
             self.html2ListItem(title,"","","","",date,"",url,None,True, False);
 
@@ -289,7 +289,7 @@ class htmlScraper(Scraper):
                 description = common.parseDOM(archive,name='div',attrs={'class':'item_description'})
                 description = common.replaceHTMLCodes(description[0]).encode('UTF-8')
 
-                parameters = {"link" : link,"title" : title,"banner" : image, "mode" : "getArchiveDetail"}
+                parameters = {"link" : link, "mode" : "getArchiveDetail"}
                 url = sys.argv[0] + '?' + urllib.urlencode(parameters)
                 self.html2ListItem(title,image,"",description,"","","",url,None,True, False);
 
@@ -314,49 +314,6 @@ class htmlScraper(Scraper):
         debugLog("Duration: %s" % duration,"Info")
 
         return createListItem(title,banner,description,duration,date,channel,videourl,playable,folder, backdrop,self.pluginhandle,subtitles,blacklist,contextMenuItems)
-
-    # Parses all "ZIB" Shows
-    def getZIB(self,baseimage):
-        url = 'http://tvthek.orf.at/programs/genre/ZIB/1';
-        html = common.fetchPage({'link': url})
-        html_content = html.get("content")
-
-        content = common.parseDOM(html_content,name='div',attrs={'class':'base_list_wrapper mod_results_list'})
-        items = common.parseDOM( content ,name='li',attrs={'class':'base_list_item jsb_ jsb_ToggleButton results_item'})
-
-        for item in items:
-            title = common.parseDOM(item,name='h4')
-            if len(title) > 0:
-                title = title[0].encode('UTF-8')
-                item_href = common.parseDOM(item,name='a',attrs={'class':'base_list_item_inner.*?'},ret="href")
-                image = common.parseDOM(item,name='img',attrs={},ret="src")
-                if len(image) > 0:
-                    image = common.replaceHTMLCodes(image[0]).encode('UTF-8').replace("height=180","height=265").replace("width=320","width=500")
-                else:
-                    image = baseimage
-
-                if len(item_href) > 0:
-                    link = common.replaceHTMLCodes(item_href[0]).encode('UTF-8')
-                    parameters = {"link" : link,"title" : title,"banner" : image, "mode" : "getSendungenDetail"}
-                    url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-                    self.html2ListItem(title,image,"", None,"","","",url,None,True, False);
-
-    # Parses all "Bundesland Heute" Shows
-    def getBundeslandHeute(self,url,image):
-        html = common.fetchPage({'link': url})
-        html_content = html.get("content")
-
-        content = common.parseDOM(html_content,name='div',attrs={'class':'base_list_wrapper mod_link_list'})
-        items = common.parseDOM(content,name='li',attrs={'class':'base_list_item'})
-        items_href = common.parseDOM(items,name='a',attrs={},ret="href")
-        items_title = common.parseDOM(items,name='h4')
-
-        for i in range(len(items)):
-            link = common.replaceHTMLCodes(items_href[i]).encode('UTF-8')
-            title = items_title[i].encode('UTF-8')
-            parameters = {"link" : link,"title" : title,"banner" : image, "mode" : "getSendungenDetail"}
-            url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-            self.html2ListItem(title,image,"", None,"","","",url,None,True, False);
 
     # Parses a Video Page and extracts the Playlist/Description/...
     def getLinks(self,url,banner,playlist):
@@ -404,7 +361,7 @@ class htmlScraper(Scraper):
                 debugLog("Found Video Playlist with %d Items" % len(video_items),'Info')
                 parameters = {"mode" : "playlist"}
                 u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-                liz = self.html2ListItem("[ "+(self.translation(30015)).encode("utf-8")+" ]",banner,"",(self.translation(30015)).encode("utf-8"),'','','',u, None,True, True);
+                liz = self.html2ListItem("[ "+(self.translation(30015)).encode("utf-8")+" ]",banner,"",(self.translation(30015)).encode("utf-8"),'','','',u,None,False,False);
                 for video_item in video_items:
                     try:
                         title = video_item["title"].encode('UTF-8')
@@ -430,7 +387,7 @@ class htmlScraper(Scraper):
                         else:
                             subtitles = None
                         videourl = self.getVideoUrl(sources);
-                        
+
                         liz = self.html2ListItem(title,preview_img,"",desc,duration,'','',videourl, subtitles,False, True)
                         playlist.add(videourl,liz)
                     except Exception as e:
@@ -450,7 +407,7 @@ class htmlScraper(Scraper):
     # Returns Live Stream Listing
     def getLiveStreams(self):
         liveurls = {}
-        
+
         try:
             xbmcaddon.Addon('inputstream.adaptive')
             inputstreamAdaptive = True
@@ -490,7 +447,7 @@ class htmlScraper(Scraper):
                     state = (self.translation(30019)).encode("utf-8")
                 else:
                     state = (self.translation(30020)).encode("utf-8")
-                
+
                 initial = True
                 link = liveurls[program]
                 final_title = "[%s] - %s (%s)" % (channelnames[program],title,time_str)
@@ -499,50 +456,50 @@ class htmlScraper(Scraper):
                 for child_list_item in child_list:
                     contextMenuItems = []
                     child_restart = common.parseDOM(child_list_item , name='span',attrs={'class': 'is_restartable.*?'},ret="class")
-                    
+
                     child_list_title = common.parseDOM(child_list_item,name='h4')
                     child_list_title = common.replaceHTMLCodes(child_list_title[0]).encode('UTF-8')
                     child_list_link = common.parseDOM(child_list_item,name='a',attrs={'class': 'base_list_item_inner'},ret="href")
                     child_list_link = common.replaceHTMLCodes(child_list_link[0])
                     child_list_time = common.parseDOM(child_list_item,name='span',attrs={'class': 'meta.meta_time'})
                     child_list_time = common.replaceHTMLCodes(child_list_time[0]).encode('UTF-8').replace("Uhr","").replace(".",":").strip()
-                    
-                    if initial:                        
+
+                    if initial:
                         if inputstreamAdaptive and child_restart:
                             final_title = "[Restart][%s] - %s (%s)" % (channelnames[program],title,time_str)
                             contextMenuItems.append(('Restart', 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (xbmcaddon.Addon().getAddonInfo('id'), child_list_link)))
 
-                        self.html2ListItem(final_title,banner,"",state,time_str,program,program,link,None,False, True,contextMenuItems)
+                        self.html2ListItem(final_title,banner,"",state,time_str,program,program, generateAddonVideoUrl(link),None,False, True,contextMenuItems)
                         initial = False
-                        
+
                     if child_list_time == time_str and child_list_title != title:
                         if inputstreamAdaptive and child_restart:
                             contextMenuItems.append(('Restart', 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (xbmcaddon.Addon().getAddonInfo('id'), child_list_link)))
                         child_list_streaming_url = self.getLivestreamUrl(child_list_link,self.videoQuality)
                         child_list_final_title = "[%s] - %s (%s)" % (channelnames[program],child_list_title,child_list_time)
 
-                        self.html2ListItem(child_list_final_title,banner,"",state,time,program,program,child_list_streaming_url,None,False, True,contextMenuItems)
+                        self.html2ListItem(child_list_final_title,banner,"",state,time,program,program, generateAddonVideoUrl(child_list_streaming_url),None,False, True,contextMenuItems)
 
     def liveStreamRestart(self, link):
         try:
             xbmcaddon.Addon('inputstream.adaptive')
         except RuntimeError:
             return
-        
+
         livestream_id = link.rpartition('/')[-1]
         html = common.fetchPage({'link': link})
         bitmovinStreamId = self.getLivestreamBitmovinID(html)
         stream_info = self.getLivestreamInformation(html)
 
         if bitmovinStreamId:
-            
+
             title       = stream_info['title']
             image       = stream_info['image']
             description = stream_info['description']
             duration    = stream_info['duration']
             date        = stream_info['date']
             channel     = stream_info['channel']
-            
+
             ApiKey = '2e9f11608ede41f1826488f1e23c4a8d'
             response = urllib2.urlopen('http://restarttv-delivery.bitmovin.com/livestreams/%s/sections/?state=active&X-Api-Key=%s' % (bitmovinStreamId, ApiKey)) # nosec
             section = json.loads(response.read())[0]
@@ -571,7 +528,7 @@ class htmlScraper(Scraper):
                                     return video_sources['src']
             except:
                 debugLog("Error getting Livestream","Info")
-    
+
     @staticmethod
     def getLivestreamBitmovinID(html):
         container = common.parseDOM(html.get("content"),name='div',attrs={'class': "player_viewport.*?"})
@@ -585,7 +542,7 @@ class htmlScraper(Scraper):
             except:
                 debugLog("Error getting Livestream Bitmovin ID","Info")
 
-    
+
     @staticmethod
     def getLivestreamInformation(html):
         container = common.parseDOM(html.get("content"),name='div',attrs={'class': "player_viewport.*?"})
@@ -597,8 +554,8 @@ class htmlScraper(Scraper):
         date        = ""
         channel     = ""
         time_str    = ""
-        
-        
+
+
         for data in data_sets:
             try:
                 data = common.replaceHTMLCodes(data)
@@ -615,14 +572,14 @@ class htmlScraper(Scraper):
                     if 'livestream_end' in data['playlist']:
                         date = data['playlist']['livestream_end']
                         time_str_end = datetime.datetime.fromtimestamp(int(date)).strftime('%H:%M')
-                    if 'videos' in data['playlist']: 
-                        if 'description' in data['playlist']['videos']: 
+                    if 'videos' in data['playlist']:
+                        if 'description' in data['playlist']['videos']:
                             description = data['playlist']['videos']['description']
- 
+
                     return {"title" : "%s (%s - %s)" % (title,time_str,time_str_end),"image" : image,"description" : description, "date" : date, "duration" : duration, "channel" : channel}
             except:
                 debugLog("Error getting Livestream Infos","Info")
-        
+
     # Helper for Livestream Listing - Returns if Stream is currently running
     @staticmethod
     def getBroadcastState(time):
@@ -661,7 +618,7 @@ class htmlScraper(Scraper):
                 for desc in descs:
                     description += "* "+common.replaceHTMLCodes(desc).encode('UTF-8') + "\n"
 
-                parameters = {"link" : link,"title" : title,"banner" : image, "mode" : "getThemenDetail"}
+                parameters = {"link" : link, "mode" : "getThemenDetail"}
                 url = sys.argv[0] + '?' + urllib.urlencode(parameters)
                 self.html2ListItem(title,image,"",description,"","","",url,None,True, False);
 
@@ -702,7 +659,7 @@ class htmlScraper(Scraper):
 
             desc = "%s - (%s) \n%s" % (str(date),str(time).strip(),str(desc))
 
-            parameters = {"link" : link,"title" : title,"banner" : image, "mode" : "openSeries"}
+            parameters = {"link" : link, "banner" : image, "mode" : "openSeries"}
             url = sys.argv[0] + '?' + urllib.urlencode(parameters)
             self.html2ListItem(title,image,"",desc,"","","",url,None,True, False);
 
@@ -738,3 +695,4 @@ class htmlScraper(Scraper):
             parameters = {'mode' : 'getSearchHistory'}
             u = sys.argv[0] + '?' + urllib.urlencode(parameters)
             createListItem((self.translation(30014)).encode("utf-8")+" ...", self.defaultbanner, "", "", "", '', u, False, True, self.defaultbackdrop,self.pluginhandle,None)
+

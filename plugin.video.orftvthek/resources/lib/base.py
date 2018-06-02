@@ -15,14 +15,14 @@ from . import Settings
 from .helpers import *
 
 def addDirectory(title,banner,backdrop, description,link,mode,pluginhandle):
-    parameters = {"link" : link,"title" : title,"banner" : banner, "mode" : mode}
+    parameters = {"link" : link, "mode" : mode}
     u = sys.argv[0] + '?' + urllib.urlencode(parameters)
     createListItem(title,banner,description,'','','',u, False,True, backdrop,pluginhandle,None)
 
 def generateAddonVideoUrl(videourl):
-    return "plugin://%s/?mode=play&videourl=%s"  % (xbmcaddon.Addon().getAddonInfo('id'),videourl)
+    return "plugin://%s/?mode=play&link=%s"  % (xbmcaddon.Addon().getAddonInfo('id'),videourl)
 
-    
+
 def createListItem(title,banner,description,duration,date,channel,videourl,playable,folder, backdrop,pluginhandle,subtitles=None,blacklist=False, contextMenuItems = None):
     contextMenuItems = contextMenuItems or []
 
@@ -37,10 +37,7 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
     liz.setInfo( type="Video", infoLabels={ "Aired": date } )
     liz.setInfo( type="Video", infoLabels={ "Studio": channel } )
     liz.setProperty('fanart_image',backdrop)
-    if playable and not folder:
-        liz.setProperty('IsPlayable', 'true')
-        videourl = "plugin://%s/?mode=play&videourl=%s" % (xbmcaddon.Addon().getAddonInfo('id'),videourl)
-        debugLog("Videourl: %s" % videourl,"ListItem")                       
+    liz.setProperty('IsPlayable', str(playable and not folder))
 
     if not folder:
         liz.setInfo( type="Video", infoLabels={ "mediatype" : 'video'})

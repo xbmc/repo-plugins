@@ -207,7 +207,7 @@ class serviceAPI(Scraper):
 		else:
 			parameters = {'mode' : 'playlist'}
 			u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-			createListItem('[ '+(self.translation(30015)).encode('UTF-8')+' ]', image, '%s\n%s' % ((self.translation(30015)).encode('UTF-8'), description), duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), u, False, True, self.defaultbackdrop,self.pluginhandle)
+			createListItem('[ '+(self.translation(30015)).encode('UTF-8')+' ]', image, '%s\n%s' % ((self.translation(30015)).encode('UTF-8'), description), duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), u, False, False, self.defaultbackdrop,self.pluginhandle)
 
 			for segment in result.get('_embedded').get('segments'):
 				listItem = self.JSONSegment2ListItem(segment)

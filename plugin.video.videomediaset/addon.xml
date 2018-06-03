@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.videomediaset" name="Video Mediaset" provider-name="phate89, aracnoz" version="1.3.0">
+<addon id="plugin.video.videomediaset" name="Video Mediaset" provider-name="phate89, aracnoz" version="1.3.1">
     <requires>
         <import addon="xbmc.python" version="2.24.0" />
         <import addon="script.module.phate89" version="1.0.0"/>
@@ -17,10 +17,8 @@
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<forum>http://forum.kodi.tv/showthread.php?tid=292876</forum>
 		<source>https://github.com/phate89/plugin.video.videomediaset</source>
-        <news>v1.3.0
-- fixed the addon after website changes
-- added the new mediaset channel 20 and icon (thx to gdx2015)
-- fixed the live channel base url (thx to gdx2015)
-- updated the canale 5 logo with the updated one (thx to fsponga)</news>
+        <news>v1.3.1
+- added the new mediaset channel focus and icon (thx to subst4nc3)
+</news>
     </extension>
 </addon>

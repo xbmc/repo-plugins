@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.ad6" name="Alpe d'HuZes" version="0.1.0" provider-name="Menco Bolt">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.routing" version="0.2.1"/>
+        <import addon="plugin.video.youtube" version="6.0.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>audio video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">You won&#39;t get any closer to Alpe d&#39;HuZes</summary>
+        <summary lang="nl_NL">Dichter bij de Alpe kom je niet</summary>
+        <description lang="en_GB">Alpe d&#39;HuZes is charity action to collect as much money as possible for the Dutch Cancer Society. Follow the event on all available streams (audio and video)</description>
+        <description lang="nl_NL">Volg de Alpe d&#39;HuZes op de voet</description>
+        <language>nl</language>
+        <platform>all</platform>
+        <license>AGPL-3.0</license>
+        <forum></forum>
+        <website>https://www.opgevenisgeenoptie.nl</website>
+        <email>menco@bolt.frl</email>
+        <source>https://github.com/macmenco/plugin.video.ad6</source>
+        <news></news>
+        <disclaimer></disclaimer>
+        <assets>
+            <icon>resources/media/ad6_large.jpg</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

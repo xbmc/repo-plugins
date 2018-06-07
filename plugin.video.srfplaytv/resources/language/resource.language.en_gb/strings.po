@@ -135,6 +135,10 @@ msgctxt "#30072"
 msgid "Live TV"
 msgstr ""
 
+msgctxt "#30073"
+msgid ">> Next page"
+msgstr ""
+
 msgctxt "#30100"
 msgid "Failed to open URL."
 msgstr ""

@@ -770,7 +770,7 @@ class SRFPlayTV(object):
 
         try:
             vid = id_list[page*NUMBER_OF_EPISODES]
-            next_item = xbmcgui.ListItem(label='>> Next')
+            next_item = xbmcgui.ListItem(label=LANGUAGE(30073))
             next_item.setProperty('IsPlayable', 'false')
             name = topic_id if topic_id else ''
             purl = self.build_url(mode=mode, name=name, page=page+1)
@@ -840,7 +840,7 @@ class SRFPlayTV(object):
                 is_folder=is_folder)
 
         if len(sorted_list_of_episodes_dict) > page * NUMBER_OF_EPISODES:
-            next_item = xbmcgui.ListItem(label='>> Next')
+            next_item = xbmcgui.ListItem(label=LANGUAGE(30073))
             next_item.setProperty('IsPlayable', 'false')
             purl = self.build_url(mode=12, page=page+1)
             xbmcplugin.addDirectoryItem(
@@ -1029,6 +1029,8 @@ class SRFPlayTV(object):
             except Exception:
                 log('build_live_menu: No entry found for live id %s.' % lid)
                 continue
+            if entry.get('streamType') == 'noStream':
+                continue
             title = entry.get('title')
             stream_url = entry.get('hls')
             image = entry.get('imageUrl')
@@ -1104,7 +1106,7 @@ class SRFPlayTV(object):
         if next_page_hash and page_hash != next_page_hash:
             log('page_hash: %s' % page_hash)
             log('next_hash: %s' % next_page_hash)
-            next_item = xbmcgui.ListItem(label='>> Next')
+            next_item = xbmcgui.ListItem(label=LANGUAGE(30073))
             next_item.setProperty('IsPlayable', 'false')
             url = self.build_url(
                 mode=20, name=show_id, page_hash=next_page_hash)
@@ -1131,7 +1133,12 @@ class SRFPlayTV(object):
             (video_id, include_segments))
         json_url = ('https://il.srgssr.ch/integrationlayer/2.0/%s/'
                     'mediaComposition/video/%s.json') % (BU, video_id)
-        json_response = json.loads(self.open_url(json_url))
+        try:
+            json_response = json.loads(self.open_url(json_url))
+        except Exception:
+            log('build_episode_menu: Cannot open media json for %s.'
+                % video_id)
+            return
 
         chapter_urn = json_response.get('chapterUrn', '')
         segment_urn = json_response.get('segmentUrn', '')

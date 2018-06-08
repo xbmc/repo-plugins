@@ -4,41 +4,13 @@
 
     <!-- menu items & misc messages -->
     <string id="30001">Alle Videos</string>
-    <string id="30002">Auswahl</string>
-    <string id="30003">Meistgesehen</string>
-    <string id="30004">Letzte Chance</string>
-    <string id="30005">Nach Datum</string>
-    <string id="30006">Themen</string>
-    <string id="30007">Live</string>
+    <string id="30002">Live</string>
 
-    <string id="30008">Heute</string>
-    <string id="30009">Gestern</string>
-
-    <!-- weird encoding bug in notifications = no accents :/ -->
-    <string id="30010">Laedt herunter</string>
-    <string id="30011">Fertig heruntergeladen</string>
-    <string id="30012">Fehler</string>
-    <string id="30013">Bitte waehlen Sie ein Downloadverzeichnis in den Einstellungen</string>
-
-    <!-- context menu -->
-    <string id="30020">Zur Warteschlange hinzufügen</string>
-    <string id="30021">Video herunterladen</string>
+    <string id="30003">Heute</string>
+    <string id="30004">Gestern</string>
 
     <!-- options -->
     <string id="30050">Sprache (Videos)</string>
-    <string id="30051">Bevorzuge Orginalfassung</string>
+    <!-- <string id="30051">Bevorzuge Orginalfassung</string> -->
     <string id="30052">Qualit&#228;t des Videostreams</string>
-    <string id="30053">Streamingprotokol</string>
-    <string id="30054">Downloadverzeichnis</string>
-    <string id="30055">Videoqualit&#228;t der Downloads</string>
-
-    <!-- categories -->
-    <string id="3000501">Aktuelles &amp; Gesellschaft</string>
-    <string id="3000502">Fernsehfilme &amp; Serien</string>
-    <string id="3000503">Kino</string>
-    <string id="3000504">Kunst &amp; Kultur</string>
-    <string id="3000505">Popkultur &amp; Alternativ</string>
-    <string id="3000506">Entdeckung</string>
-    <string id="3000507">Geschichte</string>
-    <string id="3000508">Junior</string>
 </strings>

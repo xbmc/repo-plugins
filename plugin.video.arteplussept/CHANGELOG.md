@@ -1,3 +1,9 @@
+# Version 1.0.0
+
+Major rewrite.
+
+A lot of new features, feedback welcome.
+
 # Version 0.5.8
 
 thanks to https://github.com/cifera

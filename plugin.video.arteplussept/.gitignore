@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/
 lib64/
 parts/
 sdist/
@@ -58,3 +58,6 @@ target/
 
 # PyCharm
 .idea/
+
+# Visual Studio Code
+.vscode/

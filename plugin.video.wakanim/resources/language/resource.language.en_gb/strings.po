@@ -115,3 +115,7 @@ msgstr ""
 msgctxt "#30046"
 msgid "You need to be logged in"
 msgstr ""
+
+msgctxt "#30047"
+msgid "Due to security reasons a verification link has been send to your wakanim email account.\nRestart the addon after confirming this link."
+msgstr ""

@@ -27,14 +27,16 @@ def create_magazines_item():
 
 def map_category_item(item, category_code):
     code = item.get('code')
+    title = item.get('title')
+
     if code:
         path = plugin.url_for('sub_category_by_code', sub_category_code=code)
     else:
-        path = plugin.url_for(
-            'sub_category_by_title', category_code=category_code, sub_category_title=item.get('title'))
+        path = plugin.url_for('sub_category_by_title', category_code=category_code,
+                              sub_category_title=utils.sanitize_string(title))
 
     return {
-        'label': item.get('title'),
+        'label': title,
         'path': path
     }
 

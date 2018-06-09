@@ -1,15 +1,17 @@
 import time
 import datetime
+from HTMLParser import HTMLParser
 
 from addon import language
 import hof
 
-"""
-color: a hex color string (RRGGBB or #RRGGBB) or None
-"""
+p = HTMLParser()
 
 
 def colorize(text, color):
+    """
+    color: a hex color string (RRGGBB or #RRGGBB) or None
+    """
     if not color:
         return text
     if color.startswith('#'):
@@ -18,11 +20,15 @@ def colorize(text, color):
 
 
 def format_title_and_subtitle(title, subtitle=None):
-    label = u'[B]{title}[/B]'.format(title=title)
+    label = u'[B]{title}[/B]'.format(title=p.unescape(title))
     # suffixes
     if subtitle:
-        label += u' - {subtitle}'.format(subtitle=subtitle)
+        label += u' - {subtitle}'.format(subtitle=p.unescape(subtitle))
     return label
+
+
+def sanitize_string(str):
+    return str.encode('ascii', errors='replace')
 
 
 def parse_date(datestr):

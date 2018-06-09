@@ -1,3 +1,7 @@
+# Version 1.0.1
+
+Major encoding fix & html entities decode
+
 # Version 1.0.0
 
 Major rewrite.

@@ -3,14 +3,10 @@ import requests
 
 from addon import PluginInformation
 
-_base_url = 'http://www.arte.tv/hbbtvv2/'
-_base_service = 'services/web/index.php/'
+_base_api_url = 'http://www.arte.tv/hbbtvv2/services/web/index.php'
 _base_headers = {
     'user-agent': PluginInformation.name + '/' + PluginInformation.version
 }
-
-_base_api_url = 'http://www.arte.tv/hbbtvv2/services/web/index.php'
-
 _endpoints = {
     'categories': '/EMAC/teasers/categories/v2/{lang}',
     'category': '/EMAC/teasers/category/v2/{category_code}/{lang}',
@@ -20,7 +16,7 @@ _endpoints = {
     'streams': '/OPA/v3/streams/{program_id}/{kind}/{lang}',
 
 
-    'daily': _base_service + 'OPA/v3/programs/{date}/{lang}'
+    'daily': '/OPA/v3/programs/{date}/{lang}'
 }
 
 

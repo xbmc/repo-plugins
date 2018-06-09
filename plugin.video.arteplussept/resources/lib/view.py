@@ -2,6 +2,7 @@
 import api
 import mapper
 import hof
+import utils
 
 
 def build_categories(lang):
@@ -30,8 +31,8 @@ def build_sub_category_by_code(sub_category_code, lang):
 
 def build_sub_category_by_title(category_code, sub_category_title, lang):
     category = api.category(category_code, lang)
-    sub_category = hof.find(lambda i: i.get('title') ==
-                            sub_category_title, category)
+    sub_category = hof.find(lambda i: utils.sanitize_string(
+        i.get('title')) == sub_category_title, category)
 
     return [mapper.map_generic_item(item) for item in sub_category.get('teasers')]
 

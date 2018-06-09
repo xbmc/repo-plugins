@@ -14,12 +14,6 @@ class YoutubeStream:
             video_id, time.localtime())
         return livestream_url, title, livestream_thumbnail
 
-
-    def get_video_info_from_video_id(self, video_id):
-        request = urllib2.Request("https://www.youtube.com/%s" % video_id)
-        return self.get_video_info(request)
-
-
     def get_video_info(self, request):
         response = urllib2.urlopen(request)
         string_data = response.read()
@@ -39,5 +33,6 @@ class YoutubeStream:
                 re_video_title_match = re.search(re_video_title, line)
 
             if re_video_url_match and re_video_title_match:
-                return (re_video_url_match.group('video_id'), HTMLParser.HTMLParser().unescape(re_video_title_match.group('title')))
+                title = re_video_title_match.group('title').decode('utf8', 'ignore')
+                return (re_video_url_match.group('video_id'), HTMLParser.HTMLParser().unescape(title))
 

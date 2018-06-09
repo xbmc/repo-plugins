@@ -1,7 +1,7 @@
 # Kodi Media Center language file
-# Addon Name: "CNN
-# Addon id: plugin.video.cnn
-# Addon Provider: Lunatixz
+# Addon Name: "hrmagplayer"
+# Addon id: plugin.video.hrmagplayer
+# Addon Provider: extramundane
 msgid ""
 msgstr ""
 "Project-Id-Version: plugin.video.hrmagplayer\n"

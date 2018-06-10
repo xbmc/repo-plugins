@@ -114,6 +114,11 @@ def fetchItemDetails((url, meta)):
     # Reduce page to video information block
     soup = bs(page.text, 'html.parser')
     vid_block = soup.find('div', class_='step_outer')
+
+    # Prevent errors caused by 'ghost' threads
+    if not vid_block:
+        return None
+
     for script in vid_block("script"):
         script.decompose()
     for style in vid_block("style"):

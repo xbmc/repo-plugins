@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.AML" name="Advanced MAME Launcher" version="0.9.7" provider-name="Wintermute0110">
+  <requires>
+    <!--
+        Check addon versions in https://github.com/xbmc/xbmc/tree/master/addons
+        Change the branch according to the Kodi version.
+    -->
+    <!-- 2.25.0 Krypton 17 -->
+    <import addon="xbmc.python" version="2.25.0" />
+    <import addon="script.module.pil" version="1.1.7" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Kodi meets MAME!</summary>
+    <description lang="en">MAME front-end for Kodi that supports both MAME machines and Software Lists. For help look at the Advanced MAME Launcher thread in the Kodi forum.</description>
+    <platform>all</platform>
+    <license>GNU General Public License version 2</license>
+    <email>wintermute0110@gmail.com</email>
+    <forum>http://forum.kodi.tv/showthread.php?tid=304186</forum>
+    <website>https://github.com/Wintermute0110/plugin.program.AML/wiki</website>
+    <source>https://github.com/Wintermute0110/plugin.program.AML/</source>
+    <assets>
+      <icon>media/icon.png</icon>
+      <fanart>media/fanart.jpg</fanart>
+      <screenshot>media/shot_root.png</screenshot>
+      <screenshot>media/shot_MAME_pclone_list.png</screenshot>
+      <screenshot>media/shot_SL_pclone_list.png</screenshot>
+      <screenshot>media/shot_MAME_fanart.png</screenshot>
+      <screenshot>media/shot_SL_fanart.png</screenshot>
+    </assets>
+    <news>See changelog.txt for information about the latest release.</news>
+  </extension>
+</addon>

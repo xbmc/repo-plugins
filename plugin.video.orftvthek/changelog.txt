@@ -1,3 +1,6 @@
+0.8.4
+- reverted playall fix because it resulted in a kodi crash (htmlscraper)
+
 0.8.3
 - fixed: don't set directory=true on the "play all" listitem (thx @wsnipex)
 - cleanup (thx @rechi)

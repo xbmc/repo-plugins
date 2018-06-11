@@ -310,10 +310,12 @@ class myAddon(t1mAddon):
     url = re.compile("id: '(.+?)'", re.DOTALL).search(html).group(1)
     addonLanguage = self.addon.getLocalizedString
     pbs_uid = self.addon.getSetting('pbs_uid')
+    if pbs_uid == "false":
+        pbs_uid = ""
     pg = self.getRequest('https://player.pbs.org/viralplayer/%s/?uid=%s' % (url, pbs_uid))
-    urls = re.compile("PBS.videoData =.+?recommended_encoding.+?'url'.+?'(.+?)'.+?'closed_captions_url'.+?'(.+?)'", re.DOTALL).search(pg)
-    if urls is not None:
-        url,suburl = urls.groups()
+    url = re.compile("window.videoBridge =.+\"recommended_encoding\": {[^}]*\"url\": \"([^\"]+)\"", re.DOTALL).search(pg).groups()[0]
+    suburl = re.compile("window.videoBridge =.+\"closed_captions_url\": \"([^\"]+)\"", re.DOTALL).search(pg).groups()[0]
+    if url and suburl:
         pg = self.getRequest('%s?format=json' % url)
         url = json.loads(pg)['url']
     else:

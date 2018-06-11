@@ -21,7 +21,16 @@ WIP      [MANUALS] Progress bar when extracting PDF pages.
 WIP      [MANUALS] Support for CBZ/CBR manuals.
          Wait until this is implemented in AEL and then port it from AEL into AML?
 
-[B]Advanced Emulator Launcher | version 0.9.7 | 09 June 2018[/B]
+
+[B]Advanced MAME Launcher | version 0.9.8 | 11 June 2018[/B]
+
+FEATURE  Documentation in README.md improved.
+
+FIX      Changed source code files to remove BOM. This is necessary to pass Travis tests of
+         Kodi official repo.
+
+
+[B]Advanced MAME Launcher | version 0.9.7 | 09 June 2018[/B]
 
 FEATURE  Implemented settings "display_rom_available" and "display_chd_available".
 
@@ -45,7 +54,7 @@ FEATURE  [CORE] Reduce the memory consumption during the database generation.
 FIX      Fix crash when executing "Check/Update all objects" if Favourites are empty.
 
 
-[B]Advanced Emulator Launcher | version 0.9.6 | 25 May 2018[/B]
+[B]Advanced MAME Launcher | version 0.9.6 | 25 May 2018[/B]
 
 FEATURE  Improve the user experience when the addon is just installed. Check if databases
          have been built, check for errors, etc.
@@ -77,7 +86,7 @@ FEATURE  Implement "Most played SL ROMs"
 FEATURE  Implement "Recently played SL ROMs"
 
 
-[B]Advanced Emulator Launcher | version 0.9.5 | 11 May 2018[/B]
+[B]Advanced MAME Launcher | version 0.9.5 | 11 May 2018[/B]
 
 FEATURE  Option to disable the ROM and asset caches.
 
@@ -118,7 +127,7 @@ FIX      Lots of fixes to MAME ROM audit engine.
 FIX      Lots of fixes to Software Lists audit engine.
 
 
-[B]Advanced Emulator Launcher | version 0.9.4 | 29 March 2018[/B]
+[B]Advanced MAME Launcher | version 0.9.4 | 29 March 2018[/B]
 
 FEATURE  File cache for SL ROMs/CHDs and SL assets.
 
@@ -216,7 +225,7 @@ FEATURE  Manage SL Favourites context menu.
 FEATURE  Create a hased database for main ROM database and Audit ROM database.
 
 
-[B]Advanced Emulator Launcher | version 0.9.3 | 30 May 2017[/B]
+[B]Advanced MAME Launcher | version 0.9.3 | 30 May 2017[/B]
 
 FEATURE  Ability to choose default Icon and Fanart for MAME and SL ROMs in addon settings.
 
@@ -242,7 +251,7 @@ FEATURE  Scan SL assets/artwork.
 FEATURE  Manage MAME Favourites.
 
 
-[B]Advanced Emulator Launcher | version 0.9.2 | 12 February 2017[/B]
+[B]Advanced MAME Launcher | version 0.9.2 | 12 February 2017[/B]
 
 FEATURE  Ability to sort cataloged filters by number of machines.
 
@@ -264,7 +273,7 @@ FIX      Use SORT_METHOD_LABEL_IGNORE_FOLDERS insead of SORT_METHOD_LABEL. This 
          to be rendered first when sorting listitems alpahbetically.
 
 
-[B]Advanced Emulator Launcher | version 0.9.1 | 04 February 2017[/B]
+[B]Advanced MAME Launcher | version 0.9.1 | 04 February 2017[/B]
 
 FEATURE  AML only works on Krypton now. Updated addon.xml with new fields.
 
@@ -294,7 +303,7 @@ FIX      "I get an error whenever trying to open any "Ball & Paddle" category. I
          Problem was that the '&' in the Kodi URL was not escaped.
 
 
-[B]Advanced Emulator Launcher | version 0.9.0 | 15 January 2017[/B]
+[B]Advanced MAME Launcher | version 0.9.0 | 15 January 2017[/B]
 
          Initial release
 

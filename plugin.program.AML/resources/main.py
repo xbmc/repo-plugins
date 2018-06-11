@@ -378,7 +378,7 @@ def run_plugin():
         elif command == 'LAUNCH':
             machine  = args['machine'][0]
             location = args['location'][0] if 'location' in args else LOCATION_STANDARD
-            log_info('Launching MAME machine "{0}"'.format(machine, location))
+            log_info('Launching MAME machine "{0}" in "{1}"'.format(machine, location))
             _run_machine(machine, location)
         elif command == 'LAUNCH_SL':
             SL_name  = args['SL'][0]

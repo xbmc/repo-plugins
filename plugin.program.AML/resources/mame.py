@@ -1045,7 +1045,7 @@ def mame_info_MAME_print(slist, location, machine_name, machine, assets):
     slist.append("[COLOR violet]year[/COLOR]: '{0}'".format(machine['year']))
 
     # >> Standard fields in Main database
-    slist.append('\n[COLOR orange]Machine Main data[/COLOR]'.format(machine_name))
+    slist.append('\n[COLOR orange]Machine Main data[/COLOR]')
     slist.append("[COLOR violet]bestgames[/COLOR]: '{0}'".format(machine['bestgames']))
     slist.append("[COLOR violet]catlist[/COLOR]: '{0}'".format(machine['catlist']))
     slist.append("[COLOR violet]catver[/COLOR]: '{0}'".format(machine['catver']))
@@ -1112,7 +1112,7 @@ def mame_info_MAME_print(slist, location, machine_name, machine, assets):
 
 def mame_info_SL_print(slist, location, SL_name, SL_ROM, rom, assets, SL_dic, SL_machine_list):
     # --- ROM stuff ---
-    slist.append('[COLOR orange]Software List {0} Item {0}[/COLOR]'.format(SL_name, SL_ROM))
+    slist.append('[COLOR orange]Software List {0} Item {1}[/COLOR]'.format(SL_name, SL_ROM))
     if 'SL_DB_key' in rom:
         slist.append("[COLOR slateblue]SL_DB_key[/COLOR]: '{0}'".format(rom['SL_DB_key']))
     if 'SL_ROM_name' in rom:

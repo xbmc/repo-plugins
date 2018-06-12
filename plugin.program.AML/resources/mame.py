@@ -2516,6 +2516,8 @@ def mame_audit_MAME_all(PATHS, pDialog, settings, control_dic, machines, machine
         pDialog.update((processed_machines * 100) // total_machines)
 
         # >> Skip ROMless and/or CHDless machines from reports, except the full report
+        description = machines_render[m_name]['description']
+        cloneof = machines_render[m_name]['cloneof']
         if m_name not in audit_roms_dic:
             head_list = []
             head_list.append('Machine {0} "{1}"'.format(m_name, description))
@@ -2535,8 +2537,6 @@ def mame_audit_MAME_all(PATHS, pDialog, settings, control_dic, machines, machine
             break
 
         # >> Machine header (in all reports).
-        description = machines_render[m_name]['description']
-        cloneof = machines_render[m_name]['cloneof']
         head_list = []
         head_list.append('Machine {0} "{1}"'.format(m_name, description))
         if cloneof:
@@ -3696,7 +3696,7 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic):
             # >> NOTE Some machines have no instance inside <device>, for example 2020bb
             # >>      I don't know how to launch those machines
             # if not instance_tag_found:
-                # log_warning('<instance> tag not found inside <device> tag (machine {0})'.format(machine_name))
+                # log_warning('<instance> tag not found inside <device> tag (machine {0})'.format(m_name))
                 # device_type = '{0} (NI)'.format(device_type)
 
             # >> Add device to database
@@ -3710,18 +3710,18 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic):
         elif event == 'end' and elem.tag == 'machine':
             # >> Assumption 1: isdevice = True if and only if runnable = False
             if m_render['isDevice'] == runnable:
-                print("Machine {0}: machine['isDevice'] == runnable".format(machine_name))
+                print("Machine {0}: machine['isDevice'] == runnable".format(m_name))
                 raise GeneralError
 
             # >> Are there machines with more than 1 <display> tag. Answer: YES
             # if num_displays > 1:
-            #     print("Machine {0}: num_displays = {1}".format(machine_name, num_displays))
+            #     print("Machine {0}: num_displays = {1}".format(m_name, num_displays))
             #     raise GeneralError
 
             # >> All machines with 0 displays are mechanical? NO, 24cdjuke has no screen and is not mechanical. However
             # >> 24cdjuke is a preliminary driver.
             # if num_displays == 0 and not machine['ismechanical']:
-            #     print("Machine {0}: num_displays == 0 and not machine['ismechanical']".format(machine_name))
+            #     print("Machine {0}: num_displays == 0 and not machine['ismechanical']".format(m_name))
             #     raise GeneralError
 
             # >> Mark dead machines. A machine is dead if Status is preliminary AND have no controls
@@ -5475,7 +5475,7 @@ def _get_SL_dataarea_ROMs(SL_name, item_name, part_child, dataarea_dic):
             elif loadflag == 'load32_word_swap':
                 pass
             else:
-                log_error('SL {0} / Item {1} / Unknown loadflag = {0}'.format(loadflag))
+                log_error('SL {0} / Item {1} / Unknown loadflag = "{2}"'.format(SL_name, item_name, loadflag))
                 raise CriticalError('DEBUG')
 
         # --- Add ROM to DB ---
@@ -5582,7 +5582,7 @@ def _mame_load_SL_XML(xml_filename):
                     elif part_child.tag == 'dipswitch':
                         pass
                     else:
-                        log_error('{0} -> Inside <part>, unrecognised tag <{0}>'.format(item_name, part_child.tag))
+                        log_error('{0} -> Inside <part>, unrecognised tag <{1}>'.format(item_name, part_child.tag))
                         raise CriticalError('DEBUG')
                 # --- Add ROMs/disks ---
                 SL_rom_list.append(SL_roms_dic)

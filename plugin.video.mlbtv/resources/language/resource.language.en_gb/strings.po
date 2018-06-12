@@ -16,91 +16,95 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#100"
+msgctxt "#30100"
 msgid "Login"
 msgstr ""
 
-msgctxt "#140"
+msgctxt "#30140"
 msgid "Username"
 msgstr ""
 
-msgctxt "#150"
+msgctxt "#30150"
 msgid "Password"
 msgstr ""
 
-msgctxt "#151"
+msgctxt "#30151"
 msgid "Single Team / Free Game Subscription"
 msgstr ""
 
-msgctxt "#156"
+msgctxt "#30156"
 msgid "Logout"
 msgstr ""
 
-msgctxt "#159"
+msgctxt "#30159"
 msgid "Visual"
 msgstr ""
 
-msgctxt "#160"
+msgctxt "#30160"
 msgid "Stream Quality"
 msgstr ""
 
-msgctxt "#165"
+msgctxt "#30165"
 msgid "CDN"
 msgstr ""
 
-msgctxt "#170"
+msgctxt "#30170"
 msgid "Hide Scores"
 msgstr ""
 
-msgctxt "#1700"
+msgctxt "#30171"
 msgid "Off"
 msgstr ""
 
-msgctxt "#1701"
+msgctxt "#30172"
 msgid "On"
 msgstr ""
 
-msgctxt "#1702"
+msgctxt "#30173"
 msgid "Favorite Team Only"
 msgstr ""
 
-msgctxt "#1703"
+msgctxt "#30174"
 msgid "Live Games Only"
 msgstr ""
 
-msgctxt "#1704"
+msgctxt "#30175"
 msgid "Archive Games Only"
 msgstr ""
 
-msgctxt "#180"
+msgctxt "#30180"
 msgid "Favorite Team"
 msgstr ""
 
-msgctxt "#190"
+msgctxt "#30190"
 msgid "Display Team Name as"
 msgstr ""
 
-msgctxt "#1901"
+msgctxt "#30191"
 msgid "Team (ex. Pirates)"
 msgstr ""
 
-msgctxt "#1903"
+msgctxt "#30192"
 msgid "Abbreviated (ex. PIT)"
 msgstr ""
 
-msgctxt "#200"
+msgctxt "#30301"
 msgid "Time Format"
 msgstr ""
 
-msgctxt "#2000"
+msgctxt "#30302"
 msgid "12 Hour Clock (ex. 6:00 pm)"
 msgstr ""
 
-msgctxt "#2001"
+msgctxt "#30303"
 msgid "24 Hour Clock (ex. 18:00)"
 msgstr ""
 
-msgctxt "#700"
+msgctxt "#30300"
+msgid "In Market Streams"
+msgstr ""
+
+msgctxt "#30700"
 msgid "Sports"
 msgstr ""
 

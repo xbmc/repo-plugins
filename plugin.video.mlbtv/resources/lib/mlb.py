@@ -193,22 +193,24 @@ def stream_select(game_pk):
     json_source = r.json()
 
     stream_title = ['Highlights']
-    #media_id = []
-    free_game = []
     media_state = []
     content_id = []
-    playback_scenario = []
     epg = json_source['media']['epg'][0]['items']
     for item in epg:
         xbmc.log(str(item))
         if item['mediaState'] != 'MEDIA_OFF':
-            title = str(item['mediaFeedType']).title()
-            title = title.replace('_', ' ')
-            stream_title.append(title + " (" + item['callLetters'].encode('utf-8') + ")")
-            media_state.append(item['mediaState'])
-            #media_id.append(item['mediaId'])
-            content_id.append(item['contentId'])
-            # playback_scenario.append(str(item['playback_scenario']))
+            if IN_MARKET != 'Hide' or (item['mediaFeedType'] != 'IN_MARKET_HOME' and item['mediaFeedType'] != 'IN_MARKET_AWAY'):
+                title = str(item['mediaFeedType']).title()
+                title = title.replace('_', ' ')
+                stream_title.append(title + " (" + item['callLetters'].encode('utf-8') + ")")
+                if item['mediaFeedType'] == 'HOME':
+                    media_state.insert(1, item['mediaState'])
+                    content_id.insert(1, item['contentId'])
+                else:
+                    media_state.append(item['mediaState'])
+                    content_id.append(item['contentId'])
+
+
 
     # All past games should have highlights
     if len(stream_title) == 0:
@@ -234,8 +236,7 @@ def stream_select(game_pk):
         highlight_select_stream(json_source['highlights']['live']['items'])
 
     else:
-        xbmcplugin.setResolvedUrl(addon_handle, False, xbmcgui.ListItem())
-        xbmc.executebuiltin('Dialog.Close(all,true)')
+        sys.exit()
 
 
 def highlight_select_stream(json_source):
@@ -272,20 +273,16 @@ def highlight_select_stream(json_source):
 
 
 def play_stream(stream_url, headers):
-    listitem = xbmcgui.ListItem()
-    """    
     if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
-        xbmc.log("USING INPUTSTREAM ADAPTIVE!!!")
+        listitem = xbmcgui.ListItem(path=stream_url)
         listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
         listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
         listitem.setProperty('inputstream.adaptive.stream_headers', headers)
-        listitem.setProperty('inputstream.adaptive.license_key', headers)
+        listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
     else:
-        xbmc.log("NOT USING INPUTSTREAM ADAPTIVE!!!")
-    """
-    stream_url += headers
+        listitem = xbmcgui.ListItem(path=stream_url + '|' + headers)
+        listitem.setMimeType("application/x-mpegURL")
 
-    listitem.setPath(stream_url)
     listitem.setMimeType("application/x-mpegURL")
     xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=listitem)
 

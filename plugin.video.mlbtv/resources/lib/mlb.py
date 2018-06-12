@@ -236,8 +236,6 @@ def stream_select(game_pk):
         highlight_select_stream(json_source['highlights']['live']['items'])
 
     else:
-        xbmcplugin.setResolvedUrl(addon_handle, False, xbmcgui.ListItem())
-        xbmc.executebuiltin('Dialog.Close(all,true)')
         sys.exit()
 
 

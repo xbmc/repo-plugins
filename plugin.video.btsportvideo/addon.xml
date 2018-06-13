@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.btsportvideo" name="BT Sport Video" version="0.3.1" provider-name="Leopold">
+<addon id="plugin.video.btsportvideo" name="BT Sport Video" version="0.3.2" provider-name="Leopold">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.kodiswift" version="0.0.8" optional="false"/>
@@ -18,6 +18,7 @@
     <website>https://sport.bt.com</website>
     <source>https://github.com/LS80/plugin.video.btsportvideo.git</source>
     <license>MIT</license>
+    <broken>BT Sport have asked for the add-on to be removed.</broken>
     <forum>https://forum.kodi.tv/showthread.php?tid=325188</forum>
     <assets>
       <icon>resources/icon.png</icon>

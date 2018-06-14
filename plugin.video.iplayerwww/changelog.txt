@@ -1,3 +1,6 @@
+v2.5.35
+Fixed Catgeories again.
+
 v2.5.34
 Categories fix.
 

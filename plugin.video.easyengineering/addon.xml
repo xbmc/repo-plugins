@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.easyengineering" version="1.0.0" name="Easy Engineering TV" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.youtube.dl" version="17.0.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <description lang="en_GB">Easy Engineering TV is the first video platform dedicated to industry and engineering. It is a solid source of information for an audience passionate about new and impressive technologies.</description>
+        <platform>android freebsd ios linux osx windows</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/KODI_ADDONS/tree/master/plugin.video.easyengineering</source>
+        <website>http://easyengineeringtv.com/</website>
+        <news></news>
+        <forum>https://forum.kodi.tv/showthread.php?tid=332808</forum>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+            <screenshot>resources/images/screenshot03.png</screenshot>
+        </assets>
+    </extension>
+</addon>

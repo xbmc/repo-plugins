@@ -492,14 +492,20 @@ def ScrapeEpisodes(page_url):
                     if url:
                         main_url = 'https://www.bbc.co.uk' + url
 
-                subtitle = None
-                title = ''
-                if 'title' in item:
-                    subtitle = item['title']
-                if subtitle:
-                    title = name + " - " + subtitle
+                episodes_url = ""
+                episodes_title = ""
+                if 'secondaryHref' in item:
+                    # Some strings already contain the full URL, need to work around this.
+                    url = item['secondaryHref'].replace('http://www.bbc.co.uk','')
+                    url = item['secondaryHref'].replace('https://www.bbc.co.uk','')
+                    if url:
+                        episodes_url = 'https://www.bbc.co.uk' + url
+                        episodes_title = item["title"]
+
+                if 'subtitle' in item:
+                    title = "%s - %s" % (item['title'], item['subtitle'])
                 else:
-                    title = name
+                    title = item['title']
 
                 synopsis = ''
                 if 'synopsis' in item:
@@ -512,6 +518,10 @@ def ScrapeEpisodes(page_url):
                 aired = ''
 
                 CheckAutoplay(title , main_url, icon, synopsis, aired)
+
+                if episodes_url:
+                    AddMenuEntry('[B]%s[/B]' % (episodes_title),
+                                 episodes_url, 128, icon, '', '')
 
                 percent = int(100*(page+list_item_num/len(item))/total_pages)
                 pDialog.update(percent,translation(30319),name)
@@ -842,9 +852,11 @@ def ListCategories():
     """
     html = OpenURL('https://www.bbc.co.uk/iplayer')
     match = re.compile(
-        '<a href=".*?/iplayer/categories/([^{}]*?)".*?>(.+?)</a>'
+        '<a href="/iplayer/categories/(.+?)/featured".*?>(.+?)</a>'
         ).findall(html)
     for url, name in match:
+        if name == "View all":
+            continue
         AddMenuEntry(name, url, 125, '', '', '')
 
 
@@ -853,13 +865,13 @@ def ListCategoryFilters(url):
     If there are no filters available, all programmes will be listed using GetFilteredCategory.
     """
     url = url.split('/')[0]
-    NEW_URL = 'https://www.bbc.co.uk/iplayer/categories/%s/all?sort=atoz' % url
+    NEW_URL = 'https://www.bbc.co.uk/iplayer/categories/%s/a-z' % url
 
     # Read selected category's page.
     html = OpenURL(NEW_URL)
     # Some categories offer filters, we want to provide these filters as options.
     match1 = re.findall(
-        '<li class="filter"> <a class="name" href="/iplayer/categories/(.+?)"> (.+?)</a>',
+        '<a href="/iplayer/categories/(.+?)/a-z".*?>(.+?)</a>',
         html,
         re.DOTALL)
     if match1:

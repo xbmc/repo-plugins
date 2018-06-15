@@ -13,6 +13,12 @@
     <provides>executable</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
+    <!--
+        This must be commented when releasing the addon.
+        Kodi must be restarted if this setting is changed.
+        See https://github.com/xbmc/xbmc/pull/13814
+    -->
+    <!-- <reuselanguageinvoker>false</reuselanguageinvoker> -->
     <summary lang="en">Kodi meets MAME!</summary>
     <description lang="en">MAME front-end for Kodi that supports both MAME machines and Software Lists. For help look at the Advanced MAME Launcher thread in the Kodi forum.</description>
     <platform>all</platform>

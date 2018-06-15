@@ -22,6 +22,7 @@ import os
 import urlparse
 import subprocess
 import copy
+from datetime import datetime
 
 # --- Kodi stuff ---
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
@@ -242,6 +243,7 @@ g_settings = {}
 g_base_url = ''
 g_addon_handle = 0
 g_content_type = ''
+g_time_str = unicode(datetime.now())
 
 g_mame_icon = ''
 g_mame_fanart = ''
@@ -251,7 +253,7 @@ g_SL_fanart = ''
 # ---------------------------------------------------------------------------------------------
 # This is the plugin entry point.
 # ---------------------------------------------------------------------------------------------
-def run_plugin():
+def run_plugin(addon_argv):
     global g_base_url
     global g_addon_handle
     global g_content_type
@@ -270,8 +272,9 @@ def run_plugin():
     log_debug('sys.platform {0}'.format(sys.platform))
     log_debug('Python version ' + sys.version.replace('\n', ''))
     log_debug('__addon_version__ {0}'.format(__addon_version__))
-    for i in range(len(sys.argv)): log_debug('sys.argv[{0}] = "{1}"'.format(i, sys.argv[i]))
-    # for i in range(len(sys.path)): log_debug('sys.path[{0}] = "{1}"'.format(i, sys.path[i]))
+    for i in range(len(addon_argv)): log_debug('addon_argv[{0}] = "{1}"'.format(i, addon_argv[i]))
+    # >> Timestamp to see if this submodule is reinterpreted or not.
+    log_debug('submodule global timestamp {0}'.format(g_time_str))
 
     # --- Addon data paths creation ---
     if not PLUGIN_DATA_DIR.exists(): PLUGIN_DATA_DIR.makedirs()
@@ -287,9 +290,9 @@ def run_plugin():
     if not PATHS.MAIN_CONTROL_PATH.exists(): fs_create_empty_control_dic(PATHS)
 
     # --- Process URL ---
-    g_base_url = sys.argv[0]
-    g_addon_handle = int(sys.argv[1])
-    args = urlparse.parse_qs(sys.argv[2][1:])
+    g_base_url = addon_argv[0]
+    g_addon_handle = int(addon_argv[1])
+    args = urlparse.parse_qs(addon_argv[2][1:])
     # log_debug('args = {0}'.format(args))
     # Interestingly, if plugin is called as type executable then args is empty.
     # However, if plugin is called as type video then Kodi adds the following
@@ -1449,11 +1452,19 @@ def _render_process_machines(catalog_dic, catalog_name, category_name,
 
 def _render_commit_machines(r_list):
     for r_dict in r_list:
+        # >> Krypton
         listitem = xbmcgui.ListItem(r_dict['render_name'])
+        # >> Leia (much faster rendering). See changelog.
+        # listitem = xbmcgui.ListItem(r_dict['render_name'], offscreen = True)
+
         listitem.setInfo('video', r_dict['info'])
-        # >> In Kodi Leia use setProperties()
+
+        # >> Kodi Krypton
         for prop_name, prop_value in r_dict['props'].iteritems():
             listitem.setProperty(prop_name, prop_value)
+        # >> In Kodi Leia use setProperties(). See https://github.com/xbmc/xbmc/pull/13952
+        # listitem.setProperties(r_dict['props'])
+
         listitem.setArt(r_dict['art'])
         listitem.addContextMenuItems(r_dict['context'])
         xbmcplugin.addDirectoryItem(handle = g_addon_handle, url = r_dict['URL'],

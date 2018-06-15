@@ -26,6 +26,12 @@ WIP      [MANUALS] Support for CBZ/CBR manuals.
 
 FEATURE  Documentation in README.md improved.
 
+FEATURE  [LEIA] Kodi Leia will cache the Python interpreter which means submodules will only
+         be executed once and cached. sys.argv must be propagated from the entry point code
+         into the submodules.
+         See https://github.com/xbmc/xbmc/pull/13814
+         and https://forum.kodi.tv/showthread.php?tid=303073&pid=2729071#pid2729071
+
 FIX      Changed source code files to remove BOM. This is necessary to pass Travis tests of
          Kodi official repo.
 

@@ -101,7 +101,7 @@ class Mediaset(rutils.RUtils):
     def get_canali_live(self):
         self.log('Getting the list of live channels', 4)
         
-        url = "https://live1-mediaset-it.akamaized.net/content/hls_clr_xo/live/channel(ch{ch})/index.m3u8"
+        url = "https://live3-mediaset-it.akamaized.net/content/hls_clr_xo/live/channel(ch{ch})/index.m3u8"
 
         arrdata = []
 

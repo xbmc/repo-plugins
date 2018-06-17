@@ -17,7 +17,6 @@
 
 import re
 import ssl
-import sys
 import time
 import json
 from bs4 import BeautifulSoup
@@ -42,7 +41,7 @@ def showCatalog(args):
     html = api.getPage(args, "https://www.wakanim.tv/" + args._country + "/v2/catalogue")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -72,7 +71,7 @@ def showCatalog(args):
                        "year":        li.time.string.strip()},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def listLastEpisodes(args):
@@ -82,7 +81,7 @@ def listLastEpisodes(args):
     html = api.getPage(args, "https://www.wakanim.tv/" + args._country + "/v2")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -90,7 +89,7 @@ def listLastEpisodes(args):
     container = soup.find("div", {"class": "js-slider-lastEp"})
     if not container:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -113,7 +112,7 @@ def listLastEpisodes(args):
                        "progress":  str(progress)},
                       isFolder=False, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def listLastSimulcasts(args):
@@ -123,7 +122,7 @@ def listLastSimulcasts(args):
     html = api.getPage(args, "https://www.wakanim.tv/" + args._country + "/v2")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -131,7 +130,7 @@ def listLastSimulcasts(args):
     container = soup.find("div", {"class": "js-slider-lastShow"})
     if not container:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -157,7 +156,7 @@ def listLastSimulcasts(args):
                        "year":        li.time.string.strip()},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def searchAnime(args):
@@ -176,7 +175,7 @@ def searchAnime(args):
     ul = soup.find("ul", {"class": "catalog_list"})
     if not ul:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -201,7 +200,7 @@ def searchAnime(args):
                        "year":   li.time.string.strip()},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def myWatchlist(args):
@@ -211,7 +210,7 @@ def myWatchlist(args):
     html = api.getPage(args, "https://www.wakanim.tv/" + args._country + "/v2/watchlist")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -219,7 +218,7 @@ def myWatchlist(args):
     section = soup.find("section")
     if not section:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -241,7 +240,7 @@ def myWatchlist(args):
                        "progress":  str(progress)},
                       isFolder=False, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def myDownloads(args):
@@ -252,7 +251,7 @@ def myDownloads(args):
     html = api.getPage(args, "https://www.wakanim.tv/" + args._country + "/v2/mydownloads")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -260,7 +259,7 @@ def myDownloads(args):
     container = soup.find("div", {"class": "big-item-list"})
     if not container:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -279,7 +278,7 @@ def myDownloads(args):
                        "fanart": thumb},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def myCollection(args):
@@ -289,7 +288,7 @@ def myCollection(args):
     html = api.getPage(args, "https://www.wakanim.tv/" + args._country + "/v2/collection")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -297,7 +296,7 @@ def myCollection(args):
     container = soup.find("div", {"class": "big-item-list"})
     if not container:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -316,7 +315,7 @@ def myCollection(args):
                        "fanart": thumb},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def listSeason(args):
@@ -326,7 +325,7 @@ def listSeason(args):
     html = api.getPage(args, "https://www.wakanim.tv" + args.url)
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -379,7 +378,7 @@ def listSeason(args):
                        "credits":       credit},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def listEpisodes(args):
@@ -389,7 +388,7 @@ def listEpisodes(args):
     html = api.getPage(args, "https://www.wakanim.tv" + args.url)
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -422,7 +421,7 @@ def listEpisodes(args):
 
         break
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def startplayback(args):
@@ -432,14 +431,14 @@ def startplayback(args):
     html = api.getPage(args, "https://www.wakanim.tv" + args.url)
     if not html:
         item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"))
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, item)
+        xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
         return
 
     # check if not premium
     if (u"Diese Folge ist für Abonnenten reserviert" in html) or (u"Cet épisode est reservé à nos abonnés" in html) or (u"This episode is reserved for our subscribers" in html) or (u"Эта серия зарезервирована для наших подписчиков" in html):
         xbmc.log("[PLUGIN] %s: You need to own this video or be a premium member '%s'" % (args._addonname, args.url), xbmc.LOGERROR)
         item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"))
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, item)
+        xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
         xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30043))
         return
 
@@ -459,7 +458,7 @@ def startplayback(args):
         if u"reactivate" in html:
             xbmc.log("[PLUGIN] %s: Reactivation failed '%s'" % (args._addonname, args.url), xbmc.LOGERROR)
             item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"))
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, item)
+            xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
             xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30042))
             return
 
@@ -469,7 +468,7 @@ def startplayback(args):
         if ((u"<span>Kostenlos</span>" in html) or (u"<span>Gratuit</span>" in html) or (u"<span>Free</span>" in html) or (u"<span>Бесплатный аккаунт</span>" in html)) and not (u"episode_premium_title" in html):
             xbmc.log("[PLUGIN] %s: You need to own this video or be a premium member '%s'" % (args._addonname, args.url), xbmc.LOGERROR)
             item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"))
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, item)
+            xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
             xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30043))
             return
 
@@ -477,7 +476,7 @@ def startplayback(args):
         params = getStreamParams(args, html)
         if not params:
             item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"))
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, item)
+            xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
             return
 
         # play stream
@@ -490,7 +489,7 @@ def startplayback(args):
         item.setProperty("IsPlayable", "true")
         item.setContentLookup(False)
 
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        xbmcplugin.setResolvedUrl(int(args._argv[1]), True, item)
 
         if args._addon.getSetting("sync_playtime") == "true":
             # get required infos

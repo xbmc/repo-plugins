@@ -1,3 +1,6 @@
+v0.4.4 (2018.06.16)
+- Compatibility with latest Kodi 18
+
 v0.4.3 (2018.04.29)
 - Fix website changes
 - Fix login

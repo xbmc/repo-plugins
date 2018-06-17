@@ -1,3 +1,6 @@
+v0.7.4 (2018.06.16)
+- Compatibility with latest Kodi 18
+
 v0.7.3 (2018.06.08)
 - Added 2FA verification
 

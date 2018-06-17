@@ -112,7 +112,10 @@ def getPage(args, url, data=None):
 
         # nuke session cookies and inform user
         xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30047))
-        os.remove(getCookiePath(args))
+        try:
+            os.remove(getCookiePath(args))
+        except WindowsError:
+            pass
         args._cj = None
         return ""
 

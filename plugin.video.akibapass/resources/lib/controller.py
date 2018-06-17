@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-import sys
 from bs4 import BeautifulSoup
 
 import xbmc
@@ -34,7 +33,7 @@ def showCatalog(args):
     html = api.getPage(args, "https://www.akibapass.de/de/v2/catalogue")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -64,7 +63,7 @@ def showCatalog(args):
                        "year":        li.time.string.strip()},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def listLastEpisodes(args):
@@ -74,7 +73,7 @@ def listLastEpisodes(args):
     html = api.getPage(args, "https://www.akibapass.de/de/v2")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -82,7 +81,7 @@ def listLastEpisodes(args):
     ul = soup.find_all("ul", {"class": "js-slider-list"})
     if not ul:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -102,7 +101,7 @@ def listLastEpisodes(args):
                        "plot":   li.find("a", {"class": "slider_item_season"}).string.strip()},
                       isFolder=False, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def listLastSimulcasts(args):
@@ -112,7 +111,7 @@ def listLastSimulcasts(args):
     html = api.getPage(args, "https://www.akibapass.de/de/v2")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -120,7 +119,7 @@ def listLastSimulcasts(args):
     ul = soup.find_all("ul", {"class": "js-slider-list"})
     if not ul:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -146,7 +145,7 @@ def listLastSimulcasts(args):
                        "year":        li.time.string.strip()},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def searchAnime(args):
@@ -165,7 +164,7 @@ def searchAnime(args):
     ul = soup.find("ul", {"class": "catalog_list"})
     if not ul:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -190,7 +189,7 @@ def searchAnime(args):
                        "year":   li.time.string.strip()},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def myDownloads(args):
@@ -201,7 +200,7 @@ def myDownloads(args):
     html = api.getPage(args, "https://www.akibapass.de/de/v2/mydownloads")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -209,7 +208,7 @@ def myDownloads(args):
     container = soup.find("div", {"class": "big-item-list"})
     if not container:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -228,7 +227,7 @@ def myDownloads(args):
                        "fanart": thumb},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def myCollection(args):
@@ -238,7 +237,7 @@ def myCollection(args):
     html = api.getPage(args, "https://www.akibapass.de/de/v2/collection")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -246,7 +245,7 @@ def myCollection(args):
     container = soup.find("div", {"class": "big-item-list"})
     if not container:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -265,7 +264,7 @@ def myCollection(args):
                        "fanart": thumb},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def listSeason(args):
@@ -275,7 +274,7 @@ def listSeason(args):
     html = api.getPage(args, "https://www.akibapass.de" + args.url)
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -329,7 +328,7 @@ def listSeason(args):
                        "credits":       credit},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def listEpisodes(args):
@@ -339,7 +338,7 @@ def listEpisodes(args):
     html = api.getPage(args, "https://www.akibapass.de" + args.url)
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30041)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -365,7 +364,7 @@ def listEpisodes(args):
                        "fanart": args.fanart.replace(" ", "%20")},
                       isFolder=False, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def startplayback(args):
@@ -375,7 +374,7 @@ def startplayback(args):
     html = api.getPage(args, "https://www.akibapass.de" + args.url)
     if not html:
         item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"))
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, item)
+        xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
         return
 
     # check if not premium
@@ -394,14 +393,14 @@ def startplayback(args):
         html = api.getPage(args, "https://www.akibapass.de" + a)
         if not html:
             item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"))
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, item)
+            xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
             return
 
         # reload page
         html = api.getPage(args, "https://www.akibapass.de" + args.url)
         if not html:
             item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"))
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, item)
+            xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
             return
 
         # parse html
@@ -427,7 +426,7 @@ def startplayback(args):
             item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=url + api.getCookies(args))
             item.setMimeType("application/vnd.apple.mpegurl")
             item.setContentLookup(False)
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+            xbmcplugin.setResolvedUrl(int(args._argv[1]), True, item)
         else:
             xbmc.log("[PLUGIN] %s: Failed to play stream" % args._addonname, xbmc.LOGERROR)
             xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30044))

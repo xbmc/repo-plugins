@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.vrt.nu"
        name="VRT Nu"
-       version="1.1.1"
+       version="1.2.0"
        provider-name="Martijn Moreel">
 
     <requires>
@@ -23,6 +23,10 @@
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
+v1.2.0 (17-06-2018)
+- Changed live streaming mechanism
+v1.1.2 (14-06-2018)
+- New stream links for live streaming (Thanks yorickps)
 v1.1.1 (13-03-2018)
 - Fixed bug where seasons do not show when there is one malfunctioning
 v1.1.0 (15-12-2017)

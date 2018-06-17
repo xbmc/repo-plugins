@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-import sys
 import json
 from bs4 import BeautifulSoup
 try:
@@ -39,7 +38,7 @@ def genres_show(args):
     html = api.getPage(args, "https://www.watchbox.de/genres/")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30040)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -57,7 +56,7 @@ def genres_show(args):
                        "plot":  item.find("div", {"class": "text_browse-teaser-subtitle"}).string.strip()},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def genre_list(args):
@@ -83,7 +82,7 @@ def genre_list(args):
                   {"title": args._addon.getLocalizedString(30031),
                    "url":   args.url,
                    "mode":  "genre_new"})
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def genre_view(mode, args):
@@ -110,7 +109,7 @@ def genre_view(mode, args):
 
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30040)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -122,11 +121,11 @@ def genre_view(mode, args):
         # get values
         try:
             meta = item.find("div", {"class": "text_teaser-portrait-meta"}).string.strip()
-            duration, country, year, fsk = meta.split("|")
+            duration, _, year, _ = meta.split("|")
             duration = duration.strip()[:-5]
             duration = str(int(duration) * 60)
             year = year.strip()
-        except (TypeError, ValueError) as e:
+        except (TypeError, ValueError):
             duration = ""
             year = ""
         thumb = item.img["src"].replace(" ", "%20")
@@ -166,7 +165,7 @@ def genre_view(mode, args):
                        "offset": str(int(getattr(args, "offset", 0)) + 1),
                        "mode":   args.mode})
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def mylist(args):
@@ -176,7 +175,7 @@ def mylist(args):
     html = api.getPage(args, "https://www.watchbox.de/meine-liste")
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30040)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -188,9 +187,9 @@ def mylist(args):
         # get values
         try:
             meta = item.find("div", {"class": "text_teaser-portrait-meta"}).string.strip()
-            country, year, fsk = meta.split("|")
+            _, year, _ = meta.split("|")
             year = year.strip()
-        except (TypeError, ValueError) as e:
+        except (TypeError, ValueError):
             year = ""
         thumb = item.img["src"].replace(" ", "%20")
         if thumb[:4] != "http":
@@ -219,7 +218,7 @@ def mylist(args):
                            "plot":   item.find("div", {"class": "text_teaser-portrait-description"}).string.strip()},
                           isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def season_list(args):
@@ -229,7 +228,7 @@ def season_list(args):
     html = api.getPage(args, "https://www.watchbox.de" + args.url)
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30040)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -237,7 +236,7 @@ def season_list(args):
     ul = soup.find("ul", {"class": "season-panel"})
     if not ul:
         view.add_item(args, {"title": args._addon.getLocalizedString(30040)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # get values
@@ -260,7 +259,7 @@ def season_list(args):
                        "mode":        "episode_list"},
                       isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def episode_list(args):
@@ -270,7 +269,7 @@ def episode_list(args):
     html = api.getPage(args, "https://www.watchbox.de" + args.url)
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30040)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse html
@@ -278,7 +277,7 @@ def episode_list(args):
     div = soup.find("div", {"class": "swiper-wrapper"})
     if not div:
         view.add_item(args, {"title": args._addon.getLocalizedString(30040)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # for every list entry
@@ -313,7 +312,7 @@ def episode_list(args):
                            "mode":     "videoplay"},
                           isFolder=False, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def search(args):
@@ -328,7 +327,7 @@ def search(args):
     html = api.getPage(args, "https://api.watchbox.de/v1/search/?page=1&maxPerPage=28&active=true&term=" + quote_plus(d))
     if not html:
         view.add_item(args, {"title": args._addon.getLocalizedString(30040)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         return
 
     # parse json
@@ -363,7 +362,7 @@ def search(args):
                            "plotoutline": item["infoTextShort"]},
                           isFolder=True, mediatype="video")
 
-    view.endofdirectory()
+    view.endofdirectory(args)
 
 
 def startplayback(args):
@@ -373,7 +372,7 @@ def startplayback(args):
     html = api.getPage(args, "https://www.watchbox.de" + args.url)
     if not html:
         item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"))
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, item)
+        xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
         return
 
     # get stream file
@@ -385,7 +384,7 @@ def startplayback(args):
         item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=matches.replace("\\", "") + api.getCookies(args))
         item.setMimeType("application/vnd.apple.mpegurl")
         item.setContentLookup(False)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        xbmcplugin.setResolvedUrl(int(args._argv[1]), True, item)
     else:
         xbmc.log("[PLUGIN] %s: Failed to play stream" % args._addonname, xbmc.LOGERROR)
         xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30044))

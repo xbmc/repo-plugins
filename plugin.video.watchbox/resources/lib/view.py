@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 try:
     from urllib import quote_plus
 except ImportError:
@@ -34,12 +33,12 @@ types = ["count", "size", "date", "genre", "country", "year", "episode", "season
          "lastplayed", "album", "artist", "votes", "path", "trailer", "dateadded", "mediatype", "dbid"]
 
 
-def endofdirectory():
+def endofdirectory(args):
     # sort methods are required in library mode
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
+    xbmcplugin.addSortMethod(int(args._argv[1]), xbmcplugin.SORT_METHOD_NONE)
 
     # let xbmc know the script is done adding items to the list
-    xbmcplugin.endOfDirectory(handle = int(sys.argv[1]))
+    xbmcplugin.endOfDirectory(handle = int(args._argv[1]))
 
 
 def add_item(args, info, isFolder=True, total_items=0, mediatype="video"):
@@ -62,8 +61,6 @@ def add_item(args, info, isFolder=True, total_items=0, mediatype="video"):
         # playable video
         infoLabels["mediatype"] = "video"
         li.setInfo(mediatype, infoLabels)
-        li.addStreamInfo("video", {"codec": "h264", "aspect": 1.78, "width": 960, "height": 544})
-        li.addStreamInfo("audio", {"codec": "aac", "channels": 2})
         li.setProperty("IsPlayable", "true")
 
     # set media image
@@ -74,7 +71,7 @@ def add_item(args, info, isFolder=True, total_items=0, mediatype="video"):
                "icon":   info.get("thumb",  "DefaultFolder.png")})
 
     # add item to list
-    xbmcplugin.addDirectoryItem(handle     = int(sys.argv[1]),
+    xbmcplugin.addDirectoryItem(handle     = int(args._argv[1]),
                                 url        = u,
                                 listitem   = li,
                                 isFolder   = isFolder,
@@ -108,7 +105,7 @@ def build_url(args, info):
         if value and key in types and not "&" + str(key) + "=" in s:
             s = s + "&" + key + "=" + quote_value(value, args.PY2)
 
-    return sys.argv[0] + "?" + s[1:]
+    return args._argv[0] + "?" + s[1:]
 
 
 def make_infolabel(args, info):

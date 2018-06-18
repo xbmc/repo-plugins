@@ -20,8 +20,21 @@ def addDirectory(title,banner,backdrop, description,link,mode,pluginhandle):
     createListItem(title,banner,description,'','','',u, False,True, backdrop,pluginhandle,None)
 
 def generateAddonVideoUrl(videourl):
+    videourl = buildLink(videourl)
     return "plugin://%s/?mode=play&link=%s"  % (xbmcaddon.Addon().getAddonInfo('id'),videourl)
 
+def buildLink(link):
+    if link:
+        return "%s|User-Agent=%s" % (link, Settings.userAgent())
+    else:
+        return link
+        
+def createPlayAllItem(name,pluginhandle):
+    play_all_parameters = {"mode" : "playlist"}
+    play_all_url = sys.argv[0] + '?' + urllib.urlencode(play_all_parameters)           
+    play_all_item = xbmcgui.ListItem(name)
+    play_all_item.setInfo(type="Video", infoLabels={"Title": name, "Plot": ""})
+    xbmcplugin.addDirectoryItem(pluginhandle,play_all_url,play_all_item,isFolder = False,totalItems = -1)
 
 def createListItem(title,banner,description,duration,date,channel,videourl,playable,folder, backdrop,pluginhandle,subtitles=None,blacklist=False, contextMenuItems = None):
     contextMenuItems = contextMenuItems or []
@@ -46,6 +59,8 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
             videoStreamInfo.update({'duration': int(duration)})
         except (TypeError, ValueError):
             debugLog("No Duration found in Video",'Info')
+        if videourl.lower().endswith('_qxb.mp4') or '_qxb' in videourl.lower():
+            videoStreamInfo.update({'width': 1280, 'height': 720})
         if videourl.lower().endswith('_q8c.mp4') or '_q8c' in videourl.lower():
             videoStreamInfo.update({'width': 1280, 'height': 720})
         elif videourl.lower().endswith('_q6a.mp4') or '_q6a' in videourl.lower():

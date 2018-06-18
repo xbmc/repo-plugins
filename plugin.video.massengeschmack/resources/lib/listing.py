@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Massengeschmack Kodi add-on
 # Copyright (C) 2013-2016 by Janek Bevendorff
 #
@@ -31,7 +31,7 @@ class Listing(object):
         Generate listing from data source.
         Will return False if the given DataSource does not intend to return a non-empty listing generator,
         i.e. when L{resources.lib.datasource.DataSource.hasListItems} returns False
-        
+
         @type source: resources.lib.datasource.DataSource
         @param source: the data source object
         @rtype: bool
@@ -47,7 +47,7 @@ class Listing(object):
             self.__addDir(i)
 
         return True
-    
+
     def show(self):
         """
         Show the listing after it has been generated.
@@ -56,19 +56,22 @@ class Listing(object):
         if 'true' == ADDON.getSetting('advanced.viewmodeFix'):
             self.setViewMode(510)
         else:
-            self.setViewMode(55)
+            self.setViewMode(self.__source.getViewMode())
         xbmcplugin.endOfDirectory(ADDON_HANDLE)
-    
+
     def setViewMode(self, id):
         """
         Set the view mode of the current listing.
-        
+
         @type id: int
         @param id: the view mode ID from the current skin
         """
+        if 'false' == ADDON.getSetting('advanced.adjustViewModes'):
+            return
+
         xbmcplugin.setContent(ADDON_HANDLE, self.__source.getContentMode())
         xbmc.executebuiltin('Container.SetViewMode(' + str(id) + ')')
-    
+
     def __addDir(self, listItem):
         xbmcListItem = xbmcgui.ListItem(listItem.getData('name'))
         xbmcListItem.setInfo(type='video', infoLabels=listItem.getData('streamInfo'))
@@ -89,7 +92,7 @@ class ListItem:
     def __init__(self, id=0, name='', url='', thumbnail='', fanart='', streamInfo=None, isFolder=True):
         """
         Generate list item from given parameters.
-        
+
         @type id         : int
         @param id        : numeric ID of the listed show
         @type name       : str
@@ -117,27 +120,27 @@ class ListItem:
             'streamInfo': streamInfo,
             'isFolder'  : isFolder
         }
-    
+
     def setData(self, key, value):
         """
         Set a value for this list item.
-        
+
         @type key: str
         @param key: the name of the data record
         @type value: int|str|dict
         @param value: the data (either a string, a dict or a bool)
         """
         self.__data[key] = value
-    
+
     def getData(self, key):
         """
         Get specific data from this list item.
-        
+
         @type key: str
         @param key: which data to retrieve (name, url, iconImage, metaData)
         @return mixed: the data or '' if nothing has been set or key is invalid
         """
         if key in self.__data:
             return self.__data[key]
-        
+
         return ''

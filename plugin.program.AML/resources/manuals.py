@@ -35,7 +35,6 @@ import xbmcgui, xbmcaddon
 # --- Modules/packages in this plugin ---
 from utils import *
 from utils_kodi import *
-from ReaderPDF import *
 
 # --- Load pdfrw module ---
 __addon_id__ = xbmcaddon.Addon().getAddonInfo('id').decode('utf-8')

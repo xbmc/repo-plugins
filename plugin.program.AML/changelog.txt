@@ -36,6 +36,12 @@ FIX      Changed source code files to remove BOM. This is necessary to pass Trav
          Kodi official repo.
 
 
+FIX      ActivateWindow(busydialog) and Dialog.Close(busydialog) have been deprecated.
+         See https://github.com/xbmc/xbmc/pull/13958
+         and https://github.com/xbmc/xbmc/pull/13954
+         and https://github.com/xbmc/xbmc/pull/10699
+
+
 [B]Advanced MAME Launcher | version 0.9.7 | 09 June 2018[/B]
 
 FEATURE  Implemented settings "display_rom_available" and "display_chd_available".

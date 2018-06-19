@@ -19,21 +19,27 @@
 
 # --- Python standard library ---
 from __future__ import unicode_literals
-import sys, os, shutil, time, random, hashlib, urlparse, re, string, fnmatch
+import sys
+import os
+import shutil
+import time
+import random
+import hashlib
+import urlparse
+import re
+import string
+import fnmatch
 
 # --- Kodi modules ---
 # >> FileName class uses xbmc.translatePath()
 try:
     import xbmc
+    KODI_RUNTIME_AVAILABLE = True
 except:
-    from utils_kodi_standalone import *
+    KODI_RUNTIME_AVAILABLE = False
 
 # --- AEL modules ---
-# >> utils.py and utils_kodi.py must not depend on any other AEL/AML module to avoid circular dependencies.
-try:
-    from utils_kodi import *
-except:
-    from utils_kodi_standalone import *
+from utils_kodi import *
 
 # -------------------------------------------------------------------------------------------------
 # Strings and text

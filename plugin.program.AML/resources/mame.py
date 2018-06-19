@@ -2824,15 +2824,14 @@ def mame_audit_SL_all(PATHS, settings, control_dic):
 
         # >> Update progress
         processed_files += 1
-    else:
-        a = '*** Software Lists audit finished ***'
-        report_full_list.append(a)
-        report_good_list.append(a)
-        report_error_list.append(a)
-        ROM_report_good_list.append(a)
-        ROM_report_error_list.append(a)
-        CHD_report_good_list.append(a)
-        CHD_report_error_list.append(a)
+    a = '*** Software Lists audit finished ***'
+    report_full_list.append(a)
+    report_good_list.append(a)
+    report_error_list.append(a)
+    ROM_report_good_list.append(a)
+    ROM_report_error_list.append(a)
+    CHD_report_good_list.append(a)
+    CHD_report_error_list.append(a)
     pDialog.close()
 
     # >> Write report.
@@ -2885,6 +2884,12 @@ def mame_audit_SL_all(PATHS, settings, control_dic):
 # -------------------------------------------------------------------------------------------------
 # Fanart generation
 # -------------------------------------------------------------------------------------------------
+# >> Cache font objects in global variables.
+# >> Used in mame.py, mame_build_fanart() and mame_build_SL_fanart()
+font_mono = None
+font_mono_SL = None
+font_mono_item = None
+
 #
 # Scales and centers img into a box of size (box_x_size, box_y_size).
 # Scaling keeps original img aspect ratio.

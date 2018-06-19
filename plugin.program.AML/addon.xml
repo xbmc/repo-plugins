@@ -19,9 +19,9 @@
         See https://github.com/xbmc/xbmc/pull/13814
     -->
     <!-- <reuselanguageinvoker>false</reuselanguageinvoker> -->
-    <summary lang="en">Kodi meets MAME!</summary>
-    <description lang="en">MAME front-end for Kodi that supports both MAME machines and Software Lists. For help look at the Advanced MAME Launcher thread in the Kodi forum.</description>
-    <platform>all</platform>
+    <summary lang="en_GB">Kodi meets MAME!</summary>
+    <description lang="en_GB">MAME front-end for Kodi that supports both MAME machines and Software Lists. For help look at the Advanced MAME Launcher thread in the Kodi forum.</description>
+    <platform>android freebsd ios linux osx windows</platform>
     <license>GNU General Public License version 2</license>
     <email>wintermute0110@gmail.com</email>
     <forum>http://forum.kodi.tv/showthread.php?tid=304186</forum>

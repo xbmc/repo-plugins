@@ -139,12 +139,3 @@ ASSET_ARTWORK_EXTS = ['zip']
 ASSET_MANUAL_EXTS  = ['pdf', 'cbz', 'cbr']
 ASSET_TRAILER_EXTS = ['mp4']
 ASSET_IMAGE_EXTS   = ['png']
-
-# -------------------------------------------------------------------------------------------------
-# Advanced MAME Launcher globals
-# -------------------------------------------------------------------------------------------------
-# >> Cache font objects in global variables.
-# >> Used in mame.py, mame_build_fanart() and mame_build_SL_fanart()
-font_mono = None
-font_mono_SL = None
-font_mono_item = None

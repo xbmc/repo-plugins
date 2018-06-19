@@ -578,13 +578,13 @@ def fs_create_empty_control_dic(PATHS):
     AML_LOCK_VALUE_LOCKED = 'True'
     AML_LOCK_VALUE_RELEASED = ''
 
-    # Is AML locked?
+    # >> Use Kodi properties to protect the file writing by several threads.
     infinite_loop = True
-    while infinite_loop:
+    while infinite_loop and not xbmc.Monitor().abortRequested():
         if main_window.getProperty(AML_LOCK_PROPNAME) == AML_LOCK_VALUE_LOCKED:
             log_debug('fs_create_empty_control_dic() AML is locked')
-            # Wait some time
-            time.sleep(0.1)
+            # >> Wait some time so other AML threads finish writing the file.
+            xbmc.sleep(0.25)
         else:
             log_debug('fs_create_empty_control_dic() AML not locked. Writing control_dic')
             # Get the lock

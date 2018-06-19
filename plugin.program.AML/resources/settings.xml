@@ -32,7 +32,7 @@
     <setting label="Software Lists CHD set" type="enum" id="SL_chd_set"  default="0" values="Merged|Split|Non-merged" />
 
     <setting id="separator" type="lsep" label="Misc" />
-    <setting label="Custom filter XML path" type="file" id="filter_XML" default="special://home/addons/plugin.program.AML/AML-MAME-filters.xml" />
+    <setting label="Custom filter XML path" type="file" id="filter_XML" default="special://home/addons/plugin.program.AML/filters/AML-MAME-filters.xml" />
 </category>
 <category label="Display">
     <setting id="separator" type="lsep" label="General"/>

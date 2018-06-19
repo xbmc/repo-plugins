@@ -196,3 +196,7 @@ msgstr "Fehler"
 msgctxt "#30052"
 msgid "This Video is offline"
 msgstr "Dieses Video ist offline"
+
+msgctxt "#30053"
+msgid "Adaptiv"
+msgstr ""

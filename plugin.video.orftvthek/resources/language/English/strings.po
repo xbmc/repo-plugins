@@ -210,3 +210,7 @@ msgstr ""
 msgctxt "#30052"
 msgid "This Video is offline"
 msgstr ""
+
+msgctxt "#30053"
+msgid "Adaptive"
+msgstr ""

@@ -1,3 +1,12 @@
+0.8.5
+- added UHD livestream option
+- added Adaptive quality settings
+- removed "play all" item for htmlscraper (issue #66)
+- fixed "Bundesland Heute" livestream listing for the htmlscraper
+
+0.8.4
+- reverted playall fix because it resulted in a kodi crash (htmlscraper)
+
 0.8.3
 - fixed: don't set directory=true on the "play all" listitem (thx @wsnipex)
 - cleanup (thx @rechi)

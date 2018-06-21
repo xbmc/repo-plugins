@@ -7,6 +7,7 @@ import xbmcplugin
 import xbmcaddon
 import sys
 from libplayer.channel import *
+from libplayer.livestream import *
 from libplayer.utils import *
 
 # Get the plugin url in plugin:// notation.
@@ -16,16 +17,6 @@ __handle__ = int(sys.argv[1])
 
 __context__ = None
 
-class HrMagPlayer(xbmc.Player):
-    def __init__(self):
-        print 'HrMagPlayer initialized'
-        xbmc.Player.__init__(self)
-    
-    def onPlayBackError(self):
-        logStr = 'onPlayBackError called for Hr3Player'
-        print logStr
-        xbmc.log(logStr, xbmc.LOGERROR)
-    
 def list_shows(context):
     """
     Create the list of video categories in the Kodi interface.
@@ -40,13 +31,15 @@ def list_shows(context):
     for show in shows:
         if show['active']:
             # Create a list item with a text label and a thumbnail image.
-            list_item = xbmcgui.ListItem(label=show['name'], thumbnailImage=show['image'])
+            list_item = xbmcgui.ListItem(label=show['name'])
+            list_item.setArt({"thumb": show['image']})
  
             # Create a URL for the plugin recursive callback.
             # Example: plugin://plugin.video.example/?action=listing&category=Animals
             is_folder = True
             if index == 0:
                 is_folder = False
+                list_item.setProperty("IsPlayable", "true")
             # Pass 'listing' and show index
             url = '{0}?action=listing&show={1}'.format(__url__, str(index))
             # is_folder = True means that this item opens a sub-list of lower level items.
@@ -74,26 +67,40 @@ def list_episodes(context, show):
     for episode in episodes:
         # Create a list item with a text label and a thumbnail image.
         list_item = xbmcgui.ListItem(label=episode['title'], thumbnailImage=episode['image'])
-        #list_item.setInfo('video', 'Test Info')
+        list_item.setArt({"thumb": episode['image']})
+
         url = '{0}?action=play&url={1}&episode={2}&show={3}'.format(__url__, episode['link'], encode(episode['title']), show)
         is_folder = False
+        list_item.setProperty("IsPlayable", "true")
         listing.append((url, list_item, is_folder))
         index += 1
     xbmcplugin.addDirectoryItems(__handle__, listing, len(listing))
     xbmcplugin.endOfDirectory(__handle__)
     
+def playLiveStream(context, handle, loader):
+        video = context['episodes'][0]['link']
+        resolved_video = loader.resolveLiveUrl(context, video)
+            
+        """ Show episode guide with live and next show
+        live = Livestream()
+        items = live.getLiveAndNext(context)
+        if len(items) > 0:
+            text = "Live:  " + items[0]['time'] + '  ' + items[0]['head'] + "\n" + str(items[0]['sub'])
+            text += "\nNext:  " + items[1]['time'] + '  ' + items[1]['head'] + "\n" + str(items[1]['sub'])
+            xbmcgui.Dialog().ok('Livestream', text)
+        """
+        listitem = xbmcgui.ListItem(path=resolved_video)
+        listitem.setInfo('video', {'Title': 'Livestream', 'Genre': ''})
+        listitem.setMimeType('application/x-mpegurl')
+        xbmcplugin.setResolvedUrl(int(handle), True, listitem)
+            
 def dispatch(url, handle, parameter):
-    logStr = "Entry: " + url + ", " + str(handle) + ", " + parameter
-    xbmc.log(logStr, xbmc.LOGINFO)
     parameters = extractParameters(parameter)
     action = None
     show = None
     url = None
     episode = None
     if parameters != None:
-        for action in parameters:
-            logStr = action + " = " + parameters[action]
-            xbmc.log(logStr, xbmc.LOGINFO)
         if 'action' in parameters:
             action = parameters['action']
         if 'show' in parameters:
@@ -105,8 +112,9 @@ def dispatch(url, handle, parameter):
     else:
         xbmc.log("No actions", xbmc.LOGINFO)
         action = None   
-        
-    context = ChannelContext(xbmcaddon.Addon())
+    
+    addon = xbmcaddon.Addon()
+    context = ChannelContext(addon)
 
     if action == None:
         list_shows(context)
@@ -115,20 +123,17 @@ def dispatch(url, handle, parameter):
         loader.loadEpisodeList(context, show)
         # Play live stream immediately
         if show == 0:
-            video = context['episodes'][0]['link']
-            resolved_video = loader.resolveLiveUrl(context, video)
-            listitem = xbmcgui.ListItem('')
-            listitem.setInfo('video', {'Title': 'Livestream', 'Genre': ''})
-            player = HrMagPlayer()
-            player.play(resolved_video, listitem)
+            playLiveStream(context, handle, loader)
         else:
             list_episodes(context, show)
     elif action == 'play':
-        video = getVideoLink(url)
-        listitem = xbmcgui.ListItem('')
+        video = getVideoLink(decode(url))
+
+        listitem = xbmcgui.ListItem(path=video)
         id = getShowId(context, show)
         title = context['showList'][show]['name']
         ep = decode(episode)
-        #ep = context['episodes'][episode]
+
         listitem.setInfo('video', {'Title': title, 'Genre': ep})
-        HrMagPlayer().play(video, listitem)
+        listitem.setMimeType('video/mp4')
+        xbmcplugin.setResolvedUrl(int(handle), True, listitem)

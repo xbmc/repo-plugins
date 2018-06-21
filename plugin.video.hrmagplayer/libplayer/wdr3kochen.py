@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import xbmc
+
 class WdrShow:
     def getEpisodes(self, context, index, page):
         context['episodes'] = list()
@@ -10,7 +12,7 @@ class WdrShow:
             return context['episodes']
         
         article = self.getArticle(context, page)
-        while article != None:
+        while article != None and not xbmc.Monitor().abortRequested():
             if context['debug']:
                 print "----------------------------------"
                 print article
@@ -27,14 +29,6 @@ class WdrShow:
                 
                 if episode != None:
                     context['episodes'].append(episode)
-                """
-                print "Image:" + episode['image']
-                print "link: " + episode['link']
-                print "Title:" + episode['title']
-                print "Date :" + episode['date']
-                """
-            else:
-                print("No video")
             article = self.getArticle(context, page)
         return context['episodes']
     
@@ -49,10 +43,8 @@ class WdrShow:
     def getArticle(self, context, page):
         article = None
         ix = page.find('<a href', context['charIndex'])
-        #print ix
         if ix != -1:
             ex = page.find('hideTeasertext', ix)
-            #print ex
             if ex != -1:
                 article = page[ix:ex].replace("\n", '')
                 context['charIndex'] = ex + 9
@@ -63,14 +55,11 @@ class WdrShow:
         return article
     
     def getImage(self, article):
-        #print("getImage: " + line)
         ret = ''
         s = article.find('src=')
         if s != -1:
-            #print "Image line: " + line
             s = article.find(chr(34), s) + 1
             e = article.find(chr(34), s)
-            #print "Image: " + line[s:e]
             ret = 'https://www1.wdr.de/' + article[s:e]
         return ret
 
@@ -80,7 +69,6 @@ class WdrShow:
         if s != -1:
             s = line.find('>', s) + 1
             e = line.find('<', s)
-            #print "Teaser: " + line[s:e]
             ret = line[s:e]
         return ret
 
@@ -91,7 +79,6 @@ class WdrShow:
             s = article.find(chr(34), s) + 1
             e = article.find(chr(34), s)
             ret = 'https://www1.wdr.de/' + article[s:e]
-            #print("DetailLink: " + ret)
         return ret
 
     def getTitle(self, article):
@@ -102,7 +89,6 @@ class WdrShow:
             e = article.find('<', s)
             if s != -1 and e != -1:
                 ret = article[s:e]
-                #print("Title: " + ret)
         return ret
     
     def getDate(self, article):

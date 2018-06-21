@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import urllib
-from libplayer.http import *
+from libplayer.http import HttpRetriever
 
 def extractParameters(actions):
     ret = None

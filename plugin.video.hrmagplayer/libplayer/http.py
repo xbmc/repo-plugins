@@ -10,8 +10,6 @@ class HttpRetriever:
         self.categoryurl = '/sendungen'
 	
     def get(self, url):
-        print "Getting: " + url + "\n"
-        #user_agent = 'Kodi-HR3-Player'
         values = {}
         headers = {}
 

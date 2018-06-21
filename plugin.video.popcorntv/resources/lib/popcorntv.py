@@ -1,6 +1,7 @@
 import urllib2
 import urlparse
 import re
+import json
 from BeautifulSoup import BeautifulSoup
 from BeautifulSoup import BeautifulStoneSoup
 
@@ -62,7 +63,7 @@ class PopcornTV:
         
         if urlParsed.netloc == "cinema.popcorntv.it":
             # Show video in "Lista film"
-            items = htmlTree.find("div", "row lista-episodi").findAll("a")
+            items = htmlTree.findAll("a", "episodio-link")
         else:
             # Show video in "Tutti gli episodi"
             items = htmlTree.find("div", {"role": "tabpanel", "id": "all"}).findAll("a", "episodio-link")
@@ -70,16 +71,16 @@ class PopcornTV:
         for item in items:
             video = {}
             video["title"] = item["title"].strip()
+            video["plot"] = item["data-content"]
             video["url"] = item["href"]
-            video["thumb"] = item.find("img")["src"]
+            # strip() is needed because image URLs may have a leading space
+            video["thumb"] = item.find("img")["src"].strip()
             if video["thumb"].startswith("//"):
                 video["thumb"] = urlParsed.scheme +":" + video["thumb"]
             videoList.append(video)
             
         # Get pagination URLs
         nextPageUrl = None
-        firstPageUrl = None
-        lastPageUrl = None
         prevPageUrl = None
 
         pagination = htmlTree.find("ul", "pagination")
@@ -87,37 +88,60 @@ class PopcornTV:
             prevPage = pagination.find("a", {"rel": "prev"})
             if prevPage is not None:
                 prevPageUrl = prevPage["href"]
-                firstPage = prevPage.parent.findNextSibling("li").find("a")
-                firstPageUrl = firstPage["href"]
                 
             nextPage = pagination.find("a", {"rel": "next"})
             if nextPage is not None:
                 nextPageUrl = nextPage["href"]
-                lastPage = nextPage.parent.findPreviousSibling("li").find("a")
-                lastPageUrl = lastPage["href"]
             
         page = {}
         page["videoList"] = videoList
         page["prevPageUrl"] = prevPageUrl
-        page["firstPageUrl"] = firstPageUrl
-        page["lastPageUrl"] = lastPageUrl
         page["nextPageUrl"] = nextPageUrl
         return page
 
     def getVideoMetadata(self, pageUrl):
         data = urllib2.urlopen(pageUrl).read()
         htmlTree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-
-        link = htmlTree.find("link", {"itemprop": "contentUrl"})
-        if link is None:
+        
+        cover = htmlTree.find("div", "row scheda-cover")
+        if cover is not None:
             # Cinema section
-            url = htmlTree.find("div", "row scheda-cover").find("a")["href"]
+            url = cover.find("a")["href"]
             return self.getVideoMetadata(url)
+        
+        jsonText = htmlTree.find("script", {"type":"application/ld+json"}).text
+        # Fix JSON
+        jsonText = re.sub(r'"description":\s*"([^"]*?)"', '"description": ""', jsonText, flags=re.MULTILINE)
+        params = json.loads(jsonText)
 
         metadata = {}
-        metadata["videoUrl"] = link['href']
-        metadata["title"] = htmlTree.find("meta", {"property": "og:title"})['content']
-        metadata["thumb"] = htmlTree.find("meta", {"property": "og:image"})['content']
+        metadata["title"] = params["name"]
+        metadata["thumb"] = params["thumbnailUrl"][0]
         
+        contentUrl= params["contentUrl"]
+        urlParsed = urlparse.urlsplit(contentUrl)
+        if urlParsed.netloc == "player.vimeo.com":
+            metadata["videoUrl"] = self.getVimeoUrl(contentUrl, pageUrl)
+        elif "www.youtube.com":
+            metadata["videoUrl"] = self.getYouTubeUrl(contentUrl)
+        else:
+            metadata["videoUrl"] = ""
+            
         return metadata
 
+    def getVimeoUrl(self, contentUrl, refererUrl):
+        req = urllib2.Request(contentUrl)
+        req.add_header("Referer", refererUrl)
+        data = urllib2.urlopen(req).read()
+        
+        match = re.search(r'"hls":({.*?}),"progressive":', data, re.DOTALL)
+        string = match.group(1)
+        
+        hls = json.loads(string)
+        videoUrl = hls["cdns"]["fastly_skyfire"]["url"]
+        return videoUrl
+        
+    def getYouTubeUrl(self, contentUrl):
+        videoId = contentUrl[contentUrl.rfind("/")+1:contentUrl.rfind("?")]
+        videoUrl = "plugin://plugin.video.youtube/play/?video_id=%s" % videoId
+        return videoUrl

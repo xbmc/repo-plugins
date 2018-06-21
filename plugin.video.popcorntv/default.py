@@ -30,7 +30,6 @@ def addDirectoryItem(parameters, li):
 
 def addLinkItem(parameters, li):
     li.setProperty('IsPlayable', 'true')
-    li.setInfo('video', {})
     url = sys.argv[0] + '?' + urllib.urlencode(parameters)
     return xbmcplugin.addDirectoryItem(handle=handle, url=url, 
         listitem=li, isFolder=False)
@@ -63,12 +62,9 @@ def show_video_files(url):
     
     for video in page["videoList"]:
         liStyle=xbmcgui.ListItem(video["title"], thumbnailImage=video["thumb"])
+        liStyle.setInfo('video', {"Plot": video["plot"]})
         addLinkItem({"mode": "video", "url": video["url"]}, liStyle)
-        
-    if page["firstPageUrl"] is not None:
-        liStyle=xbmcgui.ListItem("<< First Page", iconImage = "DefaultFolder.png")
-        addDirectoryItem({"mode": "list", "url": page["firstPageUrl"]}, liStyle)
-        
+              
     if page["prevPageUrl"] is not None:
         liStyle=xbmcgui.ListItem("< Prev Page", iconImage = "DefaultFolder.png")
         addDirectoryItem({"mode": "list", "url": page["prevPageUrl"]}, liStyle)
@@ -76,10 +72,6 @@ def show_video_files(url):
     if page["nextPageUrl"] is not None:
         liStyle=xbmcgui.ListItem("> Next Page", iconImage = "DefaultFolder.png")
         addDirectoryItem({"mode": "list", "url": page["nextPageUrl"]}, liStyle)
-        
-    if page["lastPageUrl"] is not None:
-        liStyle=xbmcgui.ListItem(">> Last Page", iconImage = "DefaultFolder.png")
-        addDirectoryItem({"mode": "list", "url": page["lastPageUrl"]}, liStyle)
         
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 

@@ -1,0 +1,66 @@
+[B]1.0.17[/B]
+- Updated page parsing because of upstream HTML changes.
+
+[B]1.0.16[/B]
+- This addon now requires youtube addon.
+- Updates will be available only for krypton and higher.
+
+[B]1.0.15[/B]
+- Updated page parsing because of upstream HTML changes.
+- Added li.setInfo video for Kodi 18.
+
+[B]1.0.14[/B]
+- Updated page parsing because of upstream HTML changes.
+- Added logging.
+
+[B]1.0.13[/B]
+- Updated page parsing because of upstream HTML changes.
+
+[B]1.0.12[/B]
+- Updated page parsing because of upstream HTML changes.
+
+[B]1.0.11[/B]
+- Used setResolvedUrl for playback.
+- Fixed spaces in thumb URL.
+
+[B]1.0.10[/B]
+- Updated page parsing because of upstream HTML changes.
+- Don't sort items in root folder.
+
+[B]1.0.9[/B]
+- Updated page parsing because of upstream HTML changes.
+- Minor fixes.
+
+[B]1.0.8[/B]
+- Updated page parsing because of upstream HTML changes.
+- Show title and thumbnail during play using video metadata.
+- Minor fixes.
+
+[B]1.0.7[/B]
+- added English description and summary in addon.xml
+
+[B]1.0.6[/B]
+- updated page parsing because of upstream HTML changes
+
+[B]1.0.5[/B]
+- updated page parsing because of upstream HTML changes
+- updated required python API version to 2.1.0: this addon should now work with both XBMC 12 (Frodo) and XBMC 13 (Gotham)
+
+[B]1.0.4[/B]
+- added SIMULCAST in ANIME MANGA
+- updated page parsing because of upstream HTML changes
+- now using Android streams
+- authetication needed for VM18 streams is not yet implemented
+
+[B]1.0.3[/B]
+- filtered out the "Videostrillo" and the "Fox TV" categories
+
+[B]1.0.2[/B]
+- filtered out the "News" category (previously called "GenteTV") because it does not contains videos
+
+[B]1.0.1[/B]
+- updated page parsing because of upstream HTML changes
+
+[B]1.0.0[/B]
+- first release
+

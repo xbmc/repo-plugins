@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.hrmagplayer" name="HR Magazine Player" version="1.0.2" provider-name="extramundane">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<source></source>
+        <summary lang="en_GB">Live streaming and magazines from Hessischer Rundfunk TV</summary>
+        <description lang="en_GB">This add-on provides access to the HR TV live stream and some local cultural shows.</description>
+        <language>de</language>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+            <screenshot>resources/screenshots/screenshot000.png</screenshot>
+            <screenshot>resources/screenshots/screenshot001.png</screenshot>
+            <screenshot>resources/screenshots/screenshot002.png</screenshot>
+        </assets>
+    </extension>
+</addon>

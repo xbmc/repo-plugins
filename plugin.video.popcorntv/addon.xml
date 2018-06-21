@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.popcorntv"
        name="PopcornTv"
-       version="1.0.15"
+       version="1.0.16"
        provider-name="Nightflyer">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -23,5 +23,6 @@
     <website>https://github.com/nightflyer73/plugin.video.popcorntv</website>
     <email></email>
     <source>https://github.com/nightflyer73/plugin.video.popcorntv</source>
+    <broken>PopcornTv now requires youtube addon. Updates will be available only for krypton and higher.</broken>
   </extension>
 </addon>

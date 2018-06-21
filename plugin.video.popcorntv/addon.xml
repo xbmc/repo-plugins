@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.popcorntv"
+       name="PopcornTv"
+       version="1.0.17"
+       provider-name="Nightflyer">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+    <import addon="plugin.video.youtube" version="5.1.16"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>it</language>
+    <platform>all</platform>
+    <summary lang="it_IT">La web TV On-Demand, legale e gratuita. Cinema, Musica, Sport e tanto di più</summary>
+    <description lang="it_IT">La Over the Top TV, completamente gratuita, in streaming on demand, di film, video musicali, avvenimenti sportivi, e numerosi altri contenuti di una Library in continuo aggiornamento.</description>
+    <summary lang="en_GB">The legal and free On-Demand web TV. Movies, Music, Sports and much more</summary>
+    <description lang="en_GB">The completely free Over the Top TV, streaming on-demand movies, music videos, sporting events, and many other contents from a continuously updated library.</description>
+    <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=155915</forum>
+    <website>https://github.com/nightflyer73/plugin.video.popcorntv</website>
+    <email></email>
+    <source>https://github.com/nightflyer73/plugin.video.popcorntv</source>
+  </extension>
+</addon>

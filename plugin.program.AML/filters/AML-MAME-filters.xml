@@ -1,0 +1,156 @@
+<!--
+    Example Advanced MAME Launcher custom filters
+-->
+<Advanced_MAME_Launcher_custom_filters>
+
+<!--  Driver definitions  -->
+<DEFINE name="CAPCOM_CPS_DRIVERS">has cps1.cpp or has cps2.cpp or has cps3.cpp</DEFINE>
+<DEFINE name="NEOGEO_MVS_DRIVER">has neogeo.cpp</DEFINE>
+
+<!--  Genre definitions  -->
+<DEFINE name="STANDARD_GENRES">has "Ball &amp; Paddle" or has Climbing or has Driving or has Fighter or has Maze or has MultiGame or has Multiplay or has Platform or has Puzzle or has Shooter or has Sports or has Whac-A-Mole</DEFINE>
+
+<!--  Control definitions  -->
+<DEFINE name="STANDARD_CONTROLS">has Dial or has Joy or has Lightgun or has "Only Buttons" or has Paddle or has Pedal or has Positional or has Stick or has Trackball</DEFINE>
+
+<!--  Manufacturer/board filters  -->
+<MAMEFilter>
+    <Name>Atari arcade games</Name>
+    <Plot>Arcade games by Atari</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Atari</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Capcom arcade games</Name>
+    <Plot>Arcade games by Capcom</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Capcom</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Capcom CPS board</Name>
+    <Plot>Machines in Capcom CPS arcade boards</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Driver>CAPCOM_CPS_DRIVERS</Driver>
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Data East arcade games</Name>
+    <Plot>Arcade games by Data East</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has "Data East"</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Gaelco arcade games</Name>
+    <Plot>Arcade games by Gaelco</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Gaelco</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Irem arcade games</Name>
+    <Plot>Arcade games by Irem</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Irem</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Jaleco arcade games</Name>
+    <Plot>Arcade games by Jaleco</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Jaleco</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Kaneko arcade games</Name>
+    <Plot>Arcade games by Kaneko</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Kaneko</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Konami arcade games</Name>
+    <Plot>Arcade games by Konami</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Konami</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Midway arcade games</Name>
+    <Plot>Arcade games by Midway</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Midway</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Namco arcade games</Name>
+    <Plot>Arcade games by Namco</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Namco</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Nintendo arcade games</Name>
+    <Plot>Arcade games by Nintendo</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Nintendo</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>SEGA arcade games</Name>
+    <Plot>Arcade games by SEGA</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Sega or has SEGA</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>SNK arcade games</Name>
+    <Plot>Arcade games by SNK</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has SNK or has Snk</Manufacturer> 
+</MAMEFilter>
+<MAMEFilter>
+    <Name>SNK NeoGeo MVS board</Name>
+    <Plot>Machines in SNK Neo Geo MVS arcade board</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Driver>NEOGEO_MVS_DRIVER</Driver>
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Taito arcade games</Name>
+    <Plot>Arcade games by Taito</Plot>
+    <Options>NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Taito</Manufacturer> 
+</MAMEFilter>
+
+<!--  Family game definitions  -->
+<MAMEFilter>
+    <Name>Familiy games from the 70s</Name>
+    <Plot>Arcade machines from the 70s with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines</Plot>
+    <Options>NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Genre>STANDARD_GENRES</Genre>
+    <Controls>STANDARD_CONTROLS</Controls>
+    <Year>year > 1000 and year &lt; 1980</Year>
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Familiy games from the 80s</Name>
+    <Plot>Arcade machines from the 80s with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines</Plot>
+    <Options>NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Genre>STANDARD_GENRES</Genre>
+    <Controls>STANDARD_CONTROLS</Controls>
+    <Year>year >= 1980 and year &lt; 1990</Year>
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Familiy games from the 90s</Name>
+    <Plot>Arcade machines from the 90s with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines</Plot>
+    <Options>NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Genre>STANDARD_GENRES</Genre>
+    <Controls>STANDARD_CONTROLS</Controls>
+    <Year>year >= 1990 and year &lt; 2000</Year>
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Familiy games from the 00s</Name>
+    <Plot>Arcade machines from the 00s with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines</Plot>
+    <Options>NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Genre>STANDARD_GENRES</Genre>
+    <Controls>STANDARD_CONTROLS</Controls>
+    <Year>year >= 2000 and year &lt; 2010</Year>
+</MAMEFilter>
+<MAMEFilter>
+    <Name>Familiy games from the 10s</Name>
+    <Plot>Arcade machines from the 10s with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines</Plot>
+    <Options>NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Genre>STANDARD_GENRES</Genre>
+    <Controls>STANDARD_CONTROLS</Controls>
+    <Year>year >= 2010</Year>
+</MAMEFilter>
+
+</Advanced_MAME_Launcher_custom_filters>

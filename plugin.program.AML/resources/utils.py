@@ -13,10 +13,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-#
-# Utility functions which does not depend on Kodi modules (except log_* functions)
-#
-
 # --- Python standard library ---
 from __future__ import unicode_literals
 import sys
@@ -34,11 +30,12 @@ import fnmatch
 # >> FileName class uses xbmc.translatePath()
 try:
     import xbmc
-    KODI_RUNTIME_AVAILABLE = True
+    KODI_RUNTIME_AVAILABLE_UTILS = True
 except:
-    KODI_RUNTIME_AVAILABLE = False
+    KODI_RUNTIME_AVAILABLE_UTILS = False
 
 # --- AEL modules ---
+# This module must only include utils_kodi.py to avoid circular dependencies.
 from utils_kodi import *
 
 # -------------------------------------------------------------------------------------------------

@@ -286,7 +286,7 @@ def run_plugin(addon_argv):
 
     # --- If control_dic does not exists create an empty one ---
     # >> control_dic will be used for database built checks, etc.
-    if not PATHS.MAIN_CONTROL_PATH.exists(): fs_create_empty_control_dic(PATHS)
+    if not PATHS.MAIN_CONTROL_PATH.exists(): fs_create_empty_control_dic(PATHS, __addon_version__)
 
     # --- Process URL ---
     g_base_url = addon_argv[0]
@@ -511,9 +511,11 @@ def _get_settings():
     o = __addon__
 
     # --- Paths ---
+    # >> Mandatory
     g_settings['mame_prog']    = o.getSetting('mame_prog').decode('utf-8')
-
     g_settings['rom_path']     = o.getSetting('rom_path').decode('utf-8')
+
+    # >> Optional
     g_settings['assets_path']  = o.getSetting('assets_path').decode('utf-8')
     g_settings['chd_path']     = o.getSetting('chd_path').decode('utf-8')
     g_settings['samples_path'] = o.getSetting('samples_path').decode('utf-8')
@@ -547,8 +549,8 @@ def _get_settings():
     g_settings['sl_view_mode']            = int(o.getSetting('sl_view_mode'))
     g_settings['display_hide_Mature']     = True if o.getSetting('display_hide_Mature') == 'true' else False
     g_settings['display_hide_BIOS']       = True if o.getSetting('display_hide_BIOS') == 'true' else False
-    g_settings['display_hide_nonworking'] = True if o.getSetting('display_hide_nonworking') == 'true' else False
     g_settings['display_hide_imperfect']  = True if o.getSetting('display_hide_imperfect') == 'true' else False
+    g_settings['display_hide_nonworking'] = True if o.getSetting('display_hide_nonworking') == 'true' else False
     g_settings['display_rom_available']   = True if o.getSetting('display_rom_available') == 'true' else False
     g_settings['display_chd_available']   = True if o.getSetting('display_chd_available') == 'true' else False
 
@@ -805,6 +807,8 @@ def _render_root_list():
 
     # >> Software lists
     if g_settings['display_SL_browser']:
+        _render_root_list_row_standard('Software Lists (all)',
+                                       _misc_url_1_arg('catalog', 'SL'))
         _render_root_list_row_standard('Software Lists (with ROMs)',
                                        _misc_url_1_arg('catalog', 'SL_ROM'))
         _render_root_list_row_standard('Software Lists (with ROMs and CHDs)',
@@ -1531,7 +1535,10 @@ def _render_SL_list(catalog_name):
 
     # >> Build SL
     SL_catalog_dic = {}
-    if catalog_name == 'SL_ROM':
+    if catalog_name == 'SL':
+        for SL_name, SL_dic in SL_main_catalog_dic.iteritems():
+            SL_catalog_dic[SL_name] = SL_dic
+    elif catalog_name == 'SL_ROM':
         for SL_name, SL_dic in SL_main_catalog_dic.iteritems():
             if SL_dic['num_with_ROMs'] > 0 and SL_dic['num_with_CHDs'] == 0:
                 SL_catalog_dic[SL_name] = SL_dic
@@ -1993,6 +2000,14 @@ def _command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
             else:                                Command_str = 'Not found'
         else:
             Command_str = 'Not configured'
+
+        # >> Check Fanart and Manual. Load hashed databases.
+        # NOTE A ROM loading factory need to be coded to deal with the different ROM
+        #      locations to avoid duplicate code. Have a look at ACTION_VIEW_MACHINE_DATA
+        #      in function _command_context_view()
+        # Fanart_str = 
+        # Manual_str = 
+
     elif view_type == VIEW_SL_ROM:
         History_idx_dic   = fs_load_JSON_file_dic(PATHS.HISTORY_IDX_PATH.getPath())
         if History_idx_dic:
@@ -2004,6 +2019,10 @@ def _command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
                 History_str = 'SL not found'
         else:
             History_str = 'Not configured'
+
+        # >> Check Fanart and Manual.
+        # Fanart_str =
+        # Manual_str =
 
     # --- Build menu base on view_type ---
     if view_type == VIEW_MAME_MACHINE:
@@ -4669,7 +4688,7 @@ def _command_context_setup_plugin():
         mame_prog_FN = FileName(g_settings['mame_prog'])
 
         # --- Extract MAME XML ---
-        (filesize, total_machines) = fs_extract_MAME_XML(PATHS, mame_prog_FN)
+        (filesize, total_machines) = fs_extract_MAME_XML(PATHS, mame_prog_FN, __addon_version__)
         kodi_dialog_OK('Extracted MAME XML database. '
                        'Size is {0} MB and there are {1} machines.'.format(filesize / 1000000, total_machines))
 
@@ -4692,7 +4711,7 @@ def _command_context_setup_plugin():
         # 1) Creates the ROM hashed database.
         # 2) Creates the (empty) Asset cache.
         # 3) Updates control_dic and t_MAME_DB_build timestamp.
-        DB = mame_build_MAME_main_database(PATHS, g_settings, control_dic)
+        DB = mame_build_MAME_main_database(PATHS, g_settings, control_dic, __addon_version__)
         fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
 
         # --- Build and save everything ---
@@ -6504,14 +6523,15 @@ def _run_before_execution():
     media_state_str = ['Stop', 'Pause', 'Keep playing'][media_state_action]
     a = '_run_before_execution() media_state_action is "{0}" ({1})'
     log_verb(a.format(media_state_str, media_state_action))
-    if media_state_action == 0 and xbmc.Player().isPlaying():
-        log_verb('_run_before_execution() Calling xbmc.Player().stop()')
-        xbmc.Player().stop()
+    kodi_is_playing = xbmc.getCondVisibility('Player.HasMedia')
+    if media_state_action == 0 and kodi_is_playing:
+        log_verb('_run_before_execution() Executing built-in PlayerControl(stop)')
+        xbmc.executebuiltin('PlayerControl(stop)')
         xbmc.sleep(100)
         g_flag_kodi_was_playing = True
-    elif media_state_action == 1 and xbmc.Player().isPlaying():
-        log_verb('_run_before_execution() Calling xbmc.Player().pause()')
-        xbmc.Player().pause()
+    elif media_state_action == 1 and kodi_is_playing:
+        log_verb('_run_before_execution() Executing built-in PlayerControl(pause)')
+        xbmc.executebuiltin('PlayerControl(pause)')
         xbmc.sleep(100)
         g_flag_kodi_was_playing = True
 
@@ -6619,8 +6639,8 @@ def _run_after_execution():
     log_verb(a.format(media_state_str, media_state_action))
     log_verb('_run_after_execution() g_flag_kodi_was_playing is {0}'.format(g_flag_kodi_was_playing))
     if g_flag_kodi_was_playing and media_state_action == 1:
-        log_verb('_run_after_execution() Calling xbmc.Player().play()')
-        xbmc.Player().play()
+        log_verb('_run_after_execution() Executing built-in PlayerControl(play)')
+        xbmc.executebuiltin('PlayerControl(play)')
     log_debug('_run_after_execution() Function ENDS')
 
 # ---------------------------------------------------------------------------------------------

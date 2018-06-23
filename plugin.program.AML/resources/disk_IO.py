@@ -321,10 +321,12 @@ def fs_new_control_dic():
         't_SL_audit'            : 0,
 
         # --- Filed in when building main MAME database ---
+        'ver_AML'       : 0,
+        'ver_AML_str'   : 'Undefined',
         # >> Numerical MAME version. Allows for comparisons like ver_mame >= MAME_VERSION_0190
         # >> MAME string version, as reported by the executable stdout. Example: '0.194 (mame0194)'
         'ver_mame'      : 0,
-        'ver_mame_str'  : 'MAME database not built',
+        'ver_mame_str'  : 'Undefined',
         'ver_bestgames' : 'MAME database not built',
         'ver_catlist'   : 'MAME database not built',
         'ver_catver'    : 'MAME database not built',
@@ -369,6 +371,7 @@ def fs_new_control_dic():
         'stats_samples_clones'     : 0,
 
         # --- Filed in when building the ROM audit databases ---
+        'stats_audit_MAME_machines_runnable' : 0,
         # Number of ROM ZIP files in the Merged, Split or Non-merged sets.
         'stats_audit_MAME_ROM_ZIP_files' : 0,
         # Number of Sample ZIP files.
@@ -404,7 +407,6 @@ def fs_new_control_dic():
         'stats_audit_CHDs_invalid'    : 0,
 
         # --- Filed in when auditing the MAME machines ---
-        'audit_MAME_machines_runnable'         : 0,
         # >> Machines with ROMs/CHDs archives that are OK or not
         'audit_MAME_machines_with_arch'        : 0,
         'audit_MAME_machines_with_arch_OK'     : 0,
@@ -571,8 +573,51 @@ def change_control_dic(control_dic, field, value):
     else:
         raise TypeError('Field {0} not in control_dic'.format(field))
 
-def fs_create_empty_control_dic(PATHS):
-    log_info('fs_create_empty_control_dic() Creating control_dic')
+#
+# AML version is like this: xxx.yyy.zzz[-|~][alpha[jj]|beta[jj]]
+# It gets converted to: xxx.yyy.zzz ijj -> int xxx,yyy,zzz,ijj
+# This function must be tested thorougly with a file in ~/tools/ directory.
+#
+def fs_AML_version_str_to_int(AML_version_str):
+    # --- Parse versions like 0.9.8 ---
+    m_obj = re.search('^(\d+?)\.(\d+?)\.(\d+?)', AML_version_str)
+    if m_obj:
+        major = int(m_obj.group(1))
+        minor = int(m_obj.group(2))
+        build = int(m_obj.group(3))
+        log_debug('mame_get_numerical_version() major  {0}'.format(major))
+        log_debug('mame_get_numerical_version() minor  {0}'.format(minor))
+        log_debug('mame_get_numerical_version() build  {0}'.format(build))
+        AML_version_int = major * 100000000 + minor * 1000000 + build * 1000
+        return AML_version_int
+
+    # --- Parse versions like 0.9.8[-|~][alpha|beta] ---
+    m_obj = re.search('^(\d+?)\.(\d+?)\.(\d+?)[\-\~](alpha|beta)', AML_version_str)
+    if m_obj:
+        major  = int(m_obj.group(1))
+        minor  = int(m_obj.group(2))
+        build  = int(m_obj.group(3))
+        string = int(m_obj.group(4))
+        if string == 'alpha':  string_int = 1
+        elif string == 'beta': string_int = 2
+        log_debug('mame_get_numerical_version() major       {0}'.format(major))
+        log_debug('mame_get_numerical_version() minor       {0}'.format(minor))
+        log_debug('mame_get_numerical_version() build       {0}'.format(build))
+        log_debug('mame_get_numerical_version() string      {0}'.format(string))
+        log_debug('mame_get_numerical_version() string_int  {0}'.format(string_int))
+        AML_version_int = major * 100000000 + minor * 1000000 + build * 1000 + string_int * 100
+        return AML_version_int
+
+    # --- Parse versions like 0.9.8[-|~][alphaiii|betaiii] ---
+    raise Addon_Error('Unknown version string "{0}"'.format(AML_version_str))
+
+    return 0
+
+def fs_create_empty_control_dic(PATHS, AML_version_str):
+    log_info('fs_create_empty_control_dic() Creating empty control_dic')
+    AML_version_int = fs_AML_version_str_to_int(AML_version_str)
+    log_info('fs_create_empty_control_dic() AML version str "{0}"'.format(AML_version_str))
+    log_info('fs_create_empty_control_dic() AML version int {0}'.format(AML_version_int))
     main_window = xbmcgui.Window(10000)
     AML_LOCK_PROPNAME = 'AML_instance_lock'
     AML_LOCK_VALUE_LOCKED = 'True'
@@ -592,6 +637,8 @@ def fs_create_empty_control_dic(PATHS):
 
             # Write control_dic
             control_dic = fs_new_control_dic()
+            change_control_dic(control_dic, 'ver_AML', AML_version_int)
+            change_control_dic(control_dic, 'ver_AML_str', AML_version_str)
             fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
 
             # Release lock and exit
@@ -914,12 +961,13 @@ def fs_extract_MAME_version(PATHS, mame_prog_FN):
     return version_str
 
 #
-# mame_prog_FN  -> (FileName object) path to MAME executable.
-# Returns:
-#   filesize        (int) file size of output MAME.xml in bytes
-#   total_machines  (int) number of mame machines
+# Arguments:
+# 1) mame_prog_FN    -> (FileName object) path to MAME executable.
+# 2) AML_version_str -> AML addon version string.
 #
-def fs_extract_MAME_XML(PATHS, mame_prog_FN):
+# Creates a new control_dic and updates the number of machines.
+#
+def fs_extract_MAME_XML(PATHS, mame_prog_FN, AML_version_str):
     (mame_dir, mame_exec) = os.path.split(mame_prog_FN.getPath())
     log_info('fs_extract_MAME_XML() mame_prog_FN "{0}"'.format(mame_prog_FN.getPath()))
     log_debug('fs_extract_MAME_XML() mame_dir     "{0}"'.format(mame_dir))
@@ -943,19 +991,24 @@ def fs_extract_MAME_XML(PATHS, mame_prog_FN):
 
     # --- Count number of machines. Useful for progress dialogs ---
     log_info('fs_extract_MAME_XML() Counting number of machines ...')
-    total_machines = fs_count_MAME_Machines(PATHS)
-    log_info('fs_extract_MAME_XML() Found {0} machines.'.format(total_machines))
-    # kodi_dialog_OK('Found {0} machines in MAME.xml.'.format(total_machines))
+    stats_total_machines = fs_count_MAME_Machines(PATHS)
+    log_info('fs_extract_MAME_XML() Found {0} machines.'.format(stats_total_machines))
+    # kodi_dialog_OK('Found {0} machines in MAME.xml.'.format(stats_total_machines))
 
     # -----------------------------------------------------------------------------
     # Reset MAME control dictionary completely
     # -----------------------------------------------------------------------------
+    AML_version_int = fs_AML_version_str_to_int(AML_version_str)
+    log_info('fs_create_empty_control_dic() AML version str "{0}"'.format(AML_version_str))
+    log_info('fs_create_empty_control_dic() AML version int {0}'.format(AML_version_int))
     control_dic = fs_new_control_dic()
-    change_control_dic(control_dic, 'stats_total_machines', total_machines)
+    change_control_dic(control_dic, 'ver_AML', AML_version_int)
+    change_control_dic(control_dic, 'ver_AML_str', AML_version_str)
+    change_control_dic(control_dic, 'stats_total_machines', stats_total_machines)
     change_control_dic(control_dic, 't_XML_extraction', time.time())
     fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
 
-    return (filesize, total_machines)
+    return (filesize, stats_total_machines)
 
 def fs_count_MAME_Machines(PATHS):
     pDialog = xbmcgui.DialogProgress()
@@ -965,7 +1018,7 @@ def fs_count_MAME_Machines(PATHS):
     num_machines = 0
     with open(PATHS.MAME_XML_PATH.getPath(), 'rt') as f:
         for line in f:
-            if line.decode('utf-8').find('<machine name=') > 0: num_machines = num_machines + 1
+            if line.decode('utf-8').find('<machine name=') > 0: num_machines += 1
     pDialog.update(100)
     pDialog.close()
 

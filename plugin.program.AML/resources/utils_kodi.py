@@ -14,20 +14,19 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-#
-# Utility functions which DEPEND on Kodi modules
-#
+# --- Python standard library ---
+from __future__ import unicode_literals
 import sys, os, shutil, time, random, hashlib, urlparse
 
+# --- Kodi modules ---
 try:
     import xbmc, xbmcgui
-    KODI_RUNTIME_AVAILABLE = True
+    KODI_RUNTIME_AVAILABLE_UTILS_KODI = True
 except:
-    KODI_RUNTIME_AVAILABLE = False
+    KODI_RUNTIME_AVAILABLE_UTILS_KODI = False
 
-# Addon custom modules/packages
-# import utils
-# import disk_IO
+# --- AEL modules ---
+# This module must not include any other AML/AEL modules to avoid circular dependencies.
 
 # --- Constants -----------------------------------------------------------------------------------
 LOG_ERROR   = 0
@@ -154,7 +153,7 @@ def kodi_toogle_fullscreen():
 # If runnining with Kodi Python interpreter use Kodi proper functions.
 # If running with the standard Python interpreter use replacement functions.
 # -------------------------------------------------------------------------------------------------
-if KODI_RUNTIME_AVAILABLE:
+if KODI_RUNTIME_AVAILABLE_UTILS_KODI:
     log_debug   = log_debug_KR
     log_verb    = log_verb_KR
     log_info    = log_info_KR

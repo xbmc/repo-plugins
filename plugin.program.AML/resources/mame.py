@@ -390,8 +390,8 @@ def mame_load_Catver_ini(filename):
             raise CriticalError('Unknown read_status FSM value')
     f.close()
     log_info('mame_load_Catver_ini() Version "{0}"'.format(catver_version))
-    log_info('mame_load_Catver_ini() Number of machines {0:6d}'.format(len(categories_dic)))
-    log_info('mame_load_Catver_ini() Number of categories {0:6d}'.format(len(categories_set)))
+    log_info('mame_load_Catver_ini() Machines {0}'.format(len(categories_dic)))
+    log_info('mame_load_Catver_ini() Categories {0}'.format(len(categories_set)))
 
     return (categories_dic, catver_version)
 
@@ -442,8 +442,8 @@ def mame_load_nplayers_ini(filename):
             raise CriticalError('Unknown read_status FSM value')
     f.close()
     log_info('mame_load_nplayers_ini() Version "{0}"'.format(nplayers_version))
-    log_info('mame_load_nplayers_ini() Number of machines {0:6d}'.format(len(categories_dic)))
-    log_info('mame_load_nplayers_ini() Number of categories {0:6d}'.format(len(categories_set)))
+    log_info('mame_load_nplayers_ini() Machines {0}'.format(len(categories_dic)))
+    log_info('mame_load_nplayers_ini() Categories {0}'.format(len(categories_set)))
 
     return (categories_dic, nplayers_version)
 
@@ -484,7 +484,7 @@ def mame_load_Mature_ini(filename):
             ini_set.add(machine_name)
     f.close()
     log_info('mame_load_Mature_ini() Version "{0}"'.format(ini_version))
-    log_info('mame_load_Mature_ini() Number of machines {0:6d}'.format(len(ini_set)))
+    log_info('mame_load_Mature_ini() Machines {0}'.format(len(ini_set)))
 
     return (ini_set, ini_version)
 
@@ -522,8 +522,8 @@ def mame_load_INI_datfile(filename):
             ini_dic[machine_name] = current_category
     f.close()
     log_info('mame_load_INI_datfile() Version "{0}"'.format(ini_version))
-    log_info('mame_load_INI_datfile() Number of machines {0:6d}'.format(len(ini_dic)))
-    log_info('mame_load_INI_datfile() Number of categories {0:6d}'.format(len(ini_set)))
+    log_info('mame_load_INI_datfile() Machines {0:6d}'.format(len(ini_dic)))
+    log_info('mame_load_INI_datfile() Categories {0:6d}'.format(len(ini_set)))
 
     return (ini_dic, ini_version)
 
@@ -615,8 +615,8 @@ def mame_load_History_DAT(filename):
             raise TypeError('Wrong read_status = {0}'.format(read_status))
     f.close()
     log_info('mame_load_History_DAT() Version "{0}"'.format(version_str))
-    log_info('mame_load_History_DAT() Number of rows in history_idx_dic {0:6d}'.format(len(history_idx_dic)))
-    log_info('mame_load_History_DAT() Number of rows in history_dic {0:6d}'.format(len(history_dic)))
+    log_info('mame_load_History_DAT() Rows in history_idx_dic {0}'.format(len(history_idx_dic)))
+    log_info('mame_load_History_DAT() Rows in history_dic {0}'.format(len(history_dic)))
 
     return (history_idx_dic, history_dic, version_str)
 
@@ -708,8 +708,8 @@ def mame_load_MameInfo_DAT(filename):
             raise TypeError('Wrong read_status = {0}'.format(read_status))
     f.close()
     log_info('mame_load_MameInfo_DAT() Version "{0}"'.format(version_str))
-    log_info('mame_load_MameInfo_DAT() Number of rows in idx_dic {0:6d}'.format(len(idx_dic)))
-    log_info('mame_load_MameInfo_DAT() Number of rows in data_dic {0:6d}'.format(len(data_dic)))
+    log_info('mame_load_MameInfo_DAT() Rows in idx_dic {0}'.format(len(idx_dic)))
+    log_info('mame_load_MameInfo_DAT() Rows in data_dic {0}'.format(len(data_dic)))
 
     return (idx_dic, data_dic, version_str)
 
@@ -784,8 +784,8 @@ def mame_load_GameInit_DAT(filename):
             raise TypeError('Wrong read_status = {0}'.format(read_status))
     f.close()
     log_info('mame_load_GameInit_DAT() Version "{0}"'.format(version_str))
-    log_info('mame_load_GameInit_DAT() Number of rows in idx_list {0:6d}'.format(len(idx_list)))
-    log_info('mame_load_GameInit_DAT() Number of rows in data_dic {0:6d}'.format(len(data_dic)))
+    log_info('mame_load_GameInit_DAT() Rows in idx_list {0}'.format(len(idx_list)))
+    log_info('mame_load_GameInit_DAT() Rows in data_dic {0}'.format(len(data_dic)))
 
     return (idx_list, data_dic, version_str)
 
@@ -856,8 +856,8 @@ def mame_load_Command_DAT(filename):
             raise TypeError('Wrong read_status = {0}'.format(read_status))
     f.close()
     log_info('mame_load_Command_DAT() Version "{0}"'.format(version_str))
-    log_info('mame_load_Command_DAT() Number of rows in idx_list {0:6d}'.format(len(idx_list)))
-    log_info('mame_load_Command_DAT() Number of rows in data_dic {0:6d}'.format(len(data_dic)))
+    log_info('mame_load_Command_DAT() Rows in idx_list {0}'.format(len(idx_list)))
+    log_info('mame_load_Command_DAT() Rows in data_dic {0}'.format(len(data_dic)))
 
     # >> Expand database. Many machines share the same entry. Expand the database.
     for original_name in idx_list:
@@ -868,8 +868,8 @@ def mame_load_Command_DAT(filename):
             expanded_name = expanded_name.strip()
             proper_idx_list.append([expanded_name, expanded_name])
             proper_data_dic[expanded_name] = data_dic[original_name]
-    log_info('mame_load_Command_DAT() Number of entries on proper_idx_list {0:6d}'.format(len(proper_idx_list)))
-    log_info('mame_load_Command_DAT() Number of entries on proper_data_dic {0:6d}'.format(len(proper_data_dic)))
+    log_info('mame_load_Command_DAT() Entries in proper_idx_list {0}'.format(len(proper_idx_list)))
+    log_info('mame_load_Command_DAT() Entries in proper_data_dic {0}'.format(len(proper_data_dic)))
 
     return (proper_idx_list, proper_data_dic, version_str)
 
@@ -1169,20 +1169,22 @@ def mame_info_SL_print(slist, location, SL_name, SL_ROM, rom, assets, SL_dic, SL
 #
 def mame_stats_main_print_slist(slist, control_dic, AML_version_str):
     slist.append('[COLOR orange]Main information[/COLOR]')
-    slist.append("AML version            {0}".format(AML_version_str))
-    slist.append("MAME version string    {0}".format(control_dic['ver_mame_str']))
-    slist.append("MAME version numerical {0}".format(control_dic['ver_mame']))
-    slist.append("bestgames.ini version  {0}".format(control_dic['ver_bestgames']))
-    slist.append("catlist.ini version    {0}".format(control_dic['ver_catlist']))
-    slist.append("catver.ini version     {0}".format(control_dic['ver_catver']))
-    slist.append("command.dat version    {0}".format(control_dic['ver_command']))
-    slist.append("gameinit.dat version   {0}".format(control_dic['ver_gameinit']))
-    slist.append("genre.ini version      {0}".format(control_dic['ver_genre']))
-    slist.append("history.dat version    {0}".format(control_dic['ver_history']))
-    slist.append("mameinfo.dat version   {0}".format(control_dic['ver_mameinfo']))
-    slist.append("mature.ini version     {0}".format(control_dic['ver_mature']))
-    slist.append("nplayers.ini version   {0}".format(control_dic['ver_nplayers']))
-    slist.append("series.ini version     {0}".format(control_dic['ver_series']))
+    slist.append("AML version              {0}".format(AML_version_str))
+    slist.append("Database version string  {0}".format(control_dic['ver_AML_str']))
+    slist.append("Database version num     {0:,}".format(control_dic['ver_AML']))
+    slist.append("MAME version string      {0}".format(control_dic['ver_mame_str']))
+    slist.append("MAME version num         {0:,}".format(control_dic['ver_mame']))
+    slist.append("bestgames.ini version    {0}".format(control_dic['ver_bestgames']))
+    slist.append("catlist.ini version      {0}".format(control_dic['ver_catlist']))
+    slist.append("catver.ini version       {0}".format(control_dic['ver_catver']))
+    slist.append("command.dat version      {0}".format(control_dic['ver_command']))
+    slist.append("gameinit.dat version     {0}".format(control_dic['ver_gameinit']))
+    slist.append("genre.ini version        {0}".format(control_dic['ver_genre']))
+    slist.append("history.dat version      {0}".format(control_dic['ver_history']))
+    slist.append("mameinfo.dat version     {0}".format(control_dic['ver_mameinfo']))
+    slist.append("mature.ini version       {0}".format(control_dic['ver_mature']))
+    slist.append("nplayers.ini version     {0}".format(control_dic['ver_nplayers']))
+    slist.append("series.ini version       {0}".format(control_dic['ver_series']))
 
     slist.append('')
     slist.append('[COLOR orange]Timestamps[/COLOR]')
@@ -1416,7 +1418,7 @@ def mame_stats_audit_print_slist(slist, control_dic, settings_dic):
 
     slist.append('[COLOR orange]MAME ROM audit database statistics[/COLOR]')
     t = "{0:6d} runnable MAME machines"
-    slist.append(t.format(control_dic['audit_MAME_machines_runnable']))
+    slist.append(t.format(control_dic['stats_audit_MAME_machines_runnable']))
     t = "{0:6d} machines require ROM ZIPs, {1:5d} parents and {2:5d} clones"
     slist.append(t.format(control_dic['stats_audit_machine_archives_ROM'],
                           control_dic['stats_audit_machine_archives_ROM_parents'],
@@ -2373,7 +2375,6 @@ def mame_audit_MAME_all(PATHS, pDialog, settings, control_dic, machines, machine
     pDialog.close()
 
     # >> Audit statistics.
-    audit_MAME_machines_runnable         = 0
     audit_MAME_machines_with_arch        = 0
     audit_MAME_machines_with_arch_OK     = 0
     audit_MAME_machines_with_arch_BAD    = 0
@@ -2395,7 +2396,6 @@ def mame_audit_MAME_all(PATHS, pDialog, settings, control_dic, machines, machine
         audit_dic = machine_audit_dic[m_name]
         # >> Skip unrunnable (device) machines
         if render_dic['isDevice']: continue
-        audit_MAME_machines_runnable += 1
         if audit_dic['machine_has_ROMs_or_CHDs']:
             audit_MAME_machines_with_arch += 1
             if audit_dic['machine_is_OK']: audit_MAME_machines_with_arch_OK += 1
@@ -2463,7 +2463,7 @@ def mame_audit_MAME_all(PATHS, pDialog, settings, control_dic, machines, machine
     ]
     h_list = [
         'There are {0} machines in total'.format(total_machines),
-        'Of those, {0} are runnable machines'.format(audit_MAME_machines_runnable),
+        'Of those, {0} are runnable machines'.format(control_dic['stats_audit_MAME_machines_runnable']),
     ]
     report_full_list.extend(h_list)
     report_good_list.extend(h_list)
@@ -2639,7 +2639,6 @@ def mame_audit_MAME_all(PATHS, pDialog, settings, control_dic, machines, machine
     pDialog.close()
 
     # >> Update MAME audit statistics.
-    change_control_dic(control_dic, 'audit_MAME_machines_runnable', audit_MAME_machines_runnable)
     change_control_dic(control_dic, 'audit_MAME_machines_with_arch', audit_MAME_machines_with_arch)
     change_control_dic(control_dic, 'audit_MAME_machines_with_arch_OK', audit_MAME_machines_with_arch_OK)
     change_control_dic(control_dic, 'audit_MAME_machines_with_arch_BAD', audit_MAME_machines_with_arch_BAD)
@@ -3288,7 +3287,7 @@ class DB_obj:
         self.main_pclone_dic = main_pclone_dic
         self.assets_dic      = assets_dic
 
-def mame_build_MAME_main_database(PATHS, settings, control_dic):
+def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str):
     # --- Print user configuration for debug ---
     log_info('mame_build_MAME_main_database() Starting ...')
     log_info('--- Paths ---')
@@ -3297,7 +3296,7 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic):
     log_info('assets_path    = "{0}"'.format(settings['assets_path']))
     log_info('chd_path       = "{0}"'.format(settings['chd_path']))
     log_info('samples_path   = "{0}"'.format(settings['samples_path']))
-    log_info('SL_hash_path   = "{0}"'.format(settings['SL_hash_path']))    
+    log_info('SL_hash_path   = "{0}"'.format(settings['SL_hash_path']))
     log_info('SL_rom_path    = "{0}"'.format(settings['SL_rom_path']))
     log_info('SL_chd_path    = "{0}"'.format(settings['SL_chd_path']))
     log_info('--- INI paths ---')   
@@ -3313,6 +3312,26 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic):
     log_info('mameinfo_path  = "{0}"'.format(settings['mameinfo_path']))
     log_info('gameinit_path  = "{0}"'.format(settings['gameinit_path']))
     log_info('command_path   = "{0}"'.format(settings['command_path']))
+
+    # >> If the user did not extract MAME.xml (maybe he decided to use a custom one) then
+    # >> fields ver_AML, ver_AML_str, stats_total_machines and t_XML_extraction must be
+    # >> updated in the control_dic. Check fs_extract_MAME_XML()
+    if control_dic['stats_total_machines'] < 1:
+        log_info('control_dic does not have a machine count. Updating it ...')
+        # --- Count MAME machines ---
+        log_info('mame_build_MAME_main_database() Counting number of machines ...')
+        stats_total_machines = fs_count_MAME_Machines(PATHS)
+        log_info('mame_build_MAME_main_database() Found {0} machines.'.format(stats_total_machines))
+        # --- Bring control_dic up to date ---
+        AML_version_int = fs_AML_version_str_to_int(AML_version_str)
+        log_info('mame_build_MAME_main_database() AML version str "{0}"'.format(AML_version_str))
+        log_info('mame_build_MAME_main_database() AML version int {0}'.format(AML_version_int))
+        change_control_dic(control_dic, 'ver_AML', AML_version_int)
+        change_control_dic(control_dic, 'ver_AML_str', AML_version_str)
+        change_control_dic(control_dic, 'stats_total_machines', stats_total_machines)
+        change_control_dic(control_dic, 't_XML_extraction', time.time())
+    else:
+        log_info('control_dic has stats_total_machines. User used fs_extract_MAME_XML()')
 
     # --- Progress dialog ---
     pDialog_canceled = False
@@ -4255,13 +4274,15 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
     pDialog.update(0, 'Building {0} ROM set ...'.format(rom_set_str))
     num_items = len(machines)
     item_count = 0
+    stats_audit_MAME_machines_runnable = 0
     for m_name in sorted(machines):
         # --- Update dialog ---
         pDialog.update((item_count*100)//num_items)
-        
+
         # --- ROMs ---
         # >> Skip Devices
         if machines_render[m_name]['isDevice']: continue
+        stats_audit_MAME_machines_runnable += 1
         m_roms = machine_roms[m_name]['roms']
         machine_rom_set = []
         for rom in m_roms:
@@ -4461,10 +4482,10 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
         item_count += 1
     pDialog.close()
 
-
     # ---------------------------------------------------------------------------------------------
     # Update MAME control dictionary
     # ---------------------------------------------------------------------------------------------
+    change_control_dic(control_dic, 'stats_audit_MAME_machines_runnable', stats_audit_MAME_machines_runnable)
     change_control_dic(control_dic, 'stats_audit_MAME_ROM_ZIP_files', len(ROM_archive_list))
     change_control_dic(control_dic, 'stats_audit_MAME_Sample_ZIP_files', len(Sample_archive_list))
     change_control_dic(control_dic, 'stats_audit_MAME_CHD_files', len(CHD_archive_list))

@@ -1,0 +1,35 @@
+2.0.0 - 23-06-2018
+- Rework of modules for dual Python 2/3 compatibility
+- Rework of main menu code
+- Added caching into newspaper section
+- Optimized artwork
+- Added podcasts section
+
+1.3.1 (28-12-2017)
+- Minor name change due to author's request
+
+1.3.0 (27-12-2017)
+- Added newspapers section
+- Changed main xml url
+- Removed old radio station url and accompanying toggle option
+- Various minor enhancements and cosmetics
+
+1.2.1 (16-11-2017)
+- Few minor tweaks here & there
+
+1.2.0 (02-08-2017)
+- Made several changes to comply with Kodi addon submission rules
+- Removed request function from client module, using requests library instead
+- Made icons non-transparent
+
+1.1.0 (16-07-2017)
+- Made items' info remotely hosted
+
+1.0.2 (19-06-2017)
+- New radio stream
+
+1.0.1 (25-05-2017)
+- Minor changes to artwork
+
+1.0.0 (08-05-2017)
+- Initial Version

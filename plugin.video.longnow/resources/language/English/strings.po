@@ -1,0 +1,60 @@
+msgid ""
+msgstr ""
+"Last-Translator: Florian Schmitt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Longnow Username"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Longnow Password"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Invalid Username"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Invalid Password"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Can't access seminar list page."
+msgstr ""
+
+msgctxt "#30103"
+msgid "Can't access login page."
+msgstr ""
+
+msgctxt "#30104"
+msgid "An error connecting to the server has occured."
+msgstr ""
+
+msgctxt "#30105"
+msgid "Are username and password correct?"
+msgstr ""
+
+msgctxt "#30200"
+msgid "HTTP status code is %d."
+msgstr ""
+
+msgctxt "#30201"
+msgid "The message of the server is \"%s\"."
+msgstr ""
+
+msgctxt "#30300"
+msgid "Are username and password correct?"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Please enter a username in the settings of this plugin"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Please enter a password in the settings of this plugin"
+msgstr ""

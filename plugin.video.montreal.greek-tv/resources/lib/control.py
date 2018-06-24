@@ -60,7 +60,6 @@ try:
 except AttributeError:
     dataPath = xbmc.translatePath(addonInfo('profile'))
 
-window = xbmcgui.Window(10000)
 dialog = xbmcgui.Dialog()
 progressDialog = xbmcgui.DialogProgress()
 progressDialogGB = xbmcgui.DialogProgressBG()

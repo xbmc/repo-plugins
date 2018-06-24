@@ -211,7 +211,7 @@ class youtube(object):
         except BaseException:
             return
 
-    def play(self, name, url=None, as_script=True):
+    def play(self, name, url=None):
 
         try:
 
@@ -233,10 +233,7 @@ class youtube(object):
 
             item.setInfo(type='Video', infoLabels={'title': title})
 
-            if as_script:
-                control.player.play(url, item)
-            else:
-                directory.resolve(url, meta={'title': title}, icon=icon)
+            directory.resolve(url, meta={'title': title}, icon=icon)
 
         except BaseException:
 

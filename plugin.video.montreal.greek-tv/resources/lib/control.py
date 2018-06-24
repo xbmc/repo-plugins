@@ -34,7 +34,6 @@ addItem = xbmcplugin.addDirectoryItem
 addItems = xbmcplugin.addDirectoryItems
 directory = xbmcplugin.endOfDirectory
 content = xbmcplugin.setContent
-property = xbmcplugin.setProperty
 resolve = xbmcplugin.setResolvedUrl
 sortmethod = xbmcplugin.addSortMethod
 
@@ -84,9 +83,7 @@ exists = xbmcvfs.exists
 copy = xbmcvfs.copy
 
 join = os.path.join
-settingsFile = os.path.join(dataPath, 'settings.xml')
-bookmarksFile = os.path.join(dataPath, 'bookmarks.db')
-cacheFile = os.path.join(dataPath, 'cache.db')
+cacheFile = join(dataPath, 'cache.db')
 
 
 def name():
@@ -150,16 +147,6 @@ def openSettings(query=None, id=addonInfo('id')):
         return
 
 
-# Alternative method
-def Settings(id=addonInfo('id')):
-
-    try:
-        idle()
-        addon(id).openSettings()
-    except BaseException:
-        return
-
-
 def refresh():
 
     return execute('Container.Refresh')
@@ -167,9 +154,12 @@ def refresh():
 
 def idle():
 
-    return execute('Dialog.Close(busydialog)')
+    if float(addon('xbmc.addon').getAddonInfo('version')[:-2]) > 17.6:
+        return execute('Dialog.Close(busydialognocancel)')
+    else:
+        return execute('Dialog.Close(busydialog)')
 
 
-def addonmedia(icon, addonid=addonInfo('id')):
+def addonmedia(icon):
 
-    return join(addon(addonid).getAddonInfo('path'), 'resources', 'media', icon)
+    return join(addonPath, 'resources', 'media', icon)

@@ -21,46 +21,28 @@ from __future__ import absolute_import, division, unicode_literals
 
 import re, json
 from resources.lib.compat import urlparse, parse_qs, quote_plus, range
-from resources.lib import workers, control, directory
+from resources.lib import control, directory
 import requests
 from CommonFunctions import parseDOM
 
 
-def yt_resolve(setting='yt_resolve'):
-
-    resolve_bool = control.setting(setting) == 'true' and any(
-        [
-            control.condVisibility('System.HasAddon(script.module.{0})'.format('urlresolver')),
-            control.condVisibility('System.HasAddon(script.module.{0})'.format('resolveurl'))
-        ]
-    )
-
-    return resolve_bool
-
-
 class youtube(object):
 
-    def __init__(self, key='', api_key_setting='yt_api_key', yt_resolve_setting='yt_resolve'):
+    def __init__(self, key='', api_key_setting='yt_api_key'):
 
         self.list = [];  self.data = []
 
         self.base_link = 'http://www.youtube.com/'
         self.base_addon = 'plugin://plugin.video.youtube/'
         self.google_base_link = 'https://www.googleapis.com/youtube/v3/'
-
         self.key_link = '&key={0}'.format(control.setting(api_key_setting) or key)
-
         self.playlists_link = self.google_base_link + 'playlists?part=snippet&maxResults=50&channelId=%s'
         self.playlist_link = self.google_base_link + 'playlistItems?part=snippet&maxResults=50&playlistId=%s'
         self.videos_link = self.google_base_link + 'search?part=snippet&order=date&maxResults=50&channelId=%s'
         self.content_link = self.google_base_link + 'videos?part=contentDetails&id=%s'
         self.search_link = self.google_base_link + 'search?part=snippet&type=video&maxResults=5&q=%s'
         self.youtube_search = self.google_base_link + 'search?q='
-
-        if yt_resolve(yt_resolve_setting):
-            self.play_link = self.base_link + 'watch?v={}'
-        else:
-            self.play_link = self.base_addon + 'play/?video_id={}'
+        self.play_link = self.base_addon + 'play/?video_id={}'
 
     def playlists(self, url, limit=5):
 
@@ -189,24 +171,6 @@ class youtube(object):
                 self.list.append(append)
             except BaseException:
                 pass
-
-        try:
-            u = [list(range(0, len(self.list)))[i:i+50] for i in list(range(len(list(range(0, len(self.list))))))[::50]]
-            u = [','.join([self.list[x]['url'] for x in i]) for i in u]
-            u = [self.content_link % i + self.key_link for i in u]
-
-            threads = []
-            for i in list(range(0, len(u))):
-                threads.append(workers.Process(self.thread, u[i], i))
-                self.data.append('')
-            [i.start() for i in threads]
-            [i.join() for i in threads]
-
-            items = []
-            for i in self.data:
-                items += json.loads(i)['items']
-        except BaseException:
-            pass
 
         for item in list(range(0, len(self.list))):
             try:
@@ -343,7 +307,7 @@ class youtube(object):
             if re.search('[a-zA-Z]', message):
                 raise BaseException()
 
-            url = 'plugin://plugin.video.youtube/play/?video_id=%s' % id
+            url = self.play_link.format(id)
 
             return url
 

@@ -36,177 +36,138 @@ def add(items, cacheToDisc=True, content=None, mediatype=None, infotype='video')
     for i in items:
 
         try:
-
-            try:
-                label = control.lang(i['title']).encode('utf-8')
-            except BaseException:
-                label = i['title']
-
-            if 'label' in i and not i['label'] == '0':
-                label = i['label']
-
-            if 'image' in i and not i['image'] == '0':
-                image = i['image']
-            elif 'poster' in i and not i['poster'] == '0':
-                image = i['poster']
-            elif 'icon' in i and not i['icon'] == '0':
-                image = control.addonmedia(i['icon'])
-            else:
-                image = sysimage
-
-            if 'banner' in i and not i['banner'] == '0':
-                banner = i['banner']
-            elif 'fanart' in i and not i['fanart'] == '0':
-                banner = i['fanart']
-            else:
-                banner = image
-
-            fanart = i['fanart'] if 'fanart' in i and not i['fanart'] == '0' else sysfanart
-
-            isFolder = False if 'isFolder' in i and not i['isFolder'] == '0' else True
-
-            url = '%s?action=%s' % (sysaddon, i['action'])
-
-            try:
-                url += '&url=%s' % quote_plus(i['url'])
-            except BaseException:
-                pass
-            try:
-                url += '&title=%s' % quote_plus(i['title'])
-            except KeyError:
-                try:
-                    url += '&title=%s' % quote_plus(i['title'].encode('utf-8'))
-                except KeyError:
-                    pass
-            except BaseException:
-                pass
-
-            try:
-                url += '&image=%s' % quote_plus(i['image'])
-            except KeyError:
-                try:
-                    url += '&image=%s' % quote_plus(i['image'].encode('utf-8'))
-                except KeyError:
-                    pass
-            except BaseException:
-                pass
-            try:
-                url += '&name=%s' % quote_plus(i['name'])
-            except KeyError:
-                try:
-                    url += '&name=%s' % quote_plus(i['name'].encode('utf-8'))
-                except KeyError:
-                    pass
-            except BaseException:
-                pass
-            try:
-                url += '&year=%s' % quote_plus(i['year'])
-            except BaseException:
-                pass
-            try:
-                url += '&plot=%s' % quote_plus(i['plot'])
-            except KeyError:
-                try:
-                    url += '&plot=%s' % quote_plus(i['plot'].encode('utf-8'))
-                except KeyError:
-                    pass
-            except BaseException:
-                pass
-            try:
-                url += '&genre=%s' % quote_plus(i['genre'])
-            except KeyError:
-                try:
-                    url += '&genre=%s' % quote_plus(i['genre'].encode('utf-8'))
-                except KeyError:
-                    pass
-            except BaseException:
-                pass
-            try:
-                url += '&dash=%s' % quote_plus(i['dash'])
-            except BaseException:
-                pass
-            try:
-                url += '&query=%s' % quote_plus(i['query'])
-            except BaseException:
-                pass
-
-            cm = []
-            menus = i['cm'] if 'cm' in i else []
-
-            for menu in menus:
-                try:
-                    try:
-                        tmenu = control.lang(menu['title']).encode('utf-8')
-                    except BaseException:
-                        tmenu = menu['title']
-                    qmenu = urlencode(menu['query'])
-                    cm.append((tmenu, 'RunPlugin(%s?%s)' % (sysaddon, qmenu)))
-                except BaseException:
-                    pass
-
-            meta = dict((k, v) for k, v in iteritems(i) if not k == 'cm' and not v == '0')
-
-            if mediatype is not None:
-                meta['mediatype'] = mediatype
-
-            item = control.item(label=label, iconImage=image, thumbnailImage=image)
-
-            item.setArt(
-                {
-                    'icon': image, 'thumb': image, 'poster': image, 'tvshow.poster': image, 'season.poster': image,
-                    'banner': banner, 'tvshow.banner': banner, 'season.banner': banner
-                }
-            )
-
-            item.setProperty('Fanart_Image', fanart)
-
-            item.addContextMenuItems(cm)
-            item.setInfo(type=infotype, infoLabels=meta)
-
-            if isFolder is False:
-                if not i['action'] == 'pvr_client':
-                    item.setProperty('IsPlayable', 'true')
-                else:
-                    item.setProperty('IsPlayable', 'false')
-                if not i['action'] == 'pvr_client' and infotype == 'video':
-                    item.addStreamInfo('video', {'codec': 'h264'})
-
-            control.addItem(handle=syshandle, url=url, listitem=item, isFolder=isFolder, totalItems=len(items))
-
+            label = control.lang(i['title']).encode('utf-8')
         except BaseException:
+            label = i['title']
 
-            pass
+        if 'label' in i and not i['label'] == '0':
+            label = i['label']
 
-    try:
+        if 'image' in i and not i['image'] == '0':
+            image = i['image']
+        elif 'poster' in i and not i['poster'] == '0':
+            image = i['poster']
+        elif 'icon' in i and not i['icon'] == '0':
+            image = control.addonmedia(i['icon'])
+        else:
+            image = sysimage
 
-        i = items[0]
-        if i['next'] == '':
-            raise Exception()
+        if 'banner' in i and not i['banner'] == '0':
+            banner = i['banner']
+        elif 'fanart' in i and not i['fanart'] == '0':
+            banner = i['fanart']
+        else:
+            banner = image
 
-        url = '%s?action=%s&url=%s' % (sysaddon, i['nextaction'], quote_plus(i['next']))
-        icon = i['nexticon'] if 'nexticon' in i else control.addonmedia('next.png')
-        fanart = i['nextfanart'] if 'nextfanart' in i else sysfanart
+        fanart = i['fanart'] if 'fanart' in i and not i['fanart'] == '0' else sysfanart
+
+        isFolder = False if 'isFolder' in i and not i['isFolder'] == '0' else True
+
+        url = '%s?action=%s' % (sysaddon, i['action'])
 
         try:
-            label = control.lang(i['nextlabel']).encode('utf-8')
+            url += '&url=%s' % quote_plus(i['url'])
         except BaseException:
-            label = 'next'
+            pass
+        try:
+            url += '&title=%s' % quote_plus(i['title'])
+        except KeyError:
+            try:
+                url += '&title=%s' % quote_plus(i['title'].encode('utf-8'))
+            except KeyError:
+                pass
+        except BaseException:
+            pass
 
-        item = control.item(label=label, iconImage=icon, thumbnailImage=icon)
+        try:
+            url += '&image=%s' % quote_plus(i['image'])
+        except KeyError:
+            try:
+                url += '&image=%s' % quote_plus(i['image'].encode('utf-8'))
+            except KeyError:
+                pass
+        except BaseException:
+            pass
+        try:
+            url += '&name=%s' % quote_plus(i['name'])
+        except KeyError:
+            try:
+                url += '&name=%s' % quote_plus(i['name'].encode('utf-8'))
+            except KeyError:
+                pass
+        except BaseException:
+            pass
+        try:
+            url += '&year=%s' % quote_plus(i['year'])
+        except BaseException:
+            pass
+        try:
+            url += '&plot=%s' % quote_plus(i['plot'])
+        except KeyError:
+            try:
+                url += '&plot=%s' % quote_plus(i['plot'].encode('utf-8'))
+            except KeyError:
+                pass
+        except BaseException:
+            pass
+        try:
+            url += '&genre=%s' % quote_plus(i['genre'])
+        except KeyError:
+            try:
+                url += '&genre=%s' % quote_plus(i['genre'].encode('utf-8'))
+            except KeyError:
+                pass
+        except BaseException:
+            pass
+        try:
+            url += '&dash=%s' % quote_plus(i['dash'])
+        except BaseException:
+            pass
+        try:
+            url += '&query=%s' % quote_plus(i['query'])
+        except BaseException:
+            pass
+
+        cm = []
+        menus = i['cm'] if 'cm' in i else []
+
+        for menu in menus:
+            try:
+                try:
+                    tmenu = control.lang(menu['title']).encode('utf-8')
+                except BaseException:
+                    tmenu = menu['title']
+                qmenu = urlencode(menu['query'])
+                cm.append((tmenu, 'RunPlugin(%s?%s)' % (sysaddon, qmenu)))
+            except BaseException:
+                pass
+
+        meta = dict((k, v) for k, v in iteritems(i) if not k == 'cm' and not v == '0')
+
+        if mediatype is not None:
+            meta['mediatype'] = mediatype
+
+        item = control.item(label=label, iconImage=image, thumbnailImage=image)
 
         item.setArt(
             {
-                'icon': icon, 'thumb': icon, 'poster': icon, 'tvshow.poster': icon, 'season.poster': icon,
-                'banner': icon, 'tvshow.banner': icon, 'season.banner': icon
+                'icon': image, 'thumb': image, 'poster': image, 'tvshow.poster': image, 'season.poster': image,
+                'banner': banner, 'tvshow.banner': banner, 'season.banner': banner, 'fanart': fanart
             }
         )
 
-        item.setProperty('Fanart_Image', fanart)
-        control.addItem(handle=syshandle, url=url, listitem=item, isFolder=True, totalItems=len(items))
+        item.addContextMenuItems(cm)
+        item.setInfo(type=infotype, infoLabels=meta)
 
-    except BaseException:
+        if isFolder is False:
+            if not i['action'] == 'pvr_client':
+                item.setProperty('IsPlayable', 'true')
+            else:
+                item.setProperty('IsPlayable', 'false')
+            if not i['action'] == 'pvr_client' and infotype == 'video':
+                item.addStreamInfo('video', {'codec': 'h264'})
 
-        pass
+        control.addItem(handle=syshandle, url=url, listitem=item, isFolder=isFolder, totalItems=len(items))
 
     if content is not None:
         control.content(syshandle, content)

@@ -11,27 +11,23 @@ import xbmc
 import xbmcplugin
 import xbmcgui
 import sys
+import HTMLParser
 
-UTF8     = 'utf-8'
+h = HTMLParser.HTMLParser()
+UTF8 = 'utf-8'
+
 
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      pg = self.getRequest('http://pbskids.org/pbsk/video/api/getShows/?callback=&destination=national&return=images')
-      pg = pg.strip('()')
-      a = json.loads(pg)
-      a = a.get('items')
-      for b in a:
-          name = b.get('title','no title')
-          url = 'http://pbskids.org/pbsk/video/api/getVideos/?startindex=1&endindex=200&program=%s&type=episode&category=&group=&selectedID=&status=available&player=flash&flash=true' % (urllib.quote(name.encode(UTF8)))
-          thumb = b.get('images',{'x':None})
-          if thumb == []:
-              continue
-          thumb = thumb.get('program-kids-square',{'x':None}).get('url', self.addonIcon)
+      pg = self.getRequest('http://pbskids.org/video/')
+      a = re.compile('<dd class="category-list-button.+?data-slug="(.+?)">(.+?)<.+?src="(.+?)".+?</dd', re.DOTALL).findall(pg)
+      for url, name, thumb in a:
+          url = 'https://cms-tc.pbskids.org/pbskidsvideoplaylists/%s.json' % url
           infoList = {}
+          name = h.unescape(name)
           infoList['Title'] = name
           infoList['TVShowTitle'] = name
-          infoList['Plot']  = b.get('description')
           infoList['mediatype'] = 'tvshow'
           ilist = self.addMenuItem(name,'GE', ilist, url, thumb, self.addonFanart, infoList, isFolder=True)
       return(ilist)
@@ -40,19 +36,19 @@ class myAddon(t1mAddon):
   def getAddonEpisodes(self,url,ilist):
       pg = self.getRequest(url)
       a = json.loads(pg)
-      a = a.get('items')
+      a = a['collections']['episodes']['content']
       for b in a:
-          url = b.get('videos',{'x':None}).get('flash',{'x':None})
-          url = url.get('mp4-2500k',url.get('mp4-1200k',url)).get('url')
+          url = b.get('mp4')
           if not url is None:
               name = b.get('title','no title')
-              thumb  = b.get('images',{'x':None}).get('kids-mezzannine-16x9',{'x':None}).get('url', self.addonIcon)
-              fanart  = b.get('images',{'x':None}).get('kids-mezzannine-16x9',{'x':None}).get('url', self.addonFanart)
-              captions = b.get('captions',{'x':None})
-              if captions != []:
-                  captions = captions.get('srt',{'x':None}).get('url','')
-              else:
-                  captions = ''
+              thumb  = b.get('images',{'x':None}).get('mezzanine', self.addonIcon)
+              fanart  = b.get('images',{'x':None}).get('mezzanine', self.addonFanart)
+              c = b.get('closedCaptions',[])
+              captions = ''
+              for d in c:
+                 if d.get('format') == 'SRT':
+                     captions = d.get('URI','')
+                     break
               infoList={}
               infoList['Title'] = name
               infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
@@ -68,9 +64,6 @@ class myAddon(t1mAddon):
       a = json.loads(html)
       url = a.get('url')
       if url is not None:
-          url = url.split(':videos/',1)
-          if len(url) > 1:
-              url = 'http://kids.video.cdn.pbs.org/videos/%s' % url[1]
               liz = xbmcgui.ListItem(path = url)
               if len(captions) > 0:
                   liz.setSubtitles([captions])

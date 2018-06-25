@@ -18,5 +18,6 @@
 
 # -*- coding: utf-8 -*-
 #entrypoint
-if __name__ == '__main__':
-    from resources.lib import teleup
+import sys
+from resources.lib import teleup
+if __name__ == '__main__': teleup.TeleUp(sys.argv).run()

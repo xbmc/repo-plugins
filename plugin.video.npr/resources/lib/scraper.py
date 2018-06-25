@@ -45,8 +45,8 @@ class myAddon(t1mAddon):
                   (url, thumb, name) = re.compile('<a href="(.+?)".+?src="(.+?)".+?alt="(.+?)"',re.DOTALL).search(blob).groups()
                   plot = name
                   dt = ''
-              name = h.unescape(name)
-              plot = h.unescape(plot.strip().decode('utf-8'))
+              name = h.unescape(name.decode(UTF8))
+              plot = h.unescape(plot.strip().decode(UTF8))
               infoList ={}
               infoList['Title'] = name
               if dt is not None:

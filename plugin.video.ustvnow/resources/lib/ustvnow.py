@@ -99,34 +99,39 @@ def okDialog(str1, str2='', str3='', header=ADDON_NAME):
     
 def yesnoDialog(str1, str2='', str3='', header=ADDON_NAME, yes='', no='', autoclose=0):
     return xbmcgui.Dialog().yesno(header, str1, str2, str3, no, yes, autoclose)
-     
-def getParams():
-    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
-            
+        
 socket.setdefaulttimeout(TIMEOUT)
 class USTVnow():
-    def __init__(self):
-        log('__init__')
-        self.net    = net.Net()
-        self.cache  = SimpleCache()
-        self.isFree = REAL_SETTINGS.getSetting('User_isFree') == "True"
+    def __init__(self, sysARG):
+        log('__init__, sysARG = ' + str(sysARG))
+        self.sysARG    = sysARG
+        self.net       = net.Net()
+        self.cache     = SimpleCache()
+        self.reminders = self.loadReminders()
+        self.isFree    = REAL_SETTINGS.getSetting('User_isFree') == "True"
         if self.login(USER_EMAIL, PASSWORD) == False: raise SystemExit
-        try: self.reminders = json.loads(REAL_SETTINGS.getSetting('User_Reminders'))
-        except: self.reminders = {}
+    
+    
+    def loadReminders(self):
+        try: return json.loads(REAL_SETTINGS.getSetting('User_Reminders'))
+        except: return {}
         
         
     def mainMenu(self):
         log('mainMenu')
-        for item in USTVNOW_MENU: self.addDir(*item)
-        xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+        for item in USTVNOW_MENU:
+            if   item[0] == "Highlights" and len(self.highlights) <= 2: continue
+            elif item[0] in ["Schedules","Recordings"]  and len(self.recorded) <= 2: continue
+            self.addDir(*item)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
         
         
     def buildHeader(self):
         header_dict               = {}
         header_dict['Accept']     = 'application/json, text/javascript, */*; q=0.01'
         header_dict['Connection'] = 'keep-alive'
-        header_dict['Referer']    = BASEWEB
-        header_dict['Origin']     = BASEWEB
+        header_dict['Referer']    = BASEVOD
+        header_dict['Origin']     = BASEVOD
         header_dict['User-Agent'] = 'http://kodi.tv/%s'%ADDON_ID; 
         return header_dict
         
@@ -332,11 +337,12 @@ class USTVnow():
                     label, url, liz = self.buildChannelListItem(name, channel, opt='Live')
                     self.addLink(label, url, 9, liz, len(self.channels))
             except Exception as e: log('browseLive, failed ' + str(e), xbmc.LOGERROR)
-        xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
                 
                 
     def browseRecordings(self, recorded=False):
         log('browseRecordings')
+        found = 0
         d = datetime.datetime.utcnow()
         now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))
         if self.recorded is None: xbmc.executebuiltin("Container.Refresh")
@@ -349,9 +355,11 @@ class USTVnow():
                 label, url, liz = self.buildRecordedListItem(self.grabChannelName(channel['stream_code']))
                 mode = 10 if recorded == True else 21
                 if mode == 21: liz.setProperty("IsPlayable","false")
+                found += 1
                 self.addLink(label, url, mode, liz, len(self.recorded))
             except Exception as e: log('browseRecordings, failed ' + str(e), xbmc.LOGERROR)
-        xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+        if found == 0: self.addDir(LANGUAGE(30031), '', 1)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
                 
 
     def browseGuide(self, name=None, upcoming=False):
@@ -365,7 +373,7 @@ class USTVnow():
                 except: icon = (os.path.join(IMG_PATH,'logos','%s.png'%channel) or ICON)
                 infoArt  = {"thumb":icon,"poster":icon,"icon":icon,"fanart":FANART}
                 self.addDir(channel, channel, 4, infoArt=infoArt)
-            xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL)
+            xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
         else:
             for channel in self.channels:
                 try:
@@ -382,7 +390,7 @@ class USTVnow():
                             if mode == 21: liz.setProperty("IsPlayable","false")
                             self.addLink(label, url, mode, liz, len(self.channels))
                 except Exception as e: log('browseGuide, failed ' + str(e), xbmc.LOGERROR)
-            xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+            xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
                 
            
     def browseFeatured(self, hlt=False):
@@ -402,7 +410,7 @@ class USTVnow():
                     liz.setProperty("IsPlayable","false")
                     self.addLink(label, url, 21, liz, len(optLST))
             except Exception as e: log('browseFeatured, failed ' + str(e), xbmc.LOGERROR)
-        xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
 
        
     def browseVOD(self, url=None, limit=24):
@@ -429,7 +437,7 @@ class USTVnow():
                 liz.addContextMenuItems([('Purchase','')])
                 self.addLink(label, url, '', liz, len(items))
             # self.addDir('>> Next', BASEVOD + next, 13)
-            xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+            xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
                 
 
     def search(self):
@@ -453,7 +461,7 @@ class USTVnow():
                     liz = xbmcgui.ListItem(label)
                     liz.setArt({"thumb":ICON,"poster":ICON,"fanart":FANART})
                     self.addLink(label, '', 0, liz, 1)
-                xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+                xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
             except Exception as e: log('search, failed ' + str(e), xbmc.LOGERROR)
         else: self.mainMenu()
         
@@ -518,10 +526,10 @@ class USTVnow():
         liz.setProperty("IsInternetStream","true")
         if channel['dvrtimeraction'] == 'add':
             opt = '@'.join([str(channel['prgsvcid']),(channel.get('event_time','') or str(channel.get('ut_start','')))])#lazy solution rather then create additional url parameters for this single function.
-            contextMenu = [('Set single recording'   ,'XBMC.RunPlugin(%s)'%(sys.argv[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(6)+"&name="+urllib.quote(opt))),
-                           ('Set recurring recording','XBMC.RunPlugin(%s)'%(sys.argv[0]+"?url="+urllib.quote(str(channel['connectorid']))+"&mode="+str(7)+"&name="+urllib.quote(opt)))]
+            contextMenu = [('Set single recording'   ,'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(6)+"&name="+urllib.quote(opt))),
+                           ('Set recurring recording','XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(str(channel['connectorid']))+"&mode="+str(7)+"&name="+urllib.quote(opt)))]
         else:
-            contextMenu = [('Remove recording','XBMC.RunPlugin(%s)'%(sys.argv[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(8)+"&name="+urllib.quote(name)))]
+            contextMenu = [('Remove recording','XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(8)+"&name="+urllib.quote(name)))]
         liz.addContextMenuItems(contextMenu)
         log('buildChannelListItem, label = ' + label + ', url = ' + url)
         return label, url, liz
@@ -550,9 +558,9 @@ class USTVnow():
                 contextMenu = []
                 # if channel['dvrtimeraction'] == 'add':
                     # opt = '@'.join([str(channel['prgsvcid']),channel['event_time']])#lazy solution rather then create additional url parameters for this single function.
-                    # contextMenu = [('Set single recording'   ,'XBMC.RunPlugin(%s)'%(sys.argv[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(6)+"&name="+urllib.quote(opt))),
-                                   # ('Set recurring recording','XBMC.RunPlugin(%s)'%(sys.argv[0]+"?url="+urllib.quote(str(channel['connectorid']))+"&mode="+str(7)+"&name="+urllib.quote(opt)))]
-                contextMenu.extend([('Remove recording','XBMC.RunPlugin(%s)'%(sys.argv[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(8)+"&name="+urllib.quote(name)))])
+                    # contextMenu = [('Set single recording'   ,'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(6)+"&name="+urllib.quote(opt))),
+                                   # ('Set recurring recording','XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(str(channel['connectorid']))+"&mode="+str(7)+"&name="+urllib.quote(opt)))]
+                contextMenu.extend([('Remove recording','XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(8)+"&name="+urllib.quote(name)))])
                 liz.addContextMenuItems(contextMenu)
                 log('buildRecordedListItem, label = ' + label + ', url = ' + url)
                 return label, url, liz
@@ -593,10 +601,10 @@ class USTVnow():
         #generate alternative token using website endpoint rather then googletv.
         try:
             #get CSRF Token
-            response = urllib2.urlopen(BASEWEB + "/account/signin").read()
+            response = urllib2.urlopen(BASEVOD + "/account/signin").read()
             CSRF = re.findall(r'var csrf_value = "(.*?)"', response, re.DOTALL)[0]
             #get WEB Token
-            response = (self.net.http_POST(BASEWEB + '/account/login', form_data={'csrf_ustvnow': CSRF, 'signin_email': USER_EMAIL, 'signin_password':PASSWORD, 'signin_remember':'1'}).content.encode("utf-8").rstrip())
+            response = (self.net.http_POST(BASEVOD + '/account/login', form_data={'csrf_ustvnow': CSRF, 'signin_email': USER_EMAIL, 'signin_password':PASSWORD, 'signin_remember':'1'}).content.encode("utf-8").rstrip())
             altToken = re.findall(r'var token(.*?)= "(.*?)";', response, re.DOTALL)[0][1]
             if altToken and altToken != 'null':
                 self.token = altToken
@@ -640,13 +648,13 @@ class USTVnow():
         # if url.endswith('m3u8'):
             # liz.setProperty('inputstreamaddon','inputstream.adaptive')
             # liz.setProperty('inputstream.adaptive.manifest_type','hls') 
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
 
            
     def addLink(self, name, u, mode, liz, total=0):
         log('addLink, name = ' + name)
-        u=sys.argv[0]+"?url="+urllib.quote(u)+"&mode="+str(mode)+"&name="+urllib.quote(uni(name))
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
+        u=self.sysARG[0]+"?url="+urllib.quote(u)+"&mode="+str(mode)+"&name="+urllib.quote(uni(name))
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,totalItems=total)
 
         
     def addDir(self, name, u, mode, infoList=False, infoArt=False):
@@ -657,8 +665,8 @@ class USTVnow():
         else: liz.setInfo(type="Video", infoLabels=infoList)
         if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
         else: liz.setArt(infoArt)
-        u=sys.argv[0]+"?url="+urllib.quote(u)+"&mode="+str(mode)+"&name="+urllib.quote(uni(name))
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        u=self.sysARG[0]+"?url="+urllib.quote(u)+"&mode="+str(mode)+"&name="+urllib.quote(uni(name))
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,isFolder=True)
   
   
     def isHD(self):
@@ -714,16 +722,16 @@ class USTVnow():
                             except:
                                 if key in FILE_PARAMS + PVR_PARAMS: tmpdata[key] = unescape(value)
                                     
-                        # contextMenu = [('Schedules' ,'XBMC.RunPlugin(%s)'%(sys.argv[0]+"?mode="+str(1))),
-                                       # ('Recordings','XBMC.RunPlugin(%s)'%(sys.argv[0]+"?mode="+str(2))),
-                                       # ('OnDemand'  ,'XBMC.RunPlugin(%s)'%(sys.argv[0]+"?mode="+str(13)))]
+                        # contextMenu = [('Schedules' ,'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?mode="+str(1))),
+                                       # ('Recordings','XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?mode="+str(2))),
+                                       # ('OnDemand'  ,'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?mode="+str(13)))]
                                        
                         contextMenu = []
                         if channel['dvrtimeraction'] == 'add':
                             opt = '@'.join([str(channel['prgsvcid']),(channel.get('event_time','') or str(channel.get('ut_start','')))])#lazy solution rather then create additional url parameters for this single function.
-                            contextMenu.append(('Set single recording'   ,'XBMC.RunPlugin(%s)'%(sys.argv[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(6)+"&name="+urllib.quote(opt))))
-                            contextMenu.append(('Set recurring recording','XBMC.RunPlugin(%s)'%(sys.argv[0]+"?url="+urllib.quote(str(channel['connectorid']))+"&mode="+str(7)+"&name="+urllib.quote(opt))))
-                        else: contextMenu.append(('Remove recording','XBMC.RunPlugin(%s)'%(sys.argv[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(8)+"&name="+urllib.quote(name))))
+                            contextMenu.append(('Set single recording'   ,'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(6)+"&name="+urllib.quote(opt))))
+                            contextMenu.append(('Set recurring recording','XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(str(channel['connectorid']))+"&mode="+str(7)+"&name="+urllib.quote(opt))))
+                        else: contextMenu.append(('Remove recording','XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(str(channel['scheduleid']))+"&mode="+str(8)+"&name="+urllib.quote(name))))
                         
                         isNew  = False #todo parse startime and data
                         label2 = isHD
@@ -733,44 +741,50 @@ class USTVnow():
                         # tmpdata['tagline'] = json.dumps(tags)
                         tmpdata['art'] = {"thumb":thumb,"poster":poster,"clearlogo":logo}
                         tmpdata['mediatype'] = mtype
-                        tmpdata['url'] = sys.argv[0]+'?mode=9&url=%s'%name
+                        tmpdata['url'] = self.sysARG[0]+'?mode=9&url=%s'%name
                         tmpdata['contextmenu'] = json.dumps(contextMenu)
                         guidedata.append(tmpdata)
                 except: pass
                 newChannel['guidedata'] = guidedata
             yield newChannel
 
-params=getParams()
-try: url=urllib.unquote(params["url"])
-except: url=None
-try: name=urllib.unquote(params["name"])
-except: name=None
-try: mode=int(params["mode"])
-except: mode=None
-    
-log("Mode: "+str(mode))
-log("URL : "+str(url))
-log("Name: "+str(name))
+           
+    def getParams(self):
+        return dict(urlparse.parse_qsl(self.sysARG[2][1:]))
 
-if mode==None:  USTVnow().mainMenu()
-elif mode == 0: USTVnow().browseLive()
-elif mode == 1: USTVnow().browseRecordings()
-elif mode == 2: USTVnow().browseRecordings(recorded=True)
-elif mode == 3: USTVnow().browseGuide()
-elif mode == 4: USTVnow().browseGuide(name)
-elif mode == 5: USTVnow().browseFeatured()
-elif mode == 6: USTVnow().setRecording(name,url)
-elif mode == 7: USTVnow().setRecording(name,url,recurring=True)
-elif mode == 8: USTVnow().setRecording(name,url,remove=True)
-elif mode == 9: USTVnow().playVideo(url)
-elif mode == 10:USTVnow().playVideo(url,dvr=True)
-elif mode == 11:USTVnow().search()
-elif mode == 12: USTVnow().browseFeatured(True)
-elif mode == 13:USTVnow().browseVOD(url)
-elif mode == 19:xbmc.executebuiltin("RunScript(script.module.uepg,listitem=%s&skin_path=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(sys.argv[0]+"?mode=3"),urllib.quote(json.dumps(ADDON_PATH)),urllib.quote(json.dumps(sys.argv[0]+"?mode=19")),urllib.quote(json.dumps("7200")),urllib.quote(json.dumps("7"))))
-elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&skin_path=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(json.dumps(list(USTVnow().uEPG()))),urllib.quote(json.dumps(ADDON_PATH)),urllib.quote(json.dumps(sys.argv[0]+"?mode=20")),urllib.quote(json.dumps("7200")),urllib.quote(json.dumps("7"))))
-elif mode == 21:xbmc.executebuiltin("action(ContextMenu)")
-elif mode == 22:xbmc.executebuiltin('Addon.OpenSettings(script.module.uepg)')
+            
+    def run(self):  
+        params=self.getParams()
+        try: url=urllib.unquote(params["url"])
+        except: url=None
+        try: name=urllib.unquote(params["name"])
+        except: name=None
+        try: mode=int(params["mode"])
+        except: mode=None
+            
+        log("Mode: "+str(mode))
+        log("URL : "+str(url))
+        log("Name: "+str(name))
 
-xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
-xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)
+        if mode==None:  self.mainMenu()
+        elif mode == 0: self.browseLive()
+        elif mode == 1: self.browseRecordings()
+        elif mode == 2: self.browseRecordings(recorded=True)
+        elif mode == 3: self.browseGuide()
+        elif mode == 4: self.browseGuide(name)
+        elif mode == 5: self.browseFeatured()
+        elif mode == 6: self.setRecording(name,url)
+        elif mode == 7: self.setRecording(name,url,recurring=True)
+        elif mode == 8: self.setRecording(name,url,remove=True)
+        elif mode == 9: self.playVideo(url)
+        elif mode == 10:self.playVideo(url,dvr=True)
+        elif mode == 11:self.search()
+        elif mode == 12: self.browseFeatured(True)
+        elif mode == 13:self.browseVOD(url)
+        elif mode == 19:xbmc.executebuiltin("RunScript(script.module.uepg,listitem=%s&skin_path=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(self.sysARG[0]+"?mode=3"),urllib.quote(json.dumps(ADDON_PATH)),urllib.quote(json.dumps(self.sysARG[0]+"?mode=19")),urllib.quote(json.dumps("7200")),urllib.quote(json.dumps("7"))))
+        elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&skin_path=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(json.dumps(list(self.uEPG()))),urllib.quote(json.dumps(ADDON_PATH)),urllib.quote(json.dumps(self.sysARG[0]+"?mode=20")),urllib.quote(json.dumps("7200")),urllib.quote(json.dumps("7"))))
+        elif mode == 21:xbmc.executebuiltin("action(ContextMenu)")
+        elif mode == 22:xbmc.executebuiltin('Addon.OpenSettings(script.module.uepg)')
+
+        xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)
+        xbmcplugin.endOfDirectory(int(self.sysARG[1]), cacheToDisc=True)

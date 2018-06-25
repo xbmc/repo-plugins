@@ -45,8 +45,8 @@ class myAddon(t1mAddon):
                   (url, thumb, name) = re.compile('<a href="(.+?)".+?src="(.+?)".+?alt="(.+?)"',re.DOTALL).search(blob).groups()
                   plot = name
                   dt = ''
-              name = h.unescape(name)
-              plot = h.unescape(plot.strip().decode('utf-8'))
+              name = h.unescape(name.decode(UTF8))
+              plot = h.unescape(plot.strip().decode(UTF8))
               infoList ={}
               infoList['Title'] = name
               if dt is not None:
@@ -78,7 +78,7 @@ class myAddon(t1mAddon):
       a = re.compile("data-jwplayer='(.+?)'>", re.DOTALL).search(html)
       if a is not None:
            a = json.loads(a.group(1))
-           finalurl = a['sources'][1]['file']
+           finalurl = a['sources'][0]['file']
       else:
            videoid = re.compile('<div class="video-wrap">.+?src="https://www\.youtube\.com/embed/(.+?)\?',re.DOTALL).search(html)
            if videoid is not None:

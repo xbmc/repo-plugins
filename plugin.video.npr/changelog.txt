@@ -1,5 +1,6 @@
+Version 3.0.5 website change
+Version 3.0.4 website change
 Version 3.0.3 fix youtube links and cleanup logic
-Version 3.0.2 website change
 Version 3.0.1 Isengard - separate scraper
 Version 1.0.6 website change
 Version 1.0.5 website changes, added views

@@ -3,6 +3,8 @@ plugin.video.npr
 
 Kodi Addon for NPR Music website
 
+Version 3.0.5 website change
+Version 3.0.4 website change
 Version 3.0.3 fix youtube links and cleanup logic
 Version 3.0.2 website change
 Version 3.0.1 Isengard - separate scraper

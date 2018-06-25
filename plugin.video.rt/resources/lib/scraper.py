@@ -85,7 +85,23 @@ class myAddon(t1mAddon):
                    if m != None:
                        url = m.group(1)
                    else:                   
-                       return
+                       m = re.compile('<div class="rtcode"><iframe.+?src="(.+?)"', re.DOTALL).search(html)
+                       if m != None:
+                           url = m.group(1)
+                           if not url.startswith('http'):
+                               url = 'http:'+url
+                           html = self.getRequest(url)
+                           m = re.compile('<source src="(.+?)"', re.DOTALL).search(html)
+                           if m != None:
+                               url = m.group(1)
+                           else:
+                               return
+                       else: 
+                           m = re.compile('\/\/www.youtube.com\/embed\/(.+?)\?', re.DOTALL).search(html)
+                           if m != None:
+                               url = 'plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=%s' % (m.group(1))
+                           else:
+                               return
       else:
           m = re.compile('streams_hls.+?url: "(.+?)"',re.DOTALL).search(html)
           if m != None:

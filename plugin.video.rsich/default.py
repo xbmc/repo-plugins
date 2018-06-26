@@ -4,6 +4,7 @@ from urlparse import urlparse
 import dateutil.parser
 import xml.etree.ElementTree as ET
 from tempfile import mkstemp
+import datetime
 
 webutils=rutils.RUtils()
 webutils.log=kodiutils.log
@@ -119,7 +120,7 @@ def getPrograms(letter=''):
     return ret
 
 def getChannels():
-    jsn = webutils.getJson('http://www.rsi.ch/play/tv/livemodule?layout=json')
+    jsn = webutils.getJson('https://www.rsi.ch/play/tv/live/overview')
     if not jsn or 'teaser' not in jsn:
         return False
     return jsn['teaser']
@@ -159,6 +160,7 @@ def loadList():
     kodiutils.addListItem(kodiutils.LANGUAGE(32014), params={"mode": "categories" })
     kodiutils.addListItem(kodiutils.LANGUAGE(32015), params={"mode": "dates" })
     kodiutils.addListItem(kodiutils.LANGUAGE(32016), params={"mode": "picks" })
+    kodiutils.addListItem(kodiutils.LANGUAGE(32017), params={"mode": "sport" })
     kodiutils.endScript()
 
 def addProgramsItems():
@@ -175,7 +177,7 @@ def addLive():
     chs = getChannels()
     if chs:
         for ch in chs:
-            kodiutils.addListItem(ch['title'], params={"mode": "video", "id": ch['id'] }, thumb=ch['logoUrl'], videoInfo={'mediatype': 'video'}, isFolder=False)
+            kodiutils.addListItem(ch['channelName'], params={"mode": "video", "id": ch['id'] }, thumb=ch['logo'], videoInfo={'mediatype': 'video'}, isFolder=False)
     kodiutils.endScript()
 
 def addCategories():
@@ -224,6 +226,73 @@ def addVideosItems(id='', type=1, page=1):
         if type == 1 and (not loadAll) and len(getProgramVideos(id, int(page)+1, elPerPage))>0:
             kodiutils.addListItem(kodiutils.LANGUAGE(32011), params={"id": id, "mode": "program", "page": int(page) + 1})
     kodiutils.endScript()
+
+# This function create a list of live sports to show in Kodi. Every live sport entry contains a title, a thumb image URL and params (mode and url).
+def addSport():
+    kodiutils.setContent('videos')
+    liveSportList = getLiveSportLink()
+    if liveSportList:
+        for live in liveSportList:
+            kodiutils.addListItem(live['title'], params={"mode": "watch_sport", "url": live['url'] }, thumb=live['thumbURL'], videoInfo={'mediatype': 'video'}, isFolder=False)
+    kodiutils.endScript()
+
+# This function get a dictionary with the live events ongoing containing the URL of the HLS stream, the image URL and the title of the event.
+def getLiveSportLink():
+        # Get today date.
+        today = datetime.datetime.strftime(datetime.datetime.today(),'%Y-%m-%d')
+
+        # Get tomorrow date.
+        tomorrow = datetime.datetime.strftime(datetime.datetime.today() + datetime.timedelta(1),'%Y-%m-%d')
+
+        # Get list of live sport events for today.
+        resp = webutils.getJson('https://www.rsi.ch/rsi-api/app-sport/v4/epg?from={today}&to={tomorrow}'.format(today=today,tomorrow=tomorrow))
+        # If there are no response, return.
+        if not resp:
+            return False
+        # If there is no events field return.
+        if not 'events' in resp:
+            return False
+        # If the lenght of events is empty, return.
+        if len(resp['events'])==0:
+            return False
+        
+        # List where the live sport events will be stored.
+        liveSports = []
+
+        # Iterate through all the events
+        for event in resp['events']:
+            # Save only the present (ongoing) events.
+            if event['category'] == 'present':
+                # Create an empty dict.
+                live = {}
+
+                # Extract the hls streaming link.
+                hls = event['hls']
+                
+                # Save the url (trunc before the "?" character) in the dict.
+                live['url'] = hls.split("?")[0]
+                
+                # Save the title in the dict.
+                live['title'] = event['title']
+				
+                # Save the image URL in the dict.
+                live['thumbURL'] = event['imageUrl']
+				
+                # Append the dict to the events list.
+                liveSports.append(live)
+
+        # Return the list of live events.
+        return liveSports
+
+# This function plays a sport video given the HLS stream URL.
+def watchLiveSport(url):
+    # Get the HMAC token to authorize the stream.
+    auth = getAuthString(url)
+    # If the token request was successful, play the video URL.
+    if auth:
+        subs = []
+        kodiutils.setResolvedUrl('{url}?{auth}|User-Agent={ua}'.format(url=url,auth=auth,ua=urllib.quote_plus(useragent)), subs=subs)
+    kodiutils.setResolvedUrl("",solved=False)
 
 def watchVideo(id):
     links = getVideoLinks(id)
@@ -279,5 +348,9 @@ else:
         addVideosItems(type=4)
     elif params['mode'] == "video":
         watchVideo(params['id'])
+    elif params['mode'] == "sport":
+        addSport()
+    elif params['mode'] == "watch_sport":
+        watchLiveSport(params['url'])
     else:
         loadList()

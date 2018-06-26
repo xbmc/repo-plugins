@@ -9,56 +9,60 @@ msgstr ""
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: phate89\n"
-"Language-Team: Italian (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
+"Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: label impostazioni
+#: settings labels
 
 msgctxt "#32001"
 msgid "Prefer HD streams"
-msgstr "Preferisci gli stream HD"
+msgstr "Prefer HD streams"
 
 msgctxt "#32002"
 msgid "Load all videos from a program (very slow in some case)"
-msgstr "Carica tutti i video di un programma (molto lento in alcuni casi)"
+msgstr "Load all videos from a program (very slow in some case)"
 
 msgctxt "#32003"
 msgid "Elements per page"
-msgstr "Elementi per pagina"
+msgstr "Elements per page"
 
 msgctxt "#32004"
 msgid "Add subtitles to videos (slower video start)"
-msgstr "Aggiungi sottotitoli ai video (partenza video più lenta)"
+msgstr "Add subtitles to videos (slower video start)"
 
-#label plugin
+#plugin labels
 
 msgctxt "#32011"
 msgid "Next page"
-msgstr "Pagina successiva"
+msgstr "Next page"
 
 msgctxt "#32012"
 msgid "All programs"
-msgstr "Tutti i programmi"
+msgstr "All programs"
 
 msgctxt "#32013"
 msgid "Live channels"
-msgstr "Canali live"
+msgstr "Live channels"
 
 msgctxt "#32014"
 msgid "Categories"
-msgstr "Categorie"
+msgstr "Categories"
 
 msgctxt "#32015"
 msgid "By date"
-msgstr "Per data"
+msgstr "By date"
 
 msgctxt "#32016"
 msgid "Editor picks"
-msgstr "Scelti per voi"
+msgstr "Editor picks"
+
+msgctxt "#32017"
+msgid "Live Sports"
+msgstr "Live Sports"
 
 #label date
 msgctxt "#32020"
@@ -71,76 +75,76 @@ msgstr "{month} {year}"
 
 msgctxt "#32022"
 msgid "Monday"
-msgstr "Lunedì"
+msgstr "Monday"
 
 msgctxt "#32023"
 msgid "Tuesday"
-msgstr "Martedì"
+msgstr "Tuesday"
 
 msgctxt "#32024"
 msgid "Wednesday"
-msgstr "Mercoledì"
+msgstr "Wednesday"
 
 msgctxt "#32025"
 msgid "Thursday"
-msgstr "Giovedì"
+msgstr "Thursday"
 
 msgctxt "#32026"
 msgid "Friday"
-msgstr "Venerdì"
+msgstr "Friday"
 
 msgctxt "#32027"
 msgid "Saturday"
-msgstr "Sabato"
+msgstr "Saturday"
 
 msgctxt "#32028"
 msgid "Sunday"
-msgstr "Domenica"
+msgstr "Sunday"
 
 msgctxt "#32029"
 msgid "January"
-msgstr "Gennaio"
+msgstr "January"
 
 msgctxt "#32030"
 msgid "February"
-msgstr "Febbraio"
+msgstr "February"
 
 msgctxt "#32031"
 msgid "March"
-msgstr "Marzo"
+msgstr "March"
 
 msgctxt "#32032"
 msgid "April"
-msgstr "Aprile"
+msgstr "April"
 
 msgctxt "#32033"
 msgid "May"
-msgstr "Maggio"
+msgstr "May"
 
 msgctxt "#32034"
 msgid "June"
-msgstr "Giugno"
+msgstr "June"
 
 msgctxt "#32035"
 msgid "July"
-msgstr "Luglio"
+msgstr "July"
 
 msgctxt "#32036"
 msgid "August"
-msgstr "Agosto"
+msgstr "August"
 
 msgctxt "#32037"
 msgid "September"
-msgstr "Settembre"
+msgstr "September"
 
 msgctxt "#32038"
 msgid "October"
-msgstr "Ottobre"
+msgstr "October"
 
 msgctxt "#32039"
 msgid "November"
-msgstr "Novembre"
+msgstr "November"
 
 msgctxt "#32040"
 msgid "December"
-msgstr "Dicembre"
+msgstr "December"

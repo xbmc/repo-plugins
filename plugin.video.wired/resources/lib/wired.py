@@ -83,7 +83,7 @@ class Wired(object):
         soup  = BeautifulSoup(self.openURL(url), "html.parser")
         shows = soup('div', {'class': 'cne-thumb cne-series'})
         for show in shows: 
-            link  = BASE_URL+show('a', {'class': 'cne-thumbnail cne-series'})[0].attrs['href']
+            link  = BASE_URL + urllib.quote(show('a', {'class': 'cne-thumbnail cne-series'})[0].attrs['href'])
             label = show('p', {'class': 'cne-series-title'})[0].get_text().strip()
             plot  = show('span', {'class': 'cne-thumb-description'})[0].get_text().strip()
             thumb = show.find('img').attrs['src']
@@ -97,7 +97,7 @@ class Wired(object):
         soup   = BeautifulSoup(self.openURL(url), "html.parser")
         cats = soup('li', {'class': 'cne-nav--drawer__item--categories'})
         for cat in cats: 
-            link  = BASE_URL+cat('a', {'class': 'js-nav-drawer-menu-item'})[0].attrs['href']
+            link  = BASE_URL + urllib.quote(cat('a', {'class': 'js-nav-drawer-menu-item'})[0].attrs['href'])
             label = cat('a', {'class': 'js-nav-drawer-menu-item'})[0].attrs['aria-label'].strip()
             thumb = 'http:%s'%cat.find('img').attrs['src']
             infoLabels = {"mediatype":"video","label":label,"title":label}

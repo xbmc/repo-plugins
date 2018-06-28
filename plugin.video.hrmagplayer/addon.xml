@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.hrmagplayer" name="HR Magazine Player" version="1.0.2" provider-name="extramundane">
+<addon id="plugin.video.hrmagplayer" name="HR Magazine Player" version="1.1.0" provider-name="extramundane">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
     </requires>
@@ -11,8 +11,15 @@
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<source></source>
         <summary lang="en_GB">Live streaming and magazines from Hessischer Rundfunk TV</summary>
-        <description lang="en_GB">This add-on provides access to the HR TV live stream and some local cultural shows.</description>
+        <description lang="en_GB">This add-on provides access to the HR TV live stream and some local food/cultural magazine shows.</description>
         <language>de</language>
+        <news>
+1.1.0
+- Added configurable fetching/displaying of 'Playing now' info in live stream menu item
+  (see 'Settings' to enable or disable fetching/displaying)
+- Added more magazine content
+  (see 'Settings' to disable or enable certain shows showing up in list)
+        </news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>

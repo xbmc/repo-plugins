@@ -27,6 +27,10 @@ class ChannelContext(dict):
         reportId = 'hessenreporter'
         engelId = 'engel-fragt'
         reiseId = 'reise-reportagen'
+        tobiId = 'tobis-staedtetrip'
+        wetterId = 'alle-wetter'
+        halloId = 'hallo-hessen'
+        herkulesId = 'herkules'
         wdrId = 'wdr-kochen'
         
         # Maybe create this array of series thumbnails dynamically
@@ -38,6 +42,10 @@ class ChannelContext(dict):
                   reportId: 'https://www.hr-fernsehen.de/sendungen-a-z/hessenreporter/banner-hessenreporter-100~_t-1505137253325_v-16to9__small.jpg',
                   engelId: 'https://www.hr-fernsehen.de/sendungen-a-z/engel-fragt/banner-engel-fragt-100~_t-1504627362788_v-16to9__small.jpg',
                   reiseId: 'https://www.hr-fernsehen.de/sendungen-a-z/reise-reportagen/banner-reisereportagen-100~_t-1505479140011_v-16to9__small.jpg',
+                  tobiId: 'https://www.hr-fernsehen.de/sendungen-a-z/tobis-staedtetrip/tobis-staedtetripr-1920-1080-16x7-16x-100~_t-1519744182685_v-16to9__small.jpg',
+                  wetterId: 'https://www.hr-fernsehen.de/sendungen-a-z/alle-wetter/bannerbild-alle-wetter-100~_t-1516872349178_v-16to9__small.jpg',
+                  halloId: 'https://www.hr-fernsehen.de/sendungen-a-z/hallo-hessen/banner-hallo-hessen-100~_t-1505303286797_v-16to9__small.jpg',
+                  herkulesId: 'https://www.hr-fernsehen.de/sendungen-a-z/herkules/banner-herkules-100~_t-1504790718827_v-16to9__small.jpg',
                   wdrId: 'https://www1.wdr.de/fernsehen/kochen-mit-martina-und-moritz/sendungen/kochen-mit-martina-und-moritz-152~_v-gseaclassicxl.jpg'
                   }
         actives = None
@@ -51,6 +59,10 @@ class ChannelContext(dict):
                 reportId: addon.getSetting(reportId) == 'true',
                 engelId: addon.getSetting(engelId) == 'true',
                 reiseId: addon.getSetting(reiseId) == 'true',
+                tobiId: addon.getSetting(tobiId) == 'true',
+                wetterId: addon.getSetting(wetterId) == 'true',
+                halloId: addon.getSetting(halloId) == 'true',
+                herkulesId: addon.getSetting(herkulesId) == 'true',
                 wdrId: addon.getSetting(wdrId) == 'true'
                 }
         else:
@@ -64,6 +76,10 @@ class ChannelContext(dict):
                 reportId: True,
                 engelId: True,
                 reiseId: True,
+                tobiId: True,
+                wetterId: True,
+                halloId: True,
+                herkulesId: True,
                 wdrId: True
                 }
 
@@ -76,6 +92,10 @@ class ChannelContext(dict):
             {'name': 'hessenreporter', 'id': reportId, 'image': tNails[reportId], 'active': actives[reportId]},
             {'name': 'Engel fragt', 'id': engelId, 'image': tNails[engelId], 'active': actives[engelId]},
             {'name': 'Reisereportage', 'id': reiseId, 'image': tNails[reiseId], 'active': actives[reiseId]},
+            {'name': 'Tobis Städtetrip', 'id': tobiId, 'image': tNails[tobiId], 'active': actives[tobiId]},
+            {'name': 'alle wetter', 'id': wetterId, 'image' : tNails[wetterId], 'active': actives[wetterId]},
+            {'name': 'hallo hessen', 'id': halloId, 'image': tNails[halloId], 'active': actives[halloId]},
+            {'name': 'herkules', 'id': herkulesId, 'image': tNails[herkulesId], 'active': actives[herkulesId]},
             {'name': 'WDR - Kochen mit Martina und Moritz', 'id': wdrId, 'image': tNails[wdrId], 'active' : actives[wdrId]}
             ]
         return shows
@@ -107,16 +127,17 @@ class ChannelLoader:
     def loadEpisodeList(self, context, index):
         id = getShowId(context, index)
         url = context['shows'][id]['url']
+        xbmc.log("Show id: %s, URL: %s" % (id, url), xbmc.LOGDEBUG)
         
         http = HttpRetriever()
         page = http.get(url)
         
         show = None
-        if index == 0:
+        if id == 'live':
             show = Livestream()
-        elif index == 1:
+        elif id == 'hessenschau':
             show = Hessenschau()
-        elif index == 8:
+        elif id == 'wdr-kochen':
             show = WdrShow()
         else:
             show = Show()

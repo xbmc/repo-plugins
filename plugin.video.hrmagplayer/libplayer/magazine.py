@@ -18,6 +18,8 @@ class Show:
                 episode['title'] = self.getTitle(article)
                 episode['date'] = self.getDate(article)
                 episode['teaser'] = self.getTeaser(article)
+                episode['text'] = self.getTeaserText(article)
+                episode['type'] = 'm'
                 if episode['date'] != None:
                     episode['title'] += ' - ' + episode['date']
                 
@@ -31,11 +33,13 @@ class Show:
         while clusterItem != None and not xbmc.Monitor().abortRequested():
             episode = dict()
             episode['image'] = ''
+            episode['type'] = 'c'
             episode['date'] = self.getClusterDate(clusterItem)
             episode['title'] = self.getClusterTitle(clusterItem)
             if episode['date'] != None:
                 episode['title'] += ' - ' + episode['date']
             episode['link'] = self.getClusterLink(clusterItem)
+            episode['text'] = self.getTeaserText(clusterItem)
             context['episodes'].append(episode)
             
             clusterItem = self.getClusterItem(context, page)
@@ -70,6 +74,15 @@ class Show:
             s = line.find('>', s) + 1
             e = line.find('<', s)
             ret = line[s:e]
+        return ret
+    
+    def getTeaserText(self, article):
+        ret = ''
+        s = article.find('shorttext')
+        if s != -1:
+            e = article.find('</', s + 11)
+            if e != -1:
+                ret = article[s+11:e]
         return ret
 
     def getDetailLink(self, article):

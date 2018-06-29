@@ -55,11 +55,33 @@ msgctxt "#30008"
 msgid "WDR - Kochen mit Martina und Moritz"
 msgstr ""
 
-msgctxt "#30020"
+msgctxt "#30009"
+msgid "Tobis Städtetrip"
+msgstr ""
+
+msgctxt "#30010"
+msgid "alle wetter"
+msgstr ""
+
+msgctxt "#30011"
+msgid "hallo hessen"
+msgstr ""
+
+msgctxt "#30012"
+msgid "herkules"
+msgstr ""
+
+msgctxt "#30030"
 msgid "Livestream"
 msgstr ""
 
-msgctxt "#30021"
-msgid "Show Episode Guide"
+msgctxt "#30031"
+msgid "Fetch Episode Guide"
 msgstr ""
+
+msgctxt "#30600"
+msgid "Playing now"
+msgstr ""
+
+
 

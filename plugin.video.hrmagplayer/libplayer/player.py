@@ -68,7 +68,7 @@ def list_episodes(context, showIndex):
     index = 0
     for episode in episodes:
         # Create a list item with a text label and a thumbnail image.
-        list_item = xbmcgui.ListItem(label=episode['title'], thumbnailImage=episode['image'])
+        list_item = xbmcgui.ListItem(label=episode['title'])
         list_item.setArt({"thumb": episode['image']})
         if 'text' in episode:
             list_item.setInfo('video', {"Plot": episode['text']})

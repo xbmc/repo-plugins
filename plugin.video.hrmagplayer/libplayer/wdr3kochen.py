@@ -13,9 +13,6 @@ class WdrShow:
         
         article = self.getArticle(context, page)
         while article != None and not xbmc.Monitor().abortRequested():
-            if context['debug']:
-                print "----------------------------------"
-                print article
             if self.hasVideo(article):
                 episode = dict()
             

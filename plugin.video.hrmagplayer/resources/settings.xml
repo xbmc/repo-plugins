@@ -9,7 +9,14 @@
     <setting id="hessenreporter" type="bool" default="true" label="30005"/>
     <setting id="engel-fragt" type="bool" default="true" label="30006"/>
     <setting id="reise-reportagen" type="bool" default="true" label="30007"/>
+    <setting id="tobis-staedtetrip" type="bool" default="true" label="30009"/>
+    <setting id="alle-wetter" type="bool" default="true" label="30010"/>
+    <setting id="hallo-hessen" type="bool" default="true" label="30011"/>
+    <setting id="herkules" type="bool" default="true" label="30012"/>    
     <setting id="wdr-kochen" type="bool" default="true" label="30008"/>
+  </category>
+  <category label="30030">
+    <setting id="live-epg" type="bool" default="true" label="30031"/>
   </category>
 </settings>
 

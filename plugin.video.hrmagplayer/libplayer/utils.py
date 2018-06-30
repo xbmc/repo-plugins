@@ -41,6 +41,13 @@ def getVideoLink(url):
 def getShowId(context, index):
     return context['showList'][index]['id']
 
+def getShowIndex(context, id):
+    shows = len(context['showList'])
+    for show in range(0, shows):
+        if context['showList'][show]['id'] == id:
+            return show
+    return -1
+
 def encode(string):
     return urllib.quote_plus(string)
     

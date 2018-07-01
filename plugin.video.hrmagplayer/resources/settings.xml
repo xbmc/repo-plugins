@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category label="29999">
+    <setting id="live" type="bool" default="true" label="30000"/>
+    <setting id="hessenschau" type="bool" default="true" label="30001"/>
+    <setting id="hessen-a-la-carte" type="bool" default="true" label="30002"/>
+    <setting id="herrliches-hessen" type="bool" default="true" label="30003"/>
+    <setting id="erlebnis-hessen" type="bool" default="true" label="30004"/>
+    <setting id="hessenreporter" type="bool" default="true" label="30005"/>
+    <setting id="engel-fragt" type="bool" default="true" label="30006"/>
+    <setting id="reise-reportagen" type="bool" default="true" label="30007"/>
+    <setting id="tobis-staedtetrip" type="bool" default="true" label="30009"/>
+    <setting id="alle-wetter" type="bool" default="true" label="30010"/>
+    <setting id="hallo-hessen" type="bool" default="true" label="30011"/>
+    <setting id="herkules" type="bool" default="true" label="30012"/>    
+    <setting id="wdr-kochen" type="bool" default="true" label="30008"/>
+  </category>
+  <category label="30030">
+    <setting id="live-epg" type="bool" default="true" label="30031"/>
+  </category>
+</settings>
+

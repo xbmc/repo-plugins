@@ -18,5 +18,6 @@
 
 # -*- coding: utf-8 -*-
 #entrypoint
-if __name__ == '__main__':
-    from resources.lib import ustvnow
+import sys
+from resources.lib import ustvnow
+if __name__ == '__main__': ustvnow.USTVnow(sys.argv).run()

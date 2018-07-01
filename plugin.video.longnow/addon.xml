@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.longnow" name="Long Now Seminars" version="0.1.1" provider-name="desperadoduck">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.beautifulsoup4" version="4.5.3" />
+    <import addon="script.module.requests" version="2.18.4" />
+    <import addon="script.module.future" version="0.16.0.4" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_gb">Long Now Seminar Viewer</summary>
+    <description lang="en_gb">This program is an unofficial viewer for seminars of the Long Now Foundation in Kodi. You need to have an account at https://longnow.org to make use of that plugin.</description>
+    <disclaimer lang="en_gb">This is not an official plugin of the Long Now Foundation, but my private project, so please don't bother them if anything breaks.</disclaimer>
+    <language>en</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website>http://www.galois.de/projects/kodi_longnow</website>
+    <email></email>
+    <source>https://github.com/desperadoduck/plugin.video.longnow</source>
+  </extension>
+</addon>

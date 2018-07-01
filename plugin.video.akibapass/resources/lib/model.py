@@ -23,13 +23,13 @@ except ImportError:
     from urllib.parse import parse_qs, unquote_plus
 
 
-def parse():
+def parse(argv):
     """Decode arguments
     """
-    if (sys.argv[2]):
-        return Args(parse_qs(sys.argv[2][1:]))
+    if (argv[2]):
+        return Args(argv, parse_qs(argv[2][1:]))
     else:
-        return Args({})
+        return Args(argv, {})
 
 
 class Args(object):
@@ -38,11 +38,12 @@ class Args(object):
     reference to the addon. It is intended to hold all data necessary for the
     script.
     """
-    def __init__(self, kwargs):
+    def __init__(self, argv, kwargs):
         """Initialize arguments object
         Hold also references to the addon which can't be kept at module level.
         """
         self.PY2        = sys.version_info[0] == 2 #: True for Python 2
+        self._argv      = argv
         self._addon     = sys.modules["__main__"]._addon
         self._addonname = sys.modules["__main__"]._plugin
         self._addonid   = sys.modules["__main__"]._plugId

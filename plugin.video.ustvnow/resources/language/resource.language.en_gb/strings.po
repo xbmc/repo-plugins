@@ -139,3 +139,7 @@ msgstr ""
 msgctxt "#30030"
 msgid "Open Guide Settings"
 msgstr ""
+
+msgctxt "#30031"
+msgid "No Schedules Found"
+msgstr ""

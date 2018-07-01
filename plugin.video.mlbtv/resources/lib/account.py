@@ -171,7 +171,7 @@ class Account:
 
         r = requests.post(url, headers=headers, data=payload, cookies=self.util.load_cookies(), verify=self.verify)
         access_token = r.json()['access_token']
-        # refresh_toekn = r.json()['refresh_token']
+        # refresh_token = r.json()['refresh_token']
         return access_token
 
     def get_playback_url(self, content_id):
@@ -230,7 +230,7 @@ class Account:
 
         if QUALITY == 'Always Ask':
             stream_url = self.get_stream_quality(stream_url)
-        headers = '|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+        headers = 'User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
         headers += '&Authorization=' + auth
         headers += '&Cookie='
         cookies = requests.utils.dict_from_cookiejar(self.util.load_cookies())
@@ -248,6 +248,14 @@ class Account:
         return stream_url, headers
 
     def get_stream_quality(self, stream_url):
+        #Check if inputstream adaptive is on, if so warn user and return master m3u8
+        if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
+            dialog = xbmcgui.Dialog()
+            title = 'Playback Conflict'
+            msg = 'Always Ask stream quality will not work when inputstream adaptive is enabled. Either disable inputstream adaptive or switch stream quality to Best Available.'
+            dialog.ok(title, msg)
+            return stream_url
+
         stream_title = []
         stream_urls = []
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'}

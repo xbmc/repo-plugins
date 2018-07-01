@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.akibapass" name="Akibapass" version="0.6.2" provider-name="MrKrabat">
+<addon id="plugin.video.akibapass" name="Akibapass" version="0.6.3" provider-name="MrKrabat">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.beautifulsoup4" version="4.5.3"/>
@@ -16,10 +16,10 @@
         <description lang="de_DE">Alle deine Lieblingsserien direkt aus Japan bei Akibapass.de. Zugang zu aktuellen Simulcasts und jeder Menge Klassikern.</description>
         <disclaimer lang="en_GB">WARNING: You MUST be a PREMIUM member or BUY videos to use this plugin</disclaimer>
         <disclaimer lang="de_DE">HINWEIS: Du MUSST PREMIUM Mitglied sein oder Videos KAUFEN um dieses Plugin zu benutzen</disclaimer>
-        <news>v0.6.2 (2018.04.29)[CR]- Some fixes</news>
+        <news>v0.6.3 (2018.06.16)[CR]- Compatibility with latest Kodi 18</news>
         <license>GNU Affero General Public License, v3</license>
         <forum>https://www.kodinerds.net/index.php/Thread/58346-Release-Akibapass-de/</forum>
-        <website>https://www.akibapass.de/</website>
+        <website>https://www.akibapass.de/de/v2</website>
         <source>https://github.com/MrKrabat/plugin.video.akibapass</source>
         <email></email>
         <assets>

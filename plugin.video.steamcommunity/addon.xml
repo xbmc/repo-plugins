@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.steamcommunity" name="Steam Community" version="0.2.2" provider-name="MrKrabat">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="plugin.video.youtube" version="6.0.2"/>
+        <import addon="script.module.beautifulsoup4" version="4.5.3"/>
+        <import addon="script.module.inputstreamhelper" version="0.3.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video image</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <language></language>
+        <summary lang="en_GB">Community and official content for all games and software on Steam.</summary>
+        <summary lang="zh_CN">Steam 上所有游戏与软件的社区和官方内容。</summary>
+        <summary lang="ru_RU">Фанатский и официальный контент для всех игр и программ в Steam.</summary>
+        <summary lang="es_ES">Contenido oficial y de la comunidad para todos los juegos y software de Steam.</summary>
+        <summary lang="de_DE">Community- und offizielle Inhalte für alle Spiele und Software bei Steam.</summary>
+        <summary lang="pt_BR">Conteúdo oficial e da comunidade para todos os jogos e softwares no Steam.</summary>
+        <summary lang="fr_FR">Contenu officiel et de la communauté pour tous les produits sur Steam.</summary>
+        <summary lang="ko_KR">Steam에 있는 모든 게임과 소프트웨어를 위한 커뮤니티와 공식 콘텐츠입니다.</summary>
+        <summary lang="pl_PL">Zawartość oficjalna i od społeczności dla wszystkich gier i programów na Steam.</summary>
+        <summary lang="tr_TR">Steam'deki tüm oyunlar ve yazılımlar için topluluk yapımı ve resmî içerikler.</summary>
+        <summary lang="ja_JP">Steam 上の全てのゲームとソフトウェアのための、コミュニティとオフィシャルコンテンツ。</summary>
+        <description lang="en_GB">Community Hubs are collections of all the best community and official game content as rated by users.</description>
+        <description lang="zh_CN">社区中心集合了所有由玩家评价的最佳社区及官方游戏内容。</description>
+        <description lang="ru_RU">Центры сообществ — это коллекции лучшего контента от разработчиков и сообщества, выбранные и оцененные пользователями.</description>
+        <description lang="es_ES">Los puntos de encuentro son colecciones del mejor contenido oficial y de la comunidad recomendado por los jugadores.</description>
+        <description lang="de_DE">Communityhubs sind Sammlungen der nach Benutzerbewertungen besten offiziellen und von der Community erstellten Inhalten.</description>
+        <description lang="pt_BR">Centrais da Comunidade são coleções do melhor conteúdo oficial e da comunidade segundo a avaliação dos usuários.</description>
+        <description lang="fr_FR">Les hubs des communautés sont des collections de toutes les meilleures communautés et des contenus des jeux officiels évalués par les utilisateurs.</description>
+        <description lang="ko_KR">커뮤니티 허브는 사용자들이 평가한 최고의 커뮤니티와 공식 콘텐츠의 모음집입니다.</description>
+        <description lang="pl_PL">Centra społeczności to organizowane według ocen użytkowników zbiory materiałów oficjalnych oraz tworzonych przez społeczność.</description>
+        <description lang="tr_TR">Topluluk Merkezleri, kullanıcılar tarafından değerlendirilen en iyi topluluk yapımı ve resmî oyun içeriklerinin bulunduğu koleksiyonlardır.</description>
+        <description lang="ja_JP">コミュニティハブは、コミュニティ製、メーカー製を問わずユーザーに評価されているコンテンツのコレクションです。</description>
+        <news>v0.2.2 (2018.06.17)[CR]- Compatibility with latest Kodi 18</news>
+        <license>GNU Affero General Public License, v3</license>
+        <forum>https://www.kodinerds.net/index.php/Thread/62053-WIP-Steam-Community/</forum>
+        <website>https://steamcommunity.com/</website>
+        <source>https://github.com/MrKrabat/plugin.video.steamcommunity</source>
+        <email></email>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+            <screenshot>resources/media/screenshot-01.jpg</screenshot>
+            <screenshot>resources/media/screenshot-02.jpg</screenshot>
+            <screenshot>resources/media/screenshot-03.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

@@ -1,0 +1,223 @@
+# Kodi Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+# Steam Community Settings
+
+msgctxt "#30000"
+msgid "Language"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Filter"
+msgstr "Filter"
+
+msgctxt "#30004"
+msgid "Configure InputStream Adaptive"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Arabic"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Bulgarian"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Chinese (Simplified)"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Chinese (Traditional)"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Czech"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Danish"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Dutch"
+msgstr ""
+
+msgctxt "#30017"
+msgid "English"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Finnish"
+msgstr ""
+
+msgctxt "#30019"
+msgid "French"
+msgstr ""
+
+msgctxt "#30020"
+msgid "German"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Greek"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Hungarian"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Italian"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Japanese"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Korean"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Norwegian"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Polish"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Portuguese"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Portuguese-Brazil"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Romanian"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Russian"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Spanish"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Swedish"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Thai"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Turkish"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Ukrainian"
+msgstr ""
+
+
+# Steam Community Menue
+
+msgctxt "#30040"
+msgid "Search hubs"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Search user"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Next page"
+msgstr ""
+
+msgctxt "#30045"
+msgid "Popular"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Most recent"
+msgstr ""
+
+msgctxt "#30050"
+msgid "All"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Screenshots"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Artwork"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Broadcasts"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Videos"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Workshop"
+msgstr ""
+
+msgctxt "#30056"
+msgid "News"
+msgstr ""
+
+msgctxt "#30057"
+msgid "Guides"
+msgstr ""
+
+msgctxt "#30058"
+msgid "Reviews"
+msgstr ""
+
+
+# Steam Community Messages
+
+msgctxt "#30060"
+msgid "Login failed"
+msgstr ""
+
+msgctxt "#30061"
+msgid "An error occurred"
+msgstr ""
+
+msgctxt "#30062"
+msgid "You need to be logged in"
+msgstr ""
+
+msgctxt "#30063"
+msgid "This profile is private"
+msgstr ""
+
+msgctxt "#30064"
+msgid "Failed to play video"
+msgstr ""
+
+msgctxt "#30065"
+msgid "Broadcasting requires a newer version of inputstream.adaptive"
+msgstr ""

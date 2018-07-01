@@ -311,9 +311,11 @@ class myAddon(t1mAddon):
     addonLanguage = self.addon.getLocalizedString
     pbs_uid = self.addon.getSetting('pbs_uid')
     pg = self.getRequest('https://player.pbs.org/viralplayer/%s/?uid=%s' % (url, pbs_uid))
-    urls = re.compile("PBS.videoData =.+?recommended_encoding.+?'url'.+?'(.+?)'.+?'closed_captions_url'.+?'(.+?)'", re.DOTALL).search(pg)
-    if urls is not None:
-        url,suburl = urls.groups()
+    pg = re.compile('window.videoBridge = (.+?);').search(pg).group(1)
+    a = json.loads(pg)
+    if not a is None:
+        url = a['recommended_encoding']['url']
+        suburl = a['cc'].get('SRT')
         pg = self.getRequest('%s?format=json' % url)
         url = json.loads(pg)['url']
     else:
@@ -323,8 +325,9 @@ class myAddon(t1mAddon):
     if 'mp4:' in url:
         url = 'http://ga.video.cdn.pbs.org/%s' % url.split('mp4:',1)[1]
     liz = xbmcgui.ListItem(path = url)
-    subfile = self.procConvertSubtitles(suburl)
-    liz.setSubtitles([(subfile)])
+    if not suburl is None:
+        subfile = self.procConvertSubtitles(suburl)
+        liz.setSubtitles([(subfile)])
     if ('.m3u8' in url):
         liz.setProperty('inputstreamaddon','inputstream.adaptive')
         liz.setProperty('inputstream.adaptive.manifest_type','hls')

@@ -1,0 +1,87 @@
+# Kodi Media Center language file
+# Addon Name: "hrmagplayer"
+# Addon id: plugin.video.hrmagplayer
+# Addon Provider: extramundane
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.hrmagplayer\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#29999"
+msgid "Active shows"
+msgstr ""
+
+msgctxt "#30000"
+msgid "Play Livestream"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Hessenschau"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Hessen Ã  la carte"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Herrliches Hessen"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Erlebnis Hessen"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Hessen Reporter"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Engel fragt"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Reisereportage"
+msgstr ""
+
+msgctxt "#30008"
+msgid "WDR - Kochen mit Martina und Moritz"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Tobis Städtetrip"
+msgstr ""
+
+msgctxt "#30010"
+msgid "alle wetter"
+msgstr ""
+
+msgctxt "#30011"
+msgid "hallo hessen"
+msgstr ""
+
+msgctxt "#30012"
+msgid "herkules"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Livestream"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Fetch Episode Guide"
+msgstr ""
+
+msgctxt "#30600"
+msgid "Playing now"
+msgstr ""
+
+
+

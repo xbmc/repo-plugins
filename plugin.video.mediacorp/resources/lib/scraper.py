@@ -96,7 +96,7 @@ class myAddon(t1mAddon):
       vid = url.rsplit('/',1)[1]
       if not (thumb.startswith('http')): thumb = 'http://video.toggle.sg'+thumb
       infoList['Plot'] = h.unescape(plot.decode(UTF8))
-      infoList['Title'] = h.unescape(name)
+      infoList['Title'] = h.unescape(name.decode(UTF8))
       infoList['TVShowTitle'] = showName
       infoList['mediatype'] = 'episode'
       fanart = thumb

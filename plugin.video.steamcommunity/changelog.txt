@@ -1,0 +1,11 @@
+v0.2.2 (2018.06.17)
+- Compatibility with latest Kodi 18
+
+v0.2.0 (2018.06.07)
+- Added filter
+- Added hub search and browsing
+- Added browsing through multiple pages
+- Fixed showing images does not work
+
+v0.1.0 (2018.06.04)
+- Initial ALPHA release

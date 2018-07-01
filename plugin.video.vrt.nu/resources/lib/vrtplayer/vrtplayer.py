@@ -14,20 +14,22 @@ from resources.lib.kodiwrappers import sortmethod
 class VRTPlayer:
 
     #Url met de urls https://services.vrt.be/videoplayer/r/live.json
-    _EEN_LIVESTREAM = "https://live-w.lwc.vrtcdn.be/groupc/live/d05012c2-6a5d-49ff-a711-79b32684615b/live.isml/.m3u8"
-    _CANVAS_LIVESTREAM_ = "https://live-w.lwc.vrtcdn.be/groupc/live/905b0602-9719-4d14-ae2a-a9b459630653/live.isml/.m3u8"
-    _KETNET_LIVESTREAM = "https://live-w.lwc.vrtcdn.be/groupc/live/8b898c7d-adf7-4d44-ab82-b5bb3a069989/live.isml/.m3u8"
-    _SPORZA_LIVESTREAM = "https://live-w.lwc.vrtcdn.be/groupa/live/bf2f7c79-1d77-4cdc-80e8-47ae024f30ba/live.isml/.m3u8"
+    _EEN_LIVESTREAM = "https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1/videos/vualto_een_geo"
+    _CANVAS_LIVESTREAM_ = "https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1/videos/vualto_canvas_geo"
+    _KETNET_LIVESTREAM = "https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1/videos/vualto_ketnet_geo"
+    _SPORZA_LIVESTREAM = "https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1/videos/vualto_sporza_geo"
 
     _VRT_BASE = "https://www.vrt.be/"
     _VRTNU_BASE_URL = urljoin(_VRT_BASE, "/vrtnu/")
     _VRTNU_SEARCH_URL = "https://search.vrt.be/suggest?facets[categories]="
 
-    def __init__(self, addon_path, kodi_wrapper, url_to_stream_service):
+    def __init__(self, addon_path, kodi_wrapper, url_to_stream_service, url_to_livestream_service):
         self.metadata_collector = metadatacollector.MetadataCollector()
         self._addon_path = addon_path
         self._kodi_wrapper = kodi_wrapper
         self._url_toStream_service = url_to_stream_service
+        self.url_to_livestream_service = url_to_livestream_service
+
 
     def show_main_menu_items(self):
         menu_items = {helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32091), {'action': actions.LISTING_AZ}, False,
@@ -77,7 +79,8 @@ class VRTPlayer:
         self._kodi_wrapper.play_video(stream)
 
     def play_livestream(self, url):
-        self._kodi_wrapper.play_livestream(url)
+        stream = self.url_to_livestream_service.get_stream_from_url(url)
+        self._kodi_wrapper.play_livestream(stream)
 
     def show_livestream_items(self):
         livestream_items = {helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32101),
@@ -200,5 +203,3 @@ class VRTPlayer:
         if found_element is not None:
             title = statichelper.replace_newlines_and_strip(found_element.contents[0])
         return thumbnail, title
-
-

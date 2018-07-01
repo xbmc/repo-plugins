@@ -1,0 +1,12 @@
+1.0.0
+- Initial commit
+
+1.0.2
+- Implemented change requests from pull request
+
+1.1.0
+- Added configurable fetching/displaying of 'Playing now' info in live stream menu item
+  (see 'Settings' to enable or disable fetching/displaying)
+- Added more magazine content
+  (see 'Settings' to disable or enable certain shows showing up in list)
+  

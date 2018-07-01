@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-
 import xbmc
 import xbmcgui
 import xbmcplugin
@@ -27,10 +25,10 @@ from . import model
 from . import controller
 
 
-def main():
+def main(argv):
     """Main function for the addon
     """
-    args = model.parse()
+    args = model.parse(argv)
 
     # get account informations
     username = args._addon.getSetting("akiba_username")
@@ -39,13 +37,13 @@ def main():
     if not (username and password):
         # open addon settings
         view.add_item(args, {"title": args._addon.getLocalizedString(30045)})
-        view.endofdirectory()
+        view.endofdirectory(args)
         args._addon.openSettings()
         return False
     else:
         # list menue
         api.start(args)
-        xbmcplugin.setContent(int(sys.argv[1]), "tvshows")
+        xbmcplugin.setContent(int(args._argv[1]), "tvshows")
         check_mode(args)
         api.close(args)
 
@@ -88,7 +86,7 @@ def check_mode(args):
         controller.startplayback(args)
     elif mode == "trailer":
         item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=args.url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        xbmcplugin.setResolvedUrl(int(args._argv[1]), True, item)
     else:
         # unkown mode
         xbmc.log("[PLUGIN] %s: Failed in check_mode '%s'" % (args._addonname, str(mode)), xbmc.LOGERROR)
@@ -117,4 +115,4 @@ def showMainMenue(args):
     view.add_item(args,
                   {"title": args._addon.getLocalizedString(30023),
                    "mode":  "collection"})
-    view.endofdirectory()
+    view.endofdirectory(args)

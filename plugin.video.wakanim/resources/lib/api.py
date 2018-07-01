@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from os.path import join
+import os
 from cgi import parse_header
+from bs4 import BeautifulSoup
 try:
     from urllib import urlencode, quote_plus
 except ImportError:
@@ -42,9 +43,10 @@ def start(args):
 
     # lets urllib handle cookies
     opener = build_opener(HTTPCookieProcessor(args._cj))
-    opener.addheaders = [("User-Agent",      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"),
+    opener.addheaders = [("User-Agent",      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36"),
                          ("Accept-Encoding", "identity"),
-                         ("Accept-Charset",  "utf-8")]
+                         ("Accept-Charset",  "utf-8"),
+                         ("DNT",             "1")]
     install_opener(opener)
 
     # load cookies
@@ -58,7 +60,8 @@ def start(args):
 def close(args):
     """Saves cookies and session
     """
-    args._cj.save(getCookiePath(args), ignore_discard=True)
+    if args._cj:
+        args._cj.save(getCookiePath(args), ignore_discard=True)
 
 
 def getPage(args, url, data=None):
@@ -81,9 +84,10 @@ def getPage(args, url, data=None):
     password = args._addon.getSetting("wakanim_password")
 
     # build POST data
-    post_data = urlencode({"username": username,
-                           "password": password,
-                           "remember": "1"})
+    post_data = urlencode({"Username":   username,
+                           "Password":   password,
+                           "RememberMe": True,
+                           "login":      "Verbindung"})
 
     # POST to login page
     response = urlopen("https://www.wakanim.tv/" + args._country + "/v2/account/login?ReturnUrl=" + quote_plus(url.replace("https://www.wakanim.tv", "")),
@@ -92,6 +96,28 @@ def getPage(args, url, data=None):
     # get page again
     response = urlopen(url, data)
     html = getHTML(response)
+
+    # 2FA required
+    if u"/v2/client/authorizewebclient" in html:
+        xbmc.log("[PLUGIN] %s: 2FA required" % args._addonname, xbmc.LOGNOTICE)
+        soup = BeautifulSoup(html, "html.parser")
+        RequestVerificationToken = soup.find("input", {"name": "__RequestVerificationToken"})["value"]
+
+        # request 2FA email
+        post_data = urlencode({"__RequestVerificationToken": RequestVerificationToken,
+                               "method":                     "Email"})
+        response = urlopen("https://www.wakanim.tv/" + args._country + "/v2/client/generatetokenwebclient",
+                           post_data.encode(getCharset(response)))
+        getHTML(response)
+
+        # nuke session cookies and inform user
+        xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30047))
+        try:
+            os.remove(getCookiePath(args))
+        except WindowsError:
+            pass
+        args._cj = None
+        return ""
 
     if isLoggedin(html):
         return html
@@ -114,7 +140,7 @@ def getCookies(args):
     for cookie in args._cj:
         ret += urlencode({cookie.name: cookie.value}) + ";"
 
-    return "|User-Agent=Mozilla%2F5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F60.0.3112.113%20Safari%2F537.36&Cookie=" + ret[:-1]
+    return "|User-Agent=Mozilla%2F5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F67.0.3396.62%20Safari%2F537.36&Cookie=" + ret[:-1]
 
 
 def getCookiePath(args):
@@ -122,9 +148,9 @@ def getCookiePath(args):
     """
     profile_path = xbmc.translatePath(args._addon.getAddonInfo("profile"))
     if args.PY2:
-        return join(profile_path.decode("utf-8"), u"cookies.lwp")
+        return os.path.join(profile_path.decode("utf-8"), u"cookies.lwp")
     else:
-        return join(profile_path, "cookies.lwp")
+        return os.path.join(profile_path, "cookies.lwp")
 
 
 def getCharset(response):

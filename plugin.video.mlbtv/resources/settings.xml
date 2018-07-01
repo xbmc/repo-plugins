@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <!--Login-->
-  <category label="100">    
-    <setting id="username" type="text" label="140" default=""/>
-    <setting id="password" type="text" label="150" option="hidden" default=""/>	
-    <setting id="single_team" type="bool" label="151" default="false"/> 
-    <setting label="156" type="action" action="RunPlugin(plugin://plugin.video.mlbtv/?url=junk&amp;mode=400)" option="close" />
-    <!-- <setting label="156" type="action" action="RunScript(special://home/addons/plugin.video.nhlgcl/resources/lib/logout.py)" option="close" /> -->
+  <category label="30100">
+    <setting id="username" type="text" label="30140" default=""/>
+    <setting id="password" type="text" label="30150" option="hidden" default=""/>
+    <setting id="single_team" type="bool" label="30151" default="false"/>
+    <setting label="30156" type="action" action="RunPlugin(plugin://plugin.video.mlbtv/?url=junk&amp;mode=400)" option="close" />
+    <!--Hidden-->
+    <setting id='session_key' type='text' visible="false" default=''/>
   </category>
 
-  <category label="159">
-    <setting id="quality" type="labelenum" label="160" values="Best Available|Always Ask" default="Best Available" />
-    <setting id="cdn" type="labelenum" label="165" values="Akamai|Level 3|No Preference" default="No Preference"/>
-    <setting id="no_spoilers" type="enum" label="170" lvalues="1700|1701|1702|1703|1704" />  
-    <setting id="fav_team" type="labelenum" label="180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|Oakland Athletics|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Miami Marlins|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Indians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Arizona Diamondbacks" />
+  <category label="30159">
+    <setting id="quality" type="labelenum" label="30160" values="Best Available|Always Ask" default="Best Available" />
+    <setting id="cdn" type="labelenum" label="30165" values="Akamai|Level 3|No Preference" default="No Preference"/>
+    <setting id="no_spoilers" type="enum" label="30170" lvalues="30171|30172|30173|30174|30175" />
+    <setting id="fav_team" type="labelenum" label="30180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|Oakland Athletics|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Miami Marlins|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Indians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Arizona Diamondbacks" />
 
-    <setting id="team_names" type="select" label="1901" lvalues="1901|1903" default="0" />
-    <setting id="time_format" type="select" label="200" lvalues="2000|2001" default="0" />
+    <setting id="in_market" type="labelenum" label="30300" default="Show" values="Show|Hide" />
+    
+    <setting id="team_names" type="select" label="30190" lvalues="30191|30192" default="0" />
+    <setting id="time_format" type="select" label="30301" lvalues="30302|30301" default="0" />
 
     <setting id="old_username" type="text" label="" default="" visible="false"/>
     <setting id="old_password" type="text" label="" default="" visible="false"/>
@@ -29,8 +32,5 @@
     <setting id='proxy_user' type='text' label='30240' default=''/>
     <setting id='proxy_pwd' type='text' label='30250' option='hidden' default=''/>
   </category>
-
-  <!--Hidden-->
-    <setting id='session_key' type='text' option='hidden' default=''/>
 </settings>
 

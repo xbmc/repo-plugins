@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-
 import xbmc
 import xbmcgui
 import xbmcplugin
@@ -27,10 +25,10 @@ from . import model
 from . import controller
 
 
-def main():
+def main(argv):
     """Main function for the addon
     """
-    args = model.parse()
+    args = model.parse(argv)
 
     # get account informations
     username = args._addon.getSetting("watchbox_username")
@@ -46,7 +44,7 @@ def main():
             xbmc.log("[PLUGIN] %s: Login failed" % args._addonname, xbmc.LOGERROR)
             xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30042))
 
-    xbmcplugin.setContent(int(sys.argv[1]), "tvshows")
+    xbmcplugin.setContent(int(args._argv[1]), "tvshows")
     check_mode(args)
     if args._login:
         api.close(args)
@@ -128,4 +126,4 @@ def showMainMenue(args):
     view.add_item(args,
                   {"title": args._addon.getLocalizedString(30021),
                    "mode":  "search"})
-    view.endofdirectory()
+    view.endofdirectory(args)

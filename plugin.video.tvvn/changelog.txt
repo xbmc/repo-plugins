@@ -1,3 +1,6 @@
+version 0.9.12 (09/10/2017):
+ * re-add vtvgo source
+
 version 0.9.11 (19/09/2017):
  * fix translatePath as per http://kodi.wiki/view/Add-on_rules#Requirements_for_scripts_and_plugins
 

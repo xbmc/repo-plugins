@@ -1,9 +1,8 @@
 # -*- coding: UTF-8 -*-
 #---------------------------------------------------------------------
-# File: tvvn.py
-# Version: 0.9.11
-# By:   Binh Nguyen <b@zecoj.com>
-# Date: Tue Sep 19 10:29:01 AEST 2017
+# File:    tvvn.py
+# Version: 0.9.12
+# By:      Binh Nguyen <b@zecoj.com>
 #---------------------------------------------------------------------
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -163,8 +162,6 @@ def update_chn_list():
                                 d_ok = xbmcgui.Dialog().ok(addon.getLocalizedString(30008),addon.getLocalizedString(30010))
 
 def play_link(chn, src):
-        print("xxyyzz 001")
-        xbmc.log("xxyyzz 001")
         item = xbmcgui.ListItem(chn)
         d_progress = xbmcgui.DialogProgress()
         d_progress.create("", addon.getLocalizedString(30009))
@@ -213,10 +210,9 @@ def play_link(chn, src):
         elif data['channels'][chn]['src']['playpath'] == "m3u8_vtvgo":
             url = data['channels'][chn]['src']['page_url']
             stringA = opener.open(url).read().decode('utf-8')
-            stringB = "addPlayer('"
+            stringB = "var link = '"
             stringC = "'" 
             full_url = re.search(re.escape(stringB)+"(.*?)"+re.escape(stringC),stringA).group(1) + '|Referer=http%3A%2F%2Fvtvgo.vn%2F'
-            full_url = "http://play.sohatv.vn/?v=dnR2MQ==&t=20170617133921&autoplay=true" + '|Referer=http://vtv.vn/truyen-hinh-truc-tuyen/vtv1.htm'
             print full_url
 
         #m3u8 url using before & after marker

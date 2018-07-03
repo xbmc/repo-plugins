@@ -25,6 +25,7 @@ class myAddon(t1mAddon):
       page = self.getRequest(RTBASE_URL+"/shows/")
       match = re.compile('<li class="card-rows__item.+?src="(.+?)".+?href="(.+?)">(.+?)<.+?class="link link_disabled".+?>(.+?)</li',re.DOTALL).findall(page)
       for img,url,name,plot in match:
+          url = url.strip()
           thumb = img
           fanart = img
           infoList = {}
@@ -38,7 +39,7 @@ class myAddon(t1mAddon):
 
   def getAddonEpisodes(self,url,ilist):
       page = self.getRequest(RTBASE_URL+url)
-      match = re.compile('static-three_med-one">.+?src="(.+?)".+?class="link link_hover" href="(.+?)">(.+?)<.+?class="card__summary ">(.+?)</',re.DOTALL).findall(page)
+      match = re.compile('static-three_med-one">.+?src="(.+?)".+?class="link link_hover" href="(.+?)" >(.+?)<.+?class="card__summary ">(.+?)</',re.DOTALL).findall(page)
       for img,url,name,plot in match:
           thumb = img
           fanart = img

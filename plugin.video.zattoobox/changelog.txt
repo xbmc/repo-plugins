@@ -1,3 +1,7 @@
+[B]1.0.2[/B]
+- Replaced deprecated authentication procedure
+- Added episode title to main title
+
 [B]1.0.1[/B]
 - Fixed broken streaming URLs
 

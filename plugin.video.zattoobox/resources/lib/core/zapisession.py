@@ -1,7 +1,7 @@
 # coding=utf-8
 
 ##################################
-# Zappylib V1.0.1
+# Zappylib V1.0.2
 # ZapiSession
 # (c) 2014 Pascal Nançoz
 ##################################
@@ -11,8 +11,9 @@ import urllib, urllib2
 import json
 
 class ZapiSession:
-	ZAPI_AUTH_URL = 'https://zattoo.com'
 	ZAPI_URL = 'https://zattoo.com'
+	ZAPI_UUID = 'd7512e98-38a0-4f01-b820-5a5cf98141fe'
+	ZAPI_APP_VERSION = '2.12.3'
 	CACHE_ENABLED = False
 	CACHE_FOLDER = None
 	COOKIE_FILE = None
@@ -78,7 +79,7 @@ class ZapiSession:
 		return None
 
 	def exec_zapiCall(self, api, params, context='default'):
-		url = self.ZAPI_AUTH_URL + api if context == 'session' else self.ZAPI_URL + api
+		url = self.ZAPI_URL + api
 		content = self.request_url(url, params)
 		if content is None and context != 'session' and self.renew_session():
 			content = self.request_url(url, params)
@@ -100,8 +101,9 @@ class ZapiSession:
 	def announce(self):
 		api = '/zapi/session/hello'
 		params = {"client_app_token" : self.fetch_appToken(),
-				  "uuid"    : "d7512e98-38a0-4f01-b820-5a5cf98141fe",
+				  "uuid"    : self.ZAPI_UUID,
 				  "lang"    : "en",
+				  "app_version" : self.ZAPI_APP_VERSION,
 				  "format"	: "json"}
 		resultData = self.exec_zapiCall(api, params, 'session')
 		return resultData is not None

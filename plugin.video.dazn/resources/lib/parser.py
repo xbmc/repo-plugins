@@ -16,7 +16,7 @@ class Parser:
         if id_ == 'home':
             epg = {
                 'mode': 'epg',
-                'title': self.plugin.get_string(30212),
+                'title': self.plugin.get_resource('header_schedule'),
                 'plot': 'Schedule',
                 'params': 'today',
             }
@@ -66,8 +66,8 @@ class Parser:
             def date_item(day):
                 return {
                     'mode': mode,
-                    'title': '{0} ({1})'.format(self.plugin.get_resource(day.strftime('%A')), day.strftime(self.plugin.date_format)),
-                    'plot': '{0} ({1})'.format(self.plugin.get_resource(date.strftime('%A')), date.strftime(self.plugin.date_format)),
+                    'title': '{0} ({1})'.format(self.plugin.get_resource(day.strftime('%A'), prefix='calendar_'), day.strftime(self.plugin.date_format)),
+                    'plot': '{0} ({1})'.format(self.plugin.get_resource(date.strftime('%A'), prefix='calendar_'), date.strftime(self.plugin.date_format)),
                     'params': day,
                     'cm': cm
                 }

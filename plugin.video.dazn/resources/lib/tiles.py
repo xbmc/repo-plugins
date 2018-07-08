@@ -13,7 +13,7 @@ class Tiles:
         self.now = self.plugin.time_now()
         self.sport = i.get('Sport', [])
         self.competition = i.get('Competition', [])
-        self.type = i.get('Type', '')
+        self.type = i.get('Type', '').replace('UpComing', 'ComingUp')
         self.nav = i.get('NavigateTo', '')
         self.related = i.get('Related', [])
         self.videos = i.get('Videos', [])
@@ -28,7 +28,7 @@ class Tiles:
         self.update_item(i)
 
     def add_duration(self):
-        if 'UpComing' in self.type:
+        if 'ComingUp' in self.type:
             self.end = self.start
             self.start = self.now
         elif 'Live' in self.type:
@@ -40,7 +40,10 @@ class Tiles:
         url = self.plugin.api_base+'v2/image?id={0}&Quality=95&Width={1}&Height={2}&ResizeAction=fill&VerticalAlignment=top&Format={3}'
         image = i.get('Image', '')
         if image:
-            self.item['thumb'] = url.format(image['Id'], '720', '404', image['ImageMimeType'])
+            if self.type == 'Navigation':
+                self.item['thumb'] = url.format(image['Id'], '512', '512', image['ImageMimeType'])
+            else:
+                self.item['thumb'] = url.format(image['Id'], '720', '404', image['ImageMimeType'])
             self.item['fanart'] = url.format(image['Id'], '1280', '720', image['ImageMimeType'])
         background = i.get('BackgroundImage', '')
         if background:
@@ -54,7 +57,7 @@ class Tiles:
         self.item['title'] = self.title
         self.item['plot'] = self.description
         self.item['id'] = self.id
-        self.item['type'] = self.plugin.get_resource(self.type)
+        self.item['type'] = self.type
 
         if self.params:
             self.item['params'] = self.params
@@ -72,14 +75,16 @@ class Tiles:
                 self.item['title'] = '[COLOR red]{0}[/COLOR] [COLOR dimgray]{1}[/COLOR] {2} [COLOR dimgray]{3}[/COLOR]'.format(time_, sport, self.title, competition)
             else:
                 self.item['title'] = '{0} [COLOR dimgray]{1}[/COLOR] {2} [COLOR dimgray]{3}[/COLOR]'.format(time_, sport, self.title, competition)
-
-        elif (self.type == 'UpComing' or 'Scheduled' in i.get('Id', '')) or (self.type == 'Highlights'):
-            if self.type == 'UpComing':
-                day = self.plugin.get_resource(self.plugin.days(self.type, self.now, self.start))
+        elif (self.type == 'ComingUp' or 'Scheduled' in i.get('Id', '')) or (self.type == 'Highlights'):
+            if self.type == 'ComingUp':
+                day = self.plugin.days(self.type, self.now, self.start)
                 sub_title = '{0} {1}'.format(day, self.start[11:][:5])
             else:
-                sub_title = self.plugin.get_resource(self.type)
-            self.item['title'] = '{0} ({1})'.format(self.title, sub_title)
+                sub_title = self.plugin.get_resource('{0}{1}Title'.format(self.type[0].lower(), self.type[1:]), 'browseui_')
+                if sub_title.endswith('Title'):
+                    sub_title = label[:5]
+            if sub_title not in self.title:
+                self.item['title'] = '{0} ({1})'.format(self.title, sub_title)
 
         if self.start:
             self.item['date'] = self.start[:10]

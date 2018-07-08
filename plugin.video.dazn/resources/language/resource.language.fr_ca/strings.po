@@ -12,22 +12,6 @@ msgstr ""
 "Language: fr_CA\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#30001"
-msgid "Login successful: save credentials?"
-msgstr "Connexion réussie: Enregistrer les informations d'identification?"
-
-msgctxt "#30002"
-msgid " Login: Email"
-msgstr " Login: Email"
-
-msgctxt "#30003"
-msgid " Login: Password"
-msgstr " Login: Mot de passe"
-
-msgctxt "#30004"
-msgid "Please sign in using your account details. Go to www.dazn.com on another device to retrieve your forgotten email or password."
-msgstr "Veuillez vous connecter avec vos renseignements de compte. Rendez-vous sur www.dazn.com sur un autre appareil pour récupérer votre adresse courriel ou votre mot de passe oubliés."
-
 msgctxt "#30010"
 msgid "View"
 msgstr "Vue"
@@ -37,144 +21,36 @@ msgid "Override View"
 msgstr "Vue de priorité"
 
 msgctxt "#30012"
-msgid "View: Content"
-msgstr "Vue: Content"
+msgid "Content Type"
+msgstr "Type De Contenu"
 
 msgctxt "#30013"
-msgid "View: ID"
-msgstr "Vue: ID"
+msgid "View: Folders"
+msgstr "Vue: Dossier"
+
+msgctxt "#30014"
+msgid "View: Videos"
+msgstr "Vue: Vidéos"
+
+msgctxt "#30015"
+msgid "View: Schedule"
+msgstr "Vue: Calendrier"
 
 msgctxt "#30020"
-msgid "Videoplayer"
+msgid "Video Player"
 msgstr "Lecteur Vidéo"
 
 msgctxt "#30021"
-msgid "Open Videoplayer Settings"
-msgstr "Ouvrir Les Paramètres Du Lecteur Vidéo"
-
-msgctxt "#30051"
-msgid "Failed to get Device ID. Please Retry."
-msgstr "Impossible d'obtenir l'ID de périphérique. Réessayez."
-
-msgctxt "#30101"
-msgid "Sorry, DAZN is not available in your country yet."
-msgstr "Désolé : DAZN n’est pas encore disponible dans votre pays."
-
-msgctxt "#30107"
-msgid "Access to the requested content has been denied."
-msgstr "L'accès au contenu demandé a été refusé."
-
-msgctxt "#30108"
-msgid "You can only play two videos on your connected devices at the same time. To continue watching, then close DAZN on one of your other devices."
-msgstr "Vous ne pouvez visionner que deux vidéos à la fois sur vos appareils connectés. Pour continuer à regarder, fermez DAZN sur l’un de vos autres appareils."
-
-msgctxt "#30151"
-msgid "Your email or password is incorrect. Please try again."
-msgstr "Votre adresse courriel ou votre mot de passe est incorrect. Veuillez réessayer."
-
-msgctxt "#30161"
-msgid "Continue watching sport on DAZN by reactivating your subscription in 'My Account'."
-msgstr "Continuez à regarder le sport sur DAZN en réactivant votre abonnement dans Mon compte."
-
-msgctxt "#30201"
-msgid "Catch Up"
-msgstr "Regarder plus tard"
-
-msgctxt "#30202"
-msgid "Coming Up"
-msgstr "Regarder bientôt"
-
-msgctxt "#30203"
-msgid "DAZN Picks"
-msgstr "Choix de DAZN"
-
-msgctxt "#30204"
-msgid "Features"
-msgstr "Caractéristiques"
-
-msgctxt "#30205"
-msgid "Live Now"
-msgstr "En direct maintenant"
-
-msgctxt "#30206"
-msgid "Everyone's Watching"
-msgstr "Programme familial"
-
-msgctxt "#30207"
-msgid "Your Sports"
-msgstr "Vos Sports"
-
-msgctxt "#30208"
-msgid "What's On"
-msgstr "En ce moment"
-
-msgctxt "#30209"
-msgid "All Sports"
-msgstr "Tous les Sports"
-
-msgctxt "#30210"
-msgid "Tournaments"
-msgstr "Tournois"
-
-msgctxt "#30211"
-msgid "Competitors"
-msgstr "Concurrents"
-
-msgctxt "#30212"
-msgid "Schedule"
-msgstr "Horaire"
-
-msgctxt "#30213"
-msgid "Play Highlights"
-msgstr "Lire Saillants"
+msgid "Inputstream Adaptive Settings..."
+msgstr "Inputstream Adaptive Paramètres..."
 
 msgctxt "#30214"
-msgid "Change to Sport"
-msgstr "Aller à la Sport"
+msgid "Switch to Sport"
+msgstr "Passer au Sport"
 
 msgctxt "#30215"
-msgid "Change to Competition"
-msgstr "Aller à la Concurrence"
-
-msgctxt "#30216"
-msgid "Play Condensed"
-msgstr "Lire Condensed"
-
-msgctxt "#30221"
-msgid "Today"
-msgstr "Aujourd'hui"
-
-msgctxt "#30222"
-msgid "Tomorrow"
-msgstr "Demain"
-
-msgctxt "#30223"
-msgid "Monday"
-msgstr "Lundi"
-
-msgctxt "#30224"
-msgid "Tuesday"
-msgstr "Mardi"
-
-msgctxt "#30225"
-msgid "Wednesday"
-msgstr "Mercredi"
-
-msgctxt "#30226"
-msgid "Thursday"
-msgstr "Jeudi"
-
-msgctxt "#30227"
-msgid "Friday"
-msgstr "Vendredi"
-
-msgctxt "#30228"
-msgid "Saturday"
-msgstr "Samedi"
-
-msgctxt "#30229"
-msgid "Sunday"
-msgstr "Dimanche"
+msgid "Switch to Competition"
+msgstr "Passer à la Compétition"
 
 msgctxt "#30230"
 msgid "Enter Date"

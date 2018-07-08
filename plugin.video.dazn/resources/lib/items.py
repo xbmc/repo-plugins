@@ -11,13 +11,18 @@ class Items:
         self.video = False
         self.plugin = plugin
 
-    def list_items(self, focus=False, upd=False):
+    def list_items(self, focus=False, upd=False, epg=False):
         if self.video:
             xbmcplugin.setContent(self.plugin.addon_handle, self.plugin.content)
         xbmcplugin.endOfDirectory(self.plugin.addon_handle, cacheToDisc=self.cache, updateListing=upd)
 
         if self.plugin.force_view:
-            xbmc.executebuiltin('Container.SetViewMode({0})'.format(self.plugin.view_id))
+            view_id = self.plugin.view_id
+            if self.video:
+                view_id = self.plugin.view_id_videos
+            if epg:
+                view_id = self.plugin.view_id_epg
+            xbmc.executebuiltin('Container.SetViewMode({0})'.format(view_id))
 
         if focus:
             try:
@@ -55,8 +60,8 @@ class Items:
             self.cache = False
             self.video = True
             folder = False
-            listitem.addStreamInfo('video', {'duration':item.get('duration', 0)})
-            listitem.setProperty('IsPlayable', 'true')
+            listitem.addStreamInfo('video', {'duration': item.get('duration', 0)})
+            listitem.setProperty('IsPlayable', item.get('playable', 'false'))
         else:
             folder = True
 
@@ -73,7 +78,8 @@ class Items:
         listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
         listitem.setProperty('inputstream.adaptive.manifest_type', 'mpd')
         listitem.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
-        listitem.setProperty('inputstream.adaptive.license_key', item.LaUrl+'&_widevineChallenge=B{SSM}|||JBlicense')
+        # listitem.setProperty('inputstream.adaptive.manifest_update_parameter', 'full')
+        listitem.setProperty('inputstream.adaptive.license_key', '{0}&{1}&_widevineChallenge=B{{SSM}}|||JBlicense'.format(item.LaUrl, item.LaUrlAuthParam))
         if context:
             listitem.setInfo('video', {'Title': name})
             xbmc.Player().play(path, listitem)

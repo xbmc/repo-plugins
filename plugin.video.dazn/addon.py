@@ -38,17 +38,22 @@ def router(paramstring):
         parser.playback(client.playback(id_), title, True)
     elif mode == 'is_settings':
         plugin.open_is_settings()
+    else:
+        sys.exit(0)
 
 if __name__ == '__main__':
-    if plugin.startup:
+    if plugin.startup or not client.TOKEN:
         playable = plugin.start_is_helper()
         client.DEVICE_ID = plugin.uniq_id()
         if client.DEVICE_ID and playable:
             client.startUp()
             if client.TOKEN:
                 plugin.set_setting('startup', 'false')
+                client.userProfile()
         else:
             client.TOKEN = ''
 
     if client.TOKEN and client.DEVICE_ID:
         router(sys.argv[2][1:])
+    else:
+        sys.exit(0)

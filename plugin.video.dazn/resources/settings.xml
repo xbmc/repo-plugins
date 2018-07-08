@@ -4,11 +4,15 @@
         <setting label="30011" type="bool" id="force_view" default="false"/>
         <setting label="30012" type="select" id="content" enable="eq(-1,true)" values="videos|movies|tvshows|episodes|musicvideos" default="videos"/>
         <setting label="30013" type="number" id="view_id" enable="eq(-2,true)" default="55"/>
+        <setting label="30014" type="number" id="view_id_videos" enable="eq(-3,true)" default="55"/>
+        <setting label="30015" type="number" id="view_id_epg" enable="eq(-4,true)" default="55"/>
         <setting label="country" type="text" id="country" default="" visible="false"/>
-        <setting label="language" type="text" id="language" default="" visible="false"/>
+        <setting label="language" type="text" id="language" default="en" visible="false"/>
         <setting label="device_id" type="text" id="device_id" default="" visible="false"/>
         <setting label="viewer_id" type="text" id="viewer_id" default="" visible="false"/>
+        <setting label="portability" type="text" id="portability" default="" visible="false"/>
         <setting label="token" type="text" id="token" default="" visible="false"/>
+        <setting label="mpx" type="text" id="mpx" default="" visible="false"/>
         <setting label="startup" type="bool" id="startup" default="true" visible="false"/>
     </category>
     <category label="30020">

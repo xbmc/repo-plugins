@@ -114,12 +114,18 @@ class Parser:
         self.items.list_items(upd=update, epg=True)
 
     def play(self, data):
+        path = ''
+        key = ''
+        resolved = False
         if data.get('stream'):
-            for i in data['stream']:
-                path = data['stream'][i].replace('desktop','wired50')
-                break
+            stream = data['stream']
+            for i in stream.keys():
+                if isinstance(stream[i], unicode) and stream[i].startswith('http'):
+                    path = stream[i].replace('desktop','wired50')
+                    resolved = True
+                    break
             key = data['license_key']
-            self.items.play_item(path, key)
+        self.items.play_item(path, key, resolved)
 
     def license_renewal(self, license_key):
         self.items.add_token(license_key)

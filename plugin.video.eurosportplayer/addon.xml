@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.eurosportplayer" version="2.0.10" name="Eurosport Player" provider-name="Jin">
+<addon id="plugin.video.eurosportplayer" version="2.1.0" name="Eurosport Player" provider-name="Jin">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.inputstreamhelper" version="0.3.3"/>
@@ -8,11 +8,11 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <reuselanguageinvoker>true</reuselanguageinvoker>
         <news>
-- workaround for _strptime import bug
-- add view options
-- fix type error in schedule
-- prefer non-linear stream (with timeshift) via schedule
+- enabled reusepython (performance boost on slower systems - kodi 18 only)
+- fixed playback
+- use episode name for plot if avail (fixes missing description)
         </news>
         <assets>
             <icon>resources/icon.png</icon>

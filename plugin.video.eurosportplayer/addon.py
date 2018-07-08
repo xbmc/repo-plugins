@@ -40,13 +40,14 @@ def router(paramstring):
         if date == 'date':
             prev_date, date = plugin.get_date()
         parser.epg(client.epg(prev_date, date), prev_date, date)
-    elif mode == 'play':
-        if id_:
-            parser.play(client.streams(id_))
+    elif mode == 'play' and id_:
+        parser.play(client.streams(id_))
     elif mode == 'license_renewal':
         parser.license_renewal(client.license_key())
     elif mode == 'is_settings':
         plugin.open_is_settings()
+    else:
+        sys.exit(0)
 
 if __name__ == '__main__':
     if plugin.startup:
@@ -61,3 +62,5 @@ if __name__ == '__main__':
 
     if client.ACCESS_TOKEN and client.DEVICE_ID:
         router(sys.argv[2][1:])
+    else:
+        sys.exit(0)

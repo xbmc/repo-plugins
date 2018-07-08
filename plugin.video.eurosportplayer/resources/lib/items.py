@@ -56,7 +56,7 @@ class Items:
             self.video = True
             folder = False
             listitem.addStreamInfo('video', {'duration':item.get('duration', 0)})
-            listitem.setProperty('IsPlayable', 'true')
+            listitem.setProperty('IsPlayable', item.get('playable', 'false'))
         else:
             folder = True
 
@@ -65,7 +65,7 @@ class Items:
 
         xbmcplugin.addDirectoryItem(self.plugin.addon_handle, self.plugin.build_url(data), listitem, folder)
         
-    def play_item(self, path, license_key):
+    def play_item(self, path, license_key, resolved):
         listitem = xbmcgui.ListItem()
         listitem.setContentLookup(False)
         listitem.setMimeType('application/x-mpegURL')
@@ -73,7 +73,7 @@ class Items:
         listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
         listitem.setProperty('inputstream.adaptive.license_key', license_key)
         listitem.setPath(path)
-        xbmcplugin.setResolvedUrl(self.plugin.addon_handle, True, listitem)
+        xbmcplugin.setResolvedUrl(self.plugin.addon_handle, resolved, listitem)
         
     def add_token(self, license_key):
         listitem = xbmcgui.ListItem()

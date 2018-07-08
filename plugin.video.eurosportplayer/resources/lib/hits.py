@@ -33,7 +33,9 @@ class Hits:
     def airing_info(self):
         for i in self.titles:
             self.title = i['title']
-            self.plot = i['descriptionLong']
+            self.plot = i['episodeName']
+            if not self.plot:
+                self.plot = i['descriptionLong']
             if i['language'] == self.language:
                 break
         if not self.title:
@@ -80,7 +82,9 @@ class Hits:
     def video_info(self):
         for i in self.titles:
             self.title = i['title']
-            self.plot = i['summaryLong']
+            self.plot = i['episodeName']
+            if not self.plot:
+                self.plot = i['summaryLong']
             tags = i.get('tags', [])
             for t in tags:
                 if t['type'] == 'language':
@@ -123,3 +127,5 @@ class Hits:
         self.item['duration'] = self.duration
         if self.start:
             self.item['date'] = self.start[:10]
+        if self.playback:
+            self.item['playable'] = 'true'

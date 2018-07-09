@@ -50,13 +50,11 @@ def log(msg, level=xbmc.LOGDEBUG):
     if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
     
-def getParams():
-    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
-
 socket.setdefaulttimeout(TIMEOUT)  
 class ScreenRant(object):
-    def __init__(self):
-        log('__init__')
+    def __init__(self, sysARG):
+        log('__init__, sysARG = ' + str(sysARG))
+        self.sysARG  = sysARG
         self.cache   = SimpleCache()
 
            
@@ -90,7 +88,8 @@ class ScreenRant(object):
         videos = videos[idx]('article', {'class': 'browse-clip'})
         for video in videos:
             link  = BASE_URL+ video.find('a').attrs['href']
-            thumb = video('div', {'class': 'responsive-img'})[0].find('source').attrs['srcset']
+            try: thumb = video('div', {'class': 'responsive-img'})[0].find('source').attrs['srcset']
+            except: thumb = (video('div', {'class': 'responsive-img'})[0].find('source').attrs['data-srcset']).split('?')[0]
             try: label = video('h3', {'class': 'bc-title'})[0].find('a').attrs['title']
             except: label = (video('div', {'class': 'info-wrapper'})[0].find('a').get_text())
             try: airdate = datetime.datetime.strptime(video('div', {'class': 'bc-details'})[0].find('time').get_text(), '%b %d, %Y')
@@ -125,7 +124,7 @@ class ScreenRant(object):
         liz  = xbmcgui.ListItem(name, path=url)
         liz.setProperty('inputstreamaddon','inputstream.adaptive')
         liz.setProperty('inputstream.adaptive.manifest_type','hls') 
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
         
         
     def addYoutube(self, name, url):
@@ -133,7 +132,7 @@ class ScreenRant(object):
         liz.setProperty('IsPlayable', 'false')
         liz.setInfo(type="Video", infoLabels={"label":name,"title":name} )
         liz.setArt({'thumb':ICON,'fanart':FANART})
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=True)
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=url,listitem=liz,isFolder=True)
         
            
     def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0):
@@ -145,8 +144,8 @@ class ScreenRant(object):
         else: liz.setInfo(type="Video", infoLabels=infoList)
         if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
         else: liz.setArt(infoArt)
-        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
+        u=self.sysARG[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,totalItems=total)
 
 
     def addDir(self, name, u, mode, infoList=False, infoArt=False):
@@ -158,27 +157,33 @@ class ScreenRant(object):
         else: liz.setInfo(type="Video", infoLabels=infoList)
         if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
         else: liz.setArt(infoArt)
-        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        u=self.sysARG[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,isFolder=True)
      
-params=getParams()
-try: url=urllib.unquote_plus(params["url"])
-except: url=None
-try: name=urllib.unquote_plus(params["name"])
-except: name=None
-try: mode=int(params["mode"])
-except: mode=None
-log("Mode: "+str(mode))
-log("URL : "+str(url))
-log("Name: "+str(name))
 
-if mode==None:  ScreenRant().buildMenu(MAIN_MENU)
-elif mode == 1: ScreenRant().browse(name, url)
-elif mode == 9: ScreenRant().playVideo(name, url)
+    def getParams(self):
+        return dict(urlparse.parse_qsl(self.sysARG[2][1:]))
 
-xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_TITLE)
-xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)
+            
+    def run(self):  
+        params=self.getParams()
+        try: url=urllib.unquote_plus(params["url"])
+        except: url=None
+        try: name=urllib.unquote_plus(params["name"])
+        except: name=None
+        try: mode=int(params["mode"])
+        except: mode=None
+        log("Mode: "+str(mode))
+        log("URL : "+str(url))
+        log("Name: "+str(name))
+
+        if mode==None:  self.buildMenu(MAIN_MENU)
+        elif mode == 1: self.browse(name, url)
+        elif mode == 9: self.playVideo(name, url)
+
+        xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_NONE)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_TITLE)
+        xbmcplugin.endOfDirectory(int(self.sysARG[1]), cacheToDisc=True)

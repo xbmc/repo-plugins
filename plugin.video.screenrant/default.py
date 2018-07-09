@@ -19,5 +19,6 @@
 # -*- coding: utf-8 -*-
 
 #entrypoint
-if __name__ == '__main__':
-    from resources.lib import screenrant
+import sys
+from resources.lib import screenrant
+if __name__ == '__main__': screenrant.ScreenRant(sys.argv).run()

@@ -1,9 +1,9 @@
-# coding=utf-8
+﻿# coding=utf-8
 
 ##################################
-# Zappylib V1.0.2
+# Zappylib V1.0.3
 # ZapiSession
-# (c) 2014 Pascal Nançoz
+# (c) 2014-2018 Pascal Nançoz
 ##################################
 
 import os, re, base64
@@ -41,7 +41,7 @@ class ZapiSession:
 		if os.path.isfile(self.COOKIE_FILE) and os.path.isfile(self.ACCOUNT_FILE):
 			with open(self.ACCOUNT_FILE, 'r') as f:
 				accountData = json.loads(base64.b64decode(f.readline()))
-			if accountData['success'] == True:
+			if accountData['session'] is not None and accountData['success'] == True:
 				self.AccountData = accountData
 				with open(self.COOKIE_FILE, 'r') as f:
 					self.set_cookie(base64.b64decode(f.readline()))
@@ -99,7 +99,7 @@ class ZapiSession:
 		return re.search("window\.appToken\s*=\s*'(.*)'", html).group(1)
 
 	def announce(self):
-		api = '/zapi/session/hello'
+		api = '/zapi/v2/session/hello'
 		params = {"client_app_token" : self.fetch_appToken(),
 				  "uuid"    : self.ZAPI_UUID,
 				  "lang"    : "en",
@@ -109,7 +109,7 @@ class ZapiSession:
 		return resultData is not None
 
 	def login(self):
-		api = '/zapi/account/login'
+		api = '/zapi/v2/account/login'
 		params = {"login": self.Username, "password" : self.Password}
 		accountData = self.exec_zapiCall(api, params, 'session')
 		if accountData is not None:

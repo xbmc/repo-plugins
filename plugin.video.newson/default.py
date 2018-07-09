@@ -19,5 +19,6 @@
 # -*- coding: utf-8 -*-
 
 #entrypoint
-if __name__ == '__main__':
-    from resources.lib import newson
+import sys
+from resources.lib import newson
+if __name__ == '__main__': newson.NewsOn(sys.argv).run()

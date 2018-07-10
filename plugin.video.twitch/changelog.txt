@@ -1,3 +1,8 @@
+2.2.3
+[add] Thumbnail size, Settings - General
+[fix] encoding and replace in clean_title_value
+[fix] unplayable videos on some systems, set curl opt verifypeer=false on playback urls
+
 2.2.2
 [add] refresh item to streams search when there are no results
 [upd] close chat on playback stopped [ccope]

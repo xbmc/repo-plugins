@@ -1043,10 +1043,14 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
                     elif is_live:
                         request = twitch.live_request(name)
                     if request:
+                        if kodi.get_kodi_version().major >= 18:
+                            request['headers']['verifypeer'] = 'false'
                         play_url = request['url'] + utils.append_headers(request['headers'])
 
                 if not play_url:
                     play_url = result['url']
+                    if kodi.get_kodi_version().major >= 18:
+                         play_url += '|verifypeer=false'
 
                 if is_live:
                     _set_live(channel_id, name, channel_name, quality_label)

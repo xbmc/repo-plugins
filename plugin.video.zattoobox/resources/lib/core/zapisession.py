@@ -1,7 +1,7 @@
 # coding=utf-8
 
 ##################################
-# Zappylib V1.0.3
+# Zappylib V1.0.4
 # ZapiSession
 # (c) 2014-2018 Pascal Nançoz
 ##################################
@@ -38,14 +38,17 @@ class ZapiSession:
 		return (self.CACHE_ENABLED and self.restore_session()) or self.renew_session()
 
 	def restore_session(self):
-		if os.path.isfile(self.COOKIE_FILE) and os.path.isfile(self.ACCOUNT_FILE):
-			with open(self.ACCOUNT_FILE, 'r') as f:
-				accountData = json.loads(base64.b64decode(f.readline()))
-			if accountData['session'] is not None and accountData['success'] == True:
-				self.AccountData = accountData
-				with open(self.COOKIE_FILE, 'r') as f:
-					self.set_cookie(base64.b64decode(f.readline()))
-				return True
+		try:
+			if os.path.isfile(self.COOKIE_FILE) and os.path.isfile(self.ACCOUNT_FILE):
+				with open(self.ACCOUNT_FILE, 'r') as f:
+					accountData = json.loads(base64.b64decode(f.readline()))
+				if accountData['session'] is not None and accountData['success'] == True:
+					self.AccountData = accountData
+					with open(self.COOKIE_FILE, 'r') as f:
+						self.set_cookie(base64.b64decode(f.readline()))
+					return True
+		except Exception:
+			pass
 		return False
 
 	def extract_sessionId(self, cookieContent):

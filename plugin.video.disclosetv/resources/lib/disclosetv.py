@@ -37,7 +37,7 @@ LANGUAGE      = REAL_SETTINGS.getLocalizedString
 
 ## GLOBALS ##
 TIMEOUT       = 15
-CONTENT_TYPE  = 'files'
+CONTENT_TYPE  = 'videos'
 DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 QUALITY       = int(REAL_SETTINGS.getSetting('Quality'))
 BASE_URL      = 'http://www.disclose.tv/'
@@ -55,16 +55,14 @@ def log(msg, level=xbmc.LOGDEBUG):
     if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
 
-def getParams():
-    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
-    
 def isUWP():
     return (bool(xbmc.getCondVisibility("system.platform.uwp")) or sys.platform == "win10")
      
 socket.setdefaulttimeout(TIMEOUT)
 class Disclose(object):
-    def __init__(self):
-        log('__init__')
+    def __init__(self, sysARG):
+        log('__init__, sysARG = ' + str(sysARG))
+        self.sysARG    = sysARG
         self.cache = SimpleCache()
            
            
@@ -91,7 +89,7 @@ class Disclose(object):
     def browse(self, url):
         log('browse')
         soup   = BeautifulSoup(self.openURL(url), "html.parser")
-        videos = soup('div', {'class': 'teaser teaser--third'})
+        videos = soup('div', {'class': 'grid-item'})
         for video in videos:
             try: thumb = 'http:%s'%(video('div', {'class': 'ratio-container ratio16_9'})[0].find('img').attrs['data-src'])
             except: thumb = FANART
@@ -99,9 +97,12 @@ class Disclose(object):
             vid_url = BASE_URL + (items[0]('a', {'class': 'article-link'})[0].attrs['href'])
             label   = items[0]('a', {'class': 'article-link'})[0].get_text()
             timeago = items[0]('span', {'class': 'meta-timeago'})[0].get_text()
-            plot    = '%s - %s'%(timeago, label)
+            plot    = label#'%s - %s'%(timeago, label)
             try: genre = video('span', {'class': 'teaser-figure__cat'})[0].get_text()
-            except: genre = 'Unknown'
+            except: genre = ''
+            try: aired = (datetime.datetime.strptime(timeago, '%b %d %Y'))
+            except: aired = datetime.datetime.now()
+            aired = aired.strftime("%Y-%m-%d")
             runtime = (video('span', {'class': 'teaser-figure__len'})[0].get_text()).split(':')
             if len(runtime) == 3:
                 h, m, s = runtime
@@ -109,7 +110,7 @@ class Disclose(object):
             else:
                 m, s = runtime
                 duration  = (int(m) * 60) + int(s)
-            infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":duration,"plot":plot}
+            infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":duration,"plot":plot,"genre":genre,"aired":aired}
             infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
             self.addLink(label, vid_url, 9, infoLabels, infoArt, len(videos))
         next = soup('li', {'class': 'more-container__button m-auto'})
@@ -132,7 +133,11 @@ class Disclose(object):
                 if len(re.findall('http[s]?://vimeo.com/', url)) > 0: url = VMURL%(url.split('/vimeo.com/')[1])
             else: raise Exception('resolveURL, unknown provider; data =' + json.dumps(data))
             log('resolveURL, url = ' + url)
-            return xbmcgui.ListItem(name, path=url)
+            liz = xbmcgui.ListItem(name, path=url)
+            if 'm3u8' in url.lower():
+                liz.setProperty('inputstreamaddon','inputstream.adaptive')
+                liz.setProperty('inputstream.adaptive.manifest_type','hls')
+            return liz
         except Exception as e: log("resolveURL Failed! " + str(e), xbmc.LOGERROR)
         if isUWP(): return ''
         from YDStreamExtractor import getVideoInfo
@@ -141,6 +146,9 @@ class Disclose(object):
         info = info.streams()
         url  = info[0]['xbmc_url']
         liz  = xbmcgui.ListItem(name, path=url)
+        if 'm3u8' in url.lower():
+            liz.setProperty('inputstreamaddon','inputstream.adaptive')
+            liz.setProperty('inputstream.adaptive.manifest_type','hls')
         try: 
             if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])
         except: pass
@@ -149,7 +157,7 @@ class Disclose(object):
             
     def playVideo(self, name, url):
         log('playVideo')
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, self.resolveURL(name, url))
+        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, self.resolveURL(name, url))
         
         
     def addYoutube(self, name, url):
@@ -157,7 +165,7 @@ class Disclose(object):
         liz.setProperty('IsPlayable', 'false')
         liz.setInfo(type="Video", infoLabels={"label":name,"title":name} )
         liz.setArt({'thumb':ICON,'fanart':FANART})
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=True)
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=url,listitem=liz,isFolder=True)
         
            
     def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0):
@@ -169,8 +177,8 @@ class Disclose(object):
         else: liz.setInfo(type="Video", infoLabels=infoList)
         if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
         else: liz.setArt(infoArt)
-        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
+        u=self.sysARG[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,totalItems=total)
 
 
     def addDir(self, name, u, mode, infoList=False, infoArt=False):
@@ -182,27 +190,33 @@ class Disclose(object):
         else: liz.setInfo(type="Video", infoLabels=infoList)
         if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
         else: liz.setArt(infoArt)
-        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        u=self.sysARG[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,isFolder=True)
 
-params=getParams()
-try: url=urllib.unquote_plus(params["url"])
-except: url=None
-try: name=urllib.unquote_plus(params["name"])
-except: name=None
-try: mode=int(params["mode"])
-except: mode=None
-log("Mode: "+str(mode))
-log("URL : "+str(url))
-log("Name: "+str(name))
+        
+    def getParams(self):
+        return dict(urlparse.parse_qsl(self.sysARG[2][1:]))
 
-if mode==None:  Disclose().buildMenu()
-elif mode == 1: Disclose().browse(url)
-elif mode == 9: Disclose().playVideo(name, url)
+            
+    def run(self):  
+        params=self.getParams()
+        try: url=urllib.unquote_plus(params["url"])
+        except: url=None
+        try: name=urllib.unquote_plus(params["name"])
+        except: name=None
+        try: mode=int(params["mode"])
+        except: mode=None
+        log("Mode: "+str(mode))
+        log("URL : "+str(url))
+        log("Name: "+str(name))
+        
+        if mode==None:  self.buildMenu()
+        elif mode == 1: self.browse(url)
+        elif mode == 9: self.playVideo(name, url)
 
-xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_TITLE)
-xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)
+        xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_NONE)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_TITLE)
+        xbmcplugin.endOfDirectory(int(self.sysARG[1]), cacheToDisc=True)

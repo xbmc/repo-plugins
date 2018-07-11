@@ -25,7 +25,7 @@ from base64 import b64decode
 from common import kodi, json_store
 from strings import STRINGS
 from tccleaner import TextureCacheCleaner
-from constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT, COLORS
+from constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT, COLORS, Keys
 from search_history import StreamsSearchHistory, ChannelsSearchHistory, GamesSearchHistory, IdUrlSearchHistory
 from twitch.api.parameters import Boolean, Period, ClipPeriod, Direction, Language, SortBy, VideoSort
 import xbmcvfs
@@ -185,6 +185,11 @@ def get_offset(offset, item, items, key=None):
             return int(offset) + next(index for (index, _item) in enumerate(items) if item == _item[key])
     except:
         return None
+
+
+def get_thumbnail_size():
+    size_map = [Keys.SOURCE, Keys.LARGE, Keys.MEDIUM, Keys.SMALL]
+    return size_map[int(kodi.get_setting('thumbnail_size'))]
 
 
 def get_vodcast_color():
@@ -576,7 +581,10 @@ class TitleBuilder(object):
     @staticmethod
     def clean_title_value(value):
         if isinstance(value, basestring):
-            return unicode(value).replace('\r\n', ' ').strip()
+            value = value.replace(u'\r\n', u' ')
+            value = value.replace(u'\n', u' ')
+            value = value.strip()
+            return value
         else:
             return value
 

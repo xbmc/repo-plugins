@@ -19,7 +19,7 @@
 
 import menu_items
 from common import kodi
-from utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive
+from utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, get_thumbnail_size
 from constants import Keys, Images, MODES, ADAPTIVE_SOURCE_TEMPLATE
 from base64 import b64encode
 
@@ -54,8 +54,7 @@ class JsonListItemConverter(object):
         self.title_builder = TitleBuilder(title_length)
         self.has_token = True if get_oauth_token() else False
 
-    @staticmethod
-    def game_to_listitem(game):
+    def game_to_listitem(self, game):
         channel_count = i18n('unknown')
         if Keys.CHANNELS in game:
             channel_count = str(game[Keys.CHANNELS])
@@ -67,9 +66,7 @@ class JsonListItemConverter(object):
         name = game[Keys.NAME].encode('utf-8')
         if not name:
             name = i18n('unknown_game')
-        image = Images.BOXART
-        if game.get(Keys.BOX):
-            image = game[Keys.BOX].get(Keys.LARGE) if game[Keys.BOX].get(Keys.LARGE) else image
+        image = self.get_thumbnail(game.get(Keys.BOX, game.get(Keys.LOGO)), Images.BOXART)
         context_menu = list()
         context_menu.extend(menu_items.refresh())
         context_menu.extend(menu_items.edit_follow_game(name))
@@ -101,7 +98,7 @@ class JsonListItemConverter(object):
     def collection_to_listitem(self, collection):
         title = collection[Keys.TITLE].encode('utf-8')
         _id = collection[Keys._ID]
-        image = collection[Keys.THUMBNAILS].get(Keys.MEDIUM, Images.THUMB)
+        image = self.get_thumbnail(collection[Keys.THUMBNAILS])
         owner = collection[Keys.OWNER]
         context_menu = list()
         context_menu.extend(menu_items.refresh())
@@ -173,9 +170,7 @@ class JsonListItemConverter(object):
         date = clip.get(Keys.CREATED_AT)[:10] if clip.get(Keys.CREATED_AT) else ''
         year = clip.get(Keys.CREATED_AT)[:4] if clip.get(Keys.CREATED_AT) else ''
 
-        image = clip.get(Keys.THUMBNAILS) if clip.get(Keys.THUMBNAILS) else Images.VIDEOTHUMB
-        if Keys.MEDIUM in image:
-            image = image.get(Keys.MEDIUM)
+        image = self.get_thumbnail(clip.get(Keys.THUMBNAILS), Images.VIDEOTHUMB)
         broadcaster = clip[Keys.BROADCASTER]
         context_menu = list()
         context_menu.extend(menu_items.refresh())
@@ -207,9 +202,7 @@ class JsonListItemConverter(object):
         date = video.get(Keys.PUBLISHED_AT)[:10] if video.get(Keys.PUBLISHED_AT) else ''
         year = video.get(Keys.PUBLISHED_AT)[:4] if video.get(Keys.PUBLISHED_AT) else ''
 
-        image = video.get(Keys.THUMBNAILS) if video.get(Keys.THUMBNAILS) else Images.VIDEOTHUMB
-        if Keys.MEDIUM in image:
-            image = image.get(Keys.MEDIUM)
+        image = self.get_thumbnail(video.get(Keys.THUMBNAILS), Images.VIDEOTHUMB)
         owner = video[Keys.OWNER]
         context_menu = list()
         context_menu.extend(menu_items.refresh())
@@ -239,9 +232,7 @@ class JsonListItemConverter(object):
         duration = video.get(Keys.LENGTH)
         date = video.get(Keys.CREATED_AT)[:10] if video.get(Keys.CREATED_AT) else ''
         year = video.get(Keys.CREATED_AT)[:4] if video.get(Keys.CREATED_AT) else ''
-        image = video.get(Keys.PREVIEW) if video.get(Keys.PREVIEW) else Images.VIDEOTHUMB
-        if Keys.MEDIUM in image:
-            image = image.get(Keys.MEDIUM)
+        image = self.get_thumbnail(video.get(Keys.PREVIEW), Images.VIDEOTHUMB)
         channel = video[Keys.CHANNEL]
         context_menu = list()
         context_menu.extend(menu_items.refresh())
@@ -272,11 +263,9 @@ class JsonListItemConverter(object):
         video_banner = channel.get(Keys.PROFILE_BANNER)
         if not video_banner:
             video_banner = channel.get(Keys.VIDEO_BANNER) if channel.get(Keys.VIDEO_BANNER) else Images.FANART
-        preview = stream.get(Keys.PREVIEW)
-        if Keys.MEDIUM in preview:
-            preview = preview.get(Keys.MEDIUM)
+        preview = self.get_thumbnail(stream.get(Keys.PREVIEW), Images.VIDEOTHUMB)
         logo = channel.get(Keys.LOGO) if channel.get(Keys.LOGO) else Images.VIDEOTHUMB
-        image = preview if preview else logo
+        image = preview if preview != Images.VIDEOTHUMB else logo
         title = self.get_title_for_stream(stream)
         if stream.get(Keys.STREAM_TYPE) != 'live':
             color = get_vodcast_color()
@@ -308,11 +297,9 @@ class JsonListItemConverter(object):
     def clip_to_playitem(self, clip):
         # path is returned '' and must be set after
         broadcaster = clip[Keys.BROADCASTER]
-        image = clip.get(Keys.THUMBNAILS)
-        if Keys.MEDIUM in image:
-            image = image.get(Keys.MEDIUM)
+        image = self.get_thumbnail(clip.get(Keys.THUMBNAILS), Images.VIDEOTHUMB)
         logo = broadcaster.get(Keys.LOGO) if broadcaster.get(Keys.LOGO) else Images.VIDEOTHUMB
-        image = image if image else logo
+        image = image if image != Images.VIDEOTHUMB else logo
         title = self.get_title_for_clip(clip)
         info = self.get_plot_for_clip(clip, include_title=False)
         info.update({'mediatype': 'video'})
@@ -326,11 +313,9 @@ class JsonListItemConverter(object):
     def video_to_playitem(self, video):
         # path is returned '' and must be set after
         channel = video[Keys.CHANNEL]
-        preview = video.get(Keys.PREVIEW)
-        if Keys.MEDIUM in preview:
-            preview = preview.get(Keys.MEDIUM)
+        preview = self.get_thumbnail(video.get(Keys.PREVIEW), Images.VIDEOTHUMB)
         logo = channel.get(Keys.LOGO) if channel.get(Keys.LOGO) else Images.VIDEOTHUMB
-        image = preview if preview else logo
+        image = preview if preview != Images.VIDEOTHUMB else logo
         title = self.get_title_for_video(video)
         info = self.get_plot_for_video(video, include_title=False)
         info.update({'mediatype': 'video'})
@@ -344,11 +329,9 @@ class JsonListItemConverter(object):
     def stream_to_playitem(self, stream):
         # path is returned '' and must be set after
         channel = stream[Keys.CHANNEL]
-        preview = stream.get(Keys.PREVIEW)
-        if preview:
-            preview = preview.get(Keys.MEDIUM)
+        preview = self.get_thumbnail(stream.get(Keys.PREVIEW), Images.VIDEOTHUMB)
         logo = channel.get(Keys.LOGO) if channel.get(Keys.LOGO) else Images.VIDEOTHUMB
-        image = preview if preview else logo
+        image = preview if preview != Images.VIDEOTHUMB else logo
         title = self.get_title_for_stream(stream)
         info = self.get_plot_for_stream(stream, include_title=False)
         info.update({'mediatype': 'video'})
@@ -683,3 +666,21 @@ class JsonListItemConverter(object):
             return None
         else:
             return videos[result]
+
+    @staticmethod
+    def get_thumbnail(thumbnails, default=Images.THUMB):
+        thumbnail_size = get_thumbnail_size()
+        if not thumbnails:
+            return default
+        if thumbnail_size == Keys.SOURCE and 'template' in thumbnails:
+            thumbnails[Keys.SOURCE] = thumbnails['template'].format(width='0', height='0')
+        if thumbnail_size in thumbnails:
+            return thumbnails[thumbnail_size]
+        elif Keys.LARGE in thumbnails:
+            return thumbnails[Keys.LARGE]
+        elif Keys.MEDIUM in thumbnails:
+            return thumbnails[Keys.MEDIUM]
+        elif Keys.SMALL in thumbnails:
+            return thumbnails[Keys.SMALL]
+        else:
+            return default

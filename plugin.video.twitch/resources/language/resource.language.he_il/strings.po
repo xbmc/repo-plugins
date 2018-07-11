@@ -932,3 +932,19 @@ msgstr ""
 msgctxt "#30254"
 msgid "Adaptive"
 msgstr ""
+
+msgctxt "#30255"
+msgid "Thumbnail size"
+msgstr ""
+
+msgctxt "#30256"
+msgid "Large"
+msgstr ""
+
+msgctxt "#30257"
+msgid "Medium"
+msgstr ""
+
+msgctxt "#30258"
+msgid "Small"
+msgstr ""

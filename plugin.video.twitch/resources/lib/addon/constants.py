@@ -162,6 +162,8 @@ class Keys:
     SIG = 'sig'
     SIZE600 = 'size600'
     SLUG = 'slug'
+    SMALL = 'small'
+    SOURCE = 'source'
     STATUS = 'status'
     STREAM = 'stream'
     STREAMS = 'streams'

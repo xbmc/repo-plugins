@@ -375,16 +375,23 @@ def startplayback(args):
         xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
         return
 
-    # get stream file
-    regex = r"\"hls\"\:\"(.*?)\","
-    matches = re.search(regex, html).group(1)
+    # parse html
+    soup = BeautifulSoup(html, "html.parser")
+    div = soup.find("div", {"id": "player"})
+    if not div:
+        item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"))
+        xbmcplugin.setResolvedUrl(int(args._argv[1]), False, item)
+        return
 
-    if matches:
+    # parse json
+    json_obj = json.loads(div["data-player-conf"])
+
+    if "source" in json_obj and "hls" in json_obj["source"]:
         # play stream
-        item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=matches.replace("\\", "") + api.getCookies(args))
+        item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=json_obj["source"]["hls"] + api.getCookies(args))
         item.setMimeType("application/vnd.apple.mpegurl")
         item.setContentLookup(False)
         xbmcplugin.setResolvedUrl(int(args._argv[1]), True, item)
     else:
         xbmc.log("[PLUGIN] %s: Failed to play stream" % args._addonname, xbmc.LOGERROR)
-        xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30044))
+        xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30041))

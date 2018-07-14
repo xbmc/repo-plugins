@@ -1,4 +1,5 @@
 import os
+import re
 import requests
 from urlparse import urljoin
 from bs4 import BeautifulSoup
@@ -107,15 +108,16 @@ class VRTPlayer:
         soup = BeautifulSoup(response.content, "html.parser")
         title_items = []
         episodes_list = soup.find(class_="episodeslist")
-        option_tags = []
+        li_tags = []
 
-        if episodes_list is not None:
-            option_tags.extend(episodes_list.find_all("option"))
+        if episodes_list is not None :
+            li_tags.extend(episodes_list.find_all(class_="vrt-labelnav--item"))
 
-        if len(option_tags) != 0:
-            title_items.extend(self.__get_episodes(option_tags))
+        episode_items = self.__get_episodes(li_tags)
+        if len(li_tags) != 0 and episode_items:
+            title_items.extend(episode_items)
         else:
-            episodes_list_slider = soup.find(id="episodelist__slider")
+            episodes_list_slider = soup.find("div", {"id": "episodes-list"})
             if episodes_list_slider is not None:
                 title_items.extend(self.__get_multiple_videos(soup))
             else:
@@ -123,36 +125,39 @@ class VRTPlayer:
         self._kodi_wrapper.show_listing(title_items)
 
 
-    def __get_episodes(self, option_tags):
+    def __get_episodes(self, li_tags):
         """
-        This method gets all the episodes = seasons from the dropdownmenus on the vrt.nu website
+        This method gets all the episodes = seasons from the tabmenus on the vrt.nu website
         :param option_tags:
         :return:
         """
         title_items = []
-        for option_tag in option_tags:
-            title = statichelper.replace_newlines_and_strip(option_tag.text)
-            if option_tag.has_attr('data-href'):
-                path = option_tag['data-href']
+        for li_tag in li_tags:
+            a_tag = li_tag.find("a");
+            title = statichelper.replace_newlines_and_strip(a_tag.text)
+            if a_tag.has_attr('href'):
+                path = a_tag['href']
                 title_items.append(helperobjects.TitleItem(title, {"action" : actions.LISTING_VIDEOS, 'video':path}, False))
         return title_items
 
-    def __get_multiple_videos(self, tiles):
+    def __get_multiple_videos(self, soup):
         title_items = []
-        episode_list = tiles.find("div", {"id": "episodelist__slider"})
+        episode_list = soup.find("div", {"id" : "episodes-list"})
 
-        for tile in episode_list.find_all(class_="tile"):
+        for tile in episode_list.find_all(class_="vrtnu-list--item "):
             thumbnail = VRTPlayer.__format_image_url(tile)
-            found_element = tile.find(class_="tile__title")
+            found_element = tile.find(class_="vrtnu-list--item-meta")
 
             if found_element is not None:
-                title = statichelper.replace_newlines_and_strip(found_element.contents[0])
-                broadcast_date_tag = tile.find(class_="tile__broadcastdate--mobile")
+                h_tag = found_element.find("h2")
+                title = statichelper.replace_newlines_and_strip(h_tag.text)
+                broadcast_date_tag = found_element.find(class_="vrtnu-list--item-meta__mobile")
 
                 if broadcast_date_tag is not None:
-                    title = broadcast_date_tag.text + " " + title
+                    clean_date = VRTPlayer.__strip_date_from_unessecary_caracters(broadcast_date_tag.text)
+                    title = clean_date + " " + title
 
-                path = tile["href"]
+                path = tile.find("a")["href"]
                 video_dictionary = self.metadata_collector.get_multiple_layout_episode_metadata(tile)
                 title_items.append(helperobjects.TitleItem(title, {"action": actions.PLAY, "video": path}, True, thumbnail, video_dictionary))
         return title_items
@@ -203,3 +208,8 @@ class VRTPlayer:
         if found_element is not None:
             title = statichelper.replace_newlines_and_strip(found_element.contents[0])
         return thumbnail, title
+
+    @staticmethod
+    def __strip_date_from_unessecary_caracters(dirtyDate): 
+        date = re.findall("\d+/\d+", dirtyDate)[0]  
+        return date

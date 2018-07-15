@@ -1,3 +1,6 @@
+v2.5.36
+Fixed Highlights and Channel Highlights.
+
 v2.5.35
 Fixed Catgeories again.
 

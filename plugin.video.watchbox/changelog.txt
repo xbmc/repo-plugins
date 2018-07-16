@@ -1,3 +1,8 @@
+v0.5.1 (2018.07.16)
+- Fix Watchbox changed stream info format
+- Added Widevine DRM support
+- Small optimations
+
 v0.4.4 (2018.06.16)
 - Compatibility with latest Kodi 18
 

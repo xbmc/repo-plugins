@@ -22,6 +22,8 @@ try:
 except ImportError:
     from urllib.parse import parse_qs, unquote_plus
 
+import xbmcaddon
+
 
 def parse(argv):
     """Decode arguments
@@ -44,9 +46,9 @@ class Args(object):
         """
         self.PY2        = sys.version_info[0] == 2 #: True for Python 2
         self._argv      = argv
-        self._addon     = sys.modules["__main__"]._addon
-        self._addonname = sys.modules["__main__"]._plugin
-        self._addonid   = sys.modules["__main__"]._plugId
+        self._addonid   = self._argv[0][9:-1]
+        self._addon     = xbmcaddon.Addon(id=self._addonid)
+        self._addonname = self._addon.getAddonInfo("name")
         self._cj        = None
         self._login     = False
 

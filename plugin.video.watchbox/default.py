@@ -20,10 +20,8 @@ import xbmc
 import xbmcaddon
 
 
-_plugId = "plugin.video.watchbox"
-
 # plugin constants
-_addon   = xbmcaddon.Addon(id=_plugId)
+_addon   = xbmcaddon.Addon(id=sys.argv[0][9:-1])
 _plugin  = _addon.getAddonInfo("name")
 _version = _addon.getAddonInfo("version")
 

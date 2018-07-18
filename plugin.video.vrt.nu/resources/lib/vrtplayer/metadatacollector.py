@@ -72,6 +72,7 @@ class MetadataCollector:
         seconds = None
         minutes_element = soup.find("abbr", {"title": "minuten"})
         if minutes_element is not None and minutes_element.parent is not None:
-            minutes = minutes_element.parent.next_element
-            seconds = statichelper.minutes_string_to_seconds_int(minutes)
+            minutes_with_mintext = minutes_element.parent.text.split("|")[-1];
+            stripped_minutes = re.findall("\d+", minutes_with_mintext)[0]
+            seconds = statichelper.minutes_string_to_seconds_int(stripped_minutes)
         return seconds

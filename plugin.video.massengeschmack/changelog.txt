@@ -1,5 +1,14 @@
+2.4.1
+ - Add setting to disable ViewModes
+
+2.4.0
+ - Add Offensio, Achtung Spoiler and Veto
+ - Update view modes for estuary skin
+ - Fix parser error for new feeds
+
 2.3.1
  - Fix required Python API version
+
 2.3.0
  - Add Moritz & die Anderen
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Massengeschmack Kodi add-on
 # Copyright (C) 2013-2016 by Janek Bevendorff
 #
@@ -250,9 +250,9 @@ def parseRSSFeed(feed, fetch=False):
             __fetchedFeeds[feed] = handle.read()
             handle.close()
         feed = __fetchedFeeds[feed]
-    
+
     dom = minidom.parseString(feed)
-    
+
     data   = []
     parser = HTMLParser()
     for node in dom.getElementsByTagName('item'):
@@ -264,7 +264,7 @@ def parseRSSFeed(feed, fetch=False):
             duration = timedelta(hours=h, minutes=m, seconds=s).seconds
 
         description = parser.unescape(node.getElementsByTagName('description')[0].firstChild.nodeValue).encode('utf-8')
-        
+
         # get thumbnail URL
         thumbUrl = ''
         thumbUrlMatch = re.search('^<img[^>]* src="([^"]+)" /><br>', description)
@@ -280,10 +280,14 @@ def parseRSSFeed(feed, fetch=False):
 
         # combine whitespace
         description = re.sub(' {2,}', ' ', description)
-        
+
+        subtitle = ''
+        if node.getElementsByTagName('itunes:subtitle'):
+            subtitle = parser.unescape(node.getElementsByTagName('itunes:subtitle')[0].firstChild.nodeValue).encode('utf-8')
+
         data.append({
             'title'       : parser.unescape(node.getElementsByTagName('title')[0].firstChild.nodeValue).encode('utf-8'),
-            'subtitle'    : parser.unescape(node.getElementsByTagName('itunes:subtitle')[0].firstChild.nodeValue).encode('utf-8'),
+            'subtitle'    : subtitle,
             'pubdate'     : parser.unescape(node.getElementsByTagName('pubDate')[0].firstChild.nodeValue).encode('utf-8'),
             'description' : description,
             'link'        : parser.unescape(node.getElementsByTagName('link')[0].firstChild.nodeValue).encode('utf-8'),
@@ -292,20 +296,20 @@ def parseRSSFeed(feed, fetch=False):
             'url'         : parser.unescape(node.getElementsByTagName('enclosure')[0].getAttribute('url')).encode('utf-8'),
             'duration'    : duration
         })
-    
+
     return data
 
 
 class TZOffset(tzinfo):
     """Represent fixed timezone offset east from UTC."""
-    
+
     def __init__(self, offset, *args, **kwargs):
         super(TZOffset, self).__init__(*args, **kwargs)
         self.__offset = timedelta(minutes=offset)
-    
+
     def utcoffset(self, dt):
         return self.__offset
-    
+
     def dst(self, dt):
         return timedelta(0)
 
@@ -313,7 +317,7 @@ class TZOffset(tzinfo):
 def parseUTCDateString(datestr):
     """
     Parse an RFC 2822 date format to a datetime object.
-    
+
     @type datestr: str
     @param datestr: the date string
     @return a datetime object
@@ -324,20 +328,20 @@ def parseUTCDateString(datestr):
         date = datetime.strptime(datestr[:-6], format)
     except TypeError:
         date = datetime(*(time.strptime(datestr[:-6], format)[0:6]))
-    
+
     # add timezone info which isn't possible using %z in Python 2
     offset  = int(datestr[-5:-2]) * 60
     offset += int(datestr[-5:-4] + '1') * int(datestr[-2:])
     offset  = TZOffset(offset)
     date    = date.replace(tzinfo=offset)
-    
+
     return date
 
 
 def dictUrlEncode(data):
     """
     Create a URL encoded JSON string from a given dict or list.
-    
+
     @type data: dict
     @param data: the data structure
     @return URL encoded string
@@ -348,7 +352,7 @@ def dictUrlEncode(data):
 def getPluginBaseURL():
     """
     Return the base plugin:// URL for this plugin (may be different on different platforms)
-    
+
     @return the URL string
     """
 
@@ -358,7 +362,7 @@ def getPluginBaseURL():
 def assembleListURL(module=None, submodule=None, **kwargs):
     """
     Assemble a plugin:// url with a list command.
-    
+
     @type module: str
     @param module: the name of the module to list
     @type submodule: str
@@ -366,26 +370,26 @@ def assembleListURL(module=None, submodule=None, **kwargs):
     @param kwargs: additional parameters
     @return the URL
     """
-    
+
     url = getPluginBaseURL() + '/?cmd=list'
-    
+
     if module is None:
         return url
-    
+
     url += '&module=' + urllib.quote(module)
     if submodule is not None:
         url += '&submodule=' + urllib.quote(submodule)
 
     for p in kwargs:
         url += '&' + urllib.quote(p) + '=' + urllib.quote(str(kwargs[p]))
-    
+
     return url
-    
+
 
 def assemblePlayURL(url, name='', art=None, streamInfo=None):
     """
     Assemble a plugin:// URL with a play command for a given URL.
-    
+
     @type url: str
     @param url: the real URL of the media file
     @type name: str
@@ -404,7 +408,7 @@ def assemblePlayURL(url, name='', art=None, streamInfo=None):
 
     if '#' == url or '' == url:
         return '#'
-    
+
     return getPluginBaseURL() + '/?cmd=play&url=' + urllib.quote(url) + \
           '&name=' + urllib.quote(name) + \
           '&art=' + dictUrlEncode(art) + \

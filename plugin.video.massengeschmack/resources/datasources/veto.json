@@ -1,0 +1,19 @@
+{
+    "id": 19,
+    "order": 19,
+    "metadata": {
+        "title": "VETO",
+        "cast": ["Holger Kreymeier"],
+        "country": 30202,
+        "plot": "VETO ist der tabufreie Talk um Politik und Gesellschaft - hier wird über alles gesprochen mit Gästen, die umstritten sind oder zumindest umstrittene Thesen vertreten. Der andere Blick auf die Themen, die Alternative zum Talk-Einheitsbrei im deutschen Fernsehen.",
+        "premiered": "2017-02-06"
+    },
+    "fanart": "fanart-veto.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

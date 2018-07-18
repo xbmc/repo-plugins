@@ -68,9 +68,12 @@ msgid "Advanced Settings"
 msgstr ""
 
 msgctxt "#30061"
-msgid "Apply ViewMode fix for AeonNox 5"
+msgid "Apply view mode fix for AeonNox 5"
 msgstr ""
 
+msgctxt "#30062"
+msgid "Let the add-on adjust Kodi view modes"
+msgstr ""
 
 # ----------------------------------------------------------------------------------
 # Application start up

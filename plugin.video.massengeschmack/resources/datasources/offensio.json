@@ -1,0 +1,19 @@
+{
+    "id": 21,
+    "order": 21,
+    "metadata": {
+        "title": "Offensio",
+        "cast": ["Verschiedene"],
+        "country": 30202,
+        "plot": "Verbrauchermagazin",
+        "premiered": "2017-03-09"
+    },
+    "fanart": "fanart-offensio.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

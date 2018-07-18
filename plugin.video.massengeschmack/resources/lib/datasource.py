@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Massengeschmack Kodi add-on
 # Copyright (C) 2013-2016 by Janek Bevendorff
 #
@@ -200,11 +200,11 @@ class DataSource(object):
         if 'submodule' in ADDON_ARGS and ADDON_ARGS['submodule'] in self.submodules:
             submodule = ADDON_ARGS['submodule']
         return submodule
-    
+
     def getContentMode(self):
         """
-        Get the view mode for the listing content.
-        
+        Get the content mode for the listing content.
+
         Content mode is usually either 'tvshows' or 'episodes', but can
         also be any other valid value for xbmcplugin.setContent().
 
@@ -212,6 +212,18 @@ class DataSource(object):
         @return content mode
         """
         return 'episodes'
+
+    def getViewMode(self):
+        """
+        Get the Kodi view mode for displaying the listing.
+        This is one of the numeric view mode IDs for the
+        Container.SetViewMode(int) builtin.
+
+        A list of IDs (XML files starting with View_) can be found at
+        https://github.com/xbmc/xbmc/tree/master/addons/skin.estuary/xml
+        """
+        # InfoWall
+        return 54
 
     def getShowTitle(self):
         """
@@ -436,6 +448,10 @@ class OverviewDataSource(DataSource):
     def getContentMode(self):
         return "tvshows"
 
+    def getViewMode(self):
+        # Banner
+        return 501
+
 
 @DataSourceRegistry('live')
 class LiveDataSource(DataSource):
@@ -493,6 +509,10 @@ class LiveDataSource(DataSource):
 
     def getContentMode(self):
         return 'episodes'
+
+    def getViewMode(self):
+        # InfoWall
+        return 54
 
     def hasListItems(self):
         return 'playStream' not in ADDON_ARGS
@@ -601,7 +621,7 @@ def createDataSource(module=None):
     """
     Create a L{DataSource} object based on the given module name.
     If no module name is given, an overview DataSource will be generated.
-    
+
     @type module: str
     @keyword module: the magazine name, None or empty string for overview
     @rtype: DataSource

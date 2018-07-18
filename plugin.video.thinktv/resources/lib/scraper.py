@@ -62,7 +62,8 @@ class myAddon(t1mAddon):
            xheaders["Content-Type"] = "application/x-www-form-urlencoded"
            udata = urllib.urlencode({'csrfmiddlewaretoken' : lcsr, 'next' : lnext, 'email' : username, 'password' : password})
            html = self.getRequest(url1, udata, xheaders)
-           html = self.getRequest('https://account.pbs.org/oauth2/authorize/?scope=account&redirect_uri=http://www.pbs.org/login/&response_type=code&client_id=%s&confirmed=1' % clientId)
+#           html = self.getRequest('https://account.pbs.org/oauth2/authorize/?scope=account&redirect_uri=http://www.pbs.org/login/&response_type=code&client_id=%s&confirmed=1' % clientId)
+           html = self.getRequest('https://account.pbs.org/oauth2/authorize/?scope=account+vvpa&redirect_uri=https://www.pbs.org/login/&response_type=code&client_id=%s&confirmed=1' % clientId)
            for cookie in cj:
                if cookie.name == 'pbsol.station':
                    self.addon.setSetting('pbsol', cookie.value)
@@ -96,14 +97,14 @@ class myAddon(t1mAddon):
                a = json.loads(html)
                if len(a['results']['content']) > 0:
                    ilist = self.addMenuItem(addonLanguage(30048) ,'GS', ilist, 'localpbs' , self.addonIcon, self.addonFanart, None, isFolder=True)
-    html = self.getRequest('http://www.pbs.org/favorite-shows-page/1/')
+    html = self.getRequest('https://www.pbs.org/favorite-shows-page/1/')
     if len(html) > 0:
         a = json.loads(html)
         if a['totalResults'] > 0:
             ilist = self.addMenuItem(addonLanguage(30004),'GS', ilist, 'favorites' , self.addonIcon, self.addonFanart, None, isFolder=True)
     xheaders = self.defaultHeaders.copy()
     xheaders['X-Requested-With'] = 'XMLHttpRequest'
-    html = self.getRequest('http://www.pbs.org/watchlist/page/1/', None, xheaders)
+    html = self.getRequest('https://www.pbs.org/watchlist/page/1/', None, xheaders)
     if len(html) > 0:
         a = json.loads(html)
         if a.get('videos') is not None:
@@ -228,7 +229,7 @@ class myAddon(t1mAddon):
     epis = re.compile('<article class="video-summary">.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?data-video-slug="(.+?)"',re.DOTALL).findall(html)
     if len(epis) == 0:
 #        epis = re.compile('<div class="video-summary">.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?data-video-id="(.+?)"',re.DOTALL).findall(html)
-        epis = re.compile('<div class="video-summary">.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?data-video-slug="(.+?)"',re.DOTALL).findall(html)
+        epis = re.compile('<div class="video-summary".+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?data-video-slug="(.+?)"',re.DOTALL).findall(html)
     for i, (imgs, name, plot, url)  in list(enumerate(epis, start=1)):
         name = h.unescape(name.decode(UTF8))
         name = name.replace('Video thumbnail: ','',1)
@@ -257,7 +258,7 @@ class myAddon(t1mAddon):
     self.doPBSLogin()
     xheaders = self.defaultHeaders.copy()
     xheaders['X-Requested-With'] = 'XMLHttpRequest'
-    html = self.getRequest('http://www.pbs.org/watchlist/page/1/', None, xheaders)
+    html = self.getRequest('https://www.pbs.org/watchlist/page/1/', None, xheaders)
     a = json.loads(html)
     epis = a['videos']
     for i, b  in list(enumerate(epis, start=1)):
@@ -311,7 +312,7 @@ class myAddon(t1mAddon):
     addonLanguage = self.addon.getLocalizedString
     pbs_uid = self.addon.getSetting('pbs_uid')
     pg = self.getRequest('https://player.pbs.org/viralplayer/%s/?uid=%s' % (url, pbs_uid))
-    pg = re.compile('window.videoBridge = (.+?);').search(pg).group(1)
+    pg = re.compile('window.videoBridge = (.+?);\n', re.DOTALL).search(pg).group(1)
     a = json.loads(pg)
     if not a is None:
         url = a['recommended_encoding']['url']

@@ -29,6 +29,7 @@
     <setting id="menu_video_search" label="30517" type="bool" default="true"/>
     <setting id="menu_video_live" label="30518" type="bool" default="true"/>
     <setting id="menu_video_red_button" label="30519" type="bool" default="true"/>
+    <setting id="menu_video_uhd_trial" label="30529" type="bool" default="true"/>
     <setting id="menu_video_watching" label="30520" type="bool" default="true"/>
     <setting id="menu_video_added" label="30521" type="bool" default="true"/>
     <setting id="menu_radio_live" label="30522" type="bool" default="true"/>

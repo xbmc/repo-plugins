@@ -27,7 +27,7 @@ def showMoviePages(params):
 
     url = ('{server}/emby/Users/{userid}/Items' +
            '?IsVirtualUnaired=false' +
-           '&CollapseBoxSetItems=true' +
+           #'&CollapseBoxSetItems=true' +
            '&Recursive=true' +
            "&IncludeItemTypes=Movie"
            '&IsMissing=False' +
@@ -61,7 +61,7 @@ def showMoviePages(params):
 
         item_url = ("{server}/emby/Users/{userid}/Items" +
                     "?IsVirtualUnaired=false" +
-                    "&CollapseBoxSetItems=true" +
+                    #"&CollapseBoxSetItems=true" +
                     "&Recursive=true" +
                     "&IsMissing=False" +
                     "&IncludeItemTypes=Movie"
@@ -389,7 +389,7 @@ def getCollections():
                 'path': ('{server}/emby/Users/{userid}/Items' +
                          '?ParentId=' + item.get("Id") +
                          '&IsVirtualUnaired=false' +
-                         '&CollapseBoxSetItems=true' +
+                         #'&CollapseBoxSetItems=true' +
                          '&Recursive=true' +
                          '&IsMissing=False' +
                          '&Fields={field_filters}' +
@@ -853,13 +853,13 @@ def showWidgets():
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def showSearch():
+def show_search():
     addMenuDirectoryItem(i18n('movies'), 'plugin://plugin.video.embycon/?mode=NEW_SEARCH&item_type=Movie')
     addMenuDirectoryItem(i18n('tvshows'), 'plugin://plugin.video.embycon/?mode=NEW_SEARCH&item_type=Series')
     addMenuDirectoryItem(i18n('episodes'), 'plugin://plugin.video.embycon/?mode=NEW_SEARCH&item_type=Episode')
-    addMenuDirectoryItem("Song", 'plugin://plugin.video.embycon/?mode=NEW_SEARCH&item_type=Audio')
-    addMenuDirectoryItem("Album", 'plugin://plugin.video.embycon/?mode=NEW_SEARCH&item_type=MusicAlbum')
-    #addMenuDirectoryItem("Artist", 'plugin://plugin.video.embycon/?mode=NEW_SEARCH&item_type=MusicArtists')
+    addMenuDirectoryItem(i18n('song'), 'plugin://plugin.video.embycon/?mode=NEW_SEARCH&item_type=Audio')
+    addMenuDirectoryItem(i18n('album'), 'plugin://plugin.video.embycon/?mode=NEW_SEARCH&item_type=MusicAlbum')
+    addMenuDirectoryItem(i18n('person'), 'plugin://plugin.video.embycon/?mode=NEW_SEARCH&item_type=Person')
 
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

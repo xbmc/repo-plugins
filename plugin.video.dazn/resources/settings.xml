@@ -7,7 +7,7 @@
         <setting label="30014" type="number" id="view_id_videos" enable="eq(-3,true)" default="55"/>
         <setting label="30015" type="number" id="view_id_epg" enable="eq(-4,true)" default="55"/>
         <setting label="country" type="text" id="country" default="" visible="false"/>
-        <setting label="language" type="text" id="language" default="" visible="false"/>
+        <setting label="language" type="text" id="language" default="en" visible="false"/>
         <setting label="device_id" type="text" id="device_id" default="" visible="false"/>
         <setting label="viewer_id" type="text" id="viewer_id" default="" visible="false"/>
         <setting label="portability" type="text" id="portability" default="" visible="false"/>

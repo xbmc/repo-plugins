@@ -28,9 +28,11 @@ class Context:
         for i in cm_items:
             type_ = i['type']
             if type_ == 'Highlights':
-                type_ = self.plugin.get_string(30213)
+                type_ = self.plugin.get_resource('playerMetadata_WatchHighlights')
             elif type_ == 'Condensed':
-                type_ = self.plugin.get_string(30216)
+                type_ = self.plugin.get_resource('playerMetadata_WatchCondensedFilm')
+            elif type_ == 'Coaches':
+                type_ = self.plugin.get_resource('playerMetadata_WatchCoachesFilm')
             d = {
                 'mode': 'play_context',
                 'title': self.plugin.utfenc(i['title']),

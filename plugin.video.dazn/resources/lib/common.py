@@ -4,15 +4,17 @@ import base64
 import datetime
 import hashlib
 import json
+import os
+import string
 import time
 import urllib
 import uuid
 import xbmc
 import xbmcaddon
 import xbmcgui
+import xbmcvfs
 import _strptime
 from inputstreamhelper import Helper
-from resources import resources
 
 class Common:
 
@@ -20,7 +22,7 @@ class Common:
         self.api_base = 'https://isl.dazn.com/misl/'
         self.time_format = '%Y-%m-%dT%H:%M:%SZ'
         self.date_format = '%Y-%m-%d'
-        self.portability_list = ['AT', 'DE']
+        self.portability_list = ['AT', 'DE', 'IT']
 
         addon = self.get_addon()
         self.addon_handle = addon_handle
@@ -43,6 +45,12 @@ class Common:
             result = text.encode('utf-8')
         return result
 
+    def utfdec(self, text):
+        result = text
+        if isinstance(text, str):
+            result = text.decode('utf-8')
+        return result
+
     def b64dec(self, data):
         missing_padding = len(data) % 4
         if missing_padding != 0:
@@ -51,6 +59,14 @@ class Common:
 
     def get_addon(self):
         return xbmcaddon.Addon()
+
+    def get_datapath(self):
+        return self.utfdec(xbmc.translatePath(self.get_addon().getAddonInfo('profile')))
+
+    def get_filepath(self, file_name):
+        if file_name.startswith('http'):
+            file_name = file_name.split('/')[-1]
+        return os.path.join(self.get_datapath(), file_name)
 
     def get_dialog(self):
         return xbmcgui.Dialog()
@@ -64,26 +80,32 @@ class Common:
     def get_string(self, id_):
         return self.utfenc(self.get_addon().getLocalizedString(id_))
 
-    def dialog_ok(self, id_):
-        self.get_dialog().ok(self.addon_name, self.get_string(id_))
+    def dialog_ok(self, msg):
+        self.get_dialog().ok(self.addon_name, msg)
 
-    def get_resource(self, string):
-        result = self.utfenc(string)
-        id_ = resources(string)
-        if isinstance(id_, int) and id_ != 0:
-            result = self.get_string(id_)
-        return result
+    def notification(self, title, msg, duration, thumb):
+        self.get_dialog().notification('{0}, {1}, {2}, {3}'.format(title, msg, thumb, duration))
+
+    def get_resource(self, text, prefix=''):
+        data = self.get_cache('ResourceStrings')
+        if data.get('Strings'):
+            strings = data['Strings']
+            try:
+                text = strings['{0}{1}'.format(prefix, text.replace(' ', ''))]
+            except KeyError:
+                pass
+        return self.utfenc(self.initcap(text))
 
     def get_credentials(self):
-        email = self.get_dialog().input(self.addon_name + self.get_string(30002), type=xbmcgui.INPUT_ALPHANUM)
+        email = self.get_dialog().input(self.get_resource('signin_emaillabel'), type=xbmcgui.INPUT_ALPHANUM)
         if '@' in email:
-            password = self.get_dialog().input(self.addon_name + self.get_string(30003), type=xbmcgui.INPUT_ALPHANUM, option=xbmcgui.ALPHANUM_HIDE_INPUT)
+            password = self.get_dialog().input(self.get_resource('signin_passwordlabel'), type=xbmcgui.INPUT_ALPHANUM, option=xbmcgui.ALPHANUM_HIDE_INPUT)
             if len(password) > 4:
                 return {
                     'email': email,
                     'password': password
                 }
-        return None
+        return {}
 
     def log(self, msg):
         xbmc.log(str(msg), xbmc.LOGDEBUG)
@@ -91,7 +113,7 @@ class Common:
     def build_url(self, query):
         return self.addon_url + '?' + urllib.urlencode(query)
 
-    def get_language(self):
+    def gui_language(self):
         language = xbmc.getLanguage().split(' (')[0]
         return xbmc.convertLanguage(language, xbmc.ISO_639_1)
 
@@ -128,7 +150,7 @@ class Common:
             device_id = str(uuid.UUID(hashlib.md5(str(mac_addr.decode("utf-8"))).hexdigest()))
         else:
             self.log("[{0}] error: failed to get device id ({1})".format(self.addon_id, str(mac_addr)))
-            self.dialog_ok(30051)
+            self.dialog_ok(self.get_resource('error_4005_ConnectionLost'))
         self.set_setting('device_id', device_id)
         return device_id
 
@@ -143,14 +165,14 @@ class Common:
         today = datetime.date.today()
         if start and not title == 'Live':
             if now[:10] == start[:10]:
-                return 'Today'
+                return self.get_resource('tileLabelToday', 'browseui_')
             elif str(today + datetime.timedelta(days=1)) == start[:10]:
-                return 'Tomorrow'
+                return self.get_resource('tileLabelTomorrow', 'browseui_')
             else:
                 for i in range(2,8):
                     if str(today + datetime.timedelta(days=i)) == start[:10]:
-                        return (today + datetime.timedelta(days=i)).strftime('%A')
-        return title
+                        return self.get_resource((today + datetime.timedelta(days=i)).strftime('%A'), 'calendar_')
+        return self.get_resource(title, 'browseui_')
 
     def epg_date(self, date):
         return datetime.datetime.fromtimestamp(time.mktime(time.strptime(date, self.date_format)))
@@ -173,7 +195,42 @@ class Common:
         token_data = json.loads(self.b64dec(token.split('.')[1]))
         return token_data['mpx']
 
+    def language(self, language, languages):
+        gui_lang = self.gui_language()
+        for i in languages:
+            if i.lower() == gui_lang.lower():
+                language = i
+                break
+        return language
+
     def portability_country(self, country, user_country):
         if user_country in self.portability_list:
             country = user_country
         return country
+
+    def get_cache(self, file_name):
+        json_data = {}
+        file_ = self.get_filepath(file_name)
+        if xbmcvfs.exists(file_):
+            try:
+                f = xbmcvfs.File(file_, 'r')
+                json_data = json.load(f)
+                f.close()
+            except Exception as e:
+                self.log("[{0}] get cache error: {1}".format(self.addon_id, e))
+        return json_data
+
+    def cache(self, file_name, data):
+        file_ = self.get_filepath(file_name)
+        try:
+            f = xbmcvfs.File(file_, 'w')
+            json.dump(data, f)
+            f.close()
+        except Exception as e:
+            self.log("[{0}] cache error: {1}".format(self.addon_id, e))
+
+    def initcap(self, text):
+        if text.isupper():
+            text = string.capwords(text)
+            text = text.replace('Dazn', 'DAZN')
+        return text

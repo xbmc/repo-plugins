@@ -165,7 +165,8 @@ class VRTPlayer:
     def __get_single_video(self, path, soup):
         title_items = []
         video_dictionary = self.metadata_collector.get_single_layout_episode_metadata(soup)
-        list_item_title = soup.find(class_="content__title").text
+        content = soup.find(class_="content2");
+        list_item_title = content.find("h1").text
 
         if "shortdate" in video_dictionary:
             list_item_title = video_dictionary["shortdate"] + " " + list_item_title

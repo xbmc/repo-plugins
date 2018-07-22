@@ -30,7 +30,7 @@ class MediathekFactory(object):
        ARDMediathek.name():ARDMediathek,
        ZDFMediathek.name():ZDFMediathek,
        ARTEMediathek.name():ARTEMediathek,
-       #DreiSatMediathek.name():DreiSatMediathek,
+       DreiSatMediathek.name():DreiSatMediathek,
        #ORFMediathek.name():ORFMediathek,
        #NDRMediathek.name():NDRMediathek,
        KIKA.name():KIKA

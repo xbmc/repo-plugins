@@ -90,8 +90,7 @@ UA_ANDROID = 'okhttp/3.9.0'
 #Playlists
 RECAP_PLAYLIST = xbmc.PlayList(0)
 EXTENDED_PLAYLIST = xbmc.PlayList(1)
-
-VERIFY = False
+VERIFY = True
 
 
 def find(source,start_str,end_str):    
@@ -585,3 +584,17 @@ def load_cookies():
         pass
 
     return cj
+
+
+def stream_to_listitem(stream_url, headers):
+    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
+        listitem = xbmcgui.ListItem(path=stream_url)
+        listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
+        listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+        listitem.setProperty('inputstream.adaptive.stream_headers', headers)
+        listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
+    else:
+        listitem = xbmcgui.ListItem(path=stream_url + '|' + headers)
+
+    listitem.setMimeType("application/x-mpegURL")
+    return listitem

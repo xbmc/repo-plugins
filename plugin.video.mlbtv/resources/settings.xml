@@ -23,7 +23,7 @@
 
     <setting id="old_username" type="text" label="" default="" visible="false"/>
     <setting id="old_password" type="text" label="" default="" visible="false"/>
-  </category>  
+  </category>
   <!--Proxy-->
   <category label='30200'>
     <setting id='use_proxy' type='bool' label='30210' default='false'/>

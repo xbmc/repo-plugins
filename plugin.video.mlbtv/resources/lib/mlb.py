@@ -1,5 +1,6 @@
 from resources.lib.globals import *
-from account import Account
+from .account import Account
+
 
 def categories():
     addDir('Today\'s Games', 100, ICON, FANART)
@@ -82,7 +83,7 @@ def create_game_listitem(game, game_day):
 
     game_time = ''
     #if game['status']['abstractGameState'] == 'Preview':
-    if game['status']['detailedState'] == 'Scheduled':
+    if game['status']['detailedState'].lower() == 'scheduled' or game['status']['detailedState'].lower() == 'pre-game':
         game_time = game['gameDate']
         game_time = stringToDate(game_time, "%Y-%m-%dT%H:%M:%SZ")
         game_time = UTCToLocal(game_time)
@@ -202,15 +203,14 @@ def stream_select(game_pk):
             if IN_MARKET != 'Hide' or (item['mediaFeedType'] != 'IN_MARKET_HOME' and item['mediaFeedType'] != 'IN_MARKET_AWAY'):
                 title = str(item['mediaFeedType']).title()
                 title = title.replace('_', ' ')
-                stream_title.append(title + " (" + item['callLetters'].encode('utf-8') + ")")
-                if item['mediaFeedType'] == 'HOME':
-                    media_state.insert(1, item['mediaState'])
-                    content_id.insert(1, item['contentId'])
+                if 'HOME' in title.upper():
+                    media_state.insert(0, item['mediaState'])
+                    content_id.insert(0, item['contentId'])
+                    stream_title.insert(1, title + " (" + item['callLetters'].encode('utf-8') + ")")
                 else:
                     media_state.append(item['mediaState'])
                     content_id.append(item['contentId'])
-
-
+                    stream_title.append(title + " (" + item['callLetters'].encode('utf-8') + ")")
 
     # All past games should have highlights
     if len(stream_title) == 0:
@@ -228,6 +228,14 @@ def stream_select(game_pk):
     if n > -1 and stream_title[n] != 'Highlights':
         account = Account()
         stream_url, headers = account.get_stream(content_id[n-1])
+        if epg[0]['mediaState'] == "MEDIA_ON":
+            p = dialog.select('Select a Start Point', ['Catch Up', 'Live'])
+            if p == 0:
+                listitem = stream_to_listitem(stream_url, headers)
+                #TO DO: use this url to get team names for list item title
+                #https://statsapi.mlb.com/api/v1/schedule?gamePk=game_pk&hydrate=team
+                highlight_select_stream(json_source['highlights']['live']['items'], listitem)
+                sys.exit()
 
     if '.m3u8' in stream_url:
         play_stream(stream_url, headers)
@@ -239,9 +247,9 @@ def stream_select(game_pk):
         sys.exit()
 
 
-def highlight_select_stream(json_source):
+def highlight_select_stream(json_source, catchup=None):
     highlights = get_highlights(json_source)
-    if not highlights:
+    if not highlights and catchup is None:
         msg = "No videos found."
         dialog = xbmcgui.Dialog()
         dialog.notification('Highlights', msg, ICON, 5000, False)
@@ -255,8 +263,12 @@ def highlight_select_stream(json_source):
         highlight_name.append(clip['title'])
         highlight_url.append(clip['url'])
 
-    dialog = xbmcgui.Dialog()
-    a = dialog.select('Choose Highlight', highlight_name)
+    if catchup is None:
+        dialog = xbmcgui.Dialog()
+        a = dialog.select('Choose Highlight', highlight_name)
+    else:
+        a = 0
+
     if a > 0:
         play_stream(highlight_url[a], '')
     elif a == 0:
@@ -269,21 +281,14 @@ def highlight_select_stream(json_source):
             listitem.setInfo(type="Video", infoLabels={"Title": clip['title']})
             playlist.add(clip['url'], listitem)
 
+        if catchup is not None:
+            playlist.add(catchup.getPath(), catchup)
+
         xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=playlist[0])
 
 
 def play_stream(stream_url, headers):
-    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
-        listitem = xbmcgui.ListItem(path=stream_url)
-        listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
-        listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-        listitem.setProperty('inputstream.adaptive.stream_headers', headers)
-        listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
-    else:
-        listitem = xbmcgui.ListItem(path=stream_url + '|' + headers)
-        listitem.setMimeType("application/x-mpegURL")
-
-    listitem.setMimeType("application/x-mpegURL")
+    listitem = stream_to_listitem(stream_url, headers)
     xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=listitem)
 
 

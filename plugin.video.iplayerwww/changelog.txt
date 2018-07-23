@@ -1,3 +1,6 @@
+v2.5.37
+Fixed Radio Categories and A-Z.
+
 v2.5.36
 Fixed Highlights and Channel Highlights.
 

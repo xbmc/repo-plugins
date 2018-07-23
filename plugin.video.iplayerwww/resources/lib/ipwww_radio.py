@@ -12,6 +12,7 @@ import xbmcgui
 import xbmcplugin
 import xbmcaddon
 import random
+import json
 
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
@@ -61,6 +62,10 @@ def GetPage(page_url, just_episodes=False):
         masthead_title_match = re.search(r'<div.+?id="programmes-main-content".*?<span property="name">(.+?)</span>', html)
         if masthead_title_match:
             masthead_title = masthead_title_match.group(1)
+        else:
+            alternative_masthead_title_match = re.search(r'<div class="br-masthead__title">.*?<a href="[^"]+">([^<]+?)</a>', html, re.M | re.S)
+            if alternative_masthead_title_match:
+                masthead_title = alternative_masthead_title_match.group(1)
 
         list_item_num = 1
 
@@ -87,6 +92,10 @@ def GetPage(page_url, just_episodes=False):
             name_match = re.search(r'<span property="name">(.+?)</span>', programme)
             if name_match:
                 name = name_match.group(1)
+            else:
+                alternative_name_match = re.search(r'<meta property="name" content="([^"]+?)"', programme)
+                if alternative_name_match:
+                    name = alternative_name_match.group(1)
 
             subtitle = ''
             subtitle_match = re.search(r'<span class="programme__subtitle.+?property="name">(.*?)</span>(.*?property="name">(.*?)</span>)?', programme)
@@ -124,7 +133,7 @@ def GetPage(page_url, just_episodes=False):
                 AddMenuEntry(series_title, series_id, 131, image, synopsis, '')
             elif programme_id: #TODO maybe they are not always mutually exclusive
 
-                url = "http://www.bbc.co.uk/programmes/%s" % programme_id
+                url = "http://www.bbc.co.uk/radio/play/%s" % programme_id
                 CheckAutoplay(title, url, image, ' ', '')
 
             percent = int(100*(page+list_item_num/len(programmes))/total_pages)
@@ -140,6 +149,121 @@ def GetPage(page_url, just_episodes=False):
         if current_page < next_page:
             page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
             AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 136, '', '', '')
+
+    #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+
+    pDialog.close()
+
+
+
+def GetCategoryPage(page_url, just_episodes=False):
+
+    pDialog = xbmcgui.DialogProgressBG()
+    pDialog.create(translation(30319))
+
+    html = OpenURL(page_url)
+
+    total_pages = 1
+    current_page = 1
+    page_range = range(1)
+    paginate = re.search(r'pgn__list',html)
+    next_page = 1
+    if paginate:
+        if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
+            current_page_match = re.search(r'page=(\d*)', page_url)
+            if current_page_match:
+                current_page = int(current_page_match.group(1))
+                main_base_url = re.search(r'(.+?)\?.+?', page_url).group(1)
+            else:
+                main_base_url = page_url
+            page_range = range(current_page, current_page+1)
+            next_page_match = re.search(r'pgn__page--next.*?href="(.*?page=)(.*?)"', html)
+            if next_page_match:
+                page_base_url = main_base_url + next_page_match.group(1)
+                next_page = int(next_page_match.group(2))
+            else:
+                next_page = current_page
+            page_range = range(current_page, current_page+1)
+        else:
+            pages = re.findall(r'<li class="pgn__page.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
+            if pages:
+                last = pages[-2]
+                last_page = re.search(r'href=".*?page=(.*?)"',last)
+                page_base_url = page_url + '?page='
+                total_pages = int(last_page.group(1))
+            page_range = range(1, total_pages+1)
+
+    for page in page_range:
+
+        if page > current_page:
+            page_url = page_base_url + str(page)
+            html = OpenURL(page_url)
+
+        list_item_num = 1
+
+        programmes = html.split('<div class="programme-item')
+        for programme in programmes:
+
+            series_id = ''
+            series_id_match = re.search(r'<a class="category-episodes" href="/programmes/(.+?)/episodes"', programme)
+            if series_id_match:
+                series_id = series_id_match.group(1)
+
+            programme_id = ''
+            programme_id_match = re.search(r'href="/programmes/(.+?)"', programme)
+            if programme_id_match:
+                programme_id = programme_id_match.group(1)
+
+            name = ''
+            name_match = re.search(r'<span class="programme-item-title.+?>(.+?)</span>', programme)
+            if name_match:
+                name = name_match.group(1)
+
+            subtitle = ''
+            subtitle_match = re.search(r'<p class="programme-item-subtitle.+?>(.+?)</p>', programme)
+            if subtitle_match:
+                subtitle = subtitle_match.group(1)
+
+            image = ''
+            image_match = re.search(r'class="media__image" src="(.+?)"', programme)
+            if image_match:
+                image = 'http://' + image_match.group(1)
+
+            synopsis = ''
+            synopsis_match = re.search(r'<p class="programme-item-synopsis.+?>(.+?)</p>', programme)
+            if synopsis_match:
+                synopsis = synopsis_match.group(1)
+
+            station = ''
+            station_match = re.search(r'class="programme-item-network.+?>\s*(.+?)\s*</a>', programme)
+            if station_match:
+                station = station_match.group(1).strip()
+
+            series_title = "[B]%s - %s[/B]" % (station, name)
+            title = "[B]%s[/B] - %s %s" % (station, name, subtitle)
+
+            if series_id:
+                AddMenuEntry(series_title, series_id, 131, image, synopsis, '')
+            elif programme_id: #TODO maybe they are not always mutually exclusive
+
+                url = "http://www.bbc.co.uk/radio/play/%s" % programme_id
+                CheckAutoplay(title, url, image, ' ', '')
+
+            percent = int(100*(page+list_item_num/len(programmes))/total_pages)
+            pDialog.update(percent,translation(30319),name)
+
+            list_item_num += 1
+
+        percent = int(100*page/total_pages)
+        pDialog.update(percent,translation(30319))
+
+
+    if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
+        if current_page < next_page:
+            page_url = page_base_url + str(next_page)
+            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 137, '', '', '')
 
     #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
@@ -302,22 +426,22 @@ def ListGenres():
     """
     genres = []
     html = OpenURL('http://www.bbc.co.uk/radio/programmes/genres')
-    mains = html.split('<li class="category br-keyline highlight-box--list">')
+    mains = html.split('<div class="category__box island--vertical">')
 
     for main in mains:
-        current_main_match = re.search(r'<a.+?class="beta box-link".+?href="(.+?)">(.+?)</a>',main)
+        current_main_match = re.search(r'<a.+?class="gel-double-pica-bold".+?href="(.+?)">(.+?)</a>',main)
         if current_main_match:
             genres.append((current_main_match.group(1), current_main_match.group(2), True))
-            current_sub_match = re.findall(r'<a.+?class="box-link".+?href="(.+?)">(.+?)</a>',main)
+            current_sub_match = re.findall(r'<a.+?class="gel-long-primer-bold".+?href="(.+?)">(.+?)</a>',main)
             for sub_match_url, sub_match_name in current_sub_match:
                 genres.append((sub_match_url, current_main_match.group(2)+' - '+sub_match_name, False))
 
     for url, name, group in genres:
-        new_url = 'http://www.bbc.co.uk%s/player/episodes' % url
+        new_url = 'http://www.bbc.co.uk%s' % url
         if group:
-            AddMenuEntry("[B]%s[/B]" % name, new_url, 136, '', '', '')
+            AddMenuEntry("[B]%s[/B]" % name, new_url, 137, '', '', '')
         else:
-            AddMenuEntry("%s" % name, new_url, 136, '', '', '')
+            AddMenuEntry("%s" % name, new_url, 137, '', '', '')
 
     #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
@@ -453,9 +577,10 @@ def ListListenList(logged_in):
         if episode_id:
             if series_name:
                 episode_title = "[B]%s[/B] - %s - %s" % (station, series_name, episode_name)
+                episode_url = "http://www.bbc.co.uk/programmes/%s" % episode_id
             else:
                 episode_title = "[B]%s[/B] - %s" % (station, episode_name)
-            episode_url = "http://www.bbc.co.uk/programmes/%s" % episode_id
+                episode_url = "http://www.bbc.co.uk/radio/play/%s" % episode_id
             # xbmc.log(episode_url)
             CheckAutoplay(episode_title, episode_url, episode_image, ' ', '')
 
@@ -560,7 +685,7 @@ def ListMostPopular():
         title = "[B]%s[/B] - %s %s" % (station, name, subtitle)
 
         if programme_id and title and image:
-            url = "http://www.bbc.co.uk/programmes/%s" % programme_id
+            url = "http://www.bbc.co.uk/radio/play/%s" % programme_id
             CheckAutoplay(title, url, image, ' ', '')
 
     #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
@@ -612,8 +737,18 @@ def ParseStreams(stream_id):
 def ScrapeAvailableStreams(url):
     # Open page and retrieve the stream ID
     html = OpenURL(url)
+    stream_id_st = None
     # Search for standard programmes.
     stream_id_st = re.compile('"vpid":"(.+?)"').findall(html)
+    if not stream_id_st:
+        match = re.search(r'window.__PRELOADED_STATE__ = (.*?);', html, re.DOTALL)
+        if match:
+            data = match.group(1)
+            json_data = json.loads(data)
+            # Note: Need to create list for backwards compatibility
+            stream_id_st = [json_data['programmes']['current']['id']]
+            # print json.dumps(json_data, indent=2, sort_keys=True)
+
     return stream_id_st
 
 

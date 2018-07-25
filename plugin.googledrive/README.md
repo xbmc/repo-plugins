@@ -3,6 +3,7 @@ Google Drive for KODI
 
 Play all your media from Google Drive including Videos, Music and Pictures. 
 * Unlimited accounts
+* Team Drives support
 * Playback your music and videos. Listing of videos with thumbnails.
 * Use Google Drive as a source.
 * Subtitles can be assigned automatically if a .str file exists with the same name as the video. 

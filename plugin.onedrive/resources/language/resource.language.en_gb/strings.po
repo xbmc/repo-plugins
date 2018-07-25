@@ -68,3 +68,38 @@ msgctxt "#32012"
 msgid "Open Cloud Drive Common Settings..."
 msgstr ""
 
+msgctxt "#32030"
+msgid "Collaboration"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Report errors automatically to help resolve them quickly"
+msgstr ""
+
+msgctxt "#32032"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#32033"
+msgid "Sign-in Server"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Cache expiration time (in minutes)"
+msgstr ""
+
+msgctxt "#32035"
+msgid "Clear cache now"
+msgstr ""
+
+msgctxt "#32067"
+msgid "Services"
+msgstr ""
+
+msgctxt "#32068"
+msgid "Allow using OneDrive as a source"
+msgstr ""
+
+msgctxt "#32069"
+msgid "     Source server port  -  http://localhost:<port>/source"
+msgstr ""

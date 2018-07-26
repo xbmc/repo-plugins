@@ -109,7 +109,7 @@ class USTVnow():
         self.cache     = SimpleCache()
         self.reminders = self.loadReminders()
         self.isFree    = REAL_SETTINGS.getSetting('User_isFree') == "True"
-        if self.login(USER_EMAIL, PASSWORD) == False: raise SystemExit
+        if self.login(USER_EMAIL, PASSWORD) == False: xbmc.executebuiltin("Container.Refresh")
     
     
     def loadReminders(self):
@@ -120,8 +120,10 @@ class USTVnow():
     def mainMenu(self):
         log('mainMenu')
         for item in USTVNOW_MENU:
-            if   item[0] == "Highlights" and len(self.highlights) <= 2: continue
-            elif item[0] in ["Schedules","Recordings"]  and len(self.recorded) <= 2: continue
+            if self.highlights and item[0] == "Highlights":
+                if len(self.highlights) <= 2: continue
+            elif self.recorded and item[0] in ["Schedules","Recordings"]:
+                if len(self.recorded) <= 2: continue
             self.addDir(*item)
         xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
         
@@ -141,7 +143,7 @@ class USTVnow():
         if len(user) > 0:
             try: xbmcvfs.rmdir(COOKIE_JAR)
             except: pass
-                
+            
             if xbmcvfs.exists(COOKIE_JAR) == False:
                 try:
                     xbmcvfs.mkdirs(SETTINGS_LOC)
@@ -149,12 +151,13 @@ class USTVnow():
                     f.close()
                 except: log('login, Unable to create the storage directory', xbmc.LOGERROR)
             header_dict = self.buildHeader()
+            qstr = urllib.urlencode({'username':user,'password':password})
             self.net.set_cookies(COOKIE_JAR)
             
             try:
                 #check token
                 dvrlink  = None
-                custlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getcustomerkey', form_data={'token':LAST_TOKEN}, headers=header_dict).content.encode("utf-8").rstrip())
+                custlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getcustomerkey?%s'%(qstr), form_data={'token':LAST_TOKEN}, headers=header_dict).content.encode("utf-8").rstrip())
                 '''{u'username': u'', u'ip': u'', u'customerkey': u''}'''
                 self.custkey = (custlink.get('customerkey','') or 0)                
                 if custlink and 'username' in custlink and user.lower() == custlink['username'].lower():
@@ -162,8 +165,8 @@ class USTVnow():
                     self.token   = LAST_TOKEN
                     self.passkey = LAST_PASSKEY
                 else:
-                    #login
-                    loginlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/login', form_data={'username':user,'password':password,'device':'gtv','redir':'0'}, headers=header_dict).content.encode("utf-8").rstrip())
+                    #login 
+                    loginlink = json.loads(self.net.http_POST(BASEURL + 'iphone/1/live/login?%s'%(qstr), form_data={'username':user,'password':password,'device':'gtv','redir':'0'}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'token': u'', u'result': u'success'}'''
                     if loginlink and 'token' in loginlink and loginlink['result'].lower() == 'success':
                         log('login, creating new token')
@@ -171,7 +174,7 @@ class USTVnow():
                         REAL_SETTINGS.setSetting('User_Token',self.token)          
                         
                         #passkey
-                        dvrlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/viewdvrlist', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
+                        dvrlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/viewdvrlist?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                         '''{u'globalparams': {u'passkey': u''}, u'results': []}'''
                         if dvrlink and 'globalparams' in dvrlink:
                             log('login, creating new passkey')
@@ -180,7 +183,7 @@ class USTVnow():
                     else: raise Exception
                             
                     #check user credentials
-                    userlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getuserbytoken', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
+                    userlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getuserbytoken?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'status': u'success', u'data': {u'username': u'', u'need_account_activation': False, u'plan_id': 1, u'language': u'en', u'plan_free': 1, u'sub_id': u'7', u'lname': u'', u'currency': u'USD', u'points': 1, u'need_account_renew': False, u'fname': u'', u'plan_name': u'Free Plan'}}'''
                     log('login, checking user account')
                     if userlink and 'data' in userlink and userlink['status'].lower() == 'success':
@@ -203,7 +206,7 @@ class USTVnow():
                         #check subscription
                         try:
                             #error prone, isolate and debug.
-                            sublink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getaccountsubscription', form_data={'username':user,'customerkey':self.custkey}, headers=header_dict).content.encode("utf-8").rstrip())
+                            sublink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getaccountsubscription?%s'%(qstr), form_data={'username':user,'customerkey':self.custkey}, headers=header_dict).content.encode("utf-8").rstrip())
                             '''{u'username': u'', u'billingDatetime': u'', u'currency': u'USD', u'cgaccountstatusreason': u'', u'invoicehistory': u'', u'ocaccountstatus': u'Account active', u'ccLastFour': u'', u'lname': u'', u'x-cg-acnt-USD': False, u'fname': u'', u'sub_info': {u'cost': 0, u'plan': {u'sub_group': 4, u'plan_id': 1, u'name': u'Free Plan', u'language': u'en', u'date_expire': u'0000-00-00', u'sub_id': 7, u'price': 0, u'currency': u'USD', u'plan_code': u'7_FREETRIAL', 
                                 u'details': u'This plan lets you receive all major US terrestrial stations (ABC, CBS, CW, FOX, NBC, PBS).  You can later upgrade to a paid plan with more channels and DVR.'}, u'packages': []}, u'pendinginvoices': u'', u'cgbillingstatus': u'', u'dvrpoints': 1, u'plans': {u'10': {u'price': 15, u'name': u'1 Week All Channel Plan $15 ($2.14/day)', 
                                 u'details': u'1 Week pass for all channels (No DVR)'}, u'23': {u'price': 19, u'name': u'All Channel Promo Plan $19/mo first 3 months', 
@@ -220,7 +223,7 @@ class USTVnow():
                 self.channels = self.cache.get(ADDON_NAME + '.channelguide')
                 if not self.channels:
                     log('login, refreshing channels')
-                    self.channels = sorted(json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/channelguide', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())['results'], key=lambda x: x['displayorder'])
+                    self.channels = sorted(json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/channelguide?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())['results'], key=lambda x: x['displayorder'])
                     '''{u'app_name': u'preview', u'stream': u'00000WXYZustvnow', u'af': u'US', u'dvraction': u'add', u'callsign': u'WHTM', u'event_inprogress': 1, 
                         u'srsid': 3560383, u'guideremainingtime': 3660, u'scheduleid': 9952642, u'favoriteaction': u'remove', u'event_time': u'00:00:00',u'title': u'Shark Tank', 
                         u'timemark': 1498867200, u'recordedon': u'June 30, 2017 20:00', u'prg_img': u'h3/NowShowing/9977826/p9977826_b1t_h3_aa.jpg', u'title_10': u'',
@@ -237,7 +240,7 @@ class USTVnow():
                 self.upcoming = self.cache.get(ADDON_NAME + '.upcoming')
                 if not self.upcoming:
                     log('login, refreshing upcoming')
-                    self.upcoming = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/upcoming', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
+                    self.upcoming = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/upcoming?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'prgschid': 19479379, u'dvraction': u'add', u'callsign': u'AMC', u'newtimecat': True, u'srsid': 14930, u'timecat': u'Today', u'scheduleid': 9946282, 
                         u'img': u'images/AMC.png', u'title': u'The Fugitive', u'prg_img': u'v5/NowShowing/14930/p14930_p_v5_aa.jpg', u'has_img': 1, u't': 0, u'sname': u'AMC', 
                         u'description': u'U.S. marshal (Tommy Lee Jones) hunts doctor (Harrison Ford) for murder of his wife (Sela Ward).', u'dvrtimeraction': u'add', 
@@ -249,7 +252,7 @@ class USTVnow():
                 self.highlights = self.cache.get(ADDON_NAME + '.highlights')
                 if not self.highlights:
                     log('login, refreshing highlights')
-                    self.highlights = json.loads(self.net.http_POST(BASEURL + 'api/1/live/highlights', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
+                    self.highlights = json.loads(self.net.http_POST(BASEURL + 'api/1/live/highlights?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'prgschid': 114059791, u'dvraction': u'add', u'bb_content': u'How would you like having Jim Morrison as a college roommate? ', u'callsign': u'WPSU', u'newtimecat': True,
                         u'srsid': 185479, u'timecat': u'Tomorrow', u'scheduleid': 49826153, u'img': u'images/WPSU.png', u'title': u'Antiques Roadshow', u'prg_img': u'h3/NowShowing/185479/p185479_b_h3_ag.jpg', 
                         u'has_img': 1, u't': 1, u'sname': u'PBS', u'description': u'A French Art Deco diamond and platinum ring; a copy of &quot;The History of Magic&quot; signed by Jim Morrison; four Rembrandt', 
@@ -271,7 +274,7 @@ class USTVnow():
                         u'episode_title': u'', u'synopsis': u'Paid programming.', u'dvrtimertype': 0, u'content_allowed': True, u'xcdrappname': u'livehd', u'event_date': u'2017-07-02', 
                         u'event_inprogress': 2, u'prgsvcid': 11534, u'ut_start': 1499031000, u'stream_code': u'ABC'}'''
                     if dvrlink: recorded = dvrlink['results']
-                    else: self.recorded = (json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/viewdvrlist', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip()))['results']
+                    else: self.recorded = (json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/viewdvrlist?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip()))['results']
                     self.cache.set(ADDON_NAME + '.recorded', self.recorded, expiration=datetime.timedelta(minutes=1))
                 self.names = self.getChannelNames()
                 return True
@@ -293,6 +296,10 @@ class USTVnow():
             else:
                 okDialog(LANGUAGE(30003))
                 return False
+        
+        
+    def qrLogin(self):
+        BASEVOD+'/qr/linkcode/%s'%('kodi%s'%ADDON_ID)
         
         
     def grabChannelName(self, sname):

@@ -539,10 +539,17 @@ def ScrapeEpisodes(page_url):
                         episodes_url = 'https://www.bbc.co.uk' + url
                         episodes_title = item["title"]
 
+                # Single episodes in A-Z now come without a title in the entity.
+                # Use the main title instead.
                 if 'subtitle' in item:
-                    title = "%s - %s" % (item['title'], item['subtitle'])
-                else:
+                    if 'title' in item:
+                        title = "%s - %s" % (item['title'], item['subtitle'])
+                    else:
+                        title = name
+                elif 'title' in item:
                     title = item['title']
+                else:
+                    title = name
 
                 synopsis = ''
                 if 'synopsis' in item:

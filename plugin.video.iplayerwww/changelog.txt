@@ -1,3 +1,6 @@
+v2.5.38
+Fixed single episodes in A-Z.
+
 v2.5.37
 Fixed Radio Categories and A-Z.
 

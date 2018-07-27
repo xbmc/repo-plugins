@@ -32,7 +32,13 @@ __profile_path__    = xbmc.translatePath( __addon__.getAddonInfo('profile') ).de
 __token_filepath__  = __profile_path__ + '/token.txt'
 
 
+# LOG Method
+def log(text):
+	xbmc.log('%s addon: %s' % (__addon_name__, text))
+	
+
 router = routing.Plugin()
+
 
 # BEGIN # Plugin
 class Plugin_mod(object):
@@ -89,7 +95,7 @@ SITE_LOGIN_PAGE = SITE_PATH + 'user/signin'
 
 @router.route('/')
 def main_menu():
-	request = urllib2.Request(ONLI_MASTER_MENU, headers={"User-Agent" :  xbmc.getUserAgent()+ " XBMC/Kodi MyTV Addon " + str(__version__)})
+	request = urllib2.Request(ONLI_MASTER_MENU, headers={"User-Agent" :  " XBMC/Kodi MyTV Addon " + str(__version__)})
 	response = urllib2.urlopen(request)
 
 	dataNew = json.loads(response.read())
@@ -303,7 +309,6 @@ def _has_inputstream():
 			xbmc.executeJSONRPC('{"jsonrpc":"2.0","id":1,"method":"Addons.SetAddonEnabled","params":{"addonid":"inputstream.adaptive","enabled":true}}')
 			return xbmcaddon.Addon('inputstream.adaptive')
 		except:
-			xbmcgui.Dialog().ok('Missing inputstream.adaptive add-on', 'inputstream.adaptive add-on not found or not enabled.This add-on is required to view DRM protected content.')
 			return False
 	else:
 		return True
@@ -374,7 +379,7 @@ class Player(xbmc.Player):
 					'action'        : action,
 				}
 			send = urllib.urlencode(data)
-			request = urllib2.Request(SITE_PATH +'tracking/report_playback', send, headers={"User-Agent" :  xbmc.getUserAgent()+ " MyTV Addon " + str(__version__)})
+			request = urllib2.Request(SITE_PATH +'tracking/report_playback', send, headers={"User-Agent" : " MyTV Addon " + str(__version__)})
 
 # END # 
 
@@ -421,7 +426,7 @@ class login:
 		try:
 			response = urllib2.urlopen(self.request)
 			
-		except HTTPError, e:
+		except HTTPError as e:
 			dialog = xbmcgui.Dialog()
 			dialog.ok(__lang__(30003), e.code)
 			return
@@ -430,7 +435,7 @@ class login:
 		
 		try:
 			res = json.loads(data_result)
-		except Exception, e:
+		except Exception as e:
 			xbmc.log('%s addon: %s' % (__addon_name__, e))
 			return
 		
@@ -508,10 +513,6 @@ def getInputstream():
 	return False
 
 
-# LOG Method
-def __log(text):
-	xbmc.log('%s addon: %s' % (__addon_name__, text))
-	
 
 if __name__ == '__main__':
 	router.run(sys.argv)

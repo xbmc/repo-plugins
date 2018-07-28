@@ -39,3 +39,7 @@ msgstr ""
 msgctxt "#30005"
 msgid "Guide"
 msgstr ""
+
+msgctxt "#30006"
+msgid "First-Time Run[CR]Preparing Images, Please Wait..."
+msgstr ""

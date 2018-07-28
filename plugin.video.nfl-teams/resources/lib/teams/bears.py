@@ -1,20 +1,10 @@
-import resources.lib.nflcs
+from resources.lib.nfl2018 import NFL2018
 
 
-class Team(resources.lib.nflcs.NFLCS):
-    _short = "bears"
-    _cdaweb_url = "http://www.chicagobears.com/cda-web/"
-    _categories = [
-        "Bears Talk",
-        "Draft",
-        "Features",
-        "Football",
-        "Highlights",
-        "Inside The Bears",
-        "NFL Network",
-        "Press Conferences",
-    ]
+class Team(NFL2018):
+    short = "bears"
+    hostname = "www.chicagobears.com"
 
     def __init__(self, parameters):
-        self._parameters = parameters
-        self.go()
+        self.parameters = parameters
+        NFL2018.__init__(self)

@@ -1,26 +1,10 @@
-import resources.lib.nflcs
+from resources.lib.nfl2018 import NFL2018
 
 
-class Team(resources.lib.nflcs.NFLCS):
-    _short = "bengals"
-    _cdaweb_url = "http://www.bengals.com/cda-web/"
-    _categories = [
-        "Audio Conference Calls",
-        "Bengals Breakdown",
-        "Bengals Weekly",
-        "Bengals.com Features",
-        "Game Highlights",
-        "Game Previews",
-        "In the Locker Room",
-        "Minicamp/OTAs",
-        "NFL Draft",
-        "NFL Network",
-        "NFL Scouting Combine",
-        "Press Conferences",
-        "Rookie Minicamp",
-        "Training Camp",
-    ]
+class Team(NFL2018):
+    short = "bengals"
+    hostname = "www.bengals.com"
 
     def __init__(self, parameters):
-        self._parameters = parameters
-        self.go()
+        self.parameters = parameters
+        NFL2018.__init__(self)

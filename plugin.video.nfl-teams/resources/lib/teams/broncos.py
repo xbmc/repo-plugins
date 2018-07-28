@@ -1,29 +1,10 @@
-import resources.lib.nflcs
+from resources.lib.nfl2018 import NFL2018
 
 
-class Team(resources.lib.nflcs.NFLCS):
-    _short = "broncos"
-    _cdaweb_url = "http://www.denverbroncos.com/cda-web/"
-    _categories = [
-        "Broncos TV",
-        "Cheerleaders",
-        "Community",
-        "Elway Exclusive",
-        "Fantasy Football",
-        "Highlights",
-        "Historical Vault",
-        "In The Zone",
-        "Interviews",
-        "Madden",
-        "Mic'd Up",
-        "NFL Network",
-        "Postgame Locker Room",
-        "Postgame Press Conferences",
-        "Press Conferences",
-        "Stadium Experiences",
-        "Victory Speech",
-    ]
+class Team(NFL2018):
+    short = "broncos"
+    hostname = "www.denverbroncos.com"
 
     def __init__(self, parameters):
-        self._parameters = parameters
-        self.go()
+        self.parameters = parameters
+        NFL2018.__init__(self)

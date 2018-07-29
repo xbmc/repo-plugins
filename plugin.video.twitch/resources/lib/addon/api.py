@@ -17,6 +17,8 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
+import json
+
 import utils
 import cache
 from common import kodi, log_utils
@@ -286,8 +288,10 @@ class Twitch:
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def _get_video_by_id(self, video_id):
-        results = self.api.videos._by_id(video_id=video_id)
+    def _get_video_token(self, video_id):
+        results = self.usher.vod_token(video_id=video_id)
+        if 'token' in results:
+            results = json.loads(results['token'])
         return self.error_check(results)
 
     @api_error_handler

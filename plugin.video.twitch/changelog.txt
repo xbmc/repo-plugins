@@ -1,3 +1,6 @@
+2.2.4
+[fix] VOD's error 404
+
 2.2.3
 [add] Thumbnail size, Settings - General
 [fix] encoding and replace in clean_title_value

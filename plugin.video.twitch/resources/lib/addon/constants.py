@@ -86,7 +86,7 @@ ADAPTIVE_SOURCE_TEMPLATE = {'id': 'hls', 'name': 'Adaptive', 'bandwidth': -1, 'u
 CLIENT_ID = 'NjdlYnBmaHlvaWNhYjVrcjB5N3B6b2NzZm9oczd0eQ=='
 REDIRECT_URI = 'https://mrsprigster.github.io/Twitch-on-Kodi/token/'
 
-LIVE_PREVIEW_TEMPLATE = '%://static-cdn.jtvnw.net/previews-ttv/live_user_%-%___x%___.jpg'  # sqlite LIKE pattern
+LIVE_PREVIEW_TEMPLATE = '%://static-cdn.jtvnw.net/previews-ttv/live_user_%-%x%.jpg'  # sqlite LIKE pattern
 
 
 class Images:
@@ -157,6 +157,7 @@ class Keys:
     PROFILE_BANNER = 'profile_banner'
     PUBLISHED_AT = 'published_at'
     QUALITY = 'quality'
+    RESOLUTIONS = 'resolutions'
     RTMP = 'rtmp'
     RTMP_URL = 'rtmpUrl'
     SIG = 'sig'

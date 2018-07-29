@@ -966,7 +966,10 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
             video_id = result[Keys._ID]
             channel_id = result[Keys.CHANNEL][Keys._ID]
             channel_name = result[Keys.CHANNEL][Keys.DISPLAY_NAME] if result[Keys.CHANNEL][Keys.DISPLAY_NAME] else result[Keys.CHANNEL][Keys.NAME]
-            extra_info = twitch._get_video_by_id(video_id)
+            try:
+                extra_info = twitch._get_video_token(video_id)
+            except TwitchException:
+                extra_info = dict()
             if twitch.access_token:
                 try:
                     subscribed = twitch.check_subscribed(channel_id)
@@ -978,12 +981,14 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
             else:
                 subscribed = False
             if not subscribed:
-                if ('restrictions' in extra_info) and ('chunks' in extra_info):
-                    unrestricted = extra_info['chunks']
-                    for key in list(extra_info['chunks']):
-                        if key in extra_info['restrictions']:
-                            if extra_info['restrictions'][key] == 'chansub':
-                                del unrestricted[key]
+                unrestricted = result.get(Keys.RESOLUTIONS, dict())
+                if unrestricted:
+                    unrestricted[u'audio_only'] = u''
+                if ('chansub' in extra_info) and ('restricted_bitrates' in extra_info['chansub']):
+                    log_utils.log('Restricted qualities |%s|' % extra_info['chansub']['restricted_bitrates'], log_utils.LOGDEBUG)
+                    for res in extra_info['chansub']['restricted_bitrates']:
+                        if res in unrestricted:
+                            del unrestricted[res]
                     if unrestricted == {}:
                         restricted = True
             if not restricted:
@@ -991,7 +996,7 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
                 if unrestricted:
                     videos = list()
                     for _video in _videos:
-                        if _video['id'] in list(unrestricted):
+                        if _video['id'] in list(unrestricted.keys()):
                             videos.append(_video)
                 else:
                     videos = _videos

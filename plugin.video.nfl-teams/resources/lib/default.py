@@ -15,7 +15,7 @@ class Default(object):
         {"short": "bears", "long": "Chicago Bears"},
         {"short": "bengals", "long": "Cincinnati Bengals"},
         {"short": "browns", "long": "Cleveland Browns"},
-        {"short": "cowboys", "long": "Dallas Cowboys"},
+        # {"short": "cowboys", "long": "Dallas Cowboys"},  # The website doesn't have video categories
         {"short": "broncos", "long": "Denver Broncos"},
         {"short": "lions", "long": "Detroit Lions"},
         {"short": "packers", "long": "Green Bay Packers"},
@@ -27,7 +27,7 @@ class Default(object):
         {"short": "rams", "long": "Los Angeles Rams"},
         {"short": "dolphins", "long": "Miami Dolphins"},
         {"short": "vikings", "long": "Minnesota Vikings"},
-        {"short": "patriots", "long": "New England Patriots"},
+        # {"short": "patriots", "long": "New England Patriots"},  # The website doesn't have video categories
         {"short": "saints", "long": "New Orleans Saints"},
         {"short": "giants", "long": "New York Giants"},
         {"short": "jets", "long": "New York Jets"},

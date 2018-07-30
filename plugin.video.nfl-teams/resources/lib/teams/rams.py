@@ -1,25 +1,10 @@
-import resources.lib.nflcs
+from resources.lib.nfl2018 import NFL2018
 
 
-class Team(resources.lib.nflcs.NFLCS):
-    _short = "rams"
-    _cdaweb_url = "http://www.therams.com/cda-web/"
-    _categories = [
-        "Video - Cheerleaders",
-        "Video - Community",
-        "Video - Features",
-        "Video - Highlights",
-        "Video - Interviews",
-        "Video - NFL Combine",
-        "Video - NFL Network",
-        "Video - One-on-One",
-        "Video - Press Conferences",
-        "Video - Rams Top Chef",
-        "Video - The Staff",
-        "Video - Under the Lights",
-        "Video - Wired",
-    ]
+class Team(NFL2018):
+    short = "rams"
+    hostname = "www.therams.com"
 
     def __init__(self, parameters):
-        self._parameters = parameters
-        self.go()
+        self.parameters = parameters
+        NFL2018.__init__(self)

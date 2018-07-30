@@ -1,25 +1,10 @@
-import resources.lib.nflcs
+from resources.lib.nfl2018 import NFL2018
 
 
-class Team(resources.lib.nflcs.NFLCS):
-    _short = "panthers"
-    _cdaweb_url = "http://www.panthers.com/cda-web/"
-    _categories = [
-        "Coach Interviews",
-        "Community",
-        "Mailbag",
-        "NFL Network",
-        "Panthers Gameday",
-        "Panthers Huddle",
-        "Panthers Insider",
-        "Panthers Pulse",
-        "Panthers.com TV",
-        "Player Interviews",
-        "Sir Purr",
-        "Stadium Tours",
-        "TopCats",
-    ]
+class Team(NFL2018):
+    short = "panthers"
+    hostname = "www.panthers.com"
 
     def __init__(self, parameters):
-        self._parameters = parameters
-        self.go()
+        self.parameters = parameters
+        NFL2018.__init__(self)

@@ -1,69 +1,10 @@
-import resources.lib.nflc
+from resources.lib.nfl2018 import NFL2018
 
 
-class Team(resources.lib.nflc.NFLC):
-    _short = "cowboys"
-    _website_url = "http://www.dallascowboys.com"
-    _categories = [
-        (3516, "All Talk Shows"),
-        (3586, "AskTheBoys"),
-        (19586, "Audio Only"),
-        (3571, "Best Of Talkin'"),
-        (3576, "Best Of The Draft Show"),
-        (43211, "Blueprint"),
-        (3566, "Break Hot Takes"),
-        (29541, "cheerleaders"),
-        (2761, "Cheerleaders"),
-        (2636, "Coaches-Executives"),
-        (28431, "Community"),
-        (43456, "Cover 4"),
-        (2606, "Cowboys Break"),
-        (2686, "Cowboys Hour"),
-        (19691, "Cowboys Insider"),
-        (43631, "Cowboys Legends Show"),
-        (43671, "Cowboys OT Postgame"),
-        (30936, "Cowboys Sunday Morning"),
-        (28886, "Cowboys TV"),
-        (19701, "Cowboys Weekend"),
-        (32626, "DCC Defined"),
-        (43666, "Deep Blue"),
-        (3241, "Draft"),
-        (3181, "Draft Show"),
-        (2926, "Exclusives"),
-        (3486, "Fantasy Friday"),
-        (2891, "Film Room"),
-        (48356, "FinishThisFight"),
-        (3376, "First Word"),
-        (19601, "FirstTake"),
-        (2626, "Game-Highlights"),
-        (2941, "GameDayPreRoll"),
-        (2696, "History"),
-        (2921, "Injury Report"),
-        (19596, "InjuryReport"),
-        (28891, "Inside Training Camp"),
-        (3466, "Know The Enemy"),
-        (3346, "Live Reports"),
-        (2676, "Lunch Break"),
-        (2666, "Misc"),
-        (2661, "NFL"),
-        (3446, "nopreroll"),
-        (3231, "On Air"),
-        (2611, "Players"),
-        (54106, "Pregame Live"),
-        (43651, "Press Conferences"),
-        (3136, "Quick Snap"),
-        (2616, "Reports"),
-        (28741, "Road Trip"),
-        (28561, "Roundtable"),
-        (28896, "Somos Cowboys"),
-        (19213, "Special Edition"),
-        (2596, "Talkin Cowboys"),
-        (2501, "Team"),
-        (3581, "The Blitz"),
-        (19696, "The Jason Garrett Show"),
-        (3471, "Upon Further Review"),
-    ]
+class Team(NFL2018):
+    short = "cowboys"
+    hostname = "www.dallascowboys.com"
 
     def __init__(self, parameters):
-        self._parameters = parameters
-        self.go()
+        self.parameters = parameters
+        NFL2018.__init__(self)

@@ -1,29 +1,10 @@
-import resources.lib.nflcs
+from resources.lib.nfl2018 import NFL2018
 
 
-class Team(resources.lib.nflcs.NFLCS):
-    _short = "falcons"
-    _cdaweb_url = "http://www.atlantafalcons.com/cda-web/"
-    _categories = [
-        "Video - Cheerleaders",
-        "Video - Coach's Corner",
-        "Video - Community",
-        "Video - D-Block",
-        "Video - Draft",
-        "Video - FalconCast",
-        "Video - FalconsLIVE",
-        "Video - Features",
-        "Video - Gameday",
-        "Video - Highlights",
-        "Video - History",
-        "Video - Interviews & Press Conferences",
-        "Video - New Stadium",
-        "Video - NFL Network",
-        "Video - Playoffs",
-        "Video - Quick Hits",
-        "Video - Training Camp",
-    ]
+class Team(NFL2018):
+    short = "falcons"
+    hostname = "www.atlantafalcons.com"
 
     def __init__(self, parameters):
-        self._parameters = parameters
-        self.go()
+        self.parameters = parameters
+        NFL2018.__init__(self)

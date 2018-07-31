@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tvcatchups" version="1.0.4" name="TVCatchup" provider-name="Lunatixz">
+<addon id="plugin.video.tvcatchups" version="1.0.5" name="TVCatchup" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -16,7 +16,7 @@
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
         <source>https://github.com/Lunatixz/KODI_ADDONS/tree/master/plugin.video.tvcatchups</source>
         <website>https://www.tvcatchup.com</website>
-        <news>v1.0.4[CR]- Updated Parser, Fixed Localtime and EPG Timeline[CR]v1.0.2[CR]- Fixed EPG Timezone Offsets[CR]v1.0.1[CR]- Added EPG[CR] - Improved interface[CR]</news>
+        <news>v1.0.5[CR]- Fixed Image Download[CR]- Corrected missing lineups[CR]v1.0.4[CR]- Updated Parser, Fixed Localtime and EPG Timeline[CR]v1.0.2[CR]- Fixed EPG Timezone Offsets[CR]v1.0.1[CR]- Added EPG[CR] - Improved interface[CR]</news>
         <forum>https://forum.kodi.tv/showthread.php?tid=330887</forum>
         <assets>
             <icon>resources/images/icon.png</icon>

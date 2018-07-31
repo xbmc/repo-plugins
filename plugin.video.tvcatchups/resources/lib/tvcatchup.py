@@ -17,7 +17,7 @@
 # along with TVCatchup.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, re, traceback, pytz, calendar
+import os, sys, time, _strptime, datetime, re, traceback, pytz, calendar
 import urlparse, urllib, urllib2, socket, json, threading
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
 
@@ -44,6 +44,7 @@ ICON_URL      = 'http://images-cache.tvcatchup.com/NEW/images/channels/hover/cha
 LIVE_URL      = BASE_URL + '/channels'
 GUIDE_URL     = BASE_URL + '/tv-guide'
 LOGO          = os.path.join(SETTINGS_LOC,'%s.png')
+if xbmcvfs.exists(SETTINGS_LOC) == False: xbmcvfs.mkdirs(SETTINGS_LOC)
 MAIN_MENU     = [(LANGUAGE(30003), '' , 1),
                  (LANGUAGE(30004), '' , 2),
                  (LANGUAGE(30005), '' , 20)]
@@ -62,6 +63,7 @@ def trimString(string1):
 def retrieveURL(url, dest):
     try: urllib.urlretrieve(url, dest)
     except Exception as e: log("retrieveURL, Failed! " + str(e), xbmc.LOGERROR)
+    return True
     
 socket.setdefaulttimeout(TIMEOUT)  
 class TVCatchup(object):
@@ -74,18 +76,23 @@ class TVCatchup(object):
         
     def getDuration(self, timeString):
         starttime, endtime = timeString.split('-')
-        tdelta = (datetime.datetime.strptime(endtime, '%H:%M') - datetime.datetime.strptime(starttime, '%H:%M'))
-        return tdelta.seconds
+        try: endtime = datetime.datetime.strptime(endtime, '%H:%M') 
+        except TypeError: endtime = datetime.datetime(*(time.strptime(endtime, '%H:%M')[0:6]))
+        try: starttime = datetime.datetime.strptime(starttime, '%H:%M') 
+        except TypeError: starttime = datetime.datetime(*(time.strptime(starttime, '%H:%M')[0:6]))
+        durtime = (endtime - starttime)
+        return durtime.seconds
         
         
-    def getLocaltime(self, timeString):
-        log('getLocaltime')
+    def getLocaltime(self, timeString, dst=False):
         ltz   = pytz.timezone('Europe/London')
-        ltime = datetime.datetime.strptime(timeString, '%H:%M').time()
+        try: ltime = datetime.datetime.strptime(timeString, '%H:%M').time()
+        except TypeError: ltime = datetime.datetime(*(time.strptime(timeString, '%H:%M')[0:6])).time()
         ldate = datetime.datetime.now(ltz).date()
         ltime = ltz.localize((datetime.datetime.combine(ldate, ltime)))
         ltime = ltime.astimezone(pytz.timezone('UTC')).replace(tzinfo=None)
-        return ltime - (datetime.datetime.utcnow() - datetime.datetime.now())
+        if dst: return ltime - ((datetime.datetime.utcnow() - datetime.datetime.now()) +  datetime.timedelta(hours=time.daylight))
+        else: return ltime - (datetime.datetime.utcnow() - datetime.datetime.now())
         
         
     def openURL(self, url):
@@ -152,19 +159,20 @@ class TVCatchup(object):
             elif name.lower() == chname.lower().replace('+',' '):
                 items = channel('div' , {'class': 'hide'})
                 for item in items:
-                    try:  
-                        stime = trimString(item.find_all('span')[0].get_text())
-                        dur   = self.getDuration(stime)
-                        start = self.getLocaltime(stime.split('-')[0])
-                        aired = start.strftime('%Y-%m-%d')
-                        start = start.strftime('%I:%M %p')
-                    except: continue
+                    stime = item.find_all('span')
+                    if not stime: continue
+                    stime = trimString(stime[0].get_text())
+                    dur   = self.getDuration(stime)
+                    start = self.getLocaltime(stime.split('-')[0])
+                    aired = start.strftime('%Y-%m-%d')
+                    start = start.strftime('%I:%M %p')
                     label = '%s: %s - %s'%(start,chname,cleanString(item.get_text()).split('\n')[0])
                     try: desc = trimString(item.find_all('br')[0].get_text())
                     except: desc = ''
                     infoLabels = {"mediatype":"episode","label":label ,"title":label,"plot":desc,"duration":dur,"aired":aired}
                     infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":thumb,"logo":thumb}
                     self.addLink(label, link, 9, infoLabels, infoArt, len(items))
+                    # except Exception as e: log('buildLineup, failed! ' + str(e), xbmc.LOGERROR)
                 break
             
 
@@ -197,7 +205,7 @@ class TVCatchup(object):
                 dur   = self.getDuration(stime)
                 title = cleanString(item.get_text()).split('\n')[0]
                 label = '%s - %s'%(chname,title)
-                start = self.getLocaltime(stime.split('-')[0])
+                start = self.getLocaltime(stime.split('-')[0], True)
                 starttime = time.mktime(start.timetuple())
             except: continue
             try: desc = trimString(item.find_all('br')[0].get_text())

@@ -1,3 +1,6 @@
+v2.5.39
+Fixed Channel A-Z.
+
 v2.5.38
 Fixed single episodes in A-Z.
 

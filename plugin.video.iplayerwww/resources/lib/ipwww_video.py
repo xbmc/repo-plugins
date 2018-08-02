@@ -549,166 +549,69 @@ def ScrapeAtoZEpisodes(page_url):
     total_pages = 1
     current_page = 1
     page_range = range(1)
-    paginate = re.search(r'<ul class="pagination.*?</ul>', html, re.DOTALL)
-    next_page = 1
-    if paginate:
-        page_base_url_match = re.search(r'(.+?)page=', page_url)
-        if page_base_url_match:
-            page_base_url = page_base_url_match.group(0)
-        else:
-            page_base_url = page_url+"?page="
-        if int(ADDON.getSetting('paginate_episodes')) == 0:
-            current_page_match = re.search(r'page=(\d*)', page_url)
-            if current_page_match:
-                current_page = int(current_page_match.group(1))
+
+    # There is a new layout for episodes, scrape it from the JSON received as part of the page
+    match = re.search(
+              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
+              html, re.DOTALL)
+    if match:
+        data = match.group(1)
+        json_data = json.loads(data)
+        # print json.dumps(json_data, indent=2, sort_keys=True)
+
+        last_page = 1
+        current_page = 1
+        if 'pagination' in json_data['initialState']:
             page_base_url_match = re.search(r'(.+?)page=', page_url)
             if page_base_url_match:
                 page_base_url = page_base_url_match.group(0)
             else:
                 page_base_url = page_url+"?page="
-            page_range = range(current_page, current_page+1)
-            next_page_match = re.search(r'pagination__item--next">\n.+?<a href="\?page=(.*?)"',
-                                        paginate.group(0),
-                                        re.DOTALL)
-            if next_page_match:
-                next_page = int(next_page_match.group(1))
-            else:
-                next_page = current_page
-            page_range = range(current_page, current_page+1)
-        else:
-            pages = re.findall(r'pagination__item--page">.+?<a href=".+?"',paginate.group(0),re.DOTALL)
-            if pages:
-                last = pages[-1]
-                last_page = re.search(r'<a href="\?page=(.*?)"',last)
-                total_pages = int(last_page.group(1))
-            page_range = range(1, total_pages+1)
-
-    for page in page_range:
-
-        if page > current_page:
-            page_url = page_base_url + str(page)
-            html = OpenURL(page_url)
-
-        # NOTE remove inner li to match outer li
-
-        # <li data-version-type="hd">
-        html = re.compile(r'<li class="content-flags__item" data-version-type.*?</li>',
-                          flags=(re.DOTALL | re.MULTILINE)).sub('', html)
-
-        # <li class="list-item programme"  data-ip-id="p026f2t4">
-        list_items = re.findall(r'<li class="list-item.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
-
-        list_item_num = 1
-
-        for li in list_items:
-
-            search_group = False
-
-            main_url = None
-            # <a href="/iplayer/episode/b08jny1j/antiques-road-trip-series-13-reversions-episode-10"
-            # title="Antiques Road Trip, Series 13 Reversions: Episode 10" class="list-item__main-link">
-            url_match = re.search(
-                r'<a.*?href="(.*?)".*?list-item__main-link.*?>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if url_match:
-                url = url_match.group(1)
-                if url:
-                    main_url = 'https://www.bbc.co.uk' + url
-
-            name = ''
-            title = ''
-            #<h1 class="list-item__title typo typo--bold typo--goose">Antiques Road Trip</h1>
-            #<h2 class="list-item__title typo typo--bold typo--goose">A1: Britain's Longest Road</h2>
-            title_match = re.search(
-                r'<.+?list-item__title.+?>(.*?)<',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if title_match:
-                title = title_match.group(1).strip()
-                name = title
-
-            subtitle = None
-            # <h2 class="list-item__programme-info__subtitle typo typo--skylark">
-            # Series 39: 14. Burton Constable 2</h2>
-            subtitle_match = re.search(
-                r'<.+?class="list-item__programme-info__subtitle.+?">(.*?)<',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if subtitle_match:
-                subtitle = subtitle_match.group(1)
-                if subtitle:
-                    name = name + " - " + subtitle
-
-            icon = ''
-            # <source srcset="http://ichef.bbci.co.uk/images/ic/336x189/p04cd999.jpg"
-            icon_match = re.search(
-                r'<source.*?srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if icon_match:
-                image = icon_match.group(1)
-                if image:
-                    icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
-
-            type = None
-            synopsis = ''
-            # <p class="list-item__programme-info__synopsis">
-            # Take an exclusive first look at this year’s candidates.
-            # </p>
-            synopsis_match = re.search(
-                r'<p class="list-item__programme-info__synopsis.*?">\s*(.*?)\s*</p>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if synopsis_match:
-                synopsis = synopsis_match.group(1)
-
-            aired = ''
-            # <p class="metadata__item typo typo--bullfinch">First shown: 10 Jun 2016</p>
-            release_match = re.search(
-                r'<p class="metadata__item.*?>First shown:\s*(.*?)</p>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if release_match:
-                release = release_match.group(1)
-                if release:
-                    aired = FirstShownToAired(release)
-
-            episodes = None
-            # <div class="list-item__episodes-button
-            # list-item__episodes-button--only-bp3 gel-layout__item">
-            # <a href="/iplayer/episodes/b07gx71q"
-            # class="button button--with-link button--left-align button--full-width ">
-            episodes_match = re.search(
-                r'<div class="list-item__episodes-button.+?href="(.*?)"',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if episodes_match:
-                episodes = episodes_match.group(1)
-
-            more = None
-            # <span class="button__text typo typo--bullfinch typo--bold">12 available episodes</span>
-            more_match = re.search(
-                r'<span class="button__text.+?">(.*?) available episodes</span>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if more_match:
-                more = more_match.group(1)
-
-            if episodes:
-                episodes_url = 'https://www.bbc.co.uk' + episodes
-                if search_group:
-                    AddMenuEntry('[B]%s[/B] - %s' % (title, translation(30318)),
-                                 episodes_url, 128, icon, '', '')
+            current_page = json_data['initialState']['pagination'].get('currentPage')
+            last_page = json_data['initialState']['pagination'].get('totalPages')
+            if int(ADDON.getSetting('paginate_episodes')) == 0:
+                current_page_match = re.search(r'page=(\d*)', page_url)
+                if current_page_match:
+                    current_page = int(current_page_match.group(1))
+                page_base_url_match = re.search(r'(.+?)page=', page_url)
+                if page_base_url_match:
+                    page_base_url = page_base_url_match.group(0)
                 else:
-                    AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
-                                 episodes_url, 128, icon, '', '')
-            elif more:
-                AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
-                             main_url, 128, icon, '', '')
+                    page_base_url = page_url+"?page="
+                if current_page < last_page:
+                    next_page = curent_page+1
+                else:
+                   next_page = current_page
+                page_range = range(current_page, current_page+1)
+            else:
+                page_range = range(1, last_page+1)
 
-            if type != "group":
-                CheckAutoplay(name , main_url, icon, synopsis, aired)
+        for page in page_range:
 
-            percent = int(100*(page+list_item_num/len(list_items))/total_pages)
-            pDialog.update(percent,translation(30319),name)
+            if page > current_page:
+                page_url = page_base_url + str(page)
+                html = OpenURL(page_url)
 
-            list_item_num += 1
+            match = re.search(
+                      r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
+                      html, re.DOTALL)
+            if match:
+                data = match.group(1)
+                json_data = json.loads(data)
 
-        percent = int(100*page/total_pages)
-        pDialog.update(percent,translation(30319))
+                index = 1
+                for entity in json_data['initialState']['entities']:
+                    item = entity.get("props")
+                    if not item:
+                        continue
+                    ParseHighlightsJSON(item)
+
+                    percent = int(100*(page+index/len(json_data['initialState']['entities']))/last_page)
+                    pDialog.update(percent,translation(30319))
+                    index += 1
+
+            percent = int(100*page/last_page)
+            pDialog.update(percent,translation(30319))
 
     if int(ADDON.getSetting('paginate_episodes')) == 0:
         if current_page < next_page:

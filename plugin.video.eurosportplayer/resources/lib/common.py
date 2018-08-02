@@ -17,6 +17,7 @@ class Common:
     def __init__(self, addon_handle=None, addon_url=None):
         self.base_url = 'http://www.eurosportplayer.com'
         self.global_base = 'https://global-api.svcs.eurosportplayer.com/'
+        self.west_base = 'https://eu-west-1-api.svcs.eurosportplayer.com/'
         self.search_base = 'https://search-api.svcs.eurosportplayer.com/'
         self.time_format = '%Y-%m-%dT%H:%M:%SZ'
         self.date_format = '%Y-%m-%d'

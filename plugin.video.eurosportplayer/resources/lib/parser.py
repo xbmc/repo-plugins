@@ -119,12 +119,14 @@ class Parser:
         resolved = False
         if data.get('stream'):
             stream = data['stream']
-            for i in stream.keys():
-                if isinstance(stream[i], unicode) and stream[i].startswith('http'):
-                    path = stream[i].replace('desktop','wired50')
-                    resolved = True
-                    break
-            key = data['license_key']
+            if stream.get('slide'):
+                path = stream['slide']
+            elif stream.get('complete'):
+                path = stream['complete']
+            if path:
+                resolved = True
+                path = path.replace('desktop','wired50')
+                key = data['license_key']
         self.items.play_item(path, key, resolved)
 
     def license_renewal(self, license_key):

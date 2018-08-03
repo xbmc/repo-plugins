@@ -144,7 +144,7 @@ class VRTPlayer:
         title_items = []
         episode_list = soup.find("div", {"id" : "episodes-list"})
 
-        for tile in episode_list.find_all(class_="vrtnu-list--item "):
+        for tile in episode_list.find_all("li"):
             thumbnail = VRTPlayer.__format_image_url(tile)
             found_element = tile.find(class_="vrtnu-list--item-meta")
 

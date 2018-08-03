@@ -44,6 +44,10 @@ msgctxt "#30021"
 msgid "Inputstream Adaptive Settings..."
 msgstr ""
 
+msgctxt "#30022"
+msgid "Compatibility Mode"
+msgstr ""
+
 msgctxt "#30214"
 msgid "Switch to Sport"
 msgstr ""

@@ -133,6 +133,8 @@ def _request(method, url,
         # HTTPError implements addinfourl, so we can use the exception to construct a response
         if isinstance(e, urllib2.addinfourl):
             response = e
+    except Exception:
+        return result
 
     # process response
     result.headers.update(response.headers)

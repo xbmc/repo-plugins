@@ -23,6 +23,7 @@ class Common:
         self.time_format = '%Y-%m-%dT%H:%M:%SZ'
         self.date_format = '%Y-%m-%d'
         self.portability_list = ['AT', 'DE', 'IT']
+        self.compatibility_list = ['dc1', 'dc2', 'dc3', 'dc4']
 
         addon = self.get_addon()
         self.addon_handle = addon_handle
@@ -38,6 +39,7 @@ class Common:
         self.view_id_epg = addon.getSetting('view_id_epg')
         self.force_view = addon.getSetting('force_view') == 'true'
         self.startup = addon.getSetting('startup') == 'true'
+        self.compatibility_mode = addon.getSetting('compatibility_mode') == 'true'
 
     def utfenc(self, text):
         result = text

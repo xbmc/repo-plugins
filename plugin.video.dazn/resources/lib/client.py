@@ -25,9 +25,9 @@ class Client:
             '$format': 'json'
         }
 
-        self.STARTUP = self.plugin.api_base + 'v4/Startup'
+        self.STARTUP = self.plugin.api_base + 'v5/Startup'
         self.RAIL = self.plugin.api_base + 'v2/Rail'
-        self.RAILS = self.plugin.api_base + 'v5/Rails'
+        self.RAILS = self.plugin.api_base + 'v6/Rails'
         self.EPG = self.plugin.api_base + 'v1/Epg'
         self.EVENT = self.plugin.api_base + 'v2/Event'
         self.PLAYBACK = self.plugin.api_base + 'v2/Playback'

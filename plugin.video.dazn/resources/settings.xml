@@ -17,5 +17,6 @@
     </category>
     <category label="30020">
         <setting label="30021" type="action" id="is_settings" action="RunPlugin(plugin://plugin.video.dazn/?mode=is_settings)" option="close"/>
+        <setting label="30022" type="bool" id="compatibility_mode" default="true"/>
     </category>
 </settings>

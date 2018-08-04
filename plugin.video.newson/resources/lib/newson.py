@@ -65,12 +65,10 @@ class NewsOn(object):
             cacheResponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
             if not cacheResponse:
                 request = urllib2.Request(url)
-                request.add_header('Accept-encoding', 'gzip')
+                request.add_header('Accept-Encoding', 'gzip')
                 request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
                 response = urllib2.urlopen(request, timeout = TIMEOUT)
-                log('openURL, type = ' + response.headers['content-type'])
-                log('openURL, encoding = ' + response.headers['content-encoding'])
-                if response.info().get('content-encoding') == 'gzip': cacheResponse = gzip.GzipFile(fileobj=StringIO(response.read())).read()
+                if response.info().get('Content-Encoding') == 'gzip': cacheResponse = gzip.GzipFile(fileobj=StringIO(response.read())).read()
                 else: cacheResponse = response
                 response.close()
                 self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheResponse, expiration=datetime.timedelta(minutes=5))
@@ -91,19 +89,23 @@ class NewsOn(object):
         log('browseMenu, id = ' + str(id))
         self.stateMenu = [tuple(s.format(id) for s in tup) for tup in self.stateMenu]
         for item in self.stateMenu: self.addDir(item[0], item[1], item[2], False, {"thumb":LOGO_URL%item[0],"poster":LOGO_URL%item[0],"fanart":FANART,"icon":ICON,"logo":ICON})
-            
-            
+
+
+    def cleanState(self, state):
+        return state.strip(',').strip()
+
+          
     def getStates(self):
         log('getStates')
         state     = []
         stateLST  = []
         data = self.openURL(BASE_API)
         if len(data) == 0: return []
-        for channel in data: 
-            try: state.append(channel['config']['state'])
-            except: pass
+        for channel in data:
+            try: state.append(self.cleanState(channel['config']['state']))
+            except: state.append(self.cleanState(channel['config']['locations'][0]['state']))
         states = collections.Counter(state)
-        for key, value in sorted(states.iteritems()): stateLST.append(("%s"%(key), key , '{}'))
+        for key, value in sorted(states.items()): stateLST.append(("%s"%(key), key , '{}'))
         return stateLST
             
             
@@ -113,8 +115,8 @@ class NewsOn(object):
         data = self.openURL(BASE_API)
         if len(data) == 0: return
         for channel in data:
-            try: states = channel['config']['state']
-            except: continue
+            try: states = self.cleanState(channel['config']['state'])
+            except: states = self.cleanState(channel['config']['locations'][0]['state'])
             if state in states:
                 chid   = channel['identifier']
                 title  = channel['title']
@@ -139,8 +141,8 @@ class NewsOn(object):
         data = self.openURL(BASE_API)
         if len(data) == 0: return
         for channel in data:
-            try: states = channel['config']['state']
-            except: continue
+            try: states = self.cleanState(channel['config']['state'])
+            except: states = self.cleanState(channel['config']['locations'][0]['state'])
             if state in states:
                 try: 
                     vidURL = channel['config']['localvodfeed']

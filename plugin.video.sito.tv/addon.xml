@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.sito.tv" name="SiTo" version="1.3.1" provider-name="SiTo.tv">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="xbmc.addon" version="13.0.0"/>
+        <import addon="script.module.kodiswift" version="0.0.8"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <news>
+            [license] GNUv3
+            [feature] Support for custom data API URL
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+
+        <platform>android linux</platform>
+        <language>en</language>
+
+        <summary lang="en_GB">Stream public domain and other non-copyrighted movies and TV-shows for free</summary>
+        <description lang="en_GB">Stream public domain and other non-copyrighted movies and TV-shows for free</description>
+        <disclaimer lang="en_GB">Requires BitX Player</disclaimer>
+
+        <license>GNU General Public License, v3</license>
+        <website>http://sito.tv/</website>
+        <email>support at sito dot tv</email>
+    </extension>
+</addon>

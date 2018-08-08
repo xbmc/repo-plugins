@@ -6,6 +6,7 @@
 import os
 import sys
 import urllib
+import urlparse
 
 import xbmc
 import xbmcgui
@@ -44,8 +45,23 @@ class KodiService( KodiAddon ):
 class KodiPlugin( KodiAddon ):
 	def __init__( self ):
 		KodiAddon.__init__( self )
+		self.args			= urlparse.parse_qs( sys.argv[2][1:] )
 		self.base_url		= sys.argv[0]
 		self.addon_handle	= int( sys.argv[1] )
+
+	def get_arg( self, argname, default ):
+		try:
+			return self.args[argname][0]
+		except TypeError:
+			return default
+		except KeyError:
+			return default
+
+	def get_args( self, argname, default ):
+		try:
+			return self.args[argname]
+		except KeyError:
+			return default
 
 	def build_url( self, query ):
 		return self.base_url + '?' + urllib.urlencode( query )
@@ -53,16 +69,25 @@ class KodiPlugin( KodiAddon ):
 	def runPlugin( self, params ):
 		xbmc.executebuiltin( 'RunPlugin({})'.format( self.build_url( params ) ) )
 
-	def addActionItem( self, name, params ):
-		self.addDirectoryItem( name, params, False )
+	@staticmethod
+	def runBuiltin( builtin ):
+		xbmc.executebuiltin( builtin )
 
-	def addFolderItem( self, name, params ):
-		self.addDirectoryItem( name, params, True )
+	def setResolvedUrl( self, succeeded, listitem ):
+		xbmcplugin.setResolvedUrl( self.addon_handle, succeeded, listitem )
 
-	def addDirectoryItem( self, name, params, isFolder ):
+	def addActionItem( self, name, params, contextmenu = None ):
+		self.addDirectoryItem( name, params, False, contextmenu )
+
+	def addFolderItem( self, name, params, contextmenu = None ):
+		self.addDirectoryItem( name, params, True, contextmenu )
+
+	def addDirectoryItem( self, name, params, isFolder, contextmenu = None ):
 		if isinstance( name, int ):
 			name = self.language( name )
 		li = xbmcgui.ListItem( name )
+		if contextmenu is not None:
+			li.addContextMenuItems( contextmenu )
 		xbmcplugin.addDirectoryItem(
 			handle		= self.addon_handle,
 			url			= self.build_url( params ),

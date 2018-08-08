@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mediathekview"
 	name="MediathekView"
-	version="0.4.2"
+	version="0.5.0"
 	provider-name="MediathekView.de, Leo Moll">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0"/>
@@ -26,7 +26,26 @@
 		<description lang="de_DE">Ermöglicht den Zugriff auf fast alle deutschen Mediatheken der öffentlich Rechtlichen basierend auf der Datenbank von MediathekView.de</description>
 		<description lang="en_GB">Gives access to most video-platforms from German public service broadcasters using the database of MediathekView.de</description>
 		<description lang="it_IT">Fornisce l'accesso a gran parte delle piattaforme video operate dalle emittenti pubbliche tedesche usando la banca dati di MediathekView.de</description>
-		<news>v0.4.2 (2018-01-20):
+		<news>v0.5.0 (2018-08-08):
+- Bei manchen Filme fehlte im Kontext-Menü die Möglichkeit sie herunterzuladen
+- Old Maria DB / MySQL support
+- Datenbank-Downloads werden direkt nach der Verarbeitung gelöscht
+- Abspielen mit Untertitel wahlweise aus dem Kontext-Menü oder immer (Einstellung)
+- Letzte Suchvorgänge
+- Auflistung der Life-Streams beschleunigt
+- Möglichkeit eine Sendung als Film oder als Episode einer Serie herunterzuladen
+- Auf gewissen Systemen ist die Erzeugung der SQLite Datenbank fehlgeschlagen
+- Effizientere Datenbankstruktur
+- "mvupdate" hat die neuen Optionen --force und --intervall
+- Verschiedene Optionen bezüglich NFO-Dateien
+- Automatische Erkennung von Staffel und Folge
+- Verbesserte Download-Einstellungen
+- "Update bei Start" aktualisiert erst beim ersten Addon-Aufruf
+- Typ und Version der SQL Datenbank wird nun im Log angezeigt
+v0.4.3 (2018-01-27):
+- Verschiedene Aktualisierungsmodi (Manuell, Beim Start, Automatisch) sparen Bandbreite und Energie
+- Abspielen eines Films aus den Suchergebnissen löscht nun die Liste nicht mehr
+v0.4.2 (2018-01-20):
 - Senderlogos werden nun in verschiedenen Situationen angezeigt
 - Fehler bei Auflisten der Filme in "Alle Sendungen" aus 0.4.1 behoben
 - Fehler bei Datenbankaktualisierung behoben

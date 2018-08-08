@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017 Leo Moll
-#
+"""
+The MySQL database support module
+
+Copyright 2017-20180 Leo Moll and Dominik Schlösser
+"""
+# pylint: disable=import-error
+# pylint: disable=mixed-indentation, bad-whitespace, bad-continuation, missing-docstring
 
 # -- Imports ------------------------------------------------
 import time
@@ -12,19 +17,27 @@ from resources.lib.film import Film
 
 # -- Classes ------------------------------------------------
 class StoreMySQL( object ):
+	"""The MySQL database support class"""
+
 	def __init__( self, logger, notifier, settings ):
 		self.conn		= None
 		self.logger		= logger
 		self.notifier	= notifier
 		self.settings	= settings
+		# updater state variables
+		self.ft_channel = None
+		self.ft_channelid = None
+		self.ft_show = None
+		self.ft_showid = None
 		# useful query fragments
+		# pylint: disable=line-too-long
 		self.sql_query_films	= "SELECT film.id,`title`,`show`,`channel`,`description`,TIME_TO_SEC(`duration`) AS `seconds`,`size`,`aired`,`url_sub`,`url_video`,`url_video_sd`,`url_video_hd` FROM `film` LEFT JOIN `show` ON show.id=film.showid LEFT JOIN `channel` ON channel.id=film.channelid"
 		self.sql_query_filmcnt	= "SELECT COUNT(*) FROM `film` LEFT JOIN `show` ON show.id=film.showid LEFT JOIN `channel` ON channel.id=film.channelid"
 		self.sql_cond_recent	= "( TIMESTAMPDIFF(SECOND,{},CURRENT_TIMESTAMP()) <= {} )".format( "aired" if settings.recentmode == 0 else "film.dtCreated", settings.maxage )
 		self.sql_cond_nofuture	= " AND ( ( `aired` IS NULL ) OR ( TIMESTAMPDIFF(HOUR,`aired`,CURRENT_TIMESTAMP()) > 0 ) )" if settings.nofuture else ""
 		self.sql_cond_minlength	= " AND ( ( `duration` IS NULL ) OR ( TIME_TO_SEC(`duration`) >= %d ) )" % settings.minlength if settings.minlength > 0 else ""
 
-	def Init( self, reset = False ):
+	def Init( self, reset, convert ):
 		self.logger.info( 'Using MySQL connector version {}', mysql.connector.__version__ )
 		try:
 			self.conn		= mysql.connector.connect(
@@ -33,36 +46,46 @@ class StoreMySQL( object ):
 				user		= self.settings.user,
 				password	= self.settings.password
 			)
+			try:
+				cursor = self.conn.cursor()
+				cursor.execute( 'SELECT VERSION()' )
+				( version, ) = cursor.fetchone()
+				self.logger.info( 'Connected to server {} running {}', self.settings.host, version )
+			# pylint: disable=broad-except
+			except Exception:
+				self.logger.info( 'Connected to server {}', self.settings.host )
 			self.conn.database = self.settings.database
 		except mysql.connector.Error as err:
 			if err.errno == mysql.connector.errorcode.ER_BAD_DB_ERROR:
 				self.logger.info( '=== DATABASE {} DOES NOT EXIST. TRYING TO CREATE IT ===', self.settings.database )
-				self._handle_database_initialization()
-				return
+				return self._handle_database_initialization()
 			self.conn = None
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
+			return False
+
+		# handle schema versioning
+		return self._handle_database_update( convert )
 
 	def Exit( self ):
 		if self.conn is not None:
 			self.conn.close()
+			self.conn = None
 
-	def Search( self, search, filmui ):
+	def Search( self, search, filmui, extendedsearch ):
 		searchmask = '%' + search.decode('utf-8') + '%'
-		self._Search_Condition( '( ( `title` LIKE %s ) OR ( `show` LIKE %s ) )', ( searchmask, searchmask, ), filmui, True, True, self.settings.maxresults )
-
-	def SearchFull( self, search, filmui ):
-		searchmask = '%' + search.decode('utf-8') + '%'
-		self._Search_Condition( '( ( `title` LIKE %s ) OR ( `show` LIKE %s ) OR ( `description` LIKE %s ) )', ( searchmask, searchmask, searchmask ), filmui, True, True, self.settings.maxresults )
+		searchcond = '( ( `title` LIKE %s ) OR ( `show` LIKE %s ) OR ( `description` LIKE %s ) )' if extendedsearch is True else '( ( `title` LIKE %s ) OR ( `show` LIKE %s ) )'
+		searchparm = ( searchmask, searchmask, searchmask ) if extendedsearch is True else ( searchmask, searchmask, )
+		return self._Search_Condition( searchcond, searchparm, filmui, True, True, self.settings.maxresults )
 
 	def GetRecents( self, channelid, filmui ):
 		if channelid != '0':
-			self._Search_Condition( self.sql_cond_recent + ' AND ( film.channelid=%s )', ( int( channelid ), ), filmui, True, False, 10000 )
+			return self._Search_Condition( self.sql_cond_recent + ' AND ( film.channelid=%s )', ( int( channelid ), ), filmui, True, False, 10000 )
 		else:
-			self._Search_Condition( self.sql_cond_recent, (), filmui, True, False, 10000 )
+			return self._Search_Condition( self.sql_cond_recent, (), filmui, True, False, 10000 )
 
 	def GetLiveStreams( self, filmui ):
-		self._Search_Condition( '( show.search="LIVESTREAM" )', (), filmui, False, False, 10000 )
+		return self._Search_Condition( '( show.search="LIVESTREAM" )', (), filmui, False, False, 0, False )
 
 	def GetChannels( self, channelui ):
 		self._Channels_Condition( None, channelui )
@@ -104,7 +127,7 @@ class StoreMySQL( object ):
 			initialui.End()
 			cursor.close()
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 
 	def GetShows( self, channelid, initial, showui ):
@@ -168,7 +191,7 @@ class StoreMySQL( object ):
 			showui.End()
 			cursor.close()
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 
 	def GetFilms( self, showid, filmui ):
@@ -176,10 +199,10 @@ class StoreMySQL( object ):
 			return
 		if showid.find( ',' ) == -1:
 			# only one channel id
-			self._Search_Condition( '( `showid` = %s )', ( int( showid ), ), filmui, False, False, 10000 )
+			return self._Search_Condition( '( `showid` = %s )', ( int( showid ), ), filmui, False, False, 10000 )
 		else:
 			# multiple channel ids
-			self._Search_Condition( '( `showid` IN ( {} ) )'.format( showid ), (), filmui, False, True, 10000 )
+			return self._Search_Condition( '( `showid` IN ( {} ) )'.format( showid ), (), filmui, False, True, 10000 )
 
 	def _Channels_Condition( self, condition, channelui):
 		if self.conn is None:
@@ -201,28 +224,30 @@ class StoreMySQL( object ):
 			channelui.End()
 			cursor.close()
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 
-	def _Search_Condition( self, condition, params, filmui, showshows, showchannels, maxresults ):
+	def _Search_Condition( self, condition, params, filmui, showshows, showchannels, maxresults, limiting = True ):
 		if self.conn is None:
-			return
+			return 0
 		try:
+			if limiting:
+				sql_cond_limit = self.sql_cond_nofuture + self.sql_cond_minlength
+			else:
+				sql_cond_limit = ''
 			self.logger.info( 'MySQL Query: {}',
 				self.sql_query_films +
 				' WHERE ' +
 				condition +
-				self.sql_cond_nofuture +
-				self.sql_cond_minlength
+				sql_cond_limit
 			)
 			cursor = self.conn.cursor()
 			cursor.execute(
 				self.sql_query_filmcnt +
 				' WHERE ' +
 				condition +
-				self.sql_cond_nofuture +
-				self.sql_cond_minlength +
-				' LIMIT {}'.format( maxresults + 1 ) if maxresults else '',
+				sql_cond_limit +
+				( ' LIMIT {}'.format( maxresults + 1 ) if maxresults else '' ),
 				params
 			)
 			( results, ) = cursor.fetchone()
@@ -232,9 +257,8 @@ class StoreMySQL( object ):
 				self.sql_query_films +
 				' WHERE ' +
 				condition +
-				self.sql_cond_nofuture +
-				self.sql_cond_minlength +
-				' LIMIT {}'.format( maxresults + 1 ) if maxresults else '',
+				sql_cond_limit +
+				( ' LIMIT {}'.format( maxresults + 1 ) if maxresults else '' ),
 				params
 			)
 			filmui.Begin( showshows, showchannels )
@@ -242,9 +266,11 @@ class StoreMySQL( object ):
 				filmui.Add( totalItems = results )
 			filmui.End()
 			cursor.close()
+			return results
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
+			return 0
 
 	def RetrieveFilmInfo( self, filmid ):
 		if self.conn is None:
@@ -268,11 +294,11 @@ class StoreMySQL( object ):
 				return film
 			cursor.close()
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 		return None
 
-	def GetStatus( self ):
+	def GetStatus( self, reconnect = True ):
 		status = {
 			'modified': int( time.time() ),
 			'status': '',
@@ -317,7 +343,13 @@ class StoreMySQL( object ):
 			status['tot_mov']		= r[0][13]
 			return status
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			if err.errno == -1:
+				# connection lost. Retry:
+				self.logger.warn( 'Database connection lost. Trying to reconnect...' )
+				if self.reinit():
+					self.logger.info( 'Reconnection successful' )
+					return self.GetStatus( False )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 			status['status'] = "UNINIT"
 			return status
@@ -449,11 +481,16 @@ class StoreMySQL( object ):
 			cursor.close()
 			self.conn.commit()
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 
-	def SupportsUpdate( self ):
+	@staticmethod
+	def SupportsUpdate():
 		return True
+
+	def reinit( self ):
+		self.Exit()
+		return self.Init( False, False )
 
 	def ftInit( self ):
 		# prevent concurrent updating
@@ -494,7 +531,7 @@ class StoreMySQL( object ):
 			cursor.close()
 			self.conn.commit()
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 		return ( 0, 0, 0, )
 
@@ -512,7 +549,7 @@ class StoreMySQL( object ):
 			cursor.close()
 			self.conn.commit()
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 		return ( 0, 0, 0, 0, 0, 0, )
 
@@ -521,20 +558,23 @@ class StoreMySQL( object ):
 		inschn = 0
 		insshw = 0
 		insmov = 0
+		channel = film['channel'][:64]
+		show	= film['show'][:128]
+		title	= film['title'][:128]
 
 		# handle channel
-		if self.ft_channel != film['channel']:
+		if self.ft_channel != channel:
 			# process changed channel
 			newchn = True
-			self.ft_channel = film['channel']
+			self.ft_channel = channel
 			( self.ft_channelid, inschn ) = self._insert_channel( self.ft_channel )
 			if self.ft_channelid == 0:
 				self.logger.info( 'Undefined error adding channel "{}"', self.ft_channel )
 				return ( 0, 0, 0, 0, )
 
-		if newchn or self.ft_show != film['show']:
+		if newchn or self.ft_show != show:
 			# process changed show
-			self.ft_show = film['show']
+			self.ft_show = show
 			( self.ft_showid, insshw ) = self._insert_show( self.ft_channelid, self.ft_show, mvutils.make_search_string( self.ft_show ) )
 			if self.ft_showid == 0:
 				self.logger.info( 'Undefined error adding show "{}"', self.ft_show )
@@ -545,8 +585,8 @@ class StoreMySQL( object ):
 			cursor.callproc( 'ftInsertFilm', (
 				self.ft_channelid,
 				self.ft_showid,
-				film["title"],
-				mvutils.make_search_string( film['title'] ),
+				title,
+				mvutils.make_search_string( title ),
 				film["aired"],
 				film["duration"],
 				film["size"],
@@ -569,7 +609,7 @@ class StoreMySQL( object ):
 				if commit:
 					self.conn.commit()
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 		return ( 0, 0, 0, 0, )
 
@@ -586,7 +626,7 @@ class StoreMySQL( object ):
 			cursor.close()
 			self.conn.commit()
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 		return ( 0, 0, )
 
@@ -603,9 +643,87 @@ class StoreMySQL( object ):
 			cursor.close()
 			self.conn.commit()
 		except mysql.connector.Error as err:
-			self.logger.error( 'Database error: {}', err )
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
 			self.notifier.ShowDatabaseError( err )
 		return ( 0, 0, )
+
+	def _get_schema_version( self ):
+		if self.conn is None:
+			return 0
+		cursor = self.conn.cursor()
+		try:
+			cursor.execute( 'SELECT `version` FROM `status` LIMIT 1' )
+			( version, ) = cursor.fetchone()
+			del cursor
+			return version
+		except mysql.connector.errors.ProgrammingError:
+			return 1
+		except mysql.connector.Error as err:
+			self.logger.error( 'Database error: {}, {}', err.errno, err )
+			self.notifier.ShowDatabaseError( err )
+			return 0
+
+	def _handle_database_update( self, convert, version = None ):
+		if version is None:
+			return self._handle_database_update( convert, self._get_schema_version() )
+		if version == 0:
+			# should never happen - something went wrong...
+			self.Exit()
+			return False
+		elif version == 2:
+			# current version
+			return True
+		elif convert is False:
+			# do not convert (Addon threads)
+			self.Exit()
+			self.notifier.ShowUpdatingScheme()
+			return False
+		elif version == 1:
+			# convert from 1 to 2
+			self.logger.info( 'Converting database to version 2' )
+			self.notifier.ShowUpdateSchemeProgress()
+			try:
+				cursor = self.conn.cursor()
+				cursor.execute( 'SELECT @@SESSION.sql_mode' )
+				( sql_mode, ) = cursor.fetchone()
+				self.logger.info( 'Current SQL mode is {}', sql_mode )
+				cursor.execute( 'SET SESSION sql_mode = ""' )
+
+				self.logger.info( 'Reducing channel name length...' )
+				cursor.execute( 'ALTER TABLE `channel` CHANGE COLUMN `channel` `channel` varchar(64) NOT NULL')
+				self.notifier.UpdateUpdateSchemeProgress( 5 )
+				self.logger.info( 'Reducing show name length...' )
+				cursor.execute( 'ALTER TABLE `show` CHANGE COLUMN `show` `show` varchar(128) NOT NULL')
+				self.notifier.UpdateUpdateSchemeProgress( 10 )
+				cursor.execute( 'ALTER TABLE `show` CHANGE COLUMN `search` `search` varchar(128) NOT NULL')
+				self.notifier.UpdateUpdateSchemeProgress( 15 )
+				self.logger.info( 'Reducing film title length...' )
+				cursor.execute( 'ALTER TABLE `film` CHANGE COLUMN `title` `title` varchar(128) NOT NULL')
+				self.notifier.UpdateUpdateSchemeProgress( 50 )
+				cursor.execute( 'ALTER TABLE `film` CHANGE COLUMN `search` `search` varchar(128) NOT NULL')
+				self.notifier.UpdateUpdateSchemeProgress( 80 )
+				self.logger.info( 'Deleting old dupecheck index...' )
+				cursor.execute( 'ALTER TABLE `film` DROP KEY `dupecheck`')
+				self.logger.info( 'Creating and filling new column idhash...' )
+				cursor.execute( 'ALTER TABLE `film` ADD COLUMN `idhash` varchar(32) NULL AFTER `id`')
+				self.notifier.UpdateUpdateSchemeProgress( 82 )
+				cursor.execute( 'UPDATE `film` SET `idhash`= MD5( CONCAT( `channelid`, ":", `showid`, ":", `url_video` ) )')
+				self.notifier.UpdateUpdateSchemeProgress( 99 )
+				self.logger.info( 'Creating new dupecheck index...' )
+				cursor.execute( 'ALTER TABLE `film` ADD KEY `dupecheck` (`idhash`)' )
+				self.logger.info( 'Adding version info to status table...' )
+				cursor.execute( 'ALTER TABLE `status` ADD COLUMN `version` INT(11) NOT NULL DEFAULT 2')
+				self.logger.info( 'Resetting SQL mode to {}', sql_mode )
+				cursor.execute( 'SET SESSION sql_mode = %s', ( sql_mode, ) )
+				self.logger.info( 'Scheme successfully updated to version 2' )
+				self.notifier.CloseUpdateSchemeProgress()
+			except mysql.connector.Error as err:
+				self.logger.error( '=== DATABASE SCHEME UPDATE ERROR: {} ===', err )
+				self.Exit()
+				self.notifier.CloseUpdateSchemeProgress()
+				self.notifier.ShowDatabaseError( err )
+				return False
+		return True
 
 	def _handle_database_initialization( self ):
 		cursor = None
@@ -623,10 +741,10 @@ CREATE TABLE `channel` (
 	`id`			int(11)			NOT NULL AUTO_INCREMENT,
 	`dtCreated`		timestamp		NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`touched`		smallint(1)		NOT NULL DEFAULT '1',
-	`channel`		varchar(255)	NOT NULL,
+	`channel`		varchar(64)		NOT NULL,
 	PRIMARY KEY						(`id`),
 	KEY				`channel`		(`channel`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC DEFAULT CHARSET=utf8;
 				"""
 			)
 			self.conn.commit()
@@ -634,12 +752,13 @@ CREATE TABLE `channel` (
 			cursor.execute( """
 CREATE TABLE `film` (
 	`id`			int(11)			NOT NULL AUTO_INCREMENT,
+	`idhash`		varchar(32)		DEFAULT NULL,
 	`dtCreated`		timestamp		NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`touched`		smallint(1)		NOT NULL DEFAULT '1',
 	`channelid`		int(11)			NOT NULL,
 	`showid`		int(11)			NOT NULL,
-	`title`			varchar(255)	NOT NULL,
-	`search`		varchar(255)	NOT NULL,
+	`title`			varchar(128)	NOT NULL,
+	`search`		varchar(128)	NOT NULL,
 	`aired`			timestamp		NULL DEFAULT NULL,
 	`duration`		time			DEFAULT NULL,
 	`size`			int(11)			DEFAULT NULL,
@@ -653,10 +772,10 @@ CREATE TABLE `film` (
 	PRIMARY KEY						(`id`),
 	KEY				`index_1`		(`showid`,`title`),
 	KEY				`index_2`		(`channelid`,`title`),
-	KEY				`dupecheck`		(`channelid`,`showid`,`url_video`),
+	KEY				`dupecheck`		(`idhash`),
 	CONSTRAINT `FK_FilmChannel` FOREIGN KEY (`channelid`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
 	CONSTRAINT `FK_FilmShow` FOREIGN KEY (`showid`) REFERENCES `show` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC DEFAULT CHARSET=utf8;
 			""" )
 			self.conn.commit()
 
@@ -666,15 +785,15 @@ CREATE TABLE `show` (
 	`dtCreated`		timestamp		NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`touched`		smallint(1)		NOT NULL DEFAULT '1',
 	`channelid`		int(11)			NOT NULL,
-	`show`			varchar(255)	NOT NULL,
-	`search`		varchar(255)	NOT NULL,
+	`show`			varchar(128)	NOT NULL,
+	`search`		varchar(128)	NOT NULL,
 	PRIMARY KEY						(`id`),
 	KEY				`show`			(`show`),
 	KEY				`search`		(`search`),
 	KEY				`combined_1`	(`channelid`,`search`),
 	KEY				`combined_2`	(`channelid`,`show`),
 	CONSTRAINT `FK_ShowChannel` FOREIGN KEY (`channelid`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC DEFAULT CHARSET=utf8;
 			""" )
 			self.conn.commit()
 
@@ -693,12 +812,13 @@ CREATE TABLE `status` (
 	`del_mov`		int(11)			NOT NULL,
 	`tot_chn`		int(11)			NOT NULL,
 	`tot_shw`		int(11)			NOT NULL,
-	`tot_mov`		int(11)			NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	`tot_mov`		int(11)			NOT NULL,
+	`version`		int(11)			NOT NULL DEFAULT 2
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC DEFAULT CHARSET=utf8;
 			""" )
 			self.conn.commit()
 
-			cursor.execute( 'INSERT INTO `status` VALUES (0,"IDLE",0,0,0,0,0,0,0,0,0,0,0,0);' )
+			cursor.execute( 'INSERT INTO `status` VALUES (0,"IDLE",0,0,0,0,0,0,0,0,0,0,0,0,2);' )
 			self.conn.commit()
 
 			cursor.execute( 'SET FOREIGN_KEY_CHECKS=1' )
@@ -761,18 +881,18 @@ CREATE PROCEDURE `ftInsertFilm`(
 BEGIN
 	DECLARE		id_			INT;
 	DECLARE		added_		INT DEFAULT 0;
+	DECLARE		idhash_		VARCHAR(32);
+
+	SET idhash_ = MD5( CONCAT( _channelid, ':', _showid, ':', _url_video ) );
 
 	SELECT		`id`
 	INTO		id_
 	FROM		`film` AS f
-	WHERE		( f.channelid = _channelid )
-				AND
-				( f.showid = _showid )
-				AND
-				( f.url_video = _url_video );
+	WHERE		( f.idhash = idhash_ );
 
 	IF ( id_ IS NULL ) THEN
 		INSERT INTO `film` (
+			`idhash`,
 			`channelid`,
 			`showid`,
 			`title`,
@@ -789,6 +909,7 @@ BEGIN
 			`airedepoch`
 		)
 		VALUES (
+			idhash_,
 			_channelid,
 			_showid,
 			_title,
@@ -955,6 +1076,7 @@ END
 
 			cursor.close()
 			self.logger.info( 'Database creation successfully completed' )
+			return True
 		except mysql.connector.Error as err:
 			self.logger.error( '=== DATABASE CREATION ERROR: {} ===', err )
 			self.notifier.ShowDatabaseError( err )
@@ -971,3 +1093,4 @@ END
 			except mysql.connector.Error as err:
 				# should never happen
 				self.conn = None
+		return False

@@ -22,8 +22,12 @@ msgid "General"
 msgstr "Allgemein"
 
 msgctxt "#30002"
-msgid "Database Settings"
-msgstr "Datenbank Einstellungen"
+msgid "Database"
+msgstr "Datenbank"
+
+msgctxt "#30003"
+msgid "Downloads"
+msgstr "Downloads"
 
 # Settings Page 1
 msgctxt "#30110"
@@ -31,38 +35,38 @@ msgid "Prefer HD streams"
 msgstr "HD Streams bevorzugen"
 
 msgctxt "#30111"
+msgid "Autoplay Subtitles"
+msgstr "Untertitel automatisch abspielen"
+
+msgctxt "#30112"
 msgid "No future videos (usually trailers)"
 msgstr "Keine Filme aus der Zukunft (üblicherweise Trailer)"
 
-msgctxt "#30112"
+msgctxt "#30113"
 msgid "Minimum duration in minutes"
 msgstr "Minimale Länge in Minuten"
 
-msgctxt "#30113"
+msgctxt "#30114"
 msgid "Group shows of different channel"
 msgstr "Sendungen verschiedener Sender zusammenfassen"
 
-msgctxt "#30114"
+msgctxt "#30115"
 msgid "Limit search results"
 msgstr "Suchergebnisse eingrenzen"
 
-msgctxt "#30115"
+msgctxt "#30116"
 msgid "Max age of recents in days"
 msgstr "Maximales Alter der Neuigkeiten in Tagen"
 
-msgctxt "#30116"
+msgctxt "#30117"
 msgid "Recent calculated by"
 msgstr "Neuigkeit berechnet ab"
 
-msgctxt "#30118"
-msgid "Download directory"
-msgstr "Download-Verzeichnis"
-
-msgctxt "#30161"
+msgctxt "#30171"
 msgid "Aired Date"
 msgstr "Sendedatum"
 
-msgctxt "#30162"
+msgctxt "#30172"
 msgid "Added to Database"
 msgstr "Hinzugefügt zur Datenbank"
 
@@ -100,12 +104,69 @@ msgid "External (mysql)"
 msgstr "Extern (mysql)"
 
 msgctxt "#30231"
-msgid "Database Updates"
-msgstr "Datenbankupdates"
+msgid "Database Update Mode"
+msgstr "Datenbank-Aktualisierung"
 
 msgctxt "#30232"
 msgid "Update interval in hours"
 msgstr "Aktualisierungsintervall in Stunden"
+
+msgctxt "#30241"
+msgid "Disabled"
+msgstr "Abgeschaltet"
+
+msgctxt "#30242"
+msgid "Manual"
+msgstr "Manuell"
+
+msgctxt "#30243"
+msgid "On Start"
+msgstr "Nur beim Start"
+
+msgctxt "#30244"
+msgid "Automatic"
+msgstr "Automatisch"
+
+# Settings Page 3
+msgctxt "#30310"
+msgid "Series download directory"
+msgstr "Serien Download-Verzeichnis"
+
+msgctxt "#30311"
+msgid "Movie download directory"
+msgstr "Filme Download-Verzeichnis"
+
+msgctxt "#30312"
+msgid "Download movies in separate folders"
+msgstr "Filme in getrennten Ordnern herunterladen"
+
+msgctxt "#30313"
+msgid "Include show name in movie name"
+msgstr "Sendungsname vor dem Filmnamen einfügen"
+
+msgctxt "#30314"
+msgid "Review filename before download"
+msgstr "Dateiname vor dem Download prüfen"
+
+msgctxt "#30315"
+msgid "Download Subtitles"
+msgstr "Untertitel herunterladen"
+
+msgctxt "#30316"
+msgid "Generate Metadata"
+msgstr "Metadaten generieren"
+
+msgctxt "#30340"
+msgid "No NFO File"
+msgstr "Keine NFO Datei"
+
+msgctxt "#30341"
+msgid "Basic NFO File"
+msgstr "Einfache NFO Datei"
+
+msgctxt "#30342"
+msgid "Enriched NFO File"
+msgstr "Angereicherte  NFO Datei"
 
 # Main Menu
 msgctxt "#30901"
@@ -140,22 +201,39 @@ msgctxt "#30908"
 msgid "Database Information"
 msgstr "Datenbank Informationen"
 
-# Context Menu
+msgctxt "#30909"
+msgid "Update Database"
+msgstr "Datenbank aktualisieren"
+
+# Film Context Menu
 msgctxt "#30921"
-msgid "Download Video"
-msgstr "Video herunterladen"
+msgid "Play with Subtitles"
+msgstr "Abspielen mit Untertiteln"
 
 msgctxt "#30922"
-msgid "Download LoRes Video"
-msgstr "SD Video herunterladen"
+msgid "Download as Movie"
+msgstr "Als Film herunterladen"
 
 msgctxt "#30923"
-msgid "Download HD Video"
-msgstr "HD Video herunterladen"
+msgid "Download as HD Movie"
+msgstr "Als HD Film herunterladen"
 
 msgctxt "#30924"
-msgid "Add to queue"
-msgstr "Zur Warteschlange hinzufügen"
+msgid "Download as TV episode"
+msgstr "Als Episode herunterladen"
+
+msgctxt "#30925"
+msgid "Download as HD TV episode"
+msgstr "Als HD Episode herunterladen"
+
+# Search Context Menu
+msgctxt "#30931"
+msgid "New Search..."
+msgstr "Neuer Suchvorgang..."
+
+msgctxt "#30932"
+msgid "Remove Search"
+msgstr "Suchvorgang Löschen"
 
 # Database status
 msgctxt "#30941"
@@ -209,11 +287,11 @@ msgstr "Mediathek (%d): Sender:%d, Sendungen:%d, Filme:%d ..."
 
 msgctxt "#30958"
 msgid "Please set a download folder in the settings"
-msgstr "Bitte waehlen Sie ein Download-Verzeichnis in den Einstellungen"
+msgstr "Bitte legen Sie das Download-Verzeichnis in den Einstellungen fest"
 
 msgctxt "#30959"
 msgid "Download directory could not be created: {}"
-msgstr "Fehler beim Ertzeugen des Download-Verzeichnisses: {}"
+msgstr "Fehler beim Erzeugen des Download-Verzeichnisses: {}"
 
 msgctxt "#30960"
 msgid "Download Successful"
@@ -236,26 +314,12 @@ msgstr "Dieses Kodi Addon Ermöglicht den Zugriff auf fast alle deutschen Mediat
 "Spende zu hinterlassen."
 
 msgctxt "#30963"
-msgid "No Decompressor Available"
-msgstr "Kein Entpacker Verfügbar"
+msgid "Update Database"
+msgstr "Datenbank Aktualisierung"
 
 msgctxt "#30964"
-msgid "The database updater needs the program 'xz' in order to process the database update files. "
-"This programm was not found on your Kodi system.\n\nIf you want to use the database er on this "
-"system, you have to install 'xz' in one of the standard locations (/bin, /usr/bin, /usr/local/bin).\n\n"
-"Alternatively you can specify the location of the 'xz' program in the addon settings.\n\n"
-"Another possibilty would be the use of an external database updated either by another Kodi system "
-"or by the provided update script running on a server (see README file).\n\n"
-"The datebase er has been disabled so you have to enable it again from the addon settings page."
-msgstr "Der Datenbank-Aktualisierer benötigt den Entpacker 'xz' der auf diesem Kodi-System leider "
-"nicht gefunden wurde.\n\nUm den Datenbank-Aktualisierer zu benutzen, muss dieses Programm auf dem "
-"System in einem der Standard-Verzeichnisse (/bin, /usr/bin, /usr/local/bin) installiert werden.\n\n"
-"Unter Windows bzw. falls das Programm in einem anderen Verzeichnis installiert ist, muss der Pfad "
-"zum Programm in den Addon-Einstellungen angegeben werden.\n\n"
-"Eine andere Möglichkeit ist die Benutzung einer externen Datenbank die entweder über eine anderes "
-"Kodi-System oder über das mitgelieferte Update-Skript (siehe README) regelmäßig aktualisiert wird.\n\n"
-"Der Datenbank-Aktualisierer wurde deaktiviert. Er kann über die Addon-Einstellungen wieder aktiviert "
-"werden."
+msgid "The database will be updated in the next few minutes..."
+msgstr "Die Datenbank wird in Kürze aktualisiert..."
 
 msgctxt "#30965"
 msgid "Database Status: %s"
@@ -324,3 +388,35 @@ msgstr "Ergebnisse Beschränkt"
 msgctxt "#30981"
 msgid "Only the first {} results are shown."
 msgstr "Es werden nur die ersten {} Ergebnisse angezeigt."
+
+msgctxt "#30982"
+msgid "Database Outdated"
+msgstr "Datenbank veraltet"
+
+msgctxt "#30983"
+msgid "Last {}: {}"
+msgstr "Letzte {}: {}"
+
+msgctxt "#30984"
+msgid "Database Schema Upgrade"
+msgstr "Datenbank-Schema-Aktualisierung"
+
+msgctxt "#30985"
+msgid "Please wait while the system upgrades the database schema."
+msgstr "Bitte warten Sie, bis das Schema der Datenbank aktualisiert wurde."
+
+msgctxt "#30986"
+msgid "Please Review Your Download Name"
+msgstr "Bitte prüfen Sie den Dateinamen"
+
+msgctxt "#30987"
+msgid "File already exists! Please change the filename"
+msgstr "Datei existiert bereits. Bitte ändern Sie den Dateinamen"
+
+msgctxt "#30988"
+msgid "Play Error"
+msgstr "Fehler beim Abspielen"
+
+msgctxt "#30989"
+msgid "Cannot retrieve Movie Information"
+msgstr "Es war nicht möglich die Sendung zu finden"

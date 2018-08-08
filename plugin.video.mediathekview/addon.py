@@ -1,41 +1,45 @@
 # -*- coding: utf-8 -*-
-#
-# MIT License
-#
-# Copyright (c) 2017-2018, Leo Moll
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+"""
+The main addon module
+
+MIT License
+
+Copyright (c) 2017-2018, Leo Moll
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+# pylint: disable=import-error
+# pylint: disable=mixed-indentation, bad-whitespace, bad-continuation, missing-docstring
 
 # -- Imports ------------------------------------------------
 from __future__ import unicode_literals  # ,absolute_import, division
 # from future import standard_library
 # from builtins import *
 # standard_library.install_aliases()
-import os,re,sys,urlparse,datetime
-import xbmcplugin,xbmcgui,xbmcvfs
+import time
+import datetime
 
-import resources.lib.mvutils as mvutils
-
-from contextlib import closing
+import xbmcgui
+import xbmcplugin
 
 from resources.lib.kodi.KodiAddon import KodiPlugin
-from resources.lib.kodi.KodiUI import KodiBGDialog
 
 from resources.lib.store import Store
 from resources.lib.notifier import Notifier
@@ -44,7 +48,8 @@ from resources.lib.filmui import FilmUI
 from resources.lib.channelui import ChannelUI
 from resources.lib.initialui import InitialUI
 from resources.lib.showui import ShowUI
-from resources.lib.ttml2srt import ttml2srt
+from resources.lib.downloader import Downloader
+from resources.lib.searches import RecentSearches
 
 # -- Classes ------------------------------------------------
 class MediathekView( KodiPlugin ):
@@ -53,13 +58,13 @@ class MediathekView( KodiPlugin ):
 		super( MediathekView, self ).__init__()
 		self.settings	= Settings()
 		self.notifier	= Notifier()
-		self.db			= Store( self.getNewLogger( 'Store' ), self.notifier, self.settings )
+		self.database	= Store( self.getNewLogger( 'Store' ), self.notifier, self.settings )
 
-	def showMainMenu( self ):
+	def show_main_menu( self ):
 		# Search
-		self.addFolderItem( 30901, { 'mode': "search" } )
+		self.addFolderItem( 30901, { 'mode': "search", 'extendedsearch': False } )
 		# Search all
-		self.addFolderItem( 30902, { 'mode': "searchall" } )
+		self.addFolderItem( 30902, { 'mode': "search", 'extendedsearch': True } )
 		# Browse livestreams
 		self.addFolderItem( 30903, { 'mode': "livestreams" } )
 		# Browse recently added
@@ -72,28 +77,40 @@ class MediathekView( KodiPlugin ):
 		self.addFolderItem( 30907, { 'mode': "channels" } )
 		# Database Information
 		self.addActionItem( 30908, { 'mode': "action-dbinfo" } )
+		# Manual database update
+		if self.settings.updmode == 1 or self.settings.updmode == 2:
+			self.addActionItem( 30909, { 'mode': "action-dbupdate" } )
+		self.endOfDirectory()
+		self._check_outdate()
+
+	def show_searches( self, extendedsearch = False ):
+		self.addFolderItem( 30931, { 'mode': "newsearch", 'extendedsearch': extendedsearch } )
+		RecentSearches( self, extendedsearch ).load().populate()
 		self.endOfDirectory()
 
-	def showSearch( self ):
-		searchText = self.notifier.GetEnteredText( '', self.language( 30901 ).decode( 'UTF-8' ) )
-		if len( searchText ) > 2:
-			self.db.Search( searchText, FilmUI( self ) )
+	def new_search( self, extendedsearch = False ):
+		settingid = 'lastsearch2' if extendedsearch is True else 'lastsearch1'
+		headingid = 30902 if extendedsearch is True else 30901
+		# are we returning from playback ?
+		search = self.addon.getSetting( settingid )
+		if search:
+			# restore previous search
+			self.database.Search( search, FilmUI( self ), extendedsearch )
 		else:
-			self.info( 'The following ERROR can be ignored. It is caused by the architecture of the Kodi Plugin Engine' )
-			self.endOfDirectory( False, cacheToDisc = True )
-			# self.showMainMenu()
+			# enter search term
+			( search, confirmed ) = self.notifier.GetEnteredText( '', headingid )
+			if len( search ) > 2 and confirmed is True:
+				RecentSearches( self, extendedsearch ).load().add( search ).save()
+				if self.database.Search( search, FilmUI( self ), extendedsearch ) > 0:
+					self.addon.setSetting( settingid, search )
+			else:
+				# pylint: disable=line-too-long
+				self.info( 'The following ERROR can be ignored. It is caused by the architecture of the Kodi Plugin Engine' )
+				self.endOfDirectory( False, cacheToDisc = True )
+				# self.show_searches( extendedsearch )
 
-	def showSearchAll( self ):
-		searchText = self.notifier.GetEnteredText( '', self.language( 30902 ).decode( 'UTF-8' ) )
-		if len( searchText ) > 2:
-			self.db.SearchFull( searchText, FilmUI( self ) )
-		else:
-			self.info( 'The following ERROR can be ignored. It is caused by the architecture of the Kodi Plugin Engine' )
-			self.endOfDirectory( False, cacheToDisc = True )
-			# self.showMainMenu()
-
-	def showDbInfo( self ):
-		info = self.db.GetStatus()
+	def show_db_info( self ):
+		info = self.database.GetStatus()
 		heading = self.language( 30907 )
 		infostr = self.language( {
 			'NONE': 30941,
@@ -157,176 +174,107 @@ class MediathekView( KodiPlugin ):
 			updinfo
 		)
 
-	def doDownloadFilm( self, filmid, quality ):
-		if self.settings.downloadpath:
-			film = self.db.RetrieveFilmInfo( filmid )
-			if film is None:
-				# film not found - should never happen
-				return
+	def _check_outdate( self, maxage = 172800 ):
+		if self.settings.updmode != 1 and self.settings.updmode != 2:
+			# no check with update disabled or update automatic
+			return
+		if self.database is None:
+			# should never happen
+			self.notifier.ShowOutdatedUnknown()
+			return
+		status = self.database.GetStatus()
+		if status['status'] == 'NONE' or status['status'] == 'UNINIT':
+			# should never happen
+			self.notifier.ShowOutdatedUnknown()
+			return
+		elif status['status'] == 'UPDATING':
+			# great... we are updating. nuthin to show
+			return
+		# lets check how old we are
+		tsnow = int( time.time() )
+		tsold = int( status['lastupdate'] )
+		if tsnow - tsold > maxage:
+			self.notifier.ShowOutdatedKnown( status )
 
-			# check if the download path is reachable
-			if not xbmcvfs.exists( self.settings.downloadpath ):
-				self.notifier.ShowError( self.language( 30952 ), self.language( 30979 ) )
-				return
+	def init( self ):
+		if self.database.Init():
+			if self.settings.HandleFirstRun():
+				pass
+			self.settings.HandleUpdateOnStart()
 
-			# get the best url
-			if quality == '0' and film.url_video_sd:
-				videourl = film.url_video_sd
-			elif quality == '2' and film.url_video_hd:
-				videourl = film.url_video_hd
-			else:
-				videourl = film.url_video
-
-			# prepare names
-			showname	= mvutils.cleanup_filename( film.show )[:64]
-			filestem	= mvutils.cleanup_filename( film.title )[:64]
-			extension	= os.path.splitext( videourl )[1]
-			if not extension:
-				extension = u'.mp4'
-			if not filestem:
-				filestem = u'Film-{}'.format( film.id )
-			if not showname:
-				showname = filestem
-
-			# prepare download directory and determine episode number
-			dirname = self.settings.downloadpath + showname + '/'
-			episode = 1
-			if xbmcvfs.exists( dirname ):
-				( _, epfiles, ) = xbmcvfs.listdir( dirname )
-				for epfile in epfiles:
-					match = re.search( '^.* [eE][pP]([0-9]*)\.[^/]*$', epfile )
-					if match and len( match.groups() ) > 0:
-						if episode <= int( match.group(1) ):
-							episode = int( match.group(1) ) + 1
-			else:
-				xbmcvfs.mkdir( dirname )
-
-			# prepare resulting filenames
-			fileepi = filestem + u' - EP%04d' % episode
-			movname = dirname + fileepi + extension
-			srtname = dirname + fileepi + u'.srt'
-			ttmname = dirname + fileepi + u'.ttml'
-			nfoname = dirname + fileepi + u'.nfo'
-
-			# download video
-			bgd = KodiBGDialog()
-			bgd.Create( self.language( 30974 ), fileepi + extension )
-			try:
-				bgd.Update( 0 )
-				mvutils.url_retrieve_vfs( videourl, movname, bgd.UrlRetrieveHook )
-				bgd.Close()
-				self.notifier.ShowNotification( 30960, self.language( 30976 ).format( videourl ) )
-			except Exception as err:
-				bgd.Close()
-				self.error( 'Failure downloading {}: {}', videourl, err )
-				self.notifier.ShowError( 30952, self.language( 30975 ).format( videourl, err ) )
-
-			# download subtitles
-			if film.url_sub:
-				bgd = KodiBGDialog()
-				bgd.Create( 30978, fileepi + u'.ttml' )
-				try:
-					bgd.Update( 0 )
-					mvutils.url_retrieve_vfs( film.url_sub, ttmname, bgd.UrlRetrieveHook )
-					try:
-						ttml2srt( xbmcvfs.File( ttmname, 'r' ), xbmcvfs.File( srtname, 'w' ) )
-					except Exception as err:
-						self.info( 'Failed to convert to srt: {}', err )
-					bgd.Close()
-				except Exception as err:
-					bgd.Close()
-					self.error( 'Failure downloading {}: {}', film.url_sub, err )
-
-			# create NFO Files
-			self._make_nfo_files( film, episode, dirname, nfoname, videourl )
-		else:
-			self.notifier.ShowError( 30952, 30958 )
-
-	def doEnqueueFilm( self, filmid ):
-		self.info( 'Enqueue {}', filmid )
-
-	def _make_nfo_files( self, film, episode, dirname, filename, videourl ):
-		# create NFO files
-		if not xbmcvfs.exists( dirname + 'tvshow.nfo' ):
-			try:
-				with closing( xbmcvfs.File( dirname + 'tvshow.nfo', 'w' ) ) as file:
-					file.write( b'<tvshow>\n' )
-					file.write( b'<id></id>\n' )
-					file.write( bytearray( '\t<title>{}</title>\n'.format( film.show ), 'utf-8' ) )
-					file.write( bytearray( '\t<sorttitle>{}</sorttitle>\n'.format( film.show ), 'utf-8' ) )
-# TODO:				file.write( bytearray( '\t<year>{}</year>\n'.format( 2018 ), 'utf-8' ) )
-					file.write( bytearray( '\t<studio>{}</studio>\n'.format( film.channel ), 'utf-8' ) )
-					file.write( b'</tvshow>\n' )
-			except Exception as err:
-				self.error( 'Failure creating show NFO file for {}: {}', videourl, err )
-
-		try:
-			with closing( xbmcvfs.File( filename, 'w' ) ) as file:
-				file.write( b'<episodedetails>\n' )
-				file.write( bytearray( '\t<title>{}</title>\n'.format( film.title ), 'utf-8' ) )
-				file.write( b'\t<season>1</season>\n' )
-				file.write( bytearray( '\t<episode>{}</episode>\n'.format( episode ), 'utf-8' ) )
-				file.write( bytearray( '\t<showtitle>{}</showtitle>\n'.format( film.show ), 'utf-8' ) )
-				file.write( bytearray( '\t<plot>{}</plot>\n'.format( film.description ), 'utf-8' ) )
-				file.write( bytearray( '\t<aired>{}</aired>\n'.format( film.aired ), 'utf-8' ) )
-				if film.seconds > 60:
-					file.write( bytearray( '\t<runtime>{}</runtime>\n'.format( int( film.seconds / 60 ) ), 'utf-8' ) )
-				file.write( bytearray( '\t<studio>{}</studio\n'.format( film.channel ), 'utf-8' ) )
-				file.write( b'</episodedetails>\n' )
-		except Exception as err:
-			self.error( 'Failure creating episode NFO file for {}: {}', videourl, err )
-
-	def Init( self ):
-		self.args = urlparse.parse_qs( sys.argv[2][1:] )
-		self.db.Init()
-		if self.settings.HandleFirstRun():
-			# TODO: Implement Issue #16
-			pass
-
-	def Do( self ):
-		mode = self.args.get( 'mode', None )
+	def run( self ):
+		# save last activity timestamp
+		self.settings.ResetUserActivity()
+		# process operation
+		mode = self.get_arg( 'mode', None )
 		if mode is None:
-			self.showMainMenu()
-		elif mode[0] == 'search':
-			self.showSearch()
-		elif mode[0] == 'searchall':
-			self.showSearchAll()
-		elif mode[0] == 'livestreams':
-			self.db.GetLiveStreams( FilmUI( self, [ xbmcplugin.SORT_METHOD_LABEL ] ) )
-		elif mode[0] == 'recent':
-			channel = self.args.get( 'channel', [0] )
-			self.db.GetRecents( channel[0], FilmUI( self ) )
-		elif mode[0] == 'recentchannels':
-			self.db.GetRecentChannels( ChannelUI( self, nextdir = 'recent' ) )
-		elif mode[0] == 'channels':
-			self.db.GetChannels( ChannelUI( self, nextdir = 'shows' ) )
-		elif mode[0] == 'action-dbinfo':
-			self.showDbInfo()
-		elif mode[0] == 'initial':
-			channel = self.args.get( 'channel', [0] )
-			self.db.GetInitials( channel[0], InitialUI( self ) )
-		elif mode[0] == 'shows':
-			channel = self.args.get( 'channel', [0] )
-			initial = self.args.get( 'initial', [None] )
-			self.db.GetShows( channel[0], initial[0], ShowUI( self ) )
-		elif mode[0] == 'films':
-			show = self.args.get( 'show', [0] )
-			self.db.GetFilms( show[0], FilmUI( self ) )
-		elif mode[0] == 'download':
-			filmid	= self.args.get( 'id', [0] )
-			quality	= self.args.get( 'quality', [1] )
-			self.doDownloadFilm( filmid[0], quality[0] )
-		elif mode[0] == 'enqueue':
-			self.doEnqueueFilm( self.args.get( 'id', [0] )[0] )
+			self.show_main_menu()
+		elif mode == 'search':
+			extendedsearch = self.get_arg( 'extendedsearch', 'False' ) == 'True'
+			self.show_searches( extendedsearch )
+		elif mode == 'newsearch':
+			self.new_search( self.get_arg( 'extendedsearch', 'False' ) == 'True' )
+		elif mode == 'research':
+			search			= self.get_arg( 'search', '' )
+			extendedsearch	= self.get_arg( 'extendedsearch', 'False' ) == 'True'
+			self.database.Search( search, FilmUI( self ), extendedsearch )
+			RecentSearches( self, extendedsearch ).load().add( search ).save()
+		elif mode == 'delsearch':
+			search			= self.get_arg( 'search', '' )
+			extendedsearch	= self.get_arg( 'extendedsearch', 'False' ) == 'True'
+			RecentSearches( self, extendedsearch ).load().delete( search ).save().populate()
+			self.runBuiltin( 'Container.Refresh' )
+		elif mode == 'livestreams':
+			self.database.GetLiveStreams( FilmUI( self, [ xbmcplugin.SORT_METHOD_LABEL ] ) )
+		elif mode == 'recent':
+			channel = self.get_arg( 'channel', 0 )
+			self.database.GetRecents( channel, FilmUI( self ) )
+		elif mode == 'recentchannels':
+			self.database.GetRecentChannels( ChannelUI( self, nextdir = 'recent' ) )
+		elif mode == 'channels':
+			self.database.GetChannels( ChannelUI( self, nextdir = 'shows' ) )
+		elif mode == 'action-dbinfo':
+			self.show_db_info()
+		elif mode == 'action-dbupdate':
+			self.settings.TriggerUpdate()
+			self.notifier.ShowNotification( 30963, 30964, time = 10000 )
+		elif mode == 'initial':
+			channel = self.get_arg( 'channel', 0 )
+			self.database.GetInitials( channel, InitialUI( self ) )
+		elif mode == 'shows':
+			channel = self.get_arg( 'channel', 0 )
+			initial = self.get_arg( 'initial', None )
+			self.database.GetShows( channel, initial, ShowUI( self ) )
+		elif mode == 'films':
+			show = self.get_arg( 'show', 0 )
+			self.database.GetFilms( show, FilmUI( self ) )
+		elif mode == 'downloadmv':
+			filmid	= self.get_arg( 'id', 0 )
+			quality	= self.get_arg( 'quality', 1 )
+			Downloader( self ).download_movie( filmid, quality )
+		elif mode == 'downloadep':
+			filmid	= self.get_arg( 'id', 0 )
+			quality	= self.get_arg( 'quality', 1 )
+			Downloader( self ).download_episode( filmid, quality )
+		elif mode == 'playwithsrt':
+			filmid		= self.get_arg( 'id', 0 )
+			only_sru	= self.get_arg( 'only_set_resolved_url', 'False' ) == 'True'
+			Downloader( self ).play_movie_with_subs( filmid, only_sru )
 
-	def Exit( self ):
-		self.db.Exit()
+		# cleanup saved searches
+		if mode is None or mode != 'search':
+			self.addon.setSetting( 'lastsearch1', '' )
+		if mode is None or mode != 'searchall':
+			self.addon.setSetting( 'lastsearch2', '' )
+
+	def exit( self ):
+		self.database.Exit()
 
 
 # -- Main Code ----------------------------------------------
 if __name__ == '__main__':
-	addon = MediathekView()
-	addon.Init()
-	addon.Do()
-	addon.Exit()
-	del addon
+	ADDON = MediathekView()
+	ADDON.init()
+	ADDON.run()
+	ADDON.exit()
+	del ADDON

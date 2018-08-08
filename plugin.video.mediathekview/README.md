@@ -76,6 +76,31 @@ schon erfolgreich getestet werden. Wegen der Vielzahl der Plattformen ist es
 allerdings nicht möglich eine abschließende Kompatibilitätsaussage zu machen.
 
 
+Funktionsweise der Aktualisierungsmethoden
+------------------------------------------
+
+Das Addon unterstützt 4 verschiedene Aktualisierungsmethoden:
+* **Automatisch (Standard):** Bei dieser Methode wird die Aktualisierung der
+Datenbank automatisch durchgeführt. Die Aktualisierung erfolgt ein mal pro
+eingestelltem Aktualisierungsintervall (Standard: 2 Stunden). Die erste
+Aktualisierung eines Kalendertages ist eine vollstöndige Aktualisierung, alle
+weiteren sind Differenz-Aktualisierungen. Die automatische Aktualisierung
+pausiert, wenn das Addon länger als 2 Stunden nicht bedient wurde, um
+Bandbreite und bei mobilen Geräten Strom zu sparen.
+* **Nur beim Start:** Eine Aktualisierung erfolgt nur beim Start des Addons.
+Handelt es sich hierbei um die erste Aktualisierung des Kalendertages, ist
+dies eine vollständige Aktualisierung, ansonsten eine differentielle. Alle
+weiteren Aktualisierungen müssen manuell über das Hauptmenü vom Benutzer
+ausgelöst werden.
+* **Manuell:** Es erfolgt keine automatische Aktualisierung. Der Benutzer
+hat die Möglichkeit Aktualisierungen über das Hauptmenü auszulösen. Handelt
+es sich hierbei um die erste Aktualisierung des Kalendertages, ist dies eine
+vollständige Aktualisierung, ansonsten eine differentielle.
+* **Abgeschaltet:** Es erfolgt keine automatische Aktualisierung. Diese
+Konfiguration ist nur dann sinnvoll, wenn das Plugin eine externe Datenbank
+nutzt und diese anderweitig aktualisiert wird.
+
+
 Alternativ-Konfigurationen
 --------------------------
 
@@ -222,6 +247,27 @@ tested successfully. Due to the variety of platforms, however, it is not
 possible to make a final compatibility statement.
 
 
+How the update methods work
+---------------------------
+
+The addon supports 4 different update methods:
+* **Automatic (Default):** This method automatically updates the database.
+The update takes place once per set update interval (default: 2 hours). The
+first update of a calendar day is a full update, all others are differential
+updates. The auto-update pauses if the addon has not been used for more than
+2 hours to save bandwidth and power on mobile devices.
+* **On Start:** An update will only take place on the first invocation of the
+addon during the Kodi runtime. If this is the first update of the day, it is a
+complete update, otherwise a differential one. All further updates must be
+manually initiated by the user via the main menu.
+* **Manual:** There is no automatic update. The user has the possibility to
+initiate updates via the main menu. If this is the first update of the day,
+it is a complete update, otherwise a differential one.
+* **Disabled:** There is no automatic update. This configuration only makes
+sense if the plugin uses an external database and this database is updated
+elsewhere.
+
+
 Alternate Configurations
 ------------------------
 
@@ -352,6 +398,31 @@ L'addon è stato testato su diverse piattaforme in Linux, MacOS, Windows e
 LibreELEC nonchè OpenELEC. Anche diversi sistemi Android sono stati testati
 con successo. A causa della varietà delle piattaforme, tuttavia, non è
 possibile fare una dichiarazione finale di compatibilità.
+
+
+Come funzionano i metodi di aggiornamento
+-----------------------------------------
+
+L'addon supporta 4 diversi metodi di aggiornamento:
+* **Automatico (Predefinito):** Questo metodo aggiorna automaticamente il
+database. L'aggiornamento avviene una volta per ogni intervallo di
+aggiornamento impostato (impostazione predefinita: 2 ore). Il primo
+aggiornamento di un giorno è un aggiornamento completo, tutti gli altri sono
+aggiornamenti differenziali. L'aggiornamento automatico si interrompe se
+l'addon non è stato utilizzato per più di 2 ore al fine di salvare larghezza
+di banda e corrente sui dispositivi mobili.
+* **Solo all'avvio:** L'aggiornamento avviene non appena l'addon viene
+invocato. Se questo è il primo aggiornamento del giorno, avverrà un
+aggiornamento completo, altrimenti differenziale. Tutti gli ulteriori
+aggiornamenti dovranno essere avviati manualmente dall'utente attraverso il
+menu principale.
+* **Manuale:** Non vi è alcun aggiornamento automatico. L'utente ha la
+possibilità di avviare gli aggiornamenti tramite il menu principale. Se questo
+è il primo aggiornamento del giorno, avverrà un aggiornamento completo,
+altrimenti differenziale.
+* **Disattivato:** Non vi è alcun aggiornamento automatico. Questa
+configurazione ha senso solo se il plugin utilizza un database esterno che
+viene aggiornato altrove.
 
 
 Configurazioni alternative

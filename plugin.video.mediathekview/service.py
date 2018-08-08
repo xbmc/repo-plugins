@@ -53,22 +53,30 @@ class MediathekViewService( KodiService ):
 	def Init( self ):
 		self.info( 'Init (instance id: {})', self.monitor.instance_id )
 		self.monitor.RegisterInstance()
-		self.updater.Init()
+		self.updater.Init( convert = True )
+		self.settings.ResetUserActivity()
 
 	def Run( self ):
 		self.info( 'Starting up... (instance id: {})', self.monitor.instance_id )
 		while not self.monitor.abortRequested():
+			if self.settings.Reload() is True:
+				# database configuration changed
+				self.info( '===== Database Configuration has changed - Reloading the updater =====')
+				self.updater.Reload()
+
 			updateop = self.updater.GetCurrentUpdateOperation()
 			if updateop == 1:
 				# full update
 				self.info( 'Initiating full update...' )
+				self.settings.SaveUpdateInstance( self.monitor.instance_id )
 				self.updater.Update( True )
 			elif updateop == 2:
 				# differential update
 				self.info( 'Initiating differential update...' )
+				self.settings.SaveUpdateInstance( self.monitor.instance_id )
 				self.updater.Update( False )
 			# Sleep/wait for abort for 60 seconds
-			if self.monitor.waitForAbort( 60 ):
+			if self.monitor.waitForAbort( 15 ):
 				# Abort was requested while waiting. We should exit
 				break
 		self.info( 'Shutting down... (instance id: {})', self.monitor.instance_id )
@@ -79,7 +87,12 @@ class MediathekViewService( KodiService ):
 		self.monitor.UnregisterInstance()
 
 	def ReloadSettings( self ):
+		# self.info("===== RELOAD SETTINGS =====")
 		# TODO: support online reconfiguration
+		#       currently there is a bug in Kodi: this event is only
+		#       triggered if the reconfiguration happen inside the
+		#       addon (via setSetting). If teh user changes something
+		#       via the settings page, NOTHING WILL HAPPEN!
 		pass
 
 # -- Main Code ----------------------------------------------

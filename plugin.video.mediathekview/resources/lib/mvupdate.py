@@ -13,22 +13,44 @@ from resources.lib.updater import MediathekViewUpdater
 
 # -- Classes ------------------------------------------------
 class Settings( object ):
+
 	def __init__( self, args ):
 		self.datapath		= args.path if args.dbtype == 'sqlite' else './'
-		self.type			= { 'sqlite' : '0', 'mysql' : '1' }.get( args.dbtype, '0' )
-		if self.type == '1':
+		self.type			= { 'sqlite' : 0, 'mysql' : 1 }.get( args.dbtype, 0 )
+		if self.type == 1:
 			self.host			= args.host
 			self.port			= int( args.port )
 			self.user			= args.user
 			self.password		= args.password
 			self.database		= args.database
+		self.autosub		= False
 		self.nofuture		= True
 		self.minlength		= 0
 		self.maxage			= 86400
 		self.recentmode		= 0
 		self.groupshows		= False
-		self.updenabled		= True
-		self.updinterval	= 3600
+		self.updmode		= 3
+		self.updinterval	= args.intervall
+
+	@staticmethod
+	def Reload():
+		return False
+
+	@staticmethod
+	def IsUpdateTriggered():
+		return True
+
+	@staticmethod
+	def IsUserAlive():
+		return True
+
+	@staticmethod
+	def TriggerUpdate():
+		return True
+
+	@staticmethod
+	def ResetUserActivity():
+		pass
 
 class AppLogger( Logger ):
 
@@ -96,6 +118,12 @@ class Notifier( object ):
 		pass
 	def ShowMissingExtractorError( self ):
 		pass
+	def ShowLimitResults( self, maxresults ):
+		pass
+	def ShowOutdatedUnknown( self ):
+		pass
+	def ShowOutdatedKnown( self, status ):
+		pass
 	def ShowDownloadProgress( self ):
 		pass
 	def UpdateDownloadProgress( self, percent, message = None ):
@@ -110,9 +138,18 @@ class Notifier( object ):
 		pass
 	def CloseUpdateProgress( self ):
 		pass
+	def ShowUpdatingScheme( self ):
+		pass
+	def ShowUpdateSchemeProgress( self ):
+		pass
+	def UpdateUpdateSchemeProgress( self, percent ):
+		pass
+	def CloseUpdateSchemeProgress( self ):
+		pass
 
 class MediathekViewMonitor( object ):
-	def abortRequested( self ):
+	@staticmethod
+	def abortRequested():
 		return False
 
 class UpdateApp( AppLogger ):
@@ -134,7 +171,7 @@ class UpdateApp( AppLogger ):
 			'-v', '--verbose',
 			default = 0,
 			action = 'count',
-			help = 'Show progress messages'
+			help = 'show progress messages'
 		)
 		subparsers = parser.add_subparsers(
 			dest = 'dbtype',
@@ -142,12 +179,50 @@ class UpdateApp( AppLogger ):
 		)
 		sqliteopts = subparsers.add_parser( 'sqlite', formatter_class = argparse.ArgumentDefaultsHelpFormatter )
 		sqliteopts.add_argument(
+			'-v', '--verbose',
+			default = 0,
+			action = 'count',
+			help = 'show progress messages'
+		)
+		sqliteopts.add_argument(
+			'-f', '--force',
+			default = False,
+			action = 'store_true',
+			help = 'ignore the minimum interval'
+		)
+		sqliteopts.add_argument(
+			'-i', '--intervall',
+			default = 3600,
+			type = int,
+			action = 'store',
+			help = 'minimum interval between updates'
+		)
+		sqliteopts.add_argument(
 			'-p', '--path',
 			dest = 'path',
 			help = 'alternative path for the sqlite database',
 			default = './'
 		)
 		mysqlopts = subparsers.add_parser( 'mysql', formatter_class = argparse.ArgumentDefaultsHelpFormatter )
+		mysqlopts.add_argument(
+			'-v', '--verbose',
+			default = 0,
+			action = 'count',
+			help = 'show progress messages'
+		)
+		mysqlopts.add_argument(
+			'-f', '--force',
+			default = False,
+			action = 'store_true',
+			help = 'ignore the minimum interval'
+		)
+		mysqlopts.add_argument(
+			'-i', '--intervall',
+			default = 3600,
+			type = int,
+			action = 'store',
+			help = 'minimum interval between updates'
+		)
 		mysqlopts.add_argument(
 			'-H', '--host',
 			dest = 'host',
@@ -186,11 +261,11 @@ class UpdateApp( AppLogger ):
 		self.notifier	= Notifier()
 		self.monitor	= MediathekViewMonitor()
 		self.updater	= MediathekViewUpdater( self.getNewLogger( 'MediathekViewUpdater' ), self.notifier, self.settings, self.monitor )
-		self.updater.Init()
+		return self.updater.Init( convert = True )
 
 	def Run( self ):
 		self.info( 'Starting up...' )
-		updateop = self.updater.GetCurrentUpdateOperation()
+		updateop = self.updater.GetCurrentUpdateOperation( self.args.force )
 		if updateop == 1:
 			# full update
 			self.info( 'Initiating full update...' )

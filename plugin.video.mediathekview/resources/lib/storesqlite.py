@@ -5,6 +5,7 @@
 # -- Imports ------------------------------------------------
 import os, time
 import sqlite3
+import hashlib
 
 import resources.lib.mvutils as mvutils
 
@@ -13,13 +14,14 @@ from resources.lib.exceptions import DatabaseCorrupted
 
 # -- Classes ------------------------------------------------
 class StoreSQLite( object ):
+
 	def __init__( self, logger, notifier, settings ):
 		self.logger		= logger
 		self.notifier	= notifier
 		self.settings	= settings
 		# internals
 		self.conn		= None
-		self.dbfile		= os.path.join( self.settings.datapath, 'filmliste-v1.db' )
+		self.dbfile		= os.path.join( self.settings.datapath, 'filmliste-v2.db' )
 		# useful query fragments
 		self.sql_query_films	= "SELECT film.id,title,show,channel,description,duration,size,datetime(aired, 'unixepoch', 'localtime'),url_sub,url_video,url_video_sd,url_video_hd FROM film LEFT JOIN show ON show.id=film.showid LEFT JOIN channel ON channel.id=film.channelid"
 		self.sql_query_filmcnt	= "SELECT COUNT(*) FROM film LEFT JOIN show ON show.id=film.showid LEFT JOIN channel ON channel.id=film.channelid"
@@ -27,13 +29,17 @@ class StoreSQLite( object ):
 		self.sql_cond_nofuture	= " AND ( ( aired IS NULL ) OR ( ( UNIX_TIMESTAMP() - aired ) > 0 ) )" if settings.nofuture else ""
 		self.sql_cond_minlength	= " AND ( ( duration IS NULL ) OR ( duration >= %d ) )" % settings.minlength if settings.minlength > 0 else ""
 
-	def Init( self, reset = False ):
+	def Init( self, reset, convert ):
 		self.logger.info( 'Using SQLite version {}, python library sqlite3 version {}', sqlite3.sqlite_version, sqlite3.version )
 		if not mvutils.dir_exists( self.settings.datapath ):
 			os.mkdir( self.settings.datapath )
+
+		# remove old versions
+		mvutils.file_remove( os.path.join( self.settings.datapath, 'filmliste-v1.db' ) )
+
 		if reset == True or not mvutils.file_exists( self.dbfile ):
 			self.logger.info( '===== RESET: Database will be deleted and regenerated =====' )
-			self._file_remove( self.dbfile )
+			mvutils.file_remove( self.dbfile )
 			self.conn = sqlite3.connect( self.dbfile, timeout = 60 )
 			self._handle_database_initialization()
 		else:
@@ -41,35 +47,33 @@ class StoreSQLite( object ):
 				self.conn = sqlite3.connect( self.dbfile, timeout = 60 )
 			except sqlite3.DatabaseError as err:
 				self.logger.error( 'Error while opening database: {}. trying to fully reset the Database...', err )
-				self.Init( reset = True )
+				return self.Init( reset = True, convert = convert )
 
 		self.conn.execute( 'pragma journal_mode=off' )	# 3x speed-up, check mode 'WAL'
 		self.conn.execute( 'pragma synchronous=off' )	# that is a bit dangerous :-) but faaaast
-
 		self.conn.create_function( 'UNIX_TIMESTAMP', 0, UNIX_TIMESTAMP )
 		self.conn.create_aggregate( 'GROUP_CONCAT', 1, GROUP_CONCAT )
+		return True
 
 	def Exit( self ):
 		if self.conn is not None:
 			self.conn.close()
 			self.conn	= None
 
-	def Search( self, search, filmui ):
+	def Search( self, search, filmui, extendedsearch ):
 		searchmask = '%' + search.decode('utf-8') + '%'
-		self._Search_Condition( '( ( title LIKE ? ) OR ( show LIKE ? ) )', ( searchmask, searchmask, ), filmui, True, True, self.settings.maxresults )
-
-	def SearchFull( self, search, filmui ):
-		searchmask = '%' + search.decode('utf-8') + '%'
-		self._Search_Condition( '( ( title LIKE ? ) OR ( show LIKE ? ) OR ( description LIKE ? ) )', ( searchmask, searchmask, searchmask ), filmui, True, True, self.settings.maxresults )
+		searchcond = '( ( title LIKE ? ) OR ( show LIKE ? ) OR ( description LIKE ? ) )' if extendedsearch is True else '( ( title LIKE ? ) OR ( show LIKE ? ) )'
+		searchparm = ( searchmask, searchmask, searchmask ) if extendedsearch is True else ( searchmask, searchmask, )
+		return self._Search_Condition( searchcond, searchparm, filmui, True, True, self.settings.maxresults )
 
 	def GetRecents( self, channelid, filmui ):
 		if channelid != '0':
-			self._Search_Condition( self.sql_cond_recent + ' AND ( film.channelid=? )', ( int( channelid ), ), filmui, True, False, 10000 )
+			return self._Search_Condition( self.sql_cond_recent + ' AND ( film.channelid=? )', ( int( channelid ), ), filmui, True, False, 10000 )
 		else:
-			self._Search_Condition( self.sql_cond_recent, (), filmui, True, False, 10000 )
+			return self._Search_Condition( self.sql_cond_recent, (), filmui, True, False, 10000 )
 
 	def GetLiveStreams( self, filmui ):
-		self._Search_Condition( '( show.search="LIVESTREAM" )', (), filmui, False, False, 10000 )
+		return self._Search_Condition( '( show.search="LIVESTREAM" )', (), filmui, False, False, 0, False )
 
 	def GetChannels( self, channelui ):
 		self._Channels_Condition( None, channelui )
@@ -181,10 +185,10 @@ class StoreSQLite( object ):
 			return
 		if showid.find( ',' ) == -1:
 			# only one channel id
-			self._Search_Condition( '( showid=? )', ( int( showid ), ), filmui, False, False, 10000 )
+			return self._Search_Condition( '( showid=? )', ( int( showid ), ), filmui, False, False, 10000 )
 		else:
 			# multiple channel ids
-			self._Search_Condition( '( showid IN ( {} ) )'.format(  showid ), (), filmui, False, True, 10000 )
+			return self._Search_Condition( '( showid IN ( {} ) )'.format(  showid ), (), filmui, False, True, 10000 )
 
 	def _Channels_Condition( self, condition, channelui ):
 		if self.conn is None:
@@ -208,26 +212,28 @@ class StoreSQLite( object ):
 			self.logger.error( 'Database error: {}', err )
 			self.notifier.ShowDatabaseError( err )
 
-	def _Search_Condition( self, condition, params, filmui, showshows, showchannels, maxresults ):
+	def _Search_Condition( self, condition, params, filmui, showshows, showchannels, maxresults, limiting = True ):
 		if self.conn is None:
-			return
+			return 0
 		try:
 			maxresults = int( maxresults )
+			if limiting:
+				sql_cond_limit = self.sql_cond_nofuture + self.sql_cond_minlength
+			else:
+				sql_cond_limit = ''
 			self.logger.info( 'SQLite Query: {}',
 				self.sql_query_films +
 				' WHERE ' +
 				condition +
-				self.sql_cond_nofuture +
-				self.sql_cond_minlength
+				sql_cond_limit
 			)
 			cursor = self.conn.cursor()
 			cursor.execute(
 				self.sql_query_filmcnt +
 				' WHERE ' +
 				condition +
-				self.sql_cond_nofuture +
-				self.sql_cond_minlength +
-				' LIMIT {}'.format( maxresults + 1 ) if maxresults else '',
+				sql_cond_limit +
+				( ' LIMIT {}'.format( maxresults + 1 ) if maxresults else '' ),
 				params
 			)
 			( results, ) = cursor.fetchone()
@@ -237,9 +243,8 @@ class StoreSQLite( object ):
 				self.sql_query_films +
 				' WHERE ' +
 				condition +
-				self.sql_cond_nofuture +
-				self.sql_cond_minlength +
-				' LIMIT {}'.format( maxresults ) if maxresults else '',
+				sql_cond_limit +
+				( ' LIMIT {}'.format( maxresults + 1 ) if maxresults else '' ),
 				params
 			)
 			filmui.Begin( showshows, showchannels )
@@ -247,9 +252,11 @@ class StoreSQLite( object ):
 				filmui.Add( totalItems = results )
 			filmui.End()
 			cursor.close()
+			return results
 		except sqlite3.Error as err:
 			self.logger.error( 'Database error: {}', err )
 			self.notifier.ShowDatabaseError( err )
+			return 0
 
 	def RetrieveFilmInfo( self, filmid ):
 		if self.conn is None:
@@ -447,7 +454,8 @@ class StoreSQLite( object ):
 		cursor.close()
 		self.conn.commit()
 
-	def SupportsUpdate( self ):
+	@staticmethod
+	def SupportsUpdate():
 		return True
 
 	def ftInit( self ):
@@ -543,16 +551,19 @@ class StoreSQLite( object ):
 			inschn = 0
 			insshw = 0
 			insmov = 0
+			channel = film['channel'][:64]
+			show	= film['show'][:128]
+			title	= film['title'][:128]
 
 			# handle channel
-			if self.ft_channel != film['channel']:
+			if self.ft_channel != channel:
 				# process changed channel
 				newchn = True
-				cursor.execute( 'SELECT `id`,`touched` FROM `channel` WHERE channel.channel=?', ( film['channel'], ) )
+				cursor.execute( 'SELECT `id`,`touched` FROM `channel` WHERE channel.channel=?', ( channel, ) )
 				r = cursor.fetchall()
 				if len( r ) > 0:
 					# get the channel data
-					self.ft_channel = film['channel']
+					self.ft_channel = channel
 					self.ft_channelid = r[0][0]
 					if r[0][1] == 0:
 						# updated touched
@@ -560,18 +571,18 @@ class StoreSQLite( object ):
 				else:
 					# insert the new channel
 					inschn = 1
-					cursor.execute( 'INSERT INTO `channel` ( `dtCreated`,`channel` ) VALUES ( ?,? )', ( int( time.time() ), film['channel'] ) )
-					self.ft_channel = film['channel']
+					cursor.execute( 'INSERT INTO `channel` ( `dtCreated`,`channel` ) VALUES ( ?,? )', ( int( time.time() ), channel ) )
+					self.ft_channel = channel
 					self.ft_channelid = cursor.lastrowid
 
 			# handle show
-			if newchn or self.ft_show != film['show']:
+			if newchn or self.ft_show != show:
 				# process changed show
-				cursor.execute( 'SELECT `id`,`touched` FROM `show` WHERE ( show.channelid=? ) AND ( show.show=? )', ( self.ft_channelid, film['show'] ) )
+				cursor.execute( 'SELECT `id`,`touched` FROM `show` WHERE ( show.channelid=? ) AND ( show.show=? )', ( self.ft_channelid, show ) )
 				r = cursor.fetchall()
 				if len( r ) > 0:
 					# get the show data
-					self.ft_show = film['show']
+					self.ft_show = show
 					self.ft_showid = r[0][0]
 					if r[0][1] == 0:
 						# updated touched
@@ -595,24 +606,21 @@ class StoreSQLite( object ):
 						)
 						""", (
 							int( time.time() ),
-							self.ft_channelid, film['show'],
-							mvutils.make_search_string( film['show'] )
+							self.ft_channelid, show,
+							mvutils.make_search_string( show )
 						)
 					)
-					self.ft_show = film['show']
+					self.ft_show = show
 					self.ft_showid = cursor.lastrowid
 
 			# check if the movie is there
+			idhash = hashlib.md5( "{}:{}:{}".format( self.ft_channelid, self.ft_showid, film['url_video'] ) ).hexdigest()
 			cursor.execute( """
 				SELECT		`id`,
 							`touched`
 				FROM		`film`
-				WHERE		( film.channelid = ? )
-							AND
-							( film.showid = ? )
-							AND
-							( film.url_video = ? )
-			""", ( self.ft_channelid, self.ft_showid, film['url_video'] ) )
+				WHERE		( film.idhash = ? )
+			""", ( idhash, ) )
 			r = cursor.fetchall()
 			if len( r ) > 0:
 				# film found
@@ -626,6 +634,7 @@ class StoreSQLite( object ):
 				cursor.execute(
 					"""
 					INSERT INTO `film` (
+						`idhash`,
 						`dtCreated`,
 						`channelid`,
 						`showid`,
@@ -655,13 +664,15 @@ class StoreSQLite( object ):
 						?,
 						?,
 						?,
+						?,
 						?
 					)
 					""", (
+						idhash,
 						int( time.time() ),
 						self.ft_channelid,
 						self.ft_showid,
-						film['title'],
+						title,
 						mvutils.make_search_string( film['title'] ),
 						film['airedepoch'],
 						mvutils.make_duration( film['duration'] ),
@@ -687,7 +698,7 @@ class StoreSQLite( object ):
 		self.logger.error( 'Database error during critical operation: {} - Database will be rebuilt from scratch.', err )
 		self.notifier.ShowDatabaseError( err )
 		self.Exit()
-		self.Init( reset = True )
+		self.Init( reset = True, convert = False )
 
 	def _handle_database_initialization( self ):
 		self.conn.executescript( """
@@ -701,7 +712,7 @@ CREATE TABLE "channel" (
 	 "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	 "dtCreated" integer(11,0) NOT NULL DEFAULT 0,
 	 "touched" integer(1,0) NOT NULL DEFAULT 1,
-	 "channel" TEXT(255,0) NOT NULL
+	 "channel" TEXT(64,0) NOT NULL
 );
 
 -- ----------------------------
@@ -710,12 +721,13 @@ CREATE TABLE "channel" (
 DROP TABLE IF EXISTS "film";
 CREATE TABLE "film" (
 	 "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	 "idhash" TEXT(32,0) NOT NULL,
 	 "dtCreated" integer(11,0) NOT NULL DEFAULT 0,
 	 "touched" integer(1,0) NOT NULL DEFAULT 1,
 	 "channelid" INTEGER(11,0) NOT NULL,
 	 "showid" INTEGER(11,0) NOT NULL,
-	 "title" TEXT(255,0) NOT NULL,
-	 "search" TEXT(255,0) NOT NULL,
+	 "title" TEXT(128,0) NOT NULL,
+	 "search" TEXT(128,0) NOT NULL,
 	 "aired" integer(11,0),
 	 "duration" integer(11,0),
 	 "size" integer(11,0),
@@ -738,8 +750,8 @@ CREATE TABLE "show" (
 	 "dtCreated" integer(11,0) NOT NULL DEFAULT 0,
 	 "touched" integer(1,0) NOT NULL DEFAULT 1,
 	 "channelid" INTEGER(11,0) NOT NULL DEFAULT 0,
-	 "show" TEXT(255,0) NOT NULL,
-	 "search" TEXT(255,0) NOT NULL,
+	 "show" TEXT(128,0) NOT NULL,
+	 "search" TEXT(128,0) NOT NULL,
 	CONSTRAINT "FK_ShowChannel" FOREIGN KEY ("channelid") REFERENCES "channel" ("id") ON DELETE CASCADE
 );
 
@@ -767,14 +779,13 @@ CREATE TABLE "status" (
 -- ----------------------------
 --  Indexes structure for table film
 -- ----------------------------
-CREATE INDEX "dupecheck" ON film ("channelid", "showid", "url_video");
+CREATE INDEX "dupecheck" ON film ("idhash");
 CREATE INDEX "index_1" ON film ("channelid", "title" COLLATE NOCASE);
 CREATE INDEX "index_2" ON film ("showid", "title" COLLATE NOCASE);
 
 -- ----------------------------
 --  Indexes structure for table show
 -- ----------------------------
-CREATE INDEX "category" ON show ("category");
 CREATE INDEX "search" ON show ("search");
 CREATE INDEX "combined_1" ON show ("channelid", "search");
 CREATE INDEX "combined_2" ON show ("channelid", "show");
@@ -783,19 +794,8 @@ PRAGMA foreign_keys = true;
 		""" )
 		self.UpdateStatus( 'IDLE' )
 
-	def _file_remove( self, name ):
-		if mvutils.file_exists( name ):
-			try:
-				os.remove( name )
-				return True
-			except OSError as err:
-				self.logger.error( 'Failed to remove {}: error {}', name, err )
-		return False
-
-def UNIX_TIMESTAMP():
-	return int( time.time() )
-
 class GROUP_CONCAT:
+
 	def __init__( self ):
 		self.value = ''
 
@@ -806,5 +806,8 @@ class GROUP_CONCAT:
 			else:
 				self.value = '{0},{1}'.format( self.value, value )
 
-	def finalize(self):
+	def finalize( self ):
 		return self.value
+
+def UNIX_TIMESTAMP():
+	return int( time.time() )

@@ -13,39 +13,33 @@ class Store( object ):
 		self.notifier = notifier
 		self.settings = settings
 		# load storage engine
-		if settings.type == '0':
+		if settings.type == 0:
 			self.logger.info( 'Database driver: Internal (sqlite)' )
 			self.db = StoreSQLite( logger.getNewLogger( 'StoreSQLite' ), notifier, self.settings )
-		elif settings.type == '1':
+		elif settings.type == 1:
 			self.logger.info( 'Database driver: External (mysql)' )
 			self.db = StoreMySQL( logger.getNewLogger( 'StoreMySQL' ), notifier, self.settings )
 		else:
 			self.logger.warn( 'Unknown Database driver selected' )
 			self.db = None
 
-	def Init( self, reset = False ):
+	def Init( self, reset = False, convert = False ):
 		if self.db is not None:
-			self.db.Init( reset )
+			return self.db.Init( reset, convert )
+		return False
 
 	def Exit( self ):
 		if self.db is not None:
 			self.db.Exit()
 
-	def Search( self, search, filmui ):
-		if self.db is not None:
-			self.db.Search( search, filmui )
-
-	def SearchFull( self, search, filmui ):
-		if self.db is not None:
-			self.db.SearchFull( search, filmui )
+	def Search( self, search, filmui, extendedsearch = False ):
+		return self.db.Search( search, filmui, extendedsearch ) if self.db is not None else 0
 
 	def GetRecents( self, channelid, filmui ):
-		if self.db is not None:
-			self.db.GetRecents( channelid, filmui )
+		return self.db.GetRecents( channelid, filmui ) if self.db is not None else 0
 
 	def GetLiveStreams( self, filmui ):
-		if self.db is not None:
-			self.db.GetLiveStreams( filmui )
+		return self.db.GetLiveStreams( filmui ) if self.db is not None else 0
 
 	def GetChannels( self, channelui ):
 		if self.db is not None:
@@ -64,8 +58,7 @@ class Store( object ):
 			self.db.GetShows( channelid, initial, showui )
 
 	def GetFilms( self, showid, filmui ):
-		if self.db is not None:
-			self.db.GetFilms( showid, filmui )
+		return self.db.GetFilms( showid, filmui ) if self.db is not None else 0
 
 	def RetrieveFilmInfo( self, filmid ):
 		if self.db is not None:

@@ -1,3 +1,6 @@
+Version 1.0.9 (8/8/2018)
+-Fixes to addon.xml
+
 Version 1.0.6 (25/8/2015)
 -Avoid integers in addSortMethod (tks martijn)
 -Added pt-BR translation

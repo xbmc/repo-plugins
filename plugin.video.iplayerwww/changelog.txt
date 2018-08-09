@@ -1,3 +1,6 @@
+v2.5.40
+Fixed Radio for programmes which contain semicolon in the json data.
+
 v2.5.39
 Fixed Channel A-Z.
 

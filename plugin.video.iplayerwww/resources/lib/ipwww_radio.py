@@ -741,7 +741,7 @@ def ScrapeAvailableStreams(url):
     # Search for standard programmes.
     stream_id_st = re.compile('"vpid":"(.+?)"').findall(html)
     if not stream_id_st:
-        match = re.search(r'window.__PRELOADED_STATE__ = (.*?);', html, re.DOTALL)
+        match = re.search(r'window.__PRELOADED_STATE__ = (.*?);\s*</script>', html, re.DOTALL)
         if match:
             data = match.group(1)
             json_data = json.loads(data)

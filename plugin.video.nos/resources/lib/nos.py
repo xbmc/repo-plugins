@@ -32,6 +32,9 @@ def index():
             category_text = u'{category_text} (georestricted NL only)'.format(
                 category_text=category_text
             )
+        if category_url == '/uitzending/nos-sportjournaal.html':
+            # Sportjournaal is protected by DRM
+            continue
         if category_url.startswith(u'/uitzending/'):
             data.append(
                 {
@@ -61,8 +64,8 @@ def show_category(category_url):
     )
     for video in videos:
         title = video.findAll(
-            u'span',
-            {u'class': u'broadcast-link__name '},
+            u'div',
+            {u'class': u'broadcast-link-thumb__name'},
         )[0].text
         timecode = video.findAll(u'time')[0][u'datetime']
         parsed_timecode = datetimeparse(timecode)
@@ -93,7 +96,6 @@ def video_url_to_file_url(video_url):
     )
     soup = BeautifulSoup(response.content)
     video = soup.findAll(u'video')[0]
-    geoprotected = video.get(u'data-geoprotection', False)
     sources = video.findAll(u'source')
     sources = sorted(
         sources,
@@ -103,14 +105,5 @@ def video_url_to_file_url(video_url):
         reverse=True,
     )
     preferred_source = sources[0]
-    if geoprotected:
-        url = None
-        response = requests.request(
-            method=u'POST',
-            url=u'https://nos.nl/video/resolve/',
-            data=json.dumps([{u'file': preferred_source[u'src']}]),
-        ).json()
-        url = response[0][u'file']
-    else:
-        url = preferred_source['src']
+    url = preferred_source['src']
     return url

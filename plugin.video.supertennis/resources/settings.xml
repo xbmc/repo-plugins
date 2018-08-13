@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <category label="30000">
+        <setting id="stream_source" type="select" label="30010" lvalues="30011|30012" default="1"/>
+    </category>
+</settings>

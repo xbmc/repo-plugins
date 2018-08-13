@@ -14,7 +14,7 @@ class Live:
         return htmlData
         
     def getUrl(self):
-        pageUrl = "http://eventi.liveksoft.tv/supertennis.tv/liveadv.php"
+        pageUrl = "http://advplayer.morescreens.eu/supertennis/index1.php"
         req = urllib2.Request(pageUrl, headers={'User-Agent': self.__USERAGENT})        
         htmlData = urllib2.urlopen(req).read()
         
@@ -24,11 +24,13 @@ class Live:
         string = match.group(1)
         
         # Convert string to JSON
-        string = string.replace('file', '"file"')
-        string = string.replace("'", '"')
+        string = re.sub(r'^\s+(\/\/.*)$', "", string, flags=re.MULTILINE)
+        string = string.replace('type', '"type"')
+        string = string.replace('src', '"src"')
+        string = re.sub(r'},\s*\]', "}]", string, flags=re.MULTILINE)
         
         sources = json.loads(string)
-        videoUrl = sources[1]["file"]
+        videoUrl = sources[0]["src"]
         if videoUrl.startswith("//"):
             videoUrl = "http:" + videoUrl
         

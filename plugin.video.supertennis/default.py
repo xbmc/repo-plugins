@@ -44,8 +44,13 @@ def show_root_menu():
 
 def play_live():
     live = Live()
-    url = live.getMobileUrl()
-    #url = live.getUrl()
+    xbmc.log("Live streaming...")
+    if  Addon.getSetting("stream_source") == "0":
+        xbmc.log("Web stream")
+        url = live.getUrl()
+    else:
+        xbmc.log("Mobile stream")
+        url = live.getMobileUrl()
     liStyle=xbmcgui.ListItem(path=url)
     xbmcplugin.setResolvedUrl(handle=handle, succeeded=True, listitem=liStyle)
 

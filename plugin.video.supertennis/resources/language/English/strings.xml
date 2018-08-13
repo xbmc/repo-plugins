@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+        <!--settings labels-->
+        <string id="30000">Streaming</string>
+        <string id="30010">Source</string>
+        <string id="30011">Web Site</string>
+        <string id="30012">Mobile App</string>
+</strings>

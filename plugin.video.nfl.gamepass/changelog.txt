@@ -1,3 +1,18 @@
+2018.08.15 -- Quarterback by Committee Edition
++ Assorted fixes for 2018 season breakage (kaileu)
++ Add RedZone Live (kaileu)
++ Make acquisition of NFL Shows dynamic (aqw)
++   it's slower now, but should break less often
++ If there's a password in the log, make sure to 'xxxx' it out (rva87)
++ Bugfix for subscription check (emilsvennesson)
++ When "hide game length" is enabled, don't show if the game went into overtime (pyrocumulus)
++ Assorted bugfixes (rva87, pyrocumulus)
++ Fix invalid XML in skin (aqw)
++ Code cleanup (aqw)
++ Better handle HTTP timeouts (rva87)
++ NOTE: pigskin.py development now happens in https://github.com/aqw/pigskin
++   this addon will sync regularly from that repo
+
 2017.08.24 v0.11.1 -- Kenny Easley Edition
 + Fix "everything is broken"; Game Pass broke their API again (emilsvennesson)
 + Add groundwork for what will become a Team View (kaileu)

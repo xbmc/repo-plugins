@@ -1,5 +1,5 @@
 """
-A Kodi-agnostic library for NFL Game Pass
+A Python library for NFL Game Pass
 """
 import codecs
 import uuid
@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 import requests
 import m3u8
 
+
 class pigskin(object):
     def __init__(self, proxy_config, debug=False):
         self.debug = debug
@@ -25,7 +26,6 @@ class pigskin(object):
         self.config = self.make_request(self.base_url + '/api/en/content/v1/web/config', 'get')
         self.client_id = self.config['modules']['API']['CLIENT_ID']
         self.nfln_shows = {}
-        self.nfln_seasons = []
         self.parse_shows()
 
         if proxy_config is not None:
@@ -65,16 +65,43 @@ class pigskin(object):
         if params:
             self.log('Params: %s' % params)
         if payload:
+            if 'password' in payload:
+                password = payload['password']
+                payload['password'] = 'xxxxxxxxxxxx'
             self.log('Payload: %s' % payload)
+            if 'password' in payload:
+                payload['password'] = password
         if headers:
             self.log('Headers: %s' % headers)
 
-        if method == 'get':
-            req = self.http_session.get(url, params=params, headers=headers)
-        elif method == 'put':
-            req = self.http_session.put(url, params=params, data=payload, headers=headers)
-        else:  # post
-            req = self.http_session.post(url, params=params, data=payload, headers=headers)
+        # requests session implements connection pooling, after being idle for
+        # some time the connection might be closed server side.
+        # In case it's the servers being very slow, the timeout should fail fast
+        # and retry with longer timeout.
+        failed = False
+        for t in [3, 22]:
+            try:
+                if method == 'get':
+                    req = self.http_session.get(url, params=params, headers=headers, timeout=t)
+                elif method == 'put':
+                    req = self.http_session.put(url, params=params, data=payload, headers=headers, timeout=t)
+                else:  # post
+                    req = self.http_session.post(url, params=params, data=payload, headers=headers, timeout=t)
+                # We made it without error, exit the loop
+                break
+            except requests.Timeout:
+                self.log('Timeout condition occurred after %i seconds' % t)
+                if failed:
+                    # failed twice while sending request
+                    # TODO: this should be raised so the user can be informed.
+                    pass
+                else:
+                    failed = True
+            except:
+                # something else went wrong, not a timeout
+                # TODO: raise this
+                pass
+
         self.log('Response code: %s' % req.status_code)
         self.log('Response: %s' % req.content)
 
@@ -90,7 +117,7 @@ class pigskin(object):
         if isinstance(response, dict):
             for key in response.keys():
                 if key.lower() == 'message':
-                    if response[key]: # raise all messages as GamePassError if message is not empty
+                    if response[key]:  # raise all messages as GamePassError if message is not empty
                         raise self.GamePassError(response[key])
 
         return response
@@ -130,9 +157,8 @@ class pigskin(object):
         return proxy_url
 
     def login(self, username, password):
-        """Blindly authenticate to Game Pass. Use has_subscription() to
-        determine success.
-        """
+        """Attempt to authenticate to Game Pass. Raises error_unauthorised on failure.
+        Use check_for_subscription() to determine if the user has a valid subscription."""
         url = self.config['modules']['API']['LOGIN']
         post_data = {
             'username': username,
@@ -148,12 +174,17 @@ class pigskin(object):
         return True
 
     def check_for_subscription(self):
-        """Returns True if a subscription is detected. Raises error_unauthorised on failure."""
-        url = self.config['modules']['API']['USER_PROFILE']
+        """Return True if a subscription is detected and raise 'no_subscription' on failure."""
+        url = self.config['modules']['API']['USER_ACCOUNT']
         headers = {'Authorization': 'Bearer {0}'.format(self.access_token)}
-        self.make_request(url, 'get', headers=headers)
+        account_data = self.make_request(url, 'get', headers=headers)
 
-        return True
+        if account_data['subscriptions']:
+            self.log('NFL Game Pass Europe subscription detected.')
+            return True
+        else:
+            self.log('No active NFL Game Pass Europe subscription was found.')
+            raise self.GamePassError('no_subscription')
 
     def refresh_tokens(self):
         """Refreshes authorization tokens."""
@@ -242,14 +273,18 @@ class pigskin(object):
                         for teamname in teams['modules'][conference]['content']:
                             if team == teamname['fullName']:
                                 team = teamname['seoname']
-                                break;
+                                break
                             else:
                                 return None
 
                 url = self.config['modules']['ROUTES_DATA_PROVIDERS']['team_detail'].replace(':team', team)
                 games_data = self.make_request(url, 'get')
                 # collect games from all keys in 'modules' for a specific season
-                games = [g for x in games_data['modules'].keys() if x == 'videos'+season for g in games_data['modules'][x]['content']]
+                # At the moment, only the Current Season which is supported;
+                # maybe the season category will return so this code will only
+                # be commented out.
+                # games = [g for x in games_data['modules'].keys() if x == 'videos'+season for g in games_data['modules'][x]['content']]
+                games = [g for x in games_data['modules'].keys() if x == 'gamesCurrentSeason' for g in games_data['modules'][x]['content']]
 
         except:
             self.log('Acquiring Team games data failed.')
@@ -278,6 +313,11 @@ class pigskin(object):
             url = self.config['modules']['ROUTES_DATA_PROVIDERS']['network']
             response = self.make_request(url, 'get')
             video_id = response['modules']['networkLiveVideo']['content'][0]['videoId']
+        elif video_id == 'redzone':
+            diva_config_url = self.config['modules']['DIVA']['HTML5']['SETTINGS']['Live24x7']
+            url = self.config['modules']['ROUTES_DATA_PROVIDERS']['redzone']
+            response = self.make_request(url, 'get')
+            video_id = response['modules']['redZoneLive']['content'][0]['videoId']
         else:
             if game_type == 'live':
                 diva_config_url = self.config['modules']['DIVA']['HTML5']['SETTINGS']['LiveNoData']
@@ -294,9 +334,16 @@ class pigskin(object):
         akamai_xml_data = self.make_request(stream_request_url, 'get')
         akamai_xml_root = ET.fromstring(akamai_xml_data)
         for i in akamai_xml_root.iter('videoSource'):
-            if i.attrib['format'] == 'ChromeCast':
+            if i.attrib['format'].lower() == 'chromecast':
                 for text in i.itertext():
                     if 'http' in text:
+                        m3u8_url = text
+                        break
+            if i.attrib['format'].lower() == 'hls':
+                for text in i.itertext():
+                    self.log('m3u8 url.')
+                    self.log('Python Version: %s' % text)
+                    if 'http' in text and 'highlights' in text:
                         m3u8_url = text
                         break
 
@@ -344,26 +391,47 @@ class pigskin(object):
     def parse_shows(self):
         """Dynamically parse the NFL Network shows into a dict."""
         show_dict = {}
+
+        # NFL Network shows
         url = self.config['modules']['API']['NETWORK_PROGRAMS']
         response = self.make_request(url, 'get')
 
         for show in response['modules']['programs']:
-            season_dict = {}
-            for season in show['seasons']:
-                season_name = season['value']
-                season_id = season['slug']
-                season_dict[season_name] = season_id
-                if season_name not in self.nfln_seasons:
-                    self.nfln_seasons.append(season_name)
-            show_dict[show['title']] = season_dict
+            # Unfortunately, the 'seasons' list for each show cannot be trusted.
+            # So we loop over every episode for every show to build the list.
+            # TODO: this causes a lot of network traffic and slows down init
+            #       quite a bit. Would be nice to have a better workaround.
+            request_url = self.config['modules']['API']['NETWORK_EPISODES']
+            episodes_url = request_url.replace(':seasonSlug/', '').replace(':tvShowSlug', show['slug'])
+            episodes_data = self.make_request(episodes_url, 'get')['modules']['archive']['content']
+
+            # 'season' is often left unset. It's impossible to know for sure,
+            # but the year of the broadcast date seems like a sane best guess.
+            # TODO: but apparently 'scheduleDate' often contains errors. Yay...
+            season_list = set([episode['season'].replace('season-', '')
+                               if episode['season'] else episode['scheduleDate'][:4]
+                               for episode in episodes_data])
+
+            show_dict[show['title']] = season_list
+
+        # RedZone
+        url = self.config['modules']['ROUTES_DATA_PROVIDERS']['redzone']
+        response = self.make_request(url, 'get')
+
+        season_list = []
+        for episode in response['modules']['redZoneVod']['content']:
+            season_name = episode['season'].replace('season-', '')
+            season_list.append(season_name)
+
+        show_dict['RedZone'] = season_list
         self.nfln_shows.update(show_dict)
 
     def get_shows(self, season):
         """Return a list of all shows for a season."""
         seasons_shows = []
 
-        for show_name, show_codes in self.nfln_shows.items():
-            if season in show_codes:
+        for show_name, years in self.nfln_shows.items():
+            if season in years:
                 seasons_shows.append(show_name)
 
         return sorted(seasons_shows)
@@ -371,19 +439,29 @@ class pigskin(object):
     def get_shows_episodes(self, show_name, season=None):
         """Return a list of episodes for a show. Return empty list if none are
         found or if an error occurs."""
-        url = self.config['modules']['API']['NETWORK_PROGRAMS']
-        programs = self.make_request(url, 'get')['modules']['programs']
-        for show in programs:
-            if show_name == show['title']:
-                selected_show = show
-                break
-        season_slug = [x['slug'] for x in selected_show['seasons'] if season == x['value']][0]
-        request_url = self.config['modules']['API']['NETWORK_EPISODES']
-        episodes_url = request_url.replace(':seasonSlug', season_slug).replace(':tvShowSlug', selected_show['slug'])
-        episodes_data = self.make_request(episodes_url, 'get')['modules']['archive']['content']
-        for episode in episodes_data:
-            if not episode['videoThumbnail']['templateUrl']:  # set programs thumbnail as episode thumbnail
-                episode['videoThumbnail']['templateUrl'] = [x['thumbnail']['templateUrl'] for x in programs if x['slug'] == episode['nflprogram']][0]
+        if show_name == 'RedZone':  # RedZone
+            url = self.config['modules']['ROUTES_DATA_PROVIDERS']['redzone']
+            response = self.make_request(url, 'get')
+            episodes_data = response['modules']['redZoneVod']['content']
+        else:  # NFL Network shows
+            url = self.config['modules']['API']['NETWORK_PROGRAMS']
+            programs = self.make_request(url, 'get')['modules']['programs']
+            for show in programs:
+                if show_name == show['title']:
+                    selected_show = show
+                    break
+
+            # not all shows list all their seasons, if missing use hardcoded usual slug
+            season_slug = 'season-' + season
+            if any(x.get('value', None) == season for x in selected_show['seasons']):
+                season_slug = [x['slug'] for x in selected_show['seasons'] if season == x['value']][0]
+
+            request_url = self.config['modules']['API']['NETWORK_EPISODES']
+            episodes_url = request_url.replace(':seasonSlug', season_slug).replace(':tvShowSlug', selected_show['slug'])
+            episodes_data = self.make_request(episodes_url, 'get')['modules']['archive']['content']
+            for episode in episodes_data:
+                if not episode['videoThumbnail']['templateUrl']:  # set programs thumbnail as episode thumbnail
+                    episode['videoThumbnail']['templateUrl'] = [x['thumbnail']['templateUrl'] for x in programs if x['slug'] == episode['nflprogram']][0]
 
         return episodes_data
 

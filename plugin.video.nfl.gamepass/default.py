@@ -134,8 +134,8 @@ class GamepassGUI(xbmcgui.WindowXML):
     def display_nfln_seasons(self):
         """List seasons"""
         self.season_items = []
-        # sort so that years are first (descending) followed by text
-        for season in sorted(gp.nfln_seasons, key=lambda x: (x[0].isdigit(), x), reverse=True):
+        self.seasons = set([year for show in gp.nfln_shows for year in gp.nfln_shows[show]])
+        for season in sorted(self.seasons, reverse=True):
             listitem = xbmcgui.ListItem(season)
             self.season_items.append(listitem)
 
@@ -167,9 +167,13 @@ class GamepassGUI(xbmcgui.WindowXML):
             if game['phase'] == 'FINAL' or game['phase'] == 'FINAL_OVERTIME':
                 # show game duration only if user wants to see it
                 if addon.getSetting('hide_game_length') == 'false' and game['video']:
-                    game_info = '%s [CR] Duration: %s' % (game['phase'], str(timedelta(seconds=int(float(game['video']['videoDuration'])))))
+                    if game['video']['videoDuration'] == '':
+                        game['video']['videoDuration'] = '0'
+                    game_info = '%s [CR] Duration: %s' % (game['phase'], str(timedelta(seconds=int(float(game['video']['videoDuration'].replace(',', '.'))))))
                 else:
                     game_info = game['phase']
+                    if addon.getSetting('hide_game_length') == 'true' and game_info == 'FINAL_OVERTIME':
+                        game_info = 'FINAL'
             else:
                 if addon.getSetting('time_notation') == '0':  # 12-hour clock
                     datetime_format = '%A, %b %d - %I:%M %p'
@@ -177,7 +181,7 @@ class GamepassGUI(xbmcgui.WindowXML):
                     datetime_format = '%A, %b %d - %H:%M'
 
                 datetime_obj = gp.parse_datetime(game['gameDateTimeUtc'], True)
-                game_info = datetime_obj.strftime(datetime_format)
+                game_info = datetime_obj.strftime(datetime_format).encode('utf-8')
 
             if game['videoStatus'] == 'SCHEDULED':
                 isPlayable = 'false'
@@ -552,6 +556,7 @@ class CoachesFilmGUI(xbmcgui.WindowXML):
             url = self.playsList.getSelectedItem().getProperty('url')
             xbmc.executebuiltin('PlayMedia(%s,False,1)' % url)
 
+
 if __name__ == '__main__':
     addon_log('script starting')
     hide_busy_dialog()
@@ -571,7 +576,7 @@ if __name__ == '__main__':
         gp.login(username, password)
     except gp.GamePassError as error:
         dialog = xbmcgui.Dialog()
-        if error.value == 'error_unauthorised':
+        if error.value == 'error_unauthorised' or error.value == 'no_subscription':
             dialog.ok(language(30021), language(30023))
         else:
             dialog.ok(language(30021), error.value)

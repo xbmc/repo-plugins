@@ -17,7 +17,7 @@
 # along with USTVnow. If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, re, traceback, HTMLParser, calendar
+import os, sys, time, datetime, re, traceback, HTMLParser, calendar, string
 import urlparse, urllib, urllib2, socket, json, collections, net, random
 import xbmc, xbmcvfs, xbmcgui, xbmcplugin, xbmcaddon
 
@@ -51,7 +51,7 @@ MEDIA_TYPES  = {'SP':'video','SH':'episode','EP':'episode','MV':'movie'}
 FREE_CHANS   = ['CW','ABC','FOX','PBS','CBS','NBC','MY9']
 BASEURL      = 'http://m.%s.com/'%BRAND
 BASEWEB      = 'http://%s.com'%BRAND
-BASEVOD      = 'http://watch.ustvnow.com'
+BASEVOD      = 'https://watch.ustvnow.com'
 PTR_BASE     = 'http://m.poster.static-%s.com'%BRAND
 IMG_BASE     = 'http://m.images.static-%s.com'%BRAND
 IMG_SOURCE   = PTR_BASE + '/%s/%s/%s/med'
@@ -108,6 +108,7 @@ class USTVnow():
         self.net       = net.Net()
         self.cache     = SimpleCache()
         self.reminders = self.loadReminders()
+        self.recorded  = self.highlights = []
         self.isFree    = REAL_SETTINGS.getSetting('User_isFree') == "True"
         if self.login(USER_EMAIL, PASSWORD) == False: xbmc.executebuiltin("Container.Refresh")
     
@@ -151,13 +152,12 @@ class USTVnow():
                     f.close()
                 except: log('login, Unable to create the storage directory', xbmc.LOGERROR)
             header_dict = self.buildHeader()
-            qstr = urllib.urlencode({'username':user,'password':password})
             self.net.set_cookies(COOKIE_JAR)
             
             try:
                 #check token
                 dvrlink  = None
-                custlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getcustomerkey?%s'%(qstr), form_data={'token':LAST_TOKEN}, headers=header_dict).content.encode("utf-8").rstrip())
+                custlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getcustomerkey', form_data={'token':LAST_TOKEN}, headers=header_dict).content.encode("utf-8").rstrip())
                 '''{u'username': u'', u'ip': u'', u'customerkey': u''}'''
                 self.custkey = (custlink.get('customerkey','') or 0)                
                 if custlink and 'username' in custlink and user.lower() == custlink['username'].lower():
@@ -166,7 +166,7 @@ class USTVnow():
                     self.passkey = LAST_PASSKEY
                 else:
                     #login 
-                    loginlink = json.loads(self.net.http_POST(BASEURL + 'iphone/1/live/login?%s'%(qstr), form_data={'username':user,'password':password,'device':'gtv','redir':'0'}, headers=header_dict).content.encode("utf-8").rstrip())
+                    loginlink = json.loads(self.net.http_POST(BASEURL + 'iphone/1/live/login', form_data={'username':user,'password':password,'device':'gtv'}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'token': u'', u'result': u'success'}'''
                     if loginlink and 'token' in loginlink and loginlink['result'].lower() == 'success':
                         log('login, creating new token')
@@ -174,7 +174,7 @@ class USTVnow():
                         REAL_SETTINGS.setSetting('User_Token',self.token)          
                         
                         #passkey
-                        dvrlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/viewdvrlist?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
+                        dvrlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/viewdvrlist', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                         '''{u'globalparams': {u'passkey': u''}, u'results': []}'''
                         if dvrlink and 'globalparams' in dvrlink:
                             log('login, creating new passkey')
@@ -183,7 +183,7 @@ class USTVnow():
                     else: raise Exception
                             
                     #check user credentials
-                    userlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getuserbytoken?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
+                    userlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getuserbytoken', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'status': u'success', u'data': {u'username': u'', u'need_account_activation': False, u'plan_id': 1, u'language': u'en', u'plan_free': 1, u'sub_id': u'7', u'lname': u'', u'currency': u'USD', u'points': 1, u'need_account_renew': False, u'fname': u'', u'plan_name': u'Free Plan'}}'''
                     log('login, checking user account')
                     if userlink and 'data' in userlink and userlink['status'].lower() == 'success':
@@ -206,7 +206,7 @@ class USTVnow():
                         #check subscription
                         try:
                             #error prone, isolate and debug.
-                            sublink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getaccountsubscription?%s'%(qstr), form_data={'username':user,'customerkey':self.custkey}, headers=header_dict).content.encode("utf-8").rstrip())
+                            sublink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getaccountsubscription', form_data={'username':user,'customerkey':self.custkey}, headers=header_dict).content.encode("utf-8").rstrip())
                             '''{u'username': u'', u'billingDatetime': u'', u'currency': u'USD', u'cgaccountstatusreason': u'', u'invoicehistory': u'', u'ocaccountstatus': u'Account active', u'ccLastFour': u'', u'lname': u'', u'x-cg-acnt-USD': False, u'fname': u'', u'sub_info': {u'cost': 0, u'plan': {u'sub_group': 4, u'plan_id': 1, u'name': u'Free Plan', u'language': u'en', u'date_expire': u'0000-00-00', u'sub_id': 7, u'price': 0, u'currency': u'USD', u'plan_code': u'7_FREETRIAL', 
                                 u'details': u'This plan lets you receive all major US terrestrial stations (ABC, CBS, CW, FOX, NBC, PBS).  You can later upgrade to a paid plan with more channels and DVR.'}, u'packages': []}, u'pendinginvoices': u'', u'cgbillingstatus': u'', u'dvrpoints': 1, u'plans': {u'10': {u'price': 15, u'name': u'1 Week All Channel Plan $15 ($2.14/day)', 
                                 u'details': u'1 Week pass for all channels (No DVR)'}, u'23': {u'price': 19, u'name': u'All Channel Promo Plan $19/mo first 3 months', 
@@ -223,7 +223,7 @@ class USTVnow():
                 self.channels = self.cache.get(ADDON_NAME + '.channelguide')
                 if not self.channels:
                     log('login, refreshing channels')
-                    self.channels = sorted(json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/channelguide?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())['results'], key=lambda x: x['displayorder'])
+                    self.channels = sorted(json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/channelguide', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())['results'], key=lambda x: x['displayorder'])
                     '''{u'app_name': u'preview', u'stream': u'00000WXYZustvnow', u'af': u'US', u'dvraction': u'add', u'callsign': u'WHTM', u'event_inprogress': 1, 
                         u'srsid': 3560383, u'guideremainingtime': 3660, u'scheduleid': 9952642, u'favoriteaction': u'remove', u'event_time': u'00:00:00',u'title': u'Shark Tank', 
                         u'timemark': 1498867200, u'recordedon': u'June 30, 2017 20:00', u'prg_img': u'h3/NowShowing/9977826/p9977826_b1t_h3_aa.jpg', u'title_10': u'',
@@ -240,7 +240,7 @@ class USTVnow():
                 self.upcoming = self.cache.get(ADDON_NAME + '.upcoming')
                 if not self.upcoming:
                     log('login, refreshing upcoming')
-                    self.upcoming = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/upcoming?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
+                    self.upcoming = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/upcoming', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'prgschid': 19479379, u'dvraction': u'add', u'callsign': u'AMC', u'newtimecat': True, u'srsid': 14930, u'timecat': u'Today', u'scheduleid': 9946282, 
                         u'img': u'images/AMC.png', u'title': u'The Fugitive', u'prg_img': u'v5/NowShowing/14930/p14930_p_v5_aa.jpg', u'has_img': 1, u't': 0, u'sname': u'AMC', 
                         u'description': u'U.S. marshal (Tommy Lee Jones) hunts doctor (Harrison Ford) for murder of his wife (Sela Ward).', u'dvrtimeraction': u'add', 
@@ -252,7 +252,7 @@ class USTVnow():
                 self.highlights = self.cache.get(ADDON_NAME + '.highlights')
                 if not self.highlights:
                     log('login, refreshing highlights')
-                    self.highlights = json.loads(self.net.http_POST(BASEURL + 'api/1/live/highlights?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
+                    self.highlights = json.loads(self.net.http_POST(BASEURL + 'api/1/live/highlights', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'prgschid': 114059791, u'dvraction': u'add', u'bb_content': u'How would you like having Jim Morrison as a college roommate? ', u'callsign': u'WPSU', u'newtimecat': True,
                         u'srsid': 185479, u'timecat': u'Tomorrow', u'scheduleid': 49826153, u'img': u'images/WPSU.png', u'title': u'Antiques Roadshow', u'prg_img': u'h3/NowShowing/185479/p185479_b_h3_ag.jpg', 
                         u'has_img': 1, u't': 1, u'sname': u'PBS', u'description': u'A French Art Deco diamond and platinum ring; a copy of &quot;The History of Magic&quot; signed by Jim Morrison; four Rembrandt', 
@@ -274,7 +274,7 @@ class USTVnow():
                         u'episode_title': u'', u'synopsis': u'Paid programming.', u'dvrtimertype': 0, u'content_allowed': True, u'xcdrappname': u'livehd', u'event_date': u'2017-07-02', 
                         u'event_inprogress': 2, u'prgsvcid': 11534, u'ut_start': 1499031000, u'stream_code': u'ABC'}'''
                     if dvrlink: recorded = dvrlink['results']
-                    else: self.recorded = (json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/viewdvrlist?%s'%(qstr), form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip()))['results']
+                    else: self.recorded = (json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/viewdvrlist', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip()))['results']
                     self.cache.set(ADDON_NAME + '.recorded', self.recorded, expiration=datetime.timedelta(minutes=1))
                 self.names = self.getChannelNames()
                 return True
@@ -298,8 +298,8 @@ class USTVnow():
                 return False
         
         
-    def qrLogin(self):
-        BASEVOD+'/qr/linkcode/%s'%('kodi%s'%ADDON_ID)
+    # def qrLogin(self):
+        # BASEVOD+'/qr/linkcode/%s'%('kodi%s'%ADDON_ID)
         
         
     def grabChannelName(self, sname):
@@ -575,11 +575,12 @@ class USTVnow():
     
     def resolveURL(self, url, dvr=False):
         log('resolveURL, url = ' + url + ', dvr = ' + str(dvr))
+        rstr = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))                              
         if dvr:
             for channel in self.recorded:
                 if url == str(channel['scheduleid']):
                     try:
-                        urllink = json.loads(self.net.http_POST(BASEURL + 'stream/1/dvr/play', form_data={'token':self.token,'key':self.passkey,'scheduleid':channel['scheduleid']}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
+                        urllink = json.loads(self.net.http_POST(BASEURL + 'stream/1/dvr/play', form_data={'token':self.token,'scheduleid':channel['scheduleid'], 'rand' : rstr}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
                         '''{u'pr': u'll', u'domain': u'ilvc02.ll.ustvnow.com',u'stream': u'http://ilvc02.ll.ustvnow.com/ilv10/pr/xxl/smil:0B64AWHTMUSTVNOW/playlist.m3u8?', 
                             u'streamname': u'0B64AWHTMUSTVNOW', u'tr': u'', u'up': 1, u'pd': 0, u'pl': u'vjs'}'''
                         stream = urllink['stream']
@@ -588,12 +589,14 @@ class USTVnow():
                         log('resolveURL, url = ' + stream)
                         return stream
                     except Exception as e:
+                        log('resolveURL, failed ' + str(e), xbmc.LOGERROR)
                         if channel and channel['scheduleid']: self.replaceToken(url, dvr)
         else:
             for channel in self.channels:
                 if url == self.grabChannelName(channel['stream_code']):
-                    try:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-                        urllink = json.loads(self.net.http_POST(BASEURL + 'stream/1/live/view', form_data={'token':self.token,'key':self.passkey,'scode':channel['scode']}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
+                    try:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+                        try: urllink = json.loads(self.net.http_POST(BASEURL + 'stream/1/live/view', form_data={'token':self.token,'scode':channel['scode'], 'rand' : rstr, 'r' : 'r'}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
+                        except: urllink = json.loads(self.net.http_POST(BASEURL + 'stream/1/live/view', form_data={'token':self.token,'scode':channel['scode'], 'br_n' : 'Chrome', 'br_v' : '68', 'br_d' : 'desktop'}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
                         '''{u'pr': u'll', u'domain': u'ilvc02.ll.ustvnow.com',u'stream': u'http://ilvc02.ll.ustvnow.com/ilv10/pr/xxl/smil:0B64AWHTMUSTVNOW/playlist.m3u8?', 
                             u'streamname': u'0B64AWHTMUSTVNOW', u'tr': u'', u'up': 1, u'pd': 0, u'pl': u'vjs'}'''
                         if URL_TYPE == 'm3u8': stream = urllink['stream']
@@ -601,22 +604,23 @@ class USTVnow():
                         log('resolveURL, stream = ' + stream)
                         return stream
                     except Exception as e:
+                        log('resolveURL, failed ' + str(e), xbmc.LOGERROR)
                         if channel and channel['scode']: self.replaceToken(url, dvr)
                     
                     
     def replaceToken(self, url, dvr):
-        #generate alternative token using website endpoint rather then googletv.
+        #generate alternative token using website endpoint rather then api.
         try:
             #get CSRF Token
-            response = urllib2.urlopen(BASEVOD + "/account/signin").read()
+            response = urllib2.urlopen(BASEWEB + "/account/signin").read()
             CSRF = re.findall(r'var csrf_value = "(.*?)"', response, re.DOTALL)[0]
             #get WEB Token
-            response = (self.net.http_POST(BASEVOD + '/account/login', form_data={'csrf_ustvnow': CSRF, 'signin_email': USER_EMAIL, 'signin_password':PASSWORD, 'signin_remember':'1'}).content.encode("utf-8").rstrip())
+            response = (self.net.http_POST(BASEVOD + '/account/login', form_data={'csrf_ustvnow': CSRF, 'signin_email': USER_EMAIL, 'signin_password':PASSWORD}).content.encode("utf-8").rstrip())
             altToken = re.findall(r'var token(.*?)= "(.*?)";', response, re.DOTALL)[0][1]
             if altToken and altToken != 'null':
                 self.token = altToken
-                log('replaceToken, replacing existing token')
-                REAL_SETTINGS.setSetting('User_Token',altToken)
+                log('replaceToken, replacing existing token')    
+                REAL_SETTINGS.setSetting('User_Token',altToken) 
                 self.resolveURL(url, dvr)
         except Exception as e:
             log('replaceToken, Unable to login ' + str(e), xbmc.LOGERROR)

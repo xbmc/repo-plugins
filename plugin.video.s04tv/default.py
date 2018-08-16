@@ -52,14 +52,12 @@ missingelementtext = "Missing element '%s'. Maybe the site structure has changed
 videoquality = 'hd720'
 
 quality = addon.getSetting('videoquality')
-if quality == 'low':
-    videoquality = 'small'
-elif quality == 'mid':
+if quality == 'mid':
     videoquality = 'medium'
 elif quality == 'high':
-    videoquality = 'mediumlarge'
-elif quality == 'hd':
     videoquality = 'hd720'
+elif quality == 'hd':
+    videoquality = 'hd1080'
 
 
 
@@ -132,13 +130,19 @@ def buildVideoDir(url, doc):
 
 def getVideoUrl(url, doc):
     xbmc.log('getVideoUrl: url=' +url)
-    
-    #check if we need to login
+
+    is_logged_in, has_schalke_tv = login()
+    if not is_logged_in:
+        return
+
     isPayedContent = xbmc.getInfoLabel( "ListItem.Property(isPayedContent)" ) == 'True'
+    #payedContent requires payed Schalke TV subscription
     if(isPayedContent):
-        success = login()
-        if(not success):
+        if not has_schalke_tv:
+            xbmc.log("This video requires payed Schalke TV subscription")
+            xbmcgui.Dialog().ok(PLUGINNAME, language(30104), language(30105))
             return
+
     
     #HACK: Free content may be hosted on youtube
     if(url.startswith("https://youtu.be/")):
@@ -154,9 +158,9 @@ def getVideoUrl(url, doc):
         xbmc.log(missingelementtext%'section')
         return
     
-    videoContainer = soup.find('div', attrs={'class': 'video-container'})
+    videoContainer = soup.find('div', attrs={'class': 'video-wrapper'})
     if(not videoContainer):
-        xbmc.log(missingelementtext%'videoContainer')
+        xbmc.log(missingelementtext%'video-wrapper')
         return
     
     dataoptions = videoContainer['data-options']
@@ -188,7 +192,7 @@ def getVideoUrl(url, doc):
         entry = jsonPlaylist[key]
         quality = entry['quality']
         videotype = entry['type']
-        if(videotype == 'videomp4' and quality == videoquality):
+        if(quality == videoquality):
             videourl = entry['src']
             
     listitem = xbmcgui.ListItem(path=videourl)
@@ -230,7 +234,7 @@ def login():
     
     if(not username or not password):
         xbmcgui.Dialog().ok(PLUGINNAME, language(30102), language(30103))
-        return False
+        return False, False
     
     url = 'https://schalke04.de/account/login/'
     
@@ -249,24 +253,61 @@ def login():
             pass
 
     br.submit()
-    loginSuccessful = False
     response = br.response().read()
     soup = BeautifulSoup(''.join(response))
-    for textelement in soup(text='Schalke TV KOMPLETT'):
-        li = textelement.parent
+
+    script = soup.find('script')
+    if (not script):
+        xbmc.log(missingelementtext % 'script')
+        return False, False
+
+    """
+    script is expected to look like this:
+    <script>
+      dataLayer = [{
+        'userID': 123456,
+        'IsLoggedIn': true,
+        'hasSchalkeTV': true,
+        'hasSchalkeNewsletter': false,
+        'isAge': 42,
+        'isGender': 'mr',
+        'hasHospitality': false,
+        'hasPress': false,
+        'hasFanclub': false,
+        'hasTvAboHighlights': false,
+      }];
+    </script>
+    """
+    pattern = "'IsLoggedIn': (?P<is_logged_in>.*),\s*'hasSchalkeTV': (?P<has_schalke_tv>.*),\s*'hasSchalkeNewsletter'"
+    result = re.search(pattern, script.text)
+
+    is_logged_in = result.group('is_logged_in') == 'true'
+    has_schalke_tv = result.group('has_schalke_tv') == 'true'
+
+    xbmc.log('is_logged_in = %s' %is_logged_in)
+    xbmc.log('has_schalke_tv = %s' % has_schalke_tv)
+
+    if not is_logged_in:
+        xbmc.log('login failed')
+        xbmcgui.Dialog().ok(PLUGINNAME, language(30100) %username.decode('utf-8'), language(30101))
+        return False, False
+
+    return is_logged_in, has_schalke_tv
+
+
+def searchMemberStatus(soup, status):
+    loginSuccessful = False
+    
+    for textelement in soup(text=status):
+        ahref = textelement.parent
+        li = ahref.parent
         try:
             isChecked = li['class'] == 'checked'
             loginSuccessful = isChecked
         except KeyError:
             loginSuccessful = False
-
-    if(loginSuccessful):
-        xbmc.log('login successful')
-        return True
-    else:
-        xbmc.log('login failed')
-        xbmcgui.Dialog().ok(PLUGINNAME, language(30100) %username.decode('utf-8'), language(30101))
-        return False
+            
+    return loginSuccessful
 
 
 def getUrl(url):

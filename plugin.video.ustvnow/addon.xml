@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.ustvnow" name="USTVnow" provider-name="Lunatixz" version="2018.07.25">
+<addon id="plugin.video.ustvnow" name="USTVnow" provider-name="Lunatixz" version="2018.08.15">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/> 
         <import addon="script.module.requests" version="2.7.0"/> 
@@ -17,7 +17,7 @@
         <source>https://github.com/Lunatixz/KODI_Addons/tree/master/plugin.video.ustvnow</source>
         <website>http://ustvnow.com</website>
         <forum>http://forum.kodi.tv/showthread.php?tid=233135</forum>
-        <news>2018.07.25[CR]- Fixed Login Issues[CR]2018.06.23[CR]- Misc. Maintenance [CR]2018.1.5[CR]- Added HDHomerun Tuner Support[CR]- Fixed Channel Loading Errors[CR]2017.12.24[CR]- Improved Skin[CR]2017.10.16[CR]- Added OnDemand (Preview).[CR]- Added Highlights.[CR]- Added Search.[CR]- Improved UI.[CR]- Added EPG Guide w/DVR context menu.[CR]- Misc. Tweaks and Corrections.[CR]2017.8.23[CR]- Added Preferred Playback Method and Stream Quality settings.[CR]2017.8.5[CR]- Fixed encoding error.[CR]2017.8.2[CR]- Fixed paid subscription channels and dvr control.[CR]2017.7.31[CR]- Fixed login issues.[CR]- Added fallback token generation[CR]- Added initial support for uEPG module.[CR]2017.7.26[CR]- Corrected version format.[CR]- Changed "Featured" and "Guide" click behavior.[CR]- Improved Error handling.[CR]2017.4.7a[CR]- Added "Featured"[CR]- Fixed DVR support.2017.4.7[CR]-100% new code base, written from scratch for your enjoy!!, DVR Recording and Playback Untested.</news>
+        <news>2018.08.15[CR]- Fixed Free account login[CR]2018.07.25[CR]- Fixed Login Issues[CR]2018.06.23[CR]- Misc. Maintenance [CR]2018.1.5[CR]- Added HDHomerun Tuner Support[CR]- Fixed Channel Loading Errors[CR]2017.12.24[CR]- Improved Skin[CR]2017.10.16[CR]- Added OnDemand (Preview).[CR]- Added Highlights.[CR]- Added Search.[CR]- Improved UI.[CR]- Added EPG Guide w/DVR context menu.[CR]- Misc. Tweaks and Corrections.[CR]2017.8.23[CR]- Added Preferred Playback Method and Stream Quality settings.[CR]2017.8.5[CR]- Fixed encoding error.[CR]2017.8.2[CR]- Fixed paid subscription channels and dvr control.[CR]2017.7.31[CR]- Fixed login issues.[CR]- Added fallback token generation[CR]- Added initial support for uEPG module.[CR]2017.7.26[CR]- Corrected version format.[CR]- Changed "Featured" and "Guide" click behavior.[CR]- Improved Error handling.[CR]2017.4.7a[CR]- Added "Featured"[CR]- Fixed DVR support.2017.4.7[CR]-100% new code base, written from scratch for your enjoy!!, DVR Recording and Playback Untested.</news>
         <assets>
             <icon>resources/images/icon.png</icon>
             <fanart>resources/images/fanart.jpg</fanart>

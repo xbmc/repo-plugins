@@ -24,24 +24,9 @@ msgctxt "#30010"
 msgid "Latest"
 msgstr ""
 
-#. Index page list item to search for videos on Spurs TV
+#. Index page list item to search for videos
 msgctxt "#30011"
 msgid "Search"
-msgstr ""
-
-#. List item to go to the next page of videos
-msgctxt "#30012"
-msgid "Next Page"
-msgstr ""
-
-#. List item to go to the previous page of videos
-msgctxt "#30013"
-msgid "Previous Page"
-msgstr ""
-
-#. List item to show all videos within a subcategory
-msgctxt "#30014"
-msgid "All"
 msgstr ""
 
 #. List item to show the most popular YouTube videos
@@ -59,16 +44,9 @@ msgctxt "#30017"
 msgid "New Stadium"
 msgstr ""
 
-#. List item to show videos from a particular category such as "Stadium TV"
+#. List item to show videos from the stadium video gallery
 msgctxt "#30019"
 msgid "Video Gallery"
-msgstr ""
-
-#. Message dialog for off line audio commentary
-msgctxt "#30050"
-msgid ""
-"There is no live audio commentary available at this time. "
-"Please try again 5 minutes before kick-off."
 msgstr ""
 
 #. Settings category for advanced options

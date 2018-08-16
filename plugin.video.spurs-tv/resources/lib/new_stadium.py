@@ -36,7 +36,7 @@ def get_cams():
 def get_video_gallery():
     '''Generator for the new stadium video gallery videos'''
     soup = get_soup("video-gallery")
-    for video in soup('div', 'video-new'):
-        video_vars = json.loads(RE_EMBED.search(video.find(text=RE_EMBED)).group(1))
-        yield Video(title=video.find_next_sibling('p').get_text().strip(),
+    for video in soup('script', text=RE_EMBED):
+        video_vars = json.loads(RE_EMBED.search(video.get_text()).group(1))
+        yield Video(title=video.find_next('p').get_text().strip(),
                     id=video_vars['entry_id'])

@@ -1,0 +1,82 @@
+# Kodi Media Center language file
+# Addon Name: S04tv
+# Addon id: plugin.video.s04tv
+# Addon Provider: malte
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Username"
+msgstr "Benutzername"
+
+msgctxt "#30001"
+msgid "Password"
+msgstr "Passwort"
+
+msgctxt "#30002"
+msgid "Previous page"
+msgstr "Vorherige Seite"
+
+msgctxt "#30003"
+msgid "Next page"
+msgstr "Nächste Seite"
+
+msgctxt "#30004"
+msgid "Play test video"
+msgstr "Testvideo abspielen"
+
+msgctxt "#30005"
+msgid "Play video"
+msgstr "Video abspielen"
+
+msgctxt "#30006"
+msgid "Hide [FREE/EXCL] flag"
+msgstr "[FREE/EXCL] flag ausblenden"
+
+msgctxt "#30007"
+msgid "Hide videos that require login"
+msgstr "Videos ausblenden, die einen Login benötigen"
+
+msgctxt "#30008"
+msgid "Video qualitiy"
+msgstr "Video Qualität"
+
+msgctxt "#30009"
+msgid "Hide date in title"
+msgstr "Datum im Titel ausblenden"
+
+msgctxt "#30100"
+msgid "Login failed for user "%s"."
+msgstr "Login fehlgeschlagen für Benutzer "%s"."
+
+msgctxt "#30101"
+msgid "Please validate your credentials in plugin settings."
+msgstr "Überprüfe Deine Daten in den Plugin-Einstellungen."
+
+msgctxt "#30102"
+msgid "Username and password not set."
+msgstr "Kein Benutzername und Passwort angegeben."
+
+msgctxt "#30103"
+msgid "Please enter your credentials in plugin settings."
+msgstr "Trage Deine Daten in den Plugin-Einstellungen ein."
+
+msgctxt "#30104"
+msgid "This video is not freely available."
+msgstr "Dieses Video ist nicht frei verfügbar."
+
+msgctxt "#30105"
+msgid "Please purchase a subscription at https://schalke04.de/tv/."
+msgstr "Bitte registriere Dich unter https://schalke04.de/tv/."
+

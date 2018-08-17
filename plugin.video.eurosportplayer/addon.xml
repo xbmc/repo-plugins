@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.eurosportplayer" version="2.1.1" name="Eurosport Player" provider-name="Jin">
+<addon id="plugin.video.eurosportplayer" version="2.2.0" name="Eurosport Player" provider-name="Jin">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.inputstreamhelper" version="0.3.3"/>
@@ -10,11 +10,7 @@
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
         <news>
-- fixed login
-
-- enabled reusepython (performance boost on slower systems - kodi 18 only)
-- fixed playback
-- use episode name for plot if avail (fixes missing description)
+- esp api update
         </news>
         <assets>
             <icon>resources/icon.png</icon>

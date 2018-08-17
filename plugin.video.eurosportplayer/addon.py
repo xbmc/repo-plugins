@@ -52,15 +52,14 @@ def router(paramstring):
 if __name__ == '__main__':
     if plugin.startup:
         playable = plugin.start_is_helper()
-        client.DEVICE_ID = plugin.uniq_id()
-        if client.DEVICE_ID and playable:
+        if playable:
             client.refresh_token()
             if client.ACCESS_TOKEN:
                 plugin.set_setting('startup', 'false')
         else:
             client.ACCESS_TOKEN = ''
 
-    if client.ACCESS_TOKEN and client.DEVICE_ID:
+    if client.ACCESS_TOKEN:
         router(sys.argv[2][1:])
     else:
         sys.exit(0)

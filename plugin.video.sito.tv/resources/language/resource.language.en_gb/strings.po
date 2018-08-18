@@ -1,0 +1,495 @@
+# Kodi Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# strings 30000 thru 30999 reserved for plugins and plugin settings
+# strings 31000 thru 31999 reserved for skins
+# strings 32000 thru 32999 reserved for scripts
+# strings 33000 thru 33999 reserved for common strings used in add-ons
+
+
+msgctxt "#33000"
+msgid "Hello Kodi"
+msgstr ""
+
+msgctxt "#33001"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#33002"
+msgid "Watch movies."
+msgstr ""
+
+
+msgctxt "#33003"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#33004"
+msgid "Watch your favourite TV Shows.\nComing soon !"
+msgstr ""
+
+msgctxt "#33005"
+msgid "Watch your favourite TV Shows."
+msgstr ""
+
+msgctxt "#33006"
+msgid "Plugin settings"
+msgstr ""
+
+msgctxt "#33007"
+msgid "Set plugin settings"
+msgstr ""
+
+# Category Menu
+
+msgctxt "#33008"
+msgid "All"
+msgstr ""
+
+msgctxt "#33009"
+msgid "By Genre"
+msgstr ""
+
+msgctxt "#33010"
+msgid "By alphabetical order"
+msgstr ""
+
+msgctxt "#33011"
+msgid "Collections"
+msgstr ""
+
+msgctxt "#33012"
+msgid "Search"
+msgstr ""
+
+msgctxt "#33013"
+msgid "Recently Viewed"
+msgstr ""
+
+msgctxt "#33014"
+msgid "Every item, sorted alphabetically"
+msgstr ""
+
+msgctxt "#33015"
+msgid "Browse by genre"
+msgstr ""
+
+msgctxt "#33016"
+msgid "Browse by alphabet"
+msgstr ""
+
+msgctxt "#33017"
+msgid "Browse Collections"
+msgstr ""
+
+msgctxt "#33018"
+msgid "Find by search string (title, year)"
+msgstr ""
+
+msgctxt "#33019"
+msgid "Recently viewed items"
+msgstr ""
+
+# Notices
+
+msgctxt "#33020"
+msgid "Search"
+msgstr ""
+
+msgctxt "#33021"
+msgid "Enter more than 1 characters to search"
+msgstr ""
+
+msgctxt "#33022"
+msgid "Oops"
+msgstr ""
+
+msgctxt "#33023"
+msgid "Can't play this item, sorry :("
+msgstr ""
+
+msgctxt "#33024"
+msgid "SiTo.tv Update"
+msgstr ""
+
+msgctxt "#33025"
+msgid "SiTo.tv plugin requires an update."
+msgstr ""
+
+msgctxt "#33031"
+msgid "SiTo.tv plugin is at the latest version."
+msgstr ""
+
+msgctxt "#33032"
+msgid "SiTo.tv plugin has an optional update available."
+msgstr ""
+
+msgctxt "#33033"
+msgid "There was an error while checking for update. See log for additional details."
+msgstr ""
+
+msgctxt "#33026"
+msgid "Info"
+msgstr ""
+
+msgctxt "#33027"
+msgid "Starting BitX"
+msgstr ""
+
+# Dialogs
+
+msgctxt "#33028"
+msgid "BitX App Missing"
+msgstr ""
+
+msgctxt "#33029"
+msgid "You need to install the 'BitX' application to watch this content."
+msgstr ""
+
+# Keyboards
+
+msgctxt "#33030"
+msgid "Bug report"
+msgstr ""
+
+msgctxt "#33034"
+msgid "Search for items"
+msgstr ""
+
+# Other
+
+msgctxt "#33035"
+msgid "# next ({}) >>"
+msgstr ""
+
+
+msgctxt "#33036"
+msgid "<< previous ({})"
+msgstr ""
+
+
+msgctxt "#33037"
+msgid "Unknown Title"
+msgstr ""
+
+
+msgctxt "#33038"
+msgid "Description not available."
+msgstr ""
+
+
+msgctxt "#33039"
+msgid "unknown quality"
+msgstr ""
+
+
+msgctxt "#33040"
+msgid "unknown size"
+msgstr ""
+
+
+msgctxt "#33041"
+msgid "Nothing found :("
+msgstr ""
+
+
+msgctxt "#33042"
+msgid "Description is not available"
+msgstr ""
+
+
+msgctxt "#33043"
+msgid "Synopsis is not available"
+msgstr ""
+
+
+msgctxt "#33044"
+msgid "Unsupported category"
+msgstr ""
+
+
+msgctxt "#33045"
+msgid "Curated playlists coming soon !"
+msgstr ""
+
+
+msgctxt "#33046"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33047"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33048"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33049"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33050"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33051"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33052"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33053"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33054"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33055"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33056"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33057"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33058"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33059"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33060"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33061"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33062"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33063"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33064"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33065"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33066"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33067"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33068"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33069"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33070"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33071"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33072"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33073"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33074"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33075"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33076"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33077"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33078"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33079"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33080"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33081"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33082"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33083"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33084"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33085"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33086"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33087"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33088"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33089"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33090"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33091"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33092"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33093"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33094"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33095"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33096"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33097"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33098"
+msgid ""
+msgstr ""
+
+
+msgctxt "#33099"
+msgid ""
+msgstr ""

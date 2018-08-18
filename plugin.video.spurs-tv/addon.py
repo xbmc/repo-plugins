@@ -182,7 +182,11 @@ def video_item(entry_id, title, date_str=None, date_format="%d %B %Y", duration_
 def show_index():
     image_path = os.path.join(plugin.addon.getAddonInfo('path'), 'resources', 'images')
 
-    yield {'label': plugin.get_string(30010), 'path': plugin.url_for('show_videos')}
+    yield {
+        'label': plugin.get_string(30010),
+        'path': plugin.url_for('show_videos'),
+        'thumbnail': plugin.addon.getAddonInfo('icon')
+    }
 
     yield {
         'label': plugin.get_string(30017),

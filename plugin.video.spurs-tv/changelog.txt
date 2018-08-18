@@ -1,3 +1,6 @@
+v2.15.1 (2018-08-18)
+ - Fixed latest videos listing
+
 v2.15.0 (2018-08-16)
  - The new website broke all the things
 

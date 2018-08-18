@@ -16,7 +16,7 @@ Video = namedtuple('Video', 'entry_id caption thumbnail')
 
 
 def videos():
-    data = re.search(VIDEO_DATA_RE, requests.get(URL).text).group(1)
+    data = re.search(VIDEO_DATA_RE, requests.get(URL).text, re.DOTALL).group(1)
     videos = json.loads(data)['data']['modules']
     for video in videos:
         video_data = video['data']

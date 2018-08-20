@@ -54,7 +54,7 @@ def index():
     addDir(translation(30005), "Featured", 'list', icon)
     addLink(translation(30006), "Random", 'list', icon)
     addLink(translation(30013), "Search", 'list', icon)
-    for i in range(1, 22):
+    for i in range(1, 23):
         addDir(translation(30007)+" "+str(i), str(i), 'list', defaultImgDir+str(i)+".jpg")
     xbmcplugin.endOfDirectory(pluginhandle)
 
@@ -273,8 +273,8 @@ def addLink(name, url, mode, iconimage, desc="", season="", episode="", date="")
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Season": season, "Episode": episode, "Aired": convdate})
     liz.setProperty("fanart_image", defaultFanart)
-    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
-    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
+    xbmcplugin.setContent(pluginhandle, 'episodes')
+    ok = xbmcplugin.addDirectoryItem(handle=pluginhandle, url=u, listitem=liz, isFolder=True)
     return ok
 
 
@@ -284,7 +284,7 @@ def addDir(name, url, mode, iconimage="DefaultFolder.png"):
     liz = xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
     liz.setProperty("fanart_image", defaultFanart)
-    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
+    ok = xbmcplugin.addDirectoryItem(handle=pluginhandle, url=u, listitem=liz, isFolder=True)
     return ok
 
 def getCarousel():

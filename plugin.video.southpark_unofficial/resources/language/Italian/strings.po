@@ -1,0 +1,77 @@
+# Kodi Media Center language file
+# Addon Name: South Park Unofficial Player
+# Addon id: plugin.video.southpark_unofficial
+# Addon Provider: wargio
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Italian (http://www.transifex.com/projects/p/xbmc-addons/language/it/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Audio Language"
+msgstr "Lingua Audio"
+
+msgctxt "#30001"
+msgid "Geo Location"
+msgstr "Geolocalizzazione"
+
+msgctxt "#30002"
+msgid "You seem to be geoblocked. I'll ignore it but be aware of it"
+msgstr "Il tuo paese e' bloccato. Lo ignorero', ma tu sappilo!"
+
+msgctxt "#30003"
+msgid "Loading Random Episode"
+msgstr "Caricamento Episodio Random"
+
+msgctxt "#30004"
+msgid "Cannot open the stream. Bad internet connection?"
+msgstr "Non riesco ad aprire lo stream. No Connessione?"
+
+msgctxt "#30005"
+msgid "Featured"
+msgstr "In Vetrina"
+
+msgctxt "#30006"
+msgid "Random Episode"
+msgstr "Episodio Random"
+
+msgctxt "#30007"
+msgid "Season"
+msgstr "Stagione"
+
+msgctxt "#30009"
+msgid "Loading"
+msgstr "Caricamento"
+
+msgctxt "#30010"
+msgid "Check your internet connection!"
+msgstr "Controlla la tua connessione internet!"
+
+msgctxt "#30011"
+msgid "Banned Episode! It's not available, sorry"
+msgstr "Episodio Bannato! NON e' disponibile, mi spiace"
+
+msgctxt "#30012"
+msgid "Enable CC"
+msgstr "Abilita CC"
+
+msgctxt "#30013"
+msgid "Search"
+msgstr "Cerca"
+
+msgctxt "#30014"
+msgid "This episode hasn't been released yet!"
+msgstr "Questo episodio non è ancora stato rilasciato!"
+
+msgctxt "#30015"
+msgid "Play directly the random episode"
+msgstr "Riproduci direttamente l'episodio casuale"

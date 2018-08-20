@@ -94,18 +94,14 @@ class GoogleDrive(Provider):
     def _get_field_parameters(self):
         file_fileds = 'id,name,modifiedTime,size,mimeType'
         if not self.source_mode:
-            file_fileds = file_fileds + ',description,hasThumbnail,thumbnailLink,owners(permissionId),parents,imageMediaMetadata(width),videoMediaMetadata'
+            file_fileds = file_fileds + ',description,hasThumbnail,thumbnailLink,owners(permissionId),parents,trashed,imageMediaMetadata(width),videoMediaMetadata'
         return file_fileds
         
     def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False):
         item_driveid = Utils.default(item_driveid, self._driveid)
         is_album = item_id and item_id[:6] == 'album-'
-        
         if is_album:
-            Logger.notice(item_id)
             item_id = item_id[6:]
-            Logger.notice(item_id)
-        
         parameters = self.prepare_parameters()
         if item_id:
             parameters['q'] = '\'%s\' in parents' % item_id
@@ -119,7 +115,7 @@ class GoogleDrive(Provider):
                 item = self.get_item_by_path(path, include_download_info)
                 parameters['q'] = '\'%s\' in parents' % item['id']
                 
-        parameters['fields'] = 'files(%s),nextPageToken' % self._get_field_parameters()
+        parameters['fields'] = 'files(%s),kind,nextPageToken' % self._get_field_parameters()
         if 'q' in parameters:
             parameters['q'] += ' and not trashed'
         if path == 'photos':
@@ -127,16 +123,13 @@ class GoogleDrive(Provider):
             Logger.notice(self._get_api_url())
             self._photos_provider.configure(self._account_manager, self._driveid)
             files = self._photos_provider.get('/albums')
-            files['is_album'] = True
         elif is_album:
             self._photos_provider = GooglePhotos()
             self._photos_provider.configure(self._account_manager, self._driveid)
             files = self._photos_provider.post('/mediaItems:search', parameters = {'albumId': item_id})
-            files['is_media_items'] = True
         else:
             self.configure(self._account_manager, self._driveid)
             files = self.get('/files', parameters = parameters)
-            files['is_album'] = False
         if self.cancel_operation():
             return
         return self.process_files(files, parameters, on_items_page_completed, include_download_info)
@@ -154,38 +147,60 @@ class GoogleDrive(Provider):
             return
         return self.process_files(files, parameters, on_items_page_completed)
     
-    def process_files(self, files, parameters, on_items_page_completed=None, include_download_info=False):
+    def process_files(self, files, parameters, on_items_page_completed=None, include_download_info=False, extra_info=None):
         items = []
         if files:
-            is_album = Utils.get_safe_value(files, 'is_album', False)
-            is_media_items = Utils.get_safe_value(files, 'is_media_items', False)
-            if is_album:
-                collection = 'albums'
-            elif is_media_items:
-                collection = 'mediaItems'
-            else:
-                collection = 'files'
-            if collection in files:
-                for f in files[collection]:
-                    f['is_album'] = is_album
-                    f['is_media_items'] = is_media_items
+            kind = Utils.get_safe_value(files, 'kind', '')
+            collection = []
+            if kind == 'drive#fileList':
+                collection = files['files']
+            elif kind == 'drive#changeList':
+                collection = files['changes']
+            elif 'albums' in files:
+                kind = 'album'
+                collection = files['albums']
+            elif 'mediaItems' in files:
+                kind = 'media_item'
+                collection = files['mediaItems']
+            if collection:
+                for f in collection:
+                    f['kind'] = Utils.get_safe_value(f, 'kind', kind)
                     item = self._extract_item(f, include_download_info)
-                    items.append(item)
+                    if item:
+                        items.append(item)
                 if on_items_page_completed:
                     on_items_page_completed(items)
+            if type(extra_info) is dict:
+                if 'newStartPageToken' in files:
+                    extra_info['change_token'] = files['newStartPageToken']
             if 'nextPageToken' in files:
                 parameters['pageToken'] = files['nextPageToken']
-                next_files = self.get('/files', parameters = parameters)
+                url = '/files'
+                provider = self
+                if kind == 'drive#changeList':
+                    url = '/changes'
+                elif kind == 'album':
+                    url = '/albums'
+                    provider = self._photos_provider
+                elif kind == 'media_item':
+                    url = '/mediaItems:search'
+                    provider = self._photos_provider
+                next_files = provider.get(url, parameters = parameters)
                 if self.cancel_operation():
                     return
-                next_files['is_album'] = is_album
-                items.extend(self.process_files(next_files, parameters, on_items_page_completed, include_download_info))
+                items.extend(self.process_files(next_files, parameters, on_items_page_completed, include_download_info, extra_info))
         return items
     
     def _extract_item(self, f, include_download_info=False):
+        kind = Utils.get_safe_value(f, 'kind', '')
+        if kind == 'drive#change':
+            if 'file' in f:
+                f = f['file']
+            else:
+                return {}
         size = long('%s' % Utils.get_safe_value(f, 'size', 0))
-        is_album = Utils.get_safe_value(f, 'is_album', False)
-        is_media_items = Utils.get_safe_value(f, 'is_media_items', False)
+        is_album = kind == 'album'
+        is_media_items = kind == 'media_item'
         if is_album:
             mimetype = 'application/vnd.google-apps.folder'
             name = f['title']
@@ -198,11 +213,13 @@ class GoogleDrive(Provider):
             'id': f['id'],
             'name': name,
             'name_extension' : Utils.get_extension(name),
+            'parent': Utils.get_safe_value(f, 'parents', ['root'])[0],
             'drive_id' : Utils.get_safe_value(Utils.get_safe_value(f, 'owners', [{}])[0], 'permissionId'),
             'mimetype' : mimetype,
             'last_modified_date' : Utils.get_safe_value(f,'modifiedTime'),
             'size': size,
-            'description': Utils.get_safe_value(f, 'description', '')
+            'description': Utils.get_safe_value(f, 'description', ''),
+            'deleted' : Utils.get_safe_value(f, 'trashed', False)
         }
         if item['mimetype'] == 'application/vnd.google-apps.folder':
             item['folder'] = {
@@ -308,7 +325,20 @@ class GoogleDrive(Provider):
             if subtitles:
                 item['subtitles'] = subtitles
         return item
-
+    
+    def changes(self):
+        change_token = self.get_change_token()
+        if not change_token:
+            change_token = Utils.get_safe_value(self.get('/changes/startPageToken', parameters = self.prepare_parameters()), 'startPageToken')
+        extra_info = {}
+        parameters = self.prepare_parameters()
+        parameters['pageToken'] = change_token
+        parameters['fields'] = 'kind,nextPageToken,newStartPageToken,changes(kind,type,removed,file(%s))' % self._get_field_parameters()
+        f = self.get('/changes', parameters = parameters)
+        changes = self.process_files(f, parameters, include_download_info=True, extra_info=extra_info)
+        self.persist_change_token(Utils.get_safe_value(extra_info, 'change_token'))
+        return changes
+    
 class GooglePhotos(GoogleDrive):
     def _get_api_url(self):
         return 'https://photoslibrary.googleapis.com/v1'

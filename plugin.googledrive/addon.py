@@ -94,13 +94,16 @@ class GoogleDriveAddon(CloudDriveAddon):
         self._progress_dialog.close()
         if Utils.get_safe_value(response_params, 'status', '') == 'ok':
             fmt_list = Utils.get_safe_value(response_params, 'fmt_list', '').split(',')
-            stream_formats = [self._addon.getLocalizedString(32015)]
+            stream_formats = []
             for fmt in fmt_list:
                 data = fmt.split('/')
                 stream_formats.append(data[1])
-            select = self._dialog.select(self._addon.getLocalizedString(32016), stream_formats, 8000)
-            if select > 0:
-                data = fmt_list[select-1].split('/')
+            stream_formats.append(self._addon.getLocalizedString(32015))
+            select = self._dialog.select(self._addon.getLocalizedString(32016), stream_formats, 8000, 0)
+            if select == -1:
+                self._cancel_operation = True
+            elif select != len(stream_formats) - 1:
+                data = fmt_list[select].split('/')
                 fmt_stream_map = Utils.get_safe_value(response_params, 'fmt_stream_map', '').split(',')
                 
                 for fmt in fmt_stream_map:

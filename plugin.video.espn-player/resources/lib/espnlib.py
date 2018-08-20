@@ -19,9 +19,7 @@ class espnlib(object):
     def __init__(self, cookie_file, debug=False, verify_ssl=True):
         self.debug = debug
         self.verify_ssl = verify_ssl
-        self.base_url = 'https://espnplayer.com/espnplayer'
-        self.servlets_url = self.base_url + '/servlets'
-        self.simpleconsole_url = self.servlets_url + '/simpleconsole'
+        self.base_url = 'https://www.espnplayer.com'
         self.http_session = requests.Session()
         self.cookie_jar = cookielib.LWPCookieJar(cookie_file)
         try:
@@ -29,6 +27,7 @@ class espnlib(object):
         except IOError:
             pass
         self.http_session.cookies = self.cookie_jar
+        self.secure_token = []
 
     class LoginFailure(Exception):
         def __init__(self, value):
@@ -95,71 +94,87 @@ class espnlib(object):
                 raise self.LoginFailure('No username and password supplied.')
 
     def login_to_account(self, username, password):
-        """Blindly authenticate to ESPN Player. Use check_for_subscription() to
-        determine success.
+        """authenticate to ESPN Player.
         """
-        url = self.base_url + '/secure/login'
+        url = 'https://www.espnplayer.com/secure/authenticate'
         post_data = {
             'username': username,
-            'password': password
+            'password': password,
+            'format': 'xml'
         }
-        self.make_request(url=url, method='post', payload=post_data)
+        sc_data = self.make_request(url=url, method='post', payload=post_data)
+        if 'loginsuccess' not in sc_data:
+             raise self.LoginFailure('Login failed')
 
     def check_for_subscription(self):
-        """Return whether a subscription and user name are detected. Determines
-        whether a login was successful."""
-        url = self.simpleconsole_url
-        post_data = {'isFlex': 'true'}
+        """Return whether a subscription is detected.
+        """
+        url = "https://www.espnplayer.com/account/subscriptions"
+        post_data = {'isFlex': 'true','format': 'xml'}
         sc_data = self.make_request(url=url, method='post', payload=post_data)
-        sc_dict = xmltodict.parse(sc_data)['result']
-
-        if sc_dict['isBlocked'] == 'true':
-            self.log('ESPN Player is geo blocked.')
-            return False
-        elif '</userName>' not in sc_data:
-            self.log('No user name detected in ESPN Player response.')
-            return False
-        elif '</product>' not in sc_data:
+        sc_dict = xmltodict.parse(sc_data)
+#        self.log(sc_dict)
+#        if sc_dict['isBlocked'] == 'true':
+#            self.log('ESPN Player is geo blocked.')
+#            return False
+        if 'sku' not in sc_data:
             self.log('No subscription detected in ESPN Player response.')
             return False
         else:
-            self.log('Subscription and user name detected in ESPN Player response.')
+            self.log('Subscription detected in ESPN Player response.')
             return True
 
     def get_services(self):
         """Return a dict of the services the user is subscribed to."""
         services = {}
         subscribed_services = []
-        url = self.simpleconsole_url
-        post_data = {'isFlex': 'true'}
+        url = 'https://www.espnplayer.com/account/subscriptions'
+        post_data = {'format': 'xml','isFlex': 'true'}
         sc_data = self.make_request(url=url, method='post', payload=post_data)
-        sc_dict = xmltodict.parse(sc_data)['result']
+        sc_dict = xmltodict.parse(sc_data)['subscriptions']
+        if 'NCAA' in sc_data:
+            services.update({'NCAA College Pass': 'ncaa'})
+        
+        if 'INDY' in sc_data:
+            services.update({'IndyCar Series': 'indycar'})
+  
+        if 'SELECT' in sc_data:
+            services.update({'ESPN Select': 'select'})
 
-        for service in sc_dict['user']['subscriptions'].values():
-            subscribed_services.append(service)
+#        for service in sc_dict['subs'].values():
+#            subscribed_services.append(service)
 
-        for service in sc_dict['leagues']['league']:
-            if service['type'] in subscribed_services:
-                services[service['name']] = service['type']
-
+#        for service in sc_dict['leagues']['league']:
+#            if service['type'] in subscribed_services:
+#                services[service['name']] = service['type']
+        
         return services
 
     def get_games(self, service, filter_date=False, filter_games=False, category='all'):
         """Return games in a list. Ability to sort games by date/game status."""
-        url = self.servlets_url + '/games'
-        payload = {
-            'product': service,
-            'category': category,
-            'format': 'json'
+        url = 'https://www.espnplayer.com/schedule'
+        filter_mask = { 0: 'upcoming',
+                        1: 'inplay',
+                        3: 'archive' 
         }
-
-        games_data = self.make_request(url=url, method='get', payload=payload)
-        games = json.loads(games_data)['games']
+        games = []
+        now = datetime.now()
+        for month in range(-1,1):
+            payload = {
+                # 'product': service,
+                # 'category': category,
+                'lid': service,
+                'format': 'json',
+                'ps': 300,
+                'monthly': "%d-%02d" % (now.year,(now.month+month))
+            }
+            games_data=self.make_request(url=url, method='get', payload=payload)
+            games+=json.loads(games_data)['games']
 
         if filter_date:
             dgames = []
             for game in games:
-                gamedate = self.parse_datetime(game['game_date_GMT'], localize=True).date()
+                gamedate = self.parse_datetime(game['dateTimeGMT'], localize=True).date()
                 if str(filter_date) == str(gamedate):
                     dgames.append(game)
             games = dgames
@@ -167,40 +182,63 @@ class espnlib(object):
         if filter_games:
             fgames = []
             for game in games:
-                game_status = game['game_status']
-                if filter_games == game_status:
+                game_status = game['gameState']
+                if filter_games == filter_mask[game_status]:
                     fgames.append(game)
             games = fgames
 
         return games
-
-    def get_pkan(self, airingId):
-        """Return a 'pkan' token needed to request a stream URL."""
-        url = 'http://neulion.go.com/espngeo/dgetpkan'
+    def get_token(self, airingId):
+        """Return a token needed to request a pkan"""
+        url = 'https://www.espnplayer.com/secure/espntoken'
         payload = {
-            'airingId': airingId
+            'airingId': airingId,
+            'format': 'json',
+            'isFlex': 'true'
         }
-        pkan = self.make_request(url=url, method='get', payload=payload)
+        sc_data = self.make_request(url=url, method='post', payload=payload)
+        return json.loads(sc_data)['data']
+
+
+    def get_pkan(self, token):
+        """Return a 'pkan' token needed to request a stream URL.
+           Requires a secure token
+        """
+        url = 'https://neulion.go.com/espngeo/dgetpkan'
+        payload = {
+            'airingId': token['airingId'],
+            'auth_airingid': token['airingId'],
+            'auth_timestamp': token['timestamp'],
+            'auth_token': token['token'],
+            'auth_usertrackname': token['userTrackName'],
+            'isFlex': 'true'
+        }
+        pkan = self.make_request(url=url, method='post', payload=payload)
         return pkan
 
     def get_stream_url(self, airingId, channel='espn3'):
         """Return the URL for a stream. _mediaAuth cookie is needed for decryption."""
         stream_url = {}
         auth_cookie = None
-        url = 'http://neulion.go.com/espngeo/startSession'
+        token = self.get_token(airingId)
+        url = 'https://neulion.go.com/espngeo/startSession'
         payload = {
             'channel': channel,
-            'simulcastAiringId': airingId,
             'playbackScenario': 'HTTP_CLOUD_WIRED',
             'playerId': 'neulion',
-            'pkan': self.get_pkan(airingId),
+            'pkan': self.get_pkan(token),
             'pkanType': 'TOKEN',
             'tokenType': 'GATEKEEPER',
-            'ttl': '480'
+            'ttl': '480',
+            'airingId': airingId,
+            'auth_airingid': token['airingId'],
+            'auth_timestamp': token['timestamp'],
+            'auth_token': token['token'],
+            'auth_usertrackname': token['userTrackName'],
+            'simulcastAiringId': airingId if channel=='espn3' else 0
         }
         req = self.make_request(url=url, method='post', payload=payload, return_req=True)
         stream_data = req.content
-
         try:
             stream_dict = xmltodict.parse(stream_data)['user-verified-media-response']['user-verified-event']['user-verified-content']['user-verified-media-item']
         except KeyError:
@@ -259,19 +297,20 @@ class espnlib(object):
     def get_channels(self, service):
         """Return a dict with available channels for NCAA College Pass."""
         channels = {}
-        url = self.servlets_url + '/channels'
+        url = 'https://www.espnplayer.com/channels'
         payload = {
-            'product': service
+        #     'product': service
+            'lid': service,
+            'format': 'xml'
         }
 
         channel_data = self.make_request(url=url, method='get', payload=payload)
-        channel_dict = xmltodict.parse(channel_data)['channels']['channel']
+        channel_dict = xmltodict.parse(channel_data)['result']['channels']['channel']
 
         for channel in channel_dict:
             channel_name = channel['name']
-            channel_id = channel['id']
+            channel_id = channel['seoName']
             channels[channel_name] = channel_id
-
         return channels
 
     def get_gamedates(self, service, filter=False):
@@ -281,7 +320,7 @@ class espnlib(object):
         games = self.get_games(service)
 
         for game in games:
-            gamedate = self.parse_datetime(game['game_date_GMT'], localize=True).date()
+            gamedate = self.parse_datetime(game['dateTimeGMT'], localize=True).date()
             if gamedate not in dates:
                 if filter == 'upcoming':
                     if gamedate > now.date():

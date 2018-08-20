@@ -97,7 +97,7 @@ class OneDrive(Provider):
             return
         return self.process_files(files, on_items_page_completed, include_download_info)
     
-    def process_files(self, files, on_items_page_completed=None, include_download_info=False):
+    def process_files(self, files, on_items_page_completed=None, include_download_info=False, extra_info=None):
         items = []
         for f in files['value']:
             f = Utils.get_safe_value(f, 'remoteItem', f)
@@ -105,24 +105,31 @@ class OneDrive(Provider):
             items.append(item)
         if on_items_page_completed:
             on_items_page_completed(items)
+        if type(extra_info) is dict:
+            if '@odata.deltaLink' in files:
+                extra_info['change_token'] = files['@odata.deltaLink']
+                
         if '@odata.nextLink' in files:
             next_files = self.get(files['@odata.nextLink'])
             if self.cancel_operation():
                 return
-            items.extend(self.process_files(next_files, on_items_page_completed, include_download_info))
+            items.extend(self.process_files(next_files, on_items_page_completed, include_download_info, extra_info))
         return items
     
     def _extract_item(self, f, include_download_info=False):
         name = Utils.get_safe_value(f, 'name', '')
+        parent_reference = Utils.get_safe_value(f, 'parentReference', {})
         item = {
             'id': f['id'],
             'name': name,
             'name_extension' : Utils.get_extension(name),
-            'drive_id' : Utils.get_safe_value(Utils.get_safe_value(f, 'parentReference', {}), 'driveId'),
+            'drive_id' : Utils.get_safe_value(parent_reference, 'driveId'),
+            'parent' : Utils.get_safe_value(parent_reference, 'id'),
             'mimetype' : Utils.get_safe_value(Utils.get_safe_value(f, 'file', {}), 'mimeType'),
             'last_modified_date' : Utils.get_safe_value(f,'lastModifiedDateTime'),
             'size': Utils.get_safe_value(f, 'size', 0),
-            'description': Utils.get_safe_value(f, 'description', '')
+            'description': Utils.get_safe_value(f, 'description', ''),
+            'deleted': 'deleted' in f
         }
         if 'folder' in f:
             item['folder'] = {
@@ -193,8 +200,7 @@ class OneDrive(Provider):
         item = self._extract_item(f, include_download_info)
         if find_subtitles:
             subtitles = []
-            parent_id = Utils.get_safe_value(Utils.get_safe_value(f, 'parentReference', {}), 'id')
-            search_url = '/drives/'+item_driveid+'/items/' + parent_id + '/search(q=\''+urllib.quote(Utils.str(Utils.remove_extension(item['name'])).replace("'","''"))+'\')'
+            search_url = '/drives/'+item_driveid+'/items/' + item['parent'] + '/search(q=\''+urllib.quote(Utils.str(Utils.remove_extension(item['name'])).replace("'","''"))+'\')'
             files = self.get(search_url)
             for f in files['value']:
                 subtitle = self._extract_item(f, include_download_info)
@@ -203,3 +209,10 @@ class OneDrive(Provider):
             if subtitles:
                 item['subtitles'] = subtitles
         return item
+    
+    def changes(self):
+        f = self.get(Utils.default(self.get_change_token(), '/drives/'+self._driveid+'/root/delta?token=latest'))
+        extra_info = {}
+        changes = self.process_files(f, include_download_info=True, extra_info=extra_info)
+        self.persist_change_token(Utils.get_safe_value(extra_info, 'change_token'))
+        return changes

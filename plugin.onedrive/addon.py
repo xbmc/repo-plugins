@@ -17,14 +17,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
-import datetime
 import urllib
 
-from clouddrive.common.cache.cache import Cache
 from clouddrive.common.ui.addon import CloudDriveAddon
-from clouddrive.common.ui.utils import KodiUtils
 from clouddrive.common.utils import Utils
-from resources.lib.migration import MigrateAccounts
 from resources.lib.provider.onedrive import OneDrive
 
 class OneDriveAddon(CloudDriveAddon):
@@ -69,11 +65,5 @@ class OneDriveAddon(CloudDriveAddon):
         }, self._action, self._action)
 
 if __name__ == '__main__':
-    onedrive_addon = OneDriveAddon()
-    if not KodiUtils.get_addon_setting('migrated'):
-        try:
-            MigrateAccounts()
-        except Exception as e:
-            onedrive_addon._handle_exception(e, False)
-    onedrive_addon.route()
+    OneDriveAddon().route()
 

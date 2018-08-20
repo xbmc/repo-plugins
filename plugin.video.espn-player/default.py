@@ -53,7 +53,6 @@ def addon_log(string):
 
 def services_menu():
     services = espn.get_services()
-
     if len(services) == 1:
         # list main menu directly if one service is found
         main_menu(services.values()[0])
@@ -124,14 +123,14 @@ def list_games(service, filter_date, filter_games):
 
     for game in games:
         team_names = True
-        game_datetime = espn.parse_datetime(game['game_date_GMT'], localize=True)
+        game_datetime = espn.parse_datetime(game['dateTimeGMT'], localize=True)
         time = game_datetime.strftime('%H:%M')
         time_and_date = game_datetime.strftime('%Y-%m-%d %H:%M')
-        category = game['sportCode']
+        category = game['sportId']
 
         try:
-            home_team = '%s %s' % (game['home_city'], game['home_name'])
-            away_team = '%s %s' % (game['away_city'], game['away_name'])
+            home_team = '%s' % (game['homeTeam']['name'])
+            away_team = '%s' % (game['awayTeam']['name'])
         except KeyError:
             # try to extract team names from full title
             teampattern = re.search(r'(.+)( vs. )(.+)( \()', game['name'])
@@ -141,12 +140,12 @@ def list_games(service, filter_date, filter_games):
             else:
                 team_names = False
 
-        if game['game_status'] == 'upcoming':
+        if 'availablePrograms' not in game:
             playable = False
             parameters = {'action': 'null'}
         else:
             playable = True
-            parameters = {'action': 'play_video', 'airringId': game['airring_id']}
+            parameters = {'action': 'play_video', 'airingId': game['statsId']}
 
         if team_names:
             title = '[B]%s[/B] vs. [B]%s[/B]' % (away_team, home_team)
@@ -156,7 +155,7 @@ def list_games(service, filter_date, filter_games):
             title = '[B]%s[/B]' % game['name']
             list_title = '[B]%s[/B] %s: [B]%s[/B]' % (coloring(time, 'time'), coloring(category, 'cat'), game['name'])
 
-        game_image = game['game_image'].split('.jpg')[0] + '.jpg'
+        game_image = game['image'].split('.jpg')[0] + '.jpg'
 
         art = {
             'thumb': game_image,
@@ -194,17 +193,25 @@ def list_channels(service):
         listitem = xbmcgui.ListItem(label=name)
         listitem.setProperty('IsPlayable', 'true')
         art = {'thumb': 'http://a.espncdn.com/prod/assets/watchespn/appletv/images/channels-carousel/%s.png' % channel_id}
-        # airringId is 0 for live channels
-        parameters = {'action': 'play_channel', 'airringId': '0', 'channel': channel_id}
+        # airingId is seoName for live channels
+        parameters = {'action': 'play_channel', 'airingId': channel_id, 'channel': channel_id}
         add_item(name, parameters, playable=True, set_art=art)
     xbmcplugin.endOfDirectory(_handle)
 
 
-def play_video(airringId, channel=None):
+def play_video(airingId, channel=None):
+    try:
+      espn.login(username, password)
+    except espn.LoginFailure:
+      addon_log('login failed')
+      dialog = xbmcgui.Dialog()
+      dialog.ok(language(30005),
+                language(30006))
+
     if channel:
-        stream_url = espn.get_stream_url(airringId, channel)
+        stream_url = espn.get_stream_url(airingId, channel)
     else:
-        stream_url = espn.get_stream_url(airringId)
+        stream_url = espn.get_stream_url(airingId)
     if stream_url['bitrates']:
         bitrate = select_bitrate(stream_url['bitrates'].keys())
         if bitrate:
@@ -294,9 +301,9 @@ def router(paramstring):
             list_games(params['service'], params['filter_date'], params['filter_games'])
             addon_log(params)
         elif params['action'] == 'play_video':
-            play_video(params['airringId'])
+            play_video(params['airingId'])
         elif params['action'] == 'play_channel':
-            play_video(params['airringId'], params['channel'])
+            play_video(params['airingId'], params['channel'])
         elif params['action'] == 'list_dates':
             list_dates(params['service'], params['day'])
         elif params['action'] == 'list_today':

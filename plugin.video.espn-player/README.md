@@ -5,10 +5,11 @@ If you're interested in helping out with the development, then please just send 
 
 
 ## Dependencies: ##
+This plugin is available in the official Kodi repository and all dependencies will be installed automatically when installed from there. However, if you're installing straight from git, please make sure you've got the following modules installed:
  * Requests >= 2.9.1 (http://mirrors.kodi.tv/addons/jarvis/script.module.requests)
  * xmltodict (http://mirrors.kodi.tv/addons/jarvis/script.module.xmltodict)
  * m3u8 >= 0.2.10 (http://mirrors.kodi.tv/addons/jarvis/script.module.m3u8)
-   * which depends on iso8601 (http://mirrors.kodi.tv/addons/jarvis/script.module.iso8601/)
+   * which depends on iso8601 (http://mirrors.kodi.tv/addons/jarvis/script.module.iso8601)
  
 
 This plugin supports Kodi Jarvis or later. While it may work fine on older versions as well, it is unsupported and you're encouraged to upgrade.

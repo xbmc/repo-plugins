@@ -1,3 +1,12 @@
+2018.08.20 v1.0.5
++ Fixed some open bugs
+
+2017.09.14 v1.0.4
++ Fixed login check
+
+2017.08.30 v1.0.2
++ Fixed the plugin to work with the new espnplayer site
+
 2016.09.16 v1.0.1
 + Display game time first (easier to see when team names are long)
 + Use language file on some strings instead of hardcoding them

@@ -1,4 +1,4 @@
-﻿Files: *
+Files: *
 Copyright: 2016 (see git for respective authors)
 License: GPLv3
 

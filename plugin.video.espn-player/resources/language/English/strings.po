@@ -1,4 +1,4 @@
-﻿# Kodi ESPN Player language file
+# Kodi ESPN Player language file
 msgid ""
 msgstr ""
 "Project-Id-Version: kodi-espnplayer\n"

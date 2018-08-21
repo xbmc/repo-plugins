@@ -1,1 +1,1 @@
-﻿# dummy file to init the directory
+# dummy file to init the directory

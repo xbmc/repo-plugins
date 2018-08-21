@@ -1,17 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.noco" name="noco" version="1.0.16" provider-name="Julien Gormotte (gormux)">
+<addon id="plugin.video.noco" name="noco" version="1.0.17" provider-name="Julien Gormotte (gormux)">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>
-    <import addon="script.module.xbmcswift2" version="2.4.0"/>
-    <import addon="script.module.requests" version="2.3.0"/>
   </requires>
-  <extension point="xbmc.python.pluginsource" library="addon.py">
-    <provides>video</provides>
-  </extension>
   <extension point="xbmc.addon.metadata">
+    <broken>service no longer exists</broken>
     <platform>all</platform>
     <language>fr</language>
-    <summary>Nolife Online XBMC Plugin</summary>
+    <summary lang="en">Nolife Online XBMC Plugin</summary>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 1997</license>
     <forum>http://forum.nolife-tv.com/showthread.php?t=11012</forum>
     <source>http://dev.gormotte.info/plugin.video.noco</source>

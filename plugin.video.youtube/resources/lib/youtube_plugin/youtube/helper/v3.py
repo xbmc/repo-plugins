@@ -15,6 +15,8 @@ def _process_list_response(provider, context, json_data):
 
     result = []
 
+    is_upcoming = False
+
     thumb_size = context.get_settings().use_thumbnail_size()
     yt_items = json_data.get('items', [])
     if len(yt_items) == 0:
@@ -173,6 +175,7 @@ def _process_list_response(provider, context, json_data):
             if yt_kind == 'youtube#video':
                 video_id = yt_item['id']['videoId']
                 snippet = yt_item['snippet']
+                is_upcoming = snippet.get('liveBroadcastContent', '').lower() == 'upcoming'
                 title = snippet['title']
                 image = utils.get_thumbnail(thumb_size, snippet.get('thumbnails', {}))
                 item_params = {'video_id': video_id}
@@ -229,12 +232,16 @@ def _process_list_response(provider, context, json_data):
         else:
             raise kodion.KodionException("Unknown kind '%s'" % yt_kind)
 
+    use_play_data = not incognito and context.get_settings().use_playback_history()
+
     # this will also update the channel_id_dict with the correct channel id for each video.
     channel_items_dict = {}
-    utils.update_video_infos(provider, context, video_id_dict, playlist_item_id_dict, channel_items_dict)
+    utils.update_video_infos(provider, context, video_id_dict, playlist_item_id_dict, channel_items_dict,
+                             live_details=is_upcoming, use_play_data=use_play_data)
     utils.update_playlist_infos(provider, context, playlist_id_dict, channel_items_dict)
     utils.update_channel_infos(provider, context, channel_id_dict, subscription_id_dict, channel_items_dict)
-    utils.update_fanarts(provider, context, channel_items_dict)
+    if video_id_dict or playlist_id_dict:
+        utils.update_fanarts(provider, context, channel_items_dict)
     return result
 
 
@@ -287,14 +294,22 @@ def response_to_items(provider, context, json_data, sort=None, reverse_sort=Fals
 
 def handle_error(provider, context, json_data):
     if json_data and 'error' in json_data:
-        message = json_data['error'].get('message', '')
-        reason = json_data['error']['errors'][0].get('reason', '')
-        title = '%s: %s' % (context.get_name(), reason)
+        open_settings = False
         message_timeout = 5000
+        message = kodion.utils.strip_html_from_text(json_data['error'].get('message', ''))
+        log_message = kodion.utils.strip_html_from_text(json_data['error'].get('message', ''))
+        reason = json_data['error']['errors'][0].get('reason', '')
+        if reason == 'keyInvalid' and message == 'Bad Request':
+            message = context.localize(provider.LOCAL_MAP['youtube.api.key.incorrect'])
+            message_timeout = 7000
+            open_settings = True
+        title = '%s: %s' % (context.get_name(), reason)
         if reason == 'quotaExceeded' or reason == 'dailyLimitExceeded':
             message_timeout = 7000
         context.get_ui().show_notification(message, title, time_milliseconds=message_timeout)
-        context.log_error('Error reason: |%s| with message: |%s|' % (reason, message))
+        context.log_error('Error reason: |%s| with message: |%s|' % (reason, log_message))
+        if open_settings:
+            context.get_ui().open_settings()
         return False
 
     return True

@@ -5,7 +5,7 @@ import re
 
 from ... import kodion
 from ...kodion import constants
-from ...kodion.items import VideoItem, AudioVideoItem
+from ...kodion.items import VideoItem
 from ...youtube.youtube_exceptions import YouTubeException
 from ...youtube.helper import utils, v3
 
@@ -16,6 +16,7 @@ def play_video(provider, context, re_match):
         client = provider.get_client(context)
         settings = context.get_settings()
 
+        dev_id = context.get_param('addon_id', None)
         ask_for_quality = None
         screensaver = False
         if context.get_param('screensaver', None) and str(context.get_param('screensaver')).lower() == 'true':
@@ -34,6 +35,7 @@ def play_video(provider, context, re_match):
             return False
 
         is_video = True if video_stream.get('video') else False
+        is_live = video_stream.get('Live') is True
 
         if is_video and video_stream['video'].get('rtmpe', False):
             message = context.localize(provider.LOCAL_MAP['youtube.error.rtmpe_not_supported'])
@@ -55,23 +57,35 @@ def play_video(provider, context, re_match):
                 playlist.add(i)
 
         title = video_stream.get('meta', {}).get('video', {}).get('title', '')
-        if is_video:
-            video_item = VideoItem(title, video_stream['url'])
-        else:
-            video_item = AudioVideoItem(title, video_stream['url'])
+        video_item = VideoItem(title, video_stream['url'])
 
-        video_item = utils.update_play_info(provider, context, video_id, video_item, video_stream)
+        incognito = str(context.get_param('incognito', False)).lower() == 'true'
+        use_play_data = not is_live and not screensaver and not incognito
+
+        video_item = utils.update_play_info(provider, context, video_id, video_item, video_stream, use_play_data=use_play_data)
 
         # Trigger post play events
         if provider.is_logged_in():
             try:
-                if str(context.get_param('incognito', False)).lower() != 'true' and not screensaver:
+                if not screensaver:
                     command = 'RunPlugin(%s)' % context.create_uri(['events', 'post_play'], {'video_id': video_id})
                     context.get_ui().set_home_window_property('post_play', command)
+                    if dev_id:
+                        context.get_ui().set_home_window_property('addon_id', str(dev_id))
+                    context.get_ui().set_home_window_property('video_stats_url', video_stream.get('video_stats_url'))
             except:
                 context.log_debug('Failed to set post play events.')
 
-        context.get_ui().set_home_window_property('playing', video_id)
+        if use_play_data and settings.use_playback_history():
+            major_version = context.get_system_version().get_version()[0]
+            if video_item.get_start_time() and video_item.use_dash() and major_version > 17:
+                context.get_ui().set_home_window_property('seek_time', video_item.get_start_time())
+
+            play_count = video_item.get_play_count() if video_item.get_play_count() is not None else '0'
+            context.get_ui().set_home_window_property('play_count', str(play_count))
+
+        context.get_ui().set_home_window_property('playback_history', str(use_play_data).lower())
+        context.get_ui().set_home_window_property('playing', str(video_id))
 
         return video_item
     except YouTubeException as ex:

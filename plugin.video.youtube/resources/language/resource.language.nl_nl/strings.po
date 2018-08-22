@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: 2016-05-26 16:38+0000\n"
 "PO-Revision-Date: 2016-05-26 16:38+0000\n"
-"Last-Translator: Maiko Hermans <EMAIL@ADDRESS>\n"
+"Last-Translator: MB1968 de allergoeistuh <EMAIL@ADDRESS>\n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -235,7 +235,7 @@ msgstr "Verwijder \"%s\"?"
 
 msgctxt "#30118"
 msgid "Delete"
-msgstr "Wis"
+msgstr "Verwijder"
 
 msgctxt "#30119"
 msgid "Please wait..."
@@ -258,11 +258,11 @@ msgstr "API Sleutel"
 
 msgctxt "#30202"
 msgid "API Id"
-msgstr "API Id"
+msgstr "API ID"
 
 msgctxt "#30203"
 msgid "API Secret"
-msgstr "API Secret"
+msgstr "API Geheim"
 
 msgctxt "#30204"
 msgid "Enable personal API keys"
@@ -645,11 +645,11 @@ msgstr "Miniatuur formaat"
 
 msgctxt "#30592"
 msgid "Medium (16:9)"
-msgstr "Medium"
+msgstr "Medium (16:9)"
 
 msgctxt "#30593"
 msgid "High (4:3)"
-msgstr "Hoog"
+msgstr "Hoog (4:3)"
 
 msgctxt "#30594"
 msgid "Safe search"
@@ -749,18 +749,18 @@ msgstr "MPEG-DASH"
 
 msgctxt "#30618"
 msgid "Enable mpeg-dash proxy"
-msgstr "Gebruik MPEG Dash proxy"
+msgstr "MPEG Dash proxy gebruiken"
 
 msgctxt "#30619"
 msgid "Port"
-msgstr "Port"
+msgstr "Poort"
 
 msgctxt "#30620"
 msgid "Port %s already in use. Cannot start http server."
-msgstr "Port %s al in gebruik. Kan de http server niet starten."
+msgstr "Poort %s al in gebruik. Kan de http server niet starten."
 
 msgctxt "#30621"
-msgid "Proxy is required for mpeg-dash vods"
+msgid "Proxy is required for mpeg-dash vods (see HTTP Server)"
 msgstr "Proxy is vereist voor mpeg-dash vods."
 
 msgctxt "#30622"
@@ -849,8 +849,236 @@ msgstr "Verwijder access_manager.json"
 
 msgctxt "#30643"
 msgid "Listen on IP"
-msgstr ""
+msgstr "Luister op IP"
 
 msgctxt "#30644"
 msgid "Select listen IP"
+msgstr "Selecteer luister IP "
+
+msgctxt "#30645"
+msgid "Refresh after watching"
+msgstr "Ververs na bekijken"
+
+msgctxt "#30646"
+msgid "Upcoming Live"
+msgstr "Aankomend Live"
+
+msgctxt "#30647"
+msgid "Completed Live"
+msgstr "Live Afgerond"
+
+msgctxt "#30648"
+msgid "API Key is incorrect. Settings - API - API Key"
+msgstr "API Sleutel is onjuist. Instellingen - API - API Sleutel"
+
+msgctxt "#30649"
+msgid "Client Id is incorrect. Settings - API - API Id"
+msgstr "Client ID is onjuist. Instellingen - API - API ID"
+
+msgctxt "#30650"
+msgid "Client Secret is incorrect. Settings - API - API Secret"
+msgstr "Client Geheim is onjuist. Instellingen - API - Geheim"
+
+msgctxt "#30651"
+msgid "Location"
+msgstr "Locatie"
+
+msgctxt "#30652"
+msgid "Location radius (km)"
+msgstr "Straal locatie (km)"
+
+msgctxt "#30653"
+msgid "Perform geolocation? Used for [B]My Location[/B]"
+msgstr "Geoloactie uitvoeren? Gebruikt voor [B]Mijn Lokatie[/B]"
+
+msgctxt "#30654"
+msgid "My Location"
+msgstr "Mijn Lokatie"
+
+msgctxt "#30655"
+msgid "Switch User"
+msgstr "Wissel van Gebruiker"
+
+msgctxt "#30656"
+msgid "New user"
+msgstr "Nieuwe Gebruiker"
+
+msgctxt "#30657"
+msgid "Unnamed"
+msgstr "Zonder Naam"
+
+msgctxt "#30658"
+msgid "Enter a name for this user"
+msgstr "Voer een naam in voor deze gebruiker"
+
+msgctxt "#30659"
+msgid "User is now '%s'"
+msgstr "Gebruiker is nu '%s'"
+
+msgctxt "#30660"
+msgid "Users"
+msgstr "Gebruikers"
+
+msgctxt "#30661"
+msgid "Add a user"
+msgstr "Gebruiker toevoegen"
+
+msgctxt "#30662"
+msgid "Remove a user"
+msgstr "Gebruiker verwijderen"
+
+msgctxt "#30663"
+msgid "Rename a user"
+msgstr "Gebruiker hernoemen"
+
+msgctxt "#30664"
+msgid "Switch user"
+msgstr "Wissel van Gebruiker"
+
+msgctxt "#30665"
+msgid "Switch to '%s' now?"
+msgstr "Schakel nu om naar '%s'?"
+
+msgctxt "#30666"
+msgid "Removed '%s'"
+msgstr "'%s' verwijderd"
+
+msgctxt "#30667"
+msgid "Renamed '%s' to '%s'"
+msgstr "'%s' hernoemd naar '%s'"
+
+msgctxt "#30668"
+msgid "Play count minimum percent"
+msgstr "Afspeel minimum percentage"
+
+msgctxt "#30669"
+msgid "Mark unwatched"
+msgstr "Markeer als onbekeken"
+
+msgctxt "#30670"
+msgid "Mark watched"
+msgstr "Markeer als bekeken"
+
+msgctxt "#30671"
+msgid "Clear playback history"
+msgstr "Wis afspeelgeschiedenis"
+
+msgctxt "#30672"
+msgid "Delete playback history"
+msgstr "Verwijder afspeelgeschiedenis"
+
+msgctxt "#30673"
+msgid "playback history"
+msgstr "Afspeelgeschiedenis"
+
+msgctxt "#30674"
+msgid "Reset resume point"
+msgstr "Afspeelpunt resetten"
+
+msgctxt "#30675"
+msgid "Use playback history (watched, resume tracking)"
+msgstr "Gebruik afspeelgeschiedenis (Bekeken, Hervatten)"
+
+msgctxt "#30676"
+msgid "Just now"
+msgstr "Alleen nu"
+
+msgctxt "#30677"
+msgid "A minute ago"
+msgstr "Een minuut geleden"
+
+msgctxt "#30678"
+msgid "Recently"
+msgstr "Onlangs"
+
+msgctxt "#30679"
+msgid "An hour ago"
+msgstr "Een uur geleden"
+
+msgctxt "#30680"
+msgid "Two hours ago"
+msgstr "Twee uur geleden"
+
+msgctxt "#30681"
+msgid "Three hours ago"
+msgstr "Drie uur geleden"
+
+msgctxt "#30682"
+msgid "Yesterday at"
+msgstr "Gisteren om"
+
+msgctxt "#30683"
+msgid "Two days ago"
+msgstr "Twee dagen geleden"
+
+msgctxt "#30684"
+msgid "Today at"
+msgstr "Vandaag om"
+
+msgctxt "#30685"
+msgid "Delete data cache database"
+msgstr "Verwijder datacache database"
+
+msgctxt "#30686"
+msgid "Clear data cache"
+msgstr "Datacache wissen"
+
+msgctxt "#30687"
+msgid "data cache"
+msgstr "datacache"
+
+msgctxt "#30688"
+msgid "Use for videos"
+msgstr "Gebruik voor video's"
+
+msgctxt "#30689"
+msgid "Use for live streams"
+msgstr "Gebruik voor livestreams"
+
+msgctxt "#30690"
+msgid "InputStream Adaptive >= 2.0.12 is required for live streams"
+msgstr "InputStream Adaptive >=2.0.12 vereist voor livestreams"
+
+msgctxt "#30691"
+msgid "Airing now"
+msgstr "Wordt nu uitgezonden"
+
+msgctxt "#30692"
+msgid "In a minute"
+msgstr "Over een minuut"
+
+msgctxt "#30693"
+msgid "Airing soon"
+msgstr "Wordt binnenkort uitgezonden"
+
+msgctxt "#30694"
+msgid "In over an hour"
+msgstr "Binnen een uur"
+
+msgctxt "#30695"
+msgid "In over two hours"
+msgstr "Binnen twee uur"
+
+msgctxt "#30696"
+msgid "Airing today at"
+msgstr "Wordt vandaag uitgezonden om"
+
+msgctxt "#30697"
+msgid "Tomorrow at"
+msgstr "Morgen om"
+
+msgctxt "#30698"
+msgid "Check my IP"
+msgstr "Controleer mijn IP"
+
+msgctxt "#30699"
+msgid "HTTP server is not running"
+msgstr "HTTP Server is niet opgestart"
+
+msgctxt "#30700"
+msgid "Client IP is %s"
 msgstr ""
+
+msgctxt "#30701"
+msgid "Failed to obtain client IP"
+msgstr "Verkrijgen client IP mislukt"

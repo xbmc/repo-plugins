@@ -116,10 +116,17 @@ class AbstractSettings(object):
         return verify
 
     def allow_dev_keys(self):
-        return self.get_bool(constants.setting.ALLOW_DEV_KEYS, True)
+        return self.get_bool(constants.setting.ALLOW_DEV_KEYS, False)
 
-    def use_dash_proxy(self):
-        return self.get_bool(constants.setting.DASH_PROXY, True)
+    def use_dash_videos(self):
+        if not self.use_dash():
+            return False
+        return self.get_bool(constants.setting.DASH_VIDEOS, False)
+
+    def use_dash_live_streams(self):
+        if not self.use_dash():
+            return False
+        return self.get_bool(constants.setting.DASH_LIVE_STREAMS, False)
 
     def httpd_port(self):
         return self.get_int(constants.setting.HTTPD_PORT, 50152)
@@ -135,3 +142,34 @@ class AbstractSettings(object):
 
     def api_config_page(self):
         return self.get_bool(constants.setting.API_CONFIG_PAGE, False)
+
+    def get_location(self):
+        location = self.get_string(constants.setting.LOCATION, '').replace(' ', '').strip()
+        coords = location.split(',')
+        latitude = longitude = None
+        if len(coords) == 2:
+            try:
+                latitude = float(coords[0])
+                longitude = float(coords[1])
+                if latitude > 90.0 or latitude < -90.0:
+                    latitude = None
+                if longitude > 180.0 or longitude < -180.0:
+                    longitude = None
+            except ValueError:
+                latitude = longitude = None
+        if latitude and longitude:
+            return '{lat},{long}'.format(lat=latitude, long=longitude)
+        else:
+            return ''
+
+    def set_location(self, value):
+        self.set_string(constants.setting.LOCATION, value)
+
+    def get_location_radius(self):
+        return str(self.get_int(constants.setting.LOCATION_RADIUS, 500)) + 'km'
+
+    def get_play_count_min_percent(self):
+        return self.get_int(constants.setting.PLAY_COUNT_MIN_PERCENT, 0)
+
+    def use_playback_history(self):
+        return self.get_bool(constants.setting.USE_PLAYBACK_HISTORY, False)

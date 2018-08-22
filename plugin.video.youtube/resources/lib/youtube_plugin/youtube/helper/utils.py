@@ -89,6 +89,16 @@ def update_channel_infos(provider, context, channel_id_dict, subscription_id_dic
 
         channel_item.set_context_menu(context_menu)
 
+        fanart = u''
+        fanart_images = yt_item.get('brandingSettings', {}).get('image', {})
+        banners = ['bannerTvMediumImageUrl', 'bannerTvLowImageUrl', 'bannerTvImageUrl']
+        for banner in banners:
+            fanart = fanart_images.get(banner, u'')
+            if fanart:
+                break
+
+        channel_item.set_fanart(fanart)
+
         # update channel mapping
         if channel_items_dict is not None:
             if not channel_id in channel_items_dict:
@@ -102,10 +112,11 @@ def update_playlist_infos(provider, context, playlist_id_dict, channel_items_dic
         return
 
     resource_manager = provider.get_resource_manager(context)
+    access_manager = context.get_access_manager()
     playlist_data = resource_manager.get_playlists(playlist_ids)
 
-    custom_watch_later_id = context.get_settings().get_string('youtube.folder.watch_later.playlist', '').strip()
-    custom_history_id = context.get_settings().get_string('youtube.folder.history.playlist', '').strip()
+    custom_watch_later_id = access_manager.get_watch_later_id()
+    custom_history_id = access_manager.get_watch_history_id()
 
     thumb_size = context.get_settings().use_thumbnail_size()
     for playlist_id in list(playlist_data.keys()):
@@ -162,7 +173,7 @@ def update_playlist_infos(provider, context, playlist_id_dict, channel_items_dic
             channel_items_dict[channel_id].append(playlist_item)
 
 
-def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=None, channel_items_dict=None):
+def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=None, channel_items_dict=None, live_details=False, use_play_data=True):
     settings = context.get_settings()
 
     video_ids = list(video_id_dict.keys())
@@ -173,33 +184,63 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         playlist_item_id_dict = {}
 
     resource_manager = provider.get_resource_manager(context)
-    video_data = resource_manager.get_videos(video_ids)
-
-    my_playlists = {}
-    if provider.is_logged_in():
-        my_playlists = resource_manager.get_related_playlists(channel_id='mine')
+    video_data = resource_manager.get_videos(video_ids, live_details=live_details)
 
     thumb_size = settings.use_thumbnail_size()
     thumb_stamp = get_thumb_timestamp()
     for video_id in list(video_data.keys()):
+        datetime = None
         yt_item = video_data[video_id]
         video_item = video_id_dict[video_id]
 
         snippet = yt_item['snippet']  # crash if not conform
-
-        # set uses_dash
-        video_item.set_use_dash(settings.use_dash())
+        play_data = yt_item['play_data']
+        video_item.live = True if snippet.get('liveBroadcastContent') == 'live' else False
 
         # set mediatype
         video_item.set_mediatype('video')  # using video
 
-        # set the title
-        if not video_item.get_title():
-            video_item.set_title(snippet['title'])
+        # duration
+        if not video_item.live and use_play_data and play_data.get('total_time'):
+            video_item.set_duration_from_seconds(float(play_data.get('total_time')))
+        else:
+            duration = yt_item.get('contentDetails', {}).get('duration', '')
+            duration = utils.datetime_parser.parse(duration)
+            # we subtract 1 seconds because YouTube returns +1 second to much
+            video_item.set_duration_from_seconds(duration.seconds - 1)
 
-        if not video_item.use_dash() and not settings.is_support_alternative_player_enabled() and \
-                video_item.get_headers() and video_item.get_uri().startswith('http'):
-            video_item.set_uri(video_item.get_uri() + '|' + video_item.get_headers())
+        if not video_item.live and use_play_data:
+            # play count
+            if play_data.get('play_count'):
+                video_item.set_play_count(int(play_data.get('play_count')))
+
+            if play_data.get('played_percent'):
+                video_item.set_start_percent(play_data.get('played_percent'))
+
+            if play_data.get('played_time'):
+                video_item.set_start_time(play_data.get('played_time'))
+
+            if play_data.get('last_played'):
+                video_item.set_last_played(play_data.get('last_played'))
+        elif video_item.live:
+            video_item.set_play_count(0)
+
+        scheduled_start = video_data[video_id].get('liveStreamingDetails', {}).get('scheduledStartTime')
+        if scheduled_start:
+            datetime = utils.datetime_parser.parse(scheduled_start)
+            video_item.set_scheduled_start_utc(datetime)
+            start_date, start_time = utils.datetime_parser.get_scheduled_start(datetime)
+            if start_date:
+                title = u'({live} {date}@{time}) {title}' \
+                    .format(live=context.localize(provider.LOCAL_MAP['youtube.live']), date=start_date, time=start_time, title=snippet['title'])
+            else:
+                title = u'({live} @ {time}) {title}' \
+                    .format(live=context.localize(provider.LOCAL_MAP['youtube.live']), date=start_date, time=start_time, title=snippet['title'])
+            video_item.set_title(title)
+        else:
+            # set the title
+            if not video_item.get_title():
+                video_item.set_title(snippet['title'])
 
         """
         This is experimental. We try to get the most information out of the title of a video.
@@ -229,21 +270,20 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         video_item.set_plot(description)
 
         # date time
-        if 'publishedAt' in snippet:
+        if not datetime and 'publishedAt' in snippet:
             datetime = utils.datetime_parser.parse(snippet['publishedAt'])
+            video_item.set_aired_utc(utils.datetime_parser.strptime(snippet['publishedAt']))
+
+        if datetime:
             video_item.set_year_from_datetime(datetime)
             video_item.set_aired_from_datetime(datetime)
             video_item.set_premiered_from_datetime(datetime)
             video_item.set_date_from_datetime(datetime)
 
-        # duration
-        duration = yt_item.get('contentDetails', {}).get('duration', '')
-        duration = utils.datetime_parser.parse(duration)
-        # we subtract 1 seconds because YouTube returns +1 second to much
-        video_item.set_duration_from_seconds(duration.seconds - 1)
-
         # try to find a better resolution for the image
-        image = get_thumbnail(thumb_size, snippet.get('thumbnails', {}))
+        image = video_item.get_image()
+        if not image:
+            image = get_thumbnail(thumb_size, snippet.get('thumbnails', {}))
         if image.endswith('_live.jpg'):
             image += '?ct=' + thumb_stamp
         video_item.set_image(image)
@@ -289,12 +329,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
 
         if provider.is_logged_in():
             # add 'Watch Later' only if we are not in my 'Watch Later' list
-            watch_later_playlist_id = my_playlists.get('watchLater', '')
-            if not watch_later_playlist_id or re.match('^\s*WL$', watch_later_playlist_id):
-                cplid = settings.get_string('youtube.folder.watch_later.playlist', ' WL').strip()
-                if re.match('^\s*(?:WL)*$', cplid):
-                    cplid = ' WL'
-                watch_later_playlist_id = cplid
+            watch_later_playlist_id = context.get_access_manager().get_watch_later_id()
             yt_context_menu.append_watch_later(context_menu, provider, context, watch_later_playlist_id, video_id)
 
             # provide 'remove' for videos in my playlists
@@ -303,7 +338,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
                 if playlist_match:
                     playlist_id = playlist_match.group('playlist_id')
                     # we support all playlist except 'Watch History'
-                    if not playlist_id.startswith('HL'):
+                    if playlist_id != 'HL' and playlist_id != 'WL' and playlist_id != ' WL':
                         playlist_item_id = playlist_item_id_dict[video_id]
                         context_menu.append((context.localize(provider.LOCAL_MAP['youtube.remove']),
                                              'RunPlugin(%s)' % context.create_uri(
@@ -325,6 +360,15 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
             # subscribe to the channel of the video
             yt_context_menu.append_subscribe_to_channel(context_menu, provider, context, channel_id, channel_name)
 
+        if not video_item.live and use_play_data:
+            if play_data.get('play_count') is None or int(play_data.get('play_count')) == 0:
+                yt_context_menu.append_mark_watched(context_menu, provider, context, video_id)
+            else:
+                yt_context_menu.append_mark_unwatched(context_menu, provider, context, video_id)
+
+            if int(play_data.get('played_percent', '0')) > 0 or float(play_data.get('played_time', '0.0')) > 0.0:
+                yt_context_menu.append_reset_resume_point(context_menu, provider, context, video_id)
+
         # more...
         refresh_container = context.get_path().startswith('/channel/mine/playlist/LL') or \
                             context.get_path() == '/special/disliked_videos/'
@@ -336,7 +380,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
             video_item.set_context_menu(context_menu, replace=replace_context_menu)
 
 
-def update_play_info(provider, context, video_id, video_item, video_stream):
+def update_play_info(provider, context, video_id, video_item, video_stream, use_play_data=True):
     settings = context.get_settings()
     ui = context.get_ui()
     resource_manager = provider.get_resource_manager(context)
@@ -350,18 +394,23 @@ def update_play_info(provider, context, video_id, video_item, video_stream):
 
     if meta_data:
         video_item.set_subtitles(meta_data.get('subtitles', None))
-        video_item.set_headers(meta_data.get('headers', ''))
         image = get_thumbnail(thumb_size, meta_data.get('images', {}))
+
+    if 'headers' in video_stream:
+        video_item.set_headers(video_stream['headers'])
 
     yt_item = video_data[video_id]
 
     snippet = yt_item['snippet']  # crash if not conform
+    play_data = yt_item['play_data']
+    is_live = True if snippet.get('liveBroadcastContent') == 'live' else False
+
+    # set the title
+    if not video_item.get_title():
+        video_item.set_title(snippet['title'])
 
     # set uses_dash
     video_item.set_use_dash(settings.use_dash())
-
-    # set mediatype
-    video_item.set_mediatype('video')  # using video
 
     license_info = video_stream.get('license_info', {})
 
@@ -376,13 +425,30 @@ def update_play_info(provider, context, video_id, video_item, video_stream):
     ui.set_home_window_property('license_url', license_info.get('url'))
     ui.set_home_window_property('license_token', license_info.get('token'))
 
-    # set the title
-    if not video_item.get_title():
-        video_item.set_title(snippet['title'])
+    # duration
+    if not is_live and use_play_data and play_data.get('total_time'):
+        video_item.set_duration_from_seconds(float(play_data.get('total_time')))
+    else:
+        duration = yt_item.get('contentDetails', {}).get('duration', '')
+        duration = utils.datetime_parser.parse(duration)
+        # we subtract 1 seconds because YouTube returns +1 second to much
+        video_item.set_duration_from_seconds(duration.seconds - 1)
 
-    if not video_item.use_dash() and not settings.is_support_alternative_player_enabled() and \
-            video_item.get_headers() and video_item.get_uri().startswith('http'):
-        video_item.set_uri(video_item.get_uri() + '|' + video_item.get_headers())
+    if not is_live and use_play_data:
+        # play count
+        if play_data.get('play_count'):
+            video_item.set_play_count(int(play_data.get('play_count')))
+
+        if play_data.get('played_percent'):
+            video_item.set_start_percent(play_data.get('played_percent'))
+
+        if play_data.get('played_time'):
+            video_item.set_start_time(play_data.get('played_time'))
+
+        if play_data.get('last_played'):
+            video_item.set_last_played(play_data.get('last_played'))
+    elif is_live:
+        video_item.set_play_count(0)
 
     """
     This is experimental. We try to get the most information out of the title of a video.
@@ -418,12 +484,6 @@ def update_play_info(provider, context, video_id, video_item, video_stream):
         video_item.set_aired_from_datetime(date_time)
         video_item.set_premiered_from_datetime(date_time)
         video_item.set_date_from_datetime(date_time)
-
-    # duration
-    duration = yt_item.get('contentDetails', {}).get('duration', '')
-    duration = utils.datetime_parser.parse(duration)
-    # we subtract 1 seconds because YouTube returns +1 second to much
-    video_item.set_duration_from_seconds(duration.seconds - 1)
 
     if not image:
         image = get_thumbnail(thumb_size, snippet.get('thumbnails', {}))

@@ -750,8 +750,8 @@ msgid "Port %s already in use. Cannot start http server."
 msgstr "%s port használatban van. Nem lehet elindítani a http kiszolgálót."
 
 msgctxt "#30621"
-msgid "Proxy is required for mpeg-dash vods"
-msgstr "Proxy szükséges az mpeg-dash formátumhoz"
+msgid "Proxy is required for mpeg-dash vods (see HTTP Server)"
+msgstr "Proxy szükséges az mpeg-dash formátumhoz (lásd HTTP kiszolgáló)"
 
 msgctxt "#30622"
 msgid "Purchases"
@@ -843,4 +843,232 @@ msgstr ""
 
 msgctxt "#30644"
 msgid "Select listen IP"
+msgstr ""
+
+msgctxt "#30645"
+msgid "Refresh after watching"
+msgstr ""
+
+msgctxt "#30646"
+msgid "Upcoming Live"
+msgstr ""
+
+msgctxt "#30647"
+msgid "Completed Live"
+msgstr ""
+
+msgctxt "#30648"
+msgid "API Key is incorrect. Settings - API - API Key"
+msgstr ""
+
+msgctxt "#30649"
+msgid "Client Id is incorrect. Settings - API - API Id"
+msgstr ""
+
+msgctxt "#30650"
+msgid "Client Secret is incorrect. Settings - API - API Secret"
+msgstr ""
+
+msgctxt "#30651"
+msgid "Location"
+msgstr ""
+
+msgctxt "#30652"
+msgid "Location radius (km)"
+msgstr ""
+
+msgctxt "#30653"
+msgid "Perform geolocation? Used for [B]My Location[/B]"
+msgstr ""
+
+msgctxt "#30654"
+msgid "My Location"
+msgstr ""
+
+msgctxt "#30655"
+msgid "Switch User"
+msgstr ""
+
+msgctxt "#30656"
+msgid "New user"
+msgstr ""
+
+msgctxt "#30657"
+msgid "Unnamed"
+msgstr ""
+
+msgctxt "#30658"
+msgid "Enter a name for this user"
+msgstr ""
+
+msgctxt "#30659"
+msgid "User is now '%s'"
+msgstr ""
+
+msgctxt "#30660"
+msgid "Users"
+msgstr ""
+
+msgctxt "#30661"
+msgid "Add a user"
+msgstr ""
+
+msgctxt "#30662"
+msgid "Remove a user"
+msgstr ""
+
+msgctxt "#30663"
+msgid "Rename a user"
+msgstr ""
+
+msgctxt "#30664"
+msgid "Switch user"
+msgstr ""
+
+msgctxt "#30665"
+msgid "Switch to '%s' now?"
+msgstr ""
+
+msgctxt "#30666"
+msgid "Removed '%s'"
+msgstr ""
+
+msgctxt "#30667"
+msgid "Renamed '%s' to '%s'"
+msgstr ""
+
+msgctxt "#30668"
+msgid "Play count minimum percent"
+msgstr ""
+
+msgctxt "#30669"
+msgid "Mark unwatched"
+msgstr ""
+
+msgctxt "#30670"
+msgid "Mark watched"
+msgstr ""
+
+msgctxt "#30671"
+msgid "Clear playback history"
+msgstr ""
+
+msgctxt "#30672"
+msgid "Delete playback history"
+msgstr ""
+
+msgctxt "#30673"
+msgid "playback history"
+msgstr ""
+
+msgctxt "#30674"
+msgid "Reset resume point"
+msgstr ""
+
+msgctxt "#30675"
+msgid "Use playback history (watched, resume tracking)"
+msgstr ""
+
+msgctxt "#30676"
+msgid "Just now"
+msgstr ""
+
+msgctxt "#30677"
+msgid "A minute ago"
+msgstr ""
+
+msgctxt "#30678"
+msgid "Recently"
+msgstr ""
+
+msgctxt "#30679"
+msgid "An hour ago"
+msgstr ""
+
+msgctxt "#30680"
+msgid "Two hours ago"
+msgstr ""
+
+msgctxt "#30681"
+msgid "Three hours ago"
+msgstr ""
+
+msgctxt "#30682"
+msgid "Yesterday at"
+msgstr ""
+
+msgctxt "#30683"
+msgid "Two days ago"
+msgstr ""
+
+msgctxt "#30684"
+msgid "Today at"
+msgstr ""
+
+msgctxt "#30685"
+msgid "Delete data cache database"
+msgstr ""
+
+msgctxt "#30686"
+msgid "Clear data cache"
+msgstr ""
+
+msgctxt "#30687"
+msgid "data cache"
+msgstr ""
+
+msgctxt "#30688"
+msgid "Use for videos"
+msgstr ""
+
+msgctxt "#30689"
+msgid "Use for live streams"
+msgstr ""
+
+msgctxt "#30690"
+msgid "InputStream Adaptive >= 2.0.12 is required for live streams"
+msgstr ""
+
+msgctxt "#30691"
+msgid "Airing now"
+msgstr ""
+
+msgctxt "#30692"
+msgid "In a minute"
+msgstr ""
+
+msgctxt "#30693"
+msgid "Airing soon"
+msgstr ""
+
+msgctxt "#30694"
+msgid "In over an hour"
+msgstr ""
+
+msgctxt "#30695"
+msgid "In over two hours"
+msgstr ""
+
+msgctxt "#30696"
+msgid "Airing today at"
+msgstr ""
+
+msgctxt "#30697"
+msgid "Tomorrow at"
+msgstr ""
+
+msgctxt "#30698"
+msgid "Check my IP"
+msgstr ""
+
+msgctxt "#30699"
+msgid "HTTP server is not running"
+msgstr ""
+
+msgctxt "#30700"
+msgid "Client IP is %s"
+msgstr ""
+
+msgctxt "#30701"
+msgid "Failed to obtain client IP"
 msgstr ""

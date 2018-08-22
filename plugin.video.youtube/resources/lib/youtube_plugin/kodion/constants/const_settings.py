@@ -14,12 +14,18 @@ AGE_GATE = 'kodion.age.gate'  # (bool)
 SUBTITLE_LANGUAGE = 'kodion.subtitle.languages.num'  # (int)
 SETUP_WIZARD = 'kodion.setup_wizard'  # (bool)
 VERIFY_SSL = 'simple.requests.ssl.verify'  # (bool)
+LOCATION = 'youtube.location'  # (str)
+LOCATION_RADIUS = 'youtube.location.radius'  # (int)
+PLAY_COUNT_MIN_PERCENT = 'kodion.play_count.percent'  # (int)
+USE_PLAYBACK_HISTORY = 'kodion.playback.history'  # (bool)
 
 SUPPORT_ALTERNATIVE_PLAYER = 'kodion.support.alternative_player'  # (bool)
 
 ALLOW_DEV_KEYS = 'youtube.allow.dev.keys'  # (bool)
 
-DASH_PROXY = 'kodion.mpd.proxy'  # (bool)
+DASH_VIDEOS = 'kodion.mpd.videos'  # (bool)
+DASH_LIVE_STREAMS = 'kodion.mpd.live_streams'  # (bool)
+
 HTTPD_PORT = 'kodion.mpd.proxy.port'  # (number)
 HTTPD_LISTEN = 'kodion.http.listen'  # (string)
 HTTPD_WHITELIST = 'kodion.http.ip.whitelist'  # (string)

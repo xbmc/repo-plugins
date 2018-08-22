@@ -1,3 +1,7 @@
+[B]Version 4.2.0[/B]
+- Use streams instead of direct URLs (contributed by sindrig)
+- Removed search until it can be fixed properly
+
 [B]Version 4.1.0[/B]
 - Fixed the podcast index
 - Fixed duration times

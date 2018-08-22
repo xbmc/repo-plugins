@@ -26,7 +26,6 @@ class GUI(object):
     def set_view_mode(self):
         # Common container IDs. (Used to set the default view in Kodi)
 
-
         skin_used = xbmc.getSkinDir()
         logger.log(skin_used)
         if skin_used == u'skin.confluence':
@@ -34,7 +33,6 @@ class GUI(object):
             xbmc.executebuiltin(
                 'Container.SetViewMode({0})'.format(504)
             )
-
 
     def _add_dir(self, name, action_key, action_value, image, is_folder,
                  extra_info=None):
@@ -55,7 +53,10 @@ class GUI(object):
             "name": quote(name.encode('utf-8'))
         }
 
-        url = "{base_url}?action_key={key}&action_value={value}&name={name}".format(**format_params)
+        url = (
+            "{base_url}?action_key={key}&"
+            "action_value={value}&name={name}".format(**format_params)
+        )
 
         list_item = xbmcgui.ListItem(name,
                                      iconImage=image,
@@ -71,7 +72,6 @@ class GUI(object):
             url=url,
             listitem=list_item,
             isFolder=is_folder)
-
 
     def add_dir(self, name, action_key, action_value,
                 image='DefaultFolder.png'):
@@ -127,4 +127,5 @@ class GUI(object):
         keyboard = xbmc.Keyboard('', title)
         keyboard.doModal()
         if keyboard.isConfirmed():
-            return unicode(keyboard.getText())
+            return keyboard.getText().strip()
+

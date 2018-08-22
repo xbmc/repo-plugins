@@ -1,4 +1,4 @@
-﻿<settings>
+<settings>
   <category label="30003">
     <setting id="email" type="text" label="30001" default=""/>
     <setting id="password" type="text" label="30002" option="hidden"  enable="!eq(-1,)" default=""/>

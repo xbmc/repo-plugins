@@ -199,13 +199,14 @@ class AbstractProvider(object):
             channel_id = context.get_param('channel_id', '')
             if result:
                 # context.execute('Container.Update(%s)' % context.create_uri([constants.paths.SEARCH, 'query'], item_params))
+                # Container.Update doesn't work with Remotes(Yatse)
                 try:
                     if not incognito and not channel_id:
                         search_history.update(query)
                     return self.on_search(query, context, re_match)
                 except:
                     return list()
-            # return True
+            return True
         elif command == 'query':
             incognito = str(context.get_param('incognito', False)).lower() == 'true'
             channel_id = context.get_param('channel_id', '')
@@ -220,8 +221,10 @@ class AbstractProvider(object):
             context.set_content_type(constants.content_type.FILES)
             result = []
 
+            location = str(context.get_param('location', False)).lower() == 'true'
+
             # 'New Search...'
-            new_search_item = items.NewSearchItem(context, fanart=self.get_alternative_fanart(context))
+            new_search_item = items.NewSearchItem(context, fanart=self.get_alternative_fanart(context), location=location)
             result.append(new_search_item)
 
             for search in search_history.list():
@@ -230,8 +233,7 @@ class AbstractProvider(object):
                     search = search.get_name()
 
                 # we create a new instance of the SearchItem
-                search_history_item = items.SearchHistoryItem(context, search,
-                                                              fanart=self.get_alternative_fanart(context))
+                search_history_item = items.SearchHistoryItem(context, search, fanart=self.get_alternative_fanart(context), location=location)
                 result.append(search_history_item)
 
             if search_history.is_empty():

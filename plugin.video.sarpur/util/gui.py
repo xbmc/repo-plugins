@@ -26,7 +26,6 @@ class GUI(object):
     def set_view_mode(self):
         # Common container IDs. (Used to set the default view in Kodi)
 
-
         skin_used = xbmc.getSkinDir()
         logger.log(skin_used)
         if skin_used == u'skin.confluence':
@@ -35,9 +34,16 @@ class GUI(object):
                 'Container.SetViewMode({0})'.format(504)
             )
 
-
-    def _add_dir(self, name, action_key, action_value, image, is_folder,
-                 extra_info=None):
+    def _add_dir(
+        self,
+        name,
+        action_key='',
+        action_value='',
+        image=None,
+        is_folder=False,
+        extra_info=None,
+        selectable=True
+    ):
         """
         Creates a link in Kodi
 
@@ -46,6 +52,8 @@ class GUI(object):
         :param action_value: Parameter to use with the action
         :param image: Icon to use for the link
         :param is_folder: Does the link lead to a folder or playable item
+        :param extra_info: Extra information for info label
+        :param selectable: Default True.
 
         """
         format_params = {
@@ -54,8 +62,13 @@ class GUI(object):
             "value": quote(action_value.encode('utf-8')),
             "name": quote(name.encode('utf-8'))
         }
-
-        url = "{base_url}?action_key={key}&action_value={value}&name={name}".format(**format_params)
+        if selectable:
+            url = (
+                "{base_url}?action_key={key}&"
+                "action_value={value}&name={name}".format(**format_params)
+            )
+        else:
+            url = ''
 
         list_item = xbmcgui.ListItem(name,
                                      iconImage=image,
@@ -72,7 +85,6 @@ class GUI(object):
             listitem=list_item,
             isFolder=is_folder)
 
-
     def add_dir(self, name, action_key, action_value,
                 image='DefaultFolder.png'):
         """
@@ -83,11 +95,13 @@ class GUI(object):
         :param action_value: Parameter to action
         :param image: Image to use with the folder
         """
-        self._add_dir(name,
-                      action_key,
-                      action_value,
-                      image,
-                      is_folder=True)
+        self._add_dir(
+            name=name,
+            action_key=action_key,
+            action_value=action_value,
+            image=image,
+            is_folder=True,
+        )
 
     def add_item(self, name, action_key, action_value,
                  image='DefaultMovies.png', extra_info=None):
@@ -99,12 +113,23 @@ class GUI(object):
         :param action_value: Parameter to action
         :param image: Image to use for the item
         """
-        self._add_dir(name,
-                      action_key,
-                      action_value,
-                      image,
-                      is_folder=False,
-                      extra_info=extra_info)
+        self._add_dir(
+            name=name,
+            action_key=action_key,
+            action_value=action_value,
+            image=image,
+            is_folder=False,
+            extra_info=extra_info,
+        )
+
+    def add_unselectable_item(self, name, image, extra_info=None):
+        unselectable_name = u'[COLOR red]{0}[/COLOR]'.format(name)
+        self._add_dir(
+            name=unselectable_name,
+            image=image,
+            selectable=False,
+            extra_info=extra_info,
+        )
 
     @staticmethod
     def info_box(title, message):
@@ -127,4 +152,5 @@ class GUI(object):
         keyboard = xbmc.Keyboard('', title)
         keyboard.doModal()
         if keyboard.isConfirmed():
-            return unicode(keyboard.getText())
+            return keyboard.getText().strip()
+

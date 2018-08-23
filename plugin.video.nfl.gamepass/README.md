@@ -28,12 +28,12 @@ recommended method of installing this addon.
 
 ### From GitHub ###
 
-If you install from GitHub (either by downlaod the .zip archive or using
+If you install from GitHub (either by download the .zip archive or using
 ``git``), you will need to install some dependencies:
 
- * Requests 2.x (http://mirrors.kodi.tv/addons/jarvis/script.module.requests/)
- * m3u8 >= 0.2.10 (http://mirrors.kodi.tv/addons/jarvis/script.module.m3u8/)
-   * which needs iso8601 (http://mirrors.kodi.tv/addons/jarvis/script.module.iso8601/)
+ * Requests 2.x (http://mirrors.kodi.tv/addons/krypton/script.module.requests/)
+ * m3u8 >= 0.2.10 (http://mirrors.kodi.tv/addons/krypton/script.module.m3u8/)
+   * which needs iso8601 (http://mirrors.kodi.tv/addons/krypton/script.module.iso8601/)
 
 ## What is NFL Game Pass? ##
 

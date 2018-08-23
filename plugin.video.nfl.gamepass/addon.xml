@@ -5,7 +5,7 @@
      marooned on an old version. -->
 <addon id="plugin.video.nfl.gamepass"
        name="NFL Game Pass"
-       version="2018.08.15"
+       version="2018.08.23"
        provider-name="Alexqw,divingmule,BaumSchorle,eriksoderblom,kaileu,emilsvennesson">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
@@ -25,20 +25,13 @@
     <source>https://github.com/aqw/xbmc-gamepass</source>
     <forum></forum>
     <disclaimer lang="en_GB">This addon requires you to have a subscription to NFL Game Pass.[CR]Please note that these subscriptions are region restricted by the NFL.[CR]This addon is completely unofficial and is /not/ endorsed by the NFL in any way.</disclaimer>
-    <news>2018.08.15 -- Quarterback by Committee Edition
-    + Assorted fixes for 2018 season breakage (kaileu)
-    + Add RedZone Live (kaileu)
-    + Make acquisition of NFL Shows dynamic (aqw)
-    +   it's slower now, but should break less often
-    + If there's a password in the log, make sure to 'xxxx' it out (rva87)
-    + Bugfix for subscription check (emilsvennesson)
-    + When "hide game length" is enabled, don't show if the game went into overtime (pyrocumulus)
-    + Assorted bugfixes (rva87, pyrocumulus)
-    + Fix invalid XML in skin (aqw)
-    + Code cleanup (aqw)
-    + Better handle HTTP timeouts (rva87)
-    + NOTE: pigskin.py development now happens in https://github.com/aqw/pigskin
-    +   this addon will sync regularly from that repo
+    <news>2018.08.23 -- Tampa 2 Edition
+    + Support all NFL Network shows (Kaileu)
+    + pigskin.py is now licensed MIT
+    + chromecast streams are default; fallback to HLS (aqw)
+    + compress images to reduce addon size a bit
+    + Better catch login failures (aqw)
+    + Assorted code cleanup and bug fixes (aqw)
     </news>
     <assets>
       <icon>resources/art/icon.png</icon>

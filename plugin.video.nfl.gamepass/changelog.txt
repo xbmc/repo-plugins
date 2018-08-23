@@ -1,3 +1,11 @@
+2018.08.23 -- Tampa 2 Edition
++ Support all NFL Network shows (Kaileu)
++ pigskin.py is now licensed MIT
++ chromecast streams are default; fallback to HLS (aqw)
++ compress images to reduce addon size a bit
++ Better catch login failures (aqw)
++ Assorted code cleanup and bug fixes (aqw)
+
 2018.08.15 -- Quarterback by Committee Edition
 + Assorted fixes for 2018 season breakage (kaileu)
 + Add RedZone Live (kaileu)

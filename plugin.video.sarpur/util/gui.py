@@ -62,17 +62,18 @@ class GUI(object):
             "value": quote(action_value.encode('utf-8')),
             "name": quote(name.encode('utf-8'))
         }
+        list_item = xbmcgui.ListItem(name,
+                                     iconImage=image,
+                                     thumbnailImage='')
         if selectable:
             url = (
                 "{base_url}?action_key={key}&"
                 "action_value={value}&name={name}".format(**format_params)
             )
+            list_item.setProperty('IsPlayable', 'true')
         else:
             url = ''
 
-        list_item = xbmcgui.ListItem(name,
-                                     iconImage=image,
-                                     thumbnailImage='')
         info_labels = {"Title": name}
         if extra_info:
             info_labels.update(extra_info)
@@ -153,4 +154,3 @@ class GUI(object):
         keyboard.doModal()
         if keyboard.isConfirmed():
             return keyboard.getText().strip()
-

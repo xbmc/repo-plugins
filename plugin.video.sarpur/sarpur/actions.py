@@ -64,7 +64,7 @@ def play_live_stream(channel, name):
     if url == -1:
         GUI.info_box(u"Vesen", u"Fann ekki straum")
     else:
-        player.play(url, name)
+        player.play(url, name, live=True)
 
 
 def view_category(channel, date_string):

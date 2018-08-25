@@ -20,14 +20,6 @@ msgctxt "#32000"
 msgid "Account"
 msgstr ""
 
-msgctxt "#32001"
-msgid "Video Library Export Folder"
-msgstr ""
-
-msgctxt "#32002"
-msgid "Music Library Export Folder"
-msgstr ""
-
 msgctxt "#32003"
 msgid "Before export to library, remove previous files and folders"
 msgstr ""

@@ -21,7 +21,8 @@ from clouddrive.common.service.download import DownloadService
 from clouddrive.common.service.source import SourceService
 from clouddrive.common.service.utils import ServiceUtil
 from resources.lib.provider.googledrive import GoogleDrive
+from clouddrive.common.service.export import ExportService
 
 
 if __name__ == '__main__':
-    ServiceUtil.run([DownloadService(GoogleDrive), SourceService(GoogleDrive)])
+    ServiceUtil.run([DownloadService(GoogleDrive), SourceService(GoogleDrive), ExportService(GoogleDrive)])

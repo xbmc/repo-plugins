@@ -104,7 +104,7 @@ class myAddon(t1mAddon):
                         infoList['Date'] = episode.get('auth_launch_date')
                     if isinstance(infoList['Date'], int):
                         infoList['Aired'] = time.strftime('%Y-%m-%d', time.localtime(infoList['Date']))
-                    infoList['Duration'] = str(int(episode.get('duration', '99999')))
+                    infoList['Duration'] = episode.get('duration')
                     infoList['MPAA'] = episode.get('tv_rating', 'N/A')
                     infoList['TVShowTitle'] = episode.get('collection_title')
                     infoList['Title'] = name

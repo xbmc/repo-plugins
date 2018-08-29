@@ -126,11 +126,14 @@ class myAddon(t1mAddon):
         html = self.getRequest(api_url)
         api_data = json.loads(html)
         urls = api_data.get('data').get('stream').get('assets')
-        source = [url.get('url') for url in urls if url.get('mime_type') == 'application/x-mpegURL'
-                  and (url.get('url').endswith("stream_full.m3u8") or url.get('url').endswith("/stream.m3u8"))]
+        for url in urls:
+            asset = url.get('url')
+            if url.get('mime_type') == 'application/x-mpegURL' and (asset.endswith("stream_full.m3u8") or asset.endswith("/stream.m3u8")):
+                source = asset
+                break
         autoplay = xbmcaddon.Addon().getSetting("autoplay")
         if source and autoplay == 'false':
-            hls = self.getRequest(source[0])
+            hls = self.getRequest(source)
             sources = re.findall('''BANDWIDTH=(\d+).*?RESOLUTION=([\dx]+).*?\n([^#\s]+)''', hls, re.I)
             sources = sorted(sources, key=lambda x: int(x[0]), reverse=True)
             dialog = xbmcgui.Dialog()
@@ -141,9 +144,9 @@ class myAddon(t1mAddon):
                 dialog.notification(addon_name, lang(34006).encode('utf-8'), xbmcgui.NOTIFICATION_WARNING, 3000)
                 return
             else:
-                u = '%s/%s' % (source[0].rsplit('/', 1).pop(0), sources[src][2].strip())
+                u = '%s/%s' % (source.rsplit('/', 1).pop(0), sources[src][2].strip())
         elif source and autoplay == 'true':
-            u = source[0]
+            u = source
         else:
             dialog = xbmcgui.Dialog()
             dialog.notification(addon_name, lang(34007).encode('utf-8'), xbmcgui.NOTIFICATION_WARNING, 3000)

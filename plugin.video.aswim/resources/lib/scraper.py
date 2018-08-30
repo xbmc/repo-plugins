@@ -19,9 +19,9 @@ class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
       html = self.getRequest(ASBASE+'/videos')
-      html = re.compile('__AS_INITIAL_DATA__ = (.+?);\n', re.DOTALL).search(html).group(1)
+      html = re.compile('__AS_INITIAL_STATE__ = (.+?)</script>', re.DOTALL).search(html).group(1)
       a = json.loads(html)
-      for b in a['shows']:
+      for b in a['showsIndex']['shows']:
          name = b['title']
          url = b['url']
          infoList = {}

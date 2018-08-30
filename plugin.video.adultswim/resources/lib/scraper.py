@@ -55,7 +55,7 @@ class myAddon(t1mAddon):
                     except ValueError:
                         poster = show.get("poster", self.addonIcon)
                         fanart = self.addonFanart
-                        info_list = {'Title': name, 'TVShowTitle': name, 'mediatype': 'tvshow', 'Studio': 'Adult Swim', 
+                        info_list = {'Title': name, 'TVShowTitle': name, 'mediatype': 'tvshow', 'Studio': 'Adult Swim',
                                      'cover_url': poster, 'backdrop_url': fanart}
                     i += 1
                     percent = int((i / float(total)) * 100)
@@ -66,8 +66,8 @@ class myAddon(t1mAddon):
                     info_list = {'Title': name, 'TVShowTitle': name, 'mediatype': 'tvshow', 'Studio': 'Adult Swim',
                                  'cover_url': poster, 'backdrop_url': fanart}
 
-                response = 'http://www.adultswim.com%s' % show.get("url")
-                ilist = self.addMenuItem(name, 'GE', ilist, response, poster, fanart, info_list, isFolder=True,
+                location = 'http://www.adultswim.com%s' % show.get("url")
+                ilist = self.addMenuItem(name, 'GE', ilist, location, poster, fanart, info_list, isFolder=True,
                                          cm=context_menu)
             else:
                 continue
@@ -112,8 +112,8 @@ class myAddon(t1mAddon):
                     infoList['Season'] = episode.get("season_number")
                     infoList['Plot'] = episode.get("description", "").encode("utf-8")
                     infoList['mediatype'] = 'episode'
-                    url = episode.get("id")
-                    ilist = self.addMenuItem(name, 'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
+                    media_id = episode.get("id")
+                    ilist = self.addMenuItem(name, 'GV', ilist, media_id, thumb, fanart, infoList, isFolder=False)
 
         if len(ilist) == 0:
             ilist = self.addMenuItem(lang(34004).encode('utf-8'), 'GV', ilist, '', self.addonIcon,
@@ -125,11 +125,13 @@ class myAddon(t1mAddon):
         api_url = 'http://www.adultswim.com/videos/api/v3/videos/%s?fields=title,type,duration,collection_title,poster,stream,segments,title_id' % url
         html = self.getRequest(api_url)
         api_data = json.loads(html)
-        urls = api_data.get('data').get('stream').get('assets')
-        for url in urls:
-            asset = url.get('url')
-            if url.get('mime_type') == 'application/x-mpegURL' and (asset.endswith("stream_full.m3u8") or asset.endswith("/stream.m3u8")):
-                source = asset
+        source = None
+        assets = api_data.get('data').get('stream').get('assets')
+        for asset in assets:
+            url = asset.get('url')
+            if asset.get('mime_type') == 'application/x-mpegURL' and \
+                    (url.endswith("stream_full.m3u8") or url.endswith("/stream.m3u8")):
+                source = url
                 break
         autoplay = xbmcaddon.Addon().getSetting("autoplay")
         if source and autoplay == 'false':
@@ -137,9 +139,7 @@ class myAddon(t1mAddon):
             sources = re.findall('''BANDWIDTH=(\d+).*?RESOLUTION=([\dx]+).*?\n([^#\s]+)''', hls, re.I)
             sources = sorted(sources, key=lambda x: int(x[0]), reverse=True)
             dialog = xbmcgui.Dialog()
-            src = dialog.select(lang(34005).encode('utf-8'),
-                                [str("[COLOR lawngreen]%s[/COLOR] (%skbps)" % (i[1], int(i[0]) / 1000)).encode("utf-8") for
-                                 i in sources])
+            src = dialog.select(lang(34005).encode('utf-8'), [str("[COLOR lawngreen]%s[/COLOR] (%skbps)" % (i[1], int(i[0]) / 1000)).encode("utf-8") for i in sources])
             if src == -1:
                 dialog.notification(addon_name, lang(34006).encode('utf-8'), xbmcgui.NOTIFICATION_WARNING, 3000)
                 return

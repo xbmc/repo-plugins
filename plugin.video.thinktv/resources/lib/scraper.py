@@ -315,16 +315,28 @@ class myAddon(t1mAddon):
     pg = re.compile('window.videoBridge = (.+?);\n', re.DOTALL).search(pg).group(1)
     a = json.loads(pg)
     if not a is None:
-        url = a['recommended_encoding']['url']
+#        url = a['recommended_encoding']['url']
         suburl = a['cc'].get('SRT')
-        pg = self.getRequest('%s?format=json' % url)
-        url = json.loads(pg)['url']
+        urls = a['encodings']
+        url = ''
+        for xurl in urls:
+           pg = self.getRequest('%s?format=json' % xurl)
+           xurl = json.loads(pg)['url']
+           if xurl.endswith('.m3u8'):
+               if url.endswith('800k.m3u8') or url.endswith('.mp4'):
+                   url = xurl
+                   break
+               else:
+                   url = xurl
+           else:
+               if not url.endswith('.m3u8'):
+                   url = xurl
     else:
         xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( self.addonName, addonLanguage(30049) , 4000) )
         return
 
-    if 'mp4:' in url:
-        url = 'http://ga.video.cdn.pbs.org/%s' % url.split('mp4:',1)[1]
+#    if 'mp4:' in url:
+#        url = 'http://ga.video.cdn.pbs.org/%s' % url.split('mp4:',1)[1]
     liz = xbmcgui.ListItem(path = url)
     if not suburl is None:
         subfile = self.procConvertSubtitles(suburl)

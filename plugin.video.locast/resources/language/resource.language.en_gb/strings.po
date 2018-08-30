@@ -1,0 +1,85 @@
+# Kodi Media Center language file
+# Addon Name: "Locast"
+# Addon id: plugin.video.locast
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.locast\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lunatixz Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Something went wrong, Try again..."
+msgstr ""
+
+msgctxt "#30002"
+msgid "Select Preferred Quality"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Lineup"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Guide"
+msgstr "
+
+msgctxt "#30006"
+msgid "Enter User Email"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Enter User Password"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Already have a Locast account?"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Exit Add-on"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Sign-In"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Please visit www.locast.org to activate your account."
+msgstr ""
+
+msgctxt "#30013"
+msgid "We apologize but it appears that you are not currently located in the Designated Market Area to view this content."
+msgstr ""
+
+msgctxt "#30014"
+msgid "_member_location=%s; _member_username=%s; _member_token=%s; _member_role=1; _gat=1"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Disable Add-on"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Add-on successfully disabled"
+msgstr ""
+
+msgctxt "#30017"
+msgid "iyJhbGciOiJIUzI1NiJ9.iyJzdWIiOiJrZ3JhZXJAYW9sLmNvb6IsImV4cCI6MTUzNjg2MDUxNX9.7_u8oAgvk9V69cYaPQ1wjsmHAHFJMAc6qPKTgCEgcXo"
+msgstr ""

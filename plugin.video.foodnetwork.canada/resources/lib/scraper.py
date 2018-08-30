@@ -83,17 +83,17 @@ class myAddon(t1mAddon):
 
 
   def getAddonVideo(self,url):
-     html = self.getRequest(url) #needs proxy
-     url = re.compile('video src="(.+?)"', re.DOTALL).search(html).group(1)
-     m3ranges = re.compile('_,(.+?),_', re.DOTALL).search(url)
-     if m3ranges is not None:
-         m3ranges = m3ranges.group(1)
-         url = url.replace(m3ranges, 'highest,medium', 1)
-     suburl = re.compile('textstream src="(.+?)"', re.DOTALL).search(html)
-     html = self.getRequest(url) #needs proxy
-     url = re.compile('http(.+?)\n', re.DOTALL).search(html).group(0).strip()
+#     html = self.getRequest(url) #needs proxy
+#     url = re.compile('video src="(.+?)"', re.DOTALL).search(html).group(1)
+#     m3ranges = re.compile('_,(.+?),_', re.DOTALL).search(url)
+#     if m3ranges is not None:
+#         m3ranges = m3ranges.group(1)
+#         url = url.replace(m3ranges, 'highest,medium', 1)
+#     suburl = re.compile('textstream src="(.+?)"', re.DOTALL).search(html)
+#     html = self.getRequest(url) #needs proxy
+#     url = re.compile('http(.+?)\n', re.DOTALL).search(html).group(0).strip()
      liz = xbmcgui.ListItem(path = url)
-     if suburl is not None: 
-         suburl=suburl.group(1).replace('.ttml','.vtt')
-         liz.setSubtitles([suburl])
+#     if suburl is not None: 
+#         suburl=suburl.group(1).replace('.ttml','.vtt')
+#         liz.setSubtitles([suburl])
      xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)

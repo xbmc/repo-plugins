@@ -1,4 +1,4 @@
-![Kodi logo](https://raw.githubusercontent.com/xbmc/xbmc-forum/master/xbmc/images/logo-sbs-black.png)
+![Kodi logo](https://raw.githubusercontent.com/xbmc/xbmc/master/media/banner.png)
 # Kodi Home Theater Software
 
 

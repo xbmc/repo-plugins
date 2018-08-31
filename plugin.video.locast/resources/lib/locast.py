@@ -151,7 +151,7 @@ class Locast(object):
         if not epg:
             now = ('{0:.23s}{1:s}'.format(datetime.datetime.now().strftime('%Y-%m-%dT00:00:00'),'-07:00'))
             epg = json.loads(self.net.http_POST(BASE_API, form_data={'action':'get_epgs','dma':city,'start_time':now}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
-            self.cache.set(ADDON_NAME + '.getEPG.%s'%city, epg, expiration=datetime.timedelta(hours=3))
+            self.cache.set(ADDON_NAME + '.getEPG.%s'%city, epg, expiration=datetime.timedelta(hours=1))
         return epg
 
         
@@ -210,18 +210,18 @@ class Locast(object):
         for listing in listings:
             try: starttime  = datetime.datetime.fromtimestamp(int(str(listing['startTime'])[:-3]))
             except: continue
-            duration   = listing['duration']
+            duration   = listing.get('duration',0)
             endtime    = starttime + datetime.timedelta(seconds=duration)
             label      = listing['title']
             # if listing['isNew']: label = '*%s'%label
             try: aired = datetime.datetime.fromtimestamp(int(str(listing['airdate'])[:-3]))
             except: aired = starttime
-            try: type  = {'Series':'episode'}[listing['showType']]
+            try: type  = {'Series':'episode'}[listing.get('showType','Series')]
             except: type = 'video'
             plot = (listing.get('description','') or label)
             if opt == 'Live' and starttime <= now <= endtime: label = '%s - %s'%(chname, label)
             elif opt == 'Lineup': label = '%s: %s - %s'%(starttime.strftime('%I:%M %p').lstrip('0'),chname,label)
-            infoLabels = {"mediatype":type,"label":label,"title":label,'duration':duration,'plot':plot,'genre':listing['genres'],"aired":aired.strftime('%Y-%m-%d')}
+            infoLabels = {"mediatype":type,"label":label,"title":label,'duration':duration,'plot':plot,'genre':listing.get('genres',[]),"aired":aired.strftime('%Y-%m-%d')}
             infoArt    = {"thumb":chlogo,"poster":chlogo,"fanart":FANART,"icon":chlogo,"logo":chlogo}
             if opt == 'Live':
                 if starttime <= now <= endtime: return self.addLink(label, path, 9, infoLabels, infoArt, total=len(listings))
@@ -255,16 +255,17 @@ class Locast(object):
         listings = station['listings']
         #todo added more meta from listings, ie mpaa, isNew, video/audio codec
         for listing in listings:
-            try: type  = {'Series':'episode'}[listing['showType']]
+            try: type  = {'Series':'episode'}[listing.get('showType','Series')]
             except: type = 'video'
             label = listing['title']
             plot  = (listing.get('description','') or label)
             try: aired = datetime.datetime.fromtimestamp(int(str(listing['airdate'])[:-3]))
             except: aired = now
-            duration  = listing['duration']
+            duration  = listing.get('duration',0)
             tmpdata   = {"mediatype":type,"label":label,"title":label,'duration':duration,'plot':plot,'genre':listing.get('genres',[]),"aired":aired.strftime('%Y-%m-%d')}
             starttime = datetime.datetime.fromtimestamp(int(str(listing['startTime'])[:-3]))
             endtime   = starttime + datetime.timedelta(seconds=duration)
+            if now > endtime: continue
             tmpdata['starttime'] = time.mktime((starttime).timetuple())
             tmpdata['url'] = self.sysARG[0]+'?mode=9&name=%s&url=%s'%(chname,link)
             tmpdata['art'] = {"thumb":chlogo,"poster":chlogo,"fanart":FANART,"icon":chlogo,"logo":chlogo}

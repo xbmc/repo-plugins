@@ -63,9 +63,15 @@ class UrlToStreamService:
 
     @staticmethod
     def __get_hls(dictionary):
+        hls_url = None
+        hls_aes_url = None
         for item in dictionary:
+            if item['type'] == 'HLS_AES':
+                hls_aes_url = item['url']
+                break
             if item['type'] == 'HLS':
-                return item['url']
+                hls_url = item['url']
+        return hls_aes_url or hls_url
 
     @staticmethod
     def __get_subtitle(dictionary):

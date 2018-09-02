@@ -117,9 +117,9 @@ class VRTPlayer:
         if len(li_tags) != 0 and episode_items:
             title_items.extend(episode_items)
         else:
-            episodes_list_slider = soup.find("div", {"id": "episodes-list"})
-            if episodes_list_slider is not None:
-                title_items.extend(self.__get_multiple_videos(soup))
+             
+            if soup.find("div", {"id": "episodes-list"}) is not None or soup.find("div", {"id": "episodes-list-wrapper"}) is not None:
+                title_items.extend(self.__get_multiple_videos_episodes_list_id(soup))
             else:
                 title_items.extend(self.__get_single_video(relevant_path.url, soup))
         self._kodi_wrapper.show_listing(title_items)
@@ -140,10 +140,18 @@ class VRTPlayer:
                 title_items.append(helperobjects.TitleItem(title, {"action" : actions.LISTING_VIDEOS, 'video':path}, False))
         return title_items
 
-    def __get_multiple_videos(self, soup):
+
+    #def __get_multiple_videos_episodeslist_class(self, soup):
+
+    def __get_multiple_videos_episodes_list_id(self, soup):
         title_items = []
+        #some episodes have a different episodelist using class episodelist instead of id episode-list :/
+        episode_list_css = soup.find("div", {"class": "episodeslist"})
         episode_list = soup.find("div", {"id" : "episodes-list"})
 
+        if episode_list_css is not None:
+            episode_list = episode_list_css.find("div", {"id": "episodes-list-wrapper"})
+        
         for tile in episode_list.find_all("li"):
             thumbnail = VRTPlayer.__format_image_url(tile)
             found_element = tile.find(class_="vrtnu-list--item-meta")

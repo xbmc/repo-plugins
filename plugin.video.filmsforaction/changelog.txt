@@ -1,3 +1,5 @@
+1.0.10 (2018.09.05)
+- Removed add-on dependency.
 1.0.9 (2018.03.30)
 - Minor fixes due to website changes.
 - Added sort by most viewed/recent option from add-on settings menu.

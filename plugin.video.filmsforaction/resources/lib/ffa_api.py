@@ -135,7 +135,6 @@ def get_playable_url(url):
             ('snagfilms1',   ' src="http://embed.snagfilms.com/embed/player\?filmId=([^"]*?)"', 'snagfilms'),
             ('kickstarter1', ' src="(https://www.kickstarter.com/[^"]*?)"',                     'kickstarter'),
             ('tagtele1',     ' src="(http://www.tagtele.com/embed/[^"]*?)"',                    'tagtele'),
-            ('disclosetv1',  ' src="http://www.disclose.tv/embed/([^"]*?)"',                    'disclosetv'),
             )
 
     buffer_url = l.carga_web(url)
@@ -226,9 +225,4 @@ def get_playable_tagtele_url(tagtele_url):
 
     buffer_link = l.carga_web(tagtele_url)
     return l.find_first(buffer_link, pattern_tagtele_video)
-
-
-def get_playable_disclosetv_url(video_id):
-    """This function returns the URL path to call the Disclose TV add-on with the video_id retrieved."""
-    return 'plugin://plugin.video.disclose_tv/video/' + video_id
 

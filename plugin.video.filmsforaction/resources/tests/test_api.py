@@ -43,9 +43,10 @@ class ITTests(unittest.TestCase):
     #    url='https://www.filmsforaction.org/watch/inhabit-a-permaculture-perspective/'
     #    self.assertTrue(len(api.get_playable_url(url)) > 10)
 
-    def test_dailymotion_scraper(self):
-        url='https://www.filmsforaction.org/watch/pbs_frontline_is_walmart_good_for_america_2005/'
-        self.assertTrue(len(api.get_playable_url(url)) > 10)
+    # I cannot find any link to test this scraper right now.
+    #def test_dailymotion_scraper(self):
+    #    url='https://www.filmsforaction.org/watch/pbs_frontline_is_walmart_good_for_america_2005/'
+    #    self.assertTrue(len(api.get_playable_url(url)) > 10)
 
     def test_tagtele_scraper(self):
         url='https://www.filmsforaction.org/watch/shop-til-you-drop-the-crisis-of-consumerism-2010/'

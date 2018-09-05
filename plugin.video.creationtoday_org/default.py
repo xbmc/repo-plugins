@@ -8,7 +8,6 @@ import re
 import sys
 from t0mm0.common.addon import Addon
 from t0mm0.common.net import Net
-import urlresolver
 from bs4 import BeautifulSoup
 
 
@@ -112,15 +111,21 @@ def ADDLINKS_Featured():
 	addon.add_video_item({'url': 'http://www.youtube.com/watch?v=U0u3-2CGOMQ'},{'title': 'Evolution Vs. God'},img='http://img.youtube.com/vi/U0u3-2CGOMQ/0.jpg',fanart=fanart)
 	addon.add_video_item({'url': 'http://www.youtube.com/watch?v=7y2KsU_dhwI'},{'title': '180 Movie'},img='http://img.youtube.com/vi/7y2KsU_dhwI/0.jpg',fanart=fanart)
 
+##################################################################################################################################
 
+def resolve_youtube_url(url):
+	url_patterns = ['(?:youtu.be/|/embed/|/v/|v=)(?P<video_id>[a-zA-Z0-9_\-]{11})']
+	for pattern in url_patterns:
+		v_id = re.search(pattern, url)
+		if v_id:
+			return 'plugin://plugin.video.youtube/play/?video_id={}'.format(v_id.group('video_id'))
+	return ''
 
 
 if play:
 	url = addon.queries.get('url', '')
-	host = addon.queries.get('host', '')
-	media_id = addon.queries.get('media_id', '')
-	stream_url = urlresolver.HostedMediaFile(url=url, host=host, media_id=media_id).resolve()
-	addon.resolve_url(stream_url)
+	playable_url = resolve_youtube_url(url)
+	addon.resolve_url(playable_url)
 
 ##################################################################################################################################
 
@@ -133,6 +138,7 @@ def getUrl(url):
 	return link
 
 ##################################################################################################################################
+
 
 def get_params():
         param=[]

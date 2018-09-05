@@ -16,7 +16,8 @@ import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
 
-from gamekings_const import ADDON, LANGUAGE, IMAGES_PATH, BASE_URL_GAMEKINGS_TV, convertToUnicodeString, log, getSoup
+from gamekings_const import ADDON, LANGUAGE, IMAGES_PATH, BASE_URL_GAMEKINGS_TV, PREMIUM_ONLY_VIDEO_TITLE_PREFIX, \
+    convertToUnicodeString, log, getSoup
 
 #
 # Main class
@@ -92,12 +93,17 @@ class Main(object):
         soup = getSoup(html_source)
 
         # Get the items. Each item contains a title, a video page url and a thumbnail url
+        #
         # <div class="post post--horizontal">
         #   <a href="https://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/" title="E3 2016 Vooruitblik met Shelly" class="post__thumb">
         #     <img width="270" height="170" data-original="https://www.gamekings.tv/wp-content/uploads/20160527_E3vooruitblikShelly-270x170.jpg"
         #        alt="E3 2016 Vooruitblik met Shelly" class="post__image  lazy">
         #   </a>
+        #
         #   <h3 class="post__title">
+        #   or
+        #   <h3 class="post__title post__title--premium">
+        #
         #     <a href="https://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/" class="post__titlelink">E3 2016 Vooruitblik met Shelly                </a>
         #   </h3>
         #   <p class="post__summary">De regeltante aan het woord in deze vooruitblik!            </p>
@@ -107,12 +113,24 @@ class Main(object):
         #       <a href="https://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/#comments" class="meta__item  meta--comments  disqus-comment-count" data-disqus-url="https://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/">0</a>
         #     </div>
 
-        items = soup.findAll('a', attrs={'href': re.compile("^" + BASE_URL_GAMEKINGS_TV)})
+        items = soup.findAll('div', attrs={'class': re.compile("^" + "post")})
 
         log("len(items", len(items))
 
         for item in items:
-            video_page_url = item['href']
+
+            item = convertToUnicodeString(item)
+
+            # if item contains 'postcontainer, skip the item
+            if str(item).find('postcontainer') >= 0:
+
+                log("skipped item containing 'postcontainer'", item)
+
+                continue
+
+            log("item", item)
+
+            video_page_url = item.a['href']
 
             log("video_page_url", video_page_url)
 
@@ -127,7 +145,7 @@ class Main(object):
 
             # Make title
             try:
-                title = item['title']
+                title = item.a['title']
             except:
                 # skip the item if it's got no title
                 continue
@@ -183,18 +201,21 @@ class Main(object):
                 title = title[1:]
 
             title = title.replace("aflevering", "Aflevering")
-            title = title.replace("Aflevering", str(LANGUAGE(30204)))
+            title = title.replace("Aflevering", (LANGUAGE(30204)))
             title = title.replace("Gamekings Extra: ", "")
             title = title.replace("Gamekings Extra over ", "")
             title = title.replace("Extra: ", "")
             title = title.replace("Extra over ", "")
             title = title.capitalize()
 
+            if str(item).find("title--premium") >= 0:
+                title = PREMIUM_ONLY_VIDEO_TITLE_PREFIX + ' ' + title
+
             log("title", title)
 
             # Make thumbnail
             try:
-                thumbnail_url = item.img['data-original']
+                thumbnail_url = item.a.img['data-original']
             except:
                 # skip the item if it has no thumbnail
 

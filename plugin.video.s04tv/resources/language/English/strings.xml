@@ -15,4 +15,6 @@
 	<string id="30101">Please validate your credentials in plugin settings.</string>
 	<string id="30102">Username and password not set.</string>
 	<string id="30103">Please enter your credentials in plugin settings.</string>
+	<string id="30104">This video is not freely available.</string>
+	<string id="30105">Please purchase a subscription at https://schalke04.de/tv/.</string>
 </strings>

@@ -1,27 +1,10 @@
-import resources.lib.nflcs
+from resources.lib.nfl2018 import NFL2018
 
 
-class Team(resources.lib.nflcs.NFLCS):
-    _short = "jaguars"
-    _cdaweb_url = "http://www.jaguars.com/cda-web/"
-    _categories = [
-        "Videos - All Access",
-        "Videos - Cheerleaders",
-        "Videos - Classic Jags",
-        "Videos - Community",
-        "Videos - Film Room",
-        "Videos - Gameday",
-        "Videos - Gameday Grub",
-        "Video - Inside the Jaguars",
-        "Videos - Interviews",
-        "Videos - Jags Wired",
-        "Videos - Jaguars.com Features",
-        "Videos - Jaguars.com LIVE",
-        "Videos - O-Zone",
-        "Videos - ROAR Calendar",
-        "Videos - Union Jax",
-    ]
+class Team(NFL2018):
+    short = "jaguars"
+    hostname = "www.jaguars.com"
 
     def __init__(self, parameters):
-        self._parameters = parameters
-        self.go()
+        self.parameters = parameters
+        NFL2018.__init__(self)

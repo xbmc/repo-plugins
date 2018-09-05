@@ -1,9 +1,9 @@
 # coding=utf-8
 
 ##################################
-# Zappylib V1.0.1
+# Zappylib V1.0.4
 # ZapiSession
-# (c) 2014 Pascal Nançoz
+# (c) 2014-2018 Pascal Nançoz
 ##################################
 
 import os, re, base64
@@ -11,8 +11,9 @@ import urllib, urllib2
 import json
 
 class ZapiSession:
-	ZAPI_AUTH_URL = 'https://zattoo.com'
 	ZAPI_URL = 'https://zattoo.com'
+	ZAPI_UUID = 'd7512e98-38a0-4f01-b820-5a5cf98141fe'
+	ZAPI_APP_VERSION = '2.12.3'
 	CACHE_ENABLED = False
 	CACHE_FOLDER = None
 	COOKIE_FILE = None
@@ -37,14 +38,17 @@ class ZapiSession:
 		return (self.CACHE_ENABLED and self.restore_session()) or self.renew_session()
 
 	def restore_session(self):
-		if os.path.isfile(self.COOKIE_FILE) and os.path.isfile(self.ACCOUNT_FILE):
-			with open(self.ACCOUNT_FILE, 'r') as f:
-				accountData = json.loads(base64.b64decode(f.readline()))
-			if accountData['success'] == True:
-				self.AccountData = accountData
-				with open(self.COOKIE_FILE, 'r') as f:
-					self.set_cookie(base64.b64decode(f.readline()))
-				return True
+		try:
+			if os.path.isfile(self.COOKIE_FILE) and os.path.isfile(self.ACCOUNT_FILE):
+				with open(self.ACCOUNT_FILE, 'r') as f:
+					accountData = json.loads(base64.b64decode(f.readline()))
+				if accountData['session'] is not None and accountData['success'] == True:
+					self.AccountData = accountData
+					with open(self.COOKIE_FILE, 'r') as f:
+						self.set_cookie(base64.b64decode(f.readline()))
+					return True
+		except Exception:
+			pass
 		return False
 
 	def extract_sessionId(self, cookieContent):
@@ -78,7 +82,7 @@ class ZapiSession:
 		return None
 
 	def exec_zapiCall(self, api, params, context='default'):
-		url = self.ZAPI_AUTH_URL + api if context == 'session' else self.ZAPI_URL + api
+		url = self.ZAPI_URL + api
 		content = self.request_url(url, params)
 		if content is None and context != 'session' and self.renew_session():
 			content = self.request_url(url, params)
@@ -98,16 +102,17 @@ class ZapiSession:
 		return re.search("window\.appToken\s*=\s*'(.*)'", html).group(1)
 
 	def announce(self):
-		api = '/zapi/session/hello'
+		api = '/zapi/v2/session/hello'
 		params = {"client_app_token" : self.fetch_appToken(),
-				  "uuid"    : "d7512e98-38a0-4f01-b820-5a5cf98141fe",
+				  "uuid"    : self.ZAPI_UUID,
 				  "lang"    : "en",
+				  "app_version" : self.ZAPI_APP_VERSION,
 				  "format"	: "json"}
 		resultData = self.exec_zapiCall(api, params, 'session')
 		return resultData is not None
 
 	def login(self):
-		api = '/zapi/account/login'
+		api = '/zapi/v2/account/login'
 		params = {"login": self.Username, "password" : self.Password}
 		accountData = self.exec_zapiCall(api, params, 'session')
 		if accountData is not None:

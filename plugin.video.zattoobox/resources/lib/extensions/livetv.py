@@ -3,7 +3,7 @@
 ##################################
 # ZattooBox extension
 # LiveTV
-# (c) 2014-2015 Pascal Nançoz
+# (c) 2014-2018 Pascal Nançoz
 ##################################
 
 from resources.lib.core.zbextension import ZBExtension
@@ -92,7 +92,7 @@ class LiveTV(ZBExtension):
 			if channelsData is not None:
 				return channelsData
 
-		api = '/zapi/v2/cached/channels/%s?details=False' % self.ZapiSession.AccountData['account']['power_guide_hash']
+		api = '/zapi/v2/cached/channels/%s?details=False' % self.ZapiSession.AccountData['session']['power_guide_hash']
 		channelsData = self.ZapiSession.exec_zapiCall(api, None)
 		if channelsData is not None:
 			if self.ZapiSession.CACHE_ENABLED:

@@ -1,3 +1,10 @@
+v1.0.1
+- Major encoding fix & html entities decode
+
+v1.0.0
+- Major rewrite.
+- A lot of new features, feedback welcome.
+
 v0.5.8
 - Can now use new api see issue #35,
 - Now gets all videos for last 7 days (can take a while)

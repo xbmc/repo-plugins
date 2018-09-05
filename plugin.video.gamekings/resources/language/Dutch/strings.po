@@ -16,16 +16,16 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "Addon Summary"
-msgid "Watch videos from Gamekings.nl (dutch)"
-msgstr "Bekijk videos van Gamekings.nl (dutch)"
+msgid "Watch videos from Gamekings.tv (dutch)"
+msgstr "Bekijk videos van Gamekings.tv (dutch)"
 
 msgctxt "Addon Description"
-msgid "Watch videos from Gamekings.nl (dutch)"
-msgstr "Bekijk videos van Gamekings.nl (dutch)"
+msgid "Watch videos from Gamekings.tv (dutch)"
+msgstr "Bekijk videos van Gamekings.tv (dutch)"
 
 msgctxt "Addon Disclaimer"
-msgid "For bugs, requests or general questions visit the Gamekings.nl thread on the XBMC forum."
-msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de Gamekings.nl thread op het XBMC forum."
+msgid "For bugs, requests or general questions visit the Gamekings.tv thread on the Kodi forum."
+msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de Gamekings.tv thread op het Kodi forum."
 
 msgctxt "#30000"
 msgid "Videos"
@@ -160,5 +160,9 @@ msgid "Sorry. You must be a Premium member to see this video."
 msgstr "Sorry. Je moet Premium lid zijn om deze video te zien."
 
 msgctxt "#30610"
-msgid msgid "Only show Videos category"
+msgid "Only show Videos category"
 msgstr "Toon alleen Videos categorie"
+
+msgctxt "#30611"
+msgid "Start the Kodi twitch video addon and go to the Gamekings channel to see the live stream."
+msgstr "Start de Kodi twitch video addon en ga naar het Gamekings kanaal om de live stream te zien"

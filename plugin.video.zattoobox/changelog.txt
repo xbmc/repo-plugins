@@ -1,3 +1,14 @@
+[B]1.0.4[/B]
+- [Fix] Force session cache refresh if required
+
+[B]1.0.3[/B]
+- Fixed broken authentication URLs
+- Force cache refresh after upgrade
+
+[B]1.0.2[/B]
+- Replaced deprecated authentication procedure
+- Added episode title to main title
+
 [B]1.0.1[/B]
 - Fixed broken streaming URLs
 

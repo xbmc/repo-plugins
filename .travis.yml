@@ -3,13 +3,14 @@ python:
   - "3.6"
 
 install:
-  - pip install Pillow requests kodi-addon-checker
+  - pip install kodi-addon-checker
 
 # command to run our tests
 script:
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then kodi-addon-checker; fi'
-  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then kodi-addon-checker $(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq); fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then kodi-addon-checker --branch=gotham; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then kodi-addon-checker --branch=gotham --PR $(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq); fi'
 
 notifications:
+  webhooks: https://www.travisbuddy.com/
   email:
     on_failure: change # default: always

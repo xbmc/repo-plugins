@@ -1,3 +1,22 @@
+0.8.5
+- added UHD livestream option
+- added Adaptive quality settings
+- removed "play all" item for htmlscraper (issue #66)
+- fixed "Bundesland Heute" livestream listing for the htmlscraper
+
+0.8.4
+- reverted playall fix because it resulted in a kodi crash (htmlscraper)
+
+0.8.3
+- fixed: don't set directory=true on the "play all" listitem (thx @wsnipex)
+- cleanup (thx @rechi)
+
+0.8.2
+- fixed 403 errors caused by uncommon UA
+
+0.8.1
+- fixed issue #56: db entries for the addon now start with plugin://
+
 0.8.0
 - Restart Option working (inputstream.adaptive needed)
 - minor changes and optimizations for the serviceAPI Scraper

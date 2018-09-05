@@ -1,3 +1,13 @@
+v2.0.9:
+  - Added dynamic streams fetched from RAM FM site
+  - Updated artwork
+  - Fixed song requestor, due to changes on website
+
+v2.0.8:
+  - RAM FM temporary release
+
+v2.0.7:
+  - Updated port number for high quality 320kbps stream
 
 v2.0.6:
   - Added high quality 320kbps stream

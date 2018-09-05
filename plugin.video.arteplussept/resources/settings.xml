@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting id="lang"             type="enum"   label="30050" values="FR|DE" default="0"/>
-    <setting id="prefer_vost"      type="bool"   label="30051" default="false"/>
+    <setting id="lang"             type="enum"   label="30050" values="fr|de|en|es|pl" default="0"/>
+    <!-- <setting id="prefer_vost"      type="bool"   label="30051" default="false"/> -->
     <setting id="quality"          type="enum"   label="30052" values="SQ (High)|EQ (Medium)|HQ (Low)|MQ (Very Low)" default="0"/>
-    <setting id="download_folder"  type="folder" label="30054" source="auto" option="writeable"/>
-    <setting id="download_quality" type="enum"   label="30055" values="SQ (High)|EQ (Medium)|HQ (Low)|MQ (Very Low)" default="0"/>
 </settings>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.nfl-teams" version="1.3.5" name="NFL Teams" provider-name="Tenzer">
+<addon id="plugin.video.nfl-teams" version="2.0.0" name="NFL Teams" provider-name="Tenzer">
     <requires>
         <import addon="xbmc.python" version="2.14.0"/>
-        <import addon="xbmc.addon" version="12.0.0"/>
-        <import addon="script.module.requests" version="2.3.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
         <import addon="script.common.plugin.cache" version="2.5.6"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -15,7 +15,7 @@
         <platform>all</platform>
         <language>en</language>
         <license>The MIT License (MIT)</license>
-        <forum>http://forum.kodi.tv/showthread.php?tid=170281</forum>
+        <forum>https://forum.kodi.tv/showthread.php?tid=170281</forum>
         <website>https://github.com/Tenzer/plugin.video.nfl-teams</website>
         <source>https://github.com/Tenzer/plugin.video.nfl-teams</source>
         <email>xbmc@tenzer.dk</email>

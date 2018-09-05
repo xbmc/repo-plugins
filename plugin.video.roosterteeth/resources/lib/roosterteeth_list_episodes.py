@@ -14,16 +14,16 @@ import sys
 import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
+import json
 
-from roosterteeth_const import ADDON, LANGUAGE, IMAGES_PATH, HEADERS, convertToUnicodeString, log, getSoup
+from roosterteeth_const import IMAGES_PATH, HEADERS, LANGUAGE, convertToUnicodeString, log, \
+    SPONSOR_ONLY_VIDEO_TITLE_PREFIX, ROOSTERTEETH_BASE_URL
+
 
 #
 # Main class
 #
 class Main(object):
-    #
-    # Init
-    #
     def __init__(self):
         # Get the command line arguments
         # Get the plugin url in plugin:// notation
@@ -33,29 +33,14 @@ class Main(object):
 
         log("ARGV", repr(sys.argv))
 
-        # Parse parameters
-        self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+        # Parse parameters...
+        self.url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
         self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.show_serie_name = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['show_serie_name'][0]
 
-        log("self.video_list_page_url", self.video_list_page_url)
+        log("self.url", self.url)
 
-        if self.next_page_possible == 'True':
-            # Determine current item number, next item number, next_url
-            pos_of_page = self.video_list_page_url.rfind('?page=')
-            if pos_of_page >= 0:
-                page_number_str = str(
-                    self.video_list_page_url[pos_of_page + len('?page='):pos_of_page + len('?page=') + len('000')])
-                page_number = int(page_number_str)
-                page_number_next = page_number + 1
-                if page_number_next >= 100:
-                    page_number_next_str = str(page_number_next)
-                elif page_number_next >= 10:
-                    page_number_next_str = '0' + str(page_number_next)
-                else:
-                    page_number_next_str = '00' + str(page_number_next)
-                self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
-
-                log("self.next_url", self.next_url)
+        log("self.show_serie_name", self.show_serie_name)
 
         #
         # Get the videos...
@@ -69,189 +54,120 @@ class Main(object):
         #
         # Init
         #
-        previous_video_page_url = ''
-        after_tab_episodes = False
         # Create a list for our items.
         listing = []
 
         #
         # Get HTML page
         #
-        response = requests.get(self.video_list_page_url, headers=HEADERS)
+        response = requests.get(self.url, headers=HEADERS)
 
         html_source = response.text
         html_source = convertToUnicodeString(html_source)
 
-        # Parse response
-        soup = getSoup(html_source)
-
         # log("html_source", html_source)
 
-        # <li>
-        #	<a href="http://ah.roosterteeth.com/episode/red-vs-blue-season-13-episode-2">
-        # 			<div class="block-container">
-        # 				<div class="image-container">
-        # 					<img src="//s3.amazonaws.com/cdn.roosterteeth.com/uploads/images/bfa39842-943e-49ea-9207-e71efe9544d2/md/ep10610.jpg">
-        # 				</div>
-        # 				<div class="watch-status-container">
-        # 				</div>
-        # 				<div class="play-button-container">
-        # 					<p class="play-circle"><i class="icon ion-play"></i></p>
-        # 					<p class="timestamp">8:11</p>
-        # 				</div>
-        # 			</div>
-        #		<p class="name">Episode 2</p>
-        #	</a>
-        #	<p class="post-stamp">3 months ago</p>
-        # </li>
+        try:
+            json_data = json.loads(html_source)
 
-        episodes = soup.findAll('li')
+            # for item in json_data['data']:
+            #     log("attribute1", item['canonical_links']['self'])
+            #     log("attribute2", item['attributes']['title'])
+            #     exit(1)
 
-        log("len(episodes", len(episodes))
+        except (ValueError, KeyError, TypeError):
+            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30109))
+            exit(1)
 
-        for episode in episodes:
-            # Only display episodes of a season
-            # The recently added pages don't have a 'tab-episode'
-            if str(self.video_list_page_url).find('episode/recently-added') >= 0:
-                pass
+        for item in json_data['data']:
+
+            episode_title = item['attributes']['title']
+
+            caption = item['attributes']['caption']
+
+            length = item['attributes']['length']
+
+            channel_slug = item['attributes']['channel_slug']
+
+            # the url should be something like:
+            # https://svod-be.roosterteeth.com/api/v1/episodes/ffc530d0-464d-11e7-a302-065410f210c4/videos"
+            # or even
+            # https://svod-be.roosterteeth.com/api/v1/episodes/lets-play-2011-2/videos
+            technical_episode_url_last_part = item['links']['videos']
+            technical_episode_url = ROOSTERTEETH_BASE_URL + technical_episode_url_last_part
+            technical_url = technical_episode_url
+
+            log("technical_url", technical_url)
+
+            functional_episode_url_middle_part = item['links']['self']
+            functional_url = ROOSTERTEETH_BASE_URL + functional_episode_url_middle_part + '/videos'
+
+            log("functional_url", functional_url)
+
+            thumb = item['included']['images'][0]['attributes']['thumb']
+
+            serie_title = item['attributes']['show_title']
+
+            log("serie_title", serie_title)
+
+            is_sponsor_only = item['attributes']['is_sponsors_only']
+
+            log("is_sponsor_only", is_sponsor_only)
+
+            # let's put some more info in the title of the episode
+            if self.show_serie_name == "True":
+                title = serie_title + ' - ' + episode_title
             else:
-                # Only display episodes of a season
-                # <li>
-                # <input type='radio' name='tabs' id='tab-episodes' />
-                if str(episode).find("tab-episodes") >= 0:
-                    after_tab_episodes = True
-                # Skip if the episode isn't a season episode
-                if not after_tab_episodes:
+                title = episode_title
 
-                    log("skipped episode before tab-episodes", episode)
+            if is_sponsor_only:
+                title = SPONSOR_ONLY_VIDEO_TITLE_PREFIX + ' ' + title
 
-                    continue
+            title = convertToUnicodeString(title)
 
-            # Skip the recently-added url
-            if str(episode).find('recently-added') >= 0:
+            log("title", title)
 
-                log("skipped episode before recently-added", episode)
+            thumbnail_url = thumb
 
-                continue
+            log("thumbnail_url", thumbnail_url)
 
-            # Skip an episode if it does not contain class="name"
-            pos_classname = str(episode).find('class="name"')
-            if pos_classname == -1:
+            plot = caption
 
-                log("skipped episode without class=name", episode)
+            log("plot", plot)
 
-                continue
+            duration_in_seconds = length
 
-            video_page_url = episode.a['href']
+            log("duration_in_seconds", duration_in_seconds)
 
-            log("video_page_url", video_page_url)
+            studio = channel_slug
+            studio = convertToUnicodeString(studio)
+            studio = studio.replace("-", " ")
+            studio = studio.capitalize()
 
-            # Skip the episode if it does not contain /episode/
-            if str(video_page_url).find("/episode/") < 0:
+            log("studio", studio)
 
-                log("skipped episode without /episode/", video_page_url)
-
-                continue
-
-            # Skip a video_page_url is empty
-            if video_page_url == '':
-
-                log("skipped episode with empty video_page_url", episode)
-
-                continue
-
-            # Skip episode if it's the same as the previous one
-            if video_page_url == previous_video_page_url:
-                continue
-            else:
-                previous_video_page_url = video_page_url
-
-            try:
-                thumbnail_url = "https:" + episode.img['src']
-            except:
-                thumbnail_url = ''
-
-            title = str(episode)[pos_classname + len('class="name"') + 1:]
-            pos_smaller_then_symbol = title.find("<")
-            title = title[0:pos_smaller_then_symbol]
-
-            title = title.replace('-', ' ')
-            title = title.replace('/', ' ')
-            title = title.replace(' i ', ' I ')
-            title = title.replace(' ii ', ' II ')
-            title = title.replace(' iii ', ' III ')
-            title = title.replace(' iv ', ' IV ')
-            title = title.replace(' v ', ' V ')
-            title = title.replace(' vi ', ' VI ')
-            title = title.replace(' vii ', ' VII ')
-            title = title.replace(' viii ', ' VIII ')
-            title = title.replace(' ix ', ' IX ')
-            title = title.replace(' x ', ' X ')
-            title = title.replace(' xi ', ' XI ')
-            title = title.replace(' xii ', ' XII ')
-            title = title.replace(' xiii ', ' XIII ')
-            title = title.replace(' xiv ', ' XIV ')
-            title = title.replace(' xv ', ' XV ')
-            title = title.replace(' xvi ', ' XVI ')
-            title = title.replace(' xvii ', ' XVII ')
-            title = title.replace(' xviii ', ' XVIII ')
-            title = title.replace(' xix ', ' XIX ')
-            title = title.replace(' xx ', ' XXX ')
-            title = title.replace(' xxi ', ' XXI ')
-            title = title.replace(' xxii ', ' XXII ')
-            title = title.replace(' xxiii ', ' XXIII ')
-            title = title.replace(' xxiv ', ' XXIV ')
-            title = title.replace(' xxv ', ' XXV ')
-            title = title.replace(' xxvi ', ' XXVI ')
-            title = title.replace(' xxvii ', ' XXVII ')
-            title = title.replace(' xxviii ', ' XXVIII ')
-            title = title.replace(' xxix ', ' XXIX ')
-            title = title.replace(' xxx ', ' XXX ')
-            title = title.replace('  ', ' ')
-            # welcome to characterset-hell
-            title = title.replace('&amp;#039;', "'")
-            title = title.replace('&amp;#39;', "'")
-            title = title.replace('&amp;quot;', '"')
-            title = title.replace("&#039;", "'")
-            title = title.replace("&#39;", "'")
-            title = title.replace('&amp;amp;', '&')
-            title = title.replace('&amp;', '&')
-            title = title.replace('&quot;', '"')
-            title = title.replace('&ldquo;', '"')
-            title = title.replace('&rdquo;', '"')
-            title = title.replace('&rsquo;', "'")
-
+            # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
-            list_item.setInfo("video", {"title": title, "studio": ADDON})
-            list_item.setInfo("mediatype", "video")
+            list_item.setInfo("video",
+                             {"title": title, "studio": studio, "mediatype": "video",
+                              "plot": plot, "duration": duration_in_seconds})
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
-                              'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+                             'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
 
-            # let's remove any non-ascii characters from the title, to prevent errors with urllib.parse.parse_qs of the parameters
+            # let's remove any non-ascii characters from the title, to prevent errors with urllib.parse.parse_qs
+            # of the parameters
             title = title.encode('ascii', 'ignore')
 
-            parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
-            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
+            parameters = {"action": "play", "functional_url": functional_url, "technical_url": technical_url,
+                          "title": title, "is_sponsor_only": is_sponsor_only, "next_page_possible": "False"}
+
+            plugin_url_with_parms = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
             # Add our item to the listing as a 3-element tuple.
-            listing.append((url, list_item, is_folder))
-
-        # Next page entry
-        if self.next_page_possible == 'True':
-            list_item = xbmcgui.ListItem(LANGUAGE(30200), thumbnailImage=os.path.join(IMAGES_PATH, 'next-page.png'))
-            list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-            list_item.setProperty('IsPlayable', 'false')
-            parameters = {"action": "list-episodes", "url": str(self.next_url),
-                          "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-            is_folder = True
-            # Add refresh option to context menu
-            list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
-            # Add our item to the listing as a 3-element tuple.
-            listing.append((url, list_item, is_folder))
+            listing.append((plugin_url_with_parms, list_item, is_folder))
 
         # Add our listing to Kodi.
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems

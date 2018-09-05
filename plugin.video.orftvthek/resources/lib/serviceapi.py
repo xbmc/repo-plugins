@@ -24,6 +24,7 @@ class serviceAPI(Scraper):
 	__urlTips       = 'page/startpage/tips'
 	__urlTopics     = 'topics/overview?limit=1000'
 
+
 	serviceAPIEpisode    = 'episode/%s'
 	serviceAPIDate       = 'schedule/%s?limit=1000'
 	serviceAPIDateFrom   = 'schedule/%s/%d?limit=1000'
@@ -121,14 +122,14 @@ class serviceAPI(Scraper):
 		if jsonVideos.get('progressive_download') != None:
 			for streamingUrl in jsonVideos.get('progressive_download'):
 				if streamingUrl.get('quality_key') == self.videoQuality:
-					return streamingUrl.get('src')
+					return generateAddonVideoUrl(streamingUrl.get('src'))
 				source = streamingUrl.get('src')
 
 		for streamingUrl in jsonVideos.get('hls'):
 			if streamingUrl.get('quality_key') == self.videoQuality:
-				return streamingUrl.get('src')
+				return generateAddonVideoUrl(streamingUrl.get('src'))
 			source = streamingUrl.get('src')
-		return source
+		return generateAddonVideoUrl(source)
 
 	# list all Categories
 	def getCategories(self):
@@ -202,12 +203,9 @@ class serviceAPI(Scraper):
 		if len(result.get('_embedded').get('segments')) == 1:
 			listItem = self.JSONSegment2ListItem(result.get('_embedded').get('segments')[0])
 			playlist.add(listItem[0], listItem[1])
-
 		else:
-			parameters = {'mode' : 'playlist'}
-			u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-			createListItem('[ '+(self.translation(30015)).encode('UTF-8')+' ]', image, '%s\n%s' % ((self.translation(30015)).encode('UTF-8'), description), duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), u, False, True, self.defaultbackdrop,self.pluginhandle)
-
+			play_all_name = "[ "+(self.translation(30015)).encode("utf-8")+" ]"
+			createPlayAllItem(play_all_name,self.pluginhandle)
 			for segment in result.get('_embedded').get('segments'):
 				listItem = self.JSONSegment2ListItem(segment)
 				playlist.add(listItem[0], listItem[1])
@@ -292,7 +290,7 @@ class serviceAPI(Scraper):
 					continue
 				# already playing
 				elif livestreamStart < time.localtime():
-					link = self.JSONStreamingURL(result.get('sources')) + '|User-Agent=Mozilla'
+					link = self.JSONStreamingURL(result.get('sources'))
 					if inputstreamAdaptive and result.get('restart'):
 						contextMenuItems.append(('Restart', 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (xbmcaddon.Addon().getAddonInfo('id'), result.get('id'))))
 				else:

@@ -1,21 +1,10 @@
-import resources.lib.nflcs
+from resources.lib.nfl2018 import NFL2018
 
 
-class Team(resources.lib.nflcs.NFLCS):
-    _short = "giants"
-    _cdaweb_url = "http://www.giants.com/cda-web/"
-    _categories = [
-        "Draft",
-        "Features",
-        "Gameday",
-        "Giants Online",
-        "Interviews",
-        "Sights and Sounds",
-        "Superbowl 46",
-        "TV Shows",
-        "Web Shows",
-    ]
+class Team(NFL2018):
+    short = "giants"
+    hostname = "www.giants.com"
 
     def __init__(self, parameters):
-        self._parameters = parameters
-        self.go()
+        self.parameters = parameters
+        NFL2018.__init__(self)

@@ -13,7 +13,8 @@ Contributors:
 
 ============================================
 
-Current version: 2.2.1
+Current version: 2.4.1
+  - Krypton
   - Jarvis
   - Isengard
   - Helix
@@ -30,6 +31,7 @@ Features:
     - Uploads
     - Listen later
     - Playlists
+    - Logoff
   - Browse
     - Trending
     - Categories
@@ -37,9 +39,9 @@ Features:
     - Cloudcasts
     - Users
   - Play cloudcasts
+    - Local resolver
+    - Offliberty resolver
     - Mixcloud-Downloader resolver
-    - Local resolver (broken)
-    - Offliberty resolver (broken)
     - Low quality m4a resolver (broken)
   - Thumbnails
   - History

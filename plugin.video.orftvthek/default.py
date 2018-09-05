@@ -25,9 +25,7 @@ except ImportError:
 socket.setdefaulttimeout(30)
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.8.0"
-plugin = "ORF-TVthek-" + version
-author = "sofaking,Rechi"
+plugin = "ORF-TVthek-" + xbmcaddon.Addon().getAddonInfo('version')
 
 #initial
 common.plugin = plugin
@@ -41,9 +39,9 @@ tvthekplayer = xbmc.Player()
 playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
 
 #hardcoded
-video_quality_list = ["Q1A", "Q4A", "Q6A", "Q8C"]
+video_quality_list = ["Q1A", "Q4A", "Q6A", "Q8C", "QXB"]
 videoProtocol = "http"
-videoDelivery = "progressive"
+videoDelivery = "hls"
 
 #media resources
 resource_path = os.path.join( basepath, "resources" )
@@ -81,22 +79,11 @@ else:
 params=parameters_string_to_dict(sys.argv[2])
 mode=params.get('mode')
 link=params.get('link')
-title=params.get('title')
-banner=params.get('banner')
-videourl=params.get('videourl')
-url=params.get('url')
-
 
 if mode:
     debugLog("Mode: %s" % mode,'Info')
 if link:
     debugLog("Link: %s" % urllib.unquote(link),'Info')
-if url:
-    debugLog("Url: %s" % urllib.unquote(url),'Info')
-if videourl:
-    debugLog("Videourl: %s" % urllib.unquote(videourl),'Info')
-if title:
-    debugLog("Title: %s" % title.encode('UTF-8'),'Info')
 
 
 def getMainMenu():
@@ -132,29 +119,26 @@ def startPlaylist(player,playlist):
         d = xbmcgui.Dialog()
         d.ok((translation(30051)).encode("utf-8"), (translation(30050)).encode("utf-8"),'')
 
-
 #modes
 if mode == 'openSeries':
     playlist.clear()
-    playlist = scraper.getLinks(link,banner,playlist)
-    if not autoPlayPrompt:
+    playlist = scraper.getLinks(link,params.get('banner'),playlist)
+    if autoPlayPrompt and playlist != None:
         listCallback(False,pluginhandle)
-    elif playlist != None:
         ok = xbmcgui.Dialog().yesno((translation(30047)).encode("utf-8"),(translation(30048)).encode("utf-8"))
         if ok:
             debugLog("Starting Playlist for %s" % urllib.unquote(link),'Info')
-            tvthekplayer.play(playlist)
+            tvthekplayer.play(playlist)               
     else:
+        debugLog("Running Listcallback from no autoplay openseries","Info")
         listCallback(False,pluginhandle)
-
 elif mode == 'unblacklistShow':
     heading = translation(30040).encode('UTF-8') % urllib.unquote(link).replace('+', ' ').strip()
     if xbmcgui.Dialog().yesno(heading, heading):
         unblacklistItem(link)
         xbmc.executebuiltin('Container.Refresh')
 elif mode == 'blacklistShow':
-    title=params.get('title')
-    blacklistItem(title)
+    blacklistItem(link)
     xbmc.executebuiltin('Container.Refresh')
 if mode == 'openBlacklist':
     printBlacklist(defaultbanner,defaultbackdrop,translation,pluginhandle)
@@ -181,7 +165,7 @@ elif mode == 'getThemen':
     scraper.getThemen()
     listCallback(True,pluginhandle)
 elif mode == 'getSendungenDetail':
-    scraper.getCategoriesDetail(link,banner)
+    scraper.getCategoriesDetail(link,params.get('banner'))
     listCallback(False,pluginhandle)
 elif mode == 'getThemenDetail':
     scraper.getArchiveDetail(link)
@@ -229,6 +213,12 @@ elif mode == 'liveStreamRestart':
     scraper.liveStreamRestart(link)
 elif mode == 'playlist':
     startPlaylist(tvthekplayer,playlist)
+elif mode == 'play':
+    link = "%s|User-Agent=%s" % (link, Settings.userAgent())
+    debugLog(link,'Info')
+    play_item = xbmcgui.ListItem(path=link)
+    xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
+    listCallback(False,pluginhandle)
 elif sys.argv[2] == '':
     getMainMenu()
 else:

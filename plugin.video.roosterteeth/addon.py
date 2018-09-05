@@ -37,10 +37,15 @@ else:
     if action == 'list-episodes':
         import roosterteeth_list_episodes as plugin
     #
-    # List Shows
+    # List Series
     #
-    if action == 'list-shows':
-        import roosterteeth_list_shows as plugin
+    if action == 'list-series':
+        import roosterteeth_list_series as plugin
+    #
+    # List Serie seasons
+    #
+    if action == 'list-serie-seasons':
+        import roosterteeth_list_serie_seasons as plugin
     #
     # Play
     #

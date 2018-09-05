@@ -1,3 +1,13 @@
+# Version 1.0.1
+
+Major encoding fix & html entities decode
+
+# Version 1.0.0
+
+Major rewrite.
+
+A lot of new features, feedback welcome.
+
 # Version 0.5.8
 
 thanks to https://github.com/cifera

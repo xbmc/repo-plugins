@@ -1,31 +1,10 @@
-# coding=utf-8
-import resources.lib.nflcs
+from resources.lib.nfl2018 import NFL2018
 
 
-class Team(resources.lib.nflcs.NFLCS):
-    _short = "texans"
-    _cdaweb_url = "http://www.houstontexans.com/cda-web/"
-    _categories = [
-        "Cheerleaders",
-        "Community",
-        "Espanol",
-        "Football",
-        "Friday Facebook Mailbag",
-        "Gameday",
-        "HCC",
-        "NFL Network/NFL Films",
-        "On The Road: Driven By Hyundai",
-        "Press Conferences",
-        "Season Highlights",
-        "Special Segments",
-        "Texans House",
-        "Texans Huddle",
-        "Texans TV",
-        "TORO",
-        "Training Camp presented by Academy",
-        "XFINITY TC video",
-    ]
+class Team(NFL2018):
+    short = "texans"
+    hostname = "www.houstontexans.com"
 
     def __init__(self, parameters):
-        self._parameters = parameters
-        self.go()
+        self.parameters = parameters
+        NFL2018.__init__(self)

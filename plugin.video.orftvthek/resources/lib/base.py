@@ -15,9 +15,26 @@ from . import Settings
 from .helpers import *
 
 def addDirectory(title,banner,backdrop, description,link,mode,pluginhandle):
-    parameters = {"link" : link,"title" : title,"banner" : banner, "mode" : mode}
+    parameters = {"link" : link, "mode" : mode}
     u = sys.argv[0] + '?' + urllib.urlencode(parameters)
     createListItem(title,banner,description,'','','',u, False,True, backdrop,pluginhandle,None)
+
+def generateAddonVideoUrl(videourl):
+    videourl = buildLink(videourl)
+    return "plugin://%s/?mode=play&link=%s"  % (xbmcaddon.Addon().getAddonInfo('id'),videourl)
+
+def buildLink(link):
+    if link:
+        return "%s|User-Agent=%s" % (link, Settings.userAgent())
+    else:
+        return link
+        
+def createPlayAllItem(name,pluginhandle):
+    play_all_parameters = {"mode" : "playlist"}
+    play_all_url = sys.argv[0] + '?' + urllib.urlencode(play_all_parameters)           
+    play_all_item = xbmcgui.ListItem(name)
+    play_all_item.setInfo(type="Video", infoLabels={"Title": name, "Plot": ""})
+    xbmcplugin.addDirectoryItem(pluginhandle,play_all_url,play_all_item,isFolder = False,totalItems = -1)
 
 def createListItem(title,banner,description,duration,date,channel,videourl,playable,folder, backdrop,pluginhandle,subtitles=None,blacklist=False, contextMenuItems = None):
     contextMenuItems = contextMenuItems or []
@@ -33,7 +50,7 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
     liz.setInfo( type="Video", infoLabels={ "Aired": date } )
     liz.setInfo( type="Video", infoLabels={ "Studio": channel } )
     liz.setProperty('fanart_image',backdrop)
-    liz.setProperty('IsPlayable', str(playable))
+    liz.setProperty('IsPlayable', str(playable and not folder))
 
     if not folder:
         liz.setInfo( type="Video", infoLabels={ "mediatype" : 'video'})
@@ -42,6 +59,8 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
             videoStreamInfo.update({'duration': int(duration)})
         except (TypeError, ValueError):
             debugLog("No Duration found in Video",'Info')
+        if videourl.lower().endswith('_qxb.mp4') or '_qxb' in videourl.lower():
+            videoStreamInfo.update({'width': 1280, 'height': 720})
         if videourl.lower().endswith('_q8c.mp4') or '_q8c' in videourl.lower():
             videoStreamInfo.update({'width': 1280, 'height': 720})
         elif videourl.lower().endswith('_q6a.mp4') or '_q6a' in videourl.lower():
@@ -74,7 +93,7 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
         else:
             bl_title = title.replace("+"," ").strip()
 
-        blparameters = {"mode" : "blacklistShow", "title": bl_title}
+        blparameters = {"mode" : "blacklistShow", "link": bl_title}
         blurl = sys.argv[0] + '?' + urllib.urlencode(blparameters)
         contextMenuItems.append(('%s %s %s' % (Settings.localizedString(30038).encode("utf-8"), bl_title, Settings.localizedString(30042).encode("utf-8")), 'XBMC.RunPlugin(%s)' % blurl))
         if checkBlacklist(bl_title):

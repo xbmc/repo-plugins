@@ -32,8 +32,13 @@ def addLinkItem(url, li):
 # UI builder functions
 def show_root_menu():
     ''' Show the plugin root menu '''
+    # 3bmeteo Android app
+    userAgent = "Dalvik/1.6.0 (Linux; U; Android 4.2.2; GT-I9105P Build/JDQ39)"
     url = "http://api.3bmeteo.com/mobile/video_previsionali_feed"
-    xmldata = urllib2.urlopen(url).read()
+    
+    headers = {'User-Agent': userAgent}
+    req = urllib2.Request(url, None, headers)
+    xmldata = urllib2.urlopen(req).read()
     dom = minidom.parseString(xmldata)
     
     # Parse video feed

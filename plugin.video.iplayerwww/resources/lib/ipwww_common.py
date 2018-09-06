@@ -440,7 +440,7 @@ def CreateBaseDirectory(content_type):
     if content_type == "video":
         ShowLicenceWarning()
         if ADDON.getSetting("menu_video_highlights") == 'true':
-            AddMenuEntry(translation(30300), 'iplayer', 198,
+            AddMenuEntry(translation(30300), 'iplayer', 106,
                          xbmc.translatePath(
                            'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
                                             ),
@@ -563,7 +563,7 @@ def CreateBaseDirectory(content_type):
     else:
         ShowLicenceWarning()
         if ADDON.getSetting("menu_video_highlights") == 'true':
-            AddMenuEntry((translation(30323)+translation(30300)), 'iplayer', 198,
+            AddMenuEntry((translation(30323)+translation(30300)), 'iplayer', 106,
                          xbmc.translatePath(
                            'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
                                             ),

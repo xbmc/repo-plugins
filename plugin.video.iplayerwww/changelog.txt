@@ -1,3 +1,27 @@
+v2.5.40
+Fixed Radio for programmes which contain semicolon in the json data.
+
+v2.5.39
+Fixed Channel A-Z.
+
+v2.5.38
+Fixed single episodes in A-Z.
+
+v2.5.37
+Fixed Radio Categories and A-Z.
+
+v2.5.36
+Fixed Highlights and Channel Highlights.
+
+v2.5.35
+Fixed Catgeories again.
+
+v2.5.34
+Categories fix.
+
+v2.5.33
+Fixed problem with episodes that are not available in standard format.
+
 v2.5.32
 Fixed pagination for Categories.
 

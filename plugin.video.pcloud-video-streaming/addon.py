@@ -9,6 +9,7 @@ import xbmcaddon
 from datetime import datetime, timedelta
 import time
 import xbmc
+import os
 
 myAddon = xbmcaddon.Addon()
 
@@ -117,7 +118,7 @@ if mode[0] in ("folder", "myshares"):
 		# try again
 		folderContents = pcloud.ListFolderContents(folderID, isMyShares)
 	
-	# Collect all file IDs in order to get thhumbnails
+	# Collect all file IDs in order to get thumbnails...
 	if not isMyShares:
 		allFileIDs = [ oneItem["fileid"] for oneItem in folderContents["metadata"]["contents"] if not oneItem["isfolder"] ]
 		allFileAndFolderItems = folderContents["metadata"]["contents"]
@@ -125,15 +126,32 @@ if mode[0] in ("folder", "myshares"):
 		allFileIDs = [ oneItem["metadata"]["fileid"] for oneItem in folderContents["publinks"] if not oneItem["metadata"]["isfolder"] ]
 		allFileAndFolderItems = folderContents["publinks"]
 	thumbs = pcloud.GetThumbnails(allFileIDs)
-	# Then iterate through all the files in order to populate the GUI
-	
+
+	subtitleFileIDs = dict()
+	# ... then do a first pass to find all filenames, in order to collect subtitles...
 	for oneItem in allFileAndFolderItems:
 		if not isMyShares:
 			oneFileOrFolderItem = oneItem
 		else:
 			oneFileOrFolderItem = oneItem["metadata"]
+		if not oneFileOrFolderItem["isfolder"]:
+			contentType = oneFileOrFolderItem["contenttype"]
+			if contentType == "text/plain":
+				filename = oneFileOrFolderItem["name"]
+				filenameNoExtension = os.path.splitext(filename)[0]
+				subtitleFileIDs[filenameNoExtension] = oneFileOrFolderItem["fileid"]
+	xbmc.log ("subtitleFileIDs is: ")
+	xbmc.log (str(subtitleFileIDs))
+				
+	# ... at last, iterate through all the files in order to populate the GUI
+	for oneItem in allFileAndFolderItems:
+		if not isMyShares:
+			oneFileOrFolderItem = oneItem
+		else:
+			oneFileOrFolderItem = oneItem["metadata"]
+		filename = oneFileOrFolderItem["name"]
 		if oneFileOrFolderItem["isfolder"]:
-			li = xbmcgui.ListItem(oneFileOrFolderItem["name"], iconImage='DefaultFolder.png')
+			li = xbmcgui.ListItem(filename, iconImage='DefaultFolder.png')
 			# Add context menu item for "delete folder"
 			deleteActionMenuText = myAddon.getLocalizedString(30114) # "Delete from PCloud..."
 			deleteActionUrl = base_url + "?mode=delete&folderID=" + str(oneFileOrFolderItem["folderid"]) + "&filename=" + urllib.quote(oneFileOrFolderItem["name"].encode("utf-8"))
@@ -149,15 +167,17 @@ if mode[0] in ("folder", "myshares"):
 			xbmc.log (contentType)
 			if not contentType.startswith("video/"
 				) and not contentType.startswith("audio/"
-				) and not contentType.startswith("application/x-iso9660-image"):
+				) and not contentType.startswith("application/x-iso9660-image"
+				) and not contentType.startswith("image/"):
 				continue
+			fileUrl = base_url + "?mode=file&fileID=" + str(oneFileOrFolderItem["fileid"])
 			thumbnailUrl = thumbs.get(oneFileOrFolderItem["fileid"], None)
 			if thumbnailUrl is None:
 				if contentType[:6] == "video/":
 					thumbnailUrl = "DefaultVideo.png"
 				elif contentType[:6] == "audio/":
 					thumbnailUrl = "DefaultAlbumCover.png"
-			li = xbmcgui.ListItem(oneFileOrFolderItem["name"], iconImage=thumbnailUrl)
+			li = xbmcgui.ListItem(filename, iconImage=thumbnailUrl)
 			if contentType[:6] == "video/":
 				li.addStreamInfo(
 					"video", 
@@ -171,6 +191,10 @@ if mode[0] in ("folder", "myshares"):
 					"audio",
 					{ "codec": oneFileOrFolderItem["audiocodec"] if "audiocodec" in oneFileOrFolderItem else "" }
 				)
+				# See if there's any subtitles saved at the previous cycle
+				filenameNoExtension = os.path.splitext(filename)[0]
+				if filenameNoExtension in subtitleFileIDs:
+					fileUrl += "&subtitlefileid=" + str(subtitleFileIDs[filenameNoExtension])
 			# The below is necessary in order for xbmcplugin.setResolvedUrl() to work properly
 			li.setProperty("IsPlayable", "true")
 			# Add context menu item for delete file
@@ -183,7 +207,8 @@ if mode[0] in ("folder", "myshares"):
 				(markAsWatchedMenuText, "Action(ToggleWatched)")]
 				)
 			# Finally add the list item to the directory
-			fileUrl = base_url + "?mode=file&fileID=" + str(oneFileOrFolderItem["fileid"])
+			if contentType[:6] == "image/":
+				fileUrl += "&isPicture=1" # We will need this info later on
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=fileUrl, listitem=li)
 	
 	# Now add the "virtual" entries ("go to parent folder", "my shares", and "go to root folder") where necessary
@@ -224,11 +249,20 @@ elif mode[0] == "file":
 	fileID = int(args["fileID"][0])
 	# Get streaming URL from pcloud
 	streamingUrl = pcloud.GetStreamingUrl(fileID)
-	# The code below constructs a new artificial ListItem with only the URL. Then
-	# we pass the ListItem in question to setResolvedUrl, which will tell Kodi we
-	# want to play that URL as a response to this call.
-	item = xbmcgui.ListItem(path=streamingUrl)
-	xbmcplugin.setResolvedUrl(addon_handle, True, item)
+	if "isPicture" in args:
+		xbmc.executebuiltin('ShowPicture({0})'.format(streamingUrl))
+	else:
+		# The code below constructs a new artificial ListItem with only the URL. Then
+		# we pass the ListItem in question to setResolvedUrl, which will tell Kodi we
+		# want to play that URL as a response to this call.
+		item = xbmcgui.ListItem(path=streamingUrl)
+		# See if there's a subtitle file ID in the query string
+		if "subtitlefileid" in args:
+			subtitleFileID = int(args["subtitlefileid"][0])
+			subtitleUrl = pcloud.GetStreamingUrl(subtitleFileID)
+			item.setSubtitles([subtitleUrl])
+		xbmcplugin.setResolvedUrl(addon_handle, True, item)
+	
 
 elif mode[0] == "delete":
 	# This branch can be called as a result of a context menu item callback

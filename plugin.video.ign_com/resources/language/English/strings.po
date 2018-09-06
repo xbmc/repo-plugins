@@ -60,3 +60,7 @@ msgstr ""
 msgctxt "#30104"
 msgid "Live-Stream Feature"
 msgstr ""
+
+msgctxt "#30610"
+msgid "Only show New video category"
+msgstr ""

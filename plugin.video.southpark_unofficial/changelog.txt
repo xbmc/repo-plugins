@@ -1,3 +1,7 @@
+0.4.7
+- Added season 22 and cover for 21 and 22 (custom).
+0.4.6
+- Added season 21.
 0.4.5
 - Fixed EN/ES streams due RTMPE bad behaviour.
 0.4.4

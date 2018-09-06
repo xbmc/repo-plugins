@@ -120,9 +120,6 @@ elif mode == 105:
 elif mode == 106:
     Video.ListHighlights(url)
 
-elif mode == 198:
-    Video.ListMainHighlights(url)
-
 elif mode == 107:
     Video.ListWatching(logged_in)
 
@@ -204,6 +201,9 @@ elif mode == 134:
 
 elif mode == 136:
     Radio.GetPage(url)
+
+elif mode == 137:
+    Radio.GetCategoryPage(url)
 
 # Modes 201-299 will create a playable menu entry, not a directory
 elif mode == 201:

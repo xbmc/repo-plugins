@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-   <setting id="audio_lang" type="enum" label="30000" values="EN|ES|DE" default="0" />
-   <setting id="geolocation" type="enum" label="30001" values="US|UK|ES|DE|IT" default="0" />
-   <setting id="cc" type="bool" label="30012" default="false"/>
-   <setting id="playrandom" type="bool" label="30015" default="false"/>
+	<setting default="0" id="audio_lang" label="30000" type="enum" values="EN|ES|DE"/>
+	<setting default="0" id="geolocation" label="30001" type="enum" values="US|UK|ES|DE|IT"/>
+	<setting default="false" id="cc" label="30012" type="bool"/>
+	<setting default="false" id="playrandom" label="30015" type="bool"/>
 </settings>

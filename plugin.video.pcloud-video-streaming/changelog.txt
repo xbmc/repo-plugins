@@ -1,3 +1,15 @@
+v1.2.9 -- 29-Apr-2018
+- Fixed issue #13: if a subtitle file is present in the same folder with the same filename (but different
+  extension, such as for example .srt) as an existing video file, then those subtitles will be shown along 
+  with the video.
+
+v1.2.8 -- 04-Jan-2018
+- Can now show pictures in addition to the other content types.
+
+v1.2.7 -- 07-Nov-2017
+- Fixed issue #7 (thanks @Danieldiazi) related to sorting the files alphabetically.
+- Added Spanish and Galician (thanks @Danieldiazi) and Hebrew (thanks @Eng2Heb) translations.
+
 v1.2.6 -- 02-Mar-2017
 - Fixed issue #4, occurring with files whose internal pCloud ID ('fileID') was larger than a given threshold.
 - Updated Python dependency to 2.19.0 to match Helix.

@@ -1,1 +1,1 @@
-__all__ = ['addon']
+__all__ = ['twitch_addon']

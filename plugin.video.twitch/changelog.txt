@@ -1,3 +1,13 @@
+2.3.2
+[fix] py3 encoding issues
+
+2.3.1
+[fix] i18n UnicodeEncodeError
+
+2.3.0
+[chg] refactor complex entry points
+[upd] Python 3 compat.
+
 2.2.4
 [fix] VOD's error 404
 

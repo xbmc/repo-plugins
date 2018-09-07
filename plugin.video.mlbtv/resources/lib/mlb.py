@@ -228,13 +228,13 @@ def stream_select(game_pk):
     if n > -1 and stream_title[n] != 'Highlights':
         account = Account()
         stream_url, headers = account.get_stream(content_id[n-1])
-        if epg[0]['mediaState'] == "MEDIA_ON":
+        if epg[0]['mediaState'] == "MEDIA_ON" and CATCH_UP == 'true':
             p = dialog.select('Select a Start Point', ['Catch Up', 'Live'])
             if p == 0:
                 listitem = stream_to_listitem(stream_url, headers)
-                #TO DO: use this url to get team names for list item title
-                #https://statsapi.mlb.com/api/v1/schedule?gamePk=game_pk&hydrate=team
                 highlight_select_stream(json_source['highlights']['live']['items'], listitem)
+                sys.exit()
+            elif p == -1:
                 sys.exit()
 
     if '.m3u8' in stream_url:

@@ -100,6 +100,11 @@ msgctxt "#30303"
 msgid "24 Hour Clock (ex. 18:00)"
 msgstr ""
 
+msgctxt "#30304"
+msgid "Catch Up"
+msgstr ""
+
+
 msgctxt "#30300"
 msgid "In Market Streams"
 msgstr ""

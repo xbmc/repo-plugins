@@ -43,6 +43,8 @@ FAV_TEAM = str(settings.getSetting(id="fav_team"))
 TEAM_NAMES = settings.getSetting(id="team_names")
 TIME_FORMAT = settings.getSetting(id="time_format")
 SINGLE_TEAM = str(settings.getSetting(id='single_team'))
+CATCH_UP = str(settings.getSetting(id='catch_up'))
+
 #Proxy Settings
 PROXY_ENABLED = str(settings.getSetting(id='use_proxy'))
 PROXY_SERVER = str(settings.getSetting(id='proxy_server'))

@@ -1,3 +1,6 @@
+2.3.7 (2018-09-08)
+- website switched to https
+
 2.3.6 (2018-05-17)
 - adding a setting to only view new video category.
 - updated forum link to new thread.

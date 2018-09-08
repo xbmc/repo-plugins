@@ -6,19 +6,24 @@ import sys
 import json
 from traceback import format_exc
 from datetime import timedelta
+import logging
 
 import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcvfs
 
-from resources.lib.pigskin import pigskin
+from resources.lib.pigskin.pigskin import pigskin
+from resources.lib import kodiutils
+from resources.lib import kodilogging
 
 addon = xbmcaddon.Addon()
 language = addon.getLocalizedString
 ADDON_PATH = xbmc.translatePath(addon.getAddonInfo('path'))
 ADDON_PROFILE = xbmc.translatePath(addon.getAddonInfo('profile'))
-LOGGING_PREFIX = '[%s-%s]' % (addon.getAddonInfo('id'), addon.getAddonInfo('version'))
+
+logger = logging.getLogger(addon.getAddonInfo('id'))
+kodilogging.config()
 
 busydialog = xbmcgui.DialogBusy()
 
@@ -28,26 +33,11 @@ if not xbmcvfs.exists(ADDON_PROFILE):
 username = addon.getSetting('email')
 password = addon.getSetting('password')
 
-proxy_config = None
+proxy_url = None
 if addon.getSetting('proxy_enabled') == 'true':
-    proxy_config = {
-        'scheme': addon.getSetting('proxy_scheme'),
-        'host': addon.getSetting('proxy_host'),
-        'port': addon.getSetting('proxy_port'),
-        'auth': {
-            'username': addon.getSetting('proxy_username'),
-            'password': addon.getSetting('proxy_password'),
-        },
-    }
-    if addon.getSetting('proxy_auth') == 'false':
-        proxy_config['auth'] = None
+    proxy_url = build_proxy_url(self)
 
-gp = pigskin(proxy_config, debug=True)
-
-
-def addon_log(string):
-    msg = '%s: %s' % (LOGGING_PREFIX, string)
-    xbmc.log(msg=msg, level=xbmc.LOGDEBUG)
+gp = pigskin(proxy_url=proxy_url)
 
 
 def show_busy_dialog():
@@ -58,7 +48,7 @@ def hide_busy_dialog():
     try:
         busydialog.close()
     except RuntimeError as e:
-        addon_log('Error closing busy dialog: %s' % e.message)
+        logger.error('Error closing busy dialog: %s' % e.message)
 
 
 class GamepassGUI(xbmcgui.WindowXML):
@@ -80,7 +70,7 @@ class GamepassGUI(xbmcgui.WindowXML):
         self.player = None
         self.list_refill = False
         self.focusId = 100
-        self.seasons_and_weeks = gp.get_seasons_and_weeks()
+        self.seasons = gp.get_seasons()
         self.has_inputstream_adaptive = self.has_inputstream_adaptive()
 
         xbmcgui.WindowXML.__init__(self, *args, **kwargs)
@@ -111,7 +101,33 @@ class GamepassGUI(xbmcgui.WindowXML):
         try:
             self.setFocus(self.window.getControl(self.focusId))
         except:
-            addon_log('Focus not possible: %s' % self.focusId)
+            logger.error('Focus not possible: %s' % self.focusId)
+
+    def build_proxy_url(self):
+        proxy_url = ''
+        protocol = addon.getSetting('proxy_scheme') + '://'
+
+        auth = ''
+        if addon.getSetting('proxy_auth') == 'true':
+            username = addon.getSetting('proxy_username').strip()
+            password = addon.getSetting('proxy_password')
+
+            if not username or not password:
+                return ''
+
+            auth = '%s:%s@' % (urllib.quote(username), urllib.quote(password))
+
+        host = addon.getSetting('proxy_host').strip()
+        if not host:
+            return ''
+
+        port = addon.getSetting('proxy_port').strip()
+        if port:
+            host = host + ':' + port
+
+        proxy_url = protocol + auth + host
+
+        return proxy_url
 
     def coloring(self, text, meaning):
         """Return the text wrapped in appropriate color markup."""
@@ -125,7 +141,7 @@ class GamepassGUI(xbmcgui.WindowXML):
     def display_seasons(self):
         """List seasons"""
         self.season_items = []
-        for season in sorted(self.seasons_and_weeks.keys(), reverse=True):
+        for season in self.seasons:
             listitem = xbmcgui.ListItem(season)
             self.season_items.append(listitem)
 
@@ -154,7 +170,7 @@ class GamepassGUI(xbmcgui.WindowXML):
     def display_weeks_games(self):
         """Show games for a given season/week"""
         self.games_items = []
-        games = gp.get_weeks_games(self.selected_season, self.selected_season_type, self.selected_week)
+        games = gp.get_games(self.selected_season, self.selected_season_type, self.selected_week)
         for game in games:
             game_id = '{0}-{1}-{2}'.format(game['visitorNickName'].lower(), game['homeNickName'].lower(), str(game['gameId']))
             game_name_shrt = '[B]%s[/B] at [B]%s[/B]' % (game['visitorNickName'], game['homeNickName'])
@@ -180,7 +196,7 @@ class GamepassGUI(xbmcgui.WindowXML):
                 else:  # 24-hour clock
                     datetime_format = '%A, %b %d - %H:%M'
 
-                datetime_obj = gp.parse_datetime(game['gameDateTimeUtc'], True)
+                datetime_obj = gp.nfldate_to_datetime(game['gameDateTimeUtc'], True)
                 game_info = datetime_obj.strftime(datetime_format).encode('utf-8')
 
             if game['videoStatus'] == 'SCHEDULED':
@@ -207,21 +223,23 @@ class GamepassGUI(xbmcgui.WindowXML):
 
     def display_seasons_weeks(self):
         """List weeks for a given season"""
-        weeks_dict = self.seasons_and_weeks[self.selected_season]
+        weeks_dict = gp.get_weeks(self.selected_season)
 
-        for week in weeks_dict:
-            if week['week_name'] == 'p':
-                title = language(30047).format(week['week_number'])
-            elif week['week_name'] == 'week':
-                title = language(30048).format(week['week_number'])
-            else:
-                title = week['week_name'].upper()
-            future = 'false'
-            listitem = xbmcgui.ListItem(title)
-            listitem.setProperty('week', week['week_number'])
-            listitem.setProperty('season_type', week['season_type'])
-            listitem.setProperty('future', future)
-            self.weeks_items.append(listitem)
+        for season_type in weeks_dict:
+            for week_num in sorted(weeks_dict[season_type], key=int):
+                if season_type == 'pre':
+                    title = language(30047).format(week_num)
+                elif season_type == 'reg':
+                    title = language(30048).format(week_num)
+                elif season_type == 'post':
+                    title = weeks_dict[season_type][week_num].upper()
+
+                future = 'false'
+                listitem = xbmcgui.ListItem(title)
+                listitem.setProperty('week', week_num)
+                listitem.setProperty('season_type', season_type)
+                listitem.setProperty('future', future)
+                self.weeks_items.append(listitem)
         self.weeks_list.addItems(self.weeks_items)
 
     def display_shows_episodes(self, show_name, season):
@@ -235,7 +253,6 @@ class GamepassGUI(xbmcgui.WindowXML):
                 for episode_title, episode_videoId_thumbnail in episode.items():
                     listitem.setProperty('game_info', episode_title)
                     for episode_videoId, episode_thumbnail in episode_videoId_thumbnail.items():
-                        print episode_thumbnail
                         listitem.setProperty('id', episode_videoId)
                         listitem.setProperty('away_thumb', episode_thumbnail.replace('{formatInstructions}', 'c_thumb,q_auto,f_png'))
                 listitem.setProperty('is_game', 'false')
@@ -243,8 +260,8 @@ class GamepassGUI(xbmcgui.WindowXML):
                 listitem.setProperty('isPlayable', 'true')
                 self.games_items.append(listitem)
             except:
-                addon_log('Exception adding archive directory: %s' % format_exc())
-                addon_log('Directory name: %s' % episode_title)
+                logger.error('Exception adding archive directory: %s' % format_exc())
+                logger.error('Directory name: %s' % episode_title)
         self.games_list.addItems(self.games_items)
 
     def play_url(self, url):
@@ -350,9 +367,9 @@ class GamepassGUI(xbmcgui.WindowXML):
             answer = dialog.select(language(30016), versions)
             if answer > -1:
                 selected_version = versions[answer]
-                addon_log('Selected version: %s' % selected_version)
+                logger.debug('Selected version: %s' % selected_version)
             else:
-                addon_log('Select version dialog was cancelled.')
+                logger.debug('Select version dialog was cancelled.')
                 return None
 
         return game_versions[selected_version]
@@ -371,19 +388,19 @@ class GamepassGUI(xbmcgui.WindowXML):
         response = xbmc.executeJSONRPC(json.dumps(payload))
         data = json.loads(response)
         if 'error' not in data and data['result']['addon']['enabled']:
-            addon_log('InputStream Adaptive is installed and enabled.')
+            logger.debug('InputStream Adaptive is installed and enabled.')
             return True
         else:
-            addon_log('InputStream Adaptive is not installed and/or enabled.')
+            logger.debug('InputStream Adaptive is not installed and/or enabled.')
             if addon.getSetting('use_inputstream_adaptive') == 'true':
-                addon_log('Disabling InputStream Adaptive.')
+                logger.info('Disabling InputStream Adaptive.')
                 addon.setSetting('use_inputstream_adaptive', 'false')  # reset setting
             return False
 
     def select_stream_url(self, streams):
         """Determine which stream URL to use."""
         if not streams:
-            addon_log('no streams list was provided!')
+            logger.warning('no streams list was provided!')
             dialog = xbmcgui.Dialog()
             dialog.ok(language(30043), language(30045))
             return False
@@ -406,7 +423,7 @@ class GamepassGUI(xbmcgui.WindowXML):
                 else:  # bitrate dialog was canceled
                     return None
             except:
-                addon_log('unable to parse the m3u8 manifest.')
+                logger.error('unable to parse the m3u8 manifest.')
                 dialog = xbmcgui.Dialog()
                 dialog.ok(language(30043), language(30045))
                 return False
@@ -447,7 +464,7 @@ class GamepassGUI(xbmcgui.WindowXML):
                         self.display_seasons_weeks()
                         self.display_weeks_games()
                     except:
-                        addon_log('Error while reading seasons weeks and games')
+                        logger.error('Error while reading seasons weeks and games')
                 elif controlId == 130:
                     self.main_selection = 'NFL Network'
                     self.window.setProperty('NW_clicked', 'true')
@@ -484,15 +501,17 @@ class GamepassGUI(xbmcgui.WindowXML):
                     if selected_game.getProperty('isPlayable') == 'true':
                         self.init('game')
                         game_id = selected_game.getProperty('game_id')
+                        live = False
 
                         if selected_game.getProperty('live_video_id'):
                             video_id = selected_game.getProperty('live_video_id')
+                            live = True
                         else:
                             game_versions = gp.get_game_versions(game_id, self.selected_season)
                             video_id = self.select_version(game_versions)
 
                         if video_id:
-                            streams = gp.get_streams(video_id, 'game', username=username)
+                            streams = gp.get_game_streams(video_id, live)
                             stream_url = self.select_stream_url(streams)
                             self.play_url(stream_url)
 
@@ -510,26 +529,26 @@ class GamepassGUI(xbmcgui.WindowXML):
                 elif controlId == 230:  # episode is clicked
                     self.init('episode')
                     video_id = self.games_list.getSelectedItem().getProperty('id')
-                    streams = gp.get_streams(video_id, 'video', username=username)
+                    streams = gp.get_game_streams(video_id)
                     stream_url = self.select_stream_url(streams)
 
                     self.play_url(stream_url)
                 elif controlId == 240:  # Live content (though not games)
                     show_name = self.live_list.getSelectedItem().getLabel()
                     if show_name == 'NFL RedZone - Live':
-                        streams = gp.get_streams('redzone', username=username)
+                        streams = gp.get_redzone_streams()
                         stream_url = self.select_stream_url(streams)
 
                         self.play_url(stream_url)
                     elif show_name == 'NFL Network - Live':
-                        streams = gp.get_streams('nfl_network', username=username)
+                        streams = gp.get_nfl_network_streams()
                         stream_url = self.select_stream_url(streams)
 
                         self.play_url(stream_url)
             hide_busy_dialog()
         except Exception:  # catch anything that might fail
             hide_busy_dialog()
-            addon_log(format_exc())
+            logger.error(format_exc())
 
             dialog = xbmcgui.Dialog()
             if self.main_selection == 'NFL Network' and controlId == 230:  # episode
@@ -568,7 +587,7 @@ class CoachesFilmGUI(xbmcgui.WindowXML):
 
 
 if __name__ == '__main__':
-    addon_log('script starting')
+    logger.debug('script starting')
     hide_busy_dialog()
 
     if not username or not password:
@@ -583,16 +602,19 @@ if __name__ == '__main__':
             sys.exit(0)
 
     try:
-        gp.login(username, password)
+        login_success = gp.login(username, password)
+        if not login_success:
+            dialog = xbmcgui.Dialog()
+            dialog.ok(language(30021), language(30023))
+            sys.exit(0)
+
+        gp.check_for_subscription()
     except gp.GamePassError as error:
         dialog = xbmcgui.Dialog()
-        if error.value == 'error_unauthorised' or error.value == 'no_subscription':
-            dialog.ok(language(30021), language(30023))
-        else:
-            dialog.ok(language(30021), error.value)
+        dialog.ok(language(30021), language(30023))
         sys.exit(0)
     except:
-        addon_log(format_exc())
+        logger.error(format_exc())
         dialog = xbmcgui.Dialog()
         dialog.ok('Epic Failure',
                   language(30024))
@@ -602,4 +624,4 @@ if __name__ == '__main__':
     gui.doModal()
     del gui
 
-addon_log('script finished')
+logger.debug('script finished')

@@ -2,10 +2,10 @@
 <addon
 	id="plugin.video.ign_com"
 	name="IGN.com"
-	version="2.3.6"
+	version="2.3.7"
 	provider-name="Skipmode A1">
     <requires>
-        <import addon="xbmc.python"                     version="2.14.0"/>
+        <import addon="xbmc.python"                     version="2.19.0"/>
         <import addon="script.module.future"            version="0.0.1"/>
         <import addon="script.module.requests"          version="2.4.3"/>
     </requires>
@@ -13,21 +13,19 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Game and Movie trailers/reviews/news</summary>
-        <description lang="en">Game and Movie trailers/reviews/news</description>
-        <platform>all</platform>
+        <summary lang="en_GB">Game and Movie trailers/reviews/news</summary>
+            <description lang="en_GB">Game and Movie trailers/reviews/news</description>
+            <disclaimer lang="en_GB">For bugs, requests or general questions visit the IGN_COM thread on the Kodi forum.</disclaimer>
         <language>en</language>
+        <platform>all</platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <forum>https://forum.kodi.tv/showthread.php?tid=327964</forum>
         <website>https://www.ign.com</website>
         <source>https://github.com/skipmodea1/plugin.video.ign_com</source>
         <email></email>
-        <disclaimer>For bugs, requests or general questions visit the ign_com thread on the Kodi forum</disclaimer>
         <platform>all</platform>
-        <news>2.3.6 (2018-02-02)
-        - adding a setting for only view new video category.
-        - updated forum link to new thread.
-        - using news tag in addon.xml
-        - removed audio podcast category</news>
+        <news>2.3.7 (2018-09-08)
+        - website switched to https
+        </news>
     </extension>
 </addon>

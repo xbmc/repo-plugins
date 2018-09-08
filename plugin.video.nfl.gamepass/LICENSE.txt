@@ -467,7 +467,22 @@ License: CC BY-NC 2.0
  You. This License may not be modified without the mutual written agreement of
  the Licensor and You.
 
-Files: resources/lib/pigskin.py
+Files: resources/lib/kodiutils.py, resources/lib/kodilogging.py
+Copyright 2016 Kolja Lampe <razzeee@gmail.com>
+License: Apache License, Version 2
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ .
+  http://www.apache.org/licenses/LICENSE-2.0
+ .
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+Files: resources/lib/pigskin/pigskin.py
 Copyright: 2012-2018, see git log for respective authors
 License: MIT
  Permission is hereby granted, free of charge, to any person obtaining a copy

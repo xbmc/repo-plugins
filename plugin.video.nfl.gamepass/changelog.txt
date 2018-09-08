@@ -1,3 +1,14 @@
+2018.09.08 -- A Game of Inches Edition
++ Import the latest pigskin.py. Relevant changes are:
+-- support the new Game Pass (Gigya) authentication (thanks to 41john)
+-- overhaul logging system (aqw)
+-- simplify stream acquisition APIs (aqw)
+-- python 3 fixes (aqw)
+-- loads of code cleanup, refactoring, documentation, and unit tests (aqw)
++ Fix bug where episode list would re-append all show episodes (kaileu)
++ Use ``kodilogging.py`` to better integrate with Kodi's logging (aqw)
++ Assorted code cleanup (aqw)
+
 2018.08.23 -- Tampa 2 Edition
 + Support all NFL Network shows (Kaileu)
 + pigskin.py is now licensed MIT

@@ -22,12 +22,12 @@ SETTINGS = xbmcaddon.Addon(id=ADDON)
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'resources', 'images')
 PLUGIN_HANDLE = int(sys.argv[1])
-BASE_URL = "http://www.ign.com"
-LATEST_VIDEOS_URL = "http://www.ign.com/videos?page=1&filter=all"
+BASE_URL = "https://www.ign.com"
+LATEST_VIDEOS_URL = "https://www.ign.com/videos?page=1&filter=all"
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 COOKIES = {'i18n-ccpref': '15-US-www-1'}
-DATE = "2018-05-17"
-VERSION = "2.3.6"
+DATE = "2018-09-08"
+VERSION = "2.3.7"
 
 max_video_quality = SETTINGS.getSetting("maxVideoQualityRes")
 force_view_mode = bool(SETTINGS.getSetting("force_view_mode"))
@@ -105,7 +105,7 @@ def list_series_episodes(url):
         '<div class="video-title">(.+?)</div>.+?<div class="video-duration">(.+?)</div>.+?<div class="ago">(.+?)</div>',
         re.DOTALL).findall(html_source)
     for i in range(0, len(match), 1):
-        vidurl = "http://www.ign.com/" + match[i][0]
+        vidurl = BASE_URL + match[i][0]
         description = match[i][1]
         thumb = match[i][2]
         title = match[i][3]
@@ -190,7 +190,6 @@ def list_search_results(url):
 
 
 def play_video(page_url):
-    #html_source = get_url(page_url)
     match = re.compile(BASE_URL + "(.+)", re.DOTALL).findall(page_url)
     vid = Video(match[0])
     final_url = vid.get_vid_url(max_video_height)
@@ -287,6 +286,9 @@ def get_url(url):
     response = requests.get(complete_url, headers=HEADERS, cookies=COOKIES)
     html_source = response.text
     html_source = convertToUnicodeString(html_source)
+
+    #log("html_source", html_source)
+
     return html_source
 
 

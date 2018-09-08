@@ -2,7 +2,7 @@
 <addon
 	id="plugin.video.ign_com"
 	name="IGN.com"
-	version="2.3.6"
+	version="2.3.7"
 	provider-name="Skipmode A1">
     <requires>
         <import addon="xbmc.python"                     version="2.14.0"/>
@@ -24,10 +24,8 @@
         <email></email>
         <disclaimer>For bugs, requests or general questions visit the ign_com thread on the Kodi forum</disclaimer>
         <platform>all</platform>
-        <news>2.3.6 (2018-02-02)
-        - adding a setting for only view new video category.
-        - updated forum link to new thread.
-        - using news tag in addon.xml
-        - removed audio podcast category</news>
+        <news>2.3.7 (2018-09-08)
+        - website switched to https
+        </news>
     </extension>
 </addon>

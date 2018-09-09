@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="5.4.8" provider-name="bromix">
+<addon id="plugin.video.youtube" name="YouTube" version="5.4.9" provider-name="bromix">
     <requires>
         <import addon="xbmc.python" version="2.19.0"/>
         <import addon="script.module.requests" version="2.12.4"/>
@@ -10,9 +10,8 @@
     <extension point="xbmc.service" library="resources/lib/startup.py" start="startup"/>
     <extension point="xbmc.python.module" library="resources/lib/"/>
     <extension point="xbmc.addon.metadata">
-        <news>
-[fix] Signature deciphering
-        </news>
+        <broken>Please upgrade to a newer Kodi version to continue using this add-on</broken>
+        <news>Please upgrade to a newer Kodi version to continue using this add-on</news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
@@ -49,6 +48,5 @@
         <website>https://www.youtube.com</website>
         <email>ytplugin at datanet dot ws</email>
         <source>https://github.com/jdf76/plugin.video.youtube</source>
-        <size>1408185</size>
     </extension>
 </addon>

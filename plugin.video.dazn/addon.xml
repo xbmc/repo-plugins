@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.dazn" version="1.2.0" name="DAZN" provider-name="Jin">
+<addon id="plugin.video.dazn" version="1.2.1" name="DAZN" provider-name="Jin">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.inputstreamhelper" version="0.3.3"/>
@@ -10,16 +10,8 @@
 	<extension point="xbmc.service" library="startup.py" start="startup"/>
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
-        <news>
-- added compatibility mode setting for video playback *
-
-* enabled will (hopefully) ensure proper playback for kodi 17+
-  disabled will always require latest kodi/inputstream adaptive builds
-
-- added italian and spanish translations
-- switched to resources provided by api
-- enabled reusepython (performance boost on slow systems - kodi 18 only)
-        </news>
+        <broken>This addon requires Kodi 18</broken>
+        <news>As of now this addon requires Kodi 18 Leia and is not available for Kodi 17 Krypton anymore</news>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>

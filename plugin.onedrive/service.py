@@ -22,7 +22,9 @@ from clouddrive.common.service.source import SourceService
 from clouddrive.common.service.utils import ServiceUtil
 from resources.lib.provider.onedrive import OneDrive
 from clouddrive.common.service.export import ExportService
+from clouddrive.common.service.player import PlayerService
 
 
 if __name__ == '__main__':
-    ServiceUtil.run([DownloadService(OneDrive), SourceService(OneDrive), ExportService(OneDrive)])
+    ServiceUtil.run([DownloadService(OneDrive), SourceService(OneDrive),
+                     ExportService(OneDrive), PlayerService(OneDrive)])

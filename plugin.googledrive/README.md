@@ -3,6 +3,7 @@
 Play all your media from Google Drive including Videos, Music and Pictures (including Google Photos). 
 * Unlimited accounts
 * Team Drives support
+* Google Photos support
 * Playback your music and videos. Listing of videos with thumbnails.
 * Use Google Drive as a source.
 * Subtitles can be assigned automatically if a .str file exists with the same name as the video. 

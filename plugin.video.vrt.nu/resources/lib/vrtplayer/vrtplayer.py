@@ -43,7 +43,7 @@ class VRTPlayer:
 
     def show_az_menu_items(self):
         joined_url = urljoin(self._VRTNU_BASE_URL, "./a-z/")
-        menu_items = self.__get_menu_items(joined_url, {"class": "tile"}, actions.LISTING_VIDEOS,
+        menu_items = self.__get_az_menu_items(joined_url, {"class": "nui-tile"}, actions.LISTING_VIDEOS,
                                      self.metadata_collector.get_az_metadata)
         self._kodi_wrapper.show_listing(menu_items, sortmethod.ALPHABET)
 
@@ -204,11 +204,38 @@ class VRTPlayer:
             listing.append(item)
         return listing
 
+    def __get_az_menu_items(self, url, soupstrainer_parser_selector, routing_action, video_dictionary_action=None):
+        response = requests.get(url)
+        tiles = SoupStrainer('a', soupstrainer_parser_selector)
+        soup = BeautifulSoup(response.content, "html.parser", parse_only=tiles)
+        listing = []
+        for tile in soup.find_all(class_= 'nui-tile'):
+            link_to_video = tile["href"]
+            thumbnail, title = self.__get_az_thumbnail_and_title(tile)
+            video_dictionary = None
+            if video_dictionary_action is not None:
+                video_dictionary = video_dictionary_action(tile)
+
+            item = helperobjects.TitleItem(title, {'action': routing_action, 'video': link_to_video},
+                                           False, thumbnail, video_dictionary)
+            listing.append(item)
+        return listing
+
     @staticmethod
     def __format_image_url(element):
         raw_thumbnail = element.find("img")['srcset'].split('1x,')[0]
         return statichelper.replace_double_slashes_with_https(raw_thumbnail)
 
+    @staticmethod
+    def __get_az_thumbnail_and_title(element):
+        thumbnail = VRTPlayer.__format_image_url(element)
+        found_element = element.find(class_="nui-tile--content")
+        title = ""
+        if found_element is not None:
+            title_element = found_element.find('h3')
+            title = statichelper.replace_newlines_and_strip(title_element.text)
+        return thumbnail, title
+    
     @staticmethod
     def __get_thumbnail_and_title(element):
         thumbnail = VRTPlayer.__format_image_url(element)

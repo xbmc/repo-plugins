@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.vrt.nu"
        name="VRT Nu"
-       version="1.3.3"
+       version="1.3.4"
        provider-name="Martijn Moreel">
 
     <requires>
@@ -23,6 +23,8 @@
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
+v1.3.4 (10-09-2018)
+- Fixed A-Z menu so it shows items
 v1.3.3 (02-09-2018)
 - Fixed bug where some items would not want to play
 - Fixed bug where some videos would only show one episodes while multiple episodes are present

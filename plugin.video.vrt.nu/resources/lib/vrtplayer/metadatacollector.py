@@ -35,7 +35,7 @@ class MetadataCollector:
     def get_az_metadata(tile):
         metadata_creator = metadatacreator.MetadataCreator()
         description = ""
-        description_item = tile.find(class_="tile__description")
+        description_item = tile.find(class_="nui-tile--content")
         if description_item is not None:
             p_item = description_item.find("p")
             if p_item is not None:

@@ -61,8 +61,8 @@ class Common:
     def get_string(self, id_):
         return self.utfenc(self.get_addon().getLocalizedString(id_))
 
-    def dialog_ok(self, id_):
-        self.get_dialog().ok(self.addon_name, self.get_string(id_))
+    def dialog_ok(self, msg):
+        self.get_dialog().ok(self.addon_name, msg)
 
     def get_resource(self, string):
         result = self.utfenc(string)

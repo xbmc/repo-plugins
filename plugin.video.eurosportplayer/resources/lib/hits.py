@@ -55,14 +55,14 @@ class Hits:
         start = self.plugin.plot_time(self.start, self.event)
         end = self.plugin.plot_time(self.end, self.event)
         if producttype == 'LIVE' and self.livebroadcast and not self.epg and not self.event:
-            self.title = '{0} [COLOR red]LIVE[/COLOR] [I]{1}[/I]'.format(self.plugin.utfenc(name), self.plugin.utfenc(self.title))
+            self.title = '{0} [COLOR red]LIVE[/COLOR] {1}'.format(self.plugin.utfenc(name), self.plugin.utfenc(self.title))
         elif self.epg or self.event:
             if not self.playback:
                 self.title = '{0} [COLOR dimgray]{1} {2}[/COLOR]'.format(start, self.plugin.utfenc(name), self.plugin.utfenc(self.title))
             else:
                 self.title = '{0} [COLOR dimgray]{1}[/COLOR] {2}'.format(start, self.plugin.utfenc(name), self.plugin.utfenc(self.title))
         else:
-            self.title = '{0} [I]{1}[/I]'.format(self.plugin.utfenc(name), self.plugin.utfenc(self.title))
+            self.title = '{0} {1}'.format(self.plugin.utfenc(name), self.plugin.utfenc(self.title))
         if producttype == 'LIVE':
             self.plot = '{0} - {1}\n{2}'.format(start, end, self.plugin.utfenc(self.plot))
             if not self.epg:

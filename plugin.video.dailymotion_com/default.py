@@ -6,14 +6,15 @@ import urllib2
 import xbmcplugin
 import xbmcaddon
 import xbmcgui
+import xbmc
+import xbmcvfs
 import sys
-import os
 import re
 import json
 import base64
 import datetime
 import unicodedata
-import SimpleDownloader
+import tempfile
 import requests
 import pickle
 from operator import itemgetter
@@ -27,12 +28,12 @@ _icon = addon.getAddonInfo('icon')
 _fanart = addon.getAddonInfo('fanart')
 channelFavsFile = xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+addonID+".favorites")
 cookie_file = xbmc.translatePath("special://profile/addon_data/"+addonID+"/cookies")
-
+pDialog = xbmcgui.DialogProgress()
 familyFilter = '1'
 if addon.getSetting('family_filter') == 'false':
     familyFilter = '0'
     
-if not os.path.exists(xbmc.translatePath("special://profile/addon_data/"+addonID+"/settings.xml")):
+if not xbmcvfs.exists('special://profile/addon_data/'+addonID+'/settings.xml'):
     addon.openSettings()
 
 forceViewModeNew = addon.getSetting("forceViewModeNew") == "true"
@@ -104,6 +105,7 @@ def listUserPlaylists(url):
         currentPage = content['page']
         nextPage = currentPage+1
         addDir(translation(30001)+" ("+str(nextPage)+")", url.replace("page="+str(currentPage), "page="+str(nextPage)), 'listUserPlaylists', "")
+    xbmcplugin.setContent(pluginhandle, "episodes")
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def showPlaylist(id):
@@ -112,7 +114,7 @@ def showPlaylist(id):
 
 def favouriteUsers():
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
-    if os.path.exists(channelFavsFile):
+    if xbmcvfs.exists(channelFavsFile):
        with open(channelFavsFile, 'r') as fh:
           content = fh.read()
           match = re.compile('###USER###=(.+?)###THUMB###=(.*?)###END###', re.DOTALL).findall(content)
@@ -167,7 +169,7 @@ def sortUsers2(url):
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def listVideos(url):
-    xbmcplugin.setContent(pluginhandle, "episodes")
+    xbmcplugin.setContent(pluginhandle, 'episodes')
     content = getUrl(url)
     content = json.loads(content)
     count = 1
@@ -180,7 +182,6 @@ def listVideos(url):
         date = item['taken_time']
         thumb = item['thumbnail_large_url']
         views = item['views_total']
-        duration = str(int(duration)/60+1)
         try:
             date = datetime.datetime.fromtimestamp(int(date)).strftime('%Y-%m-%d')
         except:
@@ -221,6 +222,7 @@ def listUsers(url):
         currentPage = content['page']
         nextPage = currentPage+1
         addDir(translation(30001)+" ("+str(nextPage)+")", url.replace("page="+str(currentPage), "page="+str(nextPage)), 'listUsers', "")
+    xbmcplugin.setContent(pluginhandle, "addons")
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def listLive(url):
@@ -237,6 +239,7 @@ def listLive(url):
         currentPage = content['page']
         nextPage = currentPage+1
         addDir(translation(30001)+" ("+str(nextPage)+")", url.replace("page="+str(currentPage), "page="+str(nextPage)), 'listLive', "")
+    xbmcplugin.setContent(pluginhandle, "episodes")
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewModeNew:
         xbmc.executebuiltin('Container.SetViewMode('+viewModeNew+')')
@@ -267,6 +270,7 @@ def playVideo(id,live=False):
         url=getStreamUrl(id,live=True)
     else:
         url = getStreamUrl(id)
+    #xbmc.log("DAILYMOTION - url = %s" %url,xbmc.LOGNOTICE)
     if url:
         listitem = xbmcgui.ListItem(path=url)
         xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
@@ -335,6 +339,7 @@ def getStreamUrl(id,live=False):
                             continue
                          
                     else:
+                        m_url = m_url.replace('dvr=true&','')
                         if '.m3u8?auth' in m_url:
                             m_url = m_url.split('?auth=')
                             the_url = m_url[0] + '?redirect=0&auth=' + urllib.quote(m_url[1])
@@ -349,6 +354,7 @@ def getStreamUrl(id,live=False):
         if len(other_playable_url) >0: # probably not needed, only for last resort
             for m_url in other_playable_url:
                 #xbmc.log("DAILYMOTION - other m_url = %s" %m_url,xbmc.LOGNOTICE)
+                m_url = m_url.replace('dvr=true&','')
                 if '.m3u8?auth' in m_url:
                     rr = requests.get(m_url,cookies=r.cookies.get_dict() ,headers=headers)
                     if rr.headers.get('set-cookie'):
@@ -364,26 +370,33 @@ def queueVideo(url, name):
     listitem = xbmcgui.ListItem(name)
     playlist.add(url, listitem)
 
-def downloadVideo(id):
-    downloader = SimpleDownloader.SimpleDownloader()
-    content = getUrl2("http://www.dailymotion.com/embed/video/"+id)
-    match = re.compile('<title>(.+?)</title>', re.DOTALL).findall(content)
+def downloadVideo(title,id):
+
     global downloadDir
     if not downloadDir:
         xbmc.executebuiltin('XBMC.Notification(Download:,'+translation(30110)+'!,5000)')
         return    
     url = getStreamUrl(id)
-    filename = ""
-    try:
-        filename = (''.join(c for c in unicode(match[0], 'utf-8') if c not in '/\\:?"*|<>')).strip()
-    except:
-        filename = id
-    filename+=".mp4"
-    if not os.path.exists(os.path.join(downloadDir, filename)):
-        params = { "url": url, "download_path": downloadDir }
-        downloader.download(filename, params)
+    vidfile = xbmc.makeLegalFilename(downloadDir + title + '.mp4')
+    if not xbmcvfs.exists(vidfile):
+        tmp_file = tempfile.mktemp(dir=downloadDir,
+                                   suffix='.mp4')
+        tmp_file = xbmc.makeLegalFilename(tmp_file)
+        pDialog.create('Dailymotion',translation(30044), title)
+        urllib.urlretrieve(url, tmp_file, video_report_hook)       
+        try:
+          xbmcvfs.rename(tmp_file, vidfile)
+          return vidfile
+        except:
+          return tmp_file
     else:
         xbmc.executebuiltin('XBMC.Notification(Download:,'+translation(30109)+'!,5000)')
+
+def video_report_hook(count, blocksize, totalsize):
+    percent = int(float(count * blocksize * 100) / totalsize)
+    pDialog.update(percent)
+    if pDialog.iscanceled():
+        raise KeyboardInterrupt
 
 def playArte(id):
     try:
@@ -417,7 +430,7 @@ def addFav():
     if keyboard.isConfirmed() and keyboard.getText():
         user = keyboard.getText()
         channelEntry = "###USER###="+user+"###THUMB###=###END###"
-        if os.path.exists(channelFavsFile):         
+        if xbmcvfs.exists(channelFavsFile):         
             with open(channelFavsFile, 'r') as fh:
               content = fh.read()            
             if content.find(channelEntry) == -1:
@@ -433,7 +446,7 @@ def favourites(param):
     mode = mode[:mode.find("###")]
     channelEntry = param[param.find("###USER###="):]
     if mode == "ADD":
-        if os.path.exists(channelFavsFile):            
+        if xbmcvfs.exists(channelFavsFile):            
             with open(channelFavsFile, 'r') as fh:
               content = fh.read()            
             if content.find(channelEntry) == -1:
@@ -498,7 +511,7 @@ def addLink(name, url, mode, iconimage, user, desc, duration, date, nr):
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Aired": date, "Duration": duration, "Episode": nr})
     liz.setProperty('IsPlayable', 'true')
     entries = []
-    entries.append((translation(30044), 'RunPlugin(plugin://'+addonID+'/?mode=downloadVideo&url='+urllib.quote_plus(url)+')',))
+    entries.append((translation(30044), 'RunPlugin(plugin://{0}/?mode=downloadVideo&name={1}&url={2})'.format(addonID,urllib.quote_plus(name),urllib.quote_plus(url)),))
     entries.append((translation(30043), 'RunPlugin(plugin://'+addonID+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+urllib.quote_plus(name)+')',))
     if dmUser == "":
         playListInfos = "###MODE###=ADD###USER###="+user+"###THUMB###=DefaultVideo.png###END###"
@@ -614,7 +627,7 @@ elif mode == 'playArte':
 elif mode == "queueVideo":
     queueVideo(url, name)
 elif mode == "downloadVideo":
-    downloadVideo(url)
+    downloadVideo(name, url)
 elif mode == 'search':
     search()
 elif mode == 'livesearch':

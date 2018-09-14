@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="2.3.5" provider-name="gujal">
+<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="2.3.6" provider-name="gujal">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
-        <import addon="script.module.simple.downloader" version="1.0.0"/>
         <import addon="script.module.requests" version="2.4.3"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
@@ -12,23 +11,32 @@
         <platform>all</platform>
 	    
         <summary lang="en">Movies, TV, Music, User-Clips, and Livestreams</summary>
-	<summary lang="fr">Films, Séries TV, Musique, Clips, et Live</summary>    
+		<summary lang="fr">Films, Séries TV, Musique, Clips, et Live</summary>    
         <summary lang="he">סרטים, טלוויזיה, מוסיקה, סירטונים של המשתמש, תלת מימד והזרמה חיה</summary>   
-        <language></language>
         
-	<description lang="en">Dailymotion attracts 300 million users from around the world, who watch 3.5 billion videos on its player each month.</description>
-	<description lang="fr">Dailymotion attire 300 millions d’utilisateurs qui regardent 3,5 milliards de vidéos sur son player chaque mois, à travers le monde.</description>
-        <description lang="he">Dailymotion מושך 300 מיליון משתמשים מרחבי העולם שצופים ב -3.5 מיליארד סרטונים מדי חודש.</description>
+		<description lang="en">Dailymotion attracts 300 million users from around the world, who watch 3.5 billion videos on its player each month.</description>
+		<description lang="fr">Dailymotion attire 300 millions d’utilisateurs qui regardent 3,5 milliards de vidéos sur son player chaque mois, à travers le monde.</description>
+		<description lang="he">Dailymotion מושך 300 מיליון משתמשים מרחבי העולם שצופים ב -3.5 מיליארד סרטונים מדי חודש.</description>
 	
-	<disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
-	<disclaimer lang="fr">Certaines parties de cet addon peuvent ne pas être légales dans votre pays de résidence - s’il vous plaît vérifier avec vos lois locales avant d’installer.</disclaimer>
-	<disclaimer lang="he">ייתכן שחלק מהתוספות האלו אינן חוקיות בארץ המגורים שלך - אנא בדוק את החוקים המקומיים שלך לפני ההתקנה.</disclaimer>
-	<language></language>	
+		<disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+		<disclaimer lang="fr">Certaines parties de cet addon peuvent ne pas être légales dans votre pays de résidence - s’il vous plaît vérifier avec vos lois locales avant d’installer.</disclaimer>
+		<disclaimer lang="he">ייתכן שחלק מהתוספות האלו אינן חוקיות בארץ המגורים שלך - אנא בדוק את החוקים המקומיים שלך לפני ההתקנה.</disclaimer>
 	    
-        <news>Original coding by AddonScriptorDE - Additional coding by alibaba011, gates, L0RE</news>
-	<website>http://www.dailymotion.com</website>
+        <news>
+[B]Version 2.3.6 - 14 Sep 2018[/B] 
+ - Fix for Download Progress not showing properly
+ - Fix for Video durations incorrect
+		</news>
+		<website>http://www.dailymotion.com</website>
         <source>https://github.com/Gujal00/plugin.video.dailymotion_com</source>
         <forum>https://forum.kodi.tv/showthread.php?tid=142626</forum>
         <email>gujal at protonmail dot com</email>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.jpg</fanart>
+			<screenshot>resources/images/screenshot-01.jpg</screenshot>
+			<screenshot>resources/images/screenshot-02.jpg</screenshot>
+			<screenshot>resources/images/screenshot-03.jpg</screenshot>
+		</assets>
     </extension>
 </addon>

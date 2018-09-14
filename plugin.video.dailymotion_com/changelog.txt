@@ -1,3 +1,7 @@
+2.3.6 [20180914] 
+ - Fix for Download Progress not showing properly
+ - Fix for Video durations incorrect
+
 2.3.5 [20171024]
 - Add Hebrew Language
 - Add Trending, Featured Categories

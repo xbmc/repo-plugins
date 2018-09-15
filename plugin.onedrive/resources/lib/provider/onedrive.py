@@ -181,7 +181,17 @@ class OneDrive(Provider):
             return
         return self.process_files(files, on_items_page_completed)
     
-    
+    def get_subtitles(self, parent, name, item_driveid=None, include_download_info=False):
+        item_driveid = Utils.default(item_driveid, self._driveid)
+        subtitles = []
+        search_url = '/drives/'+item_driveid+'/items/' + parent + '/search(q=\''+urllib.quote(Utils.str(Utils.remove_extension(name)).replace("'","''"))+'\')'
+        files = self.get(search_url)
+        for f in files['value']:
+            subtitle = self._extract_item(f, include_download_info)
+            if subtitle['name_extension'] == 'srt' or subtitle['name_extension'] == 'sub' or subtitle['name_extension'] == 'sbv':
+                subtitles.append(subtitle)
+        return subtitles
+                
     def get_item(self, item_driveid=None, item_id=None, path=None, find_subtitles=False, include_download_info=False):
         item_driveid = Utils.default(item_driveid, self._driveid)
         if item_id:
@@ -199,13 +209,7 @@ class OneDrive(Provider):
         
         item = self._extract_item(f, include_download_info)
         if find_subtitles:
-            subtitles = []
-            search_url = '/drives/'+item_driveid+'/items/' + item['parent'] + '/search(q=\''+urllib.quote(Utils.str(Utils.remove_extension(item['name'])).replace("'","''"))+'\')'
-            files = self.get(search_url)
-            for f in files['value']:
-                subtitle = self._extract_item(f, include_download_info)
-                if subtitle['name_extension'] == 'srt' or subtitle['name_extension'] == 'sub' or subtitle['name_extension'] == 'sbv':
-                    subtitles.append(subtitle)
+            subtitles = self.get_subtitles(item['parent'], item['name'], item_driveid, include_download_info)
             if subtitles:
                 item['subtitles'] = subtitles
         return item

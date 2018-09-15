@@ -65,14 +65,24 @@ class GoogleDrive(Provider):
             'type' : ''
         }]
         try:
-            response = self.get('/teamdrives', request_params=request_params, access_tokens=access_tokens)
-            if response and 'teamDrives' in response:
-                for drive in response['teamDrives']:
-                    drives.append({
-                        'id' : drive['id'],
-                        'name' : Utils.get_safe_value(drive, 'name', drive['id']),
-                        'type' : drive['kind']
-                    })
+            all_teamdrives_fetch = False
+            page_token = None
+            parameters = {'pageSize': 100}
+            while not all_teamdrives_fetch:
+                if page_token:
+                    parameters['nextPageToken'] = page_token
+                response = self.get('/teamdrives', parameters=parameters, request_params=request_params, access_tokens=access_tokens)
+                if response and 'teamDrives' in response:
+                    for drive in response['teamDrives']:
+                        drives.append({
+                            'id' : drive['id'],
+                            'name' : Utils.get_safe_value(drive, 'name', drive['id']),
+                            'type' : drive['kind']
+                        })
+                if response and 'nextPageToken' in response:
+                    page_token = response['nextPageToken']
+                else:
+                    all_teamdrives_fetch = True
         except RequestException as ex:
             httpex = ExceptionUtils.extract_exception(ex, HTTPError)
             if not httpex or httpex.code != 403:
@@ -201,16 +211,17 @@ class GoogleDrive(Provider):
         size = long('%s' % Utils.get_safe_value(f, 'size', 0))
         is_album = kind == 'album'
         is_media_items = kind == 'media_item'
+        item_id = f['id']
         if is_album:
             mimetype = 'application/vnd.google-apps.folder'
-            name = f['title']
+            name = Utils.get_safe_value(f, 'title', item_id)
         else:
             mimetype = Utils.get_safe_value(f, 'mimeType', '')
             name = Utils.get_safe_value(f, 'name', '')
         if is_media_items:
-            name = Utils.get_safe_value(f, 'id', '')
+            name = Utils.get_safe_value(f, 'filename', item_id) 
         item = {
-            'id': f['id'],
+            'id': item_id,
             'name': name,
             'name_extension' : Utils.get_extension(name),
             'parent': Utils.get_safe_value(f, 'parents', ['root'])[0],
@@ -301,6 +312,19 @@ class GoogleDrive(Provider):
             self._items_cache.set(key, item)
         return item
     
+    def get_subtitles(self, parent, name, item_driveid=None, include_download_info=False):
+        parameters = self.prepare_parameters()
+        item_driveid = Utils.default(item_driveid, self._driveid)
+        subtitles = []
+        parameters['fields'] = 'files(' + self._get_field_parameters() + ')'
+        parameters['q'] = 'name contains \'%s\'' % Utils.str(Utils.remove_extension(name)).replace("'","\\'")
+        files = self.get('/files', parameters = parameters)
+        for f in files['files']:
+            subtitle = self._extract_item(f, include_download_info)
+            if subtitle['name_extension'] == 'srt' or subtitle['name_extension'] == 'sub' or subtitle['name_extension'] == 'sbv':
+                subtitles.append(subtitle)
+        return subtitles
+    
     def get_item(self, item_driveid=None, item_id=None, path=None, find_subtitles=False, include_download_info=False):
         parameters = self.prepare_parameters()
         item_driveid = Utils.default(item_driveid, self._driveid)
@@ -314,14 +338,7 @@ class GoogleDrive(Provider):
             item = self.get_item_by_path(path, include_download_info)
         
         if find_subtitles:
-            subtitles = []
-            parameters['fields'] = 'files(' + self._get_field_parameters() + ')'
-            parameters['q'] = 'name contains \'%s\'' % Utils.str(Utils.remove_extension(item['name'])).replace("'","\\'")
-            files = self.get('/files', parameters = parameters)
-            for f in files['files']:
-                subtitle = self._extract_item(f, include_download_info)
-                if subtitle['name_extension'] == 'srt' or subtitle['name_extension'] == 'sub' or subtitle['name_extension'] == 'sbv':
-                    subtitles.append(subtitle)
+            subtitles = self.get_subtitles(item['parent'], item['name'], item_driveid, include_download_info)
             if subtitles:
                 item['subtitles'] = subtitles
         return item

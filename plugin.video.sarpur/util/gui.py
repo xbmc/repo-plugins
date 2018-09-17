@@ -36,7 +36,7 @@ class GUI(object):
             )
 
     def _get_url(self, action_key, action_value, name):
-
+    
         format_params = {
             "base_url": self.base_url,
             "key": quote(action_key),

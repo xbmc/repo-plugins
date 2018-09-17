@@ -12,6 +12,7 @@ import requests
 from sarpur import logger  # noqa
 
 
+
 def duration_to_seconds(duration):
     """
     Takes a string in the format hh:mm:ss or hh:mm and converts

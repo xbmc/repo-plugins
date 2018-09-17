@@ -10,6 +10,7 @@ import sarpur
 from sarpur import scraper, api, logger  # noqa
 import util.player as player
 from util.gui import GUI
+from util import strptime
 
 INTERFACE = GUI(sarpur.ADDON_HANDLE, sarpur.BASE_URL)
 EVENT_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
@@ -21,14 +22,34 @@ def index():
     """
 
     INTERFACE.add_dir(u'Beinar útsendingar', 'view_live_index', '')
-    INTERFACE.add_dir(u'RÚV', 'view_category', 'ruv')
-    INTERFACE.add_dir(u'RÚV 2', 'view_category', 'ruv2')
-    INTERFACE.add_dir(u'RÁS 1', 'view_category', 'ras1')
-    INTERFACE.add_dir(u'RÁS 2', 'view_category', 'ras2')
-    INTERFACE.add_dir(u'RÁS 3', 'view_category', 'ras3')
-    INTERFACE.add_dir(u'Rondó', 'view_category', 'rondo')
-    INTERFACE.add_dir(u'Hlaðvarp', 'view_podcast_index', '')
+    INTERFACE.add_dir(u'Sarpur forsíða', 'view_featured', '')
+    INTERFACE.add_dir(u'Flokkar', 'view_categories', '')
+    INTERFACE.add_dir(u'RÚV', 'view_schedule', 'ruv')
+    INTERFACE.add_dir(u'RÚV 2', 'view_schedule', 'ruv2')
+    INTERFACE.add_dir(u'Útvarp', 'view_radio', '')
     INTERFACE.add_dir(u'Leita', 'search', '')
+
+
+def view_featured(action_value, name):
+    for panel in api.featured_panels():
+        INTERFACE.add_dir(panel['title'], 'view_panel', panel['slug'])
+
+
+def view_panel(panel_slug, name):
+    for program in api.panel_programs(panel_slug):
+        if program['episodes']:
+            INTERFACE.add_program_episode(program, program['episodes'][0])
+
+
+def view_categories(action_value, name):
+    for category in api.categories():
+        INTERFACE.add_dir(category['title'], 'view_category', category['slug'])
+
+
+def view_category(category_slug, name):
+    for program in api.category_programs(category_slug):
+        if program['episodes']:
+            INTERFACE.add_program_episode(program, program['episodes'][0])
 
 
 def view_live_index(action_value, name):
@@ -40,6 +61,13 @@ def view_live_index(action_value, name):
     INTERFACE.add_item(u'RÁS 1', 'play_live_stream', 'ras1')
     INTERFACE.add_item(u'RÁS 2', 'play_live_stream', 'ras2')
     INTERFACE.add_item(u'Rondó', 'play_live_stream', 'rondo')
+
+
+def view_radio(action_value, name):
+    INTERFACE.add_dir(u'RÁS 1', 'view_schedule', 'ras1')
+    INTERFACE.add_dir(u'RÁS 2', 'view_schedule', 'ras2')
+    INTERFACE.add_dir(u'Rondó', 'view_schedule', 'rondo')
+    INTERFACE.add_dir(u'Hlaðvarp', 'view_podcast_index', '')
 
 
 def play_video(file, name):
@@ -67,7 +95,7 @@ def play_live_stream(channel, name):
         player.play(url, name, live=True)
 
 
-def view_category(channel, date_string):
+def view_schedule(channel, date_string):
     """
     Display the available media in category
 
@@ -86,7 +114,7 @@ def view_category(channel, date_string):
         date = datetime.today()
 
     if format:
-        date = scraper.strptime(date_string, format)
+        date = strptime(date_string, format)
 
     url = 'https://api.ruv.is/api/schedule/{0}/{1}/'.format(
         channel,
@@ -104,16 +132,16 @@ def view_category(channel, date_string):
     day_before = date + timedelta(days=-1)
     next_day = date + timedelta(days=1)
     INTERFACE.add_dir(u"<< {0}".format(day_before.strftime("%d.%m.%Y")),
-                      'view_category',
+                      'view_schedule',
                       channel)
     INTERFACE.add_dir("{0} >>".format((next_day.strftime("%d.%m.%Y"))),
-                      'view_category',
+                      'view_schedule',
                       channel)
     for ev in shows['events']:
         if 'start_time' not in ev:
             continue
-        showtime = scraper.strptime(ev['start_time'], EVENT_DATE_FORMAT)
-        end_time = scraper.strptime(ev['end_time'], EVENT_DATE_FORMAT)
+        showtime = strptime(ev['start_time'], EVENT_DATE_FORMAT)
+        end_time = strptime(ev['end_time'], EVENT_DATE_FORMAT)
         in_progress = showtime <= datetime.now() < end_time
         duration = (end_time - showtime).seconds
         display_show_time = (
@@ -205,30 +233,10 @@ def search(action_value, name):
         index()
     else:
         for program in api.search(query):
-            title = program['title'] or program['foreign_title']
-            if title:
-                INTERFACE.add_dir(
-                    title,
-                    'list_program_episodes',
-                    str(program['id']),
-                    image=program.get('image'),
-                )
+            INTERFACE.add_program_dir(program)
 
 
 def list_program_episodes(program_id, name):
     program = api.program_details(program_id)
     for episode in program['episodes']:
-        INTERFACE.add_item(
-            u'{0} - {1}'.format(program['title'], episode['title']),
-            'play_video',
-            episode['file'],
-            image=program.get('image'),
-            extra_info={
-                'Episode': program['episodes'][0]['number'],
-                'Premiered': scraper.strptime(
-                    program['episodes'][0]['firstrun'],
-                    '%Y-%m-%d %H:%M:%S',
-                ).strftime('%d.%m.%Y'),
-                'TotalEpisodes': program['web_available_episodes'],
-                'Plot': '\n'.join(program.get('description', []))
-            })
+        INTERFACE.add_program_episode(program, episode)

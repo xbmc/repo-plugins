@@ -33,3 +33,23 @@ def program_details(program_id):
     program_url = api_url('/programs/program/{0}/all'.format(program_id))
 
     return requests.get(program_url).json()
+
+
+def featured_panels():
+    url = api_url('/programs/featured/tv/')
+    return requests.get(url).json()['panels']
+
+
+def panel_programs(slug):
+    url = api_url('/programs/featured/tv/{0}'.format(slug))
+    return requests.get(url).json()['programs']
+
+
+def categories():
+    url = api_url('/programs/categories/tv')
+    return requests.get(url).json()['categories']
+
+
+def category_programs(slug):
+    url = api_url('/programs/category/tv/{0}'.format(slug))
+    return requests.get(url).json()['programs']

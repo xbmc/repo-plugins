@@ -6,6 +6,7 @@ import xbmcgui
 import xbmcplugin
 from urllib import quote_plus as quote
 from sarpur import logger
+from util import strptime
 
 
 class GUI(object):
@@ -26,7 +27,6 @@ class GUI(object):
     def set_view_mode(self):
         # Common container IDs. (Used to set the default view in Kodi)
 
-
         skin_used = xbmc.getSkinDir()
         logger.log(skin_used)
         if skin_used == u'skin.confluence':
@@ -35,9 +35,30 @@ class GUI(object):
                 'Container.SetViewMode({0})'.format(504)
             )
 
+    def _get_url(self, action_key, action_value, name):
+    
+        format_params = {
+            "base_url": self.base_url,
+            "key": quote(action_key),
+            "value": quote(action_value.encode('utf-8')),
+            "name": quote(name.encode('utf-8'))
+        }
+        return (
+            "{base_url}?action_key={key}&"
+            "action_value={value}&name={name}".format(**format_params)
+        )
 
-    def _add_dir(self, name, action_key, action_value, image, is_folder,
-                 extra_info=None):
+    def _add_dir(
+        self,
+        name,
+        action_key='',
+        action_value='',
+        image=None,
+        is_folder=False,
+        extra_info=None,
+        selectable=True,
+        context_menu=[],
+    ):
         """
         Creates a link in Kodi
 
@@ -46,32 +67,33 @@ class GUI(object):
         :param action_value: Parameter to use with the action
         :param image: Icon to use for the link
         :param is_folder: Does the link lead to a folder or playable item
+        :param extra_info: Extra information for info label
+        :param selectable: Default True.
 
         """
-        format_params = {
-            "base_url": self.base_url,
-            "key": quote(action_key),
-            "value": quote(action_value.encode('utf-8')),
-            "name": quote(name.encode('utf-8'))
-        }
-
-        url = "{base_url}?action_key={key}&action_value={value}&name={name}".format(**format_params)
-
         list_item = xbmcgui.ListItem(name,
                                      iconImage=image,
                                      thumbnailImage='')
+        if selectable:
+            url = self._get_url(action_key, action_value, name)
+            list_item.setProperty('IsPlayable', 'true')
+        else:
+            url = ''
+
         info_labels = {"Title": name}
         if extra_info:
             info_labels.update(extra_info)
 
         list_item.setInfo(type="Video", infoLabels=info_labels)
 
+        if context_menu:
+            list_item.addContextMenuItems(context_menu)
+
         xbmcplugin.addDirectoryItem(
             handle=self.addon_handle,
             url=url,
             listitem=list_item,
             isFolder=is_folder)
-
 
     def add_dir(self, name, action_key, action_value,
                 image='DefaultFolder.png'):
@@ -83,14 +105,16 @@ class GUI(object):
         :param action_value: Parameter to action
         :param image: Image to use with the folder
         """
-        self._add_dir(name,
-                      action_key,
-                      action_value,
-                      image,
-                      is_folder=True)
+        self._add_dir(
+            name=name,
+            action_key=action_key,
+            action_value=action_value,
+            image=image,
+            is_folder=True,
+        )
 
     def add_item(self, name, action_key, action_value,
-                 image='DefaultMovies.png', extra_info=None):
+                 image='DefaultMovies.png', extra_info=None, context_menu=[]):
         """
         Create link to playable item (wrapper function for _addDir).
 
@@ -99,12 +123,68 @@ class GUI(object):
         :param action_value: Parameter to action
         :param image: Image to use for the item
         """
-        self._add_dir(name,
-                      action_key,
-                      action_value,
-                      image,
-                      is_folder=False,
-                      extra_info=extra_info)
+        self._add_dir(
+            name=name,
+            action_key=action_key,
+            action_value=action_value,
+            image=image,
+            is_folder=False,
+            extra_info=extra_info,
+            context_menu=context_menu,
+        )
+
+    def add_unselectable_item(self, name, image, extra_info=None):
+        unselectable_name = u'[COLOR red]{0}[/COLOR]'.format(name)
+        self._add_dir(
+            name=unselectable_name,
+            image=image,
+            selectable=False,
+            extra_info=extra_info,
+        )
+
+    def add_program_dir(self, program):
+        title = program['title'] or program['foreign_title']
+        if title:
+            self.add_dir(
+                title,
+                'list_program_episodes',
+                str(program['id']),
+                image=program.get('image'),
+            )
+
+    def add_program_episode(self, program, episode):
+        if episode['title']:
+            title = u'{0} - {1}'.format(program['title'], episode['title'])
+        else:
+            title = program['title']
+        context_menu = []
+        if program['web_available_episodes'] > 1:
+            context_menu.append((
+                u'Skoða þáttaröð',
+                u'XBMC.Container.Update({0})'.format(
+                    self._get_url(
+                        'list_program_episodes',
+                        str(program['id']),
+                        program['title']
+                    )
+                )
+            ))
+        self.add_item(
+            title,
+            'play_video',
+            episode['file'],
+            image=program.get('image'),
+            extra_info={
+                'Episode': program['episodes'][0]['number'],
+                'Premiered': strptime(
+                    program['episodes'][0]['firstrun'],
+                    '%Y-%m-%d %H:%M:%S',
+                ).strftime('%d.%m.%Y'),
+                'TotalEpisodes': program['web_available_episodes'],
+                'Plot': '\n'.join(program.get('description', []))
+            },
+            context_menu=context_menu,
+        )
 
     @staticmethod
     def info_box(title, message):
@@ -127,4 +207,4 @@ class GUI(object):
         keyboard = xbmc.Keyboard('', title)
         keyboard.doModal()
         if keyboard.isConfirmed():
-            return unicode(keyboard.getText())
+            return keyboard.getText().strip()

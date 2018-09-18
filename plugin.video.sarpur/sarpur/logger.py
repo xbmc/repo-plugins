@@ -5,7 +5,7 @@ import xbmc
 import sarpur
 
 
-def log(message, level=xbmc.LOGNOTICE):
+def log(message, level=xbmc.LOGDEBUG):
     """
     This is the preferred way to log things in Kodi (rather than using print)
 

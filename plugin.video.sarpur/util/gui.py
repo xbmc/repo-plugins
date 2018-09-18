@@ -5,7 +5,9 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 from urllib import quote_plus as quote
-from sarpur import logger
+import sarpur
+from sarpur import logger  # noqa
+from util import strptime
 
 
 class GUI(object):
@@ -21,18 +23,19 @@ class GUI(object):
         """
         self.addon_handle = addon_handle
         self.base_url = base_url
-        self.set_view_mode()
 
-    def set_view_mode(self):
-        # Common container IDs. (Used to set the default view in Kodi)
+    def _get_url(self, action_key, action_value, name):
 
-        skin_used = xbmc.getSkinDir()
-        logger.log(skin_used)
-        if skin_used == u'skin.confluence':
-            logger.log("Set view mode")
-            xbmc.executebuiltin(
-                'Container.SetViewMode({0})'.format(504)
-            )
+        format_params = {
+            "base_url": self.base_url,
+            "key": quote(action_key),
+            "value": quote(action_value.encode('utf-8')),
+            "name": quote(name.encode('utf-8'))
+        }
+        return (
+            "{base_url}?action_key={key}&"
+            "action_value={value}&name={name}".format(**format_params)
+        )
 
     def _add_dir(
         self,
@@ -42,7 +45,8 @@ class GUI(object):
         image=None,
         is_folder=False,
         extra_info=None,
-        selectable=True
+        selectable=True,
+        context_menu=[],
     ):
         """
         Creates a link in Kodi
@@ -56,20 +60,11 @@ class GUI(object):
         :param selectable: Default True.
 
         """
-        format_params = {
-            "base_url": self.base_url,
-            "key": quote(action_key),
-            "value": quote(action_value.encode('utf-8')),
-            "name": quote(name.encode('utf-8'))
-        }
         list_item = xbmcgui.ListItem(name,
                                      iconImage=image,
                                      thumbnailImage='')
         if selectable:
-            url = (
-                "{base_url}?action_key={key}&"
-                "action_value={value}&name={name}".format(**format_params)
-            )
+            url = self._get_url(action_key, action_value, name)
             list_item.setProperty('IsPlayable', 'true')
         else:
             url = ''
@@ -79,6 +74,9 @@ class GUI(object):
             info_labels.update(extra_info)
 
         list_item.setInfo(type="Video", infoLabels=info_labels)
+
+        if context_menu:
+            list_item.addContextMenuItems(context_menu)
 
         xbmcplugin.addDirectoryItem(
             handle=self.addon_handle,
@@ -105,7 +103,7 @@ class GUI(object):
         )
 
     def add_item(self, name, action_key, action_value,
-                 image='DefaultMovies.png', extra_info=None):
+                 image='DefaultMovies.png', extra_info=None, context_menu=[]):
         """
         Create link to playable item (wrapper function for _addDir).
 
@@ -121,6 +119,7 @@ class GUI(object):
             image=image,
             is_folder=False,
             extra_info=extra_info,
+            context_menu=context_menu,
         )
 
     def add_unselectable_item(self, name, image, extra_info=None):
@@ -130,6 +129,50 @@ class GUI(object):
             image=image,
             selectable=False,
             extra_info=extra_info,
+        )
+
+    def add_program_dir(self, program):
+        title = program['title'] or program['foreign_title']
+        if title:
+            self.add_dir(
+                title,
+                'list_program_episodes',
+                str(program['id']),
+                image=program.get('image'),
+            )
+
+    def add_program_episode(self, program, episode):
+        if episode['title']:
+            title = u'{0} - {1}'.format(program['title'], episode['title'])
+        else:
+            title = program['title']
+        context_menu = []
+        if program['web_available_episodes'] > 1:
+            context_menu.append((
+                sarpur.getLocalizedString(30910),
+                u'XBMC.Container.Update({0})'.format(
+                    self._get_url(
+                        'list_program_episodes',
+                        str(program['id']),
+                        program['title']
+                    )
+                )
+            ))
+        self.add_item(
+            title,
+            'play_video',
+            episode['file'],
+            image=program.get('image'),
+            extra_info={
+                'Episode': program['episodes'][0]['number'],
+                'Premiered': strptime(
+                    program['episodes'][0]['firstrun'],
+                    '%Y-%m-%d %H:%M:%S',
+                ).strftime('%d.%m.%Y'),
+                'TotalEpisodes': program['web_available_episodes'],
+                'Plot': '\n'.join(program.get('description', []))
+            },
+            context_menu=context_menu,
         )
 
     @staticmethod

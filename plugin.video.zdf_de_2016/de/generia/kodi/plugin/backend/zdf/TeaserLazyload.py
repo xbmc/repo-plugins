@@ -1,25 +1,29 @@
+import re
 import urllib
 from datetime import datetime
 
 from de.generia.kodi.plugin.backend.zdf.Regex import getAttrPattern
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
 
-idPattern = getAttrPattern('data-teaser-id')
-typePattern = getAttrPattern('data-teaser-type')
-stylePattern = getAttrPattern('data-teaser-style')
-headlinePattern = getAttrPattern('data-teaser-headline')
-textPattern = getAttrPattern('data-teaser-text')
-sourceModuleTypePattern = getAttrPattern('data-source-module-type')
-titlePattern = getAttrPattern('data-cluster-title')
+
+def getJsonAttrPattern(attr):
+    return re.compile('&quot;' + attr + '&quot;:&quot;([^&]*)&quot;', re.DOTALL)
+
+idPattern = getJsonAttrPattern('sophoraId')
+stylePattern = getJsonAttrPattern('style')
+headlinePattern = getJsonAttrPattern('teaserHeadline')
+textPattern = getJsonAttrPattern('teasertext')
+sourceModuleTypePattern = getJsonAttrPattern('sourceModuleType')
 
 
 class TeaserLazyload(object):
-
+    url = None
+    
     def __init__(self, teaserPattern):
         self.teaserPattern = teaserPattern
                     
     def valid(self):
-        return True 
+        return self.url is not None
      
     def __str__(self):
         return "<TeaserLazyload url='%s'>" % (self.url)
@@ -32,26 +36,22 @@ class TeaserLazyload(object):
 
         endPos = teaserMatch.end(0)
         id = self._parseAttr(teaser, idPattern)
-        type = self._parseAttr(teaser, typePattern)
         style = self._parseAttr(teaser, stylePattern)
         headline = self._parseAttr(teaser, headlinePattern)
         text = self._parseAttr(teaser, textPattern)
         sourceModuleType = self._parseAttr(teaser, sourceModuleTypePattern)
-        title = self._parseAttr(teaser, titlePattern)
         
         url = None
         url = self._appendUrl(url, 'sophoraId', id)
-        url = self._appendUrl(url, 'type', type)
-        url = self._appendUrl(url, 'sourceModuleType', sourceModuleType)
         url = self._appendUrl(url, 'style', style)
         url = self._appendUrl(url, 'teaserHeadline', headline)
         url = self._appendUrl(url, 'teasertext', text)
-        url = self._appendUrl(url, 'clusterTitle', title)
+        url = self._appendUrl(url, 'sourceModuleType', sourceModuleType)
         
-        url = baseUrl + '/teaserElement' + url
+        if url is not None:
+            url = baseUrl + '/teaserElement' + url
         self.url = url
         self.baseUrl = baseUrl
-        print "teaser-lazyload: " + url      
         
         return endPos
 
@@ -64,6 +64,8 @@ class TeaserLazyload(object):
 
 
     def _appendUrl(self, url, attr, value):
+        if value is None:
+            return url
         encodedValue = urllib.quote(value, '')
         if url is None:
             return '?' + attr + '=' + encodedValue

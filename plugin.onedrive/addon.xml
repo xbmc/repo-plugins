@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.onedrive" name="OneDrive" version="2.1.4" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.onedrive" name="OneDrive" version="2.1.6" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0" />
-		<import addon="script.module.clouddrive.common" version="1.2.6"/>
+		<import addon="script.module.clouddrive.common" version="1.2.8"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>image audio video</provides>
@@ -35,6 +35,10 @@ Play all your media from OneDrive including Videos, Music and Pictures.
 		<forum>https://github.com/cguZZman/plugin.onedrive/issues</forum>
 		<website>https://addons.kodi.tv/show/plugin.onedrive</website>
 		<news>
+v2.1.6 released Sep 20, 2018:
+- Resume points and watched status for strm files in library
+v2.1.5 released Sep 12, 2018:
+- Sign-in fix
 v2.1.4 released Sep 10, 2018:
 - Subtitles assigned in source mode
 - Fixes

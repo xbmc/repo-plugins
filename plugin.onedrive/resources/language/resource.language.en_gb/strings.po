@@ -17,15 +17,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#32000"
-msgid "Account"
+msgid "Player Service"
 msgstr ""
 
 msgctxt "#32001"
-msgid "Video Library Export Folder"
+msgid "Export Service"
 msgstr ""
 
 msgctxt "#32002"
-msgid "Music Library Export Folder"
+msgid "Source Service"
 msgstr ""
 
 msgctxt "#32003"
@@ -33,7 +33,7 @@ msgid "Before export to library, remove previous files and folders"
 msgstr ""
 
 msgctxt "#32004"
-msgid "When playing videos, set the subtitle file located next to the video (.srt)"
+msgid "Automatically set subtitles from cloud drive"
 msgstr ""
 
 msgctxt "#32005"
@@ -61,11 +61,19 @@ msgid "Recursive auto-refreshed slideshow"
 msgstr ""
 
 msgctxt "#32011"
-msgid "Common Settings"
+msgid "Resume playing when resume point exists in library"
 msgstr ""
 
 msgctxt "#32012"
 msgid "Open Cloud Drive Common Settings..."
+msgstr ""
+
+msgctxt "#32017"
+msgid "Ask to resume if resume point exists in library"
+msgstr ""
+
+msgctxt "#32018"
+msgid "Save resume points and watched status in library"
 msgstr ""
 
 msgctxt "#32030"

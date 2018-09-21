@@ -23,6 +23,7 @@ from clouddrive.common.exception import RequestException, ExceptionUtils
 from urllib2 import HTTPError
 
 import urllib
+import urllib2
 
 class OneDrive(Provider):
     _extra_parameters = {'expand': 'thumbnails'}
@@ -37,7 +38,7 @@ class OneDrive(Provider):
         return None
     
     def get_account(self, request_params=None, access_tokens=None):
-        me = self.get('/me', request_params=request_params, access_tokens=access_tokens)
+        me = self.get('/me/', request_params=request_params, access_tokens=access_tokens)
         if not me:
             raise Exception('NoAccountInfo')
         return { 'id' : me['id'], 'name' : me['displayName']}
@@ -215,8 +216,13 @@ class OneDrive(Provider):
         return item
     
     def changes(self):
-        f = self.get(Utils.default(self.get_change_token(), '/drives/'+self._driveid+'/root/delta?token=latest'))
+        f = self.get(Utils.default(self.get_change_token(), '/drives/'+self._driveid+'/root/delta?token=latest'), request_params = {'on_exception': self.on_exception})
         extra_info = {}
         changes = self.process_files(f, include_download_info=True, extra_info=extra_info)
         self.persist_change_token(Utils.get_safe_value(extra_info, 'change_token'))
         return changes
+    
+    def on_exception(self, request, e):
+        ex = ExceptionUtils.extract_exception(e, urllib2.HTTPError)
+        if ex and ex.code == 404:
+            self.persist_change_token(None)

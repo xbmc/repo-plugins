@@ -1,3 +1,7 @@
+2.3.3
+[fix] Description template UnicodeDecodeError
+[chg] Use unicode punctuation space in description template
+
 2.3.2
 [fix] py3 encoding issues
 

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='2.3.2' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.3.3' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
         <import addon='script.module.six' version='1.11.0'/>
@@ -13,15 +13,9 @@
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
         <news>
-2.3.2
-[fix] py3 encoding issues
-
-2.3.1
-[fix] i18n UnicodeEncodeError
-
-2.3.0
-[chg] refactor complex entry points
-[upd] Python 3 compat.
+2.3.3
+[fix] Description template UnicodeDecodeError
+[chg] Use unicode punctuation space in description template
         </news>
         <assets>
             <icon>icon.png</icon>

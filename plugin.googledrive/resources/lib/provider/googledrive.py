@@ -128,18 +128,24 @@ class GoogleDrive(Provider):
         parameters['fields'] = 'files(%s),kind,nextPageToken' % self._get_field_parameters()
         if 'q' in parameters:
             parameters['q'] += ' and not trashed'
+        
+        self.configure(self._account_manager, self._driveid)
+        provider_method = self.get
+        url = '/files'
         if path == 'photos':
             self._photos_provider = GooglePhotos()
-            Logger.notice(self._get_api_url())
             self._photos_provider.configure(self._account_manager, self._driveid)
-            files = self._photos_provider.get('/albums')
+            parameters = {}
+            provider_method = self._photos_provider.get
+            url = '/albums'
         elif is_album:
             self._photos_provider = GooglePhotos()
             self._photos_provider.configure(self._account_manager, self._driveid)
-            files = self._photos_provider.post('/mediaItems:search', parameters = {'albumId': item_id})
-        else:
-            self.configure(self._account_manager, self._driveid)
-            files = self.get('/files', parameters = parameters)
+            parameters = {'albumId': item_id}
+            provider_method = self._photos_provider.post
+            url = '/mediaItems:search'
+            
+        files = provider_method(url, parameters = parameters)
         if self.cancel_operation():
             return
         return self.process_files(files, parameters, on_items_page_completed, include_download_info)
@@ -186,16 +192,16 @@ class GoogleDrive(Provider):
             if 'nextPageToken' in files:
                 parameters['pageToken'] = files['nextPageToken']
                 url = '/files'
-                provider = self
+                provider_method = self.get
                 if kind == 'drive#changeList':
                     url = '/changes'
                 elif kind == 'album':
                     url = '/albums'
-                    provider = self._photos_provider
+                    provider_method = self._photos_provider.get
                 elif kind == 'media_item':
                     url = '/mediaItems:search'
-                    provider = self._photos_provider
-                next_files = provider.get(url, parameters = parameters)
+                    provider_method = self._photos_provider.post
+                next_files = provider_method(url, parameters = parameters)
                 if self.cancel_operation():
                     return
                 items.extend(self.process_files(next_files, parameters, on_items_page_completed, include_download_info, extra_info))
@@ -244,6 +250,7 @@ class GoogleDrive(Provider):
                     'width' : Utils.get_safe_value(metadata, 'width'),
                     'height' : Utils.get_safe_value(metadata, 'height')
                 }
+                item['last_modified_date'] = Utils.get_safe_value(metadata, 'creationTime')
         if 'videoMediaMetadata' in f:
             video = f['videoMediaMetadata']
             item['video'] = {

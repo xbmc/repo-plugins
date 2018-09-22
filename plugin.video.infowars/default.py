@@ -12,7 +12,7 @@
 ### ############################################################################################################
 ##### Imports #####
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
-import urllib,urllib2,re,os,sys,htmllib,string,StringIO,logging,random,array,time,datetime
+import urllib,urllib2, urllib3, re,os,sys,htmllib,string,StringIO,logging,random,array,time,datetime, ssl, socket
 import copy
 import HTMLParser, htmlentitydefs
 try: 		from sqlite3 										import dbapi2 as sqlite; print "Loading sqlite3 as DB engine"
@@ -59,8 +59,15 @@ RNWDKFanart = "https://yt3.ggpht.com/-CMiJh2_nzpk79XL68m_zoyGyd4lPz42Fxy01TLVDGO
 WarRoomIcon = "https://yt3.ggpht.com/-2RKaabiN_g8/AAAAAAAAAAI/AAAAAAAAAAA/9Q41iU3wnn8/s288-c-k-no-mo-rj-c0xffffff/photo.jpg"
 #WarRoomFanart = "https://yt3.ggpht.com/QT57n2r7hRWZ-Mlj3B-67Hcr_2YWvwZnWKns3yak3DCQByyPzW6UOfY6vlpMSVhIg7xNQEdTdw=w1440-fcrop64=1,32b75a57cd48a5a8-nd-c0xffffffff-rj-k-no" #youtube banner
 WarRoomFanart = "https://pbs.twimg.com/profile_banners/890980517855866881/1504651644/1500x500" #twitter banner
+CTIcon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7wPsgffB62ZVJyUX8HTMWjEFhzT3rCfk_eWX9-1y1UlCdYNJ0"
+CTFanart = "https://cf-images.us-east-1.prod.boltdns.net/v1/static/5762013463001/bd176705-f42c-453c-96f2-709e4369b42f/9efd050e-4cac-4828-aced-f4a1d9b7a7cb/1280x720/match/image.jpg"
+IWLiveSEIcon = "https://hw.infowars.com/wp-content/images/logo.jpg"
+IWLiveSEFanart = "https://www.infowars.com/wp-content/uploads/2018/08/jones-censored23.jpg"
 PJWIcon = "https://yt3.ggpht.com/-fIb6IwufvwI/AAAAAAAAAAI/AAAAAAAAAAA/Smnj7cy5o0Y/s288-c-k-no-mo-rj-c0xffffff/photo.jpg"
 PJWFanart = "https://yt3.ggpht.com/tyGFHEOVkzV0ebThsLL3dB7p2Q-s5CpAwia5IM5gXsY_0Vgiy8gHs6HQTXhN3FnBxi_2p9LrgAY=w2120-fcrop64=1,00000000ffffffff-nd-c0xffffffff-rj-k-no"
+MWIcon = "https://pbs.twimg.com/profile_images/752288529431007238/D_9wxf-q_400x400.jpg"
+MWFanart = "https://www.infowarsteam.com/wp-content/uploads/2016/10/Millie-Weaver.jpg"
+
 
 ### ##### /\ ##### Plugin Settings ###
 
@@ -331,15 +338,18 @@ def playYoutube(url):
 
 def Menu_MainMenu(): #The Main Menu
     WhereAmI('@ the Main Menu')
-    IW_addon.add_directory({'mode': 'InfoWarsLiveSubMenu','title':'The Alex Jones Show Live HD (Youtube)'},{'title':  cFL_('The Alex Jones Show - Live HD (Youtube)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarslivestream_1@353459/master.m3u8'},{'title':  cFL_('The Alex Jones Show - Live (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'http://www.infowars.com/stream.pls'},{'title':  cFL_('The Alex Jones Show - Live - Audio Only (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
-    IW_addon.add_directory({'mode': 'RealNewsWDKLiveSubMenu','title':'Real News with David Knight Live HD (Youtube Feed Video)'},{'title':  cFL_('Real News with David Knight - Live HD (Youtube)','red')},is_folder=False,img=RNWDKIcon,fanart=RNWDKFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarsevent_1@366809/master.m3u8'},{'title':  cFL_('Real News with David Knight - Live (Loops After Airing)','red')},is_folder=False,img=RNWDKIcon,fanart=RNWDKFanart)
-    IW_addon.add_directory({'mode': 'WarRoomLiveSubMenu','title':'War Room with Owen Shroyer Live HD (Youtube Feed Video)'},{'title':  cFL_('War Room with Owen Shroyer - Live HD (Youtube)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/WarRoom_1@561925/master.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - Live (Loops After Airing)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
-    #IW_addon.add_directory({'mode': 'ClipsSubMenu','title':'Infowars Nightly News'},{'title':  cFL_('Infowars Clips','red')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
+    #IW_addon.add_directory({'mode': 'InfoWarsLiveSubMenu','title':'The Alex Jones Show Live HD (Youtube)'},{'title':  cFL_('The Alex Jones Show - Live HD (Youtube)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarslivestream_1@353459/master.m3u8'},{'title':  cFL_('The Alex Jones Show - (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
+    #IW_addon.add_directory({'mode': 'PlayURL','url':'http://www.infowars.com/stream.pls'},{'title':  cFL_('The Alex Jones Show - Live - Audio Only (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
+    #IW_addon.add_directory({'mode': 'RealNewsWDKLiveSubMenu','title':'Real News with David Knight Live HD (Youtube Feed Video)'},{'title':  cFL_('Real News with David Knight - Live HD (Youtube)','red')},is_folder=False,img=RNWDKIcon,fanart=RNWDKFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://streaminfo-live.secure.footprint.net/hls-live/streamroot2-streaminfo3/_definst_/live.m3u8'},{'title':  cFL_('Real News with David Knight - (Loops After Airing)','red')},is_folder=False,img=RNWDKIcon,fanart=RNWDKFanart)
+    #IW_addon.add_directory({'mode': 'WarRoomLiveSubMenu','title':'War Room with Owen Shroyer Live HD (Youtube Feed Video)'},{'title':  cFL_('War Room with Owen Shroyer - Live HD (Youtube)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://streaminfo-live.secure.footprint.net/hls-live/streamroot2-streaminfo2/_definst_/live.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - (Loops After Airing)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/MikeAdams_1@704916/master.m3u8'},{'title':  cFL_('Counter Think with Mike Adams - (Loops After Airing)','orange')},is_folder=False,img=CTIcon,fanart=CTFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarsevent_1@366809/master.m3u8'},{'title':  cFL_('Live Shows & Special Events','yellow')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
+	#IW_addon.add_directory({'mode': 'ClipsSubMenu','title':'Infowars Nightly News'},{'title':  cFL_('Infowars Clips','red')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
     IW_addon.add_directory({'mode': 'PaulJosephWatsonSubMenu','title':'Paul Joseph Watson (Youtube Video)'},{'title':  cFL_('Paul Joseph Watson (Youtube)','blue')},is_folder=True,img=PJWIcon,fanart=PJWFanart)
+    IW_addon.add_directory({'mode': 'MillieWeaverSubMenu','title':'Millie Weaver (Youtube Video)'},{'title':  cFL_('Millie Weaver (Youtube)','pink')},is_folder=True,img=MWIcon,fanart=MWFanart)
     video_type = ('tvshow')
     title = cFL_('Infowars Nightly News','lime')
     year = ('')
@@ -354,20 +364,24 @@ def Menu_MainMenu(): #The Main Menu
     li_url = IW_addon.build_plugin_url(queries)
     #xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=True)
     #IW_addon.add_directory({'mode': 'NightlyNewsSubMenu','title':'Infowars Nightly News'},{'title':  cFL_('Infowars Nightly News','red')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
-    IW_addon.add_directory({'mode': 'ClipsSubMenu','title':'Infowars Clips'},{'title':  cFL_('Infowars Clips','yellow')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
+    #IW_addon.add_directory({'mode': 'ClipsSubMenu','title':'Infowars Clips'},{'title':  cFL_('Infowars Clips','yellow')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
     IW_addon.add_directory({'mode': 'DocSubMenu','title':'Acclaimed Documentaries'},{'title':  cFL_('Acclaimed Documentaries','blanchedalmond')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
-    IW_addon.add_directory({'mode': 'HistoricShowsSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones Shows (Video)','yellow')},is_folder=True,img=AJSIcon,fanart=IW_artFanart)
-    IW_addon.add_directory({'mode': 'HistoricShowsAudioSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones (Audio)','yellow')},is_folder=True,img=AJSIcon,fanart=IW_artFanart)
+    #IW_addon.add_directory({'mode': 'HistoricShowsSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones Shows (Video)','yellow')},is_folder=True,img=AJSIcon,fanart=IW_artFanart)
+    #IW_addon.add_directory({'mode': 'HistoricShowsAudioSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones (Audio)','yellow')},is_folder=True,img=AJSIcon,fanart=IW_artFanart)
     
     eod()
+""" 
+#####################################################################################
+########### OLD CODE LEFT IN CASE IW IS UNBANNED BY THE INTERNET SOMEDAY ############
+#####################################################################################
 
 def Info_Wars_Live_Sub_Menu(title=''): #The Main Menu
     WhereAmI('@ Info Wars Live')
-    
+    http = urllib3.PoolManager()
     url = 'https://www.infowars.com/watch-alex-jones-show/'
-    response = urllib2.urlopen(url)
-    if response and response.getcode() == 200:
-        content = response.read()
+    response = http.request('GET', url)
+    if response:
+        content = response.data
         videos= find_multiple_matches(content,"<ul class=\"show__footer\"(.*?)</ul>")
         sources = []
         for temp, entry in enumerate(videos): 
@@ -375,44 +389,46 @@ def Info_Wars_Live_Sub_Menu(title=''): #The Main Menu
                 video_id = find_single_match(entry,"data-youtube-src=\"https://www.youtube.com/embed/(.*?)\"")
                 url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
                 #IW_addon.log('SPINAL VIDEO_ID IS %s' % video_id)
-                PlayURL(url)
+                xbmc.Player().play(url)
                 break
     eod()
 
 def Real_News_WDK_Sub_Menu(title=''): #The Main Menu
     WhereAmI('@ Real News Live')
-    
+    http = urllib3.PoolManager()
     url = 'https://www.infowars.com/watch-alex-jones-show/'
-    response = urllib2.urlopen(url)
-    if response and response.getcode() == 200:
-        content = response.read()
+    response = http.request('GET', url)
+    if response:
+        content = response.data
         videos= find_multiple_matches(content,"<ul class=\"show__footer\"(.*?)</ul>")
         sources = []
         for temp, entry in enumerate(videos): 
             if temp == 1:
                 video_id = find_single_match(entry,"data-youtube-src=\"https://www.youtube.com/embed/(.*?)\"")
                 url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
-                PlayURL(url)
+                play=xbmc.Player() ### xbmc.PLAYER_CORE_AUTO | xbmc.PLAYER_CORE_DVDPLAYER | xbmc.PLAYER_CORE_MPLAYER | xbmc.PLAYER_CORE_PAPLAYER
+                play.play(url)
                 break
     eod()
 
 def War_Room_Sub_Menu(title=''): #The Main Menu
     WhereAmI('@ War Room Live')
-    
+    http = urllib3.PoolManager()
     url = 'https://www.infowars.com/watch-alex-jones-show/'
-    response = urllib2.urlopen(url)
-    if response and response.getcode() == 200:
-        content = response.read()
+    response = http.request('GET', url)
+    if response:
+        content = response.data
         videos= find_multiple_matches(content,"<ul class=\"show__footer\"(.*?)</ul>")
         sources = []
         for temp, entry in enumerate(videos): 
             if temp == 2:
                 video_id = find_single_match(entry,"data-youtube-src=\"https://www.youtube.com/embed/(.*?)\"")
                 url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
-                PlayURL(url)
+                play=xbmc.Player() ### xbmc.PLAYER_CORE_AUTO | xbmc.PLAYER_CORE_DVDPLAYER | xbmc.PLAYER_CORE_MPLAYER | xbmc.PLAYER_CORE_PAPLAYER
+                play.play(url)
                 break
     eod()
-
+"""
 def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
     WhereAmI('@ Documentaries')
     #mode left blank for main menu.
@@ -666,6 +682,10 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         
     eod() #Ends the directory listing and prints it to the screen.  if you dont use eod() or something like it, the menu items won't be put to the screen.
 
+""" 
+#####################################################################################
+########### OLD CODE LEFT IN CASE IW IS UNBANNED BY THE INTERNET SOMEDAY ############
+#####################################################################################
 def Nightly_News_Sub_Menu(title='',dialog=''): #The Main Menu
     #https://www.youtube.com/user/RonGibsonCF
     WhereAmI('@ Nightly News')
@@ -755,11 +775,31 @@ def Historic_Shows_Audio_Sub_Menu(title=''): #The Main Menu
         util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
 
     eod()
-
+"""
 def Paul_Joseph_Watson_Sub_Menu(title=''): #The Main Menu
     #https://www.youtube.com/user/PrisonPlanetLive
     WhereAmI('@ Paul Joseph Watson')
     url = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCittVh8imKanO_5KohzDbpg'
+    response = urllib2.urlopen(url)
+    if response and response.getcode() == 200:
+        content = response.read()
+        videos= find_multiple_matches(content,"<entry>(.*?)</entry>")
+        for entry in videos:
+            title = find_single_match(entry,"<titl[^>]+>([^<]+)</title>")
+            plot = find_single_match(entry,"<media\:descriptio[^>]+>([^<]+)</media\:description>")
+            thumbnail = find_single_match(entry,"<media\:thumbnail url=\"(.*?)\"")
+            video_id = find_single_match(entry,"<yt\:videoId>([^<]+)</yt\:videoId>")
+            url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+            add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False )
+    else:
+        util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
+
+    eod()    
+
+def Millie_Weaver_Sub_Menu(title=''): #The Main Menu
+    #https://www.youtube.com/channel/UCglVbeKF9JGMCt-RTUAW_TQ
+    WhereAmI('@ Millie Weaver')
+    url = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCglVbeKF9JGMCt-RTUAW_TQ'
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
         content = response.read()
@@ -805,14 +845,15 @@ def check_mode(mode=''):
     elif (mode=='play'): 							play(params) ## Play Video
     elif (mode=='playYoutube'): 							playYoutube('url')
     elif (mode=='DocSubMenu'): 						Documentary_Sub_Menu(_param['title'], movie_num) ## Play Video
-    elif (mode=='ClipsSubMenu'): 						Clips_Sub_Menu(_param['title']) ## Play Video
-    elif (mode=='NightlyNewsSubMenu'): 						Nightly_News_Sub_Menu(_param['title'], dialog) ## Play Video
-    elif (mode=='HistoricShowsSubMenu'): 						Historic_Shows_Sub_Menu(_param['title']) ## Play Video
-    elif (mode=='HistoricShowsAudioSubMenu'): 						Historic_Shows_Audio_Sub_Menu(_param['title']) ## Play Video
+    #elif (mode=='ClipsSubMenu'): 						Clips_Sub_Menu(_param['title']) ## Play Video
+    #elif (mode=='NightlyNewsSubMenu'): 						Nightly_News_Sub_Menu(_param['title'], dialog) ## Play Video
+    #elif (mode=='HistoricShowsSubMenu'): 						Historic_Shows_Sub_Menu(_param['title']) ## Play Video
+    #elif (mode=='HistoricShowsAudioSubMenu'): 						Historic_Shows_Audio_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='PaulJosephWatsonSubMenu'): 						Paul_Joseph_Watson_Sub_Menu(_param['title']) ## Play Video
-    elif (mode=='InfoWarsLiveSubMenu'): 						Info_Wars_Live_Sub_Menu(_param['title']) ## Play Video
-    elif (mode=='RealNewsWDKLiveSubMenu'): 						Real_News_WDK_Sub_Menu(_param['title']) ## Play Video
-    elif (mode=='WarRoomLiveSubMenu'): 						War_Room_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='MillieWeaverSubMenu'): 						Millie_Weaver_Sub_Menu(_param['title']) ## Play Video
+    #elif (mode=='InfoWarsLiveSubMenu'): 						Info_Wars_Live_Sub_Menu(_param['title']) ## Play Video
+    #elif (mode=='RealNewsWDKLiveSubMenu'): 						Real_News_WDK_Sub_Menu(_param['title']) ## Play Video
+    #elif (mode=='WarRoomLiveSubMenu'): 						War_Room_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='Settings'): 							IW_addon.addon.openSettings() # Another method: _plugin.openSettings() ## Settings for this addon.
     elif (mode=='ResolverSettings'): 			urlresolver.display_settings()  ## Settings for UrlResolver script.module.
     elif (mode == 'add_to_library'):

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.infowars"
        name="Infowars"
-       version="2.0.7"
+       version="2.0.8"
        provider-name="Thomas Meadows, Spinalcracker">
   <requires>
 		<import addon="xbmc.python" version="2.24.0"/>
@@ -12,9 +12,79 @@
 		<provides>video</provides>
 	</extension>
   <extension point="xbmc.addon.metadata">
-    <summary>Videos from Infowars.com Including live daily shows</summary>
-    <description>Videos from Infowars.com Including live daily shows</description>
-    <disclaimer lang="en">This Project was made without association of the creators of infowars.com</disclaimer>
+    <summary lang="en_GB">Videos from Infowars.com Including live daily shows</summary>
+    <description lang="en_GB">Videos from Infowars.com Including live daily shows</description>
+	<news>
+Version 2.0.8
+- Removed Censored Content (Spinalcracker)
+- Cleaned up Menu System
+- Added New Shows
+- Added Millie Weaver Youtube Channel
+
+Version 2.0.7
+- Updated Youtube feeds (Spinalcracker)
+
+Version 2.0.6
+- Updated links (Spinalcracker)
+- Updated Youtube feeds
+- Added War Room Youtube feed
+- Cleaned up some code
+
+Version 2.0.5
+- Updated links (Spinalcracker)
+- Added Youtube feeds
+- Added new shows
+- Removed discontinued shows
+- Fixed past audio podcasts
+
+Version 2.0.4
+- Updated links (Spinalcracker)
+- Added Paul Joseph Watson section
+- Fixed random bugs with Krypton
+
+Version 2.0.3
+- Updated links (Spinalcracker)
+
+Version 2.0.2
+- Updated all links (Spinalcracker)
+- Switched everything over to HD sources (Spinalcracker)
+  (except live streams - only SD from source)
+- Fixed thumbnail for each link (Spinalcracker)
+- Updated Icon and Fanart (Spinalcracker)
+
+Version 2.0.1
+- Update for Youtube now forcing people over to api v3
+
+Version 2.0.0
+- Update for Kodi, removed many unncessary dependencies
+
+Version 1.0.1
+- Added License.txt(open source license)
+- Removed colors from nightly news, caused issues on some devices when added to library.
+
+Version 1.0.0
+- Added More Documentaries
+- Added Add to Library Feature for Documentaries
+- Added Add to Library Feature for Infowars Nightly News
+- Cleaned up the settings for the app so only items pertent to end user listed.
+
+Version 0.1.4
+- Added Infowars Live Audio
+- Added Infowars Historic Live Audio
+- Added Infowars Historic Live Video
+- Added Infowars Clips
+- Added Infowars Nightly News
+
+Version 0.1.3
+- Added Alex Jones Documentaries
+
+Version 0.1.2
+- Corrected Issues with device compatibility
+
+Version 0.1.0
+- initial build
+	</news>
+	<disclaimer lang="en_GB">This Project was made without association of the creators of infowars.com</disclaimer>
   	<language>en</language>
   	<platform>all</platform>
     <forum>http://forum.kodi.tv/showthread.php?tid=198601</forum>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<xs:extension xmlns:xs="http://www.w3.org/2001/XMLSchema" base="xs:string">
+    <xs:attribute name="lang" type="langIdentifier" use="required" />
+  </xs:extension>
 <addon id="plugin.video.infowars"
        name="Infowars"
        version="2.0.8"

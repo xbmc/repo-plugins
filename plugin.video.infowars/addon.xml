@@ -14,7 +14,7 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Videos from Infowars.com Including live daily shows</summary>
     <description lang="en_GB">Videos from Infowars.com Including live daily shows</description>
-	<news lang="en_GB">
+	<news>
 Version 2.0.8
 - Removed Censored Content (Spinalcracker)
 - Cleaned up Menu System

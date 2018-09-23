@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tmos" name="TMOS" version="1.0.6" provider-name="Jester">
+<addon id="plugin.video.tmos" name="TMOS" version="1.0.8" provider-name="Jester">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    <import addon="script.module.kodiswift" version="0.0.8"/>
     <import addon="plugin.video.youtube" version="5.3.12"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
@@ -10,9 +10,9 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">TMOS Podcasts and Live Streams</summary>
-    <description lang="en">Streams The Mike O'Meara Show (TMOS) podcasts from YouTube, 24-7 Audio and Ustream.</description>
-	<news>v1.0.6 (26-03-2017)
-	- Update youtube version requirement, add 24-7 audio stream</news>
+    <description lang="en">Streams The Mike O'Meara Show (TMOS) podcasts from YouTube and 24/7 Audio stream.</description>
+	<news>v1.0.8 (06-08-2018)
+	- Remove Ustream and replace by YouTube Live Stream</news>
     <platform>all</platform>
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>

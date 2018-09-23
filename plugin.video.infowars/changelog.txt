@@ -1,3 +1,9 @@
+[B]Version 2.0.8[/B]
+- Removed Censored Content (Spinalcracker)
+- Cleaned up Menu System
+- Added New Shows
+- Added Millie Weaver Youtube Channel
+
 [B]Version 2.0.7[/B]
 - Updated Youtube feeds (Spinalcracker)
 

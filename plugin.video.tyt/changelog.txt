@@ -1,3 +1,7 @@
+[B]3.0.0[/B]
+- Major Overhaul to work with the new TYT.com website
+- Now Supports automatically adding in new shows without requiring update.
+- Expect various tweaks in the next month
 [B]2.1.5[/B]
 - Update to plugin, after changes were made to their site on 5/16/18
 - Going to look into getting a better TYT Live stream for members and non-memebers, that doesn't depend on kodi's youtube plugin.

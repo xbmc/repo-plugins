@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.infographics" version="1.0.0" name="The Infographics Show - YouTube" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="plugin.video.youtube" version="5.3.10"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">The official YouTube channel of "The Infographics Show"</summary>
+        <description lang="en_GB">Facts are fun, but most are presented in a boring and badly edited videos. The Infographics Show focuses on making animated motion infographic videos, made in a fun and entertaining way. Some topics we cover are military comparisons, celebrity comparison, video game comparison a lot more. </description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/Kodi_Addons/tree/master/plugin.video.infographics</source>
+        <news></news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

@@ -71,6 +71,11 @@ class WebSocketClient(threading.Thread):
 
             media_source_id = data.get("MediaSourceId", "")
 
+            start_index = data.get("StartIndex", 0)
+
+            if start_index > 0 and start_index < len(item_ids):
+                item_ids = item_ids[start_index:]
+
             if len(item_ids) == 1:
                 item_ids = item_ids[0]
 
@@ -261,45 +266,7 @@ class WebSocketClient(threading.Thread):
 
     def post_capabilities(self):
 
-        url = "{server}/emby/Sessions/Capabilities/Full?format=json"
-        data = {
-            'SupportsMediaControl': True,
-            'PlayableMediaTypes': ["Video", "Audio"],
-            'SupportedCommands': ["MoveUp",
-                                  "MoveDown",
-                                  "MoveLeft",
-                                  "MoveRight",
-                                  "Select",
-                                  "Back",
-                                  "ToggleContextMenu",
-                                  "ToggleFullscreen",
-                                  "ToggleOsdMenu",
-                                  "GoHome",
-                                  "PageUp",
-                                  "NextLetter",
-                                  "GoToSearch",
-                                  "GoToSettings",
-                                  "PageDown",
-                                  "PreviousLetter",
-                                  "TakeScreenshot",
-                                  "VolumeUp",
-                                  "VolumeDown",
-                                  "ToggleMute",
-                                  "SendString",
-                                  "DisplayMessage",
-                                  #"SetAudioStreamIndex",
-                                  #"SetSubtitleStreamIndex",
-                                  "SetRepeatMode",
-                                  "Mute",
-                                  "Unmute",
-                                  "SetVolume",
-                                  "PlayNext",
-                                  "Play",
-                                  "Playstate",
-                                  "PlayMediaSource"]
-        }
-
         download_utils = downloadutils.DownloadUtils()
-        download_utils.downloadUrl(url, postBody=data, method="POST")
-        log.debug("Posted Capabilities: {0}", data)
+        download_utils.post_capabilities()
+
 

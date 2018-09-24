@@ -24,10 +24,14 @@ def showMoviePages(params):
     log.debug("showMoviePages: {0}", params)
 
     parent_id = params.get("parent_id")
+    settings = xbmcaddon.Addon()
+
+    group_movies = settings.getSetting('group_movies') == "true"
 
     url = ('{server}/emby/Users/{userid}/Items' +
            '?IsVirtualUnaired=false' +
-           #'&CollapseBoxSetItems=true' +
+           '&CollapseBoxSetItems=' + str(group_movies) +
+           '&GroupItemsIntoCollections=' + str(group_movies) +
            '&Recursive=true' +
            "&IncludeItemTypes=Movie"
            '&IsMissing=False' +
@@ -49,7 +53,6 @@ def showMoviePages(params):
     if result == 0:
         return
 
-    settings = xbmcaddon.Addon()
     page_limit = int(settings.getSetting('moviePageSize'))
     if page_limit == 0:
         page_limit = 20
@@ -61,7 +64,8 @@ def showMoviePages(params):
 
         item_url = ("{server}/emby/Users/{userid}/Items" +
                     "?IsVirtualUnaired=false" +
-                    #"&CollapseBoxSetItems=true" +
+                    '&CollapseBoxSetItems=' + str(group_movies) +
+                    '&GroupItemsIntoCollections=' + str(group_movies) +
                     "&Recursive=true" +
                     "&IsMissing=False" +
                     "&IncludeItemTypes=Movie"
@@ -132,6 +136,9 @@ def showGenreList(params):
     else:
         result = []
 
+    settings = xbmcaddon.Addon()
+    group_movies = settings.getSetting('group_movies') == "true"
+
     collections = []
     xbmcplugin.setContent(int(sys.argv[1]), 'genres')
 
@@ -145,6 +152,8 @@ def showGenreList(params):
         url = ("{server}/emby/Users/{userid}/Items" +
                "?Fields={field_filters}" +
                "&Recursive=true" +
+               '&CollapseBoxSetItems=' + str(group_movies) +
+               '&GroupItemsIntoCollections=' + str(group_movies) +
                "&GenreIds=" + genre.get("Id") +
                "&IncludeItemTypes=" + emby_type +
                "&ImageTypeLimit=1")
@@ -187,6 +196,7 @@ def showMovieAlphaList():
                          '&format=json')
     collections.append(item_data)
 
+    group_movies = settings.getSetting('group_movies') == "true"
     alphaList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "Y", "Z"]
 
     for alphaName in alphaList:
@@ -195,6 +205,8 @@ def showMovieAlphaList():
         item_data['media_type'] = "Movies"
         item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
                              '?Fields={field_filters}' +
+                             '&CollapseBoxSetItems=' + str(group_movies) +
+                             '&GroupItemsIntoCollections=' + str(group_movies) +
                              '&Recursive=true' +
                              '&NameStartsWith=' + alphaName +
                              '&IncludeItemTypes=Movie' +
@@ -209,54 +221,6 @@ def showMovieAlphaList():
         log.debug("addMenuDirectoryItem: {0} ({1})", collection.get('title'), url)
         addMenuDirectoryItem(collection.get('title', i18n('unknown')), url)
 
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-def showYearsList():
-
-    server = downloadUtils.getServer()
-    if server is None:
-        return
-
-    jsonData = downloadUtils.downloadUrl("{server}/emby/Years" +
-                                         "?SortBy=Name" +
-                                         "&SortOrder=Descending" +
-                                         "&IncludeItemTypes=Movie" +
-                                         "&Recursive=true" +
-                                         "&UserId={userid}" +
-                                         "&format=json")
-    log.debug("YEAR_LIST_DATA: {0}", jsonData)
-
-    result = json.loads(jsonData)
-    if result is not None:
-        result = result.get("Items")
-    else:
-        result = []
-
-    collections = []
-
-    for year in result:
-        item_data = {}
-        item_data['title'] = year.get("Name")
-        item_data['media_type'] = "Movies"
-        item_data['path'] = ('{server}/emby/Users/{userid}/Items'
-                             '?Fields={field_filters}' +
-                             '&Recursive=true' +
-                             '&Years=' + year.get("Name") +
-                             '&IncludeItemTypes=Movie' +
-                             '&ImageTypeLimit=1' +
-                             "&SortBy=Name" +
-                             "&SortOrder=Ascending" +
-                             '&format=json')
-        collections.append(item_data)
-
-    for collection in collections:
-        url = sys.argv[0] + ("?url=" + urllib.quote(collection['path']) +
-                             "&mode=GET_CONTENT" +
-                             "&media_type=" + collection["media_type"])
-        log.debug("addMenuDirectoryItem: {0} ({1})", collection.get('title'), url)
-        addMenuDirectoryItem(collection.get('title', i18n('unknown')), url)
-
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -288,7 +252,6 @@ def displaySections():
                                      url,
                                      art=collection.get("art"))
 
-        addMenuDirectoryItem(i18n('movies_year'), "plugin://plugin.video.embycon/?mode=MOVIE_YEARS")
         addMenuDirectoryItem(i18n('movies_genre'), "plugin://plugin.video.embycon/?mode=GENRES&item_type=movie")
         addMenuDirectoryItem(i18n('movies_az'), "plugin://plugin.video.embycon/?mode=MOVIE_ALPHA")
         addMenuDirectoryItem("Movie (Pages)", "plugin://plugin.video.embycon/?mode=MOVIE_PAGES")
@@ -319,7 +282,7 @@ def getCollections():
 
     userid = downloadUtils.getUserId()
 
-    if userid == None or len(userid) == 0:
+    if userid is None or len(userid) == 0:
         log.debug("No userid so returning []")
         return []
 
@@ -332,7 +295,7 @@ def getCollections():
     log.debug("parentid: {0}", parentid)
 
     htmlpath = "{server}/emby/Users/{userid}/Views?format=json"
-    #htmlpath = "{server}/emby/Users/{userid}/items?ParentId=" + parentid + "&Sortby=SortName&format=json"
+    # htmlpath = "{server}/emby/Users/{userid}/items?ParentId=" + parentid + "&Sortby=SortName&format=json"
     result = data_manager.GetContent(htmlpath)
 
     if result is not None:
@@ -341,6 +304,9 @@ def getCollections():
         result = []
 
     collections = []
+
+    settings = xbmcaddon.Addon()
+    group_movies = settings.getSetting('group_movies') == "true"
 
     for item in result:
         item_name = item.get("Name")
@@ -382,14 +348,51 @@ def getCollections():
                                  '&format=json')
             collections.append(item_data)
 
-        if collection_type in ["movies", "boxsets"]:
+        if collection_type in ["homevideos"]:
             collections.append({
                 'title': item_name,
                 'art': art,
                 'path': ('{server}/emby/Users/{userid}/Items' +
                          '?ParentId=' + item.get("Id") +
                          '&IsVirtualUnaired=false' +
-                         #'&CollapseBoxSetItems=true' +
+                         '&Recursive=false' +
+                         '&IsMissing=False' +
+                         '&Fields={field_filters}' +
+                         '&ImageTypeLimit=1' +
+                         '&SortBy=Name' +
+                         '&SortOrder=Ascending' +
+                         '&format=json'),
+                'media_type': collection_type})
+
+        if collection_type in ["boxsets"]:
+            collections.append({
+                'title': item_name,
+                'art': art,
+                'path': ('{server}/emby/Users/{userid}/Items' +
+                         '?ParentId=' + item.get("Id") +
+                         '&IsVirtualUnaired=false' +
+                         '&IncludeItemTypes=Boxset' +
+                         '&CollapseBoxSetItems=' + str(group_movies) +
+                         '&GroupItemsIntoCollections=' + str(group_movies) +
+                         '&Recursive=true' +
+                         '&IsMissing=False' +
+                         '&Fields={field_filters}' +
+                         '&ImageTypeLimit=1' +
+                         '&SortBy=Name' +
+                         '&SortOrder=Ascending' +
+                         '&format=json'),
+                'media_type': collection_type})
+
+        if collection_type in ["movies"]:
+            collections.append({
+                'title': item_name,
+                'art': art,
+                'path': ('{server}/emby/Users/{userid}/Items' +
+                         '?ParentId=' + item.get("Id") +
+                         '&IsVirtualUnaired=false' +
+                         '&IncludeItemTypes=Movie' +
+                         '&CollapseBoxSetItems=' + str(group_movies) +
+                         '&GroupItemsIntoCollections=' + str(group_movies) +
                          '&Recursive=true' +
                          '&IsMissing=False' +
                          '&Fields={field_filters}' +
@@ -526,6 +529,10 @@ def getCollections():
                 'art': art,
                 'path': ('{server}/emby/Users/{userid}/Items' +
                          '?ParentId=' + item.get("Id") +
+                         '&IncludeItemTypes=Movie' +
+                         '&CollapseBoxSetItems=false' +
+                         '&GroupItemsIntoCollections=false' +
+                         '&Recursive=true' +
                          '&IsVirtualUnaired=false' +
                          '&IsMissing=False' +
                          '&Fields={field_filters}' +
@@ -540,6 +547,10 @@ def getCollections():
                 'art': art,
                 'path': ('{server}/emby/Users/{userid}/Items' +
                          '?ParentId=' + item.get("Id") +
+                         '&IncludeItemTypes=Movie' +
+                         '&CollapseBoxSetItems=false' +
+                         '&GroupItemsIntoCollections=false' +
+                         '&Recursive=true' +
                          '&Limit={ItemLimit}' +
                          '&SortBy=DatePlayed' +
                          '&SortOrder=Descending' +
@@ -555,6 +566,10 @@ def getCollections():
                 'art': art,
                 'path': ('{server}/emby/Users/{userid}/Items' +
                          '?ParentId=' + item.get("Id") +
+                         '&IncludeItemTypes=Movie' +
+                         '&CollapseBoxSetItems=false' +
+                         '&GroupItemsIntoCollections=false' +
+                         '&Recursive=true' +
                          '&Limit={ItemLimit}' +
                          '&IsVirtualUnaired=false' +
                          '&IsMissing=False' +
@@ -585,6 +600,8 @@ def getCollections():
     item_data['media_type'] = 'Movies'
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
                          '?Fields={field_filters}' +
+                         '&CollapseBoxSetItems=' + str(group_movies) +
+                         '&GroupItemsIntoCollections=' + str(group_movies) +
                          '&Recursive=true' +
                          '&IncludeItemTypes=Movie' +
                          '&ImageTypeLimit=1' +
@@ -598,6 +615,8 @@ def getCollections():
     item_data['media_type'] = 'Movies'
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
                          '?Recursive=true' +
+                         '&CollapseBoxSetItems=false' +
+                         '&GroupItemsIntoCollections=false' +
                          '&Fields={field_filters}' +
                          '&Filters=IsUnplayed' +
                          '&IncludeItemTypes=Movie' +
@@ -612,6 +631,8 @@ def getCollections():
     item_data['media_type'] = 'Movies'
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
                          '?Limit={ItemLimit}' +
+                         '&CollapseBoxSetItems=false' +
+                         '&GroupItemsIntoCollections=false' +
                          '&Recursive=true' +
                          '&Fields={field_filters}' +
                          '&SortBy=DatePlayed' +
@@ -627,6 +648,8 @@ def getCollections():
     item_data['media_type'] = 'Movies'
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
                          '?Limit={ItemLimit}' +
+                         '&CollapseBoxSetItems=false' +
+                         '&GroupItemsIntoCollections=false' +
                          '&Recursive=true' +
                          '&SortBy=DateCreated' +
                          '&Fields={field_filters}' +
@@ -642,6 +665,8 @@ def getCollections():
     item_data['media_type'] = 'Movies'
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
                          '?Fields={field_filters}' +
+                         '&CollapseBoxSetItems=false' +
+                         '&GroupItemsIntoCollections=false' +
                          '&Recursive=true' +
                          '&Filters=IsFavorite' +
                          '&IncludeItemTypes=Movie' +
@@ -825,13 +850,17 @@ def showWidgets():
            "&ItemLimit={ItemLimit}" +
            "&format=json" +
            "&ImageTypeLimit=1" +
+           '&Fields={field_filters}' +
            "&IsMissing=False")
     addMenuDirectoryItem(i18n('movies_recommendations'),
                          "plugin://plugin.video.embycon/?mode=GET_CONTENT&media_type=Movies&url=" + urllib.quote(url))
 
     url = ("{server}/emby/Users/{userid}/Items" +
            "?Limit={ItemLimit}" +
+           '&CollapseBoxSetItems=false' +
+           '&GroupItemsIntoCollections=false' +
            "&format=json" +
+           '&Fields={field_filters}' +
            "&ImageTypeLimit=1" +
            "&IsMissing=False" +
            "&Filters={IsUnplayed,}IsNotFolder" +

@@ -30,6 +30,7 @@ def getDetailsString():
     include_overview = addonSettings.getSetting("include_overview") == "true"
 
     detailsString = "DateCreated,EpisodeCount,SeasonCount,Path,Genres,Studios,Etag,Taglines"
+    detailsString += ",RecursiveItemCount,ChildCount"
 
     if include_media:
         detailsString += ",MediaStreams"
@@ -48,6 +49,50 @@ class DownloadUtils():
     def __init__(self, *args):
         addon = xbmcaddon.Addon()
         self.addon_name = addon.getAddonInfo('name')
+
+    def post_capabilities(self):
+
+        url = "{server}/emby/Sessions/Capabilities/Full?format=json"
+        data = {
+            'IconUrl': "https://raw.githubusercontent.com/faush01/plugin.video.embycon/develop/kodi.png",
+            'SupportsMediaControl': True,
+            'PlayableMediaTypes': ["Video", "Audio"],
+            'SupportedCommands': ["MoveUp",
+                                  "MoveDown",
+                                  "MoveLeft",
+                                  "MoveRight",
+                                  "Select",
+                                  "Back",
+                                  "ToggleContextMenu",
+                                  "ToggleFullscreen",
+                                  "ToggleOsdMenu",
+                                  "GoHome",
+                                  "PageUp",
+                                  "NextLetter",
+                                  "GoToSearch",
+                                  "GoToSettings",
+                                  "PageDown",
+                                  "PreviousLetter",
+                                  "TakeScreenshot",
+                                  "VolumeUp",
+                                  "VolumeDown",
+                                  "ToggleMute",
+                                  "SendString",
+                                  "DisplayMessage",
+                                  #"SetAudioStreamIndex",
+                                  #"SetSubtitleStreamIndex",
+                                  "SetRepeatMode",
+                                  "Mute",
+                                  "Unmute",
+                                  "SetVolume",
+                                  "PlayNext",
+                                  "Play",
+                                  "Playstate",
+                                  "PlayMediaSource"]
+        }
+
+        self.downloadUrl(url, postBody=data, method="POST")
+        log.debug("Posted Capabilities: {0}", data)
 
     def getServer(self):
         settings = xbmcaddon.Addon()
@@ -285,21 +330,27 @@ class DownloadUtils():
             messageData += "&pw=" + pwd_text
 
         resp = self.downloadUrl(url, postBody=messageData, method="POST", suppress=True, authenticate=False)
+        log.debug("AuthenticateByName: {0}", resp)
 
         accessToken = None
         userid = None
         try:
             result = json.loads(resp)
             accessToken = result.get("AccessToken")
-            userid = result["SessionInfo"].get("UserId")
+            #userid = result["SessionInfo"].get("UserId")
+            userid = result["User"].get("Id")
         except:
             pass
 
         if accessToken is not None:
             log.debug("User Authenticated: {0}", accessToken)
+            log.debug("User Id: {0}", userid)
             WINDOW.setProperty("AccessToken", accessToken)
             WINDOW.setProperty("userid", userid)
             WINDOW.setProperty("userimage", "")
+
+            self.post_capabilities()
+
             return accessToken
         else:
             log.debug("User NOT Authenticated")
@@ -350,6 +401,7 @@ class DownloadUtils():
 
         return_data = "null"
         settings = xbmcaddon.Addon()
+        username = settings.getSetting("username")
 
         if settings.getSetting("suppressErrors") == "true":
             suppress = True
@@ -412,8 +464,11 @@ class DownloadUtils():
             tokens = server.split(':')
             host = tokens[0]
             port = tokens[1]
-            if (host == "<none>" or host == "" or port == ""):
-                return ""
+            if host == "<none>" or host == "" or port == "":
+                return return_data
+
+            if authenticate and username == "":
+                return return_data
 
             use_https = settings.getSetting('use_https') == 'true'
             verify_cert = settings.getSetting('verify_cert') == 'true'
@@ -471,12 +526,13 @@ class DownloadUtils():
 
                 if int(data.status) == 401:
                     # remove any saved password
-                    username = settings.getSetting("username")
                     m = hashlib.md5()
                     m.update(username)
                     hashed_username = m.hexdigest()
                     log.error("HTTP response error 401 auth error, removing any saved passwords for user: {0}", hashed_username)
                     settings.setSetting("saved_user_password_" + hashed_username, "")
+                    settings.setSetting("username", "")
+                    settings.setSetting("password", "")
 
                 log.error("HTTP response error: {0} {1}", data.status, data.reason)
                 if suppress is False:

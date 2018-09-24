@@ -337,17 +337,12 @@ def playYoutube(url):
 ### ############################################################################################################
 
 def Menu_MainMenu(): #The Main Menu
-    WhereAmI('@ the Main Menu')
-    #IW_addon.add_directory({'mode': 'InfoWarsLiveSubMenu','title':'The Alex Jones Show Live HD (Youtube)'},{'title':  cFL_('The Alex Jones Show - Live HD (Youtube)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
+    WhereAmI('@ the Main Menu'
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarslivestream_1@353459/master.m3u8'},{'title':  cFL_('The Alex Jones Show - (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
-    #IW_addon.add_directory({'mode': 'PlayURL','url':'http://www.infowars.com/stream.pls'},{'title':  cFL_('The Alex Jones Show - Live - Audio Only (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
-    #IW_addon.add_directory({'mode': 'RealNewsWDKLiveSubMenu','title':'Real News with David Knight Live HD (Youtube Feed Video)'},{'title':  cFL_('Real News with David Knight - Live HD (Youtube)','red')},is_folder=False,img=RNWDKIcon,fanart=RNWDKFanart)
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://streaminfo-live.secure.footprint.net/hls-live/streamroot2-streaminfo3/_definst_/live.m3u8'},{'title':  cFL_('Real News with David Knight - (Loops After Airing)','red')},is_folder=False,img=RNWDKIcon,fanart=RNWDKFanart)
-    #IW_addon.add_directory({'mode': 'WarRoomLiveSubMenu','title':'War Room with Owen Shroyer Live HD (Youtube Feed Video)'},{'title':  cFL_('War Room with Owen Shroyer - Live HD (Youtube)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://streaminfo-live.secure.footprint.net/hls-live/streamroot2-streaminfo2/_definst_/live.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - (Loops After Airing)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/MikeAdams_1@704916/master.m3u8'},{'title':  cFL_('Counter Think with Mike Adams - (Loops After Airing)','orange')},is_folder=False,img=CTIcon,fanart=CTFanart)
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarsevent_1@366809/master.m3u8'},{'title':  cFL_('Live Shows & Special Events','yellow')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
-	#IW_addon.add_directory({'mode': 'ClipsSubMenu','title':'Infowars Nightly News'},{'title':  cFL_('Infowars Clips','red')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
     IW_addon.add_directory({'mode': 'PaulJosephWatsonSubMenu','title':'Paul Joseph Watson (Youtube Video)'},{'title':  cFL_('Paul Joseph Watson (Youtube)','blue')},is_folder=True,img=PJWIcon,fanart=PJWFanart)
     IW_addon.add_directory({'mode': 'MillieWeaverSubMenu','title':'Millie Weaver (Youtube Video)'},{'title':  cFL_('Millie Weaver (Youtube)','pink')},is_folder=True,img=MWIcon,fanart=MWFanart)
     video_type = ('tvshow')
@@ -359,15 +354,9 @@ def Menu_MainMenu(): #The Main Menu
     url = 'plugin://plugin.video.infowars'
     resurl = 'plugin://plugin.video.infowars'
     listitem = build_listitem(video_type, title, year, img, fanart, resurl)
-    #url = '%s/%s' % (BASE_URL, resurl)
     queries = {'mode': 'NightlyNewsSubMenu'}
     li_url = IW_addon.build_plugin_url(queries)
-    #xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=True)
-    #IW_addon.add_directory({'mode': 'NightlyNewsSubMenu','title':'Infowars Nightly News'},{'title':  cFL_('Infowars Nightly News','red')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
-    #IW_addon.add_directory({'mode': 'ClipsSubMenu','title':'Infowars Clips'},{'title':  cFL_('Infowars Clips','yellow')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
     IW_addon.add_directory({'mode': 'DocSubMenu','title':'Acclaimed Documentaries'},{'title':  cFL_('Acclaimed Documentaries','blanchedalmond')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
-    #IW_addon.add_directory({'mode': 'HistoricShowsSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones Shows (Video)','yellow')},is_folder=True,img=AJSIcon,fanart=IW_artFanart)
-    #IW_addon.add_directory({'mode': 'HistoricShowsAudioSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones (Audio)','yellow')},is_folder=True,img=AJSIcon,fanart=IW_artFanart)
     
     eod()
 
@@ -393,7 +382,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=3X4hbIDnq5k'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -404,7 +392,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=NO24XmP1c5E'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -415,7 +402,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=Klqv9t1zVww'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -426,7 +412,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=VebOTc-7shU'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -437,7 +422,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=eAaQNACwaLw'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -448,7 +432,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=t-yscpNIxjI'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -459,7 +442,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=x-CrNlilZho'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -470,7 +452,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=vrXgLhkv21Y'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -481,7 +462,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=FIzT6r56CnY'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -492,7 +472,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=OVMyH8eOHKs'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -503,7 +482,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=9wRuiqqoHFY'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -514,7 +492,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=vsKVyhuBf3c'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -525,7 +502,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=1Fr5QC6u2EQ'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -536,7 +512,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=FVtEvplXMLs'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -547,7 +522,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=VhlRIH9iPD4'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -558,7 +532,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=3zkxyFhqQJ4'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -569,7 +542,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=g7kh1j8ZkEs'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
         video_type = ('movie')
@@ -580,7 +552,6 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
         resurl = 'plugin://plugin.video.infowars'
         listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
         listitem.setProperty('IsPlayable', 'true')
-        #url = '%s/%s' % (BASE_URL, resurl)
         li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=K4RWRm-bgv8'
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
     elif(movie_num=='19'):
@@ -693,29 +664,15 @@ def check_mode(mode=''):
     elif (mode=='play'): 							play(params) ## Play Video
     elif (mode=='playYoutube'): 							playYoutube('url')
     elif (mode=='DocSubMenu'): 						Documentary_Sub_Menu(_param['title'], movie_num) ## Play Video
-    #elif (mode=='ClipsSubMenu'): 						Clips_Sub_Menu(_param['title']) ## Play Video
-    #elif (mode=='NightlyNewsSubMenu'): 						Nightly_News_Sub_Menu(_param['title'], dialog) ## Play Video
-    #elif (mode=='HistoricShowsSubMenu'): 						Historic_Shows_Sub_Menu(_param['title']) ## Play Video
-    #elif (mode=='HistoricShowsAudioSubMenu'): 						Historic_Shows_Audio_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='PaulJosephWatsonSubMenu'): 						Paul_Joseph_Watson_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='MillieWeaverSubMenu'): 						Millie_Weaver_Sub_Menu(_param['title']) ## Play Video
-    #elif (mode=='InfoWarsLiveSubMenu'): 						Info_Wars_Live_Sub_Menu(_param['title']) ## Play Video
-    #elif (mode=='RealNewsWDKLiveSubMenu'): 						Real_News_WDK_Sub_Menu(_param['title']) ## Play Video
-    #elif (mode=='WarRoomLiveSubMenu'): 						War_Room_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='Settings'): 							IW_addon.addon.openSettings() # Another method: _plugin.openSettings() ## Settings for this addon.
     elif (mode=='ResolverSettings'): 			urlresolver.display_settings()  ## Settings for UrlResolver script.module.
     elif (mode == 'add_to_library'):
         add_to_library(video_type, url, title, img, year, imdbnum, movie_num)
         builtin = "XBMC.Notification(Add to Library,Added '%s' to library,2000, %s)" % (title, IW_artIcon)
         xbmc.executebuiltin(builtin)
-    #
-    #
-    #elif (mode=='YourMode'): 						YourFunction(_param['url'])
-    #
-    #
-    #
     else: myNote(header='Mode:  "'+mode+'"',msg='[ mode ] not found.'); Menu_MainMenu() ## So that if a mode isn't found, it'll goto the Main Menu and give you a message about it.
-
 
 deb('param >> title',_param['title'])
 deb('param >> url',_param['url']) ### Simply Logging the current query-passed / param -- URL

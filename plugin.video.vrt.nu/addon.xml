@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.vrt.nu"
        name="VRT Nu"
-       version="1.4.0"
+       version="1.4.1"
        provider-name="Martijn Moreel">
 
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
-		<import addon="script.module.requests" version="2.19.1"/>
-		<import addon="script.module.beautifulsoup4" version="4.5.3"/>
+    <import addon="script.module.requests" version="2.19.1"/>
+    <import addon="script.module.beautifulsoup4" version="4.5.3"/>
     </requires>
 
     <extension point="xbmc.python.pluginsource" library="addon.py">
@@ -15,14 +15,16 @@
     </extension>
 
     <extension point="xbmc.addon.metadata">
-		<summary lang="en_GB">Addon to watch vrt.nu</summary>
-		<description lang="en_GB">This addon can be used to watch all streams from vrt.nu. And also offers livestreams from Een, Canvas and Ketnet!</description>
-		<summary lang="nl_NL">Addon om vrt.nu te bekijken.</summary>
-		<description lang="nl_NL">Met deze addon kan je alle streams van vrt.nu bekijken. Alsook de livestreams van Een, Canvas en Ketnet!</description>
+    <summary lang="en_GB">Addon to watch vrt.nu</summary>
+    <description lang="en_GB">This addon can be used to watch all streams from vrt.nu. And also offers livestreams from Een, Canvas and Ketnet!</description>
+    <summary lang="nl_NL">Addon om vrt.nu te bekijken.</summary>
+    <description lang="nl_NL">Met deze addon kan je alle streams van vrt.nu bekijken. Alsook de livestreams van Een, Canvas en Ketnet!</description>
         <language>nl</language>
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
+          v1.4.1 (24-09-2018)
+          - Adapted plugin to new vrtnu layout for showing multiple seasons
           v1.4.0 (20-09-2018)
           - Using the new vrtnu login method and video services
           - Fixed bug where some videos would not be able to play (Thanks dagwieers)
@@ -68,11 +70,11 @@
           - Initial working release
         </news>
         <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
-		<website>https://www.facebook.com/kodivrtnu/</website>
-		<assets>
-			<icon>resources/icon.png</icon>
-			<fanart>resources/fanart.jpg</fanart>
-			<!--<screenshot>resources/screenshot-01.jpg</screenshot>-->
-		</assets>
+    <website>https://www.facebook.com/kodivrtnu/</website>
+    <assets>
+    <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+      <!--<screenshot>resources/screenshot-01.jpg</screenshot>-->
+    </assets>
     </extension>
 </addon>

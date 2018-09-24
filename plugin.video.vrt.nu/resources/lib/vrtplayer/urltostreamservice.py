@@ -10,10 +10,10 @@ from resources.lib.helperobjects import helperobjects
 
 class UrlToStreamService:
 
-    _API_KEY ="3_qhEcPa5JGFROVwu5SWKqJ4mVOIkwlFNMSKwzPDAh8QZOtHqu6L4nD5Q7lk0eXOOG"
-    _BASE_MEDIA_SERVICE_URL = "https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1"
-    _TOKEN_URL = _BASE_MEDIA_SERVICE_URL + "/tokens"
-    _STREAM_URL_PATH = _BASE_MEDIA_SERVICE_URL + "/videos/{}%24{}?vrtPlayerToken={}"
+    _API_KEY ='3_qhEcPa5JGFROVwu5SWKqJ4mVOIkwlFNMSKwzPDAh8QZOtHqu6L4nD5Q7lk0eXOOG'
+    _BASE_MEDIA_SERVICE_URL = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1'
+    _TOKEN_URL = _BASE_MEDIA_SERVICE_URL + '/tokens'
+    _STREAM_URL_PATH = _BASE_MEDIA_SERVICE_URL + '/videos/{}%24{}?vrtPlayerToken={}'
 
     def __init__(self, vrt_base, vrtnu_base_url, kodi_wrapper):
         self._vrt_base = vrt_base
@@ -27,20 +27,20 @@ class UrlToStreamService:
             self._kodi_wrapper.open_settings()
             cred.reload()
         url = urlparse.urljoin(self._vrt_base, url)
-        r = session.post("https://accounts.vrt.be/accounts.login",
+        r = session.post('https://accounts.vrt.be/accounts.login',
                                {'loginID': cred.username, 'password': cred.password, 'APIKey': self._API_KEY,
-                                "sessionExpiration": "-1",
-                                "targetEnv": "jssdk",
-                                "include": "profile,data,emails,subscriptions,preferences,",
-                                "includeUserInfo": "true",
-                                "loginMode": "standard",
-                                "lang": "nl-inf",
-                                "source": "showScreenSet",
-                                "sdk": "js_latest",
-                                "authMode": "cookie",
-                                "format": "json"})
+                                'sessionExpiration': '-1',
+                                'targetEnv': 'jssdk',
+                                'include': 'profile,data,emails,subscriptions,preferences,',
+                                'includeUserInfo': 'true',
+                                'loginMode': 'standard',
+                                'lang': 'nl-inf',
+                                'source': 'showScreenSet',
+                                'sdk': 'js_latest',
+                                'authMode': 'cookie',
+                                'format': 'json'})
 
-        session.get("https://token.vrt.be/vrtnuinitlogin?provider=site&destination=https://www.vrt.be/vrtnu/")
+        session.get('https://token.vrt.be/vrtnuinitlogin?provider=site&destination=https://www.vrt.be/vrtnu/')
 
         logon_json = r.json()
 
@@ -49,14 +49,14 @@ class UrlToStreamService:
             sig = logon_json['UIDSignature']
             ts = logon_json['signatureTimestamp']
 
-            data = {"UID": uid, 
-                   "UIDSignature": sig,
-                   "signatureTimestamp": ts ,
-                   "client_id": "vrtnu-site", 
-                   "submit": "submit"
+            data = {'UID': uid, 
+                   'UIDSignature': sig,
+                   'signatureTimestamp': ts ,
+                   'client_id': 'vrtnu-site', 
+                   'submit': 'submit'
                    } 
 
-            response = session.post("https://login.vrt.be/perform_login", data=data)
+            response = session.post('https://login.vrt.be/perform_login', data=data)
 
             vrt_player_token_url = session.post(self._TOKEN_URL, headers={'Content-Type': 'application/json'})
 
@@ -74,7 +74,7 @@ class UrlToStreamService:
             stream_response = session.get(final_url)
             hls = self.__get_hls(stream_response.json()['targetUrls'])
             subtitle = None
-            #if self._kodi_wrapper.get_setting("showsubtitles") == "true":
+            #if self._kodi_wrapper.get_setting('showsubtitles') == 'true':
             #    subtitle = self.__get_subtitle(stream_response.json()['subtitleUrls'])
             return helperobjects.StreamURLS(hls, subtitle)
         else:

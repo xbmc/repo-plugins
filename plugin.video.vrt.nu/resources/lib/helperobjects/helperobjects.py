@@ -21,9 +21,9 @@ class Credentials:
         self.reload()
 
     def are_filled_in(self):
-        return not (self.username is None or self.password is None or self.username == "" or self.password == "")
+        return not (self.username is None or self.password is None or self.username == '' or self.password == '')
 
     def reload(self):
-        self.username = self._kodi_wrapper.get_setting("username")
-        self.password = self._kodi_wrapper.get_setting("password")
+        self.username = self._kodi_wrapper.get_setting('username')
+        self.password = self._kodi_wrapper.get_setting('password')
 

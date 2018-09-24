@@ -186,12 +186,12 @@ def filename_from_title(title, video_type):
     filename = re.sub(r'(?!%s)[^\w\-_\. ]', '_', filename)
     xbmc.makeLegalFilename(filename)
     return filename
-	
+
 def addpr(r,s=''): return IW_addon.queries.get(r,s) ## Get Params
 def tfalse(r,d=False): ## Get True / False
-	if   (r.lower()=='true' ): return True
-	elif (r.lower()=='false'): return False
-	else: return d
+    if   (r.lower()=='true' ): return True
+    elif (r.lower()=='false'): return False
+    else: return d
 
 _setting={}; 
 
@@ -201,31 +201,31 @@ def cFL( t,c="green"): return '[COLOR '+c+']'+t+'[/COLOR]' ### For Coloring Text
 def cFL_(t,c="green"): return '[COLOR '+c+']'+t[0:1]+'[/COLOR]'+t[1:] ### For Coloring Text (First Letter-Only) ###
 def notification(header="", message="", sleep=5000 ): xbmc.executebuiltin( "XBMC.Notification(%s,%s,%i)" % ( header, message, sleep ) )
 def WhereAmI(t): ### for Writing Location Data to log file ###
-	if (IW_debugging==True): print 'Where am I:  '+t
+    if (IW_debugging==True): print 'Where am I:  '+t
 def deb(s,t): ### for Writing Debug Data to log file ###
-	if (IW_debugging==True): print s+':  '+t
+    if (IW_debugging==True): print s+':  '+t
 def debob(t): ### for Writing Debug Object to log file ###
-	if (IW_debugging==True): print t
+    if (IW_debugging==True): print t
 def nolines(t):
-	it=t.splitlines(); t=''
-	for L in it: t=t+L
-	t=((t.replace("\r","")).replace("\n",""))
-	return t
+    it=t.splitlines(); t=''
+    for L in it: t=t+L
+    t=((t.replace("\r","")).replace("\n",""))
+    return t
 def isPath(path): return os.path.exists(path)
 def isFile(filename): return os.path.isfile(filename)
 def askSelection(option_list=[],txtHeader=''):
-	if (option_list==[]): 
-		if (debugging==True): print 'askSelection() >> option_list is empty'
-		return None
-	dialogSelect = xbmcgui.Dialog();
-	index=dialogSelect.select(txtHeader, option_list)
-	return index
+    if (option_list==[]): 
+        if (debugging==True): print 'askSelection() >> option_list is empty'
+        return None
+    dialogSelect = xbmcgui.Dialog();
+    index=dialogSelect.select(txtHeader, option_list)
+    return index
 def iFL(t): return '[I]'+t+'[/I]' ### For Italic Text ###
 def bFL(t): return '[B]'+t+'[/B]' ### For Bold Text ###
 def _FL(t,c,e=''): ### For Custom Text Tags ###
-	if (e==''): d=''
-	else: d=' '+e
-	return '['+c.upper()+d+']'+t+'[/'+c.upper()+']'
+    if (e==''): d=''
+    else: d=' '+e
+    return '['+c.upper()+d+']'+t+'[/'+c.upper()+']'
 
 def build_listitem(video_type, title, year, img, resurl, movie_num='', imdbnum='', season='', episode='', extra_cms=None, subs=None):
     if not subs: subs = []
@@ -296,7 +296,7 @@ def add_to_library(video_type, url, title, img, year, imdbnum, movie_num=''):
         except Exception, e:
             IW_addon.log('Failed to create .strm file: %s\n%s' % (final_path, e))
 
-	
+
 ### ############################################################################################################
 ### ############################################################################################################
 ##### Queries #####
@@ -317,12 +317,12 @@ _param['subfav']=addpr('subfav',''); _param['episodetitle']=addpr('episodetitle'
 ### ############################################################################################################
 ##### Player Functions #####
 def PlayURL(url):
-	play=xbmc.Player() ### xbmc.PLAYER_CORE_AUTO | xbmc.PLAYER_CORE_DVDPLAYER | xbmc.PLAYER_CORE_MPLAYER | xbmc.PLAYER_CORE_PAPLAYER
-	try: IW_addon.resolve_url(url)
-	except: t=''
-	try: play.play(url)
-	except: t=''
-	
+    play=xbmc.Player() ### xbmc.PLAYER_CORE_AUTO | xbmc.PLAYER_CORE_DVDPLAYER | xbmc.PLAYER_CORE_MPLAYER | xbmc.PLAYER_CORE_PAPLAYER
+    try: IW_addon.resolve_url(url)
+    except: t=''
+    try: play.play(url)
+    except: t=''
+
 def play(params):
     play_resolved_url( params.get("url") )	
 
@@ -660,14 +660,14 @@ def check_mode(mode=''):
     WhereAmI('@ Checking Mode')
     deb('Mode',mode)
     if (mode=='') or (mode=='main') or (mode=='MainMenu'):  Menu_MainMenu() ## Default Menu
-    elif (mode=='PlayURL'): 							PlayURL(_param['url']) ## Play Video
-    elif (mode=='play'): 							play(params) ## Play Video
-    elif (mode=='playYoutube'): 							playYoutube('url')
-    elif (mode=='DocSubMenu'): 						Documentary_Sub_Menu(_param['title'], movie_num) ## Play Video
-    elif (mode=='PaulJosephWatsonSubMenu'): 						Paul_Joseph_Watson_Sub_Menu(_param['title']) ## Play Video
-    elif (mode=='MillieWeaverSubMenu'): 						Millie_Weaver_Sub_Menu(_param['title']) ## Play Video
-    elif (mode=='Settings'): 							IW_addon.addon.openSettings() # Another method: _plugin.openSettings() ## Settings for this addon.
-    elif (mode=='ResolverSettings'): 			urlresolver.display_settings()  ## Settings for UrlResolver script.module.
+    elif (mode=='PlayURL'): PlayURL(_param['url']) ## Play Video
+    elif (mode=='play'): play(params) ## Play Video
+    elif (mode=='playYoutube'): playYoutube('url')
+    elif (mode=='DocSubMenu'): Documentary_Sub_Menu(_param['title'], movie_num) ## Play Video
+    elif (mode=='PaulJosephWatsonSubMenu'): Paul_Joseph_Watson_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='MillieWeaverSubMenu'): Millie_Weaver_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='Settings'): IW_addon.addon.openSettings() # Another method: _plugin.openSettings() ## Settings for this addon.
+    elif (mode=='ResolverSettings'): urlresolver.display_settings()  ## Settings for UrlResolver script.module.
     elif (mode == 'add_to_library'):
         add_to_library(video_type, url, title, img, year, imdbnum, movie_num)
         builtin = "XBMC.Notification(Add to Library,Added '%s' to library,2000, %s)" % (title, IW_artIcon)

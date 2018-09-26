@@ -10,19 +10,20 @@ import xbmcvfs
 from datetime import timedelta
 from datetime import datetime
 import json
+import os
 
-from simple_logging import SimpleLogging
-from downloadutils import DownloadUtils
-from resume_dialog import ResumeDialog
-from utils import PlayUtils, getArt, id_generator, send_event_notification
-from kodi_utils import HomeWindow
-from translation import i18n
-from json_rpc import json_rpc
-from datamanager import DataManager
-from item_functions import get_next_episode, extract_item_info
-from clientinfo import ClientInformation
-from functions import delete
-from cache_images import CacheArtwork
+from .simple_logging import SimpleLogging
+from .downloadutils import DownloadUtils
+from .resume_dialog import ResumeDialog
+from .utils import PlayUtils, getArt, id_generator, send_event_notification
+from .kodi_utils import HomeWindow
+from .translation import i18n
+from .datamanager import DataManager
+from .item_functions import get_next_episode, extract_item_info
+from .clientinfo import ClientInformation
+from .functions import delete
+from .cache_images import CacheArtwork
+from .picture_viewer import PictureViewer
 
 log = SimpleLogging(__name__)
 download_utils = DownloadUtils()
@@ -96,7 +97,8 @@ def playListOfItems(id_list, monitor):
     items = []
 
     for id in id_list:
-        url = "{server}/emby/Users/{userid}/Items/" + id + "?format=json"
+        url = "{server}/emby/Users/{userid}/Items/%s?format=json"
+        url = url % (id,)
         result = data_manager.GetContent(url)
         if result is None:
             log.debug("Playfile item was None, so can not play!")
@@ -128,7 +130,7 @@ def playFile(play_info, monitor):
 
     server = download_utils.getServer()
 
-    url = "{server}/emby/Users/{userid}/Items/" + id + "?format=json"
+    url = "{server}/emby/Users/{userid}/Items/%s?format=json" % (id,)
     data_manager = DataManager()
     result = data_manager.GetContent(url)
     log.debug("Playfile item: {0}", result)
@@ -141,9 +143,10 @@ def playFile(play_info, monitor):
     if result.get("Type") == "Season" or result.get("Type") == "MusicAlbum":
         log.debug("PlayAllFiles for parent item id: {0}", id)
         url = ('{server}/emby/Users/{userid}/items' +
-               '?ParentId=' + id +
+               '?ParentId=%s' +
                '&Fields=MediaSources' +
                '&format=json')
+        url = url % (id,)
         result = data_manager.GetContent(url)
         log.debug("PlayAllFiles items: {0}", result)
 
@@ -156,6 +159,16 @@ def playFile(play_info, monitor):
     # select the media source to use
     media_sources = result.get('MediaSources')
     selected_media_source = None
+
+    if result.get("Type") == "Photo":
+        play_url = "%s/emby/Items/%s/Images/Primary"
+        play_url = play_url % (server, id)
+
+        plugin_path = xbmc.translatePath(os.path.join(xbmcaddon.Addon().getAddonInfo('path')))
+        action_menu = PictureViewer("PictureViewer.xml", plugin_path, "default", "720p")
+        action_menu.setPicture(play_url)
+        action_menu.doModal()
+        return
 
     if media_sources is None or len(media_sources) == 0:
         log.debug("Play Failed! There is no MediaSources data!")
@@ -433,7 +446,7 @@ def setListItemProps(id, listItem, result, server, extra_props, title):
             season_number = result.get("IndexNumber", -1)
             details["season"] = str(season_number)
 
-        details["plotoutline"] = "emby_id:" + id
+        details["plotoutline"] = "emby_id:%s" % (id,)
         #listItem.setUniqueIDs({'emby': id})
 
         listItem.setInfo("Video", infoLabels=details)
@@ -558,6 +571,9 @@ def externalSubs(media_source, list_item, item_id):
 
     externalsubs = []
     media_streams = media_source['MediaStreams']
+
+    if media_streams is None:
+        return
 
     for stream in media_streams:
 
@@ -717,7 +733,7 @@ def stopAll(played_information):
             current_possition = data.get("currentPossition", 0)
             emby_item_id = data.get("item_id")
 
-            if emby_item_id is not None and len(emby_item_id) != 0 and emby_item_id != "None":
+            if emby_item_id is not None:
                 log.debug("Playback Stopped at: {0}", current_possition)
 
                 url = "{server}/emby/Sessions/Playing/Stopped"
@@ -755,6 +771,10 @@ class Service(xbmc.Player):
         # Will be called when xbmc starts playing a file
         stopAll(self.played_information)
 
+        if not xbmc.Player().isPlaying():
+            log.debug("onPlayBackStarted: not playing file!")
+            return
+
         current_playing_file = xbmc.Player().getPlayingFile()
         log.debug("onPlayBackStarted: {0}", current_playing_file)
         log.debug("played_information: {0}", self.played_information)
@@ -772,7 +792,7 @@ class Service(xbmc.Player):
         play_session_id = data["play_session_id"]
 
         # if we could not find the ID of the current item then return
-        if emby_item_id is None or len(emby_item_id) == 0:
+        if emby_item_id is None:
             return
 
         log.debug("Sending Playback Started")
@@ -791,7 +811,7 @@ class Service(xbmc.Player):
         download_utils.downloadUrl(url, postBody=postdata, method="POST")
 
         home_screen = HomeWindow()
-        home_screen.setProperty("currently_playing_id", emby_item_id)
+        home_screen.setProperty("currently_playing_id", str(emby_item_id))
 
         # record the activity
         utcnow = datetime.utcnow()
@@ -869,21 +889,20 @@ class PlaybackService(xbmc.Monitor):
         log.debug("PlaybackService:onNotification:{0}", hex_data)
         decoded_data = binascii.unhexlify(hex_data)
         play_info = json.loads(decoded_data)
+        log.info("Received embycon_play_action : {0}", play_info)
         playFile(play_info, self.monitor)
 
     def screensaver_activated(self):
         log.debug("Screen Saver Activated")
 
+        xbmc.executebuiltin("Dialog.Close(selectdialog, true)")
+
         settings = xbmcaddon.Addon()
-        show_change_user = settings.getSetting('changeUserOnScreenSaver') == 'true'
-        if show_change_user:
-            xbmc.executebuiltin("RunScript(plugin.video.embycon,0,?mode=CHANGE_USER)")
 
         cache_images = settings.getSetting('cacheImagesOnScreenSaver') == 'true'
         if cache_images:
             self.background_image_cache_thread = CacheArtwork()
             self.background_image_cache_thread.start()
-
 
     def screensaver_deactivated(self):
         log.debug("Screen Saver Deactivated")
@@ -892,5 +911,8 @@ class PlaybackService(xbmc.Monitor):
             self.background_image_cache_thread.stop_all_activity = True
             self.background_image_cache_thread = None
 
-
+        settings = xbmcaddon.Addon()
+        show_change_user = settings.getSetting('changeUserOnScreenSaver') == 'true'
+        if show_change_user:
+            xbmc.executebuiltin("RunScript(plugin.video.embycon,0,?mode=CHANGE_USER)")
 

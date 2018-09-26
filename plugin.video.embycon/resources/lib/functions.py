@@ -17,21 +17,21 @@ import xbmcgui
 import xbmcaddon
 import xbmc
 
-from downloadutils import DownloadUtils
-from utils import getArt, send_event_notification
-from kodi_utils import HomeWindow
-from clientinfo import ClientInformation
-from datamanager import DataManager
-from server_detect import checkServer
-from simple_logging import SimpleLogging
-from menu_functions import displaySections, showMovieAlphaList, showGenreList, showWidgets, show_search, showYearsList, showMoviePages
-from translation import i18n
-from server_sessions import showServerSessions
-from action_menu import ActionMenu
-from widgets import getWidgetContent, get_widget_content_cast, getWidgetUrlContent
+from .downloadutils import DownloadUtils
+from .utils import getArt, send_event_notification
+from .kodi_utils import HomeWindow
+from .clientinfo import ClientInformation
+from .datamanager import DataManager
+from .server_detect import checkServer
+from .simple_logging import SimpleLogging
+from .menu_functions import displaySections, showMovieAlphaList, showGenreList, showWidgets, show_search, showMoviePages
+from .translation import i18n
+from .server_sessions import showServerSessions
+from .action_menu import ActionMenu
+from .widgets import getWidgetContent, get_widget_content_cast, getWidgetUrlContent
 import trakttokodi
-from item_functions import add_gui_item, extract_item_info, ItemDetails
-from cache_images import CacheArtwork
+from .item_functions import add_gui_item, extract_item_info, ItemDetails
+from .cache_images import CacheArtwork
 
 __addon__ = xbmcaddon.Addon()
 __addondir__ = xbmc.translatePath(__addon__.getAddonInfo('profile'))
@@ -93,7 +93,7 @@ def mainEntryPoint():
 
     if mode == "CHANGE_USER":
         checkServer(change_user=True, notify=False)
-    elif mode== "CACHE_ARTWORK":
+    elif mode == "CACHE_ARTWORK":
         CacheArtwork().cache_artwork_interactive()
     elif mode == "DETECT_SERVER":
         checkServer(force=True, notify=True)
@@ -105,8 +105,6 @@ def mainEntryPoint():
         showGenreList(params)
     elif mode == "MOVIE_PAGES":
         showMoviePages(params)
-    elif mode == "MOVIE_YEARS":
-        showYearsList()
     elif mode == "WIDGETS":
         showWidgets()
     elif mode == "TOGGLE_WATCHED":
@@ -670,24 +668,27 @@ def show_menu(params):
         li.setProperty('menu_id', 'view_season')
         action_items.append(li)
 
-    user_data = result["UserData"]
-    if user_data.get("Played", False) is False:
-        li = xbmcgui.ListItem(i18n('emby_mark_watched'))
-        li.setProperty('menu_id', 'mark_watched')
-        action_items.append(li)
-    else:
-        li = xbmcgui.ListItem(i18n('emby_mark_unwatched'))
-        li.setProperty('menu_id', 'mark_unwatched')
-        action_items.append(li)
+    user_data = result.get("UserData", None)
+    if user_data:
+        progress = user_data.get("PlaybackPositionTicks", 0) != 0
+        played = user_data.get("Played", False)
+        if not played or progress:
+            li = xbmcgui.ListItem(i18n('emby_mark_watched'))
+            li.setProperty('menu_id', 'mark_watched')
+            action_items.append(li)
+        if played or progress:
+            li = xbmcgui.ListItem(i18n('emby_mark_unwatched'))
+            li.setProperty('menu_id', 'mark_unwatched')
+            action_items.append(li)
 
-    if user_data["IsFavorite"] == False:
-        li = xbmcgui.ListItem(i18n('emby_set_favorite'))
-        li.setProperty('menu_id', 'emby_set_favorite')
-        action_items.append(li)
-    else:
-        li = xbmcgui.ListItem(i18n('emby_unset_favorite'))
-        li.setProperty('menu_id', 'emby_unset_favorite')
-        action_items.append(li)
+        if user_data.get("IsFavorite", False) == False:
+            li = xbmcgui.ListItem(i18n('emby_set_favorite'))
+            li.setProperty('menu_id', 'emby_set_favorite')
+            action_items.append(li)
+        else:
+            li = xbmcgui.ListItem(i18n('emby_unset_favorite'))
+            li.setProperty('menu_id', 'emby_unset_favorite')
+            action_items.append(li)
 
     li = xbmcgui.ListItem(i18n('emby_delete'))
     li.setProperty('menu_id', 'delete')
@@ -799,17 +800,21 @@ def showContent(pluginName, handle, params):
     log.debug("showContent Called: {0}", params)
 
     item_type = params.get("item_type")
+    settings = xbmcaddon.Addon()
+    group_movies = settings.getSetting('group_movies') == "true"
+
+    if item_type.lower().find("movie") == -1:
+        group_movies = False
 
     contentUrl = ("{server}/emby/Users/{userid}/Items"
                   "?format=json" +
-                  "&SortBy=Name" +
-                  "&SortOrder=Ascending" +
                   "&ImageTypeLimit=1" +
                   "&IsMissing=False" +
                   "&Fields={field_filters}" +
+                  '&CollapseBoxSetItems=' + str(group_movies) +
+                  '&GroupItemsIntoCollections=' + str(group_movies) +
                   "&Recursive=true" +
                   "&IsVirtualUnaired=false" +
-                  "&IsMissing=False" +
                   "&IncludeItemTypes=" + item_type)
 
     log.debug("showContent Content Url: {0}", contentUrl)
@@ -1022,7 +1027,7 @@ def search_results(params):
         id_list = []
         for item in search_hints:
             item_id = item.get('ItemId')
-            id_list.append(item_id)
+            id_list.append(str(item_id))
 
         if len(id_list) > 0:
             Ids = ",".join(id_list)
@@ -1079,6 +1084,7 @@ def PLAY(params):
     play_info["force_transcode"] = forceTranscode
     play_info["media_source_id"] = media_source_id
     play_info["use_default"] = use_default
+    log.info("Sending embycon_play_action : {0}", play_info)
     send_event_notification("embycon_play_action", play_info)
 
 

@@ -1,39 +1,35 @@
-import httplib, Cookie, json , re#jwt, logging
-from pyjwt.api_jwt import encode
-#curl -i 'https://platform.tyt.com/api/v1/users/auth?is_demo=0' -H 'Content-Type: application/json' -H 'Accept: application/json, text/plain, */*' -H 'Connection: keep-alive' --data-binary '{"method":"tyt","email":"email@hotmail.com","password":"whateverpwd","rememberMe":true}'
+import httplib, urllib, logging, Cookie
 
-header = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json, text/plain, */*',
-  'Connection': 'keep-alive'
+headers = {
+  'Host': 'tytnetwork.com',
+  'User-Agent': 'curl/7.47.0',
+  'Accept': '*/*',
+  'Accept-Encoding': 'gzip, deflate, br',
+  'Referer': 'https://tytnetwork.com/secure/login-2/',
+  'Content-Type': 'application/x-www-form-urlencoded'
 }
 
-host = 'platform.tyt.com'
-url = '/api/v1/users/auth'
+host = 'tytnetwork.com'
+url = '/secure/login-2'
 
-def processCookie(cookies,auth):
+def processCookie(cookies):
   C = Cookie.SimpleCookie()
-  auth = auth.get('token', None)
-  encoded_jwt = encode({"token":auth}, '', algorithm='HS256')
-#  encoded_jwt = jwt.encode({"token":auth}, '', algorithm='HS256')
-  auth = encoded_jwt[encoded_jwt.find('.')+1:encoded_jwt.rfind('.')]
-  C["tytauth"] = auth
   C.load(cookies)
   cookie = C.output('', '', ';' )
   cookie = {'Cookie':cookie}
   return cookie
-
+	
 def logon(username, password):
-  params = {
-    'method': 'tyt',
-    'email': username,
-    'password': password,
-    'rememberMe': True
-  }
+  params = urllib.urlencode({	
+    'log': username, 
+    'pwd': password,
+    'rememberme': 'forever',
+    'wp-submit': 'Log+In',
+    'redirect_to': 'https://tytnetwork.com/wp-admin/',
+    'action': 'login'
+  })
   conn = httplib.HTTPSConnection(host)
-  conn.request("POST", url, json.dumps(params), header)
+  conn.request("POST", url, params, headers)
   response = conn.getresponse()
-  data = response.read()
-  data = json.loads(data)
-  conn.close()
-  return response.status, processCookie(response.getheader('Set-Cookie'),data)
+  conn.close()	
+  return response.status, processCookie(response.getheader('Set-Cookie'))

@@ -42,12 +42,12 @@ if REMOTE_DBG:
     try:
         #import pysrc.pydevd as pydevd # with the addon script.module.pydevd, only use `import pydevd`
         import sys
-        sys.path.append('/home/juane/.kodi/addons/script.module.pydevd/lib/')
+        #sys.path.append(addonpath, '../script.module.pydevd/lib/')
         import pydevd
         # stdoutToServer and stderrToServer redirect stdout and stderr to eclipse console
         pydevd.settrace('localhost', stdoutToServer=True, stderrToServer=True)
     except ImportError:
-        sys.stderr.write("Error: " +
+        xbmc.log("Error: " +
             "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
         sys.exit(1)
 
@@ -58,7 +58,8 @@ def tratarError(msg):
     xbmcgui.Dialog().notification(addonname, msg, xbmcgui.NOTIFICATION_ERROR, 7000, True)
    
 def log(msg, level=xbmc.LOGDEBUG):
-    xbmc.log("|| " + addonid + ": " + msg, level)
+    if REMOTE_DBG:
+        xbmc.log("|| " + addonid + ": " + msg, level)
     
 def route(args):
     output = str(handle)
@@ -87,12 +88,12 @@ def set_args():
 
 def feed(feedId, next_pointer=None):
     try:
-        
-        xbmc.log("================= " + addonname + " ========================")
+        log("================= " + addonname + " ========================")
         
         log('feed ID: ' + feedId)
 
         max_feed_len = int(addon.getSetting("max_feed_len"))
+        
         log('max_feed_len:' +  str(max_feed_len))
         try:
             
@@ -193,7 +194,6 @@ def feed(feedId, next_pointer=None):
                 #cache.set(cachename, json.dumps(torList))
                 torList.time = time.time()
                 cache.set(cachename, torList.serialize())
-                
                 log("iteration ends", xbmc.LOGDEBUG)
             except:
                 tratarError(strings.get("Can_not_connect_TOR"))
@@ -223,7 +223,7 @@ def feeds():
             feed.title += ' (' + str(feed.unread_count) + ')'
             li = ListItem()
             li.setLabel(feed.title)
-            li.setIconImage(feed.iconUrl)
+            li.setArt({'icon': feed.iconUrl})
             url = base_url + '?' + urllib.urlencode({'action':'feed','handle':str(handle),'auth_code':auth_code, 'feedId' : feed.id})
             log(url)
             xbmcplugin.addDirectoryItem(handle, url, li, True)
@@ -285,7 +285,6 @@ if len(args)>0:
     if next_pointer <> None:
         next_pointer = str(next_pointer[0])
     
-
 log('handle: ' + str(handle))
 log('autho_code: ' + str(auth_code))
 log('base_url: ' + base_url)

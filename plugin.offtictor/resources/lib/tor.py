@@ -65,8 +65,10 @@ class Connection(object):
 
         var_json = {'output': 'json'}
         var_json.update(var)
+        '''
         for param in var:
             self._logger.debug(param + ":" + str(var[param]))
+        '''
         if use_get:
             response = requests.get(url, params=var_json, headers=header)
         else:
@@ -250,6 +252,13 @@ class ItemsSearch(object):
         ]
         
     def _pre_load_rest(self, continuation, var, limit_items=1000, stop=False):
+        ''' 
+        private function to prevent repeating same code for diferent request modes
+        :param continuation: id for the next bloc (limit_items-sized) of feeds
+        :param var: parameters in the TOR request
+        :param limit_items: size of the feeds bloc
+        :param stop: stops asking for further blocs
+        '''
         if continuation!=None and stop==True:
             # asking for a new page
             items_list = None
@@ -265,6 +274,14 @@ class ItemsSearch(object):
         return self._load_rest(continuation, var, limit_items, items_list, stop)
 
     def get_unread_only(self, limit_items=1000, feed=None, stop=False, continuation=None):
+        ''' 
+        Gets just unread posts
+        :param limit_items: size of the feeds bloc
+        :param feed: gets only posts from this feed (all if none)
+        :param stop: stops asking for further blocs
+        :param continuation: id for the next bloc (limit_items-sized) of feeds
+        '''
+        
         var = {
             's': 'user/-/state/com.google/reading-list',
             'xt': 'user/-/state/com.google/read'
@@ -273,38 +290,50 @@ class ItemsSearch(object):
             var['s'] = feed
         return self._pre_load_rest(continuation, var, limit_items, stop)
 
-    def get_starred_only(self, limit_items=1000, stop=False):
+    def get_starred_only(self, limit_items=1000, feed=None, stop=False, continuation=None):
+        ''' 
+        Gets just starred posts
+        :param limit_items: size of the feeds bloc
+        :param feed: gets only posts from this feed (all if none)
+        :param stop: stops asking for further blocs
+        :param continuation: id for the next bloc (limit_items-sized) of feeds
+        '''
         var = {
             's': 'user/-/state/com.google/starred'
         }
-        resp = self._make_search_request(var, limit_items)
-        continuation = resp.get('continuation')
-        items_list = resp.get('itemRefs', [])
-        if (stop):
-            continuation = None
-        return self._load_rest(continuation, var, limit_items, items_list)
+        if (feed!=None):
+            var['s'] = feed
+        return self._pre_load_rest(continuation, var, limit_items, stop)
 
-    def get_liked_only(self, limit_items=1000, stop=False):
+    def get_liked_only(self, limit_items=1000, feed=None, stop=False, continuation=None):
+        ''' 
+        Gets just liked posts
+        :param limit_items: size of the feeds bloc
+        :param feed: gets only posts from this feed (all if none)
+        :param stop: stops asking for further blocs
+        :param continuation: id for the next bloc (limit_items-sized) of feeds
+        '''
         var = {
             's': 'user/-/state/com.google/like'
         }
-        resp = self._make_search_request(var, limit_items)
-        continuation = resp.get('continuation')
-        items_list = resp.get('itemRefs', [])
-        if (stop):
-            continuation = None
-        return self._load_rest(continuation, var, limit_items, items_list)
+        if (feed!=None):
+            var['s'] = feed
+        return self._pre_load_rest(continuation, var, limit_items, stop)
 
-    def get_shared_only(self, limit_items=1000, stop=False):
+    def get_shared_only(self, limit_items=1000, feed=None, stop=False, continuation=None):
+        ''' 
+        Gets just shared posts
+        :param limit_items: size of the feeds bloc
+        :param feed: gets only posts from this feed (all if none)
+        :param stop: stops asking for further blocs
+        :param continuation: id for the next bloc (limit_items-sized) of feeds
+        '''
         var = {
             's': 'user/-/state/com.google/broadcast'
         }
-        resp = self._make_search_request(var, limit_items)
-        continuation = resp.get('continuation')
-        items_list = resp.get('itemRefs', [])
-        if (stop):
-            continuation = None
-        return self._load_rest(continuation, var, limit_items, items_list)
+        if (feed!=None):
+            var['s'] = feed
+        return self._pre_load_rest(continuation, var, limit_items, stop)
 
 class Subscriptions (object):
     def __init__(self, connection, mode = None):
@@ -313,6 +342,8 @@ class Subscriptions (object):
         :param connection: The corresponding connection
         :type connection: TheOldReaderConnection
         :rtype: None
+        
+        :param mode: search the beginning of the post enctype (i.e. 'audio')
         """
         self.connection = connection
         self.id = None
@@ -371,6 +402,9 @@ class Subscriptions (object):
         return s_list
     
     def count_unread(self, feedId):
+        '''
+        Once list is gotten, helps to find the feed unread counts
+        '''
         for counter in self.unread_response['unreadcounts']:
             if counter['id']==feedId:
                 return counter['count']
@@ -378,6 +412,10 @@ class Subscriptions (object):
         return 0
     
     def matches_mode (self, feedId):
+        '''
+        Checks if the first post of the feed matches with the mode
+        Better use it with a SubscriptionsCursor and informing about the progress, cause it's a quite expensive process
+        '''
         if self.mode != None:
             search = ItemsSearch(self.connection)
             unread = search.get_unread_only(1, feedId, True)

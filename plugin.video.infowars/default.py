@@ -12,7 +12,7 @@
 ### ############################################################################################################
 ##### Imports #####
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
-import urllib,urllib2, urllib3, re,os,sys,htmllib,string,StringIO,logging,random,array,time,datetime, ssl, socket
+import urllib,urllib2,re,os,sys,htmllib,string,StringIO,logging,random,array,time,datetime, ssl, socket
 import copy
 import HTMLParser, htmlentitydefs
 try: 		from sqlite3 										import dbapi2 as sqlite; print "Loading sqlite3 as DB engine"
@@ -53,18 +53,18 @@ IW_database_name="infowars"
 IW_plugin_id= "plugin.video.infowars"
 IW_database_file=os.path.join(xbmc.translatePath("special://database"),'infowars.db'); 
 IW_debugging= False
-AJSIcon = "https://yt3.ggpht.com/-DbNegouDvyU/AAAAAAAAAAI/AAAAAAAAAAA/QyDM_-5eUFc/s288-c-k-no-mo-rj-c0xffffff/photo.jpg"
-RNWDKIcon = "https://yt3.ggpht.com/-QT90gbNHnJ4/AAAAAAAAAAI/AAAAAAAAAAA/vuPslh3AecY/s200-c-k-no-mo-rj-c0xffffff/photo.jpg"
-RNWDKFanart = "https://yt3.ggpht.com/-CMiJh2_nzpk79XL68m_zoyGyd4lPz42Fxy01TLVDGOgiP-4DaoLZ-lbc65KQWJGdtHn7UO-=w1440-fcrop64=1,32b75a57cd48a5a8-nd-c0xffffffff-rj-k-no"
-WarRoomIcon = "https://yt3.ggpht.com/-2RKaabiN_g8/AAAAAAAAAAI/AAAAAAAAAAA/9Q41iU3wnn8/s288-c-k-no-mo-rj-c0xffffff/photo.jpg"
-WarRoomFanart = "https://pbs.twimg.com/profile_banners/890980517855866881/1504651644/1500x500" #twitter banner
-CTIcon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7wPsgffB62ZVJyUX8HTMWjEFhzT3rCfk_eWX9-1y1UlCdYNJ0"
-CTFanart = "https://cf-images.us-east-1.prod.boltdns.net/v1/static/5762013463001/bd176705-f42c-453c-96f2-709e4369b42f/9efd050e-4cac-4828-aced-f4a1d9b7a7cb/1280x720/match/image.jpg"
+AJSIcon = "https://static.infowars.com/images/alex-jones-frontal.jpg"
+RNWDKIcon = "https://static.infowars.com/images/real-news-logo.png"
+RNWDKFanart = "https://static.infowars.com/images/real-news-with-david-knight.jpg"
+WarRoomIcon = "https://static.infowars.com/images/war-room-logo.png"
+WarRoomFanart = "https://static.infowars.com/images/war-room-studio.jpg"
+CTIcon = "https://imgur.com/PN4jxKi.jpg"
+CTFanart = "https://imgur.com/KloueqE.jpg"
 IWLiveSEIcon = "https://hw.infowars.com/wp-content/images/logo.jpg"
 IWLiveSEFanart = "https://www.infowars.com/wp-content/uploads/2018/08/jones-censored23.jpg"
-PJWIcon = "https://yt3.ggpht.com/-fIb6IwufvwI/AAAAAAAAAAI/AAAAAAAAAAA/Smnj7cy5o0Y/s288-c-k-no-mo-rj-c0xffffff/photo.jpg"
-PJWFanart = "https://yt3.ggpht.com/tyGFHEOVkzV0ebThsLL3dB7p2Q-s5CpAwia5IM5gXsY_0Vgiy8gHs6HQTXhN3FnBxi_2p9LrgAY=w2120-fcrop64=1,00000000ffffffff-nd-c0xffffffff-rj-k-no"
-MWIcon = "https://pbs.twimg.com/profile_images/752288529431007238/D_9wxf-q_400x400.jpg"
+PJWIcon = "https://i.imgur.com/A9R4qjv.jpg"
+PJWFanart = "https://i.imgur.com/ZksTDyX.jpg"
+MWIcon = "https://i.imgur.com/5KMuph0.jpg"
 MWFanart = "https://www.infowarsteam.com/wp-content/uploads/2016/10/Millie-Weaver.jpg"
 
 

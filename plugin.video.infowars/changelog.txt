@@ -1,3 +1,6 @@
+[B]Version 2.1.0[/B]
+- Updated Alex Jones Show to HD Feed
+
 [B]Version 2.0.9[/B]
 - Fixed fanart and icon links (Spinalcracker)
 - Removed urllib3 dependency

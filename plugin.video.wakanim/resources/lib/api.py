@@ -18,6 +18,7 @@
 import os
 from cgi import parse_header
 from bs4 import BeautifulSoup
+from time import timezone
 try:
     from urllib import urlencode, quote_plus
 except ImportError:
@@ -27,9 +28,9 @@ try:
 except ImportError:
     from urllib.request import urlopen, build_opener, HTTPCookieProcessor, install_opener
 try:
-    from cookielib import LWPCookieJar
+    from cookielib import LWPCookieJar, Cookie
 except ImportError:
-    from http.cookiejar import LWPCookieJar
+    from http.cookiejar import LWPCookieJar, Cookie
 
 import xbmc
 import xbmcgui
@@ -55,6 +56,8 @@ def start(args):
     except IOError:
         # cookie file does not exist
         pass
+
+    args._cj.set_cookie(Cookie(0, "timezoneoffset", str(timezone/60), None, False, "www.wakanim.tv", False, False, "/", True, False, None, False, None, None, {"HttpOnly": None}, False))
 
 
 def close(args):

@@ -24,7 +24,8 @@ class myAddon(t1mAddon):
   def getAddonMenu(self,url,ilist):
       self.defaultVidStream['width'] = 1920
       self.defaultVidStream['height'] = 1080
-      html = self.getRequest('http://www.smithsonianchannel.com/full-episodes')
+      html = self.getRequest('https://www.smithsonianchannel.com/full-episodes')
+      html = re.compile('<ul id="full(.+?)</ul>', re.DOTALL).search(html).group(1)
       a = re.compile('data-premium=".+?href="(.+?)".+?srcset="(.+?)".+?series-name">(.+?)<.+?show-name">(.+?)<.+?"timecode">(.+?)<.+?</li>',re.DOTALL).findall(html)
       for (url, thumb, tvshow, title, dur) in a:
           if not thumb.startswith('http:'):
@@ -45,7 +46,7 @@ class myAddon(t1mAddon):
       return(ilist)
 
   def getAddonVideo(self,url):
-      html = self.getRequest('http://www.smithsonianchannel.com%s' % uqp(url))
+      html = self.getRequest('https://www.smithsonianchannel.com%s' % uqp(url))
       vidID = re.compile('data-bcid="(.+?)"', re.DOTALL).search(html).groups()
       url = 'http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?videoId=%s&pubId=1466806621001' % (vidID)
       master = self.getRequest(url)

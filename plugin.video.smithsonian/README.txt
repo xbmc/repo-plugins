@@ -3,6 +3,7 @@ plugin.video.smithsonian
 
 XBMC Addon for Smithsonian Channel website
 
+Version 3.0.3 website change
 Version 3.0.2 Clean up and remove meta storage
 Version 3.0.1 Isengard version - separate scraper
 Version 1.0.8 Added show caching - should load faster

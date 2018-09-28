@@ -6,3 +6,4 @@ Version 1.0.7 Added select content type
 Version 1.0.8 Added show caching - should load faster
 Version 3.0.1 Isengard version - separate scraper
 Version 3.0.2 Clean up and remove meta storage
+Version 3.0.3 website change

@@ -21,7 +21,8 @@ import os, sys, time, datetime, re, traceback, HTMLParser, calendar, string
 import urlparse, urllib, urllib2, socket, json, collections, net, random
 import xbmc, xbmcvfs, xbmcgui, xbmcplugin, xbmcaddon
 
-from simplecache import SimpleCache
+from simplecache import SimpleCache, use_cache
+
 # Plugin Info
 BRAND         = 'ustvnow'
 ADDON_ID      = 'plugin.video.%s'%BRAND
@@ -104,14 +105,16 @@ socket.setdefaulttimeout(TIMEOUT)
 class USTVnow():
     def __init__(self, sysARG):
         log('__init__, sysARG = ' + str(sysARG))
-        self.sysARG    = sysARG
-        self.net       = net.Net()
-        self.cache     = SimpleCache()
-        self.reminders = self.loadReminders()
-        self.recorded  = self.highlights = []
-        self.isFree    = REAL_SETTINGS.getSetting('User_isFree') == "True"
-        if self.login(USER_EMAIL, PASSWORD) == False: xbmc.executebuiltin("Container.Refresh")
-    
+        self.sysARG     = sysARG
+        self.net        = net.Net(cookie_file=COOKIE_JAR,http_debug=DEBUG)
+        self.cache      = SimpleCache()
+        self.reminders  = self.loadReminders()
+        self.recorded   = []
+        self.isFree     = REAL_SETTINGS.getSetting('User_isFree') == "True"
+        self.token      = REAL_SETTINGS.getSetting('User_Token')
+        self.passkey    = REAL_SETTINGS.getSetting('User_Paskey')
+        if self.login(USER_EMAIL, PASSWORD) == False: sys.exit()
+        
     
     def loadReminders(self):
         try: return json.loads(REAL_SETTINGS.getSetting('User_Reminders'))
@@ -121,10 +124,7 @@ class USTVnow():
     def mainMenu(self):
         log('mainMenu')
         for item in USTVNOW_MENU:
-            if self.highlights and item[0] == "Highlights":
-                if len(self.highlights) <= 2: continue
-            elif self.recorded and item[0] in ["Schedules","Recordings"]:
-                if len(self.recorded) <= 2: continue
+            if len(self.recorded) <= 2 and item[0] in ["Schedules","Recordings"]: continue
             self.addDir(*item)
         xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
         
@@ -157,22 +157,18 @@ class USTVnow():
             try:
                 #check token
                 dvrlink  = None
-                custlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getcustomerkey', form_data={'token':LAST_TOKEN}, headers=header_dict).content.encode("utf-8").rstrip())
-                '''{u'username': u'', u'ip': u'', u'customerkey': u''}'''
-                self.custkey = (custlink.get('customerkey','') or 0)                
-                if custlink and 'username' in custlink and user.lower() == custlink['username'].lower():
-                    log('login, using existing token, passkey')
-                    self.token   = LAST_TOKEN
-                    self.passkey = LAST_PASSKEY
+                custlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getcustomerkey', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
+                '''{u'username': u'', u'ip': u'', u'customerkey': u''}''' 
+                self.custkey = (custlink.get('customerkey','') or 0)
+                if custlink and 'username' in custlink and user.lower() == custlink['username'].lower(): log('login, using existing token, passkey')
                 else:
                     #login 
-                    loginlink = json.loads(self.net.http_POST(BASEURL + 'iphone/1/live/login', form_data={'username':user,'password':password,'device':'gtv'}, headers=header_dict).content.encode("utf-8").rstrip())
+                    loginlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/login', form_data={'username':user,'password':password,'device':'gtv','redir':'0'}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'token': u'', u'result': u'success'}'''
                     if loginlink and 'token' in loginlink and loginlink['result'].lower() == 'success':
                         log('login, creating new token')
                         self.token = loginlink['token']
-                        REAL_SETTINGS.setSetting('User_Token',self.token)          
-                        
+                        REAL_SETTINGS.setSetting('User_Token',self.token) 
                         #passkey
                         dvrlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/viewdvrlist', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                         '''{u'globalparams': {u'passkey': u''}, u'results': []}'''
@@ -180,8 +176,9 @@ class USTVnow():
                             log('login, creating new passkey')
                             self.passkey = dvrlink['globalparams']['passkey']
                             REAL_SETTINGS.setSetting('User_Paskey',self.passkey)
-                    else: raise Exception
-                            
+                    else: self.replaceToken()
+                    self.net.save_cookies(COOKIE_JAR)
+                    
                     #check user credentials
                     userlink = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/getuserbytoken', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'status': u'success', u'data': {u'username': u'', u'need_account_activation': False, u'plan_id': 1, u'language': u'en', u'plan_free': 1, u'sub_id': u'7', u'lname': u'', u'currency': u'USD', u'points': 1, u'need_account_renew': False, u'fname': u'', u'plan_name': u'Free Plan'}}'''
@@ -195,7 +192,6 @@ class USTVnow():
                         dvrPlan = 2 if 'dvr' in (userlink['data']['plan_name']).lower() else None
                         REAL_SETTINGS.setSetting('User_DVRpoints' ,str(dvrPlan or userlink['data']['points'] or 0))
                         xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30006) + userlink['data']['fname'], ICON, 4000)
-                        
                         if userlink['data']['need_account_renew'] == True: xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30016) + userlink['data']['fname'], ICON, 4000)
                         elif userlink['data']['need_account_activation'] == True: xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30022) + userlink['data']['fname'], ICON, 4000)
                         else: 
@@ -217,12 +213,12 @@ class USTVnow():
                                 u'details': u'24 hour pass for all channels (No DVR)'}}, u'cgredirectUrl': u'', u'cgaccountstatus': False, u'isfacebookuser': False, u'cgkey': u'', u'ocaccountstatuscode': 0, u'packages': [], u'subscription': u'Free Plan', u'language': u'en', u'sub_id': u'7', u'dateopened': u'December 01, 2000', u'canceledDatetime': u'', u'cgbillingmethod': u''}'''
                             if sublink: REAL_SETTINGS.setSetting('User_Expires'   ,'%s'%(sublink['sub_info']['date_expire']))
                         except: pass
-                    else: raise Exception
-                    self.net.save_cookies(COOKIE_JAR)
+                    else: raise Exception('login, Failed!')
                     
                 self.channels = self.cache.get(ADDON_NAME + '.channelguide')
                 if not self.channels:
                     log('login, refreshing channels')
+                    xbmc.sleep(500)# hammer dam
                     self.channels = sorted(json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/channelguide', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())['results'], key=lambda x: x['displayorder'])
                     '''{u'app_name': u'preview', u'stream': u'00000WXYZustvnow', u'af': u'US', u'dvraction': u'add', u'callsign': u'WHTM', u'event_inprogress': 1, 
                         u'srsid': 3560383, u'guideremainingtime': 3660, u'scheduleid': 9952642, u'favoriteaction': u'remove', u'event_time': u'00:00:00',u'title': u'Shark Tank', 
@@ -240,6 +236,7 @@ class USTVnow():
                 self.upcoming = self.cache.get(ADDON_NAME + '.upcoming')
                 if not self.upcoming:
                     log('login, refreshing upcoming')
+                    xbmc.sleep(500)# hammer dam
                     self.upcoming = json.loads(self.net.http_POST(BASEURL + 'gtv/1/live/upcoming', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'prgschid': 19479379, u'dvraction': u'add', u'callsign': u'AMC', u'newtimecat': True, u'srsid': 14930, u'timecat': u'Today', u'scheduleid': 9946282, 
                         u'img': u'images/AMC.png', u'title': u'The Fugitive', u'prg_img': u'v5/NowShowing/14930/p14930_p_v5_aa.jpg', u'has_img': 1, u't': 0, u'sname': u'AMC', 
@@ -252,6 +249,7 @@ class USTVnow():
                 self.highlights = self.cache.get(ADDON_NAME + '.highlights')
                 if not self.highlights:
                     log('login, refreshing highlights')
+                    xbmc.sleep(500)# hammer dam
                     self.highlights = json.loads(self.net.http_POST(BASEURL + 'api/1/live/highlights', form_data={'token':self.token}, headers=header_dict).content.encode("utf-8").rstrip())
                     '''{u'prgschid': 114059791, u'dvraction': u'add', u'bb_content': u'How would you like having Jim Morrison as a college roommate? ', u'callsign': u'WPSU', u'newtimecat': True,
                         u'srsid': 185479, u'timecat': u'Tomorrow', u'scheduleid': 49826153, u'img': u'images/WPSU.png', u'title': u'Antiques Roadshow', u'prg_img': u'h3/NowShowing/185479/p185479_b_h3_ag.jpg', 
@@ -264,6 +262,7 @@ class USTVnow():
                 self.recorded = self.cache.get(ADDON_NAME + '.recorded')
                 if not self.recorded:
                     log('login, refreshing recorded')
+                    xbmc.sleep(500)# hammer dam
                     '''{u'fn1': u'20170702', u'episode_season': 0, u'filename_smil': u'20170702_213000_220000_utc_SH000000010000_11534_11534_ABC.smil', u'app_name': u'dvrrokuplay', 
                         u'stream': u'2F1ECWHTMUSTVNOW', u'imgmark': u'rem', u'dvrtimeraction': u'add', u'mediatype': u'SH', u'orig_air_date': None, u'content_id': u'SH000000010000', 
                         u'callsign': u'WHTM', u'ut_expires': 1500327000, u'filename_med': u'20170702_213000_220000_utc_SH000000010000_11534_11534_ABC_650.mp4', 
@@ -302,6 +301,11 @@ class USTVnow():
         # BASEVOD+'/qr/linkcode/%s'%('kodi%s'%ADDON_ID)
         
         
+    # def browseReminders(self):
+    # {'label':'','thumb':'','startime':000000,'info':[{}]}
+    # context to delete
+        
+
     def grabChannelName(self, sname):
         return sname.strip()
         
@@ -321,11 +325,6 @@ class USTVnow():
         return names
         
         
-    # def browseReminders(self):
-    # {'label':'','thumb':'','startime':000000,'info':[{}]}
-    # context to delete
-        
-
     def browseLive(self):
         log('browseLive')
         channelCheck = []
@@ -382,6 +381,8 @@ class USTVnow():
                 self.addDir(channel, channel, 4, infoArt=infoArt)
             xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
         else:
+            self.channels = sorted(self.channels, key=lambda x:x['stream_code'])
+            self.channels = sorted(self.channels, key=lambda x:x['ut_start'])
             for channel in self.channels:
                 try:
                     if self.isFree == True and name not in FREE_CHANS: continue
@@ -588,9 +589,7 @@ class USTVnow():
                         # else: stream = (urllink['stream'].replace('smil:','mp4:').replace('USTVNOW','USTVNOW%d'%URL_QUALITY))
                         log('resolveURL, url = ' + stream)
                         return stream
-                    except Exception as e:
-                        log('resolveURL, failed ' + str(e), xbmc.LOGERROR)
-                        if channel and channel['scheduleid']: self.replaceToken(url, dvr)
+                    except Exception as e: log('resolveURL, failed ' + str(e), xbmc.LOGERROR)
         else:
             for channel in self.channels:
                 if url == self.grabChannelName(channel['stream_code']):
@@ -603,14 +602,11 @@ class USTVnow():
                         else: stream = (urllink['stream'].replace('smil:','mp4:').replace('USTVNOW','USTVNOW%d'%URL_QUALITY))
                         log('resolveURL, stream = ' + stream)
                         return stream
-                    except Exception as e:
-                        log('resolveURL, failed ' + str(e), xbmc.LOGERROR)
-                        if channel and channel['scode']: self.replaceToken(url, dvr)
+                    except Exception as e: log('resolveURL, failed ' + str(e), xbmc.LOGERROR)
                     
                     
-    def replaceToken(self, url, dvr):
-        #generate alternative token using website endpoint rather then api.
-        try:
+    def replaceToken(self):
+        try: #generate alternative token using website endpoint rather then api.
             #get CSRF Token
             response = urllib2.urlopen(BASEWEB + "/account/signin").read()
             CSRF = re.findall(r'var csrf_value = "(.*?)"', response, re.DOTALL)[0]
@@ -621,11 +617,10 @@ class USTVnow():
                 self.token = altToken
                 log('replaceToken, replacing existing token')    
                 REAL_SETTINGS.setSetting('User_Token',altToken) 
-                self.resolveURL(url, dvr)
-        except Exception as e:
-            log('replaceToken, Unable to login ' + str(e), xbmc.LOGERROR)
-            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30005), ICON, 4000)
-            raise SystemExit
+                return altToken
+        except Exception as e: log('replaceToken, Unable to login ' + str(e), xbmc.LOGERROR)
+        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30005), ICON, 4000)
+        raise SystemExit
 
             
     def setRecording(self, name, url, remove=False, recurring=False):
@@ -656,9 +651,9 @@ class USTVnow():
         if dvr: label, path, liz = self.buildRecordedListItem(url)
         else: label, path, liz = self.buildChannelListItem(url, opt='Live')
         liz.setPath(self.resolveURL(url,dvr))
-        # if url.endswith('m3u8'):
-            # liz.setProperty('inputstreamaddon','inputstream.adaptive')
-            # liz.setProperty('inputstream.adaptive.manifest_type','hls') 
+        if 'm3u8' in url.lower():
+            liz.setProperty('inputstreamaddon','inputstream.adaptive')
+            liz.setProperty('inputstream.adaptive.manifest_type','hls') 
         xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
 
            
@@ -689,13 +684,14 @@ class USTVnow():
     def hasCC(self):
         if URL_TYPE == 'm3u8': return True
         return False
-        
+
         
     def uEPG(self):
         log('uEPG')
-        #support for upcoming uEPG universal epg framework module, module will be available from the Kodi repository.
-        #https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
+        #support for uEPG universal epg framework module https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
         collect = []
+        d = datetime.datetime.utcnow()
+        now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))
         if self.channels is None: xbmc.executebuiltin("Container.Refresh")
         for channel in self.channels:
             try:
@@ -706,7 +702,7 @@ class USTVnow():
                 
         channelNum  = 0
         counter = collections.Counter(collect)
-        for key, value in sorted(counter.iteritems()):
+        for key, value in sorted(counter.iteritems()):            
             newChannel  = {}
             guidedata   = []
             channelName = key
@@ -721,6 +717,8 @@ class USTVnow():
                     if self.isFree == True and name not in FREE_CHANS: continue
                     if name == channelName:
                         tmpdata = {}
+                        startime  = datetime.datetime.fromtimestamp(channel['ut_start'])
+                        endtime   = startime + datetime.timedelta(seconds=channel['runtime'])
                         mediatype = (channel.get('mediatype','') or (channel.get('connectorid',''))[:2] or (channel.get('content_id',''))[:2] or 'SP')
                         mtype     = MEDIA_TYPES[mediatype.upper()]
                         thumb     = IMG_SOURCE%(str(channel['srsid']),channel['callsign'],mediatype)
@@ -732,11 +730,10 @@ class USTVnow():
                             try: tmpdata[uEPG_PARAMS[key]] = unescape(value)
                             except:
                                 if key in FILE_PARAMS + PVR_PARAMS: tmpdata[key] = unescape(value)
-                                    
+                                
                         # contextMenu = [('Schedules' ,'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?mode="+str(1))),
                                        # ('Recordings','XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?mode="+str(2))),
                                        # ('OnDemand'  ,'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?mode="+str(13)))]
-                                       
                         contextMenu = []
                         if channel['dvrtimeraction'] == 'add':
                             opt = '@'.join([str(channel['prgsvcid']),(channel.get('event_time','') or str(channel.get('ut_start','')))])#lazy solution rather then create additional url parameters for this single function.

@@ -1,3 +1,8 @@
+v2.5.41
+Fixed Radio A-Z.
+Added additional stream sources for Radio.
+Fixed Radio scraping in general.
+
 v2.5.40
 Fixed Radio for programmes which contain semicolon in the json data.
 

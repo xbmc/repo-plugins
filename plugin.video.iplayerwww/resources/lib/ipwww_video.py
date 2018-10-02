@@ -259,7 +259,7 @@ def ScrapeEpisodes(page_url):
 
     total_pages = 1
     current_page = 1
-    page_range = range(1)
+    page_range = list(range(1))
     paginate = re.search(r'<ol class="paginat.*?</ol>', html, re.DOTALL)
     if not paginate:
         paginate = re.search(r'<div class="paginate.*?</div>', html, re.DOTALL)
@@ -287,7 +287,7 @@ def ScrapeEpisodes(page_url):
                 next_page = current_page+1
             else:
                 next_page = current_page
-            page_range = range(current_page, current_page+1)
+            page_range = list(range(current_page, current_page+1))
         else:
             pages = re.findall(r'<li class="pag.*?</li>',paginate.group(0),re.DOTALL)
             if pages:
@@ -300,7 +300,7 @@ def ScrapeEpisodes(page_url):
                         page_base_url = page_base_url+'?'+part
                 page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
                 total_pages = int(last_page.group(1))
-            page_range = range(1, total_pages+1)
+            page_range = list(range(1, total_pages+1))
 
     for page in page_range:
 
@@ -548,7 +548,7 @@ def ScrapeAtoZEpisodes(page_url):
 
     total_pages = 1
     current_page = 1
-    page_range = range(1)
+    page_range = list(range(1))
 
     # There is a new layout for episodes, scrape it from the JSON received as part of the page
     match = re.search(
@@ -582,9 +582,9 @@ def ScrapeAtoZEpisodes(page_url):
                     next_page = curent_page+1
                 else:
                    next_page = current_page
-                page_range = range(current_page, current_page+1)
+                page_range = list(range(current_page, current_page+1))
             else:
-                page_range = range(1, last_page+1)
+                page_range = list(range(1, last_page+1))
 
         for page in page_range:
 
@@ -1045,11 +1045,11 @@ def AddAvailableStreamItem(name, url, iconimage, description):
                 match = [x for x in streams if (x[1] == bitrate)]
                 if len(match) == 0:
                     # Second Fallback: Use any lower bitrate from selected source.
-                    match = [x for x in streams if (x[0] == source) and (x[1] in range(1, bitrate))]
+                    match = [x for x in streams if (x[0] == source) and (x[1] in list(range(1, bitrate)))]
                     match.sort(key=lambda x: x[1], reverse=True)
                     if len(match) == 0:
                         # Third Fallback: Use any lower bitrate from any source.
-                        match = [x for x in streams if (x[1] in range(1, bitrate))]
+                        match = [x for x in streams if (x[1] in list(range(1, bitrate)))]
                         match.sort(key=lambda x: x[1], reverse=True)
         else:
             # Case 2: Selected source and any bitrate
@@ -1065,7 +1065,7 @@ def AddAvailableStreamItem(name, url, iconimage, description):
             if len(match) == 0:
                 # Fallback: Use any source and any lower bitrate
                 match = streams
-                match = [x for x in streams if (x[1] in range(1, bitrate))]
+                match = [x for x in streams if (x[1] in list(range(1, bitrate)))]
                 match.sort(key=lambda x: x[1], reverse=True)
         else:
             # Case 4: Any source and any bitrate
@@ -1415,7 +1415,7 @@ def ParseLiveStreams(channelname, providers):
         streams.extend([list(stream) + [provider_name] for stream in match])
 
     # Convert bitrate to Mbps for further processing
-    for i in range(len(streams)):
+    for i in list(range(len(streams))):
         streams[i][1] = round(int(streams[i][1])/1000000.0, 1)
 
     # Return list sorted by bitrate
@@ -1464,7 +1464,7 @@ def ScrapeAvailableStreams(url):
             elif (stream['kind'] == 'audio-described'):
                 stream_id_ad = stream['id']
             else:
-                print "iPlayer WWW warning: New stream kind: %s" % stream['kind']
+                xbmc.log("iPlayer WWW warning: New stream kind: %s" % stream['kind'])
                 stream_id_st = stream['id']
 
     return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad, 'name': name, 'image':image, 'description': description}

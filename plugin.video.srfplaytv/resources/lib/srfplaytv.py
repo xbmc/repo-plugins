@@ -1019,6 +1019,30 @@ class SRFPlayTV(object):
                 pass
             return live_ids
 
+        def get_srf3_live_ids():
+            """
+            Returns a list of Radio SRF 3 video streams.
+            """
+            url = 'https://www.%s.ch/radio-srf-3' % BU
+            webpage = self.open_url(url, use_cache=False)
+            video_id_regex = r'''(?x)
+                                   popupvideoplayer\?id=
+                                   (?P<video_id>
+                                       [a-f0-9]{8}-
+                                       [a-f0-9]{4}-
+                                       [a-f0-9]{4}-
+                                       [a-f0-9]{4}-
+                                       [a-f0-9]{12}
+                                    )
+                                '''
+            live_ids = []
+            try:
+                for match in re.finditer(video_id_regex, webpage):
+                    live_ids.append(match.group('video_id'))
+            except StopIteration:
+                pass
+            return live_ids
+
         live_ids = get_live_ids()
         for lid in live_ids:
             api_url = ('https://event.api.swisstxt.ch/v1/events/'
@@ -1040,6 +1064,10 @@ class SRFPlayTV(object):
             purl = self.build_url(mode=51, name=stream_url)
             xbmcplugin.addDirectoryItem(
                 int(sys.argv[1]), purl, item, isFolder=False)
+
+        srf3_ids = get_srf3_live_ids()
+        for vid in srf3_ids:
+            self.build_episode_menu(vid, include_segments=False)
 
     def play_livestream(self, stream_url):
         """

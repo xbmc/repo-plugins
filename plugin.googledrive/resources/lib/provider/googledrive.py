@@ -243,7 +243,7 @@ class GoogleDrive(Provider):
                 'child_count' : 0
             }
         if is_media_items:
-            item['url'] = f['baseUrl']
+            item['url'] = f['baseUrl'] + '=d'
             if 'mediaMetadata' in f:
                 metadata = f['mediaMetadata']
                 item['video'] = {
@@ -270,7 +270,7 @@ class GoogleDrive(Provider):
         if include_download_info:
             if is_media_items:
                 item['download_info'] =  {
-                    'url' : f['baseUrl']
+                    'url' : item['url']
                 }
             else:
                 parameters = {

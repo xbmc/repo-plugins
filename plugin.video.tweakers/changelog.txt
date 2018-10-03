@@ -1,7 +1,13 @@
+v1.1.10 (2018-10-01)
+- removing non-ascii characters in title in parameters to prevent UnicodeDecodeError: 'ascii' codec can't decode ...
+The error occured when doing urllib.parse.parse_qs of the parameters
+- using youtube now (website change)
+
 v1.1.9 (2018-01-12)
 - removed looking for video dialogue
 - fix to match the correct thumbnail with the item
-- addon now works in kode python 2 and also 3 (!!) thanks to the future project
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
 
 v1.1.8 (2017-03-12):
 - fixed url in addon.xml as per request

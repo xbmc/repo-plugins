@@ -11,14 +11,11 @@ from builtins import object
 import sys
 import requests
 import urllib.request, urllib.error, urllib.parse
-import urllib.parse
-import re
-import json
 import xbmc
 import xbmcgui
 import xbmcplugin
 
-from tweakers_const import SETTINGS, LANGUAGE, VERSION, convertToUnicodeString, log, getSoup
+from tweakers_const import SETTINGS, LANGUAGE, VERSION, YOUTUBE_ID_STRING_TO_FIND, convertToUnicodeString, log
 
 
 
@@ -85,29 +82,6 @@ class Main(object):
         try:
             response = requests.get(self.video_page_url, headers=headers)
             html_source = response.text
-            html_source = html_source.encode('utf-8', 'ignore')
-        except urllib.error.HTTPError as error:
-
-            log("HTTPError", error)
-
-            dialog_wait.close()
-            del dialog_wait
-            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
-            exit(1)
-
-        soup = getSoup(html_source)
-
-        # Find the real video page url
-        #<div class="video-container">
-        # <iframe name="s1_soc_1" id="s1_soc_1" style="border:0" frameborder="0" width="620" height="349" src="https://tweakers.net/video/player/12875/pre-alpha-gameplay-van-system-shock-remake.html?expandByResize=1&amp;width=620&amp;height=349&amp;zone=30" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" webkitallowfullscreen="webkitallowfullscreen"></iframe></div>
-        iframes = soup.findAll('iframe', attrs={'src': re.compile("^https://tweakers.net/video")}, limit=1)
-        real_video_page_url = iframes[0]['src']
-
-        log("real_video_page_url", real_video_page_url)
-
-        try:
-            response = requests.get(real_video_page_url, headers=headers)
-            html_source = response.text
             html_source = convertToUnicodeString(html_source)
         except urllib.error.HTTPError as error:
 
@@ -118,91 +92,34 @@ class Main(object):
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
             exit(1)
 
-        soup = getSoup(html_source)
+        #log("html_source", html_source)
 
-        # Find the video url in the json block
-        # .....})('video', {"skin": "https:\/\/tweakimg.net\/x\/video\/skin\/default\/streamone.css?1459246513", "playlist": {
-        #        "items": [{"id": "gY8Cje0JOwmQ", "title": "Hyperloop One voert eerste test succesvol uit",
-        #        "description": "Hyperloop One heeft in de woestijn in Nevada de eerste succesvolle test van het aandrijfsysteem uitgevoerd. De Hyperloop-slede kwam tijdens de test op de rails binnen 1,1 seconde tot een snelheid van 187km\/u.",
-        #        "poster": "https:\/\/ic.tweakimg.net\/img\/account=s7JeEm\/item=gY8Cje0JOwmQ\/size=980x551\/image.jpg",
-        #        "duration": 62, "locations": {"progressive": [{"label": "1080p", "height": 1080, "width": 1920,
-        #                                                       "sources": [{"type": "video\/mp4",
-        #                                                                    "src": "https:\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=nhsKnukbVci0\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]},
-        #                                                      {"label": "720p", "height": 720, "width": 1280,
-        #                                                       "sources": [{"type": "video\/mp4",
-        #                                                                    "src": "https:\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=jC0LmugZVMCU\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]},
-        #                                                      {"label": "360p", "height": 360, "width": 640,
-        #                                                       "sources": [{"type": "video\/mp4",
-        #                                                                    "src": "https:\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=lwkDiMAZOVO0\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]},
-        #                                                      {"label": "270p", "height": 270, "width": 480,
-        #                                                       "sources": [{"type": "video\/mp4",
-        #                                                                    "src": "http:s\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=BT1DiI2bOFuU\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]}],
-        #                                      "adaptive": []}, "audioonly": false, "live": false, ...
+        # let's find the youtube-id
+        # <script>
+        #     YouTubePlayer.init('tnet_video_1', {"videoId":17009,"videoTitle":"Techjuwelen - Asus Eee PC - Iedereen aan de netbook","youtubeId":"o48_m3x-qwQ","width":980,"height":551,"playerVars":[],"webTrekkOptions":{"trackId":"318816705845986","trackDomain":"cijfers.tweakers.nl","posInterval":30}});
+        # </script>
 
-        # Find the json block containing all the video-urls
-        soup_str = str(soup)
-        start_pos_json_block = soup_str.find('[{"label"')
-        end_pos_json_block = soup_str.find("}]}]")
-        end_pos_json_block += len("}]}]")
-        json_string = soup_str[start_pos_json_block:end_pos_json_block]
-        parsed_json = json.loads(json_string)
+        youtube_id_found = False
+        start_pos_youtube_id = html_source.find(YOUTUBE_ID_STRING_TO_FIND)
+        if start_pos_youtube_id >= 0:
+            youtube_id_found = True
 
-        log("json_string", json_string)
+            start_pos_youtube_id = start_pos_youtube_id + len(YOUTUBE_ID_STRING_TO_FIND)
+            end_pos_youtube_id = html_source.find('"', start_pos_youtube_id)
+            youtube_id = html_source[start_pos_youtube_id:end_pos_youtube_id]
 
-        # Determine what quality the video should be
-        if self.MAXIMUM_VIDEO_QUALITY == "0":
-            maximum_video_label = "270p"
-        elif self.MAXIMUM_VIDEO_QUALITY == "1":
-            maximum_video_label = "360p"
-        elif self.MAXIMUM_VIDEO_QUALITY == "2":
-            maximum_video_label = "720p"
-        elif self.MAXIMUM_VIDEO_QUALITY == "3":
-            maximum_video_label = "1080p"
-        else:
-            maximum_video_label = "1080p"
+            log("youtube_id", youtube_id)
 
-        # Find the source with the maximum video quality
-        sources_index = 0
-        label_found = False
-        while label_found == False:
-            try:
-                if parsed_json[sources_index]["label"] == maximum_video_label:
-                    label_found = True
-                else:
-                    sources_index += 1
-            except:
-                sources_index = 0
-                break
+            youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
 
-        # Find the json block containing the video-url with the maximum video quality
-        try:
-            json_string = str(parsed_json[sources_index]["sources"])
-        except:
-            # If the maximum quality is not available, use the best available quality
-            json_string = str(parsed_json[0]["sources"])
-        json_string = json_string.strip("[")
-        json_string = json_string.strip("]")
-        json_string = json_string.replace("u'", "'")
-        json_string = json_string.replace("'", '"')
-        parsed_json = json.loads(json_string)
-        video_url = str(parsed_json["src"])
+            log("youtube_url", youtube_url)
 
-        log("video_url", video_url)
-
-        no_url_found = False
-        have_valid_url = False
-
-        if len(video_url) == 0:
-            no_url_found = True
-        else:
-            have_valid_url = True
-
-        # Play video
-        if have_valid_url:
+        if youtube_id_found:
+            # Play video
+            video_url = youtube_url
             list_item = xbmcgui.ListItem(path=video_url)
-            xbmcplugin.setResolvedUrl(self.plugin_handle, True, listitem=list_item)
-        #
-        # Alert user
-        #
-        elif no_url_found:
+            xbmcplugin.setResolvedUrl(self.plugin_handle, True, list_item)
+
+            # Alert user
+        else:
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30505))

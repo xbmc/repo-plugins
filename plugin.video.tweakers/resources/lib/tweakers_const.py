@@ -18,8 +18,9 @@ ADDON = "plugin.video.tweakers"
 SETTINGS = xbmcaddon.Addon()
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
-DATE = "2018-01-12"
-VERSION = "1.1.9"
+YOUTUBE_ID_STRING_TO_FIND = '"youtubeId":"'
+DATE = "2018-09-30"
+VERSION = "1.1.10"
 
 if sys.version_info[0] > 2:
     unicode = str
@@ -40,6 +41,12 @@ def convertToByteString(s, encoding='utf-8'):
 
 
 def log(name_object, object):
+    try:
+        # Let's try and remove any non-ascii stuff first
+        object = object.encode('ascii', 'ignore')
+    except:
+        pass
+
     try:
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
             ADDON, VERSION, DATE, name_object, convertToUnicodeString(object)), xbmc.LOGDEBUG)

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="Enable_Debugging" type="bool"   label="30000" default="false" />
+    <setting id="User_Email"       type="text"   label="30006" default="" />
+    <setting id="User_Password"    type="text"   label="30007" default=""  option="hidden"/>
+</settings>

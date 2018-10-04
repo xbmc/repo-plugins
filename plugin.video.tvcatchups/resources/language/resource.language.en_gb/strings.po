@@ -43,3 +43,7 @@ msgstr ""
 msgctxt "#30006"
 msgid "First-Time Run[CR]Preparing Images, Please Wait..."
 msgstr ""
+
+msgctxt "#30007"
+msgid "TVCatchup unavailable in your location, Please use Transponder.TV ..."
+msgstr ""

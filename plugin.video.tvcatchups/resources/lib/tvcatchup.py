@@ -18,7 +18,7 @@
 
 # -*- coding: utf-8 -*-
 import os, sys, time, _strptime, datetime, re, traceback, pytz, calendar
-import urlparse, urllib, urllib2, socket, json, threading
+import urlparse, urllib, urllib2, socket, json, threading, requests
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
 
 from bs4 import BeautifulSoup
@@ -44,7 +44,7 @@ ICON_URL      = 'http://images-cache.tvcatchup.com/NEW/images/channels/hover/cha
 LIVE_URL      = BASE_URL + '/channels'
 GUIDE_URL     = BASE_URL + '/tv-guide'
 LOGO          = os.path.join(SETTINGS_LOC,'%s.png')
-if xbmcvfs.exists(SETTINGS_LOC) == False: xbmcvfs.mkdirs(SETTINGS_LOC)
+
 MAIN_MENU     = [(LANGUAGE(30003), '' , 1),
                  (LANGUAGE(30004), '' , 2),
                  (LANGUAGE(30005), '' , 20)]
@@ -97,11 +97,16 @@ class TVCatchup(object):
         
     def openURL(self, url):
         try:
+            url = requests.head(url, allow_redirects=True).url
             log('openURL, url = ' + str(url))
+            if len(re.findall('http[s]?://transponder.tv', url)) > 0: 
+                xbmcgui.Dialog().ok(ADDON_NAME, LANGUAGE(30007))
+                xbmc.executebuiltin('XBMC.RunAddon(plugin.video.transpondertv)')
+                return ''
             cacheresponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
             if not cacheresponse:
                 cacheresponse = urllib2.urlopen(urllib2.Request(url), timeout=TIMEOUT).read()
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheresponse, expiration=datetime.timedelta(minutes=5))
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheresponse, expiration=datetime.timedelta(minutes=15))
             return cacheresponse
         except Exception as e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
@@ -116,14 +121,15 @@ class TVCatchup(object):
     def downloadQueue(self, url, dest):
         if xbmcvfs.exists(LOGO%dest): return
         if self.downloadThread.isAlive(): self.downloadThread.join()
-        self.downloadThread = threading.Timer(0.5, retrieveURL, [url, xbmc.translatePath(LOGO%dest)])
-        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30006), ICON, 200)
+        self.downloadThread = threading.Timer(0.2, retrieveURL, [url, xbmc.translatePath(LOGO%dest)])
+        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30006), ICON, 2)
         self.downloadThread.name = "downloadThread"
         self.downloadThread.start()
         
         
     def downloadLogos(self, items):
         log('downloadLogos')
+        if xbmcvfs.exists(SETTINGS_LOC) == False: xbmcvfs.mkdirs(SETTINGS_LOC)
         for item in items: self.downloadQueue(*item)
         
         
@@ -138,7 +144,7 @@ class TVCatchup(object):
             label  = '%s - %s'%(chname,cleanString(channel.get_text()))
             link   = channel.find_all('a')[0].attrs['href']
             thumb  = LOGO%chname
-            infoLabels = {"mediatype":"episode","label":label ,"title":label}
+            infoLabels = {"mediatype":"episode","label":label ,"title":label,"plot":label}
             infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":thumb,"logo":thumb}
             self.addLink(label, link, 9, infoLabels, infoArt, len(results))
         self.downloadLogos(items)
@@ -148,6 +154,7 @@ class TVCatchup(object):
         log('buildLineup, name = ' + str(name))
         soup    = BeautifulSoup(self.openURL(GUIDE_URL), "html.parser")
         results = soup('div' , {'class': 'row'})
+        now = datetime.datetime.now()
         for channel in results:
             chname = cleanString(channel.find_all('img')[0].attrs['alt'])
             link   = cleanString(channel.find_all('a')[0].attrs['href'])
@@ -164,11 +171,15 @@ class TVCatchup(object):
                     stime = trimString(stime[0].get_text())
                     dur   = self.getDuration(stime)
                     start = self.getLocaltime(stime.split('-')[0])
+                    end   = start + datetime.timedelta(seconds=dur)
+                    title = cleanString(item.get_text()).split('\n')[0]
+                    if now > end: continue
+                    if now >= start and now < end: title = '[B]%s[/B]'%title
                     aired = start.strftime('%Y-%m-%d')
                     start = start.strftime('%I:%M %p')
-                    label = '%s: %s - %s'%(start,chname,cleanString(item.get_text()).split('\n')[0])
+                    label = '%s: %s'%(start,title)
                     try: desc = trimString(item.find_all('br')[0].get_text())
-                    except: desc = ''
+                    except: desc = label
                     infoLabels = {"mediatype":"episode","label":label ,"title":label,"plot":desc,"duration":dur,"aired":aired}
                     infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":thumb,"logo":thumb}
                     self.addLink(label, link, 9, infoLabels, infoArt, len(items))
@@ -178,15 +189,15 @@ class TVCatchup(object):
 
     def uEPG(self):
         log('uEPG')
-        #support for upcoming uEPG universal epg framework module, module will be available from the Kodi repository.
-        #https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
+        #support for uEPG universal epg framework module available from the Kodi repository. https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
         soup    = BeautifulSoup(self.openURL(GUIDE_URL), "html.parser")
         results = soup('div' , {'class': 'row'})
-        return (self.buildGuide(idx, channel) for idx, channel in enumerate(results))
+        return [self.buildGuide(idx, channel) for idx, channel in enumerate(results)]
         
         
     def buildGuide(self, idx, channel):
         log('buildGuide, idx = ' + str(idx))
+        now        = datetime.datetime.now()
         chname     = cleanString(channel.find_all('img')[0].attrs['alt'])
         link       = cleanString(channel.find_all('a')[0].attrs['href'])
         chlogo     = LOGO%chname
@@ -212,6 +223,8 @@ class TVCatchup(object):
             except: desc = ''
             tmpdata = {"mediatype":"episode","label":title,"title":label,"originaltitle":label,"plot":desc,"duration":dur}
             tmpdata['starttime'] = starttime
+            endtime = start + datetime.timedelta(seconds=dur)
+            # if now > endtime: continue
             tmpdata['url'] = self.sysARG[0]+'?mode=9&name=%s&url=%s'%(label,link)
             tmpdata['art'] ={"thumb":chlogo,"clearart":chlogo,"fanart":FANART,"icon":chlogo,"clearlogo":chlogo}
             guidedata.append(tmpdata)

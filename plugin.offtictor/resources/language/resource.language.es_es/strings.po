@@ -1,0 +1,102 @@
+# Kodi Media Center language file
+# Addon Name: The Old Reader Addon (by Offtic)
+# Addon id: plugin.offtictor
+# Addon Provider: Juane Puig, kusinkay
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
+"POT-Creation-Date: 2017-04-21 08:46+GMT+2\n"
+"PO-Revision-Date: 2017-04-21 08:46+GMT+2\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "General"
+msgstr "General"
+
+msgctxt "#32011"
+msgid "Login"
+msgstr "Nombre de usuario / email"
+
+msgctxt "#32012"
+msgid "Password"
+msgstr "Contraseña"
+
+msgctxt "#32013"
+msgid "Connected"
+msgstr "Connectado"
+
+msgctxt "#32014"
+msgid "Mark as read"
+msgstr "Marcar como leído"
+
+msgctxt "#32015"
+msgid "Mark as unread"
+msgstr "Marcar como NO lleído"
+
+msgctxt "#32016"
+msgid "Play with Youtube"
+msgstr "Ver en Youtube"
+
+msgctxt "#32017"
+msgid "Marked as read"
+msgstr "Marcado como leído"
+
+msgctxt "#32018"
+msgid "Marked as unread"
+msgstr "Marcado como NO leído"
+
+msgctxt "#32019"
+msgid "Can not mark as read"
+msgstr "No se ha podido marcar como leído"
+
+msgctxt "#32020"
+msgid "Can not mark as unread"
+msgstr "No se ha podido marcar como NO leído"
+
+msgctxt "#32021"
+msgid "List Subscriptions"
+msgstr "Listar suscripciones"
+
+msgctxt "#32022"
+msgid "Clear cache"
+msgstr "Limpiar caché"
+
+msgctxt "#32023"
+msgid "Cache cleared"
+msgstr "Caché limpia"
+
+msgctxt "#32024"
+msgid "Behaviour"
+msgstr "Comportamiento"
+
+msgctxt "#32025"
+msgid "Max feed length"
+msgstr "Posts a mostrar de una suscripción"
+
+msgctxt "#32026"
+msgid "Subscriptions preloaded"
+msgstr "Suscripciones precargadas"
+
+msgctxt "#32027"
+msgid "Next page"
+msgstr "Siguiente página"
+
+msgctxt "#33001"
+msgid "Can not connect"
+msgstr "No se ha podido conectar"
+
+msgctxt "#33002"
+msgid "Can not connect to TOR"
+msgstr "No se ha podido conectar a TOR"
+
+msgctxt "#33003"
+msgid "Can not start addon"
+msgstr "No se ha podido iniciar el complemento"
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.offtictor" name="The Old Reader addon (by offtic)" version="1.0.0RC" provider-name="kusinkay">
+	<requires>
+		<import addon="xbmc.python" version="2.25.0"/>
+		<import addon="script.module.addon.common"/>
+		<import addon="script.common.plugin.cache" version="2.5.5"/>
+		<import addon="script.module.pydevd" optional="true" version="3.4.1"/><!-- debug from linux -->
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en_GB">Unofficial The Old Reader RSS add-on</summary>
+		<description lang="en_GB">It shows your TOR subscriptions on KODI. For each channel you can listen to its podcasts.</description>
+		<summary lang="ca_ES">Connector NO oficial per a RSS de The Old Reader</summary>
+		<description lang="ca_ES">Mostra les teves subscripcions RSS a The Old Reader. Per cada canal pots escoltar els seus podcasts.</description>
+		<summary lang="es_ES">Connector NO oficial para RSS de The Old Reader</summary>
+		<description lang="es_ES">Mostra tus suscripciones RSS en The Old Reader. Para cada canal puedes escuchar sus podcasts.</description>
+		<license>GNU General Public License, v2</license>
+		<language>en_GB ca_ES es_ES</language>
+		<forum></forum>
+		<source>https://github.com/kusinkay/plugin.offtictor/</source>
+		<email>juanepm@tinet.org</email>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.png</fanart>
+		</assets>
+		<news>Just released</news>
+	</extension>
+</addon>

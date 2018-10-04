@@ -3,6 +3,7 @@ plugin.video.abcfamily
 
 Kodi Addon for ABC Family website
 
+V3.0.7 website change
 V3.0.6 website change
 V3.0.5 website change
 V3.0.4 website changes

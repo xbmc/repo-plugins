@@ -22,8 +22,8 @@ class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
       urls = {}
-      html = self.getRequest('http://abc.go.com/shows')
-      html = re.compile('<main class="content(.+?)class="footer-modules"', re.DOTALL).search(html).group(1)
+      html = self.getRequest('https://abc.go.com/shows?category=a-z')
+      html = re.compile('<section  data-m-id=(.+?)<section  data-m-id=', re.DOTALL).search(html).group(1)
       a = re.compile('data-sm-id="".+?href="(.+?)".+?class="tablet-source.+?srcset="(.+?) ',re.DOTALL).findall(html)
       for url, thumb in a:
         if not '/' in url:
@@ -45,8 +45,8 @@ class myAddon(t1mAddon):
 
 
   def getAddonEpisodes(self,url,ilist, getFileData = False):
-      if not url.startswith('http:'):
-          url = 'http://abc.go.com'+url
+      if not url.startswith('http'):
+          url = 'https://abc.go.com'+url
       if not url.endswith('/episode-guide'):
           url = url+'/episode-guide'
       html = self.getRequest(url)

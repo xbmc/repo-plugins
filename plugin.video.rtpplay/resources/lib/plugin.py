@@ -75,9 +75,9 @@ def play():
 					if is_helper.check_inputstream():
 						# Grab token
 						src = requests.get(stream["tk"], headers=HEADERS).text
-						tk = re.compile('k: \'(.+?)\'', re.DOTALL).findall(src)
+						tk = re.compile('k: \"(.+?)\"', re.DOTALL).findall(src)
 						if tk:
-							payload='{"drm_info":[D{SSM}], "kid":"E13506F7439BEAE7DDF0489FCDDF7481", "token":"' + tk[0] + '"}'
+							payload='{"drm_info":[D{SSM}], "kid":"E13506F7439BEAE7DDF0489FCDDF7481", "token":"' + tk[1] + '"}'
 							liz = ListItem("[B][COLOR blue]{}[/B][/COLOR] ({})".format(kodiutils.smart_str(name), kodiutils.smart_str(prog)))
 							liz.setPath(stream["url"])
 							liz.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')

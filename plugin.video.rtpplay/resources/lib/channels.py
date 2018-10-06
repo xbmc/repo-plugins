@@ -2,14 +2,14 @@
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
-    "Referer": "http://www.rtp.pt/play"
+    "Referer": "http://www.rtp.pt/play/"
 }
 
 RTP_CHANNELS = [
     {   "id": "rtp1",
         "name" : "RTP 1",
         "streams": [
-            {"type":"hls", "url": "https://streaming-live.rtp.pt/liverepeater/smil:rtp1.smil/playlist.m3u8"},
+            {"type":"hls", "url": "http://rtp-pull-live-h1bnxvdk2-proprtp-app-wrtp.hls.adaptive.level3.net/liverepeater/rtp1_5ch5h264.stream/rtp_playlist.m3u8"},
             {"type":"dashwv", "url": "https://streaming-live.rtp.pt/liverepeater/rtp1.smil/manifest.mpd", "tk": "https://www.rtp.pt/play/direto/rtp1", "license": "https://widevine-proxy.drm.technology/proxy"}
         ]
     },
@@ -22,7 +22,7 @@ RTP_CHANNELS = [
     {   "id": "rtp3",
         "name" : "RTP 3",
         "streams": [
-             {"type":"hls", "url": "https://streaming-live.rtp.pt/liverepeater/smil:rtpn.smil/playlist.m3u8"},
+             {"type":"hls", "url": "https://streaming-live.rtp.pt/livetvhlsDVR/rtpndvr.smil/playlist.m3u8?DVR"},
              {"type":"dashwv", "url": "https://streaming-live.rtp.pt/liverepeater/rtpn.smil/manifest.mpd?DVR", "tk": "https://www.rtp.pt/play/direto/rtp3", "license": "https://widevine-proxy.drm.technology/proxy" }
         ] 
     },

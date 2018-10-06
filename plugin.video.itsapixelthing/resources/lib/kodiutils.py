@@ -18,6 +18,10 @@ def show_settings():
     ADDON.openSettings()
 
 
+def select(heading, options):
+    return xbmcgui.Dialog().select(heading, options)
+
+
 def log(message,level):
     prefix = b"[%s] " % ADDON_ID
     formatter = prefix + b'%(name)s: %(message)s'

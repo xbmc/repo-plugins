@@ -24,6 +24,12 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
 from bs4 import BeautifulSoup
 from simplecache import SimpleCache, use_cache
 
+try:
+    from multiprocessing import cpu_count 
+    from multiprocessing.pool import ThreadPool 
+    ENABLE_POOL = True
+except: ENABLE_POOL = False
+
 # Plugin Info
 ADDON_ID      = 'plugin.video.transpondertv'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
@@ -355,11 +361,13 @@ class Transponder(object):
         #support for uEPG universal epg framework module available from the Kodi repository. https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
         soup  = BeautifulSoup(self.openURL(GUIDE_URL), "html.parser")
         items = soup('div' , {'class': 'tvguideChannelListings noselect'})
-        return [self.buildGuide(self.channels[channel]['number'], self.channels[channel],items) for channel in self.channels]
+        now   = datetime.datetime.now()
+        data  = [(now, self.channels[channel]['number'], self.channels[channel], items) for channel in self.channels]
+        return self.poolList(self.buildGuide, data)
         
         
-    def buildGuide(self, chnum, channel, items):
-        now = datetime.datetime.now()
+    def buildGuide(self, data):
+        now, chnum, channel, items = data
         chname     = channel['name']
         link       = channel['url']
         chlogo     = channel['logo']
@@ -400,6 +408,18 @@ class Transponder(object):
             guidedata.append(tmpdata)
         newChannel['guidedata'] = guidedata
         return newChannel
+        
+        
+    def poolList(self, method, items):
+        results = []
+        if ENABLE_POOL:
+            pool = ThreadPool(cpu_count())
+            results = pool.imap_unordered(method, items)
+            pool.close()
+            pool.join()
+        else: results = [method(item) for item in items]
+        results = filter(None, results)
+        return results
         
         
     def resolverURL(self, url):

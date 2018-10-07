@@ -91,12 +91,12 @@ socket.setdefaulttimeout(TIMEOUT)
 class Locast(object):
     def __init__(self, sysARG):
         log('__init__, sysARG = ' + str(sysARG))
-        self.token  = (TOKEN or LANGUAGE(30017))
+        self.token  = (TOKEN or '')
         self.sysARG = sysARG
         self.cache  = SimpleCache()
         self.net    = net.Net(cookie_file=COOKIE_JAR,http_debug=DEBUG)
         self.lat, self.lon = self.setRegion()
-        if self.login(USER_EMAIL, PASSWORD) == False: xbmc.executebuiltin("Container.Refresh")
+        if self.login(USER_EMAIL, PASSWORD) == False: sys.exit()  
 
         
     def buildHeader(self):
@@ -127,9 +127,9 @@ class Locast(object):
             '''{u'token': u'', u'role': 1}'''
             if data and 'token' in data: 
                 self.token = data['token']
-                if TOKEN != self.token: 
-                    REAL_SETTINGS.setSetting('User_Token',self.token)
-                    xbmc.executebuiltin("Container.Refresh")
+                if TOKEN != self.token: REAL_SETTINGS.setSetting('User_Token',self.token)
+                return True
+            else: notificationDialog(LANGUAGE(30017))
         else:
             #firstrun wizard
             if yesnoDialog(LANGUAGE(30008),no=LANGUAGE(30009), yes=LANGUAGE(30010)):
@@ -138,9 +138,8 @@ class Locast(object):
                 REAL_SETTINGS.setSetting('User_Email'   ,user)
                 REAL_SETTINGS.setSetting('User_Password',password)
                 return self.login(user, password)
-            else: 
-                okDialog(LANGUAGE(30012))
-                sys.exit()
+            else: okDialog(LANGUAGE(30012))
+        return False
 
         
     def getEPG(self, city):
@@ -149,11 +148,11 @@ class Locast(object):
         '''[{"id":104,"dma":501,"name":"WCBSDT (WCBS-DT)","callSign":"WCBS","logoUrl":"https://fans.tmsimg.com/h5/NowShowing/28711/s28711_h5_aa.png","active":true,"affiliate":"CBS","affiliateName":"CBS",
              "listings":[{"stationId":104,"startTime":1535410800000,"duration":1800,"isNew":true,"audioProperties":"CC, HD 1080i, HDTV, New, Stereo","videoProperties":"CC, HD 1080i, HDTV, New, Stereo","programId":"EP000191906491","title":"Inside Edition","description":"Primary stories and alternative news.","entityType":"Episode","airdate":1535328000000,"genres":"Newsmagazine","showType":"Series"}]}'''
         if not epg:
-            now = ('{0:.23s}{1:s}'.format(datetime.datetime.now().strftime('%Y-%m-%dT00:00:00'),'-07:00'))
+            now = ('{0:.23s}{1:s}'.format(datetime.datetime.now().strftime('%Y-%m-%dT00:00:00'),'.155-07:00'))
             epg = json.loads(self.net.http_POST(BASE_API, form_data={'action':'get_epgs','dma':city,'start_time':now}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
-            self.cache.set(ADDON_NAME + '.getEPG.%s'%city, epg, expiration=datetime.timedelta(hours=1))
+            self.cache.set(ADDON_NAME + '.getEPG.%s'%city, epg, expiration=datetime.timedelta(minutes=15))
         return epg
-
+        
         
     def getCity(self):
         log("getCity")
@@ -162,7 +161,7 @@ class Locast(object):
             city = self.cache.get(ADDON_NAME + 'getCity')
             if not city:
                 city = json.loads(self.net.http_POST(BASE_API, form_data={'action':'get_dma','lat':self.lat,'lon':self.lon}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
-                self.cache.set(ADDON_NAME + 'getCity', city, expiration=datetime.timedelta(hours=1))
+                self.cache.set(ADDON_NAME + 'getCity', city, expiration=datetime.timedelta(minutes=15))
             if city and 'DMA' not in city: okDisable(city.get('message'))
             else: return city
         except: okDisable(LANGUAGE(30013))
@@ -173,7 +172,7 @@ class Locast(object):
             geo_data = self.cache.get(ADDON_NAME + 'setRegion')
             if not geo_data:
                 geo_data = json.load(urllib2.urlopen(GEO_URL))
-                self.cache.set(ADDON_NAME + 'setRegion', geo_data, expiration=datetime.timedelta(hours=1))
+                self.cache.set(ADDON_NAME + 'setRegion', geo_data, expiration=datetime.timedelta(minutes=15))
         except: geo_data = {'lat':0.0,'lon':0.0}
         return float('{0:.7f}'.format(geo_data['lat'])), float('{0:.7f}'.format(geo_data['lon']))
 
@@ -204,9 +203,8 @@ class Locast(object):
             
 
     def buildListings(self, listings, chname, chlogo, path, opt='uEPG'):
-        log('buildListings, chname = ' + chname)
+        log('buildListings, chname = ' + chname + ', opt = ' + opt)
         now = datetime.datetime.now()
-        #todo added more meta from listings, ie mpaa, isNew, video/audio codec
         for listing in listings:
             try: starttime  = datetime.datetime.fromtimestamp(int(str(listing['startTime'])[:-3]))
             except: continue
@@ -219,23 +217,23 @@ class Locast(object):
             try: type  = {'Series':'episode'}[listing.get('showType','Series')]
             except: type = 'video'
             plot = (listing.get('description','') or label)
-            if opt == 'Live' and starttime <= now <= endtime: label = '%s - %s'%(chname, label)
-            elif opt == 'Lineup': label = '%s: %s - %s'%(starttime.strftime('%I:%M %p').lstrip('0'),chname,label)
+            if now > endtime: continue
+            elif opt == 'Live': label = '%s - %s'%(chname, label)
+            elif opt == 'Lineup'and now >= starttime and now < endtime: label = '%s - [B]%s[/B]'%(starttime.strftime('%I:%M %p').lstrip('0'),label)
             infoLabels = {"mediatype":type,"label":label,"title":label,'duration':duration,'plot':plot,'genre':listing.get('genres',[]),"aired":aired.strftime('%Y-%m-%d')}
             infoArt    = {"thumb":chlogo,"poster":chlogo,"fanart":FANART,"icon":chlogo,"logo":chlogo}
+            infoVideo  = False #todo added more meta from listings, ie mpaa, isNew, video/audio codec
+            infoAudio  = False #todo added more meta from listings, ie mpaa, isNew, video/audio codec
             if opt == 'Live':
-                if starttime <= now <= endtime: return self.addLink(label, path, 9, infoLabels, infoArt, total=len(listings))
+                if now >= starttime and now < endtime: return self.addLink(label, path, 9, infoLabels, infoArt, infoVideo, infoAudio, total=len(listings))
                 else: continue
-            else:self.addLink(label, path, 9, infoLabels, infoArt, total=len(listings))
+            self.addLink(label, path, 9, infoLabels, infoArt, infoVideo, infoAudio, total=len(listings))
         
         
     def uEPG(self):
         log('uEPG')
-        #support for upcoming uEPG universal epg framework module, module will be available from the Kodi repository.
-        #https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
-        stations = self.getEPG(self.getRegion())
-        # return [self.buildGuide(station) for station in stations]
-        return self.poolList(self.buildGuide, stations)
+        #support for uEPG universal epg framework module. #https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
+        return self.poolList(self.buildGuide, self.getEPG(self.getRegion()))
         
         
     def buildGuide(self, station):
@@ -253,7 +251,6 @@ class Locast(object):
         newChannel['channellogo']   = chlogo
         newChannel['isfavorite']    = isFavorite
         listings = station['listings']
-        #todo added more meta from listings, ie mpaa, isNew, video/audio codec
         for listing in listings:
             try: type  = {'Series':'episode'}[listing.get('showType','Series')]
             except: type = 'video'
@@ -301,7 +298,7 @@ class Locast(object):
         xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
     
            
-    def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0):
+    def addLink(self, name, u, mode, infoList=False, infoArt=False, infoVideo=False, infoAudio=False, total=0):
         name = name.encode("utf-8")
         log('addLink, name = ' + name)
         liz=xbmcgui.ListItem(name)
@@ -310,6 +307,8 @@ class Locast(object):
         else: liz.setInfo(type="Video", infoLabels=infoList)
         if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
         else: liz.setArt(infoArt)
+        if infoVideo is not False: liz.addStreamInfo('video', infoVideo)
+        if infoAudio is not False: liz.addStreamInfo('audio', infoAudio)
         u=self.sysARG[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,totalItems=total)
 
@@ -349,7 +348,7 @@ class Locast(object):
         elif mode == 4: self.getStations(name, url, 'Lineups')
         elif mode == 5: self.getStations(name, url, 'Lineup')
         elif mode == 9: self.playLive(name, url)
-        elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(json.dumps(list(self.uEPG()))),urllib.quote(json.dumps(self.sysARG[0]+"?mode=20")),urllib.quote(json.dumps("7200")),urllib.quote(json.dumps("7"))))
+        elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&refresh_path=%s&refresh_interval=%s)"%(urllib.quote(json.dumps(list(self.uEPG()))),urllib.quote(json.dumps(self.sysARG[0]+"?mode=20")),urllib.quote(json.dumps("7200"))))
 
         xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)
         xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)

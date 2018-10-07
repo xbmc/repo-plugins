@@ -1,0 +1,4 @@
+.vscode
+*.pyo
+*.pyc
+simplecache.py

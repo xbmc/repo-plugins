@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30010">
+        <setting id="Prefer_HD" type="bool" label="30002" default="true" />
+        <setting id="Enable_Show_Segments" type="bool" label="30001" default="true" />
+        <setting id="Enable_Segments_Topics" type="bool" label="30003" default="false" />
+        <setting id="Extract_Subtitles" type="bool" label="30004" default="false" />
+        <setting id="Enable_Debugging" type="bool" label="30000" default="false" />
+    </category>
+    <category label="30012">
+        <setting id="All_Shows" type="bool" label="30050" default="true" />
+        <setting id="Favourite_Shows" type="bool" label="30051" default="true" />
+        <setting id="Newest_Favourite_Shows" type="bool" label="30052" default="true" />
+        <setting id="Recommendations" type="bool" label="30053" default="true" />
+        <setting id="Newest_Shows" type="bool" label="30054" default="true" />
+        <setting id="Most_Clicked_Shows" type="bool" label="30055" default="true" />
+        <setting id="Shows_By_Date" type="bool" label="30057" default="true" />
+        <setting id="Live_TV" type="bool" label="30070" default="true" />
+    </category>
+    <category label="30011">
+        <setting label="30005" type="action" action="RunPlugin(plugin://plugin.video.rtsplaytv?mode=19)" />        
+    </category>
+</settings>

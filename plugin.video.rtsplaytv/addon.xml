@@ -17,7 +17,6 @@
     <language>fr</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-    <forum></forum>
     <website>https://www.rts.ch/play/tv</website>
     <email>seileralex@gmail.com</email>
     <source>https://github.com/goggle/plugin.video.rtsplaytv</source>
@@ -27,8 +26,6 @@ First release
     <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.png</fanart>
-        <banner></banner>
-        <clearlogo></clearlogo>
         <screenshot>resources/screenshot-01.png</screenshot>
         <screenshot>resources/screenshot-02.png</screenshot>
         <screenshot>resources/screenshot-03.png</screenshot>

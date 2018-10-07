@@ -1193,9 +1193,10 @@ class RTSPlayTV(object):
         if subs and SUBTITLES:
             subtitle_list = [x.get('url') for x in subs if
                              x.get('format') == 'VTT']
-            if not subtitle_list:
+            if subtitle_list:
+                list_item.setSubtitles(subtitle_list)
+            else:
                 log('No WEBVTT subtitles found for video id %s.' % vid)
-            list_item.setSubtitles(subtitle_list)
         if is_folder:
             list_item.setProperty('IsPlayable', 'false')
             url = self.build_url(mode=21, name=vid)

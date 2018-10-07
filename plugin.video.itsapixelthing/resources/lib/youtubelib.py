@@ -5,6 +5,7 @@ import addonutils
 import xbmc
 import math
 import re
+import sys
 import xbmcaddon
 from xbmcgui import ListItem
 
@@ -15,8 +16,23 @@ CAST = [TVSHOWTITLE]
 STATUS = 'in production'
 
 
+def get_live_videos():
+    api_endpoint = 'https://www.googleapis.com/youtube/v3/search?eventType=live&part=snippet&channelId=%s&type=video&maxResults=50&key=%s' % (CHANNEL_ID, YOUTUBE_API_KEY)
+    try:
+        resp = requests.get(api_endpoint).json()
+    except ValueError:
+        kodiutils.log(kodiutils.get_string(32009), xbmc.LOGERROR)
+        sys.exit(0)
+    if "items" in resp.keys():
+        for item in resp["items"]:
+            yield {
+                "label": item["snippet"]["title"],
+                "video_id": item["id"]["videoId"]
+            }
+
+
 def get_playlists():
-    api_endpoint = 'https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&channelId=%s&maxResults=50&key=%s' % (CHANNEL_ID,YOUTUBE_API_KEY)
+    api_endpoint = 'https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&channelId=%s&maxResults=50&key=%s' % (CHANNEL_ID, YOUTUBE_API_KEY)
     try:
         resp = requests.get(api_endpoint).json()
     except ValueError:
@@ -110,7 +126,8 @@ def get_videos(name,playlist_id,token="",page_num=1):
                         video_info['width'] = 854
                         video_info['height'] = 480
                         audio_info['channels'] = 1
-                    if xbmcaddon.Addon(id='plugin.video.youtube').getSetting('kodion.video.quality.ask') == 'false' and xbmcaddon.Addon(
+
+                    if addonutils.is_youtube_addon_installed() and xbmcaddon.Addon(id='plugin.video.youtube').getSetting('kodion.video.quality.ask') == 'false' and xbmcaddon.Addon(
                                     id='plugin.video.youtube').getSetting('kodion.video.quality') != '3' and xbmcaddon.Addon(
                                     id='plugin.video.youtube').getSetting('kodion.video.quality') != '4':
                         video_info['width'] = 854

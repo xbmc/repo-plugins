@@ -51,3 +51,16 @@ msgstr ""
 msgctxt "#32008"
 msgid "Next page"
 msgstr ""
+
+msgctxt "#32009"
+msgid "No live videos at the moment"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Live"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Watch videos now live on the channel"
+msgstr ""
+

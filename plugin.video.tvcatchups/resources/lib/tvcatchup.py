@@ -24,6 +24,12 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
 from bs4 import BeautifulSoup
 from simplecache import SimpleCache, use_cache
 
+try:
+    from multiprocessing import cpu_count 
+    from multiprocessing.pool import ThreadPool 
+    ENABLE_POOL = True
+except: ENABLE_POOL = False
+
 # Plugin Info
 ADDON_ID      = 'plugin.video.tvcatchups'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
@@ -192,10 +198,12 @@ class TVCatchup(object):
         #support for uEPG universal epg framework module available from the Kodi repository. https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
         soup    = BeautifulSoup(self.openURL(GUIDE_URL), "html.parser")
         results = soup('div' , {'class': 'row'})
-        return [self.buildGuide(idx, channel) for idx, channel in enumerate(results)]
+        data    = [(idx, channel) for idx, channel in enumerate(results)]
+        return self.poolList(self.buildGuide, data)
         
         
-    def buildGuide(self, idx, channel):
+    def buildGuide(self, data):
+        idx, channel = data
         log('buildGuide, idx = ' + str(idx))
         now        = datetime.datetime.now()
         chname     = cleanString(channel.find_all('img')[0].attrs['alt'])
@@ -230,6 +238,18 @@ class TVCatchup(object):
             guidedata.append(tmpdata)
         newChannel['guidedata'] = guidedata
         return newChannel
+        
+        
+    def poolList(self, method, items):
+        results = []
+        if ENABLE_POOL:
+            pool = ThreadPool(cpu_count())
+            results = pool.imap_unordered(method, items)
+            pool.close()
+            pool.join()
+        else: results = [method(item) for item in items]
+        results = filter(None, results)
+        return results
 
             
     def resolverURL(self, url):

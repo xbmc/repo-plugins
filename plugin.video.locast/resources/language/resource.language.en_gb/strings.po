@@ -81,5 +81,5 @@ msgid "Add-on successfully disabled"
 msgstr ""
 
 msgctxt "#30017"
-msgid "iyJhbGciOiJIUzI1NiJ9.iyJzdWIiOiJrZ3JhZXJAYW9sLmNvb6IsImV4cCI6MTUzNjg2MDUxNX9.7_u8oAgvk9V69cYaPQ1wjsmHAHFJMAc6qPKTgCEgcXo"
+msgid "Something went wrong, please check user credentials and try again."
 msgstr ""

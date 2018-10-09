@@ -208,6 +208,9 @@ elif mode == 137:
 elif mode == 138:
     Radio.GetAtoZPage(url)
 
+elif mode == 139:
+    Video.GetMultipleEpisodes(url)
+
 # Modes 201-299 will create a playable menu entry, not a directory
 elif mode == 201:
     Video.PlayStream(name, url, iconimage, description, subtitles_url)

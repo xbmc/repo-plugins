@@ -97,10 +97,13 @@ def log(msg, level=xbmc.LOGDEBUG):
     msg   -- the message to log
     level -- the logging level
     """
+    if isinstance(msg, str):
+        msg = msg.decode('utf-8')
     if DEBUG:
         if level == xbmc.LOGERROR:
             msg += ' ,' + traceback.format_exc()
-    xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
+    message = ADDON_ID + '-' + ADDON_VERSION + '-' + msg
+    xbmc.log(msg=message.encode('utf-8'), level=level)
 
 
 def get_params():
@@ -224,7 +227,7 @@ def parse_datetime(input_string):
         return date_time
     date_time = _parse_date_time_tz(input_string)
     if not date_time:
-        log('parse_datetime: Could not parse input string %s', input_string)
+        log('parse_datetime: Could not parse input string %s' % input_string)
     return date_time
 
 
@@ -294,7 +297,7 @@ def _parse_weekday_time(input_string):
             'Sonntag',
         )
         special_weekdays = ('gestern', 'heute', 'morgen')
-    else: # BU == 'rts'
+    else:  # BU == 'rts'
         weekdays = (
             'Lundi',
             'Mardi',
@@ -308,7 +311,7 @@ def _parse_weekday_time(input_string):
     weekdays += special_weekdays
 
     recent_date_regex = r'''(?x)
-                            (?P<weekday>[a-zA-z]+)
+                            (?P<weekday>[a-zA-z\']+)
                             \s*,\s*
                             (?P<hour>\d{2})(:|h)
                             (?P<minute>\d{2})

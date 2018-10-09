@@ -191,12 +191,72 @@ def GetAtoZPage(url):
 
     Creates the list of programmes for one character.
     """
-    link = OpenURL('https://www.bbc.co.uk/iplayer/a-z/%s' % url)
-    match = re.compile(
-        '<a href="/iplayer/brand/(.+?)".+?<span class="title">(.+?)</span>',
-        re.DOTALL).findall(link)
-    for programme_id, name in match:
-        AddMenuEntry(name, programme_id, 121, '', '', '')
+    html = OpenURL('https://www.bbc.co.uk/iplayer/a-z/%s' % url)
+
+    # There is a new layout for episodes, scrape it from the JSON received as part of the page
+    match = re.search(
+              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
+              html, re.DOTALL)
+    if match:
+        data = match.group(1)
+        json_data = json.loads(data)
+        # print json.dumps(json_data, indent=2, sort_keys=True)
+
+        current_letter = json_data['appStoreState']['currentLetter']
+
+        for item in json_data['appStoreState']['programmes'][current_letter]['entities']:
+            meta = item.get("meta")
+            item = item.get("props")
+            if not item:
+                continue
+
+            main_url = None
+            if 'href' in item:
+                # Some strings already contain the full URL, need to work around this.
+                url = item['href'].replace('http://www.bbc.co.uk','')
+                url = url.replace('https://www.bbc.co.uk','')
+                if url:
+                    main_url = 'https://www.bbc.co.uk' + url
+
+            num_episodes = None
+            if 'episodesAvailable' in meta:
+                if meta['episodesAvailable'] > 1:
+                    num_episodes = str(meta['episodesAvailable'])
+
+            title = ''
+            if 'title' in item:
+                if num_episodes:
+                    title = item['title']+' - '+num_episodes+' episodes available'
+                else:
+                    title = item['title']
+
+            synopsis = ''
+            if 'synopsis' in item:
+                synopsis = item['synopsis']
+
+            icon = ''
+            if 'imageTemplate' in item:
+                icon = item['imageTemplate'].replace("{recipe}","832x468")
+
+            if num_episodes:
+                AddMenuEntry(title, main_url, 139, icon, synopsis, '')
+            else:
+                CheckAutoplay(title , main_url, icon, synopsis, '')
+
+
+def GetMultipleEpisodes(url):
+    html = OpenURL(url)
+    # There is a new layout for episodes, scrape it from the JSON received as part of the page
+    match = re.search(
+              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
+              html, re.DOTALL)
+    if match:
+        data = match.group(1)
+        json_data = json.loads(data)
+        # print json.dumps(json_data, indent=2, sort_keys=True)
+
+        if json_data['episode']['tleo_id']:
+            GetEpisodes(json_data['episode']['tleo_id'])
 
 
 def ParseAired(aired):
@@ -463,6 +523,7 @@ def ScrapeEpisodes(page_url):
                 name = json_data['initialState']['header']['title']
 
             for item in json_data['initialState']['entities']:
+                meta = item.get("meta")
                 item = item.get("props")
                 if not item:
                     continue
@@ -471,16 +532,16 @@ def ScrapeEpisodes(page_url):
                 if 'href' in item:
                     # Some strings already contain the full URL, need to work around this.
                     url = item['href'].replace('http://www.bbc.co.uk','')
-                    url = item['href'].replace('https://www.bbc.co.uk','')
+                    url = url.replace('https://www.bbc.co.uk','')
                     if url:
                         main_url = 'https://www.bbc.co.uk' + url
 
                 episodes_url = ""
                 episodes_title = ""
-                if 'secondaryHref' in item:
+                if 'secondaryHref' in meta:
                     # Some strings already contain the full URL, need to work around this.
-                    url = item['secondaryHref'].replace('http://www.bbc.co.uk','')
-                    url = item['secondaryHref'].replace('https://www.bbc.co.uk','')
+                    url = meta['secondaryHref'].replace('http://www.bbc.co.uk','')
+                    url = url.replace('https://www.bbc.co.uk','')
                     if url:
                         episodes_url = 'https://www.bbc.co.uk' + url
                         episodes_title = item["title"]
@@ -602,9 +663,10 @@ def ScrapeAtoZEpisodes(page_url):
                 index = 1
                 for entity in json_data['initialState']['entities']:
                     item = entity.get("props")
+                    meta = entity.get("meta")
                     if not item:
                         continue
-                    ParseHighlightsJSON(item)
+                    ParseHighlightsJSON(item, meta)
 
                     percent = int(100*(page+index/len(json_data['initialState']['entities']))/last_page)
                     pDialog.update(percent,translation(30319))
@@ -802,12 +864,12 @@ def ListChannelHighlights():
         AddMenuEntry(name, id, 106, iconimage, '', '')
 
 
-def ParseHighlightsJSON(item):
+def ParseHighlightsJSON(item, meta):
     main_url = None
     if 'href' in item:
         # Some strings already contain the full URL, need to work around this.
         url = item['href'].replace('http://www.bbc.co.uk','')
-        url = item['href'].replace('https://www.bbc.co.uk','')
+        url = url.replace('https://www.bbc.co.uk','')
         if url:
             main_url = 'https://www.bbc.co.uk' + url
 
@@ -816,10 +878,18 @@ def ParseHighlightsJSON(item):
     if 'secondaryHref' in item:
         # Some strings already contain the full URL, need to work around this.
         url = item['secondaryHref'].replace('http://www.bbc.co.uk','')
-        url = item['secondaryHref'].replace('https://www.bbc.co.uk','')
+        url = url.replace('https://www.bbc.co.uk','')
         if url:
             episodes_url = 'https://www.bbc.co.uk' + url
             episodes_title = item["title"]
+    elif meta:
+        if 'secondaryHref' in meta:
+            # Some strings already contain the full URL, need to work around this.
+            url = meta['secondaryHref'].replace('http://www.bbc.co.uk','')
+            url = url.replace('https://www.bbc.co.uk','')
+            if url:
+                episodes_url = 'https://www.bbc.co.uk' + url
+                episodes_title = item["title"]
 
     if 'subtitle' in item:
         title = "%s - %s" % (item['title'], item['subtitle'])
@@ -867,7 +937,7 @@ def ListHighlights(highlights_url):
                     item = item.get("props")
                     if not item:
                         continue
-                    ParseHighlightsJSON(item)
+                    ParseHighlightsJSON(item, None)
 
                 title = ''
                 id = ''
@@ -887,7 +957,7 @@ def ListHighlights(highlights_url):
                     item = item.get("props")
                     if not item:
                         continue
-                    ParseHighlightsJSON(item)
+                    ParseHighlightsJSON(item, None)
 
         bundles = ''
         bundles = json_data['initialState'].get('bundles')
@@ -897,7 +967,7 @@ def ListHighlights(highlights_url):
                 entity = bundle.get('entities')
                 if entity:
                     for item in entity:
-                        ParseHighlightsJSON(item)
+                        ParseHighlightsJSON(item, None)
                 journey = ''
                 journey = bundle.get('journey')
                 if journey:

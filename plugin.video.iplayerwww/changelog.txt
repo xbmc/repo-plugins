@@ -1,3 +1,7 @@
+v2.5.42
+Fixed A-Z.
+Fixed Categories.
+
 v2.5.41
 Fixed Radio A-Z.
 Added additional stream sources for Radio.

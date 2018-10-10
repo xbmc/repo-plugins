@@ -19,7 +19,10 @@ def Get_Show_Episodes(page):
   i = 0
   for date, link, image_id, title, allhosts, description in episodes:
     hosts_decoded = re.compile('href="(.+?)">(.+?)<',re.DOTALL).findall(allhosts)
-    image = re.search('data-image-id="%s".+?url\((.+?)\)' % image_id, page, re.MULTILINE | re.DOTALL).group(1)
+    try:
+      image = re.search('data-image-id="%s".+?url\((.+?)\)' % image_id, page, re.MULTILINE | re.DOTALL).group(1)
+    except:
+      image = ''
     x = 0
     for host_info, host in hosts_decoded:
       hosts[x] = {"host": host,
@@ -65,10 +68,4 @@ def List_Shows(page):
                "avatar" : avatar}
     i+=1
   return show
-#loggedin, cookies = logon.logon('brian_soucy@hotmail.com', 'eliteelite420')
-#logon.save_cookie(cookies)
-
-#List_Shows(shows)
-#Get_Show_Episodes(show[11]["link"] + "/episodes")#?page=3")
-#hd, sd = Watch_Episode(main_show_episode)
 

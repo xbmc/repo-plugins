@@ -1,6 +1,5 @@
 import httplib, Cookie, json , re#jwt, logging
 from pyjwt.api_jwt import encode
-#curl -i 'https://platform.tyt.com/api/v1/users/auth?is_demo=0' -H 'Content-Type: application/json' -H 'Accept: application/json, text/plain, */*' -H 'Connection: keep-alive' --data-binary '{"method":"tyt","email":"email@hotmail.com","password":"whateverpwd","rememberMe":true}'
 
 header = {
   'Content-Type': 'application/json',

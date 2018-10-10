@@ -1,3 +1,5 @@
+[B]3.0.1[/B]
+- Fixed error with plugin crashing when an image is not listed
 [B]3.0.0[/B]
 - Major Overhaul to work with the new TYT.com website
 - Now Supports automatically adding in new shows without requiring update.

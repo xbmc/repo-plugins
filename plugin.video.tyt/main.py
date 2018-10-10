@@ -18,7 +18,6 @@ user_name = settings.getSetting("username")
 user_pwd = settings.getSetting("password")
 
 cookie = {}
-MEDIA_URL = 'special://home/addons/{0}/resources/images/'.format(PLUGIN_ID)
 
 def show_changelog():
   with open(changelog) as f:

@@ -1,31 +1,26 @@
 from resources.lib.globals import *
 
-params=get_params()
-url=None
-name=None
-mode=None
+params = get_params()
+url = None
+name = None
+mode = None
 
-try:
-    url=urllib.unquote_plus(params["url"])
-except:
-    pass
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    mode=int(params["mode"])
-except:
-    pass
+if 'url' in params:
+    url = urllib.unquote_plus(params["url"])
 
+if 'name' in params:
+    name = urllib.unquote_plus(params["name"])
 
-if mode==None or url==None or len(url)<1:                    
+if 'mode' in params:
+    mode = int(params["mode"])
+
+if mode is None or url is None or len(url)<1:
     listSeasons()
-elif mode==101:
+elif mode == 101:
     listEpisodes(url)  
-elif mode==102:
+elif mode == 102:
     getStream(url)
-elif mode==999:
-	deauthorize()
+elif mode == 999:
+    deauthorize()
 
 xbmcplugin.endOfDirectory(addon_handle)

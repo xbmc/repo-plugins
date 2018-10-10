@@ -1,25 +1,39 @@
 import sys, os
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs
 import random
 import cookielib, urllib
-import json
 import requests
-import time, calendar
-from datetime import date, datetime, timedelta
+import time
+import shutil
+from datetime import datetime, timedelta
 from sony import SONY
 
 
 def main_menu():
-    if ADDON.getSetting(id='all_chan_visible') == 'true': add_dir(LOCAL_STRING(30224), 30, ICON)
-    if ADDON.getSetting(id='next_airings_visible') == 'true': add_dir(LOCAL_STRING(30100), 50, ICON)
-    if ADDON.getSetting(id='myshows_visible') == 'true': add_dir(LOCAL_STRING(30101), 100, ICON)
-    if ADDON.getSetting(id='fav_visible') == 'true': add_dir(LOCAL_STRING(30102), 200, ICON)
-    if ADDON.getSetting(id='live_visible') == 'true': add_dir(LOCAL_STRING(30103), 300, ICON)
-    if ADDON.getSetting(id='sports_visible') == 'true': add_dir(LOCAL_STRING(30104), 400, ICON)
-    if ADDON.getSetting(id='kids_visible') == 'true': add_dir(LOCAL_STRING(30105), 500, ICON)
-    if ADDON.getSetting(id='recent_visible') == 'true': add_dir(LOCAL_STRING(30106), 600, ICON)
-    if ADDON.getSetting(id='featured_visible') == 'true': add_dir(LOCAL_STRING(30107), 700, ICON)
-    if ADDON.getSetting(id='search_visible') == 'true': add_dir(LOCAL_STRING(30211), 750, ICON)
+    if ADDON.getSetting(id='all_chan_visible') == 'true':
+        add_dir(LOCAL_STRING(30224), 30, ICON)
+    if ADDON.getSetting(id='next_airings_visible') == 'true':
+        add_dir(LOCAL_STRING(30100), 50, ICON)
+    if ADDON.getSetting(id='trending_visible') == 'true':
+        add_dir(LOCAL_STRING(30228), 75, ICON)
+    if ADDON.getSetting(id='myshows_visible') == 'true':
+        add_dir(LOCAL_STRING(30101), 100, ICON)
+    if ADDON.getSetting(id='fav_visible') == 'true':
+        add_dir(LOCAL_STRING(30102), 200, ICON)
+    if ADDON.getSetting(id='live_visible') == 'true':
+        add_dir(LOCAL_STRING(30103), 300, ICON)
+    if ADDON.getSetting(id='sports_visible') == 'true':
+        add_dir(LOCAL_STRING(30104), 400, ICON)
+    if ADDON.getSetting(id='kids_visible') == 'true':
+        add_dir(LOCAL_STRING(30105), 500, ICON)
+    if ADDON.getSetting(id='movies_visible') == 'true':
+        add_dir(LOCAL_STRING(30108), 550, ICON)
+    if ADDON.getSetting(id='recent_visible') == 'true':
+        add_dir(LOCAL_STRING(30106), 600, ICON)
+    if ADDON.getSetting(id='featured_visible') == 'true':
+        add_dir(LOCAL_STRING(30107), 700, ICON)
+    if ADDON.getSetting(id='search_visible') == 'true':
+        add_dir(LOCAL_STRING(30211), 750, ICON)
 
 
 def all_channels():
@@ -29,6 +43,11 @@ def all_channels():
 
 def next_airings():
     list_next_airings()
+
+
+def trending():
+    json_source = get_json(EPG_URL + '/browse/items/now_playing/filter/all/sort/popular/offset/0/size/40')
+    list_shows(json_source['body']['items'])
 
 
 def my_shows():
@@ -59,6 +78,19 @@ def sports():
 def kids():
     json_source = get_json(EPG_URL + '/programs?size=100&offset=0&filter=ds-kids')
     list_shows(json_source['body']['items'])
+
+
+def movies(offset, size):
+    json_source = get_json(EPG_URL + '/explore/items/results/sentv_type/6/sub_type/'
+                                     + ADDON.getSetting(id='movie_genre_id') + '/content_length/0/rating/0'
+                                     '/channel/0/sort/popular/offset/' + offset + '/size/' + size)
+
+    if int(offset) > 0:
+        add_dir('[B]' + LOCAL_STRING(30897) + '[/B]', 551, ICON, None, None, str(int(offset) - int(size)))
+
+    list_shows(json_source['body']['items'])
+
+    add_dir('[B]' + LOCAL_STRING(30898) + '[/B]', 552, ICON, None, None, str(int(offset) + int(size)))
 
 
 def recently_watched():
@@ -105,7 +137,7 @@ def list_next_airings():
     for strand in json_source['body']['strands']:
         if strand['id'] == 'now_playing':
             icon = ICON
-            for image in strand['programs'][0]['channel']['urls']: #Display Channel icon
+            for image in strand['programs'][0]['channel']['urls']:  # Display Channel icon
                 if 'width' in image:
                     if image['width'] == 600 or image['width'] == 440: icon = image['src']
                     if icon != ICON: break
@@ -125,8 +157,13 @@ def list_next_airings():
 
 
 def list_shows(json_source):
+    global EXPORT_DATE
+    hours = int(ADDON.getSetting(id='library_update'))
     for show in json_source:
         list_show(show)
+    if EXPORT_DATE < datetime.now() - timedelta(hours=hours):
+        EXPORT_DATE = datetime.now()
+        ADDON.setSetting(id='last_export', value=EXPORT_DATE.strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
 
 
 def list_show(show):
@@ -134,24 +171,34 @@ def list_show(show):
     icon = ICON
     for image in show['urls']:
         if 'width' in image:
-            if image['width'] == 600: icon = image['src']
-            if image['width'] >= 1080: fanart = image['src']
+            if image['width'] == 600:
+                icon = image['src']
+            if image['width'] >= 1080:
+                fanart = image['src']
             if icon != ICON and fanart != FANART: break
-    title = show['display_title']
+    if str(show['is_new']).upper() == 'TRUE':
+        title = '[COLOR=yellow]New[/COLOR] ' + show['display_title']
+    else:
+        title = show['display_title']
         
     airing_id = 'null'
-    if 'airings' in show: airing_id = str(show['airings'][0]['airing_id'])
+    if 'airings' in show:
+        airing_id = str(show['airings'][0]['airing_id'])
     channel_id = 'null'
-    if 'channel' in show: channel_id = str(show['channel']['channel_id'])
+    if 'channel' in show:
+        channel_id = str(show['channel']['channel_id'])
     program_id = 'null'
-    program_id = str(show['id'])
+    if 'id' in show:
+        program_id = str(show['id'])
     series_id = 'null'
-    if 'series_id' in show: series_id = str(show['series_id'])
+    if 'series_id' in show:
+        series_id = str(show['series_id'])
     tms_id = str(show['tms_id'])
     name = title
     genre = ''
     for item in show['genres']:
-        if genre != '': genre += ', '
+        if genre != '':
+            genre += ', '
         genre += item['genre']
 
     plot = get_dict_item('series_synopsis', show)
@@ -184,16 +231,123 @@ def list_show(show):
         add_show(title, 150, icon, fanart, info, show_info)
         
     add_sort_methods(addon_handle)
+    
+    hours = int(ADDON.getSetting(id='library_update'))
+    path = xbmc.translatePath(os.path.join(ADDON.getSetting(id='library_folder'),
+                                           'PSVue Library') + '/' + 'TV shows' + '/')
+    show_path = xbmc.translatePath(path + title + '/')
+    # When My DVR is selected, if show has been exported then it will delete the folder and re-add new episodes
+    # Only check exported shows every 8 hours
+    if xbmcvfs.exists(show_path) and EXPORT_DATE < datetime.now() - timedelta(hours=hours):
+        shutil.rmtree(show_path,ignore_errors=True)
+        export_show(program_id, icon, plot)
+
+
+def export_show(program_id, plot, icon):
+    xbmcgui.Dialog().notification("LIBRARY EXPORT:", "STARTING", xbmcgui.NOTIFICATION_INFO, 5000)
+    url = EPG_URL + '/details/items/program/' + program_id + '/episodes/offset/0/size/500'
+    json_source = get_json(url)
+    json_source = json_source['body']['items']
+    
+    i = 0
+    for show in json_source:
+        title = str(show['display_title'].encode("utf-8"))
+        title = title.replace(':', '-')
+        sentv_type = str(show['sentv_type'].encode("utf-8"))
+        plot = 'null'
+        icon = 'null'
+        #Create folder called "PSVue Library" to save .strm files
+        path = xbmc.translatePath(os.path.join(ADDON.getSetting(id='library_folder'), 'PSVue Library')
+                                  + '/' + 'TV Shows' + '/')
+        if sentv_type == 'Movies':
+            path = xbmc.translatePath(os.path.join(ADDON.getSetting(id='library_folder'), 'PSVue Library')
+                                      + '/' + 'Movies' + '/')
+        xbmcvfs.mkdir(path)
+        show_path = xbmc.translatePath(path + title + '/')
+        xbmcvfs.mkdir(show_path)
+        #Check that path was created
+        if xbmcvfs.exists(path):
+            if get_dict_item('season_num',show) == '':
+                season_num = 0
+            else:
+                season_num = int(get_dict_item('season_num',show))
+            
+            if get_dict_item('episode_num',show) == '':
+                episode_num = i
+                i += 1
+            else:
+                episode_num = int(get_dict_item('episode_num',show))
+            airing_id = str(show['airings'][0]['airing_id'])
+            tms_id = str(show['tms_id'])
+
+            series_id = 'null'
+            if 'series_id' in show:
+                series_id = str(show['series_id'])
+
+            channel_id = 'null'
+            if 'airings' in show:
+                channel_id = str(show['airings'][0]['channel_id'])
+            else:
+                channel_id = str(show['channel']['channel_id'])
+
+            airing_IDS = len(show['airings'])
+            if airing_IDS > 1:
+                airing_id = str(show['airings'][1]['airing_id'])
+
+            episode_url = SHOW_URL + '/' + airing_id
+            episode_url = urllib.quote_plus(episode_url)
+
+            if season_num < 10:
+                season_num = str(season_num)
+                season_prefix = '0' + season_num
+            else:
+                season_prefix = str(season_num)
+
+            if episode_num <10:
+                episode_num = str(episode_num)
+                episode_prefix = '0' + episode_num
+            else:
+                episode_prefix = str(episode_num)
+            # Create .strm file and write information
+            if sentv_type == 'Movies':
+                file = title + '.strm'
+            else:
+                file = 'S' + season_prefix + 'E' + episode_prefix + '.strm'
+            
+            file_path = os.path.join(xbmc.translatePath(show_path),file)
+            f = xbmcvfs.File(file_path, 'w')
+            f.write('plugin://plugin.video.psvue/?mode=900&url=')
+            f.write(episode_url)
+            f.write('&plot=')
+            f.write(plot)
+            f.write('&program_id=')
+            f.write(program_id)
+            f.write('&series_id=')
+            f.write(series_id)
+            f.write('&channel_id=')
+            f.write(channel_id)
+            f.write('&airing_id=')
+            f.write(airing_id)
+            f.write('&tms_id=')
+            f.write(tms_id)
+            f.write('&icon=')
+            f.write(icon)
+            f.write('&title=')
+            f.write(title)
+            f.close()
+        else:
+            xbmcgui.Dialog().notification("LIBRARY EXPORT:", "PATH FAILED", xbmcgui.NOTIFICATION_ERROR, 10000)
+            sys.exit()
+    xbmcgui.Dialog().notification("LIBRARY EXPORT:", "FINISHED", xbmcgui.NOTIFICATION_INFO, 5000)
 
 
 def list_episodes(program_id):
     url = EPG_URL + '/details/items/program/' + program_id + '/episodes/offset/0/size/500'
-    
     json_source = get_json(url)
     
     # Sort by airing_date newest to oldest
     json_source = json_source['body']['items']
-    json_source = sorted(json_source, key=lambda k: k['airing_date'], reverse=True)
+    #json_source = sorted(json_source, key=lambda k: k['airing_date'], reverse=True)
     
     for show in json_source:
         list_episode(show)
@@ -211,7 +365,13 @@ def list_episode(show):
     # Set variables from json
     show_title = show['display_title']
     title = show['display_episode_title']
+    channel_name = show['title']
     airing_id = str(show['airings'][0]['airing_id'])
+    airing_IDS = len(show['airings'])
+    air_num = 0
+    if airing_IDS > 1:
+        airing_id = str(show['airings'][1]['airing_id'])
+        air_num = 1
 
     channel_name = 'null'
     if 'airings' in show:
@@ -241,42 +401,39 @@ def list_episode(show):
     
     airing_date = utc_to_local(airing_date)
 
-    broadcast_date = airing_date
-    if 'broadcast_date' in show:
-        broadcast_date = show['broadcast_date']
-        xbmc.log(str(broadcast_date))
-        broadcast_date = string_to_date(broadcast_date, "%Y-%m-%dT%H:%M:%S.%fZ")
-        broadcast_date = utc_to_local(broadcast_date)
-
     media_type = 'tvshow'
     if 'movie' in get_dict_item('sentv_type',show).lower():
         media_type = 'movie'
 
     genre = ''
     for item in show['genres']:
-        if genre != '': genre += ', '
+        if genre != '':
+            genre += ', '
         genre += item['genre']
 
     plot = get_dict_item('synopsis', show)
 
-    if str(show['airings'][0]['badge']) != 'live' and str(show['playable']).upper() == 'TRUE':
-        name = '[B][COLOR=FFB048B5]Aired On[/COLOR][/B]' + '  ' + broadcast_date.strftime('%m/%d/%y') + '   ' + title
-        channel_name = show['title']
-        show_title = show['display_episode_title']
+    badge = ''
+    for item in show['airings']:
+        if badge != '':
+            badge += ', '
+        badge += item['badge']
 
-    elif str(show['playable']).upper() == 'FALSE':
-        # Add airing date/time to title for upcoming shows
-        name = '[B][I][COLOR=FFFFFF66]AIRING ON[/COLOR][/I][/B]' + '  ' + airing_date.strftime('%m/%d/%y') + '  @' + airing_date.strftime('%I:%M %p').lstrip('0') + '    ' + show_title
-    
-    # Sort Live shows and episodes no longer available to watch
-    elif str(show['airings'][0]['badge']) == 'live':
-        name = title
-        channel_name = channel_name + '    ' + '[B][I][COLOR=FFFFFF66]Live[/COLOR][/I][/B]'
+    vbadge = ''
+    if str(show['is_new']).upper() == 'TRUE':
+        vbadge = '[COLOR=yellow]New[/COLOR] '
+    if 'live' in badge:
+        vbadge = vbadge + '[COLOR=red]Live[/COLOR] '
+    if 'dvr' in badge:
+        vbadge = vbadge + '[COLOR=dodgerblue]DVR[/COLOR] '
+    elif 'vod' in badge:
+        vbadge = vbadge + '[COLOR=springgreen]VOD[/COLOR] '
+    name = vbadge + title
 
     # Add resumetime if applicable
     resumetime=''
-    if 'last_timecode' in show['airings'][0]:
-        resumetime = str(show['airings'][0]['last_timecode'])
+    if 'last_timecode' in show['airings'][air_num]:
+        resumetime = str(show['airings'][air_num]['last_timecode'])
         xbmc.log("RESUME TIME = "+resumetime)
         try:
             h,m,s = resumetime.split(':')
@@ -296,15 +453,13 @@ def list_episode(show):
         'originaltitle': title,
         'mediatype': media_type,
         'genre': genre,
-        'aired': broadcast_date.strftime('%Y-%m-%d'),
+        'aired': airing_date.strftime('%Y-%m-%d'),
         'duration': str(int(duration.total_seconds())),
         'season': get_dict_item('season_num',show),
         'episode': get_dict_item('episode_num',show),
         'mpaa': age_rating
     }
 
-    if broadcast_date != '': info['premiered'] = broadcast_date.strftime('%Y-%m-%d')
-    
     properties = {
         'totaltime': str(int(duration.total_seconds())),
         'resumetime': resumetime,
@@ -334,9 +489,12 @@ def list_channel(channel):
     icon = ICON
     for image in channel['urls']:
         if 'width' in image:
-            if image['width'] == 600 or image['width'] == 440: icon = image['src']
-            if image['width'] == 1920: fanart = image['src']
-            if icon != ICON and fanart != FANART: break
+            if image['width'] == 600 or image['width'] == 440:
+                icon = image['src']
+            if image['width'] == 1920:
+                fanart = image['src']
+            if icon != ICON and fanart != FANART:
+                break
 
     airing_id = ''
     program_id = ''
@@ -354,8 +512,10 @@ def list_channel(channel):
 
             airing_id = air_dict[air_list[0]]
 
-        if 'id' in channel['sub_item']: program_id = str(channel['sub_item']['id'])
-        if 'series_id' in channel['sub_item']: series_id = str(channel['sub_item']['series_id'])
+        if 'id' in channel['sub_item']:
+            program_id = str(channel['sub_item']['id'])
+        if 'series_id' in channel['sub_item']:
+            series_id = str(channel['sub_item']['series_id'])
         tms_id = str(channel['sub_item']['tms_id'])
 
     if 'channel' in channel:
@@ -368,6 +528,8 @@ def list_channel(channel):
     plot = get_dict_item('synopsis', channel['sub_item'])
     season = get_dict_item('season_num', channel['sub_item'])
     episode = get_dict_item('episode_num', channel['sub_item'])
+    show_title = get_dict_item('display_title', channel['sub_item'])
+    plot = show_title.upper() + ':        ' + plot
 
     genre = ''
     for item in (channel['sub_item']['genres']):
@@ -381,7 +543,7 @@ def list_channel(channel):
         'episode':episode,
         'plot': plot,
         'title': title,
-        'originaltitle': title,
+        'originaltitle': show_title,
         'genre': genre
     }
         
@@ -405,13 +567,84 @@ def list_channel(channel):
         add_stream(title, channel_url, icon, fanart, info, properties, show_info)
 
 
+def get_genre():
+    """
+    -----------------------
+     Movie Genre (sub_type)
+    -----------------------
+    0   All
+    49  Action & Adventure
+    50  Animation
+    54  Comedy
+    97  Crime
+    55  Documentary
+    56  Drama
+    99  Fantasy
+    64  History
+    68  Horror
+    70  Kids
+    72  Military & War
+    74  Musical
+    78  Other Sports
+    83  Romance
+    84  Science Fiction
+    87  Suspense
+    93  Western
+    """
+    genre_dict = {LOCAL_STRING(30900): '0',
+                  LOCAL_STRING(30905): '49',
+                  LOCAL_STRING(30910): '50',
+                  LOCAL_STRING(30915): '54',
+                  LOCAL_STRING(30920): '97',
+                  LOCAL_STRING(30925): '55',
+                  LOCAL_STRING(30930): '56',
+                  LOCAL_STRING(30935): '99',
+                  LOCAL_STRING(30940): '64',
+                  LOCAL_STRING(30945): '68',
+                  LOCAL_STRING(30950): '70',
+                  LOCAL_STRING(30955): '72',
+                  LOCAL_STRING(30960): '73',
+                  LOCAL_STRING(30965): '78',
+                  LOCAL_STRING(30970): '83',
+                  LOCAL_STRING(30975): '84',
+                  LOCAL_STRING(30980): '87',
+                  LOCAL_STRING(30985): '93'
+                  }
+
+    genre_list = [LOCAL_STRING(30900),
+                  LOCAL_STRING(30905),
+                  LOCAL_STRING(30910),
+                  LOCAL_STRING(30915),
+                  LOCAL_STRING(30920),
+                  LOCAL_STRING(30925),
+                  LOCAL_STRING(30930),
+                  LOCAL_STRING(30935),
+                  LOCAL_STRING(30940),
+                  LOCAL_STRING(30945),
+                  LOCAL_STRING(30950),
+                  LOCAL_STRING(30955),
+                  LOCAL_STRING(30960),
+                  LOCAL_STRING(30965),
+                  LOCAL_STRING(30970),
+                  LOCAL_STRING(30975),
+                  LOCAL_STRING(30980),
+                  LOCAL_STRING(30985)
+                  ]
+
+    dialog = xbmcgui.Dialog()
+    ret = dialog.select(LOCAL_STRING(30899), genre_list)
+    if ret >= 0:
+        ADDON.setSetting(id='movie_genre_id', value=genre_dict[genre_list[ret]])
+        ADDON.setSetting(id='movie_genre_name', value=genre_list[ret])
+
+
 def get_dict_item(key, dictionary):
     if key in dictionary:
         return dictionary[key]
     else:
         return ''
 
-
+    
 def get_stream(url, airing_id, channel_id, program_id, series_id, tms_id, title, plot, icon):
     headers = {
         'Accept': '*/*',
@@ -428,12 +661,19 @@ def get_stream(url, airing_id, channel_id, program_id, series_id, tms_id, title,
     }
 
     r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
-    json_source = r.json()
+
+    try:
+        json_source = r.json()
+    except ValueError:
+        xbmcgui.Dialog().ok(LOCAL_STRING(30198), LOCAL_STRING(30199))
+        sys.exit()
+
     stream_url = json_source['body']['video']
-    headers = '|User-Agent='
-    headers += 'Adobe Primetime/1.4 Dalvik/2.1.0 (Linux; U; Android 6.0.1 Build/MOB31H)'
-    headers += '&Cookie=reqPayload=' + urllib.quote('"' + ADDON.getSetting(id='EPGreqPayload') + '"')
-    listitem = xbmcgui.ListItem()
+    if ADDON.getSetting(id='alt_stream') == 'true':
+        stream_url = json_source['body']['video_alt']
+
+    headers = 'User-Agent=Adobe Primetime/1.4 Dalvik/2.1.0 (Linux; U; Android 6.0.1 Build/MOB31H)' \
+              '&Cookie=reqPayload=' + urllib.quote('"' + ADDON.getSetting(id='EPGreqPayload') + '"')
 
     # Checks to see if VideoPlayer info is already saved. If not then info is loaded from stream link
     if xbmc.getCondVisibility('String.IsEmpty(ListItem.Title)'):
@@ -443,21 +683,18 @@ def get_stream(url, airing_id, channel_id, program_id, series_id, tms_id, title,
     else:
         listitem = xbmcgui.ListItem()
         listitem.setMimeType("application/x-mpegURL")
-
-    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
-        stream_url = json_source['body']['video_alt']
+    
+    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)') \
+            and ADDON.getSetting(id='inputstream_adaptive') == 'true':
         listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
         listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
         listitem.setProperty('inputstream.adaptive.stream_headers', headers)
-        listitem.setProperty('inputstream.adaptive.license_key', headers)
+        listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
     else:
-        stream_url += headers
+        stream_url = stream_url + "|" + headers
 
     listitem.setPath(stream_url)
-
     xbmcplugin.setResolvedUrl(addon_handle, True, listitem)
-
-    # Seek to time
 
     # Give the stream sometime to start before checking
     monitor = xbmc.Monitor()
@@ -479,8 +716,9 @@ def get_stream(url, airing_id, channel_id, program_id, series_id, tms_id, title,
     if 0 < (mark_watched - int_time) <= 120:  # Mark video as watched if less than 2 minutes are left
         watched = 'true'
 
-    sony = SONY()
-    sony.put_resume_time(airing_id, channel_id, program_id, series_id, tms_id, res_time, cur_time, watched)
+    if airing_id != 'null' or channel_id != 'null' or program_id != 'null' or series_id != 'null':
+        sony = SONY()
+        sony.put_resume_time(airing_id, channel_id, program_id, series_id, tms_id, res_time, cur_time, watched)
 
 
 def get_json(url):
@@ -544,16 +782,21 @@ def create_device_id():
 
 
 def utc_to_local(utc_dt):
+    # get integer timestamp to avoid precision lost
     offset = datetime.now() - datetime.utcnow()
     local_dt = utc_dt + offset + timedelta(seconds=1)
     return local_dt
 
 
-def add_dir(name, mode, icon, fanart=None, channel_id=None):
+def add_dir(name, mode, icon, fanart=None, channel_id=None, offset=None):
     u = sys.argv[0] + "?mode=" + str(mode)
-    if channel_id is not None: u += "&channel_id=" + channel_id
+    if channel_id is not None:
+        u += "&channel_id=" + channel_id
+    if offset is not None:
+        u += "&offset=" + offset
     liz = xbmcgui.ListItem(name)
-    if fanart is None: fanart = FANART
+    if fanart is None:
+        fanart = FANART
     liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=True)
     xbmcplugin.setContent(addon_handle, 'tvshows')
@@ -570,7 +813,8 @@ def add_show(name, mode, icon, fanart, info, show_info):
     u += '&program_id=' + show_info['program_id']
     
     liz = xbmcgui.ListItem(name)
-    if fanart is None: fanart = FANART
+    if fanart is None:
+        fanart = FANART
     liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
     liz.setInfo(type="Video", infoLabels=info)
     show_values = ''
@@ -578,10 +822,16 @@ def add_show(name, mode, icon, fanart, info, show_info):
         show_values += '&' + key + '=' + value
 
     context_items = [
-        ('Add To Favorites Channels', 'RunPlugin(plugin://plugin.video.psvue/?mode=1001&fav_type=channel' + show_values + ')'),
-        ('Remove From Favorites Channels', 'RunPlugin(plugin://plugin.video.psvue/?mode=1002&fav_type=channel' + show_values + ')'),
-        ('Add To My Shows', 'RunPlugin(plugin://plugin.video.psvue/?mode=1001&fav_type=show' + show_values + ')'),
-        ('Remove From My Shows', 'RunPlugin(plugin://plugin.video.psvue/?mode=1002&fav_type=show' + show_values + ')')
+        ('Add To Favorites Channels',
+         'RunPlugin(plugin://plugin.video.psvue/?mode=1001&fav_type=channel' + show_values + ')'),
+        ('Remove From Favorites Channels',
+         'RunPlugin(plugin://plugin.video.psvue/?mode=1002&fav_type=channel' + show_values + ')'),
+        ('Add To My DVR',
+         'RunPlugin(plugin://plugin.video.psvue/?mode=1001&fav_type=show' + show_values + ')'),
+        ('Remove From My DVR',
+         'RunPlugin(plugin://plugin.video.psvue/?mode=1002&fav_type=show' + show_values + ')'),
+        ('Add To Library',
+         'RunPlugin(plugin://plugin.video.psvue/?mode=850' + show_values + ')')
     ]
     liz.addContextMenuItems(context_items)
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=True)
@@ -592,7 +842,8 @@ def add_stream(name, link_url, icon, fanart, info=None, properties=None, show_in
     u = sys.argv[0] + "?url=" + urllib.quote_plus(link_url)
     liz = xbmcgui.ListItem(name)
     liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
-    if info is not None: liz.setInfo(type="Video", infoLabels=info)
+    if info is not None:
+        liz.setInfo(type="Video", infoLabels=info)
     if properties is not None:
         for key, value in properties.iteritems():
             liz.setProperty(key,value)
@@ -607,10 +858,14 @@ def add_stream(name, link_url, icon, fanart, info=None, properties=None, show_in
             show_values += '&' + key + '=' + value
         u += show_values
         context_items = [
-            ('Add To Favorites Channels', 'RunPlugin(plugin://plugin.video.psvue/?mode=1001&fav_type=channel'+show_values+')'),
-            ('Remove From Favorites Channels', 'RunPlugin(plugin://plugin.video.psvue/?mode=1002&fav_type=channel'+show_values+')'),
-            ('Add To My Shows', 'RunPlugin(plugin://plugin.video.psvue/?mode=1001&fav_type=show' + show_values + ')'),
-            ('Remove From My Shows', 'RunPlugin(plugin://plugin.video.psvue/?mode=1002&fav_type=show' + show_values + ')')
+            ('Add To Favorites Channels',
+             'RunPlugin(plugin://plugin.video.psvue/?mode=1001&fav_type=channel'+show_values+')'),
+            ('Remove From Favorites Channels',
+             'RunPlugin(plugin://plugin.video.psvue/?mode=1002&fav_type=channel'+show_values+')'),
+            ('Add To My DVR',
+             'RunPlugin(plugin://plugin.video.psvue/?mode=1001&fav_type=show' + show_values + ')'),
+            ('Remove From My DVR',
+             'RunPlugin(plugin://plugin.video.psvue/?mode=1002&fav_type=show' + show_values + ')')
         ]
         liz.addContextMenuItems(context_items)
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=False)
@@ -659,10 +914,15 @@ LOCAL_STRING = ADDON.getLocalizedString
 FANART = os.path.join(ROOTDIR, "resources", "fanart.jpg")
 ICON = os.path.join(ROOTDIR, "resources", "icon.png")
 ADDON_PATH_PROFILE = xbmc.translatePath(ADDON.getAddonInfo('profile'))
-UA_ANDROID = 'Mozilla/5.0 (Linux; Android 6.0.1; Build/MOB31H; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/44.0.2403.119 Safari/537.36'
-UA_ANDROID_TV = 'Mozilla/5.0 (Linux; Android 6.0.1; Hub Build/MHC19J; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Safari/537.36'
+UA_ANDROID = 'Mozilla/5.0 (Linux; Android 6.0.1; Build/MOB31H; wv) AppleWebKit/537.36 (KHTML, like Gecko) ' \
+             'Version/4.0 Chrome/44.0.2403.119 Safari/537.36'
+UA_ANDROID_TV = 'Mozilla/5.0 (Linux; Android 6.0.1; Hub Build/MHC19J; wv) AppleWebKit/537.36 (KHTML, like Gecko) ' \
+                'Version/4.0 Chrome/61.0.3163.98 Safari/537.36'
 CHANNEL_URL = 'https://media-framework.totsuko.tv/media-framework/media/v2.1/stream/channel'
 EPG_URL = 'https://epg-service.totsuko.tv/epg_service_sony/service/v2'
 SHOW_URL = 'https://media-framework.totsuko.tv/media-framework/media/v2.1/stream/airing/'
-PROF_ID = ADDON.getSetting(id='default_profile')
-VERIFY = False
+PROFILE_ID = ADDON.getSetting(id='default_profile')
+EXPORT_DATE = string_to_date("1970-01-01T00:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ")
+if ADDON.getSetting(id='last_export') != '':
+    EXPORT_DATE = string_to_date(ADDON.getSetting(id='last_export'), "%Y-%m-%dT%H:%M:%S.%fZ")
+VERIFY = True

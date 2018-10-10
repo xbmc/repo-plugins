@@ -41,7 +41,7 @@ msgid "Reset Device ID"
 msgstr ""
 
 msgctxt "#30006"
-msgid "Logout Succesful"
+msgid "Logout Successful"
 msgstr ""
 
 msgctxt "#30007"
@@ -53,7 +53,7 @@ msgid "Next Airings"
 msgstr ""
 
 msgctxt "#30101"
-msgid "My Shows"
+msgid "My DVR"
 msgstr ""
 
 msgctxt "#30102"
@@ -80,6 +80,17 @@ msgctxt "#30107"
 msgid "Featured"
 msgstr ""
 
+msgctxt "#30108"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30198"
+msgid "Playback Failed"
+msgstr ""
+
+msgctxt "#30199"
+msgid "This episode has not aired yet"
+msgstr ""
 
 msgctxt "#30200"
 msgid "Login Failed"
@@ -142,7 +153,7 @@ msgid "Choose Channel"
 msgstr ""
 
 msgctxt "#30215"
-msgid "My Shows"
+msgid "My DVR"
 msgstr ""
 
 msgctxt "#30216"
@@ -179,4 +190,113 @@ msgstr ""
 
 msgctxt "#30224"
 msgid "All Channels"
+msgstr ""
+
+msgctxt "#30225"
+msgid "Export Folder"
+msgstr ""
+
+msgctxt "#30226"
+msgid "Update Library(Hours)"
+msgstr ""
+
+msgctxt "#30228"
+msgid "Trending Live"
+msgstr ""
+
+msgctxt "#30300"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Use Inputstream Adaptive"
+msgstr ""
+
+msgctxt "#30320"
+msgid "Play Alternate Stream"
+msgstr ""
+
+msgctxt "#30897"
+msgid "<< Prev."
+msgstr ""
+
+msgctxt "#30898"
+msgid "Next >>"
+msgstr ""
+
+
+msgctxt "#30899"
+msgid "Select Genre"
+msgstr ""
+
+msgctxt "#30900"
+msgid "All"
+msgstr ""
+
+msgctxt "#30905"
+msgid "Action & Adventure"
+msgstr ""
+
+msgctxt "#30910"
+msgid "Animation"
+msgstr ""
+
+msgctxt "#30915"
+msgid "Comedy"
+msgstr ""
+
+msgctxt "#30920"
+msgid "Crime"
+msgstr ""
+
+msgctxt "#30925"
+msgid "Documentary"
+msgstr ""
+
+msgctxt "#30930"
+msgid "Drama"
+msgstr ""
+
+msgctxt "#30935"
+msgid "Fantasy"
+msgstr ""
+
+msgctxt "#30940"
+msgid "History"
+msgstr ""
+
+msgctxt "#30945"
+msgid "Horror"
+msgstr ""
+
+msgctxt "#30950"
+msgid "Kids"
+msgstr ""
+
+msgctxt "#30955"
+msgid "Military & War"
+msgstr ""
+
+msgctxt "#30960"
+msgid "Musical"
+msgstr ""
+
+msgctxt "#30965"
+msgid "Other Sports"
+msgstr ""
+
+msgctxt "#30970"
+msgid "Romance"
+msgstr ""
+
+msgctxt "#30975"
+msgid "Science Fiction"
+msgstr ""
+
+msgctxt "#30980"
+msgid "Suspense"
+msgstr ""
+
+msgctxt "#30985"
+msgid "Western"
 msgstr ""

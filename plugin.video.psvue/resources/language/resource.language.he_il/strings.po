@@ -53,7 +53,7 @@ msgid "Timeline"
 msgstr "ציר זמן"
 
 msgctxt "#30101"
-msgid "My Shows"
+msgid "My DVR"
 msgstr "הסדרות שלי"
 
 msgctxt "#30102"
@@ -141,7 +141,7 @@ msgid "Timeline"
 msgstr "ציר זמן"
 
 msgctxt "#30215"
-msgid "My Shows"
+msgid "My DVR"
 msgstr "הסדרות שלי"
 
 msgctxt "#30216"

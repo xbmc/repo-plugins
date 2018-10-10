@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.simpsonsworld" name="Simpsons World" version="2017.11.28" provider-name="eracknaphobia">
+<addon id="plugin.video.simpsonsworld" name="Simpsons World" version="2018.10.10" provider-name="eracknaphobia">
   <requires>
       <import addon="xbmc.python" version="2.25.0"/>
       <import addon="script.module.adobepass" version="2017.3.20"/>
@@ -14,7 +14,9 @@
     <description lang="en_GB">Simpsons World has every episode of the series accessible to authenticated FX subscribers</description>
     <disclaimer lang="en_GB"></disclaimer>
     <news>
-- Fixed Invalid XML issue
+        - Fix for updated adobepass
+        - Add Season 30
+        - PEP 8 Code Styling
     </news>
     <language>en</language>
     <platform>all</platform>

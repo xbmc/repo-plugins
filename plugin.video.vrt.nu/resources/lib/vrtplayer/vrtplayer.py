@@ -99,7 +99,7 @@ class VRTPlayer:
                 }
         self._kodi_wrapper.show_listing(livestream_items, sortmethod.ALPHABET)
 
-    def     show_videos(self, path):
+    def show_videos(self, path):
         url = urljoin(self._VRT_BASE, path)
         #xbmc.log(url, xbmc.LOGWARNING)
         # go to url.relevant gets redirected and go on with this url
@@ -109,9 +109,12 @@ class VRTPlayer:
         title_items = []
         episodes_list = soup.find(class_='episodeslist')
         li_tags = []
-
-        if episodes_list is not None :
-            li_tags.extend(episodes_list.find_all('li', class_='vrt-labelnav--item'))
+        if episodes_list is not None:
+            lis_to_add = episodes_list.find_all('li', class_='vrt-labelnav--item')
+            if lis_to_add: 
+                has_non_self_refering_a_tags = lis_to_add[0].find('a', {'href': '#'})
+                if has_non_self_refering_a_tags is None:
+                    li_tags.extend(lis_to_add)
 
         episode_items = self.__get_episodes(li_tags, path)
         if len(li_tags) != 0 and episode_items:

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.vrt.nu"
        name="VRT Nu"
-       version="1.4.1"
+       version="1.4.2"
        provider-name="Martijn Moreel">
 
     <requires>
@@ -23,6 +23,8 @@
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
+          v1.4.2 (11-10-2018)
+          - Changed way of working with urls when a season is refering to href="#"
           v1.4.1 (24-09-2018)
           - Adapted plugin to new vrtnu layout for showing multiple seasons
           v1.4.0 (20-09-2018)

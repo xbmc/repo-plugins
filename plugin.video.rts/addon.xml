@@ -2,7 +2,7 @@
 <addon
    id="plugin.video.rts"
    name="RTS - Emissions TV"
-   version="1.1.4"
+   version="1.1.5"
    provider-name="Yttrium">
   <requires>
     <import addon="xbmc.python"                 version="2.1.0"/>
@@ -23,5 +23,6 @@
     <platform>all</platform>
     <source>https://github.com/Yttrium39/xbmc-rts</source>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+     <broken>This add-on is no longer function correctly and not maintained by it's developer.</broken>
   </extension>
 </addon>

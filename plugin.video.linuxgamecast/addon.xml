@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.linuxgamecast"
        name="LinuxGameCast"
-       version="0.0.4"
+       version="0.0.6"
        provider-name="ryochan7">
   <requires>
    <import addon="xbmc.python" version="2.1.0"/>
@@ -21,5 +21,6 @@
     <email>nickles.travis@gmail.com</email>
     <website>http://linuxgamecast.com/</website>
     <forum>http://linuxgamecast.com/discussions-2/</forum>
+    <broken>This add-on is no longer function correctly and not maintained by it's developer.</broken>
   </extension>
 </addon>

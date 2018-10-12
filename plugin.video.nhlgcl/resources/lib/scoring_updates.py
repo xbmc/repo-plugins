@@ -14,7 +14,7 @@ nhl_logo = ADDON_PATH+'/resources/lib/nhl_logo.png'
 SCORE_COLOR = 'FF00B7EB'
 GAMETIME_COLOR = 'FFFFFF66'
 
-def localToEastern():    
+def local_to_eastern():
     eastern = pytz.timezone('US/Eastern')    
     local_to_utc = datetime.now(pytz.timezone('UTC'))    
     local_to_eastern = local_to_utc.astimezone(eastern).strftime('%Y-%m-%d')
@@ -63,7 +63,7 @@ def startScoringUpdates():
         
     FIRST_TIME_THRU = 1  
     OLD_GAME_STATS = []              
-    todays_date = localToEastern() 
+    todays_date = local_to_eastern()
     wait = 30
     monitor = xbmc.Monitor()    
 

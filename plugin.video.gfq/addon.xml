@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.gfq"
        name="GFQ"
-       version="3.0.0"
+       version="3.0.1"
        provider-name="Nicholas Stinzianni">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -21,5 +21,6 @@ Guys From Queens (GFQ) Network is a producer of talk-radio style podcasts coveri
     <source>https://github.com/bawitdaba/gfq-xbmc/</source>
     <forum>http://www.gfqnetwork.com/contact/</forum>
     <website>http://www.gfqnetwork.com/</website>
+    <broken>This add-on is no longer function correctly and not maintained by it's developer.</broken>
   </extension>
 </addon>

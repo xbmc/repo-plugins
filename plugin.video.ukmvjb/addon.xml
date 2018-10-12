@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ukmvjb" name="UK Music Video Jukebox" version="1.0.0" provider-name="Gary Hall">
+<addon id="plugin.video.ukmvjb" name="UK Music Video Jukebox" version="1.0.1" provider-name="Gary Hall">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="plugin.video.youtube" version="4.4.10"/>
@@ -14,5 +14,6 @@
     <language>en</language>
     <platform>all</platform>
     <email>gh@874.org.uk</email>
+    <broken>This add-on is no longer function correctly and not maintained by it's developer.</broken>
   </extension>
 </addon>

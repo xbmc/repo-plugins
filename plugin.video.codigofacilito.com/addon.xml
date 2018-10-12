@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.codigofacilito.com" version="1.0.7" name="CodigoFacilito.com" provider-name="BuNKeR (@ezeescobar)">
+<addon id="plugin.video.codigofacilito.com" version="1.0.8" name="CodigoFacilito.com" provider-name="BuNKeR (@ezeescobar)">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="plugin.video.youtube" version="4.4.10" />
@@ -21,5 +21,6 @@
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
         <forum></forum>
         <website>http://www.codigofacilito.com</website>
+        <broken>This add-on is no longer function correctly.</broken>
     </extension>
 </addon>

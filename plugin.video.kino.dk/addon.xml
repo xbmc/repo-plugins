@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.kino.dk" version="1.0.1" name="Kino.dk TV" provider-name="twinther">
+<addon id="plugin.video.kino.dk" version="1.0.2" name="Kino.dk TV" provider-name="twinther">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.buggalo" version="1.1.2"/>
@@ -18,5 +18,6 @@
         <email>tommy@winther.nu</email>
         <website>http://tommy.winther.nu</website>
         <source>https://github.com/xbmc-danish-addons/plugin.video.kino.dk</source>
+        <broken>This add-on is no longer function correctly and not maintained by it's developer.</broken>
     </extension>
 </addon>

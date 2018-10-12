@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.pixel.tv" version="3.0.0" name="Pixel.tv" provider-name="twinther">
+<addon id="plugin.video.pixel.tv" version="3.0.1" name="Pixel.tv" provider-name="twinther">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.buggalo" version="1.1.2"/>
@@ -18,5 +18,6 @@
         <website>http://tommy.winther.nu</website>
         <source>https://github.com/xbmc-danish-addons/plugin.video.pixel.tv</source>
         <email>tommy@winther.nu</email>
+        <broken>This add-on is no longer function correctly and not maintained by it's developer.</broken>
 	</extension>
 </addon>

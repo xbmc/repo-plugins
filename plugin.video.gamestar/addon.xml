@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.gamestar"
-  version="0.1.8"
+  version="0.1.9"
   name="GamestarVideo"
   provider-name="Raptor 2101">
   <requires>
@@ -40,5 +40,6 @@
     <website>https://github.com/raptor2101/Gamestar</website>
     <source>https://github.com/raptor2101/Gamestar</source>
     <email>raptor2101@gmx.de</email>
+    <broken>This add-on is no longer function correctly and not maintained by it's developer.</broken>
   </extension>
 </addon>

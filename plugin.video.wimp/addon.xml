@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.wimp" name="Wimp.com" version="2.0.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.wimp" name="Wimp.com" version="2.0.2" provider-name="Tristan Fischer (sphere@dersphere.de)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.simplejson" version="2.0.10"/>
@@ -11,6 +11,7 @@
     <extension point="xbmc.addon.metadata">
         <language>en</language>
         <platform>all</platform>
+        <broken>This add-on is no longer function correctly and not maintained by it's developer.</broken>
         <summary lang="be">Wimp.com - Family Friendly Videos</summary>
         <summary lang="bg">Wimp.com - ззабавни и семейни клипчета</summary>
         <summary lang="da">Wimp.com - Familievenlige Videoer</summary>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.9gagtv" name="9GAG.TV" version="3.0.2" provider-name="bromix">
+<addon id="plugin.video.9gagtv" name="9GAG.TV" version="3.0.3" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
         <import addon="plugin.video.youtube" version="5.0.0" />
@@ -21,5 +21,6 @@
 		<website>www.9gag.tv</website>
 		<email>kodi at bromix dot org</email>
 		<source>https://github.com/bromix/plugin.video.9gagtv</source>
+		<broken>This add-on is no longer function correctly and not maintained by it's developer.</broken>
 	</extension>
 </addon>

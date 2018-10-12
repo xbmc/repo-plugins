@@ -14,5 +14,6 @@
         <license>GPL 2.0</license>
         <platform>all</platform>
         <email>tommy@winther.nu</email>
+        <broken>This add-on is no longer function correctly and not maintained by it's developer.</broken>
     </extension>
 </addon>

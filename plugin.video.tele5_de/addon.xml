@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tele5_de" name="Tele5.de" version="1.1.11" provider-name="L0RE">
+<addon id="plugin.video.tele5_de" name="Tele5.de" version="1.1.12" provider-name="L0RE">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
     </requires>
@@ -19,5 +19,6 @@
         <forum>http://www.kodinerds.net</forum>
         <email>andreas at vogler dot name</email>
         <website>http://www.tele5.de</website>
+        <broken>This add-on is no longer functions correctly.</broken>
     </extension>
 </addon>

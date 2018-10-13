@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.theblaze"
        name="TheBlaze TV"
-       version="0.1.3"
+       version="0.1.4"
        provider-name="divingmule">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -20,5 +20,6 @@
     <source>https://github.com/divingmule/plugin.video.theblaze</source>
     <forum></forum>
     <website>http://www.video.theblaze.com</website>
+    <broken>This add-on is no longer functions correctly.</broken>
   </extension>
 </addon>

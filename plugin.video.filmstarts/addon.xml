@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.filmstarts" name="Filmstarts" version="0.6.8" provider-name="L0RE">
+<addon id="plugin.video.filmstarts" name="Filmstarts" version="0.6.7" provider-name="L0RE">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
     </requires>
@@ -17,5 +17,6 @@
     <forum>https://www.kodinerds.net/index.php/Thread/53743-RERelease-filmstarts/</forum>
     <email>andreas at vogler dot name</email>
     <platform>all</platform>
+    <broken>This add-on is no longer functions correctly.</broken>
   </extension>
 </addon>

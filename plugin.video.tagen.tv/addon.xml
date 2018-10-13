@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tagen.tv" name="Tagen TV" version="0.2.0" provider-name="Tomasz Karbownicki">
+<addon id="plugin.video.tagen.tv" name="Tagen TV" version="0.2.1" provider-name="Tomasz Karbownicki">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.requests"/>
@@ -18,5 +18,6 @@
     <description lang="pl">Tagen.tv to pierwsza telewizja współtworzona przez internautów. Nie boimy się żadnych tematów i chętnie pokazujemy wydarzenia, zjawiska czy ludzi z zupełnie innej perspektywy. Jeżeli tak jak my, jesteś niezadowolony ze stanu Polskich mediów, które w pogoni za sensacją i oglądalnością dawno zgubiły swoją misję to trafiliście w odpowiednie miejsce. W Tagen.tv sami decydujecie co i kiedy chcecie oglądać, których twórców wspierać i jakie tematy promować.</description>
     <website>http://tagen.tv/</website>
     <email>t.karbownicki@tagen.tv</email>
+    <broken>This add-on is no longer functions correctly.</broken>
   </extension>
 </addon>

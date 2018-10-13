@@ -2,7 +2,6 @@ import httplib, logon, re, xbmcgui
 
 from urllib2 import unquote
 
-#cookie = {}
 show = {}
 shows = "/shows"
 
@@ -10,14 +9,15 @@ def popup(text):
   xbmcgui.Dialog().ok('plugin.video.tyt', text)
 
 def Get_Show_Episodes(page):
-#  page = sendResponse(cookie, page) # main show episode list
-#  with open('main_show.html', 'w') as f:
+#  with open('show.html', 'w') as f:
 #    f.write(page)
-#  videos = []
   hosts = {}
-  episodes = re.compile('id="tag">(.+?)</div></tyt-feed-tag><!----><!.+?href="(.+?)".+?data-image-id="(.+?)".+?underbox"><.+?"">(.+?)</h1>.+?Hosts:(.+?)</span></span>.+?<!----><!----><!----><!---->.+?href=".+?"> (.+?)</a>',re.DOTALL).findall(page)
+#  episodes = re.compile('id="tag">(.+?)</div></tyt-feed-tag><!----><!.+?href="(.+?)".+?data-image-id="(.+?)".+?underbox"><.+?"">(.+?)</h1>.+?Hosts:(.+?)</span></span>.+?<!----><!----><!----><!---->.+?href=".+?"> (.+?)</a>',re.DOTALL).findall(page)
+  episodes = re.compile('id="tag">(.+?)</div></tyt-feed-tag><!----><!.+?href="(.+?)".+?data-image-id="(.+?)".+?underbox"><.+?Hosts:(.+?)</span></span>.+?<!----><!----><!----><!---->.+?href=".+?"> (.+?)</a>',re.DOTALL).findall(page)
   i = 0
-  for date, link, image_id, title, allhosts, description in episodes:
+#  for date, link, image_id, title, allhosts, description in episodes:
+  for date, link, image_id, allhosts, description in episodes:
+
     hosts_decoded = re.compile('href="(.+?)">(.+?)<',re.DOTALL).findall(allhosts)
     try:
       image = re.search('data-image-id="%s".+?url\((.+?)\)' % image_id, page, re.MULTILINE | re.DOTALL).group(1)
@@ -30,7 +30,7 @@ def Get_Show_Episodes(page):
                   }
       x+=1
     show[i] = {"date" : date,
-               "title": title,
+               "title": date,
                "image": image,
                "link": link,
                "description": description,

@@ -36,6 +36,7 @@ def sendResponse(cookies, pagename):
   page = HTMLParser.HTMLParser().unescape(page).encode('utf8')
   conn.close()
   return page
+
     
 def login():
 
@@ -52,6 +53,7 @@ def get_cookie():
   with open(addon_folder + '/cookies.txt') as f:
     cookie = json.load(f)
   return cookie
+
 def list_episodes(page, showurl, pagenum):
 #    hosts[x] = {"host": host,
 #                "info": host_info
@@ -126,7 +128,8 @@ def router(paramstring):
   params = dict(parse_qsl(paramstring))
   if params:
     if params['action'] == 'episodes':
-      list_episodes(sendResponse(cookie, params['show'] + "?page=" + params['page']), params['show'], params['page'])
+      page = sendResponse(cookie, params['show'] + "?page=" + params['page'])
+      list_episodes(page, params['show'], params['page'])
     elif params['action'] == 'play':
       page = sendResponse(get_cookie(), params['video'])
       hd, sd = scrape.Watch_Episode(page)
@@ -137,7 +140,10 @@ def router(paramstring):
         popup(__language__(30004)) # "Video doesn't exist on website."
   else:
     login()
-#    list_episodes(sendResponse(get_cookie(), "/shows/6e6Xst82zYACGGyweSOkMg"))
+#    page = sendResponse(get_cookie(), "/live/streams/1260")
+#    page = sendResponse2(get_cookie(), "/api/v1/live/streams/1260")
+#    with open('1260_cookie.html', 'w') as f:
+#      f.write(page)    
     list_shows(sendResponse(get_cookie(), "/shows"))    
 if __name__ == '__main__':
   router(sys.argv[2][1:])

@@ -15,8 +15,6 @@ addon = Addon(addonID, sys.argv)
 local = xbmcaddon.Addon()
 icon = local.getAddonInfo('icon')
 
-YOUTUBE_PLAYLIST_ID = "PLUKXSlbHWi2huhANVImh3RxMQ19ASXw6p"
-
 # Entry point
 def run():
     plugintools.log("hardstyletv.run")
@@ -35,77 +33,31 @@ def run():
 def main_list(params):
     plugintools.log("hardstyletv.main_list "+repr(params))
 
-    plugintools.add_item( 
-        title="Qlimax 2016",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2g6Hp2Sq4Gz5Wte6MRpOX5U/",
-        thumbnail=icon,
-        folder=True )
+    playlists = []
+    playlists.append(("Q-Base 2018","PLUKXSlbHWi2joC0am3Uhj_J2RGVI34K3t"))
+    playlists.append(("Defqon.1 2018","PLUKXSlbHWi2jPniJM-0D3rWavFppOnHPy"))
+    playlists.append(("Hard Bass 2018","PLUKXSlbHWi2jnzPKht6hbcbcXlPMOeOko"))
+    playlists.append(("Qlimax 2017","PLUKXSlbHWi2gbP8-kRpPwzVnMJ8osz3fZ"))
+    playlists.append(("Q-Base 2017","PLUKXSlbHWi2ifrVf6J7icaBrgjYxrl1dY"))
+    playlists.append(("Defqon.1 2017","PLUKXSlbHWi2i-2j0Zv1EppYrDPdDbqoJp"))
+    playlists.append(("Hard Bass 2017","PLUKXSlbHWi2jthONLKZm6YalKIUxMViEm"))
+    playlists.append(("Qlimax 2016","PLUKXSlbHWi2g6Hp2Sq4Gz5Wte6MRpOX5U"))
+    playlists.append(("Q-Base 2016","PLUKXSlbHWi2iWv8pO6ft101PaGS6Qjrv_"))
+    playlists.append(("Defqon.1 2016","PLUKXSlbHWi2i9gLEWlV76dsS_I9pk4RbD"))
+    playlists.append(("Hard Bass 2016","PLUKXSlbHWi2jv7VvXsh1XMNu_0E7LcrWJ"))
+    playlists.append(("Defqon.1 2015","PLUKXSlbHWi2g9sdCH_6scus_EBOZGhq7C"))
+    playlists.append(("Hard Bass 2015","PLUKXSlbHWi2hsUFxs1o2DukBJiqMDAcX2"))
+    playlists.append(("Qapital Sets","PLUKXSlbHWi2jW3pkaYl34gDaUrJ34ncRI"))
+    playlists.append(("Qlimax OLD","PLUKXSlbHWi2jLjh0TYWIde8LjdImdM38f"))
+    playlists.append(("Defqon.1 OLD","PLUKXSlbHWi2hjXmAbhSXlzb33Kbe8MWBo"))
+    playlists.append(("Hard Bass OLD","PLUKXSlbHWi2gpenEDab_9n-RKbRMUViB2"))
 
-    plugintools.add_item( 
-        title="Q-Base 2016",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2iWv8pO6ft101PaGS6Qjrv_/",
-        thumbnail=icon,
-        folder=True )
 
-    plugintools.add_item( 
-        title="Defqon.1 2016",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2i9gLEWlV76dsS_I9pk4RbD/",
-        thumbnail=icon,
-        folder=True )
-
-    plugintools.add_item( 
-        title="QAPITAL 2016",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2jW3pkaYl34gDaUrJ34ncRI/",
-        thumbnail=icon,
-        folder=True )
-
-    plugintools.add_item( 
-        title="Hard Bass 2016",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2jv7VvXsh1XMNu_0E7LcrWJ/",
-        thumbnail=icon,
-        folder=True )
-
-    plugintools.add_item( 
-        title="Qlimax 2015",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2guDBcyAxQgWuU-uDx8ZL5s/",
-        thumbnail=icon,
-        folder=True )
-
-    plugintools.add_item( 
-        title="Defqon.1 2015",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2g9sdCH_6scus_EBOZGhq7C/",
-        thumbnail=icon,
-        folder=True )
-
-    plugintools.add_item( 
-        title="QAPITAL 2015",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2gCKp8OLVZzmGxZI5FAZmSU/",
-        thumbnail=icon,
-        folder=True )
-
-    plugintools.add_item( 
-        title="Hard Bass 2015",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2hsUFxs1o2DukBJiqMDAcX2/",
-        thumbnail=icon,
-        folder=True )
-
-    plugintools.add_item( 
-        title="Qlimax OLD",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2jLjh0TYWIde8LjdImdM38f/",
-        thumbnail=icon,
-        folder=True )
-
-    plugintools.add_item( 
-        title="Defqon.1 OLD",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2hjXmAbhSXlzb33Kbe8MWBo/",
-        thumbnail=icon,
-        folder=True )
-
-    plugintools.add_item( 
-        title="Hard Bass OLD",
-        url="plugin://plugin.video.youtube/playlist/PLUKXSlbHWi2gpenEDab_9n-RKbRMUViB2/",
-        thumbnail=icon,
-        folder=True )
-
+    for playlist in playlists:
+        plugintools.add_item( 
+            title=playlist[0],
+            url="plugin://plugin.video.youtube/playlist/"+playlist[1]+"/",
+            thumbnail=icon,
+            folder=True )
 
 run()

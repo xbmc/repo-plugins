@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cinepub"
        name="cinepub.ro"
-       version="0.1.4"
+       version="0.1.5"
        provider-name="strainu">
     <requires>
         <import addon="xbmc.python" version="2.20.0"/>
@@ -21,5 +21,6 @@
 	<source>https://github.com/strainu/cinepub-kodi</source>
 	<email></email>
 	<disclaimer lang="en_us">Use at your own risk</disclaimer>
+	<broken>This add-on is no longer functions correctly.</broken>
     </extension>
 </addon>

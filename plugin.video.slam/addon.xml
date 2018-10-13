@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.slam" name="SLAM!" version="1.0.2" provider-name="Jester">
+<addon id="plugin.video.slam" name="SLAM!" version="1.0.4" provider-name="Jester">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -16,5 +16,6 @@
     <language>nl</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <website>http://www.slam.nl/</website>
+    <broken>This add-on is no longer functions correctly.</broken>
   </extension>
 </addon>

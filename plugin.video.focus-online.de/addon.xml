@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.focus-online.de" name="FOCUS Online" version="2.0.4" provider-name="bromix">
+<addon id="plugin.video.focus-online.de" name="FOCUS Online" version="2.0.5" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
 	</requires>
@@ -19,5 +19,6 @@
 		<website>www.focus.de/videos</website>
 		<email>kodi at bromix dot org</email>
 		<source>https://github.com/bromix/plugin.video.focus-online.de</source>
+		<broken>This add-on is no longer functions correctly.</broken>
 	</extension>
 </addon>

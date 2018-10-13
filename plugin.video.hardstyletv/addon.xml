@@ -12,9 +12,9 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en_gb">Hardstyle livesets Youtube video Add-on</summary>
-    <description lang="en_gb">HardstyleTV is an addon that streams Hardstyle livesets from the best festivals in the world. Qlimax, Defqon.1, Decibel, Hard Bass...we got all you need!</description>
-	<disclaimer lang="en_gb">Some videos might be blocked in your country</disclaimer>
+    <summary lang="en_GB">Hardstyle livesets Youtube video Add-on</summary>
+    <description lang="en_GB">HardstyleTV is an addon that streams Hardstyle livesets from the best festivals in the world. Qlimax, Defqon.1, Decibel, Hard Bass...we got all you need!</description>
+	<disclaimer lang="en_GB">Some videos might be blocked in your country</disclaimer>
     <platform>all</platform>
     <source>https://github.com/aureliencousin/plugin.video.hardstyletv</source>
     <website>http://aurelien-cousin.com</website>

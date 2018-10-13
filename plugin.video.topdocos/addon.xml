@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.topdocos" name="Top Documentary Films" version="1.0.0" provider-name="Damon Toumbourou">
+<addon id="plugin.video.topdocos" name="Top Documentary Films" version="1.0.1" provider-name="Damon Toumbourou">
   <requires>
     <import addon="xbmc.python"                     version="2.20.0"/>
     <import addon="script.module.xbmcswift2"        version="2.4.0"/>
@@ -20,6 +20,7 @@
     <forum>http://forum.xbmc.org/showthread.php?tid=184904</forum>
     <email>dtoumbourou@gmail.com</email>
     <source>https://github.com/DamonToumbourou/plugin.video.topdocos.git</source>
+    <broken>This add-on is no longer functions correctly.</broken>
     <website></website>
   </extension>
 </addon>

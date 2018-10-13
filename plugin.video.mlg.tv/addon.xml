@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlg.tv" name="mlg.tv" version="0.0.6" provider-name="marinewater">
+<addon id="plugin.video.mlg.tv" name="mlg.tv" version="0.0.7" provider-name="marinewater">
   <requires>
     <import addon="xbmc.python" version="2.19.0"/>
   </requires>
@@ -18,5 +18,6 @@
     <website>https://github.com/marinewater/plugin.video.mlg.tv</website>
     <email></email>
     <source>https://github.com/marinewater/plugin.video.mlg.tv</source>
+    <broken>This add-on is no longer functions correctly.</broken>
   </extension>
 </addon>

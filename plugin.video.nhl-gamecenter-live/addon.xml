@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nhl-gamecenter-live" name="NHL GameCenter Live" version="0.0.28" provider-name="Timewasted">
+<addon id="plugin.video.nhl-gamecenter-live" name="NHL GameCenter Live" version="0.0.29" provider-name="Timewasted">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
 		<import addon="script.module.m3u8" version="0.2.2"/>

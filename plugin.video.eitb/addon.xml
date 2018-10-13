@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.eitb" name="EITB Nahieran (unofficial)" version="1.0.5" provider-name="Mikel Larreategi">
+<addon id="plugin.video.eitb" name="EITB Nahieran (unofficial)" version="1.0.6" provider-name="Mikel Larreategi">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
         <import addon="script.module.requests" version="2.9.1"/>
@@ -19,5 +19,6 @@
         <source>https://github.com/erral/plugin.video.eitb</source>
         <website>https://github.com/erral/plugin.video.eitb</website>
         <email>larreategi@eibar.org</email>
+        <broken>This add-on is no longer functions correctly.</broken>
     </extension>
 </addon>

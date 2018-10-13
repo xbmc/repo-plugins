@@ -1,3 +1,5 @@
+[B]3.0.2[/B]
+- Fixed bug with lack of title for some shows
 [B]3.0.1[/B]
 - Fixed error with plugin crashing when an image is not listed
 [B]3.0.0[/B]

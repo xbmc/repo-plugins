@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nrwision" name="nrwision" version="1.4.0" provider-name="nrwision / TU Dortmund">
+<addon id="plugin.video.nrwision" name="nrwision" version="1.4.1" provider-name="nrwision / TU Dortmund">
     <requires>
         <import addon="xbmc.python" version="2.19.0"/>
         <import addon="script.module.xbmcswift" version="0.2.0"/>
@@ -8,6 +8,7 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>This add-on is no longer functions correctly.</broken>
         <language>de</language>
         <platform>all</platform>
         <summary lang="en">„nrwision“ - TV learning channel on demand</summary>

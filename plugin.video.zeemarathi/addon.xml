@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.zeemarathi" name="Zee Marathi" version="0.0.3" provider-name="mavwolverine">
+<addon id="plugin.video.zeemarathi" name="Zee Marathi" version="0.0.4" provider-name="mavwolverine">
   <requires>
     <import addon="xbmc.python" version="2.19.0"/>
     <import addon="script.module.beautifulsoup" version="3.2.1" />
@@ -18,5 +18,6 @@
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <website>https://github.com/virajkanwade/plugin.video.zeemarathi</website>
     <source>https://github.com/virajkanwade/plugin.video.zeemarathi</source>
+    <broken>This add-on is no longer functions correctly.</broken>
   </extension>
 </addon>

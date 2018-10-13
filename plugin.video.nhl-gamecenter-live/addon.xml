@@ -21,5 +21,6 @@
 		<website>https://github.com/timewasted/xbmc-nhl-gamecenter</website>
 		<source>https://github.com/timewasted/xbmc-nhl-gamecenter</source>
 		<email>ryan@timewasted.me</email>
+		<broken>This add-on is no longer functions correctly.</broken>
 	</extension>
 </addon>

@@ -42,8 +42,10 @@ FANART        = REAL_SETTINGS.getAddonInfo('fanart')
 LANGUAGE      = REAL_SETTINGS.getLocalizedString
 
 ## GLOBALS ##
-TIMEOUT       = 15
+TIMEOUT       = 60
 CONTENT_TYPE  = 'episodes'
+MAX_LINEUP    = [1,2,3][int(REAL_SETTINGS.getSetting('Max_Lineup'))]
+CACHE_DAYS    = (MAX_LINEUP - 1) if MAX_LINEUP > 1 else 1
 USER_EMAIL    = REAL_SETTINGS.getSetting('User_Email')
 PASSWORD      = REAL_SETTINGS.getSetting('User_Password')
 DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
@@ -51,7 +53,7 @@ COOKIE_JAR    = xbmc.translatePath(os.path.join(SETTINGS_LOC, "cookiejar.lwp"))
 BASE_URL      = 'https://transponder.tv'
 LOGIN_URL     = BASE_URL + '/login'
 LIVE_URL      = BASE_URL + '/channels'
-GUIDE_URL     = BASE_URL + '/guide?category=all'
+GUIDE_URL     = BASE_URL + '/guide%s?category=all' #%202018-10-11
 RECORD_URL    = BASE_URL + '/recording'
 NOWNEXT_URL   = BASE_URL + '/nownext'
 CHANNEL_URL   = BASE_URL + '/watch'
@@ -89,11 +91,10 @@ def notificationDialog(message, header=ADDON_NAME, sound=False, time=1000, icon=
     except: xbmc.executebuiltin("Notification(%s, %s, %d, %s)" % (header, message, time, icon))
 
 def cleanString(string1):
-    string1 = string1.replace('\n','').replace('\t','').replace('\r','')
-    return string1.strip(' \t\n\r')
+    return string1.strip(' \t\n\r\b')
               
 def trimString(string1):
-    return re.sub('[\s+]', '', string1.strip(' \t\n\r'))
+    return re.sub('[\s+]', '', string1.strip(' \t\n\r\b'))
 
 def retrieveURL(url, dest):
     try: urllib.urlretrieve(url, dest)
@@ -110,9 +111,11 @@ class Transponder(object):
         self.chnum   = 0
         self.sysARG  = sysARG
         self.cache   = SimpleCache()
+        self.mechze  = mechanize.Browser()
         self.cj      = cookielib.LWPCookieJar()
         if self.login(USER_EMAIL, PASSWORD) == False: sys.exit()  
         self.channels   = self.getChannels()
+        self.recordings = self.getRecordings()
         
         
     def login(self, user, password):
@@ -127,12 +130,15 @@ class Transponder(object):
                     f = xbmcvfs.File(COOKIE_JAR, 'w')
                     f.close()
                 except: log('login, Unable to create the storage directory', xbmc.LOGERROR)
+                
             try:
-                login = mechanize.Browser()
+                login = self.mechze
                 login.set_handle_robots(False)
                 login.set_cookiejar(self.cj)
                 login.addheaders = [('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')]
                 login.open(LOGIN_URL)
+                if '/myaccount' in login.response().read(): return True 
+                # login.open(LOGIN_URL)
                 login.select_form(nr=0)
                 login.form['email'] = user
                 login.form['password'] = password
@@ -170,16 +176,16 @@ class Transponder(object):
         return durtime.seconds
         
         
-    def getLocalNow(self):
+    def getLocalNow(self, offset=0):
         ltz = pytz.timezone('Europe/London')
-        return datetime.datetime.now(ltz)
+        return datetime.datetime.now(ltz) + datetime.timedelta(days=offset)
         
         
-    def getLocaltime(self, timeString, dst=False):
+    def getLocaltime(self, timeString, dst=False, offset=0):
         ltz   = pytz.timezone('Europe/London')
         try: ltime = datetime.datetime.strptime(timeString, '%H:%M').time()
         except TypeError: ltime = datetime.datetime(*(time.strptime(timeString, '%H:%M')[0:6])).time()
-        ldate = datetime.datetime.now(ltz).date()
+        ldate = self.getLocalNow(offset).date()
         ltime = ltz.localize((datetime.datetime.combine(ldate, ltime)))
         ltime = ltime.astimezone(pytz.timezone('UTC')).replace(tzinfo=None)
         if dst: return ltime - ((datetime.datetime.utcnow() - datetime.datetime.now()) +  datetime.timedelta(hours=time.daylight))
@@ -191,8 +197,9 @@ class Transponder(object):
         try:
             cacheresponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
             if not cacheresponse:
-                results = mechanize.Browser()
+                results = self.mechze
                 results.set_handle_robots(False)
+                results.set_handle_refresh(True)
                 results.set_cookiejar(self.cj)
                 results.addheaders = [('Connection','keep-alive'),('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')]
                 results.open(url)
@@ -206,8 +213,11 @@ class Transponder(object):
             
             
     def buildMenu(self, items):
-        for item in items: self.addDir(*item)
-
+        for item in items:
+            if len(self.recordings['Schedules']) == 0 and item[0] == LANGUAGE(30013): continue
+            elif len(self.recordings['Recordings']) == 0 and item[0] == LANGUAGE(30002): continue
+            self.addDir(*item)
+            
         
     @use_cache(1)
     def getChannels(self):
@@ -220,67 +230,74 @@ class Transponder(object):
             chname = channel.find_all('img')[0].attrs['alt']
             logo   = '%s/%s'%(BASE_URL,channel.find_all('img')[0].attrs['src'])
             channels[link.replace('/watch/','')] = {'name':chname,'logo':logo,'url':link,'number':idx + 1}
-        return channels
+        return (channels or {})
         
         
     def getRecordings(self):
         log('getRecordings')
         record  = {}
-        soup    = BeautifulSoup(self.openURL(RECORD_URL,life=datetime.timedelta(seconds=30)), "html.parser")
+        soup    = BeautifulSoup(self.openURL(RECORD_URL,life=datetime.timedelta(seconds=5)), "html.parser")
         record['Recordings'] = (soup('div' , {'id': 'savedRecordings'})[0]('div' , {'class': 'recordingBox'}))
         record['Schedules']  = (soup('div' , {'id': 'scheduledRecordings'})[0]('div' , {'class': 'secondaryBubble'}))
-        return record
+        return (record or {})
         
         
     def buildSchedules(self):
         log('buildSchedules')
-        items = self.getRecordings()['Schedules']
+        items = self.recordings['Schedules']
         if len(items) == 0: self.addLink(LANGUAGE(30018), '', None)
         for item in items:
             chlogo = '%s/%s'%(BASE_URL,item.find_all('img')[0].attrs['src'])
             link   = item.find_all('a')[0].attrs['href']
-            chname = self.channels[re.compile('/images/channelicons/(.+?).png').findall(item.find_all('img')[0].attrs['src'])[0]]['name']
-            label  = '%s - %s'%(chname,cleanString(item.find_all('br')[0].get_text()))
+            chname = cleanString(self.channels[re.compile('/images/channelicons/(.+?).png').findall(item.find_all('img')[0].attrs['src'])[0]]['name'])
+            label  = cleanString('%s - %s'%(chname,cleanString(item.find_all('br')[0].get_text())))
             infoLabels  = {"mediatype":"episode","label":label,"title":label}
             infoArt     = {"thumb":chlogo,"poster":chlogo,"fanart":FANART,"icon":chlogo,"clearlogo":chlogo}
-            contextMenu = [(LANGUAGE(30016),'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(link)+"&mode="+str(6)+"&name="+urllib.quote(label)))]
+            contextMenu = [(LANGUAGE(30016),'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(link.replace('/watch/','/delete/'))+"&mode="+str(6)+"&name="+urllib.quote(label)))]
             self.addLink(label, link, 21, infoLabels, infoArt, len(items), contextMenu)
         
 
     def buildRecordings(self):
         log('buildRecordings')
-        items = self.getRecordings()['Recordings']
+        items = self.recordings['Recordings']
         if len(items) == 0: self.addLink(LANGUAGE(30019), '', None)
         for item in items:
             chlogo = '%s/%s'%(BASE_URL,item.find_all('img')[0].attrs['src'])
             link   = item.find_all('a')[0].attrs['href']
-            chname = self.channels[re.compile('/images/channelicons/(.+?).png').findall(item.find_all('img')[0].attrs['src'])[0]]['name']
-            label  = '%s - %s'%(chname,cleanString(item.find_all('p')[0].get_text()))
+            chname = cleanString(self.channels[re.compile('/images/channelicons/(.+?).png').findall(item.find_all('img')[0].attrs['src'])[0]]['name'])
+            label  = cleanString('%s - %s'%(chname,cleanString(item.find_all('p')[0].get_text())))
             infoLabels  = {"mediatype":"episode","label":label,"title":label}
             infoArt     = {"thumb":chlogo,"poster":chlogo,"fanart":FANART,"icon":chlogo,"clearlogo":chlogo}
-            contextMenu = [(LANGUAGE(30017),'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(link)+"&mode="+str(6)+"&name="+urllib.quote(label)))]
+            contextMenu = [(LANGUAGE(30017),'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(link.replace('/watch/','/delete/'))+"&mode="+str(6)+"&name="+urllib.quote(label)))]
             self.addLink(label, link, 9, infoLabels, infoArt, len(items), contextMenu)
         
         
     def setRecording(self, name, href):
         log('setRecording, href = ' + href)
-        if len(self.openURL(BASE_URL + href)) > 0: notificationDialog(LANGUAGE(30014))
+        try: 
+            soup    = BeautifulSoup(self.openURL(BASE_URL + href, datetime.timedelta(seconds=1)))
+            message = '%s, %s'%(cleanString(soup('p' , {'class': 'floatLeft'})[0].get_text()),cleanString(soup('p' , {'class': 'floatRight'})[0].get_text()))
+            notificationDialog(message, time=20000)
+        except: pass
         
         
     def delRecording(self, name, href):
         log('delRecording, href = ' + href)
-        if len(self.openURL(BASE_URL + href)) > 0: notificationDialog(LANGUAGE(30020))
-        xbmc.executebuiltin("Container.Refresh")
+        try: 
+            soup    = BeautifulSoup(self.openURL(BASE_URL + href, datetime.timedelta(seconds=1)))
+            message = '%s, %s'%(cleanString(soup('p' , {'class': 'floatLeft'})[0].get_text()),cleanString(soup('p' , {'class': 'floatRight'})[0].get_text()))
+            notificationDialog(message, time=20000)
+            xbmc.executebuiltin("Container.Refresh")
+        except: pass
         
         
-    @use_cache(28)
     def buildProgram(self, href):
         log('buildProgram, href = ' + href)
-        soup     = BeautifulSoup(self.openURL(BASE_URL + href), "html.parser")
+        soup     = BeautifulSoup(self.openURL(BASE_URL + href,datetime.timedelta(days=28)), "html.parser")
         results  = soup('div' , {'id': 'programmeGrid'})[0]
         thumb    = results('div' , {'id': 'programmeImg'})[0].find_all('img')[0].attrs['src']
         plot     = cleanString(results('div' , {'id': 'programmeMain'})[0].find_all('p')[0].get_text())
-        genre    = results('div' , {'id': 'programmeAside'})[0].find_all('p')[0].get_text().split(' - ')
+        genre    = cleanString(results('div' , {'id': 'programmeAside'})[0].find_all('p')[0].get_text().split(' - '))
         return thumb, plot, genre 
         
         
@@ -304,10 +321,22 @@ class Transponder(object):
         xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_NONE)
         
         
+    def buildLineups(self, days=1):
+        log('buildLineups, days = ' + str(days))
+        progs = []
+        for i in range(days):
+            if i == 0: offset = ''
+            else: offset = '/%'+ str(self.getLocalNow(i).date())
+            soup = BeautifulSoup(self.openURL(GUIDE_URL%(offset),datetime.timedelta(days=(i+1))), "html.parser")
+            items = (soup('div' , {'class': 'tvguideChannelListings noselect'}))
+            progs.append(items)
+        return progs
+        
+        
     def buildLineup(self, name=None, url=None):
         log('buildLineup, name = ' + str(name))
         if url is None:
-            soup = BeautifulSoup(self.openURL(GUIDE_URL), "html.parser")
+            soup = BeautifulSoup(self.openURL(GUIDE_URL%('')), "html.parser")
             for channel in self.channels:
                 link   = self.channels[channel]['url']
                 chname = self.channels[channel]['name']
@@ -317,57 +346,55 @@ class Transponder(object):
                 self.addDir(chname, link, 2, infoLabels, infoArt)
             xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_TRACKNUM	)
         else:
-            soup = BeautifulSoup(self.openURL(GUIDE_URL), "html.parser")
-            items = soup('div' , {'class': 'tvguideChannelListings noselect'})
-            for item in items:
-                if name.lower().replace('  1',' +1') == item.find_all('h3')[0].get_text().lower(): break
-            now = datetime.datetime.now()
-            listings = item('div' , {'class': re.compile(r'programme\s')})
-            for listing in listings:
-                mode   = 9
-                stime  = listing.find_all('p')
-                if not stime: continue
-                stime  = trimString(stime[0].get_text())
-                dur    = self.getDuration(stime)
-                start  = self.getLocaltime(stime.split('-')[0])
-                end    = start + datetime.timedelta(seconds=dur)
-                try: title  = listing.find_all('h3')[0].find_all('a')[0].get_text()
-                except: title = item.find_all('h3')[0].get_text()
-                if now > end: continue
-                # if now < end: mode = 21 # call contextMenu
-                if now >= start and now < end: title = '[B]%s[/B]'%title
-                aired  = start.strftime('%Y-%m-%d')
-                start  = start.strftime('%I:%M %p')
-                label  = '%s: %s'%(start,cleanString(title))
-                chlogo = self.channels[url.replace('/watch/','')]['logo']
-                thumb  = chlogo
-                plot   = label
-                genre  = 'Live'
-                contextMenu = []
-                # try: thumb, plot, genre = self.buildProgram(listing.find_all('a')[0].attrs['href'])
-                # except: pass
-                try:
-                    contextMenu = [(LANGUAGE(30011),'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(listing.find_all('a')[2].attrs['href'])+"&mode="+str(5)+"&name="+urllib.quote(title)))]
-                    plot = '%s [CR] %s'%(plot,LANGUAGE(30023))
-                except: pass
-                infoLabels  = {"mediatype":"episode","label":label ,"title":label,"plot":plot,"duration":dur,"aired":aired,"genre":genre}
-                infoArt     = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":chlogo,"clearlogo":chlogo}
-                self.addLink(label, url, mode, infoLabels, infoArt, len(listings), contextMenu)
+            datas = (self.buildLineups(MAX_LINEUP))
+            for idx, data in enumerate(datas):
+                now = datetime.datetime.now() + datetime.timedelta(days=idx)
+                for item in data:
+                    if name.lower().replace('  1',' +1') == item.find_all('h3')[0].get_text().lower():
+                        listings = (item('div' , {'class': re.compile(r'programme\s')}))
+                        for listing in listings:
+                            mode   = 9
+                            stime  = listing.find_all('p')
+                            if not stime: continue
+                            stime  = trimString(stime[0].get_text())
+                            dur    = self.getDuration(stime)
+                            start  = self.getLocaltime(stime.split('-')[0], offset=idx)
+                            end    = start + datetime.timedelta(seconds=dur)
+                            try: title  = cleanString(listing.find_all('h3')[0].find_all('a')[0].get_text())
+                            except: title = cleanString(item.find_all('h3')[0].get_text())
+                            if idx == 0 and now > end: continue
+                            if idx == 0 and now >= start and now < end: title = '[B]%s[/B]'%title
+                            # if now < end: mode = 21 # call contextMenu
+                            aired  = start.strftime('%Y-%m-%d')
+                            start  = start.strftime('%I:%M %p')
+                            label  = cleanString('%s: %s'%(start,title))
+                            chlogo = self.channels[url.replace('/watch/','')]['logo']
+                            thumb  = chlogo
+                            plot   = label
+                            genre  = 'Live'
+                            contextMenu = []
+                            # try: thumb, plot, genre = self.buildProgram(listing.find_all('a')[0].attrs['href'])
+                            # except: pass
+                            try:
+                                contextMenu = [(LANGUAGE(30011),'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(listing.find_all('a')[2].attrs['href'])+"&mode="+str(5)+"&name="+urllib.quote(title)))]
+                                plot = '%s [CR]%s'%(plot,LANGUAGE(30023))
+                            except: pass
+                            infoLabels  = {"mediatype":"episode","label":label ,"title":label,"plot":plot,"duration":dur,"aired":aired,"genre":genre}
+                            infoArt     = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":chlogo,"clearlogo":chlogo}
+                            self.addLink(label, url, mode, infoLabels, infoArt, len(listings), contextMenu)
+                        break
             xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_NONE)
         
 
     def uEPG(self):
         log('uEPG')
         #support for uEPG universal epg framework module available from the Kodi repository. https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
-        soup  = BeautifulSoup(self.openURL(GUIDE_URL), "html.parser")
-        items = soup('div' , {'class': 'tvguideChannelListings noselect'})
-        now   = datetime.datetime.now()
-        data  = [(now, self.channels[channel]['number'], self.channels[channel], items) for channel in self.channels]
-        return self.poolList(self.buildGuide, data)
+        lineup = (self.buildLineups(MAX_LINEUP))
+        return self.poolList(self.buildGuide, [(self.channels[channel]['number'], self.channels[channel], lineup) for channel in self.channels])
         
         
     def buildGuide(self, data):
-        now, chnum, channel, items = data
+        chnum, channel, datas = data
         chname     = channel['name']
         link       = channel['url']
         chlogo     = channel['logo']
@@ -378,34 +405,39 @@ class Transponder(object):
         newChannel['channelnumber'] = chnum
         newChannel['channellogo']   = chlogo
         newChannel['isfavorite']    = isFavorite
-        for item in items:
-            if chname.lower().replace('  1',' +1') == item.find_all('h3')[0].get_text().lower(): break
-        listings = item('div' , {'class': re.compile(r'programme\s')})
-        for listing in listings:
-            stime = listing.find_all('p')
-            if not stime: continue
-            stime  = trimString(stime[0].get_text())
-            dur    = self.getDuration(stime)
-            start  = self.getLocaltime(stime.split('-')[0])
-            aired  = start.strftime('%Y-%m-%d')
-            try: label  = listing.find_all('h3')[0].find_all('a')[0].get_text()
-            except: label = item.find_all('h3')[0].get_text()
-            thumb  = chlogo
-            plot   = label
-            genre  = 'Live'
-            contextMenu = []
-            # try: thumb, plot, genre = self.buildProgram(listing.find_all('h3')[0].attrs['href'])
-            # except: pass
-            try:
-                contextMenu = [(LANGUAGE(30011),'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(listing.find_all('h3')[2].attrs['href'])+"&mode="+str(5)+"&name="+urllib.quote(label)))]
-                plot = '%s [CR] %s'%(plot,LANGUAGE(30023))
-            except: pass
-            tmpdata = {"mediatype":"episode","label":label ,"title":label,"plot":plot,"duration":dur,"aired":aired,"genre":genre}
-            tmpdata['starttime'] = time.mktime(start.timetuple())
-            tmpdata['url'] = self.sysARG[0]+'?mode=9&name=%s&url=%s'%(label,link)
-            tmpdata['art'] = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":chlogo,"clearlogo":chlogo}
-            tmpdata['contextmenu'] = json.dumps(contextMenu)
-            guidedata.append(tmpdata)
+        for idx, data in enumerate(datas):
+            now = datetime.datetime.now() + datetime.timedelta(days=idx)
+            for item in data:
+                if chname.lower().replace('  1',' +1') == item.find_all('h3')[0].get_text().lower():
+                    listings = (item('div' , {'class': re.compile(r'programme\s')}))
+                    for listing in listings:
+                        stime = listing.find_all('p')
+                        if not stime: continue
+                        stime  = trimString(stime[0].get_text())
+                        dur    = self.getDuration(stime)
+                        start  = self.getLocaltime(stime.split('-')[0], offset=idx)
+                        end    = start + datetime.timedelta(seconds=dur)
+                        aired  = start.strftime('%Y-%m-%d')
+                        try: label  = listing.find_all('h3')[0].find_all('a')[0].get_text()
+                        except: label = item.find_all('h3')[0].get_text()
+                        if idx == 0 and now > end: continue
+                        thumb  = chlogo
+                        plot   = label
+                        genre  = 'Live'
+                        contextMenu = []
+                        # try: thumb, plot, genre = self.buildProgram(listing.find_all('h3')[0].attrs['href'])
+                        # except: pass
+                        try:
+                            contextMenu = [(LANGUAGE(30011),'XBMC.RunPlugin(%s)'%(self.sysARG[0]+"?url="+urllib.quote(listing.find_all('h3')[2].attrs['href'])+"&mode="+str(5)+"&name="+urllib.quote(label)))]
+                            plot = '%s [CR]%s'%(plot,LANGUAGE(30023))
+                        except: pass
+                        tmpdata = {"mediatype":"episode","label":label ,"title":label,"plot":plot,"duration":dur,"aired":aired,"genre":genre}
+                        tmpdata['starttime'] = time.mktime(start.timetuple())
+                        tmpdata['url'] = self.sysARG[0]+'?mode=9&name=%s&url=%s'%(label,link)
+                        tmpdata['art'] = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":chlogo,"clearlogo":chlogo}
+                        tmpdata['contextmenu'] = json.dumps(contextMenu)
+                        guidedata.append(tmpdata)
+                    break
         newChannel['guidedata'] = guidedata
         return newChannel
         
@@ -488,7 +520,7 @@ class Transponder(object):
         elif mode == 5: self.setRecording(name, url)
         elif mode == 6: self.delRecording(name, url)
         elif mode == 9: self.playVideo(name, url)
-        elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(json.dumps(list(self.uEPG()))),urllib.quote(json.dumps(self.sysARG[0]+"?mode=20")),urllib.quote(json.dumps("7200")),urllib.quote(json.dumps("7"))))
+        elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(json.dumps(list(self.uEPG()))),urllib.quote(json.dumps(self.sysARG[0]+"?mode=20")),urllib.quote(json.dumps("10800")),urllib.quote(json.dumps("7"))))
         elif mode == 21:xbmc.executebuiltin("action(ContextMenu)")
         
         xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)

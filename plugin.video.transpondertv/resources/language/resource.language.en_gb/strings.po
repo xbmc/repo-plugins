@@ -109,10 +109,14 @@ msgid "More Information Available"
 msgstr ""
 
 msgctxt "#30023"
-msgid "Recording Available"
+msgid "[B]Recording Available[/B]"
 msgstr ""
 
 msgctxt "#30024"
 msgid "Something went wrong, please check user credentials and try again."
+msgstr ""
+
+msgctxt "#30025"
+msgid "Guidedata to display"
 msgstr ""
 

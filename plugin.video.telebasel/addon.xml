@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.telebasel" name="Telebasel" version="0.9.0" provider-name="Alexander Seiler">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+    <import addon="script.module.feedparser" version="5.1.3"/>
+    <import addon="script.module.simplecache" version="1.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Telebasel media library</summary>
+    <summary lang="de_DE">Telebasel Mediathek</summary>
+    <description lang="en_GB">Watch all the shows of the local Swiss TV station Telebasel.</description>
+    <description lang="de_DE">Sehen Sie alle Sendungen des lokalen schweizer Fernsehrsender Telebasel</description>
+    <language>de</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <website>https://telebasel.ch</website>
+    <email>seileralex@gmail.com</email>
+    <source>https://github.com/goggle/plugin.video.telebasel</source>
+    <news>v0.9.0 (2018-10-17)
+- First release. Access the content of the media library of Telebasel (by show or the most recent). Watch the livestream.
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+        <screenshot>resources/screenshot-01.png</screenshot>
+        <screenshot>resources/screenshot-02.png</screenshot>
+        <screenshot>resources/screenshot-03.png</screenshot>
+    </assets>
+  </extension>
+</addon>

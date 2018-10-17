@@ -1,0 +1,44 @@
+# Kodi Media Center language file
+# Addon Name: Telebasel
+# Addon id: plugin.video.telebasel
+# Addon Provider: Alexander Seiler
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.rtsplaytv\n"
+"Report-Msgid-Bugs-To: seileralex@gmail.com\n"
+"POT-Creation-Date: 2018-10-16 17:39+0200\n"
+"PO-Revision-Date: 2018-10-16 17:39+0200\n"
+"Last-Translator: Alexander Seiler\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Enable debugging"
+msgstr "Aktiviere Debugging"
+
+msgctxt "#30010"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30050"
+msgid "All shows"
+msgstr "Alle Sendungen"
+
+msgctxt "#30051"
+msgid "Newest shows"
+msgstr "Neuste Sendungen"
+
+msgctxt "#30072"
+msgid "Live TV"
+msgstr "Live TV"
+
+msgctxt "#30074"
+msgid "Telebasel Live"
+msgstr "Telebasel Live"
+
+msgctxt "#30100"
+msgid "Failed to open URL."
+msgstr "Konnte URL nicht öffnen."

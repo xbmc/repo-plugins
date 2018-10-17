@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.telebasel" name="Telebasel" version="0.9.0" provider-name="Alexander Seiler">
+<addon id="plugin.video.telebasel" name="Telebasel" version="0.9.1" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
     <import addon="script.module.feedparser" version="5.1.3"/>
     <import addon="script.module.simplecache" version="1.0.0"/>
   </requires>
@@ -20,7 +20,9 @@
     <website>https://telebasel.ch</website>
     <email>seileralex@gmail.com</email>
     <source>https://github.com/goggle/plugin.video.telebasel</source>
-    <news>v0.9.0 (2018-10-17)
+    <news>v0.9.1 (2018-10-17)
+- Fix critical error: Import the correct BeautifulSoup module (script.module.beautifulsoup4).
+v0.9.0 (2018-10-17)
 - First release. Access the content of the media library of Telebasel (by show or the most recent). Watch the livestream.
     </news>
     <assets>

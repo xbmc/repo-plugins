@@ -1,3 +1,47 @@
+1.0.13 (2018-10-18)
+- fix for detecting stream url
+
+1.0.12 (2018-09-19)
+- fix lazy teaser loading after zdf website updates
+- fix loading zdf homepage
+
+1.0.11 (2018-05-13)
+- fix for handling lazyload teasers newly introduced by zdf.de
+- performance improvements for long lists
+
+1.0.10 (2018-01-11)
+- fix for rest-api url structure after change by zdf.de (see https://github.com/generia/plugin.video.zdf_de_2016/issues/14)
+
+1.0.9 (2017-12-22)
+- fix for empty cluster lists after website update
+
+1.0.8 (2017-11-02)
+- hotfix for parsing api-token, if token-cache is empty
+
+1.0.7 (2017-10-31)
+- handle new content elements after 'heute.de' relaunch
+- use first teaser image for cluster folders
+- added 'Startseite zdf.de' homepage processing
+- fix handling '/sendungen-a-z' properly in all cases 
+
+1.0.6 (2017-10-07)
+- full refactoring for apiToken handling after ZDF website updates 
+- fix for genre/category parsing
+- fix for rubrics parsing
+
+1.0.5 (2017-07-28)
+- fix for apiToken handling (see https://github.com/generia/plugin.video.zdf_de_2016/issues/8)
+- fix for streamInfoUrl not (yet) available (see https://github.com/generia/plugin.video.zdf_de_2016/issues/7)
+- minor variable initialization cleanups
+
+1.0.4 (2017-06-03)
+- inform about redirects to external sites (see https://github.com/generia/plugin.video.zdf_de_2016/issues/5)
+- fixes for minor labeling issues after updates on zdf.de 
+
+1.0.3 (2017-02-19)
+- provide sub-titles for video, if available on zdf.de (see https://github.com/generia/plugin.video.zdf_de_2016/issues/3)
+- Gotham support, lowered xbmc.python version to '2.14.0' (see https://github.com/generia/plugin.video.zdf_de_2016/issues/4)
+
 1.0.2 (2017-01-28)
 - fix for github issue#2 ('Meistgesehen' is empty) after ZDF website update
 - make sure that search-history store-path exists

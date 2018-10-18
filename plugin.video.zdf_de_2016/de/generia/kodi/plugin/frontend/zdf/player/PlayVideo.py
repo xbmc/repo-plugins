@@ -11,6 +11,7 @@ from de.generia.kodi.plugin.backend.zdf.VideoResource import VideoResource
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 from de.generia.kodi.plugin.backend.zdf.api.StreamInfoResource import StreamInfoResource
 
+from de.generia.kodi.plugin.frontend.base.Pagelet import Action        
 from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet        
 
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
@@ -42,7 +43,7 @@ class PlayVideo(Pagelet):
             try:
                 dialog = xbmcgui.DialogProgressBG()
                 dialog.create(self._(32007), self._(32008))
-                videoContentUrl = Constants.apiContentUrl + contentName + '.json?profile=player'
+                videoContentUrl = Constants.apiContentUrl + contentName + '.json?profile=player2'
                 self.debug("downloading video-content-url '{1}' ...", videoContentUrl)
                 videoContent = self._getVideoContent(videoContentUrl)
                 

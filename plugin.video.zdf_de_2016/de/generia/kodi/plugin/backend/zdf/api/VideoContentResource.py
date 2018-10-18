@@ -36,9 +36,14 @@ class VideoContentResource(ApiResource):
         if 'mainVideoContent' in self.content:
             mainVideoContent = self.content.get('mainVideoContent')
             target = mainVideoContent.get('http://zdf.de/rels/target')
-            self.streamInfoUrl = target.get('http://zdf.de/rels/streams/ptmd')
-            if self.streamInfoUrl is not None:
-                self.streamInfoUrl = self.apiBaseUrl + self.streamInfoUrl
+            playerId = 'ngplayer_2_3'
+            streamInfoUrl = target.get('http://zdf.de/rels/streams/ptmd-template')
+            if streamInfoUrl is not None:
+                streamInfoUrl = streamInfoUrl.replace('{playerId}', playerId)
+            else:
+                streamInfoUrl = target.get('http://zdf.de/rels/streams/ptmd-template')
+            if streamInfoUrl is not None:
+                self.streamInfoUrl = self.apiBaseUrl + streamInfoUrl
             duration = target.get('duration')
             if duration is not None:
                 self.duration = int(duration)

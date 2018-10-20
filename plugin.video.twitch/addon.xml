@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='2.3.3' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.3.4' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
         <import addon='script.module.six' version='1.11.0'/>
@@ -13,6 +13,11 @@
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
         <news>
+2.3.4
+[fix] clean_title_value UnicodeDecodeError
+[fix] Game titles UnicodeEncodeError
+[fix] python 3 compat. urllib.quote_plus
+
 2.3.3
 [fix] Description template UnicodeDecodeError
 [chg] Use unicode punctuation space in description template
@@ -21,7 +26,6 @@
             <icon>icon.png</icon>
             <fanart>fanart.png</fanart>
         </assets>
-        <language></language>
         <source>https://github.com/MrSprigster/Twitch-on-Kodi</source>
         <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
         <forum>http://forum.kodi.tv/showthread.php?tid=134538</forum>

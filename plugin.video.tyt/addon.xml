@@ -7,7 +7,7 @@ provider-name="Brian P. Soucy">
   <import addon="xbmc.python" version="2.24.0"/>
   <import addon="script.module.pyjwt" version="1.6.4"/>
 </requires>
-<extension point="xbmc.python.pluginsource" library="main.py">
+<extension point="xbmc.python.pluginsource" library="addon.py">
   <provides>video</provides>
 </extension>
 <extension point="xbmc.addon.metadata">

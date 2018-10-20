@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+
+msgctxt "#30000"
+msgid "General"
+msgstr ""
+
+msgctxt "#30001"
+msgid "TYT E-Mail"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Members Only is for paid members of TYTNetwork.com.  Please check username/password in plugin settings."
+msgstr ""
+
+msgctxt "#30004"
+msgid "Video doesn't exist on website."
+msgstr ""

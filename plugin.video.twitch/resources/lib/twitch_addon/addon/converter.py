@@ -17,6 +17,8 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
+from six import PY2
+
 from base64 import b64encode
 
 from . import menu_items
@@ -65,8 +67,11 @@ class JsonListItemConverter(object):
         if Keys.GAME in game:
             game = game[Keys.GAME]
         name = game[Keys.NAME]
+        if name and PY2:
+            name = name.encode('utf-8', 'ignore')
         if not name:
             name = i18n('unknown_game')
+
         image = self.get_thumbnail(game.get(Keys.BOX, game.get(Keys.LOGO)), Images.BOXART)
         context_menu = list()
         context_menu.extend(menu_items.refresh())

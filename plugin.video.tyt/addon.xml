@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.tyt"
-version="3.0.2"
+version="3.0.3"
 name="TYT Network - The Young Turks"
 provider-name="Brian P. Soucy">
 <requires>

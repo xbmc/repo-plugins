@@ -2,11 +2,9 @@ __author__ = 'bromix'
 
 from six.moves import range
 
-import json
-import os
 import re
-
 import requests
+
 from ....kodion.utils import FunctionCache
 from .json_script_engine import JsonScriptEngine
 
@@ -31,16 +29,6 @@ class Cipher(object):
 
         return u''
 
-    def _cache_json_script(self, json_script, md5_hash):
-        if self._cache_folder:
-            if not os.path.exists(self._cache_folder):
-                os.makedirs(self._cache_folder)
-
-            filename = md5_hash + '.jsonscript'
-            filename = os.path.join(self._cache_folder, filename)
-            with open(filename, 'w') as outfile:
-                json.dump(json_script, outfile, sort_keys=True, indent=4, ensure_ascii=False)
-
     def _load_json_script(self, javascript_url):
         headers = {'Connection': 'keep-alive',
                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36',
@@ -51,7 +39,7 @@ class Cipher(object):
 
         url = javascript_url
         if not url.startswith('http'):
-            url = 'http://' + url
+            url = ''.join(['http://', url])
 
         result = requests.get(url, headers=headers, verify=self._verify, allow_redirects=True)
         javascript = result.text
@@ -173,7 +161,7 @@ class Cipher(object):
         _object_body = _object_body.split('},')
         for _function in _object_body:
             if not _function.endswith('}'):
-                _function += '}'
+                _function = ''.join([_function, '}'])
             _function = _function.strip()
 
             match = re.match('(?P<name>[^:]*):function\((?P<parameter>[^)]*)\)\{(?P<body>[^}]+)\}', _function)

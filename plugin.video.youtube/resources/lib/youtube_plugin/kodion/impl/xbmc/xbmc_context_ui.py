@@ -129,21 +129,33 @@ class XbmcContextUI(AbstractContextUI):
     def open_settings(self):
         self._xbmc_addon.openSettings()
 
-    @staticmethod
-    def refresh_container():
-        xbmc.executebuiltin("Container.Refresh")
+    def refresh_container(self):
+        script_uri = 'special://home/addons/%s/resources/lib/youtube_plugin/refresh.py' % self._context.get_id()
+        xbmc.executebuiltin('RunScript(%s)' % script_uri)
 
     @staticmethod
     def set_home_window_property(property_id, value):
-        property_id = 'plugin.video.youtube-' + property_id
+        property_id = ''.join(['plugin.video.youtube-', property_id])
         xbmcgui.Window(10000).setProperty(property_id, value)
 
     @staticmethod
     def get_home_window_property(property_id):
-        property_id = 'plugin.video.youtube-' + property_id
+        property_id = ''.join(['plugin.video.youtube-', property_id])
         return xbmcgui.Window(10000).getProperty(property_id) or None
 
     @staticmethod
     def clear_home_window_property(property_id):
-        property_id = 'plugin.video.youtube-' + property_id
+        property_id = ''.join(['plugin.video.youtube-', property_id])
         xbmcgui.Window(10000).clearProperty(property_id)
+
+    @staticmethod
+    def bold(value):
+        return ''.join(['[B]', value, '[/B]'])
+
+    @staticmethod
+    def uppercase(value):
+        return ''.join(['[UPPERCASE]', value, '[/UPPERCASE]'])
+
+    @staticmethod
+    def color(color, value):
+        return ''.join(['[COLOR=', color.lower(), ']', value, '[/COLOR]'])

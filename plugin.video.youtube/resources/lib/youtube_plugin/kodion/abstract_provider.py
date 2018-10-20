@@ -24,10 +24,10 @@ class AbstractProvider(object):
 
         # register some default paths
         self.register_path('^/$', '_internal_root')
-        self.register_path('^/' + constants.paths.WATCH_LATER + '/(?P<command>add|remove|list)/?$',
+        self.register_path(''.join(['^/', constants.paths.WATCH_LATER, '/(?P<command>add|remove|list)/?$']),
                            '_internal_watch_later')
-        self.register_path('^/' + constants.paths.FAVORITES + '/(?P<command>add|remove|list)/?$', '_internal_favorite')
-        self.register_path('^/' + constants.paths.SEARCH + '/(?P<command>input|query|list|remove|clear|rename)/?$',
+        self.register_path(''.join(['^/', constants.paths.FAVORITES, '/(?P<command>add|remove|list)/?$']), '_internal_favorite')
+        self.register_path(''.join(['^/', constants.paths.SEARCH, '/(?P<command>input|query|list|remove|clear|rename)/?$']),
                            '_internal_search')
         self.register_path('(?P<path>.*\/)extrafanart\/([\?#].+)?$', '_internal_on_extra_fanart')
 
@@ -203,6 +203,7 @@ class AbstractProvider(object):
                 try:
                     if not incognito and not channel_id:
                         search_history.update(query)
+                    context.set_path('/kodion/search/query/')
                     return self.on_search(query, context, re_match)
                 except:
                     return list()

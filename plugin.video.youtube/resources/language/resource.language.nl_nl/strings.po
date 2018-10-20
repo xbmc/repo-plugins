@@ -16,13 +16,13 @@ msgstr ""
 "Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-msgctxt "Addon Summary"
-msgid "Plugin for YouTube"
-msgstr "Plugin voor YouTube"
+# msgctxt "Addon Summary"
+# msgid "Plugin for YouTube"
+# msgstr "Plugin voor YouTube"
 
-msgctxt "Addon Description"
-msgid "YouTube is a one of the biggest video-sharing websites of the world."
-msgstr "YouTube is een van de grootste sites ter wereld om video's te delen."
+# msgctxt "Addon Description"
+# msgid "YouTube is a one of the biggest video-sharing websites of the world."
+# msgstr "YouTube is een van de grootste sites ter wereld om video's te delen."
 
 #Kodion Settings
 
@@ -100,7 +100,7 @@ msgstr "Zoekhistorie grootte"
 
 msgctxt "#30024"
 msgid "Cache size (MB)"
-msgstr "Cache Grootte (MB)"
+msgstr "Cacheomvang (MB)"
 
 msgctxt "#30025"
 msgid "Enable setup-wizard"
@@ -243,7 +243,7 @@ msgstr "Geduld AUB..."
 
 msgctxt "#30120"
 msgid "Clear"
-msgstr "Schoon op"
+msgstr "Opschonen"
 
 #YouTube
 #empty strings from id 30121 to 30199
@@ -489,7 +489,7 @@ msgstr "Onderhoud"
 
 msgctxt "#30553"
 msgid "Delete function cache database"
-msgstr "Verwijder functie cache database"
+msgstr "Verwijder functiecache database"
 
 msgctxt "#30554"
 msgid "Delete search history database"
@@ -497,11 +497,11 @@ msgstr "Verwijder zoekhistorie database"
 
 msgctxt "#30555"
 msgid "Clear function cache"
-msgstr "Wis functie cache"
+msgstr "Opschonen functie cache"
 
 msgctxt "#30556"
 msgid "Clear search history"
-msgstr "Wis zoekhistorie"
+msgstr "Opschonen zoekhistorie"
 
 msgctxt "#30557"
 msgid "function cache"
@@ -713,7 +713,7 @@ msgstr "Ontwikkelaarsleutels toestaan"
 
 msgctxt "#30609"
 msgid "Clear watch history"
-msgstr "Kijkgeschiedenis opschonen"
+msgstr "Opschonen Kijkgeschiedenis"
 
 msgctxt "#30610"
 msgid "This will clear your account's watch history from all devices. You can't undo this."
@@ -861,7 +861,7 @@ msgstr "Ververs na bekijken"
 
 msgctxt "#30646"
 msgid "Upcoming Live"
-msgstr "Aankomend Live"
+msgstr "Binnenkort Live"
 
 msgctxt "#30647"
 msgid "Completed Live"
@@ -1021,7 +1021,7 @@ msgstr "Verwijder datacache database"
 
 msgctxt "#30686"
 msgid "Clear data cache"
-msgstr "Datacache wissen"
+msgstr "Opschonen datacache"
 
 msgctxt "#30687"
 msgid "data cache"
@@ -1082,3 +1082,27 @@ msgstr ""
 msgctxt "#30701"
 msgid "Failed to obtain client IP"
 msgstr "Verkrijgen client IP mislukt"
+
+msgctxt "#30702"
+msgid "Play with subtitles"
+msgstr "Afspelen met ondertiteling"
+
+msgctxt "#30703"
+msgid "Are you sure?"
+msgstr "Weet je dat zeker?"
+
+msgctxt "#30704"
+msgid "Use YouTube website urls"
+msgstr "Gebruik YouTube website url's"
+
+msgctxt "#30705"
+msgid "Download subtitles"
+msgstr "Download ondertiteling"
+
+msgctxt "#30706"
+msgid "Download subtitles before starting playback? (Default: No)"
+msgstr "Ondertiteling downloaden voor dat afspelen begint?"
+
+msgctxt "#30707"
+msgid "Untitled"
+msgstr "Naamloos"

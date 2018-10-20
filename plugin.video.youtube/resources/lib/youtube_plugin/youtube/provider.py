@@ -141,7 +141,12 @@ class Provider(kodion.AbstractProvider):
                  'youtube.data.cache': 30687,
                  'youtube.httpd.not.running': 30699,
                  'youtube.client.ip': 30700,
-                 'youtube.client.ip.failed': 30701
+                 'youtube.client.ip.failed': 30701,
+                 'youtube.video.play_with_subtitles': 30702,
+                 'youtube.are.you.sure': 30703,
+                 'youtube.subtitles.download': 30705,
+                 'youtube.pre.download.subtitles': 30706,
+                 'youtube.untitled': 30707
                  }
 
     def __init__(self):
@@ -526,17 +531,17 @@ class Provider(kodion.AbstractProvider):
             item_params.update({'addon_id': addon_id})
 
         if page == 1:
-            playlists_item = DirectoryItem('[B]' + context.localize(self.LOCAL_MAP['youtube.playlists']) + '[/B]',
+            playlists_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.playlists'])),
                                            context.create_uri(['channel', channel_id, 'playlists'], item_params),
                                            image=context.create_resource_path('media', 'playlist.png'))
             playlists_item.set_fanart(channel_fanarts.get(channel_id, self.get_fanart(context)))
             result.append(playlists_item)
             search_live_id = mine_id if mine_id else channel_id
-            search_item = kodion.items.NewSearchItem(context, alt_name='[B]' + context.localize(self.LOCAL_MAP['youtube.search']) + '[/B]',
+            search_item = kodion.items.NewSearchItem(context, alt_name=context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.search'])),
                                                      image=context.create_resource_path('media', 'search.png'),
                                                      fanart=self.get_fanart(context), channel_id=search_live_id, incognito=incognito, addon_id=addon_id)
             result.append(search_item)
-            live_item = DirectoryItem('[B]%s[/B]' % context.localize(self.LOCAL_MAP['youtube.live']),
+            live_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.live'])),
                                       context.create_uri(['channel', search_live_id, 'live'], item_params),
                                       image=context.create_resource_path('media', 'live.png'))
             result.append(live_item)
@@ -608,7 +613,21 @@ class Provider(kodion.AbstractProvider):
     @kodion.RegisterProviderPath('^/play/$')
     def on_play(self, context, re_match):
         params = context.get_params()
+        if context.get_ui().get_home_window_property('prompt_for_subtitles') != params.get('video_id'):
+            context.get_ui().clear_home_window_property('prompt_for_subtitles')
+
+        if 'prompt_for_subtitles' in params:
+            prompt_subtitles = params['prompt_for_subtitles'] == '1'
+            del params['prompt_for_subtitles']
+            if prompt_subtitles and 'video_id' in params and not 'playlist_id' in params:
+                # redirect to playmedia after setting home window property, so playback url matches playable listitems
+                context.get_ui().set_home_window_property('prompt_for_subtitles', params['video_id'])
+                context.execute('PlayMedia(%s)' % context.create_uri(['play'], {'video_id': params['video_id']}))
+                return
         if 'video_id' in params and not 'playlist_id' in params:
+            resource_manager = self.get_resource_manager(context)
+            video = resource_manager.get_videos([params['video_id']])
+            context.set_param('embeddable', video.get(params['video_id'], {}).get('status', {}).get('embeddable', False))
             return yt_play.play_video(self, context, re_match)
         elif 'playlist_id' in params:
             return yt_play.play_playlist(self, context, re_match)
@@ -762,16 +781,19 @@ class Provider(kodion.AbstractProvider):
             access_manager_users = access_manager.get_users()
             current_user = access_manager.get_user()
             user = None
-            users = ['[B]%s[/B]' % context.localize(self.LOCAL_MAP['youtube.user.new'])]
+            users = [ui.bold(context.localize(self.LOCAL_MAP['youtube.user.new']))]
             user_index_map = []
             for k in list(access_manager_users.keys()):
                 if k == current_user:
                     if access_manager_users[k].get('access_token') or access_manager_users[k].get('refresh_token'):
-                        users.append('[COLOR=limegreen]%s *[/COLOR]' % access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
+                        users.append(
+                            ui.color('limegreen',
+                                     ' '.join([access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])), '*']))
+                        )
                     else:
-                        users.append('%s *' % access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
+                        users.append(' '.join([access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])), '*']))
                 elif access_manager_users[k].get('access_token') or access_manager_users[k].get('refresh_token'):
-                    users.append('[COLOR=limegreen]%s[/COLOR]' % access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
+                    users.append(ui.color('limegreen', access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed']))))
                 else:
                     users.append(access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
                 user_index_map.append(k)
@@ -803,11 +825,14 @@ class Provider(kodion.AbstractProvider):
             for k in list(access_manager_users.keys()):
                 if k == current_user:
                     if access_manager_users[k].get('access_token') or access_manager_users[k].get('refresh_token'):
-                        users.append('[COLOR=limegreen]%s *[/COLOR]' % access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
+                        users.append(
+                            ui.color('limegreen',
+                                     ' '.join([access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])), '*']))
+                        )
                     else:
-                        users.append('%s *' % access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
+                        users.append(' '.join([access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])), '*']))
                 elif access_manager_users[k].get('access_token') or access_manager_users[k].get('refresh_token'):
-                    users.append('[COLOR=limegreen]%s[/COLOR]' % access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
+                    users.append(ui.color('limegreen', access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed']))))
                 else:
                     users.append(access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
                 user_index_map.append(k)
@@ -843,11 +868,14 @@ class Provider(kodion.AbstractProvider):
             for k in list(access_manager_users.keys()):
                 if k == current_user:
                     if access_manager_users[k].get('access_token') or access_manager_users[k].get('refresh_token'):
-                        users.append('[COLOR=limegreen]%s *[/COLOR]' % access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
+                        users.append(
+                            ui.color('limegreen',
+                                     ' '.join([access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])), '*']))
+                        )
                     else:
-                        users.append('%s *' % access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
+                        users.append(' '.join([access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])), '*']))
                 elif access_manager_users[k].get('access_token') or access_manager_users[k].get('refresh_token'):
-                    users.append('[COLOR=limegreen]%s[/COLOR]' % access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
+                    users.append(ui.color('limegreen', access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed']))))
                 else:
                     users.append(access_manager_users[k].get('name', context.localize(self.LOCAL_MAP['youtube.user.unnamed'])))
                 user_index_map.append(k)
@@ -879,7 +907,7 @@ class Provider(kodion.AbstractProvider):
             yt_login.process('out', self, context, re_match, sign_out_refresh=False)
 
         if not sign_out_confirmed:
-            if (mode == 'out') and context.get_ui().on_yes_no_input(context.get_name(), context.localize(self.LOCAL_MAP['youtube.sign.out']) + '?'):
+            if (mode == 'out') and context.get_ui().on_yes_no_input(context.localize(self.LOCAL_MAP['youtube.sign.out']), context.localize(self.LOCAL_MAP['youtube.are.you.sure'])):
                 sign_out_confirmed = True
 
         if (mode == 'in') or ((mode == 'out') and sign_out_confirmed):
@@ -906,8 +934,6 @@ class Provider(kodion.AbstractProvider):
         location = str(context.get_param('location', False)).lower() == 'true'
 
         context.set_param('q', search_text)
-        if context.get_path() == '/kodion/search/input/':
-            context.set_path('/kodion/search/query/')
 
         if search_type == 'video':
             self.set_content_type(context, kodion.constants.content_type.VIDEOS)
@@ -919,8 +945,8 @@ class Provider(kodion.AbstractProvider):
                 channel_params = {}
                 channel_params.update(context.get_params())
                 channel_params['search_type'] = 'channel'
-                channel_item = DirectoryItem('[B]' + context.localize(self.LOCAL_MAP['youtube.channels']) + '[/B]',
-                                             context.create_uri([context.get_path().replace('input', 'query')], channel_params),
+                channel_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.channels'])),
+                                             context.create_uri([context.get_path()], channel_params),
                                              image=context.create_resource_path('media', 'channels.png'))
                 channel_item.set_fanart(self.get_fanart(context))
                 result.append(channel_item)
@@ -928,8 +954,8 @@ class Provider(kodion.AbstractProvider):
                 playlist_params = {}
                 playlist_params.update(context.get_params())
                 playlist_params['search_type'] = 'playlist'
-                playlist_item = DirectoryItem('[B]' + context.localize(self.LOCAL_MAP['youtube.playlists']) + '[/B]',
-                                              context.create_uri([context.get_path().replace('input', 'query')], playlist_params),
+                playlist_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.playlists'])),
+                                              context.create_uri([context.get_path()], playlist_params),
                                               image=context.create_resource_path('media', 'playlist.png'))
                 playlist_item.set_fanart(self.get_fanart(context))
                 result.append(playlist_item)
@@ -940,7 +966,7 @@ class Provider(kodion.AbstractProvider):
                 live_params.update(context.get_params())
                 live_params['search_type'] = 'video'
                 live_params['event_type'] = 'live'
-                live_item = DirectoryItem('[B]%s[/B]' % context.localize(self.LOCAL_MAP['youtube.live']),
+                live_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.live'])),
                                           context.create_uri([context.get_path().replace('input', 'query')], live_params),
                                           image=context.create_resource_path('media', 'live.png'))
                 result.append(live_item)
@@ -979,12 +1005,18 @@ class Provider(kodion.AbstractProvider):
                             context.localize(self.LOCAL_MAP['youtube.subtitle._with_fallback']) % (yt_language, 'en'), yt_language,
                             '%s (%s)' % (yt_language, context.localize(self.LOCAL_MAP['youtube.subtitle.no.auto.generated']))]
 
-            sub_opts[sub_setting] = '[B]%s[/B]' % sub_opts[sub_setting]
+            sub_opts[sub_setting] = context.get_ui().bold(sub_opts[sub_setting])
 
             result = context.get_ui().on_select(context.localize(self.LOCAL_MAP['youtube.subtitle.language']), sub_opts)
-            if result == -1:
-                return False
-            context.get_settings().set_subtitle_languages(result)
+            if result > -1:
+                context.get_settings().set_subtitle_languages(result)
+
+            result = context.get_ui().on_yes_no_input(
+                context.localize(self.LOCAL_MAP['youtube.subtitles.download']),
+                context.localize(self.LOCAL_MAP['youtube.pre.download.subtitles'])
+            )
+            if result > -1:
+                context.get_settings().set_subtitle_download(result == 1)
         elif switch == 'listen_ip':
             local_ranges = ('10.', '172.16.', '192.168.')
             addresses = [iface[4][0] for iface in socket.getaddrinfo(socket.gethostname(), None) if iface[4][0].startswith(local_ranges)] + ['127.0.0.1', '0.0.0.0']
@@ -1094,7 +1126,7 @@ class Provider(kodion.AbstractProvider):
                 elif maint_type == 'temp_files':
                     _file_w_path = _file
                 elif _file == 'playback_history':
-                    _file = str(context.get_access_manager().get_current_user_id()) + '.sqlite'
+                    _file = ''.join([str(context.get_access_manager().get_current_user_id()), '.sqlite'])
                     _file_w_path = os.path.join(os.path.join(context.get_data_path(), 'playback'), _file)
                 else:
                     _file_w_path = os.path.join(context._data_path, _file)
@@ -1242,7 +1274,7 @@ class Provider(kodion.AbstractProvider):
 
         # sign in
         if not self.is_logged_in() and settings.get_bool('youtube.folder.sign.in.show', True):
-            sign_in_item = DirectoryItem('[B]%s[/B]' % context.localize(self.LOCAL_MAP['youtube.sign.in']),
+            sign_in_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.sign.in'])),
                                          context.create_uri(['sign', 'in']),
                                          image=context.create_resource_path('media', 'sign_in.png'))
             sign_in_item.set_fanart(self.get_fanart(context))
@@ -1251,7 +1283,7 @@ class Provider(kodion.AbstractProvider):
         if self.is_logged_in() and settings.get_bool('youtube.folder.my_subscriptions.show', True):
             # my subscription
             my_subscriptions_item = DirectoryItem(
-                '[B]' + context.localize(self.LOCAL_MAP['youtube.my_subscriptions']) + '[/B]',
+                context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.my_subscriptions'])),
                 context.create_uri(['special', 'new_uploaded_videos_tv']),
                 context.create_resource_path('media', 'new_uploads.png'))
             my_subscriptions_item.set_fanart(self.get_fanart(context))

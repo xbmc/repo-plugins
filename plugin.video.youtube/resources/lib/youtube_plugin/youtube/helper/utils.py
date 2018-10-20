@@ -175,6 +175,7 @@ def update_playlist_infos(provider, context, playlist_id_dict, channel_items_dic
 
 def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=None, channel_items_dict=None, live_details=False, use_play_data=True):
     settings = context.get_settings()
+    ui = context.get_ui()
 
     video_ids = list(video_id_dict.keys())
     if len(video_ids) == 0:
@@ -195,7 +196,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
 
         snippet = yt_item['snippet']  # crash if not conform
         play_data = yt_item['play_data']
-        video_item.live = True if snippet.get('liveBroadcastContent') == 'live' else False
+        video_item.live = snippet.get('liveBroadcastContent') == 'live'
 
         # set mediatype
         video_item.set_mediatype('video')  # using video
@@ -263,7 +264,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         channel_name = snippet.get('channelTitle', '')
         description = kodion.utils.strip_html_from_text(snippet['description'])
         if channel_name and settings.get_bool('youtube.view.description.show_channel_name', True):
-            description = '[UPPERCASE][B]%s[/B][/UPPERCASE][CR][CR]%s' % (channel_name, description)
+            description = '%s[CR][CR]%s' % (ui.uppercase(ui.bold(channel_name)), description)
         video_item.set_studio(channel_name)
         # video_item.add_cast(channel_name)
         video_item.add_artist(channel_name)
@@ -285,7 +286,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         if not image:
             image = get_thumbnail(thumb_size, snippet.get('thumbnails', {}))
         if image.endswith('_live.jpg'):
-            image += '?ct=' + thumb_stamp
+            image = ''.join([image, '?ct=', thumb_stamp])
         video_item.set_image(image)
 
         # set fanart
@@ -301,10 +302,8 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         context_menu = []
         replace_context_menu = False
 
-        # Refresh ('My Subscriptions')
-        if context.get_path().startswith('/special/new_uploaded_videos_tv') or \
-                context.get_path().startswith('/channel/mine/playlist/'):
-            yt_context_menu.append_refresh(context_menu, provider, context)
+        # Refresh
+        yt_context_menu.append_refresh(context_menu, provider, context)
 
         # Queue Video
         yt_context_menu.append_queue_video(context_menu, provider, context)
@@ -376,6 +375,9 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
                                               is_logged_in=provider.is_logged_in(),
                                               refresh_container=refresh_container)
 
+        if not video_item.live:
+            yt_context_menu.append_play_with_subtitles(context_menu, provider, context, video_id)
+
         if len(context_menu) > 0:
             video_item.set_context_menu(context_menu, replace=replace_context_menu)
 
@@ -387,8 +389,6 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
     video_data = resource_manager.get_videos([video_id])
 
     meta_data = video_stream.get('meta', None)
-    live = video_stream.get('Live', False)
-
     thumb_size = settings.use_thumbnail_size()
     image = None
 
@@ -403,7 +403,9 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
 
     snippet = yt_item['snippet']  # crash if not conform
     play_data = yt_item['play_data']
-    is_live = True if snippet.get('liveBroadcastContent') == 'live' else False
+    video_item.live = snippet.get('liveBroadcastContent') == 'live'
+
+    video_item.video_id = video_id
 
     # set the title
     if not video_item.get_title():
@@ -426,7 +428,7 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
     ui.set_home_window_property('license_token', license_info.get('token'))
 
     # duration
-    if not is_live and use_play_data and play_data.get('total_time'):
+    if not video_item.live and use_play_data and play_data.get('total_time'):
         video_item.set_duration_from_seconds(float(play_data.get('total_time')))
     else:
         duration = yt_item.get('contentDetails', {}).get('duration', '')
@@ -434,7 +436,7 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
         # we subtract 1 seconds because YouTube returns +1 second to much
         video_item.set_duration_from_seconds(duration.seconds - 1)
 
-    if not is_live and use_play_data:
+    if not video_item.live and use_play_data:
         # play count
         if play_data.get('play_count'):
             video_item.set_play_count(int(play_data.get('play_count')))
@@ -447,7 +449,7 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
 
         if play_data.get('last_played'):
             video_item.set_last_played(play_data.get('last_played'))
-    elif is_live:
+    elif video_item.live:
         video_item.set_play_count(0)
 
     """
@@ -471,7 +473,7 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
     channel_name = snippet.get('channelTitle', '')
     description = kodion.utils.strip_html_from_text(snippet['description'])
     if channel_name and settings.get_bool('youtube.view.description.show_channel_name', True):
-        description = '[UPPERCASE][B]%s[/B][/UPPERCASE][CR][CR]%s' % (channel_name, description)
+        description = '%s[CR][CR]%s' % (ui.uppercase(ui.bold(channel_name)), description)
     video_item.set_studio(channel_name)
     # video_item.add_cast(channel_name)
     video_item.add_artist(channel_name)
@@ -488,8 +490,8 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
     if not image:
         image = get_thumbnail(thumb_size, snippet.get('thumbnails', {}))
 
-    if live and image:
-        image += '?ct=' + get_thumb_timestamp()
+    if video_item.live and image:
+        image = ''.join([image, '?ct=', get_thumb_timestamp()])
     video_item.set_image(image)
 
     # set fanart

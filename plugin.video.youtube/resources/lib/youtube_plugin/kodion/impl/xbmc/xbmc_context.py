@@ -1,9 +1,10 @@
 from six.moves import urllib
 
-import sys
-import weakref
 import datetime
 import json
+import os
+import sys
+import weakref
 
 import xbmc
 import xbmcaddon
@@ -13,7 +14,6 @@ import xbmcvfs
 from ..abstract_context import AbstractContext
 from .xbmc_plugin_settings import XbmcPluginSettings
 from .xbmc_context_ui import XbmcContextUI
-from .xbmc_system_version import XbmcSystemVersion
 from .xbmc_playlist import XbmcPlaylist
 from .xbmc_player import XbmcPlayer
 from ... import utils
@@ -27,8 +27,6 @@ class XbmcContext(AbstractContext):
             self._addon = xbmcaddon.Addon(id=plugin_id)
         else:
             self._addon = xbmcaddon.Addon(id='plugin.video.youtube')
-
-        self._system_version = None
 
         """
         I don't know what xbmc/kodi is doing with a simple uri, but we have to extract the information from the
@@ -45,7 +43,7 @@ class XbmcContext(AbstractContext):
             if len(sys.argv) > 2:
                 params = sys.argv[2][1:]
                 if len(params) > 0:
-                    self._uri = self._uri + '?' + params
+                    self._uri = '?'.join([self._uri, params])
 
                     self._params = {}
                     params = dict(urllib.parse.parse_qsl(params))
@@ -110,12 +108,6 @@ class XbmcContext(AbstractContext):
             return 'en-US'
         """
 
-    def get_system_version(self):
-        if not self._system_version:
-            self._system_version = XbmcSystemVersion(version='', releasename='', appname='')
-
-        return self._system_version
-
     def get_video_playlist(self):
         if not self._video_playlist:
             self._video_playlist = XbmcPlaylist('video', weakref.proxy(self))
@@ -146,6 +138,13 @@ class XbmcContext(AbstractContext):
 
     def get_data_path(self):
         return self._data_path
+
+    def get_debug_path(self):
+        if not self._debug_path:
+            self._debug_path = os.path.join(self.get_data_path(), 'debug')
+            if not xbmcvfs.exists(self._debug_path):
+                xbmcvfs.mkdir(self._debug_path)
+        return self._debug_path
 
     def get_native_path(self):
         return self._native_path
@@ -219,7 +218,7 @@ class XbmcContext(AbstractContext):
             message = response['error']['message']
             code = response['error']['code']
             error = 'Requested |%s| received error |%s| and code: |%s|' % (rpc_request, message, code)
-            xbmc.log(error, xbmc.LOGDEBUG)
+            self.log_debug(error)
             return False
 
     def set_addon_enabled(self, addon_id, enabled=True):
@@ -236,7 +235,7 @@ class XbmcContext(AbstractContext):
             message = response['error']['message']
             code = response['error']['code']
             error = 'Requested |%s| received error |%s| and code: |%s|' % (rpc_request, message, code)
-            xbmc.log(error, xbmc.LOGDEBUG)
+            self.log_debug(error)
             return False
 
     def send_notification(self, method, data):

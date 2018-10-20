@@ -1,7 +1,10 @@
 __author__ = 'bromix'
 
 import copy
+import traceback
+
 import requests
+
 from .login_client import LoginClient
 from ..helper.video_info import VideoInfo
 from ..helper.utils import get_shelf_index_by_title
@@ -70,46 +73,49 @@ class YouTube(LoginClient):
         if self._access_token:
             params['access_token'] = self._access_token
 
-        result = requests.get(url, params=params, headers=headers, verify=self._verify, allow_redirects=True)
+        try:
+            result = requests.get(url, params=params, headers=headers, verify=self._verify, allow_redirects=True)
+        except:
+            context.log_error('Failed to update watch history |%s|' % traceback.print_exc())
 
-    def get_video_streams(self, context, video_id=None, player_config=None, cookies=None):
+    def get_video_streams(self, context, video_id=None, player_config=None, cookies=None, embeddable=False):
         video_info = VideoInfo(context, access_token=self._access_token, language=self._language)
 
-        video_streams = video_info.load_stream_infos(video_id, player_config, cookies)
+        video_streams = video_info.load_stream_infos(video_id, player_config, cookies, embeddable)
 
         # update title
         for video_stream in video_streams:
-            title = '[B]%s[/B] (%s)' % (video_stream['title'], video_stream['container'])
+            title = '%s (%s)' % (context.get_ui().bold(video_stream['title']), video_stream['container'])
 
             if 'audio' in video_stream and 'video' in video_stream:
                 if video_stream['audio']['bitrate'] > 0 and video_stream['video']['encoding'] and \
                         video_stream['audio']['encoding']:
-                    title = '[B]%s[/B] (%s; %s / %s@%d)' % (video_stream['title'],
-                                                            video_stream['container'],
-                                                            video_stream['video']['encoding'],
-                                                            video_stream['audio']['encoding'],
-                                                            video_stream['audio']['bitrate'])
+                    title = '%s (%s; %s / %s@%d)' % (context.get_ui().bold(video_stream['title']),
+                                                     video_stream['container'],
+                                                     video_stream['video']['encoding'],
+                                                     video_stream['audio']['encoding'],
+                                                     video_stream['audio']['bitrate'])
 
                 elif video_stream['video']['encoding'] and video_stream['audio']['encoding']:
-                    title = '[B]%s[/B] (%s; %s / %s)' % (video_stream['title'],
-                                                         video_stream['container'],
-                                                         video_stream['video']['encoding'],
-                                                         video_stream['audio']['encoding'])
+                    title = '%s (%s; %s / %s)' % (context.get_ui().bold(video_stream['title']),
+                                                  video_stream['container'],
+                                                  video_stream['video']['encoding'],
+                                                  video_stream['audio']['encoding'])
             elif 'audio' in video_stream and 'video' not in video_stream:
                 if video_stream['audio']['encoding'] and video_stream['audio']['bitrate'] > 0:
-                    title = '[B]%s[/B] (%s; %s@%d)' % (video_stream['title'],
-                                                       video_stream['container'],
-                                                       video_stream['audio']['encoding'],
-                                                       video_stream['audio']['bitrate'])
+                    title = '%s (%s; %s@%d)' % (context.get_ui().bold(video_stream['title']),
+                                                video_stream['container'],
+                                                video_stream['audio']['encoding'],
+                                                video_stream['audio']['bitrate'])
 
             elif 'audio' in video_stream or 'video' in video_stream:
-                encoding =  video_stream.get('audio', dict()).get('encoding')
+                encoding = video_stream.get('audio', dict()).get('encoding')
                 if not encoding:
                     encoding = video_stream.get('video', dict()).get('encoding')
                 if encoding:
-                    title = '[B]%s[/B] (%s; %s)' % (video_stream['title'],
-                                                    video_stream['container'],
-                                                    encoding)
+                    title = '%s (%s; %s)' % (context.get_ui().bold(video_stream['title']),
+                                             video_stream['container'],
+                                             encoding)
 
             video_stream['title'] = title
 
@@ -236,7 +242,7 @@ class YouTube(LoginClient):
         return self._perform_v3_request(method='GET', path='guideCategories', params=params)
 
     def get_popular_videos(self, page_token=''):
-        params = {'part': 'snippet',
+        params = {'part': 'snippet,status',
                   'maxResults': str(self._max_results),
                   'regionCode': self._region,
                   'hl': self._language,
@@ -246,7 +252,7 @@ class YouTube(LoginClient):
         return self._perform_v3_request(method='GET', path='videos', params=params)
 
     def get_video_category(self, video_category_id, page_token=''):
-        params = {'part': 'snippet,contentDetails',
+        params = {'part': 'snippet,contentDetails,status',
                   'maxResults': str(self._max_results),
                   'videoCategoryId': video_category_id,
                   'chart': 'mostPopular',
@@ -371,7 +377,7 @@ class YouTube(LoginClient):
             page_token = ''
 
         # prepare params
-        params = {'part': 'snippet',
+        params = {'part': 'snippet,status',
                   'myRating': 'dislike',
                   'maxResults': str(self._max_results)}
         if page_token:
@@ -389,11 +395,11 @@ class YouTube(LoginClient):
         if isinstance(video_id, list):
             video_id = ','.join(video_id)
 
-        part = 'snippet,contentDetails'
+        parts = ['snippet,contentDetails,status']
         if live_details:
-            part += ',liveStreamingDetails'
+            parts.append(',liveStreamingDetails')
 
-        params = {'part': part,
+        params = {'part': ''.join(parts),
                   'id': video_id}
         return self._perform_v3_request(method='GET', path='videos', params=params)
 
@@ -776,7 +782,7 @@ class YouTube(LoginClient):
                     for _thumb in _thumbs:
                         _thumb_url = _thumb.get('url', '')
                         if _thumb_url.startswith('//'):
-                            _thumb_url = 'https:' + _thumb_url
+                            _thumb_url = ''.join(['https:', _thumb_url])
                         if _thumb_url.endswith('/default.jpg'):
                             _video_item['thumbnails']['default']['url'] = _thumb_url
                         elif _thumb_url.endswith('/mqdefault.jpg'):

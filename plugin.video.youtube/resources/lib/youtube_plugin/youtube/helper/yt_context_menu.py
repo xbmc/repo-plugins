@@ -131,7 +131,7 @@ def append_watch_later(context_menu, provider, context, playlist_id, video_id):
 
 
 def append_go_to_channel(context_menu, provider, context, channel_id, channel_name):
-    text = context.localize(provider.LOCAL_MAP['youtube.go_to_channel']) % ('[B]%s[/B]' % channel_name)
+    text = context.localize(provider.LOCAL_MAP['youtube.go_to_channel']) % context.get_ui().bold(channel_name)
     context_menu.append((text, 'Container.Update(%s)' % context.create_uri(['channel', channel_id])))
 
 
@@ -153,7 +153,7 @@ def append_refresh(context_menu, provider, context):
 def append_subscribe_to_channel(context_menu, provider, context, channel_id, channel_name=u''):
     text = u''
     if channel_name:
-        text = context.localize(provider.LOCAL_MAP['youtube.subscribe_to']).replace('%s', '[B]' + channel_name + '[/B]')
+        text = context.localize(provider.LOCAL_MAP['youtube.subscribe_to']) % context.get_ui().bold(channel_name)
         context_menu.append(
             (text, 'RunPlugin(%s)' % context.create_uri(['subscriptions', 'add'], {'subscription_id': channel_id})))
     else:
@@ -187,3 +187,10 @@ def append_reset_resume_point(context_menu, provider, context, video_id):
                          'RunPlugin(%s)' % context.create_uri(['playback_history'],
                                                               {'video_id': video_id,
                                                                'action': 'reset_resume'})))
+
+
+def append_play_with_subtitles(context_menu, provider, context, video_id):
+    context_menu.append((context.localize(provider.LOCAL_MAP['youtube.video.play_with_subtitles']),
+                         'RunPlugin(%s)' % context.create_uri(['play'],
+                                                              {'video_id': video_id,
+                                                               'prompt_for_subtitles': '1'})))

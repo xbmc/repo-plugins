@@ -16,13 +16,13 @@ msgstr ""
 "Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-msgctxt "Addon Summary"
-msgid "Plugin for YouTube"
-msgstr "Plugin para YouTube"
+# msgctxt "Addon Summary"
+# msgid "Plugin for YouTube"
+# msgstr "Plugin para YouTube"
 
-msgctxt "Addon Description"
-msgid "YouTube is a one of the biggest video-sharing websites of the world."
-msgstr "YouTube es uno de los mayores sitios web de intercambio de vídeos del mundo."
+# msgctxt "Addon Description"
+# msgid "YouTube is a one of the biggest video-sharing websites of the world."
+# msgstr "YouTube es uno de los sitios web más grandes para compartir videos del mundo."
 
 #Kodion Settings
 
@@ -235,11 +235,11 @@ msgstr "Confirmación para suprimir"
 
 msgctxt "#30116"
 msgid "Delete \"%s\"?"
-msgstr "¿Esta seguro de que desea eliminar \"%s\"?"
+msgstr "¿Está seguro de que desea eliminar \"%s\"?"
 
 msgctxt "#30117"
 msgid "Remove \"%s\"?"
-msgstr "¿Esta seguro de que desea suprimir \"%s\"?"
+msgstr "¿Está seguro de que desea suprimir \"%s\"?"
 
 msgctxt "#30118"
 msgid "Delete"
@@ -1089,4 +1089,28 @@ msgstr "La IP del cliente es %s"
 
 msgctxt "#30701"
 msgid "Failed to obtain client IP"
-msgstr "No se pudo obtener la IP de cliente"
+msgstr "No se pudo obtener la IP del cliente"
+
+msgctxt "#30702"
+msgid "Play with subtitles"
+msgstr "Reproducir con subtítulos"
+
+msgctxt "#30703"
+msgid "Are you sure?"
+msgstr "¿Está seguro?"
+
+msgctxt "#30704"
+msgid "Use YouTube website urls"
+msgstr "Usar urls del sitio web YouTube"
+
+msgctxt "#30705"
+msgid "Download subtitles"
+msgstr "Descargar subtítulos"
+
+msgctxt "#30706"
+msgid "Download subtitles before starting playback? (Default: No)"
+msgstr "¿Desea descargar los subtítulos antes de comenzar la reproducción? (Por defecto: No)"
+
+msgctxt "#30707"
+msgid "Untitled"
+msgstr "Sin título"

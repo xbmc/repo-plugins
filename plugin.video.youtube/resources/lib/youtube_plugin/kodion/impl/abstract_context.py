@@ -3,7 +3,7 @@ from six.moves import urllib
 import os
 
 from .. import constants
-from ..logging import log
+from .. import logger
 from ..utils import *
 
 
@@ -12,7 +12,10 @@ class AbstractContext(object):
         if not params:
             params = {}
 
+        self._system_version = None
+
         self._cache_path = None
+        self._debug_path = None
 
         self._function_cache = None
         self._data_cache = None
@@ -117,7 +120,10 @@ class AbstractContext(object):
         raise NotImplementedError()
 
     def get_system_version(self):
-        raise NotImplementedError()
+        if not self._system_version:
+            self._system_version = SystemVersion(version='', releasename='', appname='')
+
+        return self._system_version
 
     def create_uri(self, path=u'/', params=None):
         if not params:
@@ -140,7 +146,7 @@ class AbstractContext(object):
                     params[param] = str(params[param])
 
                 uri_params[param] = to_utf8(params[param])
-            uri += '?' + urllib.parse.urlencode(uri_params)
+            uri = '?'.join([uri, urllib.parse.urlencode(uri_params)])
 
         return uri
 
@@ -209,24 +215,23 @@ class AbstractContext(object):
     def add_sort_method(self, *sort_methods):
         raise NotImplementedError()
 
-    def log(self, text, log_level=constants.log.NOTICE):
-        log_line = '[%s] %s' % (self.get_id(), text)
-        log(log_line, log_level)
+    def log(self, text, log_level=logger.NOTICE):
+        logger.log(text, log_level, self.get_id())
 
     def log_warning(self, text):
-        self.log(text, constants.log.WARNING)
+        self.log(text, logger.WARNING)
 
     def log_error(self, text):
-        self.log(text, constants.log.ERROR)
+        self.log(text, logger.ERROR)
 
     def log_notice(self, text):
-        self.log(text, constants.log.NOTICE)
+        self.log(text, logger.NOTICE)
 
     def log_debug(self, text):
-        self.log(text, constants.log.DEBUG)
+        self.log(text, logger.DEBUG)
 
     def log_info(self, text):
-        self.log(text, constants.log.INFO)
+        self.log(text, logger.INFO)
 
     def clone(self, new_path=None, new_params=None):
         raise NotImplementedError()

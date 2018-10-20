@@ -84,17 +84,26 @@ class AbstractSettings(object):
     def is_support_alternative_player_enabled(self):
         return self.get_bool(constants.setting.SUPPORT_ALTERNATIVE_PLAYER, False)
 
+    def alternative_player_web_urls(self):
+        return self.get_bool(constants.setting.ALTERNATIVE_PLAYER_WEB_URLS, False)
+
     def use_dash(self):
         return self.get_bool(constants.setting.USE_DASH, False)
 
     def subtitle_languages(self):
         return self.get_int(constants.setting.SUBTITLE_LANGUAGE, 0)
 
+    def subtitle_download(self):
+        return self.get_bool(constants.setting.SUBTITLE_DOWNLOAD, False)
+
     def audio_only(self):
         return self.get_bool(constants.setting.AUDIO_ONLY, False)
 
     def set_subtitle_languages(self, value):
         return self.set_int(constants.setting.SUBTITLE_LANGUAGE, value)
+
+    def set_subtitle_download(self, value):
+        return self.set_bool(constants.setting.SUBTITLE_DOWNLOAD, value)
 
     def use_thumbnail_size(self):
         size = self.get_int(constants.setting.THUMB_SIZE, 0)
@@ -166,7 +175,7 @@ class AbstractSettings(object):
         self.set_string(constants.setting.LOCATION, value)
 
     def get_location_radius(self):
-        return str(self.get_int(constants.setting.LOCATION_RADIUS, 500)) + 'km'
+        return ''.join([str(self.get_int(constants.setting.LOCATION_RADIUS, 500)), 'km'])
 
     def get_play_count_min_percent(self):
         return self.get_int(constants.setting.PLAY_COUNT_MIN_PERCENT, 0)

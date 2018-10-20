@@ -1,3 +1,5 @@
+[B]3.0.3[/B]
+- Fixed Default Langauge File
 [B]3.0.2[/B]
 - Fixed bug with lack of title for some shows
 [B]3.0.1[/B]

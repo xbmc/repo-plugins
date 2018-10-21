@@ -1,3 +1,6 @@
+[B]4.6.1[/B]
+- Fikset plugin etter API-endringer
+
 [B]4.6.0[/B]
 - Tilpasninger for Kodi v17 Krypton.
 - Mulighet for å gå til serie fra hurtigmenyen

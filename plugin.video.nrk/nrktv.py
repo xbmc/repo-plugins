@@ -22,7 +22,7 @@ from requests import Session
 
 session = Session()
 session.headers['User-Agent'] = 'kodi.tv'
-session.headers['app-version-android'] = '999'
+session.headers['app-version-android'] = '2500'
 
 
 class ImageMixin(object):

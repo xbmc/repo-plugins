@@ -68,7 +68,7 @@ def live():
 
 def add_radio_channels():
     radio_channels = [
-        ("NRK P1", "http://lyd.nrk.no/nrk_radio_p1_ostlandssendingen_mp3"),
+        ("NRK P1", "http://lyd.nrk.no/nrk_radio_p1_ostlandssendingen_mp3_h"),
         ("NRK P1+", "http://lyd.nrk.no/nrk_radio_p1pluss_mp3_h.m3u"),
         ("NRK P2", "http://lyd.nrk.no/nrk_radio_p2_mp3_h"),
         ("NRK P3", "http://lyd.nrk.no/nrk_radio_p3_mp3_h"),
@@ -95,7 +95,7 @@ def add_radio_channels():
         ("P1 Sørlandet", "http://lyd.nrk.no/nrk_radio_p1_sorlandet_mp3_h"),
         ("P1 Telemark", "http://lyd.nrk.no/nrk_radio_p1_telemark_mp3_h"),
         ("P1 Troms", "http://lyd.nrk.no/nrk_radio_p1_troms_mp3_h"),
-        ("P1 Trøndelag", " http://lyd.nrk.no/nrk_radio_p1_trondelag_mp3_h"),
+        ("P1 Trøndelag", "http://lyd.nrk.no/nrk_radio_p1_trondelag_mp3_h"),
         ("P1 Vestfold", "http://lyd.nrk.no/nrk_radio_p1_vestfold_mp3_h"),
         ("P1 Østfold", "http://lyd.nrk.no/nrk_radio_p1_ostfold_mp3_h"),
     ]

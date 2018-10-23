@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-  <setting id="vid_quality" type="enum" label="30000" lvalues="30001|30002" default="0"/>
-</settings>

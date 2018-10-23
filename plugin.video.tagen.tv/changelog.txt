@@ -1,6 +1,0 @@
-Version 0.2
-    - Stream url update
-Version 0.1
-    - Initial Release. Tagen TV video plugin.
-
-

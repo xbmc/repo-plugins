@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<strings>
-    <string id="30000">Generale</string>
-    <string id="30001">Scarica e visualizza thumbnail</string>
-	<string id="30002">Mantieni i thumbnail in cache per (giorni)</string>
-    <string id="30003">Bitrate massimo (bps)</string>
-	<string id="30004">Avvia il video dopo (secondi)</string>
-</strings>

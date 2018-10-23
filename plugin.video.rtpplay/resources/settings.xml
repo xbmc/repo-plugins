@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-   <category label="30038">
-   	 <setting id="icon_plot" type="bool" label="30039" default="true"/>
-   </category>
-</settings>

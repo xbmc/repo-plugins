@@ -1,6 +1,0 @@
-<settings>
-   <setting id="streamQuality" type="enum" label="30060" lvalues="30061|30062" default="0" />   
-   <setting id="view" type="bool" label="30055" default="true"/>
-   <setting id="downloadPrompt" type="bool" label="30056" default="false"/>
-   <setting id="downloadPath" type="folder" label="30057" default="" />
-</settings>

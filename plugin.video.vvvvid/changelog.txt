@@ -1,2 +1,0 @@
-[B]Version 1.0.0[/B]
-- Initial Release.

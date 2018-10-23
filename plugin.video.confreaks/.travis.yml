@@ -1,6 +1,0 @@
-language: python
-python:
-  - "2.7"
-install: pip install --use-mirrors xbmcswift2==0.3.0 beautifulsoup
-script: python -m unittest discover
-sudo: false

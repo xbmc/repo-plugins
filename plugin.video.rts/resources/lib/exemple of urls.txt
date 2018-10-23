@@ -1,3 +1,0 @@
-site url = http://rtsww-d.rts.ch.edgesuite.net/36/2013/36_20130501_standard_708523-701k.mp4
-
-podcast url = http://podcast-video.rts.ch/tsr/36/2013/36_20130501_full_f_731778-511k.m4v

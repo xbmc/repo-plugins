@@ -1,4 +1,0 @@
-Version .0.0 (25/8/2015)
-
--Version submited to the repo
--Code author enen92 (thx)

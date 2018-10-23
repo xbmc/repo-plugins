@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-	<category>
-		<!-- ViewModes -->
-		<setting label="$ADDON[script.module.xbmcutil 32921]" type="action" action="RunScript(plugin.video.toonjet, setViewMode, folder)"/>
-		<setting label="$ADDON[script.module.xbmcutil 32922]" type="action" action="RunScript(plugin.video.toonjet, setViewMode, video)"/>
-	</category>
-</settings>

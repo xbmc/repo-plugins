@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting id="quality" type="select" label="30100" lvalues="30101|30102|30103|30104|30105|30106" default="0"/>
-</settings>

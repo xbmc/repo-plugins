@@ -1,8 +1,0 @@
-<settings>
-   <setting id="ab3Only" type="bool" label="30105" default="false"/>
-   <setting id="playSound" type="bool" label="30104" default="true"/>
-   <setting id="useThumbAsFanart" type="bool" label="30101" default="true"/>
-   <setting id="forceViewMode" type="bool" label="30102" default="true"/>
-   <setting id="viewMode" type="number" label="30103" enable="eq(-1,true)" default="51"/>
-   <setting id="debug" type="bool" label="30105" default="true"/>
-</settings>

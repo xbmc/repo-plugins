@@ -1,4 +1,0 @@
-<settings>
-   <setting id="bitrate" type="select" label="30003" default="Max" values="Min|Max|Select" />
-   <setting id="kurzvideos" type="bool" label="30012" default="false"/>
-</settings>

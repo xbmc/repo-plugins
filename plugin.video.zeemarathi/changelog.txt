@@ -1,9 +1,0 @@
-v0.0.3
-- Added pagination
-
-v0.0.2
-- Changed video play logic
-- Bug fixes
-
-v0.0.1
-- Initial version

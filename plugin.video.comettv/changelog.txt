@@ -1,6 +1,0 @@
-Version 3.0.6 mark as broken, upgrade to Krypton
-Version 3.0.5 website change
-Version 3.0.4 website change
-Version 3.0.3 website change
-Version 3.0.2 added more epg entries
-Version 3.0.1 separated scraper for future functions

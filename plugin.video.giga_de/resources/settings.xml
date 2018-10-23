@@ -1,6 +1,0 @@
-<settings>
-   <setting id="maxVideoQuality" type="select" label="30101" values="Min|Max|Select" default="Max"/>
-   <setting id="useThumbAsFanart" type="bool" label="30104" default="true"/>
-   <setting id="forceView" type="bool" label="30102" default="true"/>
-   <setting id="viewID" type="number" label="30103" default="51"/>
-</settings>

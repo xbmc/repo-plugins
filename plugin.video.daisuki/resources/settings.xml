@@ -1,4 +1,0 @@
-<settings>
-   <setting id="user" type="text" label="30101" default=""/>   
-   <setting id="pass" type="text" option="hidden" label="30102" default=""/>
-</settings>

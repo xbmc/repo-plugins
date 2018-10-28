@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cbc"
        name="Canadian Broadcasting Corp (CBC)"
-       version="4.0.3"
+       version="4.0.4"
        provider-name="micahg,t1m">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
@@ -20,8 +20,7 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=328421</forum>
     <website>https://watch.cbc.ca/</website>
     <source>https://github.com/micahg/plugin.video.cbc</source>
-    <news>v4.0.3
-- Add CBC account support
-- Switch to web API for (marginally) higher quality</news>
+    <news>v4.0.4
+- Fix XML parsing error for certain shows</news>
   </extension>
 </addon>

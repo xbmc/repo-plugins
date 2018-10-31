@@ -1,3 +1,6 @@
+v2.5.44
+Adapted to new JSON structure.
+
 v2.5.43
 Added support for colored subtitles.
 

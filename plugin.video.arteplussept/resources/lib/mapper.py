@@ -25,6 +25,13 @@ def create_magazines_item():
     }
 
 
+def create_week_item():
+    return {
+        'label': 'Semaine I18N',
+        'path': plugin.url_for('weekly')
+    }
+
+
 def map_category_item(item, category_code):
     code = item.get('code')
     title = item.get('title')

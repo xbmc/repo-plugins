@@ -573,10 +573,10 @@ def ScrapeEpisodes(page_url):
             list_item_num = 1
 
             name = ''
-            if 'title' in json_data['initialState']['header']:
-                name = json_data['initialState']['header']['title']
+            if 'title' in json_data['appStoreState']['header']:
+                name = json_data['appStoreState']['header']['title']
 
-            for item in json_data['initialState']['entities']:
+            for item in json_data['appStoreState']['entities']:
                 meta = item.get("meta")
                 item = item.get("props")
                 if not item:
@@ -676,14 +676,14 @@ def ScrapeAtoZEpisodes(page_url):
 
         last_page = 1
         current_page = 1
-        if 'pagination' in json_data['initialState']:
+        if 'pagination' in json_data['appStoreState']:
             page_base_url_match = re.search(r'(.+?)page=', page_url)
             if page_base_url_match:
                 page_base_url = page_base_url_match.group(0)
             else:
                 page_base_url = page_url+"?page="
-            current_page = json_data['initialState']['pagination'].get('currentPage')
-            last_page = json_data['initialState']['pagination'].get('totalPages')
+            current_page = json_data['appStoreState']['pagination'].get('currentPage')
+            last_page = json_data['appStoreState']['pagination'].get('totalPages')
             if int(ADDON.getSetting('paginate_episodes')) == 0:
                 current_page_match = re.search(r'page=(\d*)', page_url)
                 if current_page_match:
@@ -715,14 +715,14 @@ def ScrapeAtoZEpisodes(page_url):
                 json_data = json.loads(data)
 
                 index = 1
-                for entity in json_data['initialState']['entities']:
+                for entity in json_data['appStoreState']['entities']:
                     item = entity.get("props")
                     meta = entity.get("meta")
                     if not item:
                         continue
                     ParseHighlightsJSON(item, meta)
 
-                    percent = int(100*(page+index/len(json_data['initialState']['entities']))/last_page)
+                    percent = int(100*(page+index/len(json_data['appStoreState']['entities']))/last_page)
                     pDialog.update(percent,translation(30319))
                     index += 1
 
@@ -984,9 +984,9 @@ def ListHighlights(highlights_url):
         list_item_num = 1
 
         groups = ''
-        groups = json_data['initialState'].get('groups')
+        groups = json_data['appStoreState'].get('groups')
         if groups:
-            for entity in json_data['initialState']['groups']:
+            for entity in json_data['appStoreState']['groups']:
                 for item in entity['entities']:
                     item = item.get("props")
                     if not item:
@@ -1003,9 +1003,9 @@ def ListHighlights(highlights_url):
                                  episodes_url, 128, '', '', '')
 
         highlights = ''
-        highlights = json_data['initialState'].get('highlights')
+        highlights = json_data['appStoreState'].get('highlights')
         if highlights:
-            entity = json_data['initialState']['highlights'].get("items")
+            entity = json_data['appStoreState']['highlights'].get("items")
             if entity:
                 for item in entity:
                     item = item.get("props")
@@ -1014,7 +1014,7 @@ def ListHighlights(highlights_url):
                     ParseHighlightsJSON(item, None)
 
         bundles = ''
-        bundles = json_data['initialState'].get('bundles')
+        bundles = json_data['appStoreState'].get('bundles')
         if bundles:
             for bundle in bundles:
                 entity = ''

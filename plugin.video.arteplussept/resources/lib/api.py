@@ -55,7 +55,6 @@ def streams(kind, program_id, lang):
 
 def daily(date, lang):
     url = _endpoints['daily'].format(date=date, lang=lang)
-    print "fetching " + url
     return _load_json(url).get('programs', [])
 
 

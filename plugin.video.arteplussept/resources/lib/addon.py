@@ -33,20 +33,13 @@ class PluginInformation:
 
 
 # settings stuff
-languages = [
-    {'short': 'fr', 'long': 'fr_FR'},
-    {'short': 'de', 'long': 'de_DE'},
-    {'short': 'en', 'long': 'en_GB'},
-    {'short': 'es', 'long': 'es_ES'},
-    {'short': 'pl', 'long': 'pl_PL'}
-]
-qualities = ['SQ', 'EQ', 'HQ', 'MQ']
+languages = ['fr', 'de', 'en', 'es', 'pl']
+qualities = ['SQ', 'EQ', 'HQ']
 
 # defaults to fr
-language = languages[plugin.get_setting('lang', int)] or languages[0]
-short_language = language.get('short')
+language = plugin.get_setting('lang', choices=languages) or languages[0]
 # defaults to SQ
-quality = qualities[plugin.get_setting('quality', int)] or qualities[0]
+quality = plugin.get_setting('quality', choices=qualities) or qualities[0]
 
 # my imports
 import view
@@ -54,12 +47,12 @@ import view
 
 @plugin.route('/', name='index')
 def index():
-    return view.build_categories(short_language)
+    return view.build_categories(language)
 
 
 @plugin.route('/category/<category_code>', name='category')
 def category(category_code):
-    return view.build_category(category_code, short_language)
+    return view.build_category(category_code, language)
 
 
 @plugin.route('/creative', name='creative')
@@ -70,30 +63,36 @@ def creative():
 @plugin.route('/magazines', name='magazines')
 def magazines():
     plugin.set_content('tvshows')
-    return plugin.finish(view.build_magazines(short_language))
+    return plugin.finish(view.build_magazines(language))
 
 
 @plugin.route('/sub_category/<sub_category_code>', name='sub_category_by_code')
 def sub_category_by_code(sub_category_code):
     plugin.set_content('tvshows')
-    return plugin.finish(view.build_sub_category_by_code(sub_category_code, short_language))
+    return plugin.finish(view.build_sub_category_by_code(sub_category_code, language))
 
 
 @plugin.route('/sub_category/<category_code>/<sub_category_title>', name='sub_category_by_title')
 def sub_category_by_title(category_code, sub_category_title):
     plugin.set_content('tvshows')
-    return plugin.finish(view.build_sub_category_by_title(category_code, sub_category_title, short_language))
+    return plugin.finish(view.build_sub_category_by_title(category_code, sub_category_title, language))
 
 
 @plugin.route('/collection/<kind>/<collection_id>', name='collection')
 def collection(kind, collection_id):
     plugin.set_content('tvshows')
-    return plugin.finish(view.build_mixed_collection(kind, collection_id, short_language))
+    return plugin.finish(view.build_mixed_collection(kind, collection_id, language))
 
 
 @plugin.route('/play/<kind>/<program_id>', name='play')
 def play(kind, program_id):
-    return plugin.set_resolved_url(view.build_stream_url(kind, program_id, short_language, quality))
+    return plugin.set_resolved_url(view.build_stream_url(kind, program_id, language, quality))
+
+
+@plugin.route('/weekly', name='weekly')
+def weekly():
+    plugin.set_content('tvshows')
+    return plugin.finish(view.build_weekly(language))
 
 
 """

@@ -1,3 +1,8 @@
+# Version 1.0.2
+
+* weekly browse
+* bugfix (settings parsing #54)
+
 # Version 1.0.1
 
 Major encoding fix & html entities decode

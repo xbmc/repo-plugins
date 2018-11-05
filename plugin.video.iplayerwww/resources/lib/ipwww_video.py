@@ -1053,8 +1053,8 @@ def ListMostPopular():
     """Scrapes all episodes of the most popular page."""
     html = OpenURL("https://www.bbc.co.uk/iplayer/group/most-popular")
 
-    # <li class="most-popular__item gel-layout__item gel-1/2 gel-1/3@m">
-    list_items = re.findall(r'<li class="most-popular.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
+    # <li class="grid__item gel-layout__item gel-1/2 gel-1/3@m">
+    list_items = re.findall(r'<li class="grid__item.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
 
     list_item_num = 1
 

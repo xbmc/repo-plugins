@@ -1,3 +1,6 @@
+v3.0.37
+Fixed Most Popular.
+
 v3.0.36
 Adapted to new JSON structure.
 

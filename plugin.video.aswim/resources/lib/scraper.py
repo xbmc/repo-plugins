@@ -34,32 +34,36 @@ class myAddon(t1mAddon):
 
   def getAddonEpisodes(self,url,ilist):
       html = self.getRequest(ASBASE+url)
-      html = re.compile('__AS_INITIAL_DATA__ = (.+?);\n', re.DOTALL).search(html).group(1)
+      html = re.compile('__NEXT_DATA__ = (.+?);__NEXT_LOADED_PAGES', re.DOTALL).search(html).group(1)
       a = json.loads(html)
-      for b in a['show']['videos']:
-          if b['auth'] == False:
+      x = a["props"]["__APOLLO_STATE__"].keys()
+      for b in x:
+          if b.startswith("Video:"):
+            b = a["props"]["__APOLLO_STATE__"][b]
+            if b.get('auth',False) == False:
               infoList = {}
               name = b['title']
               thumb = b.get('poster')
               fanart = thumb
-              url = b['id']
+              url = b['_id']
               infoList = {}
               infoList['title'] = name
-              infoList['TVShowTitle'] = b.get('collection_title')
+#              infoList['TVShowTitle'] = b.get('collection_title')
+              infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
               infoList['mediatype'] = 'episode'
               infoList['Plot'] = b.get('description')
               infoList['Duration'] = b.get('duration')
-              infoList['MPAA'] = b.get('tv_rating')
-              infoList['Season'] = b.get('season_number')
-              infoList['Episode'] = b.get('episode_number')
-              infoList['Date'] = b.get('launch_date')
+              infoList['MPAA'] = b.get('tvRating')
+#              infoList['Season'] = b.get('seasonNumber')
+              infoList['Episode'] = b.get('episodeNumber')
+              infoList['Premiered'] = b.get('launchDate').split('T',1)[0]
               ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
       return(ilist)
 
   def getAddonVideo(self,url):
-      html = self.getRequest('http://www.adultswim.com/videos/api/v3/videos/%s?fields=title,type,duration,collection_title,poster,stream,segments,title_id' % url)
+      html = self.getRequest('http://www.adultswim.com/api/shows/v1/videos/'+url+'?fields=title%2Ctype%2Cduration%2Ccollection_title%2Cposter%2Cstream%2Csegments%2Ctitle_id')
       a = json.loads(html)
-      for b in a['data']['stream']['assets']:
+      for b in a['data']['video']['stream']['assets']:
           if (b.get('mime_type') == 'application/x-mpegURL') and (b.get('url').endswith('stream_full.m3u8') or b.get('url').endswith('/stream.m3u8') ):
               url = b.get('url')
               liz = xbmcgui.ListItem(path = url)

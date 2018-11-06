@@ -1,0 +1,41 @@
+# Kodi Media Center language file
+# Addon Name: Frikanalen Nett-TV
+# Addon id: plugin.video.frikanalen
+# Addon Provider: frikanalen
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://github.com/Frikanalen/kodi-frikanalen\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Live"
+msgstr "Direkte"
+
+msgctxt "#30002"
+msgid "Schedule"
+msgstr "Sendeplan"
+
+msgctxt "#30003"
+msgid "Categories"
+msgstr "Kategorier"
+
+msgctxt "#30004"
+msgid "Search"
+msgstr "Søk"
+
+msgctxt "#30005"
+msgid "Frikanalen right now (SD)"
+msgstr "Frikanalen akkurat nå (SD)"
+
+msgctxt "#30006"
+msgid "Frikanalen right now (SD)"
+msgstr "Frikanalen akkurat nå (HD)"

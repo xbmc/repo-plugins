@@ -1,3 +1,9 @@
+[B]0.0.3[/B] (2018-11-06)
+- Added HD stream option.
+- Added category listing of published videos.
+- Show video duration in schedule and category lists.
+- Updated to not crash with new API date format.
+- Added free text video search option.
 [B]0.0.2[/B] (2018-11-03)
 - Improve package description and language settings.
 - Add link to channel web site.

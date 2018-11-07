@@ -44,3 +44,6 @@ If you like this plugin, consider to make a donation to the author:
 ![Category overview](https://raw.githubusercontent.com/goggle/plugin.video.rtsplaytv/master/resources/screenshot-01.png)
 ![A list menu](https://raw.githubusercontent.com/goggle/plugin.video.rtsplaytv/master/resources/screenshot-02.png)
 ![Episode information](https://raw.githubusercontent.com/goggle/plugin.video.rtsplaytv/master/resources/screenshot-03.png)
+
+## Thanks
+ * Thanks @nmielec for providing a french translation.

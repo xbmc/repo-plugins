@@ -772,10 +772,7 @@ class Provider(kodion.AbstractProvider):
                                  context.localize(self.LOCAL_MAP['youtube.switch.user']))
             self.get_resource_manager(context).clear()
             if refresh:
-                if context.get_system_version().get_version()[0] <= 17:
-                    ui.refresh_container()  # causes lockup/crash with Kodi 18
-                else:
-                    context.execute('RunPlugin(%s)' % context.create_uri())
+                ui.refresh_container()
 
         if action == 'switch':
             access_manager_users = access_manager.get_users()
@@ -985,6 +982,7 @@ class Provider(kodion.AbstractProvider):
         settings = context.get_settings()
         if switch == 'youtube':
             context._addon.openSettings()
+            context.get_ui().refresh_container()
         elif switch == 'mpd':
             use_dash = context.use_inputstream_adaptive()
             if use_dash:

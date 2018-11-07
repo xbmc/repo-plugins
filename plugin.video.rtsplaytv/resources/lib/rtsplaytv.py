@@ -550,54 +550,63 @@ class RTSPlayTV(object):
         main_menu_list = [
             {
                 # All shows
+                'identifier': 'All_Shows',
                 'name': LANGUAGE(30050),
                 'mode': 10,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('All_Shows')
             }, {
                 # Favourite shows
+                'identifier': 'Favourite_Shows',
                 'name': LANGUAGE(30051),
                 'mode': 11,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Favourite_Shows')
             }, {
                 # Newest favourite shows
+                'identifier': 'Newest_Favourite_Shows',
                 'name': LANGUAGE(30052),
                 'mode': 12,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Newest_Favourite_Shows')
             }, {
                 # Recommendations
+                'identifier': 'Recommendations',
                 'name': LANGUAGE(30053),
                 'mode': 16,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Recommendations')
             }, {
                 # Newest shows
+                'identifier': 'Newest_Shows',
                 'name': LANGUAGE(30054),
                 'mode': 13,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Newest_Shows')
             }, {
                 # Most clicked shows
+                'identifier': 'Most_Clicked_Shows',
                 'name': LANGUAGE(30055),
                 'mode': 14,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Most_Clicked_Shows')
             }, {
                 # Shows by date
+                'identifier': 'Shows_By_Date',
                 'name': LANGUAGE(30057),
                 'mode': 17,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Shows_By_Date')
             }, {
                 # Live TV
+                'identifier': 'Live_TV',
                 'name': LANGUAGE(30072),
                 'mode': 26,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Live_TV')
             }, {
                 # RTS.ch live
+                'identifier': 'RTS_Live',
                 'name': LANGUAGE(30070),
                 'mode': 18,
                 'isFolder': True,
@@ -610,7 +619,7 @@ class RTSPlayTV(object):
                 list_item.setProperty('IsPlayable', 'false')
                 list_item.setArt({'thumb': ICON})
                 purl = self.build_url(
-                    mode=menu_item['mode'], name=menu_item['name'])
+                    mode=menu_item['mode'], name=menu_item['identifier'])
                 xbmcplugin.addDirectoryItem(
                     handle=int(sys.argv[1]), url=purl,
                     listitem=list_item, isFolder=menu_item['isFolder'])

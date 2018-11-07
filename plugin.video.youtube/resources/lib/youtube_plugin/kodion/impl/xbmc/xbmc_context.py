@@ -66,9 +66,11 @@ class XbmcContext(AbstractContext):
         """
         Set the data path for this addon and create the folder
         """
-        self._data_path = xbmc.translatePath('special://profile/addon_data/%s' % self._plugin_id)
-        if isinstance(self._data_path, str):
-            self._data_path = self._data_path
+        try:
+            self._data_path = xbmc.translatePath(self._addon.getAddonInfo('profile')).decode('utf-8')
+        except AttributeError:
+            self._data_path = xbmc.translatePath(self._addon.getAddonInfo('profile'))
+
         if not xbmcvfs.exists(self._data_path):
             xbmcvfs.mkdir(self._data_path)
 
@@ -247,7 +249,7 @@ class XbmcContext(AbstractContext):
     def use_inputstream_adaptive(self):
         addon_enabled = self.addon_enabled('inputstream.adaptive')
         if self._settings.use_dash() and not addon_enabled:
-            if self._ui.on_yes_no_input(self.get_name(), self.localize(30579)):
+            if self.get_ui().on_yes_no_input(self.get_name(), self.localize(30579)):
                 use_dash = self.set_addon_enabled('inputstream.adaptive')
             else:
                 use_dash = False

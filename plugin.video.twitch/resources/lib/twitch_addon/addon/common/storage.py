@@ -28,12 +28,9 @@ import os
 import sqlite3
 import time
 
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
+from six.moves import cPickle as pickle
 
-import xbmc
+import kodi
 
 
 class Storage(object):
@@ -42,7 +39,7 @@ class Storage(object):
         self._filename = filename
         if not self._filename.endswith('.sqlite'):
             self._filename += '.sqlite'
-        self._filename = xbmc.translatePath(path + self._filename)
+        self._filename = kodi.translate_path(path + self._filename)
         self._file = None
         self._cursor = None
         self._max_item_count = max_item_count

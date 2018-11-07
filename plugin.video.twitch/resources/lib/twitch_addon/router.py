@@ -186,11 +186,11 @@ def _edit_user_follows(channel_id=None, channel_name=None, game=None):
     edit_user_follows.route(twitch_api, channel_id, channel_name, game)
 
 
-@dispatcher.register(MODES.EDITBLACKLIST, kwargs=['list_type', 'target_id', 'name', 'remove'])
+@dispatcher.register(MODES.EDITBLACKLIST, kwargs=['list_type', 'target_id', 'name', 'remove', 'refresh'])
 @error_handler
-def _edit_blacklist(list_type='user', target_id=None, name=None, remove=False):
+def _edit_blacklist(list_type='user', target_id=None, name=None, remove=False, refresh=False):
     from .routes import edit_blacklist
-    edit_blacklist.route(list_type, target_id, name, remove)
+    edit_blacklist.route(list_type, target_id, name, remove, refresh)
 
 
 @dispatcher.register(MODES.EDITQUALITIES, args=['content_type'], kwargs=['video_id', 'target_id', 'name', 'remove', 'clip_id'])

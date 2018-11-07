@@ -34,7 +34,7 @@ class JSONStore:
     def save(self, data):
         self._data = data
         with open(self.filename, 'w') as jsonfile:
-            log_utils.log('JSONStore Save |{filename}| Data |{data}|'.format(filename=self.filename,
+            log_utils.log('JSONStore Save |{filename}| Data |{data}|'.format(filename=self.filename.encode('utf-8'),
                                                                              data=json.dumps(data, indent=4, sort_keys=True)))
             json.dump(data, jsonfile, indent=4, sort_keys=True)
 
@@ -43,7 +43,7 @@ class JSONStore:
             with open(self.filename, 'r') as jsonfile:
                 data = json.load(jsonfile)
                 self._data = data
-                log_utils.log('JSONStore Load |{filename}| Data |{data}|'.format(filename=self.filename,
+                log_utils.log('JSONStore Load |{filename}| Data |{data}|'.format(filename=self.filename.encode('utf-8'),
                                                                                  data=json.dumps(data, indent=4, sort_keys=True)))
                 return data
         else:

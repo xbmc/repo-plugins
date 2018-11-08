@@ -18,7 +18,7 @@ def router(params_string):
     stream_service = urltostreamservice.UrlToStreamService(vrtplayer.VRTPlayer._VRT_BASE,
                                                            vrtplayer.VRTPlayer._VRTNU_BASE_URL,
                                                            kodi_wrapper)
-    livestream_service = urltolivestreamservice.UrlToLivestreamService()
+    livestream_service = urltolivestreamservice.UrlToLivestreamService(kodi_wrapper)
     vrt_player = vrtplayer.VRTPlayer(addon.getAddonInfo('path'), kodi_wrapper, stream_service, livestream_service)
     params = dict(parse_qsl(params_string))
     if params:

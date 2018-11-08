@@ -28,6 +28,10 @@ def index():
         'path': plugin.url_for('show_afleveringen', nebo_id=item['nebo_id']),
         'label': item['label'],
         'thumbnail': item['thumbnail'],
+        'info': {
+            'plot': item['plot'],
+            'studio': item['studio'],
+        }
     } for item in uzg.get_overzicht()]    
     return items
 
@@ -62,7 +66,9 @@ def show_items(opgehaaldeitemsclass):
         'thumbnail': item['thumbnail'],
         'is_playable': True,
         'info': {
-                'date': item['date']
+                'date': item['date'],
+                'plot': item['plot'],
+                'studio': item['studio'],
         },
     } for item in opgehaaldeitemsclass]
     return plugin.finish(items,sort_methods=[SortMethod.DATE,SortMethod.LABEL])

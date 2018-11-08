@@ -18,24 +18,23 @@
 from __future__ import unicode_literals
 
 import datetime
+import re
 from requests import Session
 
 session = Session()
 session.headers['User-Agent'] = 'kodi.tv'
-session.headers['app-version-android'] = '2500'
 
 
 class ImageMixin(object):
-    image_id = None
-    _image_url = "http://m.nrk.no/m/img?kaleidoId=%s&width=%d"
+    images = None
 
     @property
     def thumb(self):
-        return self._image_url % (self.image_id, 500) if self.image_id else None
+        return self.images[0]['url']
 
     @property
     def fanart(self):
-        return self._image_url % (self.image_id, 1920) if self.image_id else None
+        return self.images[-1]['url']
 
 
 class Base(object):
@@ -52,29 +51,20 @@ class Category(Base):
     def from_response(r):
         return Category(
             title=r.get('displayValue', r.get('title', None)),
-            id=r.get('categoryId', None),
+            id=r.get('id', None),
         )
 
 
 class Channel(ImageMixin, Base):
-    media_url = None
-
-    # override images. some resolutions are corrupt server side
-    @property
-    def thumb(self):
-        return self._image_url % (self.image_id, 490)
-
-    @property
-    def fanart(self):
-        return self._image_url % (self.image_id, 1910)
+    manifest = None
 
     @staticmethod
     def from_response(r):
         return Channel(
-            title=r['title'],
-            id=r['channelId'],
-            media_url=r.get('mediaUrl'),
-            image_id=r.get('imageId'),
+            title=r['_embedded']['playback']['title'],
+            id=r['id'],
+            manifest=r['_links']['manifest']['href'],
+            images=r['_embedded']['playback']['posters'][0]['image']['items'],
         )
 
 
@@ -84,19 +74,31 @@ class Series(ImageMixin, Base):
     legal_age = None
     available = True
     category = None
-    """:class:`Category`"""
+    ''':class:`Category`'''
 
     @staticmethod
     def from_response(r):
         category = Category.from_response(r['category']) if 'category' in r else None
+        images = _image_url_key_standardize(r.get('image', {}).get('webImages', None))
         return Series(
-            id=r['seriesId'],
+            id=r['id'],
             title=r['title'].strip(),
             category=category,
             description=r.get('description'),
-            legal_age=r.get('legalAge') or r.get('aldersgrense'),
-            image_id=r.get('seriesImageId', r.get('imageId', None)),
-            available=r.get('isAvailable', True)
+            legal_age=r.get('legalAge', {}).get('displayValue', '') or r.get('aldersgrense'),
+            images=images,
+            available=r.get('hasOndemandrights', True)
+        )
+
+class Season(Base):
+    is_season = True
+    ''':class:`Season`'''
+
+    @staticmethod
+    def from_response(r):
+        return Season(
+            id=r['name'],
+            title=r.get('title', '').strip(),
         )
 
 
@@ -104,15 +106,15 @@ class Program(Series):
     is_series = False
 
     episode = None
-    """Episode number, name or date as string."""
+    '''Episode number, name or date as string.'''
 
     series_id = None
 
     aired = None
-    """Date and time aired as :class:`datetime.datetime`"""
+    '''Date and time aired as :class:`datetime.datetime`'''
 
     duration = None
-    """In seconds"""
+    '''In seconds'''
 
     media_urls = None
 
@@ -121,59 +123,128 @@ class Program(Series):
         category = Category.from_response(r['category']) if 'category' in r else None
         aired = None
         try:
-            aired = datetime.datetime.fromtimestamp(
-                int(r.get('usageRights', {}).get('availableFrom', 0)/1000))
+            if 'usageRights' in r:
+                usageRights = r.get('usageRights', None)
+                availableFrom = usageRights.get('availableFrom') if usageRights else ''
+                availableFrom = re.findall(r'\d+', availableFrom)[0] if availableFrom else 0
+                aired = datetime.datetime.fromtimestamp(int(availableFrom)/1000)
         except (ValueError, OverflowError, OSError):
             pass
 
-        media_urls = []
-        if 'parts' in r:
-            parts = sorted(r['parts'], key=lambda x: x['part'])
-            media_urls = [part['mediaUrl'] for part in parts]
+        title = r.get('title', '')
+        if not title:
+            seriesTitle = r.get('seriesTitle', '')
+            episodeTitle = r.get('episodeTitle', '')
+            title = '{} {}'.format(seriesTitle, episodeTitle)
 
-        if 'mediaUrl' in r and len(media_urls) == 0:
-            media_urls = [r['mediaUrl']]
+        media_urls = []
+        if 'mediaAssetsOnDemand' in r:
+            parts = sorted(r['mediaAssetsOnDemand'], key=lambda x: x['part'])
+            media_urls = [part['hlsUrl'] for part in parts]
+
+        images = _image_url_key_standardize(r.get('image', {}).get('webImages', None))
+        duration = _duration_to_seconds(r.get('duration', 0))
+        legal_age = r.get('legalAge', None)
+        if legal_age:
+            legal_age = legal_age.get('displayValue', legal_age)
+        elif 'aldersgrense' in r:
+            legal_age = r.get('aldersgrense')
 
         return Program(
-            id=r['programId'],
-            series_id=r.get('seriesId'),
-            title=r['title'].strip(),
+            id=r['id'],
+            title=title,
             category=category,
-            description=r.get('description'),
-            duration=int(r.get('duration', 0)/1000),
-            image_id=r['imageId'],
-            legal_age=r.get('legalAge') or r.get('aldersgrense'),
+            description=r.get('shortDescription'),
+            duration=duration,
+            images=images,
+            legal_age=legal_age,
             media_urls=media_urls,
-            episode=r.get('episodeNumberOrDate'),
+            episode=r.get('episodeNumberOrDate', 0),
             aired=aired,
-            available=r.get('isAvailable', True)
+            available=r.get('availability', {}).get('status', 'unavailable') == 'available'
         )
 
+def _duration_to_seconds(duration):
+    if isinstance(duration, float) or isinstance(duration, int):
+        return duration * 60
+    else:
+        hours = re.findall(r'\d+H', duration)
+        hours = float(hours[0][:-1]) if len(hours) else 0
+        minutes = re.findall(r'\d+M', duration)
+        minutes = float(minutes[0][:-1]) if len(minutes) else 0
+        seconds = re.findall(r'\d+S', duration)
+        seconds = float(seconds[0][:-1]) if len(seconds) else 0
+        return hours * 60**2 + minutes * 60 + seconds
 
-def _get(path):
-    r = session.get("http://tvapi.nrk.no/v1" + path)
+def _image_url_key_standardize(images):
+    xs = images
+    for image in xs:
+        image['url'] = image['imageUrl']
+        del image['imageUrl']
+    return xs
+
+def _get(path, params=''):
+    api_key = 'd1381d92278a47c09066460f2522a67d'
+    r = session.get('https://psapi.nrk.no{}?apiKey={}{}'.format(path, api_key, params))
     r.raise_for_status()
     return r.json()
 
 
-def recommended_programs(category_id='all-programs'):
-    return [Program.from_response(item) for item in
-            _get('/categories/%s/recommendedprograms' % category_id)]
+def get_playback_url(manifest_url):
+    playable = _get(manifest_url)['playable']
+    if playable:
+        return playable['assets'][0]['url']
+    else:
+        return None
 
 
-def popular_programs(category_id='all-programs'):
-    return [Program.from_response(item) for item in
-            _get('/categories/%s/popularprograms' % category_id)]
+def recommended_programs(medium='tv', category_id=None):
+    if category_id:
+        return [program(item['id']) for item in
+                _get('/medium/%s/categories/%s/recommendedprograms' % (medium, category_id),
+                     '&maxnumber=15')]
+    else:
+        return [program(item['id']) for item in
+                _get('/medium/%s/recommendedprograms' % medium,
+                     '&maxnumber=15')]
+
+def popular_programs(medium='tv', category_id=None, list_type='week'):
+    if category_id:
+        return [program(item['id']) for item in
+                _get('/medium/%s/categories/%s/popularprograms' % (medium, category_id),
+                     '&maxnumber=15')]
+    else:
+        return [program(item['id']) for item in
+                _get('/medium/%s/popularprograms/%s' % (medium, list_type),
+                     '&maxnumber=15')]
 
 
-def recent_programs(category_id='all-programs'):
-    return [Program.from_response(item) for item in
-            _get('/categories/%s/recentlysentprograms' % category_id)]
+def recent_programs(medium='tv', category_id=None):
+    if category_id:
+        return [program(item['id']) for item in
+                _get('/medium/%s/categories/%s/recentlysentprograms' % (medium, category_id),
+                     '&maxnumber=15')]
+    else:
+        return [program(item['id']) for item in
+                _get('/medium/%s/recentlysentprograms' % medium,
+                     '&maxnumber=15')]
 
 
-def episodes(series_id):
-    return [Program.from_response(item) for item in
-            _get('/series/%s' % series_id)['programs']]
+def episodes(series_id, season_id):
+    season = _get('/tv/catalog/series/%s/seasons/%s' % (series_id, season_id))
+    embedded = season['_embedded']
+    instalments = []
+    if 'instalments' in embedded:
+        instalments = embedded['instalments']
+    else:
+        instalments = embedded['episodes']
+    return [program(item['prfId']) for item in instalments]
+
+
+def seasons(series_id):
+    return [Season.from_response(item) for item in
+            _get('/tv/catalog/series/%s' % series_id,
+                 '&embeddedInstalmentsPageSize=1')['_links']['seasons']]
 
 
 def program(program_id):
@@ -181,24 +252,28 @@ def program(program_id):
 
 
 def channels():
-    chs = [Channel.from_response(item) for item in _get('/channels')]
-    return [ch for ch in chs if ch.media_url]
+    chs = [Channel.from_response(item) for item in _get('/tv/live')]
+    return [ch for ch in chs if ch.manifest]
+
+def radios():
+    rds = [Channel.from_response(item) for item in _get('/radio/live')]
+    return [rd for rd in rds if rd.manifest]
 
 
 def categories():
-    return [Category.from_response(item) for item in _get('/categories/')]
+    return [Category.from_response(item) for item in _get('/medium/tv/categories')]
 
 
 def _to_series_or_program(item):
-    if item.get('seriesId', '').strip():
+    if item.get('type', '') == 'series':
         return Series.from_response(item)
     return Program.from_response(item)
 
 
 def programs(category_id):
-    items = _get('/categories/%s/programs' % category_id)
+    items = _get('/medium/tv/categories/%s/indexelements' % category_id)
     items = [item for item in items if item.get('title', '').strip() != ''
-             and item['programId'] != 'notransmission']
+             and item['hasOndemandRights']]
     return map(_to_series_or_program, items)
 
 
@@ -212,7 +287,7 @@ def _hit_to_series_or_program(item):
 
 
 def search(query):
-    response = _get('/search/' + query)
+    response = _get('/search', '&q=' + query)
     if response['hits'] is None:
         return []
     return filter(None, map(_hit_to_series_or_program, response['hits']))

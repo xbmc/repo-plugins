@@ -1,3 +1,6 @@
+[B]4.7.0[/B]
+- Fikset plugin etter API-endringer
+
 [B]4.6.1[/B]
 - Fikset plugin etter API-endringer
 

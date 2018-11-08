@@ -22,6 +22,7 @@ import xbmcaddon
 from xbmcplugin import addDirectoryItem
 from xbmcplugin import addDirectoryItems
 from xbmcplugin import endOfDirectory
+from xbmcplugin import setResolvedUrl
 from xbmcgui import ListItem
 import routing
 import nrktv
@@ -54,56 +55,29 @@ def live():
         li.setInfo('video', {'title': ch.title})
         li.addStreamInfo('video', {'codec': 'h264', 'width': 1280, 'height': 720})
         li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
-        addDirectoryItem(plugin.handle, ch.media_url, li, False)
+        addDirectoryItem(plugin.handle,
+                         plugin.url_for(live_resolve, ch.manifest.split('/')[-1]), li, False)
 
-    url = "https://nrktegnsprak-lh.akamaihd.net/i/nrktegnsprak_0@111177/master.m3u8"
-    li = ListItem("Tegnspråk")
-    li.setArt({'thumb': "http://gfx.nrk.no/R4LFuTHBHWPMmv1dkqvPGQY4-ZZTKdNKAFPg_LHhoEFA"})
-    li.setProperty('isplayable', 'true')
-    addDirectoryItem(plugin.handle, url, li, False)
-
-    add_radio_channels()
-    endOfDirectory(plugin.handle)
-
-
-def add_radio_channels():
-    radio_channels = [
-        ("NRK P1", "http://lyd.nrk.no/nrk_radio_p1_ostlandssendingen_mp3_h"),
-        ("NRK P1+", "http://lyd.nrk.no/nrk_radio_p1pluss_mp3_h.m3u"),
-        ("NRK P2", "http://lyd.nrk.no/nrk_radio_p2_mp3_h"),
-        ("NRK P3", "http://lyd.nrk.no/nrk_radio_p3_mp3_h"),
-        ("NRK P13", "http://lyd.nrk.no/nrk_radio_p13_mp3_h"),
-        ("Alltid nyheter", "http://lyd.nrk.no/nrk_radio_alltid_nyheter_mp3_h"),
-        ("Alltid RR", "http://lyd.nrk.no/nrk_radio_p3_radioresepsjonen_mp3_h"),
-        ("Jazz", "http://lyd.nrk.no/nrk_radio_jazz_mp3_h"),
-        ("Klassisk", "http://lyd.nrk.no/nrk_radio_klassisk_mp3_h"),
-        ("Folkemusikk", "http://lyd.nrk.no/nrk_radio_folkemusikk_mp3_h"),
-        ("mP3", "http://lyd.nrk.no/nrk_radio_mp3_mp3_h"),
-        ("P3 Urørt", "http://lyd.nrk.no/nrk_radio_p3_urort_mp3_h"),
-        ("Sport", "http://lyd.nrk.no/nrk_radio_sport_mp3_h"),
-        ("Sápmi", "http://lyd.nrk.no/nrk_radio_sami_mp3_h"),
-        ("Super", "http://lyd.nrk.no/nrk_radio_super_mp3_h"),
-        ("P1 Buskerud", "http://lyd.nrk.no/nrk_radio_p1_buskerud_mp3_h"),
-        ("P1 Finnmark", "http://lyd.nrk.no/nrk_radio_p1_finnmark_mp3_h"),
-        ("P1 Hedemark og Oppland", "http://lyd.nrk.no/nrk_radio_p1_hedmark_og_oppland_mp3_h"),
-        ("P1 Hordaland", "http://lyd.nrk.no/nrk_radio_p1_hordaland_mp3_h"),
-        ("P1 Møre og Romsdal", "http://lyd.nrk.no/nrk_radio_p1_more_og_romsdal_mp3_h"),
-        ("P1 Nordland", "http://lyd.nrk.no/nrk_radio_p1_nordland_mp3_h"),
-        ("P1 Oslo og Akershus", "http://lyd.nrk.no/nrk_radio_p1_ostlandssendingen_mp3_h"),
-        ("P1 Rogaland", "http://lyd.nrk.no/nrk_radio_p1_rogaland_mp3_h"),
-        ("P1 Sogn og Fjordane", "http://lyd.nrk.no/nrk_radio_p1_sogn_og_fjordane_mp3_h"),
-        ("P1 Sørlandet", "http://lyd.nrk.no/nrk_radio_p1_sorlandet_mp3_h"),
-        ("P1 Telemark", "http://lyd.nrk.no/nrk_radio_p1_telemark_mp3_h"),
-        ("P1 Troms", "http://lyd.nrk.no/nrk_radio_p1_troms_mp3_h"),
-        ("P1 Trøndelag", "http://lyd.nrk.no/nrk_radio_p1_trondelag_mp3_h"),
-        ("P1 Vestfold", "http://lyd.nrk.no/nrk_radio_p1_vestfold_mp3_h"),
-        ("P1 Østfold", "http://lyd.nrk.no/nrk_radio_p1_ostfold_mp3_h"),
-    ]
-    for title, url in radio_channels:
-        li = ListItem(title,)
+    for rd in nrktv.radios():
+        li = ListItem(rd.title)
         li.setProperty('mimetype', "audio/mpeg")
         li.setProperty('isplayable', 'true')
-        addDirectoryItem(plugin.handle, url, li, False)
+        li.setArt({'thumb': rd.thumb, 'fanart': rd.fanart})
+        li.setInfo('video', {'title': ch.title})
+        li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
+        addDirectoryItem(plugin.handle,
+                         plugin.url_for(live_resolve, rd.manifest.split('/')[-1]), li, False)
+
+    endOfDirectory(plugin.handle)
+
+@plugin.route('/live_resolve/<id>')
+def live_resolve(id):
+    success = False
+    media_url = nrktv.get_playback_url("/playback/manifest/channel/%s" % id);
+    if (media_url):
+        success = True
+    li = ListItem(path=media_url)
+    setResolvedUrl(plugin.handle, success, li)
 
 
 def set_steam_details(item, li):
@@ -144,14 +118,21 @@ def view(items, update_listing=False, urls=None):
     endOfDirectory(plugin.handle, updateListing=update_listing)
 
 
+def show_season_list(series_id, seasons):
+    for item in seasons:
+        li = ListItem(item.title)
+        url = plugin.url_for(episodes_view, series_id, item.id)
+        addDirectoryItem(plugin.handle, url, li, True)
+    endOfDirectory(plugin.handle)
+
 def show_episode_list(episodes):
     episodes = filter(lambda ep: getattr(ep, 'available', True), episodes)
     for i, item in enumerate(episodes):
-        li = ListItem(item.episode)
+        li = ListItem("%s - %s" % (item.episode, item.title))
         set_common_properties(item, li)
         set_steam_details(item, li)
         li.setInfo('video', {
-            'title': item.episode,
+            'title': item.title,
             'count': i,
             'mediatype': 'episode',
             'tvshowtitle': item.title})
@@ -244,9 +225,14 @@ def search():
 
 @plugin.route('/series/<series_id>')
 def series_view(series_id):
-    set_content_type_videos()
-    programs = nrktv.episodes(series_id)
-    show_episode_list(programs)
+    seasons = nrktv.seasons(series_id)
+    show_season_list(series_id, seasons)
+
+@plugin.route('/episodes/<series_id>/<season_id>')
+def episodes_view(series_id, season_id):
+    # set_content_type_videos()
+    episodes = nrktv.episodes(series_id, season_id)
+    show_episode_list(episodes)
 
 
 @plugin.route('/play/<video_id>')

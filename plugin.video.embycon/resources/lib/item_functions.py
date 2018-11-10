@@ -10,7 +10,6 @@ import xbmcgui
 
 from utils import getArt
 from simple_logging import SimpleLogging
-from translation import i18n
 from downloadutils import DownloadUtils
 from datamanager import DataManager
 from kodi_utils import HomeWindow
@@ -42,12 +41,14 @@ class ItemDetails():
     mpaa = None
     rating = None
     critic_rating = 0.0
+    community_rating = 0.0
     year = None
     premiere_date = ""
     date_added = ""
     location_type = None
     studio = None
-    genre = ""
+    production_location = None
+    genres = None
     play_count = 0
     director = ""
     writer = ""
@@ -216,15 +217,21 @@ def extract_item_info(item, gui_options):
     studios = item["Studios"]
     if studios is not None:
         for studio in studios:
-            if item_details.studio == "":  # Just take the first one
+            if item_details.studio == None:  # Just take the first one
                 studio_name = studio["Name"]
                 item_details.studio = studio_name
                 break
 
+    # production location
+    prod_location = item["ProductionLocations"]
+    # log.debug("ProductionLocations : {0}", prod_location)
+    if prod_location and len(prod_location) > 0:
+        item_details.production_location = prod_location[0]
+
     # Process Genres
     genres = item["Genres"]
     if genres is not None and len(genres) > 0:
-        item_details.genre = " / ".join(genres)
+        item_details.genres = genres
 
     # Process UserData
     userData = item["UserData"]
@@ -274,9 +281,15 @@ def extract_item_info(item, gui_options):
     item_details.art = getArt(item, gui_options["server"])
     item_details.rating = item["OfficialRating"]
     item_details.mpaa = item["OfficialRating"]
-    item_details.critic_rating = item["CommunityRating"]
+
+    item_details.community_rating = item["CommunityRating"]
+    if item_details.community_rating is None:
+        item_details.community_rating = 0.0
+
+    item_details.critic_rating = item["CriticRating"]
     if item_details.critic_rating is None:
         item_details.critic_rating = 0.0
+
     item_details.location_type = item["LocationType"]
     item_details.recursive_item_count = item["RecursiveItemCount"]
     item_details.recursive_unplayed_items_count = userData["UnplayedItemCount"]
@@ -288,7 +301,7 @@ def extract_item_info(item, gui_options):
 
 def add_gui_item(url, item_details, display_options, folder=True):
 
-    log.debug("Passed item_details: {0}", item_details.__dict__)
+    log.debug("item_details: {0}", item_details.__dict__)
 
     if not item_details.name:
         return None
@@ -349,7 +362,7 @@ def add_gui_item(url, item_details, display_options, folder=True):
     else:
         list_item = xbmcgui.ListItem(listItemName, iconImage=thumbPath, thumbnailImage=thumbPath)
 
-    log.debug("Setting thumbnail as: {0}", thumbPath)
+    #log.debug("Setting thumbnail as: {0}", thumbPath)
 
     # calculate percentage
     if (cappedPercentage != 0):
@@ -378,25 +391,17 @@ def add_gui_item(url, item_details, display_options, folder=True):
             info_labels['cast'] = info_labels['castandrole'] = [(cast_member['name'], cast_member['role']) for cast_member in item_details.cast]
 
     info_labels["title"] = listItemName
-    info_labels["plot"] = item_details.plot
-    info_labels["Overlay"] = item_details.overlay
-    info_labels["TVShowTitle"] = item_details.series_name
-
     info_labels["duration"] = item_details.duration
     info_labels["playcount"] = item_details.play_count
     if item_details.favorite == 'true':
         info_labels["top250"] = "1"
 
-    info_labels["mpaa"] = item_details.mpaa
     info_labels["rating"] = item_details.rating
-    info_labels["director"] = item_details.director
-    info_labels["writer"] = item_details.writer
     info_labels["year"] = item_details.year
-    info_labels["premiered"] = item_details.premiere_date
-    info_labels["dateadded"] = item_details.date_added
-    info_labels["studio"] = item_details.studio
-    info_labels["genre"] = item_details.genre
-    info_labels["tagline"] = item_details.tagline
+
+    if item_details.genres is not None and len(item_details.genres) > 0:
+        list_item.setProperty('genres', "%7C".join(item_details.genres))
+        info_labels["genre"] = "/".join(item_details.genres)
 
     mediatype = 'video'
 
@@ -427,6 +432,19 @@ def add_gui_item(url, item_details, display_options, folder=True):
 
     if is_video:
 
+        info_labels["Overlay"] = item_details.overlay
+        info_labels["tagline"] = item_details.tagline
+        info_labels["studio"] = item_details.studio
+        info_labels["premiered"] = item_details.premiere_date
+        info_labels["plot"] = item_details.plot
+        info_labels["director"] = item_details.director
+        info_labels["writer"] = item_details.writer
+        info_labels["dateadded"] = item_details.date_added
+        info_labels["TVShowTitle"] = item_details.series_name
+        info_labels["country"] = item_details.production_location
+        info_labels["mpaa"] = item_details.mpaa
+        info_labels["userrating"] = item_details.critic_rating
+
         if item_type == 'movie':
             info_labels["trailer"] = "plugin://plugin.video.embycon?mode=playTrailer&id=" + item_details.id
 
@@ -451,7 +469,8 @@ def add_gui_item(url, item_details, display_options, folder=True):
         if item_details.subtitle_lang != '':
             list_item.addStreamInfo('subtitle', {'language': item_details.subtitle_lang})
 
-        list_item.setRating("imdb", item_details.critic_rating, 0, True)
+        list_item.setRating("imdb", item_details.community_rating, 0, True)
+        # list_item.setRating("rt", item_details.critic_rating, 0, False)
         list_item.setProperty('TotalTime', str(item_details.duration))
 
     else:

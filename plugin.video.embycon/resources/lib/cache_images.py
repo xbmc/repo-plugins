@@ -14,7 +14,7 @@ import time
 from downloadutils import DownloadUtils
 from simple_logging import SimpleLogging
 from json_rpc import json_rpc
-from translation import i18n
+from translation import string_load
 from datamanager import DataManager
 from utils import getArt, double_urlencode
 
@@ -42,6 +42,40 @@ class CacheArtwork(threading.Thread):
             xbmc.sleep(1000)
         log.debug("CacheArtwork background thread exited : stop_all_activity : {0}", self.stop_all_activity)
 
+    def delete_cached_images(self, item_id):
+        log.debug("cache_delete_for_links")
+
+        item_image_url_part = "emby/Items/%s/Images/" % item_id
+        item_image_url_part = item_image_url_part.replace("/", "%2f")
+        log.debug("texture ids: {0}", item_image_url_part)
+
+        # is the web server enabled
+        web_query = {"setting": "services.webserver"}
+        result = json_rpc('Settings.GetSettingValue').execute(web_query)
+        xbmc_webserver_enabled = result['result']['value']
+        if not xbmc_webserver_enabled:
+            xbmcgui.Dialog().ok(string_load(30294), string_load(30295))
+            return
+
+        params = {"properties": ["url"]}
+        json_result = json_rpc('Textures.GetTextures').execute(params)
+        textures = json_result.get("result", {}).get("textures", [])
+        log.debug("texture ids: {0}", textures)
+
+        delete_count = 0
+        for texture in textures:
+            texture_id = texture["textureid"]
+            texture_url = texture["url"]
+            if item_image_url_part in texture_url:
+                delete_count += 1
+                log.debug("removing texture id: {0}", texture_id)
+                params = {"textureid": int(texture_id)}
+                json_rpc('Textures.RemoveTexture').execute(params)
+
+        del textures
+
+        xbmcgui.Dialog().ok(string_load(30281), string_load(30344) % delete_count)
+
     def cache_artwork_interactive(self):
         log.debug("cache_artwork_interactive")
 
@@ -52,14 +86,14 @@ class CacheArtwork(threading.Thread):
         result = json_rpc('Settings.GetSettingValue').execute(web_query)
         xbmc_webserver_enabled = result['result']['value']
         if not xbmc_webserver_enabled:
-            xbmcgui.Dialog().ok(i18n('notice'), i18n('http_control'))
+            xbmcgui.Dialog().ok(string_load(30294), string_load(30295))
             return
 
         # ask to delete all textures
-        question_result = xbmcgui.Dialog().yesno(i18n('delete'), i18n('delete_existing'))
+        question_result = xbmcgui.Dialog().yesno(string_load(30296), string_load(30297))
         if question_result:
             pdialog = xbmcgui.DialogProgress()
-            pdialog.create(i18n('deleting_textures'), "")
+            pdialog.create(string_load(30298), "")
             index = 0
 
             json_result = json_rpc('Textures.GetTextures').execute()
@@ -81,22 +115,22 @@ class CacheArtwork(threading.Thread):
             del textures
             del pdialog
 
-        question_result = xbmcgui.Dialog().yesno(i18n('cache_all_textures_title'), i18n('cache_all_textures'))
+        question_result = xbmcgui.Dialog().yesno(string_load(30299), string_load(30300))
         if not question_result:
             return
 
         pdialog = xbmcgui.DialogProgress()
-        pdialog.create(i18n('caching_textures'), "")
+        pdialog.create(string_load(30301), "")
         result_report = self.cache_artwork(pdialog)
         pdialog.close()
         del pdialog
         if result_report:
-            xbmcgui.Dialog().ok(i18n('done'), "\n".join(result_report))
+            xbmcgui.Dialog().ok(string_load(30125), "\n".join(result_report))
 
     def cache_artwork_background(self):
         log.debug("cache_artwork_background")
         dp = xbmcgui.DialogProgressBG()
-        dp.create(i18n('caching_textures'), "")
+        dp.create(string_load(30301), "")
         result_text = self.cache_artwork(dp)
         dp.close()
         del dp
@@ -228,9 +262,9 @@ class CacheArtwork(threading.Thread):
                 break
 
         result_report = []
-        result_report.append(i18n('existing_textures') + str(len(texture_urls)))
-        result_report.append(i18n('missing_textures') + str(len(missing_texture_urls)))
-        result_report.append(i18n('loaded_textures') + str(count_done))
+        result_report.append(string_load(30302) + str(len(texture_urls)))
+        result_report.append(string_load(30303) + str(len(missing_texture_urls)))
+        result_report.append(string_load(30304) + str(count_done))
         return result_report
 
 

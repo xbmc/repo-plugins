@@ -25,7 +25,7 @@ from .datamanager import DataManager
 from .server_detect import checkServer
 from .simple_logging import SimpleLogging
 from .menu_functions import displaySections, showMovieAlphaList, showGenreList, showWidgets, show_search, showMoviePages
-from .translation import i18n
+from .translation import string_load
 from .server_sessions import showServerSessions
 from .action_menu import ActionMenu
 from .widgets import getWidgetContent, get_widget_content_cast, getWidgetUrlContent
@@ -99,6 +99,9 @@ def mainEntryPoint():
         checkServer(force=True, notify=True)
     elif mode == "DETECT_SERVER_USER":
         checkServer(force=True, change_user=True, notify=False)
+    elif mode == "playTrailer":
+        item_id = params["id"]
+        playTrailer(item_id)
     elif mode == "MOVIE_ALPHA":
         showMovieAlphaList()
     elif mode == "GENRES":
@@ -245,12 +248,12 @@ def delete(item):
     else:
         final_name = item_name
 
-    return_value = xbmcgui.Dialog().yesno(i18n('confirm_file_delete'), final_name, i18n('file_delete_confirm'))
+    return_value = xbmcgui.Dialog().yesno(string_load(30091), final_name, string_load(30092))
     if return_value:
         log.debug('Deleting Item: {0}', item_id)
         url = '{server}/emby/Items/' + item_id
         progress = xbmcgui.DialogProgress()
-        progress.create(i18n('deleting'), i18n('waiting_server_delete'))
+        progress.create(string_load(30052), string_load(30053))
         downloadUtils.downloadUrl(url, method="DELETE")
         progress.close()
         home_window = HomeWindow()
@@ -310,7 +313,7 @@ def getContent(url, params):
 
     media_type = params.get("media_type", None)
     if not media_type:
-        xbmcgui.Dialog().ok(i18n('error'), i18n('no_media_type'))
+        xbmcgui.Dialog().ok(string_load(30135), string_load(30139))
 
     log.debug("URL: {0}", url)
     log.debug("MediaType: {0}", media_type)
@@ -358,8 +361,8 @@ def getContent(url, params):
     progress = None
     if (settings.getSetting('showLoadProgress') == "true"):
         progress = xbmcgui.DialogProgress()
-        progress.create(i18n('loading_content'))
-        progress.update(0, i18n('retrieving_data'))
+        progress.create(string_load(30112))
+        progress.update(0, string_load(30113))
 
     # update url for paging
     start_index = 0
@@ -441,7 +444,7 @@ def getContent(url, params):
     send_event_notification("display_items", display_items_notification)
 
     if (progress != None):
-        progress.update(100, i18n('done'))
+        progress.update(100, string_load(30125))
         progress.close()
 
     return
@@ -522,7 +525,7 @@ def processDirectory(results, progress, params):
 
         if progress is not None:
             percent_done = (float(current_item) / float(item_count)) * 100
-            progress.update(int(percent_done), i18n('processing_item:') + str(current_item))
+            progress.update(int(percent_done), string_load(30126) + str(current_item))
             current_item = current_item + 1
 
         # get the infofrom the item
@@ -609,7 +612,7 @@ def processDirectory(results, progress, params):
         item_details = ItemDetails()
 
         item_details.id = first_season_item.get("Id")
-        item_details.name = i18n('all')
+        item_details.name = string_load(30290)
         item_details.art = getArt(first_season_item, server)
         item_details.play_count = played
         item_details.overlay = overlay
@@ -644,27 +647,27 @@ def show_menu(params):
     action_items = []
     
     if result["Type"] in ["Episode", "Movie", "Music"]:
-        li = xbmcgui.ListItem(i18n('play'))
+        li = xbmcgui.ListItem(string_load(30314))
         li.setProperty('menu_id', 'play')
         action_items.append(li)
 
     if result["Type"] in ["Season", "MusicAlbum"]:
-        li = xbmcgui.ListItem(i18n('play_all'))
+        li = xbmcgui.ListItem(string_load(30317))
         li.setProperty('menu_id', 'play_all')
         action_items.append(li)
 
     if result["Type"] in ["Episode", "Movie"]:
-        li = xbmcgui.ListItem(i18n('emby_force_transcode'))
+        li = xbmcgui.ListItem(string_load(30275))
         li.setProperty('menu_id', 'transcode')
         action_items.append(li)
 
     if result["Type"] == "Movie":
-        li = xbmcgui.ListItem(i18n('play_trailer'))
+        li = xbmcgui.ListItem(string_load(30307))
         li.setProperty('menu_id', 'play_trailer')
         action_items.append(li)
 
     if result["Type"] == "Episode" and result["ParentId"] is not None:
-        li = xbmcgui.ListItem(i18n('view_season'))
+        li = xbmcgui.ListItem(string_load(30327))
         li.setProperty('menu_id', 'view_season')
         action_items.append(li)
 
@@ -673,25 +676,29 @@ def show_menu(params):
         progress = user_data.get("PlaybackPositionTicks", 0) != 0
         played = user_data.get("Played", False)
         if not played or progress:
-            li = xbmcgui.ListItem(i18n('emby_mark_watched'))
+            li = xbmcgui.ListItem(string_load(30270))
             li.setProperty('menu_id', 'mark_watched')
             action_items.append(li)
         if played or progress:
-            li = xbmcgui.ListItem(i18n('emby_mark_unwatched'))
+            li = xbmcgui.ListItem(string_load(30271))
             li.setProperty('menu_id', 'mark_unwatched')
             action_items.append(li)
 
         if user_data.get("IsFavorite", False) == False:
-            li = xbmcgui.ListItem(i18n('emby_set_favorite'))
+            li = xbmcgui.ListItem(string_load(30272))
             li.setProperty('menu_id', 'emby_set_favorite')
             action_items.append(li)
         else:
-            li = xbmcgui.ListItem(i18n('emby_unset_favorite'))
+            li = xbmcgui.ListItem(string_load(30273))
             li.setProperty('menu_id', 'emby_unset_favorite')
             action_items.append(li)
 
-    li = xbmcgui.ListItem(i18n('emby_delete'))
+    li = xbmcgui.ListItem(string_load(30274))
     li.setProperty('menu_id', 'delete')
+    action_items.append(li)
+
+    li = xbmcgui.ListItem(string_load(30281))
+    li.setProperty('menu_id', 'refresh_images')
     action_items.append(li)
 
     #xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
@@ -743,6 +750,9 @@ def show_menu(params):
         xbmc.executebuiltin(
             'ActivateWindow(Videos, plugin://plugin.video.embycon/?mode=PARENT_CONTENT&ParentId={0}&media_type=episodes, return)'.format(parent_id))
 
+    elif selected_action == "refresh_images":
+        CacheArtwork().delete_cached_images(item_id)
+
 
 def populate_listitem(item_id):
     log.debug("populate_listitem: {0}", item_id)
@@ -769,7 +779,7 @@ def populate_listitem(item_id):
     #list_item.setPath(u)
     '''
 
-    item_title = result.get("Name", i18n('missing_title'))
+    item_title = result.get("Name", string_load(30280))
 
     list_item = xbmcgui.ListItem(label=item_title)
 
@@ -901,13 +911,13 @@ def search_results(params):
     item_type = item_type.lower()
 
     if item_type == 'movie':
-        heading_type = i18n('movies')
+        heading_type = string_load(30231)
         content_type = 'movies'
     elif item_type == 'series':
-        heading_type = i18n('tvshows')
+        heading_type = string_load(30229)
         content_type = 'tvshows'
     elif item_type == 'episode':
-        heading_type = i18n('episodes')
+        heading_type = string_load(30235)
         content_type = 'episodes'
         params["name_format"] = "Episode|episode_name_format"
     elif item_type == "music" or item_type == "audio" or item_type == "musicalbum":
@@ -926,7 +936,7 @@ def search_results(params):
         home_window = HomeWindow()
         last_search = home_window.getProperty("last_search")
         kb = xbmc.Keyboard()
-        kb.setHeading(heading_type.capitalize() + ' ' + i18n('search').lower())
+        kb.setHeading(heading_type.capitalize() + ' ' + string_load(30246).lower())
         kb.setDefault(last_search)
         kb.doModal()
 
@@ -977,8 +987,8 @@ def search_results(params):
     progress = None
     if settings.getSetting('showLoadProgress') == "true":
         progress = xbmcgui.DialogProgress()
-        progress.create(i18n('loading_content'))
-        progress.update(0, i18n('retrieving_data'))
+        progress.create(string_load(30112))
+        progress.update(0, string_load(30113))
 
     search_hints_result = dataManager.GetContent(content_url)
     log.debug('SearchHints jsonData: {0}', search_hints_result)
@@ -1047,10 +1057,10 @@ def search_results(params):
                 xbmcplugin.endOfDirectory(handle, cacheToDisc=False)
 
         elif not query_string:
-            xbmcgui.Dialog().ok(i18n('no_matches'), i18n('no_items'))
+            xbmcgui.Dialog().ok(string_load(30335), string_load(30336))
 
     if progress is not None:
-        progress.update(100, i18n('done'))
+        progress.update(100, string_load(30125))
         progress.close()
 
 
@@ -1069,8 +1079,11 @@ def PLAY(params):
     media_source_id = params.get("media_source_id", "")
     log.debug("media_source_id: {0}", media_source_id)
 
-    use_default = params.get("use_default", "false") == "true"
-    log.debug("use_default: {0}", use_default)
+    subtitle_stream_index = params.get("subtitle_stream_index")
+    log.debug("subtitle_stream_index: {0}", subtitle_stream_index)
+
+    audio_stream_index = params.get("audio_stream_index")
+    log.debug("audio_stream_index: {0}", audio_stream_index)
 
     # set the current playing item id
     # set all the playback info, this will be picked up by the service
@@ -1083,7 +1096,8 @@ def PLAY(params):
     play_info["auto_resume"] = str(auto_resume)
     play_info["force_transcode"] = forceTranscode
     play_info["media_source_id"] = media_source_id
-    play_info["use_default"] = use_default
+    play_info["subtitle_stream_index"] = subtitle_stream_index
+    play_info["audio_stream_index"] = audio_stream_index
     log.info("Sending embycon_play_action : {0}", play_info)
     send_event_notification("embycon_play_action", play_info)
 
@@ -1149,7 +1163,7 @@ def playTrailer(id):
         trailer_text.append(name)
 
     dialog = xbmcgui.Dialog()
-    resp = dialog.select(i18n('select_trailer'), trailer_text)
+    resp = dialog.select(string_load(30308), trailer_text)
     if resp > -1:
         trailer = trailer_list[resp]
         log.debug("SelectedTrailer: {0}", trailer)

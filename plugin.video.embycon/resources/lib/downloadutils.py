@@ -18,7 +18,7 @@ from datetime import datetime
 from kodi_utils import HomeWindow
 from clientinfo import ClientInformation
 from simple_logging import SimpleLogging
-from translation import i18n
+from translation import string_load
 
 log = SimpleLogging(__name__)
 
@@ -30,7 +30,7 @@ def getDetailsString():
     include_overview = addonSettings.getSetting("include_overview") == "true"
 
     detailsString = "DateCreated,EpisodeCount,SeasonCount,Path,Genres,Studios,Etag,Taglines"
-    detailsString += ",RecursiveItemCount,ChildCount"
+    detailsString += ",RecursiveItemCount,ChildCount,ProductionLocations"
 
     if include_media:
         detailsString += ",MediaStreams"
@@ -79,8 +79,8 @@ class DownloadUtils():
                                   "ToggleMute",
                                   "SendString",
                                   "DisplayMessage",
-                                  #"SetAudioStreamIndex",
-                                  #"SetSubtitleStreamIndex",
+                                  "SetAudioStreamIndex",
+                                  "SetSubtitleStreamIndex",
                                   "SetRepeatMode",
                                   "Mute",
                                   "Unmute",
@@ -165,14 +165,14 @@ class DownloadUtils():
             BGTags = data["BackdropImageTags"]
             if BGTags is not None and len(BGTags) > index:
                 imageTag = BGTags[index]
-                log.debug("Background Image Tag: {0}", imageTag)
+                # log.debug("Background Image Tag: {0}", imageTag)
         elif parent is False:
             image_tags = data["ImageTags"]
             if image_tags is not None:
                 image_tag_type = image_tags[art_type]
                 if image_tag_type is not None:
                     imageTag = image_tag_type
-                    log.debug("Image Tag: {0}", imageTag)
+                    # log.debug("Image Tag: {0}", imageTag)
         elif parent is True:
             if (item_type == "Episode" or item_type == "Season") and art_type == 'Primary':
                 tagName = 'SeriesPrimaryImageTag'
@@ -185,7 +185,7 @@ class DownloadUtils():
             if parent_image_id is not None and parent_image_tag is not None:
                 id = parent_image_id
                 imageTag = parent_image_tag
-                log.debug("Parent Image Tag: {0}", imageTag)
+                # log.debug("Parent Image Tag: {0}", imageTag)
 
 
         if not imageTag and not ((art_type == 'Banner' or art_type == 'Art') and parent is True):  # ParentTag not passed for Banner and Art
@@ -194,7 +194,7 @@ class DownloadUtils():
 
         artwork = "%s/emby/Items/%s/Images/%s/%s?Format=original&Tag=%s" % (server, id, art_type, index, imageTag)
 
-        log.debug("getArtwork: request:{0} item:{1} parent:{2} link:{3}", art_type, item_type, parent, artwork)
+        # log.debug("getArtwork: request:{0} item:{1} parent:{2} link:{3}", art_type, item_type, parent, artwork)
 
         '''
         # do not return non-existing images
@@ -280,8 +280,8 @@ class DownloadUtils():
         if secure or not userid:
             authOk = self.authenticate()
             if authOk == "":
-                xbmcgui.Dialog().notification(i18n("connection_error"),
-                                              i18n('incorrect_user_pass'),
+                xbmcgui.Dialog().notification(string_load(30316),
+                                              string_load(30044),
                                               icon="special://home/addons/plugin.video.embycon/icon.png")
                 return ""
             if not userid:
@@ -291,8 +291,8 @@ class DownloadUtils():
             userImage = 'DefaultUser.png'
 
         if userid == "":
-            xbmcgui.Dialog().notification(i18n("connection_error"),
-                                          i18n('username_not_found'),
+            xbmcgui.Dialog().notification(string_load(30316),
+                                          string_load(30045),
                                           icon="special://home/addons/plugin.video.embycon/icon.png")
 
         log.debug("userid: {0}", userid)
@@ -347,7 +347,7 @@ class DownloadUtils():
             log.debug("User Id: {0}", userid)
             WINDOW.setProperty("AccessToken", accessToken)
             WINDOW.setProperty("userid", userid)
-            WINDOW.setProperty("userimage", "")
+            #WINDOW.setProperty("userimage", "")
 
             self.post_capabilities()
 
@@ -536,14 +536,14 @@ class DownloadUtils():
 
                 log.error("HTTP response error: {0} {1}", data.status, data.reason)
                 if suppress is False:
-                    xbmcgui.Dialog().notification(i18n("connection_error"),
-                                                  i18n('url_error_') % str(data.reason),
+                    xbmcgui.Dialog().notification(string_load(30316),
+                                                  string_load(30200) % str(data.reason),
                                                   icon="special://home/addons/plugin.video.embycon/icon.png")
 
         except Exception, msg:
             log.error("Unable to connect to {0} : {1}", server, msg)
             if suppress is False:
-                xbmcgui.Dialog().notification(i18n("connection_error"),
+                xbmcgui.Dialog().notification(string_load(30316),
                                               str(msg),
                                               icon="special://home/addons/plugin.video.embycon/icon.png")
 

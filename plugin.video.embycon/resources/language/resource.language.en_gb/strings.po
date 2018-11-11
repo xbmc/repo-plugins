@@ -58,10 +58,6 @@ msgctxt "#30014"
 msgid "Emby"
 msgstr ""
 
-msgctxt "#30015"
-msgid "Network"
-msgstr ""
-
 msgctxt "#30016"
 msgid "Device Name"
 msgstr ""
@@ -154,6 +150,10 @@ msgctxt "#30110"
 msgid "Interface"
 msgstr ""
 
+msgctxt "#30111"
+msgid "Services"
+msgstr ""
+
 msgctxt "#30112"
 msgid "Loading Content"
 msgstr ""
@@ -190,10 +190,6 @@ msgctxt "#30126"
 msgid "Processing Item : "
 msgstr ""
 
-msgctxt "#30128"
-msgid "Play Error"
-msgstr ""
-
 msgctxt "#30129"
 msgid "Default"
 msgstr ""
@@ -202,24 +198,8 @@ msgctxt "#30135"
 msgid "Error"
 msgstr ""
 
-msgctxt "#30136"
-msgid "EmbyCon service is not running"
-msgstr ""
-
-msgctxt "#30137"
-msgid "Please restart Kodi"
-msgstr ""
-
 msgctxt "#30139"
 msgid "No Media Type Set"
-msgstr ""
-
-msgctxt "#30150"
-msgid "Skin does not support setting views"
-msgstr ""
-
-msgctxt "#30151"
-msgid "Select item action (Requires Restart)"
 msgstr ""
 
 msgctxt "#30163"
@@ -266,22 +246,6 @@ msgctxt "#30201"
 msgid "Unable to connect to server"
 msgstr ""
 
-msgctxt "#30202"
-msgid "Error Extracting Server host:port"
-msgstr ""
-
-msgctxt "#30203"
-msgid "Error in ArtworkRotationThread"
-msgstr ""
-
-msgctxt "#30204"
-msgid "Unable to connect to host"
-msgstr ""
-
-msgctxt "#30205"
-msgid "Error in LoadMenuOptionsThread"
-msgstr ""
-
 msgctxt "#30206"
 msgid "Playback Type"
 msgstr ""
@@ -322,6 +286,10 @@ msgctxt "#30215"
 msgid "On Playback Stop (100% = disabled)"
 msgstr ""
 
+msgctxt "#30216"
+msgid "Item Details"
+msgstr ""
+
 msgctxt "#30217"
 msgid "Prompt to delete episode after %"
 msgstr ""
@@ -338,32 +306,24 @@ msgctxt "#30220"
 msgid "Prompt to delete movie after %"
 msgstr ""
 
-msgctxt "#30221"
-msgid "On Playback Stop"
+msgctxt "#30222"
+msgid "Item Layout"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Page Size and Filtering"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Interaction"
 msgstr ""
 
 msgctxt "#30229"
 msgid "TV Shows"
 msgstr ""
 
-msgctxt "#30230"
-msgid "Default View"
-msgstr ""
-
 msgctxt "#30231"
 msgid "Movies"
-msgstr ""
-
-msgctxt "#30232"
-msgid "BoxSets"
-msgstr ""
-
-msgctxt "#30233"
-msgid "Series"
-msgstr ""
-
-msgctxt "#30234"
-msgid "Seasons"
 msgstr ""
 
 msgctxt "#30235"
@@ -382,24 +342,12 @@ msgctxt "#30238"
 msgid "Playback Overrides"
 msgstr ""
 
-msgctxt "#30245"
-msgid "Next page"
-msgstr ""
-
 msgctxt "#30246"
 msgid "Search"
 msgstr ""
 
 msgctxt "#30247"
 msgid "Widgets"
-msgstr ""
-
-msgctxt "#30248"
-msgid "Emby - Movies"
-msgstr ""
-
-msgctxt "#30249"
-msgid "Emby - TV Shows"
 msgstr ""
 
 msgctxt "#30250"
@@ -420,10 +368,6 @@ msgstr ""
 
 msgctxt "#30254"
 msgid "Show Settings"
-msgstr ""
-
-msgctxt "#30255"
-msgid "Movies (Year)"
 msgstr ""
 
 msgctxt "#30256"
@@ -483,19 +427,19 @@ msgid "Movies - Random"
 msgstr ""
 
 msgctxt "#30270"
-msgid "Mark watched"
+msgid "Mark Watched"
 msgstr ""
 
 msgctxt "#30271"
-msgid "Mark unwatched"
+msgid "Mark Unwatched"
 msgstr ""
 
 msgctxt "#30272"
-msgid "Set favourite"
+msgid "Set Favourite"
 msgstr ""
 
 msgctxt "#30273"
-msgid "Unset favourite"
+msgid "Unset Favourite"
 msgstr ""
 
 msgctxt "#30274"
@@ -527,7 +471,7 @@ msgid "Missing Title"
 msgstr ""
 
 msgctxt "#30281"
-msgid "Your skin %s is currently not supported"
+msgid "Refresh Images"
 msgstr ""
 
 msgctxt "#30282"
@@ -646,14 +590,6 @@ msgctxt "#30310"
 msgid "Enable Emby remote control"
 msgstr ""
 
-msgctxt "#30311"
-msgid "EmbyCon encountered an error!"
-msgstr ""
-
-msgctxt "#30312"
-msgid "Do you want to send this error to the devs?"
-msgstr ""
-
 msgctxt "#30313"
 msgid "Menu"
 msgstr ""
@@ -694,10 +630,6 @@ msgctxt "#30322"
 msgid "Auto Resume"
 msgstr ""
 
-msgctxt "#30323"
-msgid "Check for new versions"
-msgstr ""
-
 msgctxt "#30324"
 msgid "Movies - Recommendations"
 msgstr ""
@@ -711,7 +643,7 @@ msgid "[EmbyCon Menu]"
 msgstr ""
 
 msgctxt "#30327"
-msgid "View Season"
+msgid "Go To Season"
 msgstr ""
 
 msgctxt "#30328"
@@ -735,7 +667,7 @@ msgid "Cache artwork in the background"
 msgstr ""
 
 msgctxt "#30334"
-msgid "Use EmbyCon menu (requires restart)"
+msgid "Use EmbyCon context menu"
 msgstr ""
 
 msgctxt "#30335"
@@ -761,3 +693,20 @@ msgstr ""
 msgctxt "#30340"
 msgid "Group movies into collections"
 msgstr ""
+
+msgctxt "#30341"
+msgid "Background image update interval (0 = disabled)"
+msgstr ""
+
+msgctxt "#30342"
+msgid "New content check interval (0 = disabled)"
+msgstr ""
+
+msgctxt "#30343"
+msgid "Changes Require Kodi Restart"
+msgstr ""
+
+msgctxt "#30344"
+msgid "Number of images removed from cache : %s"
+msgstr ""
+

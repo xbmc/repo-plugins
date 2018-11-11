@@ -1,0 +1,11 @@
+#NAME Stream Bosnië-Herzegovina
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//109.123.70.27%3a1935/tehnikatv777/tehnikatv777/playlist.m3u8:777 Tehnika TV (Bosnië-Herzegovina)
+#DESCRIPTION 777 Tehnika TV (Bosnië-Herzegovina)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvstream.rtvbn.com%3a1935/live/stream/chunklist_w1957700324.m3u8:BN TV (Bosnië-Herzegovina)
+#DESCRIPTION BN TV (Bosnië-Herzegovina)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//tvstream.rtvbn.com%3a1935/live/stream/chunklist_w1957700324.m3u8:Bosna (Bosnië-Herzegovina)
+#DESCRIPTION Bosna (Bosnië-Herzegovina)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//31.47.8.10%3a8081/:Slon Extra (Bosnië-Herzegovina)
+#DESCRIPTION Slon Extra (Bosnië-Herzegovina)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//37.59.21.217%3a8809/live/tv5web.m3u8:Televizija 5 (Bosnië-Herzegovina)
+#DESCRIPTION Televizija 5 (Bosnië-Herzegovina)

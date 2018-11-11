@@ -1,0 +1,9 @@
+#NAME Stream Georgië
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tbs01-edge09.itdc.ge/gpbhd/index.m3u8:1 TV GEORGIA HD (Georgië)
+#DESCRIPTION 1 TV GEORGIA HD (Georgië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//md-store4.tulix.tv/1sttv/index.m3u8:1 TV GEORGIA (Georgië)
+#DESCRIPTION 1 TV GEORGIA (Georgië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//2tvlive1.tulix.tv%3a1935/2tv/2tv1/playlist.m3u8:2 TV GEORGIA (Georgië)
+#DESCRIPTION 2 TV GEORGIA (Georgië)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//94.43.239.178%3a8080/CHANNEL470/BITRATE1/playlist.m3u8:Music Box GE (Georgië - muziek)
+#DESCRIPTION Music Box GE (Georgië - muziek)

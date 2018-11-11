@@ -1,0 +1,47 @@
+#NAME Stream Unlocator
+#SERVICE 1:64:138:0:0:0:0:0:0:0:
+#DESCRIPTION ++Denemarken++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//dr01-lh.akamaihd.net/i/live/dr01_0@147054/master.m3u8?u=n1info#X-Forwarded-For=78.157.96.0:DR 1 HD (Denemarken)
+#DESCRIPTION DR 1 HD (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//dr02-lh.akamaihd.net/i/live/dr02_0@147055/master.m3u8?u=n1info#X-Forwarded-For=78.157.96.0:DR 2 HD (Denemarken)
+#DESCRIPTION DR 2 HD (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//dr03-lh.akamaihd.net/i/live/dr03_0@147056/master.m3u8?u=n1info#X-Forwarded-For=78.157.96.0:DR 3 HD (Denemarken)
+#DESCRIPTION DR 3 HD (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//dr04-lh.akamaihd.net/i/live/dr04_0@147057/master.m3u8?u=n1info#X-Forwarded-For=78.157.96.0:DR K (Denemarken)
+#DESCRIPTION DR K (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//www.mytvonline.org/nord/drrasm/index.m3u8:DR Rasmasjang (Denemarken)
+#DESCRIPTION DR Rasmasjang (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//www.mytvonline.org/nord/drultra/index.m3u8:DR Ultra (Denemarken)
+#DESCRIPTION DR Ultra (Denemarken)
+#SERVICE 1:64:139:0:0:0:0:0:0:0:
+#DESCRIPTION ++Noorwegen++
+#SERVICE 4097:0:19:40f:46:46:e080000:0:0:0:https%3a//nrk-live-no.telenorcdn.net/21/0/hls/nrk1/playlist.m3u8:NRK 1
+#DESCRIPTION NRK 1
+#SERVICE 4097:0:19:410:46:46:e080000:0:0:0:https%3a//nrk-live-no.telenorcdn.net/22/0/hls/nrk1/playlist.m3u8:NRK 2
+#DESCRIPTION NRK 2
+#SERVICE 4097:0:19:411:46:46:e080000:0:0:0:https%3a//nrk-live-no.telenorcdn.net/23/0/hls/nrk1/playlist.m3u8:NRK 3
+#DESCRIPTION NRK 3
+#SERVICE 1:64:13a:0:0:0:0:0:0:0:
+#DESCRIPTION ++Zweden++
+#SERVICE 4097:0:19:ed9:45:46:e080000:0:0:0:https%3a//svt14-a.akamaized.net/se/svt1/master.m3u8:SVT 1
+#DESCRIPTION SVT 1
+#SERVICE 4097:0:19:581:45:46:e080000:0:0:0:https%3a//svt14-a.akamaized.net/se/svt2/master.m3u8:SVT 2
+#DESCRIPTION SVT 2
+#SERVICE 4097:0:19:1b6c:45:46:e080000:0:0:0:https%3a//svt14-a.akamaized.net/se/svtb/master.m3u8:SVT 24
+#DESCRIPTION SVT 24
+#SERVICE 1:64:13b:0:0:0:0:0:0:0:
+#DESCRIPTION ++Spanje++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hlsackdn-gl7.rtve.es/i/hlsdvrlive_1@566874/index_1500_av-b.m3u8:La 1
+#DESCRIPTION La 1
+#SERVICE 4097:0:1:10:1:41:0:0:0:0:http%3a//hlsackdn_gl1-lh.akamaihd.net/i/hlslive_1@439391/index_0400_av-p.m3u8?sd=10&rebase=on:La 2
+#DESCRIPTION La 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hlsackdn_gl1-lh.akamaihd.net/i/hlslive_1@439391/index_0400_av-p.m3u8?sd=10&rebase=on:Teledeporte
+#DESCRIPTION Teledeporte
+#SERVICE 1:64:13c:0:0:0:0:0:0:0:
+#DESCRIPTION ++Nieuw-Zeeland++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d2vbukhvwwnst7.cloudfront.net/master_4.m3u8:TVNZ 1 (Nieuw-Zeeland)
+#DESCRIPTION TVNZ 1 (Nieuw-Zeeland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ditqhbg3dqptg.cloudfront.net/master.m3u8:TVNZ 2 (Nieuw-Zeeland)
+#DESCRIPTION TVNZ 2 (Nieuw-Zeeland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//du7f1mbeu4v4z.cloudfront.net/master_1.m3u8:TVNZ Duke (Nieuw-Zeeland)
+#DESCRIPTION TVNZ Duke (Nieuw-Zeeland)

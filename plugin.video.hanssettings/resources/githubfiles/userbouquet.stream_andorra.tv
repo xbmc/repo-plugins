@@ -1,0 +1,3 @@
+#NAME Stream Andorra
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//194.158.80.31%3a443/live/rtva/HasBahCa.m3u8:RTV Andorra
+#DESCRIPTION RTV Andorra

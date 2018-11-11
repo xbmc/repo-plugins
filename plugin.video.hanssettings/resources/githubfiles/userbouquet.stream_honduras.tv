@@ -1,0 +1,13 @@
+#NAME Stream Honduras
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//st2.worldkast.com/8004/8004/chunklist_w1315793139.m3u8:Campus TV (Honduras)
+#DESCRIPTION Campus TV (Honduras)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59ca47c951054.streamlock.net/hch/hch/playlist.m3u8:HCH (Honduras)
+#DESCRIPTION HCH (Honduras)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//control.worldkast.com%3a1935/8306/smil%3a8306.smil/chunklist_w1039181019_b1500000.m3u8:MVC (Honduras)
+#DESCRIPTION MVC (Honduras)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//173.236.71.62%3a1935/telebasica/btv.sdp/playlist.m3u8:Suyapa TV Educativa (Honduras)
+#DESCRIPTION Suyapa TV Educativa (Honduras)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//190.11.224.14%3a8134/hls-live/livepkgr/_definst_/liveevent/livestream1.m3u8:Teleceiba Canal 7 (Honduras)
+#DESCRIPTION Teleceiba Canal 7 (Honduras)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.grupoabchn.com%3a1935/TENHD/TENLive.smil/chunklist_w1445105875_b1848000.m3u8:TEN Canal 10 (Honduras)
+#DESCRIPTION TEN Canal 10 (Honduras)

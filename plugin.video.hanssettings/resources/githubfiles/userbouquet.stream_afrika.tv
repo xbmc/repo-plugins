@@ -1,0 +1,113 @@
+#NAME Stream Afrika
+#SERVICE 1:64:eb:0:0:0:0:0:0:0:
+#DESCRIPTION Afrika algemeen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//africatv.live.net.sa%3a1935/live/africatv/playlist.m3u8:AFRICA TV 1 (Afrika)
+#DESCRIPTION AFRICA TV 1 (Afrika)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//africatv.live.net.sa%3a1935/live/africatv2/playlist.m3u8:AFRICA TV 2 (Afrika)
+#DESCRIPTION AFRICA TV 2 (Afrika)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//starmena.ercdn.net/libya-alhadath/libya-alhadath_480p.m3u8:AL HADATH (Afrika)
+#DESCRIPTION AL HADATH (Afrika)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream-05.ix7.dailymotion.com/dm/3/x5qokx5/live-3.m3u8:DBM | Digital Black Music (Afrika)
+#DESCRIPTION DBM | Digital Black Music (Afrika)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//vod.infomaniak.com/redirect/iconafricatv_vod/racine-32512/mp4-12/arielletfeattinaaimemoi,detestemoire-aimemoi.mp4?playlist=3122&start=201.84:Icon Africa TV Tropic TV (Afrika)
+#DESCRIPTION Icon Africa TV Tropic TV (Afrika)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream-02.dc3.dailymotion.com/dm/3/x52et3w/live-2.m3u8:Télésud (Afrika)
+#DESCRIPTION Télésud (Afrika)
+#SERVICE 1:64:ec:0:0:0:0:0:0:0:
+#DESCRIPTION Algerije
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//tv-live.echoroukonline.com/echo/EchoroukTV/chunks.m3u8:Echorouk TV (Algerije)
+#DESCRIPTION Echorouk TV (Algerije)
+#SERVICE 1:64:ed:0:0:0:0:0:0:0:
+#DESCRIPTION Congo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream-06.ix7.dailymotion.com/dm/3/x6i37o5/live-3.m3u8:Africanews (Congo)
+#DESCRIPTION Africanews (Congo)
+#SERVICE 1:64:ee:0:0:0:0:0:0:0:
+#DESCRIPTION Ivoorkust
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//185.59.221.143%3a1935/rticdn/smil%3arti1.smil/chunklist_w1521090640_b650000.m3u8:RTI 1 (Ivoorkust - Afrika)
+#DESCRIPTION RTI 1 (Ivoorkust - Afrika)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//185.59.221.143%3a1935/rticdn/smil%3arti2.smil/chunklist_w473948301_b650000.m3u8:RTI 2 (Ivoorkust - Afrika)
+#DESCRIPTION RTI 2 (Ivoorkust - Afrika)
+#SERVICE 1:64:ef:0:0:0:0:0:0:0:
+#DESCRIPTION Kaapverdië
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//streamer-a03.videos.sapo.pt/live/rtc_teste/chunklist_w1719706462.m3u8:RTC - PT (Kaapverdië)
+#DESCRIPTION RTC - PT (Kaapverdië)
+#SERVICE 1:64:f0:0:0:0:0:0:0:0:
+#DESCRIPTION Kameroen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdnamd-hls-globecast.akamaized.net/live/ramdisk/vision4/hls_video/index.m3u8:Vision 4 (Kameroen)
+#DESCRIPTION Vision 4 (Kameroen)
+#SERVICE 1:64:f1:0:0:0:0:0:0:0:
+#DESCRIPTION Kenia
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//vidcdn.vidgyor.com/citizentv-origin/liveabr/playlist.m3u8:Citizen TV (Kenia)
+#DESCRIPTION Citizen TV (Kenia)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//vidhttps.r.worldssl.net/inoorotv-origin/liveabr/playlist.m3u8:iNooro TV (Kenia)
+#DESCRIPTION iNooro TV (Kenia)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//197.232.56.13%3a1935/live/myStream/live/playlist.m3u8:Kass TV (Kenia)
+#DESCRIPTION Kass TV (Kenia)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream-07.ix7.dailymotion.com/dm/3/x6l05ws/live-3.m3u8:NTV (Kenia)
+#DESCRIPTION NTV (Kenia)
+#SERVICE 1:64:f2:0:0:0:0:0:0:0:
+#DESCRIPTION Libië
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//starmena.ercdn.net/libyaschannel/libyaschannel_480p.m3u8:Libya's Channel (Libië)
+#DESCRIPTION Libya's Channel (Libië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//m.live.net.sa%3a1935/m/tanasuhtv/chunklist.m3u8:Tanasuh (Libië)
+#DESCRIPTION Tanasuh (Libië)
+#SERVICE 1:64:f3:0:0:0:0:0:0:0:
+#DESCRIPTION Mali
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream-07.ix7.dailymotion.com/dm/3/x5tcmdy/live-2.m3u8:ORTM = Office de Radio et Télévision du Mali (Mali)
+#DESCRIPTION ORTM = Office de Radio et Télévision du Mali (Mali)
+#SERVICE 1:64:f4:0:0:0:0:0:0:0:
+#DESCRIPTION Mozambique
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//196.28.226.121%3a1935/live/smil%3aChannel1.smil/playlist.m3u8:TVM 1 (Mozambique)
+#DESCRIPTION TVM 1 (Mozambique)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//196.28.226.121%3a1935/live/smil%3aChannel2.smil/playlist.m3u8:TVM 2 (Mozambique)
+#DESCRIPTION TVM 2 (Mozambique)
+#SERVICE 1:64:f5:0:0:0:0:0:0:0:
+#DESCRIPTION Nigeria
+#SERVICE 4097:0:1:106:0:0:0:0:0:0:http%3a//vip.alpha-one.net%3a8080/A1Kids/index.m3u8:A1 Kids (Nigeria)
+#DESCRIPTION A1 Kids (Nigeria)
+#SERVICE 4097:0:1:106:0:0:0:0:0:0:http%3a//flash.netcasterusa.com%3a1935/itvlive/itvlive/playlist.m3u8:ITV (Nigeria)
+#DESCRIPTION ITV (Nigeria)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.live.metacdn.com/2450C7/bedkcjfty/lwplus_628.m3u8:Love World Plus TV (religie - Nigeria) 
+#DESCRIPTION Love World Plus TV (religie - Nigeria) 
+#SERVICE 4097:0:1:106:0:0:0:0:0:0:http%3a//109.169.48.7/hls-live/RTV/_definst_/liveevent/livestream.m3u8:Recovery Channel (Nigeria)
+#DESCRIPTION Recovery Channel (Nigeria)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//185.105.4.188%3a1935/tvce/myStream/playlist.m3u8:TV Continental Nigeria (Nigeria)
+#DESCRIPTION TV Continental Nigeria (Nigeria)
+#SERVICE 1:64:f6:0:0:0:0:0:0:0:
+#DESCRIPTION Senegal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//diaspora24.tv%3a1935/diaspora24tv/diaspora24:DIASPORA 24 (Senegal)
+#DESCRIPTION DIASPORA 24 (Senegal)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.creacast.com/mycomedy/smil%3amycomedy.smil/chunklist_w387061222_b1928000.m3u8:MYComedy (Senegal)
+#DESCRIPTION MYComedy (Senegal)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//www.trimi.com.ar%3a80/provincial/streaming/mystream.m3u8:Senegal Provincial (Senegal)
+#DESCRIPTION Senegal Provincial (Senegal)
+#SERVICE 1:64:f7:0:0:0:0:0:0:0:
+#DESCRIPTION Somalië
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//cdn01.iqbroadcast.tv%3a8081/g1/sbscvt1206/playlist.m3u8:SBC TV (Somalië)
+#DESCRIPTION SBC TV (Somalië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.smartal.net%3a25461/live/lUEGmrCOfE/G7CIXFgr9A/8622.m3u8:Somali News TV (Somalië)
+#DESCRIPTION Somali News TV (Somalië)
+#SERVICE 1:64:f8:0:0:0:0:0:0:0:
+#DESCRIPTION Soedan
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tayba.live.net.sa%3a1935/tayba/taybatv/playlist.m3u8:Tayba TV (Soedan)
+#DESCRIPTION Tayba TV (Soedan)
+#SERVICE 1:64:f9:0:0:0:0:0:0:0:
+#DESCRIPTION Tunesië
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming.toutech.net/live//jawharafm.sdp:Jawhara FM webcam (Tunesië)
+#DESCRIPTION Jawhara FM webcam (Tunesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wowzacontrol.com%3a1935/8088/8088/chunklist.m3u8:Zitouna TV (Tunesië)
+#DESCRIPTION Zitouna TV (Tunesië)
+#SERVICE 1:64:fa:0:0:0:0:0:0:0:
+#DESCRIPTION Zimbabwe
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//41.57.65.170%3a8001/live/zbc/index.m3u8:ZIM24 (Zimbabwe)
+#DESCRIPTION ZIM24 (Zimbabwe)
+#SERVICE 1:64:fb:0:0:0:0:0:0:0:
+#DESCRIPTION Zuid-Afrika
+#SERVICE 4097:0:1:60:2:4:0:0:0:0:rtsp%3a//vod.interworks.in%3a1935/live/boktv:BOK TV (Zuid-Afrika)
+#DESCRIPTION BOK TV (Zuid-Afrika)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//109.169.48.7/hls-live/ILembeTV/_definst_/liveevent/livestream.m3u8:Ilembe TV (Zuid-Afrika)
+#DESCRIPTION Ilembe TV (Zuid-Afrika)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//player.webvideocore.net/CL1olYogIrDWvwqiIKK7eBmnWbRkKKsu3nqabm9GlX02JOj3CDNXzodJMDEN2dk3/a_18rwoe8djxxc.m3u8:Life Destiny TV (Zuid-Afrika)
+#DESCRIPTION Life Destiny TV (Zuid-Afrika)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//streaming.viewsat.eu/viewsatstream05/viewsatstream05.smil/playlist.m3u8:Spirit World (religie- Zuid-Afrika)
+#DESCRIPTION Spirit World (religie- Zuid-Afrika)

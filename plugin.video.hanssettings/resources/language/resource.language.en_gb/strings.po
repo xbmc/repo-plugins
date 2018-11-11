@@ -1,0 +1,27 @@
+# Kodi Media Center language file
+# Addon Name: Kanalenlijst Hans (Streams)
+# Addon id: plugin.video.hanssettings
+# Addon Provider: Opvolger
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "Read stream files..."
+msgstr "Read stream files..."
+
+msgctxt "#32002"
+msgid "Progress"
+msgstr "Progress"
+
+msgctxt "#32003"
+msgid "Files %d/%d done"
+msgstr "Files %d/%d done"
+
+msgctxt "#32004"
+msgid "Kanalenlijst Hans (Streams)"
+msgstr "Kanalenlijst Hans (Streams)"

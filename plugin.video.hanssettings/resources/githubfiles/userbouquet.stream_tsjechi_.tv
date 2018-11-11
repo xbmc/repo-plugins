@@ -1,0 +1,67 @@
+#NAME Stream Tsjechië
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//65.254.55.10%3a4000/live/196/196.m3u8:Ceskoslovensko HD (Tsjechië)
+#DESCRIPTION Ceskoslovensko HD (Tsjechië)
+#SERVICE 4097:0:1:389:0:0:0:0:0:0:http%3a//213.81.153.221%3a8080/cetv:CETV (Tsjechië)
+#DESCRIPTION CETV (Tsjechië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//199.195.199.196%3a5000/live/368/368.m3u8:Doma  (Tsjechië)
+#DESCRIPTION Doma  (Tsjechië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp.elektrika.cz/live/myStream.sdp:Elektrika TV (Tsjechië)
+#DESCRIPTION Elektrika TV (Tsjechië)
+#SERVICE 4097:0:1:98:0:0:0:0:0:0:http%3a//65.254.55.10%3a4000/live/197/197.m3u8:Eurosport 1  (Tsjechië)
+#DESCRIPTION Eurosport 1  (Tsjechië)
+#SERVICE 4097:0:1:100:0:0:0:0:0:0:http%3a//195.206.253.157%3a8001/eurosport2hd:Eurosport 2  (Tsjechië)
+#DESCRIPTION Eurosport 2  (Tsjechië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//nn.geo.joj.sk/hls/family-540.m3u8:JOJ Family  (Tsjechië)
+#DESCRIPTION JOJ Family  (Tsjechië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//199.195.199.196%3a5000/live/367/367.m3u8:JOJ+ (Tsjechië)
+#DESCRIPTION JOJ+ (Tsjechië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//vysilani.zaktv.cz%3a8000/live/hls/jtv/index.m3u8:JTV (Tsjechië) 
+#DESCRIPTION JTV (Tsjechië) 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//65.254.55.10%3a4000/live/195/195.m3u8:Nick (Tsjechië)
+#DESCRIPTION Nick (Tsjechië)
+#SERVICE 4097:0:1:355:0:0:0:0:0:0:http%3a//174.36.163.12%3a4000/live/304/304.m3u8:nova action  (Tsjechië)
+#DESCRIPTION nova action  (Tsjechië)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:https%3a//ocko-live.ssl.cdn.cra.cz/channels/ocko/playlist.m3u8:Ocko
+#DESCRIPTION Ocko
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:https%3a//ocko-live.ssl.cdn.cra.cz/channels/ocko_expres/playlist.m3u8:Ocko expres
+#DESCRIPTION Ocko expres
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:https%3a//ocko-live.ssl.cdn.cra.cz/channels/ocko_gold/playlist.m3u8:Ocko gold
+#DESCRIPTION Ocko gold
+#SERVICE 4097:0:1:1335:ca2:3:eb0000:0:0:0:https%3a//ocko-live-dash.ssl.cdn.cra.cz/cra_live2/ocko_gold.stream.1.smil/master.m3u8:Ocko Star (muziek - Tsjechë)
+#DESCRIPTION Ocko Star (muziek - Tsjechë)
+#SERVICE 4097:0:1:1451:c98:3:eb0000:0:0:0:https%3a//ocko-live-dash.ssl.cdn.cra.cz/cra_live2/ocko.stream.1.smil/master.m3u8:Ocko TV (muziek - Tsjechë) 
+#DESCRIPTION Ocko TV (muziek - Tsjechë) 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//199.195.199.196%3a5000/live/410/410.m3u8:Rebel (Tsjechië)
+#DESCRIPTION Rebel (Tsjechië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//s1.media-planet.sk%3a80/live/reduta:Reduta
+#DESCRIPTION Reduta
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//199.195.199.196%3a5000/live/412/412.m3u8:Retro  (Tsjechië)
+#DESCRIPTION Retro  (Tsjechië)
+#SERVICE 4097:0:1:456:0:0:0:0:0:0:http%3a//stream.mediawork.cz/retrotv/smil%3aretrotv2.smil/playlist.m3u8:Retro Music Television (Tsjechië)
+#DESCRIPTION Retro Music Television (Tsjechië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.slusnejkanal.cz/hls/sktv.m3u8:Slusnej rock kanal (Tsjechië)
+#DESCRIPTION Slusnej rock kanal (Tsjechië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//199.195.199.196%3a5000/live/312/312.m3u8:Spektrum HOME  (Tsjechië)
+#DESCRIPTION Spektrum HOME  (Tsjechië)
+#SERVICE 4097:0:1:104:0:0:0:0:0:0:http%3a//str01.mediatech.by%3a9001/sport1mp4b1:Sport 1 (Tsjechië)
+#DESCRIPTION Sport 1 (Tsjechië)
+#SERVICE 4097:0:1:106:0:0:0:0:0:0:http%3a//str01.mediatech.by%3a9001/sport1mp2b1:Sport 1 (Tsjechië)
+#DESCRIPTION Sport 1 (Tsjechië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//199.195.199.196%3a5000/live/365/365.m3u8:STV 1
+#DESCRIPTION STV 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//199.195.199.196%3a5000/live/366/366.m3u8:STV 2  (Tsjechië)
+#DESCRIPTION STV 2  (Tsjechië)
+#SERVICE 4097:0:1:387:0:0:0:0:0:0:http%3a//213.81.153.221%3a8080/galanta:Televízia Galanta  (Tsjechië)
+#DESCRIPTION Televízia Galanta  (Tsjechië)
+#SERVICE 4097:0:1:385:0:0:0:0:0:0:http%3a//213.81.153.221%3a8080/hronka:Televízia Hronka - Banska Bystrica (Tsjechië)
+#DESCRIPTION Televízia Hronka - Banska Bystrica (Tsjechië)
+#SERVICE 4097:0:1:377:0:0:0:0:0:0:https%3a//nn.geo.joj.sk/hls/joj-360.m3u8:Televízia JOJ (Tsjechië)
+#DESCRIPTION Televízia JOJ (Tsjechië)
+#SERVICE 4097:0:1:379:0:0:0:0:0:0:https%3a//nn.geo.joj.sk/hls/jojplus-540.m3u8:Televízia JOJ Plus (Tsjechië)
+#DESCRIPTION Televízia JOJ Plus (Tsjechië)
+#SERVICE 4097:0:1:383:0:0:0:0:0:0:http%3a//213.81.153.221%3a8080/nasa:Televízia Naša (Tsjechië)
+#DESCRIPTION Televízia Naša (Tsjechië)
+#SERVICE 4097:0:1:381:0:0:0:0:0:0:https%3a//nn.geo.joj.sk/hls/wau-540.m3u8:Televízia Wau (Tsjechië)
+#DESCRIPTION Televízia Wau (Tsjechië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//s1.media-planet.sk/live/pezinok/playlist.m3u8:TV PEZINOK
+#DESCRIPTION TV PEZINOK

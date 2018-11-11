@@ -1,0 +1,23 @@
+#NAME Stream Aruba, Bonaire, Curaçao
+#SERVICE 1:64:104:0:0:0:0:0:0:0:
+#DESCRIPTION ++Aruba++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn.setar.aw%3a1935/Telearuba/smil%3atelearuba.smil/chunklist_w964107368_b896000_sleng.m3u8:TeleAruba (Aruba)
+#DESCRIPTION TeleAruba (Aruba)
+#SERVICE 1:64:105:0:0:0:0:0:0:0:
+#DESCRIPTION ++Bonaire++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//panchito13.flashmediacast.com%3a2087/live/livestream/playlist.m3u8:NOS TV Bonaire (Bonaire)
+#DESCRIPTION NOS TV Bonaire (Bonaire)
+#SERVICE 1:64:106:0:0:0:0:0:0:0:
+#DESCRIPTION ++Curaçao++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//nlengine1.cur.watch/cba/auto/playlist.m3u8:CBA (Curacao)
+#DESCRIPTION CBA (Curacao)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//highvolume04.streampartner.nl%3a1935/nos_pais_24_7/smil%3alivestream.stream.smil/chunklist_w1798703532_b2000000.m3u8:Nos Pais TV (Curaçao)
+#DESCRIPTION Nos Pais TV (Curaçao)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//unsecure.streann.com/loadbalancer/services/public/channels/56992db2e4b045bf250ba13c/playlist.m3u8:Tele Curacao (Curacao)
+#DESCRIPTION Tele Curacao (Curacao)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge1.tvdirect13.com/live/smil%3amystream.smil/playlist_720p.m3u8:TV Direct 13 (Curacao)
+#DESCRIPTION TV Direct 13 (Curacao)
+#SERVICE 1:64:107:0:0:0:0:0:0:0:
+#DESCRIPTION ++Antillen algemeen++
+#SERVICE 4097:0:1:131:2:4:0:0:0:0:http%3a//hls.tmacaraibes.com/live/index.m3u8:TMA - Television Musicale Antillaise (muziek - Antillen)
+#DESCRIPTION TMA - Television Musicale Antillaise (muziek - Antillen)

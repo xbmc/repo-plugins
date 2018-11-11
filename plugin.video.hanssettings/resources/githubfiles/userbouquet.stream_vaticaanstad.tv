@@ -1,0 +1,3 @@
+#NAME Stream Uruguay
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wowza.montevideo.com.uy%3a1936/live/_definst_/mvdstrem/chunklist_w1488231185.m3u8:Canal M (Uruguay)
+#DESCRIPTION Canal M (Uruguay)

@@ -1,0 +1,289 @@
+#NAME Stream Azië
+#SERVICE 1:64:108:0:0:0:0:0:0:0:
+#DESCRIPTION ++Azië algemeen++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//liveprodapnortheast.global.ssl.fastly.net/ap1/Channel-APTVqvs-AWS-tokyo-1/Source-APTVqvs-1000-1_live.m3u8:Bloomberg Azië
+#DESCRIPTION Bloomberg Azië
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//drsh196ivjwe8.cloudfront.net/hls/cnai/01.m3u8:Channel News Asia
+#DESCRIPTION Channel News Asia
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//www.metafilegenerator.de/DWelle/tv-asia/ios/master.m3u8:DW Asia
+#DESCRIPTION DW Asia
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//live.hkstv.hk.lxdns.com/live/hks:HKS
+#DESCRIPTION HKS
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//peace.fms.visionip.tv/live/b2b-peace_asia-live-25f-4x3-sdh_1:Peace Tv Asia
+#DESCRIPTION Peace Tv Asia
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ec.sinovision.net/video/ts/lv.m3u8:Sinovision TV (Chinees from USA)
+#DESCRIPTION Sinovision TV (Chinees from USA)
+#SERVICE 1:64:109:0:0:0:0:0:0:0:
+#DESCRIPTION ++Azerbeidzjan++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//85.132.78.6%3a1935/live/muztv.stream/playlist.m3u8:MUZ TV (Azerbaidzjan) 
+#DESCRIPTION MUZ TV (Azerbaidzjan) 
+#SERVICE 1:64:10a:0:0:0:0:0:0:0:
+#DESCRIPTION ++China zie Stream China++
+#SERVICE 1:64:10b:0:0:0:0:0:0:0:
+#DESCRIPTION ++Filipijnen++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//54.251.134.121/live/15273.sdp:CNN Philippines
+#DESCRIPTION CNN Philippines
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//churchrus2-lh.akamaihd.net/i/coctesting_1@57550/index_1500_av-p.m3u8?sd=10&rebase=on:INCTV (Filipijnen)
+#DESCRIPTION INCTV (Filipijnen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//untv.mmdlive.lldns.net/untv/71b244db6e8f4c93a68737f025340f8f/chunklist_b1128000.m3u8?auto:UNTV (Filipijnen)
+#DESCRIPTION UNTV (Filipijnen)
+#SERVICE 1:64:10c:0:0:0:0:0:0:0:
+#DESCRIPTION ++India zie Stream India++
+#SERVICE 1:64:10d:0:0:0:0:0:0:0:
+#DESCRIPTION ++Indonesië zie Stream Indonesië++
+#SERVICE 1:64:10e:0:0:0:0:0:0:0:
+#DESCRIPTION ++Kazachstan++
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//212.8.233.150%3a8081/kazahtv/stream_kz/playlist.m3u8:Kazakh TV (Kazachstan) 
+#DESCRIPTION Kazakh TV (Kazachstan) 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//89.218.30.37/ktklive/live.lq/playlist.m3u8:КТК (Kazachstan)
+#DESCRIPTION КТК (Kazachstan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//tv2.esilnet.com/hls/mtrk.m3u8:MTRK (Kazachstan)
+#DESCRIPTION MTRK (Kazachstan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//radio.kaztrk.kz/astvideo/astanafm/index.m3u8:Радио Астана (Kazachstan)
+#DESCRIPTION Радио Астана (Kazachstan)
+#SERVICE 1:64:10f:0:0:0:0:0:0:0:
+#DESCRIPTION ++Kirgizië++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ip.tumar.tv/hls/mstream.m3u8:Tumar TV (Kirgizië)
+#DESCRIPTION Tumar TV (Kirgizië)
+#SERVICE 1:64:110:0:0:0:0:0:0:0:
+#DESCRIPTION ++Malediven++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//vtvstreaming.myvnc.com%3a1935/vtvlive/vmedia/playlist.m3u8:VTV (Malediven)
+#DESCRIPTION VTV (Malediven)
+#SERVICE 1:64:111:0:0:0:0:0:0:0:
+#DESCRIPTION ++Maleisië++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//playback02.aotg-video.astro.com.my/AOTGHLS/master_AECAPP.m3u8:Astro AEC (Maleisië)
+#DESCRIPTION Astro AEC (Maleisië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//bcoveliveios-i.akamaihd.net/hls/live/225864/4508222217001/master.m3u8:Astro Awani (Maleisië)
+#DESCRIPTION Astro Awani (Maleisië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream2.1malaysiaiptv.com/mylive/smil%3abernama2_all.smil/playlist.m3u8:Bernama TV (Maleisië)
+#DESCRIPTION Bernama TV (Maleisië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//104275ooyala-lh.akamaihd.net/i/forevergroup_03@449367/master.m3u8:Channel 7 (Maleisië)
+#DESCRIPTION Channel 7 (Maleisië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//104275ooyala-lh.akamaihd.net/i/forevergroup_01@449365/master.m3u8:Mahar Bawdi (Maleisië)         
+#DESCRIPTION Mahar Bawdi (Maleisië)         
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//104275ooyala-lh.akamaihd.net/i/forevergroup_02@449366/master.m3u8:MRTV 4 (Maleisië)
+#DESCRIPTION MRTV 4 (Maleisië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rtm-live.glueapi.io/smil%3artmch001/playlist.m3u8:TV 1 (Maleisië)
+#DESCRIPTION TV 1 (Maleisië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rtm-live.glueapi.io/smil%3artmch006/playlist.m3u8:TV 1 News (Maleisië)
+#DESCRIPTION TV 1 News (Maleisië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rtm-live.glueapi.io/smil%3artmch002/playlist.m3u8:TV 2 (Maleisië)
+#DESCRIPTION TV 2 (Maleisië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge.vediostream.com/abr/tvikim/playlist.m3u8:TV IKIM (Maleisië)
+#DESCRIPTION TV IKIM (Maleisië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rtm-live.glueapi.io/smil%3artmch003/playlist.m3u8:TV OKEY (Maleisië)
+#DESCRIPTION TV OKEY (Maleisië)
+#SERVICE 1:64:112:0:0:0:0:0:0:0:
+#DESCRIPTION ++Nepal++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.zecast.net/ntvglobal/nepalitv/chunklist.m3u8:Nepali TV (Nepal)
+#DESCRIPTION Nepali TV (Nepal)
+#SERVICE 1:64:113:0:0:0:0:0:0:0:
+#DESCRIPTION ++Oezbekistan++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//serv1.milliy.tv/hls/index_240.m3u8:Milliy TV (Oezbekistan)
+#DESCRIPTION Milliy TV (Oezbekistan)
+#SERVICE 1:64:114:0:0:0:0:0:0:0:
+#DESCRIPTION ++Pakistan++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//92news.vdn.dstreamone.net/92newshd/92hd/playlist.m3u8:92 News (Pakistan)
+#DESCRIPTION 92 News (Pakistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//149.202.205.24%3a1935/DIGITAL/myStream/playlist.m3u8:ARY Digital (Pakistan)
+#DESCRIPTION ARY Digital (Pakistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//158.69.228.195%3a1935/newsmobile/myStream/playlist.m3u8:ARY News (Pakistan)
+#DESCRIPTION ARY News (Pakistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//imob.dunyanews.tv%3a1935/live/smil%3astream.smil/playlist.m3u8:Dunya TV (Pakistan)
+#DESCRIPTION Dunya TV (Pakistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dcunilive24-lh.akamaihd.net/i/dclive_1@32270/master.m3u8:KAY2 (Pakistan)
+#DESCRIPTION KAY2 (Pakistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//67.231.248.131%3a1935/live/PTVnews/chunklist_w1281891626.m3u8:PTV News (Pakistan)
+#DESCRIPTION PTV News (Pakistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//live.server4sale.com/live/8090:PTV WORLD / Pakistan
+#DESCRIPTION PTV WORLD / Pakistan
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streamer62.eboundservices.com/tv/roze/chunks.m3u8:Roze News (Pakistan)
+#DESCRIPTION Roze News (Pakistan)
+#SERVICE 1:64:115:0:0:0:0:0:0:0:
+#DESCRIPTION ++Singapore++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ddftztnzt6o79.cloudfront.net/hls/oktopcweb/03.m3u8:Okto (Singapore)
+#DESCRIPTION Okto (Singapore)
+#SERVICE 1:64:116:0:0:0:0:0:0:0:
+#DESCRIPTION ++Sri Lanka++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dammikartmp.tulix.tv/slrc1/slrc1/chunklist_w747273608.m3u8:Rupavahini TV (Sri Lanka)
+#DESCRIPTION Rupavahini TV (Sri Lanka)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//54.255.155.24%3a1935//Live/_definst_/amlst%3asweetbcha1novD235L240P/playlist.m3u8:SRI LANKA DD1
+#DESCRIPTION SRI LANKA DD1
+#SERVICE 1:64:117:0:0:0:0:0:0:0:
+#DESCRIPTION ++Taiwan++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//blake-ep171124.azureedge.net/hls/bltv.m3u8:Beautiful Life TV (Taiwan)
+#DESCRIPTION Beautiful Life TV (Taiwan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//t-180412.3rd-evo.com/titv-live/_definst_/smil%3atitv/titv.smil/playlist.m3u8:Taiwan Indigenous TV (Taiwan)
+#DESCRIPTION Taiwan Indigenous TV (Taiwan)
+#SERVICE 1:64:118:0:0:0:0:0:0:0:
+#DESCRIPTION ++Tamil++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//liveplay3.malimarcdn.com/ibcnews/ibcnews.sdp:IBC NEWS (Tamil)
+#DESCRIPTION IBC NEWS (Tamil)
+#SERVICE 1:64:119:0:0:0:0:0:0:0:
+#DESCRIPTION ++Thailand: apart boeket!++
+#SERVICE 1:64:11a:0:0:0:0:0:0:0:
+#DESCRIPTION ++Turkmenistan++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//alpha.tv.online.tm/hls/ch006_720/index.m3u8:Agabat (Turkmenistan)
+#DESCRIPTION Agabat (Turkmenistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//alpha.tv.online.tm/hls/ch001_720/index.m3u8:Altyn Asyr (Turkmenistan)
+#DESCRIPTION Altyn Asyr (Turkmenistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//alpha.tv.online.tm/hls/ch003_720/index.m3u8:Miras (Turkmenistan)
+#DESCRIPTION Miras (Turkmenistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//alpha.tv.online.tm/hls/ch007_720/index.m3u8:Trkmenistan (Turkmenistan)
+#DESCRIPTION Trkmenistan (Turkmenistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//217.174.225.146/legacyhls/ch005_400/index.m3u8:Turkmen Owazy (Turkmenistan)
+#DESCRIPTION Turkmen Owazy (Turkmenistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//217.174.225.146/legacyhls/ch004_400/index.m3u8:Turkmen Sport (sport - Turkmenistan)
+#DESCRIPTION Turkmen Sport (sport - Turkmenistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//217.174.225.146/legacyhls/ch007_400/index.m3u8:Turkmenistan (Turkmenistan)
+#DESCRIPTION Turkmenistan (Turkmenistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//alpha.tv.online.tm/hls/ch004_720/index.m3u8:Türkmenistan Sport (sport - Turkmenistan)
+#DESCRIPTION Türkmenistan Sport (sport - Turkmenistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//alpha.tv.online.tm/hls/ch002_720/index.m3u8:Yalyk (Turkmenistan)
+#DESCRIPTION Yalyk (Turkmenistan)
+#SERVICE 1:64:11b:0:0:0:0:0:0:0:
+#DESCRIPTION ++Vietnam++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//antvlive.ab5c6921.cdnviet.com/antv/chunklist.m3u8:ANTV - Truyền hình công an nhân dân (Vietnam)
+#DESCRIPTION ANTV - Truyền hình công an nhân dân (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//118.69.205.213/livepkgr/livestream1:Bac Lieu (Vietnam)
+#DESCRIPTION Bac Lieu (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//drtdnglive.e49a7c38.cdnviet.com/livedrt1/chunklist.m3u8:Da Nang 1 (Vietnam)
+#DESCRIPTION Da Nang 1 (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//drtdnglive.e49a7c38.cdnviet.com/livestream/chunklist.m3u8:Da Nang 2 (Vietnam)
+#DESCRIPTION Da Nang 2 (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//123.30.185.126/hls/travinh.m3u8:Tra Vinh (Vietnam)
+#DESCRIPTION Tra Vinh (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//uni6rtmp.tulix.tv%3a1935/vbstv/vbsabr.smil/chunklist_w1847269952_b204800.m3u8:VBS Canada (Vietnam)
+#DESCRIPTION VBS Canada (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//uni6rtmp.tulix.tv%3a1935/vbstv/vbsabr.smil/chunklist_w189527979_b1228800.m3u8:VBS (Vietnam)
+#DESCRIPTION VBS (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//68.235.37.11%3a1935/vietmagazine/vietmagazine/playlist.m3u8:VIET MY TV (Vietnam)
+#DESCRIPTION VIET MY TV (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//saigontvtv.saigon.ns01.us%3a1935/VietStarTV/myStream/chunklist_w36065371.m3u8:VIET STAR 57.11 / Vietnam
+#DESCRIPTION VIET STAR 57.11 / Vietnam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//125.235.29.16/livetv/keeng.m3u8:KEENG TV / Vietnam
+#DESCRIPTION KEENG TV / Vietnam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn-livestream-live.vtvgiaitri.vn/vtv1.smil/chunklist_b2000000.m3u8:VTV 1 HD (Vietnam)
+#DESCRIPTION VTV 1 HD (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn-livestream-live.vtvgiaitri.vn/vtv2.smil/chunklist_b2000000.m3u8:VTV 2 HD (Vietnam)
+#DESCRIPTION VTV 2 HD (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn-livestream-live.vtvgiaitri.vn/vtv3.smil/chunklist_b2000000.m3u8:VTV 3 HD (Vietnam)
+#DESCRIPTION VTV 3 HD (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn-livestream-live.vtvgiaitri.vn/vtv4.smil/chunklist_b2000000.m3u8:VTV 4 HD (Vietnam)
+#DESCRIPTION VTV 4 HD (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn-livestream-live.vtvgiaitri.vn/vtv5.smil/chunklist_b2000000.m3u8:VTV 5 HD (Vietnam)
+#DESCRIPTION VTV 5 HD (Vietnam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn-livestream-live.vtvgiaitri.vn/vtv6.smil/chunklist_b2000000.m3u8:VTV 6 HD (Vietnam)
+#DESCRIPTION VTV 6 HD (Vietnam)
+#SERVICE 1:64:11c:0:0:0:0:0:0:0:
+#DESCRIPTION ++Zuid-Korea++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//amdlive.ctnd.com.edgesuite.net/arirang_1ch/smil%3aarirang_1ch.smil/playlist.m3u8:Arirang TV - Zuid Korea
+#DESCRIPTION Arirang TV - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge1.everyon.tv/etv1sb/phd191/chunklist_w2109453018.m3u8:Billiards TV - Zuid Korea
+#DESCRIPTION Billiards TV - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cbs-live.gscdn.com/cbs-live/cbs-live.stream/playlist.m3u8:CBS - Zuid Korea
+#DESCRIPTION CBS - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//main1sb.everyon.tv%3a1935/etv1sb/_definst_/phd1/playlist.m3u8:CMC - Zuid Korea
+#DESCRIPTION CMC - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge1.everyon.tv/etv1/phd28/chunklist_w710953783.m3u8:CTS TV - Zuid Korea
+#DESCRIPTION CTS TV - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ebsonair.ebs.co.kr%3a1935/ebs1familypc/familypc1m/playlist.m3u8:EBS 1 - Zuid Korea
+#DESCRIPTION EBS 1 - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ebsonair.ebs.co.kr%3a1935/ebs2familypc/familypc1m/playlist.m3u8:EBS 2 - Zuid Korea
+#DESCRIPTION EBS 2 - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ebsonair.ebs.co.kr%3a1935/ebsufamilypc/familypc1m/playlist.m3u8:EBS U - Zuid Korea
+#DESCRIPTION EBS U - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ebsonair.ebs.co.kr%3a1935/plus3familypc/familypc1m/playlist.m3u8:EBC S - Zuid Korea
+#DESCRIPTION EBC S - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ebsonair.ebs.co.kr%3a1935/plus1tablet500k/tablet500k/playlist.m3u8:EBS Plus 1 - Zuid Korea
+#DESCRIPTION EBS Plus 1 - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ebsonair.ebs.co.kr%3a1935/plus2tablet500k/tablet500k/playlist.m3u8:EBS Plus 2 - Zuid Korea
+#DESCRIPTION EBS Plus 2 - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ebsonair.ebs.co.kr/ebsufamilypc/familypc1m/playlist.m3u8:EBS - Kids (Zuid-Korea)
+#DESCRIPTION EBS - Kids (Zuid-Korea)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge1.everyon.tv/etv1/phd2/chunklist_w952962869.m3u8:ETN - Zuid Korea
+#DESCRIPTION ETN - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge1.everyon.tv/etv1/phd12/chunklist_w418990445.m3u8:FTV - Zuid Korea
+#DESCRIPTION FTV - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//smart.igtb.co.kr%3a1935/live/stream.sdp/playlist.m3u8:GI SBS - Zuid Korea
+#DESCRIPTION GI SBS - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//mobliestream.c3tv.com%3a554/live/goodtv.sdp/playlist.m3u8:Good TV (Zuid Korea)
+#DESCRIPTION Good TV (Zuid Korea)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dlhls.cdn.zhanqi.tv/zqlive/49427_jmACJ.m3u8:Japon Korea Movies (Zuid-Korea)
+#DESCRIPTION Japon Korea Movies (Zuid-Korea)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//221.157.125.232%3a1935/live/kbctv/playlist.m3u8:KBC SBS - Zuid Korea
+#DESCRIPTION KBC SBS - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge1.everyon.tv/etv1/phd387/chunklist_w1890557880.m3u8:KBN - Zuid Korea
+#DESCRIPTION KBN - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//main2.everyon.tv%3a1935/etv2/_definst_/phd865:KBS HD - Zuid Korea
+#DESCRIPTION KBS HD - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//live2.kbs.gscdn.com/1tv_home/_definst_/?id=2101&secure=c2lkPWticy1saXZlJnRva2VuPUtCUy1MSVZFOTdBRjY4M0U5NDFEJmlzc3Vlcj01OC4yMjcuMTk0LjEwNiZjaWQ9NUEzOEY0RDAwRDAyJnBhdGg9LzF0dl9ob21lL19kZWZpbnN0Xy8xdHZfaG9tZS5zdHJlYW0mZmlsZT0xdHZfaG9tZS5zdHJlYW0mYnlwYXNzPWZhbHNlJmF0aW1lPTEzNDczNTc1NDQ=:KBS 1 - Zuid Korea
+#DESCRIPTION KBS 1 - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//live2.kbs.gscdn.com/2tv_home/_definst_/?id=2101&secure=c2lkPWticy1saXZlJnRva2VuPUtCUy1MSVZFOTg0RUU3NzhCNjU3Jmlzc3Vlcj01OC4yMjcuMTk0LjEwNiZjaWQ9RTcxNkFCNUEyRjBCJnBhdGg9LzJ0dl9ob21lL19kZWZpbnN0Xy8ydHZfaG9tZS5zdHJlYW0mZmlsZT0ydHZfaG9tZS5zdHJlYW0mYnlwYXNzPWZhbHNlJmF0aW1lPTEzNDczNTc1NjM=:KBS 2 - Zuid Korea
+#DESCRIPTION KBS 2 - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//112.175.138.137%3a1935/news24/_definst_/news24_800.stream/playlist.m3u8:KBS 24 - Zuid Korea
+#DESCRIPTION KBS 24 - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//112.175.138.137%3a1935/kbsn_drama/_definst_/kbsn_drama_5.stream/playlist.m3u8:KBS Drama - Zuid Korea
+#DESCRIPTION KBS Drama - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//112.175.138.137%3a1935/kbsn_joy/_definst_/kbsn_joy_5.stream/playlist.m3u8:KBS Joy - Zuid Korea
+#DESCRIPTION KBS Joy - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//112.175.138.137%3a1935/kbsn_kids/_definst_/kbsn_kids_5.stream/playlist.m3u8:KBS Kids - Zuid Korea
+#DESCRIPTION KBS Kids - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//112.175.138.137%3a1935/kbsn_wtv/_definst_/kbsn_wtv_5.stream/playlist.m3u8:KBS W - Zuid Korea
+#DESCRIPTION KBS W - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge1.everyon.tv%3a1935:KBSN Plus - Zuid Korea
+#DESCRIPTION KBSN Plus - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//221.157.125.232%3a1935:KBSN Sports - Zuid Korea
+#DESCRIPTION KBSN Sports - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//122.202.129.136%3a1935/live/ch5/playlist.m3u8:KCTV HD - Zuid Korea
+#DESCRIPTION KCTV HD - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//slive.sciencetv.kr%3a1935/science/yslive_20140419_1/chunklist_w2065795695.m3u8:KOREAN YTN SCIENC / Zuid Korea
+#DESCRIPTION KOREAN YTN SCIENC / Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//218.38.152.69%3a1935/da_live/72136989/mp4%3ach001/playlist.m3u8:KTV - Zuid Korea
+#DESCRIPTION KTV - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//m2otv-lh.akamaihd.net/i/m2oTv_1@186074/index_600_av-b.m3u8:M20 TV - Zuid Korea
+#DESCRIPTION M20 TV - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//123.108.164.71/etv2/phd847/chunklist_w505134090.m3u8:MBC - Zuid Korea
+#DESCRIPTION MBC - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//199.21.149.41%3a9083/live/CA42-live1/Vp/Ob/VpObAKeinniCi6LuFRmkLA==/live.m3u8:Met - Zuid Korea
+#DESCRIPTION Met - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge2.everyon.tv/etv2/phd337/playlist.m3u8:Mountain TV - Zuid Korea
+#DESCRIPTION Mountain TV - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge1.everyon.tv%3a1935/etv1sb/phd18/playlist.m3u8:MTN HD - Zuid Korea
+#DESCRIPTION MTN HD - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge2.everyon.tv/etv2/phd639/chunklist_w302693476.m3u8:NBN TV - Zuid Korea
+#DESCRIPTION NBN TV - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge2.everyon.tv/etv2/phd1042/chunklist_w1540475700.m3u8:OBS - Zuid Korea
+#DESCRIPTION OBS - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge2.everyon.tv/etv2/phd1042/chunklist_w608139655.m3u8:OBS W - Zuid Korea
+#DESCRIPTION OBS W - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge2.everyon.tv/etv2/phd30/chunklist_w1437445556.m3u8:ONT - Zuid Korea
+#DESCRIPTION ONT - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//123.108.164.71/etv2/phd847/playlist.m3u8:SBS - Zuid Korea
+#DESCRIPTION SBS - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//198.144.156.93%3a9083/live/CA42-live1/aU/Zx/aUZxH_RUOehMBmBXwZjwjQ==/live.m3u8:SBS Golf - Zuid Korea
+#DESCRIPTION SBS Golf - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge2.everyon.tv/etv2sb/phd753/chunklist_w881820644.m3u8:SNS - Zuid Korea
+#DESCRIPTION SNS - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge1.everyon.tv/etv1/phd852/chunklist_w1836653927.m3u8:STN - Zuid Korea
+#DESCRIPTION STN - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//221.157.125.232%3a1935/live/psike app=live/ pageUrl=http%3a//www.tbc.co.kr/tbc_player/player_onair.html swfUrl=http%3a//www.tbc.co.kr/tbc_player/jwplayer/jwplayer.flash.swf tcUrl=rtmp%3a//221.157.125.232%3a1935/live/ playPath=psike live=1:TBC - Zuid Korea
+#DESCRIPTION TBC - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:  http%3a//221.157.125.232%3a1935/live/psike/playlist.m3u8:TBC SBS - Zuid Korea
+#DESCRIPTION TBC SBS - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge2.everyon.tv/etv2/phd40/chunklist_w1197581457.m3u8:TBS - Zuid Korea
+#DESCRIPTION TBS - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//etomatofms2.hscdn.com/etomato.dvr/mp4%3aetomato:Tomatopass - Zuid Korea
+#DESCRIPTION Tomatopass - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//main1.everyon.tv%3a1935/etv1/_definst_/phd273/playlist.m3u8:TV - Zuid Korea
+#DESCRIPTION TV - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.chosun.gscdn.com/live/_definst_/tvchosun2.stream/chunklist.m3u8:TV Chosun - Zuid Korea
+#DESCRIPTION TV Chosun - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge2.everyon.tv/etv2/phd22/chunklist_w1797978994.m3u8:TV SEN - Zuid Korea
+#DESCRIPTION TV SEN - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0: http%3a//199.21.149.41%3a9083/live/CA42-live1/Rf/DM/RfDMODnZ-dV2NYqGXlMsRQ==/live.m3u8:TVN - Zuid Korea
+#DESCRIPTION TVN - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//slive.ytn.co.kr%3a1935/ytn/ylivehd_20140419_1/playlist.m3u8:YTN - Zuid Korea
+#DESCRIPTION YTN - Zuid Korea
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//slive.sciencetv.kr%3a1935/science/yslive_20140419_1/playlist.m3u8:YTN Science - Zuid Korea
+#DESCRIPTION YTN Science - Zuid Korea

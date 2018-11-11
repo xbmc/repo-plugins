@@ -1,0 +1,33 @@
+#NAME Stream NL nationaal politiek
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tweedekamerlive.download.kpnstreaming.nl/plenairezaal/2000/prog_index.m3u8:Tweede Kamer grote zaal
+#DESCRIPTION Tweede Kamer grote zaal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tweedekamerlive.download.kpnstreaming.nl/ajacobszaal/2000/prog_index.m3u8:A.Jacobszaal
+#DESCRIPTION A.Jacobszaal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tweedekamerlive.download.kpnstreaming.nl/groenvanprinsterer/2000/prog_index.m3u8:Groen van Prinstererzaal
+#DESCRIPTION Groen van Prinstererzaal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tweedekamerlive.download.kpnstreaming.nl/klompezaal/2000/prog_index.m3u8:Klompezaal
+#DESCRIPTION Klompezaal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tweedekamerlive.download.kpnstreaming.nl/sgroenewegzaal/2000/prog_index.m3u8:S.Groenewegzaal
+#DESCRIPTION S.Groenewegzaal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tweedekamerlive.download.kpnstreaming.nl/thorbeckezaal/2000/prog_index.m3u8:Thorbeckezaal
+#DESCRIPTION Thorbeckezaal
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//tweedekamerlive.download.kpnstreaming.nl/troelstrazaal/2000/prog_index.m3u8:Troelstrazaal
+#DESCRIPTION Troelstrazaal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tweedekamerlive.download.kpnstreaming.nl/wvstoetwegenzaal/2000/prog_index.m3u8:W van Stoetwegenzaal
+#DESCRIPTION W van Stoetwegenzaal
+#SERVICE 1:64:67:0:0:0:0:0:0:0:
+#DESCRIPTION +++indicenteel Tweede Kamer+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tweedekamerlive.download.kpnstreaming.nl/enquetezaal/2000/prog_index.m3u8:Enquetezaal
+#DESCRIPTION Enquetezaal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tweedekamerlive.download.kpnstreaming.nl/evenementenkanaal/2000/prog_index.m3u8:Evenementenkanaal (incidenteel)
+#DESCRIPTION Evenementenkanaal (incidenteel)
+#SERVICE 1:64:68:0:0:0:0:0:0:0:
+#DESCRIPTION +++Eerste Kamer (bij vergadering)+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//streamercdn.connectedviews.com/livehttporigin/ngrp%3aEerstekamer_001.stream_all/playlist.m3u8:Eerste Kamer - 1
+#DESCRIPTION Eerste Kamer - 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//52.50.176.111%3a1935/live/ngrp%3aeerstekamer.stream_all/chunklist_w1831844871_b326197.m3u8:Eerste Kamer - 2
+#DESCRIPTION Eerste Kamer - 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//52.50.176.111%3a1935/live/ngrp%3aeerstekamer.stream_all/chunklist_w1831844871_b976197.m3u8:Eerste Kamer - 3
+#DESCRIPTION Eerste Kamer - 3
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//52.50.176.111%3a1935/live/ngrp%3aeerstekamer.stream_all/chunklist_w1831844871_b4128644.m3u8:Eerste Kamer - 4
+#DESCRIPTION Eerste Kamer - 4

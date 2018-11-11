@@ -1,0 +1,9 @@
+#NAME Stream Luxemburg
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//live-edge04.rtl.lu/eldotv/smil%3aeldotv.smil/chunklist_b4168000_slltz.m3u8:Eldoradio TV (Luxemburg)
+#DESCRIPTION Eldoradio TV (Luxemburg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live01.rtl.lu/channel1/smil%3achannel1/chunklist.m3u8:RTL (Luxemburg)
+#DESCRIPTION RTL (Luxemburg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live-edge01.rtl.lu/channel2/smil%3achannel2/chunklist_b2168000_slltz.m3u8:RTL 2 Tele Letzebourg (Luxemburg)
+#DESCRIPTION RTL 2 Tele Letzebourg (Luxemburg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//wse5.player.tv.br%3a1935/tvmcj/tvmcj:TV MCJ (Luxemburg)
+#DESCRIPTION TV MCJ (Luxemburg)

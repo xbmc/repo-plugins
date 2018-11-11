@@ -1,0 +1,9 @@
+#NAME Stream Jamaica 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//161.0.157.8/PLTV/88888888/224/3221226874/03.m3u8:Catch 2 (Jamaica)
+#DESCRIPTION Catch 2 (Jamaica)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//player.webvideocore.net/CL1olYogIrDWvwqiIKK7eBQU29OvUayFIJiGOZCgrkdXWwDIzxrtAl9mGmmC64HpEOM4Ge8KI-27SGqX_DJHyg==/a_n1eeiwgzyg0g.m3u8:CVM (Jamaica)
+#DESCRIPTION CVM (Jamaica)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//172.93.120.62%3a8080/gbnlive/livestream/index.m3u8:GBN (Jamaica)
+#DESCRIPTION GBN (Jamaica)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.btbn.tv/mtmtv/live/playlist.m3u8:MTM TV (Jamaica)
+#DESCRIPTION MTM TV (Jamaica)

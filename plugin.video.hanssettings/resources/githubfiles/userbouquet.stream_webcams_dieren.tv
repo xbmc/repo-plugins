@@ -1,0 +1,451 @@
+#NAME Stream webcams dieren
+#SERVICE 1:64:a5:0:0:0:0:0:0:0:
+#DESCRIPTION --- Nederland ---
+#SERVICE 1:64:a6:0:0:0:0:0:0:0:
+#DESCRIPTION - diverse -
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/neushoorn-2.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Indische neushoorn 1
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Indische neushoorn 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/neushoorn-1.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Indische neushoorn 2
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Indische neushoorn 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/tapir_binnen.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Kraamstal okapi's (1)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Kraamstal okapi's (1)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/tapir_new.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Kraamstal okapi's (2)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Kraamstal okapi's (2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/olifanten_buitencam1.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (1)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (1)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/olifanten_buitencam2.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (2)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/olifanten1.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (3)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (3)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/tapir_buiten.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Tapir (buiten)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Tapir (buiten)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/neushoorn_kraamstal2.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Zwarte neushoorntje 1
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Zwarte neushoorntje 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/neushoorn_kraamstal1.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Zwarte neushoorntje 2
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Zwarte neushoorntje 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl/vencogroep/vencogroep.stream swfUrl=http%3a//hdtv.webcam.nl/vencogroep/player.swf pageUrl=http%3a//hdtv.webcam.nl/vencogroep/:Eersel - LIVE beelden van de Rondeel kippenstal
+#DESCRIPTION Eersel - LIVE beelden van de Rondeel kippenstal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/tx-lammetjes.stream/chunklist.m3u8:Webcams-Texel.nl - Lammetjes
+#DESCRIPTION Webcams-Texel.nl - Lammetjes
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/ecomare.stream/playlist.m3u8:Webcams-Texel.nl - Zeehondjes-cam
+#DESCRIPTION Webcams-Texel.nl - Zeehondjes-cam
+#SERVICE 1:64:a7:0:0:0:0:0:0:0:
+#DESCRIPTION - nestkastjes vogeltjes -
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming.avex.nl/live/valkbinnen/playlist.m3u8:Amsterdam Gustav Mahlerlaan webcam valk binnen
+#DESCRIPTION Amsterdam Gustav Mahlerlaan webcam valk binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming.avex.nl/live/valkbuiten/playlist.m3u8:Amsterdam Gustav Mahlerlaan webcam valk buiten
+#DESCRIPTION Amsterdam Gustav Mahlerlaan webcam valk buiten
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming.avex.nl/live/valkbuiten2/chunklist_w727384249.m3u8:Amsterdam Gustav Mahlerlaan webcam valk buiten 2
+#DESCRIPTION Amsterdam Gustav Mahlerlaan webcam valk buiten 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//84.22.110.224/live/cam1/mystream.m3u8:Amsterdam Hemweg – Slechtvalk binnen
+#DESCRIPTION Amsterdam Hemweg – Slechtvalk binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//84.22.110.224/live/cam2/mystream.m3u8:Amsterdam Hemweg – Slechtvalk buiten
+#DESCRIPTION Amsterdam Hemweg – Slechtvalk buiten
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/BlijdeWei1.stream/playlist.m3u8:NestkastLIVE - Bijde Wei 1
+#DESCRIPTION NestkastLIVE - Bijde Wei 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Bijen_Binnen.stream/playlist.m3u8:NestkastLIVE - Bijen binnen
+#DESCRIPTION NestkastLIVE - Bijen binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Bijen_Buiten.stream/playlist.m3u8:NestkastLIVE - Bijen buiten
+#DESCRIPTION NestkastLIVE - Bijen buiten
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Boerenzwaluw2.stream/playlist.m3u8:NestkastLIVE - Boerenzwaluw 2
+#DESCRIPTION NestkastLIVE - Boerenzwaluw 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Bosuil3Binnen.stream/playlist.m3u8:NestkastLIVE - Bosuil 3 Binnen
+#DESCRIPTION NestkastLIVE - Bosuil 3 Binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Buizerd.stream/playlist.m3u8:NestkastLIVE - Buizerd
+#DESCRIPTION NestkastLIVE - Buizerd
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Huiszwaluw1Binnen.stream/playlist.m3u8:NestkastLIVE - Huiszwaluw 1 Binnen
+#DESCRIPTION NestkastLIVE - Huiszwaluw 1 Binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Kerkuil1Binnen.stream/playlist.m3u8:NestkastLIVE - Kerkuil 1 binnen
+#DESCRIPTION NestkastLIVE - Kerkuil 1 binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Kerkuil1Buiten.stream/playlist.m3u8:NestkastLIVE - kerkuil 1 Buiten
+#DESCRIPTION NestkastLIVE - kerkuil 1 Buiten
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Koolmees2.stream/playlist.m3u8:NestkastLIVE - Koolmees 2
+#DESCRIPTION NestkastLIVE - Koolmees 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Pimpelmees1.stream/playlist.m3u8:NestkastLIVE - Pimpelmees 1
+#DESCRIPTION NestkastLIVE - Pimpelmees 1
+#SERVICE 4097:0:1:6:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Pimpelmees2.stream/chunklist_w330729289.m3u8:NestkastLIVE - Pimpelmees 2
+#DESCRIPTION NestkastLIVE - Pimpelmees 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Slechtvalk1Binnen.stream/playlist.m3u8:NestkastLIVE - Slechtvalk 1 Binnen
+#DESCRIPTION NestkastLIVE - Slechtvalk 1 Binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Slechtvalk1Buiten.stream/playlist.m3u8:NestkastLIVE - Slechtvalk 1 Buiten
+#DESCRIPTION NestkastLIVE - Slechtvalk 1 Buiten
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Spreeuw2Binnen.stream/playlist.m3u8:NestkastLIVE - Spreeuw 2  Binnen
+#DESCRIPTION NestkastLIVE - Spreeuw 2  Binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Spreeuw2Buiten.stream/playlist.m3u8:NestkastLIVE - Spreeuw 2 buiten
+#DESCRIPTION NestkastLIVE - Spreeuw 2 buiten
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Steenuil2Binnen.stream/playlist.m3u8:NestkastLIVE - steenuil 2 binnen
+#DESCRIPTION NestkastLIVE - steenuil 2 binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Steenuil2Buiten.stream/playlist.m3u8:NestkastLIVE - Steenuil 2 Buiten
+#DESCRIPTION NestkastLIVE - Steenuil 2 Buiten
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Torenvalk2.stream/playlist.m3u8:NestkastLIVE - Torenvalk 2
+#DESCRIPTION NestkastLIVE - Torenvalk 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Turksetortel2.stream/playlist.m3u8:NestkastLIVE - Turkse tortel 2
+#DESCRIPTION NestkastLIVE - Turkse tortel 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Voercam2.stream/playlist.m3u8:NestkastLIVE - Voer cam 2
+#DESCRIPTION NestkastLIVE - Voer cam 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Voercam3.stream/playlist.m3u8:NestkastLIVE - Voer cam 3
+#DESCRIPTION NestkastLIVE - Voer cam 3
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/828/default.stream/chunklist_w1319567147_tkd293emF0b2tlbmhhc2g9WWJXME9IbmRmYzhiQjg2X25maVRHcTQzSmhQWTc0dWdyeVM2R3RqMEZtUT0md293emF0b2tlbmVuZHRpbWU9MTUyNTE2NDAzMiZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjUxNjA0MzI=.m3u8:Slechtevalk - Venlo
+#DESCRIPTION Slechtevalk - Venlo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv13.arkasis.nl%3a80/828/default.stream/.m3u8:Slechtevalk - Venlo
+#DESCRIPTION Slechtevalk - Venlo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=bosuil1&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Bosuil (BINNENCAM)
+#DESCRIPTION Vogelbescherming - Bosuil (BINNENCAM)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=bosuil2&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Bosuil (BUITENCAM)
+#DESCRIPTION Vogelbescherming - Bosuil (BUITENCAM)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=Kerkuil1&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Kerkuil  (BINNENCAM)
+#DESCRIPTION Vogelbescherming - Kerkuil  (BINNENCAM)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=Kerkuil3&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Kerkuil  (BUITENCAM)
+#DESCRIPTION Vogelbescherming - Kerkuil  (BUITENCAM)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=Koolmees2&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Koolmees (BUITEN)  2017
+#DESCRIPTION Vogelbescherming - Koolmees (BUITEN)  2017
+#SERVICE 4097:0:1:2:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=Koolmees1&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Koolmees (DOOR)  2017
+#DESCRIPTION Vogelbescherming - Koolmees (DOOR)  2017
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=SteenuilDongen1&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Steenuil  (BINNEN DO)
+#DESCRIPTION Vogelbescherming - Steenuil  (BINNEN DO)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=SteenuilWW2&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Steenuil  (BINNEN2 WI)
+#DESCRIPTION Vogelbescherming - Steenuil  (BINNEN2 WI)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=SteenuilDongen2&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Steenuil  (BUITEN DO)
+#DESCRIPTION Vogelbescherming - Steenuil  (BUITEN DO)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=SteenuilWW3&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Steenuil  (BUITEN WI)
+#DESCRIPTION Vogelbescherming - Steenuil  (BUITEN WI)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=SteenuilWW1&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Steenuil (BINNEN WI)
+#DESCRIPTION Vogelbescherming - Steenuil (BINNEN WI)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/pindacam.stream/playlist.m3u8:Webcam-Harlingen.nl - Vogel-cam (Vogelcam1)
+#DESCRIPTION Webcam-Harlingen.nl - Vogel-cam (Vogelcam1)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/pindacam2.stream/playlist.m3u8:Webcam-Harlingen.nl - Vogel-cam (Vogelcam2)
+#DESCRIPTION Webcam-Harlingen.nl - Vogel-cam (Vogelcam2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/nestkast/nestkast1.stream_720p/chunklist_1866772541.m3u8:Webcam-Harlingen.nl - Vogel-cam (Nestkast1)
+#DESCRIPTION Webcam-Harlingen.nl - Vogel-cam (Nestkast1)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/nestkast3.stream/playlist.m3u8:Webcam-Harlingen.nl - Vogel-cam (Nestkast2)
+#DESCRIPTION Webcam-Harlingen.nl - Vogel-cam (Nestkast2)
+#SERVICE 1:64:a8:0:0:0:0:0:0:0:
+#DESCRIPTION --- Afrika ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//stream.africam.com/tm playpath=tm.stream swfUrl=http%3a//www.africam.com/wildlife/files/flowplayer/flowplayer.commercial-3.2.7.swf pageUrl=http%3a//www.africam.com/wildlife/tembe_webcam:Tembe Elephant Reserve - Elephant Park - KwaZulu-N
+#DESCRIPTION Tembe Elephant Reserve - Elephant Park - KwaZulu-N
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//stream.africam.com/id playpath=id.stream swfUrl=http%3a//www.africam.com/wildlife/files/flowplayer/flowplayer.commercial-3.2.10.swf pageUrl=http%3a//www.africam.com/wildlife/idube_webcam:Idube Game Reserve - Mpumalanga Republic of South
+#DESCRIPTION Idube Game Reserve - Mpumalanga Republic of South
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//stream.africam.com/be playpath=be.stream swfUrl=http%3a//www.africam.com/wildlife/files/flowplayer/flowplayer.commercial-3.2.7.swf pageUrl=http%3a//www.africam.com/wildlife/black_eagle_webcam:Johannesburg - Walter Sisulu Botanical Garden - Ea
+#DESCRIPTION Johannesburg - Walter Sisulu Botanical Garden - Ea
+#SERVICE 1:64:a9:0:0:0:0:0:0:0:
+#DESCRIPTION --- België ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/829/default.stream/playlist.m3u8?wowzatokenhash=aMSM9YG2zWHRb-gwdzklt9mpmGlTnvXiC505padoTBk=&amp;wowzatokenendtime=1525104147&amp;wowzatokenstarttime=1525100547:Slechtvalk - Wetteren
+#DESCRIPTION Slechtvalk - Wetteren
+#SERVICE 1:64:aa:0:0:0:0:0:0:0:
+#DESCRIPTION --- Canada ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/8715.flv/chunklist_w1795104374.m3u8:Ontario ijsbeer 1 (Canada)
+#DESCRIPTION Ontario ijsbeer 1 (Canada)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/8713.flv/chunklist_w818261160.m3u8:Ontario ijsbeer 2 (Canada)
+#DESCRIPTION Ontario ijsbeer 2 (Canada)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//video3.earthcam.com/fecnetwork/8715.flv/chunklist_w1795104374.m3u8:Ontario - poolbeer 1 (Canada)
+#DESCRIPTION Ontario - poolbeer 1 (Canada)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//video3.earthcam.com/fecnetwork/8713.flv/chunklist_w818261160.m3u8:Ontario - poolbeer 2 (Canada)
+#DESCRIPTION Ontario - poolbeer 2 (Canada)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ccurlott.optiktv.telus.net/live-spts/pandacam01/transmux/CCURstream3000000.m3u8:Toronto - Zoo panda (Canada)
+#DESCRIPTION Toronto - Zoo panda (Canada)
+#SERVICE 1:64:ab:0:0:0:0:0:0:0:
+#DESCRIPTION --- Denemarken ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//54.247.179.47/live playpath=camera6.stream swfUrl=https%3a//monitor.y-cam.com/jwplayer/player.swf pageUrl=https%3a//monitor.y-cam.com:Aalborg Zoo ijsbeer 1 (Denemarken)
+#DESCRIPTION Aalborg Zoo ijsbeer 1 (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//54.247.179.47/live playpath=camera7.stream swfUrl=https%3a//monitor.y-cam.com/jwplayer/player.swf pageUrl=https%3a//monitor.y-cam.com:Aalborg Zoo ijsbeer 2 (Denemarken)
+#DESCRIPTION Aalborg Zoo ijsbeer 2 (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//54.247.179.47/live playpath=camera8.stream swfUrl=https%3a//monitor.y-cam.com/jwplayer/player.swf pageUrl=https%3a//monitor.y-cam.com:Aalborg Zoo ijsbeer 3 (Denemarken)
+#DESCRIPTION Aalborg Zoo ijsbeer 3 (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//54.247.179.47/live playpath=camera9.stream swfUrl=https%3a//monitor.y-cam.com/jwplayer/player.swf pageUrl=https%3a//monitor.y-cam.com:Aalborg Zoo ijsbeer 4 (Denemarken)
+#DESCRIPTION Aalborg Zoo ijsbeer 4 (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//54.247.179.47/live playpath=camera1.stream swfUrl=https%3a//monitor.y-cam.com/jwplayer/player.swf pageUrl=https%3a//monitor.y-cam.com:Aalborg Zoo - tijger 1 (Denemarken)
+#DESCRIPTION Aalborg Zoo - tijger 1 (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//54.247.179.47/live playpath=camera2.stream swfUrl=https%3a//monitor.y-cam.com/jwplayer/player.swf pageUrl=https%3a//monitor.y-cam.com:Aalborg Zoo - tijger 2 (Denemarken)
+#DESCRIPTION Aalborg Zoo - tijger 2 (Denemarken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//54.247.179.47/live playpath=camera3.stream swfUrl=https%3a//monitor.y-cam.com/jwplayer/player.swf pageUrl=https%3a//monitor.y-cam.com:Aalborg Zoo - tijger 3 (Denemarken)
+#DESCRIPTION Aalborg Zoo - tijger 3 (Denemarken)
+#SERVICE 1:64:ac:0:0:0:0:0:0:0:
+#DESCRIPTION --- Duitsland ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5857db5306b83.streamlock.net/heidelberg-rtplive/_definst_/mp4%3acamera1.stream/playlist.m3u8:Heidelberg - Slechtvalk (Duitsland)
+#DESCRIPTION Heidelberg - Slechtvalk (Duitsland)
+#SERVICE 1:64:ad:0:0:0:0:0:0:0:
+#DESCRIPTION --- Engeland ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//595b9deb3d6ac.streamlock.net/qlive/pandas.stream/chunklist_w328320233.m3u8:EDINBURGH ZOO - Panda cam (soms)
+#DESCRIPTION EDINBURGH ZOO - Panda cam (soms)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//595b9deb3d6ac.streamlock.net/qlive/edinburghzoopenguintwo.stream/chunklist_w328320233.m3u8:EDINBURGH ZOO - Penguin cam (soms)
+#DESCRIPTION EDINBURGH ZOO - Penguin cam (soms)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//595b9deb3d6ac.streamlock.net/qlive/edinburghzoo.stream/chunklist_w328320233.m3u8:EDINBURGH ZOO - Squirrel monkey cam (soms)
+#DESCRIPTION EDINBURGH ZOO - Squirrel monkey cam (soms)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//595b9deb3d6ac.streamlock.net/qlive/edinburghzootiger1.stream/chunklist_w328320233.m3u8:EDINBURGH ZOO - Tiger cam (soms)
+#DESCRIPTION EDINBURGH ZOO - Tiger cam (soms)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//carnyx.tv%3a1935/live/abernethy1/master.m3u8:Fischadler (Schotland-UK)
+#DESCRIPTION Fischadler (Schotland-UK)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.wildlifestreaming.io%3a8443/Marwell/marwell_meerkat.stream/playlist.m3u8:Marwell Zoo - Cusimanse Cam
+#DESCRIPTION Marwell Zoo - Cusimanse Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.wildlifestreaming.io%3a8443/Marwell/marwell_flamingo.stream/playlist.m3u8:Marwell Zoo - Flamingo Cam (Engeland)
+#DESCRIPTION Marwell Zoo - Flamingo Cam (Engeland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.wildlifestreaming.io%3a8443/WildlifeKate/Foxcam.stream/playlist.m3u8:wildlivekate.co.uk - Fox Field Live Cam
+#DESCRIPTION wildlivekate.co.uk - Fox Field Live Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.wildlifestreaming.io%3a8443/WildlifeKate/PTZ.stream/playlist.m3u8:wildlivekate.co.uk - Garden Bird Feeding Stadions Cam
+#DESCRIPTION wildlivekate.co.uk - Garden Bird Feeding Stadions Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.wildlifestreaming.io%3a8443/WildlifeKate/wk1.stream/playlist.m3u8:wildlivekate.co.uk - Hub Feerder Cam
+#DESCRIPTION wildlivekate.co.uk - Hub Feerder Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.wildlifestreaming.io%3a8443/WildlifeKate/HDMammal.stream/playlist.m3u8:wildlivekate.co.uk - Mammal Box Cam
+#DESCRIPTION wildlivekate.co.uk - Mammal Box Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.wildlifestreaming.io%3a8443/WildlifeKate/SnackBar.stream/playlist.m3u8:wildlivekate.co.uk - Snack Bar Cam
+#DESCRIPTION wildlivekate.co.uk - Snack Bar Cam
+#SERVICE 1:64:ae:0:0:0:0:0:0:0:
+#DESCRIPTION --- Estland ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/metsis.m3u8:Auerhoen - Metsis (Estland)
+#DESCRIPTION Auerhoen - Metsis (Estland)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/metsis.m3u8:Auerhuhn - Metsis - Estland
+#DESCRIPTION Auerhuhn - Metsis - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/mager.m3u8:Dachs - Mager - Estland
+#DESCRIPTION Dachs - Mager - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/haigur.m3u8:Graureiher - lhaigur - Estland
+#DESCRIPTION Graureiher - lhaigur - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/hirv.m3u8:Herten - Hirv (Estland)
+#DESCRIPTION Herten - Hirv (Estland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/hyljes.m3u8:Kegelrobben - Hyljes - Estland
+#DESCRIPTION Kegelrobben - Hyljes - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/kasmu.m3u8:Zeemuseum - Kasmu  (Estland)
+#DESCRIPTION Zeemuseum - Kasmu  (Estland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//193.40.133.138/live playpath=kasmu swfUrl=http%3a//www.eenet.ee/EENet/assets/site/player.swf pageUrl=http%3a//www.eenet.ee/EENet/kasmu.html live=1:Kasmu - Ostseekueste - Estland
+#DESCRIPTION Kasmu - Ostseekueste - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/ilves.m3u8:Luchs - Ilves - Estland
+#DESCRIPTION Luchs - Ilves - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//webcam.tt.ee/live/pesakast:Stervogel - Pesakast (Estland)
+#DESCRIPTION Stervogel - Pesakast (Estland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/metskits.m3u8:Rotwild I - Metskits - Estland
+#DESCRIPTION Rotwild I - Metskits - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/konnakotkas.m3u8:Schelladler - Konnakotkas - Estland
+#DESCRIPTION Schelladler - Konnakotkas - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/merikotkas.m3u8:Seeadler - Merikotkas - Estland
+#DESCRIPTION Seeadler - Merikotkas - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/kalakotkas.m3u8:Seeadler - Kalakotkas 1 (Estland)
+#DESCRIPTION Seeadler - Kalakotkas 1 (Estland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/kalakotkas2.m3u8:Seeadler - Kalakotkas 2 (Estland)
+#DESCRIPTION Seeadler - Kalakotkas 2 (Estland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streams.oessm.org%3a1935/AXIS_P3364/Cam217.stream/chunklist_w717880950.m3u8:Seeadler - Kalakotkas 3 (Estland)
+#DESCRIPTION Seeadler - Kalakotkas 3 (Estland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/kaljukotkas.m3u8:Steinadler - Kaljukotkas - Estland
+#DESCRIPTION Steinadler - Kaljukotkas - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/must-toonekurg.m3u8:Storch Schwarz - Must Tooneburg - Estland
+#DESCRIPTION Storch Schwarz - Must Tooneburg - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo playpath=cam1286 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/oja.html:Tallinn - Zoo Amur-Leopard I - Estland
+#DESCRIPTION Tallinn - Zoo Amur-Leopard I - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee%3a80/tlnzoo playpath=cam7626 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/kannu.html:Tallinn - Zoo Amur-Leopard II - Estland
+#DESCRIPTION Tallinn - Zoo Amur-Leopard II - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo3 playpath=cam4880 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/elevant1.html:Tallinn - Zoo Elephant I - Estland
+#DESCRIPTION Tallinn - Zoo Elephant I - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo3 playpath=cam1976 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/elevant2.html:Tallinn - Zoo Elephant II - Estland
+#DESCRIPTION Tallinn - Zoo Elephant II - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo3 playpath=cam3338 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/elevant3.html:Tallinn - Zoo Elephant III - Estland
+#DESCRIPTION Tallinn - Zoo Elephant III - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo3 playpath=cam1968 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/elevant4.html:Tallinn - Zoo Elephant IV - Estland
+#DESCRIPTION Tallinn - Zoo Elephant IV - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo3 playpath=cam4378 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/elevant5.html:Tallinn - Zoo Elephant V - Estland
+#DESCRIPTION Tallinn - Zoo Elephant V - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo3 playpath=cam8884 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/elevant6.html:Tallinn - Zoo Elephant VI - Estland
+#DESCRIPTION Tallinn - Zoo Elephant VI - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo3 playpath=cam5128 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/elevant7.html:Tallinn - Zoo Elephant VII - Estland
+#DESCRIPTION Tallinn - Zoo Elephant VII - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo3 playpath=cam8944 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/elevant8.html:Tallinn - Zoo Elephant VIII - Estland
+#DESCRIPTION Tallinn - Zoo Elephant VIII - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo2 playpath=cam8189 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/lume1.html:Tallinn - Zoo Schneeleopard I - Estland
+#DESCRIPTION Tallinn - Zoo Schneeleopard I - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo2 playpath=cam2937 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/lume2.html:Tallinn - Zoo Schneeleopard II - Estland
+#DESCRIPTION Tallinn - Zoo Schneeleopard II - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp1.digisilm.ee/tlnzoo2 playpath=cam1618 swfUrl=http%3a//www.interactivezoo.eu/player.swf pageUrl=http%3a//www.interactivezoo.eu/lume3.html:Tallinn - Zoo Schneeleopard III - Estland
+#DESCRIPTION Tallinn - Zoo Schneeleopard III - Estland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//193.40.133.138/live playpath=kalakotkas2 swfUrl=http%3a//pontu.eenet.ee/player/player.swf pageUrl=http%3a//pontu.eenet.ee/player/kalakotkas2.html:Tartu - Visarend - Estland
+#DESCRIPTION Tartu - Visarend - Estland
+#SERVICE 1:64:af:0:0:0:0:0:0:0:
+#DESCRIPTION --- Indonesië ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/4337.flv/.m3u8:Elefant I - Indonesien - Bali
+#DESCRIPTION Elefant I - Indonesien - Bali
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/4338.flv/.m3u8:Elefant II - Indonesien - Bali
+#DESCRIPTION Elefant II - Indonesien - Bali
+#SERVICE 1:64:b0:0:0:0:0:0:0:0:
+#DESCRIPTION --- Kroatiё ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn-001.whatsupcams.com/hls/hr_pulaaquarium01.m3u8:Aquarium - Pula (soms)
+#DESCRIPTION Aquarium - Pula (soms)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//cdn-002.whatsupcams.com/hls/hr_zgzoo03.m3u8:Erdmännchen - Zagreb Zoo
+#DESCRIPTION Erdmännchen - Zagreb Zoo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//cdn-002.whatsupcams.com/hls/hr_zgzoo01.m3u8:Haubenkapuziner - Zagreb Zoo
+#DESCRIPTION Haubenkapuziner - Zagreb Zoo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//cdn-002.whatsupcams.com/hls/hr_zgzoo04.m3u8:Löwe III - Zagreb Zoo
+#DESCRIPTION Löwe III - Zagreb Zoo
+#SERVICE 1:64:b1:0:0:0:0:0:0:0:
+#DESCRIPTION --- Polen ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//stream5.nadaje.com%3a12216/live/ playpath=przygodzice5.stream swfUrl=http%3a//p.jwpcdn.com/6/12/jwplayer.flash.swf pageUrl=http%3a//www.bociany.ec.pl:Bociany - ooievaar (Polen)
+#DESCRIPTION Bociany - ooievaar (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls15.webcamera.pl/klekusiowo_cam_996002/klekusiowo_cam_996002.stream/playlist.m3u8:Klekusiowo (Polen)
+#DESCRIPTION Klekusiowo (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls9.webcamera.pl/gminapaslek_cam_7d31ac/gminapaslek_cam_7d31ac.stream/playlist.m3u8:Pasłęk - ooievaar (Polen)
+#DESCRIPTION Pasłęk - ooievaar (Polen)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//hoktastream1.webcamera.pl/krakow_cam_66c146/krakow_cam_66c146.stream/playlist.m3u8:Polen - Kraków Pasieka - bijen
+#DESCRIPTION Polen - Kraków Pasieka - bijen
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//hoktastream2.webcamera.pl/pszczoly_cam_41eddc/pszczoly_cam_41eddc.stream/playlist.m3u8:Polen - Pszczoły na żywo - bijen
+#DESCRIPTION Polen - Pszczoły na żywo - bijen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//hls1.webcamera.pl/um_wejherowo_cam_d5888b/um_wejherowo_cam_d5888b.stream/playlist.m3u8:Polen - vogels 1
+#DESCRIPTION Polen - vogels 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//hls15.webcamera.pl/klekusiowo_cam_f86c9b/klekusiowo_cam_f86c9b.stream/playlist.m3u8:Polen - vogels 2
+#DESCRIPTION Polen - vogels 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//hls15.webcamera.pl/klekusiowo_cam_cd36d8/klekusiowo_cam_cd36d8.stream/playlist.m3u8:Polen - vogels 3
+#DESCRIPTION Polen - vogels 3
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//46.29.18.68/live playpath=camera.stream swfUrl=http%3a//www.strzalowo.eu/plugins/system/flowplayerreloaded/flowplayer_r/players/flowplayer-3.2.15.swf pageUrl=http%3a//www.strzalowo.eu:Strzalowo - Schwarzwild -  Polen
+#DESCRIPTION Strzalowo - Schwarzwild -  Polen
+#SERVICE 1:64:b2:0:0:0:0:0:0:0:
+#DESCRIPTION --- Rusland ---
+#SERVICE 4097:0:1:498:0:0:0:0:0:0:http%3a//stream.africam.com%3a1935/nk/nk.stream_source/playlist.m3u8:Африка 1 (soms)
+#DESCRIPTION Африка 1 (soms)
+#SERVICE 4097:0:1:500:0:0:0:0:0:0:http%3a//stream.africam.com%3a1935/id/id.stream_source/playlist.m3u8:Африка 2 (soms)
+#DESCRIPTION Африка 2 (soms)
+#SERVICE 4097:0:1:502:0:0:0:0:0:0:http%3a//stream.africam.com%3a1935/tm/tm.stream_source/playlist.m3u8:Африка 3 (soms)
+#DESCRIPTION Африка 3 (soms)
+#SERVICE 4097:0:1:504:0:0:0:0:0:0:http%3a//stream.africam.com%3a1935/na/na.stream_source/playlist.m3u8:Африка 4 (soms)
+#DESCRIPTION Африка 4 (soms)
+#SERVICE 4097:0:1:506:0:0:0:0:0:0:http%3a//stream.africam.com%3a1935/rc/rc.stream_source/playlist.m3u8:Африка 5 (soms)
+#DESCRIPTION Африка 5 (soms)
+#SERVICE 4097:0:1:508:0:0:0:0:0:0:http%3a//stream.africam.com%3a1935/be/be.stream_source/playlist.m3u8:Африка 6 (soms)
+#DESCRIPTION Африка 6 (soms)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//80.78.116.125/rtplive/ playpath=zoo_ek_hd.stream swfUrl=http%3a//myttk.ru/media/webcam/uppod/uppod.swf pageUrl=http%3a//myttk.ru/media/webcam/cathedral_square/ live=1:Jekaterinburg - Zoo Elefanten - Russian Federation
+#DESCRIPTION Jekaterinburg - Zoo Elefanten - Russian Federation
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//sochi.camera%3a8080/cam_39/index.m3u8:Sochi 39 - Aquarium Koi
+#DESCRIPTION Sochi 39 - Aquarium Koi
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//sochi.camera%3a8080/cam_40/index.m3u8:Sochi 40 - Aguarium
+#DESCRIPTION Sochi 40 - Aguarium
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//sochi.camera%3a8080/cam_146/index.m3u8:Sochi 146 - luipaard (Rusland)
+#DESCRIPTION Sochi 146 - luipaard (Rusland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//sochi.camera%3a8080/cam_147/index.m3u8:Sochi 147 - Zoo leeuw 1 (Rusland)
+#DESCRIPTION Sochi 147 - Zoo leeuw 1 (Rusland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//sochi.camera%3a8080/cam_149/index.m3u8:Sochi 149 - Zoo tijger (Rusland)
+#DESCRIPTION Sochi 149 - Zoo tijger (Rusland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//sochi.camera%3a8080/cam_148/index.m3u8:Sochi 148 - Zoo leeuw 2 (Rusland)
+#DESCRIPTION Sochi 148 - Zoo leeuw 2 (Rusland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//sochi.camera%3a8080/cam_150/index.m3u8:Sochi 150 - Zoo luipaard 2 (Rusland)
+#DESCRIPTION Sochi 150 - Zoo luipaard 2 (Rusland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//sochi.camera%3a8080/cam_156/index.m3u8:Sochi 156 - Zoo  lynx (Rusland)
+#DESCRIPTION Sochi 156 - Zoo  lynx (Rusland)
+#SERVICE 1:64:b3:0:0:0:0:0:0:0:
+#DESCRIPTION --- Slowakije ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream5.kukaj.sk%3a1935/live/BOCIANY_LUPCA.stream/playlist.m3u8:Bociany Lubca - ooievaar 1 (Slowakije)
+#DESCRIPTION Bociany Lubca - ooievaar 1 (Slowakije)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream5.kukaj.sk%3a1935/live/BOCIANY_PRIB.stream/chunklist_w11730904.m3u8:Bociany Lubca - ooievaar 2 (Slowakije)
+#DESCRIPTION Bociany Lubca - ooievaar 2 (Slowakije)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream5.kukaj.sk%3a1935/live/BREST.stream/chunklist_w621160488.m3u8:Brest - ooievaar (Slowakije)
+#DESCRIPTION Brest - ooievaar (Slowakije)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream5.kukaj.sk%3a1935/live/BRZOTIN.stream/chunklist_w1409405543.m3u8:Brzotin - ooievaar (Slowakije)
+#DESCRIPTION Brzotin - ooievaar (Slowakije)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream5.kukaj.sk%3a1935/live/DEMANOVA.stream/chunklist_w1233425132.m3u8:Demanova - ooievaar (Slowakije)
+#DESCRIPTION Demanova - ooievaar (Slowakije)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream5.kukaj.sk%3a1935/live/HRADISTE.stream/chunklist_w1502943729.m3u8:Hradiste - ooievaar (Slowakije)
+#DESCRIPTION Hradiste - ooievaar (Slowakije)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream5.kukaj.sk%3a1935/live/VAVRISOVO2.stream/chunklist_w1817861259.m3u8:Vavrisovo - ooievaar (Slowakije)
+#DESCRIPTION Vavrisovo - ooievaar (Slowakije)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream5.kukaj.sk%3a1935/live/VYSOKAPRIMORAVE.stream/chunklist_w480771217.m3u8:Vysokaprimorave - ooievaar (Slowakije)
+#DESCRIPTION Vysokaprimorave - ooievaar (Slowakije)
+#SERVICE 1:64:b4:0:0:0:0:0:0:0:
+#DESCRIPTION --- United States of America ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//americaneagle-lh.akamaihd.net%3a80/i/AEF_DC1@31049/master.m3u8:Adelaarsnest (USA)
+#DESCRIPTION Adelaarsnest (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//video3.earthcam.com/fecnetwork/8838.flv/master.m3u8:FL - Zoo
+#DESCRIPTION FL - Zoo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/8838.flv/.m3u8:Gainesville - vogels (USA)
+#DESCRIPTION Gainesville - vogels (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/4798.flv/.m3u8:Greenville Zoo - giraf 1 (USA)
+#DESCRIPTION Greenville Zoo - giraf 1 (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/4597.flv/.m3u8:Greenville Zoo - giraf 2 (USA)
+#DESCRIPTION Greenville Zoo - giraf 2 (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.zoosociety.org%3a1935/live/polarbear.stream/.m3u8:Milwaukee Zoo - ijsbeer (USA)
+#DESCRIPTION Milwaukee Zoo - ijsbeer (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.zoosociety.org%3a1935/live/lion.stream/.m3u8:Milwaukee Zoo - leeuw (USA)
+#DESCRIPTION Milwaukee Zoo - leeuw (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.zoosociety.org%3a1935/live/elephant.stream/.m3u8:Milwaukee Zoo - olifanten (USA)
+#DESCRIPTION Milwaukee Zoo - olifanten (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.zoosociety.org%3a1935/live/tiger.stream/.m3u8:Milwaukee Zoo - tijger (USA)
+#DESCRIPTION Milwaukee Zoo - tijger (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge01.hdontap.com/ingest02-hd1/oaklandzoocondor_oz.stream/chunklist_w1194867596.m3u8:Oakland Zoo - Black Bear Cam
+#DESCRIPTION Oakland Zoo - Black Bear Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge04.hdontap.com/ingest02-hd1/ventana-ridge_oz.stream/chunklist_w1194867596.m3u8:Oakland Zoo - Condor Cam
+#DESCRIPTION Oakland Zoo - Condor Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge04.hdontap.com/ingest02-hd1/elephant_oz.stream/playlist.m3u8:Oakland Zoo - Elephant Cam
+#DESCRIPTION Oakland Zoo - Elephant Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge02.hdontap.com/ingest02-hd1/sunbear_oz.stream/playlist.m3u8:Oakland Zoo - Sun Bear Cam
+#DESCRIPTION Oakland Zoo - Sun Bear Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/14327.flv/playlist.m3u8:Osprey Cam (USA)
+#DESCRIPTION Osprey Cam (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge04.hdontap.com/ingest03-reidparkzoo/elephant-exhibit_rpz.stream/chunklist_w143667312.m3u8:REID PARK ZOO - ELEPHANT
+#DESCRIPTION REID PARK ZOO - ELEPHANT
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge02.hdontap.com/ingest03-reidparkzoo/elephant-mudpit_rpz.stream/chunklist_w143667312.m3u8:REID PARK ZOO - ELEPHANT 2
+#DESCRIPTION REID PARK ZOO - ELEPHANT 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge04.hdontap.com/ingest03-reidparkzoo/flamingo_rpz.stream/playlist.m3u8:REID PARK ZOO - FLAMINGO (USA)
+#DESCRIPTION REID PARK ZOO - FLAMINGO (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge02.hdontap.com/ingest03-reidparkzoo/giraffe_rpz.stream/chunklist_w778113123.m3u8:REID PARK ZOO - GIRAFFE
+#DESCRIPTION REID PARK ZOO - GIRAFFE
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge02.hdontap.com/ingest03-reidparkzoo/grizzly1_rpz.stream/playlist.m3u8:REID PARK ZOO - GRIZZLY
+#DESCRIPTION REID PARK ZOO - GRIZZLY
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge04.hdontap.com/ingest03-reidparkzoo/grizzly2_rpz.stream/playlist.m3u8:REID PARK ZOO - GRIZZLY 2
+#DESCRIPTION REID PARK ZOO - GRIZZLY 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge04.hdontap.com/ingest03-reidparkzoo/lemur_rpz.stream/playlist.m3u8:REID PARK ZOO - LEMUR
+#DESCRIPTION REID PARK ZOO - LEMUR
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge04.hdontap.com/ingest03-reidparkzoo/lion_rpz.stream/playlist.m3u8:REID PARK ZOO - LION
+#DESCRIPTION REID PARK ZOO - LION
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge01.hdontap.com/ingest03-hd1/rpz-private_tapir.stream/playlist.m3u8:REID PARK ZOO - TAPIR
+#DESCRIPTION REID PARK ZOO - TAPIR
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ape.hls.camzonecdn.com/CamzoneStreams/ape/Playlist.m3u8:San Diego Zoo Animals & Plants - Ape Cam
+#DESCRIPTION San Diego Zoo Animals & Plants - Ape Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//zssd-condorhd.hls.camzonecdn.com/CamzoneStreams/zssd-condorhd/Playlist.m3u8:San Diego Zoo Animals & Plants - Condor Cam
+#DESCRIPTION San Diego Zoo Animals & Plants - Condor Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//elephants.hls.camzonecdn.com/CamzoneStreams/elephants/Playlist.m3u8:San Diego Zoo Animals & Plants - Elephant Cam
+#DESCRIPTION San Diego Zoo Animals & Plants - Elephant Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//zssd-koala.hls.camzonecdn.com/CamzoneStreams/zssd-koala/Playlist.m3u8:San Diego Zoo Animals & Plants - Koala Cam
+#DESCRIPTION San Diego Zoo Animals & Plants - Koala Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//zssd-panda.hls.camzonecdn.com/CamzoneStreams/zssd-panda/Playlist.m3u8:San Diego Zoo Animals & Plants - Panda Cam
+#DESCRIPTION San Diego Zoo Animals & Plants - Panda Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//zssd-penguin.hls.camzonecdn.com/CamzoneStreams/zssd-penguin/Playlist.m3u8:San Diego Zoo Animals & Plants - Penguin Cam
+#DESCRIPTION San Diego Zoo Animals & Plants - Penguin Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//polarplunge.hls.camzonecdn.com/CamzoneStreams/polarplunge/Playlist.m3u8:San Diego Zoo Animals & Plants - Polar Cam
+#DESCRIPTION San Diego Zoo Animals & Plants - Polar Cam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//zssd-tiger.hls.camzonecdn.com/CamzoneStreams/zssd-tiger/Playlist.m3u8:San Diego Zoo Animals & Plants - Tiger Cam
+#DESCRIPTION San Diego Zoo Animals & Plants - Tiger Cam
+#SERVICE 4097:0:1:f:0:0:0:0:0:0:https%3a//video3.earthcam.com/fecnetwork/10201.flv/.m3u8:San Francisco - slechtvalk (USA)
+#DESCRIPTION San Francisco - slechtvalk (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//nzp-ms05.si.edu/live_edge_elephant/elephant01_all.smil/.m3u8:Smithsonian's National Zoo - Elephant Cam  (USA)
+#DESCRIPTION Smithsonian's National Zoo - Elephant Cam  (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//nzp-ms06.si.edu/live_edge_panda/smil%3apanda02_all.smil/.m3u8:Smithsonian's National Zoo - Giant Panda Cam 1 (USA)
+#DESCRIPTION Smithsonian's National Zoo - Giant Panda Cam 1 (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//nzp-ms06.si.edu/live_edge_panda/smil%3apanda03_all.smil/.m3u8:Smithsonian's National Zoo - Giant Panda Cam 2 (USA)
+#DESCRIPTION Smithsonian's National Zoo - Giant Panda Cam 2 (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//nzp-ms06.si.edu/live_edge_lion/smil%3alion01_all.smil/.m3u8:Smithsonian's National Zoo - Lion Cam  (USA)
+#DESCRIPTION Smithsonian's National Zoo - Lion Cam  (USA)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/13706.flv/playlist.m3u8:Snowman Cam (USA)
+#DESCRIPTION Snowman Cam (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//pmdlive-a.akamaihd.net/dc-1/live/hls/p/1897241/e/1_gffgxm38/sd/10000/t/Kq6cDtfvqIvzgKIZ1VwXmw/index-s32.m3u8:witkopzeeadelaar 1 (USA)
+#DESCRIPTION witkopzeeadelaar 1 (USA)
+#SERVICE 4097:0:1:f:0:0:0:0:0:0:https%3a//videos3.earthcam.com/fecnetwork/10147.flv/.m3u8:witkopzeeadelaar 2 (USA)
+#DESCRIPTION witkopzeeadelaar 2 (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/woodmenHD.flv/.m3u8:Woodmen Tower valk 1 (USA)
+#DESCRIPTION Woodmen Tower valk 1 (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//videos3.earthcam.com/fecnetwork/370.flv/.m3u8:Woodmen Tower valk 2 (USA)
+#DESCRIPTION Woodmen Tower valk 2 (USA)
+#SERVICE 1:64:b5:0:0:0:0:0:0:0:
+#DESCRIPTION --- Zwitserland ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//stream2.breitband.ch/live playpath=turmfalke.stream swfUrl=http%3a//stream2.breitband.ch%3a8080/turmfalke/player.swf pageUrl=http%3a//stream2.breitband.ch%3a8080/turmfalke:Turmfalk (Zwitserland)
+#DESCRIPTION Turmfalk (Zwitserland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//7026037d-c503-42cf-9b2d-962fc79eb792.pub.cloud.scaleway.com/hls/cam1.m3u8:Zoo Zürich - AMURTIGER
+#DESCRIPTION Zoo Zürich - AMURTIGER
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//7026037d-c503-42cf-9b2d-962fc79eb792.pub.cloud.scaleway.com/hls/cam5.m3u8:Zoo Zürich - KAENG KRACHAN ELEFANTENPARK, AUSSEN
+#DESCRIPTION Zoo Zürich - KAENG KRACHAN ELEFANTENPARK, AUSSEN
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//7026037d-c503-42cf-9b2d-962fc79eb792.pub.cloud.scaleway.com/hls/cam3.m3u8:Zoo Zürich - KAENG KRACHAN ELEFANTENPARK, INNEN (1)
+#DESCRIPTION Zoo Zürich - KAENG KRACHAN ELEFANTENPARK, INNEN (1)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//7026037d-c503-42cf-9b2d-962fc79eb792.pub.cloud.scaleway.com/hls/cam4.m3u8:Zoo Zürich - KAENG KRACHAN ELEFANTENPARK, INNEN (2)
+#DESCRIPTION Zoo Zürich - KAENG KRACHAN ELEFANTENPARK, INNEN (2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//7026037d-c503-42cf-9b2d-962fc79eb792.pub.cloud.scaleway.com/hls/cam2.m3u8:Zoo Zürich - PINGUINE, AUSSENANLAGE
+#DESCRIPTION Zoo Zürich - PINGUINE, AUSSENANLAGE
+#SERVICE 1:64:b6:0:0:0:0:0:0:0:
+#DESCRIPTION --- Diverse  ---
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wse.planeta-online.tv%3a1935/live/channel_3/chunklist.m3u8:Aquarium
+#DESCRIPTION Aquarium
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream4.idnes.cz/vod/1602/01/VF160201_163209_flv_middle.mp4:Giraffen
+#DESCRIPTION Giraffen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.eenet.ee/hls/kakk.m3u8:Kaak - bruine uil
+#DESCRIPTION Kaak - bruine uil
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//video1.earthcam.com/myearthcam/ea0d8fcee269a399533dd195f6f68a33.flv/playlist.m3u8:Piranha - Fütterung freitags 04%3a00 Uhr MEZ 
+#DESCRIPTION Piranha - Fütterung freitags 04:00 Uhr MEZ 

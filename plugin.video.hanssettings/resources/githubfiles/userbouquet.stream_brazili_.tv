@@ -1,0 +1,177 @@
+#NAME Stream Brazilië
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//live.sba1.com/hls/liveac/index.m3u8:Agro Canal
+#DESCRIPTION Agro Canal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//173.236.10.10%3a1935/dgrau/dgrau/playlist.m3u8:All Sports (sport - Brazilië)
+#DESCRIPTION All Sports (sport - Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//slrp.sambavideos.sambatech.com/liveevent/amazonsatabr1_3e9c859611a5e7fbedc785bd33c418b5/livestream3/chunklist.m3u8:Amazon Sat
+#DESCRIPTION Amazon Sat
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//69.46.0.170%3a1935/tvaparecida/tvaparecida.stream/live.m3u8:Aparecida (Brazilië)
+#DESCRIPTION Aparecida (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wz-brasil1.comets.com.br/tvaperipe/aovivo/playlist.m3u8:Aperipe TV
+#DESCRIPTION Aperipe TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//flash1.crossdigital.com.br%3a1935/ponto85/ongrace/playlist.m3u8:Canal CJC (Brazilië)
+#DESCRIPTION Canal CJC (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.sba1.com%3a80/hls-live/livecb/_definst_/liveevent/livestream.m3u8:Canal do Boi
+#DESCRIPTION Canal do Boi
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cancaonova-push-live.hls.adaptive.level3.net/hls-live/cancaonova-channel01/_definst_/live/stream1.m3u8:Cancao Nova (Brazilië)
+#DESCRIPTION Cancao Nova (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wowza4.catve.com.br%3a1935/live/livestream/playlist.m3u8:Castve HD (Brazilië)
+#DESCRIPTION Castve HD (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//live.sba1.com/hls/cm/1_2/index.m3u8:Cine+ (Brazilië)
+#DESCRIPTION Cine+ (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//45.43.208.2%3a1935/classique/classique/live.m3u8:Classique TV (Brazilië)
+#DESCRIPTION Classique TV (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stmv4.srvstm.com/tvcnagitos/tvcnagitos/playlist.m3u8:CN Agitos
+#DESCRIPTION CN Agitos
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//gw01.7idi.com%3a8087/hls/foztv.m3u8:Foz TV (Brazilië)
+#DESCRIPTION Foz TV (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv3.zoeweb.tv%3a1935/z474-live/aovivo/livestream.m3u8:G2P TV (Brazilië)
+#DESCRIPTION G2P TV (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wowza4.catve.com.br%3a1935/mastertv/livestream/playlist.m3u8:Master TV (Brazilië)
+#DESCRIPTION Master TV (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wz4.dnip.com.br%3a1935/novaeratv/novaeratv.sdp/playlist.m3u8:NE TV (Brazilië)
+#DESCRIPTION NE TV (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srvvenus.canaldoboi.com/livenc playpath=livestream?adbe-live-event=liveevent swfUrl=http%3a//live.sba1.com%3a8080/playern/player.swf live=1:Novo Canal (Brazilië)
+#DESCRIPTION Novo Canal (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.novotempo.com%3a1935/tv/tvnovotempo.smil/live.m3u8:Novo Tempo (Brazilië)
+#DESCRIPTION Novo Tempo (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp.cdn.upx.net.br/00084/myStream.sdp:Pocos TV (Brazilië)
+#DESCRIPTION Pocos TV (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wowza4.catve.com.br%3a1935/radiocamera/livestream/playlist.m3u8:Radio Catve FM - Visual Radio (Brazilië)
+#DESCRIPTION Radio Catve FM - Visual Radio (Brazilië)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//rtmp.cdn.upx.net.br/7cdd_2/myStream.sdp/playlist.m3u8:Radio JK FM - Visual Radio (Brazilie)
+#DESCRIPTION Radio JK FM - Visual Radio (Brazilie)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//173.236.10.10%3a1935/tvmocinha/tvmocinha/playlist.m3u8:Radio Menina TV (WEBCAM RADIO)
+#DESCRIPTION Radio Menina TV (WEBCAM RADIO)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//45.43.208.98%3a1935/alexandre3116/alexandre3116/live.m3u8:RBC Salvador (Brazilië)
+#DESCRIPTION RBC Salvador (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stmv4.srvstm.com/recordnewses/recordnewses/playlist.m3u8?wowzasessionid=356495000:Record News (Brazilië)
+#DESCRIPTION Record News (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wz3.dnip.com.br%3a1935/tvgazetamt/tvgazetamt.sdp/playlist.m3u8:RecordTV MatoGrosso (Brazilië)
+#DESCRIPTION RecordTV MatoGrosso (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wz3.dnip.com.br/tvgazetamt/tvgazetamt.sdp/tv.m3u8:RecordTV Sao Paulo (Brazilië)
+#DESCRIPTION RecordTV Sao Paulo (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//173.236.10.10%3a1935/redeatividade/redeatividade/playlist.m3u8:Rede Atividade (Brazilië)
+#DESCRIPTION Rede Atividade (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//173.236.10.10%3a1935/rbtv/rbtv/playlist.m3u8:Rede Brasil Opt-1 (Brazilië)
+#DESCRIPTION Rede Brasil Opt-1 (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59f1cbe63db89.streamlock.net%3a1443/rbtv/rbtv/chunklist_w1757672591.m3u8:Rede Brasil Opt-2 (Brazilië)
+#DESCRIPTION Rede Brasil Opt-2 (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv9.zoeweb.tv%3a1935/zw901/smil%3azw901.smil/playlist.m3u8:Rede Familia (Brazilië)
+#DESCRIPTION Rede Familia (Brazilië)
+#SERVICE 4097:0:1:c:999:7777:0:0:0:0:http%3a//media01.s12.com.br%3a1935/live/redegospel/livestream.m3u8:REDE GOSPEL (Brazilië)
+#DESCRIPTION REDE GOSPEL (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//api.new.livestream.com/accounts/3332377/events/2958396/live.m3u8:Rede Meio Norte
+#DESCRIPTION Rede Meio Norte
+#SERVICE 4097:0:1:c:999:7777:0:0:0:0:rtmp%3a//rtmp.cdn.upx.net.br/00084/myStream.sdp:Rede Minas (Brazilië)
+#DESCRIPTION Rede Minas (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvseculo21-lh.akamaihd.net%3a80/i/tvseculo_1@16110/master.m3u8:Rede Seculo 21 (Brazilië)
+#DESCRIPTION Rede Seculo 21 (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//evpp.mm.uol.com.br/redetv1/redetv1/chunklist_w1483436880.m3u8:Rede TV (Brazilië)
+#DESCRIPTION Rede TV (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//173.236.10.10%3a1935/tvonline/tvonline/playlist.m3u8:Rede TV Rondonia (Brazilië)
+#DESCRIPTION Rede TV Rondonia (Brazilië)
+#SERVICE 4097:0:1:c:999:7777:0:0:0:0:rtmp%3a//evp.mm.uol.com.br/redetv2/_definst_/redetv2:REDE TV2 (Brazilië)
+#DESCRIPTION REDE TV2 (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wse7.player.tv.br%3a1935/canalreporter/canalreporter/live.m3u8:Reporter Brasil (Brazilië)
+#DESCRIPTION Reporter Brasil (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srvvenus.canaldoboi.com/livecb playpath=livestream?adbe-live-event=liveevent swfUrl=http%3a//live.sba1.com%3a8080/playern/player.swf live=1:SBA (Brazilië)
+#DESCRIPTION SBA (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//192.99.46.182%3a1935/pioneira-tv3/pioneira-tv3/playlist.m3u8:SBT Piaui (Brazilië)
+#DESCRIPTION SBT Piaui (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv6.zoeweb.tv%3a1935/z343-live/stream/playlist.m3u8:SBT Rio Grande do Sul (Brazilië)
+#DESCRIPTION SBT Rio Grande do Sul (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wz4.dnip.com.br/bemtv/bemtv.sdp/playlist.m3u8:SBT Sao Paulo
+#DESCRIPTION SBT Sao Paulo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//173.236.10.10%3a1935/tboanapolis/tboanapolis/playlist.m3u8:TBO Anapolis (Brazilië)
+#DESCRIPTION TBO Anapolis (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv3.zoeweb.tv%3a1935/z99-live/stream/livestream.m3u8:TV Antares (Brazilië)
+#DESCRIPTION TV Antares (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stmv1.srvstm.com/tvarthd/tvarthd/playlist.m3u8:TV Art
+#DESCRIPTION TV Art
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv3.zoeweb.tv%3a1935/z93-live/stream/livestream.m3u8:TV Assembleia SP (Brazilië)
+#DESCRIPTION TV Assembleia SP (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//45.43.208.98%3a1935/betelnc/betelnc/live.m3u8:TV Betel (Brazilië)
+#DESCRIPTION TV Betel (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ebcremuxlive-live.hls.adaptive.level3.net/manifests/ebcremuxlive-ebctvbrasil/live.m3u8:TV Brasil (Brazilië)
+#DESCRIPTION TV Brasil (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream2.ba.gov.br%3a80/hls-live/livepkgr/_definst_/irdeb/pgm-2.m3u8:TV Brasil Animada (Brazilië)
+#DESCRIPTION TV Brasil Animada (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream2.camara.leg.br%3a8134/tv1/manifest.m3u8:TV Camara (Brazilië)
+#DESCRIPTION TV Camara (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming2.inforede.inf.br%3a1935/c1076ev2932/aovivo/live.m3u8:TV Cidade Pelotas (Brazilië)
+#DESCRIPTION TV Cidade Pelotas (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//painelvj.com.br%3a1935/pdsertaotv/pdsertaotv.sdp/playlist.m3u8:TV Diario do Sertao (Brazilië)
+#DESCRIPTION TV Diario do Sertao (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//slrp.sambavideos.sambatech.com%3a80/liveevent/tvdiario_7a683b067e5eee5c8d45e1e1883f69b9/livestream/live.m3u8:TV Diario
+#DESCRIPTION TV Diario
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//midia.faap.br/faaplatamlive-live/stream_480/livestream.m3u8:TV Faap
+#DESCRIPTION TV Faap
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//api.new.livestream.com/accounts/5381476/events/2395418/live.m3u8:TV Gazeta
+#DESCRIPTION TV Gazeta
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//s1.wsepanel.com%3a1935/tvgeral/tvgeral/chunklist_w1578794835.m3u8:TV Geral (Brazilië)
+#DESCRIPTION TV Geral (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//fms1.tacitus.com.br%3a1935/tvgeral/tvgeral/live.m3u8:TV Geral (Brazilië)
+#DESCRIPTION TV Geral (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming02.zas.media%3a1935/gideoes/_definst_/mp4%3aprogramacao_360p/chunklist_w93290010.m3u8:TV Gidoes (Brazilië)
+#DESCRIPTION TV Gidoes (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//liveabr2.sambatech.com.br/abr/acerpTvINESABR_d360fbbfbf3e5e59a31cf89ec45eb3dc/livestreamabr.m3u8:TV INES (Brazilië)
+#DESCRIPTION TV INES (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//177.73.84.49/hls/live/live.m3u8:TV Itarare
+#DESCRIPTION TV Itarare
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//173.236.10.10%3a1935/renascer/renascer/live.m3u8:TV Louvar (Brazilië)
+#DESCRIPTION TV Louvar (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ec2-54-157-173-68.compute-1.amazonaws.com%3a8081/live_tvmackenzie/tvmackenzie/playlist.m3u8:TV Mackenzie (Brazilië)
+#DESCRIPTION TV Mackenzie (Brazilië)
+#SERVICE 4097:0:1:c:999:7777:0:0:0:0:http%3a//209.126.127.101%3a1935/tvmar/tvmar/playlist.m3u8:TV Mar (Brazilië)
+#DESCRIPTION TV Mar (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//209.126.127.101%3a1935/tvmar/_definst_/tvmar/playlist.m3u8:TV Mar (Brazilië)
+#DESCRIPTION TV Mar (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wse5.player.tv.br%3a1935/tvmcj/tvmcj/playlist.m3u8:TV MCJ
+#DESCRIPTION TV MCJ
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rtmp.cdn.upx.net.br/7dcb/myStream.sdp/playlist.m3u8:TV Medicina e Saude (Brazilië)
+#DESCRIPTION TV Medicina e Saude (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.novotempo.com%3a1935/tv/smil%3atvnovotempo.smil/manifest.m3u8:TV Novo Tempo (Brazilië)
+#DESCRIPTION TV Novo Tempo (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv3.zoeweb.tv%3a1935/z01-live/stream/livestream.m3u8:TV O Povo (Brazilië)
+#DESCRIPTION TV O Povo (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rtmp.cdn.upx.net.br/00084/myStream.sdp/playlist.m3u8:TV Pocos
+#DESCRIPTION TV Pocos
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//186.227.165.118%3a1935/insatv/livestream/live.m3u8:TV Rio Preto
+#DESCRIPTION TV Rio Preto
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streamer1.streamhost.org%3a1935/salive/GMI3anjoh/playlist.m3u8:TV Terceiro Anjo (Brazilië)
+#DESCRIPTION TV Terceiro Anjo (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//69.46.0.170%3a1935/rcr_tuba/tv.stream/live.m3u8 :TV Tuba (Brazilië)
+#DESCRIPTION TV Tuba (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//iuhls-lh.akamaihd-staging.net/i/utvhls1_1@336317/master.m3u8:TV Universal (Brazilië)
+#DESCRIPTION TV Universal (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ocatv.mcgi.me%3a1935/public/247_es/live.m3u8:TV Verdade (Brazilië)
+#DESCRIPTION TV Verdade (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//200.187.60.190%3a80/hls-live/livepkgr/_definst_/irdeb/pgm-2.m3u8:TVE Bahia (Brazilië)
+#DESCRIPTION TVE Bahia (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming.procergs.com.br%3a1935/tve/stve/playlist.m3u8:TVE Rio Grande do Sul (Brazilië)
+#DESCRIPTION TVE Rio Grande do Sul (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//selpro1348.procergs.com.br%3a1935/tve/stve/playlist.m3u8:TVE RS
+#DESCRIPTION TVE RS
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//198.24.135.42%3a80/canal10/canal10/playlist.m3u8:TVES Canal 10 (Salvador - Brazilië)
+#DESCRIPTION TVES Canal 10 (Salvador - Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wse3.player.tv.br%3a1935/tvmaster/tvmaster/live.m3u8:TVMaster (Brazilië)
+#DESCRIPTION TVMaster (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//painelvj.com.br%3a1935/tvnbrasil/tvnbrasil.sdp/live.m3u8:TVN Brasil
+#DESCRIPTION TVN Brasil
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//painel.serveron.com.br%3a1935/tvregional/tvregional/live.m3u8:TVR (Brazilië)
+#DESCRIPTION TVR (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//v8.ciclano.io%3a1443/aovivotvt/_definst_/aovivotvt/playlist.m3u8:TVT (Brazilië)
+#DESCRIPTION TVT (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn.srv.br%3a8088/UCSTV/UCSTV/playlist.m3u8:UCSTV
+#DESCRIPTION UCSTV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv-vvtv.sisdera.com.br%3a1935/live/vvtv023/livestream.m3u8:Vem e Ve TV (Brazilië)
+#DESCRIPTION Vem e Ve TV (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5a8d73edc0407.streamlock.net%3a443/omdvia1str/viawebtv1/playlist.m3u8:Via Morena
+#DESCRIPTION Via Morena
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//173.236.10.10%3a1935/webtvminas/webtvminas/live.m3u8:Web TV Minas (Brazilië)
+#DESCRIPTION Web TV Minas (Brazilië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rtmp.cdn.upx.net.br%3a1935/00084/myStream.sdp/playlist.m3u8:Wizard TV
+#DESCRIPTION Wizard TV
+#SERVICE 4097:0:1:47:2:4:0:0:0:0:https%3a//stream-14.dc3.dailymotion.com/dm/3/x54jwml/live.m3u8:Yeeah! (muziek - Brazilië)
+#DESCRIPTION Yeeah! (muziek - Brazilië)

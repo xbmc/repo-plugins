@@ -1,0 +1,7 @@
+#NAME Stream Bolivië
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stmv1.questreaming.com/atb/atb/playlist.m3u8?wowzasessionid=658130495:ATB (Bolivië)
+#DESCRIPTION ATB (Bolivië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//api.new.livestream.com/accounts/10468276/events/3485826/live.m3u8:Bolivia TV (Bolivië)
+#DESCRIPTION Bolivia TV (Bolivië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streamer1.streamhost.org/salive/GMIalfam:Logos TV (Bolivië)
+#DESCRIPTION Logos TV (Bolivië)

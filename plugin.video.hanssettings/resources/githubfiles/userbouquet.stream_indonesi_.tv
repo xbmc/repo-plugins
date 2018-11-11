@@ -1,0 +1,113 @@
+#NAME Stream Indonesië
+#SERVICE 1:64:12c:0:0:0:0:0:0:0:
+#DESCRIPTION +++Indonesië nationaal+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.asianastream.com%3a1935/live/ngrp%3aannaba_all/playlist.m3u8:Annaba TV (Indonesië)
+#DESCRIPTION Annaba TV (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//bcoveliveios-i.akamaihd.net/hls/live/225864/4508222217001/master.m3u8:ASTRO AWANI (Indonesië)
+#DESCRIPTION ASTRO AWANI (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge.linknetott.swiftserve.com/live/BsNew/amlst%3absnew/playlist.m3u8:Berita Satu (Indonesië)
+#DESCRIPTION Berita Satu (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream2.1malaysiaiptv.com%3a1935/mylive/smil%3abernama2_all.smil/media.m3u8:Bernama TV (Indonesië)
+#DESCRIPTION Bernama TV (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.cnnindonesia.com/livecnn/smil%3acnntv.smil/playlist.m3u8:CNN INDONESIA (Indonesië)
+#DESCRIPTION CNN INDONESIA (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//edge.nim.mivo.tv/daaitv/daaitv2_all/playlist.m3u8:Da Ai TV Indonesia (Indonesië)
+#DESCRIPTION Da Ai TV Indonesia (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge.linknetott.swiftserve.com/live/BsNew/amlst%3absnew/chunklist_b2121000.m3u8:INDONESIA - BERITA SATU (Indonesië)
+#DESCRIPTION INDONESIA - BERITA SATU (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge.linknetott.swiftserve.com/live/BsNew/amlst%3absenglish/playlist.m3u8:Jakarta Globe (Indonesië) <kan lang duren>
+#DESCRIPTION Jakarta Globe (Indonesië) <kan lang duren>
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.asianastream.com%3a1935/live/ngrp%3amadanitv_all/playlist.m3u8:Madani TV (Indonesië)
+#DESCRIPTION Madani TV (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge.metrotvnews.com%3a1935/live-edge/smil%3ametro.smil/playlist.m3u8:METRO TV ALT 2 (Indonesië)
+#DESCRIPTION METRO TV ALT 2 (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge.metrotvnews.com%3a1935/live-edge/smil%3ametro.smil/chunklist_w91833314_b216000_sleng.m3u8:Metro TV News (Indonesië)
+#DESCRIPTION Metro TV News (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//119.235.249.58%3a1935/niagatv/live/playlist.m3u8:NIAGA TV (Indonesië)
+#DESCRIPTION NIAGA TV (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//119.235.249.60%3a1935/surautv/live/playlist.m3u8:SURAU TV (Indonesië)
+#DESCRIPTION SURAU TV (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream1.ninmedia.tv/live/nin-tabalong.stream_nin/playlist.m3u8:TV Tabalong (Indonesië)
+#DESCRIPTION TV Tabalong (Indonesië)
+#SERVICE 1:64:12d:0:0:0:0:0:0:0:
+#DESCRIPTION +++Indonesië regionaal+++
+#SERVICE 1:64:12e:0:0:0:0:0:0:0:
+#DESCRIPTION ++Bali - Nusa Tenggara++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIbali)/Stream(01)/index.m3u8:TVRI Bali  
+#DESCRIPTION TVRI Bali  
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIntbmataram)/Stream(03)/index.m3u8:TVRI Nusa Tenggara Barat 
+#DESCRIPTION TVRI Nusa Tenggara Barat 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRInttkupang)/Stream(03)/index.m3u8:TVRI Nusa Tenggara Timur
+#DESCRIPTION TVRI Nusa Tenggara Timur
+#SERVICE 1:64:12f:0:0:0:0:0:0:0:
+#DESCRIPTION ++Ditial++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRINasional)/Stream(01)/index.m3u8:TVRI 1 Nasional
+#DESCRIPTION TVRI 1 Nasional
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIdki)/Stream(02)/index.m3u8:TVRI 2 DKI Jakarta
+#DESCRIPTION TVRI 2 DKI Jakarta
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRI3)/Stream(01)/index.m3u8:TVRI 3 Budaya
+#DESCRIPTION TVRI 3 Budaya
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRI4)/Stream(01)/index.m3u8:TVRI 4 Olarahra
+#DESCRIPTION TVRI 4 Olarahra
+#SERVICE 1:64:130:0:0:0:0:0:0:0:
+#DESCRIPTION ++Jawa++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIdki)/Stream(01)/index.m3u8:TVRI DKI Jakarta
+#DESCRIPTION TVRI DKI Jakarta
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIjabarbandung)/Stream(01)/index.m3u8:TVRI Jawa Barat    
+#DESCRIPTION TVRI Jawa Barat    
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIjatengsemarang)/Stream(01)/index.m3u8:TVRI Jawa Tengah
+#DESCRIPTION TVRI Jawa Tengah
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIjatimsurabaya)/Stream(01)/index.m3u8:TVRI Jawa Timur
+#DESCRIPTION TVRI Jawa Timur
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIyogyakarta)/Stream(02)/index.m3u8:TVRI Yogyakarta
+#DESCRIPTION TVRI Yogyakarta
+#SERVICE 1:64:131:0:0:0:0:0:0:0:
+#DESCRIPTION ++Kalimantan++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIkalbar)/Stream(01)/index.m3u8:TVRI Kalimantan Barat
+#DESCRIPTION TVRI Kalimantan Barat
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIkaltimsamarinda)/Stream(03)/index.m3u8:TVRI Kalimantan Timur
+#DESCRIPTION TVRI Kalimantan Timur
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIkalteng)/Stream(03)/index.m3u8:TVRI Kalimantan Tengah
+#DESCRIPTION TVRI Kalimantan Tengah
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIkalselbanjarmsn)/Stream(01)/index.m3u8:TVRI Kalimantan Selatah 
+#DESCRIPTION TVRI Kalimantan Selatah 
+#SERVICE 1:64:132:0:0:0:0:0:0:0:
+#DESCRIPTION ++Maluku - Papua++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRImalukuambon)/Stream(03)/index.m3u8:TVRI Maluku
+#DESCRIPTION TVRI Maluku
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIpapua)/Stream(01)/index.m3u8:TVRI Papua  
+#DESCRIPTION TVRI Papua  
+#SERVICE 1:64:133:0:0:0:0:0:0:0:
+#DESCRIPTION ++Sulawesi++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIsulbarmajene)/Stream(01)/index.m3u8:TVRI Sulawesi Barat
+#DESCRIPTION TVRI Sulawesi Barat
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIsulbarmajene)/Stream(03)/index.m3u8:TVRI Sulawesi Selatan
+#DESCRIPTION TVRI Sulawesi Selatan
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIsultengpalu)/Stream(03)/index.m3u8:TVRI Sulawesi Tengah 
+#DESCRIPTION TVRI Sulawesi Tengah 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIsulutmanado)/Stream(02)/index.m3u8:TVRI Sulawesi Utara
+#DESCRIPTION TVRI Sulawesi Utara
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIgorontalo)/Stream(02)/index.m3u8:TVRI Gorontalo       
+#DESCRIPTION TVRI Gorontalo       
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIsultra)/Stream(01)/index.m3u8:TVRI Sulawesi Tenggara 
+#DESCRIPTION TVRI Sulawesi Tenggara 
+#SERVICE 1:64:134:0:0:0:0:0:0:0:
+#DESCRIPTION ++Sumartra++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIAceh)/Stream(02)/index.m3u8:TRVI Aceh     
+#DESCRIPTION TRVI Aceh     
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIsumutmedan)/Stream(01)/index.m3u8:TVRI Sumatra Ultra 
+#DESCRIPTION TVRI Sumatra Ultra 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIsumsel)/Stream(01)/index.m3u8:TVRI Sumatra Selatan 
+#DESCRIPTION TVRI Sumatra Selatan 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIsumbarpadang)/Stream(02)/index.m3u8:TVRI Sumatra Barat
+#DESCRIPTION TVRI Sumatra Barat
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIriau)/Stream(01)/index.m3u8:TVRI Riau    
+#DESCRIPTION TVRI Riau    
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIbabel)/Stream(01)/index.m3u8:TVRI Bangka Belitung
+#DESCRIPTION TVRI Bangka Belitung
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIbabel)/Stream(02)/index.m3u8:TVRI Lampung       
+#DESCRIPTION TVRI Lampung       
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIjambi)/Stream(01)/index.m3u8:TVRI Jambi
+#DESCRIPTION TVRI Jambi
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott.tvri.co.id/Content/HLS/Live/Channel(TVRIbengkulu)/Stream(01)/index.m3u8:TVRI Bengkulu
+#DESCRIPTION TVRI Bengkulu

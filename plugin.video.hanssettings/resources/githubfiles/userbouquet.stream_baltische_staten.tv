@@ -1,0 +1,15 @@
+#NAME Stream Baltische staten
+#SERVICE 1:64:11d:0:0:0:0:0:0:0:
+#DESCRIPTION ++Estland++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//e1.cdn.mind.ee/tallinnatv_live/_definst_/smil%3alive.smil/playlist.m3u8:Tallina TV (Estland)
+#DESCRIPTION Tallina TV (Estland)
+#SERVICE 1:64:11e:0:0:0:0:0:0:0:
+#DESCRIPTION ++Litouwen++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//lrt-radijas.data.lt/lrt_radijas/mp4%3acam1.stream/playlist.m3u8:LTR radio webcam 1 (Litouwen)
+#DESCRIPTION LTR radio webcam 1 (Litouwen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//lrt-radijas.data.lt/lrt_radijas/mp4%3acam2.stream/playlist.m3u8:LTR radio webcam 2 (Litouwen)
+#DESCRIPTION LTR radio webcam 2 (Litouwen)
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//lrt-klasika.lrt.lt/lrt_klasika/radio/playlist.m3u8:LTR Klasika radio (Litouwen)
+#DESCRIPTION LTR Klasika radio (Litouwen)
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:http%3a//lrt-opus.data.lt/lrt_opus/radio/playlist.m3u8?tokenhash=MEysEcpT5l4MMwKlN1vmISqrXl7E9g4rUb_V3zgpHPjlAfBN0znvBD0nyK64-WPBkIwjnwzwnAd3Ibo5m62SYA==&tokenendtime=1507747291:LTR Opus radio (Litouwen)
+#DESCRIPTION LTR Opus radio (Litouwen)

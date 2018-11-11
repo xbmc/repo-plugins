@@ -1,0 +1,13 @@
+#NAME Stream Jeugd
+#SERVICE 1:64:b9:0:0:0:0:0:0:0:
+#DESCRIPTION +++Argentinie+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streamspub.manasat.com/tvar/tvmanaar1:TV Maná Argentin
+#DESCRIPTION TV Maná Argentin
+#SERVICE 1:64:ba:0:0:0:0:0:0:0:
+#DESCRIPTION ++Nigeria++
+#SERVICE 4097:0:1:106:0:0:0:0:0:0:http%3a//vip.alpha-one.net%3a8080/A1Kids/index.m3u8:A1 Kids (Nigeria)
+#DESCRIPTION A1 Kids (Nigeria)
+#SERVICE 1:64:bb:0:0:0:0:0:0:0:
+#DESCRIPTION ++onbekend++
+#SERVICE 4097:0:1:162:0:0:0:0:0:0:http%3a//91.149.172.100%3a80/channel?id=25&u=demo&p=demo:JimJam (jeugd)
+#DESCRIPTION JimJam (jeugd)

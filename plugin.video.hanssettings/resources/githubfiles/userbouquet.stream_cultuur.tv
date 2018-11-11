@@ -1,0 +1,25 @@
+#NAME Stream Cultuur
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream-01.nyc.dailymotion.com/52/dm/3/x3m6nld/live-3.m3u8:Fashion TV 1 (Frankrijk) 
+#DESCRIPTION Fashion TV 1 (Frankrijk) 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//fash1043.cloudycdn.services/slive/_definst_/ftv_fmen_adaptive.smil/chunklist_b900000_t64MzYwcA==.m3u8:Fashion TV 2 (Frankrijk)
+#DESCRIPTION Fashion TV 2 (Frankrijk)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//lb.streaming.sk/fashiontv/stream/playlist.m3u8:Fashion TV (cultuur - Slowakije)
+#DESCRIPTION Fashion TV (cultuur - Slowakije)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//130.88.20.237%3a1235/monitor.flv:Landscape HD
+#DESCRIPTION Landscape HD
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//93.190.140.42%3a8081/websitesilence/live/chunks.m3u8:Silence TV (Voorburg)
+#DESCRIPTION Silence TV (Voorburg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//109.236.85.100%3a8081/sipTV/live/playlist.m3u8:Silence TV World
+#DESCRIPTION Silence TV World
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//wfc.bonus-tv.ru/cdn/wfcint/tracks-v2a1/mono.m3u8:World Fashion International
+#DESCRIPTION World Fashion International
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//wfc.bonus-tv.ru/cdn/wfcrus/tracks-v2a1/mono.m3u8:World Fashion Russia
+#DESCRIPTION World Fashion Russia
+#SERVICE 1:64:b7:0:0:0:0:0:0:0:
+#DESCRIPTION +++Russisch - Ukrainisch+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//api.tv.ipnet.ua/api/v1/manifest/1311962540.m3u8:Kultura 
+#DESCRIPTION Kultura 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//tv-mix.ru/live/Stream1:MIX TV
+#DESCRIPTION MIX TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//kiev1-cdn.lanet.tv/live/2009.m3u8:UA - Lanet TV Home (Oekraïne - open haard op tv)
+#DESCRIPTION UA - Lanet TV Home (Oekraïne - open haard op tv)

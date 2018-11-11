@@ -1,0 +1,11 @@
+#NAME Stream Afghanistan
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d10rltuy0iweup.cloudfront.net/ATNNAT/myStream/playlist.m3u8:Ariana TV National (Afghanistan)
+#DESCRIPTION Ariana TV National (Afghanistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d10rltuy0iweup.cloudfront.net/ATNNEWS/myStream/playlist.m3u8:ATN News (Afghanistan)
+#DESCRIPTION ATN News (Afghanistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//208.93.117.113/live/Stream1/chunklist.m3u8:Kayhan TV (muziek - Afghanistan)
+#DESCRIPTION Kayhan TV (muziek - Afghanistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//109.123.70.27%3a1935/shamshadtelevision/shamshadtelevision/playlist.m3u8:Shamshad TV (Afghanistan)
+#DESCRIPTION Shamshad TV (Afghanistan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//158.69.228.58%3a22893/AFGHAN/original/Tolo_/tracks-v1a1/index.m3u8:Tolo (Afghanistan)
+#DESCRIPTION Tolo (Afghanistan)

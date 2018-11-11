@@ -1,0 +1,89 @@
+#NAME Stream België
+#SERVICE 1:64:76:0:0:0:0:0:0:0:
+#DESCRIPTION +++Vlaanderen+++
+#SERVICE 4097:0:1:5221:c99:3:eb0000:0:0:0:https%3a//live-vrt.akamaized.net/groupc/live/8edf3bdf-7db3-41c3-a318-72cb7f82de66/live_aes.isml/playlist.m3u8:VRT één (België)
+#DESCRIPTION VRT één (België)
+#SERVICE 4097:0:1:5226:c99:3:eb0000:0:0:0:https%3a//live-vrt.akamaized.net/groupc/live/14a2c0f6-3043-4850-88a5-7fb062fe7f05/live_aes.isml/playlist.m3u8:VRT Canvas (België)
+#DESCRIPTION VRT Canvas (België)
+#SERVICE 4097:0:1:5278:c96:3:eb0000:0:0:0:https%3a//live-vrt.akamaized.net/groupc/live/f132f1b8-d04d-404e-90e0-6da1abb4f4fc/live_aes.isml/playlist.m3u8:VRT Ketnet (België)
+#DESCRIPTION VRT Ketnet (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//bhutan.thomasmore.be/elemental_hls/hls_stream.m3u8:21Bis (België)
+#DESCRIPTION 21Bis (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.mediahuisvideo.be/hlslive/account=JIJgfIEK1MQE/livestream=voQFf8nRBx8S/voQFf8nRBx8S_576p1128kbs/index.m3u8:ATV (Antwerpen)
+#DESCRIPTION ATV (Antwerpen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//hls-origin01-bruzz.cdn02.rambla.be/adliveorigin-bruzz/_definst_/AZwy8w.smil/chunklist_b3000000.m3u8:BRUZZ (Brussel)
+#DESCRIPTION BRUZZ (Brussel)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.mediahuisvideo.be/hlslive/account=pLZoWOCK3VYk/livestream=o7cIPayJF4eQ/o7cIPayJF4eQ_576p1128kbs/index.m3u8:Evenaar
+#DESCRIPTION Evenaar
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.mediahuisvideo.be/hlslive/account=pAJpWcgalA8g/livestream=hzup6slqsqw2/hzup6slqsqw2_576p1128kbs/index.m3u8:ROB TV - Regionale Omroep Brabant (België)
+#DESCRIPTION ROB TV - Regionale Omroep Brabant (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//apple.news.stream.vmmacdn.be/iphone/iphone_high.m3u8:VTM Nieuws
+#DESCRIPTION VTM Nieuws
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.mediahuisvideo.be/hlslive/account=JLYpfMwK3Ewk/livestream=roYECewS1JQS/roYECewS1JQS_576p1128kbs/index.m3u8:TVL (Limburg)
+#DESCRIPTION TVL (Limburg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.mediahuisvideo.be/hlslive/account=tqIhfOEY3U0A/livestream=1RRI7aXA60ww/1RRI7aXA60ww_576p1128kbs/index.m3u8:TVO HD (TV Oost, België)
+#DESCRIPTION TVO HD (TV Oost, België)
+#SERVICE 4097:0:1:9:2:4:0:0:0:0:http%3a//58c04fb1d143f.streamlock.net/vleugels2/livestream/playlist.m3u8:XITE - HD 3 (België)
+#DESCRIPTION XITE - HD 3 (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5592f056abba8.streamlock.net/citytv/citytv/playlist.m3u8:Ajoin Music (visual radio)
+#DESCRIPTION Ajoin Music (visual radio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//highvolume102.streampartner.nl/citytv/citytv/playlist.m3u8:CityMusic (Denderstreek - België) webcam
+#DESCRIPTION CityMusic (Denderstreek - België) webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5592f056abba8.streamlock.net/citytv/citytv/chunklist_w2109328455.m3u8:City Music - Bekijk City-Music live
+#DESCRIPTION City Music - Bekijk City-Music live
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//live-vrt.akamaized.net/groupa/live/bac277a1-306d-44a0-8e2e-e5b9c07fa270/live.isml/.m3u8:MNM (webcam radio)
+#DESCRIPTION MNM (webcam radio)
+#SERVICE 4097:0:1:52da:c96:3:eb0000:0:0:0:https%3a//live-aka.vrtcdn.be/groupa/live/bac277a1-306d-44a0-8e2e-e5b9c07fa270/live.isml/master.m3u8:MNM - Visual Radio (met EPG)
+#DESCRIPTION MNM - Visual Radio (met EPG)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//live-w.lwc.vrtcdn.be/groupb/live/cbe5b53e-2892-4124-9fba-a9827925624d/live.isml/live-audio_track=96000-video=2000000.m3u8:Radio 2 webcam radio (België)
+#DESCRIPTION Radio 2 webcam radio (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//highvolume04.streampartner.nl/radiopros/livestream/playlist.m3u8:Radio PROS (webcam) Heldergem-België
+#DESCRIPTION Radio PROS (webcam) Heldergem-België
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//live-vrt-verizon.ebuflow.com/groupb/live/0f394a26-c87d-475e-8590-e9c6e79b28d9/live.isml/.m3u8:Studio Brussel (webcam radio)
+#DESCRIPTION Studio Brussel (webcam radio)
+#SERVICE 1:64:77:0:0:0:0:0:0:0:
+#DESCRIPTION +++Wallonie+++
+#SERVICE 4097:0:1:1:1:32:0:0:0:0:https%3a//591299f7cc2d2.streamlock.net/live/actv-live/playlist.m3u8:Antenne Centre (België/Wallonië)
+#DESCRIPTION Antenne Centre (België/Wallonië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//vm109.imust.org/live playpath=livestream swfUrl=http%3a//www.antennecentre.tv/live/ip/player.swf pageUrl=http%3a//www.antennecentre.tv/live/ip/actv.php:ACTV La Louvière (België)
+#DESCRIPTION ACTV La Louvière (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//bel-lh.akamaihd.net/i/BEL_1@321282/master.m3u8:BEL RTL
+#DESCRIPTION BEL RTL
+#SERVICE 4097:0:1:3:0:32:0:0:0:0:rtmp%3a//149.202.81.107%3a1935/stream/live app=stream/ pageUrl=http%3a//bx1.be/live/ swfUrl=http%3a//bx1.be/wp-content/themes/bx1-201705/js/jwplayer/jwplayer.flash.swf tcUrl=rtmp%3a//149.202.81.107%3a1935/stream/ playPath=live live=1:BX1 (België)
+#DESCRIPTION BX1 (België)
+#SERVICE 4097:0:1:6:1:32:0:0:0:0:http%3a//streamer.canalc.be%3a1935/canalc/smil%3aSMIL-canalc-multi/playlist.m3u8:Canal C (Namen, België)
+#DESCRIPTION Canal C (Namen, België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streamer.canalc.be%3a1935/canalzoom/smil%3aSMIL-canalzoom-multi/playlist.m3u8:Canal Zoom (België)
+#DESCRIPTION Canal Zoom (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//funlive.vedge.infomaniak.com/livecast/funlive/main.m3u8:FunRadio België (visual radio)
+#DESCRIPTION FunRadio België (visual radio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//37.187.27.150%3a1935/matelelive2/matelelive_0720/playlist.m3u8:MAtele (België)
+#DESCRIPTION MAtele (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//streaming01.divercom.be/notele_live/_definst_/direct.stream/chunklist_w1342170057.m3u8:NOTELE (België)
+#DESCRIPTION NOTELE (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dev.nrj.be%3a1935/live/nrjbelgique/playlist.m3u8:NRJ Belgique (België)
+#DESCRIPTION NRJ Belgique (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//contact-lh.akamaihd.net/i/CONTACT_1@321283/index_1800_av-p.m3u8:Radio Contact (België/Wallonië)
+#DESCRIPTION Radio Contact (België/Wallonië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rtbf.l3.freecaster.net/live/rtbf/geo/drm/laune-audio_1=128000-video=2000000.m3u8:RTBF La Une (België)
+#DESCRIPTION RTBF La Une (België)
+#SERVICE 4097:0:1:420e:2f44:13e:820000:0:0:0:http%3a//rtbf.l3.freecaster.net/live/rtbf/geo/open/bc1e985c9592276a91bf1db4a6dd366efc9fc11e/laune.m3u8?token=0db0ad0d41931810f148c:RTBF - La Une (met EPG)
+#DESCRIPTION RTBF - La Une (met EPG)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rtbf.l3.freecaster.net/live/rtbf/geo/drm/ladeux-audio_1=128000-video=2000000.m3u8:RTBF La Deux (België)
+#DESCRIPTION RTBF La Deux (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rtbf.l3.freecaster.net/live/rtbf/geo/drm/latrois-audio_1=128000-video=2000000.m3u8:RTBF La Trois  (België)
+#DESCRIPTION RTBF La Trois  (België)
+#SERVICE 4097:0:1:7:899:7777:0:0:0:0:http%3a//wowza.imust.org%3a1935/live/rtc-live/playlist.m3u8:RTC Télé Liège
+#DESCRIPTION RTC Télé Liège
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rtltvi-lh.akamaihd.net/i/TVI_1@319659/master.m3u8:RTL TVI
+#DESCRIPTION RTL TVI
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//tvl-live.l3.freecaster.net/live/telesambre/telesambre-audio_track=128000-video=1600000.m3u8:Telesambre (België)
+#DESCRIPTION Telesambre (België)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//149.202.81.107/stream//live:Tele Bruselles (België/Wallonië)
+#DESCRIPTION Tele Bruselles (België/Wallonië)
+#SERVICE 4097:0:1:5:1:32:0:0:0:0:http%3a//vm109.imust.org%3a1935/live/televesdre-live/playlist.m3u8:Tele Vesdre
+#DESCRIPTION Tele Vesdre
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5a0b00d270652.streamlock.net/live/tvlux-live/playlist.m3u8:TV Lux
+#DESCRIPTION TV Lux
+#SERVICE 4097:0:1:5:1:32:0:0:0:0:https%3a//5a0b00d270652.streamlock.net/live/vedia-live/playlist.m3u8:Vedia (België/Wallonië)
+#DESCRIPTION Vedia (België/Wallonië)

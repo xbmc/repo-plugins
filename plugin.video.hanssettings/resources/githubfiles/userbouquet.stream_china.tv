@@ -1,0 +1,141 @@
+#NAME Stream China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//60.30.52.41/live/bhtv2/playlist.m3u8:'Kunstleven' (China)
+#DESCRIPTION 'Kunstleven' (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ktv009.cdnak.ds.kylintv.net/nlds/kylin/ahtv/as/live/ahtv_4.m3u8:Anhui International (China)
+#DESCRIPTION Anhui International (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//v.btzx.com.cn%3a1935/live/weishi.stream/playlist.m3u8:Bingtuan (China)
+#DESCRIPTION Bingtuan (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv1hd.m3u8:CCTV 1 (China)
+#DESCRIPTION CCTV 1 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv2.m3u8:CCTV 2 (China)
+#DESCRIPTION CCTV 2 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv3hd.m3u8:CCTV 3 (China)
+#DESCRIPTION CCTV 3 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv4.m3u8:CCTV 4 (China)
+#DESCRIPTION CCTV 4 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv5hd.m3u8:CCTV 5 (China)
+#DESCRIPTION CCTV 5 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//audio.live.cntv.dnion.com%3a8000/cache/259_/seg0/index.m3u8?AUTH=mAnt3y2eRF/RxygZBDXLYT7fCaaA6GxcKyIEe3d3Jy22VShhVmAdrLSMtrccul6NMa7hGB21iwEngT7VpY3EcQ==:CCTV 5+ (China)
+#DESCRIPTION CCTV 5+ (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv6hd.m3u8:CCTV 6 (China)
+#DESCRIPTION CCTV 6 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv7.m3u8:CCTV 7 (China)
+#DESCRIPTION CCTV 7 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv8hd.m3u8:CCTV 8 (China)
+#DESCRIPTION CCTV 8 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv9.m3u8:CCTV 9 (China)
+#DESCRIPTION CCTV 9 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv10.m3u8:CCTV 10 (China)
+#DESCRIPTION CCTV 10 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv11.m3u8:CCTV 11 (China)
+#DESCRIPTION CCTV 11 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv12.m3u8:CCTV 12 (China)
+#DESCRIPTION CCTV 12 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv13.m3u8:CCTV 13 - news (China)
+#DESCRIPTION CCTV 13 - news (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv14.m3u8:CCTV 14 (China)
+#DESCRIPTION CCTV 14 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ivi.bupt.edu.cn/hls/cctv15.m3u8:CCTV 15 (China)
+#DESCRIPTION CCTV 15 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.cgtn.com/500/prog_index.m3u8:CGTN (China)
+#DESCRIPTION CGTN (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//api.new.livestream.com/accounts/7082210/events/7115682/live.m3u8:CGTN America (China)
+#DESCRIPTION CGTN America (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.cgtn.com/cctv-d.m3u8:CGTN Documentary (China)
+#DESCRIPTION CGTN Documentary (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.cgtn.com/1000/prog_index.m3u8:CGTN English (China - nieuws)
+#DESCRIPTION CGTN English (China - nieuws)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ktv009.cdnak.ds.kylintv.net/nlds/kylin/cbn/as/live/cbn_3.m3u8:China Business Network (China)
+#DESCRIPTION China Business Network (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//pull.kapad.cn/live/livechtv/playlist.m3u8:CHTV (China)
+#DESCRIPTION CHTV (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//live.cgtn.com/1000/prog_index.m3u8:CTGN (China)
+#DESCRIPTION CTGN (China)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//ktv009.cdnak.ds.kylintv.net/nlds/kylin/cbn/as/live/cbn_4.m3u8:First Financial (China)
+#DESCRIPTION First Financial (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//6.mms.vlog.xuite.net/hls/ftvtv/index.m3u8:Formosa News TV (China)
+#DESCRIPTION Formosa News TV (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.gstv.com.cn/gsws/playlist.m3u8:Gansu (China)
+#DESCRIPTION Gansu (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/hls-live/goodtv/_definst_/liveevent/live-ch1-1.m3u8:Good TV (China)
+#DESCRIPTION Good TV (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech1.m3u8:Good TV 1 China
+#DESCRIPTION Good TV 1 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech10.m3u8:Good TV 10 China
+#DESCRIPTION Good TV 10 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech11.m3u8:Good TV 11 China
+#DESCRIPTION Good TV 11 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech12.m3u8:Good TV 12 China
+#DESCRIPTION Good TV 12 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech13.m3u8:Good TV 13 China
+#DESCRIPTION Good TV 13 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech14.m3u8:Good TV 14 China
+#DESCRIPTION Good TV 14 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech2.m3u8:Good TV 2 China
+#DESCRIPTION Good TV 2 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech3.m3u8:Good TV 3 China
+#DESCRIPTION Good TV 3 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech4.m3u8:Good TV 4 China
+#DESCRIPTION Good TV 4 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech5.m3u8:Good TV 5 China
+#DESCRIPTION Good TV 5 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech6.m3u8:Good TV 6 China
+#DESCRIPTION Good TV 6 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech7.m3u8:Good TV 7 China
+#DESCRIPTION Good TV 7 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech8.m3u8:Good TV 8 China
+#DESCRIPTION Good TV 8 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamingfast.net/osmflivech9.m3u8:Good TV 9 China
+#DESCRIPTION Good TV 9 China
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream1.hnntv.cn/lywsgq/sd/live.m3u8:Hainan Travel TV (China)
+#DESCRIPTION Hainan Travel TV (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//weblive.hebtv.com/live/hbws_bq/index.m3u8:Hebei TV (China)
+#DESCRIPTION Hebei TV (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//live.hkstv.hk.lxdns.com/live/hks:HKS (China)
+#DESCRIPTION HKS (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8:Hong Kong TV (China)
+#DESCRIPTION Hong Kong TV (China)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//ktv009.cdnak.ds.kylintv.net/nlds/kylin/kunlunhd/as/live/kunlunhd_4.m3u8:Kunlun theater (China)
+#DESCRIPTION Kunlun theater (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//60.30.52.41/live/bhtv1/playlist.m3u8:Marina News (China)
+#DESCRIPTION Marina News (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//d2e6xlgy8sg8ji.cloudfront.net/liveedge/eratv4/chunklist.m3u8:Next TV (China)
+#DESCRIPTION Next TV (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//wstreamks.now.com/originkey/Content/HLS/Live/Channel(hls_ch154)/index.m3u8:Oh!k (China)
+#DESCRIPTION Oh!k (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//v1.one-tv.com%3a1935/live/mpegts.stream/playlist.m3u8:ONE TV (China)
+#DESCRIPTION ONE TV (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rthklive1-lh.akamaihd.net/i/rthk31_1@167495/index_2052_av-b.m3u8:RTHK 31 (China)
+#DESCRIPTION RTHK 31 (China)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//rthklive2-lh.akamaihd.net/i/rthk32_1@168450/index_2052_av-b.m3u8:RTHK 32 (China)
+#DESCRIPTION RTHK 32 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.live.kksmg.com/live/live24h3/playlist.m3u8:Shanghai TV (China)
+#DESCRIPTION Shanghai TV (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//223.110.243.159/PLTV/3/224/3221225570/index.m3u8:Sichuan TV (China)
+#DESCRIPTION Sichuan TV (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ec.sinovision.net/video/ts/lv.m3u8:Sinovision TV (Chinees from USA)
+#DESCRIPTION Sinovision TV (Chinees from USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//live4.tdm.com.mo%3a80/ch1/ch1.live:TDM Channel 1 (China) kan even duren
+#DESCRIPTION TDM Channel 1 (China) kan even duren
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//live4.tdm.com.mo%3a80/ch2/ch2.live:TDM Channel 2 Macau (China) kan even duren
+#DESCRIPTION TDM Channel 2 Macau (China) kan even duren
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//live4.tdm.com.mo%3a80/ch3/ch3.live:TDM Channel 3 (China) kan even duren
+#DESCRIPTION TDM Channel 3 (China) kan even duren
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//live4.tdm.com.mo%3a80/ch4/sport_ch4.live:TDM Channel 4 sport (China) kan even duren
+#DESCRIPTION TDM Channel 4 sport (China) kan even duren
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//live4.tdm.com.mo%3a80/ch5/info_ch5.live:TDM Channel 5 Info (China) kan even duren
+#DESCRIPTION TDM Channel 5 Info (China) kan even duren
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//live4.tdm.com.mo%3a80/ch6/hd_ch6.live:TDM Channel 6 (China) kan even duren
+#DESCRIPTION TDM Channel 6 (China) kan even duren
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvbilive14-i.akamaihd.net/hls/live/496344/CTVB8/index.m3u8:TVB 8 (China)
+#DESCRIPTION TVB 8 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//zbplay.tcgqxx.com/qxdq/5acd8943e99cf.m3u8:TVB J2 (China)
+#DESCRIPTION TVB J2 (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvbilive11-i.akamaihd.net/hls/live/494666/CJunior/index.m3u8:TVB junior (China)
+#DESCRIPTION TVB junior (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvbilive12-i.akamaihd.net/hls/live/496337/CLife/index.m3u8:TVB life (China)
+#DESCRIPTION TVB life (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//viutv99-i.akamaihd.net/hls/live/265284/live1/master.m3u8:VIU TV (China)
+#DESCRIPTION VIU TV (China)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//221.238.209.44%3a81/hls/live1.m3u8:Xiqinq News 1 (China)
+#DESCRIPTION Xiqinq News 1 (China)

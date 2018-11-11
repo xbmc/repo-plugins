@@ -1,0 +1,3 @@
+#NAME Stream Nicaragua
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//162.244.81.181%3a1935/live/Stream1/playlist.m3u8:Canal 2 Nicaragua (Nicaragua)
+#DESCRIPTION Canal 2 Nicaragua (Nicaragua)

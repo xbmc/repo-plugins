@@ -1,0 +1,87 @@
+#NAME Stream NL nationaal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server-66.stream-server.nl%3a1935/Norderney192/Norderney192/chunklist_w1690526334.m3u8 :Norderney 192 TV
+#DESCRIPTION Norderney 192 TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server-67.stream-server.nl/Norderney192/Norderney192/chunklist_w343395866.m3u8 :Norderney 192 videostream
+#DESCRIPTION Norderney 192 videostream
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//102793ooyala-lh.akamaihd.net/i/depers02_delivery@381748/master.m3u8:QMusic NL
+#DESCRIPTION QMusic NL
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//talparadiohls-i.akamaihd.net/hls/live/624107/VR-Radio538-1/Radio538Stream-Q5.m3u8:Radio 538 Stream
+#DESCRIPTION Radio 538 Stream
+#SERVICE 4097:0:1:5260:c99:3:eb0000:0:0:0:https%3a//talparadiohls-i.akamaihd.net/hls/live/624107/VR-Radio538-1/playlist538.m3u8:Radio 538 - Visual Radio (met EPG)
+#DESCRIPTION Radio 538 - Visual Radio (met EPG)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//84.22.97.59%3a80/radiocontinu/live/chunklist_w1324825240.m3u8 :Radio Continu
+#DESCRIPTION Radio Continu
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//558bd16067b67.streamlock.net/radionl/radionl/chunklist_w1498662482.m3u8:Radio NL webcam studio
+#DESCRIPTION Radio NL webcam studio
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//talparadiohls-i.akamaihd.net/hls/live/585615/VR-Veronica-1/Q5.m3u8:Radio Veronica (webcam)
+#DESCRIPTION Radio Veronica (webcam)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//93.190.140.42%3a8081/websitesilence/live/chunks.m3u8:Silence TV (Voorburg)
+#DESCRIPTION Silence TV (Voorburg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//109.236.85.100%3a8081/sipTV/live/playlist.m3u8:Silence TV World
+#DESCRIPTION Silence TV World
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:https%3a//hls.slam.nl/streaming/hls/SLAM!/med_1500000/playlist.m3u8:SLAM TV
+#DESCRIPTION SLAM TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//58c2eaf76046f.streamlock.net/vleugels_hd4/livestream/playlist.m3u8:XITE - HD 4 (Nederland)
+#DESCRIPTION XITE - HD 4 (Nederland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//58c2eaf76046f.streamlock.net/vleugels_hd5/livestream/playlist.m3u8:XITE - HD 5 (Nederland)
+#DESCRIPTION XITE - HD 5 (Nederland)
+#SERVICE 1:64:59:0:0:0:0:0:0:0:
+#DESCRIPTION ++sommige images/ontvangers++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/tvlive/npo1/npo1.isml/npo1.m3u8:NPO 1 HD
+#DESCRIPTION NPO 1 HD
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/tvlive/npo2/npo2.isml/npo2.m3u8:NPO 2 HD
+#DESCRIPTION NPO 2 HD
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/tvlive/npo3/npo3.isml/npo3.m3u8:NPO 3 HD
+#DESCRIPTION NPO 3 HD
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/zappelin24/zappelin24.isml/zappelin24.m3u8:NPO 1 extra
+#DESCRIPTION NPO 1 extra
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/cultura24/cultura24.isml/cultura24.m3u8:NPO 2 extra
+#DESCRIPTION NPO 2 extra
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/101tv/101tv.isml/101tv.m3u8:NPO 3 extra
+#DESCRIPTION NPO 3 extra
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/journaal24/journaal24.isml/journaal24.m3u8 :NPO Nieuws
+#DESCRIPTION NPO Nieuws
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//smoote1g.omroep.nl/urishieldv2/l2fm3b46ef0730f884a1005ba4f91a000000.370223288bb790e62728704ea4c30aa0/live/npo/thematv/politiek24/politiek24.isml/politiek24-audio_nld=128000-video=1400000.m3u8 :NPO Politiek
+#DESCRIPTION NPO Politiek
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/tvlive/npo1/npo1.isml/npo1.m3u8:NPO 1 
+#DESCRIPTION NPO 1 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/tvlive/npo2/npo2.isml/npo2.m3u8:NPO 2 
+#DESCRIPTION NPO 2 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/tvlive/npo3/npo3.isml/npo3.m3u8:NPO 3 
+#DESCRIPTION NPO 3 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/zappelin24/zappelin24.isml/zappelin24.m3u8:NPO Zapp Xtra/NPO 1 extra
+#DESCRIPTION NPO Zapp Xtra/NPO 1 extra
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/cultura24/cultura24.isml/cultura24.m3u8:NPO 2 extra
+#DESCRIPTION NPO 2 extra
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/101tv/101tv.isml/101tv.m3u8:NPO 3 extra
+#DESCRIPTION NPO 3 extra
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/journaal24/journaal24.isml/journaal24.m3u8:NPO Nieuws
+#DESCRIPTION NPO Nieuws
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/politiek24/politiek24.isml/politiek24.m3u8:NPO Politiek
+#DESCRIPTION NPO Politiek
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/visualradio/radio1/radio1.isml/radio1.m3u8:NPO Radio 1 (Beeldradio)
+#DESCRIPTION NPO Radio 1 (Beeldradio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.omroep.nl/live/npo/visualradio/radio1/radio1.isml/radio1.m3u8?hash=749c8354dc5b6ed4e0d0b4f91fbf2579&amp;protection=ur" target="_blank" rel="nofollow">http%3a//livestreams.omroep.nl/live/npo/visualradio/radio1/radio1.isml/radio1.m3u8?hash=749c8354dc5b6ed4e0d0b4f91fbf2579&amp;protection=url</a><br>:NPO Radio 1 (Webcam Radio)
+#DESCRIPTION NPO Radio 1 (Webcam Radio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.omroep.nl/live/npo/visualradio/radio2/radio2.isml/radio2.m3u8?hash=749c8354dc5b6ed4e0d0b4f91fbf2579&amp;protection=url:NPO Radio 2 (Webcam Radio)
+#DESCRIPTION NPO Radio 2 (Webcam Radio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/visualradio/radio2/radio2.isml/radio2.m3u8:NPO Radio 2 (Beeldradio)
+#DESCRIPTION NPO Radio 2 (Beeldradio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/visualradio/3fm/3fm.isml/3fm.m3u8:NPO 3FM (Beeldradio)
+#DESCRIPTION NPO 3FM (Beeldradio)
+#SERVICE 4097:0:1:525a:c99:3:eb0000:0:0:0:http%3a//livestreams.omroep.nl/live/npo/visualradio/3fm/3fm.isml/3fm-audio_nld=128000-video=1400000.m3u8:NPO 3FM - Visual Radio (met EPG)
+#DESCRIPTION NPO 3FM - Visual Radio (met EPG)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.omroep.nl/live/npo/visualradio/3fm/3fm.isml/3fm-audio_nld=128000-video=1400000.m3u8?protection=url:NPO 3 FM (Webcam Radio)
+#DESCRIPTION NPO 3 FM (Webcam Radio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/visualradio/radio4/radio4.isml/radio4.m3u8 :NPO Radio 4 (Beeldradio)
+#DESCRIPTION NPO Radio 4 (Beeldradio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.omroep.nl/live/npo/visualradio/radio4/radio4.isml/radio4.m3u8?hash=749c8354dc5b6ed4e0d0b4f91fbf2579&amp;protection=url:NPO Radio 4 (Beeld Radio)
+#DESCRIPTION NPO Radio 4 (Beeld Radio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/visualradio/radio4/radio4.isml/radio4.m3u8:NPO Radio 4 (Beeldradio)
+#DESCRIPTION NPO Radio 4 (Beeldradio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.omroep.nl/live/npo/visualradio/funx/funx.isml/funx.m3u8?hash=749c8354dc5b6ed4e0d0b4f91fbf2579&amp;protection=url:NPO FunX (Beeld Radio)
+#DESCRIPTION NPO FunX (Beeld Radio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/visualradio/funx/funx.isml/funx.m3u8#DESCRIPTION NPO FunX (Beeldradio):NPO FunX (Beeldradio)
+#DESCRIPTION NPO FunX (Beeldradio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.omroep.nl/live/npo/visualradio/funx/funx.isml/funx.m3u8:NPO FUNX (Beeldradio
+#DESCRIPTION NPO FUNX (Beeldradio

@@ -1,0 +1,13 @@
+#NAME Stream IJsland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//w1.kringvarp.fo/uttanlands/_definst_/smil%3auttanlands.smil/playlist.m3u8:KVF (Faroe eilanden)
+#DESCRIPTION KVF (Faroe eilanden)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.vodafoneplay.is/n4/03.m3u8:N4 (IJsland)
+#DESCRIPTION N4 (IJsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//sip-live.hds.adaptive.level3.net/hls-live/omega-omega/_definst_/live/stream1.m3u8:Omega (IJsland)
+#DESCRIPTION Omega (IJsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ruvruverl-live.hls.adaptive.level3.net/ruv/ruverl/index/stream4.m3u8:RUV (IJsland) - soms
+#DESCRIPTION RUV (IJsland) - soms
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ruvruverl-live.hls.adaptive.level3.net/ruv/ruv/index/stream4.m3u8:RUV 1 (IJsland)
+#DESCRIPTION RUV 1 (IJsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ruvruv2erl-live.hls.adaptive.level3.net/f20892ba5b5cfddc703145a08956521c2aa911f4-1491637525/ruv/ruv2erl/index/stream3.m3u8:RUV 2 (IJsland)
+#DESCRIPTION RUV 2 (IJsland)

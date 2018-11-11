@@ -1,0 +1,75 @@
+#NAME Stream Portugees
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cmgaia.worldvds.com%3a8080/hls/livestream.m3u8:Agueda TV
+#DESCRIPTION Agueda TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//69.46.0.170%3a1935/tvandradas/antv.stream/live.m3u8:ANTV MG
+#DESCRIPTION ANTV MG
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//193.126.16.69%3a1935/vod/_definst_/mp4%3aout_final/sd720x576/36_destaques/004-30anoscee_v2/playlist.m3u8:ARTV
+#DESCRIPTION ARTV
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//video.sinoinformatica.com.br%3a1935/cmtupa-live/sessaoaovivo/livestream.m3u8:CANAL DE TUPA SP
+#DESCRIPTION CANAL DE TUPA SP
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//stream.novotempo.com%3a1935/tv/executivo.smil/live.m3u8:CANAL EXECUTIVO
+#DESCRIPTION CANAL EXECUTIVO
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//flash1.crossdigital.com.br%3a1935/ponto85/ongrace/live.m3u8:CJC RJ
+#DESCRIPTION CJC RJ
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//rtmp.cdn.upx.net.br%3a1935/00135_4/myStream.sdp/live.m3u8:MEGA TV SP
+#DESCRIPTION MEGA TV SP
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//213.13.26.11%3a1935/live/portocanal/chunklist.m3u8:Porto Canal
+#DESCRIPTION Porto Canal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//flash.softhost.com.br%3a1935/pucgoias/aovivo/live.m3u8:PUC TV GO
+#DESCRIPTION PUC TV GO
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//media.igospel.com.br%3a1935/live/redegospel/livestream.m3u8:REDE GOSPEL SP
+#DESCRIPTION REDE GOSPEL SP
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//213.13.26.11%3a1935/live/rtc_teste/livestream.m3u8:RTC (CV)
+#DESCRIPTION RTC (CV)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreamcdn.net%3a1935/SobrenaturalTV/SobrenaturalTV/playlist.m3u8:Sobrenatural TV (Portugal)
+#DESCRIPTION Sobrenatural TV (Portugal)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streamer1.streamhost.org%3a1935/salive/GMI3anjoh/livestream.m3u8:TERCEIRO ANJO TV
+#DESCRIPTION TERCEIRO ANJO TV
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//srv6.zoeweb.tv%3a1935/z627-live/stream/livestream.m3u8:TV ASSEMBLEIA RN
+#DESCRIPTION TV ASSEMBLEIA RN
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream2.camara.leg.br%3a80/camara-hls-live/tv1/camaraevent/TV1.m3u8:TV CAMARA DF
+#DESCRIPTION TV CAMARA DF
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//stream2.camara.leg.br%3a80/tv2/manifest.m3u8:TV CANAL 2 DF
+#DESCRIPTION TV CANAL 2 DF
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//179.107.83.10%3a1935/live/tvcidadeaovivo_1/livestream.m3u8:TV CIDADE SC
+#DESCRIPTION TV CIDADE SC
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//200.189.113.201%3a80/hls/tve.m3u8:TV CULTURA PR
+#DESCRIPTION TV CULTURA PR
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//midia.faap.br%3a80/faaplatamlive-live/stream_720/livestream.m3u8:TV FAAP SP
+#DESCRIPTION TV FAAP SP
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//fms1.tacitus.com.br%3a1935/tvgeral/tvgeral/live.m3u8:TV GERAL BA
+#DESCRIPTION TV GERAL BA
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//flash1.crossdigital.com.br%3a1935/476_1/476_1/live.m3u8:TV GUARULHOS SP
+#DESCRIPTION TV GUARULHOS SP
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//srv6.zoeweb.tv%3a1935/z476-live/stream/livestream.m3u8:TV JESUS CRISTO
+#DESCRIPTION TV JESUS CRISTO
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//stream.novotempo.com%3a1935/tv/tvnovotempo.smil/live.m3u8:TV NOVO TEMPO SP
+#DESCRIPTION TV NOVO TEMPO SP
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//srv3.zoeweb.tv%3a1935/z01-live/stream/livestream.m3u8:TV O POVO CE (Brazilië)
+#DESCRIPTION TV O POVO CE (Brazilië)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//rtmp.cdn.upx.net.br%3a1935/00084/myStream.sdp/live.m3u8:TV POCOS MG
+#DESCRIPTION TV POCOS MG
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//flash1.crossdigital.com.br%3a1935/2063/2063/live.m3u8:TV SANTA CECILIA SP
+#DESCRIPTION TV SANTA CECILIA SP
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//srv3.zoeweb.tv%3a1935/z443-live/stream1/livestream.m3u8:TV SOM ZOOM CE
+#DESCRIPTION TV SOM ZOOM CE
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//flash1.crossdigital.com.br%3a1935/ponto2/transamerica2/live.m3u8:TV TRANSAMERICA PR
+#DESCRIPTION TV TRANSAMERICA PR
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//ynv2127uts35.nethorizontes.tv%3a1935/ynv2127uts35/tvunivates/live.m3u8:TV UNIVATES
+#DESCRIPTION TV UNIVATES
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//ocatv.mcgi.me%3a1935/public/247_br/live.m3u8:TV VERDADE SC
+#DESCRIPTION TV VERDADE SC
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//wse3.player.tv.br%3a1935/tvwebparana/tvwebparana/live.m3u8:TV WEB PARANA
+#DESCRIPTION TV WEB PARANA
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//noscdn1.connectedviews.com%3a1935/live/+tvi.stream/livestream.m3u8:TVI +
+#DESCRIPTION TVI +
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//painelvj.com.br%3a1935/tvnbrasil/tvnbrasil.sdp/live.m3u8:TVN BRASIL DF (Brazilië)
+#DESCRIPTION TVN BRASIL DF (Brazilië)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//srv-vvtv.sisdera.com.br%3a1935/live/vvtv3/livestream.m3u8:VEM E VE TV 1 SP
+#DESCRIPTION VEM E VE TV 1 SP
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//srv-vvtv.sisdera.com.br%3a1935/live/vvtv023/livestream.m3u8:VEM E VE TV 2 SP
+#DESCRIPTION VEM E VE TV 2 SP
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//srv-vvtv.sisdera.com.br%3a1935/live/vvtv033/livestream.m3u8:VEM E VE TV 3 SP
+#DESCRIPTION VEM E VE TV 3 SP
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5a8d73edc0407.streamlock.net%3a443/omdvia1str/viawebtv1/playlist.m3u8:VIA MORENA TV MS
+#DESCRIPTION VIA MORENA TV MS

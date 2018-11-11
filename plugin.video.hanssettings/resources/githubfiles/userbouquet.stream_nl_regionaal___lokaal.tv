@@ -1,0 +1,359 @@
+#NAME Stream NL regionaal & lokaal
+#SERVICE 1:64:5a:0:0:0:0:0:0:0:
+#DESCRIPTION +++Friesland/Groningen/Drenthe+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn22d.streampartner.nl/podiumbv/podiumbv_1080p/chunklist_w1436483461.m3u8?ref=podium.tv:Podium.TV 1
+#DESCRIPTION Podium.TV 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn22d.streampartner.nl/podiumbv_2/podiumbv_2/chunklist_w793524307.m3u8?ref=podium.tv:Podium.TV 2
+#DESCRIPTION Podium.TV 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//highvolume102.streampartner.nl/podiumbv_4/smil%3apodiumbv_4.smil/playlist.m3u8?ref=podium.tv:Podium TV kanaal 3 - HD
+#DESCRIPTION Podium TV kanaal 3 - HD
+#SERVICE 1:64:5b:0:0:0:0:0:0:0:
+#DESCRIPTION +++Friesland+++
+#SERVICE 4097:0:1:4b0e:80e:600:0:0:0:0:https%3a//d3pvma9xb2775h.cloudfront.net/live/omropfryslan/stream04/index.m3u8:Omrop Fryslân HD
+#DESCRIPTION Omrop Fryslân HD
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streams.uitzending.tv/centraaltv/centraaltv:Centraal TV (Noordwolde)
+#DESCRIPTION Centraal TV (Noordwolde)
+#SERVICE 4097:0:1:60:2:4:0:0:0:0:http%3a//streams.uitzending.tv/centraal/centraal/chunklist_w1734214400.m3u8 :Centraal TV (visual radio - Noordwolde - Friesland)
+#DESCRIPTION Centraal TV (visual radio - Noordwolde - Friesland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d3pvma9xb2775h.cloudfront.net/live/omropfryslan/stream01/index.m3u8:Klipkar TV HQ
+#DESCRIPTION Klipkar TV HQ
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//highvolume102.streampartner.nl/rtvnof/rtvnof/chunklist_w555833727.m3u8:RTV NOF
+#DESCRIPTION RTV NOF
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn15.streampartner.nl%3a1935/rtvnof2/live/playlist.m3u8:RTV NOF webcam radio (Noordoost-Friesland)
+#DESCRIPTION RTV NOF webcam radio (Noordoost-Friesland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=E7RAPuILTJc2/livestream=-ZZMK-aARoY2/events(1536670951)/live-audio_1=96000-video=904000.m3u8:Omroep Súdwest Fryslan
+#DESCRIPTION Omroep Súdwest Fryslan
+#SERVICE 1:64:5c:0:0:0:0:0:0:0:
+#DESCRIPTION +++Groningen+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.omroep.nl/live/npo/regionaal/rtvnoord/rtvnoord.isml/rtvnoord.m3u8:RTV Noord
+#DESCRIPTION RTV Noord
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=BAAIMu-JR8Yy/livestream=ERREOY4AeMUU/events(1531133304)/live-audio_1=96000-video=304000.m3u8:OOG TV (Groningen)
+#DESCRIPTION OOG TV (Groningen)
+#SERVICE 4097:0:1:4d60:bbc:600:ffff0000:0:0:0:http%3a//highvolume04.streampartner.nl/regiomedia/regiomedia/playlist.m3u8:Regionieuws TV (midden Groningen)
+#DESCRIPTION Regionieuws TV (midden Groningen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=lqRIFo4bDtQ2/livestream=X7ZMrsKBXl8S/X7ZMrsKBXl8S.m3u8:RTV 1 (Stadsknaal/Veendam)
+#DESCRIPTION RTV 1 (Stadsknaal/Veendam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59132e529e3d1.streamlock.net/Groningen1/Groningen1/chunklist_w1958262376.m3u8:RTV GO! (Oldambt - Groningen)
+#DESCRIPTION RTV GO! (Oldambt - Groningen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59132e529e3d1.streamlock.net/westerwolde/westerwolde/playlist.m3u8:RTV Westerwolde
+#DESCRIPTION RTV Westerwolde
+#SERVICE 1:64:5d:0:0:0:0:0:0:0:
+#DESCRIPTION +++Drenthe+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.rtvdrenthe.nl/tv/%3atvstream1/playlist.m3u8:RTV Drenthe
+#DESCRIPTION RTV Drenthe
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=c7Zp96hI-t8W/livestream=7gIpxIlY-EYW/events(1531133500)/live-audio_1=96000-video=904000.m3u8:Altena TV - Altena (Drenthe)
+#DESCRIPTION Altena TV - Altena (Drenthe)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn22.streampartner.nl/streektv/streektv/playlist.m3u8:DNO Streek TV
+#DESCRIPTION DNO Streek TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=BpRIEq4LT84W/livestream=IjYFI8qBJM0W/events(1513813846)/live-audio_1=96000-video=603968.m3u8:Omroep Assen
+#DESCRIPTION Omroep Assen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//84.22.97.59%3a80/radiocontinu/live:Radio Continu (Tweede Exloermond)
+#DESCRIPTION Radio Continu (Tweede Exloermond)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=lqRIFo4bDtQ2/livestream=X7ZMrsKBXl8S/events(1531131502)/live-audio_1=96000-video=904000.m3u8:RTV1 - RTVeen (Veenkoloniën - Drenthe)
+#DESCRIPTION RTV1 - RTVeen (Veenkoloniën - Drenthe)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=lJBBN8OLDwQy/livestream=_4REFuIBBY8W/_4REFuIBBY8W.m3u8:RTV Meppel
+#DESCRIPTION RTV Meppel
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming1.stream.delivery/simonefm/live/playlist.m3u8:Simone FM beeldradio (Emmen)
+#DESCRIPTION Simone FM beeldradio (Emmen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//558bd16067b67.streamlock.net/rtvemmen_tv/rtvemmen_tv/playlist.m3u8:ZO!34 (Coevorden/Emmen)
+#DESCRIPTION ZO!34 (Coevorden/Emmen)
+#SERVICE 1:64:5e:0:0:0:0:0:0:0:
+#DESCRIPTION +++Overijssel+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//lsw-global.offload.streamzilla.xlcdn.com/session/6082319ddfbaeb111032c83e62d90f83/sz/rtv_oost/wowza4/live/tvoost.smil/playlist.m3u8:RTV Oost
+#DESCRIPTION RTV Oost
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=nYRIFIaZSIY2/livestream=CZAJjY-KKkc2/events(1509190965)/live-audio_1=96000-video=1904000.m3u8:AAVisie  (Almelo)
+#DESCRIPTION AAVisie  (Almelo)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn22.streampartner.nl/streektv/streektv/chunklist.m3u8 :DNO Streek TV (Staphorst) 
+#DESCRIPTION DNO Streek TV (Staphorst) 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=DaANmMeBRx80/livestream=j4AMuusRAlc0/events(1495074792)/live-audio_1=96000-video=603968.m3u8:Drtv (Deventer)
+#DESCRIPTION Drtv (Deventer)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=DRJAMeoZAR4W/livestream=hyQMv4KTToQ0/events(1488886427)/live-audio_1=96000-video=904000.m3u8:Hoi Nijverdal
+#DESCRIPTION Hoi Nijverdal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=jQRJNcMbSV0S/livestream=FwZEvacBRo0U/events(1495101497)/live-audio_1=96000-video=304000.m3u8:IJsselland TV (Olst-Wijhe - Raalte)
+#DESCRIPTION IJsselland TV (Olst-Wijhe - Raalte)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn22d.streampartner.nl/detorenhberg/detorenhberg/playlist.m3u8:NOOS TV (Overijssel)
+#DESCRIPTION NOOS TV (Overijssel)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//stream.radio350.nl/hls/radio350.m3u8:Radio350 webcam (Rijssen)
+#DESCRIPTION Radio350 webcam (Rijssen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=BBRIE-6bD0Q2/livestream=5SYMIucRIJUW/events(1531131212)/live-audio_1=96000-video=603968.m3u8:RTV IJsselmond (Kampen)
+#DESCRIPTION RTV IJsselmond (Kampen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=ASYIOusZTcYS/livestream=4zJNKIcCLwY2/events(1531133490)/live-audio_1=96000-video=603968.m3u8:RTV Slos (Steenwijk e.o.)
+#DESCRIPTION RTV Slos (Steenwijk e.o.)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=jQRJNcMbSV0S/livestream=FwZEvacBRo0U/events(1538144391)/live-audio_1=96000-video=904000.m3u8:Salland1 (Raalte + Olst-Wije)
+#DESCRIPTION Salland1 (Raalte + Olst-Wije)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=VzRMPeoCUJww/livestream=RwZNOeaQWVwU/events(1531132306)/live-audio_1=96000-video=904000.m3u8:TV 350 (Rijssen)
+#DESCRIPTION TV 350 (Rijssen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms2.mx-cd.net/tv/81-334271/VechtdalTV.smil/chunklist_w574429490_b1894400_slNLD.m3u8:Vechtdal Leeft (Ommen)
+#DESCRIPTION Vechtdal Leeft (Ommen)
+#SERVICE 1:64:5f:0:0:0:0:0:0:0:
+#DESCRIPTION +++Gelderland+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rrr.sz.xlcdn.com/?account=omroepgelderland&file=livetv&type=live&service=wowza&protocol=http&output=playlist.m3u8:Omroep Gelderland
+#DESCRIPTION Omroep Gelderland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ngx.cr6.streamzilla.xlcdn.com/session/955fd4dfbaf65f9f3498c6dd802d0026/sz/omroepgelderland/wowza4/live/meekijkradio/chunklist.m3u8:Omroep Gelderland - radio webcam
+#DESCRIPTION Omroep Gelderland - radio webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms7.mx-cd.net/tv/113-474263/EdeTV.smil/playlist.m3u8:Ede TV
+#DESCRIPTION Ede TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=hhYIE6ILRp02/livestream=sCAFFO6RC04S/events(1513813837)/live-audio_1=96000-video=904000.m3u8:Favoriet FM (Zevenaar, Westervoort, Doesburg, Duiven)
+#DESCRIPTION Favoriet FM (Zevenaar, Westervoort, Doesburg, Duiven)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//91.215.148.22%3a1935/live/hk14tv/playlist.m3u8:HK FM TV (Harderwijk)
+#DESCRIPTION HK FM TV (Harderwijk)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//mtxstr001.matrixdata.nl/live/hk13/playlist.m3u8:HK13 (Harderwijk)
+#DESCRIPTION HK13 (Harderwijk)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58e4d59f4ba2c.streamlock.net/loco/loco/chunklist.m3u8:Loco FM webcam (Oldebroek)
+#DESCRIPTION Loco FM webcam (Oldebroek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=nSQANa4bAEUW/livestream=DjYNq-6BAtYQ/events(1490856998)/live-audio_1=96000-video=904000.m3u8:LOE TV (Elburg)
+#DESCRIPTION LOE TV (Elburg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rtmp.microglo.sc/5b4e69e1f157c.m3u8:Omroep Berg en Dal
+#DESCRIPTION Omroep Berg en Dal
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//studio.omroepn.nl%3a8090/ntv.flv:OmroepN (Nijkerk en Barneveld)
+#DESCRIPTION OmroepN (Nijkerk en Barneveld)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=GCNkoILS_cQE/livestream=mwNspKpCuN4g/events(1531133183)/live-audio_1=96000-video=603968.m3u8:RN7 Nijmegen en regio
+#DESCRIPTION RN7 Nijmegen en regio
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//highvolume04.streampartner.nl/rtvachterhoek_live/rtvachterhoek_live/chunklist_w2120128104.m3u8:RTV Achterhoek
+#DESCRIPTION RTV Achterhoek
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ms2.mx-cd.net/tv/163-669433/RTV_Arnhem.smil/playlist.m3u8 :RTV Arnhem
+#DESCRIPTION RTV Arnhem
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.204.69.69%3a80/tv/97-450081/RTVBetuwe.smil/playlist.m3u8:RTV Betuwe (Geldermalsen)
+#DESCRIPTION RTV Betuwe (Geldermalsen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=D5RJNYcbAV42/livestream=kJZMIKsTN0cQ/kJZMIKsTN0cQ.m3u8:RTV Hattem / NO-Veluwe TV
+#DESCRIPTION RTV Hattem / NO-Veluwe TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//tv.rtvnunspeet.nl/hls/livestream.m3u8:RTV Nunspeet (Gelderland)
+#DESCRIPTION RTV Nunspeet (Gelderland)
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//ms2.mx-cd.net/tv/105-475831/RTV_Slingeland.smil/playlist.m3u8:RTV Slingeland
+#DESCRIPTION RTV Slingeland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.streamonecloud.net/livestream/amlst%3aFiK93m7AaqQ2/playlist.m3u8:RTV Slingeland Visual Radio (Winterswijk)
+#DESCRIPTION RTV Slingeland Visual Radio (Winterswijk)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=BoJIM8KLBlwS/livestream=NpIEhMsSbsc2/NpIEhMsSbsc2.m3u8:Studio Rheden
+#DESCRIPTION Studio Rheden
+#SERVICE 1:64:60:0:0:0:0:0:0:0:
+#DESCRIPTION +++Utrecht+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d18rwjdhpr8dcw.cloudfront.net/live/rtvutrecht/rtvutrecht/1533823599-faster-1920-1080-2750000-index.m3u8:RTV Utrecht HD
+#DESCRIPTION RTV Utrecht HD
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=HRRJNcIZCAwS/livestream=jCAIraMYCRQS/events(1520859077)/live-audio_1=96000-video=1904000.m3u8:EVA (Utrecht, Amersfoort, Leusden)
+#DESCRIPTION EVA (Utrecht, Amersfoort, Leusden)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=AhYAOooLTQUW/livestream=tKYMh6MQT8wS/events(1488664919)/live-audio_1=96000-video=904000.m3u8:RTV Stichtse Vecht 
+#DESCRIPTION RTV Stichtse Vecht 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=BCIJFsqbR4wS/livestream=H6ANosoCXY0U/events(1488892306)/live-audio_1=96000-video=304000.m3u8:LOS (Spakenburg)
+#DESCRIPTION LOS (Spakenburg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.regio90.nl/hls/regio90-max.m3u8:Regio90TV (Utrechtse Heuvelrug/Wijk bij Duurstede - Utrecht)
+#DESCRIPTION Regio90TV (Utrechtse Heuvelrug/Wijk bij Duurstede - Utrecht)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=DBQNnMaTd8US/livestream=HxBNvOqTPl4S/HxBNvOqTPl4S.m3u8:RPL TV Woerden
+#DESCRIPTION RPL TV Woerden
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=BAYBN4ebT482/livestream=oZRNJcsRLQ4S/events(1488900316)/live-audio_1=96000-video=904000.m3u8:RTV Baarn
+#DESCRIPTION RTV Baarn
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=BrBJM6uJD1cS/livestream=v6BMg4OAD5wS/events(1536661608)/live-audio_1=96000-video=904000.m3u8:RTV Ronde Venen (Utrecht)
+#DESCRIPTION RTV Ronde Venen (Utrecht)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=AhYAOooLTQUW/livestream=tKYMh6MQT8wS/events(1495096158)/live-audio_1=96000-video=603968.m3u8:RTV Stichtse Vecht (Maarssen)
+#DESCRIPTION RTV Stichtse Vecht (Maarssen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//mediaserv19.video-streams.nl%3a80/slotstadrtv/slotstadrtv:Slotstad TV (Zeist)
+#DESCRIPTION Slotstad TV (Zeist)
+#SERVICE 4097:0:1:1:0:33:0:0:0:0:https%3a//d18rwjdhpr8dcw.cloudfront.net/live/rtvutrecht/ustad/1533823759-faster-1920-1080-2750000-index.m3u8:UStad HD (stad Utrecht) 
+#DESCRIPTION UStad HD (stad Utrecht) 
+#SERVICE 1:64:61:0:0:0:0:0:0:0:
+#DESCRIPTION +++Flevoland+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/tv/780fb887-8647-42a4-bab5-7dbfa23331d1/index.m3u8:Omroep Flevoland
+#DESCRIPTION Omroep Flevoland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/radio/54cdb558-7d96-48e6-b574-5139a9775985/index.m3u8:Omroep Flevoland - Visual Radio
+#DESCRIPTION Omroep Flevoland - Visual Radio
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.streamonecloud.net/livestream/amlst%3a5dSjjW9sgZ/playlist.m3u8:Echnaton FM (Almere)
+#DESCRIPTION Echnaton FM (Almere)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=HRBJFcOZQFw2/livestream=njZMj8-TRs0w/events(1539352532)/live-audio_1=96000-video=603968.m3u8:Omroep 527 / Kijk 527 (Noordoostpolder - Flevoland)
+#DESCRIPTION Omroep 527 / Kijk 527 (Noordoostpolder - Flevoland)
+#SERVICE 1:64:62:0:0:0:0:0:0:0:
+#DESCRIPTION +++Noord-Holland+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=nhnieuws&file=live&type=live&service=wowza&protocol=https&output=playlist.m3u8:NH (RTV Noord-Holland)
+#DESCRIPTION NH (RTV Noord-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=nhnieuws&file=nhradio&type=live&service=wowza&protocol=https&output=playlist.m3u8:NH (RTV Noord-Holland) - radio visual
+#DESCRIPTION NH (RTV Noord-Holland) - radio visual
+#SERVICE 4097:0:1:5214:c99:3:0:0:0:0:http%3a//ngx.cr6.streamzilla.xlcdn.com/session/35fe592209cae2b9edf640df87928396/sz/atvijf/wowza4/live/live.smil/chunklist_b3145728.m3u8:AT5 (Amsterdam e.o)
+#DESCRIPTION AT5 (Amsterdam e.o)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=j6IBFM8LQE8W/livestream=jAAJuMKYCNcS/events(1531131548)/live-audio_1=96000-video=304000.m3u8:Be@t TV (Heiloo)
+#DESCRIPTION Be@t TV (Heiloo)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=_5JBI-OCfR82/livestream=9oQBJsOSPxw2/events(1495071954)/live-audio_1=96000-video=904000.m3u8:C-TV (Castricum)
+#DESCRIPTION C-TV (Castricum)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ssh101.com/m3u8/dyn/HALStadCentraal/index.m3u8:HALstad Centraal (Alkmaar e.o.)
+#DESCRIPTION HALstad Centraal (Alkmaar e.o.)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=bbYIB4oQdF02/livestream=bhNFZasIeFYi/events(1531133281)/live-audio_1=96000-video=603968.m3u8:LOS TV (Den Helder)
+#DESCRIPTION LOS TV (Den Helder)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.rtvlove.nl/hls/lovetv/index.m3u8:L.O.V.E. TV (Volendam)
+#DESCRIPTION L.O.V.E. TV (Volendam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//studiohilversum.6fm.nl%3a7007/hls/6fmtv.m3u8:NH Gooi (Hilversum)
+#DESCRIPTION NH Gooi (Hilversum)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms7.mx-cd.net/tv/137-567119/Omroep_PIM.smil/playlist.m3u8:Omroep PIM (Monnickendam)
+#DESCRIPTION Omroep PIM (Monnickendam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//radioaalsmeer.nl%3a4443/hls/tv.m3u8:Radio Aalsmeer TV
+#DESCRIPTION Radio Aalsmeer TV
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:rtmp%3a//84.22.97.59%3a80/beverwijk/studio:Radio Beverwijk webcam
+#DESCRIPTION Radio Beverwijk webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//live.streamone.nl/livestream/fDa32BaPi9r3:Radio Enkhuizen (webcam)
+#DESCRIPTION Radio Enkhuizen (webcam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//videocdn.mixer.com/hls/49782594-5620cd6011554bc55077d2a26e7fb87bcdb2cb97_source/index.m3u8:RTV80 (kust- en duinstreek Noord-Holland)
+#DESCRIPTION RTV80 (kust- en duinstreek Noord-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.rtva.nl/live/zender.m3u8:RTV A (Amstelveen)
+#DESCRIPTION RTV A (Amstelveen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=uBRtscwbzU6A/livestream=9BYkI8CRqdei/events(1515241589)/live-audio_1=96000-video=304000.m3u8:RTV IJmond (IJmuiden, Velsen, Heemskerk)
+#DESCRIPTION RTV IJmond (IJmuiden, Velsen, Heemskerk)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//wowza.pmedia74.kpnstreaming.nl/pi6atvlive/rtvpurm:RTV Purmerend
+#DESCRIPTION RTV Purmerend
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//hls.streamonecloud.net/livestream/amlst%3ac2SkaoDn1a/chunklist_b2378.m3u8:RTV Seaport (Velsen - Noord-Holland)
+#DESCRIPTION RTV Seaport (Velsen - Noord-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=gaJJHsMZBIcy/livestream=6YRNGsaSSsYW/events(1488709175)/live-audio_1=96000-video=904000.m3u8:Schagen TV
+#DESCRIPTION Schagen TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=AgYIPooZRV0y/livestream=8wJNPcoQbUwW/8wJNPcoQbUwW.m3u8:SALTO 1 (Amsterdam)
+#DESCRIPTION SALTO 1 (Amsterdam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=AgYIPooZRV0y/livestream=cgYEH-MAKNUy/events(1488704759)/live-audio_1=96000-video=904000.m3u8:SALTO 2 (Amsterdam)
+#DESCRIPTION SALTO 2 (Amsterdam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=liIAF-eZRl0W/livestream=YJYEJ8KBJl4W/events(1490213619)/live-audio_1=96000-video=904000.m3u8:WEEFF (Enkhuizen e.o.)
+#DESCRIPTION WEEFF (Enkhuizen e.o.)
+#SERVICE 1:64:63:0:0:0:0:0:0:0:
+#DESCRIPTION +++Zuid-Holland+++
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//d2dslh4sd7yvc1.cloudfront.net/live/omroepwest/ngrp%3atv-feed_all/playlist.m3u8:Omroep West
+#DESCRIPTION Omroep West
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//d3r4bk4fg0k2xi.cloudfront.net/rijnmondTv/index.m3u8 :RTV Rijnmond
+#DESCRIPTION RTV Rijnmond
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=n7RJFMIbCUYS/livestream=FwQJuuYYTNcW/events(1531131557)/live-audio_1=96000-video=603968.m3u8:Bollenstreek Omroep
+#DESCRIPTION Bollenstreek Omroep
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wowza5.video-streams.nl%3a1935/denhaag/denhaag/chunklist_w169689203.m3u8:Den Haag TV
+#DESCRIPTION Den Haag TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=HQQBFe-bAB4S/livestream=lwQBr4-YDU8y/events(1488885961)/live-audio_1=96000-video=1904000.m3u8:Feel Good TV
+#DESCRIPTION Feel Good TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=j4QJMY4bCVU2/livestream=krINAu6TPoQQ/events(1536672167)/live-audio_1=96000-video=304000.m3u8:Merwe TV (Zuid-Holland)
+#DESCRIPTION Merwe TV (Zuid-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//main.deejays.nl%3a8080/merwertv.m3u8:MerweRadio studiowebcam (Zuid-Holland)
+#DESCRIPTION MerweRadio studiowebcam (Zuid-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//s29.ipcamlive.com/streams/1d5ba9eeb00823b1d/stream.m3u8 :Midvliet TV (Leidschendam-Voorburg en Wassenaar)
+#DESCRIPTION Midvliet TV (Leidschendam-Voorburg en Wassenaar)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn22d.streampartner.nl/visualradio/visualradio/playlist.m3u8:Omroep Vlaardingen
+#DESCRIPTION Omroep Vlaardingen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=BCZBFsObTtQW/livestream=TgAEDKoSeQY0/events(1488895441)/live-audio_1=96000-video=1904000.m3u8:Omroep Zuidplas
+#DESCRIPTION Omroep Zuidplas
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms2.mx-cd.net/tv/141-573555/OPEN_Rotterdam.smil/playlist.m3u8:Open Rotterdam
+#DESCRIPTION Open Rotterdam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms10.mx-cd.net/tv/141-573565/Podium_Rotterdam.smil/chunklist.m3u8:Rotterdam Podium (Zuid-Holland)
+#DESCRIPTION Rotterdam Podium (Zuid-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=jYJIEK8LSZ02/livestream=DQJIms-IBY0y/events(1513813911)/live-audio_1=96000-video=904000.m3u8:RTV ATOS (Zwijndrecht)
+#DESCRIPTION RTV ATOS (Zwijndrecht)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=FhQAN48LB5Q2/livestream=IKRFIeeTYF4S/events(1531132279)/live-audio_1=96000-video=603968.m3u8:RTV Bodegraven
+#DESCRIPTION RTV Bodegraven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ms10.mx-cd.net/tv/107-475823/RTV_Dordrecht.smil/playlist.m3u8:RTV Dordrecht
+#DESCRIPTION RTV Dordrecht
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=lIRAF8ebBgYW/livestream=Z6IFJIqBaJcS/events(1531135188)/live-audio_1=96000-video=1904000.m3u8:RTV Katwijk
+#DESCRIPTION RTV Katwijk
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=f6QJI4YAfUQW/livestream=bbJII-8AOM82/events(1495072043)/live-audio_1=96000-video=304000.m3u8:RTV Krimpenewaard (Bergambacht)
+#DESCRIPTION RTV Krimpenewaard (Bergambacht)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//145.53.208.11%3a8181/hls/tvstream/index.m3u8:RTV Lansingerland (Zuid-Holland)
+#DESCRIPTION RTV Lansingerland (Zuid-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//145.53.208.11%3a8181/hls/livestream/1_2/index.m3u8?sessId=281672 :RTV Lansingerland - visual radio (Zuid-Holland)
+#DESCRIPTION RTV Lansingerland - visual radio (Zuid-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=FIBJE-uZTh4W/livestream=7YJFMKoTBcYW/7YJFMKoTBcYW.m3u8:RTV Papendrecht
+#DESCRIPTION RTV Papendrecht
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=hLJAN4qJT08W/livestream=pyQMp4eSYpUW/events(1531133767)/live-audio_1=96000-video=603968.m3u8:RTV Ridderkerk
+#DESCRIPTION RTV Ridderkerk
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=gCRIPoIbRB0W/livestream=rrIMh6YQSxQW/rrIMh6YQSxQW.m3u8:RTV SLOGO (Goeree-Overflakkee)
+#DESCRIPTION RTV SLOGO (Goeree-Overflakkee)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ms2.mx-cd.net/tv/111-475837/LookTV.smil/chunklist_w433429866_b1894400_slNLD.m3u8:SCHIE TV (Schiedam - Zuid-Holland)
+#DESCRIPTION SCHIE TV (Schiedam - Zuid-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ms2.mx-cd.net/tv/111-475837/LookTV.smil/playlist.m3u8:SCHIE TV (Schiedam - Zuid-Holland) alternatief
+#DESCRIPTION SCHIE TV (Schiedam - Zuid-Holland) alternatief
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms2.mx-cd.net/tv/111-475837/LookTV.smil/chunklist_w1302661134_b1894400_slNLD.m3u8:Stadsomroep Schiedam
+#DESCRIPTION Stadsomroep Schiedam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=kaIBHu4bRJ8y/livestream=aYIFns8CZAw2/events(1531133454)/live-audio_1=96000-video=603968.m3u8:Studio Alphen (Zuid-Holland)
+#DESCRIPTION Studio Alphen (Zuid-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=FhQAN48LB5Q2/livestream=IKRFIeeTYF4S/IKRFIeeTYF4S.m3u8:TV Bodegraven
+#DESCRIPTION TV Bodegraven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms2.mx-cd.net/tv/107-475823/RTVDordrecht.smil/playlist.m3u8:TV Dordrecht
+#DESCRIPTION TV Dordrecht
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=f6QJI4YAfUQW/livestream=bbJII-8AOM82/events(1495072043)/live-audio_1=96000-video=904000.m3u8:TV Krimpenewaard (Bergambacht)
+#DESCRIPTION TV Krimpenewaard (Bergambacht)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms7.mx-cd.net/tv/99-475825/WOS.smil/chunklist_w370526385_b1894400_slNLD.m3u8:WOS Media
+#DESCRIPTION WOS Media
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//kippingmultimediaal.nl%3a1935/live/ZFM1:ZFM Zoetermeer (Zuid-Holland)
+#DESCRIPTION ZFM Zoetermeer (Zuid-Holland)
+#SERVICE 1:64:64:0:0:0:0:0:0:0:
+#DESCRIPTION +++Zeeland+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d3isaxd2t6q8zm.cloudfront.net/live/omroepzeeland/tv/1535104432-fast-1920-1080-5500000-index.m3u8:Omroep Zeeland
+#DESCRIPTION Omroep Zeeland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//593aed234297b.streamlock.net/gotvsjoerd/gotvsjoerd/playlist.m3u8:GO-TV HD (Terneuzen)
+#DESCRIPTION GO-TV HD (Terneuzen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//217.63.64.27%3a1935/OH-Playout/ngrp%3aPlayout-stream_all/playlist.m3u8:Omroep Hulst (Zeeland)
+#DESCRIPTION Omroep Hulst (Zeeland)
+#SERVICE 1:64:65:0:0:0:0:0:0:0:
+#DESCRIPTION +++Noord-Brabant+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d3slqp9xhts6qb.cloudfront.net/omroepbrabantTv/index.m3u8:Omroep Brabant TV HD
+#DESCRIPTION Omroep Brabant TV HD
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d3slqp9xhts6qb.cloudfront.net/omroepbrabantVisualRadio/index.m3u8:Omroep Brabant Visual Radio
+#DESCRIPTION Omroep Brabant Visual Radio
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=c7Zp96hI-t8W/livestream=7gIpxIlY-EYW/7gIpxIlY-EYW.m3u8:ATV - Altena TV (Noord-Brabant)
+#DESCRIPTION ATV - Altena TV (Noord-Brabant)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=H6AAMOMZSU0W/livestream=DoZIqosIBJUy/events(1531133252)/live-audio_1=96000-video=304000.m3u8:BredaNu (Noord-Brabant)
+#DESCRIPTION BredaNu (Noord-Brabant)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=iAEhtK_T9hwE/livestream=GRMhto9Tut0k/events(1518000382)/live-audio_1=96000-video=904000.m3u8:Dommelland TV (Boxtel e.o. - Noord-Brabant)
+#DESCRIPTION Dommelland TV (Boxtel e.o. - Noord-Brabant)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms2.mx-cd.net/tv/143-646311/DTV_Den_Bosch.smil/playlist.m3u8:DTV Den Bosch
+#DESCRIPTION DTV Den Bosch
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=jbZJEYoJSBwy/livestream=l7RMi88DAt0U/events(1495074795)/live-audio_1=96000-video=904000.m3u8:DTV Maasland (Oss)
+#DESCRIPTION DTV Maasland (Oss)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ms2.mx-cd.net/tv/159-661277/DTV_Uden.smil/playlist.m3u8 :DTV Uden
+#DESCRIPTION DTV Uden
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=FDZAM8cZD1w2/livestream=YgANN6-TZkUW/YgANN6-TZkUW.m3u8:Hallo Gilze Rijen
+#DESCRIPTION Hallo Gilze Rijen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//hls.streamonecloud.net/livestream/amlst%3ah3kXcf2yyam/playlist.m3u8:HTR (Heusden)
+#DESCRIPTION HTR (Heusden)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=n6AAFYMLCAUW/livestream=l7JMj-YRB58w/events(1531131838)/live-audio_1=96000-video=603968.m3u8:LOM (Mill - Noord-Brabant)
+#DESCRIPTION LOM (Mill - Noord-Brabant)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//94.231.255.154%3a1935/lon/lonweb_720p/playlist.m3u8:LON (Nuenen)
+#DESCRIPTION LON (Nuenen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//hls.streamonecloud.net/livestream/amlst%3ajs2FsLiSaPLo/chunklist_w479280691_b1557.m3u8:Omroep Best
+#DESCRIPTION Omroep Best
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=hiABEuYJR4wy/livestream=QzZMHa4QelYU/events(1488895345)/live-audio_1=96000-video=904000.m3u8:Omroep Tilburg
+#DESCRIPTION Omroep Tilburg
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//hls.streamonecloud.net/livestream/amlst%3as4fa9kmgzp/chunklist_w1177205978_b1589.m3u8:ORTS (Oosterhout)
+#DESCRIPTION ORTS (Oosterhout)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//cdn-hlm-1.streamnerd.nl/live/rararadio/playlist.m3u8:Rararadio (webcam studio) Eindhoven vrij-mo
+#DESCRIPTION Rararadio (webcam studio) Eindhoven vrij-mo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//live.streamone.nl/livestream/H3KimsxZ98rR:SIRIS TV (Someren)
+#DESCRIPTION SIRIS TV (Someren)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=ghYIHoMbRVU2/livestream=arINKYeCIVcW/events(1488708053)/live-audio_1=96000-video=904000.m3u8:SLOG (Geertruidenberg)
+#DESCRIPTION SLOG (Geertruidenberg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=gzAIHu6ZTM8y/livestream=-iYMOqqATlc2/events(1488708262)/live-audio_1=96000-video=603968.m3u8:SLOS TV (Steenbergen)
+#DESCRIPTION SLOS TV (Steenbergen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms7.mx-cd.net/tv/117-475839/Studio040.smil/playlist.m3u8 :Studio040 (Eindhoven e.o.)
+#DESCRIPTION Studio040 (Eindhoven e.o.)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=kaIBHu4bRJ8y/livestream=aYIFns8CZAw2/events(1531133454)/live-audio_1=96000-video=904000.m3u8:Studio Alphen (Noord-Braqbant)
+#DESCRIPTION Studio Alphen (Noord-Braqbant)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=FKQIFqaLBo4y/livestream=T5YFDcYCHIQ0/events(1531132291)/live-audio_1=96000-video=304000.m3u8:TV Krant West-Brabant
+#DESCRIPTION TV Krant West-Brabant
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=EbAIGq6LRMU2/livestream=9RBFKqaCTQ02/events(1488714476)/live-audio_1=96000-video=904000.m3u8:Zuidwest TV (Bergen op Zoom, Roosendaal en Woensdrecht)
+#DESCRIPTION Zuidwest TV (Bergen op Zoom, Roosendaal en Woensdrecht)
+#SERVICE 4097:0:1:26:2:4:0:0:0:0:https%3a//hls.streamonecloud.net/livestream/amlst%3ay3Dns9gHaq/playlist.m3u8 :ZUID WEST FM Webcam (Bergen op Zoom - West-Brabant) 
+#DESCRIPTION ZUID WEST FM Webcam (Bergen op Zoom - West-Brabant) 
+#SERVICE 1:64:66:0:0:0:0:0:0:0:
+#DESCRIPTION +++Limburg+++
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//ipv4.api.nos.nl/resolve.php/livestream?url=/live/regionaal/l1/l1tv/l1tv.isml/l1tv.m3u8:L1 Limburg
+#DESCRIPTION L1 Limburg
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.omroep.nl/live/regionaal/l1/l1tv/l1tv.isml/l1tv-audio=128000-video=900000.m3u8:L1 Limburg
+#DESCRIPTION L1 Limburg
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=FDZJNsaJDoUy/livestream=HQZNpccCEJ4w/HQZNpccCEJ4w.m3u8:Lokale Omroep Stein
+#DESCRIPTION Lokale Omroep Stein
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=FjJBFsIbBtw2/livestream=1QJFCqsQeMwQ/events(1531132280)/live-audio_1=96000-video=904000.m3u8:LOO (Onderbanken)
+#DESCRIPTION LOO (Onderbanken)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ms2.mx-cd.net/tv/109-573495/MLA.smil/playlist.m3u8:ML1 (Weert e.o.)
+#DESCRIPTION ML1 (Weert e.o.)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.3ml.nl%3a8081/3ml/livetv/playlist.m3u8:ML5 (Roermond/Heythuyzen)
+#DESCRIPTION ML5 (Roermond/Heythuyzen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//136.144.137.55%3a8081/3ml/liveradio/playlist.m3u8:ML5 Radio Live (Webcam)
+#DESCRIPTION ML5 Radio Live (Webcam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.streamone.net/hlslive/account=hrRJN-sLDMw2/livestream=lzBElMMSEMY0/lzBElMMSEMY0.m3u8:Omroep Groot Nuth
+#DESCRIPTION Omroep Groot Nuth
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=lDJBNuobD5c2/livestream=2JJFDeYCdhw0/events(1488895327)/live-audio_1=96000-video=904000.m3u8:Omroep Venlo
+#DESCRIPTION Omroep Venlo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=GYAFz-VDz8WU/livestream=mbIE7eDDx86Q/events(1531134254)/live-audio_1=96000-video=304000.m3u8 :Omroep Venray
+#DESCRIPTION Omroep Venray
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.rtvmaastricht.nl%3a8081/rtvm_live/tv/chunks.m3u8:RTV Maastricht
+#DESCRIPTION RTV Maastricht
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.streamone.net/hlslive/account=gbYAOsqLTJ8y/livestream=YzIFOeIABwUW/events(1531131394)/live-audio_1=96000-video=304000.m3u8:START TV (Sittard, Geleen, Beek)
+#DESCRIPTION START TV (Sittard, Geleen, Beek)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//cdn22d.streampartner.nl/tvellef/livestream/playlist.m3u8:TVEllef
+#DESCRIPTION TVEllef
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestream.tvvalkenburg.tv/hls/tv-valkenburg/tv-valkenburg.m3u8:TV Valkenburg
+#DESCRIPTION TV Valkenburg

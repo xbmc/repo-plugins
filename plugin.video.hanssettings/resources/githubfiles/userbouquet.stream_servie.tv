@@ -1,0 +1,63 @@
+#NAME Stream Servie
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//66.70.129.43%3a8080/Arena1-SRB/index.m3u8:ARENA SPORT 1 SERBIA
+#DESCRIPTION ARENA SPORT 1 SERBIA
+#SERVICE 4097:0:1:3:0:0:0:0:0:0:http%3a//66.70.129.43%3a8080/Arena2-SRB/index.m3u8:ARENA SPORT 2 SERBIA
+#DESCRIPTION ARENA SPORT 2 SERBIA
+#SERVICE 4097:0:1:5:0:0:0:0:0:0:http%3a//66.70.129.43%3a8080/Arena3-SRB/index.m3u8:ARENA SPORT 3 SERBIA
+#DESCRIPTION ARENA SPORT 3 SERBIA
+#SERVICE 4097:0:1:7:0:0:0:0:0:0:http%3a//66.70.129.43%3a8080/Arena4-SRB/index.m3u8:ARENA SPORT 4 SERBIA
+#DESCRIPTION ARENA SPORT 4 SERBIA
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//s1.media-planet.sk%3a80/live/bardejov1:Bardejov
+#DESCRIPTION Bardejov
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//194.249.141.146%3a1935/live/bktv:BK TV SLO
+#DESCRIPTION BK TV SLO
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:rtmp%3a//rtcg2.videostreaming.rs/rtcg/rtcg.2.stream:Crna Gora SatTV (Servië)
+#DESCRIPTION Crna Gora SatTV (Servië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//s1.media-planet.sk%3a80/live/dolnykubin:Dolny Kubin rtmp
+#DESCRIPTION Dolny Kubin rtmp
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//178.253.194.75%3a1935/live/hram.stream/.m3u8:Hram Ortodox TV (Servië)
+#DESCRIPTION Hram Ortodox TV (Servië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//s1.media-planet.sk%3a80/live/myjava1/playlist.m3u8:Mijava
+#DESCRIPTION Mijava
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//s1.media-planet.sk%3a80/live/myjava1:Mijava
+#DESCRIPTION Mijava
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//109.72.63.194%3a5900:Mlava TV (Servië)
+#DESCRIPTION Mlava TV (Servië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//bglive-a.bitgravity.com/ndtv/247hi/live/native:ND TV
+#DESCRIPTION ND TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//s1.media-planet.sk%3a80/live/novezamky/playlist.m3u8:Nove Zamky
+#DESCRIPTION Nove Zamky
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//s1.media-planet.sk%3a80/live/novezamky:Nove Zamky
+#DESCRIPTION Nove Zamky
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//s1.media-planet.sk%3a80/live/pezinok:Pezinok
+#DESCRIPTION Pezinok
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//s1.media-planet.sk%3a80/live/reduta/playlist.m3u8:Reduta
+#DESCRIPTION Reduta
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//s1.media-planet.sk%3a80/live/reduta:Reduta
+#DESCRIPTION Reduta
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//82.114.65.202/live/rrokumtv:RROKUM TV
+#DESCRIPTION RROKUM TV
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:rtmp%3a//rtssat2.videostreaming.rs/rtssat/rtssat.2.stream:Rts-Sat (Servië)
+#DESCRIPTION Rts-Sat (Servië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//video.radio-banovina.hr/live/myStream:RTV BANOVINA HR
+#DESCRIPTION RTV BANOVINA HR
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//77.46.147.94%3a9250/:Sandzak (Servië)
+#DESCRIPTION Sandzak (Servië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//s1.media-planet.sk%3a80/live/senica1/playlist.m3u8:Senica
+#DESCRIPTION Senica
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//s1.media-planet.sk%3a80/live/senica1:Senica
+#DESCRIPTION Senica
+#SERVICE 4097:0:1:124:0:0:0:0:0:0:http%3a//edge-de-01.maksnet.tv/soskanal/soskanal/playlist.m3u8:Sos Kanal TV (Servië)
+#DESCRIPTION Sos Kanal TV (Servië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//str103.setplex.net%3a1935/228/stv_online:supersonic tv
+#DESCRIPTION supersonic tv
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//v.tf.rs/liveedge/smil%3alivestream.smil/chunklist_w2119200807_b1396000.m3u8:Telegraf (Servië)
+#DESCRIPTION Telegraf (Servië)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//tvstream.tvtopsound.com%3a1935/live/ngrp%3ampegts.stream_all/playlist.m3u8:Top Sound (Servië)
+#DESCRIPTION Top Sound (Servië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//s1.media-planet.sk%3a80/live/turzovka:Turzovka
+#DESCRIPTION Turzovka
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//212.200.102.3%3a5000/udp/239.99.99.99%3a23999:TV Partizan HD (Servië)
+#DESCRIPTION TV Partizan HD (Servië)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:mmsh%3a//212.200.255.151/rtv2?MSWMExt=.asf:Vojvodina 2 (Servië)
+#DESCRIPTION Vojvodina 2 (Servië)

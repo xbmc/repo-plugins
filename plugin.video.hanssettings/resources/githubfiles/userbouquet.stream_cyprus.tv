@@ -1,0 +1,9 @@
+#NAME Stream Cyprus
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//138.201.124.161/cybcsat/abr/l3/r11/chunks.m3u8:RIK Sat (Cyprus Grieks)
+#DESCRIPTION RIK Sat (Cyprus Grieks)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//ada.iptvboss.net%3a1835/live/:ADA TV (Cyprus Turks)
+#DESCRIPTION ADA TV (Cyprus Turks)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//wms.brtk.net%3a1935/live/brt1:BRT 1 (Cyprus Turks)
+#DESCRIPTION BRT 1 (Cyprus Turks)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//wms.brtk.net%3a1935/live/brt2:BRT 2 (Cyprus Turks)
+#DESCRIPTION BRT 2 (Cyprus Turks)

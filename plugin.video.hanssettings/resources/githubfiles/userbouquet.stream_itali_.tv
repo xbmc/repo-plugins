@@ -1,0 +1,413 @@
+#NAME Stream Italië
+#SERVICE 4097:0:1:19:0:0:0:0:0:0:http%3a//live.streamcaster.net%3a1935/alpauno/alpauno/playlist.m3u8:ALPA 1
+#DESCRIPTION ALPA 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//77.72.196.214%3a8554/live/mp4%3aAltoAdigeTV/chunklist.m3u8?time=1465231804284:Alto Adige (Italië)
+#DESCRIPTION Alto Adige (Italië)
+#SERVICE 4097:0:1:199:0:0:0:0:0:0:http%3a//live.lasiciliaweb.it/hls/as_640/index.m3u8:ANTENNA SICILIA
+#DESCRIPTION ANTENNA SICILIA
+#SERVICE 4097:0:1:2fab:2db4:13e:0:0:0:0:rtmp%3a//178.22.187.253%3a1935/streaming-tv/mp4%3amyStream3:Automoto Tv
+#DESCRIPTION Automoto Tv
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//sb.top-ix.org%3a1935/avtvlive/streaming/chunklist_w1605488247.m3u8:Azzurra TV (Italië)
+#DESCRIPTION Azzurra TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/brescialivetv/brescialivetv/playlist.m3u8:Brescia TV (Italië)
+#DESCRIPTION Brescia TV (Italië)
+#SERVICE 4097:0:1:7:666:9999:0:0:0:0:rtmp%3a//vod1.kronopress.com%3a1935/cts_live/cts:C.T.S.90
+#DESCRIPTION C.T.S.90
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv3.meway.tv%3a1957/cafe/live/playlist.m3u8:Cafe TV 24 (Italië)
+#DESCRIPTION Cafe TV 24 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv3.meway.tv%3a1957/cafe/live:CafeTV24 Veneto (Italië)
+#DESCRIPTION CafeTV24 Veneto (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//37.187.142.147%3a1935/ch10live/high.stream/live.m3u8:Canale 10 (Italië)
+#DESCRIPTION Canale 10 (Italië)
+#SERVICE 4097:0:1:7:649:9999:0:0:0:0:http%3a//wms.shared.streamshow.it/canale189/canale189/playlist.m3u8:Canale 189
+#DESCRIPTION Canale 189
+#SERVICE 4097:0:1:7:659:9999:0:0:0:0:rtmp%3a//video2.kronopress.com%3a1935/ctp_live/stream6:Canale 33
+#DESCRIPTION Canale 33
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//live3-mediaset-it.akamaized.net/content/hls_clr_xo/live/channel(ch01)/Stream(04)/index.m3u8:Canale 5 (Italië)
+#DESCRIPTION Canale 5 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/canale7/canale7/chunklist_w139218648.m3u8:Canale 7 (Italië)
+#DESCRIPTION Canale 7 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//151.80.100.112%3a1935/canale74/canale74/chunklist_w174779335.m3u8:Canale 74 (Italië)
+#DESCRIPTION Canale 74 (Italië)
+#SERVICE 4097:0:1:7:619:9999:0:0:0:0:rtmp%3a//wms.shared.streamshow.it%3a80/canale8/canale8:Canale 8 (Italië)
+#DESCRIPTION Canale 8 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it%3a80/canale85/mp4%3acanale85/playlist.m3u8:Canale 85 (Italië)
+#DESCRIPTION Canale 85 (Italië)
+#SERVICE 4097:0:1:28:649:9999:0:0:0:0:http%3a//wms.shared.streamshow.it/canale85/mp4%3acanale85/playlist.m3u8:Canale 85 (Italië)
+#DESCRIPTION Canale 85 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//d144aunvw6in2.cloudfront.net/ac024_broad/schedule/chunklist.m3u8:Canale Italia (480p)
+#DESCRIPTION Canale Italia (480p)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//canale21.live.sloode.com%3a1935/canale21.live/stream8/chunklist_w1679963337.m3u8:CANALE-21-LAZIO (Italië)
+#DESCRIPTION CANALE-21-LAZIO (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/canale7/canale7/playlist.m3u8:CANALE7 (Italië)
+#DESCRIPTION CANALE7 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//capital_tv-lh.akamaihd.net/i/CapitalTv_1@183098/master.m3u8:Capital TV (muziek - Italië)
+#DESCRIPTION Capital TV (muziek - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/carinatv/carinatv/playlist.m3u8:Carina TV (Italië)
+#DESCRIPTION Carina TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//msh0193.stream.seeweb.it/live/cblclassic.sdp/chunklist_w312564924.m3u8:Cbl Classic (Italië)
+#DESCRIPTION Cbl Classic (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//wma10.fluidstream.net/CompanyTV/_definst_/mp4%3alivestream_720p:Company TV (Italië)
+#DESCRIPTION Company TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//57e0550c502b6.streamlock.net%3a444/cts_live/_definst_/cts/playlist.m3u8:CTS Notizie (Italië)
+#DESCRIPTION CTS Notizie (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//vod1.kronopress.com%3a1935/cts_live/cts:CTS TV 90 Sicilia (Italië)
+#DESCRIPTION CTS TV 90 Sicilia (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//deejay_tv-lh.akamaihd.net/i/DeejayTv_1@129866/master.m3u8:DeejayTV (Italië)
+#DESCRIPTION DeejayTV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//sbshdlu3-lh.akamaihd.net/i/sbshdlive_4@99403/master.m3u8:DMax (Italië)
+#DESCRIPTION DMax (Italië)
+#SERVICE 4097:0:1:29:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/okitalia/okitalia/chunklist_w633067146.m3u8:DONNA TV (Italië)
+#DESCRIPTION DONNA TV (Italië)
+#SERVICE 4097:0:1:4:629:9999:0:0:0:0:http%3a//video2.kronopress.com%3a1935/etv_live/rete7/playlist.m3u8:E TV Rete 7
+#DESCRIPTION E TV Rete 7
+#SERVICE 4097:0:1:12:0:0:0:0:0:0:http%3a//video2.kronopress.com%3a1935/etv_live/teletricolore/playlist.m3u8:E TV Tricolore
+#DESCRIPTION E TV Tricolore
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//wma02.fluidstream.net/EdenTV/smil%3aEdenTV.smil/playlist.m3u8:Eden TV 86 (Italië)
+#DESCRIPTION Eden TV 86 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//grupomac-lh.akamaihd.net%3a80/i/004rss0k8_1@301782/index_3_av-p.m3u8:Efecto TV HD (Italië)
+#DESCRIPTION Efecto TV HD (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/esperiatv/esperiatv/chunklist_w1096393748.m3u8:Esperia TV (Italië)
+#DESCRIPTION Esperia TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamcaster.net%3a1935/etvmarche_live/etvmarche/livestream.m3u8:eTV Marche (Italië)
+#DESCRIPTION eTV Marche (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//flash8.streaming.xdevel.com%3a80/fmitalia/fmitalia/playlist.m3u8:FM Italia TV (muziek - Italië)
+#DESCRIPTION FM Italia TV (muziek - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//flash2.streaming.xdevel.com%3a80/globusradiocam/globusradiocam/playlist.m3u8:Globus TV (Italië)
+#DESCRIPTION Globus TV (Italië)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//wma10.fluidstream.net/HistoryLab/livestream/playlist.m3u8:HISTORY LAB (Italië)
+#DESCRIPTION HISTORY LAB (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//c17001-l.u.core.cdn.streamfarm.net/17001hse24/live/app2581299200/w2585460737/live_it.isml/playlist.m3u8:HSE24 (Italië)
+#DESCRIPTION HSE24 (Italië)
+#SERVICE 4097:0:1:4:999:9999:0:0:0:0:http%3a//media.ilmeteo.it/video/iphone/domani.m4v:Il Meteo.It Domani
+#DESCRIPTION Il Meteo.It Domani
+#SERVICE 4097:0:1:3:999:9999:0:0:0:0:http%3a//media.ilmeteo.it/video/iphone/dopodomani.m4v:Il Meteo.It Dopodomani
+#DESCRIPTION Il Meteo.It Dopodomani
+#SERVICE 4097:0:1:1:999:9999:0:0:0:0:http%3a//media.ilmeteo.it/video/iphone/oggi.m4v:Il Meteo.It Oggi
+#DESCRIPTION Il Meteo.It Oggi
+#SERVICE 4097:0:1:35:0:0:0:0:0:0:http%3a//ximperia-tvx.api.channel.livestream.com/3.0/playlist.m3u8:Imperia Tv
+#DESCRIPTION Imperia Tv
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//77.72.196.214%3a8554/live/TrentinoSAT/hasbahca.m3u8:InfoTrentino (Italië)
+#DESCRIPTION InfoTrentino (Italië)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/irctv/mp4%3airctv/playlist.m3u8:IRC TV (sport - Italië)
+#DESCRIPTION IRC TV (sport - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wse.planeta-online.tv%3a1935/live/channel_3/chunklist.m3u8:Italia TV (Italië)
+#DESCRIPTION Italia TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/canale189/canale189/playlist.m3u8:JO TV (Italië)
+#DESCRIPTION JO TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//la7-vh.akamaihd.net/i/content/entry/data/0/299/0_b7o9lvba_0_kyyr8vxz_1.mp4/master.m3u8:La 7 (Italië)
+#DESCRIPTION La 7 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//162.244.81.145%3a1962/live/livestream/playlist.m3u8:La Nuova TV (Italië)
+#DESCRIPTION La Nuova TV (Italië)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//vs2.streamcaster.net%3a1935/test_live/lunasport/playlist.m3u8:LUNA SPORT 
+#DESCRIPTION LUNA SPORT 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//m2otv-lh.akamaihd.net/i/m2oTv_1@186074/index_600_av-p.m3u8:m20 TV (Italië)
+#DESCRIPTION m20 TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//msh0209.stream.seeweb.it%3a1935/live/stream02.sdp/playlist.m3u8:NettunoTV (Italië)
+#DESCRIPTION NettunoTV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.novotempo.com%3a1935/tv/tvnuevotiempo.stream/live.m3u8?tecnotv.info?iptv.m3u8:Nueva Vida (Italië)
+#DESCRIPTION Nueva Vida (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5926fc9c7c5b2.streamlock.net/9040/9040/chunklist_w1373908906.m3u8:Onda TV (Italië)
+#DESCRIPTION Onda TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5926fc9c7c5b2.streamlock.net/9040/9040/playlist.m3u8:Onda TV (Italië)
+#DESCRIPTION Onda TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//w1.mediastreaming.it/orlertv/livestream/playlist.m3u8:Orler TV (Italië)
+#DESCRIPTION Orler TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//217.182.192.240%3a8080/hls/ottofmtv/1_2/index.m3u8:OTTO FM - anni 80 (Italië)
+#DESCRIPTION OTTO FM - anni 80 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59ef7ad665d1d.streamlock.net%3a1443/paradisetv/_definst_/paradisetv/playlist.m3u8:Paradise TV (Italië)
+#DESCRIPTION Paradise TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//dcunilive28-lh.akamaihd.net/i/dclive_1@624452/index_150_av-p.m3u8?sd=6&rebase=on:Parole di vita (Italië)
+#DESCRIPTION Parole di vita (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//ondemand.superstreaming.it%3a1935/piublu/piublu.sdp:Piu Blu Lombardia (Italië)
+#DESCRIPTION Piu Blu Lombardia (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//telecolor.econcept.it/live/primarete.isml/manifest(format=m3u8-aapl).m3u8:Primarete Lombardia (Italië)
+#DESCRIPTION Primarete Lombardia (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//msh0203.stream.seeweb.it/live/stream1.sdp/playlist.m3u8:Primocanale (Italië)
+#DESCRIPTION Primocanale (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//qvcitalia.mmdlive.lldns.net/qvcitalia/66f8359ae9c046bb8aa92144511b450a/manifest.m3u8:QVC Italia (Italië)
+#DESCRIPTION QVC Italia (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wow01.105.net%3a1935/live/105Test1/livestream.m3u8:Radio 105 TV (muziek - Italië)
+#DESCRIPTION Radio 105 TV (muziek - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rtl-radio-stream-thron.akamaized.net/live-video/video2/ngrp%3avideo2/chunklist_b2296000.m3u8:Radio Freccia HD (Italië)
+#DESCRIPTION Radio Freccia HD (Italië)
+#SERVICE 4097:0:1:29:2:6:0:0:0:0:https%3a//59d7d6f47d7fc.streamlock.net/visualradio/visualradio/playlist.m3u8:Radio Iglesias (muziek - Italië)
+#DESCRIPTION Radio Iglesias (muziek - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//radioitaliatv-lh.akamaihd.net/i/radioitaliatv_1@329645/index_720x480_av-p.m3u8:Radio Italia TV (480p)
+#DESCRIPTION Radio Italia TV (480p)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//radioitaliatv-lh.akamaihd.net/i/radioitaliatv_1@329645/master.m3u8:Radio Italia TV (muziek - Italië)
+#DESCRIPTION Radio Italia TV (muziek - Italië)
+#SERVICE 4097:0:1:1e:2:6:0:0:0:0:http%3a//dcunilive30-lh.akamaihd.net/i/dclive_1@653084/master.m3u8:Radio Linea TV (muziek - Italië)
+#DESCRIPTION Radio Linea TV (muziek - Italië)
+#SERVICE 4097:0:1:43:2:6:0:0:0:0:https%3a//5926fc9c7c5b2.streamlock.net/9044/9044/playlist.m3u8:Radio Mambo TV (muziek- Italië)
+#DESCRIPTION Radio Mambo TV (muziek- Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//fms.105.net%3a1935/live/rmc1:Radio MonteCarlo TV (Monaco)
+#DESCRIPTION Radio MonteCarlo TV (Monaco)
+#SERVICE 4097:0:1:41:0:0:0:0:0:0:http%3a//wma02.fluidstream.net/RN1TV/livestream/playlist.m3u8:Radio Number One Tv (Italië)
+#DESCRIPTION Radio Number One Tv (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//video-4.radioradicale.it%3a1935/diretta/padtv1/chunklist_w1993029635.m3u8:Radio Radicale TV (Italië)
+#DESCRIPTION Radio Radicale TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//flash5.streaming.xdevel.com%3a80/taorminatv/taorminatv/playlist.m3u8:Radio Taormina TV (Italië)
+#DESCRIPTION Radio Taormina TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//188.165.224.142%3a1935/radiotivuazzurralive/radiotivuazzurralive:Radio Tv Azzurra Live (Italië)
+#DESCRIPTION Radio Tv Azzurra Live (Italië)
+#SERVICE 4097:0:1:53:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it%3a80/rtp/rtp/playlist.m3u8:Radio TV Peloritana (Italië)
+#DESCRIPTION Radio TV Peloritana (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//fms.105.net%3a1935/live/virgin1:Radio Virgin TV (muziek - Italië)
+#DESCRIPTION Radio Virgin TV (muziek - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rtl-radio-stream-thron.akamaized.net/live-video/video3/ngrp%3avideo3/chunklist_b1196000.m3u8:Radio Zeta (muziek) 
+#DESCRIPTION Radio Zeta (muziek) 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//37.48.83.34%3a80/radionorbatv/norbatv_source.stream:Radionorba TV (Italië)
+#DESCRIPTION Radionorba TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//api.new.livestream.com/accounts/11463451/events/3679884/videos/80943761.m3u8:RadioRadio TV (Italië)
+#DESCRIPTION RadioRadio TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott-cdn.ucom.am/s29/04.m3u8:RAI 1 (Italië)
+#DESCRIPTION RAI 1 (Italië)
+#SERVICE 4097:0:1:1151:0:0:0:0:0:0:http%3a//5.135.92.130%3a58143/out/u/63_1.m3u8:RAI 2 (Italië)
+#DESCRIPTION RAI 2 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wzstreaming.rai.it/TVlive/liveStream/playlist.m3u8:Rai 3 (Italië)
+#DESCRIPTION Rai 3 (Italië)
+#SERVICE 4097:0:1:1161:0:0:0:0:0:0:http%3a//mediapolis.rai.it/relinker/relinkerServlet.htm?cont=308709&dem=3:RAI 3 (vpn italia)
+#DESCRIPTION RAI 3 (vpn italia)
+#SERVICE 4097:0:1:1167:0:0:0:0:0:0:http%3a//mediapolis.rai.it/relinker/relinkerServlet.htm?cont=75708:RAI 4 (vpn italia)
+#DESCRIPTION RAI 4 (vpn italia)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//raiquattro1-live.akamaized.net/hls/live/598315/raiquattro1/rai4_1200/chunklist.m3u8:RAI 4 HD (Italië)
+#DESCRIPTION RAI 4 HD (Italië)
+#SERVICE 4097:0:1:1173:0:0:0:0:0:0:http%3a//mediapolis.rai.it/relinker/relinkerServlet.htm?cont=395276:RAI 5 (vpn italia)
+#DESCRIPTION RAI 5 (vpn italia)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//raicinque1-live.akamaized.net/hls/live/598318/raicinque1/rai5_1200/chunklist.m3u8:RAI 5 HD (Italië)
+#DESCRIPTION RAI 5 HD (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//raigulp1-live.akamaized.net/hls/live/598332/raigulp1/raigulp_1800/chunklist.m3u8:RAI Gulp HD - kinderen (Italië)
+#DESCRIPTION RAI Gulp HD - kinderen (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//raimovie1-live.akamaized.net/hls/live/598324/raimovie1/raimovie_1200/chunklist.m3u8:RAI Movie HD (Italië)
+#DESCRIPTION RAI Movie HD (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rainews1-live.akamaized.net/hls/live/598326/rainews1/rainews_1200/chunklist.m3u8:RAI News (nieuws - Italië)
+#DESCRIPTION RAI News (nieuws - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//raipremium1-live.akamaized.net/hls/live/598328/raipremium1/raipremium_1800/chunklist.m3u8:RAI Premium HD (Italië)
+#DESCRIPTION RAI Premium HD (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//raisportdue1-live.akamaized.net/hls/live/598322/raisportdue1/raisport2_1800/chunklist.m3u8?sd=10&rebase=on:RAI Sport (Italië)
+#DESCRIPTION RAI Sport (Italië)
+#SERVICE 4097:0:1:13:0:0:0:0:0:0:http%3a//xrei103x.api.channel.livestream.com/3.0/playlist.m3u8:REI TV
+#DESCRIPTION REI TV
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//repvideo_1-lh.akamaihd.net/i/Studio1_1@183089/master.m3u8:Repubblica TV
+#DESCRIPTION Repubblica TV
+#SERVICE 4097:0:1:a:639:9999:0:0:0:0:http%3a//live.youiptv.ch%3a1935/Rete55/R55.stream_source/playlist.m3u8:Rete 55
+#DESCRIPTION Rete 55
+#SERVICE 4097:0:1:13:0:0:0:0:0:0:rtmp%3a//flash8.streaming.xdevel.com%3a80/rete8sport/_definst_/rete8sport:Rete 8 Sport
+#DESCRIPTION Rete 8 Sport
+#SERVICE 4097:0:1:15:0:0:0:0:0:0:rtmp%3a//flash2.streaming.xdevel.com%3a80/rete8/_definst_/rete8:Rete 8
+#DESCRIPTION Rete 8
+#SERVICE 4097:0:1:5:609:9999:0:0:0:0:rtmp%3a//sb.top-ix.org%3a1935/retebiella/streaming:Rete Biella TV (Italië)
+#DESCRIPTION Rete Biella TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming.reteconomy.it/live/reteconomy/chunklist_w791398149.m3u8:Reteconomy (Italië)
+#DESCRIPTION Reteconomy (Italië)
+#SERVICE 4097:0:1:c:629:9999:0:0:0:0:rtmp%3a//flash2.bsnewline.com%3a1935/retesolelazio/retesolelazio:Retesole (Italië)
+#DESCRIPTION Retesole (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//flash2.bsnewline.com%3a1935/retesoleumbria/retesoleumbria/master.m3u8:Retesole Umbria (Italië)
+#DESCRIPTION Retesole Umbria (Italië)
+#SERVICE 4097:0:1:3be5:64:fbff:820000:0:0:0:mmsh%3a//mediatv2.topix.it/24RockOne66:Rock TV (Italië)
+#DESCRIPTION Rock TV (Italië)
+#SERVICE 4097:0:1:f:659:9999:0:0:0:0:rtmp%3a//wms.shared.streamshow.it%3a80/rtp/rtp:Rtp TV
+#DESCRIPTION Rtp TV
+#SERVICE 4097:0:1:a:679:9999:0:0:0:0:rtmp%3a//wma07.fluidstream.net%3a1935/RTTRlive/livestream:RTTR (Italië)
+#DESCRIPTION RTTR (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//194.116.78.102%3a1935/webtv_live4/_definst_/9UXJ2BJMTMNR/playlist.m3u8:RTV San Marino Sport
+#DESCRIPTION RTV San Marino Sport
+#SERVICE 4097:0:1:d50:1450:13e:820000:0:0:0:http%3a//senato.spectar.tv%3a1935/senato-live/ngrp%3awebtv1_all/chunklist_b1155072_DVR.m3u8:Senato TV (Italië)
+#DESCRIPTION Senato TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//109.74.144.130/live/senzihity/playlist.m3u8:Senzi (Italië)
+#DESCRIPTION Senzi (Italië)
+#SERVICE 4097:0:1:67:0:0:0:0:0:0:http%3a//live.streamcaster.net%3a1935/siciliamediatv_live/siciliamedia/playlist.m3u8:Sicilia Media Tv
+#DESCRIPTION Sicilia Media Tv
+#SERVICE 4097:0:1:c:779:9999:0:0:0:0:http%3a//live.streamcaster.net%3a1935/siciliamediatv_live/siciliamedia/playlist.m3u8:Siciliamedia TV (Italië)
+#DESCRIPTION Siciliamedia TV (Italië)
+#SERVICE 4097:0:1:110a:1644:fbff:820000:0:0:0:http%3a//skyianywhere2-i.akamaihd.net/hls/live/200275/tg24/stream6/streamPlaylist.m3u8:Sky Tg24 (Italië)
+#DESCRIPTION Sky Tg24 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//l1tvlive1-lh.akamaihd.net/i/p-2786_u-_l-2786_hls_a-_c-DE_e-885278_i-5484528720171217122906_k-_q-_t-hds/sportitalia247_1@5383/index_1200_av-p.m3u8:SportItalia (Italië)
+#DESCRIPTION SportItalia (Italië)
+#SERVICE 4097:0:1:e:649:9999:0:0:0:0:rtmp%3a//wms.shared.streamshow.it%3a1935/studio100ta/studio100ta:Studio 100 (Italië)
+#DESCRIPTION Studio 100 (Italië)
+#SERVICE 4097:0:1:73:0:0:0:0:0:0:http%3a//uk4.streamingpulse.com%3a1935/SuperJtv/SuperJtv/playlist.m3u8:Super J TV (Italië)
+#DESCRIPTION Super J TV (Italië)
+#SERVICE 4097:0:1:4:609:9999:0:0:0:0:http%3a//wms.shared.streamshow.it%3a1935/supertv/supertv/live.m3u8:SuperTV (Italië)
+#DESCRIPTION SuperTV (Italië)
+#SERVICE 4097:0:1:17:0:0:0:0:0:0:rtmp%3a//o1.senape.tv%3a1935/webtv_live/VC3TCRHI9LNP:T.R.C. Modena (Italië)
+#DESCRIPTION T.R.C. Modena (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//vs2.streamcaster.net%3a1935/tele8_live/tele8/playlist.m3u8:Tele 8 (Italië)
+#DESCRIPTION Tele 8 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//fms.tvavicenza.it%3a1935/telechiara/diretta:Tele Chiara (Italië)
+#DESCRIPTION Tele Chiara (Italië)
+#SERVICE 4097:0:1:15:0:0:0:0:0:0:rtmp%3a//stream.telepadova.com/live/tv1:Tele Citta Padova
+#DESCRIPTION Tele Citta Padova
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it%3a1935/telediogene/telediogene/master.m3u8:Tele Diogene (Italië)
+#DESCRIPTION Tele Diogene (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//flash2.streaming.xdevel.com%3a80/telegalatina/telegalatina:Tele Galatina (Italië)
+#DESCRIPTION Tele Galatina (Italië)
+#SERVICE 4097:0:1:89:0:0:0:0:0:0:http%3a//flash2.bsnewline.com%3a1935/telelaser/telelaser/playlist.m3u8:Tele Laser (Italië)
+#DESCRIPTION Tele Laser (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//misty.infoporto.it%3a8080/hls/tls/2_1/index.m3u8:Tele Liguria Sud (Italië)
+#DESCRIPTION Tele Liguria Sud (Italië)
+#SERVICE 4097:0:1:8:609:9999:0:0:0:0:http%3a//wms.shared.streamshow.it%3a80/telemia/telemia/playlist.m3u8:Tele Mia (Italië)
+#DESCRIPTION Tele Mia (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//1se2.troydesign.eu%3a80/np_teleoltre/channel1_np_teleoltre:Tele Oltre (Italië)
+#DESCRIPTION Tele Oltre (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5698c1463445c.streamlock.net/TRPP_live/smil%3abcffcc98-ac2f-4b73-b0a5-ad1bfb96d845_all.smil/chunklist_w738465886_b130000_slita.m3u8:Tele Padre Pio (Italië)
+#DESCRIPTION Tele Padre Pio (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56972e8bd3345.streamlock.net/TRPP_live/smil%3abcffcc98-ac2f-4b73-b0a5-ad1bfb96d845_all.smil/chunklist_w1418321773_b227000_slita.m3u8:Tele Padre Pio (religie - Italië)
+#DESCRIPTION Tele Padre Pio (religie - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/telequattro/telequattro/chunklist_w1388066579.m3u8:Tele Quattro Trieste (Italië)
+#DESCRIPTION Tele Quattro Trieste (Italië)
+#SERVICE 4097:0:1:6:0:0:0:0:0:0:rtmp%3a//www.teleradioerre.com/live/mp4%3ateleradioerre:Tele Radio Erre
+#DESCRIPTION Tele Radio Erre
+#SERVICE 4097:0:1:17:0:0:0:0:0:0:rtmp%3a//streamtv.level7.it%3a1935/teleradiosciacca-tv/teleradiosciacca-tv/teleradiosciacca-tv:Tele Radio Sciacca (Italië)
+#DESCRIPTION Tele Radio Sciacca (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it%3a1935/telestudiomo/telestudiomo/live.m3u8:Tele Studio (Modena Italië)
+#DESCRIPTION Tele Studio (Modena Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//livevideo.infomaniak.com/streaming/livecast/teleticinolive/chunklist_w791861389.m3u8:Tele Ticino (Italië)
+#DESCRIPTION Tele Ticino (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59d7d6f47d7fc.streamlock.net/tva/tva/playlist.m3u8:Tele Video Agrigento (Italië)
+#DESCRIPTION Tele Video Agrigento (Italië)
+#SERVICE 4097:0:1:109:0:0:0:0:0:0:http%3a//uk4.streamingpulse.com%3a1935/TeleabruzzoTV/TeleabruzzoTV/playlist.m3u8:Teleabruzzo TV (Italië)
+#DESCRIPTION Teleabruzzo TV (Italië)
+#SERVICE 4097:0:1:99:0:0:0:0:0:0:http%3a//vod1.kronopress.com%3a1935/teleacras_live/teleacras/playlist.m3u8:TELEACRAS (Italië)
+#DESCRIPTION TELEACRAS (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wma07.fluidstream.net%3a1935/TeleArena/livestream/chunklist_w565254048.m3u8:TeleArena (Italië)
+#DESCRIPTION TeleArena (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//w1.mediastreaming.it/telebari/livestream/playlist.m3u8:TeleBari (Italië)
+#DESCRIPTION TeleBari (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//flash7.streaming.xdevel.com%3a80/teleboario playpath=teleboario swfUrl=http%3a//share.xdevel.com/api/lib/js/jwplayer5/player.swf pageUrl=http%3a//share.xdevel.com/api/?platform=streamsolution&get=player&key=bdf8d1f1f4ae8b1534d6b59b86931927:TeleBoario (Italië)
+#DESCRIPTION TeleBoario (Italië)
+#SERVICE 4097:0:1:5:679:9999:0:0:0:0:rtmp%3a//fms.tvavicenza.it%3a1935/telechiara/diretta:TeleChiara
+#DESCRIPTION TeleChiara
+#SERVICE 4097:0:1:9:679:9999:0:0:0:0:rtmp%3a//stream.telepadova.com/live/tv1:TeleCitta
+#DESCRIPTION TeleCitta
+#SERVICE 4097:0:1:97:0:0:0:0:0:0:http%3a//live.lasiciliaweb.it/hls/tc_640/index.m3u8:TELECOLOR CT 2 TV SICILIANA
+#DESCRIPTION TELECOLOR CT 2 TV SICILIANA
+#SERVICE 4097:0:1:d:639:9999:0:0:0:0:http%3a//telecolor.econcept.it/live/telecolor.isml/manifest(format=m3u8-aapl).m3u8:Telecolor Lombardia
+#DESCRIPTION Telecolor Lombardia
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dcunilive15-lh.akamaihd.net/i/dclive_1@90423/master.m3u8:Telecupole (Italië)
+#DESCRIPTION Telecupole (Italië)
+#SERVICE 4097:0:1:7:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/telefoggia/mp4%3atelefoggia/chunklist_w485752473.m3u8:Telefoggia (Italië)
+#DESCRIPTION Telefoggia (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//or01.top-ix.org%3a1935/streamtech/telefriuli/playlist.m3u8:Telefriuli (Italië)
+#DESCRIPTION Telefriuli (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.sloode.com%3a1935/telegranda_live/C2AD-0664-DC75-4744/playlist.m3u8 :TeleGranda (Italië)
+#DESCRIPTION TeleGranda (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//flash2.bsnewline.com%3a1935/telelaser/telelaser:Telelaser (Italië)
+#DESCRIPTION Telelaser (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//wma07.fluidstream.net%3a1935/TeleMantova/livestream:Telemantova (Italië)
+#DESCRIPTION Telemantova (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it%3a80/telemia/telemia/playlist.m3u8:Telemia (Italië)
+#DESCRIPTION Telemia (Italië)
+#SERVICE 4097:0:1:105:0:0:0:0:0:0:http%3a//ondemand.superstreaming.it%3a1935/piublu/piublu.sdp/playlist.m3u8:TeleMilano Piu' Blu
+#DESCRIPTION TeleMilano Piu' Blu
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//91.121.222.160%3a1935/piublu/piublu.sdp:Telemilano
+#DESCRIPTION Telemilano
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/telemonteneve/telemonteneve/playlist.m3u8:Telemonteve (Italië)
+#DESCRIPTION Telemonteve (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/telemonteneve3/telemonteneve3/playlist.m3u8:Telemonteve 3 (Italië)
+#DESCRIPTION Telemonteve 3 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streamer.oodlz.it/hls/livestream.m3u8:Telenord (Italië)
+#DESCRIPTION Telenord (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//54.228.254.95%3a1935/live/myStream:Telenuova 2 Campania (Italië)
+#DESCRIPTION Telenuova 2 Campania (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live-fs.mariatvcdn.com/mariatvpoint/d36592901d5429dd7f9ec1e7bbeda8c2.sdp/playlist.m3u8:TelePace (Vaticaan)
+#DESCRIPTION TelePace (Vaticaan)
+#SERVICE 4097:0:1:3:609:9999:0:0:0:0:http%3a//wms.shared.streamshow.it%3a1935/telepavia/telepavia/live.m3u8:TelePavia (Italië)
+#DESCRIPTION TelePavia (Italië)
+#SERVICE 4097:0:1:a:629:9999:0:0:0:0:rtmp%3a//213.187.12.18/telepn/telepn:Telepordenone
+#DESCRIPTION Telepordenone
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livetr.teleromagna.it/teleromagna/live/playlist.m3u8:Teleromagna (Italië)
+#DESCRIPTION Teleromagna (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livetr.teleromagna.it/lifestyle/live/playlist.m3u8:Teleromagna Lifestyle (Italië)
+#DESCRIPTION Teleromagna Lifestyle (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livetr.teleromagna.it/news/live/playlist.m3u8:Teleromagna Mia (Italië)
+#DESCRIPTION Teleromagna Mia (Italië)
+#SERVICE 4097:0:1:480:0:0:0:0:0:0:http%3a//livetr.teleromagna.it/mia/live/playlist.m3u8:TeleRomagna MIA
+#DESCRIPTION TeleRomagna MIA
+#SERVICE 4097:0:1:478:0:0:0:0:0:0:http%3a//livetr.teleromagna.it/news/live/playlist.m3u8:TeleRomagna NEWS
+#DESCRIPTION TeleRomagna NEWS
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livetr.teleromagna.it/sport/live/playlist.m3u8:Teleromagna Sport (Italië)
+#DESCRIPTION Teleromagna Sport (Italië)
+#SERVICE 4097:0:1:482:0:0:0:0:0:0:http%3a//livetr.teleromagna.it/sport/live/playlist.m3u8:TeleRomagna SPORT
+#DESCRIPTION TeleRomagna SPORT
+#SERVICE 4097:0:1:474:0:0:0:0:0:0:http%3a//livetr.teleromagna.it/teleromagna/live/playlist.m3u8:TeleRomagna
+#DESCRIPTION TeleRomagna
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//193.34.109.10%3a8090/:Telestar (Italië)
+#DESCRIPTION Telestar (Italië)
+#SERVICE 4097:0:1:8:659:9999:0:0:0:0:rtmp%3a//live.streamcaster.net%3a1935/telesud3_live/telesud:Telesud3 Trapani
+#DESCRIPTION Telesud3 Trapani
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//video2.kronopress.com%3a1935/etv_live/teletricolore/playlist.m3u8:Teletricolore (Italië)
+#DESCRIPTION Teletricolore (Italië)
+#SERVICE 4097:0:1:139:0:0:0:0:0:0:http%3a//flash7.streaming.xdevel.com%3a80/tris/tris/playlist.m3u8:Teletris 172
+#DESCRIPTION Teletris 172
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59d7d6f47d7fc.streamlock.net/televenezia/televenezia/chunklist_w952481899.m3u8:Televenezia (Italië)
+#DESCRIPTION Televenezia (Italië)
+#SERVICE 4097:0:1:3a0b:1fa4:13e:820000:0:0:0:rtmp%3a//37.48.83.34%3a80/tgnorba_24/tgnorba_24_source.stream:Tg Norba24 (Italië)
+#DESCRIPTION Tg Norba24 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/telemonteneve/telemonteneve/playlist.m3u8 :tMn News (Italië)
+#DESCRIPTION tMn News (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/telemonteneve3/telemonteneve3/playlist.m3u8 :tMn3 (Italië)
+#DESCRIPTION tMn3 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//flash2.streaming.xdevel.com%3a80/radiotouring10496/radiotouring10496/playlist.m3u8:Touring TV (Italië)
+#DESCRIPTION Touring TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livetr.teleromagna.it/mia/live/playlist.m3u8:TR24 (Italië)
+#DESCRIPTION TR24 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//o1.senape.tv%3a1935/webtv_live/VC3TCRHI9LNP:TRC Modena (Italië)
+#DESCRIPTION TRC Modena (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//77.72.196.214%3a8554/live/TrentinoTV/livestream.m3u8:Trentino TV (Italië)
+#DESCRIPTION Trentino TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//w1.streamingmedia.it%3a1935/trmh24/live/playlist.m3u8:Trm H24 (Italië)
+#DESCRIPTION Trm H24 (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/tsn/tsn_mobile/playlist.m3u8:TSN (Italië)
+#DESCRIPTION TSN (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/tsn2/tsn2/playlist.m3u8:TSN 2 (Italië)
+#DESCRIPTION TSN 2 (Italië)
+#SERVICE 4097:0:1:8:639:9999:0:0:0:0:http%3a//wms.shared.streamshow.it/tsn2/tsn2/playlist.m3u8:TSN Livigno (Italië)
+#DESCRIPTION TSN Livigno (Italië)
+#SERVICE 4097:0:1:9:639:9999:0:0:0:0:http%3a//wms.shared.streamshow.it/tsn/tsn_mobile/playlist.m3u8:TSN Tele Sondrio News
+#DESCRIPTION TSN Tele Sondrio News
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamcaster.net%3a1935/test_live/teleluna/chunklist_w1578080865.m3u8:Tv Luna (Italië)
+#DESCRIPTION Tv Luna (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ftp.tiscali.it/francescovernata/TVUNO/monoscopioTvUNOint-1.wmv:TV UNO
+#DESCRIPTION TV UNO
+#SERVICE 4097:0:1:2bac:19c8:fbff:820000:0:0:0:http%3a//mi1.wz.tv2000.it/tv2000_alfa.m3u8:TV2000 (Italië)
+#DESCRIPTION TV2000 (Italië)
+#SERVICE 4097:0:1:8:679:9999:0:0:0:0:rtmp%3a//fms.tvavicenza.it%3a1935/live/diretta_1:Tva Vicenza
+#DESCRIPTION Tva Vicenza
+#SERVICE 4097:0:1:185:0:0:0:0:0:0:http%3a//player.adobemediaserver.it/speedweb-hls-live/livepkgr/_definst_/liveevent/livestream.m3u8:TVR XENON
+#DESCRIPTION TVR XENON
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/tvrs/tvrs/playlist.m3u8:TVRS (Italië)
+#DESCRIPTION TVRS (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//vod1.kronopress.com%3a1935/ultimatv_live/4B96-D3C4-CD06-4CFE/chunklist_w1315656524.m3u8:Ultima TV (Italië)
+#DESCRIPTION Ultima TV (Italië)
+#SERVICE 4097:0:1:e:669:9999:0:0:0:0:rtmp%3a//eventi.ictvalleumbra.it%3a1935/live/umbriatv.sdp:Umbria TV (Italië)
+#DESCRIPTION Umbria TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream6-rai-it.akamaized.net/live/uninettuno/playlist.m3u8:Uninettuno University TV (Italië)
+#DESCRIPTION Uninettuno University TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/veratv/veratv/playlist.m3u8:Vera TV (Italië)
+#DESCRIPTION Vera TV (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestream.goinfo.it/V33Live/v33ros/playlist.m3u8:Video 33 (Italië)
+#DESCRIPTION Video 33 (Italië)
+#SERVICE 4097:0:1:b:639:9999:0:0:0:0:http%3a//wms.shared.streamshow.it/videobrescia/videobrescia/hasbahca.m3u8:Video Brescia (Italië)
+#DESCRIPTION Video Brescia (Italië)
+#SERVICE 4097:0:1:207:0:0:0:0:0:0:http%3a//dr21.streamcaster.net%3a1935/videofaro/videofaro/playlist.m3u8:VIDEO FARO (Italië)
+#DESCRIPTION VIDEO FARO (Italië)
+#SERVICE 4097:0:1:205:0:0:0:0:0:0:http%3a//streaming.ermeslink.com%3a88/hlsme/vmstream.m3u8:Video mediterraneo (Italië)
+#DESCRIPTION Video mediterraneo (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming.ermeslink.com%3a88/hlsme/vmstream.m3u8:Video Mediterraneo (Italië)
+#DESCRIPTION Video Mediterraneo (Italië)
+#SERVICE 4097:0:1:15:0:0:0:0:0:0:http%3a//live1.kronopress.com%3a1935/videostar_live/videostar/playlist.m3u8:VIDEO STAR (Italië)
+#DESCRIPTION VIDEO STAR (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live1.kronopress.com%3a1935/videostar_live/videostar2/playlist.m3u8:Video Star Plus (Italië)
+#DESCRIPTION Video Star Plus (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreaming.videolina.it/live/Videolina/chunklist_w488279894.m3u8:Videolina (Italië)
+#DESCRIPTION Videolina (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//79.143.181.106%3a8000/live/videonola/videonola/1021.m3u8:Videonola (Italië)
+#DESCRIPTION Videonola (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wms.shared.streamshow.it/visualradio/mp4%3avisualradio/chunklist.m3u8:Visual Radio (muziek - Italië)
+#DESCRIPTION Visual Radio (muziek - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//212.43.97.35%3a1935/winechannel/winechannel/playlist.m3u8:Wine Channel (Italië)
+#DESCRIPTION Wine Channel (Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//dcunilive28-lh.akamaihd.net/i/dclive_1@531020/master.m3u8:WL-TV TRIS NEWS (Italië)
+#DESCRIPTION WL-TV TRIS NEWS (Italië)

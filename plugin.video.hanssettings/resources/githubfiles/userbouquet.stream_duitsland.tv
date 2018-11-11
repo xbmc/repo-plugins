@@ -1,0 +1,345 @@
+#NAME Stream Duitsland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//123tv.cdn.ses-ps.com/index.m3u8:1-2-3 TV (Duitsland)
+#DESCRIPTION 1-2-3 TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//586c13b083c0d.streamlock.net/augsburgtv/augsburgtv.stream_1/chunklist_w1193892571.m3u8:a.tv HD (Duitsland)
+#DESCRIPTION a.tv HD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//alex-stream.rosebud-media.de/live/smil%3aalexlivetv.smil/chunklist.m3u8:ALEX (Berlijn)
+#DESCRIPTION ALEX (Berlijn)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvallgaeu.iptv-playoutcenter.de%3a1935/tvallgaeu/tvallgaeu.stream_2/chunklist_w623765085.m3u8:Allgäu.tv (Duitsland)
+#DESCRIPTION Allgäu.tv (Duitsland)
+#SERVICE 5002:0:1:2fc:5:85:c00000:0:0:0:http%3a//video1.anixehd.tv%3a8080/Apple/wifistream.m3u8:Anixe (Duitsland) 
+#DESCRIPTION Anixe (Duitsland) 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//mdrevent2hls-lh.akamaihd.net/i/livetvmdrevent3_ww@513991/index_3871_av-p.m3u8?sd=10&rebase=on:ARD Feed (Duitsland)
+#DESCRIPTION ARD Feed (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//daserstehdint-lh.akamaihd.net/i/daserstehd_int@629195/index_3776_av-p.m3u8:ARD (soms geoblocking)
+#DESCRIPTION ARD (soms geoblocking)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//brlive-lh.akamaihd.net/i/bralpha_germany@119899/index_3776_av-b.m3u8?sd=10&rebase=on:ARD alpha
+#DESCRIPTION ARD alpha
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:rtmp%3a//augsburgtv.iptv-playoutcenter.de%3a1935/augsburgtv/augsburgtv.stream_1:Augsburg TV (Duitsland)
+#DESCRIPTION Augsburg TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn.icu.de/rtplive/btv.stream/.m3u8:Baden TV (Duitsland)
+#DESCRIPTION Baden TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.br.de/i/bfsnord_germany@119898/index_3776_av-p.m3u8?sd=10&rebase=on:Bayerisches Fernsehen HD  (Duitsland)
+#DESCRIPTION Bayerisches Fernsehen HD  (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//autopilot.myowntv.org/content/33816/index.m3u8:Berlin Metal TV (Duitsland - muziek)
+#DESCRIPTION Berlin Metal TV (Duitsland - muziek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//bibeltv02.iptv-playoutcenter.de/bibeltv01/bibeltv01.stream_1/master.m3u8:Bibel TV  (Duitsland)
+#DESCRIPTION Bibel TV  (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//familytvblizz-lh.akamaihd.net/i/familytv_1@458351/index_500_av-p.m3u8:BlizzTV (Duitsland)
+#DESCRIPTION BlizzTV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//58bd5b7a98e04.streamlock.net/medienasa-live/_definst_/BLKonline_high/playlist.m3u8:BLK Regional TV (Duitsland)
+#DESCRIPTION BLK Regional TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.br.de/i/bralpha_germany@119899/index_3776_av-p.m3u8?sd=10&rebase=on:BR Alpha  (Duitsland)
+#DESCRIPTION BR Alpha  (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//brlive-lh.akamaihd.net/i/bfsnord_germany@119898/index_3776_av-p.m3u8:BR Fernsehen Nord HD (Duitsland)
+#DESCRIPTION BR Fernsehen Nord HD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//brlive-lh.akamaihd.net/i/bfssued_germany@119890/index_3776_av-p.m3u8:BR Fernsehen Süd HD (Duitsland)
+#DESCRIPTION BR Fernsehen Süd HD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.br.de/i/bfsnord_germany@119898/master.m3u8:BR HD Nord (Duitsland)
+#DESCRIPTION BR HD Nord (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreams.br.de/i/bfssued_germany@119890/master.m3u8:BR HD Sued (Duitsland)
+#DESCRIPTION BR HD Sued (Duitsland)
+#SERVICE 4097:0:1:29:2:5:0:0:0:0:https%3a//cdn.icu.de/rtplive/bwf.stream/playlist.m3u8:BW Family TV (Duitsland)
+#DESCRIPTION BW Family TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//iptvcodes.blogspot.com@62.113.210.250/medienasa-live/ok-wernigerode_high/hasbahca.m3u8?bitrate=800:Campus TV Magdeburg (Duitsland)
+#DESCRIPTION Campus TV Magdeburg (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//regio-tv-stream.de%3a1935/chemnitzfernsehenlive/livestream.sdp/playlist.m3u8:Chemnitz Fernsehen (Duitsland)
+#DESCRIPTION Chemnitz Fernsehen (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wowza2.mysoltv.com%3a1992/UK_ENG_Sky_Movie_showcase/tracks-v1a1/index.m3u8:Cinema Action
+#DESCRIPTION Cinema Action
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge-h.daf.tmt.de/ios-live/daf-ios-live-livetv.stream/master.m3u8:DAF - Deutsches Anlegerfernsehen (Duitsland)
+#DESCRIPTION DAF - Deutsches Anlegerfernsehen (Duitsland)
+#SERVICE 4097:0:1:6dca:44d:1:c00000:0:0:0:https%3a//daserstehdde-lh.akamaihd.net/i/daserstehd_de@629196/index_3776_av-b.m3u8:Das Erste HD
+#DESCRIPTION Das Erste HD
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58de7a369a9c4.streamlock.net/aktionaertv_live/smil%3aaktionaertv_live_abr.smil/chunklist_w435909556_b2616000_slger.m3u8:Der Aktionar TV (Duitsland)
+#DESCRIPTION Der Aktionar TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dwstream72-lh.akamaihd.net/i/dwstream72_live@123556/index_1_av-b.m3u8?sd=10&rebase=on:Deutsche Welle (Duitsland)
+#DESCRIPTION Deutsche Welle (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dwstream4-lh.akamaihd.net/i/dwstream4_live@131329/master.m3u8:Deutsche Welle (Engelstalig)
+#DESCRIPTION Deutsche Welle (Engelstalig)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dwstream2-lh.akamaihd.net/i/dwstream2_live@124400/master.m3u8:Deutsche Welle Arabia (Duitsland)
+#DESCRIPTION Deutsche Welle Arabia (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dwstream3-lh.akamaihd.net/i/dwstream3_live@124409/master.m3u8:Deutsche Welle Latinoamerica (Spaans) (Duitsland)
+#DESCRIPTION Deutsche Welle Latinoamerica (Spaans) (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dwstream6-lh.akamaihd.net/i/dwstream6_live@123962/master.m3u8:Deutsche Welle
+#DESCRIPTION Deutsche Welle
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//tv.artcom-venture.de/dmf/tv_720.m3u8:Deutsches Musik Fernsehen (Duitsland)
+#DESCRIPTION Deutsches Musik Fernsehen (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//donautv.iptv-playoutcenter.de%3a1935/donautv/donautv.stream_2:Donau TV (Duitsland)
+#DESCRIPTION Donau TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//regio-tv-stream.de%3a1935/dresdenfernsehenlive/livestream.sdp/playlist.m3u8:Dresden Fernsehen (Duitsland)
+#DESCRIPTION Dresden Fernsehen (Duitsland)
+#SERVICE 4097:0:1:33:2:5:0:0:0:0:https%3a//sdn-global-live-http-cache.3qsdn.com/live/_definst_/smil%3a5713-mbr.smil/playlist.m3u8:DRF1 
+#DESCRIPTION DRF1 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/elbe_high/master.m3u8:ElbeKanal
+#DESCRIPTION ElbeKanal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn-europe.smartcast.de%3a1935/eotv/eotvhd/playlist.m3u8:EOTV (Duitsland)
+#DESCRIPTION EOTV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//14000-l.z.core.cdn.streamfarm.net/007erfiphonelive/smil%3astream_live.smil/chunklist_w1563145417_b240000.m3u8:ERF 1 (Duitsland)
+#DESCRIPTION ERF 1 (Duitsland)
+#SERVICE 4097:0:1:9:2:5:0:0:0:0:http%3a//62.67.13.53%3a1935/kabeljournal/live.stream/playlist.m3u8:erzTV (KabelJournal)
+#DESCRIPTION erzTV (KabelJournal)
+#SERVICE 4097:0:1:44:2:5:0:0:0:0:http%3a//62.113.221.6/ev1tv-live/livestream/master.m3u8:EV1.TV (Duitsland)
+#DESCRIPTION EV1.TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//familytvblizz-lh.akamaihd.net/i/blizzlive_1@36699/index_500_av-p.m3u8:Family TV (Duitsland)
+#DESCRIPTION Family TV (Duitsland)
+#SERVICE 4097:0:1:1e:2:5:0:0:0:0:http%3a//62.113.210.2/filstalwelle-live/_definst_/mp4%3alivestream/playlist.m3u8:Filstalwelle (Duitsland)
+#DESCRIPTION Filstalwelle (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//46.101.244.86%3a8081/folx-abr/live-abr/fle/fle1/chunks.m3u8:Folx TV (Duitsland)
+#DESCRIPTION Folx TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//frankentv.iptv-playoutcenter.de%3a1935/frankentv/frankentv.stream_1/chunklist_w2002775230.m3u8:Franken TV HD (Duitsland)
+#DESCRIPTION Franken TV HD (Duitsland)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//62.113.221.100/friesischerRundfunk-live/_definst_/mp4%3alivestream/playlist.m3u8:FRF1 - Friesischer Rundfunk
+#DESCRIPTION FRF1 - Friesischer Rundfunk
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.221.100/friesischerRundfunk-live/_definst_/mp4%3alivestream/playlist.m3u8:Friesischer Rundfunk
+#DESCRIPTION Friesischer Rundfunk
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58481b709ae2e.streamlock.net/tv2000plus-live/_definst_/mp4%3alivestream/playlist.m3u8:Genius Plus TV (Duitsland)
+#DESCRIPTION Genius Plus TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/tvhalle_high/master.m3u8:Halle TV (Duitsland)
+#DESCRIPTION Halle TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//sdn-global-live-http-cache.3qsdn.com/live/_definst_/smil%3a7651-sbr.smil/playlist.m3u8:Hamburg 1 (Duitsland)
+#DESCRIPTION Hamburg 1 (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestream.htp.tv/hls-live/livepkgr/_definst_/H1/H1_HQ.m3u8:Hanover 1 (15%3a30 - 00%3a05 Uhr)
+#DESCRIPTION Hanover 1 (15:30 - 00:05 Uhr)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.67.13.53%3a1935/HealthTV/ghtv_live_master.stream/playlist.m3u8:health.tv (Duitsland)
+#DESCRIPTION health.tv (Duitsland)
+#SERVICE 4097:0:1:27:2:6:0:0:0:0:http%3a//148.251.76.72%3a8081/hitnrw/streamout.sdp/playlist.m3u8:Hitarena NRW TV - Visual Radio (Duitsland)
+#DESCRIPTION Hitarena NRW TV - Visual Radio (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//bcsecurelivehls-i.akamaihd.net/hls/live/257428/4303072782001/master_Layer2.m3u8:Hope Channel (Duitsland)
+#DESCRIPTION Hope Channel (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live1_hr-lh.akamaihd.net/i/hr_fernsehen@75910/index_3584_av-b.m3u8?sd=10&rebase=on:HR = Hessischer Rundfunk (Duitsland)
+#DESCRIPTION HR = Hessischer Rundfunk (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//c17001-l.z.core.cdn.streamfarm.net/10018xhse24/smil%3aclassicmobile.smil/chunklist-b500.m3u8:HSE24 (Duitsland)
+#DESCRIPTION HSE24 (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//c17001-l.z.core.cdn.streamfarm.net/10019xhse24ext/smil%3aextramobile.smil/chunklist-b500.m3u8:HSE24 Extra (Duitsland)
+#DESCRIPTION HSE24 Extra (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ingolstadttv.iptv-playoutcenter.de%3a1935/ingolstadttv/ingolstadttv.stream_1/chunklist_w337734222.m3u8:InTV (Duitsland)
+#DESCRIPTION InTV (Duitsland)
+#SERVICE 4097:0:1:14:2:6:0:0:0:0:rtmp%3a//185.19.217.171%3a1935/live/inselradio:Inselradio TV (muziek - Duitstalig - Mallorca/Spanje)
+#DESCRIPTION Inselradio TV (muziek - Duitstalig - Mallorca/Spanje)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//isar-tv.iptv-playoutcenter.de%3a1935/isar-tv/isar-tv.stream_1/media_w1753151486_master.m3u8:Isar TV (Duitsland)
+#DESCRIPTION Isar TV (Duitsland)
+#SERVICE 4097:0:1:20:2:5:0:0:0:0:http%3a//isar-tv.iptv-playoutcenter.de%3a1935/isar-tv/isar-tv.stream_1/master.m3u8:Isar TV
+#DESCRIPTION Isar TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.67.13.53%3a1935/kabeljournal/live.stream/playlist.m3u8:Kabeljournal (Duitsland)
+#DESCRIPTION Kabeljournal (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58bd5b7a98e04.streamlock.net/medienasa-live/_definst_/mp4%3akulturmd_high/chunklist_w1264774780.m3u8:KulturMD (Duitsland)
+#DESCRIPTION KulturMD (Duitsland)
+#SERVICE 4097:0:1:35:2:5:0:0:0:0:http%3a//62.113.210.250/medienasa-live/kulturmd_high/master.m3u8:kulturmd
+#DESCRIPTION kulturmd
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58481b709ae2e.streamlock.net/tv2000plus-live/_definst_/mp4%3alivestream3.stream/playlist.m3u8:L TV Baden Württemberg  (Duitsland)
+#DESCRIPTION L TV Baden Württemberg  (Duitsland)
+#SERVICE 4097:0:1:32:2:5:0:0:0:0:http%3a//62.113.221.4/tv2000plus-live/_definst_/mp4%3alivestream3.stream/playlist.m3u8:Landesfernsehen TV (Duitsland)
+#DESCRIPTION Landesfernsehen TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//regio-tv-stream.de%3a1935/leipzigfernsehenlive/livestream.sdp/playlist.m3u8:Leipzig Fernsehen (Duitsland)
+#DESCRIPTION Leipzig Fernsehen (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streamer1.streamhost.org%3a1935/salive/lctvde/playlist.m3u8:Light Channel Deutschland
+#DESCRIPTION Light Channel Deutschland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming-magenta-music-360.akamaized.net/hls/live/504581/magentamusik1/magentamusik1_1/magentamusik1.m3u8:MagentaMusik 360 (Duitsland - muziek)
+#DESCRIPTION MagentaMusik 360 (Duitsland - muziek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//maintv.iptv-playoutcenter.de%3a1935/maintv/maintv.stream_2/master.m3u8:Main.TV (Duitsland)
+#DESCRIPTION Main.TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/mdf1_high/playlist.m3u8:MDF.1 (Duitsland)
+#DESCRIPTION MDF.1 (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//mediaspar-live.hls.adaptive.level3.net/ses/mediaspar/stream3/streamPlaylist.m3u8:Mediaspar TV (Duitsland)
+#DESCRIPTION Mediaspar TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//muenchentv.iptv-playoutcenter.de/muenchentv/muenchentv.stream_1:München TV (Duitsland)
+#DESCRIPTION München TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ntvlivehls-lh.akamaihd.net/i/ntvlivehls_1@409250/master.m3u8:N-TV (540p)
+#DESCRIPTION N-TV (540p)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream-cdn.ok54.de/hls/nahetv.m3u8:NaheTV (Duitsland)
+#DESCRIPTION NaheTV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ndrfs-lh.akamaihd.net/i/ndrfs_hh@430231/index_3776_av-p.m3u8?sd=10&rebase=on:NDR Fernsehen HD (Duitsland)
+#DESCRIPTION NDR Fernsehen HD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ndrfs-lh.akamaihd.net/i/ndrfs_hh@430231/index_3776_av-p.m3u8:NDR Hamburg HD (Duitsland)
+#DESCRIPTION NDR Hamburg HD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ndrfs-lh.akamaihd.net/i/ndrfs_mv@430232/master.m3u8:NDR Mecklenburg-Vorpommern (Duitsland)
+#DESCRIPTION NDR Mecklenburg-Vorpommern (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ndrfs-lh.akamaihd.net/i/ndrfs_nds@430233/index_3776_av-p.m3u8:NDR Niedersachsen HD (Duitsland)
+#DESCRIPTION NDR Niedersachsen HD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ndrfs-lh.akamaihd.net/i/ndrfs_sh@430234/index_3776_av-p.m3u8:NDR Schleswig-Holstein HD (Duitsland)
+#DESCRIPTION NDR Schleswig-Holstein HD (Duitsland)
+#SERVICE 4097:0:1:9:2:6:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=nice-broadcast-media-gmbh&file=1800-h264-nice-DEF-TV-Video&type=live&service=wowza&output=playlist.m3u8:nice DEF TV (muziek - Duitsland)
+#DESCRIPTION nice DEF TV (muziek - Duitsland)
+#SERVICE 4097:0:1:19:2:6:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=nice-broadcast-media-gmbh&file=1800-h264-Event-Video&type=live&service=wowza&output=playlist.m3u8:nice Mix TV (muziek - Duitsland)
+#DESCRIPTION nice Mix TV (muziek - Duitsland)
+#SERVICE 4097:0:1:34:2:6:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=nice-broadcast-media-gmbh&file=zumglueckberlinerLIVE&type=live&service=wowza&output=playlist.m3u8:nice Zum Glück Berliner TV (muziek - Duitsland)
+#DESCRIPTION nice Zum Glück Berliner TV (muziek - Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls1.wtnet.de/noa4hh/apple/wifi6500.m3u8:noa4 Hamburg FHD (Duitsland)
+#DESCRIPTION noa4 Hamburg FHD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls1.wtnet.de/noa4/apple/wifi6500.m3u8:noa4 Norderstedt FHD (Duitsland)
+#DESCRIPTION noa4 Norderstedt FHD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//fms.nrwision.de/live/livestreamHD.stream_source/chunklist.m3u8:NRWISION HD (Duitsland)
+#DESCRIPTION NRWISION HD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//oberpfalztv.iptv-playoutcenter.de%3a1935/oberpfalztv/oberpfalztv.stream_1/chunklist_w779438037.m3u8:Oberpfalz TV (Duitsland)
+#DESCRIPTION Oberpfalz TV (Duitsland)
+#SERVICE 4097:0:1:42:2:5:0:0:0:0:https%3a//586af19f15937.streamlock.net/germanpictures-live/_definst_/mp4%3astreamschedule/chunklist.m3u8:OFTV (Duitsland)
+#DESCRIPTION OFTV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//iptvcodes.blogspot.com@62.113.210.250/medienasa-live/ok-magdeburg_high/hasbahca.m3u8?bitrate=800:Offener Kanal Magdeburg (Duitsland)
+#DESCRIPTION Offener Kanal Magdeburg (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/ok-dessau_high/master.m3u8:OK Dessau (Duitsland)
+#DESCRIPTION OK Dessau (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/ok-magdeburg_high/master.m3u8:OK Magedeburg (Duitsland)
+#DESCRIPTION OK Magedeburg (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream-cdn.ok54.de/hls/oktvmainz.m3u8:OK Mainz
+#DESCRIPTION OK Mainz
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/ok-merseburg_high/master.m3u8:OK Merseburg (Duitsland)
+#DESCRIPTION OK Merseburg (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/ok-salzwedel_high/master.m3u8:OK Salzwedel (Duitsland)
+#DESCRIPTION OK Salzwedel (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/ok-stendal_high/master.m3u8:OK Stendal (Duitsland)
+#DESCRIPTION OK Stendal (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream-cdn.ok54.de/hls/okswp.m3u8:OK Südwestpfalz (Duitsland)
+#DESCRIPTION OK Südwestpfalz (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//stream-cdn.ok54.de/tv/okweinstrasse:OK Weinstrasse (Duitsland)
+#DESCRIPTION OK Weinstrasse (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/ok-wernigerode_high/master.m3u8:OK Wernigerode (Duitsland)
+#DESCRIPTION OK Wernigerode (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/ok-wettin_high/master.m3u8:OK Wettin
+#DESCRIPTION OK Wettin
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream-cdn.ok54.de/hls/ok4.m3u8:OK4
+#DESCRIPTION OK4
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream-cdn.ok54.de/hls/ok54.m3u8:OK54
+#DESCRIPTION OK54
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//d2jk87psbjrjdz.cloudfront.net/livehttporigin/okto/chunklist.m3u8:OKTO
+#DESCRIPTION OKTO
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//188.40.16.94%3a1935/live/studio/chunklist_w27232713.m3u8:Oldenburg eins TV (Duitsland)
+#DESCRIPTION Oldenburg eins TV (Duitsland)
+#SERVICE 4097:0:1:3a:2:5:0:0:0:0:http%3a//188.40.16.94%3a1935/live/studio/playlist.m3u8:Oldenburg Eins
+#DESCRIPTION Oldenburg Eins
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//onelivestream-lh.akamaihd.net/i/one_livestream@568814/index_7_av-p.m3u8:ONE HD (Duitsland)
+#DESCRIPTION ONE HD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//p3-6.mov.at%3a1935/live/weekstream:P3 tv
+#DESCRIPTION P3 tv
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//c13014-l-hls.u.core.cdn.streamfarm.net/1000153copo/hk1.m3u8:Parlamentsfernsehen 1 (Duitsland)
+#DESCRIPTION Parlamentsfernsehen 1 (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//c13014-l-hls.u.core.cdn.streamfarm.net/1000153copo/hk2.m3u8:Parlamentsfernsehen 2 (Duitsland)
+#DESCRIPTION Parlamentsfernsehen 2 (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//enstyle-live.hls.adaptive.level3.net/ses/enstyle/stream3/streamPlaylist.m3u8:Pearl TV (Duitsland)
+#DESCRIPTION Pearl TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//iptvcodes.blogspot.com@62.113.210.250/medienasa-live/ok-dessau_high/hasbahca.m3u8?bitrate=800:pop10 (Duitsland)
+#DESCRIPTION pop10 (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//sdn-global-live-http-cache.3qsdn.com/live/_definst_/mp4%3a5654_9rRqfHQLh4Yd6pm/playlist.m3u8:Potsdam TV
+#DESCRIPTION Potsdam TV
+#SERVICE 4097:0:1:7:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/punktum_high/playlist.m3u8:PUNKTum (Duitsland)
+#DESCRIPTION PUNKTum (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d2mn03dhv5o3g8.cloudfront.net/live/qvcde_main_clean/bitrate1.isml/3/prog_index.m3u8:QVC (Duitsland)
+#DESCRIPTION QVC (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//llnw.live.qvc.simplestream.com/hera/remote/qvcde_primary_sdi7/live.m3u8?DVR:QVC Beauty & Style (Duitsland)
+#DESCRIPTION QVC Beauty & Style (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ios-stream.qvc.de/qvc.m3u8:QVC DE  (Duitsland)
+#DESCRIPTION QVC DE  (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d2mn03dhv5o3g8.cloudfront.net/live/qvcde_plus_clean/bitrate1.isml/3/prog_index.m3u8:QVC DE Plus (Duitsland)
+#DESCRIPTION QVC DE Plus (Duitsland)
+#SERVICE 4097:0:1:21:2:5:0:0:0:0:https%3a//5857499ee635b.streamlock.net/radiowesertv-live/_definst_/mp4%3alivestreamTV/playlist.m3u8:Radio Weser TV (10-22.00 uur - Duitsland)
+#DESCRIPTION Radio Weser TV (10-22.00 uur - Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/ran1_high/master.m3u8:RAN 1 (Duitsland)
+#DESCRIPTION RAN 1 (Duitsland)
+#SERVICE 4097:0:1:2:2:5:0:0:0:0:http%3a//62.113.210.250/medienasa-live/ran1_high/master.m3u8:RAN 1
+#DESCRIPTION RAN 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/rbw_high/master.m3u8:RB Wittenberg (Duitsland)
+#DESCRIPTION RB Wittenberg (Duitsland)
+#SERVICE 4097:0:1:1:2:5:0:0:0:0:http%3a//62.113.210.250/medienasa-live/rbw_high/master.m3u8:RBW
+#DESCRIPTION RBW
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//www.reeins.tv%3a1935/live/re1/playlist.m3u8:RE eins TV
+#DESCRIPTION RE eins TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//regiotv.iptv-playoutcenter.de%3a1935/regiotv/regiotv.stream_1/chunklist_w246313954.m3u8:Regio TV (Duitsland)
+#DESCRIPTION Regio TV (Duitsland)
+#SERVICE 4097:0:1:43:2:5:0:0:0:0:http%3a//regiotv.iptv-playoutcenter.de%3a1935/regiotv/regiotv.stream_2/playlist.m3u8:Regio TV HD Schwaben (Duitsland)
+#DESCRIPTION Regio TV HD Schwaben (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/RFH_high/playlist.m3u8:RFHarz  (Duitsland)
+#DESCRIPTION RFHarz  (Duitsland)
+#SERVICE 4097:0:1:16aa:3ff:1:c00000:0:0:0:http%3a//rfo.iptv-playoutcenter.de%3a1935/rfo/rfo.stream_2/chunklist.m3u8:rfo HD - Regional Fernsehen Oberbayern (Duitsland)
+#DESCRIPTION rfo HD - Regional Fernsehen Oberbayern (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rnf.iptv-playoutcenter.de%3a1935/rnf/rnf.stream_1/chunklist_w657988848.m3u8:Rhein Neckar Fernsehen (Duitsland)
+#DESCRIPTION Rhein Neckar Fernsehen (Duitsland)
+#SERVICE 4097:0:1:3b:2:5:0:0:0:0:http%3a//stream-cdn.ok54.de%3a8080/$RheinLokal:RheinLokal (Duitsland)
+#DESCRIPTION RheinLokal (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.67.13.54%3a1935/rmtv/rmtv_livestream/playlist.m3u8:RheinMain TV (Duitsland)
+#DESCRIPTION RheinMain TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rnf.iptv-playoutcenter.de/rnf/rnf.stream_1/playlist.m3u8:RNF HD (Duitsland)
+#DESCRIPTION RNF HD (Duitsland)
+#SERVICE 4097:0:1:1:2:6:0:0:0:0:https%3a//58c2eaf76046f.streamlock.net/rocklandradio/livestream/playlist.m3u8:Rockland Radio (muziek - Duitsland) 
+#DESCRIPTION Rockland Radio (muziek - Duitsland) 
+#SERVICE 4097:0:1:45:2:5:0:0:0:0:https%3a//586dce1287bfd.streamlock.net/saarland1/ngrp%3asaarland1.stream_all/playlist.m3u8:Saarland Fernsehen 1 (Duitsland)
+#DESCRIPTION Saarland Fernsehen 1 (Duitsland)
+#SERVICE 4097:0:1:46:2:5:0:0:0:0:https%3a//saarland2.iptv-playoutcenter.de/saarland2/ngrp%3asaarland2.stream_all/playlist.m3u8:Saarland Fernsehen 2 (Duitsland)
+#DESCRIPTION Saarland Fernsehen 2 (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//eventhlshttps-i.akamaihd.net/hls/live/263645/ssn-hd-https/indexvideo-3400.m3u8:Sky Sport News  (Duitsland)
+#DESCRIPTION Sky Sport News  (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//euvia.cdn.ses-ps.com/HLS-Live/index.m3u8:Sonnenklar.TV HD (Duitsland)
+#DESCRIPTION Sonnenklar.TV HD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//www.sonus.fm%3a1935/public/stream_240p/playlist.m3u8:Sonus FM TV  - Visual Radio (Duitsland) 
+#DESCRIPTION Sonus FM TV  - Visual Radio (Duitsland) 
+#SERVICE 4097:0:1:47:2:5:0:0:0:0:https%3a//5852afe96c9bb.streamlock.net/studio47-live/_definst_/mp4%3alivestream/playlist.m3u8:STUDIO 47 (Duitsland)
+#DESCRIPTION STUDIO 47 (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//swr3visual-lh.akamaihd.net/i/swr3visual_live@6410/index_3584_av-p.m3u8:SWR 3 beeldradio (Duitsland)
+#DESCRIPTION SWR 3 beeldradio (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//swrdasding-lh.akamaihd.net/i/dasdingvisual_live@6416/index_1800_av-p.m3u8:SWR Dasding (Duitsland)
+#DESCRIPTION SWR Dasding (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.67.13.54%3a1935/sylt1/sylt1_high.stream/chunklist_w701419076.m3u8:Sylt 1 - Duitsland
+#DESCRIPTION Sylt 1 - Duitsland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestream.goinfo.it/SDFLive/sdfrosnew1/playlist.m3u8:Südtirol Digital Fernsehen (Duitsland)
+#DESCRIPTION Südtirol Digital Fernsehen (Duitsland)
+#SERVICE 4097:0:1:6f37:445:1:c00000:0:0:0:https%3a//swrdasding-lh.akamaihd.net/i/dasdingvisual_live@6416/master.m3u8:SWR Dasding - Visual Radio (Duitsland)
+#DESCRIPTION SWR Dasding - Visual Radio (Duitsland)
+#SERVICE 4097:0:1:6f34:445:1:c00000:0:0:0:https%3a//swr3visual-lh.akamaihd.net/i/swr3visual_live@6410/master.m3u8:SWR3 - Visual Radio (Duitsland)
+#DESCRIPTION SWR3 - Visual Radio (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tagesschau-lh.akamaihd.net/i/tagesschau_1@119231/index_3776_av-p.m3u8:Tagesschau 24 HD (nieuws - Duitsland)
+#DESCRIPTION Tagesschau 24 HD (nieuws - Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//teleregionalpassau1.iptv-playoutcenter.de%3a1935/teleregionalpassau1/teleregionalpassau1.stream_1/master.m3u8:Tele Regional Passau 1
+#DESCRIPTION Tele Regional Passau 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//klive-a.akamaihd.net/dc-1/live/hls/p/1719221/e/1_hoislpiz/sd/10000/t/AFb4DZ0W2ts1a8fV5xo1VQ/index-s32.m3u8:Tele Zürich
+#DESCRIPTION Tele Zürich
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.8/tide-rtplive/mp4%3aliveplayout.stream/playlist.m3u8:Tide TV (Duitsland)
+#DESCRIPTION Tide TV (Duitsland)
+#SERVICE 4097:0:1:2e:2:5:0:0:0:0:http%3a//teleregionalpassau1.iptv-playoutcenter.de%3a1935/teleregionalpassau1/teleregionalpassau1.stream_2/playlist.m3u8:TRP1 (Tele Regional Passau - Duitsland)
+#DESCRIPTION TRP1 (Tele Regional Passau - Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvaktuellr.iptv-playoutcenter.de%3a1935/tvaktuellr/tvaktuellr.stream_1/playlist.m3u8:TV Aktuell
+#DESCRIPTION TV Aktuell
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//sdn-global-live-http-cache.3qsdn.com/live/_definst_/amlst%3a7649-sbr/chunklist_b2658304.m3u8:TV Berlin (Duitsland)
+#DESCRIPTION TV Berlin (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.113.210.250/medienasa-live/BLKonline_high/master.m3u8:TV Burgenlandkreis
+#DESCRIPTION TV Burgenlandkreis
+#SERVICE 4097:0:1:3:2:5:0:0:0:0:http%3a//62.113.210.250/medienasa-live/tvhalle_high/master.m3u8:TV Halle
+#DESCRIPTION TV Halle
+#SERVICE 4097:0:1:2a:2:5:0:0:0:0:http%3a//tvtourings.iptv-playoutcenter.de%3a1935/tvtourings/tvtourings.stream_2/playlist.m3u8:TV Mainfranken Schweinfurt (Duitsland)
+#DESCRIPTION TV Mainfranken Schweinfurt (Duitsland)
+#SERVICE 4097:0:1:2b:2:5:0:0:0:0:http%3a//tvtourings.iptv-playoutcenter.de%3a1935/tvtouringw/tvtouringw.stream_2/playlist.m3u8:TV Mainfranken Würzburg (Duitsland)
+#DESCRIPTION TV Mainfranken Würzburg (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//sdn-global-live-http-cache.3qsdn.com/live/_definst_/smil%3a5714-mbr.smil/playlist.m3u8:TV Mittelrhein (Duitsland)
+#DESCRIPTION TV Mittelrhein (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvoberfranken.iptv-playoutcenter.de%3a1935/tvoberfranken/tvoberfranken.stream_1/playlist.m3u8:TV Oberfranken
+#DESCRIPTION TV Oberfranken
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//oberpfalztv.iptv-playoutcenter.de%3a1935/oberpfalztv/oberpfalztv.stream_1/chunklist_w535800930.m3u8:TV Oberpfalz
+#DESCRIPTION TV Oberpfalz
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvtourings.iptv-playoutcenter.de%3a1935/tvtourings/tvtourings.stream_1/playlist.m3u8:TV Touring Schweinfurt
+#DESCRIPTION TV Touring Schweinfurt
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvtourings.iptv-playoutcenter.de%3a1935/tvtouringw/tvtouringw.stream_1/playlist.m3u8:TV Touring Würzburg
+#DESCRIPTION TV Touring Würzburg
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvtouringw.iptv-playoutcenter.de%3a1935/tvtouringw/tvtouringw.stream_1/chunklist_w893326909.m3u8:TV Wurzburg
+#DESCRIPTION TV Wurzburg
+#SERVICE 4097:0:1:40:2:5:0:0:0:0:http%3a//62.113.221.3/tv38-live/_definst_/mp4%3alivestream/playlist.m3u8:TV38 (12-15Uhr &amp; 22-07Uhr Euronews)
+#DESCRIPTION TV38 (12-15Uhr &amp; 22-07Uhr Euronews)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvaktuellr.iptv-playoutcenter.de%3a1935/tvaktuellr/tvaktuellr.stream_1/master.m3u8:TVA OSTBAYERN (Duitsland)
+#DESCRIPTION TVA OSTBAYERN (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//tvo.vedge.infomaniak.com/livecast/tvo/master.m3u8:TVO HD (Duitsland)
+#DESCRIPTION TVO HD (Duitsland)
+#SERVICE 4097:0:1:5:2:6:0:0:0:0:https%3a//srunserding-lh.akamaihd.net/i/visualradio_ud@197013/master.m3u8:UNSERDING - Visual Radio (Duitsland)
+#DESCRIPTION UNSERDING - Visual Radio (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.visit-x.tv/vxtv/live/playlist.m3u8:VISIT-X.tv (Duitsland)
+#DESCRIPTION VISIT-X.tv (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wdr_fs-lh.akamaihd.net/i/wdrfs_weltweit@112033/master.m3u8:WDR Fernsehen
+#DESCRIPTION WDR Fernsehen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wdr_fs-lh.akamaihd.net/i/wdrfs_weltweit@112033/index_3776_av-p.m3u8:WDR HD (Duitsland)
+#DESCRIPTION WDR HD (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.vidoo.de/live/weltderwunder/chunklist_w818079807.m3u8:Welt der Wunder (Duitsland)
+#DESCRIPTION Welt der Wunder (Duitsland)
+#SERVICE 4097:0:1:2d:2:5:0:0:0:0:http%3a//sdn-global-live-http-cache.3qsdn.com/live/_definst_/smil%3a5715-mbr.smil/playlist.m3u8:Westerwald-Wied TV (Duitsland)
+#DESCRIPTION Westerwald-Wied TV (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//62.67.13.53%3a1935/wmzsenftenberg/live.stream:WMZ TV Senftenberg (Duitsland)
+#DESCRIPTION WMZ TV Senftenberg (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//62.67.13.53/wmzsenftenberg//live.stream:WMZ TV
+#DESCRIPTION WMZ TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//58c2eaf76046f.streamlock.net/vleugels_hd6/livestream/playlist.m3u8:XITE - HD 6 (Duitsland)
+#DESCRIPTION XITE - HD 6 (Duitsland)

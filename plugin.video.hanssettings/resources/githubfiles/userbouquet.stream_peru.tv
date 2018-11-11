@@ -1,0 +1,7 @@
+#NAME Stream Panama
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdnlive.medcom.com.pa/medcom-livestream/eco-live/eco-live/streamout-480p/chunks.m3u8:Eco TV (Panama)
+#DESCRIPTION Eco TV (Panama)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ssai-apac.ooyala.com/hls/delta/CFLIVE/out/u/ezye7lz7hql35/107829/xkbjFrZjE6C0XcIGJRrNEk-TEe8LBvv8/cn/9f9cf618b2464b86b7a7a074ab605613.m3u8:TVMax (Panama)
+#DESCRIPTION TVMax (Panama)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ssai-apac.ooyala.com/hls/delta/CFLIVE/out/u/ezye7lz7hql35/107829/JlbDRrZjE6JBi2W0IpB3pRbFcNpyNh5W/cn/34ee71d50185402b81af1ebb43af1706.m3u8:TVN (Panama)
+#DESCRIPTION TVN (Panama)

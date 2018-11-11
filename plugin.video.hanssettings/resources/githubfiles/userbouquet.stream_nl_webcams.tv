@@ -1,0 +1,737 @@
+#NAME Stream NL webcams
+#SERVICE 1:64:69:0:0:0:0:0:0:0:
+#DESCRIPTION --Amsterdam--
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/683/default.stream/chunklist_w1197028604__3629_tkd293emF0b2tlbmhhc2g9cUR5bGREbHMwNnVjcVh5bVVab3dSQW9qTU9idVg2ZE1EamJnanEyb2NJMD0md293emF0b2tlbmVuZHRpbWU9MTUzMzExODg4NiZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MzMxMTUyODY=.m3u8:Amsterdam - Adamtoren en Eye
+#DESCRIPTION Amsterdam - Adamtoren en Eye
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//live.earthtv.com%3a7135/edge0/AMS/chunklist_w1584093798.m3u8?590c4dd1bbf047feec0cb6b6:Amsterdam - Amstel 
+#DESCRIPTION Amsterdam - Amstel 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//webcamserver2.dyndns-remote.com%3a1935/live/amsterdam1.stream/&mp4%3aplaylist.m3u8:Amsterdam - Het IJ (oost)
+#DESCRIPTION Amsterdam - Het IJ (oost)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//webcamserver2.dyndns-remote.com%3a1935/live/amsterdam2.stream/&amp;mp4%3aplaylist.m3u8:Amsterdam - Het IJ (west)
+#DESCRIPTION Amsterdam - Het IJ (west)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/812/repeater.stream/playlist.m3u8:Amsterdam - Panorama over het IJ vanaf CS
+#DESCRIPTION Amsterdam - Panorama over het IJ vanaf CS
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv13.arkasis.nl%3a/242/default.stream:Amsterdam - Passenger Terminal
+#DESCRIPTION Amsterdam - Passenger Terminal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv13.arkasis.nl%3a80/480/default.stream:Amsterdam - Port of Amsterdam
+#DESCRIPTION Amsterdam - Port of Amsterdam
+#SERVICE 1:64:6a:0:0:0:0:0:0:0:
+#DESCRIPTION --Eindhoven--
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming.onsplatform.tv/rtplive/cureldst.stream:Eindhoven - Milieustraat Lodewijkstraat
+#DESCRIPTION Eindhoven - Milieustraat Lodewijkstraat
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/885/default.stream/chunklist_w575274114_tkd293emF0b2tlbmhhc2g9NTlqNi1tLTZybjNPcU0xUllHcTEwZnNnUHZBWDFjY0s3QmJjalEwQ3haRT0md293emF0b2tlbmVuZHRpbWU9MTUzMzY1NjcxMyZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MzM2NTMxMTM=.m3u8:Eindhoven - Montgomerylaan
+#DESCRIPTION Eindhoven - Montgomerylaan
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//streaming.onsplatform.tv/rtplive/klokgebouw.stream/playlist.m3u8:Eindhoven - Strijp-S Klokgebouw
+#DESCRIPTION Eindhoven - Strijp-S Klokgebouw
+#SERVICE 1:64:6b:0:0:0:0:0:0:0:
+#DESCRIPTION --Maastricht--
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//212.114.109.144%3a1935/live/maastricht.stream/playlist.m3u8:Maastricht - Maasboulevard
+#DESCRIPTION Maastricht - Maasboulevard
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv13.arkasis.nl%3a/632/default.stream:Maastricht - squashbaan
+#DESCRIPTION Maastricht - squashbaan
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/899/default.stream/playlist.m3u8:Maastricht - Stationsplein cam 1
+#DESCRIPTION Maastricht - Stationsplein cam 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/900/default.stream/playlist.m3u8:Maastricht - Stationsplein cam 2
+#DESCRIPTION Maastricht - Stationsplein cam 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/901/default.stream/playlist.m3u8:Maastricht - Stationsplein cam 3
+#DESCRIPTION Maastricht - Stationsplein cam 3
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/639/default.stream/playlist.m3u8?wowzatokenhash=h1akGk-hyIn4ThAzMQBrwqTUFaelDcVbloo1qudXTLU=&wowzatokenendtime=1505135646&wowzatokenstarttime=1505132046:Maastricht - Vrijthof
+#DESCRIPTION Maastricht - Vrijthof
+#SERVICE 1:64:6c:0:0:0:0:0:0:0:
+#DESCRIPTION --Rotterdam--
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming3.netcam.nl%3a1935/rtplive/paulmartens101647.stream/playlist.m3u8:Rotterdam - Beeddiep
+#DESCRIPTION Rotterdam - Beeddiep
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming2.camvista.com%3a1935/rtplive/paulmartens101453.stream/playlist.m3u8:Rotterdam - Blaak
+#DESCRIPTION Rotterdam - Blaak
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming3.netcam.nl%3a1935/rtplive/paulmartens101453.stream/playlist.m3u8:Rotterdam - Blaak
+#DESCRIPTION Rotterdam - Blaak
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming3.netcam.nl%3a1935/rtplive/paulmartens101456.stream/playlist.m3u8:Rotterdam - Centraal Station
+#DESCRIPTION Rotterdam - Centraal Station
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming3.netcam.nl%3a1935/rtplive/paulmartens101456.stream/chunklist_w948579059.m3u8:Rotterdam - Centraal Station
+#DESCRIPTION Rotterdam - Centraal Station
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl/cofely/cofely.stream swfUrl=http%3a//bouw.webcam.nl/cofely/player.swf pageUrl=http%3a//bouw.webcam.nl/cofely/:Rotterdam - Cofely West Industrie
+#DESCRIPTION Rotterdam - Cofely West Industrie
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/rotterdam2.stream/playlist.m3u8:Rotterdam - De Esch
+#DESCRIPTION Rotterdam - De Esch
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming3.netcam.nl%3a1935/rtplive/paulmartens101426.stream/playlist.m3u8:Rotterdam - De Kaap
+#DESCRIPTION Rotterdam - De Kaap
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming2.camvista.com%3a1935/rtplive/paulmartens101034.stream/playlist.m3u8:Rotterdam - Erasmusbrug Maasoever
+#DESCRIPTION Rotterdam - Erasmusbrug Maasoever
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//streaming2.camvista.com%3a1935/rtplive/paulmartens101034.stream:Rotterdam - Erasmusbrug Maasoever
+#DESCRIPTION Rotterdam - Erasmusbrug Maasoever
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming3.netcam.nl%3a1935/rtplive/paulmartens101034.stream/chunklist_w1658570285.m3u8:Rotterdam - Erasmusbrug noordoever
+#DESCRIPTION Rotterdam - Erasmusbrug noordoever
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//streaming3.netcam.nl%3a1935/rtplive/paulmartens101424.stream/chunklist_w1807267475.m3u8:Rotterdam - Erasmusbrug zuidoever
+#DESCRIPTION Rotterdam - Erasmusbrug zuidoever
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//595b9deb3d6ac.streamlock.net/rtplive/paulmartens101468.stream/playlist.m3u8:Rotterdam - Futureland (Maasvlakte 2)
+#DESCRIPTION Rotterdam - Futureland (Maasvlakte 2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/rotterdam3.stream/playlist.m3u8:Rotterdam - Hal 4
+#DESCRIPTION Rotterdam - Hal 4
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn22d.streampartner.nl/berartvd/berartvd.stream/chunklist_w1217637226.m3u8:Rotterdam - Haven panorama
+#DESCRIPTION Rotterdam - Haven panorama
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/rotterdam1.stream/playlist.m3u8:Rotterdam - Hotel New York
+#DESCRIPTION Rotterdam - Hotel New York
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/rotterdam1.stream/playlist.m3u8:Rotterdam - Holland Americalijn
+#DESCRIPTION Rotterdam - Holland Americalijn
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming3.netcam.nl%3a1935/rtplive/paulmartens100930.stream/playlist.m3u8:Rotterdam - Waterplein Benthemplein
+#DESCRIPTION Rotterdam - Waterplein Benthemplein
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming3.netcam.nl%3a1935/rtplive/paulmartens100930.stream/chunklist_w2140184089.m3u8:Rotterdam - Waterplein Benthemplein
+#DESCRIPTION Rotterdam - Waterplein Benthemplein
+#SERVICE 1:64:6d:0:0:0:0:0:0:0:
+#DESCRIPTION --Utrecht--
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/444/default.stream/playlist.m3u8:Utrecht - Jaarbeursplein
+#DESCRIPTION Utrecht - Jaarbeursplein
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/497/default.stream/playlist.m3u8?wowzatokenhash=6DM1o_iCnTuO4S3csYu9gkSmxAzPiqpJMzoVkloYAyM=&wowzatokenendtime=1530109237&wowzatokenstarttime=1530105637:Utrecht - Katreinetoren
+#DESCRIPTION Utrecht - Katreinetoren
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/497/default.stream/chunklist_w1701569589_tkd293emF0b2tlbmhhc2g9cDVQUzEzblJnSlkyVktqby1Bem16ZjZQNmMwcUhmUE01cEVuT0xXVTVuRT0md293emF0b2tlbmVuZHRpbWU9MTUzMzY2MTk3OCZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MzM2NTgzNzg=.m3u8:Utrecht - station
+#DESCRIPTION Utrecht - station
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/892/default.stream/playlist.m3u8?wowzatokenhash=WRrhqrPPSRsGKiz1aJDLVkb7bOdbonhxNSeTqjD7R8Q=&wowzatokenendtime=1533656089&wowzatokenstarttime=1533652489:Utrecht - Vredenburgplein
+#DESCRIPTION Utrecht - Vredenburgplein
+#SERVICE 1:64:6e:0:0:0:0:0:0:0:
+#DESCRIPTION --overige steden NL--
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/stenhuis.stream/playlist.m3u8:Aalsmeer - Jachthaven
+#DESCRIPTION Aalsmeer - Jachthaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/akkrum.stream/playlist.m3u8:Akkrum spoorbrug
+#DESCRIPTION Akkrum spoorbrug
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//80.101.233.106%3a8064:Amersfoort - zicht op weg
+#DESCRIPTION Amersfoort - zicht op weg
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv13.arkasis.nl%3a/272/default.stream:Barneveld - De Meerwaarde
+#DESCRIPTION Barneveld - De Meerwaarde
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/blokzijl1.stream/playlist.m3u8:Blokzijl - Havenkolk
+#DESCRIPTION Blokzijl - Havenkolk
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/blokzijl2.stream/playlist.m3u8:Blokzijl - Sluis
+#DESCRIPTION Blokzijl - Sluis
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server01.veenstramultimedia.nl%3a1935/live/bolsward.stream/playlist.m3u:Bolsward – centrum
+#DESCRIPTION Bolsward – centrum
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/CIV-denHelder.stream/chunklist_w1013382237.m3u8:Den Helder – haven
+#DESCRIPTION Den Helder – haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/nwiedus1.stream/playlist.m3u8:Den Helder – Nogal Wiedus (noordzijde)
+#DESCRIPTION Den Helder – Nogal Wiedus (noordzijde)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/nwiedus2.stream/playlist.m3u8:Den Helder – Nogal Wiedus (zuidzijde)
+#DESCRIPTION Den Helder – Nogal Wiedus (zuidzijde)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming02.mapgear.eu/deventer_rvdr/camera1.stream_720p/playlist.m3u:Deventer - IJssel
+#DESCRIPTION Deventer - IJssel
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming02.mapgear.eu/deventer/stadhuiskwartier.stream/playlist.m3u8:Deventer - Stadhuiskwartier
+#DESCRIPTION Deventer - Stadhuiskwartier
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server01.veenstramultimedia.nl%3a1935/live/bekijkdokkum.stream/&mp4%3aplaylist.m3u8:Dokkum - Diepswal
+#DESCRIPTION Dokkum - Diepswal
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//streaming5.webcam.nl/fort-pannerden/fort-pannerden.stream/master.m3u8:Doornenburg - Fort Pannerden (Gelderland)
+#DESCRIPTION Doornenburg - Fort Pannerden (Gelderland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/dordrecht.stream/playlist.m3u8:Dordrecht - Het Bolwerk
+#DESCRIPTION Dordrecht - Het Bolwerk
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl/flevoland/flevoland.stream swfUrl=http%3a//hdtv.webcam.nl/flevoland/player.swf pageUrl=http%3a//hdtv.webcam.nl/flevoland/:Dronten - LIVE camera in Flevoland
+#DESCRIPTION Dronten - LIVE camera in Flevoland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/enkhuizen.stream/playlist.m3u8:Enkhuizen
+#DESCRIPTION Enkhuizen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn22d.streampartner.nl/newmediasystems_ip3/ipcam3.stream/chunklist_w1571364316.m3u8:Enkhuizen - Compagnieshaven
+#DESCRIPTION Enkhuizen - Compagnieshaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//mtxstr001.matrixdata.nl/live/molendekoe.stream/chunklist_w427954024.m3u8:Ermelo - Blik vanaf molen De Koe
+#DESCRIPTION Ermelo - Blik vanaf molen De Koe
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl%3a80/flevoweer/flevoweer.stream:Flevoland - weer
+#DESCRIPTION Flevoland - weer
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//webcamservervlie.dyndns-remote.com%3a1935/live/galamadammen.stream/&mp4%3aplaylist.m3u8:Friese meren - Galamadammen
+#DESCRIPTION Friese meren - Galamadammen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//webcamservervlie.dyndns-remote.com%3a1935/live/oudeschouw.stream/&mp4%3aplaylist.m3u8:Friese meren - Oude Schouw
+#DESCRIPTION Friese meren - Oude Schouw
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/iesicht.stream/playlist.m3u8:Friese meren - Wijde Ee
+#DESCRIPTION Friese meren - Wijde Ee
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//webcamservervlie.dyndns-remote.com%3a1935/live/woudfennen.stream/&mp4%3aplaylist.m3u8:Friese meren - Woudfennen
+#DESCRIPTION Friese meren - Woudfennen
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//streaming5.webcam.nl/waalstrand/waalstrand.stream//master.m3u8:Gendt - Camping Waalstrand (Gelderland)
+#DESCRIPTION Gendt - Camping Waalstrand (Gelderland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/grou1.stream/playlist.m3u8:Grou
+#DESCRIPTION Grou
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/500/default.stream/chunklist_w936026558_tkd293emF0b2tlbmhhc2g9d0o0dUtGa09ZZ2Noc0xrellYVmFka3J2SkFyaDFCLWlxSlIzNG5ybWFGWT0md293emF0b2tlbmVuZHRpbWU9MTUyMTgwNjUzNiZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjE4MDI5MzY=.m3u8:Haarlem - ijsbaan
+#DESCRIPTION Haarlem - ijsbaan
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/binnenhaven.stream/playlist.m3u8:Harlingen - Binnenhaven
+#DESCRIPTION Harlingen - Binnenhaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/kerktoren.stream/playlist.m3u8:Harlingen - Grote Kerk
+#DESCRIPTION Harlingen - Grote Kerk
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/havenmond.stream/playlist.m3u8:Harlingen - Havenmond I
+#DESCRIPTION Harlingen - Havenmond I
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/havenmond2.stream/playlist.m3u8:Harlingen - Havenmond II
+#DESCRIPTION Harlingen - Havenmond II
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live4/noorderhaven.stream/playlist.m3u8:Harlingen - Noorderhaven
+#DESCRIPTION Harlingen - Noorderhaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/sud9.stream/playlist.m3u8:Harlingen - Zuiderhaven
+#DESCRIPTION Harlingen - Zuiderhaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/srf.stream/playlist.m3u8:Harlingen - Scheepswerf SRF
+#DESCRIPTION Harlingen - Scheepswerf SRF
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/zilt.stream/playlist.m3u8:Harlingen - Strand
+#DESCRIPTION Harlingen - Strand
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/sluis.stream/playlist.m3u8:Harlingen - TH-sluis
+#DESCRIPTION Harlingen - TH-sluis
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/steemar.stream/playlist.m3u8:Harlingen - Visserhaven
+#DESCRIPTION Harlingen - Visserhaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/esk.stream/playlist.m3u8:Harlingen - Windmolen
+#DESCRIPTION Harlingen - Windmolen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/singel.stream/playlist.m3u8:Harlingen - ZO singel
+#DESCRIPTION Harlingen - ZO singel
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/zuiderpier.stream/playlist.m3u8:Harlingen - Zuiderpier
+#DESCRIPTION Harlingen - Zuiderpier
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/vt.stream/playlist.m3u8:Harlingen - Willemshaven
+#DESCRIPTION Harlingen - Willemshaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/478/default.stream/chunklist_220934648_tkd293emF0b2tlbmhhc2g9UVdHTzc2Wl9OamJIMkJKeG01ZXJUR0tNTzUwVExpdjhPem1LSk9TdFAwdz0md293emF0b2tlbmVuZHRpbWU9MTUyNTI3Mjk0NSZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjUyNjkzNDU=.m3u8:Heerlen - Centraal Stadion
+#DESCRIPTION Heerlen - Centraal Stadion
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/622/default.stream/chunklist_48986484_tkd293emF0b2tlbmhhc2g9UVdHTzc2Wl9OamJIMkJKeG01ZXJUR0tNTzUwVExpdjhPem1LSk9TdFAwdz0md293emF0b2tlbmVuZHRpbWU9MTUyNTI3Mjk0NSZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjUyNjkzNDU=.m3u8:Heerenveen - Jachthaven De Welle
+#DESCRIPTION Heerenveen - Jachthaven De Welle
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server01.veenstramultimedia.nl%3a1935/live/bekijkhindeloopen.stream/playlist.m3u:Hindeloopen – haven
+#DESCRIPTION Hindeloopen – haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/hindeloopen.stream/playlist.m3u8:Hindeloopen - haven 2
+#DESCRIPTION Hindeloopen - haven 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/884/default.stream/playlist.m3u8:Hoorn - Vaarschool Albatros klaslokaal
+#DESCRIPTION Hoorn - Vaarschool Albatros klaslokaal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server01.veenstramultimedia.nl%3a1935/live/elfstedenhal.stream/&mp4%3aplaylist.m3u8:Leeuwarden - Elfstedenhal
+#DESCRIPTION Leeuwarden - Elfstedenhal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server01.veenstramultimedia.nl%3a1935/live/nieuwestad.stream/playlist.m3u:Leeuwarden – Nieuwestad
+#DESCRIPTION Leeuwarden – Nieuwestad
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5b8d2cbe62ad6.streamlock.net/live/leeuwarden1.stream/chunklist_w1342467997.m3u8 :Leeuwarden – Nieuwestad - 2
+#DESCRIPTION Leeuwarden – Nieuwestad - 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server01.veenstramultimedia.nl%3a1935/live/oldehoofsterkerkhof.stream/playlist.m3u8:Leeuwarden – Oldehoofsterkerkhof (= centrum)
+#DESCRIPTION Leeuwarden – Oldehoofsterkerkhof (= centrum)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/lelystad.stream/playlist.m3u8:Lelystad - Haven
+#DESCRIPTION Lelystad - Haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/lelystad2.stream/playlist.m3u8:Lelystad - Havenmond
+#DESCRIPTION Lelystad - Havenmond
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming5.webcam.nl/fort-pannerden/fort-pannerden.stream/playlist.m3u8:Lingewaard - Fort Pannerden
+#DESCRIPTION Lingewaard - Fort Pannerden
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming3.webcam.nl/lisse01/lisse01.stream/playlist.m3u8:Lisse - (koop)centrum
+#DESCRIPTION Lisse - (koop)centrum
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//flash-11.streaming.in2ip.nl%3a1935/in2ip/_definst_/mp4%3astarbytes-cam2.stream/playlist.m3u8:Loosdrecht - Jachthaven Wetterwille - toegang
+#DESCRIPTION Loosdrecht - Jachthaven Wetterwille - toegang
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//flash-11.streaming.in2ip.nl%3a1935/in2ip/_definst_/mp4%3astarbytes-cam1.stream/playlist.m3u8:Loosdrecht - Jachthaven Wetterwille - overzicht
+#DESCRIPTION Loosdrecht - Jachthaven Wetterwille - overzicht
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//flash-11.streaming.in2ip.nl%3a1935/in2ip/_definst_/mp4%3astarbytes-cam5.stream/playlist.m3u8:Loosdrecht - Jachthaven Wetterwille - panorama
+#DESCRIPTION Loosdrecht - Jachthaven Wetterwille - panorama
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//flash-11.streaming.in2ip.nl%3a1935/in2ip/_definst_/mp4%3astarbytes-cam3.stream/playlist.m3u8:Loosdrecht - Jachthaven Wetterwille - kantoor PTZ
+#DESCRIPTION Loosdrecht - Jachthaven Wetterwille - kantoor PTZ
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/maasland.stream/playlist.m3u8:Maassluis - havenhoofd
+#DESCRIPTION Maassluis - havenhoofd
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/maassluis.stream/playlist.m3u8:Maassluis - Het scheur
+#DESCRIPTION Maassluis - Het scheur
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/marken-haven.stream/playlist.m3u8:Marken – haven
+#DESCRIPTION Marken – haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/marken2.stream/playlist.m3u8:Marken – uitzicht Markermeer
+#DESCRIPTION Marken – uitzicht Markermeer
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming5.webcam.nl/geldersepoort/geldersepoort.stream/playlist.m3u8:Millingen a/d Rijn - De Gelderse Poort
+#DESCRIPTION Millingen a/d Rijn - De Gelderse Poort
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/gouwzee.stream/playlist.m3u8:Monnickendam - Gouwzee
+#DESCRIPTION Monnickendam - Gouwzee
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//webcamserverdh.dyndns-remote.com%3a1935/live/marina.stream/&mp4%3aplaylist.m3u8:Monnickendam - Haven
+#DESCRIPTION Monnickendam - Haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5a5d6a3ee3a13.streamlock.net/live/waalkade.stream/playlist.m3u8:Nijmegen - Waalkade/brug
+#DESCRIPTION Nijmegen - Waalkade/brug
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/roodeschool.stream/playlist.m3u8:Roodeschool (Groningen)
+#DESCRIPTION Roodeschool (Groningen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestream.oolderplas.nl%3a1935/live/camera.stream/playlist.m3u8:Roermond - Herten, Oolderplas
+#DESCRIPTION Roermond - Herten, Oolderplas
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//video.iptvsolutions.nl/ruinen/livestream/livestream.m3u8:Ruinen - Munnekenweg
+#DESCRIPTION Ruinen - Munnekenweg
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//deams.xseu.net%3a5443/live/skyview.stream/playlist.m3u8:Sappemeer - weerstation (Groningen)
+#DESCRIPTION Sappemeer - weerstation (Groningen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58cbb5532ad4f.streamlock.net/schiedam02/schiedam02.stream/playlist.m3u8:Schiedam - Skatebaan camera 1
+#DESCRIPTION Schiedam - Skatebaan camera 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58cbb5532ad4f.streamlock.net/schiedam04/schiedam04.stream/playlist.m3u8:Schiedam - Skatebaan camera 2
+#DESCRIPTION Schiedam - Skatebaan camera 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv13.arkasis.nl%3a/677/default.stream:Sittard - binnenstad
+#DESCRIPTION Sittard - binnenstad
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv13.arkasis.nl%3a80/657/default.stream/.m3u8:Sittard - Markt
+#DESCRIPTION Sittard - Markt
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/677/default.stream/chunklist_w283392478_tkd293emF0b2tlbmhhc2g9UHhGSG1uRWF4SXZkckFJQzdScHpuelNqRU9tRGt1NlVTMnJIejdXdk1lQT0md293emF0b2tlbmVuZHRpbWU9MTUyNTg2MTg3MSZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjU4NTgyNzE=.m3u8:Sittard - Markt cam2
+#DESCRIPTION Sittard - Markt cam2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/657/default.stream/chunklist_w704030208_tkd293emF0b2tlbmhhc2g9V0V2OTBVN05Cd2dNV0luT2c4M0RjTV9RVkh2dUVzS1JoM2dHT1dteWRfdz0md293emF0b2tlbmVuZHRpbWU9MTUyNTg2MTQ4OSZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjU4NTc4ODk=.m3u8:Sittard - Markt cam3
+#DESCRIPTION Sittard - Markt cam3
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/sneek.stream/playlist.m3u8:Sneek - De Houkesloot
+#DESCRIPTION Sneek - De Houkesloot
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server01.veenstramultimedia.nl%3a1935/live/sneek.stream/playlist.m3u8:Sneek – Leeuwenburg (centrum)
+#DESCRIPTION Sneek – Leeuwenburg (centrum)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//www.sneek.nl/webcam/1/nphMotionJpeg:Sneek - Waterpoort (motion jpg)
+#DESCRIPTION Sneek - Waterpoort (motion jpg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//www.weerenmeer.nl/WeatherCat1hrMovie.mp4:Son en Breugel weerstation
+#DESCRIPTION Son en Breugel weerstation
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/terherne.stream/playlist.m3u8:Terherne - Haven
+#DESCRIPTION Terherne - Haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/terherne2.stream/playlist.m3u8:Terherne - Sluis
+#DESCRIPTION Terherne - Sluis
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/ecomare.stream/playlist.m3u8:Texel - Ecomare
+#DESCRIPTION Texel - Ecomare
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//highvolume102.streampartner.nl/tipcon/livestream.stream/chunklist_w2058817693.m3u8:Uden - Markt (Noord-Brabant) soms
+#DESCRIPTION Uden - Markt (Noord-Brabant) soms
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl/flevoland2/flevoland2.stream swfUrl=http%3a//hdtv.webcam.nl/flevoland2/player.swf pageUrl=http%3a//hdtv.webcam.nl/flevoland2/:Urk - haven in Urk
+#DESCRIPTION Urk - haven in Urk
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//58cbb5532ad4f.streamlock.net/varik/varik.stream/playlist.m3u8:Varik - Waalpleisterplaats de Bol
+#DESCRIPTION Varik - Waalpleisterplaats de Bol
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/854/default.stream/chunklist_w2044754153_tkd293emF0b2tlbmhhc2g9NW5ReU9rWlVheFpOUGtNaWdyRnJGdzNRamx4cWE5amtfczExZHYyV3lyYz0md293emF0b2tlbmVuZHRpbWU9MTUzMDM5MzAyOSZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MzAzODk0Mjk=.m3u8:Vechtdal
+#DESCRIPTION Vechtdal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/vlaardingen.stream/playlist.m3u8:Vlaardingen
+#DESCRIPTION Vlaardingen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/508/default.stream/chunklist_1763053291_tkd293emF0b2tlbmhhc2g9UVdHTzc2Wl9OamJIMkJKeG01ZXJUR0tNTzUwVExpdjhPem1LSk9TdFAwdz0md293emF0b2tlbmVuZHRpbWU9MTUyNTI3Mjk0NSZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjUyNjkzNDU=.m3u8:Volendam - FC Volendam
+#DESCRIPTION Volendam - FC Volendam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/854/default.stream/chunklist_w1782606851_tkd293emF0b2tlbmhhc2g9cVRnUGVvNnhMakdPcWVIMjBJM3FlLVhKd2wzamk2WmpOV2JVa1BaU3IwVT0md293emF0b2tlbmVuZHRpbWU9MTUyNTE4MDIwMCZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjUxNzY2MDA=.m3u8:Waterschap Vechtstromen
+#DESCRIPTION Waterschap Vechtstromen
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/786/default.stream/playlist.m3u8:Weert - Franciscushuis
+#DESCRIPTION Weert - Franciscushuis
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/787/default.stream/playlist.m3u8?wowzatokenhash=AxC6-pQcQ4Kag0tWB_93KN-g_QUedODQilZex1chzuE=&wowzatokenendtime=1505135921&wowzatokenstarttime=1505132321:Weert - Stationsplein (vaste cam)
+#DESCRIPTION Weert - Stationsplein (vaste cam)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/803/default.stream/playlist.m3u8?wowzatokenhash=I8bTUqBGM5gvFSEjRSQRRnfFMa106YzgiPo0LQYn0Lg=&wowzatokenendtime=1505135921&wowzatokenstarttime=1505132321:Weert - Stationsplein (draaiende cam)
+#DESCRIPTION Weert - Stationsplein (draaiende cam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv13.arkasis.nl%3a/459/default.stream:Wittem - Redemptoristenklooster
+#DESCRIPTION Wittem - Redemptoristenklooster
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//webcamserverdh.dyndns-remote.com%3a1935/live/workum-haven.stream/&mp4%3aplaylist.m3u8:Workum - panorama polder
+#DESCRIPTION Workum - panorama polder
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/workum.stream/playlist.m3u8:Workum - strand (Friesland)
+#DESCRIPTION Workum - strand (Friesland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wowzas02.crossmediaventures.nl/cpz-pitcam/cpz-pitcam.smil/playlist.m3u8:Zandvoort - Circuit
+#DESCRIPTION Zandvoort - Circuit
+#SERVICE 1:64:6f:0:0:0:0:0:0:0:
+#DESCRIPTION +++Dieren+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/neushoorn-2.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Indische neushoorn 1
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Indische neushoorn 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/neushoorn-1.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Indische neushoorn 2 
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Indische neushoorn 2 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/tapir_binnen.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Kraamstal okapi's (1)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Kraamstal okapi's (1)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/tapir_new.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Kraamstal okapi's (2)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Kraamstal okapi's (2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/olifanten_buitencam1.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (1)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (1)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/olifanten_buitencam2.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (2)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/olifanten1.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (3)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Olifanten (3)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/tapir_buiten.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Tapir (buiten)
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Tapir (buiten)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/neushoorn_kraamstal2.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Zwarte neushoorntje 1
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Zwarte neushoorntje 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56d7ccce550bc.streamlock.net/rtplive/neushoorn_kraamstal1.sdp/playlist.m3u8:Diergaarde Blijdorp / Rotterdam Zoo - Zwarte neushoorntje 2
+#DESCRIPTION Diergaarde Blijdorp / Rotterdam Zoo - Zwarte neushoorntje 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/tx-lammetjes.stream/chunklist.m3u8:Texel - lammetjes
+#DESCRIPTION Texel - lammetjes
+#SERVICE 1:64:70:0:0:0:0:0:0:0:
+#DESCRIPTION +++nestkastjes vogels+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming.avex.nl/live/valkbinnen/playlist.m3u8:Amsterdam Gustav Mahlerlaan - Slechtvalk binnen
+#DESCRIPTION Amsterdam Gustav Mahlerlaan - Slechtvalk binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming.avex.nl/live/valkbuiten/playlist.m3u8:Amsterdam Gustav Mahlerlaan - Slechtvalk buiten 1
+#DESCRIPTION Amsterdam Gustav Mahlerlaan - Slechtvalk buiten 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming.avex.nl/live/valkbuiten2/playlist.m3u8:Amsterdam Gustav Mahlerlaan - Slechtvalk buiten 2
+#DESCRIPTION Amsterdam Gustav Mahlerlaan - Slechtvalk buiten 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//84.22.110.224/live/cam1/mystream.m3u8:Amsterdam Hemweg – Slechtvalk binnen
+#DESCRIPTION Amsterdam Hemweg – Slechtvalk binnen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//84.22.110.224/live/cam2/mystream.m3u8:Amsterdam Hemweg – Slechtvalk buiten
+#DESCRIPTION Amsterdam Hemweg – Slechtvalk buiten
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/pindacam.stream/playlist.m3u8:Harlingen - Vogelcam 1
+#DESCRIPTION Harlingen - Vogelcam 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/pindacam2.stream/playlist.m3u8:Harlingen - Vogelcam 2
+#DESCRIPTION Harlingen - Vogelcam 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/nestkast/nestkast1.stream_720p/chunklist_1866772541.m3u8:Harlingen - Vogelcam Nestkast 1
+#DESCRIPTION Harlingen - Vogelcam Nestkast 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/nestkast3.stream/playlist.m3u8:Harlingen - Vogelcam Nestkast 2 
+#DESCRIPTION Harlingen - Vogelcam Nestkast 2 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Spreeuw1Binnen.stream/playlist.m3u8:NestkastLIVE - Bij  (Spreeuw1)
+#DESCRIPTION NestkastLIVE - Bij  (Spreeuw1)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Bijen_Binnen.stream/playlist.m3u8:NestkastLIVE - Bij (Bijenkast)
+#DESCRIPTION NestkastLIVE - Bij (Bijenkast)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Bijen_Buiten.stream/playlist.m3u8:NestkastLIVE - Bijen (buiten)
+#DESCRIPTION NestkastLIVE - Bijen (buiten)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Boerenzwaluw2.stream/playlist.m3u8:NestkastLIVE - Boerenzwaluw 2
+#DESCRIPTION NestkastLIVE - Boerenzwaluw 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Buizerd.stream/playlist.m3u8:NestkastLIVE - Buizerd
+#DESCRIPTION NestkastLIVE - Buizerd
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Huiszwaluw1Binnen.stream/playlist.m3u8:NestkastLIVE - Huiszwaluw
+#DESCRIPTION NestkastLIVE - Huiszwaluw
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Kauw1.stream/playlist.m3u8:NestkastLIVE - Kauw
+#DESCRIPTION NestkastLIVE - Kauw
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Kerkuil1Binnen.stream/playlist.m3u8:NestkastLIVE - Kerkuil ( binnen)
+#DESCRIPTION NestkastLIVE - Kerkuil ( binnen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Koolmees1.stream/playlist.m3u8:NestkastLIVE - Koolmees
+#DESCRIPTION NestkastLIVE - Koolmees
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Koolmees2.stream/playlist.m3u8:NestkastLIVE - Koolmees (2)
+#DESCRIPTION NestkastLIVE - Koolmees (2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Koolmees4.stream/playlist.m3u8:NestkastLIVE - Koolmees (4)
+#DESCRIPTION NestkastLIVE - Koolmees (4)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/BlijdeWei1.stream/playlist.m3u8:NestkastLIVE - Mezen (Koolmees)
+#DESCRIPTION NestkastLIVE - Mezen (Koolmees)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Pimpelmees1.stream/playlist.m3u8:NestkastLIVE - Mezen (Pimpelmees1)
+#DESCRIPTION NestkastLIVE - Mezen (Pimpelmees1)
+#SERVICE 4097:0:1:6:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Pimpelmees2.stream/chunklist_w330729289.m3u8:NestkastLIVE - Mezen (Pimpelmees2)
+#DESCRIPTION NestkastLIVE - Mezen (Pimpelmees2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Plasdras1.stream/playlist.m3u8:NestkastLIVE - Plasdras
+#DESCRIPTION NestkastLIVE - Plasdras
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Slechtvalk1Binnen.stream/playlist.m3u8:NestkastLIVE - Slechtvalk 1
+#DESCRIPTION NestkastLIVE - Slechtvalk 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Spreeuw2Binnen.stream/playlist.m3u8:NestkastLIVE - Spreeuw  (binnen)
+#DESCRIPTION NestkastLIVE - Spreeuw  (binnen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Spreeuw2Buiten.stream/playlist.m3u8:NestkastLIVE - Spreeuw (buiten)
+#DESCRIPTION NestkastLIVE - Spreeuw (buiten)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Steenuil2Binnen.stream/playlist.m3u8:NestkastLIVE - steenuil (buiten)
+#DESCRIPTION NestkastLIVE - steenuil (buiten)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Torenvalk2.stream/playlist.m3u8:NestkastLIVE - Torenvalk 2
+#DESCRIPTION NestkastLIVE - Torenvalk 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Turksetortel2.stream/playlist.m3u8:NestkastLIVE - Turkse tortel
+#DESCRIPTION NestkastLIVE - Turkse tortel
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Bosuil3Binnen.stream/playlist.m3u8:NestkastLIVE - Uil (Bosuil)
+#DESCRIPTION NestkastLIVE - Uil (Bosuil)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Kerkuil1Buiten.stream/playlist.m3u8:NestkastLIVE - Uil (Kerkuil)
+#DESCRIPTION NestkastLIVE - Uil (Kerkuil)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Steenuil2Buiten.stream/playlist.m3u8:NestkastLIVE - Uil (Steenuil)
+#DESCRIPTION NestkastLIVE - Uil (Steenuil)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Torenvalk2.stream/playlist.m3u8:NestkastLIVE - Valk (Torenvalk1)
+#DESCRIPTION NestkastLIVE - Valk (Torenvalk1)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Torenvalk3.stream/playlist.m3u8:NestkastLIVE - Valk (Torenvalk2)
+#DESCRIPTION NestkastLIVE - Valk (Torenvalk2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Slechtvalk1Buiten.stream/playlist.m3u8:NestkastlLIVE - Valk (Slechtvalk)
+#DESCRIPTION NestkastlLIVE - Valk (Slechtvalk)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Voercam3.stream/playlist.m3u8:NestkastLIVE - Voer (Voerplaats1)
+#DESCRIPTION NestkastLIVE - Voer (Voerplaats1)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Voercam5.stream/playlist.m3u8:NestkastLIVE - Voer (Voerplaats2)
+#DESCRIPTION NestkastLIVE - Voer (Voerplaats2)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.nestkastlive.nl%3a1935/live/Huiszwaluw1.stream/playlist.m3u8:NestkastLIVE - Zwaluw (Huiszwaluw)
+#DESCRIPTION NestkastLIVE - Zwaluw (Huiszwaluw)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/828/default.stream/chunklist_w1319567147_tkd293emF0b2tlbmhhc2g9WWJXME9IbmRmYzhiQjg2X25maVRHcTQzSmhQWTc0dWdyeVM2R3RqMEZtUT0md293emF0b2tlbmVuZHRpbWU9MTUyNTE2NDAzMiZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjUxNjA0MzI=.m3u8:Slechtvalk Venlo
+#DESCRIPTION Slechtvalk Venlo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=bosuil1&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Bosuil (BINNENCAM)
+#DESCRIPTION Vogelbescherming - Bosuil (BINNENCAM)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=bosuil2&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Bosuil (BUITENCAM)
+#DESCRIPTION Vogelbescherming - Bosuil (BUITENCAM)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=Kerkuil1&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Kerkuil  (BINNENCAM)
+#DESCRIPTION Vogelbescherming - Kerkuil  (BINNENCAM)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=Kerkuil3&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Kerkuil  (BUITENCAM)
+#DESCRIPTION Vogelbescherming - Kerkuil  (BUITENCAM)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=Koolmees2&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Koolmees (BUITEN)  2017
+#DESCRIPTION Vogelbescherming - Koolmees (BUITEN)  2017
+#SERVICE 4097:0:1:2:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=Koolmees1&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Koolmees (DOOR)  2017
+#DESCRIPTION Vogelbescherming - Koolmees (DOOR)  2017
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=SteenuilDongen1&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Steenuil  (BINNEN DO)
+#DESCRIPTION Vogelbescherming - Steenuil  (BINNEN DO)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=SteenuilWW2&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Steenuil  (BINNEN2 WI)
+#DESCRIPTION Vogelbescherming - Steenuil  (BINNEN2 WI)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=SteenuilDongen2&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Steenuil  (BUITEN DO)
+#DESCRIPTION Vogelbescherming - Steenuil  (BUITEN DO)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=SteenuilWW3&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Steenuil  (BUITEN WI)
+#DESCRIPTION Vogelbescherming - Steenuil  (BUITEN WI)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=bdl&file=SteenuilWW1&type=live&service=wowza&protocol=https&output=playlist.m3u8:Vogelbescherming - Steenuil (BINNEN WI)
+#DESCRIPTION Vogelbescherming - Steenuil (BINNEN WI)
+#SERVICE 1:64:71:0:0:0:0:0:0:0:
+#DESCRIPTION -- LiveWebcams kust/strand --
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/aalsmeersurf.stream/playlist.m3u8:Aalsmeer - Surfeiland
+#DESCRIPTION Aalsmeer - Surfeiland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/aalsmeertoren.stream/playlist.m3u8:Aalsmeer - Westeinderplassen
+#DESCRIPTION Aalsmeer - Westeinderplassen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/aalsmeerzeil1.stream/playlist.m3u8:Aalsmeer - Zeilschool haven
+#DESCRIPTION Aalsmeer - Zeilschool haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/aalsmeerzeil2.stream/playlist.m3u8:Aalsmeer - Zeilschool steiger
+#DESCRIPTION Aalsmeer - Zeilschool steiger
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/nes.stream/playlist.m3u8:Ameland - Nes haven
+#DESCRIPTION Ameland - Nes haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/ehal3.stream/playlist.m3u8:Ameland - Vliegveld helispot
+#DESCRIPTION Ameland - Vliegveld helispot
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/722/default.stream/chunklist_w1429222491_tkd293emF0b2tlbmhhc2g9S01LZ1h4SjgyRW0xTnZxSm5KM2RKbE1NUTltb3dVVDZlam9JbFVMYmxkST0md293emF0b2tlbmVuZHRpbWU9MTUyMjk1OTI3MiZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjI5NTU2NzI=.m3u8:Bergen aan  Zee
+#DESCRIPTION Bergen aan  Zee
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wowza01.crossmediaventures.com/beachcam/beachcam.smil/playlist.m3u8:Bloemendaal - Reddingsbrigade
+#DESCRIPTION Bloemendaal - Reddingsbrigade
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn15.streampartner.nl/interact1037_1/live.stream/playlist.m3u8:Breskens - havenmond
+#DESCRIPTION Breskens - havenmond
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/777/default.stream/playlist.m3u8?wowzatokenhash=aMSM9YG2zWHRb-gwdzklt9mpmGlTnvXiC505padoTBk=&wowzatokenendtime=1525104147&wowzatokenstarttime=1525100547:Cadzand (blanke top)
+#DESCRIPTION Cadzand (blanke top)
+#SERVICE 4097:0:1:8:999:7777:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/delfzijl2.stream/playlist.m3u8:Delfzijl - Eems zuidzijde
+#DESCRIPTION Delfzijl - Eems zuidzijde
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/delfzijl1.stream/playlist.m3u8:Delfzijl - Eems noordzijde
+#DESCRIPTION Delfzijl - Eems noordzijde
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/delfzijlhaven.stream/playlist.m3u8:Delfzijl - haven
+#DESCRIPTION Delfzijl - haven
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//webcamserverdh.dyndns-remote.com%3a1935/live/denoever.stream/&mp4%3aplaylist.m3u8:Den Oever - haven
+#DESCRIPTION Den Oever - haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv13.arkasis.nl%3a/472/default.stream:Domburg - De Stenen Toko
+#DESCRIPTION Domburg - De Stenen Toko
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv13.arkasis.nl%3a/296/default.stream:Domburg - Oase Domburg
+#DESCRIPTION Domburg - Oase Domburg
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/721/default.stream/playlist.m3u8:Domburg - Strandpaviljoen Noordduine
+#DESCRIPTION Domburg - Strandpaviljoen Noordduine
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//mtxstr001.matrixdata.nl/live/gemeente_jachthaven.stream/chunklist_w899773368.m3u8:Harderwijk - Haven de Knar
+#DESCRIPTION Harderwijk - Haven de Knar
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//mtxstr001.matrixdata.nl/live/gemeente.stream/chunklist_w1032543100.m3u8:Harderwijk - Havendam
+#DESCRIPTION Harderwijk - Havendam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//mtxstr001.matrixdata.nl/live/vuurtoren.stream/chunklist_w2084393416.m3u8:Harderwijk - Strandboulevard
+#DESCRIPTION Harderwijk - Strandboulevard
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/holwerd.stream/playlist.m3u8:Holwerd - Veerhaven
+#DESCRIPTION Holwerd - Veerhaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/hvh1.stream/playlist.m3u8:Hoek van Holland - Berghaven
+#DESCRIPTION Hoek van Holland - Berghaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//mediaserv20.live-streams.nl%3a80/beachclubroyal playpath=beachclubroyal.stream swfUrl=http%3a//www.video-streams.nl/flow/flowplayer-3.2.11.swf pageUrl=http%3a//gobefore.me/cams/beach_club_royal/:Hoek van Holland - Beach Club Royal
+#DESCRIPTION Hoek van Holland - Beach Club Royal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live4/hvh3.stream/playlist.m3u8:Hoek van Holland - ingang Waterweg
+#DESCRIPTION Hoek van Holland - ingang Waterweg
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/hvh2.stream/playlist.m3u8:Hoek van Holland - Waterweg
+#DESCRIPTION Hoek van Holland - Waterweg
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/ijmuiden2.stream/playlist.m3u8:IJmuiden - havenmond
+#DESCRIPTION IJmuiden - havenmond
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/ijmuiden1.stream/playlist.m3u8:IJmuiden - haven
+#DESCRIPTION IJmuiden - haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv13.arkasis.nl%3a/566/default.stream/master.m3u8:IJmuiden - zeesluis
+#DESCRIPTION IJmuiden - zeesluis
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/844/default.stream/chunklist_w539424544_tkd293emF0b2tlbmhhc2g9UVdHTzc2Wl9OamJIMkJKeG01ZXJUR0tNTzUwVExpdjhPem1LSk9TdFAwdz0md293emF0b2tlbmVuZHRpbWU9MTUyNTI3Mjk0NSZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjUyNjkzNDU=.m3u8:Katwijk - Artime strand
+#DESCRIPTION Katwijk - Artime strand
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/lauwersmeer.stream/playlist.m3u8:Lauwersoog - Lauwersmeer
+#DESCRIPTION Lauwersoog - Lauwersmeer
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/lauwersoog-haven.stream/playlist.m3u8:Lauwersoog - havenmond
+#DESCRIPTION Lauwersoog - havenmond
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/lauwersoog-havenmond2.stream/playlist.m3u8:Lauwersoog - havenmond 2
+#DESCRIPTION Lauwersoog - havenmond 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/marken-haven.stream/playlist.m3u8 :Marken - haven
+#DESCRIPTION Marken - haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamink.nl%3a80/live/sys1.stream/.m3u8:Scheveningen Boulevard Webcam
+#DESCRIPTION Scheveningen Boulevard Webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamink.nl%3a80/live/sys11.stream/.m3u8:Scheveningen Evenementen
+#DESCRIPTION Scheveningen Evenementen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//live.streamink.nl%3a1935/live/sys11.stream:Scheveningen Evenementen Webcam
+#DESCRIPTION Scheveningen Evenementen Webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamink.nl%3a80/live/sys5.stream/.m3u8:Scheveningen Havenhoofd Noord
+#DESCRIPTION Scheveningen Havenhoofd Noord
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtsp%3a//live.streamink.nl%3a80/live/sys4.stream:Scheveningen Havenhoofd Zuid webcam
+#DESCRIPTION Scheveningen Havenhoofd Zuid webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamink.nl%3a80/live/sys19.stream/.m3u8:Scheveningen KiteSurf Webcam
+#DESCRIPTION Scheveningen KiteSurf Webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamink.nl%3a80/live/sys6.stream/.m3u8:Scheveningen Pier
+#DESCRIPTION Scheveningen Pier
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/scheveningen.stream/playlist.m3u8:Scheveningen - Pier (noord)
+#DESCRIPTION Scheveningen - Pier (noord)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamink.nl%3a80/live/sys7.stream/.m3u8:Scheveningen Sportstrand Webcam
+#DESCRIPTION Scheveningen Sportstrand Webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamink.nl%3a80/live/sys2.stream/.m3u8:Scheveningen Strand Webcam
+#DESCRIPTION Scheveningen Strand Webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.streamink.nl%3a80/live/sys3.stream/.m3u8:Scheveningen Surf Webcam
+#DESCRIPTION Scheveningen Surf Webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//camsecurelive.dyndns.tv/HLS/zeewebcam.m3u8:Scheveningen zeewebcam
+#DESCRIPTION Scheveningen zeewebcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/scheveningen.stream/playlist.m3u8:Scheveningen - zicht op pier
+#DESCRIPTION Scheveningen - zicht op pier
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5b8d2cbe62ad6.streamlock.net/live2/terneuzen1.stream/playlist.m3u8:Terneuzen - Oost
+#DESCRIPTION Terneuzen - Oost
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5b8d2cbe62ad6.streamlock.net/live2/terneuzen2.stream/playlist.m3u8:Terneuzen - West
+#DESCRIPTION Terneuzen - West
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/hotelschylge2.stream/chunklist.m3u8:Terschelling - Brandaris - Hotel Schylge 
+#DESCRIPTION Terschelling - Brandaris - Hotel Schylge 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server01.veenstramultimedia.nl%3a1935/live/terschelling.stream/&mp4%3aplaylist.m3u8:Terschelling - haven
+#DESCRIPTION Terschelling - haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/hotelschylge.stream/chunklist.m3u8:Terschelling - Hotel Schylge
+#DESCRIPTION Terschelling - Hotel Schylge
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/veerkade.stream/chunklist.m3u8:Terschelling - veerkade
+#DESCRIPTION Terschelling - veerkade
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/oudeschildTX.stream/playlist.m3u8:Texel - Havenmond Oudeschild
+#DESCRIPTION Texel - Havenmond Oudeschild
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/598/default.stream/playlist.m3u8?wowzatokenhash=aMSM9YG2zWHRb-gwdzklt9mpmGlTnvXiC505padoTBk=&amp;wowzatokenendtime=1525104147&amp;wowzatokenstarttime=1525100547:Texel - Strandhotel Noordzee
+#DESCRIPTION Texel - Strandhotel Noordzee
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/oudeschildTX2.stream/playlist.m3u8:Texel - Werkhaven Oudeschild
+#DESCRIPTION Texel - Werkhaven Oudeschild
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/paal9.stream/playlist.m3u8:Texel - Paal 9
+#DESCRIPTION Texel - Paal 9
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/paal17.stream/playlist.m3u8:Texel - Paal 17
+#DESCRIPTION Texel - Paal 17
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/teso.stream/playlist.m3u8:Texel - Veerboot TESO
+#DESCRIPTION Texel - Veerboot TESO
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live2/vuurtorenTX.stream/playlist.m3u8:Texel - vuurtoren
+#DESCRIPTION Texel - vuurtoren
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59f185ece6219.streamlock.net/aloha/_definst_/aloha.stream/playlist.m3u8:Velsen Noord - Aloha beach
+#DESCRIPTION Velsen Noord - Aloha beach
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/hls/vlieland-veerkade.stream/chunklist_w1378621013_tkd293emF0b2tlbmVuZHRpbWU9MTUzNjU5NDE1MCZ3b3d6YXRva2VuaGFzaD1lSWwwUEhPUDlVZTVVNEZFZThrUnZzSFpiOUk3Y0xZX3Npc0tocnRnWkpvPSZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MzY1OTIzNTA=.m3u8:Vlieland - haven
+#DESCRIPTION Vlieland - haven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/vlieland2.stream/chunklist_w441142594.m3u8:Vlieland - jachthaven
+#DESCRIPTION Vlieland - jachthaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/posthuys.stream/chunklist.m3u8:Vlieland - Posthuys
+#DESCRIPTION Vlieland - Posthuys
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/posthuys2.stream/chunklist.m3u8:Vlieland - Posthuys wad
+#DESCRIPTION Vlieland - Posthuys wad
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5b8d2cbe62ad6.streamlock.net/live2/vlissingen2a.stream/chunklist_w1359324185.m3u8:Vlissingen - Jachthaven
+#DESCRIPTION Vlissingen - Jachthaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5b8d2cbe62ad6.streamlock.net/live2/vlissingen2.stream/chunklist_w2145786814.m3u8:Vlissingen - Rede
+#DESCRIPTION Vlissingen - Rede
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5b8d2cbe62ad6.streamlock.net/live2/vlissingen3.stream/chunklist_w1717615295.m3u8:Vlissingen - Westerschelde
+#DESCRIPTION Vlissingen - Westerschelde
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5b8d2cbe62ad6.streamlock.net/live2/vlissingen1.stream/chunklist_w101650044.m3u8:Vlissingen - Zeegat
+#DESCRIPTION Vlissingen - Zeegat
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/volendam.stream/playlist.m3u8:Volendam - haven en IJsselmeer
+#DESCRIPTION Volendam - haven en IJsselmeer
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/731/default.stream/chunklist_w763562978_tkd293emF0b2tlbmhhc2g9VmZrSDhNOHp0anc3SUFwQUw0d1Bra0JHbGNZaW4tQ0pPMkRzdXRFSS1Hcz0md293emF0b2tlbmVuZHRpbWU9MTUyNTIxOTM2MyZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjUyMTU3NjM=.m3u8:Vrouwenpolder - stranttent De Dam
+#DESCRIPTION Vrouwenpolder - stranttent De Dam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//aloha.streamink.nl/aloha/aloha.stream/playlist.m3u8:Wijk aan Zee - Aloha Beach
+#DESCRIPTION Wijk aan Zee - Aloha Beach
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream1.streamink.nl%3a80/timboektoe/tim01.stream/playlist.m3u8:Wijk aan Zee - Timboektoe
+#DESCRIPTION Wijk aan Zee - Timboektoe
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv13.arkasis.nl%3a/644/default.stream:Zeeuwsche kust
+#DESCRIPTION Zeeuwsche kust
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//srv13.arkasis.nl%3a/461/default.stream:Zoutelande
+#DESCRIPTION Zoutelande
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//srv13.arkasis.nl%3a80/719/default.stream/.m3u8:Zoutelande - Strandpaviljoen De Zeeuwse Riviera
+#DESCRIPTION Zoutelande - Strandpaviljoen De Zeeuwse Riviera
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//webcamserverro.dyndns-remote.com%3a1935/live/zoutkamp.stream/&mp4%3aplaylist.m3u8:Zoutkamp - Haven
+#DESCRIPTION Zoutkamp - Haven
+#SERVICE 1:64:72:0:0:0:0:0:0:0:
+#DESCRIPTION -- webcams vliegvelden--
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/ehal.stream/playlist.m3u8:Ameland - Vliegveld 1
+#DESCRIPTION Ameland - Vliegveld 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/ehal2.stream/playlist.m3u8:Ameland - Vliegveld 2
+#DESCRIPTION Ameland - Vliegveld 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/dhAirport.stream/playlist.m3u8:Den Helder – luchthaven
+#DESCRIPTION Den Helder – luchthaven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/ehmm.stream/playlist.m3u8:Middenmeer - Vliegveld
+#DESCRIPTION Middenmeer - Vliegveld
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/ehho1.stream/playlist.m3u8:Hoogeveen - Vliegveld oostzijde
+#DESCRIPTION Hoogeveen - Vliegveld oostzijde
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/ehho2.stream/playlist.m3u8:Hoogeveen - Vliegveld westzijde
+#DESCRIPTION Hoogeveen - Vliegveld westzijde
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//565c3c746b763.streamlock.net/live/teuge.stream/playlist.m3u8:Teuge - vliegveld
+#DESCRIPTION Teuge - vliegveld
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//webcamserverdh.dyndns-remote.com%3a1935/live/ehtx.stream/&mp4%3aplaylist.m3u8:Texel airport 1
+#DESCRIPTION Texel airport 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//webcamserverdh.dyndns-remote.com%3a1935/live/ehtx2.stream/&mp4%3aplaylist.m3u8:Texel airport 2
+#DESCRIPTION Texel airport 2
+#SERVICE 1:64:73:0:0:0:0:0:0:0:
+#DESCRIPTION -- LiveWebcam Bouw --
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58cbb5532ad4f.streamlock.net/kegel01/kegel01.stream/playlist.m3u8:Amstelveen - nieuwbouw tennis- en sportpark de Kegel
+#DESCRIPTION Amstelveen - nieuwbouw tennis- en sportpark de Kegel
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/620/default.stream/playlist.m3u8:Amsterdam - Bouw station Noord
+#DESCRIPTION Amsterdam - Bouw station Noord
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/707/default.stream/chunklist_w448713518_tkd293emF0b2tlbmhhc2g9ZjQ5NGpPbVluTE1pZ0dEN0VpbDZ2MUx4SWJ5SDM3UEFRZXJ5UUtlQ0k2TT0md293emF0b2tlbmVuZHRpbWU9MTUyNjQ3ODc4MiZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjY0NzUxODI=.m3u8:Amsterdam - Bouw station Noord 2
+#DESCRIPTION Amsterdam - Bouw station Noord 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58cbb5532ad4f.streamlock.net/rivierstaete01/rivierstaete01.stream/playlist.m3u8:Amsterdam - renovatie gebouw Rivierstaetel
+#DESCRIPTION Amsterdam - renovatie gebouw Rivierstaetel
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58cbb5532ad4f.streamlock.net%3a443/barneveld01/barneveld01.stream/playlist.m3u8:Barneveld - Harselaarstunnel (bouwproject)
+#DESCRIPTION Barneveld - Harselaarstunnel (bouwproject)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/478/default.stream/playlist.m3u8:Heerlen - Maankwartier
+#DESCRIPTION Heerlen - Maankwartier
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server01.veenstramultimedia.nl%3a1935/live/tesselschadestraat.stream/&mp4%3aplaylist.m3u8:Leeuwarden - Tesselschadestraat
+#DESCRIPTION Leeuwarden - Tesselschadestraat
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58cbb5532ad4f.streamlock.net/meelfabriek01/meelfabriek01.stream/playlist.m3u8:Leiden - nieuwbouw meelfabriek
+#DESCRIPTION Leiden - nieuwbouw meelfabriek
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58cbb5532ad4f.streamlock.net/wintertrust01/wintertrust01.stream/playlist.m3u8:Maarssen - sloop/nieuwbouw Bissonspoor
+#DESCRIPTION Maarssen - sloop/nieuwbouw Bissonspoor
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//56f2a99952126.streamlock.net/870/default.stream/chunklist_w1573485690_tkd293emF0b2tlbmhhc2g9LXJQZkpGc1JpV3Z3YkdFRXAxNEFSQzJ5Ym45RW5uMVJzMEtOWU9CU0txOD0md293emF0b2tlbmVuZHRpbWU9MTUyMjk2NDM4MiZ3b3d6YXRva2Vuc3RhcnR0aW1lPTE1MjI5NjA3ODI=.m3u8:Vrouwenpolder (Zeeland)
+#DESCRIPTION Vrouwenpolder (Zeeland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/837/default.stream/playlist.m3u8:Zeist - Center One Group cam 2
+#DESCRIPTION Zeist - Center One Group cam 2
+#SERVICE 1:64:74:0:0:0:0:0:0:0:
+#DESCRIPTION +++webcam verkeerspunten+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_55.stream/playlist.m3u8:VID A1 bij Amersfoort
+#DESCRIPTION VID A1 bij Amersfoort
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_69.stream/playlist.m3u8:VID A2 bij Vianen
+#DESCRIPTION VID A2 bij Vianen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_26.stream/playlist.m3u8:VID A2 bij Zaltbommel
+#DESCRIPTION VID A2 bij Zaltbommel
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_94.stream/playlist.m3u8:VID A4 bij Amsterdam-Sloten
+#DESCRIPTION VID A4 bij Amsterdam-Sloten
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_92.stream/chunklist_w492409076.m3u8:VID A4 knooppunt De Hoek
+#DESCRIPTION VID A4 knooppunt De Hoek
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_64.stream/chunklist_w1777317968.m3u8:VID A4 bij Roelofarendsveen
+#DESCRIPTION VID A4 bij Roelofarendsveen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_28.stream/playlist.m3u8:VID A4 bij Leiden
+#DESCRIPTION VID A4 bij Leiden
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_37.stream/chunklist_w1577270050.m3u8:VID A6 bij Almere-stad
+#DESCRIPTION VID A6 bij Almere-stad
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_231.stream/chunklist_w190417876.m3u8:VID A9 bij Diemen
+#DESCRIPTION VID A9 bij Diemen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_14.stream/playlist.m3u8:VID A9 knooppunt Holendrecht
+#DESCRIPTION VID A9 knooppunt Holendrecht
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_207.stream/playlist.m3u8:VID A9 bij Amstelveen
+#DESCRIPTION VID A9 bij Amstelveen
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_45.stream/playlist.m3u8:VID A9 knooppunt Rottepolderplein
+#DESCRIPTION VID A9 knooppunt Rottepolderplein
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_33.stream/playlist.m3u8:VID A10 knooppunt Watergraafsmeer
+#DESCRIPTION VID A10 knooppunt Watergraafsmeer
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_19.stream/playlist.m3u8:VID A10 knooppunt Coenplein-noord
+#DESCRIPTION VID A10 knooppunt Coenplein-noord
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_100.stream/playlist.m3u8:VID A10 knooppunt Amstel
+#DESCRIPTION VID A10 knooppunt Amstel
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_25.stream/playlist.m3u8:VID A10 bij aansluiting S107
+#DESCRIPTION VID A10 bij aansluiting S107
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_16.stream/playlist.m3u8:VID A10 knooppunt Westpoort
+#DESCRIPTION VID A10 knooppunt Westpoort
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_91.stream/playlist.m3u8:VID A12 knooppunt Hoograven
+#DESCRIPTION VID A12 knooppunt Hoograven
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_201.stream/playlist.m3u8:VID A12 bij Oudenrijn
+#DESCRIPTION VID A12 bij Oudenrijn
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_13.stream/playlist.m3u8:VID A12 knooppunt Gouwe
+#DESCRIPTION VID A12 knooppunt Gouwe
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_20.stream/playlist.m3u8:VID A13 bij Delft
+#DESCRIPTION VID A13 bij Delft
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_205.stream/playlist.m3u8:VID A16 bij de Van Brienenoordbrug
+#DESCRIPTION VID A16 bij de Van Brienenoordbrug
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_41.stream/playlist.m3u8:VID A16 bij Zwijndrecht
+#DESCRIPTION VID A16 bij Zwijndrecht
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.vid.nl%3a1935/rtplive/IB_22a.stream/playlist.m3u8:VID A27 bij Gorinchem
+#DESCRIPTION VID A27 bij Gorinchem
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//streaming5.webcam.nl/live/A325.stream/playlist.m3u8:Arnhem A325
+#DESCRIPTION Arnhem A325
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:rtsp%3a//streaming3.webcam.nl%3a80/n224/n224.stream:Arnhem - Papendal
+#DESCRIPTION Arnhem - Papendal
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//stream-ire-charlie.dropcam.com/nexus_aac/f2da378a4f034273ae41767dbb0bfb84/playlist.m3u8:Arnhem - Zijpse poort
+#DESCRIPTION Arnhem - Zijpse poort
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/885/default.stream/playlist.m3u8:Eindhoven - Montgomerylaan
+#DESCRIPTION Eindhoven - Montgomerylaan
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streaming3.webcam.nl/n233/n233.stream/.m3u8:Gelderland - N333
+#DESCRIPTION Gelderland - N333
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl/n319/n319.stream swfUrl=http%3a//webcam.prvgld.nl/site/player.swf pageUrl=http%3a//webcam.prvgld.nl/site/n319.html:Groenlo - LIVE beeld van de N319 verkeerscamera
+#DESCRIPTION Groenlo - LIVE beeld van de N319 verkeerscamera
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/n31-cam1.stream/playlist.m3u8:Harlingen - N31
+#DESCRIPTION Harlingen - N31
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//584b389d712f9.streamlock.net/live/aquaduct3.stream/playlist.m3u8:Harlingen - N31 Aquaduct 2
+#DESCRIPTION Harlingen - N31 Aquaduct 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl/n794b/n794b.stream swfUrl=http%3a//webcam.prvgld.nl/site/player.swf pageUrl=http%3a//webcam.prvgld.nl/site/n794b.html:Heerde - traffic cam op het Transferium
+#DESCRIPTION Heerde - traffic cam op het Transferium
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server01.veenstramultimedia.nl%3a1935/live/stephensonviaduct.stream/&mp4%3aplaylist.m3u8:Leeuwarden - Stephensonviaduct
+#DESCRIPTION Leeuwarden - Stephensonviaduct
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl/n332/n332.stream swfUrl=http%3a//webcam.prvgld.nl/site/player.swf pageUrl=http%3a//webcam.prvgld.nl/site/n332.html:Lochem - LIVE beeld van de N332 verkeerscamera
+#DESCRIPTION Lochem - LIVE beeld van de N332 verkeerscamera
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/514/default.stream/playlist.m3u8:Maastricht - A2 Geusselt
+#DESCRIPTION Maastricht - A2 Geusselt
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//56f2a99952126.streamlock.net/482/default.stream/playlist.m3u8:Maastricht - A2 zuid
+#DESCRIPTION Maastricht - A2 zuid
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl/n301/n301.stream swfUrl=http%3a//webcam.prvgld.nl/site/player.swf pageUrl=http%3a//webcam.prvgld.nl/site/n301.html:Nijkerk - LIVE beeld van de N301 verkeerscamera
+#DESCRIPTION Nijkerk - LIVE beeld van de N301 verkeerscamera
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl/n224/n224.stream swfUrl=http%3a//webcam.prvgld.nl/site/player.swf pageUrl=http%3a//webcam.prvgld.nl/site/n224.html:Papendal - LIVE beeld van de N224 verkeerscamera
+#DESCRIPTION Papendal - LIVE beeld van de N224 verkeerscamera
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//85.25.218.202%3a1935/live/mp4%3an31-cam1.stream/.m3u8:?
+#DESCRIPTION ?
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//streaming3.webcam.nl/n314/n314.stream swfUrl=http%3a//webcam.prvgld.nl/site/player.swf pageUrl=http%3a//webcam.prvgld.nl/site/n314.html:Zutphen - LIVE beeld van de N314 verkeerscamera
+#DESCRIPTION Zutphen - LIVE beeld van de N314 verkeerscamera
+#SERVICE 1:64:75:0:0:0:0:0:0:0:
+#DESCRIPTION +++radio webcams+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//136.144.137.55%3a8081/3ml/liveradio/playlist.m3u8:3ML Radio Live (Webcam) NL
+#DESCRIPTION 3ML Radio Live (Webcam) NL
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//bnr-cache-cdp.triple-it.nl/studio/index.m3u8:BNR webcam
+#DESCRIPTION BNR webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//102793ooyala-lh.akamaihd.net/i/depers02_delivery@381748/index_1164_av-p.m3u8:Qmusic NL
+#DESCRIPTION Qmusic NL
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//58e4d59f4ba2c.streamlock.net/loco/loco/chunklist.m3u8:Loco FM webcam (Oldebroek)
+#DESCRIPTION Loco FM webcam (Oldebroek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//main.deejays.nl%3a8080/merwertv.m3u8:MerweRadio studiowebcam (Zuid-Holland)
+#DESCRIPTION MerweRadio studiowebcam (Zuid-Holland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rrr.sz.xlcdn.com/?account=nhnieuws&file=nhradio&type=live&service=wowza&protocol=https&output=playlist.m3u8:NH (RTV Noord-Holland) - radio visual
+#DESCRIPTION NH (RTV Noord-Holland) - radio visual
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//cdn.streampunt.nl/hls/stream.m3u8:RN7 Studio webcam (Nijmegen)
+#DESCRIPTION RN7 Studio webcam (Nijmegen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d3slqp9xhts6qb.cloudfront.net/omroepbrabantVisualRadio/index.m3u8:Omroep Brabant - radio visual
+#DESCRIPTION Omroep Brabant - radio visual
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//lb-omroepflevoland-live.cdn.streamgate.nl/omroepflevoland/webcamradio2.mp4/playlist.m3u8:Omroep Flevoland - radio visual
+#DESCRIPTION Omroep Flevoland - radio visual
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ngx.cr6.streamzilla.xlcdn.com/session/955fd4dfbaf65f9f3498c6dd802d0026/sz/omroepgelderland/wowza4/live/meekijkradio/chunklist.m3u8:Omroep Gelderland - radio visual
+#DESCRIPTION Omroep Gelderland - radio visual
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//cdn-hlm-1.streamnerd.nl/live/rararadio/playlist.m3u8:Rararadio (webcam studio) Eindhoven vrij-mo
+#DESCRIPTION Rararadio (webcam studio) Eindhoven vrij-mo
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:rtmp%3a//stream.radio350.nl/live/radio350:Radio350 webcam (Rijssen en Holten)
+#DESCRIPTION Radio350 webcam (Rijssen en Holten)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//talparadiohls-i.akamaihd.net/hls/live/585615/VR-Veronica-1/Q5.m3u8:Radio Veronica (webcam)
+#DESCRIPTION Radio Veronica (webcam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//558bd16067b67.streamlock.net/radionl/radionl/chunklist_w1478214221.m3u8:Radio NL (webcam studio)
+#DESCRIPTION Radio NL (webcam studio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//558bd16067b67.streamlock.net/radionl/radionl/chunklist_w1527483009.m3u8:Radio NL (webcam studio)
+#DESCRIPTION Radio NL (webcam studio)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//593aed234297b.streamlock.net/visual_radio/visual_radio/playlist.m3u8:RTV Nunspeet (Webcam)
+#DESCRIPTION RTV Nunspeet (Webcam)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn15.streampartner.nl%3a1935/rtvnof2/live/playlist.m3u8:RTV NOF webcam radio (Noordoost-Friesland)
+#DESCRIPTION RTV NOF webcam radio (Noordoost-Friesland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.streamonecloud.net/livestream/amlst%3aFiK93m7AaqQ2/playlist.m3u8:RTV Slingeland Visual Radio
+#DESCRIPTION RTV Slingeland Visual Radio
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//hls2.slamfm.nl/content/slamwebcam/slamwebcam.m3u8:Slam webcam
+#DESCRIPTION Slam webcam
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//hls.streamonecloud.net/livestream/amlst%3afDa32BaPi9r3/chunklist_b596.m3u8:WEEFF webcam (Enkhuizen/Hoorn)
+#DESCRIPTION WEEFF webcam (Enkhuizen/Hoorn)

@@ -1,0 +1,143 @@
+#NAME Stream Carabiën/Caribisch gebied
+#SERVICE 1:64:11f:0:0:0:0:0:0:0:
+#DESCRIPTION ++Antillen++
+#SERVICE 4097:0:1:131:2:4:0:0:0:0:http%3a//hls.tmacaraibes.com/live/index.m3u8:TMA - Television Musicale Antillaise (muziek - Antillen)
+#DESCRIPTION TMA - Television Musicale Antillaise (muziek - Antillen)
+#SERVICE 1:64:120:0:0:0:0:0:0:0:
+#DESCRIPTION ++Bahama's++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hi.duok5.tv%3a81/iltv/ntsc/index.m3u8 :ILTV (Bahama's)
+#DESCRIPTION ILTV (Bahama's)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hi.duok5.tv%3a81/iltv/ntsc/tracks-v1a1/mono.m3u8:ILTV (Bahama's) - alternatief
+#DESCRIPTION ILTV (Bahama's) - alternatief
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5a452e3832fe3.streamlock.net/znstv_ingesttwo/smil%3aznstv_investtwo_streams.smil/chunklist_w115758989_b1628000_sleng.m3u8:ZNS TV (Bahama's)
+#DESCRIPTION ZNS TV (Bahama's)
+#SERVICE 1:64:121:0:0:0:0:0:0:0:
+#DESCRIPTION ++Barbados++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59cc03a18f8dd.streamlock.net/cbcbarbados/live/playlist.m3u8:CBC TV (Barbados)
+#DESCRIPTION CBC TV (Barbados)
+#SERVICE 1:64:122:0:0:0:0:0:0:0:
+#DESCRIPTION ++Cuba++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//playback.akamaized.net/streams/5730046_2966225_lsi2nd88lz0jg7fa1au_1/media/5730046_2966225_lsi2nd88lz0jg7fa1au_1@2320000pb.m3u8?dw=14400&ts=1532451600&hdnts=exp=1532624683~acl=/streams/5730046_2966225_lsi2nd88lz0jg7fa1au_1/media*~hmac=839c229b9c48a1007590db14b3a4621a8670eefe908b193fcef9fddd798d5a53:América TeVé (Cuba)
+#DESCRIPTION América TeVé (Cuba)
+#SERVICE 1:64:123:0:0:0:0:0:0:0:
+#DESCRIPTION ++Dominicaanse Republiek ++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss6.domint.net%3a2028/ame_str/amecanal47/chunklist_w2008883027.m3u8:Amé 47 (Dominicaanse Republiek)
+#DESCRIPTION Amé 47 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss1.domint.net%3a2226/btv_str/bonao/playlist.m3u8:Bonao TV Canal 12 (Dominicaanse Republiek)
+#DESCRIPTION Bonao TV Canal 12 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cm.hostlagarto.com%3a8081/Canavision/CanavisionHD.myStream/playlist.m3u8:Cana Visión Canal 88 Bavaro (Dominicaanse Republiek)
+#DESCRIPTION Cana Visión Canal 88 Bavaro (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss1.domint.net%3a2200/c25_str/canal25/playlist.m3u8:Canal 25 Santiago (Dominicaanse Republiek)
+#DESCRIPTION Canal 25 Santiago (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//45.35.46.43%3a1935/live/canal4/playlist.m3u8?wowzasessionid=1439147972:CER TV Canal 4 (Dominicaanse Republiek)
+#DESCRIPTION CER TV Canal 4 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss2.domint.net%3a2138/cvh_str/colorvisionhd/playlist.m3u8:Color Vision Canal 9 (Dominicaanse Republiek)
+#DESCRIPTION Color Vision Canal 9 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss6.domint.net%3a2046/gh_str/tv10/chunklist_w1301712904.m3u8?fluxustv.m3u8:GH Television (Dominicaanse Republiek)
+#DESCRIPTION GH Television (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cm.hostlagarto.com%3a8081/Hmtv/hmtv.myStream/playlist.m3u8:Hermanas Mirabal TV Canal 33 Salcedo (Dominicaanse Republiek)
+#DESCRIPTION Hermanas Mirabal TV Canal 33 Salcedo (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hd.streamingmedios.com%3a1935/HilandoFinoTV/smil%3aGlobalMarket.smil/playlist.m3u8:Hilando Fino TV (Dominicaanse Republiek)
+#DESCRIPTION Hilando Fino TV (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//uni01rtmp.tulix.tv/playout2multi9/lavozdemaria.stream/playlist.m3u8:La Voz de Maria la Vega (Dominicaanse Republiek)
+#DESCRIPTION La Voz de Maria la Vega (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss1.domint.net%3a2314/mtv_str/maimon/playlist.m3u8:Miamón TV Canal 3 (Dominicaanse Republiek)
+#DESCRIPTION Miamón TV Canal 3 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ciez45.live.cloud.influxis.com/ciez45/NaranjaTV/playlist.m3u8:Naranja TV Dominicana (Dominicaanse Republiek)
+#DESCRIPTION Naranja TV Dominicana (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss6.domint.net%3a2082/202_str/orbittv/chunklist_w29206476.m3u8:Orbit TV (Dominicaanse Republiek)
+#DESCRIPTION Orbit TV (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//platiniumtv.srfms.com%3a1935/platiniumtv/livestream/playlist.m3u8:Platinium TV Canal 50 La Vega (Dominicaanse Republiek)
+#DESCRIPTION Platinium TV Canal 50 La Vega (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tv.romanatv42.com/hls/live.m3u8:Romana TV Canal 42 (Dominicaanse Republiek)
+#DESCRIPTION Romana TV Canal 42 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss1.domint.net%3a2122/rnn_str/canal27/playlist.m3u8:RNN Canal 27 (Dominicaanse Republiek)
+#DESCRIPTION RNN Canal 27 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss8.domint.net%3a2128/stv_str/tv55/playlist.m3u8:Super TV 55 Santiago (Dominicaanse Republiek)
+#DESCRIPTION Super TV 55 Santiago (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server3.prostudionetwork.com%3a1957/telecontacto/smil%3atelecontacto.smil/playlist.m3u8:Telecontacto Canal 57 Santiago (Dominicaanse Republiek)
+#DESCRIPTION Telecontacto Canal 57 Santiago (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss8.domint.net%3a2118/tf_str/futu/playlist.m3u8:Telefuturo Canal 23 (Dominicaanse Republiek)
+#DESCRIPTION Telefuturo Canal 23 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.grupotelemicro.com/5.m3u8:Telemicro  (Dominicaanse Republiek)
+#DESCRIPTION Telemicro  (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cm.hostlagarto.com%3a8081/Telemilenio/Telemilenio.myStream/playlist.m3u8:Telemilenio Canal 50 (Dominicaanse Republiek)
+#DESCRIPTION Telemilenio Canal 50 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//server3.prostudionetwork.com%3a1945/teleunion/TU/playlist.m3u8:Teleunion Canal 16 Santiago (Dominicaanse Republiek)
+#DESCRIPTION Teleunion Canal 16 Santiago (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss1.domint.net%3a2302/tu_str/universo/playlist.m3u8:Teleuniverso Canal 29 (Dominicaanse Republiek)
+#DESCRIPTION Teleuniverso Canal 29 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tengomusica.ddns.net%3a1935/telever/telever.sdp/playlist.m3u8:Telever Canal 12 Jarabacoa (Dominicaanse Republiek)
+#DESCRIPTION Telever Canal 12 Jarabacoa (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss1.domint.net%3a2200/c25_str/canal25/chunklist_w141605877.m3u8:Telemedios Canal 25 (Dominicaanse Republiek)
+#DESCRIPTION Telemedios Canal 25 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//newyorkstream.ddns.net%3a1935/telenord8/telenord8/chunklist_w1386973441.m3u8:Telenord Canal 8 (Dominicaanse Republiek)
+#DESCRIPTION Telenord Canal 8 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//newyorkstream.ddns.net%3a1935/telenord10/telenord10/playlist.m3u8:Telenord Canal 10 (Dominicaanse Republiek)
+#DESCRIPTION Telenord Canal 10 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//newyorkstream.ddns.net%3a1935/telenord12/telenord12/chunklist_w240295877.m3u8:Telenord Canal 12 (Dominicaanse Republiek)
+#DESCRIPTION Telenord Canal 12 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss1.domint.net%3a2310/tra_str/canal45/chunklist_w1099317289.m3u8:TRA = Tele Radio America (Dominicaanse Republiek)
+#DESCRIPTION TRA = Tele Radio America (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cm.hostlagarto.com%3a8081/tumusicahd/tumusicaHD.myStream/playlist.m3u8:Tu Musica HD (Dominicaanse Republiek)
+#DESCRIPTION Tu Musica HD (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cm.hostlagarto.com%3a8081/TVPLATA/tvplataHD.myStream/playlist.m3u8:TV Plata Canal 3 (Dominicaanse Republiek)
+#DESCRIPTION TV Plata Canal 3 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//media.az-streamingserver.com%3a1935/7230/7230/playlist.m3u8:TV Recuerdos Canal 56 Santo Domimgo (Dominicaanse Republiek)
+#DESCRIPTION TV Recuerdos Canal 56 Santo Domimgo (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//vegatevenacional.ddns.net%3a1936/vegateve/vegateve/playlist.m3u8:Vegateve Canal 12  La vega (Dominicaanse Republiek)
+#DESCRIPTION Vegateve Canal 12  La vega (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss1.domint.net%3a2300/yv_str/yuna/playlist.m3u8:Yuna Vision Canal 10 Bonao (Dominicaanse Republiek)
+#DESCRIPTION Yuna Vision Canal 10 Bonao (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss1.domint.net%3a2120/xtr_str/xtremo/playlist.m3u8:Xtremo Vision Canal 22 (Dominicaanse Republiek)
+#DESCRIPTION Xtremo Vision Canal 22 (Dominicaanse Republiek)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ss6.domint.net%3a1948/zol_str/vzol/chunklist_w745366436.m3u8:Zol FM - Visual Radio (Dominicaanse Republiek)
+#DESCRIPTION Zol FM - Visual Radio (Dominicaanse Republiek)
+#SERVICE 1:64:124:0:0:0:0:0:0:0:
+#DESCRIPTION ++Grenada++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//172.93.120.62%3a8080/gbnlive/livestream/tracks-v1a1/index.m3u8:GBN (Grenada)
+#DESCRIPTION GBN (Grenada)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//streamer1.streamhost.org%3a1935/salive/GMIFLNL/chunklist_w536436435.m3u8:Grenada Family Network (Grenada)
+#DESCRIPTION Grenada Family Network (Grenada)
+#SERVICE 1:64:125:0:0:0:0:0:0:0:
+#DESCRIPTION ++Haïtie++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//haititivi.com%3a8088/haititv/tele6NY/tracks-v1a1/mono.m3u8:Nago TV (Haïtie)
+#DESCRIPTION Nago TV (Haïtie)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//162.244.81.145%3a3333/live/telebostonrtb/chunklist_w352358317.m3u8:Tele Boston (Haïtie)
+#DESCRIPTION Tele Boston (Haïtie)
+#SERVICE 1:64:126:0:0:0:0:0:0:0:
+#DESCRIPTION ++Jamaica++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdnvideobak.webvideocore.net/enc4_l2bv3g4kmog243htkg626l8frjnijeaaq3a6glfpte1fqcobg6emssaifae8ld2shpmq4vdtl4ev6v1ehji1gnljevbgsst8jhj7felvjlkmtnuaait51s79ams2a43iu/index.m3u8?clip_id=n1eeiwgzyg0g:CVM TV (Jamaica)
+#DESCRIPTION CVM TV (Jamaica)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//wowzaprod133-i.akamaihd.net/hls/live/577385/a1e0ad3f_1_1299456/chunklist.m3u8:Mello TV (Jamaica)
+#DESCRIPTION Mello TV (Jamaica)
+#SERVICE 1:64:127:0:0:0:0:0:0:0:
+#DESCRIPTION ++Martinique++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//vod.infomaniak.com/redirect/jean-manuelmassenya_vod/testdirectmadinina-6225/mp4-12/chasseurtonygillesroromarott_mpeg2video_cut2.mp4?playlist=502:Madinina (Martinique)
+#DESCRIPTION Madinina (Martinique)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//vod.infomaniak.com/redirect/jean-manuelmassenya_vod/testdirectmadinina-6225/mp4-12/chasseurtonygillesroromarott_mpeg2video_cut2.mp4?playlist=502:Madinina (Martinique)
+#DESCRIPTION Madinina (Martinique)
+#SERVICE 1:64:128:0:0:0:0:0:0:0:
+#DESCRIPTION ++Puerto Rico++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59f2354c05961.streamlock.net%3a1443/acsanetworktv/_definst_/acsanetworktv/playlist.m3u8:ACS Network TV (Puerto Rico)
+#DESCRIPTION ACS Network TV (Puerto Rico)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestreamcdn.net%3a1935/AlientoSD/AlientoSD/chunklist_w1181174651.m3u8:Aliento Vision (Puerto Rico)
+#DESCRIPTION Aliento Vision (Puerto Rico)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//59825a54e4454.streamlock.net%3a8443/marcos536/marcos536/chunklist_w815796812.m3u8:CDM (Puerto Rico)
+#DESCRIPTION CDM (Puerto Rico)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5945b12468189.streamlock.net%3a4443/ebntv/ebntv/playlist.m3u8:EBN (Puerto Rico)
+#DESCRIPTION EBN (Puerto Rico)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//livestream-f.akamaihd.net/i/16550960_8077197_32137830_1@446583/index_2628_av-p.m3u8?sd=4&dw=14400&set-segment-duration=responsive&rebase=on&hdntl=exp=1532538824~acl=%252fi%252f16550960_8077197_32137830_1%2540446583%252f*~data=hdntl~hmac=7b5cd1bb006a1a64512ff63d84ccc5d9b97479ebbb07aeca9bd5a534ebd62247:WIPR (Puerto Rico)
+#DESCRIPTION WIPR (Puerto Rico)
+#SERVICE 1:64:129:0:0:0:0:0:0:0:
+#DESCRIPTION ++St. Kitts & Nevis++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//5b23808a738c5.streamlock.net/liveTrans/ngrp%3alivestream_all/chunklist_w1977462127_b1431072.m3u8:ZIZ (St. Kitts & Nevis)
+#DESCRIPTION ZIZ (St. Kitts & Nevis)
+#SERVICE 1:64:12a:0:0:0:0:0:0:0:
+#DESCRIPTION ++St. Maarten/St. Eustatius/Saba
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//eu-all0.secdn.net/daavp2-live/play/mp4%3adaavp2/playlist.m3u8:TV Carib (St. Maarten - St. Eustatius - Saba)
+#DESCRIPTION TV Carib (St. Maarten - St. Eustatius - Saba)
+#SERVICE 1:64:12b:0:0:0:0:0:0:0:
+#DESCRIPTION ++Trinidad++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//playback.akamaized.net/streams/27001737_8190593_lsiwua5935ia768p6kd_1/master.m3u8?dw=14400&storage=iss&hdnts=exp=1532124163~acl=/streams/27001737_8190593_lsiwua5935ia768p6kd_1/master.m3u8*~hmac=6d90ec50d624d7fc6807dc8e88ad7caf796fb0409ce34ec8f2089f6985d3b955:CNC 3 (Trinidad)
+#DESCRIPTION CNC 3 (Trinidad)

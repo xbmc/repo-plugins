@@ -1,0 +1,285 @@
+#NAME Stream Nieuws
+#SERVICE 1:64:d0:0:0:0:0:0:0:0:
+#DESCRIPTION ++Nederland/België++
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:https%3a//bnr-cache-cdp.triple-it.nl/studio/index.m3u8:BNR webcam
+#DESCRIPTION BNR webcam
+#SERVICE 1:64:d1:0:0:0:0:0:0:0:
+#DESCRIPTION ++algemeen++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//161.0.157.9/PLTV/88888888/224/3221227005/03.m3u8:CNBC World (nieuws - USA)
+#DESCRIPTION CNBC World (nieuws - USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ott-cdn.ucom.am/s27/04.m3u8:CNN International (nieuws)
+#DESCRIPTION CNN International (nieuws)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//ott.ec.streamcloud.be/live/disk1/EBS/hls_el/EBS-audio_AACL_ell_66400_207=66400-video=800000.m3u8:EBS (Europe By Satellite)
+#DESCRIPTION EBS (Europe By Satellite)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//ott.ec.streamcloud.be/live/disk1/EBSplus/hls_el/EBSplus-audio_AACL_ell_66400_407=66400-video=800000.m3u8:EBS Plus (Europe By Satellite)
+#DESCRIPTION EBS Plus (Europe By Satellite)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//euronews-en-b9-cdn.hexaglobe.net/3676cc842a23e6596e8b8abe60e13757/5ba62f6f/euronews/euronews-euronews-website-web-responsive-2/ewnsabrenbkp_eng.smil/ewnsabrenbkp_eng_720p.m3u8:Euronews
+#DESCRIPTION Euronews
+#SERVICE 1:64:d2:0:0:0:0:0:0:0:
+#DESCRIPTION ++Albanië++
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//tv.balkanweb.com%3a8081/news24/livestream/playlist.m3u8:NEWS 24 (Albanië)
+#DESCRIPTION NEWS 24 (Albanië)
+#SERVICE 1:64:d3:0:0:0:0:0:0:0:
+#DESCRIPTION ++Australië++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//abc-iview-mediapackagestreams-1.akamaized.net/out/v1/50345bf35f664739912f0b255c172ae9/index_1.m3u8:ABC News (Australië)
+#DESCRIPTION ABC News (Australië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//liveprodapnortheast.akamaized.net/oz1/Channel-OZTVqvs-AWS-tokyo-1/Source-OZTVqvs-440-1_live.m3u8:Bloomberg Australië (Australië)
+#DESCRIPTION Bloomberg Australië (Australië)
+#SERVICE 1:64:d4:0:0:0:0:0:0:0:
+#DESCRIPTION ++Arabisch/Engelstalig++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//aljazeera-eng-hd-live.hls.adaptive.level3.net/aljazeera/english2/index.m3u8:Al Jazeera
+#DESCRIPTION Al Jazeera
+#SERVICE 1:64:d5:0:0:0:0:0:0:0:
+#DESCRIPTION ++Arabisch++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//ns8.indexforce.com/home/mystream:Alsharqiya Tv
+#DESCRIPTION Alsharqiya Tv
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//38.96.148.30%3a1935/live/omantv1/playlist.m3u8:Oman (Arabisch)
+#DESCRIPTION Oman (Arabisch)
+#SERVICE 1:64:d6:0:0:0:0:0:0:0:
+#DESCRIPTION ++Azië++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//liveprodapnortheast.global.ssl.fastly.net/ap1/Channel-APTVqvs-AWS-tokyo-1/Source-APTVqvs-1000-1_live.m3u8:Bloomberg Azië
+#DESCRIPTION Bloomberg Azië
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//drsh196ivjwe8.cloudfront.net/hls/cnai/01.m3u8:Channel News Asia
+#DESCRIPTION Channel News Asia
+#SERVICE 1:64:d7:0:0:0:0:0:0:0:
+#DESCRIPTION ++Canada++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cbcnewshd-f.akamaihd.net/i/cbcnews_1@8981/index_2500_av-p.m3u8:CBC News (Canada)
+#DESCRIPTION CBC News (Canada)
+#SERVICE 1:64:d8:0:0:0:0:0:0:0:
+#DESCRIPTION ++Chili++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//unlimited1-us.dps.live/cnn/cnn.smil/playlist.m3u8:CNN Chili
+#DESCRIPTION CNN Chili
+#SERVICE 1:64:d9:0:0:0:0:0:0:0:
+#DESCRIPTION ++China++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.cgtn.com/1000/prog_index.m3u8:CGTN English (China - nieuws)
+#DESCRIPTION CGTN English (China - nieuws)
+#SERVICE 1:64:da:0:0:0:0:0:0:0:
+#DESCRIPTION ++Duitsland++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dwstream5-lh.akamaihd.net/i/dwstream5_live@124540/master.m3u8:Deutsche Welle 
+#DESCRIPTION Deutsche Welle 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dwstream72-lh.akamaihd.net/i/dwstream72_live@123556/index_1_av-b.m3u8?sd=10&rebase=on:Deutsche Welle (Duitsland)
+#DESCRIPTION Deutsche Welle (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dwstream4-lh.akamaihd.net/i/dwstream4_live@131329/master.m3u8:Deutsche Welle (Engelstalig)
+#DESCRIPTION Deutsche Welle (Engelstalig)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dwstream2-lh.akamaihd.net/i/dwstream2_live@124400/master.m3u8:Deutsche Welle Arabia (Duitsland)
+#DESCRIPTION Deutsche Welle Arabia (Duitsland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//dwstream6-lh.akamaihd.net/i/dwstream6_live@123962/master.m3u8:DW Deutsche Welle
+#DESCRIPTION DW Deutsche Welle
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//62.67.13.53%3a1935/kabeljournal/live.stream/playlist.m3u8:KabelJournal
+#DESCRIPTION KabelJournal
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//stream-cdn.ok54.de/tv/nahetv:Nahe TV
+#DESCRIPTION Nahe TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tagesschau-lh.akamaihd.net/i/tagesschau_1@119231/index_3776_av-p.m3u8:Tagesschau 24 HD (nieuws - Duitsland)
+#DESCRIPTION Tagesschau 24 HD (nieuws - Duitsland)
+#SERVICE 1:64:db:0:0:0:0:0:0:0:
+#DESCRIPTION ++Engeland++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//contributionstreams.ashttp9.visionip.tv/live/visiontv-contributionstreams-arise-tv-hsslive-25f-16x9-SD/chunklist.m3u8:Arise News
+#DESCRIPTION Arise News
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//hlslive.lcdn.une.net.co/v1/AUTH_HLSLIVE/BBCW/tu1_1.m3u8:BBC WORLD NEWS (Engeland/UK)
+#DESCRIPTION BBC WORLD NEWS (Engeland/UK)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//203.162.235.41%3a17817/:BBC World News
+#DESCRIPTION BBC World News
+#SERVICE 1:64:dc:0:0:0:0:0:0:0:
+#DESCRIPTION ++Filipijnen++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//54.251.134.121/live/15273.sdp:CNN Philippines
+#DESCRIPTION CNN Philippines
+#SERVICE 1:64:dd:0:0:0:0:0:0:0:
+#DESCRIPTION ++Frankrijk++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream-03.nyc.dailymotion.com/25/dm/3/x3b68jn/live-3.m3u8:CNews (Frankrijk)
+#DESCRIPTION CNews (Frankrijk)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//f24hls-i.akamaihd.net/hls/live/221193/F24_EN_LO_HLS/master_900.m3u8:France24 (English)
+#DESCRIPTION France24 (English)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//static.FRANCE24.com/live/F24_EN_LO_HLS/live_web.m3u8:FRANCE 24 Engels (nieuws - Frankrijk)
+#DESCRIPTION FRANCE 24 Engels (nieuws - Frankrijk)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//f24hls-i.akamaihd.net/hls/live/221192/F24_FR_LO_HLS/master_900.m3u8:France24 French (Frankrijk)
+#DESCRIPTION France24 French (Frankrijk)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream-02.nyc.dailymotion.com/39/dm/3/x4rdeu6/live-3.m3u8:FranceInfo (Frankrijk)
+#DESCRIPTION FranceInfo (Frankrijk)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//v3plusinfo247hls-i.akamaihd.net/hls/live/218877-b/v3plusinfo247hls/v3plusinfo247hls_1_1.m3u8:TV5 Monde Info (Frankrijk)
+#DESCRIPTION TV5 Monde Info (Frankrijk)
+#SERVICE 1:64:de:0:0:0:0:0:0:0:
+#DESCRIPTION ++Ierland++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wmsrtsp1.rte.ie/live/android.sdp/playlist.m3u8:RTE News Now Ireland (nieuws - Ierland)
+#DESCRIPTION RTE News Now Ireland (nieuws - Ierland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//csm-e.cds1.yospace.com/csm/live/74246610.m3u8:TG4 Ireland (nieuws - Ierland)
+#DESCRIPTION TG4 Ireland (nieuws - Ierland)
+#SERVICE 1:64:df:0:0:0:0:0:0:0:
+#DESCRIPTION ++India++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hindiabp-lh.akamaihd.net/i/hindiabp1new_1@192103/master.m3u8:ABP News (India)
+#DESCRIPTION ABP News (India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//asianetcdn.vidgyor.com/asianet-origin/liveabr/playlist.m3u8:Asianet News (India)
+#DESCRIPTION Asianet News (India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//bloomtv.live-s.cdn.bitgravity.com/cdn-live-b5/_definst_/bloomtv/live/feed01/playlist.m3u8:Bloomberg India (India)
+#DESCRIPTION Bloomberg India (India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d1j33l0xltpapp.cloudfront.net/bqmain_2.m3u8:Bloomberg Quint (India)
+#DESCRIPTION Bloomberg Quint (India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//cnbctv18-lh.akamaihd.net/i/cnbc_tv18_hls_n_1@174868/index_5_av-p.m3u8:CNBC TV18 (nieuws - India)
+#DESCRIPTION CNBC TV18 (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cnn_ibn_hls-lh.akamaihd.net/i/cnn_ibn_hls_n_1@174950/index_5.m3u8:CNN-News 18 (nieuws - India)
+#DESCRIPTION CNN-News 18 (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//dbgz3a72bx1vv.cloudfront.net/yuppenc2/ngrp%3acvrnewseng_all/chunklist_b2179072.m3u8:CVR News (nieuws - India)
+#DESCRIPTION CVR News (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//nicls1-lh.akamaihd.net/i/ddnews_1@409133/master.m3u8:DD News (nieuws - India)
+#DESCRIPTION DD News (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//150.242.21.2/drisya.m3u8:Drisya (nieuws - India)
+#DESCRIPTION Drisya (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//etv-rajasthan.akamaized.net/i/etv_rajasthan_hls_1@175738/index_5_av-p.m3u8:ETV Rajasthan (nieuws - India)
+#DESCRIPTION ETV Rajasthan (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//livestream.5centscdn.com/garshomtv/d0dbe915091d400bd8ee7f27f0791303.sdp/index.m3u8:Garshom News (India)
+#DESCRIPTION Garshom News (India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ibn7_hls-lh.akamaihd.net/i/ibn7_hls_n_1@174951/index_3.m3u8:IBN7 News (nieuws - India'
+#DESCRIPTION IBN7 News (nieuws - India'
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ibn_lokmat_hls-lh.akamaihd.net/i/ibn_lokmat_hls_n_1@178974/index_3.m3u8:IBN Lokmat Marathi/Hindi (India)
+#DESCRIPTION IBN Lokmat Marathi/Hindi (India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d8rgs2gjqo2ht.cloudfront.net/abr/ngrp%3aindianews_all/master.m3u8:India News (nieuws - India)
+#DESCRIPTION India News (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d8rgs2gjqo2ht.cloudfront.net/abr/ngrp%3anewsharyana_all/master.m3u8:India News Haryana (nieuws - India)
+#DESCRIPTION India News Haryana (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d8rgs2gjqo2ht.cloudfront.net/abr/ngrp%3anewsmp_all/master.m3u8:India News Madhya Pradesh & Chhattisgarh (nieuws - India)
+#DESCRIPTION India News Madhya Pradesh & Chhattisgarh (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d3cjrhqx3ygiqt.cloudfront.net/abr/ngrp%3anewspunjab_all/master.m3u8:India News Punjab (nieuws - India)
+#DESCRIPTION India News Punjab (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d3cjrhqx3ygiqt.cloudfront.net/abr/ngrp%3anewsrajasthan_all/master.m3u8:India News Rajasthan (nieuws - India)
+#DESCRIPTION India News Rajasthan (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d3cjrhqx3ygiqt.cloudfront.net/abr/ngrp%3anewsup_all/master.m3u8:India News Uttar Pradesh (nieuws - India)
+#DESCRIPTION India News Uttar Pradesh (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//indiatvnews-lh.akamaihd.net/i/ITV_1@199237/master.m3u8:India TV (India)
+#DESCRIPTION India TV (India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge-ind.inapcdn.in%3a1935/device2/camera2.stream/playlist.m3u8:JK 24x7 News (India)
+#DESCRIPTION JK 24x7 News (India)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//367449830.r.cdnsun.net/367449830/_definst_/seithigal/chunklist_w456641487.m3u8:Kalaignar Seithigal TV (Tamil) (India)
+#DESCRIPTION Kalaignar Seithigal TV (Tamil) (India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//mbnowweb-lh.akamaihd.net/i/MRN_1@346545/index_576_av-p.m3u8:Mirror Now (nieuws - India)
+#DESCRIPTION Mirror Now (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ndtvstream-lh.akamaihd.net%3a80/i/ndtv_24x7_1@300633/master.m3u8:NDTV 24x7 (India)
+#DESCRIPTION NDTV 24x7 (India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//ibn_lokmat_hls-lh.akamaihd.net/i/ibn_lokmat_hls_n_1@178974/index_5.m3u8:News 18 Lokmat (nieuws - India)
+#DESCRIPTION News 18 Lokmat (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//d3cjrhqx3ygiqt.cloudfront.net/abr/ngrp%3anewsx_all/master.m3u8:NewsX (nieuws - India)
+#DESCRIPTION NewsX (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//50.7.198.170%3a8081/PB/PTCNEWS/playlist.m3u8:PTC News (nieuws - India)
+#DESCRIPTION PTC News (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge-ap2.cloudfrontcdn.in%3a1935/edge1/smartsh4.stream_aac/playlist.m3u8:RPlus News (nieuws - India)
+#DESCRIPTION RPlus News (nieuws - India)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.wmncdn.net/sadhanaplus1/live.stream/index.m3u8:Sadhna Plus News (nieuws - India)
+#DESCRIPTION Sadhna Plus News (nieuws - India)
+#SERVICE 1:64:e0:0:0:0:0:0:0:0:
+#DESCRIPTION ++Indonesië++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//live.cnnindonesia.com/livecnn/smil%3acnntv.smil/playlist.m3u8:CNN INDONESIA (Indonesië)
+#DESCRIPTION CNN INDONESIA (Indonesië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//edge.linknetott.swiftserve.com/live/BsNew/amlst%3absenglish/playlist.m3u8:JAKARTA GLOBE NEWS CHANNEL (Indonesië)
+#DESCRIPTION JAKARTA GLOBE NEWS CHANNEL (Indonesië)
+#SERVICE 1:64:e1:0:0:0:0:0:0:0:
+#DESCRIPTION ++Italië++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rainews1-live.akamaized.net/hls/live/598326/rainews1/rainews_1200/chunklist.m3u8:RAI News (nieuws - Italië)
+#DESCRIPTION RAI News (nieuws - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//skyianywhere2-i.akamaihd.net/hls/live/200275/tg24/stream6/streamPlaylist.m3u8:Sky Tg24 (nieuws - Italië)
+#DESCRIPTION Sky Tg24 (nieuws - Italië)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//origin-free-live1.mediaset.net/content/hls_clr_xo/live/channel(ch10)/index.m3u8:Tgcom24 (nieuws - Italië)
+#DESCRIPTION Tgcom24 (nieuws - Italië)
+#SERVICE 1:64:e2:0:0:0:0:0:0:0:
+#DESCRIPTION ++Japan++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//bcsecurelivehls-i.akamaihd.net/hls/live/265320/5043843989001/140130JTDX/index_600.m3u8:Japanet Channel DX (Japan)
+#DESCRIPTION Japanet Channel DX (Japan)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//nhkwtvglobal-i.akamaihd.net/hls/live/263941/nhkwtvglobal/index_1180.m3u8:NHK World (Japan)
+#DESCRIPTION NHK World (Japan)
+#SERVICE 1:64:e3:0:0:0:0:0:0:0:
+#DESCRIPTION ++Koerdisch++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rajevideo1.flashmediacast.com%3a1935/rajevideo/livestream/chunklist_w1193697746.m3u8:NRT HD (Koerdisch)
+#DESCRIPTION NRT HD (Koerdisch)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//nrt2.flashmediacast.com%3a1935/nrt2/livestream/chunklist_w478741163.m3u8:NRT 2 (Koerdisch)
+#DESCRIPTION NRT 2 (Koerdisch)
+#SERVICE 1:64:e4:0:0:0:0:0:0:0:
+#DESCRIPTION ++Maleisië++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//rtm-live.glueapi.io/smil%3artmch006/playlist.m3u8:TV 1 News (Maleisië)
+#DESCRIPTION TV 1 News (Maleisië)
+#SERVICE 1:64:e5:0:0:0:0:0:0:0:
+#DESCRIPTION ++Peru++
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//v8.ciclano.io%3a1935/visionnoticias/_definst_/visionnoticias/playlist.m3u8:Vision Noticias (nieuws - Peru)
+#DESCRIPTION Vision Noticias (nieuws - Peru)
+#SERVICE 1:64:e6:0:0:0:0:0:0:0:
+#DESCRIPTION ++Polen++
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/20C4EB56/1575/0/hls576/masterlist.m3u8?#User-Agent=Mozilla/5.0:POLSAT NEWS 2
+#DESCRIPTION POLSAT NEWS 2
+#SERVICE 1:64:e7:0:0:0:0:0:0:0:
+#DESCRIPTION ++Rusland++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//85.238.112.40%3a8810/hls_sec/239.17.16.32-.m3u8:100%25 NEWS (nieuws - Rusland)
+#DESCRIPTION 100% NEWS (nieuws - Rusland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//secure-streams.akamaized.net/rt-esp/index2500.m3u8:RT HD Spaanstalig 
+#DESCRIPTION RT HD Spaanstalig 
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//secure-streams.akamaized.net/rt-uk/index2500.m3u8:RT UK HD (Rus)
+#DESCRIPTION RT UK HD (Rus)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//secure-streams.akamaized.net/rt-usa/index2500.m3u8:RT USA HD (Rus)
+#DESCRIPTION RT USA HD (Rus)
+#SERVICE 1:64:e8:0:0:0:0:0:0:0:
+#DESCRIPTION ++Spaans++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//rtvev4-live.hss.adaptive.level3.net/egress/ahandler/rtvegl0/irtve01_lv3_aosv4_gl0/irtve01_lv3_aosv4_gl0.isml/irtve01_lv3_aosv4_gl0-audio=128000-video=400000.m3u8:24 Horas (nieuws - Spanje)
+#DESCRIPTION 24 Horas (nieuws - Spanje)
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//ss6.domint.net%3a1948/zol_str/vzol/playlist.m3u8:Xtremo channel (Spaans)
+#DESCRIPTION Xtremo channel (Spaans)
+#SERVICE 1:64:e9:0:0:0:0:0:0:0:
+#DESCRIPTION ++Turkije++
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:https%3a//tinyurl.com/y7ayffad:CNN TURK (Turkije)
+#DESCRIPTION CNN TURK (Turkije)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//trtcanlitv-lh.akamaihd.net/i/TRTWORLD_1@321783/master.m3u8:TRT World (Engels)
+#DESCRIPTION TRT World (Engels)
+#SERVICE 1:64:ea:0:0:0:0:0:0:0:
+#DESCRIPTION ++USA++
+#SERVICE 4097:0:1:86:0:0:0:0:0:0:http%3a//abclive.abcnews.com/i/abc_live4@136330/master.m3u8:ABC News (USA)
+#DESCRIPTION ABC News (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//abclive.abcnews.com/i/abc_live4@136330/index_2500_av-b.m3u8?sd=10&rebase=on:ABC NEWS (USA)
+#DESCRIPTION ABC NEWS (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cmghlslive-i.akamaihd.net/hls/live/224711/WFTV/master.m3u8:ABC NEWS 9 ORLANDO (nieuws)
+#DESCRIPTION ABC NEWS 9 ORLANDO (nieuws)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn-videos.akamaized.net/btv/desktop/akamai/europe/live/primary.m3u8:Bloomberg (USA)
+#DESCRIPTION Bloomberg (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//bcliveuniv-lh.akamaihd.net/i/news_1@194050/master.m3u8:CBN News (nieuws - USA)
+#DESCRIPTION CBN News (nieuws - USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//www.cbsnews.com/common/video/dai_prod.m3u8:CBS News (nieuws - USA)
+#DESCRIPTION CBS News (nieuws - USA)
+#SERVICE 4097:0:0:0:0:0:0:0:0:0:http%3a//cbsnewshd-lh.akamaihd.net/i/CBSNHD_7@199302/index_2200_av-p.m3u8:CBS News
+#DESCRIPTION CBS News
+#SERVICE 4097:0:1:90:0:0:0:0:0:0:http%3a//cmghlslive-i.akamaihd.net/hls/live/224708/KIRO/564k/prog.m3u8:CBS7 Seattle (USA)
+#DESCRIPTION CBS7 Seattle (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//svc-lvanvato-cxtv-wpxi.cmgvideo.com/wpxi/2564k/index.m3u8:Channel 11 News WPXI (Pittsburgh - USA)
+#DESCRIPTION Channel 11 News WPXI (Pittsburgh - USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//2201.janjuaplayer.com%3a8088/live/cnbc_hulkusc/playlist.m3u8?id=65373&pk=fc42f253ebad10fd1a71dca803e1c513fd15696c662014c2dea3af942695911b:CNBC USA (USA)
+#DESCRIPTION CNBC USA (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//nl2.vaders.tv/usa_cnn_news_hd/tracks-v1a1/mono.m3u8?token=djIubG9jYWwuNVYzV3dyVGV6QWVuQS1PeVY5STZFSUgyTjFfbGJ3ZWN0WUJVS0pKOFNtbGJiLVFUNjN1Wk9rTlJONmNDTzZaVXV1LXR1NmN2bnk5S2FJMmRKN29KTmZlVTBfM2p3eWw2NVhzcldDcm1EMGROSzFLNWVQOHN6dmQxa0dxdkxFZzV4YjRVU0RqaDhOQmdQZmR4RHA1a05LVGdBTHQ4MVdHVFplQ0I1TVdndTVhUEFUekUzNHg1NEVRSWxSTHBYUXd6VXpTdVYtY0hJcFFvRkV5b0V3:CNN USA (USA)
+#DESCRIPTION CNN USA (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//203.162.235.41%3a17818/:CNN
+#DESCRIPTION CNN
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wgntribune-lh.akamaihd.net/i/WGNPrimary_1@304622/master.m3u8:CW 9 Chicago, IL
+#DESCRIPTION CW 9 Chicago, IL
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//api.new.livestream.com/accounts/1859803/events/1648429/live.m3u8:Fox 10 News (USA)
+#DESCRIPTION Fox 10 News (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//api.new.livestream.com/accounts/6396566/events/2598525/live.m3u8:FOX 2 News (USA)
+#DESCRIPTION FOX 2 News (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//api.new.livestream.com/accounts/6370754/events/2591860/live.m3u8:Fox 29 News (USA)
+#DESCRIPTION Fox 29 News (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tribwdaf-lh.akamaihd.net/i/WDAFBreaking_1@394769/index_1900_av-b.m3u8?sd=10&rebase=on:Fox 4 News Kansas City, MI
+#DESCRIPTION Fox 4 News Kansas City, MI
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//fnurtmp-f.akamaihd.net/i/FNRADIO_1@92141/master.m3u8:Fox News Talk Radio (USA)
+#DESCRIPTION Fox News Talk Radio (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//tvemsnbc-lh.akamaihd.net/i/nbcmsnbc_1@122532/master.m3u8:MSNBC (USA)
+#DESCRIPTION MSNBC (USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wcaulive-f.akamaihd.net/i/wcaua1_1@13991/master.m3u8:NBC 10 NEWS PHILADELPHIA (nieuws)
+#DESCRIPTION NBC 10 NEWS PHILADELPHIA (nieuws)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.iptv.optimum.net/news12/nipadlive/index_new.m3u8?callsign=N12WH_WESTCHESTER:News 12 (Westchester - USA)
+#DESCRIPTION News 12 (Westchester - USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.iptv.optimum.net/news12/nipadlive/index_new.m3u8?callsign=N12TW_NYC:News 12 Bronx & Brooklyn (Weather)
+#DESCRIPTION News 12 Bronx & Brooklyn (Weather)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.iptv.optimum.net/news12/nipadlive/index_new.m3u8?callsign=N12TW_CT:News 12 Connecticut (Weather)
+#DESCRIPTION News 12 Connecticut (Weather)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.iptv.optimum.net/news12/nipadlive/index_new.m3u8?callsign=N12TW_WC:News 12 Hudson Valley & Westchester (Weather)
+#DESCRIPTION News 12 Hudson Valley & Westchester (Weather)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.iptv.optimum.net/news12/nipadlive/index_new.m3u8?callsign=N12TW_LI:News 12 Long Island (Weather)
+#DESCRIPTION News 12 Long Island (Weather)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.iptv.optimum.net/news12/nipadlive/index_new.m3u8?callsign=N12TW_NJ:News 12 New Jersey (Weather)
+#DESCRIPTION News 12 New Jersey (Weather)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//api.new.livestream.com/accounts/19128364/events/5285531/live.m3u8:News Channel 21 (Oregon - USA)
+#DESCRIPTION News Channel 21 (Oregon - USA)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdnapi.kaltura.com/p/931702/sp/93170200/playManifest/entryId/1_oorxcge2/format/applehttp/protocol/http/uiConfId/28428751/a.m3u8:The Weather Channels US
+#DESCRIPTION The Weather Channels US
+#SERVICE 4097:0:1:84:0:0:0:0:0:0:http%3a//wgntribune-lh.akamaihd.net/i/WGNPrimary_1@304622/master.m3u8:WGN News Chicago (USA)
+#DESCRIPTION WGN News Chicago (USA)

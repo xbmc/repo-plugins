@@ -1,0 +1,13 @@
+#NAME Stream Ierland
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//media.heanet.ie/oirlive/dail/ngrp%3adail.stream_all/playlist.m3u8:Parlement Ierland (Ierland)
+#DESCRIPTION Parlement Ierland (Ierland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//163.172.15.141%3a9732/live?channelId=113&deviceMac=00%3a1A%3a79%3a49%3aED%3a5D&uid=5352:RTE 1 (Ierland)
+#DESCRIPTION RTE 1 (Ierland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//163.172.15.141%3a9732/live?channelId=114&deviceMac=00%3a1A%3a79%3a49%3aED%3a5D&uid=5352:RTE 2 (Ierland)
+#DESCRIPTION RTE 2 (Ierland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//cdn.rasset.ie/hls-live/_definst_/rtejr/rtejr-576.m3u8:RTE jr (Ierland)
+#DESCRIPTION RTE jr (Ierland)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//wmsv1.rte.ie/live/smil%3aiphone.smil/playlist.m3u8:RTE News Now
+#DESCRIPTION RTE News Now
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//csm-e.cds1.yospace.com/csm/live/74246610.m3u8?yo.ac=true&yo.u=1507501456:TG 4 (Ierland)
+#DESCRIPTION TG 4 (Ierland)

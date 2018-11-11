@@ -1,0 +1,129 @@
+#NAME Stream Polen
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/99520853/1576/0/hls576/masterlist.m3u8:4FUN Dance
+#DESCRIPTION 4FUN Dance
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/25670764/1580/0/hls576/576p/list.m3u8?#User-Agent=Mozilla/5.0:4FUN Hits (Polen)
+#DESCRIPTION 4FUN Hits (Polen)
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/99520853/1576/0/hls576/576p/list.m3u8?#User-Agent=Mozilla/5.0:4FUN TV
+#DESCRIPTION 4FUN TV
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/894619ED/1579/0/hls576/masterlist.m3u8:4FUN TV
+#DESCRIPTION 4FUN TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream85.polskieradio.pl/sat/streama.stream/playlist.m3u8:Czwolka webcam radio (Polen)
+#DESCRIPTION Czwolka webcam radio (Polen)
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//94.246.128.53%3a1935/tv/_definst_/dlaCiebieTv/playlist.m3u8:Dla ciebie TV (Polen)
+#DESCRIPTION Dla ciebie TV (Polen)
+#SERVICE 4097:0:1:2c:0:4c:0:0:0:0:https%3a//stream.smcdn.pl/fokustv-p/stream1/playlist.m3u8:Fokus TV (Polen)
+#DESCRIPTION Fokus TV (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//stream.smcdn.pl/fokustv-p/stream1/playlist.m3u8:Fokus TV
+#DESCRIPTION Fokus TV
+#SERVICE 4097:0:1:2b:0:1:0:0:0:0:http%3a//stream.hopechannel.pl/livetv/colombo/hope_high/index.m3u8:Hope Channel (Polen)
+#DESCRIPTION Hope Channel (Polen)
+#SERVICE 4097:0:1:32:0:47:0:0:0:0:https%3a//stream.tvimperium.pl/ram/hls_adaptive/tvimperium_hi/index.m3u8:Imperium TV Gliwice (Polen)
+#DESCRIPTION Imperium TV Gliwice (Polen)
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/B34FB49D/1567/0/hls576/576p/list.m3u8?#User-Agent=Mozilla/5.0:KINO POLSKA MUSIC
+#DESCRIPTION KINO POLSKA MUSIC
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/B34FB49D/1567/0/hls576/masterlist.m3u8:Kino Polska Muzyka
+#DESCRIPTION Kino Polska Muzyka
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/76929AC6/1571/0/hls576/masterlist.m3u8:Kino Polska
+#DESCRIPTION Kino Polska
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream.tvkujawy.pl%3a8080/live/broadcast.m3u8:Kujawy (Polen)
+#DESCRIPTION Kujawy (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//stream.tvkujawy.pl/live/broadcast:Kujawy TV (Polen)
+#DESCRIPTION Kujawy TV (Polen)
+#SERVICE 4097:0:1:17:0:f:0:0:0:0:rtmp%3a//stream.tvkujawy.pl/live/broadcast:Kujawy TV
+#DESCRIPTION Kujawy TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ec05.waw2.cache.orange.pl/jupiter/o1-cl3/live/wtk-b-lechtv/live.m3u8:Lech TV (Polen)
+#DESCRIPTION Lech TV (Polen)
+#SERVICE 4097:0:1:b:0:63:0:0:0:0:https%3a//stream.mango.pl%3a4443/mango/_definst_/live/chunklist_w762274906.m3u8:Mango TV (Polen)
+#DESCRIPTION Mango TV (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//94.130.255.149%3a8080/hls/opoka_tv_live.m3u8:Opoka TV (Polen)
+#DESCRIPTION Opoka TV (Polen)
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/4C97F3A2/11306/0/hls576/576p/list.m3u8?#User-Agent=Mozilla/5.0:POLSAT CRIME (Polen)
+#DESCRIPTION POLSAT CRIME (Polen)
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/4C97F3A2/11306/0/hls576/masterlist.m3u8:Polsat Crime Investigation
+#DESCRIPTION Polsat Crime Investigation
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/20C4EB56/1575/0/hls576/masterlist.m3u8:Polsat News 2
+#DESCRIPTION Polsat News 2
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/20C4EB56/1575/0/hls576/masterlist.m3u8?#User-Agent=Mozilla/5.0:POLSAT NEWS 2
+#DESCRIPTION POLSAT NEWS 2
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream85.polskieradio.pl/sat/streamb.stream/playlist.m3u8:Polskie Radio 24 webcam radio (Polen)
+#DESCRIPTION Polskie Radio 24 webcam radio (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//m1-tvrepublika.4vod.tv/smil%3apremium_abr.ism/playlist.m3u8:Republika (Polen)
+#DESCRIPTION Republika (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//stream.sferatv.pl/sferalive/_definst_/mp4%3alive3:Sfera TV (Polen)
+#DESCRIPTION Sfera TV (Polen)
+#SERVICE 4097:0:1:f:0:11:0:0:0:0:rtmp%3a//stream.sferatv.pl/sferalive/_definst_/mp4%3alive3:Sfera TV
+#DESCRIPTION Sfera TV
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//starstv.live.e55-po.insyscd.net/starstvhd.smil/index.m3u8:Stars TV (Polen)
+#DESCRIPTION Stars TV (Polen)
+#SERVICE 4097:0:1:b:0:15:0:0:0:0:rtmp%3a//live-tvk.tvkstella.pl/flvplayback/StellaLive:Stella
+#DESCRIPTION Stella
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/97100F84/1577/0/hls576/masterlist.m3u8:Superstacja
+#DESCRIPTION Superstacja
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/97100F84/1577/0/hls576/576p/list.m3u8?#User-Agent=Mozilla/5.0:SUPERSTACJA
+#DESCRIPTION SUPERSTACJA
+#SERVICE 4097:0:1:b:0:14:0:0:0:0:rtsp%3a//trwamtv.live.e53-po.insyscd.net/trwamtv.live-rtsp/trwamtv_500.stream:Trwam TV
+#DESCRIPTION Trwam TV
+#SERVICE 4097:0:1:16:0:2:0:0:0:0:http%3a//94.246.169.19/ttv_hls/live_720p/index.m3u8?:TTV HD (Polen)
+#DESCRIPTION TTV HD (Polen)
+#SERVICE 4097:0:1:16:0:2:0:0:0:0:http%3a//94.246.169.19/ttv_hls/live_360p/index.m3u8:TTV SD (Polen)
+#DESCRIPTION TTV SD (Polen)
+#SERVICE 4097:0:1:21:0:58:0:0:0:0:http%3a//m2-tvrepublika.4vod.tv/smil%3apremium_abr.ism/chunklist_b1600000.m3u8?:TV Republika (Polen)
+#DESCRIPTION TV Republika (Polen)
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/93F156C9/2643/0/hls576/masterlist.m3u8:TV Republika
+#DESCRIPTION TV Republika
+#SERVICE 4097:0:1:2b:0:4c:0:0:0:0:http%3a//217.173.176.107%3a1935/live/ngrp%3atvk.stream_all/master.m3u8:TV Toruń (Polen)
+#DESCRIPTION TV Toruń (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//trwamtv.live.e96-jw.insyscd.net/trwamtv.smil/chunklist.m3u8:TV TRWAM (Polen)
+#DESCRIPTION TV TRWAM (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream4.nadaje.com%3a15308/live/stream-1/chunklist_w734420720.m3u8:TV Wielkopolska (Polen)
+#DESCRIPTION TV Wielkopolska (Polen)
+#SERVICE 4097:0:1:b:0:c:0:0:0:0:https%3a//redir.cache.orange.pl/jupiter/o2-cl4//livetvopl/list.m3u8:tvo (Polen)
+#DESCRIPTION tvo (Polen)
+#SERVICE 4097:0:1:7:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpbialystok:TVP 3 Białystok (Polen)
+#DESCRIPTION TVP 3 Białystok (Polen)
+#SERVICE 4097:0:1:8:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpbydgoszcz:TVP 3 Bydgoszcz (Polen)
+#DESCRIPTION TVP 3 Bydgoszcz (Polen)
+#SERVICE 4097:0:1:9:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpgdansk:TVP 3 Gdańsk (Polen)
+#DESCRIPTION TVP 3 Gdańsk (Polen)
+#SERVICE 4097:0:1:10:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpgorzow:TVP 3 Gorzów (Polen)
+#DESCRIPTION TVP 3 Gorzów (Polen)
+#SERVICE 4097:0:1:11:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpkatowice:TVP 3 Katowice (Polen)
+#DESCRIPTION TVP 3 Katowice (Polen)
+#SERVICE 4097:0:1:12:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpkielce:TVP 3 Kielce (Polen)
+#DESCRIPTION TVP 3 Kielce (Polen)
+#SERVICE 4097:0:1:13:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpkrakow:TVP 3 Kraków (Polen)
+#DESCRIPTION TVP 3 Kraków (Polen)
+#SERVICE 4097:0:1:14:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvplublin:TVP 3 Lublin (Polen)
+#DESCRIPTION TVP 3 Lublin (Polen)
+#SERVICE 4097:0:1:16:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpolsztyn:TVP 3 Olsztyn (Polen)
+#DESCRIPTION TVP 3 Olsztyn (Polen)
+#SERVICE 4097:0:1:17:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpopole:TVP 3 Opole (Polen)
+#DESCRIPTION TVP 3 Opole (Polen)
+#SERVICE 4097:0:1:18:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvppoznan:TVP 3 Poznań (Polen)
+#DESCRIPTION TVP 3 Poznań (Polen)
+#SERVICE 4097:0:1:19:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvprzeszow:TVP 3 Rzeszów (Polen)
+#DESCRIPTION TVP 3 Rzeszów (Polen)
+#SERVICE 4097:0:1:20:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpszczecin:TVP 3 Szczecin (Polen)
+#DESCRIPTION TVP 3 Szczecin (Polen)
+#SERVICE 4097:0:1:21:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpwarszawa:TVP 3 Warszawa (Polen)
+#DESCRIPTION TVP 3 Warszawa (Polen)
+#SERVICE 4097:0:1:22:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpwroclaw:TVP 3 Wrocław (Polen)
+#DESCRIPTION TVP 3 Wrocław (Polen)
+#SERVICE 4097:0:1:15:0:48:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvplodz:TVP 3 Łódź (Polen)
+#DESCRIPTION TVP 3 Łódź (Polen)
+#SERVICE 4097:0:1:10:0:8:0:0:0:0:http%3a//hbbtvlive.v3.tvp.pl/hbbtvlive/livestream.php?app_id=tvpinfo:TVP Info
+#DESCRIPTION TVP Info
+#SERVICE 4097:0:1:24:0:4a:0:0:0:0:http%3a//gargoyle.tomkow.pl/hls/tvt.m3u8:TVT Zgorzelec (Polen)
+#DESCRIPTION TVT Zgorzelec (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//94.246.169.19/ttv_hls/live_270p/index.m3u8:Twoja TV (Polen)
+#DESCRIPTION Twoja TV (Polen)
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/27D4F385/4195/0/hls576/masterlist.m3u8:Viasat Nature
+#DESCRIPTION Viasat Nature
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//94.246.169.19/ttv_hls/live_720p/index.m3u8?#User-Agent=Mozilla/5.0:WIFI-Films PL (Polen)
+#DESCRIPTION WIFI-Films PL (Polen)
+#SERVICE 4097:0:1:23:0:49:0:0:0:0:https%3a//av-cdn-1.wpimg.pl/tv24/ngrp%3awp1/chunklist_b1628000.m3u8:WP 1
+#DESCRIPTION WP 1
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//av-cdn-1.wpimg.pl/tv24/ngrp%3awp1/chunklist_b1628000.m3u8:WP1 (Polen)
+#DESCRIPTION WP1 (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//ec05.waw2.cache.orange.pl/jupiter/o1-cl3/live/wtk-b-wtktv/live-wtk-b-wtktv-3600k.m3u8:WTK Poznan (Polen)
+#DESCRIPTION WTK Poznan (Polen)

@@ -1,0 +1,5 @@
+#NAME Stream Letland en Litouwen
+#SERVICE 4097:0:1:41:2:6:0:0:0:0:http%3a//live.mixnews.lv/live/mp4%3amixfm/playlist.m3u8:Mix FM Riga - Visual Radio (Letland)
+#DESCRIPTION Mix FM Riga - Visual Radio (Letland)
+#SERVICE 4097:0:1:40:2:6:0:0:0:0:http%3a//m-1.data.lt/m-1/smil%3am-1.smil/playlist.m3u8:Radio M-1 Visual Radio (muziek - Litouwen)
+#DESCRIPTION Radio M-1 Visual Radio (muziek - Litouwen)

@@ -1,0 +1,21 @@
+#NAME Stream Kosovo
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//shkoder.gjirafa.com/live/qmTKvskk60iLvvS8LKzac9k72BP3L0kK/kohavision-MjY3Njc1-720/index.m3u8:ARTA TV (Kosovo)
+#DESCRIPTION ARTA TV (Kosovo)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//82.114.65.202%3a1935/live/rrokumtv/chunklist.m3u8  :Rrokum TV (Kosovo)
+#DESCRIPTION Rrokum TV (Kosovo)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream1.rtkit.com%3a1935/rtk1stream/rtk1.stream/playlist.m3u8:RTK 1 (Kosovo) zacht geluid
+#DESCRIPTION RTK 1 (Kosovo) zacht geluid
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream1.rtkit.com%3a1935/rtk2stream/rtk2.stream/playlist.m3u8:RTK 2 (Kosovo)
+#DESCRIPTION RTK 2 (Kosovo)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream2.rtkit.com%3a1935/rtk3stream/rtk3.stream/playlist.m3u8:RTK 3 (Kosovo)
+#DESCRIPTION RTK 3 (Kosovo)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//stream2.rtkit.com%3a1935/rtk4stream/rtk4.stream/playlist.m3u8:RTK 4 (Kosovo)
+#DESCRIPTION RTK 4 (Kosovo)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//37.26.69.49%3a80/live/syri app=live pageUrl=http%3a//syri-vision.tv/tv/live.html swfUrl=http%3a//syri-vision.tv/tv/swfs/StrobeMediaPlayback.swf tcUrl=rtmp%3a//37.26.69.49%3a80/live playPath=syri live=1:Syri (Albanië en Kosovo)
+#DESCRIPTION Syri (Albanië en Kosovo)
+#SERVICE 1:64:135:0:0:0:0:0:0:0:
+#DESCRIPTION ++radio uit Kosovo++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//82.114.72.2%3a8088/;stream.mp3:Radio Kosova (Kosovo)
+#DESCRIPTION Radio Kosova (Kosovo)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//82.114.72.2%3a8098/;stream.mp3:Radio Kosova 2 (Kosovo)
+#DESCRIPTION Radio Kosova 2 (Kosovo)

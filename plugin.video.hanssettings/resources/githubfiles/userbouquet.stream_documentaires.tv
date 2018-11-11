@@ -1,0 +1,25 @@
+#NAME Stream Documentaires
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//mhms5.airtel.tv/PLTV/88888888/224/3221226201/01.m3u8:Animal Planet HD (docu - UK)
+#DESCRIPTION Animal Planet HD (docu - UK)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//mhms5.airtel.tv/PLTV/88888888/224/3221226205/01.m3u8:Discovery World (docu - UK)
+#DESCRIPTION Discovery World (docu - UK)
+#SERVICE 5002:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/D25BC5E8/1572/0/hls720/masterlist.m3u8:DocuBox (Polen)
+#DESCRIPTION DocuBox (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//urtmpkal-f.akamaihd.net/i/12qekz6vu_1@180481/index_1_av-p.m3u8?sd=10&rebase=on:Evenaar
+#DESCRIPTION Evenaar
+#SERVICE 4097:0:1:1:0:0:0:0:0:0:http%3a//93.190.140.42%3a8081/websitesilence/live/chunks.m3u8:Silence TV (Voorburg)
+#DESCRIPTION Silence TV (Voorburg)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//109.236.85.100%3a8081/sipTV/live/playlist.m3u8:Silence TV World
+#DESCRIPTION Silence TV World
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:https%3a//kiev1-cdn.lanet.tv/live/2009.m3u8:UA - Lanet TV Home (Oekraïne - open haard op tv)
+#DESCRIPTION UA - Lanet TV Home (Oekraïne - open haard op tv)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/00643E2B/4196/0/hls720/720p/list.m3u8?#User-Agent=Mozilla/5.0:VIASAT EXPLORE HD (Polen)
+#DESCRIPTION VIASAT EXPLORE HD (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/C1F25A0A/4194/0/hls720/720p/list.m3u8?#User-Agent=Mozilla/5.0:VIASAT HISTORY HD (Polen)
+#DESCRIPTION VIASAT HISTORY HD (Polen)
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:http%3a//hls.redefine.pl/27D4F385/4195/0/hls576/576p/list.m3u8?#User-Agent=Mozilla/5.0:VIASAT NATURE (Polen)
+#DESCRIPTION VIASAT NATURE (Polen)
+#SERVICE 1:64:b8:0:0:0:0:0:0:0:
+#DESCRIPTION +++Tjechie+++
+#SERVICE 4097:0:1:0:0:0:0:0:0:0:rtmp%3a//rtmp.elektrika.cz/live/myStream.sdp:Elektrika TV
+#DESCRIPTION Elektrika TV

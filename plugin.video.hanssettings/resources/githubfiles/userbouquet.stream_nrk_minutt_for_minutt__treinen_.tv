@@ -1,0 +1,87 @@
+#NAME Stream NRK Minutt for Minutt (treinen)
+#SERVICE 1:64:136:0:0:0:0:0:0:0:
+#DESCRIPTION Sommertoget 2017
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-00.akamaized.net/world/65900/0/hls/enrk60000117/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-06-27 Bodo - Rognan
+#DESCRIPTION 2017-06-27 Bodo - Rognan
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/66277/0/hls/enrk60000217/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-06-28 Rognan - Mo i Rana
+#DESCRIPTION 2017-06-28 Rognan - Mo i Rana
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/66786/0/hls/enrk60000317/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-06-29 Mo i Rana - Trofors
+#DESCRIPTION 2017-06-29 Mo i Rana - Trofors
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/67084/0/hls/enrk60000417/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-06-30 Trofors - Grong
+#DESCRIPTION 2017-06-30 Trofors - Grong
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-60.akamaized.net/world/67260/0/hls/enrk60000517/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-01 Grong - Steinkjer
+#DESCRIPTION 2017-07-01 Grong - Steinkjer
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-56.akamaized.net/world/68056/0/hls/enrk60000617/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-04 Steinkjer - Hommelvik
+#DESCRIPTION 2017-07-04 Steinkjer - Hommelvik
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//httpcache0-47115-cacheod0.dna.qbrick.com/47115-cacheod1/68514/0/hls/enrk60000717/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-05 Hommelvik - Storen
+#DESCRIPTION 2017-07-05 Hommelvik - Storen
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//httpcache0-47115-cacheod0.dna.qbrick.com/47115-cacheod1/68883/0/hls/enrk60000817/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-06 Storen - Oppdal
+#DESCRIPTION 2017-07-06 Storen - Oppdal
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//httpcache0-47115-cacheod0.dna.qbrick.com/47115-cacheod1/69189/0/hls/enrk60000917/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-07 Oppdal - Dombas
+#DESCRIPTION 2017-07-07 Oppdal - Dombas
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//httpcache0-47115-cacheod0.dna.qbrick.com/47115-cacheod1/69366/0/hls/enrk60001017/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-08 Dombas - Andalsnes
+#DESCRIPTION 2017-07-08 Dombas - Andalsnes
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/70106/0/hls/enrk60001117/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-11 Andalsnes - Vinstra
+#DESCRIPTION 2017-07-11 Andalsnes - Vinstra
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/70571/0/hls/enrk60001217/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-12 Vinstra - Moelv
+#DESCRIPTION 2017-07-12 Vinstra - Moelv
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-89.akamaized.net/world/70989/0/hls/enrk60001317/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-13 Moelv - Rena
+#DESCRIPTION 2017-07-13 Moelv - Rena
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-62.akamaized.net/world/71262/0/hls/enrk60001417/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-14 Rena - Alvdal
+#DESCRIPTION 2017-07-14 Rena - Alvdal
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/71472/0/hls/enrk60001517/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-15 Alvdal - Roros
+#DESCRIPTION 2017-07-15 Alvdal - Roros
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/72611/0/hls/enrk60001617/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-18 Roros - Tynset
+#DESCRIPTION 2017-07-18 Roros - Tynset
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-53.akamaized.net/world/72953/0/hls/enrk60001717/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-19 Tynset - Elverum
+#DESCRIPTION 2017-07-19 Tynset - Elverum
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a///nrk-od.telenorcdn.net/73146/0/hls/enrk60001817/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-20 Elverum - Kongsvinger
+#DESCRIPTION 2017-07-20 Elverum - Kongsvinger
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-68.akamaized.net/world/73568/0/hls/enrk60001917/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-21 Kongsvinger - Grorud
+#DESCRIPTION 2017-07-21 Kongsvinger - Grorud
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/73790/0/hls/enrk60002017/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-22 Grorud - Eidsvoll - Deel 1
+#DESCRIPTION 2017-07-22 Grorud - Eidsvoll - Deel 1
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/73779/0/hls/enrk60004217/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-22 Grorud - Eidsvoll - Deel 2
+#DESCRIPTION 2017-07-22 Grorud - Eidsvoll - Deel 2
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/74494/0/hls/enrk60002117/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-25 Eidsvoll - Gran
+#DESCRIPTION 2017-07-25 Eidsvoll - Gran
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/74757/0/hls/enrk60002217/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-26 Gran - Fla
+#DESCRIPTION 2017-07-26 Gran - Fla
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-59.akamaized.net/world/75059/0/hls/enrk60002317/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-27 Fla - Finse
+#DESCRIPTION 2017-07-27 Fla - Finse
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-25.akamaized.net/world/75325/0/hls/enrk60002417/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-28 Finse - Flam
+#DESCRIPTION 2017-07-28 Finse - Flam
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-38.akamaized.net/world/75538/0/hls/enrk60002517/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-07-29 Flam - Voss
+#DESCRIPTION 2017-07-29 Flam - Voss
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-12.akamaized.net/world/76312/0/hls/enrk60002617/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-01 Voss - Al
+#DESCRIPTION 2017-08-01 Voss - Al
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/76570/0/hls/enrk60002717/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-02 Al - Honefoss
+#DESCRIPTION 2017-08-02 Al - Honefoss
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/76855/0/hls/enrk60002817/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-03 Honefoss - Stokke
+#DESCRIPTION 2017-08-03 Honefoss - Stokke
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-50.akamaized.net/world/77150/0/hls/enrk60002917/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-04 Stokke - Porsgrunn
+#DESCRIPTION 2017-08-04 Stokke - Porsgrunn
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/77373/0/hls/enrk60003017/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-05 Porsgrunn - Notodden
+#DESCRIPTION 2017-08-05 Porsgrunn - Notodden
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/78152/0/hls/enrk60003117/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-08 Notodden - Nelaug
+#DESCRIPTION 2017-08-08 Notodden - Nelaug
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/78412/0/hls/enrk60003217/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-09 Nelaug - Marnardal
+#DESCRIPTION 2017-08-09 Nelaug - Marnardal
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-19.akamaized.net/world/78719/0/hls/enrk60003317/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-10 Marnardal - Brusand
+#DESCRIPTION 2017-08-10 Marnardal - Brusand
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-19.akamaized.net/world/79019/0/hls/enrk60003417/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-11 Brusand - Sira
+#DESCRIPTION 2017-08-11 Brusand - Sira
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-27.akamaized.net/world/79227/0/hls/enrk60003517/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-12 Sira - Vennesla
+#DESCRIPTION 2017-08-12 Sira - Vennesla
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/79946/0/hls/enrk60003617/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-15 Vennesla - Bo
+#DESCRIPTION 2017-08-15 Vennesla - Bo
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-15.akamaized.net/world/80215/0/hls/enrk60003717/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-16 Bo - Vestfossen
+#DESCRIPTION 2017-08-16 Bo - Vestfossen
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/80514/0/hls/enrk60003817/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-17 Vestfossen - As
+#DESCRIPTION 2017-08-17 Vestfossen - As
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/80817/0/hls/enrk60003917/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-18 As - Rade
+#DESCRIPTION 2017-08-18 As - Rade
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od.telenorcdn.net/81064/0/hls/enrk60004017/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:2017-08-19 Rade - Sarpsborg
+#DESCRIPTION 2017-08-19 Rade - Sarpsborg
+#SERVICE 4097:0:2:0:0:0:0:0:0:0:https%3a//nrk-od-65.akamaized.net/world/81065/0/hls/enrk61000017/playlist.m3u8?b=10-3500&bw_start=1200&no_audio_only&no_subtitles:Sommertoget 2017
+#DESCRIPTION Sommertoget 2017

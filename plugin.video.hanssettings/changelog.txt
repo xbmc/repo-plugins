@@ -1,0 +1,17 @@
+﻿﻿Version 1.0.5
+* Review changes after pull-request
+
+Version 1.0.4
+* Processbar
+
+Version 1.0.3
+* Description from files.
+
+Version 1.0.2
+* xbmcswift2 is gone.
+
+Version 1.0.1
+* Fixxes 302 Redirects
+
+Version 1.0.0
+* Initial version

@@ -18,6 +18,7 @@
         <setting id="Shows_By_Date" type="bool" label="30057" default="true" />
         <setting id="Live_TV" type="bool" label="30070" default="true" />
         <setting id="SRF_Live" type="bool" label="30072" default="true" />
+        <setting id="SRF_YouTube" type="bool" label="30074" default="true" />
     </category>
     <category label="30011">
         <setting label="30005" type="action" action="RunPlugin(plugin://plugin.video.srfplaytv?mode=19)" />        

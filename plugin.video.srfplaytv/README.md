@@ -18,6 +18,7 @@ Bring the full power of the [SRF Play TV media library](https://www.srf.ch/play/
  - [x] Subtitle support.
  - [x] Livestreams that are exclusively broadcasted on SRF.ch (only available in Switzerland).
  - [x] Live TV support: SRF 1, SRF 2 and SRF info (only available in Switzerland).
+ - [x] SRF on YouTube: Browse the official SRF channels on YouTube.
 
 ## Planned features
  - [ ] Twitter integration: For shows with a SRF hashtag (e.g. #srfarena) get the tweets which were emitted during the show on the screen.
@@ -33,7 +34,6 @@ Bring the full power of the [SRF Play TV media library](https://www.srf.ch/play/
 How you can help improving this plugin:
  - For bugs and feature requests use the [issue tracker](https://github.com/goggle/plugin.video.srfplaytv/issues) on the github page.
  - Feel free to submit a pull request. Please style your code according to [PEP 8](https://www.python.org/dev/peps/pep-0008/).
- - If you can provide a French or Italian translation, let me know.
 
 If you like this plugin, consider to make a donation to the author:
 
@@ -47,3 +47,7 @@ If you like this plugin, consider to make a donation to the author:
 ![Main menu](https://raw.githubusercontent.com/goggle/plugin.video.srfplaytv/master/resources/screenshot-01.png)
 ![A list menu](https://raw.githubusercontent.com/goggle/plugin.video.srfplaytv/master/resources/screenshot-02.png)
 ![Episode information](https://raw.githubusercontent.com/goggle/plugin.video.srfplaytv/master/resources/screenshot-03.png)
+
+## Thanks
+ - Thanks to @giovannipessiva for providing an Italian translation.
+ - Thanks @nmielec for providing a French translation.

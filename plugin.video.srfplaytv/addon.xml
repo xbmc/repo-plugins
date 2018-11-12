@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.srfplaytv" name="SRF Play TV" version="1.1.0" provider-name="Alexander Seiler">
+<addon id="plugin.video.srfplaytv" name="SRF Play TV" version="1.2.0" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.simplecache" version="1.0.0"/>
@@ -8,10 +8,13 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
+    <summary lang="fr_FR">SRF Play vidéothèque</summary>
     <summary lang="en_GB">SRF Play television video library</summary>
     <summary lang="de_DE">SRF Play Videobibliothek</summary>
+    <description lang="fr_FR">Avec SRF Play TV vous pouvez regarder les vidéos de la vidéothèque de la Radio télévision suisse (SRF).</description>
     <description lang="en_GB">SRF Play TV allows you to watch the content from the video library of Swiss Radio and Television (SRF).</description>
     <description lang="de_DE">Mit SRF Play TV können Sie den Inhalt der SRF Play Videobibliothek des Schweizer Fernsehens anschauen.</description>
+    <disclaimer lang="fr_FR">Certains contenus sont géo-bloqués et disponibles uniquement en Suisse.</disclaimer>
     <disclaimer lang="en_GB">Some content is geo-blocked and only available in Switzerland.</disclaimer>
     <disclaimer lang="de_DE">Einige Inhalte sind nur in der Schweiz verfügbar.</disclaimer>
     <language>de</language>
@@ -21,27 +24,25 @@
     <website>https://www.srf.ch/play/tv</website>
     <email>seileralex@gmail.com</email>
     <source>https://github.com/goggle/plugin.video.srfplaytv</source>
-    <news>v1.1.0 (2018-07-01)
-     - Add support for Radio SRF 3 video livestreams.
+    <news>v1.2.0 (2018-11-12)
+ - Add French translation.
+ - Add Italian translation.
+ - Add YouTube support.
+v1.1.0 (2018-07-01)
+ - Add support for Radio SRF 3 video livestreams.
 
-    v1.0.1 (2018-06-07)
-     - Only list srf.ch live events if livestream is available.
-     - Ignore invalid video ids in episode menu.
-     - Translate 'Next page' string.
-    
-    v1.0.0 (2018-04-24)
-     - Add support for SRF.ch livestreams.
-     - Add support for Live TV (SRF 1, SRF 2, SRF info).
-     - Choose folders to appear in the main menu.
-    
-    v0.9.3 (2018-04-22)
-     - Add date picker for choosing shows by date.
-    </news>
+v1.0.1 (2018-06-07)
+ - Only list srf.ch live events if livestream is available.
+ - Ignore invalid video ids in episode menu.
+ - Translate 'Next page' string.
+
+v1.0.0 (2018-04-24)
+ - Add support for SRF.ch livestreams.
+ - Add support for Live TV (SRF 1, SRF 2, SRF info).
+ - Choose folders to appear in the main menu.</news>
     <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.png</fanart>
-        <banner></banner>
-        <clearlogo></clearlogo>
         <screenshot>resources/screenshot-01.png</screenshot>
         <screenshot>resources/screenshot-02.png</screenshot>
         <screenshot>resources/screenshot-03.png</screenshot>

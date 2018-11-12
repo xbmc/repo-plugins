@@ -1,148 +1,148 @@
 # Kodi Media Center language file
-# Addon Name: SRF Play TV
-# Addon id: plugin.video.srfplaytv
+# Addon Name: RTS Play TV
+# Addon id: plugin.video.RTSplaytv
 # Addon Provider: Alexander Seiler
 msgid ""
 msgstr ""
-"Project-Id-Version: plugin.video.srfplaytv\n"
+"Project-Id-Version: plugin.video.rtsplaytv\n"
 "Report-Msgid-Bugs-To: seileralex@gmail.com\n"
-"POT-Creation-Date: 2018-04-11 10:28+0200\n"
-"PO-Revision-Date: 2018-04-17 15:47+0200\n"
-"Last-Translator: Alexander Seiler\n"
+"POT-Creation-Date: 2018-11-05 15:26+0200\n"
+"PO-Revision-Date: 2018-11-05 15:26+0200\n"
+"Last-Translator: Nicolas Mielec\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30000"
 msgid "Enable debugging"
-msgstr ""
+msgstr "Activer le débogage"
 
 msgctxt "#30001"
 msgid "Enable show segments"
-msgstr ""
+msgstr "Activer l'affichage des segments"
 
 msgctxt "#30002"
 msgid "Prefer HD quality"
-msgstr ""
+msgstr "Privilégier qualité HD"
 
 msgctxt "#30003"
 msgid "Enable segments in topical playlists"
-msgstr ""
+msgstr "Activer les segments dans les listes thématiques"
 
 msgctxt "#30004"
 msgid "Enable subtitles"
-msgstr ""
+msgstr "Activer les sous-titres"
 
 msgctxt "#30005"
 msgid "Manage favourite shows"
-msgstr ""
+msgstr "Gérer les émissions favorites"
 
 msgctxt "#30010"
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 msgctxt "#30011"
 msgid "Favourites"
-msgstr ""
+msgstr "Favoris"
 
 msgctxt "#30012"
 msgid "Main menu"
-msgstr ""
+msgstr "Menu principal"
 
 msgctxt "#30050"
 msgid "All shows"
-msgstr ""
+msgstr "Toutes les émissions"
 
 msgctxt "#30051"
 msgid "Favourite shows"
-msgstr ""
+msgstr "Emissions favorites"
 
 msgctxt "#30052"
 msgid "Newest favourite shows"
-msgstr ""
+msgstr "Nouvelles émissions favorites"
 
 msgctxt "#30053"
 msgid "Recommendations"
-msgstr ""
+msgstr "Recommandations"
 
 msgctxt "#30054"
 msgid "Newest shows (by topic)"
-msgstr ""
+msgstr "Nouvelles émissions (par thème)"
 
 msgctxt "#30055"
 msgid "Most clicked shows (by topic)"
-msgstr ""
+msgstr "Emissions les plus consultées (par thème)"
 
 msgctxt "#30056"
 msgid "Soon offline"
-msgstr ""
+msgstr "Bientôt indisponible"
 
 msgctxt "#30057"
 msgid "Shows by date"
-msgstr ""
+msgstr "Emissions par date"
 
 msgctxt "#30058"
 msgid "Today"
-msgstr ""
+msgstr "Aujourd'hui"
 
 msgctxt "#30059"
 msgid "Yesterday"
-msgstr ""
+msgstr "Hier"
 
 msgctxt "#30060"
 msgid "Monday"
-msgstr ""
+msgstr "Lundi"
 
 msgctxt "#30061"
 msgid "Tuesday"
-msgstr ""
+msgstr "Mardi"
 
 msgctxt "#30062"
 msgid "Wednesday"
-msgstr ""
+msgstr "Mercredi"
 
 msgctxt "#30063"
 msgid "Thursday"
-msgstr ""
+msgstr "Jeudi"
 
 msgctxt "#30064"
 msgid "Friday"
-msgstr ""
+msgstr "Vendredi"
 
 msgctxt "#30065"
 msgid "Saturday"
-msgstr ""
+msgstr "Samedi"
 
 msgctxt "#30066"
 msgid "Sunday"
-msgstr ""
+msgstr "Dimanche"
 
 msgctxt "#30069"
 msgid "Choose your favourite shows"
-msgstr ""
+msgstr "Sélectionnez vos émissions favorites"
 
 msgctxt "#30070"
-msgid "SRF.ch Live"
-msgstr ""
+msgid "RTS.ch Live"
+msgstr "RTS.ch Live"
 
 msgctxt "#30071"
 msgid "Choose date"
-msgstr ""
+msgstr "Sélectionnez la date"
 
 msgctxt "#30072"
 msgid "Live TV"
-msgstr ""
+msgstr "Live TV"
 
 msgctxt "#30073"
 msgid ">> Next page"
-msgstr ""
+msgstr ">> Page suivante"
 
 msgctxt "#30074"
 msgid "SRF on YouTube"
-msgstr ""
+msgstr "SRF sur YouTube"
 
 msgctxt "#30100"
 msgid "Failed to open URL."
-msgstr ""
+msgstr "Erreur lors de l'ouverture de l'URL"

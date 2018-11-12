@@ -82,6 +82,8 @@ TODAY = LANGUAGE(30058)
 YESTERDAY = LANGUAGE(30059)
 WEEKDAYS = (LANGUAGE(30060), LANGUAGE(30061), LANGUAGE(30062), LANGUAGE(30063),
             LANGUAGE(30064), LANGUAGE(30065), LANGUAGE(30066))
+DATA_URI = 'special://home/addons/%s/resources/data' % ADDON_ID
+YOUTUBE_CHANNELS_FILENAME = 'youtube_channels.json'
 
 socket.setdefaulttimeout(TIMEOUT)
 
@@ -533,64 +535,81 @@ class SRFPlayTV(object):
         main_menu_list = [
             {
                 # All shows
+                'identifier': 'All_Shows',
                 'name': LANGUAGE(30050),
                 'mode': 10,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('All_Shows')
             }, {
                 # Favourite shows
+                'identifier': 'Favourite_Shows',
                 'name': LANGUAGE(30051),
                 'mode': 11,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Favourite_Shows')
             }, {
                 # Newest favourite shows
+                'identifier': 'Newest_Favourite_Shows',
                 'name': LANGUAGE(30052),
                 'mode': 12,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Newest_Favourite_Shows')
             }, {
                 # Recommendations
+                'identifier': 'Recommendations',
                 'name': LANGUAGE(30053),
                 'mode': 16,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Recommendations')
             }, {
                 # Newest shows
+                'identifier': 'Newest_Shows',
                 'name': LANGUAGE(30054),
                 'mode': 13,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Newest_Shows')
             }, {
                 # Most clicked shows
+                'identifier': 'Most_Clicked_Shows',
                 'name': LANGUAGE(30055),
                 'mode': 14,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Most_Clicked_Shows')
             }, {
                 # Soon offline
+                'identifier': 'Soon_Offline',
                 'name': LANGUAGE(30056),
                 'mode': 15,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Soon_Offline')
             }, {
                 # Shows by date
+                'identifier': 'Shows_By_Date',
                 'name': LANGUAGE(30057),
                 'mode': 17,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Shows_By_Date')
             }, {
                 # Live TV
+                'identifier': 'Live_TV',
                 'name': LANGUAGE(30072),
                 'mode': 26,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('Live_TV')
             }, {
                 # SRF.ch live
+                'identifier': 'SRF_Live',
                 'name': LANGUAGE(30070),
                 'mode': 18,
                 'isFolder': True,
                 'displayItem': get_boolean_setting('SRF_Live')
+            }, {
+                # SRF on YouTube
+                'identifier': 'SRF_YouTube',
+                'name': LANGUAGE(30074),
+                'mode': 30,
+                'isFolder': True,
+                'displayItem': get_boolean_setting('SRF_YouTube')
             }
         ]
         for menu_item in main_menu_list:
@@ -599,7 +618,7 @@ class SRFPlayTV(object):
                 list_item.setProperty('IsPlayable', 'false')
                 list_item.setArt({'thumb': ICON})
                 purl = self.build_url(
-                    mode=menu_item['mode'], name=menu_item['name'])
+                    mode=menu_item['mode'], name=menu_item['identifier'])
                 xbmcplugin.addDirectoryItem(
                     handle=int(sys.argv[1]), url=purl,
                     listitem=list_item, isFolder=menu_item['isFolder'])
@@ -1262,9 +1281,10 @@ class SRFPlayTV(object):
         if subs and SUBTITLES:
             subtitle_list = [x.get('url') for x in subs if
                              x.get('format') == 'VTT']
-            if not subtitle_list:
+            if subtitle_list:
+                list_item.setSubtitles(subtitle_list)
+            else:
                 log('No WEBVTT subtitles found for video id %s.' % vid)
-            list_item.setSubtitles(subtitle_list)
         if is_folder:
             list_item.setProperty('IsPlayable', 'false')
             url = self.build_url(mode=21, name=vid)
@@ -1368,6 +1388,19 @@ class SRFPlayTV(object):
         play_item = xbmcgui.ListItem(video_id, path=auth_url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, play_item)
 
+    def build_youtube_menu(self):
+        data_file = os.path.join(xbmc.translatePath(DATA_URI),
+                                 YOUTUBE_CHANNELS_FILENAME)
+        with open(data_file, 'r') as f:
+            ch_content = json.load(f)
+            for elem in ch_content.get('channels', []):
+                name = elem.get('name')
+                channel_id = elem.get('channel')
+                list_item = xbmcgui.ListItem(label=name)
+                url = 'plugin://plugin.video.youtube/channel/%s/' % channel_id
+                xbmcplugin.addDirectoryItem(
+                    int(sys.argv[1]), url, list_item, isFolder=True)
+
 
 def run():
     """
@@ -1435,6 +1468,8 @@ def run():
         SRFPlayTV().pick_date()
     elif mode == 26:
         SRFPlayTV().build_tv_menu()
+    elif mode == 30:
+        SRFPlayTV().build_youtube_menu()
     elif mode == 50:
         SRFPlayTV().play_video(name)
     elif mode == 51:

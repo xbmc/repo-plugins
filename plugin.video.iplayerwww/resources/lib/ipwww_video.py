@@ -197,51 +197,11 @@ def GetAtoZPage(url):
     match = re.search(
               r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
               html, re.DOTALL)
+
     if match:
         data = match.group(1)
         json_data = json.loads(data)
-        # print json.dumps(json_data, indent=2, sort_keys=True)
-
-        current_letter = json_data['appStoreState']['currentLetter']
-
-        for item in json_data['appStoreState']['programmes'][current_letter]['entities']:
-            meta = item.get("meta")
-            item = item.get("props")
-            if not item:
-                continue
-
-            main_url = None
-            if 'href' in item:
-                # Some strings already contain the full URL, need to work around this.
-                url = item['href'].replace('http://www.bbc.co.uk','')
-                url = url.replace('https://www.bbc.co.uk','')
-                if url:
-                    main_url = 'https://www.bbc.co.uk' + url
-
-            num_episodes = None
-            if 'episodesAvailable' in meta:
-                if meta['episodesAvailable'] > 1:
-                    num_episodes = str(meta['episodesAvailable'])
-
-            title = ''
-            if 'title' in item:
-                if num_episodes:
-                    title = item['title']+' - '+num_episodes+' episodes available'
-                else:
-                    title = item['title']
-
-            synopsis = ''
-            if 'synopsis' in item:
-                synopsis = item['synopsis']
-
-            icon = ''
-            if 'imageTemplate' in item:
-                icon = item['imageTemplate'].replace("{recipe}","832x468")
-
-            if num_episodes:
-                AddMenuEntry(title, main_url, 139, icon, synopsis, '')
-            else:
-                CheckAutoplay(title , main_url, icon, synopsis, '')
+        ParseJSON(json_data)
 
 
 def GetMultipleEpisodes(url):
@@ -368,145 +328,6 @@ def ScrapeEpisodes(page_url):
             page_url = 'https://www.bbc.co.uk' + page_base_url + str(page)
             html = OpenURL(page_url)
 
-        # NOTE remove inner li to match outer li
-
-        # <li data-version-type="hd">
-        html = re.compile(r'<li data-version-type.*?</li>',
-                          flags=(re.DOTALL | re.MULTILINE)).sub('', html)
-
-        # <li class="list-item programme"  data-ip-id="p026f2t4">
-        list_items = re.findall(r'<li class="list-item.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
-
-        list_item_num = 1
-
-        for li in list_items:
-            # <li class="list-item unavailable"  data-ip-id="b06sq9xj">
-            unavailable_match = re.search(
-                'data-timeliness-type="unavailable"',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if unavailable_match:
-                continue
-
-            # <li class="list-item search-group"  data-ip-id="b06rdtx0">
-            search_group = False
-            search_group_match = re.search(
-                '<li class="list-item.*?search-group.*?"',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if search_group_match:
-                search_group = True
-
-            main_url = None
-            # <a href="/iplayer/episode/p026gmw9/world-of-difference-the-models"
-            # title="World of Difference, The Models" class="list-item-link stat"
-            url_match = re.search(
-                r'<a.*?href="(.*?)".*?list-item-link.*?>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if url_match:
-                url = url_match.group(1)
-                # Some strings already contain the full URL, need to work around this.
-                url = url.replace('http://www.bbc.co.uk','')
-                url = url.replace('https://www.bbc.co.uk','')
-                if url:
-                    main_url = 'https://www.bbc.co.uk' + url
-
-            name = ''
-            title = ''
-            #<div class="title top-title">World of Difference</div>
-            title_match = re.search(
-                r'<div class="title top-title">\s*(.*?)\s*</div>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if title_match:
-                title = title_match.group(1)
-                name = title
-
-            subtitle = None
-            #<div class="subtitle">The Models</div>
-            subtitle_match = re.search(
-                r'<div class="subtitle">\s*(.*?)\s*</div>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if subtitle_match:
-                subtitle = subtitle_match.group(1)
-                if subtitle:
-                    name = name + " - " + subtitle
-
-            icon = ''
-            # <source srcset="http://ichef.bbci.co.uk/images/ic/336x189/p04cd999.jpg"
-            icon_match = re.search(
-                r'<source.*?srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg"',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if icon_match:
-                image = icon_match.group(1)
-                if image:
-                    icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
-
-
-            type = None
-            # <div class="r-image"  data-ip-type="episode"
-            # data-ip-src="http://ichef.bbci.co.uk/images/ic/336x189/p026vl1q.jpg">
-            # <div class="r-image"  data-ip-type="group"
-            # data-ip-src="http://ichef.bbci.co.uk/images/ic/336x189/p037ty9z.jpg">
-            image_match = re.search(
-                r'<div class="r-image".+?data-ip-type="(.*?)"',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if image_match:
-                type = image_match.group(1)
-
-            synopsis = ''
-            # <p class="synopsis">What was it like to be a top fashion model 30 years ago? (1978)</p>
-            synopsis_match = re.search(
-                r'<p class="synopsis">\s*(.*?)\s*</p>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if synopsis_match:
-                synopsis = synopsis_match.group(1)
-
-            aired = ''
-            # <span class="release">\nFirst shown: 8 Jun 1967\n</span>
-            release_match = re.search(
-                r'<span class="release">.*?First shown:\s*(.*?)\n.*?</span>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if release_match:
-                release = release_match.group(1)
-                if release:
-                    aired = FirstShownToAired(release)
-
-            episodes = None
-            # <a class="view-more-container avail stat" href="/iplayer/episodes/p00db1jf" data-progress-state="">
-            # <a class="view-more-container sibling stat"
-            #  href="/iplayer/search?q=doctor&amp;search_group_id=urn:bbc:programmes:b06qbs4n">
-            episodes_match = re.search(
-                r'<a class="view-more-container.+?stat".+?href="(.*?)"',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if episodes_match:
-                episodes = episodes_match.group(1)
-
-            more = None
-            # <em class="view-more-heading">27</em>
-            more_match = re.search(
-                r'<em class="view-more-heading">(.*?)</em>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-            if more_match:
-                more = more_match.group(1)
-
-            if episodes:
-                episodes_url = 'https://www.bbc.co.uk' + episodes
-                if search_group:
-                    AddMenuEntry('[B]%s[/B] - %s' % (title, translation(30318)),
-                                 episodes_url, 128, icon, '', '')
-                else:
-                    AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
-                                 episodes_url, 128, icon, '', '')
-            elif more:
-                AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
-                             main_url, 128, icon, '', '')
-
-            if type != "group":
-                CheckAutoplay(name , main_url, icon, synopsis, aired)
-
-            percent = int(100*(page+list_item_num/len(list_items))/total_pages)
-            pDialog.update(percent,translation(30319),name)
-
-            list_item_num += 1
-
         # There is a new layout for episodes, scrape it from the JSON received as part of the page
         match = re.search(
                   r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
@@ -514,70 +335,7 @@ def ScrapeEpisodes(page_url):
         if match:
             data = match.group(1)
             json_data = json.loads(data)
-            # print json.dumps(json_data, indent=2, sort_keys=True)
-
-            list_item_num = 1
-
-            name = ''
-            if 'title' in json_data['appStoreState']['header']:
-                name = json_data['appStoreState']['header']['title']
-
-            for item in json_data['appStoreState']['entities']:
-                meta = item.get("meta")
-                item = item.get("props")
-                if not item:
-                    continue
-
-                main_url = None
-                if 'href' in item:
-                    # Some strings already contain the full URL, need to work around this.
-                    url = item['href'].replace('http://www.bbc.co.uk','')
-                    url = url.replace('https://www.bbc.co.uk','')
-                    if url:
-                        main_url = 'https://www.bbc.co.uk' + url
-
-                episodes_url = ""
-                episodes_title = ""
-                if 'secondaryHref' in meta:
-                    # Some strings already contain the full URL, need to work around this.
-                    url = meta['secondaryHref'].replace('http://www.bbc.co.uk','')
-                    url = url.replace('https://www.bbc.co.uk','')
-                    if url:
-                        episodes_url = 'https://www.bbc.co.uk' + url
-                        episodes_title = item["title"]
-
-                # Single episodes in A-Z now come without a title in the entity.
-                # Use the main title instead.
-                if 'subtitle' in item:
-                    if 'title' in item:
-                        title = "%s - %s" % (item['title'], item['subtitle'])
-                    else:
-                        title = name
-                elif 'title' in item:
-                    title = item['title']
-                else:
-                    title = name
-
-                synopsis = ''
-                if 'synopsis' in item:
-                    synopsis = item['synopsis']
-
-                icon = ''
-                if 'imageTemplate' in item:
-                    icon = item['imageTemplate'].replace("{recipe}","832x468")
-
-                aired = ''
-
-                CheckAutoplay(title , main_url, icon, synopsis, aired)
-
-                if episodes_url:
-                    AddMenuEntry('[B]%s[/B]' % (episodes_title),
-                                 episodes_url, 128, icon, '', '')
-
-                percent = int(100*(page+list_item_num/len(item))/total_pages)
-                pDialog.update(percent,translation(30319),name)
-
-                list_item_num += 1
+            ParseJSON(json_data)
 
         percent = int(100*page/total_pages)
         pDialog.update(percent,translation(30319))
@@ -586,10 +344,6 @@ def ScrapeEpisodes(page_url):
         if current_page < next_page:
             page_url = 'https://www.bbc.co.uk' + page_base_url + str(next_page)
             AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 128, '', '', '')
-
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
 
     pDialog.close()
 
@@ -659,18 +413,7 @@ def ScrapeAtoZEpisodes(page_url):
             if match:
                 data = match.group(1)
                 json_data = json.loads(data)
-
-                index = 1
-                for entity in json_data['appStoreState']['entities']:
-                    item = entity.get("props")
-                    meta = entity.get("meta")
-                    if not item:
-                        continue
-                    ParseHighlightsJSON(item, meta)
-
-                    percent = int(100*(page+index/len(json_data['appStoreState']['entities']))/last_page)
-                    pDialog.update(percent,translation(30319))
-                    index += 1
+                ParseJSON(json_data)
 
             percent = int(100*page/last_page)
             pDialog.update(percent,translation(30319))
@@ -679,10 +422,6 @@ def ScrapeAtoZEpisodes(page_url):
         if current_page < next_page:
             page_url = page_base_url + str(next_page)
             AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 134, '', '', '')
-
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
 
     pDialog.close()
 
@@ -864,7 +603,7 @@ def ListChannelHighlights():
         AddMenuEntry(name, id, 106, iconimage, '', '')
 
 
-def ParseHighlightsJSON(item, meta):
+def ParseSingleJSON(meta, item, name, added_playables, added_directories):
     main_url = None
     if 'href' in item:
         # Some strings already contain the full URL, need to work around this.
@@ -875,6 +614,7 @@ def ParseHighlightsJSON(item, meta):
 
     episodes_url = ""
     episodes_title = ""
+    num_episodes = None
     if 'secondaryHref' in item:
         # Some strings already contain the full URL, need to work around this.
         url = item['secondaryHref'].replace('http://www.bbc.co.uk','')
@@ -890,11 +630,19 @@ def ParseHighlightsJSON(item, meta):
             if url:
                 episodes_url = 'https://www.bbc.co.uk' + url
                 episodes_title = item["title"]
+        if 'episodesAvailable' in meta:
+            if meta['episodesAvailable'] > 1:
+                num_episodes = str(meta['episodesAvailable'])
 
     if 'subtitle' in item:
-        title = "%s - %s" % (item['title'], item['subtitle'])
-    else:
+        if 'title' in item:
+            title = "%s - %s" % (item['title'], item['subtitle'])
+        else:
+            title = name
+    elif 'title' in item:
         title = item['title']
+    else:
+        title = name
 
     synopsis = ''
     if 'synopsis' in item:
@@ -906,38 +654,71 @@ def ParseHighlightsJSON(item, meta):
 
     aired = ''
 
-    CheckAutoplay(title , main_url, icon, synopsis, aired)
+    if not main_url in added_playables:
+        CheckAutoplay(title , main_url, icon, synopsis, aired)
+        added_playables.append(main_url)
+
+    if num_episodes:
+        if not main_url in added_directories:
+            title = '[B]'+item['title']+'[/B] - '+num_episodes+' episodes available'
+            AddMenuEntry(title, main_url, 139, icon, synopsis, '')
+            added_directories.append(main_url)
 
     if episodes_url:
-        AddMenuEntry('[B]%s[/B]' % (episodes_title),
-                     episodes_url, 128, icon, '', '')
+        if not main_url in added_directories:
+            AddMenuEntry('[B]%s[/B]' % (episodes_title),
+                         episodes_url, 128, icon, synopsis, '')
+            added_directories.append(main_url)
 
 
-def ListHighlights(highlights_url):
-    """Creates a list of the programmes in the highlights section.
+def ParseJSON(json_data):
+    """Parses the JSON data containing programme information of a page. Contains a lot of fallbacks
     """
 
-    html = OpenURL('https://www.bbc.co.uk/%s' % highlights_url)
+    added_playables = []
+    added_directories = []
 
-    # There is a new layout for episodes, scrape it from the JSON received as part of the page
-    match = re.search(
-              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
-              html, re.DOTALL)
-    if match:
-        data = match.group(1)
-        json_data = json.loads(data)
-        # xbmc.log(json.dumps(json_data, indent=2, sort_keys=True))
-        list_item_num = 1
+    programme_data = None
+    if 'appStoreState' in json_data:
+        programme_data = json_data.get('appStoreState')
+    if 'initialState' in json_data:
+        programme_data = json_data.get('initialState')
 
-        groups = ''
-        groups = json_data['appStoreState'].get('groups')
-        if groups:
-            for entity in json_data['appStoreState']['groups']:
+    if programme_data:
+        name = ''
+        if 'header' in programme_data:
+            if 'title' in programme_data['header']:
+                name = programme_data['header']['title']
+
+        programmes = None
+        if 'currentLetter' in programme_data:
+            # This must be an A-Z page.
+            current_letter = programme_data['currentLetter']
+            programmes = programme_data['programmes'][current_letter]['entities']
+        elif 'entities' in programme_data:
+            # This must be a category or most popular.
+            programmes = programme_data['entities']
+
+        if programmes:
+            for item in programmes:
+                meta = None
+                if 'props' in item:
+                    meta = item.get('meta')
+                    item = item.get('props')
+                ParseSingleJSON(meta, item, name, added_playables, added_directories)
+
+        # The next section is for global and channel highlights. They are a bit tricky.
+        groups = None
+        highlights = None
+        bundles = None
+        if 'groups' in programme_data:
+            groups = programme_data.get('groups')
+            for entity in groups:
                 for item in entity['entities']:
                     item = item.get("props")
                     if not item:
                         continue
-                    ParseHighlightsJSON(item, None)
+                    ParseSingleJSON(None, item, None, added_playables, added_directories)
 
                 title = ''
                 id = ''
@@ -945,29 +726,28 @@ def ListHighlights(highlights_url):
                 id = entity.get('id')
                 if (title and id):
                     episodes_url = 'https://www.bbc.co.uk/iplayer/group/%s' % id
-                    AddMenuEntry('[B]%s: %s[/B]' % (translation(30314), title),
-                                 episodes_url, 128, '', '', '')
+                    if not episodes_url in added_directories:
+                        AddMenuEntry('[B]%s: %s[/B]' % (translation(30314), title),
+                                     episodes_url, 128, '', '', '')
 
-        highlights = ''
-        highlights = json_data['appStoreState'].get('highlights')
-        if highlights:
-            entity = json_data['appStoreState']['highlights'].get("items")
+        if 'highlights' in programme_data:
+            highlights = programme_data.get('highlights')
+            entity = highlights.get("items")
             if entity:
                 for item in entity:
                     item = item.get("props")
                     if not item:
                         continue
-                    ParseHighlightsJSON(item, None)
+                    ParseSingleJSON(None, item, None, added_playables, added_directories)
 
-        bundles = ''
-        bundles = json_data['appStoreState'].get('bundles')
-        if bundles:
+        if 'bundles' in programme_data:
+            bundles = programme_data.get('bundles')
             for bundle in bundles:
                 entity = ''
                 entity = bundle.get('entities')
                 if entity:
                     for item in entity:
-                        ParseHighlightsJSON(item, None)
+                        ParseSingleJSON(None, item, None, added_playables, added_directories)
                 journey = ''
                 journey = bundle.get('journey')
                 if journey:
@@ -984,8 +764,9 @@ def ListHighlights(highlights_url):
                                              'url', 105, '', '', '')
                             else:
                                 episodes_url = 'https://www.bbc.co.uk/iplayer/group/%s' % id
-                                AddMenuEntry('[B]%s: %s[/B]' % (translation(30314), title),
-                                             episodes_url, 128, '', '', '')
+                                if not episodes_url in added_directories:
+                                    AddMenuEntry('[B]%s: %s[/B]' % (translation(30314), title),
+                                                 episodes_url, 128, '', '', '')
                         if (id and (type == 'category')):
                             AddMenuEntry('[B]%s: %s[/B]' % (translation(30314), title),
                                          id, 126, '', '', '')
@@ -995,88 +776,36 @@ def ListHighlights(highlights_url):
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
 
 
+def ListHighlights(highlights_url):
+    """Creates a list of the programmes in the highlights section.
+    """
+
+    html = OpenURL('https://www.bbc.co.uk/%s' % highlights_url)
+
+    # There is a new layout for episodes, scrape it from the JSON received as part of the page
+    match = re.search(
+              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
+              html, re.DOTALL)
+    if match:
+        data = match.group(1)
+        json_data = json.loads(data)
+        # xbmc.log(json.dumps(json_data, indent=2, sort_keys=True))
+        ParseJSON(json_data)
+
+
 def ListMostPopular():
     """Scrapes all episodes of the most popular page."""
     html = OpenURL("https://www.bbc.co.uk/iplayer/group/most-popular")
 
-    # <li class="grid__item gel-layout__item gel-1/2 gel-1/3@m">
-    list_items = re.findall(r'<li class="grid__item.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
+    # There is a new layout for episodes, scrape it from the JSON received as part of the page
+    match = re.search(
+              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
+              html, re.DOTALL)
 
-    list_item_num = 1
-
-    for li in list_items:
-        # NOTE remove useless hrefs
-
-        # href="#gel-icon-iplayer"
-        li = re.compile(r'href="#.*?"',
-                          flags=(re.DOTALL | re.MULTILINE)).sub('', li)
-
-        main_url = None
-        # <a class="content-item__link gel-layout gel-layout--flush"
-        # href="/iplayer/episode/b09k9n93/eastenders-21122017"
-        url_match = re.search(
-            r'href="(.*?)"',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if url_match:
-            url = url_match.group(1)
-            # Some strings already contain the full URL, need to work around this.
-            url = url.replace('http://www.bbc.co.uk','')
-            url = url.replace('https://www.bbc.co.uk','')
-            if url:
-                main_url = 'https://www.bbc.co.uk' + url
-
-        name = ''
-        title = ''
-        # <div class="content-item__title typo typo--skylark typo--bold">EastEnders</div>
-        title_match = re.search(
-            r'<div class="content-item__title.*?>\s*(.*?)\s*</div>',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if title_match:
-            title = title_match.group(1)
-            name = title
-
-        subtitle = None
-        # <div class="content-item__info__primary"><div class="content-item__description
-        # typo typo--bullfinch">21/21 Crowning the champion</div>
-        subtitle_match = re.search(
-            r'<div class="content-item__info__primary">.*?>\s*(.*?)\s*</div>',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if subtitle_match:
-            subtitle = subtitle_match.group(1)
-            if subtitle:
-                name = name + " - " + subtitle
-
-        icon = ''
-        # <source srcset="http://ichef.bbci.co.uk/images/ic/336x189/p04cd999.jpg"
-        icon_match = re.search(
-            r'https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if icon_match:
-            image = icon_match.group(1)
-            if image:
-                icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
-
-        type = None
-        synopsis = ''
-        # <div class="content-item__info__secondary"><div class="content-item__description typo
-        # typo--bullfinch">Linda gets more than she bargained for when looking for her Christmas
-        # present.</div>
-        synopsis_match = re.search(
-            r'<div class="content-item__info__secondary">.*?>\s*(.*?)\s*</div>',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if synopsis_match:
-            synopsis = synopsis_match.group(1)
-
-        aired = ''
-        episodes = None
-        more = None
-
-        CheckAutoplay(name , main_url, icon, synopsis, aired)
-
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
-
+    if match:
+        data = match.group(1)
+        json_data = json.loads(data)
+        ParseJSON(json_data)
 
 
 def AddAvailableStreamItem(name, url, iconimage, description):

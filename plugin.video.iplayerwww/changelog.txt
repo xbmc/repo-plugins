@@ -1,3 +1,7 @@
+v3.0.38
+Programme scraping now relies on JSON only.
+Refactored code scraping.
+
 v3.0.37
 Fixed Most Popular.
 

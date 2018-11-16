@@ -1,3 +1,6 @@
+v3.0.39
+Fixed episode JSON changes.
+
 v3.0.38
 Programme scraping now relies on JSON only.
 Refactored code scraping.

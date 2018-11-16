@@ -215,8 +215,8 @@ def GetMultipleEpisodes(url):
         json_data = json.loads(data)
         # print json.dumps(json_data, indent=2, sort_keys=True)
 
-        if json_data['episode']['tleo_id']:
-            GetEpisodes(json_data['episode']['tleo_id'])
+        if json_data['appStoreState']['episode']['tleoId']:
+            GetEpisodes(json_data['appStoreState']['episode']['tleoId'])
 
 
 def ParseAired(aired):
@@ -1235,6 +1235,7 @@ def ScrapeAvailableStreams(url):
     if match:
         data = match.group(1)
         json_data = json.loads(data)
+        json_data = json_data['appStoreState']
         # print json.dumps(json_data, indent=2, sort_keys=True)
         if 'title' in json_data['episode']:
             name = json_data['episode']['title']
@@ -1250,7 +1251,7 @@ def ScrapeAvailableStreams(url):
                 description = synopses['editorial']
         if 'standard' in json_data['episode']['images']:
             image = json_data['episode']['images']['standard'].replace('{recipe}','832x468')
-        for stream in json_data['episode']['versions']:
+        for stream in json_data['versions']:
             if ((stream['kind'] == 'original') or
                (stream['kind'] == 'iplayer-version') or
                (stream['kind'] == 'technical-replacement') or

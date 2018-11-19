@@ -10,14 +10,21 @@ VIDEO_DATA_RE = (
     r", document.getElementById\("
 )
 
-URL = "https://www.tottenhamhotspur.com/spurs-tv/"
+URL = "https://www.tottenhamhotspur.com/trendinggrid/loadmore"
 
-Video = namedtuple('Video', 'entry_id caption thumbnail')
+Video = namedtuple('Video', 'entry_id title caption thumbnail')
 
 
 def videos():
-    data = re.search(VIDEO_DATA_RE, requests.get(URL).text, re.DOTALL).group(1)
-    videos = json.loads(data)['data']['modules']
-    for video in videos:
-        video_data = video['data']
-        yield Video(video_data['entryId'], video_data['caption'], video_data['thumbnail']['smallUrl'])
+    response = requests.get(URL, dict(tagIds=56552, page=1, itemsPerGrid=1000)).text
+    data = re.search(VIDEO_DATA_RE, response, re.DOTALL).group(1)
+    modules = json.loads(data)['data']['modules']
+    for module in modules:
+        article = module['data']['article']
+        video_data = article['media']
+        yield Video(
+            entry_id=video_data['entryId'],
+            title=article['title'],
+            caption=video_data['caption'],
+            thumbnail=video_data['thumbnail']['smallUrl']
+        )

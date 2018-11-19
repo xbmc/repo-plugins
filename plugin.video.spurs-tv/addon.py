@@ -209,7 +209,7 @@ def show_index():
 @plugin.route('/videos')
 def show_videos():
     for video in api.videos():
-        yield video_item(video.entry_id, video.caption)
+        yield video_item(video.entry_id, video.title)
 
 @plugin.cached_route('/stadium')
 def show_stadium_index():

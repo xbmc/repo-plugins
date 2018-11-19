@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import json
 import requests
@@ -59,7 +61,6 @@ def get_search_results(query):
 
 if __name__ == "__main__":
     for playlist_id, title, thumbnail, published_at in get_playlists():
-        print
-        print title
+        print('\n', title)
         for item_id, title, thumbnail, published_at in get_playlist_items(playlist_id):
-            print '\t', title
+            print('\t', title)

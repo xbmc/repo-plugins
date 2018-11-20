@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="screensaver.kaster" name="Kaster" version="1.2.5" provider-name="enen92">
+	<requires>
+		<import addon="xbmc.python" version="2.25.0"/>
+		<import addon="script.module.requests"/>
+	</requires>
+	<extension point="xbmc.ui.screensaver" library="entrypoint.py" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<source>https://github.com/enen92/screensaver.kaster</source>
+		<forum>https://forum.kodi.tv/showthread.php?tid=319709</forum>
+		<summary lang="en_GB">A chromecast-like screensaver for Kodi</summary>
+		<summary lang="pt_PT">Um screensaver idêntico ao screensaver original chromecast</summary>
+		<summary lang="es_ES">Un protector de pantalla tipo Chromecast para Kodi</summary>
+		<summary lang="nl_NL">Een Chromecast-achtige screensaver voor Kodi</summary>
+		<description lang="en_GB">Display beautiful pictures originally from the chromecast screensaver. You can also display your own photos along with its respective information.</description>
+		<description lang="pt_PT">Apresenta imagens lindíssimas originalmente pertencentes ao screensaver do chromecast. Pode também apresentar as suas próprias imagens conjuntamente com a respectiva informação.</description>
+		<description lang="es_ES">Muestra bellas imágenes como las del protector de pantalla de chromecast. También puede mostrar sus propias fotos junto con su respectiva información.</description>
+		<description lang="nl_NL">Toon prachtige afbeeldingen afkomstig van de Chromecast screensaver. Je kunt ook je eigen foto's tonen met al hun informatie.</description>
+		<news>v1.2.5
+			[new] initial support for python3 compatibility (tks rechi)
+		</news>
+		<assets>
+			<icon>resources/images/icon.png</icon>
+			<fanart>resources/images/fanart.jpg</fanart>
+			<screenshot>resources/images/screenshot-1.png</screenshot>
+			<screenshot>resources/images/screenshot-2.png</screenshot>
+			<screenshot>resources/images/screenshot-3.png</screenshot>
+			<screenshot>resources/images/screenshot-4.png</screenshot>
+		</assets>
+	</extension>
+</addon>

@@ -1,0 +1,105 @@
+# Kodi Media Center language file
+# Addon Name: Kaster
+# Addon id: screensaver.kaster
+# Addon Provider: enen92
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/xbmc-addons/language/pt/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Kaster"
+msgstr "Kaster"
+
+msgctxt "#32001"
+msgid "Photo by"
+msgstr "Fotografia por"
+
+msgctxt "#32002"
+msgid "General"
+msgstr "Geral"
+
+msgctxt "#32003"
+msgid "Screensaver Mode"
+msgstr "Modo do Screensaver"
+
+msgctxt "#32004"
+msgid "Only google photos"
+msgstr "Apenas fotos da google"
+
+msgctxt "#32005"
+msgid "Only my photos"
+msgstr "Apenas as minhas fotos"
+
+msgctxt "#32006"
+msgid "Google photos + my photos"
+msgstr "Fotos google + minhas fotos"
+
+msgctxt "#32007"
+msgid "Unknown"
+msgstr "Desconhecido"
+
+msgctxt "#32008"
+msgid "Wait time before changing image (s)"
+msgstr "Tempo de espera até mudar a imagem (s)"
+
+msgctxt "#32009"
+msgid "Folder with pictures"
+msgstr "Pasta com as imagens"
+
+msgctxt "#32010"
+msgid "Failed to parse image dictionary"
+msgstr "Erro a fazer parse da imagem no dicionário"
+
+msgctxt "#32011"
+msgid "Aspect"
+msgstr "Aspecto"
+
+msgctxt "#32012"
+msgid "Hide Kodi logo"
+msgstr "Esconder logo do Kodi"
+
+msgctxt "#32013"
+msgid "Hide weather info"
+msgstr "Esconder informação de metereologia"
+
+msgctxt "#32014"
+msgid "Hide clock info"
+msgstr "Esconder relógio"
+
+msgctxt "#32015"
+msgid "Hide picture info"
+msgstr "Esconder informação das fotografias"
+
+msgctxt "#32016"
+msgid "Animations"
+msgstr "Animações"
+
+msgctxt "#32017"
+msgid "Enabled animation"
+msgstr "Animação activa"
+
+msgctxt "#32018"
+msgid "Fade"
+msgstr "Fade"
+
+msgctxt "#32019"
+msgid "Pan and zoom"
+msgstr "Pan e zoom"
+
+msgctxt "#32020"
+msgid "Hide dim overlay"
+msgstr "Esconder plano dim"
+
+msgctxt "#32021"
+msgid "Show black background"
+msgstr "Mostrar fundo preto"

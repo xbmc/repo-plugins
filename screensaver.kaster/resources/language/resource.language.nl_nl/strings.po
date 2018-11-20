@@ -1,0 +1,105 @@
+# Kodi Media Center language file
+# Addon Name: Kaster
+# Addon id: screensaver.kaster
+# Addon Provider: enen92
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Dutch (http://www.transifex.com/projects/p/xbmc-addons/language/nl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Kaster"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Photo by"
+msgstr "Foto door"
+
+msgctxt "#32002"
+msgid "General"
+msgstr "Algemeen"
+
+msgctxt "#32003"
+msgid "Screensaver Mode"
+msgstr "Screensavermodus"
+
+msgctxt "#32004"
+msgid "Only google photos"
+msgstr "Alleen Google foto's"
+
+msgctxt "#32005"
+msgid "Only my photos"
+msgstr "Alleen mijn foto's"
+
+msgctxt "#32006"
+msgid "Google photos + my photos"
+msgstr "Google foto's + mijn foto's"
+
+msgctxt "#32007"
+msgid "Unknown"
+msgstr "Onbekend"
+
+msgctxt "#32008"
+msgid "Wait time before changing image (s)"
+msgstr "Wachttijd voor het wisselen van afbeelding"
+
+msgctxt "#32009"
+msgid "Folder with pictures"
+msgstr "Folder met afbeeldingen"
+
+msgctxt "#32010"
+msgid "Failed to parse image dictionary"
+msgstr "Kan de afbeeldingen niet verwerken"
+
+msgctxt "#32011"
+msgid "Aspect"
+msgstr "Aspect"
+
+msgctxt "#32012"
+msgid "Hide Kodi logo"
+msgstr "Verberg Kodi-logo"
+
+msgctxt "#32013"
+msgid "Hide weather info"
+msgstr "Verberg weersinformatie"
+
+msgctxt "#32014"
+msgid "Hide clock info"
+msgstr "Verberg de klok"
+
+msgctxt "#32015"
+msgid "Hide picture info"
+msgstr "Verberg afbeeldingsinformatie"
+
+msgctxt "#32016"
+msgid "Animations"
+msgstr "Animaties"
+
+msgctxt "#32017"
+msgid "Enabled animation"
+msgstr "Animatie ingeschakeld"
+
+msgctxt "#32018"
+msgid "Fade"
+msgstr "Vervagen"
+
+msgctxt "#32019"
+msgid "Pan and zoom"
+msgstr "Pan en zoom"
+
+msgctxt "#32020"
+msgid "Hide dim overlay"
+msgstr "Verberg gedimde bedekking"
+
+msgctxt "#32021"
+msgid "Show black background"
+msgstr "Toon donkere achtergrond"

@@ -1,0 +1,31 @@
+v1.2.4/1.2.5 (20/11/2018)
+- [new] initial support for python3 compatibility (tks rechi)
+
+v1.2.3 11/11/2018
+- [new] add dutch translation (tks klojum)
+
+v1.2.2 10/11/2018
+-fix spanish translation (tks roliversc)
+-fix del instances left in memory
+
+v1.2.1 2/3/2018
+- update spanish translation (tks roliversc)
+- Clock font for eminence skin
+
+v1.2.0 28/2/2018
+- Improve skinning
+- Set clock font for Actic Zephyr skin
+
+v1.1.0  21/2/2018
+- Support for network shares (tks InuSasha).
+- Recursive folder support for personal images 
+- Black background as an option
+- Option to hide dim overlay
+- Added spanish translation (tks roliverosc)
+
+v1.0.1  11/8/2017
+-Hide Logos
+-Animations
+
+v1.0.1  10/8/2017
+-First version of the addon

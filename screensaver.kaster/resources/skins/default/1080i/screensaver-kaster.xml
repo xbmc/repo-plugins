@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<window type="window">
+    <controls>
+        <control type="image">
+            <description>Overlay</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1920</width>
+            <height>1080</height>
+            <texture>blackbackground.png</texture>
+            <visible>!String.IsEqual(Window.Property(show-blackbackground),"false")</visible>
+        </control>
+        <control type="image" id="32500">
+            <description>Fade image</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <fadetime>1000</fadetime>
+            <aspectratio scalediffuse="false" align="center" aligny="center">scale</aspectratio>
+            <width>1920</width>
+            <height>1080</height>
+            <texture></texture>
+            <animation effect="zoom" start="110" end="130" center="auto" time="25000" tween="cubic" easing="inout" condition="StringCompare(Window.Property(animation),panzoom)" pulse="true">Conditional</animation>
+            <animation effect="slide" start="-10,-10" end="20,20" time="9000" tween="cubic" easing="inout" condition="StringCompare(Window.Property(animation),panzoom)" pulse="true">Conditional</animation>
+        </control>
+        <control type="image">
+            <description>Overlay</description>
+            <posx>0</posx>
+            <posy>250</posy>
+            <colordiffuse>FF555555</colordiffuse>
+            <width>1920</width>
+            <height>980</height>
+            <texture>overlayfade.png</texture>
+            <visible>!String.IsEqual(Window.Property(hide-overlay),"true")</visible>
+        </control>
+        <control type="image">
+            <description>kodi logo</description>
+            <posx>90</posx>
+            <posy>930</posy>
+            <width>250</width>
+            <height>80</height>
+            <texture>kaster-kodi-logo.png</texture>
+            <visible>!String.IsEqual(Window.Property(hide-kodi-logo),"true")</visible>
+        </control>
+        <control type="group">
+            <orientation>vertical</orientation>
+            <top>830</top>
+            <right>125</right>
+            <control type="grouplist">
+                <orientation>horizontal</orientation>
+                <align>right</align>
+                <control type="label" id="32502">
+                    <description>temperature</description>
+                    <right>auto</right>
+                    <font>font13</font>
+                    <shadowcolor>#22000000</shadowcolor>
+                    <textcolor>whitesmoke</textcolor>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <height>125</height>
+                    <width>auto</width>
+                    <align>right</align>
+                    <label>$INFO[Weather.Temperature]</label>
+                    <visible>Weather.IsFetched+!String.IsEqual(Window.Property(hide-weather-info),"true")</visible>
+                </control>
+                <control type="image">
+                    <description>Weather icon</description>
+                    <align>right</align>
+                    <width>80</width>
+                    <height>80</height>
+                    <texture>icons/$INFO[Weather.fanartcode].png</texture>
+                    <visible>Weather.IsFetched+!String.IsEqual(Window.Property(hide-weather-info),"true")</visible>
+                </control>
+                <control type="label">
+                    <description>Time</description>
+                    <align>left</align>
+                    <font>font_clock</font>
+                    <shadowcolor>22000000</shadowcolor>
+                    <textcolor>whitesmoke</textcolor>
+                    <height>200</height>
+                    <width>auto</width>
+                    <label>$INFO[System.Time]</label>
+                    <visible>String.IsEqual(Window.Property(clockfont),"fontclock")+!String.IsEqual(Window.Property(hide-clock-info),"true")</visible>
+                </control>
+                <control type="label">
+                    <description>Time</description>
+                    <align>left</align>
+                    <font>font_MainMenu</font>
+                    <shadowcolor>22000000</shadowcolor>
+                    <textcolor>whitesmoke</textcolor>
+                    <height>200</height>
+                    <width>auto</width>
+                    <label>$INFO[System.Time]</label>
+                    <visible>String.IsEqual(Window.Property(clockfont),"fontmainmenu")+!String.IsEqual(Window.Property(hide-clock-info),"true")</visible>
+                </control>
+                <control type="label">
+                    <description>Time</description>
+                    <align>left</align>
+                    <font>HomeFO</font>
+                    <shadowcolor>22000000</shadowcolor>
+                    <textcolor>whitesmoke</textcolor>
+                    <height>120</height>
+                    <width>auto</width>
+                    <label>$INFO[System.Time]</label>
+                    <visible>String.IsEqual(Window.Property(clockfont),"fontzephyr")+!String.IsEqual(Window.Property(hide-clock-info),"true")</visible>
+                </control>
+                <control type="label">
+                    <description>Time</description>
+                    <align>left</align>
+                    <font>Font-Header</font>
+                    <shadowcolor>22000000</shadowcolor>
+                    <textcolor>whitesmoke</textcolor>
+                    <height>120</height>
+                    <width>auto</width>
+                    <label>$INFO[System.Time]</label>
+                    <visible>String.IsEqual(Window.Property(clockfont),"fonteminence")+!String.IsEqual(Window.Property(hide-clock-info),"true")</visible>
+                </control>
+            </control>
+            <control type="label" id="32503">
+                <description>Line one</description>
+                <font>font13</font>
+                <shadowcolor>22000000</shadowcolor>
+                <textcolor>whitesmoke</textcolor>
+                <top>90</top>
+                <right>0</right>
+                <height>30</height>
+                <width>1000</width>
+                <align>right</align>
+                <label></label>
+                <animation effect="fade" start="100" end="0" time="15000">Visible</animation>
+                <visible>!String.IsEqual(Window.Property(hide-pic-info),"true")</visible>
+            </control>
+            <control type="label" id="32504">
+                <description>Line two</description>
+                <font>font13</font>
+                <shadowcolor>22000000</shadowcolor>
+                <textcolor>whitesmoke</textcolor>
+                <top>130</top>
+                <right>0</right>
+                <height>30</height>
+                <width>1000</width>
+                <align>right</align>
+                <label></label>
+                <animation effect="fade" start="100" end="0" time="15000">Visible</animation>
+                <visible>!String.IsEqual(Window.Property(hide-pic-info),"true")</visible>
+            </control>
+        </control>
+    </controls>
+</window>

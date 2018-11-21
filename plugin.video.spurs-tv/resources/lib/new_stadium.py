@@ -15,6 +15,7 @@ import requests
 URL_ROOT = "http://new-stadium.tottenhamhotspur.com/"
 
 RE_EMBED = re.compile(r'kWidget\.embed\((.*)\)', re.MULTILINE|re.DOTALL)
+RE_LIVE_STREAM = re.compile(r'Start (Live Stream \d+)')
 
 Video = namedtuple('Video', ['title', 'id'])
 
@@ -28,8 +29,9 @@ def get_soup(path):
 def get_cams():
     '''Generator for live stadium cameras'''
     soup = get_soup("interact")
-    for stream_num, iframe in enumerate(soup('iframe', 'video-class'), start=1):
-        yield Video(title='Live Stream {}'.format(stream_num),
+    for stream in soup(text=re.compile(RE_LIVE_STREAM)):
+        iframe = stream.find_next('iframe', 'video-class')
+        yield Video(title=RE_LIVE_STREAM.search(stream.string).group(1),
                     id=os.path.basename(urlparse(iframe['src']).path))
 
 

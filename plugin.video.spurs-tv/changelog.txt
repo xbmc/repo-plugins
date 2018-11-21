@@ -1,3 +1,7 @@
+v2.15.2 (2018-11-19)
+ - Fixed the redirect errors
+ - Fixed the stadium live stream labels
+
 v2.15.1 (2018-08-18)
  - Fixed latest videos listing
 

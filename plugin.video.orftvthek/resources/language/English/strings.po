@@ -214,3 +214,15 @@ msgstr ""
 msgctxt "#30053"
 msgid "Adaptive"
 msgstr ""
+
+msgctxt "#30054"
+msgid "Stream Method"
+msgstr ""
+
+msgctxt "#30055"
+msgid "HLS"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Enable Progressive Streaming Method"
+msgstr ""

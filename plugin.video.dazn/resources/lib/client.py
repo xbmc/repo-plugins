@@ -27,13 +27,13 @@ class Client:
 
         self.STARTUP = self.plugin.api_base + 'v5/Startup'
         self.RAIL = self.plugin.api_base + 'v2/Rail'
-        self.RAILS = self.plugin.api_base + 'v6/Rails'
+        self.RAILS = self.plugin.api_base + 'v7/Rails'
         self.EPG = self.plugin.api_base + 'v1/Epg'
         self.EVENT = self.plugin.api_base + 'v2/Event'
         self.PLAYBACK = self.plugin.api_base + 'v2/Playback'
-        self.SIGNIN = self.plugin.api_base + 'v4/SignIn'
+        self.SIGNIN = self.plugin.api_base + 'v5/SignIn'
         self.SIGNOUT = self.plugin.api_base + 'v1/SignOut'
-        self.REFRESH = self.plugin.api_base + 'v4/RefreshAccessToken'
+        self.REFRESH = self.plugin.api_base + 'v5/RefreshAccessToken'
         self.PROFILE = self.plugin.api_base + 'v1/UserProfile'
         self.RESOURCES = self.plugin.api_base + 'v1/ResourceStrings'
 
@@ -149,6 +149,7 @@ class Client:
         r = self.request(self.SIGNOUT)
         self.TOKEN = ''
         self.plugin.set_setting('token', self.TOKEN)
+        self.plugin.set_setting('mpx', '')
 
     def refreshToken(self):
         self.HEADERS['Authorization'] = 'Bearer ' + self.TOKEN
@@ -199,6 +200,8 @@ class Client:
         else:
             if not r.status_code == 204:
                 self.plugin.log('[{0}] error: {1} ({2}, {3})'.format(self.plugin.addon_id, url, str(r.status_code), r.headers.get('content-type', '')))
+            if r.status_code == -1:
+                self.plugin.log('[{0}] error: {1}'.format(self.plugin.addon_id, r.text))
             return {}
 
     def errorHandler(self, data):

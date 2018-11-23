@@ -12,6 +12,14 @@ msgstr ""
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "My Account"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Sign Out"
+msgstr ""
+
 msgctxt "#30010"
 msgid "View"
 msgstr ""
@@ -42,6 +50,10 @@ msgstr ""
 
 msgctxt "#30021"
 msgid "Inputstream Adaptive Settings..."
+msgstr ""
+
+msgctxt "#30022"
+msgid "Max. Bandwidth (Bit/s)"
 msgstr ""
 
 msgctxt "#30023"

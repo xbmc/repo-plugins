@@ -33,19 +33,20 @@ class Parser:
         highlights = True if 'highlights' in mode else False
         focus = data.get('StartPosition', False)
         for i in data.get('Tiles', []):
-            context = Context(self.plugin)
             item = Tiles(self.plugin, i).item
             if highlights:
                 if item['type'] == 'Highlights':
-                    item['cm'] = context.goto(item)
+                    item['cm'] = Context(self.plugin).goto(item)
                     self.items.add_item(item)
                 elif item.get('related', []):
                     for i in item['related']:
+                        context = Context(self.plugin)
                         if i.get('Videos', []):
                             _item = Tiles(self.plugin, i).item
                             _item['cm'] = context.goto(_item)
                             self.items.add_item(_item)
             else:
+                context = Context(self.plugin)
                 if item.get('related', []):
                     cm_items = []
                     for i in item['related']:

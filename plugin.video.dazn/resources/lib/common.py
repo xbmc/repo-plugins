@@ -24,43 +24,36 @@ class Common:
         self.date_format = '%Y-%m-%d'
         self.portability_list = ['AT', 'DE', 'IT']
 
-        addon = self.get_addon()
+        self.addon = xbmcaddon.Addon()
         self.addon_handle = addon_handle
         self.addon_url = addon_url
-        self.addon_id = addon.getAddonInfo('id')
-        self.addon_name = addon.getAddonInfo('name')
-        self.addon_version = addon.getAddonInfo('version')
-        self.addon_icon = addon.getAddonInfo('icon')
-        self.addon_fanart = addon.getAddonInfo('fanart')
-        self.content = addon.getSetting('content')
-        self.view_id = addon.getSetting('view_id')
-        self.view_id_videos = addon.getSetting('view_id_videos')
-        self.view_id_epg = addon.getSetting('view_id_epg')
-        self.force_view = addon.getSetting('force_view') == 'true'
-        self.startup = addon.getSetting('startup') == 'true'
-        self.select_cdn = addon.getSetting('select_cdn') == 'true'
-        self.preferred_cdn = addon.getSetting('preferred_cdn')
+        self.addon_id = self.addon.getAddonInfo('id')
+        self.addon_name = self.addon.getAddonInfo('name')
+        self.addon_version = self.addon.getAddonInfo('version')
+        self.addon_icon = self.addon.getAddonInfo('icon')
+        self.addon_fanart = self.addon.getAddonInfo('fanart')
+        self.content = self.addon.getSetting('content')
+        self.view_id = self.addon.getSetting('view_id')
+        self.view_id_videos = self.addon.getSetting('view_id_videos')
+        self.view_id_epg = self.addon.getSetting('view_id_epg')
+        self.force_view = self.addon.getSetting('force_view') == 'true'
+        self.startup = self.addon.getSetting('startup') == 'true'
+        self.select_cdn = self.addon.getSetting('select_cdn') == 'true'
+        self.preferred_cdn = self.addon.getSetting('preferred_cdn')
+        self.max_bw = self.addon.getSetting('max_bw')
 
-    def utfenc(self, text):
-        result = text
-        if isinstance(text, unicode):
-            result = text.encode('utf-8')
-        return result
+    def log(self, msg):
+        xbmc.log(str(msg), xbmc.LOGDEBUG)
 
-    def utfdec(self, text):
-        result = text
-        if isinstance(text, str):
-            result = text.decode('utf-8')
-        return result
+    def build_url(self, query):
+        return self.addon_url + '?' + urllib.urlencode(query)
 
-    def b64dec(self, data):
-        missing_padding = len(data) % 4
-        if missing_padding != 0:
-            data += b'='* (4 - missing_padding)
-        return base64.b64decode(data)
+    def gui_language(self):
+        language = xbmc.getLanguage().split(' (')[0]
+        return xbmc.convertLanguage(language, xbmc.ISO_639_1)
 
     def get_addon(self):
-        return xbmcaddon.Addon()
+        return self.addon
 
     def get_datapath(self):
         return self.utfdec(xbmc.translatePath(self.get_addon().getAddonInfo('profile')))
@@ -85,8 +78,29 @@ class Common:
     def dialog_ok(self, msg):
         self.get_dialog().ok(self.addon_name, msg)
 
-    def notification(self, title, msg, duration, thumb):
-        self.get_dialog().notification('{0}, {1}, {2}, {3}'.format(title, msg, thumb, duration))
+    def dialog_yesno(self, msg):
+        return self.get_dialog().yesno(self.addon_name, msg)
+
+    def notification(self, title, msg, thumb, duration):
+        self.get_dialog().notification(title, msg, thumb, duration)
+
+    def utfenc(self, text):
+        result = text
+        if isinstance(text, unicode):
+            result = text.encode('utf-8')
+        return result
+
+    def utfdec(self, text):
+        result = text
+        if isinstance(text, str):
+            result = text.decode('utf-8')
+        return result
+
+    def b64dec(self, data):
+        missing_padding = len(data) % 4
+        if missing_padding != 0:
+            data += b'='* (4 - missing_padding)
+        return base64.b64decode(data)
 
     def get_resource(self, text, prefix=''):
         data = self.get_cache('ResourceStrings')
@@ -95,7 +109,7 @@ class Common:
             try:
                 text = strings['{0}{1}'.format(prefix, text.replace(' ', ''))]
             except KeyError:
-                pass
+                text = text.replace('_',' ')
         return self.utfenc(self.initcap(text))
 
     def get_credentials(self):
@@ -109,15 +123,8 @@ class Common:
                 }
         return {}
 
-    def log(self, msg):
-        xbmc.log(str(msg), xbmc.LOGDEBUG)
-
-    def build_url(self, query):
-        return self.addon_url + '?' + urllib.urlencode(query)
-
-    def gui_language(self):
-        language = xbmc.getLanguage().split(' (')[0]
-        return xbmc.convertLanguage(language, xbmc.ISO_639_1)
+    def logout(self):
+        return self.dialog_yesno(self.get_resource('signout_body'))
 
     def time_now(self):
         return datetime.datetime.now().strftime(self.time_format)
@@ -140,7 +147,7 @@ class Common:
     def uniq_id(self):
         device_id = ''
         mac_addr = xbmc.getInfoLabel('Network.MacAddress')
-        if not ":" in mac_addr: 
+        if not ":" in mac_addr:
             mac_addr = xbmc.getInfoLabel('Network.MacAddress')
         # hack response busy
         i = 0
@@ -150,6 +157,8 @@ class Common:
             mac_addr = xbmc.getInfoLabel('Network.MacAddress')
         if ":" in mac_addr:
             device_id = str(uuid.UUID(hashlib.md5(str(mac_addr.decode("utf-8"))).hexdigest()))
+        elif self.get_setting('device_id'):
+            device_id = self.get_setting('device_id')
         else:
             self.log("[{0}] error: failed to get device id ({1})".format(self.addon_id, str(mac_addr)))
             self.dialog_ok(self.get_resource('error_4005_ConnectionLost'))
@@ -232,7 +241,7 @@ class Common:
             self.log("[{0}] cache error: {1}".format(self.addon_id, e))
 
     def initcap(self, text):
-        if text.isupper():
+        if text.isupper() and len(text) > 3:
             text = string.capwords(text)
             text = text.replace('Dazn', 'DAZN')
         return text

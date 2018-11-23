@@ -75,14 +75,14 @@ class Tiles:
                 self.item['title'] = '[COLOR red]{0}[/COLOR] [COLOR dimgray]{1}[/COLOR] {2} [COLOR dimgray]{3}[/COLOR]'.format(time_, sport, self.title, competition)
             else:
                 self.item['title'] = '{0} [COLOR dimgray]{1}[/COLOR] {2} [COLOR dimgray]{3}[/COLOR]'.format(time_, sport, self.title, competition)
-        elif (self.type == 'ComingUp' or 'Scheduled' in i.get('Id', '')) or (self.type == 'Highlights'):
+        elif (self.type == 'ComingUp' or 'Scheduled' in i.get('Id', '')) or (self.type == 'Highlights' or self.type == 'Condensed'):
             if self.type == 'ComingUp':
                 day = self.plugin.days(self.type, self.now, self.start)
                 sub_title = '{0} {1}'.format(day, self.start[11:][:5])
             else:
                 sub_title = self.plugin.get_resource('{0}{1}Title'.format(self.type[0].lower(), self.type[1:]), 'browseui_')
                 if sub_title.endswith('Title'):
-                    sub_title = label[:5]
+                    sub_title = self.type
             if sub_title not in self.title:
                 self.item['title'] = '{0} ({1})'.format(self.title, sub_title)
 

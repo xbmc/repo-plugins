@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.dazn" version="1.3.0" name="DAZN" provider-name="Jin">
+<addon id="plugin.video.dazn" version="1.3.1" name="DAZN" provider-name="Jin">
     <requires>
-        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.inputstreamhelper" version="0.3.3"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
     </extension>
-	<extension point="xbmc.service" library="startup.py" start="startup"/>
+	<extension point="xbmc.service" library="startup.py"/>
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
         <news>
-- as of now this addon requires kodi 18
-- removed compatibility mode
-- added setting to manually select cdn
+- few minor bug fixes
+- added logout and max bandwidth setting (allows reducing the inp. ad. setting)
         </news>
         <assets>
             <icon>resources/icon.png</icon>

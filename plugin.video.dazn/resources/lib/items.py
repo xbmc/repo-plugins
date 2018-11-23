@@ -77,10 +77,10 @@ class Items:
         listitem.setMimeType('application/dash+xml')
         listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
         listitem.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+        listitem.setProperty('inputstream.adaptive.manifest_update_parameter', 'full')
+        listitem.setProperty('inputstream.adaptive.max_bandwidth', self.plugin.max_bw)
         listitem.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
         listitem.setProperty('inputstream.adaptive.license_key', '{0}&{1}&_widevineChallenge=B{{SSM}}|||JBlicense'.format(item.LaUrl, item.LaUrlAuthParam))
-        if not ('dc1' or 'dc2') in path:
-            listitem.setProperty('inputstream.adaptive.manifest_update_parameter', 'full')
         if context:
             listitem.setInfo('video', {'Title': name})
             xbmc.Player().play(path, listitem)

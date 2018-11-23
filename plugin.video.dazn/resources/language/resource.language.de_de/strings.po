@@ -12,6 +12,14 @@ msgstr ""
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "My Account"
+msgstr "Mein Konto"
+
+msgctxt "#30001"
+msgid "Sign Out"
+msgstr "Ausloggen"
+
 msgctxt "#30010"
 msgid "View"
 msgstr "Ansicht"
@@ -43,6 +51,10 @@ msgstr "Video Player"
 msgctxt "#30021"
 msgid "Inputstream Adaptive Settings..."
 msgstr "Inputstream Adaptive Einstellungen..."
+
+msgctxt "#30022"
+msgid "Max. Bandwidth (Bit/s)"
+msgstr "Max. Bandbreite (Bit/s)"
 
 msgctxt "#30023"
 msgid "Manually select CDN"

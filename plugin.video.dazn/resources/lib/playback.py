@@ -34,7 +34,7 @@ class Playback:
         for i in details:
             if cdn == self.clean_name([i['CdnName']])[0] or not cdn:
                 r = requests.head(i['ManifestUrl'])
-                if r.status_code == 200:
+                if r.status_code == 200 and r.headers.get('content-type', '').startswith('application/dash+xml'):
                     self.ManifestUrl = i['ManifestUrl']
                     self.LaUrl = i['LaUrl']
                     self.LaUrlAuthParam = '{0}={1}'.format(i['LaUrlAuthParamName'], self.plugin.get_setting('mpx'))

@@ -36,6 +36,10 @@ def router(paramstring):
         parser.playback(client.playback(id_))
     elif mode == 'play_context':
         parser.playback(client.playback(id_), title, True)
+    elif mode == 'logout':
+        if plugin.logout():
+            client.signOut()
+            sys.exit(0)
     elif mode == 'is_settings':
         plugin.open_is_settings()
     else:

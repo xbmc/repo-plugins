@@ -21,18 +21,14 @@ class Context:
             'id': item.get('id', ''),
             'params': item.get('params','')
         }
-        self.cm.append((self.plugin.get_string(30231), 'ActivateWindow(Videos, {0})'.format(self.plugin.build_url(d))))
+        self.cm.append((self.plugin.get_string(30231), 'Container.Update({0})'.format(self.plugin.build_url(d))))
         return self.cm
 
     def related(self, cm_items):
         for i in cm_items:
-            type_ = i['type']
-            if type_ == 'Highlights':
-                type_ = self.plugin.get_resource('playerMetadata_WatchHighlights')
-            elif type_ == 'Condensed':
-                type_ = self.plugin.get_resource('playerMetadata_WatchCondensedFilm')
-            elif type_ == 'Coaches':
-                type_ = self.plugin.get_resource('playerMetadata_WatchCoachesFilm')
+            type_ = self.plugin.get_resource('{0}{1}Title'.format(i['type'][0].lower(), i['type'][1:]), 'browseui_')
+            if type_.endswith('Title'):
+                type_ = i['type']
             d = {
                 'mode': 'play_context',
                 'title': self.plugin.utfenc(i['title']),
@@ -51,7 +47,7 @@ class Context:
                 'id': 'sport',
                 'params': i['Id']
             }
-            self.cm.append((self.plugin.get_string(30214), 'ActivateWindow(Videos, {0})'.format(self.plugin.build_url(d))))
+            self.cm.append((self.plugin.get_string(30214), 'Container.Update({0})'.format(self.plugin.build_url(d))))
 
         if item.get('competition', None):
             i = item['competition']
@@ -61,6 +57,6 @@ class Context:
                 'id': 'competition',
                 'params': i['Id']
             }
-            self.cm.append((self.plugin.get_string(30215), 'ActivateWindow(Videos, {0})'.format(self.plugin.build_url(d))))
+            self.cm.append((self.plugin.get_string(30215), 'Container.Update({0})'.format(self.plugin.build_url(d))))
 
         return self.cm

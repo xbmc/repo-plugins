@@ -133,13 +133,16 @@ def _request(method, url,
         # HTTPError implements addinfourl, so we can use the exception to construct a response
         if isinstance(e, urllib2.addinfourl):
             response = e
-    except Exception:
+    except Exception as e:
+        result.text = e
         return result
 
     # process response
     result.headers.update(response.headers)
     result.status_code = response.getcode()
-    if response.headers.get('Content-Encoding', '').startswith('gzip'):
+    if method.upper() == 'HEAD':
+        return result
+    elif response.headers.get('Content-Encoding', '').startswith('gzip'):
         buf = StringIO(response.read())
         f = gzip.GzipFile(fileobj=buf)
         result.text = f.read()

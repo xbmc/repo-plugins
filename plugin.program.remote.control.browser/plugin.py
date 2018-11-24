@@ -30,6 +30,14 @@ try:
     import alsaaudio
 except ImportError:
     alsaaudio = None
+try:
+    import pulsectl
+except ImportError:
+    pulsectl = None
+try:
+    import pyctl
+except ImportError:
+    pyctl = None
 
 
 DEFAULT_VOLUME = 50L
@@ -44,6 +52,11 @@ class JsonRpcError(RuntimeError):
 
 class CompetingLaunchError(RuntimeError):
     pass
+
+
+class VolumeError(RuntimeError):
+    def __init__(self, cause):
+        super(VolumeError, self).__init__(str(cause))
 
 
 class InterminableProgressBar(object):
@@ -126,8 +139,79 @@ def lockPidfile(browserLockPath, pid):
                 xbmc.log('Failed to remove pidfile: ' + str(e))
 
 
+class AlsaWrapper(object):
+    """Interchangable wrapper for Alsa"""
+
+    def __init__(self, alsaControl):
+        if alsaaudio is None:
+            xbmc.log('Not initializing an alsaaudio mixer', xbmc.LOGDEBUG)
+            raise VolumeError('No alsaaudio package')
+        else:
+            try:
+                self.delegate = alsaaudio.Mixer(alsaControl)
+            except alsaaudio.ALSAAudioError as e:
+                xbmc.log('Failed to initialize alsaaudio: ' + str(e))
+                raise VolumeError(e)
+
+    def getChannels(self):
+        try:
+            return self.delegate.getvolume()
+        except alsaaudio.ALSAAudioError as e:
+            raise VolumeError(e)
+
+    def setVolume(self, volume):
+        try:
+            self.delegate.setvolume(volume)
+        except alsaaudio.ALSAAudioError as e:
+            raise VolumeError(e)
+
+    def setChannels(self, channels):
+        try:
+            for (channel, volume) in enumerate(channels):
+                self.delegate.setvolume(volume, channel)
+        except alsaaudio.ALSAAudioError as e:
+            raise VolumeError(e)
+
+
+class PulseWrapper(object):
+    """Interchangable wrapper for Pulse"""
+
+    def __init__(self):
+        if pulsectl is None:
+            logger.debug('Not initializing a pulsectl mixer')
+            raise VolumeError('No pulsectl package')
+        else:
+            try:
+                self.pulse = pulsectl.Pulse()
+                self.sink = next(iter(self.pulse.sink_list()))
+            except pulsectl.PulseError as e:
+                xbmc.log('Failed to initialize pulsectl: ' + str(e))
+                raise VolumeError(e)
+
+    def getChannels(self):
+        try:
+            return [int(round(channel * 100)) for channel in self.sink.volume.values]
+        except pulsectl.PulseError as e:
+            raise VolumeError(e)
+
+    def setVolume(self, volume):
+        try:
+            volume_buffer = self.sink.volume
+            volume_buffer.value_flat = volume / 100.
+            self.pulse.volume_set(self.sink, volume_buffer)
+        except pulsectl.PulseError as e:
+            raise VolumeError(e)
+
+    def setChannels(self, channels):
+        try:
+            volume_buffer = pulsectl.PulseVolumeInfo([channel / 100. for channel in channels])
+            self.pulse.volume_set(self.sink, volume_buffer)
+        except pulsectl.PulseError as e:
+            raise VolumeError(e)
+
+
 class VolumeGuard(object):
-    """Hands off volume control between Kodi and ALSA"""
+    """Hands off volume control between Kodi and Pulse or ALSA"""
 
     def __init__(self, alsaControl):
         self.alsaControl = alsaControl
@@ -153,23 +237,23 @@ class VolumeGuard(object):
             self.kodiVolume = volume
 
             try:
-                self.alsaChannels = mixer.getvolume()
-            except alsaaudio.ALSAAudioError as e:
-                xbmc.log('Could not detect original ALSA volume: ' + str(e))
+                self.alsaChannels = mixer.getChannels()
+            except VolumeError as e:
+                xbmc.log('Could not detect original system volume: ' + str(e))
                 self.alsaChannels = None
 
             try:
-                # Match the ALSA volume to Kodi's last volume.
+                # Match the system volume to Kodi's last volume.
                 # Muting the Master volume and then unmuting it is not a
                 # symmetric operation, because other controls end up muted.
                 # So a mute needs to be simulated by setting the volume level
                 # to zero.
                 if mute:
-                    mixer.setvolume(0)
+                    mixer.setVolume(0)
                 else:
-                    mixer.setvolume(volume)
-            except alsaaudio.ALSAAudioError as e:
-                xbmc.log('Could not set ALSA volume: ' + str(e))
+                    mixer.setVolume(volume)
+            except VolumeError as e:
+                xbmc.log('Could not set system volume: ' + str(e))
 
         return self
 
@@ -178,10 +262,11 @@ class VolumeGuard(object):
         if mixer is not None:
             # Match Kodi's volume to the Master volume.
             try:
-                channels = mixer.getvolume()
+                channels = mixer.getChannels()
                 volume = next(iter(channels))
-                xbmc.log('Detected ALSA volume: ' + str(volume), xbmc.LOGDEBUG)
-                if not volume:
+                if volume:
+                    mute = False
+                else:
                     if self.kodiVolume:
                         # The volume was probably zero because it was muted.
                         mute = True
@@ -189,8 +274,6 @@ class VolumeGuard(object):
                         # The volume and mute haven't changed.
                         mute = self.kodiMute
                     volume = self.kodiVolume
-                else:
-                    mute = False
                 try:
                     xbmc.log('Updating Kodi volume: ' + str(volume) +
                              ', mute=' + str(mute), xbmc.LOGDEBUG)
@@ -200,30 +283,20 @@ class VolumeGuard(object):
                         'Application.SetVolume', {'volume': volume})
                 except (JsonRpcError, ValueError) as e:
                     xbmc.log('Could not update Kodi volume: ' + str(e))
-            except alsaaudio.ALSAAudioError as e:
+            except VolumeError as e:
                 xbmc.log('Could not detect final ALSA volume: ' + str(e))
 
             # Restore the master volume to its original level.
             try:
-                for (channel, volume) in enumerate(self.alsaChannels):
-                    mixer.setvolume(volume, channel)
-            except alsaaudio.ALSAAudioError as e:
+                mixer.setChannels(self.alsaChannels)
+            except VolumeError as e:
                 xbmc.log('Could not restore ALSA volume: ' + str(e))
 
     def getMixer(self):
-        """Returns a ALSA mixer, which is not kept, because it tends to cache
-        stale values
-        """
-        if alsaaudio is None:
-            xbmc.log('Not initializing an alsaaudio mixer', xbmc.LOGDEBUG)
-            mixer = None
-        else:
-            try:
-                mixer = alsaaudio.Mixer(self.alsaControl)
-            except alsaaudio.ALSAAudioError as e:
-                xbmc.log('Failed to initialize alsaaudio: ' + str(e))
-                mixer = None
-        return mixer
+        try:
+            return PulseWrapper() if self.alsaControl is None else AlsaWrapper(self.alsaControl)
+        except VolumeError:
+            return None
 
     def getNextRpcId(self):
         self.lastRpcId = self.lastRpcId + 1
@@ -444,7 +517,7 @@ class RemoteControlBrowserPlugin(xbmcaddon.Addon):
             xbmc.log('Failed to retrieve favicon: ' + str(e))
 
     def inputBookmark(
-            self, bookmarkId=None, defaultUrl='http://', defaultTitle=None):
+            self, bookmarkId=None, defaultUrl='https://', defaultTitle=None):
         keyboard = xbmc.Keyboard(defaultUrl, self.getLocalizedString(30004))
         keyboard.doModal()
         if not keyboard.isConfirmed():
@@ -601,7 +674,8 @@ class RemoteControlBrowserPlugin(xbmcaddon.Addon):
         browserPath = self.getSetting('browserPath').decode('utf_8')
         browserArgs = self.getSetting('browserArgs').decode('utf_8')
         xdotoolPath = self.getSetting('xdotoolPath').decode('utf_8')
-        alsaControl = self.getSetting('alsaControl').decode('utf_8')
+        soundServer = self.getSetting('soundServer').decode('utf_8')
+        alsaControl = self.getSetting('alsaControl').decode('utf_8') if soundServer == '1' else None
         suspendKodi = self.unmarshalBool(self.getSetting('suspendKodi'))
 
         if not browserPath or not os.path.isfile(browserPath):
@@ -653,10 +727,11 @@ class RemoteControlBrowserPlugin(xbmcaddon.Addon):
             alsaControl):
         # The browser runs in its own subprocess so that it can continue after
         # Kodi stops.
-        suspendKodiFlags = []
-        if suspendKodi:
-            suspendKodiFlags.append('--suspend-kodi')
+        suspendKodiFlags = ['--suspend-kodi'] if suspendKodi else []
         browsePath = os.path.join(self.addonFolder, 'browse.py')
+        alsaCmd = [] if alsaControl is None else [
+                '--alsa-control', alsaControl,
+            ]
         if xbmc.getCondVisibility('System.Platform.Windows'):
             # On Windows, the Popen will block unless close_fds is True and
             # creationflags is DETACHED_PROCESS.
@@ -672,13 +747,19 @@ class RemoteControlBrowserPlugin(xbmcaddon.Addon):
             [
                 sys.executable,
                 browsePath,
-            ] + suspendKodiFlags + [
+            ] +
+            suspendKodiFlags +
+            alsaCmd +
+            [
                 '--lirc-config', lircConfig,
                 '--xdotool-path', xdotoolPath,
-                '--alsa-control', alsaControl,
                 '--',
-            ] + browserCmd,
+            ] +
+            browserCmd,
             creationflags=creationflags,
+            # Closing stdin will inform the child of its parent's death.
+            stdin=subprocess.PIPE,
+            # The child will publish log lines via stderr.
             stderr=subprocess.PIPE)
         try:
             slurper = threading.Thread(target=slurpLog, args=(proc.stderr,))
@@ -693,12 +774,8 @@ class RemoteControlBrowserPlugin(xbmcaddon.Addon):
                     monitor.waitForAbort(1)
 
         finally:
-            if proc.poll() is None:
-                try:
-                    proc.terminate()
-                except OSError:
-                    pass
-                proc.wait()
+            proc.stderr.close()
+            proc.wait()
             slurper.join()
 
         if proc.returncode:

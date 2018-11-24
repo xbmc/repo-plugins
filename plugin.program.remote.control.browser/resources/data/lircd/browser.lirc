@@ -1,7 +1,7 @@
 begin netflix
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = More
     config = KEY Ctrl+Shift+Alt+D
@@ -16,7 +16,7 @@ end netflix
 begin youtubetv
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_UP
     config = KEY Up
@@ -25,7 +25,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_DOWN
     config = KEY Down
@@ -34,7 +34,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_OK
     config = KEY Return
@@ -44,7 +44,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_LEFT
     config = KEY Left
@@ -53,7 +53,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_RIGHT
     config = KEY Right
@@ -62,7 +62,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_AGAIN
     config = KEY H
@@ -71,7 +71,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_NEXT
     config = KEY L
@@ -81,7 +81,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_REWIND
     config = KEY J
@@ -91,7 +91,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_FORWARD
     config = KEY L
@@ -101,7 +101,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_STOP
     config = KEY Escape
@@ -111,7 +111,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_HOME
     config = KEY S
@@ -121,7 +121,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = Guide
     config = KEY G
@@ -131,7 +131,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = More
     config = KEY G
@@ -143,7 +143,7 @@ end
 # Suppress the regular mouse controls.
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_UP
     repeat = 1
@@ -152,7 +152,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_DOWN
     repeat = 1
@@ -161,7 +161,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_LEFT
     repeat = 1
@@ -170,7 +170,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_RIGHT
     repeat = 1
@@ -179,7 +179,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_AGAIN
     repeat = 1
@@ -191,7 +191,7 @@ end youtubetv
 
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_UP
     config = MOUSE 0 -1
@@ -200,7 +200,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_DOWN
     config = MOUSE 0 1
@@ -209,7 +209,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_OK
     config = CLICK
@@ -218,7 +218,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_LEFT
     config = MOUSE -1 0
@@ -227,7 +227,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_RIGHT
     config = MOUSE 1 0
@@ -236,16 +236,16 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_BACK
+    button = KEY_EXIT
     config = EXIT
     repeat = 0
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_VOLUMEUP
     config = VOLUME_UP
@@ -254,7 +254,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_VOLUMEDOWN
     config = VOLUME_DOWN
@@ -263,7 +263,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_MUTE
     config = MUTE
@@ -272,7 +272,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_PLAY
     config = KEY space
@@ -281,7 +281,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_PAUSE
     config = KEY space
@@ -290,7 +290,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_AGAIN
     config = KEY Left
@@ -299,7 +299,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_NEXT
     config = KEY Right
@@ -308,7 +308,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_REWIND
     config = KEY Left
@@ -317,7 +317,7 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_FORWARD
     config = KEY Right
@@ -326,124 +326,124 @@ begin
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_1
-    config = MULTITAP 1
+    button = KEY_NUMERIC_1
+    config = MULTITAP 1 at exclam slash
     repeat = 0
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_2
+    button = KEY_NUMERIC_2
     config = MULTITAP A B C 2
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_3
+    button = KEY_NUMERIC_3
     config = MULTITAP D E F 3
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_4
+    button = KEY_NUMERIC_4
     config = MULTITAP G H I 4
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_5
+    button = KEY_NUMERIC_5
     config = MULTITAP J K L 5
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_6
+    button = KEY_NUMERIC_6
     config = MULTITAP M N O 6
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_7
+    button = KEY_NUMERIC_7
     config = MULTITAP P Q R S 7
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_8
+    button = KEY_NUMERIC_8
     config = MULTITAP T U V 8
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_9
+    button = KEY_NUMERIC_9
     config = MULTITAP W X Y Z 9
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_0
+    button = KEY_NUMERIC_0
     config = MULTITAP space 0
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = Star
-    config = MULTITAP asterisk period
+    button = KEY_NUMERIC_STAR
+    config = MULTITAP asterisk period minus
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = Hash
+    button = KEY_NUMERIC_POUND
     config = KEY numbersign
     repeat = 5
     delay = 0
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
-    button = KEY_CLEAR
+    button = KEY_DELETE
     config = KEY BackSpace
     repeat = 1
     delay = 5
 end
 
 begin
-    remote = mceusb
+    remote = devinput-32
     prog = browser
     button = KEY_ENTER
     config = KEY Return

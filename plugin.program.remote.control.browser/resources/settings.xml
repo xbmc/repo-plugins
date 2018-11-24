@@ -7,7 +7,8 @@
         <setting id="linkcastEnabled" label="30030" type="bool" default="false" />
         <setting id="linkcastPort" label="30031" type="number" subsetting="true" enable="eq(-1,true)" default="49029" />
         <setting id="suspendKodi" label="30041" type="bool" default="false" />
-        <setting id="alsaControl" type="text" visible="false" default="Master" />
+        <setting id="soundServer" label="30042" type="select" lvalues="30043|30044" default="0" />
+        <setting id="alsaControl" label="30045" type="text" enable="eq(-1,1)" default="Master" />
         <setting id="memorySufficient" type="bool" visible="false" default="true" />
         <setting label="30039" type="lsep" visible="eq(-1,false)" />
         <setting id="psutilInstalled" type="bool" visible="false" default="true" />

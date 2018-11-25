@@ -200,3 +200,15 @@ msgstr "Dieses Video ist offline"
 msgctxt "#30053"
 msgid "Adaptiv"
 msgstr ""
+
+msgctxt "#30054"
+msgid "Stream Methode"
+msgstr ""
+
+msgctxt "#30055"
+msgid "HLS"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Progressive Streaming aktivieren"
+msgstr ""

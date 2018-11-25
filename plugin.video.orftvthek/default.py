@@ -39,9 +39,10 @@ tvthekplayer = xbmc.Player()
 playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
 
 #hardcoded
+video_delivery_list = ["HLS", "Progressive"]
 video_quality_list = ["Q1A", "Q4A", "Q6A", "Q8C", "QXB"]
 videoProtocol = "http"
-videoDelivery = "hls"
+
 
 #media resources
 resource_path = os.path.join( basepath, "resources" )
@@ -64,8 +65,8 @@ defaultbackdrop = os.path.join(media_path,"fanart.jpg")
 #load settings
 useServiceAPI = Settings.serviceAPI()
 videoQuality = Settings.videoQuality(video_quality_list)
+videoDelivery = Settings.videoDelivery(video_delivery_list)
 autoPlayPrompt = Settings.autoPlayPrompt()
-
 
 #init scrapers
 if useServiceAPI:

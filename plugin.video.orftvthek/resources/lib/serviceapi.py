@@ -353,11 +353,14 @@ class serviceAPI(Scraper):
 			date        = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
 
 			ApiKey = '2e9f11608ede41f1826488f1e23c4a8d'
-			bitmovinStreamId = result.get('_embedded').get('channel').get('bitmovin_stream_id')
-			response = urllib2.urlopen('http://restarttv-delivery.bitmovin.com/livestreams/%s/sections/?state=active&X-Api-Key=%s' % (bitmovinStreamId, ApiKey)) # nosec
+			bitmovinStreamId = result.get('_embedded').get('channel').get('restart_urls').get('default')
+			if bitmovinStreamId:
+				bitmovinStreamId = bitmovinStreamId.replace("https://playerapi-restarttv.ors.at/livestreams/","").replace("/sections/","")
+				bitmovinStreamId = bitmovinStreamId.split("?")[0]
+			response = urllib2.urlopen('https://playerapi-restarttv.ors.at/livestreams/%s/sections/?state=active&X-Api-Key=%s' % (bitmovinStreamId, ApiKey)) # nosec
 			section = json.loads(response.read())[0]
 
-			streamingURL = 'http://restarttv-delivery.bitmovin.com/livestreams/%s/sections/%s/manifests/hls/?startTime=%s&X-Api-Key=%s' % (bitmovinStreamId, section.get('id'), section.get('metaData').get('timestamp'), ApiKey)
+			streamingURL = 'https://playerapi-restarttv.ors.at/livestreams/%s/sections/%s/manifests/hls/?startTime=%s&X-Api-Key=%s' % (bitmovinStreamId, section.get('id'), section.get('metaData').get('timestamp'), ApiKey)
 
 			listItem = createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), streamingURL, True, False, self.defaultbackdrop, self.pluginhandle)
 			listItem.setProperty('inputstreamaddon', 'inputstream.adaptive')

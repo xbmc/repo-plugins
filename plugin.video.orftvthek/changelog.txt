@@ -1,7 +1,16 @@
+0.8.8
+- removed stream method option because its not available with the htmlscraper. Progressive streaming can still be used with the serviceAPI. 
+
+0.8.7
+- another fix for the restart option
+
+0.8.6
+- fixed restart option
+
 0.8.5
 - added UHD livestream option
 - added Adaptive quality settings
-- removed "play all" item for htmlscraper (issue #66)
+- fixed "play all" item (issue #66)
 - fixed "Bundesland Heute" livestream listing for the htmlscraper
 
 0.8.4

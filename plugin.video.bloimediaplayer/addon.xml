@@ -13,12 +13,11 @@ provider-name="MnsRulz">
 </extension>
 <extension point="xbmc.addon.metadata">
   <summary lang="en">Media player provides various media sources playback for Kodi</summary>
-  <description lang="en_GB">Media player provides various media sources playback for Kodi</description>
+  <description lang="en_GB">Media player provides various media sources playback for Kodi. https://github.com/manishrawat4u/plugin.video.bloimediaplayer</description>
   <disclaimer lang="en_GB">Media player provides various media sources playback for Kodi</disclaimer>
   <assets>
     <icon>icon.png</icon>
     <fanart>fanart.jpg</fanart>
-	<source>https://github.com/manishrawat4u/plugin.video.bloimediaplayer</source>
   </assets>
   <news>movieretina added as a source with hd gdrive links /nInitial version</news>
 </extension>

@@ -18,9 +18,7 @@ provider-name="MnsRulz">
   <assets>
     <icon>icon.png</icon>
     <fanart>fanart.jpg</fanart>
-    <screenshot>resources\screenshot-01.jpg</screenshot>
-    <screenshot>resources\screenshot-02.jpg</screenshot>
-    <screenshot>resources\screenshot-03.jpg</screenshot>    
+	<source>https://github.com/manishrawat4u/plugin.video.bloimediaplayer</source>
   </assets>
   <news>movieretina added as a source with hd gdrive links /nInitial version</news>
 </extension>

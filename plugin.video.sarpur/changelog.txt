@@ -1,3 +1,6 @@
+[B]Version 4.3.1[/B]
+- Handle error when program title missing
+
 [B]Version 4.3.0[/B]
 - Add featured and categories. Add context menu.
 - Only display program episode if program has episodes 

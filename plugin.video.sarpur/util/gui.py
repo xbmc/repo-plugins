@@ -142,8 +142,10 @@ class GUI(object):
             )
 
     def add_program_episode(self, program, episode):
-        if episode['title']:
+        if episode['title'] and program['title']:
             title = u'{0} - {1}'.format(program['title'], episode['title'])
+        elif episode['title']:
+            title = episode['title']
         else:
             title = program['title']
         context_menu = []
@@ -154,7 +156,7 @@ class GUI(object):
                     self._get_url(
                         'list_program_episodes',
                         str(program['id']),
-                        program['title']
+                        title,
                     )
                 )
             ))

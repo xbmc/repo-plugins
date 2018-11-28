@@ -19,19 +19,19 @@ UTF8 = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      html = self.getRequest('https://www.nbc.com/shows/all')
-      html = re.compile('<script>PRELOAD=(.+?)</script>', re.DOTALL).search(html).group(1)
+      html = self.getRequest('https://friendship.nbc.co/v2/graphql?extensions=%7B%22persistedQuery%22:%7B%22namedHash%22:%22page.v2%22%7D%7D&variables=%7B%22name%22:%22allShows%22,%22type%22:%22PAGE%22,%22userId%22:%22%22,%22platform%22:%22web%22,%22device%22:%22web%22%7D')
       a = json.loads(html)
-      a = a['lists']['allShows']['items']
+      a = a["data"]["page"]["sections"][0]["data"]["items"][0]["data"]["items"]
       mode = 'GE'
       for b in a:
+          b = b["data"]
           name = b['title']
           infoList ={}
           infoList['mediatype'] = 'tvshow'
           infoList['TVShowTitle'] = name
           infoList['Title'] = name
           url = b['urlAlias']
-          thumb = b['image']['path']
+          thumb = b['image']
           fanart = thumb
           contextMenu = [('Add To Library','XBMC.RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
           ilist = self.addMenuItem(name, mode, ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.earthtouch" name="Earth Touch" provider-name="willforde" version="3.0.0">
+<addon id="plugin.video.earthtouch" name="Earth Touch" provider-name="willforde" version="3.0.2">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.codequick" version="0.9.0"/>
@@ -24,6 +24,7 @@
             <screenshot>resources/screenshots/screenshot001.jpg</screenshot>
             <screenshot>resources/screenshots/screenshot002.jpg</screenshot>
         </assets>
-        <news>[upd] Upgraded to use the codequick framework.</news>
+        <news>[upd] Enable reuse of language invoker for Leia.</news>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
     </extension>
 </addon>

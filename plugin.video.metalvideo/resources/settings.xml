@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-	<category>
-		<!-- Misc -->
-		<setting id="sort" type="enum" label="30301" lvalues="552|557|563|30302" default="0" />
-	</category>
-</settings>

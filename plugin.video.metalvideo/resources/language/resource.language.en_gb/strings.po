@@ -25,15 +25,15 @@ msgid "Please Select Top 50"
 msgstr ""
 
 msgctxt "#30002"
-msgid "[B]Top 50 Videos[/B]"
+msgid "Top 50 Videos"
 msgstr ""
 
 msgctxt "#30004"
-msgid "[B]Video of the day[/B]"
+msgid "Video of the day"
 msgstr ""
 
 msgctxt "#30005"
-msgid "[B]Being watched right now[/B]"
+msgid "Being watched right now"
 msgstr ""
 
 ##################################

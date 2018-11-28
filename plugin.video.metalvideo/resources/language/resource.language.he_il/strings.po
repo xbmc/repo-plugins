@@ -25,16 +25,16 @@ msgid "Please Select Top 50"
 msgstr "אנא בחר את 50 המובחרים"
 
 msgctxt "#30002"
-msgid "[B]Top 50 Videos[/B]"
-msgstr "[B]50 הסרטים המובילים[/B]"
+msgid "Top 50 Videos"
+msgstr "50 הסרטים המובילים"
 
 msgctxt "#30004"
-msgid "[B]Video of the day[/B]"
-msgstr "[B] הסרט של היום [/B]"
+msgid "Video of the day"
+msgstr "הסרט של היום"
 
 msgctxt "#30005"
-msgid "[B]Being watched right now[/B]"
-msgstr "[B] צופים עכשיו [/B]"
+msgid "Being watched right now"
+msgstr "צופים עכשיו"
 
 # #################################
 # Settings Codes: 30300 to 30399 #

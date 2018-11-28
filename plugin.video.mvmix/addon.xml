@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.mvmix" version="2.0.0" name="Music Video Mix" provider-name="Jin">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <news>
+- rewrite
+- removed vevo
+- added setting to allow playback via youtube addon
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+        <summary lang="en_GB">Music Video Mix Player</summary>
+        <description lang="en_GB">Video add-on to play local and online music videos randomly</description>
+        <summary lang="de_DE">Music Video Mix Player</summary>
+        <description lang="de_DE">Video Add-on um lokale und Online-Musikvideos per Zufall abzuspielen</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <email>[jin] at [xyz] dot [de]</email>
+        <source>https://github.com/JinRonin/plugin.video.mvmix</source>
+    </extension>
+</addon>

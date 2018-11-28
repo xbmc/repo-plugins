@@ -1,0 +1,18 @@
+<settings>
+    <category label="30000">
+        <setting id="artists_source" type="enum" lvalues="30004|30005" label="30001" default="0"/>
+        <setting id="artists_path" type="folder" visible="eq(-1,1)" label="30003"/>
+        <setting id="video_source" type="enum" lvalues="30004|30005" label="30002" default="0"/>
+        <setting id="video_path" type="folder" visible="eq(-1,1)" label="30003"/>
+        <setting type="sep"/>
+        <setting id="limit_result" type="slider" label="30006" default="25" range="1,1,50" option="int"/>
+        <setting id="limit_artists" type="text" label="limit_artists" default="" visible="false"/>
+        <setting id="process" type="text" label="process" default="" visible="false"/>
+    </category>
+    <category label="30010">
+        <setting id="imvdb" type="bool" label="imvdb.com" default="true"/>
+        <setting id="youtube" type="bool" label="youtube.com" default="true"/>
+        <setting type="sep"/>
+        <setting id="yt_addon" type="bool" label="30011" default="false"/>
+    </category>
+</settings>

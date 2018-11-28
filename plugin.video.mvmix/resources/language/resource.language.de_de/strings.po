@@ -1,0 +1,89 @@
+# Kodi Media Center language file
+# Addon Name: Music Video Mix
+# Addon id: plugin.video.mvmix
+# Addon Provider: Jin
+
+msgid ""
+msgstr ""
+
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30001"
+msgid "My Music"
+msgstr "Meine Musik"
+
+msgctxt "#30002"
+msgid "My Videos"
+msgstr "Meine Videos"
+
+msgctxt "#30003"
+msgid "Select path"
+msgstr "Pfad auswählen"
+
+msgctxt "#30004"
+msgid "Library"
+msgstr "Bibliothek"
+
+msgctxt "#30005"
+msgid "Folder"
+msgstr "Ordner"
+
+msgctxt "#30006"
+msgid "Limit similar artists result"
+msgstr "Begrenze Anzahl der ähnlichen Interpreten"
+
+msgctxt "#30010"
+msgid "External Sources"
+msgstr "Externe Quellen"
+
+msgctxt "#30011"
+msgid "Use youtube add-on for playback"
+msgstr "Benutze youtube add-on zum abspielen"
+
+msgctxt "#30101"
+msgid "Enter artist"
+msgstr "Interpret eingeben"
+
+msgctxt "#30102"
+msgid "Now playing:"
+msgstr "Wird abgespielt:"
+
+msgctxt "#30103"
+msgid "Play my music"
+msgstr "Meine Musik abspielen"
+
+msgctxt "#30104"
+msgid "Search"
+msgstr "Suche"
+
+msgctxt "#30105"
+msgid "Resume playback"
+msgstr "Abspielen fortsetzen"
+
+msgctxt "#30121"
+msgid "List my music"
+msgstr "Meine Musik anzeigen"
+
+msgctxt "#30122"
+msgid "List videos"
+msgstr "Videos anzeigen"
+
+msgctxt "#30123"
+msgid "Hide video"
+msgstr "Video ausblenden"
+
+msgctxt "#30124"
+msgid "Add to playlist"
+msgstr "In Abspielliste einreihen"
+
+msgctxt "#30125"
+msgid "Remove artist"
+msgstr "Interpret entfernen"

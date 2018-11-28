@@ -20,20 +20,20 @@ msgstr ""
 # Addon Codes: 30000 to 30199 #
 # ##############################
 msgctxt "#30001"
-msgid "[B]Recent Videos[/B]"
-msgstr "[B]קבצי וידאו אחרונים[/B]"
+msgid "Recent Videos"
+msgstr "קבצי וידאו אחרונים"
 
 msgctxt "#30002"
-msgid "[B]Recent Audio[/B]"
-msgstr "[B]קבצי אודיו אחרונים[/B]"
+msgid "Recent Audio"
+msgstr "קבצי אודיו אחרונים"
 
 msgctxt "#30003"
-msgid "[B]List Audio Items[/B]"
-msgstr "[B]רשימת קבצי אודיו[/B]"
+msgid "List Audio Items"
+msgstr "רשימת קבצי אודיו"
 
 msgctxt "#30004"
-msgid "[B]List Video Items[/B]"
-msgstr "[B]רשימת קבצי וידאו[/B]"
+msgid "List Video Items"
+msgstr "רשימת קבצי וידאו"
 
 # #################################
 # Settings Codes: 30300 to 30399 #

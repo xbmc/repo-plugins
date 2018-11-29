@@ -132,10 +132,12 @@ def router(paramstring):
       list_episodes(page, params['show'], params['page'])
     elif params['action'] == 'play':
       page = sendResponse(get_cookie(), params['video'])
-      hd, sd = scrape.Watch_Episode(page)
-      if hd is not None:
-          #print(hd)
-          play_video(hd)
+#      with open('main_show_episode.html', 'w') as f:
+#        f.write(page)
+#      hd, sd = scrape.Watch_Episode(page)
+      episode_url = scrape.Watch_Episode(page, params['video'].rsplit('/',1)[1])
+      if episode_url is not None:
+          play_video(episode_url)
       else:
         popup(__language__(30004)) # "Video doesn't exist on website."
   else:

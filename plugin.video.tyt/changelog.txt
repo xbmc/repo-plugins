@@ -1,3 +1,5 @@
+[B]3.0.4[/B]
+- Fixed Crashing Info due to TYT.com changing their underlying code
 [B]3.0.3[/B]
 - Fixed Default Langauge File
 [B]3.0.2[/B]

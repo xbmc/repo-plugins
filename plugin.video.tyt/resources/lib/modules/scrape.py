@@ -39,12 +39,13 @@ def Get_Show_Episodes(page):
     i+=1
   return show
 
-def Watch_Episode(page):
+def Watch_Episode(page, show):
 #  page = sendResponse(cookie, page) # main show episode list
 #  with open('main_show_episode.html', 'w') as f:
 #    f.write(page)
-  episode = re.compile('tap to download" href="(.+?)">.+?tap to download" href="(.+?)">',re.DOTALL).findall(page)
-  for link in episode: return link
+  return re.search('tytapp-state.+?%s.+?hd_video_download_url.+?:\\\&q;(.+?)\\\&q' % show, page, re.MULTILINE | re.DOTALL).group(1)
+#  episode = re.compile('tap to download" href="(.+?)">.+?tap to download" href="(.+?)">',re.DOTALL).findall(page)
+#  for link in episode: return link
 
 def List_Shows(page):
 #  page = sendResponse(cookie, page)

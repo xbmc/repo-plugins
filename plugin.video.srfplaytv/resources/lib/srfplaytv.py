@@ -37,7 +37,9 @@ import xbmcplugin
 import xbmcaddon
 
 
+import youtube_requests
 from simplecache import SimpleCache
+
 
 try:
     CompatStr = unicode  # Python2
@@ -223,7 +225,7 @@ def parse_datetime(input_string):
         return date_time
     date_time = _parse_date_time_tz(input_string)
     if not date_time:
-        log('parse_datetime: Could not parse input string %s', input_string)
+        log('parse_datetime: Could not parse input string %s' % input_string)
     return date_time
 
 
@@ -244,7 +246,7 @@ def _parse_date_time_tz(input_string):
                         \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}
                     )
                     (?P<tz>
-                        [-+]\d{2}:\d{2}
+                        (?:[-+]\d{2}:\d{2}|Z)
                     )
                 '''
     match = re.match(dt_regex, input_string)
@@ -1388,16 +1390,49 @@ class SRFPlayTV(object):
         play_item = xbmcgui.ListItem(video_id, path=auth_url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, play_item)
 
-    def build_youtube_menu(self):
+    @staticmethod
+    def build_youtube_menu():
+        """
+        Builds the main YouTube menu (listing all the SRF YouTube channels).
+        """
+        log('build_youtube_menu')
         data_file = os.path.join(xbmc.translatePath(DATA_URI),
                                  YOUTUBE_CHANNELS_FILENAME)
+
+        def get_channel(cid, channels):
+            for ch in channels:
+                if ch['id'] == cid:
+                    return ch
+            return {}
+
         with open(data_file, 'r') as f:
             ch_content = json.load(f)
-            for elem in ch_content.get('channels', []):
-                name = elem.get('name')
-                channel_id = elem.get('channel')
+            cids = [elem['channel'] for elem in ch_content.get('channels', [])]
+            channels_unsorted = youtube_requests.get_channels(cids)
+            channels = []
+            for cid in cids:
+                ch = get_channel(cid, channels_unsorted)
+                if not ch:
+                    log('build_youtube_menu: Channel id %s not found.' % cid)
+                    continue
+                channels.append(ch)
+            for channel in channels:
+                name = channel['brandingSettings']['channel']['title']
                 list_item = xbmcgui.ListItem(label=name)
-                url = 'plugin://plugin.video.youtube/channel/%s/' % channel_id
+                thumbnail = channel['snippet']['thumbnails']['high']['url']
+                image = channel['brandingSettings']['image']
+                banner = image['bannerImageUrl']
+                poster = image['bannerTvHighImageUrl']
+                list_item.setArt({
+                    'thumb': thumbnail,
+                    'banner': banner,
+                    'poster': poster,
+                    'fanart': poster,
+                })
+                description = channel['snippet']['description']
+                list_item.setInfo('video', {'plot': description})
+                yt_plugin_id = 'plugin.video.youtube'
+                url = 'plugin://%s/channel/%s/' % (yt_plugin_id, channel['id'])
                 xbmcplugin.addDirectoryItem(
                     int(sys.argv[1]), url, list_item, isFolder=True)
 

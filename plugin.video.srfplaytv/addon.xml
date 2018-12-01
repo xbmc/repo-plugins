@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.srfplaytv" name="SRF Play TV" version="1.2.0" provider-name="Alexander Seiler">
+<addon id="plugin.video.srfplaytv" name="SRF Play TV" version="1.2.1" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.simplecache" version="1.0.0"/>
+    <import addon="plugin.video.youtube" version="6.2.2"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -24,22 +25,17 @@
     <website>https://www.srf.ch/play/tv</website>
     <email>seileralex@gmail.com</email>
     <source>https://github.com/goggle/plugin.video.srfplaytv</source>
-    <news>v1.2.0 (2018-11-12)
+    <news>v1.2.1 (2018-12-01)
+ - Improve SRF on YouTube.
+ - Fix date parsing issue.
+
+v1.2.0 (2018-11-12)
  - Add French translation.
  - Add Italian translation.
  - Add YouTube support.
+
 v1.1.0 (2018-07-01)
- - Add support for Radio SRF 3 video livestreams.
-
-v1.0.1 (2018-06-07)
- - Only list srf.ch live events if livestream is available.
- - Ignore invalid video ids in episode menu.
- - Translate 'Next page' string.
-
-v1.0.0 (2018-04-24)
- - Add support for SRF.ch livestreams.
- - Add support for Live TV (SRF 1, SRF 2, SRF info).
- - Choose folders to appear in the main menu.</news>
+ - Add support for Radio SRF 3 video livestreams.</news>
     <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.png</fanart>

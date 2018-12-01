@@ -1,46 +1,53 @@
+[B]Version 2.1.1[/B]
+- Updated All Links
+- Removed broken documentary section
+- Added On Demand Videos Section
+- Added Lastest Full On Demand Episodes Section
+- Updated Icons
+
 [B]Version 2.1.0[/B]
 - Updated Alex Jones Show to HD Feed
 
 [B]Version 2.0.9[/B]
-- Fixed fanart and icon links (Spinalcracker)
+- Fixed fanart and icon links
 - Removed urllib3 dependency
 
 [B]Version 2.0.8[/B]
-- Removed Censored Content (Spinalcracker)
+- Removed Censored Content
 - Cleaned up Menu System
 - Added New Shows
 - Added Millie Weaver Youtube Channel
 
 [B]Version 2.0.7[/B]
-- Updated Youtube feeds (Spinalcracker)
+- Updated Youtube feeds
 
 [B]Version 2.0.6[/B]
-- Updated links (Spinalcracker)
+- Updated links
 - Updated Youtube feeds
 - Added War Room Youtube feed
 - Cleaned up some code
 
 [B]Version 2.0.5[/B]
-- Updated links (Spinalcracker)
+- Updated links
 - Added Youtube feeds
 - Added new shows
 - Removed discontinued shows
 - Fixed past audio podcasts
 
 [B]Version 2.0.4[/B]
-- Updated links (Spinalcracker)
+- Updated links
 - Added Paul Joseph Watson section
 - Fixed random bugs with Krypton
 
 [B]Version 2.0.3[/B]
-- Updated links (Spinalcracker)
+- Updated links
 
 [B]Version 2.0.2[/B]
-- Updated all links (Spinalcracker)
-- Switched everything over to HD sources (Spinalcracker)
+- Updated all links 
+- Switched everything over to HD sources 
   (except live streams - only SD from source)
-- Fixed thumbnail for each link (Spinalcracker)
-- Updated Icon and Fanart (Spinalcracker)
+- Fixed thumbnail for each link 
+- Updated Icon and Fanart 
 
 [B]Version 2.0.1[/B]
 - Update for Youtube now forcing people over to api v3

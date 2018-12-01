@@ -1,3 +1,4 @@
+import urllib
 import urllib2
 import xbmc
 import xbmcaddon
@@ -19,7 +20,7 @@ class PCloudApi:
 	def CheckIfAuthPresent(self):
 		if self.auth is None or self.auth == "":
 			raise Exception ("Auth not present. Call PerformLogon() or SetAuth() first.")
-		
+
 	def GetErrorMessage(self, errorCode):
 		if errorCode == 1000:
 			errorText = "Log in required."
@@ -53,7 +54,7 @@ class PCloudApi:
 
 	def SetAuth(self, auth):
 		self.auth = auth
-	
+
 	def PerformLogon(self, username, password):
 		""" This must be the first API that gets called after the constructor
 			Returns auth
@@ -65,7 +66,7 @@ class PCloudApi:
 		if response["result"] != 0:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling getdigest: " + errorMessage)
-		
+
 		authUrl = self.PCLOUD_BASE_URL + "userinfo?getauth=1&logout=1&username=" + username + "&digest=" + response["digest"] + \
 					"&authexpire=" + str(self.TOKEN_EXPIRATION_SECONDS) # this backtick affair is a to-string conversion
 		sha1 = hashlib.sha1()
@@ -133,8 +134,12 @@ class PCloudApi:
 	def GetThumbnails (self, fileIDSequence):
 		self.CheckIfAuthPresent()
 		commaSeparated = ",".join(str(oneFileID) for oneFileID in fileIDSequence) # coerce to string before comma-joining
-		url = self.PCLOUD_BASE_URL + "getthumbslinks?auth=" + self.auth + "&fileids=" + commaSeparated + "&size=256x256&format=png"
-		outputStream = urllib2.urlopen(url)
+		url = self.PCLOUD_BASE_URL + "getthumbslinks"
+		# Here we use POST instead of GET in order to account for folders with lots of files
+		params = { "auth": self.auth, "fileids": commaSeparated, "size": "256x256", "format": "png" }
+		paramsEncoded = urllib.urlencode(params)
+		req = urllib2.Request(url, paramsEncoded)
+		outputStream = urllib2.urlopen(req) # https://docs.python.org/2/howto/urllib2.html
 		response = json.load(outputStream)
 		outputStream.close()
 		if response["result"] != 0:
@@ -147,7 +152,7 @@ class PCloudApi:
 				thumbs[oneThumb["fileid"]] = "https://{0}{1}".format(oneThumb["hosts"][0], oneThumb["path"])
 		# NOTE: cannot use list comprehension (like below) because the Python interpreter in
 		# the Android Kodi port does not seem to understand the syntax.
-		# thumbs = { oneThumb["fileid"]: "https://{0}{1}".format(oneThumb["hosts"][0], oneThumb["path"]) for oneThumb in response["thumbs"] if oneThumb["result"] == 0 } 
+		# thumbs = { oneThumb["fileid"]: "https://{0}{1}".format(oneThumb["hosts"][0], oneThumb["path"]) for oneThumb in response["thumbs"] if oneThumb["result"] == 0 }
 		return thumbs
 
 	def DeleteFile(self, fileID):
@@ -159,7 +164,7 @@ class PCloudApi:
 		if response["result"] != 0:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling deletefile: " + errorMessage)
-		
+
 	def DeleteFolder(self, folderID):
 		self.CheckIfAuthPresent()
 		url = self.PCLOUD_BASE_URL + "deletefolderrecursive?auth=" + self.auth + "&folderid=" + str(folderID)

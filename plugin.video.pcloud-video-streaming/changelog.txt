@@ -1,6 +1,10 @@
+v1.2.10 -- 01-Dec-2018
+- Fixed issue #17: if a folder contained a large amount of files (typically, 500+), its contents could not
+  be shown.
+
 v1.2.9 -- 29-Apr-2018
 - Fixed issue #13: if a subtitle file is present in the same folder with the same filename (but different
-  extension, such as for example .srt) as an existing video file, then those subtitles will be shown along 
+  extension, such as for example .srt) as an existing video file, then those subtitles will be shown along
   with the video.
 
 v1.2.8 -- 04-Jan-2018

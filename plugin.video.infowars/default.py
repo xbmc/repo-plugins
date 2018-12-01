@@ -14,7 +14,9 @@
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
 import urllib,urllib2,re,os,sys,htmllib,string,StringIO,logging,random,array,time,datetime, ssl, socket
 import copy
+import json,requests
 import HTMLParser, htmlentitydefs
+#import simplejson as json
 try: 		from sqlite3 										import dbapi2 as sqlite; print "Loading sqlite3 as DB engine"
 except: from pysqlite2 									import dbapi2 as sqlite; print "Loading pysqlite2 as DB engine"
 try: 			from addon.common.addon 				import Addon
@@ -53,19 +55,22 @@ IW_database_name="infowars"
 IW_plugin_id= "plugin.video.infowars"
 IW_database_file=os.path.join(xbmc.translatePath("special://database"),'infowars.db'); 
 IW_debugging= False
-AJSIcon = "https://static.infowars.com/images/alex-jones-frontal.jpg"
-RNWDKIcon = "https://static.infowars.com/images/real-news-logo.png"
-RNWDKFanart = "https://static.infowars.com/images/real-news-with-david-knight.jpg"
-WarRoomIcon = "https://static.infowars.com/images/war-room-logo.png"
+AJSIcon = "https://imgur.com/YYl3GFe.png"
+DKSIcon = "https://static.infowars.com/images/DKS-logo.png"
+DKSFanart = "https://static.infowars.com/images/DKS-bg.jpg"
+WarRoomIcon = "https://static.infowars.com/images/war-room-logo-white.png"
 WarRoomFanart = "https://static.infowars.com/images/war-room-studio.jpg"
-CTIcon = "https://imgur.com/PN4jxKi.jpg"
+CTIcon = "https://imgur.com/XA1mZtd.png"
 CTFanart = "https://imgur.com/KloueqE.jpg"
-IWLiveSEIcon = "https://hw.infowars.com/wp-content/images/logo.jpg"
+IWLiveSEIcon = "https://imgur.com/i4TqWhY.png"
 IWLiveSEFanart = "https://www.infowars.com/wp-content/uploads/2018/08/jones-censored23.jpg"
 PJWIcon = "https://i.imgur.com/A9R4qjv.jpg"
 PJWFanart = "https://i.imgur.com/ZksTDyX.jpg"
 MWIcon = "https://i.imgur.com/5KMuph0.jpg"
 MWFanart = "https://www.infowarsteam.com/wp-content/uploads/2016/10/Millie-Weaver.jpg"
+IWODIcon = "https://imgur.com/PcR2j1b.png"
+IWODFanart = "https://imgur.com/Un7aMqX.jpg"
+IWODFLSIcon = "https://imgur.com/fgVD9Ps.png"
 
 
 ### ##### /\ ##### Plugin Settings ###
@@ -160,6 +165,10 @@ def add_item( action="" , title="" , plot="" , url="" ,thumbnail="" , folder=Tru
         itemurl = url
         listitem.setProperty('IsPlayable', 'true')
         xbmcplugin.addDirectoryItem( handle=int(sys.argv[1]), url=itemurl, listitem=listitem)
+    elif url.startswith("https://"):
+        itemurl = url
+        listitem.setProperty('IsPlayable', 'true')
+        xbmcplugin.addDirectoryItem( handle=int(sys.argv[1]), url=itemurl, listitem=listitem)
     else:
         itemurl = '%s?action=%s&title=%s&url=%s&thumbnail=%s&plot=%s' % ( sys.argv[ 0 ] , action , urllib.quote_plus( title ) , urllib.quote_plus(url) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ))
         xbmcplugin.addDirectoryItem( handle=int(sys.argv[1]), url=itemurl, listitem=listitem, isFolder=folder)
@@ -239,7 +248,6 @@ def build_listitem(video_type, title, year, img, resurl, movie_num='', imdbnum='
     listitem.addContextMenuItems(menu_items, replaceItems=True)
     return listitem
 
-
 def add_to_library(video_type, url, title, img, year, imdbnum, movie_num=''):
     try: IW_addon.log('Creating .strm for %s %s %s %s %s %s' % (video_type, title, imdbnum, url, img, year))
     except: pass
@@ -291,7 +299,7 @@ def add_to_library(video_type, url, title, img, year, imdbnum, movie_num=''):
         except Exception, e:
             IW_addon.log('Failed to create .strm file: %s\n%s' % (final_path, e))
 
-	
+
 ### ############################################################################################################
 ### ############################################################################################################
 ##### Queries #####
@@ -333,264 +341,18 @@ def playYoutube(url):
 
 def Menu_MainMenu(): #The Main Menu
     WhereAmI('@ the Main Menu')
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://streaminfo-live.secure.footprint.net/hls-live/streamroot2-streaminfo/_definst_/live.m3u8'},{'title':  cFL_('The Alex Jones Show - (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://streaminfo-live.secure.footprint.net/hls-live/streamroot2-streaminfo3/_definst_/live.m3u8'},{'title':  cFL_('Real News with David Knight - (Loops After Airing)','red')},is_folder=False,img=RNWDKIcon,fanart=RNWDKFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://streaminfo-live.secure.footprint.net/hls-live/streamroot2-streaminfo2/_definst_/live.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - (Loops After Airing)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/MikeAdams_1@704916/master.m3u8'},{'title':  cFL_('Counter Think with Mike Adams - (Loops After Airing)','orange')},is_folder=False,img=CTIcon,fanart=CTFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarsevent_1@366809/master.m3u8'},{'title':  cFL_('Live Shows & Special Events','yellow')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream-infostream/_definst_/live.m3u8'},{'title':  cFL_('The Alex Jones Show - (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream2-infostream2/_definst_/live.m3u8'},{'title':  cFL_('The David Knight Show - (Loops After Airing)','red')},is_folder=False,img=DKSIcon,fanart=DKSFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream3-infostream3/_definst_/live.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - (Loops After Airing)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/MikeAdams_1@704916/index_800_av-p.m3u8?sd=10&rebase=on'},{'title':  cFL_('Counter Think with Mike Adams - (Loops After Airing)','orange')},is_folder=False,img=CTIcon,fanart=CTFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarsevent_1@366809/index_800_av-p.m3u8?sd=10&rebase=on'},{'title':  cFL_('Live Shows & Special Events','yellow')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
+    IW_addon.add_directory({'mode': 'AJShowArchiveSubMenu','title':'On Demand Videos'},{'title':  cFL_('On Demand Videos','cyan')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
     IW_addon.add_directory({'mode': 'PaulJosephWatsonSubMenu','title':'Paul Joseph Watson (Youtube Video)'},{'title':  cFL_('Paul Joseph Watson (Youtube)','blue')},is_folder=True,img=PJWIcon,fanart=PJWFanart)
     IW_addon.add_directory({'mode': 'MillieWeaverSubMenu','title':'Millie Weaver (Youtube Video)'},{'title':  cFL_('Millie Weaver (Youtube)','pink')},is_folder=True,img=MWIcon,fanart=MWFanart)
-    video_type = ('tvshow')
-    title = cFL_('Infowars Nightly News','lime')
-    year = ('')
-    img = IW_artIcon
-    fanart = IW_artFanart
-    imdbnum = ''
-    url = 'plugin://plugin.video.infowars'
-    resurl = 'plugin://plugin.video.infowars'
-    listitem = build_listitem(video_type, title, year, img, fanart, resurl)
-    queries = {'mode': 'NightlyNewsSubMenu'}
-    li_url = IW_addon.build_plugin_url(queries)
-    IW_addon.add_directory({'mode': 'DocSubMenu','title':'Acclaimed Documentaries'},{'title':  cFL_('Acclaimed Documentaries','blanchedalmond')},is_folder=True,img=IW_artIcon,fanart=IW_artFanart)
     
     eod()
 
-def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
-    WhereAmI('@ Documentaries')
-    #mode left blank for main menu.
-    if not movie_num:
-        video_type = ('movie')
-        title = ('Strategic Relocation')
-        img = IW_artIcon
-        year = ''
-        movie_num = '19'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url = 'plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=jzjm9MJFSA8'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('911 Truth Hollywood Speaks Out')
-        img = IW_artIcon
-        year = ''
-        movie_num = '18'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=3X4hbIDnq5k'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('Invisible Empire A New World Order Defined ')
-        img = IW_artIcon
-        year = ''
-        movie_num = '17'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=NO24XmP1c5E'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('Police State 4 The Rise of Fema')
-        img = IW_artIcon
-        year = ''
-        movie_num = '16'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=Klqv9t1zVww'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('Fall of the Republic')
-        img = IW_artIcon
-        year = ''
-        movie_num = '15'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=VebOTc-7shU'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('The Obama Deception')
-        img = IW_artIcon
-        year = ''
-        movie_num = '14'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=eAaQNACwaLw'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('Truth Rising')
-        img = IW_artIcon
-        year = ''
-        movie_num = '13'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=t-yscpNIxjI'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('End Game')
-        img = IW_artIcon
-        year = ''
-        movie_num = '12'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=x-CrNlilZho'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('TerrorStorm')
-        img = IW_artIcon
-        year = ''
-        movie_num = '11'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=vrXgLhkv21Y'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('Martial Law 911 Rise of the Police State')
-        img = IW_artIcon
-        year = ''
-        movie_num = '10'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=FIzT6r56CnY'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('911 The Road to Tyranny')
-        img = IW_artIcon
-        year = ''
-        movie_num = '9'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=OVMyH8eOHKs'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('Matrix of Evil')
-        img = IW_artIcon
-        year = ''
-        movie_num = '8'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=9wRuiqqoHFY'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('America Destroyed by Design')
-        img = IW_artIcon
-        year = ''
-        movie_num = '7'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=vsKVyhuBf3c'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('American Dictators')
-        img = IW_artIcon
-        year = ''
-        movie_num = '6'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=1Fr5QC6u2EQ'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('Dark Secrets Inside Bohemian Grove')
-        img = IW_artIcon
-        year = ''
-        movie_num = '5'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=FVtEvplXMLs'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('The Order of Death')
-        img = IW_artIcon
-        year = ''
-        movie_num = '4'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=VhlRIH9iPD4'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('Police State 2000')
-        img = IW_artIcon
-        year = ''
-        movie_num = '3'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=3zkxyFhqQJ4'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('Police State II The Take Over')
-        img = IW_artIcon
-        year = ''
-        movie_num = '2'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=g7kh1j8ZkEs'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-        video_type = ('movie')
-        title = ('Police State 3 Total Enslavement')
-        img = IW_artIcon
-        year = ''
-        movie_num = '1'
-        resurl = 'plugin://plugin.video.infowars'
-        listitem = build_listitem(video_type, title, year, img, resurl, movie_num)
-        listitem.setProperty('IsPlayable', 'true')
-        li_url ='plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=K4RWRm-bgv8'
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=False)
-    elif(movie_num=='19'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=jzjm9MJFSA8') 
-    elif(movie_num=='18'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=3X4hbIDnq5k')
-    elif(movie_num=='17'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=NO24XmP1c5E')
-    elif(movie_num=='16'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=Klqv9t1zVww')
-    elif(movie_num=='15'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=VebOTc-7shU')    
-    elif(movie_num=='14'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=eAaQNACwaLw')
-    elif(movie_num=='13'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=t-yscpNIxjI')
-    elif(movie_num=='12'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=x-CrNlilZho')
-    elif(movie_num=='11'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=vrXgLhkv21Y')
-    elif(movie_num=='10'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=FIzT6r56CnY')
-    elif(movie_num=='9'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=OOVMyH8eOHKs')
-    elif(movie_num=='8'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=9wRuiqqoHFY')
-    elif(movie_num=='7'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=vsKVyhuBf3c')
-    elif(movie_num=='6'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=1Fr5QC6u2EQ')
-    elif(movie_num=='5'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=FVtEvplXMLs')
-    elif(movie_num=='4'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=VhlRIH9iPD4')
-    elif(movie_num=='3'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=3zkxyFhqQJ4')
-    elif(movie_num=='2'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=g7kh1j8ZkEs')
-    elif(movie_num=='1'):
-        addon.resolve_url('plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=K4RWRm-bgv8')
-        
-    eod() #Ends the directory listing and prints it to the screen.  if you dont use eod() or something like it, the menu items won't be put to the screen.
-
-def Paul_Joseph_Watson_Sub_Menu(title=''): #The Main Menu
+def Paul_Joseph_Watson_Sub_Menu(title=''): 
     #https://www.youtube.com/user/PrisonPlanetLive
     WhereAmI('@ Paul Joseph Watson')
     url = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCittVh8imKanO_5KohzDbpg'
@@ -610,7 +372,7 @@ def Paul_Joseph_Watson_Sub_Menu(title=''): #The Main Menu
 
     eod()    
 
-def Millie_Weaver_Sub_Menu(title=''): #The Main Menu
+def Millie_Weaver_Sub_Menu(title=''):
     #https://www.youtube.com/channel/UCglVbeKF9JGMCt-RTUAW_TQ
     WhereAmI('@ Millie Weaver')
     url = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCglVbeKF9JGMCt-RTUAW_TQ'
@@ -629,6 +391,89 @@ def Millie_Weaver_Sub_Menu(title=''): #The Main Menu
         util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
 
     eod()    
+
+def Full_Show_Sub_Menu(title=''):
+    WhereAmI('@ Recent Full Length Shows')
+    ifwID = None
+    urlMAIN = 'https://vod-api.infowars.com/api/channel'
+    hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+       'Accept': 'text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
+       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+       'Accept-Encoding': 'none',
+       'Accept-Language': 'en-US,en;q=0.8',
+       'Connection': 'keep-alive'}
+    dataMAIN = None
+    reqMAIN = urllib2.Request(urlMAIN, dataMAIN ,hdr)
+    responseMAIN = urllib2.urlopen(reqMAIN) 
+    dataMAIN = json.load(responseMAIN)
+
+    for section in reversed(dataMAIN):
+       titleCheck = unicode(section["title"]).encode('utf-8');
+       if not titleCheck=="Testing" and not titleCheck=="Miscellaneous Videos":
+           if titleCheck=="Real News with David Knight":
+               titleCheck = "The David Knight Show";
+           ifwID = unicode(section["id"]).encode('utf-8');
+
+           url = 'https://vod-api.infowars.com/api/channel/'+ ifwID +'/videos'
+
+           data = None
+           req = urllib2.Request(url, data ,hdr)
+           response = urllib2.urlopen(req)
+           data = json.load(response)
+
+           for item in data["videos"]:
+               title = titleCheck + " - " + unicode(item["title"]).encode('utf-8'); 
+               plot = unicode(item["summary"]).encode('utf-8');
+               thumbnail = unicode(item["posterThumbnailUrl"]).encode('utf-8');
+               video_id = unicode(item["directUrl"]).encode('utf-8');
+               url = video_id
+               if "Full Show" in title:
+                   add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
+            
+
+    eod()
+
+def Alex_Jones_Show_Archive_Sub_Menu(title=''):
+    #https://www.infowars.com/videos/
+    WhereAmI('@ On Demand Videos')
+    IW_addon.add_directory({'mode': 'FullShowSubMenu','title':'Recent Full Length Shows'},{'title':  cFL('===[ Click Here For Recent Full Length Shows ]===','red')},is_folder=True,img=IWODFLSIcon,fanart=IWODFanart)
+    ifwID = None
+    urlMAIN = 'https://vod-api.infowars.com/api/channel'
+    hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+       'Accept': 'text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
+       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+       'Accept-Encoding': 'none',
+       'Accept-Language': 'en-US,en;q=0.8',
+       'Connection': 'keep-alive'}
+    dataMAIN = None
+    reqMAIN = urllib2.Request(urlMAIN, dataMAIN ,hdr)
+    responseMAIN = urllib2.urlopen(reqMAIN) 
+    dataMAIN = json.load(responseMAIN)
+
+    for section in reversed(dataMAIN):
+       titleCheck = unicode(section["title"]).encode('utf-8');
+       if not titleCheck=="Testing" and not titleCheck=="Miscellaneous Videos":
+           if titleCheck=="Real News with David Knight":
+               titleCheck = "The David Knight Show";
+           ifwID = unicode(section["id"]).encode('utf-8');
+
+           url = 'https://vod-api.infowars.com/api/channel/'+ ifwID +'/videos'
+
+           data = None
+           req = urllib2.Request(url, data ,hdr)
+           response = urllib2.urlopen(req)
+           data = json.load(response)
+
+           for item in data["videos"]:
+               title = titleCheck + " - " + unicode(item["title"]).encode('utf-8'); 
+               plot = unicode(item["summary"]).encode('utf-8');
+               thumbnail = unicode(item["posterThumbnailUrl"]).encode('utf-8');
+               video_id = unicode(item["directUrl"]).encode('utf-8');
+               url = video_id
+               if not "Full Show" in title:
+                   add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
+
+    eod()
 
 def check_mode(mode=''):
     mode = IW_addon.queries.get('mode', None)
@@ -658,9 +503,10 @@ def check_mode(mode=''):
     elif (mode=='PlayURL'): PlayURL(_param['url']) ## Play Video
     elif (mode=='play'): play(params) ## Play Video
     elif (mode=='playYoutube'): playYoutube('url')
-    elif (mode=='DocSubMenu'): Documentary_Sub_Menu(_param['title'], movie_num) ## Play Video
     elif (mode=='PaulJosephWatsonSubMenu'): Paul_Joseph_Watson_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='MillieWeaverSubMenu'): Millie_Weaver_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='AJShowArchiveSubMenu'): Alex_Jones_Show_Archive_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='FullShowSubMenu'): Full_Show_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='Settings'): IW_addon.addon.openSettings() # Another method: _plugin.openSettings() ## Settings for this addon.
     elif (mode=='ResolverSettings'): urlresolver.display_settings()  ## Settings for UrlResolver script.module.
     elif (mode == 'add_to_library'):

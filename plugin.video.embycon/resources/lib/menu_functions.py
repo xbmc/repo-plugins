@@ -247,6 +247,8 @@ def displaySections():
                        "&mode=GET_CONTENT&media_type=" + collection["media_type"])
                 if collection.get("name_format") is not None:
                     url += "&name_format=" + urllib.quote(collection.get("name_format"))
+                if not collection.get("use_cache", True):
+                    url += "&use_cache=false"
                 log.debug("addMenuDirectoryItem: {0} ({1})", collection.get('title'), url)
                 addMenuDirectoryItem(collection.get('title', string_load(30250)),
                                      url,
@@ -307,6 +309,7 @@ def getCollections():
 
     settings = xbmcaddon.Addon()
     group_movies = settings.getSetting('group_movies') == "true"
+    show_x_filtered_items = settings.getSetting("show_x_filtered_items")
 
     for item in result:
         item_name = item.get("Name")
@@ -331,6 +334,55 @@ def getCollections():
                                  '&EnableImageTypes=Primary,Backdrop,Banner,Thumb' +
                                  '&SortBy=Name' +
                                  '&SortOrder=Ascending' +
+                                 '&format=json')
+            collections.append(item_data)
+
+            item_data = {}
+            item_data['title'] = item_name + string_load(30268) + " (" + show_x_filtered_items + ")"
+            item_data['art'] = art
+            item_data['media_type'] = 'MusicAlbums'
+            item_data['path'] = ('{server}/emby/Users/{userid}/Items/Latest' +
+                                 '?IncludeItemTypes=Audio' +
+                                 '&ParentId=' + item.get("Id") +
+                                 '&ImageTypeLimit=1' +
+                                 '&Limit={ItemLimit}' +
+                                 '&EnableImageTypes=Primary,Backdrop,Banner,Thumb' +
+                                 '&SortBy=Name' +
+                                 '&SortOrder=Ascending' +
+                                 '&format=json')
+            collections.append(item_data)
+
+            item_data = {}
+            item_data['title'] = item_name + string_load(30349) + " (" + show_x_filtered_items + ")"
+            item_data['art'] = art
+            item_data['media_type'] = 'MusicAlbum'
+            item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
+                                 '?SortBy=DatePlayed' +
+                                 '&SortOrder=Descending' +
+                                 '&IncludeItemTypes=Audio' +
+                                 '&Limit={ItemLimit}' +
+                                 '&Recursive=true' +
+                                 '&ParentId=' + item.get("Id") +
+                                 '&ImageTypeLimit=1' +
+                                 '&EnableImageTypes=Primary,Backdrop,Banner,Thumb' +
+                                 '&Filters=IsPlayed' +
+                                 '&format=json')
+            collections.append(item_data)
+
+            item_data = {}
+            item_data['title'] = item_name + string_load(30353) + " (" + show_x_filtered_items + ")"
+            item_data['art'] = art
+            item_data['media_type'] = 'MusicAlbum'
+            item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
+                                 '?SortBy=PlayCount' +
+                                 '&SortOrder=Descending' +
+                                 '&IncludeItemTypes=Audio' +
+                                 '&Limit={ItemLimit}' +
+                                 '&Recursive=true' +
+                                 '&ParentId=' + item.get("Id") +
+                                 '&ImageTypeLimit=1' +
+                                 '&EnableImageTypes=Primary,Backdrop,Banner,Thumb' +
+                                 '&Filters=IsPlayed' +
                                  '&format=json')
             collections.append(item_data)
 
@@ -361,6 +413,44 @@ def getCollections():
                          '&ImageTypeLimit=1' +
                          '&SortBy=Name' +
                          '&SortOrder=Ascending' +
+                         '&format=json'),
+                'media_type': collection_type})
+
+            collections.append({
+                'title': item_name + string_load(30267) + " (" + show_x_filtered_items + ")",
+                'art': art,
+                'use_cache': False,
+                'path': ('{server}/emby/Users/{userid}/Items' +
+                         '?ParentId=' + item.get("Id") +
+                         '&Limit={ItemLimit}' +
+                         '&SortBy=DatePlayed' +
+                         '&SortOrder=Descending' +
+                         '&IsVirtualUnaired=false' +
+                         '&IsMissing=False' +
+                         '&Fields={field_filters}' +
+                         '&Filters=IsResumable' +
+                         '&Recursive=true' +
+                         '&ImageTypeLimit=1' +
+                         '&format=json'),
+                'media_type': collection_type})
+
+            collections.append({
+                'title': item_name + string_load(30268) + " (" + show_x_filtered_items + ")",
+                'art': art,
+                'use_cache': False,
+                'path': ('{server}/emby/Users/{userid}/Items' +
+                         '?ParentId=' + item.get("Id") +
+                         '&CollapseBoxSetItems=false' +
+                         '&GroupItemsIntoCollections=false' +
+                         '&Recursive=true' +
+                         '&Limit={ItemLimit}' +
+                         '&IsVirtualUnaired=false' +
+                         '&IsMissing=False' +
+                         '&Fields={field_filters}' +
+                         '&SortBy=DateCreated' +
+                         '&SortOrder=Descending' +
+                         '&Filters={IsUnplayed,}IsNotFolder' +
+                         '&ImageTypeLimit=1' +
                          '&format=json'),
                 'media_type': collection_type})
 
@@ -416,6 +506,7 @@ def getCollections():
                          '&SortOrder=Ascending' +
                          '&format=json'),
                 'media_type': collection_type})
+
             collections.append({
                 'title': item_name + string_load(30285),
                 'art': art,
@@ -432,9 +523,11 @@ def getCollections():
                          '&ImageTypeLimit=1' +
                          '&format=json'),
                 'media_type': 'tvshows'})
+
             collections.append({
-                'title': item_name + string_load(30267),
+                'title': item_name + string_load(30267) + " (" + show_x_filtered_items + ")",
                 'art': art,
+                'use_cache': False,
                 'path': ('{server}/emby/Users/{userid}/Items' +
                          '?ParentId=' + item.get("Id") +
                          '&Limit={ItemLimit}' +
@@ -450,9 +543,11 @@ def getCollections():
                          '&format=json'),
                 'media_type': 'Episodes',
                 'name_format': 'Episode|episode_name_format'})
+
             collections.append({
-                'title': item_name + string_load(30288),
+                'title': item_name + string_load(30288) + " (" + show_x_filtered_items + ")",
                 'art': art,
+                'use_cache': False,
                 'path': ('{server}/emby/Users/{userid}/Items/Latest' +
                          '?ParentId=' + item.get("Id") +
                          '&Limit={ItemLimit}' +
@@ -468,9 +563,11 @@ def getCollections():
                          '&format=json'),
                 'media_type': 'Episodes',
                 'name_format': 'Episode|episode_name_format'})
+
             collections.append({
-                'title': item_name + string_load(30268),
+                'title': item_name + string_load(30268) + " (" + show_x_filtered_items + ")",
                 'art': art,
+                'use_cache': False,
                 'path': ('{server}/emby/Users/{userid}/Items' +
                          '?ParentId=' + item.get("Id") +
                          '&Limit={ItemLimit}' +
@@ -486,9 +583,11 @@ def getCollections():
                          '&format=json'),
                 'media_type': 'Episodes',
                 'name_format': 'Episode|episode_name_format'})
+
             collections.append({
-                'title': item_name + string_load(30278),
+                'title': item_name + string_load(30278) + " (" + show_x_filtered_items + ")",
                 'art': art,
+                'use_cache': False,
                 'path': ('{server}/emby/Shows/NextUp/?Userid={userid}' +
                          '&ParentId=' + item.get("Id") +
                          '&Limit={ItemLimit}' +
@@ -502,6 +601,7 @@ def getCollections():
                          '&format=json'),
                 'media_type': 'Episodes',
                 'name_format': 'Episode|episode_name_format'})
+
             collections.append({
                 'title': item_name + string_load(30325),
                 'item_type': 'plugin_link',
@@ -542,9 +642,11 @@ def getCollections():
                          '&SortOrder=Ascending' +
                          '&format=json'),
                 'media_type': collection_type})
+
             collections.append({
-                'title': item_name + string_load(30267),
+                'title': item_name + string_load(30267) + " (" + show_x_filtered_items + ")",
                 'art': art,
+                'use_cache': False,
                 'path': ('{server}/emby/Users/{userid}/Items' +
                          '?ParentId=' + item.get("Id") +
                          '&IncludeItemTypes=Movie' +
@@ -561,9 +663,11 @@ def getCollections():
                          '&ImageTypeLimit=1' +
                          '&format=json'),
                 'media_type': collection_type})
+
             collections.append({
-                'title': item_name + string_load(30268),
+                'title': item_name + string_load(30268) + " (" + show_x_filtered_items + ")",
                 'art': art,
+                'use_cache': False,
                 'path': ('{server}/emby/Users/{userid}/Items' +
                          '?ParentId=' + item.get("Id") +
                          '&IncludeItemTypes=Movie' +
@@ -580,12 +684,14 @@ def getCollections():
                          '&ImageTypeLimit=1' +
                          '&format=json'),
                 'media_type': collection_type})
+
             collections.append({
                 'title': item_name + string_load(30325),
                 'item_type': 'plugin_link',
                 'art': art,
                 'path': 'plugin://plugin.video.embycon/?mode=GENRES&item_type=movie&parent_id=' + item.get("Id"),
                 'media_type': collection_type})
+
             collections.append({
                 'title': item_name + ' - Pages',
                 'item_type': 'plugin_link',
@@ -627,11 +733,12 @@ def getCollections():
     collections.append(item_data)
 
     item_data = {}
-    item_data['title'] = string_load(30258)
+    item_data['title'] = string_load(30258) + " (" + show_x_filtered_items + ")"
     item_data['media_type'] = 'Movies'
+    item_data['use_cache'] = False
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
-                         '?Limit={ItemLimit}' +
-                         '&CollapseBoxSetItems=false' +
+                         '?CollapseBoxSetItems=false' +
+                         '&Limit={ItemLimit}' +
                          '&GroupItemsIntoCollections=false' +
                          '&Recursive=true' +
                          '&Fields={field_filters}' +
@@ -644,11 +751,12 @@ def getCollections():
     collections.append(item_data)
 
     item_data = {}
-    item_data['title'] = string_load(30257)
+    item_data['title'] = string_load(30257) + " (" + show_x_filtered_items + ")"
     item_data['media_type'] = 'Movies'
+    item_data['use_cache'] = False
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
-                         '?Limit={ItemLimit}' +
-                         '&CollapseBoxSetItems=false' +
+                         '?CollapseBoxSetItems=false' +
+                         '&Limit={ItemLimit}' +
                          '&GroupItemsIntoCollections=false' +
                          '&Recursive=true' +
                          '&SortBy=DateCreated' +
@@ -731,12 +839,13 @@ def getCollections():
     collections.append(item_data)
 
     item_data = {}
-    item_data['title'] = string_load(30287)
+    item_data['title'] = string_load(30287) + " (" + show_x_filtered_items + ")"
     item_data['media_type'] = 'Episodes'
+    item_data['use_cache'] = False
     item_data['path'] = ('{server}/emby/Users/{userid}/Items/Latest' +
-                         '?Limit={ItemLimit}' +
+                         '?GroupItems=true' +
+                         '&Limit={ItemLimit}' +
                          '&Recursive=true' +
-                         '&GroupItems=true' +
                          '&SortBy=DateCreated' +
                          '&Fields={field_filters}' +
                          '&SortOrder=Descending' +
@@ -750,11 +859,12 @@ def getCollections():
     collections.append(item_data)
 
     item_data = {}
-    item_data['title'] = string_load(30264)
+    item_data['title'] = string_load(30264) + " (" + show_x_filtered_items + ")"
     item_data['media_type'] = 'Episodes'
+    item_data['use_cache'] = False
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
-                         '?Limit={ItemLimit}' +
-                         '&SortBy=DatePlayed' +
+                         '?SortBy=DatePlayed' +
+                         '&Limit={ItemLimit}' +
                          '&SortOrder=Descending' +
                          '&Recursive=true' +
                          '&Fields={field_filters}' +
@@ -766,12 +876,13 @@ def getCollections():
     collections.append(item_data)
 
     item_data = {}
-    item_data['title'] = string_load(30263)
+    item_data['title'] = string_load(30263) + " (" + show_x_filtered_items + ")"
     item_data['media_type'] = 'Episodes'
+    item_data['use_cache'] = False
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
-                         '?Limit={ItemLimit}' +
+                         '?SortBy=DateCreated' +
+                         '&Limit={ItemLimit}' +
                          '&Recursive=true' +
-                         '&SortBy=DateCreated' +
                          '&Fields={field_filters}' +
                          '&SortOrder=Descending' +
                          '&Filters={IsUnplayed,}IsNotFolder' +
@@ -784,8 +895,9 @@ def getCollections():
     collections.append(item_data)
 
     item_data = {}
-    item_data['title'] = string_load(30265)
+    item_data['title'] = string_load(30265) + " (" + show_x_filtered_items + ")"
     item_data['media_type'] = 'Episodes'
+    item_data['use_cache'] = False
     item_data['path'] = ('{server}/emby/Shows/NextUp/?Userid={userid}' +
                          '&Limit={ItemLimit}' +
                          '&Recursive=true' +
@@ -800,21 +912,6 @@ def getCollections():
     collections.append(item_data)
 
     item_data = {}
-    item_data['title'] = string_load(30266)
-    item_data['media_type'] = 'Episodes'
-    item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
-                         '?Recursive=true' +
-                         '&SortBy=PremiereDate' +
-                         '&Fields={field_filters}' +
-                         '&SortOrder=Ascending' +
-                         '&IsVirtualUnaired=true' +
-                         '&IsNotFolder' +
-                         '&IncludeItemTypes=Episode' +
-                         '&ImageTypeLimit=1' +
-                         '&format=json')
-    collections.append(item_data)
-
-    item_data = {}
     item_data['title'] = string_load(30318)
     item_data['media_type'] = 'MusicAlbums'
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
@@ -824,6 +921,52 @@ def getCollections():
                          '&EnableImageTypes=Primary,Backdrop,Banner,Thumb' +
                          '&SortBy=Name' +
                          '&SortOrder=Ascending' +
+                         '&format=json')
+    collections.append(item_data)
+
+    item_data = {}
+    item_data['title'] = string_load(30350) + " (" + show_x_filtered_items + ")"
+    item_data['art'] = art
+    item_data['media_type'] = 'MusicAlbums'
+    item_data['path'] = ('{server}/emby/Users/{userid}/Items/Latest' +
+                         '?IncludeItemTypes=Audio' +
+                         '&ImageTypeLimit=1' +
+                         '&Limit={ItemLimit}' +
+                         '&EnableImageTypes=Primary,Backdrop,Banner,Thumb' +
+                         '&SortBy=Name' +
+                         '&SortOrder=Ascending' +
+                         '&format=json')
+    collections.append(item_data)
+
+    item_data = {}
+    item_data['title'] = string_load(30351) + " (" + show_x_filtered_items + ")"
+    item_data['art'] = art
+    item_data['media_type'] = 'MusicAlbum'
+    item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
+                         '?SortBy=DatePlayed' +
+                         '&SortOrder=Descending' +
+                         '&IncludeItemTypes=Audio' +
+                         '&Limit={ItemLimit}' +
+                         '&Recursive=true' +
+                         '&ImageTypeLimit=1' +
+                         '&EnableImageTypes=Primary,Backdrop,Banner,Thumb' +
+                         '&Filters=IsPlayed' +
+                         '&format=json')
+    collections.append(item_data)
+
+    item_data = {}
+    item_data['title'] = string_load(30352) + " (" + show_x_filtered_items + ")"
+    item_data['art'] = art
+    item_data['media_type'] = 'MusicAlbum'
+    item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
+                         '?SortBy=PlayCount' +
+                         '&SortOrder=Descending' +
+                         '&IncludeItemTypes=Audio' +
+                         '&Limit={ItemLimit}' +
+                         '&Recursive=true' +
+                         '&ImageTypeLimit=1' +
+                         '&EnableImageTypes=Primary,Backdrop,Banner,Thumb' +
+                         '&Filters=IsPlayed' +
                          '&format=json')
     collections.append(item_data)
 
@@ -844,6 +987,9 @@ def getCollections():
 
 def showWidgets():
 
+    settings = xbmcaddon.Addon()
+    show_x_filtered_items = settings.getSetting("show_x_filtered_items")
+
     url = ("{server}/emby/Movies/Recommendations" +
            "?userId={userid}" +
            "&categoryLimit=1" +
@@ -851,12 +997,14 @@ def showWidgets():
            "&format=json" +
            "&ImageTypeLimit=1" +
            '&Fields={field_filters}' +
+           "&Filters={IsUnplayed}" +
            "&IsMissing=False")
-    addMenuDirectoryItem(string_load(30324),
-                         "plugin://plugin.video.embycon/?mode=GET_CONTENT&media_type=Movies&url=" + urllib.quote(url))
+    addMenuDirectoryItem(string_load(30324) + " (" + show_x_filtered_items + ")",
+                         "plugin://plugin.video.embycon/?mode=GET_CONTENT&use_cache=false&media_type=Movies&url=" + urllib.quote(url))
 
     url = ("{server}/emby/Users/{userid}/Items" +
-           "?Limit={ItemLimit}" +
+           "?SortBy=Random" +
+           "&Limit={ItemLimit}" +
            '&CollapseBoxSetItems=false' +
            '&GroupItemsIntoCollections=false' +
            "&format=json" +
@@ -866,18 +1014,19 @@ def showWidgets():
            "&Filters={IsUnplayed,}IsNotFolder" +
            "&Recursive=true" +
            "&SortBy=Random" +
-           "&SortOrder=Descending" +
+           #"&SortOrder=Descending" +
            "&IsVirtualUnaired=false" +
            "&IsMissing=False" +
            "&IncludeItemTypes=Movie")
-    addMenuDirectoryItem(string_load(30269),
-                         "plugin://plugin.video.embycon/?mode=GET_CONTENT&media_type=Movies&url=" + urllib.quote(url))
+    addMenuDirectoryItem(string_load(30269) + " (" + show_x_filtered_items + ")",
+                         "plugin://plugin.video.embycon/?mode=GET_CONTENT&use_cache=false&media_type=Movies&url=" + urllib.quote(url))
 
-    #addMenuDirectoryItem(string_load(30257), 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_movies')
-    #addMenuDirectoryItem(string_load(30258), 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=inprogress_movies')
-    #addMenuDirectoryItem(string_load(30263), 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_episodes')
-    #addMenuDirectoryItem(string_load(30264), 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=inprogress_episodes')
-    #addMenuDirectoryItem(string_load(30265), 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=nextup_episodes')
+    addMenuDirectoryItem(string_load(30257) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_movies')
+    addMenuDirectoryItem(string_load(30258) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=inprogress_movies')
+    addMenuDirectoryItem(string_load(30287) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_tvshows')
+    addMenuDirectoryItem(string_load(30263) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_episodes')
+    addMenuDirectoryItem(string_load(30264) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=inprogress_episodes')
+    addMenuDirectoryItem(string_load(30265) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=nextup_episodes')
 
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

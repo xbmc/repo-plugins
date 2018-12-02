@@ -347,7 +347,7 @@ msgid "Search"
 msgstr ""
 
 msgctxt "#30247"
-msgid "Widgets"
+msgid "Custom Widget Content"
 msgstr ""
 
 msgctxt "#30250"
@@ -408,10 +408,6 @@ msgstr ""
 
 msgctxt "#30265"
 msgid "Episodes - Next Up"
-msgstr ""
-
-msgctxt "#30266"
-msgid "Upcoming TV"
 msgstr ""
 
 msgctxt "#30267"
@@ -614,16 +610,8 @@ msgctxt "#30318"
 msgid "Music - All Albums"
 msgstr ""
 
-msgctxt "#30319"
-msgid "Music - All Album Artists"
-msgstr ""
-
 msgctxt "#30320"
 msgid " - Albums"
-msgstr ""
-
-msgctxt "#30321"
-msgid " - Album Artists"
 msgstr ""
 
 msgctxt "#30322"
@@ -710,3 +698,50 @@ msgctxt "#30344"
 msgid "Number of images removed from cache : %s"
 msgstr ""
 
+msgctxt "#30345"
+msgid "Cache server requests"
+msgstr ""
+
+msgctxt "#30346"
+msgid "Deleteing Cached Images"
+msgstr ""
+
+msgctxt "#30347"
+msgid "Getting Existing Images"
+msgstr ""
+
+msgctxt "#30348"
+msgid "Add user ratings"
+msgstr ""
+
+msgctxt "#30349"
+msgid " - Recently Played"
+msgstr ""
+
+msgctxt "#30350"
+msgid "Music - Recently Added"
+msgstr ""
+
+msgctxt "#30351"
+msgid "Music - Recently Played"
+msgstr ""
+
+msgctxt "#30352"
+msgid "Music - Frequently Played"
+msgstr ""
+
+msgctxt "#30319"
+msgid "Music - All Album Artists"
+msgstr ""
+
+msgctxt "#30321"
+msgid " - Album Artists"
+msgstr ""
+
+msgctxt "#30353"
+msgid " - Frequently Played"
+msgstr ""
+
+msgctxt "#30354"
+msgid "Goto Series"
+msgstr ""

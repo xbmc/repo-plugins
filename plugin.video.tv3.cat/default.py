@@ -905,7 +905,7 @@ def addVideo2(data):
         
     if linkvideo <> None:
         if type(linkvideo) is list and len(linkvideo) > 0:
-            linkvideo_item = linkvideo[1]
+            linkvideo_item = linkvideo[0]
             video = linkvideo_item.get('file', None)
             
         titol = data.get('informacio',{}).get('titol', None)
@@ -1003,7 +1003,7 @@ def playVideo(url):
                 
             if urlvideo:
                 if type(urlvideo) is list and len(urlvideo) > 0:
-                    urlvideo_item = urlvideo[1]
+                    urlvideo_item = urlvideo[0]
                     video = urlvideo_item.get('file', None)
                     
                 else:

@@ -1,3 +1,10 @@
+﻿v1.3.9
+- Canviada reproducció de videos a HD
+- Afegida traducció en alemany gràcies a Connum
+
+- Changed videos playback to HD
+- Added german translation thanks to Connum
+
 v1.3.8
 - Corregits canvis al website
 

@@ -11,6 +11,8 @@ import StringIO
 import encodings
 import binascii
 import re
+import hashlib
+import cPickle
 
 import xbmcplugin
 import xbmcgui
@@ -52,15 +54,14 @@ def mainEntryPoint():
     settings = xbmcaddon.Addon()
     profile_code = settings.getSetting('profile') == "true"
     pr = None
-    if (profile_code):
+    if profile_code:
         return_value = xbmcgui.Dialog().yesno("Profiling Enabled", "Do you want to run profiling?")
         if return_value:
             pr = cProfile.Profile()
             pr.enable()
 
-    ADDON_VERSION = ClientInformation().getVersion()
     log.debug("Running Python: {0}", sys.version_info)
-    log.debug("Running EmbyCon: {0}", ADDON_VERSION)
+    log.debug("Running EmbyCon: {0}", ClientInformation().getVersion())
     log.debug("Kodi BuildVersion: {0}", xbmc.getInfoLabel("System.BuildVersion"))
     log.debug("Kodi Version: {0}", kodi_version)
     log.debug("Script argument data: {0}", sys.argv)
@@ -72,13 +73,13 @@ def mainEntryPoint():
 
     home_window = HomeWindow()
 
-    if (len(params) == 0):
-        windowParams = home_window.getProperty("Params")
-        log.debug("windowParams: {0}", windowParams)
+    if len(params) == 0:
+        window_params = home_window.getProperty("Params")
+        log.debug("windowParams: {0}", window_params)
         # home_window.clearProperty("Params")
-        if (windowParams):
+        if window_params:
             try:
-                params = get_params(windowParams)
+                params = get_params(window_params)
             except:
                 params = {}
 
@@ -162,8 +163,6 @@ def mainEntryPoint():
         else:
             displaySections()
 
-    dataManager.canRefreshNow = True
-
     if (pr):
         pr.disable()
 
@@ -208,6 +207,12 @@ def markWatched(item_id):
     downloadUtils.downloadUrl(url, postBody="", method="POST")
     home_window = HomeWindow()
     home_window.setProperty("embycon_widget_reload", str(time.time()))
+
+    last_url = home_window.getProperty("last_content_url")
+    if last_url:
+        log.debug("markWatched_lastUrl: {0}", last_url)
+        home_window.setProperty("skip_cache_for_" + last_url, "true")
+
     xbmc.executebuiltin("Container.Refresh")
 
 
@@ -217,6 +222,12 @@ def markUnwatched(item_id):
     downloadUtils.downloadUrl(url, method="DELETE")
     home_window = HomeWindow()
     home_window.setProperty("embycon_widget_reload", str(time.time()))
+
+    last_url = home_window.getProperty("last_content_url")
+    if last_url:
+        log.debug("markUnwatched_lastUrl: {0}", last_url)
+        home_window.setProperty("skip_cache_for_" + last_url, "true")
+
     xbmc.executebuiltin("Container.Refresh")
 
 
@@ -226,6 +237,11 @@ def markFavorite(item_id):
     downloadUtils.downloadUrl(url, postBody="", method="POST")
     home_window = HomeWindow()
     home_window.setProperty("embycon_widget_reload", str(time.time()))
+
+    last_url = home_window.getProperty("last_content_url")
+    if last_url:
+        home_window.setProperty("skip_cache_for_" + last_url, "true")
+
     xbmc.executebuiltin("Container.Refresh")
 
 
@@ -235,6 +251,11 @@ def unmarkFavorite(item_id):
     downloadUtils.downloadUrl(url, method="DELETE")
     home_window = HomeWindow()
     home_window.setProperty("embycon_widget_reload", str(time.time()))
+
+    last_url = home_window.getProperty("last_content_url")
+    if last_url:
+        home_window.setProperty("skip_cache_for_" + last_url, "true")
+
     xbmc.executebuiltin("Container.Refresh")
 
 
@@ -258,6 +279,11 @@ def delete(item):
         progress.close()
         home_window = HomeWindow()
         home_window.setProperty("embycon_widget_reload", str(time.time()))
+
+        last_url = home_window.getProperty("last_content_url")
+        if last_url:
+            home_window.setProperty("skip_cache_for_" + last_url, "true")
+
         xbmc.executebuiltin("Container.Refresh")
 
 
@@ -307,6 +333,7 @@ def setSort(pluginhandle, viewType):
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
+
 
 def getContent(url, params):
     log.debug("== ENTER: getContent ==")
@@ -389,16 +416,19 @@ def getContent(url, params):
             log.debug("ADDING NEXT URL: {0}", url_next)
 
     # use the data manager to get the data
-    result = dataManager.GetContent(url)
+    #result = dataManager.GetContent(url)
 
-    total_records = 0
-    if result is not None and isinstance(result, dict):
-        total_records = result.get("TotalRecordCount", 0)
+    #total_records = 0
+    #if result is not None and isinstance(result, dict):
+    #    total_records = result.get("TotalRecordCount", 0)
 
-    dir_items, detected_type = processDirectory(result, progress, params)
+    use_cache = params.get("use_cache", "true") == "true"
+
+    dir_items, detected_type = processDirectory(url, progress, params, use_cache)
     if dir_items is None:
         return
 
+    total_records = len(dir_items)
     # add paging items
     if page_limit > 0 and media_type.startswith("movie"):
         if url_prev:
@@ -450,7 +480,7 @@ def getContent(url, params):
     return
 
 
-def processDirectory(results, progress, params):
+def processDirectory(url, progress, params, use_cache_data=False):
     log.debug("== ENTER: processDirectory ==")
 
     settings = xbmcaddon.Addon()
@@ -468,24 +498,20 @@ def processDirectory(results, progress, params):
             name_format_type = None
             name_format = None
 
-    dirItems = []
-    if results is None:
-        results = []
+    gui_options = {}
+    gui_options["server"] = server
+    gui_options["name_format"] = name_format
+    gui_options["name_format_type"] = name_format_type
 
-    baseline_name = None
-    if isinstance(results, dict) and results.get("Items") is not None:
-        baseline_name = results.get("BaselineItemName")
-        results = results.get("Items", [])
-    elif isinstance(results, list) and len(results) > 0 and results[0].get("Items") is not None:
-        baseline_name = results[0].get("BaselineItemName")
-        results = results[0].get("Items")
+    use_cache = settings.getSetting("use_cache") == "true" and use_cache_data
+    cache_file, item_list = dataManager.get_items(url, gui_options, use_cache)
 
     # flatten single season
     # if there is only one result and it is a season and you have flatten signle season turned on then
     # build a new url, set the content media type and call get content again
     flatten_single_season = settings.getSetting("flatten_single_season") == "true"
-    if flatten_single_season and len(results) == 1 and results[0].get("Type", "") == "Season":
-        season_id = results[0].get("Id")
+    if flatten_single_season and len(item_list) == 1 and item_list[0].item_type == "Season":
+        season_id = item_list[0].id
         season_url = ('{server}/emby/Users/{userid}/items' +
                       '?ParentId=' + season_id +
                       '&IsVirtualUnAired=false' +
@@ -504,33 +530,26 @@ def processDirectory(results, progress, params):
     display_options["addCounts"] = settings.getSetting("addCounts") == 'true'
     display_options["addResumePercent"] = settings.getSetting("addResumePercent") == 'true'
     display_options["addSubtitleAvailable"] = settings.getSetting("addSubtitleAvailable") == 'true'
+    display_options["addUserRatings"] = settings.getSetting("add_user_ratings") == 'true'
 
     show_empty_folders = settings.getSetting("show_empty_folders") == 'true'
 
-    item_count = len(results)
+    item_count = len(item_list)
     current_item = 1
     first_season_item = None
     total_unwatched = 0
     total_episodes = 0
     total_watched = 0
 
-    gui_options = {}
-    gui_options["server"] = server
-
-    gui_options["name_format"] = name_format
-    gui_options["name_format_type"] = name_format_type
     detected_type = None
+    dir_items = []
 
-    for item in results:
+    for item_details in item_list:
 
         if progress is not None:
             percent_done = (float(current_item) / float(item_count)) * 100
             progress.update(int(percent_done), string_load(30126) + str(current_item))
             current_item = current_item + 1
-
-        # get the infofrom the item
-        item_details = extract_item_info(item, gui_options)
-        item_details.baseline_itemname = baseline_name
 
         if detected_type is not None:
             if item_details.item_type != detected_type:
@@ -539,7 +558,8 @@ def processDirectory(results, progress, params):
             detected_type = item_details.item_type
 
         if item_details.item_type == "Season" and first_season_item is None:
-            first_season_item = item
+            log.debug("Setting First Season to : {0}", item_details)
+            first_season_item = item_details
 
         total_unwatched += item_details.unwatched_episodes
         total_episodes += item_details.total_episodes
@@ -551,7 +571,7 @@ def processDirectory(results, progress, params):
             item_details.art["poster"] = item_details.art["tvshow.poster"]
             item_details.art["thumb"] = item_details.art["tvshow.poster"]
 
-        if item["IsFolder"] is True:
+        if item_details.is_folder is True:
             if item_details.item_type == "Series":
                 u = ('{server}/emby/Shows/' + item_details.id +
                      '/Seasons'
@@ -567,10 +587,10 @@ def processDirectory(results, progress, params):
                      '&Fields={field_filters}' +
                      '&format=json')
 
-            if show_empty_folders or item["RecursiveItemCount"] != 0:
+            if show_empty_folders or item_details.recursive_item_count != 0:
                 gui_item = add_gui_item(u, item_details, display_options)
                 if gui_item:
-                    dirItems.append(gui_item)
+                    dir_items.append(gui_item)
 
         elif item_details.item_type == "MusicArtist":
             u = ('{server}/emby/Users/{userid}/items' +
@@ -581,22 +601,22 @@ def processDirectory(results, progress, params):
                  '&format=json')
             gui_item = add_gui_item(u, item_details, display_options)
             if gui_item:
-                dirItems.append(gui_item)
+                dir_items.append(gui_item)
 
         else:
             u = item_details.id
             gui_item = add_gui_item(u, item_details, display_options, folder=False)
             if gui_item:
-                dirItems.append(gui_item)
+                dir_items.append(gui_item)
 
     # add the all episodes item
     show_all_episodes = settings.getSetting('show_all_episodes') == 'true'
     if (show_all_episodes
             and first_season_item is not None
-            and len(dirItems) > 1
-            and first_season_item.get("SeriesId") is not None):
+            and len(dir_items) > 1
+            and first_season_item.series_id is not None):
         series_url = ('{server}/emby/Users/{userid}/items' +
-                      '?ParentId=' + first_season_item.get("SeriesId") +
+                      '?ParentId=' + first_season_item.series_id +
                       '&IsVirtualUnAired=false' +
                       '&IsMissing=false' +
                       '&Fields={field_filters}' +
@@ -611,13 +631,13 @@ def processDirectory(results, progress, params):
 
         item_details = ItemDetails()
 
-        item_details.id = first_season_item.get("Id")
+        item_details.id = first_season_item.id
         item_details.name = string_load(30290)
-        item_details.art = getArt(first_season_item, server)
+        item_details.art = first_season_item.art
         item_details.play_count = played
         item_details.overlay = overlay
         item_details.name_format = "Episode|episode_name_format"
-        item_details.series_name = first_season_item.get("SeriesName")
+        item_details.series_name = first_season_item.series_name
         item_details.item_type = "Season"
         item_details.unwatched_episodes = total_unwatched
         item_details.total_episodes = total_episodes
@@ -626,9 +646,11 @@ def processDirectory(results, progress, params):
 
         gui_item = add_gui_item(series_url, item_details, display_options, folder=True)
         if gui_item:
-            dirItems.append(gui_item)
+            dir_items.append(gui_item)
 
-    return dirItems, detected_type
+    HomeWindow().clearProperty(cache_file)
+
+    return dir_items, detected_type
 
 
 def show_menu(params):
@@ -645,8 +667,8 @@ def show_menu(params):
         return
 
     action_items = []
-    
-    if result["Type"] in ["Episode", "Movie", "Music"]:
+
+    if result["Type"] in ["Episode", "Movie", "Music", "Video", "Audio"]:
         li = xbmcgui.ListItem(string_load(30314))
         li.setProperty('menu_id', 'play')
         action_items.append(li)
@@ -656,7 +678,7 @@ def show_menu(params):
         li.setProperty('menu_id', 'play_all')
         action_items.append(li)
 
-    if result["Type"] in ["Episode", "Movie"]:
+    if result["Type"] in ["Episode", "Movie", "Video"]:
         li = xbmcgui.ListItem(string_load(30275))
         li.setProperty('menu_id', 'transcode')
         action_items.append(li)
@@ -669,6 +691,11 @@ def show_menu(params):
     if result["Type"] == "Episode" and result["ParentId"] is not None:
         li = xbmcgui.ListItem(string_load(30327))
         li.setProperty('menu_id', 'view_season')
+        action_items.append(li)
+
+    if result["Type"] == "Series":
+        li = xbmcgui.ListItem(string_load(30354))
+        li.setProperty('menu_id', 'view_series')
         action_items.append(li)
 
     user_data = result.get("UserData", None)
@@ -746,9 +773,21 @@ def show_menu(params):
         delete(result)
 
     elif selected_action == "view_season":
+        xbmc.executebuiltin("Dialog.Close(all,true)")
         parent_id = result["ParentId"]
         xbmc.executebuiltin(
             'ActivateWindow(Videos, plugin://plugin.video.embycon/?mode=PARENT_CONTENT&ParentId={0}&media_type=episodes, return)'.format(parent_id))
+
+    elif selected_action == "view_series":
+        xbmc.executebuiltin("Dialog.Close(all,true)")
+        u = ('{server}/emby/Shows/' + item_id +
+             '/Seasons'
+             '?userId={userid}' +
+             '&Fields={field_filters}' +
+             '&format=json')
+        action_url = ("plugin://plugin.video.embycon/?url=" + urllib.quote(u) + "&mode=GET_CONTENT&media_type=Series")
+        built_in_command = 'ActivateWindow(Videos, ' + action_url + ', return)'
+        xbmc.executebuiltin(built_in_command)
 
     elif selected_action == "refresh_images":
         CacheArtwork().delete_cached_images(item_id)
@@ -860,6 +899,7 @@ def search_results_person(params):
                    '&Fields={field_filters}' +
                    '&format=json')
 
+    '''
     details_result = dataManager.GetContent(details_url)
     log.debug("Search Results Details: {0}", details_result)
 
@@ -869,8 +909,8 @@ def search_results_person(params):
         for item in items:
             found_types.add(item.get("Type"))
         log.debug("search_results_person found_types: {0}", found_types)
-
-    dir_items, detected_type = processDirectory(details_result, None, params)
+    '''
+    dir_items, detected_type = processDirectory(details_url, None, params)
 
     log.debug('search_results_person results: {0}', dir_items)
     log.debug('search_results_person detect_type: {0}', detected_type)
@@ -1045,13 +1085,15 @@ def search_results(params):
                            '?Ids=' + Ids +
                            '&Fields={field_filters}' +
                            '&format=json')
+            '''
             details_result = dataManager.GetContent(details_url)
             log.debug("Search Results Details: {0}", details_result)
+            '''
 
             # set content type
             xbmcplugin.setContent(handle, content_type)
 
-            dir_items, detected_type = processDirectory(details_result, progress, params)
+            dir_items, detected_type = processDirectory(details_url, progress, params)
             if dir_items is not None:
                 xbmcplugin.addDirectoryItems(handle, dir_items)
                 xbmcplugin.endOfDirectory(handle, cacheToDisc=False)

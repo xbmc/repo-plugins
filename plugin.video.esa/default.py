@@ -253,15 +253,16 @@ def play_video(params):
             lutil.log("esa.play: We have found this alt video URL for '%s' language: '%s'" % (language, lang_url))
             buffer_link = lutil.carga_web(lang_url)
 
-    pattern_video = "file[']?: '(http[^']*?)'"
-    video_url = lutil.find_first(buffer_link, pattern_video)
-    if video_url:
-        try:
-            lutil.log("esa.play: We have found this video: '%s' and let's going to play it!" % video_url)
-            return lutil.play_resolved_url(pluginhandle = pluginhandle, url = video_url)
-        except:
-            lutil.log('esa.play ERROR: we cannot reproduce this video URL: "%s"' % video_url)
-            return lutil.showWarning(translation(30012))
+    video_patterns = ( '<a href="(http[^"]*?)" class="video_download" [^<]*?<span>DOWNLOAD<', "file[']?: '(http[^']*?)'" )
+    for pattern_video in video_patterns:
+        video_url = lutil.find_first(buffer_link, pattern_video)
+        if video_url:
+            try:
+                lutil.log("esa.play: We have found this video: '%s' and let's going to play it!" % video_url)
+                return lutil.play_resolved_url(pluginhandle = pluginhandle, url = video_url)
+            except:
+                lutil.log('esa.play ERROR: we cannot reproduce this video URL: "%s"' % video_url)
+                return lutil.showWarning(translation(30012))
 
     lutil.log('esa.play ERROR: we cannot play the video from this source yet: "%s"' % params.get("url"))
     return lutil.showWarning(translation(30011))

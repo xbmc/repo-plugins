@@ -57,13 +57,13 @@ def set_fanart_file(root_path=""):
 # This function logs the messages into the main XBMC log file. Called from main plugin module.
 def log(message):
     if debug_enable:
-        print "%s" % message
+        xbmc.log("%s" % message, level=xbmc.LOGNOTICE)
 
 
 # This function logs the messages into the main XBMC log file. Called from the libraries module by other functions.
 def _log(message):
     if debug_enable:
-        print "lutils.%s" % message
+        xbmc.log("lutils.%s" % message, level=xbmc.LOGNOTICE)
 
 
 # This function gets all the parameters passed to the plugin from XBMC API and retuns a dictionary.

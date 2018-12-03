@@ -1,20 +1,12 @@
 # -*- coding: utf-8 -*-
 """
      
-    Copyright (C) 2016 Twitch-on-Kodi
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    Copyright (C) 2012-2018 Twitch-on-Kodi
+
+    This file is part of Twitch-on-Kodi (plugin.video.twitch)
+
+    SPDX-License-Identifier: GPL-3.0-only
+    See LICENSES/GPL-3.0-only for more information.
 """
 
 import traceback
@@ -254,13 +246,6 @@ def _settings(refresh=True):
 def _reset_cache():
     from .routes import reset_cache
     reset_cache.route()
-
-
-@dispatcher.register(MODES.CLEARLIVEPREVIEWS, kwargs=['notify'])
-@error_handler
-def _clear_live_previews(notify=True):
-    from .routes import clear_live_previews
-    clear_live_previews.route(notify)
 
 
 @dispatcher.register(MODES.INSTALLIRCCHAT)

@@ -1,66 +1,159 @@
-"""
-    Original Source:
-    https://github.com/jdf76/plugin.video.youtube/blob/master/resources/lib/youtube_plugin/kodion/utils/storage.py
-    @ commit: 5c32bc002d4a30350f8f44d7ca3970da9066b7ef
-    Modified: 2018-02-16
-
-    Copyright (C) bromix, plugin.video.youtube
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# -*- coding: utf-8 -*-
 """
 
-import hashlib
+    Copyright (C) 2012-2018 Twitch-on-Kodi
 
-from .storage import Storage
+    This file is part of Twitch-on-Kodi (plugin.video.twitch)
+
+    SPDX-License-Identifier: GPL-3.0-only
+    See LICENSES/GPL-3.0-only for more information.
+"""
+import datetime
+import sqlite3
+
+import xbmcvfs
+
+from six.moves import cPickle as pickle
+
+from . import kodi
 
 
-class SearchHistory(Storage):
+class SearchHistory:
     def __init__(self, filename, max_items=10):
         path = 'special://profile/addon_data/plugin.video.twitch/search/'
-        Storage.__init__(self, path, filename, max_item_count=max_items)
+        filename = ''.join([path, filename])
+        if not filename.endswith('.sqlite'):
+            filename = ''.join([filename, '.sqlite'])
 
-    def is_empty(self):
-        return self._is_empty()
+        self.path = kodi.translate_path(path)
+        self.filename = kodi.translate_path(filename)
+
+        self.database = None
+        self.cursor = None
+
+        self._max_items = max_items
+        self._table_name = 'search_history_01'
+
+        self.create_table()
+
+        self.upgrade()
+
+    def open(self):
+        if not xbmcvfs.exists(self.path):
+            xbmcvfs.mkdirs(self.path)
+
+        self.database = sqlite3.connect(self.filename, check_same_thread=False, detect_types=sqlite3.PARSE_DECLTYPES, timeout=1)
+        self.database.isolation_level = None
+
+        self.cursor = self.database.cursor()
+        self.cursor.execute('PRAGMA journal_mode=MEMORY')
+        self.cursor.execute('PRAGMA busy_timeout=20000')
+
+        self.cursor.execute('BEGIN')
+
+    def close(self):
+        self.cursor.execute('COMMIT')
+        self.cursor.execute('VACUUM')
+
+        self.database.commit()
+
+        self.cursor.close()
+        self.cursor = None
+
+        self.database.close()
+        self.database = None
+
+    def create_table(self):
+        query = 'CREATE TABLE IF NOT EXISTS %s (value TEXT PRIMARY KEY, time TIMESTAMP)' % self._table_name
+
+        self.open()
+        self.execute(query)
+        self.close()
+
+    def execute(self, query, values=[]):
+        ret_val = self.cursor.execute(query, values)
+        return ret_val
 
     def list(self):
-        result = []
+        results = []
+        query = 'SELECT value FROM %s ORDER BY time DESC' % self._table_name
 
-        keys = self._get_ids(oldest_first=False)
-        for key in keys:
-            item = self._get(key)
-            result.append(item[0])
-
-        return result
+        self.open()
+        ret_vals = self.execute(query)
+        if ret_vals:
+            for item in ret_vals:
+                results.append(item[0])
+        self.close()
+        return results
 
     def clear(self):
-        self._clear()
+        query = 'DELETE FROM %s' % self._table_name
 
-    def _make_id(self, search_text):
-        m = hashlib.md5()
-        try:
-            m.update(search_text.encode('utf-8'))
-        except UnicodeDecodeError:
-            m.update(search_text)
-        return m.hexdigest()
+        self.open()
+        self.execute(query)
+        self.close()
 
-    def rename(self, old_search_text, new_search_text):
-        self.remove(old_search_text)
-        self.update(new_search_text)
+        self.create_table()
 
-    def remove(self, search_text):
-        self._remove(self._make_id(search_text))
+    def update(self, value):
+        timestamp = datetime.datetime.now() + datetime.timedelta(microseconds=1)
+        query = 'REPLACE INTO %s (value,time) VALUES(?,?)' % self._table_name
 
-    def update(self, search_text):
-        self._set(self._make_id(search_text), search_text)
+        self.open()
+        self.execute(query, values=[kodi.decode_utf8(value), timestamp])
+        self.close()
+
+        self.trim()
+
+    def remove(self, value):
+        query = 'DELETE FROM %s WHERE value = ?' % self._table_name
+
+        self.open()
+        self.execute(query, [kodi.decode_utf8(value)])
+        self.close()
+
+    def rename(self, old_value, new_value):
+        self.remove(old_value)
+        self.update(new_value)
+
+    def trim(self):
+        query = 'SELECT value FROM %s ORDER BY time DESC LIMIT -1 OFFSET %d' % (self._table_name, self._max_items)
+
+        self.open()
+        ret_vals = self.execute(query)
+        if ret_vals is not None:
+            for item in ret_vals:
+                self.remove(item[0])
+        self.close()
+
+    def upgrade(self):
+        def _decode(obj):
+            return pickle.loads(bytes(obj))
+
+        table_to_upgrade = 'storage'
+        query = 'SELECT name FROM sqlite_master WHERE type="table" AND name="%s"' % table_to_upgrade
+
+        self.open()
+        ret_val = self.execute(query)
+        table_exists = ret_val.fetchone() is not None
+        self.close()
+
+        if table_exists:
+            results = []
+            query = 'SELECT value FROM %s ORDER BY time ASC' % table_to_upgrade
+
+            self.open()
+            ret_vals = self.execute(query)
+            if ret_vals:
+                for item in ret_vals:
+                    results.append(_decode(item[0]))
+            self.close()
+
+            for result in results:
+                self.update(result)
+
+            query = 'DROP TABLE IF EXISTS %s' % table_to_upgrade
+
+            self.open()
+            self.execute(query)
+            self.close()

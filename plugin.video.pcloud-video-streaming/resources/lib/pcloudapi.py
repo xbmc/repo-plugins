@@ -66,17 +66,19 @@ class PCloudApi:
 		if response["result"] != 0:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling getdigest: " + errorMessage)
-
-		authUrl = self.PCLOUD_BASE_URL + "userinfo?getauth=1&logout=1&username=" + username + "&digest=" + response["digest"] + \
-					"&authexpire=" + str(self.TOKEN_EXPIRATION_SECONDS) # this backtick affair is a to-string conversion
 		sha1 = hashlib.sha1()
 		sha1.update(username)
 		usernameDigest = sha1.hexdigest() # hexdigest outputs hex-encoded bytes
 		sha1 = hashlib.sha1()
 		sha1.update(password + usernameDigest + response["digest"])
 		passwordDigest = sha1.hexdigest()
-		authUrl += "&passworddigest=" + passwordDigest
-		outputStream = urllib2.urlopen(authUrl)
+		# Here we use POST instead of GET in order to account for folders with lots of files
+		authUrl = self.PCLOUD_BASE_URL
+		params = { "getauth": 1, "logout": 1, "username": username, "digest": response["digest"],
+					"authexpire": str(self.TOKEN_EXPIRATION_SECONDS), "passworddigest": passwordDigest }
+		paramsEncoded = urllib.urlencode(params)
+		req = urllib2.Request(url, paramsEncoded)
+		outputStream = urllib2.urlopen(req) # https://docs.python.org/2/howto/urllib2.html
 		response = json.load(outputStream)
 		outputStream.close()
 		if response["result"] != 0:

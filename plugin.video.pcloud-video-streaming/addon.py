@@ -11,6 +11,7 @@ import time
 import xbmc
 import os
 
+
 myAddon = xbmcaddon.Addon()
 
 base_url = sys.argv[0] 						# The base URL of your add-on, e.g. 'plugin://plugin.video.pcloud-video-streaming/'
@@ -26,9 +27,9 @@ pcloud = resources.lib.pcloudapi.PCloudApi()
 class MyXbmcMonitor( xbmc.Monitor ):
     def __init__( self, *args, **kwargs ):
 		xbmc.Monitor.__init__(self)
-    
+
     def onSettingsChanged( self ):
-        xbmcgui.Dialog().notification("Info", "Settings changed", time=10000)		
+        xbmcgui.Dialog().notification("Info", "Settings changed", time=10000)
 '''
 def IsAuthMissing():
 	auth = myAddon.getSetting("auth")
@@ -80,14 +81,13 @@ def AuthenticateToPCloud():
 			time=5000)
 	return True
 
-	
 folderID = None
 
 # Mode is None when the plugin gets first invoked - Kodi does not pass a query string to our plugin's base URL
 mode = args.get("mode", None)
 if mode is None:
 	mode = [ "folder" ]
-	
+
 if mode[0] in ("folder", "myshares"):
 	if IsAuthMissing():
 		authResult = AuthenticateToPCloud()
@@ -108,7 +108,7 @@ if mode[0] in ("folder", "myshares"):
 		# If mode is "myshares", there's no folder ID
 		isMyShares = True
 		folderID = None
-		
+
 	try:
 		folderContents = pcloud.ListFolderContents(folderID, isMyShares)
 	except LoginFailedException as lfEx:
@@ -117,7 +117,7 @@ if mode[0] in ("folder", "myshares"):
 			exit()
 		# try again
 		folderContents = pcloud.ListFolderContents(folderID, isMyShares)
-	
+
 	# Collect all file IDs in order to get thumbnails...
 	if not isMyShares:
 		allFileIDs = [ oneItem["fileid"] for oneItem in folderContents["metadata"]["contents"] if not oneItem["isfolder"] ]
@@ -140,9 +140,7 @@ if mode[0] in ("folder", "myshares"):
 				filename = oneFileOrFolderItem["name"]
 				filenameNoExtension = os.path.splitext(filename)[0]
 				subtitleFileIDs[filenameNoExtension] = oneFileOrFolderItem["fileid"]
-	xbmc.log ("subtitleFileIDs is: ")
-	xbmc.log (str(subtitleFileIDs))
-				
+
 	# ... at last, iterate through all the files in order to populate the GUI
 	for oneItem in allFileAndFolderItems:
 		if not isMyShares:
@@ -180,7 +178,7 @@ if mode[0] in ("folder", "myshares"):
 			li = xbmcgui.ListItem(filename, iconImage=thumbnailUrl)
 			if contentType[:6] == "video/":
 				li.addStreamInfo(
-					"video", 
+					"video",
 					{ 	"duration": int(float(oneFileOrFolderItem["duration"] if "duration" in oneFileOrFolderItem else "0")),
 						"codec": oneFileOrFolderItem["videocodec"] if "videocodec" in oneFileOrFolderItem else "",
 						"width": oneFileOrFolderItem["width"] if "width" in oneFileOrFolderItem else "0",
@@ -210,7 +208,7 @@ if mode[0] in ("folder", "myshares"):
 			if contentType[:6] == "image/":
 				fileUrl += "&isPicture=1" # We will need this info later on
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=fileUrl, listitem=li)
-	
+
 	# Now add the "virtual" entries ("go to parent folder", "my shares", and "go to root folder") where necessary
 	if not isMyShares:
 		thisIsTheRootFolder = not folderContents["metadata"].has_key("parentfolderid")
@@ -237,10 +235,10 @@ if mode[0] in ("folder", "myshares"):
 		parentFolderText = "[I]{0}[/I]".format(myAddon.getLocalizedString(30123))
 		li = xbmcgui.ListItem(parentFolderText, iconImage="DefaultFolder.png")
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
-	
+
 	xbmcplugin.endOfDirectory(addon_handle)
 	myAddon.setSetting("lastUsedFolderID", str(folderID))
-	
+
 elif mode[0] == "file":
 	if IsAuthMissing():
 		authResult = AuthenticateToPCloud()
@@ -262,7 +260,7 @@ elif mode[0] == "file":
 			subtitleUrl = pcloud.GetStreamingUrl(subtitleFileID)
 			item.setSubtitles([subtitleUrl])
 		xbmcplugin.setResolvedUrl(addon_handle, True, item)
-	
+
 
 elif mode[0] == "delete":
 	# This branch can be called as a result of a context menu item callback
@@ -280,7 +278,7 @@ elif mode[0] == "delete":
 	filename = urllib.unquote(args["filename"][0].decode("utf-8"))
 	filenameShort = filename[:35] # first 35 char
 	if filenameShort != filename:
-		filenameShort += "..." 
+		filenameShort += "..."
 	yesNoDialog = xbmcgui.Dialog()
 	wantToDelete = yesNoDialog.yesno(
 					myAddon.getLocalizedString(30115), 						# "Confirm Delete"
@@ -306,4 +304,3 @@ elif mode[0] == "delete":
 		myAddon.getLocalizedString(30110), # "Success"
 		myAddon.getLocalizedString(30118), # "Deleted successfully"
 		time=5000)
-

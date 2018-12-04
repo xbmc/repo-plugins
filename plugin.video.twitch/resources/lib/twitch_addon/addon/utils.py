@@ -1,20 +1,12 @@
 # -*- coding: utf-8 -*-
 """
      
-    Copyright (C) 2016 Twitch-on-Kodi
+    Copyright (C) 2012-2018 Twitch-on-Kodi
     
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    This file is part of Twitch-on-Kodi (plugin.video.twitch)
+
+    SPDX-License-Identifier: GPL-3.0-only
+    See LICENSES/GPL-3.0-only for more information.
 """
 
 from six import iteritems, string_types
@@ -28,7 +20,6 @@ from datetime import datetime
 
 from .common import kodi, json_store
 from .strings import STRINGS
-from .tccleaner import TextureCacheCleaner
 from .constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT, COLORS, Keys
 from .search_history import StreamsSearchHistory, ChannelsSearchHistory, GamesSearchHistory, IdUrlSearchHistory
 
@@ -248,13 +239,20 @@ def notify_refresh():
 
 
 def refresh_previews():
-    if kodi.get_setting('live_previews_enable') != 'true':
-        return
-    if kodi.get_setting('refresh_previews') == 'true':
-        refresh_interval = int(kodi.get_setting('refresh_interval')) * 60
+    refresh_interval = int(kodi.get_setting('refresh_interval')) * 60
+    if refresh_interval > 0:
+        if not get_refresh_stamp():
+            set_refresh_stamp()
+            return
         if get_refresh_diff() >= refresh_interval:
             set_refresh_stamp()
-            TextureCacheCleaner().remove_like(LIVE_PREVIEW_TEMPLATE, notify_refresh())
+    else:
+        clear_refresh_stamp()
+
+
+def clear_refresh_stamp():
+    window = kodi.Window(10000)
+    window.clearProperty(key='%s-lpr_stamp' % kodi.get_id())
 
 
 def set_refresh_stamp():

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='2.3.5' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.4.0' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
         <import addon='script.module.six' version='1.11.0'/>
-        <import addon='script.module.python.twitch' version='2.0.2'/>
+        <import addon='script.module.python.twitch' version='2.0.5'/>
         <import addon='script.module.requests' version='2.9.1'/>
     </requires>
     <extension point='xbmc.python.pluginsource' library='resources/lib/addon_runner.py'>
@@ -13,18 +13,13 @@
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
         <news>
-2.3.5
-[fix] utf-8 file paths
-[fix] perpetual busy dialogs in Kodi 18
-
-2.3.4
-[fix] clean_title_value UnicodeDecodeError
-[fix] Game titles UnicodeEncodeError
-[fix] python 3 compat. urllib.quote_plus
-
-2.3.3
-[fix] Description template UnicodeDecodeError
-[chg] Use unicode punctuation space in description template
+2.4.0
+[add] allow limiting framerate to 30 fps when video quality is set to Source
+[fix] change import from absolute to relative
+[chg] clips default to source quality instead of always ask
+[chg] refresh live previews by adding timestamp to urls
+[upd] re-write of search history
+[upd] use SPDX license identifiers
         </news>
         <assets>
             <icon>icon.png</icon>
@@ -32,7 +27,7 @@
         </assets>
         <language></language>
         <source>https://github.com/MrSprigster/Twitch-on-Kodi</source>
-        <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+        <license>GPL-3.0-only</license>
         <forum>http://forum.kodi.tv/showthread.php?tid=134538</forum>
         <summary lang='en_GB'>Twitch video plugin</summary>
         <description lang='en_GB'>Watch your favorite gaming streams!</description>

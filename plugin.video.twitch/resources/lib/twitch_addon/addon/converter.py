@@ -1,30 +1,24 @@
 # -*- coding: utf-8 -*-
 """
 
-    Copyright (C) 2016 Twitch-on-Kodi
+    Copyright (C) 2012-2018 Twitch-on-Kodi
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This file is part of Twitch-on-Kodi (plugin.video.twitch)
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    SPDX-License-Identifier: GPL-3.0-only
+    See LICENSES/GPL-3.0-only for more information.
 """
 
 from six import PY2
 
 from base64 import b64encode
 
+from six.moves.urllib_parse import quote
+
 from . import menu_items
 from .common import kodi
 from .constants import Keys, Images, MODES, ADAPTIVE_SOURCE_TEMPLATE
-from .utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, get_thumbnail_size
+from .utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, get_thumbnail_size, get_refresh_stamp
 
 
 class PlaylistConverter(object):
@@ -93,7 +87,6 @@ class JsonListItemConverter(object):
         image = community.get(Keys.AVATAR_IMAGE, Images.THUMB)
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        context_menu.extend(menu_items.clear_previews())
         context_menu.extend(menu_items.add_blacklist(_id, display_name, list_type='community'))
         return {'label': display_name,
                 'path': kodi.get_plugin_url({'mode': MODES.COMMUNITYSTREAMS, 'community_id': _id}),
@@ -126,7 +119,6 @@ class JsonListItemConverter(object):
         image = team.get(Keys.LOGO) if team.get(Keys.LOGO) else Images.ICON
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        context_menu.extend(menu_items.clear_previews())
         return {'label': name,
                 'path': kodi.get_plugin_url({'mode': MODES.TEAMSTREAMS, 'team': name}),
                 'art': the_art({'fanart': background, 'poster': image, 'thumb': image, 'icon': image}),
@@ -157,7 +149,6 @@ class JsonListItemConverter(object):
             video_banner = channel.get(Keys.PROFILE_BANNER) if channel.get(Keys.PROFILE_BANNER) else Images.FANART
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        context_menu.extend(menu_items.clear_previews())
         name = channel.get(Keys.DISPLAY_NAME) if channel.get(Keys.DISPLAY_NAME) else channel.get(Keys.NAME)
         if self.has_token:
             context_menu.extend(menu_items.edit_follow(channel[Keys._ID], name))
@@ -271,7 +262,9 @@ class JsonListItemConverter(object):
             video_banner = channel.get(Keys.VIDEO_BANNER) if channel.get(Keys.VIDEO_BANNER) else Images.FANART
         preview = self.get_thumbnail(stream.get(Keys.PREVIEW), Images.VIDEOTHUMB)
         logo = channel.get(Keys.LOGO) if channel.get(Keys.LOGO) else Images.VIDEOTHUMB
-        image = preview if preview != Images.VIDEOTHUMB else logo
+        if preview and get_refresh_stamp():
+            preview = '?timestamp='.join([preview, quote(get_refresh_stamp())])
+        image =  preview if preview != Images.VIDEOTHUMB else logo
         title = self.get_title_for_stream(stream)
         if stream.get(Keys.STREAM_TYPE) != 'live':
             color = get_vodcast_color()
@@ -631,21 +624,36 @@ class JsonListItemConverter(object):
                 bandwidth_value = int(kodi.get_setting('bandwidth'))
             except:
                 bandwidth_value = None
+
             if quality or len(videos) == 1:
                 for video in videos:
                     if (quality and (quality.lower() in video['name'].lower())) or len(videos) == 1:
                         return video
+
             if ask:
                 return self.select_video_for_quality(videos)
+
+            if clip and (bandwidth or adaptive or source):
+                for video in videos:
+                    if 'source' in video['id'].lower():
+                        return video
 
             if adaptive:
                 for video in videos:
                     if 'hls' in video['id']:
                         return video
-            elif source:
+
+            elif source and not clip:
+                limit_framerate = kodi.get_setting('framerate_limit') == 'true'
+                if limit_framerate:
+                    fps_videos = [video for video in videos if video.get('fps') and video['fps'] < 31.0]  # use < 31, 30 fps may be > 30 ie. 30.211
+                    if fps_videos:
+                        return fps_videos[0]
+
                 for video in videos:
                     if 'chunked' in video['id']:
                         return video
+
             elif bandwidth and bandwidth_value and not clip:
                 bandwidths = []
                 for video in videos:

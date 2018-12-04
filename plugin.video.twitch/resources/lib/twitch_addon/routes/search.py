@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2012-2018 Twitch-on-Kodi
+
+    This file is part of Twitch-on-Kodi (plugin.video.twitch)
+
+    SPDX-License-Identifier: GPL-3.0-only
+    See LICENSES/GPL-3.0-only for more information.
+"""
 from ..addon.common import kodi
 from ..addon import utils, menu_items
 from ..addon.constants import MODES
@@ -11,7 +20,6 @@ def route():
     use_history = history_size > 0
     if use_history:
         context_menu = list()
-        context_menu.extend(menu_items.clear_previews())
         context_menu.extend(menu_items.clear_search_history('streams', do_refresh=False))
         kodi.create_item({'label': i18n('streams'), 'path': {'mode': MODES.LISTSEARCH, 'content': 'streams'}, 'context_menu': context_menu,
                           'info': {'plot': '%s - %s' % (i18n('search'), i18n('streams'))}})
@@ -29,7 +37,6 @@ def route():
                           'info': {'plot': '%s - %s[CR]%s' % (i18n('search'), i18n('video_id_url'), i18n('search_id_url_description'))}})
     else:
         context_menu = list()
-        context_menu.extend(menu_items.clear_previews())
         kodi.create_item({'label': i18n('streams'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'streams'}, 'context_menu': context_menu,
                           'info': {'plot': '%s - %s' % (i18n('search'), i18n('streams'))}})
         kodi.create_item({'label': i18n('channels'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'channels'},

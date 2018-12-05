@@ -1,3 +1,5 @@
+[B]3.0.5[/B]
+- Changed method of playback due to lack of TYT.com website QC.
 [B]3.0.4[/B]
 - Fixed Crashing Info due to TYT.com changing their underlying code
 [B]3.0.3[/B]

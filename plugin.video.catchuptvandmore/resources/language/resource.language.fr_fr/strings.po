@@ -72,6 +72,14 @@ msgctxt "#30014"
 msgid "Hide websites"
 msgstr "Masquer des sites internet"
 
+msgctxt "#30015"
+msgid "Hide live TV countries"
+msgstr "Masquer des pays pour la TV en direct"
+
+msgctxt "#30016"
+msgid "Hide catch-up TV countries"
+msgstr "Masquer des pays pour le replay TV"
+
 
 # Main menu (from 30030 to 30049)
 msgctxt "#30030"
@@ -117,6 +125,25 @@ msgctxt "#30056"
 msgid "Canada"
 msgstr "Canada"
 
+msgctxt "#30057"
+msgid "United States of America"
+msgstr "Etat Unis d'Amérique"
+
+msgctxt "#30058"
+msgid "Poland"
+msgstr "Pologne"
+
+msgctxt "#30059"
+msgid "Spain"
+msgstr "Espagne"
+
+msgctxt "#30060"
+msgid "Tunisia"
+msgstr "Tunisie"
+
+msgctxt "#30061"
+msgid "Italia"
+msgstr "Italie"
 
 # Channels (from 30080 to 30129)
 msgctxt "#30080"
@@ -151,6 +178,21 @@ msgctxt "#30087"
 msgid "United States channels"
 msgstr "Chaînes américaines"
 
+msgctxt "#30088"
+msgid "Polish channels"
+msgstr "Chaînes polonaises"
+
+msgctxt "#30089"
+msgid "Spanish channels"
+msgstr "Chaînes espagnoles"
+
+msgctxt "#30090"
+msgid "Tunisia channels"
+msgstr "Chaînes tunisiennes"
+
+msgctxt "#30091"
+msgid "Italian channels"
+msgstr "Chaînes italiennes"
 
 # Websites (from 30130 to 30149)
 
@@ -197,11 +239,50 @@ msgctxt "#30159"
 msgid "La 1ère: Choose region"
 msgstr "La 1ère : Choix de la région"
 
+msgctxt "#30160"
+msgid "Bein Sports: Choose Channel"
+msgstr "Bein Sports : Choix de la chaîne"
+
+msgctxt "#30161"
+msgid "QVC: Choose Channel"
+msgstr "QVC : Choix de la chaîne"
+
+msgctxt "#30162"
+msgid "NHK World: Choose Country"
+msgstr "NHK World : Choix du pays"
+
+msgctxt "#30163"
+msgid "CGTN: Choose Channel"
+msgstr "CGTN : Choix de la chaîne"
+
+msgctxt "#30164"
+msgid "Paramount Channel: Choose Channel"
+msgstr "Paramount Channel : Choix de la chaîne"
+
+msgctxt "#30165"
+msgid "Realmadrid TV: Choose Channel"
+msgstr "Realmadrid TV : Choix de la chaîn"
+
+msgctxt "#30166"
+msgid "Yes TV: Choose region"
+msgstr "Yes TV : Choix de la région"
+
+msgctxt "#30167"
+msgid "TVP 3: Choose region"
+msgstr "TVP 3 : Choix de la région"
+
+msgctxt "#30168"
+msgid "Enable TV guide (slower)"
+msgstr "Activer le programme TV (plus lent)"
+
+msgctxt "#30169"
+msgid "Enable Subtitle if present in the content"
+msgstr "Activer les sous-titres si présent dans le contenu"
 
 # Download (from 30200 to 30239)
 
 msgctxt "#30200"
-msgid "Folder to Download"
+msgid "Download directory"
 msgstr "Répertoire de téléchargement"
 
 msgctxt "#30201"
@@ -211,6 +292,10 @@ msgstr "Qualité de la vidéo à télécharger"
 msgctxt "#30202"
 msgid "Download in background"
 msgstr "Télécharger en arrière plan"
+
+msgctxt "#30203"
+msgid "Automatically rename the video (download directory required)"
+msgstr "Renommer automatiquement la vidéo (répertoire de téléchargement requis)"
 
 
 
@@ -232,11 +317,32 @@ msgctxt "#30243"
 msgid "VRT NU Password"
 msgstr "Mot de passe VRT NU"
 
+msgctxt "#30244"
+msgid "6play Login"
+msgstr "Login 6play"
+
+msgctxt "#30245"
+msgid "6play Password"
+msgstr "Mot de passe 6play"
+
+msgctxt "#30246"
+msgid "RTLplay Login"
+msgstr "Login RTLplay"
+
+msgctxt "#30247"
+msgid "RTLplay Password"
+msgstr "Mot de passe RTLplay"
+
+msgctxt "#30248"
+msgid "Atresplayer Login"
+msgstr "Login Atresplayer"
+
+msgctxt "#30249"
+msgid "Atresplayer Password"
+msgstr "Mot de passe Atresplayer"
 
 # Reserved space for other tab/category in settins (from 30260 to 30339)
 
-
-# OpenVPN (not present in official Kodi repo) (from 30340 to 30369)
 
 
 # Advanced settings (from 30370 to 30399)
@@ -335,3 +441,34 @@ msgctxt "#30712"
 msgid "Video with an account needed"
 msgstr "Vidéo avec un compte requis"
 
+msgctxt "#30713"
+msgid "Geo-blocked video"
+msgstr "Vidéo géo-bloquée"
+
+msgctxt "#30714"
+msgid "Search videos"
+msgstr "Rechercher vidéos"
+
+msgctxt "#30715"
+msgid "Search programs"
+msgstr "Rechercher programmes"
+
+msgctxt "#30716"
+msgid "Video stream is not available"
+msgstr "Le flux vidéo n'est pas disponible"
+
+msgctxt "#30717"
+msgid "All programs"
+msgstr "Tous les programmes"
+
+msgctxt "#30718"
+msgid "No videos found"
+msgstr "Aucune vidéo trouvée"
+
+msgctxt "#30719"
+msgid "Inputstream Adaptive not enable"
+msgstr "Inputstream Adaptive n'est pas activé"
+
+msgctxt "#30720"
+msgid "Kodi 17.6 or > is required"
+msgstr "Kodi 17.6 ou > est requis"

@@ -72,6 +72,14 @@ msgctxt "#30014"
 msgid "Hide websites"
 msgstr ""
 
+msgctxt "#30015"
+msgid "Hide live TV countries"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Hide catch-up TV countries"
+msgstr ""
+
 
 # Main menu (from 30030 to 30049)
 msgctxt "#30030"
@@ -117,6 +125,25 @@ msgctxt "#30056"
 msgid "Canada"
 msgstr ""
 
+msgctxt "#30057"
+msgid "United States of America"
+msgstr ""
+
+msgctxt "#30058"
+msgid "Poland"
+msgstr ""
+
+msgctxt "#30059"
+msgid "Spain"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Tunisia"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Italia"
+msgstr ""
 
 # Channels (from 30080 to 30129)
 msgctxt "#30080"
@@ -151,6 +178,21 @@ msgctxt "#30087"
 msgid "United States channels"
 msgstr ""
 
+msgctxt "#30088"
+msgid "Polish channels"
+msgstr ""
+
+msgctxt "#30089"
+msgid "Spanish channels"
+msgstr ""
+
+msgctxt "#30090"
+msgid "Tunisia channels"
+msgstr ""
+
+msgctxt "#30091"
+msgid "Italian channels"
+msgstr ""
 
 # Websites (from 30130 to 30149)
 
@@ -197,11 +239,50 @@ msgctxt "#30159"
 msgid "La 1ère: Choose region"
 msgstr ""
 
+msgctxt "#30160"
+msgid "Bein Sports: Choose Channel"
+msgstr "Bein Sports : בחר ערוץ"
+
+msgctxt "#30161"
+msgid "QVC: Choose Channel"
+msgstr "QVC : בחר ערוץ"
+
+msgctxt "#30162"
+msgid "NHK World: Choose Country"
+msgstr ""
+
+msgctxt "#30163"
+msgid "CGTN: Choose Channel"
+msgstr "CGTN : בחר ערוץ"
+
+msgctxt "#30164"
+msgid "Paramount Channel: Choose Channel"
+msgstr "Paramount Channel : בחר ערוץ"
+
+msgctxt "#30165"
+msgid "Realmadrid TV: Choose Channel"
+msgstr "Realmadrid TV : בחר ערוץ"
+
+msgctxt "#30166"
+msgid "Yes TV: Choose region"
+msgstr ""
+
+msgctxt "#30167"
+msgid "TVP 3: Choose region"
+msgstr ""
+
+msgctxt "#30168"
+msgid "Enable TV guide (slower)"
+msgstr ""
+
+msgctxt "#30169"
+msgid "Enable Subtitle if present in the content"
+msgstr ""
 
 # Download (from 30200 to 30239)
 
 msgctxt "#30200"
-msgid "Folder to Download"
+msgid "Download directory"
 msgstr "תיקיה להורדה"
 
 msgctxt "#30201"
@@ -212,6 +293,9 @@ msgctxt "#30202"
 msgid "Download in background"
 msgstr ""
 
+msgctxt "#30203"
+msgid "Automatically rename the video (download directory required)"
+msgstr ""
 
 
 # Accounts (from 30240 to 30259)
@@ -232,11 +316,31 @@ msgctxt "#30243"
 msgid "VRT NU Password"
 msgstr ""
 
+msgctxt "#30244"
+msgid "6play Login"
+msgstr ""
+
+msgctxt "#30245"
+msgid "6play Password"
+msgstr ""
+
+msgctxt "#30246"
+msgid "RTLplay Login"
+msgstr ""
+
+msgctxt "#30247"
+msgid "RTLplay Password"
+msgstr ""
+
+msgctxt "#30248"
+msgid "Atresplayer Login"
+msgstr ""
+
+msgctxt "#30249"
+msgid "Atresplayer Password"
+msgstr ""
 
 # Reserved space for other tab/category in settins (from 30260 to 30339)
-
-
-# OpenVPN (not present in official Kodi repo) (from 30340 to 30369)
 
 
 
@@ -334,4 +438,36 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "Video with an account needed"
+msgstr ""
+
+msgctxt "#30713"
+msgid "Geo-blocked video"
+msgstr ""
+
+msgctxt "#30714"
+msgid "Search videos"
+msgstr ""
+
+msgctxt "#30715"
+msgid "Search programs"
+msgstr ""
+
+msgctxt "#30716"
+msgid "Video stream is not available"
+msgstr ""
+
+msgctxt "#30717"
+msgid "All programs"
+msgstr ""
+
+msgctxt "#30718"
+msgid "No videos found"
+msgstr ""
+
+msgctxt "#30719"
+msgid "Inputstream Adaptive not enable"
+msgstr ""
+
+msgctxt "#30720"
+msgid "Kodi 17.6 or > is required"
 msgstr ""

@@ -77,8 +77,8 @@ def list_episodes(page, showurl, pagenum):
     is_folder = False
     listing.append((url, list_item, is_folder))
 
-  xbmcplugin.addSortMethod(_handle, xbmcplugin.SORT_METHOD_DATE)
-  xbmcplugin.addSortMethod(_handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+#  xbmcplugin.addSortMethod(_handle, xbmcplugin.SORT_METHOD_DATE)
+#  xbmcplugin.addSortMethod(_handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
   xbmcplugin.addSortMethod(_handle, xbmcplugin.SORT_METHOD_NONE)
 
   list_item = xbmcgui.ListItem(label='Next')

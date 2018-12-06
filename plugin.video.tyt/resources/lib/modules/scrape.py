@@ -43,16 +43,17 @@ def Watch_Episode(page, show):
 #  page = sendResponse(cookie, page) # main show episode list
 #  with open('main_show_episode.html', 'w') as f:
 #    f.write(page)
-#  return re.search('tytapp-state.+?%s.+?hd_video_download_url.+?:\\\&q;(.+?)\\\&q' % show, page, re.MULTILINE | re.DOTALL).group(1) This works Too, Faster, but tyt.com always screws up
-  return re.search('tytapp-state.+?%s.+?\\[JW\\].+?url\\\&q;:\\\&q;(.+?)\\\&q' % show, page, re.MULTILINE | re.DOTALL).group(1)
-#  episode = re.compile('tap to download" href="(.+?)">.+?tap to download" href="(.+?)">',re.DOTALL).findall(page)
-#  for link in episode: return link
+  try:
+    hd = re.search('tytapp-state.+?%s.+?hd_video_download_url.+?:\\\&q;(.+?)\\\&q' % show, page, re.MULTILINE | re.DOTALL).group(1) #This works Too, Faster, but tyt.com always screws up
+  except:
+    hd = None
+  try:
+    jw = re.search('tytapp-state.+?%s.+?\\[JW\\].+?url\\\&q;:\\\&q;(.+?)\\\&q' % show, page, re.MULTILINE | re.DOTALL).group(1)
+  except:
+    jw = None
+  return hd, jw
 
 def List_Shows(page):
-#  page = sendResponse(cookie, page)
-
-#  with open('shows.html', 'w') as f:
-#    f.write(page)
   
   shows = re.compile('class="show responsive-background" aria-label="(.+?)".+?href="(.+?)".+?"(.+?)".+?summary.+?"">(.+?)<',re.DOTALL).findall(page)
   i = 0

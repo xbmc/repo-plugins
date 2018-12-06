@@ -20,3 +20,19 @@ msgstr ""
 msgctxt "#30004"
 msgid "Video doesn't exist on website."
 msgstr ""
+
+msgctxt "#30005"
+msgid "Select Preferred Stream"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Which stream would you prefer?"
+msgstr ""
+
+msgctxt "#30007"
+msgid "m3u8 'JW Player'"
+msgstr ""
+
+msgctxt "#30008"
+msgid "MP4 HD"
+msgstr ""

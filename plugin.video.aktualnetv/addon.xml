@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.aktualnetv" version="2.0.4" name="Aktualne TV" provider-name="Petr Kutalek">
+<addon id="plugin.video.aktualnetv" version="2.1.2" name="Aktualne TV" provider-name="Petr Kutalek">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
   </requires>
@@ -38,9 +38,11 @@
       <screenshot>resources/screenshot-3.jpg</screenshot>
     </assets>
 
-    <news><![CDATA[ [B]2.0.4[/B]
-— add Hebrew localization (by A. Dambledore)
-— removed Live Videos (web page has changed recently)
+    <news><![CDATA[ [B]2.1.2[/B]
+— fixed resource directory structure
+
+[B]2.1.1[/B]
+— adapted to new webpage video player
 ]]></news>
 
   </extension>

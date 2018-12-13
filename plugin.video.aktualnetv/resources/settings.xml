@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <setting label="30101" type="lsep"/>
-  <setting id="quality" type="enum" label="30110" lvalues="30111|30112|30113|30114|30115|30116" default="3"/>
+  <setting id="quality" type="enum" label="30110" lvalues="30111|30112|30113|30114|30115" default="3"/>
 </settings>

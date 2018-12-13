@@ -1,0 +1,30 @@
+# XBMC Media Center language file
+# Addon Name: Aktualne TV
+# Addon id: plugin.video.aktualnetv
+# Addon version: 2.1.2
+# Addon Provider: Petr Kutalek
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2018-12-13 08:58+0000\n"
+"PO-Revision-Date: 2018-12-13 09:58+0100\n"
+"Last-Translator: Petr Kutalek <petr@kutalek.cz>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "This addon provides access to videos published on Aktualne TV"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Aktualne.cz — covering all aspects of life in the Czech Republic, from political, social, economic and sports news to arts and culture"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "This is an unofficial addon and is in no way affiliated with publisher Economia, a. s. It was created and is maintained by an independent developer. It is provided for reference only and may contain errors."
+msgstr ""

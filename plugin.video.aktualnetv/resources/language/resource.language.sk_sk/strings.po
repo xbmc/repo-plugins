@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: Aktualne TV
 # Addon id: plugin.video.aktualnetv
-# Addon version: 2.0.4
+# Addon version: 2.1.2
 # Addon Provider: Petr Kutalek
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2017-10-22 13:04+0000\n"
-"PO-Revision-Date: 2017-10-22 15:04+0200\n"
+"POT-Creation-Date: 2018-12-13 08:58+0000\n"
+"PO-Revision-Date: 2018-12-13 09:58+0100\n"
 "Last-Translator: Petr Kutalek <petr@kutalek.cz>\n"
 "Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"
@@ -28,63 +28,3 @@ msgstr "Aktuálně.cz — kompletné spravodajstvo, správy z domova i zo sveta"
 msgctxt "Addon Disclaimer"
 msgid "This is an unofficial addon and is in no way affiliated with publisher Economia, a. s. It was created and is maintained by an independent developer. It is provided for reference only and may contain errors."
 msgstr "Toto je neoficiálny doplnok a nie je, žiaľ, žiadnym spôsobom spojený s vydavateľstvom Economia, a. s. Bol vytvorený a je udržiavaný nezávislým vývojárom. Doplnok je poskytnutý len ako ukážka a môže obsahovať chyby."
-
-msgctxt "#30000"
-msgid "Aktualne TV"
-msgstr "Aktuálně TV"
-
-msgctxt "#30001"
-msgid "Economia"
-msgstr "Economia"
-
-msgctxt "#30011"
-msgid "Archive"
-msgstr "Archív"
-
-msgctxt "#30012"
-msgid "Shows"
-msgstr "Relácie"
-
-msgctxt "#30014"
-msgid "Search"
-msgstr "Hľadať"
-
-msgctxt "#30020"
-msgid "Next…"
-msgstr "Ďalšie…"
-
-msgctxt "#30030"
-msgid "Live Stream"
-msgstr "Priamy prenos"
-
-msgctxt "#30101"
-msgid "Playback"
-msgstr "Prehrávanie"
-
-msgctxt "#30110"
-msgid "Quality"
-msgstr "Kvalita"
-
-msgctxt "#30111"
-msgid "LQ (180p)"
-msgstr "LQ (180p)"
-
-msgctxt "#30112"
-msgid "SD (360p)"
-msgstr "SD (360p)"
-
-msgctxt "#30113"
-msgid "HQ (480p)"
-msgstr "HQ (480p)"
-
-msgctxt "#30114"
-msgid "HD (720p)"
-msgstr "HD (720p)"
-
-msgctxt "#30115"
-msgid "FullHD (1080p)"
-msgstr "FullHD (1080p)"
-
-msgctxt "#30116"
-msgid "Adaptive"
-msgstr "Automaticky"

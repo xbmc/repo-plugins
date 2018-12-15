@@ -1,8 +1,8 @@
 <settings>
-    <setting id="maxVideoQualityRes"        type="enum"   label="30101" values="360p|540p|720p|1080p" default="2"/>
-    <setting id="LiveStream"                type="bool"   label="30104"                               default="true"/>
+    <setting id="maxVideoQualityRes"        type="enum"   label="30101" values="360p|480p|540p|720p|1080p"  default="3"/>
+    <setting id="LiveStream"                type="bool"   label="30104"                                     default="true"/>
     <setting                                type="sep" />
-    <setting id="force_view_mode"           type="bool"   label="30102"                               default="false"/>
-    <setting id="viewMode"                  type="number" label="30103"                               default="500"/>
-    <setting id="onlyshownewvideocategory" 	type="bool"   label="30610"                               default="false"/>
+    <setting id="force_view_mode"           type="bool"   label="30102"                                     default="false"/>
+    <setting id="viewMode"                  type="number" label="30103"                                     default="500"/>
+    <setting id="onlyshownewvideocategory" 	type="bool"   label="30610"                                     default="false"/>
 </settings>

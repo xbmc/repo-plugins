@@ -26,8 +26,8 @@ BASE_URL = "https://www.ign.com"
 LATEST_VIDEOS_URL = "https://www.ign.com/videos?page=1&filter=all"
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 COOKIES = {'i18n-ccpref': '15-US-www-1'}
-DATE = "2018-09-08"
-VERSION = "2.3.7"
+DATE = "2018-12-15"
+VERSION = "2.3.8"
 
 max_video_quality = SETTINGS.getSetting("maxVideoQualityRes")
 force_view_mode = bool(SETTINGS.getSetting("force_view_mode"))
@@ -38,6 +38,7 @@ video_height = [360, 480, 540, 720, 1080]
 max_video_height = video_height[int(max_video_quality)]
 max_video_bitrate = [347000, 724000, 1129000, 1910000, 3906000]
 max_video_quality = [640, 853, 960, 1280, 1920]
+
 
 def index():
     if live_stream_setting:
@@ -193,6 +194,9 @@ def play_video(page_url):
     match = re.compile(BASE_URL + "(.+)", re.DOTALL).findall(page_url)
     vid = Video(match[0])
     final_url = vid.get_vid_url(max_video_height)
+
+    log("final_url", final_url)
+
     list_item = xbmcgui.ListItem(path=final_url)
     return xbmcplugin.setResolvedUrl(PLUGIN_HANDLE, True, list_item)
 
@@ -205,51 +209,53 @@ class Video(object):
 
     def _detect(self):
         html_source = get_url(self.url)
+        self._get_video_links(html_source)
 
-        if "data-settings" in html_source:
-            self._get_data_SETTINGS(html_source)
-
-        if "hero-unit-container" in html_source:
-            self._get_hero_unit_container(html_source)
-
-    def _get_data_SETTINGS(self, html_source):
-        match = re.compile('data-settings="(.+?)"').findall(html_source)
-        match = re.compile('&quot;(\d+?)&quot;:{&quot;url&quot;:&quot;(.+?)&quot;,.+?}').findall(match[0])
-        for res in match:
-            self.urls[res[0]] = res[1].replace("\\", "")
-
-    def _get_hero_unit_container(self, html_source):
-        match = re.compile('class="hero-poster instant-play hidden"\n\s.+?\n\s.+?data-id="(.+?)"', re.DOTALL)\
+    def _get_video_links(self, html_source):
+        # ion"},{"type":"id","generated":true,"id":"$ROOT_QUERY.video({\"slug\":\"artifact-review\"}).recommendations.26","typename":"Recommendation"},{"type":"id","generated":true,"id":"$ROOT_QUERY.video({\"slug\":\"artifact-review\"}).recommendations.27","typename":"Recommendation"},{"type":"id","generated":true,"id":"$ROOT_QUERY.video({\"slug\":\"artifact-review\"}).recommendations.28","typename":"Recommendation"},{"type":"id","generated":true,"id":"$ROOT_QUERY.video({\"slug\":\"artifact-review\"}).recommendations.29","typename":"Recommendation"}],"__typename":"Video"},"$ROOT_QUERY.video({\"slug\":\"artifact-review\"}).assets.0":{"url":"https://assets14.ign.com/videos/zencoder/2018/12/12/640/6446a6b64d3bdf7bcdc904c0c65239b3-500000-1544662394.mp4","width":640,"height":360,"fps":60,"__typename":"VideoAsset"},"$ROOT_QUERY.video({\"slug\":\"artifact-review\"}).assets.1":{"url":"https://assets14.ign.com/videos/zencoder/2018/12/12/960/6446a6b64d3bdf7bcdc904c0c65239b3-3000000-1544662394.mp4","width":960,"height":540,"fps":60,"__typename":"VideoAsset"},"$ROOT_QUERY.video({\"slug\":\"artifact-review\"}).assets.2":{"url":"https://assets14.ign.com/videos/zencoder/2018/12/12/1280/6446a6b64d3bdf7bcdc904c0c65239b3-7500000-1544662394.mp4","width":1280,"height":720,"fps":60,"__typename":"VideoAsset"},"$ROOT_QUERY.video({\"slug\":\"artifact-review\"}).assets.3":{"url":"https://assets14.ign.com/videos/zencoder/2018/12/12/1920/6446a6b64d3bdf7bcdc904c0c65239b3-9000000-1544662394.mp4","width":1920,"height":1080,"fps":60,"__typename":"VideoAsset"},"$ROOT_QUERY.video({\"slug\":\"artifact-review\"}).relatedObjects.0":{"name":"Artifact","slug":"artifact","type":"Game","__typename":"VideoRelatedObject"},"$ROOT_QUERY.video({\"slug\":\"artifact-review\"}).recommendations.0":{"duration":230,"title":"Why We Think Valve Hasn't Made Half-Life 3 Yet","url":"https://www.ign.com/videos/2018/03/10/why-we-think-valve-hasnt-made-half-life-3-yet","videoId":"8b84c80d625cd3c5a163cd0358a67f05",
+        temp_matches = re.compile('{"url":"(.+?)/zencoder/(.+?)/(.+?)/(.+?)/(.+?)/(.+?)-(.+?)-(.+?)"', re.DOTALL)\
             .findall(html_source)
-        config = get_url("/videos/configs/id/" + match[0] + ".config").replace("\\", "")
-        temp_matches = re.compile('"url":"(.+?)/zencoder/(.+?)/(.+?)/(.+?)/(.+?)/(.+?)-(.+?)-(.+?)"', re.DOTALL)\
-            .findall(config)
-        start_url = temp_matches[0][0]
-        date = temp_matches[0][1] + "/" + temp_matches[0][2] + "/" + temp_matches[0][3]
-        # resolution = int(temp_matches[0][4])
-        vid_id = temp_matches[0][5]
-        # bitrate = temp_matches[0][6]
-        ext = temp_matches[0][7]
 
-        for i in range(0, len(video_height), 1):
+        temp_match_index = 0;
+        for temp_match in temp_matches:
 
-            temp_url = start_url + "/zencoder/" + date + "/" + str(max_video_quality[i]) + "/" + vid_id + "-" + str(
-                max_video_bitrate[i]) + "-" + ext
+            log("temp_match", temp_match)
+
+            start_url = temp_match[0]
+            year = temp_match[1]
+            month = temp_match[2]
+            day = temp_match[3]
+            resolution = temp_match[4]
+            video_id_part_1 = temp_match[5]
+            bitrate = temp_match[6]
+            video_id_part_2 = temp_match[7]
+            temp_url = start_url + "/zencoder/" + year + "/" + month + "/" + day + "/" + resolution + "/" + video_id_part_1 + "-" + bitrate + "-" + video_id_part_2
             try:
+
+                log("temp_url trying", temp_url)
+
                 ret = urllib.request.urlopen(temp_url)
                 if ret.code == 200:
-                    self.urls[video_height[i]] = temp_url
+
+                    log("temp_url added", temp_url)
+
+                    self.urls[video_height[temp_match_index]] = temp_url
             except urllib.error.HTTPError as e:
                 xbmc.log('HTTPError: ' + temp_url)
             except urllib.error.URLError as e:
                 xbmc.log('URLError: ' + temp_url)
 
-    def get_vid_url(self, res):
+            temp_match_index = temp_match_index + 1
+            # We only need 5 temp_matches, after that it starts repeating itself
+            if temp_match_index > 4:
+                break
+
+    def get_vid_url(self, wanted_resolution):
         self._detect()
         final_url = ""
-        for u in list(self.urls.keys()):
-            if int(u) >= res:
-                final_url = self.urls[u]
+        for available_resolution in list(self.urls.keys()):
+            if int(available_resolution) <= wanted_resolution:
+                final_url = self.urls[available_resolution]
         return final_url
 
 
@@ -287,7 +293,7 @@ def get_url(url):
     html_source = response.text
     html_source = convertToUnicodeString(html_source)
 
-    #log("html_source", html_source)
+    # log("html_source", html_source)
 
     return html_source
 
@@ -397,4 +403,3 @@ else:
     xbmc.log("[ADDON] %s debug mode, Python Version %s" % (ADDON, convertToUnicodeString(sys.version)), xbmc.LOGDEBUG)
     xbmc.log("[ADDON] %s v%s (%s) debug mode, is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)), xbmc.LOGDEBUG)
     index()
-

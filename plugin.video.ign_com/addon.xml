@@ -2,7 +2,7 @@
 <addon
 	id="plugin.video.ign_com"
 	name="IGN.com"
-	version="2.3.7"
+	version="2.3.8"
 	provider-name="Skipmode A1">
     <requires>
         <import addon="xbmc.python"                     version="2.19.0"/>
@@ -24,8 +24,8 @@
         <source>https://github.com/skipmodea1/plugin.video.ign_com</source>
         <email></email>
         <platform>all</platform>
-        <news>2.3.7 (2018-09-08)
-        - website switched to https
+        <news>2.3.8 (2018-12-15)
+        - website changes
         </news>
     </extension>
 </addon>

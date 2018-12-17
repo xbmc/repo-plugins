@@ -62,8 +62,8 @@ socket.setdefaulttimeout(TIMEOUT)
 class Disclose(object):
     def __init__(self, sysARG):
         log('__init__, sysARG = ' + str(sysARG))
-        self.sysARG    = sysARG
-        self.cache = SimpleCache()
+        self.sysARG = sysARG
+        self.cache  = SimpleCache()
            
            
     def openURL(self, url):
@@ -115,7 +115,7 @@ class Disclose(object):
             self.addLink(label, vid_url, 9, infoLabels, infoArt, len(videos))
         next = soup('li', {'class': 'more-container__button m-auto'})
         if len(next) == 0: return
-        next_url   = BASE_URL + next[0].find('a').attrs['href']
+        next_url   = BASE_URL.rstrip('/') + next[0].find('a').attrs['href']
         next_label = (next[0].find('a').attrs['title'] or next[0].get_text())
         self.addDir(next_label, next_url, 1)
             

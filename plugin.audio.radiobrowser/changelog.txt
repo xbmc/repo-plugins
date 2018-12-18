@@ -1,2 +1,5 @@
 v1.0.0 (2016-06-19)
 - First working version with basic lists for tags, countries, top 100s
+v1.1.0 (2018-12-17)
+- Add search function
+- Add in-app favorites menu

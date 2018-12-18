@@ -43,3 +43,23 @@ msgstr ""
 msgctxt "#32006"
 msgid "All"
 msgstr ""
+
+msgctxt "#32007"
+msgid "Search..."
+msgstr ""
+
+msgctxt "#32008"
+msgid "My Stations"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Remove Station"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Add Station"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Search Station"
+msgstr ""

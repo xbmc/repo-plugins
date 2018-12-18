@@ -37,9 +37,29 @@ msgid "Tags"
 msgstr "Kategorien"
 
 msgctxt "#32005"
-msgstr "Länder"
 msgid "Countries"
+msgstr "Länder"
 
 msgctxt "#32006"
 msgid "All"
 msgstr "Alle"
+
+msgctxt "#32007"
+msgid "Search..."
+msgstr "Suchen..."
+
+msgctxt "#32008"
+msgid "My Stations"
+msgstr "Meine Sender"
+
+msgctxt "#32009"
+msgid "Remove Station"
+msgstr "Sender entfernen"
+
+msgctxt "#32010"
+msgid "Add Station"
+msgstr "Sender hinzufügen"
+
+msgctxt "#32011"
+msgid "Search Station"
+msgstr "Sender suchen"

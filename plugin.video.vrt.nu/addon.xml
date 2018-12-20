@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.vrt.nu"
        name="VRT Nu"
-       version="1.4.3"
+       version="1.5.0"
        provider-name="Martijn Moreel">
 
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.requests" version="2.19.1"/>
-    <import addon="script.module.beautifulsoup4" version="4.5.3"/>
+        <import addon="script.module.requests" version="2.19.1"/>
+        <import addon="script.module.beautifulsoup4" version="4.5.3"/>
+        <import addon="inputstream.adaptive" version="2.0.19" />
     </requires>
 
     <extension point="xbmc.python.pluginsource" library="addon.py">
@@ -23,6 +24,10 @@
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
+          v1.5.0 (27-12-2018)
+          - 720p Livestreams when enabled in settings + having kodi 18 + having widevine.dll present (Thanks mediaminister)
+          - Fixed bug where watched icon was not showing in Kodi 18
+          - Implemented different way of working with subtitles (Thanks mediaminister)
           v1.4.3 (07-11-2018)
           - Livestreams working again
           v1.4.2 (11-10-2018)

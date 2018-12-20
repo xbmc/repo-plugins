@@ -1,6 +1,8 @@
 import xbmc
 import xbmcgui
 import xbmcplugin
+import xbmcvfs
+import json
 from urllib import urlencode
 from resources.lib.vrtplayer import vrtplayer
 from resources.lib.kodiwrappers import sortmethod
@@ -32,17 +34,29 @@ class KodiWrapper:
             kodi_sortmethod = kodi_sorts.get(sort)
             xbmcplugin.addSortMethod(self._handle, kodi_sortmethod)
 
+        xbmcplugin.setContent(int(self._handle), "episodes")
         xbmcplugin.endOfDirectory(self._handle)
 
-    def play_video(self, stream):
-        if stream is not None:
-            play_item = xbmcgui.ListItem(path=stream.stream_url)
-            if stream.subtitle_url is not None:
-                play_item.setSubtitles([stream.subtitle_url])
-            xbmcplugin.setResolvedUrl(self._handle, True, listitem=play_item)
+    def play(self, video):
+        play_item = xbmcgui.ListItem(path=video.stream_url)
 
-    def play_livestream(self, path):
-        play_item = xbmcgui.ListItem(path=path)
+        if video.stream_url is not None and '/.mpd' in video.stream_url:
+            play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+            play_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+            play_item.setMimeType('application/dash+xml')
+            play_item.setContentLookup(False)
+
+        if video.license_key is not None:
+            play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
+            play_item.setProperty('inputstream.adaptive.license_key', video.license_key)
+
+        if self.get_setting('showsubtitles') == 'true':
+            xbmc.Player().showSubtitles(True)
+            if video.subtitle_url is not None:
+                play_item.setSubtitles([video.subtitle_url])
+        else:
+            xbmc.Player().showSubtitles(False)
+
         xbmcplugin.setResolvedUrl(self._handle, True, listitem=play_item)
 
     def show_ok_dialog(self, title, message):
@@ -57,3 +71,27 @@ class KodiWrapper:
     def open_settings(self):
         self._addon.openSettings()
 
+    def check_inputstream_adaptive(self):
+        return xbmc.getCondVisibility('System.HasAddon("{0}")'.format('inputstream.adaptive')) == 1
+
+    def check_widevine(self):
+        dirs, files = xbmcvfs.listdir(xbmc.translatePath('special://home/cdm'))
+        return any('widevine' in s for s in files)
+
+    def get_userdata_path(self):
+        return xbmc.translatePath(self._addon.getAddonInfo('profile')).decode('utf-8')
+
+    def make_dir(self, path):
+        xbmcvfs.mkdir(path)
+
+    def check_if_path_exists(self, path):
+        return xbmcvfs.exists(path)
+
+    def open_path(self, path):
+        return json.loads(open(path, 'r').read())
+
+    def delete_path(self, path):
+        return xbmcvfs.delete(path)
+
+    def log(self, message):
+        xbmc.log(message, xbmc.LOGNOTICE)

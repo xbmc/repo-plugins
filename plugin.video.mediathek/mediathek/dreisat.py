@@ -195,7 +195,7 @@ class DreiSatMediathek(Mediathek):
 
   def parseDate(self,dateString):
     dateString = regex_dateString.search(dateString).group();
-    for month in month_replacements.keys():
+    for month in list(month_replacements.keys()):
       dateString = dateString.replace(month,month_replacements[month]);
     return time.strptime(dateString,"%d.%m.%Y");
 

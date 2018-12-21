@@ -94,7 +94,7 @@ class ZDFMediathek(Mediathek):
       title=categoriePage["titel"];
       subTitle=categoriePage["beschreibung"];
       imageLink="";
-      for width,imageObject in categoriePage["teaserBild"].iteritems():
+      for width,imageObject in list(categoriePage["teaserBild"].items()):
         if int(width)<=840:
           imageLink=imageObject["url"];
       url = categoriePage["url"];
@@ -114,7 +114,7 @@ class ZDFMediathek(Mediathek):
       description=videoObject["beschreibung"];
     imageLink="";
     if("teaserBild" in videoObject):
-      for width,imageObject in videoObject["teaserBild"].iteritems():
+      for width,imageObject in list(videoObject["teaserBild"].items()):
         if int(width)<=840:
           imageLink=imageObject["url"];
     if("visibleFrom" in videoObject):

@@ -202,14 +202,15 @@ class SimpleXbmcGui(object):
       return links[self.quality];
     else:
       selectedKey = -1;
-      for key in links.keys():
+      keys = list(links.keys())
+      for key in keys:
         if(key < self.quality and key > selectedKey):
           selectedKey = key;
       if(selectedKey > -1):
         return links[selectedKey];
       else:
-        selectedKey = links.keys()[0];
-        for key in links.keys():
+        selectedKey = keys[0];
+        for key in keys:
           if(key < selectedKey):
             selectedKey = key;
         return links[selectedKey];

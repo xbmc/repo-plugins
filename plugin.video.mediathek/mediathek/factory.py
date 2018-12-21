@@ -15,19 +15,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-from mediathek.wdr import *
 from mediathek.ard import *
 from mediathek.zdf import *
 from mediathek.arte import *
 from mediathek.dreisat import *
-from mediathek.orf import *
-from mediathek.ndr import *
 from mediathek.kika import *
 
 class MediathekFactory(object):
   def __init__(self):
     self.avaibleMediathekes = {
-       ARDMediathek.name():ARDMediathek,
+       #ARDMediathek.name():ARDMediathek,
        ZDFMediathek.name():ZDFMediathek,
        ARTEMediathek.name():ARTEMediathek,
        DreiSatMediathek.name():DreiSatMediathek,

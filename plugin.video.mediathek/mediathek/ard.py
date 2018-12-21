@@ -21,9 +21,9 @@ from mediathek import *
 class ARDMediathek(Mediathek):
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
-    self.rootLink = "http://www.ardmediathek.de"
+    self.rootLink = "https://www.ardmediathek.de"
     self.menuTree = (
-                      TreeNode("0","Neuste Videos",self.rootLink+"/tv/Neueste-Videos/mehr?documentId=21282466",True),
+                      TreeNode("0","Neuste Videos",self.rootLink+"/ard/",True),
                       TreeNode("1","Sendungen von A-Z","",False,(
                         TreeNode("1.0","0-9",self.rootLink+"/tv/sendungen-a-z?buchstabe=0-9",True),
                         TreeNode("1.1","A",self.rootLink+"/tv/sendungen-a-z?buchstabe=A",True),
@@ -71,7 +71,6 @@ class ARDMediathek(Mediathek):
                         )),
                       )
     self.configLink = self.rootLink+"/play/media/%s?devicetype=pc&feature=flash"
-                                                     #.*Video\?bcastId=\d+&amp;documentId=(\d+)\" class=\"textLink\">\s+?<p class=\"dachzeile\">(.*?)</p>\s+?<h4 class=\"headline\">(.*?)</h4>
     self.regex_VideoPageLink = re.compile("<a href=\".*Video\?.*?documentId=(\d+).*?\" class=\"textLink\">\s+?<p class=\"dachzeile\">(.*?)<\/p>\s+?<h4 class=\"headline\">(.*?)<\/h4>\s+?<p class=\"subtitle\">(?:(\d+.\d+.\d+) \| )?(\d*) Min.")
     self.regex_CategoryPageLink = re.compile("<a href=\"(.*(?:Sendung|Thema)\?.*?documentId=\d+.*?)\" class=\"textLink\">(?:.|\n)+?<h4 class=\"headline\">(.*?)<\/h4>")
     self.pageSelectString = "&mcontent%s=page.%s"

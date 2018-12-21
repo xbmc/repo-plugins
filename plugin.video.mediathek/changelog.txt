@@ -1,3 +1,4 @@
+0.8.7 - CHG: ARTE working again, ARD disabled Temporaily
 0.8.7 - CHG: Reimplement 3SAT again ...
 0.8.6 - FIX: ARD,ARTE Disable NDR,ORF,3SAT (will be enabled later)
 0.8.5 - FIX: KIKA and ARD

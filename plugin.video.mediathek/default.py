@@ -28,7 +28,6 @@ gui = SimpleXbmcGui(settings);
 def get_params():
   paramDict = {}
   try:
-    print "get_params() argv=", sys.argv
     if sys.argv[2]:
       paramPairs=sys.argv[2][1:].split( "&" )
       for paramsPair in paramPairs:

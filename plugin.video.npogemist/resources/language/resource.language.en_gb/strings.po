@@ -1,0 +1,127 @@
+# Kodi Media Center plugin language file
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.npogemist\n"
+"Report-Msgid-Bugs-To: http://trac.kodi.tv/@@@\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Dion Nicolaas\n"
+"Language-Team: Dion Nicolaas\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "NPO Gemist"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Guide"
+msgstr ""
+
+msgctxt "#30004"
+msgid "The television guide for the last week. This includes programs that can not (yet) be played; they will show in italic letters."
+msgstr ""
+
+msgctxt "#30005"
+msgid "New"
+msgstr ""
+
+msgctxt "#30006"
+msgid "New broadcasts from the last few days."
+msgstr ""
+
+msgctxt "#30007"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Yesterday"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Day before yesterday"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Programs"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Programs by alphabet."
+msgstr ""
+
+msgctxt "#30012"
+msgid "Programs starting with the letter {0}."
+msgstr ""
+
+msgctxt "#30013"
+msgid "Programs not starting with a letter."
+msgstr ""
+
+msgctxt "#30014"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Programs by genre."
+msgstr ""
+
+msgctxt "#30016"
+msgid "Search for broadcasts by name or description."
+msgstr ""
+
+msgctxt "#30017"
+msgid "Broadcasts of a certain duration. Check here if you want to watch television for a certain time."
+msgstr ""
+
+msgctxt "#30018"
+msgid "{0}-{1} minutes"
+msgstr ""
+
+msgctxt "#30019"
+msgid "{0} minutes or more"
+msgstr ""
+
+msgctxt "#30020"
+msgid "re-run"
+msgstr ""
+
+msgctxt "#30021"
+msgid "All"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Broadcasts from all channels"
+msgstr ""
+
+msgctxt "#30023"
+msgid "New search"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Earlier search: '{0}'"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Recently viewed"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Programs you have recently viewed. Check here if there are new episodes waiting."
+msgstr ""
+
+msgctxt "#30027"
+msgid "This program is not available."
+msgstr ""
+

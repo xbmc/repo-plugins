@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.npogemist" name="NPO Gemist" version="1.1.1" provider-name="Dion Nicolaas">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">NPO Gemist - Watch free videos from NPO (Dutch IP-address required)</summary>
+        <summary lang="nl_NL">NPO Gemist - Bekijk gratis videos van NPO (alleen met Nederlands IP-adres)</summary>
+        <description lang="en_GB">Watch the free programmes from Dutch TV NPO 1, 2 and 3. Only works from a Dutch IP-address.</description>
+        <description lang="nl_NL">Bekijk het gratis aanbod van de NPO van NPO 1, 2 en 3. Werkt alleen vanaf een Nederlands IP-adres.</description>
+        <disclaimer lang="en_GB">Dutch IP-address required.</disclaimer>
+        <disclaimer lang="nl_NL">Werkt alleen vanaf een Nederlands IP-adres.</disclaimer>
+        <news>1.1.0: Compatible with the new NPO Start API.</news>
+        <platform>all</platform>
+        <language>nl</language>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <website>https://www.npostart.nl/</website>
+        <email>dion at nicolaas dot net</email>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

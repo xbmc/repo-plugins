@@ -1,0 +1,127 @@
+# Kodi Media Center plugin language file
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.npogemist\n"
+"Report-Msgid-Bugs-To: http://trac.kodi.tv/@@@\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Dion Nicolaas\n"
+"Language-Team: Dion Nicolaas\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "NPO Gemist"
+msgstr "NPO Gemist"
+
+msgctxt "#30001"
+msgid "Settings"
+msgstr "Instellingen"
+
+msgctxt "#30002"
+msgid "Subtitles"
+msgstr "Ondertiteling"
+
+msgctxt "#30003"
+msgid "Guide"
+msgstr "Gids"
+
+msgctxt "#30004"
+msgid "The television guide for the last week. This includes programs that can not (yet) be played; they will show in italic letters."
+msgstr "De televisiegids van de laatste week. Hier staan ook programma's die (nog) niet kunnen worden afgespeeld; die staan in schuine letters."
+
+msgctxt "#30005"
+msgid "New"
+msgstr "Nieuw"
+
+msgctxt "#30006"
+msgid "New broadcasts from the last few days."
+msgstr "Nieuwe uitzendingen van de laatste dagen."
+
+msgctxt "#30007"
+msgid "Today"
+msgstr "Vandaag"
+
+msgctxt "#30008"
+msgid "Yesterday"
+msgstr "Gisteren"
+
+msgctxt "#30009"
+msgid "Day before yesterday"
+msgstr "Eergisteren"
+
+msgctxt "#30010"
+msgid "Programs"
+msgstr "Programma's"
+
+msgctxt "#30011"
+msgid "Programs by alphabet."
+msgstr "Programma's op alfabet."
+
+msgctxt "#30012"
+msgid "Programs starting with the letter {0}."
+msgstr "Programma's die beginnen met de letter {0}."
+
+msgctxt "#30013"
+msgid "Programs not starting with a letter."
+msgstr "Programma's die niet met een letter beginnen."
+
+msgctxt "#30014"
+msgid "Genres"
+msgstr "Genres"
+
+msgctxt "#30015"
+msgid "Programs by genre."
+msgstr "Programma's op genre."
+
+msgctxt "#30016"
+msgid "Search for broadcasts by name or description."
+msgstr "Zoek naar uitzendingen op naam of omschrijving."
+
+msgctxt "#30017"
+msgid "Broadcasts of a certain duration. Check here if you want to watch television for a certain time."
+msgstr "Uitzendingen op lengte. Check hier als je een bepaalde tijd televisie wil kijken."
+
+msgctxt "#30018"
+msgid "{0}-{1} minutes"
+msgstr "{0}-{1} minuten"
+
+msgctxt "#30019"
+msgid "{0} minutes or more"
+msgstr "{0} minuten of langer"
+
+msgctxt "#30020"
+msgid "re-run"
+msgstr "herh."
+
+msgctxt "#30021"
+msgid "All"
+msgstr "Alles"
+
+msgctxt "#30022"
+msgid "Broadcasts from all channels"
+msgstr "Uitzendingen op alle kanalen"
+
+msgctxt "#30023"
+msgid "New search"
+msgstr "Nieuwe zoekopdracht"
+
+msgctxt "#30024"
+msgid "Earlier search: '{0}'"
+msgstr "Eerdere zoekopdracht: '{0}'"
+
+msgctxt "#30025"
+msgid "Recently viewed"
+msgstr "Kortgeleden bekeken"
+
+msgctxt "#30026"
+msgid "Programs you have recently viewed. Check here if there are new episodes waiting."
+msgstr "Programma's die je kortgeleden bekeken hebt. Kijk hier of er nieuwe afleveringen zijn."
+
+msgctxt "#30027"
+msgid "This program is not available."
+msgstr "Dit programma is niet beschikbaar."
+

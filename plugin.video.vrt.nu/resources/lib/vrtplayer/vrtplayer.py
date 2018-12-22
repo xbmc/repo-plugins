@@ -15,21 +15,19 @@ from resources.lib.kodiwrappers import sortmethod
 class VRTPlayer:
 
     #Url met de urls https://services.vrt.be/videoplayer/r/live.json
-    _EEN_LIVESTREAM = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1/videos/vualto_een_geo'
-    _CANVAS_LIVESTREAM_ = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1/videos/vualto_canvas_geo'
-    _KETNET_LIVESTREAM = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1/videos/vualto_ketnet_geo'
-    _SPORZA_LIVESTREAM = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1/videos/vualto_sporza_geo'
+    _EEN_LIVESTREAM = 'https://www.vrt.be/vrtnu/kanalen/een/'
+    _CANVAS_LIVESTREAM_ = 'https://www.vrt.be/vrtnu/kanalen/canvas/'
+    _KETNET_LIVESTREAM = 'https://www.vrt.be/vrtnu/kanalen/ketnet/'
 
     _VRT_BASE = 'https://www.vrt.be/'
     _VRTNU_BASE_URL = urljoin(_VRT_BASE, '/vrtnu/')
     _VRTNU_SEARCH_URL = 'https://search.vrt.be/suggest?facets[categories]='
 
-    def __init__(self, addon_path, kodi_wrapper, url_to_stream_service, url_to_livestream_service):
+    def __init__(self, addon_path, kodi_wrapper, url_to_stream_service):
         self.metadata_collector = metadatacollector.MetadataCollector()
         self._addon_path = addon_path
         self._kodi_wrapper = kodi_wrapper
         self._url_toStream_service = url_to_stream_service
-        self.url_to_livestream_service = url_to_livestream_service
 
 
     def show_main_menu_items(self):
@@ -75,27 +73,21 @@ class VRTPlayer:
             menu_items.append(item)
         self._kodi_wrapper.show_listing(menu_items, sortmethod.ALPHABET)
 
-    def play_vrtnu_video(self, url):
-        stream = self._url_toStream_service.get_stream_from_url(url)
-        self._kodi_wrapper.play_video(stream)
-
-    def play_livestream(self, url):
-        stream = self.url_to_livestream_service.get_stream_from_url(url)
-        self._kodi_wrapper.play_livestream(stream)
+    def play(self, url):
+        video = self._url_toStream_service.get_stream_from_url(url)
+        if video is not None:
+            self._kodi_wrapper.play(video)
 
     def show_livestream_items(self):
         livestream_items = {helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32101),
-                                        {'action': actions.PLAY_LIVE, 'video': self._EEN_LIVESTREAM},
+                                        {'action': actions.PLAY, 'video': self._EEN_LIVESTREAM},
                                         True, self.__get_media('een.png')),
                 helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32102),
-                                        {'action': actions.PLAY_LIVE, 'video': self._CANVAS_LIVESTREAM_},
+                                        {'action': actions.PLAY, 'video': self._CANVAS_LIVESTREAM_},
                                         True, self.__get_media('canvas.png')),
                 helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32103),
-                                        {'action': actions.PLAY_LIVE, 'video': self._KETNET_LIVESTREAM},
-                                        True, self.__get_media('ketnet.png')),
-                helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32104),
-                                        {'action': actions.PLAY_LIVE, 'video': self._SPORZA_LIVESTREAM},
-                                        True, self.__get_media('sporza.png'))
+                                        {'action': actions.PLAY, 'video': self._KETNET_LIVESTREAM},
+                                        True, self.__get_media('ketnet.png'))
                 }
         self._kodi_wrapper.show_listing(livestream_items, sortmethod.ALPHABET)
 

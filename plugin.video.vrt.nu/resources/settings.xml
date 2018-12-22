@@ -7,4 +7,7 @@
     <category label="32010">
         <setting label="32011" type="bool" id="showsubtitles" default="true" />
     </category>
+    <category label="32020">
+        <setting label="32021" type="bool" id="usedrm" default="false" />
+    </category>
 </settings>

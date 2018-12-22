@@ -97,19 +97,18 @@ def get_clean_title(title):
         strip()
 
 
-def get_two_level_menu(html):
-    """This function makes the two level menu parammeters data structure for all the menu sections."""
+def get_channels_menu(html_channels):
+    """This function makes the program menu parammeters data structure for all the channel menus."""
 
-    menu_pattern   = '<span>(Podcasts por [gc][^<]*?)</span>(.*?)</div></div></div>'
-    menu_entry_pat = '<li> <a href="([^"]*?)" [^>]*?>([^<]*?)</a>'
+    channel_sep       = '<ul class="layercanales">'
+    channel_pattern   = '<li class="rn."><a href="([^"]*?)" rel="nofollow"><span></span><strong>([^<]*?)</strong></a></li>'
 
     menu_level = []
-    for menu_title, menu_body in l.find_multiple(html, menu_pattern):
-        nested_menu = '¡'.join(['%s¿%s' % (url, get_clean_title(label)) for url, label in l.find_multiple(menu_body, menu_entry_pat)])
+    for url, channel in l.find_multiple(html_channels.split(channel_sep)[1], channel_pattern):
         menu_item   = {
-                'action' : 'menu_sec',
-                'title'  : get_clean_title(menu_title),
-                'args'   : nested_menu,
+                'action' : 'program_list',
+                'title'  : channel,
+                'args'   : root_url + url,
                 }
         menu_level.append(menu_item)
 
@@ -119,25 +118,24 @@ def get_two_level_menu(html):
 def get_create_index():
     """This function gets the the first level index menu."""
 
-    main_url = root_url + '/tsacdop/oidar/'[::-1]
+    main_url = root_url + '/enr/atracala/'[::-1]
 
     menu_patterns = (
-            ( 'program_list', '<a href="([^"]*?)" title="(Listado de programas)"><span>'),
-            ( 'menu_direct',  'href="([^"]*?)".*?([Ee]n [Dd]irecto)'),
+            ( 'program_list', '<a href="([^"]*?)">(Todo RNE)</a>'),
+            ( 'menu_direct',  'href="([^"]*?)".*?([Rr]adio [Ee]n [Dd]irecto)'),
             )
 
     buffer_url   = l.carga_web(main_url)
-    menu_entries = get_two_level_menu(buffer_url)
+    menu_entries = get_channels_menu(buffer_url)
 
     for action, pattern in menu_patterns:
         url, title = l.find_first(buffer_url, pattern) or ('', '')
-        if url:
-            menu_item = {
+        menu_item = {
                 'action' : action,
-                'title'  : get_clean_title(title).capitalize(),
-                'args'   : url,
+                'title'  : get_clean_title(title),
+                'args'   : root_url + url,
                 }
-            menu_entries.append(menu_item)
+        menu_entries.append(menu_item)
 
     return menu_entries
 
@@ -145,63 +143,45 @@ def get_create_index():
 def get_program_list(menu_url, all_programmes_flag=False, localized=lambda x: x):
     """This function makes programmes list data structure for all the program sections."""
 
-    program_section_sep   = '<span class="col_tit"'
-    program_fecha_pattern = '<span class="col_fec">([^<]*?)</span>'
-    program_canal_pattern = "title=\"Ir a portada de '([^']*?)'"
-    program_desc_pattern  = '<span class="detalle">(.*?)</span>'
-    program_link_pattern  = '<span class="titulo-tooltip"><a href="([^"]*?)" title="[^>]*?>([^<]*?)</a></span>'
-    program_genre_pattern = '<span class="col_cat">([^<]*?)</span>'
-    page_num_pattern      = '/([0-9]+)/'
+    program_pattern       = '<dd><a title="([^"]*?)" href="([^"]*?)">[^<]*?</a></dd>'
+    suffix                = 'zaSP=ldom'[::-1]
+    channel_pattern       = '<span class="last">([^<]*?)</span></h1>'
+    page_num_pattern      = 'pbq=([0-9]+)'
     page_url_pattern      = '<a name="paginaIR" href="([^"]*?)"><span>%s'
-    page_num_url_pattern  = '<a name="paginaIR" href=".*?/([0-9]+)/[^"]*?"><span>%s'
+    page_num_url_pattern  = '<a name="paginaIR" href=".*?pbq=([0-9]+)[^"]*?"><span>%s'
+    base_url_pattern      = '(^[^?]*?)\?'
+    suffix_pattern        = '([^/]+)/$'
+    suffix_string         = 'zaSP=ldom&se=gnal&=adeuqsuBartel&s%=xtc&1=qbp?'[::-1]
 
-    # This toggles between only on emission and all the programmes filter option selected from the add-on setings.
-    filter_flag           = 'lla=retliFnoissime'[::-1]
-    menu_url              = menu_url + '&csa=airetirc&1=redro?'[::-1] + filter_flag if all_programmes_flag and \
-                                not filter_flag in menu_url else menu_url
+    if not suffix in menu_url:
+        suffix            = suffix_string % l.find_first(menu_url, suffix_pattern)
+        menu_url          = menu_url + suffix
 
     buffer_url            = l.carga_web(menu_url)
-
     program_list          = []
     reset_cache           = False
+    canal                 = l.find_first(buffer_url, channel_pattern)
+    base_url              = l.find_first(menu_url, base_url_pattern)
 
     curr_page_num = l.find_first(menu_url, page_num_pattern) or '1'
     if curr_page_num != '1':
         previous_page_url = l.find_first(buffer_url, page_url_pattern % 'Anterior')
         prev_page_num     = l.find_first(previous_page_url, page_num_pattern)
         program_entry     = {
-                'url'     : root_url + previous_page_url.replace('&amp;', '&'),
+                'url'     : base_url + previous_page_url.replace('&amp;', '&'),
                 'title'   : '<< %s (%s)' % (localized('Previous page'), prev_page_num),
                 'action'  : 'program_list',
                 }
         program_list.append(program_entry)
         reset_cache = True
 
-
-    for program_section in buffer_url.split(program_section_sep)[1:]:
-        date              = l.find_first(program_section, program_fecha_pattern)
-        desc              = l.find_first(program_section, program_desc_pattern)
-        url, title        = l.find_first(program_section, program_link_pattern) or ('', '')
-        genre             = l.find_first(program_section, program_genre_pattern)
-        canal             = l.find_first(program_section, program_canal_pattern)
-        title             = get_clean_title(title)
-        l.log('Program info. url: "%s" canal: "%s" title: "%s" genre: "%s" date: "%s"' % (
-                url, canal, title, genre, date))
-
+    for title, url in l.find_multiple(buffer_url, program_pattern):
+        l.log('Program info. url: "%s" canal: "%s" title: "%s"' % (url, canal, title))
         program_entry     = {
                 'url'     : url,
-                'title'   : "%s (%s | %s | %s)" % (
-                             title,
-                             canal,
-                             genre,
-                             date,
-                            ),
-                'comment' : "%s\n%s - %s" % (
-                             desc.strip(),
-                             genre,
-                             date,
-                            ),
-                'genre'   : genre,
+                'title'   : title,
+                'comment' : "",
+                'genre'   : "",
                 'canal'   : canal,
                 'program' : title,
                 'action'  : 'audio_list'
@@ -214,7 +194,7 @@ def get_program_list(menu_url, all_programmes_flag=False, localized=lambda x: x)
         next_page_url     = l.find_first(buffer_url, page_url_pattern % 'Siguiente')
         next_page_num     = l.find_first(next_page_url, page_num_pattern)
         program_entry     = {
-                'url'     : root_url + next_page_url.replace('&amp;', '&'),
+                'url'     : base_url + next_page_url.replace('&amp;', '&'),
                 'title'   : '>> %s (%s/%s)' % (
                              localized('Next page'),
                              next_page_num,
@@ -384,8 +364,8 @@ def get_search_url(searchtext):
 
     search_prefix = '/rodacsub/se.evtr.www//:ptth'[::-1] + '=q?telvreSelgooG'[::-1]
     search_suffix = (
-                    'oidua=tnoc&0=nr&oidar=etis&=atsah&=edsed&'[::-1] +\
-                    'oiduaE25252%EVTR=sdleifderiuqer&'[::-1]
+                    '=rartlif_timbus&oidar=etis&=atsah&=edsed&'[::-1] +\
+                    'soidua=tnoc&ecnaveler=tros&1=trats&'[::-1]
                     )
 
     return  search_prefix + l.get_url_encoded(searchtext) + search_suffix
@@ -399,20 +379,23 @@ def get_search_list(search_url, localized=lambda x: x):
     search_title_pattern  = '<span class="maintitle">(.*?)</span>'
     search_desc_pattern   = '<div class="auxBox">[^<]*?<p>(.*?)</p>'
     search_year_pattern   = '<span class="datpub">[0-9]+.[0-9]+.([0-9]+)</span>'
-    page_url_pattern      = '<li class="be_on"><span class="ico arrow %s_"><a href="([^"]*?)"'
-    page_num_pattern      = 'start=([0-9]+)' # Starts by 0 and the results goes from 10 to 10.
+    page_num_pattern      = 'start=([0-9]+)' # Starts by 1.
+    page_url_pattern      = 'start=%d&'
 
-    search_root           = '/rodacsub/se.evtr.www//:ptth'[::-1]
     buffer_url            = l.carga_web(search_url)
 
     search_list           = []
     reset_cache           = False
 
-    previous_page_url     = l.find_first(buffer_url, page_url_pattern % 'back')
-    if previous_page_url:
-        prev_page_num     = int(l.find_first(previous_page_url, page_num_pattern))/10 + 1
+    current_page_num      = int(l.find_first(search_url, page_num_pattern) or '1')
+    if current_page_num  != 1:
+        prev_page_num     = current_page_num - 1
+        previous_page_url = search_url.replace(
+                page_url_pattern % current_page_num,
+                page_url_pattern % prev_page_num
+                )
         search_entry      = {
-                'url'        : search_root + previous_page_url.replace('&amp;', '&'),
+                'url'        : previous_page_url,
                 'title'      : '<< %s (%d)' % (localized('Previous page'), prev_page_num),
                 'action'     : 'search_list',
                 'IsPlayable' : False
@@ -439,11 +422,14 @@ def get_search_list(search_url, localized=lambda x: x):
                 }
         search_list.append(search_entry)
 
-    next_page_url         = l.find_first(buffer_url, page_url_pattern % 'next')
-    if next_page_url:
-        next_page_num     = int(l.find_first(next_page_url, page_num_pattern))/10 + 1
+    next_page_num         = current_page_num + 1
+    if l.find_first(buffer_url, page_url_pattern % next_page_num):
+        next_page_url     = search_url.replace(
+                page_url_pattern % current_page_num,
+                page_url_pattern % next_page_num
+                )
         search_entry      = {
-                'url'        : search_root + next_page_url.replace('&amp;', '&'),
+                'url'        : next_page_url,
                 'title'      : '>> %s (%d)' % (localized('Next page'), next_page_num),
                 'action'     : 'search_list',
                 'IsPlayable' : False

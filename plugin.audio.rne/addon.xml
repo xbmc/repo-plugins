@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.rne" name="RNE Podcasts" version="1.0.10" provider-name="Jose Antonio Montes (jamontes)">
+<addon id="plugin.audio.rne" name="RNE Podcasts" version="1.0.11" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
         <import addon="xbmc.python" version="2.19.0"/>
     </requires>
@@ -20,7 +20,6 @@
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
         <forum>http://forum.xbmc.org/showthread.php?tid=224126</forum>
         <source>https://github.com/jamontes/plugin.audio.rne</source>
-        <website>http://www.rtve.es/radio/podcast/</website>
-        <mail></mail>
+        <website>http://www.rtve.es/alacarta/rne/</website>
     </extension>
 </addon>

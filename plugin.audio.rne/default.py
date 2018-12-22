@@ -111,29 +111,6 @@ def create_index(params):
     p.add_items(main_menu)
 
 
-def menu_sec(params):
-    """This function generates the nexted menu entries for the genre and channel menu sections."""
-    p.log("rne.menu_sec "+repr(params))
-
-    genre    = params.get('genre', '')
-    menus    = params.get('url')
-    action   = 'program_list'
-
-    menu_sec = [ {
-            'info': {
-                'title'  : imenu.split('¿')[1],
-                'genre'  : genre,
-            },
-            'path'       : p.get_plugin_path(
-                url      = imenu.split('¿')[0],
-                action   = action,
-            ),
-            'IsPlayable' : False,
-            } for imenu in menus.split('¡') ]
-
-    p.add_items(menu_sec)
-
-
 def program_list(params):
     """This function generates the programmes list, based on the upper menu selection."""
     p.log("rne.program_list "+repr(params))
@@ -155,6 +132,7 @@ def program_list(params):
                 program     = item.get('program',   ''),
                 canal       = item.get('canal',     ''),
                 genre       = item.get('genre',     ''),
+                reset_cache = reset_cache,
             ),
             'IsPlayable'    : False,
             } for item in programs.get('program_list') ]

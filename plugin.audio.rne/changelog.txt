@@ -1,3 +1,7 @@
+1.0.11 (2018.12.22)
+- Recover podcast playback due to website changes (thanks to cgg1969).
+- Updated search feature due to website changes.
+- Updated integration tests due to code changes.
 1.0.10 (2018.03.25)
 - Quick fix for direct channels.
 - Fixed playback and search podcasts.

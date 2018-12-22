@@ -32,6 +32,14 @@ msgctxt "#32011"
 msgid "Show subtitles if available"
 msgstr "Show subtitles if available"
 
+msgctxt "#32020"
+msgid "DRM"
+msgstr "DRM"
+
+msgctxt "#32021"
+msgid "Use DRM for 720p HD-quality livestreams"
+msgstr "Use DRM for 720p HD-quality livestreams"
+
 msgctxt "#32051"
 msgid "Could not login!"
 msgstr "could not login"

@@ -7,4 +7,3 @@ LISTING_CATEGORY_VIDEOS = 'listingcategoryvideos'
 LISTING_EPISODES = 'listingepisodes'
 
 PLAY = 'play'
-PLAY_LIVE = "playlive"

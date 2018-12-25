@@ -1,3 +1,6 @@
+2.4.1
+[chg] Settings and Refresh menu items to unplayable items instead of folders
+
 2.4.0
 [add] allow limiting framerate to 30 fps when video quality is set to Source
 [fix] change import from absolute to relative

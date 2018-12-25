@@ -35,7 +35,10 @@ def route(api, content, query, index=0):
             if results[Keys.TOTAL] > (offset + limit):
                 kodi.create_item(utils.link_to_next_page({'mode': MODES.SEARCHRESULTS, 'content': content, 'query': query, 'index': index}))
         else:
-            kodi.create_item({'path': kodi.get_plugin_url({'mode': MODES.REFRESH}), 'label': i18n('refresh')})
+            kodi.create_item({'path': kodi.get_plugin_url({'mode': MODES.REFRESH}),
+                              'label': i18n('refresh'),
+                              'is_folder': False,
+                              'is_playable': False})
         kodi.end_of_directory()
     elif content == 'channels':
         kodi.set_view('files', set_sort=False)

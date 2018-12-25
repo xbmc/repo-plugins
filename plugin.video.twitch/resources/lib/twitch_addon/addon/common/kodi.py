@@ -246,7 +246,7 @@ def add_item(item_dict, list_item):
     if not path: return
 
     is_playable = item_dict.get('is_playable', False)
-    is_folder = not is_playable
+    is_folder = item_dict.get('is_folder', not is_playable)
 
     list_item.setProperty('isPlayable', str(is_playable).lower())
 

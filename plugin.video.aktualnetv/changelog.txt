@@ -1,5 +1,4 @@
- [B]2.1.2[/B]
-— fixed resource directory structure
-
-[B]2.1.1[/B]
-— adapted to new webpage video player
+[B]2.2.1[/B]
+– Moved from MP4 sources to adaptive HLS
+– Addon always plays the video in the best available quality
+– Code clean-up

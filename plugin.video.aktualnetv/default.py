@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
+# pylint: disable=import-error
 
 import datetime
 import email.utils
@@ -10,10 +11,8 @@ import sys
 import urllib2
 from urllib import urlencode
 from urlparse import parse_qsl
-from urlparse import urljoin
 from xml.etree import ElementTree
 
-import xbmc
 import xbmcaddon
 import xbmcplugin
 import xbmcgui
@@ -22,7 +21,7 @@ import xbmcgui
 __author__ = "Petr Kutalek (petr@kutalek.cz)"
 __copyright__ = "Copyright (c) Petr Kutalek, 2015-2018"
 __license__ = "GPL 2, June 1991"
-__version__ = "2.1.2"
+__version__ = "2.2.1"
 
 HANDLE = int(sys.argv[1])
 ADDON = xbmcaddon.Addon("plugin.video.aktualnetv")
@@ -35,30 +34,6 @@ def _create_url(**kwargs):
     plugin://plugin.video.aktualnetv/?action=list&offset=…
     """
     return "{0}?{1}".format(sys.argv[0], urlencode(kwargs))
-
-
-def _router(paramstring):
-    """Handles addon execution
-    """
-    params = dict(parse_qsl(paramstring))
-    if params:
-        if params.get("action") == "play":
-            if "token" not in params:
-                raise ValueError(
-                    "Invalid plugin:// url. Missing token param: {0}"
-                    .format(paramstring))
-            _play_video(params["token"])
-        elif params.get("action") == "list":
-            offset = 0
-            if "offset" in params:
-                offset = int(params["offset"])
-            _list_videos(offset)
-        else:
-            raise ValueError(
-                "Invalid plugin:// url. Unknown action param: {0}"
-                .format(paramstring))
-    else:
-        _list_videos()
 
 
 def _download_file(url):
@@ -77,7 +52,7 @@ def _download_file(url):
             content = gzipf.read()
         else:
             content = f.read()
-    except (urllib2.HTTPError, urllib2.URLError), err:
+    except (urllib2.HTTPError, urllib2.URLError) as err:
         print(err.reason)
     finally:
         try:
@@ -85,15 +60,6 @@ def _download_file(url):
         except NameError:
             pass
     return content
-
-
-def _list_videos(offset=0):
-    """Builds list of playable items
-    """
-    rss = _download_file(
-        "https://video.aktualne.cz/mrss/?offset={0}".format(offset))
-    items = _parse_root(rss)
-    _build_list(items, offset + 30)
 
 
 def _parse_root(rss):
@@ -140,14 +106,12 @@ def _parse_root(rss):
     items = []
     root = ElementTree.fromstring(rss)
     for i in root.findall(".//channel/item", NS):
-        if i.find(".//blackbox:extra", NS).attrib.get("videoType") \
-            != "bbxvideo":
+        if i.find(".//blackbox:extra", NS).attrib.get("videoType") != "bbxvideo":
             continue
         items.append({
             "title": _get_text(i.find(".//title", NS), "?"),
             "description": _get_text(i.find(".//description", NS)),
-            "pubdate": _parse_rfc822_date(
-                _get_text(i.find(".//pubDate", NS))),
+            "pubdate": _parse_rfc822_date(_get_text(i.find(".//pubDate", NS))),
             "duration": _parse_duration(
                 i.find(".//blackbox:extra", NS).attrib.get("duration", "0")),
             "cover": _parse_cover(i.find(
@@ -172,11 +136,6 @@ def _build_list(items, offset=None):
             "duration": i["duration"],
             "studio": u"Online Partners s.r.o.",
             "genre": u"News",
-            #"aired": i["pubdate"].strftime("%Y-%m-%d"),
-            #"cast": [
-            #    (u"Daniela Drtinová", u"1"),
-            #    (u"Martin Veselovský", u"2"),
-            #    ],
             "tvshowtitle": i["category"],
             "tag": i["category"],
             "imdbnumber": "tt7030366",
@@ -196,46 +155,50 @@ def _build_list(items, offset=None):
     xbmcplugin.endOfDirectory(HANDLE)
 
 
-def _get_source(token, preference=None):
-    """Fetches video URLs for specified token
-    Returns best match acording to preference parameter
+def _list_videos(offset=0):
+    """Builds list of playable items
     """
-    def _get_quality(item):
-        result = -1
-        k = item.get("label")
-        if k[-1:] == "p" and k[:1].isdigit():
-            result = int(k[:-1])
-        return result
+    rss = _download_file(
+        "https://video.aktualne.cz/mrss/?offset={0}".format(offset))
+    items = _parse_root(rss)
+    _build_list(items, offset + 30)
 
-    webpage = _download_file(
-        "https://video.aktualne.cz/-/r~{0}/".format(token)).decode("utf-8")
-    sources = re.findall(
-        u"tracks: ({.+?}\]}),", webpage, re.DOTALL)[0]
-    sources = u"{{ \"sources\": {0} }}".format(sources)
-    sources = json.loads(sources)
-    sources = sources["sources"]["MP4"]
-    sources = sorted(sources, key=_get_quality, reverse=True)
-    result = sources[0]["src"]
-    if preference:
-        for s in sources:
-            if s["label"] == preference:
-                result = s["src"]
-                break
-    return result
 
 def _play_video(token):
     """Resolves file plugin into actual video file
     """
-    Q = [
-        "180p",
-        "360p",
-        "480p",
-        "720p",
-        "1080p",
-        ]
-    path = _get_source(token, Q[int(ADDON.getSetting("quality"))])
+    webpage = _download_file(
+        "https://video.aktualne.cz/-/r~{0}/".format(token)).decode("utf-8")
+    sources = re.findall(u"tracks: ({.+?}\\]}),", webpage, re.DOTALL)[0]
+    sources = u"{{ \"sources\": {0} }}".format(sources)
+    sources = json.loads(sources)
+    path = sources["sources"]["HLS"][0]["src"]
     item = xbmcgui.ListItem(path=path)
     xbmcplugin.setResolvedUrl(HANDLE, True, listitem=item)
+
+
+def _router(paramstring):
+    """Handles addon execution
+    """
+    params = dict(parse_qsl(paramstring))
+    if params:
+        if params.get("action") == "play":
+            if "token" not in params:
+                raise ValueError(
+                    "Invalid plugin:// url. Missing token param: {0}".format(
+                        paramstring))
+            _play_video(params["token"])
+        elif params.get("action") == "list":
+            offset = 0
+            if "offset" in params:
+                offset = int(params["offset"])
+            _list_videos(offset)
+        else:
+            raise ValueError(
+                "Invalid plugin:// url. Unknown action param: {0}".format(
+                    paramstring))
+    else:
+        _list_videos()
 
 
 if __name__ == "__main__":

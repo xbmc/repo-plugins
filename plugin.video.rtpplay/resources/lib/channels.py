@@ -9,7 +9,7 @@ RTP_CHANNELS = [
     {   "id": "rtp1",
         "name" : "RTP 1",
         "streams": [
-            {"type":"hls", "url": "http://rtp-pull-live-h1bnxvdk2-proprtp-app-wrtp.hls.adaptive.level3.net/liverepeater/rtp1_5ch5h264.stream/rtp_playlist.m3u8"},
+            {"type":"hls", "url": "https://streaming-live.rtp.pt/liverepeater/smil:rtp1.smil/playlist.m3u8"},
             {"type":"dashwv", "url": "https://streaming-live.rtp.pt/liverepeater/rtp1.smil/manifest.mpd", "tk": "https://www.rtp.pt/play/direto/rtp1", "license": "https://widevine-proxy.drm.technology/proxy"}
         ]
     },

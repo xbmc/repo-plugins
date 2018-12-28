@@ -14,8 +14,8 @@ ADDON = "plugin.video.dumpert"
 SETTINGS = xbmcaddon.Addon(id=ADDON)
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'resources', 'images')
-DATE = "2018-02-21"
-VERSION = "1.1.6"
+DATE = "2018-12-28"
+VERSION = "1.1.7"
 
 
 if sys.version_info[0] > 2:

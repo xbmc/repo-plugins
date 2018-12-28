@@ -127,7 +127,6 @@ class Main(object):
                 have_valid_url = True
 
                 log("video_url1", video_url)
-
         else:
             video_url_enc = video_urls[0]['data-files']
             # base64 decode
@@ -142,39 +141,42 @@ class Main(object):
             video_url_dec_dict = ast.literal_eval(video_url_dec)
 
             try:
-                video_url_embed = convertToUnicodeString(video_url_dec_dict['embed'])
-                embed_found = True
+                video_url_stream = convertToUnicodeString(video_url_dec_dict['stream'])
+                stream_found = True
             except KeyError:
-                embed_found = False
+                stream_found = False
 
-            if embed_found:
-                # make youtube plugin url
-                youtube_id = video_url_embed.replace("youtube:", "")
-                youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
-                video_url = youtube_url
+            if stream_found:
+                video_url = video_url_stream
+                video_url = video_url.replace('\/', '/')
                 have_valid_url = True
 
                 log("video_url2", video_url)
-
             else:
-                # matching the desired and available quality
-                if self.VIDEO == '0':
-                    try:
-                        video_url = str(video_url_dec_dict['mobile'])
-                    except KeyError:
-                        no_url_found = True
-                elif self.VIDEO == '1':
-                    try:
-                        video_url = str(video_url_dec_dict['tablet'])
-                    except KeyError:
+
+                try:
+                    video_url_embed = convertToUnicodeString(video_url_dec_dict['embed'])
+                    embed_found = True
+                except KeyError:
+                    embed_found = False
+
+                if embed_found:
+                    # make youtube plugin url
+                    youtube_id = video_url_embed.replace("youtube:", "")
+                    youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
+                    video_url = youtube_url
+                    have_valid_url = True
+
+                    log("video_url3", video_url)
+
+                else:
+                    # matching the desired and available quality
+                    if self.VIDEO == '0':
                         try:
                             video_url = str(video_url_dec_dict['mobile'])
                         except KeyError:
                             no_url_found = True
-                elif self.VIDEO == '2':
-                    try:
-                        video_url = str(video_url_dec_dict['720p'])
-                    except KeyError:
+                    elif self.VIDEO == '1':
                         try:
                             video_url = str(video_url_dec_dict['tablet'])
                         except KeyError:
@@ -182,16 +184,27 @@ class Main(object):
                                 video_url = str(video_url_dec_dict['mobile'])
                             except KeyError:
                                 no_url_found = True
+                    elif self.VIDEO == '2':
+                        try:
+                            video_url = str(video_url_dec_dict['720p'])
+                        except KeyError:
+                            try:
+                                video_url = str(video_url_dec_dict['tablet'])
+                            except KeyError:
+                                try:
+                                    video_url = str(video_url_dec_dict['mobile'])
+                                except KeyError:
+                                    no_url_found = True
 
-                if no_url_found:
-                    pass
-                else:
-                    video_url = video_url.replace('\/', '/')
+                    if no_url_found:
+                        pass
+                    else:
+                        video_url = video_url.replace('\/', '/')
 
-                    log("video_url3", video_url)
+                        log("video_url4", video_url)
 
-                    # The need for speed: let's guess that the video-url exists
-                    have_valid_url = True
+                        # The need for speed: let's guess that the video-url exists
+                        have_valid_url = True
 
         # Play video...
         if have_valid_url:

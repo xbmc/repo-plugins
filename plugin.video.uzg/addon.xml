@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.uzg" name="Uitzendinggemist (NPO)" provider-name="Bas Magré (Opvolger)" version="2.0.0">
+<addon id="plugin.video.uzg" name="Uitzendinggemist (NPO)" provider-name="Bas Magré (Opvolger)" version="2.0.1">
   <requires>
     <import addon="xbmc.python" version="2.26.0" />
   </requires>
@@ -9,6 +9,7 @@
   <extension point="xbmc.addon.metadata">
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <website>https://github.com/Opvolger</website>
+    <broken>Conditions and api changed, reverse engineering is prohibited, as is the release of an addon.</broken>
     <email>Opvolger at gmail dot com</email>
     <language>nl</language>
     <platform>all</platform>

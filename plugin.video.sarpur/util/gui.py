@@ -47,6 +47,7 @@ class GUI(object):
         extra_info=None,
         selectable=True,
         context_menu=[],
+        subtitles=None,
     ):
         """
         Creates a link in Kodi
@@ -78,6 +79,10 @@ class GUI(object):
         if context_menu:
             list_item.addContextMenuItems(context_menu)
 
+        if subtitles and any(subtitles):
+            # Make sure we don't pass in [None]
+            list_item.setSubtitles([sub for sub in subtitles if sub])
+
         xbmcplugin.addDirectoryItem(
             handle=self.addon_handle,
             url=url,
@@ -103,7 +108,8 @@ class GUI(object):
         )
 
     def add_item(self, name, action_key, action_value,
-                 image='DefaultMovies.png', extra_info=None, context_menu=[]):
+                 image='DefaultMovies.png', extra_info=None, context_menu=[],
+                 subtitles=None):
         """
         Create link to playable item (wrapper function for _addDir).
 
@@ -120,6 +126,7 @@ class GUI(object):
             is_folder=False,
             extra_info=extra_info,
             context_menu=context_menu,
+            subtitles=subtitles,
         )
 
     def add_unselectable_item(self, name, image, extra_info=None):
@@ -165,6 +172,7 @@ class GUI(object):
             'play_video',
             episode['file'],
             image=program.get('image'),
+            subtitles=[episode.get('subtitles_url')],
             extra_info={
                 'Episode': program['episodes'][0]['number'],
                 'Premiered': strptime(

@@ -202,14 +202,19 @@ def view_schedule(channel, date_string):
                                'play_live_stream',
                                channel,
                                image=image,
-                               extra_info=meta)
+                               extra_info=meta,
+                               )
 
         elif is_playable:
+            episode = ev['program']['episodes'][0]
+            subtitles = [episode.get('subtitles_url')]
             INTERFACE.add_item(title,
                                'play_video',
-                               ev['program']['episodes'][0]['file'],
+                               episode['file'],
                                image=image,
-                               extra_info=meta)
+                               extra_info=meta,
+                               subtitles=subtitles,
+                               )
         else:
             INTERFACE.add_unselectable_item(
                 title,

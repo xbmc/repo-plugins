@@ -1,3 +1,6 @@
+v1.1.7 (2018-12-28)
+- marking addon broken for gotham branch
+
 v1.1.6 (2018-02-21)
 - added 'videos' to icon
 - for json now using plugin://-url instead of http-url

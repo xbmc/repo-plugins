@@ -1,3 +1,6 @@
+[B]Version 4.4[/B]
+- Add subtitles when available to playable list items
+
 [B]Version 4.3.1[/B]
 - Handle error when program title missing
 

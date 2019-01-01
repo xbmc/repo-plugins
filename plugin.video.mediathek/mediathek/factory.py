@@ -24,7 +24,7 @@ from mediathek.kika import *
 class MediathekFactory(object):
   def __init__(self):
     self.avaibleMediathekes = {
-       #ARDMediathek.name():ARDMediathek,
+       ARDMediathek.name():ARDMediathek,
        ZDFMediathek.name():ZDFMediathek,
        ARTEMediathek.name():ARTEMediathek,
        DreiSatMediathek.name():DreiSatMediathek,

@@ -17,6 +17,7 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 
+
 import xbmc
 import xbmcaddon
 import xbmcplugin
@@ -71,10 +72,9 @@ _RECORD      = 500
 _PODCASTS    = 700
 _PLAYPODCAST = 800
 
-MODE_FREE   = 1000
-MODE_SONG   = 1100
-MODE_ARTIST = 1200
-MODE_IGNORE = 1300
+MODE_FREE        = 1000
+MODE_UNAVAILABLE = 1100
+MODE_IGNORE      = 1200
 
 
 URL_320 = 'http://ramfm.shoutcaststream.com:8513'
@@ -87,6 +87,7 @@ DEFAULTS['URL_320'] = URL_320
 DEFAULTS['URL_192'] = URL_192
 DEFAULTS['URL_128'] = URL_128
 DEFAULTS['URL_64']  = URL_64
+
 
 
 def DialogOK(title, line1='', line2='', line3=''):
@@ -200,26 +201,15 @@ def PlayPodcast(name, link):
 
     xbmc.Player().play(pl)
 
+
 def ShowPodcasts():
     response = urllib2.urlopen(PODCASTS).read()   
     response = response.replace('\n','')
 
-    match = re.compile('<item><title>(.+?)</title><link>.+?</link>.+?<enclosure url="(.+?)</enclosure>').findall(response)
+    match = re.compile('<item><title>(.+?)</title><link>.+?</link>.+?<enclosure url="(.+?)".+?:image href="(.+?)"').findall(response)
 
-    for name, link in match:
-        AddPodcast(clean(name), link.split('?')[0])
-
-
-def AddPodcast(name, link):
-    thumbnail = ICON#'DefaultPlaylist.png'
-
-    u   = sys.argv[0]
-    u  += '?url='  + urllib.quote_plus(link)
-    u  += '&mode=' + str(_PLAYPODCAST)
-    u  += '&name=' + urllib.quote_plus(name)
-    liz = xbmcgui.ListItem(name, iconImage=thumbnail, thumbnailImage=thumbnail)
-
-    xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = liz, isFolder = False)
+    for name, link, image in match:
+        addDir(name, _PLAYPODCAST, image, image, isFolder=False, url=link)
 
 
 def GetRecent(response):
@@ -233,9 +223,9 @@ def GetRecent(response):
 
 
 def Request():
-    addLetter('0-9')
+    addDir('0-9', _LETTER, ICON, FANART, True)
     for i in range(65, 91):
-        addLetter(chr(i))
+        addDir(chr(i), _LETTER, ICON, FANART, True)
 
 
 def IsLive():
@@ -257,6 +247,7 @@ def IsLive():
     shows.append('Eighties Request')    #Sunday - Verified
     shows.append('Chat Request')        #
     shows.append('Wayne & Dave')        #Friday
+    shows.append('Berlin Calling')
 
     #genre = xbmc.getInfoLabel('MusicPlayer.Genre')
     #xbmc.log('Genre = %s' % genre)
@@ -336,9 +327,9 @@ def RequestLetter(letter):
         mode = MODE_FREE
 
         if '<i>song recently played</i>' in item:
-            mode = MODE_IGNORE if hide else MODE_SONG
+            mode = MODE_IGNORE if hide else MODE_UNAVAILABLE
         if '<i>artist recently played</i>' in item:
-            mode = MODE_IGNORE if hide else MODE_ARTIST
+            mode = MODE_IGNORE if hide else MODE_UNAVAILABLE
 
         title = None
 
@@ -349,12 +340,19 @@ def RequestLetter(letter):
                 info      = match[0]
                 match     = re.compile('<h2>(.+?)</h2>').findall(item)
                 artist    = match[0].split(' - ', 1)[0].strip()
-                image     = ''
+                
+                try:
+                    image = re.compile("<img src='(.+?)'").findall(artist)[0]
+                except Exception as e:
+                    image = 'na.gif'
+
+                artist = artist.rsplit('>', 1)[-1].strip()
+
                 available = True
             except:
                 continue
 
-        if mode == MODE_ARTIST or mode == MODE_SONG:
+        if mode == MODE_UNAVAILABLE:
             try:
                 match         = re.compile('title="(.+?)">').findall(item) #.+?<p>(.+?)</p></header></a></section><!-- end song recently played /  artists recently played -->').findall(item)[0]
                 info          = match[0]
@@ -362,16 +360,24 @@ def RequestLetter(letter):
                 title         = match.rsplit('(', 1)[0].strip()
                 artist, title = title.split(' - ', 1)
                 artist        = artist.strip()    
-                title         = title.strip()    
-                image     = ''
+                title         = title.strip() 
+
+                try:
+                    image = re.compile("<img src='(.+?)'").findall(artist)[0]
+                except Exception as e:
+                    image = 'na.gif'
+
+                artist = artist.rsplit('>', 1)[-1].strip()
+
                 available = False
-            except:
+
+            except Exception as e:
                 continue
 
         if not title:
             continue
 
-        if image != 'na.gif':
+        if '/na.gif' not in image:
             images[artist] = image
 
         tracks.append([artist, title, image, info, available])
@@ -392,15 +398,15 @@ def RequestLetter(letter):
 
         titles.append(title)
 
-        if image == 'na.gif':
+
+        if '/na.gif' in image:
             try:    image = images[artist]
-            except: pass
+            except: image = ICON
        
         if available:
-            addAvailable(title, artist, image, info)
+            addAvailable(title, artist, image, info)            
         else:
             addUnavailable(title, artist, image, info)
-
 
 
 def clean(name):
@@ -410,43 +416,42 @@ def clean(name):
     return name.strip()
 
 
+def fixImage(image):
+    image = image.replace(' ', '%20')
+    return image
+
 
 def addAvailable(title, artist, image, request):
-    image = ICON   
-    name  = title
+    image  = fixImage(image)
+    fanart = image 
+ 
+    name = title
 
     if name.startswith('Request'):
         name  = name.split('Request', 1)[-1]
 
     name = '%s - %s' % (artist, name)
-    name = clean(name)
     
     id   = request.split(',')[0]
     ip   = request.split('\'')[1]
     port = request.split('\'')[3]
 
-    u    = sys.argv[0] 
-    u   += '?url='  + urllib.quote_plus('http://www.ramfm.org/req/request.php?songid=%s&samport=%s&samhost=%s' %  (id, port, ip))
-    u   += '&mode=' + str(_TRACK)        
-    liz  = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
+    url = 'http://www.ramfm.org/req/request.php?songid=%s&samport=%s&samhost=%s' %  (id, port, ip)
 
-    xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = liz, isFolder = False)
+    addDir(name, _TRACK, image, fanart, isFolder=False, url=url)
 
 
 def addUnavailable(title, artist, image, reason):
-    image = ICON   
-    name   = title + '[I] (%s)[/I]' % reason
-
+    image = fixImage(image)
+    fanart = image 
+  
+    name = title + '[I] (%s)[/I]' % reason
     name = '%s - %s' % (artist, name)
-    name   = clean(name)
-    name   = '[COLOR=FFFF0000]' + name + '[/COLOR]'
+    name = clean(name)
+    name = '[COLOR=FFFF0000]' + name + '[/COLOR]'
+
+    addDir(name, MODE_UNAVAILABLE, image, fanart, isFolder=False, reason=reason)
         
-    u    = sys.argv[0] 
-    u   += '?mode=' + str(mode)
-    liz  = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
-
-    xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = liz, isFolder = False) 
-
 
 def getURL():
     kbps = ADDON.getSetting('STREAM')
@@ -498,42 +503,53 @@ def ShowError(text):
     DialogOK(GETTEXT(30031), GETTEXT(30034), GETTEXT(30035), text)
             
 
-def Main():   
+def MainMenu():   
     CheckVersion()
 
-
-    addDir(GETTEXT(30054), _PLAYNOW_320,  False)
-    addDir(GETTEXT(30051), _PLAYNOW_HI,   False)
-    addDir(GETTEXT(30052), _PLAYNOW_MED,  False)
-    addDir(GETTEXT(30053), _PLAYNOW_LO,   False)
-    addDir(GETTEXT(30037), _RECORD,       False)
-    addDir(GETTEXT(30031), _REQUEST,      True)
-    addDir(GETTEXT(30040), _PODCASTS,     True)
+    addDir(GETTEXT(30054), _PLAYNOW_320, ICON, FANART, False)
+    addDir(GETTEXT(30051), _PLAYNOW_HI,  ICON, FANART, False)
+    addDir(GETTEXT(30052), _PLAYNOW_MED, ICON, FANART, False)
+    addDir(GETTEXT(30053), _PLAYNOW_LO,  ICON, FANART, False)
+    addDir(GETTEXT(30037), _RECORD,      ICON, FANART, False)
+    addDir(GETTEXT(30031), _REQUEST,     ICON, FANART, True)
+    addDir(GETTEXT(30040), _PODCASTS,    ICON, FANART, True)
 
     play = ADDON.getSetting('PLAY')=='true'
     if play and not xbmc.Player().isPlayingAudio():
         Play()
 
 
-
-def addLetter(letter):
-    thumbnail = ICON#'DefaultPlaylist.png'
-    u         = sys.argv[0]
-    u        += '?letter=' + letter
-    u        += '&mode='   + str(_LETTER)
-    liz       = xbmcgui.ListItem(letter, iconImage=thumbnail, thumbnailImage=thumbnail)
-
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
-
-
-def addDir(name, mode, isFolder):
+def addDir(name, mode, thumbnail, fanart, isFolder, **kwargs):
     name = clean(name)
-    thumbnail = ICON
-    u         = sys.argv[0] + '?mode=' + str(mode)        
-    liz       = xbmcgui.ListItem(name, iconImage=thumbnail, thumbnailImage=thumbnail)
 
-    liz.setProperty('Fanart_Image', FANART)
+    u = []
+    u.append(sys.argv[0])
 
+    u.append('?mode=')
+    u.append(str(mode))
+
+    u.append('&name=')
+    u.append(urllib.quote_plus(name))
+
+    for key in kwargs:
+        u.append('&%s=' % key)
+        u.append(urllib.quote_plus(str(kwargs[key])))
+
+    u = ''.join(u)
+    
+    liz = xbmcgui.ListItem(name, iconImage=thumbnail, thumbnailImage=thumbnail)
+
+    art = {}
+    art['thumb']     = thumbnail
+    art['poster']    = thumbnail
+    art['banner']    = thumbnail
+    art['clearart']  = thumbnail
+    art['clearlogo'] = thumbnail
+    art['icon']      = thumbnail
+    art['landscape'] = thumbnail
+    art['fanart']    = fanart
+    liz.setArt(art) 
+ 
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=isFolder)
 
    
@@ -550,67 +566,56 @@ def get_params(path):
     return params
 
 
-params = get_params(sys.argv[2])
-mode   = None
+def main():
+    params = get_params(sys.argv[2])
+    mode   = None
 
-try:    mode = int(params['mode'])
-except: pass
-
-
-if mode in [_PLAYNOW_HI, _PLAYNOW_MED, _PLAYNOW_LO, _PLAYNOW_320]:
-    ADDON.setSetting('STREAM', str(mode))
-    Play()
+    try:    mode = int(params['mode'])
+    except: pass
 
 
-elif mode == _RECORD:
-    Record()
+    if mode in [_PLAYNOW_HI, _PLAYNOW_MED, _PLAYNOW_LO, _PLAYNOW_320]:
+        ADDON.setSetting('STREAM', str(mode))
+        Play()
 
 
-elif mode == _REQUEST:
-    if IsPlaying(GETTEXT(30030)):
-        xbmc.sleep(500)
-        if IsLive():
-            DialogOK(GETTEXT(30031), GETTEXT(30046), GETTEXT(30047), GETTEXT(30048))
-            #xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
-            Exit()
-        else:
-            Request()
+    elif mode == _RECORD:
+        Record()
 
 
-elif mode == _LETTER:
-    if 'letter' in params:
-        RequestLetter(params['letter'])
+    elif mode == _REQUEST:
+        if IsPlaying(GETTEXT(30030)):
+            xbmc.sleep(500)
+            if IsLive():
+                DialogOK(GETTEXT(30031), GETTEXT(30046), GETTEXT(30047), GETTEXT(30048))
+                Exit()
+            else:
+                Request()
+
+
+    elif mode == _LETTER:
+        RequestLetter(params['name'])
+
+
+    elif mode == _TRACK:    
+        RequestURL(params['url'])
+
+
+    elif mode == _PODCASTS:
+        ShowPodcasts()
+
+
+    elif mode == _PLAYPODCAST:
+        PlayPodcast(params['name'], params['url'])
+        
+
+    elif mode == MODE_UNAVAILABLE:
+        ShowError(params['reason'])
+
+
     else:
-        Exit()
+        MainMenu()
 
 
-elif mode == _TRACK:    
-    RequestURL(params['url'])
-
-
-elif mode == _PODCASTS:
-    ShowPodcasts()
-
-
-elif mode == _PLAYPODCAST:
-    try:
-        name = params['name']
-        url  = params['url']
-        PlayPodcast(name, url)
-    except:
-        pass
-
-
-elif mode == MODE_SONG:
-    ShowError(GETTEXT(30043))
-
-
-elif mode == MODE_ARTIST:
-    ShowError(GETTEXT(30044))
-
-
-else:
-    Main()
-
-    
+main()    
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

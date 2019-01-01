@@ -1,3 +1,9 @@
+v2.1.0:
+  - Updated due to changes on RAM FM site   
+  - Fixed podcasts due to website changes
+  - Added back artist artwork
+  - Updated to use PO language file format
+
 v2.0.9:
   - Added dynamic streams fetched from RAM FM site
   - Updated artwork

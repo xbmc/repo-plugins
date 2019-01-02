@@ -1,4 +1,4 @@
-## -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #-------------LicenseHeader--------------
 # plugin.video.Mediathek - Gives access to most video-platforms from German public service broadcasters
 # Copyright (C) 2010  Raptor 2101 [raptor2101@gmx.de]
@@ -72,7 +72,7 @@ class ARTEMediathek(Mediathek):
     self.regex_playlists = re.compile(regexSourceString%"data-highlightedPlaylists");
 
     self.searchContent = re.compile(regexSourceString%"data-results");
-    
+
     self.regex_ExtractJson = re.compile("__INITIAL_STATE__ = ({.*});");
 
   def searchVideo(self, searchText):
@@ -211,9 +211,6 @@ class ARTEMediathek(Mediathek):
 
     kind = jsonObject["kind"];
     if(kind is not None and kind["code"] in ("SHOW","MANUAL_CLIP")):
-      self.gui.log(title);
-      self.gui.log("%d"%duration);
-      self.gui.log(pubDate);
       link=self.jsonLink%jsonObject["programId"];
 
       self.gui.buildVideoLink(DisplayObject(title,subTitle,pictureUrl,detail,link,"JsonLink", pubDate,duration),self,0);

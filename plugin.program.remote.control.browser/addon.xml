@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.program.remote.control.browser" name="Remote Control Browser" version="1.2.0" provider-name="Chad Parry">
+<addon id="plugin.program.remote.control.browser" name="Remote Control Browser" version="1.3.2" provider-name="Chad Parry">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
         <import addon="script.module.beautifulsoup4" version="4.3.2"/>
@@ -22,11 +22,13 @@
         <disclaimer lang="en_US">The experience will be degraded unless these external dependencies are installed: “psutil,” “pyalsaaudio,” “pylirc2,” and “Pillow.” Another helpful utility is “unclutter,” which automatically hides the mouse pointer. (On a Debian-based system, run “sudo apt-get install python-psutil python-alsaaudio python-pylirc python-pil unclutter”). Finally, a theme with a large mouse pointer will improve pointer visibility, (e.g., https://www.gnome-look.org/p/999574/).</disclaimer>
         <disclaimer lang="de_DE">Die Erfahrung wird vermindert werden, wenn nicht diese externen Abhängigkeiten installiert sind: „psutil“, „pyalsaaudio“, „pylirc2“ und „Pillow“. Ein weiteres hilfreiches Werkzeug ist „unclutter“, das automatisch den Mauszeiger versteckt. (Auf einem Debian-basierten System führen Sie „sudo apt-get install python-psutil python-alsaaudio python-pylirc python-pil unclutter“ aus). Schließlich wird ein Theme mit einem großen Mauszeiger die Sichtbarkeit verbessern, (zum Beispiel https://www.gnome-look.org/p/999574/).</disclaimer>
         <disclaimer lang="pt_BR">A experiência será degradada, a menos que essas dependências externas estejam instaladas: “psutil”, “pyalsaaudio”, “pylirc2” e “Pillow”. Outra ferramenta útil é “unclutter”, que oculta automaticamente o ponteiro do mouse. (Em um sistema baseado em Debian, execute “sudo apt-get install python-psutil python-alsaaudio python-pylirc python-pil unclutter”). Finalmente, um tema com um ponteiro do mouse grande irá melhorar a visibilidade do ponteiro, (por exemplo, https://www.gnome-look.org/p/999574/).</disclaimer>
+        <news>v1.3.0 (2018-11-23)
+- Support PulseAudio</news>
         <platform>linux osx</platform>
         <language></language>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <forum></forum>
-        <website></website>
+        <website>https://chad.parry.org/software/kodi/</website>
         <source>https://github.com/chadparry/kodi-plugin.program.remote.control.browser</source>
         <email>github at chad dot parry dot org</email>
     </extension>

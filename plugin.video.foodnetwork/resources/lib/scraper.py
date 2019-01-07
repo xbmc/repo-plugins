@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Food Networsk Kodi Video Addon
+# Food Network Kodi Video Addon
 #
 from t1mlib import t1mAddon
 import json
@@ -15,7 +15,7 @@ import sys
 h = HTMLParser.HTMLParser()
 qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
-UTF8     = 'utf-8'
+UTF8 = 'utf-8'
 
 
 class myAddon(t1mAddon):
@@ -42,8 +42,8 @@ class myAddon(t1mAddon):
   def getAddonEpisodes(self,url,ilist):
       self.defaultVidStream['width']  = 1280
       self.defaultVidStream['height'] = 720
-      if not url.startswith('http:'):
-          url = 'http:'+url
+      if not url.startswith('https:'):
+          url = 'https:'+url
       html = self.getRequest(url)
       vids  = re.compile('"videos"\: \[(.+?)\]',re.DOTALL).search(html).group(1)
       vids = '['+vids+']'

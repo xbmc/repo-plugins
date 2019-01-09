@@ -10,9 +10,9 @@ import time
 #import copy
 #import urllib
 
-from downloadutils import DownloadUtils
-from simple_logging import SimpleLogging
-from item_functions import extract_item_info
+from .downloadutils import DownloadUtils
+from .simple_logging import SimpleLogging
+from .item_functions import extract_item_info
 from .kodi_utils import HomeWindow
 
 import xbmc
@@ -52,7 +52,7 @@ class DataManager():
     def get_items(self, url, gui_options, use_cache=False):
 
         home_window = HomeWindow()
-        log.debug("last_content_url : {0}", url)
+        log.debug("last_content_url : use_cache={0} url={1}", use_cache, url)
         home_window.setProperty("last_content_url", url)
 
         user_id = DownloadUtils().getUserId()
@@ -88,7 +88,7 @@ class DataManager():
                     cache_item = cPickle.load(handle)
                     cache_thread.cached_item = cache_item
                     item_list = cache_item.item_list
-                except Exception, err:
+                except Exception as err:
                     log.debug("Pickle Data Load Failed : {0}", err)
                     item_list = None
 

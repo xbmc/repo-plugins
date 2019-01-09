@@ -102,10 +102,6 @@ msgctxt "#30026"
 msgid "Widget item select action"
 msgstr ""
 
-msgctxt "#30027"
-msgid "Show watched in recently added"
-msgstr ""
-
 msgctxt "#30044"
 msgid "Incorrect Username/Password"
 msgstr ""
@@ -120,18 +116,6 @@ msgstr ""
 
 msgctxt "#30053"
 msgid "Waiting for server to delete"
-msgstr ""
-
-msgctxt "#30060"
-msgid "%s (Secured)"
-msgstr ""
-
-msgctxt "#30061"
-msgid "%s (User-defined)"
-msgstr ""
-
-msgctxt "#30062"
-msgid "Hidden user (User-input)"
 msgstr ""
 
 msgctxt "#30063"
@@ -211,11 +195,7 @@ msgid "Select Server"
 msgstr ""
 
 msgctxt "#30167"
-msgid "Server Detection Succeeded"
-msgstr ""
-
-msgctxt "#30168"
-msgid "Found server"
+msgid "Selected Server Address"
 msgstr ""
 
 msgctxt "#30169"
@@ -471,7 +451,7 @@ msgid "Refresh Images"
 msgstr ""
 
 msgctxt "#30282"
-msgid "No Emby servers on your local network detected"
+msgid "No Emby servers detected on your local network."
 msgstr ""
 
 msgctxt "#30283"
@@ -523,7 +503,7 @@ msgid "Notice"
 msgstr ""
 
 msgctxt "#30295"
-msgid "To use this feature you need to enabled HTTP control in Kodi"
+msgid "To use this feature you need HTTP control enabled"
 msgstr ""
 
 msgctxt "#30296"
@@ -650,6 +630,10 @@ msgctxt "#30331"
 msgid "Movies per page"
 msgstr ""
 
+msgctxt "#30332"
+msgid "Stop media playback on screensaver activation"
+msgstr ""
+
 msgctxt "#30333"
 msgid "Cache artwork in the background"
 msgstr ""
@@ -744,4 +728,96 @@ msgstr ""
 
 msgctxt "#30354"
 msgid "Goto Series"
+msgstr ""
+
+msgctxt "#30355"
+msgid "Kodi Settings->Services->Allow remote control via HTTP"
+msgstr ""
+
+msgctxt "#30356"
+msgid ""Loading existing image list""
+msgstr ""
+
+msgctxt "#30357"
+msgid "Processing existing image list"
+msgstr ""
+
+msgctxt "#30358"
+msgid "Retreiving remote image list"
+msgstr ""
+
+msgctxt "#30359"
+msgid "Building full image list"
+msgstr ""
+
+msgctxt "#30360"
+msgid " - Channels"
+msgstr ""
+
+msgctxt "#30361"
+msgid " - Programs"
+msgstr ""
+
+msgctxt "#30362"
+msgid " - Recordings"
+msgstr ""
+
+msgctxt "#30363"
+msgid "Save Password?"
+msgstr ""
+
+msgctxt "#30364"
+msgid "Do you want to save the password?"
+msgstr ""
+
+msgctxt "#30365"
+msgid "Manual Login"
+msgstr ""
+
+msgctxt "#30366"
+msgid "Manually enter user details"
+msgstr ""
+
+msgctxt "#30367"
+msgid "Allow password saving"
+msgstr ""
+
+msgctxt "#30368"
+msgid "Clear Password?"
+msgstr ""
+
+msgctxt "#30369"
+msgid "Do you want to clear your saved password?"
+msgstr ""
+
+msgctxt "#30370"
+msgid "Do you want to manually enter a server url?"
+msgstr ""
+
+msgctxt "#30371"
+msgid "The server url you entered is not valid, do you want to try again?"
+msgstr ""
+
+msgctxt "#30372"
+msgid "Server URL"
+msgstr ""
+
+msgctxt "#30373"
+msgid "Scanning for local servers"
+msgstr ""
+
+msgctxt "#30374"
+msgid "Sending request"
+msgstr ""
+
+msgctxt "#30375"
+msgid "Receiving data packet: %s"
+msgstr ""
+
+msgctxt "#30376"
+msgid "Checking server url"
+msgstr ""
+
+msgctxt "#30377"
+msgid "Sending request"
 msgstr ""

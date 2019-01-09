@@ -15,10 +15,10 @@ from urlparse import urlparse
 import urllib
 from datetime import datetime
 
-from kodi_utils import HomeWindow
-from clientinfo import ClientInformation
-from simple_logging import SimpleLogging
-from translation import string_load
+from .kodi_utils import HomeWindow
+from .clientinfo import ClientInformation
+from .simple_logging import SimpleLogging
+from .translation import string_load
 
 log = SimpleLogging(__name__)
 
@@ -93,6 +93,127 @@ class DownloadUtils():
 
         self.downloadUrl(url, postBody=data, method="POST")
         log.debug("Posted Capabilities: {0}", data)
+
+    def get_item_playback_info(self, item_id):
+
+        profile = {
+            "Name": "Kodi",
+            "MaxStreamingBitrate": 100000000,
+            "MusicStreamingTranscodingBitrate": 1280000,
+            "TimelineOffsetSeconds": 5,
+            "TranscodingProfiles": [
+                {
+                    "Type": "Audio"
+                },
+                {
+                    "Container": "m3u8",
+                    "Type": "Video",
+                    "AudioCodec": "aac,mp3,ac3,opus,flac,vorbis",
+                    "VideoCodec": "h264,mpeg4,mpeg2video",
+                    "MaxAudioChannels": "6"
+                },
+                {
+                    "Container": "jpeg",
+                    "Type": "Photo"
+                }
+            ],
+            "DirectPlayProfiles": [
+                {
+                    "Type": "Video"
+                },
+                {
+                    "Type": "Audio"
+                },
+                {
+                    "Type": "Photo"
+                }
+            ],
+            "ResponseProfiles": [],
+            "ContainerProfiles": [],
+            "CodecProfiles": [],
+            "SubtitleProfiles": [
+                {
+                    "Format": "srt",
+                    "Method": "External"
+                },
+                {
+                    "Format": "srt",
+                    "Method": "Embed"
+                },
+                {
+                    "Format": "ass",
+                    "Method": "External"
+                },
+                {
+                    "Format": "ass",
+                    "Method": "Embed"
+                },
+                {
+                    "Format": "sub",
+                    "Method": "Embed"
+                },
+                {
+                    "Format": "sub",
+                    "Method": "External"
+                },
+                {
+                    "Format": "ssa",
+                    "Method": "Embed"
+                },
+                {
+                    "Format": "ssa",
+                    "Method": "External"
+                },
+                {
+                    "Format": "smi",
+                    "Method": "Embed"
+                },
+                {
+                    "Format": "smi",
+                    "Method": "External"
+                },
+                {
+                    "Format": "pgssub",
+                    "Method": "Embed"
+                },
+                {
+                    "Format": "pgssub",
+                    "Method": "External"
+                },
+                {
+                    "Format": "dvdsub",
+                    "Method": "Embed"
+                },
+                {
+                    "Format": "dvdsub",
+                    "Method": "External"
+                },
+                {
+                    "Format": "pgs",
+                    "Method": "Embed"
+                },
+                {
+                    "Format": "pgs",
+                    "Method": "External"
+                }
+            ]
+        }
+
+        playback_info = {
+            'UserId': self.getUserId(),
+            'DeviceProfile': profile,
+            'AutoOpenLiveStream': True
+        }
+
+        url = "{server}/emby/Items/%s/PlaybackInfo" % item_id
+        log.debug("PlaybackInfo : {0}", url)
+        log.debug("PlaybackInfo : {0}", profile)
+        play_info_result = self.downloadUrl(url, postBody=playback_info, method="POST")
+        play_info_result = json.loads(play_info_result)
+        log.debug("PlaybackInfo : {0}", play_info_result)
+
+        return play_info_result
+
 
     def getServer(self):
         settings = xbmcaddon.Addon()
@@ -247,7 +368,7 @@ class DownloadUtils():
         jsonData = None
         try:
             jsonData = self.downloadUrl("{server}/emby/Users/Public?format=json", suppress=True, authenticate=False)
-        except Exception, msg:
+        except Exception as msg:
             log.error("Get User unable to connect: {0}", msg)
             return ""
 
@@ -257,7 +378,7 @@ class DownloadUtils():
 
         try:
             result = json.loads(jsonData)
-        except Exception, e:
+        except Exception as e:
             log.debug("Could not load user data: {0}", e)
             return ""
 
@@ -268,11 +389,11 @@ class DownloadUtils():
 
         secure = False
         for user in result:
-            if (user.get("Name") == unicode(userName, "utf-8")):
+            if user.get("Name") == unicode(userName, "utf-8"):
                 userid = user.get("Id")
-                userImage =  self.get_user_artwork(user, 'Primary')
+                userImage = self.get_user_artwork(user, 'Primary')
                 log.debug("Username Found: {0}", user.get("Name"))
-                if (user.get("HasPassword") == True):
+                if user.get("HasPassword", False):
                     secure = True
                     log.debug("Username Is Secure (HasPassword=True)")
                 break
@@ -422,26 +543,16 @@ class DownloadUtils():
             show_x_filtered_items = settings.getSetting("show_x_filtered_items")
             url = url.replace("{ItemLimit}", show_x_filtered_items)
 
-        if url.find("{IsUnplayed}") != -1 or url.find("{,IsUnplayed}") != -1 or url.find("{IsUnplayed,}") != -1 \
-                or url.find("{,IsUnplayed,}") != -1:
-            show_latest_unplayed = settings.getSetting("show_latest_unplayed") == "true"
-            if show_latest_unplayed:
-                url = url.replace("{IsUnplayed}", "")
-                url = url.replace("{,IsUnplayed}", "")
-                url = url.replace("{IsUnplayed,}", "")
-                url = url.replace("{,IsUnplayed,}", "")
-            elif url.find("{IsUnplayed}") != -1:
-                url = url.replace("{IsUnplayed}", "IsUnplayed")
-            elif url.find("{,IsUnplayed}") != -1:
-                url = url.replace("{,IsUnplayed}", ",IsUnplayed")
-            elif url.find("{IsUnplayed,}") != -1:
-                url = url.replace("{IsUnplayed,}", "IsUnplayed,")
-            elif url.find("{,IsUnplayed,}") != -1:
-                url = url.replace("{,IsUnplayed,}", ",IsUnplayed,")
-
         if url.find("{field_filters}") != -1:
             filter_string = getDetailsString()
             url = url.replace("{field_filters}", filter_string)
+
+        if url.find("{random_movies}") != -1:
+            home_window = HomeWindow()
+            random_movies = home_window.getProperty("random-movies")
+            if not random_movies:
+                return return_data
+            url = url.replace("{random_movies}", random_movies)
 
         log.debug("After: {0}", url)
 
@@ -540,7 +651,7 @@ class DownloadUtils():
                                                   string_load(30200) % str(data.reason),
                                                   icon="special://home/addons/plugin.video.embycon/icon.png")
 
-        except Exception, msg:
+        except Exception as msg:
             log.error("Unable to connect to {0} : {1}", server, msg)
             if suppress is False:
                 xbmcgui.Dialog().notification(string_load(30316),

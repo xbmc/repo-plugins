@@ -27,13 +27,17 @@ except ImportError:
     xbmc.log('Missing Python package: psutil')
     psutil = None
 try:
+    import pulsectl
+except ImportError:
+    xbmc.log('Missing Python package: pulsectl')
+    pulsectl = None
+try:
     import pylirc
 except ImportError:
     xbmc.log('Missing Python package: pylirc2')
     pylirc = None
 
 
-DEFAULT_LINKCAST_PORT = 49029
 MINIMUM_RAM_REQUIREMENT = 1.5 * 2**30  # 1.5 GB
 
 
@@ -310,13 +314,14 @@ class RemoteControlBrowserService(xbmcaddon.Addon):
         return unmarshalled
 
     def storeDefaults(self):
-        xbmc.log('Generating default addon settings')
+        xbmc.log('Generating default add-on settings')
         self.setSetting(
             'memorySufficient',
             self.marshalBool(self.isMemorySufficient()))
         self.setSetting('psutilInstalled', self.marshalBool(psutil))
-        self.setSetting('alsaaudioInstalled', self.marshalBool(alsaaudio))
         self.setSetting('pylircInstalled', self.marshalBool(pylirc))
+        self.setSetting('alsaaudioInstalled', self.marshalBool(alsaaudio))
+        self.setSetting('pulsectlInstalled', self.marshalBool(pulsectl))
 
         browserPath = self.getSetting('browserPath').decode('utf_8')
         xdotoolPath = self.getSetting('xdotoolPath').decode('utf_8')

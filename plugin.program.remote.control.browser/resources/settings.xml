@@ -8,14 +8,18 @@
         <setting id="linkcastPort" label="30031" type="number" subsetting="true" enable="eq(-1,true)" default="49029" />
         <setting id="suspendKodi" label="30041" type="bool" default="false" />
         <setting id="soundServer" label="30042" type="select" lvalues="30043|30044" default="0" />
-        <setting id="alsaControl" label="30045" type="text" enable="eq(-1,1)" default="Master" />
+        <setting id="alsaControl" label="30045" type="text" enable="eq(-1,1)|eq(-1,ALSA Audio)" default="Master" />
         <setting id="memorySufficient" type="bool" visible="false" default="true" />
         <setting label="30039" type="lsep" visible="eq(-1,false)" />
         <setting id="psutilInstalled" type="bool" visible="false" default="true" />
         <setting label="30022" type="lsep" visible="eq(-1,false)" />
-        <setting id="alsaaudioInstalled" type="bool" visible="false" default="true" />
-        <setting label="30023" type="lsep" visible="eq(-1,false)" />
         <setting id="pylircInstalled" type="bool" visible="false" default="true" />
         <setting label="30024" type="lsep" visible="eq(-1,false)" />
+        <setting id="alsaaudioInstalled" type="bool" visible="false" default="true" />
+        <setting label="30023" type="lsep" visible="eq(-1,false)+eq(-9,1)" />
+        <setting label="30023" type="lsep" visible="eq(-2,false)+eq(-10,ALSA Audio)" />
+        <setting id="pulsectlInstalled" type="bool" visible="false" default="true" />
+        <setting label="30046" type="lsep" visible="eq(-1,false)+eq(-12,0)" />
+        <setting label="30046" type="lsep" visible="eq(-2,false)+eq(-13,PulseAudio)" />
     </category>
 </settings>

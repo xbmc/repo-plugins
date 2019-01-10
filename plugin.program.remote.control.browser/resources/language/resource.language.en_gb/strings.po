@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: Remote Control Browser
 # Addon id: plugin.program.remote.control.browser
-# Addon version: 1.3.0
+# Addon version: 1.4.0
 # Addon Provider: Chad Parry
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: Chad Parry <github@chad.parry.org>\n"
 "POT-Creation-Date: 2016-05-25 22:19+0000\n"
-"PO-Revision-Date: 2018-11-23 19:35-0800\n"
+"PO-Revision-Date: 2019-01-09 11:08-0800\n"
 "Last-Translator: Chad Parry <github@chad.parry.org>\n"
 "Language-Team: Remote Control Browser Translation\n"
 "MIME-Version: 1.0\n"
@@ -153,4 +153,8 @@ msgstr ""
 
 msgctxt "#30045"
 msgid "ALSA Volume Control Device"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Warning: Missing Python package “pulsectl”"
 msgstr ""

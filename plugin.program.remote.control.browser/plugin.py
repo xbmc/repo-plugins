@@ -29,15 +29,13 @@ import xbmcaddon
 try:
     import alsaaudio
 except ImportError:
+    xbmc.log('Missing Python package: alsaaudio', xbmc.LOGDEBUG)
     alsaaudio = None
 try:
     import pulsectl
 except ImportError:
+    xbmc.log('Missing Python package: pulsectl', xbmc.LOGDEBUG)
     pulsectl = None
-try:
-    import pyctl
-except ImportError:
-    pyctl = None
 
 
 DEFAULT_VOLUME = 50L
@@ -178,7 +176,7 @@ class PulseWrapper(object):
 
     def __init__(self):
         if pulsectl is None:
-            logger.debug('Not initializing a pulsectl mixer')
+            xbmc.log('Not initializing a pulsectl mixer', xbmc.LOGDEBUG)
             raise VolumeError('No pulsectl package')
         else:
             try:

@@ -17,29 +17,33 @@ import sys
 import threading
 
 
+logger = logging.getLogger('remotecontrolbrowser')
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.INFO)
+
+
 # If any of these packages are missing, the script will attempt to proceed
 # without those features.
 try:
     import alsaaudio
 except ImportError:
+    logger.debug('Missing Python package: alsaaudio')
     alsaaudio = None
-try:
-    import pulsectl
-except ImportError:
-    pulsectl = None
 try:
     import psutil
 except ImportError:
+    logger.debug('Missing Python package: psutil')
     psutil = None
+try:
+    import pulsectl
+except ImportError:
+    logger.debug('Missing Python package: pulsectl')
+    pulsectl = None
 try:
     import pylirc
 except ImportError:
+    logger.debug('Missing Python package: pylirc')
     pylirc = None
-
-
-logger = logging.getLogger('remotecontrolbrowser')
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.INFO)
 
 
 VOLUME_MIN = 0L

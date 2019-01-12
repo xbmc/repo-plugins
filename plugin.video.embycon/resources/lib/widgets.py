@@ -6,12 +6,15 @@ import json
 import urllib
 import hashlib
 import time
+import random
+import sys
 
-from downloadutils import DownloadUtils
-from utils import getArt
-from datamanager import DataManager
-from simple_logging import SimpleLogging
-from kodi_utils import HomeWindow
+from .downloadutils import DownloadUtils
+from .utils import getArt
+from .datamanager import DataManager
+from .simple_logging import SimpleLogging
+from .kodi_utils import HomeWindow
+from .dir_functions import processDirectory
 
 log = SimpleLogging(__name__)
 downloadUtils = DownloadUtils()
@@ -22,11 +25,48 @@ background_items = []
 background_current_item = 0
 
 
-def set_background_image():
-    log.debug("set_background_image Called")
+def set_random_movies():
+    log.debug("set_random_movies Called")
+
+    url = ('{server}/emby/Users/{userid}/Items' +
+           '?Recursive=true' +
+           '&limit=20' +
+           '&Filters=IsUnplayed' +
+           '&IsPlayed=false' +
+           '&SortBy=Random' +
+           '&IncludeItemTypes=Movie' +
+           '&ImageTypeLimit=0')
+    results = downloadUtils.downloadUrl(url, suppress=True)
+    results = json.loads(results)
+
+    randon_movies_list = []
+    if results is not None:
+        items = results.get("Items", [])
+        for item in items:
+            randon_movies_list.append(item.get("Id"))
+
+    random.shuffle(randon_movies_list)
+    movies_list_string = ",".join(randon_movies_list)
+    home_window = HomeWindow()
+    m = hashlib.md5()
+    m.update(movies_list_string)
+    new_widget_hash = m.hexdigest()
+
+    log.debug("set_random_movies : {0}", movies_list_string)
+    log.debug("set_random_movies : {0}", new_widget_hash)
+    home_window.setProperty("random-movies", movies_list_string)
+    home_window.setProperty("random-movies-changed", new_widget_hash)
+
+
+def set_background_image(force=False):
+    log.debug("set_background_image Called forced={0}", force)
 
     global background_current_item
     global background_items
+
+    if force:
+        background_current_item = 0
+        background_items = []
 
     if len(background_items) == 0 or background_current_item >= len(background_items):
         log.debug("set_background_image: Need to load more backgrounds {0} - {1}",
@@ -129,22 +169,6 @@ def checkForNewContent():
         log.debug("Setting New Widget Hash: {0}", new_widget_hash)
 
 
-def getWidgetUrlContent(handle, params):
-    log.debug("getWidgetUrlContent Called: {0}", params)
-
-    request = params["url"]
-    request = urllib.unquote(request)
-    request = "{server}/emby/" + request + "&ImageTypeLimit=1&format=json"
-    log.debug("getWidgetUrlContent URL: {0}", request)
-
-    select_action = params.get("action", None)
-
-    list_items = populateWidgetItems(request, None, override_select_action=select_action)
-
-    xbmcplugin.addDirectoryItems(handle, list_items)
-    xbmcplugin.endOfDirectory(handle, cacheToDisc=False)
-
-
 def get_widget_content_cast(handle, params):
     log.debug("getWigetContentCast Called: {0}", params)
     server = downloadUtils.getServer()
@@ -212,7 +236,7 @@ def get_widget_content_cast(handle, params):
     xbmcplugin.addDirectoryItems(handle, list_items)
     xbmcplugin.endOfDirectory(handle, cacheToDisc=False)
 
-
+'''
 def populateWidgetItems(items_url, widget_type, override_select_action=None):
     server = downloadUtils.getServer()
     if server is None:
@@ -232,6 +256,9 @@ def populateWidgetItems(items_url, widget_type, override_select_action=None):
     data_manager = DataManager()
     result = data_manager.GetContent(items_url)
     log.debug("WIDGET_DATA: {0}", result)
+
+    if result is None:
+        return []
 
     simmilar_to = None
     if result is not None and isinstance(result, dict) and result.get("Items") is not None:
@@ -347,7 +374,7 @@ def populateWidgetItems(items_url, widget_type, override_select_action=None):
         list_items.append(item_tupple)
 
     return list_items
-
+'''
 
 def getWidgetContent(handle, params):
     log.debug("getWigetContent Called: {0}", params)
@@ -362,6 +389,7 @@ def getWidgetContent(handle, params):
     items_url = ("{server}/emby/Users/{userid}/Items" +
                  "?Limit={ItemLimit}" +
                  "&format=json" +
+                 '&Fields={field_filters}' +
                  "&ImageTypeLimit=1" +
                  "&IsMissing=False")
 
@@ -370,7 +398,8 @@ def getWidgetContent(handle, params):
         items_url += ("&Recursive=true" +
                       "&SortBy=DateCreated" +
                       "&SortOrder=Descending" +
-                      "&Filters={IsUnplayed,}IsNotFolder" +
+                      "&Filters=IsUnplayed,IsNotFolder" +
+                      "&IsPlayed=false" +
                       "&IsVirtualUnaired=false" +
                       "&IsMissing=False" +
                       "&IncludeItemTypes=Movie")
@@ -387,17 +416,7 @@ def getWidgetContent(handle, params):
 
     elif widget_type == "random_movies":
         xbmcplugin.setContent(handle, 'movies')
-        watched = params.get("watched", "") == "true"
-        if watched:
-            items_url += "&Filters=IsPlayed,IsNotFolder"
-        else:
-            items_url += "&Filters={IsUnplayed,}IsNotFolder"
-        items_url += ("&Recursive=true" +
-                      "&SortBy=Random" +
-                      "&SortOrder=Descending" +
-                      "&IsVirtualUnaired=false" +
-                      "&IsMissing=False" +
-                      "&IncludeItemTypes=Movie")
+        items_url += "&Ids={random_movies}"
 
     elif widget_type == "recent_tvshows":
         xbmcplugin.setContent(handle, 'episodes')
@@ -406,9 +425,10 @@ def getWidgetContent(handle, params):
                      '&Limit={ItemLimit}' +
                      '&Recursive=true' +
                      '&SortBy=DateCreated' +
-                     '&Fields={field_filters}' +
                      '&SortOrder=Descending' +
-                     '&Filters={IsUnplayed}' +
+                     '&Filters=IsUnplayed' +
+                     '&Fields={field_filters}' +
+                     '&IsPlayed=false' +
                      '&IsVirtualUnaired=false' +
                      '&IsMissing=False' +
                      '&IncludeItemTypes=Episode' +
@@ -420,7 +440,8 @@ def getWidgetContent(handle, params):
         items_url += ("&Recursive=true" +
                       "&SortBy=DateCreated" +
                       "&SortOrder=Descending" +
-                      "&Filters={IsUnplayed,}IsNotFolder" +
+                      "&Filters=IsUnplayed,IsNotFolder" +
+                      "&IsPlayed=false" +
                       "&IsVirtualUnaired=false" +
                       "&IsMissing=False" +
                       "&IncludeItemTypes=Episode")
@@ -441,10 +462,13 @@ def getWidgetContent(handle, params):
                      "?Limit={ItemLimit}"
                      "&userid={userid}" +
                      "&Recursive=true" +
+                     '&Fields={field_filters}' +
                      "&format=json" +
                      "&ImageTypeLimit=1")
 
-    list_items = populateWidgetItems(items_url, widget_type)
+    list_items, detected_type = processDirectory(items_url, None, params, False)
+
+    #list_items = populateWidgetItems(items_url, widget_type)
 
     xbmcplugin.addDirectoryItems(handle, list_items)
     xbmcplugin.endOfDirectory(handle, cacheToDisc=False)

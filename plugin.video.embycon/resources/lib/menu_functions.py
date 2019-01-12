@@ -8,12 +8,12 @@ import urllib
 import xbmcplugin
 import xbmcaddon
 
-from downloadutils import DownloadUtils
-from kodi_utils import addMenuDirectoryItem, HomeWindow
-from simple_logging import SimpleLogging
-from translation import string_load
-from datamanager import DataManager
-from utils import getArt
+from .downloadutils import DownloadUtils
+from .kodi_utils import addMenuDirectoryItem, HomeWindow
+from .simple_logging import SimpleLogging
+from .translation import string_load
+from .datamanager import DataManager
+from .utils import getArt
 
 log = SimpleLogging(__name__)
 downloadUtils = DownloadUtils()
@@ -400,6 +400,43 @@ def getCollections():
                                  '&format=json')
             collections.append(item_data)
 
+        if collection_type in ["livetv"]:
+            collections.append({
+                'title': item_name + string_load(30360),
+                'art': art,
+                'path': ('{server}/emby/LiveTv/Channels' +
+                         '?UserId={userid}' +
+                         '&Recursive=false' +
+                         '&Fields={field_filters}' +
+                         '&ImageTypeLimit=1' +
+                         '&EnableTotalRecordCount=false' +
+                         '&format=json'),
+                'media_type': collection_type})
+
+            collections.append({
+                'title': item_name + string_load(30361),
+                'art': art,
+                'path': ('{server}/emby/LiveTv/Programs/Recommended' +
+                         '?UserId={userid}' +
+                         '&IsAiring=true' +
+                         '&Fields=ChannelInfo,{field_filters}' +
+                         '&ImageTypeLimit=1' +
+                         '&EnableTotalRecordCount=false' +
+                         '&format=json'),
+                'media_type': collection_type})
+
+            collections.append({
+                'title': item_name + string_load(30362),
+                'art': art,
+                'path': ('{server}/emby/LiveTv/Recordings' +
+                         '?UserId={userid}' +
+                         '&Recursive=false' +
+                         '&Fields={field_filters}' +
+                         '&ImageTypeLimit=1' +
+                         '&EnableTotalRecordCount=false' +
+                         '&format=json'),
+                'media_type': collection_type})
+
         if collection_type in ["homevideos"]:
             collections.append({
                 'title': item_name,
@@ -449,7 +486,8 @@ def getCollections():
                          '&Fields={field_filters}' +
                          '&SortBy=DateCreated' +
                          '&SortOrder=Descending' +
-                         '&Filters={IsUnplayed,}IsNotFolder' +
+                         '&Filters=IsUnplayed,IsNotFolder' +
+                         '&IsPlayed=false' +
                          '&ImageTypeLimit=1' +
                          '&format=json'),
                 'media_type': collection_type})
@@ -501,6 +539,8 @@ def getCollections():
                          '&IsVirtualUnaired=false' +
                          '&IsMissing=False' +
                          '&Fields={field_filters}' +
+                         '&Recursive=true' +
+                         '&IncludeItemTypes=Series' +                         
                          '&ImageTypeLimit=1' +
                          '&SortBy=Name' +
                          '&SortOrder=Ascending' +
@@ -516,6 +556,7 @@ def getCollections():
                          '&IsMissing=False' +
                          '&Fields={field_filters}' +
                          '&Filters=IsUnplayed' +
+                         '&IsPlayed=false' +
                          '&Recursive=true' +
                          '&IncludeItemTypes=Series' +
                          '&SortBy=Name' +
@@ -557,6 +598,7 @@ def getCollections():
                          '&SortBy=DateCreated' +
                          '&SortOrder=Descending' +
                          '&Filters=IsUnplayed' +
+                         '&IsPlayed=false' +
                          '&Recursive=true' +
                          '&IncludeItemTypes=Episode' +
                          '&ImageTypeLimit=1' +
@@ -576,7 +618,8 @@ def getCollections():
                          '&Fields={field_filters}' +
                          '&SortBy=DateCreated' +
                          '&SortOrder=Descending' +
-                         '&Filters={IsUnplayed,}IsNotFolder' +
+                         '&Filters=IsUnplayed,IsNotFolder' +
+                         '&IsPlayed=false' +
                          '&Recursive=true' +
                          '&IncludeItemTypes=Episode' +
                          '&ImageTypeLimit=1' +
@@ -594,6 +637,7 @@ def getCollections():
                          '&Recursive=true' +
                          '&Fields={field_filters}' +
                          '&Filters=IsUnplayed,IsNotFolder' +
+                         '&IsPlayed=false' +
                          '&IsVirtualUnaired=false' +
                          '&IsMissing=False' +
                          '&IncludeItemTypes=Episode' +
@@ -637,6 +681,7 @@ def getCollections():
                          '&IsMissing=False' +
                          '&Fields={field_filters}' +
                          '&Filters=IsUnplayed' +
+                         '&IsPlayed=false' +
                          '&ImageTypeLimit=1' +
                          '&SortBy=Name' +
                          '&SortOrder=Ascending' +
@@ -680,7 +725,8 @@ def getCollections():
                          '&Fields={field_filters}' +
                          '&SortBy=DateCreated' +
                          '&SortOrder=Descending' +
-                         '&Filters={IsUnplayed,}IsNotFolder' +
+                         '&Filters=IsUnplayed,IsNotFolder' +
+                         '&IsPlayed=false' +
                          '&ImageTypeLimit=1' +
                          '&format=json'),
                 'media_type': collection_type})
@@ -725,6 +771,7 @@ def getCollections():
                          '&GroupItemsIntoCollections=false' +
                          '&Fields={field_filters}' +
                          '&Filters=IsUnplayed' +
+                         '&IsPlayed=false' +
                          '&IncludeItemTypes=Movie' +
                          '&ImageTypeLimit=1' +
                          '&SortBy=Name' +
@@ -762,7 +809,8 @@ def getCollections():
                          '&SortBy=DateCreated' +
                          '&Fields={field_filters}' +
                          '&SortOrder=Descending' +
-                         '&Filters={IsUnplayed,}IsNotFolder' +
+                         '&Filters=IsUnplayed,IsNotFolder' +
+                         '&IsPlayed=false' +
                          '&IncludeItemTypes=Movie' +
                          '&ImageTypeLimit=1' +
                          '&format=json')
@@ -817,6 +865,7 @@ def getCollections():
                          '?Fields={field_filters}' +
                          '&Recursive=true' +
                          '&Filters=IsUnplayed' +
+                         '&IsPlayed=false' +
                          '&IncludeItemTypes=Series' +
                          '&ImageTypeLimit=1' +
                          '&SortBy=Name' +
@@ -849,7 +898,8 @@ def getCollections():
                          '&SortBy=DateCreated' +
                          '&Fields={field_filters}' +
                          '&SortOrder=Descending' +
-                         '&Filters={IsUnplayed}' +
+                         '&Filters=IsUnplayed' +
+                         '&IsPlayed=false' +
                          '&IsVirtualUnaired=false' +
                          '&IsMissing=False' +
                          '&IncludeItemTypes=Episode' +
@@ -885,7 +935,8 @@ def getCollections():
                          '&Recursive=true' +
                          '&Fields={field_filters}' +
                          '&SortOrder=Descending' +
-                         '&Filters={IsUnplayed,}IsNotFolder' +
+                         '&Filters=IsUnplayed,IsNotFolder' +
+                         '&IsPlayed=false' +
                          '&IsVirtualUnaired=false' +
                          '&IsMissing=False' +
                          '&IncludeItemTypes=Episode' +
@@ -903,6 +954,7 @@ def getCollections():
                          '&Recursive=true' +
                          '&Fields={field_filters}' +
                          '&Filters=IsUnplayed,IsNotFolder' +
+                         '&IsPlayed=false' +
                          '&IsVirtualUnaired=false' +
                          '&IsMissing=False' +
                          '&IncludeItemTypes=Episode' +
@@ -996,37 +1048,29 @@ def showWidgets():
            "&ItemLimit={ItemLimit}" +
            "&format=json" +
            "&ImageTypeLimit=1" +
-           '&Fields={field_filters}' +
-           "&Filters={IsUnplayed}" +
+           "&Fields={field_filters}" +
+           "&Filters=IsUnplayed" +
+           "&IsPlayed=false" +
            "&IsMissing=False")
     addMenuDirectoryItem(string_load(30324) + " (" + show_x_filtered_items + ")",
                          "plugin://plugin.video.embycon/?mode=GET_CONTENT&use_cache=false&media_type=Movies&url=" + urllib.quote(url))
 
     url = ("{server}/emby/Users/{userid}/Items" +
-           "?SortBy=Random" +
-           "&Limit={ItemLimit}" +
-           '&CollapseBoxSetItems=false' +
-           '&GroupItemsIntoCollections=false' +
-           "&format=json" +
-           '&Fields={field_filters}' +
-           "&ImageTypeLimit=1" +
-           "&IsMissing=False" +
-           "&Filters={IsUnplayed,}IsNotFolder" +
-           "&Recursive=true" +
-           "&SortBy=Random" +
-           #"&SortOrder=Descending" +
-           "&IsVirtualUnaired=false" +
-           "&IsMissing=False" +
-           "&IncludeItemTypes=Movie")
+           "?Limit={ItemLimit}" +
+           "&Ids={random_movies}" +
+           "&Fields={field_filters}" +
+           "&ImageTypeLimit=1")
     addMenuDirectoryItem(string_load(30269) + " (" + show_x_filtered_items + ")",
                          "plugin://plugin.video.embycon/?mode=GET_CONTENT&use_cache=false&media_type=Movies&url=" + urllib.quote(url))
 
-    addMenuDirectoryItem(string_load(30257) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_movies')
-    addMenuDirectoryItem(string_load(30258) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=inprogress_movies')
-    addMenuDirectoryItem(string_load(30287) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_tvshows')
-    addMenuDirectoryItem(string_load(30263) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_episodes')
-    addMenuDirectoryItem(string_load(30264) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=inprogress_episodes')
-    addMenuDirectoryItem(string_load(30265) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=nextup_episodes')
+    addMenuDirectoryItem(" - " + string_load(30257) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_movies')
+    addMenuDirectoryItem(" - " + string_load(30258) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=inprogress_movies')
+    addMenuDirectoryItem(" - " + string_load(30269) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=random_movies')
+
+    addMenuDirectoryItem(" - " + string_load(30287) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_tvshows')
+    addMenuDirectoryItem(" - " + string_load(30263) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=recent_episodes')
+    addMenuDirectoryItem(" - " + string_load(30264) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=inprogress_episodes')
+    addMenuDirectoryItem(" - " + string_load(30265) + " (" + show_x_filtered_items + ")", 'plugin://plugin.video.embycon/?mode=WIDGET_CONTENT&type=nextup_episodes')
 
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -1042,12 +1086,12 @@ def show_search():
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def set_library_window_values():
-    log.debug("set_library_window_values called")
+def set_library_window_values(force=False):
+    log.debug("set_library_window_values Called forced={0}", force)
     home_window = HomeWindow()
 
     already_set = home_window.getProperty("view_item.0.name")
-    if already_set:
+    if not force and already_set:
         return
 
     for index in range(0, 20):

@@ -23,11 +23,11 @@ LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'resources', 'images')
 PLUGIN_HANDLE = int(sys.argv[1])
 BASE_URL = "https://www.ign.com"
-LATEST_VIDEOS_URL = "https://www.ign.com/videos?page=1&filter=all"
+LATEST_VIDEOS_URL = "/videos?page=1&filter=all"
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-COOKIES = {'i18n-ccpref': '15-US-www-1'}
-DATE = "2018-12-15"
-VERSION = "2.3.8"
+COOKIES = {}
+DATE = "2019-01-14"
+VERSION = "2.3.9"
 
 max_video_quality = SETTINGS.getSetting("maxVideoQualityRes")
 force_view_mode = bool(SETTINGS.getSetting("force_view_mode"))
@@ -54,6 +54,7 @@ def index():
     add_dir(LANGUAGE(30003), "/videos/all/filtergalleryajax?filter=games-review", 'list_videos', "")
     add_dir(LANGUAGE(30004), "/videos/all/filtergalleryajax?filter=games-trailer", 'list_videos', "")
     add_dir(LANGUAGE(30005), "/videos/all/filtergalleryajax?filter=movies-trailer", 'list_videos', "")
+    add_dir(LANGUAGE(30006), "/videos/all/filtergalleryajax?filter=series", 'list_videos', "")
     add_dir(LANGUAGE(30008), "", 'search', "")
 
     xbmcplugin.endOfDirectory(PLUGIN_HANDLE)
@@ -191,6 +192,9 @@ def list_search_results(url):
 
 
 def play_video(page_url):
+
+    log("page_url", page_url)
+
     match = re.compile(BASE_URL + "(.+)", re.DOTALL).findall(page_url)
     vid = Video(match[0])
     final_url = vid.get_vid_url(max_video_height)
@@ -377,7 +381,7 @@ url = params.get('url')
 if url is None:
     if SETTINGS.getSetting('onlyshownewvideocategory') == 'true':
         mode = 'list_videos'
-        url = urllib.parse.quote_plus(LATEST_VIDEOS_URL)
+        url = urllib.parse.quote_plus(BASE_URL + LATEST_VIDEOS_URL)
 
 if mode == 'list_videos':
     url = urllib.parse.unquote_plus(url)

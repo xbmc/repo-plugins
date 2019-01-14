@@ -1,0 +1,9 @@
+v0.1.0
+- Initial version
+v0.2.1
+- Updated plugintools to v1.0.8
+v0.2.2
+- updated for Isengard and Jarvis
+- added COMPET-N records channel
+v0.2.3
+- added DSDA records channel maintained by Zero Master

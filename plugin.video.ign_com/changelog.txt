@@ -1,3 +1,7 @@
+2.3.9 (2019-01-14)
+- fix to make the addon work for all countries again
+- added series updates category
+
 2.3.8 (2018-12-15)
 - website changes
 

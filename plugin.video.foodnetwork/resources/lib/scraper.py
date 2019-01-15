@@ -21,9 +21,9 @@ UTF8 = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      html = self.getRequest('https://www.foodnetwork.com/videos/players/food-network-full-episodes.vc.html')
-      a = re.compile('<div class="m-MediaBlock o-Capsule__m-MediaBlock m-MediaBlock--playlist">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText.+?>(.+?)<.+?AssetInfo">(.+?) .+?</div',re.DOTALL).findall(html)
-      for (url, thumb, name, vidcnt) in a:
+      html = self.getRequest('https://www.foodnetwork.com/videos/full-episodes')
+      a = re.compile('m-MediaBlock--playlist.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText">(.+?)<.+?</div',re.DOTALL).findall(html)
+      for (url, thumb, name) in a:
           name=name.strip()
           if not thumb.startswith('http'):
               thumb = 'http:'+thumb

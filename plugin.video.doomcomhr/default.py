@@ -29,6 +29,7 @@ icon = local.getAddonInfo('icon')
 
 YOUTUBE_CHANNEL_ID_1 = "UCuy3ApT1zlEcbSDPkb2j6cA"
 YOUTUBE_CHANNEL_ID_2 = "UCfoaUAr2rLZBjLeIJzrS9NQ"
+YOUTUBE_CHANNEL_ID_3 = "UCqcYluu5zm7uqBNGL8kextA"
 
 
 # Entry point
@@ -64,4 +65,10 @@ def main_list(params):
         thumbnail="http://www.doom.com.hr/cndoom/kodi/compet-n_logo_old.png",
         folder=True )
 
+    plugintools.add_item( 
+        #action="", 
+        title="DSDA",
+        url="plugin://plugin.video.youtube/channel/"+YOUTUBE_CHANNEL_ID_3+"/",
+        thumbnail="http://www.doom.com.hr/cndoom/kodi/dsda.png",
+        folder=True )
 run()

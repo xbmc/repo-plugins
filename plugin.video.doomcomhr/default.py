@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #------------------------------------------------------------
-# KODI Add-on for http://www.youtube.com/user/doomcomhr
+# KODI Add-on for https://www.youtube.com/user/doomcomhr
 #------------------------------------------------------------
-# License: GPL (http://www.gnu.org/licenses/gpl-3.0.html)
+# License: GPL (https://www.gnu.org/licenses/gpl-3.0.html)
 # Based on code from youtube addon
 #------------------------------------------------------------
 # Changelog:
@@ -29,6 +29,7 @@ icon = local.getAddonInfo('icon')
 
 YOUTUBE_CHANNEL_ID_1 = "UCuy3ApT1zlEcbSDPkb2j6cA"
 YOUTUBE_CHANNEL_ID_2 = "UCfoaUAr2rLZBjLeIJzrS9NQ"
+YOUTUBE_CHANNEL_ID_3 = "UCqcYluu5zm7uqBNGL8kextA"
 
 
 # Entry point
@@ -54,14 +55,20 @@ def main_list(params):
         #action="", 
         title="Competition Doom",
         url="plugin://plugin.video.youtube/channel/"+YOUTUBE_CHANNEL_ID_1+"/",
-        thumbnail="http://www.doom.com.hr/cndoom/kodi/compet-n_logo.png",
+        thumbnail="https://www.doom.com.hr/cndoom/kodi/compet-n_logo.png",
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="COMPET-N",
         url="plugin://plugin.video.youtube/channel/"+YOUTUBE_CHANNEL_ID_2+"/",
-        thumbnail="http://www.doom.com.hr/cndoom/kodi/compet-n_logo_old.png",
+        thumbnail="https://www.doom.com.hr/cndoom/kodi/compet-n_logo_old.png",
         folder=True )
 
+    plugintools.add_item( 
+        #action="", 
+        title="DSDA",
+        url="plugin://plugin.video.youtube/channel/"+YOUTUBE_CHANNEL_ID_3+"/",
+        thumbnail="https://www.doom.com.hr/cndoom/kodi/dsda.png",
+        folder=True )
 run()

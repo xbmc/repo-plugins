@@ -4,7 +4,7 @@
     version="0.2.3"
     provider-name="doom.com.hr">
     <requires>
-        <import addon="xbmc.python" version="2.14.0"/>
+        <import addon="xbmc.python" version="2.20.0"/>
         <import addon="script.module.addon.common" version="2.0.0"/>
         <import addon="plugin.video.youtube" version="5.0.0"/>
     </requires>

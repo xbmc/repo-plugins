@@ -5,3 +5,5 @@ v0.2.1
 v0.2.2
 - updated for Isengard and Jarvis
 - added COMPET-N records channel
+v0.2.3
+- added DSDA records channel maintained by Zero Master

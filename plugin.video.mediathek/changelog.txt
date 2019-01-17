@@ -1,3 +1,4 @@
+0.9.0 - CHG: Adding ZDF search
 0.8.9 - CHG: Fixed ARD and enabling it again (get access to ARD, Das Erste, BR, HR, MDR, NDR, Radio Bremen, RBB, SR, SWR, WDR, One and Alpha)
 0.8.8 - CHG: ARTE working again, ARD disabled Temporaily
 0.8.7 - CHG: Reimplement 3SAT again ...

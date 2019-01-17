@@ -28,7 +28,20 @@ class ZDFMediathek(Mediathek):
 
     self.menuTree = (
       TreeNode("0","Startseite","https://zdf-cdn.live.cellular.de/mediathekV2/start-page",True),
-      TreeNode("1","Kategorien","https://zdf-cdn.live.cellular.de/mediathekV2/categories",True),
+      TreeNode("1","Kategorien","",False,(
+          TreeNode("1.0",u"Comedy/Show","https://www.zdf.de/comedy-show",True),
+          TreeNode("1.1",u"Doku/Wissen","https://www.zdf.de/doku-wissen",True),
+          TreeNode("1.2",u"Filme","https://www.zdf.de/filme",True),
+          TreeNode("1.3",u"Geschichte","https://www.zdf.de/geschichte",True),
+          TreeNode("1.4",u"nachrichten","https://www.zdf.de/nachrichten",True),
+          TreeNode("1.5",u"Kinder/ZDFtivi","https://www.zdf.de/kinder",True),
+          TreeNode("1.6",u"Krimi","https://www.zdf.de/krimi",True),
+          TreeNode("1.7",u"Kultur","https://www.zdf.de/kultur",True),
+          TreeNode("1.8",u"Politik/Gesellschaft","https://www.zdf.de/politik-gesellschaft",True),
+          TreeNode("1.9",u"Serien","https://www.zdf.de/serien",True),
+          TreeNode("1.10",u"Sport","https://www.zdf.de/sport",True),
+          TreeNode("1.11",u"Verbraucher","https://www.zdf.de/verbraucher",True),
+        )),
       TreeNode("2","Sendungen von A-Z","https://zdf-cdn.live.cellular.de/mediathekV2/brands-alphabetical",True),
       TreeNode("3","Sendung verpasst?","",False,(
         TreeNode("3.0","Heute","https://zdf-cdn.live.cellular.de/mediathekV2/broadcast-missed/%s"%(today.strftime("%Y-%m-%d")),True),
@@ -47,10 +60,10 @@ class ZDFMediathek(Mediathek):
     return "ZDF";
 
   def isSearchable(self):
-    return False;
+    return True;
 
   def searchVideo(self, searchText):
-    return;
+    self.buildPageMenu("https://zdf-cdn.live.cellular.de/mediathekV2/search?q=%s"%searchText,0);
 
   def buildPageMenu(self, link, initCount):
     self.gui.log("buildPageMenu: "+link);
@@ -61,7 +74,10 @@ class ZDFMediathek(Mediathek):
       for stageObject in jsonObject["stage"]:
         if(stageObject["type"]=="video"):
           self.buildVideoLink(stageObject,initCount);
-
+    if("results" in jsonObject):
+      for stageObject in jsonObject["results"]:
+        if(stageObject["type"]=="video"):
+          self.buildVideoLink(stageObject,initCount);
     if("cluster" in jsonObject):
       for counter, clusterObject in enumerate(jsonObject["cluster"]):
         if "teaser" in clusterObject and "name" in clusterObject:

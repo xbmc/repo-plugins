@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
 from six.moves import urllib
 
 import os
@@ -48,7 +58,7 @@ class AbstractContext(object):
     def get_region(self):
         raise NotImplementedError()
 
-    def _get_cache_path(self):
+    def get_cache_path(self):
         if not self._cache_path:
             self._cache_path = os.path.join(self.get_data_path(), 'kodion')
         return self._cache_path
@@ -67,7 +77,7 @@ class AbstractContext(object):
                 max_cache_size_mb = 5
             else:
                 max_cache_size_mb = max_cache_size_mb / 2.0
-            self._data_cache = DataCache(os.path.join(self._get_cache_path(), 'data_cache'),
+            self._data_cache = DataCache(os.path.join(self.get_cache_path(), 'data_cache'),
                                          max_file_size_mb=max_cache_size_mb)
         return self._data_cache
 
@@ -78,25 +88,25 @@ class AbstractContext(object):
                 max_cache_size_mb = 5
             else:
                 max_cache_size_mb = max_cache_size_mb / 2.0
-            self._function_cache = FunctionCache(os.path.join(self._get_cache_path(), 'cache'),
+            self._function_cache = FunctionCache(os.path.join(self.get_cache_path(), 'cache'),
                                                  max_file_size_mb=max_cache_size_mb)
         return self._function_cache
 
     def get_search_history(self):
         if not self._search_history:
             max_search_history_items = self.get_settings().get_int(constants.setting.SEARCH_SIZE, 50)
-            self._search_history = SearchHistory(os.path.join(self._get_cache_path(), 'search'),
+            self._search_history = SearchHistory(os.path.join(self.get_cache_path(), 'search'),
                                                  max_search_history_items)
         return self._search_history
 
     def get_favorite_list(self):
         if not self._favorite_list:
-            self._favorite_list = FavoriteList(os.path.join(self._get_cache_path(), 'favorites'))
+            self._favorite_list = FavoriteList(os.path.join(self.get_cache_path(), 'favorites'))
         return self._favorite_list
 
     def get_watch_later_list(self):
         if not self._watch_later_list:
-            self._watch_later_list = WatchLaterList(os.path.join(self._get_cache_path(), 'watch_later'))
+            self._watch_later_list = WatchLaterList(os.path.join(self.get_cache_path(), 'watch_later'))
         return self._watch_later_list
 
     def get_access_manager(self):

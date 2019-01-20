@@ -1,13 +1,22 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from datetime import datetime
 import time
 
 from .impl import Context
-from .utils import YouTubeMonitor, YouTubePlayer
+from .utils import YouTubeMonitor
 
 
 def strptime(stamp, stamp_fmt):
+    # noinspection PyUnresolvedReferences
     import _strptime
     try:
         time.strptime('01 01 2012', '%d %m %Y')  # dummy call
@@ -19,7 +28,8 @@ def strptime(stamp, stamp_fmt):
 def get_stamp_diff(current_stamp):
     stamp_format = '%Y-%m-%d %H:%M:%S.%f'
     current_datetime = datetime.now()
-    if not current_stamp: return 86400  # 24 hrs
+    if not current_stamp:
+        return 86400  # 24 hrs
     try:
         stamp_datetime = datetime(*(strptime(current_stamp, stamp_format)[0:6]))
     except ValueError:  # current_stamp has no microseconds
@@ -42,13 +52,12 @@ def run():
     context = Context(plugin_id='plugin.video.youtube')
 
     context.log_debug('YouTube service initialization...')
-    version = context.get_system_version().get_version()
-    settings = context.get_settings()
 
-    player = YouTubePlayer(context=context)
     monitor = YouTubeMonitor()
 
     monitor.remove_temp_dir()
+
+    context.get_ui().set_home_window_property('abort_requested', 'false')
 
     while not monitor.abortRequested():
 
@@ -66,4 +75,5 @@ def run():
         if monitor.waitForAbort(sleep_time):
             if monitor.httpd:
                 monitor.shutdown_httpd()
+            context.get_ui().set_home_window_property('abort_requested', 'true')
             break

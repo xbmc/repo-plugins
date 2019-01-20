@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2018-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
 from six.moves.urllib.parse import unquote
 
 import json
@@ -15,6 +24,7 @@ from .. import logger
 
 class YouTubeMonitor(xbmc.Monitor):
 
+    # noinspection PyUnusedLocal,PyMissingConstructor
     def __init__(self, *args, **kwargs):
         self.addon_id = 'plugin.video.youtube'
         addon = xbmcaddon.Addon(self.addon_id)

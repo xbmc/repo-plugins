@@ -1,7 +1,14 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 import os
-import re
 import json
 import shutil
 import socket
@@ -9,7 +16,7 @@ from base64 import b64decode
 
 from ..youtube.helper import yt_subscriptions
 from .. import kodion
-from ..kodion.utils import FunctionCache, strip_html_from_text, get_client_ip_address, is_httpd_live
+from ..kodion.utils import FunctionCache, strip_html_from_text, get_client_ip_address, is_httpd_live, find_video_id
 from ..kodion.items import *
 from ..youtube.client import YouTube
 from .helper import v3, ResourceManager, yt_specials, yt_playlist, yt_login, yt_setup_wizard, yt_video, \
@@ -148,7 +155,17 @@ class Provider(kodion.AbstractProvider):
                  'youtube.subtitles.download': 30705,
                  'youtube.pre.download.subtitles': 30706,
                  'youtube.untitled': 30707,
-                 'youtube.video.play_audio_only': 30708
+                 'youtube.video.play_audio_only': 30708,
+                 'youtube.failed.watch_later.retry.2': 30709,
+                 'youtube.failed.watch_later.retry.3': 30710,
+                 'youtube.added.to.watch.later': 30713,
+                 'youtube.added.to.playlist': 30714,
+                 'youtube.removed.from.playlist': 30715,
+                 'youtube.liked.video': 30716,
+                 'youtube.disliked.video': 30717,
+                 'youtube.unrated.video': 30718,
+                 'youtube.subscribed.to.channel': 30719,
+                 'youtube.unsubscribed.from.channel': 30720,
                  }
 
     def __init__(self):
@@ -157,6 +174,9 @@ class Provider(kodion.AbstractProvider):
 
         self._client = None
         self._is_logged_in = False
+
+        self.v3_handle_error = v3.handle_error
+        self.yt_video = yt_video
 
     def get_wizard_supported_views(self):
         return ['default', 'episodes']
@@ -373,9 +393,11 @@ class Provider(kodion.AbstractProvider):
     def get_alternative_fanart(self, context):
         return self.get_fanart(context)
 
-    def get_fanart(self, context):
+    @staticmethod
+    def get_fanart(context):
         return context.create_resource_path('media', 'fanart.jpg')
 
+    # noinspection PyUnusedLocal
     @kodion.RegisterProviderPath('^/uri2addon/$')
     def on_uri2addon(self, context, re_match):
         uri = context.get_param('uri', '')
@@ -420,7 +442,6 @@ class Provider(kodion.AbstractProvider):
     def _on_channel_playlist(self, context, re_match):
         self.set_content_type(context, kodion.constants.content_type.VIDEOS)
         client = self.get_client(context)
-        settings = context.get_settings()
         result = []
 
         playlist_id = re_match.group('playlist_id')
@@ -487,15 +508,24 @@ class Provider(kodion.AbstractProvider):
 
     @kodion.RegisterProviderPath('^/(?P<method>(channel|user))/(?P<channel_id>[^/]+)/$')
     def _on_channel(self, context, re_match):
+        listitem_channel_id = context.get_ui().get_info_label('Container.ListItem(0).Property(channel_id)')
+
+        method = re_match.group('method')
+        channel_id = re_match.group('channel_id')
+
+        if method == 'channel' and channel_id and channel_id.lower() == 'property':
+            if listitem_channel_id and listitem_channel_id.lower().startswith(('mine', 'uc')):
+                context.execute('Container.Update(%s)' % context.create_uri(['channel', listitem_channel_id]))  # redirect if keymap, without redirect results in 'invalid handle -1'
+
+        if method == 'channel' and not channel_id:
+            return False
+
         self.set_content_type(context, kodion.constants.content_type.VIDEOS)
 
         resource_manager = self.get_resource_manager(context)
 
-        result = []
-
-        method = re_match.group('method')
-        channel_id = re_match.group('channel_id')
         mine_id = ''
+        result = []
 
         """
         This is a helper routine if we only have the username of a channel. This will retrieve the correct channel id
@@ -562,6 +592,7 @@ class Provider(kodion.AbstractProvider):
 
         return result
 
+    # noinspection PyUnusedLocal
     @kodion.RegisterProviderPath('^/location/mine/$')
     def _on_my_location(self, context, re_match):
         self.set_content_type(context, kodion.constants.content_type.FILES)
@@ -612,30 +643,64 @@ class Provider(kodion.AbstractProvider):
         live = index of live stream if channel has multiple live streams
     """
 
+    # noinspection PyUnusedLocal
     @kodion.RegisterProviderPath('^/play/$')
     def on_play(self, context, re_match):
+        listitem_path = context.get_ui().get_info_label('Container.ListItem(0).FileNameAndPath')
+
+        redirect = False
         params = context.get_params()
+
+        if 'video_id' not in params and 'playlist_id' not in params and \
+                'channel_id' not in params and 'live' not in params:
+            if context.is_plugin_path(listitem_path, 'play'):
+                video_id = find_video_id(listitem_path)
+                if video_id:
+                    context.set_param('video_id', video_id)
+                    params = context.get_params()
+                else:
+                    return False
+            else:
+                return False
+
         if context.get_ui().get_home_window_property('prompt_for_subtitles') != params.get('video_id'):
             context.get_ui().clear_home_window_property('prompt_for_subtitles')
+
+        if context.get_ui().get_home_window_property('audio_only') != params.get('video_id'):
+            context.get_ui().clear_home_window_property('audio_only')
 
         if 'prompt_for_subtitles' in params:
             prompt_subtitles = params['prompt_for_subtitles'] == '1'
             del params['prompt_for_subtitles']
-            if prompt_subtitles and 'video_id' in params and not 'playlist_id' in params:
-                # redirect to playmedia after setting home window property, so playback url matches playable listitems
+            if prompt_subtitles and 'video_id' in params and 'playlist_id' not in params:
+                # redirect to builtin after setting home window property, so playback url matches playable listitems
                 context.get_ui().set_home_window_property('prompt_for_subtitles', params['video_id'])
-                context.execute('PlayMedia(%s)' % context.create_uri(['play'], {'video_id': params['video_id']}))
-                return
-        if 'video_id' in params and not 'playlist_id' in params:
-            resource_manager = self.get_resource_manager(context)
-            video = resource_manager.get_videos([params['video_id']])
-            context.set_param('embeddable', video.get(params['video_id'], {}).get('status', {}).get('embeddable', False))
-            return yt_play.play_video(self, context, re_match)
+                context.log_debug('Redirecting playback with subtitles')
+                redirect = True
+
+        elif 'audio_only' in params:
+            audio_only = params['audio_only'] == '1'
+            del params['audio_only']
+            if audio_only and 'video_id' in params and 'playlist_id' not in params:
+                # redirect to builtin after setting home window property, so playback url matches playable listitems
+                context.get_ui().set_home_window_property('audio_only', params['video_id'])
+                context.log_debug('Redirecting audio only playback')
+                redirect = True
+
+        if 'playlist_id' not in params and 'video_id' in params and (context.get_handle() == -1 or redirect):
+            builtin = 'PlayMedia(%s)' if context.get_handle() == -1 else 'RunPlugin(%s)'
+            if not redirect:
+                context.log_debug('Redirecting playback, handle is -1')
+            context.execute(builtin % context.create_uri(['play'], {'video_id': params['video_id']}))
+            return
+
+        if 'video_id' in params and 'playlist_id' not in params:
+            return yt_play.play_video(self, context)
         elif 'playlist_id' in params:
-            return yt_play.play_playlist(self, context, re_match)
+            return yt_play.play_playlist(self, context)
         elif 'channel_id' in params and 'live' in params:
             if int(params['live']) > 0:
-                return yt_play.play_channel_live(self, context, re_match)
+                return yt_play.play_channel_live(self, context)
         return False
 
     @kodion.RegisterProviderPath('^/video/(?P<method>[^/]+)/$')
@@ -647,22 +712,23 @@ class Provider(kodion.AbstractProvider):
     def _on_playlist_x(self, context, re_match):
         method = re_match.group('method')
         category = re_match.group('category')
-        return yt_playlist.process(method, category, self, context, re_match)
+        return yt_playlist.process(method, category, self, context)
 
     @kodion.RegisterProviderPath('^/subscriptions/(?P<method>[^/]+)/$')
     def _on_subscriptions(self, context, re_match):
         method = re_match.group('method')
         if method == 'list':
             self.set_content_type(context, kodion.constants.content_type.FILES)
-        return yt_subscriptions.process(method, self, context, re_match)
+        return yt_subscriptions.process(method, self, context)
 
     @kodion.RegisterProviderPath('^/special/(?P<category>[^/]+)/$')
     def _on_yt_specials(self, context, re_match):
         category = re_match.group('category')
         if category == 'browse_channels':
             self.set_content_type(context, kodion.constants.content_type.FILES)
-        return yt_specials.process(category, self, context, re_match)
+        return yt_specials.process(category, self, context)
 
+    # noinspection PyUnusedLocal
     @kodion.RegisterProviderPath('^/history/clear/$')
     def _on_yt_clear_history(self, context, re_match):
         if context.get_ui().on_yes_no_input(context.get_name(), context.localize(self.LOCAL_MAP['youtube.clear_history_confirmation'])):
@@ -670,13 +736,16 @@ class Provider(kodion.AbstractProvider):
             if 'error' not in json_data:
                 context.get_ui().show_notification(context.localize(self.LOCAL_MAP['youtube.succeeded']))
 
+    # noinspection PyUnusedLocal
     @kodion.RegisterProviderPath('^/watch_later/playlist_id/$')
     def _on_yt_get_watch_later_id(self, context, re_match):
         client = self.get_client(context)
         access_manager = context.get_access_manager()
         if self.is_logged_in():
             watch_later_id = None
+            count = 0
             while not watch_later_id:
+                count += 1
                 watch_later_id = client.get_watch_later_id()
 
                 if watch_later_id:
@@ -684,67 +753,22 @@ class Provider(kodion.AbstractProvider):
                     context.get_ui().show_notification(context.localize(self.LOCAL_MAP['youtube.succeeded']))
                     break
                 else:
-                    if not context.get_ui().on_yes_no_input(context.get_name(), context.localize(self.LOCAL_MAP['youtube.failed.watch_later.retry']),
-                                                            nolabel=context.localize(self.LOCAL_MAP['youtube.cancel']),
-                                                            yeslabel=context.localize(self.LOCAL_MAP['youtube.retry'])):
+                    if count == 1:
+                        if not context.get_ui().on_yes_no_input(context.get_name(), context.localize(self.LOCAL_MAP['youtube.failed.watch_later.retry']),
+                                                                nolabel=context.localize(self.LOCAL_MAP['youtube.cancel']),
+                                                                yeslabel=context.localize(self.LOCAL_MAP['youtube.retry'])):
+                            break
+                    elif count == 2:
+                        if not context.get_ui().on_yes_no_input(context.get_name(), context.localize(self.LOCAL_MAP['youtube.failed.watch_later.retry.2']),
+                                                                nolabel=context.localize(self.LOCAL_MAP['youtube.cancel']),
+                                                                yeslabel=context.localize(self.LOCAL_MAP['youtube.retry'])):
+                            break
+                    else:
+                        _ = context.get_ui().on_ok(context.get_name(), context.localize(self.LOCAL_MAP['youtube.failed.watch_later.retry.3']))
                         break
+
         else:
             context.get_ui().show_notification(context.localize(self.LOCAL_MAP['youtube.must.be.signed.in']))
-
-    @kodion.RegisterProviderPath('^/events/post_play/$')
-    def _on_post_play(self, context, re_match):
-        video_id = context.get_param('video_id', '')
-        refresh_only = context.get_param('refresh_only', 'false') == 'true'
-
-        video_stats_url = context.get_ui().get_home_window_property('video_stats_url')
-        context.get_ui().clear_home_window_property('video_stats_url')
-
-        if video_id:
-            if not refresh_only:
-                client = self.get_client(context)
-                settings = context.get_settings()
-                access_manager = context.get_access_manager()
-                if self.is_logged_in():
-                    # first: update history
-                    if video_stats_url:
-                        client.update_watch_history(video_id, video_stats_url)
-
-                    # second: remove video from 'Watch Later' playlist
-                    if context.get_settings().get_bool('youtube.playlist.watchlater.autoremove', True):
-                        watch_later_id = access_manager.get_watch_later_id()
-
-                        if watch_later_id and watch_later_id.strip().lower() != 'wl':
-                            playlist_item_id = client.get_playlist_item_id_of_video_id(playlist_id=watch_later_id, video_id=video_id)
-                            if playlist_item_id:
-                                json_data = client.remove_video_from_playlist(watch_later_id, playlist_item_id)
-                                if not v3.handle_error(self, context, json_data):
-                                    return False
-
-                    history_playlist_id = access_manager.get_watch_history_id()
-                    if history_playlist_id and history_playlist_id != 'HL':
-                        json_data = client.add_video_to_playlist(history_playlist_id, video_id)
-                        if not v3.handle_error(self, context, json_data):
-                            return False
-
-                    # rate video
-                    if context.get_settings().get_bool('youtube.post.play.rate', False):
-                        json_data = client.get_video_rating(video_id)
-                        if not v3.handle_error(self, context, json_data):
-                            return False
-                        items = json_data.get('items', [{'rating': 'none'}])
-                        rating = items[0].get('rating', 'none')
-                        if rating == 'none':
-                            rating_match = re.search('/(?P<video_id>[^/]+)/(?P<rating>[^/]+)', '/%s/%s/' % (video_id, rating))
-                            yt_video.process('rate', self, context, rating_match)
-
-            if context.get_settings().get_bool('youtube.post.play.refresh', False) and \
-                    not xbmc.getInfoLabel('Container.FolderPath').startswith(context.create_uri(['kodion', 'search', 'input'])):
-                # don't refresh search input it causes request for new input, (Container.Update in abstract_provider /kodion/search/input/
-                # would resolve this but doesn't work with Remotes(Yatse))
-                context.get_ui().refresh_container()
-        else:
-            context.log_warning('Missing video ID for post play event')
-        return True
 
     @kodion.RegisterProviderPath('^/users/(?P<action>[^/]+)/$')
     def _on_users(self, context, re_match):
@@ -761,8 +785,8 @@ class Provider(kodion.AbstractProvider):
             if not _new_user_name.strip():
                 _new_user_name = context.localize(self.LOCAL_MAP['youtube.user.unnamed'])
             _new_users = {}
-            for i, u in enumerate(list(_access_manager_users.keys())):
-                _new_users[str(i)] = _access_manager_users[u]
+            for idx, key in enumerate(list(_access_manager_users.keys())):
+                _new_users[str(idx)] = _access_manager_users[key]
             _new_users[str(len(_new_users))] = access_manager.get_new_user(_new_user_name)
             access_manager.set_users(_new_users)
             return str(len(_new_users) - 1)
@@ -779,7 +803,6 @@ class Provider(kodion.AbstractProvider):
         if action == 'switch':
             access_manager_users = access_manager.get_users()
             current_user = access_manager.get_user()
-            user = None
             users = [ui.bold(context.localize(self.LOCAL_MAP['youtube.user.new']))]
             user_index_map = []
             for k in list(access_manager_users.keys()):
@@ -903,14 +926,14 @@ class Provider(kodion.AbstractProvider):
         sign_out_confirmed = context.get_param('confirmed', '').lower() == 'true'
         mode = re_match.group('mode')
         if (mode == 'in') and context.get_access_manager().has_refresh_token():
-            yt_login.process('out', self, context, re_match, sign_out_refresh=False)
+            yt_login.process('out', self, context, sign_out_refresh=False)
 
         if not sign_out_confirmed:
             if (mode == 'out') and context.get_ui().on_yes_no_input(context.localize(self.LOCAL_MAP['youtube.sign.out']), context.localize(self.LOCAL_MAP['youtube.are.you.sure'])):
                 sign_out_confirmed = True
 
         if (mode == 'in') or ((mode == 'out') and sign_out_confirmed):
-            yt_login.process(mode, self, context, re_match)
+            yt_login.process(mode, self, context)
         return False
 
     @kodion.RegisterProviderPath('^/search/$')
@@ -983,7 +1006,7 @@ class Provider(kodion.AbstractProvider):
         switch = re_match.group('switch')
         settings = context.get_settings()
         if switch == 'youtube':
-            context._addon.openSettings()
+            context.addon().openSettings()
             context.get_ui().refresh_container()
         elif switch == 'mpd':
             use_dash = context.use_inputstream_adaptive()
@@ -1028,6 +1051,7 @@ class Provider(kodion.AbstractProvider):
         else:
             return False
 
+    # noinspection PyUnusedLocal
     @kodion.RegisterProviderPath('^/my_subscriptions/filter/$')
     def manage_my_subscription_filter(self, context, re_match):
         params = context.get_params()
@@ -1122,14 +1146,14 @@ class Provider(kodion.AbstractProvider):
             success = False
             if _file:
                 if 'sqlite' in _file:
-                    _file_w_path = os.path.join(context._get_cache_path(), _file)
+                    _file_w_path = os.path.join(context.get_cache_path(), _file)
                 elif maint_type == 'temp_files':
                     _file_w_path = _file
                 elif _file == 'playback_history':
                     _file = ''.join([str(context.get_access_manager().get_current_user_id()), '.sqlite'])
                     _file_w_path = os.path.join(os.path.join(context.get_data_path(), 'playback'), _file)
                 else:
-                    _file_w_path = os.path.join(context._data_path, _file)
+                    _file_w_path = os.path.join(context.get_data_path(), _file)
                 if context.get_ui().on_delete_content(_file):
                     if maint_type == 'temp_files':
                         _trans_path = xbmc.translatePath(_file_w_path)
@@ -1160,6 +1184,7 @@ class Provider(kodion.AbstractProvider):
                 else:
                     context.get_ui().show_notification(context.localize(self.LOCAL_MAP['youtube.requires.krypton']))
 
+    # noinspection PyUnusedLocal
     @kodion.RegisterProviderPath('^/api/update/$')
     def api_key_update(self, context, re_match):
         settings = context.get_settings()
@@ -1211,6 +1236,7 @@ class Provider(kodion.AbstractProvider):
             context.get_ui().show_notification(context.localize(self.LOCAL_MAP['youtube.api.personal.failed']) % ', '.join(missing_list))
             context.log_debug('Failed to enable personal API keys. Missing: %s' % ', '.join(log_list))
 
+    # noinspection PyUnusedLocal
     @kodion.RegisterProviderPath('^/show_client_ip/$')
     def show_client_ip(self, context, re_match):
         port = context.get_settings().httpd_port()
@@ -1224,6 +1250,7 @@ class Provider(kodion.AbstractProvider):
         else:
             context.get_ui().show_notification(context.localize(self.LOCAL_MAP['youtube.httpd.not.running']))
 
+    # noinspection PyUnusedLocal
     @kodion.RegisterProviderPath('^/playback_history/$')
     def on_playback_history(self, context, re_match):
         params = context.get_params()
@@ -1266,7 +1293,7 @@ class Provider(kodion.AbstractProvider):
             return yt_old_actions.process_old_action(self, context, re_match)
 
         settings = context.get_settings()
-        client = self.get_client(context)  # required for self.is_logged_in()
+        _ = self.get_client(context)  # required for self.is_logged_in()
 
         self.set_content_type(context, kodion.constants.content_type.FILES)
 
@@ -1277,6 +1304,7 @@ class Provider(kodion.AbstractProvider):
             sign_in_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.sign.in'])),
                                          context.create_uri(['sign', 'in']),
                                          image=context.create_resource_path('media', 'sign_in.png'))
+            sign_in_item.set_action(True)
             sign_in_item.set_fanart(self.get_fanart(context))
             result.append(sign_in_item)
 
@@ -1484,6 +1512,7 @@ class Provider(kodion.AbstractProvider):
             switch_user_item = DirectoryItem(context.localize(self.LOCAL_MAP['youtube.switch.user']),
                                              context.create_uri(['users', 'switch']),
                                              image=context.create_resource_path('media', 'channel.png'))
+            switch_user_item.set_action(True)
             switch_user_item.set_fanart(self.get_fanart(context))
             result.append(switch_user_item)
 
@@ -1492,6 +1521,7 @@ class Provider(kodion.AbstractProvider):
             sign_out_item = DirectoryItem(context.localize(self.LOCAL_MAP['youtube.sign.out']),
                                           context.create_uri(['sign', 'out']),
                                           image=context.create_resource_path('media', 'sign_out.png'))
+            sign_out_item.set_action(True)
             sign_out_item.set_fanart(self.get_fanart(context))
             result.append(sign_out_item)
 
@@ -1499,12 +1529,14 @@ class Provider(kodion.AbstractProvider):
             settings_menu_item = DirectoryItem(context.localize(self.LOCAL_MAP['youtube.settings']),
                                                context.create_uri(['config', 'youtube']),
                                                image=context.create_resource_path('media', 'settings.png'))
+            settings_menu_item.set_action(True)
             settings_menu_item.set_fanart(self.get_fanart(context))
             result.append(settings_menu_item)
 
         return result
 
-    def set_content_type(self, context, content_type):
+    @staticmethod
+    def set_content_type(context, content_type):
         context.set_content_type(content_type)
         if content_type == kodion.constants.content_type.VIDEOS:
             context.add_sort_method(kodion.constants.sort_method.UNSORTED,

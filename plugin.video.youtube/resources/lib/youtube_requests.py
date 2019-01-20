@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2017-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
 from youtube_plugin.youtube.provider import Provider
 from youtube_plugin.kodion.impl import Context
 
@@ -31,11 +40,17 @@ def handle_error(context, json_data):
 def v3_request(method='GET', headers=None, path=None, post_data=None, params=None, allow_redirects=True, addon_id=None):
     """
         https://developers.google.com/youtube/v3/docs/
+        :param method:
+        :param headers:
+        :param path:
+        :param post_data:
+        :param params:
+        :param allow_redirects:
         :param addon_id: addon id associated with developer keys to use for requests
         :type addon_id: str
     """
     provider, context, client = __get_core_components(addon_id)
-    return client._perform_v3_request(method=method, headers=headers, path=path, post_data=post_data, params=params, allow_redirects=allow_redirects)
+    return client.perform_v3_request(method=method, headers=headers, path=path, post_data=post_data, params=params, allow_redirects=allow_redirects)
 
 
 def _append_missing_page_token(items):

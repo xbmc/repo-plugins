@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
 
-__author__ = 'bromix'
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 import xbmcgui
 
@@ -14,8 +20,7 @@ def to_play_item(context, play_item):
 
     major_version = context.get_system_version().get_version()[0]
 
-    is_strm = str(context.get_param('strm', False)).lower() == 'true' \
-                 and major_version >= 18
+    is_strm = str(context.get_param('strm', False)).lower() == 'true' and major_version >= 18
 
     thumb = play_item.get_image() if play_item.get_image() else u'DefaultVideo.png'
     title = play_item.get_title() if play_item.get_title() else play_item.get_name()
@@ -29,8 +34,8 @@ def to_play_item(context, play_item):
         list_item = xbmcgui.ListItem(label=utils.to_unicode(title))
 
     if not is_strm:
-        list_item.setProperty(u'IsPlayable', u'true')
-    
+        list_item.setProperty('IsPlayable', 'true')
+
         if play_item.get_fanart() and settings.show_fanart():
             fanart = play_item.get_fanart()
         if major_version <= 15:
@@ -38,7 +43,7 @@ def to_play_item(context, play_item):
             list_item.setIconImage(thumb)
         else:
             list_item.setArt({'icon': thumb, 'thumb': thumb, 'fanart': fanart})
-    
+
     if not play_item.use_dash() and not settings.is_support_alternative_player_enabled() and \
             play_item.get_headers() and play_item.get_uri().startswith('http'):
         play_item.set_uri('|'.join([play_item.get_uri(), play_item.get_headers()]))
@@ -60,28 +65,26 @@ def to_play_item(context, play_item):
             list_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
             list_item.setProperty('inputstream.adaptive.license_key', play_item.get_license_key())
 
-        # item.setProperty('inputstream.adaptive.manifest_update_parameter', '&start_seq=$START_NUMBER$')
-
     if not is_strm:
         if play_item.get_play_count() == 0:
             if play_item.get_start_percent():
                 list_item.setProperty('StartPercent', play_item.get_start_percent())
-    
+
             if play_item.get_start_time():
                 list_item.setProperty('StartOffset', play_item.get_start_time())
-    
+
         if play_item.subtitles:
             list_item.setSubtitles(play_item.subtitles)
-    
-        _info_labels = info_labels.create_from_item(context, play_item)
-    
+
+        _info_labels = info_labels.create_from_item(play_item)
+
         # This should work for all versions of XBMC/KODI.
         if 'duration' in _info_labels:
             duration = _info_labels['duration']
             del _info_labels['duration']
             list_item.addStreamInfo('video', {'duration': duration})
-    
-        list_item.setInfo(type=u'video', infoLabels=_info_labels)
+
+        list_item.setInfo(type='video', infoLabels=_info_labels)
     return list_item
 
 
@@ -107,7 +110,7 @@ def to_video_item(context, video_item):
     if video_item.get_context_menu() is not None:
         item.addContextMenuItems(video_item.get_context_menu(), replaceItems=video_item.replace_context_menu())
 
-    item.setProperty(u'IsPlayable', u'true')
+    item.setProperty('IsPlayable', 'true')
 
     if not video_item.live:
         published_at = video_item.get_aired_utc()
@@ -115,13 +118,13 @@ def to_video_item(context, video_item):
         use_dt = scheduled_start or published_at
         if use_dt:
             local_dt = utils.datetime_parser.utc_to_local(use_dt)
-            item.setProperty(u'PublishedSince',
+            item.setProperty('PublishedSince',
                              utils.to_unicode(utils.datetime_parser.datetime_to_since(context, local_dt)))
-            item.setProperty(u'PublishedLocal', str(local_dt))
+            item.setProperty('PublishedLocal', str(local_dt))
     else:
-        item.setProperty(u'PublishedSince', context.localize('30539'))
+        item.setProperty('PublishedSince', context.localize('30539'))
 
-    _info_labels = info_labels.create_from_item(context, video_item)
+    _info_labels = info_labels.create_from_item(video_item)
 
     if video_item.get_play_count() == 0:
         if video_item.get_start_percent():
@@ -136,7 +139,20 @@ def to_video_item(context, video_item):
         del _info_labels['duration']
         item.addStreamInfo('video', {'duration': duration})
 
-    item.setInfo(type=u'video', infoLabels=_info_labels)
+    item.setInfo(type='video', infoLabels=_info_labels)
+
+    if video_item.get_channel_id():  # make channel_id property available for keymapping
+        item.setProperty('channel_id', video_item.get_channel_id())
+
+    if video_item.get_subscription_id():  # make subscription_id property available for keymapping
+        item.setProperty('subscription_id', video_item.get_subscription_id())
+
+    if video_item.get_playlist_id():  # make playlist_id property available for keymapping
+        item.setProperty('playlist_id', video_item.get_playlist_id())
+
+    if video_item.get_playlist_item_id():  # make playlist_item_id property available for keymapping
+        item.setProperty('playlist_item_id', video_item.get_playlist_item_id())
+
     return item
 
 
@@ -162,9 +178,9 @@ def to_audio_item(context, audio_item):
     if audio_item.get_context_menu() is not None:
         item.addContextMenuItems(audio_item.get_context_menu(), replaceItems=audio_item.replace_context_menu())
 
-    item.setProperty(u'IsPlayable', u'true')
+    item.setProperty('IsPlayable', 'true')
 
-    item.setInfo(type=u'music', infoLabels=info_labels.create_from_item(context, audio_item))
+    item.setInfo(type='music', infoLabels=info_labels.create_from_item(audio_item))
     return item
 
 
@@ -175,7 +191,7 @@ def to_uri_item(context, base_item):
         item = xbmcgui.ListItem(path=base_item.get_uri(), offscreen=True)
     else:
         item = xbmcgui.ListItem(path=base_item.get_uri())
-    item.setProperty(u'IsPlayable', u'true')
+    item.setProperty('IsPlayable', 'true')
     return item
 
 

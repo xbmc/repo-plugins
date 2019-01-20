@@ -1,6 +1,12 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
 
-from six import string_types
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 import xbmc
 import xbmcgui
@@ -26,18 +32,6 @@ class XbmcContextUI(AbstractContextUI):
             return XbmcProgressDialogBG(heading, text)
 
         return XbmcProgressDialog(heading, text)
-
-    def set_view_mode(self, view_mode):
-        if isinstance(view_mode, string_types):
-            view_mode = self._context.get_settings().get_int(constants.setting.VIEW_X % view_mode, 50)
-
-        self._view_mode = view_mode
-
-    def get_view_mode(self):
-        if self._view_mode is not None:
-            return self._view_mode
-
-        return self._context.get_settings().get_int(constants.setting.VIEW_DEFAULT, 50)
 
     def get_skin_id(self):
         return xbmc.getSkinDir()
@@ -86,7 +80,9 @@ class XbmcContextUI(AbstractContextUI):
         text = self._context.localize(constants.localize.DELETE_CONTENT) % utils.to_unicode(content_name)
         return self.on_yes_no_input(self._context.localize(constants.localize.CONFIRM_DELETE), text)
 
-    def on_select(self, title, items=[]):
+    def on_select(self, title, items=None):
+        if items is None:
+            items = []
         major_version = self._context.get_system_version().get_version()[0]
         if isinstance(items[0], tuple) and len(items[0]) == 4 and major_version <= 16:
             items = [(item[0], item[2]) for item in items]
@@ -120,7 +116,7 @@ class XbmcContextUI(AbstractContextUI):
 
         return _dict.get(result, -1)
 
-    def show_notification(self, message, header='', image_uri='', time_milliseconds=5000):
+    def show_notification(self, message, header='', image_uri='', time_milliseconds=5000, audible=True):
         _header = header
         if not _header:
             _header = self._context.get_name()
@@ -140,7 +136,8 @@ class XbmcContextUI(AbstractContextUI):
             _message = utils.to_unicode(_message)
             _header = utils.to_unicode(_header)
 
-        xbmc.executebuiltin("Notification(%s, %s, %d, %s)" % (_header, _message, time_milliseconds, _image))
+        #  xbmc.executebuiltin("Notification(%s, %s, %d, %s)" % (_header, _message, time_milliseconds, _image))
+        xbmcgui.Dialog().notification(_header, _message, _image, time_milliseconds, audible)
 
     def open_settings(self):
         self._xbmc_addon.openSettings()
@@ -148,6 +145,10 @@ class XbmcContextUI(AbstractContextUI):
     def refresh_container(self):
         script_uri = 'special://home/addons/%s/resources/lib/youtube_plugin/refresh.py' % self._context.get_id()
         xbmc.executebuiltin('RunScript(%s)' % script_uri)
+
+    @staticmethod
+    def get_info_label(value):
+        return xbmc.getInfoLabel(value)
 
     @staticmethod
     def set_home_window_property(property_id, value):
@@ -175,3 +176,11 @@ class XbmcContextUI(AbstractContextUI):
     @staticmethod
     def color(color, value):
         return ''.join(['[COLOR=', color.lower(), ']', value, '[/COLOR]'])
+
+    def set_focus_next_item(self):
+        cid = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getFocusId()
+        try:
+            current_position = int(self.get_info_label('Container.Position')) + 1
+            self._context.execute('SetFocus(%s,%s)' % (cid, str(current_position)))
+        except ValueError:
+            pass

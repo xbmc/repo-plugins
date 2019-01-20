@@ -1,4 +1,13 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
 from six import PY2
 
 import re
@@ -13,7 +22,6 @@ try:
 except ImportError:
     inputstreamhelper = None
 
-
 __RE_SEASON_EPISODE_MATCHES__ = [re.compile(r'Part (?P<episode>\d+)'),
                                  re.compile(r'#(?P<episode>\d+)'),
                                  re.compile(r'Ep.[^\w]?(?P<episode>\d+)'),
@@ -26,7 +34,7 @@ __RE_SEASON_EPISODE_MATCHES__ = [re.compile(r'Part (?P<episode>\d+)'),
 def extract_urls(text):
     result = []
 
-    re_url = re.compile('(https?://[^\s]+)')
+    re_url = re.compile(r'(https?://[^\s]+)')
     matches = re_url.findall(text)
     result = matches or result
 
@@ -37,7 +45,10 @@ def get_thumb_timestamp(minutes=15):
     return str(time.mktime(time.gmtime(minutes * 60 * (round(time.time() / (minutes * 60))))))
 
 
-def update_channel_infos(provider, context, channel_id_dict, subscription_id_dict={}, channel_items_dict=None):
+def update_channel_infos(provider, context, channel_id_dict, subscription_id_dict=None, channel_items_dict=None):
+    if subscription_id_dict is None:
+        subscription_id_dict = {}
+
     channel_ids = list(channel_id_dict.keys())
     if len(channel_ids) == 0:
         return
@@ -72,6 +83,7 @@ def update_channel_infos(provider, context, channel_id_dict, subscription_id_dic
         # -- unsubscribe from channel
         subscription_id = subscription_id_dict.get(channel_id, '')
         if subscription_id:
+            channel_item.set_channel_subscription_id(subscription_id)
             yt_context_menu.append_unsubscribe_from_channel(context_menu, provider, context, subscription_id)
         # -- subscribe to the channel
         if provider.is_logged_in() and context.get_path() != '/subscriptions/list/':
@@ -101,7 +113,7 @@ def update_channel_infos(provider, context, channel_id_dict, subscription_id_dic
 
         # update channel mapping
         if channel_items_dict is not None:
-            if not channel_id in channel_items_dict:
+            if channel_id not in channel_items_dict:
                 channel_items_dict[channel_id] = []
             channel_items_dict[channel_id].append(channel_item)
 
@@ -168,7 +180,7 @@ def update_playlist_infos(provider, context, playlist_id_dict, channel_items_dic
 
         # update channel mapping
         if channel_items_dict is not None:
-            if not channel_id in channel_items_dict:
+            if channel_id not in channel_items_dict:
                 channel_items_dict[channel_id] = []
             channel_items_dict[channel_id].append(playlist_item)
 
@@ -295,7 +307,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         # update channel mapping
         channel_id = snippet.get('channelId', '')
         if channel_items_dict is not None:
-            if not channel_id in channel_items_dict:
+            if channel_id not in channel_items_dict:
                 channel_items_dict[channel_id] = []
             channel_items_dict[channel_id].append(video_item)
 
@@ -340,6 +352,8 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
                     if playlist_id:
                         if playlist_id != 'HL' and playlist_id.strip().lower() != 'wl':
                             playlist_item_id = playlist_item_id_dict[video_id]
+                            video_item.set_playlist_id(playlist_id)
+                            video_item.set_playlist_item_id(playlist_item_id)
                             context_menu.append((context.localize(provider.LOCAL_MAP['youtube.remove']),
                                                  'RunPlugin(%s)' % context.create_uri(
                                                      ['playlist', 'remove', 'video'],
@@ -354,10 +368,12 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         if channel_id and channel_name:
             # only if we are not directly in the channel provide a jump to the channel
             if kodion.utils.create_path('channel', channel_id) != context.get_path():
+                video_item.set_channel_id(channel_id)
                 yt_context_menu.append_go_to_channel(context_menu, provider, context, channel_id, channel_name)
 
         if provider.is_logged_in():
             # subscribe to the channel of the video
+            video_item.set_subscription_id(channel_id)
             yt_context_menu.append_subscribe_to_channel(context_menu, provider, context, channel_id, channel_name)
 
         if not video_item.live and use_play_data:
@@ -370,8 +386,9 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
                 yt_context_menu.append_reset_resume_point(context_menu, provider, context, video_id)
 
         # more...
-        refresh_container = context.get_path().startswith('/channel/mine/playlist/LL') or \
-                            context.get_path() == '/special/disliked_videos/'
+        refresh_container = \
+            context.get_path().startswith('/channel/mine/playlist/LL') or \
+            context.get_path() == '/special/disliked_videos/'
         yt_context_menu.append_more_for_video(context_menu, provider, context, video_id,
                                               is_logged_in=provider.is_logged_in(),
                                               refresh_container=refresh_container)

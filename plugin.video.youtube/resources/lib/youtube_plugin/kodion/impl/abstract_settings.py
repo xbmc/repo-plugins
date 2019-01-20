@@ -1,7 +1,17 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 import sys
+
 from .. import constants
+from ..logger import log_debug
 
 
 class AbstractSettings(object):
@@ -19,7 +29,8 @@ class AbstractSettings(object):
 
     def get_int(self, setting_id, default_value, converter=None):
         if not converter:
-            converter = lambda x: x
+            def converter(x):
+                return x
 
         value = self.get_string(setting_id)
         if value is None or value == '':
@@ -28,9 +39,7 @@ class AbstractSettings(object):
         try:
             return converter(int(value))
         except Exception as ex:
-            from . import log
-
-            log("Failed to get setting '%s' as 'int' (%s)" % setting_id, ex.__str__())
+            log_debug("Failed to get setting '%s' as 'int' (%s)" % setting_id, ex.__str__())
 
         return default_value
 

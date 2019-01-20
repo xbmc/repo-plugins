@@ -14,6 +14,10 @@ import xbmc
 import xbmcgui
 import HTMLParser
 import sys
+try:
+    from urllib import quote  # Python 2.X
+except ImportError:
+    from urllib.parse import quote  # Python 3+
 
 h = HTMLParser.HTMLParser()
 UTF8 = 'utf-8'
@@ -22,60 +26,20 @@ showsPerPage = 24 # number of shows returned per page by PBS
 class myAddon(t1mAddon):
 
  def doPBSLogin(self):
-    if self.addon.getSetting('enable_login') != 'true':
-        return
+   return()
 
-    profile = self.addon.getAddonInfo('profile').decode(UTF8)
-    pdir  = xbmc.translatePath(profile).decode(UTF8)
-    if not os.path.isdir(pdir):
-        os.makedirs(pdir)
-    cjFile = xbmc.translatePath(os.path.join(profile, 'PBSCookies.dat')).decode(UTF8)
-    cj = cookielib.LWPCookieJar()
-    badCookie = True
-    try:
-        cj.load(cjFile)
-    except:
-        cj=[]
-    for cookie in cj:
-        if cookie.name == 'sessionid':
-            badCookie = cookie.is_expired()
-    if self.addon.getSetting('first_run_done') != 'true':
-        badCookie = True
-    if badCookie:
-       cj = cookielib.LWPCookieJar(cjFile)
-       opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-       urllib2.install_opener(opener)
-       html = self.getRequest('http://www.pbs.org/shows/')
-       clientId = re.compile('id="signInServiceList".+?client_id=(.+?)"', re.DOTALL).search(html).group(1)
-       html = self.getRequest('https://account.pbs.org/oauth2/login/')
-       lcsr, lnext = re.compile("name='csrfmiddlewaretoken'.+?value='(.+?)'.+?"+'name="next".+?value="(.+?)"', re.DOTALL).search(html).groups()
-       username = self.addon.getSetting('login_name')
-       password = self.addon.getSetting('login_pass')
-       if username !='' and password !='':
-           url1  = ('https://account.pbs.org/oauth2/login/')
-           xheaders = self.defaultHeaders.copy()
-           xheaders["Referer"] = "https://account.pbs.org/oauth2/login/"
-           xheaders["Host"] = "account.pbs.org"
-           xheaders["Origin"] = "https://account.pbs.org"
-           xheaders["Connection"] = "keep-alive"
-           xheaders["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
-           xheaders["Content-Type"] = "application/x-www-form-urlencoded"
-           udata = urllib.urlencode({'csrfmiddlewaretoken' : lcsr, 'next' : lnext, 'email' : username, 'password' : password})
-           html = self.getRequest(url1, udata, xheaders)
-#           html = self.getRequest('https://account.pbs.org/oauth2/authorize/?scope=account&redirect_uri=http://www.pbs.org/login/&response_type=code&client_id=%s&confirmed=1' % clientId)
-           html = self.getRequest('https://account.pbs.org/oauth2/authorize/?scope=account+vvpa&redirect_uri=https://www.pbs.org/login/&response_type=code&client_id=%s&confirmed=1' % clientId)
-           for cookie in cj:
-               if cookie.name == 'pbsol.station':
-                   self.addon.setSetting('pbsol', cookie.value)
-               elif cookie.name == 'pbs_uid':
-                   self.addon.setSetting('pbs_uid', cookie.value)
-           self.addon.setSetting('first_run_done', 'true')
-           cj.save()
-    else:
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-        urllib2.install_opener(opener)
-        return
 
+ def getPBSCookie(self):
+   html = self.getRequest('https://localization.services.pbs.org/localize/auto/cookie/')
+   a = json.loads(html)
+   a = a['cookie']
+   b = re.compile('\["(.+?)".+?\["(.+?)"', re.DOTALL).search(a)
+   if b is not None:
+       station, station_id = b.groups()
+       cookie = 'pbsol.sta_extended=%s; pbsol.station=%s; pbsol.station_id=%s; pbskids.localized=%s' % (quote(a),station, station_id, station)
+   else:
+       cookie = ''
+   return(cookie)
 
  def getAddonMenu(self,url,ilist):
     addonLanguage  = self.addon.getLocalizedString
@@ -155,7 +119,7 @@ class myAddon(t1mAddon):
         if gsurl == 'pbssearch':
             url = b['url']
         else:
-            url = b.get('cid')
+            url = b.get('url')
             if url is None:
                 url = b['id']
         name   = b['title']
@@ -201,7 +165,9 @@ class myAddon(t1mAddon):
     infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
     infoList['Title'] = infoList['TVShowTitle']
     infoList['mediatype'] = 'tvshow'
-    html = self.getRequest('http://www.pbs.org/show/%s' % url)
+    xheaders = self.defaultHeaders.copy()
+    xheaders['Cookie'] = self.getPBSCookie()
+    html = self.getRequest('https://www.pbs.org%s' % url, None, xheaders)
     seasons = re.compile('data-content-type="episodes">(.+?)</select>', re.DOTALL).search(html)
     if not seasons is None:
         seasons = seasons.group(1)
@@ -224,11 +190,11 @@ class myAddon(t1mAddon):
     addonLanguage = self.addon.getLocalizedString
     url, stype, pageNum = url.split('|',2)
     sname = url
-    html = self.getRequest('http://www.pbs.org/show/%s/%s/?page=%s' % (url, stype, pageNum))
-#    epis = re.compile('<article class="video-summary">.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?data-video-id="(.+?)"',re.DOTALL).findall(html)
+    xheaders = self.defaultHeaders.copy()
+    xheaders['Cookie'] = self.getPBSCookie()
+    html = self.getRequest('https://www.pbs.org%s%s/?page=%s' % (url, stype, pageNum), None, xheaders)
     epis = re.compile('<article class="video-summary">.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?data-video-slug="(.+?)"',re.DOTALL).findall(html)
     if len(epis) == 0:
-#        epis = re.compile('<div class="video-summary">.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?data-video-id="(.+?)"',re.DOTALL).findall(html)
         epis = re.compile('<div class="video-summary".+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?data-video-slug="(.+?)"',re.DOTALL).findall(html)
     for i, (imgs, name, plot, url)  in list(enumerate(epis, start=1)):
         name = h.unescape(name.decode(UTF8))
@@ -307,7 +273,7 @@ class myAddon(t1mAddon):
     if not url.startswith('/video'):
         html = self.getRequest('http://www.pbs.org/video/%s/' % (url), None, xheaders)
     else:
-        html = self.getRequest('http://www.pbs.org/%s' % (url), None, xheaders)
+        html = self.getRequest('http://www.pbs.org%s' % (url), None, xheaders)
     url = re.compile("id: '(.+?)'", re.DOTALL).search(html).group(1)
     addonLanguage = self.addon.getLocalizedString
     pbs_uid = self.addon.getSetting('pbs_uid')

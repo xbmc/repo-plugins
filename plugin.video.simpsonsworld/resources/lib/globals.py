@@ -3,6 +3,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import urllib
 import base64
 import requests
+import random
 from adobepass.adobe import ADOBE
 
 addon_handle = int(sys.argv[1])
@@ -17,6 +18,7 @@ VERIFY = False
 RATIO = str(ADDON.getSetting(id="ratio"))
 COMMENTARY = str(ADDON.getSetting(id="commentary"))
 LOCAL_STRING = ADDON.getLocalizedString
+INPUTSTREAM_ENABLED = str(ADDON.getSetting(id="inputstream_adaptive"))
 
 RESOURCE_ID = "<rss version='2.0'><channel><title>fx</title></channel></rss>"
 UA_FX = 'FXNOW/562 CFNetwork/711.4.6 Darwin/14.0.0'
@@ -64,21 +66,71 @@ season_art = {'1': '71663-1-16.jpg',
               '30': '5bb070d688a18.jpg'
               }
 
+min_season = 1
+max_season = 31
 
-def listSeasons():
-    for x in range(1, 31):
+
+def list_seasons():
+    properties = {'totaltime': '1380', 'resumetime': '0'}
+    add_episode("Random[CR]Episode", str(0), "Random[CR]Episode",
+                'https://www.thetvdb.com/banners/posters/71663-32.jpg', FANART, None, 103, properties)
+
+    for x in range(min_season, max_season):
         title = "Season " + str(x)
         url = str(x)
         icon = art_root + season_art[str(x)]
-        addSeason(title, url, 101, icon, FANART)
+        add_season(title, url, 101, icon, FANART)
 
 
-def listEpisodes(season):
+def random_episode():
+    # Get a random season
+    season = random.randint(min_season, max_season)
+    url = "http://fapi2.fxnetworks.com/androidtv/videos?filter%5Bfapi_show_id%5D=9aad7da1-093f-40f5-b371-fec4122f0d86" \
+          "&filter%5Bseason%5D=" + str(season) + "&limit=500&filter%5Btype%5D=episode"
+
+    headers = {
+        "Accept": "*/*",
+        "Accept-Encoding": "deflate",
+        "Accept-Language": "en-us",
+        "Connection": "keep-alive",
+        "Authentication": "androidtv:a4y4o0e01jh27dsyrrgpvo6d1wvpravc2c4szpp4",
+        "User-Agent": UA_FX,
+    }
+
+    r = requests.get(url, headers=headers, verify=VERIFY)
+    json_source = r.json()
+
+    episode_list = sorted(json_source['videos'], key=lambda k: k['episode'])
+    # Get a random episode from that season
+    elen = len(episode_list)
+    elen -= 1
+    enum = random.randint(1, elen)
+
+    # Default video type is 16x9
+    url = episode_list[enum]['video_urls']['16x9']['en_US']['video_url']
+    try:
+        url = episode_list[enum]['video_urls'][RATIO]['en_US']['video_url']
+    except:
+        pass
+    if COMMENTARY == 'true':
+        try:
+            url = episode_list[enum]['video_urls'][RATIO]['en_US']['video_url_commentary']
+        except:
+            pass
+
+    info = {'plot': episode_list[enum]['description'], 'tvshowtitle': LOCAL_STRING(30000), 'season': season,
+            'episode': str(episode_list[enum]['episode']).zfill(2), 'title': episode_list[enum]['name'],
+            'originaltitle': episode_list[enum]['name'], 'duration': episode_list[enum]['duration'],
+            'aired': episode_list[enum]['airDate'], 'genre': LOCAL_STRING(30002)}
+
+    get_stream(url, info)
+
+
+def list_episode(season):
     url = "http://fapi2.fxnetworks.com/androidtv/videos?filter%5Bfapi_show_id%5D=9aad7da1-093f-40f5-b371-fec4122f0d86" \
           "&filter%5Bseason%5D=" + season + "&limit=500&filter%5Btype%5D=episode"
 
     headers = {
-        "Connection": "keep-alive",
         "Accept": "*/*",
         "Accept-Encoding": "deflate",
         "Accept-Language": "en-us",
@@ -103,7 +155,8 @@ def listEpisodes(season):
             try:
                 url = episode['video_urls'][RATIO]['en_US']['video_url_commentary']
             except:
-                pass
+               pass
+
         icon = episode['img_url']
         desc = episode['description']
         duration = episode['duration']
@@ -114,10 +167,10 @@ def listEpisodes(season):
         info = {'plot': desc, 'tvshowtitle': LOCAL_STRING(30000), 'season': season, 'episode': episode, 'title': title,
                 'originaltitle': title, 'duration': duration, 'aired': aired, 'genre': LOCAL_STRING(30002)}
 
-        addEpisode(title, url, title, icon, FANART, info)
+        add_episode(title, url, title, icon, FANART, info)
 
 
-def getStream(url):
+def get_stream(url, INFO=None):
     adobe = ADOBE(SERVICE_VARS)
     if adobe.check_authn():
         if adobe.authorize():
@@ -125,7 +178,6 @@ def getStream(url):
             url = url + "&auth=" + urllib.quote(base64.b64decode(media_token))
 
             headers = {
-                "Connection": "keep-alive",
                 "Accept": "*/*",
                 "Accept-Encoding": "deflate",
                 "Accept-Language": "en-us",
@@ -137,7 +189,20 @@ def getStream(url):
 
             stream_url = r.url
             stream_url = stream_url + '|User-Agent=okhttp/3.4.1'
-            listitem = xbmcgui.ListItem(path=stream_url)
+
+            if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)') and INPUTSTREAM_ENABLED == 'true':
+                listitem = xbmcgui.ListItem(path=stream_url.split("|")[0])
+                listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
+                listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+                listitem.setProperty('inputstream.adaptive.stream_headers', stream_url.split("|")[1])
+                listitem.setProperty('inputstream.adaptive.license_key', "|" + stream_url.split("|")[1])
+            else:
+                listitem = xbmcgui.ListItem(path=stream_url)
+                listitem.setMimeType("application/x-mpegURL")
+
+            if INFO is not None:
+                listitem.setInfo(type='Video', infoLabels=INFO)
+
             xbmcplugin.setResolvedUrl(addon_handle, True, listitem)
         else:
             sys.exit()
@@ -146,7 +211,7 @@ def getStream(url):
         answer = dialog.yesno(LOCAL_STRING(30911), LOCAL_STRING(30910))
         if answer:
             adobe.register_device()
-            getStream(url)
+            get_stream(url, INFO)
         else:
             sys.exit()
 
@@ -158,22 +223,24 @@ def deauthorize():
     dialog.notification(LOCAL_STRING(30900), LOCAL_STRING(30901), '', 5000, False)
 
 
-def addEpisode(name, link_url, title, iconimage, fanart, info=None):
+def add_episode(name, link_url, title, iconimage, fanart, info=None, mode=102, properties=None):
     ok = True
-    u = sys.argv[0] + "?url=" + urllib.quote_plus(link_url) + "&mode=" + str(102)
+    u = sys.argv[0] + "?url=" + urllib.quote_plus(link_url) + "&mode=" + str(mode)
     liz = xbmcgui.ListItem(name)
     liz.setArt({'icon': ICON, 'thumb': iconimage, 'fanart': fanart})
     liz.setProperty("IsPlayable", "true")
     liz.setInfo(type="Video", infoLabels={"Title": title, 'mediatype': 'episode'})
-    if info != None:
+    if info is not None:
         liz.setInfo(type="Video", infoLabels=info)
+    if properties is not None:
+        for key, value in properties.iteritems():
+            liz.setProperty(key, value)
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=False)
     xbmcplugin.setContent(addon_handle, 'tvshows')
     return ok
 
 
-def addSeason(name, url, mode, iconimage, fanart=None, info=None):
-    params = get_params()
+def add_season(name, url, mode, iconimage, fanart=None, info=None):
     ok = True
     u = sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) + "&name=" + urllib.quote_plus(name)
     liz = xbmcgui.ListItem(name)

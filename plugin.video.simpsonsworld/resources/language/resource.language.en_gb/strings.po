@@ -32,8 +32,20 @@ msgctxt "#30010"
 msgid "Screen Ratio"
 msgstr ""
 
+msgctxt "#30011"
+msgid "16x9"
+msgstr ""
+
+msgctxt "#30012"
+msgid "4x3"
+msgstr ""
+
 msgctxt "#30020"
 msgid "Audio Commentary"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Use Inputstream Adaptive"
 msgstr ""
 
 msgctxt "#30900"

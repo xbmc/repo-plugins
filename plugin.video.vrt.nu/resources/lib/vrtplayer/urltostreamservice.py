@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import requests
 from urlparse import urljoin
 import datetime
@@ -7,25 +8,21 @@ import json
 import re
 from bs4 import BeautifulSoup
 from bs4 import SoupStrainer
-from resources.lib.helperobjects import helperobjects
+from resources.lib.helperobjects import helperobjects, streamurls, apidata
 
 class UrlToStreamService:
 
-    _API_KEY = '3_qhEcPa5JGFROVwu5SWKqJ4mVOIkwlFNMSKwzPDAh8QZOtHqu6L4nD5Q7lk0eXOOG'
-    _VUPLAY_API_URL = 'https://api.vuplay.co.uk'
-    _LOGIN_URL = 'https://accounts.vrt.be/accounts.login'
-    _TOKEN_GATEWAY_URL = 'https://token.vrt.be'
 
-    def __init__(self, vrt_base, vrtnu_base_url, kodi_wrapper):
+    _VUPLAY_API_URL = 'https://api.vuplay.co.uk'
+
+    def __init__(self, vrt_base, vrtnu_base_url, kodi_wrapper, token_resolver):
         self._kodi_wrapper = kodi_wrapper
+        self.token_resolver = token_resolver
         self._vrt_base = vrt_base
         self._vrtnu_base_url = vrtnu_base_url
         self._create_settings_dir()
-        self._has_drm = self._check_drm()
+        self._can_play_drm = self._kodi_wrapper.has_widevine_installed() and self._kodi_wrapper.has_inputstream_adaptive_installed()
         self._license_url = self._get_license_url()
-
-    def _check_drm(self):
-        return self._kodi_wrapper.check_inputstream_adaptive() and self._kodi_wrapper.check_widevine()
 
     def _get_license_url(self):
         return requests.get(self._VUPLAY_API_URL).json()['drm_providers']['widevine']['la_url']
@@ -34,79 +31,6 @@ class UrlToStreamService:
         settingsdir = self._kodi_wrapper.get_userdata_path()
         if not self._kodi_wrapper.check_if_path_exists(settingsdir):
             self._kodi_wrapper.make_dir(settingsdir)
-
-    def _get_new_playertoken(self, path, token_url, headers):
-        playertoken = requests.post(token_url, headers=headers).json()
-        json.dump(playertoken, open(path,'w'))
-        return playertoken['vrtPlayerToken']
-
-    def _get_cached_token(self, path, token_url=None, xvrttoken=None):
-        token = json.loads(open(path, 'r').read())
-        now = datetime.datetime.utcnow()
-        exp = datetime.datetime(*(time.strptime(token['expirationDate'], '%Y-%m-%dT%H:%M:%S.%fZ')[0:6]))
-        if exp > now:
-            return token[token.keys()[0]]
-        else:
-            self._kodi_wrapper.delete_path(path)
-            if 'XVRTToken' in path:
-                return self._get_xvrttoken()
-            else:
-                return self._get_playertoken(token_url, xvrttoken)
-
-    def _get_playertoken(self, token_url, xvrttoken=None):
-        #on demand cache
-        tokenfile = self._kodi_wrapper.get_userdata_path() + 'ondemand_vrtPlayerToken'
-        if self._kodi_wrapper.check_if_path_exists(tokenfile):
-            playertoken = self._get_cached_token(tokenfile, token_url, xvrttoken)
-            return playertoken
-        #live cache
-        elif xvrttoken is None:
-            tokenfile = self._kodi_wrapper.get_userdata_path() + 'live_vrtPlayerToken'
-            if self._kodi_wrapper.check_if_path_exists(tokenfile):
-                playertoken = self._get_cached_token(tokenfile, token_url, xvrttoken)
-                return playertoken
-            #renew live 
-            else:
-                headers = {'Content-Type': 'application/json'}
-                return self._get_new_playertoken(tokenfile, token_url, headers)
-        #renew on demand
-        else:
-            cookie_value = 'X-VRT-Token=' + xvrttoken
-            headers = {'Content-Type': 'application/json', 'Cookie' : cookie_value}
-            return self._get_new_playertoken(tokenfile, token_url, headers)
-
-    def _get_new_xvrttoken(self, path):
-        cred = helperobjects.Credentials(self._kodi_wrapper)
-        if not cred.are_filled_in():
-            self._kodi_wrapper.open_settings()
-            cred.reload()
-        data = {'loginID': cred.username, 'password': cred.password, 'APIKey': self._API_KEY, 'targetEnv': 'jssdk'}
-        logon_json = requests.post(self._LOGIN_URL, data).json()
-        if logon_json['errorCode'] == 0:
-            login_token = logon_json['sessionInfo']['login_token']
-            cookie_value = 'glt_'.join((self._API_KEY, '=', login_token))
-            payload = {'uid': logon_json['UID'], 'uidsig': logon_json['UIDSignature'], 'ts': logon_json['signatureTimestamp'], 'email': cred.password}
-            headers = {'Content-Type': 'application/json', 'Cookie': cookie_value}
-            cookie_jar = requests.post(self._TOKEN_GATEWAY_URL, headers=headers, json=payload).cookies
-            if 'X-VRT-Token' in cookie_jar:
-                xvrttoken_cookie = cookie_jar._cookies['.vrt.be']['/']['X-VRT-Token']
-                xvrttoken = { xvrttoken_cookie.name : xvrttoken_cookie.value, 'expirationDate' : datetime.datetime.fromtimestamp(xvrttoken_cookie.expires).strftime('%Y-%m-%dT%H:%M:%S.%fZ')}
-                json.dump(xvrttoken, open(path,'w'))
-                return xvrttoken['X-VRT-Token']
-            else:
-                return self._get_new_xvrttoken(path)
-        else:
-            title = self._kodi_wrapper.get_localized_string(32051)
-            message = self._kodi_wrapper.get_localized_string(32052)
-            self._kodi_wrapper.show_ok_dialog(title, message)
-
-    def _get_xvrttoken(self):
-        tokenfile = self._kodi_wrapper.get_userdata_path() + 'XVRTToken'
-        if self._kodi_wrapper.check_if_path_exists(tokenfile):
-            xvrttoken = self._get_cached_token(tokenfile)
-            return xvrttoken
-        else:
-            return self._get_new_xvrttoken(tokenfile)
 
     def _get_license_key(self, key_url, key_type='R', key_headers=None, key_value=None):
             """ Generates a propery license key value
@@ -149,52 +73,89 @@ class UrlToStreamService:
 
             return ''.join((key_url, '|', header.strip('&'), '|', key_value, '|'))
 
-
-    def get_stream_from_url(self, url):
-        url = urljoin(self._vrt_base, url)
-        html_page = requests.get(url).text
+    def _get_api_data(self, video_url):
+        video_url = urljoin(self._vrt_base, video_url)
+        html_page = requests.get(video_url).text
         strainer = SoupStrainer('div', {'class': 'cq-dd-vrtvideo'})
         soup = BeautifulSoup(html_page, 'html.parser', parse_only=strainer)
         video_data = soup.find(lambda tag: tag.name == 'div' and tag.get('class') == ['vrtvideo']).attrs
+        is_live_stream = False
+        xvrttoken = None
+
+        #store required data attributes
         client = video_data['data-client']
         media_api_url = video_data['data-mediaapiurl']
         if 'data-videoid' in video_data.keys():
             video_id = video_data['data-videoid']
-            xvrttoken = self._get_xvrttoken()
+            xvrttoken = self.token_resolver.get_xvrttoken()
         else:
             video_id = video_data['data-livestream']
-            xvrttoken = None
+            is_live_stream = True
+        publication_id = ''
         if 'data-publicationid' in video_data.keys():
             publication_id = video_data['data-publicationid'] + requests.utils.quote('$')
+        return apidata.ApiData(client, media_api_url, video_id, publication_id, xvrttoken, is_live_stream)
+
+    def _get_video_json(self, api_data):
+        token_url = api_data.media_api_url + '/tokens'
+        if api_data.is_live_stream :
+            playertoken = self.token_resolver.get_live_playertoken(token_url)
         else:
-            publication_id = ''
-        token_url = media_api_url + '/tokens'
-        playertoken = self._get_playertoken(token_url, xvrttoken) 
-        url = ''.join((media_api_url, '/videos/', publication_id, video_id, '?vrtPlayerToken=', playertoken, '&client=', client))
-        video_json = requests.get(url).json()
-        try:
+            playertoken = self.token_resolver.get_ondemand_playertoken(token_url, api_data.xvrttoken)
+
+        #construct api_url and get video json
+        api_url = ''.join((api_data.media_api_url, '/videos/', api_data.publication_id, api_data.video_id, '?vrtPlayerToken=', playertoken, '&client=', api_data.client))
+        video_json = requests.get(api_url).json()
+            
+        return video_json
+
+    def _handle_error(self, video_json):
+        self._kodi_wrapper.log_error(video_json['message'])
+        message = self._kodi_wrapper.get_localized_string(32054)
+        self._kodi_wrapper.show_ok_dialog('', message)
+
+    def get_stream_from_url(self, video_url, retry = False, api_data = None):
+        vudrm_token = None
+        api_data = api_data or self._get_api_data(video_url)
+        video_json = self._get_video_json(api_data)
+
+        if 'drm' in video_json:
             vudrm_token = video_json['drm']
             target_urls = video_json['targetUrls']
-            stream_dict = {}
-            for stream in target_urls:
-                stream_dict[stream['type']] = stream['url']
+            stream_dict = dict(list(map(lambda x: (x['type'] , x['url']), target_urls)))
             return self._select_stream(stream_dict, vudrm_token)
-        except KeyError as error:
-            self._kodi_wrapper.show_ok_dialog('', video_json['message'])
 
-    def _select_stream(self, stream_dict, vudrm_token):        
-        if vudrm_token:
-            if self._has_drm and self._kodi_wrapper.get_setting('usedrm') == 'true':
-                encryption_json = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}'.format(vudrm_token)
-                license_key = self._get_license_key(key_url=self._license_url, key_type='D', key_value=encryption_json, key_headers={'Content-Type': 'text/plain;charset=UTF-8'})
-                return helperobjects.StreamURLS(stream_dict['mpeg_dash'], license_key=license_key)
+        elif video_json['code'] == 'INVALID_LOCATION' or video_json['code'] == 'INCOMPLETE_ROAMING_CONFIG':
+            self._kodi_wrapper.log_notice(video_json['message'])
+            roaming_xvrttoken = self.get_xvrttoken(True)
+            if not retry and roaming_xvrttoken is not None:
+                if video_json['code'] == 'INCOMPLETE_ROAMING_CONFIG':
+                    #delete cached ondemand_vrtPlayerToken
+                    self._kodi_wrapper.delete_path(self._kodi_wrapper.get_userdata_path() + 'ondemand_vrtPlayerToken')
+                #update api_data with roaming_xvrttoken and try again
+                api_data.xvrttoken = roaming_xvrttoken
+                return self.get_stream_from_url(video_url, True, api_data)
             else:
-                return helperobjects.StreamURLS(*self._select_hls_substreams(stream_dict['hls_aes']))
+                message = self._kodi_wrapper.get_localized_string(32053)
+                self._kodi_wrapper.show_ok_dialog('', message)
         else:
-            if self._kodi_wrapper.check_inputstream_adaptive():
-                return helperobjects.StreamURLS(stream_dict['mpeg_dash'])
-            else:
-                return helperobjects.StreamURLS(*self._select_hls_substreams(stream_dict['hls']))
+            self._handle_error(video_json)
+
+
+    def _try_get_drm_stream(self, stream_dict, vudrm_token):
+        encryption_json = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}'.format(vudrm_token)
+        license_key = self._get_license_key(key_url=self._license_url, key_type='D', key_value=encryption_json, key_headers={'Content-Type': 'text/plain;charset=UTF-8'})
+        return streamurls.StreamURLS(stream_dict['mpeg_dash'], license_key=license_key)
+        
+    def _select_stream(self, stream_dict, vudrm_token):
+        if vudrm_token and self._can_play_drm and self._kodi_wrapper.get_setting('usedrm') == 'true':
+            return self._try_get_drm_stream(stream_dict, vudrm_token)
+        elif vudrm_token:
+            return streamurls.StreamURLS(*self._select_hls_substreams(stream_dict['hls_aes']))
+        elif self._kodi_wrapper.has_inputstream_adaptive_installed():
+            return streamurls.StreamURLS(stream_dict['mpeg_dash']) #non drm stream
+        else:
+            return streamurls.StreamURLS(*self._select_hls_substreams(stream_dict['hls'])) #last resort, non drm hls stream, only applies if people uninstalled inputstream adaptive while vrt nu addon was disabled
 
     #speed up hls selection, workaround for slower kodi selection
     def _select_hls_substreams(self, master_hls_url):

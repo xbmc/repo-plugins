@@ -47,7 +47,7 @@ class VRTPlayer:
 
     def show_category_menu_items(self):
         joined_url = urljoin(self._VRTNU_BASE_URL, './categorieen/')
-        menu_items = self.__get_menu_items(joined_url, {'class': 'tile tile--category'}, actions.LISTING_CATEGORY_VIDEOS)
+        menu_items = self.__get_category_menu_items(joined_url, {'class': 'nui-tile title'}, actions.LISTING_CATEGORY_VIDEOS)
         self._kodi_wrapper.show_listing(menu_items, sortmethod.ALPHABET)
 
     def show_video_category_episodes(self, path):
@@ -183,14 +183,14 @@ class VRTPlayer:
     def __get_media(self, file_name):
         return os.path.join(self._addon_path, 'resources', 'media', file_name)
 
-    def __get_menu_items(self, url, soupstrainer_parser_selector, routing_action, video_dictionary_action=None):
+    def __get_category_menu_items(self, url, soupstrainer_parser_selector, routing_action, video_dictionary_action=None):
         response = requests.get(url)
         tiles = SoupStrainer('a', soupstrainer_parser_selector)
         soup = BeautifulSoup(response.content, 'html.parser', parse_only=tiles)
         listing = []
-        for tile in soup.find_all(class_='tile'):
+        for tile in soup.find_all(class_='nui-tile title'):
             link_to_video = tile['href']
-            thumbnail, title = self.__get_thumbnail_and_title(tile)
+            thumbnail, title = self.__get_category_thumbnail_and_title(tile)
             video_dictionary = None
             if video_dictionary_action is not None:
                 video_dictionary = video_dictionary_action(tile)
@@ -223,6 +223,11 @@ class VRTPlayer:
         return statichelper.replace_double_slashes_with_https(raw_thumbnail)
 
     @staticmethod
+    def __format_category_image_url(element):
+        raw_thumbnail = element.find(class_='nui-tile--image')['data-responsive-image']
+        return statichelper.replace_double_slashes_with_https(raw_thumbnail)
+
+    @staticmethod
     def __get_az_thumbnail_and_title(element):
         thumbnail = VRTPlayer.__format_image_url(element)
         found_element = element.find(class_='nui-tile--content')
@@ -231,16 +236,16 @@ class VRTPlayer:
             title_element = found_element.find('h3')
             title = statichelper.replace_newlines_and_strip(title_element.text)
         return thumbnail, title
-    
+
     @staticmethod
-    def __get_thumbnail_and_title(element):
-        thumbnail = VRTPlayer.__format_image_url(element)
-        found_element = element.find(class_='tile__title')
+    def __get_category_thumbnail_and_title(element):
+        thumbnail = VRTPlayer.__format_category_image_url(element)
+        found_element = element.find('h2')
         title = ''
         if found_element is not None:
             title = statichelper.replace_newlines_and_strip(found_element.contents[0])
         return thumbnail, title
-
+    
     @staticmethod
     def __strip_date_from_unessecary_caracters(dirtyDate): 
         date = re.findall('\d+/\d+', dirtyDate)[0]  

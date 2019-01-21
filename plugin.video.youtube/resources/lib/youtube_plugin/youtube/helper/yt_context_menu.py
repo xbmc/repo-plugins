@@ -1,4 +1,12 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from ... import kodion
 
@@ -151,7 +159,6 @@ def append_refresh(context_menu, provider, context):
 
 
 def append_subscribe_to_channel(context_menu, provider, context, channel_id, channel_name=u''):
-    text = u''
     if channel_name:
         text = context.localize(provider.LOCAL_MAP['youtube.subscribe_to']) % context.get_ui().bold(channel_name)
         context_menu.append(
@@ -162,7 +169,7 @@ def append_subscribe_to_channel(context_menu, provider, context, channel_id, cha
                                                                   {'subscription_id': channel_id})))
 
 
-def append_unsubscribe_from_channel(context_menu, provider, context, channel_id, channel_name=u''):
+def append_unsubscribe_from_channel(context_menu, provider, context, channel_id):
     context_menu.append((context.localize(provider.LOCAL_MAP['youtube.unsubscribe']),
                          'RunPlugin(%s)' % context.create_uri(['subscriptions', 'remove'],
                                                               {'subscription_id': channel_id})))
@@ -198,6 +205,6 @@ def append_play_with_subtitles(context_menu, provider, context, video_id):
 
 def append_play_audio_only(context_menu, provider, context, video_id):
     context_menu.append((context.localize(provider.LOCAL_MAP['youtube.video.play_audio_only']),
-                         'PlayMedia(%s)' % context.create_uri(['play'],
+                         'RunPlugin(%s)' % context.create_uri(['play'],
                                                               {'video_id': video_id,
                                                                'audio_only': '1'})))

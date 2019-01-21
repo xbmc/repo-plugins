@@ -1,24 +1,35 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 import random
 import re
+import traceback
+
+import xbmcplugin
 
 from ... import kodion
 from ...kodion import constants
 from ...kodion.items import VideoItem
+from ...kodion.impl.xbmc.xbmc_items import to_playback_item
+from ...kodion.utils import playback_monitor
 from ...youtube.youtube_exceptions import YouTubeException
 from ...youtube.helper import utils, v3
 
 
-def play_video(provider, context, re_match):
+def play_video(provider, context):
     try:
         video_id = context.get_param('video_id')
-        embeddable = context.get_param('embeddable') is True
 
         client = provider.get_client(context)
         settings = context.get_settings()
 
-        dev_id = context.get_param('addon_id', None)
         ask_for_quality = None
         screensaver = False
         if context.get_param('screensaver', None) and str(context.get_param('screensaver')).lower() == 'true':
@@ -26,11 +37,18 @@ def play_video(provider, context, re_match):
             screensaver = True
 
         audio_only = None
-        if context.get_param('audio_only', '0') == '1':
+        if video_id and context.get_ui().get_home_window_property('audio_only') == video_id:
             ask_for_quality = False
             audio_only = True
+        context.get_ui().clear_home_window_property('audio_only')
 
-        video_streams = client.get_video_streams(context, video_id, embeddable=embeddable)
+        try:
+            video_streams = client.get_video_streams(context, video_id)
+        except YouTubeException as e:
+            context.get_ui().show_notification(message=e.get_message())
+            context.log_error(traceback.print_exc())
+            return False
+
         if len(video_streams) == 0:
             message = context.localize(provider.LOCAL_MAP['youtube.error.no_video_streams_found'])
             context.get_ui().show_notification(message, time_milliseconds=5000)
@@ -67,51 +85,44 @@ def play_video(provider, context, re_match):
         video_item = VideoItem(title, video_stream['url'])
 
         incognito = str(context.get_param('incognito', False)).lower() == 'true'
-        use_play_data = not is_live and not screensaver and not incognito
+        use_history = not is_live and not screensaver and not incognito and settings.use_playback_history()
 
-        video_item = utils.update_play_info(provider, context, video_id, video_item, video_stream, use_play_data=use_play_data)
+        video_item = utils.update_play_info(provider, context, video_id, video_item, video_stream, use_play_data=use_history)
 
-        # Trigger post play events
-        if provider.is_logged_in():
-            try:
-                if not screensaver:
-                    command = 'RunPlugin(%s)' % context.create_uri(['events', 'post_play'], {'video_id': video_id})
-                    context.get_ui().set_home_window_property('post_play', command)
-                    if dev_id:
-                        context.get_ui().set_home_window_property('addon_id', str(dev_id))
-                    context.get_ui().set_home_window_property('video_stats_url', video_stream.get('video_stats_url'))
-            except:
-                context.log_debug('Failed to set post play events.')
+        seek_time = None
+        play_count = 0
+        playback_stats = video_stream.get('playback_stats')
 
-        if use_play_data and settings.use_playback_history():
+        if use_history:
             major_version = context.get_system_version().get_version()[0]
             if video_item.get_start_time() and video_item.use_dash() and major_version > 17:
-                context.get_ui().set_home_window_property('seek_time', video_item.get_start_time())
-
+                seek_time = video_item.get_start_time()
             play_count = video_item.get_play_count() if video_item.get_play_count() is not None else '0'
-            context.get_ui().set_home_window_property('play_count', str(play_count))
 
-        context.get_ui().set_home_window_property('playback_history', str(use_play_data).lower())
-        context.get_ui().set_home_window_property('playing', str(video_id))
+        item = to_playback_item(context, video_item)
+        item.setPath(video_item.get_uri())
 
-        return video_item
+        xbmcplugin.setResolvedUrl(handle=context.get_handle(), succeeded=True, listitem=item)
+        playback_monitor(provider=provider, context=context, video_id=video_id, playing_file=video_item.get_uri(),
+                         play_count=play_count, use_history=use_history, playback_stats=playback_stats,
+                         seek_time=seek_time, refresh_only=screensaver)
     except YouTubeException as ex:
         message = ex.get_message()
         message = kodion.utils.strip_html_from_text(message)
         context.get_ui().show_notification(message, time_milliseconds=15000)
 
 
-def play_playlist(provider, context, re_match):
+def play_playlist(provider, context):
     videos = []
 
     def _load_videos(_page_token='', _progress_dialog=None):
-        if not _progress_dialog:
+        if _progress_dialog is None:
             _progress_dialog = context.get_ui().create_progress_dialog(
                 context.localize(provider.LOCAL_MAP['youtube.playlist.progress.updating']),
                 context.localize(constants.localize.COMMON_PLEASE_WAIT), background=True)
         json_data = client.get_playlist_items(playlist_id, page_token=_page_token)
         if not v3.handle_error(provider, context, json_data):
-            return False
+            return None
         _progress_dialog.set_total(int(json_data.get('pageInfo', {}).get('totalResults', 0)))
 
         result = v3.response_to_items(provider, context, json_data, process_next_page=False)
@@ -139,7 +150,7 @@ def play_playlist(provider, context, re_match):
             items.append((context.localize(provider.LOCAL_MAP['youtube.playlist.play.%s' % order]), order))
 
         order = context.get_ui().on_select(context.localize(provider.LOCAL_MAP['youtube.playlist.play.select']), items)
-        if not order in order_list:
+        if order not in order_list:
             return False
 
     player = context.get_video_player()
@@ -198,7 +209,7 @@ def play_playlist(provider, context, re_match):
     return True
 
 
-def play_channel_live(provider, context, re_match):
+def play_channel_live(provider, context):
     channel_id = context.get_param('channel_id')
     index = int(context.get_param('live')) - 1
     if index < 0:

@@ -1,7 +1,12 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
 
-__all__ = ['create_path', 'create_uri_path', 'strip_html_from_text', 'print_items', 'find_best_fit', 'to_utf8',
-           'to_unicode', 'select_stream', 'make_dirs']
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from six.moves import urllib
 from six import next
@@ -14,8 +19,11 @@ import re
 from ..constants import localize
 
 import xbmc
-import xbmcaddon
 import xbmcvfs
+
+
+__all__ = ['create_path', 'create_uri_path', 'strip_html_from_text', 'print_items', 'find_best_fit', 'to_utf8',
+           'to_unicode', 'select_stream', 'make_dirs', 'loose_version', 'find_video_id']
 
 
 def loose_version(v):
@@ -230,7 +238,7 @@ def make_dirs(path):
     path = xbmc.translatePath(path)
     if not xbmcvfs.exists(path):
         try:
-            r = xbmcvfs.mkdirs(path)
+            _ = xbmcvfs.mkdirs(path)
         except:
             pass
         if not xbmcvfs.exists(path):
@@ -241,3 +249,10 @@ def make_dirs(path):
         return xbmcvfs.exists(path)
 
     return True
+
+
+def find_video_id(plugin_path):
+    match = re.search(r'.*video_id=(?P<video_id>[a-zA-Z0-9_\-]{11}).*', plugin_path)
+    if match:
+        return match.group('video_id')
+    return ''

@@ -1,4 +1,12 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from ...kodion.utils import FunctionCache, DataCache, strip_html_from_text
 
@@ -113,7 +121,8 @@ class ResourceManager(object):
         if self.handle_error(json_data):
             return result
 
-    def _make_list_of_50(self, list_of_ids):
+    @staticmethod
+    def _make_list_of_50(list_of_ids):
         list_of_50 = []
         pos = 0
         while pos < len(list_of_ids):

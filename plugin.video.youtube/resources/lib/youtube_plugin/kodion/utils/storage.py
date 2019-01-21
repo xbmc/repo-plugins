@@ -1,7 +1,16 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from six import PY2
 from six.moves import range
+# noinspection PyPep8Naming
 from six.moves import cPickle as pickle
 
 import datetime
@@ -51,7 +60,9 @@ class Storage(object):
             # self._cursor.execute('PRAGMA synchronous=OFF')
             self._create_table()
 
-    def _execute(self, needs_commit, query, values=[]):
+    def _execute(self, needs_commit, query, values=None):
+        if values is None:
+            values = []
         if not self._needs_commit and needs_commit:
             self._needs_commit = True
             self._cursor.execute('BEGIN')

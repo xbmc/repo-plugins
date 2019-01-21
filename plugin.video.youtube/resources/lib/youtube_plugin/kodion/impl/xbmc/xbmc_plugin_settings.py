@@ -1,9 +1,14 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from ..abstract_settings import AbstractSettings
-
-import xbmc
-import xbmcgui
 
 
 class XbmcPluginSettings(AbstractSettings):
@@ -17,3 +22,6 @@ class XbmcPluginSettings(AbstractSettings):
 
     def set_string(self, setting_id, value):
         self._xbmc_addon.setSetting(setting_id, value)
+
+    def open_settings(self):
+        self._xbmc_addon.openSetting()

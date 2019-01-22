@@ -49,15 +49,18 @@ class KodiWrapper:
         if video.license_key is not None:
             play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
             play_item.setProperty('inputstream.adaptive.license_key', video.license_key)
-
+        
+        subtitles_visible = False
         if self.get_setting('showsubtitles') == 'true':
-            xbmc.Player().showSubtitles(True)
+            subtitles_visible = True
+            #separate subtitle url for hls-streams
             if video.subtitle_url is not None:
                 play_item.setSubtitles([video.subtitle_url])
-        else:
-            xbmc.Player().showSubtitles(False)
 
         xbmcplugin.setResolvedUrl(self._handle, True, listitem=play_item)
+        while not xbmc.Player().isPlaying() and not xbmc.Monitor().abortRequested():
+            xbmc.sleep(100)
+        xbmc.Player().showSubtitles(subtitles_visible)
 
     def show_ok_dialog(self, title, message):
         xbmcgui.Dialog().ok(self._addon.getAddonInfo('name'), title, message)
@@ -71,12 +74,19 @@ class KodiWrapper:
     def open_settings(self):
         self._addon.openSettings()
 
-    def check_inputstream_adaptive(self):
+    def has_inputstream_adaptive_installed(self): #note normally inputstream adaptive will always be installed, this only applies for people uninstalling inputstream adaptive while this addon is disabled
         return xbmc.getCondVisibility('System.HasAddon("{0}")'.format('inputstream.adaptive')) == 1
 
-    def check_widevine(self):
-        dirs, files = xbmcvfs.listdir(xbmc.translatePath('special://home/cdm'))
-        return any('widevine' in s for s in files)
+    def has_widevine_installed(self):
+        kodi_version = int(xbmc.getInfoLabel('System.BuildVersion').split('.')[0])
+        if xbmc.getCondVisibility('system.platform.android') and kodi_version > 17:
+            return True
+        cdm_path = xbmc.translatePath('special://home/cdm/')
+        has_widevine_installed = False
+        if self.check_if_path_exists(cdm_path):
+            dirs, files = xbmcvfs.listdir(cdm_path)
+            has_widevine_installed = any('widevine' in s for s in files)
+        return has_widevine_installed
 
     def get_userdata_path(self):
         return xbmc.translatePath(self._addon.getAddonInfo('profile')).decode('utf-8')
@@ -93,5 +103,8 @@ class KodiWrapper:
     def delete_path(self, path):
         return xbmcvfs.delete(path)
 
-    def log(self, message):
+    def log_notice(self, message):
         xbmc.log(message, xbmc.LOGNOTICE)
+
+    def log_error(self, message):
+        xbmc.log(message, xbmc.LOGERROR)

@@ -1,11 +1,8 @@
 import sys
 import xbmcaddon
 from urlparse import parse_qsl
-from resources.lib.vrtplayer import vrtplayer
-from resources.lib.kodiwrappers import kodiwrapper
-from resources.lib.vrtplayer import actions
-from resources.lib.kodiwrappers import sortmethod
-from resources.lib.vrtplayer import urltostreamservice
+from resources.lib.kodiwrappers import kodiwrapper, sortmethod
+from resources.lib.vrtplayer import vrtplayer, urltostreamservice, tokenresolver, actions
 
 _url = sys.argv[0]
 _handle = int(sys.argv[1])
@@ -14,9 +11,10 @@ _handle = int(sys.argv[1])
 def router(params_string):
     addon = xbmcaddon.Addon()
     kodi_wrapper = kodiwrapper.KodiWrapper(_handle, _url, addon)
+    token_resolver = tokenresolver.TokenResolver(kodi_wrapper)
     stream_service = urltostreamservice.UrlToStreamService(vrtplayer.VRTPlayer._VRT_BASE,
                                                            vrtplayer.VRTPlayer._VRTNU_BASE_URL,
-                                                           kodi_wrapper)
+                                                           kodi_wrapper, token_resolver)
     vrt_player = vrtplayer.VRTPlayer(addon.getAddonInfo('path'), kodi_wrapper, stream_service)
     params = dict(parse_qsl(params_string))
     if params:

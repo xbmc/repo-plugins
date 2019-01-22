@@ -1,0 +1,79 @@
+{
+    "cbstv": {
+        "label": "CBS TV",
+        "url": "live/cbstv/",
+        "tagline": "Nothing Beyond Our Reach",
+        "plot": "Cybernetic Broadcasting System dominates our galaxy for over a decade. This stream is non-commercial, non-conventional and nothing like it can be encountered on any planet. You can run all you want, but there is no escaping CBS TV.",
+        "genre": "electro, acid, italo, disco"
+    },
+    "prc": {
+        "label": "Intergalactic TV",
+        "url": "live/smil:tv.smil/",
+        "tagline": "No Station Such Dedication",
+        "plot": "This stream is Intergalactic FM's TV channel. Delivering a mix of live recordings from the Panama Racing Club, the best B movies and keeping you updated on UFO sighings.This is eh apex of the West Coast Sound of Holland.",
+        "genre": "electro, acid, italo, B movies"
+    },
+    "mw": {
+        "label": "Magic Waves",
+        "url": "show/mw/",
+        "tagline": "Do you believe in Magic?",
+        "plot": "Hailing from the UK, Magic Waves has been broadcasting since 2006, and since 2009 as one of the main staples of Intergalactic FM. Known for championing underground music with no regard for the commercial or mainstream in their legendary regular Sunday night broadcasts, the Magic Waves team bring you music and culture from the future and past with the highest passion now on their very own TV channel.",
+        "genre": "Future Past"
+    },
+    "neon": {
+        "label": "Neon",
+        "url": "show/neon/",
+        "tagline": "Dreams of Neon, Berlin",
+        "plot": "Dreams of Neon transmits from Berlin offering streams from Neon studios and club nights by Lazercat, Naks and the Dreams of Neon residents.",
+        "genre": "electro, acid, italo"
+    },
+    "vunk": {
+        "label": "Vunk",
+        "url": "live/vunk/",
+        "tagline": "Music from the Heart",
+        "plot": "Music straight from the heart is what David Vunk is all about. Known for his label Moustace Records and his envigorating dj sets and productions, watch his weekly stream on Wednesday evening from West Coast's Rotterdam.",
+        "genre": "techno, acid, italo, disco"
+    },
+    "submit": {
+        "label": "Submit",
+        "url": "show/submit/",
+        "tagline": "Gesloten Cirkel's stream",
+        "plot": "Stream from the producer named Gesloten Cirkel. Submit to his stream with his music and visuals.",
+        "genre": "electro, acid, techno"
+    },
+    "discotto": {
+        "label": "Discotto",
+        "url": "show/discotto/",
+        "tagline": "D on the TV",
+        "plot": "Streaming live and direct from the Woolwich triangle, London. Aural and visual stimulation from the studio featuring Discotto and guests.",
+        "genre": "italo, disco, electro"
+    },
+    "shipwrec": {
+        "label": "Shipwrec",
+        "url": "show/shipwrec/",
+        "tagline": "Shipwreced",
+        "plot": "Shipwrec Radio is a Nijmegen-based label which focuses on acid, electro, house and techno, with excursions into braindance, ambient and IDM. Featuring DJ Shipwrec, Camiel, Yash and sometimes guest DJs.",
+        "genre": "electronic music"
+    },
+    "clone": {
+        "label": "Clone",
+        "url": "show/clone/",
+        "tagline": "Serge Clone's stream",
+        "plot": "Serge Clone has a record shop located in Rotterdam, the Netherlands. Next to having a label and begin a distributor focused on electro, techno, house, soundtracks, (italo) disco and much more, he is also an active dj and producer himself.",
+        "genre": "electronic music"
+    },
+    "zahara": {
+        "label": "Zahara",
+        "url": "show/zahara/",
+        "tagline": "Cocktailbar Scheveningen",
+        "plot": "Live stream from Zahara cocktail bar which is located directly at the beach in Scheveningen, the Netherlands. A frequent location for Intergalactic FM djs and has hosted for many of the IFM's infamous top 100. The most West you can go on Holland's Coast.",
+        "genre": "electronic music"
+    },
+    "onderwereld": {
+        "label": "Onderwereld",
+        "url": "show/onderwereld/",
+        "tagline": "electronic music",
+        "plot": "Platform for all kinds of unique electronic music. Onderwereld is streaming from their bunker somewhere in the Hague.",
+        "genre": "electronic music"
+    }
+}

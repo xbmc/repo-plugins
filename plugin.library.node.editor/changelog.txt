@@ -1,3 +1,7 @@
+1.0.6
+- update language directory structure
+- add assets tag in addon.xml
+
 1.0.5
 - replace edit order with move node
 

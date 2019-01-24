@@ -1,4 +1,4 @@
-﻿# coding=utf-8
+# coding=utf-8
 import os, sys, shutil, unicodedata, re, types
 from htmlentitydefs import name2codepoint
 import xbmc, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs

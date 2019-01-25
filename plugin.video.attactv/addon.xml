@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.attactv" name="attac tv" version="1.1.13" provider-name="Jose Antonio Montes (jamontes)">
+<addon id="plugin.video.attactv" name="attac tv" version="1.1.14" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
         <import addon="xbmc.python" version="2.14.0"/>
-        <import addon="plugin.video.youtube" version="4.4.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
@@ -22,6 +21,10 @@
         <forum>http://forum.kodi.tv/showthread.php?tid=155306</forum>
         <source>https://github.com/jamontes/plugin.video.attactv</source>
         <website>http://www.attac.tv/</website>
-        <mail></mail>
+        <broken>This add-on is only available for Isengard and onwards</broken>
+	<disclaimer lang="en">This add-on is only available for Isengard and onwards. Please, upgrade your Kodi version if you want to continue enjoying it.</disclaimer>
+	<disclaimer lang="es">Este add-on está sólo disponible a partir de la versión Isengard de Kodi. Por favor, actualice su versión de Kodi si desea seguír disfrutando de este add-on.</disclaimer>
+	<disclaimer lang="fr">Cette add-on est disponible uniquement a partir de la version Isengard et suivantes du logiciel Kodi. Pourtant, veulliez mettre à jour votre version de Kodi pour continuer à l'utiliser.</disclaimer>
+	<disclaimer lang="de">Dieses add-on ist nur für Isengard und höher verfügbar.</disclaimer>
     </extension>
 </addon>

@@ -48,6 +48,14 @@ msgctxt "#32052"
 msgid "Only VRT logins are supported no Google or Facebook login!"
 msgstr "Only VRT logins are supported no Google or Facebook login "
 
+msgctxt "#32053"
+msgid "This program cannot be played. To view this program outside of Belgium, you first have to validate a Belgian mobile phone number on the VRT NU website."
+msgstr "This program cannot be played. To view this program outside of Belgium, you first have to validate a Belgian mobile phone number on the VRT NU website."
+
+msgctxt "#32054"
+msgid "Woops something went wrong, check the log for more details"
+msgstr "Woops something went wrong, check the log for more details"
+
 msgctxt "#32091"
 msgid "A-Z"
 msgstr "A-Z"

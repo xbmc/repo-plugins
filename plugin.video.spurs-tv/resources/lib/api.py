@@ -22,9 +22,10 @@ def videos():
     for module in modules:
         article = module['data']['article']
         video_data = article['media']
-        yield Video(
-            entry_id=video_data['entryId'],
-            title=article['title'],
-            caption=video_data['caption'],
-            thumbnail=video_data['thumbnail']['smallUrl']
-        )
+        if video_data is not None:
+            yield Video(
+                entry_id=video_data['entryId'],
+                title=article['title'],
+                caption=video_data['caption'],
+                thumbnail=video_data['thumbnail']['smallUrl']
+            )

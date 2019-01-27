@@ -1,3 +1,5 @@
+1.1.14 (2019.01.25)
+- Marked as broken for Gotham and Helix versions due to a missing dependency.
 1.1.13 (2017.03.10)
 - Fixed scraper due to Dailymotion website changes.
 - Fixed scraper due to KontextTV website changes.

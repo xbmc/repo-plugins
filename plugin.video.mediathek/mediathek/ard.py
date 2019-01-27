@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import re, time, datetime, json;
+import re, time, datetime, json, urllib;
 from bs4 import BeautifulSoup;
 from mediathek import *
 
@@ -58,6 +58,10 @@ class ARDMediathek(Mediathek):
     self.regex_ExtractJson = re.compile("__APOLLO_STATE__ = ({.*});");
     self.tumbnail_size = "600";
 
+    self.variables = "{\"widgetId\":\"%s\",\"client\":\"%s\",\"pageNumber\":%d,\"pageSize\":%d}"
+    self.extension = "{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"915283a7f9b1fb8a5b2628aaa45aef8831f789a8ffdb31aa81fcae53945ee712\"}}";
+    self.publicGateway = "https://api.ardmediathek.de/public-gateway?variables=%s&extensions=%s";
+
   @classmethod
   def name(self):
     return "ARD";
@@ -83,11 +87,12 @@ class ARDMediathek(Mediathek):
 
   def GenerateCaterogyLink(self, widgetContent, callHash, jsonContent,client):
     widgetId = widgetContent["id"];
+    listingKey = self.buildcategoryListingKey(client,widgetId,jsonContent);
     title = widgetContent["title"];
     if(widgetContent["titleVisible"] == True):
       self.gui.buildJsonLink(self, title, "%s.%s"%(client,widgetId), callHash,0);
     else:
-      widgetContent = jsonContent[self.buildcategoryListingKey(client,widgetId,jsonContent)];
+      widgetContent = jsonContent[listingKey];
       self.GenerateCaterogyLinks(widgetContent, jsonContent)
 
   def buildcategoryListingKey(self,client,widgetId,jsonContent):
@@ -100,19 +105,62 @@ class ARDMediathek(Mediathek):
 
     return self.categoryListingKey%(client,pageNumber,pageSize,widgetId);
 
+  def buildJsonLink(self,client,widgetId,jsonContent):
+    #es wird immer besser ...
+    widgetContent = jsonContent["Widget:%s"%widgetId];
+    paginationId = widgetContent["pagination"]["id"];
+    paginationContent = jsonContent[paginationId];
+    pageSize = paginationContent["pageSize"];
+    pageNumber = paginationContent["pageNumber"];
+
+    variables = urllib.quote_plus(self.variables%(widgetId,client,pageNumber,pageSize));
+    extension = urllib.quote_plus(self.extension);
+    return self.publicGateway%(variables,extension);
+
   def buildJsonMenu(self, path, callhash, initCount):
     jsonContent = self.gui.loadJsonFile(callhash);
     path = path.split(".");
     client = path[0];
     widgetId = path[1];
 
-    widgetContent = jsonContent[self.buildcategoryListingKey(client,widgetId,jsonContent)];
-    self.GenerateCaterogyLinks(widgetContent, jsonContent)
+    listingKey = self.buildcategoryListingKey(client,widgetId,jsonContent);
+    if(listingKey in jsonContent):
+      widgetContent = jsonContent[listingKey];
+      self.GenerateCaterogyLinks(widgetContent, jsonContent)
+    else:
+      link = self.buildJsonLink(client,widgetId,jsonContent);
+
+      pageContent = self.loadPage(link);
+      jsonContent= json.loads(pageContent);
+
+      dataObject = jsonContent["data"];
+      widgetObject = dataObject["widget"];
+
+      for jsonObject in widgetObject["teasers"]:
+        self.GenerateTeaserLink(jsonObject)
 
   def GenerateCaterogyLinks(self, widgetContent, jsonContent):
     for teaser in widgetContent["teasers"]:
       teaserId = teaser["id"];
       self.GenerateVideoLink(jsonContent[teaserId],jsonContent);
+
+  def GenerateTeaserLink(self, teaserContent):
+    title = teaserContent["shortTitle"];
+    subTitle = None;
+    picture = None;
+    images = teaserContent["images"];
+    for key in images:
+      imageObject = images[key];
+      if (type(imageObject) is dict):
+        picture = imageObject["src"].replace("{width}",self.tumbnail_size);
+
+    duration = teaserContent["duration"];
+    if(teaserContent["broadcastedOn"] is not None):
+      date = time.strptime(teaserContent["broadcastedOn"],"%Y-%m-%dT%H:%M:%SZ");
+    else:
+      date = None;
+    videoLink = self.playerLink%teaserContent["links"]["target"]["id"];
+    self.gui.buildVideoLink(DisplayObject(title, subTitle, picture, "", videoLink, "JsonLink", date, duration),self,0);
 
   def GenerateVideoLink(self, teaserContent, jsonContent):
     title = teaserContent["shortTitle"];
@@ -159,5 +207,5 @@ class ARDMediathek(Mediathek):
           link = "https:"+link;
         self.gui.log("VideoLink: "+link);
         videoLinks[quality] = SimpleLink(link,-1);
-
-    self.gui.play(videoLinks);
+    if(len(videoLinks) > 0):
+      self.gui.play(videoLinks);

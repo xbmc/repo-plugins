@@ -3,9 +3,11 @@ import xbmcgui
 import xbmcplugin
 import xbmcvfs
 import json
+import inputstreamhelper
 from urllib import urlencode
 from resources.lib.vrtplayer import vrtplayer
 from resources.lib.kodiwrappers import sortmethod
+
 
 class KodiWrapper:
 
@@ -39,23 +41,22 @@ class KodiWrapper:
 
     def play(self, video):
         play_item = xbmcgui.ListItem(path=video.stream_url)
-
-        if video.stream_url is not None and '/.mpd' in video.stream_url:
+        if video.stream_url is not None and video._use_inputstream_adaptive:
             play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
             play_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
             play_item.setMimeType('application/dash+xml')
             play_item.setContentLookup(False)
-
-        if video.license_key is not None:
-            play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
-            play_item.setProperty('inputstream.adaptive.license_key', video.license_key)
+            if video.license_key is not None:
+                is_helper = inputstreamhelper.Helper('mpd', drm='com.widevine.alpha')
+                if is_helper.check_inputstream():
+                    play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
+                    play_item.setProperty('inputstream.adaptive.license_key', video.license_key)
         
-        subtitles_visible = False
-        if self.get_setting('showsubtitles') == 'true':
-            subtitles_visible = True
-            #separate subtitle url for hls-streams
-            if video.subtitle_url is not None:
-                play_item.setSubtitles([video.subtitle_url])
+        subtitles_visible = self.get_setting('showsubtitles') == 'true'
+        #separate subtitle url for hls-streams
+        if subtitles_visible and video.subtitle_url is not None:
+            self.log_notice('subtitle ' + video.subtitle_url)
+            play_item.setSubtitles([video.subtitle_url])
 
         xbmcplugin.setResolvedUrl(self._handle, True, listitem=play_item)
         while not xbmc.Player().isPlaying() and not xbmc.Monitor().abortRequested():
@@ -77,16 +78,9 @@ class KodiWrapper:
     def has_inputstream_adaptive_installed(self): #note normally inputstream adaptive will always be installed, this only applies for people uninstalling inputstream adaptive while this addon is disabled
         return xbmc.getCondVisibility('System.HasAddon("{0}")'.format('inputstream.adaptive')) == 1
 
-    def has_widevine_installed(self):
+    def can_play_widevine(self):
         kodi_version = int(xbmc.getInfoLabel('System.BuildVersion').split('.')[0])
-        if xbmc.getCondVisibility('system.platform.android') and kodi_version > 17:
-            return True
-        cdm_path = xbmc.translatePath('special://home/cdm/')
-        has_widevine_installed = False
-        if self.check_if_path_exists(cdm_path):
-            dirs, files = xbmcvfs.listdir(cdm_path)
-            has_widevine_installed = any('widevine' in s for s in files)
-        return has_widevine_installed
+        return kodi_version > 17
 
     def get_userdata_path(self):
         return xbmc.translatePath(self._addon.getAddonInfo('profile')).decode('utf-8')

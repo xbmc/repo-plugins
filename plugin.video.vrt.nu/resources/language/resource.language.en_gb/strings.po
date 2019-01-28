@@ -24,6 +24,10 @@ msgctxt "#32002"
 msgid "Password"
 msgstr "Password"
 
+msgctxt "#32003"
+msgid "Delete cookies"
+msgstr "Delete cookies"
+
 msgctxt "#32010"
 msgid "Subtitles"
 msgstr "Subtitles"

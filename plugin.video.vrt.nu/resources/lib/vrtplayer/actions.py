@@ -7,3 +7,4 @@ LISTING_CATEGORY_VIDEOS = 'listingcategoryvideos'
 LISTING_EPISODES = 'listingepisodes'
 
 PLAY = 'play'
+CREDENTIALS = 'credentials'

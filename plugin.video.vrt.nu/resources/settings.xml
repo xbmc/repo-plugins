@@ -9,5 +9,5 @@
     </category>
     <category label="32020">
         <setting label="32021" type="bool" id="usedrm" default="false" />
-    </category>
+    </category>  
 </settings>

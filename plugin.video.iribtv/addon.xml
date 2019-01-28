@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.iribtv"
+       name="IRIB TV3"
+       version="2.1.0"
+       provider-name="Amir Ammari">
+  <requires>
+    <import addon="xbmc.python" version="2.14.0"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">IRIB TV3</summary>
+    <description lang="en_GB">IRIB TV3 Addon for Kodi</description>
+    <platform>all</platform>
+    <language>fa</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website>amirrammari.blogfa.com</website>
+    <email>amirrammari@gmail.com</email>
+    <source>https://github.com/amirrammari</source>
+  </extension>
+</addon>

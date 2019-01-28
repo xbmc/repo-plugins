@@ -4,7 +4,7 @@
        version="2.1.0"
        provider-name="Amir Ammari">
   <requires>
-    <import addon="xbmc.python" version="2.14.0"/>
+    <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.beautifulsoup" version="3.2.1"/>
   </requires>
   <extension point="xbmc.python.pluginsource"

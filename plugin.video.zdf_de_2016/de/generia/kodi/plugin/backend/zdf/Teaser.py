@@ -15,9 +15,10 @@ catPattern = compile('class="teaser-cat\s*[^"]*"[^>]*>')
 catCategoryPattern = compile('class="teaser-cat-category\s*[^"]*"[^>]*>([^<]*)</[^>]*>')
 catBrandPattern = compile('class="teaser-cat-brand\s*[^"]*"[^>]*>([^<]*)</[^>]*>')
 aPattern = compile('href="([^"]*)"[^>]*>')
-titleIconPattern = compile('class="[^"]*icon-[0-9]*_(play)">')
 textPattern = compile('class="teaser-text"[^>]*>([^<]*)</[^>]*>')
-datePattern = compile('class="video-airing"[^>]*>([^<]*)</[^>]*>')
+footPattern = compile('class="teaser-foot"[^>]*>')
+footIconPattern = compile('class="[^"]*icon-[0-9]*_(play)[^"]*">')
+datePattern = compile('class="teaser-info"[^>]*>([^<]*)</[^>]*>')
 apiTokenPattern = compile('"apiToken"\s*:\s*"([^"]*)"')
 
     
@@ -70,7 +71,7 @@ class Teaser(object):
         return self.title is not None and self.url is not None and self.url[0:1] == '/' 
      
     def __str__(self):
-        return "<Teaser '%s' url='%s' apiToken='%s'>" % (self.title, self.url, self.apiToken)
+        return "<Teaser '%s' playable='%s' url='%s' apiToken='%s' label='%s'>" % (self.title, self.playable, self.url, self.apiToken, self.label)
         
 
     def parse(self, string, pos=0, baseUrl=None, teaserMatch=None):
@@ -86,11 +87,11 @@ class Teaser(object):
             return endPos
                 
         pos = self.parseImage(article, pos)
-        pos = self.parseLabel(article, pos)
         pos = self.parseCategory(article, pos)
         pos = self.parseTitle(article, pos, baseUrl)
         pos = self.parseText(article, pos)
-        pos = self.parseDate(article, pos)
+        pos = self.parseLabel(article, pos)
+        pos = self.parseFoot(article, pos)
 
         return endPos
 
@@ -113,14 +114,12 @@ class Teaser(object):
             iconMatch = iconPattern.search(labelTags)
             if iconMatch is not None:    
                 type = iconMatch.group(1)
-            i = labelTags.find('</span>') + len('</span>')
+            i = labelTags.find('>') + len('>')
             j = labelTags.rfind('</div>')
             pos = j + len('</div>') 
             label = labelTags[i:j]
-            label = label.replace('<strong>', '')
-            label = label.replace('</strong>', '')
             label = stripTag('abbr', label)
-            label = stripTag('span', label)
+            label = cleanTags(label)
             label = label.strip()
 
         self.label = stripHtml(label)
@@ -154,16 +153,10 @@ class Teaser(object):
         aMatch = aPattern.search(article, pos)
         title = None
         url = None
-        playable = False
         if aMatch is not None:
             url = aMatch.group(1).strip()        
             pos = aMatch.end(0)
             i = pos
-            iconMatch = titleIconPattern.search(article, pos)
-            if iconMatch is not None:    
-                playable =  iconMatch.group(1) == 'play'
-                i = article.find('</span>', pos) + len('</span>')
-
             j = article.find('</a>', i)
             # check for '<span class="arrowhover ...'
             k = article.find('<span class="arrowhover', i)
@@ -176,7 +169,6 @@ class Teaser(object):
     
         self.title = stripHtml(title)
         self.url = url
-        self.playable = playable
         self.contentName = None
         if url is not None:
             if baseUrl is not None and url[0:len(baseUrl)] == baseUrl:
@@ -195,15 +187,36 @@ class Teaser(object):
 
         self.text = stripHtml(text)
         return pos
+
+    def parseFoot(self, article, pos, pattern=footPattern):
+        playable = False
+        footMatch = pattern.search(article, pos)
+        foot = None
+        if footMatch is not None:
+            pos = footMatch.end(0)
+
+            iconMatch = footIconPattern.search(article, pos)
+            if iconMatch is not None:    
+                playable =  iconMatch.group(1) == 'play'
+                pos = article.find('</span>', pos) + len('</span>')
+
+        self.playable = playable
+        pos = self.parseDuration(article, pos)
+        return pos
         
-    def parseDate(self, article, pos, pattern=datePattern):
-        dateMatch = pattern.search(article, pos)
-        date = None
-        if dateMatch is not None:
-            date = dateMatch.group(1).strip()
-            pos = dateMatch.end(0)
+    def parseDuration(self, article, pos, pattern=datePattern):
+        durationMatch = pattern.search(article, pos)
+        duration = None
+        if durationMatch is not None:
+            duration = durationMatch.group(1).strip()
+            duration = duration.replace(' min', '')
+            if duration.isdigit():
+                duration = int(duration) * 60
+            else:
+                uuration = None
+            pos = durationMatch.end(0)
     
-        self.date = date
+        self.duration = duration
         return pos
 
 

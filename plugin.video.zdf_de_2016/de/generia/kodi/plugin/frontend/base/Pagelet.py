@@ -79,13 +79,14 @@ class Response(object):
         return url 
     
 class Item(object):
-    def __init__(self, title, action, image=None, text=None, genre=None, date=None, isFolder=False, isPlayable=False):
+    def __init__(self, title, action, image=None, text=None, genre=None, date=None, duration=None, isFolder=False, isPlayable=False):
         self.title = title
         self.action = action
         self.image = image
         self.text = text
         self.genre = genre
         self.date = date
+        self.duration = duration
         self.isFolder = isFolder
         self.isPlayable = isPlayable
 

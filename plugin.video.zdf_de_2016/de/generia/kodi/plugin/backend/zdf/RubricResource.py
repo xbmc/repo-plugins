@@ -137,7 +137,7 @@ class RubricResource(AbstractPageResource):
             p = teaser.parseCategory(item, p)
             p = teaser.parseTitle(item, p, self._getBaseUrl())
             p = teaser.parseText(item, p, textPattern)
-            p = teaser.parseDate(item, p, datePattern)
+            p = teaser.parseFoot(item, p)
             if teaser.valid():
                 teasers = self.teasers
                 if cluster is not None:

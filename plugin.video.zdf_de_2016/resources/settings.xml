@@ -4,7 +4,7 @@
   <!-- General -->
   <category label="32014">
     <setting label="32018" id="loadAllSearchResults" type="bool" default="true"/>
-    <setting label="32019" id="showOnlyPlayableSearchResults" type="bool" default="false"/>
+    <setting label="32019" id="showOnlyPlayableSearchResults" type="bool" default="true"/>
     <setting label="32028" id="searchHistorySize" type="number" default="10"/>
     <!--setting label="32016" id="itemPattern" type="text" default="{$date }{[$genre | $category]}{($playable) }{$label }{$title}"/-->
   </category>

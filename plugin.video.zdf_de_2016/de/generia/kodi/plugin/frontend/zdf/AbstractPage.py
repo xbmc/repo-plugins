@@ -52,6 +52,8 @@ class AbstractPage(Pagelet):
                 params['videoUrl'] = teaser.url
             if teaser.date is not None:
                 params['date'] = teaser.date
+            if teaser.duration is not None:
+                params['duration'] = teaser.duration
             if genre is not None:
                 params['genre'] = genre
             action = Action(pagelet='PlayVideo', params=params)
@@ -61,5 +63,5 @@ class AbstractPage(Pagelet):
             self.info("redirecting to rubric-url  '{}' and teaser-title '{}' ...", teaser.url, title)
             isFolder = True
             #return None
-        item = Item(title, action, teaser.image, teaser.text, genre, teaser.date, isFolder, teaser.playable)
+        item = Item(title, action, teaser.image, teaser.text, genre, teaser.date, teaser.duration, isFolder, teaser.playable)
         return item

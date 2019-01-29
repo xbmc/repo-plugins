@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.itvrs"
+	name="ITVRS"
+	version="1.0.0"
+	provider-name="ITVRS">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.addon.common" version="2.0.0"/>
+    <import addon="plugin.video.youtube" version="5.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">ITVRS TV And Radio video Add-on</summary>
+    <description lang="en_GB">ITVRS TV And Radio</description>
+	<disclaimer lang="en_GB">Some videos might be blocked in your country</disclaimer>
+    <platform>all</platform>
+    <source></source>
+    <website>http://www.itvrs.com</website>
+	  <source>https://github.com/remichie/plugin.video.itvrs</source>  
+    <license>GPL v2.0</license>
+    <assets>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

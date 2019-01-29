@@ -1,0 +1,4 @@
+- 1.0.0 initial release
+- 1.0.1 comply to kodi krypton standards
+- 1.1.0 updated content with 2017/2018 video livesets
+- 1.1.1 removed unused 'forum' tag in addon metadata

@@ -41,7 +41,7 @@ cc_settings = addon.getSetting('cc') == "true"
 viewMode = str("504")
 addonpath = xbmc.translatePath('special://temp/temp')
 if not os.path.isdir(addonpath):
-	os.mkdir(addonpath, 0755)
+	os.mkdir(addonpath, 0o755)
 
 
 def index():
@@ -52,7 +52,7 @@ def index():
         notifyText(translation(30002), 7000)
 	
     addDir(translation(30005), "Featured", 'list', icon)
-    addLink(translation(30006), "Random", 'list', icon)
+    addLink(translation(30006), "Random", 'list', icon, is_playable=playrandom)
     addLink(translation(30013), "Search", 'list', icon)
     for i in range(1, 23):
         addDir(translation(30007)+" "+str(i), str(i), 'list', defaultImgDir+str(i)+".jpg")
@@ -66,11 +66,11 @@ def list_episodes(url):
         promojson = _json.loads(jsonrsp)
         for episode in promojson['results']:
             if episode['_availability'] == "banned":
-				addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
             elif episode['_availability'] == "beforepremiere":
-				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
             else:
-				addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
     elif url == "Random":
 		notifyText(translation(30003), 2000)
 		rand = getUrl("http://"+mainweb_geo[audio_pos]+fullep_geo[audio_pos]+"random")
@@ -95,11 +95,11 @@ def list_episodes(url):
 			playEpisode(episode['itemId'], episode['title'], episode['images'])
 		else:
 			if episode['_availability'] == "banned":
-				addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
 			elif episode['_availability'] == "beforepremiere":
-				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
 			else:
-				addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
     elif url == "Search":
 		keyboard = xbmc.Keyboard('')
 		keyboard.doModal()
@@ -110,11 +110,11 @@ def list_episodes(url):
 			seasonjson = _json.loads(jsonrsp)
 			for episode in seasonjson['results']:
 				if episode['_availability'] == "banned":
-					addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+					addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
 				elif episode['_availability'] == "beforepremiere":
-					addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+					addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
 				else:
-					addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+					addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
     else:
         xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_EPISODE)
         if audio == "de":
@@ -126,11 +126,11 @@ def list_episodes(url):
         seasonjson = _json.loads(jsonrsp)
         for episode in seasonjson['results']:
             if episode['_availability'] == "banned":
-				addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
             elif episode['_availability'] == "beforepremiere":
-				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
             else:
-				addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'], is_playable=True)
     xbmcplugin.endOfDirectory(pluginhandle)
     xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
@@ -164,6 +164,7 @@ def playEpisode(url, title, thumbnail):
 	ccs = []
 	playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
 	playlist.clear()
+	start_listitem = None
 	i = 0
 	for media in mediagen:
 		data = getVideoData(media)
@@ -196,14 +197,20 @@ def playEpisode(url, title, thumbnail):
 			li.setProperty('pageUrl', pageUrl)
 			li.setProperty('SWFPlayer', "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.12.5.swf")
 			li.setProperty("SWFVerify", "true")
+		li.setPath(rtmp)
 		if cc != "" and cc_settings:
 			fname = os.path.join(addonpath, "subtitle_"+str(i)+"_"+str(parts)+".vtt")
 			subname = saveSubs(fname, cc)
 			if subname != "":
 				ccs.append(subname)
 		playlist.add(url=rtmp, listitem=li, index=i)
+		if i == 0:
+			start_listitem = li
 		i += 1
-	player.play(playlist)
+	if pluginhandle == -1:
+		player.play(playlist)
+	else:
+		xbmcplugin.setResolvedUrl(handle=pluginhandle, succeeded=True, listitem=start_listitem)
 	for s in xrange(1):
 		if player.isPlaying():
 			break
@@ -258,7 +265,7 @@ def getUrl(url):
 		raise
 	return link
 
-def addLink(name, url, mode, iconimage, desc="", season="", episode="", date=""):
+def addLink(name, url, mode, iconimage, desc="", season="", episode="", date="", is_playable=False):
     if "?" in iconimage:
 		pos = iconimage.index('?') - len(iconimage)
 		iconimage = iconimage[:pos]
@@ -273,8 +280,12 @@ def addLink(name, url, mode, iconimage, desc="", season="", episode="", date="")
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Season": season, "Episode": episode, "Aired": convdate})
     liz.setProperty("fanart_image", defaultFanart)
+    is_folder = True
+    if is_playable:
+        liz.setProperty("isPlayable", "true")
+        is_folder = False
     xbmcplugin.setContent(pluginhandle, 'episodes')
-    ok = xbmcplugin.addDirectoryItem(handle=pluginhandle, url=u, listitem=liz, isFolder=True)
+    ok = xbmcplugin.addDirectoryItem(handle=pluginhandle, url=u, listitem=liz, isFolder=is_folder)
     return ok
 
 

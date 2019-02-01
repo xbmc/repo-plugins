@@ -61,7 +61,7 @@ class SearchHistory(object):
                     entry = self._parseEntry(line)
                     if entry is not None:
                         entries.append(entry)
-        except IOError, e:
+        except IOError as e:
             self.log.error(LOG_PREFIX + "caught exception while loading search history using store-file '{}', exception: {}", self.storeFile, e)
         return entries
                 
@@ -91,7 +91,7 @@ class SearchHistory(object):
                 date = entry.date #getDateFormatted()
                 file.write('{0} {1} {2}\n'.format(date, entry.contentTypes, entry.query))
             file.close()
-        except IOError, e:
+        except IOError as e:
             self.log.error(LOG_PREFIX + "caught exception while saving search history using store-file '{}', exception: {}", self.storeFile, e)
 
     def _checkStorePath(self):
@@ -100,7 +100,7 @@ class SearchHistory(object):
             return
         try:
             os.makedirs(storeDir)
-        except IOError, e:
+        except IOError as e:
             self.log.error(LOG_PREFIX + "caught exception while creating store-dir '{}', exception: {}", storeDir, e)
             return
         

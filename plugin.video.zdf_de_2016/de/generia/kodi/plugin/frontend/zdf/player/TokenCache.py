@@ -20,7 +20,7 @@ class TokenCache(object):
                     apiToken = line.strip()
                     self.log.info(LOG_PREFIX + "loading api-token '{}' from store-file '{}'", apiToken, self.storeFile)
                     break
-        except IOError, e:
+        except IOError as e:
             self.log.error(LOG_PREFIX + "caught exception while loading api-token using store-file '{}', exception: {}", self.storeFile, e)
             
         return apiToken
@@ -32,7 +32,7 @@ class TokenCache(object):
             if apiToken is not None:
                 file.write(apiToken)
             file.close()
-        except IOError, e:
+        except IOError as e:
             self.log.error(LOG_PREFIX + "caught exception while saving api-token using store-file '{}', exception: {}", self.storeFile, e)
 
     def _checkStorePath(self):
@@ -41,6 +41,6 @@ class TokenCache(object):
             return
         try:
             os.makedirs(storeDir)
-        except IOError, e:
+        except IOError as e:
             self.log.error(LOG_PREFIX + "caught exception while creating store-dir '{}', exception: {}", storeDir, e)
             return

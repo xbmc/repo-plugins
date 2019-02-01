@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.navahang" name="Navahang" version="2.1.0" provider-name="Amir Ammari">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+
+    <summary lang="en_GB">Plugin for Navahang</summary>
+    <description lang="en_GB">Navahang is a media company with one of the largest online archives, dedicated to Persian music along with 24/7 Live Radio.</description>
+    <disclaimer lang="en_GB">This plugin is not endorsed by Navahang LLC</disclaimer>
+    
+    <summary lang="en_NZ">Plugin for Navahang</summary>
+    <description lang="en_NZ">Navahang is a media company with one of the largest online archives, dedicated to Persian music along with 24/7 Live Radio.</description>
+    <disclaimer lang="en_NZ">This plugin is not endorsed by Navahang LLC</disclaimer>
+    
+    <summary lang="en_US">Plugin for Navahang</summary>
+    <description lang="en_US">Navahang is a media company with one of the largest online archives, dedicated to Persian music along with 24/7 Live Radio.</description>
+    <disclaimer lang="en_US">This plugin is not endorsed by Navahang LLC</disclaimer>
+    
+    <summary lang="fa_af">افزونه برای نواهنگ</summary>
+    <description lang="fa_af">نواهنگ یک شرکت رسانه ای با یکی از بزرگترین آرشیو های آنلاین است که به موسیقی فارسی و همراه با ۲۴/۷ رادیو زنده اختصاص یافته است.</description>
+    <disclaimer lang="fa_af">این افزونه توسط شرکت نواهنگ تایید نشده است</disclaimer>
+    
+    <summary lang="fa_ir">افزونه برای نواهنگ</summary>
+    <description lang="fa_ir">نواهنگ یک شرکت رسانه ای با یکی از بزرگترین آرشیو های آنلاین است که به موسیقی فارسی و همراه با ۲۴/۷ رادیو زنده اختصاص یافته است.</description>
+    <disclaimer lang="fa_ir">این افزونه توسط شرکت نواهنگ تایید نشده است</disclaimer>
+    
+    <platform>all</platform>
+    <language>fa</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website>https://www.navahang.com</website>
+    <email>amirrammari@gmail.com</email>
+    <source>https://github.com/amirrammari/kodi-navahang-addon</source>
+		<news>Fix Bugs</news>
+    <assets>
+      <icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+			<screenshot>resources/screenshot-01.jpg</screenshot>
+			<screenshot>resources/screenshot-02.jpg</screenshot>
+			<screenshot>resources/screenshot-03.jpg</screenshot>
+		</assets>
+	</extension>
+</addon>

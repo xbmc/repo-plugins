@@ -1,3 +1,4 @@
+0.9.2 - CHG: Fixing ZDF Category Links
 0.9.1 - CHG: Fixing ARD again (and again, and ...)
 0.9.0 - CHG: Adding ZDF search
 0.8.9 - CHG: Fixed ARD and enabling it again (get access to ARD, Das Erste, BR, HR, MDR, NDR, Radio Bremen, RBB, SR, SWR, WDR, One and Alpha)

@@ -2,12 +2,13 @@
 <!--- Provide a short summary of submitted add-on in case it's a new addition. -->
 <!--- If it's plugin update only highlight biggest changes if needed. -->
 <!--- Make sure you follow the checklist below before finalizing your pull-request. -->
+Stream Arlo security cameras to Kodi
 ### Checklist:
 <!--- Go over all the following points, and put an `x` in all the boxes that apply like this: [X] -->
 <!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
-- [ ] My code follows the [add-on rules](http://kodi.wiki/view/Add-on_rules) and [piracy stance](http://kodi.wiki/view/Official:Forum_rules#Piracy_Policy) of this project. 
-- [ ] I have read the [CONTRIBUTING](https://github.com/xbmc/repo-plugins/blob/master/CONTRIBUTING.md) document
-- [ ] Each add-on submission should be a single commit with using the following style: [plugin.video.foo] v1.0.0
+- [X] My code follows the [add-on rules](http://kodi.wiki/view/Add-on_rules) and [piracy stance](http://kodi.wiki/view/Official:Forum_rules#Piracy_Policy) of this project. 
+- [X] I have read the [CONTRIBUTING](https://github.com/xbmc/repo-plugins/blob/master/CONTRIBUTING.md) document
+- [X] Each add-on submission should be a single commit with using the following style: [plugin.video.foo] v1.0.0
 
 Additional information :
 - Submitting your add-on to this specific branch makes it available to any Kodi version equal or higher than the branch name with the applicable Kodi dependencies limits.

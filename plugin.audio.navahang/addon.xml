@@ -8,7 +8,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Plugin for Navahang</summary>
-    <description lang="en">Navahang is a media company with one of the largest online archives, dedicated to Persian music along with 24/7 Live Radio.</description>
+    <description lang="en_GB">Navahang is a media company with one of the largest online archives, dedicated to Persian music along with 24/7 Live Radio.</description>
     <disclaimer lang="en">This plugin is not endorsed by Navahang LLC</disclaimer>
     <summary lang="fa">افزونه برای نواهنگ</summary>
     <description lang="fa">نواهنگ یک شرکت رسانه ای با یکی از بزرگترین آرشیو های آنلاین است که به موسیقی فارسی و همراه با ۲۴/۷ رادیو زنده اختصاص یافته است.</description>

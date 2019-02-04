@@ -228,6 +228,12 @@ def listNoPerdis():
         
         try: 
             links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo"})
+            
+            if not links:
+                links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo "})
+                
+            if not links:
+                links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo  "})
         
             for i in links:
                 a = i.a["href"]
@@ -322,6 +328,12 @@ def listMesVist():
         
         try: 
             links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo"})
+            
+            if not links:
+                links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo "})
+                
+            if not links:
+                links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo  "})
             
             for i in links:
                 a = i.a["href"]
@@ -426,7 +438,7 @@ def listSections(url):
                             
                     else:
                         match = re.compile('(http://www.ccma.cat/tv3/alacarta/.+?/fitxa-programa/)(\d+/)').findall(urlProg)
-                        if len(match) <> 0:
+                        if len(match) != 0:
                             url1 = match[0][0]
                             urlcode = match[0][1]
                             url_final = url1 + 'ultims-programes/' + urlcode
@@ -658,7 +670,7 @@ def listProgramesAZ(url, letters):
                 
                 li = elements[23:]
                 
-            if li <> None and len(li) > 0:
+            if li != None and len(li) > 0:
                 
                 
                 for l in li:
@@ -679,7 +691,7 @@ def listProgramesAZ(url, letters):
                                     
                             else:
                                 match = re.compile('(http://www.ccma.cat/tv3/alacarta/.+?/fitxa-programa/)(\d+/)').findall(urlProg)
-                                if len(match) <> 0:
+                                if len(match) != 0:
                                     url1 = match[0][0]
                                     urlcode = match[0][1]
                                     url_final = url1 + 'ultims-programes/' + urlcode
@@ -756,7 +768,7 @@ def listVideos(url, cercar, program):
                     else:
                         durada = None
                         
-                    img = l.img["src"]
+                    img = "https:" + l.img["src"]
                     
                     datElement = l.find("time", {"class" : "data"})
                     if datElement :
@@ -800,7 +812,7 @@ def listVideos(url, cercar, program):
                    
             #Pagination
             match = re.compile('<p class="numeracio">P\xc3\xa0gina (\d+) de (\d+)</p>').findall(link)
-            if len(match) <> 0:
+            if len(match) != 0:
                 actualPage = int(match[0][0])
                 totalPages = int(match[0][1])
                 
@@ -863,7 +875,7 @@ def addVideo(titol, url, img, durada, programa, data, resum):
     
     infolabels = {}
     
-    if titol <> None:
+    if titol != None:
         infolabels['title'] = titol
         
         
@@ -903,7 +915,7 @@ def addVideo2(data):
     else:
         linkvideo = media.get('url', None)
         
-    if linkvideo <> None:
+    if linkvideo != None:
         if type(linkvideo) is list and len(linkvideo) > 0:
             linkvideo_item = linkvideo[0]
             video = linkvideo_item.get('file', None)
@@ -918,7 +930,7 @@ def addVideo2(data):
         milisec = data.get('informacio',{}).get('durada', {}).get('milisegons', None)
         durada = ""
         
-        if milisec <> None:
+        if milisec != None:
             durada = milisec/1000
         
         liz = xbmcgui.ListItem(titol, iconImage="DefaultVideo.png", thumbnailImage=image)
@@ -929,7 +941,7 @@ def addVideo2(data):
             descripcio = descripcio.replace('<br />', '')
             
         header = ""
-        if programa <> None:
+        if programa != None:
             if type(programa) is int or type(programa) is float:
                 programa = str(programa)
             header = '[B]' + programa + '[/B]' + '[CR]'
@@ -938,7 +950,7 @@ def addVideo2(data):
         infolabels = {}
         
            
-        if data_emisio <> None:
+        if data_emisio != None:
             dt = data_emisio[0:10]
             year = data_emisio[6:10]
             infolabels['aired'] = dt
@@ -947,18 +959,18 @@ def addVideo2(data):
             
         descripcio = header + descripcio
         
-        if titol <> None:
+        if titol != None:
             infolabels['title'] = titol
             xbmc.log('Titol: ' + titol.encode("utf-8"))
             
-        if capitol <> None:
+        if capitol != None:
             infolabels['episode'] = capitol
             xbmc.log('Capitol: ' + str(capitol))
             
-        if descripcio <> None:
+        if descripcio != None:
             infolabels['plot'] = descripcio
           
-        if tematica <> None:
+        if tematica != None:
             infolabels['genre'] = tematica
         
             
@@ -1028,7 +1040,7 @@ xbmcplugin.setContent(addon_handle, 'movies')
 mode = args.get('mode', None)
 url = args.get('url', [''])
 name = args.get('name', None)
-if (name <> None) and (len(name) > 0):
+if (name != None) and (len(name) > 0):
     name = name[0].replace("\n", "")
 program = args.get('program', None)
   

@@ -4,14 +4,14 @@
 		<setting id="language" type="enum" label="30101" values="Argentina|Brasil|Canada (EN)|Canada (FR)|Deutschland|España|France|India|Indonesia|Italia|Ivory Coast|Malaysia|México|Pakistan|Pilipinas|Türkiye|United Kingdom|United States|Việt Nam|대한민국|台灣" default="16"/>
 		<setting id="dmUser" type="text" label="30106" default=""/>
 		<setting id="itemsPerPage" type="enum" label="30107" values="25|50|75|100" default="1"/>
-		<setting id="maxVideoQuality" type="enum" label="30105" values="480p|720p|1080p" default="1"/>
+		<setting id="maxVideoQuality" type="enum" label="30105" values="240p|380p|SD|HD|FHD|QHD|UHD" default="2"/>
 	</category> 
 	<category label="30112">
 		<setting id="downloadDir" type="folder" label="30108" default=""/>
 	</category>
 	<category label="30113">
 		<setting id="forceViewModeNew" type="bool" label="30102" default="true"/>
-		<setting id="viewModeNew" type="number" label="30103" default="504"/>
+		<setting id="viewModeNew" type="number" label="30103" default="54"/>
 		<setting label="30114" type="lsep"/>
         <setting id="family_filter" type="bool" label="30104" default="true"/>
 	</category>

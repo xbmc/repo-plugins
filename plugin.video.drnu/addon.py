@@ -1,6 +1,7 @@
 #
-#      Copyright (C) 2014 Tommy Winther
-#      http://tommy.winther.nu
+#      Copyright (C) 2014 Tommy Winther, msj33
+#
+#  https://github.com/xbmc-danish-addons/plugin.video.drnu
 #
 #  This Program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -449,10 +450,10 @@ if __name__ == '__main__':
                 items = drDkTvAddon.api.getChildrenFrontItems('dr-ultra')
                 drDkTvAddon.listSeries(items)
 
-    except tvapi.ApiException, ex:
+    except tvapi.ApiException as ex:
         drDkTvAddon.displayError(str(ex))
 
-    except IOError, ex:
+    except IOError as ex:
         drDkTvAddon.displayIOError(str(ex))
 
     except Exception:

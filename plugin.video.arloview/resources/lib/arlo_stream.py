@@ -11,7 +11,6 @@ import xbmcplugin
 import resources.lib.Arlo
 import urlparse
 
-
 # Plugin Info
 ADDON_ID = 'plugin.video.arloview'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
@@ -254,7 +253,7 @@ class ArloStream(object):
 
         self.check_first_run()
 
-        if REAL_SETTINGS.getSetting("userid") <> "":
+        if REAL_SETTINGS.getSetting("userid") != "":
             try:
                 _cam_name = urllib.unquote(params["cameraName"])
             except:

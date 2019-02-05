@@ -31,9 +31,9 @@ import time
 from requests.exceptions import HTTPError
 from six import string_types, text_type
 import requests
-import sseclient
 
-import monotonic
+from . import monotonic
+from . import sseclient
 
 # import logging
 if sys.version[0] == '2':
@@ -263,7 +263,7 @@ class Arlo(object):
 
     def Logout(self):
         event_streams = self.event_streams.copy()
-        for basestation_id in event_streams.keys():
+        for basestation_id in list(event_streams.keys()):
             self.Unsubscribe(basestation_id)
         return self.request.put('https://arlo.netgear.com/hmsweb/logout')
 

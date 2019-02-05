@@ -38,7 +38,7 @@ ADDONVERSION = ADDON.getAddonInfo('version')
 CWD = ADDON.getAddonInfo('path').decode("utf-8")
 LANGUAGE = ADDON.getLocalizedString
 
-DataLink = 'http://navahang.com/~siavash/webservice/GetMp3?type=Featured&from=0&to=20'
+DataLink = 'http://navahang.me/webservice/GetMp3?type=Featured&from=0&to=20'
 
 class LoadLister:
 

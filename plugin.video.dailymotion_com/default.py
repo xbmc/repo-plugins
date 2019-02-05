@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import socket
+
 import urllib
-import urllib2
 import xbmcplugin
 import xbmcaddon
 import xbmcgui
@@ -11,16 +10,11 @@ import xbmcvfs
 import sys
 import re
 import json
-import base64
 import datetime
-import unicodedata
 import tempfile
 import requests
-import pickle
-from operator import itemgetter
 from HTMLParser import HTMLParser
 
-socket.setdefaulttimeout(60)
 pluginhandle = int(sys.argv[1])
 addon = xbmcaddon.Addon()
 addonID = addon.getAddonInfo('id')
@@ -30,17 +24,17 @@ channelFavsFile = xbmc.translatePath("special://profile/addon_data/"+addonID+"/"
 cookie_file = xbmc.translatePath("special://profile/addon_data/"+addonID+"/cookies")
 pDialog = xbmcgui.DialogProgress()
 familyFilter = '1'
-if addon.getSetting('family_filter') == 'false':
-    familyFilter = '0'
     
 if not xbmcvfs.exists('special://profile/addon_data/'+addonID+'/settings.xml'):
     addon.openSettings()
 
+if addon.getSetting('family_filter') == 'false':
+    familyFilter = '0'
 forceViewModeNew = addon.getSetting("forceViewModeNew") == "true"
 viewModeNew = str(addon.getSetting("viewModeNew"))
 maxVideoQuality = addon.getSetting("maxVideoQuality")
 downloadDir = addon.getSetting("downloadDir")
-qual = ["480", "720", "1080"]
+qual = ['240','380','480','720','1080','1440','2160']
 maxVideoQuality = qual[int(maxVideoQuality)]
 language = addon.getSetting("language")
 languages = ["ar_ES", "br_PT", "ca_EN", "ca_FR", "de_DE", "es_ES", "fr_FR", "in_EN", "id_ID", "it_IT", "ci_FR", "my_MS", "mx_ES", "pk_EN", "ph_EN", "tr_TR", "en_GB", "en_US", "vn_VI", "kr_KO", "tw_TW"]
@@ -50,7 +44,6 @@ itemsPerPage = addon.getSetting("itemsPerPage")
 itemsPage = ["25", "50", "75", "100"]
 itemsPerPage = itemsPage[int(itemsPerPage)]
 urlMain = "https://api.dailymotion.com"
-
 
 
 class MLStripper(HTMLParser):
@@ -94,13 +87,13 @@ def personalMain():
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def listUserPlaylists(url):
-    content = getUrl(url)
+    content = getUrl2(url)
     content = json.loads(content)
     for item in content['list']:
-        id = item['id']
+        vid = item['id']
         title = item['name'].encode('utf-8')
         vids = item['videos_total']
-        addDir(title+" ("+str(vids)+")", urllib.quote_plus(str(id)+"_"+dmUser+"_"+title), 'showPlaylist', '')
+        addDir(title+" ("+str(vids)+")", urllib.quote_plus(str(vid)+"_"+dmUser+"_"+title), 'showPlaylist', '')
     if content['has_more']:
         currentPage = content['page']
         nextPage = currentPage+1
@@ -108,8 +101,8 @@ def listUserPlaylists(url):
     xbmcplugin.setContent(pluginhandle, "episodes")
     xbmcplugin.endOfDirectory(pluginhandle)
 
-def showPlaylist(id):
-    url = urlMain+"/playlist/"+id+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
+def showPlaylist(pid):
+    url = urlMain+"/playlist/"+pid+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
     listVideos(url)
 
 def favouriteUsers():
@@ -123,27 +116,27 @@ def favouriteUsers():
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def listChannels():
-    content = getUrl(urlMain+"/channels?family_filter="+familyFilter+"&localization="+language)
+    content = getUrl2(urlMain+"/channels?family_filter="+familyFilter+"&localization="+language)
     content = json.loads(content)
     for item in content['list']:
-        id = item['id']
+        cid = item['id']
         title = item['name'].encode('utf-8')
         desc = item['description'].encode('utf-8')
-        addDir(title, 'channel:'+id, 'sortVideos1', '', desc)
+        addDir(title, 'channel:'+cid, 'sortVideos1', '', desc)
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def sortVideos1(url):
     type = url[:url.find(":")]
-    id = url[url.find(":")+1:]
+    gid = url[url.find(":")+1:]
     if type == "group":
-        url = urlMain+"/group/"+id+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
+        url = urlMain+"/group/"+gid+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
     else:
-        url = urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&"+type+"="+id+"&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
+        url = urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&"+type+"="+gid+"&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
     addDir(translation(30015), url.replace("sort=recent", "sort=trending"), 'listVideos', "")
     addDir(translation(30008), url, 'listVideos', "")
     addDir(translation(30009), url.replace("sort=recent", "sort=visited"), 'sortVideos2', "")
     if type == "owner":
-        addDir("- "+translation(30038), urlMain+"/user/"+id+"/playlists?fields=id,name,videos_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listUserPlaylists', "")
+        addDir("- "+translation(30038), urlMain+"/user/"+gid+"/playlists?fields=id,name,videos_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listUserPlaylists', "")
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def sortVideos2(url):
@@ -170,11 +163,11 @@ def sortUsers2(url):
 
 def listVideos(url):
     xbmcplugin.setContent(pluginhandle, 'episodes')
-    content = getUrl(url)
+    content = getUrl2(url)
     content = json.loads(content)
     count = 1
     for item in content['list']:
-        id = item['id']
+        vid = item['id']
         title = item['title'].encode('utf-8')
         desc = strip_tags(item['description']).encode('utf-8')
         duration = item['duration']
@@ -196,10 +189,10 @@ def listVideos(url):
         elif user == "cracklemovies":
             pass
         elif user == "ARTEplus7":
-            addLink(title, id, 'playArte', thumb.replace("\\", ""), user, desc, duration, date, count)
+            addLink(title, vid, 'playArte', thumb.replace("\\", ""), user, desc, duration, date, count)
             count+=1
         else:
-            addLink(title, id, 'playVideo', thumb.replace("\\", ""), user, desc, duration, date, count)
+            addLink(title, vid, 'playVideo', thumb.replace("\\", ""), user, desc, duration, date, count)
             count+=1
     if content['has_more']:
         currentPage = content['page']
@@ -210,14 +203,15 @@ def listVideos(url):
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def listUsers(url):
-    content = getUrl(url)
+    content = getUrl2(url)
     content = json.loads(content)
     for item in content['list']:
-        user = item['username'].encode('utf-8')
-        thumb = item['avatar_large_url']
-        videos = item['videos_total']
-        views = item['views_total']
-        addUserDir(user, 'owner:'+user, 'sortVideos1', thumb.replace("\\", ""), "Views: "+str(views)+"\nVideos: "+str(videos))
+        if item['username']:
+            user = item['username'].encode('utf-8')
+            thumb = item['avatar_large_url']
+            videos = item['videos_total']
+            views = item['views_total']
+            addUserDir(user, 'owner:'+user, 'sortVideos1', thumb.replace("\\", ""), "Views: "+str(views)+"\nVideos: "+str(videos))
     if content['has_more']:
         currentPage = content['page']
         nextPage = currentPage+1
@@ -226,15 +220,14 @@ def listUsers(url):
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def listLive(url):
-    #print 'live url ',url
-    content = getUrl(url)
+    content = getUrl2(url)
     content = json.loads(content)
     for item in content['list']:
         title = item['title'].encode('utf-8')
-        id = item['id']
+        vid = item['id']
         thumb = item['thumbnail_large_url']
         views = item['views_last_hour']
-        addLiveLink(title, id, 'playLiveVideo', thumb.replace("\\", ""), views)
+        addLiveLink(title, vid, 'playLiveVideo', thumb.replace("\\", ""), views)
     if content['has_more']:
         currentPage = content['page']
         nextPage = currentPage+1
@@ -265,30 +258,17 @@ def searchUser():
         searchl_string = keyboard.getText().replace(" ", "+")
         listUsers(urlMain+"/users?fields=username,avatar_large_url,videos_total,views_total&search="+searchl_string+"&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1")
 
-def playVideo(id,live=False):
+def playVideo(vid,live=False):
     if live:
-        url=getStreamUrl(id,live=True)
+        url=getStreamUrl(vid,live=True)
     else:
-        url = getStreamUrl(id)
-    #xbmc.log("DAILYMOTION - url = %s" %url,xbmc.LOGNOTICE)
+        url = getStreamUrl(vid)
+    xbmc.log("DAILYMOTION - url = %s" %url,xbmc.LOGDEBUG)
     if url:
         listitem = xbmcgui.ListItem(path=url)
         xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
     else:
-        print 'No playable url found'
-
-def BW_choice(stream):
-    bandwidth =[]
-    if re.search('BANDWIDTH', stream) :
-        print 'Getting bandwidth'
-        needle = "BANDWIDTH=(\d+)\d{3}[^\n]*\W+([^\n]+.m3u8[^\n\r]*)"
-        bw_url = re.compile(needle,re.DOTALL|re.IGNORECASE).findall(stream)
-    elif re.search('RESOLUTION', stream):
-        needle = 'RESOLUTION=(\d+)x\d{3}[^\n]*\W+([^\n]+.m3u8[^\n\r]*)'
-        bw_url = re.compile(needle).findall(stream)
-    if bw_url :
-        newlist =  sorted(bw_url, key=itemgetter(0),reverse=True)
-        return newlist[0] [1].split('#cell')[0]
+        xbmc.log('DAILYMOTION - No playable url found',xbmc.LOGNOTICE)
 
 def s(elem):
     if elem[0] == "auto":
@@ -296,15 +276,16 @@ def s(elem):
     else:
         return int(elem[0].split("@")[0])
 
-def getStreamUrl(id,live=False):
+def getStreamUrl(vid,live=False):
     if familyFilter == "1":
         ff = "on"
     else:
         ff = "off"
-    print 'The url is ::',url
+    xbmc.log('DAILYMOTION - url is %s'%url, xbmc.LOGDEBUG)
     headers = {'User-Agent':'Android'}
-    cookie = {'Cookie':"lang="+language+"; ff="+ff}
-    r = requests.get("http://www.dailymotion.com/player/metadata/video/"+id,headers=headers,cookies=cookie)
+    cookie = {'lang': language,
+              'ff': ff}
+    r = requests.get("https://www.dailymotion.com/player/metadata/video/"+vid,headers=headers,cookies=cookie)
     content = r.json()
     if content.get('error') is not None:
         Error = (content['error']['title'])
@@ -334,34 +315,52 @@ def getStreamUrl(id,live=False):
                         elif  int(source) <= int(maxVideoQuality) :
                             if 'video' in item.get('type',None):
                                 return m_url
-
-                        elif '.mnft' in m_url:
-                            continue
                          
                     else:
                         m_url = m_url.replace('dvr=true&','')
-                        if '.m3u8?auth' in m_url:
-                            m_url = m_url.split('?auth=')
-                            the_url = m_url[0] + '?redirect=0&auth=' + urllib.quote(m_url[1])
+                        if '.m3u8?sec' in m_url:
+                            m_url = m_url.split('?sec=')
+                            the_url = m_url[0] + '?redirect=0&sec=' + urllib.quote(m_url[1])
                             rr = requests.get(the_url,cookies=r.cookies.get_dict() ,headers=headers)
                             if rr.headers.get('set-cookie'):
-                                print 'adding cookie to url'
+                                xbmc.log('DAILYMOTION - adding cookie to url', xbmc.LOGDEBUG)
                                 return rr.text.split('#cell')[0]+'|Cookie='+rr.headers['set-cookie']
                             else:
-                                return rr.text.split('#cell')[0]
+                                mburl = re.findall('(http.+)',rr.text)[0].split('#cell')[0]
+                                mb = requests.get(mburl,headers=headers).text
+                                mb = re.findall('NAME="([^"]+)"\n(.+)',mb)
+                                mb = sorted(mb,key=s,reverse=True)
+                                for quality, strurl in mb:
+                                    quality = quality.split("@")[0]
+                                    if int(quality) <= int(maxVideoQuality):
+                                        if not strurl.startswith('http'):
+                                            strurl1 = re.findall('(.+/)',mburl)[0]
+                                            strurl = strurl1 + strurl
+                                        return strurl
                     other_playable_url.append(m_url)
                     
         if len(other_playable_url) >0: # probably not needed, only for last resort
             for m_url in other_playable_url:
                 #xbmc.log("DAILYMOTION - other m_url = %s" %m_url,xbmc.LOGNOTICE)
                 m_url = m_url.replace('dvr=true&','')
-                if '.m3u8?auth' in m_url:
+                if '.m3u8?sec' in m_url:
                     rr = requests.get(m_url,cookies=r.cookies.get_dict() ,headers=headers)
                     if rr.headers.get('set-cookie'):
-                        print 'adding cookie to url'
+                        xbmc.log('DAILYMOTION - adding cookie to url', xbmc.LOGDEBUG)
                         strurl = re.findall('(http.+)',rr.text)[0].split('#cell')[0]+'|Cookie='+rr.headers['set-cookie']
                     else:
-                        strurl = re.findall('(http.+)',rr.text)[0].split('#cell')[0]
+                        mburl = re.findall('(http.+)',rr.text)[0].split('#cell')[0]
+                        mb = requests.get(mburl,headers=headers).text
+                        mb = re.findall('NAME="([^"]+)"\n(.+)',mb)
+                        mb = sorted(mb,key=s,reverse=True)
+                        for quality, strurl in mb:
+                            quality = quality.split("@")[0]
+                            if int(quality) <= int(maxVideoQuality):
+                                if not strurl.startswith('http'):
+                                    strurl1 = re.findall('(.+/)',mburl)[0]
+                                    strurl = strurl1 + strurl
+                                break
+                        
                     #xbmc.log("DAILYMOTION - Calculated url = %s" %strurl,xbmc.LOGNOTICE)
                     return strurl
 
@@ -370,45 +369,52 @@ def queueVideo(url, name):
     listitem = xbmcgui.ListItem(name)
     playlist.add(url, listitem)
 
-def downloadVideo(title,id):
-
+def downloadVideo(title,vid):
+    headers = {'User-Agent':'Android'}
     global downloadDir
     if not downloadDir:
         xbmc.executebuiltin('XBMC.Notification(Download:,'+translation(30110)+'!,5000)')
         return    
-    url = getStreamUrl(id)
+    url = getStreamUrl(vid)
     vidfile = xbmc.makeLegalFilename(downloadDir + title + '.mp4')
     if not xbmcvfs.exists(vidfile):
-        tmp_file = tempfile.mktemp(dir=downloadDir,
-                                   suffix='.mp4')
+        tmp_file = tempfile.mktemp(dir=downloadDir, suffix='.mp4')
         tmp_file = xbmc.makeLegalFilename(tmp_file)
         pDialog.create('Dailymotion',translation(30044), title)
-        urllib.urlretrieve(url, tmp_file, video_report_hook)       
+        dfile = requests.get(url, headers=headers, stream=True)
+        totalsize = float(dfile.headers['content-length'])
+        handle = open(tmp_file, "wb")
+        chunks = 0
+        for chunk in dfile.iter_content(chunk_size=2097152):
+            if chunk:  # filter out keep-alive new chunks
+                handle.write(chunk)
+                chunks += 1
+                percent = int(float(chunks * 209715200) / totalsize)
+                pDialog.update(percent)
+                if pDialog.iscanceled():
+                    handle.close()
+                    xbmcvfs.delete(tmp_file)
+                    break
+        handle.close()
         try:
-          xbmcvfs.rename(tmp_file, vidfile)
-          return vidfile
+            xbmcvfs.rename(tmp_file, vidfile)
+            return vidfile
         except:
-          return tmp_file
+            return tmp_file
     else:
         xbmc.executebuiltin('XBMC.Notification(Download:,'+translation(30109)+'!,5000)')
 
-def video_report_hook(count, blocksize, totalsize):
-    percent = int(float(count * blocksize * 100) / totalsize)
-    pDialog.update(percent)
-    if pDialog.iscanceled():
-        raise KeyboardInterrupt
-
-def playArte(id):
+def playArte(aid):
     try:
-        content = getUrl("http://www.dailymotion.com/video/"+id)
+        content = getUrl2("http://www.dailymotion.com/video/"+aid)
         match = re.compile('<a class="link" href="http://videos.arte.tv/(.+?)/videos/(.+?).html">', re.DOTALL).findall(content)
         lang = match[0][0]
         vid = match[0][1]
         url = "http://videos.arte.tv/"+lang+"/do_delegate/videos/"+vid+",view,asPlayerXml.xml"
-        content = getUrl(url)
+        content = getUrl2(url)
         match = re.compile('<video lang="'+lang+'" ref="(.+?)"', re.DOTALL).findall(content)
         url = match[0]
-        content = getUrl(url)
+        content = getUrl2(url)
         match1 = re.compile('<url quality="hd">(.+?)</url>', re.DOTALL).findall(content)
         match2 = re.compile('<url quality="sd">(.+?)</url>', re.DOTALL).findall(content)
         urlNew = ""
@@ -468,26 +474,18 @@ def favourites(param):
         if refresh == "TRUE":
             xbmc.executebuiltin("Container.Refresh")
 
-
-def translation(id):
-    return addon.getLocalizedString(id).encode('utf-8')
-
-def getUrl(url):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', 'Android')
-    response = urllib2.urlopen(req)
-    link = response.read()
-    response.close()
-    return link
+def translation(lid):
+    return addon.getLocalizedString(lid).encode('utf-8')
 
 def getUrl2(url):
     if familyFilter == "1":
         ff = "on"
     else:
         ff = "off"
-    print 'The url is ::',url
+    xbmc.log('DAILYMOTION - The url is %s'%url, xbmc.LOGDEBUG)
     headers = {'User-Agent':'Android'}
-    cookie = {'Cookie':"lang="+language+"; ff="+ff}
+    cookie = {'lang': language,
+              'ff': ff}
     r = requests.get(url,headers=headers,cookies=cookie)
     return r.text
 

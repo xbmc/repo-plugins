@@ -9,12 +9,16 @@ class TokenResolver:
     _API_KEY = '3_qhEcPa5JGFROVwu5SWKqJ4mVOIkwlFNMSKwzPDAh8QZOtHqu6L4nD5Q7lk0eXOOG'
     _LOGIN_URL = 'https://accounts.vrt.be/accounts.login'
     _TOKEN_GATEWAY_URL = 'https://token.vrt.be'
+    _ONDEMAND_COOKIE = 'ondemand_vrtPlayerToken'
+    _LIVE_COOKIE = 'live_vrtPlayerToken'
+    _ROAMING_XVRTTOKEN_COOKIE = 'roaming_XVRTToken'
+    _XVRT_TOKEN_COOKIE = 'XVRTToken'
 
     def __init__(self, kodi_wrapper):
         self._kodi_wrapper = kodi_wrapper
 
     def get_ondemand_playertoken(self, token_url, xvrttoken):
-        token_path = self._kodi_wrapper.get_userdata_path() + 'ondemand_vrtPlayerToken'
+        token_path = self._kodi_wrapper.get_userdata_path() + self._ONDEMAND_COOKIE
         token = self._get_cached_token(token_path)
 
         if token == None:
@@ -24,7 +28,7 @@ class TokenResolver:
         return token
 
     def get_live_playertoken(self, token_url):
-        token_path = self._kodi_wrapper.get_userdata_path() + 'live_vrtPlayerToken'
+        token_path = self._kodi_wrapper.get_userdata_path() + self._LIVE_COOKIE
         token = self._get_cached_token(token_path)
         if token == None:
             headers = {'Content-Type': 'application/json'}
@@ -32,7 +36,7 @@ class TokenResolver:
         return token
 
     def get_xvrttoken(self, get_roaming_token = False):
-        token_filename = 'roaming_XVRTToken' if get_roaming_token else 'XVRTToken'
+        token_filename = self._ROAMING_XVRTTOKEN_COOKIE if get_roaming_token else self._XVRT_TOKEN_COOKIE
         token_path = self._kodi_wrapper.get_userdata_path() + token_filename
         token = self._get_cached_token(token_path)
 
@@ -79,9 +83,9 @@ class TokenResolver:
             xvrttoken = TokenResolver._create_token_dictionary(cookie_jar)
             token =  xvrttoken['X-VRT-Token']
             if get_roaming_token: 
-                roaming_xvrttoken = TokenResolver._get_roaming_xvrttoken(login_cookie, xvrttoken)
-                token = roaming_xvrttoken['X-VRT-Token'] if roaming_xvrttoken is not None else None
-            json.dump(token, open(path,'w'))
+                xvrttoken = TokenResolver._get_roaming_xvrttoken(login_cookie, xvrttoken)
+                token = xvrttoken['X-VRT-Token'] if xvrttoken is not None else None
+            json.dump(xvrttoken, open(path,'w'))
         else:
             title = self._kodi_wrapper.get_localized_string(32051)
             message = self._kodi_wrapper.get_localized_string(32052)
@@ -111,3 +115,15 @@ class TokenResolver:
             xvrttoken_cookie = cookie_jar._cookies['.vrt.be']['/']['X-VRT-Token']
             token_dictionary = { xvrttoken_cookie.name : xvrttoken_cookie.value, 'expirationDate' : datetime.datetime.fromtimestamp(xvrttoken_cookie.expires).strftime('%Y-%m-%dT%H:%M:%S.%fZ')}
         return token_dictionary
+
+    def reset_cookies(self):
+        user_data_path = self._kodi_wrapper.get_userdata_path()
+        ondemand = user_data_path + self._ONDEMAND_COOKIE
+        live = user_data_path + self._LIVE_COOKIE
+        xvrt = user_data_path + self._XVRT_TOKEN_COOKIE
+        roaming = user_data_path + self._ROAMING_XVRTTOKEN_COOKIE
+        self._kodi_wrapper.delete_path(ondemand)
+        self._kodi_wrapper.delete_path(live)
+        self._kodi_wrapper.delete_path(xvrt)
+        self._kodi_wrapper.delete_path(roaming)
+

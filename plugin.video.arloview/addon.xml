@@ -29,7 +29,6 @@
     <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.png</fanart>
-        <banner></banner>
         <clearlogo></clearlogo>
         <screenshot>resources/ArloCamera.png</screenshot>
     </assets>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.arloview" name="Arlo Streamer" version="1.0.0" provider-name="JavaWiz">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.requests" version=""/>
+    <import addon="script.module.six" version=""/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Stream your Arlo cameras in Kodi</summary>
+    <description>List and stream each of your Arlo cameras in Kodi.  This plugin is 
+    compatible with Kodi v18 (Leia) and above.
+    
+    Thanks to Jeffrey D. Walter for his work on creating 
+    the python interface to  Arlo devices. 
+    (https://github.com/jeffreydwalter/arlo)
+    </description>
+    <disclaimer></disclaimer>
+    <language></language>
+    <platform>all</platform>
+    <license>Apache 2.0</license>
+    <forum></forum>
+    <website></website>
+    <email>JavaWiz1@hotmail.com</email>
+    <source></source>
+    <news>
+    v1.0.0 (1/1/2019)
+    - Initial release
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.png</fanart>
+        <banner></banner>
+        <clearlogo></clearlogo>
+        <screenshot>resources/ArloCamera.png</screenshot>
+    </assets>
+  </extension>
+
+</addon>

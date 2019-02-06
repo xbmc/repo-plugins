@@ -1,6 +1,7 @@
 #
-#      Copyright (C) 2014 Tommy Winther
-#      http://tommy.winther.nu
+#      Copyright (C) 2014 Tommy Winther, msj33
+#
+#  https://github.com/xbmc-danish-addons/plugin.video.drnu
 #
 #  This Program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

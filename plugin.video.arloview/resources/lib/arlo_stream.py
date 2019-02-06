@@ -46,7 +46,7 @@ class ArloStream(object):
 
     def __init__(self, sys_args):
         self.log_level = int(REAL_SETTINGS.getSetting("log_level"))
-        self.log("BEGIN __init__, sys_args: " + str(sys_args), xbmc.LOGDEBUG)
+        # self.log("BEGIN __init__, sys_args: " + str(sys_args), xbmc.LOGDEBUG)
         self._url = sys_args[0]
         self._handle = int(sys_args[1])
         self._args = sys_args
@@ -54,15 +54,15 @@ class ArloStream(object):
         self.basestation = None
         self.cameras = None
         self.debug_mode = REAL_SETTINGS.getSetting('enable_debug') == 'true'
-        self.log("END   __init__", xbmc.LOGDEBUG)
+        # self.log("END   __init__", xbmc.LOGDEBUG)
 
     def log(self, msg, level=xbmc.LOGNOTICE):
+        """
+        Log to the kodi log file.  Only output messages with a level
+        equal to or higher than the self.log_level (dflt NOTICE)
+        """
         if level < self.log_level:
             return
-        # if level == xbmc.LOGERROR:
-        #    msg += ' ,' + traceback.format_exc()
-        if level < xbmc.LOGNOTICE:
-            level = xbmc.LOGNOTICE
         xbmc.log("[{}-{}] {}".format(ADDON_ID, ADDON_VERSION, msg), level)
 
     def check_first_run(self):
@@ -77,8 +77,6 @@ class ArloStream(object):
             self.log_level = int(REAL_SETTINGS.getSetting("log_level"))
 
     def main_menu(self):
-        self.log("BEGIN main_menu()", xbmc.LOGNOTICE)
-
         for camera in self._get_arlo_cameras():
             camera_info = self._get_camera_info(camera)
             list_item = xbmcgui.ListItem(label=camera["deviceName"])
@@ -106,23 +104,22 @@ class ArloStream(object):
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self._handle)
 
-        self.log("  Setup refresh timer", xbmc.LOGDEBUG)
         # Update the gui to reflect signal and battery strength
-        gui_update_timer = threading.Timer(120, self._refresh_gui)
-        gui_update_timer.start()
-        self.log("END   main_menu()", xbmc.LOGDEBUG)
+        # TODO: Find a better way to update the gui
+        # gui_update_timer = threading.Timer(120, self._refresh_gui)
+        # gui_update_timer.start()
 
     def _refresh_gui(self):
-        self.log("Refresh container UI", xbmc.LOGDEBUG)
+        # self.log("Refresh container UI", xbmc.LOGDEBUG)
         xbmc.executebuiltin('Container.Refresh')
 
     def _get_arlo_cameras(self):
-        self.log("_get_arlo_cameras()", xbmc.LOGDEBUG)
         if self.cameras is None:
-            self.log("Retrieving cameras...", xbmc.LOGNOTICE)
+            self.log("Retrieving cameras...", xbmc.LOGDEBUG)
             self.cameras = self.arlo.GetDevices("camera")
             self._update_arlo_cameras_details()
             if self.debug_mode:
+                # Only print if user has enabled DEBUG mode in settings
                 self.log(json.dumps(self.cameras, indent=4), xbmc.LOGNOTICE)
 
         return self.cameras
@@ -145,7 +142,6 @@ class ArloStream(object):
                         break
 
     def _get_camera(self, device_id):
-        self.log("BEGIN _get_camera({})".format(device_id), xbmc.LOGDEBUG)
         tgt_camera = None
         for camera in self._get_arlo_cameras():
             if device_id == camera["deviceId"]:
@@ -165,7 +161,6 @@ class ArloStream(object):
                               camera['signalStrength'])
 
     def _get_camera_snapshot(self, device_id):
-        self.log("BEGIN _get_camera_snapshot({})".format(device_id), xbmc.LOGDEBUG)
         if REAL_SETTINGS.getSetting('show_snapshots'):
             camera = self._get_camera(device_id)
             snapshot_file = "{0}/resources/media/{1}.jpg".format(ADDON_PATH, camera['deviceId'])
@@ -184,8 +179,6 @@ class ArloStream(object):
         pass
 
     def play_camera(self, device_id):
-        self.log("BEGIN play_camera({})".format(device_id), xbmc.LOGNOTICE)
-
         # Send the command to start the stream and return the stream url.
         camera = self._get_camera(device_id)
         stream_url = self.arlo.StartStream(self.basestation, camera)
@@ -213,15 +206,14 @@ class ArloStream(object):
                     timed_out = True
 
         while is_playing:
-            self.log("Player is playing...", xbmc.LOGDEBUG)
+            # self.log("Player is playing...", xbmc.LOGDEBUG)
             time.sleep(1)
             is_playing = xbmc.Player().isPlaying()
             if not is_playing:
                 self.log("Player has stopped.", xbmc.LOGDEBUG)
 
+        # Update camera details after viewing (battery strength, signal strength,...)
         self._update_arlo_cameras_details()
-
-        self.log("END   play_camera({})".format(device_id), xbmc.LOGNOTICE)
 
     def arlo_login(self):
         self.log("BEGIN arlo_login()", xbmc.LOGDEBUG)
@@ -230,19 +222,18 @@ class ArloStream(object):
         self.arlo = resources.lib.Arlo.Arlo(user_name, password)
         self.basestation = self.arlo.GetDevices('basestation')[0]
         if self.debug_mode:
+            # Only print if user has enabled DEBUG mode in settings
             self.log(json.dumps(self.basestation, indent=4), xbmc.LOGNOTICE)
         self.log("END   arlo_login()", xbmc.LOGDEBUG)
 
     def arlo_logout(self):
-        self.log("BEGIN arlo_logout()", xbmc.LOGDEBUG)
         self.arlo.Logout()
-        self.log("END   arlo_logout()", xbmc.LOGDEBUG)
 
     def run(self):
-        self.log("BEGIN run()", xbmc.LOGNOTICE)
-        self.log("  arg[0]  : {}".format(self._args[0]), xbmc.LOGNOTICE)
-        self.log("  arg[1]  : {}".format(self._args[2]), xbmc.LOGNOTICE)
-        self.log("  arg[2:n]: {}".format(self._args[2][1:]), xbmc.LOGNOTICE)
+        self.log("BEGIN run()", xbmc.LOGDEBUG)
+        self.log("  arg[0]  : {}".format(self._args[0]), xbmc.LOGDEBUG)
+        self.log("  arg[1]  : {}".format(self._args[2]), xbmc.LOGDEBUG)
+        self.log("  arg[2:n]: {}".format(self._args[2][1:]), xbmc.LOGDEBUG)
         params = get_params(self._args)
         # Set plugin category. It is displayed in some skins as the name
         # of the current section.
@@ -272,4 +263,4 @@ class ArloStream(object):
                 self.play_camera(_cam_id)
                 self.arlo_logout()
 
-        self.log("END   run()", xbmc.LOGNOTICE)
+        self.log("END   run()", xbmc.LOGDEBUG)

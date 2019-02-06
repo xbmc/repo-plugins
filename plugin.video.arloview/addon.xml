@@ -18,7 +18,6 @@
     (https://github.com/jeffreydwalter/arlo)
     </description>
     <source>https://github.com/JavaWiz1/repo-plugins</source>
-    <language>en</language>
     <platform>all</platform>
     <license>Apache 2.0</license>
     <email>JavaWiz1@hotmail.com</email>
@@ -29,7 +28,6 @@
     <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.png</fanart>
-        <clearlogo></clearlogo>
         <screenshot>resources/ArloCamera.png</screenshot>
     </assets>
   </extension>

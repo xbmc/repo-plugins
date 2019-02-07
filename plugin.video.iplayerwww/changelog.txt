@@ -1,3 +1,6 @@
+v2.5.48
+Fix duplicate of last subtitle.
+
 v2.5.47
 Fixed episode JSON changes.
 

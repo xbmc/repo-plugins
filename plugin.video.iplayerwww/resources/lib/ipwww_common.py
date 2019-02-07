@@ -174,6 +174,7 @@ def download_subtitles(url):
             else:
                 entry = "%d\n%s,%s --> %s,%s\n%s\n\n" % (
                     i, prev['start'], prev['start_mil'], prev['end'], prev['end_mil'], prev['text'])
+            prev = None
 
         # get color for this line
         color = getSubColor(line, styles)

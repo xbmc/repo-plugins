@@ -12,6 +12,7 @@ This branch is not used for public. Please use one of the other branches availab
 * [Submitting an add-on details](http://kodi.wiki/view/Submitting_Add-ons)
 * [Code guidelines](http://kodi.wiki/view/Official:Code_guidelines_and_formatting_conventions)
 * [Kodi development](http://kodi.wiki/view/Development)
+* [Kodi Addon checker](https://pypi.org/project/kodi-addon-checker/)
 
 ## Other useful links
 

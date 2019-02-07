@@ -48,6 +48,7 @@ Team Kodi reserves the right to update or remove add-ons at any time as we deem 
 * [Submitting an add-on details](http://kodi.wiki/view/Submitting_Add-ons)
 * [Code guidelines](http://kodi.wiki/view/Official:Code_guidelines_and_formatting_conventions)
 * [Kodi development](http://kodi.wiki/view/Development)
+* [Kodi Addon checker](https://pypi.org/project/kodi-addon-checker/)
 
 ## Other useful links
 

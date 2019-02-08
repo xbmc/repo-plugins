@@ -18,6 +18,7 @@ import xbmcgui
 class UI:
     
     def __init__(self, url):
+        pass
         
         
     def addDir(name, url, mode,iconimage):
@@ -41,7 +42,7 @@ class UI:
         else:
             linkvideo = media.get('url', None)
             
-        if linkvideo <> None:
+        if linkvideo != None:
             titol = data.get('informacio',{}).get('titol', None)
             image = data.get('imatges',{}).get('url', None)
             descripcio = data.get('informacio',{}).get('descripcio', None)
@@ -52,7 +53,7 @@ class UI:
             milisec = data.get('informacio',{}).get('durada', {}).get('milisegons', None)
             durada = ""
             
-            if milisec <> None:
+            if milisec != None:
                 durada = milisec/1000
             
             liz = xbmcgui.ListItem(titol, iconImage="DefaultVideo.png", thumbnailImage=image)
@@ -63,7 +64,7 @@ class UI:
                 descripcio = descripcio.replace('<br />', '')
                 
             header = ""
-            if programa <> None:
+            if programa != None:
                 if type(programa) is int or type(programa) is float:
                     programa = str(programa)
                 header = '[B]' + programa + '[/B]' + '[CR]'
@@ -72,7 +73,7 @@ class UI:
             infolabels = {}
             
                
-            if data_emisio <> None:
+            if data_emisio != None:
                 dt = data_emisio[0:10]
                 year = data_emisio[6:10]
                 infolabels['aired'] = dt
@@ -81,18 +82,18 @@ class UI:
                 
             descripcio = header + descripcio
             
-            if titol <> None:
+            if titol != None:
                 infolabels['title'] = titol
                 xbmc.log('Titol: ' + titol.encode("utf-8"))
                 
-            if capitol <> None:
+            if capitol != None:
                 infolabels['episode'] = capitol
                 xbmc.log('Capitol: ' + str(capitol))
                 
-            if descripcio <> None:
+            if descripcio != None:
                 infolabels['plot'] = descripcio
               
-            if tematica <> None:
+            if tematica != None:
                 infolabels['genre'] = tematica
             
                 
@@ -107,21 +108,28 @@ class UI:
         return ok
         
     def playVideo(self):
+        pass
 
 
 class DestaquemAction:
+    pass
     
     
     
 class MesVistAction:
+    pass
     
     
 class NoperdisAction:
+    pass
     
 
 class ColeccionsAction:
+    pass
     
     
 class SearchAction:
+    pass
     
 class ProgramesAction:
+    pass

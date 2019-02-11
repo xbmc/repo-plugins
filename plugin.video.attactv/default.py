@@ -121,7 +121,7 @@ def main_list(params):
 
     buffer_web = lutil.carga_web(page_url)
 
-    pattern_videos = '<a href="([^"]*?)" rel="bookmark" title="Permanent Link: ([^"]*?)"><img width="[^"]*?" height="[^"]*?" src="([^"]*?)" class="attachment-miniatura wp-post-image" alt="[^"]*?" title="[^"]*?" /></a>'
+    pattern_videos = '<a href="([^"]*?)" rel="bookmark" title="Permanent Link: ([^"]*?)"><img width="[^"]*?" height="[^"]*?" src="([^"]*?)" class="attachment-miniatura '
     pattern_video_excerpt = '<div id="feature-video-excerpt">'
     pattern_page_num = '/page/([0-9]+)'
     pattern_prevpage = '<a class="prev page-numbers" href="([^"]*?)">'
@@ -137,13 +137,13 @@ def main_list(params):
     # Extract video items from the html content
     videolist = lutil.find_multiple(buffer_web,pattern_videos)
 
-    # This is a workaround for the spanish website as the former pages have no videos listed.
+    # This is a workaround for the spanish website when the former pages have no videos listed.
     if len(videolist) == 0:
         # This page has no videos content, we must continue on the next page.
         lutil.log("attactv.main_list We have found an empty page video list: %s" % page_url)
         next_page_url = lutil.find_first(buffer_web, pattern_nextpage)
         next_page_num = lutil.find_first(next_page_url, pattern_page_num)
-        if next_page_url and int(next_page_num) < 12: # We must setup a limit.
+        if next_page_url:
             lutil.log("attactv.main_list We continue on next page: %s" % next_page_url)
             params['url'] = next_page_url.replace('&#038;', '&') # Fixup next_page on search.
             return main_list(params)

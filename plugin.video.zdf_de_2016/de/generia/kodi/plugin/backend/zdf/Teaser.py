@@ -63,6 +63,7 @@ class Teaser(object):
     playable = False
     contentName = None
     apiToken = None
+    duration = None
     
     def __init__(self):
         pass

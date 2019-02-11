@@ -90,7 +90,7 @@ class XbmcResponse(Response):
         infoLabels['sorttitle'] = title
         infoLabels['genre'] = item.genre
         infoLabels['plot'] = item.text
-        if item.genre is not None:
+        if item.genre is not None and infoLabels['plot'] is not None:
             infoLabels['plot'] = item.genre + '\n' + infoLabels['plot']
 
         date = item.date

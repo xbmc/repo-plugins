@@ -1,0 +1,425 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<window id="33000">
+    <allowoverlay>no</allowoverlay>
+    <depth>2</depth>
+    <zorder>2</zorder>
+    <coordinates>
+        <left>0</left>
+        <top>0</top>
+    </coordinates>
+    <onload>SetProperty(uEPG.timeFormat,%25a%2C%20%25B%20%25d,10000)</onload>
+    <onload>SetProperty(uEPG.timeCount,4,10000)</onload>
+    <onload>SetProperty(uEPG.buttonWidth,7200,10000)</onload>
+    <onload>SetProperty(uEPG.textColor,0xFF8C8C8C,10000)</onload>
+    <onload>SetProperty(uEPG.disabledColor,0xFF8C8C8C,10000)</onload>
+    <onload>SetProperty(uEPG.focusedColor,0xFFFFFFFF,10000)</onload>
+    <onload>SetProperty(uEPG.shadowColor,0xFF000000,10000)</onload>
+    <onload>SetProperty(uEPG.pastColor,0xFF009CD5,10000)</onload>
+    <onload>SetProperty(uEPG.favColor,0xFFE34444,10000)</onload>
+    <onload>SetProperty(uEPG.favDefault,0xFF8C8C8C,10000)</onload>
+    <onload>SetProperty(uEPG.timeColor,0xFF009CD5,10000)</onload>
+    <onload>SetProperty(uEPG.textFont,font12,10000)</onload>
+    <onload>SetProperty(uEPGGuide,True,10000)</onload>
+    <onunload>SetProperty(uEPGGuide,False,10000)</onunload>  
+    <animation effect="fade" start="0" end="100" time="100">WindowOpen</animation>
+    <animation effect="fade" start="100" end="0" time="100">WindowClose</animation>
+    <controls> 
+        <control type="videowindow">
+            <description>VideoWindow</description>
+            <width>1920</width>
+            <height>1080</height>
+        </control>
+        <control type="image">
+            <width>1920</width>
+            <height>1080</height>
+            <texture>Background.png</texture>
+            <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+        </control>
+        <control type="image" id="33009">     
+            <description>Optional Channel Focus Highlight</description>
+            <visible>false</visible>
+        </control> 
+        <control type="image" id="33010">     
+            <description>Optional Channel Playing Highlight</description>
+            <visible>false</visible>
+        </control>
+        <control type="group">
+            <posx>0</posx>
+            <posy>-50</posy>
+            <control type="label" id="33005">
+                <description>Date Label</description>
+                <posx>70</posx>
+                <posy>200</posy>
+                <width min="162" max="400">auto</width>
+                <height>38</height>
+                <align>left</align>
+                <aligny>center</aligny>
+                <font>font10</font>
+                <textcolor>FF8C8C8C</textcolor>
+            </control> 
+            <control type="label" id="33007">
+                <description>Timebar Current Time Button</description>
+                <posx>-500</posx>
+                <posy>-500</posy>
+                <width min="0" max="0">auto</width>
+                <height>38</height>
+                <fadetime>250</fadetime>
+                <textcolor>FF8C8C8C</textcolor>
+                <font>font12</font>
+                <align>center</align>
+                <aligny>center</aligny>
+            </control>
+            <control type="label" id="33101">
+                <description>Time Label</description>
+                <posx>284</posx>
+                <posy>290</posy>
+                <width min="155" max="200">auto</width>
+                <height>38</height>
+                <label>Time 1</label>
+                <font>font12</font>
+                <align>left</align>
+                <aligny>center</aligny>
+                <textcolor>FF8C8C8C</textcolor>
+            </control>>
+            <control type="label" id="33102">
+                <description>Time Label</description>
+                <posx>714</posx>
+                <posy>290</posy>
+                <width min="155" max="200">auto</width>
+                <height>38</height>
+                <label>Time 2</label>
+                <font>font12</font>
+                <align>left</align>
+                <aligny>center</aligny>
+                <textcolor>FF8C8C8C</textcolor>
+            </control>
+            <control type="label" id="33103">
+                <description>Time Label</description>
+                <posx>1144</posx>
+                <posy>290</posy>
+                <width min="155" max="200">auto</width>
+                <height>38</height>
+                <label>Time 3</label>
+                <font>font12</font>
+                <align>left</align>
+                <aligny>center</aligny>
+                <textcolor>FF8C8C8C</textcolor>
+            </control> 
+            <control type="label" id="33104">
+                <description>Time Label</description>
+                <posx>1577</posx>
+                <posy>290</posy>
+                <width min="155" max="200">auto</width>
+                <height>38</height>
+                <label>Time 3</label>
+                <font>font12</font>
+                <align>left</align>
+                <aligny>center</aligny>
+                <textcolor>FF8C8C8C</textcolor>
+            </control>       
+            <control type="grouplist">
+                <posx>10</posx>
+                <posy>287</posy>
+                <itemgap>0</itemgap>
+                <orientation>vertical</orientation>
+                <description>Number</description>
+                <control type="label" id="33111">
+                    <description>Channel 1 Number</description>
+                    <width>254</width>
+                    <height>141</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FF8C8C8C</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <visible>false</visible>
+                </control>
+                <control type="label" id="33112">
+                    <description>Channel 2 Number</description>
+                    <width>254</width>
+                    <height>141</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FF8C8C8C</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <visible>false</visible>
+                </control>
+                <control type="label" id="33113">
+                    <description>Channel 3 Number</description>
+                    <width>254</width>
+                    <height>141</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FF8C8C8C</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <visible>false</visible>
+                </control>
+                <control type="label" id="33114">
+                    <description>Channel 4 Number</description>
+                    <width>254</width>
+                    <height>141</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FF8C8C8C</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <visible>false</visible>
+                </control>
+                <control type="label" id="33115">
+                    <description>Channel 5 Number</description>
+                    <width>254</width>
+                    <height>141</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FF8C8C8C</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <visible>false</visible>
+                </control>    
+            </control>
+            <control type="group">            
+                <posx>0</posx>
+                <posy>375</posy>
+                <width>254</width>
+                <height>141</height>
+                <itemgap>0</itemgap>
+                <orientation>vertical</orientation>
+                <description>Logo+Name</description>
+                <control type="image" id="33411">
+                    <description>Channel 1 Icon</description>
+                    <posx>0</posx>
+                    <posy>0</posy>                       
+                    <width>200</width>
+                    <height>80</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <aspectratio>keep</aspectratio> 
+                    <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                </control>
+                <control type="image">
+                    <description>Channel 1 Favorite</description>
+                    <posx>110</posx>
+                    <posy>15</posy>                       
+                    <width>200</width>
+                    <height>40</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <aspectratio>keep</aspectratio> 
+                    <texture>favorite.png</texture>
+                    <colordiffuse>Window(10000).Property(FavColor)</colordiffuse>
+                    <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                </control>
+                <control type="label" id="33511">
+                    <description>Channel 1 Name</description>
+                    <visible>false</visible>
+                </control>
+                <control type="image" id="33412">
+                    <description>Channel 2 Icon</description>         
+                    <posx>0</posx>
+                    <posy>140</posy>                       
+                    <width>200</width>
+                    <height>80</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <aspectratio>keep</aspectratio> 
+                    <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                </control>
+                <control type="image">
+                    <description>Channel 2 Favorite</description>
+                    <posx>110</posx>
+                    <posy>155</posy>                       
+                    <width>200</width>
+                    <height>40</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <aspectratio>keep</aspectratio> 
+                    <texture>favorite.png</texture>
+                    <colordiffuse>Window(10000).Property(FavColor)</colordiffuse>
+                    <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                </control>
+                <control type="label" id="33512">
+                    <description>Channel 2 Name</description>  
+                    <visible>false</visible>
+                </control>
+                <control type="image" id="33413">
+                    <description>Channel 3 Icon</description>         
+                    <posx>0</posx>
+                    <posy>285</posy>                       
+                    <width>200</width>
+                    <height>80</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <aspectratio>keep</aspectratio> 
+                    <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                </control>
+                <control type="image">
+                    <description>Channel 3 Favorite</description>
+                    <posx>110</posx>
+                    <posy>300</posy>                       
+                    <width>200</width>
+                    <height>40</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <aspectratio>keep</aspectratio> 
+                    <texture>favorite.png</texture>
+                    <colordiffuse>Window(10000).Property(FavColor)</colordiffuse>
+                    <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                </control>
+                <control type="label" id="33513">
+                    <description>Channel 3 Name</description>
+                    <visible>false</visible>
+                </control>
+                <control type="image" id="33414">
+                    <description>Channel 4 Icon</description>         
+                    <posx>0</posx>
+                    <posy>430</posy>                       
+                    <width>200</width>
+                    <height>80</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <aspectratio>keep</aspectratio> 
+                    <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                </control>
+                <control type="image">
+                    <description>Channel 4 Favorite</description>
+                    <posx>110</posx>
+                    <posy>445</posy>                       
+                    <width>200</width>
+                    <height>40</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <aspectratio>keep</aspectratio> 
+                    <texture>favorite.png</texture>
+                    <colordiffuse>Window(10000).Property(FavColor)</colordiffuse>
+                    <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                </control>
+                <control type="label" id="33514">
+                    <description>Channel 4 Name</description>
+                    <visible>false</visible>
+                </control>
+                <control type="image" id="33415">
+                    <description>Channel 5 Icon</description>         
+                    <posx>0</posx>
+                    <posy>575</posy>                       
+                    <width>200</width>
+                    <height>80</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <aspectratio>keep</aspectratio>  
+                    <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                </control> 
+                <control type="image">
+                    <description>Channel 5 Favorite</description>
+                    <posx>110</posx>
+                    <posy>590</posy>                       
+                    <width>200</width>
+                    <height>40</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <aspectratio>keep</aspectratio> 
+                    <texture>favorite.png</texture>
+                    <colordiffuse>Window(10000).Property(FavColor)</colordiffuse>
+                    <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                </control>
+                <control type="label" id="33515">
+                    <description>Channel 5 Name</description>
+                    <visible>false</visible>
+                </control> 
+            </control>
+            <control type="group" id="33611">
+                <posx>258</posx>
+                <posy>287</posy>
+                <width>1665</width>
+                <height>141</height>
+            </control>
+            <control type="group" id="33612">
+                <posx>258</posx>
+                <posy>431</posy>
+                <width>1665</width>
+                <height>141</height>
+            </control>
+            <control type="group" id="33613">
+                <posx>258</posx>
+                <posy>575</posy>
+                <width>1665</width>
+                <height>141</height>
+            </control>
+            <control type="group" id="33614">
+                <posx>258</posx>
+                <posy>720</posy>
+                <width>1665</width>
+                <height>141</height>
+            </control>
+            <control type="group" id="33615">
+                <posx>258</posx>
+                <posy>866</posy>
+                <width>1665</width>
+                <height>141</height>
+            </control>
+        </control>
+        <control type="image" id="33011"> 
+            <description>Timebar Optional past fade</description>
+            <posx>258</posx>
+            <posy>280</posy>
+            <width>-1</width>
+            <height>5</height>
+            <aspectratio>scale</aspectratio>
+        </control>  
+        <control type="image" id="33012"> 
+            <description>Timebar Optional future fade</description>
+            <posx>258</posx>
+            <posy>280</posy>
+            <width>-1</width>
+            <height>5</height>
+            <aspectratio>scale</aspectratio>
+        </control>
+        <control type="image" id="33013">
+            <description>Timebar line</description>
+            <posx>258</posx>
+            <posy>274</posy>
+            <width>20</width>
+            <height>20</height>
+            <aspectratio>scale</aspectratio>
+        </control> 
+        <control type="fixedlist" id="40000">
+            <itemlayout width="0" height="0">
+            </itemlayout>
+            <focusedlayout height="0" width="0">
+            </focusedlayout>
+        </control>
+        <control type="fixedlist" id="40001">
+            <itemlayout width="0" height="0">
+            </itemlayout>
+            <focusedlayout height="0" width="0">
+            </focusedlayout>
+        </control>
+        <control type="group">
+            <posx>265</posx>
+            <posy>1015</posy>
+            <control type="label">
+                <description>Show Info</description>
+                <posx>5</posx>
+                <posy>10</posy>
+                <width>1468</width>
+                <height>40</height>
+                <font>font12</font>
+                <textcolor>FF8C8C8C</textcolor>
+                <shadowcolor>ff000000</shadowcolor>
+                <aligny>top</aligny>
+                <align>left</align>
+                <scroll>true</scroll>
+                <wrapmultiline>true</wrapmultiline>
+                <scrollspeed>50</scrollspeed>
+                <scrollsuffix> - </scrollsuffix>
+                <label>[COLOR=FF8C8C8C][B]$INFO[Window(10000).Property(Time),,   ][/B][/COLOR]$INFO[Container(40000).ListItem.plot,,      ][COLOR=FF8C8C8C]$INFO[Container(40000).ListItem.genre,Genre: ,][/COLOR]</label>
+            </control>
+        </control> 
+    </controls>
+</window>

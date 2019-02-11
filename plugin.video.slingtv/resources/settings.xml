@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="Enable_Debugging" type="bool"   label="30000" default="false" />
+    <setting id="User_Email"       type="text"   label="30006" default="" />
+    <setting id="User_Password"    type="text"   label="30007" default=""  option="hidden"/>
+    <setting id="Log_Out"          type="action"   label="30013" action="RunPlugin(plugin://plugin.video.slingtv/?mode=logout)" />
+    <!-- Hidden -->
+    <setting id="access" type="text" default="" visible="false"/>
+    <setting id="access_token" type="text" default="" visible="false"/>
+    <setting id="subscriber_id" type="text" default="" visible="false"/>
+    <setting id="device_id" type="text" default="" visible="false"/>
+    <setting id="user_subs" type="text" default="" visible="false"/>
+    <setting id="legacy_subs" type="text" default="" visible="false"/>
+    <setting id="user_dma" type="text" default="" visible="false"/>
+    <setting id="user_offset" type="text" default="" visible="false"/>
+    <setting id="user_zip" type="text" default="" visible="false"/>
+</settings>

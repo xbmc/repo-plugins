@@ -1,4 +1,13 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
 from six.moves import range
 
 
@@ -11,7 +20,7 @@ class JsonScriptEngine(object):
 
         _actions = self._json_script['actions']
         for action in _actions:
-            func = '_' + action['func']
+            func = ''.join(['_', action['func']])
             params = action['params']
 
             if func == '_return':

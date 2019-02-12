@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
 import uuid
 import time
 
@@ -24,10 +34,9 @@ class AccessManager(object):
         self._json = self._jstore.get_data()
         return self._json['access_manager']['users'][self.get_user()]['id']
 
-    def get_new_user(self, user_name='', addon_id=''):
+    def get_new_user(self, user_name=''):
         """
         :param user_name: string, users name
-        :param addon_id: string, addon id
         :return: a new user dict
         """
         uuids = list()
@@ -90,9 +99,12 @@ class AccessManager(object):
         self._json = self._jstore.get_data()
         current_playlist_id = self._json['access_manager']['users'].get(self._user, {}).get('watch_later', ' WL')
         settings_playlist_id = self._settings.get_string('youtube.folder.watch_later.playlist', '').strip()
-        if settings_playlist_id and (current_playlist_id != settings_playlist_id):
-            self._json['access_manager']['users'][self._user]['watch_later'] = settings_playlist_id
-            self._jstore.save(self._json)
+        if settings_playlist_id.lower() == 'wl':
+            settings_playlist_id = ' WL'
+        if settings_playlist_id:
+            if current_playlist_id != settings_playlist_id:
+                self._json['access_manager']['users'][self._user]['watch_later'] = settings_playlist_id
+                self._jstore.save(self._json)
             self._settings.set_string('youtube.folder.watch_later.playlist', '')
         return self._json['access_manager']['users'].get(self._user, {}).get('watch_later', ' WL')
 
@@ -103,6 +115,8 @@ class AccessManager(object):
         :return:
         """
 
+        if playlist_id.strip().lower() == 'wl':
+            playlist_id = ' WL'
         self._json = self._jstore.get_data()
         self._json['access_manager']['users'][self._user]['watch_later'] = playlist_id
         self._settings.set_string('youtube.folder.watch_later.playlist', '')
@@ -138,8 +152,7 @@ class AccessManager(object):
     def set_last_origin(self, origin):
         """
         Updates the origin
-        :param user: string, origin
-        :param switch_to: boolean, change last origin
+        :param origin: string, origin
         :return:
         """
         self._last_origin = origin
@@ -214,9 +227,9 @@ class AccessManager(object):
 
         self._jstore.save(self._json)
 
-    def get_new_developer(self, addon_id):
+    @staticmethod
+    def get_new_developer():
         """
-        :param addon_id: string, addon id
         :return: a new developer dict
         """
 

@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2012-2018 Twitch-on-Kodi
+
+    This file is part of Twitch-on-Kodi (plugin.video.twitch)
+
+    SPDX-License-Identifier: GPL-3.0-only
+    See LICENSES/GPL-3.0-only for more information.
+"""
 
 __all__ = ['browse', 'channel_video_categories', 'channel_videos', 'clear_list',
-           'clear_live_previews', 'clear_search_history', 'clips', 'collection_videos',
+           'clear_search_history', 'clips', 'collection_videos',
            'collections', 'communities', 'community_streams', 'configure_inputstream_adaptive',
            'edit_blacklist', 'edit_languages', 'edit_qualities', 'edit_sorting',
            'edit_user_follows', 'featured_streams', 'followed', 'following',

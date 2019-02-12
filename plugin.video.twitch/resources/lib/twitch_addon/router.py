@@ -1,20 +1,12 @@
 # -*- coding: utf-8 -*-
 """
      
-    Copyright (C) 2016 Twitch-on-Kodi
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    Copyright (C) 2012-2018 Twitch-on-Kodi
+
+    This file is part of Twitch-on-Kodi (plugin.video.twitch)
+
+    SPDX-License-Identifier: GPL-3.0-only
+    See LICENSES/GPL-3.0-only for more information.
 """
 
 import traceback
@@ -186,11 +178,11 @@ def _edit_user_follows(channel_id=None, channel_name=None, game=None):
     edit_user_follows.route(twitch_api, channel_id, channel_name, game)
 
 
-@dispatcher.register(MODES.EDITBLACKLIST, kwargs=['list_type', 'target_id', 'name', 'remove'])
+@dispatcher.register(MODES.EDITBLACKLIST, kwargs=['list_type', 'target_id', 'name', 'remove', 'refresh'])
 @error_handler
-def _edit_blacklist(list_type='user', target_id=None, name=None, remove=False):
+def _edit_blacklist(list_type='user', target_id=None, name=None, remove=False, refresh=False):
     from .routes import edit_blacklist
-    edit_blacklist.route(list_type, target_id, name, remove)
+    edit_blacklist.route(list_type, target_id, name, remove, refresh)
 
 
 @dispatcher.register(MODES.EDITQUALITIES, args=['content_type'], kwargs=['video_id', 'target_id', 'name', 'remove', 'clip_id'])
@@ -254,13 +246,6 @@ def _settings(refresh=True):
 def _reset_cache():
     from .routes import reset_cache
     reset_cache.route()
-
-
-@dispatcher.register(MODES.CLEARLIVEPREVIEWS, kwargs=['notify'])
-@error_handler
-def _clear_live_previews(notify=True):
-    from .routes import clear_live_previews
-    clear_live_previews.route(notify)
 
 
 @dispatcher.register(MODES.INSTALLIRCCHAT)

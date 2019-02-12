@@ -1,4 +1,13 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
 from six import PY2
 
 import re
@@ -13,7 +22,6 @@ try:
 except ImportError:
     inputstreamhelper = None
 
-
 __RE_SEASON_EPISODE_MATCHES__ = [re.compile(r'Part (?P<episode>\d+)'),
                                  re.compile(r'#(?P<episode>\d+)'),
                                  re.compile(r'Ep.[^\w]?(?P<episode>\d+)'),
@@ -26,7 +34,7 @@ __RE_SEASON_EPISODE_MATCHES__ = [re.compile(r'Part (?P<episode>\d+)'),
 def extract_urls(text):
     result = []
 
-    re_url = re.compile('(https?://[^\s]+)')
+    re_url = re.compile(r'(https?://[^\s]+)')
     matches = re_url.findall(text)
     result = matches or result
 
@@ -37,7 +45,10 @@ def get_thumb_timestamp(minutes=15):
     return str(time.mktime(time.gmtime(minutes * 60 * (round(time.time() / (minutes * 60))))))
 
 
-def update_channel_infos(provider, context, channel_id_dict, subscription_id_dict={}, channel_items_dict=None):
+def update_channel_infos(provider, context, channel_id_dict, subscription_id_dict=None, channel_items_dict=None):
+    if subscription_id_dict is None:
+        subscription_id_dict = {}
+
     channel_ids = list(channel_id_dict.keys())
     if len(channel_ids) == 0:
         return
@@ -72,6 +83,7 @@ def update_channel_infos(provider, context, channel_id_dict, subscription_id_dic
         # -- unsubscribe from channel
         subscription_id = subscription_id_dict.get(channel_id, '')
         if subscription_id:
+            channel_item.set_channel_subscription_id(subscription_id)
             yt_context_menu.append_unsubscribe_from_channel(context_menu, provider, context, subscription_id)
         # -- subscribe to the channel
         if provider.is_logged_in() and context.get_path() != '/subscriptions/list/':
@@ -101,7 +113,7 @@ def update_channel_infos(provider, context, channel_id_dict, subscription_id_dic
 
         # update channel mapping
         if channel_items_dict is not None:
-            if not channel_id in channel_items_dict:
+            if channel_id not in channel_items_dict:
                 channel_items_dict[channel_id] = []
             channel_items_dict[channel_id].append(channel_item)
 
@@ -168,13 +180,14 @@ def update_playlist_infos(provider, context, playlist_id_dict, channel_items_dic
 
         # update channel mapping
         if channel_items_dict is not None:
-            if not channel_id in channel_items_dict:
+            if channel_id not in channel_items_dict:
                 channel_items_dict[channel_id] = []
             channel_items_dict[channel_id].append(playlist_item)
 
 
 def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=None, channel_items_dict=None, live_details=False, use_play_data=True):
     settings = context.get_settings()
+    ui = context.get_ui()
 
     video_ids = list(video_id_dict.keys())
     if len(video_ids) == 0:
@@ -195,7 +208,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
 
         snippet = yt_item['snippet']  # crash if not conform
         play_data = yt_item['play_data']
-        video_item.live = True if snippet.get('liveBroadcastContent') == 'live' else False
+        video_item.live = snippet.get('liveBroadcastContent') == 'live'
 
         # set mediatype
         video_item.set_mediatype('video')  # using video
@@ -263,7 +276,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         channel_name = snippet.get('channelTitle', '')
         description = kodion.utils.strip_html_from_text(snippet['description'])
         if channel_name and settings.get_bool('youtube.view.description.show_channel_name', True):
-            description = '[UPPERCASE][B]%s[/B][/UPPERCASE][CR][CR]%s' % (channel_name, description)
+            description = '%s[CR][CR]%s' % (ui.uppercase(ui.bold(channel_name)), description)
         video_item.set_studio(channel_name)
         # video_item.add_cast(channel_name)
         video_item.add_artist(channel_name)
@@ -285,7 +298,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         if not image:
             image = get_thumbnail(thumb_size, snippet.get('thumbnails', {}))
         if image.endswith('_live.jpg'):
-            image += '?ct=' + thumb_stamp
+            image = ''.join([image, '?ct=', thumb_stamp])
         video_item.set_image(image)
 
         # set fanart
@@ -294,17 +307,15 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         # update channel mapping
         channel_id = snippet.get('channelId', '')
         if channel_items_dict is not None:
-            if not channel_id in channel_items_dict:
+            if channel_id not in channel_items_dict:
                 channel_items_dict[channel_id] = []
             channel_items_dict[channel_id].append(video_item)
 
         context_menu = []
         replace_context_menu = False
 
-        # Refresh ('My Subscriptions')
-        if context.get_path().startswith('/special/new_uploaded_videos_tv') or \
-                context.get_path().startswith('/channel/mine/playlist/'):
-            yt_context_menu.append_refresh(context_menu, provider, context)
+        # Refresh
+        yt_context_menu.append_refresh(context_menu, provider, context)
 
         # Queue Video
         yt_context_menu.append_queue_video(context_menu, provider, context)
@@ -338,13 +349,16 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
                 if playlist_match:
                     playlist_id = playlist_match.group('playlist_id')
                     # we support all playlist except 'Watch History'
-                    if playlist_id != 'HL' and playlist_id != 'WL' and playlist_id != ' WL':
-                        playlist_item_id = playlist_item_id_dict[video_id]
-                        context_menu.append((context.localize(provider.LOCAL_MAP['youtube.remove']),
-                                             'RunPlugin(%s)' % context.create_uri(
-                                                 ['playlist', 'remove', 'video'],
-                                                 {'playlist_id': playlist_id, 'video_id': playlist_item_id,
-                                                  'video_name': video_item.get_name()})))
+                    if playlist_id:
+                        if playlist_id != 'HL' and playlist_id.strip().lower() != 'wl':
+                            playlist_item_id = playlist_item_id_dict[video_id]
+                            video_item.set_playlist_id(playlist_id)
+                            video_item.set_playlist_item_id(playlist_item_id)
+                            context_menu.append((context.localize(provider.LOCAL_MAP['youtube.remove']),
+                                                 'RunPlugin(%s)' % context.create_uri(
+                                                     ['playlist', 'remove', 'video'],
+                                                     {'playlist_id': playlist_id, 'video_id': playlist_item_id,
+                                                      'video_name': video_item.get_name()})))
 
             is_history = re.match('^/special/watch_history_tv/$', context.get_path())
             if is_history:
@@ -354,10 +368,12 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         if channel_id and channel_name:
             # only if we are not directly in the channel provide a jump to the channel
             if kodion.utils.create_path('channel', channel_id) != context.get_path():
+                video_item.set_channel_id(channel_id)
                 yt_context_menu.append_go_to_channel(context_menu, provider, context, channel_id, channel_name)
 
         if provider.is_logged_in():
             # subscribe to the channel of the video
+            video_item.set_subscription_id(channel_id)
             yt_context_menu.append_subscribe_to_channel(context_menu, provider, context, channel_id, channel_name)
 
         if not video_item.live and use_play_data:
@@ -370,11 +386,16 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
                 yt_context_menu.append_reset_resume_point(context_menu, provider, context, video_id)
 
         # more...
-        refresh_container = context.get_path().startswith('/channel/mine/playlist/LL') or \
-                            context.get_path() == '/special/disliked_videos/'
+        refresh_container = \
+            context.get_path().startswith('/channel/mine/playlist/LL') or \
+            context.get_path() == '/special/disliked_videos/'
         yt_context_menu.append_more_for_video(context_menu, provider, context, video_id,
                                               is_logged_in=provider.is_logged_in(),
                                               refresh_container=refresh_container)
+
+        if not video_item.live:
+            yt_context_menu.append_play_with_subtitles(context_menu, provider, context, video_id)
+            yt_context_menu.append_play_audio_only(context_menu, provider, context, video_id)
 
         if len(context_menu) > 0:
             video_item.set_context_menu(context_menu, replace=replace_context_menu)
@@ -387,8 +408,6 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
     video_data = resource_manager.get_videos([video_id])
 
     meta_data = video_stream.get('meta', None)
-    live = video_stream.get('Live', False)
-
     thumb_size = settings.use_thumbnail_size()
     image = None
 
@@ -403,7 +422,9 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
 
     snippet = yt_item['snippet']  # crash if not conform
     play_data = yt_item['play_data']
-    is_live = True if snippet.get('liveBroadcastContent') == 'live' else False
+    video_item.live = snippet.get('liveBroadcastContent') == 'live'
+
+    video_item.video_id = video_id
 
     # set the title
     if not video_item.get_title():
@@ -426,7 +447,7 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
     ui.set_home_window_property('license_token', license_info.get('token'))
 
     # duration
-    if not is_live and use_play_data and play_data.get('total_time'):
+    if not video_item.live and use_play_data and play_data.get('total_time'):
         video_item.set_duration_from_seconds(float(play_data.get('total_time')))
     else:
         duration = yt_item.get('contentDetails', {}).get('duration', '')
@@ -434,7 +455,7 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
         # we subtract 1 seconds because YouTube returns +1 second to much
         video_item.set_duration_from_seconds(duration.seconds - 1)
 
-    if not is_live and use_play_data:
+    if not video_item.live and use_play_data:
         # play count
         if play_data.get('play_count'):
             video_item.set_play_count(int(play_data.get('play_count')))
@@ -447,7 +468,7 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
 
         if play_data.get('last_played'):
             video_item.set_last_played(play_data.get('last_played'))
-    elif is_live:
+    elif video_item.live:
         video_item.set_play_count(0)
 
     """
@@ -471,7 +492,7 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
     channel_name = snippet.get('channelTitle', '')
     description = kodion.utils.strip_html_from_text(snippet['description'])
     if channel_name and settings.get_bool('youtube.view.description.show_channel_name', True):
-        description = '[UPPERCASE][B]%s[/B][/UPPERCASE][CR][CR]%s' % (channel_name, description)
+        description = '%s[CR][CR]%s' % (ui.uppercase(ui.bold(channel_name)), description)
     video_item.set_studio(channel_name)
     # video_item.add_cast(channel_name)
     video_item.add_artist(channel_name)
@@ -488,8 +509,8 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
     if not image:
         image = get_thumbnail(thumb_size, snippet.get('thumbnails', {}))
 
-    if live and image:
-        image += '?ct=' + get_thumb_timestamp()
+    if video_item.live and image:
+        image = ''.join([image, '?ct=', get_thumb_timestamp()])
     video_item.set_image(image)
 
     # set fanart
@@ -549,3 +570,42 @@ def get_shelf_index_by_title(context, json_data, shelf_title):
             shelf_index = None
 
     return shelf_index
+
+
+def add_related_video_to_playlist(provider, context, client, v3, video_id):
+    playlist = context.get_video_playlist()
+
+    if playlist.size() <= 999:
+        a = 0
+        add_item = None
+        page_token = ''
+        playlist_items = playlist.get_items()
+
+        while not add_item and a <= 2:
+            a += 1
+            result_items = []
+
+            try:
+                json_data = client.get_related_videos(video_id, page_token=page_token, max_results=17)
+                result_items = v3.response_to_items(provider, context, json_data, process_next_page=False)
+                page_token = json_data.get('nextPageToken', '')
+            except:
+                context.get_ui().show_notification('Failed to add a suggested video.', time_milliseconds=5000)
+
+            if result_items:
+                add_item = next((
+                    item for item in result_items
+                    if not any((item.get_uri() == pitem.get('file') or
+                                item.get_title() == pitem.get('title'))
+                               for pitem in playlist_items)),
+                    None)
+
+            if not add_item and page_token:
+                continue
+
+            if add_item:
+                playlist.add(add_item)
+                break
+
+            if not page_token:
+                break

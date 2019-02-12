@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2018-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
 import requests
 
 
@@ -13,7 +21,7 @@ class Locator:
         return self._response
 
     def locate_requester(self):
-        request_url = self._base_url + '/json'
+        request_url = '/'.join([self._base_url, 'json'])
         response = requests.get(request_url)
         self._response = response.json()
 

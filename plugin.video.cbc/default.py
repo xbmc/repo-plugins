@@ -168,6 +168,8 @@ def showsMenu(values):
 
     prog.close()
     for show in show_list:
+        if show['url'] == None:
+            continue
         isVideo = show['video'] if 'video' in show else False
         labels = cbc.getLabels(show)
         image = show['image'] if 'image' in show else None

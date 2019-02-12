@@ -1,3 +1,109 @@
+6.4.0
+[add] 4K videos with InputStream Adaptive >= v2.3.14
+        - Thanks to @peak3d
+[fix] some videos not playing when logged in
+[fix] reset function cache at restart/update to resolve issues persisting due to cached results
+[fix] service potentially not shutting down http server
+[fix] added to playlist/subscriptions notifications
+[fix] only generate mpeg-dash file if adaptive formats are available
+[fix] map frame rates to more common representation to lessen the chance of double refresh rate changes (only applies to generated mpeg-dash files)
+[fix] currently playing file check when playing file is a plugin:// url
+[chg] Settings - General - Autoplay suggested videos
+        - limit playlist size to 1000 videos
+        - request less relevant videos at one time
+        - old behavior: add 50 most relevant videos for each video played, repeats allowed
+            - result: a lot of barely relevant videos in groups of 50
+        - new behavior: add single most relevant video, no repeats
+            - result: next video is always the most relevant video to the last video played
+[upd] player javascript retrieval
+
+6.3.1
+[fix] ensure playback monitoring is monitoring the correct item
+[fix] check for abortRequested while processing purchased collections
+[upd] Use setArt instead of iconImage, thumbnailImage and setProperty('fanart_image')
+
+6.3.0
+[add] support for keymapping of some endpoints, wiki: https://kodi.wiki/view/Add-on:YouTube#Keymaps
+[add] 'Rate videos in playlists' setting to 'Settings - General - Rate after watching'
+[add] Support for purchased collections |contrib: MisterD81|
+[fix] Playback of some videos (e.g. music videos)
+[fix] Live stream playback
+[fix] post play add to watch history
+[fix] fix add-ons playback history not saving
+[fix] playback monitoring/post play events triggering for the wrong videos in some cases
+[fix] call setResolvedUrl(False) if get_video_streams fails
+[upd] code cosmetics and resolve inspections
+[upd] improve watch history tracking, actively report watch times and state during playback
+[upd] sign in/out, switch user, and settings ListItems to isFolder=False and isPlayable=False
+[upd] improve watch later playlist id retrieval and feedback
+[upd] Use SPDX license identifier
+[lang] de_de strings |contrib: tobhor|
+[lang] el_gr strings |contrib: twilight0|
+[lang] es_es strings |contrib: roliverosc|
+[lang] ko_kr strings |contrib: parkmino|
+[lang] nl_nl strings |contrib: Markman-B|
+
+6.2.3
+[add] Next Page to 'More...' -> 'Add to...' context menu
+[add] icon and description to playlists in 'More...' -> 'Add to...' context menu on Kodi 17+
+[add] 'Play audio only' context menu item
+[fix] generated dash with no supported video streams(audio only) being played when Audio only not enabled
+[fix] potential RuntimeError when retrieving total time of playing content if player is stopped immediately
+[lang] nl_nl strings |contrib: Markman-B|
+[lang] pl_pl strings |contrib: xulek|
+[lang] pl_pl strings |contrib: drrak|
+[lang] sk_sk strings |contrib: jose1711|
+[lang] el_gr strings |contrib: twilight0|
+[lang] es_es strings |contrib: roliverosc|
+
+6.2.2
+[fix] signature function not found on some videos
+
+6.2.1
+[fix] some streams reporting as Unavailable
+[fix] utf-8 file paths
+[fix] settings, and switch user causing perpetual busy dialog on Kodi 18
+
+6.2.0
+[add] Context menu -> 'Play with subtitles' |contrib: solarus|
+[add] Option to download subtitles before playback in Settings -> General -> Configure subtitles
+[add] Refresh context menu to all videos/live streams
+[add] &strm=true parameter for strm files in Kodi 18 |contrib: vlmaksime|
+    - use description from library and set watched status
+[add] 'Settings -> Advanced -> Use YouTube website urls' for external/alternative players
+            eg. Player: MPC-BE, URL: https://www.youtube.com/watch?v=C0NyvxTJGcQ
+            eg. playercorefactory.xml
+                <?xml version="1.0" encoding="UTF-8"?>
+                <playercorefactory>
+                    <players>
+                        <player name="MPC-BE" type="ExternalPlayer" audio="false" video="true">
+                            <filename>C:\Program Files\MPC-BE x64\mpc-be64.exe</filename>
+                            <args>"{1}" /fullscreen /close</args>
+                            <hidexbmc>true</hidexbmc>
+                            <hideconsole>true</hideconsole>
+                            <warpcursor>none</warpcursor>
+                        </player>
+                    </players>
+                    <rules action="prepend">
+                       <rule filename="(?:http)*s*:*[/]{0,2}(?:www\.)*youtu(?:\.be/|be\.com/(?:embed/|watch/|v/|.*?[?&/]v=))[a-zA-Z0-9_\-]{11}.*" player="MPC-BE" />
+                    </rules>
+                </playercorefactory>
+[fix] Reported background progress dialog percentage
+[fix] Playlist items, use video_items instead of playback_items
+[fix] search history size
+[fix] remove Spanish (Latin America)|es-419 from the setup wizard, causing invalidLanguage and invalidRelevanceLanguage errors
+[upd] Improve speed of playback starting and resolver
+            before: min: 1.5s max: 2.6s median: 1.7s
+            after:  min: 0.9s max: 2.6s median: 1.2s
+[chg] refactor logging and system version
+[chg] Localize confirmation
+[lang] el_gr strings |contrib: twilight0|
+[lang] es_es strings |contrib: roliverosc|
+[lang] es_mx strings |contrib: Intel11|
+[lang] it_it strings |contrib: SebastianoPistore|
+[lang] nl_nl strings |contrib: Markman-B|
+[lang] ru_ru strings |contrib: vlmaksime|
+
 6.1.4
 [fix] Signature function not found
 

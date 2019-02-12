@@ -35,34 +35,23 @@ class myAddon(t1mAddon):
 
   def getAddonEpisodes(self,url,ilist, getFileData=False):
       if not url.startswith('http'):
-         url = 'https://freeform.go.com'+url+'/episodes'
+         url = 'https://freeform.go.com'+url
       html = self.getRequest(url)
-      vids = re.compile('<hr />.+?href="(.+?)".+?requires-sign-in="(.+?)".+?src="(.+?)".+?m-y-0">.+?S(.+?) E(.+?) (.+?)<.+?"m-t-1">(.+?)<', re.DOTALL).findall(html)
-      if vids == []:
-          html = re.compile('<div class="swiper-container"(.+?)<div class="swiper-nav swiper-next', re.DOTALL).search(html)
-          if html is None:
-              return(ilist)
-          html = html.group(1)
-          vids = re.compile('<a href="(.+?)".+?url\((.+?)\).+?requires-sign-in="(.+?)".+?<span class="heavy">    <span class="heavy">.+?S(.+?) E(.+?) .+?class="card-title">(.+?)<', re.DOTALL).findall(html)
-          vids1 = []
-          for url, thumb, elock, season, episode, name in vids:
-              thumb = thumb.strip("'")
-              vids1.append([url, elock, thumb, season, episode, name, ''])
-          vids = vids1
-      for url, elock, thumb, season, episode, name,plot in vids:
-          if elock != 'False':
+      vids = re.compile('<hr />.+?\<\!\-\- (.+?) \-\-\>', re.DOTALL).findall(html)
+      for vid in vids:
+          if not vid.startswith('{'):
               continue
-          name = h.unescape(name.decode(UTF8))
-          name = name.strip()
-          plot = h.unescape(plot.decode(UTF8))
-          plot = plot.strip()
-          thumb = thumb.strip()
+          a = json.loads(vid)
+          name = a['Episode']['Title']
+          plot = a['LongDescription']
+          thumb = a['DisplayImageUrl']
           fanart = thumb
+          url = a['PartnerApiId']
+          episode = a['Episode']['EpisodeNumber']
+          season = a['Episode']['SeasonNumber']
           infoList = {}
-          if len(season) > 0 and season.strip().isdigit():
-              infoList['Season'] = int(season)
-          if len(episode) > 0 and episode.strip().isdigit():
-              infoList['Episode'] = int(episode)
+          infoList['Season'] = season
+          infoList['Episode'] = episode
           infoList['Title'] = name
           infoList['Plot'] = plot
           infoList['MPAA'] = 'TV-PG'
@@ -97,12 +86,8 @@ class myAddon(t1mAddon):
       jsonRespond = xbmc.executeJSONRPC(json_cmd)
 
   def getAddonVideo(self,url):
-      if not url.startswith('http'):
-          url = 'https://freeform.go.com'+url
-      html = self.getRequest(url)
-      vd = re.compile("VDKA(.+?)'").search(html).group(1)
+      udata = 'video%5Fid='+str(url)+'&device=001&video%5Ftype=lf&brand=002'
       url = 'https://api.entitlement.watchabc.go.com/vp2/ws-secure/entitlement/2020/authorize.json'
-      udata = 'video%5Fid=VDKA'+str(vd)+'&device=001&video%5Ftype=lf&brand=002'
       uheaders = self.defaultHeaders.copy()
       uheaders['Content-Type'] = 'application/x-www-form-urlencoded'
       uheaders['Accept'] = 'application/json'

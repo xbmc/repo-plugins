@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2012-2018 Twitch-on-Kodi
+
+    This file is part of Twitch-on-Kodi (plugin.video.twitch)
+
+    SPDX-License-Identifier: GPL-3.0-only
+    See LICENSES/GPL-3.0-only for more information.
+"""
 from ..addon import menu_items
 from ..addon.common import kodi
 from ..addon.constants import MODES
@@ -10,7 +19,6 @@ from twitch.api.parameters import StreamType
 def route():
     kodi.set_view('files', set_sort=False)
     context_menu = list()
-    context_menu.extend(menu_items.clear_previews())
     kodi.create_item({'label': i18n('live_channels'), 'path': {'mode': MODES.FOLLOWED, 'content': StreamType.LIVE}, 'context_menu': context_menu,
                       'info': {'plot': '%s - %s' % (i18n('following'), i18n('live_channels'))}})
     kodi.create_item({'label': i18n('playlists'), 'path': {'mode': MODES.FOLLOWED, 'content': StreamType.PLAYLIST},

@@ -76,7 +76,9 @@ class Shows:
                 if len(tag_nodes) > 0:
                     tags[tag] = tag_nodes[0].firstChild.nodeValue
         else:
-            tags['url'] = item.getElementsByTagName('link')[0].firstChild.nodeValue
+            # even though its a list of links, there should only be one
+            links = item.getElementsByTagName('link')
+            tags['url'] = links[0].firstChild.nodeValue if len(links) > 0 else None
 
         return tags
 

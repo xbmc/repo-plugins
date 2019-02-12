@@ -1,4 +1,12 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from six.moves import urllib
 
@@ -75,7 +83,7 @@ class UrlToItemConverter(object):
             # remove duplicates
             self._channel_ids = list(set(self._channel_ids))
 
-            channels_item = DirectoryItem('[B]' + context.localize(provider.LOCAL_MAP['youtube.channels']) + '[/B]',
+            channels_item = DirectoryItem(context.get_ui().bold(context.localize(provider.LOCAL_MAP['youtube.channels'])),
                                           context.create_uri(['special', 'description_links'],
                                                              {'channel_ids': ','.join(self._channel_ids)}),
                                           context.create_resource_path('media', 'playlist.png'))
@@ -86,7 +94,7 @@ class UrlToItemConverter(object):
             # remove duplicates
             self._playlist_ids = list(set(self._playlist_ids))
 
-            playlists_item = DirectoryItem('[B]' + context.localize(provider.LOCAL_MAP['youtube.playlists']) + '[/B]',
+            playlists_item = DirectoryItem(context.get_ui().bold(context.localize(provider.LOCAL_MAP['youtube.playlists'])),
                                            context.create_uri(['special', 'description_links'],
                                                               {'playlist_ids': ','.join(self._playlist_ids)}),
                                            context.create_resource_path('media', 'playlist.png'))

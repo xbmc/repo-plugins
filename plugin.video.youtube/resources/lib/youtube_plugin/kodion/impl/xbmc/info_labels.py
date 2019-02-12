@@ -1,4 +1,12 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from ... import utils
 from ...items import *
@@ -73,7 +81,7 @@ def _process_last_played(info_labels, name, param):
         info_labels[name] = param.strftime('%Y-%m-%d %H:%M:%S')
 
 
-def create_from_item(context, base_item):
+def create_from_item(base_item):
     info_labels = {}
 
     # 'date' = '09.03.1982'

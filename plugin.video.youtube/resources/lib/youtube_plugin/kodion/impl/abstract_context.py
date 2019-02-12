@@ -1,9 +1,19 @@
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
 from six.moves import urllib
 
 import os
 
 from .. import constants
-from ..logging import log
+from .. import logger
 from ..utils import *
 
 
@@ -12,7 +22,10 @@ class AbstractContext(object):
         if not params:
             params = {}
 
+        self._system_version = None
+
         self._cache_path = None
+        self._debug_path = None
 
         self._function_cache = None
         self._data_cache = None
@@ -45,7 +58,7 @@ class AbstractContext(object):
     def get_region(self):
         raise NotImplementedError()
 
-    def _get_cache_path(self):
+    def get_cache_path(self):
         if not self._cache_path:
             self._cache_path = os.path.join(self.get_data_path(), 'kodion')
         return self._cache_path
@@ -64,7 +77,7 @@ class AbstractContext(object):
                 max_cache_size_mb = 5
             else:
                 max_cache_size_mb = max_cache_size_mb / 2.0
-            self._data_cache = DataCache(os.path.join(self._get_cache_path(), 'data_cache'),
+            self._data_cache = DataCache(os.path.join(self.get_cache_path(), 'data_cache'),
                                          max_file_size_mb=max_cache_size_mb)
         return self._data_cache
 
@@ -75,25 +88,25 @@ class AbstractContext(object):
                 max_cache_size_mb = 5
             else:
                 max_cache_size_mb = max_cache_size_mb / 2.0
-            self._function_cache = FunctionCache(os.path.join(self._get_cache_path(), 'cache'),
+            self._function_cache = FunctionCache(os.path.join(self.get_cache_path(), 'cache'),
                                                  max_file_size_mb=max_cache_size_mb)
         return self._function_cache
 
     def get_search_history(self):
         if not self._search_history:
             max_search_history_items = self.get_settings().get_int(constants.setting.SEARCH_SIZE, 50)
-            self._search_history = SearchHistory(os.path.join(self._get_cache_path(), 'search'),
+            self._search_history = SearchHistory(os.path.join(self.get_cache_path(), 'search'),
                                                  max_search_history_items)
         return self._search_history
 
     def get_favorite_list(self):
         if not self._favorite_list:
-            self._favorite_list = FavoriteList(os.path.join(self._get_cache_path(), 'favorites'))
+            self._favorite_list = FavoriteList(os.path.join(self.get_cache_path(), 'favorites'))
         return self._favorite_list
 
     def get_watch_later_list(self):
         if not self._watch_later_list:
-            self._watch_later_list = WatchLaterList(os.path.join(self._get_cache_path(), 'watch_later'))
+            self._watch_later_list = WatchLaterList(os.path.join(self.get_cache_path(), 'watch_later'))
         return self._watch_later_list
 
     def get_access_manager(self):
@@ -117,7 +130,10 @@ class AbstractContext(object):
         raise NotImplementedError()
 
     def get_system_version(self):
-        raise NotImplementedError()
+        if not self._system_version:
+            self._system_version = SystemVersion(version='', releasename='', appname='')
+
+        return self._system_version
 
     def create_uri(self, path=u'/', params=None):
         if not params:
@@ -140,7 +156,7 @@ class AbstractContext(object):
                     params[param] = str(params[param])
 
                 uri_params[param] = to_utf8(params[param])
-            uri += '?' + urllib.parse.urlencode(uri_params)
+            uri = '?'.join([uri, urllib.parse.urlencode(uri_params)])
 
         return uri
 
@@ -209,24 +225,23 @@ class AbstractContext(object):
     def add_sort_method(self, *sort_methods):
         raise NotImplementedError()
 
-    def log(self, text, log_level=constants.log.NOTICE):
-        log_line = '[%s] %s' % (self.get_id(), text)
-        log(log_line, log_level)
+    def log(self, text, log_level=logger.NOTICE):
+        logger.log(text, log_level, self.get_id())
 
     def log_warning(self, text):
-        self.log(text, constants.log.WARNING)
+        self.log(text, logger.WARNING)
 
     def log_error(self, text):
-        self.log(text, constants.log.ERROR)
+        self.log(text, logger.ERROR)
 
     def log_notice(self, text):
-        self.log(text, constants.log.NOTICE)
+        self.log(text, logger.NOTICE)
 
     def log_debug(self, text):
-        self.log(text, constants.log.DEBUG)
+        self.log(text, logger.DEBUG)
 
     def log_info(self, text):
-        self.log(text, constants.log.INFO)
+        self.log(text, logger.INFO)
 
     def clone(self, new_path=None, new_params=None):
         raise NotImplementedError()

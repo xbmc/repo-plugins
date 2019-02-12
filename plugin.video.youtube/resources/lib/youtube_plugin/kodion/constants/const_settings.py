@@ -1,4 +1,12 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 THUMB_SIZE = 'kodion.thumbnail.size'  # (int)
 SHOW_FANART = 'kodion.fanart.show'  # (bool)
@@ -12,6 +20,7 @@ USE_DASH = 'kodion.video.quality.mpd'  # (bool)
 AUDIO_ONLY = 'kodion.audio_only'  # (bool)
 AGE_GATE = 'kodion.age.gate'  # (bool)
 SUBTITLE_LANGUAGE = 'kodion.subtitle.languages.num'  # (int)
+SUBTITLE_DOWNLOAD = 'kodion.subtitle.download'  # (bool)
 SETUP_WIZARD = 'kodion.setup_wizard'  # (bool)
 VERIFY_SSL = 'simple.requests.ssl.verify'  # (bool)
 LOCATION = 'youtube.location'  # (str)
@@ -20,6 +29,7 @@ PLAY_COUNT_MIN_PERCENT = 'kodion.play_count.percent'  # (int)
 USE_PLAYBACK_HISTORY = 'kodion.playback.history'  # (bool)
 
 SUPPORT_ALTERNATIVE_PLAYER = 'kodion.support.alternative_player'  # (bool)
+ALTERNATIVE_PLAYER_WEB_URLS = 'kodion.alternative_player.web.urls'  # (bool)
 
 ALLOW_DEV_KEYS = 'youtube.allow.dev.keys'  # (bool)
 

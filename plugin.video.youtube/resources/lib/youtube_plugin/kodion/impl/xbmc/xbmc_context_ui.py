@@ -1,6 +1,12 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
 
-from six import string_types
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 import xbmc
 import xbmcgui
@@ -26,18 +32,6 @@ class XbmcContextUI(AbstractContextUI):
             return XbmcProgressDialogBG(heading, text)
 
         return XbmcProgressDialog(heading, text)
-
-    def set_view_mode(self, view_mode):
-        if isinstance(view_mode, string_types):
-            view_mode = self._context.get_settings().get_int(constants.setting.VIEW_X % view_mode, 50)
-
-        self._view_mode = view_mode
-
-    def get_view_mode(self):
-        if self._view_mode is not None:
-            return self._view_mode
-
-        return self._context.get_settings().get_int(constants.setting.VIEW_DEFAULT, 50)
 
     def get_skin_id(self):
         return xbmc.getSkinDir()
@@ -86,14 +80,28 @@ class XbmcContextUI(AbstractContextUI):
         text = self._context.localize(constants.localize.DELETE_CONTENT) % utils.to_unicode(content_name)
         return self.on_yes_no_input(self._context.localize(constants.localize.CONFIRM_DELETE), text)
 
-    def on_select(self, title, items=[]):
+    def on_select(self, title, items=None):
+        if items is None:
+            items = []
+        major_version = self._context.get_system_version().get_version()[0]
+        if isinstance(items[0], tuple) and len(items[0]) == 4 and major_version <= 16:
+            items = [(item[0], item[2]) for item in items]
+
+        use_details = (isinstance(items[0], tuple) and len(items[0]) == 4 and major_version > 16)
+
         _dict = {}
         _items = []
         i = 0
         for item in items:
             if isinstance(item, tuple):
-                _dict[i] = item[1]
-                _items.append(item[0])
+                if use_details:
+                    new_item = xbmcgui.ListItem(label=item[0], label2=item[1])
+                    new_item.setArt({'icon': item[3], 'thumb': item[3]})
+                    _items.append(new_item)
+                    _dict[i] = item[2]
+                else:
+                    _dict[i] = item[1]
+                    _items.append(item[0])
             else:
                 _dict[i] = i
                 _items.append(item)
@@ -101,10 +109,14 @@ class XbmcContextUI(AbstractContextUI):
             i += 1
 
         dialog = xbmcgui.Dialog()
-        result = dialog.select(title, _items)
+        if use_details:
+            result = dialog.select(title, _items, useDetails=use_details)
+        else:
+            result = dialog.select(title, _items)
+
         return _dict.get(result, -1)
 
-    def show_notification(self, message, header='', image_uri='', time_milliseconds=5000):
+    def show_notification(self, message, header='', image_uri='', time_milliseconds=5000, audible=True):
         _header = header
         if not _header:
             _header = self._context.get_name()
@@ -124,26 +136,51 @@ class XbmcContextUI(AbstractContextUI):
             _message = utils.to_unicode(_message)
             _header = utils.to_unicode(_header)
 
-        xbmc.executebuiltin("Notification(%s, %s, %d, %s)" % (_header, _message, time_milliseconds, _image))
+        #  xbmc.executebuiltin("Notification(%s, %s, %d, %s)" % (_header, _message, time_milliseconds, _image))
+        xbmcgui.Dialog().notification(_header, _message, _image, time_milliseconds, audible)
 
     def open_settings(self):
         self._xbmc_addon.openSettings()
 
+    def refresh_container(self):
+        script_uri = 'special://home/addons/%s/resources/lib/youtube_plugin/refresh.py' % self._context.get_id()
+        xbmc.executebuiltin('RunScript(%s)' % script_uri)
+
     @staticmethod
-    def refresh_container():
-        xbmc.executebuiltin("Container.Refresh")
+    def get_info_label(value):
+        return xbmc.getInfoLabel(value)
 
     @staticmethod
     def set_home_window_property(property_id, value):
-        property_id = 'plugin.video.youtube-' + property_id
+        property_id = ''.join(['plugin.video.youtube-', property_id])
         xbmcgui.Window(10000).setProperty(property_id, value)
 
     @staticmethod
     def get_home_window_property(property_id):
-        property_id = 'plugin.video.youtube-' + property_id
+        property_id = ''.join(['plugin.video.youtube-', property_id])
         return xbmcgui.Window(10000).getProperty(property_id) or None
 
     @staticmethod
     def clear_home_window_property(property_id):
-        property_id = 'plugin.video.youtube-' + property_id
+        property_id = ''.join(['plugin.video.youtube-', property_id])
         xbmcgui.Window(10000).clearProperty(property_id)
+
+    @staticmethod
+    def bold(value):
+        return ''.join(['[B]', value, '[/B]'])
+
+    @staticmethod
+    def uppercase(value):
+        return ''.join(['[UPPERCASE]', value, '[/UPPERCASE]'])
+
+    @staticmethod
+    def color(color, value):
+        return ''.join(['[COLOR=', color.lower(), ']', value, '[/COLOR]'])
+
+    def set_focus_next_item(self):
+        cid = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getFocusId()
+        try:
+            current_position = int(self.get_info_label('Container.Position')) + 1
+            self._context.execute('SetFocus(%s,%s)' % (cid, str(current_position)))
+        except ValueError:
+            pass

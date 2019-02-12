@@ -1,15 +1,32 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
+import copy
+import timeit
+
+from .impl import Runner
+from .impl import Context
+
+from . import debug
 
 __all__ = ['run']
 
-import copy
-from .impl import Runner
-from .impl import Context
+__DEBUG_RUNTIME = False
+__DEBUG_RUNTIME_SINGLE_FILE = False
 
 __RUNNER__ = Runner()
 
 
 def run(provider, context=None):
+    start_time = timeit.default_timer()
+
     if not context:
         context = Context(plugin_id='plugin.video.youtube')
 
@@ -42,4 +59,10 @@ def run(provider, context=None):
 
     __RUNNER__.run(provider, context)
     provider.tear_down(context)
-    context.log_debug('Shutdown of Kodion')
+
+    elapsed = timeit.default_timer() - start_time
+
+    if __DEBUG_RUNTIME:
+        debug.runtime(context, addon_version, elapsed, single_file=__DEBUG_RUNTIME_SINGLE_FILE)
+
+    context.log_debug('Shutdown of Kodion after |%s| seconds' % str(round(elapsed, 4)))

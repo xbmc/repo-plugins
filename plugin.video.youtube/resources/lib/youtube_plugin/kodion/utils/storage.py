@@ -1,7 +1,16 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from six import PY2
 from six.moves import range
+# noinspection PyPep8Naming
 from six.moves import cPickle as pickle
 
 import datetime
@@ -15,7 +24,7 @@ class Storage(object):
         self._table_name = 'storage'
         self._filename = filename
         if not self._filename.endswith('.sqlite'):
-            self._filename += '.sqlite'
+            self._filename = ''.join([self._filename, '.sqlite'])
         self._file = None
         self._cursor = None
         self._max_item_count = max_item_count
@@ -51,7 +60,9 @@ class Storage(object):
             # self._cursor.execute('PRAGMA synchronous=OFF')
             self._create_table()
 
-    def _execute(self, needs_commit, query, values=[]):
+    def _execute(self, needs_commit, query, values=None):
+        if values is None:
+            values = []
         if not self._needs_commit and needs_commit:
             self._needs_commit = True
             self._cursor.execute('BEGIN')
@@ -115,25 +126,28 @@ class Storage(object):
         def _encode(obj):
             return sqlite3.Binary(pickle.dumps(obj, protocol=pickle.HIGHEST_PROTOCOL))
 
-        self._open()
-        now = datetime.datetime.now()
-        if not now.microsecond:  # now is to the second
-            now += datetime.timedelta(microseconds=1)  # add 1 microsecond, required for dbapi2
-        query = 'REPLACE INTO %s (key,time,value) VALUES(?,?,?)' % self._table_name
-        self._execute(True, query, values=[item_id, now, _encode(item)])
-        self._close()
-        self._optimize_item_count()
+        if self._max_file_size_kb < 1 and self._max_item_count < 1:
+            self._optimize_item_count()
+        else:
+            self._open()
+            now = datetime.datetime.now() + datetime.timedelta(microseconds=1)  # add 1 microsecond, required for dbapi2
+            query = 'REPLACE INTO %s (key,time,value) VALUES(?,?,?)' % self._table_name
+            self._execute(True, query, values=[item_id, now, _encode(item)])
+            self._close()
+            self._optimize_item_count()
 
     def _optimize_item_count(self):
         if self._max_item_count < 1:
-            return
-        self._open()
-        query = 'SELECT key FROM %s ORDER BY time DESC LIMIT -1 OFFSET %d' % (self._table_name, self._max_item_count)
-        result = self._execute(False, query)
-        if result is not None:
-            for item in result:
-                self._remove(item[0])
-        self._close()
+            if not self._is_empty():
+                self._clear()
+        else:
+            self._open()
+            query = 'SELECT key FROM %s ORDER BY time DESC LIMIT -1 OFFSET %d' % (self._table_name, self._max_item_count)
+            result = self._execute(False, query)
+            if result is not None:
+                for item in result:
+                    self._remove(item[0])
+            self._close()
 
     def _clear(self):
         self._open()

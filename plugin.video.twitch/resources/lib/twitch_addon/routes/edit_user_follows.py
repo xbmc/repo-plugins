@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2012-2018 Twitch-on-Kodi
+
+    This file is part of Twitch-on-Kodi (plugin.video.twitch)
+
+    SPDX-License-Identifier: GPL-3.0-only
+    See LICENSES/GPL-3.0-only for more information.
+"""
 from ..addon.common import kodi
+from ..addon.constants import Scripts
 from ..addon.utils import i18n
 
 
@@ -33,3 +43,4 @@ def route(api, channel_id=None, channel_name=None, game=None):
             else:
                 result = api.follow_game(game)
             kodi.notify(msg=i18n('now_following') % display_name, sound=False)
+    kodi.execute_builtin('RunScript(%s)' % Scripts.REFRESH)

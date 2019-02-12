@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: 2015-09-21 11:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: roliverosc\n"
 "Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,13 +16,13 @@ msgstr ""
 "Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-msgctxt "Addon Summary"
-msgid "Plugin for YouTube"
-msgstr "Plugin para YouTube"
+# msgctxt "Addon Summary"
+# msgid "Plugin for YouTube"
+# msgstr "Plugin para YouTube"
 
-msgctxt "Addon Description"
-msgid "YouTube is a one of the biggest video-sharing websites of the world."
-msgstr "YouTube es uno de los mayores sitios web de intercambio de vídeos del mundo."
+# msgctxt "Addon Description"
+# msgid "YouTube is a one of the biggest video-sharing websites of the world."
+# msgstr "YouTube es uno de los sitios web más grandes para compartir videos del mundo."
 
 #Kodion Settings
 
@@ -179,7 +179,7 @@ msgstr "Añadir a favoritos del Add-on"
 
 msgctxt "#30102"
 msgid "Search"
-msgstr "Búsqueda"
+msgstr "Buscar"
 
 msgctxt "#30103"
 msgid "Library"
@@ -235,11 +235,11 @@ msgstr "Confirmación para suprimir"
 
 msgctxt "#30116"
 msgid "Delete \"%s\"?"
-msgstr "¿Esta seguro de que desea eliminar \"%s\"?"
+msgstr "¿Está seguro de que desea eliminar \"%s\"?"
 
 msgctxt "#30117"
 msgid "Remove \"%s\"?"
-msgstr "¿Esta seguro de que desea suprimir \"%s\"?"
+msgstr "¿Está seguro de que desea suprimir \"%s\"?"
 
 msgctxt "#30118"
 msgid "Delete"
@@ -885,7 +885,7 @@ msgstr "La ID de cliente es incorrecta. Ajustes - API - API ID"
 
 msgctxt "#30650"
 msgid "Client Secret is incorrect. Settings - API - API Secret"
-msgstr "La ID Secreta es incorrecta. Ajustes - API - API Secret"
+msgstr "La API Secreta es incorrecta. Ajustes - API - API Secret"
 
 msgctxt "#30651"
 msgid "Location"
@@ -1025,7 +1025,7 @@ msgstr "Hoy a las"
 
 msgctxt "#30685"
 msgid "Delete data cache database"
-msgstr "Eliminar base de datos para caché de datos"
+msgstr "Eliminar la base de datos para caché de datos"
 
 msgctxt "#30686"
 msgid "Clear data cache"
@@ -1081,7 +1081,7 @@ msgstr "Comprobar mi dirección IP"
 
 msgctxt "#30699"
 msgid "HTTP server is not running"
-msgstr "El Servidor HTTP no está funcionando"
+msgstr "El Servidor HTTP no está arrancado"
 
 msgctxt "#30700"
 msgid "Client IP is %s"
@@ -1089,4 +1089,80 @@ msgstr "La IP del cliente es %s"
 
 msgctxt "#30701"
 msgid "Failed to obtain client IP"
-msgstr "No se pudo obtener la IP de cliente"
+msgstr "Error al obtener IP del cliente"
+
+msgctxt "#30702"
+msgid "Play with subtitles"
+msgstr "Reproducir con subtítulos"
+
+msgctxt "#30703"
+msgid "Are you sure?"
+msgstr "¿Está seguro?"
+
+msgctxt "#30704"
+msgid "Use YouTube website urls"
+msgstr "Usar urls del sitio web YouTube"
+
+msgctxt "#30705"
+msgid "Download subtitles"
+msgstr "Descargar subtítulos"
+
+msgctxt "#30706"
+msgid "Download subtitles before starting playback? (Default: No)"
+msgstr "¿Desea descargar los subtítulos antes de comenzar la reproducción? (Por defecto: No)"
+
+msgctxt "#30707"
+msgid "Untitled"
+msgstr "Sin título"
+
+msgctxt "#30708"
+msgid "Play audio only"
+msgstr "Reproducir solo audio"
+
+msgctxt "#30709"
+msgid "Failed to retrieve Watch Later playlist id. To increase the chances of retrieval add 8-10 videos to Watch Later via the web/app and retry."
+msgstr "Error al recuperar la id para la lista de reproducción Ver más tarde. Para aumentar las posibilidades de recuperación, agregue 8-10 vídeos a Ver más tarde a través de la web/aplicación y vuelva a intentarlo."
+
+msgctxt "#30710"
+msgid "Failed to retrieve Watch Later playlist id. Try again tomorrow without removing any of the videos."
+msgstr "Error al recuperar la id para la lista de reproducción Ver más tarde. Inténtalo de nuevo mañana sin quitar ninguno de los vídeos."
+
+msgctxt "#30711"
+msgid "Searching for Watch Later... Page %s"
+msgstr "Buscando para Ver más tarde... Página %s"
+
+msgctxt "#30712"
+msgid "Rate videos in playlists"
+msgstr "Calificar vídeos en listas de reproducción"
+
+msgctxt "#30713"
+msgid "Added to Watch Later"
+msgstr "Añadido a Ver más tarde"
+
+msgctxt "#30714"
+msgid "Added to playlist"
+msgstr "Añadido a lista de reproducción"
+
+msgctxt "#30715"
+msgid "Removed from playlist"
+msgstr "Eliminado de la lista de reproducción"
+
+msgctxt "#30716"
+msgid "Liked video"
+msgstr "Me gusto el vídeo"
+
+msgctxt "#30717"
+msgid "Disliked video"
+msgstr "No me gusto el vídeo"
+
+msgctxt "#30718"
+msgid "Rating removed"
+msgstr "Calificados eliminados"
+
+msgctxt "#30719"
+msgid "Subscribed to channel"
+msgstr ""
+
+msgctxt "#30720"
+msgid "Unsubscribed from channel"
+msgstr ""

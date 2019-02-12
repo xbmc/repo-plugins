@@ -1,35 +1,35 @@
 # -*- coding: utf-8 -*-
 """
-    Modified: Feb. 06, 2018 plugin.video.youtube
 
-    Copyright (C) 2016 Twitch-on-Kodi
+    Copyright (C) 2018-2018 plugin.video.youtube
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
 """
 
 import os
 import json
 from copy import deepcopy
 
+import xbmcaddon
 import xbmcvfs
 import xbmc
+
+from .. import logger
 
 
 class JSONStore(object):
     def __init__(self, filename):
-        self.base_path = 'special://profile/addon_data/plugin.video.youtube/'
-        self.filename = xbmc.translatePath(self.base_path + filename)
+        addon_id = 'plugin.video.youtube'
+        addon = xbmcaddon.Addon(addon_id)
+
+        try:
+            self.base_path = xbmc.translatePath(addon.getAddonInfo('profile')).decode('utf-8')
+        except AttributeError:
+            self.base_path = xbmc.translatePath(addon.getAddonInfo('profile'))
+
+        self.filename = os.path.join(self.base_path, filename)
+
         self._data = None
         self.load()
         self.set_defaults()
@@ -42,10 +42,10 @@ class JSONStore(object):
             self._data = deepcopy(data)
             if not xbmcvfs.exists(self.base_path):
                 if not self.make_dirs(self.base_path):
-                    xbmc.log('[plugin.video.youtube] JSONStore Save |{filename}| failed to create directories.'.format(filename=self.filename), xbmc.LOGDEBUG)
+                    logger.log_debug('JSONStore Save |{filename}| failed to create directories.'.format(filename=self.filename.encode("utf-8")))
                     return
             with open(self.filename, 'w') as jsonfile:
-                xbmc.log('[plugin.video.youtube] JSONStore Save |{filename}|'.format(filename=self.filename), xbmc.LOGDEBUG)
+                logger.log_debug('JSONStore Save |{filename}|'.format(filename=self.filename.encode("utf-8")))
                 json.dump(self._data, jsonfile, indent=4, sort_keys=True)
 
     def load(self):
@@ -53,20 +53,21 @@ class JSONStore(object):
             with open(self.filename, 'r') as jsonfile:
                 data = json.load(jsonfile)
                 self._data = data
-                xbmc.log('[plugin.video.youtube] JSONStore Load |{filename}|'.format(filename=self.filename), xbmc.LOGDEBUG)
+                logger.log_debug('JSONStore Load |{filename}|'.format(filename=self.filename.encode("utf-8")))
         else:
             self._data = dict()
 
     def get_data(self):
         return deepcopy(self._data)
 
-    def make_dirs(self, path):
+    @staticmethod
+    def make_dirs(path):
         if not path.endswith('/'):
-            path += '/'
+            path = ''.join([path, '/'])
         path = xbmc.translatePath(path)
         if not xbmcvfs.exists(path):
             try:
-                r = xbmcvfs.mkdirs(path)
+                _ = xbmcvfs.mkdirs(path)
             except:
                 pass
             if not xbmcvfs.exists(path):

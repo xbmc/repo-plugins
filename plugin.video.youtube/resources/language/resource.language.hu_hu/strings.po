@@ -17,13 +17,13 @@ msgstr ""
 "Last-Translator: Kardos László <lacesz at ox dot io>\n"
 "X-Generator: Poedit 2.0.4\n"
 
-msgctxt "Addon Summary"
-msgid "Plugin for YouTube"
-msgstr "YouTube kiegészítő"
+# msgctxt "Addon Summary"
+# msgid "Plugin for YouTube"
+# msgstr "YouTube kiegészítő"
 
-msgctxt "Addon Description"
-msgid "YouTube is a one of the biggest video-sharing websites of the world."
-msgstr "A YouTube a világ egyik legnagyobb videómegosztó weboldala."
+# msgctxt "Addon Description"
+# msgid "YouTube is a one of the biggest video-sharing websites of the world."
+# msgstr "A YouTube a világ egyik legnagyobb videómegosztó weboldala."
 
 msgctxt "#30000"
 msgid "General"
@@ -1071,4 +1071,80 @@ msgstr ""
 
 msgctxt "#30701"
 msgid "Failed to obtain client IP"
+msgstr ""
+
+msgctxt "#30702"
+msgid "Play with subtitles"
+msgstr ""
+
+msgctxt "#30703"
+msgid "Are you sure?"
+msgstr ""
+
+msgctxt "#30704"
+msgid "Use YouTube website urls"
+msgstr ""
+
+msgctxt "#30705"
+msgid "Download subtitles"
+msgstr ""
+
+msgctxt "#30706"
+msgid "Download subtitles before starting playback? (Default: No)"
+msgstr ""
+
+msgctxt "#30707"
+msgid "Untitled"
+msgstr ""
+
+msgctxt "#30708"
+msgid "Play audio only"
+msgstr ""
+
+msgctxt "#30709"
+msgid "Failed to retrieve Watch Later playlist id. To increase the chances of retrieval add 8-10 videos to Watch Later via the web/app and retry."
+msgstr ""
+
+msgctxt "#30710"
+msgid "Failed to retrieve Watch Later playlist id. Try again tomorrow without removing any of the videos."
+msgstr ""
+
+msgctxt "#30711"
+msgid "Searching for Watch Later... Page %s"
+msgstr ""
+
+msgctxt "#30712"
+msgid "Rate videos in playlists"
+msgstr ""
+
+msgctxt "#30713"
+msgid "Added to Watch Later"
+msgstr ""
+
+msgctxt "#30714"
+msgid "Added to playlist"
+msgstr ""
+
+msgctxt "#30715"
+msgid "Removed from playlist"
+msgstr ""
+
+msgctxt "#30716"
+msgid "Liked video"
+msgstr ""
+
+msgctxt "#30717"
+msgid "Disliked video"
+msgstr ""
+
+msgctxt "#30718"
+msgid "Rating removed"
+msgstr ""
+
+msgctxt "#30719"
+msgid "Subscribed to channel"
+msgstr ""
+
+msgctxt "#30720"
+msgid "Unsubscribed from channel"
 msgstr ""

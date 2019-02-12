@@ -1,20 +1,12 @@
 # -*- coding: utf-8 -*-
 """
      
-    Copyright (C) 2016 Twitch-on-Kodi
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    Copyright (C) 2012-2018 Twitch-on-Kodi
+
+    This file is part of Twitch-on-Kodi (plugin.video.twitch)
+
+    SPDX-License-Identifier: GPL-3.0-only
+    See LICENSES/GPL-3.0-only for more information.
 """
 
 from .common import kodi
@@ -43,7 +35,6 @@ MODES = __enum(
     CHANNELVIDEOLIST='channel_video_list',
     GAMESTREAMS='game_streams',
     RESETCACHE='reset_cache',
-    CLEARLIVEPREVIEWS='clear_live_previews',
     INSTALLIRCCHAT='install_ircchat',
     PLAY='play',
     TOKENURL='get_token_url',
@@ -83,8 +74,6 @@ ICON = kodi.get_icon()
 FANART = kodi.get_fanart()
 
 ADAPTIVE_SOURCE_TEMPLATE = {'id': 'hls', 'name': 'Adaptive', 'bandwidth': -1, 'url': ''}
-
-REFRESH_SCRIPT = 'special://home/addons/plugin.video.twitch/resources/lib/twitch_addon/refresh.py'
 
 CLIENT_ID = 'NjdlYnBmaHlvaWNhYjVrcjB5N3B6b2NzZm9oczd0eQ=='
 REDIRECT_URI = 'https://mrsprigster.github.io/Twitch-on-Kodi/token/'
@@ -191,6 +180,10 @@ class Keys:
     VIEWS = 'views'
     VOD = 'vod'
     VODS = 'vods'
+
+
+class Scripts:
+    REFRESH = 'special://home/addons/plugin.video.twitch/resources/lib/twitch_addon/refresh.py'
 
 
 SCOPES = [scopes.user_read, scopes.user_follows_edit, scopes.user_subscriptions, scopes.chat_login]

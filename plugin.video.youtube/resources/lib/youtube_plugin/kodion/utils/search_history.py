@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
+
 import hashlib
 
 from .storage import Storage
@@ -15,7 +25,9 @@ class SearchHistory(Storage):
         result = []
 
         keys = self._get_ids(oldest_first=False)
-        for key in keys:
+        for i, key in enumerate(keys):
+            if i >= self._max_item_count:
+                break
             item = self._get(key)
             result.append(item[0])
 
@@ -24,7 +36,8 @@ class SearchHistory(Storage):
     def clear(self):
         self._clear()
 
-    def _make_id(self, search_text):
+    @staticmethod
+    def _make_id(search_text):
         m = hashlib.md5()
         m.update(to_utf8(search_text))
         return m.hexdigest()

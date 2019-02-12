@@ -1,4 +1,12 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from six.moves import range
 
@@ -8,7 +16,7 @@ import time
 from ...youtube.youtube_exceptions import LoginException
 
 
-def process(mode, provider, context, re_match, sign_out_refresh=True):
+def process(mode, provider, context, sign_out_refresh=True):
     addon_id = context.get_param('addon_id', None)
 
     def _do_logout():
@@ -54,8 +62,9 @@ def process(mode, provider, context, re_match, sign_out_refresh=True):
         device_code = json_data['device_code']
         user_code = json_data['user_code']
 
-        text = context.localize(provider.LOCAL_MAP['youtube.sign.go_to']) % '[B]youtube.com/activate[/B]'
-        text += '[CR]%s [B]%s[/B]' % (context.localize(provider.LOCAL_MAP['youtube.sign.enter_code']), user_code)
+        text = [context.localize(provider.LOCAL_MAP['youtube.sign.go_to']) % context.get_ui().bold('youtube.com/activate'),
+                '[CR]%s %s' % (context.localize(provider.LOCAL_MAP['youtube.sign.enter_code']), context.get_ui().bold(user_code))]
+        text = ''.join(text)
         dialog = context.get_ui().create_progress_dialog(
             heading=context.localize(provider.LOCAL_MAP['youtube.sign.in']), text=text, background=False)
 
@@ -79,7 +88,7 @@ def process(mode, provider, context, re_match, sign_out_refresh=True):
                 log_data['refresh_token'] = '<redacted>'
             context.log_debug('Requesting access token: |%s|' % json.dumps(log_data))
 
-            if not 'error' in json_data:
+            if 'error' not in json_data:
                 _access_token = json_data.get('access_token', '')
                 _expires_in = time.time() + int(json_data.get('expires_in', 3600))
                 _refresh_token = json_data.get('refresh_token', '')

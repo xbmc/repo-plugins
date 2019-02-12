@@ -1,4 +1,12 @@
-__author__ = 'bromix'
+# -*- coding: utf-8 -*-
+"""
+
+    Copyright (C) 2014-2016 bromix (plugin.video.youtube)
+    Copyright (C) 2016-2018 plugin.video.youtube
+
+    SPDX-License-Identifier: GPL-2.0-only
+    See LICENSES/GPL-2.0-only for more information.
+"""
 
 from six.moves import urllib
 
@@ -54,9 +62,9 @@ class YouTubeResolver(AbstractResolver):
                            'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
                 response = requests.get(url, headers=headers, verify=self._verify)
                 if response.status_code == 200:
-                    re_match = re.search(r'<meta itemprop="channelId" content="(?P<channel_id>.+)">', response.text)
-                    if re_match:
-                        channel_id = re_match.group('channel_id')
+                    match = re.search(r'<meta itemprop="channelId" content="(?P<channel_id>.+)">', response.text)
+                    if match:
+                        channel_id = match.group('channel_id')
                         return 'https://www.youtube.com/channel/%s' % channel_id
             except:
                 # do nothing
@@ -112,7 +120,7 @@ class CommonResolver(AbstractResolver, list):
 
                     # some server return 301 for HEAD requests
                     # we just compare the new location - if it's equal we can return the url
-                    if location == _url or location + '/' == _url or location == _url + '/':
+                    if location == _url or ''.join([location, '/']) == _url or location == ''.join([_url, '/']):
                         return _url
 
                     if location:

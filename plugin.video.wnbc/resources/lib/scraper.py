@@ -19,7 +19,7 @@ UTF8 = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      html = self.getRequest('https://friendship.nbc.co/v2/graphql?extensions=%7B%22persistedQuery%22:%7B%22namedHash%22:%22page.v2%22%7D%7D&variables=%7B%22name%22:%22allShows%22,%22type%22:%22PAGE%22,%22userId%22:%22%22,%22platform%22:%22web%22,%22device%22:%22web%22%7D')
+      html = self.getRequest('https://friendship.nbc.co/v2/graphql?extensions=%7B%22persistedQuery%22:%7B%22namedHash%22:%22page.v5%22%7D%7D&variables=%7B%22name%22:%22allShows%22,%22type%22:%22PAGE%22,%22userId%22:%22-6407222222222222222%22,%22platform%22:%22web%22,%22device%22:%22web%22,%22timeZone%22:%22America%2FNew_York%22%7D')
       a = json.loads(html)
       a = a["data"]["page"]["sections"][0]["data"]["items"][0]["data"]["items"]
       mode = 'GE'
@@ -51,61 +51,35 @@ class myAddon(t1mAddon):
 
 
   def getAddonEpisodes(self,url,ilist, dtype='episode', getFileData = False):
-      html = self.getRequest('https://www.nbc.com/%s' % url)
-      id = re.compile(',"listKey"\:\"(.+?)"', re.DOTALL).search(html)
-      if id is not None:
-          id = id.group(1)
-          id = id.rsplit('-',1)[0]
-      else:
-          return(ilist)
-      html = self.getRequest('https://api.nbc.com/v3.14/videos?fields%5Bvideos%5D=title%2Cdescription%2Ctype%2Cgenre%2CvChipRating%2CvChipSubRatings%2Cguid%2Cpublished%2CrunTime%2Cairdate%2Cavailable%2CseasonNumber%2CepisodeNumber%2Cexpiration%2Centitlement%2CtveAuthWindow%2CnbcAuthWindow%2CexternalAdId%2CuplynkStatus%2CdayPart%2CinternalId%2Ckeywords%2Cpermalink%2CembedUrl%2Ccredits%2CselectedCountries%2Ccopyright&fields%5Bshows%5D=active%2Ccategory%2Ccolors%2CcreditTypeLabel%2Cdescription%2Cfrontends%2Cgenre%2CinternalId%2CisCoppaCompliant%2Cname%2Cnavigation%2Creference%2CschemaType%2CshortDescription%2CshortTitle%2CshowTag%2Csocial%2CsortTitle%2CtuneIn%2Ctype%2CurlAlias&fields%5Bimages%5D=derivatives%2Cpath%2Cwidth%2Cattributes%2CaltText%2Clink&fields%5BaggregatesShowProperties%5D=videoEpisodeSeasons%2CvideoTypes&include=image%2Cshow.image%2Cshow.aggregates&filter%5Bpublished%5D=1&filter%5BsalesItem%5D=0&filter%5Bshow%5D='+id+'&filter%5Btype%5D%5Bvalue%5D=Full%20Episode&filter%5Btype%5D%5Boperator%5D=%3D&sort=airdate&page%5Bnumber%5D=1&page%5Bsize%5D=50')
+      html = self.getRequest('https://friendship.nbc.co/v2/graphql?extensions=%7B%22persistedQuery%22:%7B%22namedHash%22:%22page.v4%22%7D%7D&variables=%7B%22name%22:%22'+url+'%22,%22type%22:%22SERIES%22,%22userId%22:%22-6407222222222222222%22,%22platform%22:%22web%22,%22device%22:%22web%22%7D')
       a = json.loads(html)
-      ux = a.get('links').get('next')
-      if not ux is None:
-          html = self.getRequest(ux)
-          b = json.loads(html)
-          a['data'].extend(b['data'])
-      for b in a['data']:
-           infoList = {}
-           url = b['attributes'].get('mediaUrl')
-           if url == None:
-               url = b['attributes'].get('embedUrl')
-               url = url.split('guid/',1)[1]
-               url = url.split('?',1)[0]
-               url = 'http://link.theplatform.com/s/NnzsPC/media/guid/%s?format=preview' % url
-           else:
-               url += '&format=preview'
-           html = self.getRequest(url)
-           if html == '':
+      for b in a['data']['page']['sections']:
+       if b['component'] != 'LinksSelectableGroup':
+           continue
+       for c in b['data']['items']:
+         if c['component'] != 'Shelf':
                continue
-           c = json.loads(html)
-           name = c['title']
-           thumb = c.get('defaultThumbnailUrl')
+         for b in c['data']['items']:
+           b = b['data']
+           if b['programmingType'] != 'Full Episode':
+               continue
+           infoList = {}
+           name = b['secondaryTitle']
+           url = 'https://link.theplatform.com/s/NnzsPC/media/guid/2410887629/'+b['mpxGuid']+'?policy=43674&player=NBC.com%20Instance%20of%3A%20rational-player-production&formats=m3u,mpeg4&format=SMIL&embedded=true&tracking=true'
+           thumb = b['image']
            fanart = thumb
-           url = 'http://link.theplatform.com/s/NnzsPC/media/'+c['mediaPid']+'?policy=43674&player=NBC.com%20Instance%20of%3A%20rational-player-production&formats=m3u,mpeg4&format=SMIL&embedded=true&tracking=true'
            infoList['Title'] = name
-           season = c.get('nbcu$seasonNumber', False)
+           season = b.get('seasonNumber', False)
            if season:
                infoList['Season'] = int(season)
-           episode = c.get('nbcu$airOrder', False)
+           episode = b.get('episodeNumber', False)
            if episode:
                infoList['Episode'] = int(episode)
-           duration = c.get('duration')
+           duration = b.get('duration', False)
            if duration:
-               infoList['Duration'] = int(duration/1000)
-           airDate = c.get('nbcu$airDate')
-           if airDate is not None:
-               airDate = int(airDate/1000)
-               infoList['date'] = datetime.datetime.fromtimestamp(airDate).strftime('%d.%m.%Y')
-               airDate = datetime.datetime.fromtimestamp(airDate).strftime('%Y-%m-%d')
-               infoList['aired'] = airDate
-               infoList['premiered'] = airDate
-               infoList['year'] = int(airDate.split('-',1)[0])
-           rating = c.get('ratings')
-           if (rating is not None) and (rating != []):
-               infoList['MPAA'] = rating[0].get('rating')
+               infoList['Duration'] = int(duration)
            infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
-           infoList['Plot'] = c.get('description')
+           infoList['Plot'] = b.get('description')
            infoList['Studio'] = 'NBC'
            infoList['mediatype'] = 'episode'
            if getFileData == False:

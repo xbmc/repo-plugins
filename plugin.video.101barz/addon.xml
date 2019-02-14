@@ -35,7 +35,6 @@
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
             <banner></banner>
-            <screenshot></screenshot>
         </assets>
     </extension>
 </addon>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.slingtv" version="1.0.0" name="Sling.TV" provider-name="Lunatixz, eracknaphobia, d21spike">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.requests" version="2.7.0"/>
+        <import addon="script.module.pytz" version="2014.2"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+        <import addon="script.module.uepg" version="1.0.5"/>
+        <import addon="script.module.mechanize" version="0.2.6"/>
+        <import addon="script.module.inputstreamhelper" version="0.3.3"/>
+        <import addon="script.module.requests_oauthlib" version="0.7.0"/>
+        <import addon="script.module.xmltodict" version="0.11.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <description lang="en_GB"></description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/plugin.video.slingtv</source>
+        <website>https://www.sling.com</website>
+        <forum>https://forum.kodi.tv/showthread.php?tid=340715</forum>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+            <screenshot>resources/images/screenshot03.png</screenshot>
+            <screenshot>resources/images/screenshot04.png</screenshot>
+        </assets>
+    </extension>
+</addon>

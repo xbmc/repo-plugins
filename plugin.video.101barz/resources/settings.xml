@@ -1,0 +1,3 @@
+<settings>
+    <setting id="onlyshowallvideoscategory" 	type="bool"   label="30101"                                     default="false"/>
+</settings>

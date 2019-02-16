@@ -1,0 +1,54 @@
+msgid ""
+msgstr ""
+
+msgctxt "Addon Summary"
+msgid "Video clips featuring mostly dutch hip hop artists"
+msgstr "Video clips van voornamelijk nerderlandse hip hop artiesten"
+
+msgctxt "Addon Description"
+msgid "Video clips featuring mostly dutch hip hop artists"
+msgstr "Video clips van voornamelijk nerderlandse hip hop artiesten"
+
+msgctxt "Addon Disclaimer"
+msgid "For bugs, requests or general questions visit the 101barz thread on the Kodi forum"
+msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de 101barz thread op het Kodi forum."
+
+msgctxt "#30001"
+msgid "Search"
+msgstr "Zoek"
+
+msgctxt "#30002"
+msgid "All Videos"
+msgstr "Alle Videos"
+
+msgctxt "#30003"
+msgid "Studio Sessions"
+msgstr "Studio Sessies"
+
+msgctxt "#30004"
+msgid "Video Clipz"
+msgstr "Video Clipz"
+
+msgctxt "#30005"
+msgid "Rotjoch Lounge"
+msgstr "Rotjoch Lounge"
+
+msgctxt "#30006"
+msgid "Hitmakerz"
+msgstr "Hitmakerz"
+
+msgctxt "#30007"
+msgid "Barz4Barz"
+msgstr "Barz4Barz"
+
+msgctxt "#30008"
+msgid "Talent of the month"
+msgstr "Talent van de maand"
+
+msgctxt "#30009"
+msgid "Next Page"
+msgstr "Volgende Pagina"
+
+msgctxt "#30101"
+msgid "Only show All videos category"
+msgstr "Laat alleen de Alle Videos categorie zien"

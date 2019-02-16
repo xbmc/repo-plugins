@@ -191,7 +191,8 @@ def GetAtoZPage(url):
 
     Creates the list of programmes for one character.
     """
-    html = OpenURL('https://www.bbc.co.uk/iplayer/a-z/%s' % url)
+    current_url = 'https://www.bbc.co.uk/iplayer/a-z/%s' % url
+    html = OpenURL(current_url)
 
     # There is a new layout for episodes, scrape it from the JSON received as part of the page
     match = re.search(
@@ -201,7 +202,7 @@ def GetAtoZPage(url):
     if match:
         data = match.group(1)
         json_data = json.loads(data)
-        ParseJSON(json_data)
+        ParseJSON(json_data, current_url)
 
 
 def GetMultipleEpisodes(url):
@@ -335,7 +336,7 @@ def ScrapeEpisodes(page_url):
         if match:
             data = match.group(1)
             json_data = json.loads(data)
-            ParseJSON(json_data)
+            ParseJSON(json_data, page_url)
 
         percent = int(100*page/total_pages)
         pDialog.update(percent,translation(30319))
@@ -413,7 +414,7 @@ def ScrapeAtoZEpisodes(page_url):
             if match:
                 data = match.group(1)
                 json_data = json.loads(data)
-                ParseJSON(json_data)
+                ParseJSON(json_data, page_url)
 
             percent = int(100*page/last_page)
             pDialog.update(percent,translation(30319))
@@ -546,10 +547,10 @@ def ListCategories():
     """
     html = OpenURL('https://www.bbc.co.uk/iplayer')
     match = re.compile(
-        '<a href="/iplayer/categories/(.+?)/featured".*?>(.+?)</a>'
+        '<a href="/iplayer/categories/(.+?)/featured".*?><span class="lnk__label">(.+?)</span>'
         ).findall(html)
     for url, name in match:
-        if name == "View all":
+        if ((name == "View all") or (name == "A-Z")):
             continue
         AddMenuEntry(name, url, 126, '', '', '')
 
@@ -671,7 +672,7 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
             added_directories.append(main_url)
 
 
-def ParseJSON(json_data):
+def ParseJSON(json_data, current_url):
     """Parses the JSON data containing programme information of a page. Contains a lot of fallbacks
     """
 
@@ -689,6 +690,17 @@ def ParseJSON(json_data):
         if 'header' in programme_data:
             if 'title' in programme_data['header']:
                 name = programme_data['header']['title']
+            if 'availableSlices' in programme_data['header']:
+                current_series = programme_data['header']['currentSliceId']
+                slices = programme_data['header']['availableSlices']
+                if slices is not None:
+                    for series in slices:
+                        if series['id'] == current_series:
+                            continue
+                        base_url = current_url.split('?')[0]
+                        series_url = base_url + '?seriesId=' + series['id']
+                        AddMenuEntry('[B]%s: %s[/B]' % (name, series['title']),
+                                     series_url, 128, '', '', '')
 
         programmes = None
         if 'currentLetter' in programme_data:
@@ -780,7 +792,8 @@ def ListHighlights(highlights_url):
     """Creates a list of the programmes in the highlights section.
     """
 
-    html = OpenURL('https://www.bbc.co.uk/%s' % highlights_url)
+    current_url = 'https://www.bbc.co.uk/%s' % highlights_url
+    html = OpenURL(current_url)
 
     # There is a new layout for episodes, scrape it from the JSON received as part of the page
     match = re.search(
@@ -790,12 +803,13 @@ def ListHighlights(highlights_url):
         data = match.group(1)
         json_data = json.loads(data)
         # xbmc.log(json.dumps(json_data, indent=2, sort_keys=True))
-        ParseJSON(json_data)
+        ParseJSON(json_data, current_url)
 
 
 def ListMostPopular():
     """Scrapes all episodes of the most popular page."""
-    html = OpenURL("https://www.bbc.co.uk/iplayer/group/most-popular")
+    current_url = 'https://www.bbc.co.uk/iplayer/group/most-popular'
+    html = OpenURL(current_url)
 
     # There is a new layout for episodes, scrape it from the JSON received as part of the page
     match = re.search(
@@ -805,7 +819,7 @@ def ListMostPopular():
     if match:
         data = match.group(1)
         json_data = json.loads(data)
-        ParseJSON(json_data)
+        ParseJSON(json_data, current_url)
 
 
 def AddAvailableStreamItem(name, url, iconimage, description):

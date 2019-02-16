@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import re, time, datetime, json, urllib;
+import re, time, datetime, json, urllib, base64;
 from bs4 import BeautifulSoup;
 from mediathek import *
 
@@ -24,7 +24,7 @@ class ARDMediathek(Mediathek):
     self.gui = simpleXbmcGui;
     self.rootLink = "https://www.ardmediathek.de"
     self.menuTree = (
-                      TreeNode("0" ,"ARD"          ,self.rootLink+"/ard/",True),
+                      TreeNode("0" ,"Alle"         ,self.rootLink+"/ard/",True),
                       TreeNode("1" ,"Das Erste"    ,self.rootLink+"/daserste/",True),
                       TreeNode("2" ,"BR"           ,self.rootLink+"/br/",True),
                       TreeNode("3" ,"HR"           ,self.rootLink+"/hr/",True),
@@ -67,12 +67,11 @@ class ARDMediathek(Mediathek):
     return "ARD";
   def isSearchable(self):
     return False;
+
   def extractJsonFromPage(self,link):
     pageContent = self.loadPage(link).decode('UTF-8');
     content = self.regex_ExtractJson.search(pageContent).group(1);
-    pageContent = BeautifulSoup(content,"html.parser");
-    jsonContent= pageContent.prettify(formatter=None);
-    return json.loads(jsonContent);
+    return json.loads(content);
 
   def buildPageMenu(self, link, initCount):
     self.gui.log("Build Page Menu: %s"%(link));
@@ -83,7 +82,6 @@ class ARDMediathek(Mediathek):
     for key in jsonContent:
       if(key.startswith("Widget:")):
         self.GenerateCaterogyLink(jsonContent[key], callHash, jsonContent, client);
-    return 0;
 
   def GenerateCaterogyLink(self, widgetContent, callHash, jsonContent,client):
     widgetId = widgetContent["id"];
@@ -92,8 +90,9 @@ class ARDMediathek(Mediathek):
     if(widgetContent["titleVisible"] == True):
       self.gui.buildJsonLink(self, title, "%s.%s"%(client,widgetId), callHash,0);
     else:
-      widgetContent = jsonContent[listingKey];
-      self.GenerateCaterogyLinks(widgetContent, jsonContent)
+      if(listingKey in jsonContent):
+        widgetContent = jsonContent[listingKey];
+        self.GenerateCaterogyLinks(widgetContent, jsonContent)
 
   def buildcategoryListingKey(self,client,widgetId,jsonContent):
     #ich werd zum elch... erst noch die "dynamische" Pagesize/Number nachschlagen ...
@@ -159,14 +158,14 @@ class ARDMediathek(Mediathek):
       date = time.strptime(teaserContent["broadcastedOn"],"%Y-%m-%dT%H:%M:%SZ");
     else:
       date = None;
-    videoLink = self.playerLink%teaserContent["links"]["target"]["id"];
+    videoLink = base64.b64encode(self.playerLink%teaserContent["links"]["target"]["id"]);
     self.gui.buildVideoLink(DisplayObject(title, subTitle, picture, "", videoLink, "JsonLink", date, duration),self,0);
 
   def GenerateVideoLink(self, teaserContent, jsonContent):
     title = teaserContent["shortTitle"];
     subTitle = None;
     picture = self.getPictureLink(teaserContent["images"],jsonContent);
-    videoLinks = self.getVideoLinks(teaserContent["links"],jsonContent);
+    videoLinks = base64.b64encode(self.getVideoLinks(teaserContent["links"],jsonContent));
     if(teaserContent["broadcastedOn"] is not None):
       date = time.strptime(teaserContent["broadcastedOn"],"%Y-%m-%dT%H:%M:%SZ");
     else:
@@ -191,7 +190,9 @@ class ARDMediathek(Mediathek):
     return None;
 
   def playVideoFromJsonLink(self,link):
+    link = base64.b64decode(link);
     #WTF OHHHHHHHHH JAAAAAA - es geht noch sinnloser...
+    self.gui.log("Play from JSON Link %s"%link);
     jsonContent = self.extractJsonFromPage(link);
 
     videoLinks = {}
@@ -209,3 +210,5 @@ class ARDMediathek(Mediathek):
         videoLinks[quality] = SimpleLink(link,-1);
     if(len(videoLinks) > 0):
       self.gui.play(videoLinks);
+    else:
+      self.gui.log("Nothing playable found");

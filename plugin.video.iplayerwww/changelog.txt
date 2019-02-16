@@ -1,3 +1,7 @@
+v3.0.41
+Fixed Categories.
+(Dirty) fix for new series view.
+
 v3.0.40
 Fix duplicate of last subtitle.
 

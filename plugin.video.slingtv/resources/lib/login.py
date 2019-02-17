@@ -17,7 +17,7 @@
 # along with Sling.TV.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, _strptime, datetime, re, traceback, pytz, calendar, random, zip
+import os, sys, time, _strptime, datetime, re, traceback, pytz, calendar, random
 import urlparse, urllib, urllib2, socket, json, requests, base64, inputstreamhelper
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
 from itertools import cycle

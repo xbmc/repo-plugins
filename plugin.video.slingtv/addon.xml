@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.slingtv" version="1.0.0" name="Sling.TV" provider-name="Lunatixz, eracknaphobia, d21spike">
+<addon id="plugin.video.slingtv" version="1.0.1" name="Sling.TV" provider-name="Lunatixz, eracknaphobia, d21spike">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.simplecache" version="1.0.0"/>

@@ -30,7 +30,7 @@ class Tokens:
         })
 
     def _authorize(self):
-        OAuthPrepareParams = self.open_json_from_file("OAuthPrepareParams.json")
+        OAuthPrepareParams = self.fetch_OAuthPrepareParams()
 
         authorize_Url = OAuthPrepareParams["authorizeUrl"]
         client_Id = OAuthPrepareParams["clientId"]
@@ -232,8 +232,9 @@ class Tokens:
                               None, None, False, None, self.testing)
         j = r.json()
 
-        entitlemendId = j["linked"]["customerFeatures"]["entitlements"][0]["id"]
-        self.save_json_to_file("entitlement.json", {"entitlementId": entitlemendId})
+        entitlements = [int(item["id"]) for item in j["linked"]["customerFeatures"]["entitlements"]]
+
+        self.save_json_to_file("entitlement.json", {"entitlementId": entitlements})
 
 
 class YeloPlay(Tokens):
@@ -259,13 +260,13 @@ class YeloPlay(Tokens):
 
     def list_channels(self, tv_channels, is_folder=False):
         listing = []
-        entitlementId = int(self.fetch_Entitlement())
+        entitlementId = self.fetch_Entitlement()
 
         for i in xrange(len(tv_channels)):
             if (
                     not bool(tv_channels[i]["channelProperties"]["radio"])
                     and bool(tv_channels[i]["channelProperties"]["live"])
-                    and entitlementId in tv_channels[i]["channelAvailability"]["oasisId"]
+                    and any(x in entitlementId for x in tv_channels[i]["channelAvailability"]["oasisId"])
             ):
                 list_item = self.kodi_wrapper.create_list_item(tv_channels[i]["channelIdentification"]["name"],
                                                                tv_channels[i]["channelProperties"]["squareLogo"],

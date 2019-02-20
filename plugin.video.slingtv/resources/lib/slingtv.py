@@ -338,8 +338,8 @@ class SlingTV(object):
             for item in items:
                 self.addDir(item['title'], item['_href'], 'on_demand', False, False)
         else:
-            items = (self.getURL(url))['tiles']
-            for item in items:
+            tiles = (self.getURL(url))['tiles']
+            for item in tiles:
                 if item['type'] == 'series':
                     label = item['title']
                     thumb = item['thumbnail']['url']
@@ -371,6 +371,9 @@ class SlingTV(object):
                             title = 'Upcoming - ' + utcToLocal(start_time).strftime('%m/%d %H:%M') \
                                     + ' - ' + infoLabels['label']
                             self.addDir(title, '', 'no_play', infoLabels, infoArt)
+
+            if '_next' in items.keys():
+                self.buildOnDemand(items['_next'])
 
 
     def buildMyTV(self, name, item=None):
@@ -647,7 +650,10 @@ class SlingTV(object):
 
 
     def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0, contextMenu=None, properties=None):
-        name = name.encode("utf-8")
+        try:
+            name = name.encode("utf-8")
+        except:
+            pass
         log('addLink, name = ' + name)
         liz=xbmcgui.ListItem(name)
         if mode == 21: liz.setProperty("IsPlayable","false")

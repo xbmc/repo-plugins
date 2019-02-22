@@ -15,13 +15,15 @@ import xbmc
 UTF8 = 'utf-8'
 ASBASE = 'http://www.adultswim.com'
 
+SHOW_CLIPS = (xbmcplugin.getSetting(int(sys.argv[1]), "show_clips") == "true")
+
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
       html = self.getRequest(ASBASE+'/videos')
-      html = re.compile('__AS_INITIAL_STATE__ = (.+?)</script>', re.DOTALL).search(html).group(1)
+      html = re.compile('<script id="__NEXT_DATA__" type="application/json">(.+?)</script>', re.DOTALL).search(html).group(1)
       a = json.loads(html)
-      for b in a['showsIndex']['shows']:
+      for b in a['props']['pageProps']['shows']:
          name = b['title']
          url = b['url']
          infoList = {}
@@ -40,7 +42,7 @@ class myAddon(t1mAddon):
       for b in x:
           if b.startswith("Video:"):
             b = a["props"]["__APOLLO_STATE__"][b]
-            if b.get('auth',False) == False:
+            if (b.get('auth',False) == False) and ((b['type'] != 'CLIP') or SHOW_CLIPS):
               infoList = {}
               name = b['title']
               thumb = b.get('poster')

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.aswim"
        name="Adult Swim"
-       version="3.0.3"
+       version="3.0.4"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
@@ -21,7 +21,7 @@
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <website>www.adultswim.com</website>
     <source>https://github.com/learningit/plugin.video.aswim</source>
-    <news>Version 3.0.3 Update for website change
+    <news>Version 3.0.4 Update for website change, add setting for hiding clips
     </news>
     <assets>
         <icon>resources/icon.png</icon>

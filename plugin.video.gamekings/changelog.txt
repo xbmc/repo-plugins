@@ -1,3 +1,7 @@
+v1.2.14 (2019-02-23)
+- since vimeo disabled oauth1, the vimeo addon broke. Therefore not using that addon anymore
+- improved detecting if the video is a twitch live-stream
+
 v1.2.13 (2018-05-18)
 - prefix the titles of premium-only videos with an asterisk
 - using news-tag in addon.xml

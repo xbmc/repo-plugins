@@ -16,10 +16,11 @@ SETTINGS = xbmcaddon.Addon()
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
 BASE_URL_GAMEKINGS_TV = "https://www.gamekings.tv/"
+TWITCH_URL_GAMEKINGS_TV = "https://player.twitch.tv/?channel=gamekings"
 PREMIUM_ONLY_VIDEO_TITLE_PREFIX = '* '
 LOGIN_URL = 'https://www.gamekings.tv/wp-login.php'
-DATE = "2018-05-18"
-VERSION = "1.2.13"
+DATE = "2018-05-23"
+VERSION = "1.2.14-SNAPSHOT"
 
 
 if sys.version_info[0] > 2:

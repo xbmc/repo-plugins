@@ -66,14 +66,15 @@ def set_background_image(force=False):
 
     if force:
         background_current_item = 0
+        del background_items
         background_items = []
 
-    if len(background_items) == 0 or background_current_item >= len(background_items):
+    if len(background_items) == 0:
         log.debug("set_background_image: Need to load more backgrounds {0} - {1}",
                   len(background_items), background_current_item)
         url = ('{server}/emby/Users/{userid}/Items' +
                '?Recursive=true' +
-               '&limit=60' +
+               # '&limit=60' +
                '&SortBy=Random' +
                '&IncludeItemTypes=Movie,Series' +
                '&ImageTypeLimit=1')
@@ -96,12 +97,14 @@ def set_background_image(force=False):
 
         log.debug("set_background_image: Loaded {0} more backgrounds", len(background_items))
 
-    if len(background_items) > 0 and background_current_item < len(background_items):
+    if len(background_items) > 0:
         bg_image = background_items[background_current_item].get("image")
         label = background_items[background_current_item].get("name")
         log.debug("set_background_image: {0} - {1} - {2}", background_current_item, label, bg_image)
 
         background_current_item += 1
+        if background_current_item >= len(background_items):
+            background_current_item = 0
 
         home_window = HomeWindow()
         home_window.setProperty("random-gb", bg_image)
@@ -236,145 +239,6 @@ def get_widget_content_cast(handle, params):
     xbmcplugin.addDirectoryItems(handle, list_items)
     xbmcplugin.endOfDirectory(handle, cacheToDisc=False)
 
-'''
-def populateWidgetItems(items_url, widget_type, override_select_action=None):
-    server = downloadUtils.getServer()
-    if server is None:
-        return []
-
-    settings = xbmcaddon.Addon()
-    select_action = settings.getSetting("widget_select_action")
-
-    if override_select_action is not None:
-        select_action = str(override_select_action)
-
-    log.debug("WIDGET_DATA_URL: {0}", items_url)
-
-    home_window = HomeWindow()
-
-    # get the items
-    data_manager = DataManager()
-    result = data_manager.GetContent(items_url)
-    log.debug("WIDGET_DATA: {0}", result)
-
-    if result is None:
-        return []
-
-    simmilar_to = None
-    if result is not None and isinstance(result, dict) and result.get("Items") is not None:
-        simmilar_to = result.get("BaselineItemName", None)
-        result = result.get("Items")
-    elif result is not None and isinstance(result, list) and len(result) > 0 and result[0].get("Items") is not None:
-        simmilar_to = result[0].get("BaselineItemName", None)
-        result = result[0].get("Items")
-
-    list_items = []
-    for item in result:
-        item_id = item["Id"]
-        name = item["Name"]
-        log.debug("name: {0}", name)
-
-        title = name
-        tvshowtitle = ""
-        item_type = item["Type"]
-        series_name = item["SeriesName"]
-        art = getArt(item, server)
-
-        if item_type == "Episode" and series_name is not None:
-
-            episode_number = item["IndexNumber"]
-            if episode_number is None:
-                episode_number = 0
-
-            season_number = item["ParentIndexNumber"]
-            if season_number is None:
-                season_number = 0
-
-            # name = series_name + " " + episodeDetails
-            name = "%s S%02dE%02d" % (series_name, season_number, episode_number)
-            tvshowtitle = "S%02dE%02d" % (season_number, episode_number)
-            title = series_name
-
-        elif item_type == "Series":
-
-            user_data = item["UserData"]
-            unplayed = user_data["UnplayedItemCount"]
-
-            title = item["Name"]
-            tvshowtitle = str(unplayed) + " Episodes"
-
-            art["poster"] = art["landscape"]
-
-
-        if kodi_version > 17:
-            list_item = xbmcgui.ListItem(label=name, iconImage=art['thumb'], offscreen=True)
-        else:
-            list_item = xbmcgui.ListItem(label=name, iconImage=art['thumb'])
-
-        # list_item.setLabel2(episodeDetails)
-
-        production_year = item["ProductionYear"]
-        prem_year = item["PremiereDate"]
-        if production_year is None and prem_year is not None:
-            production_year = int(prem_year[:4])
-
-        # add progress percent
-        userData = item["UserData"]
-        if userData["Played"] == True:
-            playCount = "1"
-            overlay = "5"
-        else:
-            playCount = "0"
-            overlay = "6"
-
-        runtime = item["RunTimeTicks"]
-        playBackTicks = userData["PlaybackPositionTicks"]
-
-        if playBackTicks is not None and runtime is not None and runtime > 0:
-            runtime = float(runtime)
-            playBackTicks = float(playBackTicks)
-            playBackPos = int(((playBackTicks / 1000) / 10000) / 60)
-            list_item.setProperty('ResumeTime', str(playBackPos))
-            percentage = int((playBackTicks / runtime) * 100.0)
-            list_item.setProperty("complete_percentage", str(percentage))
-
-        video_info_label = {"title": title,
-                            "tvshowtitle": tvshowtitle,
-                            "year": production_year,
-                            "Overlay": overlay,
-                            "playcount": playCount}
-
-        list_item.setInfo(type="Video", infoLabels=video_info_label)
-        list_item.setProperty('fanart_image', art['fanart'])  # back compat
-        list_item.setProperty('discart', art['discart'])  # not avail to setArt
-        list_item.setArt(art)
-
-        list_item.setProperty('IsPlayable', 'false')
-
-        if runtime is not None:
-            totalTime = str(int(float(runtime) / (10000000 * 60)))
-            list_item.setProperty('TotalTime', str(totalTime))
-
-        list_item.setContentLookup(False)
-        list_item.setProperty('id', item_id)
-
-        if simmilar_to is not None:
-            list_item.setProperty('suggested_from_watching', simmilar_to)
-
-        session_id = "&session_id=" + home_window.getProperty("session_id")
-
-        if item_type == "Series":
-            playurl = "plugin://plugin.video.embycon/?item_id=" + item_id + '&mode=SHOW_MENU' + session_id
-        elif select_action == "1":
-            playurl = "plugin://plugin.video.embycon/?item_id=" + item_id + '&mode=PLAY' + session_id
-        elif select_action == "0":
-            playurl = "plugin://plugin.video.embycon/?item_id=" + item_id + '&mode=SHOW_MENU' + session_id
-
-        item_tupple = (playurl, list_item, False)
-        list_items.append(item_tupple)
-
-    return list_items
-'''
 
 def getWidgetContent(handle, params):
     log.debug("getWigetContent Called: {0}", params)
@@ -466,7 +330,7 @@ def getWidgetContent(handle, params):
                      "&format=json" +
                      "&ImageTypeLimit=1")
 
-    list_items, detected_type = processDirectory(items_url, None, params, False)
+    list_items, detected_type, total_records = processDirectory(items_url, None, params, False)
 
     #list_items = populateWidgetItems(items_url, widget_type)
 

@@ -26,7 +26,7 @@ from .clientinfo import ClientInformation
 from .datamanager import DataManager
 from .server_detect import checkServer
 from .simple_logging import SimpleLogging
-from .menu_functions import displaySections, showMovieAlphaList, showGenreList, showWidgets, show_search, showMoviePages
+from .menu_functions import displaySections, showMovieAlphaList, showTvShowAlphaList, showGenreList, showWidgets, show_search, showMoviePages
 from .translation import string_load
 from .server_sessions import showServerSessions
 from .action_menu import ActionMenu
@@ -106,6 +106,8 @@ def mainEntryPoint():
         playTrailer(item_id)
     elif mode == "MOVIE_ALPHA":
         showMovieAlphaList()
+    elif mode == "TVSHOW_ALPHA":
+        showTvShowAlphaList()
     elif mode == "GENRES":
         showGenreList(params)
     elif mode == "MOVIE_PAGES":
@@ -335,7 +337,7 @@ def show_menu(params):
         li.setProperty('menu_id', 'transcode')
         action_items.append(li)
 
-    if result["Type"] == "Movie":
+    if result["Type"] in ("Movie", "Series"):
         li = xbmcgui.ListItem(string_load(30307))
         li.setProperty('menu_id', 'play_trailer')
         action_items.append(li)
@@ -525,6 +527,8 @@ def showContent(pluginName, handle, params):
                   '&CollapseBoxSetItems=' + str(group_movies) +
                   '&GroupItemsIntoCollections=' + str(group_movies) +
                   "&Recursive=true" +
+                  '&SortBy=Name' +
+                  '&SortOrder=Ascending' +
                   "&IsVirtualUnaired=false" +
                   "&IncludeItemTypes=" + item_type)
 
@@ -558,7 +562,7 @@ def search_results_person(params):
 
     params["name_format"] = "Episode|episode_name_format"
 
-    dir_items, detected_type = processDirectory(details_url, None, params)
+    dir_items, detected_type, total_records = processDirectory(details_url, None, params)
 
     log.debug('search_results_person results: {0}', dir_items)
     log.debug('search_results_person detect_type: {0}', detected_type)
@@ -741,7 +745,7 @@ def search_results(params):
             # set content type
             xbmcplugin.setContent(handle, content_type)
 
-            dir_items, detected_type = processDirectory(details_url, progress, params)
+            dir_items, detected_type, total_records = processDirectory(details_url, progress, params)
             if dir_items is not None:
                 xbmcplugin.addDirectoryItems(handle, dir_items)
                 xbmcplugin.endOfDirectory(handle, cacheToDisc=False)
@@ -835,7 +839,7 @@ def playTrailer(id):
         info = {}
         info["type"] = "remote"
         url = trailer.get("Url", "none")
-        if url.lower().find("youtube"):
+        if url.lower().find("youtube") != -1:
             info["url"] = url
             name = trailer.get("Name")
             while not name or name in trailer_names:
@@ -865,8 +869,13 @@ def playTrailer(id):
 
         elif trailer.get("type") == "remote":
             youtube_id = trailer.get("url").rsplit('=', 1)[1]
-            youtube_plugin = "PlayMedia(plugin://plugin.video.youtube/play/?video_id=%s)" % youtube_id
+            youtube_plugin = "RunPlugin(plugin://plugin.video.youtube/play/?video_id=%s)" % youtube_id
             log.debug("youtube_plugin: {0}", youtube_plugin)
+
+            #play_info = {}
+            #play_info["url"] = youtube_plugin
+            #log.info("Sending embycon_play_trailer_action : {0}", play_info)
+            #send_event_notification("embycon_play_youtube_trailer_action", play_info)
             xbmc.executebuiltin(youtube_plugin)
 
 

@@ -1,3 +1,6 @@
+This became broken about a year ago when pluralsight removed the API that was used by their android
+app. This needs to be completely rewritten against the new SPA APIs
+
 v1.1.3
 - Fixed video URL lookups (change in API structure broke this completely)
 v1.1.2

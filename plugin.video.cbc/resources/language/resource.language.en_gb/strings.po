@@ -63,3 +63,7 @@ msgstr ""
 msgctxt "#30012"
 msgid "Please logout in settings and try again"
 msgstr ""
+
+msgctxt "#30013"
+msgid "Use FFMPEG instead of inputstream.adaptive"
+msgstr ""

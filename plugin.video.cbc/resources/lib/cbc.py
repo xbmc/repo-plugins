@@ -28,8 +28,8 @@ class CBC:
         # Create requests session object
         self.session = requests.Session()
         session_cookies = loadCookies()
-        if not session_cookies == None: 
-            self.session.cookies = session_cookies 
+        if not session_cookies == None:
+            self.session.cookies = session_cookies
 
     def authorize(self, username = None, password = None, callback = None):
         full_auth = not username == None and not password == None
@@ -82,7 +82,6 @@ class CBC:
             log('ERROR: {} returns status of {}'.format(url, r.status_code), True)
             return None
         saveCookies(self.session.cookies)
-
         # Parse the authorization response
         dom = parseString(r.content)
         status = dom.getElementsByTagName('status')[0].firstChild.nodeValue

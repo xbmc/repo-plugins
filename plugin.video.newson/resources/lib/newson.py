@@ -1,4 +1,4 @@
-#   Copyright (C) 2018 Lunatixz
+#   Copyright (C) 2019 Lunatixz
 #
 #
 # This file is part of NewsOn.
@@ -17,7 +17,7 @@
 # along with NewsOn.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, traceback, feedparser, random
+import os, sys, time, datetime, traceback, feedparser, random, inputstreamhelper
 import urlparse, urllib, urllib2, socket, json, collections, gzip
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
@@ -187,6 +187,7 @@ class NewsOn(object):
         log('playVideo')
         liz = xbmcgui.ListItem(name, path=url)
         if 'm3u8' in url.lower():
+            if not inputstreamhelper.Helper('hls').check_inputstream(): sys.exit()
             liz.setProperty('inputstreamaddon','inputstream.adaptive')
             liz.setProperty('inputstream.adaptive.manifest_type','hls')
         xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)

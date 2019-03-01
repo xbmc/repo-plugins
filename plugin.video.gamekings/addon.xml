@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.gamekings" 
 	name="GameKings" 
-	version="1.2.13"
+	version="1.2.14"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="2.14.0"/>
@@ -10,9 +10,6 @@
     <import addon="script.module.requests"          version="2.4.3"/>
     <import addon="script.module.future"            version="0.0.1"/>
   	<import addon="script.module.html5lib"          version="0.999.0"/>
-    <import addon="plugin.video.youtube" 		    version="5.1.7" />
-    <import addon="plugin.video.twitch"             version="1.4.5"/>
-    <import addon="plugin.video.vimeo"              version="4.1.4"/>
   </requires>
   <extension point="xbmc.python.pluginsource" 	library="addon.py">
     <provides>video</provides>
@@ -32,9 +29,9 @@
     <website>https://www.gamekings.tv</website>
     <email></email>
     <source>https://github.com/skipmodea1/plugin.video.gamekings</source>
-    <news>v1.2.13 (2018-05-18)
-    - prefix the titles of premium-only videos with an asterisk
-    - using news-tag in addon.xml
-    - showing a popup when it's a twitch live stream</news>
+    <news>v1.2.14 (2019-02-23)
+	- marking the addon broken for gotham. A working version will be available in Leia (Kodi 18)
+	</news>
+	<broken>no more youtube addon in gotham</broken>	
   </extension>
 </addon>

@@ -1,3 +1,6 @@
+v1.2.14 (2019-02-23)
+- marking the addon broken for gotham. A working version will be available in Leia (Kodi 18)
+
 v1.2.13 (2018-05-18)
 - prefix the titles of premium-only videos with an asterisk
 - using news-tag in addon.xml

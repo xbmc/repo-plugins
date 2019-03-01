@@ -319,7 +319,7 @@ msgid "Start from beginning"
 msgstr ""
 
 msgctxt "#30238"
-msgid "Playback Overrides"
+msgid "Playback Options"
 msgstr ""
 
 msgctxt "#30246"
@@ -350,8 +350,12 @@ msgctxt "#30254"
 msgid "Show Settings"
 msgstr ""
 
+msgctxt "#30255"
+msgid "TV Show (A-Z)"
+msgstr ""
+
 msgctxt "#30256"
-msgid "Movies - All"
+msgid "Movies"
 msgstr ""
 
 msgctxt "#30257"
@@ -371,7 +375,7 @@ msgid "BoxSets"
 msgstr ""
 
 msgctxt "#30261"
-msgid "TV Shows - All"
+msgid "TV Shows"
 msgstr ""
 
 msgctxt "#30262"
@@ -388,6 +392,10 @@ msgstr ""
 
 msgctxt "#30265"
 msgid "Episodes - Next Up"
+msgstr ""
+
+msgctxt "#30266"
+msgid "Movie (Pages)"
 msgstr ""
 
 msgctxt "#30267"
@@ -511,35 +519,35 @@ msgid "Delete"
 msgstr ""
 
 msgctxt "#30297"
-msgid "Delete all existing textures?"
+msgid "Delete unused images?"
 msgstr ""
 
 msgctxt "#30298"
-msgid "Deleting Textures"
+msgid "Deleting Kodi Images"
 msgstr ""
 
 msgctxt "#30299"
-msgid "Cache Textures"
+msgid "Cache Images"
 msgstr ""
 
 msgctxt "#30300"
-msgid "Cache all Emby media images as local Kodi textures?"
+msgid "Cache all Emby images as local Kodi images?"
 msgstr ""
 
 msgctxt "#30301"
-msgid "Caching Textures"
+msgid "Caching Images"
 msgstr ""
 
 msgctxt "#30302"
-msgid "Existing Textures: "
+msgid "Existing images : "
 msgstr ""
 
 msgctxt "#30303"
-msgid "Missing Textures: "
+msgid "Missing Emby images : "
 msgstr ""
 
 msgctxt "#30304"
-msgid "Loaded Textures: "
+msgid "Cached Emby images : "
 msgstr ""
 
 msgctxt "#30305"
@@ -566,6 +574,14 @@ msgctxt "#30310"
 msgid "Enable Emby remote control"
 msgstr ""
 
+msgctxt "#30311"
+msgid "Library - "
+msgstr ""
+
+msgctxt "#30312"
+msgid "All - "
+msgstr ""
+
 msgctxt "#30313"
 msgid "Menu"
 msgstr ""
@@ -587,7 +603,7 @@ msgid "Play All"
 msgstr ""
 
 msgctxt "#30318"
-msgid "Music - All Albums"
+msgid "Music - Albums"
 msgstr ""
 
 msgctxt "#30320"
@@ -604,10 +620,6 @@ msgstr ""
 
 msgctxt "#30325"
 msgid " - Genres"
-msgstr ""
-
-msgctxt "#30326"
-msgid "[EmbyCon Menu]"
 msgstr ""
 
 msgctxt "#30327"
@@ -779,7 +791,7 @@ msgid "Manually enter user details"
 msgstr ""
 
 msgctxt "#30367"
-msgid "Allow password saving"
+msgid "Allow fast user switching password saving"
 msgstr ""
 
 msgctxt "#30368"
@@ -820,4 +832,44 @@ msgstr ""
 
 msgctxt "#30377"
 msgid "Sending request"
+msgstr ""
+
+msgctxt "#30378"
+msgid "Persist user details"
+msgstr ""
+
+msgctxt "#30379"
+msgid "External Subtitle Prompt"
+msgstr ""
+
+msgctxt "#30380"
+msgid "Never"
+msgstr ""
+
+msgctxt "#30381"
+msgid "More than one"
+msgstr ""
+
+msgctxt "#30382"
+msgid "Always"
+msgstr ""
+
+msgctxt "#30383"
+msgid "System - "
+msgstr ""
+
+msgctxt "#30384"
+msgid "Random movies refresh interval (0 = disabled)"
+msgstr ""
+
+msgctxt "#30385"
+msgid "Existing images before delete : "
+msgstr ""
+
+msgctxt "#30386"
+msgid "Unused Emby images : "
+msgstr ""
+
+msgctxt "#30387"
+msgid "Unused images removed : "
 msgstr ""

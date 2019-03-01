@@ -142,12 +142,6 @@ def playFile(play_info, monitor):
 
     log.debug("playFile id({0}) resume({1}) force_transcode({2})", id, auto_resume, force_transcode)
 
-    # get playback info
-    playback_info = download_utils.get_item_playback_info(id)
-    if playback_info is None:
-        log.debug("playback_info was None, could not get MediaSources so can not play!")
-        return
-
     settings = xbmcaddon.Addon()
     addon_path = settings.getAddonInfo('path')
     force_auto_resume = settings.getSetting('forceAutoResume') == 'true'
@@ -187,6 +181,12 @@ def playFile(play_info, monitor):
         url = "{server}/emby/Users/{userid}/Items/%s?format=json" % (channel_id,)
         result = data_manager.GetContent(url)
         id = result["Id"]
+
+    # get playback info from the server using the device profile
+    playback_info = download_utils.get_item_playback_info(id)
+    if playback_info is None:
+        log.debug("playback_info was None, could not get MediaSources so can not play!")
+        return
 
     #play_session_id = id_generator()
     play_session_id = playback_info.get("PlaySessionId")
@@ -689,11 +689,13 @@ def audioSubsPref(url, list_item, media_source, item_id, audio_stream_index, sub
 # direct stream, set any available subtitle streams
 def externalSubs(media_source, list_item, item_id):
 
-    externalsubs = []
     media_streams = media_source.get('MediaStreams')
 
     if media_streams is None:
         return
+
+    externalsubs = []
+    sub_names = []
 
     for stream in media_streams:
 
@@ -704,13 +706,42 @@ def externalSubs(media_source, list_item, item_id):
 
             index = stream['Index']
             source_id = media_source['Id']
-            url = ("%s/emby/Videos/%s/%s/Subtitles/%s/Stream.%s"
-                   % (download_utils.getServer(), item_id, source_id, index, stream['Codec']))
+            server = download_utils.getServer()
+            token = download_utils.authenticate()
 
+            if stream.get('DeliveryUrl', '').lower().startswith('/videos'):
+                url = "%s/emby%s" % (server, stream.get('DeliveryUrl'))
+            else:
+                url = ("%s/emby/Videos/%s/%s/Subtitles/%s/Stream.%s?api_key=%s"
+                       % (server, item_id, source_id, index, stream['Codec'], token))
+
+            default = ""
+            if stream['IsDefault']:
+                default = "default"
+            forced = ""
+            if stream['IsForced']:
+                forced = "forced"
+
+            sub_name = stream.get('Language', "n/a") + " (" + stream.get('Codec', "n/a") + ") " + default + " " + forced
+
+            sub_names.append(sub_name)
             externalsubs.append(url)
 
-    log.debug("External Subtitles : {0}", externalsubs)
-    list_item.setSubtitles(externalsubs)
+    if len(externalsubs) == 0:
+        return
+
+    settings = xbmcaddon.Addon()
+    direct_stream_sub_select = settings.getSetting("direct_stream_sub_select")
+
+    if direct_stream_sub_select == "0" or (len(externalsubs) == 1 and not direct_stream_sub_select == "2"):
+        list_item.setSubtitles(externalsubs)
+    else:
+        resp = xbmcgui.Dialog().select(string_load(30292), sub_names)
+        if resp > -1:
+
+            selected_sub = externalsubs[resp]
+            log.debug("External Subtitle Selected: {0}", selected_sub)
+            list_item.setSubtitles([selected_sub])
 
 
 def sendProgress(monitor):
@@ -924,15 +955,6 @@ class Service(xbmc.Player):
     def __init__(self, *args):
         log.debug("Starting monitor service: {0}", args)
         self.played_information = {}
-        self.activity = {}
-
-    def save_activity(self):
-        addon = xbmcaddon.Addon()
-        path = xbmc.translatePath(addon.getAddonInfo('profile')) + "activity.json"
-        activity_data = json.dumps(self.activity)
-        f = xbmcvfs.File(path, 'w')
-        f.write(activity_data)
-        f.close()
 
     def onPlayBackStarted(self):
         # Will be called when xbmc starts playing a file
@@ -976,16 +998,6 @@ class Service(xbmc.Player):
 
         home_screen = HomeWindow()
         home_screen.setProperty("currently_playing_id", str(emby_item_id))
-
-        # record the activity
-        utcnow = datetime.utcnow()
-        today = "%s-%s-%s" % (utcnow.year, utcnow.month, utcnow.day)
-        if today not in self.activity:
-            self.activity[today] = {}
-        if playback_type not in self.activity[today]:
-            self.activity[today][playback_type] = 0
-        self.activity[today][playback_type] += 1
-        self.save_activity()
 
     def onPlayBackEnded(self):
         # Will be called when kodi stops playing a file
@@ -1045,7 +1057,7 @@ class PlaybackService(xbmc.Monitor):
             return
 
         signal = method.split('.', 1)[-1]
-        if signal != "embycon_play_action":
+        if signal not in ("embycon_play_action", "embycon_play_youtube_trailer_action"):
             return
 
         data_json = json.loads(data)
@@ -1053,8 +1065,14 @@ class PlaybackService(xbmc.Monitor):
         log.debug("PlaybackService:onNotification:{0}", hex_data)
         decoded_data = binascii.unhexlify(hex_data)
         play_info = json.loads(decoded_data)
-        log.info("Received embycon_play_action : {0}", play_info)
-        playFile(play_info, self.monitor)
+
+        if signal == "embycon_play_action":
+            log.info("Received embycon_play_action : {0}", play_info)
+            playFile(play_info, self.monitor)
+        elif signal == "embycon_play_youtube_trailer_action":
+            log.info("Received embycon_play_trailer_action : {0}", play_info)
+            trailer_link = play_info["url"]
+            xbmc.executebuiltin(trailer_link)
 
     def screensaver_activated(self):
         log.debug("Screen Saver Activated")
@@ -1064,8 +1082,12 @@ class PlaybackService(xbmc.Monitor):
 
         if stop_playback:
             player = xbmc.Player()
-            if player.isPlaying():
-                player.stop()
+            if player.isPlayingVideo():
+                log.debug("Screen Saver Activated : isPlayingVideo() = true")
+                play_data = get_playing_data(self.monitor.played_information)
+                if play_data:
+                    log.debug("Screen Saver Activated : this is an EmbyCon item so stop it")
+                    player.stop()
 
         #xbmc.executebuiltin("Dialog.Close(selectdialog, true)")
 

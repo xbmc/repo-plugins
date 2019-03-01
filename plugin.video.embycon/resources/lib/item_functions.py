@@ -487,11 +487,15 @@ def add_gui_item(url, item_details, display_options, folder=True):
         info_labels["episode"] = item_details.episode_number
         info_labels["season"] = item_details.season_number
         info_labels["tvshowtitle"] = item_details.series_name
+        if item_details.season_number == 0:
+            item_properties["IsSpecial"] = "true"
 
     elif item_type == 'season':
         info_labels["season"] = item_details.season_number
         info_labels["episode"] = item_details.total_episodes
         info_labels["tvshowtitle"] = item_details.series_name
+        if item_details.season_number == 0:
+            item_properties["IsSpecial"] = "true"
 
     elif item_type == "series":
         info_labels["episode"] = item_details.total_episodes
@@ -515,7 +519,7 @@ def add_gui_item(url, item_details, display_options, folder=True):
         if display_options["addUserRatings"]:
             info_labels["userrating"] = item_details.critic_rating
 
-        if item_type == 'movie':
+        if item_type in ('movie', 'series'):
             info_labels["trailer"] = "plugin://plugin.video.embycon?mode=playTrailer&id=" + item_details.id
 
         list_item.setInfo('video', info_labels)

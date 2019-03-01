@@ -14,9 +14,6 @@ msgstr ""
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#Next available: 30041-30044, 30063, 30113
-#main menu
-
 msgctxt "#30001"
 msgid "Games"
 msgstr ""
@@ -45,8 +42,6 @@ msgctxt "#30007"
 msgid "Search for channels"
 msgstr ""
 
-#general
-
 msgctxt "#30008"
 msgid "Channels"
 msgstr ""
@@ -71,7 +66,7 @@ msgctxt "#30013"
 msgid "-- Followed Channels --"
 msgstr ""
 
-#empty strings from id 30014 to 30019
+# empty strings from id 30014 to 30019
 
 msgctxt "#30020"
 msgid "Http error"
@@ -113,13 +108,13 @@ msgctxt "#30029"
 msgid "Please check your internet connection"
 msgstr ""
 
-#empty strings from id 30030 to 30039
+# empty strings from id 30030 to 30039
 
 msgctxt "#30040"
 msgid "Video Quality"
 msgstr ""
 
-#empty strings from id 30041 to 30044
+# empty strings from id 30041 to 30044
 
 msgctxt "#30045"
 msgid "Display titles"
@@ -161,7 +156,7 @@ msgctxt "#30054"
 msgid "Language | Streamer - Stream Title"
 msgstr ""
 
-#empty strings from id 30055 to 30059
+# empty strings from id 30055 to 30059
 
 msgctxt "#30060"
 msgid "Unnamed Streamer"
@@ -235,8 +230,6 @@ msgctxt "#30077"
 msgid "Play (Choose Quality)"
 msgstr ""
 
-#stream info
-
 msgctxt "#30078"
 msgid "Past Broadcasts"
 msgstr ""
@@ -244,8 +237,6 @@ msgstr ""
 msgctxt "#30079"
 msgid "Video Highlights"
 msgstr ""
-
-#notifications
 
 msgctxt "#30080"
 msgid "Could not find any playable urls"
@@ -303,8 +294,6 @@ msgctxt "#30093"
 msgid "Delay"
 msgstr ""
 
-#title
-
 msgctxt "#30094"
 msgid "Automatic refresh interval (minutes)"
 msgstr ""
@@ -312,8 +301,6 @@ msgstr ""
 msgctxt "#30095"
 msgid "Username is required"
 msgstr ""
-
-#settings
 
 msgctxt "#30096"
 msgid "API"

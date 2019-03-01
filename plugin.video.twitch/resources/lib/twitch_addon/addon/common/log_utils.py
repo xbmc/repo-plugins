@@ -9,7 +9,6 @@
     SPDX-License-Identifier: GPL-3.0-only
     See LICENSES/GPL-3.0-only for more information.
 """
-from six import string_types, PY2
 
 import time
 
@@ -20,7 +19,7 @@ from xbmc import LOGDEBUG, LOGERROR, LOGFATAL, LOGINFO, LOGNONE, LOGNOTICE, LOGS
 
 def log(msg, level=LOGDEBUG):
     try:
-        if isinstance(msg, string_types) and PY2:
+        if kodi.is_unicode(msg):
             msg = '%s (ENCODED)' % msg.encode('utf-8')
         kodi.__log('%s: %s' % (kodi.get_name(), msg), level)
     except Exception as e:

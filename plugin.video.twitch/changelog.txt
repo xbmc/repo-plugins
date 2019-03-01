@@ -1,3 +1,6 @@
+2.4.2
+[fix] fixed issue with Live Notifications if no followed channels are live
+
 2.4.1
 [chg] Settings and Refresh menu items to unplayable items instead of folders
 

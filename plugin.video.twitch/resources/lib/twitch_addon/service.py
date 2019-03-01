@@ -164,6 +164,8 @@ def get_followed_streams(twitch_api, monitor, blacklist_filter):
             streams = twitch_api.get_followed_streams(stream_type='live', offset=offset, limit=100)
         except:
             break
+        if streams[Keys.TOTAL] == 0:
+            break
         if (streams[Keys.TOTAL] > 0) and (Keys.STREAMS in streams):
             for stream in streams[Keys.STREAMS]:
                 all_followed[Keys.STREAMS].append(stream)

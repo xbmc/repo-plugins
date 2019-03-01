@@ -10,7 +10,7 @@
     See LICENSES/GPL-3.0-only for more information.
 """
 
-from six import string_types, with_metaclass, PY3
+from six import string_types, text_type, with_metaclass, PY2, PY3
 from six.moves.urllib.parse import urlparse, urlencode, parse_qs
 
 from xbmc import PLAYLIST_VIDEO, PLAYLIST_MUSIC  # NOQA
@@ -51,6 +51,10 @@ def decode_utf8(string):
         return string.decode('utf-8')
     except AttributeError:
         return string
+
+
+def is_unicode(string):
+    return PY2 and isinstance(string, text_type)
 
 
 def execute_jsonrpc(command):
@@ -194,7 +198,7 @@ def get_plugin_url(queries):
         query = urlencode(queries)
     except UnicodeEncodeError:
         for k in queries:
-            if isinstance(queries[k], unicode):
+            if is_unicode(queries[k]):
                 queries[k] = queries[k].encode('utf-8')
         query = urlencode(queries)
 

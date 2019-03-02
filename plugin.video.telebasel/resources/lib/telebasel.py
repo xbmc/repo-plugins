@@ -26,9 +26,22 @@ import traceback
 import datetime
 import json
 import socket
-import urllib2
+
+try:  # Python 3
+    from urllib.request import urlopen
+    from urllib.request import Request as request
+    from urllib.error import URLError
+except ImportError:  # Python 2
+    from urllib2 import urlopen
+    from urllib2 import Request as request
+    from urllib2 import URLError
+
 import urllib
-import urlparse
+
+try:  # Python 2
+    import urlparse
+except ImportError:  # Python 3
+    from urllib.parse import urlparse
 
 try:
     from multiprocessing.dummy import Pool as ThreadPool
@@ -180,18 +193,18 @@ class Telebasel(object):
                 cache_response = self.cache.get(
                     ADDON_NAME + '.open_url, url = %s' % url)
             if not cache_response:
-                request = urllib2.Request(url)
-                request.add_header(
+                req = request(url)
+                req.add_header(
                     'User-Agent',
                     ('Mozilla/5.0 (X11; Linux x86_64; rv:59.0)'
                      'Gecko/20100101 Firefox/59.0'))
-                response = urllib2.urlopen(request, timeout=TIMEOUT).read()
+                response = urlopen(req, timeout=TIMEOUT).read()
                 self.cache.set(
                     ADDON_NAME + '.open_url, url = %s' % url,
                     response,
                     expiration=datetime.timedelta(hours=2))
             return self.cache.get(ADDON_NAME + '.open_url, url = %s' % url)
-        except urllib2.URLError as err:
+        except URLError as err:
             log("openURL Failed! " + str(err), xbmc.LOGERROR)
         except socket.timeout as err:
             log("openURL Failed! " + str(err), xbmc.LOGERROR)
@@ -255,7 +268,7 @@ class Telebasel(object):
         shows_soup = soup.find_all('a', {'class': 'tb-a-unstyled'})
 
         shows = []
-        image_regex = r'background-image\s*:\s*url\(\'(?P<url>.+)\''
+        image_regex = r'data-bg\s*=\s*\"url\(\'(?P<url>.+)\''
         for ssoup in shows_soup:
             page = ssoup.attrs['href']
             m = re.search(image_regex, str(ssoup))

@@ -111,6 +111,14 @@ msgctxt "#30232"
 msgid "Update interval in hours"
 msgstr "Aktualisierungsintervall in Stunden"
 
+msgctxt "#30233"
+msgid "Fast Native Updates"
+msgstr "Schnelle Datenbankaktualisierung"
+
+msgctxt "#30234"
+msgid "Query Caching"
+msgstr "Abfragen zwischenspeichern"
+
 msgctxt "#30241"
 msgid "Disabled"
 msgstr "Abgeschaltet"
@@ -126,6 +134,10 @@ msgstr "Nur beim Start"
 msgctxt "#30244"
 msgid "Automatic"
 msgstr "Automatisch"
+
+msgctxt "#30245"
+msgid "Continously"
+msgstr "Zeitgesteuert"
 
 # Settings Page 3
 msgctxt "#30310"

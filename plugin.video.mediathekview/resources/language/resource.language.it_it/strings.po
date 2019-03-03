@@ -111,6 +111,14 @@ msgctxt "#30232"
 msgid "Update interval in hours"
 msgstr "Intervallo di attualizzazione in ore"
 
+msgctxt "#30233"
+msgid "Fast Native Updates"
+msgstr "Attualizzazione veloce"
+
+msgctxt "#30234"
+msgid "Query Caching"
+msgstr "Memoria ultime liste"
+
 msgctxt "#30241"
 msgid "Disabled"
 msgstr "Disattivato"
@@ -126,6 +134,10 @@ msgstr "Solo all'avvio"
 msgctxt "#30244"
 msgid "Automatic"
 msgstr "Automatico"
+
+msgctxt "#30245"
+msgid "Continously"
+msgstr "Di continuo"
 
 # Settings Page 3
 msgctxt "#30310"

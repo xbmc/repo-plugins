@@ -1,38 +1,61 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017 Leo Moll and Dominik Schlösser
-#
+"""
+The Kodi logger module
 
-# -- Imports ------------------------------------------------
+Copyright 2017-2018, Leo Moll and Dominik Schlösser
+Licensed under MIT License
+"""
+
+# pylint: disable=import-error
 import xbmc
 
-from resources.lib.base.Logger import Logger
+from resources.lib.base.logger import Logger
 
-# -- Classes ------------------------------------------------
-class KodiLogger( Logger ):
 
-	def __init__( self, name, version, topic = None ):
-		super( KodiLogger, self ).__init__( name, version, topic)
+class KodiLogger(Logger):
+    """
+    The Kodi logger class
 
-	def getNewLogger( self, topic = None ):
-		return KodiLogger( self.name, self.version, topic )
+    Args:
+        name(str): Name of the logger
 
-	def debug( self, message, *args ):
-		self._log( xbmc.LOGDEBUG, message, *args )
+        version(str): Version string of the application
 
-	def info( self, message, *args ):
-		self._log( xbmc.LOGNOTICE, message, *args )
+        topic(str, optional): Topic string displayed in messages
+            from this logger. Default is `None`
+    """
 
-	def warn( self, message, *args ):
-		self._log( xbmc.LOGWARNING, message, *args )
+    def get_new_logger(self, topic=None):
+        """
+        Generates a new logger instance with a specific topic
 
-	def error( self, message, *args ):
-		self._log( xbmc.LOGERROR, message, *args )
+        Args:
+            topic(str, optional): the topic of the new logger.
+                Default is the same topic of `self`
+        """
+        return KodiLogger(self.name, self.version, topic)
 
-	def _log( self, level, message, *args ):
-		parts = []
-		for arg in args:
-			part = arg
-			if isinstance( arg, basestring ):
-				part = arg # arg.decode('utf-8')
-			parts.append( part )
-		xbmc.log( self.prefix + message.format( *parts ), level = level )
+    def debug(self, message, *args):
+        """ Outputs a debug message """
+        self._log(xbmc.LOGDEBUG, message, *args)
+
+    def info(self, message, *args):
+        """ Outputs an info message """
+        self._log(xbmc.LOGNOTICE, message, *args)
+
+    def warn(self, message, *args):
+        """ Outputs a warning message """
+        self._log(xbmc.LOGWARNING, message, *args)
+
+    def error(self, message, *args):
+        """ Outputs an error message """
+        self._log(xbmc.LOGERROR, message, *args)
+
+    def _log(self, level, message, *args):
+        parts = []
+        for arg in args:
+            part = arg
+            if isinstance(arg, basestring):
+                part = arg  # arg.decode('utf-8')
+            parts.append(part)
+        xbmc.log(self.prefix + message.format(*parts), level=level)

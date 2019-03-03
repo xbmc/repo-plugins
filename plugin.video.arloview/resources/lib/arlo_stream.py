@@ -4,6 +4,7 @@ import time
 import urllib
 import urlparse
 import datetime
+import os
 
 import xbmc
 import xbmcaddon
@@ -16,10 +17,9 @@ import arlo
 ADDON_ID = 'plugin.video.arloview'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
 ADDON_NAME = REAL_SETTINGS.getAddonInfo('name')
-SETTINGS_LOC = REAL_SETTINGS.getAddonInfo('profile')
-ADDON_PATH = REAL_SETTINGS.getAddonInfo('path').decode('utf-8')
+SETTINGS_LOC = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')).decode('utf-8')
+ADDON_PATH = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path')).decode('utf-8') 
 ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
-# LANGUAGE = REAL_SETTINGS.getLocalizedString
 
 # # GLOBALS ##
 # TIMEOUT = 15
@@ -47,36 +47,20 @@ def get_url(url, **kwargs):
 class ArloStream(object):
 
     def __init__(self, sys_args):
-        self.log_level = int(REAL_SETTINGS.getSetting("log_level"))
-        # self.log("BEGIN __init__, sys_args: " + str(sys_args), xbmc.LOGDEBUG)
         self._url = sys_args[0]
         self._handle = int(sys_args[1])
         self._args = sys_args
         self.arlo = None
         self.basestation = None
         self.cameras = None
-        self.debug_mode = REAL_SETTINGS.getSetting('enable_debug') == 'true'
-        # self.log("END   __init__", xbmc.LOGDEBUG)
+        self.addon_logging = REAL_SETTINGS.getSettingBool('enable_debug')
 
     def log(self, msg, level=xbmc.LOGNOTICE):
-        """
-        Log to the kodi log file.  Only output messages with a level
-        equal to or higher than the self.log_level (dflt NOTICE)
-        """
-        if level < self.log_level:
-            return
-        xbmc.log("[{}-{}] {}".format(ADDON_ID, ADDON_VERSION, msg), level)
 
-    def check_first_run(self):
-
-        if REAL_SETTINGS.getSetting("userid") == "":
-            self.log("check_first_run()- userid NOT set!", xbmc.LOGNOTICE)
-            msg = "Set ARLO credentials, otherwise...\nVideo will not stream correctly!"
-            icon = REAL_SETTINGS.getAddonInfo('icon')
-            xbmcgui.Dialog().notification(ADDON_NAME, msg, icon, 5000)
-            REAL_SETTINGS.openSettings()
-            self.debug_mode = REAL_SETTINGS.getSetting('enable_debug') == 'true'
-            self.log_level = int(REAL_SETTINGS.getSetting("log_level"))
+        if self.addon_logging :
+            if level < xbmc.LOGNOTICE:
+                level = xbmc.LOGNOTICE
+            xbmc.log("[{}-{}] {}".format(ADDON_ID, ADDON_VERSION, msg), level)
 
     def main_menu(self):
         for camera in self._get_arlo_cameras():
@@ -111,18 +95,16 @@ class ArloStream(object):
         # gui_update_timer = threading.Timer(120, self._refresh_gui)
         # gui_update_timer.start()
 
-    def _refresh_gui(self):
-        # self.log("Refresh container UI", xbmc.LOGDEBUG)
-        xbmc.executebuiltin('Container.Refresh')
+    #def _refresh_gui(self):
+    #    # self.log("Refresh container UI", xbmc.LOGDEBUG)
+    #    xbmc.executebuiltin('Container.Refresh')
 
     def _get_arlo_cameras(self):
         if self.cameras is None:
             self.log("Retrieving cameras...", xbmc.LOGDEBUG)
             self.cameras = self.arlo.GetDevices("camera")
             self._update_arlo_cameras_details()
-            if self.debug_mode:
-                # Only print if user has enabled DEBUG mode in settings
-                self.log(json.dumps(self.cameras, indent=4), xbmc.LOGNOTICE)
+            #self.log(json.dumps(self.cameras, indent=4), xbmc.LOGDEBUG)
 
         return self.cameras
 
@@ -145,6 +127,7 @@ class ArloStream(object):
 
     def _get_camera(self, device_id):
         tgt_camera = None
+        self.log("BEGIN _get_camera() deviceID: {}".format(device_id), xbmc.LOGDEBUG)
         for camera in self._get_arlo_cameras():
             if device_id == camera["deviceId"]:
                 tgt_camera = camera
@@ -160,29 +143,64 @@ class ArloStream(object):
         return fmt_str.format(camera['deviceId'],
                               camera['properties']['modelId'],
                               camera['batteryLevel'],
-                              camera['signalStrength'])
+                              camera['signalStrength']) 
 
+    
+    
     def _get_camera_snapshot(self, device_id):
-        if REAL_SETTINGS.getSetting('show_snapshots'):
-            camera = self._get_camera(device_id)
-            snapshot_file = "{0}/resources/media/{1}.jpg".format(ADDON_PATH, camera['deviceId'])
-            snapshot_url = camera['presignedFullFrameSnapshotUrl']
-            #self.log("*** file: {}".format(snapshot_file))
-            #self.log("*** URL : {}".format(snapshot_url))
-            try:
-                self.arlo.DownloadSnapshot(snapshot_url, snapshot_file, 4096)
-            except:
-                self.log("Unable to download snapshot: {0}".format(snapshot_url), xbmc.LOGERROR)
-                snapshot_file = "{0}/resources/ArloCamera.png".format(ADDON_PATH)
-        else:
+        if not REAL_SETTINGS.getSettingBool('show_snapshots'):
             snapshot_file = "{0}/resources/ArloCamera.png".format(ADDON_PATH)
-        self.log("  snapshot_file name = {0}".format(snapshot_file), xbmc.LOGDEBUG)
+        else:
+            snapshot_path = "{0}/resources/media".format(SETTINGS_LOC)
+            if not os.path.exists(snapshot_path):
+                os.makedirs(snapshot_path)
+            snapshot_file = self._refresh_snapshot(device_id, snapshot_path)
+
+        self.log("Snapshot file: {}".format(snapshot_file), xbmc.LOGDEBUG)
         return snapshot_file
 
-    def stop_camera(self):
+    def _refresh_snapshot(self, device_id, snapshot_path):
+        camera = self._get_camera(device_id)
+        snapshot_type = REAL_SETTINGS.getSetting('snapshot_type')
+        snapshot_file_prefix = ''.join(ch for ch in snapshot_type if ch.isupper())
+        snapshot_file = "{0}/{1}_{2}.jpg".format(snapshot_path, snapshot_file_prefix, camera['deviceId'])
+        if self._snapshot_expired(snapshot_file):
+            snapshot_url = camera[snapshot_type]
+            try:
+                self.log("Download {} into {}_{}".format(snapshot_type, snapshot_file_prefix, camera['deviceId']),xbmc.LOGNOTICE)
+                self.arlo.DownloadSnapshot(snapshot_url, snapshot_file, 4096)
+                if os.path.getsize(snapshot_file) < 1024:
+                    # File seems to be invalid, remove so it will try again the next time
+                    self.log("Invalid jpg? FILE: {}".format(snapshot_file), xbmc.LOGERROR)
+                    snapshot_file = "{0}/resources/ArloCamera.png".format(ADDON_PATH)
+            except Exception as err:
+                self.log("Unable to download snapshot: {0}".format(err), xbmc.LOGERROR)
+                snapshot_file = "{0}/resources/ArloCamera.png".format(ADDON_PATH)
+        return snapshot_file
+    
+    def _snapshot_expired(self, snapshot_file):
+        expired = False
+        if not os.path.exists(snapshot_file):
+            self.log("_snapshot_expired() - file does not exist", xbmc.LOGDEBUG)
+            expired = True
+        elif os.path.getsize(snapshot_file) < 1024:
+            self.log("_snapshot_expired() - file appears to be invalid, check contents with editor", xbmc.LOGDEBUG)
+            expired = True
+        else:
+            snapshot_created_time = os.path.getctime(snapshot_file) 
+            days_old = (time.time() - snapshot_created_time) // (24 * 3600)
+            if days_old >= 7:
+                self.log("_snapshot_expired() - file is {} days old".format(days_old), xbmc.LOGDEBUG)
+                expired = True
+            else:
+                self.log("Found cached snapshot, will use it.", xbmc.LOGDEBUG)
+
+        return expired
+
+    def _stop_camera(self):
         pass
 
-    def play_camera(self, device_id):
+    def _play_camera(self, device_id):
         # Send the command to start the stream and return the stream url.
         camera = self._get_camera(device_id)
         stream_url = self.arlo.StartStream(self.basestation, camera)
@@ -227,19 +245,28 @@ class ArloStream(object):
         #                            'plot': camera_info,
         #                            'mediatype': 'video'})
 
-    def arlo_login(self):
-        self.log("BEGIN arlo_login()", xbmc.LOGDEBUG)
+    def _arlo_login(self):
+        self.log("BEGIN _arlo_login()", xbmc.LOGDEBUG)
         user_name = REAL_SETTINGS.getSetting('userid')
         password = REAL_SETTINGS.getSetting('password')
         self.arlo = arlo.Arlo(user_name, password)
         self.basestation = self.arlo.GetDevices('basestation')[0]
-        if self.debug_mode:
-            # Only print if user has enabled DEBUG mode in settings
-            self.log(json.dumps(self.basestation, indent=4), xbmc.LOGNOTICE)
-        self.log("END   arlo_login()", xbmc.LOGDEBUG)
+        #self.log(json.dumps(self.basestation, indent=4), xbmc.LOGDEBUG)
+        self.log("END   _arlo_login()", xbmc.LOGDEBUG)
 
-    def arlo_logout(self):
+    def _arlo_logout(self):
+        self.log("_arlo_logout() in progress...")
         self.arlo.Logout()
+
+    def check_first_run(self):
+        if REAL_SETTINGS.getSetting("userid") == "":
+            self.log("check_first_run()- userid NOT set!", xbmc.LOGNOTICE)
+            msg = "Set ARLO credentials, otherwise...\nVideo will not stream correctly!"
+            icon = REAL_SETTINGS.getAddonInfo('icon')
+            xbmcgui.Dialog().notification(ADDON_NAME, msg, icon, 5000)
+            REAL_SETTINGS.openSettings()
+            self.addon_logging = REAL_SETTINGS.getSettingBool('enable_debug')
+
 
     def run(self):
         params = get_params(self._args)
@@ -252,7 +279,12 @@ class ArloStream(object):
 
         self.check_first_run()
 
-        if REAL_SETTINGS.getSetting("userid") != "":
+        if REAL_SETTINGS.getSetting("userid") == "":
+            xbmc.log("ArloView: Settings not established, ending...", xbmc.LOGERROR)
+            msg = "Set ARLO credentials, ArloView Exiting!"
+            icon = REAL_SETTINGS.getAddonInfo('icon')
+            xbmcgui.Dialog().notification(ADDON_NAME, msg, icon, 5000)
+        else:
             try:
                 _cam_name = urllib.unquote(params["cameraName"])
             except:
@@ -263,10 +295,10 @@ class ArloStream(object):
             except:
                 _cam_id = None
 
-            self.arlo_login()
+            self._arlo_login()
             if _cam_id is None:
                 self.main_menu()
-                self.arlo_logout()
             else:
-                self.play_camera(_cam_id)
-                self.arlo_logout()
+                self._play_camera(_cam_id)
+
+            self._arlo_logout()

@@ -41,6 +41,6 @@ msgid "Debug_Mode"
 msgstr ""
 
 msgctxt "#30008"
-msgid "Logging level"
+msgid "SnapShot Type"
 msgstr ""
 

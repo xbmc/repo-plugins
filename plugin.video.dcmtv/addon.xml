@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.dcmtv"
+	name="DCM TV"
+	version="1.0.0"
+	provider-name="TonyTaliaferro">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.addon.common" version="2.0.0"/>
+    <import addon="plugin.video.youtube" version="5.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">DCM TV Add-on</summary>
+    <description lang="en">DCM TV features Originals, Clasic tv, Urban films and documentaries from around the world enjoy Independent films from many talented filmmakers.</description>
+    <platform>all</platform>
+    <source>https://github.com/therezacuet/kodi-tv-youtube-channel-ad-on</source>
+    <website>http://thereza.herokuapp.com</website>
+    <email>rejaulcuet88@gmail.com</email>
+    <license>GPL v2.0</license>
+    <assets>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
+        <screenshot>resources/1.jpg</screenshot>
+        <screenshot>resources/2.png</screenshot>
+        <screenshot>resources/3.jpeg</screenshot>
+    </assets>
+    <news>DCM is a fast evolving multimedia company. Offering original entertainment.</news>
+  </extension>
+</addon>

@@ -24,7 +24,7 @@ channelFavsFile = xbmc.translatePath("special://profile/addon_data/"+addonID+"/"
 cookie_file = xbmc.translatePath("special://profile/addon_data/"+addonID+"/cookies")
 pDialog = xbmcgui.DialogProgress()
 familyFilter = '1'
-    
+
 if not xbmcvfs.exists('special://profile/addon_data/'+addonID+'/settings.xml'):
     addon.openSettings()
 
@@ -266,6 +266,7 @@ def playVideo(vid,live=False):
     xbmc.log("DAILYMOTION - url = %s" %url,xbmc.LOGDEBUG)
     if url:
         listitem = xbmcgui.ListItem(path=url)
+        listitem.setContentLookup(False)
         xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
     else:
         xbmc.log('DAILYMOTION - No playable url found',xbmc.LOGNOTICE)

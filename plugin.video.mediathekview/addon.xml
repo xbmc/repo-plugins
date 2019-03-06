@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mediathekview"
 	name="MediathekView"
-	version="0.5.0"
+	version="0.6.0"
 	provider-name="MediathekView.de, Leo Moll">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0"/>
@@ -26,47 +26,15 @@
 		<description lang="de_DE">Ermöglicht den Zugriff auf fast alle deutschen Mediatheken der öffentlich Rechtlichen basierend auf der Datenbank von MediathekView.de</description>
 		<description lang="en_GB">Gives access to most video-platforms from German public service broadcasters using the database of MediathekView.de</description>
 		<description lang="it_IT">Fornisce l'accesso a gran parte delle piattaforme video operate dalle emittenti pubbliche tedesche usando la banca dati di MediathekView.de</description>
-		<news>v0.5.0 (2018-08-08):
-- Bei manchen Filme fehlte im Kontext-Menü die Möglichkeit sie herunterzuladen
-- Old Maria DB / MySQL support
-- Datenbank-Downloads werden direkt nach der Verarbeitung gelöscht
-- Abspielen mit Untertitel wahlweise aus dem Kontext-Menü oder immer (Einstellung)
-- Letzte Suchvorgänge
-- Auflistung der Life-Streams beschleunigt
-- Möglichkeit eine Sendung als Film oder als Episode einer Serie herunterzuladen
-- Auf gewissen Systemen ist die Erzeugung der SQLite Datenbank fehlgeschlagen
-- Effizientere Datenbankstruktur
-- "mvupdate" hat die neuen Optionen --force und --intervall
-- Verschiedene Optionen bezüglich NFO-Dateien
-- Automatische Erkennung von Staffel und Folge
-- Verbesserte Download-Einstellungen
-- "Update bei Start" aktualisiert erst beim ersten Addon-Aufruf
-- Typ und Version der SQL Datenbank wird nun im Log angezeigt
-v0.4.3 (2018-01-27):
-- Verschiedene Aktualisierungsmodi (Manuell, Beim Start, Automatisch) sparen Bandbreite und Energie
-- Abspielen eines Films aus den Suchergebnissen löscht nun die Liste nicht mehr
-v0.4.2 (2018-01-20):
-- Senderlogos werden nun in verschiedenen Situationen angezeigt
-- Fehler bei Auflisten der Filme in "Alle Sendungen" aus 0.4.1 behoben
-- Fehler bei Datenbankaktualisierung behoben
-- Herunterladen von zufälligem Server
-v0.4.1 (2018-01-20):
-- Alphabetische Anzeige in Listen ist nun nicht mehr Groß-Klein-Sensitiv
-- Download von Inhalten funktioniert wieder
-- "Suchen nach Titel und Beschreibung" mit MySQL funktioniert wieder
-- Freitextsuche kommt nun auch mit " und ' klar
-- In seltenen Fällen konnte es bei der Installation oder das Update des Addons zu einem Fehler kommen, der die Datenbank korrumpiert hat.
-- Das Programm mvupdate hat nicht funktioniert
-- In "Alle Sendungen nach Sender" kommt man nun direkt nach der Auswahl des Senders in die Filmliste
-- Die Anzahl Tage die ein Film als "Vor kurzem hinzugefügt" gilt, ist nun einstellbar
-- Es ist einstellbar, ob "Vor kurzem hinzugefügt" das Sendedatum oder das Datum des Hinzufügens in der Datenbank berücksichtigt
-- Anzahl der neuen Filme in "Vor Kurzem hinzugefügt nach Sender" stimmt nun
-- Übersetzungsfehler korrigiert
-v0.4.0 (2018-01-14):
-- Android und Windows Kompatibilität da kein externer Entpacker mehr benötigt wird
-- Der Datenbanktreiber für MySQL kann nun die Datenbank selbsttätig anlegen
-- Im Datenbanktreiber für MySQL kann nun auch die Portnummer angegeben werden
-- Konfigurierbare Begrenzung der Suchergebnisse
+		<news>v0.6.0 (2019-03-01):
+- Feature: Cache der Anfragen für lokale Datenbanken
+- Feature: Natives ultraschnelles Update für SQLite
+- Bugfix: Live Streams konnten heruntergeladen werden
+- Bugfix: Auf Kodi 18 hat der automatische Aktualisierungsmodus nicht mehr funktioniert
+- Feature: Neue option --full um ein vollstndiges Update zu erzwingen
+- Feature: Neue Aktualisierungsmethode "Zeitgesteuert"
+- Bugfix: Es war nicht möglich, den Aktualisierungsintervall bei der Methode "Automatisch" einzustellen
+- Feature: Passende Symbole für alle Menü-Einträge
 </news>
 		<platform>all</platform>
 		<language>de fr</language>

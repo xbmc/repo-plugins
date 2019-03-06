@@ -79,11 +79,15 @@ allerdings nicht möglich eine abschließende Kompatibilitätsaussage zu machen.
 Funktionsweise der Aktualisierungsmethoden
 ------------------------------------------
 
-Das Addon unterstützt 4 verschiedene Aktualisierungsmethoden:
+Das Addon unterstützt 5 verschiedene Aktualisierungsmethoden:
+* **Zeitgesteuert:** Bei dieser Methode erfolgt die Aktualisierung ein mal
+pro eingestelltem Zeitintervall (Standard: 2 Stunden).  Die erste
+Aktualisierung eines Kalendertages ist eine vollständige Aktualisierung, alle
+weiteren sind Differenz-Aktualisierungen.
 * **Automatisch (Standard):** Bei dieser Methode wird die Aktualisierung der
 Datenbank automatisch durchgeführt. Die Aktualisierung erfolgt ein mal pro
 eingestelltem Aktualisierungsintervall (Standard: 2 Stunden). Die erste
-Aktualisierung eines Kalendertages ist eine vollstöndige Aktualisierung, alle
+Aktualisierung eines Kalendertages ist eine vollständige Aktualisierung, alle
 weiteren sind Differenz-Aktualisierungen. Die automatische Aktualisierung
 pausiert, wenn das Addon länger als 2 Stunden nicht bedient wurde, um
 Bandbreite und bei mobilen Geräten Strom zu sparen.
@@ -165,11 +169,17 @@ das Programm spezifische Hilfe aus. Beispiel:
 
 ````
 leo@bookpoldo ~/plugin.video.mediathekview $ ./mvupdate mysql -h
-usage: mvupdate mysql [-h] [-H HOST] [-P PORT] [-u USER] [-p PASSWORD]
-                      [-d DATABASE]
+usage: mvupdate mysql [-h] [-v] [-f | -F] [-i INTERVALL] [-H HOST] [-P PORT]
+                      [-u USER] [-p PASSWORD] [-d DATABASE]
 
 optional arguments:
   -h, --help            show this help message and exit
+  -v, --verbose         show progress messages (default: 0)
+  -f, --force           ignore the minimum interval (default: False)
+  -F, --full            ignore the minimum interval and force a full update
+                        (default: False)
+  -i INTERVALL, --intervall INTERVALL
+                        minimum interval between updates (default: 3600)
   -H HOST, --host HOST  hostname or ip address (default: localhost)
   -P PORT, --port PORT  connection port (default: 3306)
   -u USER, --user USER  connection username (default: mediathekview)
@@ -250,7 +260,10 @@ possible to make a final compatibility statement.
 How the update methods work
 ---------------------------
 
-The addon supports 4 different update methods:
+The addon supports 5 different update methods:
+* **Continously:** This method automatically updates the database. The update
+takes place once per set update interval (default: 2 hours). The first update
+of a calendar day is a full update, all others are differential updates.
 * **Automatic (Default):** This method automatically updates the database.
 The update takes place once per set update interval (default: 2 hours). The
 first update of a calendar day is a full update, all others are differential
@@ -333,6 +346,12 @@ usage: mvupdate mysql [-h] [-H HOST] [-P PORT] [-u USER] [-p PASSWORD]
 
 optional arguments:
   -h, --help            show this help message and exit
+  -v, --verbose         show progress messages (default: 0)
+  -f, --force           ignore the minimum interval (default: False)
+  -F, --full            ignore the minimum interval and force a full update
+                        (default: False)
+  -i INTERVALL, --intervall INTERVALL
+                        minimum interval between updates (default: 3600)
   -H HOST, --host HOST  hostname or ip address (default: localhost)
   -P PORT, --port PORT  connection port (default: 3306)
   -u USER, --user USER  connection username (default: mediathekview)
@@ -403,7 +422,11 @@ possibile fare una dichiarazione finale di compatibilità.
 Come funzionano i metodi di aggiornamento
 -----------------------------------------
 
-L'addon supporta 4 diversi metodi di aggiornamento:
+L'addon supporta 5 diversi metodi di aggiornamento:
+* **Di continuo:** Questo metodo aggiorna il database una volta per ogni
+intervallo di aggiornamento impostato (impostazione predefinita: 2 ore).
+Il primo aggiornamento di un giorno è un aggiornamento completo, tutti gli
+altri sono aggiornamenti differenziali.
 * **Automatico (Predefinito):** Questo metodo aggiorna automaticamente il
 database. L'aggiornamento avviene una volta per ogni intervallo di
 aggiornamento impostato (impostazione predefinita: 2 ore). Il primo
@@ -493,6 +516,12 @@ usage: mvupdate mysql [-h] [-H HOST] [-P PORT] [-u USER] [-p PASSWORD]
 
 optional arguments:
   -h, --help            show this help message and exit
+  -v, --verbose         show progress messages (default: 0)
+  -f, --force           ignore the minimum interval (default: False)
+  -F, --full            ignore the minimum interval and force a full update
+                        (default: False)
+  -i INTERVALL, --intervall INTERVALL
+                        minimum interval between updates (default: 3600)
   -H HOST, --host HOST  hostname or ip address (default: localhost)
   -P PORT, --port PORT  connection port (default: 3306)
   -u USER, --user USER  connection username (default: mediathekview)

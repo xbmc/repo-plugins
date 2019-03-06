@@ -1,94 +1,264 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017 Leo Moll and Dominik Schlösser
-#
+"""
+The Kodi addons module
 
-# -- Imports ------------------------------------------------
+Copyright 2017-2018, Leo Moll and Dominik Schlösser
+Licensed under MIT License
+"""
+
+# pylint: disable=import-error
 import xbmc
 import xbmcgui
 import xbmcaddon
 
-# -- Classes ------------------------------------------------
-class KodiUI( object ):
 
-	def __init__( self ):
-		self.addon			= xbmcaddon.Addon()
-		self.language		= self.addon.getLocalizedString
-		self.bgdialog		= KodiBGDialog()
+class KodiUI(object):
+    """ Generic helper class for Kodi UI operations """
 
-	def GetEnteredText( self, deftext = None, heading = None, hidden = False ):
-		heading = self.language( heading ).encode( 'utf-8' ) if isinstance( heading, int ) else heading if heading is not None else ''
-		deftext = self.language( deftext ).encode( 'utf-8' ) if isinstance( deftext, int ) else deftext if deftext is not None else ''
-		keyboard = xbmc.Keyboard( deftext, heading, 1 if hidden else 0 )
-		keyboard.doModal()
-		if keyboard.isConfirmed():
-			return ( keyboard.getText(), True, )
-		return ( deftext.encode( 'utf-8' ), False, )
+    def __init__(self):
+        self.addon = xbmcaddon.Addon()
+        self.language = self.addon.getLocalizedString
+        self.pgdialog = KodiProgressDialog()
 
-	def ShowOkDialog( self, heading = None, line1 = None, line2 = None, line3 = None  ):
-		heading = self.language( heading ).decode( 'utf-8' ) if isinstance( heading, int ) else heading if heading is not None else ''
-		line1 = self.language( line1 ).decode( 'utf-8' ) if isinstance( line1, int ) else line1 if line1 is not None else ''
-		line2 = self.language( line2 ).decode( 'utf-8' ) if isinstance( line2, int ) else line2 if line2 is not None else ''
-		line3 = self.language( line3 ).decode( 'utf-8' ) if isinstance( line3, int ) else line3 if line3 is not None else ''
-		dialog = xbmcgui.Dialog()
-		ok = dialog.ok( heading, line1, line2, line3 )
-		del dialog
-		return ok
+    def get_entered_text(self, deftext=None, heading=None, hidden=False):
+        """
+        Asks the user to enter a text. The method returnes a tuple with
+        the text and the confirmation status: `( "Entered Text", True, )`
 
-	def ShowNotification( self, heading, message, icon = xbmcgui.NOTIFICATION_INFO, time = 5000, sound = True ):
-		heading = self.language( heading ) if isinstance( heading, int ) else heading
-		message = self.language( message ) if isinstance( message, int ) else message
-		xbmcgui.Dialog().notification( heading, message, icon, time, sound )
+        Args:
+            deftext(str|int, optional): Default text in the text entry box.
+                Can be a string or a numerical id to a localized text. This
+                text will be returned if the user selects `Cancel`
 
-	def ShowWarning( self, heading, message, time = 5000, sound = True ):
-		self.ShowNotification( heading, message, xbmcgui.NOTIFICATION_WARNING, time, sound )
+            heading(str|int, optional): Heading text of the text entry UI.
+                Can be a string or a numerical id to a localized text.
 
-	def ShowError( self, heading, message, time = 5000, sound = True ):
-		self.ShowNotification( heading, message, xbmcgui.NOTIFICATION_ERROR, time, sound )
+            hidden(bool, optional): If `True` the entered text is not
+                desplayed. Placeholders are used for every char. Default
+                is `False`
+        """
+        heading = self.language(heading).encode(
+            'utf-8') if isinstance(heading, int) else heading if heading is not None else ''
+        deftext = self.language(deftext).encode(
+            'utf-8') if isinstance(deftext, int) else deftext if deftext is not None else ''
+        keyboard = xbmc.Keyboard(deftext, heading, 1 if hidden else 0)
+        keyboard.doModal()
+        if keyboard.isConfirmed():
+            return (keyboard.getText(), True, )
+        return (deftext.encode('utf-8'), False, )
 
-	def ShowBGDialog( self, heading = None, message = None ):
-		self.bgdialog.Create( heading, message )
+    def show_ok_dialog(self, heading=None, line1=None, line2=None, line3=None):
+        """
+        Shows an OK dialog to the user
 
-	def UpdateBGDialog( self, percent, heading = None, message = None ):
-		self.bgdialog.Update( percent, heading, message )
+        Args:
+            heading(str|int, optional): Heading text of the OK Dialog.
+                Can be a string or a numerical id to a localized text.
 
-	def HookBGDialog( self, blockcount, blocksize, totalsize ):
-		self.bgdialog.UrlRetrieveHook( blockcount, blocksize, totalsize )
+            line1(str|int, optional): First text line of the OK Dialog.
+                Can be a string or a numerical id to a localized text.
 
-	def CloseBGDialog( self ):
-		self.bgdialog.Close()
+            line2(str|int, optional): Second text line of the OK Dialog.
+                Can be a string or a numerical id to a localized text.
 
-class KodiBGDialog( object ):
-	def __init__( self ):
-		self.language		= xbmcaddon.Addon().getLocalizedString
-		self.bgdialog= None
+            line3(str|int, optional): Third text line of the OK Dialog.
+                Can be a string or a numerical id to a localized text.
+        """
+        heading = self.language(heading).decode(
+            'utf-8') if isinstance(heading, int) else heading if heading is not None else ''
+        line1 = self.language(line1).decode(
+            'utf-8') if isinstance(line1, int) else line1 if line1 is not None else ''
+        line2 = self.language(line2).decode(
+            'utf-8') if isinstance(line2, int) else line2 if line2 is not None else ''
+        line3 = self.language(line3).decode(
+            'utf-8') if isinstance(line3, int) else line3 if line3 is not None else ''
+        dialog = xbmcgui.Dialog()
+        retval = dialog.ok(heading, line1, line2, line3)
+        del dialog
+        return retval
 
-	def __del__( self ):
-		self.Close()
+    # pylint: disable=line-too-long
+    def show_notification(self, heading, message, icon=xbmcgui.NOTIFICATION_INFO, time=5000, sound=True):
+        """
+        Shows a notification to the user
 
-	def Create( self, heading = None, message = None ):
-		heading = self.language( heading ) if isinstance( heading, int ) else heading
-		message = self.language( message ) if isinstance( message, int ) else message
-		if self.bgdialog is None:
-			self.bgdialog = xbmcgui.DialogProgressBG()
-			self.bgdialog.create( heading, message )
-		else:
-			self.bgdialog.update( 0, heading, message )
+        Args:
+            heading(str|int): Heading text of the notification.
+                Can be a string or a numerical id to a localized text.
 
-	def Update( self, percent, heading = None, message = None ):
-		if self.bgdialog is not None:
-			heading = self.language( heading ) if isinstance( heading, int ) else heading
-			message = self.language( message ) if isinstance( message, int ) else message
-			self.bgdialog.update( percent, heading, message )
+            message(str|int): Text of the notification.
+                Can be a string or a numerical id to a localized text.
 
-	def UrlRetrieveHook( self, blockcount, blocksize, totalsize ):
-		downloaded = blockcount * blocksize
-		if totalsize > 0:
-			percent = int( (downloaded * 100) / totalsize )
-			if self.bgdialog is not None:
-				self.bgdialog.update( percent )
+            icon(id, optional): xbmc id of the icon. Can be `xbmcgui.NOTIFICATION_INFO`,
+                `xbmcgui.NOTIFICATION_WARNING` or `xbmcgui.NOTIFICATION_ERROR`.
+                Default is `xbmcgui.NOTIFICATION_INFO`
 
-	def Close( self ):
-		if self.bgdialog is not None:
-			self.bgdialog.close()
-			del self.bgdialog
-			self.bgdialog = None
+            time(int, optional): Number of milliseconds the notification stays
+                visible. Default is 5000.
+
+            sound(bool, optional): If `True` a sound is played. Default is `True`
+        """
+        heading = self.language(heading) if isinstance(
+            heading, int) else heading
+        message = self.language(message) if isinstance(
+            message, int) else message
+        xbmcgui.Dialog().notification(heading, message, icon, time, sound)
+
+    def show_warning(self, heading, message, time=5000, sound=True):
+        """
+        Shows a warning notification to the user
+
+        Args:
+            heading(str|int): Heading text of the notification.
+                Can be a string or a numerical id to a localized text.
+
+            message(str|int): Text of the notification.
+                Can be a string or a numerical id to a localized text.
+
+            time(int, optional): Number of milliseconds the notification stays
+                visible. Default is 5000.
+
+            sound(bool, optional): If `True` a sound is played. Default is `True`
+        """
+        self.show_notification(
+            heading, message, xbmcgui.NOTIFICATION_WARNING, time, sound)
+
+    def show_error(self, heading, message, time=5000, sound=True):
+        """
+        Shows an error notification to the user
+
+        Args:
+            heading(str|int): Heading text of the notification.
+                Can be a string or a numerical id to a localized text.
+
+            message(str|int): Text of the notification.
+                Can be a string or a numerical id to a localized text.
+
+            time(int, optional): Number of milliseconds the notification stays
+                visible. Default is 5000.
+
+            sound(bool, optional): If `True` a sound is played. Default is `True`
+        """
+        self.show_notification(
+            heading, message, xbmcgui.NOTIFICATION_ERROR, time, sound)
+
+    def show_progress_dialog(self, heading=None, message=None):
+        """
+        Shows a progress dialog to the user
+
+        Args:
+            heading(str|int): Heading text of the progress dialog.
+                Can be a string or a numerical id to a localized text.
+
+            message(str|int): Text of the progress dialog.
+                Can be a string or a numerical id to a localized text.
+        """
+        self.pgdialog.create(heading, message)
+
+    def update_progress_dialog(self, percent, heading=None, message=None):
+        """
+        Updates a progress dialog
+
+        Args:
+            percent(int): percentage of progress
+
+            heading(str|int): Heading text of the progress dialog.
+                Can be a string or a numerical id to a localized text.
+
+            message(str|int): Text of the progress dialog.
+                Can be a string or a numerical id to a localized text.
+        """
+        self.pgdialog.update(percent, heading, message)
+
+    def hook_progress_dialog(self, blockcount, blocksize, totalsize):
+        """
+        A hook function that will be passed to functions like `url_retrieve`
+
+        Args:
+            blockcount(int): Count of blocks transferred so far
+
+            blocksize(int): Block size in bytes
+
+            totalsize(int): Total size of the file
+        """
+        self.pgdialog.url_retrieve_hook(blockcount, blocksize, totalsize)
+
+    def close_progress_dialog(self):
+        """ Closes a progress dialog """
+        self.pgdialog.close()
+
+
+class KodiProgressDialog(object):
+    """ Kodi Progress Dialog Class """
+
+    def __init__(self):
+        self.language = xbmcaddon.Addon().getLocalizedString
+        self.pgdialog = None
+
+    def __del__(self):
+        self.close()
+
+    def create(self, heading=None, message=None):
+        """
+        Shows a progress dialog to the user
+
+        Args:
+            heading(str|int): Heading text of the progress dialog.
+                Can be a string or a numerical id to a localized text.
+
+            message(str|int): Text of the progress dialog.
+                Can be a string or a numerical id to a localized text.
+        """
+        heading = self.language(heading) if isinstance(
+            heading, int) else heading
+        message = self.language(message) if isinstance(
+            message, int) else message
+        if self.pgdialog is None:
+            self.pgdialog = xbmcgui.DialogProgressBG()
+            self.pgdialog.create(heading, message)
+        else:
+            self.pgdialog.update(0, heading, message)
+
+    def update(self, percent, heading=None, message=None):
+        """
+        Updates a progress dialog
+
+        Args:
+            percent(int): percentage of progress
+
+            heading(str|int): Heading text of the progress dialog.
+                Can be a string or a numerical id to a localized text.
+
+            message(str|int): Text of the progress dialog.
+                Can be a string or a numerical id to a localized text.
+        """
+        if self.pgdialog is not None:
+            heading = self.language(heading) if isinstance(
+                heading, int) else heading
+            message = self.language(message) if isinstance(
+                message, int) else message
+            self.pgdialog.update(percent, heading, message)
+
+    def url_retrieve_hook(self, blockcount, blocksize, totalsize):
+        """
+        A hook function that will be passed to functions like `url_retrieve`
+
+        Args:
+            blockcount(int): Count of blocks transferred so far
+
+            blocksize(int): Block size in bytes
+
+            totalsize(int): Total size of the file
+        """
+        downloaded = blockcount * blocksize
+        if totalsize > 0:
+            percent = int((downloaded * 100) / totalsize)
+            if self.pgdialog is not None:
+                self.pgdialog.update(percent)
+
+    def close(self):
+        """ Closes a progress dialog """
+        if self.pgdialog is not None:
+            self.pgdialog.close()
+            del self.pgdialog
+            self.pgdialog = None

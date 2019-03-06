@@ -17,8 +17,10 @@
 		<setting id="dbuser"			type="text"		label="30213"	default="mediathekview"		visible="eq(-3,1)"		/>
 		<setting id="dbpass"			type="text"		label="30214"	default=""	option="hidden"	visible="eq(-4,1)"		/>
 		<setting id="dbdata"			type="text"		label="30215"	default="mediathekview"		visible="eq(-5,1)"		/>
-		<setting id="updmode"			type="enum"		label="30231"	default="3"		lvalues="30241|30242|30243|30244"	/>
-		<setting id="updinterval"		type="slider"	label="30232"	default="2"	range="1,24"	visible="eq(-1,true)"	/>
+		<setting id="updnative"			type="bool"		label="30233"	default="true"				visible="eq(-6,0)"		/>
+		<setting id="caching"			type="bool"		label="30234"	default="true"				visible="eq(-7,0)"		/>
+		<setting id="updmode"			type="enum"		label="30231"	default="3"	lvalues="30241|30242|30243|30244|30245"	/>
+		<setting id="updinterval"		type="slider"	label="30232"	default="2"	range="1,24"	visible="gt(-1,2)"		/>
 	</category>
 	<category label="30003">
 		<setting id="downloadpathep"	type="folder"	label="30310"	source="auto"	option="writeable"					/>

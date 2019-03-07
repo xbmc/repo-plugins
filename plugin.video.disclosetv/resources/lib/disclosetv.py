@@ -1,4 +1,4 @@
-#   Copyright (C) 2018 Lunatixz
+#   Copyright (C) 2019 Lunatixz
 #
 #
 # This file is part of disclosetv.
@@ -44,11 +44,10 @@ BASE_URL      = 'http://www.disclose.tv/'
 BASE_VID      = BASE_URL + 'videos'
 YTURL        = 'plugin://plugin.video.youtube/play/?video_id=%s'
 VMURL        = 'plugin://plugin.video.vimeo/play/?video_id=%s'
-MAIN_MENU    = [(LANGUAGE(30003), BASE_VID, 1),
-                (LANGUAGE(30004), BASE_VID+"/new", 1),
-                (LANGUAGE(30005), BASE_VID+"/popular", 1),
-                (LANGUAGE(30006), BASE_VID+"/long", 1),
-                (LANGUAGE(30007), BASE_VID+"/documentaries", 1)]
+MAIN_MENU    = [(LANGUAGE(30010), BASE_VID, 1)]# ,
+                # (LANGUAGE(30004), BASE_VID+"/d/all/new", 1),
+                # (LANGUAGE(30005), BASE_VID+"/d/all/popular", 1),
+                # (LANGUAGE(30009), BASE_VID+"/d/all/last-reply", 1)]
                 
 def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == False and level != xbmc.LOGERROR: return
@@ -56,8 +55,8 @@ def log(msg, level=xbmc.LOGDEBUG):
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
 
 def isUWP():
-    return (bool(xbmc.getCondVisibility("system.platform.uwp")) or sys.platform == "win10")
-     
+    return (xbmc.getCondVisibility("system.platform.uwp") or sys.platform == "win10" or re.search(r"[/\\]WindowsApps[/\\]XBMCFoundation\.Kodi_", xbmc.translatePath("special://xbmc/")))
+         
 socket.setdefaulttimeout(TIMEOUT)
 class Disclose(object):
     def __init__(self, sysARG):
@@ -87,7 +86,7 @@ class Disclose(object):
             
             
     def browse(self, url):
-        log('browse')
+        log('browse, url = %s'%url)
         soup   = BeautifulSoup(self.openURL(url), "html.parser")
         videos = soup('div', {'class': 'grid-item'})
         for video in videos:
@@ -103,13 +102,15 @@ class Disclose(object):
             try: aired = (datetime.datetime.strptime(timeago, '%b %d %Y'))
             except: aired = datetime.datetime.now()
             aired = aired.strftime("%Y-%m-%d")
-            runtime = (video('span', {'class': 'teaser-figure__len'})[0].get_text()).split(':')
-            if len(runtime) == 3:
-                h, m, s = runtime
-                duration  = int(h) * 3600 + int(m) * 60 + int(s)
-            else:
-                m, s = runtime
-                duration  = (int(m) * 60) + int(s)
+            try:
+                runtime = (video('span', {'class': 'teaser-figure__len'})[0].get_text()).split(':')
+                if len(runtime) == 3:
+                    h, m, s = runtime
+                    duration  = int(h) * 3600 + int(m) * 60 + int(s)
+                else:
+                    m, s = runtime
+                    duration = (int(m) * 60) + int(s)
+            except: duration = 0
             infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":duration,"plot":plot,"genre":genre,"aired":aired}
             infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
             self.addLink(label, vid_url, 9, infoLabels, infoArt, len(videos))
@@ -216,7 +217,4 @@ class Disclose(object):
 
         xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)
         xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
-        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_NONE)
-        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
-        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.endOfDirectory(int(self.sysARG[1]), cacheToDisc=True)

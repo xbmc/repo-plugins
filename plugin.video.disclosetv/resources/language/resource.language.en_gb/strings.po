@@ -51,3 +51,11 @@ msgstr ""
 msgctxt "#30008"
 msgid "Youtube"
 msgstr ""
+
+msgctxt "#30009"
+msgid "Last Reply"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Browse"
+msgstr ""

@@ -2,7 +2,7 @@ import sys
 import xbmcaddon
 from urlparse import parse_qsl
 from resources.lib.kodiwrappers import kodiwrapper, sortmethod
-from resources.lib.vrtplayer import vrtplayer, urltostreamservice, tokenresolver, actions
+from resources.lib.vrtplayer import vrtplayer, urltostreamservice, tokenresolver, actions, vrtapihelper
 
 _url = sys.argv[0]
 _handle = int(sys.argv[1])
@@ -15,7 +15,8 @@ def router(params_string):
     stream_service = urltostreamservice.UrlToStreamService(vrtplayer.VRTPlayer._VRT_BASE,
                                                            vrtplayer.VRTPlayer._VRTNU_BASE_URL,
                                                            kodi_wrapper, token_resolver)
-    vrt_player = vrtplayer.VRTPlayer(addon.getAddonInfo('path'), kodi_wrapper, stream_service)
+    api_helper = vrtapihelper.VRTApiHelper()
+    vrt_player = vrtplayer.VRTPlayer(addon.getAddonInfo('path'), kodi_wrapper, stream_service, api_helper)
     params = dict(parse_qsl(params_string))
     if params:
         if params['action'] == actions.LISTING_AZ:
@@ -25,7 +26,8 @@ def router(params_string):
         elif params['action'] == actions.LISTING_LIVE:
             vrt_player.show_livestream_items()
         elif params['action'] == actions.LISTING_VIDEOS:
-            vrt_player.show_videos(params['video'])
+            season = params['season'] if  'season' in params else None
+            vrt_player.show_videos(params['video'], season)
         elif params['action'] == actions.LISTING_CATEGORY_VIDEOS:
             vrt_player.show_video_category_episodes(params['video'])
         elif params['action'] == actions.PLAY:

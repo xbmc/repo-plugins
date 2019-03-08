@@ -5,10 +5,7 @@ from urlparse import urljoin
 from bs4 import BeautifulSoup
 from bs4 import SoupStrainer
 from resources.lib.helperobjects import helperobjects
-from resources.lib.vrtplayer import metadatacollector
-from resources.lib.vrtplayer import statichelper
-from resources.lib.vrtplayer import actions
-from resources.lib.vrtplayer import metadatacreator
+from resources.lib.vrtplayer import metadatacollector, statichelper, actions, metadatacreator
 from resources.lib.kodiwrappers import sortmethod
 
 
@@ -23,10 +20,11 @@ class VRTPlayer:
     _VRTNU_BASE_URL = urljoin(_VRT_BASE, '/vrtnu/')
     _VRTNU_SEARCH_URL = 'https://search.vrt.be/suggest?facets[categories]='
 
-    def __init__(self, addon_path, kodi_wrapper, url_to_stream_service):
+    def __init__(self, addon_path, kodi_wrapper, url_to_stream_service, api_helper):
         self.metadata_collector = metadatacollector.MetadataCollector()
         self._addon_path = addon_path
         self._kodi_wrapper = kodi_wrapper
+        self._api_helper = api_helper
         self._url_toStream_service = url_to_stream_service
 
 
@@ -66,8 +64,7 @@ class VRTPlayer:
             video_dictionary = metadata_creator.get_video_dictionary()
             #cut vrtbase url off since it will be added again when searching for episodes (with a-z we dont have the
             #  full url)
-            link_to_video = statichelper.replace_double_slashes_with_https(program['targetUrl']).replace(self._VRT_BASE,
-                                                                                                         '')
+            link_to_video = program['targetUrl'].replace('//www.vrt.be','')
             item = helperobjects.TitleItem(title, {'action': actions.LISTING_VIDEOS, 'video': link_to_video},
                                            False, thumbnail, video_dictionary)
             menu_items.append(item)
@@ -91,94 +88,9 @@ class VRTPlayer:
                 }
         self._kodi_wrapper.show_listing(livestream_items, sortmethod.ALPHABET)
 
-    def show_videos(self, path):
-        url = urljoin(self._VRT_BASE, path)
-        #xbmc.log(url, xbmc.LOGWARNING)
-        # go to url.relevant gets redirected and go on with this url
-        relevant_path = requests.get(url)
-        response = requests.get(relevant_path.url)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        title_items = []
-        episodes_list = soup.find(class_='episodeslist')
-        li_tags = []
-        if episodes_list is not None:
-            lis_to_add = episodes_list.find_all('li', class_='vrt-labelnav--item')
-            if lis_to_add: 
-                has_non_self_refering_a_tags = lis_to_add[0].find('a', {'href': '#'})
-                if has_non_self_refering_a_tags is None:
-                    li_tags.extend(lis_to_add)
-
-        episode_items = self.__get_episodes(li_tags, path)
-        if len(li_tags) != 0 and episode_items:
-            title_items.extend(episode_items)
-        else:
-             
-            if soup.find('div', {'id': 'episodes-list'}) is not None or soup.find('div', {'id': 'episodes-list-wrapper'}) is not None:
-                title_items.extend(self.__get_multiple_videos_episodes_list_id(soup))
-            else:
-                title_items.extend(self.__get_single_video(relevant_path.url, soup))
+    def show_videos(self, path, season):
+        title_items = self._api_helper.get_video_items(path, season)
         self._kodi_wrapper.show_listing(title_items)
-
-
-    def __get_episodes(self, li_tags, original_path):
-        '''
-        This method gets all the episodes = seasons from the tabmenus on the vrt.nu website
-        :param option_tags:
-        :return:
-        '''
-        title_items = []
-        for li_tag in li_tags:
-            a_tag = li_tag.find('a');
-            if a_tag is not None and a_tag.has_attr('href'):
-                title = a_tag.text
-                path = a_tag['href']
-                stripped_title = statichelper.replace_newlines_and_strip(title)
-                title_items.append(helperobjects.TitleItem(stripped_title, {'action' : actions.LISTING_VIDEOS, 'video':path}, False))
-                
-        return title_items
-
-
-
-    def __get_multiple_videos_episodes_list_id(self, soup):
-        title_items = []
-        #some episodes have a different episodelist using class episodelist instead of id episode-list :/
-        episode_list_css = soup.find('div', {'class': 'episodeslist'})
-        episode_list = soup.find('div', {'id' : 'episodes-list'})
-
-        if episode_list_css is not None:
-            episode_list = episode_list_css.find('div', {'id': 'episodes-list-wrapper'})
-        
-        for tile in episode_list.find_all('li'):
-            thumbnail = VRTPlayer.__format_image_url(tile)
-            found_element = tile.find(class_='vrtnu-list--item-meta')
-
-            if found_element is not None:
-                h_tag = found_element.find('h3')
-                title = statichelper.replace_newlines_and_strip(h_tag.text)
-                broadcast_date_tag = found_element.find(class_='vrtnu-list--item-meta__mobile')
-
-                if broadcast_date_tag is not None:
-                    clean_date = VRTPlayer.__strip_date_from_unessecary_caracters(broadcast_date_tag.text)
-                    title = clean_date + ' ' + title
-
-                path = tile.find('a')['href']
-                video_dictionary = self.metadata_collector.get_multiple_layout_episode_metadata(tile)
-                title_items.append(helperobjects.TitleItem(title, {'action': actions.PLAY, 'video': path}, True, thumbnail, video_dictionary))
-        return title_items
-
-    def __get_single_video(self, path, soup):
-        title_items = []
-        video_dictionary = self.metadata_collector.get_single_layout_episode_metadata(soup)
-        content = soup.find(class_='content2');
-        list_item_title = content.find('h1').text
-
-        if 'shortdate' in video_dictionary:
-            list_item_title = video_dictionary['shortdate'] + ' ' + list_item_title
-
-        vrt_video = soup.find(class_='vrtvideo')
-        thumbnail = VRTPlayer.__format_image_url(vrt_video)
-        title_items.append(helperobjects.TitleItem(list_item_title, {'action': actions.PLAY, 'video': path}, True, thumbnail, video_dictionary))
-        return title_items
 
     def __get_media(self, file_name):
         return os.path.join(self._addon_path, 'resources', 'media', file_name)
@@ -245,8 +157,3 @@ class VRTPlayer:
         if found_element is not None:
             title = statichelper.replace_newlines_and_strip(found_element.contents[0])
         return thumbnail, title
-    
-    @staticmethod
-    def __strip_date_from_unessecary_caracters(dirtyDate): 
-        date = re.findall('\d+/\d+', dirtyDate)[0]  
-        return date

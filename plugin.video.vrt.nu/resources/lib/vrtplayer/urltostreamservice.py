@@ -127,7 +127,7 @@ class UrlToStreamService:
 
         elif video_json['code'] == 'INVALID_LOCATION' or video_json['code'] == 'INCOMPLETE_ROAMING_CONFIG':
             self._kodi_wrapper.log_notice(video_json['message'])
-            roaming_xvrttoken = self.get_xvrttoken(True)
+            roaming_xvrttoken = self.token_resolver.get_xvrttoken(True)
             if not retry and roaming_xvrttoken is not None:
                 if video_json['code'] == 'INCOMPLETE_ROAMING_CONFIG':
                     #delete cached ondemand_vrtPlayerToken
@@ -143,23 +143,36 @@ class UrlToStreamService:
 
 
     def _try_get_drm_stream(self, stream_dict, vudrm_token):
+        protocol = "mpeg_dash"
         encryption_json = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}'.format(vudrm_token)
         license_key = self._get_license_key(key_url=self._license_url, key_type='D', key_value=encryption_json, key_headers={'Content-Type': 'text/plain;charset=UTF-8'})
-        return streamurls.StreamURLS(stream_dict['mpeg_dash'], license_key=license_key, use_inputstream_adaptive=True)
+        return streamurls.StreamURLS(stream_dict[protocol], license_key=license_key, use_inputstream_adaptive=True) if protocol in stream_dict else None
         
     def _select_stream(self, stream_dict, vudrm_token):
+        stream_url = None
+        protocol = None
         if vudrm_token and self._can_play_drm and self._kodi_wrapper.get_setting('usedrm') == 'true':
-            self._kodi_wrapper.log_notice('protocol: usedrm')
-            return self._try_get_drm_stream(stream_dict, vudrm_token)
-        elif vudrm_token:
-            self._kodi_wrapper.log_notice('protocol: hls_aes')
-            return streamurls.StreamURLS(*self._select_hls_substreams(stream_dict['hls_aes']))
-        elif self._kodi_wrapper.has_inputstream_adaptive_installed():
-            self._kodi_wrapper.log_notice('protocol: mpeg_dash')
-            return streamurls.StreamURLS(stream_dict['mpeg_dash'], use_inputstream_adaptive=True) #non drm stream
-        else:
-            self._kodi_wrapper.log_notice('protocol: hls')
-            return streamurls.StreamURLS(*self._select_hls_substreams(stream_dict['hls'])) #last resort, non drm hls stream, only applies if people uninstalled inputstream adaptive while vrt nu addon was disabled
+            protocol = 'mpeg_dash drm';
+            self._kodi_wrapper.log_notice('protocol: ' + protocol)
+            stream_url = self._try_get_drm_stream(stream_dict, vudrm_token)
+        
+        if vudrm_token and stream_url == None:
+            protocol = 'hls_aes';
+            self._kodi_wrapper.log_notice('protocol: ' + protocol)
+            stream_url = streamurls.StreamURLS(*self._select_hls_substreams(stream_dict[protocol])) if protocol in stream_dict else None
+
+        if self._kodi_wrapper.has_inputstream_adaptive_installed() and stream_url == None:
+            protocol = 'mpeg_dash';
+            self._kodi_wrapper.log_notice('protocol: ' + protocol)
+            stream_url = streamurls.StreamURLS(stream_dict[protocol], use_inputstream_adaptive=True) if protocol in stream_dict else None
+
+        if stream_url == None:
+            protocol = 'hls';
+            self._kodi_wrapper.log_notice('protocol: ' + protocol)
+            stream_url = streamurls.StreamURLS(*self._select_hls_substreams(stream_dict[protocol])) #no  if else statement because this is the last resort stream selection
+
+        return stream_url
+
 
     #speed up hls selection, workaround for slower kodi selection
     def _select_hls_substreams(self, master_hls_url):

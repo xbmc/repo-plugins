@@ -1,13 +1,13 @@
 # Kodi Media Center language file
-# Addon Name: RTS Play TV
-# Addon id: plugin.video.RTSplaytv
+# Addon Name: SRF Play TV
+# Addon id: plugin.video.srfplaytv
 # Addon Provider: Alexander Seiler
 msgid ""
 msgstr ""
-"Project-Id-Version: plugin.video.rtsplaytv\n"
+"Project-Id-Version: plugin.video.srfplaytv\n"
 "Report-Msgid-Bugs-To: seileralex@gmail.com\n"
 "POT-Creation-Date: 2018-11-05 15:26+0200\n"
-"PO-Revision-Date: 2018-11-05 15:26+0200\n"
+"PO-Revision-Date: 2018-11-21 14:55+0100\n"
 "Last-Translator: Nicolas Mielec\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -83,42 +83,6 @@ msgctxt "#30057"
 msgid "Shows by date"
 msgstr "Emissions par date"
 
-msgctxt "#30058"
-msgid "Today"
-msgstr "Aujourd'hui"
-
-msgctxt "#30059"
-msgid "Yesterday"
-msgstr "Hier"
-
-msgctxt "#30060"
-msgid "Monday"
-msgstr "Lundi"
-
-msgctxt "#30061"
-msgid "Tuesday"
-msgstr "Mardi"
-
-msgctxt "#30062"
-msgid "Wednesday"
-msgstr "Mercredi"
-
-msgctxt "#30063"
-msgid "Thursday"
-msgstr "Jeudi"
-
-msgctxt "#30064"
-msgid "Friday"
-msgstr "Vendredi"
-
-msgctxt "#30065"
-msgid "Saturday"
-msgstr "Samedi"
-
-msgctxt "#30066"
-msgid "Sunday"
-msgstr "Dimanche"
-
 msgctxt "#30069"
 msgid "Choose your favourite shows"
 msgstr "Sélectionnez vos émissions favorites"
@@ -127,22 +91,10 @@ msgctxt "#30070"
 msgid "RTS.ch Live"
 msgstr "RTS.ch Live"
 
-msgctxt "#30071"
-msgid "Choose date"
-msgstr "Sélectionnez la date"
-
 msgctxt "#30072"
 msgid "Live TV"
 msgstr "Live TV"
 
-msgctxt "#30073"
-msgid ">> Next page"
-msgstr ">> Page suivante"
-
 msgctxt "#30074"
 msgid "SRF on YouTube"
 msgstr "SRF sur YouTube"
-
-msgctxt "#30100"
-msgid "Failed to open URL."
-msgstr "Erreur lors de l'ouverture de l'URL"

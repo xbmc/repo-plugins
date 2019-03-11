@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mediathekview"
 	name="MediathekView"
-	version="0.6.1"
+	version="0.6.2"
 	provider-name="MediathekView.de, Leo Moll">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0"/>
@@ -26,17 +26,22 @@
 		<description lang="de_DE">Ermöglicht den Zugriff auf fast alle deutschen Mediatheken der öffentlich Rechtlichen basierend auf der Datenbank von MediathekView.de</description>
 		<description lang="en_GB">Gives access to most video-platforms from German public service broadcasters using the database of MediathekView.de</description>
 		<description lang="it_IT">Fornisce l'accesso a gran parte delle piattaforme video operate dalle emittenti pubbliche tedesche usando la banca dati di MediathekView.de</description>
-		<news>v.0.6.1 (2019-03-08):
-- Bugfix: Fixed module exception due to case error
+		<news>v.0.6.2 (2019-03-10):
+- [fix] Implemented Workaround for broken gzip module support in Kodi 18 running on Android
+- [fix] Fixed crash in mvupdate tool when invoked with MySQL support
+- [new] Improved compatibility with future Kodi versions with Python 3 support
+v.0.6.1 (2019-03-08):
+- [fix] Fixed module exception due to case error
 v0.6.0 (2019-03-01):
-- Feature: Cache der Anfragen für lokale Datenbanken
-- Feature: Natives ultraschnelles Update für SQLite
-- Bugfix: Live Streams konnten heruntergeladen werden
-- Bugfix: Auf Kodi 18 hat der automatische Aktualisierungsmodus nicht mehr funktioniert
-- Feature: Neue option --full um ein vollstndiges Update zu erzwingen
-- Feature: Neue Aktualisierungsmethode "Zeitgesteuert"
-- Bugfix: Es war nicht möglich, den Aktualisierungsintervall bei der Methode "Automatisch" einzustellen
-- Feature: Passende Symbole für alle Menü-Einträge
+- [new] Query Cache for slow systems
+- [new] Native SQLite fast update
+- [fix] It was possible to "download" the live stream
+- [fix] Automatic DB update did not work any more on Kodi 18
+- [new] Possibility to force a full update from the command line
+- [new] New database update mode "Continously"
+- [fix] Implemented some improvements suggested by Kodi Team in xbmc/repo-plugins#1979 (comment)
+- [new] New Menu Icons
+- [new] Source code now complies to PEP8 specification
 </news>
 		<platform>all</platform>
 		<language>de fr</language>

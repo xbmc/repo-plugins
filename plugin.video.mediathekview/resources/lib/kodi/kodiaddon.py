@@ -2,19 +2,26 @@
 """
 The Kodi addons module
 
-Copyright 2017-2018, Leo Moll and Dominik Schlösser
+Copyright 2017-2019, Leo Moll and Dominik Schlösser
 Licensed under MIT License
 """
 import os
 import sys
-import urllib
-import urlparse
 
 # pylint: disable=import-error
 import xbmc
 import xbmcgui
 import xbmcaddon
 import xbmcplugin
+
+try:
+    # Python 3.x
+    from urllib.parse import urlencode
+    from urllib.parse import parse_qs
+except ImportError:
+    # Python 2.x
+    from urllib import urlencode
+    from urlparse import parse_qs
 
 from resources.lib.kodi.kodilogger import KodiLogger
 
@@ -96,7 +103,7 @@ class KodiPlugin(KodiAddon):
 
     def __init__(self):
         KodiAddon.__init__(self)
-        self.args = urlparse.parse_qs(sys.argv[2][1:])
+        self.args = parse_qs(sys.argv[2][1:])
         self.base_url = sys.argv[0]
         self.addon_handle = int(sys.argv[1])
 
@@ -141,7 +148,7 @@ class KodiPlugin(KodiAddon):
         Args:
             params(object): an object containing parameters
         """
-        return self.base_url + '?' + urllib.urlencode(params)
+        return self.base_url + '?' + urlencode(params)
 
     def run_plugin(self, params):
         """

@@ -13,8 +13,14 @@ import sys
 import stat
 import string
 
-import urllib
-import urllib2
+# pylint: disable=import-error
+try:
+    # Python 3.x
+    from urllib.parse import urlencode
+    from urllib.request import urlopen
+except ImportError:
+    from urllib import urlencode
+    from urllib2 import urlopen
 
 from contextlib import closing
 from resources.lib.exceptions import ExitRequested
@@ -108,12 +114,23 @@ def file_rename(srcname, dstname):
     return False
 
 
+def find_gzip():
+    """
+    Return the full pathname to the gzip decompressor
+    executable
+    """
+    for gzbin in ['/bin/gzip', '/usr/bin/gzip', '/usr/local/bin/gzip', '/system/bin/gzip']:
+        if file_exists(gzbin):
+            return gzbin
+    return None
+
+
 def find_xz():
     """
     Return the full pathname to the xz decompressor
     executable
     """
-    for xzbin in ['/bin/xz', '/usr/bin/xz', '/usr/local/bin/xz']:
+    for xzbin in ['/bin/xz', '/usr/bin/xz', '/usr/local/bin/xz', '/system/bin/xz']:
         if file_exists(xzbin):
             return xzbin
     return None
@@ -125,7 +142,7 @@ def make_search_string(val):
     containing only a well defined set of characters
     for a simplified search
     """
-    cset = string.letters + string.digits + ' _-#'
+    cset = string.ascii_letters + string.digits + ' _-#'
     search = ''.join([c for c in val if c in cset])
     return search.upper().strip()
 
@@ -156,7 +173,7 @@ def cleanup_filename(val):
     Args:
         val(str): input string
     """
-    cset = string.letters + string.digits + \
+    cset = string.ascii_letters + string.digits + \
         u' _-#äöüÄÖÜßáàâéèêíìîóòôúùûÁÀÉÈÍÌÓÒÚÙçÇœ'
     search = ''.join([c for c in val if c in cset])
     return search.strip()
@@ -185,7 +202,7 @@ def url_retrieve(url, filename, reporthook, chunk_size=8192, aborthook=None):
             each block read thereafter. If specified the operation will be
             aborted if the hook function returns `True`
     """
-    with closing(urllib2.urlopen(url)) as src, closing(open(filename, 'wb')) as dst:
+    with closing(urlopen(url)) as src, closing(open(filename, 'wb')) as dst:
         _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook)
 
 
@@ -213,7 +230,7 @@ def url_retrieve_vfs(url, filename, reporthook, chunk_size=8192, aborthook=None)
             each block read thereafter. If specified the operation will be
             aborted if the hook function returns `True`
     """
-    with closing(urllib2.urlopen(url)) as src, closing(xbmcvfs.File(filename, 'wb')) as dst:
+    with closing(urlopen(url)) as src, closing(xbmcvfs.File(filename, 'wb')) as dst:
         _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook)
 
 
@@ -224,7 +241,7 @@ def build_url(query):
     Args:
         query(object): a query object
     """
-    return sys.argv[0] + '?' + urllib.urlencode(query)
+    return sys.argv[0] + '?' + urlencode(query)
 
 
 def _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook):

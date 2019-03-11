@@ -8,9 +8,16 @@ Copyright 2017-2019, Leo Moll and Dominik Schlösser
 # -- Imports ------------------------------------------------
 import os
 import time
-import urllib2
 import datetime
 import subprocess
+
+# pylint: disable=import-error
+try:
+    # Python 3.x
+    from urllib.error import URLError
+except ImportError:
+    # Python 2.x
+    from urllib2 import URLError
 
 from contextlib import closing
 
@@ -338,7 +345,7 @@ class MediathekViewUpdater(object):
                 reporthook=self.notifier.hook_download_progress,
                 aborthook=self.monitor.abort_requested
             )
-        except urllib2.URLError as err:
+        except URLError as err:
             self.logger.error('Failure downloading {} - {}', url, err)
             self.notifier.close_download_progress()
             self.notifier.show_download_error(url, err)
@@ -369,7 +376,7 @@ class MediathekViewUpdater(object):
             retval = self._decompress_gz(compfile, destfile)
             self.logger.info('Return {}', retval)
         else:
-            # should nebver reach
+            # should never reach
             pass
 
         self.notifier.close_download_progress()
@@ -587,20 +594,36 @@ class MediathekViewUpdater(object):
         return 0
 
     def _decompress_gz(self, sourcefile, destfile):
-        """
         blocksize = 8192
+        # pylint: disable=broad-except
 
         try:
             with open(destfile, 'wb') as dstfile, gzip.open(sourcefile) as srcfile:
                 for data in iter(lambda: srcfile.read(blocksize), b''):
                     dstfile.write(data)
-                # pylint: disable=broad-except
         except Exception as err:
-            self.logger.error('gz decompression of "{}" to "{}" failed: {}'.format(
-                sourcefile, destfile, err))
+            self.logger.error(
+                'gz decompression of "{}" to "{}" failed: {}', sourcefile, destfile, err)
+            if mvutils.find_gzip() is not None:
+                gzip_binary = mvutils.find_gzip()
+                self.logger.info(
+                    'Trying to decompress gzip file "{}" using {}...', sourcefile, gzip_binary)
+                try:
+                    mvutils.file_remove(destfile)
+                    retval = subprocess.call([gzip_binary, '-d', sourcefile])
+                    self.logger.info('Calling {} -d {} returned {}',
+                                     gzip_binary, sourcefile, retval)
+                    return retval
+                except Exception as err:
+                    self.logger.error(
+                        'gz commandline decompression of "{}" to "{}" failed: {}',
+                        sourcefile, destfile, err)
             return -1
         return 0
-        """
+
+    # pylint: disable=pointless-string-statement
+    """
+    def _decompress_gz(self, sourcefile, destfile):
         blocksize = 8192
         # pylint: disable=broad-except,line-too-long
 
@@ -631,3 +654,4 @@ class MediathekViewUpdater(object):
                 sourcefile, destfile, err))
             return -1
         return 0
+"""

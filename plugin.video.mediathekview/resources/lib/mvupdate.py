@@ -25,7 +25,9 @@ class Settings(object):
     def __init__(self, args):
         self.datapath = args.path if args.dbtype == 'sqlite' else './'
         self.type = {'sqlite': 0, 'mysql': 1}.get(args.dbtype, 0)
-        if self.type == 1:
+        if self.type == 0:
+            self.updnative = args.native
+        elif self.type == 1:
             self.host = args.host
             self.port = int(args.port)
             self.user = args.user
@@ -38,7 +40,6 @@ class Settings(object):
         self.recentmode = 0
         self.groupshows = False
         self.updmode = 3
-        self.updnative = args.native
         self.updinterval = args.intervall
 
     @staticmethod

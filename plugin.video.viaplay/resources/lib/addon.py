@@ -49,6 +49,8 @@ def root():
     for page in pages:
         if page['name'] in supported_pages:
             helper.add_item(page['title'], plugin.url_for(supported_pages[page['name']], url=page['href']))
+        elif 'type' in page and page['type'] in supported_pages:  # weird channels listing fix on some subscriptions
+            helper.add_item(page['title'], plugin.url_for(supported_pages[page['type']], url=page['href']))
         else:
             helper.log('Unsupported page found: %s' % page['name'])
     helper.eod()
@@ -102,9 +104,13 @@ def channels():
 
     for channel in channels_dict['channels']:
         plugin_url = plugin.url_for(list_products, url=channel['_links']['self']['href'])
+        if 'fallback' in channel['content']['images']:
+            channel_image = channel['content']['images']['fallback']['template'].split('{')[0]
+        else:
+            channel_image = channel['content']['images']['logo']['template'].split('{')[0]
         art = {
-            'thumb': channel['content']['images']['fallback']['template'].split('{')[0],
-            'fanart': channel['content']['images']['fallback']['template'].split('{')[0]
+            'thumb': channel_image,
+            'fanart': channel_image
         }
 
         for program in channel['_embedded']['viaplay:products']:  # get current live program

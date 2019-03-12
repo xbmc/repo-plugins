@@ -1,4 +1,8 @@
-﻿2018.02.21 v2.1.1
+2019.03.11 v.2.1.2
++ Fix channels listing on some subscriptions
++ Fix 'fallback' image is not always available
+
+2018.02.21 v2.1.1
 + Fix parental control
 
 2018.02.21 v2.1.0

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.viaplay" version="2.1.1" name="Viaplay" provider-name="emilsvennesson">
+<addon id="plugin.video.viaplay" version="2.1.2" name="Viaplay" provider-name="emilsvennesson">
    <requires>
       <import addon="xbmc.python" version="2.25.0" />
       <import addon="script.module.requests" version="2.9.1" />
@@ -11,14 +11,14 @@
       <provides>video</provides>
    </extension>
    <extension point="xbmc.addon.metadata">
+      <description lang="da_DK">Se indhold fra Viaplay.</description>
       <description lang="en_GB">Watch content from Viaplay.</description>
+      <description lang="fi_FI">Katso sisältöä Viaplay.</description>
+      <description lang="nb_NO">Se innhold fra Viaplay.</description>
       <description lang="sv_SE">Titta på innehåll från Viaplay.</description>
-      <news>2018.02.21 v2.1.1
-      + New dependency: script.module.routing
-      + Support for 4K streams and 5.1 audio
-      + Fix audio bug on some sports streams (requires Kodi v18 Leia)
-      + Channels section improvements
-      + Code cleanup
+      <news>2019.03.11 v.2.1.2
+      + Fix channels listing on some subscriptions
+      + Fix 'fallback' image is not always available
       </news>
       <platform>all</platform>
       <language>sv dk no fi en</language>

@@ -6,7 +6,6 @@
 #
 from future import standard_library
 standard_library.install_aliases()
-from builtins import str
 from builtins import object
 import os
 import requests
@@ -30,16 +29,14 @@ class Main(object):
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        log("ARGV", repr(sys.argv))
+        # log("ARGV", repr(sys.argv))
 
         # Parse parameters...
         self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
         self.thumbnail_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['thumbnail_url'][0]
         self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        log("self.url", self.video_list_page_url)
-
-        log("self.thumbnail_url", self.thumbnail_url)
+        # log("self.url", self.video_list_page_url)
 
         #
         # Get the videos...
@@ -90,15 +87,9 @@ class Main(object):
 
             title = season_title
 
-            log("title", title)
-
             url = serie_url
 
-            log("url", url)
-
             thumbnail_url = thumb
-
-            log("thumbnail_url", thumbnail_url)
 
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)

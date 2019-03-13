@@ -7,7 +7,6 @@
 from future import standard_library
 
 standard_library.install_aliases()
-from builtins import str
 from builtins import object
 import requests
 import sys
@@ -38,7 +37,7 @@ class Main(object):
         self.PREFERRED_QUALITY = SETTINGS.getSetting('quality')
         self.IS_SPONSOR = SETTINGS.getSetting('is_sponsor')
 
-        log("ARGV", repr(sys.argv))
+        # log("ARGV", repr(sys.argv))
 
         # Parse parameters...
         self.functional_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['functional_url'][0]
@@ -51,14 +50,8 @@ class Main(object):
 
         log("self.technical_url", self.technical_url)
 
-        log("self.title", self.title)
-
-        log("self.is_sponsor_only", self.is_sponsor_only)
-
         # let's use the technical url
         self.url = self.technical_url
-
-        log("self.url", self.url)
 
         #
         # Play video...
@@ -113,7 +106,7 @@ class Main(object):
                     must_login_sponsored_user = False
                     video_is_not_yet_available = False
 
-            log("must_login_sponsored_user", must_login_sponsored_user)
+            #log("must_login_sponsored_user", must_login_sponsored_user)
 
             # login if needed
             if must_login_sponsored_user:
@@ -283,6 +276,12 @@ class Main(object):
         log("found_m3u8_url", found_m3u8_url)
 
         if found_m3u8_url:
+            # for some reason u0026 is present in the url, it should have been an ampersand
+            # let's correct that
+            m3u8_url = m3u8_url.replace('u0026', '&')
+
+            log("corrected m3u8_url", m3u8_url)
+
             # try and get the non-sponsored video without being logged in
             # get the page that contains the video
             response = session.get(m3u8_url, headers=HEADERS)

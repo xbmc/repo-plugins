@@ -172,11 +172,11 @@ msgid "Game Attack Series"
 msgstr ""
 
 msgctxt "#30315"
-msgid "The Know Recently Added Episodes"
+msgid "Inside Gaming Recently Added Episodes"
 msgstr ""
 
 msgctxt "#30316"
-msgid "The Know Series"
+msgid "Inside Gaming Series"
 msgstr ""
 
 msgctxt "#30317"
@@ -187,3 +187,10 @@ msgctxt "#30318"
 msgid "JT Music Series"
 msgstr "
 
+msgctxt "#30319"
+msgid "Kinda Funny Recently Added Episodes"
+msgstr ""
+
+msgctxt "#30320"
+msgid "Kinda Funny Series"
+msgstr ""

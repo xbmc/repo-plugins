@@ -6,7 +6,6 @@
 #
 from future import standard_library
 standard_library.install_aliases()
-from builtins import str
 from builtins import object
 import os
 import requests
@@ -31,16 +30,16 @@ class Main(object):
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        log("ARGV", repr(sys.argv))
-
+        # log("ARGV", repr(sys.argv))
+        #
         # Parse parameters...
         self.url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
         self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
         self.show_serie_name = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['show_serie_name'][0]
 
-        log("self.url", self.url)
+        # log("self.url", self.url)
 
-        log("self.show_serie_name", self.show_serie_name)
+        # log("self.show_serie_name", self.show_serie_name)
 
         #
         # Get the videos...
@@ -108,11 +107,7 @@ class Main(object):
 
             serie_title = item['attributes']['show_title']
 
-            log("serie_title", serie_title)
-
             is_sponsor_only = item['attributes']['is_sponsors_only']
-
-            log("is_sponsor_only", is_sponsor_only)
 
             # let's put some more info in the title of the episode
             if self.show_serie_name == "True":
@@ -125,26 +120,16 @@ class Main(object):
 
             title = convertToUnicodeString(title)
 
-            log("title", title)
-
             thumbnail_url = thumb
-
-            log("thumbnail_url", thumbnail_url)
 
             plot = caption
 
-            log("plot", plot)
-
             duration_in_seconds = length
-
-            log("duration_in_seconds", duration_in_seconds)
 
             studio = channel_slug
             studio = convertToUnicodeString(studio)
             studio = studio.replace("-", " ")
             studio = studio.capitalize()
-
-            log("studio", studio)
 
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)

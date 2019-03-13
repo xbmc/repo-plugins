@@ -15,10 +15,11 @@ import os
 
 from roosterteeth_const import LANGUAGE, IMAGES_PATH, ROOSTERTEETH_SERIES_URL, \
     ROOSTERTEETH_RECENTLY_ADDED_VIDEOS_SERIES_URL, ACHIEVEMENTHUNTER_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
-    FUNHAUS_RECENTLY_ADDED_VIDEOS_SERIES_URL,SCREWATTACK__RECENTLY_ADDED_VIDEOS_SERIES_URL, \
-    COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL, SUGARPINE7__RECENTLY_ADDED_VIDEOS_SERIES_URL, \
-    GAMEATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL, THEKNOW_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
-    JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL
+    FUNHAUS_RECENTLY_ADDED_VIDEOS_SERIES_URL, INSIDE_GAMING_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
+    SCREWATTACK__RECENTLY_ADDED_VIDEOS_SERIES_URL, SUGARPINE7__RECENTLY_ADDED_VIDEOS_SERIES_URL, \
+    COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL, GAMEATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
+    JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL, KINDAFUNNY_RECENTLY_ADDED_VIDEOS_SERIES_URL
+
 #
 # Main class
 #
@@ -82,6 +83,19 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
+        # Inside Gaming Recently Added Episodes
+        #
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30315),
+                      "url": INSIDE_GAMING_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30315))
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
+        #
         # Screw Attack Recently Added Episodes
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30307),
@@ -89,19 +103,6 @@ class Main(object):
                       "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30307))
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
-        # Cow Chop Recently Added Episodes
-        #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30309),
-                      "url": COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30309))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
         list_item.setProperty('IsPlayable', 'false')
@@ -121,6 +122,19 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
+        # Cow Chop Recently Added Episodes
+        #
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30309),
+                      "url": COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30309))
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
+        #
         # Game Attack Recently Added Episodes
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30313),
@@ -134,19 +148,6 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # The Know Recently Added Episodes
-        #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30315),
-                      "url": THEKNOW_RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30315))
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
         # JT Music Recently Added Episodes
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30317),
@@ -154,6 +155,19 @@ class Main(object):
                       "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30317))
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
+        #
+        # Kinda Funny Recently Added Episodes
+        #
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30319),
+                      "url": KINDAFUNNY_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30319))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
         list_item.setProperty('IsPlayable', 'false')

@@ -24,12 +24,13 @@ NUMBER_OF_EPISODES_PER_PAGE = '30'
 ROOSTERTEETH_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/rooster-teeth/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
 ACHIEVEMENTHUNTER_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/achievement-hunter/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
 FUNHAUS_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/funhaus/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
+INSIDE_GAMING_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/funhaus/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
 SCREWATTACK__RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/screwattack/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/cow-chop/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
 SUGARPINE7__RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/sugar-pine-7/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
+COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/cow-chop/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
 GAMEATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/game-attack/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-THEKNOW_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/the-know/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
 JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/jt-music/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
+KINDAFUNNY_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/kinda-funny/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
 SPONSOR_ONLY_VIDEO_TITLE_PREFIX = '* '
 VQ4K = '4k'
 VQ1080P = '1080p'
@@ -38,8 +39,8 @@ VQ480P = '480p'
 VQ360P = '360p'
 VQ240P = '240p'
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-DATE = "2018-05-15"
-VERSION = "1.3.9"
+DATE = "2019-03-13"
+VERSION = "1.3.10"
 
 
 if sys.version_info[0] > 2:

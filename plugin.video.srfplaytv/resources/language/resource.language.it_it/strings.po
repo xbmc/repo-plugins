@@ -7,12 +7,12 @@ msgstr ""
 "Project-Id-Version: plugin.video.srfplaytv\n"
 "Report-Msgid-Bugs-To: seileralex@gmail.com\n"
 "POT-Creation-Date: 2018-10-30 15:58+0100\n"
-"PO-Revision-Date: 2018-10-30 16:10+0100\n"
+"PO-Revision-Date: 2018-11-21 15:10+0100\n"
 "Last-Translator: Alexander Seiler\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30000"
@@ -83,42 +83,6 @@ msgctxt "#30057"
 msgid "Shows by date"
 msgstr "Show per data"
 
-msgctxt "#30058"
-msgid "Today"
-msgstr "Oggi"
-
-msgctxt "#30059"
-msgid "Yesterday"
-msgstr "Ieri"
-
-msgctxt "#30060"
-msgid "Monday"
-msgstr "Lunedì"
-
-msgctxt "#30061"
-msgid "Tuesday"
-msgstr "Martedì"
-
-msgctxt "#30062"
-msgid "Wednesday"
-msgstr "Mercoledì"
-
-msgctxt "#30063"
-msgid "Thursday"
-msgstr "Giovedì"
-
-msgctxt "#30064"
-msgid "Friday"
-msgstr "Venerdì"
-
-msgctxt "#30065"
-msgid "Saturday"
-msgstr "Sabato"
-
-msgctxt "#30066"
-msgid "Sunday"
-msgstr "Domenica"
-
 msgctxt "#30069"
 msgid "Choose your favourite shows"
 msgstr "Scegli i tui show preferiti"
@@ -127,22 +91,10 @@ msgctxt "#30070"
 msgid "SRF.ch Live"
 msgstr "Diretta SRF.ch"
 
-msgctxt "#30071"
-msgid "Choose date"
-msgstr "Sceglia una data"
-
 msgctxt "#30072"
 msgid "Live TV"
 msgstr "Diretta TV"
 
-msgctxt "#30073"
-msgid ">> Next page"
-msgstr ">> Prossima pagina"
-
 msgctxt "#30074"
 msgid "SRF on YouTube"
 msgstr "SRF su YouTube"
-
-msgctxt "#30100"
-msgid "Failed to open URL."
-msgstr "Apertura URL fallita."

@@ -1,0 +1,11 @@
+{
+    "channels": [{
+            "name": "Radiotelevisione svizzera (RSI)",
+            "channel": "UC2AH2KxP-0Afk0bc6XehWqA"
+        },
+        {
+            "name": "tvsvizzera",
+            "channel": "UCU4LZe3FBXoAdTtpOIWR48Q"
+        }
+    ]
+}

@@ -15,17 +15,11 @@ Bring the full power of the [RTS Play TV media library](https://www.rts.ch/play/
  - [x] Choose between SD and HD quality.
  - [x] Subtitle support.
  - [ ] Livestreams that are exclusively broadcasted on RTS.ch (only available in Switzerland).
- - [x] Live TV support: RTS 1, RTS 2 and RTS info (only available in Switzerland).
+ - [ ] Live TV support: RTS 1, RTS 2 and RTS info (only available in Switzerland).
 
-<!-- ## Planned features
- - [ ] Twitter integration: For shows with a RTS hashtag get the tweets which were emitted during the show on the screen.
- - [ ] Download episodes for personal archiving purposes (probably through an additional Kodi script). -->
-
-<!-- ## Installation
-
+## Installation
  - The plugin is available in the official "Kodi Add-on repository". This is the recommended way to get the plugin.
- - It is also available in "Goggle Addon Repository", which can be found [here](https://github.com/goggle/repository.goggle.addons).
- - Furthermore, you can download the newest release as a zip file from the [release section](https://github.com/goggle/plugin.video.rtsplaytv/releases) on github and manually install the plugin from the zip file. Keep in mind that you won't get any automatic updates if you choose this method. -->
+ - Furthermore, you can download the newest release as a zip file from the [release section](https://github.com/goggle/plugin.video.rtsplaytv/releases) on github and manually install the plugin from the zip file. Keep in mind that you won't get any automatic updates if you choose this method.
 
 ## Support this plugin
 How you can help improving this plugin:

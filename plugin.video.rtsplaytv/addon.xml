@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rtsplaytv" name="RTS Play TV" version="1.1.0" provider-name="Alexander Seiler">
+<addon id="plugin.video.rtsplaytv" name="RTS Play TV" version="1.5.0" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.simplecache" version="1.0.0"/>
-    <import addon="plugin.video.youtube" version="6.2.2" optional="true"/>
+    <import addon="script.module.srgssr" version="1.5.0"/>
+    <import addon="script.module.kodi-six" version="0.0.2"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -25,14 +25,16 @@
     <website>https://www.rts.ch/play/tv</website>
     <email>seileralex@gmail.com</email>
     <source>https://github.com/goggle/plugin.video.rtsplaytv</source>
-    <news>v1.1.0 (2018-11-13)
+    <news>v1.5.0 (2019-03-15)
+ - Port all code that is reusable by other SRG SSR plugin's into seperate library script.module.srgssr.
+ - Improve YouTube channels support.
+ - Remove support of Live TV (DRM protected).
+ - Fix extraction of Live events.
+ - Add full Python 3 support.
+v1.1.0 (2018-11-13)
  - Add support for the official RTS YouTube channels.
 v1.0.0 (2018-11-07)
- - Add french translation.
-v0.9.3 (2018-10-09)
- - Allow plugin to parse the date indicator "Aujourd'hui".
- - Fix bug that crashed plugin after unsuccessful date parsing.
- - Add forum thread to addon metadata.</news>
+ - Add french translation.</news>
     <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.png</fanart>

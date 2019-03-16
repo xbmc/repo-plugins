@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rsiplaytv" name="RSI Play TV" version="1.5.0" provider-name="Alexander Seiler">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.srgssr" version="1.5.0"/>
+    <import addon="script.module.kodi-six" version="0.0.2"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="fr_FR">RSI Play vidéothèque</summary>
+    <summary lang="en_GB">RSI Play television video library</summary>
+    <summary lang="de_DE">RSI Play Videobibliothek</summary>
+    <description lang="fr_FR">Avec RSI Play TV vous pouvez regarder les vidéos de la vidéothèque de la Radio télévision suisse (RSI).</description>
+    <description lang="en_GB">RSI Play TV allows you to watch the content from the video library of Swiss Radio and Television (RSI).</description>
+    <description lang="de_DE">Mit RSI Play TV können Sie den Inhalt der RSI Play Videobibliothek des Schweizer Fernsehens anschauen.</description>
+    <disclaimer lang="fr_FR">Certains contenus sont géo-bloqués et disponibles uniquement en Suisse.</disclaimer>
+    <disclaimer lang="en_GB">Some content is geo-blocked and only available in Switzerland.</disclaimer>
+    <disclaimer lang="de_DE">Einige Inhalte sind nur in der Schweiz verfügbar.</disclaimer>
+    <language>it</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=331129</forum>
+    <website>https://www.rsi.ch/play/tv</website>
+    <email>seileralex@gmail.com</email>
+    <source>https://github.com/goggle/plugin.video.rsiplaytv</source>
+    <news>v1.5.0 (2019-03-15)
+ - Initial release: For a feature list have a look at the README on https://github.com/goggle/plugin.video.rsiplaytv</news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.png</fanart>
+        <screenshot>resources/screenshot-01.png</screenshot>
+        <screenshot>resources/screenshot-02.png</screenshot>
+        <screenshot>resources/screenshot-03.png</screenshot>
+    </assets>
+  </extension>
+</addon>

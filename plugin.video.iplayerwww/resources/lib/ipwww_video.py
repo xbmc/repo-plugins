@@ -1449,11 +1449,16 @@ def ScrapeAvailableStreams(url):
     stream_id_sl = []
     stream_id_ad = []
 
+    format = 1
     match = re.search(r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);', html, re.DOTALL)
+    if not match:
+        format = 2
+        match = re.search(r'window.__IPLAYER_REDUX_STATE__ = (.*?);\s*</script>', html, re.DOTALL)
     if match:
         data = match.group(1)
         json_data = json.loads(data)
-        json_data = json_data['appStoreState']
+        if format == 1:
+            json_data = json_data['appStoreState']
         # print json.dumps(json_data, indent=2, sort_keys=True)
         if 'title' in json_data['episode']:
             name = json_data['episode']['title']

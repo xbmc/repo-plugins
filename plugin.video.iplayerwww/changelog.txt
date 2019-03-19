@@ -1,3 +1,6 @@
+v3.0.42
+Added fallback for experimental JSON data.
+
 v3.0.41
 Fixed Categories.
 (Dirty) fix for new series view.

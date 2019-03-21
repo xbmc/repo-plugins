@@ -27,5 +27,13 @@ def videos():
                 entry_id=video_data['entryId'],
                 title=article['title'],
                 caption=video_data['caption'],
-                thumbnail=video_data['thumbnail']['smallUrl']
+                thumbnail=_thumbnail(video_data)
             )
+
+
+def _thumbnail(video_data):
+    for key in ['thumbnail', 'image']:
+        try:
+            return video_data.get(key) and video_data[key]['smallUrl']
+        except KeyError:
+            continue

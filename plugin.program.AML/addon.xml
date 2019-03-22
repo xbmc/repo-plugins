@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.AML" name="Advanced MAME Launcher" version="0.9.8" provider-name="Wintermute0110">
+<addon id="plugin.program.AML" name="Advanced MAME Launcher" version="0.9.9" provider-name="Wintermute0110">
   <requires>
     <!--
         Check addon versions in https://github.com/xbmc/xbmc/tree/master/addons
@@ -10,7 +10,7 @@
     <import addon="script.module.pil" version="1.1.7" />
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
-    <provides>executable</provides>
+    <provides>executable game</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
     <!--
@@ -24,17 +24,19 @@
     <platform>android freebsd ios linux osx windows</platform>
     <license>GNU General Public License version 2</license>
     <email>wintermute0110@gmail.com</email>
-    <forum>http://forum.kodi.tv/showthread.php?tid=304186</forum>
-    <website>https://github.com/Wintermute0110/plugin.program.AML/wiki</website>
-    <source>https://github.com/Wintermute0110/plugin.program.AML/</source>
+    <forum>https://forum.kodi.tv/showthread.php?tid=304186</forum>
+    <website>https://github.com/Wintermute0110/plugin.program.AML.dev/wiki</website>
+    <source>https://github.com/Wintermute0110/plugin.program.AML.dev/</source>
     <assets>
       <icon>media/icon.png</icon>
       <fanart>media/fanart.jpg</fanart>
       <screenshot>media/shot_root.png</screenshot>
-      <screenshot>media/shot_MAME_pclone_list.png</screenshot>
+      <screenshot>media/shot_MAME_pclone_list_A.png</screenshot>
+      <screenshot>media/shot_MAME_pclone_list_B.png</screenshot>
       <screenshot>media/shot_SL_pclone_list.png</screenshot>
       <screenshot>media/shot_MAME_fanart.png</screenshot>
       <screenshot>media/shot_SL_fanart.png</screenshot>
+      <screenshot>media/shot_MAME_audit.png</screenshot>
     </assets>
     <news>See changelog.txt for information about the latest release.</news>
   </extension>

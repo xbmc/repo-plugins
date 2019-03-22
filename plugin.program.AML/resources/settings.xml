@@ -1,29 +1,17 @@
 <settings>
 <category label="Paths">
-    <!-- <setting id="separator" type="lsep" label="Mandatory paths" /> -->
+    <setting id="separator" type="lsep" label="Mandatory paths" />
     <setting label="MAME executable" type="file" id="mame_prog" />
     <setting label="MAME ROMs path" type="folder" id="rom_path" source="auto" option="" />
 
     <setting id="separator" type="lsep" label="Optional paths" />
     <setting label="MAME Assets path" type="folder" id="assets_path" source="auto" option="" />
+    <setting label="MAME INI/DAT path" type="folder" id="dats_path" source="auto" option="" />
     <setting label="MAME CHDs path" type="folder" id="chd_path" source="auto" option="" />
     <setting label="MAME Samples path" type="folder" id="samples_path" source="auto" option="" />
     <setting label="Software Lists hash path" type="folder" id="SL_hash_path" source="auto" option="" />
     <setting label="Software Lists ROMs path" type="folder" id="SL_rom_path" source="auto" option="" />
     <setting label="Software Lists CHDs path" type="folder" id="SL_chd_path" source="auto" option="" />
-</category>
-<category label="DAT paths">
-    <setting label="bestgames.ini path" type="file"   id="bestgames_path" />
-    <setting label="catlist.ini path"   type="file"   id="catlist_path" />
-    <setting label="catver.ini path"    type="file"   id="catver_path" />
-    <setting label="command.dat path"   type="file"   id="command_path" />
-    <setting label="gameinit.dat path"  type="file"   id="gameinit_path" />
-    <setting label="genre.ini path"     type="file"   id="genre_path" />
-    <setting label="history.dat path"   type="file"   id="history_path" />
-    <setting label="mameinfo.dat path"  type="file"   id="mameinfo_path" />
-    <setting label="mature.ini path"    type="file"   id="mature_path" />
-    <setting label="nplayers.ini path"  type="file"   id="nplayers_path" />
-    <setting label="series.ini path"    type="file"   id="series_path" />
 </category>
 <category label="ROM sets">
     <setting label="MAME ROM set" type="enum" id="mame_rom_set"  default="1" values="Merged|Split|Non-merged" />
@@ -32,7 +20,7 @@
     <setting label="Software Lists CHD set" type="enum" id="SL_chd_set"  default="0" values="Merged|Split|Non-merged" />
 
     <setting id="separator" type="lsep" label="Misc" />
-    <setting label="Custom filter XML path" type="file" id="filter_XML" default="special://home/addons/plugin.program.AML/filters/AML-MAME-filters.xml" />
+    <setting label="Custom filter XML path" type="file" id="filter_XML" default="" />
 </category>
 <category label="Display">
     <setting id="separator" type="lsep" label="General"/>
@@ -67,12 +55,6 @@
     <setting label="Software Lists Fanart" type="enum" id="artwork_SL_fanart"  default="0" values="Fanart|Snap|Title" />
     <setting label="Do not render trailers" type="bool" default="false" id="display_hide_trailers" />
 </category>
-<category label="Utilities">
-    <setting label="Check/Update all objects ..." type="action" option="close" action="RunPlugin(plugin://plugin.program.AML/?command=CHECK_ALL_OBJECTS)"/>
-    <setting label="Check AML configuration ..." type="action" option="close" action="RunPlugin(plugin://plugin.program.AML/?command=CHECK_CONFIG)"/>
-    <setting label="Check MAME CRC hash collisions ..." type="action" option="close" action="RunPlugin(plugin://plugin.program.AML/?command=CHECK_MAME_COLLISIONS)"/>
-    <setting label="Check SL CRC hash collisions ..." type="action" option="close" action="RunPlugin(plugin://plugin.program.AML/?command=CHECK_SL_COLLISIONS)"/>
-</category>
 <category label="Advanced">
     <setting label="Action on Kodi playing media" type="enum" id="media_state_action" default="0" values="Stop|Pause|Keep playing" />
     <setting label="After/before launch delay (ms)" type="slider" id="delay_tempo" default="100" range="0,100,15000" option="int" />
@@ -81,7 +63,7 @@
     <setting label="Log level" type="enum" id="log_level" default="2" values="ERROR|WARNING|INFO|VERBOSE|DEBUG" />
 
     <setting id="separator" type="lsep" label="MAME database cache" />
-    <setting label="Enable MAME machine cache" type="bool" default="false" id="debug_enable_MAME_machine_cache" />
+    <setting label="Enable MAME render cache" type="bool" default="false" id="debug_enable_MAME_render_cache" />
     <setting label="Enable MAME asset cache" type="bool" default="false" id="debug_enable_MAME_asset_cache" />
 
     <setting id="separator" type="lsep" label="Information dump" />

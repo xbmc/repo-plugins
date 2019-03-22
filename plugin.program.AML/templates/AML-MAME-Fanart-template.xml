@@ -1,4 +1,8 @@
-<!-- AML MAME Fanart template -->
+<!--
+    AML MAME Fanart template.
+    Images/assets are drawn in the order they appear in the XML.
+    Fanart size is 1920 x 1080.
+-->
 <Advanced_MAME_Launcher_MAME_Fanart>
     <!-- Artwork images -->
     <Title>

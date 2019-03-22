@@ -1,22 +1,22 @@
 <!--
-    AML XML MAME filter reference
-    Currently only the <Driver> filter is implemented.
+    Advanced MAME Launcher XML MAME filter reference.
 -->
 <Advanced_MAME_Launcher_custom_filters>
 <MAMEFilter>
     <Name>Example filter name</Name>
 
     <!--
+        Device machines are removed automatically.
         Separate multiple options with ','
         Multiple <Options> tags allowed.
       -->
-    <Options>NoCoin, NoCoinLess, NoROMs, NoCHDs, NoSamples</Options>
+    <Options>NoClones, NoCoin, NoCoinLess, NoROMs, NoCHDs, NoSamples</Options>
     <Options>NoMature, NoBIOS, NoMechanical, NoImperfect, NoNonworking</Options>
 
     <!--
         As shown in "Machines by Driver" filter.
         Search is case sensitive.
-        If multiple tags only last one is used.
+        If multiple <Driver> tags only the last one is used.
         Literals with spaces must be enclosed in quotes ' or double quotes ".
         LSP parser operators: and, or, not, has, lacks, '(', ')', literal.
     -->
@@ -25,7 +25,7 @@
     <!--
         As shown in "Manufacturer" filter.
         Search is case sensitive.
-        If multiple tags only last one is used.
+        If multiple <Manufacturer> tags only last one is used.
         SP operators: and, or, not, has, lacks, literal.
     -->
     <Manufacturer>has Konami or has Namco</Manufacturer>
@@ -33,7 +33,7 @@
     <!--
         As shown in "Machines by Category (Genre)" filter.
         Search is case sensitive.
-        If multiple tags only last one is used.
+        If multiple <Genre> tags only last one is used.
         Literals with spaces must be enclosed in quotes ' or double quotes ".
         LSP parser operators: and, or, not, has, lacks, '(', ')', literal.
     -->
@@ -42,7 +42,7 @@
     <!--
         As shown in "Machines by Control Type (Compact)" filter.
         Search is case sensitive.
-        If multiple tags only last one is used.
+        If multiple <Controls> tags only last one is used.
         Literals with spaces must be enclosed in quotes ' or double quotes ".
         LSP parser operators: and, or, not, has, lacks, '(', ')', literal.
     -->
@@ -51,7 +51,7 @@
     <!--
         As shown in "Machines by Device (Compact)" filter.
         Search is case sensitive.
-        If multiple tags only last one is used.
+        If multiple <Devices> tags only last one is used.
         Literals with spaces must be enclosed in quotes ' or double quotes ".
         LSP parser operators: and, or, not, has, lacks, '(', ')', literal.
     -->
@@ -59,30 +59,32 @@
 
     <!--
         As shown in "Machines by Year" filter.
-        If multiple tags only last one is used.
+        If multiple <Year> tags only last one is used.
         Invalid year strings (for example '19??') get converted to 0.
-        YP operators: ==, >, <, >=, <=, and, or, not, '(', ')', literal.
+        In XML files:
+            '>'  must be '&gt;'
+            '<'  must be '&lt;'
+            '>=' must be '&gt;='
+            '<=' must be '&lt;='
+        YP operators: ==, !=, >, <, >=, <=, and, or, not, (, ), literal.
     -->
-    <Year>year >= 1990 and year &lt; 2000</Year>
+    <Year>year &gt;= 1990 and year &lt; 2000</Year>
 
     <!--
-        NOT IMPLEMENTED YET.
         Separate multiple machines with ','.
-        Multiple <Include> tags allowed
+        Multiple <Include> tags allowed.
     -->
     <Include>005, 100lions, 10yard</Include>
 
     <!--
-        NOT IMPLEMENTED YET.
         Separate multiple machines with ','.
-        Multiple <Exclude> tags allowed
+        Multiple <Exclude> tags allowed.
     -->
     <Exclude>005, 100lions, 10yard</Exclude>
 
     <!--
-        NOT IMPLEMENTED YET.
         Only 1 machine per <Change> tag.
-        There may be multiple <Change> tags
+        There may be multiple <Change> tags.
     -->
     <Change>dino with dinoj</Change>
 </MAMEFilter>

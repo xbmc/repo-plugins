@@ -194,30 +194,18 @@ def GetAtoZPage(url):
     current_url = 'https://www.bbc.co.uk/iplayer/a-z/%s' % url
     html = OpenURL(current_url)
 
-    # There is a new layout for episodes, scrape it from the JSON received as part of the page
-    match = re.search(
-              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
-              html, re.DOTALL)
-
-    if match:
-        data = match.group(1)
-        json_data = json.loads(data)
+    json_data = ScrapeJSON(html)
+    if json_data:
         ParseJSON(json_data, current_url)
 
 
 def GetMultipleEpisodes(url):
     html = OpenURL(url)
     # There is a new layout for episodes, scrape it from the JSON received as part of the page
-    match = re.search(
-              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
-              html, re.DOTALL)
-    if match:
-        data = match.group(1)
-        json_data = json.loads(data)
-        # print json.dumps(json_data, indent=2, sort_keys=True)
+    json_data = ScrapeJSON(html)
 
-        if json_data['appStoreState']['episode']['tleoId']:
-            GetEpisodes(json_data['appStoreState']['episode']['tleoId'])
+    if json_data['episode']['tleoId']:
+        GetEpisodes(json_data['episode']['tleoId'])
 
 
 def ParseAired(aired):
@@ -329,13 +317,8 @@ def ScrapeEpisodes(page_url):
             page_url = 'https://www.bbc.co.uk' + page_base_url + str(page)
             html = OpenURL(page_url)
 
-        # There is a new layout for episodes, scrape it from the JSON received as part of the page
-        match = re.search(
-                  r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
-                  html, re.DOTALL)
-        if match:
-            data = match.group(1)
-            json_data = json.loads(data)
+        json_data = ScrapeJSON(html)
+        if json_data:
             ParseJSON(json_data, page_url)
 
         percent = int(100*page/total_pages)
@@ -366,25 +349,19 @@ def ScrapeAtoZEpisodes(page_url):
     current_page = 1
     page_range = list(range(1))
 
-    # There is a new layout for episodes, scrape it from the JSON received as part of the page
-    match = re.search(
-              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
-              html, re.DOTALL)
-    if match:
-        data = match.group(1)
-        json_data = json.loads(data)
-        # print json.dumps(json_data, indent=2, sort_keys=True)
+    json_data = ScrapeJSON(html)
+    if json_data:
 
         last_page = 1
         current_page = 1
-        if 'pagination' in json_data['appStoreState']:
+        if 'pagination' in json_data:
             page_base_url_match = re.search(r'(.+?)page=', page_url)
             if page_base_url_match:
                 page_base_url = page_base_url_match.group(0)
             else:
                 page_base_url = page_url+"?page="
-            current_page = json_data['appStoreState']['pagination'].get('currentPage')
-            last_page = json_data['appStoreState']['pagination'].get('totalPages')
+            current_page = json_data['pagination'].get('currentPage')
+            last_page = json_data['pagination'].get('totalPages')
             if int(ADDON.getSetting('paginate_episodes')) == 0:
                 current_page_match = re.search(r'page=(\d*)', page_url)
                 if current_page_match:
@@ -408,12 +385,8 @@ def ScrapeAtoZEpisodes(page_url):
                 page_url = page_base_url + str(page)
                 html = OpenURL(page_url)
 
-            match = re.search(
-                      r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
-                      html, re.DOTALL)
-            if match:
-                data = match.group(1)
-                json_data = json.loads(data)
+            json_data = ScrapeJSON(html)
+            if json_data:
                 ParseJSON(json_data, page_url)
 
             percent = int(100*page/last_page)
@@ -672,18 +645,12 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
             added_directories.append(main_url)
 
 
-def ParseJSON(json_data, current_url):
+def ParseJSON(programme_data, current_url):
     """Parses the JSON data containing programme information of a page. Contains a lot of fallbacks
     """
 
     added_playables = []
     added_directories = []
-
-    programme_data = None
-    if 'appStoreState' in json_data:
-        programme_data = json_data.get('appStoreState')
-    if 'initialState' in json_data:
-        programme_data = json_data.get('initialState')
 
     if programme_data:
         name = ''
@@ -795,14 +762,8 @@ def ListHighlights(highlights_url):
     current_url = 'https://www.bbc.co.uk/%s' % highlights_url
     html = OpenURL(current_url)
 
-    # There is a new layout for episodes, scrape it from the JSON received as part of the page
-    match = re.search(
-              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
-              html, re.DOTALL)
-    if match:
-        data = match.group(1)
-        json_data = json.loads(data)
-        # xbmc.log(json.dumps(json_data, indent=2, sort_keys=True))
+    json_data = ScrapeJSON(html)
+    if json_data:
         ParseJSON(json_data, current_url)
 
 
@@ -811,14 +772,8 @@ def ListMostPopular():
     current_url = 'https://www.bbc.co.uk/iplayer/group/most-popular'
     html = OpenURL(current_url)
 
-    # There is a new layout for episodes, scrape it from the JSON received as part of the page
-    match = re.search(
-              r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
-              html, re.DOTALL)
-
-    if match:
-        data = match.group(1)
-        json_data = json.loads(data)
+    json_data = ScrapeJSON(html)
+    if json_data:
         ParseJSON(json_data, current_url)
 
 
@@ -1245,17 +1200,8 @@ def ScrapeAvailableStreams(url):
     stream_id_sl = []
     stream_id_ad = []
 
-    format = 1
-    match = re.search(r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);', html, re.DOTALL)
-    if not match:
-        format = 2
-        match = re.search(r'window.__IPLAYER_REDUX_STATE__ = (.*?);\s*</script>', html, re.DOTALL)
-    if match:
-        data = match.group(1)
-        json_data = json.loads(data)
-        if format == 1:
-            json_data = json_data['appStoreState']
-        # print json.dumps(json_data, indent=2, sort_keys=True)
+    json_data = ScrapeJSON(html)
+    if json_data:
         if 'title' in json_data['episode']:
             name = json_data['episode']['title']
         if 'synopses' in json_data['episode']:
@@ -1287,6 +1233,25 @@ def ScrapeAvailableStreams(url):
                 stream_id_st = stream['id']
 
     return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad, 'name': name, 'image':image, 'description': description}
+
+
+def ScrapeJSON(html):
+    json_data = None
+    format = 1
+    match = re.search(r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);', html, re.DOTALL)
+    if not match:
+        format = 2
+        match = re.search(r'window.__IPLAYER_REDUX_STATE__ = (.*?);\s*</script>', html, re.DOTALL)
+    if match:
+        data = match.group(1)
+        json_data = json.loads(data)
+        if format == 1:
+            if 'appStoreState' in json_data:
+                json_data = json_data.get('appStoreState')
+            elif 'initialState' in json_data:
+                json_data = json_data.get('initialState')
+        # print json.dumps(json_data, indent=2, sort_keys=True)
+    return json_data
 
 
 def CheckAutoplay(name, url, iconimage, plot, aired=None):

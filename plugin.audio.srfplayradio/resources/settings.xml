@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30010">
+        <setting id="Enable_Debugging" type="bool" label="30000" default="false" />
+    </category>
+    <category label="30012">
+        <setting id="All_Shows" type="bool" label="30050" default="true" />
+        <setting id="Shows_Topics" type="bool" label="30079" default="true" />
+        <setting id="Favourite_Shows" type="bool" label="30051" default="true" />
+        <setting id="Newest_Favourite_Shows" type="bool" label="30052" default="true" />
+        <setting id="Radio_Channels" type="bool" label="30075" default="true" />
+        <setting id="Most_Listened" type="bool" label="30077" default="true" />
+        <setting id="Live_Radio" type="bool" label="30078" default="true" />
+    </category>
+    <category label="30011">
+        <setting label="30005" type="action" action="RunPlugin(plugin://plugin.audio.srfplayradio?mode=19)" />
+    </category>
+</settings>

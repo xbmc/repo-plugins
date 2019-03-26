@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.srfplayradio" name="SRF Play Radio" version="0.9.0" provider-name="Alexander Seiler">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.srgssr" version="1.6.0"/>
+    <import addon="script.module.kodi-six" version="0.0.3"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="fr_FR">SRF Play audiothèque</summary>
+    <summary lang="en_GB">SRF Play audio media library</summary>
+    <summary lang="de_DE">SRF Play Audiobibliothek</summary>
+    <description lang="fr_FR">Avec SRF Play Radio vous pouvez écouter les audios de la audiothèque de la Radio télévision suisse (SRF).</description>
+    <description lang="en_GB">SRF Play Radio allows you to listen the content from the audio library of Swiss Radio and Television (SRF).</description>
+    <description lang="de_DE">Mit SRF Play Radio können Sie den Inhalt der SRF Play Audiobibliothek des Schweizer Fernsehens anschauen.</description>
+    <disclaimer lang="fr_FR">Certains contenus sont géo-bloqués et disponibles uniquement en Suisse.</disclaimer>
+    <disclaimer lang="en_GB">Some content is geo-blocked and only available in Switzerland.</disclaimer>
+    <disclaimer lang="de_DE">Einige Inhalte sind nur in der Schweiz verfügbar.</disclaimer>
+    <language>de</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <website>https://www.srf.ch/play/radio</website>
+    <email>seileralex@gmail.com</email>
+    <source>https://github.com/goggle/plugin.audio.srfplayradio</source>
+    <news>v0.9.0 (2019-03-26)
+Initial release</news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.png</fanart>
+        <screenshot>resources/screenshot-01.png</screenshot>
+        <screenshot>resources/screenshot-02.png</screenshot>
+        <screenshot>resources/screenshot-03.png</screenshot>
+        <screenshot>resources/screenshot-04.png</screenshot>
+    </assets>
+  </extension>
+</addon>

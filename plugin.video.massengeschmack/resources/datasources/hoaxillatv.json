@@ -1,0 +1,19 @@
+{
+    "id": 8,
+    "order": 108,
+    "metadata": {
+        "title": "Hoaxilla-TV",
+        "cast": ["Alexa Waschkau", "Alexander Waschkau"],
+        "plot": "Elvis lebt? Es war nie ein Mensch auf dem Mond? Wir alle werden von Chemtrails vergiftet? Die Welt ist voller düsterer und teils skurriler Verschwörungstheorien. Alexa und Alex klären auf, bringen Fakten und zeigen, was tatsächlich dran ist an so manchen verrückten Theorien.",
+        "premiered": "2014-06-17"
+    },
+    "fanart": "fanart-hoaxillatv-20160221.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+    "active": false
+}

@@ -1,0 +1,19 @@
+{
+    "id": 22,
+    "order": 22,
+    "metadata": {
+        "title": "Schatzkammer",
+        "cast": ["Verschiedene"],
+        "country": 30202,
+        "plot": "Hier finden sich exklusive Inhalte für Premium-Abonnenten.",
+        "premiered": "2018-09-09"
+    },
+    "fanart": "fanart-schatzkammer.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

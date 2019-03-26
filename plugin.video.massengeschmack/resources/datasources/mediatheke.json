@@ -1,0 +1,19 @@
+{
+    "id": 23,
+    "order": 23,
+    "metadata": {
+        "title": "Die Mediatheke",
+        "cast": ["Holger Kreymeier"],
+        "country": 30202,
+        "plot": "Die Mediatheke ist das wöchentliche Medienmagazin auf Massengeschmack-TV - und der offizielle Nachfolger von Fernsehkritik-TV. Egal ob schlechter Journalismus, miese Abzocke oder unfreiwillige Komik - in der Mediatheke kommt alles gnadenlos auf den Tisch.",
+        "premiered": "2018-09-22"
+    },
+    "fanart": "fanart-mediatheke.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

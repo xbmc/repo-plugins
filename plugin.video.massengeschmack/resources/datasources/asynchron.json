@@ -1,0 +1,20 @@
+{
+    "id": 6,
+    "order": 106,
+    "metadata": {
+        "title": "Asynchron",
+        "cast": ["Olaf Brill", "Holger Kreymeier"],
+        "country": 30202,
+        "plot": "Asynchron beschäftigt sich mit der Synchronisation von Serien und Filmen. Wie gut sind die Sprecher? Wie nah am Original sind die Dialoge? Asynchron ist exklusiv im Abo verfügbar. Ein Magazin zu diesem speziellen Thema – das gibt es nur auf Massengeschmack.",
+        "premiered": "2017-04-05"
+    },
+    "fanart": "fanart-asynchron-20160220.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+	"active": false
+}

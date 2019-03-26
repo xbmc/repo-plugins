@@ -1,0 +1,109 @@
+2.5.0
+ - Add Trip, Die Mediatheke, Schatzkammer, Sonntagsfrühstück
+ - Updated flag of active/inactive shows
+ - Moved Das Studio to own section
+ - Renamed PantoffelTV to PantoffelKino
+
+2.4.1
+ - Add setting to disable ViewModes
+
+2.4.0
+ - Add Offensio, Achtung Spoiler and Veto
+ - Update view modes for estuary skin
+ - Fix parser error for new feeds
+
+2.3.1
+ - Fix required Python API version
+
+2.3.0
+ - Add Moritz & die Anderen
+
+2.2.0
+ - Update for Krypton
+ - List show runners as cast
+ - Fix episode length display
+ - Move plot descriptions from translation file to data source definition
+
+2.1.0
+ - Add support for ComicTalk, Geisterjäger, Jung und Anders, MG Interaktiv,
+   Serienkiller, Sprechplanet, Vorzelt zur Hölle (thanks, mchawk!)
+
+2.0.2
+ - Fix Python 2.6 format string issue
+
+2.0.1
+ - Fix feed parse error
+
+2.0.0
+ - Major code refactoring
+ - Move to new v1 API (you may experience rate limiting now)
+ - Add main feed with latest releases from all magazines
+ - Add support for FKTV Plus
+ - Add pagination to allow watching older episodes
+ - Add "Best" quality setting for 1080p streams
+ - Update magazine artwork
+ - Update magazine descriptions
+ - List recordings of recent live streams
+ - Move "Live Stream" category to the top when shows are currently on air
+
+1.4.1
+ - Fix feed parse errors after upstream changes
+
+1.4.0
+ - Add support for Migropolis
+
+1.3.2
+ - Fix error on recent XBMC4Xbox version
+
+1.3.1
+ - Add ViewMode fix setting for AeonNox 5
+
+1.3.0
+ - Add support for Sakura (thanks Sebastian)
+
+1.2.0
+ - Add support for Massengeschmack Direkt
+
+1.1.0
+ - Add support for Hoaxilla-TV and Tonangeber
+ - Use thumbnail URL from feed entry description instead of guessing
+ - Strip HTML tags from episode description
+
+1.0.2
+ - Fix GUID parsing issue for new interviews
+
+1.0.1
+ - Fix minor convention issues causing rejection from XBMC add-on repository
+
+1.0.0
+ - First stable release, addition to official XBMC add-on repository
+
+0.4.0beta
+ - Implement live stream support
+ - Add fix for XBMC4Xbox
+
+0.3.2
+ - Fix thumbnails for Presseschlau and PaschTV
+ - Update banner and fanart for Netzprediger
+
+0.3.1
+ - Add support for Asynchron
+ - Add show individual thumbnails for newer episodes of Postecke
+ - Fix episode list not showing up after date format change
+ - Fix thumbnails for newer episodes of PTV and Netzprediger, as well as MGTV
+ - Fix thumbnail URLs for newer FKTV episodes and interviews
+ - Fix thumbnails for newer episodes of Sendeschluss not showing up
+
+0.2.1
+ - Fixed thumbnail not showing up for Pasch-TV episode 2
+ - Reordered main listing (moved Massengeschmack-TV to the end)
+
+0.2.0
+ - Add support for Pasch-TV
+ - Add support for Netzprediger
+
+0.1.1
+ - Fix date parsing issue occurring on some platforms
+
+0.1.0
+ - First testing release

@@ -1,0 +1,20 @@
+{
+    "id": 18,
+    "order": 118,
+    "metadata": {
+        "title": "Moritz & die Anderen",
+        "cast": ["Moritz"],
+        "country": 30202,
+        "plot": "Moritz sucht nach anderen Meinungen und will sich mit diesen auseinandersetzen. Seine Gäste sind Menschen, die nicht den politischen Mainstream vertreten - mal extrem, mal absurd, mal intellektuell. Aber immer fair und immer sachlich.",
+        "premiered": "2017-04-04"
+    },
+    "fanart": "fanart-moritz.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+	"active": false
+}

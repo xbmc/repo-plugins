@@ -1,0 +1,321 @@
+# Kodi Media Center language file
+# Addon Name: Massengeschmack
+# Addon id: plugin.video.massengeschmack
+# Addon Provider: Janek Bevendorff <janek at jbev dot net>
+
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-02-19 18:52+0000\n"
+"PO-Revision-Date: 2016-02-19 18:52+0000\n"
+"Last-Translator: Janek Bevendorff <janek at jbev dot net>\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+
+# ----------------------------------------------------------------------------------
+# Settings
+# ----------------------------------------------------------------------------------
+
+msgctxt "#30001"
+msgid "Account"
+msgstr "Konto"
+
+msgctxt "#30002"
+msgid "Warning: Login credentials will not be saved in encrypted form!"
+msgstr "Warnung: Login-Daten werden nicht in verschlüsselter Form gespeichert!"
+
+msgctxt "#30003"
+msgid "Username"
+msgstr "Benutzername"
+
+msgctxt "#30004"
+msgid "Password"
+msgstr "Passwort"
+
+msgctxt "#30050"
+msgid "Contents"
+msgstr "Inhalte"
+
+msgctxt "#30051"
+msgid "Video Quality"
+msgstr "Video-Qualität"
+
+msgctxt "#30055"
+msgid "Best Quality (1080p)"
+msgstr "Beste Qualität (1080p)"
+
+msgctxt "#30052"
+msgid "HD Quality (720p)"
+msgstr "HD-Qualität (720p)"
+
+msgctxt "#30053"
+msgid "Podcast Version (SD)"
+msgstr "Podcast-Version (SD)"
+
+msgctxt "#30054"
+msgid "Audio only (may not be available for all contents)"
+msgstr "Nur Audio (möglicherweise nicht für alle Inhalte verfügbar)"
+
+msgctxt "#30060"
+msgid "Advanced Settings"
+msgstr "Erweiterte Einstellungen"
+
+msgctxt "#30061"
+msgid "Apply view mode fix for AeonNox 5"
+msgstr "View-Mode-Fix für AeonNox 5 anwenden"
+
+msgctxt "#30062"
+msgid "Let the add-on adjust Kodi view modes"
+msgstr "Add-on darf Kodi-View-Modes anpassen"
+
+
+# ----------------------------------------------------------------------------------
+# Application start up
+# ----------------------------------------------------------------------------------
+
+msgctxt "#30100"
+msgid "No login data found!"
+msgstr "Keine Login-Daten gefunden!"
+
+msgctxt "#30101"
+msgid "You need to configure your login credentials\nbefore you can use this add-on."
+msgstr "Sie müssen zuerst Ihre Login-Daten angeben,\nbevor Sie dieses Add-on verwenden können."
+
+msgctxt "#30102"
+msgid "Login failed!"
+msgstr "Login fehlgeschlagen!"
+
+msgctxt "#30103"
+msgid "Could not log into your Massengeschmack account,\nplease check your login credentials!"
+msgstr "Login-in für Ihr Massengeschmack-Konto fehlgeschlagen,\nbitte prüfen Sie Ihre Benutzer-Daten!"
+
+msgctxt "#30104"
+msgid "Probing login data…"
+msgstr "Teste Login-Daten…"
+
+msgctxt "#30105"
+msgid "Your login credentials for these contents are invalid,\nmaybe you didn't subscribe to them?"
+msgstr "Ihre Login-Daten sind für diese Inhalte ungültig,\nhaben Sie diese vielleicht nicht abonniert?"
+
+msgctxt "#30106"
+msgid "Massengeschmack API unavailable (rate limit exceeded?)\nPlease try again later."
+msgstr "Massengeschmack-API zur Zeit nicht verfügbar (Rate-Limit überschritten?)\nBitte versuchen Sie es später erneut."
+
+
+# ----------------------------------------------------------------------------------
+# Magazine listings and descriptions
+# ----------------------------------------------------------------------------------
+
+msgctxt "#30130"
+msgid "Various"
+msgstr "Verschiedene"
+
+msgctxt "#30140"
+msgid "OLDER >>"
+msgstr "ÄLTERE >>"
+
+msgctxt "#30150"
+msgid "Latest releases"
+msgstr "Neuste Veröffentlichungen"
+
+msgctxt "#30151"
+msgid "Main feed with latest releases from all magazines."
+msgstr "Haupt-Feed mit neusten Folgen aus allen Magazinen."
+
+msgctxt "#30198"
+msgid "[Missing Title]"
+msgstr "[Fehlender Titel]"
+
+msgctxt "#30199"
+msgid "[inactive]"
+msgstr "[inaktiv]"
+
+msgctxt "#30202"
+msgid "Germany"
+msgstr "Deutschland"
+
+msgctxt "#30224"
+msgid "All Pressesch(l)au episodes and extras"
+msgstr "Alle Pressesch(l)au-Folgen und Extras"
+
+msgctxt "#30225"
+msgid "Regular Pressesch(l)au episodes"
+msgstr "Reguläre Pressesch(l)au-Folgen"
+
+msgctxt "#30230"
+msgid "Massengeschmack-TV"
+msgstr "Massengeschmack-TV"
+
+msgctxt "#30233"
+msgid "In this category you find all extra content from Massengeschmack such as “Massengeschmack Direkt” or the"
+"satirical weekly show “Das Studio”."
+msgstr "In dieser Kategorie finden Sie alle Extra-Inhalte von Massengeschmack wie etwa „Massengeschmack Direkt“"
+"oder die wöchentliche Satireshow „Das Studio“."
+
+msgctxt "#30244"
+msgid "All Pasch-TV episodes and extras"
+msgstr "Alle Pasch-TV-Folgen und Extras"
+
+msgctxt "#30245"
+msgid "Regular Pasch-TV episodes"
+msgstr "Reguläre Pasch-TV-Folgen"
+
+msgctxt "#30246"
+msgid "Pasch-TV extras"
+msgstr "Pasch-TV-Extras"
+
+msgctxt "#30254"
+msgid "All Netzprediger episodes and extras"
+msgstr "Alle Netzprediger-Folgen und Extras"
+
+msgctxt "#30255"
+msgid "Regular Netzprediger episodes"
+msgstr "Reguläre Netzprediger-Folgen"
+
+msgctxt "#30270"
+msgid "LIVE Streams"
+msgstr "LIVE-Sendungen"
+
+msgctxt "#30272"
+msgid "Massengeschmack Live streams"
+msgstr "Massengeschmack Live-Streams"
+
+msgctxt "#30273"
+msgid "Live:"
+msgstr "Live:"
+
+msgctxt "#30274"
+msgid "The following shows are currently online"
+msgstr "Die folgenden Sendungen sind gerade online"
+
+msgctxt "#30275"
+msgid "Upcoming:"
+msgstr "Upcoming:"
+
+msgctxt "#30281"
+msgid "Recordings:"
+msgstr "Aufzeichnungen:"
+
+msgctxt "#30276"
+msgid "Shows coming live next"
+msgstr "Sendungen, die demnächst online kommen"
+
+msgctxt "#30277"
+msgid "Live stream: {0}\nAir date: {1}"
+msgstr "Live-Stream: {0}\nSendedatum: {1}"
+
+msgctxt "#30278"
+msgid "[ON AIR]"
+msgstr "[ON AIR]"
+
+msgctxt "#30294"
+msgid "[RECORDING]"
+msgstr "[AUFZEICHNUNG"
+
+msgctxt "#30279"
+msgid "Starts on {0}"
+msgstr "Startet am {0}"
+
+msgctxt "#30292"
+msgid "Recorded on {0}"
+msgstr "Aufgezeichnet am {0}"
+
+msgctxt "#30280"
+msgid "Livetalk"
+msgstr ""
+
+msgctxt "#30300"
+msgid "All"
+msgstr "Alle"
+
+msgctxt "#30301"
+msgid "Episodes"
+msgstr "Folgen"
+
+msgctxt "#30302"
+msgid "Interviews"
+msgstr "Interviews"
+
+msgctxt "#30303"
+msgid "Extras"
+msgstr "Extras"
+
+msgctxt "#30350"
+msgid "All Fernsehkritik-TV episodes and extras, including Postecke, uncut interview and other specials."
+msgstr "Alle Fernsehkritik-TV-Folgen und Extras, einschließlich Postecke, ungeschnittenen Interviews"
+"und anderen Specials."
+
+
+msgctxt "#30354"
+msgid "Uncut Interviews"
+msgstr "Ungeschnittene Interviews"
+
+msgctxt "#30355"
+msgid "Various extras"
+msgstr "Verschiedene Extras"
+
+msgctxt "#30361"
+msgid "All Massengeschmack-TV content, including “Massengeschmack Direkt“, “Das Studio” and any extras."
+msgstr "Alle Massengeschmack-TV-Inhalte, einschließlich „Massengeschmack Direkt“, „Das Studio“, sowie sämtliche Extras."
+
+msgctxt "#30363"
+msgid "Massengeschmack Internal"
+msgstr "Massengeschmack Intern"
+
+msgctxt "#30364"
+msgid "Massengeschmack announcements and uncategorized extras."
+msgstr "Massengeschmack-Ankündigungen und unkategorisierte Extras."
+
+msgctxt "#30367"
+msgid "-> Massengeschmack Direkt"
+msgstr "-> Massengeschmack Direkt"
+
+msgctxt "#30368"
+msgid "Postecke has been replaced by “Massengeschmack Direkt”. Click on this link to go to the new"
+"“Massengeschmack Direkt” category. You can also find it in the main category „Massengeschmack-TV“"
+msgstr "Postecke wurde durch „Massengeschmack Direkt“ ersetzt. Klicken Sie auf den Link, um zur neuen"
+"„Massengeschmack Direkt“-Kategorie zu gelangen. Sie können diese auch in der Hauptkategorie"
+"„Massengeschmack-TV“ finden."
+
+msgctxt "#30370"
+msgid "All Sakura epsisodes und interviews"
+msgstr "Alle Sakura-Folgen und Interviews"
+
+msgctxt "#30371"
+msgid "Regular Sakura episodes"
+msgstr "Reguläre Sakura-Folgen"
+
+msgctxt "#30416"
+msgid "Talkshow, Comic"
+msgstr "Talkshow, Comic"
+
+msgctxt "#30418"
+msgid "Gameshow"
+msgstr "Gameshow"
+
+# ----------------------------------------------------------------------------------
+# General runtime error messages
+# ----------------------------------------------------------------------------------
+
+msgctxt "#30901"
+msgid "Invalid internal command!\nThis is probably a bug. You should report it if it happens more often."
+msgstr "Ungültiges internes Kommando!\nDies ist möglicherweise ein Bug und Sie sollten ihn melden, wenn er"
+"häufiger auftritt."
+
+msgctxt "#30902"
+msgid "Request failed!"
+msgstr "Request fehlgeschlagen!"
+
+msgctxt "#30903"
+msgid "Could not complete request, maybe the network is down?"
+msgstr "Konnte Request nicht ausführen, ist vielleicht das Netzwerk unerreichbar?"
+
+msgctxt "#30904"
+msgid "Could not complete request, server replied:"
+msgstr "Konnte Request nicht ausführen, Server antwortete:"

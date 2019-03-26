@@ -1,0 +1,20 @@
+{
+    "id": 11,
+    "order": 111,
+    "metadata": {
+        "title": "Serienkiller",
+        "cast": ["Olaf Brill", "Nils Beckmann"],
+        "country": 30202,
+        "plot": "Serienkiller ist das Magazin rund um TV-Serien. Filmhistoriker Olaf Brill, Serienjunkie Nils Beckmann und Deutschlands intellektuellster Filmkritiker Wolfgang M. Schmitt liefern umfangreiche Analysen zu Serien der Neuzeit und TV-Klassikern ab.",
+        "premiered": "2016-06-28"
+    },
+    "fanart": "fanart-serienkiller.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+	"active": false
+}

@@ -1,0 +1,40 @@
+{
+    "id": 5,
+    "order": 105,
+    "metadata": {
+        "title": "Netzprediger",
+        "cast": ["Adam Wolke"],
+        "country": 30202,
+        "plot": "Aktuelles und Skurriles aus dem Netz bietet unsere Live-Show Netzprediger – moderiert von Adam Wolke. Immer den aktuellen Trends im World Wide Web auf der Spur – und dabei gnadenlos direkt.",
+        "premiered": "2013-10-10"
+    },
+    "fanart": "fanart-netzprediger-20160221.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1, 2],
+            "metadata": {
+                "title": 30300,
+                "plot": 30254
+            }
+        },
+        {
+            "name": "episodes",
+            "ids": [1],
+            "metadata": {
+                "title": 30301,
+                "plot": 30255
+            }
+        },
+        {
+            "name": "interviews",
+            "ids": [2],
+            "metadata": {
+                "title": 30302,
+                "plot": 30354
+            }
+        }
+    ], 
+	"active": false
+}

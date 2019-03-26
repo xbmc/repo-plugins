@@ -1,0 +1,47 @@
+{
+    "id": 0,
+    "order": 99,
+    "metadata": {
+        "title": 30303,
+        "cast": ["Holger Kreymeier"],
+        "country": 30202,
+        "plot": 30233
+    },
+    "banner": "banner-massengeschmack-20160220.png",
+    "fanart": "fanart-massengeschmack-20160220.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1, 2, 3, 4, 5],
+            "metadata": {
+                "title": 30300,
+                "plot": 30361
+            }
+        },
+        {
+            "name": "direkt",
+            "ids": [3],
+            "metadata": {
+                "title": "MG Direkt",
+                "plot": "Postecke und Live-Talk für Abonnenten."
+            }
+        },
+        {
+            "name": "internal",
+            "ids": [1],
+            "metadata": {
+                "title": 30363,
+                "plot": 30364
+            }
+        },
+        {
+           "name":  "Spendennacht",
+            "ids": [5],
+            "metadata": {
+                "title": "Spendennacht",
+                "plot": "Spendennacht zum Supernanny-Prozess"
+            }
+        }
+    ]
+}

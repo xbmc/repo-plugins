@@ -1,0 +1,20 @@
+{
+    "id": 14,
+    "order": 114,
+    "metadata": {
+        "title": "Interaktiv",
+        "cast": ["!CF", "Thomas Mertke"],
+        "country": 30202,
+        "plot": "MG Interaktiv ist die Gameshow nur für Abonnenten – gewinnen Sie in kreativen und verrückten Spielrunden Preise und Gutscheine. In Skype, im Chat oder live bei uns im Studio.",
+        "premiered": "2015-08-01"
+    },
+    "fanart": "fanart-interaktiv.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+    "active": false
+}

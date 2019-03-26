@@ -1,0 +1,19 @@
+{
+    "id": 24,
+    "order": 24,
+    "metadata": {
+        "title": "Trip",
+        "cast": ["Thomas Mertke"],
+        "country": 30202,
+        "plot": "TRIP ist das Technik-Magazin bei Massengeschmack-TV - Wie funktionieren Maschinen? Was sind die Innovationen? Thomas ist direkt vor Ort, um sich mit Fachleuten zu unterhalten und sich alles zeigen zu lassen.",
+        "premiered": "2018-09-25"
+    },
+    "fanart": "fanart-trip.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

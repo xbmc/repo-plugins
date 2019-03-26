@@ -1,0 +1,19 @@
+{
+    "id": 26,
+    "order": 26,
+    "metadata": {
+        "title": "Das Studio",
+        "cast": ["Verschiedene"],
+        "country": 30202,
+        "plot": "„Das Studio“ ist die Massengeschmack-Reality-Show. Sie ist garantiert gefaked und gescripted!",
+        "premiered": "2013-08-05"
+    },
+    "fanart": "fanart-dasstudio.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

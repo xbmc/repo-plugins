@@ -1,0 +1,20 @@
+{
+    "id": 20,
+    "order": 120,
+    "metadata": {
+        "title": "Achtung Spoiler!",
+        "cast": ["Holger Kreymeier","Verschiedene"],
+        "country": 30202,
+        "plot": "In Achtung: Spoiler! wird endlich das besprochen, was sonst tabu ist: das Ende! So manche Filme und Serien warten mit kontroversen Schlüssen auf - Grund genug, darüber mal frei von der Leber weg zu diskutieren.",
+        "premiered": "2017-02-23"
+    },
+    "fanart": "fanart-achtung-spoiler.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+	"active": false
+}

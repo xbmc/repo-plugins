@@ -1,7 +1,9 @@
-import re
-import time
+# -*- coding: utf-8 -*-
+
+# GNU General Public License v2.0 (see COPYING or https://www.gnu.org/licenses/gpl-2.0.txt)
+
 from resources.lib.vrtplayer import metadatacreator
-from resources.lib.vrtplayer import statichelper
+
 
 class MetadataCollector:
 
@@ -15,5 +17,4 @@ class MetadataCollector:
             if p_item is not None:
                 description = p_item.text.strip()
         metadata_creator.plot = description
-        return metadata_creator.get_video_dictionary()
-
+        return metadata_creator.get_video_dict()

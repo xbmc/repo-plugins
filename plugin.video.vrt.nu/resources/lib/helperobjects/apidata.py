@@ -1,12 +1,16 @@
+# -*- coding: utf-8 -*-
+
+# GNU General Public License v2.0 (see COPYING or https://www.gnu.org/licenses/gpl-2.0.txt)
+
 class ApiData:
 
-    def __init__(self, client, media_api_url, video_id, publication_id, xvrttoken, is_live_stream ):
+    def __init__(self, client, media_api_url, video_id, publication_id, xvrttoken, is_live_stream):
         self._client = client
         self._media_api_url = media_api_url
         self._video_id = video_id
         self._publication_id = publication_id
         self._xvrttoken = xvrttoken
-        self.is_live_stream = is_live_stream
+        self._is_live_stream = is_live_stream
 
     @property
     def client(self):
@@ -34,4 +38,8 @@ class ApiData:
 
     @property
     def is_live_stream(self):
-        return self.is_live_stream
+        return self._is_live_stream
+
+    @is_live_stream.setter
+    def is_live_stream(self, value):
+        self._is_live_stream = value

@@ -159,11 +159,11 @@ def genre_view(mode, args):
                           isFolder=True, mediatype="video")
 
     # show me more
-    if u"<span>Zeig mir mehr</span>" in html:
+    if len(div.find_all("section")) >= 30:
         view.add_item(args,
                       {"title":  args._addon.getLocalizedString(30025),
                        "url":    getattr(args, "url", ""),
-                       "offset": str(int(getattr(args, "offset", 0)) + 1),
+                       "offset": str(int(getattr(args, "offset", 1)) + 1),
                        "mode":   args.mode})
 
     view.endofdirectory(args)

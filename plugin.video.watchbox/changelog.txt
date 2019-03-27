@@ -1,3 +1,6 @@
+v0.5.2 (2019.03.27)
+- Watchbox was integrated into the service of TVNow on 2019-03-27
+
 v0.5.1 (2018.07.16)
 - Fix Watchbox changed stream info format
 - Added Widevine DRM support

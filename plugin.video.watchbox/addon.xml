@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.watchbox" name="Watchbox" version="0.5.1" provider-name="MrKrabat">
+<addon id="plugin.video.watchbox" name="Watchbox" version="0.5.2" provider-name="MrKrabat">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.beautifulsoup4" version="4.5.3"/>
@@ -17,7 +17,8 @@
         <description lang="de_DE">Ob Anime, Horror, Action oder Komödie! Stöber durch unsere Top Genres! Alle Filme und Serien kostenlos im Online-Stream bei WATCHBOX.</description>
         <disclaimer lang="en_GB">WARNING: This plugin is only available from Germany by geo blocking!</disclaimer>
         <disclaimer lang="de_DE">HINWEIS: Dieses Plugin ist durch Geoblocking nur von Deutschland aus verfügbar!</disclaimer>
-        <news>v0.5.1 (2018.07.16)[CR]- Fix Watchbox changed stream info format[CR]- Added Widevine DRM support[CR]- Small optimations</news>
+        <broken>Watchbox was integrated into the service of TVNow on 2019-03-27</broken>
+        <news>v0.5.2 (2019.03.27)[CR]- Watchbox was integrated into the service of TVNow on 2019-03-27</news>
         <license>GNU Affero General Public License, v3</license>
         <forum>https://www.kodinerds.net/index.php/Thread/58398-Release-Watchbox-de/</forum>
         <website>https://www.watchbox.de/</website>

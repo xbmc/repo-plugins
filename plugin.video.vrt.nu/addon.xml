@@ -1,63 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.vrt.nu"
        name="VRT Nu"
-       version="1.6.0"
+       version="1.7.0"
        provider-name="Martijn Moreel">
 
     <requires>
-        <import addon="xbmc.python" version="2.25.0"/>
-        <import addon="script.module.requests" version="2.19.1"/>
+        <import addon="inputstream.adaptive" version="2.0.19" />
         <import addon="script.module.beautifulsoup4" version="4.5.3"/>
         <import addon="script.module.inputstreamhelper" version="0.3.3"/>
+        <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
+        <import addon="script.module.requests" version="2.19.1"/>
+        <import addon="xbmc.python" version="2.25.0"/>
     </requires>
 
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
     </extension>
+
     <extension point="xbmc.service" library="service.py" start="startup" />
+
     <extension point="xbmc.addon.metadata">
-    <summary lang="en_GB">Addon to watch vrt.nu</summary>
-    <description lang="en_GB">This addon can be used to watch all streams from vrt.nu. And also offers livestreams from Een, Canvas and Ketnet!</description>
-    <summary lang="nl_NL">Addon om vrt.nu te bekijken.</summary>
-    <description lang="nl_NL">Met deze addon kan je alle streams van vrt.nu bekijken. Alsook de livestreams van Een, Canvas en Ketnet!</description>
+        <summary lang="en_GB">Addon to watch VRT.NU</summary>
+        <description lang="en_GB">This addon can be used to watch all streams from VRT.NU. And also offers livestreams from Eén, Canvas and Ketnet!</description>
+        <summary lang="nl_NL">Addon om VRT.NU te bekijken.</summary>
+        <description lang="nl_NL">Met deze addon kan je alle streams van VRT.NU bekijken. Alsook de livestreams van Eén, Canvas en Ketnet!</description>
         <language>nl</language>
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
-v1.6.0 (07-03-2019)
-- Use Vrt search api (greatly improves stability)
+v1.7.0 (2019-03-26)
+- Fix the categories web-scraping (@mediaminister)
+- Add full proxy support (@dagwieers)
+- Indicate when content will disappear in the next 3 months (@dagwieers)
+- Indicate when content is geo-blocked (@dagwieers)
+- Add fanart to menus (@dagwieers)
+- Fix issue related to missing sound (@mediaminister)
+- Improve main menu listing (@dagwieers)
+- Use VRT.NU search API for most information gathering (@mediaminister)
+- Added Dutch translation (@mediaminister)
+- Added "Most recent" menu item (@mediaminister)
+- Fix roaming for live streams (@mediaminister)
+- Add Python 3 compatibility (@dagwieers)
+- Added automated testing using Travis CI (@dagwieers)
+v1.6.0 (2019-03-07)
+- Use VRT search api (greatly improves stability)
 - Fix for users with Non ASCII compatible user path
 - Fix for roaming token
-v1.5.2 (28-01-2019)
+v1.5.2 (2019-01-28)
 - Bug fix where the vrt token would be stored in a wrong format
 - Inputstream helper for easier widevine installation
 - Token resets when settings are being changed
 v1.5.1 (20-01-2019)
-- Fixed subtitle issue where subtitles would always be visible (Thanks mediaminister)
-- Fixed categories (Thanks mediaminister)
-- Roaming support added (Thanks mediaminister)
-v1.5.0 (27-12-2018)
-- 720p Livestreams when enabled in settings + having kodi 18 + having widevine.dll present (Thanks mediaminister)
-- Fixed bug where watched icon was not showing in Kodi 18
-- Implemented different way of working with subtitles (Thanks mediaminister)
-v1.4.3 (07-11-2018)
-- Livestreams working again
-v1.4.2 (11-10-2018)
-- Changed way of working with urls when a season is refering to href="#"
-v1.4.1 (24-09-2018)
-- Adapted plugin to new vrtnu layout for showing multiple seasons
-v1.4.0 (20-09-2018)
-- Using the new vrtnu login method and video services
-- Fixed bug where some videos would not be able to play (Thanks dagwieers)
-v1.3.4 (10-09-2018)
-- Fixed A-Z menu so it shows items
+- Fixed subtitle issue where subtitles would always be visible (@mediaminister)
+- Fixed categories (@mediaminister)
+- Roaming support added (@mediaminister)
         </news>
         <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
-    <website>https://www.facebook.com/kodivrtnu/</website>
-    <assets>
-    <icon>resources/icon.png</icon>
-      <fanart>resources/fanart.jpg</fanart>
-      <!--<screenshot>resources/screenshot-01.jpg</screenshot>-->
-    </assets>
+        <website>https://github.com/pietje666/plugin.video.vrt.nu/wiki</website>
+        <forum>https://www.facebook.com/kodivrtnu/</forum>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <!-- screenshot>resources/screenshot-01.jpg</screenshot -->
+        </assets>
     </extension>
 </addon>

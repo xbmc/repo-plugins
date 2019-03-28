@@ -41,6 +41,9 @@ you can send a message to [our Facebook page](https://www.facebook.com/kodivrtnu
 
 ## Releases
 
+#### v1.7.1 (2019-03-28)
+- Remove the inputstream.adaptive requirement for Krypton
+
 #### v1.7.0 (2019-03-26)
 - Fix the categories web-scraping (@mediaminister)
 - Add full proxy support (@dagwieers)

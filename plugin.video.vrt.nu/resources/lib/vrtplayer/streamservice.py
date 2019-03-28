@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# GNU General Public License v2.0 (see COPYING or https://www.gnu.org/licenses/gpl-2.0.txt)
+# GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 import re
 import requests
@@ -85,14 +85,14 @@ class StreamService:
         # Store required data attributes
         client = video_data['data-client']
         media_api_url = video_data['data-mediaapiurl']
-        if 'data-videoid' in video_data.keys():
+        if 'data-videoid' in list(video_data.keys()):
             video_id = video_data['data-videoid']
             xvrttoken = self.token_resolver.get_xvrttoken()
         else:
             video_id = video_data['data-livestream']
             is_live_stream = True
         publication_id = ''
-        if 'data-publicationid' in video_data.keys():
+        if 'data-publicationid' in list(video_data.keys()):
             publication_id = video_data['data-publicationid'] + requests.utils.quote('$')
         return apidata.ApiData(client, media_api_url, video_id, publication_id, xvrttoken, is_live_stream)
 
@@ -128,7 +128,7 @@ class StreamService:
         if 'drm' in video_json:
             vudrm_token = video_json['drm']
             target_urls = video_json['targetUrls']
-            stream_dict = dict(list(map(lambda x: (x['type'], x['url']), target_urls)))
+            stream_dict = dict(list([(x['type'], x['url']) for x in target_urls]))
             return self._select_stream(stream_dict, vudrm_token)
 
         if video_json['code'] == 'INVALID_LOCATION' or video_json['code'] == 'INCOMPLETE_ROAMING_CONFIG':

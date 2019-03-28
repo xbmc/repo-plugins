@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rsiplaytv" name="RSI Play TV" version="1.5.0" provider-name="Alexander Seiler">
+<addon id="plugin.video.rsiplaytv" name="RSI Play TV" version="1.5.1" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
     <import addon="script.module.srgssr" version="1.5.0"/>
@@ -25,7 +25,9 @@
     <website>https://www.rsi.ch/play/tv</website>
     <email>seileralex@gmail.com</email>
     <source>https://github.com/goggle/plugin.video.rsiplaytv</source>
-    <news>v1.5.0 (2019-03-15)
+    <news>v1.5.1 (2019-03-28)
+ - Fix settings option to choose favourite shows.
+v1.5.0 (2019-03-15)
  - Initial release: For a feature list have a look at the README on https://github.com/goggle/plugin.video.rsiplaytv</news>
     <assets>
         <icon>resources/icon.png</icon>

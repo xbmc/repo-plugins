@@ -19,6 +19,6 @@
         <setting id="RSI_YouTube" type="bool" label="30074" default="true" />
     </category>
     <category label="30011">
-        <setting label="30005" type="action" action="RunPlugin(plugin://plugin.video.rtsplaytv?mode=19)" />        
+        <setting label="30005" type="action" action="RunPlugin(plugin://plugin.video.rsiplaytv?mode=19)" />        
     </category>
 </settings>

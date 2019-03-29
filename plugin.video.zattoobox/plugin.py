@@ -1,9 +1,9 @@
 # coding=utf-8
 
 ##################################
-# ZattooBox v1.0.3
+# ZattooBox v1.0.5
 # Kodi Addon for Zattoo
-# (c) 2014-2018 Pascal Nançoz
+# (c) 2014-2019 Pascal Nançoz
 # nancpasc@gmail.com
 ##################################
 

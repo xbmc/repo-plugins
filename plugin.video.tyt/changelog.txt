@@ -1,3 +1,7 @@
+[B]3.1.0[/B]
+- Updated to work with split shows. 
+- Fixed Date info
+- Added video length in title
 [B]3.0.6[/B]
 - Some platforms have problem with JW m3u8 stream, so gave stream choice
 [B]3.0.5[/B]

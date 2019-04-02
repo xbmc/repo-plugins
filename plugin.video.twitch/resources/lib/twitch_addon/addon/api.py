@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
      
-    Copyright (C) 2012-2018 Twitch-on-Kodi
+    Copyright (C) 2012-2019 Twitch-on-Kodi
 
     This file is part of Twitch-on-Kodi (plugin.video.twitch)
 
@@ -340,13 +340,19 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def live_request(self, name):
-        results = self.usher.live_request(name)
+        if not utils.inputstream_adpative_supports('EXT-X-DISCONTINUITY'):
+            results = self.usher.live_request(name, platform='ps4')
+        else:
+            results = self.usher.live_request(name)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def video_request(self, video_id):
-        results = self.usher.video_request(video_id)
+        if not utils.inputstream_adpative_supports('EXT-X-DISCONTINUITY'):
+            results = self.usher.video_request(video_id, platform='ps4')
+        else:
+            results = self.usher.video_request(video_id)
         return self.error_check(results)
 
     def get_user_blocks(self):

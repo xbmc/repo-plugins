@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
      
-    Copyright (C) 2012-2018 Twitch-on-Kodi
+    Copyright (C) 2012-2019 Twitch-on-Kodi
     
     This file is part of Twitch-on-Kodi (plugin.video.twitch)
 
@@ -83,6 +83,19 @@ def use_inputstream_adaptive():
             return False
     else:
         return False
+
+
+def inputstream_adpative_supports(feature):
+    try:
+        ia_version = kodi.Addon('inputstream.adaptive').getAddonInfo('version')
+    except RuntimeError:
+        ia_version = '0.0.0'
+
+    if feature == 'EXT-X-DISCONTINUITY':
+        if loose_version(ia_version) >= loose_version('999.999.999'):  # TODO: update version when resolved in I.A
+            return True
+
+    return False
 
 
 def append_headers(headers):

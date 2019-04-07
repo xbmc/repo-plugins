@@ -45,6 +45,14 @@ msgctxt "#30008"
 msgid "Search"
 msgstr ""
 
+msgctxt "#30009"
+msgid "Game Reviews"
+msgstr ""
+
+msgctxt "#30010"
+msgid "IGN Daily Fix"
+msgstr ""
+
 msgctxt "#30101"
 msgid "Maximum video resolution"
 msgstr ""

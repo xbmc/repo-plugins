@@ -1,12 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from future.standard_library import install_aliases
+install_aliases()
+
 import datetime
-import json
 import sys
 import time
-import urllib
-import urllib2
+import urllib.error
+import urllib.parse
+import urllib.request
+
+import simplejson as json
 import xbmcaddon
 import xbmcgui
 
@@ -50,11 +55,11 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(self.serviceAPIHighlights)
 			responseCode = response.getcode()
-		except urllib2.HTTPError as error:
+		except urllib.error.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
-			for result in json.loads(response.read()).get('highlight_teasers'):
+			for result in json.loads(response.read().decode('UTF-8')).get('highlight_teasers'):
 				if result.get('target').get('model') == 'Segment':
 					self.JSONSegment2ListItem(result.get('target'))
 
@@ -63,11 +68,11 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(self.__urlMostViewed)
 			responseCode = response.getcode()
-		except urllib2.HTTPError as error:
+		except urllib.error.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
-			for result in json.loads(response.read()).get('most_viewed_segments'):
+			for result in json.loads(response.read().decode('UTF-8')).get('most_viewed_segments'):
 				if result.get('model') == 'Segment':
 					self.JSONSegment2ListItem(result)
 
@@ -79,16 +84,18 @@ class serviceAPI(Scraper):
 	def getTips(self):
 		self.getTableResults(self.__urlTips)
 
+	def getFocus(self):
+		self.xbmc.log(msg='"In Focus" not available', level=xbmc.LOGDEBUG);
 
 	def getTableResults(self, urlAPI):
 		try:
 			response = self.__makeRequest(urlAPI)
 			responseCode = response.getcode()
-		except urllib2.HTTPError as error:
+		except urllib.error.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
-			for result in json.loads(response.read()):
+			for result in json.loads(response.read().decode('UTF-8')):
 				if result.get('model') == 'Episode':
 					self.__JSONEpisode2ListItem(result)
 				elif result.get('model') == 'Tip':
@@ -136,11 +143,11 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(self.__urlShows)
 			responseCode = response.getcode()
-		except urllib2.HTTPError as error:
+		except urllib.error.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
-			for result in json.loads(response.read()).get('_embedded').get('items'):
+			for result in json.loads(response.read().decode('UTF-8')).get('_embedded').get('items'):
 				self.__JSONProfile2ListItem(result)
 		else:
 			xbmcgui.Dialog().notification(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'), xbmcaddon.Addon().getAddonInfo('icon'))
@@ -154,7 +161,7 @@ class serviceAPI(Scraper):
 			url = self.serviceAPIDateFrom % (date, 7)
 		response = self.__makeRequest(url)
 
-		episodes = json.loads(response.read()).get('_embedded').get('items')
+		episodes = json.loads(response.read().decode('UTF-8')).get('_embedded').get('items')
 		if dateFrom != None:
 			episodes = reversed(episodes)
 
@@ -165,7 +172,7 @@ class serviceAPI(Scraper):
 	# list all Entries for the given Topic
 	def getTopic(self,topicID):
 		response = self.__makeRequest(self.servieAPITopic % topicID)
-		for entrie in json.loads(response.read()).get('_embedded').get('video_items'):
+		for entrie in json.loads(response.read().decode('UTF-8')).get('_embedded').get('video_items'):
 			self.__JSONVideoItem2ListItem(entrie)
 
 
@@ -175,7 +182,7 @@ class serviceAPI(Scraper):
 		responseCode = response.getcode()
 
 		if responseCode == 200:
-			episodes = json.loads(response.read()).get('_embedded').get('items')
+			episodes = json.loads(response.read().decode('UTF-8')).get('_embedded').get('items')
 			if len(episodes) == 1:
 				for episode in episodes:
 					self.getEpisode(episode.get('id'), playlist)
@@ -193,7 +200,7 @@ class serviceAPI(Scraper):
 		playlist.clear()
 
 		response = self.__makeRequest(self.serviceAPIEpisode % episodeID)
-		result = json.loads(response.read())
+		result = json.loads(response.read().decode('UTF-8'))
 
 		image       = self.JSONImage(result.get('_embedded').get('image'))
 		description = result.get('description').encode('UTF-8') if result.get('description') != None else result.get('description')
@@ -217,11 +224,11 @@ class serviceAPI(Scraper):
 			responseCode = response.getcode()
 		except ValueError as error:
 			responseCode = 404
-		except urllib2.HTTPError as error:
+		except urllib.error.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
-			for topic in json.loads(response.read()).get('_embedded').get('items'):
+			for topic in json.loads(response.read().decode('UTF-8')).get('_embedded').get('items'):
 				title       = topic.get('title').encode('UTF-8')
 				description = topic.get('description')
 				link        = topic.get('id')
@@ -238,11 +245,11 @@ class serviceAPI(Scraper):
 			responseCode = response.getcode()
 		except ValueError as error:
 			responseCode = 404
-		except urllib2.HTTPError as error:
+		except urllib.error.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
-			for episode in json.loads(response.read())['_embedded']['items']:
+			for episode in json.loads(response.read().decode('UTF-8'))['_embedded']['items']:
 				self.__JSONEpisode2ListItem(episode)
 		else:
 			xbmcgui.Dialog().notification(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'), xbmcaddon.Addon().getAddonInfo('icon'))
@@ -252,14 +259,14 @@ class serviceAPI(Scraper):
 
 	# lists schedule overview (date listing)
 	def getSchedule(self):
-		for x in xrange(9):
+		for x in range(9):
 			date  = datetime.datetime.now() - datetime.timedelta(days=x)
 			title = '%s' % (date.strftime('%A, %d.%m.%Y'))
 			parameters = {'mode' : 'openDate', 'link': date.strftime('%Y-%m-%d')}
 			if x == 8:
 				title = 'älter als %s' % title
 				parameters = {'mode' : 'openDate', 'link': date.strftime('%Y-%m-%d'), 'from': (date - datetime.timedelta(days=150)).strftime('%Y-%m-%d')}
-			u = sys.argv[0] + '?' + urllib.urlencode(parameters)
+			u = sys.argv[0] + '?' + urllib.parse.urlencode(parameters)
 			createListItem(title, None, None, None, date.strftime('%Y-%m-%d'), '', u, False, True, self.defaultbackdrop,self.pluginhandle)
 
 	# Returns Live Stream Listing
@@ -267,7 +274,7 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(self.__urlLive)
 			responseCode = response.getcode()
-		except urllib2.HTTPError as error:
+		except urllib.error.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
@@ -277,7 +284,7 @@ class serviceAPI(Scraper):
 			except RuntimeError:
 				inputstreamAdaptive = False
 
-			for result in json.loads(response.read()).get('_embedded').get('items'):
+			for result in json.loads(response.read().decode('UTF-8')).get('_embedded').get('items'):
 				description     = result.get('description')
 				programName     = result.get('_embedded').get('channel').get('name')
 				livestreamStart = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
@@ -294,7 +301,7 @@ class serviceAPI(Scraper):
 					if inputstreamAdaptive and result.get('restart'):
 						contextMenuItems.append(('Restart', 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (xbmcaddon.Addon().getAddonInfo('id'), result.get('id'))))
 				else:
-					link = sys.argv[0] + '?' + urllib.urlencode({'mode': 'liveStreamNotOnline', 'link': result.get('id')})
+					link = sys.argv[0] + '?' + urllib.parse.urlencode({'mode': 'liveStreamNotOnline', 'link': result.get('id')})
 
 				title = "[%s]%s %s (%s)" % (programName, '[Restart]' if inputstreamAdaptive and result.get('restart') else '', result.get('title'), time.strftime('%H:%M', livestreamStart))
 
@@ -308,11 +315,11 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest('livestream/' + link)
 			responseCode = response.getcode()
-		except urllib2.HTTPError as error:
+		except urllib.error.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
-			result = json.loads(response.read())
+			result = json.loads(response.read().decode('UTF-8'))
 
 			title       = result.get('title').encode('UTF-8')
 			image       = self.JSONImage(result.get('_embedded').get('image'))
@@ -340,11 +347,11 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest('livestream/' + link)
 			responseCode = response.getcode()
-		except urllib2.HTTPError as error:
+		except urllib.error.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
-			result = json.loads(response.read())
+			result = json.loads(response.read().decode('UTF-8'))
 
 			title       = result.get('title').encode('UTF-8')
 			image       = self.JSONImage(result.get('_embedded').get('image'))
@@ -357,8 +364,8 @@ class serviceAPI(Scraper):
 			if bitmovinStreamId:
 				bitmovinStreamId = bitmovinStreamId.replace("https://playerapi-restarttv.ors.at/livestreams/","").replace("/sections/","")
 				bitmovinStreamId = bitmovinStreamId.split("?")[0]
-			response = urllib2.urlopen('https://playerapi-restarttv.ors.at/livestreams/%s/sections/?state=active&X-Api-Key=%s' % (bitmovinStreamId, ApiKey)) # nosec
-			section = json.loads(response.read())[0]
+			response = urllib.request.urlopen('https://playerapi-restarttv.ors.at/livestreams/%s/sections/?state=active&X-Api-Key=%s' % (bitmovinStreamId, ApiKey)) # nosec
+			section = json.loads(response.read().decode('UTF-8'))[0]
 
 			streamingURL = 'https://playerapi-restarttv.ors.at/livestreams/%s/sections/%s/manifests/hls/?startTime=%s&X-Api-Key=%s' % (bitmovinStreamId, section.get('id'), section.get('metaData').get('timestamp'), ApiKey)
 
@@ -369,9 +376,9 @@ class serviceAPI(Scraper):
 
 
 	def __makeRequest(self, url):
-		request = urllib2.Request(self.__urlBase + url) # nosec
+		request = urllib.request.Request(self.__urlBase + url) # nosec
 		request.add_header('Authorization', 'Basic %s' % 'cHNfYW5kcm9pZF92Mzo2YTYzZDRkYTI5YzcyMWQ0YTk4NmZkZDMxZWRjOWU0MQ==')
-		return urllib2.urlopen(request) # nosec
+		return urllib.request.urlopen(request) # nosec
 
 
 	def __JSONEpisode2ListItem(self, JSONEpisode, ignoreEpisodeType = None):
@@ -386,7 +393,7 @@ class serviceAPI(Scraper):
 			JSONEpisode.get('duration_seconds'),
 			time.strftime('%Y-%m-%d', time.strptime(JSONEpisode.get('date')[0:19], '%Y-%m-%dT%H:%M:%S')),
 			JSONEpisode.get('_embedded').get('channel').get('name') if JSONEpisode.get('_embedded').get('channel') != None else None,
-			sys.argv[0] + '?' + urllib.urlencode({'mode' : 'openEpisode', 'link': JSONEpisode.get('id')}),
+			sys.argv[0] + '?' + urllib.parse.urlencode({'mode' : 'openEpisode', 'link': JSONEpisode.get('id')}),
 			False,
 			True,
 			self.defaultbackdrop,
@@ -402,7 +409,7 @@ class serviceAPI(Scraper):
 			None,
 			None,
 			None,
-			sys.argv[0] + '?' + urllib.urlencode({'mode' : 'openProgram', 'link': jsonProfile.get('id')}),
+			sys.argv[0] + '?' + urllib.parse.urlencode({'mode' : 'openProgram', 'link': jsonProfile.get('id')}),
 			False,
 			True,
 			self.defaultbackdrop,

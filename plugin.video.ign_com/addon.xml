@@ -2,7 +2,7 @@
 <addon
 	id="plugin.video.ign_com"
 	name="IGN.com"
-	version="2.3.9"
+	version="2.3.10"
 	provider-name="Skipmode A1">
     <requires>
         <import addon="xbmc.python"                     version="2.19.0"/>
@@ -24,9 +24,10 @@
         <source>https://github.com/skipmodea1/plugin.video.ign_com</source>
         <email></email>
         <platform>all</platform>
-        <news>2.3.9 (2019-01-14)
-        - fix to make the addon work for all countries again
-        - added series updates category
+        <news>2.3.10 (2019-04-07)
+        - added 'Game Reviews' category. This was needed because not all game reviews show up the 'Reviews' category
+        - fixed displaying the video in the correct resolution
+        - removed testing on presence of the videos. This should speed up the addon a bit.
         </news>
     </extension>
 </addon>

@@ -1,3 +1,8 @@
+2.3.10 (2019-04-07)
+- added 'Game Reviews' category. This was needed because not all game reviews show up the 'Reviews' category
+- fixed displaying the video in the correct resolution
+- removed testing on presence of the videos. This should speed up the addon a bit.
+
 2.3.9 (2019-01-14)
 - fix to make the addon work for all countries again
 - added series updates category

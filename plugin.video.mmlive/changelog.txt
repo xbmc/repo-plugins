@@ -1,6 +1,3 @@
-2017.3.19
-- Bumped python version for Krypton
-
 2017.3.18
 - Fixed completed games not showing final
 - Fixed some stream parameter issues

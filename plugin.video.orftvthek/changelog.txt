@@ -1,3 +1,9 @@
+0.9.0
+- fixed htmlscraper (new orf tvthek website structure)
+- "Im Fokus" added for the htmlscraper
+- "TV Programm" added for the htmlscraper
+- New icons/backdrops according to the new CI
+
 0.8.8
 - removed stream method option because its not available with the htmlscraper. Progressive streaming can still be used with the serviceAPI. 
 

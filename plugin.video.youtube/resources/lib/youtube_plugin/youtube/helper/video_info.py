@@ -362,6 +362,16 @@ class VideoInfo(object):
                 'fps': 60,
                 'hdr': True,
                 'video': {'height': 2160, 'encoding': 'vp9.2'}},
+        '400': {'container': 'mp4',
+                'dash/video': True,
+                'fps': 60,
+                'hdr': True,
+                'video': {'height': 1440, 'encoding': 'av1'}},
+        '401': {'container': 'mp4',
+                'dash/video': True,
+                'fps': 60,
+                'hdr': True,
+                'video': {'height': 2160, 'encoding': 'av1'}},
         '394': {'container': 'mp4',
                 'dash/video': True,
                 'fps': 30,
@@ -886,12 +896,11 @@ class VideoInfo(object):
                         raise YouTubeException('Cipher: Not Found')
             if mpd_sig_deciphered:
                 license_info = {'url': None, 'proxy': None, 'token': None}
-                pa_li_info = player_args.get('license_info', params.get('license_info', '')).split(',')
+                pa_li_info = player_response.get('streamingData', {}).get('licenseInfos', [])
                 if pa_li_info and (pa_li_info != ['']) and not httpd_is_live:
                     raise YouTubeException('Proxy is not running')
                 for li_info in pa_li_info:
-                    li_info = dict(urllib.parse.parse_qsl(li_info))
-                    if li_info.get('family') == 'widevine':
+                    if li_info.get('drmFamily') == 'WIDEVINE':
                         license_info['url'] = li_info.get('url', None)
                         if license_info['url']:
                             self._context.log_debug('Found widevine license url: |%s|' % license_info['url'])
@@ -1048,19 +1057,9 @@ class VideoInfo(object):
         has_video_stream = False
         ia_capabilities = self._context.inputstream_adaptive_capabilities()
 
-        # map frame rates to a more common representation to lessen the chance of double refresh changes
-        # sometimes 30 fps is 30 fps, more commonly it is 29.97 fps (same for all mapped frame rates)
-        fps_map = {'24': '23.976', '30': '29.97', '60': '59.94'}
-
         ipaddress = self._context.get_settings().httpd_listen()
         if ipaddress == '0.0.0.0':
             ipaddress = '127.0.0.1'
-
-        supported_mime_types = ['audio/mp4', 'video/mp4']
-        if 'vp9' in ia_capabilities or 'vp9.2' in ia_capabilities:
-            supported_mime_types.append('video/webm')
-        if 'vorbis' in ia_capabilities or 'opus' in ia_capabilities:
-            supported_mime_types.append('audio/webm')
 
         stream_info = {'video': {'height': '0', 'fps': '0', 'codec': '', 'mime': '', 'quality_label': '', 'bandwidth': 0},
                        'audio': {'bitrate': '0', 'codec': '', 'mime': '', 'bandwidth': 0}}
@@ -1094,9 +1093,16 @@ class VideoInfo(object):
 
             data[mime][i]['bandwidth'] = stream_map.get('bitrate')
 
-            data[mime][i]['frameRate'] = fps_map.get(stream_map.get('fps'), stream_map.get('fps'))
-            if data[mime][i]['frameRate']:
-                data[mime][i]['frameRate'] = str(format(float(data[mime][i]['frameRate']), '.3f'))
+            # map frame rates to a more common representation to lessen the chance of double refresh changes
+            # sometimes 30 fps is 30 fps, more commonly it is 29.97 fps (same for all mapped frame rates)
+            frame_rate = None
+            fps_scale_map = {24: 1001, 30: 1001, 60: 1001}
+            if 'fps' in stream_map:
+                fps = int(stream_map.get('fps'))
+                scale = fps_scale_map.get(fps) if fps_scale_map.get(fps) else 1000
+                frame_rate = '%d/%d' % (fps * 1000, scale)
+
+            data[mime][i]['frameRate'] = frame_rate
 
             url = urllib.parse.unquote(stream_map.get('url'))
 
@@ -1118,6 +1124,40 @@ class VideoInfo(object):
             data[mime][i]['indexRange'] = stream_map.get('index')
             data[mime][i]['init'] = stream_map.get('init')
 
+        default_mime_type = 'mp4'
+        supported_mime_types = ['audio/mp4', 'video/mp4']
+
+        if ('vp9' in ia_capabilities or 'vp9.2' in ia_capabilities) and any(m for m in data if m == 'video/webm'):
+            supported_mime_types.append('video/webm')
+
+        if ('vorbis' in ia_capabilities or 'opus' in ia_capabilities) and any(m for m in data if m == 'audio/webm'):
+            supported_mime_types.append('audio/webm')
+
+        if 'video/webm' in supported_mime_types and self._context.get_settings().use_webm_adaptation_set():
+            default_mime_type = 'webm'
+
+        if ('video/webm' in supported_mime_types and
+                'vp9.2' in ia_capabilities and
+                self._context.get_settings().include_hdr() and
+                self._context.inputstream_adaptive_auto_stream_selection() and
+                any(k for k in list(data['video/webm'].keys()) if '"vp9.2"' in data['video/webm'][k]['codecs'])):
+            # when hdr enabled and inputstream adaptive stream selection is set to automatic
+            # replace vp9 streams with vp9.2 (hdr) of the same resolution
+            webm_streams = {}
+
+            for key in list(data['video/webm'].keys()):
+                if '"vp9.2"' in data['video/webm'][key]['codecs']:
+                    webm_streams[key] = data['video/webm'][key]
+                elif '"vp9"' in data['video/webm'][key]['codecs']:
+                    if not any(k for k in list(data['video/webm'].keys())
+                               if '"vp9.2"' in data['video/webm'][k]['codecs'] and
+                                  data['video/webm'][key]['height'] == data['video/webm'][k]['height'] and
+                                  data['video/webm'][key]['width'] == data['video/webm'][k]['width']):
+                        webm_streams[key] = data['video/webm'][key]
+
+            if webm_streams:
+                data['video/webm'] = webm_streams
+
         out_list = ['<?xml version="1.0" encoding="UTF-8"?>\n'
                     '<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:xlink="http://www.w3.org/1999/xlink" '
                     'xsi:schemaLocation="urn:mpeg:dash:schema:mpd:2011 http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-DASH_schema_files/DASH-MPD.xsd" '
@@ -1127,7 +1167,11 @@ class VideoInfo(object):
         n = 0
         for mime in data:
             if mime in supported_mime_types:
-                out_list.append(''.join(['\t\t<AdaptationSet id="', str(n), '" mimeType="', mime, '" subsegmentAlignment="true" subsegmentStartsWithSAP="1" bitstreamSwitching="true">\n']))
+                default = False
+                if mime.endswith(default_mime_type):
+                    default = True
+
+                out_list.append(''.join(['\t\t<AdaptationSet id="', str(n), '" mimeType="', mime, '" subsegmentAlignment="true" subsegmentStartsWithSAP="1" bitstreamSwitching="true" default="', str(default).lower(), '">\n']))
                 out_list.append('\t\t\t<Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>\n')
                 for i in data[mime]:
                     stream_format = self.FORMAT.get(i, {})
@@ -1166,7 +1210,8 @@ class VideoInfo(object):
                         if match:
                             video_codec = match.group('codec')
 
-                        if 'vp9.2' == video_codec.lower() and 'vp9.2' not in ia_capabilities:
+                        if 'vp9.2' == video_codec.lower() and ('vp9.2' not in ia_capabilities or
+                                                               not self._context.get_settings().include_hdr()):
                             discarded_streams.append(get_discarded_video(mime, i, data[mime][i]))
                             continue
                         elif 'vp9' == video_codec.lower() and 'vp9' not in ia_capabilities:

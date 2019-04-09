@@ -314,10 +314,11 @@ def displaySections():
 
         addMenuDirectoryItem(string_load(30383) + string_load(30246), "plugin://plugin.video.embycon/?mode=SEARCH")
         addMenuDirectoryItem(string_load(30383) + string_load(30017), "plugin://plugin.video.embycon/?mode=SHOW_SERVER_SESSIONS")
-        addMenuDirectoryItem(string_load(30383) + string_load(30253), "plugin://plugin.video.embycon/?mode=CHANGE_USER")
+        addMenuDirectoryItem(string_load(30383) + string_load(30012), "plugin://plugin.video.embycon/?mode=CHANGE_USER")
 
     addMenuDirectoryItem(string_load(30383) + string_load(30011), "plugin://plugin.video.embycon/?mode=DETECT_SERVER_USER")
     addMenuDirectoryItem(string_load(30383) + string_load(30254), "plugin://plugin.video.embycon/?mode=SHOW_SETTINGS")
+    addMenuDirectoryItem(string_load(30383) + string_load(30395), "plugin://plugin.video.embycon/?mode=CLEAR_CACHE")
 
     # only add these if we have other collection which means we have a valid server conn
     if collections:
@@ -452,7 +453,7 @@ def getCollections():
                                  '&format=json')
             collections.append(item_data)
 
-        if collection_type in ["livetv"]:
+        if collection_type == "livetv":
             collections.append({
                 'title': string_load(30311) + item_name + string_load(30360),
                 'art': art,
@@ -489,7 +490,7 @@ def getCollections():
                          '&format=json'),
                 'media_type': collection_type})
 
-        if collection_type in ["homevideos"]:
+        if collection_type == "homevideos":
             collections.append({
                 'title': string_load(30311) + item_name,
                 'art': art,
@@ -544,7 +545,7 @@ def getCollections():
                          '&format=json'),
                 'media_type': collection_type})
 
-        if collection_type in ["boxsets"]:
+        if collection_type == "boxsets":
             collections.append({
                 'title': string_load(30311) + item_name,
                 'art': art,
@@ -563,18 +564,12 @@ def getCollections():
                          '&format=json'),
                 'media_type': collection_type})
 
-        if collection_type in ["movies"]:
+        if collection_type == "playlists":
             collections.append({
                 'title': string_load(30311) + item_name,
                 'art': art,
                 'path': ('{server}/emby/Users/{userid}/Items' +
                          '?ParentId=' + item.get("Id") +
-                         '&IsVirtualUnaired=false' +
-                         '&IncludeItemTypes=Movie' +
-                         '&CollapseBoxSetItems=' + str(group_movies) +
-                         '&GroupItemsIntoCollections=' + str(group_movies) +
-                         '&Recursive=true' +
-                         '&IsMissing=False' +
                          '&Fields={field_filters}' +
                          '&ImageTypeLimit=1' +
                          '&SortBy=Name' +
@@ -721,6 +716,24 @@ def getCollections():
 
         if collection_type == "movies":
             collections.append({
+                'title': string_load(30311) + item_name,
+                'art': art,
+                'path': ('{server}/emby/Users/{userid}/Items' +
+                         '?ParentId=' + item.get("Id") +
+                         '&IsVirtualUnaired=false' +
+                         '&IncludeItemTypes=Movie' +
+                         '&CollapseBoxSetItems=' + str(group_movies) +
+                         '&GroupItemsIntoCollections=' + str(group_movies) +
+                         '&Recursive=true' +
+                         '&IsMissing=False' +
+                         '&Fields={field_filters}' +
+                         '&ImageTypeLimit=1' +
+                         '&SortBy=Name' +
+                         '&SortOrder=Ascending' +
+                         '&format=json'),
+                'media_type': collection_type})
+            
+            collections.append({
                 'title': string_load(30311) + item_name + string_load(30285),
                 'art': art,
                 'path': ('{server}/emby/Users/{userid}/Items' +
@@ -791,7 +804,7 @@ def getCollections():
                 'media_type': collection_type})
 
             collections.append({
-                'title': "Library - " + item_name + ' - Pages',
+                'title': string_load(30311) + item_name + string_load(30397),
                 'item_type': 'plugin_link',
                 'art': art,
                 'path': 'plugin://plugin.video.embycon/?mode=MOVIE_PAGES&parent_id=' + item.get("Id"),

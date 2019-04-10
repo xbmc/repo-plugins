@@ -27,7 +27,6 @@ class ADOBE():
     def getDeviceID(self):
         addon_profile_path = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
         fname = os.path.join(addon_profile_path, 'device.id')
-        #xbmc.log("FILE PATH == "+str(fname))
         if not os.path.isfile(fname):
             if not os.path.exists(addon_profile_path):
                 os.makedirs(addon_profile_path)         

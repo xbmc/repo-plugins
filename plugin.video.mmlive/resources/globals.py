@@ -16,6 +16,7 @@ from datetime import datetime, timedelta
 import time
 import cookielib
 import base64
+import requests, urlparse
 
 
 addon_handle = int(sys.argv[1])
@@ -114,15 +115,12 @@ def SET_STREAM_QUALITY(url):
     
     if len(stream_title) > 0:
         ret =-1      
-        stream_title.sort(key=natural_sort_key)  
-        print "PLAY BEST SETTING"
-        print PLAY_BEST
+        stream_title.sort(key=natural_sort_key)
         if str(PLAY_BEST) == 'true':
             ret = len(stream_title)-1            
         else:
             dialog = xbmcgui.Dialog() 
             ret = dialog.select('Choose Stream Quality', stream_title)
-            print ret
         if ret >=0:
             url = stream_url.get(stream_title[ret])           
         else:
@@ -220,7 +218,6 @@ def getGameClock(current_games, game_id):
 
     for game in games:        
         if str(game['id']) == str(game_id):
-            print game
             clock = str(game['clock'])
             per = str(game['per'])
             state = str(game['state'])
@@ -257,46 +254,23 @@ def getAppConfig():
     #BASE_PATH = api['base']['sche']
 
 
+def tokenTurner(media_token, stream_url, mvpd):
+    url = ('https://token.ncaa.com/token/token_spe_mml?profile=mml&path=%s&format=json&accessTokenType=adobe&accessToken=%s') % \
+          (urlparse.urlparse(stream_url).path, urllib.quote_plus(str(base64.b64decode(media_token))))
 
-def tokenTurner(media_token, stream_url, mvpd):       
-    #url = 'http://token.vgtf.net/token/turner'
-    url = 'https://token.vgtf.net/token/token_spe_mml?profile=mml'
-
-    cj = cookielib.LWPCookieJar()
-    cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-    opener.addheaders = [ ("Current-Type", "application/x-www-form-urlencoded"),                            
-                        ("Pragma", "no-cache"),
-                        ("Content-Type", "application/x-www-form-urlencoded"),                            
-                        ("Accept-Encoding", "deflate"),    
-                        ("Connection", "keep-alive"),                                                                            
-                        ("User-Agent", UA_MMOD)]
-    
-    xbmc.log(str(base64.b64decode(media_token)))    
-    payload = urllib.urlencode({'accessToken' : str(base64.b64decode(media_token)),                                
-                            'accessTokenType' : 'Adobe',
-                            #'sessionId': '05a564d7c8622b5dd1c67f0ae737c5bb1515d66a~auth~win8~mml~100~1489621236122',
-                            #'throttled' : 'no',
-                            'appData' : '{"clientTime":0}',
-                            'mvpd' : mvpd,                            
-                            'path' : FIND(stream_url,BASE_PATH,'master.m3u8')+'*'
-                            })
-
-    resp = opener.open(url, payload)
-    response = resp.read()    
-    resp.close()    
-    hdnts = FIND(response,'<token>','</token>')      
-    stream_url += '?hdnts='+hdnts
-    xbmc.log(stream_url)    
-    stream_url = stream_url + '|User-Agent='+UA_MMOD
-        
-
+    headers = {'app-id': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6Im5jYWEtbW1sLWlvcy1ncnJjZWwiLCJuZXR3b3JrIj'
+                         'oibmNhYSIsInBsYXRmb3JtIjoiaW9zIiwicHJvZHVjdCI6Im1tbCIsImlhdCI6MTUxNTcwMDExM30.NLuTO5WIGNKd7Y'
+                         'XGIEK0LVawhw68mawSQqnGAsRUs80',
+               'User-Agent': 'MML%20iOS/166 CFNetwork/976 Darwin/18.2.0'
+               }
+    r = requests.get(url, headers=headers)
+    stream_url += '?hdnts=' + r.json()['auth']['token'] + '|User-Agent=MML%20iOS/166 CFNetwork/976 Darwin/18.2.0'
     return stream_url
 
 
 def fetchStream(game_id,archive=None):    
     now = datetime.now()
-    url = 'http://data.ncaa.com/mml/'+str(now.year)+'/mobile/video/'+game_id+'_bk.json'
+    url = 'http://data.ncaa.com/mml/'+str(now.year)+'/mobile/video/'+game_id+'_pr.json'
     if archive == 'archive': url = 'http://data.ncaa.com/mml/'+str(now.year)+'/mobile/game/game_'+game_id+'.json'
     now = datetime.now()
     req = urllib2.Request(url)    
@@ -313,8 +287,7 @@ def fetchStream(game_id,archive=None):
         stream_url = json_source['game']['videos']['video'][0]['connected']
     else:
         stream_url = json_source['connected1']
-        
-    
+
     return stream_url
 
 
@@ -336,15 +309,15 @@ def getAuthCookie():
 
 def addStream(name,link_url,title,game_id,icon=None,fanart=None):
     ok=True
-    u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_id="+urllib.quote_plus(str(game_id))    
-        
-    liz=xbmcgui.ListItem(name)
-    liz.setArt({'icon': ICON, 'thumb': ICON})
+    u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_id="+urllib.quote_plus(str(game_id))
 
-    if fanart != None:        
-        liz.setArt({'fanart': fanart})      
-    else:        
-        liz.setArt({'fanart': FANART})      
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({'icon': ICON, 'thumb': ICON })
+
+    if fanart != None:
+        liz.setArt({'fanart': fanart})
+    else:
+        liz.setArt({'fanart': FANART})
 
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": title } )    
@@ -353,37 +326,45 @@ def addStream(name,link_url,title,game_id,icon=None,fanart=None):
     xbmcplugin.setContent(addon_handle, 'episodes')    
     return ok
 
-def addDir(name,url,mode,icon,fanart=None):       
+def addDir(name,url,mode,iconimage,fanart=None):       
     ok=True    
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-    
-    liz=xbmcgui.ListItem(name)
-    liz.setArt({'icon': icon, 'thumb': icon})
+
+    liz = xbmcgui.ListItem(name)
+    if iconimage is not None:
+        liz.setArt({'icon': iconimage, 'thumb': iconimage})
+    else:
+        liz.setArt({'icon': ICON, 'thumb': ICON})
+
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
 
-    if fanart != None:        
-        liz.setArt({'fanart': fanart})      
-    else:        
-        liz.setArt({'fanart': FANART})      
+    if fanart != None:
+        liz.setArt({'fanart': fanart})
+    else:
+        liz.setArt({'fanart': FANART})
+
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)    
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
 
-def addLink(name,url,icon,fanart=None):
-    ok=True            
-    
-    liz=xbmcgui.ListItem(name)
-    liz.setArt({'icon': icon, 'thumb': icon})
+def addLink(name,url,iconimage,fanart=None):
+    ok=True
+    liz = xbmcgui.ListItem(name)
+
+    if iconimage is not None:
+        liz.setArt({'icon': iconimage, 'thumb': iconimage})
+    else:
+        liz.setArt({'icon': ICON, 'thumb': ICON})
+
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
     liz.setProperty("IsPlayable", "true")
-        
-    if fanart != None:        
-        liz.setArt({'fanart': fanart})      
-    else:        
-        liz.setArt({'fanart': FANART})      
 
+    if fanart is not None:
+        liz.setArt({'fanart': fanart})
+    else:
+        liz.setArt({'fanart': FANART})
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)    
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
@@ -392,8 +373,8 @@ def addLink(name,url,icon,fanart=None):
 
 # KODI ADDON GLOBALS
 ADDON_HANDLE = int(sys.argv[1])
+ROOTDIR = xbmcaddon.Addon(id='plugin.video.mmlive').getAddonInfo('path')
 ADDON = xbmcaddon.Addon()
-ROOTDIR = ADDON.getAddonInfo('path')
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_VERSION = ADDON.getAddonInfo('version')
 ADDON_PATH = xbmc.translatePath(ADDON.getAddonInfo('path'))
@@ -403,8 +384,11 @@ LOCAL_STRING = ADDON.getLocalizedString
 FANART = ROOTDIR+"/fanart.jpg"
 ICON = ROOTDIR+"/icon.png"
 
+#Settings file location
+settings = xbmcaddon.Addon(id='plugin.video.mmlive')
+
 #Main settings
-NO_SPOILERS = str(ADDON.getSetting(id="no_spoilers"))
+NO_SPOILERS = str(settings.getSetting(id="no_spoilers"))
 
 #User Agents
 UA_IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143'

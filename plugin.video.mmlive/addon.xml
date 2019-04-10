@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mmlive" name="March Madness Live" version="2017.3.19" provider-name="eracknaphobia">
-  <requires>
-   <import addon="xbmc.python" version="2.25.0"/>      
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="main.py">
+<addon id="plugin.video.mmlive" name="March Madness Live" version="2019.3.28" provider-name="eracknaphobia">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.requests" version="2.9.1"/>
+        <import addon="inputstream.adaptive" version="2.0.10" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
-  </extension>  
-  
-  <extension point="xbmc.addon.metadata">    
-    <platform>all</platform>
-    <summary lang="en_GB"></summary>
-    <description lang="en_GB">The National Collegiate Athletic Association (NCAA) Men's Division I Basketball Tournament is a single-elimination tournament played each spring in the United States, currently featuring 68 college basketball teams, to determine the national championship of the major college basketball teams.</description>
-    <disclaimer lang="en_GB"></disclaimer>
-    <language>en</language>
-    <platform>all</platform>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.kodi.tv/showthread.php?tid=264888</forum>
-    <website></website>
-    <email></email>
-    <source>https://github.com/eracknaphobia/plugin.video.mmlive/tree/krypton</source>
-  </extension>
+    </extension>
+
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Lets you stream all the March Madness games live.</summary>
+        <description lang="en_GB">The National Collegiate Athletic Association (NCAA) Men's Division I Basketball
+            Tournament is a single-elimination tournament played each spring in the United States, currently featuring
+            68 college basketball teams, to determine the national championship of the major college basketball teams.
+        </description>
+        <disclaimer lang="en_GB">Requires a valid US cable / satellite subscription</disclaimer>
+        <language>en</language>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=264888</forum>
+        <source>https://github.com/eracknaphobia/plugin.video.mmlive</source>
+        <website>https://www.ncaa.com/march-madness-live/watch</website>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
 </addon>
 

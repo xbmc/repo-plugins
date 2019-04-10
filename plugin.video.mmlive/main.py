@@ -131,19 +131,28 @@ def setArchiveStreams(tourn_day, json_source, teams):
 
 def startStream(game_id):
     stream_url = fetchStream(game_id,addon_url)
-    
-    if addon_url == 'archive':        
-        playable_stream = stream_url + '|User-Agent='+UA_MMOD
+
+    if addon_url == 'archive':
+        stream_url += '|User-Agent='+UA_MMOD
     else:
         adobe = ADOBE(SERVICE_VARS)        
         resource_id = 'truTV'
         mvpd = adobe.authorizeDevice(resource_id)        
         media_token = adobe.mediaToken(resource_id)          
-        playable_stream = tokenTurner(media_token,stream_url,mvpd)        
+        stream_url = tokenTurner(media_token,stream_url,mvpd)
 
-    listitem = xbmcgui.ListItem(path=playable_stream)        
+    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
+        listitem = xbmcgui.ListItem(path=stream_url.split("|")[0])
+        listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
+        listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+        listitem.setProperty('inputstream.adaptive.stream_headers', stream_url.split("|")[1])
+        listitem.setProperty('inputstream.adaptive.license_key', "|" + stream_url.split("|")[1])
+    else:
+        listitem = xbmcgui.ListItem(path=stream_url)
+        listitem.setMimeType("application/x-mpegURL")
+
+    #listitem = xbmcgui.ListItem(path=playable_stream)
     xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=listitem)
-
 
 
 def get_params():

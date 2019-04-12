@@ -53,7 +53,7 @@ msgid "Already have a USTVnow account?"
 msgstr ""
 
 msgctxt "#30009"
-msgid "Exit"
+msgid "Exit Add-on"
 msgstr ""
 
 msgctxt "#30010"
@@ -142,4 +142,12 @@ msgstr ""
 
 msgctxt "#30031"
 msgid "No Schedules Found"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Lineup"
 msgstr ""

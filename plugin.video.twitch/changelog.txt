@@ -1,3 +1,8 @@
+2.4.3
+[fix] ads causing playback issues with InputStream Adaptive
+[fix] migrate url shortener from Google URL Shortener to Google Firebase Dynamic Links
+[upd] move Live Notifications to it's own thread
+
 2.4.2
 [fix] fixed issue with Live Notifications if no followed channels are live
 

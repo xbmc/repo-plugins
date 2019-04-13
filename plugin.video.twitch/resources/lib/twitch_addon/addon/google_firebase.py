@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-    Copyright (C) 2012-2018 Twitch-on-Kodi
+    Copyright (C) 2012-2019 Twitch-on-Kodi
 
     This file is part of Twitch-on-Kodi (plugin.video.twitch)
 
@@ -13,19 +13,27 @@ import json
 import requests
 from base64 import b64decode
 
+from six.moves.urllib_parse import quote
+
 from .common import log_utils
 
-__key = 'QUl6YVN5RE1qUHVQTzExNDAxc19Ydl95TVNaa0hTUVZTRUwzV1R3'
+__key = 'QUl6YVN5RDBtVGtVUU1TQnZ2dzVobnN4LTRZeGktNXNKSmdRR0E4'
 
 
-def googl_url(url):
-    post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=%s' % b64decode(__key)
-    data = {'longUrl': url}
+def dynamic_links_short_url(url):
+    post_url = 'https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=%s' % b64decode(__key)
+    data = {
+        'longDynamicLink': 'https://twitchaddon.page.link/?link=%s' % quote(url),
+        'suffix': {
+            'option': 'SHORT'
+        }
+    }
     headers = {'content-type': 'application/json'}
     request = requests.post(post_url, data=json.dumps(data), headers=headers)
     json_data = request.json()
-    if 'id' in json_data:
-        return json_data['id']
+
+    if 'shortLink' in json_data:
+        return json_data['shortLink']
     else:
         if 'error' in json_data:
             if 'errors' in json_data['error']:

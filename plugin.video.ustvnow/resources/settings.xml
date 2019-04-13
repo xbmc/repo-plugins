@@ -3,16 +3,7 @@
     <setting id="Enable_Debugging" type="bool"   label="30000" default="false" />
     <setting id="User_Email"       type="text"   label="30001" default="" />
     <setting id="User_Password"    type="text"   label="30002" default=""  option="hidden"/>
-    <setting id="URL_Type"         type="enum"   label="30025" default="0" values="M3U8|MP4" />
-    <setting id="URL_Quality"      type="enum"   label="30026" default="1" values="Low|Medium|High" visible="eq(-1,1)" subsetting="true"/>
     <setting id="uEPG_Settings"    type="action" label="30030" default=""  action="RunPlugin(plugin://plugin.video.ustvnow/?mode=22)" option="close" />  
-    <setting                       type="lsep"   label="30017"/>
-    <setting id="User_Plan"        type="text"   label="30020" default=""  enable="false"/>
-    <setting id="User_Expires"     type="text"   label="30018" default=""  enable="false"/>
     <setting id="User_Token"       type="text"   label="30002" default=""  visible="false"/>
-    <setting id="User_Paskey"      type="text"   label="30002" default=""  visible="false"/>
-    <setting id="User_isFree"      type="text"   label="30002" default=""  visible="false"/>
-    <setting id="Last_DVRpoints"   type="text"   label="30002" default=""  visible="false"/>
-    <setting id="User_DVRpoints"   type="text"   label="30002" default=""  visible="false"/>
-    <setting id="User_Reminders"   type="text"   label="30002" default=""  visible="false"/>
+    <setting id="User_Device"      type="text"   label="30002" default=""  visible="false"/>
 </settings>

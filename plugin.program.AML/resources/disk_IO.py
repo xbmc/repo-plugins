@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+#
 # Advanced MAME Launcher filesystem I/O functions
 #
 
-# Copyright (c) 2016-2018 Wintermute0110 <wintermute0110@gmail.com>
+# Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,12 +36,9 @@ import copy
 import xml.etree.ElementTree as ET
 
 # --- AEL packages ---
-from constants import *
-from utils import *
-try:
-    from utils_kodi import *
-except:
-    from utils_kodi_standalone import *
+from .constants import *
+from .utils import *
+from .utils_kodi import *
 
 # -------------------------------------------------------------------------------------------------
 # Advanced MAME Launcher data model
@@ -106,8 +104,6 @@ def fs_new_machine_dic():
         'display_type'   : [], # (raster|vector|lcd|unknown) #REQUIRED>
         'display_rotate' : [], # (0|90|180|270) #REQUIRED>
         'input'          : {},
-        'coins'          : 0,  # Deprecated field 0.9.6
-        'control_type'   : [], # Deprecated field 0.9.6
         'softwarelists'  : [],
         'devices'        : [], # List of dictionaries. See comments avobe.
         # >> Custom AML data (from INI files or generated)
@@ -307,18 +303,29 @@ def fs_new_control_dic():
         'stats_total_machines' : 0,
 
         # --- Timestamps ---
-        't_XML_extraction'      : 0,
-        't_MAME_DB_build'       : 0,
-        't_MAME_Audit_DB_build' : 0,
-        't_MAME_Catalog_build'  : 0,
-        't_MAME_ROMs_scan'      : 0,
-        't_MAME_assets_scan'    : 0,
-        't_Custom_Filter_build' : 0,
-        't_SL_DB_build'         : 0,
-        't_SL_ROMs_scan'        : 0,
-        't_SL_assets_scan'      : 0,
-        't_MAME_audit'          : 0,
-        't_SL_audit'            : 0,
+        # MAME
+        't_XML_extraction'          : 0,
+        't_MAME_DB_build'           : 0,
+        't_MAME_Audit_DB_build'     : 0,
+        't_MAME_Catalog_build'      : 0,
+        't_MAME_ROMs_scan'          : 0,
+        't_MAME_assets_scan'        : 0,
+        't_MAME_plots_build'        : 0,
+        't_MAME_fanart_build'       : 0,
+        't_MAME_machine_hash'       : 0,
+        't_MAME_asset_hash'         : 0,
+        't_MAME_render_cache_build' : 0,
+        't_MAME_asset_cache_build'  : 0,
+        # Software Lists
+        't_SL_DB_build'             : 0,
+        't_SL_ROMs_scan'            : 0,
+        't_SL_assets_scan'          : 0,
+        't_SL_plots_build'          : 0,
+        't_SL_fanart_build'         : 0,
+        # Misc
+        't_Custom_Filter_build'     : 0,
+        't_MAME_audit'              : 0,
+        't_SL_audit'                : 0,
 
         # --- Filed in when building main MAME database ---
         'ver_AML'       : 0,
@@ -343,7 +350,8 @@ def fs_new_control_dic():
         'stats_processed_machines' : 0,
         'stats_parents'            : 0,
         'stats_clones'             : 0,
-        'stats_runnable'           : 0, # Excluding devices (devices are not runnable)
+        # Excluding devices machines (devices are not runnable)
+        'stats_runnable'           : 0,
         'stats_runnable_parents'   : 0,
         'stats_runnable_clones'    : 0,
         # Main filters
@@ -369,6 +377,29 @@ def fs_new_control_dic():
         'stats_samples'            : 0,
         'stats_samples_parents'    : 0,
         'stats_samples_clones'     : 0,
+
+        # --- Filed in when building the MAME catalogs in  mame_build_MAME_catalogs() ---
+        'stats_MF_Normal_Total'          : 0,
+        'stats_MF_Normal_Good'           : 0,
+        'stats_MF_Normal_Imperfect'      : 0,
+        'stats_MF_Normal_Nonworking'     : 0,
+        'stats_MF_Unusual_Total'         : 0,
+        'stats_MF_Unusual_Good'          : 0,
+        'stats_MF_Unusual_Imperfect'     : 0,
+        'stats_MF_Unusual_Nonworking'    : 0,
+        'stats_MF_Nocoin_Total'          : 0,
+        'stats_MF_Nocoin_Good'           : 0,
+        'stats_MF_Nocoin_Imperfect'      : 0,
+        'stats_MF_Nocoin_Nonworking'     : 0,
+        'stats_MF_Mechanical_Total'      : 0,
+        'stats_MF_Mechanical_Good'       : 0,
+        'stats_MF_Mechanical_Imperfect'  : 0,
+        'stats_MF_Mechanical_Nonworking' : 0,
+        'stats_MF_Dead_Total'            : 0,
+        'stats_MF_Dead_Good'             : 0,
+        'stats_MF_Dead_Imperfect'        : 0,
+        'stats_MF_Dead_Nonworking'       : 0,
+        # Devices driver_status is always the empty string ''
 
         # --- Filed in when building the ROM audit databases ---
         'stats_audit_MAME_machines_runnable' : 0,
@@ -459,37 +490,43 @@ def fs_new_control_dic():
         'audit_SL_items_without_CHD'       : 0,
 
         # --- Filed in by the MAME ROM/CHD/Samples scanner ---
-        # >> ROM_Set_ROM_archives.json database
-        # Number of ROM ZIP files, including devices.
+        # ROM_Set_ROM_list.json database
+        # Number of ROM ZIP files, including device ROMs.
         'scan_ROM_ZIP_files_total'   : 0,
         'scan_ROM_ZIP_files_have'    : 0,
         'scan_ROM_ZIP_files_missing' : 0,
 
-        # >> ROM_Set_CHD_archives.json database
+        # ROM_Set_Sample_list.json
+        # Number of Samples ZIP files.
+        'scan_Samples_ZIP_total'   : 0,
+        'scan_Samples_ZIP_have'    : 0,
+        'scan_Samples_ZIP_missing' : 0,
+
+        # ROM_Set_CHD_list.json database
         # Number of CHD files.
         'scan_CHD_files_total'   : 0,
         'scan_CHD_files_have'    : 0,
         'scan_CHD_files_missing' : 0,
 
-        # >> ROM_Set_machine_archives.json database
+        # ROM_Set_machine_files.json database
         # Number of runnable machines that need one or more ROM ZIP file to run (excluding devices).
-        'scan_machine_archives_ROM_total'   : 0,
         # Number of machines you can run, excluding devices.
-        'scan_machine_archives_ROM_have'    : 0,
         # Number of machines you cannot run, excluding devices.
+        'scan_machine_archives_ROM_total'   : 0,
+        'scan_machine_archives_ROM_have'    : 0,
         'scan_machine_archives_ROM_missing' : 0,
 
-        # Number of machines that need one or more CHDs to run.
-        'scan_machine_archives_CHD_total'   : 0,
-        # Number of machines with CHDs you can run.
-        'scan_machine_archives_CHD_have'    : 0,
-        # Number of machines with CHDs you cannot run.
-        'scan_machine_archives_CHD_missing' : 0,
+        # Sames with Samples
+        'scan_machine_archives_Samples_total'   : 0,
+        'scan_machine_archives_Samples_have'    : 0,
+        'scan_machine_archives_Samples_missing' : 0,
 
-        # >> Samples
-        'scan_Samples_total'   : 0,
-        'scan_Samples_have'    : 0,
-        'scan_Samples_missing' : 0,
+        # Number of machines that need one or more CHDs to run.
+        # Number of machines with CHDs you can run.
+        # Number of machines with CHDs you cannot run.
+        'scan_machine_archives_CHD_total'   : 0,
+        'scan_machine_archives_CHD_have'    : 0,
+        'scan_machine_archives_CHD_missing' : 0,
 
         # --- Filed in by the SL ROM/CHD scanner ---
         'scan_SL_archives_ROM_total'   : 0,
@@ -574,44 +611,79 @@ def change_control_dic(control_dic, field, value):
         raise TypeError('Field {0} not in control_dic'.format(field))
 
 #
-# AML version is like this: xxx.yyy.zzz[-|~][alpha[jj]|beta[jj]]
-# It gets converted to: xxx.yyy.zzz ijj -> int xxx,yyy,zzz,ijj
-# This function must be tested thorougly with a file in ~/tools/ directory.
+# All version numbers must be less than 100, except the major version.
+# AML version is like this: aa.bb.cc[-|~][alpha[dd]|beta[dd]]
+# It gets converted to: aa.bb.cc Rdd -> int aab,bcc,Rdd
+# The number 2,147,483,647 is the maximum positive value for a 32-bit signed binary integer.
+#
+# aa.bb.cc.Rdd    formatted aab,bcc,Xdd
+#  |  |  | | |--> Beta/Alpha flag 0, 1, ..., 99
+#  |  |  | |----> Release kind flag 
+#  |  |  |        5 for non-beta, non-alpha, non RC versions.
+#  |  |  |        2 for RC versions
+#  |  |  |        1 for beta versions
+#  |  |  |        0 for alpha versions
+#  |  |  |------> Build version 0, 1, ..., 99
+#  |  |---------> Minor version 0, 1, ..., 99
+#  |------------> Major version 0, ..., infinity
 #
 def fs_AML_version_str_to_int(AML_version_str):
-    # --- Parse versions like 0.9.8 ---
-    m_obj = re.search('^(\d+?)\.(\d+?)\.(\d+?)', AML_version_str)
-    if m_obj:
-        major = int(m_obj.group(1))
-        minor = int(m_obj.group(2))
-        build = int(m_obj.group(3))
-        log_debug('mame_get_numerical_version() major  {0}'.format(major))
-        log_debug('mame_get_numerical_version() minor  {0}'.format(minor))
-        log_debug('mame_get_numerical_version() build  {0}'.format(build))
-        AML_version_int = major * 100000000 + minor * 1000000 + build * 1000
-        return AML_version_int
+    log_verb('fs_AML_version_str_to_int() AML_version_str = "{0}"'.format(AML_version_str))
+    version_int = 0
+    # Parse versions like 0.9.8[-|~]alpha[jj]
+    m_obj_alpha_n = re.search('^(\d+?)\.(\d+?)\.(\d+?)[\-\~](alpha|beta)(\d+?)', AML_version_str)
+    # Parse versions like 0.9.8[-|~]alpha
+    m_obj_alpha = re.search('^(\d+?)\.(\d+?)\.(\d+?)[\-\~](alpha|beta)', AML_version_str)
+    # Parse versions like 0.9.8
+    m_obj_standard = re.search('^(\d+?)\.(\d+?)\.(\d+?)', AML_version_str)
 
-    # --- Parse versions like 0.9.8[-|~][alpha|beta] ---
-    m_obj = re.search('^(\d+?)\.(\d+?)\.(\d+?)[\-\~](alpha|beta)', AML_version_str)
-    if m_obj:
-        major  = int(m_obj.group(1))
-        minor  = int(m_obj.group(2))
-        build  = int(m_obj.group(3))
-        string = int(m_obj.group(4))
-        if string == 'alpha':  string_int = 1
-        elif string == 'beta': string_int = 2
-        log_debug('mame_get_numerical_version() major       {0}'.format(major))
-        log_debug('mame_get_numerical_version() minor       {0}'.format(minor))
-        log_debug('mame_get_numerical_version() build       {0}'.format(build))
-        log_debug('mame_get_numerical_version() string      {0}'.format(string))
-        log_debug('mame_get_numerical_version() string_int  {0}'.format(string_int))
-        AML_version_int = major * 100000000 + minor * 1000000 + build * 1000 + string_int * 100
-        return AML_version_int
+    if m_obj_alpha_n:
+        major    = int(m_obj_alpha_n.group(1))
+        minor    = int(m_obj_alpha_n.group(2))
+        build    = int(m_obj_alpha_n.group(3))
+        kind_str = m_obj_alpha_n.group(4)
+        beta     = int(m_obj_alpha_n.group(5))
+        if kind_str == 'alpha':
+            release_flag = 0
+        elif kind_str == 'beta':
+            release_flag = 1
+        # log_debug('fs_AML_version_str_to_int() major        {0}'.format(major))
+        # log_debug('fs_AML_version_str_to_int() minor        {0}'.format(minor))
+        # log_debug('fs_AML_version_str_to_int() build        {0}'.format(build))
+        # log_debug('fs_AML_version_str_to_int() kind_str     {0}'.format(kind_str))
+        # log_debug('fs_AML_version_str_to_int() release_flag {0}'.format(release_flag))
+        # log_debug('fs_AML_version_str_to_int() beta         {0}'.format(beta))
+        version_int = major * 10000000 + minor * 100000 + build * 1000 + release_flag * 100 + beta
+    elif m_obj_alpha:
+        major    = int(m_obj_alpha.group(1))
+        minor    = int(m_obj_alpha.group(2))
+        build    = int(m_obj_alpha.group(3))
+        kind_str = m_obj_alpha.group(4)
+        if kind_str == 'alpha':
+            release_flag = 0
+        elif kind_str == 'beta':
+            release_flag = 1
+        # log_debug('fs_AML_version_str_to_int() major        {0}'.format(major))
+        # log_debug('fs_AML_version_str_to_int() minor        {0}'.format(minor))
+        # log_debug('fs_AML_version_str_to_int() build        {0}'.format(build))
+        # log_debug('fs_AML_version_str_to_int() kind_str     {0}'.format(kind_str))
+        # log_debug('fs_AML_version_str_to_int() release_flag {0}'.format(release_flag))
+        version_int = major * 10000000 + minor * 100000 + build * 1000 + release_flag * 100
+    elif m_obj_standard:
+        major = int(m_obj_standard.group(1))
+        minor = int(m_obj_standard.group(2))
+        build = int(m_obj_standard.group(3))
+        release_flag = 5
+        # log_debug('fs_AML_version_str_to_int() major {0}'.format(major))
+        # log_debug('fs_AML_version_str_to_int() minor {0}'.format(minor))
+        # log_debug('fs_AML_version_str_to_int() build {0}'.format(build))
+        version_int = major * 10000000 + minor * 100000 + build * 1000 + release_flag * 100
+    else:
+        log_error('AML addon version "{0}" cannot be parsed.'.format(AML_version_str))
+        raise TypeError
+    log_verb('fs_AML_version_str_to_int() version_int = {0}'.format(version_int))
 
-    # --- Parse versions like 0.9.8[-|~][alphaiii|betaiii] ---
-    raise Addon_Error('Unknown version string "{0}"'.format(AML_version_str))
-
-    return 0
+    return version_int
 
 def fs_create_empty_control_dic(PATHS, AML_version_str):
     log_info('fs_create_empty_control_dic() Creating empty control_dic')
@@ -867,6 +939,25 @@ def fs_write_JSON_file(json_filename, json_data, verbose = True):
         write_time_s = l_end - l_start
         log_debug('fs_write_JSON_file() Writing time {0:f} s'.format(write_time_s))
 
+def fs_write_JSON_file_pprint(json_filename, json_data, verbose = True):
+    l_start = time.time()
+    if verbose:
+        log_debug('fs_write_JSON_file_pprint() "{0}"'.format(json_filename))
+    try:
+        with io.open(json_filename, 'wt', encoding='utf-8') as file:
+            file.write(unicode(json.dumps(
+                json_data, ensure_ascii = False, sort_keys = True, indent = 1, separators = (', ', ' : '))))
+    except OSError:
+        kodi_notify('Advanced MAME Launcher',
+                    'Cannot write {0} file (OSError)'.format(json_filename))
+    except IOError:
+        kodi_notify('Advanced MAME Launcher',
+                    'Cannot write {0} file (IOError)'.format(json_filename))
+    l_end = time.time()
+    if verbose:
+        write_time_s = l_end - l_start
+        log_debug('fs_write_JSON_file_pprint() Writing time {0:f} s'.format(write_time_s))
+
 def fs_write_JSON_file_lowmem(json_filename, json_data, verbose = True):
     l_start = time.time()
     if verbose:
@@ -970,6 +1061,7 @@ def fs_extract_MAME_version(PATHS, mame_prog_FN):
 def fs_extract_MAME_XML(PATHS, mame_prog_FN, AML_version_str):
     (mame_dir, mame_exec) = os.path.split(mame_prog_FN.getPath())
     log_info('fs_extract_MAME_XML() mame_prog_FN "{0}"'.format(mame_prog_FN.getPath()))
+    log_info('fs_extract_MAME_XML() Saving XML   "{0}"'.format(PATHS.MAME_XML_PATH.getPath()))
     log_debug('fs_extract_MAME_XML() mame_dir     "{0}"'.format(mame_dir))
     log_debug('fs_extract_MAME_XML() mame_exec    "{0}"'.format(mame_exec))
     pDialog = xbmcgui.DialogProgress()
@@ -1006,7 +1098,7 @@ def fs_extract_MAME_XML(PATHS, mame_prog_FN, AML_version_str):
     change_control_dic(control_dic, 'ver_AML_str', AML_version_str)
     change_control_dic(control_dic, 'stats_total_machines', stats_total_machines)
     change_control_dic(control_dic, 't_XML_extraction', time.time())
-    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic, verbose = True)
 
     return (filesize, stats_total_machines)
 
@@ -1101,16 +1193,17 @@ def fs_set_Sample_flag(m_render, new_Sample_flag):
     m_render['flags'] = '{0}{1}{2}{3}{4}'.format(flag_ROM, flag_CHD, flag_Samples, flag_SL, flag_Devices)
 
 # -------------------------------------------------------------------------------------------------
-# Hashed databases. Useful when only one item in a big dictionary is required.
+# MAME hashed databases. Useful when only one item in a big dictionary is required.
 # -------------------------------------------------------------------------------------------------
 # Hash database with 256 elements (2 hex digits)
-def fs_build_main_hashed_db(PATHS, machines, machines_render, pDialog):
+def fs_build_main_hashed_db(PATHS, settings, control_dic, machines, machines_render):
     log_info('fs_build_main_hashed_db() Building main hashed database ...')
 
     # machine_name -> MD5 -> take two letters -> aa.json, ab.json, ...
     # A) First create an index
     #    db_main_hash_idx = { 'machine_name' : 'aa', ... }
     # B) Then traverse a list [0, 1, ..., f] and write the machines in that sub database section.
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', 'Building main hashed database ...')
     db_main_hash_idx = {}
     for key in machines:
@@ -1141,11 +1234,15 @@ def fs_build_main_hashed_db(PATHS, machines, machines_render, pDialog):
                 machine_dic.update(machines_render[key])
                 hashed_db_dic[key] = machine_dic
         # --- Save JSON file ---
-        hash_DB_FN = PATHS.MAIN_DB_HASH_DIR.pjoin(db_prefix + '.json')
+        hash_DB_FN = PATHS.MAIN_DB_HASH_DIR.pjoin(db_prefix + '_machines.json')
         fs_write_JSON_file(hash_DB_FN.getPath(), hashed_db_dic, verbose = False)
         item_count += 1
         pDialog.update(int((item_count*100) / num_items))
     pDialog.close()
+
+    # --- Timestamp ---
+    change_control_dic(control_dic, 't_MAME_machine_hash', time.time())
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
 
 #
 # Retrieves machine from distributed database.
@@ -1155,16 +1252,17 @@ def fs_get_machine_main_db_hash(PATHS, machine_name):
     log_debug('fs_get_machine_main_db_hash() machine {0}'.format(machine_name))
     md5_str = hashlib.md5(machine_name).hexdigest()
     # WARNING Python slicing does not work like in C/C++!
-    hash_DB_FN = PATHS.MAIN_DB_HASH_DIR.pjoin(md5_str[0:2] + '.json')
+    hash_DB_FN = PATHS.MAIN_DB_HASH_DIR.pjoin(md5_str[0:2] + '_machines.json')
     hashed_db_dic = fs_load_JSON_file_dic(hash_DB_FN.getPath())
 
     return hashed_db_dic[machine_name]
 
-# Hash database with 256 elements (2 hex digits)
-def fs_build_asset_hashed_db(PATHS, assets_dic, pDialog):
+# MAME hash database with 256 elements (2 hex digits)
+def fs_build_asset_hashed_db(PATHS, settings, control_dic, assets_dic):
     log_info('fs_build_asset_hashed_db() Building assets hashed database ...')
 
     # machine_name -> MD5 -> take two letters -> aa.json, ab.json, ...
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', 'Building asset hashed database ...')
     db_main_hash_idx = {}
     for key in assets_dic:
@@ -1195,6 +1293,10 @@ def fs_build_asset_hashed_db(PATHS, assets_dic, pDialog):
         pDialog.update(int((item_count*100) / num_items))
     pDialog.close()
 
+    # --- Timestamp ---
+    change_control_dic(control_dic, 't_MAME_asset_hash', time.time())
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
+
 #
 # Retrieves machine from distributed database.
 # This is very quick for retrieving individual machines, very slow for multiple machines.
@@ -1208,33 +1310,39 @@ def fs_get_machine_assets_db_hash(PATHS, machine_name):
     return hashed_db_dic[machine_name]
 
 # -------------------------------------------------------------------------------------------------
-# ROM cache
+# MAME machine render cache
+# Creates a separate MAME render and assets databases for each catalog to speed up
+# access of ListItems when rendering machine lists.
 # -------------------------------------------------------------------------------------------------
-def fs_rom_cache_get_hash(catalog_name, category_name):
+def fs_render_cache_get_hash(catalog_name, category_name):
     prop_key = '{0} - {1}'.format(catalog_name, category_name)
 
     return hashlib.md5(prop_key).hexdigest()
 
-def fs_build_ROM_cache(PATHS, machines, machines_render, cache_index_dic, pDialog):
-    log_info('fs_build_ROM_cache() Building ROM cache ...')
+def fs_build_render_cache(PATHS, settings, control_dic, cache_index_dic, machines_render):
+    log_info('fs_build_render_cache() Building ROM cache ...')
 
     # --- Clean 'cache' directory JSON ROM files ---
     log_info('Cleaning dir "{0}"'.format(PATHS.CACHE_DIR.getPath()))
     pdialog_line1 = 'Cleaning old cache JSON files ...'
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', pdialog_line1, ' ')
     pDialog.update(0, pdialog_line1)
     file_list = os.listdir(PATHS.CACHE_DIR.getPath())
     num_files = len(file_list)
     log_info('Found {0} files'.format(num_files))
     processed_items = 0
+    deleted_items = 0
     for file in file_list:
         pDialog.update((processed_items*100) // num_files, pdialog_line1)
-        if file.endswith('_ROMs.json'):
-            full_path = os.path.join(PATHS.CACHE_DIR.getPath(), file)
-            # log_debug('UNLINK "{0}"'.format(full_path))
-            os.unlink(full_path)
         processed_items += 1
+        if not file.endswith('_render.json'): continue
+        full_path = os.path.join(PATHS.CACHE_DIR.getPath(), file)
+        # log_debug('UNLINK "{0}"'.format(full_path))
+        os.unlink(full_path)
+        deleted_items += 1
     pDialog.close()
+    log_info('Deleted {0} files'.format(deleted_items))
 
     # --- Build ROM cache ---
     pDialog.create('Advanced MAME Launcher', ' ', ' ')
@@ -1259,7 +1367,7 @@ def fs_build_ROM_cache(PATHS, machines, machines_render, cache_index_dic, pDialo
             m_render_all_dic = {}
             for machine_name in catalog_all[catalog_key]:
                 m_render_all_dic[machine_name] = machines_render[machine_name]
-            ROMs_all_FN = PATHS.CACHE_DIR.pjoin(hash_str + '_ROMs.json')
+            ROMs_all_FN = PATHS.CACHE_DIR.pjoin(hash_str + '_render.json')
             fs_write_JSON_file(ROMs_all_FN.getPath(), m_render_all_dic, verbose = False)
 
             # >> Progress dialog
@@ -1268,35 +1376,43 @@ def fs_build_ROM_cache(PATHS, machines, machines_render, cache_index_dic, pDialo
         catalog_count += 1
     pDialog.close()
 
-def fs_load_roms_all(PATHS, cache_index_dic, catalog_name, category_name):
+    # --- Timestamp ---
+    change_control_dic(control_dic, 't_MAME_render_cache_build', time.time())
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
+
+def fs_load_render_dic_all(PATHS, cache_index_dic, catalog_name, category_name):
     hash_str = cache_index_dic[catalog_name][category_name]['hash']
-    ROMs_all_FN = PATHS.CACHE_DIR.pjoin(hash_str + '_ROMs.json')
+    ROMs_all_FN = PATHS.CACHE_DIR.pjoin(hash_str + '_render.json')
 
     return fs_load_JSON_file_dic(ROMs_all_FN.getPath())
 
 # -------------------------------------------------------------------------------------------------
-# Asset cache
+# MAME asset cache
 # -------------------------------------------------------------------------------------------------
-def fs_build_asset_cache(PATHS, assets_dic, cache_index_dic, pDialog):
+def fs_build_asset_cache(PATHS, settings, control_dic, cache_index_dic, assets_dic):
     log_info('fs_build_asset_cache() Building Asset cache ...')
 
     # --- Clean 'cache' directory JSON Asset files ---
     log_info('Cleaning dir "{0}"'.format(PATHS.CACHE_DIR.getPath()))
     pdialog_line1 = 'Cleaning old cache JSON files ...'
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', pdialog_line1, ' ')
     pDialog.update(0, pdialog_line1)
     file_list = os.listdir(PATHS.CACHE_DIR.getPath())
     num_files = len(file_list)
     log_info('Found {0} files'.format(num_files))
     processed_items = 0
+    deleted_items = 0
     for file in file_list:
         pDialog.update((processed_items*100) // num_files, pdialog_line1)
-        if file.endswith('_assets.json'):
-            full_path = os.path.join(PATHS.CACHE_DIR.getPath(), file)
-            # log_debug('UNLINK "{0}"'.format(full_path))
-            os.unlink(full_path)
         processed_items += 1
+        if not file.endswith('_assets.json'): continue
+        full_path = os.path.join(PATHS.CACHE_DIR.getPath(), file)
+        # log_debug('UNLINK "{0}"'.format(full_path))
+        os.unlink(full_path)
+        deleted_items += 1
     pDialog.close()
+    log_info('Deleted {0} files'.format(deleted_items))
 
     # --- Build cache ---
     pDialog.create('Advanced MAME Launcher', ' ', ' ')
@@ -1330,6 +1446,10 @@ def fs_build_asset_cache(PATHS, assets_dic, cache_index_dic, pDialog):
         catalog_count += 1
     pDialog.close()
 
+    # --- Timestamp ---
+    change_control_dic(control_dic, 't_MAME_asset_cache_build', time.time())
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
+
 def fs_load_assets_all(PATHS, cache_index_dic, catalog_name, category_name):
     hash_str = cache_index_dic[catalog_name][category_name]['hash']
     ROMs_all_FN = PATHS.CACHE_DIR.pjoin(hash_str + '_assets.json')
@@ -1337,10 +1457,58 @@ def fs_load_assets_all(PATHS, cache_index_dic, catalog_name, category_name):
     return fs_load_JSON_file_dic(ROMs_all_FN.getPath())
 
 # -------------------------------------------------------------------------------------------------
+# Load and save a bunch of JSON files
+# -------------------------------------------------------------------------------------------------
+#
+# Accepts a list of JSON files to be loaded. Displays a progress dialog.
+# Returns a dictionary with the context of the loaded files.
+#
+def fs_load_files(db_files):
+    log_debug('fs_load_files() Loading {0} JSON database files ...\n'.format(len(db_files)))
+    db_dic = {}
+    line1_str = 'Loading databases ...'
+    num_items = len(db_files)
+    item_count = 0
+    pDialog = xbmcgui.DialogProgress()
+    pDialog.create('Advanced MAME Launcher')
+    for f_item in db_files:
+        dict_key = f_item[0]
+        db_name  = f_item[1]
+        db_path  = f_item[2]
+        pDialog.update(int((item_count*100) / num_items), line1_str, db_name)
+        db_dic[dict_key] = fs_load_JSON_file_dic(db_path)
+        item_count += 1
+    # >> Kodi BUG: when the progress dialog is closed and reopened again, the
+    # >> second line of the previous dialog is not deleted (still printed).
+    pDialog.update(int((item_count*100) / num_items), ' ', ' ')
+    pDialog.close()
+
+    return db_dic
+
+def fs_save_files(db_files, json_write_func = fs_write_JSON_file):
+    log_debug('fs_save_files() Saving {0} JSON database files ...\n'.format(len(db_files)))
+    line1_str = 'Saving databases ...'
+    num_items = len(db_files)
+    item_count = 0
+    pDialog = xbmcgui.DialogProgress()
+    pDialog.create('Advanced MAME Launcher')
+    for f_item in db_files:
+        dict_data = f_item[0]
+        db_name  = f_item[1]
+        db_path  = f_item[2]
+        pDialog.update(int((item_count*100) / num_items), line1_str, db_name)
+        json_write_func(db_path, dict_data)
+        item_count += 1
+    # >> Kodi BUG: when the progress dialog is closed and reopened again, the
+    # >> second line of the previous dialog is not deleted (still printed).
+    pDialog.update(int((item_count*100) / num_items), ' ', ' ')
+    pDialog.close()
+
+# -------------------------------------------------------------------------------------------------
 # Export stuff
 # -------------------------------------------------------------------------------------------------
-def fs_export_Virtual_Launcher(export_FN, catalog_dic, machines, machines_render, assets_dic):
-    log_verb('fs_export_Virtual_Launcher() File "{0}"'.format(export_FN.getPath()))
+def fs_export_Read_Only_Launcher(export_FN, catalog_dic, machines, machines_render, assets_dic):
+    log_verb('fs_export_Read_Only_Launcher() File "{0}"'.format(export_FN.getPath()))
 
     # --- Create list of strings ---
     str_list = []

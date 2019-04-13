@@ -3,7 +3,7 @@
 # Advanced MAME Launcher MAME filter engine.
 #
 
-# Copyright (c) 2016-2018 Wintermute0110 <wintermute0110@gmail.com>
+# Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,19 +22,26 @@ from __future__ import division
 import xml.etree.ElementTree as ET
 
 # --- Modules/packages in this plugin ---
-from constants import *
-from utils import *
-from utils_kodi import *
-from mame import *
+from .constants import *
+from .mame import *
+from .utils import *
+from .utils_kodi import *
 
 # -------------------------------------------------------------------------------------------------
 # Parse filter XML definition
 # -------------------------------------------------------------------------------------------------
+#
+# Strips a list of strings.
+#
 def strip_str_list(t_list):
-    for i, s_t in enumerate(t_list): t_list[i] = s_t.strip()
+    for i, s_t in enumerate(t_list):
+        t_list[i] = s_t.strip()
 
     return t_list
 
+#
+# Returns a comma-separated list of values as a list of strings.
+#
 def _get_comma_separated_list(text_t):
     if not text_t:
         return []
@@ -42,14 +49,14 @@ def _get_comma_separated_list(text_t):
         return strip_str_list(text_t.split(','))
 
 #
-# Parse a string 'XXXXXX with YYYYYY'
+# Parse a string 'XXXXXX with YYYYYY' and return a tuple.
 #
 def _get_change_tuple(text_t):
-    if not text_t:
-        return ''
-    tuple_list = re.findall(r'(\w+) with (\w+)', text_t)
+    if not text_t: return ()
+    # Returns a list of strings or list of tuples.
+    tuple_list = re.findall('(\w+) with (\w+)', text_t)
     if tuple_list:
-        return tuple_list
+        return tuple_list[0]
     else:
         log_error('_get_change_tuple() text_t = "{0}"'.format(text_t))
         m = '(Exception) Cannot parse <Change> "{0}"'.format(text_t)
@@ -125,12 +132,10 @@ def filter_parse_XML(fname_str):
                     this_filter_dic['year'] = text_t
                 elif filter_element.tag == 'Include':
                     t_list = _get_comma_separated_list(text_t)
-                    if t_list:
-                        this_filter_dic['include'].extend(t_list)
+                    if t_list: this_filter_dic['include'].extend(t_list)
                 elif filter_element.tag == 'Exclude':
                     t_list = _get_comma_separated_list(text_t)
-                    if t_list:
-                        this_filter_dic['exclude'].extend(t_list)
+                    if t_list: this_filter_dic['exclude'].extend(t_list)
                 elif filter_element.tag == 'Change':
                     tuple_t = _get_change_tuple(text_t)
                     if tuple_t: this_filter_dic['change'].append(tuple_t)
@@ -149,21 +154,27 @@ def filter_parse_XML(fname_str):
             f_definition['genre']        = f_definition['genre'].replace(initial_str, final_str)
             f_definition['controls']     = f_definition['controls'].replace(initial_str, final_str)
             f_definition['devices']      = f_definition['devices'].replace(initial_str, final_str)
-            # f_definition['include']      = f_definition['include'].replace(initial_str, final_str)
-            # f_definition['exclude']      = f_definition['exclude'].replace(initial_str, final_str)
-            # f_definition['change']       = f_definition['change'].replace(initial_str, final_str)
+            # Replace strings in list of strings.
+            for i, s_t in enumerate(f_definition['include']):
+                f_definition['include'][i] = s_t.replace(initial_str, final_str)
+            for i, s_t in enumerate(f_definition['exclude']):
+                f_definition['exclude'][i] = s_t.replace(initial_str, final_str)
+            # for i, s_t in enumerate(f_definition['change']):
+            #     f_definition['change'][i] = s_t.replace(initial_str, final_str)
+
     return filters_list
 
 #
-# Returns a dictionary of dictionaries.
+# Returns a dictionary of dictionaries, indexed by the machine name.
+# This includes all MAME machines, including parents and clones.
 #
-def filter_get_filter_DB(machine_main_dic, machine_render_dic,
-                         assets_dic, main_pclone_dic, machine_archives_dic, pDialog):
+def filter_get_filter_DB(machine_main_dic, machine_render_dic, assets_dic, machine_archives_dic):
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', 'Building filter database ...')
-    total_items = len(main_pclone_dic)
+    total_items = len(machine_main_dic)
     item_count = 0
     main_filter_dic = {}
-    for m_name in main_pclone_dic:
+    for m_name in machine_main_dic:
         pDialog.update(int((item_count*100) / total_items))
         if 'att_coins' in machine_main_dic[m_name]['input']:
             coins = machine_main_dic[m_name]['input']['att_coins']
@@ -181,9 +192,13 @@ def filter_get_filter_DB(machine_main_dic, machine_render_dic,
             hasSamples = True if machine_archives_dic[m_name]['Samples'] else False
         else:
             hasSamples = False
-
-        # >> Fix this to match "Controls (Compact)" filter
-        raw_control_list = machine_main_dic[m_name]['control_type']
+        # >> Fix controls to match "Controls (Compact)" filter
+        if machine_main_dic[m_name]['input']:
+            raw_control_list = [
+                ctrl_dic['type'] for ctrl_dic in machine_main_dic[m_name]['input']['control_list']
+            ]
+        else:
+            raw_control_list = []
         pretty_control_type_list = mame_improve_control_type_list(raw_control_list)
         control_list = mame_compress_item_list_compact(pretty_control_type_list)
         if not control_list: control_list = [ '[ No controls ]' ]
@@ -199,6 +214,7 @@ def filter_get_filter_DB(machine_main_dic, machine_render_dic,
             # --- Default filters ---
             'isDevice' : machine_render_dic[m_name]['isDevice'],
             # --- <Option> filters ---
+            'isClone' : True if machine_render_dic[m_name]['cloneof'] else False,
             'coins' : coins,
             'hasROMs' : hasROMs,
             'hasCHDs' : hasCHDs,
@@ -331,7 +347,7 @@ class SP_end_token:
         return "<END token>"
 
 # -------------------------------------------------------------------------------------------------
-# Tokenizer
+# String Parser (SP) Tokenizer
 # See http://jeffknupp.com/blog/2013/04/07/improve-your-python-yield-and-generators-explained/
 # -------------------------------------------------------------------------------------------------
 SP_token_pat = re.compile("\s*(?:(and|or|not|has|lacks)|(\"[ \.\w_\-\&\/]+\")|([\.\w_\-\&]+))")
@@ -362,7 +378,7 @@ def SP_tokenize(program):
     yield SP_end_token()
 
 # -------------------------------------------------------------------------------------------------
-# Manufacturer Parser (SP) inspired by http://effbot.org/zone/simple-top-down-parsing.htm
+# String Parser (SP) inspired by http://effbot.org/zone/simple-top-down-parsing.htm
 # -------------------------------------------------------------------------------------------------
 def SP_expression(rbp = 0):
     global SP_token
@@ -535,7 +551,7 @@ class LSP_end_token:
         return "<END token>"
 
 # -------------------------------------------------------------------------------------------------
-# Tokenizer
+# List of String Parser (LSP) Tokenizer
 # See http://jeffknupp.com/blog/2013/04/07/improve-your-python-yield-and-generators-explained/
 # -------------------------------------------------------------------------------------------------
 LSP_token_pat = re.compile("\s*(?:(and|or|not|has|lacks|\(|\))|(\"[ \.\w_\-\&\/]+\")|([\.\w_\-\&]+))")
@@ -570,7 +586,7 @@ def LSP_tokenize(program):
     yield LSP_end_token()
 
 # -------------------------------------------------------------------------------------------------
-# Manufacturer Parser (LSP) inspired by http://effbot.org/zone/simple-top-down-parsing.htm
+# List of String Parser (LSP) inspired by http://effbot.org/zone/simple-top-down-parsing.htm
 # -------------------------------------------------------------------------------------------------
 def LSP_expression(rbp = 0):
     global LSP_token
@@ -613,7 +629,7 @@ def LSP_parse_exec(program, search_list):
 # Year Parser (YP) engine. Grammar token objects.
 # Parser inspired by http://effbot.org/zone/simple-top-down-parsing.htm
 #
-# YP operators: ==, <>, >, <, >=, <=, and, or, not, '(', ')', literal.
+# YP operators: ==, !=, >, <, >=, <=, and, or, not, '(', ')', literal.
 # literal may be the special variable 'year' or a MAME number.
 # -------------------------------------------------------------------------------------------------
 debug_YP_parser = False
@@ -634,7 +650,7 @@ class YP_literal_token:
         if debug_YP_parser: log_debug('LITERAL token returns {0} "{1}"'.format(type(ret), unicode(ret)))
         return ret
     def __repr__(self):
-        return '<LITERAL "{0}">'.format(self.value)
+        return '[LITERAL "{0}"]'.format(self.value)
 
 def YP_advance(id = None):
     global YP_token
@@ -652,14 +668,14 @@ class YP_operator_open_par_token:
         YP_advance("OP )")
         return expr
     def __repr__(self):
-        return "<OP (>"
+        return "[OP (]"
 
 class YP_operator_close_par_token:
     lbp = 0
     def __init__(self):
         self.id = "OP )"
     def __repr__(self):
-        return "<OP )>"
+        return "[OP )]"
 
 class YP_operator_not_token:
     lbp = 60
@@ -674,7 +690,7 @@ class YP_operator_not_token:
         if debug_YP_parser: log_debug('NOT token returns {0} "{1}"'.format(type(ret), unicode(ret)))
         return ret
     def __repr__(self):
-        return "<OP not>"
+        return "[OP not]"
 
 class YP_operator_and_token:
     lbp = 10
@@ -691,7 +707,7 @@ class YP_operator_and_token:
         if debug_YP_parser: log_debug('AND token returns {0} "{1}"'.format(type(ret), unicode(ret)))
         return ret
     def __repr__(self):
-        return "<OP and>"
+        return "[OP and]"
 
 class YP_operator_or_token:
     lbp = 10
@@ -707,7 +723,7 @@ class YP_operator_or_token:
         if debug_YP_parser: log_debug('OR token returns {0} "{1}"'.format(type(ret), unicode(ret)))
         return ret
     def __repr__(self):
-        return "<OP or>"
+        return "[OP or]"
 
 class YP_operator_equal_token:
     lbp = 50
@@ -723,23 +739,23 @@ class YP_operator_equal_token:
         if debug_YP_parser: log_debug('== token returns {0} "{1}"'.format(type(ret), unicode(ret)))
         return ret
     def __repr__(self):
-        return "<OP ==>"
+        return "[OP ==]"
 
 class YP_operator_not_equal_token:
     lbp = 50
     def __init__(self):
-        self.id = "OP <>"
+        self.id = "OP !="
     def led(self, left):
         self.first = left
         self.second = YP_expression(10)
         return self
     def exec_token(self):
-        if debug_YP_parser: log_debug('Executing <> token')
-        ret = self.first.exec_token() <> self.second.exec_token()
-        if debug_YP_parser: log_debug('<> token returns {0} "{1}"'.format(type(ret), unicode(ret)))
+        if debug_YP_parser: log_debug('Executing != token')
+        ret = self.first.exec_token() != self.second.exec_token()
+        if debug_YP_parser: log_debug('!= token returns {0} "{1}"'.format(type(ret), unicode(ret)))
         return ret
     def __repr__(self):
-        return "<OP <>>"
+        return "[OP !=]"
 
 class YP_operator_great_than_token:
     lbp = 50
@@ -755,7 +771,7 @@ class YP_operator_great_than_token:
         if debug_YP_parser: log_debug('> token returns {0} "{1}"'.format(type(ret), unicode(ret)))
         return ret
     def __repr__(self):
-        return "<OP >>"
+        return "[OP >]"
 
 class YP_operator_less_than_token:
     lbp = 50
@@ -771,7 +787,7 @@ class YP_operator_less_than_token:
         if debug_YP_parser: log_debug('< token returns {0} "{1}"'.format(type(ret), unicode(ret)))
         return ret
     def __repr__(self):
-        return "<OP <>"
+        return "[OP <]"
 
 class YP_operator_great_or_equal_than_token:
     lbp = 50
@@ -787,7 +803,7 @@ class YP_operator_great_or_equal_than_token:
         if debug_YP_parser: log_debug('>= token returns {0} "{1}"'.format(type(ret), unicode(ret)))
         return ret
     def __repr__(self):
-        return "<OP >=>"
+        return "[OP >=]"
 
 class YP_operator_less_or_equal_than_token:
     lbp = 50
@@ -803,56 +819,43 @@ class YP_operator_less_or_equal_than_token:
         if debug_YP_parser: log_debug('<= token returns {0} "{1}"'.format(type(ret), unicode(ret)))
         return ret
     def __repr__(self):
-        return "<OP <=>"
+        return "[OP <=]"
 
 class YP_end_token:
     lbp = 0
     def __init__(self):
         self.id = "END TOKEN"
     def __repr__(self):
-        return "<END token>"
+        return "[END token]"
 
 # -------------------------------------------------------------------------------------------------
-# Tokenizer
+# Year Parser Tokenizer
 # See http://jeffknupp.com/blog/2013/04/07/improve-your-python-yield-and-generators-explained/
 # -------------------------------------------------------------------------------------------------
-YP_token_pat = re.compile("\s*(?:(==|<>|>=|<=|>|<|and|or|not|\(|\))|([\w]+))")
+YP_token_pat = re.compile("\s*(?:(==|!=|>=|<=|>|<|and|or|not|\(|\))|([\w]+))")
 
 def YP_tokenize(program):
     # \s* -> Matches any number of blanks [ \t\n\r\f\v].
     # (?:...) -> A non-capturing version of regular parentheses.
     # \w -> Matches [a-zA-Z0-9_]
     for operator, n_string in YP_token_pat.findall(program):
-        if n_string:
-            yield YP_literal_token(n_string)
-        elif operator == "==":
-            yield YP_operator_equal_token()
-        elif operator == "<>":
-            yield YP_operator_not_equal_token()
-        elif operator == ">":
-            yield YP_operator_great_than_token()
-        elif operator == "<":
-            yield YP_operator_less_than_token()
-        elif operator == ">=":
-            yield YP_operator_great_or_equal_than_token()
-        elif operator == "<=":
-            yield YP_operator_less_or_equal_than_token()
-        elif operator == "and":
-            yield YP_operator_and_token()
-        elif operator == "or":
-            yield YP_operator_or_token()
-        elif operator == "not":
-            yield YP_operator_not_token()
-        elif operator == "(":
-            yield YP_operator_open_par_token()
-        elif operator == ")":
-            yield YP_operator_close_par_token()
-        else:
-            raise SyntaxError("Unknown operator: '{0}'".format(operator))
+        if n_string:            yield YP_literal_token(n_string)
+        elif operator == "==":  yield YP_operator_equal_token()
+        elif operator == "!=":  yield YP_operator_not_equal_token()
+        elif operator == ">":   yield YP_operator_great_than_token()
+        elif operator == "<":   yield YP_operator_less_than_token()
+        elif operator == ">=":  yield YP_operator_great_or_equal_than_token()
+        elif operator == "<=":  yield YP_operator_less_or_equal_than_token()
+        elif operator == "and": yield YP_operator_and_token()
+        elif operator == "or":  yield YP_operator_or_token()
+        elif operator == "not": yield YP_operator_not_token()
+        elif operator == "(":   yield YP_operator_open_par_token()
+        elif operator == ")":   yield YP_operator_close_par_token()
+        else:                   raise SyntaxError("Unknown operator: '{0}'".format(operator))
     yield YP_end_token()
 
 # -------------------------------------------------------------------------------------------------
-# Manufacturer Parser (YP) inspired by http://effbot.org/zone/simple-top-down-parsing.htm
+# Year Parser (YP) inspired by http://effbot.org/zone/simple-top-down-parsing.htm
 # -------------------------------------------------------------------------------------------------
 def YP_expression(rbp = 0):
     global YP_token
@@ -879,7 +882,7 @@ def YP_parse_exec(program, year_str):
 
     if debug_YP_parse_exec:
         log_debug('YP_parse_exec() Initialising program execution')
-        log_debug('YP_parse_exec() year     {0}'.format(year))
+        log_debug('YP_parse_exec() year     "{0}"'.format(year))
         log_debug('YP_parse_exec() Program  "{0}"'.format(program))
     YP_year = year
     YP_next = YP_tokenize(program).next
@@ -931,6 +934,7 @@ def mame_filter_Options_tag(mame_xml_dic, f_definition):
     log_debug('Option list "{0}"'.format(options_list))
 
     # --- Compute bool variables ---
+    NoClones_bool     = True if 'NoClones' in options_list else False
     NoCoin_bool       = True if 'NoCoin' in options_list else False
     NoCoinLess_bool   = True if 'NoCoinLess' in options_list else False
     NoROMs_bool       = True if 'NoROMs' in options_list else False
@@ -941,6 +945,7 @@ def mame_filter_Options_tag(mame_xml_dic, f_definition):
     NoMechanical_bool = True if 'NoMechanical' in options_list else False
     NoImperfect_bool  = True if 'NoImperfect' in options_list else False
     NoNonWorking_bool = True if 'NoNonworking' in options_list else False
+    log_debug('NoClones_bool     {0}'.format(NoClones_bool))
     log_debug('NoCoin_bool       {0}'.format(NoCoin_bool))
     log_debug('NoCoinLess_bool   {0}'.format(NoCoinLess_bool))
     log_debug('NoROMs_bool       {0}'.format(NoROMs_bool))
@@ -956,6 +961,10 @@ def mame_filter_Options_tag(mame_xml_dic, f_definition):
     filtered_out_games = 0
     machines_filtered_dic = {}
     for m_name in sorted(mame_xml_dic):
+        # >> Remove Clone machines
+        if NoClones_bool and mame_xml_dic[m_name]['isClone']:
+            filtered_out_games += 1
+            continue
         # >> Remove Coin machines
         if NoCoin_bool and mame_xml_dic[m_name]['coins'] > 0:
             filtered_out_games += 1
@@ -1148,6 +1157,84 @@ def mame_filter_Year_tag(mame_xml_dic, f_definition):
             machines_filtered_dic[m_name] = mame_xml_dic[m_name]
     log_debug('mame_filter_Year_tag() Initial {0} | '.format(initial_num_games) + \
               'Removed {0} | '.format(filtered_out_games) + \
+              'Remaining {0}'.format(len(machines_filtered_dic)))
+
+    return machines_filtered_dic
+
+def mame_filter_Include_tag(mame_xml_dic, f_definition, machines_dic):
+    # log_debug('mame_filter_Include_tag() Starting ...')
+    log_debug('mame_filter_Include_tag() Include machines {0}'.format(unicode(f_definition['include'])))
+    added_machines = 0
+    machines_filtered_dic = mame_xml_dic.copy()
+    # If no machines to include then skip processing
+    if not f_definition['include']:
+        log_debug('mame_filter_Include_tag() No machines to include. Exiting.')
+        return machines_filtered_dic
+    # First traverse all MAME machines, then traverse list of strings to include.
+    for m_name in sorted(machines_dic):
+        for f_name in f_definition['include']:
+            if f_name == m_name:
+                log_debug('mame_filter_Include_tag() Matched machine {0}'.format(f_name))
+                if f_name in machines_filtered_dic:
+                    log_debug('mame_filter_Include_tag() Machine {0} already in filtered list'.format(f_name))
+                else:
+                    log_debug('mame_filter_Include_tag() Adding machine {0}'.format(f_name))
+                    machines_filtered_dic[m_name] = machines_dic[m_name]
+                    added_machines += 1
+    log_debug('mame_filter_Include_tag() Initial {0} | '.format(len(mame_xml_dic)) + \
+              'Added {0} | '.format(added_machines) + \
+              'Remaining {0}'.format(len(machines_filtered_dic)))
+
+    return machines_filtered_dic
+
+def mame_filter_Exclude_tag(mame_xml_dic, f_definition):
+    # log_debug('mame_filter_Exclude_tag() Starting ...')
+    log_debug('mame_filter_Exclude_tag() Exclude machines {0}'.format(unicode(f_definition['exclude'])))
+    initial_num_games = len(mame_xml_dic)
+    filtered_out_games = 0
+    machines_filtered_dic = mame_xml_dic.copy()
+    # If no machines to exclude then skip processing
+    if not f_definition['exclude']:
+        log_debug('mame_filter_Exclude_tag() No machines to exclude. Exiting.')
+        return machines_filtered_dic
+    # First traverse current set of machines, then traverse list of strings to include.
+    for m_name in sorted(mame_xml_dic):
+        for f_name in f_definition['exclude']:
+            if f_name == m_name:
+                log_debug('mame_filter_Exclude_tag() Matched machine {0}'.format(f_name))
+                log_debug('mame_filter_Exclude_tag() Deleting machine {0}'.format(f_name))
+                del machines_filtered_dic[f_name]
+                filtered_out_games += 1
+    log_debug('mame_filter_Exclude_tag() Initial {0} | '.format(initial_num_games) + \
+              'Removed {0} | '.format(filtered_out_games) + \
+              'Remaining {0}'.format(len(machines_filtered_dic)))
+
+    return machines_filtered_dic
+
+def mame_filter_Change_tag(mame_xml_dic, f_definition, machines_dic):
+    # log_debug('mame_filter_Change_tag() Starting ...')
+    log_debug('mame_filter_Change_tag() Change machines {0}'.format(unicode(f_definition['change'])))
+    initial_num_games = len(mame_xml_dic)
+    changed_machines = 0
+    machines_filtered_dic = mame_xml_dic.copy()
+    # If no machines to change then skip processing
+    if not f_definition['change']:
+        log_debug('mame_filter_Change_tag() No machines to swap. Exiting.')
+        return machines_filtered_dic
+    # First traverse current set of machines, then traverse list of strings to include.
+    for m_name in sorted(mame_xml_dic):
+        for (f_name, new_name) in f_definition['change']:
+            if f_name == m_name:
+                log_debug('mame_filter_Change_tag() Matched machine {0}'.format(f_name))
+                if new_name in machines_dic:
+                    log_debug('mame_filter_Change_tag() Changing machine {0} with {1}'.format(f_name, new_name))
+                    del machines_filtered_dic[f_name]
+                    machines_filtered_dic[new_name] = machines_dic[new_name]
+                    changed_machines += 1
+                else:
+                    log_warning('mame_filter_Change_tag() New machine {0} not found on MAME machines.'.format(new_name))
+    log_debug('mame_filter_Change_tag() Initial {0} | '.format(initial_num_games) + \
+              'Changed {0} | '.format(changed_machines) + \
               'Remaining {0}'.format(len(machines_filtered_dic)))
 
     return machines_filtered_dic

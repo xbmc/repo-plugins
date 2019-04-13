@@ -3,7 +3,7 @@
 # Advanced Emulator Launcher miscellaneous functions
 #
 
-# Copyright (c) 2016-2018 Wintermute0110 <wintermute0110@gmail.com>
+# Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,16 @@
 
 # --- Python standard library ---
 from __future__ import unicode_literals
-import sys, os, shutil, time, random, hashlib, urlparse
+from __future__ import division
+
+import hashlib
+import json
+import os
+import random
+import shutil
+import sys
+import time
+import urlparse
 
 # --- Kodi modules ---
 try:
@@ -146,8 +155,84 @@ def kodi_refresh_container():
     xbmc.executebuiltin('Container.Refresh')
 
 def kodi_toogle_fullscreen():
-    # >> Frodo and up compatible
-    xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Input.ExecuteAction","params":{"action":"togglefullscreen"},"id":"1"}')
+    # Frodo and up compatible
+    xbmc.executeJSONRPC('{"jsonrpc":"2.0","id":"1","method":"Input.ExecuteAction","params":{"action":"togglefullscreen"}}')
+
+#
+# Access Kodi JSON-RPC interface in an easy way.
+# Returns a dictionary with the parsed response 'result' field.
+#
+# Query input:
+#
+# {
+#     "id" : 1,
+#     "jsonrpc" : "2.0",
+#     "method" : "Application.GetProperties",
+#     "params" : { "properties" : ["name", "version"] }
+# }
+#
+# Query response:
+#
+# {
+#     "id" : 1,
+#     "jsonrpc" : "2.0",
+#     "result" : {
+#         "name" : "Kodi",
+#         "version" : {"major":17,"minor":6,"revision":"20171114-a9a7a20","tag":"stable"}
+#     }
+# }
+#
+# Query response ERROR:
+# {
+#     "id" : null,
+#     "jsonrpc" : "2.0",
+#     "error" : { "code":-32700, "message" : "Parse error."}
+# }
+#
+def kodi_jsonrpc_query(method_str, params_str, verbose = False):
+    if verbose:
+        log_debug('kodi_jsonrpc_query() method_str "{0}"'.format(method_str))
+        log_debug('kodi_jsonrpc_query() params_str "{0}"'.format(params_str))
+        params_dic = json.loads(params_str)
+        log_debug('kodi_jsonrpc_query() params_dic = \n{0}'.format(pprint.pformat(params_dic)))
+
+    # --- Do query ---
+    query_str = '{{"id" : 1, "jsonrpc" : "2.0", "method" : "{0}", "params" : {1} }}'.format(method_str, params_str)
+    # if verbose: log_debug('kodi_jsonrpc_query() query_str "{0}"'.format(query_str))
+    response_json_str = xbmc.executeJSONRPC(query_str)
+    # if verbose: log_debug('kodi_jsonrpc_query() response "{0}"'.format(response_json_str))
+
+    # --- Parse JSON response ---
+    response_dic = json.loads(response_json_str)
+    # if verbose: log_debug('kodi_jsonrpc_query() response_dic = \n{0}'.format(pprint.pformat(response_dic)))
+    if 'error' in response_dic:
+        result_dic = response_dic['error']
+        log_warning('kodi_jsonrpc_query() JSONRPC ERROR {0}'.format(result_dic['message']))
+    else:
+        result_dic = response_dic['result']
+    if verbose:
+        log_debug('kodi_jsonrpc_query() result_dic = \n{0}'.format(pprint.pformat(result_dic)))
+
+    return result_dic
+
+# -------------------------------------------------------------------------------------------------
+# Determine Kodi version and create some constants to allow version-dependent code.
+# This if useful to work around bugs in Kodi core.
+# -------------------------------------------------------------------------------------------------
+def kodi_get_Kodi_major_version():
+    try:
+        rpc_dic = kodi_jsonrpc_query('Application.GetProperties', '{ "properties" : ["version"] }')
+        return int(rpc_dic['version']['major'])
+    except:
+        # Default fallback
+        return KODI_VERSION_KRYPTON
+
+# Execute the Kodi version query when module is loaded and store results in global variable.
+kodi_running_version = kodi_get_Kodi_major_version()
+
+# --- Version constants. Minimum required version is Kodi Krypton ---
+KODI_VERSION_KRYPTON = 17
+KODI_VERSION_LEIA    = 18
 
 # -------------------------------------------------------------------------------------------------
 # If runnining with Kodi Python interpreter use Kodi proper functions.

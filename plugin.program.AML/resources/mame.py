@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-# Advanced MAME Launcher MAME specific stuff
+#
+# Advanced MAME Launcher MAME specific stuff.
 #
 
-# Copyright (c) 2016-2018 Wintermute0110 <wintermute0110@gmail.com>
+# Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,10 +16,11 @@
 
 # --- Python standard library ---
 from __future__ import unicode_literals
-import zipfile as z
-import struct
 import binascii
+from collections import OrderedDict
+import struct
 import xml.etree.ElementTree as ET
+import zipfile as z
 try:
     from PIL import Image, ImageDraw, ImageFont
     PILLOW_AVAILABLE = True
@@ -26,13 +28,10 @@ except:
     PILLOW_AVAILABLE = False
 
 # --- AEL packages ---
-from constants import *
-from utils import *
-try:
-    from utils_kodi import *
-except:
-    from utils_kodi_standalone import *
-from disk_IO import *
+from .constants import *
+from .utils import *
+from .utils_kodi import *
+from .disk_IO import *
 
 # -------------------------------------------------------------------------------------------------
 # Data structures
@@ -172,13 +171,29 @@ SL_better_name_dic = {
 # Numerical MAME version. Allows for comparisons like ver_mame >= MAME_VERSION_0190
 # Support MAME versions higher than 0.53 August 12th 2001.
 # See header of MAMEINFO.dat for a list of all MAME versions.
-# a.bbb.ccc gets transformed into an uint a,bbb,ccc
+#
+# M.mmm.Xbb
+# | |   ||--> Beta flag 0, 1, ..., 99
+# | |   ||--> Release kind flag 
+# | |         5 for non-beta, non-alpha, non RC versions.
+# | |         2 for RC versions
+# | |         1 for beta versions
+# | |         0 for alpha versions
+# | |-------> Minor version 0, 1, ..., 999
+# |---------> Major version 0, ..., infinity
+#
+# See https://retropie.org.uk/docs/MAME/
+# See https://www.mamedev.org/oldrel.html
+#
 # Examples:
-#   '0.53'   ->  53000
-#   '0.70'   ->  70000
-#   '0.70u1' ->  70001
-#   '0.150'  -> 150000
-#   '0.190'  -> 190000
+#   '0.37b5'  ->  37105  (mame4all-pi, lr-mame2000 released 27 Jul 2000)
+#   '0.37b16' ->  37116  (Last unconsistent MAME version, released 02 Jul 2001)
+#   '0.53'    ->  53500  (MAME versioning is consistent from this release, released 12 Aug 2001)
+#   '0.78'    ->  78500  (lr-mame2003, lr-mame2003-plus)
+#   '0.139'   -> 139500  (lr-mame2010)
+#   '0.160'   -> 160500  (lr-mame2015)
+#   '0.174'   -> 174500  (lr-mame2016)
+#   '0.206'   -> 206500
 #
 # mame_version_raw examples:
 #   a) '0.194 (mame0194)' from '<mame build="0.194 (mame0194)" debug="no" mameconfig="10">'
@@ -187,13 +202,30 @@ SL_better_name_dic = {
 def mame_get_numerical_version(mame_version_str):
     log_verb('mame_get_numerical_version() mame_version_str = "{0}"'.format(mame_version_str))
     version_int = 0
-    m_obj = re.search('^(\d+?)\.(\d+?) \(', mame_version_str)
-    if m_obj:
-        major = int(m_obj.group(1))
-        minor = int(m_obj.group(2))
-        log_verb('mame_get_numerical_version() major = {0}'.format(major))
-        log_verb('mame_get_numerical_version() minor = {0}'.format(minor))
-        version_int = major * 100000 + minor * 1000
+    # Search for old version scheme x.yyybzz
+    m_obj_old = re.search('^(\d+)\.(\d+)b(\d+)', mame_version_str)
+    # Search for modern, consistent versioning system x.yyy
+    m_obj_modern = re.search('^(\d+)\.(\d+)', mame_version_str)
+
+    if m_obj_old:
+        major = int(m_obj_old.group(1))
+        minor = int(m_obj_old.group(2))
+        beta  = int(m_obj_old.group(3))
+        release_flag = 1
+        # log_verb('mame_get_numerical_version() major = {0}'.format(major))
+        # log_verb('mame_get_numerical_version() minor = {0}'.format(minor))
+        # log_verb('mame_get_numerical_version() beta  = {0}'.format(beta))
+        version_int = major * 1000000 + minor * 1000 + release_flag * 100 + beta
+    elif m_obj_modern:
+        major = int(m_obj_modern.group(1))
+        minor = int(m_obj_modern.group(2))
+        release_flag = 5
+        # log_verb('mame_get_numerical_version() major = {0}'.format(major))
+        # log_verb('mame_get_numerical_version() minor = {0}'.format(minor))
+        version_int = major * 1000000 + minor * 1000 + release_flag * 100
+    else:
+        log_error('MAME version "{0}" cannot be parsed.'.format(mame_version_str))
+        raise TypeError
     log_verb('mame_get_numerical_version() version_int = {0}'.format(version_int))
 
     return version_int
@@ -289,6 +321,20 @@ def mame_improve_device_list(control_type_list):
     return out_list
 
 #
+# A) Substitute well know display types with fancier names.
+#
+def mame_improve_display_type_list(display_type_list):
+    out_list = []
+    for dt in display_type_list:
+        if   dt == 'lcd':    out_list.append('LCD')
+        elif dt == 'raster': out_list.append('Raster')
+        elif dt == 'svg':    out_list.append('SVG')
+        elif dt == 'vector': out_list.append('Vector')
+        else:                out_list.append(dt)
+
+    return out_list
+
+#
 # See tools/test_compress_item_list.py for reference
 # Input/Output examples:
 # 1) ['dial']                 ->  ['dial']
@@ -304,7 +350,7 @@ def mame_compress_item_list(item_list):
     item_count = 1
     for i in range(1, num_items):
         current_item = item_list[i]
-        # print('{0} | item_count {1} | previous_item "{2:>8}" | current_item "{3:>8}"'.format(i, item_count, previous_item, current_item))
+        # log_debug('{0} | item_count {1} | previous_item "{2:>8}" | current_item "{3:>8}"'.format(i, item_count, previous_item, current_item))
         if current_item == previous_item:
             item_count += 1
         else:
@@ -361,7 +407,7 @@ def mame_load_Catver_ini(filename):
         return (categories_dic, catver_version)
     for cat_line in f:
         stripped_line = cat_line.strip()
-        if __debug_do_list_categories: print('Line "' + stripped_line + '"')
+        if __debug_do_list_categories: log_debug('Line "' + stripped_line + '"')
         if read_status == 0:
             # >> Look for Catver version
             m = re.search(r'^;; CatVer ([0-9\.]+) / ', stripped_line)
@@ -369,7 +415,7 @@ def mame_load_Catver_ini(filename):
             m = re.search(r'^;; CATVER.ini ([0-9\.]+) / ', stripped_line)
             if m: catver_version = m.group(1)
             if stripped_line == '[Category]':
-                if __debug_do_list_categories: print('Found [Category]')
+                if __debug_do_list_categories: log_debug('Found [Category]')
                 read_status = 1
         elif read_status == 1:
             line_list = stripped_line.split("=")
@@ -377,7 +423,7 @@ def mame_load_Catver_ini(filename):
                 read_status = 2
                 continue
             else:
-                if __debug_do_list_categories: print(line_list)
+                if __debug_do_list_categories: log_debug(line_list)
                 machine_name = line_list[0]
                 category = line_list[1]
                 if machine_name not in categories_dic:
@@ -416,12 +462,12 @@ def mame_load_nplayers_ini(filename):
         return (categories_dic, nplayers_version)
     for cat_line in f:
         stripped_line = cat_line.strip()
-        if __debug_do_list_categories: print('Line "' + stripped_line + '"')
+        if __debug_do_list_categories: log_debug('Line "' + stripped_line + '"')
         if read_status == 0:
             m = re.search(r'NPlayers ([0-9\.]+) / ', stripped_line)
             if m: nplayers_version = m.group(1)
             if stripped_line == '[NPlayers]':
-                if __debug_do_list_categories: print('Found [NPlayers]')
+                if __debug_do_list_categories: log_debug('Found [NPlayers]')
                 read_status = 1
         elif read_status == 1:
             line_list = stripped_line.split("=")
@@ -429,7 +475,7 @@ def mame_load_nplayers_ini(filename):
                 read_status = 2
                 continue
             else:
-                if __debug_do_list_categories: print(line_list)
+                if __debug_do_list_categories: log_debug(line_list)
                 machine_name = line_list[0]
                 category = line_list[1]
                 if machine_name not in categories_dic:
@@ -1049,10 +1095,6 @@ def mame_info_MAME_print(slist, location, machine_name, machine, assets):
     slist.append("[COLOR violet]bestgames[/COLOR]: '{0}'".format(machine['bestgames']))
     slist.append("[COLOR violet]catlist[/COLOR]: '{0}'".format(machine['catlist']))
     slist.append("[COLOR violet]catver[/COLOR]: '{0}'".format(machine['catver']))
-    # >> Deprecated
-    slist.append("[COLOR skyblue]coins[/COLOR]: {0}".format(machine['coins']))
-    # >> Deprecated
-    slist.append("[COLOR skyblue]control_type[/COLOR]: {0}".format(unicode(machine['control_type'])))
     # --- Devices list is a special case ---
     if machine['devices']:
         for i, device in enumerate(machine['devices']):
@@ -1168,119 +1210,251 @@ def mame_info_SL_print(slist, location, SL_name, SL_ROM, rom, assets, SL_dic, SL
 # slist is a list, so it is mutable and can be changed by reference.
 #
 def mame_stats_main_print_slist(slist, control_dic, AML_version_str):
-    slist.append('[COLOR orange]Main information[/COLOR]')
-    slist.append("AML version              {0}".format(AML_version_str))
-    slist.append("Database version string  {0}".format(control_dic['ver_AML_str']))
-    slist.append("Database version num     {0:,}".format(control_dic['ver_AML']))
-    slist.append("MAME version string      {0}".format(control_dic['ver_mame_str']))
-    slist.append("MAME version num         {0:,}".format(control_dic['ver_mame']))
-    slist.append("bestgames.ini version    {0}".format(control_dic['ver_bestgames']))
-    slist.append("catlist.ini version      {0}".format(control_dic['ver_catlist']))
-    slist.append("catver.ini version       {0}".format(control_dic['ver_catver']))
-    slist.append("command.dat version      {0}".format(control_dic['ver_command']))
-    slist.append("gameinit.dat version     {0}".format(control_dic['ver_gameinit']))
-    slist.append("genre.ini version        {0}".format(control_dic['ver_genre']))
-    slist.append("history.dat version      {0}".format(control_dic['ver_history']))
-    slist.append("mameinfo.dat version     {0}".format(control_dic['ver_mameinfo']))
-    slist.append("mature.ini version       {0}".format(control_dic['ver_mature']))
-    slist.append("nplayers.ini version     {0}".format(control_dic['ver_nplayers']))
-    slist.append("series.ini version       {0}".format(control_dic['ver_series']))
+    AML_version_int = fs_AML_version_str_to_int(AML_version_str)
 
+    slist.append('[COLOR orange]Main information[/COLOR]')
+    slist.append("AML version           {0:,} (str [COLOR violet]{1}[/COLOR])".format(
+        AML_version_int, AML_version_str))
+    slist.append("Database version      {0:,} (str [COLOR violet]{1}[/COLOR])".format(
+        control_dic['ver_AML'], control_dic['ver_AML_str']))
+    slist.append("MAME version          {0:,} (str [COLOR violet]{1}[/COLOR])".format(
+        control_dic['ver_mame'], control_dic['ver_mame_str']))
+    slist.append("bestgames.ini version {0}".format(control_dic['ver_bestgames']))
+    slist.append("catlist.ini version   {0}".format(control_dic['ver_catlist']))
+    slist.append("catver.ini version    {0}".format(control_dic['ver_catver']))
+    slist.append("command.dat version   {0}".format(control_dic['ver_command']))
+    slist.append("gameinit.dat version  {0}".format(control_dic['ver_gameinit']))
+    slist.append("genre.ini version     {0}".format(control_dic['ver_genre']))
+    slist.append("history.dat version   {0}".format(control_dic['ver_history']))
+    slist.append("mameinfo.dat version  {0}".format(control_dic['ver_mameinfo']))
+    slist.append("mature.ini version    {0}".format(control_dic['ver_mature']))
+    slist.append("nplayers.ini version  {0}".format(control_dic['ver_nplayers']))
+    slist.append("series.ini version    {0}".format(control_dic['ver_series']))
+
+    # Timestamps ordered if user selects "All in one step"
     slist.append('')
     slist.append('[COLOR orange]Timestamps[/COLOR]')
+    # MAME and SL databases.
     if control_dic['t_XML_extraction']:
-        slist.append("MAME XML extracted on   {0}".format(_str_time(control_dic['t_XML_extraction'])))
+        slist.append("MAME XML extracted on       {0}".format(
+            _str_time(control_dic['t_XML_extraction'])))
     else:
         slist.append("MAME XML never extracted")
     if control_dic['t_MAME_DB_build']:
-        slist.append("MAME DB built on        {0}".format(_str_time(control_dic['t_MAME_DB_build'])))
+        slist.append("MAME DB built on            {0}".format(
+            _str_time(control_dic['t_MAME_DB_build'])))
     else:
         slist.append("MAME DB never built")
     if control_dic['t_MAME_Audit_DB_build']:
-        slist.append("MAME Audit DB built on  {0}".format(_str_time(control_dic['t_MAME_Audit_DB_build'])))
+        slist.append("MAME Audit DB built on      {0}".format(
+            _str_time(control_dic['t_MAME_Audit_DB_build'])))
     else:
         slist.append("MAME Audit DB never built")
     if control_dic['t_MAME_Catalog_build']:
-        slist.append("MAME Catalog built on   {0}".format(_str_time(control_dic['t_MAME_Catalog_build'])))
+        slist.append("MAME Catalog built on       {0}".format(
+            _str_time(control_dic['t_MAME_Catalog_build'])))
     else:
         slist.append("MAME Catalog never built")
+    if control_dic['t_SL_DB_build']:
+        slist.append("SL DB built on              {0}".format(
+            _str_time(control_dic['t_SL_DB_build'])))
+    else:
+        slist.append("SL DB never built")
+
+    # MAME and SL scanner.
     if control_dic['t_MAME_ROMs_scan']:
-        slist.append("MAME ROMs scaned on     {0}".format(_str_time(control_dic['t_MAME_ROMs_scan'])))
+        slist.append("MAME ROMs scaned on         {0}".format(
+            _str_time(control_dic['t_MAME_ROMs_scan'])))
     else:
         slist.append("MAME ROMs never scaned")
     if control_dic['t_MAME_assets_scan']:
-        slist.append("MAME assets scaned on   {0}".format(_str_time(control_dic['t_MAME_assets_scan'])))
+        slist.append("MAME assets scaned on       {0}".format(
+            _str_time(control_dic['t_MAME_assets_scan'])))
     else:
         slist.append("MAME assets never scaned")
-    if control_dic['t_Custom_Filter_build']:
-        slist.append("Custom filters built on {0}".format(_str_time(control_dic['t_Custom_Filter_build'])))
-    else:
-        slist.append("Custom filters never built")
 
-    # >> Software Lists stuff
-    if control_dic['t_SL_DB_build']:
-        slist.append("SL DB built on          {0}".format(_str_time(control_dic['t_SL_DB_build'])))
-    else:
-        slist.append("SL DB never built")
     if control_dic['t_SL_ROMs_scan']:
-        slist.append("SL ROMs scaned on       {0}".format(_str_time(control_dic['t_SL_ROMs_scan'])))
+        slist.append("SL ROMs scaned on           {0}".format(
+            _str_time(control_dic['t_SL_ROMs_scan'])))
     else:
         slist.append("SL ROMs never scaned")
     if control_dic['t_SL_assets_scan']:
-        slist.append("SL assets scaned on     {0}".format(_str_time(control_dic['t_SL_assets_scan'])))
+        slist.append("SL assets scaned on         {0}".format(
+            _str_time(control_dic['t_SL_assets_scan'])))
     else:
         slist.append("SL assets never scaned")
 
-    # >> Audit stuff
+    # Plots and fanarts.
+    if control_dic['t_MAME_plots_build']:
+        slist.append("MAME Plots built on         {0}".format(
+            _str_time(control_dic['t_MAME_plots_build'])))
+    else:
+        slist.append("MAME Plots never built")
+    if control_dic['t_SL_plots_build']:
+        slist.append("SL Plots built on           {0}".format(
+            _str_time(control_dic['t_SL_plots_build'])))
+    else:
+        slist.append("SL Plots never built")
+    if control_dic['t_MAME_fanart_build']:
+        slist.append("MAME Fanarts built on       {0}".format(
+            _str_time(control_dic['t_MAME_fanart_build'])))
+    else:
+        slist.append("MAME Fanarts never built")
+    if control_dic['t_SL_fanart_build']:
+        slist.append("SL Fanarts built on         {0}".format(
+            _str_time(control_dic['t_SL_fanart_build'])))
+    else:
+        slist.append("SL Fanarts never built")
+
+    # MAME machine hash, asset hash, render cache and asset cache.
+    if control_dic['t_MAME_machine_hash']:
+        slist.append("MAME machine hash built on  {0}".format(
+            _str_time(control_dic['t_MAME_machine_hash'])))
+    else:
+        slist.append("MAME machine hash never built")
+    if control_dic['t_MAME_asset_hash']:
+        slist.append("MAME asset hash built on    {0}".format(
+            _str_time(control_dic['t_MAME_asset_hash'])))
+    else:
+        slist.append("MAME asset hash never built")
+    if control_dic['t_MAME_render_cache_build']:
+        slist.append("MAME render cache built on  {0}".format(
+            _str_time(control_dic['t_MAME_render_cache_build'])))
+    else:
+        slist.append("MAME render cache never built")
+    if control_dic['t_MAME_asset_cache_build']:
+        slist.append("MAME asset cache built on   {0}".format(
+            _str_time(control_dic['t_MAME_asset_cache_build'])))
+    else:
+        slist.append("MAME asset cache never built")
+
+    # Custsom filters.
+    if control_dic['t_Custom_Filter_build']:
+        slist.append("Custom filters built on     {0}".format(
+            _str_time(control_dic['t_Custom_Filter_build'])))
+    else:
+        slist.append("Custom filters never built")
+
+    # Audit stuff.
     if control_dic['t_MAME_audit']:
-        slist.append("MAME ROMs audited on    {0}".format(_str_time(control_dic['t_MAME_audit'])))
+        slist.append("MAME ROMs audited on        {0}".format(
+            _str_time(control_dic['t_MAME_audit'])))
     else:
         slist.append("MAME ROMs never audited")
     if control_dic['t_SL_audit']:
-        slist.append("SL ROMs audited on      {0}".format(_str_time(control_dic['t_SL_audit'])))
+        slist.append("SL ROMs audited on          {0}".format(
+            _str_time(control_dic['t_SL_audit'])))
     else:
         slist.append("SL ROMs never audited")
 
     # >> 5,d prints the comma separator but does not pad to 5 spaces.
     slist.append('')
     slist.append('[COLOR orange]MAME machine count[/COLOR]')
-    t = "Machines   {0:5d}, parents {1:5d}, clones {2:5d}"
-    slist.append(t.format(control_dic['stats_processed_machines'],
-                          control_dic['stats_parents'], 
-                          control_dic['stats_clones']))
-    t = "Runnable   {0:5d}, parents {1:5d}, clones {2:5d}"
-    slist.append(t.format(control_dic['stats_runnable'],
-                          control_dic['stats_runnable_parents'], 
-                          control_dic['stats_runnable_clones']))
-    t = "Coin       {0:5d}, parents {1:5d}, clones {2:5d}"
-    slist.append(t.format(control_dic['stats_coin'],
-                          control_dic['stats_coin_parents'], 
-                          control_dic['stats_coin_clones']))
-    t = "Nocoin     {0:5d}, parents {1:5d}, clones {2:5d}"
-    slist.append(t.format(control_dic['stats_nocoin'],
-                          control_dic['stats_nocoin_parents'],
-                          control_dic['stats_nocoin_clones']))
-    t = "Mechanical {0:5d}, parents {1:5d}, clones {2:5d}"
-    slist.append(t.format(control_dic['stats_mechanical'],
-                          control_dic['stats_mechanical_parents'],
-                          control_dic['stats_mechanical_clones']))
-    t = "Dead       {0:5d}, parents {1:5d}, clones {2:5d}"
-    slist.append(t.format(control_dic['stats_dead'],
-                          control_dic['stats_dead_parents'], 
-                          control_dic['stats_dead_clones']))
-    t = "Devices    {0:5d}, parents {1:5d}, clones {2:5d}"
-    slist.append(t.format(control_dic['stats_devices'],
-                          control_dic['stats_devices_parents'], 
-                          control_dic['stats_devices_clones']))
-    # >> Binary filters
-    t = "BIOS       {0:5d}, parents {1:5d}, clones {2:5d}"
-    slist.append(t.format(control_dic['stats_BIOS'],
-                          control_dic['stats_BIOS_parents'], 
-                          control_dic['stats_BIOS_clones']))
-    t = "Samples    {0:5d}, parents {1:5d}, clones {2:5d}"
-    slist.append(t.format(control_dic['stats_samples'],
-                          control_dic['stats_samples_parents'], 
-                          control_dic['stats_samples_clones']))
+    table_str = []
+    table_str.append(['left', 'right', 'right',  'right'])
+    table_str.append(['Type', 'Total', 'Parent', 'Clones'])
+    table_str.append([
+        'Machines',
+        '{0:5d}'.format(control_dic['stats_processed_machines']),
+        '{0:5d}'.format(control_dic['stats_parents']),
+        '{0:5d}'.format(control_dic['stats_clones']),
+    ])
+    table_str.append([
+        'Runnable',
+        '{0:5d}'.format(control_dic['stats_runnable']),
+        '{0:5d}'.format(control_dic['stats_runnable_parents']),
+        '{0:5d}'.format(control_dic['stats_runnable_clones']),
+    ])
+    table_str.append([
+        'Coin',
+        '{0:5d}'.format(control_dic['stats_coin']),
+        '{0:5d}'.format(control_dic['stats_coin_parents']),
+        '{0:5d}'.format(control_dic['stats_coin_clones']),
+    ])
+    table_str.append([
+        'Nocoin',
+        '{0:5d}'.format(control_dic['stats_nocoin']),
+        '{0:5d}'.format(control_dic['stats_nocoin_parents']),
+        '{0:5d}'.format(control_dic['stats_nocoin_clones']),
+    ])
+    table_str.append([
+        'Mechanical',
+        '{0:5d}'.format(control_dic['stats_mechanical']),
+        '{0:5d}'.format(control_dic['stats_mechanical_parents']),
+        '{0:5d}'.format(control_dic['stats_mechanical_clones']),
+    ])
+    table_str.append([
+        'Dead',
+        '{0:5d}'.format(control_dic['stats_dead']),
+        '{0:5d}'.format(control_dic['stats_dead_parents']),
+        '{0:5d}'.format(control_dic['stats_dead_clones']),
+    ])
+    table_str.append([
+        'Devices',
+        '{0:5d}'.format(control_dic['stats_devices']),
+        '{0:5d}'.format(control_dic['stats_devices_parents']),
+        '{0:5d}'.format(control_dic['stats_devices_clones']),
+    ])
+    # Binary filters
+    table_str.append([
+        'BIOS',
+        '{0:5d}'.format(control_dic['stats_BIOS']),
+        '{0:5d}'.format(control_dic['stats_BIOS_parents']),
+        '{0:5d}'.format(control_dic['stats_BIOS_clones']),
+    ])
+    table_str.append([
+        'Samples',
+        '{0:5d}'.format(control_dic['stats_samples']),
+        '{0:5d}'.format(control_dic['stats_samples_parents']),
+        '{0:5d}'.format(control_dic['stats_samples_clones']),
+    ])
+    slist.extend(text_render_table_str(table_str))
+
+    slist.append('')
+    slist.append('[COLOR orange]MAME machine statistics[/COLOR]')
+    table_str = []
+    table_str.append(['left', 'right', 'right', 'right',     'right'])
+    table_str.append(['Type', 'Total', 'Good',  'Imperfect', 'Nonworking'])
+    table_str.append([
+        'Coin slot machines (Normal)',
+        '{0:5d}'.format(control_dic['stats_MF_Normal_Total']),
+        '{0:5d}'.format(control_dic['stats_MF_Normal_Good']),
+        '{0:5d}'.format(control_dic['stats_MF_Normal_Imperfect']),
+        '{0:5d}'.format(control_dic['stats_MF_Normal_Nonworking']),
+    ])
+    table_str.append([
+        'Coin slot machines (Unusual)',
+        '{0:5d}'.format(control_dic['stats_MF_Unusual_Total']),
+        '{0:5d}'.format(control_dic['stats_MF_Unusual_Good']),
+        '{0:5d}'.format(control_dic['stats_MF_Unusual_Imperfect']),
+        '{0:5d}'.format(control_dic['stats_MF_Unusual_Nonworking']),
+    ])
+    table_str.append([
+        'No coin slot',
+        '{0:5d}'.format(control_dic['stats_MF_Nocoin_Total']),
+        '{0:5d}'.format(control_dic['stats_MF_Nocoin_Good']),
+        '{0:5d}'.format(control_dic['stats_MF_Nocoin_Imperfect']),
+        '{0:5d}'.format(control_dic['stats_MF_Nocoin_Nonworking']),
+    ])
+    table_str.append([
+        'Mechanical machines',
+        '{0:5d}'.format(control_dic['stats_MF_Mechanical_Total']),
+        '{0:5d}'.format(control_dic['stats_MF_Mechanical_Good']),
+        '{0:5d}'.format(control_dic['stats_MF_Mechanical_Imperfect']),
+        '{0:5d}'.format(control_dic['stats_MF_Mechanical_Nonworking']),
+    ])
+    table_str.append([
+        'Dead machines',
+        '{0:5d}'.format(control_dic['stats_MF_Dead_Total']),
+        '{0:5d}'.format(control_dic['stats_MF_Dead_Good']),
+        '{0:5d}'.format(control_dic['stats_MF_Dead_Imperfect']),
+        '{0:5d}'.format(control_dic['stats_MF_Dead_Nonworking']),
+    ])
+    table_str.append([
+        'Device machines',
+        '{0:5d}'.format(control_dic['stats_devices']),
+        'N/A', 'N/A', 'N/A'])
+    slist.extend(text_render_table_str(table_str))
 
     slist.append('')
     slist.append('[COLOR orange]Software Lists item count[/COLOR]')
@@ -1292,25 +1466,29 @@ def mame_stats_main_print_slist(slist, control_dic, AML_version_str):
 def mame_stats_scanner_print_slist(slist, control_dic):
     # >> MAME statistics
     slist.append('[COLOR orange]MAME scanner information[/COLOR]')
-    ta = "You have {0:5d} ROM ZIP files out of {1:5d}, missing    {2:5d}"
-    tb = "You have {0:5d} CHDs out of          {1:5d}, missing    {2:5d}"
-    tc = "You have {0:5d} Samples out of       {1:5d}, missing    {2:5d}"
+    ta = "You have {0:5d} ROM ZIP files    out of  {1:5d}, missing    {2:5d}"
+    tb = "You have {0:5d} Sample ZIP files out of  {1:5d}, missing    {2:5d}"
+    tc = "You have {0:5d} CHDs file        out of  {1:5d}, missing    {2:5d}"
     slist.append(ta.format(control_dic['scan_ROM_ZIP_files_have'],
                            control_dic['scan_ROM_ZIP_files_total'],
                            control_dic['scan_ROM_ZIP_files_missing']))
-    slist.append(tb.format(control_dic['scan_CHD_files_have'],
+    slist.append(tb.format(control_dic['scan_Samples_ZIP_have'],
+                           control_dic['scan_Samples_ZIP_total'],
+                           control_dic['scan_Samples_ZIP_missing']))
+    slist.append(tc.format(control_dic['scan_CHD_files_have'],
                            control_dic['scan_CHD_files_total'],
                            control_dic['scan_CHD_files_missing']))
-    slist.append(tc.format(control_dic['scan_Samples_have'],
-                           control_dic['scan_Samples_total'],
-                           control_dic['scan_Samples_missing']))
 
-    ta = "Can run  {0:5d} ROM machines out of  {1:5d}, unrunnable {2:5d}"
-    tb = "Can run  {0:5d} CHD machines out of  {1:5d}, unrunnable {2:5d}"
+    ta = "Can run  {0:5d} ROM machines     out of  {1:5d}, unrunnable {2:5d}"
+    tb = "Can run  {0:5d} Sample machines  out of  {1:5d}, unrunnable {2:5d}"
+    tc = "Can run  {0:5d} CHD machines     out of  {1:5d}, unrunnable {2:5d}"
     slist.append(ta.format(control_dic['scan_machine_archives_ROM_have'],
                            control_dic['scan_machine_archives_ROM_total'],
                            control_dic['scan_machine_archives_ROM_missing']))
-    slist.append(tb.format(control_dic['scan_machine_archives_CHD_have'],
+    slist.append(tb.format(control_dic['scan_machine_archives_Samples_have'],
+                           control_dic['scan_machine_archives_Samples_total'],
+                           control_dic['scan_machine_archives_Samples_missing']))
+    slist.append(tc.format(control_dic['scan_machine_archives_CHD_have'],
                            control_dic['scan_machine_archives_CHD_total'],
                            control_dic['scan_machine_archives_CHD_missing']))
 
@@ -1469,7 +1647,7 @@ def mame_stats_audit_print_slist(slist, control_dic, settings_dic):
     slist.append(t.format(control_dic['stats_audit_SL_items_with_CHD']))
 
     # --- MAME audit info ---
-    slist.append('\n[COLOR orange]MAME ROM audit information[/COLOR]\n')
+    slist.append('\n[COLOR orange]MAME ROM audit information[/COLOR]')
     table_str = []
     table_str.append(['left', 'right', 'right',  'right'])
     table_str.append(['Type', 'Total', 'Good',   'Bad'])
@@ -1504,7 +1682,7 @@ def mame_stats_audit_print_slist(slist, control_dic, settings_dic):
     slist.extend(text_render_table_str(table_str))
 
     # --- SL audit info ---
-    slist.append('\n[COLOR orange]SL audit information[/COLOR]\n')
+    slist.append('\n[COLOR orange]SL audit information[/COLOR]')
     table_str = []
     table_str.append(['left', 'right', 'right',  'right'])
     table_str.append(['Type', 'Total', 'Good',   'Bad'])
@@ -1534,8 +1712,9 @@ def mame_stats_audit_print_slist(slist, control_dic, settings_dic):
 # -------------------------------------------------------------------------------------------------
 # Check/Update/Repair Favourite ROM objects
 # -------------------------------------------------------------------------------------------------
-def mame_update_MAME_Fav_objects(PATHS, control_dic, machines, machines_render, assets_dic, pDialog):
+def mame_update_MAME_Fav_objects(PATHS, control_dic, machines, machines_render, assets_dic):
     line1_str = 'Checking/Updating MAME Favourites ...'
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', line1_str)
     fav_machines = fs_load_JSON_file_dic(PATHS.FAV_MACHINES_PATH.getPath())
     if len(fav_machines) > 1:
@@ -1563,8 +1742,9 @@ def mame_update_MAME_Fav_objects(PATHS, control_dic, machines, machines_render, 
         pDialog.update(100, line1_str)
     pDialog.close()
 
-def mame_update_MAME_MostPlay_objects(PATHS, control_dic, machines, machines_render, assets_dic, pDialog):
+def mame_update_MAME_MostPlay_objects(PATHS, control_dic, machines, machines_render, assets_dic):
     line1_str = 'Checking/Updating MAME Most Played machines ...'
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', line1_str)
     most_played_roms_dic = fs_load_JSON_file_dic(PATHS.MAME_MOST_PLAYED_FILE_PATH.getPath())
     if len(most_played_roms_dic) > 1:
@@ -1597,8 +1777,9 @@ def mame_update_MAME_MostPlay_objects(PATHS, control_dic, machines, machines_ren
         pDialog.update(100, line1_str)
     pDialog.close()
 
-def mame_update_MAME_RecentPlay_objects(PATHS, control_dic, machines, machines_render, assets_dic, pDialog):
+def mame_update_MAME_RecentPlay_objects(PATHS, control_dic, machines, machines_render, assets_dic):
     line1_str = 'Checking/Updating MAME Recently Played machines ...'
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', line1_str)
     recent_roms_list = fs_load_JSON_file_list(PATHS.MAME_RECENT_PLAYED_FILE_PATH.getPath())
     if len(recent_roms_list) > 1:
@@ -1627,7 +1808,7 @@ def mame_update_MAME_RecentPlay_objects(PATHS, control_dic, machines, machines_r
         pDialog.update(100, line1_str)
     pDialog.close()
 
-def mame_update_SL_Fav_objects(PATHS, control_dic, SL_catalog_dic, pDialog):
+def mame_update_SL_Fav_objects(PATHS, control_dic, SL_catalog_dic):
     fav_SL_roms = fs_load_JSON_file_dic(PATHS.FAV_SL_ROMS_PATH.getPath())
     num_SL_favs = len(fav_SL_roms)
     num_iteration = 0
@@ -1649,7 +1830,7 @@ def mame_update_SL_Fav_objects(PATHS, control_dic, SL_catalog_dic, pDialog):
         num_iteration += 1
 
         # >> Load SL ROMs DB and assets
-        file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '.json'
+        file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_items.json'
         SL_DB_FN = PATHS.SL_DB_DIR.pjoin(file_name)
         assets_file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_assets.json'
         SL_asset_DB_FN = PATHS.SL_DB_DIR.pjoin(assets_file_name)
@@ -1672,7 +1853,7 @@ def mame_update_SL_Fav_objects(PATHS, control_dic, SL_catalog_dic, pDialog):
     pDialog.update(100)
     pDialog.close()
 
-def mame_update_SL_MostPlay_objects(PATHS, control_dic, SL_catalog_dic, pDialog):
+def mame_update_SL_MostPlay_objects(PATHS, control_dic, SL_catalog_dic):
     most_played_roms_dic = fs_load_JSON_file_dic(PATHS.SL_MOST_PLAYED_FILE_PATH.getPath())
     num_SL_favs = len(most_played_roms_dic)
     num_iteration = 0
@@ -1698,7 +1879,7 @@ def mame_update_SL_MostPlay_objects(PATHS, control_dic, SL_catalog_dic, pDialog)
         num_iteration += 1
 
         # >> Load SL ROMs DB and assets
-        file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '.json'
+        file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_items.json'
         SL_DB_FN = PATHS.SL_DB_DIR.pjoin(file_name)
         assets_file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_assets.json'
         SL_asset_DB_FN = PATHS.SL_DB_DIR.pjoin(assets_file_name)
@@ -1721,7 +1902,7 @@ def mame_update_SL_MostPlay_objects(PATHS, control_dic, SL_catalog_dic, pDialog)
     pDialog.update(100)
     pDialog.close()
 
-def mame_update_SL_RecentPlay_objects(PATHS, control_dic, SL_catalog_dic, pDialog):
+def mame_update_SL_RecentPlay_objects(PATHS, control_dic, SL_catalog_dic):
     recent_roms_list = fs_load_JSON_file_list(PATHS.SL_RECENT_PLAYED_FILE_PATH.getPath())
     num_SL_favs = len(recent_roms_list)
     num_iteration = 0
@@ -1743,7 +1924,7 @@ def mame_update_SL_RecentPlay_objects(PATHS, control_dic, SL_catalog_dic, pDialo
         num_iteration += 1
 
         # >> Load SL ROMs DB and assets
-        file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '.json'
+        file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_items.json'
         SL_DB_FN = PATHS.SL_DB_DIR.pjoin(file_name)
         assets_file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_assets.json'
         SL_asset_DB_FN = PATHS.SL_DB_DIR.pjoin(assets_file_name)
@@ -1777,9 +1958,10 @@ def mame_update_SL_RecentPlay_objects(PATHS, control_dic, SL_catalog_dic, pDialo
 # Line 5) Artwork, Manual, History, Info, Gameinit, Command
 # Line 6) Machine [supports|does not support] a Software List.
 # ---------------------------------------------------------------------------------------------
-def mame_build_MAME_plots(machines, machines_render, assets_dic, pDialog,
-                          history_idx_dic, mameinfo_idx_dic, gameinit_idx_dic, command_idx_dic):
-    log_info('mame_build_plots() Building machine plots/descriptions ...')
+def mame_build_MAME_plots(PATHS, settings, control_dic,
+    machines, machines_render, assets_dic,
+    history_idx_dic, mameinfo_idx_dic, gameinit_idx_dic, command_idx_dic):
+    log_info('mame_build_MAME_plots() Building machine plots/descriptions ...')
     # >> Do not crash if DAT files are not configured.
     if history_idx_dic:
         history_info_set  = {machine[0] for machine in history_idx_dic['mame']['machines']}
@@ -1792,7 +1974,8 @@ def mame_build_MAME_plots(machines, machines_render, assets_dic, pDialog,
     gameinit_info_set = {machine[0] for machine in gameinit_idx_dic}
     command_info_set  = {machine[0] for machine in command_idx_dic}
 
-    # >> Built machine plots
+    # --- Built machine plots ---
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher')
     pDialog.update(0, 'Generating MAME machine plots ...')
     total_machines = len(machines)
@@ -1806,12 +1989,17 @@ def mame_build_MAME_plots(machines, machines_render, assets_dic, pDialog,
         if machine_name in gameinit_info_set: Flag_list.append('Gameinit')
         if machine_name in command_info_set: Flag_list.append('Command')
         Flag_str = ', '.join(Flag_list)
-        if m['control_type']:
-            controls_str = 'Controls {0}'.format(mame_get_control_str(m['control_type']))
+        if m['input']:
+            control_list = [ctrl_dic['type'] for ctrl_dic in m['input']['control_list']]
+        else:
+            control_list = []
+        if control_list:
+            controls_str = 'Controls {0}'.format(mame_get_control_str(control_list))
         else:
             controls_str = 'No controls'
         mecha_str = 'Mechanical' if m['isMechanical'] else 'Non-mechanical'
-        coin_str  = 'Machine has {0} coin slots'.format(m['coins']) if m['coins'] > 0 else 'Machine has no coin slots'
+        n_coins = m['input']['att_coins'] if m['input'] else 0
+        coin_str  = 'Machine has {0} coin slots'.format(n_coins) if n_coins > 0 else 'Machine has no coin slots'
         SL_str    = ', '.join(m['softwarelists']) if m['softwarelists'] else ''
 
         plot_str_list = []
@@ -1823,10 +2011,21 @@ def mame_build_MAME_plots(machines, machines_render, assets_dic, pDialog,
         if SL_str: plot_str_list.append('SL {0}'.format(SL_str))
         assets_dic[machine_name]['plot'] = '\n'.join(plot_str_list)
 
-        # >> Update progress
+        # --- Update progress ---
         num_machines += 1
         pDialog.update((num_machines*100)//total_machines)
     pDialog.close()
+
+    # --- Timestamp ---
+    change_control_dic(control_dic, 't_MAME_plots_build', time.time())
+
+    # --- Save the MAME asset database ---
+    db_files = [
+        (assets_dic, 'MAME machine assets', PATHS.MAIN_ASSETS_DB_PATH.getPath()),
+        # --- Save control_dic after everything is saved ---
+        (control_dic, 'Control dictionary', PATHS.MAIN_CONTROL_PATH.getPath()),
+    ]
+    fs_save_files(db_files)
 
 # ---------------------------------------------------------------------------------------------
 # Generate plot for Software Lists
@@ -1835,8 +2034,10 @@ def mame_build_MAME_plots(machines, machines_render, assets_dic, pDialog,
 # Line 3) Manual, History
 # Line 4) Machines: machine list ...
 # ---------------------------------------------------------------------------------------------
-def mame_build_SL_plots(PATHS, SL_index_dic, SL_machines_dic, History_idx_dic, pDialog):
+def mame_build_SL_plots(PATHS, settings, control_dic,
+    SL_index_dic, SL_machines_dic, History_idx_dic):
     pdialog_line1 = 'Scanning Sofware Lists assets/artwork ...'
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', pdialog_line1)
     pDialog.update(0)
     total_files = len(SL_index_dic)
@@ -1848,7 +2049,7 @@ def mame_build_SL_plots(PATHS, SL_index_dic, SL_machines_dic, History_idx_dic, p
 
         # >> Open database
         SL_DB_prefix = SL_index_dic[SL_name]['rom_DB_noext']
-        SL_ROMs_FN      = PATHS.SL_DB_DIR.pjoin(SL_DB_prefix + '.json')
+        SL_ROMs_FN      = PATHS.SL_DB_DIR.pjoin(SL_DB_prefix + '_items.json')
         SL_assets_FN    = PATHS.SL_DB_DIR.pjoin(SL_DB_prefix + '_assets.json')
         SL_ROM_audit_FN = PATHS.SL_DB_DIR.pjoin(SL_DB_prefix + '_ROM_audit.json')
         SL_roms          = fs_load_JSON_file_dic(SL_ROMs_FN.getPath(), verbose = False)
@@ -1895,6 +2096,10 @@ def mame_build_SL_plots(PATHS, SL_index_dic, SL_machines_dic, History_idx_dic, p
         processed_files += 1
     update_number = (processed_files*100) // total_files
     pDialog.close()
+
+    # --- Timestamp ---
+    change_control_dic(control_dic, 't_SL_plots_build', time.time())
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
 
 # -------------------------------------------------------------------------------------------------
 # MAME ROM/CHD audit code
@@ -2168,7 +2373,7 @@ def mame_audit_MAME_machine(settings, rom_list, audit_dic):
 # -------------------------------------------------------------------------------------------------
 # SL ROM/CHD audit code
 # -------------------------------------------------------------------------------------------------
-def mame_audit_SL_machine(settings, rom_list, audit_dic):
+def mame_audit_SL_machine(SL_ROM_path_FN, SL_CHD_path_FN, SL_name, item_name, rom_list, audit_dic):
     # --- Cache the ROM set ZIP files and detect wrong named files by CRC ---
     # >> Look at mame_audit_MAME_machine() for comments.
     z_cache = {}
@@ -2181,7 +2386,7 @@ def mame_audit_SL_machine(settings, rom_list, audit_dic):
         split_list = m_rom['location'].split('/')
         SL_name  = split_list[0]
         zip_name = split_list[1] + '.zip'
-        zip_FN = FileName(settings['SL_rom_path']).pjoin(SL_name).pjoin(zip_name)
+        zip_FN = SL_ROM_path_FN.pjoin(SL_name).pjoin(zip_name)
         zip_path = zip_FN.getPath()
 
         # >> ZIP file encountered for the first time. Skip ZIP files already in the cache.
@@ -2202,7 +2407,28 @@ def mame_audit_SL_machine(settings, rom_list, audit_dic):
                     z_info = zip_f.getinfo(zfile)
                     z_info_file_size = z_info.file_size
                     z_info_crc_hex_str = '{0:08x}'.format(z_info.CRC)
-                    zip_file_dic[zfile] = {'size' : z_info_file_size, 'crc' : z_info_crc_hex_str}
+                    # Unicode filenames in ZIP files cause problems later in this function.
+                    # zfile has type str and it's not encoded in utf-8.
+                    # How to know encoding of ZIP files?
+                    # https://stackoverflow.com/questions/15918314/how-to-detect-string-byte-encoding/15918519
+                    try:
+                        # zfile sometimes has type str, sometimes unicode. If type is str then
+                        # try to decode it as UTF-8.
+                        if type(zfile) == unicode:
+                            zfile_unicode = zfile
+                        else:
+                            zfile_unicode = zfile.decode('utf-8')
+                    except UnicodeDecodeError:
+                        log_error('mame_audit_SL_machine() Exception UnicodeDecodeError')
+                        log_error('type(zfile) = {0}'.format(type(zfile)))
+                        log_error('SL_name "{0}", item_name "{1}", rom name "{2}"'.format(SL_name, item_name, m_rom['name']))
+                    except UnicodeEncodeError:
+                        log_error('mame_audit_SL_machine() Exception UnicodeEncodeError')
+                        log_error('type(zfile) = {0}'.format(type(zfile)))
+                        log_error('SL_name "{0}", item_name "{1}", rom name "{2}"'.format(SL_name, item_name, m_rom['name']))
+                    else:
+                        # For now, do not add non-ASCII ROMs so the audit will fail for this ROM.
+                        zip_file_dic[zfile_unicode] = {'size' : z_info_file_size, 'crc' : z_info_crc_hex_str}
                     # log_debug('ZIP CRC32 {0} | CRC hex {1} | size {2}'.format(z_info.CRC, z_crc_hex, z_info.file_size))
                     # log_debug('ROM CRC hex {0} | size {1}'.format(m_rom['crc'], 0))
                 zip_f.close()
@@ -2212,9 +2438,10 @@ def mame_audit_SL_machine(settings, rom_list, audit_dic):
                 # >> Mark ZIP file as not found
                 z_cache_status[zip_path] = ZIP_NOT_FOUND
 
-    # >> Audit ROM by ROM
+    # --- Audit ROM by ROM ---
     for m_rom in rom_list:
         if m_rom['type'] == ROM_TYPE_DISK:
+            # --- Audit CHD ----------------------------------------------------------------------
             split_list = m_rom['location'].split('/')
             SL_name   = split_list[0]
             item_name = split_list[1]
@@ -2232,7 +2459,7 @@ def mame_audit_SL_machine(settings, rom_list, audit_dic):
                 continue
 
             # >> Test if DISK file exists
-            chd_FN = FileName(settings['SL_chd_path']).pjoin(SL_name).pjoin(item_name).pjoin(disk_name + '.chd')
+            chd_FN = SL_CHD_path_FN.pjoin(SL_name).pjoin(item_name).pjoin(disk_name + '.chd')
             # log_debug('chd_FN P {0}'.format(chd_FN.getPath()))
             if not chd_FN.exists():
                 m_rom['status'] = AUDIT_STATUS_CHD_NO_FOUND
@@ -2258,6 +2485,7 @@ def mame_audit_SL_machine(settings, rom_list, audit_dic):
             m_rom['status'] = AUDIT_STATUS_OK
             m_rom['status_colour'] = '[COLOR green]{0}[/COLOR]'.format(m_rom['status'])
         else:
+            # --- Audit ROM ----------------------------------------------------------------------
             split_list = m_rom['location'].split('/')
             SL_name   = split_list[0]
             item_name = split_list[1]
@@ -2275,7 +2503,7 @@ def mame_audit_SL_machine(settings, rom_list, audit_dic):
                 continue
 
             # >> Test if ZIP file exists
-            zip_FN = FileName(settings['SL_rom_path']).pjoin(SL_name).pjoin(item_name + '.zip')
+            zip_FN = SL_ROM_path_FN.pjoin(SL_name).pjoin(item_name + '.zip')
             zip_path = zip_FN.getPath()
             # log_debug('zip_FN P {0}'.format(zip_FN.getPath()))
             if z_cache_status[zip_path] == ZIP_NOT_FOUND:
@@ -2352,11 +2580,12 @@ def mame_audit_SL_machine(settings, rom_list, audit_dic):
     audit_dic['machine_CHDs_are_OK'] = all(CHD_OK_status_list) if audit_dic['machine_has_CHDs'] else True
     audit_dic['machine_is_OK'] = audit_dic['machine_ROMs_are_OK'] and audit_dic['machine_CHDs_are_OK']
 
-def mame_audit_MAME_all(PATHS, pDialog, settings, control_dic, machines, machines_render, audit_roms_dic):
+def mame_audit_MAME_all(PATHS, settings, control_dic, machines, machines_render, audit_roms_dic):
     log_debug('mame_audit_MAME_all() Initialising ...')
 
     # >> Go machine by machine and audit ZIPs and CHDs.
     # >> Adds new column 'status' to each ROM.
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', 'Auditing MAME ROMs and CHDs ... ')
     total_machines = len(machines_render)
     processed_machines = 0
@@ -2656,8 +2885,11 @@ def mame_audit_MAME_all(PATHS, pDialog, settings, control_dic, machines, machine
     change_control_dic(control_dic, 'audit_MAME_machines_with_CHDs_BAD', audit_MAME_machines_with_CHDs_BAD)
     change_control_dic(control_dic, 'audit_MAME_machines_without_CHDs', audit_MAME_machines_without_CHDs)
 
-    # >> Update timestamp
+    # --- Update timestamp ---
     change_control_dic(control_dic, 't_MAME_audit', time.time())
+
+    # --- Save control_dic ---
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
 
 def mame_audit_SL_all(PATHS, settings, control_dic):
     log_debug('mame_audit_SL_all() Initialising ...')
@@ -2738,10 +2970,12 @@ def mame_audit_SL_all(PATHS, settings, control_dic):
     pDialog.create('Advanced MAME Launcher', pdialog_line1)
     total_files = len(SL_catalog_dic)
     processed_files = 0
+    SL_ROM_path_FN = FileName(settings['SL_rom_path'])
+    SL_CHD_path_FN = FileName(settings['SL_chd_path'])
     for SL_name in sorted(SL_catalog_dic):
         pDialog.update((processed_files*100) // total_files, pdialog_line1, 'Software List {0}'.format(SL_name))
         SL_dic = SL_catalog_dic[SL_name]
-        SL_DB_FN = PATHS.SL_DB_DIR.pjoin(SL_dic['rom_DB_noext'] + '.json')
+        SL_DB_FN = PATHS.SL_DB_DIR.pjoin(SL_dic['rom_DB_noext'] + '_items.json')
         SL_AUDIT_ROMs_DB_FN = PATHS.SL_DB_DIR.pjoin(SL_dic['rom_DB_noext'] + '_ROM_audit.json')
         roms = fs_load_JSON_file_dic(SL_DB_FN.getPath(), verbose = False)
         audit_roms = fs_load_JSON_file_dic(SL_AUDIT_ROMs_DB_FN.getPath(), verbose = False)
@@ -2751,7 +2985,7 @@ def mame_audit_SL_all(PATHS, settings, control_dic):
             # >> audit_roms_list and audit_dic are mutable and edited inside the function()
             audit_rom_list = audit_roms[rom_key]
             audit_dic = fs_new_audit_dic()
-            mame_audit_SL_machine(settings, audit_rom_list, audit_dic)
+            mame_audit_SL_machine(SL_ROM_path_FN, SL_CHD_path_FN, SL_name, rom_key, audit_rom_list, audit_dic)
 
             # >> Audit statistics
             audit_SL_items_runnable += 1
@@ -2863,7 +3097,6 @@ def mame_audit_SL_all(PATHS, settings, control_dic):
 
     # >> Update SL audit statistics.
     change_control_dic(control_dic, 'audit_SL_items_runnable', audit_SL_items_runnable)
-    
     change_control_dic(control_dic, 'audit_SL_items_with_arch', audit_SL_items_with_arch)
     change_control_dic(control_dic, 'audit_SL_items_with_arch_OK', audit_SL_items_with_arch_OK)
     change_control_dic(control_dic, 'audit_SL_items_with_arch_BAD', audit_SL_items_with_arch_BAD)
@@ -2877,8 +3110,11 @@ def mame_audit_SL_all(PATHS, settings, control_dic):
     change_control_dic(control_dic, 'audit_SL_items_with_CHD_BAD', audit_SL_items_with_CHD_BAD)
     change_control_dic(control_dic, 'audit_SL_items_without_CHD', audit_SL_items_without_CHD)
 
-    # >> Update timestamp
+    # --- Update timestamp ---
     change_control_dic(control_dic, 't_SL_audit', time.time())
+
+    # --- Save control_dic ---
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
 
 # -------------------------------------------------------------------------------------------------
 # Fanart generation
@@ -2888,6 +3124,7 @@ def mame_audit_SL_all(PATHS, settings, control_dic):
 font_mono = None
 font_mono_SL = None
 font_mono_item = None
+font_mono_debug = None
 
 #
 # Scales and centers img into a box of size (box_x_size, box_y_size).
@@ -2897,32 +3134,32 @@ font_mono_item = None
 def PIL_resize_proportional(img, layout, dic_key, CANVAS_COLOR = (0, 0, 0)):
     box_x_size = layout[dic_key]['width']
     box_y_size = layout[dic_key]['height']
-    # print('PIL_resize_proportional() Initialising ...')
-    # print('img X_size = {0} | Y_size = {1}'.format(img.size[0], img.size[1]))
-    # print('box X_size = {0} | Y_size = {1}'.format(box_x_size, box_y_size))
+    # log_debug('PIL_resize_proportional() Initialising ...')
+    # log_debug('img X_size = {0} | Y_size = {1}'.format(img.size[0], img.size[1]))
+    # log_debug('box X_size = {0} | Y_size = {1}'.format(box_x_size, box_y_size))
 
     # --- First try to fit X dimension ---
-    # print('PIL_resize_proportional() Fitting X dimension')
+    # log_debug('PIL_resize_proportional() Fitting X dimension')
     wpercent = (box_x_size / float(img.size[0]))
     hsize = int((float(img.size[1]) * float(wpercent)))
     r_x_size = box_x_size
     r_y_size = hsize
     x_offset = 0
     y_offset = (box_y_size - r_y_size) / 2
-    # print('resize X_size = {0} | Y_size = {1}'.format(r_x_size, r_y_size))
-    # print('resize x_offset = {0} | y_offset = {1}'.format(x_offset, y_offset))
+    # log_debug('resize X_size = {0} | Y_size = {1}'.format(r_x_size, r_y_size))
+    # log_debug('resize x_offset = {0} | y_offset = {1}'.format(x_offset, y_offset))
 
     # --- Second try to fit Y dimension ---
     if y_offset < 0:
-        # print('Fitting Y dimension')
+        # log_debug('Fitting Y dimension')
         hpercent = (box_y_size / float(img.size[1]))
         wsize = int((float(img.size[0]) * float(hpercent)))
         r_x_size = wsize
         r_y_size = box_y_size
         x_offset = (box_x_size - r_x_size) / 2
         y_offset = 0
-        # print('resize X_size = {0} | Y_size = {1}'.format(r_x_size, r_y_size))
-        # print('resize x_offset = {0} | y_offset = {1}'.format(x_offset, y_offset))
+        # log_debug('resize X_size = {0} | Y_size = {1}'.format(r_x_size, r_y_size))
+        # log_debug('resize x_offset = {0} | y_offset = {1}'.format(x_offset, y_offset))
 
     # >> Create a new image and paste original image centered.
     canvas_img = Image.new('RGB', (box_x_size, box_y_size), CANVAS_COLOR)
@@ -2969,9 +3206,13 @@ MAME_layout_assets = {
     'Marquee'     : 'marquee',
 }
 
+#
+# Returns an Ordered dictionary with the layout of the fanart.
+# The Ordered dictionary is to keep the order of the tags in the XML
+#
 def mame_load_MAME_Fanart_template(Template_FN):
-    # >> Load XML file
-    layout = {}
+    # --- Load XML file ---
+    layout = OrderedDict()
     if not os.path.isfile(Template_FN.getPath()): return None
     log_debug('mame_load_MAME_Fanart_template() Loading XML "{0}"'.format(Template_FN.getPath()))
     try:
@@ -2980,7 +3221,7 @@ def mame_load_MAME_Fanart_template(Template_FN):
         return None
     xml_root = xml_tree.getroot()
 
-    # >> Parse file
+    # --- Parse XML file ---
     art_list = ['Title', 'Snap', 'Flyer', 'Cabinet', 'Artpreview', 'PCB', 'Clearlogo', 'CPanel', 'Marquee']
     art_tag_list = ['width', 'height', 'left', 'top']
     text_list = ['MachineName']
@@ -2988,7 +3229,7 @@ def mame_load_MAME_Fanart_template(Template_FN):
     for root_element in xml_root:
         # log_debug('Root child {0}'.format(root_element.tag))
         if root_element.tag in art_list:
-            art_dic = d = {key : 0 for key in art_tag_list}
+            art_dic = {key : 0 for key in art_tag_list}
             for art_child in root_element:
                 if art_child.tag in art_tag_list:
                     art_dic[art_child.tag] = int(art_child.text)
@@ -2998,7 +3239,7 @@ def mame_load_MAME_Fanart_template(Template_FN):
                     return None
             layout[root_element.tag] = art_dic
         elif root_element.tag in text_list:
-            text_dic = d = {key : 0 for key in test_tag_list}
+            text_dic = {key : 0 for key in test_tag_list}
             for art_child in root_element:
                 if art_child.tag in test_tag_list:
                     text_dic[art_child.tag] = int(art_child.text)
@@ -3008,18 +3249,25 @@ def mame_load_MAME_Fanart_template(Template_FN):
                     return None
             layout[root_element.tag] = text_dic
         else:
-            log_error('Unknown tag <{0}>'.format(root_element.tag))
+            log_error('Unknown root tag <{0}>'.format(root_element.tag))
             return None
 
     return layout
 
 #
-# Rebuild Fanart for a given MAME machine
+# Rebuild Fanart for a given MAME machine.
 #
-def mame_build_fanart(PATHS, layout, m_name, assets_dic, Fanart_FN, CANVAS_COLOR = (0, 0, 0)):
+def mame_build_MAME_Fanart(PATHS, layout, m_name, assets_dic,
+    Fanart_FN, CANVAS_COLOR = (0, 0, 0), test_flag = False):
     global font_mono
+    global font_mono_debug
+    canvas_size = (1920, 1080)
+    canvas_bg_color = (0, 0, 0)
+    color_white = (255, 255, 255)
+    t_color_fg = (255,255,0)
+    t_color_bg = (102,102,0)
 
-    # >> Quickly check if machine has valid assets, and skip fanart generation if not.
+    # Quickly check if machine has valid assets, and skip fanart generation if not.
     # log_debug('mame_build_fanart() Building fanart for machine {0}'.format(m_name))
     machine_has_valid_assets = False
     for asset_key, asset_db_name in MAME_layout_assets.iteritems():
@@ -3029,24 +3277,31 @@ def mame_build_fanart(PATHS, layout, m_name, assets_dic, Fanart_FN, CANVAS_COLOR
             break
     if not machine_has_valid_assets: return
 
-    # >> If font object does not exists open font an cache it.
+    # --- If font object does not exists open font an cache it. ---
     if not font_mono:
         log_debug('mame_build_fanart() Creating font_mono object')
         log_debug('mame_build_fanart() Loading "{0}"'.format(PATHS.MONO_FONT_PATH.getPath()))
         font_mono = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), layout['MachineName']['fontsize'])
+    if not font_mono_debug:
+        log_debug('mame_build_SL_fanart() Creating font_mono_debug object')
+        log_debug('mame_build_SL_fanart() Loading "{0}"'.format(PATHS.MONO_FONT_PATH.getPath()))
+        font_mono_debug = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), 44)
 
-    # >> Create fanart canvas
-    fanart_img = Image.new('RGB', (1920, 1080), (0, 0, 0))
+    # --- Create fanart canvas ---
+    fanart_img = Image.new('RGB', canvas_size, canvas_bg_color)
     draw = ImageDraw.Draw(fanart_img)
 
-    # >> Draw assets according to layout
+    # --- Draw assets according to layout ---
+    # layout is an ordered dictionary, so the assets are draw in the order they appear
+    # in the XML file.
+    img_index = 1
     for asset_key in layout:
         # log_debug('{0:<10} initialising'.format(asset_key))
         m_assets = assets_dic[m_name]
         if asset_key == 'MachineName':
             t_left = layout['MachineName']['left']
             t_top = layout['MachineName']['top']
-            draw.text((t_left, t_top), m_name, (255, 255, 255), font = font_mono)
+            draw.text((t_left, t_top), m_name, color_white, font_mono)
         else:
             asset_db_name = MAME_layout_assets[asset_key]
             if not m_assets[asset_db_name]:
@@ -3057,11 +3312,42 @@ def mame_build_fanart(PATHS, layout, m_name, assets_dic, Fanart_FN, CANVAS_COLOR
                 # log_debug('{0:<10} file not found'.format(asset_db_name))
                 continue
             # log_debug('{0:<10} found'.format(asset_db_name))
-            img_asset = Image.open(Asset_FN.getPath())
-            img_asset = PIL_resize_proportional(img_asset, layout, asset_key, CANVAS_COLOR)
-            fanart_img = PIL_paste_image(fanart_img, img_asset, layout, asset_key)
+            # Sometimes PIL_resize_proportional() fails.
+            #   File "~/plugin.program.AML.dev/resources/mame.py", line 3017, in PIL_resize_proportional
+            #   img = img.resize((r_x_size, r_y_size), Image.ANTIALIAS)
+            #   File "/usr/lib/python2.7/dist-packages/PIL/Image.py", line 1804, in resize
+            #   self.load()
+            #   File "/usr/lib/python2.7/dist-packages/PIL/ImageFile.py", line 252, in load
+            #   self.load_end()
+            #   File "/usr/lib/python2.7/dist-packages/PIL/PngImagePlugin.py", line 680, in load_end
+            #   self.png.call(cid, pos, length)
+            #   File "/usr/lib/python2.7/dist-packages/PIL/PngImagePlugin.py", line 140, in call
+            #   return getattr(self, "chunk_" + cid.decode('ascii'))(pos, length)
+            #   AttributeError: 'PngStream' object has no attribute 'chunk_tIME'
+            # If so, report the machine that produces the fail and do not generate the
+            # Fanart.
+            try:
+                img_asset = Image.open(Asset_FN.getPath())
+                img_asset = PIL_resize_proportional(img_asset, layout, asset_key, CANVAS_COLOR)
+            except AttributeError:
+                u = 'mame_build_fanart() Exception AttributeError in m_name {0}, asset_key {1}'.format(m_name, asset_key)
+                log_error(u)
+            else:
+                fanart_img = PIL_paste_image(fanart_img, img_asset, layout, asset_key)
+            # In debug mode print asset name and draw order.
+            if test_flag:
+                t_off = 15
+                bg_off = 2
+                t_bg_coord = (layout[asset_key]['left'] + t_off + bg_off,
+                              layout[asset_key]['top'] + t_off + bg_off)
+                t_coord = (layout[asset_key]['left'] + t_off, layout[asset_key]['top'] + t_off)
+                debug_text = '{0} {1}'.format(img_index, asset_key)
+                # Draw text background first, then front text to create a nice effect.
+                draw.text(t_bg_coord, debug_text, t_color_bg, font_mono_debug)
+                draw.text(t_coord, debug_text, t_color_fg, font_mono_debug)
+            img_index += 1
 
-    # >> Save fanart and update database
+    # --- Save fanart and update database ---
     # log_debug('mame_build_fanart() Saving Fanart "{0}"'.format(Fanart_FN.getPath()))
     fanart_img.save(Fanart_FN.getPath())
     assets_dic[m_name]['fanart'] = Fanart_FN.getPath()
@@ -3080,9 +3366,13 @@ SL_layout_assets = {
     'BoxFront' : 'boxfront',
 }
 
+#
+# Returns an Ordered dictionary with the layout of the fanart.
+# The Ordered dictionary is to keep the order of the tags in the XML
+#
 def mame_load_SL_Fanart_template(Template_FN):
-    # >> Load XML file
-    layout = {}
+    # --- Load XML file ---
+    layout = OrderedDict()
     if not os.path.isfile(Template_FN.getPath()): return None
     log_debug('mame_load_SL_Fanart_template() Loading XML "{0}"'.format(Template_FN.getPath()))
     try:
@@ -3091,7 +3381,7 @@ def mame_load_SL_Fanart_template(Template_FN):
         return None
     xml_root = xml_tree.getroot()
 
-    # >> Parse file
+    # --- Parse file ---
     art_list = ['Title', 'Snap', 'BoxFront']
     art_tag_list = ['width', 'height', 'left', 'top']
     text_list = ['SLName', 'ItemName']
@@ -3099,7 +3389,8 @@ def mame_load_SL_Fanart_template(Template_FN):
     for root_element in xml_root:
         # log_debug('Root child {0}'.format(root_element.tag))
         if root_element.tag in art_list:
-            art_dic = d = {key : 0 for key in art_tag_list}
+            # Default size tags to 0
+            art_dic = {key : 0 for key in art_tag_list}
             for art_child in root_element:
                 if art_child.tag in art_tag_list:
                     art_dic[art_child.tag] = int(art_child.text)
@@ -3109,7 +3400,7 @@ def mame_load_SL_Fanart_template(Template_FN):
                     return None
             layout[root_element.tag] = art_dic
         elif root_element.tag in text_list:
-            text_dic = d = {key : 0 for key in test_tag_list}
+            text_dic = {key : 0 for key in test_tag_list}
             for art_child in root_element:
                 if art_child.tag in test_tag_list:
                     text_dic[art_child.tag] = int(art_child.text)
@@ -3119,7 +3410,7 @@ def mame_load_SL_Fanart_template(Template_FN):
                     return None
             layout[root_element.tag] = text_dic
         else:
-            log_error('Unknown tag <{0}>'.format(root_element.tag))
+            log_error('Unknown root tag <{0}>'.format(root_element.tag))
             return None
 
     return layout
@@ -3127,11 +3418,18 @@ def mame_load_SL_Fanart_template(Template_FN):
 #
 # Rebuild Fanart for a given SL item
 #
-def mame_build_SL_fanart(PATHS, layout_SL, SL_name, m_name, assets_dic, Fanart_FN, CANVAS_COLOR = (0, 0, 0)):
+def mame_build_SL_Fanart(PATHS, layout, SL_name, m_name, assets_dic,
+    Fanart_FN, CANVAS_COLOR = (0, 0, 0), test_flag = False):
     global font_mono_SL
     global font_mono_item
+    global font_mono_debug
+    canvas_size = (1920, 1080)
+    canvas_bg_color = (0, 0, 0)
+    color_white = (255, 255, 255)
+    t_color_fg = (255,255,0)
+    t_color_bg = (102,102,0)
 
-    # >> Quickly check if machine has valid assets, and skip fanart generation if not.
+    # Quickly check if machine has valid assets, and skip fanart generation if not.
     # log_debug('mame_build_SL_fanart() Building fanart for SL {0} item {1}'.format(SL_name, m_name))
     machine_has_valid_assets = False
     for asset_key, asset_db_name in SL_layout_assets.iteritems():
@@ -3141,32 +3439,38 @@ def mame_build_SL_fanart(PATHS, layout_SL, SL_name, m_name, assets_dic, Fanart_F
             break
     if not machine_has_valid_assets: return
 
-    # >> If font object does not exists open font an cache it.
+    # If font object does not exists open font an cache it.
     if not font_mono_SL:
         log_debug('mame_build_SL_fanart() Creating font_mono_SL object')
         log_debug('mame_build_SL_fanart() Loading "{0}"'.format(PATHS.MONO_FONT_PATH.getPath()))
-        font_mono_SL = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), layout_SL['SLName']['fontsize'])
+        font_mono_SL = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), layout['SLName']['fontsize'])
     if not font_mono_item:
         log_debug('mame_build_SL_fanart() Creating font_mono_item object')
         log_debug('mame_build_SL_fanart() Loading "{0}"'.format(PATHS.MONO_FONT_PATH.getPath()))
-        font_mono_item = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), layout_SL['ItemName']['fontsize'])
+        font_mono_item = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), layout['ItemName']['fontsize'])
+    if not font_mono_debug:
+        log_debug('mame_build_SL_fanart() Creating font_mono_debug object')
+        log_debug('mame_build_SL_fanart() Loading "{0}"'.format(PATHS.MONO_FONT_PATH.getPath()))
+        font_mono_debug = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), 44)
 
-    # >> Create fanart canvas
-    fanart_img = Image.new('RGB', (1920, 1080), (0, 0, 0))
+    # --- Create fanart canvas ---
+    fanart_img = Image.new('RGB', canvas_size, canvas_bg_color)
     draw = ImageDraw.Draw(fanart_img)
 
-    # >> Draw assets according to layout_SL
-    for asset_key in layout_SL:
+    # --- Draw assets according to layout ---
+    # layout is an ordered dictionary, so the assets are draw in the order they appear
+    # in the XML file.
+    img_index = 1
+    for asset_key in layout:
         # log_debug('{0:<10} initialising'.format(asset_key))
         m_assets = assets_dic[m_name]
-        if asset_key == 'SLName':
-            t_left = layout_SL['SLName']['left']
-            t_top = layout_SL['SLName']['top']
-            draw.text((t_left, t_top), SL_name, (255, 255, 255), font = font_mono_SL)
-        elif asset_key == 'ItemName':
-            t_left = layout_SL['ItemName']['left']
-            t_top = layout_SL['ItemName']['top']
-            draw.text((t_left, t_top), m_name, (255, 255, 255), font = font_mono_item)
+        if asset_key == 'SLName' or asset_key == 'ItemName':
+            t_left = layout[asset_key]['left']
+            t_top = layout[asset_key]['top']
+            if asset_key == 'SLName': name = SL_name
+            elif asset_key == 'ItemName': name = m_name
+            else: raise TypeError
+            draw.text((t_left, t_top), name, color_white, font_mono_SL)
         else:
             asset_db_name = SL_layout_assets[asset_key]
             if not m_assets[asset_db_name]:
@@ -3178,10 +3482,21 @@ def mame_build_SL_fanart(PATHS, layout_SL, SL_name, m_name, assets_dic, Fanart_F
                 continue
             # log_debug('{0:<10} found'.format(asset_db_name))
             img_asset = Image.open(Asset_FN.getPath())
-            img_asset = PIL_resize_proportional(img_asset, layout_SL, asset_key, CANVAS_COLOR)
-            fanart_img = PIL_paste_image(fanart_img, img_asset, layout_SL, asset_key)
-
-    # >> Save fanart and update database
+            img_asset = PIL_resize_proportional(img_asset, layout, asset_key, CANVAS_COLOR)
+            fanart_img = PIL_paste_image(fanart_img, img_asset, layout, asset_key)
+            # In debug mode print asset name and draw order.
+            if test_flag:
+                t_off = 15
+                bg_off = 2
+                t_bg_coord = (layout[asset_key]['left'] + t_off + bg_off,
+                              layout[asset_key]['top'] + t_off + bg_off)
+                t_coord = (layout[asset_key]['left'] + t_off, layout[asset_key]['top'] + t_off)
+                debug_text = '{0} {1}'.format(img_index, asset_key)
+                # Draw text background first, then front text to create a nice effect.
+                draw.text(t_bg_coord, debug_text, t_color_bg, font_mono_debug)
+                draw.text(t_coord, debug_text, t_color_fg, font_mono_debug)
+            img_index += 1
+    # --- Save fanart and update database ---
     # log_debug('mame_build_SL_fanart() Saving Fanart "{0}"'.format(Fanart_FN.getPath()))
     fanart_img.save(Fanart_FN.getPath())
     assets_dic[m_name]['fanart'] = Fanart_FN.getPath()
@@ -3254,6 +3569,25 @@ def mame_build_SL_names(PATHS, settings):
 # -------------------------------------------------------------------------------------------------
 # MAME database building
 # -------------------------------------------------------------------------------------------------
+#
+# Checks for errors before scanning for SL ROMs.
+# Display a Kodi dialog if an error is found.
+# Returns a dictionary of settings:
+# options_dic['abort'] is always present.
+#
+def mame_check_before_build_MAME_main_database(PATHS, settings, control_dic):
+    options_dic = {}
+    options_dic['abort'] = False
+
+    # --- Check for errors ---
+    # >> Check that MAME_XML_PATH exists
+    if not PATHS.MAME_XML_PATH.exists():
+        kodi_dialog_OK('MAME XML not found. Execute "Extract MAME.xml" first.')
+        options_dic['abort'] = True
+        return options_dic
+
+    return options_dic
+
 # -------------------------------------------------------------------------------------------------
 # Reads and processes MAME.xml
 #
@@ -3277,41 +3611,46 @@ def mame_build_SL_names(PATHS, settings):
 #   ROM_SHA1_HASH_DB_PATH
 #
 STOP_AFTER_MACHINES = 100000
-class DB_obj:
-    def __init__(self, machines, machines_render, devices_db_dic,
-                 machine_roms, main_pclone_dic, assets_dic):
-        self.machines        = machines
-        self.machines_render = machines_render
-        self.devices_db_dic  = devices_db_dic
-        self.machine_roms    = machine_roms
-        self.main_pclone_dic = main_pclone_dic
-        self.assets_dic      = assets_dic
 
 def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str):
+    DATS_dir_FN = FileName(settings['dats_path'])
+    BESTGAMES_FN = DATS_dir_FN.pjoin(BESTGAMES_INI)
+    CATLIST_FN = DATS_dir_FN.pjoin(CATLIST_INI)
+    CATVER_FN = DATS_dir_FN.pjoin(CATVER_INI)
+    GENRE_FN = DATS_dir_FN.pjoin(GENRE_INI)
+    MATURE_FN = DATS_dir_FN.pjoin(MATURE_INI)
+    NPLAYERS_FN = DATS_dir_FN.pjoin(NPLAYERS_INI)
+    SERIES_FN = DATS_dir_FN.pjoin(SERIES_INI)
+    COMMAND_FN = DATS_dir_FN.pjoin(COMMAND_DAT)
+    GAMEINIT_FN = DATS_dir_FN.pjoin(GAMEINIT_DAT)
+    HISTORY_FN = DATS_dir_FN.pjoin(HISTORY_DAT)
+    MAMEINFO_FN = DATS_dir_FN.pjoin(MAMEINFO_DAT)
+
     # --- Print user configuration for debug ---
     log_info('mame_build_MAME_main_database() Starting ...')
     log_info('--- Paths ---')
     log_info('mame_prog      = "{0}"'.format(settings['mame_prog']))
     log_info('rom_path       = "{0}"'.format(settings['rom_path']))
     log_info('assets_path    = "{0}"'.format(settings['assets_path']))
+    log_info('dats_path      = "{0}"'.format(settings['dats_path']))
     log_info('chd_path       = "{0}"'.format(settings['chd_path']))
     log_info('samples_path   = "{0}"'.format(settings['samples_path']))
     log_info('SL_hash_path   = "{0}"'.format(settings['SL_hash_path']))
     log_info('SL_rom_path    = "{0}"'.format(settings['SL_rom_path']))
     log_info('SL_chd_path    = "{0}"'.format(settings['SL_chd_path']))
     log_info('--- INI paths ---')   
-    log_info('catver_path    = "{0}"'.format(settings['catver_path']))
-    log_info('catlist_path   = "{0}"'.format(settings['catlist_path']))
-    log_info('genre_path     = "{0}"'.format(settings['genre_path']))
-    log_info('nplayers_path  = "{0}"'.format(settings['nplayers_path']))
-    log_info('bestgames_path = "{0}"'.format(settings['bestgames_path']))
-    log_info('series_path    = "{0}"'.format(settings['series_path']))
-    log_info('mature_path    = "{0}"'.format(settings['mature_path']))
+    log_info('bestgames_path = "{0}"'.format(BESTGAMES_FN.getPath()))
+    log_info('catlist_path   = "{0}"'.format(CATLIST_FN.getPath()))
+    log_info('catver_path    = "{0}"'.format(CATVER_FN.getPath()))
+    log_info('genre_path     = "{0}"'.format(GENRE_FN.getPath()))
+    log_info('mature_path    = "{0}"'.format(MATURE_FN.getPath()))
+    log_info('nplayers_path  = "{0}"'.format(NPLAYERS_FN.getPath()))
+    log_info('series_path    = "{0}"'.format(SERIES_FN.getPath()))
     log_info('--- DAT paths ---')
-    log_info('history_path   = "{0}"'.format(settings['history_path']))
-    log_info('mameinfo_path  = "{0}"'.format(settings['mameinfo_path']))
-    log_info('gameinit_path  = "{0}"'.format(settings['gameinit_path']))
-    log_info('command_path   = "{0}"'.format(settings['command_path']))
+    log_info('command_path   = "{0}"'.format(COMMAND_FN.getPath()))
+    log_info('gameinit_path  = "{0}"'.format(GAMEINIT_FN.getPath()))
+    log_info('history_path   = "{0}"'.format(HISTORY_FN.getPath()))
+    log_info('mameinfo_path  = "{0}"'.format(MAMEINFO_FN.getPath()))
 
     # >> If the user did not extract MAME.xml (maybe he decided to use a custom one) then
     # >> fields ver_AML, ver_AML_str, stats_total_machines and t_XML_extraction must be
@@ -3348,20 +3687,20 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     pdialog_line1 = 'Processing INI files ...'
     num_items = 7
     pDialog.create('Advanced MAME Launcher', pdialog_line1)
-    pDialog.update(int((0*100) / num_items), pdialog_line1, 'catver.ini')
-    (categories_dic, catver_version) = mame_load_Catver_ini(settings['catver_path'])
-    pDialog.update(int((1*100) / num_items), pdialog_line1, 'catlist.ini')
-    (catlist_dic, catlist_version) = mame_load_INI_datfile(settings['catlist_path'])
-    pDialog.update(int((2*100) / num_items), pdialog_line1, 'genre.ini')
-    (genre_dic, genre_version) = mame_load_INI_datfile(settings['genre_path'])
-    pDialog.update(int((3*100) / num_items), pdialog_line1, 'nplayers.ini')
-    (nplayers_dic, nplayers_version) = mame_load_nplayers_ini(settings['nplayers_path'])
-    pDialog.update(int((4*100) / num_items), pdialog_line1, 'bestgames.ini')
-    (bestgames_dic, bestgames_version) = mame_load_INI_datfile(settings['bestgames_path'])
-    pDialog.update(int((5*100) / num_items), pdialog_line1, 'series.ini')
-    (series_dic, series_version) = mame_load_INI_datfile(settings['series_path'])
-    pDialog.update(int((6*100) / num_items), pdialog_line1, 'mature.ini')
-    (mature_set, mature_version) = mame_load_Mature_ini(settings['mature_path'])
+    pDialog.update(int((0*100) / num_items), pdialog_line1, BESTGAMES_INI)
+    (bestgames_dic, bestgames_version) = mame_load_INI_datfile(BESTGAMES_FN.getPath())
+    pDialog.update(int((1*100) / num_items), pdialog_line1, CATLIST_INI)
+    (catlist_dic, catlist_version) = mame_load_INI_datfile(CATLIST_FN.getPath())
+    pDialog.update(int((2*100) / num_items), pdialog_line1, CATVER_INI)
+    (categories_dic, catver_version) = mame_load_Catver_ini(CATVER_FN.getPath())
+    pDialog.update(int((3*100) / num_items), pdialog_line1, GENRE_INI)
+    (genre_dic, genre_version) = mame_load_INI_datfile(GENRE_FN.getPath())
+    pDialog.update(int((4*100) / num_items), pdialog_line1, MATURE_INI)
+    (mature_set, mature_version) = mame_load_Mature_ini(MATURE_FN.getPath())
+    pDialog.update(int((5*100) / num_items), pdialog_line1, NPLAYERS_INI)
+    (nplayers_dic, nplayers_version) = mame_load_nplayers_ini(NPLAYERS_FN.getPath())
+    pDialog.update(int((6*100) / num_items), pdialog_line1, SERIES_INI)
+    (series_dic, series_version) = mame_load_INI_datfile(SERIES_FN.getPath())
     pDialog.update(int((7*100) / num_items), ' ', ' ')
     pDialog.close()
 
@@ -3369,14 +3708,14 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     pdialog_line1 = 'Processing DAT files ...'
     num_items = 4
     pDialog.create('Advanced MAME Launcher', pdialog_line1)
-    pDialog.update(int((0*100) / num_items), pdialog_line1, 'history.dat')
-    (history_idx_dic, history_dic, history_version) = mame_load_History_DAT(settings['history_path'])
-    pDialog.update(int((1*100) / num_items), pdialog_line1, 'mameinfo.dat')
-    (mameinfo_idx_dic, mameinfo_dic, mameinfo_version) = mame_load_MameInfo_DAT(settings['mameinfo_path'])
-    pDialog.update(int((2*100) / num_items), pdialog_line1, 'gameinit.dat')
-    (gameinit_idx_dic, gameinit_dic, gameinit_version) = mame_load_GameInit_DAT(settings['gameinit_path'])
-    pDialog.update(int((3*100) / num_items), pdialog_line1, 'command.dat')
-    (command_idx_dic, command_dic, command_version) = mame_load_Command_DAT(settings['command_path'])
+    pDialog.update(int((3*100) / num_items), pdialog_line1, COMMAND_DAT)
+    (command_idx_dic, command_dic, command_version) = mame_load_Command_DAT(COMMAND_FN.getPath())
+    pDialog.update(int((2*100) / num_items), pdialog_line1, GAMEINIT_DAT)
+    (gameinit_idx_dic, gameinit_dic, gameinit_version) = mame_load_GameInit_DAT(GAMEINIT_FN.getPath())
+    pDialog.update(int((0*100) / num_items), pdialog_line1, HISTORY_DAT)
+    (history_idx_dic, history_dic, history_version) = mame_load_History_DAT(HISTORY_FN.getPath())
+    pDialog.update(int((1*100) / num_items), pdialog_line1, MAMEINFO_DAT)
+    (mameinfo_idx_dic, mameinfo_dic, mameinfo_version) = mame_load_MameInfo_DAT(MAMEINFO_FN.getPath())
     pDialog.update(int((4*100) / num_items), ' ', ' ')
     pDialog.close()
 
@@ -3438,9 +3777,9 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     num_iteration = 0
     for event, elem in context:
         # --- Debug the elements we are iterating from the XML file ---
-        # print('Event     {0:6s} | Elem.tag    "{1}"'.format(event, elem.tag))
-        # print('                   Elem.text   "{0}"'.format(elem.text))
-        # print('                   Elem.attrib "{0}"'.format(elem.attrib))
+        # log_debug('Event     {0:6s} | Elem.tag    "{1}"'.format(event, elem.tag))
+        # log_debug('                   Elem.text   "{0}"'.format(elem.text))
+        # log_debug('                   Elem.attrib "{0}"'.format(elem.attrib))
 
         # <machine> tag start event includes <machine> attributes
         if event == 'start' and elem.tag == 'machine':
@@ -3471,7 +3810,7 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
                 # if raw_driver_name[-4:] == '.cpp':
                 #     driver_name = raw_driver_name[0:-4]
                 # else:
-                #     print('Unrecognised driver name "{0}"'.format(raw_driver_name))
+                #     log_debug('Unrecognised driver name "{0}"'.format(raw_driver_name))
 
                 # >> Assign driver name
                 machine['sourcefile'] = raw_driver_name
@@ -3629,16 +3968,6 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
         #     ]
         # }
         elif event == 'start' and elem.tag == 'input':
-            # --- Keep this as is it now for compatibility ---
-            if 'coins' in elem.attrib:
-                machine['coins'] = int(elem.attrib['coins'])
-
-            # --- Keep this as it is now for compatibility ---
-            # >> Iterate children of <input> and search for <control> tags
-            for control_child in elem:
-                if control_child.tag == 'control':
-                    machine['control_type'].append(control_child.attrib['type'])
-
             # --- New 'input' field in 0.9.6 ---
             # --- <input> attributes ---
             att_players = int(elem.attrib['players']) if 'players' in elem.attrib else 0
@@ -3724,35 +4053,39 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
                 # device_type = '{0} (NI)'.format(device_type)
 
             # >> Add device to database
-            device_dic = {'att_type'      : att_type,      'att_tag'        : att_tag,
-                          'att_mandatory' : att_mandatory, 'att_interface'  : att_interface,
-                          'instance'      : { 'name' : inst_name, 'briefname' : inst_briefname},
-                          'ext_names'     : ext_names}
+            device_dic = {
+                'att_type'      : att_type,
+                'att_tag'       : att_tag,
+                'att_mandatory' : att_mandatory,
+                'att_interface' : att_interface,
+                'instance'      : { 'name' : inst_name, 'briefname' : inst_briefname },
+                'ext_names'     : ext_names
+            }
             machine['devices'].append(device_dic)
 
         # --- <machine> tag closing. Add new machine to database ---
         elif event == 'end' and elem.tag == 'machine':
             # >> Assumption 1: isdevice = True if and only if runnable = False
             if m_render['isDevice'] == runnable:
-                print("Machine {0}: machine['isDevice'] == runnable".format(m_name))
+                log_error("Machine {0}: machine['isDevice'] == runnable".format(m_name))
                 raise GeneralError
 
             # >> Are there machines with more than 1 <display> tag. Answer: YES
             # if num_displays > 1:
-            #     print("Machine {0}: num_displays = {1}".format(m_name, num_displays))
+            #     log_error("Machine {0}: num_displays = {1}".format(m_name, num_displays))
             #     raise GeneralError
 
-            # >> All machines with 0 displays are mechanical? NO, 24cdjuke has no screen and is not mechanical. However
-            # >> 24cdjuke is a preliminary driver.
+            # >> All machines with 0 displays are mechanical? NO, 24cdjuke has no screen and
+            # is not mechanical. However 24cdjuke is a preliminary driver.
             # if num_displays == 0 and not machine['ismechanical']:
-            #     print("Machine {0}: num_displays == 0 and not machine['ismechanical']".format(m_name))
+            #     log_error("Machine {0}: num_displays == 0 and not machine['ismechanical']".format(m_name))
             #     raise GeneralError
 
-            # >> Mark dead machines. A machine is dead if Status is preliminary AND have no controls
-            if m_render['driver_status'] == 'preliminary' and not machine['control_type']:
+            # >> Mark dead machines. A machine is dead if Status is preliminary AND have no controls.
+            if m_render['driver_status'] == 'preliminary' and not machine['input']['control_list']:
                 machine['isDead'] = True
 
-            # >> Delete XML element once it has been processed
+            # --- Delete XML element once it has been processed to conserve memory ---
             elem.clear()
 
             # --- Compute statistics ---
@@ -3775,7 +4108,7 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
                 if m_render['cloneof']: stats_BIOS_clones += 1
                 else:                   stats_BIOS_parents += 1
             if runnable:
-                if machine['coins'] > 0:
+                if machine['input']['att_coins'] > 0:
                     stats_coin += 1
                     if m_render['cloneof']: stats_coin_clones += 1
                     else:                   stats_coin_parents += 1
@@ -3802,7 +4135,8 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
         num_iteration += 1
         if num_iteration % 1000 == 0:
             pDialog.update((stats_processed_machines * 100) // total_machines)
-            # log_debug('Processed {0:10d} events ({1:6d} machines so far) ...'.format(num_iteration, stats_processed_machines))
+            # log_debug('Processed {0:10d} events ({1:6d} machines so far) ...'.format(
+            #     num_iteration, stats_processed_machines))
             # log_debug('stats_processed_machines   = {0}'.format(stats_processed_machines))
             # log_debug('total_machines = {0}'.format(total_machines))
             # log_debug('Update number  = {0}'.format(update_number))
@@ -3811,13 +4145,11 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
         if stats_processed_machines >= STOP_AFTER_MACHINES: break
     pDialog.update(100)
     pDialog.close()
-    log_info('Processed {0} MAME XML events'.format(num_iteration))
-    log_info('Processed machines {0}'.format(stats_processed_machines))
-    log_info('Parents            {0}'.format(stats_parents))
-    log_info('Clones             {0}'.format(stats_clones))
-    log_info('Dead machines      {0}'.format(stats_dead))
-    log_info('Dead parents       {0}'.format(stats_dead_parents))
-    log_info('Dead clones        {0}'.format(stats_dead_clones))
+    log_info('Processed {0:,} MAME XML events'.format(num_iteration))
+    log_info('Processed machines {0:,} ({1:,} parents, {2:,} clones)'.format(
+        stats_processed_machines, stats_parents, stats_clones))
+    log_info('Dead machines      {0:,} ({1:,} parents, {2:,} clones)'.format(
+        stats_dead, stats_dead_parents, stats_dead_clones))
 
     # ---------------------------------------------------------------------------------------------
     # Main parent-clone list
@@ -3854,24 +4186,30 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     # Improve information fields in Main Render database
     # ---------------------------------------------------------------------------------------------
     if mature_set:
+        log_info('MAME machine Mature information available.')
         for machine_name in machines_render:
             machines_render[machine_name]['isMature'] = True if machine_name in mature_set else False
+    else:
+        log_info('MAME machine Mature flag not available.')
 
     # >> Add genre infolabel into render database
     if genre_dic:
+        log_info('Using genre.ini for MAME genre information.')
         for machine_name in machines_render:
             machines_render[machine_name]['genre'] = machines[machine_name]['genre']
     elif categories_dic:
+        log_info('Using catver.ini for MAME genre information.')
         for machine_name in machines_render:
             machines_render[machine_name]['genre'] = machines[machine_name]['catver']
     elif catlist_dic:
+        log_info('Using catlist.ini for MAME genre information.')
         for machine_name in machines_render:
             machines_render[machine_name]['genre'] = machines[machine_name]['catlist']
 
     # ---------------------------------------------------------------------------------------------
     # Improve name in DAT indices and machine names
     # ---------------------------------------------------------------------------------------------
-    # >> History DAT categories are Software List names.
+    # --- History DAT categories are Software List names ---
     if history_idx_dic:
         log_debug('Updating History DAT cateogories and machine names ...')
         # >> Open Software List index if it exists.
@@ -3910,13 +4248,6 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
         for machine_list in command_idx_dic:
             if machine_list[0] in machines_render:
                 machine_list[1] = machines_render[machine_list[0]]['description']
-
-    # ---------------------------------------------------------------------------------------------
-    # Build main distributed hashed database
-    # ---------------------------------------------------------------------------------------------
-    # >> This saves the hashs files in the database directory.
-    fs_build_main_hashed_db(PATHS, machines, machines_render, pDialog)
-    fs_build_asset_hashed_db(PATHS, assets_dic, pDialog)
 
     # ---------------------------------------------------------------------------------------------
     # Update MAME control dictionary
@@ -3969,12 +4300,18 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     change_control_dic(control_dic, 'stats_samples_parents', stats_samples_parents)
     change_control_dic(control_dic, 'stats_samples_clones', stats_samples_clones)
 
-    # >> Timestamp
+    # --- Timestamp ---
     change_control_dic(control_dic, 't_MAME_DB_build', time.time())
 
-    # -----------------------------------------------------------------------------
-    # Write JSON databases
-    # -----------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------------
+    # Build main distributed hashed database
+    # ---------------------------------------------------------------------------------------------
+    # This saves the hash files in the database directory.
+    # At this point the main hashed database is complete but the asset hashed DB is empty.
+    fs_build_main_hashed_db(PATHS, settings, control_dic, machines, machines_render)
+    fs_build_asset_hashed_db(PATHS, settings, control_dic, assets_dic)
+
+    # --- Save databases ---
     log_info('Saving database JSON files ...')
     if OPTION_LOWMEM_WRITE_JSON:
         json_write_func = fs_write_JSON_file_lowmem
@@ -3982,52 +4319,45 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     else:
         json_write_func = fs_write_JSON_file
         log_debug('Using fs_write_JSON_file() JSON writer')
-    pdialog_line1 = 'Saving databases ...'
-    num_items = 15
+    db_files = [
+        [machines, 'MAME machines Main', PATHS.MAIN_DB_PATH.getPath()],
+        [machines_render, 'MAME machines Render', PATHS.RENDER_DB_PATH.getPath()],
+        [machines_roms, 'MAME machine ROMs', PATHS.ROMS_DB_PATH.getPath()],
+        [machines_devices, 'MAME machine Devices', PATHS.DEVICES_DB_PATH.getPath()],
+        [assets_dic, 'MAME machine assets', PATHS.MAIN_ASSETS_DB_PATH.getPath()],
+        [main_pclone_dic, 'MAME PClone dictionary', PATHS.MAIN_PCLONE_DIC_PATH.getPath()],
+        [roms_sha1_dic, 'MAME ROMs SHA1 dictionary', PATHS.SHA1_HASH_DB_PATH.getPath()],
+        # --- DAT files ---
+        [history_idx_dic, 'History DAT index', PATHS.HISTORY_IDX_PATH.getPath()],
+        [history_dic, 'History DAT database', PATHS.HISTORY_DB_PATH.getPath()],
+        [mameinfo_idx_dic, 'MAMEInfo DAT index', PATHS.MAMEINFO_IDX_PATH.getPath()],
+        [mameinfo_dic, 'MAMEInfo DAT database', PATHS.MAMEINFO_DB_PATH.getPath()],
+        [gameinit_idx_dic, 'Gameinit DAT index', PATHS.GAMEINIT_IDX_PATH.getPath()],
+        [gameinit_dic, 'Gameinit DAT database', PATHS.GAMEINIT_DB_PATH.getPath()],
+        [command_idx_dic, 'Command DAT index', PATHS.COMMAND_IDX_PATH.getPath()],
+        [command_dic, 'Command DAT database', PATHS.COMMAND_DB_PATH.getPath()],
+        # --- Save control_dic after everything is saved ---
+        [control_dic, 'Control dictionary', PATHS.MAIN_CONTROL_PATH.getPath()],
+    ]
+    db_dic = fs_save_files(db_files, json_write_func)
 
-    # --- Databases ---
-    pDialog.create('Advanced MAME Launcher', pdialog_line1)
-    pDialog.update(int((0*100) / num_items), pdialog_line1, 'MAME machines Main')
-    json_write_func(PATHS.MAIN_DB_PATH.getPath(), machines)
-    pDialog.update(int((1*100) / num_items), pdialog_line1, 'MAME machines Render')
-    json_write_func(PATHS.RENDER_DB_PATH.getPath(), machines_render)
-    pDialog.update(int((2*100) / num_items), pdialog_line1, 'MAME machine ROMs')
-    json_write_func(PATHS.ROMS_DB_PATH.getPath(), machines_roms)
-    pDialog.update(int((3*100) / num_items), pdialog_line1, 'MAME machine Devices')
-    json_write_func(PATHS.DEVICES_DB_PATH.getPath(), machines_devices)
-    pDialog.update(int((4*100) / num_items), pdialog_line1, 'MAME machine Assets')
-    json_write_func(PATHS.MAIN_ASSETS_DB_PATH.getPath(), assets_dic)
-    pDialog.update(int((5*100) / num_items), pdialog_line1, 'MAME PClone dictionary')
-    json_write_func(PATHS.MAIN_PCLONE_DIC_PATH.getPath(), main_pclone_dic)
-    pDialog.update(int((6*100) / num_items), pdialog_line1, 'MAME ROMs SHA1 dictionary')
-    json_write_func(PATHS.ROM_SHA1_HASH_DB_PATH.getPath(), roms_sha1_dic)
-    # --- DAT files ---
-    pDialog.update(int((7*100) / num_items), pdialog_line1, 'History DAT index')
-    json_write_func(PATHS.HISTORY_IDX_PATH.getPath(), history_idx_dic)
-    pDialog.update(int((8*100) / num_items), pdialog_line1, 'History DAT database')
-    json_write_func(PATHS.HISTORY_DB_PATH.getPath(), history_dic)
-    pDialog.update(int((9*100) / num_items), pdialog_line1, 'MAMEInfo DAT index')
-    json_write_func(PATHS.MAMEINFO_IDX_PATH.getPath(), mameinfo_idx_dic)
-    pDialog.update(int((10*100) / num_items), pdialog_line1, 'MAMEInfo DAT database')
-    json_write_func(PATHS.MAMEINFO_DB_PATH.getPath(), mameinfo_dic)
-    pDialog.update(int((11*100) / num_items), pdialog_line1, 'Gameinit DAT index')
-    json_write_func(PATHS.GAMEINIT_IDX_PATH.getPath(), gameinit_idx_dic)
-    pDialog.update(int((12*100) / num_items), pdialog_line1, 'Gameinit DAT database')
-    json_write_func(PATHS.GAMEINIT_DB_PATH.getPath(), gameinit_dic)
-    pDialog.update(int((13*100) / num_items), pdialog_line1, 'Command DAT index')
-    json_write_func(PATHS.COMMAND_IDX_PATH.getPath(), command_idx_dic)
-    pDialog.update(int((14*100) / num_items), pdialog_line1, 'Command DAT database')
-    json_write_func(PATHS.COMMAND_DB_PATH.getPath(), command_dic)
-    pDialog.update(int((15*100) / num_items), ' ', ' ')
-    pDialog.close()
-
-    # Return an object with reference to the objects just in case they are needed after
+    # Return an dictionary with reference to the objects just in case they are needed after
     # this function (in "Build everything", for example. This saves time (databases do not
     # need to be reloaded) and apparently memory as well.
-    DB = DB_obj(machines, machines_render, machines_devices,
-                machines_roms, main_pclone_dic, assets_dic)
+    data_dic = {
+        'machines' : machines,
+        'render' : machines_render,
+        'devices' : machines_devices,
+        'roms' : machines_roms,
+        'main_pclone_dic' : main_pclone_dic,
+        'assets' : assets_dic,
+        'history_idx_dic' : history_idx_dic,
+        'mameinfo_idx_dic' : mameinfo_idx_dic,
+        'gameinit_idx_list' : gameinit_idx_dic,
+        'command_idx_list' : command_idx_dic,
+    }
 
-    return DB
+    return data_dic
 
 # -------------------------------------------------------------------------------------------------
 # Generates the ROM audit database. This database contains invalid ROMs also to display information
@@ -4044,11 +4374,22 @@ def _get_ROM_type(rom):
 
     return r_type
 
+#
+# Finds merged ROM merged_name in the parent ROM set roms (list of dictionaries).
+# Returns a dictionary (first item of the returned list) or None if the merged ROM cannot
+# be found in the ROMs of the parent.
+#
 def _get_merged_rom(roms, merged_name):
-    merged_rom_list = filter(lambda r: r['name'] == merged_name, roms)
+    merged_rom_list = [r for r in roms if r['name'] == merged_name]
 
-    return merged_rom_list[0]
+    if len(merged_rom_list) > 0:
+        return merged_rom_list[0]
+    else:
+        return None
 
+#
+# Traverses the ROM hierarchy and returns the ROM location and name.
+#
 def _get_ROM_location(rom_set, rom, m_name, machines, machines_render, machine_roms):
     if rom_set == 'MERGED':
         cloneof = machines_render[m_name]['cloneof']
@@ -4111,20 +4452,46 @@ def _get_ROM_location(rom_set, rom, m_name, machines, machines_render, machine_r
             #    <rom name="cmos_riscos3.bin" merge="cmos_riscos3.bin" bios="311" size="256" crc="0da2d31d" />
             #    <rom name="cmos_riscos3.bin" merge="cmos_riscos3.bin" bios="319" size="256" crc="0da2d31d" />
             #
+            # 6. In MAME 0.206, clone machine adonisce has a merged ROM 'setchip v4.04.09.u7'
+            #    that is not found on the parent machine adoins ROMs.
+            #        AML WARN : Clone machine "adonisce"
+            #        AML WARN : ROM "setchip v4.04.09.u7" MERGE "setchip v4.04.09.u7"
+            #        AML WARN : Cannot be found on parent "adonis" ROMs
+            #    By looking to the XML, the ROM "setchip v4.04.09.u7" is on the BIOS aristmk5
+            #    More machines with same issue: adonisu, bootsctnu, bootsctnua, bootsctnub, ...
+            #    and a lot more machines related to BIOS aristmk5.
+            #
             if rom['merge']:
                 # >> Get merged ROM from parent
                 parent_name = cloneof
                 parent_roms = machine_roms[parent_name]['roms']
                 clone_rom_merged_name = rom['merge']
                 parent_merged_rom = _get_merged_rom(parent_roms, clone_rom_merged_name)
+                # >> Clone merged ROM cannot be found in parent ROM set. This is likely a MAME
+                # >> XML bug. In this case, treat the clone marged ROM as a non-merged ROM.
+                if parent_merged_rom is None:
+                    log_warning('Clone machine "{0}" parent_merged_rom is None'.format(m_name))
+                    log_warning('ROM "{0}" MERGE "{1}"'.format(rom['name'], rom['merge']))
+                    log_warning('Cannot be found on parent "{0}" ROMs'.format(parent_name))
+                    # >> Check if merged ROM is in the BIOS machine.
+                    bios_name = machines[parent_name]['romof']
+                    if bios_name:
+                        log_warning('Parent machine "{0}" has BIOS machine "{1}"'.format(parent_name, bios_name))
+                        log_warning('Searching for clone merged ROM "{0}" in BIOS ROMs'.format(clone_rom_merged_name))
+                        bios_roms = machine_roms[bios_name]['roms']
+                        bios_merged_rom = _get_merged_rom(bios_roms, clone_rom_merged_name)
+                        location = bios_name + '/' + bios_merged_rom['name']
+                    else:
+                        TypeError
                 # >> Check if clone merged ROM is also merged in parent (BIOS ROM)
-                if parent_merged_rom['merge']:
+                elif parent_merged_rom['merge']:
                     parent_romof = machines[parent_name]['romof']
                     bios_name = parent_romof
                     bios_roms = machine_roms[bios_name]['roms']
                     bios_rom_merged_name = parent_merged_rom['merge']
                     bios_merged_rom = _get_merged_rom(bios_roms, bios_rom_merged_name)
-                    # >> At least in one machine (0.196) BIOS roms can be merged in another BIOS.
+                    # At least in one machine (0.196) BIOS ROMs can be merged in another
+                    # BIOS ROMs (1 level of recursion in BIOS ROM merging).
                     if bios_merged_rom['merge']:
                         bios_romof = machines[bios_name]['romof']
                         parent_bios_name = bios_romof
@@ -4169,7 +4536,7 @@ def _get_CHD_location(chd_set, disk, m_name, machines, machines_render, machine_
                 parent_disks =  machine_roms[parent_name]['disks']
                 clone_disk_merged_name = disk['merge']
                 # >> Pick ROMs with same name and choose the first one.
-                parent_merged_disk_l = filter(lambda r: r['name'] == clone_disk_merged_name, parent_disks)
+                parent_merged_disk_l = [r for r in parent_disks if r['name'] == clone_disk_merged_name]
                 parent_merged_disk = parent_merged_disk_l[0]
                 # >> Check if clone merged ROM is also merged in parent
                 if parent_merged_disk['merge']:
@@ -4178,7 +4545,7 @@ def _get_CHD_location(chd_set, disk, m_name, machines, machines_render, machine_
                     super_parent_disks =  machine_roms[super_parent_name]['disks']
                     parent_disk_merged_name = parent_merged_disk['merge']
                     # >> Pick ROMs with same name and choose the first one.
-                    super_parent_merged_disk_l = filter(lambda r: r['name'] == parent_disk_merged_name, super_parent_disks)
+                    super_parent_merged_disk_l = [r for r in super_parent_disks if r['name'] == parent_disk_merged_name]
                     super_parent_merged_disk = super_parent_merged_disk_l[0]
                     location = super_parent_name + '/' + super_parent_merged_disk['name']
                 else:
@@ -4209,7 +4576,27 @@ def _get_CHD_location(chd_set, disk, m_name, machines, machines_render, machine_
 
     return location
 
-# Audit database build main function.
+#
+# Checks for errors before scanning for SL ROMs.
+# Display a Kodi dialog if an error is found.
+# Returns a dictionary of settings:
+# options_dic['abort'] is always present.
+# 
+#
+def mame_check_before_build_ROM_audit_databases(PATHS, settings, control_dic):
+    options_dic = {}
+    options_dic['abort'] = False
+
+    # --- Check that MAME database have been built ---
+
+    return options_dic
+
+#
+# Builds the ROM/CHD/Samples audit database and more things.
+# Updates statistics in control_dic and saves it.
+#
+# The audit databases changes for Merged, Split and Non-merged sets (the location of the ROMs changes).
+# The audit database is used when auditing MAME machines.
 #
 # audit_roms_dic = {
 #     'machine_name ' : [
@@ -4219,43 +4606,60 @@ def _get_CHD_location(chd_set, disk, m_name, machines, machines_render, machine_
 #             'name'     : string,
 #             'size'     : int,
 #             'type'     : 'ROM' or 'BROM' or 'MROM' or 'XROM'
-#         },
+#         }, ...,
 #         {
 #             'location' : 'machine_name/chd_name.chd'
 #             'name'     : string,
 #             'sha1'     : string,
 #             'type'     : 'DISK'
-#         }, ...
-#     ],
-#     ...
+#         }, ...,
+#         {
+#             'location' : 'machine_name/sample_name'
+#             'name'     : string,
+#             'type'     : 'SAM'
+#         }, ...,
+#     ], ...
 # }
 #
-# A) Used by the ROM scanner to check how many machines may be run or not depending of the
-#    ZIPs/CHDs you have. Note that depeding of the ROM set (Merged, Split, Non-merged) the number
-#    of machines you can run changes.
-# B) For every machine stores the ZIP/CHD required files to run the machine.
-# C) A ZIP/CHD exists if and only if it is valid (CRC/SHA1 exists). Invalid ROMs are excluded.
+# This function also builds the machine files database.
+#
+# A) For every machine stores the ROM ZIP/CHD/Samples ZIP files required to run the machine.
+# B) A ROM ZIP/CHD exists if and only if it has valid ROMs (CRC and SHA1 exist).
+# C) Used by the ROM scanner to check how many machines may be run or not depending of the
+#    ROM ZIPs/CHDs/Sample ZIPs you have.
+# D) ROM ZIPs and CHDs are mandatory to run a machine. Samples are not. This function kind of
+#    thinks that Samples are also mandatory.
 #
 # machine_archives_dic = {
-#     'machine_name ' : { 'ROMs' : [name1, name2, ...], 'CHDs' : [dir/name1, dir/name2, ...] }, ...
+#     'machine_name ' : {
+#         'ROMs'    : [name1, name2, ...],
+#         'CHDs'    : [dir/name1, dir/name2, ...],
+#         'Samples' : [name1, name2, ...],
+#     }, ...
 # }
 #
-# A) Used by the ROM scanner to determine how many ZIPs/CHDs files you have or not.
-# B) Both lists have unique elements (instead of lists there should be sets but sets are 
-#    not JSON serializable).
-# C) A ZIP/CHD exists if and only if it is valid (CRC/SHA1 exists). Invalid ROMs are excluded.
+# This function builds the ROM ZIP list, the CHD list and the Samples ZIP list.
+#
+# A) Used by the ROM scanner to determine how many ROM ZIP/CHD/SampleZIP files you have or not.
+# B) The three lists have unique elements. Instead of Python lists there should be Python sets.
+#    However, sets are not serializable with JSON.
+# C) A ROM ZIP/CHD/Sample ZIP exists if and only if it has valid ROMs (CRC/SHA1 exists).
+#    Invalid ROMs are excluded.
 #
 # ROM_archive_list = [ name1, name2, ..., nameN ]
 # CHD_archive_list = [ dir1/name1, dir2/name2, ..., dirN/nameN ]
+# SAM_archive_list = [ name1, name2, ..., nameN ]
 #
-# Saves:
-#   ROM_AUDIT_DB_PATH
-#   ROM_SET_MACHINE_ARCHIVES_DB_PATH
-#   ROM_SET_ROM_ARCHIVES_DB_PATH
-#   ROM_SET_CHD_ARCHIVES_DB_PATH
+# Saved files:
+#     ROM_AUDIT_DB_PATH
+#     ROM_SET_MACHINE_FILES_DB_PATH
+#     ROM_SET_ROM_LIST_DB_PATH
+#     ROM_SET_CHD_LIST_DB_PATH
+#     ROM_SET_SAM_LIST_DB_PATH
+#     MAIN_CONTROL_PATH
 #
 def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
-                                   machines, machines_render, devices_db_dic, machine_roms):
+    machines, machines_render, devices_db_dic, machine_roms):
     log_info('mame_build_ROM_audit_databases() Initialising ...')
 
     # --- Initialise ---
@@ -4265,16 +4669,18 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
     chd_set_str = ['Merged', 'Split', 'Non-merged'][settings['mame_chd_set']]
     log_info('mame_build_ROM_audit_databases() ROM set is {0}'.format(rom_set))
     log_info('mame_build_ROM_audit_databases() CHD set is {0}'.format(chd_set))
-    audit_roms_dic = {}
-    pDialog = xbmcgui.DialogProgress()
 
-    # --- ROM set (refactored code) ---------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------------
+    # Audit database
+    # ---------------------------------------------------------------------------------------------
+    log_info('mame_build_ROM_audit_databases() Building {0} ROM/Sample audit database ...'.format(rom_set_str))
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher')
-    log_info('mame_build_ROM_audit_databases() Building {0} ROM set ...'.format(rom_set_str))
     pDialog.update(0, 'Building {0} ROM set ...'.format(rom_set_str))
     num_items = len(machines)
     item_count = 0
     stats_audit_MAME_machines_runnable = 0
+    audit_roms_dic = {}
     for m_name in sorted(machines):
         # --- Update dialog ---
         pDialog.update((item_count*100)//num_items)
@@ -4318,8 +4724,8 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
     pDialog.close()
 
     # --- CHD set (refactored code) ---------------------------------------------------------------
+    log_info('mame_build_ROM_audit_databases() Building {0} CHD audit database ...'.format(chd_set_str))
     pDialog.create('Advanced MAME Launcher')
-    log_info('mame_build_ROM_audit_databases() Building {0} CHD set ...'.format(chd_set_str))
     pDialog.update(0, 'Building {0} CHD set ...'.format(chd_set_str))
     num_items = len(machines)
     item_count = 0
@@ -4345,18 +4751,21 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
         item_count += 1
     pDialog.close()
 
-    # --- Machine archives and ROM/Sample/CHD sets ---
+    # ---------------------------------------------------------------------------------------------
+    # Machine files and ROM ZIP/Sample ZIP/CHD lists
+    # ---------------------------------------------------------------------------------------------
     # NOTE roms_dic and chds_dic may have invalid ROMs/CHDs. However, machine_archives_dic must
     #      have only valid ROM archives (ZIP/7Z).
     # For every machine, it goes ROM by ROM and makes a list of ZIP archive locations. Then, it
     # transforms the list into a set to have a list with unique elements.
     # roms_dic/chds_dic have invalid ROMs. Skip invalid ROMs.
+    log_info('mame_build_ROM_audit_databases() Building ROM ZIP/Sample ZIP/CHD file lists ...')
+    pDialog.create('Advanced MAME Launcher')
+    pDialog.update(0, 'Building ROM, Sample and CHD archive lists ...')
     machine_archives_dic = {}
     full_ROM_archive_set = set()
     full_Sample_archive_set = set()
     full_CHD_archive_set = set()
-    pDialog.create('Advanced MAME Launcher')
-    pDialog.update(0, 'Building ROM and CHD archive lists ...')
     num_items = len(machines)
     item_count = 0
     machine_archives_ROM = 0
@@ -4452,17 +4861,20 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
         # --- Update dialog ---
         item_count += 1
     pDialog.close()
-    ROM_archive_list = list(sorted(full_ROM_archive_set))
-    Sample_archive_list = list(sorted(full_Sample_archive_set))
+    # Sort lists alphabetically
+    ROM_ZIP_list     = list(sorted(full_ROM_archive_set))
+    Sample_ZIP_list  = list(sorted(full_Sample_archive_set))
     CHD_archive_list = list(sorted(full_CHD_archive_set))
 
     # ---------------------------------------------------------------------------------------------
-    # Remove unused fiels to save memory before saving the JSON file.
+    # machine_roms dictionary is passed as argument and not save in this function.
+    # It is modified in this function to create audit_roms_dic.
+    # Remove unused fields to save memory before saving the audit_roms_dic JSON file.
     # Do not remove earlier because 'merge' is used in the _get_XXX_location() functions.
     # ---------------------------------------------------------------------------------------------
     pDialog.create('Advanced MAME Launcher')
-    log_info('mame_build_ROM_audit_databases() Building {0} ROM set ...'.format(rom_set_str))
-    pDialog.update(0, 'Building {0} ROM set ...'.format(rom_set_str))
+    log_info('mame_build_ROM_audit_databases() Cleaning audit database before saving ...')
+    pDialog.update(0, 'Cleaning audit database ...')
     num_items = len(machines)
     item_count = 0
     for m_name in sorted(machines):
@@ -4486,8 +4898,8 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
     # Update MAME control dictionary
     # ---------------------------------------------------------------------------------------------
     change_control_dic(control_dic, 'stats_audit_MAME_machines_runnable', stats_audit_MAME_machines_runnable)
-    change_control_dic(control_dic, 'stats_audit_MAME_ROM_ZIP_files', len(ROM_archive_list))
-    change_control_dic(control_dic, 'stats_audit_MAME_Sample_ZIP_files', len(Sample_archive_list))
+    change_control_dic(control_dic, 'stats_audit_MAME_ROM_ZIP_files', len(ROM_ZIP_list))
+    change_control_dic(control_dic, 'stats_audit_MAME_Sample_ZIP_files', len(Sample_ZIP_list))
     change_control_dic(control_dic, 'stats_audit_MAME_CHD_files', len(CHD_archive_list))
     change_control_dic(control_dic, 'stats_audit_machine_archives_ROM', machine_archives_ROM)
     change_control_dic(control_dic, 'stats_audit_machine_archives_ROM_parents', machine_archives_ROM_parents)
@@ -4516,19 +4928,28 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
     else:
         json_write_func = fs_write_JSON_file
         log_debug('Using fs_write_JSON_file() JSON writer')
-    line1_str = 'Saving audit/scanner databases ...'
-    pDialog.create('Advanced MAME Launcher')
-    num_items = 4
-    pDialog.update(int((0*100) / num_items), line1_str, 'MAME ROM Audit')
-    json_write_func(PATHS.ROM_AUDIT_DB_PATH.getPath(), audit_roms_dic)
-    pDialog.update(int((1*100) / num_items), line1_str, 'Machine archives list')
-    json_write_func(PATHS.ROM_SET_MACHINE_ARCHIVES_DB_PATH.getPath(), machine_archives_dic)
-    pDialog.update(int((2*100) / num_items), line1_str, 'ROM List index')
-    json_write_func(PATHS.ROM_SET_ROM_ARCHIVES_DB_PATH.getPath(), ROM_archive_list)
-    pDialog.update(int((3*100) / num_items), line1_str, 'CHD list index')
-    json_write_func(PATHS.ROM_SET_CHD_ARCHIVES_DB_PATH.getPath(), CHD_archive_list)
-    pDialog.update(int((4*100) / num_items), ' ', ' ')
-    pDialog.close()
+    db_files = [
+        [audit_roms_dic, 'MAME ROM Audit', PATHS.ROM_AUDIT_DB_PATH.getPath()],
+        [machine_archives_dic, 'Machine file list', PATHS.ROM_SET_MACHINE_FILES_DB_PATH.getPath()],
+        [ROM_ZIP_list, 'ROM ZIP list', PATHS.ROM_SET_ROM_LIST_DB_PATH.getPath()],
+        [Sample_ZIP_list, 'Sample ZIP list', PATHS.ROM_SET_SAM_LIST_DB_PATH.getPath()],
+        [CHD_archive_list, 'CHD list', PATHS.ROM_SET_CHD_LIST_DB_PATH.getPath()],
+        # --- Save control_dic after everything is saved ---
+        [control_dic, 'Control dictionary', PATHS.MAIN_CONTROL_PATH.getPath()],
+    ]
+    db_dic = fs_save_files(db_files, json_write_func)
+
+    # Return an dictionary with reference to the objects just in case they are needed after
+    # this function (in "Build everything", for example.
+    audit_dic = {
+        'audit_roms' : audit_roms_dic,
+        'machine_archives' : machine_archives_dic,
+        'ROM_ZIP_list' : ROM_ZIP_list,
+        'Sample_ZIP_list' : Sample_ZIP_list,
+        'CHD_archive_list' : CHD_archive_list,
+    }
+
+    return audit_dic
 
 # -------------------------------------------------------------------------------------------------
 #
@@ -4548,7 +4969,7 @@ def _cache_index_builder(cat_name, cache_index_dic, catalog_all, catalog_parents
         cache_index_dic[cat_name][cat_key] = {
             'num_parents'  : len(catalog_parents[cat_key]),
             'num_machines' : len(catalog_all[cat_key]),
-            'hash'         : fs_rom_cache_get_hash(cat_name, cat_key)
+            'hash'         : fs_render_cache_get_hash(cat_name, cat_key)
         }
 
 def _build_catalog_helper(catalog_parents, catalog_all, machines, machines_render, main_pclone_dic, db_field):
@@ -4564,6 +4985,21 @@ def _build_catalog_helper(catalog_parents, catalog_all, machines, machines_rende
             catalog_all[catalog_key] = { parent_name : machines_render[parent_name]['description'] }
         for clone_name in main_pclone_dic[parent_name]:
             catalog_all[catalog_key][clone_name] = machines_render[clone_name]['description']
+
+#
+# Checks for errors before scanning for SL ROMs.
+# Display a Kodi dialog if an error is found.
+# Returns a dictionary of settings:
+# options_dic['abort'] is always present.
+# 
+#
+def mame_check_before_build_MAME_catalogs(PATHS, settings, control_dic):
+    options_dic = {}
+    options_dic['abort'] = False
+
+    # --- Check that database exists ---
+
+    return options_dic
 
 #
 # A) Builds the following catalog files
@@ -4595,7 +5031,8 @@ def _build_catalog_helper(catalog_parents, catalog_all, machines, machines_rende
 #    }
 #
 def mame_build_MAME_catalogs(PATHS, settings, control_dic,
-                             machines, machines_render, machine_roms, main_pclone_dic, assets_dic):
+    machines, machines_render, machine_roms, main_pclone_dic, assets_dic):
+
     # >> Progress dialog
     pDialog_line1 = 'Building catalogs ...'
     pDialog = xbmcgui.DialogProgress()
@@ -4645,8 +5082,9 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     for parent_name in main_pclone_dic:
         machine_main = machines[parent_name]
         machine_render = machines_render[parent_name]
+        n_coins = machine_main['input']['att_coins'] if machine_main['input'] else 0
         if machine_main['isMechanical']: continue
-        if machine_main['coins'] == 0: continue
+        if n_coins == 0: continue
         if machine_main['isDead']: continue
         if machine_render['isDevice']: continue
 
@@ -4657,8 +5095,12 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
         #
         # Unusual machine driver exceptions (must be Normal and not Unusual):
         #
-        ctrl_list = machine_main['control_type']
-        if ('only_buttons' in ctrl_list and len(ctrl_list) > 1) or \
+        # control_list = machine_main['control_type']
+        if machine_main['input']:
+            control_list = [ctrl_dic['type'] for ctrl_dic in machine_main['input']['control_list']]
+        else:
+            control_list = []
+        if ('only_buttons' in control_list and len(control_list) > 1) or \
            machine_main['sourcefile'] == '88games.cpp' or \
            machine_main['sourcefile'] == 'cball.cpp' or \
            machine_main['sourcefile'] == 'asteroid.cpp':
@@ -4668,8 +5110,8 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
         #
         # Unusual machines. Most of them you don't wanna play.
         #
-        elif not ctrl_list or 'only_buttons' in ctrl_list or 'gambling' in ctrl_list or \
-             'hanafuda' in ctrl_list or 'mahjong' in ctrl_list or \
+        elif not control_list or 'only_buttons' in control_list or 'gambling' in control_list or \
+             'hanafuda' in control_list or 'mahjong' in control_list or \
              machine_main['sourcefile'] == 'aristmk5.cpp' or \
              machine_main['sourcefile'] == 'adp.cpp' or \
              machine_main['sourcefile'] == 'mpu4vid.cpp' or \
@@ -4699,8 +5141,9 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     for parent_name in main_pclone_dic:
         machine_main = machines[parent_name]
         machine_render = machines_render[parent_name]
+        n_coins = machine_main['input']['att_coins'] if machine_main['input'] else 0
         if machine_main['isMechanical']: continue
-        if machine_main['coins'] > 0: continue
+        if n_coins > 0: continue
         if machine_main['isDead']: continue
         if machine_render['isDevice']: continue
         parent_dic[parent_name] = machine_render['description']
@@ -4755,7 +5198,7 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     main_catalog_parents['Devices'] = parent_dic
     main_catalog_all['Devices'] = all_dic
 
-    # >> Build ROM cache index and save Main catalog JSON file
+    # --- Build ROM cache index and save Main catalog JSON file ---
     _cache_index_builder('Main', cache_index_dic, main_catalog_all, main_catalog_parents)
     fs_write_JSON_file(PATHS.CATALOG_MAIN_ALL_PATH.getPath(), main_catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_MAIN_PARENT_PATH.getPath(), main_catalog_parents)
@@ -4968,7 +5411,11 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
         machine_render = machines_render[parent_name]
         if machine_render['isDevice']: continue # >> Skip device machines
         # >> Order alphabetically the list
-        pretty_control_type_list = mame_improve_control_type_list(machine['control_type'])
+        if machine['input']:
+            control_list = [ctrl_dic['type'] for ctrl_dic in machine['input']['control_list']]
+        else:
+            control_list = []
+        pretty_control_type_list = mame_improve_control_type_list(control_list)
         sorted_control_type_list = sorted(pretty_control_type_list)
         # >> Maybe a setting should be added for compact or non-compact control list
         # sorted_control_type_list = mame_compress_item_list(sorted_control_type_list)
@@ -5001,7 +5448,11 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
         machine_render = machines_render[parent_name]
         if machine_render['isDevice']: continue # >> Skip device machines
         # >> Order alphabetically the list
-        pretty_control_type_list = mame_improve_control_type_list(machine['control_type'])
+        if machine['input']:
+            control_list = [ctrl_dic['type'] for ctrl_dic in machine['input']['control_list']]
+        else:
+            control_list = []
+        pretty_control_type_list = mame_improve_control_type_list(control_list)
         sorted_control_type_list = sorted(pretty_control_type_list)
         compressed_control_type_list = mame_compress_item_list_compact(sorted_control_type_list)
         if not compressed_control_type_list: compressed_control_type_list = [ '[ No controls ]' ]
@@ -5027,8 +5478,10 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     for parent_name in main_pclone_dic:
         machine = machines[parent_name]
         machine_render = machines_render[parent_name]
-        if machine_render['isDevice']: continue # >> Skip device machines
-        catalog_key = " / ".join(machine['display_type'])
+        # >> Skip device machines
+        if machine_render['isDevice']: continue
+        display_list = mame_improve_display_type_list(machine['display_type'])
+        catalog_key = " / ".join(display_list)
         # >> Change category name for machines with no display
         if catalog_key == '': catalog_key = '[ No display ]'
         if catalog_key in catalog_parents:
@@ -5220,9 +5673,9 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     pDialog.close()
 
     # --- Create properties database with default values ------------------------------------------
-    # >> Now overwrites all properties when the catalog is rebuilt.
-    #    New versions must kept user set properties!
-    # >> Disabled
+    # Now overwrites all properties when the catalog is rebuilt.
+    # New versions must kept user set properties!
+    # This code is disabled
     # mame_properties_dic = {}
     # for catalog_name in CATALOG_NAME_LIST:
     #     catalog_dic = fs_get_cataloged_dic_parents(PATHS, catalog_name)
@@ -5232,11 +5685,121 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     # fs_write_JSON_file(PATHS.MAIN_PROPERTIES_PATH.getPath(), mame_properties_dic)
     # log_info('mame_properties_dic has {0} entries'.format(len(mame_properties_dic)))
 
-    # --- Save Catalog index ----------------------------------------------------------------------
-    fs_write_JSON_file(PATHS.CACHE_INDEX_PATH.getPath(), cache_index_dic)
+    # --- Compute main filter statistics ---
+    stats_MF_Normal_Total = 0
+    stats_MF_Normal_Good = 0
+    stats_MF_Normal_Imperfect = 0
+    stats_MF_Normal_Nonworking = 0
+    stats_MF_Unusual_Total = 0
+    stats_MF_Unusual_Good = 0
+    stats_MF_Unusual_Imperfect = 0
+    stats_MF_Unusual_Nonworking = 0
+    stats_MF_Nocoin_Total = 0
+    stats_MF_Nocoin_Good = 0
+    stats_MF_Nocoin_Imperfect = 0
+    stats_MF_Nocoin_Nonworking = 0
+    stats_MF_Mechanical_Total = 0
+    stats_MF_Mechanical_Good = 0
+    stats_MF_Mechanical_Imperfect = 0
+    stats_MF_Mechanical_Nonworking = 0
+    stats_MF_Dead_Total = 0
+    stats_MF_Dead_Good = 0
+    stats_MF_Dead_Imperfect = 0
+    stats_MF_Dead_Nonworking = 0
+    NUM_FILTERS = 5
+    processed_filters = 0
+    pDialog.create('Advanced MAME Launcher', 'Computing statistics ...')
+    update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
+    pDialog.update(update_number)
+    for m_name in main_catalog_all['Normal']:
+        driver_status = machines_render[m_name]['driver_status']
+        stats_MF_Normal_Total += 1
+        if   driver_status == 'good':        stats_MF_Normal_Good += 1
+        elif driver_status == 'imperfect':   stats_MF_Normal_Imperfect += 1
+        elif driver_status == 'preliminary': stats_MF_Normal_Nonworking += 1
+        else: raise TypeError
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
+    pDialog.update(update_number)
+    for m_name in main_catalog_all['Unusual']:
+        driver_status = machines_render[m_name]['driver_status']
+        stats_MF_Unusual_Total += 1
+        if   driver_status == 'good':        stats_MF_Unusual_Good += 1
+        elif driver_status == 'imperfect':   stats_MF_Unusual_Imperfect += 1
+        elif driver_status == 'preliminary': stats_MF_Unusual_Nonworking += 1
+        else: raise TypeError
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
+    pDialog.update(update_number)
+    for m_name in main_catalog_all['NoCoin']:
+        driver_status = machines_render[m_name]['driver_status']
+        stats_MF_Nocoin_Total += 1
+        if   driver_status == 'good':        stats_MF_Nocoin_Good += 1
+        elif driver_status == 'imperfect':   stats_MF_Nocoin_Imperfect += 1
+        elif driver_status == 'preliminary': stats_MF_Nocoin_Nonworking += 1
+        else: raise TypeError
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
+    pDialog.update(update_number)
+    for m_name in main_catalog_all['Mechanical']:
+        driver_status = machines_render[m_name]['driver_status']
+        stats_MF_Mechanical_Total += 1
+        if   driver_status == 'good':        stats_MF_Mechanical_Good += 1
+        elif driver_status == 'imperfect':   stats_MF_Mechanical_Imperfect += 1
+        elif driver_status == 'preliminary': stats_MF_Mechanical_Nonworking += 1
+        else: raise TypeError
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
+    pDialog.update(update_number)
+    for m_name in main_catalog_all['Dead']:
+        driver_status = machines_render[m_name]['driver_status']
+        stats_MF_Dead_Total += 1
+        if   driver_status == 'good':        stats_MF_Dead_Good += 1
+        elif driver_status == 'imperfect':   stats_MF_Dead_Imperfect += 1
+        elif driver_status == 'preliminary': stats_MF_Dead_Nonworking += 1
+        else: raise TypeError
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
+    pDialog.update(update_number)
+    pDialog.close()
+
+    # --- Update statistics ---
+    change_control_dic(control_dic, 'stats_MF_Normal_Total', stats_MF_Normal_Total)
+    change_control_dic(control_dic, 'stats_MF_Normal_Good', stats_MF_Normal_Good)
+    change_control_dic(control_dic, 'stats_MF_Normal_Imperfect', stats_MF_Normal_Imperfect)
+    change_control_dic(control_dic, 'stats_MF_Normal_Nonworking', stats_MF_Normal_Nonworking)
+    change_control_dic(control_dic, 'stats_MF_Unusual_Total', stats_MF_Unusual_Total)
+    change_control_dic(control_dic, 'stats_MF_Unusual_Good', stats_MF_Unusual_Good)
+    change_control_dic(control_dic, 'stats_MF_Unusual_Imperfect', stats_MF_Unusual_Imperfect)
+    change_control_dic(control_dic, 'stats_MF_Unusual_Nonworking', stats_MF_Unusual_Nonworking)
+    change_control_dic(control_dic, 'stats_MF_Nocoin_Total', stats_MF_Nocoin_Total)
+    change_control_dic(control_dic, 'stats_MF_Nocoin_Good', stats_MF_Nocoin_Good)
+    change_control_dic(control_dic, 'stats_MF_Nocoin_Imperfect', stats_MF_Nocoin_Imperfect)
+    change_control_dic(control_dic, 'stats_MF_Nocoin_Nonworking', stats_MF_Nocoin_Nonworking)
+    change_control_dic(control_dic, 'stats_MF_Mechanical_Total', stats_MF_Mechanical_Total)
+    change_control_dic(control_dic, 'stats_MF_Mechanical_Good', stats_MF_Mechanical_Good)
+    change_control_dic(control_dic, 'stats_MF_Mechanical_Imperfect', stats_MF_Mechanical_Imperfect)
+    change_control_dic(control_dic, 'stats_MF_Mechanical_Nonworking', stats_MF_Mechanical_Nonworking)
+    change_control_dic(control_dic, 'stats_MF_Dead_Total', stats_MF_Dead_Total)
+    change_control_dic(control_dic, 'stats_MF_Dead_Good', stats_MF_Dead_Good)
+    change_control_dic(control_dic, 'stats_MF_Dead_Imperfect', stats_MF_Dead_Imperfect)
+    change_control_dic(control_dic, 'stats_MF_Dead_Nonworking', stats_MF_Dead_Nonworking)
 
     # --- Update timestamp ---
     change_control_dic(control_dic, 't_MAME_Catalog_build', time.time())
+
+    # --- Save stuff ------------------------------------------------------------------------------
+    db_files = [
+        [cache_index_dic, 'MAME cache index', PATHS.CACHE_INDEX_PATH.getPath()],
+        [control_dic, 'Control dictionary', PATHS.MAIN_CONTROL_PATH.getPath()],
+    ]
+    db_dic = fs_save_files(db_files)
+
+    # Return an dictionary with reference to the objects just in case they are needed after
+    # this function (in "Build everything", for example. This saves time (databases do not
+    # need to be reloaded) and apparently memory as well.
+
+    return cache_index_dic
 
 # -------------------------------------------------------------------------------------------------
 # Software Lists and ROM audit database building function
@@ -5401,13 +5964,14 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
 #   ], ...
 # }
 #
-class SLDataObj:
-    def __init__(self):
-        self.roms = {}
-        self.SL_roms = {}
-        self.display_name = ''
-        self.num_with_ROMs = 0
-        self.num_with_CHDs = 0
+def _new_SL_Data_dic():
+    return {
+        'items'         : {},
+        'SL_roms'       : {},
+        'display_name'  : '',
+        'num_with_ROMs' : 0,
+        'num_with_CHDs' : 0,
+    }
 
 def _get_SL_dataarea_ROMs(SL_name, item_name, part_child, dataarea_dic):
     # >> Get ROMs in dataarea
@@ -5530,7 +6094,7 @@ def _get_SL_dataarea_CHDs(SL_name, item_name, part_child, diskarea_dic):
 
 def _mame_load_SL_XML(xml_filename):
     __debug_xml_parser = False
-    SLData = SLDataObj()
+    SLData = _new_SL_Data_dic()
 
     # --- If file does not exist return empty dictionary ---
     if not os.path.isfile(xml_filename): return SLData
@@ -5544,9 +6108,9 @@ def _mame_load_SL_XML(xml_filename):
     except:
         return SLData
     xml_root = xml_tree.getroot()
-    SLData.display_name = xml_root.attrib['description']
+    SLData['display_name'] = xml_root.attrib['description']
     for root_element in xml_root:
-        if __debug_xml_parser: print('Root child {0}'.format(root_element.tag))
+        if __debug_xml_parser: log_debug('Root child {0}'.format(root_element.tag))
 
         # >> Only process 'software' elements
         if root_element.tag != 'software': continue
@@ -5564,7 +6128,7 @@ def _mame_load_SL_XML(xml_filename):
             # >> By default read strings
             xml_text = rom_child.text if rom_child.text is not None else ''
             xml_tag  = rom_child.tag
-            if __debug_xml_parser: print('{0} --> {1}'.format(xml_tag, xml_text))
+            if __debug_xml_parser: log_debug('{0} --> {1}'.format(xml_tag, xml_text))
 
             # --- Only pick tags we want ---
             if xml_tag == 'description' or xml_tag == 'year' or xml_tag == 'publisher':
@@ -5629,21 +6193,21 @@ def _mame_load_SL_XML(xml_filename):
         if num_roms:
             SL_item['hasROMs'] = True
             SL_item['status_ROM'] = '?'
-            SLData.num_with_ROMs += 1
+            SLData['num_with_ROMs'] += 1
         else:
             SL_item['hasROMs'] = False
             SL_item['status_ROM'] = '-'
         if num_disks:
             SL_item['hasCHDs'] = True
             SL_item['status_CHD'] = '?'
-            SLData.num_with_CHDs += 1
+            SLData['num_with_CHDs'] += 1
         else:
             SL_item['hasCHDs'] = False
             SL_item['status_CHD'] = '-'
 
         # >> Add <software> item (SL_item) to database and software ROM/CHDs to database
-        SLData.roms[item_name] = SL_item
-        SLData.SL_roms[item_name] = SL_rom_list
+        SLData['items'][item_name] = SL_item
+        SLData['SL_roms'][item_name] = SL_rom_list
 
     return SLData
 
@@ -5735,6 +6299,36 @@ def _get_SL_CHD_location(chd_set, SL_name, SL_item_name, disk_dic, SL_Items):
     return location
 
 # -------------------------------------------------------------------------------------------------
+#
+# Checks for errors before scanning for SL ROMs.
+# Display a Kodi dialog if an error is found.
+# Returns a dictionary of settings:
+# options_dic['abort'] is always present.
+# 
+#
+def mame_check_before_build_SL_databases(PATHS, settings, control_dic):
+    options_dic = {}
+    options_dic['abort'] = False
+
+    # --- Error checks ---
+    if not settings['SL_hash_path']:
+        t = ('Software Lists hash path not set. '
+             'Open AML addon settings and configure the location of the MAME hash path in the '
+             '"Paths" tab.')
+        kodi_dialog_OK(t)
+        options_dic['abort'] = True
+        return options_dic
+
+    if not PATHS.MAIN_DB_PATH.exists():
+        t = ('MAME Main database not found. '
+            'Open AML addon settings and configure the location of the MAME executable in the '
+            '"Paths" tab.')
+        kodi_dialog_OK(t)
+        options_dic['abort'] = True
+        return options_dic
+
+    return options_dic
+
 # SL_catalog = { 'name' : {
 #     'display_name': u'', 'num_with_CHDs' : int, 'num_with_ROMs' : int, 'rom_DB_noext' : u'' }, ...
 # }
@@ -5752,11 +6346,11 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
     SL_dir_FN = FileName(settings['SL_hash_path'])
     log_debug('mame_build_SoftwareLists_databases() SL_dir_FN "{0}"'.format(SL_dir_FN.getPath()))
 
-    # --- Scan all XML files in Software Lists directory and save SL and SL ROMs databases ---
+    # --- Scan all XML files in Software Lists directory and save SL catalog and SL databases ---
     log_info('Processing Software List XML files ...')
     pDialog = xbmcgui.DialogProgress()
     pDialog_canceled = False
-    pdialog_line1 = 'Building Sofware Lists ROM databases ...'
+    pdialog_line1 = 'Building Sofware Lists item databases ...'
     pDialog.create('Advanced MAME Launcher', pdialog_line1)
     SL_file_list = SL_dir_FN.scanFilesInPath('*.xml')
     # >> DEBUG code for development, only process first SL file (32x).
@@ -5775,24 +6369,24 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
         # log_debug('mame_build_SoftwareLists_databases() Processing "{0}"'.format(file))
         SL_path_FN = FileName(file)
         SLData = _mame_load_SL_XML(SL_path_FN.getPath())
-        fs_write_JSON_file(PATHS.SL_DB_DIR.pjoin(FN.getBase_noext() + '.json').getPath(),
-                           SLData.roms, verbose = False)
-        fs_write_JSON_file(PATHS.SL_DB_DIR.pjoin(FN.getBase_noext() + '_ROMs.json').getPath(),
-                           SLData.SL_roms, verbose = False)
+        fs_write_JSON_file(
+            PATHS.SL_DB_DIR.pjoin(FN.getBase_noext() + '_items.json').getPath(), SLData['items'], verbose = False)
+        fs_write_JSON_file(
+            PATHS.SL_DB_DIR.pjoin(FN.getBase_noext() + '_ROMs.json').getPath(), SLData['SL_roms'], verbose = False)
 
         # >> Add software list to catalog
-        num_SL_with_ROMs += SLData.num_with_ROMs
-        num_SL_with_CHDs += SLData.num_with_CHDs
-        SL = {'display_name'  : SLData.display_name, 
-              'num_with_ROMs' : SLData.num_with_ROMs,
-              'num_with_CHDs' : SLData.num_with_CHDs,
-              'rom_DB_noext'  : FN.getBase_noext()
+        num_SL_with_ROMs += SLData['num_with_ROMs']
+        num_SL_with_CHDs += SLData['num_with_CHDs']
+        SL = {
+            'display_name'  : SLData['display_name'],
+            'num_with_ROMs' : SLData['num_with_ROMs'],
+            'num_with_CHDs' : SLData['num_with_CHDs'],
+            'rom_DB_noext'  : FN.getBase_noext(),
         }
         SL_catalog_dic[FN.getBase_noext()] = SL
 
         # >> Update progress
         processed_files += 1
-    fs_write_JSON_file(PATHS.SL_INDEX_PATH.getPath(), SL_catalog_dic)
     pDialog.update((processed_files*100) // total_SL_files, pdialog_line1, ' ')
 
     # --- Make the SL ROM/CHD unified Audit databases ---
@@ -5801,7 +6395,7 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
     chd_set = ['MERGED', 'SPLIT', 'NONMERGED'][settings['SL_chd_set']]
     log_info('mame_build_SoftwareLists_databases() SL ROM set is {0}'.format(rom_set))
     log_info('mame_build_SoftwareLists_databases() SL CHD set is {0}'.format(chd_set))
-    pdialog_line1 = 'Building Software List ROM Audit database ...'
+    pdialog_line1 = 'Building Software List ROM audit databases ...'
     pDialog.update(0, pdialog_line1)
     total_files = len(SL_file_list)
     processed_files = 0
@@ -5817,7 +6411,7 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
 
         # >> Filenames of the databases
         # log_debug('mame_build_SoftwareLists_databases() Processing "{0}"'.format(file))
-        SL_Items_DB_FN = PATHS.SL_DB_DIR.pjoin(FN.getBase_noext() + '.json')        
+        SL_Items_DB_FN = PATHS.SL_DB_DIR.pjoin(FN.getBase_noext() + '_items.json')
         SL_ROMs_DB_FN = PATHS.SL_DB_DIR.pjoin(FN.getBase_noext() + '_ROMs.json')
         SL_ROM_Audit_DB_FN = PATHS.SL_DB_DIR.pjoin(FN.getBase_noext() + '_ROM_audit.json')
         SL_Soft_Archives_DB_FN = PATHS.SL_DB_DIR.pjoin(FN.getBase_noext() + '_ROM_archives.json')
@@ -5825,7 +6419,7 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
         SL_ROMs = fs_load_JSON_file_dic(SL_ROMs_DB_FN.getPath(), verbose = False)
 
         # --- First add the SL item ROMs to the audit database ---
-        SL_Audit_ROMs_dic = {}        
+        SL_Audit_ROMs_dic = {}
         for SL_item_name in SL_ROMs:
             # >> If SL item is a clone then create parent_rom_dic. This is only needed in the
             # >> SPLIT set, so current code is a bit inefficient for other sets.
@@ -5924,7 +6518,7 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
         pDialog.update((processed_files*100) // total_files, pdialog_line1, 'Software List {0}'.format(sl_name))
         total_SL_XML_files += 1
         pclone_dic = {}
-        SL_database_FN = PATHS.SL_DB_DIR.pjoin(sl_name + '.json')
+        SL_database_FN = PATHS.SL_DB_DIR.pjoin(sl_name + '_items.json')
         ROMs = fs_load_JSON_file_dic(SL_database_FN.getPath(), verbose = False)
         for rom_name in ROMs:
             total_SL_software_items += 1
@@ -5938,7 +6532,6 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
         SL_PClone_dic[sl_name] = pclone_dic
         # >> Update progress
         processed_files += 1
-    fs_write_JSON_file(PATHS.SL_PCLONE_DIC_PATH.getPath(), SL_PClone_dic)
     pDialog.update((processed_files*100) // total_files, pdialog_line1, ' ')
 
     # --- Make a list of machines that can launch each SL ---
@@ -5955,15 +6548,14 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
             # if not machines[machine_name]['softwarelists']: continue
             for machine_SL_name in machines[machine_name]['softwarelists']:
                 if machine_SL_name == SL_name:
-                    SL_machine_dic = {'machine'     : machine_name,
-                                      'description' : machines_render[machine_name]['description'],
-                                      'devices'     : machines[machine_name]['devices']}
+                    SL_machine_dic = {
+                        'machine'     : machine_name,
+                        'description' : machines_render[machine_name]['description'],
+                        'devices'     : machines[machine_name]['devices']
+                    }
                     SL_machine_list.append(SL_machine_dic)
         SL_machines_dic[SL_name] = SL_machine_list
-
-        # >> Update progress
         processed_SL += 1
-    fs_write_JSON_file(PATHS.SL_MACHINES_PATH.getPath(), SL_machines_dic)
     pDialog.update((processed_SL*100) // total_SL, pdialog_line1, ' ')
 
     # --- Empty SL asset DB ---
@@ -5972,13 +6564,12 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
     pDialog.update(0, pdialog_line1)
     total_SL = len(SL_catalog_dic)
     processed_SL = 0
-    SL_machines_dic = {}
     for SL_name in sorted(SL_catalog_dic):
         # --- Update progress ---
         pDialog.update((processed_SL*100) // total_SL, pdialog_line1, 'Software List {0}'.format(SL_name))
 
         # --- Load SL databases ---
-        file_name = SL_catalog_dic[SL_name]['rom_DB_noext'] + '.json'
+        file_name = SL_catalog_dic[SL_name]['rom_DB_noext'] + '_items.json'
         SL_DB_FN = PATHS.SL_DB_DIR.pjoin(file_name)
         SL_roms = fs_load_JSON_file_dic(SL_DB_FN.getPath(), verbose = False)
         assets_file_name = SL_catalog_dic[SL_name]['rom_DB_noext'] + '_assets.json'
@@ -5991,8 +6582,6 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
 
         # --- Write SL asset JSON ---
         fs_write_JSON_file(SL_asset_DB_FN.getPath(), SL_assets_dic, verbose = False)
-
-        # >> Update progress
         processed_SL += 1
     pDialog.update((processed_SL*100) // total_SL, pdialog_line1, ' ')
     pDialog.close()
@@ -6038,20 +6627,129 @@ def mame_build_SoftwareLists_databases(PATHS, settings, control_dic, machines, m
     # --- SL build timestamp ---
     change_control_dic(control_dic, 't_SL_DB_build', time.time())
 
+    # --- Save modified/created stuff in this function ---
+    if OPTION_LOWMEM_WRITE_JSON:
+        json_write_func = fs_write_JSON_file_lowmem
+        log_debug('Using fs_write_JSON_file_lowmem() JSON writer')
+    else:
+        json_write_func = fs_write_JSON_file
+        log_debug('Using fs_write_JSON_file() JSON writer')
+    db_files = [
+        # Fix this list of files!!!
+        [SL_catalog_dic, 'Software Lists index', PATHS.SL_INDEX_PATH.getPath()],
+        [SL_PClone_dic, 'Software Lists P/Clone', PATHS.SL_PCLONE_DIC_PATH.getPath()],
+        [SL_machines_dic, 'Software Lists Machines', PATHS.SL_MACHINES_PATH.getPath()],
+        # --- Save control_dic after everything is saved ---
+        [control_dic, 'Control dictionary', PATHS.MAIN_CONTROL_PATH.getPath()],
+    ]
+    db_dic = fs_save_files(db_files, json_write_func)
+
+    # Return an dictionary with reference to the objects just in case they are needed after
+    # this function (in "Build everything", for example. This saves time (databases do not
+    # need to be reloaded) and apparently memory as well.
+    SL_dic = {
+        'SL_index' : SL_catalog_dic,
+        'SL_PClone_dic' : SL_PClone_dic,
+        'SL_machines' : SL_machines_dic,
+    }
+
+    return SL_dic
+
 # -------------------------------------------------------------------------------------------------
 # ROM/CHD and asset scanner
 # -------------------------------------------------------------------------------------------------
-# Does not save any file. assets_dic and control_dic mutated by assigment.
-def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
-                        machines, machines_render, assets_dic,
-                        machine_archives_dic, ROM_archive_list, CHD_archive_list,
-                        ROM_path_FN, CHD_path_FN, Samples_path_FN,
-                        scan_CHDs, scan_Samples):
+#
+# Checks for errors before scanning for SL ROMs.
+# Display a Kodi dialog if an error is found.
+# Returns a dictionary of settings:
+# options_dic['abort'] is always present.
+# 
+#
+def mame_check_before_scan_MAME_ROMs(PATHS, settings, control_dic):
+    log_info('mame_check_before_scan_MAME_ROMs() Starting ...')
+    options_dic = {}
+    options_dic['abort'] = False
+
+    # >> Get paths and check they exist
+    if not settings['rom_path']:
+        kodi_dialog_OK('ROM directory not configured. Aborting.')
+        options_dic['abort'] = True
+        return options_dic
+    ROM_path_FN = FileName(settings['rom_path'])
+    if not ROM_path_FN.isdir():
+        kodi_dialog_OK('ROM directory does not exist. Aborting.')
+        options_dic['abort'] = True
+        return options_dic
+
+    # Scanning of CHDs is optional.
+    if settings['chd_path']:
+        CHD_path_FN = FileName(settings['chd_path'])
+        if not CHD_path_FN.isdir():
+            kodi_dialog_OK('CHD directory does not exist. CHD scanning disabled.')
+            options_dic['scan_CHDs'] = False
+        else:
+            options_dic['scan_CHDs'] = True
+    else:
+        kodi_dialog_OK('CHD directory not configured. CHD scanning disabled.')
+        options_dic['scan_CHDs'] = False
+
+    # Scanning of Samples is optional.
+    if settings['samples_path']:
+        Samples_path_FN = FileName(settings['samples_path'])
+        if not Samples_path_FN.isdir():
+            kodi_dialog_OK('Samples directory does not exist. Samples scanning disabled.')
+            options_dic['scan_Samples'] = False
+        else:
+            options_dic['scan_Samples'] = True
+    else:
+        kodi_dialog_OK('Samples directory not configured. Samples scanning disabled.')
+        options_dic['scan_Samples'] = False
+
+    return options_dic
+
+#
+# Saves control_dic and assets_dic.
+#
+# PROBLEM with samples scanning.
+# Most samples are stored in ZIP files. However, the samples shipped with MAME executable
+# are uncompressed:
+#   MAME_DIR/samples/floppy/35_seek_12ms.wav
+#   MAME_DIR/samples/floppy/35_seek_20ms.wav
+#   ...
+#   MAME_DIR/samples/MM1_keyboard/beep.wav
+#   MAME_DIR/samples/MM1_keyboard/power_switch.wav
+#
+def mame_scan_MAME_ROMs(PATHS, settings, control_dic, options_dic,
+    machines, machines_render, assets_dic, machine_archives_dic,
+    ROM_ZIP_list, Sample_ZIP_list, CHD_list):
+    log_info('mame_scan_MAME_ROMs() Starting ...')
+
+    # At this point paths have been verified and exists.
+    ROM_path_FN = FileName(settings['rom_path'])
+    log_info('mame_scan_MAME_ROMs() ROM dir OP {0}'.format(ROM_path_FN.getOriginalPath()))
+    log_info('mame_scan_MAME_ROMs() ROM dir  P {0}'.format(ROM_path_FN.getPath()))
+
+    if options_dic['scan_CHDs']:
+        CHD_path_FN = FileName(settings['chd_path'])
+        log_info('mame_scan_MAME_ROMs() CHD dir OP {0}'.format(CHD_path_FN.getOriginalPath()))
+        log_info('mame_scan_MAME_ROMs() CHD dir  P {0}'.format(CHD_path_FN.getPath()))
+    else:
+        CHD_path_FN = FileName('')
+        log_info('Scan of CHDs disabled.')
+
+    if options_dic['scan_Samples']:
+        Samples_path_FN = FileName(settings['samples_path'])
+        log_info('mame_scan_MAME_ROMs() Samples OP {0}'.format(Samples_path_FN.getOriginalPath()))
+        log_info('mame_scan_MAME_ROMs() Samples P {0}'.format(Samples_path_FN.getPath()))
+    else:
+        Samples_path_FN = FileName('')
+        log_info('Scan of Samples disabled.')
 
     # --- Create a cache of assets ---
     # >> misc_add_file_cache() creates a set with all files in a given directory.
     # >> That set is stored in a function internal cache associated with the path.
     # >> Files in the cache can be searched with misc_search_file_cache()
+    # >> misc_add_file_cache() accepts invalid/empty paths, just do not add them to the cache.
     ROM_path_str = ROM_path_FN.getPath()
     CHD_path_str = CHD_path_FN.getPath()
     Samples_path_str = Samples_path_FN.getPath()
@@ -6065,16 +6763,21 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
         pDialog.update((100*(i+1))/len(STUFF_PATH_LIST))
     pDialog.close()
 
-    # --- Scan ROMs ---
-    pDialog.create('Advanced MAME Launcher', 'Scanning MAME machine archives (ROMs and CHDs) ...')
+    # --- Scan machine archives ---
+    # Traverses all machines and scans if all required files exist. 
+    pDialog.create('Advanced MAME Launcher',
+        'Scanning MAME machine archives (ROMs, Samples and CHDs) ...')
     total_machines = len(machines_render)
     processed_machines = 0
-    scan_ROM_machines_total = 0
-    scan_ROM_machines_have = 0
-    scan_ROM_machines_missing = 0
-    scan_CHD_machines_total = 0
-    scan_CHD_machines_have = 0
-    scan_CHD_machines_missing = 0
+    scan_march_ROM_total = 0
+    scan_march_ROM_have = 0
+    scan_march_ROM_missing = 0
+    scan_march_SAM_total = 0
+    scan_march_SAM_have = 0
+    scan_march_SAM_missing = 0
+    scan_march_CHD_total = 0
+    scan_march_CHD_have = 0
+    scan_march_CHD_missing = 0
     r_full_list = []
     r_have_list = []
     r_miss_list = []
@@ -6082,7 +6785,7 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
         pDialog.update((processed_machines*100) // total_machines)
 
         # --- Initialise machine ---
-        # log_info('_command_setup_plugin() Checking machine {0}'.format(key))
+        # log_info('mame_scan_MAME_ROMs() Checking machine {0}'.format(key))
         if machines_render[key]['isDevice']: continue # Skip Devices
         m_have_str_list = []
         m_miss_str_list = []
@@ -6090,6 +6793,7 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
         # --- ROMs ---
         rom_list = machine_archives_dic[key]['ROMs']
         if rom_list:
+            scan_march_ROM_total += 1
             have_rom_list = [False] * len(rom_list)
             for i, rom in enumerate(rom_list):
                 # --- Old code ---
@@ -6103,23 +6807,48 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
                     m_have_str_list.append('HAVE ROM {0}'.format(rom))
                 else:
                     m_miss_str_list.append('MISS ROM {0}'.format(rom))
-            scan_ROM_machines_total += 1
             if all(have_rom_list):
                 # --- All ZIP files required to run this machine exist ---
+                scan_march_ROM_have += 1
                 ROM_flag = 'R'
-                scan_ROM_machines_have += 1
             else:
+                scan_march_ROM_missing += 1
                 ROM_flag = 'r'
-                scan_ROM_machines_missing += 1
         else:
             ROM_flag = '-'
         fs_set_ROM_flag(assets_dic[key], ROM_flag)
 
+        # --- Samples ---
+        sample_list = machine_archives_dic[key]['Samples']
+        if sample_list and options_dic['scan_Samples']:
+            scan_march_SAM_total += 1
+            have_sample_list = [False] * len(sample_list)
+            for i, sample in enumerate(sample_list):
+                Sample_FN = misc_search_file_cache(Samples_path_str, sample, MAME_SAMPLE_EXTS)
+                if ROM_FN:
+                    have_sample_list[i] = True
+                    m_have_str_list.append('HAVE SAM {0}'.format(sample))
+                else:
+                    m_miss_str_list.append('MISS SAM {0}'.format(sample))
+            if all(have_sample_list):
+                scan_march_SAM_have += 1
+                Sample_flag = 'S'
+            else:
+                scan_march_SAM_missing += 1
+                Sample_flag = 's'
+        elif chd_list and not options_dic['scan_Samples']:
+            scan_march_SAM_total += 1
+            scan_march_SAM_missing += 1
+            Sample_flag = 's'
+        else:
+            Sample_flag = '-'
+        fs_set_Sample_flag(assets_dic[key], Sample_flag)
+
         # --- Disks ---
         # >> Machines with CHDs: 2spicy, sfiii2
         chd_list = machine_archives_dic[key]['CHDs']
-        if chd_list and scan_CHDs:
-            scan_CHD_machines_total += 1
+        if chd_list and options_dic['scan_CHDs']:
+            scan_march_CHD_total += 1
             has_chd_list = [False] * len(chd_list)
             for idx, chd_name in enumerate(chd_list):
                 # --- Old code ---
@@ -6134,49 +6863,47 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
                 else:
                     m_miss_str_list.append('MISS CHD {0}'.format(chd_name))
             if all(has_chd_list):
+                scan_march_CHD_have += 1
                 CHD_flag = 'C'
-                scan_CHD_machines_have += 1
             else:
+                scan_march_CHD_missing += 1
                 CHD_flag = 'c'
-                scan_CHD_machines_missing += 1
-        elif chd_list and not scan_CHDs:
-            scan_CHD_machines_total += 1
+        elif chd_list and not options_dic['scan_CHDs']:
+            scan_march_CHD_total += 1
+            scan_march_CHD_missing += 1
             CHD_flag = 'c'
-            scan_CHD_machines_missing += 1
         else:
             CHD_flag = '-'
         fs_set_CHD_flag(assets_dic[key], CHD_flag)
 
         # >> Build FULL, HAVE and MISSING reports.
-        r_full_list.append('Machine {0} -- "{1}"'.format(key, machines_render[key]['description']))
+        r_full_list.append('Machine {0} "{1}"'.format(key, machines_render[key]['description']))
         if machines_render[key]['cloneof']:
             cloneof = machines_render[key]['cloneof']
-            r_full_list.append('cloneof {0} ({1})'.format(cloneof, machines_render[cloneof]['description']))
-        if not rom_list and not chd_list:
-            r_full_list.append('Machine has no ROMs and/or CHDs')
+            r_full_list.append('cloneof {0} "{1}"'.format(cloneof, machines_render[cloneof]['description']))
+        if not rom_list and not sample_list and not chd_list:
+            r_full_list.append('Machine has no ROMs, Samples and/or CHDs')
         else:
             r_full_list.extend(m_have_str_list)
             r_full_list.extend(m_miss_str_list)
         r_full_list.append('')
 
-        # >> Also including missing ROMs/CHDs if any.
-        if m_have_str_list:
-            r_have_list.append('Machine {0} -- "{1}"'.format(key, machines_render[key]['description']))
+        # In the HAVE report include machines if and only if every required file is there.
+        if m_have_str_list and not m_miss_str_list:
+            r_have_list.append('Machine {0} "{1}"'.format(key, machines_render[key]['description']))
             if machines_render[key]['cloneof']:
                 cloneof = machines_render[key]['cloneof']
-                r_have_list.append('cloneof {0} ({1})'.format(cloneof, machines_render[cloneof]['description']))
+                r_have_list.append('cloneof {0} "{1}"'.format(cloneof, machines_render[cloneof]['description']))
             r_have_list.extend(m_have_str_list)
-            # if m_miss_str_list: r_have_list.extend(m_miss_str_list)
             r_have_list.extend(m_miss_str_list)
             r_have_list.append('')
 
-        # >> Also including have ROMs/CHDs if any.
+        # In the MISSING report include machines if anything is missing.
         if m_miss_str_list:
-            r_miss_list.append('Machine {0} -- "{1}"'.format(key, machines_render[key]['description']))
+            r_miss_list.append('Machine {0} "{1}"'.format(key, machines_render[key]['description']))
             if machines_render[key]['cloneof']:
                 cloneof = machines_render[key]['cloneof']
-                r_miss_list.append('cloneof {0} ({1})'.format(cloneof, machines_render[cloneof]['description']))
-            # if m_have_str_list: r_miss_list.extend(m_have_str_list)
+                r_miss_list.append('cloneof {0} "{1}"'.format(cloneof, machines_render[cloneof]['description']))
             r_miss_list.extend(m_have_str_list)
             r_miss_list.extend(m_miss_str_list)
             r_miss_list.append('')
@@ -6190,9 +6917,11 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
     with open(PATHS.REPORT_MAME_SCAN_MACHINE_ARCH_FULL_PATH.getPath(), 'w') as file:
         report_slist = [
             '*** Advanced MAME Launcher MAME machines scanner report ***',
-            'This report shows all the scanned MAME machines.\n',
-            'MAME ROM path = "{0}"'.format(ROM_path_str),
-            'MAME CHD path = "{0}"'.format(CHD_path_str),
+            'This report shows all the scanned MAME machines.',
+            '',
+            'MAME ROM path     "{0}"'.format(ROM_path_str),
+            'MAME Samples path "{0}"'.format(Samples_path_str),
+            'MAME CHD path     "{0}"'.format(CHD_path_str),
             '',
         ]
         report_slist.extend(r_full_list)
@@ -6202,9 +6931,13 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
     with open(PATHS.REPORT_MAME_SCAN_MACHINE_ARCH_HAVE_PATH.getPath(), 'w') as file:
         report_slist = [
             '*** Advanced MAME Launcher MAME machines scanner report ***',
-            'This reports shows HAVE MAME machines with ROM ZIPs and/or CHDs.\n',
-            'MAME ROM path = "{0}"'.format(ROM_path_str),
-            'MAME CHD path = "{0}"'.format(CHD_path_str),
+            'This reports shows MAME machines that have all the required',
+            'ROM ZIP files, Sample ZIP files and CHD files.',
+            'Machines that no require files are not listed.',
+            '',
+            'MAME ROM path     "{0}"'.format(ROM_path_str),
+            'MAME Samples path "{0}"'.format(Samples_path_str),
+            'MAME CHD path     "{0}"'.format(CHD_path_str),
             '',
         ]
         if not r_have_list:
@@ -6216,9 +6949,13 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
     with open(PATHS.REPORT_MAME_SCAN_MACHINE_ARCH_MISS_PATH.getPath(), 'w') as file:
         report_slist = [
             '*** Advanced MAME Launcher MAME machines scanner report ***',
-            'This reports shows MISSING MAME machines with ROM ZIPs and/or CHDs.\n',
-            'MAME ROM path = "{0}"'.format(ROM_path_str),
-            'MAME CHD path = "{0}"'.format(CHD_path_str),
+            'This reports shows MAME machines that miss all or some of the required',
+            'ROM ZIP files, Sample ZIP files or CHD files.',
+            'Machines that no require files are not listed.',
+            '',
+            'MAME ROM path     "{0}"'.format(ROM_path_str),
+            'MAME Samples path "{0}"'.format(Samples_path_str),
+            'MAME CHD path     "{0}"'.format(CHD_path_str),
             '',
         ]
         if not r_miss_list:
@@ -6229,41 +6966,77 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
     # --- ROM ZIP file list ---
     pDialog = xbmcgui.DialogProgress()
     pDialog_canceled = False
-    pDialog.create('Advanced MAME Launcher', 'Scanning MAME archive ROMs ...')
+    pDialog.create('Advanced MAME Launcher', 'Scanning MAME ROM ZIPs ...')
     total_machines = len(machines_render)
     processed_machines = 0
-    scan_ZIP_files_total = 0
-    scan_ZIP_files_have = 0
-    scan_ZIP_files_missing = 0
+    scan_ROM_ZIP_files_total = 0
+    scan_ROM_ZIP_files_have = 0
+    scan_ROM_ZIP_files_missing = 0
     r_list = [
         '*** Advanced MAME Launcher MAME machines scanner report ***',
-        'This report shows all missing MAME machine ROM ZIPs',
-        'Each missing ROM ZIP appears only once, but more than one machine may be unrunnable.\n',
-        'MAME ROM path = "{0}"'.format(ROM_path_str),
-        'MAME CHD path = "{0}"'.format(CHD_path_str),
+        'This report shows all missing MAME machine ROM ZIP files.',
+        'Each missing ROM ZIP appears only once, but more than one machine may be affected.',
+        '',
+        'MAME ROM path     "{0}"'.format(ROM_path_str),
+        'MAME Samples path "{0}"'.format(Samples_path_str),
+        'MAME CHD path     "{0}"'.format(CHD_path_str),
         '',
     ]
-    for rom_name in ROM_archive_list:
-        scan_ZIP_files_total += 1
+    for rom_name in ROM_ZIP_list:
+        scan_ROM_ZIP_files_total += 1
         ROM_FN = misc_search_file_cache(ROM_path_str, rom_name, MAME_ROM_EXTS)
         if ROM_FN:
-            scan_ZIP_files_have += 1
+            scan_ROM_ZIP_files_have += 1
         else:
-            scan_ZIP_files_missing += 1
+            scan_ROM_ZIP_files_missing += 1
             r_list.append('Missing ROM {0}'.format(rom_name))
-        # >> Progress dialog
         processed_machines += 1
         pDialog.update((processed_machines*100) // total_machines)
     pDialog.close()
-    # >> Write report
     log_info('Writing report "{0}"'.format(PATHS.REPORT_MAME_SCAN_ROM_LIST_MISS_PATH.getPath()))
     with open(PATHS.REPORT_MAME_SCAN_ROM_LIST_MISS_PATH.getPath(), 'w') as file:
-        if scan_ZIP_files_missing == 0:
+        if scan_ROM_ZIP_files_missing == 0:
             r_list.append('Congratulations!!! You have no missing ROM ZIP files.')
         file.write('\n'.join(r_list).encode('utf-8'))
 
+    # --- Sample ZIP file list ---
+    pDialog = xbmcgui.DialogProgress()
+    pDialog_canceled = False
+    pDialog.create('Advanced MAME Launcher', 'Scanning MAME Sample ZIPs ...')
+    total_machines = len(machines_render)
+    processed_machines = 0
+    scan_Samples_ZIP_total = 0
+    scan_Samples_ZIP_have = 0
+    scan_Samples_ZIP_missing = 0
+    r_list = [
+        '*** Advanced MAME Launcher MAME machines scanner report ***',
+        'This report shows all missing MAME machine Sample ZIP files.',
+        'Each missing Sample ZIP appears only once, but more than one machine may be affected.',
+        '',
+        'MAME ROM path     "{0}"'.format(ROM_path_str),
+        'MAME Samples path "{0}"'.format(Samples_path_str),
+        'MAME CHD path     "{0}"'.format(CHD_path_str),
+        '',
+    ]
+    for sample_name in Sample_ZIP_list:
+        scan_Samples_ZIP_total += 1
+        Sample_FN = misc_search_file_cache(Samples_path_str, sample_name, MAME_SAMPLE_EXTS)
+        if Sample_FN:
+            scan_Samples_ZIP_have += 1
+        else:
+            scan_Samples_ZIP_missing += 1
+            r_list.append('Missing Sample {0}'.format(sample_name))
+        processed_machines += 1
+        pDialog.update((processed_machines*100) // total_machines)
+    pDialog.close()
+    log_info('Writing report "{0}"'.format(PATHS.REPORT_MAME_SCAN_SAM_LIST_MISS_PATH.getPath()))
+    with open(PATHS.REPORT_MAME_SCAN_SAM_LIST_MISS_PATH.getPath(), 'w') as file:
+        if scan_Samples_ZIP_missing == 0:
+            r_list.append('Congratulations!!! You have no missing Sample ZIP files.')
+        file.write('\n'.join(r_list).encode('utf-8'))
+
     # --- CHD file list ---
-    pDialog.create('Advanced MAME Launcher', 'Scanning MAME CHDs ...')
+    pDialog.create('Advanced MAME Launcher', 'Scanning MAME CHD files ...')
     total_machines = len(machines_render)
     processed_machines = 0
     scan_CHD_files_total = 0
@@ -6272,12 +7045,14 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
     r_list = [
         '*** Advanced MAME Launcher MAME machines scanner report ***',
         'This report shows all missing MAME machine CHDs',
-        'Each missing CHD appears only once, but more than one machine may be unrunnable.\n',
-        'MAME ROM path = "{0}"'.format(ROM_path_str),
-        'MAME CHD path = "{0}"'.format(CHD_path_str),
+        'Each missing CHD appears only once, but more than one machine may be affected.',
+        '',
+        'MAME ROM path     "{0}"'.format(ROM_path_str),
+        'MAME Samples path "{0}"'.format(Samples_path_str),
+        'MAME CHD path     "{0}"'.format(CHD_path_str),
         '',
     ]
-    for chd_name in CHD_archive_list:
+    for chd_name in CHD_list:
         scan_CHD_files_total += 1
         CHD_FN = misc_search_file_cache(CHD_path_str, chd_name, MAME_CHD_EXTS)
         if CHD_FN:
@@ -6285,98 +7060,104 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic,
         else:
             scan_CHD_files_missing += 1
             r_list.append('Missing CHD {0}'.format(chd_name))
-        # >> Progress dialog
         processed_machines += 1
         pDialog.update((processed_machines*100) // total_machines)
     pDialog.close()
-    # >> Write report
     log_info('Writing report "{0}"'.format(PATHS.REPORT_MAME_SCAN_CHD_LIST_MISS_PATH.getPath()))
     with open(PATHS.REPORT_MAME_SCAN_CHD_LIST_MISS_PATH.getPath(), 'w') as file:
         if scan_CHD_files_missing == 0:
-            r_list.append('Congratulations!!! You have no missing CHDs.')
+            r_list.append('Congratulations!!! You have no missing CHD files.')
         file.write('\n'.join(r_list).encode('utf-8'))
 
-    # --- Scan Samples ---
-    pDialog.create('Advanced MAME Launcher', 'Scanning MAME Samples ...')
-    total_machines = len(machines_render)
-    processed_machines = 0
-    scan_Samples_have = 0
-    scan_Samples_missing = 0
-    scan_Samples_total = 0
-    r_have_list = []
-    r_miss_list = []
-    for key in sorted(machines):
-        m_have_str_list = []
-        m_miss_str_list = []
-        if machines[key]['sampleof']:
-            scan_Samples_total += 1
-            if scan_Samples:
-                sample = machines[key]['sampleof']
-                Sample_FN = misc_search_file_cache(Samples_path_str, sample, MAME_SAMPLE_EXTS)
-                if Sample_FN:
-                    Sample_flag = 'S'
-                    scan_Samples_have += 1
-                    m_have_str_list.append('Have sample {0}'.format(sample))
-                else:
-                    Sample_flag = 's'
-                    scan_Samples_missing += 1
-                    m_miss_str_list.append('Missing sample {0}'.format(sample))
-            else:
-                Sample_flag = 's'
-                scan_Samples_missing += 1
-        else:
-            Sample_flag = '-'
-        fs_set_Sample_flag(assets_dic[key], Sample_flag)
-        # >> Build HAVE and MISSING reports.
-        if m_have_str_list:
-            r_have_list.append('Machine {0} -- "{1}"'.format(key, machines_render[key]['description']))
-            if machines_render[key]['cloneof']:
-                cloneof = machines_render[key]['cloneof']
-                r_have_list.append('cloneof {0} ({1})'.format(cloneof, machines_render[cloneof]['description']))
-            r_have_list.extend(m_have_str_list)
-            if m_miss_str_list: r_have_list.extend(m_miss_str_list)
-            r_have_list.append('')
-        if m_miss_str_list:
-            r_miss_list.append('Machine {0} -- "{1}"'.format(key, machines_render[key]['description']))
-            if machines_render[key]['cloneof']:
-                cloneof = machines_render[key]['cloneof']
-                r_miss_list.append('cloneof {0} ({1})'.format(cloneof, machines_render[cloneof]['description']))
-            if m_have_str_list: r_miss_list.extend(m_have_str_list)
-            r_miss_list.extend(m_miss_str_list)
-            r_miss_list.append('')
-        # >> Progress dialog
-        processed_machines += 1
-        pDialog.update((processed_machines*100) // total_machines)
-    pDialog.close()
-    # >> Write reports
-    log_info('Writing report "{0}"'.format(PATHS.REPORT_MAME_SCAN_SAMP_HAVE_PATH.getPath()))
-    with open(PATHS.REPORT_MAME_SCAN_SAMP_HAVE_PATH.getPath(), 'w') as file:
-        file.write('\n'.join(r_have_list).encode('utf-8'))
-    log_info('Writing report "{0}"'.format(PATHS.REPORT_MAME_SCAN_SAMP_MISS_PATH.getPath()))
-    with open(PATHS.REPORT_MAME_SCAN_SAMP_MISS_PATH.getPath(), 'w') as file:
-        file.write('\n'.join(r_miss_list).encode('utf-8'))
-
     # --- Update statistics ---
-    change_control_dic(control_dic, 'scan_ROM_ZIP_files_total', scan_ZIP_files_total)
-    change_control_dic(control_dic, 'scan_ROM_ZIP_files_have', scan_ZIP_files_have)
-    change_control_dic(control_dic, 'scan_ROM_ZIP_files_missing', scan_ZIP_files_missing)
+    change_control_dic(control_dic, 'scan_machine_archives_ROM_total', scan_march_ROM_total)
+    change_control_dic(control_dic, 'scan_machine_archives_ROM_have', scan_march_ROM_have)
+    change_control_dic(control_dic, 'scan_machine_archives_ROM_missing', scan_march_ROM_missing)
+    change_control_dic(control_dic, 'scan_machine_archives_Samples_total', scan_march_SAM_total)
+    change_control_dic(control_dic, 'scan_machine_archives_Samples_have', scan_march_SAM_have)
+    change_control_dic(control_dic, 'scan_machine_archives_Samples_missing', scan_march_SAM_missing)
+    change_control_dic(control_dic, 'scan_machine_archives_CHD_total', scan_march_CHD_total)
+    change_control_dic(control_dic, 'scan_machine_archives_CHD_have', scan_march_CHD_have)
+    change_control_dic(control_dic, 'scan_machine_archives_CHD_missing', scan_march_CHD_missing)
+
+    change_control_dic(control_dic, 'scan_ROM_ZIP_files_total', scan_ROM_ZIP_files_total)
+    change_control_dic(control_dic, 'scan_ROM_ZIP_files_have', scan_ROM_ZIP_files_have)
+    change_control_dic(control_dic, 'scan_ROM_ZIP_files_missing', scan_ROM_ZIP_files_missing)
+    change_control_dic(control_dic, 'scan_Samples_ZIP_total', scan_Samples_ZIP_total)
+    change_control_dic(control_dic, 'scan_Samples_ZIP_have', scan_Samples_ZIP_have)
+    change_control_dic(control_dic, 'scan_Samples_ZIP_missing', scan_Samples_ZIP_missing)
     change_control_dic(control_dic, 'scan_CHD_files_total', scan_CHD_files_total)
     change_control_dic(control_dic, 'scan_CHD_files_have', scan_CHD_files_have)
     change_control_dic(control_dic, 'scan_CHD_files_missing', scan_CHD_files_missing)
-    change_control_dic(control_dic, 'scan_machine_archives_ROM_total', scan_ROM_machines_total)
-    change_control_dic(control_dic, 'scan_machine_archives_ROM_have', scan_ROM_machines_have)
-    change_control_dic(control_dic, 'scan_machine_archives_ROM_missing', scan_ROM_machines_missing)
-    change_control_dic(control_dic, 'scan_machine_archives_CHD_total', scan_CHD_machines_total)
-    change_control_dic(control_dic, 'scan_machine_archives_CHD_have', scan_CHD_machines_have)
-    change_control_dic(control_dic, 'scan_machine_archives_CHD_missing', scan_CHD_machines_missing)
-    change_control_dic(control_dic, 'scan_Samples_total', scan_Samples_total)
-    change_control_dic(control_dic, 'scan_Samples_have', scan_Samples_have)
-    change_control_dic(control_dic, 'scan_Samples_missing', scan_Samples_missing)
+
+    # --- Scanner timestamp ---
     change_control_dic(control_dic, 't_MAME_ROMs_scan', time.time())
 
+    # --- Save databases ---
+    db_files = [
+        [assets_dic, 'MAME machine assets', PATHS.MAIN_ASSETS_DB_PATH.getPath()],
+        [control_dic, 'Control dictionary', PATHS.MAIN_CONTROL_PATH.getPath()],
+    ]
+    db_dic = fs_save_files(db_files)
+
 # -------------------------------------------------------------------------------------------------
+#
+# Checks for errors before scanning for SL ROMs.
+# Display a Kodi dialog if an error is found.
+# Returns a dictionary of settings:
+# options_dic['abort'] is always present.
+# options_dic['scan_SL_CHDs'] scanning of CHDs is optional.
+#
+def mame_check_before_scan_SL_ROMs(PATHS, settings, control_dic):
+    options_dic = {}
+    options_dic['abort'] = False
+
+    # >> Abort if SL hash path not configured.
+    if not settings['SL_hash_path']:
+        kodi_dialog_OK('Software Lists hash path not set. Scanning aborted.')
+        options_dic['abort'] = True
+        return options_dic
+
+    # >> Abort if SL ROM dir not configured.
+    if not settings['SL_rom_path']:
+        kodi_dialog_OK('Software Lists ROM path not set. Scanning aborted.')
+        options_dic['abort'] = True
+        return options_dic
+
+    # >> SL CHDs scanning is optional
+    if settings['SL_chd_path']:
+        SL_CHD_path_FN = FileName(settings['SL_chd_path'])
+        if not SL_CHD_path_FN.isdir():
+            options_dic['scan_SL_CHDs'] = False
+            kodi_dialog_OK('SL CHD directory does not exist. SL CHD scanning disabled.')
+        else:
+            options_dic['scan_SL_CHDs'] = True
+    else:
+        kodi_dialog_OK('SL CHD directory not configured. SL CHD scanning disabled.')
+        options_dic['scan_SL_CHDs'] = False
+
+    return options_dic
+
 # Saves SL JSON databases, MAIN_CONTROL_PATH.
-def mame_scan_SL_ROMs(PATHS, control_dic, SL_catalog_dic, SL_hash_dir_FN, SL_ROM_dir_FN, scan_SL_CHDs, SL_CHD_path_FN):
+def mame_scan_SL_ROMs(PATHS, settings, control_dic, options_dic, SL_catalog_dic):
+    log_info('mame_scan_SL_ROMs() Starting ...')
+
+    # Paths have been verified at this point
+    SL_hash_dir_FN = PATHS.SL_DB_DIR
+    log_info('mame_scan_SL_ROMs() SL hash dir OP {0}'.format(SL_hash_dir_FN.getOriginalPath()))
+    log_info('mame_scan_SL_ROMs() SL hash dir  P {0}'.format(SL_hash_dir_FN.getPath()))
+
+    SL_ROM_dir_FN = FileName(settings['SL_rom_path'])
+    log_info('mame_scan_SL_ROMs() SL ROM dir OP {0}'.format(SL_ROM_dir_FN.getOriginalPath()))
+    log_info('mame_scan_SL_ROMs() SL ROM dir  P {0}'.format(SL_ROM_dir_FN.getPath()))
+
+    if options_dic['scan_SL_CHDs']:
+        SL_CHD_path_FN = FileName(settings['SL_chd_path'])
+        log_info('mame_scan_SL_ROMs() SL CHD dir OP {0}'.format(SL_CHD_path_FN.getOriginalPath()))
+        log_info('mame_scan_SL_ROMs() SL CHD dir  P {0}'.format(SL_CHD_path_FN.getPath()))
+    else:
+        SL_CHD_path_FN = FileName('')
+        log_info('Scan of SL CHDs disabled.')
 
     # --- Add files to cache ---
     SL_ROM_path_str = SL_ROM_dir_FN.getPath()
@@ -6414,7 +7195,7 @@ def mame_scan_SL_ROMs(PATHS, control_dic, SL_catalog_dic, SL_hash_dir_FN, SL_ROM
         pDialog.update(update_number, pdialog_line1, 'Software List {0} ...'.format(SL_name))
 
         # >> Load SL databases
-        SL_DB_FN = SL_hash_dir_FN.pjoin(SL_name + '.json')
+        SL_DB_FN = SL_hash_dir_FN.pjoin(SL_name + '_items.json')
         SL_SOFT_ARCHIVES_DB_FN = SL_hash_dir_FN.pjoin(SL_name + '_ROM_archives.json')
         sl_roms = fs_load_JSON_file_dic(SL_DB_FN.getPath(), verbose = False)
         soft_archives = fs_load_JSON_file_dic(SL_SOFT_ARCHIVES_DB_FN.getPath(), verbose = False)
@@ -6432,12 +7213,12 @@ def mame_scan_SL_ROMs(PATHS, control_dic, SL_catalog_dic, SL_hash_dir_FN, SL_ROM
                 for i, rom_file in enumerate(rom_list):
                     SL_ROMs_total += 1
                     SL_ROM_FN = misc_search_file_cache(SL_ROM_path_str, rom_file, SL_ROM_EXTS)
-                    ROM_path = SL_ROM_path_str + '/' + rom_file
+                    # ROM_path = SL_ROM_path_str + '/' + rom_file
                     if SL_ROM_FN:
                         have_rom_list[i] = True
-                        m_have_str_list.append('Have SL ROM {0}'.format(ROM_path))
+                        m_have_str_list.append('HAVE ROM {0}'.format(rom_file))
                     else:
-                        m_miss_str_list.append('Missing SL ROM {0}'.format(ROM_path))
+                        m_miss_str_list.append('MISS ROM {0}'.format(rom_file))
                 if all(have_rom_list):
                     rom['status_ROM'] = 'R'
                     SL_ROMs_have += 1
@@ -6450,17 +7231,17 @@ def mame_scan_SL_ROMs(PATHS, control_dic, SL_catalog_dic, SL_hash_dir_FN, SL_ROM
             # --- Disks ---
             chd_list = soft_archives[rom_key]['CHDs']
             if chd_list:
-                if scan_SL_CHDs:
+                if options_dic['scan_SL_CHDs']:
                     SL_CHDs_total += 1
                     has_chd_list = [False] * len(chd_list)
                     for idx, chd_file in enumerate(chd_list):
                         SL_CHD_FN = misc_search_file_cache(SL_CHD_path_str, chd_file, SL_CHD_EXTS)
-                        CHD_path = SL_CHD_path_str + '/' + chd_file
+                        # CHD_path = SL_CHD_path_str + '/' + chd_file
                         if SL_CHD_FN:
                             has_chd_list[idx] = True
-                            m_have_str_list.append('Have SL CHD {0}'.format(CHD_path))
+                            m_have_str_list.append('HAVE CHD {0}'.format(chd_file))
                         else:
-                            m_miss_str_list.append('Missing SL CHD {0}'.format(CHD_path))
+                            m_miss_str_list.append('MISS CHD {0}'.format(chd_file))
                     if all(has_chd_list):
                         rom['status_CHD'] = 'C'
                         SL_CHDs_have += 1
@@ -6476,7 +7257,7 @@ def mame_scan_SL_ROMs(PATHS, control_dic, SL_catalog_dic, SL_hash_dir_FN, SL_ROM
             # --- Build report ---
             description = sl_roms[rom_key]['description']
             clone_name = sl_roms[rom_key]['cloneof']
-            r_all_list.append('SL {0} Software item {1} "{2}"'.format(SL_name, rom_key, description))
+            r_all_list.append('SL {0} item {1} "{2}"'.format(SL_name, rom_key, description))
             if clone_name:
                 clone_description = sl_roms[clone_name]['description']
                 r_all_list.append('cloneof {0} "{1}"'.format(clone_name, clone_description))
@@ -6487,7 +7268,7 @@ def mame_scan_SL_ROMs(PATHS, control_dic, SL_catalog_dic, SL_hash_dir_FN, SL_ROM
             r_all_list.append('')
 
             if m_have_str_list:
-                r_have_list.append('SL {0} Software item {1} "{2}"'.format(SL_name, rom_key, description))
+                r_have_list.append('SL {0} item {1} "{2}"'.format(SL_name, rom_key, description))
                 if clone_name:
                     r_have_list.append('cloneof {0} "{1}"'.format(clone_name, clone_description))
                 r_have_list.extend(m_have_str_list)
@@ -6495,7 +7276,7 @@ def mame_scan_SL_ROMs(PATHS, control_dic, SL_catalog_dic, SL_hash_dir_FN, SL_ROM
                 r_have_list.append('')
 
             if m_miss_str_list:
-                r_miss_list.append('SL {0} Software item {1} "{2}"'.format(SL_name, rom_key, description))
+                r_miss_list.append('SL {0} item {1} "{2}"'.format(SL_name, rom_key, description))
                 if clone_name:
                     r_miss_list.append('cloneof {0} "{1}"'.format(clone_name, clone_description))
                 r_miss_list.extend(m_miss_str_list)
@@ -6543,33 +7324,41 @@ def mame_scan_SL_ROMs(PATHS, control_dic, SL_catalog_dic, SL_hash_dir_FN, SL_ROM
         else:
             file.write('Congratulations! No missing SL ROM ZIP or CHD files.')
 
-    # --- SL ROM ZIP and CHD file list ---
-    # >> Not coded yet
-    log_info('Opening SL ROM list missing report')
-    log_info('Report file "{0}"'.format(PATHS.REPORT_SL_SCAN_ROM_LIST_MISS_PATH.getPath()))
-    with open(PATHS.REPORT_SL_SCAN_ROM_LIST_MISS_PATH.getPath(), 'w') as file:
-        file.write('*** Advanced MAME Launcher Software Lists scanner report ***\n'.encode('utf-8'))
-        file.write('This report shows all missing SL item ROM ZIPs\n'.encode('utf-8'))
-        file.write('\nSL ROM list missing report not coded yet. Sorry.\n'.encode('utf-8'))
-        # file.write('\n'.join(report_list).encode('utf-8'))
-
-    # >> Not coded yet
-    log_info('Opening SL CHD list missing report')
-    log_info('Report file "{0}"'.format(PATHS.REPORT_SL_SCAN_CHD_LIST_MISS_PATH.getPath()))
-    with open(PATHS.REPORT_SL_SCAN_CHD_LIST_MISS_PATH.getPath(), 'w') as file:
-        file.write('*** Advanced MAME Launcher Software Lists scanner report ***\n'.encode('utf-8'))
-        file.write('This report shows all missing SL item CHDs\n'.encode('utf-8'))
-        file.write('\nSL CHD list missing report not coded yet. Sorry.\n'.encode('utf-8'))
-        # file.write('\n'.join(report_list).encode('utf-8'))
-
-    # >> Update statistics
+    # --- Update statistics ---
     change_control_dic(control_dic, 'scan_SL_archives_ROM_total', SL_ROMs_total)
     change_control_dic(control_dic, 'scan_SL_archives_ROM_have', SL_ROMs_have)
     change_control_dic(control_dic, 'scan_SL_archives_ROM_missing', SL_ROMs_missing)
     change_control_dic(control_dic, 'scan_SL_archives_CHD_total', SL_CHDs_total)
     change_control_dic(control_dic, 'scan_SL_archives_CHD_have', SL_CHDs_have)
     change_control_dic(control_dic, 'scan_SL_archives_CHD_missing', SL_CHDs_missing)
+
+    # --- Timestamps ---
     change_control_dic(control_dic, 't_SL_ROMs_scan', time.time())
+
+    # --- Save control_dic ---
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
+
+#
+# Checks for errors before scanning for SL assets.
+# Display a Kodi dialog if an error is found and returns True if scanning must be aborted.
+# Returns False if no errors.
+#
+def mame_check_before_scan_MAME_assets(PATHS, settings, control_dic):
+    options_dic = {}
+    options_dic['abort'] = False
+
+    # >> Get assets directory. Abort if not configured/found.
+    if not settings['assets_path']:
+        kodi_dialog_OK('Asset directory not configured. Aborting.')
+        options_dic['abort'] = True
+        return options_dic
+    Asset_path_FN = FileName(settings['assets_path'])
+    if not Asset_path_FN.isdir():
+        kodi_dialog_OK('Asset directory does not exist. Aborting.')
+        options_dic['abort'] = True
+        return options_dic
+
+    return options_dic
 
 #
 # Note that MAME is able to use clone artwork from parent machines. Mr. Do's Artwork ZIP files
@@ -6579,14 +7368,18 @@ def mame_scan_SL_ROMs(PATHS, control_dic, SL_catalog_dic, SL_hash_dir_FN, SL_ROM
 #   A) A clone may use assets from parent.
 #   B) A parent may use assets from a clone.
 #
-def mame_scan_MAME_assets(PATHS, assets_dic, control_dic, pDialog,
-                          machines_render, main_pclone_dic, Asset_path_FN):
+def mame_scan_MAME_assets(PATHS, settings, control_dic,
+                          assets_dic, machines_render, main_pclone_dic):
+    Asset_path_FN = FileName(settings['assets_path'])
+    log_info('mame_scan_MAME_assets() Asset path {0}'.format(Asset_path_FN.getPath()))
+
     # >> Iterate machines, check if assets/artwork exist.
     table_str = []
     table_str.append(['left', 'left', 'left',  'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left'])
     table_str.append(['Name', 'PCB',  'Artp',  'Art',  'Cab',  'Clr',  'CPan', 'Fan',  'Fly',  'Man',  'Mar',  'Snap', 'Tit',  'Tra'])
 
     # --- Create a cache of assets ---
+    pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', 'Scanning files in asset directories ...')
     pDialog.update(0)
     num_assets = len(ASSET_MAME_T_LIST)
@@ -6769,8 +7562,41 @@ def mame_scan_MAME_assets(PATHS, assets_dic, control_dic, pDialog,
     change_control_dic(control_dic, 'assets_trailers_alternate', Tra[2])
     change_control_dic(control_dic, 't_MAME_assets_scan', time.time())
 
-def mame_scan_SL_assets(PATHS, control_dic, SL_index_dic, SL_pclone_dic, Asset_path_FN):
+    # --- Save databases ---
+    db_files = [
+        [control_dic, 'Control dictionary', PATHS.MAIN_CONTROL_PATH.getPath()],
+        [assets_dic, 'MAME machine assets', PATHS.MAIN_ASSETS_DB_PATH.getPath()],
+    ]
+    db_dic = fs_save_files(db_files)
+
+#
+# Checks for errors before scanning for SL assets.
+# Display a Kodi dialog if an error is found and returns True if scanning must be aborted.
+# Returns False if no errors.
+#
+def mame_check_before_scan_SL_assets(PATHS, settings, control_dic):
+    options_dic = {}
+    options_dic['abort'] = False
+
+    # >> Get assets directory. Abort if not configured/found.
+    if not settings['assets_path']:
+        kodi_dialog_OK('Asset directory not configured. Aborting.')
+        options_dic['abort'] = True
+        return options_dic
+    Asset_path_FN = FileName(settings['assets_path'])
+    if not Asset_path_FN.isdir():
+        kodi_dialog_OK('Asset directory does not exist. Aborting.')
+        options_dic['abort'] = True
+        return options_dic
+
+    return options_dic
+
+def mame_scan_SL_assets(PATHS, settings, control_dic, SL_index_dic, SL_pclone_dic):
     log_debug('mame_scan_SL_assets() Starting ...')
+
+    # At this point assets_path is configured and the directory exists.
+    Asset_path_FN = FileName(settings['assets_path'])
+    log_info('mame_scan_SL_assets() SL asset path {0}'.format(Asset_path_FN.getPath()))
 
     # --- Traverse Software List, check if ROM exists, update and save database ---
     pDialog = xbmcgui.DialogProgress()
@@ -6796,7 +7622,7 @@ def mame_scan_SL_assets(PATHS, control_dic, SL_index_dic, SL_pclone_dic, Asset_p
         pDialog.update(update_number, pdialog_line1, 'Software List {0}'.format(SL_name))
 
         # --- Load SL databases ---
-        file_name = SL_index_dic[SL_name]['rom_DB_noext'] + '.json'
+        file_name = SL_index_dic[SL_name]['rom_DB_noext'] + '_items.json'
         SL_DB_FN = PATHS.SL_DB_DIR.pjoin(file_name)
         SL_roms = fs_load_JSON_file_dic(SL_DB_FN.getPath(), verbose = False)
 
@@ -6937,3 +7763,6 @@ def mame_scan_SL_assets(PATHS, control_dic, SL_index_dic, SL_pclone_dic, Asset_p
     change_control_dic(control_dic, 'assets_SL_manuals_missing', Man[1])
     change_control_dic(control_dic, 'assets_SL_manuals_alternate', Man[2])
     change_control_dic(control_dic, 't_SL_assets_scan', time.time())
+
+    # --- Save control_dic ---
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)

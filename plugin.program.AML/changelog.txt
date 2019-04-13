@@ -1,40 +1,149 @@
-[B]AML planned features / TODO[/B]
-
-WIP      [DOCS] Improve AML wiki in Github and move documentation from Kodi forum to Github wiki.
-
-WIP      [CORE] [LEIA] Check out the ListItem constructor offscreen parameter in Leia. It can
-         dramatically speed up ListItem creation and population.
-         See https://forum.kodi.tv/showthread.php?tid=329315&pid=2711937#pid2711937
-         and https://forum.kodi.tv/showthread.php?tid=307394&pid=2531524
-
-WIP      [CORE] [LEIA] Use the new API function ListItem.setProperties({p1:v1, p2:v2, ...})
-         See https://forum.kodi.tv/showthread.php?tid=332283
-
-WIP      [CORE] Configuring every DAT and INI file one by one is tedious. Instead, define
-         a directory where the DATs must be placed and pick the files from there.
+[B]AML ideas and planned features (more futuristic ideas)[/B]
 
 WIP      [CORE] JSON database files (specially MAME_DB_main.json, MAME_DB_render.json and 
          MAME_assets.json) could be compressed with DEFLATE to reduce the size on disk. They
          will decompressed on the fly. I have to test if this is faster than no compression at all.
+         Use low values of compression in the deflate algorithm. Maximum compression is very
+         slow but less compression is fast and may reduce the XML file size a lot.
 
-WIP      [CORE] Remove redundant fields from MAME DB like 'coins' and 'control_type'. Use new
-         'input' data structure to replace them.
+WIP      [AUDIT] Samples distributed with MAME are uncompressed and not stored into ZIP files.
+         The MAME audit engine must take this into account.
+         See comments in mame_scan_MAME_ROMs() @mame.py
 
-WIP      [MAME FILTERING] Implement <Include>, <Exclude> and <Change> tags.
+WIP      [CORE] [LEIA] Recursive context menus.
+         Pay attention to the select() bug in Kodi Krypton.
+         This requires Kodi version detection and having different code for Krypton/Leia.
 
-WIP      [MANUALS] Import the number of supported PDF filters.
 
-WIP      [MANUALS] When displaying manuals use cached extracted images if they exist.
+[B]AML ideas and planned features (read to implement)[/B]
 
-WIP      [MANUALS] Progress bar when extracting PDF pages.
+WIP      [DOCS] Improve AML wiki in Github and move documentation from Kodi forum to Github wiki.
+
+WIP      [MANUALS] Increase the number of supported PDF filters.
+         This may required A LOT of Python coding.
 
 WIP      [MANUALS] Support for CBZ/CBR manuals.
+         In theory Kodi VFS is able to read RAR files.
          Wait until this is implemented in AEL and then port it from AEL into AML?
+
+WIP      [FILTERING] Test the filters for errors. For example, test that all the drivers
+         defined in <Driver> exist. Another example, test that the genres defined in
+         <Genre> and the controls defined in <Controls> exist.
+         Warn the user if errors found, maybe in a report the user reads.
+
+WIP      [FILTERING] Make a filter report the user can read.
+         I have to think if this is really useful or not.
+
+WIP      [CORE] Differentiate between Non-merged and Fully non-merged ROM sets.
+         Non-merged sets do not include BIOS and device ROMs.
+         Fully non-merged sets include BIOS and devices ROMs (every ROM required to run each
+         machine). Pleasuredome rom sets are Fully non-merged.
+
+WIP      [CORE] Implement the "Read-only launchers". ROLs are XML files that include the
+         launcher information as well as the ROMs information. ROLs are generated with AML,
+         can be exported as XML and then used with AEL. AEL will trear ROLs are read-only
+         (cannot be edited). If a ROL should be changed, then the XML is edited or regenerated
+         and then imported again into AML.
+
+WIP      [CORE] AML/AEL must report the aspect ratio of artwork to the skin.
+
+WIP      [CORE] New artwork type, 3dboxes.
+
+
+[B]Advanced MAME Launcher | version 0.9.9 | 22 March 2019[/B]
+
+FEATURE  [CORE] Improve statistics of working, non-working games, etc. for the Main filters.
+
+FEATURE  [CORE] [LEIA] Check out the ListItem constructor offscreen parameter in Leia.
+         The offscreen parameter increases the speed a bit.
+         This requires Kodi version detection and having different code for Krypton/Leia.
+         See https://forum.kodi.tv/showthread.php?tid=329315&pid=2711937#pid2711937
+         and https://forum.kodi.tv/showthread.php?tid=307394&pid=2531524
+
+FEATURE  [CORE] [LEIA] Use the new API function ListItem.setProperties({p1:v1, p2:v2, ...})
+         This requires Kodi version detection and having different code for Krypton/Leia.
+         See https://forum.kodi.tv/showthread.php?tid=332283
+
+FEATURE  [FANARTS] Set an order to print fanart assets. This will allow to have images printed
+         on top of each other.
+
+FEATURE  [CORE] Improve the Samples scanner and report.
+
+FEATURE  [CORE] MAME and SL plots build timestamp.
+
+FEATURE  [CORE] MAME and SL Fanart build timestamp.
+
+FEATURE  [CORE] MAME render and asset cache build timestamp.
+
+FEATURE  [CORE] Move the utilities from the addon settings into the root menu.
+
+FEATURE  [CORE] Move the report viewer from the context menu to the root menu. The context
+         menu is a little bit overloaded and this will alleviate the situation.
+
+FEATURE  [CORE] Use xbmcplugin.addDirectoryItems() instead of xbmcplugin.addDirectoryItem().
+         According to the docs "Large lists benefit over using the standard addDirectoryItem().
+         You may call this more than once to add items in chunks."
+
+FEATURE  [CORE] Configuring every DAT and INI file one by one is tedious. Instead, define
+         a directory where the DATs must be placed and pick the files from there automatically.
+
+FEATURE  [CORE] Add plots for entries in the root window.
+
+FEATURE  [CORE] Renamed the "Machines by Score" filter to "Machines by Rating", to avoid
+         confusing with scores in games.
+
+FEATURE  [CORE] Implement context menu "All in one (Extract, Build and Scan)"
+
+FEATURE  [CORE] Refactoring and code cleaning of the addon setup functions (DB build, scanner).
+
+FEATURE  [CORE] Remove redundant fields from MAME DB 'coins' and 'control_type'. Use new
+         'input' data structure to replace them.
+
+FEATURE  [CORE] At least two directories for samples are needed. MAME includes a default samples
+         directory with some samples used by some machines. Both directories must be configured
+         in mame.ini in order to get all the samples working.
+
+         NOTE This feature was cancelled. Only one Samples directory. If the user wants to have
+         a complete Good audit, then the samples shipped with MAME must be compressed and
+         the ZIP file placed in the unique samples directory. In any case, only three machines
+         are affected.
+
+FEATURE  [FILTERING] Implement <Include>, <Exclude> and <Change> tags.
+         This will require more work than expected. Currently, only parent machines are filtered
+         and clone machines are added after the filtering process. However, to implement
+         Include, Exclude and Change tags, all machines must be included in the filter list.
+         This will require modification of the filter render engine (must be rendered always in
+         flat mode and not in parent/clone mode).
+
+FEATURE  [MANUALS] Progress bar when extracting PDF pages.
+
+FEATURE  [MANUALS] When displaying manuals use cached extracted images if they exist.
+         When the manual is extracted, create a small JSON file with the timestamp of
+         the extraction so it can be compared with the timestamp of the PDF file to
+         test if images must be extracted again.
+
+FIX      In MAME 0.206, some clone merged ROMs are not present in the parent machine, only
+         in the BIOS. For example, in machine adonisce (clone of adonis). Before 0.206, such
+         ROMs were also present on the parent machine. This change in behaviour crashed AML.
+
+FIX      Fixed the AML addon and MAME numerical versioning scheme.
+
+FIX      Fix crash in "Build MAME databases".
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2822949#pid2822949
+
+FIX      Some Software List ROMs are compressed using non-ASCII characters and this make
+         the audit engine to crash. I have to investigate how to fix this issue.
+         Maybe use the chardet library https://github.com/Wintermute0110/chardet/tree/master/chardet
+         I think this should reported creating an issue in MAME project in Github.
+         Problematic SL ROM example: SL ibm5170, item wordfndr
+         https://github.com/mamedev/mame/blob/master/hash/ibm5170.xml#L7521
+         The current implementation just ignores non-ASCII files and the audit fails for those
+         SL items.
 
 
 [B]Advanced MAME Launcher | version 0.9.8 | 23 June 2018[/B]
 
-FEATURE  Documentation in README.md improved.
+FEATURE  [DOCS] Documentation in README.md improved.
 
 FEATURE  [LEIA] Kodi Leia will cache the Python interpreter which means submodules will only
          be executed once and cached. sys.argv must be propagated from the entry point code
@@ -46,6 +155,7 @@ FIX      Changed source code files to remove BOM. This is necessary to pass Trav
          Kodi official repo.
 
 FIX      ActivateWindow(busydialog) and Dialog.Close(busydialog) have been deprecated.
+         Use DialogProgress() for all operations.
          See https://github.com/xbmc/xbmc/pull/13958
          and https://github.com/xbmc/xbmc/pull/13954
          and https://github.com/xbmc/xbmc/pull/10699

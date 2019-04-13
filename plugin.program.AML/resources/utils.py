@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+#
 # Advanced MAME Launcher miscellaneous functions
 #
 
-# Copyright (c) 2016-2018 Wintermute0110 <wintermute0110@gmail.com>
+# Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +37,7 @@ except:
 
 # --- AEL modules ---
 # This module must only include utils_kodi.py to avoid circular dependencies.
-from utils_kodi import *
+from .utils_kodi import *
 
 # -------------------------------------------------------------------------------------------------
 # Strings and text
@@ -645,6 +646,13 @@ class FileName:
     # ---------------------------------------------------------------------------------------------
     # Filesystem functions
     # ---------------------------------------------------------------------------------------------
+    #
+    # mtime (Modification time) is a floating point number giving the number of seconds since
+    # the epoch (see the time module).
+    #
+    def getmtime(self):
+        return os.path.getmtime(self.path)
+
     def stat(self):
         return os.stat(self.path)
 

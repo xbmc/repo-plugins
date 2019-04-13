@@ -9,7 +9,7 @@
 
 from six.moves import BaseHTTPServer
 from six.moves.urllib.parse import parse_qs, urlparse
-from six.moves import xrange
+from six.moves import range
 
 import json
 import os
@@ -42,11 +42,7 @@ class YouTubeRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
     def connection_allowed(self):
         client_ip = self.client_address[0]
-        split_ip = client_ip.split('.')
-        log_ip = 'unknown'
-        if len(split_ip) == 4:
-            log_ip = '%s.%s.' % (split_ip[0], split_ip[1])
-        log_lines = ['HTTPServer: Connection from |%s|' % log_ip]
+        log_lines = ['HTTPServer: Connection from |%s|' % client_ip]
         conn_allowed = client_ip.startswith(self.local_ranges)
         log_lines.append('Local range: |%s|' % str(conn_allowed))
         if not conn_allowed:
@@ -54,7 +50,7 @@ class YouTubeRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             log_lines.append('Whitelisted: |%s|' % str(conn_allowed))
 
         if not conn_allowed:
-            logger.log_debug('HTTPServer: Connection from |%s| not allowed' % log_ip)
+            logger.log_debug('HTTPServer: Connection from |%s| not allowed' % client_ip)
         else:
             logger.log_debug(' '.join(log_lines))
         return conn_allowed
@@ -256,7 +252,7 @@ class YouTubeRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         return
 
     def get_chunks(self, data):
-        for i in xrange(0, len(data), self.chunk_size):
+        for i in range(0, len(data), self.chunk_size):
             yield data[i:i + self.chunk_size]
 
     @staticmethod

@@ -32,11 +32,14 @@ class Items:
                 pass
 
     def add_item(self, item):
+        verify_age = item.get('verify_age', False)
+
         data = {
             'mode': item['mode'],
             'title': item['title'],
             'id': item.get('id', ''),
-            'params': item.get('params','')
+            'params': item.get('params',''),
+            'verify_age': verify_age
         }
 
         art = {
@@ -51,6 +54,9 @@ class Items:
             'premiered': item.get('date', ''),
             'episode': item.get('episode', 0)
         }
+
+        if verify_age:
+            labels['mpaa'] = 'PG-18'
 
         listitem = xbmcgui.ListItem(item['title'])
         listitem.setArt(art)
@@ -72,6 +78,7 @@ class Items:
 
     def play_item(self, item, name, context):
         path = item.ManifestUrl
+        resolved = True if path else False
         listitem = xbmcgui.ListItem()
         listitem.setContentLookup(False)
         listitem.setMimeType('application/dash+xml')
@@ -81,9 +88,9 @@ class Items:
         listitem.setProperty('inputstream.adaptive.max_bandwidth', self.plugin.max_bw)
         listitem.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
         listitem.setProperty('inputstream.adaptive.license_key', '{0}&{1}&_widevineChallenge=B{{SSM}}|||JBlicense'.format(item.LaUrl, item.LaUrlAuthParam))
-        if context:
+        if context and resolved:
             listitem.setInfo('video', {'Title': name})
             xbmc.Player().play(path, listitem)
         else:
             listitem.setPath(path)
-            xbmcplugin.setResolvedUrl(self.plugin.addon_handle, True, listitem)
+            xbmcplugin.setResolvedUrl(self.plugin.addon_handle, resolved, listitem)

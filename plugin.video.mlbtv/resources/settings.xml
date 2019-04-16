@@ -8,6 +8,9 @@
     <setting label="30156" type="action" action="RunPlugin(plugin://plugin.video.mlbtv/?url=junk&amp;mode=400)" option="close" />
     <!--Hidden-->
     <setting id='session_key' type='text' visible="false" default=''/>
+    <setting id='device_id' type='text' visible="false" default=''/>
+    <setting id='last_login' type='text' visible="false" default=''/>
+    <setting id='login_token' type='text' visible="false" default=''/>
   </category>
 
   <category label="30159">

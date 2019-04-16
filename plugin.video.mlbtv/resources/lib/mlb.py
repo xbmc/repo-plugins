@@ -241,7 +241,7 @@ def stream_select(game_pk):
         play_stream(stream_url, headers)
 
     elif stream_title[n] == 'Highlights':
-        highlight_select_stream(json_source['highlights']['live']['items'])
+        highlight_select_stream(json_source['highlights']['highlights']['items'])
 
     else:
         sys.exit()
@@ -293,10 +293,11 @@ def play_stream(stream_url, headers):
 
 
 def get_highlights(items):
+    xbmc.log(str(items))
     highlights = []
-    for item in reversed(items):
+    for item in items:
         for playback in item['playbacks']:
-            if '_60' in playback['name']:
+            if 'hlsCloud' in playback['name']:
                 clip_url = playback['url']
                 break
         headline = item['headline']

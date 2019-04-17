@@ -22,7 +22,7 @@ class Common:
         self.api_base = 'https://isl.dazn.com/misl/'
         self.time_format = '%Y-%m-%dT%H:%M:%SZ'
         self.date_format = '%Y-%m-%d'
-        self.portability_list = ['AT', 'DE', 'IT']
+        self.portability_list = ['AT', 'DE', 'IT', 'ES']
 
         self.addon = xbmcaddon.Addon()
         self.addon_handle = addon_handle
@@ -240,10 +240,28 @@ class Common:
         except Exception as e:
             self.log("[{0}] cache error: {1}".format(self.addon_id, e))
 
+    def split_on_uppercase(self, s, keep_contiguous=False):
+        string_length = len(s)
+        is_lower_around = (lambda: s[i-1].islower() or 
+                           string_length > (i + 1) and s[i + 1].islower())
+
+        start = 0
+        parts = []
+        for i in range(1, string_length):
+            if s[i].isupper() and (not keep_contiguous or is_lower_around()):
+                parts.append(s[start: i])
+                start = i
+        parts.append(s[start:])
+
+        return parts
+
     def initcap(self, text):
         if text.isupper() and len(text) > 3:
             text = string.capwords(text)
             text = text.replace('Dazn', 'DAZN')
+        elif not text.isupper() and not ' ' in text:
+            parts = self.split_on_uppercase(text, True)
+            text = ' '.join(parts)
         return text
 
     def get_cdn(self, cdns):
@@ -254,3 +272,15 @@ class Common:
                 self.set_setting('preferred_cdn', self.preferred_cdn)
                 self.set_setting('select_cdn', 'false')
         return self.preferred_cdn
+
+    def validate_pin(self, pin):
+        result = False
+        if len(pin) == 4 and pin.isdigit():
+            result = True
+        return result
+
+    def youth_protection_pin(self, verify_age):
+        pin = ''
+        if verify_age:
+            pin = self.get_dialog().input(self.get_resource('youthProtectionTV_verified_body'), type=xbmcgui.INPUT_ALPHANUM, option=xbmcgui.ALPHANUM_HIDE_INPUT)
+        return pin

@@ -17,6 +17,7 @@ class Tiles:
         self.nav = i.get('NavigateTo', '')
         self.related = i.get('Related', [])
         self.videos = i.get('Videos', [])
+        self.verify_age = i.get('VerifyAge', False)
         if self.nav:
             self.mode = 'rails'
             self.id = i['NavigateTo']
@@ -58,6 +59,7 @@ class Tiles:
         self.item['plot'] = self.description
         self.item['id'] = self.id
         self.item['type'] = self.type
+        self.item['verify_age'] = self.verify_age
 
         if self.params:
             self.item['params'] = self.params

@@ -84,7 +84,9 @@ class Client:
         self.PARAMS['PlayReadyInitiator'] = 'false'
         return self.request(self.PLAYBACK)
 
-    def playback(self, id_):
+    def playback(self, id_, pin):
+        if self.plugin.validate_pin(pin):
+            self.HEADERS['x-age-verification-pin'] = pin
         data = self.playback_data(id_)
         if data.get('odata.error', None):
             self.errorHandler(data)
@@ -118,7 +120,7 @@ class Client:
             self.TOKEN = auth['Token']
             self.MPX = self.plugin.get_mpx(self.TOKEN)
         else:
-            if result == 'HardOffer':
+            if result in ['HardOffer', 'SignedInInactive', 'SignedInPaused']:
                 self.plugin.dialog_ok(self.plugin.get_resource('error_10101'))
             self.signOut()
         self.plugin.set_setting('token', self.TOKEN)
@@ -210,15 +212,20 @@ class Client:
         code = str(data['odata.error']['code'])
         self.plugin.log('[{0}] version: {1} country: {2} language: {3} portability: {4}'.format(self.plugin.addon_id, self.plugin.addon_version, self.COUNTRY, self.LANGUAGE, self.PORTABILITY))
         self.plugin.log('[{0}] error: {1} ({2})'.format(self.plugin.addon_id, msg, code))
+
+        error_codes = ['10006', '10008']
+        pin_codes = ['10155', '10161', '10163']
+
         if code == '10000' and self.ERRORS < 3:
             self.refreshToken()
         elif (code == '401' or code == '10033') and self.ERRORS < 3:
             self.signIn()
         elif code == '3001':
             self.startUp()
-        elif code == '10006':
-            self.plugin.dialog_ok(self.plugin.get_resource('error_10006'))
-        elif code == '10008':
-            self.plugin.dialog_ok(self.plugin.get_resource('error_10008'))
         elif code == '10049':
             self.plugin.dialog_ok(self.plugin.get_resource('signin_errormessage'))
+        elif code in error_codes:
+            self.plugin.dialog_ok(self.plugin.get_resource('error_{0}'.format(code)))
+        elif code in pin_codes:
+            self.TOKEN = ''
+            self.plugin.dialog_ok(self.plugin.get_resource('error_{0}'.format(code)))

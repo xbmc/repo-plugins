@@ -75,7 +75,9 @@ class XumoTV(object):
             log('openURL, url = ' + str(url))
             cacheresponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
             if not cacheresponse:
-                cacheresponse = urllib2.urlopen(urllib2.Request(url), timeout=TIMEOUT).read()
+                request = urllib2.Request(url)
+                request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
+                cacheresponse = urllib2.urlopen(request, timeout=TIMEOUT).read()
                 self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheresponse, expiration=datetime.timedelta(minutes=5))
             return cacheresponse
         except Exception as e:
@@ -92,11 +94,10 @@ class XumoTV(object):
         
     def getChannels(self):
         log('getChannels')
-        items = json.loads(self.openURL(BASE_API%'channels/list/%s.json?sort=hybrid&geoId=%s'%(self.geoLST, self.geoID)))
         '''{u'description': u'Dedicated to providing the best in journalism under standards it pioneered at the dawn of radio and television and continue in the digital age.', u'title': u'CBS News', u'number': 125, u'callsign': u'XCBSNWS', u'genre': [{u'genreId': 13, u'value': u'News'}], u'guid': {u'isPermaLink': False, u'value': u'9999158'}, u'properties': {u'has_vod': u'false', u'hybrid_type': u'promoted', u'brand_color': u'rgba(48,129,180,1)', u'is_simulcast': u'true', u'is_live': u'true', u'has_discontinuity': u'true'}}'''
-        for item in items['channel']['item']: yield item
-            
-            
+        return json.loads(self.openURL(BASE_API%'channels/list/%s.json?sort=hybrid&geoId=%s'%(self.geoLST, self.geoID)))['channel']['item']
+       
+             
     def getChannelsByGenre(self, genre):
         log('getChannelsByGenre')
         return json.loads(self.openURL(BASE_API%'channels/list/%s.json?q=genreid:%s'%(self.geoLST, genre)))['channel']['item']
@@ -178,10 +179,8 @@ class XumoTV(object):
             try: genre = item['genre']['value']
             except: genre = ''
             if opt == 'now':
-                try: 
-                    label, url, liz = self.buildAsset(self.getOnNow(chid)['id'], chid, chnam)
-                    self.addLink(label, url, 9, liz)
-                except: pass
+                label, url, liz = self.buildAsset(self.getOnNow(chid)['id'], chid, chnam, chnum)
+                self.addLink(label, url, 9, liz)
             else: 
                 label = '%s: %s'%(chnum,chnam)
                 plot  = (item.get('descriptions','') or label)
@@ -210,7 +209,7 @@ class XumoTV(object):
         for item in items: self.addDir(*item)
         
   
-    def buildAsset(self, chid, channelId, channelName=None):
+    def buildAsset(self, chid, channelId, channelName=None, channelNumber=None):
         log('buildAsset, chID = ' + chid)
         meta  = self.getMeta(chid)
         mType = ''
@@ -220,6 +219,8 @@ class XumoTV(object):
         if channelName is not None: 
             thumb = BASE_LOGO%(channelId)
             label = '%s - %s'%(channelName,label)
+        if channelNumber is not None: 
+            label = '%s: %s'%(channelNumber,label)
         try: 
             # if channelName is None: label = '%s - %s'%(meta['providers'][0]['title'],label)
             url   = meta['providers'][0]['sources'][0]['uri']
@@ -303,8 +304,8 @@ class XumoTV(object):
         endTime    = datetime.datetime.now()
         for listing in listings:
             if listing['channelId'] != int(chid): continue
-            cid   = listing['id']
-            meta  = self.getMeta(cid)
+            cid         = listing['id']
+            meta        = self.getMeta(cid)
             label       = meta['title']
             plot        = (self.getDescription(meta.get('descriptions',{})) or label)
             try: aired  = datetime.datetime.strptime(meta['availableSince'],'%a, %d %b %Y %H:%M:%S %z')

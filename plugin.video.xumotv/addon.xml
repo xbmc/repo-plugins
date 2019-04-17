@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.xumotv" version="1.0.0" name="Xumo.TV" provider-name="Lunatixz">
+<addon id="plugin.video.xumotv" version="1.0.1" name="Xumo.TV" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -8,12 +8,12 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <description lang="en_GB">We bring you the best content from digital networks, presented just like the channels on your TV and mobile devices, only with more cool features.</description>
+        <description lang="en_GB">Xumo.TV brings you the best content from digital networks, presented just like the channels on your TV and mobile devices, only with more cool features.</description>
         <platform>android freebsd ios linux osx windows</platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
         <source>https://github.com/Lunatixz/KODI_ADDONS/tree/master/plugin.video.xumotv</source>
         <website>www.xumo.tv</website>
-        <news></news>
+        <news>v.1.0.1[CR]- Fixed Menu Errors</news>
         <forum>https://forum.kodi.tv/showthread.php?tid=335453</forum>
         <assets>
             <icon>resources/images/icon.png</icon>

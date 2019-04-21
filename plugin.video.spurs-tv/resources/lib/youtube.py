@@ -1,26 +1,31 @@
 from __future__ import print_function
 
+import base64
 import os
 import json
 import requests
 from urlparse import urljoin, urlunparse
 
-import utils
+from . import utils
 
-SCHEME = "https"
-HOST = "www.googleapis.com"
-PATH = "/youtube/v3/"
-
-CHANNEL_ID = "UCEg25rdRZXg32iwai6N6l0w"
-API_KEY = "AIzaSyAyfLT-xP3vrQLwejc22hYe5m0RoZXX2vA"
-
-QS_FMT = "part=snippet&key={0}&{{0}}Id={{1}}&maxResults={{2}}&q={{3}}&order={{4}}&type=video".format(API_KEY)
+CHANNEL_ID = 'UCEg25rdRZXg32iwai6N6l0w'
 
 
-def _get_items(resource, key="channel", id=CHANNEL_ID, max_results=50, order='date', query=""):
-    qs = QS_FMT.format(key, id, max_results, query, order)
-    url = urlunparse((SCHEME, HOST, os.path.join(PATH, resource), None, qs, None))
-    response = json.loads(requests.get(url).text)
+def _get_items(resource, key='channel', id=CHANNEL_ID, max_results=50, order='date', query=''):
+    params=dict(
+        key=base64.b64decode('QUl6YVN5Q1NDWDRmMmhpNjhuUlo3eGhxbFdLTi0wMDJXZTBxaGV3'),
+        part='snippet',
+        type='video',
+        maxResults=max_results,
+        q=query,
+        order=order
+    )
+    params['{}Id'.format(key)] = id
+    response = requests.get(
+        url=urljoin('https://www.googleapis.com/youtube/v3/', resource),
+        params=params
+    ).json()
+
 
     for item in response['items']:
         snippet = item['snippet']
@@ -57,10 +62,3 @@ def get_latest():
 
 def get_search_results(query):
     return _get_items("search", query=query)
-
-
-if __name__ == "__main__":
-    for playlist_id, title, thumbnail, published_at in get_playlists():
-        print('\n', title)
-        for item_id, title, thumbnail, published_at in get_playlist_items(playlist_id):
-            print('\t', title)

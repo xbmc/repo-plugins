@@ -119,6 +119,9 @@ class myAddon(t1mAddon):
 
   def getAddonVideo(self,url):
       vd = uqp(url)
+      url = 'https://api.pluto.watchabc.go.com/api/ws/pluto/v1/module/videoplayer/2185737?brand=001&device=001&authlevel=0&layout=2185698&video=VDKA'+str(vd)
+      html = self.getRequest(url)
+      ua = re.compile('"ULNK","value":"(.+?)"', re.DOTALL).search(html).group(1)
       url = 'https://api.entitlement.watchabc.go.com/vp2/ws-secure/entitlement/2020/authorize.json'
       udata = 'video%5Fid=VDKA'+str(vd)+'&device=001&video%5Ftype=lf&brand=001'
       uheaders = self.defaultHeaders.copy()
@@ -133,12 +136,7 @@ class myAddon(t1mAddon):
           return
 
       sessionKey = a['uplynkData']['sessionKey']
-      if not '&cid=' in sessionKey:
-          oid, eid = re.compile('&oid=(.+?)&eid=(.+?)&', re.DOTALL).search(sessionKey).groups()
-          url = 'http://content.uplynk.com/ext/%s/%s.m3u8?%s' % (oid, eid, sessionKey)
-      else:
-          cid = re.compile('&cid=(.+?)&', re.DOTALL).search(sessionKey).group(1)
-          url = 'http://content.uplynk.com/%s.m3u8?%s' % (cid, sessionKey)
+      url = ua+'?'+sessionKey
       html = self.getRequest(url)
       url = re.compile('#UPLYNK-MEDIA0.+?http(.+?)\n',re.DOTALL).search(html).group(1)
       url = 'http'+url

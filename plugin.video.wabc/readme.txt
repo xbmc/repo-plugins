@@ -1,3 +1,4 @@
+Version 3.0.12 website change
 Version 3.0.11 website change
 Version 3.0.10 website change
 Version 3.0.9 bump t1mlib version to fix timeout request on Kodi 17.0 Android

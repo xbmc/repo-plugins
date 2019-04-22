@@ -86,6 +86,10 @@ class myAddon(t1mAddon):
       jsonRespond = xbmc.executeJSONRPC(json_cmd)
 
   def getAddonVideo(self,url):
+      xurl = 'https://api.pluto.watchabc.go.com/api/ws/pluto/v1/module/videoplayer/2185739?brand=002&device=001&authlevel=1&layout=2185738&video='+str(url)
+      html = self.getRequest(xurl)
+      ua = re.compile('"ULNK","value":"(.+?)"', re.DOTALL).search(html).group(1)
+
       udata = 'video%5Fid='+str(url)+'&device=001&video%5Ftype=lf&brand=002'
       url = 'https://api.entitlement.watchabc.go.com/vp2/ws-secure/entitlement/2020/authorize.json'
       uheaders = self.defaultHeaders.copy()
@@ -105,8 +109,9 @@ class myAddon(t1mAddon):
           return
 
       sessionKey = a['uplynkData']['sessionKey']
-      oid, eid = re.compile('&oid=(.+?)&eid=(.+?)&', re.DOTALL).search(sessionKey).groups()
-      url = 'http://content.uplynk.com/ext/%s/%s.m3u8?%s' % (oid, eid, sessionKey)
+#      oid, eid = re.compile('&oid=(.+?)&eid=(.+?)&', re.DOTALL).search(sessionKey).groups()
+#      url = 'http://content.uplynk.com/ext/%s/%s.m3u8?%s' % (oid, eid, sessionKey)
+      url = ua+'?'+sessionKey
       html = self.getRequest(url)
       url = re.compile('#UPLYNK-MEDIA0.+?http(.+?)\n',re.DOTALL).search(html).group(1)
       url = 'http'+url

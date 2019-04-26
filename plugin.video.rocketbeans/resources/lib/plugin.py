@@ -69,6 +69,13 @@ def index():
     )
 
     addDirectoryItem(
+        plugin.handle, 
+        "plugin://plugin.video.youtube/channel/%s/" % config.KINO_PLUS_CHANNEL_ID, 
+        ListItem(getString(32009)),
+        True
+    )
+
+    addDirectoryItem(
         plugin.handle,
         "plugin://plugin.video.youtube/channel/%s/" % config.HAENGI_HQ_CHANNEL_ID,
         ListItem(getString(32008)),

@@ -2,6 +2,9 @@
 
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+from __future__ import absolute_import, division, unicode_literals
+
+
 class ApiData:
 
     def __init__(self, client, media_api_url, video_id, publication_id, xvrttoken, is_live_stream):

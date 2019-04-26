@@ -4,6 +4,8 @@
 
 ''' This is the actual VRT Nu service entry point '''
 
+from __future__ import absolute_import, division, unicode_literals
+
 import xbmc
 import xbmcaddon
 from resources.lib.kodiwrappers import kodiwrapper

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.vrt.nu"
        name="VRT Nu"
-       version="1.7.1"
+       version="1.8.0"
        provider-name="Martijn Moreel">
 
     <requires>
         <!-- import addon="inputstream.adaptive" version="2.0.19"/ -->
         <import addon="script.module.beautifulsoup4" version="4.5.3"/>
+        <import addon="script.module.dateutil" version="2.6.0"/>
         <import addon="script.module.inputstreamhelper" version="0.3.3"/>
         <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
         <import addon="script.module.requests" version="2.19.1"/>
@@ -26,6 +27,16 @@
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
+v1.8.0 (2019-04-27)
+- Fix the menu listings due to the urllib3 update (@dagwieers)
+- Add a TV guide menu entry (@dagwieers)
+- Add a permalink to the episode plot (optionally) (@dagwieers)
+- Avoid getting license url on every request (@mediaminister)
+- Improve menu listings order and add menu sort methods (@dagwieers)
+- Implement Kodi formatted text conversion (@pietje666)
+- Improved login handling (@mediaminister)
+- Improve thumbnail/fanart for menu listings (@dagwieers)
+- Fixes to remote play (@mediaminister)
 v1.7.1 (2019-03-28)
 - Remove the inputstream.adaptive requirement for Krypton
 v1.7.0 (2019-03-26)
@@ -46,22 +57,16 @@ v1.6.0 (2019-03-07)
 - Use VRT search api (greatly improves stability)
 - Fix for users with Non ASCII compatible user path
 - Fix for roaming token
-v1.5.2 (2019-01-28)
-- Bug fix where the vrt token would be stored in a wrong format
-- Inputstream helper for easier widevine installation
-- Token resets when settings are being changed
-v1.5.1 (20-01-2019)
-- Fixed subtitle issue where subtitles would always be visible (@mediaminister)
-- Fixed categories (@mediaminister)
-- Roaming support added (@mediaminister)
         </news>
         <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
         <website>https://github.com/pietje666/plugin.video.vrt.nu/wiki</website>
         <forum>https://www.facebook.com/kodivrtnu/</forum>
         <assets>
-            <icon>resources/icon.png</icon>
-            <fanart>resources/fanart.jpg</fanart>
-            <!-- screenshot>resources/screenshot-01.jpg</screenshot -->
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+            <screenshot>resources/media/screenshot01.jpg</screenshot>
+            <screenshot>resources/media/screenshot02.jpg</screenshot>
+            <screenshot>resources/media/screenshot03.jpg</screenshot>
         </assets>
     </extension>
 </addon>

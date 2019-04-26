@@ -2,6 +2,7 @@ CHANNEL_ID = 'ROCKETBEANSTV'
 LETS_PLAY_CHANNEL_ID = 'UCtSP1OA6jO4quIGLae7Fb4g'
 GAME_TWO_CHANNEL_ID = 'UCFBapHA35loZ3KZwT_z3BsQ'
 HAENGI_HQ_CHANNEL_ID = 'UCkfDws3roWo1GaA3pZUzfIQ'
+KINO_PLUS_CHANNEL_ID = 'UCSPhBkVTeztDGsz9-rdsNvw'
 
 GUIDE_URL = 'http://api.rbtv.rodney.io/api/1.0/schedule/schedule_linear.json'
 

@@ -3,26 +3,38 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, unicode_literals
+import json
 
 import inputstreamhelper
-import json
 import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcvfs
-from resources.lib.kodiwrappers import sortmethod
 
 try:
     from urllib.parse import urlencode
 except ImportError:
     from urllib import urlencode
 
+sort_methods = {
+    # 'date': xbmcplugin.SORT_METHOD_DATE,
+    'dateadded': xbmcplugin.SORT_METHOD_DATEADDED,
+    'duration': xbmcplugin.SORT_METHOD_DURATION,
+    'episode': xbmcplugin.SORT_METHOD_EPISODE,
+    # 'genre': xbmcplugin.SORT_METHOD_GENRE,
+    'label': xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
+    # 'none': xbmcplugin.SORT_METHOD_UNSORTED,
+    # FIXME: We would like to be able to sort by unprefixed title (ignore date/episode prefix)
+    # 'title': xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE,
+    'unsorted': xbmcplugin.SORT_METHOD_UNSORTED,
+}
+
 
 def has_socks():
     ''' Test if socks is installed, and remember this information '''
     if not hasattr(has_socks, 'installed'):
         try:
-            import socks  # pylint: disable=unused-variable,unused-import
+            import socks  # noqa: F401  # pylint: disable=unused-variable,unused-import
             has_socks.installed = True
         except ImportError:
             has_socks.installed = False
@@ -38,12 +50,41 @@ class KodiWrapper:
         self._addon = addon
         self._addon_id = addon.getAddonInfo('id')
 
-    def show_listing(self, list_items, sort=None, content_type='episodes'):
+    def show_listing(self, list_items, sort='unsorted', ascending=True, content_type='episodes'):
         listing = []
+
+        xbmcplugin.setContent(self._handle, content=content_type)
+
+        # FIXME: Since there is no way to influence descending order, we force it here
+        if not ascending:
+            sort = 'unsorted'
+
+        # Add all sort methods to GUI (start with preferred)
+        xbmcplugin.addSortMethod(handle=self._handle, sortMethod=sort_methods[sort])
+        for key in sorted(sort_methods):
+            if key != sort:
+                xbmcplugin.addSortMethod(handle=self._handle, sortMethod=sort_methods[key])
+
+        # FIXME: This does not appear to be working, we have to order it ourselves
+#        xbmcplugin.setProperty(handle=self._handle, key='sort.ascending', value='true' if ascending else 'false')
+#        if ascending:
+#            xbmcplugin.setProperty(handle=self._handle, key='sort.order', value=str(sort_methods[sort]))
+#        else:
+#            # NOTE: When descending, use unsorted
+#            xbmcplugin.setProperty(handle=self._handle, key='sort.order', value=str(sort_methods['unsorted']))
+
         for title_item in list_items:
-            list_item = xbmcgui.ListItem(label=title_item.title)
+            list_item = xbmcgui.ListItem(label=title_item.title, thumbnailImage=title_item.art_dict.get('thumb'))
             url = self._url + '?' + urlencode(title_item.url_dict)
-            list_item.setProperty('IsPlayable', str(title_item.is_playable))
+            list_item.setProperty(key='IsPlayable', value='true' if title_item.is_playable else 'false')
+
+            # FIXME: This does not appear to be working, we have to order it ourselves
+#            list_item.setProperty(key='sort.ascending', value='true' if ascending else 'false')
+#            if ascending:
+#                list_item.setProperty(key='sort.order', value=str(sort_methods[sort]))
+#            else:
+#                # NOTE: When descending, use unsorted
+#                list_item.setProperty(key='sort.order', value=str(sort_methods['unsorted']))
 
             if title_item.art_dict:
                 list_item.setArt(title_item.art_dict)
@@ -54,15 +95,6 @@ class KodiWrapper:
             listing.append((url, list_item, not title_item.is_playable))
 
         ok = xbmcplugin.addDirectoryItems(self._handle, listing, len(listing))
-
-        if sort is not None:
-            kodi_sorts = {sortmethod.ALPHABET: xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE}
-            kodi_sortmethod = kodi_sorts.get(sort)
-            xbmcplugin.addSortMethod(handle=self._handle, sortMethod=kodi_sortmethod)
-        else:
-            xbmcplugin.addSortMethod(handle=self._handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
-
-        xbmcplugin.setContent(self._handle, content=content_type)
         xbmcplugin.endOfDirectory(self._handle, ok)
 
     def play(self, video):
@@ -98,15 +130,21 @@ class KodiWrapper:
     def get_localized_dateshort(self):
         return xbmc.getRegion('dateshort')
 
+    def get_localized_datelong(self):
+        return xbmc.getRegion('datelong')
+
     def get_setting(self, setting_id):
         return self._addon.getSetting(setting_id)
+
+    def set_setting(self, setting_id, setting_value):
+        return self._addon.setSetting(setting_id, setting_value)
 
     def open_settings(self):
         self._addon.openSettings()
 
     def get_global_setting(self, setting):
         json_result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Settings.GetSettingValue", "params": {"setting": "%s"}, "id": 1}' % setting)
-        return json.loads(json_result)['result']['value']
+        return json.loads(json_result).get('result', dict()).get('value')
 
     def get_proxies(self):
         usehttpproxy = self.get_global_setting('network.usehttpproxy')
@@ -147,11 +185,11 @@ class KodiWrapper:
 
         return dict(http=proxy_address, https=proxy_address)
 
-    # NOTE: normally inputstream adaptive will always be installed, this only applies for people uninstalling inputstream adaptive while this addon is disabled
+    # Note: InputStream Adaptive is not pre-installed on Windows and in some cases users can uninstall it
     def has_inputstream_adaptive_installed(self):
         return xbmc.getCondVisibility('System.HasAddon("{0}")'.format('inputstream.adaptive')) == 1
 
-    def can_play_widevine(self):
+    def can_play_drm(self):
         kodi_version = int(xbmc.getInfoLabel('System.BuildVersion').split('.')[0])
         return kodi_version > 17
 

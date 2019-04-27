@@ -2,6 +2,9 @@
 
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+from __future__ import absolute_import, division, unicode_literals
+
+
 class StreamURLS:
 
     def __init__(self, stream_url, subtitle_url=None, license_key=None, use_inputstream_adaptive=False):

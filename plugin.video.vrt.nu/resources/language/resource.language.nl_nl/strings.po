@@ -21,8 +21,8 @@ msgid "Credentials"
 msgstr "Inloggegevens"
 
 msgctxt "#32001"
-msgid "Username"
-msgstr "Gebruikersnaam"
+msgid "Email address"
+msgstr "E-mailadres"
 
 msgctxt "#32002"
 msgid "Password"
@@ -33,12 +33,16 @@ msgid "Delete cookies"
 msgstr "Verwijder cookies"
 
 msgctxt "#32010"
-msgid "Subtitles"
-msgstr "Ondertiteling"
+msgid "Interface"
+msgstr "Interface"
 
 msgctxt "#32011"
-msgid "Show subtitles if available"
+msgid "Show subtitles when available"
 msgstr "Toon ondertiteling indien beschikbaar"
+
+msgctxt "#32012"
+msgid "Show episode permalink in plot"
+msgstr "Toon aflevering permalink in beschrijving"
 
 msgctxt "#32020"
 msgid "DRM"
@@ -49,12 +53,12 @@ msgid "Use DRM for 720p HD-quality livestreams"
 msgstr "Gebruik DRM voor de livestreams in 720p HD-kwaliteit"
 
 msgctxt "#32051"
-msgid "Could not login!"
-msgstr "Kan niet inloggen!"
+msgid "Login failed!"
+msgstr "Inloggen mislukt!"
 
 msgctxt "#32052"
-msgid "Only VRT logins are supported no Google or Facebook login!"
-msgstr "Alleen VRT-logins worden ondersteund, geen Google of Facebook login!"
+msgid "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
+msgstr "Ongeldig e-mailadres of wachtwoord. Alleen VRT-logins worden ondersteund, geen Google- of Facebook-logins."
 
 msgctxt "#32053"
 msgid "This program cannot be played. To view this program outside of Belgium, you first have to validate a Belgian mobile phone number on the VRT NU website."
@@ -63,6 +67,14 @@ msgstr "Het programma kan niet afgespeeld worden. Om dit programma buiten Belgi�
 msgctxt "#32054"
 msgid "Woops something went wrong, check the log for more details"
 msgstr "Oeps, er ging iets mis, check de log voor meer informatie"
+
+msgctxt "#32055"
+msgid "Please fill in your email address to login."
+msgstr "Gelieve je e-mailadres in te vullen om in te loggen."
+
+msgctxt "#32056"
+msgid "Please fill in your password to login."
+msgstr "Gelieve je wachtwoord in te vullen om in te loggen."
 
 msgctxt "#32061"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
@@ -86,7 +98,7 @@ msgstr "Lijst van tv-programma's per categorie"
 
 msgctxt "#32084"
 msgid "Live TV"
-msgstr "Live tv"
+msgstr "Live kijken"
 
 msgctxt "#32085"
 msgid "Watch TV channels live (using Internet streaming)"
@@ -100,6 +112,14 @@ msgctxt "#32087"
 msgid "Recently published episodes of TV programs"
 msgstr "Recent gepubliceerde afleveringen van tv-programma's"
 
+msgctxt "#32088"
+msgid "TV guide"
+msgstr "TV-gids"
+
+msgctxt "#32089"
+msgid "Browse channel TV guides"
+msgstr "Doorzoek de TV-gids per kanaal"
+
 msgctxt "#32094"
 msgid "Season"
 msgstr "Seizoen"
@@ -109,20 +129,36 @@ msgid "Episode"
 msgstr "Aflevering"
 
 msgctxt "#32101"
-msgid "Eén"
-msgstr "Eén"
+msgid "Eén live"
+msgstr "Eén live"
 
 msgctxt "#32102"
-msgid "Canvas"
-msgstr "Canvas"
+msgid "Watch Eén live TV stream"
+msgstr "Bekijk Eén live tv stream"
 
-msgctxt "#32103"
-msgid "Ketnet"
-msgstr "Ketnet"
+msgctxt "#32111"
+msgid "Canvas live"
+msgstr "Canvas live"
 
-msgctxt "#32104"
-msgid "Sporza"
-msgstr "Sporza"
+msgctxt "#32112"
+msgid "Watch Canvas live TV stream"
+msgstr "Bekijk Canvas live tv stream"
+
+msgctxt "#32121"
+msgid "Ketnet live"
+msgstr "Ketnet live"
+
+msgctxt "#32122"
+msgid "Watch Ketnet live TV stream"
+msgstr "Bekijk Ketnet live tv stream"
+
+msgctxt "#32131"
+msgid "Sporza live"
+msgstr "Sporza live"
+
+msgctxt "#32132"
+msgid "Watch Sporza live TV stream"
+msgstr "Bekijk Sporza live tv stream"
 
 msgctxt "#32201"
 msgid "[B][COLOR red]Geo-blocked[/COLOR][/B]\n"
@@ -139,3 +175,31 @@ msgstr "[B][COLOR green](nog %s dagen)[/COLOR][/B]\n"
 msgctxt "#32204"
 msgid "[B][COLOR green](%s hours left)[/COLOR][/B]\n"
 msgstr "[B][COLOR green](nog %s uur)[/COLOR][/B]\n"
+
+msgctxt "#32301"
+msgid "[B]TV guide for channel %s[/B]"
+msgstr "[B]TV-gids for kanaal %s[/B]"
+
+msgctxt "#32302"
+msgid "[B][I]Now on live TV[/I][/B]"
+msgstr "[B][I]Speelt nu op TV[/I][/B]"
+
+msgctxt "#32330"
+msgid "2 days ago"
+msgstr "Eergisteren"
+
+msgctxt "#32331"
+msgid "Yesterday"
+msgstr "Gisteren"
+
+msgctxt "#32332"
+msgid "Today"
+msgstr "Vandaag"
+
+msgctxt "#32333"
+msgid "Tomorrow"
+msgstr "Morgen"
+
+msgctxt "#32334"
+msgid "In 2 days"
+msgstr "Overmorgen"

@@ -20,8 +20,8 @@ msgid "Credentials"
 msgstr "Credentials"
 
 msgctxt "#32001"
-msgid "Username"
-msgstr "Username"
+msgid "Email address"
+msgstr "Email address"
 
 msgctxt "#32002"
 msgid "Password"
@@ -32,12 +32,16 @@ msgid "Delete cookies"
 msgstr "Delete cookies"
 
 msgctxt "#32010"
-msgid "Subtitles"
-msgstr "Subtitles"
+msgid "Interface"
+msgstr "Interface"
 
 msgctxt "#32011"
-msgid "Show subtitles if available"
-msgstr "Show subtitles if available"
+msgid "Show subtitles when available"
+msgstr "Show subtitles when available"
+
+msgctxt "#32012"
+msgid "Show episode permalink in plot"
+msgstr "Show episode permalink in plot"
 
 msgctxt "#32020"
 msgid "DRM"
@@ -48,12 +52,12 @@ msgid "Use DRM for 720p HD-quality livestreams"
 msgstr "Use DRM for 720p HD-quality livestreams"
 
 msgctxt "#32051"
-msgid "Could not login!"
-msgstr "could not login"
+msgid "Login failed!"
+msgstr "Login failed!"
 
 msgctxt "#32052"
-msgid "Only VRT logins are supported no Google or Facebook login!"
-msgstr "Only VRT logins are supported no Google or Facebook login "
+msgid "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
+msgstr "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
 
 msgctxt "#32053"
 msgid "This program cannot be played. To view this program outside of Belgium, you first have to validate a Belgian mobile phone number on the VRT NU website."
@@ -62,6 +66,14 @@ msgstr "This program cannot be played. To view this program outside of Belgium, 
 msgctxt "#32054"
 msgid "Woops something went wrong, check the log for more details"
 msgstr "Woops something went wrong, check the log for more details"
+
+msgctxt "#32055"
+msgid "Please fill in your email address to login."
+msgstr "Please fill in your email address to login."
+
+msgctxt "#32056"
+msgid "Please fill in your password to login."
+msgstr "Please fill in your password to login."
 
 msgctxt "#32061"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
@@ -99,6 +111,14 @@ msgctxt "#32087"
 msgid "Recently published episodes of TV programs"
 msgstr "Recently published episodes of TV programs"
 
+msgctxt "#32088"
+msgid "TV guide"
+msgstr "TV guide"
+
+msgctxt "#32089"
+msgid "Browse channel TV guides"
+msgstr "Browse channel TV guides"
+
 msgctxt "#32094"
 msgid "Season"
 msgstr "Season"
@@ -108,20 +128,36 @@ msgid "Episode"
 msgstr "Episode"
 
 msgctxt "#32101"
-msgid "Eén"
-msgstr "Eén"
+msgid "Eén live"
+msgstr "Eén live"
 
 msgctxt "#32102"
-msgid "Canvas"
-msgstr "Canvas"
+msgid "Watch Eén live TV stream"
+msgstr "Watch Eén live TV stream"
 
-msgctxt "#32103"
-msgid "Ketnet"
-msgstr "Ketnet"
+msgctxt "#32111"
+msgid "Canvas live"
+msgstr "Canvas live"
 
-msgctxt "#32104"
-msgid "Sporza"
-msgstr "Sporza"
+msgctxt "#32112"
+msgid "Watch Canvas live TV stream"
+msgstr "Watch Canvas live TV stream"
+
+msgctxt "#32121"
+msgid "Ketnet live"
+msgstr "Ketnet live"
+
+msgctxt "#32122"
+msgid "Watch Ketnet live TV stream"
+msgstr "Watch Ketnet live TV stream"
+
+msgctxt "#32131"
+msgid "Sporza live"
+msgstr "Sporza live"
+
+msgctxt "#32132"
+msgid "Watch Sporza live TV stream"
+msgstr "Watch Sporza live TV stream"
 
 msgctxt "#32201"
 msgid "[B][COLOR red]Geo-blocked[/COLOR][/B]\n"
@@ -138,3 +174,32 @@ msgstr "[B][COLOR green](%s days left)[/COLOR][/B]\n"
 msgctxt "#32204"
 msgid "[B][COLOR green](%s hours left)[/COLOR][/B]\n"
 msgstr "[B][COLOR green](%s hours left)[/COLOR][/B]\n"
+
+msgctxt "#32301"
+msgid "[B]TV guide for channel %s[/B]"
+msgstr "[B]TV guide for channel %s[/B]"
+
+msgctxt "#32302"
+msgid "[B][I]Now on live TV[/I][/B]"
+msgstr "[B][I]Now on live TV[/I][/B]"
+
+msgctxt "#32330"
+msgid "2 days ago"
+msgstr "2 days ago"
+
+msgctxt "#32331"
+msgid "Yesterday"
+msgstr "Yesterday"
+
+msgctxt "#32332"
+msgid "Today"
+msgstr "Today"
+
+msgctxt "#32333"
+msgid "Tomorrow"
+msgstr "Tomorrow"
+
+msgctxt "#32334"
+msgid "In 2 days"
+msgstr "In 2 days"
+

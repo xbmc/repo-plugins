@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/pietje666/plugin.video.vrt.nu.svg?branch=master)](https://travis-ci.org/pietje666/plugin.video.vrt.nu)
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/licenses/GPLv3)
 [![Contributors](https://img.shields.io/github/contributors/pietje666/plugin.video.vrt.nu.svg)](https://github.com/pietje666/plugin.video.vrt.nu/graphs/contributors)
+[![Donate!](https://img.shields.io/static/v1.svg?label=&message=Donate!&color=lightgrey&logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6C58R2PNAWTNW&source=url)
 
 # VRT.NU Kodi addon
 
@@ -40,6 +41,17 @@ You can report issues at [our GitHub project](https://github.com/pietje666/plugi
 you can send a message to [our Facebook page](https://www.facebook.com/kodivrtnu/).
 
 ## Releases
+
+#### v1.8.0 (2019-04-27)
+- Fix the menu listings due to the urllib3 update (@dagwieers)
+- Add a TV guide menu entry (@dagwieers)
+- Add a permalink to the episode plot (optionally) (@dagwieers)
+- Avoid getting license url on every request (@mediaminister)
+- Improve menu listings order and add menu sort methods (@dagwieers)
+- Implement Kodi formatted text conversion (@pietje666)
+- Improved login handling (@mediaminister)
+- Improve thumbnail/fanart for menu listings (@dagwieers)
+- Fixes to remote play (@mediaminister)
 
 #### v1.7.1 (2019-03-28)
 - Remove the inputstream.adaptive requirement for Krypton

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.soundcloud" name="SoundCloud" version="3.0.0" provider-name="jaylinski">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.future" version="0.16.0"/>
+        <import addon="script.module.requests" version="2.4.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="de_DE">Soundcloud ist eine Online-Audio-Vertriebsplattform.</summary>
+		<summary lang="en_GB">SoundCloud is an online audio distribution platform.</summary>
+        <language></language>
+        <platform>all</platform>
+        <license>MIT</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=206635</forum>
+        <website>https://soundcloud.com</website>
+        <source>https://github.com/jaylinski/kodi-addon-soundcloud</source>
+        <news>3.0.0 (2019-0x-xx)
+[new] complete rewrite
+[new] python 3.6 compatibility
+[fix] use new SoundCloud API
+
+2.0.6 (2016-09-08)
+[fix] Cover (thumbs) missing (done by SLiX, bromix still 'afk')
+
+2.0.5 (2015-12-07)
+[add] Bulgarian (thx 2 NEOhidra)
+[upd] addon.xml (thx 2 NEOhidra)
+
+2.0.4 (2015-12-02)
+[add] Dutch (thx 2 steefdw)
+
+2.0.3 (2015-09-20)
+[add] Hebrew (thx 2 smoky-jr)
+[fix] skip incomplete items (bug of SoundCloud)
+[fix] login
+
+2.0.2 (2015-08-31)
+[fix] add missing fanart
+
+2.0.1 (2015-08-27)
+[add] French (thx 2 Soullivaneuh)
+[upd] moved to *.po files
+[upd] Framework
+
+2.0.0 (2015-08-01)
+[upd] framework
+
+1.2.1 (2015-05-17)
+1.2.0 (2015-05-09)
+1.1.2 (2015-02-27)
+1.1.1 (2015-01-25)
+1.1.0 (2015-01-14)
+1.0.2 (2014-11-29)
+1.0.1 (2014-11-27)
+1.0.0 (2014-10-29)
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

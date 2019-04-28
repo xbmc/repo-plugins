@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30001">
+        <setting label="30002" type="lsep"/>
+        <setting id="audio.format" type="enum" label="30003" values="opus (audio/ogg)|mp3 (audio/mpeg)" default="0" />
+        <setting label="30011" type="lsep"/>
+        <setting id="search.items.size" type="labelenum" label="30012" values="5|10|15|20|25|30|40|50" default="20" />
+        <setting id="search.history.size" type="labelenum" label="30013" values="0|5|10|15|20|30|50" default="10" />
+    </category>
+    <category label="30051">
+        <setting label="30060" type="lsep"/>
+        <setting id="apiv2.clientid" type="text" label="30061" value="" default="" />
+        <setting id="apiv2.locale" type="enum" label="30062" lvalues="30063|30064" default="0" />
+    </category>
+</settings>

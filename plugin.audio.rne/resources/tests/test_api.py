@@ -65,11 +65,12 @@ class ITTests(unittest.TestCase):
     def test_5_direct_channels(self):
         direct_channels = api.get_direct_channels()
         self.assertTrue(direct_channels is not None and len(direct_channels) == 6)
-        channel_url = direct_channels[0]['url']
-        self.assertTrue(channel_url.startswith('http'))
-        if channel_url.endswith('m3u'):
-            direct_url = api.get_playable_url(channel_url)
-            self.assertTrue(direct_url.startswith('http'))
+        for direct_channel in direct_channels:
+            channel_url = direct_channel['url']
+            self.assertTrue(channel_url.startswith('http'))
+            if channel_url.endswith('m3u'):
+                direct_url = api.get_playable_url(channel_url)
+                self.assertTrue(direct_url.startswith('http'))
 
 
 if __name__ == '__main__':

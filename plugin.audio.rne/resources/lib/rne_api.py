@@ -311,15 +311,15 @@ def get_audio_list(program_url, localized=lambda x: x):
 def get_direct_channels():
     """This function makes the direct channels menu."""
 
-    direct_url = 'u3m.3pm.s%/evtr/moc.noitomulf.evtr-3pm-eviloidar//:ptth'[::-1]
+    direct_url = '8u3m.retsam/s%/i/ten.dhiamaka.hl-0lgdmaevilslh//:ptth'[::-1]
 
     channel_list  = (
-            ( 'Radio Nacional',   'rtve-rne'),
-            ( 'Radio Clásica',    'rtve-radioclasica'),
-            ( 'Radio 3',          'rtve-radio3'),
-            ( 'Ràdio 4',          'rtve-radio4'),
-            ( 'Radio 5',          'rtve-radio5'),
-            ( 'Radio Exterior',   'radioexterior'),
+            ( 'Radio Nacional',   'rnerne_1@586398'),
+            ( 'Radio Clásica',    'rnerc_1@586399'),
+            ( 'Radio 3',          'rnerne3_1@793568'),
+            ( 'Ràdio 4',          'rnerne4_1@793569'),
+            ( 'Radio 5',          'rnerne5_1@793570'),
+            ( 'Radio Exterior',   'rneree_1@793572'),
             )
 
     menu_entries  = []

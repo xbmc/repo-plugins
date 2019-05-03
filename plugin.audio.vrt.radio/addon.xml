@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.vrt.radio" name="VRT Radio" version="0.1.0" provider-name="dagwieers">
+    <requires>
+        <!-- import addon="resource.images.studios.coloured" version="0.0.15"/ -->
+        <import addon="resource.images.studios.white" version="0.0.21"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="xbmc.python" version="2.25.0"/>
+    </requires>
+
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Listen to VRT Radio streams</summary>
+        <description lang="en_GB">
+With this addon you can browse and liste the VRT Radio streams.
+</description>
+        <summary lang="nl_NL">Luister naar VRT Radio streams</summary>
+        <description lang="nl_NL">
+Met deze addon kan je alle VRT Radio streams beluisteren.
+</description>
+        <language>nl</language>
+        <platform>all</platform>
+        <license>GNU General Public License, v3</license>
+        <news>
+v0.1.0 (2019-05-01)
+- First release
+        </news>
+        <source>https://github.com/dagwieers/plugin.audio.vrt.radio</source>
+        <website>https://github.com/dagwieers/plugin.audio.vrt.radio/wiki</website>
+        <forum>https://github.com/dagwieers/plugin.audio.vrt.radio/issues</forum>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

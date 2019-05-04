@@ -2,7 +2,7 @@
 
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-''' This is the actual VRT Nu service entry point '''
+''' This is the actual VRT NU service entry point '''
 
 from __future__ import absolute_import, division, unicode_literals
 
@@ -13,7 +13,7 @@ from resources.lib.vrtplayer import tokenresolver
 
 
 class VrtMonitor(xbmc.Monitor):
-    ''' This is the class that monitors Kodi for the VRT Nu video plugin '''
+    ''' This is the class that monitors Kodi for the VRT NU video plugin '''
 
     def __init__(self):
         ''' VRT Monitor initialisiation '''

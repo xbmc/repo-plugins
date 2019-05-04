@@ -7,10 +7,11 @@ from __future__ import absolute_import, division, unicode_literals
 
 LISTING_AZ_TVSHOWS = 'listingaztvshows'
 LISTING_CATEGORIES = 'listingcategories'
-LISTING_LIVE = 'listinglive'
-
 LISTING_CATEGORY_TVSHOWS = 'listingcategorytvshows'
+LISTING_CHANNELS = 'listingchannels'
 LISTING_EPISODES = 'listingepisodes'
+LISTING_LIVE = 'listinglive'
+LISTING_RECENT = 'listingrecent'
 LISTING_TVGUIDE = 'listingtvguide'
 
 PLAY = 'play'

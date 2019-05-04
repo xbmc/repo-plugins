@@ -4,25 +4,30 @@
 [![Contributors](https://img.shields.io/github/contributors/pietje666/plugin.video.vrt.nu.svg)](https://github.com/pietje666/plugin.video.vrt.nu/graphs/contributors)
 [![Donate!](https://img.shields.io/static/v1.svg?label=&message=Donate!&color=lightgrey&logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6C58R2PNAWTNW&source=url)
 
-# VRT.NU Kodi addon
-
-**plugin.video.vrt.nu** is a [Kodi](https://kodi.tv/) add-on used to watch all live video streams *and* all video-on-demand
-content available on [VRT NU](https://www.vrt.be/vrtnu/).
+# VRT NU Kodi addon
+**plugin.video.vrt.nu** is a [Kodi](https://kodi.tv/) add-on for watching all live video streams *and* all video-on-demand
+content available on [VRT NU](https://vrt.be/vrtnu/).
 
 VRT NU is the video-on-demand platform of VRT, Flanders' public broadcasting service.
 
-## Installing
+This addon can be used to watch all video content from VRT NU.
 
+- List all videos alphabetically by program or by category
+- Watch live streams from Eén, Canvas and Ketnet
+- Discover recently added content
+- Browse the online VRT TV guides
+
+Some video content may be geo-blocked.
+
+## Installing
 In Kodi, simply search for `VRT NU`, and install the add-on.
 
 Alternatively, you can download a ZIP archive from the [GitHub releases](https://github.com/pietje666/plugin.video.vrt.nu/releases)
-or the [Kodi plugin page](https://kodi.tv/addon/plugins-video-add-ons/vrt-nu-0) and install it directly in Kodi
-using the **Install via Zip** option.
+and install it directly in Kodi using the **Install via Zip** option.
 
 ## Using the plugin
-
-The [VRT NU](https://www.vrt.be/vrtnu) platform requires users to sign in before gaining access to video-on-demand content. Users can
-sign in with a user name and password, or sign in with their Google, or Facebook account.
+The [VRT NU](https://vrt.be/vrtnu) platform requires users to sign in before gaining access to video-on-demand content.
+Users can sign in with a user name and password, or sign in with their Google, or Facebook account.
 
 This plugin currently only supports signing in using the first method (user name and password). If you already
 have a VRT NU account and sign in with another method, it is easy to get a password:
@@ -31,16 +36,25 @@ have a VRT NU account and sign in with another method, it is easy to get a passw
 - Click **Inloggen met e-mail**;
 - Click the **Wachtwoord vergeten?** hyperlink, and enter your email address.
 
-You will receive an email that allows you to set a password. Use that password to enter in the plugin when
+You will receive an email that allows you to set a password. Use this password to enter in the plugin when
 prompted.
 
-For more information about the VRT.NU Kodi addon, look at [our GitHub Wiki page](https://github.com/pietje666/plugin.video.vrt.nu/wiki).
+For more information about the VRT NU Kodi addon, look at [our GitHub Wiki page](https://github.com/pietje666/plugin.video.vrt.nu/wiki).
 
 ## Reporting issues
 You can report issues at [our GitHub project](https://github.com/pietje666/plugin.video.vrt.nu) or
-you can send a message to [our Facebook page](https://www.facebook.com/kodivrtnu/).
+you can send a message to [our Facebook page](https://facebook.com/kodivrtnu/).
 
 ## Releases
+
+#### v1.9.0 (2019-05-04)
+- Add a Channels menu (@dagwieers)
+- Add page-browsing in Recent menu, 50 items per page (@dagwieers)
+- Fix general performance issue on Raspberry Pi (@mediaminister)
+- Add icon support to channel listings (@dagwieers)
+- Improvements to streamservice (@mediaminister)
+- Add fallback code for web scraping logic (@dagwieers)
+- Add Studio Brussel and MNM live streams (@dagwieers)
 
 #### v1.8.0 (2019-04-27)
 - Fix the menu listings due to the urllib3 update (@dagwieers)
@@ -64,7 +78,7 @@ you can send a message to [our Facebook page](https://www.facebook.com/kodivrtnu
 - Add fanart to menus (@dagwieers)
 - Fix issue related to missing sound (@mediaminister)
 - Improve main menu listing (@dagwieers)
-- Use VRT.NU search API for most information gathering (@mediaminister)
+- Use VRT NU search API for most information gathering (@mediaminister)
 - Added Dutch translation (@mediaminister)
 - Added "Most recent" menu item (@mediaminister)
 - Fix roaming for live streams (@mediaminister)

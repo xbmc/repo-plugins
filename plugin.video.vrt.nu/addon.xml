@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.vrt.nu"
-       name="VRT Nu"
-       version="1.8.0"
+       name="VRT NU"
+       version="1.9.0"
        provider-name="Martijn Moreel">
 
     <requires>
+        <import addon="resource.images.studios.white" version="0.0.21"/>
         <!-- import addon="inputstream.adaptive" version="2.0.19"/ -->
         <import addon="script.module.beautifulsoup4" version="4.5.3"/>
         <import addon="script.module.dateutil" version="2.6.0"/>
         <import addon="script.module.inputstreamhelper" version="0.3.3"/>
         <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
-        <import addon="script.module.requests" version="2.19.1"/>
+        <!-- import addon="script.module.requests" version="2.19.1"/ -->
         <import addon="xbmc.python" version="2.25.0"/>
     </requires>
 
@@ -19,14 +20,41 @@
     </extension>
     <extension point="xbmc.service" library="service.py"/>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Addon to watch VRT.NU</summary>
-        <description lang="en_GB">This addon can be used to watch all streams from VRT.NU. And also offers livestreams from Eén, Canvas and Ketnet!</description>
-        <summary lang="nl_NL">Addon om VRT.NU te bekijken.</summary>
-        <description lang="nl_NL">Met deze addon kan je alle streams van VRT.NU bekijken. Alsook de livestreams van Eén, Canvas en Ketnet!</description>
+        <summary lang="en_GB">Watch videos from VRT NU</summary>
+        <description lang="en_GB">
+This addon can be used to watch all video content from VRT NU.
+
+- List all videos alphabetically by program or by category
+- Watch live streams from Eén, Canvas and Ketnet
+- Discover recently added content
+- Browse the online VRT TV guides
+
+Some video content may be geo-blocked.
+</description>
+        <summary lang="nl_NL">VRT NU videos bekijken.</summary>
+        <description lang="nl_NL">
+Met deze addon kan je alle video streams van VRT NU bekijken.
+
+- Raadpleeg alle videos alfabetisch geordend per programma of per categorie
+- Bekijk de livestreams van Eén, Canvas en Ketnet
+- Ontdekt recent toegevoegde videos
+- Doorblader de online VRT TV-gids
+
+Sommige videos zijn geografisch geblokkeerd.
+</description>
         <language>nl</language>
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
+v1.9.0 (2019-05-04)
+- Add a Channels menu (@dagwieers)
+- Add page-browsing in Recent menu, 50 items per page (@dagwieers)
+- Fix general performance issue on Raspberry Pi (@mediaminister)
+- Add icon support to channel listings (@dagwieers)
+- Improvements to streamservice (@mediaminister)
+- Add fallback code for web scraping logic (@dagwieers)
+- Add Studio Brussel and MNM live streams (@dagwieers)
+
 v1.8.0 (2019-04-27)
 - Fix the menu listings due to the urllib3 update (@dagwieers)
 - Add a TV guide menu entry (@dagwieers)
@@ -37,30 +65,13 @@ v1.8.0 (2019-04-27)
 - Improved login handling (@mediaminister)
 - Improve thumbnail/fanart for menu listings (@dagwieers)
 - Fixes to remote play (@mediaminister)
+
 v1.7.1 (2019-03-28)
 - Remove the inputstream.adaptive requirement for Krypton
-v1.7.0 (2019-03-26)
-- Fix the categories web-scraping (@mediaminister)
-- Add full proxy support (@dagwieers)
-- Indicate when content will disappear in the next 3 months (@dagwieers)
-- Indicate when content is geo-blocked (@dagwieers)
-- Add fanart to menus (@dagwieers)
-- Fix issue related to missing sound (@mediaminister)
-- Improve main menu listing (@dagwieers)
-- Use VRT.NU search API for most information gathering (@mediaminister)
-- Added Dutch translation (@mediaminister)
-- Added "Most recent" menu item (@mediaminister)
-- Fix roaming for live streams (@mediaminister)
-- Add Python 3 compatibility (@dagwieers)
-- Added automated testing using Travis CI (@dagwieers)
-v1.6.0 (2019-03-07)
-- Use VRT search api (greatly improves stability)
-- Fix for users with Non ASCII compatible user path
-- Fix for roaming token
         </news>
         <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
         <website>https://github.com/pietje666/plugin.video.vrt.nu/wiki</website>
-        <forum>https://www.facebook.com/kodivrtnu/</forum>
+        <forum>https://facebook.com/kodivrtnu/</forum>
         <assets>
             <icon>resources/media/icon.png</icon>
             <fanart>resources/media/fanart.jpg</fanart>

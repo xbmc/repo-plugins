@@ -3,13 +3,8 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, unicode_literals
-import json
-
-import inputstreamhelper
 import xbmc
-import xbmcgui
 import xbmcplugin
-import xbmcvfs
 
 try:
     from urllib.parse import urlencode
@@ -34,7 +29,7 @@ def has_socks():
     ''' Test if socks is installed, and remember this information '''
     if not hasattr(has_socks, 'installed'):
         try:
-            import socks  # noqa: F401  # pylint: disable=unused-variable,unused-import
+            import socks  # noqa: F401; pylint: disable=unused-variable,unused-import
             has_socks.installed = True
         except ImportError:
             has_socks.installed = False
@@ -50,10 +45,12 @@ class KodiWrapper:
         self._addon = addon
         self._addon_id = addon.getAddonInfo('id')
 
-    def show_listing(self, list_items, sort='unsorted', ascending=True, content_type='episodes'):
+    def show_listing(self, list_items, sort='unsorted', ascending=True, content_type=None, cache=True):
+        import xbmcgui
         listing = []
 
-        xbmcplugin.setContent(self._handle, content=content_type)
+        if content_type:
+            xbmcplugin.setContent(self._handle, content=content_type)
 
         # FIXME: Since there is no way to influence descending order, we force it here
         if not ascending:
@@ -90,14 +87,15 @@ class KodiWrapper:
                 list_item.setArt(title_item.art_dict)
 
             if title_item.video_dict:
-                list_item.setInfo('video', infoLabels=title_item.video_dict)
+                list_item.setInfo(type='video', infoLabels=title_item.video_dict)
 
             listing.append((url, list_item, not title_item.is_playable))
 
         ok = xbmcplugin.addDirectoryItems(self._handle, listing, len(listing))
-        xbmcplugin.endOfDirectory(self._handle, ok)
+        xbmcplugin.endOfDirectory(self._handle, ok, cacheToDisc=cache)
 
     def play(self, video):
+        import xbmcgui
         play_item = xbmcgui.ListItem(path=video.stream_url)
         if video.stream_url is not None and video.use_inputstream_adaptive:
             play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
@@ -105,6 +103,7 @@ class KodiWrapper:
             play_item.setMimeType('application/dash+xml')
             play_item.setContentLookup(False)
             if video.license_key is not None:
+                import inputstreamhelper
                 is_helper = inputstreamhelper.Helper('mpd', drm='com.widevine.alpha')
                 if is_helper.check_inputstream():
                     play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
@@ -122,7 +121,17 @@ class KodiWrapper:
         xbmc.Player().showSubtitles(subtitles_visible)
 
     def show_ok_dialog(self, title, message):
+        import xbmcgui
         xbmcgui.Dialog().ok(self._addon.getAddonInfo('name'), title, message)
+
+    def set_locale(self):
+        import locale
+        locale_lang = self.get_global_setting('locale.language').split('.')[-1]
+        try:
+            # NOTE: This only works if the platform supports the Kodi configured locale
+            locale.setlocale(locale.LC_ALL, locale_lang)
+        except Exception as e:
+            self.log_notice(e)
 
     def get_localized_string(self, string_id):
         return self._addon.getLocalizedString(string_id)
@@ -143,6 +152,7 @@ class KodiWrapper:
         self._addon.openSettings()
 
     def get_global_setting(self, setting):
+        import json
         json_result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Settings.GetSettingValue", "params": {"setting": "%s"}, "id": 1}' % setting)
         return json.loads(json_result).get('result', dict()).get('value')
 
@@ -157,7 +167,7 @@ class KodiWrapper:
         if httpproxytype != 0 and not socks_supported:
             # Only open the dialog the first time (to avoid multiple popups)
             if socks_supported is None:
-                message = self.get_localized_string(32061)
+                message = self.get_localized_string(30061)
                 self.show_ok_dialog('', message)
             return None
 
@@ -203,15 +213,19 @@ class KodiWrapper:
         return xbmc.translatePath(path)
 
     def make_dir(self, path):
+        import xbmcvfs
         xbmcvfs.mkdir(path)
 
     def check_if_path_exists(self, path):
+        import xbmcvfs
         return xbmcvfs.exists(path)
 
     def open_path(self, path):
+        import json
         return json.loads(open(path, 'r').read())
 
     def delete_path(self, path):
+        import xbmcvfs
         return xbmcvfs.delete(path)
 
     def log_notice(self, message):

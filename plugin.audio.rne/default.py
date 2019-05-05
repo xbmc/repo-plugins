@@ -66,11 +66,11 @@ def run():
     # Get the params
     params = p.get_plugin_parms()
 
-    if params.get("action") is None:
-        create_index(params)
+    action = params.get("action", '')
+    if action:
+        eval("%s(params)" % action)
     else:
-        action = params.get("action")
-        exec action+"(params)"
+        create_index(params)
 
 
 # Main menu

@@ -43,9 +43,8 @@ def errdlg(args):
 
 def parse_stream_config(html, prefix):
     """Make JSON from JWPlayer config contents in HTML
-       * quote keys: file: "xxx" -> "file": "xxx"
+       * quote keys and values: file: "xxx" -> "file": "xxx"
        * replace single quotes with double quotes: "type": 'dash' -> "type": "dash"
-       * remove whitespaces
        * parse with json.loads()
        Parameters:
          html: HTML page content
@@ -59,41 +58,35 @@ def parse_stream_config(html, prefix):
     l = len(html)
     brace_count = 1
     result = ""
-    quote_key = False
+    quote = False
     # regex to string with single or double quotes
     ms = re.compile(r"(?P<q>['\"])(.*?)(?<!\\)(?P=q)")
     # regex to replace quotes
     mq = re.compile(r"(?<!\\)\"")
     while i < l and brace_count:
         c = html[i]
-        if c.isalnum():
-            # key: first quote
-            if not quote_key:
-                result += "\""
-                quote_key = True
-            result += c
-        else:
-            # key: second quote
-            if quote_key:
-                result += "\""
-                quote_key = False
+        if c in "\"'":
             # replace single quotes with double quotes
-            if c in "\"'":
-                m = ms.match(html, i)
-                if m:
-                    result += "\"" + mq.sub(r"\"", m.group(2)) + "\""
-                    i = m.end()
-                    if i >= l:
-                        break
-                    c = html[i]
+            m = ms.match(html, i)
+            if m:
+                result += "\"" + mq.sub(r"\"", m.group(2)) + "\""
+                i = m.end()
+                continue
+        elif c in "{}[]:," or c.isspace():
+            # second quote
+            if quote:
+                result += "\""
+                quote = False
             # count braces and stop on last '}'
             if c == "{":
                 brace_count += 1
             elif c == "}":
                 brace_count -= 1
-            # skip whitespaces
-            if not c in " \t\n\r":
-                result += c
+        # first quote
+        elif not quote:
+            result += "\""
+            quote = True
+        result += c
         i += 1
     return json.loads("{" + result)
 

@@ -57,7 +57,7 @@ def start(args):
         # cookie file does not exist
         pass
 
-    args._cj.set_cookie(Cookie(0, "timezoneoffset", str(timezone/60), None, False, "www.wakanim.tv", False, False, "/", True, False, None, False, None, None, {"HttpOnly": None}, False))
+    args._cj.set_cookie(Cookie(0, "timezoneoffset", str(timezone//60), None, False, "www.wakanim.tv", False, False, "/", True, False, None, False, None, None, {"HttpOnly": None}, False))
 
 
 def close(args):
@@ -85,14 +85,21 @@ def getPage(args, url, data=None):
     # get account informations
     username = args._addon.getSetting("wakanim_username")
     password = args._addon.getSetting("wakanim_password")
+    logindict = {"Username":   username,
+                 "Password":   password,
+                 "RememberMe": True,
+                 "login":      "Verbindung"}
 
-    # build POST data
-    post_data = urlencode({"Username":   username,
-                           "Password":   password,
-                           "RememberMe": True,
-                           "login":      "Verbindung"})
+    # get security tokens
+    soup = BeautifulSoup(html, "html.parser")
+    form = soup.find_all("form", {"class": "nav-user_login"})[0]
+    for inputform in form.find_all("input", {"type": "hidden"}):
+        if inputform.get("name") == u"RememberMe":
+            continue
+        logindict[inputform.get("name")] = inputform.get("value")
 
     # POST to login page
+    post_data = urlencode(logindict)
     response = urlopen("https://www.wakanim.tv/" + args._country + "/v2/account/login?ReturnUrl=" + quote_plus(url.replace("https://www.wakanim.tv", "")),
                        post_data.encode(getCharset(response)))
 

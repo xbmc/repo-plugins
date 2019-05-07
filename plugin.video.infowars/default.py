@@ -425,9 +425,9 @@ def Full_Show_Sub_Menu(title=''):
                title = titleCheck + " - " + unicode(item["title"]).encode('utf-8'); 
                plot = unicode(item["summary"]).encode('utf-8');
                thumbnail = unicode(item["posterThumbnailUrl"]).encode('utf-8');
-               video_id = unicode(item["directUrl"]).encode('utf-8');
+               video_id = unicode(item["streamUrl"]).encode('utf-8');
                url = video_id
-               if "Full Show" in title:
+               if ("FULL" in title or "Full" in title) and ("SHOW" in title or "Show" in title):
                    add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
             
 
@@ -468,7 +468,7 @@ def Alex_Jones_Show_Archive_Sub_Menu(title=''):
                title = titleCheck + " - " + unicode(item["title"]).encode('utf-8'); 
                plot = unicode(item["summary"]).encode('utf-8');
                thumbnail = unicode(item["posterThumbnailUrl"]).encode('utf-8');
-               video_id = unicode(item["directUrl"]).encode('utf-8');
+               video_id = unicode(item["streamUrl"]).encode('utf-8');
                url = video_id
                if not "Full Show" in title:
                    add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)

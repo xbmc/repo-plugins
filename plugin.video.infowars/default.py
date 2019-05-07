@@ -266,14 +266,14 @@ def add_to_library(video_type, url, title, img, year, imdbnum, movie_num=''):
             try:
                 try: xbmcvfs.mkdirs(os.path.dirname(final_path))
                 except: os.path.mkdir(os.path.dirname(final_path))
-            except Exception, e:
+            except Exception as e:
                 try: IW_addon.log('Failed to create directory %s' % final_path)
                 except: pass
         try:
             file_desc = xbmcvfs.File(final_path, 'w')
             file_desc.write(strm_string)
             file_desc.close()
-        except Exception, e:
+        except Exception as e:
             IW_addon.log('Failed to create .strm file: %s\n%s' % (final_path, e))
     elif video_type == 'movie':
         save_path = IW_addon.get_setting('movie-folder')
@@ -289,14 +289,14 @@ def add_to_library(video_type, url, title, img, year, imdbnum, movie_num=''):
             try:
                 try: xbmcvfs.mkdirs(os.path.dirname(final_path))
                 except: os.path.mkdir(os.path.dirname(final_path))
-            except Exception, e:
+            except Exception as e:
                 try: IW_addon.log('Failed to create directory %s' % final_path)
                 except: pass
         try:
             file_desc = xbmcvfs.File(final_path, 'w')
             file_desc.write(strm_string)
             file_desc.close()
-        except Exception, e:
+        except Exception as e:
             IW_addon.log('Failed to create .strm file: %s\n%s' % (final_path, e))
 
 
@@ -425,9 +425,9 @@ def Full_Show_Sub_Menu(title=''):
                title = titleCheck + " - " + unicode(item["title"]).encode('utf-8'); 
                plot = unicode(item["summary"]).encode('utf-8');
                thumbnail = unicode(item["posterThumbnailUrl"]).encode('utf-8');
-               video_id = unicode(item["directUrl"]).encode('utf-8');
+               video_id = unicode(item["streamUrl"]).encode('utf-8');
                url = video_id
-               if "Full Show" in title:
+               if ("FULL" in title or "Full" in title) and ("SHOW" in title or "Show" in title):
                    add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
             
 
@@ -468,7 +468,7 @@ def Alex_Jones_Show_Archive_Sub_Menu(title=''):
                title = titleCheck + " - " + unicode(item["title"]).encode('utf-8'); 
                plot = unicode(item["summary"]).encode('utf-8');
                thumbnail = unicode(item["posterThumbnailUrl"]).encode('utf-8');
-               video_id = unicode(item["directUrl"]).encode('utf-8');
+               video_id = unicode(item["streamUrl"]).encode('utf-8');
                url = video_id
                if not "Full Show" in title:
                    add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.mazacka"
-version="1.0.0"
+version="1.1.0"
 name="Mazačka - Streets of Prague"
 provider-name="Radek Homola">
 <requires>
@@ -22,7 +22,7 @@ provider-name="Radek Homola">
     <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     <screenshot>resources/screenshots/screenshot-03.jpg</screenshot>    
   </assets>
-  <news>v1.0 (2019-01-13)
-  - First version</news>
+  <news>v1.1.0 (2019-05-04)
+  - Updated for new stream server</news>
 </extension>
 </addon>

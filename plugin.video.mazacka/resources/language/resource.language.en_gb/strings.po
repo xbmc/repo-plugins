@@ -16,10 +16,18 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#30000"
+msgctxt "#30720"
 msgid "Watch the live stream in 720p."
 msgstr ""
 
-msgctxt "#30001"
+msgctxt "#30360"
 msgid "Watch the live stream in 360p."
+msgstr ""
+
+msgctxt "#30002"
+msgid "Mazačka is currently not streaming.\nPlease try again later."
+msgstr ""
+
+msgctxt "#30003"
+msgid "Connection error."
 msgstr ""

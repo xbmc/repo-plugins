@@ -266,14 +266,14 @@ def add_to_library(video_type, url, title, img, year, imdbnum, movie_num=''):
             try:
                 try: xbmcvfs.mkdirs(os.path.dirname(final_path))
                 except: os.path.mkdir(os.path.dirname(final_path))
-            except Exception, e:
+            except Exception as e:
                 try: IW_addon.log('Failed to create directory %s' % final_path)
                 except: pass
         try:
             file_desc = xbmcvfs.File(final_path, 'w')
             file_desc.write(strm_string)
             file_desc.close()
-        except Exception, e:
+        except Exception as e:
             IW_addon.log('Failed to create .strm file: %s\n%s' % (final_path, e))
     elif video_type == 'movie':
         save_path = IW_addon.get_setting('movie-folder')
@@ -289,14 +289,14 @@ def add_to_library(video_type, url, title, img, year, imdbnum, movie_num=''):
             try:
                 try: xbmcvfs.mkdirs(os.path.dirname(final_path))
                 except: os.path.mkdir(os.path.dirname(final_path))
-            except Exception, e:
+            except Exception as e:
                 try: IW_addon.log('Failed to create directory %s' % final_path)
                 except: pass
         try:
             file_desc = xbmcvfs.File(final_path, 'w')
             file_desc.write(strm_string)
             file_desc.close()
-        except Exception, e:
+        except Exception as e:
             IW_addon.log('Failed to create .strm file: %s\n%s' % (final_path, e))
 
 

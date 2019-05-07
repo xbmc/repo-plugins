@@ -59,7 +59,7 @@ def main(argv):
 
     if not (username and password):
         # open addon settings
-        view.add_item(args, {"title": args._addon.getLocalizedString(30045)})
+        view.add_item(args, {"title": args._addon.getLocalizedString(30040)})
         view.endofdirectory(args)
         args._addon.openSettings()
         return False

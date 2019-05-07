@@ -538,7 +538,7 @@ def startplayback(args):
                                       headers={"Content-type": "application/json"})
                         response = urlopen(req)
                         html = response.read()
-                    except (ssl.SSLError, URLError) as e:
+                    except (ssl.SSLError, URLError):
                         # catch timeout exception
                         pass
             except RuntimeError:

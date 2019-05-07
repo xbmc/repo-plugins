@@ -4,18 +4,17 @@ msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2018-12-25 20:47+0100\n"
 "Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
+"Last-Translator: \n"
+"X-Generator: Poedit 2.0.6\n"
 
 # Wakanim Settings
-
 msgctxt "#30001"
 msgid "Username"
 msgstr "Utilisateur"
@@ -26,7 +25,7 @@ msgstr "Mot de passe"
 
 msgctxt "#30003"
 msgid "Configure InputStream Adaptive"
-msgstr "Configurer inputstream.adaptive"
+msgstr "Configurer InputStream Adaptive"
 
 msgctxt "#30004"
 msgid "Synchronize play time progress"
@@ -42,7 +41,7 @@ msgstr "Allemagne, Autriche, Suisse"
 
 msgctxt "#30012"
 msgid "France, Switzerland, Monaco, Benelux Union, Franco-Canadians, Overseas France, Africa"
-msgstr "France, Suisse, Monaco, Union Benelux, Canadiens francophones, France d'outre-mer, Afrique"
+msgstr "France, Suisse, Monaco, Union Bénélux, Canadiens francophones, France d'outre-mer, Afrique"
 
 msgctxt "#30013"
 msgid "Sweden, Norway, Iceland, Finland, Denmark"
@@ -53,7 +52,6 @@ msgid "Russia"
 msgstr "Russie"
 
 # Wakanim Menue
-
 msgctxt "#30020"
 msgid "Catalog"
 msgstr "Catalogue"
@@ -72,7 +70,7 @@ msgstr "Ma collection"
 
 msgctxt "#30024"
 msgid "Watch trailer"
-msgstr "Regarde la bande-annonce"
+msgstr "Regarder la bande-annonce"
 
 msgctxt "#30025"
 msgid "Last aired episodes"
@@ -87,7 +85,6 @@ msgid "My watchlist"
 msgstr "Ma watchlist"
 
 # Wakanim Messages
-
 msgctxt "#30040"
 msgid "Login failed"
 msgstr "Échec de la connexion"
@@ -98,7 +95,7 @@ msgstr "Une erreur s'est produite"
 
 msgctxt "#30042"
 msgid "Reactivation failed of this video"
-msgstr "La réactivation a échoué de cette vidéo"
+msgstr "La réactivation de cette vidéo a échoué"
 
 msgctxt "#30043"
 msgid "You need to be a premium member or own this video"
@@ -106,8 +103,8 @@ msgstr "Vous devez être un membre premium ou posséder cette vidéo"
 
 msgctxt "#30044"
 msgid "Failed to play video"
-msgstr "Impossible de lire de la vidéo"
+msgstr "Impossible de lire la vidéo"
 
 msgctxt "#30045"
 msgid "Do you want to continue watching at %s%%?"
-msgstr "Voulez-vous continuer à regarder à %s%%?"
+msgstr "Voulez-vous continuer à regarder à partir de %s%%?"

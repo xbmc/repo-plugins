@@ -4,7 +4,6 @@ AML metadata/assets model is as much compatible with [Advanced Emulator Launcher
 
 [Advanced Emulator Launcher]: http://github.com/Wintermute0110/plugin.program.advanced.emulator.launcher/
 
-
 ## MAME machine metadata labels ##
 
 | Metadata name | setInfo label | setProperty label | Infolabel                            |
@@ -27,6 +26,7 @@ AML metadata/assets model is as much compatible with [Advanced Emulator Launcher
 | CPanel     | boxback      |               | `$INFO[ListItem.Art(boxback)]`   |
 | PCB        | cartridge    |               | `$INFO[ListItem.Art(cartridge)]` |
 | Flyer      | flyer        |               | `$INFO[ListItem.Art(flyer)]`     |
+| 3D Box     | 3dbox        |               | `$INFO[ListItem.Art(3dbox)]`     |
 | Icon       | icon         |               | `$INFO[ListItem.Icon]`           |
 | Fanart     | fanart       |               | `$INFO[ListItem.Fanart]`         |
 | Marquee    | banner       |               | `$INFO[ListItem.Art(banner)]`    |

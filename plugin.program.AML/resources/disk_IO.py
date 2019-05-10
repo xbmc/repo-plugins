@@ -11,8 +11,8 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
 
 # --- Python standard library ---
 from __future__ import unicode_literals
@@ -95,24 +95,36 @@ from .utils_kodi import *
 #
 def fs_new_machine_dic():
     return {
-        # >> <machine> attributes
-        'romof'          : '',
-        'sampleof'       : '',
-        'sourcefile'     : '',
-        'isMechanical'   : False,
-        # >> Other <machine> tags from MAME XML
-        'display_type'   : [], # (raster|vector|lcd|unknown) #REQUIRED>
-        'display_rotate' : [], # (0|90|180|270) #REQUIRED>
-        'input'          : {},
-        'softwarelists'  : [],
-        'devices'        : [], # List of dictionaries. See comments avobe.
-        # >> Custom AML data (from INI files or generated)
-        'catver'         : '', # External catalog
-        'catlist'        : '', # External catalog
-        'genre'          : '', # External catalog
-        'bestgames'      : '', # External catalog
-        'series'         : '', # External catalog
-        'isDead'         : False,
+        # <machine> attributes
+        'romof'           : '',
+        'sampleof'        : '',
+        'sourcefile'      : '',
+        'isMechanical'    : False,
+        # <!ATTLIST chip type (cpu|audio) #REQUIRED>
+        # <!ATTLIST chip name CDATA #REQUIRED>
+        # Name of the chip when type == 'cpu'
+        # Example <chip type="cpu" tag="maincpu" name="Zilog Z80" />
+        'chip_cpu_name'   : [],
+        # Other <machine> tags from MAME XML
+        'display_type'    : [], # <!ATTLIST display type (raster|vector|lcd|svg|unknown) #REQUIRED>
+        'display_rotate'  : [], # <!ATTLIST display rotate (0|90|180|270) #IMPLIED>
+        'display_width'   : [], # <!ATTLIST display width CDATA #IMPLIED>
+        'display_height'  : [], # <!ATTLIST display height CDATA #IMPLIED>
+        'display_refresh' : [], # <!ATTLIST display refresh CDATA #REQUIRED>
+        'input'           : {},
+        'softwarelists'   : [],
+        'devices'         : [], # List of dictionaries. See comments avobe.
+        # Custom AML data (from INI files or generated)
+        'artwork'         : [], # MASH Artwork.ini
+        'bestgames'       : '', # betsgames.ini
+        'category'        : [], # MASH category.ini
+        'catlist'         : '', # catlist.ini
+        'catver'          : '', # catver.ini
+        'genre'           : '', # genre.ini
+        'series'          : [], # series.ini
+        'veradded'        : '', # catver.ini
+        # AML generated field.
+        'isDead'          : False,
     }
 
 #
@@ -120,19 +132,21 @@ def fs_new_machine_dic():
 #
 def fs_new_machine_render_dic():
     return {
-        # >> <machine> attributes
+        # <machine> attributes
         'cloneof'        : '', # Must be in the render DB to generate the PClone flag
         'isBIOS'         : False,
         'isDevice'       : False,
-        # >> Other <machine> tags from MAME XML
+        # Other <machine> tags from MAME XML
         'description'    : '',
         'year'           : '',
         'manufacturer'   : '',
         'driver_status'  : '',
-        # >> Custom AML data
-        'isMature'       : False,
-        'genre'          : '',      # Taken from Genre.ini, Catver.ini or Catlist.ini
-        'nplayers'       : '',      # Taken from NPlayers.ini
+        # Custom AML data
+        'isMature'       : False, # Taken from mature.ini
+        'nplayers'       : '',    # Taken from NPlayers.ini
+        # Genre used in AML for the skin
+        # Taken from Genre.ini or Catver.ini or Catlist.ini
+        'genre'          : '',
     }
 
 #
@@ -186,10 +200,11 @@ def fs_new_audit_dic():
     }
 
 #
-# Object used in MAME_assets.json, ordered alphabetically.
+# First is the database dictionary key of the asset, second is the subdirectory name.
+# List used in mame_scan_MAME_assets()
 #
 ASSET_MAME_T_LIST  = [
-    ('PCB',        'PCBs'),
+    ('3dbox',      '3dboxes'),
     ('artpreview', 'artpreviews'),
     ('artwork',    'artwork'),
     ('cabinet',    'cabinets'),
@@ -199,13 +214,14 @@ ASSET_MAME_T_LIST  = [
     ('flyer',      'flyers'),
     ('manual',     'manuals'),
     ('marquee',    'marquees'),
+    ('PCB',        'PCBs'),
     ('snap',       'snaps'),
     ('title',      'titles'),
     ('trailer',    'videosnaps'),
 ]
 
 #
-# flags -> ROM, CHD, Samples, SoftwareLists, Devices
+# flags -> ROM, CHD, Samples, SoftwareLists, Pluggable Devices
 #
 # Status flags meaning:
 #   -  Machine doesn't have ROMs | Machine doesn't have Software Lists
@@ -220,7 +236,7 @@ ASSET_MAME_T_LIST  = [
 #
 def fs_new_MAME_asset():
     return {
-        'PCB'        : '',
+        '3dbox'      : '',
         'artpreview' : '',
         'artwork'    : '',
         'cabinet'    : '',
@@ -231,6 +247,7 @@ def fs_new_MAME_asset():
         'flyer'      : '',
         'manual'     : '',
         'marquee'    : '',
+        'PCB'        : '',
         'plot'       : '',
         'snap'       : '',
         'title'      : '',
@@ -279,6 +296,7 @@ def fs_new_SL_DISK_audit_dic():
     }
 
 ASSET_SL_T_LIST = [
+    ('3dbox',    '3dboxes_SL'),
     ('title',    'titles_SL'),
     ('snap',     'snaps_SL'),
     ('boxfront', 'covers_SL'),
@@ -289,6 +307,7 @@ ASSET_SL_T_LIST = [
 
 def fs_new_SL_asset():
     return {
+        '3dbox'    : '',
         'title'    : '',
         'snap'     : '',
         'boxfront' : '',
@@ -300,6 +319,10 @@ def fs_new_SL_asset():
 def fs_new_control_dic():
     return {
         # --- Filed in when extracting MAME XML ---
+        # Operation mode when the database is created. If the OP mode is changed database
+        # must be rebuilt.
+        'op_mode_raw'          : 0,
+        'op_mode'              : '',
         'stats_total_machines' : 0,
 
         # --- Timestamps ---
@@ -312,6 +335,7 @@ def fs_new_control_dic():
         't_MAME_assets_scan'        : 0,
         't_MAME_plots_build'        : 0,
         't_MAME_fanart_build'       : 0,
+        't_MAME_3dbox_build'        : 0,
         't_MAME_machine_hash'       : 0,
         't_MAME_asset_hash'         : 0,
         't_MAME_render_cache_build' : 0,
@@ -322,6 +346,7 @@ def fs_new_control_dic():
         't_SL_assets_scan'          : 0,
         't_SL_plots_build'          : 0,
         't_SL_fanart_build'         : 0,
+        't_SL_3dbox_build'          : 0,
         # Misc
         't_Custom_Filter_build'     : 0,
         't_MAME_audit'              : 0,
@@ -330,21 +355,26 @@ def fs_new_control_dic():
         # --- Filed in when building main MAME database ---
         'ver_AML'       : 0,
         'ver_AML_str'   : 'Undefined',
-        # >> Numerical MAME version. Allows for comparisons like ver_mame >= MAME_VERSION_0190
-        # >> MAME string version, as reported by the executable stdout. Example: '0.194 (mame0194)'
+        # Numerical MAME version. Allows for comparisons like ver_mame >= MAME_VERSION_0190
+        # MAME string version, as reported by the executable stdout. Example: '0.194 (mame0194)'
         'ver_mame'      : 0,
         'ver_mame_str'  : 'Undefined',
+        # INI files
+        'ver_artwork'   : 'MAME database not built',
         'ver_bestgames' : 'MAME database not built',
+        'ver_category'  : 'MAME database not built',
         'ver_catlist'   : 'MAME database not built',
         'ver_catver'    : 'MAME database not built',
-        'ver_command'   : 'MAME database not built',
-        'ver_gameinit'  : 'MAME database not built',
         'ver_genre'     : 'MAME database not built',
-        'ver_history'   : 'MAME database not built',
-        'ver_mameinfo'  : 'MAME database not built',
         'ver_mature'    : 'MAME database not built',
         'ver_nplayers'  : 'MAME database not built',
         'ver_series'    : 'MAME database not built',
+
+        # DAT files
+        'ver_command'   : 'MAME database not built',
+        'ver_gameinit'  : 'MAME database not built',
+        'ver_history'   : 'MAME database not built',
+        'ver_mameinfo'  : 'MAME database not built',
 
         # Basic stats
         'stats_processed_machines' : 0,
@@ -538,9 +568,9 @@ def fs_new_control_dic():
 
         # --- Filed in by the MAME asset scanner ---
         'assets_num_MAME_machines'    : 0,
-        'assets_PCBs_have'            : 0,
-        'assets_PCBs_missing'         : 0,
-        'assets_PCBs_alternate'       : 0,
+        'assets_3dbox_have'           : 0,
+        'assets_3dbox_missing'        : 0,
+        'assets_3dbox_alternate'      : 0,
         'assets_artpreview_have'      : 0,
         'assets_artpreview_missing'   : 0,
         'assets_artpreview_alternate' : 0,
@@ -568,6 +598,9 @@ def fs_new_control_dic():
         'assets_marquees_have'        : 0,
         'assets_marquees_missing'     : 0,
         'assets_marquees_alternate'   : 0,
+        'assets_PCBs_have'            : 0,
+        'assets_PCBs_missing'         : 0,
+        'assets_PCBs_alternate'       : 0,
         'assets_snaps_have'           : 0,
         'assets_snaps_missing'        : 0,
         'assets_snaps_alternate'      : 0,
@@ -580,6 +613,9 @@ def fs_new_control_dic():
 
         # --- Filed in by the SL asset scanner ---
         'assets_SL_num_items'           : 0,
+        'assets_SL_3dbox_have'          : 0,
+        'assets_SL_3dbox_missing'       : 0,
+        'assets_SL_3dbox_alternate'     : 0,
         'assets_SL_titles_have'         : 0,
         'assets_SL_titles_missing'      : 0,
         'assets_SL_titles_alternate'    : 0,
@@ -720,7 +756,12 @@ def fs_create_empty_control_dic(PATHS, AML_version_str):
     log_debug('fs_create_empty_control_dic() Exiting function')
 
 #
-# Favourite object creation
+# Favourite MAME object creation.
+# Simple means the main data and assets are used to created the Favourite.
+# Full means that the main data, the render data and the assets are used to create the Favourite.
+#
+# Both functioncs create a complete Favourite. When simple() is used the machine is taken from
+# the hashed database, which includes both the main and render machine data.
 #
 # Changes introduced in 0.9.6
 # 1) fav_machine['name'] = machine_name
@@ -777,36 +818,46 @@ def fs_get_cataloged_dic_parents(PATHS, catalog_name):
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_CATLIST_PARENT_PATH.getPath())
     elif catalog_name == 'Genre':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_GENRE_PARENT_PATH.getPath())
+    elif catalog_name == 'Category':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_CATEGORY_PARENT_PATH.getPath())
     elif catalog_name == 'NPlayers':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_NPLAYERS_PARENT_PATH.getPath())
     elif catalog_name == 'Bestgames':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_BESTGAMES_PARENT_PATH.getPath())
     elif catalog_name == 'Series':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_SERIES_PARENT_PATH.getPath())
-    elif catalog_name == 'Manufacturer':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_MANUFACTURER_PARENT_PATH.getPath())
-    elif catalog_name == 'Year':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_YEAR_PARENT_PATH.getPath())
-    elif catalog_name == 'Driver':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DRIVER_PARENT_PATH.getPath())
+    elif catalog_name == 'Artwork':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_ARTWORK_PARENT_PATH.getPath())
+    elif catalog_name == 'Version':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_VERADDED_PARENT_PATH.getPath())
     elif catalog_name == 'Controls_Expanded':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_CONTROL_EXPANDED_PARENT_PATH.getPath())
     elif catalog_name == 'Controls_Compact':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_CONTROL_COMPACT_PARENT_PATH.getPath())
-    elif catalog_name == 'Display_Type':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DISPLAY_TYPE_PARENT_PATH.getPath())
-    elif catalog_name == 'Display_Rotate':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DISPLAY_ROTATE_PARENT_PATH.getPath())
     elif catalog_name == 'Devices_Expanded':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DEVICE_EXPANDED_PARENT_PATH.getPath())
     elif catalog_name == 'Devices_Compact':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DEVICE_COMPACT_PARENT_PATH.getPath())
-    elif catalog_name == 'BySL':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_SL_PARENT_PATH.getPath())
+    elif catalog_name == 'Display_Type':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DISPLAY_TYPE_PARENT_PATH.getPath())
+    elif catalog_name == 'Display_VSync':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DISPLAY_VSYNC_PARENT_PATH.getPath())
+    elif catalog_name == 'Display_Resolution':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DISPLAY_RES_PARENT_PATH.getPath())
+    elif catalog_name == 'CPU':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_CPU_PARENT_PATH.getPath())
+    elif catalog_name == 'Driver':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DRIVER_PARENT_PATH.getPath())
+    elif catalog_name == 'Manufacturer':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_MANUFACTURER_PARENT_PATH.getPath())
     elif catalog_name == 'ShortName':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_SHORTNAME_PARENT_PATH.getPath())
     elif catalog_name == 'LongName':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_LONGNAME_PARENT_PATH.getPath())
+    elif catalog_name == 'BySL':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_SL_PARENT_PATH.getPath())
+    elif catalog_name == 'Year':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_YEAR_PARENT_PATH.getPath())
     else:
         log_error('fs_get_cataloged_dic_parents() Unknown catalog_name = "{0}"'.format(catalog_name))
 
@@ -823,36 +874,46 @@ def fs_get_cataloged_dic_all(PATHS, catalog_name):
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_CATLIST_ALL_PATH.getPath())
     elif catalog_name == 'Genre':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_GENRE_ALL_PATH.getPath())
+    elif catalog_name == 'Category':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_CATEGORY_ALL_PATH.getPath())
     elif catalog_name == 'NPlayers':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_NPLAYERS_ALL_PATH.getPath())
     elif catalog_name == 'Bestgames':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_BESTGAMES_ALL_PATH.getPath())
     elif catalog_name == 'Series':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_SERIES_ALL_PATH.getPath())
-    elif catalog_name == 'Manufacturer':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_MANUFACTURER_ALL_PATH.getPath())
-    elif catalog_name == 'Year':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_YEAR_ALL_PATH.getPath())
-    elif catalog_name == 'Driver':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DRIVER_ALL_PATH.getPath())
+    elif catalog_name == 'Artwork':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_ARTWORK_ALL_PATH.getPath())
+    elif catalog_name == 'Version':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_VERADDED_ALL_PATH.getPath())
     elif catalog_name == 'Controls_Expanded':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_CONTROL_EXPANDED_ALL_PATH.getPath())
     elif catalog_name == 'Controls_Compact':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_CONTROL_COMPACT_ALL_PATH.getPath())
-    elif catalog_name == 'Display_Type':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DISPLAY_TYPE_ALL_PATH.getPath())
-    elif catalog_name == 'Display_Rotate':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DISPLAY_ROTATE_ALL_PATH.getPath())
     elif catalog_name == 'Devices_Expanded':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DEVICE_EXPANDED_ALL_PATH.getPath())
     elif catalog_name == 'Devices_Compact':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DEVICE_COMPACT_ALL_PATH.getPath())
-    elif catalog_name == 'BySL':
-        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_SL_ALL_PATH.getPath())
+    elif catalog_name == 'Display_Type':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DISPLAY_TYPE_ALL_PATH.getPath())
+    elif catalog_name == 'Display_VSync':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DISPLAY_VSYNC_ALL_PATH.getPath())
+    elif catalog_name == 'Display_Resolution':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DISPLAY_RES_ALL_PATH.getPath())
+    elif catalog_name == 'CPU':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_CPU_ALL_PATH.getPath())
+    elif catalog_name == 'Driver':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_DRIVER_ALL_PATH.getPath())
+    elif catalog_name == 'Manufacturer':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_MANUFACTURER_ALL_PATH.getPath())
     elif catalog_name == 'ShortName':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_SHORTNAME_ALL_PATH.getPath())
     elif catalog_name == 'LongName':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_LONGNAME_ALL_PATH.getPath())
+    elif catalog_name == 'BySL':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_SL_ALL_PATH.getPath())
+    elif catalog_name == 'Year':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_YEAR_ALL_PATH.getPath())
     else:
         log_error('fs_get_cataloged_dic_all() Unknown catalog_name = "{0}"'.format(catalog_name))
 
@@ -1052,13 +1113,59 @@ def fs_extract_MAME_version(PATHS, mame_prog_FN):
     return version_str
 
 #
-# Arguments:
-# 1) mame_prog_FN    -> (FileName object) path to MAME executable.
-# 2) AML_version_str -> AML addon version string.
+# Counts MAME machines in a modern MAME XML file.
+#
+def fs_count_MAME_machines_modern(XML_path_FN):
+    log_debug('fs_count_MAME_machines_modern() BEGIN ...')
+    log_debug('XML "{0}"'.format(XML_path_FN.getPath()))
+    pDialog = xbmcgui.DialogProgress()
+    pDialog_canceled = False
+    pDialog.create('Advanced MAME Launcher', 'Counting number of MAME machines ...')
+    pDialog.update(0)
+    num_machines = 0
+    with open(XML_path_FN.getPath(), 'rt') as f:
+        for line in f:
+            if line.decode('utf-8').find('<machine name=') > 0: num_machines += 1
+    pDialog.update(100)
+    pDialog.close()
+
+    return num_machines
+
+def fs_count_MAME_machines_archaic(XML_path_FN):
+    log_debug('fs_count_MAME_machines_archaic() BEGIN ...')
+    log_debug('XML "{0}"'.format(XML_path_FN.getPath()))
+    pDialog = xbmcgui.DialogProgress()
+    pDialog_canceled = False
+    pDialog.create('Advanced MAME Launcher', 'Counting number of MAME machines ...')
+    pDialog.update(0)
+    num_machines = 0
+    with open(XML_path_FN.getPath(), 'rt') as f:
+        for line in f:
+            if line.decode('utf-8').find('<game name=') > 0: num_machines += 1
+    pDialog.update(100)
+    pDialog.close()
+
+    return num_machines
+
 #
 # Creates a new control_dic and updates the number of machines.
+# Returns:
+# options_dic['abort']
+# options_dic['msg']            Only valid if options_dic['abort'] is True
+# options_dic['filesize']       In bytes
+# options_dic['total_machines'] Integer
 #
-def fs_extract_MAME_XML(PATHS, mame_prog_FN, AML_version_str):
+def fs_extract_MAME_XML(PATHS, settings, AML_version_str, options_dic):
+    options_dic['abort'] = False
+
+    # --- Check for errors ---
+    if not settings['mame_prog']:
+        options_dic['abort'] = True
+        options_dic['msg'] = 'MAME executable is not set.'
+        return
+
+    # Extract XML from MAME executable.
+    mame_prog_FN = FileName(settings['mame_prog'])
     (mame_dir, mame_exec) = os.path.split(mame_prog_FN.getPath())
     log_info('fs_extract_MAME_XML() mame_prog_FN "{0}"'.format(mame_prog_FN.getPath()))
     log_info('fs_extract_MAME_XML() Saving XML   "{0}"'.format(PATHS.MAME_XML_PATH.getPath()))
@@ -1080,41 +1187,55 @@ def fs_extract_MAME_XML(PATHS, mame_prog_FN, AML_version_str):
     # --- Check if everything OK ---
     statinfo = os.stat(PATHS.MAME_XML_PATH.getPath())
     filesize = statinfo.st_size
+    options_dic['filesize'] = filesize
 
     # --- Count number of machines. Useful for progress dialogs ---
     log_info('fs_extract_MAME_XML() Counting number of machines ...')
-    stats_total_machines = fs_count_MAME_Machines(PATHS)
-    log_info('fs_extract_MAME_XML() Found {0} machines.'.format(stats_total_machines))
-    # kodi_dialog_OK('Found {0} machines in MAME.xml.'.format(stats_total_machines))
+    total_machines = fs_count_MAME_machines_modern(PATHS.MAME_XML_PATH)
+    options_dic['total_machines'] = total_machines
+    log_info('fs_extract_MAME_XML() Found {0} machines.'.format(total_machines))
 
     # -----------------------------------------------------------------------------
     # Reset MAME control dictionary completely
     # -----------------------------------------------------------------------------
     AML_version_int = fs_AML_version_str_to_int(AML_version_str)
-    log_info('fs_create_empty_control_dic() AML version str "{0}"'.format(AML_version_str))
-    log_info('fs_create_empty_control_dic() AML version int {0}'.format(AML_version_int))
+    log_info('fs_extract_MAME_XML() AML version str "{0}"'.format(AML_version_str))
+    log_info('fs_extract_MAME_XML() AML version int {0}'.format(AML_version_int))
     control_dic = fs_new_control_dic()
     change_control_dic(control_dic, 'ver_AML', AML_version_int)
     change_control_dic(control_dic, 'ver_AML_str', AML_version_str)
-    change_control_dic(control_dic, 'stats_total_machines', stats_total_machines)
+    change_control_dic(control_dic, 'stats_total_machines', total_machines)
     change_control_dic(control_dic, 't_XML_extraction', time.time())
     fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic, verbose = True)
 
-    return (filesize, stats_total_machines)
+def fs_process_RETRO_MAME2003PLUS(PATHS, settings, AML_version_str, options_dic):
+    options_dic['abort'] = False
 
-def fs_count_MAME_Machines(PATHS):
-    pDialog = xbmcgui.DialogProgress()
-    pDialog_canceled = False
-    pDialog.create('Advanced MAME Launcher', 'Counting number of MAME machines ...')
-    pDialog.update(0)
-    num_machines = 0
-    with open(PATHS.MAME_XML_PATH.getPath(), 'rt') as f:
-        for line in f:
-            if line.decode('utf-8').find('<machine name=') > 0: num_machines += 1
-    pDialog.update(100)
-    pDialog.close()
+    # --- Check for errors ---
+    if not settings['xml_2003_path']:
+        options_dic['abort'] = True
+        kodi_dialog_OK('MAME 2003 Plus XML path is not set.')
+        return
 
-    return num_machines
+    # --- Count number of machines. Useful for progress dialogs ---
+    XML_path_FN = FileName(settings['xml_2003_path'])
+    log_info('fs_process_RETRO_MAME2003PLUS() Counting number of machines ...')
+    total_machines = fs_count_MAME_machines_archaic(XML_path_FN)
+    options_dic['total_machines'] = total_machines
+    log_info('fs_process_RETRO_MAME2003PLUS() Found {0} machines.'.format(total_machines))
+
+    # -----------------------------------------------------------------------------
+    # Reset MAME control dictionary completely
+    # -----------------------------------------------------------------------------
+    AML_version_int = fs_AML_version_str_to_int(AML_version_str)
+    log_info('fs_process_RETRO_MAME2003PLUS() AML version str "{0}"'.format(AML_version_str))
+    log_info('fs_process_RETRO_MAME2003PLUS() AML version int {0}'.format(AML_version_int))
+    control_dic = fs_new_control_dic()
+    change_control_dic(control_dic, 'ver_AML', AML_version_int)
+    change_control_dic(control_dic, 'ver_AML_str', AML_version_str)
+    change_control_dic(control_dic, 'stats_total_machines', total_machines)
+    change_control_dic(control_dic, 't_XML_extraction', time.time())
+    fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic, verbose = True)
 
 # Valid ROM: ROM has CRC hash
 # Valid CHD: CHD has SHA1 hash
@@ -1352,7 +1473,7 @@ def fs_build_render_cache(PATHS, settings, control_dic, cache_index_dic, machine
         catalog_index_dic = cache_index_dic[catalog_name]
         catalog_all = fs_get_cataloged_dic_all(PATHS, catalog_name)
 
-        pdialog_line1 = 'Building {0} ROM cache ({1} of {2}) ...'.format(
+        pdialog_line1 = 'Building {0} MAME render cache ({1} of {2}) ...'.format(
             catalog_name, catalog_count, num_catalogs)
         pDialog.update(0, pdialog_line1)
         total_items = len(catalog_index_dic)
@@ -1422,7 +1543,7 @@ def fs_build_asset_cache(PATHS, settings, control_dic, cache_index_dic, assets_d
         catalog_index_dic = cache_index_dic[catalog_name]
         catalog_all = fs_get_cataloged_dic_all(PATHS, catalog_name)
 
-        pdialog_line1 = 'Building {0} asset cache ({1} of {2}) ...'.format(
+        pdialog_line1 = 'Building {0} MAME asset cache ({1} of {2}) ...'.format(
             catalog_name, catalog_count, num_catalogs)
         pDialog.update(0, pdialog_line1)
         total_items = len(catalog_index_dic)

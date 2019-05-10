@@ -20,19 +20,19 @@ from __future__ import unicode_literals
 # -------------------------------------------------------------------------------------------------
 # Addon configuration options
 # -------------------------------------------------------------------------------------------------
-# >> Compat, smaller size, non-human readable JSON.
-# >> This settings must be True when releasing.
+# Compat, smaller size, non-human readable JSON.
+# This settings must be True when releasing.
 OPTION_COMPACT_JSON = True
 
-# >> Use less memory when writing big JSON files, but writing is slower.
-# >> This settings must be True when releasing.
+# Use less memory when writing big JSON files, but writing is slower.
+# This settings must be True when releasing.
 OPTION_LOWMEM_WRITE_JSON = True
 
 # -------------------------------------------------------------------------------------------------
 # DEBUG/TEST settings
 # -------------------------------------------------------------------------------------------------
-# >> If True MAME is not launched. Useful to test the Recently Played and Most Played code.
-# >> This settings must be False when releasing.
+# If True MAME is not launched. Useful to test the Recently Played and Most Played code.
+# This settings must be False when releasing.
 DISABLE_MAME_LAUNCHING = False
 
 # -------------------------------------------------------------------------------------------------
@@ -41,7 +41,8 @@ DISABLE_MAME_LAUNCHING = False
 # Unhandled exceptions must not raise Addon_Error() so the addon crashes and the traceback 
 # is printed in the Kodi log file.
 # -------------------------------------------------------------------------------------------------
-# >> Top-level GUI code looks like this
+# Top-level GUI code looks like this:
+#
 # try:
 #     autoconfig_export_category(category, export_FN)
 # except Addon_Error as ex:
@@ -49,7 +50,8 @@ DISABLE_MAME_LAUNCHING = False
 # else:
 #     kodi_notify('Exported Category "{0}" XML config'.format(category['m_name']))
 #
-# >> Low-level code looks like this
+# Low-level code looks like this:
+#
 # def autoconfig_export_category(category, export_FN):
 #     try:
 #         do_something_that_may_fail()
@@ -66,10 +68,49 @@ class Addon_Error(Exception):
         return self.err_str
 
 # -------------------------------------------------------------------------------------------------
+# Advanced MAME Launcher settings
+# -------------------------------------------------------------------------------------------------
+# Operational modes
+# This must match setting op_mode_raw in settings.xml or bad things will happen.
+OP_MODE_EXTERNAL           = 'External MAME'
+OP_MODE_RETRO_MAME2003PLUS = 'Retroarch MAME 2003 Plus'
+OP_MODE_RETRO_MAME2010     = 'Retroarch MAME 2010'
+OP_MODE_RETRO_MAME2014     = 'Retroarch MAME 2014'
+OP_MODE_LIST = [
+    OP_MODE_EXTERNAL,
+    OP_MODE_RETRO_MAME2003PLUS,
+    OP_MODE_RETRO_MAME2010,
+    OP_MODE_RETRO_MAME2014,
+]
+
+# Make sure these strings are equal to the ones in settings.xml or bad things will happen.
+VIEW_MODE_FLAT             = 0 # 'Flat'
+VIEW_MODE_PCLONE           = 1 # 'Parent/Clone'
+ROMSET_MAME_MERGED         = 0 # 'Merged'
+ROMSET_MAME_SPLIT          = 1 # 'Split'
+ROMSET_MAME_NONMERGED      = 2 # 'Non-merged'
+ROMSET_MAME_FULLYNONMERGED = 3 # 'Non-merged'
+ROMSET_SL_MERGED           = 0 # 'Merged'
+ROMSET_SL_SPLIT            = 1 # 'Split'
+
+# -------------------------------------------------------------------------------------------------
 # Advanced MAME Launcher constants
 # -------------------------------------------------------------------------------------------------
-# >> INI and DAT files default names.
+# Database status. Status it determined with timestamps in control_dic
+MAME_XML_EXTRACTED    = 100
+MAME_MAIN_DB_BUILT    = 200
+MAME_AUDIT_DB_BUILT   = 300
+MAME_CATALOG_BUILT    = 400
+MAME_MACHINES_SCANNED = 500
+MAME_ASSETS_SCANNED   = 600
+SL_MAIN_DB_BUILT      = 700
+SL_ITEMS_SCANNED      = 800
+SL_ASSETS_SCANNED     = 900
+
+# INI and DAT files default names.
+ARTWORK_INI   = 'Artwork.ini'
 BESTGAMES_INI = 'bestgames.ini'
+CATEGORY_INI  = 'Category.ini'
 CATLIST_INI   = 'catlist.ini'
 CATVER_INI    = 'catver.ini'
 GENRE_INI     = 'genre.ini'
@@ -80,15 +121,6 @@ COMMAND_DAT   = 'command.dat'
 GAMEINIT_DAT  = 'gameinit.dat'
 HISTORY_DAT   = 'history.dat'
 MAMEINFO_DAT  = 'mameinfo.dat'
-
-# >> Make sure these strings are equal to the ones in settings.xml
-VIEW_MODE_FLAT         = 0 # 'Flat'
-VIEW_MODE_PCLONE       = 1 # 'Parent/Clone'
-ROMSET_MAME_MERGED     = 0 # 'Merged'
-ROMSET_MAME_SPLIT      = 1 # 'Split'
-ROMSET_MAME_NONMERGED  = 2 # 'Non-merged'
-ROMSET_SL_MERGED       = 0 # 'Merged'
-ROMSET_SL_SPLIT        = 1 # 'Split'
 
 # --- Used in the addon URLs so mark the location of machines/ROMs ---
 LOCATION_STANDARD           = 'STANDARD'

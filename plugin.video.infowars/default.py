@@ -17,8 +17,8 @@ import copy
 import json,requests
 import HTMLParser, htmlentitydefs
 #import simplejson as json
-try: 		from sqlite3 										import dbapi2 as sqlite; print "Loading sqlite3 as DB engine"
-except: from pysqlite2 									import dbapi2 as sqlite; print "Loading pysqlite2 as DB engine"
+try: 		from sqlite3 										import dbapi2 as sqlite; print("Loading sqlite3 as DB engine")
+except: from pysqlite2 									import dbapi2 as sqlite; print("Loading pysqlite2 as DB engine")
 try: 			from addon.common.addon 				import Addon
 except:
 	try: 		from t0mm0.common.addon 				import Addon
@@ -68,6 +68,8 @@ PJWIcon = "https://i.imgur.com/A9R4qjv.jpg"
 PJWFanart = "https://i.imgur.com/ZksTDyX.jpg"
 MWIcon = "https://i.imgur.com/5KMuph0.jpg"
 MWFanart = "https://www.infowarsteam.com/wp-content/uploads/2016/10/Millie-Weaver.jpg"
+KBIcon = "https://imgur.com/6eHYGNi.jpg"
+KBFanart = "https://imgur.com/2tv5KdN.jpg"
 IWODIcon = "https://imgur.com/PcR2j1b.png"
 IWODFanart = "https://imgur.com/Un7aMqX.jpg"
 IWODFLSIcon = "https://imgur.com/fgVD9Ps.png"
@@ -209,11 +211,11 @@ def cFL( t,c="green"): return '[COLOR '+c+']'+t+'[/COLOR]' ### For Coloring Text
 def cFL_(t,c="green"): return '[COLOR '+c+']'+t[0:1]+'[/COLOR]'+t[1:] ### For Coloring Text (First Letter-Only) ###
 def notification(header="", message="", sleep=5000 ): xbmc.executebuiltin( "XBMC.Notification(%s,%s,%i)" % ( header, message, sleep ) )
 def WhereAmI(t): ### for Writing Location Data to log file ###
-	if (IW_debugging==True): print 'Where am I:  '+t
+	if (IW_debugging==True): print('Where am I:  '+t)
 def deb(s,t): ### for Writing Debug Data to log file ###
-	if (IW_debugging==True): print s+':  '+t
+	if (IW_debugging==True): print(s+':  '+t)
 def debob(t): ### for Writing Debug Object to log file ###
-	if (IW_debugging==True): print t
+	if (IW_debugging==True): print(t)
 def nolines(t):
 	it=t.splitlines(); t=''
 	for L in it: t=t+L
@@ -223,7 +225,7 @@ def isPath(path): return os.path.exists(path)
 def isFile(filename): return os.path.isfile(filename)
 def askSelection(option_list=[],txtHeader=''):
 	if (option_list==[]): 
-		if (debugging==True): print 'askSelection() >> option_list is empty'
+		if (debugging==True): print('askSelection() >> option_list is empty')
 		return None
 	dialogSelect = xbmcgui.Dialog();
 	index=dialogSelect.select(txtHeader, option_list)
@@ -344,11 +346,11 @@ def Menu_MainMenu(): #The Main Menu
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream-infostream/_definst_/live.m3u8'},{'title':  cFL_('The Alex Jones Show - (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream2-infostream2/_definst_/live.m3u8'},{'title':  cFL_('The David Knight Show - (Loops After Airing)','red')},is_folder=False,img=DKSIcon,fanart=DKSFanart)
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream3-infostream3/_definst_/live.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - (Loops After Airing)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/MikeAdams_1@704916/index_800_av-p.m3u8?sd=10&rebase=on'},{'title':  cFL_('Counter Think with Mike Adams - (Loops After Airing)','orange')},is_folder=False,img=CTIcon,fanart=CTFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarsevent_1@366809/index_800_av-p.m3u8?sd=10&rebase=on'},{'title':  cFL_('Live Shows & Special Events','yellow')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream-infostream/_definst_/live.m3u8'},{'title':  cFL_('Live Shows & Special Events','orange')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
     IW_addon.add_directory({'mode': 'AJShowArchiveSubMenu','title':'On Demand Videos'},{'title':  cFL_('On Demand Videos','cyan')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
     IW_addon.add_directory({'mode': 'PaulJosephWatsonSubMenu','title':'Paul Joseph Watson (Youtube Video)'},{'title':  cFL_('Paul Joseph Watson (Youtube)','blue')},is_folder=True,img=PJWIcon,fanart=PJWFanart)
     IW_addon.add_directory({'mode': 'MillieWeaverSubMenu','title':'Millie Weaver (Youtube Video)'},{'title':  cFL_('Millie Weaver (Youtube)','pink')},is_folder=True,img=MWIcon,fanart=MWFanart)
+    IW_addon.add_directory({'mode': 'KaitlinBennettSubMenu','title':'Kaitlin Bennett - Liberty Hangout (Youtube Video)'},{'title':  cFL_('Kaitlin Bennett - Liberty Hangout (Youtube)','yellow')},is_folder=True,img=KBIcon,fanart=KBFanart)
     
     eod()
 
@@ -376,6 +378,26 @@ def Millie_Weaver_Sub_Menu(title=''):
     #https://www.youtube.com/channel/UCglVbeKF9JGMCt-RTUAW_TQ
     WhereAmI('@ Millie Weaver')
     url = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCglVbeKF9JGMCt-RTUAW_TQ'
+    response = urllib2.urlopen(url)
+    if response and response.getcode() == 200:
+        content = response.read()
+        videos= find_multiple_matches(content,"<entry>(.*?)</entry>")
+        for entry in videos:
+            title = find_single_match(entry,"<titl[^>]+>([^<]+)</title>")
+            plot = find_single_match(entry,"<media\:descriptio[^>]+>([^<]+)</media\:description>")
+            thumbnail = find_single_match(entry,"<media\:thumbnail url=\"(.*?)\"")
+            video_id = find_single_match(entry,"<yt\:videoId>([^<]+)</yt\:videoId>")
+            url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+            add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False )
+    else:
+        util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
+
+    eod()    
+
+def Kaitlin_Bennett_Sub_Menu(title=''):
+    #https://www.youtube.com/channel/UCglVbeKF9JGMCt-RTUAW_TQ
+    WhereAmI('@ Millie Weaver')
+    url = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCQMb7c66tJ7Si8IrWHOgAPg'
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
         content = response.read()
@@ -505,6 +527,7 @@ def check_mode(mode=''):
     elif (mode=='playYoutube'): playYoutube('url')
     elif (mode=='PaulJosephWatsonSubMenu'): Paul_Joseph_Watson_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='MillieWeaverSubMenu'): Millie_Weaver_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='KaitlinBennettSubMenu'): Kaitlin_Bennett_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='AJShowArchiveSubMenu'): Alex_Jones_Show_Archive_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='FullShowSubMenu'): Full_Show_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='Settings'): IW_addon.addon.openSettings() # Another method: _plugin.openSettings() ## Settings for this addon.

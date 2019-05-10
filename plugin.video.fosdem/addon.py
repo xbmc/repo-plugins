@@ -64,7 +64,8 @@ def show_dir(subdir=''):
         root = fetch_xml(subdir)
         for day in root.findall('day'):
             number = day.attrib['index']
-            text = 'Day {}'.format(number)
+            date = day.attrib['date']
+            text = 'Day {} ({})'.format(number, date)
             url = plugin.url_for(show_day, year=subdir, day=number)
             addDirectoryItem(plugin.handle, url,
                              ListItem(text), True)
@@ -80,9 +81,11 @@ def show_day(year, day):
             continue
 
         name = room.attrib['name']
+        genre = room.find('./event/track').text
+        text = '{} - {}'.format(name, genre)
         url = plugin.url_for(show_room, year=year, day=day, room=name)
         addDirectoryItem(plugin.handle, url,
-                         ListItem(name), True)
+                         ListItem(text), True)
     endOfDirectory(plugin.handle)
 
 
@@ -98,9 +101,10 @@ def show_room(day, year, room):
         title = event.find('title').text
         track = event.find('track').text
         subtitle = event.find('subtitle').text
-        persons = [p.text for p in event.find('./persons/person')]
+        person_items = event.find('./persons/person')
+        persons = [p.text for p in person_items] if person_items is not None else []
         abstract = event.find('abstract').text
-        duration = event.find('duration').text
+        duration = event.find('duration').text or '0:0'
         if abstract:
             abstract = abstract.replace('<p>', '').replace('</p>', '')
 

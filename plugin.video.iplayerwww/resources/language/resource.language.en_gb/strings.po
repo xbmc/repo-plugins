@@ -104,7 +104,6 @@ msgctxt "#30190"
 msgid "Show Red Button warning"
 msgstr ""
 
-msgstr ""
 msgctxt "#30200"
 msgid "Streams"
 msgstr ""

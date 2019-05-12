@@ -1,3 +1,7 @@
+v2.5.52
+Preserve all subtitle colours to indicate speaker changes.
+Fixed new JSON format for Highlights.
+
 v2.5.51
 Adapt to new JSON format for all expected cases.
 In particular fixed A-Z based on this change.

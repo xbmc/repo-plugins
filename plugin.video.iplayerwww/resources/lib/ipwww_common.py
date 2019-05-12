@@ -54,21 +54,52 @@ def ParseImageUrl(url):
     return url.replace("{recipe}", "832x468")
 
 
-def getSubColor(line,  styles):
+def getSubColor(line, styles):
     color = None
-    match = re.search(r'style="(.*?)"', line, re.DOTALL)
+    match = re.search(r'^[^>]+style="(.*?)"', line, re.DOTALL)
     if match:
         style = match.group(1)
         color = [value for (style_id,value) in styles if style_id == style]
     else:
         # fallback: sometimes, there is direct formatting in the text
-        match = re.search(r'color="(.*?)"', line, re.DOTALL)
+        match = re.search(r'^[^>]+color="(.*?)"', line, re.DOTALL)
         if match:
             color = [match.group(1)]
         else:
             # fallback 2: sometimes, there is no formatting at all, use default
             color = [value for (style_id,value) in styles if style_id == 's0']
-    return color
+    if color:
+        return color[0]
+    else:
+        return None
+
+
+def make_span_replacer(styles):
+    def replace_span(m_span):
+        repl_span = None
+        color_span = getSubColor(m_span.group(0), styles)
+        if color_span:
+            repl_span = '<font color="%s">%s</font>' % (color_span, m_span.group(1))
+        else:
+            repl_span = m_span.group(1)
+        return repl_span
+    return replace_span
+
+
+def format_subtitle(caption, span_replacer, index):
+    subtitle = None
+    text = caption['text']
+    text = re.sub(r'&#[0-9]+;', '', text)
+    text = re.sub(r'<br\s?/>', '\n', text)
+    text = re.sub(r'<span.*?>(.*?)</span>', span_replacer, text, flags=re.DOTALL)
+    if caption['color']:
+        text = re.sub(r'(^|</font>)([^<]+)(<font|$)', r'\1<font color="%s">\2</font>\3' % 
+            caption['color'], text, flags=re.DOTALL)
+        if not re.search(r'<font.*?>(.*?)</font>', text, re.DOTALL):
+            text = '<font color="%s">%s</font>' %  (caption['color'], text)
+    subtitle = "%d\n%s,%s --> %s,%s\n%s\n\n" % (
+        index, caption['start'], caption['start_mil'], caption['end'], caption['end_mil'], text)
+    return subtitle
 
 
 def download_subtitles(url):
@@ -95,8 +126,6 @@ def download_subtitles(url):
         return
 
     txt = OpenURL(url)
-
-    styles = []
     # print txt
 
     # get styles
@@ -107,6 +136,7 @@ def download_subtitles(url):
         if match:
             for id, color in match:
                 styles.append((id, color))
+    span_replacer = make_span_replacer(styles)
 
     i = 0
     prev = None
@@ -135,21 +165,14 @@ def download_subtitles(url):
                   'start_mil': start_mil[:3],
                   'end': m.group(4),
                   'end_mil': end_mil[:3],
-                  'text': m.group(7)}
-
-            # ma['text'] = ma['text'].replace('&amp;', '&')
-            # ma['text'] = ma['text'].replace('&gt;', '>')
-            # ma['text'] = ma['text'].replace('&lt;', '<')
-            ma['text'] = ma['text'].replace('<br />', '\n')
-            ma['text'] = ma['text'].replace('<br/>', '\n')
-            ma['text'] = re.sub('<.*?>', '', ma['text'])
-            ma['text'] = re.sub('&#[0-9]+;', '', ma['text'])
-            # ma['text'] = ma['text'].replace('<.*?>', '')
+                  'text': m.group(7),
+                  'color': None}
+            ma['color'] = getSubColor(line, styles)
             # print ma
+
             if not prev:
-                # first match - only get the color, wait till next line
+                # first match, wait till next line
                 prev = ma
-                color = getSubColor(line, styles)
                 continue
 
             if prev['text'] == ma['text']:
@@ -158,25 +181,12 @@ def download_subtitles(url):
                 prev['end_mil'] = ma['end_mil']
             else:
                 i += 1
-                if color:
-                    entry = "%d\n%s,%s --> %s,%s\n<font color=\"%s\">%s</font>\n\n" % (
-                        i, prev['start'], prev['start_mil'], prev['end'], prev['end_mil'], color[0], prev['text'])
-                else:
-                    entry = "%d\n%s,%s --> %s,%s\n%s\n\n" % (
-                        i, prev['start'], prev['start_mil'], prev['end'], prev['end_mil'], prev['text'])
+                entry = format_subtitle(prev, span_replacer, i)
                 prev = ma
         elif prev:
             i += 1
-            if color:
-                entry = "%d\n%s,%s --> %s,%s\n<font color=\"%s\">%s</font>\n\n" % (
-                    i, prev['start'], prev['start_mil'], prev['end'], prev['end_mil'], color[0], prev['text'])
-            else:
-                entry = "%d\n%s,%s --> %s,%s\n%s\n\n" % (
-                    i, prev['start'], prev['start_mil'], prev['end'], prev['end_mil'], prev['text'])
+            entry = format_subtitle(prev, span_replacer, i)
             prev = None
-
-        # get color for this line
-        color = getSubColor(line, styles)
 
         if entry:
             fw.write(entry)

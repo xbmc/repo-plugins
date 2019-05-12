@@ -633,58 +633,83 @@ def ListChannelHighlights():
 
 def ParseSingleJSON(meta, item, name, added_playables, added_directories):
     main_url = None
-    if 'href' in item:
-        # Some strings already contain the full URL, need to work around this.
-        url = item['href'].replace('http://www.bbc.co.uk','')
-        url = url.replace('https://www.bbc.co.uk','')
-        if url:
-            main_url = 'https://www.bbc.co.uk' + url
-
-    episodes_url = ""
-    episodes_title = ""
+    episodes_url = ''
+    episodes_title = ''
     num_episodes = None
-    if 'secondaryHref' in item:
-        # Some strings already contain the full URL, need to work around this.
-        url = item['secondaryHref'].replace('http://www.bbc.co.uk','')
-        url = url.replace('https://www.bbc.co.uk','')
-        if url:
-            episodes_url = 'https://www.bbc.co.uk' + url
-            episodes_title = item["title"]
-    elif meta:
-        if 'secondaryHref' in meta:
+    synopsis = ''
+    icon = ''
+    aired = ''
+    title = ''
+
+    if 'episode' in item:
+        subitem = item['episode']
+        if 'id' in subitem:
+            main_url = 'https://www.bbc.co.uk/iplayer/episode/' + subitem.get('id')
+        if subitem.get('subtitle'):
+            if 'default' in subitem.get('subtitle'):
+                if 'title' in subitem:
+                    if 'default' in subitem.get('title'):
+                        title = '%s - %s' % (subitem['title'].get('default'), subitem['subtitle'].get('default'))
+                else:
+                     title = '%s - %s' % (name, subitem['subtitle'].get('default'))
+        elif subitem.get('title'):
+            if 'default' in subitem.get('title'):
+                title = subitem['title'].get('default')
+        else:
+            title = name
+        if subitem.get('synopsis'):
+            if 'small' in subitem.get('synopsis'):
+                synopsis = subitem['synopsis'].get('small')
+        if subitem.get('image'):
+            if 'default' in subitem.get('image'):
+                icon = subitem['image'].get('default').replace("{recipe}","832x468")
+    else:
+        if 'href' in item:
             # Some strings already contain the full URL, need to work around this.
-            url = meta['secondaryHref'].replace('http://www.bbc.co.uk','')
+            url = item['href'].replace('http://www.bbc.co.uk','')
+            url = url.replace('https://www.bbc.co.uk','')
+            if url:
+                main_url = 'https://www.bbc.co.uk' + url
+
+        if 'secondaryHref' in item:
+            # Some strings already contain the full URL, need to work around this.
+            url = item['secondaryHref'].replace('http://www.bbc.co.uk','')
             url = url.replace('https://www.bbc.co.uk','')
             if url:
                 episodes_url = 'https://www.bbc.co.uk' + url
                 episodes_title = item["title"]
-        if 'episodesAvailable' in meta:
-            if meta['episodesAvailable'] > 1:
-                num_episodes = str(meta['episodesAvailable'])
+        elif meta:
+            if 'secondaryHref' in meta:
+                # Some strings already contain the full URL, need to work around this.
+                url = meta['secondaryHref'].replace('http://www.bbc.co.uk','')
+                url = url.replace('https://www.bbc.co.uk','')
+                if url:
+                    episodes_url = 'https://www.bbc.co.uk' + url
+                    episodes_title = item["title"]
+            if 'episodesAvailable' in meta:
+                if meta['episodesAvailable'] > 1:
+                    num_episodes = str(meta['episodesAvailable'])
 
-    if 'subtitle' in item:
-        if 'title' in item:
-            title = "%s - %s" % (item['title'], item['subtitle'])
+        if 'subtitle' in item:
+            if 'title' in item:
+                title = "%s - %s" % (item['title'], item['subtitle'])
+            else:
+                title = name
+        elif 'title' in item:
+            title = item['title']
         else:
             title = name
-    elif 'title' in item:
-        title = item['title']
-    else:
-        title = name
 
-    synopsis = ''
-    if 'synopsis' in item:
-        synopsis = item['synopsis']
+        if 'synopsis' in item:
+            synopsis = item['synopsis']
 
-    icon = ''
-    if 'imageTemplate' in item:
-        icon = item['imageTemplate'].replace("{recipe}","832x468")
+        if 'imageTemplate' in item:
+            icon = item['imageTemplate'].replace("{recipe}","832x468")
 
-    aired = ''
-
-    if not main_url in added_playables:
-        CheckAutoplay(title , main_url, icon, synopsis, aired)
-        added_playables.append(main_url)
+    if main_url:
+        if not main_url in added_playables:
+            CheckAutoplay(title , main_url, icon, synopsis, aired)
+            added_playables.append(main_url)
 
     if num_episodes:
         if not main_url in added_directories:

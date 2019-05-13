@@ -72,6 +72,7 @@ def addDirectoryItem_nodup(parameters, li, title=titolo_global, folder=True):
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         #xbmc.log('LIST: '+str(url),xbmc.LOGNOTICE)
         if not folder:
+            li.setInfo('video', {})
             li.setProperty('isPlayable', 'true')
         return xbmcplugin.addDirectoryItem(handle=handle, url=url, listitem=li, isFolder=folder)
 
@@ -100,7 +101,7 @@ def play_video(video,live):
             page2=urllib2.urlopen(req2)
             html2=page2.read();
             if re.findall(regex2, html2):
-                link_video = re.findall(regex2, html2)[0]
+                link_video = str("http:")+re.findall(regex2, html2)[0]
 
     listitem =xbmcgui.ListItem(titolo_global)
     listitem.setInfo('video', {'Title': titolo_global})
@@ -304,12 +305,13 @@ def programmi_lettera_tg_meteo():
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     addDirectoryItem_nodup({"mode": mode,"link": link}, liStyle, titolo)
 
-    titolo = 'TG Cronache'
-    liStyle = xbmcgui.ListItem(titolo)
-    link = 'flag_tg_cronache'
-    thumb = os.path.join(thumb_path, 'tgcronache.jpg')
-    liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
-    addDirectoryItem_nodup({"mode": mode,"link": link}, liStyle, titolo)
+    # (rimosso temporaneamente per mancanza di contenuti)
+    # titolo = 'TG Cronache'
+    # liStyle = xbmcgui.ListItem(titolo)
+    # link = 'flag_tg_cronache'
+    # thumb = os.path.join(thumb_path, 'tgcronache.jpg')
+    # liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
+    # addDirectoryItem_nodup({"mode": mode,"link": link}, liStyle, titolo)
     
     titolo = 'Omnibus News'
     liStyle = xbmcgui.ListItem(titolo)
@@ -468,7 +470,12 @@ def get_rows_video_tgla7d(video):
         thumb_link=div.find('div',class_='tgla7-img').get('style')
         thumb = thumb_link[22:-1]
         #xbmc.log('THUMB: '+str(thumb),xbmc.LOGNOTICE)
-        plot=div.find('div',class_='tgla7-descrizione').text.encode('utf-8').strip()
+        try:
+            plot=div.find('div',class_='tgla7-descrizione').text.encode('utf-8').strip()
+        except Exception as e:
+            e = sys.exc_info()[0]
+            xbmc.log('EXCEP PLOT_TGLA7d: '+str(e),xbmc.LOGNOTICE)
+            plot=""
         link=div.find('div',class_='tgla7-condividi').get('data-share')
         liStyle = xbmcgui.ListItem(titolo)
         liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })

@@ -3,8 +3,6 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, unicode_literals
-from datetime import datetime
-import dateutil.tz
 
 
 class MetadataCreator:
@@ -156,16 +154,21 @@ class MetadataCreator:
         self._year = value
 
     def get_video_dict(self):
-        try:
-            epoch = datetime.fromtimestamp(0, dateutil.tz.tzlocal())
-        except ValueError:
-            epoch = datetime.fromtimestamp(0, dateutil.tz.tzwinlocal())
+        from datetime import datetime
+        import dateutil.tz
+        from resources.lib.vrtplayer import CHANNELS
 
+        epoch = datetime.fromtimestamp(0, dateutil.tz.UTC)
         video_dict = dict()
 
         if self.brands:
-            video_dict['studio'] = self.brands
-#            video_dict['channelname'] = self.brands[0] if isinstance(self.brands, list) else self.brands
+            try:
+                channel = next(c for c in CHANNELS if c.get('name') == self.brands[0])
+                video_dict['studio'] = channel.get('studio', 'VRT')
+            except StopIteration:
+                video_dict['studio'] = 'VRT'
+        else:
+            video_dict['studio'] = 'VRT'
 
         if self.datetime:
             video_dict['aired'] = self.datetime.strftime('%Y-%m-%d %H:%M:%S')

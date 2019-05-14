@@ -7,23 +7,10 @@ import re
 
 
 HTML_MAPPING = [
-    (re.compile(r'<i\s[^>]+>'), '[I]'),
-    (re.compile('<i>'), '[I]'),
-    (re.compile('</i>'), '[/I]'),
-    (re.compile(r'<b\s[^>]+>'), '[B]'),
-    (re.compile('<b>'), '[B]'),
-    (re.compile('</b>'), '[/B]'),
-    (re.compile(r'<p\s[^>]+>'), ''),
-    (re.compile('<p>'), '',),
-    (re.compile('</p>'), ''),
-    (re.compile(r'<div\s[^>]+>'), ''),
-    (re.compile('<div>'), ''),
-    (re.compile('</div>'), ''),
-    (re.compile(r'<span\s[^>]+>'), ''),
-    (re.compile('<span>'), ''),
-    (re.compile('</span>'), ''),
-    (re.compile('<br>\n'), ' '),  # This appears to be specific formatting for VRT.NU, but unwanted for us
-    (re.compile('<br>'), ' '),  # This appears to be specific formatting for VRT.NU, but unwanted for us
+    (re.compile(r'<(/?)i(|\s[^>]+)>'), '[\\1I]'),
+    (re.compile(r'<(/?)b(|\s[^>]+)>'), '[\\1B]'),
+    (re.compile(r'</?(div|p|span)(|\s[^>]+)>'), ''),
+    (re.compile('<br>\n{0,1}'), ' '),  # This appears to be specific formatting for VRT NU, but unwanted for us
 ]
 
 # pylint: disable=unused-import
@@ -45,10 +32,12 @@ def convert_html_to_kodilabel(text):
 def shorten_link(url):
     if url is None:
         return None
-    # As used in episode search result 'permalink'
-    url = url.replace('https://www.vrt.be/vrtnu/', 'vrtnu.be/')
-    # As used in program a-z listing 'targetUrl'
-    url = url.replace('//www.vrt.be/vrtnu/', 'vrtnu.be/')
+    if url.startswith('https://www.vrt.be/vrtnu/'):
+        # As used in episode search result 'permalink'
+        return url.replace('https://www.vrt.be/vrtnu/', 'vrtnu.be/')
+    if url.startswith('//www.vrt.be/vrtnu/'):
+        # As used in program a-z listing 'targetUrl'
+        return url.replace('//www.vrt.be/vrtnu/', 'vrtnu.be/')
     return url
 
 

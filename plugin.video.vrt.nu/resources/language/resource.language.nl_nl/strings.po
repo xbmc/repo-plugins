@@ -16,190 +16,182 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#32000"
+msgctxt "#30000"
 msgid "Credentials"
 msgstr "Inloggegevens"
 
-msgctxt "#32001"
+msgctxt "#30001"
 msgid "Email address"
 msgstr "E-mailadres"
 
-msgctxt "#32002"
+msgctxt "#30002"
 msgid "Password"
 msgstr "Wachtwoord"
 
-msgctxt "#32003"
+msgctxt "#30003"
 msgid "Delete cookies"
 msgstr "Verwijder cookies"
 
-msgctxt "#32010"
-msgid "Interface"
-msgstr "Interface"
+msgctxt "#30010"
+msgid "Subtitles"
+msgstr "Ondertiteling"
 
-msgctxt "#32011"
+msgctxt "#30011"
 msgid "Show subtitles when available"
 msgstr "Toon ondertiteling indien beschikbaar"
 
-msgctxt "#32012"
-msgid "Show episode permalink in plot"
-msgstr "Toon aflevering permalink in beschrijving"
-
-msgctxt "#32020"
+msgctxt "#30020"
 msgid "DRM"
 msgstr "DRM"
 
-msgctxt "#32021"
+msgctxt "#30021"
 msgid "Use DRM for 720p HD-quality livestreams"
 msgstr "Gebruik DRM voor de livestreams in 720p HD-kwaliteit"
 
-msgctxt "#32051"
+msgctxt "#30030"
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+msgctxt "#30031"
+msgid "Show episode permalink in plot"
+msgstr "Toon aflevering permalink in beschrijving"
+
+msgctxt "#30051"
 msgid "Login failed!"
 msgstr "Inloggen mislukt!"
 
-msgctxt "#32052"
+msgctxt "#30052"
 msgid "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
 msgstr "Ongeldig e-mailadres of wachtwoord. Alleen VRT-logins worden ondersteund, geen Google- of Facebook-logins."
 
-msgctxt "#32053"
+msgctxt "#30053"
 msgid "This program cannot be played. To view this program outside of Belgium, you first have to validate a Belgian mobile phone number on the VRT NU website."
 msgstr "Het programma kan niet afgespeeld worden. Om dit programma buiten België te bekijken moet je eerst een Belgisch gsm-nummer valideren via de VRT NU-website."
 
-msgctxt "#32054"
+msgctxt "#30054"
 msgid "Woops something went wrong, check the log for more details"
 msgstr "Oeps, er ging iets mis, check de log voor meer informatie"
 
-msgctxt "#32055"
+msgctxt "#30055"
 msgid "Please fill in your email address to login."
 msgstr "Gelieve je e-mailadres in te vullen om in te loggen."
 
-msgctxt "#32056"
+msgctxt "#30056"
 msgid "Please fill in your password to login."
 msgstr "Gelieve je wachtwoord in te vullen om in te loggen."
 
-msgctxt "#32061"
+msgctxt "#30061"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
 msgstr "Het gebruik van SOCKS proxies vereist dat de PySocks library (script.module.pysocks) geïnstalleerd is."
 
-msgctxt "#32080"
+msgctxt "#30080"
 msgid "A-Z"
 msgstr "A-Z"
 
-msgctxt "#32081"
+msgctxt "#30081"
 msgid "Alphabetically sorted list of TV programs"
-msgstr "Alle tv-programma's in alfabetische volgorde"
+msgstr "Alle TV-programma's in alfabetische volgorde"
 
-msgctxt "#32082"
+msgctxt "#30082"
 msgid "Categories"
 msgstr "Categorieën"
 
-msgctxt "#32083"
+msgctxt "#30083"
 msgid "TV programs listed by category"
-msgstr "Lijst van tv-programma's per categorie"
+msgstr "Lijst van TV-programma's per categorie"
 
-msgctxt "#32084"
+msgctxt "#30084"
+msgid "Channels"
+msgstr "Kanalen"
+
+msgctxt "#30085"
+msgid "TV programs listed by channel"
+msgstr "Lijst van TV-programma's per kanaal"
+
+msgctxt "#30086"
 msgid "Live TV"
 msgstr "Live kijken"
 
-msgctxt "#32085"
+msgctxt "#30087"
 msgid "Watch TV channels live (using Internet streaming)"
-msgstr "Bekijk tv-kanalen live (via Internet)"
+msgstr "Bekijk TV-kanalen live (via Internet)"
 
-msgctxt "#32086"
+msgctxt "#30088"
 msgid "Most recent"
 msgstr "Meest recent"
 
-msgctxt "#32087"
+msgctxt "#30089"
 msgid "Recently published episodes of TV programs"
-msgstr "Recent gepubliceerde afleveringen van tv-programma's"
+msgstr "Recent gepubliceerde afleveringen van TV-programma's"
 
-msgctxt "#32088"
+msgctxt "#30090"
 msgid "TV guide"
 msgstr "TV-gids"
 
-msgctxt "#32089"
+msgctxt "#30091"
 msgid "Browse channel TV guides"
 msgstr "Doorzoek de TV-gids per kanaal"
 
-msgctxt "#32094"
+msgctxt "#30094"
 msgid "Season"
 msgstr "Seizoen"
 
-msgctxt "#32095"
+msgctxt "#30095"
 msgid "Episode"
 msgstr "Aflevering"
 
-msgctxt "#32101"
-msgid "Eén live"
-msgstr "Eén live"
+msgctxt "#30101"
+msgid "%s live"
+msgstr "%s live"
 
-msgctxt "#32102"
-msgid "Watch Eén live TV stream"
-msgstr "Bekijk Eén live tv stream"
+msgctxt "#30102"
+msgid "Watch %s live TV stream (via Internet)"
+msgstr "Bekijk %s live tv stream (via Internet)"
 
-msgctxt "#32111"
-msgid "Canvas live"
-msgstr "Canvas live"
-
-msgctxt "#32112"
-msgid "Watch Canvas live TV stream"
-msgstr "Bekijk Canvas live tv stream"
-
-msgctxt "#32121"
-msgid "Ketnet live"
-msgstr "Ketnet live"
-
-msgctxt "#32122"
-msgid "Watch Ketnet live TV stream"
-msgstr "Bekijk Ketnet live tv stream"
-
-msgctxt "#32131"
-msgid "Sporza live"
-msgstr "Sporza live"
-
-msgctxt "#32132"
-msgid "Watch Sporza live TV stream"
-msgstr "Bekijk Sporza live tv stream"
-
-msgctxt "#32201"
+msgctxt "#30201"
 msgid "[B][COLOR red]Geo-blocked[/COLOR][/B]\n"
-msgstr "[B][COLOR red]Geo-blocked[/COLOR][/B]\n"
+msgstr "[B][COLOR red]Geo-geblokkeerd[/COLOR][/B]\n"
 
-msgctxt "#32202"
+msgctxt "#30202"
 msgid "[B][COLOR blue]Available until %s[/COLOR][/B]\n"
 msgstr "[B][COLOR blue]Beschikbaar tot %s[/COLOR][/B]\n"
 
-msgctxt "#32203"
+msgctxt "#30203"
 msgid "[B][COLOR green](%s days left)[/COLOR][/B]\n"
 msgstr "[B][COLOR green](nog %s dagen)[/COLOR][/B]\n"
 
-msgctxt "#32204"
+msgctxt "#30204"
 msgid "[B][COLOR green](%s hours left)[/COLOR][/B]\n"
 msgstr "[B][COLOR green](nog %s uur)[/COLOR][/B]\n"
 
-msgctxt "#32301"
+msgctxt "#30300"
+msgid "[B][COLOR yellow]More...[/COLOR][/B]"
+msgstr "[B][COLOR yellow]Meer...[/COLOR][/B]"
+
+msgctxt "#30301"
 msgid "[B]TV guide for channel %s[/B]"
 msgstr "[B]TV-gids for kanaal %s[/B]"
 
-msgctxt "#32302"
+msgctxt "#30302"
 msgid "[B][I]Now on live TV[/I][/B]"
 msgstr "[B][I]Speelt nu op TV[/I][/B]"
 
-msgctxt "#32330"
+msgctxt "#30330"
 msgid "2 days ago"
 msgstr "Eergisteren"
 
-msgctxt "#32331"
+msgctxt "#30331"
 msgid "Yesterday"
 msgstr "Gisteren"
 
-msgctxt "#32332"
+msgctxt "#30332"
 msgid "Today"
 msgstr "Vandaag"
 
-msgctxt "#32333"
+msgctxt "#30333"
 msgid "Tomorrow"
 msgstr "Morgen"
 
-msgctxt "#32334"
+msgctxt "#30334"
 msgid "In 2 days"
 msgstr "Overmorgen"

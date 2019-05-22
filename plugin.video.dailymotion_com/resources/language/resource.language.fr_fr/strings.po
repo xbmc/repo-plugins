@@ -117,7 +117,7 @@ msgctxt "#30025"
 msgid "What to Watch"
 msgstr "Recommandées pour vous"
 
-#empty strings from id 30026 to 30027
+# empty strings from id 30026 to 30027
 
 msgctxt "#30028"
 msgid "Add user to favourites"
@@ -187,7 +187,7 @@ msgctxt "#30044"
 msgid "Download video"
 msgstr "Télécharger la video"
 
-#empty strings from id 30045 to 30100
+# empty strings from id 30045 to 30100
 
 msgctxt "#30101"
 msgid "Country"

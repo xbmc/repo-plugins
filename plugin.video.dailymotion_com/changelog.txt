@@ -1,3 +1,7 @@
+2.3.9 [20190523]
+ - Make code Python 3 compatible
+ - New artwork by jokstergfx
+
 2.3.8 [20190306]
  - Fix for video playback
  

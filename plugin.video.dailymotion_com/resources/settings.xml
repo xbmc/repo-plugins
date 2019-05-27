@@ -9,9 +9,14 @@
 	<category label="30112">
 		<setting id="downloadDir" type="folder" label="30108" default=""/>
 	</category>
+	<category label="30102">
+		<setting id="forceViewMode" type="bool" label="30102" default="false"/>
+		<setting label="30111" type="lsep"/>
+		<setting id="MenuMode" type="number" label="30103" default="500" visible="eq(-2,true)" enable="!eq(-2,)"/>
+		<setting label="30041" type="lsep"/>
+		<setting id="VideoMode" type="number" label="30103" default="54" visible="eq(-4,true)" enable="!eq(-4,)"/>
+	</category>
 	<category label="30113">
-		<setting id="forceViewModeNew" type="bool" label="30102" default="true"/>
-		<setting id="viewModeNew" type="number" label="30103" default="54"/>
 		<setting label="30114" type="lsep"/>
         <setting id="family_filter" type="bool" label="30104" default="true"/>
 	</category>

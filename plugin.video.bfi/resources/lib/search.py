@@ -38,7 +38,7 @@ def query_decode(query):
 
 def html_to_text(text):
     # type (str) -> str
-    soup = BeautifulSoup(text, "html.parser")
+    soup = BeautifulSoup(text, "html.parser", from_encoding="utf-8")
     return '\n'.join(soup.stripped_strings)
 
 
@@ -97,7 +97,7 @@ def retrieve():
 
 
 def remove(query):
-    # type: (str) -> None
+    # type: (str) -> bool
     """Removes a query from the saved search list"""
     if not query or not SEARCH_SAVED:
         return False
@@ -110,7 +110,7 @@ def remove(query):
 
 
 def append(query):
-    # type: (str) -> None
+    # type: (str) -> bool
     """
     Adds a query to the saved search list
     unless the query is equal to False or

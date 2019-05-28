@@ -16,8 +16,6 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#This is a comment
-
 msgctxt "#32000"
 msgid "General"
 msgstr ""
@@ -75,7 +73,7 @@ msgid "Results per-page"
 msgstr ""
 
 msgctxt "#32014"
-msgid "Default Opperator"
+msgid "Default Operator"
 msgstr ""
 
 msgctxt "#32015"
@@ -108,4 +106,8 @@ msgstr ""
 
 msgctxt "#32022"
 msgid "Clear Recent"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Are you sure?"
 msgstr ""

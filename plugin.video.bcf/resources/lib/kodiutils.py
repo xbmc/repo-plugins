@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 
 import json as json
 import logging
@@ -31,7 +30,7 @@ def icon(image):
 
 
 def user_input():
-    # type () -> Union[str, bool}
+    # type () -> Union[str, bool]
     keyboard = xbmc.Keyboard("",
                              "{} {}".format(get_string(32007),  # Search
                                             ADDON.getAddonInfo("name")))
@@ -67,7 +66,7 @@ def get_setting(setting):
 
 
 def set_setting(setting, value):
-    # type (Any) -> None
+    # type (Any, Any) -> None
     ADDON.setSetting(setting, str(value))
 
 

@@ -38,7 +38,7 @@ BCF_THEMES = [
     ku.get_string(32045),  # Town and Country
     ku.get_string(32046),  # Leisure
     ku.get_string(32047),  # Landscapes and Scenery
-    ]
+]
 
 BCF_SERIES = [
     "Any",
@@ -47,9 +47,8 @@ BCF_SERIES = [
     ku.get_string(32052),  # Senior Biology
     ku.get_string(32053),  # Human Geography
     ku.get_string(32054),  # Technical Geography
-    # TODO: "British News" links don't work - contact BCF
     ku.get_string(32055),  # British News 
-    ]
+]
 
 # no 1949?
 BCF_YEARS = [
@@ -62,7 +61,8 @@ BCF_YEARS = [
     1946,
     1947,
     1948,
-    1950]
+    1950
+]
 
 
 def parse_results(data):
@@ -71,14 +71,17 @@ def parse_results(data):
     directory = data.find("div", {"id": "directory-list"})
     if directory is None:
         return
-    list = directory.find("ul")
-    if list is None:
+
+    container = directory.find("ul")
+    if container is None:
         return
-    for child in list.find_all("li"):
+
+    for child in container.find_all("li"):
         image = child.find("img")
         action = child.find("a")
         if image is None or action is None:
             continue
+
         info = {
             "genre": child.find("div", "col-4").text.split(","),
             "year": bcfs.text_to_int(child.find("div", "col-3").text),
@@ -160,16 +163,21 @@ def play_film():
     data = bcfs.get_html(uri)
     if data is None:
         return False
-    link = data.select_one("a[href*={}]".format(bcfs.PLAYER_URI))
+    try:
+        link = data.select_one("a[href*={}]".format(bcfs.PLAYER_URI))["href"]
+    except TypeError:
+        # news items are tricksy...
+        src = data.select_one("iframe[src*={}]".format(bcfs.PLAYER_URI))["src"]
+        link = bcfs.get_mp4_url(bcfs.get_html(src).encode("utf-8"))
     if link is None:
         return False
-    list_item = ListItem(path=link["href"])
+    list_item = ListItem(path=link)
     dl_data = data.find("dl", "details")
     plot = data.find("p", "standfirst").text
-    year = dl_data.find("dt", string="Release year").find_next_sibling("dd").text.strip()
+    released = dl_data.find("dt", string="Release year").find_next_sibling("dd").text.strip()
     list_item.setInfo("video", {
         "plot": plot,
-        "year": year
+        "year": released
     })
     xp.setResolvedUrl(plugin.handle, True, list_item)
 
@@ -183,7 +191,6 @@ def clear(token):
 @plugin.route("/search")
 def search():
     query = get_arg("q")
-    offset = int(get_arg("offset", 0))
     # remove saved search item
     if bool(get_arg("delete", False)):
         bcfs.remove(query)

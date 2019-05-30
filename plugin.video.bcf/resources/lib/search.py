@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-
 """BCF searcher and helpers"""
 __author__ = "fraser"
 
 import json
+import re
 
 import requests
 from bs4 import BeautifulSoup
@@ -13,7 +13,7 @@ from .cache import Cache, datetime_to_httpdate
 
 BCF_URI = "http://film.britishcouncil.org/"
 BCF_SEARCH_URI = "http://film.britishcouncil.org/british-council-film-collection"
-PLAYER_URI = "https://player.vimeo.com"
+PLAYER_URI = "player.vimeo.com"  # mixed protocol
 
 SEARCH_SAVED = ku.get_setting_as_bool("search_saved")
 SEARCH_TIMEOUT = 60
@@ -119,6 +119,15 @@ def cache_clear():
         c.clear()
 
 
+def get_mp4_url(text):
+    # type: (str) -> Union[str, None]
+    """Attempts to get the first mp4 url from the given string"""
+    match = re.search(r"https://[^\"]*\.mp4\??[^\"]*", text)
+    if match:
+        return match.group()
+    return None
+
+
 def get_html(url):
     # type: (str) -> BeautifulSoup
     """Gets cached or live HTML from the url"""
@@ -136,7 +145,7 @@ def get_html(url):
         if 200 == r.status_code:
             soup = BeautifulSoup(r.content, "html.parser")
             # pre-cache clean-up
-            for x in soup(["script", "style"]):
+            for x in soup(["style"]):
                 x.extract()
             c.set(url, str(soup), r.headers)
             return soup

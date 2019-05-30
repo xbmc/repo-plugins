@@ -4,6 +4,10 @@ This add-on enables playing of videos and movies from the [British Council Film]
 
 * Uses [a nice little Cache](https://github.com/FraserChapman/cache) to remain fast and responsive
 
+# The Collection
+
+The British Council Film Collection is an archive of 120 short documentary films made by the British Council during the 1940s designed to show the world how Britain lived, worked and played. Preserved by the BFI National Film Archive and digitised by means of a generous donation by Google, the films are now yours to view, to download and to play with for the first time.
+
 # Disclaimer 
 
 This add-on is not created, maintained or in any way affiliated with the British Council.

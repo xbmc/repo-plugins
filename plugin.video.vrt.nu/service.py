@@ -8,8 +8,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import xbmc
 import xbmcaddon
-from resources.lib.kodiwrappers import kodiwrapper
-from resources.lib.vrtplayer import tokenresolver
+from resources.lib import kodiwrapper, tokenresolver
 
 
 class VrtMonitor(xbmc.Monitor):
@@ -22,10 +21,15 @@ class VrtMonitor(xbmc.Monitor):
     def onSettingsChanged(self):
         ''' Handler for changes to settings '''
         addon = xbmcaddon.Addon(id='plugin.video.vrt.nu')
-        kodi_wrapper = kodiwrapper.KodiWrapper(None, None, addon)
-        kodi_wrapper.log_notice('VRT NU Addon: settings changed')
-        token_resolver = tokenresolver.TokenResolver(kodi_wrapper)
-        token_resolver.reset_cookies()
+        _kodi = kodiwrapper.KodiWrapper(None, None, addon)
+        _kodi.log_notice('VRT NU Addon: settings changed')
+        _kodi.container_refresh()
+
+        _kodi.invalidate_caches('offline-*.json')
+        _kodi.invalidate_caches('recent-*.json')
+
+        _tokenresolver = tokenresolver.TokenResolver(_kodi)
+        _tokenresolver.reset_cookies()
 
 
 if __name__ == '__main__':

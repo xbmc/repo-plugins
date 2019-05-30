@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: XBMC Addons\n"
 "POT-Creation-Date: 2017-02-25 15:08+0001\n"
 "PO-Revision-Date: 2019-03-12 21:17+0001\n"
-"Last-Translator: Martijn"
+"Last-Translator: Martijn Moreel\n"
 "Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,183 +15,467 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#30000"
-msgid "Credentials"
-msgstr "Credentials"
-
-msgctxt "#30001"
-msgid "Email address"
-msgstr "Email address"
-
-msgctxt "#30002"
-msgid "Password"
-msgstr "Password"
-
-msgctxt "#30003"
-msgid "Delete cookies"
-msgstr "Delete cookies"
-
+### MAIN MENU
 msgctxt "#30010"
-msgid "Subtitles"
-msgstr "Subtitles"
+msgid "My programs"
+msgstr ""
 
 msgctxt "#30011"
-msgid "Show subtitles when available"
-msgstr "Show subtitles when available"
+msgid "Browse only the programs you follow"
+msgstr ""
+
+msgctxt "#30012"
+msgid "A-Z"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Alphabetically sorted list of programs"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30015"
+msgid "TV programs listed by category"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30017"
+msgid "TV programs listed by channel"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Watch TV channels live via Internet"
+msgstr ""
 
 msgctxt "#30020"
-msgid "DRM"
-msgstr "DRM"
+msgid "Most recent"
+msgstr ""
 
 msgctxt "#30021"
-msgid "Use DRM for 720p HD-quality livestreams"
-msgstr "Use DRM for 720p HD-quality livestreams"
+msgid "Recently published video content"
+msgstr ""
 
-msgctxt "#30030"
-msgid "Advanced"
-msgstr "Advanced"
+msgctxt "#30022"
+msgid "Soon offline"
+msgstr ""
 
-msgctxt "#30031"
-msgid "Show episode permalink in plot"
-msgstr "Show episode permalink in plot"
+msgctxt "#30023"
+msgid "Video content that will soon be offline"
+msgstr ""
 
-msgctxt "#30051"
-msgid "Login failed!"
-msgstr "Login failed!"
-
-msgctxt "#30052"
-msgid "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
-msgstr "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
-
-msgctxt "#30053"
-msgid "This program cannot be played. To view this program outside of Belgium, you first have to validate a Belgian mobile phone number on the VRT NU website."
-msgstr "This program cannot be played. To view this program outside of Belgium, you first have to validate a Belgian mobile phone number on the VRT NU website."
-
-msgctxt "#30054"
-msgid "Woops something went wrong, check the log for more details"
-msgstr "Woops something went wrong, check the log for more details"
-
-msgctxt "#30055"
-msgid "Please fill in your email address to login."
-msgstr "Please fill in your email address to login."
-
-msgctxt "#30056"
-msgid "Please fill in your password to login."
-msgstr "Please fill in your password to login."
-
-msgctxt "#30061"
-msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
-msgstr "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
-
-msgctxt "#30080"
-msgid "A-Z"
-msgstr "A-Z"
-
-msgctxt "#30081"
-msgid "Alphabetically sorted list of TV programs"
-msgstr "Alphabetically sorted list of TV programs"
-
-msgctxt "#30082"
-msgid "Categories"
-msgstr "Categories"
-
-msgctxt "#30083"
-msgid "TV programs listed by category"
-msgstr "TV programs listed by category"
-
-msgctxt "#30084"
-msgid "Channels"
-msgstr "Channels"
-
-msgctxt "#30085"
-msgid "TV programs listed by channel"
-msgstr "TV programs listed by channel"
-
-msgctxt "#30086"
-msgid "Live TV"
-msgstr "Live TV"
-
-msgctxt "#30087"
-msgid "Watch TV channels live (using Internet streaming)"
-msgstr "Watch TV channels live (using Internet streaming)"
-
-msgctxt "#30088"
-msgid "Most recent"
-msgstr "Most recent"
-
-msgctxt "#30089"
-msgid "Recently published episodes of TV programs"
-msgstr "Recently published episodes of TV programs"
-
-msgctxt "#30090"
+msgctxt "#30024"
 msgid "TV guide"
-msgstr "TV guide"
+msgstr ""
 
-msgctxt "#30091"
+msgctxt "#30025"
 msgid "Browse channel TV guides"
-msgstr "Browse channel TV guides"
+msgstr ""
 
+msgctxt "#30026"
+msgid "Search VRT NU"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Search the complete VRT NU library"
+msgstr ""
+
+
+### FAVORITES
+msgctxt "#30040"
+msgid "My A-Z"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Alphabetically sorted list of My TV programs"
+msgstr ""
+
+msgctxt "#30042"
+msgid "My most recent"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Recently published episodes of My TV programs"
+msgstr ""
+
+msgctxt "#30044"
+msgid "My soon offline"
+msgstr ""
+
+msgctxt "#30045"
+msgid "My video content that will soon be offline"
+msgstr ""
+
+
+### APPLICATION
 msgctxt "#30094"
 msgid "Season"
-msgstr "Season"
+msgstr ""
 
 msgctxt "#30095"
 msgid "Episode"
-msgstr "Episode"
+msgstr ""
+
+msgctxt "#30096"
+msgid "* All seasons"
+msgstr ""
+
+msgctxt "#30097"
+msgid "Enter search string"
+msgstr ""
+
+msgctxt "#30098"
+msgid "Nothing found"
+msgstr ""
+
+msgctxt "#30099"
+msgid "Nothing was found when searching for: {keywords}"
+msgstr ""
 
 msgctxt "#30101"
-msgid "%s live"
-msgstr "%s live"
+msgid "{label} live"
+msgstr ""
 
 msgctxt "#30102"
-msgid "Watch %s live TV stream (via Internet)"
-msgstr "Watch %s live TV stream (via Internet)"
+msgid "Watch [B]{label}[/B] live via Internet"
+msgstr ""
 
 msgctxt "#30201"
 msgid "[B][COLOR red]Geo-blocked[/COLOR][/B]\n"
-msgstr "[B][COLOR red]Geo-blocked[/COLOR][/B]\n"
+msgstr ""
 
 msgctxt "#30202"
-msgid "[B][COLOR blue]Available until %s[/COLOR][/B]\n"
-msgstr "[B][COLOR blue]Available until %s[/COLOR][/B]\n"
+msgid "[B][COLOR blue]Available until {date}[/COLOR][/B]\n"
+msgstr ""
 
 msgctxt "#30203"
-msgid "[B][COLOR green](%s days left)[/COLOR][/B]\n"
-msgstr "[B][COLOR green](%s days left)[/COLOR][/B]\n"
+msgid "[B][COLOR green]({days} days left)[/COLOR][/B]\n"
+msgstr ""
 
 msgctxt "#30204"
-msgid "[B][COLOR green](%s hours left)[/COLOR][/B]\n"
-msgstr "[B][COLOR green](%s hours left)[/COLOR][/B]\n"
+msgid "[B][COLOR green]({hours} hours left)[/COLOR][/B]\n"
+msgstr ""
 
 msgctxt "#30300"
 msgid "[B][COLOR yellow]More...[/COLOR][/B]"
-msgstr "[B][COLOR yellow]More...[/COLOR][/B]"
+msgstr ""
 
 msgctxt "#30301"
-msgid "[B]TV guide for channel %s[/B]"
-msgstr "[B]TV guide for channel %s[/B]"
+msgid "[B]TV guide for channel {label}[/B]"
+msgstr ""
 
 msgctxt "#30302"
 msgid "[B][I]Now on live TV[/I][/B]"
-msgstr "[B][I]Now on live TV[/I][/B]"
+msgstr ""
 
 msgctxt "#30330"
 msgid "2 days ago"
-msgstr "2 days ago"
+msgstr ""
 
 msgctxt "#30331"
 msgid "Yesterday"
-msgstr "Yesterday"
+msgstr ""
 
 msgctxt "#30332"
 msgid "Today"
-msgstr "Today"
+msgstr ""
 
 msgctxt "#30333"
 msgid "Tomorrow"
-msgstr "Tomorrow"
+msgstr ""
 
 msgctxt "#30334"
 msgid "In 2 days"
-msgstr "In 2 days"
+msgstr ""
 
+msgctxt "#30411"
+msgid "Follow"
+msgstr ""
+
+msgctxt "#30412"
+msgid "Unfollow"
+msgstr ""
+
+msgctxt "#30415"
+msgid "No followed programs found"
+msgstr ""
+
+msgctxt "#30416"
+msgid "We could not find any programs that were followed.\n\nEither right-click on a program or an episode to follow a program, or follow a program on the VRT NU website."
+msgstr ""
+
+msgctxt "#30421"
+msgid "Now:"
+msgstr ""
+
+msgctxt "#30422"
+msgid "Next:"
+msgstr ""
+
+msgctxt "#30423"
+msgid "[B]No transmission[/B]"
+msgstr ""
+
+
+### SETTINGS
+msgctxt "#30800"
+msgid "Credentials"
+msgstr ""
+
+msgctxt "#30801"
+msgid "VRT NU login"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Email address"
+msgstr ""
+
+msgctxt "#30804"
+msgid "Provide your VRT NU email address. In case this is a Google or Facebook account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
+msgstr ""
+
+msgctxt "#30805"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30806"
+msgid "Provide your VRT NU account password."
+msgstr ""
+
+msgctxt "#30820"
+msgid "Interface"
+msgstr ""
+
+msgctxt "#30821"
+msgid "Features"
+msgstr ""
+
+msgctxt "#30823"
+msgid "Enable My programs"
+msgstr ""
+
+msgctxt "#30824"
+msgid "When enabled, the user can follow their favourite programs and list these separately. In this case the VRT NU add-on will download and update a list of your followed programs on the VRT NU website."
+msgstr ""
+
+msgctxt "#30825"
+msgid "Show fanart"
+msgstr ""
+
+msgctxt "#30827"
+msgid "Show episode permalink in plot"
+msgstr ""
+
+msgctxt "#30828"
+msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
+msgstr ""
+
+msgctxt "#30829"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30831"
+msgid "Enable menu caching"
+msgstr ""
+
+msgctxt "#30832"
+msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected."
+msgstr ""
+
+msgctxt "#30833"
+msgid "Enable local HTTP caching"
+msgstr ""
+
+msgctxt "#30840"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30841"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#30843"
+msgid "Show subtitles when available"
+msgstr ""
+
+msgctxt "#30844"
+msgid "This enables subtitles by default for all content that includes substitles."
+msgstr ""
+
+msgctxt "#30845"
+msgid "Streaming"
+msgstr ""
+
+msgctxt "#30847"
+msgid "Use DRM for 720p HD-quality live streams"
+msgstr ""
+
+msgctxt "#30848"
+msgid "Most live streams are available in 720p HD-quality, but may require DRM to be enabled."
+msgstr ""
+
+msgctxt "#30849"
+msgid "Maximum bandwidth (kbps)"
+msgstr ""
+
+msgctxt "#30850"
+msgid "In case you have limited bandwidth available, you may want to specify a maximum bandwidth so that a lower bitrate stream can be selected for playback."
+msgstr ""
+
+msgctxt "#30860"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30861"
+msgid "Select channels to use for 'Most recent' and 'Soon offline' listings"
+msgstr ""
+
+msgctxt "#30863"
+msgid "Eén"
+msgstr ""
+
+msgctxt "#30864"
+msgid "Canvas"
+msgstr ""
+
+msgctxt "#30865"
+msgid "Ketnet"
+msgstr ""
+
+msgctxt "#30866"
+msgid "Ketnet Junior"
+msgstr ""
+
+msgctxt "#30867"
+msgid "Sporza"
+msgstr ""
+
+msgctxt "#30868"
+msgid "Radio 1"
+msgstr ""
+
+msgctxt "#30869"
+msgid "Radio 2"
+msgstr ""
+
+msgctxt "#30870"
+msgid "Klara"
+msgstr ""
+
+msgctxt "#30871"
+msgid "Studio Brussel"
+msgstr ""
+
+msgctxt "#30872"
+msgid "MNM"
+msgstr ""
+
+msgctxt "#30873"
+msgid "VRT NXT"
+msgstr ""
+
+msgctxt "#30874"
+msgid "VRT NWS"
+msgstr ""
+
+msgctxt "#30900"
+msgid "Troubleshooting"
+msgstr ""
+
+msgctxt "#30901"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30903"
+msgid "Clear VRT tokens"
+msgstr ""
+
+msgctxt "#30905"
+msgid "Refresh favorites"
+msgstr ""
+
+msgctxt "#30907"
+msgid "Invalidate local HTTP caches"
+msgstr ""
+
+msgctxt "#30909"
+msgid "Streaming"
+msgstr ""
+
+msgctxt "#30911"
+msgid "Use InputStream Adaptive"
+msgstr ""
+
+msgctxt "#30913"
+msgid "InputStream Adaptive settings..."
+msgstr ""
+
+msgctxt "#30915"
+msgid "Install Widevine... [COLOR gray][I](needed for DRM content)[/I][/COLOR]"
+msgstr ""
+
+msgctxt "#30917"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30919"
+msgid "Log level"
+msgstr ""
+
+
+### MESSAGES
+msgctxt "#30951"
+msgid "Login failed!"
+msgstr ""
+
+msgctxt "#30952"
+msgid "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
+msgstr ""
+
+msgctxt "#30953"
+msgid "This program cannot be played. To view this program outside of Belgium, you first have to validate a Belgian mobile phone number on the VRT NU website."
+msgstr ""
+
+msgctxt "#30954"
+msgid "Whoops something went wrong, check the kodi log for more details."
+msgstr ""
+
+msgctxt "#30955"
+msgid "Please fill in your email address to login."
+msgstr ""
+
+msgctxt "#30956"
+msgid "Please fill in your password to login."
+msgstr ""
+
+msgctxt "#30957"
+msgid "Please increase the maximum bandwidth. Maximum bandwidth is set to {max} kbps, but this stream needs a minimum of {min} kbps."
+msgstr ""
+
+msgctxt "#30961"
+msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
+msgstr ""
+
+msgctxt "#30971"
+msgid "Install Widevine using 'InputStream Helper' add-on"
+msgstr ""
+
+msgctxt "#30972"
+msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and the VRT NU add-on is not responsible for any results. Nor is it guaranteed that Widevine will be installed correctly."
+msgstr ""
+
+msgctxt "#30973"
+msgid "Installation of Widevine failed!"
+msgstr ""
+
+msgctxt "#30974"
+msgid "Installation of Widevine completed!"
+msgstr ""

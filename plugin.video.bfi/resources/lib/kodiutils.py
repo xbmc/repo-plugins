@@ -15,15 +15,15 @@ ADDON_ID = ADDON.getAddonInfo("id")
 MEDIA_URI = "special://home/addons/{}/resources/media/".format(ADDON_ID)
 
 
-def art(image):
+def art(domain, image):
     return ({
-                "thumb": image.get("data-img-800", ""),
-                "fanart": image.get("data-img-1440", ""),
-                "poster": image.get("src")
+                "thumb": "{}{}".format(domain, image.get("data-img-800", "")),
+                "fanart": "{}{}".format(domain, image.get("data-img-1440", "")),
+                "poster": "{}{}".format(domain, image.get("data-img-960", ""))
             } if "src" in image else {
-        "thumb": image,
-        "fanart": image,
-        "poster": image
+        "thumb": "{}{}".format(domain, image),
+        "fanart": "{}{}".format(domain, image),
+        "poster": "{}{}".format(domain, image)
     })
 
 
@@ -33,7 +33,7 @@ def icon(image):
 
 def user_input():
     keyboard = xbmc.Keyboard("",
-                             "{} {}".format(get_string(32007),
+                             "{} {}".format(get_string(32007),  # Search
                                             ADDON.getAddonInfo("name")))
     keyboard.doModal()
     if keyboard.isConfirmed():
@@ -42,7 +42,7 @@ def user_input():
 
 
 def confirm():
-    return xbmcgui.Dialog().yesno("BFI Player", "Are you sure?")
+    return xbmcgui.Dialog().yesno("BFI Player", get_string(32023))  # Are you sure?
 
 
 def notification(header, message, time=5000, image=ADDON.getAddonInfo("icon"), sound=True):

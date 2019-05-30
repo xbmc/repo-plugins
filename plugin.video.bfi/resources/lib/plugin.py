@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Main plugin file - Handles the various routes"""
 
-__author__ = "fraser"
+__author__ = "fraser.chapman@gmail.com"
 
 import routing
 import xbmc
@@ -20,21 +20,18 @@ MEDIA_URI = "special://home/addons/{}/resources/media/".format(ADDON_ID)
 PLAYER_ID_ATTR = "data-video-id"
 JIG = {
     "category": {
-        "card": ["div", "card"],
-        "action": ["a", "card__title__action"],
-        "title": ["a", "card__title__action"],
+        "card": ["div", "card--free"],
+        "title": ["h3", "card__title"],
         "plot": ["div", "card__description"],
         "meta": ["span", "card__info__item"]
     },
     "collection": {
-        "card": ["div", "collection-card"],
-        "action": ["a", "collection-card__title__action"],
-        "title": ["a", "collection-card__title__action"],
+        "card": ["div", "collection-card--free"],
+        "title": ["h3", "collection-card__title"],
         "plot": ["div", "collection-card__description"]
     },
     "the-cut": {
         "card": ["div", "c_card"],
-        "action": ["a", "c_card__image__action"],
         "title": ["h3", "c_card__title"],
         "plot": ["div", "c_card__footer__summary"]
     }
@@ -88,11 +85,11 @@ def paginate(query, count, total, offset):
         add_menu_item(index, main_menu)
 
 
-@plugin.route("/clear/<id>")
-def clear(id):
-    if id == "cache" and ku.confirm():
+@plugin.route("/clear/<target>")
+def clear(target):
+    if target == "cache" and ku.confirm():
         bfis.cache_clear()
-    if id == "recent" and ku.confirm():
+    if target == "recent" and ku.confirm():
         bfis.recent_clear()
 
 
@@ -127,7 +124,7 @@ def index():
     if ku.get_setting_as_bool("show_search"):
         add_menu_item(search, 32007, {"menu": True}, ku.icon("search.png"))
     if ku.get_setting_as_bool("show_recent"):
-        add_menu_item(recent, 32021)
+        add_menu_item(recent, 32021, art=ku.icon("saved.png"))
     if ku.get_setting_as_bool("show_settings"):
         add_menu_item(settings, 32010, art=ku.icon("settings.png"), directory=False)
     xp.setPluginCategory(plugin.handle, ADDON_NAME)
@@ -143,7 +140,7 @@ def settings():
 
 @plugin.route("/recent")
 def recent():
-    """Show recently viewed films setting config"""
+    """Show recently viewed films"""
     data = bfis.get_recent()
     for item in data:
         parts = item["uri"].split("/")[3:]
@@ -161,7 +158,7 @@ def play_film():
     html = bfis.get_html(url)
     try:
         video_id = html.find(True, attrs={PLAYER_ID_ATTR: True})[PLAYER_ID_ATTR]
-    except (AttributeError, TypeError) as e:
+    except (AttributeError, TypeError):
         return False
     if video_id is not None:
         video_url = bfis.get_video_url(video_id)
@@ -232,7 +229,7 @@ def search():
             play_film,
             title,
             {"href": data.get("url")},
-            ku.art(data.get("image", ["Default.png"])[0]),
+            ku.art("", data.get("image", ["Default.png"])[0]),
             info,
             False)
     xp.setContent(plugin.handle, "videos")
@@ -253,7 +250,7 @@ def show_category():
     url = bfis.get_page_url(href)
     html = bfis.get_html(url)
     for card in html.findAll(*JIG[key]["card"]):
-        action = card.find(*JIG[key]["action"])
+        action = card.find(["a", "card__action"])
         if action is None:
             continue
 
@@ -267,14 +264,14 @@ def show_category():
                 genre, year, duration = card.find_all(*JIG[key]["meta"], limit=3)
                 info["genre"] = genre.text.encode("utf-8")
                 info["year"] = bfis.text_to_int(year.text.encode("utf-8"))
-                info["duration"] = bfis.text_to_int(duration.text.encode("utf-8"))
+                info["duration"] = bfis.text_to_int(duration.text.encode("utf-8")) * 60  # duration is min
             except (ValueError, TypeError):
                 pass
         add_menu_item(
             show_category if is_dir else play_film,
             title,
             {"href": action["href"], "title": title},
-            ku.art(card.find("img").attrs),
+            ku.art(bfis.BFI_URI, card.find("img").attrs),
             info,
             is_dir
         )

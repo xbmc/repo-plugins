@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
+
 """HTTP File cache and helpers"""
+
 __author__ = "fraser"
 
+import logging
 import sqlite3
 import time
 from datetime import datetime, timedelta, tzinfo
 from os import path
 
+import xbmc
+import xbmcaddon
 import xbmcvfs
 
 try:
@@ -14,13 +19,12 @@ try:
 except ImportError:
     import cPickle as cpickle
 
-import logging
-from . import kodilogging
-
-kodilogging.config()
 logger = logging.getLogger(__name__)
 
-HTTPDATE_FORMAT = "%a, %d %b %Y %H:%M:%S %Z"
+HTTP_DATE_FORMAT = "%a, %d %b %Y %H:%M:%S %Z"
+ADDON = xbmcaddon.Addon()
+ADDON_PROFILE = ADDON.getAddonInfo("profile")
+CACHE_URI = xbmc.translatePath(path.join(ADDON_PROFILE, "cache.sqlite")).decode("utf-8")
 
 
 def httpdate_to_datetime(input_date):
@@ -28,9 +32,9 @@ def httpdate_to_datetime(input_date):
     if input_date is None:
         return None
     try:
-        return datetime.strptime(input_date, HTTPDATE_FORMAT)
+        return datetime.strptime(input_date, HTTP_DATE_FORMAT)
     except TypeError:
-        return datetime(*(time.strptime(input_date, HTTPDATE_FORMAT)[0:6]))
+        return datetime(*(time.strptime(input_date, HTTP_DATE_FORMAT)[0:6]))
     except ValueError as e:
         logger.debug(e)
         return None
@@ -41,7 +45,7 @@ def datetime_to_httpdate(input_date):
     if input_date is None:
         return None
     try:
-        return input_date.strftime(HTTPDATE_FORMAT)
+        return input_date.strftime(HTTP_DATE_FORMAT)
     except (ValueError, TypeError) as e:
         logger.debug(e)
         return None
@@ -86,10 +90,10 @@ class Cache(object):
 
     def __init__(self, name=None):
         self.connection = None
-        if not xbmcvfs.exists(name):
-            xbmcvfs.mkdirs(path.dirname(name))
-        if name:
-            self._open(name)
+        self.name = CACHE_URI if name is None else name
+        if not xbmcvfs.exists(self.name):
+            xbmcvfs.mkdirs(path.dirname(self.name))
+        self._open(self.name)
 
     def get(self, uri):
         # type: (str) -> Union[sqlite3.Row, None]
@@ -155,7 +159,7 @@ class Cache(object):
     def domain(self, domain, limit=25):
         # type (str, int) -> list
         """Get items where uri like %domain%"""
-        query = "select * from data where uri like ? order by http_date limit ?"
+        query = "SELECT * FROM data WHERE uri LIKE ? ORDER BY http_date LIMIT ?"
         cursor = self._execute(query, ('%{}%'.format(domain), limit))
         return [] if cursor is None else cursor.fetchall()
 

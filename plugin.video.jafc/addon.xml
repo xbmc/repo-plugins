@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.jafc" name="Japanese Animated Film Classics" version="1.0.0" provider-name="fraser">
+<addon id="plugin.video.jafc" name="Japanese Animated Film Classics" version="1.1.0" provider-name="fraser">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.routing" version="0.2.0"/>
         <import addon="script.module.beautifulsoup4" version="4.3.2"/>
         <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="script.module.inputstreamhelper" version="0.3.4"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Search and play free movies from the Japanese Animated Film Classics website</summary>
-        <description lang="en_GB">This add-on enables playing of videos and movies from the Japanese Animated Film Classics. It is not created, maintained or in any way affiliated with the National Film Archive of Japan. The add-on only provides an interface to access the free content on the Japanese Animated Film Classics website from Kodi.
+        <summary lang="en_GB">Search and play works from the Japanese Animated Film Classics website</summary>
+        <description lang="en_GB">Play videos from the "Japanese Animated Film Classics" website.
+            To mark a century of Japanese animation, the Film Center at Tokyo's National Museum of Modern Art digitised
+            a number of classic works.
+            These are made available here, with the option of hardcoded English subtitles, categorised by genre, theme
+            and artist.
         </description>
-        <language>en</language>
+        <language>ja en</language>
         <platform>all</platform>
         <license>MIT</license>
         <forum>https://forum.kodi.tv/showthread.php?tid=331943</forum>
         <website>https://animation.filmarchives.jp/</website>
         <email>fraser.chapman@gmail.com</email>
         <source>https://github.com/FraserChapman/plugin.video.jafc</source>
-        <news>v1.0.0 (25-4-18)
-            - Inital Version
-        </news>
-        <disclaimer>Neither this addon nor its author are in anyway affiliated with the National Film Archive of Japan</disclaimer>
+        <news>v1.2.0 (31-5-19) - Python 3 compatible</news>
+        <disclaimer lang="en_GB">Neither this addon nor its author are in anyway affiliated with the National Film
+            Archive of Japan.
+        </disclaimer>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>

@@ -4,42 +4,31 @@
 __author__ = "fraser"
 
 import json
+import logging
 
 import requests
+import xbmcaddon
 from bs4 import BeautifulSoup
 
 from . import kodiutils as ku
 from .cache import Cache, datetime_to_httpdate
 
-JAFC_URI = "https://animation.filmarchives.jp/"
-JAFC_SEARCH_URI = JAFC_URI + "en/works/"
-JAFC_INFO_URI = JAFC_URI + "/en/works/view/"
-JAFC_M3U8_TEMPLATE = "https://h10.cs.nii.ac.jp/stream/nfc/{}_en/hls/auto/media-2/stream.m3u8"
+logger = logging.getLogger(__name__)
 
+JAFC_URI = "https://animation.filmarchives.jp/"
+JAFC_SEARCH_URI = "{}en/works/".format(JAFC_URI)
+JAFC_INFO_URI = "{}en/works/view/".format(JAFC_URI)
+
+JAFC_STREAM_URI = "https://h10.cs.nii.ac.jp/stream/nfc/"
+JAFC_MPD_TEMPLATE = "{}{{}}_{{}}/dash/auto/master.mpd".format(JAFC_STREAM_URI)
 
 SEARCH_SAVED = ku.get_setting_as_bool("search_saved")
 SEARCH_MAX_RESULTS = ku.get_setting_as_int("search_max_results")
+ENGLISH_SUBTITLES = ku.get_setting_as_bool("english_subtitles")
 SEARCH_TIMEOUT = 60
 
-CACHE_URI = ku.translate_path("special://profile/addon_data/plugin.video.jafc/cache.sqlite")
-SAVED_SEARCH = "app://saved-searches"
-
-
-def query_encode(query):
-    # type (str) -> str
-    return query.replace(" ", "+")
-
-
-def query_decode(query):
-    # type (str) -> str
-    return query.replace("+", " ")
-
-
-def html_to_text(text):
-    # type (str) -> str
-    """Extracts plain text content from HTML"""
-    soup = BeautifulSoup(text, "html.parser")
-    return "\n".join(soup.stripped_strings)
+SETTINGS_LOCATION = xbmcaddon.Addon().getAddonInfo("profile")
+APP_SAVED_SEARCHES = "app://saved-searches"
 
 
 def text_to_int(text):
@@ -62,18 +51,18 @@ def add_cache_headers(headers, cached):
 
 def get_table_data(soup, text, default=None):
     # type (BeautifulSoup.tag, str) -> str
+    """Attempts to retrieve text data from a table based on the header value"""
     if default is None:
         default = ""
-    head = soup.find("th", text=text)
-    return default if head is None else head.findNext("td").text
-
-
-def remove_whitespace(text):
-    # type (str) -> str
-    """strips all white-space from a string"""
+    if soup is None:
+        return default
     if text is None:
-        return ""
-    return "".join(text.split())
+        return default
+    head = soup.find("th", text=text)
+    if head is None:
+        return default
+    data = head.findNext("td").text
+    return default if data is None or not data else data
 
 
 def pluck(text, start, end, default=None):
@@ -81,43 +70,57 @@ def pluck(text, start, end, default=None):
     """Attempts to extract string between start and end from text"""
     if default is None:
         default = ""
-    idx = text.find(start) + len(start)
+    index = text.find(start) + len(start)
     try:
-        return text[idx:text.find(end, idx)]
+        return text[index:text.find(end, index)]
     except IndexError:
         return default
 
 
 def get_search_url(query, page=1):
     # type: (str, int) -> str
-    """Gets a full URL to a JAFC search page"""
+    """Gets a full URL to a JAFC search result page"""
     return "{}?orderby=default&sound=all&num={}&page={}&keyword={}".format(
         JAFC_SEARCH_URI, SEARCH_MAX_RESULTS, page, query)
 
 
-def get_player_url(id):
-    """Gets a full URL to a JAFC player page"""
-    return JAFC_M3U8_TEMPLATE.format(id)
+def get_mpd_url(token):
+    """Gets a full URL to a playable object"""
+    english = JAFC_MPD_TEMPLATE.format(token, "en")
+    japanese = JAFC_MPD_TEMPLATE.format(token, "jp")
+    if not ENGLISH_SUBTITLES:
+        return japanese
+    with Cache() as c:
+        cached = c.get(english)
+        if cached and cached["immutable"]:
+            return cached["blob"]
+        r = requests.head(english, timeout=SEARCH_TIMEOUT)
+        if r.status_code == 200:
+            c.set(english, english)
+            return english
+        else:
+            c.set(english, japanese)
+            return japanese
 
 
-def get_page_url(href):
+def get_url(href):
     # type: (str) -> str
-    """Gets a full URL to a JAFC html page"""
+    """Create a full URL to a JAFC resource"""
     return "{}{}".format(JAFC_URI, href.lstrip("/"))
 
 
 def save(searches):
     # type: (list) -> None
     """Saves a list of search strings"""
-    with Cache(CACHE_URI) as c:
-        c.set(SAVED_SEARCH, json.dumps(searches, ensure_ascii=False))
+    with Cache() as c:
+        c.set(APP_SAVED_SEARCHES, json.dumps(searches, ensure_ascii=False))
 
 
 def retrieve():
     # type: () -> list
     """Gets list of saved search strings"""
-    with Cache(CACHE_URI) as c:
-        data = c.get(SAVED_SEARCH)
+    with Cache() as c:
+        data = c.get(APP_SAVED_SEARCHES)
         return json.loads(data["blob"]) if data else []
 
 
@@ -152,8 +155,23 @@ def append(query):
 def cache_clear():
     # type: () -> None
     """Clears all cached data"""
-    with Cache(CACHE_URI) as c:
+    with Cache() as c:
         c.clear()
+
+
+def recent_clear():
+    # type: () -> None
+    with Cache() as c:
+        data = c.domain(JAFC_STREAM_URI, 999)  # larger than total possible film uris
+        for item in data:
+            c.delete(item["uri"])
+
+
+def get_recent():
+    # type: () -> list
+    with Cache() as c:
+        data = c.domain(JAFC_STREAM_URI)
+        return data if data is not None else []
 
 
 def get_html(url):
@@ -163,12 +181,12 @@ def get_html(url):
         "Accept": "text/html",
         "Accept-encoding": "gzip"
     }
-    with Cache(CACHE_URI) as c:
+
+    with Cache() as c:
         cached = c.get(url)
         if cached:
             add_cache_headers(headers, cached)
-            # always return cached info regardless
-            if cached["fresh"] or url.startswith(JAFC_INFO_URI):
+            if cached["fresh"] or cached["immutable"]:
                 return BeautifulSoup(cached["blob"], "html.parser")
         r = requests.get(url, headers=headers, timeout=SEARCH_TIMEOUT)
         if 200 == r.status_code:
@@ -176,8 +194,29 @@ def get_html(url):
             # pre-cache clean-up
             for x in soup(["script", "style"]):
                 x.extract()
-            c.set(url, str(soup), r.headers)
+            # immutable info
+            headers = None if url.startswith(JAFC_INFO_URI) else r.headers
+            c.set(url, str(soup), headers)
             return soup
         if 304 == r.status_code:
             c.touch(url, r.headers)
             return BeautifulSoup(cached["blob"], "html.parser")
+
+
+def get_image(token):
+    # type: (str) -> str
+    data = get_html("{}{}".format(JAFC_INFO_URI, text_to_int(token)))  # cached
+    return data.find("img", "thumbnail")["src"]
+
+
+def get_info(token):
+    # type: (str) -> object
+    data = get_html("{}{}".format(JAFC_INFO_URI, text_to_int(token)))  # cached
+    return {
+        "plot": get_table_data(data, "Plot", get_table_data(data, "Description")),  # fallback to description
+        "title": get_table_data(data, "English Title"),
+        "originaltitle": get_table_data(data, "Japanese kana Rendering"),
+        "year": text_to_int(get_table_data(data, "Production Date")),
+        "director": get_table_data(data, "Credits: Director"),
+        "duration": text_to_int(get_table_data(data, "Duration (minutes)")) * 60
+    }

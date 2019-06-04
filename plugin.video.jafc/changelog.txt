@@ -1,2 +1,8 @@
+v1.1.0
+- Python 3 compatible
+- Added setting for hardcoded English subtitles
+- Removed all special:// uris
+- Changed streamed from M3U8 to MPD
+
 v1.0.0
 - Initial version

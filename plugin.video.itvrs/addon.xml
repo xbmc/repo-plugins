@@ -16,7 +16,7 @@
     <description lang="en_GB">ITVRS TV And Radio</description>
 	<disclaimer lang="en_GB">Some videos might be blocked in your country</disclaimer>
     <platform>all</platform>
-    <source></source>
+    <source>https://github.com/remichie/repo-plugins/tree/leia/plugin.video.itvrs</source>
     <website>http://www.itvrs.com</website>
     <license>GPL v2.0</license>
     <assets>

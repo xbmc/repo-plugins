@@ -1,22 +1,23 @@
 # -*- coding: utf-8 -*-
 
-import json
+"""Kodi gui and settings helpers"""
+
+__author__ = "fraser"
+
 import logging
+import os
 
 import xbmc
 import xbmcaddon
 import xbmcgui
 
-# read settings
-ADDON = xbmcaddon.Addon()
 logger = logging.getLogger(__name__)
 
+ADDON = xbmcaddon.Addon()
+ADDON_NAME = ADDON.getAddonInfo("name")
 ADDON_ID = ADDON.getAddonInfo("id")
-MEDIA_URI = "special://home/addons/{}/resources/media/".format(ADDON_ID)
-
-
-def log(m):
-    logger.error(m)
+ADDON_PATH = ADDON.getAddonInfo("path")
+MEDIA_URI = os.path.join(ADDON_PATH, "resources", "media")
 
 
 def art(image):
@@ -30,14 +31,12 @@ def art(image):
 def icon(image):
     # type (str) -> dict
     """Creates the application folder icon info for main menu items"""
-    return {"icon": translate_path("{}{}".format(MEDIA_URI, image))}
+    return {"icon": os.path.join(MEDIA_URI, image)}
 
 
 def user_input():
     # type () -> Union[str, bool}
-    keyboard = xbmc.Keyboard("",
-                             "{} {}".format(get_string(32007),  # Search
-                                            ADDON.getAddonInfo("name")))
+    keyboard = xbmc.Keyboard("", "{} {}".format(localize(32007), ADDON_NAME))  # search
     keyboard.doModal()
     if keyboard.isConfirmed():
         return keyboard.getText()
@@ -46,17 +45,12 @@ def user_input():
 
 def confirm():
     # type () -> bool
-    return xbmcgui.Dialog().yesno(ADDON.getAddonInfo("name"), get_string(32022))  # Are you sure?
+    return xbmcgui.Dialog().yesno(ADDON_NAME, localize(32022))  # Are you sure?
 
 
 def notification(header, message, time=5000, image=ADDON.getAddonInfo("icon"), sound=True):
     # type (str, str, int, str, bool) -> None
     xbmcgui.Dialog().notification(header, str(message), image, time, sound)
-
-
-def translate_path(path):
-    # type (str) -> str
-    return xbmc.translatePath(path).decode("utf-8")
 
 
 def show_settings():
@@ -95,25 +89,6 @@ def get_setting_as_int(setting):
         return 0
 
 
-def get_string(string_id):
+def localize(string_id):
     # type (str) -> str
     return ADDON.getLocalizedString(string_id).encode("utf-8", "ignore")
-
-
-def kodi_json_request(params):
-    # type (str) -> str
-    data = json.dumps(params)
-    request = xbmc.executeJSONRPC(data)
-
-    try:
-        response = json.loads(request)
-    except UnicodeDecodeError:
-        response = json.loads(request.decode("utf-8", "ignore"))
-
-    try:
-        if "result" in response:
-            return response["result"]
-        return None
-    except KeyError:
-        logger.debug("[{}] {}".format(params["method"], response["error"]["message"]))
-        return None

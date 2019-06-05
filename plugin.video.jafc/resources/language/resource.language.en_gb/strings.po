@@ -1,6 +1,6 @@
 # Kodi Media Center language file
-# Addon Name: BFI Player
-# Addon id: plugin.video.bfi
+# Addon Name: Japanese Animated Film Classics
+# Addon id: plugin.video.jafc
 # Addon Provider: fraser
 msgid ""
 msgstr ""
@@ -16,7 +16,6 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#This is a comment
 
 msgctxt "#32000"
 msgid "General"
@@ -51,7 +50,7 @@ msgid "Search"
 msgstr ""
 
 msgctxt "#32008"
-msgid "Error playing"
+msgid "Error"
 msgstr ""
 
 msgctxt "#32009"
@@ -102,3 +101,18 @@ msgctxt "#32023"
 msgid "Experts Choice"
 msgstr ""
 
+msgctxt "#32024"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#32025"
+msgid "English (hardcoded)"
+msgstr ""
+
+msgctxt "#32026"
+msgid "Recently Viewed"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Clear Recent"
+msgstr ""

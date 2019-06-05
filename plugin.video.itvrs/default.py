@@ -54,7 +54,7 @@ def main_list(params):
     plugintools.add_item( 
         #action="", 
         title="Movies From Maverick Entertainment",
-        url="https://www.youtube.com/playlist?list=PLDySQNnzfMCqoBxquMEhCOi0GUEB1RbCf,
+        url="https://www.youtube.com/playlist?list=PLDySQNnzfMCqoBxquMEhCOi0GUEB1RbCf",
         thumbnail=icon,
         fanart="fanart.jpg",
         folder=True )

@@ -16,7 +16,7 @@ class TedTalks:
         talk_html = self.getHTML(url)
         try:
             video_url, title, speaker, plot, talk_json = talk_scraper.get(talk_html, self.logger, video_quality)
-        except Exception, e:
+        except Exception as e:
             raise type(e)(e.message + "\nfor url '%s'" % (url))
 
         subs = None

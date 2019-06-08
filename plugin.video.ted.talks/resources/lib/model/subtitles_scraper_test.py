@@ -66,7 +66,7 @@ Vous savez tous que ce que je vais dire est vrai.
     #     talk_json = self.__get_talk_json__(newest_talk['link'])
     #     subs = subtitles_scraper.get_subtitles_for_talk(talk_json, ['en'], lambda m1, m2: sys.stdout.write('%s\n%s' % (m1, m2)))
     #     if subs:
-    #         print "Newest Talk (%s) has subtitles: test ineffective" % (newest_talk['title'])
+    #         print("Newest Talk (%s) has subtitles: test ineffective" % (newest_talk['title']))
 
 
     def __get_talk_json__(self, url):

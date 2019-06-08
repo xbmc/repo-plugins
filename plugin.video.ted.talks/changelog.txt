@@ -1,3 +1,9 @@
+Version 4.2.13
+High resolution plugin icon (pull#71 thanks to MarhyCZ)
+Fixed video playback (pull#64 thanks to and3md)
+Fixed search
+Fixed topics images
+
 Version 4.2.12
 Updates to support new TED site
 

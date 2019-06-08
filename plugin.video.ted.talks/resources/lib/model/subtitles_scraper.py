@@ -72,7 +72,7 @@ def get_subtitles_for_talk(talk_json, accepted_languages, logger):
 
         return format_subtitles(raw_subtitles, int(float(intro_duration) * 1000))
 
-    except Exception, e:
+    except Exception as e:
         # Must not fail!
         logger('Could not display subtitles: %s' % (e), __friendly_message__)
         return None

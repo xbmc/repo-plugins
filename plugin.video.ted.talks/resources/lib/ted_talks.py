@@ -86,6 +86,7 @@ class UI:
                 time.sleep(1)
             if player.isPlaying():
                 xbmc.Player().setSubtitles(subs_file)
+                xbmc.Player().showSubtitles(True)
             else:
                 # No user message: user was probably already notified of a problem with the stream.
                 plugin.report('Could not show subtitles: timed out waiting for player to start.')

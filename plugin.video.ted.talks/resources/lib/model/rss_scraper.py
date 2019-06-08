@@ -53,7 +53,7 @@ class NewTalksRss(object):
         pub_date = item.find('./pubDate').text[:-6]  # strptime can't handle timezone info.
         try:
             date = time.strptime(pub_date, "%a, %d %b %Y %H:%M:%S")
-        except ValueError, e:
+        except ValueError as e:
             self.logger("Could not parse date '%s': %s" % (pub_date, e))
             date = time.localtime()
         date = time.strftime("%d.%m.%Y", date)

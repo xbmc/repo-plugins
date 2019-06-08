@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ted.talks" name="TED Talks" version="4.2.12" provider-name="Skipmode A1, moreginger, rwparris2">
+<addon id="plugin.video.ted.talks" name="TED Talks" version="4.2.13" provider-name="Skipmode A1, moreginger, rwparris2">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.requests" version="2.22.0"/>
     <import addon="script.module.elementtree" version="1.2.7"/>
     <import addon="script.module.parsedom" version="0.9.1"/>
   </requires>
@@ -21,8 +22,8 @@
     <description lang="pt_PT">TED é uma organização sem fins lucrativos dedicada a 'Ideias com Valor'. Foi iniciada em 1984 como uma conferência que pretendia juntar pessoas de três mundos: Tecnologia, Entretenimento e Design. Desde ai tornou-se muito mais abrangente.</description>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=36866</forum>
+    <forum>https://forum.kodi.tv/showthread.php?tid=36866</forum>
     <website>https://github.com/moreginger/xbmc-plugin.video.ted.talks</website>
-    <source>https://github.com/moreginger/xbmc-plugin.video.ted.talks.git</source>
+    <source>https://github.com/moreginger/xbmc-plugin.video.ted.talks</source>
   </extension>
 </addon>

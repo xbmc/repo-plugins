@@ -1,23 +1,21 @@
 # Custom xbmc thing for fast parsing. Can't rely on lxml being available
 # as of 2012-03.
 import CommonFunctions as xbmc_common
-import httplib
-import urlparse
 import json
-import re
+import requests
+import urlparse
 
 
-def get(html, logger, video_quality='320kbps'):
+def get(html, logger, video_quality='180kbps'):
     '''Extract talk details from talk html
        @param video_quality string in form '\\d+kbps' that should match one of the provided TED bitrates.
     '''
 
-    init_scripts = [script for script in xbmc_common.parseDOM(html, 'script') if '"talkPage.init"' in script]
+    init_scripts = [script for script in xbmc_common.parseDOM(html, 'script', {'data-spec':'q' } ) if '"talkPage.init"' in script]
     if init_scripts:
 
         logger('%s = %s' % ('init_scripts', init_scripts), level='debug')
 
-        # init_json = json.loads(re.compile(r'q[(]"talkPage.init",(.+)[)]').search(init_scripts[0]).group(1))
         # let's do this some other way
         init_scripts_start_pos = str(init_scripts).find('{')
         init_scripts = str(init_scripts)[init_scripts_start_pos:]
@@ -32,6 +30,7 @@ def get(html, logger, video_quality='320kbps'):
         init_scripts = init_scripts.replace('\\', '')
 
         logger('%s = %s' % ('init_scripts sliced', init_scripts), level='debug')
+        init_scripts = init_scripts[:-4]
 
         init_json = json.loads(str(init_scripts), strict=False)
         talk_json = init_json['__INITIAL_DATA__']['talks'][0]
@@ -58,17 +57,9 @@ def get(html, logger, video_quality='320kbps'):
 
         logger('%s = %s' % ('plot', plot), level='debug')
 
-        if video_quality != '320kbps':
-            url_custom = url.replace(
-                '-320k.mp4', '-%sk.mp4' % (video_quality.split('k')[0]))
-
-            # Test resource exists
-            url_custom_parsed = urlparse.urlparse(url_custom)
-            h = httplib.HTTPConnection(url_custom_parsed.netloc)
-            h.request('HEAD', url_custom_parsed.path)
-            response = h.getresponse()
-            h.close()
-            if response.status / 100 < 4:
+        if video_quality != '180kbps':
+            url_custom = url.replace('-180k.mp4', '-%sk.mp4' % (video_quality.split('k')[0]))
+            if requests.head(url_custom).ok:
                 url = url_custom
 
         return url, title, speaker, plot, talk_json

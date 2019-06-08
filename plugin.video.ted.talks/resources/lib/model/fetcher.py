@@ -43,9 +43,9 @@ class Fetcher:
             usock.close()
             cj.save(cookiefile)
             return response
-        except urllib2.HTTPError, error:
+        except urllib2.HTTPError as error:
             self.logger('%s error:\n%s\n%s\n%s' % (__name__, error.code, error.msg, error.geturl()))
-        except Exception, error:
+        except Exception as error:
             import xbmc
             xbmc.log(Exception.__module__, level=xbmc.LOGERROR)
             xbmc.log(Exception.__module__, level=xbmc.LOGERROR)

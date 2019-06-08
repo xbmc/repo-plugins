@@ -31,7 +31,7 @@ import json
 
 version = u"1.5.1"
 plugin = u"CommonFunctions Beta-" + version
-print plugin
+print(plugin)
 
 USERAGENT = u"Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1"
 
@@ -458,7 +458,7 @@ def fetchPage(params={}):
         ret_obj["status"] = 200
         return ret_obj
 
-    except urllib2.HTTPError, e:
+    except urllib2.HTTPError as e:
         err = str(e)
         log("HTTPError : " + err)
         log("HTTPError - Headers: " + str(e.headers) + " - Content: " + e.fp.read())
@@ -473,7 +473,7 @@ def fetchPage(params={}):
         ret_obj["status"] = 500
         return ret_obj
 
-    except urllib2.URLError, e:
+    except urllib2.URLError as e:
         err = str(e)
         log("URLError : " + err)
 

@@ -16,7 +16,7 @@ import xbmcgui
 import xbmcplugin
 
 from roosterteeth_const import LANGUAGE, SETTINGS, HEADERS, convertToUnicodeString, log, VQ4K, VQ1080P, VQ720P, \
-    VQ480P, VQ360P, VQ240P, ROOSTERTEETH_AUTHORIZATION_URL, KODI_ROOSTERTEETH_ADDON_CLIENT_ID
+    VQ480P, VQ360P, VQ240P, ROOSTERTEETH_AUTHORIZATION_URL, KODI_ROOSTERTEETH_ADDON_CLIENT_ID, INDEX_DOT_M3U8
 
 
 #
@@ -36,6 +36,7 @@ class Main(object):
         # Get plugin settings
         self.PREFERRED_QUALITY = SETTINGS.getSetting('quality')
         self.IS_SPONSOR = SETTINGS.getSetting('is_sponsor')
+        self.USE_ADAPTIVE_STREAM = SETTINGS.getSetting('use_adaptive_inputstream')
 
         # log("ARGV", repr(sys.argv))
 
@@ -282,94 +283,154 @@ class Main(object):
 
             log("corrected m3u8_url", m3u8_url)
 
-            # try and get the non-sponsored video without being logged in
-            # get the page that contains the video
+            # get the content of the m3u8 file
             response = session.get(m3u8_url, headers=HEADERS)
             if response.status_code == 200:
-
-                html_source = response.text
-                html_source = convertToUnicodeString(html_source)
-
-                # log("html_source m3u8 file", html_source)
-
-                # determine the wanted video quality
-                if self.PREFERRED_QUALITY == '0':  # Very Low
-                    quality = VQ240P
-                elif self.PREFERRED_QUALITY == '1':  # Low
-                    quality = VQ360P
-                elif self.PREFERRED_QUALITY == '2':  # Medium
-                    quality = VQ480P
-                elif self.PREFERRED_QUALITY == '3':  # High Quality
-                    quality = VQ720P
-                elif self.PREFERRED_QUALITY == '4':  # Very High Quality
-                    quality = VQ1080P
-                elif self.PREFERRED_QUALITY == '5':  # Ultra High Quality
-                    quality = VQ4K
-                else:  # Default in case quality is not found?
-                    quality = VQ720P
-
+                have_valid_url = True
                 video_url = m3u8_url
 
                 log("video_url", video_url)
 
-                # an example of the content of a m3u8 file. Not all the resolutions will be there as most videos don't
-                # have an 4k option:
-                # #EXTM3U
-                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=21589000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
-                # aef4654c-hls_4k-rebuilds-4030.mp4.m3u8
-                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=21589000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
-                # aef4654c-hls_1080p-rebuilds-4030.mp4.m3u8
-                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=8281000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
-                # aef4654c-hls_720p-rebuilds-4030.mp4.m3u8
-                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=6370000,RESOLUTION=854x480,CODECS="avc1.4d001f,mp4a.40.2"
-                # aef4654c-hls_480p-rebuilds-4030.mp4.m3u8
-                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=4093000,RESOLUTION=640x360,CODECS="avc1.4d001f,mp4a.40.2"
-                # aef4654c-hls_360p-rebuilds-4030.mp4.m3u8
-                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2941000,RESOLUTION=426x240,CODECS="avc1.4d001f,mp4a.40.2"
-                # aef4654c-hls_240p-rebuilds-4030.mp4.m3u8
-
-                video_url_altered = ''
-                # read the m3u8 file line for line and search for the quality. If found: alter the url of the m3u8 file.
-                for line in response.iter_lines():
-                    if line:
-                        # let's convert the line to prevent python 2/3 troubles
-                        line = convertToUnicodeString(line)
-
-                        # log("line", line)
-                        
-                        if line.find(quality) >= 0:
-                            video_url_altered = video_url.replace("index.m3u8", line)
-                        elif line.find(quality.upper()) >= 0:
-                            video_url_altered = video_url.replace("index.m3u8", line)
-
-                if video_url_altered == '':
+                if self.USE_ADAPTIVE_STREAM == 'true':
                     pass
                 else:
+                    html_source = response.text
+                    html_source = convertToUnicodeString(html_source)
 
-                    log("video_url_altered", video_url_altered)
+                    # log("html_source m3u8 file", html_source)
 
-                    # Find out if the altered m3u8 url exists
-                    response = session.get(video_url_altered)
+                    # determine the wanted video quality
+                    if self.PREFERRED_QUALITY == '0':  # Very Low
+                        quality = VQ240P
+                    elif self.PREFERRED_QUALITY == '1':  # Low
+                        quality = VQ360P
+                    elif self.PREFERRED_QUALITY == '2':  # Medium
+                        quality = VQ480P
+                    elif self.PREFERRED_QUALITY == '3':  # High Quality
+                        quality = VQ720P
+                    elif self.PREFERRED_QUALITY == '4':  # Very High Quality
+                        quality = VQ1080P
+                    elif self.PREFERRED_QUALITY == '5':  # Ultra High Quality
+                        quality = VQ4K
+                    else:  # Default in case quality is not found
+                        quality = VQ720P
 
-                    log("response.status_code", response.status_code)
+                    # log("wanted quality", quality)
 
-                    # if we find a m3u8 file with the altered url, let's use that.
-                    # If it is not found, let's use the unaltered url.
-                    if response.status_code == 200:
-                        video_url = video_url_altered
+                    # an example of the content of a m3u8 file. Not all the resolutions will be there as most videos don't
+                    # have an 4k option:
+                    # #EXTM3U
+                    # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=21589000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
+                    # aef4654c-hls_4k-rebuilds-4030.mp4.m3u8
+                    # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=21589000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
+                    # aef4654c-hls_1080p-rebuilds-4030.mp4.m3u8
+                    # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=8281000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
+                    # aef4654c-hls_720p-rebuilds-4030.mp4.m3u8
+                    # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=6370000,RESOLUTION=854x480,CODECS="avc1.4d001f,mp4a.40.2"
+                    # aef4654c-hls_480p-rebuilds-4030.mp4.m3u8
+                    # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=4093000,RESOLUTION=640x360,CODECS="avc1.4d001f,mp4a.40.2"
+                    # aef4654c-hls_360p-rebuilds-4030.mp4.m3u8
+                    # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2941000,RESOLUTION=426x240,CODECS="avc1.4d001f,mp4a.40.2"
+                    # aef4654c-hls_240p-rebuilds-4030.mp4.m3u8
 
-                have_valid_url = True
+                    # Let's try and find a video of the desired video quality.
+                    # If that can't be found, try to find a video with less than the desired video quality
+                    video_url_altered = ''
+                    if video_url_altered == '':
+                        if quality in [VQ4K]:
+                            video_url_altered = self.find_video_quality_url(VQ4K, response, video_url)
 
-                log("final video_url", video_url)
-            else:
-                have_valid_url = False
+                    if video_url_altered == '':
+                        if quality in [VQ4K, VQ1080P]:
+                            video_url_altered = self.find_video_quality_url(VQ1080P, response, video_url)
+
+                    if video_url_altered == '':
+                        if quality in [VQ4K, VQ1080P, VQ720P]:
+                            video_url_altered = self.find_video_quality_url(VQ720P, response, video_url)
+
+                    if video_url_altered == '':
+                        if quality in [VQ4K, VQ1080P, VQ720P, VQ480P]:
+                            video_url_altered = self.find_video_quality_url(VQ480P, response, video_url)
+
+                    if video_url_altered == '':
+                        if quality in [VQ4K, VQ1080P, VQ720P, VQ480P, VQ360P]:
+                            video_url_altered = self.find_video_quality_url(VQ360P, response, video_url)
+
+                    if video_url_altered == '':
+                        if quality in [VQ4K, VQ1080P, VQ720P, VQ480P, VQ360P, VQ240P]:
+                            video_url_altered = self.find_video_quality_url(VQ240P, response, video_url)
+
+                    if video_url_altered == '':
+                        pass
+                    else:
+
+                        log("video_url_altered", video_url_altered)
+
+                        # Find out if the altered m3u8 url exists
+                        response = session.get(video_url_altered)
+
+                        log("response.status_code", response.status_code)
+
+                        # if we find a m3u8 file with the altered url, let's use that.
+                        # If it is not found, let's use the unaltered url.
+                        if response.status_code in [200]:
+                            video_url = video_url_altered
+
+                    log("final video_url", video_url)
+        else:
+            have_valid_url = False
 
         # Play video...
         if have_valid_url:
             list_item = xbmcgui.ListItem(path=video_url)
+            if self.USE_ADAPTIVE_STREAM == 'true':
+                list_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+                list_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
             xbmcplugin.setResolvedUrl(self.plugin_handle, True, list_item)
         #
         # Alert user
         #
         elif no_url_found:
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30107))
+
+
+    def find_video_quality_url(self, quality, response, video_url):
+
+        # the video url will be something like this:
+        # https://rtv3-roosterteeth.akamaized.net/store/24ee639e8baae80356d2b0c9cc367c75-f3abd10f/ts/1557430260_index.m3u8?Policy...
+        # However, the direct link should be something like this:
+        # https://rtv3-roosterteeth.akamaized.net/store/24ee639e8baae80356d2b0c9cc367c75-f3abd10f/ts/f3abd10f-hls_1080p-store-24ee639e8baae80356d2b0c9cc367c75.m3u8?Policy...
+        # its composed of 3 parts:
+        # part 1:
+        # https://rtv3-roosterteeth.akamaized.net/store/24ee639e8baae80356d2b0c9cc367c75-f3abd10f/ts/
+        # part 2:
+        # the line found in the m3u8 of the corresponding quality (f.e. f3abd10f-hls_480p-store-24ee639e8baae80356d2b0c9cc367c75.m3u8)
+        # part 3:
+        # ?Policy...
+
+        # lets determine part 1 and 3
+        pos_of_index_dot_m3u8 = video_url.find(INDEX_DOT_M3U8)
+        if pos_of_index_dot_m3u8 >= 0:
+            pos_of_slash_before_dotm3u8 = video_url.rfind("/", 0, pos_of_index_dot_m3u8)
+            video_url_part1 = video_url[0:pos_of_slash_before_dotm3u8 + 1]
+            video_url_part3 = video_url[pos_of_index_dot_m3u8 + len(INDEX_DOT_M3U8):]
+
+        video_url_altered = ''
+        # read the m3u8 file line for line and search for the quality. If found: alter the url of the m3u8 file.
+        for line in response.iter_lines():
+            if line:
+                # let's convert the line to prevent python 2/3 troubles
+                line = convertToUnicodeString(line)
+
+                log("line", line)
+
+                if line.find(quality) >= 0:
+                    video_url_part2 = line
+                    video_url_altered = video_url_part1 + video_url_part2 + video_url_part3
+                elif line.find(quality.upper()) >= 0:
+                    video_url_part2 = line
+                    video_url_altered = video_url_part1 + video_url_part2 + video_url_part3
+
+        # log("returning video_url_altered", video_url_altered)
+
+        return video_url_altered

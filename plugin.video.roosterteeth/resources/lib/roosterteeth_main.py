@@ -5,6 +5,7 @@
 # Imports
 #
 from future import standard_library
+
 standard_library.install_aliases()
 from builtins import object
 import sys
@@ -16,9 +17,11 @@ import os
 from roosterteeth_const import LANGUAGE, IMAGES_PATH, ROOSTERTEETH_SERIES_URL, \
     ROOSTERTEETH_RECENTLY_ADDED_VIDEOS_SERIES_URL, ACHIEVEMENTHUNTER_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
     FUNHAUS_RECENTLY_ADDED_VIDEOS_SERIES_URL, INSIDE_GAMING_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
-    SCREWATTACK__RECENTLY_ADDED_VIDEOS_SERIES_URL, SUGARPINE7__RECENTLY_ADDED_VIDEOS_SERIES_URL, \
-    COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL, GAMEATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
-    JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL, KINDAFUNNY_RECENTLY_ADDED_VIDEOS_SERIES_URL
+    SCREWATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL, SUGARPINE7_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
+    COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL, JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
+    KINDAFUNNY_RECENTLY_ADDED_VIDEOS_SERIES_URL, ROOSTERTEETH_GET_EVERYTHING_IN_ONE_PAGE_URL_PART, \
+    ROOSTERTEETH_ORDER_URL_PART
+
 
 #
 # Main class
@@ -36,7 +39,7 @@ class Main(object):
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30301),
                       "url": ROOSTERTEETH_RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
+                      "show_serie_name": "True", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30301))
         is_folder = True
@@ -47,7 +50,9 @@ class Main(object):
         #
         # Series
         #
-        parameters = {"action": "list-series", "plugin_category": LANGUAGE(30302), "url": ROOSTERTEETH_SERIES_URL,
+        parameters = {"action": "list-series", "plugin_category": LANGUAGE(30302),
+                      "url": ROOSTERTEETH_SERIES_URL + ROOSTERTEETH_GET_EVERYTHING_IN_ONE_PAGE_URL_PART +
+                             ROOSTERTEETH_ORDER_URL_PART,
                       "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30302))
@@ -61,7 +66,7 @@ class Main(object):
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30303),
                       "url": ACHIEVEMENTHUNTER_RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
+                      "show_serie_name": "True", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30303))
         is_folder = True
@@ -74,7 +79,7 @@ class Main(object):
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30305),
                       "url": FUNHAUS_RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
+                      "show_serie_name": "True", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30305))
         is_folder = True
@@ -87,7 +92,7 @@ class Main(object):
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30315),
                       "url": INSIDE_GAMING_RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
+                      "show_serie_name": "True", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30315))
         is_folder = True
@@ -99,8 +104,8 @@ class Main(object):
         # Screw Attack Recently Added Episodes
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30307),
-                      "url": SCREWATTACK__RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
+                      "url": SCREWATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30307))
         is_folder = True
@@ -112,8 +117,8 @@ class Main(object):
         # Sugar Pine 7 Recently Added Episodes
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30311),
-                      "url": SUGARPINE7__RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
+                      "url": SUGARPINE7_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30311))
         is_folder = True
@@ -126,22 +131,9 @@ class Main(object):
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30309),
                       "url": COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
+                      "show_serie_name": "True", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30309))
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
-        # Game Attack Recently Added Episodes
-        #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30313),
-                      "url": GAMEATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30313))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
         list_item.setProperty('IsPlayable', 'false')
@@ -152,7 +144,7 @@ class Main(object):
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30317),
                       "url": JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
+                      "show_serie_name": "True", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30317))
         is_folder = True
@@ -165,7 +157,7 @@ class Main(object):
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30319),
                       "url": KINDAFUNNY_RECENTLY_ADDED_VIDEOS_SERIES_URL,
-                      "show_serie_name": "True", "next_page_possible": "False"}
+                      "show_serie_name": "True", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30319))
         is_folder = True

@@ -5,6 +5,7 @@
 # Imports
 #
 from future import standard_library
+
 standard_library.install_aliases()
 from builtins import object
 import os
@@ -15,7 +16,8 @@ import xbmcgui
 import xbmcplugin
 import json
 
-from roosterteeth_const import IMAGES_PATH, HEADERS, LANGUAGE, convertToUnicodeString, log, ROOSTERTEETH_BASE_URL
+from roosterteeth_const import IMAGES_PATH, HEADERS, LANGUAGE, convertToUnicodeString, log, ROOSTERTEETH_BASE_URL, \
+    ROOSTERTEETH_PAGE_URL_PART, ROOSTERTEETH_ORDER_URL_PART
 
 
 #
@@ -34,7 +36,8 @@ class Main(object):
         # Parse parameters...
         self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
         self.thumbnail_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['thumbnail_url'][0]
-        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][
+            0]
 
         # log("self.url", self.video_list_page_url)
 
@@ -60,7 +63,7 @@ class Main(object):
 
         html_source = response.text
         html_source = convertToUnicodeString(html_source)
-        
+
         # log("html_source", html_source)
 
         try:
@@ -83,6 +86,15 @@ class Main(object):
             serie_url_last_part = item['links']['episodes']
             serie_url = ROOSTERTEETH_BASE_URL + serie_url_last_part
 
+            # serie_url should now looks something like this: https://svod-be.roosterteeth.com/api/v1/seasons/gameplay-2019/episodes?order=desc
+            # let's alter the selection criteria a bit
+            pos_of_questionmark = serie_url.find("?")
+            if pos_of_questionmark >= 0:
+                serie_url = serie_url[0: pos_of_questionmark]
+                serie_url = serie_url + ROOSTERTEETH_PAGE_URL_PART + ROOSTERTEETH_ORDER_URL_PART
+
+            log("serie_url", serie_url)
+
             thumb = self.thumbnail_url
 
             title = season_title
@@ -94,7 +106,7 @@ class Main(object):
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
-                             'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+                              'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'false')
 
             # let's remove any non-ascii characters from the title, to prevent errors with urllib.parse.parse_qs
@@ -102,7 +114,7 @@ class Main(object):
             title = title.encode('ascii', 'ignore')
 
             parameters = {"action": "list-episodes", "url": url, "title": title, "show_serie_name": "False",
-                          "next_page_possible": "False"}
+                          "next_page_possible": "True"}
             plugin_url_with_parms = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Add refresh option to context menu

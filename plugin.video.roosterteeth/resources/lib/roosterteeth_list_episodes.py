@@ -37,9 +37,32 @@ class Main(object):
         self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
         self.show_serie_name = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['show_serie_name'][0]
 
-        # log("self.url", self.url)
+        log("self.url", self.url)
 
-        # log("self.show_serie_name", self.show_serie_name)
+        # log("self.next_page_possible", self.next_page_possible)
+
+        # Make the next page url
+        if self.next_page_possible == 'True':
+            # Determine current item number, next item number, next_url
+            pos_of_page = self.url.rfind('page=')
+
+            # log("pos_of_page", pos_of_page)
+
+            if pos_of_page >= 0:
+                page_number_str = str(
+                    self.url[pos_of_page + len('page='):pos_of_page + len('page=') + len('000')])
+                page_number = int(page_number_str)
+                self.page_number_next = page_number + 1
+                if self.page_number_next >= 100:
+                    page_number_next_str = str(self.page_number_next)
+                elif self.page_number_next >= 10:
+                    page_number_next_str = '0' + str(self.page_number_next)
+                else:
+                    page_number_next_str = '00' + str(self.page_number_next)
+
+                self.next_url = self.url.replace('page=' + page_number_str, 'page=' + page_number_next_str)
+
+                log("self.next_url", self.next_url)
 
         #
         # Get the videos...
@@ -153,6 +176,24 @@ class Main(object):
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
             # Add our item to the listing as a 3-element tuple.
             listing.append((plugin_url_with_parms, list_item, is_folder))
+
+        # Make a next page item, if a next page is possible
+        total_pages_str = json_data['total_pages']
+        total_pages = int(total_pages_str)
+        if self.page_number_next <= total_pages:
+            # Next page entry
+            if self.next_page_possible == 'True':
+                list_item = xbmcgui.ListItem(LANGUAGE(30200), thumbnailImage=os.path.join(IMAGES_PATH, 'next-page.png'))
+                list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+                list_item.setProperty('IsPlayable', 'false')
+                parameters = {"action": "list-episodes", "url": str(self.next_url),
+                              "next_page_possible": self.next_page_possible, "show_serie_name": self.show_serie_name}
+                url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
+                is_folder = True
+                # Add refresh option to context menu
+                list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
+                # Add our item to the listing as a 3-element tuple.
+                listing.append((url, list_item, is_folder))
 
         # Add our listing to Kodi.
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems

@@ -18,30 +18,50 @@ IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'reso
 KODI_ROOSTERTEETH_ADDON_CLIENT_ID = '4338d2b4bdc8db1239360f28e72f0d9ddb1fd01e7a38fbb07b4b1f4ba4564cc5'
 ROOSTERTEETH_AUTHORIZATION_URL = 'https://auth.roosterteeth.com/oauth/token'
 ROOSTERTEETH_BASE_URL = 'https://svod-be.roosterteeth.com'
+
+# Keep pagenumbers 3 digits
+ROOSTERTEETH_GET_EVERYTHING_IN_ONE_PAGE_URL_PART = '?per_page=1000&filter=all&page=001'
+NUMBER_OF_EPISODES_PER_PAGE = '24'
+ROOSTERTEETH_PAGE_URL_PART = '?per_page=' + NUMBER_OF_EPISODES_PER_PAGE + '&filter=all&page=001'
+ROOSTERTEETH_ORDER_URL_PART = '&order=desc'
+
+# Shows
 ROOSTERTEETH_SERIES_BASE_URL = 'https://svod-be.roosterteeth.com/api/v1/shows'
-ROOSTERTEETH_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/shows?per_page=1000&order=desc'
-NUMBER_OF_EPISODES_PER_PAGE = '30'
-ROOSTERTEETH_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/rooster-teeth/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-ACHIEVEMENTHUNTER_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/achievement-hunter/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-FUNHAUS_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/funhaus/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-INSIDE_GAMING_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/funhaus/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-SCREWATTACK__RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/screwattack/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-SUGARPINE7__RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/sugar-pine-7/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/cow-chop/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-GAMEATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/game-attack/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/jt-music/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
-KINDAFUNNY_RECENTLY_ADDED_VIDEOS_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/channels/kinda-funny/episodes?per_page=' + NUMBER_OF_EPISODES_PER_PAGE
+ROOSTERTEETH_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/shows' + ROOSTERTEETH_GET_EVERYTHING_IN_ONE_PAGE_URL_PART
+
+# Recent video's per channel
+ROOSTERTEETH_CHANNEL_BASE_URL = "https://svod-be.roosterteeth.com/api/v1/episodes"
+ROOSTERTEETH_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
+                                              + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=rooster-teeth"
+ACHIEVEMENTHUNTER_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
+                                                   + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=achievement-hunter"
+FUNHAUS_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
+                                         + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=funhaus"
+INSIDE_GAMING_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
+                                               + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=inside-gaming"
+SCREWATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
+                                             + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=screwattack"
+SUGARPINE7_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
+                                            + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=sugar-pine-7"
+COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
+                                         + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=cow-chop"
+JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
+                                         + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=jt-music"
+KINDAFUNNY_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
+                                            + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=kinda-funny"
+
 SPONSOR_ONLY_VIDEO_TITLE_PREFIX = '* '
+INDEX_DOT_M3U8 = "index.m3u8"
 VQ4K = '4k'
 VQ1080P = '1080p'
 VQ720P = '720p'
 VQ480P = '480p'
 VQ360P = '360p'
 VQ240P = '240p'
-HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-DATE = "2019-03-13"
-VERSION = "1.3.10"
-
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+DATE = "2019-06-09"
+VERSION = "1.4.1"
 
 if sys.version_info[0] > 2:
     unicode = str
@@ -88,7 +108,8 @@ def find_all(string_to_be_searched_for, string_to_be_searched_in):
     start_pos_array = []
     # exit loop when kodi gets an abort-request
     while not monitor.abortRequested():
-        found_start_pos = string_to_be_searched_in.find(string_to_be_searched_for, start_pos_in_string_to_be_searched_in)
+        found_start_pos = string_to_be_searched_in.find(string_to_be_searched_for,
+                                                        start_pos_in_string_to_be_searched_in)
         if found_start_pos == -1:
             # exit the loop
             break

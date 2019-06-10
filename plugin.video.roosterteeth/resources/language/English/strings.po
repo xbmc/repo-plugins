@@ -39,6 +39,10 @@ msgctxt "#30017"
 msgid "Password"
 msgstr ""
 
+msgctxt "#30018"
+msgid "Use Adaptive Inputstream (Video Quality chosen by that Addon)"
+msgstr ""
+
 msgctxt "#30020"
 msgid "Maximum Video Quality"
 msgstr ""

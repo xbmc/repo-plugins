@@ -16,7 +16,8 @@ import xbmcgui
 import xbmcplugin
 import json
 
-from roosterteeth_const import IMAGES_PATH, HEADERS, LANGUAGE, convertToUnicodeString, log, ROOSTERTEETH_SERIES_BASE_URL
+from roosterteeth_const import IMAGES_PATH, HEADERS, LANGUAGE, convertToUnicodeString, log, \
+    ROOSTERTEETH_SERIES_BASE_URL, ROOSTERTEETH_GET_EVERYTHING_IN_ONE_PAGE_URL_PART, ROOSTERTEETH_ORDER_URL_PART
 
 
 #
@@ -35,7 +36,8 @@ class Main(object):
         # Parse parameters...
         self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
         self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][
+            0]
 
         # log("self.url", self.video_list_page_url)
 
@@ -79,12 +81,17 @@ class Main(object):
         for item in json_data['data']:
             serie_title = item['attributes']['title']
 
+            # this part looks like this f.e.: /series/nature-town
             serie_url_middle_part = item['canonical_links']['self']
-            # the serie url should something like this:
-            # https://svod-be.roosterteeth.com/api/v1/shows/always-open/seasons
-            serie_url = ROOSTERTEETH_SERIES_BASE_URL + serie_url_middle_part + '/seasons'
-            # remove '/series/' from the url
-            serie_url = serie_url.replace('/series/', '/')
+            serie_name = serie_url_middle_part.replace('/series/', '')
+
+            # log("serie_url_middle_part", serie_url_middle_part)
+            # log("serie_name", serie_name)
+
+            # the serie url should become something like this:
+            # https://svod-be.roosterteeth.com/api/v1/shows/nature-town/seasons?order=desc
+            serie_url = ROOSTERTEETH_SERIES_BASE_URL + '/' + serie_name + '/' + 'seasons' \
+                        + ROOSTERTEETH_GET_EVERYTHING_IN_ONE_PAGE_URL_PART + ROOSTERTEETH_ORDER_URL_PART
 
             thumb = item['included']['images'][0]['attributes']['thumb']
 
@@ -104,7 +111,7 @@ class Main(object):
             # of the parameters
             title = title.encode('ascii', 'ignore')
 
-            parameters = {"action": "list-serie-seasons", "url": url, "title": title, "thumbnail_url": thumbnail_url ,
+            parameters = {"action": "list-serie-seasons", "url": url, "title": title, "thumbnail_url": thumbnail_url,
                           "next_page_possible": "False"}
             plugin_url_with_parms = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True

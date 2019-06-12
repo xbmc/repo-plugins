@@ -1,3 +1,6 @@
+1.3.11 (2019-06-09)
+- marking the addon broken for gotham. A working version will be available in Leia (Kodi 18)
+
 1.3.10 (2019-03-13)
 - fixed videos
 - removed the know channel

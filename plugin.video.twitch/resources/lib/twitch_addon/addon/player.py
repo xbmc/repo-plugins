@@ -2,7 +2,7 @@
 """
     Player for handling Callbacks only
 
-    Copyright (C) 2012-2018 Twitch-on-Kodi
+    Copyright (C) 2012-2019 Twitch-on-Kodi
 
     This file is part of Twitch-on-Kodi (plugin.video.twitch)
 
@@ -23,7 +23,6 @@ converter = JsonListItemConverter(LINE_LENGTH)
 
 
 class TwitchPlayer(xbmc.Player):
-    window = kodi.Window(10000)
     player_keys = {
         'twitch_playing': ID + '-twitch_playing'
     }
@@ -34,8 +33,12 @@ class TwitchPlayer(xbmc.Player):
         'stream': ID + '-livestream'
     }
 
-    def __init__(self, *args, **kwargs):
+    def __new__(cls, window, *args, **kwargs):
+        return super(TwitchPlayer, cls).__new__(cls, *args, **kwargs)
+
+    def __init__(self, window, *args, **kwargs):
         log_utils.log('Player: Start', log_utils.LOGDEBUG)
+        self.window = window
         self.reset()
 
     def reset(self):

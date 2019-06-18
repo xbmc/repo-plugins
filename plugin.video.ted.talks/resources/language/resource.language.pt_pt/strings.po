@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.ted.talks\n"
+"Report-Msgid-Bugs-To: https://github.com/moreginger/xbmc-plugin.video.ted.talks\n"
+"POT-Creation-Date: 2017-01-13 22:42+000\n"
+"PO-Revision-Date: 2017-01-13 22:42+000\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/xbmc-addons/language/pt_PT/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_PT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "TED Talks"
+msgstr "Conversas do TED"
+
+msgctxt "#30001"
+msgid "Newest Talks"
+msgstr "Novas conversas"
+
+msgctxt "#30031"
+msgid "TED is a nonprofit devoted to Ideas Worth Spreading. On this feed, you'll find TEDTalks video to inspire, intrigue and stir the imagination from some of the world's leading thinkers and doers, speaking from the stage at TED conferences, TEDx events and partner events around the world. This podcast is also available in high-def video and audio-only formats."
+msgstr "TED é uma organização sem fins lucrativos dedicada a 'Ideias com Valor'. Foi iniciada em 1984 como uma conferência que pretendia juntar pessoas de três mundos: Tecnologia, Entretenimento e Design. Desde ai, tornou-se muito mais abrangente. Juntamente com a conferência TED anual em Long Beach, California, e a conferência TEDGlobal em Oxford, UK, TED inclui o premiado site de vídeos TEDTalks, o Open Translation Program, o novo programa de comunidade TEDx, a conferência TEDIndia deste ano e o prémio anual TED Prize."
+
+msgctxt "#30002"
+msgid "Speakers"
+msgstr "Oradores"
+
+msgctxt "#30032"
+msgid "Thinkers. Doers. Idea-generators. These are the speakers who have delivered a talk featured on TED.com. Whether the talk was given at an official TED conference, at one of thousands of local, independently organized TEDx events, or on another stage altogether, these are the people who brought it to life."
+msgstr "O painel de apresentadores cresceu para incluir cientistas, filósofos, músicos, líderes religiosos, filantropos e muitos outros. Ao longo dos anos, os oradores do TED incluiram Bill Gates, Frank Gehry, Jane Goodall, Al Gore, Billy Graham, Peter Gabriel, Quincy Jones, Bono e outros. Ainda assim, muitas vezes, as verdadeiras estrelas são inesperadas: Li Lu, um organizador dos protestos estudantis na Praça Tiananmen; Aimee Mullins, uma atleta paraolímpica que experimentou novas próteses no palco ou Jennifer Lin, uma pianista de 14 anos, cuja improvisação de 6 minutos levou a audiência às lágrimas."
+
+msgctxt "#30004"
+msgid "Search"
+msgstr "procura"
+
+msgctxt "#30034"
+msgid "Search for Talks on TED.com"
+msgstr "Procurar conversas em TED.com"
+
+msgctxt "#30007"
+msgid "Topics"
+msgstr "Tópicos"
+
+msgctxt "#30020"
+msgid "Next"
+msgstr "Seguinte"
+
+msgctxt "#30021"
+msgid "Previous"
+msgstr "Anterior"

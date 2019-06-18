@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 #------------------------------------------------------------
 # License: GPL (http://www.gnu.org/licenses/gpl-3.0.html)
@@ -51,15 +52,11 @@ def main_list(params):
         fanart="fanart.jpg",
         folder=True )    
     
-    plugintools.add_item( 
-        #action="", 
-        title="Movies From Maverick Entertainment",
-        url="https://www.youtube.com/playlist?list=PLDySQNnzfMCqoBxquMEhCOi0GUEB1RbCf",
-        thumbnail=icon,
-        fanart="fanart.jpg",
-        folder=True )
-    
+ 
+        
     playlists = []
+    playlists.append(("Movies From Maverick Entertainment","PLDySQNnzfMCqoBxquMEhCOi0GUEB1RbCf"))
+    playlists.append(("Scottish Movies","PLmRZGLKXlU2AllRch_NW-MKySlV89M5Vk"))
     playlists.append(("Animated Movies","PLwk819jJ5CdpW41PWVp9wtDrw_KBC9h8y"))
     playlists.append(("Classic Movies - Action","PLwk819jJ5CdqFIs_zKIV4arQeCiItlhlQ"))
     playlists.append(("Classic Movies - Adventure","PLwk819jJ5CdosuzWibf_E6ZmErWt78BZn"))
@@ -78,3 +75,4 @@ def main_list(params):
         folder=True )
 
 run()
+

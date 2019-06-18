@@ -18,9 +18,13 @@
     <platform>all</platform>
     <source>https://github.com/remichie/repo-plugins/tree/leia/plugin.video.itvrs</source>
     <license>GPL v2.0</license>
-    <assets>
-        <icon>icon.png</icon>
-        <fanart>fanart.jpg</fanart>
-    </assets>
+  <assets>
+     <icon>resources/icon.png</icon>
+     <fanart>resources/fanart.jpg</fanart>
+     <screenshot>resources/media/screenshot-01.jpg</screenshot>
+     <screenshot>resources/media/screenshot-02.jpg</screenshot>
+     <screenshot>resources/media/screenshot-03.jpg</screenshot>
+     <screenshot>resources/media/screenshot-04.jpg</screenshot>
+  </assets>
   </extension>
 </addon>

@@ -63,7 +63,8 @@ def main_list(params):
     playlists.append(("Classic Movies - Crime","PLwk819jJ5Cdqffh8uP9-0F5FB_NJUBGb1"))
     playlists.append(("Classic Movies - Drama","PLwk819jJ5CdoquDFHXiu7vk_pvOLDlhvA"))
     playlists.append(("Classic Movies - Fantasy","PLwk819jJ5CdrF_b1oht-tC0O0HxFP6D4g"))
-    playlists.append(("Classic Movies - Westerns ","PLwk819jJ5CdqSi7GIeguKeU3ul-byTEF2"))
+    playlists.append(("Classic Movies - Westerns","PLwk819jJ5CdqSi7GIeguKeU3ul-byTEF2"))
+    playlists.append(("News","PLwk819jJ5Cdo9jItpKsCZINK1R-cVCl5X"))
 
 
     for playlist in playlists:

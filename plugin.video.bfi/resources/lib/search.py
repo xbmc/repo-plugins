@@ -15,14 +15,12 @@ SEARCH_URI = "https://search-es.player.bfi.org.uk/prod-films/_search"
 PLAYER_URI = "https://player.ooyala.com/hls/player/all/"
 RECENT_URI = "https://player.bfi.org.uk/free/film/watch"
 
-STREAM_BANDWIDTH = ku.get_setting_as_int("stream_bandwidth")
+STREAM_BANDWIDTH = ku.get_setting("stream_bandwidth")
 SEARCH_MAX_RESULTS = ku.get_setting_as_int("search_max_results")
 SEARCH_DEFAULT_OPERATOR = ku.get_setting("search_default_operator")
 SEARCH_LENIENT = ku.get_setting_as_bool("search_lenient")
 SEARCH_SAVED = ku.get_setting_as_bool("search_saved")
 SEARCH_TIMEOUT = 60
-
-CACHE_URI = ku.translate_path("special://profile/addon_data/plugin.video.bfi/cache.sqlite")
 SAVED_SEARCH = "app://saved-searches"
 
 
@@ -38,17 +36,8 @@ def query_decode(query):
 
 def html_to_text(text):
     # type (str) -> str
-    soup = BeautifulSoup(text, "html.parser", from_encoding="utf-8")
+    soup = BeautifulSoup(text, "html.parser")
     return '\n'.join(soup.stripped_strings)
-
-
-def text_to_int(text):
-    # type (str) -> int
-    """Extracts each digit from a string in sequence, defaults to 0"""
-    try:
-        return int("".join(x for x in text if x.isdigit()))
-    except ValueError:
-        return 0
 
 
 def add_cache_headers(headers, cached):
@@ -84,14 +73,14 @@ def get_page_url(href):
 
 def save(searches):
     # type: (list) -> None
-    with Cache(CACHE_URI) as c:
+    with Cache() as c:
         c.set(SAVED_SEARCH, json.dumps(searches, ensure_ascii=False), None)
 
 
 def retrieve():
     # type: () -> list
     """Gets list of saved search strings"""
-    with Cache(CACHE_URI) as c:
+    with Cache() as c:
         data = c.get(SAVED_SEARCH)
         return json.loads(data["blob"]) if data else []
 
@@ -128,20 +117,20 @@ def append(query):
 
 def get_recent():
     # type: () -> list
-    with Cache(CACHE_URI) as c:
+    with Cache() as c:
         data = c.domain(RECENT_URI)
         return data if data is not None else []
 
 
 def cache_clear():
     # type: () -> None
-    with Cache(CACHE_URI) as c:
+    with Cache() as c:
         c.clear()
 
 
 def recent_clear():
     # type: () -> None
-    with Cache(CACHE_URI) as c:
+    with Cache() as c:
         data = c.domain(RECENT_URI, 99999)
         for item in data:
             c.delete(item["uri"])
@@ -157,7 +146,7 @@ def get_m3u8(url):
         "Accept": "application/x-mpegURL",
         "Accept-encoding": "gzip"
     }
-    with Cache(CACHE_URI) as c:
+    with Cache() as c:
         cached = c.get(url)
         if cached:
             add_cache_headers(headers, cached)
@@ -179,7 +168,7 @@ def get_html(url):
         "Accept": "text/html",
         "Accept-encoding": "gzip"
     }
-    with Cache(CACHE_URI) as c:
+    with Cache() as c:
         cached = c.get(url)
         if cached:
             add_cache_headers(headers, cached)
@@ -205,7 +194,7 @@ def get_json(url):
         "Accept": "application/json",
         "Accept-encoding": "gzip"
     }
-    with Cache(CACHE_URI) as c:
+    with Cache() as c:
         cached = c.get(url)
         if cached:
             add_cache_headers(headers, cached)

@@ -16,7 +16,7 @@ plugin = routing.Plugin()
 ADDON = xa.Addon()
 ADDON_ID = ADDON.getAddonInfo("id")  # plugin.video.bfi
 ADDON_NAME = ADDON.getAddonInfo("name")  # BFI Player
-MEDIA_URI = "special://home/addons/{}/resources/media/".format(ADDON_ID)
+
 PLAYER_ID_ATTR = "data-video-id"
 JIG = {
     "category": {
@@ -44,14 +44,14 @@ def add_menu_item(method, label, args=None, art=None, info=None, directory=True)
     info = {} if info is None else info
     art = {} if art is None else art
     args = {} if args is None else args
-    label = ku.get_string(label) if isinstance(label, int) else label
+    label = ku.localize(label) if isinstance(label, int) else label
     list_item = ListItem(label)
     list_item.setArt(art)
     list_item.setInfo("video", info)
     if method == search and "q" in args:
         # saved search menu items can be removed via context menu
         list_item.addContextMenuItems([(
-            ku.get_string(32019),
+            ku.localize(32019),
             "XBMC.RunPlugin({})".format(plugin.url_for(search, delete=True, q=label))
         )])
     if not directory and method == play_film:
@@ -76,9 +76,9 @@ def paginate(query, count, total, offset):
     """Adds search partition menu items"""
     if count < total and count == bfis.SEARCH_MAX_RESULTS:
         offset += 1
-        next_page = "[{} {}]".format(ku.get_string(32011), offset + 1)  # [Page n+1]
-        first_page = "[{} 1]".format(ku.get_string(32011))  # [Page 1]
-        main_menu = "[{}]".format(ku.get_string(32012))  # [Menu]
+        next_page = "[{} {}]".format(ku.localize(32011), offset + 1)  # [Page n+1]
+        first_page = "[{} 1]".format(ku.localize(32011))  # [Page 1]
+        main_menu = "[{}]".format(ku.localize(32012))  # [Menu]
         if offset > 1:
             add_menu_item(search, first_page, {"q": query, "offset": 0})
         add_menu_item(search, next_page, {"q": query, "offset": offset})
@@ -99,20 +99,20 @@ def index():
     if ku.get_setting_as_bool("show_home"):
         add_menu_item(show_category, 32009, {
             "href": "free",
-            "title": ku.get_string(32009)}, ku.icon("home.png"))
+            "title": ku.localize(32009)}, ku.icon("home.png"))
     if ku.get_setting_as_bool("show_new"):
         add_menu_item(show_category, 32004, {
             "href": "free/new",
-            "title": ku.get_string(32004)}, ku.icon("new.png"))
+            "title": ku.localize(32004)}, ku.icon("new.png"))
     if ku.get_setting_as_bool("show_popular"):
         add_menu_item(show_category, 32005, {
             "href": "free/popular",
-            "title": ku.get_string(32005)}, ku.icon("popular.png"))
+            "title": ku.localize(32005)}, ku.icon("popular.png"))
     if ku.get_setting_as_bool("show_collections"):
         add_menu_item(show_category, 32006, {
             "key": "collection",
             "href": "free/collections",
-            "title": ku.get_string(32006),
+            "title": ku.localize(32006),
             "isdir": True
         }, ku.icon("collection.png"))
     if ku.get_setting_as_bool("show_the_cut"):
@@ -178,11 +178,10 @@ def search():
 
     # View saved search menu
     if bool(get_arg("menu", False)):
-        add_menu_item(search, "[{}]".format(ku.get_string(32016)), {"new": True})  # [New Search]
+        add_menu_item(search, "[{}]".format(ku.localize(32016)), {"new": True})  # [New Search]
         for item in bfis.retrieve():
-            text = item.encode("utf-8")
-            add_menu_item(search, text, {"q": text})
-        xp.setPluginCategory(plugin.handle, ku.get_string(32007))  # Search
+            add_menu_item(search, item, {"q": item})
+        xp.setPluginCategory(plugin.handle, ku.localize(32007))  # Search
         xp.endOfDirectory(plugin.handle)
         return True
 
@@ -198,7 +197,7 @@ def search():
     if data is None:
         return False
 
-    hits = data.get("hits", False)
+    hits = data.get("hits")
     if not hits:
         return False
 
@@ -233,7 +232,7 @@ def search():
             info,
             False)
     xp.setContent(plugin.handle, "videos")
-    xp.setPluginCategory(plugin.handle, "{} '{}'".format(ku.get_string(32007), bfis.query_decode(query)))
+    xp.setPluginCategory(plugin.handle, "{} '{}'".format(ku.localize(32007), bfis.query_decode(query)))
     xp.addSortMethod(plugin.handle, xp.SORT_METHOD_LABEL_IGNORE_THE)
     xp.addSortMethod(plugin.handle, xp.SORT_METHOD_GENRE)
     xp.addSortMethod(plugin.handle, xp.SORT_METHOD_VIDEO_YEAR)
@@ -246,25 +245,26 @@ def show_category():
     key = get_arg("key", "category")
     href = get_arg("href", "free")
     is_dir = bool(get_arg("isdir", False))
-    category = get_arg("title", ku.get_string(32008))
+    category = get_arg("title", ku.localize(32008))
     url = bfis.get_page_url(href)
     html = bfis.get_html(url)
     for card in html.findAll(*JIG[key]["card"]):
         action = card.find(["a", "card__action"])
         if action is None:
             continue
-
-        title = card.find(*JIG[key]["title"]).text.encode("utf-8")
+        title_tag = card.find(*JIG[key]["title"])
+        plot_tag = card.find(*JIG[key]["plot"])
+        title = title_tag.text.encode("utf-8") if title_tag else action["aria-label"]
         info = {
             "mediatype": "video",
-            "plot": bfis.html_to_text(card.find(*JIG[key]["plot"]).text.encode("utf-8"))
+            "plot": bfis.html_to_text(plot_tag.text) if plot_tag else ""
         }
         if "meta" in JIG[key]:
             try:
                 genre, year, duration = card.find_all(*JIG[key]["meta"], limit=3)
-                info["genre"] = genre.text.encode("utf-8")
-                info["year"] = bfis.text_to_int(year.text.encode("utf-8"))
-                info["duration"] = bfis.text_to_int(duration.text.encode("utf-8")) * 60  # duration is min
+                info["genre"] = genre.text
+                info["year"] = year.text
+                info["duration"] = duration.text * 60  # duration is min
             except (ValueError, TypeError):
                 pass
         add_menu_item(

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.bfi" name="BFI Player" version="1.0.3" provider-name="fraser">
+<addon id="plugin.video.bfi" name="BFI Player" version="1.1.0" provider-name="fraser">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.routing" version="0.2.0"/>
-        <import addon="script.module.beautifulsoup4" version="4.3.2" />
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
         <import addon="script.module.requests" version="2.12.4"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
@@ -12,22 +12,18 @@
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Search and play free movies from the BFI collection</summary>
         <description lang="en_GB">This add-on enables playing of videos and movies from the BFI Player website.
-        It is not created, maintained or in any way affiliated with the British Film Institute.
-        The add-on only provides an interface to access the free content on the BFI Player website from Kodi.</description>
+            It is not created, maintained or in any way affiliated with the British Film Institute.
+            The add-on only provides an interface to access the free content on the BFI Player website from Kodi.
+        </description>
         <language>en</language>
         <platform>all</platform>
         <license>MIT</license>
-        <forum></forum>
+        <forum>https://forum.kodi.tv/showthread.php?tid=331302</forum>
         <website>https://player.bfi.org.uk/free</website>
         <email>fraser.chapman@gmail.com</email>
         <source>https://github.com/FraserChapman/plugin.video.bfi</source>
-        <news>v1.0.3 (28-5-19)
-            - Fixes non-absolute image URLs
-            v1.0.2 (28-2-19)
-            - Scraper update to reflect changes on bfi website
-            v1.0.1 (24-4-18)
-        - Small bug fix</news>
-        <disclaimer lang="en_GB">Neither this addon nor its author are in anyway affiliated with the BFI</disclaimer>
+        <news>v1.1.0 (19-6-19) - Python 3 compatible</news>
+        <disclaimer lang="en_GB">>Neither this addon nor its author are in anyway affiliated with the BFI</disclaimer>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>

@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import json as json
 import logging
+import os
 
 import xbmc
 import xbmcaddon
 import xbmcgui
 
-# read settings
-ADDON = xbmcaddon.Addon()
 logger = logging.getLogger(__name__)
 
-ADDON_ID = ADDON.getAddonInfo("id")
-MEDIA_URI = "special://home/addons/{}/resources/media/".format(ADDON_ID)
+ADDON = xbmcaddon.Addon()
+ADDON_PATH = ADDON.getAddonInfo("path")
+ADDON_NAME = ADDON.getAddonInfo("name")
+MEDIA_URI = os.path.join(ADDON_PATH, "resources", "media")
 
 
 def art(domain, image):
@@ -28,13 +28,13 @@ def art(domain, image):
 
 
 def icon(image):
-    return {"icon": translate_path("{}{}".format(MEDIA_URI, image))}
+    # type (str) -> dict
+    """Creates the application folder icon info for main menu items"""
+    return {"icon": os.path.join(MEDIA_URI, image)}
 
 
 def user_input():
-    keyboard = xbmc.Keyboard("",
-                             "{} {}".format(get_string(32007),  # Search
-                                            ADDON.getAddonInfo("name")))
+    keyboard = xbmc.Keyboard("", "{} {}".format(localize(32007), ADDON_NAME))  # Search
     keyboard.doModal()
     if keyboard.isConfirmed():
         return keyboard.getText()
@@ -42,7 +42,7 @@ def user_input():
 
 
 def confirm():
-    return xbmcgui.Dialog().yesno("BFI Player", get_string(32023))  # Are you sure?
+    return xbmcgui.Dialog().yesno("BFI Player", localize(32023))  # Are you sure?
 
 
 def notification(header, message, time=5000, image=ADDON.getAddonInfo("icon"), sound=True):
@@ -50,7 +50,7 @@ def notification(header, message, time=5000, image=ADDON.getAddonInfo("icon"), s
 
 
 def translate_path(path):
-    return xbmc.translatePath(path).decode("utf-8")
+    return xbmc.translatePath(path)
 
 
 def show_settings():
@@ -58,7 +58,7 @@ def show_settings():
 
 
 def get_setting(setting):
-    return ADDON.getSetting(setting).strip().decode("utf-8")
+    return ADDON.getSetting(setting).strip()
 
 
 def set_setting(setting, value):
@@ -66,10 +66,12 @@ def set_setting(setting, value):
 
 
 def get_setting_as_bool(setting):
+    # type (str) -> bool
     return get_setting(setting).lower() == "true"
 
 
 def get_setting_as_float(setting):
+    # type (str) -> float
     try:
         return float(get_setting(setting))
     except ValueError:
@@ -77,30 +79,13 @@ def get_setting_as_float(setting):
 
 
 def get_setting_as_int(setting):
+    # type (str) -> int
     try:
         return int(get_setting_as_float(setting))
     except ValueError:
         return 0
 
 
-def get_string(string_id):
-    return ADDON.getLocalizedString(string_id).encode("utf-8", "ignore")
-
-
-def kodi_json_request(params):
-    data = json.dumps(params)
-    request = xbmc.executeJSONRPC(data)
-
-    try:
-        response = json.loads(request)
-    except UnicodeDecodeError:
-        response = json.loads(request.decode("utf-8", "ignore"))
-
-    try:
-        if "result" in response:
-            return response["result"]
-        return None
-    except KeyError:
-        logger.warn("[%s] %s" %
-                    (params["method"], response["error"]["message"]))
-        return None
+def localize(string_id):
+    # type (str) -> str
+    return ADDON.getLocalizedString(string_id)

@@ -1,3 +1,7 @@
+v1.1.0
+- Python 3 compatible
+  Removed hardcoded special urls
+
 v1.0.3
 - Fixes non-absolute image URLs
 

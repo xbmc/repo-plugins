@@ -1,5 +1,12 @@
-from resources.lib import itvrs
+# -*- coding: utf-8 -*-
 
-if __name__ == '__main__':
-    itvrs.run()
-    
+from resources.lib import kodilogging
+from resources.lib import plugin
+
+import logging
+import xbmcaddon
+
+ADDON = xbmcaddon.Addon()
+kodilogging.config()
+
+plugin.run()

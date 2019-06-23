@@ -9,6 +9,6 @@ id = plugin.video.itvrs
 #
 name = ITVRS
 #
-version = 1.0.0
+version = 0.0.1
 #
 provider-name = Rudi Paret (Remichie)

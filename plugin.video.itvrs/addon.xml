@@ -15,13 +15,10 @@
         <summary lang="en_GB">ITVRS TV</summary>
     <description lang="en_GB">Independnt TV and Radio Scotland (ITVRS) offers movies and series, TV shows, cartoons, News, documentaries and shorts, and ITVRS broadcasts.</description>
         <language>en</language>
-        <platform>all</platform
+	<platform>all</platform>
         <license>GPL-3.0</license>
-        <forum></forum>
-        <website></website>
         <email>info@itvrs.com</email>
         <source>https://github.com/remichie/repo-plugins/tree/leia/plugin.video.itvrs</source>
-        <news></news>
         <disclaimer lang="en_GB">Some videos might be blocked in your country</disclaimer>
         <assets>
             <icon>resources/icon.png</icon>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.itvrs" name="ITVRS" version="0.0.1" provider-name="Rudi Paret (Remichie)">
+<addon id="plugin.video.itvrs"
+	name="ITVRS"
+	version="0.0.1"
+	provider-name="Rudi Paret (Remichie)">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.routing" version="0.2.0"/>

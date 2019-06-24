@@ -21,7 +21,7 @@ from ..kodion.items import *
 from ..youtube.client import YouTube
 from .helper import v3, ResourceManager, yt_specials, yt_playlist, yt_login, yt_setup_wizard, yt_video, \
     yt_context_menu, yt_play, yt_old_actions, UrlResolver, UrlToItemConverter
-from .youtube_exceptions import LoginException
+from .youtube_exceptions import InvalidGrant, LoginException
 
 import xbmc
 import xbmcaddon
@@ -166,6 +166,7 @@ class Provider(kodion.AbstractProvider):
                  'youtube.unrated.video': 30718,
                  'youtube.subscribed.to.channel': 30719,
                  'youtube.unsubscribed.from.channel': 30720,
+                 'youtube.uploads': 30726,
                  }
 
     def __init__(self):
@@ -351,14 +352,20 @@ class Provider(kodion.AbstractProvider):
                         access_manager.update_dev_access_token(dev_id, access_token, expires_in)
                     else:
                         access_manager.update_access_token(access_token, expires_in)
-                except LoginException as ex:
+                except (InvalidGrant, LoginException) as ex:
                     self.handle_exception(context, ex)
                     access_tokens = ['', '']
                     # reset access_token
-                    if dev_id:
-                        access_manager.update_dev_access_token(dev_id, '')
+                    if isinstance(ex, InvalidGrant):
+                        if dev_id:
+                            access_manager.update_dev_access_token(dev_id, access_token='', refresh_token='')
+                        else:
+                            access_manager.update_access_token(access_token='', refresh_token='')
                     else:
-                        access_manager.update_access_token('')
+                        if dev_id:
+                            access_manager.update_dev_access_token(dev_id, '')
+                        else:
+                            access_manager.update_access_token('')
                     # we clear the cache, so none cached data of an old account will be displayed.
                     self.get_resource_manager(context).clear()
 
@@ -469,6 +476,25 @@ class Provider(kodion.AbstractProvider):
         channel_id = re_match.group('channel_id')
         page_token = context.get_param('page_token', '')
 
+        resource_manager = self.get_resource_manager(context)
+
+        item_params = {}
+        incognito = str(context.get_param('incognito', False)).lower() == 'true'
+        addon_id = context.get_param('addon_id', '')
+        if incognito:
+            item_params.update({'incognito': incognito})
+        if addon_id:
+            item_params.update({'addon_id': addon_id})
+
+        playlists = resource_manager.get_related_playlists(channel_id)
+        uploads_playlist = playlists.get('uploads', '')
+        if uploads_playlist:
+            uploads_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.uploads'])),
+                                         context.create_uri(['channel', channel_id, 'playlist', uploads_playlist],
+                                                            item_params),
+                                         image=context.create_resource_path('media', 'playlist.png'))
+            result.append(uploads_item)
+
         # no caching
         json_data = self.get_client(context).get_playlists_of_channel(channel_id, page_token)
         if not v3.handle_error(self, context, json_data):
@@ -578,17 +604,15 @@ class Provider(kodion.AbstractProvider):
                                       image=context.create_resource_path('media', 'live.png'))
             result.append(live_item)
 
-        playlists = resource_manager.get_related_playlists(channel_id)
-        upload_playlist = playlists.get('uploads', '')
-        if upload_playlist:
-            json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 5,
-                                                         self.get_client(context).get_playlist_items, upload_playlist,
-                                                         page_token=page_token)
-            if not v3.handle_error(self, context, json_data):
-                return False
+        json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 10,
+                                                     self.get_client(context).get_channel_videos,
+                                                     channel_id=channel_id,
+                                                     page_token=page_token)
 
-            result.extend(
-                v3.response_to_items(self, context, json_data, sort=lambda x: x.get_aired(), reverse_sort=True))
+        if not v3.handle_error(self, context, json_data):
+            return False
+
+        result.extend(v3.response_to_items(self, context, json_data))
 
         return result
 
@@ -1549,10 +1573,10 @@ class Provider(kodion.AbstractProvider):
                                     kodion.constants.sort_method.DATE)
 
     def handle_exception(self, context, exception_to_handle):
-        if isinstance(exception_to_handle, LoginException):
+        if (isinstance(exception_to_handle, InvalidGrant) or
+                isinstance(exception_to_handle, LoginException)):
             message_timeout = 5000
             failed_refresh = False
-            context.get_access_manager().update_access_token('')
 
             message = exception_to_handle.get_message()
             msg = exception_to_handle.get_message()

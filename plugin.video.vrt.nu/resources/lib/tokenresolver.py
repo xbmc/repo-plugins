@@ -2,18 +2,24 @@
 
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+''' This module contains all functionality for VRT NU API authentication. '''
+
 from __future__ import absolute_import, division, unicode_literals
+import json
 from resources.lib.helperobjects import Credentials
 
-try:
+try:  # Python 3
+    import http.cookiejar as cookielib
     from urllib.parse import urlencode, unquote
     from urllib.request import build_opener, install_opener, ProxyHandler, HTTPCookieProcessor, HTTPErrorProcessor, urlopen, Request
-except ImportError:
+except ImportError:  # Python 2
     from urllib import urlencode
     from urllib2 import build_opener, install_opener, ProxyHandler, HTTPCookieProcessor, HTTPErrorProcessor, unquote, urlopen, Request
+    import cookielib
 
 
 class NoRedirection(HTTPErrorProcessor):
+    ''' Prevent urllib from following http redirects '''
 
     def http_response(self, request, response):
         return response
@@ -22,79 +28,73 @@ class NoRedirection(HTTPErrorProcessor):
 
 
 class TokenResolver:
+    ''' Get, refresh and cache tokens for VRT NU API authentication. '''
 
     _API_KEY = '3_qhEcPa5JGFROVwu5SWKqJ4mVOIkwlFNMSKwzPDAh8QZOtHqu6L4nD5Q7lk0eXOOG'
     _LOGIN_URL = 'https://accounts.vrt.be/accounts.login'
-    _TOKEN_GATEWAY_URL = 'https://token.vrt.be'
     _VRT_LOGIN_URL = 'https://login.vrt.be/perform_login'
-    _ONDEMAND_COOKIE = 'ondemand_vrtPlayerToken'
-    _LIVE_COOKIE = 'live_vrtPlayerToken'
-    _ROAMING_XVRTTOKEN_COOKIE = 'roaming_XVRTToken'
-    _FAV_TOKEN_GATEWAY_URL = 'https://token.vrt.be/vrtnuinitlogin?provider=site&destination=https://www.vrt.be/vrtnu/'
-    _FAV_XVRTTOKEN_COOKIE = 'user_XVRTToken'
-    _XVRT_TOKEN_COOKIE = 'XVRTToken'
+    _TOKEN_GATEWAY_URL = 'https://token.vrt.be'
+    _USER_TOKEN_GATEWAY_URL = 'https://token.vrt.be/vrtnuinitlogin?provider=site&destination=https://www.vrt.be/vrtnu/'
+    _ROAMING_TOKEN_GATEWAY_URL = 'https://token.vrt.be/vrtnuinitloginEU?destination=https://www.vrt.be/vrtnu/'
 
     def __init__(self, _kodi):
+        ''' Initialize Token Resolver class '''
         self._kodi = _kodi
         self._proxies = _kodi.get_proxies()
         install_opener(build_opener(ProxyHandler(self._proxies)))
 
-    def get_ondemand_playertoken(self, token_url, xvrttoken):
-        token_path = self._kodi.get_userdata_path() + self._ONDEMAND_COOKIE
-        token = self._get_cached_token(token_path, 'vrtPlayerToken')
+    def get_playertoken(self, token_url, token_variant=None, roaming=False):
+        ''' Get cached or new playertoken, variants: live or ondemand '''
+        token = None
+        xvrttoken_variant = None
+        if roaming:
+            xvrttoken_variant = 'roaming'
+            # Delete cached playertoken
+            path = self._get_token_path('vrtPlayerToken', token_variant)
+            self._kodi.delete_file(path)
+        else:
+            token = self._get_cached_token('vrtPlayerToken', token_variant)
 
-        if xvrttoken and token is None:
-            cookie_value = 'X-VRT-Token=' + xvrttoken
-            headers = {'Content-Type': 'application/json', 'Cookie': cookie_value}
-            token = self._get_new_playertoken(token_path, token_url, headers)
-        return token
-
-    def get_live_playertoken(self, token_url, xvrttoken):
-        token_path = self._kodi.get_userdata_path() + self._LIVE_COOKIE
-        token = self._get_cached_token(token_path, 'vrtPlayerToken')
         if token is None:
-            if xvrttoken is None:
-                headers = {'Content-Type': 'application/json'}
-            else:
+            if token_variant == 'ondemand' or roaming:
+                xvrttoken = self.get_xvrttoken(token_variant=xvrttoken_variant)
+                if xvrttoken is None:
+                    return token
                 cookie_value = 'X-VRT-Token=' + xvrttoken
                 headers = {'Content-Type': 'application/json', 'Cookie': cookie_value}
-            token = self._get_new_playertoken(token_path, token_url, headers)
+            else:
+                headers = {'Content-Type': 'application/json'}
+            token = self._get_new_playertoken(token_url, headers, token_variant)
+
         return token
 
-    def get_xvrttoken(self, get_roaming_token=False):
-        token_filename = self._ROAMING_XVRTTOKEN_COOKIE if get_roaming_token else self._XVRT_TOKEN_COOKIE
-        token_path = self._kodi.get_userdata_path() + token_filename
-        token = self._get_cached_token(token_path, 'X-VRT-Token')
-
+    def get_xvrttoken(self, token_variant=None):
+        ''' Get cached, fresh or new X-VRT-Token, variants: None, user or roaming '''
+        token = self._get_cached_token('X-VRT-Token', token_variant)
         if token is None:
-            token = self._get_new_xvrttoken(token_path, get_roaming_token)
+            # Try to refresh if we have a cached refresh token (vrtlogin-rt)
+            refresh_token = self._get_cached_token('vrtlogin-rt')
+            if refresh_token:
+                token = self._get_fresh_token(refresh_token, 'X-VRT-Token', token_variant='user')
+            else:
+                token = self._get_new_xvrttoken(token_variant)
         return token
 
-    def get_fav_xvrttoken(self):
-        token_path = self._kodi.get_userdata_path() + self._FAV_XVRTTOKEN_COOKIE
-        token = self._get_cached_token(token_path, 'X-VRT-Token')
+    def _get_token_path(self, token_name, token_variant):
+        ''' Create token path following predefined file naming rules '''
+        prefix = token_variant + '_' if token_variant else ''
+        token_path = self._kodi.get_userdata_path() + prefix + token_name.replace('-', '') + '.tkn'
+        return token_path
 
-        if token is None:
-            token = self._get_fav_xvrttoken(token_path)
-        return token
-
-    def _get_new_playertoken(self, path, token_url, headers):
-        import json
-        self._kodi.log_notice('URL post: ' + unquote(token_url), 'Verbose')
-        req = Request(token_url, data=b'', headers=headers)
-        playertoken = json.load(urlopen(req))
-        with self._kodi.open_file(path, 'w') as f:
-            json.dump(playertoken, f)
-        return playertoken.get('vrtPlayerToken')
-
-    def _get_cached_token(self, path, token_name):
+    def _get_cached_token(self, token_name, token_variant=None):
+        ''' Return a cached token '''
         cached_token = None
+        path = self._get_token_path(token_name, token_variant)
 
         if self._kodi.check_if_path_exists(path):
             from datetime import datetime
             import dateutil.parser
             import dateutil.tz
-            import json
             with self._kodi.open_file(path) as f:
                 token = json.load(f)
             now = datetime.now(dateutil.tz.tzlocal())
@@ -107,9 +107,25 @@ class TokenResolver:
                 self._kodi.delete_file(path)
         return cached_token
 
-    def _get_new_xvrttoken(self, path, get_roaming_token):
-        import json
+    def _set_cached_token(self, token, token_variant=None):
+        ''' Save token to cache'''
+        token_name = list(token.keys())[0]
+        path = self._get_token_path(token_name, token_variant)
+        with self._kodi.open_file(path, 'w') as f:
+            json.dump(token, f)
 
+    def _get_new_playertoken(self, token_url, headers, token_variant=None):
+        ''' Get new playertoken from VRT Token API '''
+        self._kodi.log_notice('URL post: ' + unquote(token_url), 'Verbose')
+        req = Request(token_url, data=b'', headers=headers)
+        playertoken = json.load(urlopen(req))
+        self._set_cached_token(playertoken, token_variant)
+        return playertoken.get('vrtPlayerToken')
+
+    def _get_new_xvrttoken(self, token_variant=None):
+        ''' Get new X-VRT-Token from VRT NU website '''
+        if token_variant == 'user':
+            return self._get_new_user_xvrttoken()
         cred = Credentials(self._kodi)
         if not cred.are_filled_in():
             self._kodi.open_settings()
@@ -129,7 +145,7 @@ class TokenResolver:
         token = None
 
         if logon_json.get('errorCode') != 0:
-            self._handle_error(logon_json, cred)
+            self._handle_login_error(logon_json, cred)
             return None
 
         login_token = logon_json.get('sessionInfo', dict()).get('login_token')
@@ -144,26 +160,20 @@ class TokenResolver:
         headers = {'Content-Type': 'application/json', 'Cookie': login_cookie}
         self._kodi.log_notice('URL post: ' + unquote(self._TOKEN_GATEWAY_URL), 'Verbose')
         req = Request(self._TOKEN_GATEWAY_URL, data=data, headers=headers)
-        try:  # Python 2
-            cookie_data = urlopen(req).info().getheader('Set-Cookie').split('X-VRT-Token=')[1].split('; ')
-        except AttributeError:
-            cookie_data = urlopen(req).info().get('Set-Cookie').split('X-VRT-Token=')[1].split('; ')
-        xvrttoken = TokenResolver._create_token_dictionary_from_urllib(cookie_data)
-        if get_roaming_token:
+        try:  # Python 3
+            setcookie_header = urlopen(req).info().get('Set-Cookie')
+        except AttributeError:  # Python 2
+            setcookie_header = urlopen(req).info().getheader('Set-Cookie')
+        xvrttoken = TokenResolver._create_token_dictionary(setcookie_header)
+        if token_variant == 'roaming':
             xvrttoken = self._get_roaming_xvrttoken(xvrttoken)
         if xvrttoken is not None:
             token = xvrttoken.get('X-VRT-Token')
-            with self._kodi.open_file(path, 'w') as f:
-                json.dump(xvrttoken, f)
+            self._set_cached_token(xvrttoken, token_variant)
         return token
 
-    def _get_fav_xvrttoken(self, path):
-        try:
-            import http.cookiejar as cookielib
-        except ImportError:
-            import cookielib
-        import json
-
+    def _get_new_user_xvrttoken(self):
+        ''' Get new 'user' X-VRT-Token from VRT NU website '''
         cred = Credentials(self._kodi)
         if not cred.are_filled_in():
             self._kodi.open_settings()
@@ -183,7 +193,7 @@ class TokenResolver:
         token = None
 
         if logon_json.get('errorCode') != 0:
-            self._handle_error(logon_json, cred)
+            self._handle_login_error(logon_json, cred)
             return None
 
         payload = dict(
@@ -195,19 +205,37 @@ class TokenResolver:
         )
         data = urlencode(payload).encode('utf8')
         cookiejar = cookielib.CookieJar()
-        opener = build_opener(HTTPCookieProcessor(cookiejar))
-        self._kodi.log_notice('URL get: ' + unquote(self._FAV_TOKEN_GATEWAY_URL), 'Verbose')
-        opener.open(self._FAV_TOKEN_GATEWAY_URL)
+        opener = build_opener(HTTPCookieProcessor(cookiejar), ProxyHandler(self._proxies))
+        self._kodi.log_notice('URL get: ' + unquote(self._USER_TOKEN_GATEWAY_URL), 'Verbose')
+        opener.open(self._USER_TOKEN_GATEWAY_URL)
         self._kodi.log_notice('URL post: ' + unquote(self._VRT_LOGIN_URL), 'Verbose')
         opener.open(self._VRT_LOGIN_URL, data=data)
         xvrttoken = TokenResolver._create_token_dictionary(cookiejar)
+        refreshtoken = TokenResolver._create_token_dictionary(cookiejar, cookie_name='vrtlogin-rt')
         if xvrttoken is not None:
             token = xvrttoken.get('X-VRT-Token')
-            with self._kodi.open_file(path, 'w') as f:
-                json.dump(xvrttoken, f)
+            self._set_cached_token(xvrttoken, token_variant='user')
+        if refreshtoken is not None:
+            self._set_cached_token(refreshtoken)
         return token
 
-    def _handle_error(self, logon_json, cred):
+    def _get_fresh_token(self, refresh_token, token_name, token_variant=None):
+        ''' Refresh an expired X-VRT-Token, vrtlogin-at or vrtlogin-rt token '''
+        token = None
+        refresh_url = self._TOKEN_GATEWAY_URL + '/refreshtoken'
+        cookie_value = 'vrtlogin-rt=' + refresh_token
+        headers = {'Cookie': cookie_value}
+        cookiejar = cookielib.CookieJar()
+        opener = build_opener(HTTPCookieProcessor(cookiejar), ProxyHandler(self._proxies))
+        self._kodi.log_notice('URL get: ' + refresh_url, 'Verbose')
+        req = Request(refresh_url, headers=headers)
+        opener.open(req)
+        token = TokenResolver._create_token_dictionary(cookiejar, token_name)
+        self._set_cached_token(token, token_variant)
+        return list(token.values())[0]
+
+    def _handle_login_error(self, logon_json, cred):
+        ''' Show localized login error messages in Kodi GUI'''
         message = logon_json.get('errorDetails')
         if message == 'invalid loginID or password':
             cred.reset()
@@ -220,61 +248,61 @@ class TokenResolver:
         self._kodi.end_of_directory()
 
     def _get_roaming_xvrttoken(self, xvrttoken):
+        ''' Get new 'roaming' X-VRT-Token from VRT NU website '''
         roaming_xvrttoken = None
-        url = 'https://token.vrt.be/vrtnuinitloginEU?destination=https://www.vrt.be/vrtnu/'
         cookie_value = 'X-VRT-Token=' + xvrttoken.get('X-VRT-Token')
         headers = {'Cookie': cookie_value}
         opener = build_opener(NoRedirection, ProxyHandler(self._proxies))
-        self._kodi.log_notice('URL get: ' + unquote(url), 'Verbose')
-        req = Request(url, headers=headers)
+        self._kodi.log_notice('URL get: ' + unquote(self._ROAMING_TOKEN_GATEWAY_URL), 'Verbose')
+        req = Request(self._ROAMING_TOKEN_GATEWAY_URL, headers=headers)
         req_info = opener.open(req).info()
-        try:  # Python 2
-            cookie_value += '; state=' + req_info.getheader('Set-Cookie').split('state=')[1].split('; ')[0]
-        except AttributeError:  # Python 3
+        try:  # Python 3
             cookie_value += '; state=' + req_info.get('Set-Cookie').split('state=')[1].split('; ')[0]
+        except AttributeError:  # Python 2
+            cookie_value += '; state=' + req_info.getheader('Set-Cookie').split('state=')[1].split('; ')[0]
         url = req_info.getheader('Location')
         self._kodi.log_notice('URL get: ' + unquote(url), 'Verbose')
-        try:  # Python 2
-            url = opener.open(url).info().getheader('Location')
-        except AttributeError:  # Python 3
+        try:  # Python 3
             url = opener.open(url).info().get('Location')
+        except AttributeError:  # Python 2
+            url = opener.open(url).info().getheader('Location')
         headers = {'Cookie': cookie_value}
         if url is not None:
             self._kodi.log_notice('URL get: ' + unquote(url), 'Verbose')
             req = Request(url, headers=headers)
-            try:  # Python 2
-                cookie_data = opener.open(req).info().getheader('Set-Cookie').split('X-VRT-Token=')[1].split('; ')
-            except AttributeError:  # Python 3
-                cookie_data = opener.open(req).info().get('Set-Cookie').split('X-VRT-Token=')[1].split('; ')
-            roaming_xvrttoken = TokenResolver._create_token_dictionary_from_urllib(cookie_data)
+            try:  # Python 3
+                setcookie_header = opener.open(req).info().get('Set-Cookie')
+            except AttributeError:  # Python 2
+                setcookie_header = opener.open(req).info().getheader('Set-Cookie')
+            roaming_xvrttoken = TokenResolver._create_token_dictionary(setcookie_header)
         return roaming_xvrttoken
 
     @staticmethod
-    def _create_token_dictionary(cookie_jar):
+    def _create_token_dictionary(cookie_data, cookie_name='X-VRT-Token'):
+        ''' Create a dictionary with token name and token expirationDate from a Python cookielib.CookieJar or urllib2 Set-Cookie http header '''
         token_dictionary = None
-        # Get cookie from cookiejar
-        xvrttoken_cookie = next(cookie for cookie in cookie_jar if cookie.name == 'X-VRT-Token')
-        if xvrttoken_cookie is not None:
-            from datetime import datetime
+        if isinstance(cookie_data, cookielib.CookieJar):
+            # Get token dict from cookiejar
+            token_cookie = next(cookie for cookie in cookie_data if cookie.name == cookie_name)
+            if token_cookie:
+                from datetime import datetime
+                token_dictionary = {
+                    token_cookie.name: token_cookie.value,
+                    'expirationDate': datetime.utcfromtimestamp(token_cookie.expires).strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+                }
+        elif cookie_name in cookie_data:
+            # Get token dict from http header
+            import dateutil.parser
+            cookie_data = cookie_data.split('X-VRT-Token=')[1].split('; ')
             token_dictionary = {
-                xvrttoken_cookie.name: xvrttoken_cookie.value,
-                'expirationDate': datetime.utcfromtimestamp(xvrttoken_cookie.expires).strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+                cookie_name: cookie_data[0],
+                'expirationDate': dateutil.parser.parse(cookie_data[2].strip('Expires=')).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
             }
         return token_dictionary
 
-    @staticmethod
-    def _create_token_dictionary_from_urllib(cookie_data):
-        import dateutil.parser
-        token_dictionary = {
-            'X-VRT-Token': cookie_data[0],
-            'expirationDate': dateutil.parser.parse(cookie_data[2].strip('Expires=')).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-        }
-        return token_dictionary
-
-    def reset_cookies(self):
-        user_data_path = self._kodi.get_userdata_path()
-        self._kodi.delete_file(user_data_path + self._ONDEMAND_COOKIE)
-        self._kodi.delete_file(user_data_path + self._LIVE_COOKIE)
-        self._kodi.delete_file(user_data_path + self._XVRT_TOKEN_COOKIE)
-        self._kodi.delete_file(user_data_path + self._ROAMING_XVRTTOKEN_COOKIE)
-        self._kodi.delete_file(user_data_path + self._FAV_XVRTTOKEN_COOKIE)
+    def delete_tokens(self):
+        ''' Delete all cached tokens '''
+        dirs, files = self._kodi.listdir(self._kodi.get_userdata_path())  # pylint: disable=unused-variable
+        for item in files:
+            if item.endswith('.tkn'):
+                self._kodi.delete_file(self._kodi.get_userdata_path() + item)

@@ -19,11 +19,11 @@ msgstr ""
 ### MAIN MENU
 msgctxt "#30010"
 msgid "My programs"
-msgstr "Mijn tv-programma's"
+msgstr "Mijn programma's"
 
 msgctxt "#30011"
 msgid "Browse only the programs you follow"
-msgstr "Bekijk enkel de programma's die je volgt"
+msgstr "Bekijk alleen de tv-programma's die je volgt"
 
 msgctxt "#30012"
 msgid "A-Z"
@@ -39,7 +39,7 @@ msgstr "Categorieën"
 
 msgctxt "#30015"
 msgid "TV programs listed by category"
-msgstr "Lijst van tv-programma's per categorie"
+msgstr "Tv-programma's gerangschikt per categorie"
 
 msgctxt "#30016"
 msgid "Channels"
@@ -47,7 +47,7 @@ msgstr "Kanalen"
 
 msgctxt "#30017"
 msgid "TV programs listed by channel"
-msgstr "Lijst van tv-programma's per kanaal"
+msgstr "Tv-programma's gerangschikt per kanaal"
 
 msgctxt "#30018"
 msgid "Live TV"
@@ -62,58 +62,82 @@ msgid "Most recent"
 msgstr "Meest recent"
 
 msgctxt "#30021"
-msgid "Recently published video content"
-msgstr "Recent gepubliceerde afleveringen van tv-programma's"
+msgid "Recently published episodes"
+msgstr "Recent gepubliceerde afleveringen"
 
 msgctxt "#30022"
 msgid "Soon offline"
 msgstr "Binnenkort offline"
 
 msgctxt "#30023"
-msgid "Video content that will soon be offline"
-msgstr "Tv-afleveringen die binnenkort verdwijnen"
+msgid "Episodes that will soon be offline"
+msgstr "Afleveringen die binnenkort verdwijnen"
 
 msgctxt "#30024"
+msgid "Featured content"
+msgstr "Uitgelicht aanbod"
+
+msgctxt "#30025"
+msgid "Highlighted movies and TV programs"
+msgstr "Aanbevolen films en tv-programma's"
+
+msgctxt "#30026"
 msgid "TV guide"
 msgstr "Tv-gids"
 
-msgctxt "#30025"
+msgctxt "#30027"
 msgid "Browse channel TV guides"
-msgstr "Doorzoek de tv-gids per kanaal"
+msgstr "Doorblader de tv-gids per kanaal"
 
-msgctxt "#30026"
-msgid "Doorzoek VRT NU"
+msgctxt "#30028"
+msgid "Search VRT NU"
 msgstr "Doorzoek VRT NU"
 
-msgctxt "#30027"
+msgctxt "#30029"
 msgid "Search the complete VRT NU library"
-msgstr "Doorzoek de hele VRT NU bibliotheek"
+msgstr "Doorzoek de hele VRT NU-bibliotheek"
 
 
 ### FAVORITES
 msgctxt "#30040"
-msgid "My A-Z"
-msgstr "Mijn tv-programma's"
+msgid "My favourite programs"
+msgstr "Mijn favoriete programma's"
 
 msgctxt "#30041"
 msgid "Alphabetically sorted list of My TV programs"
 msgstr "Alle tv-programma's die je volgt in alfabetische volgorde"
 
 msgctxt "#30042"
+msgid "My movies"
+msgstr "Mijn films"
+
+msgctxt "#30043"
+msgid "All movies available on VRT NU"
+msgstr "Alle films beschikbaar op VRT NU"
+
+msgctxt "#30044"
+msgid "My documentaries"
+msgstr "Mijn documentaires"
+
+msgctxt "#30045"
+msgid "All [I]one-off[/I] documentaries on VRT NU"
+msgstr "Alle [I]one-off[/I] documentaires op VRT NU"
+
+msgctxt "#30046"
 msgid "My most recent"
 msgstr "Mijn meest recent"
 
-msgctxt "#30043"
+msgctxt "#30047"
 msgid "Recently published episodes of My TV programs"
 msgstr "Recent gepubliceerde afleveringen van tv-programma's die je volgt"
 
-msgctxt "#30044"
+msgctxt "#30048"
 msgid "My soon offline"
-msgstr "Mijn binnenkort verwijderd"
+msgstr "Mijn binnenkort offline"
 
-msgctxt "#30045"
-msgid "My video content that will soon be offline"
-msgstr "Mijn tv-afleveringen die binnenkort verdwijnen"
+msgctxt "#30049"
+msgid "My episodes that will soon be offline"
+msgstr "Mijn afleveringen die binnenkort verdwijnen"
 
 
 ### APPLICATION
@@ -205,13 +229,17 @@ msgctxt "#30412"
 msgid "Unfollow"
 msgstr "Vergeet"
 
+msgctxt "#30413"
+msgid "Refresh"
+msgstr "Vernieuw"
+
 msgctxt "#30415"
 msgid "No followed programs found"
 msgstr "Geen programma's worden gevolgd"
 
 msgctxt "#30416"
-msgid "We could not find any programs that were followed.\n\nEither right-click on a program or an episode to follow a program, or follow a program on the VRT NU website."
-msgstr "We konden geen programma's vonden die je volgt.\n\nJe kan een programma volgen door rechts te klikken op een programma of aflevering, of om ze op de VRT NU website to volgen."
+msgid "We could not find any programs that are followed.\n\nEither right-click on a program or episode to follow a program, or follow a program on the VRT NU website."
+msgstr "We konden geen programma's vinden die je volgt.\n\nKlik met de rechtermuisknop op een programma of aflevering om een programma te volgen of volg een programma op de VRT NU-website."
 
 msgctxt "#30421"
 msgid "Nu:"
@@ -224,6 +252,22 @@ msgstr ""
 msgctxt "#30423"
 msgid "[B]No transmission[/B]"
 msgstr "[B]Geen uitzending[/B]"
+
+msgctxt "#30424"
+msgid "[B]New search...[/B]"
+msgstr "[B]Nieuwe zoekopdracht...[/B]"
+
+msgctxt "#30425"
+msgid "Perform a new search on VRT NU content"
+msgstr "Geef een nieuwe zoekopdracht in"
+
+msgctxt "#30426"
+msgid "[B]Clear search history[/B]"
+msgstr "[B]Verwijder oude zoekopdrachten[/B]"
+
+msgctxt "#30427"
+msgid "Clear the search history"
+msgstr "Verwijder alle oude zoekopdrachten"
 
 
 ### SETTINGS
@@ -253,113 +297,137 @@ msgstr "Functionaliteit"
 
 msgctxt "#30823"
 msgid "Enable My programs"
-msgstr "Toon Mijn tv-programma's"
+msgstr "Toon Mijn programma's"
 
 msgctxt "#30824"
 msgid "When enabled, the user can follow their favourite programs and list these separately. In this case the VRT NU add-on will download and update a list of your followed programs on the VRT NU website."
 msgstr "Indien actief kan de gebruiker zijn favoriete programma's volgen en apart aanroepen. Dit zorgt er wel voor dat de VRT NU add-on een lijst van favoriete programma's download en aanpast op de VRT NU website."
 
 msgctxt "#30825"
+msgid "Add My movies"
+msgstr "Toon Mijn films"
+
+msgctxt "#30827"
+msgid "Add My documentaries"
+msgstr "Toon Mijn documentaires"
+
+msgctxt "#30829"
+msgid "Show one-off videos in between program folders"
+msgstr "Toon one-off video's tussen tv-programmafolders"
+
+msgctxt "#30831"
 msgid "Show fanart"
 msgstr "Toon fanart"
 
-msgctxt "#30827"
+msgctxt "#30833"
 msgid "Show episode permalink in plot"
 msgstr "Toon aflevering permalink in beschrijving"
 
-msgctxt "#30828"
+msgctxt "#30834"
 msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
 msgstr "Indien actief zal de beschrijving van iedere video een permanent link bevatten die je rechtstreeks naar de VRT NU website brengt. Dit is handig om snel een aflevering of film to openen op een mobiel toestel."
 
-msgctxt "#30829"
+msgctxt "#30835"
 msgid "Cache"
 msgstr "Cache"
 
-msgctxt "#30831"
+msgctxt "#30837"
 msgid "Enable menu caching"
 msgstr "Gebruik menu caching"
 
-msgctxt "#30833"
+msgctxt "#30839"
 msgid "Enable local HTTP caching"
 msgstr "Gebruik local HTTP caching"
 
-msgctxt "#30840"
+msgctxt "#30860"
 msgid "Playback"
 msgstr "Afspelen"
 
-msgctxt "#30841"
+msgctxt "#30861"
 msgid "Subtitles"
 msgstr "Ondertiteling"
 
-msgctxt "#30843"
+msgctxt "#30863"
 msgid "Show subtitles when available"
 msgstr "Toon ondertiteling indien beschikbaar"
 
-msgctxt "#30845"
+msgctxt "#30864"
+msgid "This enables subtitles by default for all content that includes subtitles."
+msgstr "Dit zet ondertitels standaard aan voor alle video's met ondertitels."
+
+msgctxt "#30865"
 msgid "Streaming"
 msgstr "Streaming"
 
-msgctxt "#30847"
-msgid "Use DRM for 720p HD-quality livestreams"
-msgstr "Gebruik DRM voor de livestreams in 720p HD-kwaliteit"
+msgctxt "#30867"
+msgid "Use Widevine DRM [COLOR gray][I](for protected content)[/I][/COLOR]"
+msgstr "Gebruik Widevine DRM [COLOR gray][I](voor beveiligde video's)[/I][/COLOR]"
 
-msgctxt "#30849"
+msgctxt "#30868"
+msgid "Most live streams are available in 720p HD-quality, but may require DRM to be enabled."
+msgstr "De meeste livestreams zijn beschikbaar in 720p HD-kwaliteit, maar hiervoor moet mogelijk DRM worden ingeschakeld."
+
+msgctxt "#30869"
 msgid "Maximum bandwidth (kbps)"
 msgstr "Maximale bandbreedte (kbps)"
 
-msgctxt "#30860"
+msgctxt "#30870"
+msgid "In case you have limited bandwidth available, you may want to specify a maximum bandwidth so that a lower bitrate stream can be selected for playback."
+msgstr "Als de bandbreedte van je verbinding gelimiteerd is, wilt u misschien een maximale bandbreedte instellen zodat een stream met lagere bitrate-stream wordt geselecteerd."
+
+msgctxt "#30880"
 msgid "Channels"
 msgstr "Kanalen"
 
-msgctxt "#30861"
-msgid "Select channels for 'Most recent' and 'Soon offline' listings"
+msgctxt "#30881"
+msgid "Select channels to use for 'Most recent' and 'Soon offline' listings"
 msgstr "Selecteer kanalen voor de 'Meest recent' en 'Binnenkort offline' lijsten"
 
-msgctxt "#30863"
+msgctxt "#30883"
 msgid "Eén"
 msgstr "Eén"
 
-msgctxt "#30864"
+msgctxt "#30884"
 msgid "Canvas"
 msgstr "Canvas"
 
-msgctxt "#30865"
+msgctxt "#30885"
 msgid "Ketnet"
 msgstr "Ketnet"
 
-msgctxt "#30866"
+msgctxt "#30886"
 msgid "Ketnet Junior"
 msgstr "Ketnet Junior"
 
-msgctxt "#30867"
+msgctxt "#30887"
 msgid "Sporza"
 msgstr "Sporza"
 
-msgctxt "#30868"
+msgctxt "#30888"
 msgid "Radio 1"
 msgstr "Radio 1"
 
-msgctxt "#30869"
+msgctxt "#30889"
 msgid "Radio 2"
 msgstr "Radio 2"
 
-msgctxt "#30870"
+msgctxt "#30890"
 msgid "Klara"
 msgstr "Klara"
 
-msgctxt "#30871"
+msgctxt "#30891"
 msgid "Studio Brussel"
 msgstr "Studio Brussel"
 
-msgctxt "#30872"
+msgctxt "#30892"
 msgid "MNM"
 msgstr "MNM"
 
-msgctxt "#30873"
+msgctxt "#30893"
 msgid "VRT NXT"
 msgstr "VRT NXT"
 
-msgctxt "#30874"
+msgctxt "#30894"
 msgid "VRT NWS"
 msgstr "VRT NWS"
 
@@ -373,37 +441,41 @@ msgstr "Cache"
 
 msgctxt "#30903"
 msgid "Clear VRT tokens"
-msgstr "Verwijder VRT tokens"
+msgstr "Verwijder VRT-tokens"
 
 msgctxt "#30905"
 msgid "Refresh favorites"
-msgstr "Ververs gevolgde programma's"
+msgstr "Ververs favoriete programma's"
 
 msgctxt "#30907"
 msgid "Invalidate local HTTP caches"
-msgstr "Invalideer local HTTP caches"
+msgstr "Maak lokale HTTP caches ongeldig"
 
 msgctxt "#30909"
 msgid "Streaming"
 msgstr "Streaming"
 
 msgctxt "#30911"
+msgid "Please install or enable InputStream Adaptive to use this setting"
+msgstr "Installeer of schakel InputStream Adaptive in voor deze instelling"
+
+msgctxt "#30913"
 msgid "Use InputStream Adaptive"
 msgstr "Gebruik InputStream Adaptive"
 
-msgctxt "#30913"
+msgctxt "#30915"
 msgid "InputStream Adaptive settings..."
 msgstr "InputStream Adaptive instellingen..."
 
-msgctxt "#30915"
-msgid "Install Widevine... [COLOR gray][I](needed for DRM content)[/I][/COLOR]"
-msgstr "Installeer Widevine... [COLOR gray][I](nodig voor DRM content)[/I][/COLOR]"
-
 msgctxt "#30917"
+msgid "Install Widevine CDM... [COLOR gray][I](for protected content)[/I][/COLOR]"
+msgstr "Installeer Widevine CDM... [COLOR gray][I](voor beveiligde video's)[/I][/COLOR]"
+
+msgctxt "#30919"
 msgid "Logging"
 msgstr "Logboek"
 
-msgctxt "#30919"
+msgctxt "#30921"
 msgid "Log level"
 msgstr "Log level"
 
@@ -419,7 +491,7 @@ msgstr "Ongeldig e-mailadres of wachtwoord. Alleen VRT-logins worden ondersteund
 
 msgctxt "#30953"
 msgid "This program cannot be played. To view this program outside of Belgium, you first have to validate a Belgian mobile phone number on the VRT NU website."
-msgstr "Het programma kan niet afgespeeld worden. Om dit programma buiten België te bekijken moet je eerst een Belgisch gsm-nummer valideren via de VRT NU-website."
+msgstr "Dit programma kan niet afgespeeld worden. Om dit programma buiten België te bekijken moet je eerst een Belgisch gsm-nummer valideren via de VRT NU-website."
 
 msgctxt "#30954"
 msgid "Whoops something went wrong, check the kodi log for more details."
@@ -437,7 +509,27 @@ msgctxt "#30957"
 msgid "Please increase the maximum bandwidth. Maximum bandwidth is set to {max} kbps, but this stream needs a minimum of {min} kbps."
 msgstr "Verhoog de maximale bandbreedte alstublieft. De maximale bandbreedte is ingesteld op {max} kbps, maar deze stream heeft minimum {min} kbps nodig."
 
+msgctxt "#30958"
+msgid "There is a problem with this VRT NU %s stream. Try again with %s %s %s or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgstr "Er is een probleem met deze VRT NU %s-stream. Probeer het opnieuw met %s %s %s of probeer dit programma af te spelen vanaf de VRT NU-website. Meld dit probleem op https://www.vrt.be/vrtnu/help/"
+
+msgctxt "#30959"
+msgid "and Widevine DRM"
+msgstr "en Widevine DRM"
+
+msgctxt "#30960"
+msgid "disabled"
+msgstr "uitgeschakeld"
+
 msgctxt "#30961"
+msgid "enabled"
+msgstr "ingeschakeld"
+
+msgctxt "#30962"
+msgid "There is a problem with this VRT NU %s stream and Kodi %s does not support the alternative stream. Please upgrade to a newer Kodi version or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgstr "Er is een probleem met deze VRT NU %s-stream en Kodi %s ondersteunt de alternatieve stream niet. Schakel over op een nieuwere versie van Kodi of probeer dit programma af te spelen vanaf de VRT NU-website. Meld dit probleem op https://www.vrt.be/vrtnu/help/"
+
+msgctxt "#30965"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
 msgstr "Het gebruik van SOCKS proxies vereist dat de PySocks library (script.module.pysocks) geïnstalleerd is."
 
@@ -456,3 +548,20 @@ msgstr "Widevine installatie mislukt!"
 msgctxt "#30974"
 msgid "Installation of Widevine completed!"
 msgstr "Widevine installatie gelukt"
+
+msgctxt "#30975"
+msgid "Failed to get favorites token from VRT NU"
+msgstr "Ophalen van het favorieten token van VRT NU is mislukt"
+
+msgctxt "#30976"
+msgid "Failed to (un)follow program '%s' at VRT NU"
+msgstr "Het programma '%s' op VRT NU volgen of vergeten is mislukt"
+
+msgctxt "#30978"
+msgid "Welcome to VRT NU add-on v2.0.0"
+msgstr "Welkom bij VRT NU add-on v2.0.0"
+
+msgctxt "#30979"
+msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favourites.[/B]"
+msgstr "Wegens belangrijke interne wijzigingen werken bestaande Kodi-favorieten en kijkgeschiedenis van VRT NU niet meer.\n[B]Gelieve al uw VRT NU-favorieten opnieuw aan te maken.[/B]"
+

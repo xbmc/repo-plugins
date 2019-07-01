@@ -12,9 +12,9 @@ VRT NU is the video-on-demand platform of VRT, Flanders' public broadcasting ser
 
 This Kodi add-on can be used to watch all video content from VRT NU.
 
-- Track the programs you follow
-- List all videos alphabetically by program, by category or by channel
-- Watch live streams from Eén, Canvas, Ketnet and Ketnet Junior
+- Track the programs you like
+- List all videos alphabetically by program, by category, by channel or by feature
+- Watch live streams from Eén, Canvas, Ketnet, Ketnet Junior and Sporza
 - Discover recently added or soon offline content
 - Browse the online TV guides or search VRT NU
 
@@ -49,6 +49,19 @@ You can report issues at [our GitHub project](https://github.com/pietje666/plugi
 you can send a message to [our Facebook page](https://facebook.com/kodivrtnu/).
 
 ## Releases
+
+#### v2.0.0 (2019-06-30)
+- Changes to API calls, THIS BREAKS EXISTING FAVOURITES AND WATCHED ITEMS
+- Added "Featured content" menu, with e.g. "Complete season" or "Last chance" (@dagwieers)
+- Added "My movies" and "My documentaries" menus (@dagwieers)
+- Added "Refresh" to context menu to refresh without cache (@dagwieers)
+- New API call to play latest episode of a program, i.e. home automation (@mediaminister)
+- Added Live TV entry at the top of channel-menu, convenient for favourites (@dagwieers)
+- Mix one-off programs with multi-episode programs (@dagwieers)
+- Indicate followed programs using the °-symbol (@dagwieers)
+- Improvements to the add-on settings and error messages (@mediaminister)
+- Store previous search queries (@dagwieers)
+- Small performance/efficiency improvements (@mediaminister)
 
 #### v1.10.0 (2019-05-30)
 - Performance improvements by caching HTTP requests locally (@dagwieers)
@@ -127,7 +140,7 @@ you can send a message to [our Facebook page](https://facebook.com/kodivrtnu/).
 - Livestreams working again
 
 #### v1.4.2 (2018-10-11)
-- Changed way of working with urls when a season is refering to href="#"
+- Changed way of working with urls when a season is referring to href="#"
 
 #### v1.4.1 (2018-09-24)
 - Adapted plugin to new vrtnu layout for showing multiple seasons
@@ -159,7 +172,7 @@ you can send a message to [our Facebook page](https://facebook.com/kodivrtnu/).
 #### v1.1.2 (2018-06-14)
 - New stream links for live streaming (@yorickps)
 
-#### v1.1.1 (2017-03-13)
+#### v1.1.1 (2018-03-13)
 - Fixed bug where seasons do not show when there is one malfunctioning
 
 #### v1.1.0 (2017-12-15)

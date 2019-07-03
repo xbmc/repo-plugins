@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.tvhk"
+       version="1.0.1"
+       name="Hong Kong TV"
+       provider-name="y2kbug">
+
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.inputstreamhelper" version="0.3.4"/>
+        <import addon="script.module.simplejson" version="3.16.1"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+    </requires>
+
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Plugin for Hong Kong TV</summary>
+        <description lang="en_GB">Television channels of Hong Kong on KODI</description>
+        <disclaimer lang="en_GB">Home use only please</disclaimer>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+            <screenshot>resources\screenshot.png</screenshot>
+        </assets>
+        <news>Initial release</news>
+    </extension>
+</addon>

@@ -61,7 +61,7 @@ msgid "Most recent"
 msgstr ""
 
 msgctxt "#30021"
-msgid "Recently published video content"
+msgid "Recently published episodes"
 msgstr ""
 
 msgctxt "#30022"
@@ -69,29 +69,37 @@ msgid "Soon offline"
 msgstr ""
 
 msgctxt "#30023"
-msgid "Video content that will soon be offline"
+msgid "Episodes that will soon be offline"
 msgstr ""
 
 msgctxt "#30024"
-msgid "TV guide"
+msgid "Featured content"
 msgstr ""
 
 msgctxt "#30025"
-msgid "Browse channel TV guides"
+msgid "Highlighted movies and TV programs"
 msgstr ""
 
 msgctxt "#30026"
-msgid "Search VRT NU"
+msgid "TV guide"
 msgstr ""
 
 msgctxt "#30027"
+msgid "Browse channel TV guides"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Search VRT NU"
+msgstr ""
+
+msgctxt "#30029"
 msgid "Search the complete VRT NU library"
 msgstr ""
 
 
 ### FAVORITES
 msgctxt "#30040"
-msgid "My A-Z"
+msgid "My favourite programs"
 msgstr ""
 
 msgctxt "#30041"
@@ -99,21 +107,134 @@ msgid "Alphabetically sorted list of My TV programs"
 msgstr ""
 
 msgctxt "#30042"
-msgid "My most recent"
+msgid "My movies"
 msgstr ""
 
 msgctxt "#30043"
-msgid "Recently published episodes of My TV programs"
+msgid "All movies available on VRT NU"
 msgstr ""
 
 msgctxt "#30044"
-msgid "My soon offline"
+msgid "My documentaries"
 msgstr ""
 
 msgctxt "#30045"
-msgid "My video content that will soon be offline"
+msgid "All [I]one-off[/I] documentaries on VRT NU"
 msgstr ""
 
+msgctxt "#30046"
+msgid "My most recent"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Recently published episodes of My TV programs"
+msgstr ""
+
+msgctxt "#30048"
+msgid "My soon offline"
+msgstr ""
+
+msgctxt "#30049"
+msgid "My episodes that will soon be offline"
+msgstr ""
+
+### CATEGORIES
+msgctxt "#30070"
+msgid "Audio description"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Culture"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Docu"
+msgstr ""
+
+msgctxt "#30073"
+msgid "Entertainment"
+msgstr ""
+
+msgctxt "#30074"
+msgid "Films"
+msgstr ""
+
+msgctxt "#30075"
+msgid "Human interest"
+msgstr ""
+
+msgctxt "#30076"
+msgid "Comedy"
+msgstr ""
+
+msgctxt "#30077"
+msgid "Children"
+msgstr ""
+
+msgctxt "#30078"
+msgid "Cooking"
+msgstr ""
+
+msgctxt "#30079"
+msgid "Lifestyle"
+msgstr ""
+
+msgctxt "#30080"
+msgid "Music"
+msgstr ""
+
+msgctxt "#30081"
+msgid "News and current affairs"
+msgstr ""
+
+msgctxt "#30082"
+msgid "Series"
+msgstr ""
+
+msgctxt "#30083"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30084"
+msgid "Talk shows"
+msgstr ""
+
+msgctxt "#30085"
+msgid "Flemish Sign Language"
+msgstr ""
+
+msgctxt "#30086"
+msgid "Science and nature"
+msgstr ""
+
+### FEATURED
+msgctxt "#30087"
+msgid "Online exclusive"
+msgstr ""
+
+msgctxt "#30088"
+msgid "Last episode"
+msgstr ""
+
+msgctxt "#30089"
+msgid "Last chance"
+msgstr ""
+
+msgctxt "#30090"
+msgid "New"
+msgstr ""
+
+msgctxt "#30091"
+msgid "Full season"
+msgstr ""
+
+msgctxt "#30092"
+msgid "Complete series"
+msgstr ""
+
+msgctxt "#30093"
+msgid "Short film"
+msgstr ""
 
 ### APPLICATION
 msgctxt "#30094"
@@ -204,12 +325,16 @@ msgctxt "#30412"
 msgid "Unfollow"
 msgstr ""
 
+msgctxt "#30413"
+msgid "Refresh"
+msgstr ""
+
 msgctxt "#30415"
 msgid "No followed programs found"
 msgstr ""
 
 msgctxt "#30416"
-msgid "We could not find any programs that were followed.\n\nEither right-click on a program or an episode to follow a program, or follow a program on the VRT NU website."
+msgid "We could not find any programs that are followed.\n\nEither right-click on a program or episode to follow a program, or follow a program on the VRT NU website."
 msgstr ""
 
 msgctxt "#30421"
@@ -222,6 +347,22 @@ msgstr ""
 
 msgctxt "#30423"
 msgid "[B]No transmission[/B]"
+msgstr ""
+
+msgctxt "#30424"
+msgid "[B]New search...[/B]"
+msgstr ""
+
+msgctxt "#30425"
+msgid "Perform a new search on VRT NU content"
+msgstr ""
+
+msgctxt "#30426"
+msgid "[B]Clear search history[/B]"
+msgstr ""
+
+msgctxt "#30427"
+msgid "Clear the search history"
 msgstr ""
 
 
@@ -267,122 +408,134 @@ msgid "When enabled, the user can follow their favourite programs and list these
 msgstr ""
 
 msgctxt "#30825"
-msgid "Show fanart"
+msgid "Add My movies"
 msgstr ""
 
 msgctxt "#30827"
-msgid "Show episode permalink in plot"
-msgstr ""
-
-msgctxt "#30828"
-msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
+msgid "Add My documentaries"
 msgstr ""
 
 msgctxt "#30829"
-msgid "Cache"
+msgid "Show one-off videos in between program folders"
 msgstr ""
 
 msgctxt "#30831"
-msgid "Enable menu caching"
-msgstr ""
-
-msgctxt "#30832"
-msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected."
+msgid "Show fanart"
 msgstr ""
 
 msgctxt "#30833"
+msgid "Show episode permalink in plot"
+msgstr ""
+
+msgctxt "#30834"
+msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
+msgstr ""
+
+msgctxt "#30835"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30837"
+msgid "Enable menu caching"
+msgstr ""
+
+msgctxt "#30838"
+msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected."
+msgstr ""
+
+msgctxt "#30839"
 msgid "Enable local HTTP caching"
 msgstr ""
 
-msgctxt "#30840"
+msgctxt "#30860"
 msgid "Playback"
 msgstr ""
 
-msgctxt "#30841"
+msgctxt "#30861"
 msgid "Subtitles"
 msgstr ""
 
-msgctxt "#30843"
+msgctxt "#30863"
 msgid "Show subtitles when available"
 msgstr ""
 
-msgctxt "#30844"
-msgid "This enables subtitles by default for all content that includes substitles."
-msgstr ""
-
-msgctxt "#30845"
-msgid "Streaming"
-msgstr ""
-
-msgctxt "#30847"
-msgid "Use DRM for 720p HD-quality live streams"
-msgstr ""
-
-msgctxt "#30848"
-msgid "Most live streams are available in 720p HD-quality, but may require DRM to be enabled."
-msgstr ""
-
-msgctxt "#30849"
-msgid "Maximum bandwidth (kbps)"
-msgstr ""
-
-msgctxt "#30850"
-msgid "In case you have limited bandwidth available, you may want to specify a maximum bandwidth so that a lower bitrate stream can be selected for playback."
-msgstr ""
-
-msgctxt "#30860"
-msgid "Channels"
-msgstr ""
-
-msgctxt "#30861"
-msgid "Select channels to use for 'Most recent' and 'Soon offline' listings"
-msgstr ""
-
-msgctxt "#30863"
-msgid "Eén"
-msgstr ""
-
 msgctxt "#30864"
-msgid "Canvas"
+msgid "This enables subtitles by default for all content that includes subtitles."
 msgstr ""
 
 msgctxt "#30865"
-msgid "Ketnet"
-msgstr ""
-
-msgctxt "#30866"
-msgid "Ketnet Junior"
+msgid "Streaming"
 msgstr ""
 
 msgctxt "#30867"
-msgid "Sporza"
+msgid "Use Widevine DRM [COLOR gray][I](for protected content)[/I][/COLOR]"
 msgstr ""
 
 msgctxt "#30868"
-msgid "Radio 1"
+msgid "Most live streams are available in 720p HD-quality, but may require DRM to be enabled."
 msgstr ""
 
 msgctxt "#30869"
-msgid "Radio 2"
+msgid "Maximum bandwidth (kbps)"
 msgstr ""
 
 msgctxt "#30870"
+msgid "In case you have limited bandwidth available, you may want to specify a maximum bandwidth so that a lower bitrate stream can be selected for playback."
+msgstr ""
+
+msgctxt "#30880"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30881"
+msgid "Select channels to use for 'Most recent' and 'Soon offline' listings"
+msgstr ""
+
+msgctxt "#30883"
+msgid "Eén"
+msgstr ""
+
+msgctxt "#30884"
+msgid "Canvas"
+msgstr ""
+
+msgctxt "#30885"
+msgid "Ketnet"
+msgstr ""
+
+msgctxt "#30886"
+msgid "Ketnet Junior"
+msgstr ""
+
+msgctxt "#30887"
+msgid "Sporza"
+msgstr ""
+
+msgctxt "#30888"
+msgid "Radio 1"
+msgstr ""
+
+msgctxt "#30889"
+msgid "Radio 2"
+msgstr ""
+
+msgctxt "#30890"
 msgid "Klara"
 msgstr ""
 
-msgctxt "#30871"
+msgctxt "#30891"
 msgid "Studio Brussel"
 msgstr ""
 
-msgctxt "#30872"
+msgctxt "#30892"
 msgid "MNM"
 msgstr ""
 
-msgctxt "#30873"
+msgctxt "#30893"
 msgid "VRT NXT"
 msgstr ""
 
-msgctxt "#30874"
+msgctxt "#30894"
 msgid "VRT NWS"
 msgstr ""
 
@@ -411,22 +564,26 @@ msgid "Streaming"
 msgstr ""
 
 msgctxt "#30911"
-msgid "Use InputStream Adaptive"
+msgid "Please install or enable InputStream Adaptive to use this setting"
 msgstr ""
 
 msgctxt "#30913"
-msgid "InputStream Adaptive settings..."
+msgid "Use InputStream Adaptive"
 msgstr ""
 
 msgctxt "#30915"
-msgid "Install Widevine... [COLOR gray][I](needed for DRM content)[/I][/COLOR]"
+msgid "InputStream Adaptive settings..."
 msgstr ""
 
 msgctxt "#30917"
-msgid "Logging"
+msgid "Install Widevine CDM... [COLOR gray][I](for protected content)[/I][/COLOR]"
 msgstr ""
 
 msgctxt "#30919"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30921"
 msgid "Log level"
 msgstr ""
 
@@ -460,7 +617,27 @@ msgctxt "#30957"
 msgid "Please increase the maximum bandwidth. Maximum bandwidth is set to {max} kbps, but this stream needs a minimum of {min} kbps."
 msgstr ""
 
+msgctxt "#30958"
+msgid "There is a problem with this VRT NU %s stream. Try again with %s %s %s or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgstr ""
+
+msgctxt "#30959"
+msgid "and Widevine DRM"
+msgstr ""
+
+msgctxt "#30960"
+msgid "disabled"
+msgstr ""
+
 msgctxt "#30961"
+msgid "enabled"
+msgstr ""
+
+msgctxt "#30962"
+msgid "There is a problem with this VRT NU %s stream and Kodi %s does not support the alternative stream. Please upgrade to a newer Kodi version or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgstr ""
+
+msgctxt "#30965"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
 msgstr ""
 
@@ -469,7 +646,7 @@ msgid "Install Widevine using 'InputStream Helper' add-on"
 msgstr ""
 
 msgctxt "#30972"
-msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and the VRT NU add-on is not responsible for any results. Nor is it guaranteed that Widevine will be installed correctly."
+msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and the VRT NU add-on is not responsible for any results. Nor is it guaranteed that Widevine will be (re)installed correctly."
 msgstr ""
 
 msgctxt "#30973"
@@ -478,4 +655,20 @@ msgstr ""
 
 msgctxt "#30974"
 msgid "Installation of Widevine completed!"
+msgstr ""
+
+msgctxt "#30975"
+msgid "Failed to get favorites token from VRT NU"
+msgstr ""
+
+msgctxt "#30976"
+msgid "Failed to (un)follow program '%s' at VRT NU"
+msgstr ""
+
+msgctxt "#30978"
+msgid "Welcome to VRT NU add-on v2.0.0"
+msgstr ""
+
+msgctxt "#30979"
+msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favourites.[/B]"
 msgstr ""

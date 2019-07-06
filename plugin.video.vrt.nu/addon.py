@@ -6,99 +6,217 @@
 
 from __future__ import absolute_import, division, unicode_literals
 import sys
+import routing
+from resources.lib import kodiwrapper
+from resources.lib.statichelper import to_unicode
 
-import xbmcaddon
-from resources.lib import actions, kodiwrapper
+try:  # Python 3
+    from urllib.parse import unquote_plus
+except ImportError:  # Python 2
+    from urllib import unquote_plus
 
-try:
-    from urllib.parse import parse_qsl
-except ImportError:
-    from urlparse import parse_qsl
-
-_ADDON_URL = sys.argv[0]
-_ADDON_HANDLE = int(sys.argv[1])
+plugin = routing.Plugin()
+kodi = kodiwrapper.KodiWrapper(globals())
 
 
-def router(params_string):
-    ''' This is the main router for the video plugin menu '''
-    addon = xbmcaddon.Addon()
-    params = dict(parse_qsl(params_string))
-    action = params.get('action')
+@plugin.route('/')
+def main_menu():
+    ''' The VRT NU plugin main menu '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_main_menu_items()
 
-    _kodi = kodiwrapper.KodiWrapper(_ADDON_HANDLE, _ADDON_URL, addon)
-    _kodi.log_access(_ADDON_URL, params_string)
 
-    if action == actions.INVALIDATE_CACHES:
-        _kodi.invalidate_caches()
-        return
-    if action == actions.CLEAR_COOKIES:
-        from resources.lib import tokenresolver
-        _tokenresolver = tokenresolver.TokenResolver(_kodi)
-        _tokenresolver.reset_cookies()
-        return
-    if action == actions.LISTING_TVGUIDE:
-        from resources.lib import tvguide
-        _tvguide = tvguide.TVGuide(_kodi)
-        _tvguide.show_tvguide(params)
-        return
-    if action == actions.INSTALL_WIDEVINE:
-        _kodi.install_widevine()
-        return
+@plugin.route('/cache/delete')
+@plugin.route('/cache/delete/<cache_file>')
+def delete_cache(cache_file=None):
+    ''' The API interface to delete caches '''
+    kodi.refresh_caches(cache_file=cache_file)
 
+
+@plugin.route('/tokens/delete')
+def delete_tokens():
+    ''' The API interface to delete all VRT tokens '''
+    from resources.lib import tokenresolver
+    tokenresolver.TokenResolver(kodi).delete_tokens()
+
+
+@plugin.route('/widevine/install')
+def install_widevine():
+    ''' The API interface to install Widevine '''
+    kodi.install_widevine()
+
+
+@plugin.route('/follow/<program>/<title>')
+def follow(program, title):
+    ''' The API interface to follow a program used by the context menu '''
     from resources.lib import favorites
-    _favorites = favorites.Favorites(_kodi)
-    if action == actions.FOLLOW:
-        _favorites.follow(program=params.get('program'), path=params.get('path'))
-        return
-    if action == actions.UNFOLLOW:
-        _favorites.unfollow(program=params.get('program'), path=params.get('path'))
-        return
-    if action == actions.REFRESH_FAVORITES:
-        _favorites.get_favorites(ttl=0)
-        return
+    favorites.Favorites(kodi).follow(program=program, title=to_unicode(unquote_plus(title)))
 
-    from resources.lib import vrtapihelper, vrtplayer
-    _apihelper = vrtapihelper.VRTApiHelper(_kodi, _favorites)
-    _vrtplayer = vrtplayer.VRTPlayer(_kodi, _favorites, _apihelper)
 
-    if action == actions.PLAY:
-        _vrtplayer.play(params)
-    elif action == actions.LISTING_AZ_TVSHOWS:
-        _favorites.get_favorites(ttl=5 * 60)  # Update favorites more often
-        _vrtplayer.show_tvshow_menu_items(use_favorites=params.get('use_favorites'))
-    elif action == actions.LISTING_CATEGORIES:
-        _vrtplayer.show_category_menu_items()
-    elif action == actions.LISTING_CATEGORY_TVSHOWS:
-        if params.get('category'):
-            _favorites.get_favorites(ttl=60 * 60)
-        _vrtplayer.show_tvshow_menu_items(category=params.get('category'))
-    elif action == actions.LISTING_CHANNELS:
-        if params.get('channel'):
-            _favorites.get_favorites(ttl=60 * 60)
-        _vrtplayer.show_channels_menu_items(channel=params.get('channel'))
-    elif action == actions.LISTING_FAVORITES:
-        _favorites.get_favorites(ttl=60 * 60)
-        _vrtplayer.show_favorites_menu_items()
-    elif action == actions.LISTING_LIVE:
-        _vrtplayer.show_livestream_items()
-    elif action == actions.LISTING_EPISODES:
-        _favorites.get_favorites(ttl=60 * 60)
-        _vrtplayer.show_episodes(path=params.get('video_url'))
-    elif action == actions.LISTING_ALL_EPISODES:
-        _favorites.get_favorites(ttl=60 * 60)
-        _vrtplayer.show_all_episodes(path=params.get('video_url'))
-    elif action == actions.LISTING_OFFLINE:
-        _favorites.get_favorites(ttl=5 * 60)  # Update favorites more often
-        _vrtplayer.show_offline(page=params.get('page'), use_favorites=params.get('use_favorites'))
-    elif action == actions.LISTING_RECENT:
-        _favorites.get_favorites(ttl=5 * 60)  # Update favorites more often
-        _vrtplayer.show_recent(page=params.get('page'), use_favorites=params.get('use_favorites'))
-    elif action == actions.SEARCH:
-        _favorites.get_favorites(ttl=60 * 60)
-        _vrtplayer.search(search_string=params.get('query'), page=params.get('page'))
+@plugin.route('/unfollow/<program>/<title>')
+def unfollow(program, title):
+    ''' The API interface to unfollow a program used by the context menu '''
+    from resources.lib import favorites
+    favorites.Favorites(kodi).unfollow(program=program, title=to_unicode(unquote_plus(title)))
+
+
+@plugin.route('/favorites')
+def favorites_menu():
+    ''' The favorites My program menu '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_favorites_menu_items()
+
+
+@plugin.route('/favorites/programs')
+def favorites_programs():
+    ''' The favorites A-Z listing '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_tvshow_menu_items(use_favorites=True)
+
+
+@plugin.route('/favorites/docu')
+def favorites_docu():
+    ''' The favorites docu listing '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_favorites_docu_menu_items()
+
+
+@plugin.route('/favorites/recent')
+@plugin.route('/favorites/recent/<page>')
+def favorites_recent(page=1):
+    ''' The favorites recent listing '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_recent(page=page, use_favorites=True)
+
+
+@plugin.route('/favorites/offline')
+@plugin.route('/favorites/offline/<page>')
+def favorites_offline(page=1):
+    ''' The favorites offline listing '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_offline(page=page, use_favorites=True)
+
+
+@plugin.route('/favorites/refresh')
+def favorites_refresh():
+    ''' The API interface to refresh the favorites cache '''
+    from resources.lib import favorites
+    favorites.Favorites(kodi).get_favorites(ttl=0)
+
+
+@plugin.route('/programs')
+@plugin.route('/programs/<program>')
+@plugin.route('/programs/<program>/<season>')
+def programs(program=None, season=None):
+    ''' The programs A-Z / seasons / episode listing '''
+    from resources.lib import vrtplayer
+    if program:
+        vrtplayer.VRTPlayer(kodi).show_episodes(program=program, season=season)
     else:
-        _vrtplayer.show_main_menu_items()
+        vrtplayer.VRTPlayer(kodi).show_tvshow_menu_items()
+
+
+@plugin.route('/categories')
+@plugin.route('/categories/<category>')
+def categories(category=None):
+    ''' The categories menu and listing '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_category_menu_items(category=category)
+
+
+@plugin.route('/channels')
+@plugin.route('/channels/<channel>')
+def channels(channel=None):
+    ''' The channels menu and listing '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_channels_menu_items(channel=channel)
+
+
+@plugin.route('/livetv')
+def livetv():
+    ''' The livetv menu '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_livestream_items()
+
+
+@plugin.route('/recent')
+@plugin.route('/recent/<page>')
+def recent(page=1):
+    ''' The most recent items listing '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_recent(page=page)
+
+
+@plugin.route('/offline')
+@plugin.route('/offline/<page>')
+def offline(page=1):
+    ''' The soon offline listing '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_offline(page=page)
+
+
+@plugin.route('/featured')
+@plugin.route('/featured/<feature>')
+def featured(feature=None):
+    ''' The featured menu and listing '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).show_featured_menu_items(feature=feature)
+
+
+@plugin.route('/tvguide')
+@plugin.route('/tvguide/<date>')
+@plugin.route('/tvguide/<date>/<channel>')
+def tvguide(date=None, channel=None):
+    ''' The TV guide menu and listings '''
+    from resources.lib import tvguide as tvguide_module
+    tvguide_module.TVGuide(kodi).show_tvguide(date=date, channel=channel)
+
+
+@plugin.route('/search')
+def search():
+    ''' The Search menu and history '''
+    from resources.lib import search as search_module
+    search_module.Search(kodi).search_menu()
+
+
+@plugin.route('/search/clear')
+def clear_search():
+    ''' Clear the search history '''
+    from resources.lib import search as search_module
+    search_module.Search(kodi).clear()
+
+
+@plugin.route('/search/query')
+@plugin.route('/search/query/<keywords>')
+@plugin.route('/search/query/<keywords>/<page>')
+def search_query(keywords=None, page=1):
+    ''' The Search interface and query listing '''
+    from resources.lib import search as search_module
+    search_module.Search(kodi).search(keywords=keywords, page=page)
+
+
+@plugin.route('/play/id/<video_id>')
+@plugin.route('/play/id/<video_id>/<publication_id>')
+def play_id(video_id, publication_id=None):
+    ''' The API interface to play a video by video_id and/or publication_id '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).play(dict(video_id=video_id, publication_id=publication_id))
+
+
+@plugin.route('/play/url/<path:video_url>')
+def play_url(video_url):
+    ''' The API interface to play a video by using a URL '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).play(dict(video_url=video_url))
+
+
+@plugin.route('/play/latest/<program>')
+def play_latest(program):
+    ''' The API interface to play the latest episode of a program '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).play_latest_episode(program=program)
 
 
 if __name__ == '__main__':
-    router(sys.argv[2][1:])
+    kodi.log_access(to_unicode(sys.argv[0]))
+    plugin.run(sys.argv)

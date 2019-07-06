@@ -2,12 +2,14 @@
 
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+''' Implements static functions used elsewhere in the add-on '''
+
 from __future__ import absolute_import, division, unicode_literals
 import re
 
-try:
+try:  # Python 3
     from html import unescape
-except ImportError:
+except ImportError:  # Python 2
     from HTMLParser import HTMLParser
 
     def unescape(s):
@@ -32,11 +34,53 @@ def convert_html_to_kodilabel(text):
     return unescape(text).strip()
 
 
-def unique_path(path):
-    ''' Create a unique path to be used in VRT favorites '''
-    if path.startswith('//www.vrt.be/vrtnu'):
-        return path.replace('//www.vrt.be/vrtnu/', '/vrtnu/').replace('.relevant/', '/')
-    return path
+def program_to_url(program, url_type):
+    ''' Convert a program url component (e.g. de-campus-cup) to a short programUrl (e.g. /vrtnu/a-z/de-campus-cup/)
+        or to a long programUrl (e.g. //www.vrt.be/vrtnu/a-z/de-campus-cup/)
+    '''
+    url = None
+    if program:
+        # short programUrl
+        if url_type == 'short':
+            url = '/vrtnu/a-z/' + program + '/'
+        # long programUrl
+        elif url_type == 'long':
+            url = '//www.vrt.be/vrtnu/a-z/' + program + '/'
+    return url
+
+
+def url_to_program(url):
+    ''' Convert
+          - a targetUrl (e.g. //www.vrt.be/vrtnu/a-z/de-campus-cup.relevant/),
+          - a short programUrl (e.g. /vrtnu/a-z/de-campus-cup/) or
+          - a long programUrl (e.g. //www.vrt.be/vrtnu/a-z/de-campus-cup/)
+        to a program url component (e.g. de-campus-cup).
+        Any season or episode information is removed as well.
+    '''
+    program = None
+    if url.startswith('//www.vrt.be/vrtnu/a-z/'):
+        # long programUrl or targetUrl
+        program = url.split('/')[5]
+        if program.endswith('.relevant'):
+            # targetUrl
+            program = program.replace('.relevant', '')
+    elif url.startswith('/vrtnu/a-z/'):
+        # short programUrl
+        program = url.split('/')[3]
+    return program
+
+
+def to_unicode(text, encoding='utf-8'):
+    ''' Force text to unicode '''
+    return text.decode(encoding) if isinstance(text, bytes) else text
+
+
+def from_unicode(text, encoding='utf-8'):
+    ''' Force unicode to text '''
+    import sys
+    if sys.version_info.major == 2 and isinstance(text, unicode):  # pylint: disable=undefined-variable
+        return text.encode(encoding)
+    return text
 
 
 def shorten_link(url):

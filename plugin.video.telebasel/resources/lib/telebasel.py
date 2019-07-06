@@ -269,28 +269,34 @@ class Telebasel(object):
 
         shows = []
         image_regex = r'data-bg\s*=\s*\"url\(\'(?P<url>.+)\''
+        filename_regex = r'(?P<trunk>.+)-\d+x\d+\.(?P<ext>.+)'
         for ssoup in shows_soup:
-            page = ssoup.attrs['href']
-            m = re.search(image_regex, str(ssoup))
-            image_url = m.group('url')
+            try:
+                page = ssoup.attrs['href']
+                m = re.search(image_regex, CompatStr(ssoup))
+                image_url = m.group('url')
 
-            filename = image_url.split('/')[-1]
-            filename_regex = r'(?P<trunk>.+)-\d+x\d+\.(?P<ext>.+)'
-            match = re.match(filename_regex, filename)
-            if match:
-                trunk = match.group('trunk')
-                ext = match.group('ext')
-                image_url = '/'.join(
-                    image_url.split('/')[:-1]) + '/' + trunk + '.' + ext
+                filename = image_url.split('/')[-1]
+                match = re.match(filename_regex, filename)
+                if match:
+                    trunk = match.group('trunk')
+                    ext = match.group('ext')
+                    image_url = '/'.join(
+                        image_url.split('/')[:-1]) + '/' + trunk + '.' + ext
 
-            title = ssoup.h2.text
+                title = ssoup.h2.text
 
-            # The element 'Telebasel Archiv' refers to the old
-            # website. We need to skip this:
-            if 'Archiv' in title:
+                # The element 'Telebasel Archiv' refers to the old
+                # website. We need to skip this:
+                if 'Archiv' in title:
+                    continue
+
+                urls = frozenset(map(lambda x: x['page'], shows))
+                if page not in urls:
+                    shows.append(
+                        {'title': title, 'page': page, 'image': image_url})
+            except Exception:
                 continue
-
-            shows.append({'title': title, 'page': page, 'image': image_url})
 
         return shows
 

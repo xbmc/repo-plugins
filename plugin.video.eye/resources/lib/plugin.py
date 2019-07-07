@@ -197,15 +197,15 @@ def play_film():
     xbmcplugin.setResolvedUrl(plugin.handle, True, list_item)
 
 
-@plugin.route("/clear/<token>")
-def clear(token):
+@plugin.route("/clear/<idx>")
+def clear(idx):
     # type: (str) -> None
     """Clear cached or recently played items"""
-    if token == "cache" and ku.confirm():
+    if idx == "cache" and ku.confirm():
         eyes.clear()
-    if token == "recent" and ku.confirm():
+    if idx == "recent" and ku.confirm():
         eyes.recents.clear()
-    if token == "search" and ku.confirm():
+    if idx == "search" and ku.confirm():
         eyes.searches.clear()
 
 

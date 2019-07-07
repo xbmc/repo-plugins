@@ -1,2 +1,5 @@
+v1.0.1
+ - Use fixed cache
+
 v1.0.0
 - Initial version

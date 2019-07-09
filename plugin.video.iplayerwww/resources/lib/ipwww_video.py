@@ -454,120 +454,6 @@ def ScrapeAtoZEpisodes(page_url):
     pDialog.close()
 
 
-def ScrapeMarkup(markup):
-    """Creates a list of programmes of a markup response.
-
-    """
-    pDialog = xbmcgui.DialogProgressBG()
-    pDialog.create(translation(30319))
-
-    # <li class="list-item programme"  data-ip-id="p026f2t4">
-    list_items = re.findall(r'<li class="list-item.*?</li>', markup, flags=(re.DOTALL | re.MULTILINE))
-
-    list_item_num = 1
-
-    for li in list_items:
-        main_url = None
-        # <a href="/iplayer/episode/p026gmw9/world-of-difference-the-models"
-        # title="World of Difference, The Models" class="list-item-link stat"
-        url_match = re.search(
-            r'<a.*?href="(.*?)".*?list-item-link.*?>',
-                li, flags=(re.DOTALL | re.MULTILINE))
-        if url_match:
-            tmp_url = url_match.group(1)
-            if tmp_url.startswith('http'):
-                main_url = tmp_url
-            else:
-                main_url = 'https://www.bbc.co.uk' + tmp_url
-
-        name = ''
-        title = ''
-        #<div class="title top-title">World of Difference</div>
-        title_match = re.search(
-            r'<div class="title top-title">\s*(.*?)\s*</div>',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if title_match:
-            title = title_match.group(1)
-            name = title
-
-        subtitle = None
-        #<div class="subtitle">The Models</div>
-        subtitle_match = re.search(
-            r'<div class="subtitle">\s*(.*?)\s*</div>',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if subtitle_match:
-            subtitle = subtitle_match.group(1)
-            if subtitle:
-                name = name + " - " + subtitle
-
-        icon = ''
-        type = None
-        # <div class="r-image"  data-ip-type="episode"
-        # data-ip-src="https://ichef.bbci.co.uk/images/ic/336x189/p033s1dh.jpg">
-
-        image_match = re.search(
-            r'srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?).jpg"',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if image_match:
-            image = image_match.group(1)
-            if image:
-                icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
-
-        synopsis = ''
-        # <p class="synopsis">What was it like to be a top fashion model 30 years ago? (1978)</p>
-        synopsis_match = re.search(
-            r'<p class="synopsis">\s*(.*?)\s*</p>',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if synopsis_match:
-            synopsis = synopsis_match.group(1)
-
-        # There is no aired date available
-        aired = ''
-
-        episodes_url = None
-        # <a class="view-more-container avail stat" href="/iplayer/episodes/p00db1jf" data-progress-state="">
-        # <a class="view-more-container sibling stat"
-        #  href="/iplayer/search?q=doctor&amp;search_group_id=urn:bbc:programmes:b06qbs4n">
-        episodes_match = re.search(
-            r'<a class="view-more-container.+?stat".+?href="(.*?)"',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if episodes_match:
-            tmp_url = episodes_match.group(1)
-            if tmp_url.startswith('http'):
-                episodes_url = tmp_url
-            else:
-                episodes_url = 'https://www.bbc.co.uk' + tmp_url
-
-        more = None
-        # <em class="view-more-heading">27</em>
-        more_match = re.search(
-            r'<em class="view-more-heading">(.*?)</em>',
-            li, flags=(re.DOTALL | re.MULTILINE))
-        if more_match:
-            more = more_match.group(1)
-
-        if episodes_url:
-            AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
-                         episodes_url, 128, icon, '', '')
-        elif more:
-            AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
-                         main_url, 128, icon, '', '')
-
-        if type != "group":
-            CheckAutoplay(name , main_url, icon, synopsis, aired)
-
-        percent = int(100*(list_item_num/len(list_items)))
-        pDialog.update(percent,translation(30319),name)
-
-        list_item_num += 1
-
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
-
-    pDialog.close()
-
-
 def ListCategories():
     """Parses the available categories and creates directories for selecting one of them.
     The category names are scraped from the website.
@@ -756,6 +642,9 @@ def ParseJSON(programme_data, current_url):
         elif 'entities' in programme_data:
             # This must be a category or most popular.
             programmes = programme_data['entities']
+        elif 'items' in programme_data:
+            # This must be Added or Watching.
+            programmes = programme_data['items']
 
         if programmes:
             for item in programmes:
@@ -1075,11 +964,11 @@ def ListWatching(logged_in):
 
     cookie_jar = None
     cookie_jar = GetCookieJar()
-    url = "https://component.iplayer.api.bbc.co.uk/v1/user/lists/watching"
+    url = "https://www.bbc.co.uk/iplayer/watching"
     html = OpenURL(url)
-    json_data = json.loads(html)
-    markup = json_data.get('markup')
-    ScrapeMarkup(markup)
+    json_data = ScrapeJSON(html)
+    if json_data:
+        ParseJSON(json_data, url)
 
 
 def ListFavourites(logged_in):
@@ -1090,11 +979,11 @@ def ListFavourites(logged_in):
 
     cookie_jar = None
     cookie_jar = GetCookieJar()
-    url = "https://component.iplayer.api.bbc.co.uk/v1/user/lists/added"
+    url = "https://www.bbc.co.uk/iplayer/added"
     html = OpenURL(url)
-    json_data = json.loads(html)
-    markup = json_data.get('markup')
-    ScrapeMarkup(markup)
+    json_data = ScrapeJSON(html)
+    if json_data:
+        ParseJSON(json_data, url)
 
 
 def PlayStream(name, url, iconimage, description, subtitles_url):

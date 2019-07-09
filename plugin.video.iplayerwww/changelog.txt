@@ -1,3 +1,6 @@
+v2.5.53
+Fixed Added and Watching.
+
 v2.5.52
 Preserve all subtitle colours to indicate speaker changes.
 Fixed new JSON format for Highlights.

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.0.0" provider-name="Martijn Moreel, dagwieers">
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.1.0" provider-name="Martijn Moreel, dagwieers">
     <requires>
         <import addon="resource.images.studios.coloured" version="0.0.16" optional="true"/>
         <import addon="resource.images.studios.white" version="0.0.21"/>
@@ -23,7 +23,7 @@
 This Kodi add-on can be used to watch all video content from VRT NU.
 
 - Track the programs you like
-- List all videos alphabetically by program, by category, by channel or by feature
+- List all videos alphabetically by program, category, channel or feature
 - Watch live streams from Eén, Canvas, Ketnet, Ketnet Junior and Sporza
 - Discover recently added or soon offline content
 - Browse the online TV guides or search VRT NU
@@ -36,8 +36,8 @@ This Kodi add-on can be used to watch all video content from VRT NU.
 Met deze Kodi add-on kan je alle video streams van VRT NU bekijken.
 
 - Volg je favoriete tv-programma's
-- Raadpleeg alle videos alfabetisch geordend per programma, per categorie of per kanaal
-- Bekijk de livestreams van Eén, Canvas, Ketnet en Ketnet Junior
+- Raadpleeg videos op basis van programma, categorie, kanaal of feature
+- Bekijk de livestreams van Eén, Canvas, Ketnet, Ketnet Junior en Sporza
 - Ontdek recent toegevoegde of binnenkort offline video's
 - Doorblader de online tv-gids of doorzoek VRT NU
 
@@ -48,6 +48,14 @@ Met deze Kodi add-on kan je alle video streams van VRT NU bekijken.
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
+v2.1.0 (2019-07-11)
+- Fix an issue with roaming VRT tokens (@mediaminister)
+- Start a video by channel/start time (@mediaminister)
+- Use notifications for various events related to tokens/cache/credentials (@dagwieers)
+- Add YouTube channel support (@dagwieers)
+- Add Radio 1 live stream (@dagwieers)
+- Improve credential input (@michaelarnauts)
+
 v2.0.0 (2019-06-30)
 - Changes to API calls, THIS BREAKS EXISTING FAVOURITES AND WATCHED ITEMS
 - Added "Featured content" menu, with e.g. "Complete season" or "Last chance" (@dagwieers)

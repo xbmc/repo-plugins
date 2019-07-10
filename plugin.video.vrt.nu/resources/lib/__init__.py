@@ -27,6 +27,9 @@ CATEGORIES = [
     dict(name='Wetenschap en natuur', id='wetenschap-en-natuur', msgctxt='30086'),
 ]
 
+# VRT: https://www.youtube.com/channel/UCojJNXcer3yKj9Q-RWOFZuw
+# VRT NU: https://www.youtube.com/channel/UCt3RWMlMKf5jKg5cvqxC_xA
+
 CHANNELS = [
     dict(
         id='O8',
@@ -35,6 +38,8 @@ CHANNELS = [
         studio='Een',
         live_stream='https://www.vrt.be/vrtnu/kanalen/een/',
         live_stream_id='vualto_een_geo',
+        # Eén: https://www.youtube.com/user/welkombijeen
+        youtube='plugin://plugin.video.youtube/user/welkombijeen/',
     ),
     dict(
         id='1H',
@@ -43,6 +48,8 @@ CHANNELS = [
         studio='Canvas',
         live_stream='https://www.vrt.be/vrtnu/kanalen/canvas/',
         live_stream_id='vualto_canvas_geo',
+        # Canvas: https://www.youtube.com/user/CanvasTV
+        youtube='plugin://plugin.video.youtube/user/CanvasTV/',
     ),
     dict(
         id='O9',
@@ -51,6 +58,9 @@ CHANNELS = [
         studio='Ketnet',
         live_stream='https://www.vrt.be/vrtnu/kanalen/ketnet/',
         live_stream_id='vualto_ketnet_geo',
+        # Ketnet: https://www.youtube.com/user/KetnetVideo
+        # Ketnet Musical: https://www.youtube.com/channel/UCB90ZMfqVLgGtp3Z99h4GWg
+        youtube='plugin://plugin.video.youtube/user/KetnetVideo/',
     ),
     dict(
         id='1H',
@@ -58,6 +68,8 @@ CHANNELS = [
         label='Ketnet Junior',
         studio='Ketnet Junior',
         live_stream_id='ketnet_jr',
+        # Ketnet Juior: https://www.youtube.com/channel/UCTxm_H52WlKWBEB_h7PjzFA
+        youtube='plugin://plugin.video.youtube/channel/UCTxm_H52WlKWBEB_h7PjzFA/',
     ),
     dict(
         id='12',
@@ -65,6 +77,8 @@ CHANNELS = [
         label='Sporza',
         studio='Sporza',
         live_stream_id='vualto_sporza_geo',
+        # Sporza: https://www.youtube.com/user/SporzaOfficial
+        youtube='plugin://plugin.video.youtube/user/SporzaOfficial/',
     ),
     dict(
         id='13',
@@ -73,24 +87,34 @@ CHANNELS = [
         studio='VRT NWS',
         live_stream_id='vualto_nieuws',
         # live_stream_id='vualto_journaal',
+        # VRT NWS: https://www.youtube.com/channel/UC59gT3bFTFNSqafRcluDIsQ
+        # Terzake: https://www.youtube.com/user/terzaketv
+        youtube='plugin://plugin.video.youtube/channel/UC59gT3bFTFNSqafRcluDIsQ/',
     ),
     dict(
         id='11',
         name='radio1',
         label='Radio 1',
         studio='Radio 1',
+        live_stream_id='vualto_events3_geo',
+        # Radio 1: https://www.youtube.com/user/vrtradio1
+        youtube='plugin://plugin.video.youtube/user/vrtradio1/',
     ),
     dict(
         id='24',
         name='radio2',
         label='Radio 2',
         studio='Radio 2',
+        # Radio 2: https://www.youtube.com/user/radio2inbeeld
+        youtube='plugin://plugin.video.youtube/user/radio2inbeeld/',
     ),
     dict(
         id='31',
         name='klara',
         label='Klara',
         studio='Klara',
+        # Klara: https://www.youtube.com/user/klararadio
+        youtube='plugin://plugin.video.youtube/user/klararadio/',
     ),
     dict(
         id='41',
@@ -99,6 +123,8 @@ CHANNELS = [
         studio='Studio Brussel',
         # live_stream='https://stubru.be/live',
         live_stream_id='vualto_stubru',
+        # youtube='https://www.youtube.com/user/StuBru',
+        youtube='plugin://plugin.video.youtube/user/StuBru/',
     ),
     dict(
         id='55',
@@ -107,12 +133,16 @@ CHANNELS = [
         studio='MNM',
         # live_stream='https://mnm.be/kijk/live',
         live_stream_id='vualto_mnm',
+        # MNM: https://www.youtube.com/user/MNMbe
+        youtube='plugin://plugin.video.youtube/user/MNMbe/',
     ),
     dict(
         id='',
         name='vrtnxt',
         label='VRT NXT',
         studio='VRT NXT',
+        # VRT NXT: https://www.youtube.com/channel/UCO-VoGCVzhYVwvQvWYJq4-Q
+        youtube='plugin://plugin.video.youtube/channel/UCO-VoGCVzhYVwvQvWYJq4-Q/',
     ),
 ]
 

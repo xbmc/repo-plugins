@@ -152,8 +152,9 @@ class VRTPlayer:
             self._favorites.get_favorites(ttl=60 * 60)
             # Add Live TV channel entry
             channel_item = self._apihelper.get_channel_items(channels=[channel])
+            youtube_item = self._apihelper.get_youtube_items(channels=[channel])
             tvshow_items = self._apihelper.get_tvshow_items(channel=channel)
-            self._kodi.show_listing(channel_item + tvshow_items, sort='unsorted', content='tvshows')
+            self._kodi.show_listing(channel_item + youtube_item + tvshow_items, sort='unsorted', content='tvshows')
         else:
             channel_items = self._apihelper.get_channel_items(live=False)
             self._kodi.show_listing(channel_items, cache=False)
@@ -228,6 +229,20 @@ class VRTPlayer:
         video = self._apihelper.get_latest_episode(program)
         if not video:
             self._kodi.log_error('Play latest episode failed, program %s' % program)
+            self._kodi.show_ok_dialog(message=self._kodi.localize(30954))
+            self._kodi.end_of_directory()
+            return
+        self.play(video)
+
+    def play_episode_by_air_date(self, channel, start_date, end_date):
+        ''' Play an episode of a program given the channel and the air date in iso format (2019-07-06T19:35:00) '''
+        video = self._apihelper.get_episode_by_air_date(channel, start_date, end_date)
+        if video and video.get('video_title'):
+            self._kodi.show_ok_dialog(message=self._kodi.localize(30986) % video.get('video_title'))
+            self._kodi.end_of_directory()
+            return
+        if not video:
+            self._kodi.log_error('Play episode by air date failed, channel %s, start_date %s' % (channel, start_date))
             self._kodi.show_ok_dialog(message=self._kodi.localize(30954))
             self._kodi.end_of_directory()
             return

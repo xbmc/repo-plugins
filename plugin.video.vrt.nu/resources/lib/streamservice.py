@@ -216,8 +216,12 @@ class StreamService:
             # Get stream manifest url
             manifest_url = next(stream.get('url') for stream in stream_json.get('targetUrls') if stream.get('type') == protocol)
 
+            # External virtual subclip, live-to-VOD from past 24 hours archived livestream (airdate feature)
+            if video.get('start_date') and video.get('end_date'):
+                manifest_url += '?t=' + video.get('start_date') + '-' + video.get('end_date')
+
             # Fix virtual subclip
-            duration = timedelta(milliseconds=stream_json.get('duration'))
+            duration = timedelta(milliseconds=stream_json.get('duration', 0))
             manifest_url = self._fix_virtualsubclip(manifest_url, duration)
 
             # Prepare stream for Kodi player

@@ -40,6 +40,13 @@ def delete_tokens():
     tokenresolver.TokenResolver(kodi).delete_tokens()
 
 
+@plugin.route('/tokens/check-credentials')
+def check_credentials():
+    ''' Check if the credentials are correct '''
+    from resources.lib import tokenresolver
+    tokenresolver.TokenResolver(kodi).check_credentials()
+
+
 @plugin.route('/widevine/install')
 def install_widevine():
     ''' The API interface to install Widevine '''
@@ -101,7 +108,7 @@ def favorites_offline(page=1):
 def favorites_refresh():
     ''' The API interface to refresh the favorites cache '''
     from resources.lib import favorites
-    favorites.Favorites(kodi).get_favorites(ttl=0)
+    favorites.Favorites(kodi).refresh_favorites()
 
 
 @plugin.route('/programs')
@@ -215,6 +222,14 @@ def play_latest(program):
     ''' The API interface to play the latest episode of a program '''
     from resources.lib import vrtplayer
     vrtplayer.VRTPlayer(kodi).play_latest_episode(program=program)
+
+
+@plugin.route('/play/airdate/<channel>/<start_date>')
+@plugin.route('/play/airdate/<channel>/<start_date>/<end_date>')
+def play_by_air_date(channel, start_date, end_date=None):
+    ''' The API interface to play an episode of a program given the channel and the air date in iso format (2019-07-06T19:35:00) '''
+    from resources.lib import vrtplayer
+    vrtplayer.VRTPlayer(kodi).play_episode_by_air_date(channel, start_date, end_date)
 
 
 if __name__ == '__main__':

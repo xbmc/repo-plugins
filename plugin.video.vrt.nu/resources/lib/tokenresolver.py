@@ -74,11 +74,35 @@ class TokenResolver:
         if token is None:
             # Try to refresh if we have a cached refresh token (vrtlogin-rt)
             refresh_token = self._get_cached_token('vrtlogin-rt')
-            if refresh_token:
-                token = self._get_fresh_token(refresh_token, 'X-VRT-Token', token_variant='user')
+            if refresh_token and token_variant != 'roaming':
+                token = self._get_fresh_token(refresh_token, 'X-VRT-Token', token_variant=token_variant)
             else:
                 token = self._get_new_xvrttoken(token_variant)
         return token
+
+    def check_credentials(self):
+        ''' Check the credentials '''
+        cred = Credentials(self._kodi)
+        if not cred.are_filled_in():
+            # If credentials are not filled out, do nothing
+            return
+
+        payload = dict(
+            loginID=cred.username,
+            password=cred.password,
+            sessionExpiration='-1',
+            APIKey=self._API_KEY,
+            targetEnv='jssdk',
+        )
+        data = urlencode(payload).encode('utf8')
+        self._kodi.log_notice('URL post: ' + unquote(self._LOGIN_URL), 'Verbose')
+        req = Request(self._LOGIN_URL, data=data)
+        logon_json = json.load(urlopen(req))
+
+        if logon_json.get('errorCode') == 0:
+            self._kodi.show_notification(message=self._kodi.localize(30983))
+        else:
+            self._kodi.show_notification(message=self._kodi.localize(30984))
 
     def _get_token_path(self, token_name, token_variant):
         ''' Create token path following predefined file naming rules '''
@@ -258,9 +282,10 @@ class TokenResolver:
         req_info = opener.open(req).info()
         try:  # Python 3
             cookie_value += '; state=' + req_info.get('Set-Cookie').split('state=')[1].split('; ')[0]
+            url = req_info.get('Location')
         except AttributeError:  # Python 2
             cookie_value += '; state=' + req_info.getheader('Set-Cookie').split('state=')[1].split('; ')[0]
-        url = req_info.getheader('Location')
+            url = req_info.getheader('Location')
         self._kodi.log_notice('URL get: ' + unquote(url), 'Verbose')
         try:  # Python 3
             url = opener.open(url).info().get('Location')
@@ -306,3 +331,4 @@ class TokenResolver:
         for item in files:
             if item.endswith('.tkn'):
                 self._kodi.delete_file(self._kodi.get_userdata_path() + item)
+        self._kodi.show_notification(message=self._kodi.localize(30985))

@@ -1,0 +1,6 @@
+version 1.0.2:
+ * change json import
+ version 1.0.1:
+ * python3 compatibility
+version 1.0.0:
+ * initial version

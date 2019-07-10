@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.eye" name="EYE Film" version="1.0.0" provider-name="fraser">
+<addon id="plugin.video.eye" name="EYE Film" version="1.0.1" provider-name="fraser">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.routing" version="0.2.0"/>
         <import addon="script.module.beautifulsoup4" version="4.3.2"/>
         <import addon="script.module.requests" version="2.12.4"/>
-        <import addon="script.module.cache" version="1.0.0"/>
+        <import addon="script.module.cache" version="1.0.1"/>
         <import addon="plugin.video.youtube" version="6.4.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
@@ -20,13 +20,12 @@ EYE is renowned worldwide for its knowledge and expertise in the field of film r
         <language>en nl</language>
         <platform>all</platform>
         <license>MIT</license>
-        <forum></forum>
+        <forum>https://forum.kodi.tv/showthread.php?tid=345133</forum>
         <website>https://www.eyefilm.nl/</website>
         <email>fraser.chapman@gmail.com</email>
         <source>https://github.com/FraserChapman/plugin.video.eye</source>
-        <news>v1.0.0 (17-6-19) - Initial version</news>
-        <disclaimer lang="en_GB">Neither this addon nor its author are in anyway affiliated with the EYE Film Institute
-            Netherlands
+        <news>v1.0.1 (6-7-19) - Use fixed cache</news>
+        <disclaimer lang="en_GB">Neither this addon nor its author are in anyway affiliated with the EYE Film Institute Netherlands
         </disclaimer>
         <assets>
             <icon>resources/icon.png</icon>

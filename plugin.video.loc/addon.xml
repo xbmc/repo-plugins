@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.loc" name="Library of Congress" version="1.0.0" provider-name="fraser">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="script.module.cache" version="1.0.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Search and play free content from the Library of Congress</summary>
+        <description lang="en_GB">The Library is the main research arm of the U.S. Congress and the home of the U.S. Copyright Office.
+Several thousand clips, videos and early motion pictures are viewable from the Library's Digital Collection.
+        </description>
+        <language>en</language>
+        <platform>all</platform>
+        <license>MIT</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=345338</forum>
+        <website>https://www.loc.gov/</website>
+        <email>fraser.chapman@gmail.com</email>
+        <source>https://github.com/FraserChapman/plugin.video.loc</source>
+        <news>v1.0.0 (11-7-19) - Initial version</news>
+        <disclaimer lang="en_GB">Neither this addon nor its author are in anyway affiliated with the Library of
+            Congress
+        </disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/media/ss1.jpg</screenshot>
+            <screenshot>resources/media/ss2.jpg</screenshot>
+            <screenshot>resources/media/ss3.jpg</screenshot>
+            <screenshot>resources/media/ss4.jpg</screenshot>
+            <screenshot>resources/media/ss5.jpg</screenshot>
+            <screenshot>resources/media/ss6.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

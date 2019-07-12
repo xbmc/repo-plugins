@@ -17,6 +17,7 @@
         <website>https://code.google.com/p/previewnetworks-xbmc-plugin/</website>
         <source>http://previewnetworks-xbmc-plugin.googlecode.com/svn/trunk/plugin.video.previewnetworks/</source>
         <email>nmazz at tiscali dot it</email>
+        <broken>deprecated</broken>
         <summary lang="en">Watch movie trailers on your Xbmc player.</summary>
         <description lang="en">With this plugin you can see movie trailers distributed by previewnetworks.com.[CR] Setting a specific country in the "options" section, you can see the trailers for that region and listen in original language..[CR] You can list newest, now, coming and also select trailers from title and genre. All videos can be downloaded.</description>
         <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>

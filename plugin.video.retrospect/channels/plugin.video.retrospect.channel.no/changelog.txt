@@ -1,0 +1,18 @@
+﻿[B]Changelog[/B]
+* Added: Category thumbs for NRK.no (Fixes #1100)
+
+[I]Previous changes[/I]
+* Added: NRK.no search (Fixes #1062)
+* Fixed: Using other NRK.no API (Fixes #1033)
+* Fixed: NRK.no listings (Fixes #1033)
+* Removed: NRK.no for now as their API was shut down (See #1033)
+* Fixed: NRK1 live stream (Fixes #991)
+* Fixed: NRK Category listing (Fixes #893)
+* Fixed: Image and season indications (Fixes #793)
+* Added: A - Å folder item with a lot, really a lot of shows. It loads slow! (Fixes #790).
+* Added: Subtitles for NRK.no (Fixes #789)
+* Fixed: Don't show unavailable videos (Fixes #775)
+* Fixed: Show description for NRK shows (Fixes #768)
+* Fixed: NRK live channels broke due to stream location change (Fixes #752)
+* Fixed: Show videos in the category lists (Fixes #718)
+* Fixed: NRK.no broke due to an API version bump (Fixes #709)

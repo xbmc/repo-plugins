@@ -1,0 +1,16 @@
+{
+  "channels": [
+    {
+      "guid": "15D92364-42F4-11DD-AF9B-7BFF55D89593",
+      "name": "RTL XL (RTL 4,5,7 &amp; 8)",
+      "description": "Uitzendingen van de zenders RTL 4,5,7 &amp; 8.",
+      "icon": "rtl.png",
+      "category": "National",
+      "sortorder": 4,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "message": "De meeste streams van RTL Gemist zijn beschermd|met behulp van DRM. Deze items kunnen enkel binnen|Nederland worden afgespeeld.",
+      "fanart": "rtlfanart.png"
+    }
+  ]
+}

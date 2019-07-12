@@ -1,0 +1,13 @@
+﻿[B]Changelog[/B]
+* Fixed: Dumpert video's were not playing (Fixes #1039)
+
+[I]Previous changes[/I]
+* Fixed: Eredivisie Live moved to Dash streams (Fixes #987)
+* Fixed: support Youtube streams from Dumpert
+* Fixed: AMT introduced a new JSON API
+* Fixed: Hardwareinfo.tv broke due to Google API deprecation.
+* Fixed: Eredivisie Live did not show any content (Fixes #651)
+* Fixed: Dumpert cookie consent issue (Fixes #628)
+* Fixed: Pathe updated their layout again (Fixes #577)
+* Fixed: Pathe.nl updated their site (Fixes #576)
+* Fixed: Dumpert (Fixes #527)

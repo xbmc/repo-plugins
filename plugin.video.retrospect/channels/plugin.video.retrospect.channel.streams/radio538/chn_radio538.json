@@ -1,0 +1,16 @@
+{
+  "channels": [
+    {
+      "guid": "0C59FF4A-8E07-11E1-B2D2-8071BBE59B18",
+      "name": "Radio 538",
+      "description": "Uitzendingen van Radio 538 gemist (www.538gemist.nl).",
+      "icon": "radio538large.png",
+      "category": "Radio",
+      "channelcode": "538",
+      "sortorder": 220,
+      "language": "nl",
+      "message": "De oudere streams van 538 gemist komen bij RTL XL|vandaan. Deze kunnen niet met dit kanaal worden|afgespeeld. Gebruik daarvoor het RTL XL kanaal.",
+      "fanart": "radio538fanart.jpg"
+    }
+  ]
+}

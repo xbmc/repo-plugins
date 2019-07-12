@@ -1,0 +1,31 @@
+﻿[B]Changelog[/B]
+* Fixed: ViaFree changed their JSON...again...and again...and broke the main listing (Fixes #1163)
+
+[I]Previous changes[/I]
+* Fixed: ViaFree changed their JSON....again....and broke the main listing (Fixes #1163)
+* Fixed: ViaFree changed their JSON and broke the main listing (Fixes #1139)
+* Fixed: Some ViaFree streams did not play (Fixes #1107)
+* Fixed: some ViaFree videos that were just live did not play (Fixes #1050)
+* Fixed: ViaFree based channels without a season/episode number broken (Fixes #996)
+* Fixed: subtitle issue with some Swedish channels (Fixes #993)
+* Fixed: ViaSat channels split into Viasat.se/.no and non-api channels
+* Fixed: MTG changed their API again (Fixes #973)
+* Fixed: clean-up some code in the Swedish channels
+* Changed: Use the 'inputstream.adaptive' add-on for some Leia streams to solve some playback and header issues
+* Added: ViaFree.se channel (See #945)
+* Fixed: ViaFree.se channels broke (Fixes #945)
+* Fixed: ViaSat streams would not play (Fixes #864)
+* Fixed: not all ViaSat streams would have subtitles (Fixes #843)
+* Fixed: ViaSat changed subtitle formats (Fixes #784)
+* Fixed: ViaFree parsing (Fixes #765)
+* Fixed: ViaFree Search will move to 'Titles with other chars' when enable 'Group list if exceeds # of folders' (Fixes #753)
+* Fixed: MTG update their sites to a new standard and broke the Swedish and Norwegian channels (See #750)
+* Fixed: more TV6 (MTG) stream issues
+* Fixed: ViaSat channels sometimes won't work with manifest.m3u8 but do with master.m3u8 (See #598)
+* Fixed: MTG channels did not select streams properly (Fixes #590)
+* Fixed: MTG streams would not always play (Issue #558)
+* Fixed: MTG channels could not open next pages (Fixes 556)
+* Fixed: ViaSat channels did not show any shows due to site changes (Fixes #521)
+* Removed: some logging in the MTG channel
+* Fixed: Klipp instead of Clips in mtg channel
+* Fixed: VIASAT changed their player and layouts (Issue 505)

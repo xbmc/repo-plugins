@@ -1,0 +1,12 @@
+﻿﻿﻿[B]Changelog[/B]
+* Fixed: Nickelodeon Sweden (Fixes #948)
+
+[I]Previous changes[/I]
+* Fixed: Nickelodeon channels (Fixes #911)
+* Added: NickJr NL and International
+* Fixed: Remove NickJR content from the main Nickelodeon channels as that content moved
+* Fixed: Minor site change broke Nick channels again...
+* Fixed: Minor site change broke Nick channels (Fixes #680)
+* Fixed: Nickelodeon changed their layout which broke playback (Fixes #636)
+* Fixed: Nickelodeon site changes (Fixes #555)
+* Fixed: Nickelodeon channels updated (Fixes #529)

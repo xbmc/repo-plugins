@@ -1,0 +1,36 @@
+[B]Retrospect v5.0.0.0~beta2 - Changelog - 2019-07-14[/B]
+
+A new beta version that fixes some channel problems and some Kodi repository compliancy.  
+
+[B]Framework related[/B]
+* Py2/3: updated code to be compatible with both Python 2 and Python 3
+* Py2/3: use `backtothefuture` module to be 100% Python 3 compatible and keep performance high
+* Fixed: some code cleanup
+* Updated: disclaimer in addon.xml
+* Changed: moved the settings_template.xml to the /resources/data/ folder (See https://kodi.wiki/view/Add-on_structure)
+* Reverted: Partly reverted ad38d22f because it caused sync issues with subs if the InputStream Adaptive is used.
+* Updated: allow to specify an initial bitrate for HLS streams
+* Updated: use ListItem.setSubtitles for subtitle (See #1154)
+* Changed: a bit of performance tuning that makes use of the `reuselanguageinvoker` feature of Kodi
+* Changed: some in code `import` statements that improve performance
+* Added: make the InputStream Adaptive configurable for certain channels
+* Fixed: Refresh list after changing the InputStream Adaptive settings to get rid of previous urls
+* Fixed: Always show "Channel Options -> Settings" in context menu if available for a channel
+
+[B]GUI/Settings/Language related[/B]
+* Changed: removed the "experimental" warning from the HTTP Caching settings
+* Updated: readme.md
+* Fixed: error with None check and xbmc.PlayList
+* Updated: context menu restructured a bit
+
+[B]Channel related[/B]
+* Fixed: BBC did not work at all
+* Added: more Premium channel for Stievie (See #1030)
+* Added: Duration and Expire Date to SVT
+* Updated: AT5 and the ViaFree channels to select to use InputStream Adaptive or not
+* Updated: SVT can now select to use InputStream adaptive or not
+* Fixed: NPO genres would list shows as videos (Fixes #1172)
+* Added: Duration to DPlay
+* Fixed: Some DPlay items were shown as Paid, while there were not actually paid
+* Fixed: NPO genres would list shows as videos (Fixes #1172)
+* Fixed: ViaFree changed their JSON...again...and again...and broke the main listing (See #1163)

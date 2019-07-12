@@ -1,0 +1,62 @@
+﻿[B]Changelog[/B]
+* Fixed: NPO genres would list shows as videos (Fixes #1172)
+
+[I]Previous Changes[/I]
+* Fixed: NPO radio would not list
+* Fixed: Date parsing in NPO Start (Fixes #1152)
+* Fixed: NPO video would now show in some occasions.
+* Fixed: For some NPO live streams the audio stops after some time (Fixes #1134)
+* Fixed: timestamp issue with cookies in NPO Channel (Fixes #1136)
+* Fixed: some dates in the previous years did not show correct (Fixes #1129)
+* Fixed: NPO now uses Widevine streams only. Older items are no longer available without a paid account (Fixes #1114)
+* Fixed: some radio live streams did not play (Fixes #1108)
+* Added: Warning for Kodi installations without decryption support that want to play live streams in NPOO (See #1099)
+* Fixed: subs would not show if InputStream Adaptive is enabled (Fixes #1082)
+* Fixed: NPO Complete listing (Fixes #1079)
+* Changed: use InputStream Adaptive for NPO (Fixes #1073)
+* Fixed: NPO live radio streams (Fixes #1061)
+* Changed: renamed Uitzendinggemist to NPO Start (Fixes #1059)
+* Fixed: NOS.nl streams did not start (Fixes #1048)
+* Fixed: NPO shows within `Genres` would not list any items (Fixes #1037)
+* Fixed: no images for A-Z listing (Fixes #1010)
+* Changed: Moved `recent` items to own folder
+* Added: use Widevine for Live streams if possible (so we have subtitles)
+* Added: recent shows for the past days to the NPO channel (Fixes #990)
+* Fixed: NPO live channels (Fixes #978)
+* Fixed: NPO regex issue (Fixes #975)
+* Fixed: npostart.nl url parameters are case sensitive (Fixes #971)
+* Fixed: renamed npo.nl -> npostart.nl (Fixes #968)
+* Fixed: NPO Live streams
+* Added: times to NOS Journaal (Fixes #933)
+* Fixed: NOS.nl only showed old videos (Fixes #912)
+* Fixed: NTR School TV had some weird <null> items (Fixes #913)
+* Fixed: NPO Search and paging
+* Fixed: NPO Genres (Fixes #906)
+* Fixed: NPO listing (Fixes #906)
+* Fixed: NPO released a new site (Fixes #887)
+* Fixed: perhaps not group the "Hele Lijst" listing from NPO to distinguish it better from the NPO native alphabet listing
+* Changed: updated NPO urls to https
+* Fixed: NPO 3 had voice-over subs (See #831)
+* Fixed: Cleaned up NPO (See #831)
+* Fixed: NPO loginFixed: NPO live streams (See #831)
+* Fixed: NPO changed their API (Fixes #831)
+* Fixed: NPO moved the subtitle (TT888) urls
+* Fixed: Some live channels were missing (Fixes #804)
+* Fixed: NPO "Titles with '..'" listings (Fixes #801)
+* Added: NTR School.tv (Fixes #671)
+* Fixed: NPO Radio streams
+* Fixed: NPO update broke paging (Fixes #756)
+* Fixed: Live TV channels and some video items for NPO did not show (Fixes #756)
+* Fixed: Most of the NPO TV Live streams were missing (Fixes #704)
+* Fixed: NPO Radio channels
+* Fixed: NPO changed their URL scheme which broke parsing (Fixed #654)
+* Fixed: Some NPO listings were empty due to site changes (Fixes #647)
+* Fixed: Very old streams would not play (Fixes #648)
+* Added: more NPO Radio web cam streams (Fixes #643)
+* Added: Genres to NPO.nl channel (Fixes #388)
+* Fixed: NPO updated their video back-end which broke playback (Fixes #634)
+* Fixed: NPO date items did not work (Fixed #623)
+* Fixed: NPO.nl changed their site which broke the alphabetical listing (Fixes #612)
+* Fixed: NPO broke due to site changes (Fixes #605)
+* Fixed: 3FM web cam stream disappeared from the listing due to a previous fix (Fixes #594)
+* Added: "Current" and "Next" to the NPO Live channels (Fixes #583) and don't cache the Live TV Url for now

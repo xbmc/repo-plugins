@@ -1,0 +1,29 @@
+{
+  "channels": [
+    {
+
+      "guid": "BD113683-233A-46EB-962D-98B3C02EB738",
+      "name": "RTV Utrecht",
+      "description": "RTV Utrecht Uitzendinggemist",
+      "icon": "rtvutrechtlarge.png",
+      "category": "Regional",
+      "channelcode": "rtvutrecht",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "rtvutrechtfanart.png"
+    },
+    {
+      "guid": "8B4A56C7-44D5-40C2-A890-2287C4C1D74B",
+      "name": "Omroep Zeeland",
+      "description": "Omroep Zeeland Uitzendinggemist",
+      "icon": "omroepzeelandlarge.png",
+      "category": "Regional",
+      "channelcode": "omroepzeeland",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "omroepzeelandfanart.jpg"
+    }
+  ]
+}

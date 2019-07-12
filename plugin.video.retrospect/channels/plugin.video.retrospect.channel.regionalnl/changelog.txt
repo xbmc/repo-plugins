@@ -1,0 +1,29 @@
+﻿﻿[B]Changelog[/B]
+* Removed: ATV as it broke a long time ago
+* Fixed: AT5 would not work
+* Fixed: Omroep Flevoland
+* Fixed: L1 did not work at all
+
+[I]Previous changes[/I]
+* Fixed: RTV Oost Live stream (Fixes #1106)
+* Fixed: RTV Noord Live stream (Fixes #1065)
+* Fixed: Omroep Flevoland live streams (See #1032)
+* Fixed: RTV Drenthe live streams (See #1032)
+* Fixed: missed the MP4 streams for Flevoland (Fixes #1040)
+* Added: AT5 live stream (Fixes #1031)
+* Added: L1 live TV and Radio (See #1032)
+* Fixed: TV Rijnmond live TV (See #1032)
+* Fixed: RTV Noord Holland live TV (See #1032)
+* Fixed: Omroep Zeeland (See #1032)
+* Fixed: RTV Utrecht (See #1032)
+* Fixed: Omroep Flevoland (Fixes #1032)
+* Fixed: TV Noord &amp; TV West main listings
+* Fixed: HTML Tags in descriptions of some Dutch regional channels
+* Fixed: AT5 programs, videos and streams
+* Fixed: L1 channel broke due to site changes
+* Fixed: AVT.sr Live Stream
+* Fixed: a lot of Dutch Regional channel updated their JSON API
+* Added: ATV.sr (Algemene Televisie Verzorging Uitzendinggemist) (Fixes #601)
+* Fixed: Omrop Fryslân broke (Fixes #606)
+* Fixed: RTV Utrecht changed URL
+* Fixed: L1 did not play back

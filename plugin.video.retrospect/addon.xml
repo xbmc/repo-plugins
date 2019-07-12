@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon  id="plugin.video.retrospect"
+        version="5.0.0.0~beta2"
+        name="Retrospect"
+        provider-name="Bas Rieter">
+
+    <requires>
+        <import addon="xbmc.metadata" version="2.1.0" />
+        <import addon="xbmc.python" version="2.25.0" />
+        <import addon="script.module.requests" version="2.18.0" />
+        <import addon="inputstream.adaptive" version="2.0.19" />
+        <import addon="plugin.video.youtube" version="6.0.0" optional="true" />
+        <import addon="script.module.inputstreamhelper" version="0.3.3" />
+    </requires>
+
+    <extension  point="xbmc.python.pluginsource"
+                library="default.py">
+        <provides>video</provides>
+    </extension>
+
+    <extension point="xbmc.service" library="retroservice.py" />
+
+
+    <extension point="kodi.context.item">
+        <menu id="kodi.core.main">
+            <item library="resources\menus\menu_queue.py">
+                <label>30541</label>
+                <visible>ListItem.Property(RetrospectVideo)|ListItem.Property(RetrospectFolder)</visible>
+            </item>
+
+            <item library="resources\menus\menu_hide_channel.py">
+                <label>30574</label>
+                <visible>ListItem.Property(RetrospectChannel)</visible>
+            </item>
+
+            <item library="resources\menus\menu_cloak.py">
+                <label>30563</label>
+                <visible>ListItem.Property(RetrospectFolder)+!ListItem.Property(RetrospectCloaked)+!ListItem.Property(RetrospectFavorite)</visible>
+            </item>
+
+            <item library="resources\menus\menu_uncloak.py">
+                <label>30564</label>
+                <visible>ListItem.Property(RetrospectCloaked)</visible>
+            </item>
+
+            <!-- Channel settings -->
+            <menu>
+                <label>30580</label>
+
+                <item library="resources\menus\menu_bitrate.py">
+                    <label>30577</label>
+                    <visible>ListItem.Property(Retrospect)+!ListItem.Property(RetrospectCategory)+!ListItem.Property(RetrospectFavorite)</visible>
+                </item>
+
+                <item library="resources\menus\menu_adaptive.py">
+                    <label>30579</label>
+                    <visible>ListItem.Property(RetrospectAdaptive)+System.HasAddon(inputstream.adaptive)</visible>
+                </item>
+
+                <item library="resources\menus\menu_channelsettings.py">
+                    <label>30069</label>
+                    <visible>ListItem.Property(RetrospectChannelSettings)+!ListItem.Property(RetrospectCategory)</visible>
+                </item>
+            </menu>
+
+            <!-- Favorites menu -->
+            <menu>
+                <label>30575</label>
+
+                <item library="resources\menus\menu_channel_favs.py">
+                    <label>30503</label>
+                    <visible>ListItem.Property(RetrospectVideo)|ListItem.Property(RetrospectFolder)|ListItem.Property(RetrospectChannel)</visible>
+                </item>
+
+                <item library="resources\menus\menu_all_favs.py">
+                    <label>30500</label>
+                    <visible>ListItem.Property(RetrospectChannel)</visible>
+                </item>
+
+                <item library="resources\menus\menu_add_fav.py">
+                    <label>30504</label>
+                    <visible>ListItem.Property(RetrospectFolder)+!ListItem.Property(RetrospectFavorite)</visible>
+                </item>
+
+                <item library="resources\menus\menu_remove_fav.py">
+                    <label>30506</label>
+                    <visible>ListItem.Property(RetrospectFavorite)</visible>
+                </item>
+            </menu>
+
+            <!-- Retrospect Menu -->
+            <menu>
+                <label>30572</label>
+
+                <item library="resources\menus\menu_channel_selection.py">
+                    <label>30507</label>
+                    <visible>ListItem.Property(RetrospectChannel)</visible>
+                </item>
+
+                <item library="resources\menus\menu_country_selection.py">
+                    <label>30576</label>
+                    <visible>ListItem.Property(RetrospectChannel)</visible>
+                </item>
+
+                <item library="resources\menus\menu_settings.py">
+                    <label>30528</label>
+                    <visible>ListItem.Property(Retrospect)</visible>
+                </item>
+
+                <!--item library="resources\menus\menu_install_widevine.py">
+                    <label>30532</label>
+                    <visible>ListItem.Property(Retrospect)+System.HasAddon(inputstream.adaptive)+System.HasAddon(script.module.inputstreamhelper)</visible>
+                </item-->
+            </menu>
+        </menu>
+    </extension>
+
+    <extension point="xbmc.addon.metadata">
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <platform>all</platform>
+        <summary lang="en_GB">Retrospect (previously XBMC Online TV) is a plugin that allows the playback of a lot of TV shows that are available (legally) via the broadcasters websites.</summary>
+        <description lang="en_GB">Retrospect uses the official websites of a lot of different broadcasting companies (mainly Dutch, Belgian, British and Swedish) to make their re-run episodes available on the Kodi platform. More information can be found at www.rieter.net.[CR][CR]Retrospect reports back usage statistics to our servers. This option can be disabled from the add-on settings.</description>
+        <disclaimer lang="en_GB">Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched via this add-on or any consequences of using this add-on to watch the content using the content provider's platforms.</disclaimer>
+        <language>en nl de se no lt lv fi</language>
+        <news>[B]Retrospect v5.0.0.0~beta2 - Changelog - 2019-07-14[/B]
+
+A new beta version that fixes some channel problems and some Kodi repository compliancy.
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

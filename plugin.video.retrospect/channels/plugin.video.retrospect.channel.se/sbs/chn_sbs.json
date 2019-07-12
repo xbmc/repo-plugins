@@ -1,0 +1,182 @@
+{
+  "channels": [
+    {
+      "guid": "C72D24F6-5FAE-11E0-9935-5F41E0D72085",
+      "name": "Kanal 5 Play",
+      "description": "Sändningar från Kanal 5",
+      "icon": "tv5selarge.png",
+      "category": "National",
+      "channelcode": "tv5json",
+      "sortorder": 5,
+      "language": "se",
+      "fanart": "kanal5fanart.jpg"
+    },
+    {
+      "guid": "32B4A9AB-583C-4F78-A057-6D79C797B45C",
+      "name": "Kanal 9 Play",
+      "description": "Sändningar från Kanal 9",
+      "icon": "tv9selarge2014.png",
+      "category": "National",
+      "channelcode": "tv9json",
+      "sortorder": 9,
+      "language": "se",
+      "fanart": "http://a2.res.cloudinary.com/dumrsasw1/image/upload/Thewalkingdead_hqwfz1.jpg"
+    },
+    {
+      "guid": "64E1CA5E-BC3C-4763-9A63-02BE76754BD3",
+      "name": "Kanal 11 Play",
+      "description": "Sändningar från Kanal 11",
+      "icon": "tv11selarge.png",
+      "category": "National",
+      "channelcode": "tv11json",
+      "sortorder": 11,
+      "language": "se",
+      "fanart": "http://a3.res.cloudinary.com/dumrsasw1/image/upload/unnamed_v3u5zt.jpg"
+    },
+    {
+      "guid": "230A2F56-572B-470B-AD53-AFD20A768D54",
+      "name": "Dplay (Sverige)",
+      "description": "Sändningar från dplay.se",
+      "icon": "dplaylarge.png",
+      "category": "National",
+      "channelcode": "dplayse",
+      "sortorder": 7,
+      "language": "se",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "90C8695D-23AE-45B5-BD51-CEA780A770B0",
+      "name": "Dplay (Norge)",
+      "description": "Sendninger fra dplay.no",
+      "icon": "dplaylarge.png",
+      "category": "National",
+      "channelcode": "dplayno",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "E0D572B5-D992-4F90-960E-F0D82A8C9E51",
+      "name": "TVNorge",
+      "description": "TVNorge Sendninger via dplay.no",
+      "icon": "tvnorgelarge.png",
+      "category": "National",
+      "channelcode": "tvnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "tvnorgefanart.jpg"
+    },
+    {
+      "guid": "214E3395-E467-4B1F-87E9-C19FABB5C983",
+      "name": "TLC Norge",
+      "description": "TLC Norge Sendninger via dplay.no",
+      "icon": "tlcnorgelarge.png",
+      "category": "National",
+      "channelcode": "tlcnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "AA14585A-F519-42FF-824B-7ABAC76F18FD",
+      "name": "Max Norge",
+      "description": "Max Norge Sendninger via dplay.no",
+      "icon": "maxnorgelarge.png",
+      "category": "National",
+      "channelcode": "maxnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "94951B96-77FD-4519-8AE2-55C6133CB9EC",
+      "name": "FEM Norge",
+      "description": "FEM Norge Sendninger via dplay.no",
+      "icon": "femnorgelarge.png",
+      "category": "National",
+      "channelcode": "femnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "79B3216B-3485-4522-B963-38D0F452C032",
+      "name": "VOX Norge",
+      "description": "VOX Norge Sendninger via dplay.no",
+      "icon": "voxnorgelarge.png",
+      "category": "National",
+      "channelcode": "voxnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "CF4BA707-70F6-435A-AA90-498BBA51E8CE",
+      "name": "Animal Planet Norge",
+      "description": "Animal Planet Norge Sendninger via dplay.no",
+      "icon": "animalplanetnorgelarge.png",
+      "category": "National",
+      "channelcode": "animalplanetnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "51289704-362F-42A0-9AA9-8F69F36925A3",
+      "name": "Discovery Channel Norge",
+      "description": "Discovery Channel Norge Sendninger via dplay.no",
+      "icon": "discoverynorgelarge.png",
+      "category": "National",
+      "channelcode": "discoverynorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "A4F6C1DA-A485-4504-B6C2-840E5548E87D",
+      "name": "Discovery Science Norge",
+      "description": "Discovery Science Norge Sendninger via dplay.no",
+      "icon": "discoverysciencenorgelarge.png",
+      "category": "National",
+      "channelcode": "discoverysciencenorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg",
+      "compatible": "Environments.NoPlatform"
+    },
+    {
+      "guid": "1A272A28-3655-4991-B983-5EEBC1282534",
+      "name": "Discovery World Norge",
+      "description": "Discovery World Norge Sendninger via dplay.no",
+      "icon": "discoverynorgelarge.png",
+      "category": "National",
+      "channelcode": "discoveryworldnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg",
+      "compatible": "Environments.NoPlatform"
+    },
+    {
+      "guid": "FA962043-49C4-45C7-9EB5-B82C70EB0974",
+      "name": "Investigation Discovery Norge",
+      "description": "Investigation Discovery Norge Sendninger via dplay.no",
+      "icon": "investigationdiscoverynorgelarge.png",
+      "category": "National",
+      "channelcode": "investigationdiscoverynorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "5141DFDF-3B9D-4368-8943-2F8D500BC2D1",
+      "name": "DPlay (Danmark)",
+      "description": "Videos from DPlay.dk",
+      "icon": "dplaylarge.png",
+      "category": "National",
+      "channelcode": "dplaydk",
+      "sortorder": 7,
+      "language": "dk",
+      "fanart": "dplayfanart.jpg"
+    }
+  ]
+}

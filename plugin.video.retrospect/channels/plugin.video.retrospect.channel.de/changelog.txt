@@ -1,0 +1,5 @@
+﻿[B]Changelog[/B]
+Fixed: SRF.ch changed their Play API (Fixes #653)
+
+[I]Previous changes[/I]
+Added: SRF.ch (Fixes #597)

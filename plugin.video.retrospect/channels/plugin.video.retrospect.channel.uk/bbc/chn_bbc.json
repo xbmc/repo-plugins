@@ -1,0 +1,16 @@
+{
+  "channels": [
+    {
+      "guid": "F1E2E7DA-5710-4455-8EEF-CEAF16AF1121",
+      "name": "BBC iPlayer",
+      "description": "BBC iPlayer available shows",
+      "icon": "bbciplayerlarge.png",
+      "category": "National",
+      "channelcode": "bbciplayer",
+      "sortorder": 1,
+      "language": "en-gb",
+      "compatible": "Environments.All",
+      "fanart": "bbcfanart.png"
+    }
+  ]
+}

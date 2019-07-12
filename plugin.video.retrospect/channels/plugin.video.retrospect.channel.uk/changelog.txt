@@ -1,0 +1,12 @@
+﻿[B]Changelog[/B]
+* Fixed: BBC did not work at all
+
+[I]Previous changes[/I]
+* Fixed: BBC Changed thumbnail html code
+* Fixed: Show BBC items without dates or secondary titles
+* Fixed: BBC iPlayer was not showing episodes due to minor site changes (Fixes #685)
+* Fixed: BBC moved their streams around which broke the channel (Fixes #669)
+* Fixed: BBC iPlayer regex fixed (Fixes #602)
+* Fixed: BBC iPlayer removed RSS Feeds (Fixes #574)
+* Fixed: BBC streams
+* Fixed: BBC iPlayer channel (Issue 442)

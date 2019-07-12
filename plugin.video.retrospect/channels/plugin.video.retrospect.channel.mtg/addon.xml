@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.retrospect.channel.mtg"
+       version="5.0.0.0"
+       name="Retrospect Modern Time Group (Swedish, Lithuanian and Latvian) Channels"
+       provider-name="Bas Rieter">
+
+    <requires>
+        <import addon="xbmc.python" version="2.25.0" />
+        <!--import addon="plugin.video.retrospect" version="x.x.x" optional="false" /-->
+    </requires>
+
+    <extension point="xbmc.python.pluginsource"
+               library="">
+        <!--provides>video</provides-->
+    </extension>
+
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Retrospect (a.k.a. XBMC Online TV) is an add-on that allows the playback of a lot of TV shows that are available (legally) via the broadcasters websites.</summary>
+        <description lang="en_GB">Set of Swedish, Latvian and Lithuanian channels for Retrospect: TV3, TV6, TV8 and Viasat4.</description>
+        <disclaimer lang="en_GB">Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage cause to your system. Nor do we take responsibility for the content that can be watched via this add-on.</disclaimer>
+        <language>se lt lv no</language>
+    </extension>
+</addon>

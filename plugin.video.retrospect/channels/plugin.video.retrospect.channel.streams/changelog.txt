@@ -1,0 +1,17 @@
+﻿[B]Changelog[/B]
+* Removed: TV.nl channel as none of them worked anymore
+
+[I]Previous changes[/I]
+* Fixed: naming of Radio NL (Fixes #1147)
+* Changed: cache radio data in the profile cache folder
+* Fixed: 24 Classic moved to https which broke the channel (Fixes #1111)
+* Fixed: Radio 538 channel was completely broken again (Fixes #943)
+* Fixed: Radio 538 channel was completely broken
+* Added: 24Classics.com (Fixes #714)
+* Fixed: Radio 538, Slam! FM and Q-Music streams broken (Fixes #665, Fixes #666, Fixes #667)
+* Added: SLAM! TV stream (Fixes #650)
+* Fixed: Radio 538 had some data items appear as folders
+* Fixed: Radio 538 Live streams (Fixes #604)
+* Fixed: Radio 538 gemist
+* Fixed: XBMCWrapper float vs. int issue (Fixes #530)
+* Fixed: SLAM.tv did not work (Fixes #528)

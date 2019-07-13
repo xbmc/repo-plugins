@@ -447,7 +447,7 @@ msgid "Missing Title"
 msgstr ""
 
 msgctxt "#30281"
-msgid "Refresh Images"
+msgid "Refresh Cached Images"
 msgstr ""
 
 msgctxt "#30282"
@@ -731,7 +731,7 @@ msgid " - Frequently Played"
 msgstr ""
 
 msgctxt "#30354"
-msgid "Goto Series"
+msgid "Go To Series"
 msgstr ""
 
 msgctxt "#30355"
@@ -739,7 +739,7 @@ msgid "Kodi Settings->Services->Allow remote control via HTTP"
 msgstr ""
 
 msgctxt "#30356"
-msgid ""Loading existing image list""
+msgid "Loading existing image list"
 msgstr ""
 
 msgctxt "#30357"
@@ -851,7 +851,7 @@ msgid "System - "
 msgstr ""
 
 msgctxt "#30384"
-msgid "Random movies refresh interval (0 = disabled)"
+msgid "Random movies interval minutes (0 = disabled)"
 msgstr ""
 
 msgctxt "#30385"
@@ -904,4 +904,16 @@ msgstr ""
 
 msgctxt "#30397"
 msgid " - Pages"
+msgstr ""
+
+msgctxt "#30398"
+msgid "Refresh Emby Metadata"
+msgstr ""
+
+msgctxt "#30399"
+msgid "Hide"
+msgstr ""
+
+msgctxt "#30400"
+msgid "Cache images interval minutes (0 = disabled)"
 msgstr ""

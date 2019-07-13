@@ -1,9 +1,6 @@
 # coding=utf-8
 # Gnu General Public License - see LICENSE.TXT
 
-import xbmcgui
-import xbmcplugin
-import xbmc
 import urllib
 import httplib
 import base64
@@ -11,12 +8,18 @@ import sys
 import threading
 import time
 
+import xbmcgui
+import xbmcplugin
+import xbmc
+import xbmcaddon
+
 from .downloadutils import DownloadUtils
 from .simple_logging import SimpleLogging
 from .json_rpc import json_rpc
 from .translation import string_load
 from .datamanager import DataManager
 from .utils import getArt, double_urlencode
+from .kodi_utils import HomeWindow
 
 downloadUtils = DownloadUtils()
 log = SimpleLogging(__name__)
@@ -34,10 +37,18 @@ class CacheArtwork(threading.Thread):
     def run(self):
         log.debug("CacheArtwork background thread started")
         last_update = 0
+        home_window = HomeWindow()
+        settings = xbmcaddon.Addon()
+        latest_content_hash = "never"
+        check_interval = int(settings.getSetting('cacheImagesOnScreenSaver_interval'))
+        check_interval = check_interval * 60
+
         while not self.stop_all_activity and not xbmc.abortRequested:
-            if (time.time() - last_update) > 300:
+            content_hash = home_window.getProperty("embycon_widget_reload")
+            if (check_interval != 0 and (time.time() - last_update) > check_interval) or (latest_content_hash != content_hash):
                 self.cache_artwork_background()
                 last_update = time.time()
+                latest_content_hash = content_hash
 
             xbmc.sleep(1000)
         log.debug("CacheArtwork background thread exited : stop_all_activity : {0}", self.stop_all_activity)
@@ -179,13 +190,14 @@ class CacheArtwork(threading.Thread):
         log.debug("cache_artwork_background")
         dp = xbmcgui.DialogProgressBG()
         dp.create(string_load(30301), "")
+        result_text = None
         try:
             result_text = self.cache_artwork(dp)
         except Exception as err:
             log.error("Cache Images Failed : {0}", err)
         dp.close()
         del dp
-        if result_text:
+        if result_text is not None:
             log.debug("Cache Images reuslt : {0}", " - ".join(result_text))
 
     def get_emby_artwork(self, progress):
@@ -327,8 +339,9 @@ class CacheArtwork(threading.Thread):
             log.debug("Get Image Result: {0}", data.status)
 
             index += 1
+            # if progress.iscanceled():
             # if "iscanceled" in dir(progress) and progress.iscanceled():
-            if progress.iscanceled():
+            if isinstance(progress, xbmcgui.DialogProgress) and progress.iscanceled():
                 break
 
             if self.stop_all_activity:

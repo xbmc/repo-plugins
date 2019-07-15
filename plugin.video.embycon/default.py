@@ -1,13 +1,11 @@
-# Gnu General Public License - see LICENSE.TXT
+import xbmcgui
+import xbmcaddon
 
-from resources.lib.simple_logging import SimpleLogging
-from resources.lib.functions import mainEntryPoint
+settings = xbmcaddon.Addon()
+message_disabled = settings.getSetting("disable_move_message") == "true"
 
-log = SimpleLogging('default')
-
-log.debug("About to enter mainEntryPoint()")
-
-mainEntryPoint()
-
-# clear done and exit.
-# sys.modules.clear()
+if not message_disabled:
+	result = xbmcgui.Dialog().yesno("EmbyCon Addon Moved", "Please install the latest version from:", "http://kodi.emby.media", "Disable further notifications?")
+	if result:
+		settings.setSetting("disable_move_message", "true")
+	

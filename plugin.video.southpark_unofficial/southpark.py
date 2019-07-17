@@ -182,6 +182,11 @@ class SP_Helper(object):
 	def __init__(self, options):
 		super(SP_Helper, self).__init__()
 		self.options = options
+		self.PROTO_REF = [
+			"https", ## en
+			"https", ## es
+			"https"  ## de
+		]
 		self.DOMAIN_REF = [
 			"southpark.cc.com", ## en
 			"southpark.cc.com", ## es
@@ -211,6 +216,9 @@ class SP_Helper(object):
 			"rtmpe://viacommtvstrmfs.fplive.net:1935/viacommtvstrm",
 			"rtmpe://cp75298.edgefcs.net/ondemand"
 		]
+
+	def proto_ref(self):
+		return self.PROTO_REF[self.options.audio()]
 
 	def domain_ref(self):
 		return self.DOMAIN_REF[self.options.audio()]
@@ -254,19 +262,19 @@ class SP_Helper(object):
 		return "http://southpark.cc.com/feeds/carousel/video/2b6c5ab4-d717-4e84-9143-918793a3b636/14/2/json/!airdate/?lang={0}".format(self.options.audio(True))
 
 	def random_episode(self, suburl=""):
-		return "http://{0}{1}{2}".format(self.domain_ref(), self.full_episodes(), suburl)
+		return "{0}://{1}{2}{3}".format(self.proto_ref(), self.domain_ref(), self.full_episodes(), suburl)
 
 	def mediagen_url(self, identifier):
-		return "http://{0}/feeds/video-player/mrss/mgid:arc:episode:{1}:{2}?lang={3}".format(self.domain_ref(), self.domain_url(), identifier, self.options.audio(True))
+		return "{0}://{1}/feeds/video-player/mrss/mgid:arc:episode:{2}:{3}?lang={4}".format(self.proto_ref(), self.domain_ref(), self.domain_url(), identifier, self.options.audio(True))
 
 	def search(self, text):
-		return "http://southpark.cc.com/feeds/carousel/search/81bc07c7-07bf-4a2c-a128-257d0bc0f4f7/14/1/json/{0}".format(text)
+		return "{0}://southpark.cc.com/feeds/carousel/search/81bc07c7-07bf-4a2c-a128-257d0bc0f4f7/14/1/json/{1}".format(self.proto_ref(), text)
 
 	def season_data(self, season):
 		if self.options.audio(True) == "de":
-			return "http://www.southpark.de/feeds/carousel/video/e3748950-6c2a-4201-8e45-89e255c06df1/30/1/json/!airdate/season-{0}".format(season)
+			return "{0}://www.southpark.de/feeds/carousel/video/e3748950-6c2a-4201-8e45-89e255c06df1/30/1/json/!airdate/season-{1}".format(self.proto_ref(), season)
 		# cc.com is the ony one with jsons so descriptions will be in english
-		return "http://southpark.cc.com/feeds/carousel/video/06bb4aa7-9917-4b6a-ae93-5ed7be79556a/30/1/json/!airdate/season-{0}?lang={1}".format(season, self.options.audio(True))
+		return "{0}://southpark.cc.com/feeds/carousel/video/06bb4aa7-9917-4b6a-ae93-5ed7be79556a/30/1/json/!airdate/season-{1}?lang={2}".format(self.proto_ref(), season, self.options.audio(True))
 
 class Video(object):
 	"""Video data"""

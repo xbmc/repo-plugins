@@ -15,6 +15,7 @@ from urlparse import urlparse
 import urllib
 from datetime import datetime
 from base64 import b64encode
+from collections import defaultdict
 
 from .kodi_utils import HomeWindow
 from .clientinfo import ClientInformation
@@ -53,26 +54,45 @@ def load_user_details(settings):
     return user_details
 
 
-def getDetailsString():
+def get_details_string():
 
-    addonSettings = xbmcaddon.Addon()
-    include_media = addonSettings.getSetting("include_media") == "true"
-    include_people = addonSettings.getSetting("include_people") == "true"
-    include_overview = addonSettings.getSetting("include_overview") == "true"
+    addon_settings = xbmcaddon.Addon()
+    include_media = addon_settings.getSetting("include_media") == "true"
+    include_people = addon_settings.getSetting("include_people") == "true"
+    include_overview = addon_settings.getSetting("include_overview") == "true"
 
-    detailsString = "DateCreated,EpisodeCount,SeasonCount,Path,Genres,Studios,Etag,Taglines"
-    detailsString += ",RecursiveItemCount,ChildCount,ProductionLocations"
+    filer_list = [
+        "DateCreated",
+        "EpisodeCount",
+        "SeasonCount",
+        "Path",
+        "Genres",
+        "Studios",
+        "Etag",
+        "Taglines",
+        "SortName",
+        "RecursiveItemCount",
+        "ChildCount",
+        "ProductionLocations",
+        "CriticRating",
+        "OfficialRating",
+        "CommunityRating",
+        "PremiereDate",
+        "ProductionYear",
+        "AirTime",
+        "Status"
+    ]
 
     if include_media:
-        detailsString += ",MediaStreams"
+        filer_list.append("MediaStreams")
 
     if include_people:
-        detailsString += ",People"
+        filer_list.append("People")
 
     if include_overview:
-        detailsString += ",Overview"
+        filer_list.append("Overview")
 
-    return detailsString
+    return ",".join(filer_list)
 
 
 class DownloadUtils:
@@ -300,6 +320,30 @@ class DownloadUtils:
             server = "http://" + host + ":" + port
 
         return server
+
+    def get_all_artwork(self, item, server):
+        all_art = defaultdict(lambda: "")
+
+        id = item["Id"]
+        item_type = item["Type"]
+        image_tags = item["ImageTags"]
+        bg_item_tags = item["ParentBackdropImageTags"]
+
+        # All the image tags
+        for tag_name in image_tags:
+            tag = image_tags[tag_name]
+            art_url = "%s/emby/Items/%s/Images/%s/0?Format=original&Tag=%s" % (server, id, tag_name, tag)
+            all_art[tag_name] = art_url
+
+        # Series images
+        if item_type in ["Episode", "Season"]:
+            image_tag = item["SeriesPrimaryImageTag"]
+            series_id = item["SeriesId"]
+            if image_tag and series_id:
+                art_url = "%s/emby/Items/%s/Images/Primary/0?Format=original&Tag=%s" % (server, series_id, image_tag)
+                all_art["Primary.Series"] = art_url
+
+        return all_art
 
     def getArtwork(self, data, art_type, parent=False, index=0, server=None):
 
@@ -600,7 +644,7 @@ class DownloadUtils:
             url = url.replace("{ItemLimit}", show_x_filtered_items)
 
         if url.find("{field_filters}") != -1:
-            filter_string = getDetailsString()
+            filter_string = get_details_string()
             url = url.replace("{field_filters}", filter_string)
 
         if url.find("{random_movies}") != -1:
@@ -651,6 +695,7 @@ class DownloadUtils:
                 userAndPass = b64encode(b"%s:%s" % (user_name, user_password)).decode("ascii")
                 head["Authorization"] = 'Basic %s' % userAndPass
 
+            head["User-Agent"] = "EmbyCon-" + ClientInformation().getVersion()
             log.debug("HEADERS: {0}", head)
 
             if postBody is not None:

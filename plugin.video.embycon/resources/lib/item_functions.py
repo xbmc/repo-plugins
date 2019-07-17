@@ -31,6 +31,7 @@ home_window = HomeWindow()
 class ItemDetails():
 
     name = None
+    sort_name = None
     id = None
     etag = None
     path = None
@@ -57,15 +58,10 @@ class ItemDetails():
     play_count = 0
     director = ""
     writer = ""
-    channels = ""
-    video_codec = ""
-    aspect_ratio = 0.0
-    audio_codec = ""
-    height = 0
-    width = 0
     cast = None
     tagline = ""
     status = None
+    media_streams = None
 
     resume_time = 0
     duration = 0
@@ -78,7 +74,6 @@ class ItemDetails():
     number_episodes = 0
     original_title = None
     item_type = None
-    subtitle_lang = ""
     subtitle_available = False
     total_items = 0
 
@@ -109,6 +104,7 @@ def extract_item_info(item, gui_options):
     item_details.item_type = item["Type"]
     item_details.location_type = item["LocationType"]
     item_details.name = item["Name"]
+    item_details.sort_name = item["SortName"]
     item_details.original_title = item_details.name
 
     if item_details.item_type == "Episode":
@@ -187,29 +183,43 @@ def extract_item_info(item, gui_options):
         item_details.program_end_date = item["EndDate"]
 
     # Process MediaStreams
-    mediaStreams = item["MediaStreams"]
-    if mediaStreams is not None:
-        for mediaStream in mediaStreams:
+    media_streams = item["MediaStreams"]
+    if media_streams is not None:
+        media_info_list = []
+        for mediaStream in media_streams:
             stream_type = mediaStream["Type"]
             if stream_type == "Video":
-                item_details.video_codec = mediaStream["Codec"]
-                item_details.height = mediaStream["Height"]
-                item_details.width = mediaStream["Width"]
-                aspect = mediaStream["AspectRatio"]
-                if aspect is not None and len(aspect) >= 3:
+                media_info = {}
+                media_info["type"] = "video"
+                media_info["codec"] = mediaStream["Codec"]
+                media_info["height"] = mediaStream["Height"]
+                media_info["width"] = mediaStream["Width"]
+                aspect_ratio = mediaStream["AspectRatio"]
+                media_info["apect"] = aspect_ratio
+                if aspect_ratio is not None and len(aspect_ratio) >= 3:
                     try:
-                        aspect_width, aspect_height = aspect.split(':')
-                        item_details.aspect_ratio = float(aspect_width) / float(aspect_height)
+                        aspect_width, aspect_height = aspect_ratio.split(':')
+                        media_info["apect_ratio"] = float(aspect_width) / float(aspect_height)
                     except:
-                        item_details.aspect_ratio = 1.85
+                        media_info["apect_ratio"] = 1.85
+                else:
+                    media_info["apect_ratio"] = 1.85
+                media_info_list.append(media_info)
             if stream_type == "Audio":
-                item_details.audio_codec = mediaStream["Codec"]
-                item_details.channels = mediaStream["Channels"]
+                media_info = {}
+                media_info["type"] = "audio"
+                media_info["codec"] = mediaStream["Codec"]
+                media_info["channels"] = mediaStream["Channels"]
+                media_info["language"] = mediaStream["Language"]
+                media_info_list.append(media_info)
             if stream_type == "Subtitle":
                 item_details.subtitle_available = True
-                sub_lang = mediaStream["Language"]
-                if sub_lang is not None:
-                    item_details.subtitle_lang = sub_lang
+                media_info = {}
+                media_info["type"] = "sub"
+                media_info["language"] = mediaStream["Language"]
+                media_info_list.append(media_info)
+
+        item_details.media_streams = media_info_list
 
     # Process People
     people = item["People"]
@@ -339,7 +349,7 @@ def add_gui_item(url, item_details, display_options, folder=True):
         if item_details.name_format:
             u += '&name_format=' + urllib.quote(item_details.name_format)
     else:
-        u = sys.argv[0] + "?item_id=" + url + "&mode=PLAY" + "&session_id=" + home_window.getProperty("session_id")
+        u = sys.argv[0] + "?item_id=" + url + "&mode=PLAY"# + "&session_id=" + home_window.getProperty("session_id")
 
     # Create the ListItem that will be displayed
     thumbPath = item_details.art["thumb"]
@@ -446,6 +456,11 @@ def add_gui_item(url, item_details, display_options, folder=True):
             info_labels['cast'] = info_labels['castandrole'] = [(cast_member['name'], cast_member['role']) for cast_member in item_details.cast]
 
     info_labels["title"] = list_item_name
+    if item_details.sort_name:
+        info_labels["sorttitle"] = item_details.sort_name
+    else:
+        info_labels["sorttitle"] = list_item_name
+
     info_labels["duration"] = item_details.duration
     info_labels["playcount"] = item_details.play_count
     if item_details.favorite == 'true':
@@ -524,24 +539,30 @@ def add_gui_item(url, item_details, display_options, folder=True):
 
         list_item.setInfo('video', info_labels)
         log.debug("info_labels: {0}", info_labels)
-        list_item.addStreamInfo('video',
-                                {'duration': item_details.duration,
-                                 'aspect': item_details.aspect_ratio,
-                                 'codec': item_details.video_codec,
-                                 'width': item_details.width,
-                                 'height': item_details.height})
-        list_item.addStreamInfo('audio',
-                                {'codec': item_details.audio_codec,
-                                 'channels': item_details.channels})
+
+        if item_details.media_streams is not None:
+            for stream in item_details.media_streams:
+                if stream["type"] == "video":
+                    list_item.addStreamInfo('video',
+                                            {'duration': item_details.duration,
+                                             'aspect': stream["apect_ratio"],
+                                             'codec': stream["codec"],
+                                             'width': stream["width"],
+                                             'height': stream["height"]})
+                elif stream["type"] == "audio":
+                    list_item.addStreamInfo('audio',
+                                            {'codec': stream["codec"],
+                                             'channels': stream["channels"],
+                                             'language': stream["language"]})
+                elif stream["type"] == "sub":
+                    list_item.addStreamInfo('subtitle',
+                                            {'language': stream["language"]})
 
         item_properties["TotalSeasons"] = str(item_details.total_seasons)
         item_properties["TotalEpisodes"] = str(item_details.total_episodes)
         item_properties["WatchedEpisodes"] = str(item_details.watched_episodes)
         item_properties["UnWatchedEpisodes"] = str(item_details.unwatched_episodes)
         item_properties["NumEpisodes"] = str(item_details.number_episodes)
-
-        if item_details.subtitle_lang != '':
-            list_item.addStreamInfo('subtitle', {'language': item_details.subtitle_lang})
 
         list_item.setRating("imdb", item_details.community_rating, 0, True)
         # list_item.setRating("rt", item_details.critic_rating, 0, False)

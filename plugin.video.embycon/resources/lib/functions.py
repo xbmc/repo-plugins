@@ -19,7 +19,7 @@ import xbmcgui
 import xbmcaddon
 import xbmc
 
-from .downloadutils import DownloadUtils
+from .downloadutils import DownloadUtils, load_user_details
 from .utils import getArt, send_event_notification
 from .kodi_utils import HomeWindow
 from .clientinfo import ClientInformation
@@ -30,9 +30,8 @@ from .menu_functions import displaySections, showMovieAlphaList, showTvShowAlpha
 from .translation import string_load
 from .server_sessions import showServerSessions
 from .action_menu import ActionMenu
-from .widgets import getWidgetContent, get_widget_content_cast
+from .widgets import getWidgetContent, get_widget_content_cast, checkForNewContent
 from . import trakttokodi
-from .item_functions import add_gui_item, extract_item_info, ItemDetails
 from .cache_images import CacheArtwork
 from .dir_functions import getContent, processDirectory
 
@@ -200,9 +199,8 @@ def markWatched(item_id):
     log.debug("Mark Item Watched: {0}", item_id)
     url = "{server}/emby/Users/{userid}/PlayedItems/" + item_id
     downloadUtils.downloadUrl(url, postBody="", method="POST")
+    checkForNewContent()
     home_window = HomeWindow()
-    home_window.setProperty("embycon_widget_reload", str(time.time()))
-
     last_url = home_window.getProperty("last_content_url")
     if last_url:
         log.debug("markWatched_lastUrl: {0}", last_url)
@@ -215,9 +213,8 @@ def markUnwatched(item_id):
     log.debug("Mark Item UnWatched: {0}", item_id)
     url = "{server}/emby/Users/{userid}/PlayedItems/" + item_id
     downloadUtils.downloadUrl(url, method="DELETE")
+    checkForNewContent()
     home_window = HomeWindow()
-    home_window.setProperty("embycon_widget_reload", str(time.time()))
-
     last_url = home_window.getProperty("last_content_url")
     if last_url:
         log.debug("markUnwatched_lastUrl: {0}", last_url)
@@ -230,9 +227,8 @@ def markFavorite(item_id):
     log.debug("Add item to favourites: {0}", item_id)
     url = "{server}/emby/Users/{userid}/FavoriteItems/" + item_id
     downloadUtils.downloadUrl(url, postBody="", method="POST")
+    checkForNewContent()
     home_window = HomeWindow()
-    home_window.setProperty("embycon_widget_reload", str(time.time()))
-
     last_url = home_window.getProperty("last_content_url")
     if last_url:
         home_window.setProperty("skip_cache_for_" + last_url, "true")
@@ -244,9 +240,8 @@ def unmarkFavorite(item_id):
     log.debug("Remove item from favourites: {0}", item_id)
     url = "{server}/emby/Users/{userid}/FavoriteItems/" + item_id
     downloadUtils.downloadUrl(url, method="DELETE")
+    checkForNewContent()
     home_window = HomeWindow()
-    home_window.setProperty("embycon_widget_reload", str(time.time()))
-
     last_url = home_window.getProperty("last_content_url")
     if last_url:
         home_window.setProperty("skip_cache_for_" + last_url, "true")
@@ -272,9 +267,8 @@ def delete(item):
         progress.create(string_load(30052), string_load(30053))
         downloadUtils.downloadUrl(url, method="DELETE")
         progress.close()
+        checkForNewContent()
         home_window = HomeWindow()
-        home_window.setProperty("embycon_widget_reload", str(time.time()))
-
         last_url = home_window.getProperty("last_content_url")
         if last_url:
             home_window.setProperty("skip_cache_for_" + last_url, "true")
@@ -317,7 +311,7 @@ def show_menu(params):
     url = "{server}/emby/Users/{userid}/Items/" + item_id + "?format=json"
     data_manager = DataManager()
     result = data_manager.GetContent(url)
-    log.debug("Playfile item info: {0}", result)
+    log.debug("Menu item info: {0}", result)
 
     if result is None:
         return
@@ -349,7 +343,7 @@ def show_menu(params):
         li.setProperty('menu_id', 'view_season')
         action_items.append(li)
 
-    if result["Type"] == "Series":
+    if result["Type"] in ("Series", "Season", "Episode"):
         li = xbmcgui.ListItem(string_load(30354))
         li.setProperty('menu_id', 'view_series')
         action_items.append(li)
@@ -382,9 +376,18 @@ def show_menu(params):
         li.setProperty('menu_id', 'delete')
         action_items.append(li)
 
+    li = xbmcgui.ListItem(string_load(30398))
+    li.setProperty('menu_id', 'refresh_server')
+    action_items.append(li)
+
     li = xbmcgui.ListItem(string_load(30281))
     li.setProperty('menu_id', 'refresh_images')
     action_items.append(li)
+
+    if result["Type"] in ["Movie", "Series"]:
+        li = xbmcgui.ListItem(string_load(30399))
+        li.setProperty('menu_id', 'hide')
+        action_items.append(li)
 
     #xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
 
@@ -395,7 +398,7 @@ def show_menu(params):
     selected_action = ""
     if selected_action_item is not None:
         selected_action = selected_action_item.getProperty('menu_id')
-    log.debug("Menu Action Selected: {0}", selected_action_item)
+    log.debug("Menu Action Selected: {0}", selected_action)
     del action_menu
 
     if selected_action == "play":
@@ -404,6 +407,36 @@ def show_menu(params):
         #result = xbmcgui.Dialog().info(list_item)
         #log.debug("xbmcgui.Dialog().info: {0}", result)
         PLAY(params)
+
+    elif selected_action == "refresh_server":
+        url = ("{server}/emby/Items/" + item_id + "/Refresh" +
+               "?Recursive=true" +
+               "&ImageRefreshMode=FullRefresh" +
+               "&MetadataRefreshMode=FullRefresh" +
+               "&ReplaceAllImages=true" +
+               "&ReplaceAllMetadata=true")
+        res = downloadUtils.downloadUrl(url, postBody="", method="POST")
+        log.debug("Refresh Server Responce: {0}", res)
+
+    elif selected_action == "hide":
+        settings = xbmcaddon.Addon()
+        user_details = load_user_details(settings)
+        user_name = user_details["username"]
+        hide_tag_string = "hide-" + user_name
+        url = "{server}/emby/Items/" + item_id + "/Tags/Add"
+        post_tag_data = {"Tags": [{"Name": hide_tag_string}]}
+        res = downloadUtils.downloadUrl(url, postBody=post_tag_data, method="POST")
+        log.debug("Add Tag Responce: {0}", res)
+
+        checkForNewContent()
+
+        home_window = HomeWindow()
+        last_url = home_window.getProperty("last_content_url")
+        if last_url:
+            log.debug("markUnwatched_lastUrl: {0}", last_url)
+            home_window.setProperty("skip_cache_for_" + last_url, "true")
+
+        xbmc.executebuiltin("Container.Refresh")
 
     elif selected_action == "play_all":
         PLAY(params)
@@ -448,13 +481,25 @@ def show_menu(params):
 
     elif selected_action == "view_series":
         xbmc.executebuiltin("Dialog.Close(all,true)")
-        u = ('{server}/emby/Shows/' + item_id +
+
+        series_id = result["SeriesId"]
+        if not series_id:
+            series_id = item_id
+
+        u = ('{server}/emby/Shows/' + series_id +
              '/Seasons'
              '?userId={userid}' +
              '&Fields={field_filters}' +
              '&format=json')
+
         action_url = ("plugin://plugin.video.embycon/?url=" + urllib.quote(u) + "&mode=GET_CONTENT&media_type=Series")
-        built_in_command = 'ActivateWindow(Videos, ' + action_url + ', return)'
+
+        if xbmc.getCondVisibility("Window.IsActive(home)"):
+            built_in_command = 'ActivateWindow(Videos, ' + action_url + ', return)'
+        else:
+            #built_in_command = 'Container.Update(' + action_url + ', replace)'
+            built_in_command = 'Container.Update(' + action_url + ')'
+
         xbmc.executebuiltin(built_in_command)
 
     elif selected_action == "refresh_images":

@@ -89,11 +89,12 @@ def set_background_image(force=False):
             background_items = []
             for item in items:
                 bg_image = downloadUtils.getArtwork(item, "Backdrop", server=server)
-                label = item.get("Name")
-                item_background = {}
-                item_background["image"] = bg_image
-                item_background["name"] = label
-                background_items.append(item_background)
+                if bg_image:
+                    label = item.get("Name")
+                    item_background = {}
+                    item_background["image"] = bg_image
+                    item_background["name"] = label
+                    background_items.append(item_background)
 
         log.debug("set_background_image: Loaded {0} more backgrounds", len(background_items))
 
@@ -170,6 +171,9 @@ def checkForNewContent():
     if current_widget_hash != new_widget_hash:
         home_window.setProperty("embycon_widget_reload", new_widget_hash)
         log.debug("Setting New Widget Hash: {0}", new_widget_hash)
+        return True
+    else:
+        return False
 
 
 def get_widget_content_cast(handle, params):
@@ -331,6 +335,15 @@ def getWidgetContent(handle, params):
                      "&ImageTypeLimit=1")
 
     list_items, detected_type, total_records = processDirectory(items_url, None, params, False)
+
+    # remove resumable items from next up
+    if widget_type == "nextup_episodes":
+        filtered_list = []
+        for item in list_items:
+            resume_time = item[1].getProperty("ResumeTime")
+            if resume_time is None or float(resume_time) == 0.0:
+                filtered_list.append(item)
+        list_items = filtered_list
 
     #list_items = populateWidgetItems(items_url, widget_type)
 

@@ -1,3 +1,5 @@
+0.5.1
+- Fixed issues with http to https redirects
 0.5.0
 - Refactoring of the code to make it more readable
 0.4.8

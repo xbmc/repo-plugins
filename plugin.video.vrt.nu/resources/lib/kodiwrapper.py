@@ -179,7 +179,7 @@ class KodiWrapper:
             is_folder = bool(not title_item.is_playable and title_item.path)
             is_playable = bool(title_item.is_playable and title_item.path)
 
-            list_item = xbmcgui.ListItem(label=title_item.title)
+            list_item = xbmcgui.ListItem(label=title_item.title, offscreen=True)
             list_item.setProperty(key='IsPlayable', value='true' if is_playable else 'false')
 
             # FIXME: The setIsFolder is new in Kodi18, so we cannot use it just yet.
@@ -191,6 +191,10 @@ class KodiWrapper:
             if title_item.info_dict:
                 # type is one of: video, music, pictures, game
                 list_item.setInfo(type='video', infoLabels=title_item.info_dict)
+
+            if title_item.stream_dict:
+                # type is one of: video, audio, subtitle
+                list_item.addStreamInfo('video', title_item.stream_dict)
 
             if title_item.context_menu:
                 list_item.addContextMenuItems(title_item.context_menu)
@@ -207,7 +211,7 @@ class KodiWrapper:
     def play(self, video):
         ''' Create a virtual directory listing to play its only item '''
         import xbmcgui
-        play_item = xbmcgui.ListItem(path=video.stream_url)
+        play_item = xbmcgui.ListItem(path=video.stream_url, offscreen=True)
         play_item.setProperty('inputstream.adaptive.max_bandwidth', str(self.get_max_bandwidth() * 1000))
         play_item.setProperty('network.bandwidth', str(self.get_max_bandwidth() * 1000))
         if video.stream_url is not None and video.use_inputstream_adaptive:
@@ -230,6 +234,7 @@ class KodiWrapper:
 
         self.log_notice('Play: %s' % unquote(video.stream_url), 'Info')
         xbmcplugin.setResolvedUrl(self._handle, bool(video.stream_url), listitem=play_item)
+
         while not xbmc.Player().isPlaying() and not xbmc.Monitor().abortRequested():
             xbmc.sleep(100)
         xbmc.Player().showSubtitles(subtitles_visible)
@@ -248,7 +253,9 @@ class KodiWrapper:
         import xbmcgui
         if not heading:
             heading = self._addon.getAddonInfo('name')
-        xbmcgui.Dialog().ok(heading=heading, line1=message)
+        dialog = xbmcgui.Dialog()
+        ok = dialog.ok(heading=heading, line1=message)
+        return ok
 
     def show_notification(self, heading='', message='', icon='info', time=4000):
         ''' Show a Kodi notification '''
@@ -383,6 +390,10 @@ class KodiWrapper:
             return None
 
         return dict(http=proxy_address, https=proxy_address)
+
+    def get_cond_visibility(self, condition):
+        ''' Test a condition in XBMC '''
+        return xbmc.getCondVisibility(condition)
 
     def has_inputstream_adaptive(self):
         ''' Whether InputStream Adaptive is installed and enabled in add-on settings '''
@@ -547,6 +558,7 @@ class KodiWrapper:
         ''' Invalidate the needed caches and refresh container '''
         self.invalidate_caches(expr=cache_file)
         self.container_refresh()
+        self.show_notification(message=self.localize(30981))
 
     def invalidate_cache(self, path):
         ''' Invalidate a existing cache file '''

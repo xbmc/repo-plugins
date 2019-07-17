@@ -130,7 +130,7 @@ class VRTApiHelper:
             program_title = quote_plus(statichelper.from_unicode(tvshow.get('title')))  # We need to ensure forward slashes are quoted
             if self._favorites.is_favorite(program):
                 context_menu = [(self._kodi.localize(30412), 'RunPlugin(%s)' % self._kodi.url_for('unfollow', program=program, title=program_title))]
-                label += '[COLOR yellow]°[/COLOR]'
+                label += '[COLOR yellow]ᵛ[/COLOR]'
             else:
                 context_menu = [(self._kodi.localize(30411), 'RunPlugin(%s)' % self._kodi.url_for('follow', program=program, title=program_title))]
         else:
@@ -159,6 +159,64 @@ class VRTApiHelper:
         if search_json.get('meta', {}).get('total_results') != 0:
             episode = list(search_json.get('results'))[0]
             video = dict(video_id=episode.get('videoId'), publication_id=episode.get('publicationId'))
+        return video
+
+    def get_episode_by_air_date(self, channel_name, start_date, end_date=None):
+        ''' Get an episode of a program given the channel and the air date in iso format (2019-07-06T19:35:00) '''
+        import json
+        from datetime import datetime, timedelta
+        import dateutil.parser
+        import dateutil.tz
+        offairdate = None
+        try:
+            channel = next(c for c in CHANNELS if c.get('name') == channel_name)
+        except StopIteration:
+            return None
+        try:
+            onairdate = dateutil.parser.parse(start_date, default=datetime.now(dateutil.tz.gettz('Europe/Brussels')))
+        except ValueError:
+            return None
+
+        if end_date:
+            try:
+                offairdate = dateutil.parser.parse(end_date, default=datetime.now(dateutil.tz.gettz('Europe/Brussels')))
+            except ValueError:
+                return None
+        video = None
+        episode_guess_off = None
+        now = datetime.now(dateutil.tz.gettz('Europe/Brussels'))
+        onairdate_isostr = onairdate.isoformat()
+        url = 'https://www.vrt.be/bin/epg/schedule.%s.json' % onairdate_isostr.split('T')[0]
+        schedule_json = json.load(urlopen(url))
+        episodes = schedule_json.get(channel.get('id'), [])
+        if offairdate:
+            mindate = min(abs(offairdate - dateutil.parser.parse(episode.get('endTime'))) for episode in episodes)
+            episode_guess_off = next((episode for episode in episodes if abs(offairdate - dateutil.parser.parse(episode.get('endTime'))) == mindate), None)
+
+        mindate = min(abs(onairdate - dateutil.parser.parse(episode.get('startTime'))) for episode in episodes)
+        episode_guess_on = next((episode for episode in episodes if abs(onairdate - dateutil.parser.parse(episode.get('startTime'))) == mindate), None)
+        offairdate_guess = dateutil.parser.parse(episode_guess_on.get('endTime'))
+        if (episode_guess_off and episode_guess_on.get('vrt.whatson-id') == episode_guess_off.get('vrt.whatson-id')
+                or (not episode_guess_off and episode_guess_on)):
+            if episode_guess_on.get('url'):
+                video_url = statichelper.add_https_method(episode_guess_on.get('url'))
+                video = dict(video_url=video_url)
+            # Airdate live2vod feature
+            elif now - timedelta(hours=24) <= dateutil.parser.parse(episode_guess_on.get('endTime')) <= now:
+                video = dict(
+                    video_id=channel.get('live_stream_id'),
+                    start_date=onairdate.astimezone(dateutil.tz.UTC).isoformat()[0:19],
+                    end_date=offairdate_guess.astimezone(dateutil.tz.UTC).isoformat()[0:19],
+                )
+            elif offairdate and now - timedelta(hours=24) <= offairdate <= now:
+                video = dict(
+                    video_id=channel.get('live_stream_id'),
+                    start_date=onairdate.astimezone(dateutil.tz.UTC).isoformat()[0:19],
+                    end_date=offairdate.astimezone(dateutil.tz.UTC).isoformat()[0:19],
+                )
+            else:
+                video_title = episode_guess_on.get('title')
+                video = dict(video_title=video_title)
         return video
 
     def get_episode_items(self, program=None, season=None, category=None, feature=None, programtype=None, page=None, use_favorites=False, variety=None):
@@ -316,7 +374,7 @@ class VRTApiHelper:
         metadata.duration = (episode.get('duration', 0) * 60)  # Minutes to seconds
         metadata.plot = statichelper.convert_html_to_kodilabel(episode.get('description'))
         metadata.brands.extend(episode.get('programBrands', []) or episode.get('brands', []))
-        metadata.geolocked = episode.get('allowedRegion') == 'BE'
+        metadata.geoblocked = episode.get('allowedRegion') == 'BE'
         if display_options.get('showShortDescription'):
             short_description = statichelper.convert_html_to_kodilabel(episode.get('shortDescription'))
             metadata.plotoutline = short_description
@@ -335,8 +393,8 @@ class VRTApiHelper:
 
         # Add additional metadata to plot
         plot_meta = ''
-        if metadata.geolocked:
-            # Show Geo-locked
+        if metadata.geoblocked:
+            # Show Geo-blocked
             plot_meta += self._kodi.localize(30201)
 
         # Only display when a video disappears if it is within the next 3 months
@@ -360,7 +418,7 @@ class VRTApiHelper:
             program_title = quote_plus(statichelper.from_unicode(episode.get('program')))  # We need to ensure forward slashes are quoted
             if self._favorites.is_favorite(program):
                 context_menu = [(self._kodi.localize(30412), 'RunPlugin(%s)' % self._kodi.url_for('unfollow', program=program, title=program_title))]
-                label += '[COLOR yellow]°[/COLOR]'
+                label += '[COLOR yellow]ᵛ[/COLOR]'
             else:
                 context_menu = [(self._kodi.localize(30411), 'RunPlugin(%s)' % self._kodi.url_for('follow', program=program, title=program_title))]
         else:
@@ -378,7 +436,7 @@ class VRTApiHelper:
         return TitleItem(
             title=label,
             path=self._kodi.url_for('play_id', video_id=episode.get('videoId'), publication_id=episode.get('publicationId')),
-            art_dict=dict(thumb=thumb, icon='DefaultAddonVideo.png', fanart=fanart),
+            art_dict=dict(thumb=thumb, icon='DefaultAddonVideo.png', fanart=fanart, banner=fanart),
             info_dict=metadata.get_info_dict(),
             context_menu=context_menu,
             is_playable=True,
@@ -404,13 +462,13 @@ class VRTApiHelper:
         metadata.plot = statichelper.convert_html_to_kodilabel(episode.get('programDescription'))
         metadata.plotoutline = statichelper.convert_html_to_kodilabel(episode.get('programDescription'))
         metadata.brands.extend(episode.get('programBrands', []) or episode.get('brands', []))
-        metadata.geolocked = episode.get('allowedRegion') == 'BE'
+        metadata.geoblocked = episode.get('allowedRegion') == 'BE'
         metadata.season = episode.get('seasonTitle')
 
         # Add additional metadata to plot
         plot_meta = ''
-        if metadata.geolocked:
-            # Show Geo-locked
+        if metadata.geoblocked:
+            # Show Geo-blocked
             plot_meta += self._kodi.localize(30201) + '\n'
         metadata.plot = '%s[B]%s[/B]\n%s' % (plot_meta, episode.get('program'), metadata.plot)
 
@@ -573,6 +631,7 @@ class VRTApiHelper:
                 plot = '[B]%s[/B]' % channel.get('label')
                 is_playable = False
                 info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video')
+                stream_dict = []
                 context_menu = []
             elif channel.get('live_stream') or channel.get('live_stream_id'):
                 if channel.get('live_stream_id'):
@@ -591,7 +650,8 @@ class VRTApiHelper:
                 else:
                     plot = self._kodi.localize(30102).format(**channel)
                 # NOTE: Playcount is required to not have live streams as "Watched"
-                info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video', playcount=0)
+                info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video', playcount=0, duration=0)
+                stream_dict = dict(duration=0)
                 context_menu = [(self._kodi.localize(30413), 'RunPlugin(%s)' % self._kodi.url_for('delete_cache', cache_file='channel.%s.json' % channel))]
             else:
                 # Not a playable channel
@@ -602,11 +662,52 @@ class VRTApiHelper:
                 path=path,
                 art_dict=dict(thumb=thumb, fanart=fanart),
                 info_dict=info_dict,
+                stream_dict=stream_dict,
                 context_menu=context_menu,
                 is_playable=is_playable,
             ))
 
         return channel_items
+
+    def get_youtube_items(self, channels=None, live=True):
+        ''' Construct a list of channel ListItems, either for Live TV or the TV Guide listing '''
+
+        youtube_items = []
+
+        if self._kodi.get_cond_visibility('System.HasAddon(plugin.video.youtube)') == 0 or self._kodi.get_setting('showyoutube') == 'false':
+            return youtube_items
+
+        for channel in CHANNELS:
+            if channels and channel.get('name') not in channels:
+                continue
+
+            fanart = 'resource://resource.images.studios.coloured/%(studio)s.png' % channel
+            thumb = 'resource://resource.images.studios.white/%(studio)s.png' % channel
+
+            if channel.get('youtube'):
+                path = channel.get('youtube')
+                label = self._kodi.localize(30103).format(**channel)
+                # A single Live channel means it is the entry for channel's TV Show listing, so make it stand out
+                if channels and len(channels) == 1:
+                    label = '[B]%s[/B]' % label
+                plot = self._kodi.localize(30104).format(**channel)
+                # NOTE: Playcount is required to not have live streams as "Watched"
+                info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video', playcount=0)
+                context_menu = [(self._kodi.localize(30413), 'RunPlugin(%s)' % self._kodi.url_for('delete_cache', cache_file='channel.%s.json' % channel))]
+            else:
+                # Not a playable channel
+                continue
+
+            youtube_items.append(TitleItem(
+                title=label,
+                path=path,
+                art_dict=dict(thumb=thumb, fanart=fanart),
+                info_dict=info_dict,
+                context_menu=context_menu,
+                is_playable=False,
+            ))
+
+        return youtube_items
 
     def get_featured_items(self):
         ''' Construct a list of featured Listitems '''

@@ -269,6 +269,14 @@ msgctxt "#30102"
 msgid "Watch [B]{label}[/B] live via Internet"
 msgstr ""
 
+msgctxt "#30103"
+msgid "{label} on YouTube"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Watch [B]{label}[/B] on YouTube"
+msgstr ""
+
 msgctxt "#30201"
 msgid "[B][COLOR red]Geo-blocked[/COLOR][/B]\n"
 msgstr ""
@@ -391,6 +399,14 @@ msgctxt "#30806"
 msgid "Provide your VRT NU account password."
 msgstr ""
 
+msgctxt "#30807"
+msgid "Check credentials"
+msgstr ""
+
+msgctxt "#30808"
+msgid "Check if your VRT NU credentials are correct."
+msgstr ""
+
 msgctxt "#30820"
 msgid "Interface"
 msgstr ""
@@ -424,26 +440,30 @@ msgid "Show fanart"
 msgstr ""
 
 msgctxt "#30833"
-msgid "Show episode permalink in plot"
-msgstr ""
-
-msgctxt "#30834"
-msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
+msgid "Show YouTube channel content"
 msgstr ""
 
 msgctxt "#30835"
-msgid "Cache"
+msgid "Show episode permalink in plot"
+msgstr ""
+
+msgctxt "#30836"
+msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
 msgstr ""
 
 msgctxt "#30837"
-msgid "Enable menu caching"
-msgstr ""
-
-msgctxt "#30838"
-msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected."
+msgid "Cache"
 msgstr ""
 
 msgctxt "#30839"
+msgid "Enable menu caching"
+msgstr ""
+
+msgctxt "#30840"
+msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected."
+msgstr ""
+
+msgctxt "#30841"
 msgid "Enable local HTTP caching"
 msgstr ""
 
@@ -671,4 +691,32 @@ msgstr ""
 
 msgctxt "#30979"
 msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favourites.[/B]"
+msgstr ""
+
+msgctxt "#30980"
+msgid "Login successful!"
+msgstr ""
+
+msgctxt "#30981"
+msgid "Successfully invalidated caches."
+msgstr ""
+
+msgctxt "#30982"
+msgid "Successfully refreshed favorites."
+msgstr ""
+
+msgctxt "#30983"
+msgid "Successfully verified credentials."
+msgstr ""
+
+msgctxt "#30984"
+msgid "Credentials failed, please fix and retry."
+msgstr ""
+
+msgctxt "#30985"
+msgid "Successfully cleared VRT tokens."
+msgstr ""
+
+msgctxt "#30986"
+msgid "No on demand stream available for %s."
 msgstr ""

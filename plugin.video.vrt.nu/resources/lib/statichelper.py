@@ -132,7 +132,7 @@ def realpage(page):
     ''' Convert a URL parameter page value into an integer '''
     try:
         page = int(page)
-    except TypeError:
+    except ValueError:
         return 1
     if page < 1:
         return 1

@@ -130,3 +130,8 @@ class Favorites:
         # self._kodi.invalidate_caches('favorites.json')
         self._kodi.invalidate_caches('my-offline-*.json')
         self._kodi.invalidate_caches('my-recent-*.json')
+
+    def refresh_favorites(self):
+        ''' External API call to refresh favorites, used in Troubleshooting section '''
+        self.get_favorites(ttl=0)
+        self._kodi.show_notification(message=self._kodi.localize(30982))

@@ -87,8 +87,6 @@ class Search:
                 info_dict=dict(),
             ))
 
-        self._kodi.container_update(replace=True)
-
         self._favorites.get_favorites(ttl=60 * 60)
         self._kodi.show_listing(search_items, sort=sort, ascending=ascending, content=content, cache=False)
 

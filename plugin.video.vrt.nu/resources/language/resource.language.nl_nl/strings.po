@@ -173,6 +173,14 @@ msgctxt "#30102"
 msgid "Watch [B]{label}[/B] live via Internet"
 msgstr "Bekijk [B]{label}[/B] live via Internet"
 
+msgctxt "#30103"
+msgid "{label} on YouTube"
+msgstr "{label} op YouTube"
+
+msgctxt "#30104"
+msgid "Watch [B]{label}[/B] on YouTube"
+msgstr "Bekijk [B]{label}[/B] op YouTube"
+
 msgctxt "#30201"
 msgid "[B][COLOR red]Geo-blocked[/COLOR][/B]\n"
 msgstr "[B][COLOR red]Geo-geblokkeerd[/COLOR][/B]\n"
@@ -287,6 +295,14 @@ msgctxt "#30805"
 msgid "Password"
 msgstr "Wachtwoord"
 
+msgctxt "#30807"
+msgid "Check credentials"
+msgstr "Controleer inloggegevens"
+
+msgctxt "#30808"
+msgid "Check if your VRT NU credentials are correct."
+msgstr "Controleer of je VRT NU inloggegevens correct zijn."
+
 msgctxt "#30820"
 msgid "Interface"
 msgstr "Interface"
@@ -320,22 +336,26 @@ msgid "Show fanart"
 msgstr "Toon fanart"
 
 msgctxt "#30833"
+msgid "Show YouTube channel content"
+msgstr "Toon YouTube kanaal video's"
+
+msgctxt "#30835"
 msgid "Show episode permalink in plot"
 msgstr "Toon aflevering permalink in beschrijving"
 
-msgctxt "#30834"
+msgctxt "#30836"
 msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
 msgstr "Indien actief zal de beschrijving van iedere video een permanent link bevatten die je rechtstreeks naar de VRT NU website brengt. Dit is handig om snel een aflevering of film to openen op een mobiel toestel."
 
-msgctxt "#30835"
+msgctxt "#30837"
 msgid "Cache"
 msgstr "Cache"
 
-msgctxt "#30837"
+msgctxt "#30839"
 msgid "Enable menu caching"
 msgstr "Gebruik menu caching"
 
-msgctxt "#30839"
+msgctxt "#30841"
 msgid "Enable local HTTP caching"
 msgstr "Gebruik local HTTP caching"
 
@@ -565,3 +585,30 @@ msgctxt "#30979"
 msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favourites.[/B]"
 msgstr "Wegens belangrijke interne wijzigingen werken bestaande Kodi-favorieten en kijkgeschiedenis van VRT NU niet meer.\n[B]Gelieve al uw VRT NU-favorieten opnieuw aan te maken.[/B]"
 
+msgctxt "#30980"
+msgid "Login successful!"
+msgstr "Inloggen gelukt!"
+
+msgctxt "#30981"
+msgid "Successfully invalidated caches."
+msgstr "Caches werden ongeldig gemaakt."
+
+msgctxt "#30982"
+msgid "Successfully refreshed favorites."
+msgstr "Favoriete programmma's werden verversd."
+
+msgctxt "#30983"
+msgid "Successfully verified credentials."
+msgstr "Inloggegevens werken correct."
+
+msgctxt "#30984"
+msgid "Credentials failed, please fix and retry."
+msgstr "Inloggegevens zijn niet correct, verifieer en probeer opnieuw."
+
+msgctxt "#30985"
+msgid "Successfully cleared VRT tokens."
+msgstr "VRT tokens werden verwijderd."
+
+msgctxt "#30986"
+msgid "No on demand stream available for %s."
+msgstr "Geen on demand stream beschikbaar voor %s"

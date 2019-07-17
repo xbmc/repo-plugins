@@ -5,6 +5,7 @@
         <setting label="30801" type="lsep"/> <!-- VRT NU login -->
         <setting label="30803" help="30804" type="text" id="username"/>
         <setting label="30805" help="30806" type="text" id="password" option="hidden"/>
+        <setting label="30807" help="30808" type="action" id="check_credentials" action="RunPlugin(plugin://plugin.video.vrt.nu/tokens/check-credentials)" subsetting="true"  enable="!eq(-2,) + !eq(-1,)"/>
     </category>
     <category label="30820"> <!-- Interface -->
         <setting label="30821" type="lsep"/> <!-- Features -->
@@ -13,10 +14,11 @@
         <setting label="30827" help="30828" type="bool" id="addmydocu" default="true" enable="eq(-2,true)" subsetting="true"/>
         <setting label="30829" help="30830" type="bool" id="showoneoff" default="true"/>
         <setting label="30831" help="30832" type="bool" id="showfanart" default="true"/>
-        <setting label="30833" help="30834" type="bool" id="showpermalink" default="false"/>
-        <setting label="30835" type="lsep"/> <!-- Cache -->
-        <setting label="30837" help="30838" type="bool" id="usemenucaching" default="true"/>
-        <setting label="30839" help="30840" type="bool" id="usehttpcaching" default="true"/>
+        <setting label="30833" help="30834" type="bool" id="showyoutube" default="true" enable="System.HasAddon(plugin.video.youtube)"/>
+        <setting label="30835" help="30836" type="bool" id="showpermalink" default="false"/>
+        <setting label="30837" type="lsep"/> <!-- Cache -->
+        <setting label="30839" help="30840" type="bool" id="usemenucaching" default="true"/>
+        <setting label="30841" help="30842" type="bool" id="usehttpcaching" default="true"/>
     </category>
     <category label="30860"> <!-- Playback -->
         <setting label="30861" type="lsep"/>

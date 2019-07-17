@@ -16,7 +16,7 @@ class MetadataCreator:
         self.datetime = None
         self.duration = None
         self.episode = None
-        self.geolocked = None
+        self.geoblocked = None
         self.mediatype = None
         self.offtime = None
         self.ontime = None

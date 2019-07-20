@@ -1,0 +1,109 @@
+# Kodi Media Center language file
+# Addon Name: Prelinger Archives
+# Addon id: plugin.video.pa
+# Addon Provider: fraser
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "General"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Creator"
+msgstr ""
+
+msgctxt "#32003"
+msgid "!UNUSED!"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Subject"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Recent"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Years"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Search"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Collection"
+msgstr ""
+
+msgctxt "#32009"
+msgid "!UNUSED!"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Page"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Menu"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Results per-page"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Clear Recently Viewed"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Clear Searches"
+msgstr ""
+
+msgctxt "#32016"
+msgid "New Search"
+msgstr ""
+
+msgctxt "#32017"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#32018"
+msgid "Clear Cache"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Remove Search"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Save Searches"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Save Recently Viewed"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Are you sure?"
+msgstr ""

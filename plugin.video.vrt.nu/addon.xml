@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.1.0" provider-name="Martijn Moreel, dagwieers">
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.1.1" provider-name="Martijn Moreel, dagwieers">
     <requires>
         <import addon="resource.images.studios.coloured" version="0.0.16" optional="true"/>
         <import addon="resource.images.studios.white" version="0.0.21"/>
@@ -48,6 +48,9 @@ Met deze Kodi add-on kan je alle video streams van VRT NU bekijken.
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
+v2.1.1 (2019-07-20)
+- Fix issue on Kodi v17 (@dagwieers)
+
 v2.1.0 (2019-07-11)
 - Fix an issue with roaming VRT tokens (@mediaminister)
 - Start a video by channel/start time (@mediaminister)

@@ -179,7 +179,7 @@ class KodiWrapper:
             is_folder = bool(not title_item.is_playable and title_item.path)
             is_playable = bool(title_item.is_playable and title_item.path)
 
-            list_item = xbmcgui.ListItem(label=title_item.title, offscreen=True)
+            list_item = xbmcgui.ListItem(label=title_item.title)
             list_item.setProperty(key='IsPlayable', value='true' if is_playable else 'false')
 
             # FIXME: The setIsFolder is new in Kodi18, so we cannot use it just yet.
@@ -211,7 +211,7 @@ class KodiWrapper:
     def play(self, video):
         ''' Create a virtual directory listing to play its only item '''
         import xbmcgui
-        play_item = xbmcgui.ListItem(path=video.stream_url, offscreen=True)
+        play_item = xbmcgui.ListItem(path=video.stream_url)
         play_item.setProperty('inputstream.adaptive.max_bandwidth', str(self.get_max_bandwidth() * 1000))
         play_item.setProperty('network.bandwidth', str(self.get_max_bandwidth() * 1000))
         if video.stream_url is not None and video.use_inputstream_adaptive:

@@ -1,4 +1,4 @@
-#   Copyright (C) 2018 Lunatixz
+#   Copyright (C) 2019 Lunatixz
 #
 #
 # This file is part of HDHomerun Simple
@@ -19,5 +19,6 @@
 # -*- coding: utf-8 -*-
 
 #entrypoint
-if __name__ == '__main__':
-    from resources.lib import hdhomerun
+import sys
+from resources.lib import hdhomerun
+if __name__ == '__main__': hdhomerun.HDHR(sys.argv).run()

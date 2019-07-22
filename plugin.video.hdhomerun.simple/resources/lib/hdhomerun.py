@@ -1,4 +1,4 @@
-#   Copyright (C) 2018 Lunatixz
+#   Copyright (C) 2019 Lunatixz
 #
 #
 # This file is part of HDHomerun Simple
@@ -53,9 +53,6 @@ def log(msg, level=xbmc.LOGDEBUG):
     if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
 
-def getParams():
-    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
-
 def collectData(mydict, key):
     items = []
     for item in mydict: items.append(item[key])
@@ -65,14 +62,17 @@ def collectData(mydict, key):
 def getIndex(items, key, value):
     for item in items: 
         if item[key] == value: yield item
-    
+
 socket.setdefaulttimeout(TIMEOUT)
 class HDHR(object):
-    def __init__(self):
-        self.cache  = SimpleCache()
-        self.pyHDHR = PyHDHR.PyHDHR()
-        self.tuners = self.getTuners()
-        self.hasDVR = self.pyHDHR.hasSDDVR()
+    def __init__(self, sysARG):
+        log('__init__, sysARG = ' + str(sysARG))
+        self.cacheToDisc = True
+        self.sysARG      = sysARG
+        self.cache       = SimpleCache()
+        self.pyHDHR      = PyHDHR.PyHDHR()
+        self.tuners      = self.getTuners()
+        self.hasDVR      = self.pyHDHR.hasSDDVR()
         
         
     def browseTuners(self):
@@ -81,26 +81,29 @@ class HDHR(object):
         for tunerkey in self.tuners: 
             if len(self.tuners) == 1: return self.browseTunerMenu(self.tuners[tunerkey].getLocalIP())
             self.addDir('%s - %s'%(self.tuners[tunerkey].FriendlyName,tunerkey), self.tuners[tunerkey].getLocalIP(), 0)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_NONE)
                 
             
     def browseTunerMenu(self, tunerkey):
         for idx, tup in enumerate(HDHR_MENU):
             if tup[0] == LANGUAGE(30111) and not self.hasDVR: continue
             self.addDir(tup[0], tup[1].format(tunerkey), tup[2])
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_NONE)
         
            
     def browseLive(self, tunerkey):
         self.setDevice(tunerkey)
         progs  = self.pyHDHR.getWhatsOn()
+        self.cacheToDisc = False
         for channel in progs:
             try:
                 label, liz = self.buildChannelListItem(channel, progs[channel])
                 self.addLink(label, json.dumps({"tunerkey":tunerkey,"channel":channel}), 9, liz, len(progs))
             except: pass
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
             
             
     def browseGuide(self, mydata):
-        log('browseGuide, mydata = ' + mydata)
         try:
             mydata   = json.loads(mydata)
             chnum    = mydata['chnum']
@@ -119,7 +122,7 @@ class HDHR(object):
             chlogo      = (chan.getImageURL() or ICON)
             if chnum is None:
                 try:
-                    label, liz = self.buildChannelListItem(channel, None, '%s %s'%(channel,channelname))
+                    label, liz = self.buildChannelListItem(channel, None, '%s: %s'%(channel,channelname))
                     self.addDir(label,json.dumps({"tunerkey":tunerkey,"chnum":str(channel)}),4,liz)
                 except: pass
             else:
@@ -130,6 +133,7 @@ class HDHR(object):
                         label, liz = self.buildChannelListItem(chnum, program, opt='Lineup')
                         self.addLink(label, json.dumps({"tunerkey":tunerkey,"channel":chnum}), 9, liz, len(programs))
                     except: pass
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
 
                     
     def browseRecordings(self):
@@ -157,6 +161,8 @@ class HDHR(object):
                     label, liz = self.buildRecordListItem(prog, label)
                     self.addLink(label, prog.getPlayURL(), 8, liz)
                 except: pass
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_DATEADDED)
 
             
     def browseSeries(self, seriesid):
@@ -172,6 +178,7 @@ class HDHR(object):
             else: label = '%s: %s'%(stime,title)
             label, liz = self.buildRecordListItem(prog, label)
             self.addLink(label, prog.getPlayURL(), 8, liz)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
             
         
     def browseSearch(self):
@@ -181,23 +188,32 @@ class HDHR(object):
         kb.doModal()
         if kb.isConfirmed():
             query = kb.getText()
-            progs = self.pyHDHR.searchWhatsOn(query)
-            for prog in progs:
-                label, liz = self.buildChannelListItem(prog, progs[prog], opt='searchWhatsOn')
-                self.addLink(label, prog, 9, liz, len(progs))
-            progs = self.pyHDHR.search(query)
-            for prog in progs:
-                try:
-                    label, liz = self.buildChannelListItem(prog, progs[prog], opt='search')
-                    self.addLink(label, prog, 9, liz, len(progs))
-                except: pass
+            progs = (self.pyHDHR.searchWhatsOn(query))
+            if progs is not None:
+                for prog in progs:
+                    try:
+                        label, liz = self.buildChannelListItem(prog, progs[prog], opt='searchWhatsOn')
+                        self.addLink(label, prog, 9, liz, len(progs))
+                    except: pass
+
+            progs = (self.pyHDHR.search(query))
+            if progs is not None: 
+                for prog in progs:
+                    try:
+                        label, liz = self.buildChannelListItem(prog, progs[prog], opt='search')
+                        self.addLink(label, prog, 9, liz, len(progs))
+                    except: pass
+                    
             if not self.hasDVR: return
             progs = self.pyHDHR.searchRecorded(query)
             for prog in progs:
-                try:
-                    label, liz = self.buildRecordListItem(progs[prog], opt='searchRecorded')
-                    s=elf.addLink(label, prog, 9, liz, len(progs))
-                except: pass
+                if progs is not None: 
+                    try:
+                        label, liz = self.buildRecordListItem(progs[prog], opt='searchRecorded')
+                        self.addLink(label, prog, 9, liz, len(progs))
+                    except: pass
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
+        
             
     def buildRecordListItem(self, prog, label=None, opt='Live'):
         return self.buildChannelListItem(prog.getChannelNumber(), prog, label, opt)
@@ -206,6 +222,7 @@ class HDHR(object):
     def buildChannelListItem(self, channel, item=None, label=None, opt='Live'):
         info   = self.getChannelInfo(channel)
         if info is None: return
+        elif info.getDRM(): return
         chlogo = (info.getImageURL() or ICON)
         chname = (info.getAffiliate() or info.getGuideName() or info.getGuideNumber() or 'N/A')
         liz    = xbmcgui.ListItem(label)
@@ -272,7 +289,6 @@ class HDHR(object):
 
         
     def setDevice(self, tunerkey):
-        log('setDevice, tunerkey = ' + tunerkey)
         if tunerkey != 'All': self.pyHDHR.setManualTunerList(tunerkey)
         
     
@@ -300,7 +316,7 @@ class HDHR(object):
     def playVideo(self, name, url):
         log('playVideo, name = ' + name + ', url = ' + url)
         liz = xbmcgui.ListItem(name, path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
         
         
     def playChannel(self, name, mydata):
@@ -318,7 +334,7 @@ class HDHR(object):
             if tranOPT != "none": video = {'codec': 'h264'}
             url = url + "?transcode="+tranOPT
         liz = xbmcgui.ListItem(name, path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
 
         
     def addLink(self, name, u, mode, liz=None, total=0):
@@ -329,8 +345,8 @@ class HDHR(object):
             liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name})
             liz.setArt({'thumb':ICON,'fanart':FANART})
         liz.setProperty('IsPlayable', 'true')
-        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
+        u=self.sysARG[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,totalItems=total)
 
 
     def addDir(self, name, u, mode, liz=None):
@@ -340,35 +356,36 @@ class HDHR(object):
             liz = xbmcgui.ListItem(name)
             liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name})
             liz.setArt({'thumb':ICON,'fanart':FANART})
-        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        u=self.sysARG[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,isFolder=True)
      
-params=getParams()
-try: url=urllib.unquote(params["url"])
-except: url=None
-try: name=urllib.unquote(params["name"])
-except: name=None
-try: mode=int(params["mode"])
-except: mode=None    
-log("Mode: "+str(mode))
-log("URL : "+str(url))
-log("Name: "+str(name))
+     
+    def getParams(self):
+        return dict(urlparse.parse_qsl(self.sysARG[2][1:]))
 
-if mode==None:  HDHR().browseTuners()
-elif mode == 0: HDHR().browseTunerMenu(url)
-elif mode == 1: HDHR().browseLive(url)
-elif mode == 2: HDHR().browseRecordings()
-elif mode == 3: HDHR().browseSeries(url)
-elif mode == 4: HDHR().browseGuide(url)
-elif mode == 8: HDHR().playVideo(name, url)
-elif mode == 9: HDHR().playChannel(name, url)
-elif mode == 11: HDHR().browseSearch()
-elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,listitem=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(json.dumps(sys.argv[0]+"?mode=4")),urllib.quote(json.dumps(sys.argv[0]+"?mode=4")),urllib.quote(json.dumps("7200")),urllib.quote(json.dumps("5"))))
-#pass invalid listitem to uEPG to load built-in HDHR support.
+            
+    def run(self):  
+        params=self.getParams()
+        try: url=urllib.unquote_plus(params["url"])
+        except: url=None
+        try: name=urllib.unquote_plus(params["name"])
+        except: name=None
+        try: mode=int(params["mode"])
+        except: mode=None
+        log("Mode: "+str(mode))
+        log("URL : "+str(url))
+        log("Name: "+str(name))
 
-xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_TITLE)
-xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)
+        if mode==None:  self.browseTuners()
+        elif mode == 0: self.browseTunerMenu(url)
+        elif mode == 1: self.browseLive(url)
+        elif mode == 2: self.browseRecordings()
+        elif mode == 3: self.browseSeries(url)
+        elif mode == 4: self.browseGuide(url)
+        elif mode == 8: self.playVideo(name, url)
+        elif mode == 9: self.playChannel(name, url)
+        elif mode == 11: self.browseSearch()
+        elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%("[]",urllib.quote(self.sysARG[0]+"?mode=20"),"7200","5"))
+
+        xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)
+        xbmcplugin.endOfDirectory(int(self.sysARG[1]), cacheToDisc=self.cacheToDisc)

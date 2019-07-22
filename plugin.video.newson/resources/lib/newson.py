@@ -17,12 +17,12 @@
 # along with NewsOn.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, traceback, feedparser, random, inputstreamhelper
+import os, sys, time, datetime, traceback, feedparser, random
 import urlparse, urllib, urllib2, socket, json, collections, gzip
-import xbmc, xbmcgui, xbmcplugin, xbmcaddon
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
 
 from StringIO import StringIO
-from simplecache import SimpleCache
+from simplecache import SimpleCache, use_cache
 # Plugin Info
 ADDON_ID      = 'plugin.video.newson'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
@@ -39,9 +39,12 @@ CLIPART       = os.path.join(ADDON_PATH,'resources','images','videoclips.jpg')
 ## GLOBALS ##
 TIMEOUT       = 15
 CONTENT_TYPE  = 'episodes'
+APIKEY        = REAL_SETTINGS.getSetting('MAPQUEST_API')
 DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 BASE_API      = 'http://watchnewson.com/api/linear/channels'
 LOGO_URL      = 'https://dummyimage.com/512x512/035e8b/FFFFFF.png&text=%s'
+FAN_URL       = 'https://dummyimage.com/1280x720/035e8b/FFFFFF.png&text=%s'
+MAP_URL       = 'https://www.mapquestapi.com/staticmap/v5/map?key=%s&center=%s&size=1280,720&zoom=14&type=dark'
 MENU          = [(LANGUAGE(30002), '0', 0, False, {"thumb":NEWSART,"poster":NEWSART,"fanart":FANART,"icon":ICON,"logo":ICON}),
                  (LANGUAGE(30003), '2', 2, False, {"thumb":CLIPART,"poster":CLIPART,"fanart":FANART,"icon":ICON,"logo":ICON})]
            
@@ -58,22 +61,30 @@ class NewsOn(object):
         self.cache     = SimpleCache()
         self.stateMenu = self.getStates()
 
+
+    def getMAP(self, args):
+        try:
+            if len(args) == 2: return MAP_URL%(APIKEY, '%s,%s'%(tuple(args)))
+            else: return MAP_URL%(APIKEY, args)
+        except: return FANART
+            
         
     def openURL(self, url):
         try:
             log('openURL, url = ' + str(url))
-            cacheResponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
-            if not cacheResponse:
+            if DEBUG: cacheresponse = None
+            else: cacheresponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
+            if not cacheresponse:
                 request = urllib2.Request(url)
                 request.add_header('Accept-Encoding', 'gzip')
                 request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
                 response = urllib2.urlopen(request, timeout = TIMEOUT)
-                if response.info().get('Content-Encoding') == 'gzip': cacheResponse = gzip.GzipFile(fileobj=StringIO(response.read())).read()
-                else: cacheResponse = response
+                if response.info().get('Content-Encoding') == 'gzip': cacheresponse = gzip.GzipFile(fileobj=StringIO(response.read())).read()
+                else: cacheresponse = response
                 response.close()
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheResponse, expiration=datetime.timedelta(minutes=5))
-            if isinstance(cacheResponse, basestring): cacheResponse = json.loads(cacheResponse)
-            return cacheResponse
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheresponse, expiration=datetime.timedelta(minutes=5))
+            if isinstance(cacheresponse, basestring): cacheresponse = json.loads(cacheresponse)
+            return cacheresponse
         except Exception as e: 
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
             xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
@@ -88,7 +99,8 @@ class NewsOn(object):
     def browseMenu(self, id=1):
         log('browseMenu, id = ' + str(id))
         self.stateMenu = [tuple(s.format(id) for s in tup) for tup in self.stateMenu]
-        for item in self.stateMenu: self.addDir(item[0], item[1], item[2], False, {"thumb":LOGO_URL%item[0],"poster":LOGO_URL%item[0],"fanart":FANART,"icon":ICON,"logo":ICON})
+        for item in self.stateMenu: 
+            self.addDir(item[0], item[1], item[2], False, {"thumb":LOGO_URL%item[0],"poster":LOGO_URL%item[0],"fanart":self.getMAP((item[0])),"landscape":FAN_URL%(item[0]),"icon":ICON,"logo":ICON})
 
 
     def cleanState(self, state):
@@ -120,19 +132,20 @@ class NewsOn(object):
             if state in states:
                 chid   = channel['identifier']
                 title  = channel['title']
+                lat    = channel['config']['latitude']
+                lon    = channel['config']['longitude']
                 icon   = (channel['icon'] or ICON)
                 for idx, stream in enumerate(channel['streams']):
-                    streamType = stream['StreamType']
-                    if streamType == 'website': continue
+                    if stream['StreamType'] == 'website': continue
                     url = stream['Url']
                     offset = stream['OffsetFromNow']
-                    delay  = url+'&delay=%d'  #todo do something with delay option?
-                    if url in urls: continue
+                    delay  = url+'&delay=%d' # todo do something with delay option?
+                    if url in urls: continue # filter duplicate feeds
                     if url not in urls: urls.append(url)
                     chid = chid+'.%d'%idx if idx > 0 else chid
                     label      = "%s - %s" % (chid, title)
-                    infoLabels ={"mediatype":"episodes","label":label,"title":label}
-                    infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":icon,"logo":icon} 
+                    infoLabels ={"mediatype":"episodes","label":label,"title":label,'plot':label}
+                    infoArt    ={"thumb":icon,"poster":icon,"fanart":self.getMAP((lat, lon)),"landscape":FAN_URL%(channel['config']['locations'][0]["state"]),"icon":icon,"logo":icon} 
                     self.addLink(title, url, 9, infoLabels, infoArt)
         
         
@@ -148,10 +161,12 @@ class NewsOn(object):
                     vidURL = channel['config']['localvodfeed']
                     chid   = channel['identifier']
                     title  = channel['title']
+                    lat    = channel['config']['latitude']
+                    lon    = channel['config']['longitude']
                     icon   = (channel['icon'] or ICON)
                     label  = "%s - %s" % (chid, title)
                     infoLabels ={"mediatype":"video","label":label,"title":label}
-                    infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":ICON,"logo":ICON} 
+                    infoArt    ={"thumb":icon,"poster":icon,"fanart":self.getMAP((lat, lon)),"landscape":FAN_URL%(channel['config']['locations'][0]["state"]),"icon":ICON,"logo":ICON} 
                     self.addDir(label, vidURL, 4, infoLabels, infoArt)
                 except: continue
 
@@ -178,7 +193,7 @@ class NewsOn(object):
                             for tag in item['tags']: tagLST.append(((tag['term']).split('/')[0]).title())
                         if len(tagLST) > 0: genre = (tagLST[0] or '')
                         infoLabels ={"mediatype":"episode","label":title,"title":title,"plot":plot,"aired":aired,'genre':genre,'tags':tagLST}
-                        infoArt    ={"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON} 
+                        infoArt    ={"thumb":thumb,"poster":thumb,"fanart":thumb,"icon":ICON,"logo":ICON} 
                         self.addLink(title, url, 8, infoLabels, infoArt)
                     except: continue
                     
@@ -186,10 +201,6 @@ class NewsOn(object):
     def playVideo(self, name, url, live=False):
         log('playVideo')
         liz = xbmcgui.ListItem(name, path=url)
-        if 'm3u8' in url.lower():
-            if not inputstreamhelper.Helper('hls').check_inputstream(): sys.exit()
-            liz.setProperty('inputstreamaddon','inputstream.adaptive')
-            liz.setProperty('inputstream.adaptive.manifest_type','hls')
         xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
 
            

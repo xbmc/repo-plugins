@@ -1,4 +1,4 @@
-#   Copyright (C) 2018 Lunatixz
+#   Copyright (C) 2019 Lunatixz
 #
 #
 # This file is part of PlutoTV.
@@ -17,12 +17,19 @@
 # along with PlutoTV.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, net, re, traceback
-import urlparse, urllib, socket, json, collections
+import os, sys, time, _strptime, datetime, net, re, traceback
+import urlparse, urllib, socket, json, collections, inputstreamhelper
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
 
-from simplecache import use_cache, SimpleCache
+from uepg import buildChannels
+from simplecache import SimpleCache, use_cache
 
+try:
+    from multiprocessing import cpu_count 
+    from multiprocessing.pool import ThreadPool 
+    ENABLE_POOL = True
+except: ENABLE_POOL = False
+    
 # Plugin Info
 ADDON_ID      = 'plugin.video.plutotv'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
@@ -53,9 +60,9 @@ BASE_GUIDE   = BASE_API + '/v1/timelines/%s.000Z/%s.000Z/matrix.json'
 LOGIN_URL    = BASE_API + '/v1/auth/local'
 BASE_CLIPS   = BASE_API + '/v2/episodes/%s/clips.json'
 REGION_URL   = 'http://ip-api.com/json'
-PLUTO_MENU   = [("Browse Channels" , BASE_LINEUP, 0),
-                ("Browse OnDemand" , BASE_LINEUP, 1),
-                ("Channel Guide"   , BASE_LINEUP, 20)]
+PLUTO_MENU   = [(LANGUAGE(30011), BASE_LINEUP, 0),
+                (LANGUAGE(30012), BASE_LINEUP, 1),
+                (LANGUAGE(30013), BASE_LINEUP, 20)]
               
 def isUWP():
     return (bool(xbmc.getCondVisibility("system.platform.uwp")) or sys.platform == "win10")
@@ -82,11 +89,13 @@ def log(msg, level=xbmc.LOGDEBUG):
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
     
 def getParams():
-    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
+    return dict(urlparse.parse_qsl(self.sysARG[2][1:]))
                         
 socket.setdefaulttimeout(TIMEOUT)
-class PlutoTV():
-    def __init__(self):
+class PlutoTV(object):
+    def __init__(self, sysARG):
+        log('__init__, sysARG = ' + str(sysARG))
+        self.sysARG  = sysARG
         self.net     = net.Net()
         self.cache   = SimpleCache()
         self.region  = self.getRegion()
@@ -96,9 +105,8 @@ class PlutoTV():
         log('__init__, region = ' + self.region)
         
         
-    @use_cache(1)
     def getRegion(self):
-        return (self.openURL(REGION_URL).get('countryCode','') or 'US')
+        return (self.openURL(REGION_URL, life=datetime.timedelta(hours=12)).get('countryCode','') or 'US')
         
         
     def login(self):
@@ -122,7 +130,7 @@ class PlutoTV():
                     f = xbmcvfs.File(COOKIE_JAR, 'w')
                     f.close()
                 except: log('login, Unable to create the storage directory', xbmc.LOGERROR)
-            
+
             form_data = ({'optIn': 'true', 'password': PASSWORD,'synced': 'false', 'userIdentity': USER_EMAIL})
             self.net.set_cookies(COOKIE_JAR)
             try:
@@ -141,7 +149,7 @@ class PlutoTV():
             xbmc.executebuiltin('RunScript("' + ADDON_PATH + '/country.py' + '")')
             
             
-    def openURL(self, url):
+    def openURL(self, url, life=datetime.timedelta(minutes=15)):
         log('openURL, url = ' + url)
         try:
             header_dict               = {}
@@ -158,13 +166,13 @@ class PlutoTV():
                 try: cacheResponse = self.net.http_GET(url, headers=header_dict).content.encode("utf-8", 'ignore')
                 except: cacheResponse = (self.net.http_GET(url, headers=header_dict).content.translate(trans_table)).encode("utf-8")
                 self.net.save_cookies(COOKIE_JAR)
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheResponse, expiration=datetime.timedelta(hours=1))
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheResponse, expiration=life)
             if isinstance(cacheResponse, basestring): cacheResponse = json.loads(cacheResponse)
             return cacheResponse
         except Exception as e:
             log('openURL, Unable to open url ' + str(e), xbmc.LOGERROR)
             xbmcgui.Dialog().notification(ADDON_NAME, 'Unable to Connect, Check User Credentials', ICON, 4000)
-            return ''
+            return {}
             
 
     def mainMenu(self):
@@ -185,9 +193,9 @@ class PlutoTV():
         data = self.openURL(BASE_LINEUP)
         for channel in data: collect.append(channel['category'])
         counter = collections.Counter(collect)
-        for key, value in sorted(counter.iteritems()): lineup.append(("%s"%(key)  , BASE_LINEUP, 2))
-        lineup.insert(0,("Featured"    , BASE_LINEUP, 2))
-        lineup.insert(2,("All Channels", BASE_LINEUP, 2))
+        for key, value in sorted(counter.iteritems()): lineup.append(("%s"%(key) , BASE_LINEUP, 2))
+        lineup.insert(0,("Featured", BASE_LINEUP, 2))
+        # lineup.insert(2,(LANGUAGE(30014), BASE_LINEUP, 2))
         return lineup
         
         
@@ -210,8 +218,10 @@ class PlutoTV():
             id      = channel['_id']
             cat     = channel['category']
             number  = channel['number']
-            region  = channel['regionFilter']['include']
-            exclude = channel['regionFilter']['exclude']
+            filter  = channel.get('regionFilter',{})
+            if isinstance(filter, list): filter = dict(filter)
+            region  = filter.get('include','US')
+            exclude = filter.get('exclude','')
             name    = channel['name']
             plot    = channel['description']
             feat    = (channel.get('featured','') or 0) == -1
@@ -228,7 +238,7 @@ class PlutoTV():
             if 'featuredImage' in channel: land = (channel['featuredImage'].get('path',FANART) or FANART)
             logo = ICON
             if 'logo' in channel: logo   = (channel['logo']['path'] or ICON)
-            if chname == "All Channels":
+            if chname == LANGUAGE(30014):
                 title = "%s - %s: %s" % (cat, number, name)
                 infoLabels ={"mediatype":self.mediaType[cat],"label":title ,"title":title  ,"plot":plot, "code":number, "genre":cat, "imdbnumber":id}
                 infoArt    ={"thumb":thumb,"poster":thumb,"fanart":land,"icon":logo,"logo":logo}
@@ -255,17 +265,20 @@ class PlutoTV():
         start   = 0 if start == BASE_LINEUP else int(start)
         data    = list(self.pagination((self.openURL(BASE_LINEUP)), end))
         start   = 0 if start >= len(data) else start
-        link    = (self.openURL(BASE_GUIDE % (datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00'),(datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00'))))
+        link    = self.getGuidedata()
+        # if start == 0 and end == 14: self.addDir(LANGUAGE(30014), '', 10)
         for channel in data[start]:
             chid    = channel['_id']
             chcat   = channel['category']
             chnum   = channel['number']
-            region  = channel['regionFilter']['include']
-            exclude = channel['regionFilter']['exclude']
+            filter  = channel.get('regionFilter',{})
+            if isinstance(filter, list): filter = dict(filter)
+            region  = filter.get('include','US')
+            exclude = filter.get('exclude','')
             chname  = channel['name']
             chplot  = channel['description']
             chthumb = ICON
-            if 'thumbnail' in channel: chthumb = (channel['thumbnail'].get('path',ICON) or ICON)
+            if 'thumbnail' in channel: chthumb = ((channel['thumbnail'].get('path','')).replace(' ','%20') or ICON)
             feat = (channel.get('featured','') or 0) == -1
             if self.filter == True and (self.region in exclude or self.region not in region):
                 if geowarn == False:
@@ -289,14 +302,14 @@ class PlutoTV():
             infoArt    ={"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
             self.addLink(title, chid, 9, infoLabels, infoArt, end)
         start += 1
-        self.addDir('>> Next', '%s'%(start), 0)
+        if end == 14: self.addDir(LANGUAGE(30015), '%s'%(start), 0)
     
     
     def playChannel(self, name, url):
         log('playChannel')
         origurl  = url
         if PTVL_RUN: self.playContent(name, url)
-        link = (self.openURL(BASE_GUIDE % (datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00'),(datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00'))))
+        link = self.getGuidedata()
         item = link[origurl][0]
         id = item['episode']['_id']
         ch_start = datetime.datetime.fromtimestamp(time.mktime(time.strptime((item["start"].split('.')[0]), "%Y-%m-%dT%H:%M:%S")))
@@ -321,24 +334,22 @@ class PlutoTV():
             liz.setArt(infoArt)
             liz.setProperty("IsPlayable","true")
             liz.setProperty("IsInternetStream",str(field['liveBroadcast']).lower())
-            if 'm3u8' in url.lower():
+            if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream():
                 liz.setProperty('inputstreamaddon','inputstream.adaptive')
                 liz.setProperty('inputstream.adaptive.manifest_type','hls')
             if dur_start < ch_timediff and dur_sum > ch_timediff:
                 vid_offset = ch_timediff - dur_start
                 liz.setProperty('ResumeTime', str(vid_offset))
             playlist.add(url, liz, idx)
-            if idx == 0: xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+            if idx == 0: xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
      
      
     def playContent(self, name, url):
         log('playContent')
         origurl = url
-        t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
-        t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
-        link = (self.openURL(BASE_GUIDE % (t1,t2)))
+        link = self.getGuidedata()
         try: item = link[origurl][0]
-        except Exception as e: return log('playContent, failed! ' + str(e), xbmc.LOGERROR)
+        except Exception as e: return log('playContent, failed! ' + str(e) + ', origurl = ' + str(link.get(origurl,[EMPTY])), xbmc.LOGERROR)
         id = item['episode']['_id']
         ch_start = datetime.datetime.fromtimestamp(time.mktime(time.strptime((item["start"].split('.')[0]), "%Y-%m-%dT%H:%M:%S")))
         ch_timediff = (datetime.datetime.now() - ch_start).seconds
@@ -360,7 +371,7 @@ class PlutoTV():
             else: self.addLink(name, url, 7, infoList, infoArt, len(data))
             
            
-    @use_cache(28)
+    @use_cache(1)
     def resolveURL(self, provider, url):
         log('resolveURL, provider = ' + str(provider) + ', url = ' + url)
         if provider == 'jwplatform' or 'm3u8' in url.lower() or url is None: return url
@@ -386,10 +397,10 @@ class PlutoTV():
         provider = url['provider']
         url = url['url']
         if liz is None: liz = xbmcgui.ListItem(name, path=self.resolveURL(provider, url))
-        if 'm3u8' in url.lower():
+        if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream() and not DEBUG:
             liz.setProperty('inputstreamaddon','inputstream.adaptive')
             liz.setProperty('inputstream.adaptive.manifest_type','hls')
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
 
            
     def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0):
@@ -401,8 +412,8 @@ class PlutoTV():
         else: liz.setInfo(type="Video", infoLabels=infoList)
         if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
         else: liz.setArt(infoArt)
-        u=sys.argv[0]+"?url="+urllib.quote(u)+"&mode="+str(mode)+"&name="+urllib.quote(name)
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
+        u=self.sysARG[0]+"?url="+urllib.quote(u)+"&mode="+str(mode)+"&name="+urllib.quote(name)
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,totalItems=total)
 
 
     def addDir(self, name, u, mode, infoList=False, infoArt=False):
@@ -414,17 +425,33 @@ class PlutoTV():
         else: liz.setInfo(type="Video", infoLabels=infoList)
         if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
         else: liz.setArt(infoArt)
-        u=sys.argv[0]+"?url="+urllib.quote(u)+"&mode="+str(mode)+"&name="+urllib.quote(name)
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        u=self.sysARG[0]+"?url="+urllib.quote(u)+"&mode="+str(mode)+"&name="+urllib.quote(name)
+        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,isFolder=True)
 
 
+    def poolList(self, method, items):
+        results = []
+        if ENABLE_POOL:
+            pool = ThreadPool(cpu_count())
+            results = pool.imap_unordered(method, items)
+            pool.close()
+            pool.join()
+        else: results = [method(item) for item in items]
+        results = filter(None, results)
+        return results
+        
+        
+    def getGuidedata(self):
+        return (self.openURL(BASE_GUIDE % (datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00'),(datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')), life=datetime.timedelta(hours=6)))
+        
+        
+    # @buildChannels({'refresh_path':urllib.quote("plugin://%s?mode=20"%ADDON_ID),'refresh_interval':"7200"})
     def uEPG(self):
         log('uEPG')
-        #support for uEPG universal epg framework module, available from the Kodi repository.
-        #https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
+        #support for uEPG universal epg framework module available from the Kodi repository. https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
         data      = (self.openURL(BASE_LINEUP))
-        self.link = (self.openURL(BASE_GUIDE % (datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00'),(datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00'))))
-        return (self.buildGuide(channel) for channel in data)
+        self.link = self.getGuidedata()
+        return self.poolList(self.buildGuide, data)
         
         
     def buildGuide(self, channel):
@@ -433,8 +460,10 @@ class PlutoTV():
         chid       = channel['_id']
         chcat      = channel['category']
         chnum      = channel['number']
-        region     = channel['regionFilter']['include']
-        exclude    = channel['regionFilter']['exclude']
+        filter     = channel.get('regionFilter',{})
+        if isinstance(filter, list): filter = dict(filter)
+        region     = filter.get('include','US')
+        exclude    = filter.get('exclude','')
         chname     = channel['name']
         chplot     = channel['description']
         isFavorite = False #(channel.get('featured','') or 0) == -1
@@ -479,36 +508,42 @@ class PlutoTV():
                 if any(k.lower().startswith(title.lower()) for k in IGNORE_KEYS): return
                 tmpdata = {"mediatype":self.mediaType[chcat],"label":title,"title":chname,"originaltitle":epname,"plot":epplot, "code":epid, "genre":chcat, "imdbnumber":chid, "duration":dur}
                 tmpdata['starttime'] = int(time.mktime(time.strptime((item["start"].split('.')[0]), "%Y-%m-%dT%H:%M:%S")))
-                tmpdata['url']       = sys.argv[0]+'?mode=7&name=%s&url=%s'%(title,url)
+                tmpdata['url']       = self.sysARG[0]+'?mode=7&name=%s&url=%s'%(title,url)
                 tmpdata['art']       = {"thumb":thumb,"clearart":poster,"fanart":FANART,"icon":chthumb,"clearlogo":chlogo}
                 guidedata.append(tmpdata)
         newChannel['guidedata'] = guidedata
         return newChannel
+     
 
-params=getParams()
-try: url=urllib.unquote(params["url"])
-except: url=None
-try: name=urllib.unquote(params["name"])
-except: name=None
-try: mode=int(params["mode"])
-except: mode=None
-    
-log("Mode: "+str(mode))
-log("URL : "+str(url))
-log("Name: "+str(name))
+    def getParams(self):
+        return dict(urlparse.parse_qsl(self.sysARG[2][1:]))
 
-if mode==None:  PlutoTV().mainMenu()
-elif mode == 0: PlutoTV().browseGuide(url)
-elif mode == 1: PlutoTV().browseMenu()
-elif mode == 2: PlutoTV().browse(name, url)
-elif mode == 7: PlutoTV().playVideo(name, url)
-elif mode == 8: PlutoTV().playContent(name, url)
-elif mode == 9: PlutoTV().playChannel(name, url)
-elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&skin_path=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(json.dumps(list(PlutoTV().uEPG()))),urllib.quote(json.dumps(ADDON_PATH)),urllib.quote(json.dumps(sys.argv[0]+"?mode=20")),urllib.quote(json.dumps("7200")),urllib.quote(json.dumps("5"))))
+            
+    def run(self):  
+        params=self.getParams()
+        try: url=urllib.unquote_plus(params["url"])
+        except: url=None
+        try: name=urllib.unquote_plus(params["name"])
+        except: name=None
+        try: mode=int(params["mode"])
+        except: mode=None
+        log("Mode: "+str(mode))
+        log("URL : "+str(url))
+        log("Name: "+str(name))
 
-xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL)
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_TITLE)
-xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)
+        if mode==None:   self.mainMenu()
+        elif mode == 0:  self.browseGuide(url)
+        elif mode == 1:  self.browseMenu()
+        elif mode == 2:  self.browse(name, url)
+        elif mode == 7:  self.playVideo(name, url)
+        elif mode == 8:  self.playContent(name, url)
+        elif mode == 9:  self.playChannel(name, url)
+        elif mode == 10: self.browseGuide(end=5000)
+        elif mode == 20: xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&skin_path=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(json.dumps(list(self.uEPG()))),urllib.quote(ADDON_PATH),urllib.quote(self.sysARG[0]+"?mode=20"),"7200","5"))
+
+        xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_NONE)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
+        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_TITLE)
+        xbmcplugin.endOfDirectory(int(self.sysARG[1]), cacheToDisc=False)

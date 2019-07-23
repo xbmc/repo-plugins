@@ -1,0 +1,25 @@
+v1.2.0
+- Updated to use script.module.cache
+  Fixes duration when parsing collection items
+  Added all genres when parsing collection items
+  Added "clear searches" to settings
+  Added "Save recently viewed" option to settings
+  Added additional short videos to "The Cut" selection
+  Added "Kermode Introduces" menu and videos
+  Amends recently viewed to show; image, description, etc
+
+v1.1.0
+- Python 3 compatible
+  Removed hardcoded special urls
+
+v1.0.3
+- Fixes relative image URLs
+
+v1.0.2
+- Scraper update to reflect changes on bfi website
+
+v1.0.1
+- Small bug fix
+
+v1.0.0
+- Initial version

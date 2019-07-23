@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
     <setting id="Enable_Debugging" type="bool" label="30000" default="false" />
+    <setting id="MAPQUEST_API" type="text" visible="false" default="uvrvuR9Sh8Eyi22GOQF9RZAY4Jfye5y4" />
+    
 </settings>

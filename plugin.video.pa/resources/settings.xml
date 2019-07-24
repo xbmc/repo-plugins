@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="32000">
+        <setting id="debug" type="bool" label="32001" default="false"/>
+        <setting type="sep"/>
+        <setting id="cache_use" type="bool" label="32017" default="true"/>
+        <setting type="sep"/>
+        <setting id="cache_clear" label="32018" type="action"
+                 action="RunPlugin(plugin://plugin.video.pa/clear/cache)"/>
+        <setting id="recent_clear" label="32014" type="action"
+                 action="RunPlugin(plugin://plugin.video.pa/clear/recent)"/>
+        <setting id="searches_clear" label="32015" type="action"
+                 action="RunPlugin(plugin://plugin.video.pa/clear/search)"/>
+    </category>
+    <category label="32007">
+        <setting id="search_saved" type="bool" label="32020" default="true"/>
+        <setting id="recent_saved" type="bool" label="32021" default="true"/>
+    </category>
+    <category label="32012">
+        <setting id="show_creator" type="bool" label="32002" default="true"/>
+        <setting id="show_subject" type="bool" label="32004" default="true"/>
+        <setting id="show_collection" type="bool" label="32008" default="true"/>
+        <setting id="show_years" type="bool" label="32006" default="true"/>
+        <setting id="show_recent" type="bool" label="32005" default="true"/>
+        <setting id="show_search" type="bool" label="32007" default="true"/>
+        <setting id="show_settings" type="bool" label="32010" default="true"/>>
+    </category>
+</settings>

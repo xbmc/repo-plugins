@@ -1,29 +1,37 @@
 <settings>
-<category label="Paths">
-    <setting id="separator" type="lsep" label="Mandatory paths" />
-    <setting label="MAME executable" type="file" id="mame_prog" />
-    <setting label="MAME ROMs path" type="folder" id="rom_path" source="auto" option="" />
+<category label="Main operation">
+    <setting label="Mode" type="enum" id="op_mode_raw" default="0" values="Vanilla MAME|Retroarch MAME 2003 Plus" />
 
-    <setting id="separator" type="lsep" label="Optional paths" />
-    <setting label="MAME Assets path" type="folder" id="assets_path" source="auto" option="" />
-    <setting label="MAME INI/DAT path" type="folder" id="dats_path" source="auto" option="" />
-    <setting label="MAME CHDs path" type="folder" id="chd_path" source="auto" option="" />
-    <setting label="MAME Samples path" type="folder" id="samples_path" source="auto" option="" />
-    <setting label="Software Lists hash path" type="folder" id="SL_hash_path" source="auto" option="" />
-    <setting label="Software Lists ROMs path" type="folder" id="SL_rom_path" source="auto" option="" />
-    <setting label="Software Lists CHDs path" type="folder" id="SL_chd_path" source="auto" option="" />
+    <setting id="separator" type="lsep" label="Vanilla MAME" />
+    <setting label="Enable Software Lists" type="bool" id="enable_SL" default="true" />
+    <setting label="MAME executable path" type="file" id="mame_prog" />
+    <setting label="Software Lists hash path" type="folder" id="SL_hash_path" source="" />
+
+    <setting id="separator" type="lsep" label="Retroarch MAME 2003 Plus" />
+    <setting label="Retroarch executable path" type="file" id="retroarch_prog" />
+    <setting label="Libretro path" type="file" id="libretro_dir" />
+    <setting label="MAME XML path" type="file" id="xml_2003_path" />
+</category>
+<category label="Optional paths">
+    <setting label="MAME ROMs path" type="folder" id="rom_path" source="" />
+    <setting label="MAME Assets path" type="folder" id="assets_path" source="" />
+    <setting label="MAME INI/DAT path" type="folder" id="dats_path" source="" />
+    <setting label="MAME CHDs path" type="folder" id="chd_path" source="" />
+    <setting label="MAME Samples path" type="folder" id="samples_path" source="" />
+    <setting label="Software Lists ROMs path" type="folder" id="SL_rom_path" source="" />
+    <setting label="Software Lists CHDs path" type="folder" id="SL_chd_path" source="" />
 </category>
 <category label="ROM sets">
-    <setting label="MAME ROM set" type="enum" id="mame_rom_set"  default="1" values="Merged|Split|Non-merged" />
-    <setting label="MAME CHD set" type="enum" id="mame_chd_set"  default="0" values="Merged|Split|Non-merged" />
+    <setting label="MAME ROM set" type="enum" id="mame_rom_set" default="1" values="Merged|Split|Non-merged|Fully non-merged" />
+    <setting label="MAME CHD set" type="enum" id="mame_chd_set" default="0" values="Merged|Split|Non-merged" />
     <setting label="Software Lists ROM set" type="enum" id="SL_rom_set"  default="1" values="Merged|Split|Non-merged" />
     <setting label="Software Lists CHD set" type="enum" id="SL_chd_set"  default="0" values="Merged|Split|Non-merged" />
 
     <setting id="separator" type="lsep" label="Misc" />
     <setting label="Custom filter XML path" type="file" id="filter_XML" default="" />
 </category>
-<category label="Display">
-    <setting id="separator" type="lsep" label="General"/>
+<category label="Display I">
+    <!-- <setting id="separator" type="lsep" label="General"/> -->
     <setting label="Launching application notification" type="bool" id="display_launcher_notify" default="true" />
     <setting label="MAME view mode" type="enum" id="mame_view_mode" default="1" values="Flat|Parent/Clone" />
     <setting label="Software Lists view mode" type="enum" id="sl_view_mode" default="1" values="Flat|Parent/Clone" />
@@ -33,20 +41,25 @@
     <setting label="Hide non-working machines" type="bool" default="false" id="display_hide_nonworking" />
     <setting label="Display machines with available ROMs only" type="bool" default="false" id="display_rom_available" />
     <setting label="Display machines with available CHDs only" type="bool" default="false" id="display_chd_available" />
+</category>
 
-    <setting id="separator" type="lsep" label="Addon filters" />
+<category label="Display II">
+    <!-- <setting id="separator" type="lsep" label="Addon filters" /> -->
     <setting label="Display Main filters" type="bool" default="true" id="display_main_filters" />
     <setting label="Display Binary filters" type="bool" default="true" id="display_binary_filters" />
     <setting label="Display Catalog filters" type="bool" default="true" id="display_catalog_filters" />
     <setting label="Display DAT browser" type="bool" default="false" id="display_DAT_browser" />
     <setting label="Display Software List browser" type="bool" default="true" id="display_SL_browser" />
-    <setting label="Display MAME Favourites" type="bool" default="true" id="display_MAME_favs" />
-    <setting label="Display SL Favourites" type="bool" default="true" id="display_SL_favs" />
     <setting label="Display Custom filters" type="bool" default="true" id="display_custom_filters" />
+    <setting label="Display Read-only Launchers" type="bool" default="false" id="display_ROLs" />
+    <setting label="Display MAME Favourites" type="bool" default="true" id="display_MAME_favs" />
     <setting label="Display MAME Most Played" type="bool" default="true" id="display_MAME_most" />
     <setting label="Display MAME Recently Played" type="bool" default="true" id="display_MAME_recent" />
+    <setting label="Display SL Favourites" type="bool" default="true" id="display_SL_favs" />
     <setting label="Display SL Most Played" type="bool" default="true" id="display_SL_most" />
     <setting label="Display SL Recently Played" type="bool" default="true" id="display_SL_recent" />
+    <setting label="Display Utilities" type="bool" default="true" id="display_utilities" />
+    <setting label="Display Global Reports" type="bool" default="true" id="display_global_reports" />
 </category>
 <category label="Artwork / Assets">
     <setting label="MAME Icon" type="enum" id="artwork_mame_icon"  default="0" values="Title|Snap|Flyer|Cabinet|PCB" />

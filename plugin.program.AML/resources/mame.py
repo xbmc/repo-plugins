@@ -17,21 +17,17 @@
 # --- Python standard library ---
 from __future__ import unicode_literals
 import binascii
-from collections import OrderedDict
 import struct
 import xml.etree.ElementTree as ET
 import zipfile as z
-try:
-    from PIL import Image, ImageDraw, ImageFont
-    PILLOW_AVAILABLE = True
-except:
-    PILLOW_AVAILABLE = False
 
 # --- AEL packages ---
 from .constants import *
 from .utils import *
 from .utils_kodi import *
+from .misc import *
 from .disk_IO import *
+from .filters import *
 
 # -------------------------------------------------------------------------------------------------
 # Data structures
@@ -231,225 +227,163 @@ def mame_get_numerical_version(mame_version_str):
     return version_int
 
 # -------------------------------------------------------------------------------------------------
-# Functions
-# -------------------------------------------------------------------------------------------------
-def mame_get_control_str(control_type_list):
-    control_set = set()
-    improved_c_type_list = mame_improve_control_type_list(control_type_list)
-    for control in improved_c_type_list: control_set.add(control)
-    control_str = ', '.join(list(sorted(control_set)))
-
-    return control_str
-
-def mame_get_screen_rotation_str(display_rotate):
-    if display_rotate == '0' or display_rotate == '180':
-        screen_str = 'horizontal'
-    elif display_rotate == '90' or display_rotate == '270':
-        screen_str = 'vertical'
-    else:
-        raise TypeError
-
-    return screen_str
-
-def mame_get_screen_str(machine_name, machine):
-    d_list = machine['display_type']
-    if d_list:
-        if len(d_list) == 1:
-            rotation_str = mame_get_screen_rotation_str(machine['display_rotate'][0])
-            screen_str = 'One {0} {1} screen'.format(d_list[0], rotation_str)
-        elif len(d_list) == 2:
-            if d_list[0] == 'lcd' and d_list[1] == 'raster':
-                r_str_1 = mame_get_screen_rotation_str(machine['display_rotate'][0])
-                r_str_2 = mame_get_screen_rotation_str(machine['display_rotate'][1])
-                screen_str = 'One LCD {0} screen and one raster {1} screen'.format(r_str_1, r_str_2)
-            elif d_list[0] == 'raster' and d_list[1] == 'raster':
-                r_str = mame_get_screen_rotation_str(machine['display_rotate'][0])
-                screen_str = 'Two raster {0} screens'.format(r_str)
-            elif d_list[0] == 'svg' and d_list[1] == 'svg':
-                r_str = mame_get_screen_rotation_str(machine['display_rotate'][0])
-                screen_str = 'Two SVG {0} screens'.format(r_str)
-            elif d_list[0] == 'unknown' and d_list[1] == 'unknown':
-                screen_str = 'Two unknown screens'
-            else:
-                screen_str = 'Two unrecognised screens'
-        elif len(d_list) == 3:
-            if d_list[0] == 'raster' and d_list[1] == 'raster' and d_list[2] == 'raster':
-                r_str = mame_get_screen_rotation_str(machine['display_rotate'][0])
-                screen_str = 'Three raster {0} screens'.format(r_str)
-            elif d_list[0] == 'raster' and d_list[1] == 'lcd' and d_list[2] == 'lcd':
-                screen_str = 'Three screens special case'
-            else:
-                screen_str = 'Three unrecognised screens'
-        elif len(d_list) == 4:
-            if d_list[0] == 'raster' and d_list[1] == 'raster' and d_list[2] == 'raster' and d_list[3] == 'raster':
-                r_str = mame_get_screen_rotation_str(machine['display_rotate'][0])
-                screen_str = 'Four raster {0} screens'.format(r_str)
-            else:
-                screen_str = 'Four unrecognised screens'
-        elif len(d_list) == 5:
-            screen_str = 'Five unrecognised screens'
-        elif len(d_list) == 6:
-            screen_str = 'Six unrecognised screens'
-        else:
-            log_error('mame_get_screen_str() d_list = {0}'.format(unicode(d_list)))
-            raise TypeError
-    else:
-        screen_str = 'No screen'
-
-    return screen_str
-
-#
-# A) Capitalise every list item
-# B) Substitute Only_buttons -> Only buttons
-#
-def mame_improve_control_type_list(control_type_list):
-    out_list = []
-    for control_str in control_type_list:
-        capital_str = control_str.title()
-        if capital_str == 'Only_Buttons': capital_str = 'Only Buttons'
-        out_list.append(capital_str)
-
-    return out_list
-
-#
-# A) Capitalise every list item
-#
-def mame_improve_device_list(control_type_list):
-    out_list = []
-    for control_str in control_type_list: out_list.append(control_str.title())
-
-    return out_list
-
-#
-# A) Substitute well know display types with fancier names.
-#
-def mame_improve_display_type_list(display_type_list):
-    out_list = []
-    for dt in display_type_list:
-        if   dt == 'lcd':    out_list.append('LCD')
-        elif dt == 'raster': out_list.append('Raster')
-        elif dt == 'svg':    out_list.append('SVG')
-        elif dt == 'vector': out_list.append('Vector')
-        else:                out_list.append(dt)
-
-    return out_list
-
-#
-# See tools/test_compress_item_list.py for reference
-# Input/Output examples:
-# 1) ['dial']                 ->  ['dial']
-# 2) ['dial', 'dial']         ->  ['2 x dial']
-# 3) ['dial', 'dial', 'joy']  ->  ['2 x dial', 'joy']
-# 4) ['joy', 'dial', 'dial']  ->  ['joy', '2 x dial']
-#
-def mame_compress_item_list(item_list):
-    reduced_list = []
-    num_items = len(item_list)
-    if num_items == 0 or num_items == 1: return item_list
-    previous_item = item_list[0]
-    item_count = 1
-    for i in range(1, num_items):
-        current_item = item_list[i]
-        # log_debug('{0} | item_count {1} | previous_item "{2:>8}" | current_item "{3:>8}"'.format(i, item_count, previous_item, current_item))
-        if current_item == previous_item:
-            item_count += 1
-        else:
-            if item_count == 1: reduced_list.append('{0}'.format(previous_item))
-            else:               reduced_list.append('{0} {1}'.format(item_count, previous_item))
-            item_count = 1
-            previous_item = current_item
-        # >> Last elemnt of the list
-        if i == num_items - 1:
-            if current_item == previous_item:
-                if item_count == 1: reduced_list.append('{0}'.format(current_item))
-                else:               reduced_list.append('{0} {1}'.format(item_count, current_item))
-            else:
-               reduced_list.append('{0}'.format(current_item))
-
-    return reduced_list
-
-#
-# See tools/test_compress_item_list.py for reference
-# Output is sorted alphabetically
-# Input/Output examples:
-# 1) ['dial']                 ->  ['dial']
-# 2) ['dial', 'dial']         ->  ['dial']
-# 3) ['dial', 'dial', 'joy']  ->  ['dial', 'joy']
-# 4) ['joy', 'dial', 'dial']  ->  ['dial', 'joy']
-#
-def mame_compress_item_list_compact(item_list):
-    num_items = len(item_list)
-    if num_items == 0 or num_items == 1: return item_list
-    item_set = set(item_list)
-    reduced_list = list(item_set)
-    reduced_list_sorted = sorted(reduced_list)
-
-    return reduced_list_sorted
-
-# -------------------------------------------------------------------------------------------------
 # Loading of data files
 # -------------------------------------------------------------------------------------------------
+# Catver.ini is very special so it has a custom loader.
+# It provides data for two catalogs: categories and version added. In other words, it
+# has 2 folders defined in the INI file.
+#
+# --- Example -----------------------------------
+# ;; Comment
+# [special_folder_name or no mae]
+# machine_name_1 = category_name_1
+# machine_name_2 = category_name_2
+# -----------------------------------------------
+#
+# Returns two dictionaries with struct similar a mame_load_INI_datfile_simple()
+# catver_dic, veradded_dic
+#
 def mame_load_Catver_ini(filename):
-    log_info('mame_load_Catver_ini() Parsing "{0}"'.format(filename))
-    catver_version = 'Not found'
-    categories_dic = {}
-    categories_set = set()
     __debug_do_list_categories = False
-    read_status = 0
-    # read_status FSM values
+    log_info('mame_load_Catver_ini() Parsing "{0}"'.format(filename))
+    catver_dic = {
+        'version' : 'unknown',
+        'unique_categories' : True,
+        'single_category' : False,
+        'isValid' : False,
+        'data' : {},
+        'categories' : set(),
+    }
+    veradded_dic = {
+        'version' : 'unknown',
+        'unique_categories' : True,
+        'single_category' : False,
+        'isValid' : False,
+        'data' : {},
+        'categories' : set(),
+    }
+
+    # --- read_status FSM values ---
     # 0 -> Looking for '[Category]' tag
     # 1 -> Reading categories
-    # 2 -> Categories finished. STOP
+    # 2 -> Looking for '[VerAdded]' tag.
+    # 3 -> Reading version added
+    # 4 -> END
+    read_status = 0
     try:
         f = open(filename, 'rt')
     except IOError:
-        log_error('mame_load_Catver_ini() (IOError) opening "{0}"'.format(filename))
-        return (categories_dic, catver_version)
+        log_error('mame_load_Catver_ini() Exception IOError')
+        log_error('mame_load_Catver_ini() File "{0}"'.format(filename))
+        return (catver_dic, veradded_dic)
     for cat_line in f:
         stripped_line = cat_line.strip()
         if __debug_do_list_categories: log_debug('Line "' + stripped_line + '"')
         if read_status == 0:
             # >> Look for Catver version
             m = re.search(r'^;; CatVer ([0-9\.]+) / ', stripped_line)
-            if m: catver_version = m.group(1)
+            if m:
+                catver_dic['version'] = m.group(1)
+                veradded_dic['version'] = m.group(1)
             m = re.search(r'^;; CATVER.ini ([0-9\.]+) / ', stripped_line)
-            if m: catver_version = m.group(1)
+            if m:
+                catver_dic['version'] = m.group(1)
+                veradded_dic['version'] = m.group(1)
             if stripped_line == '[Category]':
                 if __debug_do_list_categories: log_debug('Found [Category]')
                 read_status = 1
         elif read_status == 1:
             line_list = stripped_line.split("=")
             if len(line_list) == 1:
+                log_debug('mame_load_Catver_ini() Reached end of categories parsing.')
                 read_status = 2
-                continue
             else:
                 if __debug_do_list_categories: log_debug(line_list)
                 machine_name = line_list[0]
-                category = line_list[1]
-                if machine_name not in categories_dic:
-                    categories_dic[machine_name] = category
-                categories_set.add(category)
+                current_category = line_list[1]
+                catver_dic['categories'].add(current_category)
+                if machine_name in catver_dic['data']:
+                    catver_dic['data'][machine_name].append(current_category)
+                else:
+                    catver_dic['data'][machine_name] = [current_category]
         elif read_status == 2:
-            log_debug('mame_load_Catver_ini() Reached end of categories parsing.')
+            if stripped_line == '[VerAdded]':
+                if __debug_do_list_categories: log_debug('Found [VerAdded]')
+                read_status = 3
+        elif read_status == 3:
+            line_list = stripped_line.split("=")
+            if len(line_list) == 1:
+                log_debug('mame_load_Catver_ini() Reached end of veradded parsing.')
+                read_status = 4
+            else:
+                if __debug_do_list_categories: log_debug(line_list)
+                machine_name = line_list[0]
+                current_category = line_list[1]
+                veradded_dic['categories'].add(current_category)
+                if machine_name in veradded_dic['data']:
+                    veradded_dic['data'][machine_name].append(current_category)
+                else:
+                    veradded_dic['data'][machine_name] = [current_category]
+        elif read_status == 4:
+            log_debug('End parsing')
             break
         else:
             raise CriticalError('Unknown read_status FSM value')
     f.close()
-    log_info('mame_load_Catver_ini() Version "{0}"'.format(catver_version))
-    log_info('mame_load_Catver_ini() Machines {0}'.format(len(categories_dic)))
-    log_info('mame_load_Catver_ini() Categories {0}'.format(len(categories_set)))
+    catver_dic['single_category'] = True if len(catver_dic['categories']) == 1 else False
+    for m_name in sorted(catver_dic['data']):
+        if len(catver_dic['data'][m_name]) > 1:
+            catver_dic['unique_categories'] = False
+            break
+    catver_dic['single_category'] = True
+    veradded_dic['single_category'] = True if len(veradded_dic['categories']) == 1 else False
+    for m_name in sorted(veradded_dic['data']):
+        if len(veradded_dic['data'][m_name]) > 1:
+            veradded_dic['unique_categories'] = False
+            break
+    veradded_dic['single_category'] = True
+    # If categories are unique for each machine transform lists into strings
+    if catver_dic['unique_categories']:
+        for m_name in catver_dic['data']:
+            catver_dic['data'][m_name] = catver_dic['data'][m_name][0]
+    if veradded_dic['unique_categories']:
+        for m_name in veradded_dic['data']:
+            veradded_dic['data'][m_name] = veradded_dic['data'][m_name][0]
+    log_info('mame_load_Catver_ini() Catver Machines   {0:6d}'.format(len(catver_dic['data'])))
+    log_info('mame_load_Catver_ini() Catver Categories {0:6d}'.format(len(catver_dic['categories'])))
+    log_info('mame_load_Catver_ini() Catver Version "{0}"'.format(catver_dic['version']))
+    log_info('mame_load_Catver_ini() Catver unique_categories {0}'.format(catver_dic['unique_categories']))
+    log_info('mame_load_Catver_ini() Catver single_category   {0}'.format(catver_dic['single_category']))
+    log_info('mame_load_Catver_ini() Veradded Machines   {0:6d}'.format(len(veradded_dic['data'])))
+    log_info('mame_load_Catver_ini() Veradded Categories {0:6d}'.format(len(veradded_dic['categories'])))
+    log_info('mame_load_Catver_ini() Veradded Version "{0}"'.format(veradded_dic['version']))
+    log_info('mame_load_Catver_ini() Veradded unique_categories {0}'.format(veradded_dic['unique_categories']))
+    log_info('mame_load_Catver_ini() Veradded single_category   {0}'.format(veradded_dic['single_category']))
 
-    return (categories_dic, catver_version)
+    return (catver_dic, veradded_dic)
 
-# -------------------------------------------------------------------------------------------------
-# Load nplayers.ini. Structure similar to catver.ini
-# -------------------------------------------------------------------------------------------------
+#
+# nplayers.ini does not have [ROOT_FOLDER], only [NPlayers].
+# nplayers.ini has an structure very similar to catver.ini, and it is also supported here.
+# Returns a ini_dic with same structue as mame_load_INI_datfile_simple()
+#
+# NOTE  nplayers.ini has defects like having repeated entries for some machines.
+#       Do not crash because of this! For example (in verrsion 0.194 04-feb-18)
+#       1943=2P sim
+#       1943=2P sim
+#
 def mame_load_nplayers_ini(filename):
-    log_info('mame_load_nplayers_ini() Parsing "{0}"'.format(filename))
-    nplayers_version = 'Not found'
-    categories_dic = {}
-    categories_set = set()
     __debug_do_list_categories = False
+    log_info('mame_load_nplayers_ini() Parsing "{0}"'.format(filename))
+    ini_dic = {
+        'version' : 'unknown',
+        'unique_categories' : True,
+        'single_category' : False,
+        'isValid' : False,
+        'data' : {},
+        'categories' : set(),
+    }
+
     # --- read_status FSM values ---
     # 0 -> Looking for '[NPlayers]' tag
     # 1 -> Reading categories
@@ -459,13 +393,13 @@ def mame_load_nplayers_ini(filename):
         f = open(filename, 'rt')
     except IOError:
         log_info('mame_load_nplayers_ini() (IOError) opening "{0}"'.format(filename))
-        return (categories_dic, nplayers_version)
+        return ini_dic
     for cat_line in f:
         stripped_line = cat_line.strip()
         if __debug_do_list_categories: log_debug('Line "' + stripped_line + '"')
         if read_status == 0:
             m = re.search(r'NPlayers ([0-9\.]+) / ', stripped_line)
-            if m: nplayers_version = m.group(1)
+            if m: ini_dic['version'] = m.group(1)
             if stripped_line == '[NPlayers]':
                 if __debug_do_list_categories: log_debug('Found [NPlayers]')
                 read_status = 1
@@ -475,103 +409,239 @@ def mame_load_nplayers_ini(filename):
                 read_status = 2
                 continue
             else:
-                if __debug_do_list_categories: log_debug(line_list)
-                machine_name = line_list[0]
-                category = line_list[1]
-                if machine_name not in categories_dic:
-                    categories_dic[machine_name] = category
-                categories_set.add(category)
+                machine_name, current_category = str(line_list[0]), str(line_list[1])
+                if __debug_do_list_categories: log_debug('"{0}" / "{1}"'.format(machine_name, current_category))
+                ini_dic['categories'].add(current_category)
+                if machine_name in ini_dic['data']:
+                    # Force a single category to avoid nplayers.ini bugs.
+                    pass
+                    # ini_dic['data'][machine_name].add(current_category)
+                    # log_debug('machine "{0}"'.format(machine_name))
+                    # log_debug('current_category "{0}"'.format(current_category))
+                    # log_debug('"{0}"'.format(unicode(ini_dic['data'][machine_name])))
+                    # raise ValueError('unique_categories False')
+                else:
+                    ini_dic['data'][machine_name] =  [current_category]
         elif read_status == 2:
             log_info('mame_load_nplayers_ini() Reached end of nplayers parsing.')
             break
         else:
-            raise CriticalError('Unknown read_status FSM value')
+            raise ValueError('Unknown read_status FSM value')
     f.close()
-    log_info('mame_load_nplayers_ini() Version "{0}"'.format(nplayers_version))
-    log_info('mame_load_nplayers_ini() Machines {0}'.format(len(categories_dic)))
-    log_info('mame_load_nplayers_ini() Categories {0}'.format(len(categories_set)))
+    ini_dic['single_category'] = True if len(ini_dic['categories']) == 1 else False
+    # nplayers.ini has repeated machines, so checking for unique_cateogories is here.
+    for m_name in sorted(ini_dic['data']):
+        if len(ini_dic['data'][m_name]) > 1:
+            ini_dic['unique_categories'] = False
+            break
+    # If categories are unique for each machine transform lists into strings
+    if ini_dic['unique_categories']:
+        for m_name in ini_dic['data']:
+            ini_dic['data'][m_name] = ini_dic['data'][m_name][0]
+    log_info('mame_load_nplayers_ini() Machines   {0:6d}'.format(len(ini_dic['data'])))
+    log_info('mame_load_nplayers_ini() Categories {0:6d}'.format(len(ini_dic['categories'])))
+    log_info('mame_load_nplayers_ini() Version "{0}"'.format(ini_dic['version']))
+    log_info('mame_load_nplayers_ini() unique_categories {0}'.format(ini_dic['unique_categories']))
+    log_info('mame_load_nplayers_ini() single_category   {0}'.format(ini_dic['single_category']))
 
-    return (categories_dic, nplayers_version)
+    # DEBUG: print machines with more than one category.
+    # for m_name in sorted(ini_dic['data']):
+    #     if len(ini_dic['data'][m_name]) > 1:
+    #         for cat_name in ini_dic['data'][m_name]:
+    #             log_debug('machine {0} nplayers {1}'.format(m_name, cat_name))
+
+    return ini_dic
 
 #
 # Load mature.ini file.
-# Returns a tuple consisting of:
-# 1) ini_set = {machine1, machine2, ...}
-# 2) ini_version
+# Returns a ini_dic similar to mame_load_INI_datfile_simple()
 #
 def mame_load_Mature_ini(filename):
+    # FSM statuses
+    FSM_HEADER = 0        # Looking for and process '[ROOT_FOLDER]' directory tag.
+                          # Initial status.
+    FSM_FOLDER_NAME = 1   # Searching for [category_name] and/or adding machines.
+
     log_info('mame_load_Mature_ini() Parsing "{0}"'.format(filename))
-    ini_version = 'Not found'
-    ini_set = set()
+    ini_dic = {
+        'version' : 'unknown',
+        'unique_categories' : True,
+        'single_category' : False,
+        'isValid' : False,
+        'data' : {},
+        'categories' : set(),
+    }
+    slist = []
     try:
         f = open(filename, 'rt')
+        for file_line in f:
+            stripped_line = file_line.strip()
+            if stripped_line == '': continue # Skip blanks
+            slist.append(stripped_line)
+        f.close()
     except IOError:
         log_info('mame_load_Mature_ini() (IOError) opening "{0}"'.format(filename))
-        return (ini_set, ini_version)
-    # FSM statuses
-    # 0 -> Reading the file header
-    # 1 -> '[ROOT_FOLDER]' found. Read machines (one per line).
-    fsm_status = 0
-    for file_line in f:
-        stripped_line = file_line.strip()
-        if fsm_status == 0:
-            # >> Skip comments: lines starting with ';;'
-            # >> Look for version string in comments
+        return ini_dic
+
+    fsm_status = FSM_HEADER
+    for stripped_line in slist:
+        if fsm_status == FSM_HEADER:
+            # Skip comments: lines starting with ';;'
+            # Look for version string in comments
             if re.search(r'^;;', stripped_line):
+                # log_debug('mame_load_Mature_ini() Comment line "{0}"'.format(stripped_line))
                 m = re.search(r';; (\w+)\.ini ([0-9\.]+) / ', stripped_line)
-                if m: ini_version = m.group(2)
+                if m:
+                    ini_dic['version'] = m.group(2)
                 continue
             if stripped_line == '[ROOT_FOLDER]':
-                fsm_status = 1
-                continue
-        elif fsm_status == 1:
-            if stripped_line == '': continue
+                fsm_status = FSM_FOLDER_NAME
+                # Create default category
+                current_category = 'default'
+                ini_dic['categories'].add(current_category)
+        elif fsm_status == FSM_FOLDER_NAME:
             machine_name = stripped_line
-            ini_set.add(machine_name)
-    f.close()
-    log_info('mame_load_Mature_ini() Version "{0}"'.format(ini_version))
-    log_info('mame_load_Mature_ini() Machines {0}'.format(len(ini_set)))
+            if machine_name in ini_dic['data']:
+                ini_dic['data'][machine_name].append(current_category)
+            else:
+                ini_dic['data'][machine_name] = [current_category]
+        else:
+            raise ValueError('Unknown FSM fsm_status {0}'.format(fsm_status))
+    ini_dic['single_category'] = True if len(ini_dic['categories']) == 1 else False
+    for m_name in sorted(ini_dic['data']):
+        if len(ini_dic['data'][m_name]) > 1:
+            ini_dic['unique_categories'] = False
+            break
+    # If categories are unique for each machine transform lists into strings
+    if ini_dic['unique_categories']:
+        for m_name in ini_dic['data']:
+            ini_dic['data'][m_name] = ini_dic['data'][m_name][0]
+    log_info('mame_load_Mature_ini() Machines   {0:6d}'.format(len(ini_dic['data'])))
+    log_info('mame_load_Mature_ini() Categories {0:6d}'.format(len(ini_dic['categories'])))
+    log_info('mame_load_Mature_ini() Version "{0}"'.format(ini_dic['version']))
+    log_info('mame_load_Mature_ini() unique_categories {0}'.format(ini_dic['unique_categories']))
+    log_info('mame_load_Mature_ini() single_category   {0}'.format(ini_dic['single_category']))
 
-    return (ini_set, ini_version)
+    return ini_dic
 
 #
 # Generic MAME INI file loader.
-# Supports Catlist.ini, Genre.ini, Bestgames.ini and Series.ini
+# Supports Artwork.ini, bestgames.ini, Category.ini, catlist.ini, genre.ini and series.ini.
 #
-def mame_load_INI_datfile(filename):
-    log_info('mame_load_INI_datfile() Parsing "{0}"'.format(filename))
-    ini_version = 'Not found'
-    ini_dic = {}
-    ini_set = set()
+# --- Example -----------------------------------
+# ;; Comment
+# [FOLDER_SETTINGS]
+# RootFolderIcon mame
+# SubFolderIcon folder
+#
+# [ROOT_FOLDER]
+#
+# [category_name_1]
+# machine_name_1
+# machine_name_2
+#
+# [category_name_2]
+# machine_name_1
+# -----------------------------------------------
+#
+# Note that some INIs, for example Artwork.ini, may have the same machine on different
+# categories. This must be supported in this function.
+#
+# ini_dic = {
+#     'version' : string,
+#     'unique_categories' : bool,
+#     'single_category' : bool,
+#     'data' : {
+#         'machine_name' : { 'category_1', 'category_2', ... }
+#     }
+#     'categories' : {
+#         'category_1', 'category_2', ...
+#     }
+# }
+#
+# categories is a set of (unique) categories. By definition of set, each category appears
+# only once.
+# unique_categories is True is each machine has a unique category, False otherwise.
+# single_category is True if only one category is defined, for example in mature.ini.
+#
+def mame_load_INI_datfile_simple(filename):
+    # FSM statuses
+    FSM_HEADER = 0        # Looking for and process '[ROOT_FOLDER]' directory tag.
+                          # Initial status.
+    FSM_FOLDER_NAME = 1   # Searching for [category_name] and/or adding machines.
+
+    # Read file and put it in a list of strings.
+    # Strings in this list are stripped.
+    log_info('mame_load_INI_datfile_simple() Parsing "{0}"'.format(filename))
+    ini_dic = {
+        'version' : 'unknown',
+        'unique_categories' : True,
+        'single_category' : False,
+        'isValid' : False,
+        'data' : {},
+        'categories' : set(),
+    }
+    slist = []
     try:
         f = open(filename, 'rt')
+        for file_line in f:
+            stripped_line = file_line.strip()
+            if stripped_line == '': continue # Skip blanks
+            slist.append(stripped_line)
+        f.close()
     except IOError:
-        log_info('mame_load_INI_datfile() (IOError) opening "{0}"'.format(filename))
-        return (ini_dic, ini_version)
-    for file_line in f:
-        stripped_line = file_line.strip()
-        # >> Skip comments: lines starting with ';;'
-        # >> Look for version string in comments
-        if re.search(r'^;;', stripped_line):
-            m = re.search(r';; (\w+)\.ini ([0-9\.]+) / ', stripped_line)
-            if m: ini_version = m.group(2)
-            continue
-        # >> Skip blanks
-        if stripped_line == '': continue
-        # >> New category
-        searchObj = re.search(r'^\[(.*)\]', stripped_line)
-        if searchObj:
-            current_category = searchObj.group(1)
-            ini_set.add(current_category)
-        else:
-            machine_name = stripped_line
-            ini_dic[machine_name] = current_category
-    f.close()
-    log_info('mame_load_INI_datfile() Version "{0}"'.format(ini_version))
-    log_info('mame_load_INI_datfile() Machines {0:6d}'.format(len(ini_dic)))
-    log_info('mame_load_INI_datfile() Categories {0:6d}'.format(len(ini_set)))
+        log_info('mame_load_INI_datfile_simple() (IOError) opening "{0}"'.format(filename))
+        return ini_dic
 
-    return (ini_dic, ini_version)
+    # Compile regexes to increase performance => It is no necessary. According to the docs: The
+    # compiled versions of the most recent patterns passed to re.match(), re.search() or 
+    # re.compile() are cached, so programs that use only a few regular expressions at a 
+    # time needn’t worry about compiling regular expressions.
+    fsm_status = FSM_HEADER
+    for stripped_line in slist:
+        # log_debug('{0}'.format(stripped_line))
+        if fsm_status == FSM_HEADER:
+            # log_debug('FSM_HEADER "{0}"'.format(stripped_line))
+            # Skip comments: lines starting with ';;'
+            # Look for version string in comments
+            if re.search(r'^;;', stripped_line):
+                m = re.search(r';; (\w+)\.ini ([0-9\.]+) / ', stripped_line)
+                if m: ini_dic['version'] = m.group(2)
+                continue
+            if stripped_line.find('[ROOT_FOLDER]') >= 0:
+                fsm_status = FSM_FOLDER_NAME
+        elif fsm_status == FSM_FOLDER_NAME:
+            m = re.search(r'^\[(.*)\]', stripped_line)
+            if m:
+                current_category = m.group(1)
+                if current_category in ini_dic['categories']:
+                    raise ValueError('Repeated category {0}'.format(current_category))
+                ini_dic['categories'].add(current_category)
+            else:
+                machine_name = stripped_line
+                if machine_name in ini_dic['data']:
+                    ini_dic['unique_categories'] = False
+                    ini_dic['data'][machine_name].append(current_category)
+                else:
+                    ini_dic['data'][machine_name] = [current_category]
+        else:
+            raise ValueError('Unknown FSM fsm_status {0}'.format(fsm_status))
+    ini_dic['single_category'] = True if len(ini_dic['categories']) == 1 else False
+    for m_name in sorted(ini_dic['data']):
+        if len(ini_dic['data'][m_name]) > 1:
+            ini_dic['unique_categories'] = False
+            break
+    # If categories are unique for each machine transform lists into strings
+    if ini_dic['unique_categories']:
+        for m_name in ini_dic['data']:
+            ini_dic['data'][m_name] = ini_dic['data'][m_name][0]
+    log_info('mame_load_INI_datfile_simple() Machines   {0:6d}'.format(len(ini_dic['data'])))
+    log_info('mame_load_INI_datfile_simple() Categories {0:6d}'.format(len(ini_dic['categories'])))
+    log_info('mame_load_INI_datfile_simple() Version "{0}"'.format(ini_dic['version']))
+    log_info('mame_load_INI_datfile_simple() unique_categories {0}'.format(ini_dic['unique_categories']))
+    log_info('mame_load_INI_datfile_simple() single_category   {0}'.format(ini_dic['single_category']))
+
+    return ini_dic
 
 #
 # Loads History.dat
@@ -920,6 +990,213 @@ def mame_load_Command_DAT(filename):
     return (proper_idx_list, proper_data_dic, version_str)
 
 # -------------------------------------------------------------------------------------------------
+# DAT export
+# -------------------------------------------------------------------------------------------------
+#
+# Writes a XML text tag line, indented 2 spaces by default.
+# Both tag_name and tag_text must be Unicode strings.
+# Returns an Unicode string.
+#
+def XML_t(tag_name, tag_text, num_spaces = 4):
+    if tag_text:
+        tag_text = text_escape_XML(tag_text)
+        line = '{0}<{1}>{2}</{3}>'.format(' ' * num_spaces, tag_name, tag_text, tag_name)
+    else:
+        # Empty tag
+        line = '{0}<{1} />'.format(' ' * num_spaces, tag_name)
+
+    return line
+
+#
+# Only valid ROMs in DAT file.
+#
+def mame_write_MAME_ROM_XML_DAT(PATHS, settings, control_dic, out_dir_FN, db_dic):
+    log_debug('mame_write_MAME_ROM_XML_DAT() BEGIN ...')
+    machines = db_dic['machines']
+    render = db_dic['render']
+    audit_roms = db_dic['audit_roms']
+    roms_sha1_dic = db_dic['roms_sha1_dic']
+
+    # Get output filename
+    # DAT filename: AML 0.xxx ROMs (merged|split|non-merged|fully non-merged).xml
+    mame_version_str = control_dic['ver_mame']
+    rom_set = ['MERGED', 'SPLIT', 'NONMERGED', 'FULLYNONMERGED'][settings['mame_rom_set']]
+    rom_set_str = ['Merged', 'Split', 'Non-merged', 'Fully Non-merged'][settings['mame_rom_set']]
+    log_info('MAME version "{0}"'.format(mame_version_str))
+    log_info('ROM set is "{0}"'.format(rom_set_str))
+    DAT_basename_str = 'AML MAME {0} ROMs ({1}).xml'.format(mame_version_str, rom_set_str)
+    DAT_FN = out_dir_FN.pjoin(DAT_basename_str)
+    log_info('XML "{0}"'.format(DAT_FN.getPath()))
+
+    # XML file header.
+    slist = []
+    slist.append('<?xml version="1.0" encoding="UTF-8"?>')
+    str_a = '-//Logiqx//DTD ROM Management Datafile//EN'
+    str_b = 'http://www.logiqx.com/Dats/datafile.dtd'
+    slist.append('<!DOCTYPE datafile PUBLIC "{0}" "{1}">'.format(str_a, str_b))
+    slist.append('<datafile>')
+
+    desc_str = 'AML MAME {0} ROMs {1} set'.format(mame_version_str, rom_set_str)
+    slist.append('<header>')
+    slist.append(XML_t('name', desc_str))
+    slist.append(XML_t('description', desc_str))
+    slist.append(XML_t('version', '{0}'.format(mame_version_str)))
+    slist.append(XML_t('date', _str_time(time.time())))
+    slist.append(XML_t('author', 'Exported by Advanced MAME Launcher'))
+    slist.append('</header>')
+
+    # Traverse ROMs and write DAT.
+    total_machines, machine_counter = len(audit_roms), 0
+    pDialog = xbmcgui.DialogProgress()
+    pDialog.create('Advanced MAME Launcher', 'Creating MAME ROMs XML DAT ...')
+    pDialog.update(0)
+    for m_name in sorted(audit_roms):
+        # If machine has no ROMs then skip it
+        rom_list, actual_rom_list, num_ROMs = audit_roms[m_name], [], 0
+        for rom in rom_list:
+            # Skip CHDs and samples
+            if rom['type'] == ROM_TYPE_ERROR: raise ValueError
+            if rom['type'] in [ROM_TYPE_DISK, ROM_TYPE_SAMPLE]: continue
+            # Skip machine ROMs not in this machine ZIP file.
+            zip_name, rom_name = rom['location'].split('/')
+            if zip_name != m_name: continue
+            # Skip invalid ROMs
+            if not rom['crc']: continue
+            # Add SHA1 field
+            rom['sha1'] = roms_sha1_dic[rom['location']]
+            actual_rom_list.append(rom)
+            num_ROMs += 1
+        # Machine has no ROMs, skip it
+        if num_ROMs == 0: continue
+
+        # Print ROMs in the XML.
+        slist.append('<machine name="{0}">'.format(m_name))
+        slist.append(XML_t('description', render[m_name]['description']))
+        slist.append(XML_t('year', render[m_name]['year']))
+        slist.append(XML_t('manufacturer', render[m_name]['manufacturer']))
+        if render[m_name]['cloneof']:
+            slist.append(XML_t('cloneof', render[m_name]['cloneof']))
+        for rom in actual_rom_list:
+            t = '    <rom name="{0}" size="{1}" crc="{2}" sha1="{3}"/>'.format(
+                rom['name'], rom['size'], rom['crc'], rom['sha1'])
+            slist.append(t)
+        slist.append('</machine>')
+        machine_counter += 1
+        pDialog.update((100*machine_counter)/total_machines)
+    pDialog.close()
+    slist.append('</datafile>')
+
+    # Open output file name.
+    pDialog.create('Advanced MAME Launcher', 'Writing MAME ROMs XML DAT ...')
+    pDialog.update(15)
+    try:
+        file_obj = open(DAT_FN.getPath(), 'w')
+        file_obj.write('\n'.join(slist).encode('utf-8'))
+        file_obj.close()
+        pDialog.update(100)
+        pDialog.close()
+    except OSError:
+        pDialog.close()
+        log_error('(OSError) Cannot write DAT XML file')
+        kodi_notify_warn('(OSError) Cannot write DAT XML file')
+    except IOError:
+        pDialog.close()
+        log_error('(IOError) Cannot write DAT XML file')
+        kodi_notify_warn('(IOError) Cannot write DAT XML file')
+
+#
+# Only valid CHDs in DAT file.
+#
+def mame_write_MAME_CHD_XML_DAT(PATHS, settings, control_dic, out_dir_FN, db_dic):
+    log_debug('mame_write_MAME_CHD_XML_DAT() BEGIN ...')
+    machines = db_dic['machines']
+    render = db_dic['render']
+    audit_roms = db_dic['audit_roms']
+
+    # Get output filename
+    # DAT filename: AML 0.xxx ROMs (merged|split|non-merged|fully non-merged).xml
+    mame_version_str = control_dic['ver_mame']
+    chd_set = ['MERGED', 'SPLIT', 'NONMERGED'][settings['mame_chd_set']]
+    chd_set_str = ['Merged', 'Split', 'Non-merged'][settings['mame_chd_set']]
+    log_info('MAME version "{0}"'.format(mame_version_str))
+    log_info('CHD set is "{0}"'.format(chd_set_str))
+    DAT_basename_str = 'AML MAME {0} CHDs ({1}).xml'.format(mame_version_str, chd_set_str)
+    DAT_FN = out_dir_FN.pjoin(DAT_basename_str)
+    log_info('XML "{0}"'.format(DAT_FN.getPath()))
+
+    # XML file header.
+    slist = []
+    slist.append('<?xml version="1.0" encoding="UTF-8"?>')
+    str_a = '-//Logiqx//DTD ROM Management Datafile//EN'
+    str_b = 'http://www.logiqx.com/Dats/datafile.dtd'
+    slist.append('<!DOCTYPE datafile PUBLIC "{0}" "{1}">'.format(str_a, str_b))
+    slist.append('<datafile>')
+
+    desc_str = 'AML MAME {0} CHDs {1} set'.format(mame_version_str, chd_set_str)
+    slist.append('<header>')
+    slist.append(XML_t('name', desc_str))
+    slist.append(XML_t('description', desc_str))
+    slist.append(XML_t('version', '{0}'.format(mame_version_str)))
+    slist.append(XML_t('date', _str_time(time.time())))
+    slist.append(XML_t('author', 'Exported by Advanced MAME Launcher'))
+    slist.append('</header>')
+
+    # Traverse ROMs and write DAT.
+    total_machines, machine_counter = len(audit_roms), 0
+    pDialog = xbmcgui.DialogProgress()
+    pDialog.create('Advanced MAME Launcher', 'Creating MAME CHDs XML DAT ...')
+    pDialog.update(0)
+    for m_name in sorted(audit_roms):
+        # If machine has no ROMs then skip it
+        chd_list, actual_chd_list, num_CHDs = audit_roms[m_name], [], 0
+        for chd in chd_list:
+            # Only include CHDs
+            if chd['type'] != ROM_TYPE_DISK: continue
+            # Skip machine ROMs not in this machine ZIP file.
+            zip_name, chd_name = chd['location'].split('/')
+            if zip_name != m_name: continue
+            # Skip invalid CHDs
+            if not chd['sha1']: continue
+            actual_chd_list.append(chd)
+            num_CHDs += 1
+        if num_CHDs == 0: continue
+
+        # Print CHDs in the XML.
+        slist.append('<machine name="{0}">'.format(m_name))
+        slist.append(XML_t('description', render[m_name]['description']))
+        slist.append(XML_t('year', render[m_name]['year']))
+        slist.append(XML_t('manufacturer', render[m_name]['manufacturer']))
+        if render[m_name]['cloneof']:
+            slist.append(XML_t('cloneof', render[m_name]['cloneof']))
+        for chd in actual_chd_list:
+            t = '    <rom name="{0}" sha1="{1}"/>'.format(chd['name'], chd['sha1'])
+            slist.append(t)
+        slist.append('</machine>')
+        machine_counter += 1
+        pDialog.update((100*machine_counter)/total_machines)
+    pDialog.close()
+    slist.append('</datafile>')
+
+    # Open output file name.
+    pDialog.create('Advanced MAME Launcher', 'Creating MAME ROMs XML DAT ...')
+    pDialog.update(15)
+    try:
+        file_obj = open(DAT_FN.getPath(), 'w')
+        file_obj.write('\n'.join(slist).encode('utf-8'))
+        file_obj.close()
+        pDialog.update(100)
+        pDialog.close()
+    except OSError:
+        pDialog.close()
+        log_error('(OSError) Cannot write DAT XML file')
+        kodi_notify_warn('(OSError) Cannot write DAT XML file')
+    except IOError:
+        pDialog.close()
+        log_error('(IOError) Cannot write DAT XML file')
+        kodi_notify_warn('(IOError) Cannot write DAT XML file')
+
+#
+# -------------------------------------------------------------------------------------------------
 # CHD manipulation functions
 # -------------------------------------------------------------------------------------------------
 # Reference in https://github.com/rtissera/libchdr/blob/master/src/chd.h
@@ -1092,9 +1369,12 @@ def mame_info_MAME_print(slist, location, machine_name, machine, assets):
 
     # >> Standard fields in Main database
     slist.append('\n[COLOR orange]Machine Main data[/COLOR]')
+    slist.append("[COLOR skyblue]artwork[/COLOR]: {0}".format(unicode(machine['artwork'])))
     slist.append("[COLOR violet]bestgames[/COLOR]: '{0}'".format(machine['bestgames']))
+    slist.append("[COLOR skyblue]category[/COLOR]: {0}".format(unicode(machine['category'])))
     slist.append("[COLOR violet]catlist[/COLOR]: '{0}'".format(machine['catlist']))
     slist.append("[COLOR violet]catver[/COLOR]: '{0}'".format(machine['catver']))
+    slist.append("[COLOR skyblue]chip_cpu_name[/COLOR]: {0}".format(unicode(machine['chip_cpu_name'])))
     # --- Devices list is a special case ---
     if machine['devices']:
         for i, device in enumerate(machine['devices']):
@@ -1107,8 +1387,11 @@ def mame_info_MAME_print(slist, location, machine_name, machine, assets):
             slist.append("  [COLOR skyblue]ext_names[/COLOR]: {0}".format(unicode(device['ext_names'])))
     else:
         slist.append("[COLOR lime]devices[/COLOR]: []")
+    slist.append("[COLOR skyblue]display_height[/COLOR]: {0}".format(unicode(machine['display_height'])))
+    slist.append("[COLOR skyblue]display_refresh[/COLOR]: {0}".format(unicode(machine['display_refresh'])))
     slist.append("[COLOR skyblue]display_rotate[/COLOR]: {0}".format(unicode(machine['display_rotate'])))
     slist.append("[COLOR skyblue]display_type[/COLOR]: {0}".format(unicode(machine['display_type'])))
+    slist.append("[COLOR skyblue]display_width[/COLOR]: {0}".format(unicode(machine['display_width'])))
     slist.append("[COLOR violet]genre[/COLOR]: '{0}'".format(machine['genre']))
     # --- input is a special case ---
     if machine['input']:
@@ -1131,12 +1414,13 @@ def mame_info_MAME_print(slist, location, machine_name, machine, assets):
     slist.append("[COLOR skyblue]isMechanical[/COLOR]: {0}".format(unicode(machine['isMechanical'])))
     slist.append("[COLOR violet]romof[/COLOR]: '{0}'".format(machine['romof']))
     slist.append("[COLOR violet]sampleof[/COLOR]: '{0}'".format(machine['sampleof']))
-    slist.append("[COLOR violet]series[/COLOR]: '{0}'".format(machine['series']))
+    slist.append("[COLOR skyblue]series[/COLOR]: '{0}'".format(machine['series']))
     slist.append("[COLOR skyblue]softwarelists[/COLOR]: {0}".format(unicode(machine['softwarelists'])))
     slist.append("[COLOR violet]sourcefile[/COLOR]: '{0}'".format(machine['sourcefile']))
+    slist.append("[COLOR violet]veradded[/COLOR]: '{0}'".format(machine['veradded']))
 
     slist.append('\n[COLOR orange]Machine assets/artwork[/COLOR]')
-    slist.append("[COLOR violet]PCB[/COLOR]: '{0}'".format(assets['PCB']))
+    slist.append("[COLOR violet]3dbox[/COLOR]: '{0}'".format(assets['3dbox']))
     slist.append("[COLOR violet]artpreview[/COLOR]: '{0}'".format(assets['artpreview']))
     slist.append("[COLOR violet]artwork[/COLOR]: '{0}'".format(assets['artwork']))
     slist.append("[COLOR violet]cabinet[/COLOR]: '{0}'".format(assets['cabinet']))
@@ -1147,6 +1431,7 @@ def mame_info_MAME_print(slist, location, machine_name, machine, assets):
     slist.append("[COLOR violet]flyer[/COLOR]: '{0}'".format(assets['flyer']))
     slist.append("[COLOR violet]manual[/COLOR]: '{0}'".format(assets['manual']))
     slist.append("[COLOR violet]marquee[/COLOR]: '{0}'".format(assets['marquee']))
+    slist.append("[COLOR violet]PCB[/COLOR]: '{0}'".format(assets['PCB']))
     slist.append("[COLOR violet]plot[/COLOR]: '{0}'".format(assets['plot']))
     slist.append("[COLOR violet]snap[/COLOR]: '{0}'".format(assets['snap']))
     slist.append("[COLOR violet]title[/COLOR]: '{0}'".format(assets['title']))
@@ -1187,6 +1472,7 @@ def mame_info_SL_print(slist, location, SL_name, SL_ROM, rom, assets, SL_dic, SL
     slist.append("[COLOR violet]year[/COLOR]: '{0}'".format(rom['year']))
 
     slist.append('\n[COLOR orange]Software List assets[/COLOR]')
+    slist.append("[COLOR violet]3dbox[/COLOR]: '{0}'".format(assets['3dbox']))
     slist.append("[COLOR violet]title[/COLOR]: '{0}'".format(assets['title']))
     slist.append("[COLOR violet]snap[/COLOR]: '{0}'".format(assets['snap']))
     slist.append("[COLOR violet]boxfront[/COLOR]: '{0}'".format(assets['boxfront']))
@@ -1209,7 +1495,7 @@ def mame_info_SL_print(slist, location, SL_name, SL_ROM, rom, assets, SL_dic, SL
 # slist is a list of strings that will be joined like '\n'.join(slist)
 # slist is a list, so it is mutable and can be changed by reference.
 #
-def mame_stats_main_print_slist(slist, control_dic, AML_version_str):
+def mame_stats_main_print_slist(settings, slist, control_dic, AML_version_str):
     AML_version_int = fs_AML_version_str_to_int(AML_version_str)
 
     slist.append('[COLOR orange]Main information[/COLOR]')
@@ -1219,7 +1505,9 @@ def mame_stats_main_print_slist(slist, control_dic, AML_version_str):
         control_dic['ver_AML'], control_dic['ver_AML_str']))
     slist.append("MAME version          {0:,} (str [COLOR violet]{1}[/COLOR])".format(
         control_dic['ver_mame'], control_dic['ver_mame_str']))
+    slist.append("Artwork.ini version   {0}".format(control_dic['ver_artwork']))
     slist.append("bestgames.ini version {0}".format(control_dic['ver_bestgames']))
+    slist.append("Category.ini version  {0}".format(control_dic['ver_category']))
     slist.append("catlist.ini version   {0}".format(control_dic['ver_catlist']))
     slist.append("catver.ini version    {0}".format(control_dic['ver_catver']))
     slist.append("command.dat version   {0}".format(control_dic['ver_command']))
@@ -1284,7 +1572,7 @@ def mame_stats_main_print_slist(slist, control_dic, AML_version_str):
     else:
         slist.append("SL assets never scaned")
 
-    # Plots and fanarts.
+    # Plots, Fanarts and 3D Boxes.
     if control_dic['t_MAME_plots_build']:
         slist.append("MAME Plots built on         {0}".format(
             _str_time(control_dic['t_MAME_plots_build'])))
@@ -1295,6 +1583,7 @@ def mame_stats_main_print_slist(slist, control_dic, AML_version_str):
             _str_time(control_dic['t_SL_plots_build'])))
     else:
         slist.append("SL Plots never built")
+
     if control_dic['t_MAME_fanart_build']:
         slist.append("MAME Fanarts built on       {0}".format(
             _str_time(control_dic['t_MAME_fanart_build'])))
@@ -1305,6 +1594,17 @@ def mame_stats_main_print_slist(slist, control_dic, AML_version_str):
             _str_time(control_dic['t_SL_fanart_build'])))
     else:
         slist.append("SL Fanarts never built")
+
+    if control_dic['t_MAME_3dbox_build']:
+        slist.append("MAME 3D Boxes built on      {0}".format(
+            _str_time(control_dic['t_MAME_3dbox_build'])))
+    else:
+        slist.append("MAME 3D Boxes never built")
+    if control_dic['t_SL_3dbox_build']:
+        slist.append("SL 3D Boxes built on        {0}".format(
+            _str_time(control_dic['t_SL_3dbox_build'])))
+    else:
+        slist.append("SL 3D Boxes never built")
 
     # MAME machine hash, asset hash, render cache and asset cache.
     if control_dic['t_MAME_machine_hash']:
@@ -1413,17 +1713,17 @@ def mame_stats_main_print_slist(slist, control_dic, AML_version_str):
     slist.append('')
     slist.append('[COLOR orange]MAME machine statistics[/COLOR]')
     table_str = []
-    table_str.append(['left', 'right', 'right', 'right',     'right'])
-    table_str.append(['Type', 'Total', 'Good',  'Imperfect', 'Nonworking'])
+    table_str.append(['left', 'right', 'right', 'right', 'right'])
+    table_str.append(['Type (parents/total)', 'Total', 'Good',  'Imperfect', 'Nonworking'])
     table_str.append([
-        'Coin slot machines (Normal)',
+        'Coin slot (Normal)',
         '{0:5d}'.format(control_dic['stats_MF_Normal_Total']),
         '{0:5d}'.format(control_dic['stats_MF_Normal_Good']),
         '{0:5d}'.format(control_dic['stats_MF_Normal_Imperfect']),
         '{0:5d}'.format(control_dic['stats_MF_Normal_Nonworking']),
     ])
     table_str.append([
-        'Coin slot machines (Unusual)',
+        'Coin slot (Unusual)',
         '{0:5d}'.format(control_dic['stats_MF_Unusual_Total']),
         '{0:5d}'.format(control_dic['stats_MF_Unusual_Good']),
         '{0:5d}'.format(control_dic['stats_MF_Unusual_Imperfect']),
@@ -1458,12 +1758,15 @@ def mame_stats_main_print_slist(slist, control_dic, AML_version_str):
 
     slist.append('')
     slist.append('[COLOR orange]Software Lists item count[/COLOR]')
-    slist.append("SL files           {0:6d}".format(control_dic['stats_SL_XML_files']))
-    slist.append("SL software items  {0:6d}".format(control_dic['stats_SL_software_items']))
-    slist.append("SL items with ROMs {0:6d}".format(control_dic['stats_SL_items_with_ROMs']))
-    slist.append("SL items with CHDs {0:6d}".format(control_dic['stats_SL_items_with_CHDs']))
+    if settings['enable_SL']:
+        slist.append("SL files           {0:6d}".format(control_dic['stats_SL_XML_files']))
+        slist.append("SL software items  {0:6d}".format(control_dic['stats_SL_software_items']))
+        slist.append("SL items with ROMs {0:6d}".format(control_dic['stats_SL_items_with_ROMs']))
+        slist.append("SL items with CHDs {0:6d}".format(control_dic['stats_SL_items_with_CHDs']))
+    else:
+        slist.append('Software Lists disabled')
 
-def mame_stats_scanner_print_slist(slist, control_dic):
+def mame_stats_scanner_print_slist(settings, slist, control_dic):
     # >> MAME statistics
     slist.append('[COLOR orange]MAME scanner information[/COLOR]')
     ta = "You have {0:5d} ROM ZIP files    out of  {1:5d}, missing    {2:5d}"
@@ -1495,23 +1798,26 @@ def mame_stats_scanner_print_slist(slist, control_dic):
     # >> SL statistics
     slist.append('')
     slist.append('[COLOR orange]Software List scanner information[/COLOR]')
-    ta = "You have {0:5d} SL ROMs out of {1:5d}, missing {2:5d}"
-    tb = "You have {0:5d} SL CHDs out of {1:5d}, missing {2:5d}"
-    slist.append(ta.format(control_dic['scan_SL_archives_ROM_have'],
-                           control_dic['scan_SL_archives_ROM_total'],
-                           control_dic['scan_SL_archives_ROM_missing']))
-    slist.append(tb.format(control_dic['scan_SL_archives_CHD_have'],
-                           control_dic['scan_SL_archives_CHD_total'],
-                           control_dic['scan_SL_archives_CHD_missing']))
+    if settings['enable_SL']:
+        ta = "You have {0:6d} SL ROMs out of {1:6d}, missing {2:6d}"
+        tb = "You have {0:6d} SL CHDs out of {1:6d}, missing {2:6d}"
+        slist.append(ta.format(control_dic['scan_SL_archives_ROM_have'],
+                               control_dic['scan_SL_archives_ROM_total'],
+                               control_dic['scan_SL_archives_ROM_missing']))
+        slist.append(tb.format(control_dic['scan_SL_archives_CHD_have'],
+                               control_dic['scan_SL_archives_CHD_total'],
+                               control_dic['scan_SL_archives_CHD_missing']))
+    else:
+        slist.append('Software Lists disabled')
 
-    # >> MAME asset scanner.
+    # --- MAME asset scanner ---
     slist.append('')
     slist.append('[COLOR orange]MAME asset scanner information[/COLOR]')
     # slist.append('Total number of MAME machines {0:,d}'.format(control_dic['assets_num_MAME_machines']))
-    t = "You have {0:6d} MAME PCBs       , missing {1:6d}, alternate {2:6d}"
-    slist.append(t.format(control_dic['assets_PCBs_have'],
-                          control_dic['assets_PCBs_missing'],
-                          control_dic['assets_PCBs_alternate']))
+    t = "You have {0:6d} MAME 3D Boxes   , missing {1:6d}, alternate {2:6d}"
+    slist.append(t.format(control_dic['assets_3dbox_have'],
+                          control_dic['assets_3dbox_missing'],
+                          control_dic['assets_3dbox_alternate']))
     t = "You have {0:6d} MAME Artpreviews, missing {1:6d}, alternate {2:6d}"
     slist.append(t.format(control_dic['assets_artpreview_have'],
                           control_dic['assets_artpreview_missing'],
@@ -1548,6 +1854,10 @@ def mame_stats_scanner_print_slist(slist, control_dic):
     slist.append(t.format(control_dic['assets_marquees_have'],
                           control_dic['assets_marquees_missing'],
                           control_dic['assets_marquees_alternate']))
+    t = "You have {0:6d} MAME PCBs       , missing {1:6d}, alternate {2:6d}"
+    slist.append(t.format(control_dic['assets_PCBs_have'],
+                          control_dic['assets_PCBs_missing'],
+                          control_dic['assets_PCBs_alternate']))
     t = "You have {0:6d} MAME Snaps      , missing {1:6d}, alternate {2:6d}"
     slist.append(t.format(control_dic['assets_snaps_have'],
                           control_dic['assets_snaps_missing'],
@@ -1561,36 +1871,43 @@ def mame_stats_scanner_print_slist(slist, control_dic):
                           control_dic['assets_trailers_missing'],
                           control_dic['assets_trailers_alternate']))
 
-    # >> Software List scanner
+    # --- Software List scanner ---
     slist.append('')
     slist.append('[COLOR orange]Software List asset scanner information[/COLOR]')
-    # slist.append('Total number of SL items {0:,d}'.format(control_dic['assets_SL_num_items']))
-    t = "You have {0:6d} SL Titles   , missing {1:6d}, alternate {2:6d}"
-    slist.append(t.format(control_dic['assets_SL_titles_have'],
-                          control_dic['assets_SL_titles_missing'],
-                          control_dic['assets_SL_titles_alternate']))
-    t = "You have {0:6d} SL Snaps    , missing {1:6d}, alternate {2:6d}"
-    slist.append(t.format(control_dic['assets_SL_snaps_have'],
-                          control_dic['assets_SL_snaps_missing'],
-                          control_dic['assets_SL_snaps_alternate']))
-    t = "You have {0:6d} SL Boxfronts, missing {1:6d}, alternate {2:6d}"
-    slist.append(t.format(control_dic['assets_SL_boxfronts_have'],
-                          control_dic['assets_SL_boxfronts_missing'],
-                          control_dic['assets_SL_boxfronts_alternate']))
-    t = "You have {0:6d} SL Fanarts  , missing {1:6d}, alternate {2:6d}"
-    slist.append(t.format(control_dic['assets_SL_fanarts_have'],
-                          control_dic['assets_SL_fanarts_missing'],
-                          control_dic['assets_SL_fanarts_alternate']))
-    t = "You have {0:6d} SL Trailers , missing {1:6d}, alternate {2:6d}"
-    slist.append(t.format(control_dic['assets_SL_trailers_have'],
-                          control_dic['assets_SL_trailers_missing'],
-                          control_dic['assets_SL_trailers_alternate']))
-    t = "You have {0:6d} SL Manuals  , missing {1:6d}, alternate {2:6d}"
-    slist.append(t.format(control_dic['assets_SL_manuals_have'],
-                          control_dic['assets_SL_manuals_missing'],
-                          control_dic['assets_SL_manuals_alternate']))
+    if settings['enable_SL']:
+        # slist.append('Total number of SL items {0:,d}'.format(control_dic['assets_SL_num_items']))
+        t = "You have {0:6d} SL 3D Boxes , missing {1:6d}, alternate {2:6d}"
+        slist.append(t.format(control_dic['assets_SL_3dbox_have'],
+                              control_dic['assets_SL_3dbox_missing'],
+                              control_dic['assets_SL_3dbox_alternate']))
+        t = "You have {0:6d} SL Titles   , missing {1:6d}, alternate {2:6d}"
+        slist.append(t.format(control_dic['assets_SL_titles_have'],
+                              control_dic['assets_SL_titles_missing'],
+                              control_dic['assets_SL_titles_alternate']))
+        t = "You have {0:6d} SL Snaps    , missing {1:6d}, alternate {2:6d}"
+        slist.append(t.format(control_dic['assets_SL_snaps_have'],
+                              control_dic['assets_SL_snaps_missing'],
+                              control_dic['assets_SL_snaps_alternate']))
+        t = "You have {0:6d} SL Boxfronts, missing {1:6d}, alternate {2:6d}"
+        slist.append(t.format(control_dic['assets_SL_boxfronts_have'],
+                              control_dic['assets_SL_boxfronts_missing'],
+                              control_dic['assets_SL_boxfronts_alternate']))
+        t = "You have {0:6d} SL Fanarts  , missing {1:6d}, alternate {2:6d}"
+        slist.append(t.format(control_dic['assets_SL_fanarts_have'],
+                              control_dic['assets_SL_fanarts_missing'],
+                              control_dic['assets_SL_fanarts_alternate']))
+        t = "You have {0:6d} SL Trailers , missing {1:6d}, alternate {2:6d}"
+        slist.append(t.format(control_dic['assets_SL_trailers_have'],
+                              control_dic['assets_SL_trailers_missing'],
+                              control_dic['assets_SL_trailers_alternate']))
+        t = "You have {0:6d} SL Manuals  , missing {1:6d}, alternate {2:6d}"
+        slist.append(t.format(control_dic['assets_SL_manuals_have'],
+                              control_dic['assets_SL_manuals_missing'],
+                              control_dic['assets_SL_manuals_alternate']))
+    else:
+        slist.append('Software Lists disabled')
 
-def mame_stats_audit_print_slist(slist, control_dic, settings_dic):
+def mame_stats_audit_print_slist(settings, slist, control_dic, settings_dic):
     rom_set = ['Merged', 'Split', 'Non-merged'][settings_dic['mame_rom_set']]
     chd_set = ['Merged', 'Split', 'Non-merged'][settings_dic['mame_chd_set']]
 
@@ -1637,14 +1954,17 @@ def mame_stats_audit_print_slist(slist, control_dic, settings_dic):
     # --- SL item audit database statistics ---
     slist.append('')
     slist.append('[COLOR orange]SL audit database statistics[/COLOR]')
-    t = "{0:6d} runnable Software List items"
-    slist.append(t.format(control_dic['stats_audit_SL_items_runnable']))
-    t = "{0:6d} SL items require ROM ZIPs and/or CHDs"
-    slist.append(t.format(control_dic['stats_audit_SL_items_with_arch']))
-    t = "{0:6d} SL items require ROM ZIPs"
-    slist.append(t.format(control_dic['stats_audit_SL_items_with_arch_ROM']))
-    t = "{0:6d} SL items require CHDs"
-    slist.append(t.format(control_dic['stats_audit_SL_items_with_CHD']))
+    if settings['enable_SL']:
+        t = "{0:6d} runnable Software List items"
+        slist.append(t.format(control_dic['stats_audit_SL_items_runnable']))
+        t = "{0:6d} SL items require ROM ZIPs and/or CHDs"
+        slist.append(t.format(control_dic['stats_audit_SL_items_with_arch']))
+        t = "{0:6d} SL items require ROM ZIPs"
+        slist.append(t.format(control_dic['stats_audit_SL_items_with_arch_ROM']))
+        t = "{0:6d} SL items require CHDs"
+        slist.append(t.format(control_dic['stats_audit_SL_items_with_CHD']))
+    else:
+        slist.append('Software Lists disabled')
 
     # --- MAME audit info ---
     slist.append('\n[COLOR orange]MAME ROM audit information[/COLOR]')
@@ -1683,31 +2003,34 @@ def mame_stats_audit_print_slist(slist, control_dic, settings_dic):
 
     # --- SL audit info ---
     slist.append('\n[COLOR orange]SL audit information[/COLOR]')
-    table_str = []
-    table_str.append(['left', 'right', 'right',  'right'])
-    table_str.append(['Type', 'Total', 'Good',   'Bad'])
-    table_row = [
-        'SL items with ROMs and/or CHDs',
-        str(control_dic['audit_SL_items_with_arch']),
-        str(control_dic['audit_SL_items_with_arch_OK']),
-        str(control_dic['audit_SL_items_with_arch_BAD']),
-    ]
-    table_str.append(table_row)
-    table_row = [
-        'SL items with ROMs',
-        str(control_dic['audit_SL_items_with_arch_ROM']),
-        str(control_dic['audit_SL_items_with_arch_ROM_OK']),
-        str(control_dic['audit_SL_items_with_arch_ROM_BAD']),
-    ]
-    table_str.append(table_row)
-    table_row = [
-        'SL items with CHDs',
-        str(control_dic['audit_SL_items_with_CHD']),
-        str(control_dic['audit_SL_items_with_CHD_OK']),
-        str(control_dic['audit_SL_items_with_CHD_BAD']),
-    ]
-    table_str.append(table_row)
-    slist.extend(text_render_table_str(table_str))
+    if settings['enable_SL']:
+        table_str = []
+        table_str.append(['left', 'right', 'right',  'right'])
+        table_str.append(['Type', 'Total', 'Good',   'Bad'])
+        table_row = [
+            'SL items with ROMs and/or CHDs',
+            str(control_dic['audit_SL_items_with_arch']),
+            str(control_dic['audit_SL_items_with_arch_OK']),
+            str(control_dic['audit_SL_items_with_arch_BAD']),
+        ]
+        table_str.append(table_row)
+        table_row = [
+            'SL items with ROMs',
+            str(control_dic['audit_SL_items_with_arch_ROM']),
+            str(control_dic['audit_SL_items_with_arch_ROM_OK']),
+            str(control_dic['audit_SL_items_with_arch_ROM_BAD']),
+        ]
+        table_str.append(table_row)
+        table_row = [
+            'SL items with CHDs',
+            str(control_dic['audit_SL_items_with_CHD']),
+            str(control_dic['audit_SL_items_with_CHD_OK']),
+            str(control_dic['audit_SL_items_with_CHD_BAD']),
+        ]
+        table_str.append(table_row)
+        slist.extend(text_render_table_str(table_str))
+    else:
+        slist.append('Software Lists disabled')
 
 # -------------------------------------------------------------------------------------------------
 # Check/Update/Repair Favourite ROM objects
@@ -1717,23 +2040,30 @@ def mame_update_MAME_Fav_objects(PATHS, control_dic, machines, machines_render, 
     pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', line1_str)
     fav_machines = fs_load_JSON_file_dic(PATHS.FAV_MACHINES_PATH.getPath())
-    if len(fav_machines) > 1:
+    if len(fav_machines) >= 1:
         num_iteration = len(fav_machines)
         iteration = 0
         for fav_key in sorted(fav_machines):
             pDialog.update((iteration*100) // num_iteration, line1_str)
-            log_debug('Checking Favourite "{0}"'.format(fav_key))
+            log_debug('Checking machine "{0}"'.format(fav_key))
             if fav_key in machines:
                 machine = machines[fav_key]
-                m_render = machines_render[fav_key]
+                render = machines_render[fav_key]
                 assets = assets_dic[fav_key]
-                new_fav = fs_get_MAME_Favourite_full(fav_key, machine, m_render, assets, control_dic)
-                fav_machines[fav_key] = new_fav
-                log_debug('Updated machine    "{0}"'.format(fav_key))
             else:
+                # Machine not found in DB. Create an empty one to update the database fields.
+                # The user can delete it later.
                 log_debug('Machine "{0}" not found in MAME main DB'.format(fav_key))
-                t = 'Favourite machine "{0}" not found in database'.format(fav_key)
-                kodi_dialog_OK(t)
+                machine = fs_new_machine_dic()
+                render = fs_new_machine_render_dic()
+                assets = fs_new_MAME_asset()
+                # Change plot to warn user this machine is not found in database.
+                t = 'Machine {0} missing'.format(fav_key)
+                render['description'] = t
+                assets['plot'] = t
+            new_fav = fs_get_MAME_Favourite_full(fav_key, machine, render, assets, control_dic)
+            fav_machines[fav_key] = new_fav
+            log_debug('Updated machine "{0}"'.format(fav_key))
             iteration += 1
         fs_write_JSON_file(PATHS.FAV_MACHINES_PATH.getPath(), fav_machines)
         pDialog.update((iteration*100) // num_iteration, line1_str)
@@ -1747,28 +2077,32 @@ def mame_update_MAME_MostPlay_objects(PATHS, control_dic, machines, machines_ren
     pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', line1_str)
     most_played_roms_dic = fs_load_JSON_file_dic(PATHS.MAME_MOST_PLAYED_FILE_PATH.getPath())
-    if len(most_played_roms_dic) > 1:
+    if len(most_played_roms_dic) >= 1:
         num_iteration = len(most_played_roms_dic)
         iteration = 0
         for fav_key in sorted(most_played_roms_dic):
             pDialog.update((iteration*100) // num_iteration, line1_str)
-            log_debug('Checking Most Played machine "{0}"'.format(fav_key))
+            log_debug('Checking machine "{0}"'.format(fav_key))
+            if 'launch_count' in most_played_roms_dic[fav_key]:
+                launch_count = most_played_roms_dic[fav_key]['launch_count']
+            else:
+                launch_count = 1
             if fav_key in machines:
-                if 'launch_count' in most_played_roms_dic[fav_key]:
-                    launch_count = most_played_roms_dic[fav_key]['launch_count']
-                else:
-                    launch_count = 1
                 machine = machines[fav_key]
-                m_render = machines_render[fav_key]
+                render = machines_render[fav_key]
                 assets = assets_dic[fav_key]
-                new_fav = fs_get_MAME_Favourite_full(fav_key, machine, m_render, assets, control_dic)
-                new_fav['launch_count'] = launch_count
-                most_played_roms_dic[fav_key] = new_fav
-                log_debug('Updated machine              "{0}"'.format(fav_key))
             else:
                 log_debug('Machine "{0}" not found in MAME main DB'.format(fav_key))
-                t = 'Favourite machine "{0}" not found in database'.format(fav_key)
-                kodi_dialog_OK(t)
+                machine = fs_new_machine_dic()
+                render = fs_new_machine_render_dic()
+                assets = fs_new_MAME_asset()
+                t = 'Machine {0} missing'.format(fav_key)
+                render['description'] = t
+                assets['plot'] = t
+            new_fav = fs_get_MAME_Favourite_full(fav_key, machine, render, assets, control_dic)
+            new_fav['launch_count'] = launch_count
+            most_played_roms_dic[fav_key] = new_fav
+            log_debug('Updated machine "{0}"'.format(fav_key))
             iteration += 1
         fs_write_JSON_file(PATHS.MAME_MOST_PLAYED_FILE_PATH.getPath(), most_played_roms_dic)
         pDialog.update((iteration*100) // num_iteration, line1_str)
@@ -1782,24 +2116,28 @@ def mame_update_MAME_RecentPlay_objects(PATHS, control_dic, machines, machines_r
     pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher', line1_str)
     recent_roms_list = fs_load_JSON_file_list(PATHS.MAME_RECENT_PLAYED_FILE_PATH.getPath())
-    if len(recent_roms_list) > 1:
+    if len(recent_roms_list) >= 1:
         num_iteration = len(recent_roms_list)
         iteration = 0
         for i, recent_rom in enumerate(recent_roms_list):
             pDialog.update((iteration*100) // num_iteration, line1_str)
             fav_key = recent_rom['name']
-            log_debug('Checking Recently Played "{0}"'.format(fav_key))
+            log_debug('Checking machine "{0}"'.format(fav_key))
             if fav_key in machines:
                 machine = machines[fav_key]
-                m_render = machines_render[fav_key]
+                render = machines_render[fav_key]
                 assets = assets_dic[fav_key]
-                new_fav = fs_get_MAME_Favourite_full(fav_key, machine, m_render, assets, control_dic)
-                recent_roms_list[i] = new_fav
-                log_debug('Updated machine          "{0}"'.format(fav_key))
             else:
                 log_debug('Machine "{0}" not found in MAME main DB'.format(fav_key))
-                t = 'Favourite machine "{0}" not found in database'.format(fav_key)
-                kodi_dialog_OK(t)
+                machine = fs_new_machine_dic()
+                render = fs_new_machine_render_dic()
+                assets = fs_new_MAME_asset()
+                t = 'Machine {0} missing'.format(fav_key)
+                render['description'] = t
+                assets['plot'] = t
+            new_fav = fs_get_MAME_Favourite_full(fav_key, machine, render, assets, control_dic)
+            recent_roms_list[i] = new_fav
+            log_debug('Updated machine "{0}"'.format(fav_key))
             iteration += 1
         fs_write_JSON_file(PATHS.MAME_RECENT_PLAYED_FILE_PATH.getPath(), recent_roms_list)
         pDialog.update((iteration*100) // num_iteration, line1_str)
@@ -1824,12 +2162,12 @@ def mame_update_SL_Fav_objects(PATHS, control_dic, SL_catalog_dic):
         fav_SL_name = fav_SL_roms[fav_SL_key]['SL_name']
         log_debug('Checking SL Favourite "{0}" / "{1}"'.format(fav_SL_name, fav_ROM_name))
 
-        # >> Update progress dialog (BEGIN)
+        # --- Update progress dialog (BEGIN) ---
         update_number = (num_iteration * 100) // num_SL_favs
         pDialog.update(update_number, 'Checking SL Favourites (ROM "{0}") ...'.format(fav_ROM_name))
         num_iteration += 1
 
-        # >> Load SL ROMs DB and assets
+        # --- Load SL ROMs DB and assets ---
         file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_items.json'
         SL_DB_FN = PATHS.SL_DB_DIR.pjoin(file_name)
         assets_file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_assets.json'
@@ -1837,18 +2175,23 @@ def mame_update_SL_Fav_objects(PATHS, control_dic, SL_catalog_dic):
         SL_roms = fs_load_JSON_file_dic(SL_DB_FN.getPath(), verbose = False)
         SL_assets_dic = fs_load_JSON_file_dic(SL_asset_DB_FN.getPath(), verbose = False)
 
-        # >> Check
+        # --- Check ---
         if fav_ROM_name in SL_roms:
             SL_ROM = SL_roms[fav_ROM_name]
             SL_assets = SL_assets_dic[fav_ROM_name]
-            new_fav_ROM = fs_get_SL_Favourite(fav_SL_name, fav_ROM_name, SL_ROM, SL_assets, control_dic)
-            fav_SL_roms[fav_SL_key] = new_fav_ROM
-            log_debug('Updated SL Favourite  "{0}" / "{1}"'.format(fav_SL_name, fav_ROM_name))
         else:
-            # >> Delete not found Favourites???
+            # Machine not found in DB. Create an empty one to update the database fields.
+            # The user can delete it later.
             log_debug('Machine "{0}" / "{1}" not found in SL main DB'.format(fav_ROM_name, fav_SL_name))
-            t = 'Favourite machine "{0}" in SL "{1}" not found in database'.format(fav_ROM_name, fav_SL_name)
-            kodi_dialog_OK(t)
+            SL_ROM = fs_new_SL_ROM()
+            SL_assets = fs_new_SL_asset()
+            # Change plot to warn user this machine is not found in database.
+            t = 'Item "{0}" missing'.format(fav_ROM_name)
+            SL_ROM['description'] = t
+            SL_ROM['plot'] = t
+        new_fav_ROM = fs_get_SL_Favourite(fav_SL_name, fav_ROM_name, SL_ROM, SL_assets, control_dic)
+        fav_SL_roms[fav_SL_key] = new_fav_ROM
+        log_debug('Updated SL Favourite "{0}" / "{1}"'.format(fav_SL_name, fav_ROM_name))
     fs_write_JSON_file(PATHS.FAV_SL_ROMS_PATH.getPath(), fav_SL_roms)
     pDialog.update(100)
     pDialog.close()
@@ -1873,12 +2216,12 @@ def mame_update_SL_MostPlay_objects(PATHS, control_dic, SL_catalog_dic):
         fav_SL_name = most_played_roms_dic[fav_SL_key]['SL_name']
         log_debug('Checking SL Most Played "{0}" / "{1}"'.format(fav_SL_name, fav_ROM_name))
 
-        # >> Update progress dialog (BEGIN)
+        # --- Update progress dialog (BEGIN) ---
         update_number = (num_iteration * 100) // num_SL_favs
         pDialog.update(update_number, 'Checking SL Most Played (ROM "{0}") ...'.format(fav_ROM_name))
         num_iteration += 1
 
-        # >> Load SL ROMs DB and assets
+        # --- Load SL ROMs DB and assets ---
         file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_items.json'
         SL_DB_FN = PATHS.SL_DB_DIR.pjoin(file_name)
         assets_file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_assets.json'
@@ -1886,18 +2229,21 @@ def mame_update_SL_MostPlay_objects(PATHS, control_dic, SL_catalog_dic):
         SL_roms = fs_load_JSON_file_dic(SL_DB_FN.getPath(), verbose = False)
         SL_assets_dic = fs_load_JSON_file_dic(SL_asset_DB_FN.getPath(), verbose = False)
 
+        # --- Check ---
         if fav_ROM_name in SL_roms:
             SL_ROM = SL_roms[fav_ROM_name]
             SL_assets = SL_assets_dic[fav_ROM_name]
-            new_fav_ROM = fs_get_SL_Favourite(fav_SL_name, fav_ROM_name, SL_ROM, SL_assets, control_dic)
-            new_fav_ROM['launch_count'] = launch_count
-            most_played_roms_dic[fav_SL_key] = new_fav_ROM
-            log_debug('Updated SL Most Played  "{0}" / "{1}"'.format(fav_SL_name, fav_ROM_name))
         else:
-            # >> Delete Favourite ROM from Favourite DB
-            log_debug('Machine "{0}" / "{1}" not found in SL main DB'.format(fav_SL_name, fav_ROM_name))
-            t = 'Favourite machine "{0}" in SL "{1}" not found in SL database'.format(fav_SL_name, fav_ROM_name)
-            kodi_dialog_OK(t)
+            log_debug('Machine "{0}" / "{1}" not found in SL main DB'.format(fav_ROM_name, fav_SL_name))
+            SL_ROM = fs_new_SL_ROM()
+            SL_assets = fs_new_SL_asset()
+            t = 'Item "{0}" missing'.format(fav_ROM_name)
+            SL_ROM['description'] = t
+            SL_ROM['plot'] = t
+        new_fav_ROM = fs_get_SL_Favourite(fav_SL_name, fav_ROM_name, SL_ROM, SL_assets, control_dic)
+        new_fav_ROM['launch_count'] = launch_count
+        most_played_roms_dic[fav_SL_key] = new_fav_ROM
+        log_debug('Updated SL Most Played "{0}" / "{1}"'.format(fav_SL_name, fav_ROM_name))
     fs_write_JSON_file(PATHS.SL_MOST_PLAYED_FILE_PATH.getPath(), most_played_roms_dic)
     pDialog.update(100)
     pDialog.close()
@@ -1918,12 +2264,12 @@ def mame_update_SL_RecentPlay_objects(PATHS, control_dic, SL_catalog_dic):
         fav_SL_name = recent_rom['SL_name']
         log_debug('Checking SL Recently Played "{0}" / "{1}"'.format(fav_SL_name, fav_ROM_name))
 
-        # >> Update progress dialog (BEGIN)
+        # --- Update progress dialog (BEGIN) ---
         update_number = (num_iteration * 100) // num_SL_favs
         pDialog.update(update_number, 'Checking SL Recently Played (ROM "{0}") ...'.format(fav_ROM_name))
         num_iteration += 1
 
-        # >> Load SL ROMs DB and assets
+        # --- Load SL ROMs DB and assets ---
         file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_items.json'
         SL_DB_FN = PATHS.SL_DB_DIR.pjoin(file_name)
         assets_file_name =  SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_assets.json'
@@ -1931,17 +2277,20 @@ def mame_update_SL_RecentPlay_objects(PATHS, control_dic, SL_catalog_dic):
         SL_roms = fs_load_JSON_file_dic(SL_DB_FN.getPath(), verbose = False)
         SL_assets_dic = fs_load_JSON_file_dic(SL_asset_DB_FN.getPath(), verbose = False)
 
+        # --- Check ---
         if fav_ROM_name in SL_roms:
             SL_ROM = SL_roms[fav_ROM_name]
             SL_assets = SL_assets_dic[fav_ROM_name]
-            new_fav_ROM = fs_get_SL_Favourite(fav_SL_name, fav_ROM_name, SL_ROM, SL_assets, control_dic)
-            recent_roms_list[i] = new_fav_ROM
-            log_debug('Updated SL Recently Played  "{0}" / "{1}"'.format(fav_SL_name, fav_ROM_name))
         else:
-            # >> Delete Favourite ROM from Favourite DB
-            log_debug('Machine "{0}" / "{1}" not found in SL main DB'.format(fav_SL_name, fav_ROM_name))
-            t = 'Favourite machine "{0}" in SL "{1}" not found in SL database'.format(fav_SL_name, fav_ROM_name)
-            kodi_dialog_OK(t)
+            log_debug('Machine "{0}" / "{1}" not found in SL main DB'.format(fav_ROM_name, fav_SL_name))
+            SL_ROM = fs_new_SL_ROM()
+            SL_assets = fs_new_SL_asset()
+            t = 'Item "{0}" missing'.format(fav_ROM_name)
+            SL_ROM['description'] = t
+            SL_ROM['plot'] = t
+        new_fav_ROM = fs_get_SL_Favourite(fav_SL_name, fav_ROM_name, SL_ROM, SL_assets, control_dic)
+        recent_roms_list[i] = new_fav_ROM
+        log_debug('Updated SL Recently Played  "{0}" / "{1}"'.format(fav_SL_name, fav_ROM_name))
     fs_write_JSON_file(PATHS.SL_RECENT_PLAYED_FILE_PATH.getPath(), recent_roms_list)
     pDialog.update(100)
     pDialog.close()
@@ -1994,7 +2343,7 @@ def mame_build_MAME_plots(PATHS, settings, control_dic,
         else:
             control_list = []
         if control_list:
-            controls_str = 'Controls {0}'.format(mame_get_control_str(control_list))
+            controls_str = 'Controls {0}'.format(misc_get_mame_control_str(control_list))
         else:
             controls_str = 'No controls'
         mecha_str = 'Mechanical' if m['isMechanical'] else 'Non-mechanical'
@@ -2004,7 +2353,7 @@ def mame_build_MAME_plots(PATHS, settings, control_dic,
 
         plot_str_list = []
         plot_str_list.append('{0}'.format(controls_str))
-        plot_str_list.append('{0}'.format(mame_get_screen_str(machine_name, m)))
+        plot_str_list.append('{0}'.format(misc_get_mame_screen_str(machine_name, m)))
         plot_str_list.append('{0} / Driver is {1}'.format(mecha_str, m['sourcefile']))
         plot_str_list.append('{0}'.format(coin_str))
         if Flag_str: plot_str_list.append('{0}'.format(Flag_str))
@@ -2036,8 +2385,8 @@ def mame_build_MAME_plots(PATHS, settings, control_dic,
 # ---------------------------------------------------------------------------------------------
 def mame_build_SL_plots(PATHS, settings, control_dic,
     SL_index_dic, SL_machines_dic, History_idx_dic):
-    pdialog_line1 = 'Scanning Sofware Lists assets/artwork ...'
     pDialog = xbmcgui.DialogProgress()
+    pdialog_line1 = 'Generating SL item plots ...'
     pDialog.create('Advanced MAME Launcher', pdialog_line1)
     pDialog.update(0)
     total_files = len(SL_index_dic)
@@ -2891,11 +3240,8 @@ def mame_audit_MAME_all(PATHS, settings, control_dic, machines, machines_render,
     # --- Save control_dic ---
     fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
 
-def mame_audit_SL_all(PATHS, settings, control_dic):
+def mame_audit_SL_all(PATHS, settings, control_dic, SL_catalog_dic):
     log_debug('mame_audit_SL_all() Initialising ...')
-
-    # >> Load SL catalog.
-    SL_catalog_dic = fs_load_JSON_file_dic(PATHS.SL_INDEX_PATH.getPath())
 
     # >> Report header and statistics
     report_full_list = [
@@ -3117,390 +3463,8 @@ def mame_audit_SL_all(PATHS, settings, control_dic):
     fs_write_JSON_file(PATHS.MAIN_CONTROL_PATH.getPath(), control_dic)
 
 # -------------------------------------------------------------------------------------------------
-# Fanart generation
+# MAME database building
 # -------------------------------------------------------------------------------------------------
-# >> Cache font objects in global variables.
-# >> Used in mame.py, mame_build_fanart() and mame_build_SL_fanart()
-font_mono = None
-font_mono_SL = None
-font_mono_item = None
-font_mono_debug = None
-
-#
-# Scales and centers img into a box of size (box_x_size, box_y_size).
-# Scaling keeps original img aspect ratio.
-# Returns an image of size (box_x_size, box_y_size)
-#
-def PIL_resize_proportional(img, layout, dic_key, CANVAS_COLOR = (0, 0, 0)):
-    box_x_size = layout[dic_key]['width']
-    box_y_size = layout[dic_key]['height']
-    # log_debug('PIL_resize_proportional() Initialising ...')
-    # log_debug('img X_size = {0} | Y_size = {1}'.format(img.size[0], img.size[1]))
-    # log_debug('box X_size = {0} | Y_size = {1}'.format(box_x_size, box_y_size))
-
-    # --- First try to fit X dimension ---
-    # log_debug('PIL_resize_proportional() Fitting X dimension')
-    wpercent = (box_x_size / float(img.size[0]))
-    hsize = int((float(img.size[1]) * float(wpercent)))
-    r_x_size = box_x_size
-    r_y_size = hsize
-    x_offset = 0
-    y_offset = (box_y_size - r_y_size) / 2
-    # log_debug('resize X_size = {0} | Y_size = {1}'.format(r_x_size, r_y_size))
-    # log_debug('resize x_offset = {0} | y_offset = {1}'.format(x_offset, y_offset))
-
-    # --- Second try to fit Y dimension ---
-    if y_offset < 0:
-        # log_debug('Fitting Y dimension')
-        hpercent = (box_y_size / float(img.size[1]))
-        wsize = int((float(img.size[0]) * float(hpercent)))
-        r_x_size = wsize
-        r_y_size = box_y_size
-        x_offset = (box_x_size - r_x_size) / 2
-        y_offset = 0
-        # log_debug('resize X_size = {0} | Y_size = {1}'.format(r_x_size, r_y_size))
-        # log_debug('resize x_offset = {0} | y_offset = {1}'.format(x_offset, y_offset))
-
-    # >> Create a new image and paste original image centered.
-    canvas_img = Image.new('RGB', (box_x_size, box_y_size), CANVAS_COLOR)
-    # >> Resize and paste
-    img = img.resize((r_x_size, r_y_size), Image.ANTIALIAS)
-    canvas_img.paste(img, (x_offset, y_offset, x_offset + r_x_size, y_offset + r_y_size))
-
-    return canvas_img
-
-def PIL_paste_image(img, img_title, layout, dic_key):
-    box = (
-        layout[dic_key]['left'],
-        layout[dic_key]['top'], 
-        layout[dic_key]['left'] + layout[dic_key]['width'],
-        layout[dic_key]['top']  + layout[dic_key]['height']
-    )
-    img.paste(img_title, box)
-
-    return img
-
-# --- Fanart layout ---
-MAME_layout_example = {
-    'Title'       : {'width' : 450, 'height' : 450, 'left' : 50,   'top' : 50},
-    'Snap'        : {'width' : 450, 'height' : 450, 'left' : 50,   'top' : 550},
-    'Flyer'       : {'width' : 450, 'height' : 450, 'left' : 1420, 'top' : 50},
-    'Cabinet'     : {'width' : 300, 'height' : 425, 'left' : 1050, 'top' : 625},
-    'Artpreview'  : {'width' : 450, 'height' : 550, 'left' : 550,  'top' : 500},
-    'PCB'         : {'width' : 300, 'height' : 300, 'left' : 1500, 'top' : 525},
-    'Clearlogo'   : {'width' : 450, 'height' : 200, 'left' : 1400, 'top' : 850},
-    'CPanel'      : {'width' : 300, 'height' : 100, 'left' : 1050, 'top' : 500},
-    'Marquee'     : {'width' : 800, 'height' : 275, 'left' : 550,  'top' : 200},
-    'MachineName' : {'left' : 550, 'top' : 50, 'fontsize' : 72},
-}
-
-MAME_layout_assets = {
-    'Title'       : 'title',
-    'Snap'        : 'snap',
-    'Flyer'       : 'flyer',
-    'Cabinet'     : 'cabinet',
-    'Artpreview'  : 'artpreview',
-    'PCB'         : 'PCB',
-    'Clearlogo'   : 'clearlogo',
-    'CPanel'      : 'cpanel',
-    'Marquee'     : 'marquee',
-}
-
-#
-# Returns an Ordered dictionary with the layout of the fanart.
-# The Ordered dictionary is to keep the order of the tags in the XML
-#
-def mame_load_MAME_Fanart_template(Template_FN):
-    # --- Load XML file ---
-    layout = OrderedDict()
-    if not os.path.isfile(Template_FN.getPath()): return None
-    log_debug('mame_load_MAME_Fanart_template() Loading XML "{0}"'.format(Template_FN.getPath()))
-    try:
-        xml_tree = ET.parse(Template_FN.getPath())
-    except IOError as E:
-        return None
-    xml_root = xml_tree.getroot()
-
-    # --- Parse XML file ---
-    art_list = ['Title', 'Snap', 'Flyer', 'Cabinet', 'Artpreview', 'PCB', 'Clearlogo', 'CPanel', 'Marquee']
-    art_tag_list = ['width', 'height', 'left', 'top']
-    text_list = ['MachineName']
-    test_tag_list = ['left', 'top', 'fontsize']
-    for root_element in xml_root:
-        # log_debug('Root child {0}'.format(root_element.tag))
-        if root_element.tag in art_list:
-            art_dic = {key : 0 for key in art_tag_list}
-            for art_child in root_element:
-                if art_child.tag in art_tag_list:
-                    art_dic[art_child.tag] = int(art_child.text)
-                else:
-                    log_error('Inside root tag <{0}>'.format(root_element.tag))
-                    log_error('Unknown tag <{0}>'.format(art_child.tag))
-                    return None
-            layout[root_element.tag] = art_dic
-        elif root_element.tag in text_list:
-            text_dic = {key : 0 for key in test_tag_list}
-            for art_child in root_element:
-                if art_child.tag in test_tag_list:
-                    text_dic[art_child.tag] = int(art_child.text)
-                else:
-                    log_error('Inside root tag <{0}>'.format(root_element.tag))
-                    log_error('Unknown tag <{0}>'.format(art_child.tag))
-                    return None
-            layout[root_element.tag] = text_dic
-        else:
-            log_error('Unknown root tag <{0}>'.format(root_element.tag))
-            return None
-
-    return layout
-
-#
-# Rebuild Fanart for a given MAME machine.
-#
-def mame_build_MAME_Fanart(PATHS, layout, m_name, assets_dic,
-    Fanart_FN, CANVAS_COLOR = (0, 0, 0), test_flag = False):
-    global font_mono
-    global font_mono_debug
-    canvas_size = (1920, 1080)
-    canvas_bg_color = (0, 0, 0)
-    color_white = (255, 255, 255)
-    t_color_fg = (255,255,0)
-    t_color_bg = (102,102,0)
-
-    # Quickly check if machine has valid assets, and skip fanart generation if not.
-    # log_debug('mame_build_fanart() Building fanart for machine {0}'.format(m_name))
-    machine_has_valid_assets = False
-    for asset_key, asset_db_name in MAME_layout_assets.iteritems():
-        m_assets = assets_dic[m_name]
-        if m_assets[asset_db_name]:
-            machine_has_valid_assets = True
-            break
-    if not machine_has_valid_assets: return
-
-    # --- If font object does not exists open font an cache it. ---
-    if not font_mono:
-        log_debug('mame_build_fanart() Creating font_mono object')
-        log_debug('mame_build_fanart() Loading "{0}"'.format(PATHS.MONO_FONT_PATH.getPath()))
-        font_mono = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), layout['MachineName']['fontsize'])
-    if not font_mono_debug:
-        log_debug('mame_build_SL_fanart() Creating font_mono_debug object')
-        log_debug('mame_build_SL_fanart() Loading "{0}"'.format(PATHS.MONO_FONT_PATH.getPath()))
-        font_mono_debug = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), 44)
-
-    # --- Create fanart canvas ---
-    fanart_img = Image.new('RGB', canvas_size, canvas_bg_color)
-    draw = ImageDraw.Draw(fanart_img)
-
-    # --- Draw assets according to layout ---
-    # layout is an ordered dictionary, so the assets are draw in the order they appear
-    # in the XML file.
-    img_index = 1
-    for asset_key in layout:
-        # log_debug('{0:<10} initialising'.format(asset_key))
-        m_assets = assets_dic[m_name]
-        if asset_key == 'MachineName':
-            t_left = layout['MachineName']['left']
-            t_top = layout['MachineName']['top']
-            draw.text((t_left, t_top), m_name, color_white, font_mono)
-        else:
-            asset_db_name = MAME_layout_assets[asset_key]
-            if not m_assets[asset_db_name]:
-                # log_debug('{0:<10} DB empty'.format(asset_db_name))
-                continue
-            Asset_FN = FileName(m_assets[asset_db_name])
-            if not Asset_FN.exists():
-                # log_debug('{0:<10} file not found'.format(asset_db_name))
-                continue
-            # log_debug('{0:<10} found'.format(asset_db_name))
-            # Sometimes PIL_resize_proportional() fails.
-            #   File "~/plugin.program.AML.dev/resources/mame.py", line 3017, in PIL_resize_proportional
-            #   img = img.resize((r_x_size, r_y_size), Image.ANTIALIAS)
-            #   File "/usr/lib/python2.7/dist-packages/PIL/Image.py", line 1804, in resize
-            #   self.load()
-            #   File "/usr/lib/python2.7/dist-packages/PIL/ImageFile.py", line 252, in load
-            #   self.load_end()
-            #   File "/usr/lib/python2.7/dist-packages/PIL/PngImagePlugin.py", line 680, in load_end
-            #   self.png.call(cid, pos, length)
-            #   File "/usr/lib/python2.7/dist-packages/PIL/PngImagePlugin.py", line 140, in call
-            #   return getattr(self, "chunk_" + cid.decode('ascii'))(pos, length)
-            #   AttributeError: 'PngStream' object has no attribute 'chunk_tIME'
-            # If so, report the machine that produces the fail and do not generate the
-            # Fanart.
-            try:
-                img_asset = Image.open(Asset_FN.getPath())
-                img_asset = PIL_resize_proportional(img_asset, layout, asset_key, CANVAS_COLOR)
-            except AttributeError:
-                u = 'mame_build_fanart() Exception AttributeError in m_name {0}, asset_key {1}'.format(m_name, asset_key)
-                log_error(u)
-            else:
-                fanart_img = PIL_paste_image(fanart_img, img_asset, layout, asset_key)
-            # In debug mode print asset name and draw order.
-            if test_flag:
-                t_off = 15
-                bg_off = 2
-                t_bg_coord = (layout[asset_key]['left'] + t_off + bg_off,
-                              layout[asset_key]['top'] + t_off + bg_off)
-                t_coord = (layout[asset_key]['left'] + t_off, layout[asset_key]['top'] + t_off)
-                debug_text = '{0} {1}'.format(img_index, asset_key)
-                # Draw text background first, then front text to create a nice effect.
-                draw.text(t_bg_coord, debug_text, t_color_bg, font_mono_debug)
-                draw.text(t_coord, debug_text, t_color_fg, font_mono_debug)
-            img_index += 1
-
-    # --- Save fanart and update database ---
-    # log_debug('mame_build_fanart() Saving Fanart "{0}"'.format(Fanart_FN.getPath()))
-    fanart_img.save(Fanart_FN.getPath())
-    assets_dic[m_name]['fanart'] = Fanart_FN.getPath()
-
-SL_layout_example = {
-    'Title'    : {'width' : 600, 'height' : 600, 'left' : 690,  'top' : 430},
-    'Snap'     : {'width' : 600, 'height' : 600, 'left' : 1300, 'top' : 430},
-    'BoxFront' : {'width' : 650, 'height' : 980, 'left' : 30,   'top' : 50},
-    'SLName'   : {'left' : 730, 'top' : 90,  'fontsize' : 76},
-    'ItemName' : {'left' : 730, 'top' : 180, 'fontsize' : 76},
-}
-
-SL_layout_assets = {
-    'Title'    : 'title',
-    'Snap'     : 'snap',
-    'BoxFront' : 'boxfront',
-}
-
-#
-# Returns an Ordered dictionary with the layout of the fanart.
-# The Ordered dictionary is to keep the order of the tags in the XML
-#
-def mame_load_SL_Fanart_template(Template_FN):
-    # --- Load XML file ---
-    layout = OrderedDict()
-    if not os.path.isfile(Template_FN.getPath()): return None
-    log_debug('mame_load_SL_Fanart_template() Loading XML "{0}"'.format(Template_FN.getPath()))
-    try:
-        xml_tree = ET.parse(Template_FN.getPath())
-    except IOError as E:
-        return None
-    xml_root = xml_tree.getroot()
-
-    # --- Parse file ---
-    art_list = ['Title', 'Snap', 'BoxFront']
-    art_tag_list = ['width', 'height', 'left', 'top']
-    text_list = ['SLName', 'ItemName']
-    test_tag_list = ['left', 'top', 'fontsize']
-    for root_element in xml_root:
-        # log_debug('Root child {0}'.format(root_element.tag))
-        if root_element.tag in art_list:
-            # Default size tags to 0
-            art_dic = {key : 0 for key in art_tag_list}
-            for art_child in root_element:
-                if art_child.tag in art_tag_list:
-                    art_dic[art_child.tag] = int(art_child.text)
-                else:
-                    log_error('Inside root tag <{0}>'.format(root_element.tag))
-                    log_error('Unknown tag <{0}>'.format(art_child.tag))
-                    return None
-            layout[root_element.tag] = art_dic
-        elif root_element.tag in text_list:
-            text_dic = {key : 0 for key in test_tag_list}
-            for art_child in root_element:
-                if art_child.tag in test_tag_list:
-                    text_dic[art_child.tag] = int(art_child.text)
-                else:
-                    log_error('Inside root tag <{0}>'.format(root_element.tag))
-                    log_error('Unknown tag <{0}>'.format(art_child.tag))
-                    return None
-            layout[root_element.tag] = text_dic
-        else:
-            log_error('Unknown root tag <{0}>'.format(root_element.tag))
-            return None
-
-    return layout
-
-#
-# Rebuild Fanart for a given SL item
-#
-def mame_build_SL_Fanart(PATHS, layout, SL_name, m_name, assets_dic,
-    Fanart_FN, CANVAS_COLOR = (0, 0, 0), test_flag = False):
-    global font_mono_SL
-    global font_mono_item
-    global font_mono_debug
-    canvas_size = (1920, 1080)
-    canvas_bg_color = (0, 0, 0)
-    color_white = (255, 255, 255)
-    t_color_fg = (255,255,0)
-    t_color_bg = (102,102,0)
-
-    # Quickly check if machine has valid assets, and skip fanart generation if not.
-    # log_debug('mame_build_SL_fanart() Building fanart for SL {0} item {1}'.format(SL_name, m_name))
-    machine_has_valid_assets = False
-    for asset_key, asset_db_name in SL_layout_assets.iteritems():
-        m_assets = assets_dic[m_name]
-        if m_assets[asset_db_name]:
-            machine_has_valid_assets = True
-            break
-    if not machine_has_valid_assets: return
-
-    # If font object does not exists open font an cache it.
-    if not font_mono_SL:
-        log_debug('mame_build_SL_fanart() Creating font_mono_SL object')
-        log_debug('mame_build_SL_fanart() Loading "{0}"'.format(PATHS.MONO_FONT_PATH.getPath()))
-        font_mono_SL = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), layout['SLName']['fontsize'])
-    if not font_mono_item:
-        log_debug('mame_build_SL_fanart() Creating font_mono_item object')
-        log_debug('mame_build_SL_fanart() Loading "{0}"'.format(PATHS.MONO_FONT_PATH.getPath()))
-        font_mono_item = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), layout['ItemName']['fontsize'])
-    if not font_mono_debug:
-        log_debug('mame_build_SL_fanart() Creating font_mono_debug object')
-        log_debug('mame_build_SL_fanart() Loading "{0}"'.format(PATHS.MONO_FONT_PATH.getPath()))
-        font_mono_debug = ImageFont.truetype(PATHS.MONO_FONT_PATH.getPath(), 44)
-
-    # --- Create fanart canvas ---
-    fanart_img = Image.new('RGB', canvas_size, canvas_bg_color)
-    draw = ImageDraw.Draw(fanart_img)
-
-    # --- Draw assets according to layout ---
-    # layout is an ordered dictionary, so the assets are draw in the order they appear
-    # in the XML file.
-    img_index = 1
-    for asset_key in layout:
-        # log_debug('{0:<10} initialising'.format(asset_key))
-        m_assets = assets_dic[m_name]
-        if asset_key == 'SLName' or asset_key == 'ItemName':
-            t_left = layout[asset_key]['left']
-            t_top = layout[asset_key]['top']
-            if asset_key == 'SLName': name = SL_name
-            elif asset_key == 'ItemName': name = m_name
-            else: raise TypeError
-            draw.text((t_left, t_top), name, color_white, font_mono_SL)
-        else:
-            asset_db_name = SL_layout_assets[asset_key]
-            if not m_assets[asset_db_name]:
-                # log_debug('{0:<10} DB empty'.format(asset_db_name))
-                continue
-            Asset_FN = FileName(m_assets[asset_db_name])
-            if not Asset_FN.exists():
-                # log_debug('{0:<10} file not found'.format(asset_db_name))
-                continue
-            # log_debug('{0:<10} found'.format(asset_db_name))
-            img_asset = Image.open(Asset_FN.getPath())
-            img_asset = PIL_resize_proportional(img_asset, layout, asset_key, CANVAS_COLOR)
-            fanart_img = PIL_paste_image(fanart_img, img_asset, layout, asset_key)
-            # In debug mode print asset name and draw order.
-            if test_flag:
-                t_off = 15
-                bg_off = 2
-                t_bg_coord = (layout[asset_key]['left'] + t_off + bg_off,
-                              layout[asset_key]['top'] + t_off + bg_off)
-                t_coord = (layout[asset_key]['left'] + t_off, layout[asset_key]['top'] + t_off)
-                debug_text = '{0} {1}'.format(img_index, asset_key)
-                # Draw text background first, then front text to create a nice effect.
-                draw.text(t_bg_coord, debug_text, t_color_bg, font_mono_debug)
-                draw.text(t_coord, debug_text, t_color_fg, font_mono_debug)
-            img_index += 1
-    # --- Save fanart and update database ---
-    # log_debug('mame_build_SL_fanart() Saving Fanart "{0}"'.format(Fanart_FN.getPath()))
-    fanart_img.save(Fanart_FN.getPath())
-    assets_dic[m_name]['fanart'] = Fanart_FN.getPath()
-
 #
 # 1) Scan MAME hash dir for XML files.
 # 2) For each XML file, read the first XML_READ_LINES lines.
@@ -3566,9 +3530,6 @@ def mame_build_SL_names(PATHS, settings):
     log_debug('mame_build_SL_names() Extracted {0} Software List names'.format(len(SL_names_dic)))
     fs_write_JSON_file(PATHS.SL_NAMES_PATH.getPath(), SL_names_dic)
 
-# -------------------------------------------------------------------------------------------------
-# MAME database building
-# -------------------------------------------------------------------------------------------------
 #
 # Checks for errors before scanning for SL ROMs.
 # Display a Kodi dialog if an error is found.
@@ -3610,11 +3571,97 @@ def mame_check_before_build_MAME_main_database(PATHS, settings, control_dic):
 #   MAIN_CONTROL_PATH    (updated and then JSON file saved)
 #   ROM_SHA1_HASH_DB_PATH
 #
-STOP_AFTER_MACHINES = 100000
+def _get_stats_dic():
+    return {
+        'parents' : 0,
+        'clones' : 0,
+        'devices' : 0,
+        'devices_parents' : 0,
+        'devices_clones' : 0,
+        'runnable' : 0,
+        'runnable_parents' : 0,
+        'runnable_clones' : 0,
+        'samples' : 0,
+        'samples_parents' : 0,
+        'samples_clones' : 0,
+        'BIOS' : 0,
+        'BIOS_parents' : 0,
+        'BIOS_clones' : 0,
+        'coin' : 0,
+        'coin_parents' : 0,
+        'coin_clones' : 0,
+        'nocoin' : 0,
+        'nocoin_parents' : 0,
+        'nocoin_clones' : 0,
+        'mechanical' : 0,
+        'mechanical_parents' : 0,
+        'mechanical_clones' : 0,
+        'dead' : 0,
+        'dead_parents' : 0,
+        'dead_clones' : 0,
+    }
+
+def _update_stats(stats, machine, m_render, runnable):
+    if m_render['cloneof']: stats['clones'] += 1
+    else:                   stats['parents'] += 1
+    if m_render['isDevice']:
+        stats['devices'] += 1
+        if m_render['cloneof']:
+            stats['devices_clones'] += 1
+        else:
+            stats['devices_parents'] += 1
+    if runnable:
+        stats['runnable'] += 1
+        if m_render['cloneof']:
+            stats['runnable_clones'] += 1
+        else:
+            stats['runnable_parents'] += 1
+    if machine['sampleof']:
+        stats['samples'] += 1
+        if m_render['cloneof']:
+            stats['samples_clones'] += 1
+        else:
+            stats['samples_parents'] += 1
+    if m_render['isBIOS']:
+        stats['BIOS'] += 1
+        if m_render['cloneof']:
+            stats['BIOS_clones'] += 1
+        else:
+            stats['BIOS_parents'] += 1
+
+    if runnable:
+        if machine['input']['att_coins'] > 0:
+            stats['coin'] += 1
+            if m_render['cloneof']:
+                stats['coin_clones'] += 1
+            else:
+                stats['coin_parents'] += 1
+        else:
+            stats['nocoin'] += 1
+            if m_render['cloneof']:
+                stats['nocoin_clones'] += 1
+            else:
+                stats['nocoin_parents'] += 1
+        if machine['isMechanical']:
+            stats['mechanical'] += 1
+            if m_render['cloneof']:
+                stats['mechanical_clones'] += 1
+            else:
+                stats['mechanical_parents'] += 1
+        if machine['isDead']:
+            stats['dead'] += 1
+            if m_render['cloneof']: 
+                stats['dead_clones'] += 1
+            else:
+                stats['dead_parents'] += 1
+
+STOP_AFTER_MACHINES = 250000
 
 def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str):
     DATS_dir_FN = FileName(settings['dats_path'])
+    ARTWORK_FN = DATS_dir_FN.pjoin(ARTWORK_INI)
     BESTGAMES_FN = DATS_dir_FN.pjoin(BESTGAMES_INI)
+    CATEGORY_FN = DATS_dir_FN.pjoin(CATEGORY_INI)
     CATLIST_FN = DATS_dir_FN.pjoin(CATLIST_INI)
     CATVER_FN = DATS_dir_FN.pjoin(CATVER_INI)
     GENRE_FN = DATS_dir_FN.pjoin(GENRE_INI)
@@ -3630,16 +3677,18 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     log_info('mame_build_MAME_main_database() Starting ...')
     log_info('--- Paths ---')
     log_info('mame_prog      = "{0}"'.format(settings['mame_prog']))
-    log_info('rom_path       = "{0}"'.format(settings['rom_path']))
+    log_info('ROM_path       = "{0}"'.format(settings['rom_path']))
     log_info('assets_path    = "{0}"'.format(settings['assets_path']))
-    log_info('dats_path      = "{0}"'.format(settings['dats_path']))
-    log_info('chd_path       = "{0}"'.format(settings['chd_path']))
+    log_info('DATs_path      = "{0}"'.format(settings['dats_path']))
+    log_info('CHD_path       = "{0}"'.format(settings['chd_path']))
     log_info('samples_path   = "{0}"'.format(settings['samples_path']))
     log_info('SL_hash_path   = "{0}"'.format(settings['SL_hash_path']))
     log_info('SL_rom_path    = "{0}"'.format(settings['SL_rom_path']))
     log_info('SL_chd_path    = "{0}"'.format(settings['SL_chd_path']))
-    log_info('--- INI paths ---')   
+    log_info('--- INI paths ---')
+    log_info('artwork_path   = "{0}"'.format(ARTWORK_FN.getPath()))
     log_info('bestgames_path = "{0}"'.format(BESTGAMES_FN.getPath()))
+    log_info('category_path  = "{0}"'.format(CATEGORY_FN.getPath()))
     log_info('catlist_path   = "{0}"'.format(CATLIST_FN.getPath()))
     log_info('catver_path    = "{0}"'.format(CATVER_FN.getPath()))
     log_info('genre_path     = "{0}"'.format(GENRE_FN.getPath()))
@@ -3651,26 +3700,6 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     log_info('gameinit_path  = "{0}"'.format(GAMEINIT_FN.getPath()))
     log_info('history_path   = "{0}"'.format(HISTORY_FN.getPath()))
     log_info('mameinfo_path  = "{0}"'.format(MAMEINFO_FN.getPath()))
-
-    # >> If the user did not extract MAME.xml (maybe he decided to use a custom one) then
-    # >> fields ver_AML, ver_AML_str, stats_total_machines and t_XML_extraction must be
-    # >> updated in the control_dic. Check fs_extract_MAME_XML()
-    if control_dic['stats_total_machines'] < 1:
-        log_info('control_dic does not have a machine count. Updating it ...')
-        # --- Count MAME machines ---
-        log_info('mame_build_MAME_main_database() Counting number of machines ...')
-        stats_total_machines = fs_count_MAME_Machines(PATHS)
-        log_info('mame_build_MAME_main_database() Found {0} machines.'.format(stats_total_machines))
-        # --- Bring control_dic up to date ---
-        AML_version_int = fs_AML_version_str_to_int(AML_version_str)
-        log_info('mame_build_MAME_main_database() AML version str "{0}"'.format(AML_version_str))
-        log_info('mame_build_MAME_main_database() AML version int {0}'.format(AML_version_int))
-        change_control_dic(control_dic, 'ver_AML', AML_version_int)
-        change_control_dic(control_dic, 'ver_AML_str', AML_version_str)
-        change_control_dic(control_dic, 'stats_total_machines', stats_total_machines)
-        change_control_dic(control_dic, 't_XML_extraction', time.time())
-    else:
-        log_info('control_dic has stats_total_machines. User used fs_extract_MAME_XML()')
 
     # --- Progress dialog ---
     pDialog_canceled = False
@@ -3685,23 +3714,27 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
 
     # --- Load INI files to include category information ---
     pdialog_line1 = 'Processing INI files ...'
-    num_items = 7
+    num_items = 9
     pDialog.create('Advanced MAME Launcher', pdialog_line1)
-    pDialog.update(int((0*100) / num_items), pdialog_line1, BESTGAMES_INI)
-    (bestgames_dic, bestgames_version) = mame_load_INI_datfile(BESTGAMES_FN.getPath())
-    pDialog.update(int((1*100) / num_items), pdialog_line1, CATLIST_INI)
-    (catlist_dic, catlist_version) = mame_load_INI_datfile(CATLIST_FN.getPath())
-    pDialog.update(int((2*100) / num_items), pdialog_line1, CATVER_INI)
-    (categories_dic, catver_version) = mame_load_Catver_ini(CATVER_FN.getPath())
-    pDialog.update(int((3*100) / num_items), pdialog_line1, GENRE_INI)
-    (genre_dic, genre_version) = mame_load_INI_datfile(GENRE_FN.getPath())
-    pDialog.update(int((4*100) / num_items), pdialog_line1, MATURE_INI)
-    (mature_set, mature_version) = mame_load_Mature_ini(MATURE_FN.getPath())
-    pDialog.update(int((5*100) / num_items), pdialog_line1, NPLAYERS_INI)
-    (nplayers_dic, nplayers_version) = mame_load_nplayers_ini(NPLAYERS_FN.getPath())
-    pDialog.update(int((6*100) / num_items), pdialog_line1, SERIES_INI)
-    (series_dic, series_version) = mame_load_INI_datfile(SERIES_FN.getPath())
-    pDialog.update(int((7*100) / num_items), ' ', ' ')
+    pDialog.update(int((0*100) / num_items), pdialog_line1, ARTWORK_INI)
+    artwork_dic = mame_load_INI_datfile_simple(ARTWORK_FN.getPath())
+    pDialog.update(int((1*100) / num_items), pdialog_line1, BESTGAMES_INI)
+    bestgames_dic = mame_load_INI_datfile_simple(BESTGAMES_FN.getPath())
+    pDialog.update(int((2*100) / num_items), pdialog_line1, CATEGORY_INI)
+    category_dic = mame_load_INI_datfile_simple(CATEGORY_FN.getPath())
+    pDialog.update(int((3*100) / num_items), pdialog_line1, CATLIST_INI)
+    catlist_dic = mame_load_INI_datfile_simple(CATLIST_FN.getPath())
+    pDialog.update(int((4*100) / num_items), pdialog_line1, CATVER_INI)
+    (catver_dic, veradded_dic) = mame_load_Catver_ini(CATVER_FN.getPath())
+    pDialog.update(int((5*100) / num_items), pdialog_line1, GENRE_INI)
+    genre_dic = mame_load_INI_datfile_simple(GENRE_FN.getPath())
+    pDialog.update(int((6*100) / num_items), pdialog_line1, MATURE_INI)
+    mature_dic = mame_load_Mature_ini(MATURE_FN.getPath())
+    pDialog.update(int((7*100) / num_items), pdialog_line1, NPLAYERS_INI)
+    nplayers_dic = mame_load_nplayers_ini(NPLAYERS_FN.getPath())
+    pDialog.update(int((8*100) / num_items), pdialog_line1, SERIES_INI)
+    series_dic = mame_load_INI_datfile_simple(SERIES_FN.getPath())
+    pDialog.update(int((9*100) / num_items), ' ', ' ')
     pDialog.close()
 
     # --- Load DAT files to include category information ---
@@ -3719,6 +3752,20 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     pDialog.update(int((4*100) / num_items), ' ', ' ')
     pDialog.close()
 
+    # --- Verify that INIs comply with the data model ---
+    # In MAME 0.209 only artwork, category and series are lists. Other INIs define
+    # machine-unique categories (each machine belongs to one category only).
+    log_info('artwork_dic   unique_categories {0}'.format(artwork_dic['unique_categories']))
+    log_info('bestgames_dic unique_categories {0}'.format(bestgames_dic['unique_categories']))
+    log_info('category_dic  unique_categories {0}'.format(category_dic['unique_categories']))
+    log_info('catlist_dic   unique_categories {0}'.format(catlist_dic['unique_categories']))
+    log_info('catver_dic    unique_categories {0}'.format(catver_dic['unique_categories']))
+    log_info('genre_dic     unique_categories {0}'.format(genre_dic['unique_categories']))
+    log_info('mature_dic    unique_categories {0}'.format(mature_dic['unique_categories']))
+    log_info('nplayers_dic  unique_categories {0}'.format(nplayers_dic['unique_categories']))
+    log_info('series_dic    unique_categories {0}'.format(series_dic['unique_categories']))
+    log_info('veradded_dic  unique_categories {0}'.format(veradded_dic['unique_categories']))
+
     # ---------------------------------------------------------------------------------------------
     # Incremental Parsing approach B (from [1])
     # ---------------------------------------------------------------------------------------------
@@ -3726,53 +3773,36 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     # grab only the information we want and discard the rest.
     # See http://effbot.org/zone/element-iterparse.htm [1]
     #
+    if settings['op_mode'] == OP_MODE_EXTERNAL:
+        MAME_XML_path = PATHS.MAME_XML_PATH
+    elif settings['op_mode'] == OP_MODE_RETRO_MAME2003PLUS:
+        MAME_XML_path = FileName(settings['xml_2003_path'])
+    else:
+        raise ValueError
     pDialog.create('Advanced MAME Launcher')
     pDialog.update(0, 'Building main MAME database ...')
-    log_info('mame_build_MAME_main_database() Loading "{0}"'.format(PATHS.MAME_XML_PATH.getPath()))
-    context = ET.iterparse(PATHS.MAME_XML_PATH.getPath(), events=("start", "end"))
+    log_info('Loading XML "{0}"'.format(MAME_XML_path.getPath()))
+    context = ET.iterparse(MAME_XML_path.getPath(), events=("start", "end"))
     context = iter(context)
     event, root = context.next()
-    mame_version_raw = root.attrib['build']
-    mame_version_int = mame_get_numerical_version(mame_version_raw)
+    if settings['op_mode'] == OP_MODE_EXTERNAL:
+        mame_version_raw = root.attrib['build']
+        mame_version_int = mame_get_numerical_version(mame_version_raw)
+    elif settings['op_mode'] == OP_MODE_RETRO_MAME2003PLUS:
+        mame_version_raw = '0.78 (RA2003Plus)'
+        mame_version_int = mame_get_numerical_version(mame_version_raw)
+    else:
+        raise ValueError
     log_info('mame_build_MAME_main_database() MAME str version "{0}"'.format(mame_version_raw))
     log_info('mame_build_MAME_main_database() MAME numerical version {0}'.format(mame_version_int))
 
     # --- Process MAME XML ---
     total_machines = control_dic['stats_total_machines']
+    processed_machines = 0
+    stats = _get_stats_dic()
     log_info('mame_build_MAME_main_database() total_machines {0}'.format(total_machines))
-    machines = {}
-    machines_render = {}
-    machines_roms = {}
-    machines_devices = {}
+    machines, machines_render, machines_roms, machines_devices = {}, {}, {}, {}
     roms_sha1_dic = {}
-    stats_processed_machines = 0
-    stats_parents            = 0
-    stats_clones             = 0
-    stats_devices            = 0
-    stats_devices_parents    = 0
-    stats_devices_clones     = 0
-    stats_runnable           = 0
-    stats_runnable_parents   = 0
-    stats_runnable_clones    = 0
-    stats_samples            = 0
-    stats_samples_parents    = 0
-    stats_samples_clones     = 0
-    stats_BIOS               = 0
-    stats_BIOS_parents       = 0
-    stats_BIOS_clones        = 0
-    stats_coin               = 0
-    stats_coin_parents       = 0
-    stats_coin_clones        = 0
-    stats_nocoin             = 0
-    stats_nocoin_parents     = 0
-    stats_nocoin_clones      = 0
-    stats_mechanical         = 0
-    stats_mechanical_parents = 0
-    stats_mechanical_clones  = 0
-    stats_dead               = 0
-    stats_dead_parents       = 0
-    stats_dead_clones        = 0
-
     log_info('mame_build_MAME_main_database() Parsing MAME XML file ...')
     num_iteration = 0
     for event, elem in context:
@@ -3782,7 +3812,8 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
         # log_debug('                   Elem.attrib "{0}"'.format(elem.attrib))
 
         # <machine> tag start event includes <machine> attributes
-        if event == 'start' and elem.tag == 'machine':
+        if (event == 'start' and elem.tag == 'machine') or (event == 'start' and elem.tag == 'game'):
+            processed_machines += 1
             machine  = fs_new_machine_dic()
             m_render = fs_new_machine_render_dic()
             m_roms   = fs_new_roms_object()
@@ -3794,26 +3825,22 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
             # name is #REQUIRED attribute
             if 'name' not in elem.attrib:
                 log_error('name attribute not found in <machine> tag.')
-                raise CriticalError('name attribute not found in <machine> tag')
+                raise ValueError('name attribute not found in <machine> tag')
+            m_name = elem.attrib['name']
+
+            # In modern MAME sourcefile attribute is always present
+            if settings['op_mode'] == OP_MODE_EXTERNAL:
+                # sourcefile #IMPLIED attribute
+                if 'sourcefile' not in elem.attrib:
+                    log_error('sourcefile attribute not found in <machine> tag.')
+                    raise ValueError('sourcefile attribute not found in <machine> tag.')
+                # Remove trailing '.cpp' from driver name
+                machine['sourcefile'] = elem.attrib['sourcefile']
+            # In MAME 2003 Plus sourcefile does not exists.
+            elif settings['op_mode'] == OP_MODE_RETRO_MAME2003PLUS:
+                machine['sourcefile'] = ''
             else:
-                m_name = elem.attrib['name']
-
-            # sourcefile #IMPLIED attribute
-            if 'sourcefile' not in elem.attrib:
-                log_error('sourcefile attribute not found in <machine> tag.')
-                raise CriticalError('sourcefile attribute not found in <machine> tag.')
-            else:
-                # >> Remove trailing '.cpp' from driver name
-                raw_driver_name = elem.attrib['sourcefile']
-
-                # >> In MAME 0.174 some driver end with .cpp and others with .hxx
-                # if raw_driver_name[-4:] == '.cpp':
-                #     driver_name = raw_driver_name[0:-4]
-                # else:
-                #     log_debug('Unrecognised driver name "{0}"'.format(raw_driver_name))
-
-                # >> Assign driver name
-                machine['sourcefile'] = raw_driver_name
+                raise ValueError
 
             # Optional, default no
             if 'isbios' not in elem.attrib:
@@ -3843,22 +3870,17 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
             # sampleof is #IMPLIED attribute
             if 'sampleof' in elem.attrib: machine['sampleof'] = elem.attrib['sampleof']
 
-            # >> Add catver/catlist/genre
-            if m_name in categories_dic: machine['catver']    = categories_dic[m_name]
-            else:                        machine['catver']    = '[ Not set ]'
-            if m_name in catlist_dic:    machine['catlist']   = catlist_dic[m_name]
-            else:                        machine['catlist']   = '[ Not set ]'
-            if m_name in genre_dic:      machine['genre']     = genre_dic[m_name]
-            else:                        machine['genre']     = '[ Not set ]'
-            if m_name in bestgames_dic:  machine['bestgames'] = bestgames_dic[m_name]
-            else:                        machine['bestgames'] = '[ Not set ]'
-            if m_name in series_dic:     machine['series']    = series_dic[m_name]
-            else:                        machine['series']    = '[ Not set ]'
-            if m_name in nplayers_dic:   m_render['nplayers'] = nplayers_dic[m_name]
-            else:                        m_render['nplayers'] = '[ Not set ]'
-
-            # >> Increment number of machines
-            stats_processed_machines += 1
+            # --- Add catver/catlist/genre ---
+            machine['artwork'] = artwork_dic['data'][m_name] if m_name in artwork_dic['data'] else [ '[ Not set ]' ]
+            machine['bestgames'] = bestgames_dic['data'][m_name] if m_name in bestgames_dic['data'] else '[ Not set ]'
+            machine['category'] = category_dic['data'][m_name] if m_name in category_dic['data'] else [ '[ Not set ]' ]
+            machine['catlist'] = catlist_dic['data'][m_name] if m_name in catlist_dic['data'] else '[ Not set ]'
+            machine['catver'] = catver_dic['data'][m_name] if m_name in catver_dic['data'] else '[ Not set ]'
+            machine['genre'] = genre_dic['data'][m_name] if m_name in genre_dic['data'] else '[ Not set ]'
+            machine['series'] = series_dic['data'][m_name] if m_name in series_dic['data'] else [ '[ Not set ]' ]
+            machine['veradded'] = veradded_dic['data'][m_name] if m_name in veradded_dic['data'] else '[ Not set ]'
+            # Careful, nplayers goes into render database.
+            m_render['nplayers'] = nplayers_dic['data'][m_name] if m_name in nplayers_dic['data'] else '[ Not set ]'
 
         elif event == 'start' and elem.tag == 'description':
             m_render['description'] = unicode(elem.text)
@@ -3940,13 +3962,24 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
             sample = { 'name' : unicode(elem.attrib['name']) }
             m_roms['samples'].append(sample)
 
+        # >> Chips define CPU and audio circuits.
+        elif event == 'start' and elem.tag == 'chip':
+            if elem.attrib['type'] == 'cpu':
+                machine['chip_cpu_name'].append(elem.attrib['name'])
+
         # Some machines have more than one display tag (for example aquastge has 2).
         # Other machines have no display tag (18w)
         elif event == 'start' and elem.tag == 'display':
             rotate_str = elem.attrib['rotate'] if 'rotate' in elem.attrib else '0'
+            width_str = elem.attrib['width'] if 'width' in elem.attrib else 'Undefined'
+            height_str = elem.attrib['height'] if 'height' in elem.attrib else 'Undefined'
+            # All attribute lists have same length, event if data is empty.
             # machine['display_tag'].append(elem.attrib['tag'])
             machine['display_type'].append(elem.attrib['type'])
             machine['display_rotate'].append(rotate_str)
+            machine['display_width'].append(width_str)
+            machine['display_height'].append(height_str)
+            machine['display_refresh'].append(elem.attrib['refresh'])
             num_displays += 1
 
         # Some machines have no controls at all.
@@ -3968,7 +4001,8 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
         #     ]
         # }
         elif event == 'start' and elem.tag == 'input':
-            # --- New 'input' field in 0.9.6 ---
+            # In the archaic MAMEs used by Retroarch the control structure is totally different
+            # and this code must be adapted.
             # --- <input> attributes ---
             att_players = int(elem.attrib['players']) if 'players' in elem.attrib else 0
             att_coins = int(elem.attrib['coins']) if 'coins' in elem.attrib else 0
@@ -3981,9 +4015,8 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
             control_list = []
             for control_child in elem:
                 attrib = control_child.attrib
-                # >> Skip non <control> tags
+                # >> Skip non <control> tags. Process <control> tags only.
                 if control_child.tag != 'control': continue
-                # >> Process <control> tags
                 t_ctrl_dic = {}
                 if 'type' in attrib:
                     t_ctrl_dic['type'] = attrib['type']
@@ -3998,7 +4031,7 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
                 if 'ways3' in attrib: ways_list.append(attrib['ways3'])
                 t_ctrl_dic['ways'] = ways_list
                 control_list.append(t_ctrl_dic)
-            # >> Fix player field when implied
+            # Fix player field when implied
             if att_players == 1:
                 for control in control_list:
                     control['player'] = 1
@@ -4064,22 +4097,29 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
             machine['devices'].append(device_dic)
 
         # --- <machine> tag closing. Add new machine to database ---
-        elif event == 'end' and elem.tag == 'machine':
-            # >> Assumption 1: isdevice = True if and only if runnable = False
-            if m_render['isDevice'] == runnable:
-                log_error("Machine {0}: machine['isDevice'] == runnable".format(m_name))
-                raise GeneralError
+        elif (event == 'end' and elem.tag == 'machine') or (event == 'end' and elem.tag == 'game'):
+            # Checks in modern MAME
+            if settings['op_mode'] == OP_MODE_EXTERNAL:
+                # Assumption 1: isdevice = True if and only if runnable = False
+                if m_render['isDevice'] == runnable:
+                    log_error("Machine {0}: machine['isDevice'] == runnable".format(m_name))
+                    raise ValueError
 
-            # >> Are there machines with more than 1 <display> tag. Answer: YES
-            # if num_displays > 1:
-            #     log_error("Machine {0}: num_displays = {1}".format(m_name, num_displays))
-            #     raise GeneralError
+                # Are there machines with more than 1 <display> tag. Answer: YES
+                # if num_displays > 1:
+                #     log_error("Machine {0}: num_displays = {1}".format(m_name, num_displays))
+                #     raise ValueError
 
-            # >> All machines with 0 displays are mechanical? NO, 24cdjuke has no screen and
-            # is not mechanical. However 24cdjuke is a preliminary driver.
-            # if num_displays == 0 and not machine['ismechanical']:
-            #     log_error("Machine {0}: num_displays == 0 and not machine['ismechanical']".format(m_name))
-            #     raise GeneralError
+                # All machines with 0 displays are mechanical? NO, 24cdjuke has no screen and
+                # is not mechanical. However 24cdjuke is a preliminary driver.
+                # if num_displays == 0 and not machine['ismechanical']:
+                #     log_error("Machine {0}: num_displays == 0 and not machine['ismechanical']".format(m_name))
+                #     raise ValueError
+            # Checks in Retroarch MAME 2003 Plus
+            elif settings['op_mode'] == OP_MODE_RETRO_MAME2003PLUS:
+                pass
+            else:
+                raise ValueError
 
             # >> Mark dead machines. A machine is dead if Status is preliminary AND have no controls.
             if m_render['driver_status'] == 'preliminary' and not machine['input']['control_list']:
@@ -4089,41 +4129,7 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
             elem.clear()
 
             # --- Compute statistics ---
-            if m_render['cloneof']: stats_clones += 1
-            else:                   stats_parents += 1
-            if m_render['isDevice']:
-                stats_devices += 1
-                if m_render['cloneof']: stats_devices_clones += 1
-                else:                   stats_devices_parents += 1
-            if runnable:
-                stats_runnable += 1
-                if m_render['cloneof']: stats_runnable_clones += 1
-                else:                   stats_runnable_parents += 1
-            if machine['sampleof']:
-                stats_samples += 1
-                if m_render['cloneof']: stats_samples_clones += 1
-                else:                   stats_samples_parents += 1
-            if m_render['isBIOS']:
-                stats_BIOS += 1
-                if m_render['cloneof']: stats_BIOS_clones += 1
-                else:                   stats_BIOS_parents += 1
-            if runnable:
-                if machine['input']['att_coins'] > 0:
-                    stats_coin += 1
-                    if m_render['cloneof']: stats_coin_clones += 1
-                    else:                   stats_coin_parents += 1
-                else:
-                    stats_nocoin += 1
-                    if m_render['cloneof']: stats_nocoin_clones += 1
-                    else:                   stats_nocoin_parents += 1
-                if machine['isMechanical']:
-                    stats_mechanical += 1
-                    if m_render['cloneof']: stats_mechanical_clones += 1
-                    else:                   stats_mechanical_parents += 1
-                if machine['isDead']:
-                    stats_dead += 1
-                    if m_render['cloneof']: stats_dead_clones += 1
-                    else:                   stats_dead_parents += 1
+            _update_stats(stats, machine, m_render, runnable)
 
             # >> Add new machine
             machines[m_name] = machine
@@ -4134,22 +4140,22 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
         # --- Print something to prove we are doing stuff ---
         num_iteration += 1
         if num_iteration % 1000 == 0:
-            pDialog.update((stats_processed_machines * 100) // total_machines)
+            pDialog.update((processed_machines * 100) // total_machines)
             # log_debug('Processed {0:10d} events ({1:6d} machines so far) ...'.format(
-            #     num_iteration, stats_processed_machines))
-            # log_debug('stats_processed_machines   = {0}'.format(stats_processed_machines))
+            #     num_iteration, processed_machines))
+            # log_debug('processed_machines   = {0}'.format(processed_machines))
             # log_debug('total_machines = {0}'.format(total_machines))
             # log_debug('Update number  = {0}'.format(update_number))
 
         # --- Stop after STOP_AFTER_MACHINES machines have been processed for debug ---
-        if stats_processed_machines >= STOP_AFTER_MACHINES: break
+        if processed_machines >= STOP_AFTER_MACHINES: break
     pDialog.update(100)
     pDialog.close()
     log_info('Processed {0:,} MAME XML events'.format(num_iteration))
     log_info('Processed machines {0:,} ({1:,} parents, {2:,} clones)'.format(
-        stats_processed_machines, stats_parents, stats_clones))
+        processed_machines, stats['parents'], stats['clones']))
     log_info('Dead machines      {0:,} ({1:,} parents, {2:,} clones)'.format(
-        stats_dead, stats_dead_parents, stats_dead_clones))
+        stats['dead'], stats['dead_parents'], stats['dead_clones']))
 
     # ---------------------------------------------------------------------------------------------
     # Main parent-clone list
@@ -4185,10 +4191,10 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     # ---------------------------------------------------------------------------------------------
     # Improve information fields in Main Render database
     # ---------------------------------------------------------------------------------------------
-    if mature_set:
+    if mature_dic:
         log_info('MAME machine Mature information available.')
         for machine_name in machines_render:
-            machines_render[machine_name]['isMature'] = True if machine_name in mature_set else False
+            machines_render[machine_name]['isMature'] = True if machine_name in mature_dic['data'] else False
     else:
         log_info('MAME machine Mature flag not available.')
 
@@ -4252,53 +4258,55 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     # ---------------------------------------------------------------------------------------------
     # Update MAME control dictionary
     # ---------------------------------------------------------------------------------------------
-    # >> Versions
+    # Version strings
     change_control_dic(control_dic, 'ver_mame', mame_version_int)
     change_control_dic(control_dic, 'ver_mame_str', mame_version_raw)
-    change_control_dic(control_dic, 'ver_bestgames', bestgames_version)
-    change_control_dic(control_dic, 'ver_catlist', catlist_version)
-    change_control_dic(control_dic, 'ver_catver', catver_version)
+    # INI files
+    change_control_dic(control_dic, 'ver_artwork', artwork_dic['version'])
+    change_control_dic(control_dic, 'ver_bestgames', bestgames_dic['version'])
+    change_control_dic(control_dic, 'ver_category', category_dic['version'])
+    change_control_dic(control_dic, 'ver_catlist', catlist_dic['version'])
+    change_control_dic(control_dic, 'ver_catver', catver_dic['version'])
+    change_control_dic(control_dic, 'ver_genre', genre_dic['version'])
+    change_control_dic(control_dic, 'ver_mature', mature_dic['version'])
+    change_control_dic(control_dic, 'ver_nplayers', nplayers_dic['version'])
+    change_control_dic(control_dic, 'ver_series', series_dic['version'])
+    # DAT files
     change_control_dic(control_dic, 'ver_command', command_version)
     change_control_dic(control_dic, 'ver_gameinit', gameinit_version)
-    change_control_dic(control_dic, 'ver_genre', genre_version)
     change_control_dic(control_dic, 'ver_history', history_version)
     change_control_dic(control_dic, 'ver_mameinfo', mameinfo_version)
-    change_control_dic(control_dic, 'ver_mature', mature_version)
-    change_control_dic(control_dic, 'ver_nplayers', nplayers_version)
-    change_control_dic(control_dic, 'ver_series', series_version)
 
-    # >> Statistics
-    change_control_dic(control_dic, 'stats_processed_machines', stats_processed_machines)
-    change_control_dic(control_dic, 'stats_parents', stats_parents)
-    change_control_dic(control_dic, 'stats_clones', stats_clones)
-    change_control_dic(control_dic, 'stats_runnable', stats_runnable)
-    change_control_dic(control_dic, 'stats_runnable_parents', stats_runnable_parents)
-    change_control_dic(control_dic, 'stats_runnable_clones', stats_runnable_clones)
-
-    # >> Main filters
-    change_control_dic(control_dic, 'stats_coin', stats_coin)
-    change_control_dic(control_dic, 'stats_coin_parents', stats_coin_parents)
-    change_control_dic(control_dic, 'stats_coin_clones', stats_coin_clones)
-    change_control_dic(control_dic, 'stats_nocoin', stats_nocoin)
-    change_control_dic(control_dic, 'stats_nocoin_parents', stats_nocoin_parents)
-    change_control_dic(control_dic, 'stats_nocoin_clones', stats_nocoin_clones)
-    change_control_dic(control_dic, 'stats_mechanical', stats_mechanical)
-    change_control_dic(control_dic, 'stats_mechanical_parents', stats_mechanical_parents)
-    change_control_dic(control_dic, 'stats_mechanical_clones', stats_mechanical_clones)
-    change_control_dic(control_dic, 'stats_dead', stats_dead)
-    change_control_dic(control_dic, 'stats_dead_parents', stats_dead_parents)
-    change_control_dic(control_dic, 'stats_dead_clones', stats_dead_clones)
-    change_control_dic(control_dic, 'stats_devices', stats_devices)
-    change_control_dic(control_dic, 'stats_devices_parents', stats_devices_parents)
-    change_control_dic(control_dic, 'stats_devices_clones', stats_devices_clones)
-
-    # >> Binary filters
-    change_control_dic(control_dic, 'stats_BIOS', stats_BIOS)
-    change_control_dic(control_dic, 'stats_BIOS_parents', stats_BIOS_parents)
-    change_control_dic(control_dic, 'stats_BIOS_clones', stats_BIOS_clones)
-    change_control_dic(control_dic, 'stats_samples', stats_samples)
-    change_control_dic(control_dic, 'stats_samples_parents', stats_samples_parents)
-    change_control_dic(control_dic, 'stats_samples_clones', stats_samples_clones)
+    # Statistics
+    change_control_dic(control_dic, 'stats_processed_machines', processed_machines)
+    change_control_dic(control_dic, 'stats_parents', stats['parents'])
+    change_control_dic(control_dic, 'stats_clones', stats['clones'])
+    change_control_dic(control_dic, 'stats_runnable', stats['runnable'])
+    change_control_dic(control_dic, 'stats_runnable_parents', stats['runnable_parents'])
+    change_control_dic(control_dic, 'stats_runnable_clones', stats['runnable_clones'])
+    # Main filters
+    change_control_dic(control_dic, 'stats_coin', stats['coin'])
+    change_control_dic(control_dic, 'stats_coin_parents', stats['coin_parents'])
+    change_control_dic(control_dic, 'stats_coin_clones', stats['coin_clones'])
+    change_control_dic(control_dic, 'stats_nocoin', stats['nocoin'])
+    change_control_dic(control_dic, 'stats_nocoin_parents', stats['nocoin_parents'])
+    change_control_dic(control_dic, 'stats_nocoin_clones', stats['nocoin_clones'])
+    change_control_dic(control_dic, 'stats_mechanical', stats['mechanical'])
+    change_control_dic(control_dic, 'stats_mechanical_parents', stats['mechanical_parents'])
+    change_control_dic(control_dic, 'stats_mechanical_clones', stats['mechanical_clones'])
+    change_control_dic(control_dic, 'stats_dead', stats['dead'])
+    change_control_dic(control_dic, 'stats_dead_parents', stats['dead_parents'])
+    change_control_dic(control_dic, 'stats_dead_clones', stats['dead_clones'])
+    change_control_dic(control_dic, 'stats_devices', stats['devices'])
+    change_control_dic(control_dic, 'stats_devices_parents', stats['devices_parents'])
+    change_control_dic(control_dic, 'stats_devices_clones', stats['devices_clones'])
+    # Binary filters
+    change_control_dic(control_dic, 'stats_BIOS', stats['BIOS'])
+    change_control_dic(control_dic, 'stats_BIOS_parents', stats['BIOS_parents'])
+    change_control_dic(control_dic, 'stats_BIOS_clones', stats['BIOS_clones'])
+    change_control_dic(control_dic, 'stats_samples', stats['samples'])
+    change_control_dic(control_dic, 'stats_samples_parents', stats['samples_parents'])
+    change_control_dic(control_dic, 'stats_samples_clones', stats['samples_clones'])
 
     # --- Timestamp ---
     change_control_dic(control_dic, 't_MAME_DB_build', time.time())
@@ -4391,16 +4399,16 @@ def _get_merged_rom(roms, merged_name):
 # Traverses the ROM hierarchy and returns the ROM location and name.
 #
 def _get_ROM_location(rom_set, rom, m_name, machines, machines_render, machine_roms):
+    # In the Merged set all Parent and Clone ROMs are in the parent archive.
+    # What about BIOS and Device ROMs?
+    # However, according to the Pleasuredome DATs, ROMs are organised like
+    # this:
+    #   clone_name_a/clone_rom_1
+    #   clone_name_b/clone_rom_1
+    #   parent_rom_1
+    #   parent_rom_2
     if rom_set == 'MERGED':
         cloneof = machines_render[m_name]['cloneof']
-
-        # In the Merged set all Parent and Clone ROMs are in the parent archive.
-        # However, according to the Pleasuredome DATs, ROMs are organised like
-        # this:
-        #   clone_name_a/clone_rom_1
-        #   clone_name_b/clone_rom_1
-        #   parent_rom_1
-        #   parent_rom_2
         if cloneof:
             location = cloneof + '/' + m_name + '/' + rom['name']
         else:
@@ -4506,9 +4514,15 @@ def _get_ROM_location(rom_set, rom, m_name, machines, machines_render, machine_r
             else:
                 location = m_name + '/' + rom['name']
 
+    # In the Non-Merged set all ROMs are in the machine archive ZIP archive, with
+    # the exception of BIOS ROMs and device ROMs.
     elif rom_set == 'NONMERGED':
-        # >> In the Non-Merged set all ROMs are in the machine archive, including BIOSes and
-        # >> device ROMs.
+        location = m_name + '/' + rom['name']
+
+    # In the Fully Non-Merged sets all ROMs are in the machine ZIP archive, including
+    # BIOS ROMs and device ROMs.
+    # Note that PD ROM sets are named Non-Merged but actually they are Fully Non-merged.
+    elif rom_set == 'FULLYNONMERGED':
         location = m_name + '/' + rom['name']
 
     else:
@@ -4663,9 +4677,10 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
     log_info('mame_build_ROM_audit_databases() Initialising ...')
 
     # --- Initialise ---
-    rom_set = ['MERGED', 'SPLIT', 'NONMERGED'][settings['mame_rom_set']]
+    # This must match the values defined in settings.xml, "ROM sets" tab.
+    rom_set = ['MERGED', 'SPLIT', 'NONMERGED', 'FULLYNONMERGED'][settings['mame_rom_set']]
+    rom_set_str = ['Merged', 'Split', 'Non-merged', 'Fully Non-merged'][settings['mame_rom_set']]
     chd_set = ['MERGED', 'SPLIT', 'NONMERGED'][settings['mame_chd_set']]
-    rom_set_str = ['Merged', 'Split', 'Non-merged'][settings['mame_rom_set']]
     chd_set_str = ['Merged', 'Split', 'Non-merged'][settings['mame_chd_set']]
     log_info('mame_build_ROM_audit_databases() ROM set is {0}'.format(rom_set))
     log_info('mame_build_ROM_audit_databases() CHD set is {0}'.format(chd_set))
@@ -4673,7 +4688,8 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
     # ---------------------------------------------------------------------------------------------
     # Audit database
     # ---------------------------------------------------------------------------------------------
-    log_info('mame_build_ROM_audit_databases() Building {0} ROM/Sample audit database ...'.format(rom_set_str))
+    log_info('mame_build_ROM_audit_databases() Starting ...')
+    log_info('Building {0} ROM/Sample audit database ...'.format(rom_set_str))
     pDialog = xbmcgui.DialogProgress()
     pDialog.create('Advanced MAME Launcher')
     pDialog.update(0, 'Building {0} ROM set ...'.format(rom_set_str))
@@ -4686,7 +4702,7 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
         pDialog.update((item_count*100)//num_items)
 
         # --- ROMs ---
-        # >> Skip Devices
+        # >> Skip device machines.
         if machines_render[m_name]['isDevice']: continue
         stats_audit_MAME_machines_runnable += 1
         m_roms = machine_roms[m_name]['roms']
@@ -4724,7 +4740,7 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
     pDialog.close()
 
     # --- CHD set (refactored code) ---------------------------------------------------------------
-    log_info('mame_build_ROM_audit_databases() Building {0} CHD audit database ...'.format(chd_set_str))
+    log_info('Building {0} CHD audit database ...'.format(chd_set_str))
     pDialog.create('Advanced MAME Launcher')
     pDialog.update(0, 'Building {0} CHD set ...'.format(chd_set_str))
     num_items = len(machines)
@@ -4752,14 +4768,14 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
     pDialog.close()
 
     # ---------------------------------------------------------------------------------------------
-    # Machine files and ROM ZIP/Sample ZIP/CHD lists
+    # Machine files and ROM ZIP/Sample ZIP/CHD lists.
     # ---------------------------------------------------------------------------------------------
     # NOTE roms_dic and chds_dic may have invalid ROMs/CHDs. However, machine_archives_dic must
     #      have only valid ROM archives (ZIP/7Z).
     # For every machine, it goes ROM by ROM and makes a list of ZIP archive locations. Then, it
     # transforms the list into a set to have a list with unique elements.
     # roms_dic/chds_dic have invalid ROMs. Skip invalid ROMs.
-    log_info('mame_build_ROM_audit_databases() Building ROM ZIP/Sample ZIP/CHD file lists ...')
+    log_info('Building ROM ZIP/Sample ZIP/CHD file lists ...')
     pDialog.create('Advanced MAME Launcher')
     pDialog.update(0, 'Building ROM, Sample and CHD archive lists ...')
     machine_archives_dic = {}
@@ -4873,7 +4889,7 @@ def mame_build_ROM_audit_databases(PATHS, settings, control_dic,
     # Do not remove earlier because 'merge' is used in the _get_XXX_location() functions.
     # ---------------------------------------------------------------------------------------------
     pDialog.create('Advanced MAME Launcher')
-    log_info('mame_build_ROM_audit_databases() Cleaning audit database before saving ...')
+    log_info('Cleaning audit database before saving it to disk ...')
     pDialog.update(0, 'Cleaning audit database ...')
     num_items = len(machines)
     item_count = 0
@@ -4972,19 +4988,181 @@ def _cache_index_builder(cat_name, cache_index_dic, catalog_all, catalog_parents
             'hash'         : fs_render_cache_get_hash(cat_name, cat_key)
         }
 
-def _build_catalog_helper(catalog_parents, catalog_all, machines, machines_render, main_pclone_dic, db_field):
+#
+# Helper functions to get the catalog key.
+#
+def _aux_catalog_key_Catver(parent_name, machines, machines_render):
+    return [ machines[parent_name]['catver'] ]
+
+def _aux_catalog_key_Catlist(parent_name, machines, machines_render):
+    return [ machines[parent_name]['catlist'] ]
+
+def _aux_catalog_key_Genre(parent_name, machines, machines_render):
+    return [ machines[parent_name]['genre'] ]
+
+def _aux_catalog_key_Category(parent_name, machines, machines_render):
+    # Already a list.
+    return machines[parent_name]['category']
+
+def _aux_catalog_key_NPlayers(parent_name, machines, machines_render):
+    return [ machines[parent_name]['nplayers'] ]
+
+def _aux_catalog_key_Bestgames(parent_name, machines, machines_render):
+    return [ machines[parent_name]['bestgames'] ]
+
+def _aux_catalog_key_Series(parent_name, machines, machines_render):
+    # Already a list.
+    return machines[parent_name]['series']
+
+def _aux_catalog_key_Artwork(parent_name, machines, machines_render):
+    # Already a list.
+    return machines[parent_name]['artwork']
+
+def _aux_catalog_key_VerAdded(parent_name, machines, machines_render):
+    return [ machines[parent_name]['veradded'] ]
+
+def _aux_catalog_key_Controls_Expanded(parent_name, machines, machines_render):
+    machine = machines[parent_name]
+    machine_render = machines_render[parent_name]
+    # Order alphabetically the list
+    if machine['input']:
+        control_list = [ctrl_dic['type'] for ctrl_dic in machine['input']['control_list']]
+    else:
+        control_list = []
+    pretty_control_type_list = misc_improve_mame_control_type_list(control_list)
+    sorted_control_type_list = sorted(pretty_control_type_list)
+    # Maybe a setting should be added for compact or non-compact control list.
+    # sorted_control_type_list = misc_compress_mame_item_list(sorted_control_type_list)
+    sorted_control_type_list = misc_compress_mame_item_list_compact(sorted_control_type_list)
+    catalog_key_list = [ " / ".join(sorted_control_type_list) ]
+
+    return catalog_key_list
+
+def _aux_catalog_key_Controls_Compact(parent_name, machines, machines_render):
+    machine = machines[parent_name]
+    machine_render = machines_render[parent_name]
+    # Order alphabetically the list
+    if machine['input']:
+        control_list = [ctrl_dic['type'] for ctrl_dic in machine['input']['control_list']]
+    else:
+        control_list = []
+    pretty_control_type_list = misc_improve_mame_control_type_list(control_list)
+    sorted_control_type_list = sorted(pretty_control_type_list)
+    catalog_key_list = misc_compress_mame_item_list_compact(sorted_control_type_list)
+    if not catalog_key_list:
+        catalog_key_list = [ '[ No controls ]' ]
+
+    return catalog_key_list
+
+def _aux_catalog_key_Devices_Expanded(parent_name, machines, machines_render):
+    machine = machines[parent_name]
+    machine_render = machines_render[parent_name]
+    # Order alphabetically the list
+    device_list = [device['att_type'] for device in machine['devices']]
+    pretty_device_list = misc_improve_mame_device_list(device_list)
+    sorted_device_list = sorted(pretty_device_list)
+    # Maybe a setting should be added for compact or non-compact control list
+    # sorted_device_list = misc_compress_mame_item_list(sorted_device_list)
+    sorted_device_list = misc_compress_mame_item_list_compact(sorted_device_list)
+    catalog_key = " / ".join(sorted_device_list)
+    # Change category name for machines with no devices
+    if catalog_key == '':
+        catalog_key = '[ No devices ]'
+
+    return [catalog_key]
+
+def _aux_catalog_key_Devices_Compact(parent_name, machines, machines_render):
+    machine = machines[parent_name]
+    machine_render = machines_render[parent_name]
+    # >> Order alphabetically the list
+    device_list = [ device['att_type'] for device in machine['devices'] ]
+    pretty_device_list = misc_improve_mame_device_list(device_list)
+    sorted_device_list = sorted(pretty_device_list)
+    compressed_device_list = misc_compress_mame_item_list_compact(sorted_device_list)
+    if not compressed_device_list:
+        compressed_device_list = [ '[ No devices ]' ]
+
+    return compressed_device_list
+
+def _aux_catalog_key_Display_Type(parent_name, machines, machines_render):
+    # Compute the catalog_key. display_type and display_rotate main DB entries used.
+    catalog_key = misc_get_display_type_catalog_key(
+        machines[parent_name]['display_type'], machines[parent_name]['display_rotate'])
+
+    return [catalog_key]
+
+def _aux_catalog_key_Display_VSync(parent_name, machines, machines_render):
+    catalog_list = []
+    # machine['display_refresh'] is a list.
+    # Change string '60.12346' to 1 decimal only to avoid having a log of keys in this catalog.
+    # An empty machine['display_refresh'] means no display.
+    if len(machines[parent_name]['display_refresh']) == 0:
+        catalog_list.append('No display')
+    else:
+        for display_str in machines[parent_name]['display_refresh']:
+            vsync = float(display_str)
+            catalog_list.append('{0:.1f} Hz'.format(vsync))
+
+    return catalog_list
+
+def _aux_catalog_key_Display_Resolution(parent_name, machines, machines_render):
+    # Move code of this function here???
+    catalog_key = misc_get_display_resolution_catalog_key(
+        machines[parent_name]['display_width'], machines[parent_name]['display_height'])
+
+    return [catalog_key]
+
+def _aux_catalog_key_CPU(parent_name, machines, machines_render):
+    # machine['chip_cpu_name'] is a list.
+    return machines[parent_name]['chip_cpu_name']
+
+def _aux_catalog_key_Driver(parent_name, machines, machines_render):
+    catalog_key = machines[parent_name]['sourcefile']
+    # Some drivers get a prettier name.
+    if catalog_key in mame_driver_name_dic:
+        catalog_key = mame_driver_name_dic[catalog_key]
+
+    return [catalog_key]
+
+def _aux_catalog_key_Manufacturer(parent_name, machines, machines_render):
+    return [machines_render[parent_name]['manufacturer']]
+
+# This is a special catalog, not easy to automatise.
+# def _aux_catalog_key_ShortName(parent_name, machines, machines_render):
+#     return [machines_render[parent_name]['year']]
+
+def _aux_catalog_key_LongName(parent_name, machines, machines_render):
+    return [machines_render[parent_name]['description'][0]]
+
+# This is a special catalog, not easy to automatise.
+# def _aux_catalog_key_BySL(parent_name, machines, machines_render):
+#     return [machines_render[parent_name]['year']]
+
+def _aux_catalog_key_Year(parent_name, machines, machines_render):
+    return [machines_render[parent_name]['year']]
+
+#
+# Uses a "function pointer" to obtain the catalog_key.
+# catalog_key is a list that has one element for most catalogs.
+# In some catalogs (Controls_Compact) this list has sometimes more than one item, for example
+# one parent machine may have more than one control.
+#
+def _build_catalog_helper_new(catalog_parents, catalog_all,
+    machines, machines_render, main_pclone_dic, catalog_key_function):
     for parent_name in main_pclone_dic:
-        # >> Skip device machines in catalogs.
-        if machines_render[parent_name]['isDevice']: continue
-        catalog_key = machines[parent_name][db_field]
-        if catalog_key in catalog_parents:
-            catalog_parents[catalog_key][parent_name] = machines_render[parent_name]['description']
-            catalog_all[catalog_key][parent_name] = machines_render[parent_name]['description']
-        else:
-            catalog_parents[catalog_key] = { parent_name : machines_render[parent_name]['description'] }
-            catalog_all[catalog_key] = { parent_name : machines_render[parent_name]['description'] }
-        for clone_name in main_pclone_dic[parent_name]:
-            catalog_all[catalog_key][clone_name] = machines_render[clone_name]['description']
+        render = machines_render[parent_name]
+        # Skip device machines in catalogs.
+        if render['isDevice']: continue
+        catalog_key_list = catalog_key_function(parent_name, machines, machines_render)
+        for catalog_key in catalog_key_list:
+            if catalog_key in catalog_parents:
+                catalog_parents[catalog_key][parent_name] = render['description']
+                catalog_all[catalog_key][parent_name] = render['description']
+            else:
+                catalog_parents[catalog_key] = { parent_name : render['description'] }
+                catalog_all[catalog_key] = { parent_name : render['description'] }
+            for clone_name in main_pclone_dic[parent_name]:
+                catalog_all[catalog_key][clone_name] = machines_render[clone_name]['description']
 
 #
 # Checks for errors before scanning for SL ROMs.
@@ -5042,43 +5220,56 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
 
     # --- Machine count ---
     cache_index_dic = {
-        'Main'              : {},
-        'Binary'            : {},
-        'Catver'            : {},
-        'Catlist'           : {},
-        'Genre'             : {},
-        'NPlayers'          : {},
-        'Bestgames'         : {},
-        'Series'            : {},
-        'Manufacturer'      : {},
-        'Year'              : {},
-        'Driver'            : {},
-        'Controls_Expanded' : {},
-        'Controls_Compact'  : {},
-        'Display_Type'      : {},
-        'Display_Rotate'    : {},
-        'Devices_Expanded'  : {},
-        'Devices_Compact'   : {},
-        'BySL'              : {},
-        'ShortName'         : {},
-        'LongName'          : {},
+        # Virtual Main filter catalog
+        'Main'               : {},
+        # Virtual Binary filter catalog
+        'Binary'             : {},
+        # INI based catalogs
+        'Catver'             : {},
+        'Catlist'            : {},
+        'Genre'              : {},
+        'Category'           : {},
+        'NPlayers'           : {},
+        'Bestgames'          : {},
+        'Series'             : {},
+        'Artwork'            : {},
+        'Version'            : {},
+        # MAME XML extracted catalogs
+        'Controls_Expanded'  : {},
+        'Controls_Compact'   : {},
+        'Devices_Expanded'   : {},
+        'Devices_Compact'    : {},
+        'Display_Type'       : {},
+        'Display_VSync'      : {},
+        'Display_Resolution' : {},
+        'CPU'                : {},
+        'Driver'             : {},
+        'Manufacturer'       : {},
+        'ShortName'          : {},
+        'LongName'           : {},
+        'BySL'               : {},
+        'Year'               : {},
     }
     NUM_CATALOGS = len(cache_index_dic)
+
+    NORMAL_DRIVER_LIST = [
+        '88games.cpp', 'cball.cpp', 'asteroid.cpp',
+    ]
+    UNUSUAL_DRIVER_LIST = [
+        'aristmk5.cpp', 'adp.cpp',     'mpu4vid.cpp',
+        'cubo.cpp',     'sfbonus.cpp', 'peplus.cpp',
+    ]
 
     # ---------------------------------------------------------------------------------------------
     # Main filters (None catalog) -----------------------------------------------------------------
     # ---------------------------------------------------------------------------------------------
     pDialog.update(update_number, pDialog_line1, 'Main Catalog')
-    main_catalog_parents = {}
-    main_catalog_all = {}
+    main_catalog_parents, main_catalog_all = {}, {}
 
     # --- Normal and Unusual machine list ---
     # Machines with Coin Slot and Non Mechanical and not Dead and not Device
     log_info('Making None catalog - Coin index ...')
-    normal_parent_dic = {}
-    normal_all_dic = {}
-    unusual_parent_dic = {}
-    unusual_all_dic = {}
+    normal_parent_dic, normal_all_dic, unusual_parent_dic, unusual_all_dic = {}, {}, {}, {}
     for parent_name in main_pclone_dic:
         machine_main = machines[parent_name]
         machine_render = machines_render[parent_name]
@@ -5088,36 +5279,27 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
         if machine_main['isDead']: continue
         if machine_render['isDevice']: continue
 
-        # --- Determinte if machine is Normal or Unusual ----
-        # Add parent to parent list and parents and clonse to all list
-        # Unusual machine: no controls or control_type has "only_buttons" or "gambling"
-        # or "hanafuda" or "mahjong"
-        #
-        # Unusual machine driver exceptions (must be Normal and not Unusual):
-        #
-        # control_list = machine_main['control_type']
+        # Make list of machine controls.
         if machine_main['input']:
             control_list = [ctrl_dic['type'] for ctrl_dic in machine_main['input']['control_list']]
         else:
             control_list = []
-        if ('only_buttons' in control_list and len(control_list) > 1) or \
-           machine_main['sourcefile'] == '88games.cpp' or \
-           machine_main['sourcefile'] == 'cball.cpp' or \
-           machine_main['sourcefile'] == 'asteroid.cpp':
+
+        # --- Determinte if machine is Normal or Unusual ----
+        # Standard machines.
+        if ('only_buttons' in control_list and len(control_list) > 1) \
+            or machine_main['sourcefile'] in NORMAL_DRIVER_LIST:
             normal_parent_dic[parent_name] = machine_render['description']
             normal_all_dic[parent_name] = machine_render['description']
             _catalog_add_clones(parent_name, main_pclone_dic, machines_render, normal_all_dic)
         #
         # Unusual machines. Most of them you don't wanna play.
+        # No controls or control_type has "only_buttons" or "gambling" or "hanafuda" or "mahjong"
         #
-        elif not control_list or 'only_buttons' in control_list or 'gambling' in control_list or \
-             'hanafuda' in control_list or 'mahjong' in control_list or \
-             machine_main['sourcefile'] == 'aristmk5.cpp' or \
-             machine_main['sourcefile'] == 'adp.cpp' or \
-             machine_main['sourcefile'] == 'mpu4vid.cpp' or \
-             machine_main['sourcefile'] == 'cubo.cpp' or \
-             machine_main['sourcefile'] == 'sfbonus.cpp' or \
-             machine_main['sourcefile'] == 'peplus.cpp':
+        elif not control_list \
+            or 'only_buttons' in control_list or 'gambling' in control_list \
+            or 'hanafuda' in control_list or 'mahjong' in control_list \
+            or machine_main['sourcefile'] in UNUSUAL_DRIVER_LIST:
             unusual_parent_dic[parent_name] = machine_render['description']
             unusual_all_dic[parent_name] = machine_render['description']
             _catalog_add_clones(parent_name, main_pclone_dic, machines_render, unusual_all_dic)
@@ -5136,8 +5318,7 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     # --- NoCoin list ---
     # A) Machines with No Coin Slot and Non Mechanical and not Dead and not Device
     log_info('Making NoCoin index ...')
-    parent_dic = {}
-    all_dic = {}
+    parent_dic, all_dic = {}, {}
     for parent_name in main_pclone_dic:
         machine_main = machines[parent_name]
         machine_render = machines_render[parent_name]
@@ -5155,8 +5336,7 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     # --- Mechanical machines ---
     # >> Mechanical machines and not Dead and not Device
     log_info('Making Mechanical index ...')
-    parent_dic = {}
-    all_dic = {}
+    parent_dic, all_dic = {}, {}
     for parent_name in main_pclone_dic:
         machine_main = machines[parent_name]
         machine_render = machines_render[parent_name]
@@ -5172,8 +5352,7 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     # --- Dead machines ---
     # >> Dead machines
     log_info('Making Dead Machines index ...')
-    parent_dic = {}
-    all_dic = {}
+    parent_dic, all_dic = {}, {}
     for parent_name in main_pclone_dic:
         machine_main = machines[parent_name]
         machine_render = machines_render[parent_name]
@@ -5187,8 +5366,7 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     # --- Device machines ---
     # >> Device machines
     log_info('Making Device Machines index ...')
-    parent_dic = {}
-    all_dic = {}
+    parent_dic, all_dic = {}, {}
     for parent_name in main_pclone_dic:
         machine_render = machines_render[parent_name]
         if not machine_render['isDevice']: continue
@@ -5209,13 +5387,11 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     # Binary filters ------------------------------------------------------------------------------
     # ---------------------------------------------------------------------------------------------
     pDialog.update(update_number, pDialog_line1, 'Binary Catalog')
-    binary_catalog_parents = {}
-    binary_catalog_all = {}
+    binary_catalog_parents, binary_catalog_all = {}, {}
 
     # --- CHD machines ---
     log_info('Making CHD Machines index ...')
-    parent_dic = {}
-    all_dic = {}
+    parent_dic, all_dic = {}, {}
     for parent_name in main_pclone_dic:
         machine = machines[parent_name]
         machine_render = machines_render[parent_name]
@@ -5229,8 +5405,7 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
 
     # --- Machines with samples ---
     log_info('Making Samples Machines index ...')
-    parent_dic = {}
-    all_dic = {}
+    parent_dic, all_dic = {}, {}
     for parent_name in main_pclone_dic:
         machine = machines[parent_name]
         machine_render = machines_render[parent_name]
@@ -5244,8 +5419,7 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
 
     # --- Software List machines ---
     log_info('Making Software List Machines index ...')
-    parent_dic = {}
-    all_dic = {}
+    parent_dic, all_dic = {}, {}
     for parent_name in main_pclone_dic:
         machine = machines[parent_name]
         machine_render = machines_render[parent_name]
@@ -5259,8 +5433,7 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
 
     # --- BIOS ---
     log_info('Making BIOS Machines index ...')
-    parent_dic = {}
-    all_dic = {}
+    parent_dic, all_dic = {}, {}
     for parent_name in main_pclone_dic:
         machine_render = machines_render[parent_name]
         if machine_render['isDevice']: continue # >> Skip device machines
@@ -5271,7 +5444,7 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     binary_catalog_parents['BIOS'] = parent_dic
     binary_catalog_all['BIOS'] = all_dic
 
-    # >> Build cache index and save Binary catalog JSON file
+    # Build cache index and save Binary catalog JSON file
     _cache_index_builder('Binary', cache_index_dic, binary_catalog_all, binary_catalog_parents)
     fs_write_JSON_file(PATHS.CATALOG_BINARY_ALL_PATH.getPath(), binary_catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_BINARY_PARENT_PATH.getPath(), binary_catalog_parents)
@@ -5284,155 +5457,120 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     # --- Catver catalog ---
     log_info('Making Catver catalog ...')
     pDialog.update(update_number, pDialog_line1, 'Catver catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    _build_catalog_helper(catalog_parents, catalog_all, machines, machines_render, main_pclone_dic, 'catver')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Catver)
     _cache_index_builder('Catver', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_CATVER_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_CATVER_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_CATVER_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
     # --- Catlist catalog ---
     log_info('Making Catlist catalog ...')
     pDialog.update(update_number, pDialog_line1, 'Catlist catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    _build_catalog_helper(catalog_parents, catalog_all, machines, machines_render, main_pclone_dic, 'catlist')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Catlist)
     _cache_index_builder('Catlist', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_CATLIST_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_CATLIST_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_CATLIST_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
     # --- Genre catalog ---
     log_info('Making Genre catalog ...')
     pDialog.update(update_number, pDialog_line1, 'Genre catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    _build_catalog_helper(catalog_parents, catalog_all, machines, machines_render, main_pclone_dic, 'genre')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Genre)
     _cache_index_builder('Genre', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_GENRE_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_GENRE_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_GENRE_ALL_PATH.getPath(), catalog_all)
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
+
+    # --- Category catalog ---
+    log_info('Making Category catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'Category catalog')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Category)
+    _cache_index_builder('Category', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_CATEGORY_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_CATEGORY_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
     # --- Nplayers catalog ---
     log_info('Making Nplayers catalog ...')
     pDialog.update(update_number, pDialog_line1, 'Nplayers catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    _build_catalog_helper(catalog_parents, catalog_all, machines_render, machines_render, main_pclone_dic, 'nplayers')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines_render, machines_render, main_pclone_dic, _aux_catalog_key_NPlayers)
     _cache_index_builder('NPlayers', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_NPLAYERS_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_NPLAYERS_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_NPLAYERS_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
     # --- Bestgames catalog ---
     log_info('Making Bestgames catalog ...')
     pDialog.update(update_number, pDialog_line1, 'Bestgames catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    _build_catalog_helper(catalog_parents, catalog_all, machines, machines_render, main_pclone_dic, 'bestgames')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Bestgames)
     _cache_index_builder('Bestgames', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_BESTGAMES_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_BESTGAMES_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_BESTGAMES_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
     # --- Series catalog ---
     log_info('Making Series catalog ...')
     pDialog.update(update_number, pDialog_line1, 'Series catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    _build_catalog_helper(catalog_parents, catalog_all, machines, machines_render, main_pclone_dic, 'series')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Series)
     _cache_index_builder('Series', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_SERIES_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_SERIES_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_SERIES_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
-    # --- Manufacturer catalog ---
-    log_info('Making Manufacturer catalog ...')
-    pDialog.update(update_number, pDialog_line1, 'Manufacturer catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    _build_catalog_helper(catalog_parents, catalog_all, machines_render, machines_render, main_pclone_dic, 'manufacturer')
-    _cache_index_builder('Manufacturer', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_MANUFACTURER_ALL_PATH.getPath(), catalog_all)
-    fs_write_JSON_file(PATHS.CATALOG_MANUFACTURER_PARENT_PATH.getPath(), catalog_parents)
+    # --- Artwork catalog ---
+    log_info('Making Artwork catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'Artwork catalog')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Artwork)
+    _cache_index_builder('Artwork', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_ARTWORK_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_ARTWORK_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
-    # --- Year catalog ---
-    log_info('Making Year catalog ...')
-    pDialog.update(update_number, pDialog_line1, 'Year catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    _build_catalog_helper(catalog_parents, catalog_all, machines_render, machines_render, main_pclone_dic, 'year')
-    _cache_index_builder('Year', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_YEAR_ALL_PATH.getPath(), catalog_all)
-    fs_write_JSON_file(PATHS.CATALOG_YEAR_PARENT_PATH.getPath(), catalog_parents)
-    processed_filters += 1
-    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
-
-    # --- Driver catalog ---
-    log_info('Making Driver catalog ...')
-    pDialog.update(update_number, pDialog_line1, 'Driver catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    for parent_name in main_pclone_dic:
-        machine = machines[parent_name]
-        machine_render = machines_render[parent_name]
-        if machine_render['isDevice']: continue # >> Skip device machines
-        catalog_key = machine['sourcefile']
-        if catalog_key in mame_driver_name_dic: catalog_key = mame_driver_name_dic[catalog_key]
-        if catalog_key in catalog_parents:
-            catalog_parents[catalog_key][parent_name] = machine_render['description']
-            catalog_all[catalog_key][parent_name] = machine_render['description']
-        else:
-            catalog_parents[catalog_key] = { parent_name : machine_render['description'] }
-            catalog_all[catalog_key] = { parent_name : machine_render['description'] }
-        _catalog_add_clones(parent_name, main_pclone_dic, machines_render, catalog_all[catalog_key])
-    _cache_index_builder('Driver', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_DRIVER_ALL_PATH.getPath(), catalog_all)
-    fs_write_JSON_file(PATHS.CATALOG_DRIVER_PARENT_PATH.getPath(), catalog_parents)
+    # --- Version catalog ---
+    log_info('Making Version catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'Version catalog')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_VerAdded)
+    _cache_index_builder('Version', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_VERADDED_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_VERADDED_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
     # --- Control catalog (Expanded) ---
     log_info('Making Control Expanded catalog ...')
     pDialog.update(update_number, pDialog_line1, 'Control Expanded catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    for parent_name in main_pclone_dic:
-        machine = machines[parent_name]
-        machine_render = machines_render[parent_name]
-        if machine_render['isDevice']: continue # >> Skip device machines
-        # >> Order alphabetically the list
-        if machine['input']:
-            control_list = [ctrl_dic['type'] for ctrl_dic in machine['input']['control_list']]
-        else:
-            control_list = []
-        pretty_control_type_list = mame_improve_control_type_list(control_list)
-        sorted_control_type_list = sorted(pretty_control_type_list)
-        # >> Maybe a setting should be added for compact or non-compact control list
-        # sorted_control_type_list = mame_compress_item_list(sorted_control_type_list)
-        sorted_control_type_list = mame_compress_item_list_compact(sorted_control_type_list)
-        catalog_key = " / ".join(sorted_control_type_list)
-        # >> Change category name for machines with no controls
-        if catalog_key == '': catalog_key = '[ No controls ]'
-        if catalog_key in catalog_parents:
-            catalog_parents[catalog_key][parent_name] = machine_render['description']
-            catalog_all[catalog_key][parent_name] = machine_render['description']
-        else:
-            catalog_parents[catalog_key] = { parent_name : machine_render['description'] }
-            catalog_all[catalog_key] = { parent_name : machine_render['description'] }
-        _catalog_add_clones(parent_name, main_pclone_dic, machines_render, catalog_all[catalog_key])
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Controls_Expanded)
     _cache_index_builder('Controls_Expanded', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_CONTROL_EXPANDED_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_CONTROL_EXPANDED_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_CONTROL_EXPANDED_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
@@ -5441,191 +5579,117 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
     # >> one control.
     log_info('Making Control Compact catalog ...')
     pDialog.update(update_number, pDialog_line1, 'Control Compact catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    for parent_name in main_pclone_dic:
-        machine = machines[parent_name]
-        machine_render = machines_render[parent_name]
-        if machine_render['isDevice']: continue # >> Skip device machines
-        # >> Order alphabetically the list
-        if machine['input']:
-            control_list = [ctrl_dic['type'] for ctrl_dic in machine['input']['control_list']]
-        else:
-            control_list = []
-        pretty_control_type_list = mame_improve_control_type_list(control_list)
-        sorted_control_type_list = sorted(pretty_control_type_list)
-        compressed_control_type_list = mame_compress_item_list_compact(sorted_control_type_list)
-        if not compressed_control_type_list: compressed_control_type_list = [ '[ No controls ]' ]
-        for catalog_key in compressed_control_type_list:
-            if catalog_key in catalog_parents:
-                catalog_parents[catalog_key][parent_name] = machine_render['description']
-                catalog_all[catalog_key][parent_name] = machine_render['description']
-            else:
-                catalog_parents[catalog_key] = { parent_name : machine_render['description'] }
-                catalog_all[catalog_key] = { parent_name : machine_render['description'] }
-            _catalog_add_clones(parent_name, main_pclone_dic, machines_render, catalog_all[catalog_key])
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Controls_Compact)
     _cache_index_builder('Controls_Compact', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_CONTROL_COMPACT_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_CONTROL_COMPACT_PARENT_PATH.getPath(), catalog_parents)
-    processed_filters += 1
-    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
-
-    # --- Display type catalog ---
-    log_info('Making Display Type catalog ...')
-    pDialog.update(update_number, pDialog_line1, 'Display type catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    for parent_name in main_pclone_dic:
-        machine = machines[parent_name]
-        machine_render = machines_render[parent_name]
-        # >> Skip device machines
-        if machine_render['isDevice']: continue
-        display_list = mame_improve_display_type_list(machine['display_type'])
-        catalog_key = " / ".join(display_list)
-        # >> Change category name for machines with no display
-        if catalog_key == '': catalog_key = '[ No display ]'
-        if catalog_key in catalog_parents:
-            catalog_parents[catalog_key][parent_name] = machine_render['description']
-            catalog_all[catalog_key][parent_name] = machine_render['description']
-        else:
-            catalog_parents[catalog_key] = { parent_name : machine_render['description'] }
-            catalog_all[catalog_key] = { parent_name : machine_render['description'] }
-        _catalog_add_clones(parent_name, main_pclone_dic, machines_render, catalog_all[catalog_key])
-    _cache_index_builder('Display_Type', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_DISPLAY_TYPE_ALL_PATH.getPath(), catalog_all)
-    fs_write_JSON_file(PATHS.CATALOG_DISPLAY_TYPE_PARENT_PATH.getPath(), catalog_parents)
-    processed_filters += 1
-    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
-
-    # --- Display rotate catalog ---
-    log_info('Making Display Rotate catalog ...')
-    pDialog.update(update_number, pDialog_line1, 'Display rotate catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    for parent_name in main_pclone_dic:
-        machine = machines[parent_name]
-        machine_render = machines_render[parent_name]
-        if machine_render['isDevice']: continue # >> Skip device machines
-        # >> machine['display_rotate'] is a list of strings
-        fixed_d_rotate_list = []
-        for d_str in machine['display_rotate']:
-            if d_str == '0' or d_str == '180':
-                fixed_d_rotate_list.append('Horizontal')
-            elif d_str == '90' or d_str == '270':
-                fixed_d_rotate_list.append('Vertical')
-            else:
-                raise TypeError('Machine {0} wrong display rotate "{1}"'.format(parent_name, d_str))
-        catalog_key = " / ".join(fixed_d_rotate_list)
-        # >> Change category name for machines with no display
-        if catalog_key == '': catalog_key = '[ No display ]'
-        if catalog_key in catalog_parents:
-            catalog_parents[catalog_key][parent_name] = machine_render['description']
-            catalog_all[catalog_key][parent_name] = machine_render['description']
-        else:
-            catalog_parents[catalog_key] = { parent_name : machine_render['description'] }
-            catalog_all[catalog_key] = { parent_name : machine_render['description'] }
-        _catalog_add_clones(parent_name, main_pclone_dic, machines_render, catalog_all[catalog_key])
-    _cache_index_builder('Display_Rotate', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_DISPLAY_ROTATE_ALL_PATH.getPath(), catalog_all)
-    fs_write_JSON_file(PATHS.CATALOG_DISPLAY_ROTATE_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_CONTROL_COMPACT_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
     # --- <device> / Device Expanded catalog ---
     log_info('Making <device> tag Expanded catalog ...')
     pDialog.update(update_number, pDialog_line1, '<device> Expanded catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    for parent_name in main_pclone_dic:
-        machine = machines[parent_name]
-        machine_render = machines_render[parent_name]
-        if machine_render['isDevice']: continue # >> Skip device machines
-        # >> Order alphabetically the list
-        device_list = [device['att_type'] for device in machine['devices']]
-        pretty_device_list = mame_improve_device_list(device_list)
-        sorted_device_list = sorted(pretty_device_list)
-        # >> Maybe a setting should be added for compact or non-compact control list
-        # sorted_device_list = mame_compress_item_list(sorted_device_list)
-        sorted_device_list = mame_compress_item_list_compact(sorted_device_list)
-        catalog_key = " / ".join(sorted_device_list)
-        # >> Change category name for machines with no devices
-        if catalog_key == '': catalog_key = '[ No devices ]'
-        if catalog_key in catalog_parents:
-            catalog_parents[catalog_key][parent_name] = machine_render['description']
-            catalog_all[catalog_key][parent_name] = machine_render['description']
-        else:
-            catalog_parents[catalog_key] = { parent_name : machine_render['description'] }
-            catalog_all[catalog_key] = { parent_name : machine_render['description'] }
-        _catalog_add_clones(parent_name, main_pclone_dic, machines_render, catalog_all[catalog_key])
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Devices_Expanded)
     _cache_index_builder('Devices_Expanded', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_DEVICE_EXPANDED_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_DEVICE_EXPANDED_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_DEVICE_EXPANDED_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
     # --- <device> / Device Compact catalog ---
     log_info('Making <device> tag Compact catalog ...')
     pDialog.update(update_number, pDialog_line1, '<device> Compact catalog')
-    catalog_parents = {}
-    catalog_all = {}
-    for parent_name in main_pclone_dic:
-        machine = machines[parent_name]
-        machine_render = machines_render[parent_name]
-        if machine_render['isDevice']: continue # >> Skip device machines
-        # >> Order alphabetically the list
-        device_list = [ device['att_type'] for device in machine['devices'] ]
-        pretty_device_list = mame_improve_device_list(device_list)
-        sorted_device_list = sorted(pretty_device_list)
-        compressed_device_list = mame_compress_item_list_compact(sorted_device_list)
-        if not compressed_device_list: compressed_device_list = [ '[ No devices ]' ]
-        for catalog_key in compressed_device_list:
-            if catalog_key in catalog_parents:
-                catalog_parents[catalog_key][parent_name] = machine_render['description']
-                catalog_all[catalog_key][parent_name] = machine_render['description']
-            else:
-                catalog_parents[catalog_key] = { parent_name : machine_render['description'] }
-                catalog_all[catalog_key] = { parent_name : machine_render['description'] }
-            _catalog_add_clones(parent_name, main_pclone_dic, machines_render, catalog_all[catalog_key])
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Devices_Compact)
     _cache_index_builder('Devices_Compact', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_DEVICE_COMPACT_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_DEVICE_COMPACT_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_DEVICE_COMPACT_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
-    # --- Software List catalog ---
-    log_info('Making Software List catalog ...')
-    pDialog.update(update_number, pDialog_line1, 'Software List catalog')
-    # >> Load proper Software List proper names, if available
-    SL_names_dic = fs_load_JSON_file_dic(PATHS.SL_NAMES_PATH.getPath())
-    catalog_parents = {}
-    catalog_all = {}
-    for parent_name in main_pclone_dic:
-        machine = machines[parent_name]
-        machine_render = machines_render[parent_name]
-        if machine_render['isDevice']: continue # >> Skip device machines
-        # >> A machine may have more than 1 software lists
-        for sl_name in machine['softwarelists']:
-            catalog_key = sl_name
-            if catalog_key in SL_names_dic:
-                catalog_key = SL_names_dic[catalog_key]
-            if catalog_key in catalog_parents:
-                catalog_parents[catalog_key][parent_name] = machine_render['description']
-                catalog_all[catalog_key][parent_name] = machine_render['description']
-            else:
-                catalog_parents[catalog_key] = { parent_name : machine_render['description'] }
-                catalog_all[catalog_key] = { parent_name : machine_render['description'] }
-            _catalog_add_clones(parent_name, main_pclone_dic, machines_render, catalog_all[catalog_key])
-    _cache_index_builder('BySL', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_SL_ALL_PATH.getPath(), catalog_all)
-    fs_write_JSON_file(PATHS.CATALOG_SL_PARENT_PATH.getPath(), catalog_parents)
+    # --- Display Type catalog ---
+    log_info('Making Display Type catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'Display Type catalog')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Display_Type)
+    _cache_index_builder('Display_Type', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_DISPLAY_TYPE_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_DISPLAY_TYPE_ALL_PATH.getPath(), catalog_all)
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
+
+    # --- Display VSync catalog ---
+    log_info('Making Display VSync catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'Display VSync catalog')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Display_VSync)
+    _cache_index_builder('Display_VSync', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_DISPLAY_VSYNC_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_DISPLAY_VSYNC_ALL_PATH.getPath(), catalog_all)
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
+
+    # --- Display Resolution catalog ---
+    log_info('Making Display Resolution catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'Display Resolution catalog')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Display_Resolution)
+    _cache_index_builder('Display_Resolution', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_DISPLAY_RES_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_DISPLAY_RES_ALL_PATH.getPath(), catalog_all)
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
+
+    # --- CPU catalog ---
+    log_info('Making CPU catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'CPU catalog')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_CPU)
+    _cache_index_builder('CPU', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_CPU_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_CPU_ALL_PATH.getPath(), catalog_all)
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
+
+    # --- Driver catalog ---
+    log_info('Making Driver catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'Driver catalog')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Driver)
+    _cache_index_builder('Driver', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_DRIVER_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_DRIVER_ALL_PATH.getPath(), catalog_all)
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
+
+    # --- Manufacturer catalog ---
+    log_info('Making Manufacturer catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'Manufacturer catalog')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Manufacturer)
+    _cache_index_builder('Manufacturer', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_MANUFACTURER_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_MANUFACTURER_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
     # --- MAME short name catalog ---
+    # This catalog cannot use _build_catalog_helper_new() because of the special name
+    # of the catalog (it is not the plain description).
     log_info('Making MAME short name catalog ...')
     pDialog.update(update_number, pDialog_line1, 'Short name catalog')
-    catalog_parents = {}
-    catalog_all = {}
+    catalog_parents, catalog_all = {}, {}
     for parent_name in main_pclone_dic:
         machine = machines[parent_name]
         machine_render = machines_render[parent_name]
@@ -5642,33 +5706,64 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
             t = '{0} "{1}"'.format(clone_name, machines_render[clone_name]['description'])
             catalog_all[catalog_key][clone_name] = t
     _cache_index_builder('ShortName', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_SHORTNAME_ALL_PATH.getPath(), catalog_all)
     fs_write_JSON_file(PATHS.CATALOG_SHORTNAME_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_SHORTNAME_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
 
     # --- MAME long name catalog ---
     log_info('Making MAME long name catalog ...')
     pDialog.update(update_number, pDialog_line1, 'Long name catalog')
-    catalog_parents = {}
-    catalog_all = {}
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_LongName)
+    _cache_index_builder('LongName', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_LONGNAME_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_LONGNAME_ALL_PATH.getPath(), catalog_all)
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
+
+    # --- Software List (BySL) catalog ---
+    # This catalog cannot use _build_catalog_helper_new() because of the name change of the SLs.
+    log_info('Making Software List catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'Software List catalog')
+    # >> Load proper Software List proper names, if available
+    SL_names_dic = fs_load_JSON_file_dic(PATHS.SL_NAMES_PATH.getPath())
+    catalog_parents, catalog_all = {}, {}
     for parent_name in main_pclone_dic:
         machine = machines[parent_name]
         machine_render = machines_render[parent_name]
-        if machine_render['isDevice']: continue # >> Skip device machines
-        catalog_key = machine_render['description'][0]
-        if catalog_key in catalog_parents:
-            catalog_parents[catalog_key][parent_name] = machine_render['description']
-            catalog_all[catalog_key][parent_name] = machine_render['description']
-        else:
-            catalog_parents[catalog_key] = { parent_name : machine_render['description'] }
-            catalog_all[catalog_key] = { parent_name : machine_render['description'] }
-        _catalog_add_clones(parent_name, main_pclone_dic, machines_render, catalog_all[catalog_key])
-    _cache_index_builder('LongName', cache_index_dic, catalog_all, catalog_parents)
-    fs_write_JSON_file(PATHS.CATALOG_LONGNAME_ALL_PATH.getPath(), catalog_all)
-    fs_write_JSON_file(PATHS.CATALOG_LONGNAME_PARENT_PATH.getPath(), catalog_parents)
+        if machine_render['isDevice']: continue
+        for sl_name in machine['softwarelists']:
+            catalog_key = sl_name
+            if catalog_key in SL_names_dic:
+                catalog_key = SL_names_dic[catalog_key]
+            if catalog_key in catalog_parents:
+                catalog_parents[catalog_key][parent_name] = machine_render['description']
+                catalog_all[catalog_key][parent_name] = machine_render['description']
+            else:
+                catalog_parents[catalog_key] = { parent_name : machine_render['description'] }
+                catalog_all[catalog_key] = { parent_name : machine_render['description'] }
+            _catalog_add_clones(parent_name, main_pclone_dic, machines_render, catalog_all[catalog_key])
+    _cache_index_builder('BySL', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_SL_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_SL_ALL_PATH.getPath(), catalog_all)
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
+
+    # --- Year catalog ---
+    log_info('Making Year catalog ...')
+    pDialog.update(update_number, pDialog_line1, 'Year catalog')
+    catalog_parents, catalog_all = {}, {}
+    _build_catalog_helper_new(catalog_parents, catalog_all,
+        machines, machines_render, main_pclone_dic, _aux_catalog_key_Year)
+    _cache_index_builder('Year', cache_index_dic, catalog_all, catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_YEAR_PARENT_PATH.getPath(), catalog_parents)
+    fs_write_JSON_file(PATHS.CATALOG_YEAR_ALL_PATH.getPath(), catalog_all)
+    processed_filters += 1
+    update_number = int((float(processed_filters) / float(NUM_CATALOGS)) * 100)
+
+    # Close progress dialog.
     pDialog.update(update_number)
     pDialog.close()
 
@@ -5717,7 +5812,12 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
         if   driver_status == 'good':        stats_MF_Normal_Good += 1
         elif driver_status == 'imperfect':   stats_MF_Normal_Imperfect += 1
         elif driver_status == 'preliminary': stats_MF_Normal_Nonworking += 1
-        else: raise TypeError
+        # Found in mame2003-plus.xml, machine quizf1 and maybe others.
+        elif driver_status == 'protection': pass
+        elif driver_status == '': pass
+        else:
+            log_error('Machine {0}, unrecognised driver_status {1}'.format(m_name, driver_status))
+            raise TypeError
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
     pDialog.update(update_number)
@@ -5727,7 +5827,12 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
         if   driver_status == 'good':        stats_MF_Unusual_Good += 1
         elif driver_status == 'imperfect':   stats_MF_Unusual_Imperfect += 1
         elif driver_status == 'preliminary': stats_MF_Unusual_Nonworking += 1
-        else: raise TypeError
+        # Found in mame2003-plus.xml, machine quizf1 and maybe others.
+        elif driver_status == 'protection': pass
+        elif driver_status == '': pass
+        else:
+            log_error('Machine {0}, unrecognised driver_status {1}'.format(m_name, driver_status))
+            raise TypeError
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
     pDialog.update(update_number)
@@ -5737,7 +5842,12 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
         if   driver_status == 'good':        stats_MF_Nocoin_Good += 1
         elif driver_status == 'imperfect':   stats_MF_Nocoin_Imperfect += 1
         elif driver_status == 'preliminary': stats_MF_Nocoin_Nonworking += 1
-        else: raise TypeError
+        # Found in mame2003-plus.xml, machine quizf1 and maybe others.
+        elif driver_status == 'protection': pass
+        elif driver_status == '': pass
+        else:
+            log_error('Machine {0}, unrecognised driver_status {1}'.format(m_name, driver_status))
+            raise TypeError
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
     pDialog.update(update_number)
@@ -5747,7 +5857,12 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
         if   driver_status == 'good':        stats_MF_Mechanical_Good += 1
         elif driver_status == 'imperfect':   stats_MF_Mechanical_Imperfect += 1
         elif driver_status == 'preliminary': stats_MF_Mechanical_Nonworking += 1
-        else: raise TypeError
+        # Found in mame2003-plus.xml, machine quizf1 and maybe others.
+        elif driver_status == 'protection': pass
+        elif driver_status == '': pass
+        else:
+            log_error('Machine {0}, unrecognised driver_status {1}'.format(m_name, driver_status))
+            raise TypeError
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
     pDialog.update(update_number)
@@ -5757,7 +5872,12 @@ def mame_build_MAME_catalogs(PATHS, settings, control_dic,
         if   driver_status == 'good':        stats_MF_Dead_Good += 1
         elif driver_status == 'imperfect':   stats_MF_Dead_Imperfect += 1
         elif driver_status == 'preliminary': stats_MF_Dead_Nonworking += 1
-        else: raise TypeError
+        # Found in mame2003-plus.xml, machine quizf1 and maybe others.
+        elif driver_status == 'protection': pass
+        elif driver_status == '': pass
+        else:
+            log_error('Machine {0}, unrecognised driver_status {1}'.format(m_name, driver_status))
+            raise TypeError
     processed_filters += 1
     update_number = int((float(processed_filters) / float(NUM_FILTERS)) * 100)
     pDialog.update(update_number)
@@ -6756,7 +6876,7 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic, options_dic,
     STUFF_PATH_LIST = [ROM_path_str, CHD_path_str, Samples_path_str]
     pDialog = xbmcgui.DialogProgress()
     pDialog_canceled = False
-    pDialog.create('Advanced MAME Launcher', 'Scanning files in ROM/CHD/Samples directories ...')
+    pDialog.create('Advanced MAME Launcher', 'Listing files in ROM/CHD/Samples directories ...')
     pDialog.update(0)
     for i, asset_dir in enumerate(STUFF_PATH_LIST):
         misc_add_file_cache(asset_dir)
@@ -7036,7 +7156,7 @@ def mame_scan_MAME_ROMs(PATHS, settings, control_dic, options_dic,
         file.write('\n'.join(r_list).encode('utf-8'))
 
     # --- CHD file list ---
-    pDialog.create('Advanced MAME Launcher', 'Scanning MAME CHD files ...')
+    pDialog.create('Advanced MAME Launcher', 'Scanning MAME CHDs ...')
     total_machines = len(machines_render)
     processed_machines = 0
     scan_CHD_files_total = 0
@@ -7163,11 +7283,11 @@ def mame_scan_SL_ROMs(PATHS, settings, control_dic, options_dic, SL_catalog_dic)
     SL_ROM_path_str = SL_ROM_dir_FN.getPath()
     SL_CHD_path_str = SL_CHD_path_FN.getPath()
     pDialog = xbmcgui.DialogProgress()
-    pdialog_line1 = 'Caching Sofware Lists ROMs/CHDs ...'
+    pdialog_line1 = 'Listing Sofware Lists ROM ZIPs and CHDs ...'
     pDialog.create('Advanced MAME Launcher', pdialog_line1)
-    pDialog.update(0, pdialog_line1, 'Scanning SL ROM path')
+    pDialog.update(0, pdialog_line1, 'Listing SL ROM ZIP path')
     misc_add_file_cache(SL_ROM_path_str, verbose = True)
-    pDialog.update(75, pdialog_line1, 'Scanning SL CHD path')
+    pDialog.update(75, pdialog_line1, 'Listing SL CHD path')
     misc_add_file_cache(SL_CHD_path_str, verbose = True)
     pDialog.update(100, pdialog_line1, ' ')
     pDialog.close()
@@ -7175,7 +7295,7 @@ def mame_scan_SL_ROMs(PATHS, settings, control_dic, options_dic, SL_catalog_dic)
     # --- SL ROM ZIP archives and CHDs ---
     # Traverse the Software Lists, check if ROMs ZIPs and CHDs exists for every SL item, 
     # update and save database.
-    pdialog_line1 = 'Scanning Sofware Lists ROMs/CHDs ...'
+    pdialog_line1 = 'Scanning Sofware Lists ROM ZIPs and CHDs ...'
     pDialog.create('Advanced MAME Launcher', pdialog_line1)
     pDialog.update(0)
     total_files = len(SL_catalog_dic)
@@ -7369,18 +7489,24 @@ def mame_check_before_scan_MAME_assets(PATHS, settings, control_dic):
 #   B) A parent may use assets from a clone.
 #
 def mame_scan_MAME_assets(PATHS, settings, control_dic,
-                          assets_dic, machines_render, main_pclone_dic):
+    assets_dic, machines_render, main_pclone_dic):
     Asset_path_FN = FileName(settings['assets_path'])
     log_info('mame_scan_MAME_assets() Asset path {0}'.format(Asset_path_FN.getPath()))
 
     # >> Iterate machines, check if assets/artwork exist.
     table_str = []
-    table_str.append(['left', 'left', 'left',  'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left'])
-    table_str.append(['Name', 'PCB',  'Artp',  'Art',  'Cab',  'Clr',  'CPan', 'Fan',  'Fly',  'Man',  'Mar',  'Snap', 'Tit',  'Tra'])
+    table_str.append([
+        'left',
+        'left', 'left', 'left', 'left', 'left', 'left', 'left',
+        'left', 'left', 'left', 'left', 'left', 'left', 'left'])
+    table_str.append([
+        'Name',
+        '3DB',  'Apr',  'Art',  'Cab',  'Clr',  'CPa',  'Fan',
+        'Fly',  'Man',  'Mar',  'PCB',  'Snp',  'Tit',  'Tra'])
 
     # --- Create a cache of assets ---
     pDialog = xbmcgui.DialogProgress()
-    pDialog.create('Advanced MAME Launcher', 'Scanning files in asset directories ...')
+    pDialog.create('Advanced MAME Launcher', 'Listing files in asset directories ...')
     pDialog.update(0)
     num_assets = len(ASSET_MAME_T_LIST)
     asset_dirs = [''] * num_assets
@@ -7480,25 +7606,27 @@ def mame_scan_MAME_assets(PATHS, settings, control_dic,
     pDialog.close()
 
     # --- Asset statistics and report ---
-    PCB  = (have_count_list[0],  total_machines - have_count_list[0],  alternate_count_list[0])
-    Artp = (have_count_list[1],  total_machines - have_count_list[1],  alternate_count_list[1])
-    Art  = (have_count_list[2],  total_machines - have_count_list[2],  alternate_count_list[2])
-    Cab  = (have_count_list[3],  total_machines - have_count_list[3],  alternate_count_list[3])
-    Clr  = (have_count_list[4],  total_machines - have_count_list[4],  alternate_count_list[4])
-    CPan = (have_count_list[5],  total_machines - have_count_list[5],  alternate_count_list[5])
-    Fan  = (have_count_list[6],  total_machines - have_count_list[6],  alternate_count_list[6])
-    Fly  = (have_count_list[7],  total_machines - have_count_list[7],  alternate_count_list[7])
-    Man  = (have_count_list[8],  total_machines - have_count_list[8],  alternate_count_list[8])
-    Mar  = (have_count_list[9],  total_machines - have_count_list[9],  alternate_count_list[9])
-    Snap = (have_count_list[10], total_machines - have_count_list[10], alternate_count_list[10])
-    Tit  = (have_count_list[11], total_machines - have_count_list[11], alternate_count_list[11])
-    Tra  = (have_count_list[12], total_machines - have_count_list[12], alternate_count_list[12])
+    # This must match the order of ASSET_MAME_T_LIST defined in disk_IO.py
+    box3D = (have_count_list[0],  total_machines - have_count_list[0],  alternate_count_list[0])
+    Artp  = (have_count_list[1],  total_machines - have_count_list[1],  alternate_count_list[1])
+    Art   = (have_count_list[2],  total_machines - have_count_list[2],  alternate_count_list[2])
+    Cab   = (have_count_list[3],  total_machines - have_count_list[3],  alternate_count_list[3])
+    Clr   = (have_count_list[4],  total_machines - have_count_list[4],  alternate_count_list[4])
+    CPan  = (have_count_list[5],  total_machines - have_count_list[5],  alternate_count_list[5])
+    Fan   = (have_count_list[6],  total_machines - have_count_list[6],  alternate_count_list[6])
+    Fly   = (have_count_list[7],  total_machines - have_count_list[7],  alternate_count_list[7])
+    Man   = (have_count_list[8],  total_machines - have_count_list[8],  alternate_count_list[8])
+    Mar   = (have_count_list[9],  total_machines - have_count_list[9],  alternate_count_list[9])
+    PCB   = (have_count_list[10], total_machines - have_count_list[10], alternate_count_list[10])
+    Snap  = (have_count_list[11], total_machines - have_count_list[11], alternate_count_list[11])
+    Tit   = (have_count_list[12], total_machines - have_count_list[12], alternate_count_list[12])
+    Tra   = (have_count_list[13], total_machines - have_count_list[13], alternate_count_list[13])
     pDialog.create('Advanced MAME Launcher')
     pDialog.update(0, 'Creating MAME asset report ...')
     report_slist = []
     report_slist.append('*** Advanced MAME Launcher MAME machines asset scanner report ***')
     report_slist.append('Total MAME machines {0}'.format(total_machines))
-    report_slist.append('Have PCBs       {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*PCB))
+    report_slist.append('Have 3D Boxes   {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*box3D))
     report_slist.append('Have Artpreview {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*Artp))
     report_slist.append('Have Artwork    {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*Art))
     report_slist.append('Have Cabinets   {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*Cab))
@@ -7508,6 +7636,7 @@ def mame_scan_MAME_assets(PATHS, settings, control_dic,
     report_slist.append('Have Flyers     {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*Fly))
     report_slist.append('Have Manuals    {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*Man))
     report_slist.append('Have Marquees   {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*Mar))
+    report_slist.append('Have PCBs       {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*PCB))
     report_slist.append('Have Snaps      {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*Snap))
     report_slist.append('Have Titles     {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*Tit))
     report_slist.append('Have Trailers   {0:5d} (Missing {1:5d}, Alternate {2:5d})'.format(*Tra))
@@ -7521,9 +7650,9 @@ def mame_scan_MAME_assets(PATHS, settings, control_dic,
 
     # >> Update control_dic by assigment (will be saved in caller)
     change_control_dic(control_dic, 'assets_num_MAME_machines', total_machines)
-    change_control_dic(control_dic, 'assets_PCBs_have', PCB[0])
-    change_control_dic(control_dic, 'assets_PCBs_missing', PCB[1])
-    change_control_dic(control_dic, 'assets_PCBs_alternate', PCB[2])
+    change_control_dic(control_dic, 'assets_3dbox_have', box3D[0])
+    change_control_dic(control_dic, 'assets_3dbox_missing', box3D[1])
+    change_control_dic(control_dic, 'assets_3dbox_alternate', box3D[2])
     change_control_dic(control_dic, 'assets_artpreview_have', Artp[0])
     change_control_dic(control_dic, 'assets_artpreview_missing', Artp[1])
     change_control_dic(control_dic, 'assets_artpreview_alternate', Artp[2])
@@ -7551,6 +7680,9 @@ def mame_scan_MAME_assets(PATHS, settings, control_dic,
     change_control_dic(control_dic, 'assets_marquees_have', Mar[0])
     change_control_dic(control_dic, 'assets_marquees_missing', Mar[1])
     change_control_dic(control_dic, 'assets_marquees_alternate', Mar[2])
+    change_control_dic(control_dic, 'assets_PCBs_have', PCB[0])
+    change_control_dic(control_dic, 'assets_PCBs_missing', PCB[1])
+    change_control_dic(control_dic, 'assets_PCBs_alternate', PCB[2])
     change_control_dic(control_dic, 'assets_snaps_have', Snap[0])
     change_control_dic(control_dic, 'assets_snaps_missing', Snap[1])
     change_control_dic(control_dic, 'assets_snaps_alternate', Snap[2])
@@ -7606,8 +7738,8 @@ def mame_scan_SL_assets(PATHS, settings, control_dic, SL_index_dic, SL_pclone_di
     total_files = len(SL_index_dic)
     processed_files = 0
     table_str = []
-    table_str.append(['left', 'left', 'left', 'left', 'left', 'left', 'left', 'left'])
-    table_str.append(['Soft', 'Name', 'Tit',  'Snap', 'Bft',  'Fan',  'Tra',  'Man'])
+    table_str.append(['left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left'])
+    table_str.append(['Soft', 'Name', '3DB',  'Tit',  'Snap', 'Bft',  'Fan',  'Tra',  'Man'])
     have_count_list = [0] * len(ASSET_SL_T_LIST)
     alternate_count_list = [0] * len(ASSET_SL_T_LIST)
     SL_item_count = 0
@@ -7716,17 +7848,20 @@ def mame_scan_SL_assets(PATHS, settings, control_dic, SL_index_dic, SL_pclone_di
     pDialog.close()
 
     # >> Asset statistics and report.
-    Tit  = (have_count_list[0], SL_item_count - have_count_list[0], alternate_count_list[0])
-    Snap = (have_count_list[1], SL_item_count - have_count_list[1], alternate_count_list[1])
-    Boxf = (have_count_list[2], SL_item_count - have_count_list[2], alternate_count_list[2])
-    Fan  = (have_count_list[3], SL_item_count - have_count_list[3], alternate_count_list[3])
-    Tra  = (have_count_list[4], SL_item_count - have_count_list[4], alternate_count_list[4])
-    Man  = (have_count_list[5], SL_item_count - have_count_list[5], alternate_count_list[5])
+    # This must match the order of ASSET_SL_T_LIST defined in disk_IO.py
+    _3db = (have_count_list[0], SL_item_count - have_count_list[0], alternate_count_list[0])
+    Tit  = (have_count_list[1], SL_item_count - have_count_list[1], alternate_count_list[1])
+    Snap = (have_count_list[2], SL_item_count - have_count_list[2], alternate_count_list[2])
+    Boxf = (have_count_list[3], SL_item_count - have_count_list[3], alternate_count_list[3])
+    Fan  = (have_count_list[4], SL_item_count - have_count_list[4], alternate_count_list[4])
+    Tra  = (have_count_list[5], SL_item_count - have_count_list[5], alternate_count_list[5])
+    Man  = (have_count_list[6], SL_item_count - have_count_list[6], alternate_count_list[6])
     pDialog.create('Advanced MAME Launcher')
     pDialog.update(0, 'Creating SL asset report ...')
     report_slist = []
     report_slist.append('*** Advanced MAME Launcher Software List asset scanner report ***')
     report_slist.append('Total SL items {0}'.format(SL_item_count))
+    report_slist.append('Have 3D Boxes  {0:6d} (Missing {1:6d}, Alternate {2:6d})'.format(*_3db))
     report_slist.append('Have Titles    {0:6d} (Missing {1:6d}, Alternate {2:6d})'.format(*Tit))
     report_slist.append('Have Snaps     {0:6d} (Missing {1:6d}, Alternate {2:6d})'.format(*Snap))
     report_slist.append('Have Boxfronts {0:6d} (Missing {1:6d}, Alternate {2:6d})'.format(*Boxf))
@@ -7744,6 +7879,9 @@ def mame_scan_SL_assets(PATHS, settings, control_dic, SL_index_dic, SL_pclone_di
 
     # >> Update control_dic by assigment (will be saved in caller)
     change_control_dic(control_dic, 'assets_SL_num_items', SL_item_count)
+    change_control_dic(control_dic, 'assets_SL_3dbox_have', _3db[0])
+    change_control_dic(control_dic, 'assets_SL_3dbox_missing', _3db[1])
+    change_control_dic(control_dic, 'assets_SL_3dbox_alternate', _3db[2])
     change_control_dic(control_dic, 'assets_SL_titles_have', Tit[0])
     change_control_dic(control_dic, 'assets_SL_titles_missing', Tit[1])
     change_control_dic(control_dic, 'assets_SL_titles_alternate', Tit[2])

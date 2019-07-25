@@ -19,17 +19,25 @@ this guide is far from complete and I will try to improve it soon.
 
 ## Screenshot gallery ##
 
-All the screenshots have been taken using the skin [Estuary AEL MOD].
+All the screenshots have been taken using the skin [Estuary AEL MOD](https://forum.kodi.tv/showthread.php?tid=287826&pid=2398922#pid2398922)
 
-[Estuary AEL MOD]: https://forum.kodi.tv/showthread.php?tid=287826&pid=2398922#pid2398922
+**Addon root window**
 
-![Estuary AEL mod 1](https://raw.githubusercontent.com/wiki/Wintermute0110/plugin.program.AML.dev/shots/shot_root.png)
+![](https://raw.githubusercontent.com/Wintermute0110/plugin.program.AML.dev/master/media/shot_root.png)
 
-![Estuary AEL mod 2](https://raw.githubusercontent.com/wiki/Wintermute0110/plugin.program.AML.dev/shots/shot_MAME_pclone_list.png)
+**Browsing MAME machines**
 
-![Estuary AEL mod 3](https://raw.githubusercontent.com/wiki/Wintermute0110/plugin.program.AML.dev/shots/shot_SL_pclone_list.png)
+![](https://raw.githubusercontent.com/Wintermute0110/plugin.program.AML.dev/master/media/shot_MAME_pclone_list_A.png)
 
-![Estuary AEL mod 4](https://raw.githubusercontent.com/wiki/Wintermute0110/plugin.program.AML.dev/shots/aml_machine_Audit_machine.png)
+![](https://raw.githubusercontent.com/Wintermute0110/plugin.program.AML.dev/master/media/shot_MAME_pclone_list_B.png)
+
+**Browsing Software Lists**
+
+![](https://raw.githubusercontent.com/Wintermute0110/plugin.program.AML.dev/master/media/shot_SL_pclone_list.png)
+
+**Audit of a MAME machine**
+
+![](https://raw.githubusercontent.com/Wintermute0110/plugin.program.AML.dev/master/media/shot_MAME_audit.png)
 
 ## Installing the latest released version ##
 

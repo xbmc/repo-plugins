@@ -131,6 +131,13 @@ def kodi_dialog_yesno(row1, row2='', row3='', title = 'Advanced MAME Launcher'):
 
     return ret
 
+# type 3 ShowAndGetWriteableDirectory
+# shares  'files'  list file sources (added through filemanager)
+# shares  'local'  list local drives
+# shares  ''       list local drives and network shares
+def kodi_dialog_get_wdirectory(dialog_heading):
+    return xbmcgui.Dialog().browse(3, dialog_heading, '').decode('utf-8')
+
 #
 # Displays a small box in the bottom right corner
 #

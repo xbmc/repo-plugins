@@ -144,9 +144,16 @@
     <Manufacturer>has Taito</Manufacturer>
 </MAMEFilter>
 
+<MAMEFilter>
+    <Name>Williams arcade games</Name>
+    <Plot>Arcade games by [COLOR orange]Williams[/COLOR].</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Williams</Manufacturer>
+</MAMEFilter>
+
 <!--  Family game definitions  -->
 <MAMEFilter>
-    <Name>Familiy games from the 1970s</Name>
+    <Name>Family games from the 70s</Name>
     <Plot>Arcade machines from the 1970s with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines</Plot>
     <Options>NoClones, NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
     <Genre>STANDARD_GENRES</Genre>
@@ -155,28 +162,45 @@
 </MAMEFilter>
 
 <MAMEFilter>
-    <Name>Familiy games from the 1980s</Name>
-    <Plot>Arcade machines from the 1980s with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
+    <Name>Family games from the 80s</Name>
+    <Plot>Arcade machines from 1980 to 1984 with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
     <Options>NoClones, NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
     <Genre>STANDARD_GENRES</Genre>
     <Controls>STANDARD_CONTROLS</Controls>
-    <Year>year &gt;= 1980 and year &lt; 1990</Year>
-
+    <Year>year &gt;= 1980 and year &lt; 1985</Year>
     <!-- Include notable clone games -->
     <Include>pacman</Include>
 </MAMEFilter>
 
 <MAMEFilter>
-    <Name>Familiy games from the 1990s</Name>
-    <Plot>Arcade machines from the 1990s with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
+    <Name>Family games from the 85s</Name>
+    <Plot>Arcade machines from 1985 to 1989 with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
     <Options>NoClones, NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
     <Genre>STANDARD_GENRES</Genre>
     <Controls>STANDARD_CONTROLS</Controls>
-    <Year>year &gt;= 1990 and year &lt; 2000</Year>
+    <Year>year &gt;= 1985 and year &lt; 1990</Year>
 </MAMEFilter>
 
 <MAMEFilter>
-    <Name>Familiy games from the 2000s</Name>
+    <Name>Family games from the 90s</Name>
+    <Plot>Arcade machines from 1990 to 1994 with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
+    <Options>NoClones, NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Genre>STANDARD_GENRES</Genre>
+    <Controls>STANDARD_CONTROLS</Controls>
+    <Year>year &gt;= 1990 and year &lt; 1995</Year>
+</MAMEFilter>
+
+<MAMEFilter>
+    <Name>Family games from the 95s</Name>
+    <Plot>Arcade machines from 1995 to 1999 with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
+    <Options>NoClones, NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Genre>STANDARD_GENRES</Genre>
+    <Controls>STANDARD_CONTROLS</Controls>
+    <Year>year &gt;= 1995 and year &lt; 2000</Year>
+</MAMEFilter>
+
+<MAMEFilter>
+    <Name>Family games from the 00s</Name>
     <Plot>Arcade machines from the 2000s with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
     <Options>NoClones, NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
     <Genre>STANDARD_GENRES</Genre>
@@ -185,11 +209,30 @@
 </MAMEFilter>
 
 <MAMEFilter>
-    <Name>Familiy games from the 2010s an up</Name>
+    <Name>Family games from the 10s</Name>
     <Plot>Arcade machines from the 2010s an up with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
     <Options>NoClones, NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
     <Genre>STANDARD_GENRES</Genre>
     <Controls>STANDARD_CONTROLS</Controls>
     <Year>year &gt;= 2010</Year>
 </MAMEFilter>
+
+<MAMEFilter>
+    <Name>Family games with Horizonal Screen</Name>
+    <Plot>Arcade machines with a Horizontal screen with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
+    <Options>NoClones, NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Options>NoVertical</Options>
+    <Genre>STANDARD_GENRES</Genre>
+    <Controls>STANDARD_CONTROLS</Controls>
+</MAMEFilter>
+
+<MAMEFilter>
+    <Name>Family games with Vertical Screen</Name>
+    <Plot>Arcade machines with a Vertical screen with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
+    <Options>NoClones, NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Options>NoHorizontal</Options>
+    <Genre>STANDARD_GENRES</Genre>
+    <Controls>STANDARD_CONTROLS</Controls>
+</MAMEFilter>
+
 </Advanced_MAME_Launcher_custom_filters>

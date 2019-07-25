@@ -10,14 +10,13 @@ WIP      [AUDIT] Samples distributed with MAME are uncompressed and not stored i
          The MAME audit engine must take this into account.
          See comments in mame_scan_MAME_ROMs() @mame.py
 
-WIP      [CORE] [LEIA] Recursive context menus.
-         Pay attention to the select() bug in Kodi Krypton.
-         This requires Kodi version detection and having different code for Krypton/Leia.
+WIP      [CORE] AML/AEL must report the aspect ratio of artwork to the skin.
+         How to implement this? Using PIL?
+         I think best way is that core developers expose the image aspect ratio to the
+         skin using infolabels.
 
 
 [B]AML ideas and planned features (read to implement)[/B]
-
-WIP      [DOCS] Improve AML wiki in Github and move documentation from Kodi forum to Github wiki.
 
 WIP      [MANUALS] Increase the number of supported PDF filters.
          This may required A LOT of Python coding.
@@ -26,28 +25,115 @@ WIP      [MANUALS] Support for CBZ/CBR manuals.
          In theory Kodi VFS is able to read RAR files.
          Wait until this is implemented in AEL and then port it from AEL into AML?
 
-WIP      [FILTERING] Test the filters for errors. For example, test that all the drivers
-         defined in <Driver> exist. Another example, test that the genres defined in
-         <Genre> and the controls defined in <Controls> exist.
-         Warn the user if errors found, maybe in a report the user reads.
-
-WIP      [FILTERING] Make a filter report the user can read.
-         I have to think if this is really useful or not.
-
-WIP      [CORE] Differentiate between Non-merged and Fully non-merged ROM sets.
-         Non-merged sets do not include BIOS and device ROMs.
-         Fully non-merged sets include BIOS and devices ROMs (every ROM required to run each
-         machine). Pleasuredome rom sets are Fully non-merged.
-
 WIP      [CORE] Implement the "Read-only launchers". ROLs are XML files that include the
          launcher information as well as the ROMs information. ROLs are generated with AML,
          can be exported as XML and then used with AEL. AEL will trear ROLs are read-only
          (cannot be edited). If a ROL should be changed, then the XML is edited or regenerated
          and then imported again into AML.
 
-WIP      [CORE] AML/AEL must report the aspect ratio of artwork to the skin.
+WIP      [CORE] [LEIA] Recursive context menus.
+         Pay attention to the select() bug in Kodi Krypton.
+         This requires Kodi version detection and having different code for Krypton/Leia.
+         Start with the context menu in which recursiveness ir more useful.
 
-WIP      [CORE] New artwork type, 3dboxes.
+WIP      [GRAPHICS] Optimize the generation of 3D boxes. Cache the background images used
+         in all boxes.
+
+
+[B]Advanced MAME Launcher | version 0.9.11 | xx June 2019[/B]
+
+WIP      [DOCS] Improve the AML wiki in Github and move documentation from Kodi forum to
+         Github wiki.
+
+WIP      Retroarch core MAME 2003 Plus allows to save the MAME XML file needed by AML.
+         In this core, the XML is extracted using the MAME internal menu, which must be
+         opened with the Retroarch core options menu. The XML file is saved in the SAVES
+         directory with name mame2003-plus/mame2003-plus.xml
+         TTBOMK, currently it is the only core to support this feature.
+         Exploit this to give support to MAME 2003 and then Android. According to
+         Chrisism, Retroarch is currently the best way to use MAME in Android.
+
+         See https://github.com/libretro/mame2003-libretro/pull/348
+         See https://github.com/libretro/mame2003-plus-libretro/pull/8
+         See https://github.com/libretro/mame2010-libretro/pull/123
+         See https://github.com/libretro/mame2010-libretro/tree/master/metadata
+
+WIP      Read-only Launcher (ROLs) to export into AEL.
+
+
+[B]Advanced MAME Launcher | version 0.9.10 | 10 May 2019[/B]
+
+FEATURE  Option to disable Software Lists at all in Vanilla MAME mode.
+
+FEATURE  Management of MAME Favourite objects (delete missing, delete single).
+
+FEATURE  Management of SL Favourite objects (delete missing, delete single).
+
+FEATURE  Initial support for Retroarch MAME 2003 Plus core.
+
+FEATURE  [CORE] Ability to export DAT files in Logiqx format for MAME ROMs and MAME CHDs.
+
+FEATURE  [CORE] Differentiate between Non-merged and Fully non-merged MAME ROM sets.
+         Non-merged sets do not include BIOS and device ROMs.
+         Fully non-merged sets include BIOS and devices ROMs (every ROM required to run each
+         machine). Pleasuredome ROM sets are Fully non-merged.
+         This needs more testing.
+
+FEATURE  [FILTERING] Test the filters for errors. For example, test that all the drivers
+         defined in <Driver> exist. Another example, test that the genres defined in
+         <Genre> and the controls defined in <Controls> exist.
+
+FEATURE  [FILTERING] Warn the user if errors found in the XML filter definition, maybe in
+         a report the user can read later.
+
+FEATURE  [FILTERING] Make a filter report the user can read. Now, only the number of machines
+         after filtering is reported.
+
+FEATURE  [GRAPHICS] Generate MAME machines and SL items 3D Boxes.
+
+FEATURE  [GRAPHICS] Refactoring of the Fanart and 3D Box code generation. Creation of graphics.py.
+
+FEATURE  [GRAPHICS] Only generate 3D Boxes if both Fyler and Clearlogo (MAME) or Boxfront (SL)
+         are present. Avoid having empty 3D boxes.
+
+FEATURE  [CORE] Improved filter "Machines by Display Type" and removed filter
+         "Machines by Display Rotation."
+
+FEATURE  [CORE] New catalog filter "Machines by Display VSync freq." Inspired by
+         MASH's MAMEINFO Vsync.ini.
+
+FEATURE  [CORE] New catalog filter "Machines by Display Resolution" Inspired by
+         MASH's MAMEINFO Screen.ini.
+
+FEATURE  [CORE] New catalog filter "Machines by CPU" Inspired by
+         MASH's MAMEINFO CPU.ini.
+
+FEATURE  [CORE] Rewrite the INI loading engine.
+         See comments in header of function mame_load_INI_datfile().
+
+FEATURE  [CORE] New INI file Artwork.ini (produced by MASH's MAMEINFO).
+         Catalog filter "Machines by Artwork".
+         Note that Artwork.ini places the same machine in different categories. Maybe other
+         INIs do the same and currently AML does not support this. This requires
+         some changes in AML engine.
+
+FEATURE  New catalog "Version added"
+
+FEATURE  [CORE] New INI file Category.ini (produced by MASH's MAMEINFO).
+         Catalog filter "Machines by Category".
+
+FEATURE  [CORE] New "All in one (Extract, Build and Scan)" options:
+         1) Delete current to "All in one (Extract, Build, Scan)"
+         2) Add "All in one (Extract, Build, Scan, Filters)"
+         3) Add "All in one (Extract, Build, Scan, Filters, Audit)"
+
+FEATURE  [CORE] By request of Rufoo, support MAME 3dboxes.
+
+FIX      Fixed a couple of crashes when executing context menus, thanks to Dax9.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2838180#pid2838180
+
+FIX      Fix the render_skin_*() functions. These are called by skins to get a list of
+         filters.
 
 
 [B]Advanced MAME Launcher | version 0.9.9 | 22 March 2019[/B]

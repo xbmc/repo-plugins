@@ -40,7 +40,7 @@
     <Genre>has Driving and has "Board Game"</Genre>
 
     <!--
-        As shown in "Machines by Control Type (Compact)" filter.
+        As shown in "Machines by Controls (Compact)" filter.
         Search is case sensitive.
         If multiple <Controls> tags only last one is used.
         Literals with spaces must be enclosed in quotes ' or double quotes ".
@@ -49,13 +49,13 @@
     <Controls>lacks Mahjong and lacks Gambling and lacks Hanafuda</Controls>
 
     <!--
-        As shown in "Machines by Device (Compact)" filter.
+        As shown in "Machines by Pluggable Devices (Compact)" filter.
         Search is case sensitive.
-        If multiple <Devices> tags only last one is used.
+        If multiple <PluggableDevices> tags only last one is used.
         Literals with spaces must be enclosed in quotes ' or double quotes ".
         LSP parser operators: and, or, not, has, lacks, '(', ')', literal.
     -->
-    <Devices>has Cartridge and has Harddisk</Devices>
+    <PluggableDevices>has Cartridge and has Harddisk</PluggableDevices>
 
     <!--
         As shown in "Machines by Year" filter.

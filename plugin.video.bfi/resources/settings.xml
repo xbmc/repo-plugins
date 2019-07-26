@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="32000">
+        <setting id="debug" type="bool" label="32001" default="false"/>
+        <setting type="sep"/>
+        <setting id="cache_use" type="bool" label="32017" default="true"/>
+        <setting id="cache_history" type="bool" label="32021" default="true"/>
+        <setting type="sep"/>
+        <setting id="cache_clear" label="32018" type="action" action="RunPlugin(plugin://$ID/clear/cache)"/>
+        <setting id="search_clear" label="32025" type="action" action="RunPlugin(plugin://$ID/clear/search)"/>
+        <setting id="recent_clear" label="32022" type="action" action="RunPlugin(plugin://$ID/clear/recent)"/>
+    </category>
+    <category label="32002">
+        <setting id="stream_bandwidth" type="labelenum" label="32003" values="300|600|900|1200|1800|2400"
+                 default="900"/>
+    </category>
+    <category label="32007">
+        <!--https://www.elastic.co/guide/en/elasticsearch/reference/current/search-uri-request.html-->
+        <setting id="search_max_results" type="slider" label="32013" default="10" range="1,1,24" option="int"/>
+        <setting id="search_default_operator" type="labelenum" label="32014" values="AND|OR" default="OR"/>
+        <setting id="search_lenient" type="bool" label="32015" default="true"/>
+        <setting id="search_saved" type="bool" label="32020" default="true"/>
+        <setting id="recent_saved" type="bool" label="32024" default="true"/>
+    </category>
+    <category label="32012">
+        <setting id="show_home" type="bool" label="32009" default="true"/>
+        <setting id="show_new" type="bool" label="32004" default="true"/>
+        <setting id="show_popular" type="bool" label="32005" default="true"/>
+        <setting id="show_collections" type="bool" label="32006" default="true"/>
+        <setting id="show_the_cut" type="bool" label="The Cut" default="true"/>
+        <setting id="show_kermode" type="bool" label="32026" default="true"/>
+        <setting id="show_search" type="bool" label="32007" default="true"/>
+        <setting id="show_settings" type="bool" label="32010" default="true"/>
+        <setting id="show_recent" type="bool" label="32021" default="true"/>
+    </category>
+</settings>

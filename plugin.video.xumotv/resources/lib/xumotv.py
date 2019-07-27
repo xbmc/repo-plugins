@@ -18,7 +18,7 @@
 
 # -*- coding: utf-8 -*-
 import os, sys, time, datetime, re, traceback, calendar
-import urlparse, urllib, urllib2, socket, json
+import urlparse, urllib, urllib2, socket, json, inputstreamhelper
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 from simplecache import SimpleCache, use_cache
@@ -170,6 +170,7 @@ class XumoTV(object):
             items = list(self.pagination(items, end))
             start = 0 if start >= len(items) else start
             items = items[start]
+        # if start == 0 and end == 14: self.addDir(LANGUAGE(30007), '', 10)
         for item in items:
             chid   = item['guid']['value']
             chnum  = item['number']
@@ -190,7 +191,7 @@ class XumoTV(object):
         xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
         if start is not None and opt == 'now': 
             start += 1
-            self.addDir('>> Next', '%s'%(start), 1)
+            if end == 14: self.addDir(LANGUAGE(30008), '%s'%(start), 1)
 
                 
     def buildOnDemand(self, name, channelId=None):
@@ -216,11 +217,10 @@ class XumoTV(object):
         url   = channelId
         label = meta['title']
         thumb = BASE_THUMB%(chid)
-        if channelName is not None: 
+        if channelName is not None and channelName.lower() != label.lower(): 
             thumb = BASE_LOGO%(channelId)
             label = '%s - %s'%(channelName,label)
-        if channelNumber is not None: 
-            label = '%s: %s'%(channelNumber,label)
+        if channelNumber is not None:  label = '%s: %s'%(channelNumber,label)
         try: 
             # if channelName is None: label = '%s - %s'%(meta['providers'][0]['title'],label)
             url   = meta['providers'][0]['sources'][0]['uri']
@@ -249,8 +249,9 @@ class XumoTV(object):
         liz  = xbmcgui.ListItem(name, path=url)
         liz.setProperty("IsPlayable","true")
         liz.setProperty("IsInternetStream","true")
-        liz.setProperty('inputstreamaddon','inputstream.adaptive')
-        liz.setProperty('inputstream.adaptive.manifest_type','hls')
+        if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream():
+            liz.setProperty('inputstreamaddon','inputstream.adaptive')
+            liz.setProperty('inputstream.adaptive.manifest_type','hls')
         xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
         
         
@@ -263,6 +264,9 @@ class XumoTV(object):
         items = self.getChannelCategories(url)
         for idx, item in enumerate(items):
             label, url, liz = self.buildAsset(item['id'], url)
+            if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream():
+                liz.setProperty('inputstreamaddon','inputstream.adaptive')
+                liz.setProperty('inputstream.adaptive.manifest_type','hls')
             playlist.add(url, liz, idx)
             if idx == 0: xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
         
@@ -275,6 +279,9 @@ class XumoTV(object):
         items = self.getCategories(self.getOnNow(channelId)['categoryId'])['results']
         for idx, item in enumerate(items):
             label, url, liz = self.buildAsset(item['id'], channelId)
+            if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream() and not DEBUG:
+                liz.setProperty('inputstreamaddon','inputstream.adaptive')
+                liz.setProperty('inputstream.adaptive.manifest_type','hls')
             playlist.add(url, liz, idx)
             if idx == 0: xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 
@@ -284,7 +291,7 @@ class XumoTV(object):
         #support for uEPG universal epg framework module. https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
         stations = sorted(list(self.getChannels()), key=lambda item: item['number'])
         listings = sorted(self.getOnNEXT(), key=lambda item: item['start'], reverse=False)
-        return [self.buildGuide((station, listings)) for station in stations]
+        return urllib.quote(json.dumps(list([self.buildGuide((station, listings)) for station in stations])))
         
         
     def buildGuide(self, item):
@@ -364,7 +371,8 @@ class XumoTV(object):
         elif mode == 1: self.buildChannels(int(url), opt='now')
         elif mode == 2: self.buildOnDemand(name, url)
         elif mode == 9: self.playVideo(name, url)
-        elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(urllib.quote(json.dumps(list(self.uEPG()))),urllib.quote(json.dumps(self.sysARG[0]+"?mode=20")),urllib.quote(json.dumps("3600")),urllib.quote(json.dumps("7"))))
+        elif mode == 10: self.buildChannels(end=5000, opt='now')
+        elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&refresh_path=%s&refresh_interval=%s&row_count=%s)"%(self.uEPG(),urllib.quote(self.sysARG[0]+"?mode=20"),"3600","7"))
 
 
         xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)

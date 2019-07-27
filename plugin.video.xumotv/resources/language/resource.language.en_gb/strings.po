@@ -43,3 +43,11 @@ msgstr ""
 msgctxt "#30006"
 msgid "Genre"
 msgstr ""
+
+msgctxt "#30007"
+msgid "All Channels"
+msgstr "
+
+msgctxt "#30008"
+msgid ">> Next"
+msgstr "

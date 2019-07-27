@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.previewnetworks"
 	name="Preview Networks"
-	version="2.3.5"
+	version="2.3.6"
 	provider-name="nmazz64">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
@@ -10,6 +10,7 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>Content website no longer exists</broken>
         <platform>all</platform>
         <language>en it</language>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>

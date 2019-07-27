@@ -69,7 +69,7 @@ msgid "We apologize but it appears that you are not currently located in the Des
 msgstr ""
 
 msgctxt "#30014"
-msgid "_member_location=%s; _member_username=%s; _member_token=%s; _member_role=1; _gat=1"
+msgid "_member_location=%s; _member_email=%s; _member_token=%s; _member_role=1"
 msgstr ""
 
 msgctxt "#30015"
@@ -82,4 +82,16 @@ msgstr ""
 
 msgctxt "#30017"
 msgid "Something went wrong, please check user credentials and try again."
+msgstr ""
+
+msgctxt "#30018"
+msgid "_member_location=%s; _member_email=%s; _member_role=1"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Locast Supporter? (Ad-Free)"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Your City"
 msgstr ""

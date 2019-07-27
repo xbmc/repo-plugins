@@ -91,3 +91,7 @@ msgstr ""
 msgctxt "#30118"
 msgid "Coming Up"
 msgstr ""
+
+msgctxt "#30119"
+msgid "No Search Results found for %s"
+msgstr ""

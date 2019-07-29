@@ -1,58 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.catchuptvandmore"
        name="Catch-up TV &amp; More"
-       version="0.1.10"
-       provider-name="SylvainCecchetto,wwark">
+       version="0.2.9"
+       provider-name="SylvainCcchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
-    <import addon="script.module.requests" version="2.12.4"/>
     <import addon="script.module.youtube.dl" version="18.225.0"/>
+    <import addon="script.module.requests" version="2.12.4"/>
+    <import addon="script.module.codequick" version="0.9.10"/>
+    <import addon="script.module.pytz" version="2014.2"/>
+    <import addon="script.module.inputstreamhelper" version="0.3.3"/>
+    <import addon="script.module.six" version="1.11.0"/>
+    <import addon="script.module.pyqrcode" version="0.0.1"/>
+    <import addon="script.module.tzlocal" version="2.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="fr_fr">Catch-Up TV &amp; More : Replay TV, Live TV et bien plus encore.</summary>
-    <description lang="fr_fr">Catch-Up TV &amp; More regroupe dans un même plugin Kodi l'ensemble des vidéos des différents services et chaînes de Replay TV (rattrapage TV) ainsi que l'accès au direct. De plus, cette extension vous permet d'accéder rapidement aux vidéos et contenus proposés par certains sites internet.</description>
-    <disclaimer lang="fr_fr">Retours de bugs, propositions d'améliorations ou d'ajout de contenus sont les bienvenue ! GitHub ou e-mail.</disclaimer>
-    <summary lang="en_gb">Catch-Up TV &amp; More: It's all in the title.</summary>
-    <description lang="en_gb">Catch-Up TV &amp; More brings together in one Kodi plugin all the videos of the various services and channels of catch-up TV and live TV. Furthermore, this addon allows you to quickly access the videos and content offered by certain websites.</description>
-    <disclaimer lang="en_gb">Bug reports, suggestions for improvements or content additions are welcome! GitHub or e-mail.</disclaimer>
-    <description lang="he_il">ההרחבה מאפשרת לך להתעדכן בתוכן השידורים תוסף אחד של קודי מרכז את כל קטעי וידאו של שירותים שונים וערוצי תוכן משודר. בנוסף, תוספת זו מאפשרת לך לגשת במהירות לסרטונים ולתכנים המוצעים על ידי אתרים מסוימים.</description>
-    <disclaimer lang="he_il">דוחות שגיאה, הצעות לשיפור או תוספות תוכן יתקבלו בברכה! ל-GitHub או אימייל.</disclaimer>
- 
-    <language>fr</language>
+    <reuselanguageinvoker>false</reuselanguageinvoker>
+    <summary lang="fr_FR">Catch-Up TV &amp; More : Replay TV, Live TV et bien plus encore.</summary>
+    <description lang="fr_FR">Catch-Up TV &amp; More regroupe dans un même plugin Kodi l'ensemble des vidéos des différents services et chaînes de Replay TV (rattrapage TV) ainsi que l'accès au direct. De plus, cette extension vous permet d'accéder rapidement aux vidéos et contenus proposés par certains sites internet.</description>
+    <disclaimer lang="fr_FR">Retours de bugs, propositions d'améliorations ou d'ajout de contenus sont les bienvenue ! GitHub ou e-mail.</disclaimer>
+    <summary lang="en_GB">Catch-Up TV &amp; More: It's all in the title.</summary>
+    <description lang="en_GB">Catch-Up TV &amp; More brings together in one Kodi add-on all the videos of the various services and channels of catch-up TV and live TV. Furthermore, this add-on allows you to quickly access the videos and content offered by certain websites.</description>
+    <disclaimer lang="en_GB">Bug reports, suggestions for improvements or content additions are welcome! GitHub or e-mail.</disclaimer>
+    <description lang="he_IL">ההרחבה מאפשרת לך להתעדכן בתוכן השידורים תוסף אחד של קודי מרכז את כל קטעי וידאו של שירותים שונים וערוצי תוכן משודר. בנוסף, תוספת זו מאפשרת לך לגשת במהירות לסרטונים ולתכנים המוצעים על ידי אתרים מסוימים.</description>
+    <disclaimer lang="he_IL">דוחות שגיאה, הצעות לשיפור או תוספות תוכן יתקבלו בברכה! ל-GitHub או אימייל.</disclaimer>
+    <summary lang="nl_NL">Catch-Up TV &amp; More: Replay tv, Live tv en meer.</summary>
+    <description lang="nl_NL">Catch-Up TV &amp; More brengt replay en live tv van verschikkende diensten en kanalen samen in één Kodi add-on. Bovendien stelt deze add-on u instaat video's van bepaalde websites makkelijk te benaderen.</description>
+    <disclaimer lang="nl_NL">Bug meldingen, suggesties ter verbetering of additionele inhouden zijn welkom! Via GitHub of e-mail.</disclaimer>
+
+    <language></language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum></forum>
-    <website></website>
-    <email>catch.up.tv.and.more [AT] gmail [DOT] com</email>
+    <forum>https://forum.kodi.tv/showthread.php?tid=307107</forum>
+    <website>https://catch-up-tv-and-more.github.io/</website>
+    <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.1.10]
-[Add Live TV] DW (Contents EN, DE, ES, AR) (wwark)
-[Fix] Default Quality for Replay group TF1 (Thanks Chris_wafer) (wwark)
-[Readd Live TV] C8, CSTAR, Canalplus (clair) (wwark)
-[Fix] Arte Replay and Add some new contents language (EN|ES|PL)
-[Improvement] New menu layout and new live TV menu presentation (SylvainCecchetto)
-[Upgrade] Upgrade SimplePlugin framework to v2.3.2 (SylvainCecchetto)
-[Fix] Broken favorites (SylvainCecchetto)
-[Fix] Live TV for RTL TVI, PlugRTL, ClubRTL (wwark)
-[Add Channel] 日テレ (JP) (wwark)
-[Add Channel] テレビ朝日 (JP) (wwark)
-[Add Channel] TBSテレビ (JP) (wwark)
-[Add Channel] テレビ東京 (JP) (wwark)
-[Add Channel] MBSテレビ (JP) (wwark)
-[Add Channel] 朝日放送株式会社 (JP) (wwark)
-[Add Channel] 読売テレビ (JP) (wwark)
-[Improvement] Use XMLTV Telerama for Live FR TV guide (SylvainCecchetto)
-[Improvement] Faster navigation in plugin (SylvainCecchetto)
-[Fix] RTBF Auvio - Replay Emissions (BE) (wwark) 
-[Improvement] Customizable parameters to download video (SylvainCecchetto)
-[Fix] PublicSenat Replay (wwark)
-[Fix] L'équipeTV Replay (wwark)
-[Fix] RTC (BE) (wwark)
+[Version 0.2.9]
+[Fix] Catch-up TV - KTO (FR) - Some programs
+[Fix] Catch-up TV - MyCanal (FR) - Some programs
+[Add] Catch-up TV - Piwi + and TéléToon + (FR)
+[Fix] Catch-up TV - Rai (IT) - Check if program has contents
+[Remove] Catch-up TV - J-One (FR) - No more contents in the website - Maybe will be readd in the future
+[Fix] Catch-up TV - GameOne (FR)
+[Add] Catch-up TV - Paramount Channel (FR)
+[Move] Live TV - Paramount Channel (ES|IT) from WO to IT and ES
+[Move] Catch-up TV - MTV (FR) from WO to FR
+[Remove] Log_uploader for the exception 'No items found'
+[Fix] Catch-up TV - Arte Concert (WO)
+[Remove] Live TV - Virgin Radio (FR)
+[Add] Website - Philharmoniedeparis.fr (FR)
+[Fix] Catch-up TV - NPO (NL)
+[Fix] Catch-up TV - RT (EN)
+[Fix] Live TV - La7 (IT)
+[Fix] Catch-up TV and Live TV - RMC Découverte (FR)
+[Fix] Live TV - L'équipe TV (FR)
     </news>
     <assets>
       <icon>icon.png</icon>

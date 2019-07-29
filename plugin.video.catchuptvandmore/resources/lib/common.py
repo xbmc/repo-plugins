@@ -20,54 +20,30 @@
     Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """
 
+# The unicode_literals import only has
+# an effect on Python 2.
+# It makes string literals as unicode like in Python 3
+from __future__ import unicode_literals
+
 import os
-import sys
-from resources.lib import simpleplugin as sp
-
-PLUGIN = sp.Plugin()
-ADDON = sp.Addon()
-
-CACHE_TIME = 10
-
-PLUGIN_NAME = 'Catch-up TV & More'
-
-# Initialize GNU gettext emulation in addon
-# This allows to use UI strings from addon’s English
-# strings.po file instead of numeric codes
-GETTEXT = ADDON.initialize_gettext()
-
-FILESYSTEM_CODING = sys.getfilesystemencoding()
-if sys.getfilesystemencoding() is None:
-    FILESYSTEM_CODING = "utf-8"
-
-ADDON_DATA = sp.xbmc.translatePath(
-    os.path.join(
-        'special://profile/addon_data',
-        ADDON.id
-    )
-)
-
-MEDIA_PATH = sp.xbmc.translatePath(
-    os.path.join(
-        ADDON.path,
-        "resources",
-        "media"
-    )
-)
-
-LIB_PATH = sp.xbmc.translatePath(
-    os.path.join(
-        ADDON.path,
-        "resources",
-        "lib"
-    )
-)
+from codequick.script import Script
+from codequick.utils import ensure_native_str
 
 
-def get_window_title():
-    query = sp.sys.argv[2][1:]
-    params = PLUGIN.get_params(query)
-    if 'window_title' in params:
-        return params.window_title
+def get_item_media_path(item_media_path):
+    full_path = ''
+
+    # Local image in ressources/media folder
+    if type(item_media_path) is list:
+        full_path = os.path.join(Script.get_info("path"), "resources", "media",
+                                 *(item_media_path))
+
+    # Remote image with complete URL
+    elif 'http' in item_media_path:
+        full_path = item_media_path
+
+    # Remote image on our images repo
     else:
-        return PLUGIN_NAME
+        full_path = 'https://github.com/Catch-up-TV-and-More/images/raw/master/' + item_media_path
+
+    return ensure_native_str(full_path)

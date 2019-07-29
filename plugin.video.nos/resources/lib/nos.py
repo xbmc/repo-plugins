@@ -22,19 +22,16 @@ def index():
         url=url,
     )
     soup = BeautifulSoup(response.content)
-    categories_container = soup.findAll(id=u'programs')[0]
+    categories_container = soup.findAll(id=u'broadcasts')[0]
     categories = categories_container.findAll(u'li')
     for category in categories:
         category_anchor = category.findAll(u'a')[0]
-        category_text = category_anchor.text
+        category_text = category_anchor.findAll('span')[1].text
         category_url = category_anchor[u'href']
         if category_text in nl_only_categories:
             category_text = u'{category_text} (georestricted NL only)'.format(
                 category_text=category_text
             )
-        if category_url == '/uitzending/nos-sportjournaal.html':
-            # Sportjournaal is protected by DRM
-            continue
         if category_url.startswith(u'/uitzending/'):
             data.append(
                 {
@@ -59,13 +56,13 @@ def show_category(category_url):
     )
     soup = BeautifulSoup(response.content)
     videos = soup.findAll(
-        u'li',
-        {u'class': u'broadcast-player__playlist__item'},
+        u'div', {u'class': u'broadcast-player'}
     )
+
     for video in videos:
         title = video.findAll(
-            u'div',
-            {u'class': u'broadcast-link-thumb__name'},
+            u'h1',
+            {u'class': u'broadcast-player-meta__title'},
         )[0].text
         timecode = video.findAll(u'time')[0][u'datetime']
         parsed_timecode = datetimeparse(timecode)
@@ -73,37 +70,25 @@ def show_category(category_url):
             title=title,
             time=parsed_timecode.strftime(u'%Y-%m-%d %H:%M'),
         )
-        video_url = video.findAll(u'a')[0][u'href']
-        data.append(
-            {
-                u'label': label,
-                u'path': {
-                    u'endpoint': u'show_video',
-                    u'video_url': u'https://nos.nl{video_url}'.format(
-                        video_url=video_url,
-                    ),
-                },
-                u'is_playable': True,
-            }
-        )
+        # add each quality version of the video as an entry
+        sub_videos = video.findAll("source")
+        for sub_video in sub_videos:
+            video_url = sub_video["src"]
+            sub_label = label + ' ' + sub_video["data-label"]
+            data.append(
+                {
+                    u'label': sub_label,
+                    u'path': {
+                        u'endpoint': u'show_video',
+                        u'video_url': u'{video_url}'.format(
+                            video_url=video_url,
+                        ),
+                    },
+                    u'is_playable': True,
+                }
+            )
     return data
 
 
 def video_url_to_file_url(video_url):
-    response = requests.request(
-        method=u'GET',
-        url=video_url,
-    )
-    soup = BeautifulSoup(response.content)
-    video = soup.findAll(u'video')[0]
-    sources = video.findAll(u'source')
-    sources = sorted(
-        sources,
-        key=lambda source: int(
-            quality_re.search(source[u'data-label']).group(0)
-        ),
-        reverse=True,
-    )
-    preferred_source = sources[0]
-    url = preferred_source['src']
-    return url
+    return video_url

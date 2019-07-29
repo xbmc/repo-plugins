@@ -1,0 +1,14 @@
+{
+  "channels": [
+    {
+      "guid": "F9AE6336-74BD-4FDF-B453-3BE23187D201",
+      "name": "24 Classics",
+      "description": "Playlists from www.24classics.com",
+      "icon": "24classicsicon.png",
+      "category": "Radio",
+      "sortorder": 250,
+      "message": "",
+      "fanart": "24classicfanart.png"
+    }
+  ]
+}

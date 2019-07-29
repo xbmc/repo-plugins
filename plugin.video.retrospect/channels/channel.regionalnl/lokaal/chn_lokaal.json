@@ -1,0 +1,112 @@
+{
+  "channels": [
+    {
+      "guid": "B7EB69DF-18C4-4935-BA83-0B2A89295178",
+      "name": "RTV Drenthe",
+      "description": "RTV Drenthe Uitzendinggemist",
+      "icon": "rtvdrenthelarge.png",
+      "category": "Regional",
+      "channelcode": "rtvdrenthe",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "rtvdrenthefanart.jpg"
+    },
+    {
+      "guid": "B099990E-5749-44FC-A5C5-A40427A9A5C9",
+      "name": "RTV Oost",
+      "description": "RTV Oost Uitzendinggemist",
+      "icon": "rtvoostlarge.png",
+      "category": "Regional",
+      "channelcode": "rtvoost",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "rtvoostfanart.jpg"
+    },
+    {
+      "guid": "7C40EEE7-40F4-40ED-8A70-FAAB42B7A2B1",
+      "name": "RTV Noord",
+      "description": "RTV Noord Uitzendinggemist",
+      "icon": "rtvnoordlarge.png",
+      "category": "Regional",
+      "channelcode": "rtvnoord",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "rtvnoordfanart.png"
+    },
+    {
+      "guid": "EF46E726-92F4-42FC-A6D4-68A888E23E96",
+      "name": "RTV Noord-Holland",
+      "description": "RTV Noord-Holland Uitzendinggemist",
+      "icon": "rtvnhlarge.png",
+      "category": "Regional",
+      "channelcode": "rtvnh",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "rtvnhfanart.jpg"
+    },
+    {
+      "guid": "AF2B907D-D437-46DB-B802-F946850098FB",
+      "name": "RTV Rijnmond",
+      "description": "RTV Rijnmond Uitzendinggemist",
+      "icon": "rtvrijnmondlarge.png",
+      "category": "Regional",
+      "channelcode": "rtvrijnmond",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "rtvrijnmondfanart.png"
+    },
+    {
+      "guid": "EFE57022-9F52-41F9-8775-13CCD001FA56",
+      "name": "Omroep West",
+      "description": "Omroep West Uitzendinggemist",
+      "icon": "omroepwestlarge.png",
+      "category": "Regional",
+      "channelcode": "omroepwest",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "omroepwestfanart.jpg"
+    },
+    {
+      "guid": "B2AF5744-4697-44CD-9A54-CFD6A4273207",
+      "name": "Omroep Gelderland",
+      "description": "Omroep Gelderland Uitzendinggemist",
+      "icon": "omroepgelderlandlarge.png",
+      "category": "Regional",
+      "channelcode": "omroepgelderland",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "omroepgelderlandfanart.jpg"
+    },
+    {
+      "guid": "770D3385-2EC9-4B87-9BC8-3A7190248A9C",
+      "name": "Omroep Brabant",
+      "description": "Omroep Brabant Uitzendinggemist",
+      "icon": "omroepbrabantlarge.png",
+      "category": "Regional",
+      "channelcode": "omroepbrabant",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "omroepbrabantfanart.png"
+    },
+    {
+      "guid": "81CD5339-0D59-4019-9171-12A98815311C",
+      "name": "Omrop Fryslân",
+      "description": "Omrop Fryslân Uitzendinggemist",
+      "icon": "omropfryslanlarge.png",
+      "category": "Regional",
+      "channelcode": "omropfryslan",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "omropfryslanfanart.jpg"
+    }
+  ]
+}

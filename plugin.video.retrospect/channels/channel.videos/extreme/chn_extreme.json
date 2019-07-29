@@ -1,0 +1,13 @@
+{
+  "channels": [
+    {
+      "guid": "52230AF6-FBA9-11DD-87D4-15B656D89593",
+      "name": "Extreme.com",
+      "description": "Extreme.com movies",
+      "icon": "extremelarge.png",
+      "category": "Sport",
+      "channelcode": "extreme",
+      "fanart": "extremefanart.jpg"
+    }
+  ]
+}

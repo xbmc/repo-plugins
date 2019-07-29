@@ -1,0 +1,15 @@
+{
+  "channels": [
+    {
+      "guid": "29D36E00-730B-11E2-AD39-B0F06188709B",
+      "name": "L1",
+      "description": "L1.nl Uitzendinggemist",
+      "icon": "l1large.png",
+      "category": "Regional",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "l1fanart.jpg"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.nfpf" name="National Film Preservation Foundation" version="1.0.0" provider-name="fraser">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+        <import addon="script.module.cache" version="1.0.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Search and play free content from the National Film Preservation Foundation</summary>
+        <description lang="en_GB">The National Film Preservation Foundation is the nonprofit organization created by the U.S. Congress to help save America's film heritage.
+They support activities that preserve American films and improve film access for study, education, and exhibition.
+        </description>
+        <language>en</language>
+        <platform>all</platform>
+        <license>MIT</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=345866</forum>
+        <website>https://www.filmpreservation.org/</website>
+        <email>fraser.chapman@gmail.com</email>
+        <source>https://github.com/FraserChapman/plugin.video.nfpf</source>
+        <news>v1.0.0 (31-7-19) - Initial version</news>
+        <disclaimer lang="en_GB">Neither this addon nor its author are in anyway affiliated with National Film Preservation Foundation</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/media/ss1.jpg</screenshot>
+            <screenshot>resources/media/ss2.jpg</screenshot>
+            <screenshot>resources/media/ss3.jpg</screenshot>
+            <screenshot>resources/media/ss4.jpg</screenshot>
+            <screenshot>resources/media/ss5.jpg</screenshot>
+            <screenshot>resources/media/ss6.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

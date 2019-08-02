@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting id="debug" type="bool" label="30101" default="false"/>
-    <setting id="show_best" type="bool" label="30102" default="true"/>
-    <setting id="views" type="bool" label="30103" default="false"/>
-</settings>

@@ -1,0 +1,27 @@
+Criminal podcast - Kodi 18 version
+
+__Version 1.0.0__
+1. Initial working version
+
+__Version 1.1.0__
+1. Fixed images
+2. Improved loading speed with local icons
+
+__Version 1.1.1__
+1. Updated Python required to 2.26.0
+
+__Version 1.1.2__
+1. Updated website tag
+2. Removed audiotag ref
+3. Added kodi-six dependency requirement
+4. Added more local icons
+
+__Version 1.1.3__
+1. Removed strings.xml
+2. Added strings.po US
+3. Added strings.po GB
+4. Added addon.xml.md5 file and md5 hash
+5. Fixed transparency on addon.xml icon file
+6. Criminalpodcast.py added: xbmc.log('type: %s'%(type(soup)),xbmc.LOGDEBUG)
+7. Increased latest episodes to last 5 episodes
+8. Changed screenshot image for addon info screen

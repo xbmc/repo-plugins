@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.criminalpodcast-kodi18" name="Criminal Podcast" version="1.1.3" provider-name="leopheard">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    <import addon="script.module.beautifulsoup4" version="4.3.1"/>
+    <import addon="script.module.requests" version="1.1.0"/>
+    <import addon="script.module.kodi-six" version="0.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>en</language>
+    <summary lang="en_GB">KODI / XBMC audio addon for the podcast Criminal from NPR / PRX</summary>
+    <description lang="en_GB">Criminal is a podcast about crime. Not so much the "if it bleeds, it leads," kind of crime. Something a little more complex. Stories of people who've done wrong, been wronged, and/or gotten caught somewhere in the middle. We are a proud member of Radiotopia, from PRX, a curated network of extraordinary, story-driven shows. Learn more at radiotopia.fm
+    </description>
+    <license>The MIT License (MIT)</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=344790</forum>
+    <email>leopheard@gmail.com</email>
+    <source>https://github.com/leopheard/criminalpodcast</source>
+    <website>http://thisiscriminal.com</website>
+        	<assets>
+			<icon>resources/media/icon.jpg</icon>
+			<fanart>resources/media/fanart.png</fanart>
+			<screenshot>resources/media/Criminal_SocialShare_2.png</screenshot>
+			<screenshot>resources/media/Criminal_SocialShare_3.png</screenshot>
+			<screenshot>resources/media/screen3.jpg</screenshot>
+		</assets>
+  </extension>
+</addon>

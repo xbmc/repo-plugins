@@ -1,0 +1,31 @@
+# Kodi Media Center language file
+# Addon Name: Criminal Podcast
+# Addon id: plugin.audio.criminalpodcast
+# Addon Provider: leopheard
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: leopheard@gmail.com\n"
+"POT-Creation-Date: 2019-07-30 HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-07-30 HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "All Criminal episodes"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Latest Criminal episode"
+msgstr ""
+
+# empty string with id 32003
+
+msgctxt "#30002"
+msgid "New to Criminal? Start here"
+msgstr ""

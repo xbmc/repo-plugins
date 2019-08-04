@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Plugin name -->
+  <string id="20000">The Intercept Spoken Edition</string>
+  <string id="20001">The Intercept Spoken Edition latest episode</string>
+  <string id="30001">All Deconstructed episodes</string>
+  <string id="30000">Latest Deconstructed episode</string>
+  <string id="30002">All Intercepted episodes</string>
+  <string id="30003">Latest Intercepted episode</string>
+  <string id="30004">All Murderville, GA episodes</string>
+  <string id="30005">Latest Murderville, GA episode</string>
+</strings>

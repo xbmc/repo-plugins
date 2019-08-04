@@ -1,0 +1,5 @@
+__Version 1.0.0__
+1. Initial working version
+
+__Version 1.1.0__
+1. Added Spoken Edition

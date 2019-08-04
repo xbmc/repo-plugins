@@ -1,0 +1,24 @@
+{
+  "channels": [
+    {
+      "guid": "F9616B7C-5CC8-11E1-8F40-43194824019B",
+      "name": "Southpark Sweden",
+      "description": "Southpark Epsides for playback in Sweden.",
+      "icon": "southparklarge.png",
+      "category": "Video",
+      "channelcode": "southpark.se",
+      "language": "se",
+      "compatible": "Environments.NoPlatform"
+    },
+    {
+      "guid": "3ac3d6d0-5b2a-11dd-ae16-0800200c9a66",
+      "name": "Southpark.NL",
+      "description": "Southpark Epsides for playback in The Netherlands.",
+      "icon": "southparklarge.png",
+      "category": "Video",
+      "channelcode": "southpark",
+      "language": "nl",
+      "compatible": "Environments.NoPlatform"
+    }
+  ]
+}

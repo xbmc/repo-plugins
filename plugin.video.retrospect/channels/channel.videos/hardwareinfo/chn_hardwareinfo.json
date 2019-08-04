@@ -1,0 +1,13 @@
+{
+  "channels": [
+    {
+      "guid": "DB6A5104-30B0-11E1-A995-AF324924019B",
+      "name": "Hardware.info",
+      "description": "Videos van Hardware.info",
+      "icon": "hardwareinfolarge.png",
+      "category": "Tech",
+      "language": "nl",
+      "fanart": "hardwareinfofanart.jpg"
+    }
+  ]
+}

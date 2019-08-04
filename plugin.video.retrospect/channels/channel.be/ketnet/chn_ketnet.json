@@ -1,0 +1,27 @@
+{
+  "channels": [
+    {
+      "guid": "756FFEC8-B6BA-11E0-898D-1F434824019B",
+      "name": "Ketnet",
+      "description": "Online uitzendingen van www.ketnet.be.",
+      "icon": "ketnetlarge.png",
+      "category": "National",
+      "channelcode": "ketnet",
+      "sortorder": 12,
+      "language": "be",
+      "compatible": "Environments.All",
+      "fanart": "ketnetfanart.jpg"
+    },
+    {
+      "guid": "6C7374A8-B6BA-11E0-A21E-1A434824019B",
+      "name": "Cobra",
+      "description": "Online uitzendingen van www.cobra.be.",
+      "icon": "cobralarge.png",
+      "category": "National",
+      "channelcode": "cobra",
+      "sortorder": 14,
+      "language": "be",
+      "compatible": "Environments.NoPlatform"
+    }
+  ]
+}

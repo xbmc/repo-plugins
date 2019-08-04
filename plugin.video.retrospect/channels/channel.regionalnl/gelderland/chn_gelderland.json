@@ -1,0 +1,15 @@
+{
+  "channels": [
+    {
+      "guid": "B797D9BA-F06B-11E1-9CD5-9F7D6188709B",
+      "name": "Omroep Gelderland",
+      "description": "Omroep Gelderland uitzendinggemist",
+      "icon": "gelderlandlarge.png",
+      "category": "Regional",
+      "channelcode": "tv1",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.NoPlatform"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "channel.nos",
+  "version": "5.0.0.0",
+  "textures": {
+    "channel.nos.nos2010/nosfanart.jpg": "7397f29df1f86111c076cdcd015173a1",
+    "channel.nos.nos2010/nosfanart2.jpg": "8baf9e12664ac0dec783773a11fb32bb",
+    "channel.nos.nos2010/nosfanart3.jpg": "68cbc240df45373d83f892ad1eb55a97",
+    "channel.nos.nos2010/nosfanart4.jpg": "6cc979f507f5bc5f6e1ad42e28da64c4",
+    "channel.nos.nosnl/nosfanart.jpg": "7773ffa2916d6f07829c84d1673d729d",
+    "channel.nos.schooltv/schooltvfanart.jpg": "6c2cbc2aef2f74c162aafac4555fb574",
+    "channel.nos.schooltv/schooltvimage.jpg": "c10d93339c2023017150f348dcaf5ac3",
+    "channel.nos.nos2010/1large.png": "651eb593fdb0476afdc32aa1fa49b6ac",
+    "channel.nos.nos2010/2large.png": "8e29745c38da024acdbe8a5df1f2c3e6",
+    "channel.nos.nos2010/3large.png": "f986976bc983df08f0937c4da06829e9",
+    "channel.nos.nos2010/nosimage.png": "7acff73c5fbc8554797250edf8ec05fb",
+    "channel.nos.nos2010/npolarge.png": "ba5a994c57d5ac07274dbf7e8695504c",
+    "channel.nos.nos2010/radio1.png": "ca04dd41150c0ece0a1cd66537751e69",
+    "channel.nos.nos2010/radio2.png": "d266248e835c993d0b683ff9df83bee2",
+    "channel.nos.nos2010/radio6.png": "db6aad7941bafd2ade05aa0d33b82bbc",
+    "channel.nos.nos2010/zapimage.png": "0ce3026eb74ba8c320bfbeab97b718c4",
+    "channel.nos.nos2010/zappelinimage.png": "b85203b25f4c8f3a8967e7e1d4ded943",
+    "channel.nos.nos2010/zappelinlarge.png": "5a9722d07a50b3ddf954cfefd1cd0254",
+    "channel.nos.nos2010/zapplarge.png": "5ed2333bd4713dee7134b12ec39114f6",
+    "channel.nos.nosnl/nosnlimage.png": "c4503da915728577f769537e292c345f",
+    "channel.nos.nosnl/nosnllarge.png": "139c5cb6f7d973d0d9ac932d36f98e1c",
+    "channel.nos.schooltv/schooltvlarge.png": "9dc438eeec3a5105576c92ded658b4aa"
+  }
+}

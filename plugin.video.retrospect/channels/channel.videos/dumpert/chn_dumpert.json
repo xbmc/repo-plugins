@@ -1,0 +1,14 @@
+{
+  "channels": [
+    {
+      "guid": "80726A74-42F3-11DD-BBA6-A1F055D89593",
+      "name": "Dumpert.nl",
+      "description": "Filmpjes van Dumpert.nl",
+      "icon": "dumperticonlarge.png",
+      "category": "Video",
+      "channelcode": "dumpert",
+      "language": "nl",
+      "fanart": "dumpertfanart.jpg"
+    }
+  ]
+}

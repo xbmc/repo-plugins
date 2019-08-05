@@ -5,7 +5,6 @@
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
     <import addon="script.module.beautifulsoup4" version="4.3.1"/>
     <import addon="script.module.requests" version="1.1.0"/>
-    <import addon="script.module.kodi-six" version="0.1.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>audio</provides>
@@ -19,7 +18,7 @@
     <license>The MIT License (MIT)</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=344790</forum>
     <email>leopheard@gmail.com</email>
-    <source>https://github.com/leopheard/criminalpodcast</source>
+    <source>https://github.com/leopheard/criminalpodcast-kodi18</source>
     <website>http://thisiscriminal.com</website>
         	<assets>
 			<icon>resources/media/icon.jpg</icon>

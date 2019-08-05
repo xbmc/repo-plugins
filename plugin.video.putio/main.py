@@ -148,7 +148,7 @@ def play(item):
                })
 
     li.setPath(item.stream_url())
-    li.setSubtitles([item.subtitles()])
+    li.setSubtitles(item.subtitles())
 
     xbmcplugin.setResolvedUrl(PLUGIN_HANDLE, succeeded=True, listitem=li)
 

@@ -7,6 +7,9 @@ import webbrowser
 from urllib import urlencode
 from datetime import datetime
 
+import xbmc
+import xbmcvfs
+
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -21,6 +24,8 @@ CHUNK_SIZE = 256 * KB
 BASE_URL = 'https://api.put.io/v2'
 ACCESS_TOKEN_URL = 'https://api.put.io/v2/oauth2/access_token'
 AUTHENTICATION_URL = 'https://api.put.io/v2/oauth2/authenticate'
+
+SPECIAL_TEMPORARY_DIRECTORY_PATH = 'special://temp/plugin.video.putio'
 
 logger = logging.getLogger(__name__)
 
@@ -173,8 +178,44 @@ class _File(_BaseResource):
         return BASE_URL + '/files/%s/stream?oauth_token=%s' % (self.id, self.client.access_token)
 
     # FIXME: temporarily added.
-    def subtitles(self, key='default'):
-        return BASE_URL + '/files/%s/subtitles/%s?oauth_token=%s' % (self.id, key, self.client.access_token)
+    def subtitles(self):
+        """
+        Returns an array of all subtitles for the video.
+        
+        Subtitles are listed by the api, and downloaded to a temporary directory.
+        """
+        subtitles_list_url = '/files/%s/subtitles' % self.id
+        subtitles_list_response = self.client.request(subtitles_list_url)
+        assert subtitles_list_response.status_code == 200
+        # NOTE: The subtitle key (used below) is a bunch of base64 encoded bits. They are not
+        # deterministic, and may change even if the video id and each subtitle file contents
+        # stays the same. Deleting any previous temporary subtitle files (for all videos) to
+        # not amass files, neither from duplicates of subtitles, every previously watched video,
+        # nor videos already deleted from put.io.
+        subtitles_directory_path = '%s/subtitles' % SPECIAL_TEMPORARY_DIRECTORY_PATH
+        ensure_local_special_path_rmdir_recursive(subtitles_directory_path)
+        video_directory_path = '%s/%s' % (subtitles_directory_path, self.id)
+        subtitle_file_paths = []
+        for subtitle in subtitles_list_response['subtitles']:
+            # NOTE: There are subtitle filename collisions, even per video. Using the
+            # subtitle key for subtitle uniqueness to not overwrite files during download,
+            # but the raw key string is too long.
+            truncated_subtitle_key = subtitle['key'][:5]
+            subtitle_directory_path = '%s/%s' % (video_directory_path, truncated_subtitle_key)
+            xbmcvfs.mkdirs(subtitle_directory_path)
+            subtitle_path = '%s/%s' % (subtitle_directory_path, subtitle['name'])
+            # FIXME: Parallelize downloads.
+            subtitle_url = '%s/%s' % (subtitles_list_url, subtitle['key'])
+            self._download_subtitle(subtitle_url, subtitle_path)
+            subtitle_file_paths.append(subtitle_path)
+        return subtitle_file_paths
+
+    def _download_subtitle(self, url, special_path):
+        special_path_translated = xbmc.translatePath(special_path)
+        response = self.client.request(url, raw=True)
+        with open(special_path_translated, 'wb') as f:
+            for data in response.iter_content():
+                f.write(data)
 
     # FIXME: temporarily added.
     @property
@@ -386,3 +427,36 @@ def strptime(date):
 
     d = dict((k, int(v)) for k, v in d.iteritems())
     return datetime(**d)
+
+# FIXME: Import from some library, or move to utilities.
+def local_rmdir_recursive(dirpath):
+    """
+    Recursive directory removal utility, as non-empty directories cannot be deleted.
+    """
+    dirs, files = xbmcvfs.listdir(dirpath)
+    for f in files:
+        xbmcvfs.delete(os.path.join(dirpath, f))
+    for d in dirs:
+        local_rmdir_recursive(os.path.join(dirpath, d))
+    return xbmcvfs.rmdir(dirpath)
+
+# FIXME: Import from some library, or move to utilities.
+def local_special_directory_exists(special_dir_path):
+    """
+    Checks if a directory, specified by a special:// path, exists.
+    """
+    # NOTE: Checking if directory exists requires a trailing slash.
+    # NOTE: Assuming special:// paths, which use forward slashes only.
+    special_separator = '/'
+    special_dir_path_with_slash = (special_dir_path + special_separator
+        if special_dir_path[:-1] != special_separator else special_dir_path)
+    return xbmcvfs.exists(special_dir_path_with_slash)
+
+# FIXME: Import from some library, or move to utilities.
+def ensure_local_special_path_rmdir_recursive(special_dir_path):
+    """
+    Ensures that a directory, specified by a special:// path, exists, does not exist.
+    """
+    if local_special_directory_exists(special_dir_path):
+        return local_rmdir_recursive(special_dir_path)
+    return True

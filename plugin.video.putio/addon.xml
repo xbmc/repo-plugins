@@ -2,7 +2,7 @@
 
 <addon id="plugin.video.putio"
     name="put.io"
-    version="2.2.1"
+    version="2.3.0"
     provider-name="Put.io Developers">
     <requires>
         <import addon="xbmc.python" version="2.19.0" />
@@ -15,7 +15,7 @@
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Put.io for Kodi</summary>
         <description lang="en">Put.io is a service that combines cloud storage and bittorrent. You need an account to use this plug-in. Get one from https://put.io</description>
-        <disclaimer></disclaimer>
+        <disclaimer lang="en_GB">Please read terms of service at https://put.io/terms-of-service/</disclaimer>
         <language>en tr</language>
         <platform>all</platform>
         <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>

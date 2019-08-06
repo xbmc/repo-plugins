@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.crossroads"
-version="1.0.1"
+version="1.0.2"
 name="Crossroads Church"
 provider-name="CRDS">
 <requires>
@@ -15,6 +15,7 @@ provider-name="CRDS">
   <provides>video</provides>
 </extension>
 <extension point="xbmc.addon.metadata">
+  <broken>Addon is not being maintained.</broken>
   <summary lang="en">Crossroads Church</summary>
   <description lang="en">This plugin provides access to live crossroads streams and past services. 
 We started this church for our friends who didn't like church.

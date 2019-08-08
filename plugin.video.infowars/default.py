@@ -416,41 +416,60 @@ def Kaitlin_Bennett_Sub_Menu(title=''):
 
 def Full_Show_Sub_Menu(title=''):
     WhereAmI('@ Recent Full Length Shows')
-    ifwID = None
-    urlMAIN = 'https://vod-api.infowars.com/api/channel'
     hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
        'Accept': 'text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
        'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
        'Accept-Encoding': 'none',
        'Accept-Language': 'en-US,en;q=0.8',
        'Connection': 'keep-alive'}
-    dataMAIN = None
-    reqMAIN = urllib2.Request(urlMAIN, dataMAIN ,hdr)
-    responseMAIN = urllib2.urlopen(reqMAIN) 
-    dataMAIN = json.load(responseMAIN)
 
-    for section in reversed(dataMAIN):
-       titleCheck = unicode(section["title"]).encode('utf-8');
-       if not titleCheck=="Testing" and not titleCheck=="Miscellaneous Videos":
-           if titleCheck=="Real News with David Knight":
-               titleCheck = "The David Knight Show";
-           ifwID = unicode(section["id"]).encode('utf-8');
 
-           url = 'https://vod-api.infowars.com/api/channel/'+ ifwID +'/videos'
+    #0 - Alex Jones Show
+    #1 - The David Knight Show
+    #2 - War Room
+    #3 - Special Reports
+    #4 - Infowars Archive
+    
+    ### Keep UrlShows in correct order as per site menu
+    
+    urlShows = ['https://www.infowars.com/videos/', 'https://www.infowars.com/david-knight-show/', 'https://www.infowars.com/war-room/', 'https://www.infowars.com/special-reports/', 'https://www.infowars.com/video-archive/']
+    showID = []
 
-           data = None
-           req = urllib2.Request(url, data ,hdr)
-           response = urllib2.urlopen(req)
-           data = json.load(response)
+    for i in range(len(urlShows)):
+        IW_addon.log('*******  ' + urlShows[i])
+        dataSHOW = None
+        reqSHOW = urllib2.Request(urlShows[i], dataSHOW ,hdr)
+        responseSHOW = urllib2.urlopen(reqSHOW)
+        content = responseSHOW.read()
+        showID.append(find_multiple_matches(content,"var CHANNEL_ID = \"(.*?)\";"))
+    
+    urlMAIN = 'https://api.infowarsmedia.com/api/channel/'
+ 
+    for i in range(len(urlShows)):
+        dataMAIN = None
+        urlMAINID = urlMAIN + str(showID[i]).strip('[\']') + '/'
+        IW_addon.log('*******  ' + urlMAINID)
+        reqMAIN = urllib2.Request(urlMAINID, dataMAIN ,hdr)
+        responseMAIN = urllib2.urlopen(reqMAIN) 
+        dataMAIN = json.load(responseMAIN)
 
-           for item in data["videos"]:
-               title = titleCheck + " - " + unicode(item["title"]).encode('utf-8'); 
-               plot = unicode(item["summary"]).encode('utf-8');
-               thumbnail = unicode(item["posterThumbnailUrl"]).encode('utf-8');
-               video_id = unicode(item["streamUrl"]).encode('utf-8');
-               url = video_id
-               if ("FULL" in title or "Full" in title) and ("SHOW" in title or "Show" in title):
-                   add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
+        titleCheck = dataMAIN["title"] 
+
+        url = urlMAINID + 'videos/'
+
+        data = None
+        req = urllib2.Request(url, data ,hdr)
+        response = urllib2.urlopen(req)
+        data = json.load(response)
+
+        for item in data["videos"]:
+            title = titleCheck + " - " + item["title"]            
+            plot = item["summary"]                               
+            thumbnail = item["posterThumbnailUrl"]               
+            video_id = item["streamUrl"]                         
+            url = video_id
+            if ("FULL" in title or "Full" in title) and ("SHOW" in title or "Show" in title):
+                add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
             
 
     eod()
@@ -459,41 +478,60 @@ def Alex_Jones_Show_Archive_Sub_Menu(title=''):
     #https://www.infowars.com/videos/
     WhereAmI('@ On Demand Videos')
     IW_addon.add_directory({'mode': 'FullShowSubMenu','title':'Recent Full Length Shows'},{'title':  cFL('===[ Click Here For Recent Full Length Shows ]===','red')},is_folder=True,img=IWODFLSIcon,fanart=IWODFanart)
-    ifwID = None
-    urlMAIN = 'https://vod-api.infowars.com/api/channel'
     hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
        'Accept': 'text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
        'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
        'Accept-Encoding': 'none',
        'Accept-Language': 'en-US,en;q=0.8',
        'Connection': 'keep-alive'}
-    dataMAIN = None
-    reqMAIN = urllib2.Request(urlMAIN, dataMAIN ,hdr)
-    responseMAIN = urllib2.urlopen(reqMAIN) 
-    dataMAIN = json.load(responseMAIN)
 
-    for section in reversed(dataMAIN):
-       titleCheck = unicode(section["title"]).encode('utf-8');
-       if not titleCheck=="Testing" and not titleCheck=="Miscellaneous Videos":
-           if titleCheck=="Real News with David Knight":
-               titleCheck = "The David Knight Show";
-           ifwID = unicode(section["id"]).encode('utf-8');
 
-           url = 'https://vod-api.infowars.com/api/channel/'+ ifwID +'/videos'
+    #0 - Alex Jones Show
+    #1 - The David Knight Show
+    #2 - War Room
+    #3 - Special Reports
+    #4 - Infowars Archive
+    
+    ### Keep UrlShows in correct order as per site menu
+    
+    urlShows = ['https://www.infowars.com/videos/', 'https://www.infowars.com/david-knight-show/', 'https://www.infowars.com/war-room/', 'https://www.infowars.com/special-reports/', 'https://www.infowars.com/video-archive/']
+    showID = []
 
-           data = None
-           req = urllib2.Request(url, data ,hdr)
-           response = urllib2.urlopen(req)
-           data = json.load(response)
+    for i in range(len(urlShows)):
+        IW_addon.log('*******  ' + urlShows[i])
+        dataSHOW = None
+        reqSHOW = urllib2.Request(urlShows[i], dataSHOW ,hdr)
+        responseSHOW = urllib2.urlopen(reqSHOW)
+        content = responseSHOW.read()
+        showID.append(find_multiple_matches(content,"var CHANNEL_ID = \"(.*?)\";"))
+    
+    urlMAIN = 'https://api.infowarsmedia.com/api/channel/'
 
-           for item in data["videos"]:
-               title = titleCheck + " - " + unicode(item["title"]).encode('utf-8'); 
-               plot = unicode(item["summary"]).encode('utf-8');
-               thumbnail = unicode(item["posterThumbnailUrl"]).encode('utf-8');
-               video_id = unicode(item["streamUrl"]).encode('utf-8');
-               url = video_id
-               if not "Full Show" in title:
-                   add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
+    for i in range(len(urlShows)):
+        dataMAIN = None
+        urlMAINID = urlMAIN + str(showID[i]).strip('[\']') + '/'
+        IW_addon.log('*******  ' + urlMAINID)
+        reqMAIN = urllib2.Request(urlMAINID, dataMAIN ,hdr)
+        responseMAIN = urllib2.urlopen(reqMAIN) 
+        dataMAIN = json.load(responseMAIN)
+
+        titleCheck = dataMAIN["title"] 
+
+        url = urlMAINID + 'videos/'
+
+        data = None
+        req = urllib2.Request(url, data ,hdr)
+        response = urllib2.urlopen(req)
+        data = json.load(response)
+
+        for item in data["videos"]:
+           title = titleCheck + " - " + item["title"]           
+           plot = item["summary"]                               
+           thumbnail = item["posterThumbnailUrl"]               
+           video_id = item["streamUrl"]                         
+           url = video_id
+           if not "Full Show" in title:
+               add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
 
     eod()
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.eafa" name="East Anglian Film Archive" version="1.1.0" provider-name="fraser">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="script.module.cache" version="1.0.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Play content from the East Anglian Film Archive</summary>
+        <description lang="en_GB">The East Anglian Film Archive preserves moving image heritage.
+Whilst the films they look after are largely of regional content, many are of national and international significance.
+This add-on provides access to over 200 hours of archive film, spanning 1,200 individual titles.
+        </description>
+        <language>en</language>
+        <platform>all</platform>
+        <license>MIT</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=331329</forum>
+        <website>http://www.eafa.org.uk/</website>
+        <email>fraser.chapman@gmail.com</email>
+        <source>https://github.com/FraserChapman/plugin.video.eafa</source>
+        <news>v1.1.0 (3-8-19) - Python 3 compatible</news>
+        <disclaimer lang="en_GB">Neither this addon nor its author are in anyway affiliated with the East Anglian Film Archive</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/media/ss1.jpg</screenshot>
+            <screenshot>resources/media/ss2.jpg</screenshot>
+            <screenshot>resources/media/ss3.jpg</screenshot>
+            <screenshot>resources/media/ss4.jpg</screenshot>
+            <screenshot>resources/media/ss5.jpg</screenshot>
+            <screenshot>resources/media/ss6.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

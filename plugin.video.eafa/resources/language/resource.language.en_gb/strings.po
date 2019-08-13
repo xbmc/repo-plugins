@@ -1,6 +1,6 @@
 # Kodi Media Center language file
-# Addon Name: BFI Player
-# Addon id: plugin.video.bfi
+# Addon Name: East Anglian Film Archive
+# Addon id: plugin.video.eafa
 # Addon Provider: fraser
 msgid ""
 msgstr ""
@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#This is a comment
 
 msgctxt "#32000"
 msgid "General"
@@ -87,7 +85,7 @@ msgid "Clear Cache"
 msgstr ""
 
 msgctxt "#32019"
-msgid "Remove Search"
+msgid "Remove"
 msgstr ""
 
 msgctxt "#32020"
@@ -98,3 +96,26 @@ msgctxt "#32022"
 msgid "Are you sure?"
 msgstr ""
 
+msgctxt "#32023"
+msgid "Recently Viewed"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Save Recently Viewed"
+msgstr ""
+
+msgctxt "#32025"
+msgid "Clear Recently Viewed"
+msgstr ""
+
+msgctxt "#32026"
+msgid "Clear Saved Searches"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Definition"
+msgstr ""
+
+msgctxt "#32028"
+msgid "Playback"
+msgstr ""

@@ -3,303 +3,345 @@
 
 __author__ = "fraser"
 
+import logging
+
 import routing
 import xbmc
-import xbmcaddon as xa
-import xbmcplugin as xp
+import xbmcaddon
+import xbmcplugin
 from xbmcgui import ListItem
 
+from resources.lib import kodilogging
 from resources.lib import kodiutils as ku
 from resources.lib import search as eafa
 
-plugin = routing.Plugin()
-ADDON = xa.Addon()
-ADDON_ID = ADDON.getAddonInfo("id")  # plugin.video.eafa
+ADDON = xbmcaddon.Addon()
 ADDON_NAME = ADDON.getAddonInfo("name")  # East Anglian Film Archive
-MEDIA_URI = "special://home/addons/{}/resources/media/".format(ADDON_ID)
+
+kodilogging.config()
+logger = logging.getLogger(__name__)
+plugin = routing.Plugin()
 
 
-def add_menu_item(method, label, args=None, art=None, info=None, directory=True):
-    # type (Callable, str, dict, dict, dict, bool) -> None
+def paginate(soup, **kwargs):
+    # type: (BeautifulSoup, Any) -> None
+    """Adds pagination links as required"""
+    pagination = soup.find("div", "pagination")
+    if not pagination:
+        return
+    if kwargs.get("query", False):
+        # search results
+        if kwargs.get("count", 0) == eafa.SEARCH_MAX_RESULTS:
+            offset = int(kwargs.get("offset", 0)) + 1
+            add_menu_item(search,
+                          "[{} {}]".format(ku.localize(32011), offset),
+                          args={"q": kwargs.get("query"), "page": offset})
+        return
+    current = int(pagination.find("span", "current").text)
+    next_page = pagination.find("img", {"src": "images/page-next.gif"})
+    if next_page:
+        # theme results
+        form = eafa.get_form_data(soup)
+        callback_id = eafa.get_callback_id(next_page.parent.get("href"))
+        add_menu_item(themes, "[{} {}]".format(ku.localize(32011), current + 1),
+                      args={
+                          "target": callback_id,
+                          "state": form.get("state"),
+                          "validation": form.get("validation"),
+                          "action": form.get("action"),
+                          "category": kwargs.get("category")
+                      })
+
+
+def parse_search_results(soup, **kwargs):
+    # type: (BeautifulSoup, Any) -> None
+    """Parse playable items from results and add pagination"""
+    items = soup.find_all("div", "result_item")
+    if not items:
+        logger.debug("parse_search_results no items")
+        return
+    paginate(soup, count=len(items), **kwargs)
+    for item in items:
+        catalogue_number = eafa.text_to_int(item.find("div", "title_right").text)
+        if not catalogue_number:
+            logger.debug("parse_search_results error no catalogue_number: {}".format(item))
+            continue
+        url = eafa.get_catalogue_url(catalogue_number)
+        meta = eafa.get_info(eafa.get_html(url))
+        if not meta:
+            logger.debug("parse_search_results error no meta: {}".format(url))
+            continue
+        add_menu_item(play_film, meta.get("title"),
+                      args={"href": url},
+                      art=ku.art(meta.get("image")),
+                      info=meta.get("info"),
+                      directory=False)
+    xbmcplugin.setContent(plugin.handle, "videos")
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_DURATION)
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_GENRE)
+
+
+def parse_links(soup, form):
+    # type: (BeautifulSoup, dict) -> None
+    """Parse links from results and add prepare query"""
+    links = soup.select("a[href*=javascript:__doPostBack]")
+    if not links:
+        logger.debug("parse_links no links")
+        return
+    for link in links:
+        title = link.text.strip().title()
+        add_menu_item(themes, title,
+                      args={
+                          "target": eafa.get_callback_id(link.get("href")),
+                          "state": form.get("state"),
+                          "validation": form.get("validation"),
+                          "action": form.get("action"),
+                          "category": title
+                      })
+
+
+def add_remove_context_menu(list_item, label, method, **kwargs):
+    # type: (ListItem, str, callable, Any) -> None
+    list_item.addContextMenuItems([(
+        "{} {}".format(ku.localize(32019), label),
+        "XBMC.RunPlugin({})".format(plugin.url_for(method, delete=True, **kwargs))
+    )])
+
+
+def add_menu_item(method, label, **kwargs):
+    # type: (callable, Union[str, int], Any) -> None
     """wrapper for xbmcplugin.addDirectoryItem"""
-    info = {} if info is None else info
-    art = {} if art is None else art
-    args = {} if args is None else args
-    label = ku.get_string(label) if isinstance(label, int) else label
+    args = kwargs.get("args", {})
+    label = ku.localize(label) if isinstance(label, int) else label
     list_item = ListItem(label)
-    list_item.setArt(art)
-    list_item.setInfo("video", info)
-    if method == search and "q" in args:
-        # saved search menu items can be removed via context menu
-        list_item.addContextMenuItems([(
-            ku.get_string(32019),
-            "XBMC.RunPlugin({})".format(plugin.url_for(search, delete=True, q=label))
-        )])
-    if not directory and method == play_film:
+    list_item.setArt(kwargs.get("art"))
+    if method == search and args.get("saved"):
+        add_remove_context_menu(list_item, label, search, q=label)
+    if method == play_film:
+        list_item.setInfo("video", kwargs.get("info"))
         list_item.setProperty("IsPlayable", "true")
-    xp.addDirectoryItem(
+        if args.get("recent"):
+            add_remove_context_menu(list_item, label, recent, url=args.get("url"))
+    xbmcplugin.addDirectoryItem(
         plugin.handle,
         plugin.url_for(method, **args),
         list_item,
-        directory)
+        kwargs.get("directory", True))
 
 
 def get_arg(key, default=None):
-    # (str, Any) -> Any
+    # type: (str, Any) -> Any
     """Get the argument value or default"""
     if default is None:
         default = ""
     return plugin.args.get(key, [default])[0]
 
 
-def parse_time(text):
-    # type (str) -> int
-    """
-    Attempts to calculate the total number of seconds in a time string
-    e.g. "10"=10 "1:14"=74 "1:03:28"=3808
-    """
-    sep = text.count(":")
-    if not sep:
-        return eafa.text_to_int(text)
-    if sep == 1:
-        m, s = text.split(":")
-        return (eafa.text_to_int(m) * 60) + eafa.text_to_int(s)
-    if sep == 2:
-        h, m, s = text.split(":")
-        return ((eafa.text_to_int(h) * 3600) +
-                (eafa.text_to_int(m) * 60) +
-                eafa.text_to_int(s))
-    return 0
-
-
-def parse_results(data, offset=1, query=None):
-    # type (BeautifulSoup, int, str) -> None
-    """Parse videos from results and add pagination"""
-    items = data.find_all("div", "result_item")
-    if not items:
-        return
-    if query is not None and data.find("div", "pagination"):
-        paginate(query, offset, len(items))
-    for item in items:
-        action = item.find("a")
-        title = item.find("h2").text.strip()
-        img = item.find("img")
-        add_menu_item(
-            play_film,
-            title,
-            args={"href": action["href"].lstrip("../")},
-            art=ku.art(eafa.get_page_url(img["src"])),
-            info={
-                "title": title,
-                "plot": item.find("p").text.strip(),
-                "duration": parse_time(item.find("span", "dur").text)
-            },
-            directory=False
-        )
-    xp.setContent(plugin.handle, "videos")
-    xp.endOfDirectory(plugin.handle)
-
-
-def parse_links(data, form):
-    # type (BeautifulSoup, dict) -> None
-    """Parse links from results and add prepare query"""
-    links = data.select("a[href*=javascript:__doPostBack]")
-    if not links:
-        return
-    for link in links:
-        title = link.text.strip().title()
-        add_menu_item(themes, title, {
-            "target": eafa.pluck(link["href"], "'", "'"),
-            "state": form["state"],
-            "validation": form["validation"],
-            "action": form["action"],
-            "title": title
-        })
-    xp.setContent(plugin.handle, "videos")
-    xp.endOfDirectory(plugin.handle)
-
-
-def get_form_data(data):
-    # type (BeautifulSoup) -> Union[bool, dict]
-    """Attempts to extract the form state and validation data"""
-    validation = data.find("input", {"id": "__EVENTVALIDATION"})
-    if not validation:
-        return False
-    return {
-        "state": data.find("input", {"id": "__VIEWSTATE"})["value"],
-        "action": data.find("form", {"id": "aspnetForm"})["action"],
-        "validation": validation["value"]
-    }
-
-
-def paginate(query, offset, count):
-    # type (str, int, int) -> None
-    """Adds pagination links as required"""
-    offset += 1
-    next_page = "[{} {}]".format(ku.get_string(32011), offset)  # [Page n+1]
-    first_page = "[{} 1]".format(ku.get_string(32011))  # [Page 1]
-    main_menu = "[{}]".format(ku.get_string(32012))  # [Menu]
-    if offset > 2:
-        add_menu_item(search, first_page, {"q": query, "page": 1})
-    if count == eafa.SEARCH_MAX_RESULTS:
-        add_menu_item(search, next_page, {"q": query, "page": offset})
-    add_menu_item(index, main_menu)
-
-
 @plugin.route("/")
 def index():
+    # type: () -> None
     """Main menu"""
     if ku.get_setting_as_bool("show_highlights"):
-        add_menu_item(highlights,
-                      ku.get_string(32006),
+        add_menu_item(highlights, 32006,
                       art=ku.icon("highlights.png"))
     if ku.get_setting_as_bool("show_genres"):
-        add_menu_item(browse,
-                      ku.get_string(32005),
-                      {"id": "genre_items", "title": ku.get_string(32005)},
-                      ku.icon("genres.png"))
+        add_menu_item(browse, 32005,
+                      args={"id": "genre_items", "title": ku.localize(32005)},
+                      art=ku.icon("genres.png"))
     if ku.get_setting_as_bool("show_subjects"):
-        add_menu_item(browse,
-                      ku.get_string(32003),
-                      {"id": "subject_items", "title": ku.get_string(32003)},
-                      ku.icon("subjects.png"))
+        add_menu_item(browse, 32003,
+                      args={"id": "subject_items", "title": ku.localize(32003)},
+                      art=ku.icon("subjects.png"))
     if ku.get_setting_as_bool("show_people"):
-        add_menu_item(browse,
-                      ku.get_string(32004),
-                      {"id": "people_items", "title": ku.get_string(32004)},
-                      ku.icon("people.png"))
+        add_menu_item(browse, 32004,
+                      args={"id": "people_items", "title": ku.localize(32004)},
+                      art=ku.icon("people.png"))
+    if ku.get_setting_as_bool("show_recent"):
+        add_menu_item(recent, 32023,
+                      art=ku.icon("recent.png"))
     if ku.get_setting_as_bool("show_search"):
-        add_menu_item(search, 32007, {"menu": True}, ku.icon("search.png"))
+        add_menu_item(search, 32007,
+                      args={"menu": True},
+                      art=ku.icon("search.png"))
     if ku.get_setting_as_bool("show_settings"):
-        add_menu_item(settings, 32010, art=ku.icon("settings.png"), directory=False)
-    xp.setPluginCategory(plugin.handle, ADDON_NAME)
-    xp.endOfDirectory(plugin.handle)
+        add_menu_item(settings, 32010,
+                      art=ku.icon("settings.png"),
+                      directory=False)
+    xbmcplugin.setPluginCategory(plugin.handle, ADDON_NAME)
+    xbmcplugin.endOfDirectory(plugin.handle)
 
 
-@plugin.route("/settings")
-def settings():
-    ku.show_settings()
-    xbmc.executebuiltin("Container.Refresh()")
+@plugin.route("/recent")
+def recent():
+    # type: ()-> None
+    """Recently viewed items menu"""
+    # remove recently viewed item
+    if bool(get_arg("delete", False)):
+        eafa.recents.remove(get_arg("url"))
+        xbmc.executebuiltin("Container.Refresh()")
+        return
+    for url in eafa.recents.retrieve():
+        soup = eafa.get_html(url)
+        meta = eafa.get_info(soup)
+        add_menu_item(play_film, meta.get("title"),
+                      args={"recent": True, "url": url},
+                      info=meta.get("info"),
+                      art=ku.art(meta.get("image")),
+                      directory=False)
+    xbmcplugin.setContent(plugin.handle, "videos")
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_DURATION)
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_GENRE)
+    xbmcplugin.setPluginCategory(plugin.handle, ku.localize(32023))  # Recently Viewed
+    xbmcplugin.endOfDirectory(plugin.handle)
 
 
 @plugin.route("/play")
 def play_film():
-    url = eafa.get_page_url(get_arg("href"))
-    data = eafa.get_html(url)
-    container = data.find("div", {"id": "video-container"})
-    if not container:
-        return False
-    script = container.find_next_sibling("script")
-    if not script:
-        return False
-    mp4_url = eafa.pluck(
-        eafa.remove_whitespace(script.text),
-        "'hd-2':{'file':'", "'}}});")  # TODO: maybe re
-    list_item = ListItem(path=mp4_url)
-    xp.setResolvedUrl(plugin.handle, True, list_item)
-
-
-@plugin.route("/clear/<token>")
-def clear(token):
-    if token == "cache" and ku.confirm():
-        eafa.cache_clear()
-
-
-@plugin.route("/search")
-def search():
-    query = get_arg("q")
-    page = int(get_arg("page", 1))
-
-    # remove saved search item
-    if bool(get_arg("delete", False)):
-        eafa.remove(query)
-        xbmc.executebuiltin("Container.Refresh()")
-        return True
-
-    # View saved search menu
-    if bool(get_arg("menu", False)):
-        add_menu_item(search, "[{}]".format(ku.get_string(32016)), {"new": True})  # [New Search]
-        for item in eafa.retrieve():
-            text = item.encode("utf-8")
-            add_menu_item(search, text, {"q": text})
-        xp.setPluginCategory(plugin.handle, ku.get_string(32007))  # Search
-        xp.endOfDirectory(plugin.handle)
-        return True
-
-    # look-up
-    if bool(get_arg("new", False)):
-        query = ku.user_input()
-        eafa.append(query)
-        if not query:
-            return False
-
-    form = get_form_data(eafa.get_html(eafa.EAFA_SEARCH_URI))
-    if not form:
-        return False
-    data = eafa.post_html(eafa.EAFA_SEARCH_URI, {
-        "__EVENTTARGET": "ctl00$ContentPlaceHolder1$ucSearch$ToolkitScriptManager1",
-        "__EVENTARGUMENT": eafa.get_search_params(query, page),
-        "__VIEWSTATE": form["state"]
-    })
-    xp.setPluginCategory(
-        plugin.handle,
-        "{} '{}'".format(ku.get_string(32007),  # Search 'query'
-                         eafa.query_decode(query))
-    )
-    parse_results(data, page, query)
+    # type: () -> None
+    href = get_arg("href")
+    if not href:
+        logger.debug("play_film error no href")
+        return
+    url = eafa.get_url(href)
+    soup = eafa.get_html(url)
+    meta = eafa.get_info(soup)
+    if not meta.get("video"):
+        logger.debug("play_film error no video: {}".format(url))
+        return
+    if ku.get_setting_as_bool("recent_saved"):
+        eafa.recents.append(url)
+    list_item = ListItem(path=meta.get("video"))
+    list_item.setInfo("video", meta.get("info"))
+    xbmcplugin.setResolvedUrl(plugin.handle, True, list_item)
 
 
 @plugin.route("/browse")
 def browse():
+    # type: () -> None
+    """Shows browse menu items for genre, subject, people, etc"""
     data = eafa.get_html(eafa.EAFA_BROWSE_URI)
-    form = get_form_data(data)
+    form = eafa.get_form_data(data)
     if not form:
-        return False
-    container = data.find("div", {"id": get_arg("id")})
-    form["action"] = "browse.aspx"
-    parse_links(container, form)
+        logger.debug("browse error no form: {}".format(eafa.EAFA_BROWSE_URI))
+        return
+    parse_links(data.find("div", {"id": get_arg("id")}), form)
+    xbmcplugin.setPluginCategory(plugin.handle, get_arg("title"))
+    xbmcplugin.endOfDirectory(plugin.handle)
 
 
 @plugin.route("/themes")
 def themes():
-    url = eafa.get_page_url(get_arg("action"))
-    xp.setPluginCategory(plugin.handle, get_arg("title"))
-    parse_results(eafa.post_html(url, {
+    # type: () -> None
+    """Shows themes playable items"""
+    url = eafa.get_url(get_arg("action"))
+    soup = eafa.post_html(url, {
         "ctl00$ContentPlaceHolder1$ucBrowse$cbVideo": "on",
         "__EVENTTARGET": get_arg("target"),
         "__EVENTVALIDATION": get_arg("validation"),
         "__VIEWSTATE": get_arg("state")
-    }))
+    })
+    parse_search_results(soup, category=get_arg("category"))
+    xbmcplugin.setPluginCategory(plugin.handle, get_arg("category"))
+    xbmcplugin.endOfDirectory(plugin.handle)
 
 
 @plugin.route("/highlights")
 def highlights():
+    # type: () -> None
+    """Shows the highlights menu, sub-menus and playable items"""
     href = get_arg("href", False)
-    xp.setPluginCategory(plugin.handle, get_arg("title", ku.get_string(32006)))  # Highlights
+    category = get_arg("category", ku.localize(32006))  # Highlights
     if not href:
-        url = eafa.get_page_url("highlights.aspx")
-        data = eafa.get_html(url)
-        for item in data.find_all("div", "hl_box"):
+        # Highlights menu
+        url = eafa.get_url("highlights.aspx")
+        soup = eafa.get_html(url)
+        for item in soup.find_all("div", "hl_box"):
             action = item.find("a")
             img = action.find("img")
             title = img["alt"]
-            add_menu_item(
-                highlights,
-                title,
-                {"href": action["href"], "title": title},
-                art=ku.art(eafa.get_page_url(img["src"]))
-            )
-        xp.setContent(plugin.handle, "videos")
-        xp.endOfDirectory(plugin.handle)
-        return
-    url = eafa.get_page_url(href)
-    data = eafa.get_html(url)
-    form = get_form_data(data)
-    if form:
-        parse_links(data, form)
+            add_menu_item(highlights, title,
+                          args={"href": action.get("href"), "category": title},
+                          art=ku.art(eafa.get_url(img["src"])))
     else:
-        parse_results(data)
+        url = eafa.get_url(href)
+        soup = eafa.get_html(url)
+        form = eafa.get_form_data(soup)
+        if form:
+            # sub-menu
+            parse_links(soup, form)
+        else:
+            # playable items
+            parse_search_results(soup, category=category)
+    xbmcplugin.setPluginCategory(plugin.handle, category)
+    xbmcplugin.endOfDirectory(plugin.handle)
+
+
+@plugin.route("/search")
+def search():
+    # type: () -> None
+    """Shows saved searches menu and handles new searches"""
+    query = get_arg("q")
+    page = int(get_arg("page", 1))
+    category = get_arg("category")
+    # remove saved search item
+    if get_arg("delete"):
+        eafa.searches.remove(query)
+        xbmc.executebuiltin("Container.Refresh()")
+        return
+    # View saved search menu
+    if get_arg("menu"):
+        add_menu_item(search, "[{}]".format(ku.localize(32016)), args={"new": True})  # [New Search]
+        for item in eafa.searches.retrieve():
+            text = item.encode("utf-8")
+            add_menu_item(search, text,
+                          args={
+                              "q": text,
+                              "category": "{} '{}'".format(ku.localize(32007), text),
+                              "saved": True
+                          })
+        xbmcplugin.setPluginCategory(plugin.handle, ku.localize(32007))  # Search
+        xbmcplugin.endOfDirectory(plugin.handle)
+        return
+    # look-up
+    if get_arg("new"):
+        query = ku.user_input()
+        if not query:
+            return
+        if ku.get_setting_as_bool("search_saved"):
+            eafa.searches.append(query)
+        category = "{} '{}'".format(ku.localize(32007), query)
+    form = eafa.get_form_data(eafa.get_html(eafa.EAFA_SEARCH_URI))
+    soup = eafa.do_search(form, page, query)
+    parse_search_results(soup, offset=page, query=query, category=category)
+    xbmcplugin.setPluginCategory(plugin.handle, category)
+    xbmcplugin.endOfDirectory(plugin.handle)
+
+
+@plugin.route("/clear/<idx>")
+def clear(idx):
+    # type: (str) -> None
+    """Clear cache, search or recently played"""
+    if idx == "cache" and ku.confirm():
+        eafa.cache_clear()
+    elif idx == "recent" and ku.confirm():
+        eafa.recents.clear()
+    elif idx == "search" and ku.confirm():
+        eafa.searches.clear()
+
+
+@plugin.route("/settings")
+def settings():
+    # type: () -> None
+    """Shows the plugin settings"""
+    ku.show_settings()
+    xbmc.executebuiltin("Container.Refresh()")
 
 
 def run():
+    # type: () -> None
+    """Main entry point"""
     plugin.run()

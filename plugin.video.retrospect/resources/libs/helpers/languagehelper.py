@@ -42,6 +42,8 @@ class LanguageHelper(object):
     Disabled = 30074
     Retrospect = 30008
     ChannelAdaptiveMode = 30581
+    LoginErrorTitle = 30012
+    LoginErrorText = 30013
 
     ChannelSelection = 30507
     # Unused:

@@ -95,8 +95,8 @@ class Comparable(object):
 class Version(Comparable):
     """ Class representing a version number """
 
-    def __init__(self, version=None, major=None, minor=None, build=None,
-                 revision=None, build_type=None):
+    def __init__(self, version=None, major=None, minor=None, revision=None,
+                 build=None, build_type=None):
         """ Initialises a new version number
 
         :param str version:     Version string
@@ -127,8 +127,8 @@ class Version(Comparable):
 
         self.major = major
         self.minor = minor
-        self.revision = revision
-        self.build = build
+        self.build = revision
+        self.revision = build
         if build_type is not None:
             self.buildType = build_type.lower()
         else:
@@ -137,7 +137,7 @@ class Version(Comparable):
         if version:
             self.__extract_version(version)
 
-    def equal_builds(self, other):
+    def are_compatible(self, other):
         """ Checks if two versions have the same version up until the revision 
         part of the version.
         
@@ -151,7 +151,28 @@ class Version(Comparable):
         if other is None:
             return False
 
-        return self.major == other.major and self.minor == other.minor and self.build == other.build
+        return self.equals(other, major=True, minor=True, revision=False, build=False)
+
+    def equals(self, other, major=True, minor=True, revision=True, build=True, build_type=False):
+        if other is None:
+            return False
+
+        if major and self.major != other.major:
+            return False
+
+        if minor and self.minor != other.minor:
+            return False
+
+        if revision and self.revision != other.revision:
+            return False
+
+        if build and self.build != other.build:
+            return False
+
+        if build_type and self.buildType != other.buildType:
+            return False
+
+        return True
 
     def __extract_version(self, version):
         """ Extracts the Major, Minor, Revision and Buildnumber from a version string
@@ -171,9 +192,9 @@ class Version(Comparable):
         if len(split) > 1:
             self.minor = int(split[1])
         if len(split) > 2:
-            self.build = int(split[2])
+            self.revision = int(split[2])
         if len(split) > 3:
-            self.revision = int(split[3])
+            self.build = int(split[3])
 
     def __none_is_zero(self, value):
         """ Returns 0 if a value is None. This is needed for comparison. As None
@@ -202,21 +223,21 @@ class Version(Comparable):
         if self.buildType:
             if self.minor is None:
                 return "%d~%s" % (self.major, self.buildType)
-            elif self.build is None:
-                return "%d.%d~%s" % (self.major, self.minor, self.buildType)
             elif self.revision is None:
-                return "%d.%d.%d~%s" % (self.major, self.minor, self.build, self.buildType)
+                return "%d.%d~%s" % (self.major, self.minor, self.buildType)
+            elif self.build is None:
+                return "%d.%d.%d~%s" % (self.major, self.minor, self.revision, self.buildType)
             else:
-                return "%d.%d.%d.%d~%s" % (self.major, self.minor, self.build, self.revision, self.buildType)
+                return "%d.%d.%d.%d~%s" % (self.major, self.minor, self.revision, self.build, self.buildType)
         else:
             if self.minor is None:
                 return str(self.major)
-            elif self.build is None:
-                return "%d.%d" % (self.major, self.minor)
             elif self.revision is None:
-                return "%d.%d.%d" % (self.major, self.minor, self.build)
+                return "%d.%d" % (self.major, self.minor)
+            elif self.build is None:
+                return "%d.%d.%d" % (self.major, self.minor, self.revision)
             else:
-                return "%d.%d.%d.%d" % (self.major, self.minor, self.build, self.revision)
+                return "%d.%d.%d.%d" % (self.major, self.minor, self.revision, self.build)
 
     def __lt__(self, other):
         """ Tests two versios for 'Lower Then' 
@@ -240,11 +261,11 @@ class Version(Comparable):
         if not self.__none_is_zero(self.minor) == self.__none_is_zero(other.minor):
             return self.__none_is_zero(self.minor) < self.__none_is_zero(other.minor)
 
-        if not self.__none_is_zero(self.build) == self.__none_is_zero(other.build):
-            return self.__none_is_zero(self.build) < self.__none_is_zero(other.build)
-
         if not self.__none_is_zero(self.revision) == self.__none_is_zero(other.revision):
             return self.__none_is_zero(self.revision) < self.__none_is_zero(other.revision)
+
+        if not self.__none_is_zero(self.build) == self.__none_is_zero(other.build):
+            return self.__none_is_zero(self.build) < self.__none_is_zero(other.build)
 
         if self.buildType is None and other.buildType is None:
             # they are the same

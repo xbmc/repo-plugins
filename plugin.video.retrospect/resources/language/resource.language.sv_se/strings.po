@@ -38,11 +38,11 @@ msgstr "Stabil"
 
 msgctxt "#30006"
 msgid "Alpha/Beta"
-msgstr "Alpha/Beta"
+msgstr "Alpha/beta"
 
 msgctxt "#30007"
 msgid "via other add-on"
-msgstr ""
+msgstr "via ett annat tillägg"
 
 msgctxt "#30009"
 msgid "General"
@@ -54,7 +54,7 @@ msgstr "Kanaler"
 
 msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
-msgstr "Omstart av Retrospect krävs"
+msgstr "Omstart av Retrospect krävs."
 
 msgctxt "#30016"
 msgid "Sort by"
@@ -97,7 +97,7 @@ msgid "None"
 msgstr "Inget"
 
 msgctxt "#30026"
-msgid "Group list if exceeds # folders"
+msgid "Group list if it exceeds # folders"
 msgstr "Gruppera listan om den överskrider"
 
 msgctxt "#30027"
@@ -174,7 +174,7 @@ msgstr "Loggnivå"
 
 msgctxt "#30049"
 msgid "Premium/Paid"
-msgstr "Premium/Betal"
+msgstr "Premium/betal"
 
 msgctxt "#30050"
 msgid "DRM Protected"
@@ -250,7 +250,7 @@ msgstr "Ställ in denna proxy och lokalt IP för alla kanaler för det här land
 
 msgctxt "#30072"
 msgid "Proxy Type"
-msgstr "Proxy Typ"
+msgstr "Proxytyp"
 
 msgctxt "#30073"
 msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
@@ -355,6 +355,9 @@ msgstr "Lokalt IP"
 msgctxt "#30098"
 msgid "Logging & Diagnostics"
 msgstr "Loggning & diagnostik"
+msgctxt "#30099"
+msgid "Use HLS instead of Dash for non-encrypted streams"
+msgstr "Använd HLS istället för Dash för okrypterade strömmar"
 
 msgctxt "#30100"
 msgid "None"
@@ -566,7 +569,7 @@ msgstr "En ny version av %s är tillgänglig: %s. Besök hemsidan för att ladda
 
 msgctxt "#30520"
 msgid "Repository Warning"
-msgstr "Tilläggsförråds-varning"
+msgstr "Tilläggsförrådsvarning"
 
 msgctxt "#30521"
 msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
@@ -582,7 +585,7 @@ msgstr "Fel"
 
 msgctxt "#30524"
 msgid "No videos were found for the selected item."
-msgstr "Det fanns ingen video att visa för det valda objektet."
+msgstr "Det finns ingen video att visa för det valda objektet."
 
 msgctxt "#30525"
 msgid "The selected item does not have|any streams associated."
@@ -602,7 +605,7 @@ msgstr "Uppdatera Retrospect"
 
 msgctxt "#30531"
 msgid "Missing 'InputStream Helper' add-on. Cannot install."
-msgstr "Tillägget 'InputStream Helper' saknas. Avbryter installationen"
+msgstr "Tillägget 'InputStream Helper' saknas. Avbryter installationen."
 
 msgctxt "#30532"
 msgid "Install Widevine using 'InputStream Helper' add-on"
@@ -614,7 +617,7 @@ msgstr "Att installera Widevine via tillägget 'InputStream Helper' görs på eg
 
 msgctxt "#30534"
 msgid "Installation of Widevine failed!"
-msgstr "Installation av Widevine misslyckades!"
+msgstr "Installationen av Widevine misslyckades!"
 
 msgctxt "#30535"
 msgid "Installation of Widevine completed!"
@@ -622,7 +625,7 @@ msgstr "Installationen av Widevine är klar!"
 
 msgctxt "#30536"
 msgid "This stream requires Kodi Leia, an enabled InputStream Adaptive add-on and the Widevine library to be installed. The latter can be installed from within the Retrospect add-on settings."
-msgstr ""
+msgstr "Denna ström kräver Kodi Leia, att tillägget InputStream Adaptive installerats och aktiverats, samt att Widevine-bibioteket är installerat. Den sistnämnda kan installeras via Retrospects tilläggsinställningar."
 
 msgctxt "#30537"
 msgid "Page"
@@ -791,6 +794,17 @@ msgstr "Strömbitshastighet för kanal »"
 msgctxt "#30578"
 msgid "InputStream Adaptive add-on settings"
 msgstr "Inställningar för InputStream Adaptive-tillägget"
+msgctxt "#30579"
+msgid "InputStream Adaptive add-on »"
+msgstr "InputStream Adaptive-tillägget »"
+
+msgctxt "#30580"
+msgid "Channel Options »"
+msgstr "Kanalinställningar »"
+
+msgctxt "#30581"
+msgid "InputStream Adaptive add-on usage"
+msgstr "InputStream Adaptive-tilläggsanvändning"
 
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
@@ -846,4 +860,4 @@ msgstr "Misslyckades att ladda upp loggfilen"
 
 msgctxt "#30603"
 msgid "Retrospect changed add-on ID. To prevent data loss, your user data will now be migrated. After this has been done, please restart Kodi to complete migration. After the restart update any shortcut you had to Retrospect. The Retrospect marked as \"broken\" can be uninstalled."
-msgstr "Retrospect har fått nytt tilläggs-ID. För att du ska kunna behålla dina inställningar görs nu en migrering. När migreringen är klar, starta om Kodi för att slutföra den. Efter omstarten behöver eventuella genvägar till Retrospect göras om. Den Retrospect som är markerad \"trasig\" i 'Mina tillägg' kan avinstalleras."
+msgstr "Retrospect har fått ett nytt tilläggs-ID. För att du ska kunna behålla dina inställningar görs nu en migrering. När migreringen är klar, starta om Kodi för att slutföra den. Efter omstarten behöver eventuella genvägar till Retrospect göras om. Den Retrospect som är markerad \"trasig\" i 'Mina tillägg' kan avinstalleras."

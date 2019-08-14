@@ -216,6 +216,7 @@ class Channel(chn_class.Channel):
         Logger.warning("Failed to extend the VRT.be session.")
         username = self._get_setting("username")
         if not username:
+            Logger.warning("No username configured for VRT.nu")
             return None
 
         v = Vault()

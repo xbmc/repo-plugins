@@ -14,7 +14,7 @@ from parserdata import ParserData
 from helpers.languagehelper import LanguageHelper
 from helpers.htmlentityhelper import HtmlEntityHelper
 from vault import Vault
-from addonsettings import AddonSettings
+from addonsettings import AddonSettings, LOCAL
 from mediaitem import MediaItem
 from xbmcwrapper import XbmcWrapper
 
@@ -173,6 +173,7 @@ class Channel(chn_class.Channel):
             "OPVO": None,  # "NPO Zappelin", -> Mainly paid
             "NOSJ": "NPO Nieuws"
         }
+        self.__has_premium_cache = None
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
@@ -183,10 +184,18 @@ class Channel(chn_class.Channel):
         username = self._get_setting("username")
         if not username:
             Logger.info("No user name for NPO, not logging in")
+            UriHandler.delete_cookie(domain="www.npostart.nl")
             return False
 
+        previous_name = AddonSettings.get_channel_setting(self, "previous_username", store=LOCAL)
+        log_out = previous_name != username
+        if log_out:
+            Logger.info("Username changed for NPO from '%s' to '%s'", previous_name, username)
+            UriHandler.delete_cookie(domain="www.npostart.nl")
+            AddonSettings.set_channel_setting(self, "previous_username", username, store=LOCAL)
+
         cookie = UriHandler.get_cookie("isAuthenticatedUser", "www.npostart.nl")
-        if cookie:
+        if cookie and not log_out:
             expire_date = DateHelper.get_date_from_posix(float(cookie.expires))
             Logger.info("Found existing valid NPO token (valid until: %s)", expire_date)
             return True
@@ -214,8 +223,7 @@ class Channel(chn_class.Channel):
                         },
                         params=data)
 
-        # The cookie should already be in the jar now
-        return True
+        return not UriHandler.instance().status.error
 
     def extract_tiles(self, data):  # NOSONAR
         """ Extracts the JSON tiles data from the HTML.
@@ -1198,6 +1206,18 @@ class Channel(chn_class.Channel):
         item.complete = True
         return item
 
+    def __has_premium(self):
+        if self.__has_premium_cache is None:
+            subscription_cookie = UriHandler.get_cookie("subscription", "www.npostart.nl")
+            if subscription_cookie:
+                self.__has_premium_cache = subscription_cookie.value == "npoplus"
+                if self.__has_premium_cache:
+                    Logger.debug("NPO Plus account, so all items can be played.")
+            else:
+                self.__has_premium_cache = False
+
+        return self.__has_premium_cache
+
     def __update_video_item(self, item, episode_id, fetch_subtitles=True):
         """ Updates an existing MediaItem with more data.
 
@@ -1244,6 +1264,8 @@ class Channel(chn_class.Channel):
                 LanguageHelper.get_localized_string(LanguageHelper.DrmTitle),
                 LanguageHelper.get_localized_string(LanguageHelper.WidevineLeiaRequired))
 
+        if item.isPaid and self.__has_premium():
+            item.isPaid = False
         return item
 
     def __ignore_cookie_law(self):

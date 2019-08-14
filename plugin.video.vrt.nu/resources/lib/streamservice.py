@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
-
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-
 ''' This module collects and prepares stream info for Kodi Player. '''
 
 from __future__ import absolute_import, division, unicode_literals
 import json
 import re
-from resources.lib.helperobjects import ApiData, StreamURLS
 
 try:  # Python 3
     from urllib.error import HTTPError
@@ -17,15 +14,19 @@ except ImportError:  # Python 2
     from urllib import urlencode
     from urllib2 import build_opener, install_opener, urlopen, ProxyHandler, quote, unquote, HTTPError
 
+from helperobjects import ApiData, StreamURLS
+
 
 class StreamService:
     ''' Collect and prepare stream info for Kodi Player'''
 
     _VUPLAY_API_URL = 'https://api.vuplay.co.uk'
     _VUALTO_API_URL = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1'
-    _CLIENT = 'vrtvideo'
+    _CLIENT = 'vrtvideo@PROD'
     _UPLYNK_LICENSE_URL = 'https://content.uplynk.com/wv'
-    _GEOBLOCK_ERROR_CODES = ('INCOMPLETE_ROAMING_CONFIG', 'INVALID_LOCATION')
+    _INVALID_LOCATION = 'INVALID_LOCATION'
+    _INCOMPLETE_ROAMING_CONFIG = 'INCOMPLETE_ROAMING_CONFIG'
+    _GEOBLOCK_ERROR_CODES = (_INCOMPLETE_ROAMING_CONFIG, _INVALID_LOCATION)
 
     def __init__(self, _kodi, _tokenresolver):
         ''' Initialize Stream Service class '''
@@ -108,10 +109,10 @@ class StreamService:
         from bs4 import BeautifulSoup, SoupStrainer
         self._kodi.log_notice('URL get: ' + unquote(video_url), 'Verbose')
         html_page = urlopen(video_url).read()
-        strainer = SoupStrainer('div', {'class': 'cq-dd-vrtvideo'})
+        strainer = SoupStrainer('div', {'class': ['left', 'livestream__player']})
         soup = BeautifulSoup(html_page, 'html.parser', parse_only=strainer)
         try:
-            video_data = soup.find(lambda tag: tag.name == 'div' and tag.get('class') == ['vrtvideo']).attrs
+            video_data = soup.find(lambda tag: tag.name == 'nui-media').attrs
         except Exception as e:
             # Web scraping failed, log error
             self._kodi.log_error('Web scraping api data failed: %s' % e)
@@ -123,14 +124,14 @@ class StreamService:
             return None
 
         # Store required html data attributes
-        client = video_data.get('data-client')
-        media_api_url = video_data.get('data-mediaapiurl')
-        video_id = video_data.get('data-videoid')
-        publication_id = video_data.get('data-publicationid', '')
+        client = video_data.get('client') or self._CLIENT
+        media_api_url = video_data.get('mediaapiurl')
+        video_id = video_data.get('videoid')
+        publication_id = video_data.get('publicationid', '')
         # Live stream or on demand
         if video_id is None:
             is_live_stream = True
-            video_id = video_data.get('data-livestream')
+            video_id = video_data.get('livestream')
         else:
             is_live_stream = False
             publication_id += quote('$')
@@ -192,8 +193,16 @@ class StreamService:
             api_data = self._get_api_data(video)
 
         stream_json = self._get_stream_json(api_data, roaming)
+
         if not stream_json:
-            return None
+
+            # Roaming token failed
+            if roaming:
+                message = self._kodi.localize(30964)  # Geoblock error: Cannot be played, need Belgian phone number validation
+                return self._handle_stream_api_error(message)
+            # X-VRT-Token failed
+            message = self._kodi.localize(30963)  # You need a VRT NU account to play this stream.
+            return self._handle_stream_api_error(message)
 
         if 'targetUrls' in stream_json:
 
@@ -255,16 +264,21 @@ class StreamService:
             if not roaming:
                 return self.get_stream(video, roaming=True, api_data=api_data)
 
-            message = self._kodi.localize(30953)  # Geoblock error: Cannot be played, need Belgian phone number validation
-            return self._handle_stream_api_error(stream_json, message)
+            if stream_json.get('code') == self._INVALID_LOCATION:
+                message = self._kodi.localize(30965)  # Geoblock error: Blocked on your geographical location based on your IP address
+                return self._handle_stream_api_error(message, stream_json)
+
+            message = self._kodi.localize(30964)  # Geoblock error: Cannot be played, need Belgian phone number validation
+            return self._handle_stream_api_error(message, stream_json)
 
         # Failed to get stream, handle error
         message = self._kodi.localize(30954)  # Whoops something went wrong
-        return self._handle_stream_api_error(stream_json, message)
+        return self._handle_stream_api_error(message, stream_json)
 
-    def _handle_stream_api_error(self, video_json, message):
+    def _handle_stream_api_error(self, message, video_json=None):
         ''' Show localized stream api error messages in Kodi GUI '''
-        self._kodi.log_error(video_json.get('message'))
+        if video_json:
+            self._kodi.log_error(video_json.get('message'))
         self._kodi.show_ok_dialog(message=message)
         self._kodi.end_of_directory()
 
@@ -275,15 +289,15 @@ class StreamService:
         '''
         # HLS AES DRM failed
         if protocol == 'hls_aes' and not self._kodi.supports_drm():
-            message = self._kodi.localize(30962) % (protocol.upper(), self._kodi.kodi_version())
+            message = self._kodi.localize(30962, protocol=protocol.upper(), version=self._kodi.kodi_version())
         elif protocol == 'hls_aes' and not self._kodi.has_inputstream_adaptive() and self._kodi.get_setting('usedrm', 'true') == 'false':
-            message = self._kodi.localize(30958) % (protocol.upper(), 'InputStream Adaptive', self._kodi.localize(30959), self._kodi.localize(30961))
+            message = self._kodi.localize(30958, protocol=protocol.upper(), component=self._kodi.localize(30959), state=self._kodi.localize(30961))
         elif protocol == 'hls_aes' and self._kodi.has_inputstream_adaptive():
-            message = self._kodi.localize(30958) % (protocol.upper(), 'Widevine DRM', '', self._kodi.localize(30961))
+            message = self._kodi.localize(30958, protocol=protocol.upper(), component='Widevine DRM', state=self._kodi.localize(30961))
         elif protocol == 'hls_aes' and self._kodi.get_setting('usedrm', 'true') == 'true':
-            message = self._kodi.localize(30958) % (protocol.upper(), 'InputStream Adaptive', '', self._kodi.localize(30961))
+            message = self._kodi.localize(30958, protocol=protocol.upper(), component='InputStream Adaptive', state=self._kodi.localize(30961))
         else:
-            message = self._kodi.localize(30958) % (protocol.upper(), 'InputStream Adaptive', '', self._kodi.localize(30960))
+            message = self._kodi.localize(30958, protocol=protocol.upper(), component='InputStream Adaptive', state=self._kodi.localize(30960))
         self._kodi.show_ok_dialog(message=message)
         self._kodi.end_of_directory()
 
@@ -322,7 +336,7 @@ class StreamService:
                 break
 
         if stream_bandwidth > max_bandwidth and not hls_variant_url:
-            message = self._kodi.localize(30057).format(max=max_bandwidth, min=stream_bandwidth)
+            message = self._kodi.localize(30057, max=max_bandwidth, min=stream_bandwidth)
             self._kodi.show_ok_dialog(message=message)
             self._kodi.open_settings()
 

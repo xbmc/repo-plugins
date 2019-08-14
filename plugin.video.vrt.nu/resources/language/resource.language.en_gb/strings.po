@@ -96,6 +96,18 @@ msgctxt "#30029"
 msgid "Search the complete VRT NU library"
 msgstr ""
 
+msgctxt "#30030"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Search results"
+msgstr ""
+
 
 ### FAVORITES
 msgctxt "#30040"
@@ -278,19 +290,19 @@ msgid "Watch [B]{label}[/B] on YouTube"
 msgstr ""
 
 msgctxt "#30201"
-msgid "[B][COLOR red]Geo-blocked[/COLOR][/B]\n"
+msgid "[COLOR red]Geo-blocked[/COLOR]\n"
 msgstr ""
 
 msgctxt "#30202"
-msgid "[B][COLOR blue]Available until {date}[/COLOR][/B]\n"
+msgid "[COLOR blue]Available until {date}[/COLOR]\n"
 msgstr ""
 
 msgctxt "#30203"
-msgid "[B][COLOR green]({days} days left)[/COLOR][/B]\n"
+msgid "[COLOR gray]({days} days left)[/COLOR]\n"
 msgstr ""
 
 msgctxt "#30204"
-msgid "[B][COLOR green]({hours} hours left)[/COLOR][/B]\n"
+msgid "[COLOR gray]({hours} hours left)[/COLOR]\n"
 msgstr ""
 
 msgctxt "#30300"
@@ -298,11 +310,15 @@ msgid "[B][COLOR yellow]More...[/COLOR][/B]"
 msgstr ""
 
 msgctxt "#30301"
-msgid "[B]TV guide for channel {label}[/B]"
+msgid "[B][I]Now on live TV[/I][/B]"
 msgstr ""
 
 msgctxt "#30302"
-msgid "[B][I]Now on live TV[/I][/B]"
+msgid "TV guide for channel [B]{label}[/B]"
+msgstr ""
+
+msgctxt "#30303"
+msgid "{label} TV guide"
 msgstr ""
 
 msgctxt "#30330"
@@ -325,6 +341,10 @@ msgctxt "#30334"
 msgid "In 2 days"
 msgstr ""
 
+msgctxt "#30410"
+msgid "program"
+msgstr ""
+
 msgctxt "#30411"
 msgid "Follow"
 msgstr ""
@@ -345,6 +365,10 @@ msgctxt "#30416"
 msgid "We could not find any programs that are followed.\n\nEither right-click on a program or episode to follow a program, or follow a program on the VRT NU website."
 msgstr ""
 
+msgctxt "#30417"
+msgid "Go to program"
+msgstr ""
+
 msgctxt "#30421"
 msgid "Now:"
 msgstr ""
@@ -354,7 +378,7 @@ msgid "Next:"
 msgstr ""
 
 msgctxt "#30423"
-msgid "[B]No transmission[/B]"
+msgid "No transmission"
 msgstr ""
 
 msgctxt "#30424"
@@ -399,14 +423,6 @@ msgctxt "#30806"
 msgid "Provide your VRT NU account password."
 msgstr ""
 
-msgctxt "#30807"
-msgid "Check credentials"
-msgstr ""
-
-msgctxt "#30808"
-msgid "Check if your VRT NU credentials are correct."
-msgstr ""
-
 msgctxt "#30820"
 msgid "Interface"
 msgstr ""
@@ -449,22 +465,6 @@ msgstr ""
 
 msgctxt "#30836"
 msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
-msgstr ""
-
-msgctxt "#30837"
-msgid "Cache"
-msgstr ""
-
-msgctxt "#30839"
-msgid "Enable menu caching"
-msgstr ""
-
-msgctxt "#30840"
-msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected."
-msgstr ""
-
-msgctxt "#30841"
-msgid "Enable local HTTP caching"
 msgstr ""
 
 msgctxt "#30860"
@@ -576,34 +576,46 @@ msgid "Refresh favorites"
 msgstr ""
 
 msgctxt "#30907"
-msgid "Invalidate local HTTP caches"
+msgid "Use menu caching"
+msgstr ""
+
+msgctxt "#30908"
+msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected."
 msgstr ""
 
 msgctxt "#30909"
-msgid "Streaming"
+msgid "Use local HTTP caching"
 msgstr ""
 
 msgctxt "#30911"
-msgid "Please install or enable InputStream Adaptive to use this setting"
+msgid "Invalidate local HTTP caches"
 msgstr ""
 
 msgctxt "#30913"
-msgid "Use InputStream Adaptive"
+msgid "Streaming"
 msgstr ""
 
 msgctxt "#30915"
-msgid "InputStream Adaptive settings..."
+msgid "Please install or enable InputStream Adaptive to use this setting"
 msgstr ""
 
 msgctxt "#30917"
-msgid "Install Widevine CDM... [COLOR gray][I](for protected content)[/I][/COLOR]"
+msgid "Use InputStream Adaptive"
 msgstr ""
 
 msgctxt "#30919"
-msgid "Logging"
+msgid "InputStream Adaptive settings..."
 msgstr ""
 
 msgctxt "#30921"
+msgid "Install Widevine CDM... [COLOR gray][I](for protected content)[/I][/COLOR]"
+msgstr ""
+
+msgctxt "#30923"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30925"
 msgid "Log level"
 msgstr ""
 
@@ -614,11 +626,11 @@ msgid "Login failed!"
 msgstr ""
 
 msgctxt "#30952"
-msgid "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
+msgid "Login succeeded."
 msgstr ""
 
 msgctxt "#30953"
-msgid "This program cannot be played. To view this program outside of Belgium, you first have to validate a Belgian mobile phone number on the VRT NU website."
+msgid "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
 msgstr ""
 
 msgctxt "#30954"
@@ -638,11 +650,11 @@ msgid "Please increase the maximum bandwidth. Maximum bandwidth is set to {max} 
 msgstr ""
 
 msgctxt "#30958"
-msgid "There is a problem with this VRT NU %s stream. Try again with %s %s %s or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgid "There is a problem with this VRT NU {protocol} stream. Try again with {component} {state} or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
 msgstr ""
 
 msgctxt "#30959"
-msgid "and Widevine DRM"
+msgid "InputStream Adaptive and Widevine DRM"
 msgstr ""
 
 msgctxt "#30960"
@@ -654,10 +666,22 @@ msgid "enabled"
 msgstr ""
 
 msgctxt "#30962"
-msgid "There is a problem with this VRT NU %s stream and Kodi %s does not support the alternative stream. Please upgrade to a newer Kodi version or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgid "There is a problem with this VRT NU {protocol} stream and Kodi {version} does not support the alternative stream. Please upgrade to a newer Kodi version or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgstr ""
+
+msgctxt "#30963"
+msgid "This program cannot be played. You need a VRT account to play this program. Please register at https://www.vrt.be/vrtnu/"
+msgstr ""
+
+msgctxt "#30964"
+msgid "This program cannot be played. To view this program outside of Belgium, a Belgian mobile phone number must be linked to your VRT account at https://www.vrt.be/vrtnu/"
 msgstr ""
 
 msgctxt "#30965"
+msgid "This program cannot be played. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtnu/help/country/"
+msgstr ""
+
+msgctxt "#30966"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
 msgstr ""
 
@@ -682,7 +706,7 @@ msgid "Failed to get favorites token from VRT NU"
 msgstr ""
 
 msgctxt "#30976"
-msgid "Failed to (un)follow program '%s' at VRT NU"
+msgid "Failed to (un)follow program '{program}' at VRT NU"
 msgstr ""
 
 msgctxt "#30978"
@@ -693,10 +717,6 @@ msgctxt "#30979"
 msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favourites.[/B]"
 msgstr ""
 
-msgctxt "#30980"
-msgid "Login successful!"
-msgstr ""
-
 msgctxt "#30981"
 msgid "Successfully invalidated caches."
 msgstr ""
@@ -705,18 +725,10 @@ msgctxt "#30982"
 msgid "Successfully refreshed favorites."
 msgstr ""
 
-msgctxt "#30983"
-msgid "Successfully verified credentials."
-msgstr ""
-
-msgctxt "#30984"
-msgid "Credentials failed, please fix and retry."
-msgstr ""
-
 msgctxt "#30985"
 msgid "Successfully cleared VRT tokens."
 msgstr ""
 
 msgctxt "#30986"
-msgid "No on demand stream available for %s."
+msgid "No on demand stream available for {title}."
 msgstr ""

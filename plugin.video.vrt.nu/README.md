@@ -49,6 +49,20 @@ You can report issues at [our GitHub project](https://github.com/pietje666/plugi
 you can send a message to [our Facebook page](https://facebook.com/kodivrtnu/).
 
 ## Releases
+### v2.2.0 (2019-08-14)
+- Add breadcrumbs support (@dagwieers)
+- Support unicode characters in credentials (@mediaminister)
+- Add a 'Go to program' context menu (@mediaminister)
+- Fix the ordering of categories and features (@dagwieers)
+- New icon and fanart (@mediaminister)
+- Fixes to credentials, tokens, favorites and roaming (@mediaminister)
+- Fix broken streamservice webscraper (@mediaminister)
+- Fix play-by-airdate API interface (@mediaminister)
+- Add TV guide to channel menu (@dagwieers)
+- Add a context menu to remove search queries from history (@dagwieers)
+
+### v2.1.1 (2019-07-20)
+- Fix issue on Kodi v17 (@dagwieers)
 
 ### v2.1.0 (2019-07-11)
 - Fix an issue with roaming VRT tokens (@mediaminister)

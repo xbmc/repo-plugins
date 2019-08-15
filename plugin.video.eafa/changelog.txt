@@ -1,2 +1,16 @@
+v.1.1.0
+- Python 3 compatible
+  Uses script.module.cache
+  Adds "Recently Viewed" playable items menu
+  Adds "Save recently viewed" setting
+  Adds "Clear Recently Viewed" setting
+  Adds Remove Recently viewed context menu
+  Adds "Clear Searches" setting
+  Adds playback "Bandwidth" setting
+  Adds smart pagination to Themes playable items
+  Fixes "Clear Cache" setting
+  Updates fantart.jpg
+
+
 v1.0.0
 - Initial version

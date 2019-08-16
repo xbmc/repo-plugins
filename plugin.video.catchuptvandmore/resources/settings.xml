@@ -718,6 +718,9 @@
 
             <setting label="MTV (FR)" type="bool" id="mtv_fr" default="true" visible="eq(-189,true)"/>
             <setting label="" type="number" visible="false" id="mtv_fr.order" default="94"/>
+
+            <setting label="IDF 1" type="bool" id="idf1" default="true" visible="eq(-191,true)"/>
+            <setting label="" type="number" visible="false" id="idf1.order" default="95"/>
         <!-- France -->
 
 

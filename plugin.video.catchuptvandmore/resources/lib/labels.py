@@ -575,6 +575,8 @@ LABELS = {
     'Paramount Channel (FR)',
     'mtv_fr':
     'MTV (FR)',
+    'idf1':
+    'IDF 1',
 
     # Japan channels / live TV
     'nhknews':

@@ -487,5 +487,12 @@ menu = {
         'fanart': 'channels/fr/tvpifr_fanart.jpg',
         'module': 'resources.lib.channels.fr.tvpifr',
         'm3u_group': 'Région'
+    },
+    'idf1': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/idf1.png',
+        'fanart': 'channels/fr/idf1_fanart.jpg',
+        'module': 'resources.lib.channels.fr.idf1',
+        'm3u_group': 'Région'
     }
 }

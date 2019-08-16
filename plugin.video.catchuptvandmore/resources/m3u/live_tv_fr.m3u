@@ -423,6 +423,11 @@ plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=alsace20&item_m
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tvpifr.png" group-title="France Région",TVPI télévision d'ici
 plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=tvpifr&item_module=resources.lib.channels.fr.tvpifr&item_dict={}
 
+##	IDF 1
+##	idf1
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/idf1.png" group-title="France Région",IDF 1
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=idf1&item_module=resources.lib.channels.fr.idf1&item_dict={}
+
 ##	Euronews
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="France",Euronews

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.catchuptvandmore"
        name="Catch-up TV &amp; More"
-       version="0.2.9"
-       provider-name="SylvainCcchetto,wwark">
+       version="0.2.10"
+       provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.youtube.dl" version="18.225.0"/>
@@ -39,25 +39,12 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.9]
-[Fix] Catch-up TV - KTO (FR) - Some programs
-[Fix] Catch-up TV - MyCanal (FR) - Some programs
-[Add] Catch-up TV - Piwi + and TéléToon + (FR)
-[Fix] Catch-up TV - Rai (IT) - Check if program has contents
-[Remove] Catch-up TV - J-One (FR) - No more contents in the website - Maybe will be readd in the future
-[Fix] Catch-up TV - GameOne (FR)
-[Add] Catch-up TV - Paramount Channel (FR)
-[Move] Live TV - Paramount Channel (ES|IT) from WO to IT and ES
-[Move] Catch-up TV - MTV (FR) from WO to FR
-[Remove] Log_uploader for the exception 'No items found'
-[Fix] Catch-up TV - Arte Concert (WO)
-[Remove] Live TV - Virgin Radio (FR)
-[Add] Website - Philharmoniedeparis.fr (FR)
-[Fix] Catch-up TV - NPO (NL)
-[Fix] Catch-up TV - RT (EN)
-[Fix] Live TV - La7 (IT)
-[Fix] Catch-up TV and Live TV - RMC Découverte (FR)
-[Fix] Live TV - L'équipe TV (FR)
+[Version 0.2.10]
+[Fix] Catch-up TV - France TV (FR) - Case Fort Boyard
+[Add] Live TV - IDF 1 (FR)
+[Improvements] Use external tzlocal module
+[Fix] Catch-up TV - Arte (WO) - Fix Description
+[Fix] Guide TV (BE) - Need to rework the guide TV
     </news>
     <assets>
       <icon>icon.png</icon>

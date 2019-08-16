@@ -25,7 +25,10 @@ def run():
     # Get params
     params = plugintools.get_params()
     
-        pass
+  #  if params.get("action") is None:
+  #      main_list(params)
+  #  else:
+  #     pass
     
     plugintools.close_item_list()
 

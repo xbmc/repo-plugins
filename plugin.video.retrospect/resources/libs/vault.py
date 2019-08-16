@@ -20,10 +20,12 @@ from logger import Logger
 from addonsettings import AddonSettings, LOCAL, KODI
 from xbmcwrapper import XbmcWrapper
 from helpers.languagehelper import LanguageHelper
+from helpers.encodinghelper import EncodingHelper
 
 
 class Vault(object):
-    __Key = None
+    # bytes representation of the key. Use bytes.decode() to get string representation
+    __Key = None  # type: bytes
     __APPLICATION_KEY_SETTING = "application_key"
 
     def __init__(self):
@@ -33,7 +35,7 @@ class Vault(object):
 
         # ask for PIN of no key is present
         if Vault.__Key is None:
-            key = self.__get_application_key()
+            key = self.__get_application_key()  # type: bytes
 
             # was there a key? No, let's initialize it.
             if key is None:
@@ -42,18 +44,18 @@ class Vault(object):
                 if not self.change_pin(key):
                     raise RuntimeError("Error creating Application Key.")
                 Logger.info("Created a new Application Key with MD5: %s (lengt=%s)",
-                            hashlib.md5(key).hexdigest(), len(key))
+                            EncodingHelper.encode_md5(key), len(key))
                 self.__newKeyGeneratedInConstructor = True
 
             Vault.__Key = key
-            Logger.trace("Using Application Key with MD5: %s (lengt=%s)", hashlib.md5(key).hexdigest(), len(key))
+            Logger.trace("Using Application Key with MD5: %s (lengt=%s)", EncodingHelper.encode_md5(key), len(key))
 
     def change_pin(self, application_key=None):
         """ Stores an existing ApplicationKey using a new PIN.
 
-        :param str application_key: an existing ApplicationKey that will be stored. If none
-                                    specified, the existing ApplicationKey of the Vault will
-                                    be used.
+        :param bytes application_key: an existing ApplicationKey that will be stored. If none
+                                      specified, the existing ApplicationKey of the Vault will
+                                      be used.
 
         :return: Indication of success.
         :rtype: bool
@@ -97,7 +99,11 @@ class Vault(object):
                 XbmcWrapper.Error)
             return False
 
-        encrypted_key = "%s=%s" % (self.__APPLICATION_KEY_SETTING, application_key)
+        if PY2:
+            encrypted_key = "%s=%s" % (self.__APPLICATION_KEY_SETTING, application_key)
+        else:
+            # make it text to store
+            encrypted_key = "%s=%s" % (self.__APPLICATION_KEY_SETTING, application_key.decode())
 
         # let's generate a pin using the scrypt password-based key derivation
         pin_key = self.__get_pbk(pin)
@@ -213,7 +219,7 @@ class Vault(object):
         """ Gets the decrypted application key that is used for all the encryption.
 
         :return: The decrypted application key that is used for all the encryption.
-        :rtype: str
+        :rtype: bytes
 
         """
 
@@ -247,13 +253,17 @@ class Vault(object):
 
         application_key_value = application_key[len(Vault.__APPLICATION_KEY_SETTING) + 1:]
         Logger.info("Successfully decrypted the ApplicationKey.")
-        return application_key_value
+        if PY2:
+            return application_key_value
+
+        # We return bytes on Python 3
+        return application_key_value.encode()
 
     def __encrypt(self, data, key):
-        """ Encrypt data based on the given encryption key.
+        """ Encrypt string data (not bytes) based on the given encryption key (bytes).
 
         :param str data:    The data to encrypt.
-        :param str key:     The key to use for encryption.
+        :param bytes key:   The key to use for encryption.
 
         :return: The encrypted base64 encoded value.
         :rtype: str
@@ -264,13 +274,14 @@ class Vault(object):
         aes = pyaes.AESModeOfOperationCTR(key)
         if PY2:
             return base64.b64encode(aes.encrypt(data))
-        return base64.b64encode(aes.encrypt(data).encode())
+        return base64.b64encode(aes.encrypt(data)).decode()
 
     def __decrypt(self, data, key):
-        """ Decrypts data based on the given encryption key.
+        """ Decrypts string data (not bytes) using the given encryption key (bytes). The decrypted
+        string is returned.
 
         :param str data:    The data to decrypt.
-        :param str key:     The key to use for encryption.
+        :param bytes key:   The key to use for encryption.
 
         :return: Decrypted value.
         :rtype: str
@@ -282,7 +293,7 @@ class Vault(object):
 
         if PY2:
             return aes.decrypt(base64.b64decode(data))
-        return aes.decrypt(base64.b64decode(data.encode()))
+        return aes.decrypt(base64.b64decode(data)).decode()
 
     def __get_new_key(self, length=32):
         """ Returns a random key.
@@ -290,12 +301,17 @@ class Vault(object):
         :param int length:  The lenght of the key.
 
         :return: A random key of the given length.
-        :rtype: str
+        :rtype: bytes
 
         """
 
-        return ''.join(random.choice(string.digits + string.ascii_letters + string.punctuation)
-                       for _ in range(length))
+        new_key = ''.join(random.choice(string.digits + string.ascii_letters + string.punctuation)
+                          for _ in range(length))
+        if PY2:
+            return new_key
+
+        # The key is bytes in Py3
+        return new_key.encode()
 
     def __get_pbk(self, pin):
         """ Gets the Password Based Key (PBK) based on the PIN.
@@ -303,7 +319,7 @@ class Vault(object):
         :param str pin: The pin for the key.
 
         :return: The PBK
-        :rtype: str
+        :rtype: bytes
 
         """
 

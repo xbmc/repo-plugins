@@ -13,9 +13,10 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">ITVRS TV And Radio video Add-on</summary>
-    <description lang="en">Independnt TV and Radio Scotland (ITVRS) offers movies and series, TV shows, cartoons, News, documentaries and shorts, and ITVRS broadcasts.</description>
+    <description lang="en_GB">Independnt TV and Radio Scotland (ITVRS) offers movies and series, TV shows, cartoons, News, documentaries and shorts, and ITVRS broadcasts.</description>
 	<disclaimer lang="en_GB">Some videos might be blocked in your country</disclaimer>
-    <platform>all</platform>
+  <language>en</language> 
+	  <platform>all</platform>
     <source>https://github.com/remichie/repo-plugins/tree/leia/plugin.video.itvrs</source>
     <license>GPL-2.0</license>
   <news>

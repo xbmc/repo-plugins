@@ -178,7 +178,7 @@ msgstr "Premium/Betaald"
 
 msgctxt "#30050"
 msgid "DRM Protected"
-msgstr "DRM Beschermd"
+msgstr "DRM-Beschermd"
 
 msgctxt "#30051"
 msgid "Hidden item"
@@ -254,7 +254,7 @@ msgstr "Proxy type"
 
 msgctxt "#30073"
 msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
-msgstr "- Geo-geblokkeerde = º, DRM beschermd = ^ en betaald = ª."
+msgstr "- Geo-geblokkeerde = º, DRM-beschermd = ^ en betaald = ª."
 
 msgctxt "#30074"
 msgid "Disabled"
@@ -282,7 +282,7 @@ msgstr "Lokaal IP (0.0.0.0=Uitgeschakeld)"
 
 msgctxt "#30080"
 msgid "Filter DRM protected items"
-msgstr "Verberg DRM beschermde streams"
+msgstr "Verberg DRM-beschermde streams"
 
 msgctxt "#30081"
 msgid "Filter Premium/Paid items"
@@ -574,7 +574,7 @@ msgstr "Repository waarschuwing"
 
 msgctxt "#30521"
 msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
-msgstr "De Retrospect repository is niet geïnstalleerd.|Installeer deze om toekomstige update te ontvangen."
+msgstr "De Retrospect repository is niet geïnstalleerd.|Installeer deze om toekomstige updates te ontvangen."
 
 msgctxt "#30522"
 msgid "Channel message"
@@ -702,7 +702,7 @@ msgstr "DRM Bescherming"
 
 msgctxt "#30555"
 msgid "The selected item is DRM protected and might not play on Kodi."
-msgstr "Het geselecteerde item is DRM bescherm en werkt wellicht niet in Kodi."
+msgstr "Het geselecteerde item is DRM-beschermd en werkt wellicht niet in Kodi."
 
 msgctxt "#30556"
 msgid "Initialising channel(s)."
@@ -710,7 +710,7 @@ msgstr "Kanaal/kanalen initialiseren."
 
 msgctxt "#30557"
 msgid "Channels have been updated or installed. Performing first time actions. This could take some time."
-msgstr "Er zijn kanalen bijgewerkt of installeerd. Intiële acties worden uitgevoerd. Dit kan even duren."
+msgstr "Er zijn kanalen bijgewerkt of geïnstalleerd. Initiële acties worden uitgevoerd. Dit kan even duren."
 
 msgctxt "#30558"
 msgid "Fetching Textures"
@@ -758,7 +758,7 @@ msgstr "Enkele Retrospect kanaal add-ons zijn uitgeschakeld waardoor ze niet aut
 
 msgctxt "#30569"
 msgid "Ignore SSL verification errors (Security Risk!)"
-msgstr "SSL verificatie fouten negeren (Veiligheids risico!)"
+msgstr "SSL verificatiefouten negeren (Veiligheids risico!)"
 
 msgctxt "#30570"
 msgid "Hide channel initialisation messages"
@@ -842,7 +842,7 @@ msgstr "Logfile succesvol verstuurd"
 
 msgctxt "#30601"
 msgid "Error posting logfile: %s"
-msgstr "Fout bij het vesturen van de logfile: %s"
+msgstr "Fout bij het versturen van de logfile: %s"
 
 msgctxt "#30602"
 msgid "Error posting logfile"

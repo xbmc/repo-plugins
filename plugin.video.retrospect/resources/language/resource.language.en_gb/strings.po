@@ -60,7 +60,15 @@ msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
 msgstr ""
 
-# empty strings from id 30012 to 30015
+msgctxt "#30012"
+msgid "Login Failed"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Could not log on to the selected channel."
+msgstr ""
+
+# empty strings from id 30014 to 30015
 
 msgctxt "#30016"
 msgid "Sort by"
@@ -103,7 +111,7 @@ msgid "None"
 msgstr ""
 
 msgctxt "#30026"
-msgid "Group list if exceeds # folders"
+msgid "Group list if it exceeds # folders"
 msgstr ""
 
 msgctxt "#30027"
@@ -851,7 +859,7 @@ msgid "InputStream Adaptive add-on settings"
 msgstr ""
 
 msgctxt "#30579"
-msgid "InputStream add-on »"
+msgid "InputStream Adaptive add-on »"
 msgstr ""
 
 msgctxt "#30580"
@@ -859,7 +867,7 @@ msgid "Channel Options »"
 msgstr ""
 
 msgctxt "#30581"
-msgid "InputStream add-on usage"
+msgid "InputStream Adaptive add-on usage"
 msgstr ""
 
 # empty strings from id 30582 to 30589

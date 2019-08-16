@@ -604,7 +604,8 @@ class Channel(chn_class.Channel):
 
         item.complete = M3u8.update_part_with_m3u8_streams(part, m3u8_url,
                                                            proxy=self.proxy,
-                                                           headers=part.HttpHeaders)
+                                                           headers=part.HttpHeaders,
+                                                           channel=self)
         return item
 
     def __ignore_cookie_law(self):

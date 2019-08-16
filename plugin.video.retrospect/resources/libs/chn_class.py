@@ -81,7 +81,7 @@ class Channel:
         self.path = channel_info.path
         self.version = channel_info.version
         self.adaptiveAddonSelectable = channel_info.adaptiveAddonSelectable
-        self.hasSettings = channel_info.settings is not None
+        self.hasSettings = channel_info.settings is not None and len(channel_info.settings) > 0
 
         # get the textures from the channelinfo and get their full uri's.
         self.icon = TextureHandler.instance().get_texture_uri(self, channel_info.icon)
@@ -415,6 +415,11 @@ class Channel:
         if data_parser.LogOnRequired:
             Logger.info("One or more dataparsers require logging in.")
             self.loggedOn = self.log_on()
+            if not self.loggedOn:
+                Logger.warning("Could not log on for: %s", self)
+                title = LanguageHelper.get_localized_string(LanguageHelper.LoginErrorTitle)
+                text = LanguageHelper.get_localized_string(LanguageHelper.LoginErrorText)
+                XbmcWrapper.show_dialog(title, text)
 
         Logger.debug("Processing Updater from %s", data_parser)
         return data_parser.Updater(item)

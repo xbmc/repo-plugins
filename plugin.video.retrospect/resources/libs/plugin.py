@@ -26,10 +26,12 @@ from helpers.channelimporter import ChannelIndex
 from helpers.languagehelper import LanguageHelper
 from helpers.stopwatch import StopWatch
 from helpers.sessionhelper import SessionHelper
+from helpers.htmlentityhelper import HtmlEntityHelper
 from textures import TextureHandler
 from paramparser import ParameterParser
 from urihandler import UriHandler
 from channelinfo import ChannelInfo
+from chn_class import Channel
 
 
 class Plugin(ParameterParser):
@@ -470,6 +472,7 @@ class Plugin(ParameterParser):
             watcher.stop()
 
             self.__add_sort_method_to_handle(self.handle, media_items)
+            self.__add_breadcrumb(self.handle, self.channelObject, selected_item)
 
             # set the content
             xbmcplugin.setContent(handle=self.handle, content=self.contentType)
@@ -491,11 +494,11 @@ class Plugin(ParameterParser):
         try:
             media_item = self._pickler.de_pickle_media_item(self.params[self.keywordPickle])
 
-            # Any warning to show
-            self.__show_warnings(media_item)
-
             if not media_item.complete:
                 media_item = self.channelObject.process_video_item(media_item)
+
+            # Any warning to show
+            self.__show_warnings(media_item)
 
             # validated the updated media_item
             if not media_item.complete or not media_item.has_media_item_parts():
@@ -925,3 +928,25 @@ class Plugin(ParameterParser):
                 title = LanguageHelper.get_localized_string(LanguageHelper.PaidTitle)
                 message = LanguageHelper.get_localized_string(LanguageHelper.PaidText)
                 XbmcWrapper.show_dialog(title, message)
+
+    def __add_breadcrumb(self, handle, channel, selected_item, last_only=False):
+        """ Updates the Kodi category with a breadcrumb to the current parent item
+
+        :param int handle:                      The Kodi file handle
+        :param ChannelInfo|Channel channel:     The channel to which the item belongs
+        :param MediaItem selected_item:         The item from which to show the breadcrumbs
+        :param bool last_only:                  Show only the last item
+
+        """
+
+        bread_crumb = None
+        if selected_item is not None:
+            bread_crumb = selected_item.name
+        elif self.channelObject is not None:
+            bread_crumb = channel.channelName
+
+        if not bread_crumb:
+            return
+
+        bread_crumb = HtmlEntityHelper.convert_html_entities(bread_crumb)
+        xbmcplugin.setPluginCategory(handle=handle, category=bread_crumb)

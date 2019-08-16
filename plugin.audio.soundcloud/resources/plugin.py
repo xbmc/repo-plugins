@@ -79,7 +79,7 @@ def run():
         playlist_id = args.get("playlist_id", [None])[0]
         url = args.get("url", [None])[0]
 
-        # Public legacy params (deprecated)
+        # Public legacy params (@deprecated)
         audio_id_legacy = args.get("audio_id", [None])[0]
         track_id = audio_id_legacy if audio_id_legacy else track_id
 
@@ -93,57 +93,79 @@ def run():
         elif track_id:
             collection = listItems.from_collection(api.resolve_id(track_id))
             playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+            resolve_list_item(handle, collection[0][1])
             playlist.add(url=collection[0][0], listitem=collection[0][1])
         elif playlist_id:
             call = "/playlists/{id}".format(id=playlist_id)
             collection = listItems.from_collection(api.call(call))
             playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
             for item in collection:
+                resolve_list_item(handle, item[1])
                 playlist.add(url=item[0], listitem=item[1])
         elif url:
             collection = listItems.from_collection(api.resolve_url(url))
             playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
             for item in collection:
+                resolve_list_item(handle, item[1])
                 playlist.add(url=item[0], listitem=item[1])
         else:
             xbmc.log("Invalid play param", xbmc.LOGERROR)
 
     elif path == PATH_SEARCH:
         action = args.get("action", None)
-        query = args.get("query", "")
-        if action is None:
-            items = listItems.search()
-            xbmcplugin.addDirectoryItems(handle, items, len(items))
-            xbmcplugin.endOfDirectory(handle)
-        elif "new" in action:
-            if not query:
-                search = xbmcgui.Dialog().input(addon.getLocalizedString(30101))
-                search_history.add(search)
+        query = args.get("query", [""])[0]
+        if query:
+            if action is None:
+                search(handle, query)
+            elif "people" in action:
+                xbmcplugin.setContent(handle, 'artists')
+                collection = listItems.from_collection(api.search(query, "users"))
+                xbmcplugin.addDirectoryItems(handle, collection, len(collection))
+                xbmcplugin.endOfDirectory(handle)
+            elif "albums" in action:
+                xbmcplugin.setContent(handle, 'albums')
+                collection = listItems.from_collection(api.search(query, "albums"))
+                xbmcplugin.addDirectoryItems(handle, collection, len(collection))
+                xbmcplugin.endOfDirectory(handle)
+            elif "playlists" in action:
+                xbmcplugin.setContent(handle, 'albums')
+                collection = listItems.from_collection(api.search(query, "playlists_without_albums"))
+                xbmcplugin.addDirectoryItems(handle, collection, len(collection))
+                xbmcplugin.endOfDirectory(handle)
             else:
-                search = query
-
-            search_options = listItems.search_sub(search)
-            collection = listItems.from_collection(api.search(search))
-            xbmcplugin.addDirectoryItems(handle, search_options, len(collection))
-            xbmcplugin.addDirectoryItems(handle, collection, len(collection))
-            xbmcplugin.endOfDirectory(handle)
-        elif "people" in action:
-            xbmcplugin.setContent(handle, 'artists')
-            collection = listItems.from_collection(api.search(query, "users"))
-            xbmcplugin.addDirectoryItems(handle, collection, len(collection))
-            xbmcplugin.endOfDirectory(handle)
-        elif "albums" in action:
-            xbmcplugin.setContent(handle, 'albums')
-            collection = listItems.from_collection(api.search(query, "albums"))
-            xbmcplugin.addDirectoryItems(handle, collection, len(collection))
-            xbmcplugin.endOfDirectory(handle)
-        elif "playlists" in action:
-            xbmcplugin.setContent(handle, 'albums')
-            collection = listItems.from_collection(api.search(query, "playlists_without_albums"))
-            xbmcplugin.addDirectoryItems(handle, collection, len(collection))
-            xbmcplugin.endOfDirectory(handle)
+                xbmc.log("Invalid search action", xbmc.LOGERROR)
         else:
-            xbmc.log("Invalid search action", xbmc.LOGERROR)
+            if action is None:
+                items = listItems.search()
+                xbmcplugin.addDirectoryItems(handle, items, len(items))
+                xbmcplugin.endOfDirectory(handle)
+            elif "new" in action:
+                query = xbmcgui.Dialog().input(addon.getLocalizedString(30101))
+                search_history.add(query)
+                search(handle, query)
+            else:
+                xbmc.log("Invalid search action", xbmc.LOGERROR)
+
+    # Legacy search query used by Chorus2 (@deprecated)
+    elif path == PATH_SEARCH_LEGACY:
+        query = args.get("q", [""])[0]
+        collection = listItems.from_collection(api.search(query))
+        xbmcplugin.addDirectoryItems(handle, collection, len(collection))
+        xbmcplugin.endOfDirectory(handle)
 
     else:
         xbmc.log("Path not found", xbmc.LOGERROR)
+
+
+def resolve_list_item(handle, list_item):
+    resolved_url = api.resolve_media_url(list_item.getProperty("mediaUrl"))
+    list_item.setPath(resolved_url)
+    xbmcplugin.setResolvedUrl(handle, succeeded=True, listitem=list_item)
+
+
+def search(handle, query):
+    search_options = listItems.search_sub(query)
+    collection = listItems.from_collection(api.search(query))
+    xbmcplugin.addDirectoryItems(handle, search_options, len(collection))
+    xbmcplugin.addDirectoryItems(handle, collection, len(collection))
+    xbmcplugin.endOfDirectory(handle)

@@ -33,5 +33,6 @@ class Track(ListItem):
             # "xxx": item.info.get("description")
         })
         list_item.setProperty("isPlayable", "true")
+        list_item.setProperty("mediaUrl", self.media)
 
         return url, list_item, False

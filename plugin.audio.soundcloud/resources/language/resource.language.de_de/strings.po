@@ -33,11 +33,11 @@ msgctxt "#30011"
 msgid "Search"
 msgstr "Suche"
 
-msgctxt "#300012"
+msgctxt "#30012"
 msgid "Items per page"
 msgstr "Einträge pro Seite"
 
-msgctxt "#300013"
+msgctxt "#30013"
 msgid "History Size"
 msgstr "Größe der Suchhistorie"
 
@@ -59,12 +59,12 @@ msgid "Localization"
 msgstr "Sprache"
 
 msgctxt "#30063"
-msgid "automatisch"
-msgstr ""
+msgid "auto"
+msgstr "automatisch"
 
 msgctxt "#30064"
-msgid "deaktiviert"
-msgstr ""
+msgid "disabled"
+msgstr "deaktiviert"
 
 # GUI - Root
 msgctxt "#30101"

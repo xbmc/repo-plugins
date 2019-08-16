@@ -57,7 +57,6 @@ class Items:
         for k in sorted(list(history), reverse=True):
             list_item = xbmcgui.ListItem(label=history[k].get("query"))
             url = self.addon_base + PATH_SEARCH + "?" + urllib.parse.urlencode({
-                "action": "new",
                 "query": history[k].get("query")
             })
             items.append((url, list_item, True))

@@ -215,10 +215,10 @@ def read_body_and_headers(url, post=None, headers=[], follow_redirects=False, ti
     _log("read_body_and_headers ---------------------------")
     for header in headers:
         _log("read_body_and_headers header %s=%s" % (str(header[0]),str(header[1])) )
-        txheaders[header[0]]=header[1]
-    _log("read_body_and_headers ---------------------------")
+ #       txheaders[header[0]]=header[1]
+ #   _log("read_body_and_headers ---------------------------")
 
-    req = Request(url, post, txheaders)
+ #   req = Request(url, post, txheaders)
     if timeout is None:
         handle=urlopen(req)
     else:        

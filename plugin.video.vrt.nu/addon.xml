@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.1.1" provider-name="Martijn Moreel, dagwieers">
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.2.1" provider-name="Martijn Moreel, dagwieers">
     <requires>
-        <import addon="resource.images.studios.coloured" version="0.0.16" optional="true"/>
+        <import addon="plugin.video.youtube" version="6.0.0" optional="true"/>
+        <!-- import addon="resource.images.studios.coloured" version="0.0.16" optional="true"/ -->
         <import addon="resource.images.studios.white" version="0.0.21"/>
         <import addon="script.module.beautifulsoup4" version="4.5.3"/>
         <import addon="script.module.dateutil" version="2.6.0"/>
         <!-- import addon="inputstream.adaptive" version="2.0.20" optional="true"/ -->
-        <import addon="script.module.inputstreamhelper" version="0.3.3"/>
+        <import addon="script.module.inputstreamhelper" version="0.3.5"/>
         <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
         <import addon="script.module.routing" version="0.2.0"/>
         <import addon="xbmc.python" version="2.25.0"/>
     </requires>
-
-    <extension point="xbmc.python.pluginsource" library="addon.py">
+    <extension point="xbmc.python.pluginsource" library="resources/lib/addon_plugin.py">
         <provides>video</provides>
     </extension>
-    <extension point="xbmc.service" library="service.py"/>
-
+    <extension point="xbmc.service" library="resources/lib/addon_service.py"/>
+    <extension point="xbmc.python.module" library="resources/lib/"/>
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Watch videos from VRT NU</summary>
         <description lang="en_GB">
@@ -48,39 +48,56 @@ Met deze Kodi add-on kan je alle video streams van VRT NU bekijken.
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
+v2.2.1 (2019-08-16)
+- Implement Kodi-approved thumb removal
+- Fix broken streamservice webscraper (again)
+
+v2.2.0 (2019-08-14)
+- Add breadcrumbs support
+- Support unicode characters in credentials
+- Add a 'Go to program' context menu
+- Fix the ordering of categories and features
+- New icon and fanart
+- Fixes to credentials, tokens, favorites and roaming
+- Fix broken streamservice webscraper
+- Fix play-by-airdate API interface
+- Add TV guide to channel menu
+- Add a context menu to remove search queries from history
+
 v2.1.1 (2019-07-20)
-- Fix issue on Kodi v17 (@dagwieers)
+- Fix issue on Kodi v17
 
 v2.1.0 (2019-07-11)
-- Fix an issue with roaming VRT tokens (@mediaminister)
-- Start a video by channel/start time (@mediaminister)
-- Use notifications for various events related to tokens/cache/credentials (@dagwieers)
-- Add YouTube channel support (@dagwieers)
-- Add Radio 1 live stream (@dagwieers)
-- Improve credential input (@michaelarnauts)
+- Fix an issue with roaming VRT tokens
+- Start a video by channel/start time
+- Use notifications for various events related to tokens/cache/credentials
+- Add YouTube channel support
+- Add Radio 1 live stream
+- Improve credential input
 
 v2.0.0 (2019-06-30)
 - Changes to API calls, THIS BREAKS EXISTING FAVOURITES AND WATCHED ITEMS
-- Added "Featured content" menu, with e.g. "Complete season" or "Last chance" (@dagwieers)
-- Added "My movies" and "My documentaries" menus (@dagwieers)
-- Added "Refresh" to context menu to refresh without cache (@dagwieers)
-- New API call to play latest episode of a program, i.e. home automation (@mediaminister)
-- Added Live TV entry at the top of channel-menu, convenient for favourites (@dagwieers)
-- Mix one-off programs with multi-episode programs (@dagwieers)
-- Indicate followed programs using the °-symbol (@dagwieers)
-- Improvements to the add-on settings and error messages (@mediaminister)
-- Store previous search queries (@dagwieers)
-- Small performance/efficiency improvements (@mediaminister)
+- Added "Featured content" menu, with e.g. "Complete season" or "Last chance"
+- Added "My movies" and "My documentaries" menus
+- Added "Refresh" to context menu to refresh without cache
+- New API call to play latest episode of a program, i.e. home automation
+- Added Live TV entry at the top of channel-menu, convenient for favourites
+- Mix one-off programs with multi-episode programs
+- Indicate followed programs using the °-symbol
+- Improvements to the add-on settings and error messages
+- Store previous search queries
+- Small performance/efficiency improvements
         </news>
         <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
         <website>https://github.com/pietje666/plugin.video.vrt.nu/wiki</website>
         <forum>https://www.facebook.com/kodivrtnu/</forum>
         <assets>
             <icon>resources/media/icon.png</icon>
-            <fanart>resources/media/fanart.jpg</fanart>
+            <fanart>resources/media/fanart.png</fanart>
             <screenshot>resources/media/screenshot01.jpg</screenshot>
             <screenshot>resources/media/screenshot02.jpg</screenshot>
             <screenshot>resources/media/screenshot03.jpg</screenshot>
+            <screenshot>resources/media/screenshot04.jpg</screenshot>
         </assets>
         <reuselanguageinvoker>true</reuselanguageinvoker>
     </extension>

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-
 ''' Implements static functions used elsewhere in the add-on '''
 
 from __future__ import absolute_import, division, unicode_literals

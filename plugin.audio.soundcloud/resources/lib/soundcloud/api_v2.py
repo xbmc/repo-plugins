@@ -66,6 +66,7 @@ class ApiV2(ApiInterface):
         return self._map_json_to_collection({"collection": res})
 
     def resolve_url(self, url):
+        url = self._sanitize_url(url)
         res = self._do_request("/resolve", {"url": url})
         return self._map_json_to_collection(res)
 
@@ -262,3 +263,7 @@ class ApiV2(ApiInterface):
     def _is_preferred_codec(codec, setting):
         if codec["mime_type"] == setting["mime_type"] and codec["protocol"] == setting["protocol"]:
             return True
+
+    @staticmethod
+    def _sanitize_url(url):
+        return url.replace("m.soundcloud.com/", "soundcloud.com/")

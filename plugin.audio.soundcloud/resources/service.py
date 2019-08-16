@@ -8,7 +8,7 @@ settings = Settings(addon)
 
 
 def run():
-    # Extract tha SoundCloud API key and save it to settings
+    # Extract the SoundCloud API key and save it to settings
     try:
         api_v2_client_id = ApiV2.fetch_client_id()
         settings.set("apiv2.clientid", api_v2_client_id)

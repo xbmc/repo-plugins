@@ -18,6 +18,10 @@
     <platform>all</platform>
     <source>https://github.com/remichie/repo-plugins/tree/leia/plugin.video.itvrs</source>
     <license>GPL-2.0</license>
+  <news>
+v0.0.1  (16-8-2019)
+- Initial version  
+</news>	  
   <assets>
      <icon>resources/icon.png</icon>
      <fanart>resources/fanart.jpg</fanart>

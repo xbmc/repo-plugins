@@ -68,9 +68,9 @@ def log(message):
     xbmc.log(message)
 
 # Write this module messages on XBMC log
-def _log(message):
-    if module_log_enabled:
-        xbmc.log("plugintools."+message)
+#def _log(message):
+#    if module_log_enabled:
+#        xbmc.log("plugintools."+message)
 
 # Parse XBMC params - based on script.module.parsedom addon    
 def get_params():

@@ -231,7 +231,7 @@ def list_programs(plugin, item_id, sub_category_code_name, sub_category_url,
                                 'landscape']['resolutions']:
                             video_image = video_image_datas['url']
                     video_duration = program_datas["duration"]
-                    video_plot = program_datas["description"]
+                    video_plot = program_datas.get("description", "")
 
                     item = Listitem()
                     item.label = video_title
@@ -306,7 +306,7 @@ def list_videos_sub_category(plugin, item_id, sub_category_url,
                         'landscape']['resolutions']:
                     video_image = video_image_datas['url']
             video_duration = video_datas["duration"]
-            video_plot = video_datas["description"]
+            video_plot = video_datas.get("description", "")
 
             item = Listitem()
             item.label = video_title
@@ -350,7 +350,7 @@ def list_videos_sub_category(plugin, item_id, sub_category_url,
                                 'landscape']['resolutions']:
                             video_image = video_image_datas['url']
                     video_duration = video_datas["duration"]
-                    video_plot = video_datas["description"]
+                    video_plot = video_datas.get("description", "")
 
                     item = Listitem()
                     item.label = video_title
@@ -435,7 +435,7 @@ def list_videos_program_concert(plugin, item_id, program_url,
                         'landscape']['resolutions']:
                     video_image = video_image_datas['url']
             video_duration = video_datas["duration"]
-            video_plot = video_datas["description"]
+            video_plot = video_datas.get("description", "")
 
             item = Listitem()
             item.label = video_title
@@ -477,7 +477,7 @@ def list_videos_program_concert(plugin, item_id, program_url,
                         'landscape']['resolutions']:
                     video_image = video_image_datas['url']
             video_duration = video_datas["duration"]
-            video_plot = video_datas["description"]
+            video_plot = video_datas.get("description", "")
 
             item = Listitem()
             item.label = video_title

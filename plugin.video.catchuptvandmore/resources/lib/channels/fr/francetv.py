@@ -408,7 +408,8 @@ def populate_item(item, video, include_program_name=False, **kwargs):
     if video['type'] == "extrait":
         item.label += "[extrait] "
 
-    item.label += video['title']
+    if video['title'] is not None:
+        item.label += video['title']
 
     # It's too bad item.info['title'] overrules item.label everywhere
     # so there's no difference between what is shown in the video list

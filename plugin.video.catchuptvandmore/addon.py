@@ -122,6 +122,7 @@ def add_context_menus_to_item(plugin, item, index, menu_id, menu_len,
                         plugin.localize(LABELS['Hide']),
                         item_id=item.params['item_id'])
 
+
     # Add to add-on favourites
     is_playable = False
     if 'is_playable' in kwargs:

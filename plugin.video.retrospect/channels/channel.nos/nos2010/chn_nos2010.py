@@ -182,17 +182,17 @@ class Channel(chn_class.Channel):
         """ Makes sure that we are logged on. """
 
         username = self._get_setting("username")
-        if not username:
-            Logger.info("No user name for NPO, not logging in")
-            UriHandler.delete_cookie(domain="www.npostart.nl")
-            return False
-
         previous_name = AddonSettings.get_channel_setting(self, "previous_username", store=LOCAL)
         log_out = previous_name != username
         if log_out:
             Logger.info("Username changed for NPO from '%s' to '%s'", previous_name, username)
             UriHandler.delete_cookie(domain="www.npostart.nl")
             AddonSettings.set_channel_setting(self, "previous_username", username, store=LOCAL)
+
+        if not username:
+            Logger.info("No user name for NPO, not logging in")
+            UriHandler.delete_cookie(domain="www.npostart.nl")
+            return True
 
         cookie = UriHandler.get_cookie("isAuthenticatedUser", "www.npostart.nl")
         if cookie and not log_out:
@@ -202,6 +202,8 @@ class Channel(chn_class.Channel):
 
         v = Vault()
         password = v.get_channel_setting(self.guid, "password")
+        if not bool(password):
+            return False
 
         # get a token (why?), cookies and an xsrf token
         token = UriHandler.open("https://www.npostart.nl/api/token", proxy=self.proxy, no_cache=True,

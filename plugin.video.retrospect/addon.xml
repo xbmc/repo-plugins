@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.0.1"
+        version="5.0.2"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -124,9 +124,9 @@
         <description lang="en_GB">Retrospect uses the official websites of a lot of different broadcasting companies (mainly Dutch, Belgian, British and Swedish) to make their re-run episodes available on the Kodi platform. More information can be found at www.rieter.net.[CR][CR]Retrospect reports back usage statistics to our servers. This option can be disabled from the add-on settings.</description>
         <disclaimer lang="en_GB">Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched via this add-on or any consequences of using this add-on to watch the content using the content provider's platforms.</disclaimer>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.0.1 - Changelog - 2019-08-15[/B]
+        <news>[B]Retrospect v5.0.2 - Changelog - 2019-08-16[/B]
 
-This new version fixes a number of channel related issues (RTL XL and NPO Start) and adds support for NPO Start Plus accounts that can be configured. Allow with these fixes some additional bugs were squashed. And while we were at it, we also updated some of the translations.
+A quick release for an annoying bug in NPO Start and the Retrospect vault under Kodi Matrix. Besides this, this new version fixes a number of channel related issues (RTL XL and NPO Start) and adds support for NPO Start Plus accounts that can be configured. Allow with these fixes some additional bugs were squashed. And while we were at it, we also updated some of the translations.
         </news>
         <assets>
             <icon>icon.png</icon>

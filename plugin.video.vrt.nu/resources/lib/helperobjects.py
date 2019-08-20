@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-
 ''' Various helper classes used throughtout the VRT NU add-on '''
 
 from __future__ import absolute_import, division, unicode_literals
@@ -19,31 +17,6 @@ class ApiData:
         self.is_live_stream = is_live_stream
 
 
-class Credentials:
-    ''' This helper object holds all credential information '''
-
-    def __init__(self, _kodi):
-        ''' The constructor for the Credentials class '''
-        self._kodi = _kodi
-        self.username = _kodi.get_setting('username')
-        self.password = _kodi.get_setting('password')
-
-    def are_filled_in(self):
-        ''' Whether the credentials have been filled in and are stored in the settings '''
-        return bool(self.username and self.password)
-
-    def reload(self):
-        ''' Reload the credentials from the settings '''
-        self.username = self._kodi.get_setting('username')
-        self.password = self._kodi.get_setting('password')
-
-    def reset(self):
-        ''' Reset the credentials in the settings '''
-        # NOTE: Do not reset the username, this can be edited by the user and doesn't need to be retyped
-        # self.username = self._kodi.set_setting('username', None)
-        self.password = self._kodi.set_setting('password', None)
-
-
 class StreamURLS:
     ''' This helper object holds all information to be used when playing streams '''
 
@@ -59,7 +32,7 @@ class StreamURLS:
 class TitleItem:
     ''' This helper object holds all information to be used with Kodi xbmc's ListItem object '''
 
-    def __init__(self, title, path, art_dict=None, info_dict=None, stream_dict=None, context_menu=None, is_playable=False):
+    def __init__(self, title, path=None, art_dict=None, info_dict=None, stream_dict=None, context_menu=None, is_playable=False):
         ''' The constructor for the TitleItem class '''
         self.title = title
         self.path = path

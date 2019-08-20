@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.dplay" name="Dplay" version="1.0.4" provider-name="NeverWise">
+<addon id="plugin.video.dplay" name="Dplay" version="1.0.5" provider-name="NeverWise">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>
     <import addon="script.module.neverwise" version="1.1.0"/>
@@ -21,5 +21,6 @@
     <website></website>
     <email></email>
     <source>https://github.com/NeverWise/plugin.video.dplay</source>
+    <broken>This add-on is no longer function correctly.</broken>
   </extension>
 </addon>

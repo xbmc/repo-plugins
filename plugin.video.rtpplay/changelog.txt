@@ -1,3 +1,8 @@
+Version 5.0.0 (21/8/2019)
+- Fix thumbs and EPG
+- Python3 support for Matrix
+- Bump inputstreamhelper
+
 Version 4.0.4 (26/12/2018)
 - Fix live streams
 

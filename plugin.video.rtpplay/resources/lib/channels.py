@@ -34,7 +34,7 @@ RTP_CHANNELS = [
         ] 
     },
     {   "id": "rtpmemoria",
-        "name" : "RTP Memoria",
+        "name" : "RTP Memória",
         "streams": [
              {"type":"hls", "url": "https://streaming-live.rtp.pt/liverepeater/smil:rtpmem.smil/playlist.m3u8"},
              {"type":"dashwv", "url": "https://streaming-live.rtp.pt/liverepeater/rtpmem.smil/manifest.mpd", "tk": "https://www.rtp.pt/play/direto/rtpmemoria", "license": "https://widevine-proxy.drm.technology/proxy" }

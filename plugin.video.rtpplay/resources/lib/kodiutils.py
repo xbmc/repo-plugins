@@ -8,6 +8,7 @@ import os
 import logging
 import json as json
 
+PY3 =  sys.version_info > (3, 0)
 
 # read settings
 ADDON = xbmcaddon.Addon()
@@ -16,15 +17,19 @@ FANART = xbmc.translatePath(ADDON.getAddonInfo("fanart"))
 
 logger = logging.getLogger(__name__)
 
-def smart_str(x):
-    if isinstance(x, unicode):
-        return unicode(x).encode("utf-8")
-    elif isinstance(x, int) or isinstance(x, float):
+def compat_py23str(x):
+    if PY3:
         return str(x)
-    return x
+    else:
+        if isinstance(x, unicode):
+            return unicode(x).encode("utf-8")
+        else:
+            return str(x)
+
 
 def ok(heading, line1, line2="", line3=""):
     xbmcgui.Dialog().ok(heading, line1, line2, line3)
+
 
 def notification(header, message, time=5000, icon=ADDON.getAddonInfo('icon'), sound=True):
     xbmcgui.Dialog().notification(header, message, icon, time, sound)
@@ -35,8 +40,7 @@ def show_settings():
 
 
 def get_setting(setting):
-    return ADDON.getSetting(setting).strip().decode('utf-8')
-
+    return ADDON.getSetting(setting).strip()
 
 def set_setting(setting, value):
     ADDON.setSetting(setting, str(value))

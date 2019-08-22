@@ -66,6 +66,47 @@ class Updater(object):
             return False
 
     def __get_online_version(self, include_alpha_beta=False):
+        # Migrating soon
+        # return self.__get_online_version_from_bitbucket(include_alpha_beta)
+        return self.__get_online_version_from_github(include_alpha_beta)
+
+    def __get_online_version_from_github(self, include_alpha_beta=False):
+        """ Retrieves the current online version.
+
+        :param bool include_alpha_beta: should we include alpha/beta releases?
+
+        :return: Returns the current online version or `None` of no version was found.
+        :rtype: None|Version
+
+        """
+
+        data = self.__uriHandler.open(self.updateUrl, no_cache=True)
+        json_data = JsonHelper(data)
+        version_tag = "tag_name"
+        online_versions = [
+            r[version_tag].lstrip("v").replace("-", "~")
+            for r in json_data.get_value()
+            if bool(r[version_tag]) and (not r["prerelease"] or include_alpha_beta)
+        ]
+
+        if not bool(online_versions):
+            return None
+
+        max_version = None
+        for online_version_data in online_versions:
+            online_version = Version(online_version_data)
+
+            if not include_alpha_beta and online_version.buildType is not None:
+                self.__logger.trace("Ignoring %s", online_version)
+                continue
+
+            self.__logger.trace("Found possible version: %s", online_version)
+            if online_version > max_version:
+                max_version = online_version
+
+        return max_version
+
+    def __get_online_version_from_bitbucket(self, include_alpha_beta=False):
         """ Retrieves the current online version.
 
         :param bool include_alpha_beta: should we include alpha/beta releases?

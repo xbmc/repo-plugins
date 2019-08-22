@@ -69,7 +69,7 @@ class Config:
         #noinspection PyRedeclaration
         appName = str(addonentry.getAttribute("name"))        # : The name from the addon (from addon.xml)
 
-    updateUrl = "https://api.bitbucket.org/2.0/repositories/basrieter/xbmc-online-tv/downloads/"
+    updateUrl = "https://api.github.com/repos/retrospect-addon/plugin.video.retrospect/releases"
 
     textureMode = "Resources"                                 # : The mode for the textures: Local, Remote, Cached or Resources
     textureUrl = "https://cdn.rieter.net/" \

@@ -9,7 +9,7 @@
       "channelcode": "schooltv",
       "sortorder": 25,
       "language": "nl",
-      "compatible": "Environments.All",
+      "compatible": "Environments.NoPlatform",
       "fanart": "schooltvfanart.jpg"
     }
   ]

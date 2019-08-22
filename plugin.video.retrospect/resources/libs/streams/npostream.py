@@ -9,6 +9,7 @@
 #===============================================================================
 
 from helpers.jsonhelper import JsonHelper
+from regexer import Regexer
 from streams.m3u8 import M3u8
 from streams.mpd import Mpd
 from helpers.subtitlehelper import SubtitleHelper
@@ -46,6 +47,9 @@ class NpoStream(object):
         :param ProxyInfo proxy:     The proxy to use for opening
         :param bool live:           Is this a live stream?
 
+        :rtype: str|None
+        :return: An error message if an error occurred.
+
         for s, b, p in NpoStream.GetMpdStreamFromNpo(None, episodeId, proxy=self.proxy):
             item.complete = True
             stream = part.append_media_stream(s, b)
@@ -61,7 +65,7 @@ class NpoStream(object):
             Logger.info("Determining MPD streams for VideoId: %s", episode_id)
         else:
             Logger.error("No url or streamId specified!")
-            return
+            return None
 
         token_headers = {"x-requested-with": "XMLHttpRequest"}
         token_headers.update(headers or {})
@@ -88,9 +92,16 @@ class NpoStream(object):
 
         data = UriHandler.open(stream_data_url, proxy=proxy, additional_headers=headers)
         stream_data = JsonHelper(data)
+        error = stream_data.get_value("html")
+        if error:
+            error = Regexer.do_regex(r'message">\s*<p>([^<]+)', error)
+            if bool(error):
+                return error[0]
+            return "Unspecified error retrieving streams"
+
         stream_url = stream_data.get_value("stream", "src")
         if stream_url is None:
-            return
+            return None
 
         # Encryption?
         license_url = stream_data.get_value("stream", "keySystemOptions", 0, "options", "licenseUrl")
@@ -114,7 +125,7 @@ class NpoStream(object):
                                          license_type=license_type,
                                          manifest_update=None if not live else "full")
 
-        return
+        return None
 
     @staticmethod
     def get_streams_from_npo(url, episode_id, proxy=None, headers=None):

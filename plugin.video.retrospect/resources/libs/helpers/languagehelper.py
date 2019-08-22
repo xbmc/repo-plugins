@@ -41,9 +41,30 @@ class LanguageHelper(object):
     Enabled = 30042
     Disabled = 30074
     Retrospect = 30008
+
+    Monday = 30190
+    Tuesday = 30191
+    Wednesday = 30192
+    Thursday = 30193
+    Friday = 30194
+    Saturday = 30195
+    Sunday = 30196
+
     ChannelAdaptiveMode = 30581
     LoginErrorTitle = 30012
     LoginErrorText = 30013
+
+    Search = 30350
+    Categories = 30351
+    TvShows = 30352
+    CurrentlyPlayingEpisodes = 30353
+    MostViewedEpisodes = 30354
+    MostRecentEpisodes = 30355
+    LiveTv = 30356
+    LiveRadio = 30357
+    Episodes = 30358
+    Genres = 30359
+    FullList = 30360
 
     ChannelSelection = 30507
     # Unused:
@@ -164,6 +185,23 @@ class LanguageHelper(object):
         return LanguageHelper.get_localized_string(
             LanguageHelper.__LanguageMapping.get(language_id,
                                                  LanguageHelper.__LanguageMapping[None]))
+
+    @staticmethod
+    def get_days_list():
+        """ Returns a list of strings with the days of the week starting at monday and ending at
+        Sunday.
+
+        :rtype: list[str]
+        :return: A list of strings
+        """
+        days = [LanguageHelper.get_localized_string(LanguageHelper.Monday),
+                LanguageHelper.get_localized_string(LanguageHelper.Tuesday),
+                LanguageHelper.get_localized_string(LanguageHelper.Wednesday),
+                LanguageHelper.get_localized_string(LanguageHelper.Thursday),
+                LanguageHelper.get_localized_string(LanguageHelper.Friday),
+                LanguageHelper.get_localized_string(LanguageHelper.Saturday),
+                LanguageHelper.get_localized_string(LanguageHelper.Sunday)]
+        return days
 
     @staticmethod
     def get_localized_string(string_id, split_on_pipes=True, replace_pipes=False):

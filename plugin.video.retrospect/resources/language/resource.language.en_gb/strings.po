@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://bitbucket.org/basrieter/xbmc-online-tv/issues?status=new&status=open\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Bas Rieter\n"
@@ -91,7 +91,7 @@ msgid "Maximum Stream Bitrate"
 msgstr ""
 
 msgctxt "#30021"
-msgid "Subtitle mode"
+msgid "Enable subtitles by default when available"
 msgstr ""
 
 msgctxt "#30022"
@@ -421,7 +421,35 @@ msgid "Other"
 msgstr ""
 
 # used for list limits
-# empty strings from id 30109 to 30198
+# empty strings from id 30109 to 30189
+
+msgctxt "#30190"
+msgid "Monday"
+msgstr ""
+
+msgctxt "#30191"
+msgid "Tuesday"
+msgstr ""
+
+msgctxt "#30192"
+msgid "Wednesday"
+msgstr ""
+
+msgctxt "#30193"
+msgid "Thursday"
+msgstr ""
+
+msgctxt "#30194"
+msgid "Friday"
+msgstr ""
+
+msgctxt "#30195"
+msgid "Saturday"
+msgstr ""
+
+msgctxt "#30196"
+msgid "Sunday"
+msgstr ""
 
 msgctxt "#30199"
 msgid "10"
@@ -504,7 +532,53 @@ msgctxt "#30311"
 msgid "Finland"
 msgstr ""
 
-# empty strings from id 30312 to 30400
+# empty strings from id 30312 to 30349
+
+msgctxt "#30350"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30351"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30352"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#30353"
+msgid "Currently Playing"
+msgstr ""
+
+msgctxt "#30354"
+msgid "Most viewed episodes"
+msgstr ""
+
+msgctxt "#30355"
+msgid "Most recent episodes"
+msgstr ""
+
+msgctxt "#30356"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30357"
+msgid "Live Radio"
+msgstr ""
+
+msgctxt "#30358"
+msgid "Episodes"
+msgstr ""
+
+msgctxt "#30359"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Full list"
+msgstr ""
+
+# empty strings from id 30361 to 30400
 
 msgctxt "#30401"
 msgid "Dutch"

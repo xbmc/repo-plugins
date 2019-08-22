@@ -71,7 +71,7 @@ class Channel(chn_class.Channel):
 
         # Use old urls with new Updater
         self._add_data_parser("http://e.omroep.nl/metadata/", name="e.omroep.nl classic parser",
-                              updater=self.update_from_poms)
+                              updater=self.update_from_poms, requires_logon=True)
 
         # Standard updater
         self._add_data_parser("*", requires_logon=True,
@@ -133,10 +133,23 @@ class Channel(chn_class.Channel):
                               creator=self.create_genre_item)
 
         # Favourites
-        self._add_data_parser("https://www.npostart.nl/ums/accounts/@me/favourites",
+        self._add_data_parser("https://www.npostart.nl/api/account/@me/profile",
+                              match_type=ParserData.MatchExact, json=True, requires_logon=True,
+                              name="Profile selection",
+                              parser=["profiles"], creator=self.create_profile_item)
+        self._add_data_parser("#list_profile",
+                              name="List favourites for profile",
+                              preprocessor=self.switch_profile,
+                              requires_logon=True)
+        self._add_data_parser("https://www.npostart.nl/ums/accounts/@me/favourites?",
                               preprocessor=self.extract_tiles,
                               parser=episode_parser,
                               creator=self.create_episode_item,
+                              requires_logon=True)
+        self._add_data_parser("https://www.npostart.nl/ums/accounts/@me/favourites/episodes?",
+                              preprocessor=self.extract_tiles,
+                              parser=video_parser,
+                              creator=self.create_npo_item,
                               requires_logon=True)
 
         # Alpha listing based on JSON API
@@ -205,16 +218,9 @@ class Channel(chn_class.Channel):
         if not bool(password):
             return False
 
-        # get a token (why?), cookies and an xsrf token
-        token = UriHandler.open("https://www.npostart.nl/api/token", proxy=self.proxy, no_cache=True,
-                                additional_headers={"X-Requested-With": "XMLHttpRequest"})
-
-        json_token = JsonHelper(token)
-        token = json_token.get_value("token")
-        if not token:
+        xsrf_token = self.__get_xsrf_token()[0]
+        if not xsrf_token:
             return False
-        xsrf_token = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl").value
-        xsrf_token = HtmlEntityHelper.url_decode(xsrf_token)
 
         data = "username=%s&password=%s" % (HtmlEntityHelper.url_encode(username),
                                             HtmlEntityHelper.url_encode(password))
@@ -314,7 +320,7 @@ class Channel(chn_class.Channel):
         """
 
         items = []
-        search = MediaItem("Zoeken", "searchSite")
+        search = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Search), "searchSite")
         search.complete = True
         search.icon = self.icon
         search.thumb = self.noImage
@@ -324,7 +330,8 @@ class Channel(chn_class.Channel):
         items.append(search)
 
         # Favorite items that require login
-        favs = MediaItem("Favorieten", "https://www.npostart.nl/ums/accounts/@me/favourites?page=1&type=series&tileMapping=normal&tileType=teaser")
+        favs = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.FavouritesId),
+                         "https://www.npostart.nl/api/account/@me/profile")
         favs.complete = True
         favs.description = "Favorieten van de NPO.nl website. Het toevoegen van favorieten " \
                            "wordt nog niet ondersteund."
@@ -335,7 +342,8 @@ class Channel(chn_class.Channel):
         favs.set_date(2200, 1, 1, text="")
         items.append(favs)
 
-        extra = MediaItem("Live Radio", "http://radio-app.omroep.nl/player/script/player.js")
+        extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.LiveRadio),
+                          "http://radio-app.omroep.nl/player/script/player.js")
         extra.complete = True
         extra.icon = self.icon
         extra.thumb = self.noImage
@@ -343,7 +351,8 @@ class Channel(chn_class.Channel):
         extra.set_date(2200, 1, 1, text="")
         items.append(extra)
 
-        extra = MediaItem("Live TV", "%s/live" % (self.baseUrlLive,))
+        extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.LiveTv),
+                          "%s/live" % (self.baseUrlLive,))
         extra.complete = True
         extra.icon = self.icon
         extra.thumb = self.noImage
@@ -351,9 +360,13 @@ class Channel(chn_class.Channel):
         extra.set_date(2200, 1, 1, text="")
         items.append(extra)
 
-        extra = MediaItem("Programma's (Hele lijst)",
-                          "https://start-api.npo.nl/page/catalogue?pageSize={}"
-                          .format(self.__pageSize))
+        extra = MediaItem(
+            "{} ({})".format(
+                LanguageHelper.get_localized_string(LanguageHelper.TvShows),
+                LanguageHelper.get_localized_string(LanguageHelper.FullList)
+            ),
+            "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize))
+
         extra.complete = True
         extra.icon = self.icon
         extra.thumb = self.noImage
@@ -364,7 +377,8 @@ class Channel(chn_class.Channel):
         # API Key from here: https://packagist.org/packages/kro-ncrv/npoplayer?q=&p=0&hFR%5Btype%5D%5B0%5D=concrete5-package
         items.append(extra)
 
-        extra = MediaItem("Genres", "https://www.npostart.nl/programmas")
+        extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Genres),
+                          "https://www.npostart.nl/programmas")
         extra.complete = True
         extra.icon = self.icon
         extra.thumb = self.noImage
@@ -372,7 +386,9 @@ class Channel(chn_class.Channel):
         extra.set_date(2200, 1, 1, text="")
         items.append(extra)
 
-        extra = MediaItem("Programma's (A-Z)", "#alphalisting")
+        extra = MediaItem(
+            "{} (A-Z)".format(LanguageHelper.get_localized_string(LanguageHelper.TvShows)),
+            "#alphalisting")
         extra.complete = True
         extra.icon = self.icon
         extra.thumb = self.noImage
@@ -381,7 +397,7 @@ class Channel(chn_class.Channel):
         extra.set_date(2200, 1, 1, text="")
         items.append(extra)
 
-        recent = MediaItem("Recent", "#recent")
+        recent = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Recent), "#recent")
         recent.complete = True
         recent.icon = self.icon
         recent.thumb = self.noImage
@@ -403,7 +419,7 @@ class Channel(chn_class.Channel):
 
         items = []
         today = datetime.datetime.now()
-        days = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"]
+        days = LanguageHelper.get_days_list()
         for i in range(0, 7, 1):
             air_date = today - datetime.timedelta(i)
             Logger.trace("Adding item for: %s", air_date)
@@ -411,11 +427,11 @@ class Channel(chn_class.Channel):
             # Determine a nice display date
             day = days[air_date.weekday()]
             if i == 0:
-                day = "Vandaag"
+                day = LanguageHelper.get_localized_string(LanguageHelper.Today)
             elif i == 1:
-                day = "Gisteren"
-            elif i == 2:
-                day = "Eergisteren"
+                day = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
+            # elif i == 2:
+            #     day = LanguageHelper.get_localized_string(LanguageHelper.DayBeforeYesterday)
             title = "%04d-%02d-%02d - %s" % (air_date.year, air_date.month, air_date.day, day)
 
             # url = "https://www.npostart.nl/media/series?page=1&dateFrom=%04d-%02d-%02d&tileMapping=normal&tileType=teaser&pageType=catalogue" % \
@@ -537,6 +553,66 @@ class Channel(chn_class.Channel):
             sub_item.dontGroup = True
             sub_item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
             items.append(sub_item)
+        return data, items
+
+    def create_profile_item(self, result_set):
+        """ Creates a new MediaItem for a the profiles in NPO Start.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'folder'.
+        :rtype: MediaItem|None
+
+        """
+
+        profile_name = result_set.get("name")
+        item = MediaItem(profile_name, "#list_profile")
+        item.thumb = result_set.get("thumburl", None)
+        item.description = result_set.get("description", "")
+        item.complete = True
+        item.metaData["id"] = result_set["id"]
+        return item
+
+    def switch_profile(self, data):
+        """ Switches to the selected profile.
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        items = []
+        profile_id = self.parentItem.metaData.get("id", None)
+        if not profile_id:
+            return data, items
+
+        profile_data = {"id": profile_id, "pinCode": ""}
+
+        xsrf_token = self.__get_xsrf_token()[0]
+        UriHandler.open("https://www.npostart.nl/api/account/@me/profile/switch",
+                        proxy=self.proxy, data=profile_data,
+                        additional_headers={
+                            "X-Requested-With": "XMLHttpRequest",
+                            "X-XSRF-TOKEN": xsrf_token,
+                            "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+                        })
+
+        # Add the episodes/tvshows
+        epsisodes = MediaItem(
+            LanguageHelper.get_localized_string(LanguageHelper.Episodes),
+            "https://www.npostart.nl/ums/accounts/@me/favourites/episodes?page=1&dateFrom=2014-01-01&tileMapping=dedicated&tileType=asset")
+        items.append(epsisodes)
+
+        tvshows = MediaItem(
+            LanguageHelper.get_localized_string(LanguageHelper.TvShows),
+            "https://www.npostart.nl/ums/accounts/@me/favourites?page=1&type=series&tileMapping=normal&tileType=teaser")
+        items.append(tvshows)
         return data, items
 
     def create_episode_item(self, result_set):
@@ -792,6 +868,8 @@ class Channel(chn_class.Channel):
                 name = "{} - {}".format(name, result_set["episodeTitle"])
         else:
             name = result_set.get('episodeTitle')
+            if not bool(name):
+                name = result_set.get('franchiseTitle')
 
         description = result_set.get('descriptionLong')
         if not description:
@@ -1259,7 +1337,15 @@ class Channel(chn_class.Channel):
 
         if AddonSettings.use_adaptive_stream_add_on(
                 with_encryption=True, ignore_add_on_config=True):
-            NpoStream.add_mpd_stream_from_npo(None, episode_id, part, proxy=self.proxy, live=item.isLive)
+            error = NpoStream.add_mpd_stream_from_npo(None, episode_id, part, proxy=self.proxy, live=item.isLive)
+            if bool(error):
+                XbmcWrapper.show_dialog(
+                    LanguageHelper.get_localized_string(LanguageHelper.ErrorId),
+                    error)
+                # We don't want more errors to show
+                item.isPaid = False
+                return item
+
             item.complete = True
         else:
             XbmcWrapper.show_dialog(
@@ -1268,6 +1354,23 @@ class Channel(chn_class.Channel):
 
         if item.isPaid and self.__has_premium():
             item.isPaid = False
+
+        # registering playback - The issue is that is linked to a profile, which we did not configure
+        # if self.loggedOn:
+        #     Logger.debug("Registering this playback with NPO")
+        #     xsrf_token, token = self.__get_xsrf_token()
+        #     data = {
+        #         "_token": token,
+        #         "progress": 10
+        #     }
+        #     UriHandler.open(
+        #         "https://www.npostart.nl/api/progress/VPWON_1267211",
+        #         proxy=self.proxy, data=data, additional_headers={
+        #             "X-Requested-With": "XMLHttpRequest",
+        #             "X-XSRF-TOKEN": xsrf_token,
+        #             "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+        #         }
+        #     )
         return item
 
     def __ignore_cookie_law(self):
@@ -1354,3 +1457,24 @@ class Channel(chn_class.Channel):
 
             item.set_date(date_time[2], month, date_time[0])
         return True
+
+    def __get_xsrf_token(self):
+        """ Retrieves a JSON Token and XSRF token
+
+        :return: XSRF Token and JSON Token
+        :rtype: tuple[str|None,str|None]
+        """
+
+        # get a token (why?), cookies and an xsrf token
+        token = UriHandler.open("https://www.npostart.nl/api/token", proxy=self.proxy,
+                                no_cache=True,
+                                additional_headers={"X-Requested-With": "XMLHttpRequest"})
+
+        json_token = JsonHelper(token)
+        token = json_token.get_value("token")
+        if not token:
+            return None, None
+
+        xsrf_token = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl").value
+        xsrf_token = HtmlEntityHelper.url_decode(xsrf_token)
+        return xsrf_token, token

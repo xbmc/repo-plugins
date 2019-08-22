@@ -722,35 +722,6 @@ class Channel:
 
         return False
 
-    def play_video_item(self, item, bitrate=None):
-        """ Starts the playback of the <item> with the specific <bitrate> in the selected <player>.
-
-        Starts the playback of the selected MediaItem <item>. Before playback is started
-        the item is check for completion (item.complete), if not completed, the self.update_video_item
-        method is called to update the item.
-
-        After updating the requested bitrate playlist is selected, if bitrate was set to None
-        the bitrate is retrieved from the addon settings. The playlist is then played using the
-        requested player.
-
-        :param MediaItem item:      The item to start playing
-        :param int|None bitrate:    The requested bitrate in Kbps or None.
-
-        :return: A Kodi Playlist for this MediaItem and a subtitle.
-        :rtype: xbmc.PlayList
-
-        """
-
-        if bitrate is None:
-            # use the bitrate from the Kodi settings if bitrate was not specified and the item is MultiBitrate
-            bitrate = AddonSettings.get_max_stream_bitrate(self)
-
-        # get the playlist
-        play_list = item.get_kodi_play_list(bitrate, update_item_urls=True, proxy=self.proxy)
-
-        # if the item urls have been updated, don't start playback, but return
-        return play_list
-
     def get_default_cache_path(self):
         """ Returns the default cache path for this channel.
 

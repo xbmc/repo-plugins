@@ -5,9 +5,8 @@
 
     <category id="general" label="30009">
         <setting id="cloud_sync_enabled" default="true" />
-        <!--setting id="stream_autobitrate" type="bool" label="30070" default="true" /-->
         <setting id="stream_bitrate" type="select" label="30020" default="4000" values="100|250|500|750|1000|1500|2000|2500|4000|8000|20000" />
-        <setting id="subtitle_mode" type="enum" label="30021" lvalues="30022|30023" default="0" />
+        <setting id="show_subtitles" type="bool" label="30021" default="true" />
         <setting id="list_limit" type="enum" label="30026" default="5" lvalues="30074|30199|30200|30201|30202|30203|30204|30205" />
         <setting id="show_cloaked_items" type="bool" label="30095" default="false" />
         <setting id="use_adaptive_addon" type="bool" label="30571" default="true" enable="System.HasAddon(inputstream.adaptive)" />
@@ -86,7 +85,6 @@
     </category>
 
     <category id="advancedsettings" label="30055">
-        <!--<setting type="lsep" label="30055" />-->
         <setting id="auto_run" type="bool" label="30027" default="false" />
         <setting id="folders_as_video" type="bool" label="30087" default="false" />
         <setting id="empty_folder" type="select" label="30075" default="2" lvalues="30076|30077|30078" />

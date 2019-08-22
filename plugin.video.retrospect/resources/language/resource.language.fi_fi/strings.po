@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://bitbucket.org/basrieter/xbmc-online-tv/issues?status=new&status=open\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Bas Rieter\n"
@@ -61,7 +61,7 @@ msgid "Maximum stream bitrate"
 msgstr "Toiston maksimi bittinopeus"
 
 msgctxt "#30021"
-msgid "Subtitle mode"
+msgid "Enable subtitles by default when available"
 msgstr "Tekstityksen moodi"
 
 msgctxt "#30022"

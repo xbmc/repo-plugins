@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://bitbucket.org/basrieter/xbmc-online-tv/issues?status=new&status=open\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Bas Rieter\n"
@@ -77,8 +77,8 @@ msgid "Maximum Stream Bitrate"
 msgstr "Maximale stream bitrate"
 
 msgctxt "#30021"
-msgid "Subtitle mode"
-msgstr "Ondertiteling modus"
+msgid "Enable subtitles by default when available"
+msgstr "Schakel ondertiteling in als deze beschikbaar is"
 
 msgctxt "#30022"
 msgid "If available"
@@ -396,6 +396,34 @@ msgctxt "#30108"
 msgid "Other"
 msgstr "Overige"
 
+msgctxt "#30190"
+msgid "Monday"
+msgstr "Maandag"
+
+msgctxt "#30191"
+msgid "Tuesday"
+msgstr "Dinsdag"
+
+msgctxt "#30192"
+msgid "Wednesday"
+msgstr "Woensdag"
+
+msgctxt "#30193"
+msgid "Thursday"
+msgstr "Donderdag"
+
+msgctxt "#30194"
+msgid "Friday"
+msgstr "Vrijdag"
+
+msgctxt "#30195"
+msgid "Saturday"
+msgstr "Zaterdag"
+
+msgctxt "#30196"
+msgid "Sunday"
+msgstr "Zondag"
+
 msgctxt "#30199"
 msgid "10"
 msgstr "10"
@@ -471,6 +499,50 @@ msgstr "Denemarken"
 msgctxt "#30311"
 msgid "Finland"
 msgstr "Finland"
+
+msgctxt "#30350"
+msgid "Search"
+msgstr "Zoeken"
+
+msgctxt "#30351"
+msgid "Categories"
+msgstr "Categorien"
+
+msgctxt "#30352"
+msgid "TV Shows"
+msgstr "TV Programma's"
+
+msgctxt "#30353"
+msgid "Currently Playing"
+msgstr "Nu uitgezonden"
+
+msgctxt "#30354"
+msgid "Most viewed episodes"
+msgstr "Meest bekeken afleveringen"
+
+msgctxt "#30355"
+msgid "Most recent episodes"
+msgstr "Recente afleveringen"
+
+msgctxt "#30356"
+msgid "Live TV"
+msgstr "Live TV"
+
+msgctxt "#30357"
+msgid "Live Radio"
+msgstr "Live Radio"
+
+msgctxt "#30358"
+msgid "Afleveringen"
+msgstr ""
+
+msgctxt "#30359"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Full list"
+msgstr "Hele lijst"
 
 msgctxt "#30401"
 msgid "Dutch"

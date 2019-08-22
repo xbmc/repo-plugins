@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://bitbucket.org/basrieter/xbmc-online-tv/issues?status=new&status=open\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Bas Rieter\n"
@@ -77,8 +77,8 @@ msgid "Maximum Stream Bitrate"
 msgstr "Högsta strömbitshastighet"
 
 msgctxt "#30021"
-msgid "Subtitle mode"
-msgstr "Visa undertexter"
+msgid "Enable subtitles by default when available"
+msgstr "Aktivera undertexter som standard om de finns"
 
 msgctxt "#30022"
 msgid "If available"
@@ -395,6 +395,34 @@ msgctxt "#30108"
 msgid "Other"
 msgstr "Andra"
 
+msgctxt "#30190"
+msgid "Monday"
+msgstr "Måndag"
+
+msgctxt "#30191"
+msgid "Tuesday"
+msgstr "Tisdag"
+
+msgctxt "#30192"
+msgid "Wednesday"
+msgstr "Onsdag"
+
+msgctxt "#30193"
+msgid "Thursday"
+msgstr "Torsdag"
+
+msgctxt "#30194"
+msgid "Friday"
+msgstr "Fredag"
+
+msgctxt "#30195"
+msgid "Saturday"
+msgstr "Lördag"
+
+msgctxt "#30196"
+msgid "Sunday"
+msgstr "Söndag"
+
 msgctxt "#30199"
 msgid "10"
 msgstr "10"
@@ -470,6 +498,38 @@ msgstr "Danmark"
 msgctxt "#30311"
 msgid "Finland"
 msgstr "Finland"
+
+msgctxt "#30350"
+msgid "Search"
+msgstr "Sök"
+
+msgctxt "#30351"
+msgid "Categories"
+msgstr "Kategorier"
+
+msgctxt "#30352"
+msgid "TV Shows"
+msgstr "Programmen"
+
+msgctxt "#30353"
+msgid "Currently Playing"
+msgstr "Livesändningar"
+
+msgctxt "#30354"
+msgid "Most viewed episodes"
+msgstr "Mest sedda programmen just nu"
+
+msgctxt "#30355"
+msgid "Most recent episodes"
+msgstr ""
+
+msgctxt "#30356"
+msgid "Live TV"
+msgstr "Live-sändning"
+
+msgctxt "#30357"
+msgid "Live Radio"
+msgstr ""
 
 msgctxt "#30401"
 msgid "Dutch"

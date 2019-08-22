@@ -14,7 +14,6 @@ import datetime
 import binascii
 from functools import reduce
 
-import xbmc
 import xbmcgui
 
 from backtothefuture import unichr
@@ -70,7 +69,6 @@ class MediaItem:
                 "complete",
                 "items",
                 "HttpHeaders",
-                "rating",
                 "guid",
                 "guidValue"]
 
@@ -117,7 +115,6 @@ class MediaItem:
         self.complete = False
         self.items = []
         self.HttpHeaders = dict()                 # : http headers for the item data retrieval
-        self.rating = None
 
         # Items that are not essential for pickled
         self.isCloaked = False
@@ -197,20 +194,6 @@ class MediaItem:
         """
 
         return self.type.lower() in ('video', 'audio', 'playlist')
-
-    def is_resolvable(self):
-        """Returns True if the item can be played directly stream (using setResolveUrl).
-
-        At this moment it returns True for:
-        * type = 'video'
-        * type = 'audio'
-
-        :return: True if the MediaItem's URL can be resolved by setResolved().
-        :rtype: bool
-
-        """
-
-        return self.type.lower() in ('video', 'audio')
 
     def has_track(self):
         """ Does this MediaItem have a TrackNumber InfoLabel
@@ -391,7 +374,7 @@ class MediaItem:
         item.setLabel2(self.__date)
 
         # set a flag to indicate it is a item that can be used with setResolveUrl.
-        if self.is_resolvable():
+        if self.is_playable():
             Logger.trace("Setting IsPlayable to True")
             item.setProperty("IsPlayable", "true")
 
@@ -423,102 +406,76 @@ class MediaItem:
             pass
         return item
 
-    def get_kodi_play_list(self, bitrate, update_item_urls=False, proxy=None):
-        """ Creates a Kodi Playlist containing the MediaItemParts in this MediaItem
-
-        If the Bitrate keyword is omitted the the bitrate is retrieved using the
-        default bitrate settings:
+    def get_kodi_play_list_data(self, bitrate, proxy=None):
+        """ Returns the playlist items for this MediaItem
 
         :param int bitrate:             The bitrate of the streams that should be in the
                                         playlist. Given in kbps.
-        :param bool update_item_urls:   If specified, the Playlist items will have a path pointing
-                                        to the actual stream
         :param ProxyInfo|None proxy:    The proxy to set
 
-        :return: A Kodi Playlist for this MediaItem and a subtitle.
-        :rtype: xbmc.PlayList
+        :return: A list of ListItems that should be added to a playlist with their selected
+                 stream url
+        :rtype: list[tuple[xbmcgui.ListItem, str]]
 
         """
 
-        play_list = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        Logger.info("Creating playlist items for Bitrate: %s kbps\n%s", bitrate, self)
 
-        play_list_items = []
-        if not update_item_urls:
-            # if we are not using the resolveUrl method, we need to clear the playlist and set the index
-            play_list.clear()
-            current_index = 0
-        else:
-            # copy into a list so we can add stuff in between (we can't do that in an
-            # Kodi PlayList) and then create a new playlist item
-            current_index = play_list.getposition()  # this is the location at which we are now.
-            if current_index < 0:
-                # no items where there, so we can just start at position 0
-                current_index = 0
+        if not bool(bitrate):
+            raise ValueError("Bitrate not specified")
 
-            Logger.info("Updating the playlist for item at position %s and trying to preserve other playlist items", current_index)
-            for i in range(0, len(play_list)):
-                Logger.trace("Copying play_list item %s out of %s", i + 1, len(play_list))
-                play_list_items.append((play_list[i].getfilename(), play_list[i]))
-
-            start_list = reduce(lambda x, y: "%s\n%s" % (x, y[0]), play_list_items, "Starting with Playlist Items (%s)" % (len(play_list_items),))
-            Logger.debug(start_list)
-            play_list.clear()
-
-        log_text = "Creating playlist for Bitrate: %s kbps\n%s\nSelected Streams:\n" % (bitrate, self)
-
-        # for each MediaItemPart get the URL, starting at the current index
-        index = current_index
+        play_list_data = []
         for part in self.MediaItemParts:
             if len(part.MediaStreams) == 0:
                 Logger.warning("Ignoring empty MediaPart: %s", part)
                 continue
 
-            # get the playlist item
-            (stream, kodi_item) = part.get_kodi_play_list_item(self, bitrate, update_item_urls=update_item_urls)
-            log_text = "%s\n + %s" % (log_text, stream)
+            kodi_item = self.get_kodi_item()
+            stream = part.get_media_stream_for_bitrate(bitrate)
+            Logger.info("Selected Stream:  %s", stream)
+            if stream.Adaptive:
+                Adaptive.set_max_bitrate(stream, max_bit_rate=bitrate)
 
-            stream_url = stream.Url
-            kodi_params = dict()
+            # Set the actual stream path
+            kodi_item.setProperty("path", stream.Url)
+
+            # properties of the Part
+            for prop in part.Properties + stream.Properties:
+                Logger.trace("Adding property: %s", prop)
+                kodi_item.setProperty(prop[0], prop[1])
+
+            # TODO: Apparently if we use the InputStream Adaptive, using the setSubtitles() causes sync issues.
+            if part.Subtitle and False:
+                Logger.debug("Adding subtitle to ListItem: %s", part.Subtitle)
+                kodi_item.setSubtitles([part.Subtitle, ])
+
+            # Set any custom Header
+            header_params = dict()
 
             # set proxy information if present
-            self.__set_kodi_proxy_info(kodi_item, stream, stream_url, kodi_params, log_text, proxy)
+            self.__set_kodi_proxy_info(kodi_item, stream, stream.Url, header_params, proxy)
 
             # Now add the actual HTTP headers
             for k in part.HttpHeaders:
-                kodi_params[k] = HtmlEntityHelper.url_encode(part.HttpHeaders[k])
+                header_params[k] = HtmlEntityHelper.url_encode(part.HttpHeaders[k])
 
-            if kodi_params:
+            stream_url = stream.Url
+            if header_params:
                 kodi_query_string = reduce(
-                    lambda x, y: "%s&%s=%s" % (x, y, kodi_params[y]), kodi_params.keys(), "")
+                    lambda x, y: "%s&%s=%s" % (x, y, header_params[y]), header_params.keys(), "")
                 kodi_query_string = kodi_query_string.lstrip("&")
-                Logger.debug("Adding Kodi Stream parameters: %s\n%s", kodi_params, kodi_query_string)
+                Logger.debug("Adding Kodi Stream parameters: %s\n%s", header_params, kodi_query_string)
                 stream_url = "%s|%s" % (stream.Url, kodi_query_string)
 
-            if index == current_index and index < len(play_list_items):
-                # We need to replace the current item.
-                Logger.trace("Replacing current Kodi ListItem at Playlist index %s (of %s)", index, len(play_list_items))
-                play_list_items[index] = (stream_url, kodi_item)
-            else:
-                # We need to add at the current index
-                Logger.trace("Inserting Kodi ListItem at Playlist index %s", index)
-                play_list_items.insert(index, (stream_url, kodi_item))
+            play_list_data.append((kodi_item, stream_url))
 
-            index += 1
-
-        Logger.info(log_text)
-
-        end_list = reduce(lambda x, y: "%s\n%s" % (x, y[0]), play_list_items, "Ended with Playlist Items (%s)" % (len(play_list_items),))
-        Logger.debug(end_list)
-        for play_list_item in play_list_items:
-            play_list.add(play_list_item[0], play_list_item[1])
-
-        return play_list
+        return play_list_data
 
     @property
     def uses_external_addon(self):
         return self.url is not None and self.url.startswith("plugin://")
 
-    def __set_kodi_proxy_info(self, kodi_item, stream, stream_url, kodi_params, log_text, proxy):
+    def __set_kodi_proxy_info(self, kodi_item, stream, stream_url, kodi_params, proxy):
         """ Updates a Kodi ListItem with the correct Proxy configuration taken from the ProxyInfo
         object.
 
@@ -527,26 +484,18 @@ class MediaItem:
         :param str stream_url:                      The current Url for the Stream object (might have
                                                     been changed in the mean time by other calls)
         :param dict[str|unicode,str] kodi_params:   A dictionary of Kodi Parameters.
-        :param str|unicode log_text:                The current text that will be logged.
         :param ProxyInfo proxy:                     The ProxyInfo object
-
-        :return: The new log text
-        :rtype: str
 
         """
         if not proxy:
-            return log_text
+            return
 
-        log_text = "%s\n + %s" % (log_text, stream)
-
-        if stream.Downloaded:
-            log_text = "%s\n    + Not adding proxy as the stream is already downloaded" % (log_text,)
-        elif proxy.Scheme.startswith("http") and not stream.Url.startswith("http"):
-            log_text = "%s\n    + Not adding proxy due to scheme mismatch" % (log_text,)
+        if proxy.Scheme.startswith("http") and not stream.Url.startswith("http"):
+            Logger.debug("Not adding proxy due to scheme mismatch")
         elif proxy.Scheme == "dns":
-            log_text = "%s\n    + Not adding DNS proxy for Kodi streams" % (log_text,)
+            Logger.debug("Not adding DNS proxy for Kodi streams")
         elif not proxy.use_proxy_for_url(stream_url):
-            log_text = "%s\n    + Not adding proxy due to filter mismatch" % (log_text,)
+            Logger.debug("Not adding proxy due to filter mismatch")
         else:
             if AddonSettings.is_min_version(17):
                 # See ffmpeg proxy in https://github.com/xbmc/xbmc/commit/60b21973060488febfdc562a415e11cb23eb9764
@@ -557,11 +506,11 @@ class MediaItem:
                     kodi_item.setProperty("proxy.user", proxy.Username)
                 if proxy.Password:
                     kodi_item.setProperty("proxy.password", proxy.Password)
-                log_text = "%s\n    + Adding (Krypton) %s" % (log_text, proxy)
+                Logger.debug("Adding (Krypton) %s", proxy)
             else:
                 kodi_params["HttpProxy"] = proxy.get_proxy_address()
-                log_text = "%s\n    + Adding (Pre-Krypton) %s" % (log_text, proxy)
-        return log_text
+                Logger.debug("Adding (Pre-Krypton) %s", proxy)
+        return
 
     def __get_uuid(self):
         """ Generates a Unique Identifier based on Time and Random Integers """
@@ -837,61 +786,6 @@ class MediaItemPart:
         Logger.debug("Adding property: %s = %s", name, value)
         self.Properties.append((name, value))
 
-    def get_kodi_play_list_item(self, parent, bitrate, update_item_urls=False):
-        """ Returns a Kodi List Item than can be played or added to an Kodi
-        PlayList.
-
-        Returns a tuple with (stream url, Kodi PlayListItem). The Kodi PlayListItem
-        can be used to add to a Kodi Playlist. The stream url can be used
-        to set as the stream for the PlayListItem using xbmc.PlayList.add()
-
-        If quality is not specified the quality is retrieved from the add-on
-        settings.
-
-        :param MediaItem parent:        The parent MediaItem.
-        :param int bitrate:             The bitrate for the list items
-        :param bool update_item_urls:   If set, the Kodi items will have a path
-                                        that corresponds with the actual stream.
-
-        :return: A tuple with (stream url, Kodi PlayListItem).
-        :rtype: tuple[MediaStream,ListItem]
-
-        """
-
-        if self.Name:
-            Logger.debug("Creating Kodi ListItem '%s'", self.Name)
-            item = parent.get_kodi_item(name=self.Name)
-        else:
-            Logger.debug("Creating Kodi ListItem '%s'", parent.name)
-            item = parent.get_kodi_item()
-
-        if not bitrate:
-            raise ValueError("Bitrate not specified")
-
-        for prop in self.Properties:
-            Logger.trace("Adding property: %s", prop)
-            item.setProperty(prop[0], prop[1])
-
-        # now find the correct quality stream and set the properties if there are any
-        stream = self.get_media_stream_for_bitrate(bitrate)
-        if stream.Adaptive:
-            Adaptive.set_max_bitrate(stream, max_bit_rate=bitrate)
-
-        for prop in stream.Properties:
-            Logger.trace("Adding Kodi property: %s", prop)
-            item.setProperty(prop[0], prop[1])
-
-        if update_item_urls:
-            Logger.info("Updating Kodi playlist-item path: %s", stream.Url)
-            item.setProperty("path", stream.Url)
-
-        # TODO: Apparently if we use the InputStream Adaptive, using the setSubtitles() causes sync issues.
-        if self.Subtitle and False:
-            Logger.debug("Adding subtitle to ListItem: %s", self.Subtitle)
-            item.setSubtitles([self.Subtitle, ])
-
-        return stream, item
-
     def get_media_stream_for_bitrate(self, bitrate):
         """Returns the MediaStream for the requested bitrate.
 
@@ -1007,7 +901,6 @@ class MediaStream:
         Logger.trace("Creating MediaStream '%s' with bitrate '%s'", url, bitrate)
         self.Url = url
         self.Bitrate = int(bitrate)
-        self.Downloaded = False
         self.Properties = []
         self.Adaptive = False
 
@@ -1059,7 +952,7 @@ class MediaStream:
 
         """
 
-        text = "MediaStream: %s [bitrate=%s, downloaded=%s]" % (self.Url, self.Bitrate, self.Downloaded)
+        text = "MediaStream: %s [bitrate=%s]" % (self.Url, self.Bitrate)
         for prop in self.Properties:
             text = "%s\n    + Property: %s=%s" % (text, prop[0], prop[1])
 

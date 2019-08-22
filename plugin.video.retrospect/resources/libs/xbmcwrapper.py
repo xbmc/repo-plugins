@@ -399,7 +399,7 @@ class XbmcWrapper:
 
         while time.time() - start < timeout:
             if player.isPlaying() == play_state:
-                if url is None:
+                if url is None or url.startswith("plugin://"):
                     # the player stopped in time
                     if logger:
                         logger.debug("player.isPlaying obtained the desired value '%s'", play_state)

@@ -48,17 +48,16 @@ class Channel(chn_class.Channel):
         # self.mainListUri = "http://webapi.tv4play.se/play/programs?is_active=true&platform=tablet&per_page=1000" \
         #                    "&fl=nid,name,program_image&start=0"
 
-        self.mainListUri = "http://webapi.tv4play.se/play/programs?is_active=true" \
-                           "&platform=tablet&per_page=1000" \
-                           "&fl=nid,name,program_image,is_premium,updated_at,channel&start=0"
+        self.mainListUri = "#mainlisting"
 
         self.baseUrl = "http://www.tv4play.se"
         self.swfUrl = "http://www.tv4play.se/flash/tv4playflashlets.swf"
 
+        self._add_data_parser(self.mainListUri, preprocessor=self.add_categories_and_specials)
+
         self.episodeItemJson = ["results", ]
-        self._add_data_parser(self.mainListUri,
-                              preprocessor=self.add_categories_and_specials, json=True,
-                              match_type=ParserData.MatchExact,  # No longer used:  requiresLogon=True,
+        self._add_data_parser("http://webapi.tv4play.se/play/programs?", json=True,
+                              # No longer used:  requiresLogon=True,
                               parser=self.episodeItemJson, creator=self.create_episode_item)
 
         self._add_data_parser("http://webapi.tv4play.se/play/categories.json",
@@ -261,17 +260,22 @@ class Channel(chn_class.Channel):
         items = []
 
         extras = {
-            "\a.: S&ouml;k :.": (
-                "searchSite", None, False
-            )}
+            LanguageHelper.get_localized_string(LanguageHelper.Search): ("searchSite", None, False),
+            LanguageHelper.get_localized_string(LanguageHelper.TvShows): (
+                "http://webapi.tv4play.se/play/programs?is_active=true&platform=tablet"
+                "&per_page=1000&fl=nid,name,program_image,is_premium,updated_at,channel&start=0",
+                None,
+                False
+            )
+        }
 
         # Channel 4 specific items
         if self.channelCode == "tv4se":
             extras.update({
-                "\a.: Kategorier :.": (
+                LanguageHelper.get_localized_string(LanguageHelper.Categories): (
                     "http://webapi.tv4play.se/play/categories.json", None, False
                 ),
-                "\a.: Mest sedda programmen just nu :.": (
+                LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes): (
                     "http://webapi.tv4play.se/play/video_assets/most_viewed?type=episode"
                     "&platform=tablet&is_live=false&per_page=%s&start=0" % (self.maxPageSize,),
                     None, False
@@ -286,16 +290,22 @@ class Channel(chn_class.Channel):
             #     })
 
             today = datetime.datetime.now()
-            days = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"]
+            days = [LanguageHelper.get_localized_string(LanguageHelper.Monday),
+                    LanguageHelper.get_localized_string(LanguageHelper.Tuesday),
+                    LanguageHelper.get_localized_string(LanguageHelper.Wednesday),
+                    LanguageHelper.get_localized_string(LanguageHelper.Thursday),
+                    LanguageHelper.get_localized_string(LanguageHelper.Friday),
+                    LanguageHelper.get_localized_string(LanguageHelper.Saturday),
+                    LanguageHelper.get_localized_string(LanguageHelper.Sunday)]
             for i in range(0, 7, 1):
                 start_date = today - datetime.timedelta(i)
                 end_date = start_date + datetime.timedelta(1)
 
                 day = days[start_date.weekday()]
                 if i == 0:
-                    day = "Idag"
+                    day = LanguageHelper.get_localized_string(LanguageHelper.Today)
                 elif i == 1:
-                    day = "Igår"
+                    day = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
 
                 Logger.trace("Adding item for: %s - %s", start_date, end_date)
                 # Old URL:
@@ -312,16 +322,16 @@ class Channel(chn_class.Channel):
                 url = "http://webapi.tv4play.se/play/video_assets?exclude_node_nids=" \
                       "&platform=tablet&per_page=32&is_live=false&product_groups=2&type=episode&per_page=100"
                 url = "%s&broadcast_from=%s&broadcast_to=%s&" % (url, start_date.strftime("%Y%m%d"), end_date.strftime("%Y%m%d"))
-                day_name = "\a.: %s :." % (day, )
-                extras[day_name] = (url, start_date, False)
+                extras[day] = (url, start_date, False)
 
-        extras["\a.: Lives&#xE4;ndningar :."] = (
+        extras[LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes)] = (
             "http://webapi.tv4play.se/play/video_assets?exclude_node_nids=&platform=tablet&"
             "per_page=32&is_live=true&product_groups=2&type=episode&per_page=100", None, False)
 
         for name in extras:
+            title = name
             url, date, is_live = extras[name]
-            item = MediaItem(name, url)
+            item = MediaItem(title, url)
             item.dontGroup = True
             item.complete = True
             item.thumb = self.noImage

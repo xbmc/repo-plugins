@@ -1,4 +1,4 @@
-﻿Retrospect 5.x.x.x
+﻿Retrospect v5
 ==================================================================================================== 
 
 Contents
@@ -444,3 +444,10 @@ sorted chronologically):
 - Gerrit Halfwerk
 - M. Prins
 - Remco Swart
+- Johan Johansson
+- Bert Algoet
+- Pieter Unema
+- Peter Notebaert
+- Mjm De Frankrijker
+- Kris Provoost (via Brickshop.nl)
+- Lord_Drubibu (via World of Tanks) 

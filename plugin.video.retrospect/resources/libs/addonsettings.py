@@ -786,7 +786,7 @@ class AddonSettings(object):
             return "dummy"
 
     @staticmethod
-    def use_subtitle():
+    def show_subtitles():
         """Returns whether to show subtitles or not
 
         :return: Indication if Kodi should how subs or not
@@ -794,12 +794,7 @@ class AddonSettings(object):
 
         """
 
-        setting = AddonSettings.store(KODI).get_setting("subtitle_mode", default="0")
-
-        if setting == "0":
-            return True
-        else:
-            return False
+        return AddonSettings.store(KODI).get_boolean_setting("show_subtitles", default=True)
 
     @staticmethod
     def get_list_limit():
@@ -1360,8 +1355,8 @@ class AddonSettings(object):
         pattern = "%s\n%s: %s"
         value = "%s: %s" % ("ClientId", AddonSettings.get_client_id())
         value = pattern % (value, "MaxStreamBitrate", AddonSettings.get_max_stream_bitrate())
-        value = pattern % (value, "use_subtitle", AddonSettings.use_subtitle())
-        value = pattern % (value, "cache_http_responses", AddonSettings.cache_http_responses())
+        value = pattern % (value, "Show_subtitles", AddonSettings.show_subtitles())
+        value = pattern % (value, "Cache_http_responses", AddonSettings.cache_http_responses())
         value = pattern % (value, "Folder Prefx", "'%s'" % AddonSettings.get_folder_prefix())
         value = pattern % (value, "Mix Folders & Videos", AddonSettings.mix_folders_and_videos())
         value = pattern % (value, "Empty List Behaviour", AddonSettings.get_empty_list_behaviour())

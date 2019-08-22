@@ -101,7 +101,7 @@ class Favourites:
                     name = file_handle.readline().rstrip()
                     action_url = file_handle.readline().rstrip()
                     if "pickle=" in action_url and "pickle=%s" not in action_url:
-                        # see issue https://bitbucket.org/basrieter/xbmc-online-tv/issues/1037
+                        # see issue https://github.com/retrospect-addon/plugin.video.retrospect/issues/1037
                         Logger.debug("Found favourite with full pickle, removing the pickle as we should use the one from the file.")
                         action_url = self.__remove_pickle(action_url)
 

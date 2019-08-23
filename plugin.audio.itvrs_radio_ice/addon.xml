@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.itvrs_radio_ice"
+	name="ITVRS - Radio Ice"
+	version="0.0.3"
+	provider-name="Rudi Paret (Remichie)">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.neverwise" version="1.0.8"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">ITVRS Radio audio Add-on</summary>
+    <description lang="en_GB">The Best Hits All Day Long.
+We play all the biggest hits, all day long.
+Upbeat songs that make you smile, sing
+along, and dance when nobody's watching!
+Our music is deep and broad,
+and the sound we create is unique.
+Just call it awesome.</description>
+  <language>en</language> 
+    <platform>all</platform>
+    <source>https://github.com/remichie/repo-plugins/tree/leia/plugin.audio.itvrs_radio_ice</source>
+    <license>GPL-2.0</license>
+  <news>
+v0.0.3  (20-8-2019)
+- dropped the usage of script.module.neverwise
+	  
+v0.0.2  (20-8-2019)
+- Code made Python 3 compatible
+
+v0.0.1  (16-8-2019)
+- Initial version  
+</news>	  
+  <assets>
+     <icon>resources/icon.png</icon>
+     <fanart>resources/fanart.jpg</fanart>
+     <screenshot>resources/media/screenshot-01.jpg</screenshot>
+  </assets>
+  </extension>
+</addon>

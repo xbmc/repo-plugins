@@ -1,0 +1,19 @@
+{
+    "id": 27,
+    "order": 27,
+    "metadata": {
+        "title": "Paddys Retrokosmos",
+        "cast": ["Paddy"],
+        "country": 30202,
+        "plot": "In Paddys Retrokosmos geht’s um alte Games, alte Serien, alte Filme - ein verrückt-skurriler Blick auf die Vergangenheit!",
+        "premiered": "2019-07-29"
+    },
+    "fanart": "fanart-paddysretrokosmos.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

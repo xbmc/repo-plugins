@@ -20,15 +20,6 @@
             }
         },
         {
-            "name": "studio",
-            "ids": [2],
-            "metadata": {
-                "title": "Das Studio",
-                "plot": "„Das Studio“ ist die Massengeschmack-Reality-Show. Sie ist garantiert gefaked und gescripted!",
-                "premiered": "2013-08-05"
-            }
-        },
-        {
             "name": "direkt",
             "ids": [3],
             "metadata": {

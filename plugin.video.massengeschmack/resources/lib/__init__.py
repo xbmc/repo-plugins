@@ -81,10 +81,10 @@ def openHTTPConnection(uri, requestMethod='GET'):
 
     try:
         handle = urllib2.urlopen(request, None, HTTP_TIMEOUT)
-    except urllib2.HTTPError, e:
+    except urllib2.HTTPError as e:
         response['code']   = e.code
         response['reason'] = e.reason
-    except urllib2.URLError, e:
+    except urllib2.URLError as e:
         response['code']   = -1
         response['reason'] = e.reason
 

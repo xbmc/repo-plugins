@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.vimeo" name="Vimeo" version="5.0.0" provider-name="jaylinski">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.future" version="0.16.0"/>
+        <import addon="script.module.requests" version="2.4.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="de_DE">Vimeo lässt dich fantastische Videos der weltbesten Filmemacher entdecken.</summary>
+        <summary lang="en_GB">Vimeo lets you discover amazing videos from the world’s best creators.</summary>
+        <language></language>
+        <!-- Has to be activated as soon as login is implemented:
+        <disclaimer lang="de_DE">Durch die Nutzung dieses Add-ons stimmst du zu, dass dieses Add-on für dich auf deine Daten zugreifen darf.</disclaimer>
+        <disclaimer lang="en_GB">By using this add-on, you express consent to let this add-on access data on behalf of you.</disclaimer>
+        -->
+        <platform>all</platform>
+        <license>MIT</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=220437</forum>
+        <website>https://vimeo.com</website>
+        <source>https://github.com/jaylinski/kodi-addon-vimeo</source>
+        <news>5.0.0 (2019-08-21)
+NEW: complete rewrite
+NEW: python 3.6 compatibility
+FIX: use new Vimeo API
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

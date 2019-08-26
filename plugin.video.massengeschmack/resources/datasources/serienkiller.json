@@ -1,6 +1,6 @@
 {
     "id": 11,
-    "order": 11,
+    "order": 111,
     "metadata": {
         "title": "Serienkiller",
         "cast": ["Olaf Brill", "Nils Beckmann"],
@@ -15,5 +15,6 @@
             "name": "all",
             "ids": [1]
         }
-    ]
+    ],
+	"active": false
 }

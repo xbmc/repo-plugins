@@ -1,0 +1,19 @@
+{
+    "id": 24,
+    "order": 24,
+    "metadata": {
+        "title": "Trip",
+        "cast": ["Thomas Mertke"],
+        "country": 30202,
+        "plot": "TRIP ist das Reportage-Magazin bei Massengeschmack-TV. Immer direkt vor Ort, niemals im Studio.",
+        "premiered": "2018-09-25"
+    },
+    "fanart": "fanart-trip.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

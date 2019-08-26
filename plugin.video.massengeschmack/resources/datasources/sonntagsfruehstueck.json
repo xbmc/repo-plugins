@@ -1,0 +1,19 @@
+{
+    "id": 25,
+    "order": 25,
+    "metadata": {
+        "title": "Sonntagsfrühstück",
+        "cast": ["Verschiedene"],
+        "country": 30202,
+        "plot": "Vier Leute aus dem Team sitzen zusammen und diskutieren ein vorgegebenes Thema. Den Themen sind keine Schranken gesetzt - von banal bis höchst anspruchsvoll und philosophisch.",
+        "premiered": "2018-09-09"
+    },
+    "fanart": "fanart-sonntagsfruehstueck.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

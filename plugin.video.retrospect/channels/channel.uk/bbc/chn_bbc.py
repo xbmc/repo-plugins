@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+
 import chn_class
 from helpers.languagehelper import LanguageHelper
 from mediaitem import MediaItem

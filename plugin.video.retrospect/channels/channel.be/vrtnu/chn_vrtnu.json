@@ -10,7 +10,8 @@
       "sortorder": 11,
       "language": "be",
       "fanart": "vrtnufanart.jpg",
-      "message": "Streams from VRT NU require a VRT account. It can be configured via the Channel settings."
+      "message": "Streams from VRT NU require a VRT account. It can be configured via the Channel settings.",
+      "adaptiveAddonSelectable": true
     }
   ],
   "settings": [

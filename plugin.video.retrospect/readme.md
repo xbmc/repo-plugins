@@ -4,32 +4,12 @@
 Contents
 ---------------------------------------------------------------------------------------------------- 
 
-1. License
-2. Introduction
-3. Changelog
-4. Troubleshooting and Known Issues
-5. Acknowledgements
-6. Donations
+1. Introduction
+2. Troubleshooting and Known Issues
+3. Acknowledgements
+4. Donations
 
-1 - License
----------------------------------------------------------------------------------------------------- 
-The Retrospect-Framework is licensed under the Creative Commons Attribution-Non-Commercial-No
-Derivative Works 3.0 Unported License. To view a copy of this licence, visit 
-[http://creativecommons.org/licenses/by-nc-nd/3.0/](http://creativecommons.org/licenses/by-nc-nd/3.0/) 
-or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California 94105,
- USA. Files that belong to the Retrospect-Framework have a disclaimer stating that they are licensed 
- under the Creative Commons Attribution-Non-Commercial-No Derivative Works 3.0 Unported License.
-
-All channels, skins and retroconfig.py (further called Retrospect Additions) are free software:
-you can redistribute it and/or modify it under the terms of the GNU General Public License 
-as published by the Free Software Foundation, either version 3 of the License, or (at your 
-option) any later version. Retrospect Additions are distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
-FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
-details. You should have received a copy of the GNU General Public License along with 
-Retrospect Additions. If not, see [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/).
- 
-2 - Introduction
+1 - Introduction
 ----------------------------------------------------------------------------------------------------
 Retrospect (Previously XBMC Online TV) is a Kodi video add-on which allows you to watch streams of 
 a number of free and publicly available online TV stream sites.
@@ -41,22 +21,18 @@ Dutch site. The add-on got its initial name from this site: ‘_Uitzending gemis
 Discussion about the add-on can be done in [this](https://forum.kodi.tv/showthread.php?tid=25522) 
 thread at the Kodi forums or in [this](https://gathering.tweakers.net/forum/list_messages/1643928/last) 
 thread at Tweakers.net (Dutch only). Issues regarding this script can be submitted at our issue 
-tracker at BitBucket.
+tracker at GitHub.
 
-3 - Changelog
-----------------------------------------------------------------------------------------------------
-See the changelog.txt file.
-
-4 - Troubleshooting and Known Issues
+2 - Troubleshooting and Known Issues
 ----------------------------------------------------------------------------------------------------
 Please visit the [Retrospect Troubleshooting Page](https://www.rieter.net/content/xot/troubleshooting/).
 
-5 - Acknowledgement
+3 - Acknowledgement
 ----------------------------------------------------------------------------------------------------
 The first idea for Retrospect/XBMC Online TV/XOT-Uzg came from a script by
 by BaKMaN.
 
-6 - Donations
+4 - Donations
 ----------------------------------------------------------------------------------------------------
 The following persons have supported Retrospect by donating (the list is
 sorted chronologically):

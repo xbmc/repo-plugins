@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+
 import sys
 
 PY2 = sys.version_info[0] == 2

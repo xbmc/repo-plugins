@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+
 import os
 import xml.dom.minidom
 
@@ -35,6 +37,8 @@ class Config:
     rootDir = __path.replace(";", "").rstrip(os.sep)         # : The root directory where Retrospect resides.
     addonDir = os.path.split(rootDir)[-1]                    # : The add-on directory of Kodi.
     rootDir = os.path.join(rootDir, '')                      # : The root directory where Retrospect resides.
+    icon = os.path.join(rootDir, "resources", "media", "icon.png")
+    fanart = os.path.join(rootDir, "resources", "media", "fanart.jpg")
 
     # determine the profile directory, where user data is stored.
     if xbmc.getCondVisibility("system.platform.xbox"):

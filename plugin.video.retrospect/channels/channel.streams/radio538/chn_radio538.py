@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+
 import datetime
 import time
 from xml.dom.minidom import parseString

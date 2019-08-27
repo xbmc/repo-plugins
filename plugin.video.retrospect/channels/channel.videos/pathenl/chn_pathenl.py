@@ -1,4 +1,6 @@
 # coding:UTF-8
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+
 import datetime
 
 import chn_class

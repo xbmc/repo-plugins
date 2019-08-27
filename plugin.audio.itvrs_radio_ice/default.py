@@ -1,22 +1,16 @@
 #!/usr/bin/python
 
-import os
-import xbmcaddon
+import sys
 import xbmcgui
+import xbmcplugin
 
-addon = xbmcaddon.Addon()
-addonname = addon.getAddonInfo('name')
-line1 = 'ITVRS - Radio Ice'
-line2 = '  '
-line3 = 'Use Left Menu To Pause Or Stop'
+addon_handle = int(sys.argv[1])
 
-xbmcgui.Dialog().ok(addonname, line1, line2, line3)
+xbmcplugin.setContent(addon_handle, 'audio')
 
-class itvrs_radio_ice:
+url = 'http://stream.zeno.fm/3611cwn8mbruv'
+li = xbmcgui.ListItem(label='ITVRS - Radio Ice', iconImage='DefaultAudio.png')
+li.setInfo('music', {'Title': 'ITVRS - Radio Ice', 'Album': 'ITVRS - Radio Ice'})
+xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 
-    def __init__(self):
-		
-        xbmc.Player().play('http://stream.zeno.fm/3611cwn8mbruv')
-
-rr = itvrs_radio_ice()
-del rr
+xbmcplugin.endOfDirectory(addon_handle)

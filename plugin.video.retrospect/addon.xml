@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.0.3"
+        version="5.0.4"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,32 +123,29 @@
         <summary lang="en_GB">Retrospect (previously XBMC Online TV) is a plugin that allows the playback of a lot of TV shows that are available (legally) via the broadcasters websites.</summary>
         <description lang="en_GB">Retrospect uses the official websites of a lot of different broadcasting companies (mainly Dutch, Belgian, British and Swedish) to make their re-run episodes available on the Kodi platform. More information can be found at www.rieter.net.[CR][CR]Retrospect reports back usage statistics to our servers. This option can be disabled from the add-on settings.</description>
         <disclaimer lang="en_GB">Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched via this add-on or any consequences of using this add-on to watch the content using the content provider's platforms.</disclaimer>
+        <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.0.3 - Changelog - 2019-08-22[/B]
+        <news>[B]Retrospect v5.0.4 - Changelog - 2019-08-28[/B]
 
-A new release that contains a number of changes for the NPO Start channel that enables users to configure their NPO Start account and watch all content to which they are entitled. Support for multiple profiles was added to the NPO Start favourites. Besides this the playlist generation code was simplified and the default behaviour for subtitles was changed to default to &#x27;always show&#x27; subtitles whenever they are available.
+Mainly a release to update the Retrospect license from CC BY-NC-ND to CC BY-NC-SA.
 
 [B]Framework related[/B]
-* Fixed: Python 3 issue with Vault
-* Changed: behaviour of enabling/disabling subtitles in Retrospect (Fixes #1204)
+* Fixed: ignore Channel InputStream Adaptive settings if encryption is needed
+* Updated: license from CC-BY-NC-ND to CC-BY-NC-SA-4.0
 
 [B]GUI/Settings/Language related[/B]
-* Added: translation for some common list item names
-* Updated: NPO Start is now localized for most of the strings
-* Changed: cleanup of playback and playlist generation code
+-
 
 [B]Channel related[/B]
-* Changed: restructured the TV4 Play main list a bit (Fixes #1193)
-* Fixed: NPO Start shows logon error popup even if no account was specified for NPO Start
-* Changed: removed NTR School TV for now as it is no longer working and they retired their JSON api
-* Fixed: some NPO Start shows don&#x27;t have a title in the metadata, which broken parsing (Fixes #1196)
-* Added: support for more profiles in NPO start (Fixes #1197)
-* Added: Show NPO Start error messages to user (See #1197)
+* Added: Option to disable InputStream Adaptive for VRT.Nu (Fixes #1210)
 
         </news>
         <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+            <screenshot>resources/media/retrospect01.jpg</screenshot>
+            <screenshot>resources/media/retrospect02.jpg</screenshot>
+            <screenshot>resources/media/retrospect03.jpg</screenshot>
         </assets>
     </extension>
 </addon>

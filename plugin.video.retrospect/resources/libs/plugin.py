@@ -1,13 +1,5 @@
 # coding=utf-8
-#===============================================================================
-# LICENSE Retrospect-Framework - CC BY-NC-ND
-#===============================================================================
-# This work is licenced under the Creative Commons
-# Attribution-Non-Commercial-No Derivative Works 3.0 Unported License. To view a
-# copy of this licence, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
-# or send a letter to Creative Commons, 171 Second Street, Suite 300,
-# San Francisco, California 94105, USA.
-#===============================================================================
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 import os
 import xbmcplugin
@@ -263,8 +255,8 @@ class Plugin(ParameterParser):
         categories = channel_register.get_categories()
 
         kodi_items = []
-        icon = os.path.join(Config.rootDir, "icon.png")
-        fanart = os.path.join(Config.rootDir, "fanart.jpg")
+        icon = Config.icon
+        fanart = Config.fanart
         for category in categories:
             name = LanguageHelper.get_localized_category(category)
             kodi_item = xbmcgui.ListItem(name, name)
@@ -312,8 +304,8 @@ class Plugin(ParameterParser):
 
             # Should we show the "All Favourites"?
             if AddonSettings.show_show_favourites_in_channel_list():
-                icon = os.path.join(Config.rootDir, "icon.png")
-                fanart = os.path.join(Config.rootDir, "fanart.jpg")
+                icon = Config.icon
+                fanart = Config.fanart
                 name = LanguageHelper.get_localized_string(LanguageHelper.AllFavouritesId)
                 kodi_item = xbmcgui.ListItem(name, name)
 
@@ -425,8 +417,8 @@ class Plugin(ParameterParser):
                 fallback_icon = self.channelObject.noImage
                 fallback_fanart = self.channelObject.fanart
             else:
-                fallback_icon = os.path.join(Config.rootDir, "icon.png")
-                fallback_fanart = os.path.join(Config.rootDir, "fanart.jpg")
+                fallback_icon = Config.icon
+                fallback_fanart = Config.fanart
 
             for media_item in media_items:  # type: MediaItem
                 media_item.thumb = media_item.thumb or fallback_icon
@@ -779,8 +771,8 @@ class Plugin(ParameterParser):
                 empty_list_item.thumb = self.channelObject.noImage
                 empty_list_item.fanart = self.channelObject.fanart
             else:
-                icon = os.path.join(Config.rootDir, "icon.png")
-                fanart = os.path.join(Config.rootDir, "fanart.jpg")
+                icon = Config.icon
+                fanart = Config.fanart
                 empty_list_item.icon = icon
                 empty_list_item.thumb = fanart
                 empty_list_item.fanart = fanart

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+
 from backtothefuture import PY2
 if PY2:
     # noinspection PyUnresolvedReferences

@@ -1,12 +1,4 @@
-#===============================================================================
-# LICENSE Retrospect-Framework - CC BY-NC-ND
-#===============================================================================
-# This work is licenced under the Creative Commons
-# Attribution-Non-Commercial-No Derivative Works 3.0 Unported License. To view a
-# copy of this licence, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
-# or send a letter to Creative Commons, 171 Second Street, Suite 300,
-# San Francisco, California 94105, USA.
-#===============================================================================
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 import time
 import os
@@ -192,7 +184,7 @@ class XbmcWrapper:
             display_time = 1500
 
         # Get an icon
-        notification_icon = os.path.join(Config.rootDir, "icon.png")
+        notification_icon = Config.icon
         if os.path.exists(notification_icon):
             # change the separators
             notification_icon = notification_icon.replace("\\", "/")

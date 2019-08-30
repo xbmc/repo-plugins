@@ -1,3 +1,7 @@
+v3.0.46
+Fixed sign in.
+Fixed CRLF in changelog.txt
+
 v3.0.45
 Fixed Added and Watching.
 

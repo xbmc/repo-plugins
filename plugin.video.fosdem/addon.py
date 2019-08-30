@@ -32,7 +32,7 @@ def years():
 
 def fetch_xml(year):
     r = requests.get(FORMAT_URL.format(year))
-    return ET.fromstring(r.text.encode('utf-8'))
+    return ET.fromstring(r.content)
 
 
 def contains_videos(links):

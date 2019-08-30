@@ -231,7 +231,7 @@ def SignInBBCiD():
         m = p.search(resp.text)
         url = m.group(1)
 
-        url = "https://account.bbc.com%s" % url
+        url = "https://account.bbc.com%s" % HTMLParser.HTMLParser().unescape(url)
         resp = s.post(url, data=post_data, headers=headers)
     
         for cookie in s.cookies:
@@ -247,7 +247,7 @@ def SignInBBCiD():
         m = p.search(resp.text)
         url = m.group(1)
 
-        url = "https://account.bbc.com%s" % url
+        url = "https://account.bbc.com%s" % HTMLParser.HTMLParser().unescape(url)
         resp = s.post(url, data=post_data, headers=headers)
     
         for cookie in s.cookies:

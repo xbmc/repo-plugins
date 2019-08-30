@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vimeo" name="Vimeo" version="4.1.4" provider-name="bromix">
+<addon id="plugin.video.vimeo" name="Vimeo" version="4.1.5" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
 	</requires>
@@ -19,5 +19,6 @@
 		<website>www.vimeo.com</website>
 		<email>bromix at gmx dot net</email>
 		<source>https://github.com/bromix/plugin.video.vimeo</source>
+		<broken>Deprecated. Upgrade to Krypton or higher to use the updated plugin.</broken>
 	</extension>
 </addon>

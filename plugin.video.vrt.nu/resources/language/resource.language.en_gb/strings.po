@@ -17,7 +17,7 @@ msgstr ""
 
 ### MAIN MENU
 msgctxt "#30010"
-msgid "My programs"
+msgid "My favorites"
 msgstr ""
 
 msgctxt "#30011"
@@ -111,7 +111,7 @@ msgstr ""
 
 ### FAVORITES
 msgctxt "#30040"
-msgid "My favourite programs"
+msgid "My favorite programs"
 msgstr ""
 
 msgctxt "#30041"
@@ -378,7 +378,7 @@ msgid "Next:"
 msgstr ""
 
 msgctxt "#30423"
-msgid "No transmission"
+msgid "Retransmissions"
 msgstr ""
 
 msgctxt "#30424"
@@ -432,11 +432,11 @@ msgid "Features"
 msgstr ""
 
 msgctxt "#30823"
-msgid "Enable My programs"
+msgid "Enable My favorites"
 msgstr ""
 
 msgctxt "#30824"
-msgid "When enabled, the user can follow their favourite programs and list these separately. In this case the VRT NU add-on will download and update a list of your followed programs on the VRT NU website."
+msgid "When enabled, the user can follow their favorite programs and list these separately. In this case the VRT NU add-on will download and update a list of your followed programs on the VRT NU website."
 msgstr ""
 
 msgctxt "#30825"
@@ -714,7 +714,7 @@ msgid "Welcome to VRT NU add-on v2.0.0"
 msgstr ""
 
 msgctxt "#30979"
-msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favourites.[/B]"
+msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favorites.[/B]"
 msgstr ""
 
 msgctxt "#30981"

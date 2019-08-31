@@ -92,13 +92,10 @@ class Metadata:
 
         # Go to program context menu
         if cache_file and cache_file.startswith(('my-offline', 'my-recent', 'offline', 'recent')):
-            season = self.get_season(api_data)
-            if season:
-                plugin_url = self._kodi.url_for('programs', program=program, season=season)
-            else:
-                plugin_url = self._kodi.url_for('programs', program=program)
-            # NOTE: ActivateWindow doesn't handle urls without trailing slash right
-            context_menu.append((self._kodi.localize(30417), 'ActivateWindow(Videos,%s,return)' % plugin_url))
+            plugin_url = self._kodi.url_for('programs', program=program, season='allseasons')
+            # NOTE: Because of a bug in ActivateWindow(), return does not work
+            # context_menu.append((self._kodi.localize(30417), 'ActivateWindow(Videos,%s,return)' % plugin_url))
+            context_menu.append((self._kodi.localize(30417), 'ActivateWindow(Videos,%s)' % plugin_url))
 
         # Refresh context menu
         context_menu.append((self._kodi.localize(30413), 'RunPlugin(%s)' % self._kodi.url_for('delete_cache', cache_file=cache_file)))

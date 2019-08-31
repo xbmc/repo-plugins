@@ -22,12 +22,12 @@ class VRTPlayer:
         self._favorites.get_favorites(ttl=60 * 60)
         main_items = []
 
-        # Only add 'My programs' when it has been activated
+        # Only add 'My favorites' when it has been activated
         if self._favorites.is_activated():
             main_items.append(TitleItem(
-                title=self._kodi.localize(30010),  # My programs
+                title=self._kodi.localize(30010),  # My favorites
                 path=self._kodi.url_for('favorites_menu'),
-                art_dict=dict(thumb='icons/settings/profiles.png'),
+                art_dict=dict(thumb='DefaultFavourites.png'),
                 info_dict=dict(plot=self._kodi.localize(30011))
             ))
 
@@ -75,7 +75,7 @@ class VRTPlayer:
     def _version_check(self):
         first_run, settings_version, addon_version = self._first_run()
         if first_run:
-            # 2.0.0 version: changed plugin:// url interface: show warning that favourites and what-was-watched will break
+            # 2.0.0 version: changed plugin:// url interface: show warning that Kodi favourites and what-was-watched will break
             if settings_version == '' and self._kodi.credentials_filled_in():
                 self._kodi.show_ok_dialog(self._kodi.localize(30978), self._kodi.localize(30979))
             if addon_version == '2.2.1':
@@ -140,7 +140,7 @@ class VRTPlayer:
                           info_dict=dict(plot=self._kodi.localize(30045))),
             )
 
-        self._kodi.show_listing(favorites_items, category=30010)  # My programs
+        self._kodi.show_listing(favorites_items, category=30010)  # My favorites
 
         # Show dialog when no favorites were found
         if not self._favorites.titles():
@@ -154,7 +154,7 @@ class VRTPlayer:
 
     def show_tvshow_menu(self, use_favorites=False):
         ''' The VRT NU add-on 'A-Z' listing menu '''
-        # My programs menus may need more up-to-date favorites
+        # My favorites menus may need more up-to-date favorites
         self._favorites.get_favorites(ttl=5 * 60 if use_favorites else 60 * 60)
         tvshow_items = self._apihelper.list_tvshows(use_favorites=use_favorites)
         self._kodi.show_listing(tvshow_items, category=30012, sort='label', content='tvshows')
@@ -208,7 +208,7 @@ class VRTPlayer:
         ''' The VRT NU add-on 'Most recent' and 'My most recent' listing menu '''
         from statichelper import realpage
 
-        # My programs menus may need more up-to-date favorites
+        # My favorites menus may need more up-to-date favorites
         self._favorites.get_favorites(ttl=5 * 60 if use_favorites else 60 * 60)
         page = realpage(page)
         episode_items, sort, ascending, content = self._apihelper.list_episodes(page=page, use_favorites=use_favorites, variety='recent')
@@ -232,7 +232,7 @@ class VRTPlayer:
         ''' The VRT NU add-on 'Soon offline' and 'My soon offline' listing menu '''
         from statichelper import realpage
 
-        # My programs menus may need more up-to-date favorites
+        # My favorites menus may need more up-to-date favorites
         self._favorites.get_favorites(ttl=5 * 60 if use_favorites else 60 * 60)
         page = realpage(page)
         episode_items, sort, ascending, content = self._apihelper.list_episodes(page=page, use_favorites=use_favorites, variety='offline')

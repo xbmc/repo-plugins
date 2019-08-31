@@ -18,8 +18,8 @@ msgstr ""
 
 ### MAIN MENU
 msgctxt "#30010"
-msgid "My programs"
-msgstr "Mijn programma's"
+msgid "My favorites"
+msgstr "Mijn favorieten"
 
 msgctxt "#30011"
 msgid "Browse only the programs you follow"
@@ -112,7 +112,7 @@ msgstr "Zoekresultaten"
 
 ### FAVORITES
 msgctxt "#30040"
-msgid "My favourite programs"
+msgid "My favorite programs"
 msgstr "Mijn favoriete programma's"
 
 msgctxt "#30041"
@@ -282,8 +282,8 @@ msgid "Straks:"
 msgstr ""
 
 msgctxt "#30423"
-msgid "No transmission"
-msgstr "Geen uitzending"
+msgid "Retransmissions"
+msgstr "Herhalingslus"
 
 msgctxt "#30424"
 msgid "[B]New search...[/B]"
@@ -328,11 +328,11 @@ msgid "Features"
 msgstr "Functionaliteit"
 
 msgctxt "#30823"
-msgid "Enable My programs"
-msgstr "Toon Mijn programma's"
+msgid "Enable My favorites"
+msgstr "Toon Mijn favorieten"
 
 msgctxt "#30824"
-msgid "When enabled, the user can follow their favourite programs and list these separately. In this case the VRT NU add-on will download and update a list of your followed programs on the VRT NU website."
+msgid "When enabled, the user can follow their favorite programs and list these separately. In this case the VRT NU add-on will download and update a list of your followed programs on the VRT NU website."
 msgstr "Indien actief kan de gebruiker zijn favoriete programma's volgen en apart aanroepen. Dit zorgt er wel voor dat de VRT NU add-on een lijst van favoriete programma's download en aanpast op de VRT NU website."
 
 msgctxt "#30825"
@@ -606,7 +606,7 @@ msgid "Welcome to VRT NU add-on v2.0.0"
 msgstr "Welkom bij VRT NU add-on v2.0.0"
 
 msgctxt "#30979"
-msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favourites.[/B]"
+msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favorites.[/B]"
 msgstr "Wegens belangrijke interne wijzigingen werken bestaande Kodi-favorieten en kijkgeschiedenis van VRT NU niet meer.\n[B]Gelieve al uw VRT NU-favorieten opnieuw aan te maken.[/B]"
 
 msgctxt "#30981"

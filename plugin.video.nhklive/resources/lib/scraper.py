@@ -33,7 +33,7 @@ class myAddon(t1mAddon):
       nw_api_prefix, nw_api_key = re.compile('nw_api_prefix\|\|"(.+?)".+?nw_api_key\|\|"(.+?)"', re.DOTALL).search(html).groups()
       nw_region = 'world'
       nw_api_prefix = nw_api_prefix.replace('nhkworldstg','nhkworld')
-      url = nw_api_prefix + 'epg/v6/' + nw_region + '/now.json' + '?apikey=' + nw_api_key
+      url = nw_api_prefix + 'epg/v7/' + nw_region + '/now.json' + '?apikey=' + nw_api_key
       if not url.startswith('http'):
          url = 'http:' + url
       html = self.getRequest(url)

@@ -389,6 +389,10 @@ def show_menu(params):
         li.setProperty('menu_id', 'hide')
         action_items.append(li)
 
+    li = xbmcgui.ListItem(string_load(30401))
+    li.setProperty('menu_id', 'info')
+    action_items.append(li)
+
     #xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
 
     action_menu = ActionMenu("ActionMenu.xml", PLUGINPATH, "default", "720p")
@@ -505,6 +509,8 @@ def show_menu(params):
     elif selected_action == "refresh_images":
         CacheArtwork().delete_cached_images(item_id)
 
+    elif selected_action == "info":
+        xbmc.executebuiltin("Action(info)")
 
 def populate_listitem(item_id):
     log.debug("populate_listitem: {0}", item_id)
@@ -739,17 +745,19 @@ def search_results(params):
             person_name = item.get('Name')
             image_tags = item.get('ImageTags', {})
             image_tag = image_tags.get('PrimaryImageTag', '')
-            person_thumbnail = downloadUtils.imageUrl(person_id, "Primary", 0, 400, 400, image_tag, server=server)
+            person_thumbnail = downloadUtils.getArtwork(item, "Primary", server=server)
 
             action_url = sys.argv[0] + "?mode=NEW_SEARCH_PERSON&person_id=" + person_id
 
             list_item = xbmcgui.ListItem(label=person_name)
             list_item.setProperty("id", person_id)
+
+            art_links = {}
+            art_links["icon"] = "DefaultActor.png"
             if person_thumbnail:
-                art_links = {}
                 art_links["thumb"] = person_thumbnail
                 art_links["poster"] = person_thumbnail
-                list_item.setArt(art_links)
+            list_item.setArt(art_links)
 
             item_tupple = (action_url, list_item, True)
             list_items.append(item_tupple)

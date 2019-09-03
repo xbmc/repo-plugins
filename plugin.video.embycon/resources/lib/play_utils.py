@@ -182,6 +182,16 @@ def playFile(play_info, monitor):
         result = data_manager.GetContent(url)
         id = result["Id"]
 
+    if result.get("Type") == "Photo":
+        play_url = "%s/emby/Items/%s/Images/Primary"
+        play_url = play_url % (server, id)
+
+        plugin_path = xbmc.translatePath(os.path.join(xbmcaddon.Addon().getAddonInfo('path')))
+        action_menu = PictureViewer("PictureViewer.xml", plugin_path, "default", "720p")
+        action_menu.setPicture(play_url)
+        action_menu.doModal()
+        return
+
     # get playback info from the server using the device profile
     playback_info = download_utils.get_item_playback_info(id)
     if playback_info is None:
@@ -195,16 +205,6 @@ def playFile(play_info, monitor):
     #media_sources = result.get('MediaSources')
     media_sources = playback_info.get('MediaSources')
     selected_media_source = None
-
-    if result.get("Type") == "Photo":
-        play_url = "%s/emby/Items/%s/Images/Primary"
-        play_url = play_url % (server, id)
-
-        plugin_path = xbmc.translatePath(os.path.join(xbmcaddon.Addon().getAddonInfo('path')))
-        action_menu = PictureViewer("PictureViewer.xml", plugin_path, "default", "720p")
-        action_menu.setPicture(play_url)
-        action_menu.doModal()
-        return
 
     if media_sources is None or len(media_sources) == 0:
         log.debug("Play Failed! There is no MediaSources data!")
@@ -605,7 +605,7 @@ def audioSubsPref(url, list_item, media_source, item_id, audio_stream_index, sub
     downloadableStreams = []
     selectAudioIndex = audio_stream_index
     selectSubsIndex = subtitle_stream_index
-    playurlprefs = "%s" % url
+    playurlprefs = ""
     default_audio = media_source.get('DefaultAudioStreamIndex', 1)
     default_sub = media_source.get('DefaultSubtitleStreamIndex', "")
     source_id = media_source["Id"]
@@ -667,10 +667,10 @@ def audioSubsPref(url, list_item, media_source, item_id, audio_stream_index, sub
     if selectSubsIndex is not None:
         # Load subtitles in the listitem if downloadable
         if selectSubsIndex in downloadableStreams:
-            url = [("%s/emby/Videos/%s/%s/Subtitles/%s/Stream.srt"
+            subtitle_url = [("%s/emby/Videos/%s/%s/Subtitles/%s/Stream.srt"
                     % (download_utils.getServer(), item_id, source_id, selectSubsIndex))]
-            log.debug("Streaming subtitles url: {0} {1}", selectSubsIndex, url)
-            list_item.setSubtitles(url)
+            log.debug("Streaming subtitles url: {0} {1}", selectSubsIndex, subtitle_url)
+            list_item.setSubtitles(subtitle_url)
         else:
             # Burn subtitles
             playurlprefs += "&SubtitleStreamIndex=%s" % selectSubsIndex
@@ -687,10 +687,10 @@ def audioSubsPref(url, list_item, media_source, item_id, audio_stream_index, sub
 
             # Load subtitles in the listitem if downloadable
             if selectSubsIndex in downloadableStreams:
-                url = [("%s/emby/Videos/%s/%s/Subtitles/%s/Stream.srt"
+                subtitle_url = [("%s/emby/Videos/%s/%s/Subtitles/%s/Stream.srt"
                         % (download_utils.getServer(), item_id, source_id, selectSubsIndex))]
-                log.debug("Streaming subtitles url: {0} {1}", selectSubsIndex, url)
-                list_item.setSubtitles(url)
+                log.debug("Streaming subtitles url: {0} {1}", selectSubsIndex, subtitle_url)
+                list_item.setSubtitles(subtitle_url)
             else:
                 # Burn subtitles
                 playurlprefs += "&SubtitleStreamIndex=%s" % selectSubsIndex
@@ -705,7 +705,12 @@ def audioSubsPref(url, list_item, media_source, item_id, audio_stream_index, sub
     else:
         playurlprefs += "&AudioBitrate=192000"
 
-    return playurlprefs
+    if url.find("|verifypeer=false"):
+        new_url = url.replace("|verifypeer=false", playurlprefs + "|verifypeer=false")
+    else:
+        new_url = url + playurlprefs
+
+    return new_url
 
 
 # direct stream, set any available subtitle streams
@@ -1100,6 +1105,9 @@ class PlaybackService(xbmc.Monitor):
     def screensaver_activated(self):
         log.debug("Screen Saver Activated")
 
+        home_screen = HomeWindow()
+        home_screen.clearProperty("skip_select_user")
+
         settings = xbmcaddon.Addon()
         stop_playback = settings.getSetting("stopPlaybackOnScreensaver") == 'true'
 
@@ -1125,11 +1133,15 @@ class PlaybackService(xbmc.Monitor):
         log.debug("Screen Saver Deactivated")
 
         if self.background_image_cache_thread:
-            self.background_image_cache_thread.stop_all_activity = True
+            self.background_image_cache_thread.stop_activity()
             self.background_image_cache_thread = None
 
         settings = xbmcaddon.Addon()
         show_change_user = settings.getSetting('changeUserOnScreenSaver') == 'true'
         if show_change_user:
+            home_screen = HomeWindow()
+            skip_select_user = home_screen.getProperty("skip_select_user")
+            if skip_select_user is not None and skip_select_user == "true":
+                return
             xbmc.executebuiltin("RunScript(plugin.video.embycon,0,?mode=CHANGE_USER)")
 

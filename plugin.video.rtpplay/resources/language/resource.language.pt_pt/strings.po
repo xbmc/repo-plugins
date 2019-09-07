@@ -22,36 +22,36 @@ msgstr ""
 
 msgctxt "#32001"
 msgid "Could not complete request. The plugin needs an update."
-msgstr ""
+msgstr "Não foi possível completar o pedido. O plugin precisa de uma atualização."
 
 msgctxt "#32002"
 msgid "Could not grab stream url. The plugin needs an update."
-msgstr ""
+msgstr "Não foi possível obter o url da stream. O plugin precisa de uma atualização."
 
 msgctxt "#32003"
 msgid "Debug"
-msgstr ""
+msgstr "Depuração"
 
 msgctxt "#32004"
 msgid "Live TV"
-msgstr ""
+msgstr "Em direto"
 
 msgctxt "#32005"
 msgid "Programs"
-msgstr ""
+msgstr "Programas"
 
 msgctxt "#32006"
 msgid "Search"
-msgstr ""
+msgstr "Pesquisar"
 
 msgctxt "#32007"
 msgid "Search query"
-msgstr ""
+msgstr "Texto para pesquisar"
 
 msgctxt "#32008"
 msgid "Results for"
-msgstr ""
+msgstr "Resultados para"
 
 msgctxt "#32009"
 msgid "Page"
-msgstr ""
+msgstr "Página"

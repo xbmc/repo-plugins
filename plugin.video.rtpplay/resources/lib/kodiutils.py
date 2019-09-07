@@ -22,7 +22,13 @@ def compat_py23str(x):
         return str(x)
     else:
         if isinstance(x, unicode):
-            return unicode(x).encode("utf-8")
+            try:
+                return unicode(x).encode("latin-1")
+            except UnicodeEncodeError:
+                try:
+                    return unicode(x).encode("utf-8")
+                except:
+                   return str(x)
         else:
             return str(x)
 
@@ -65,7 +71,7 @@ def get_setting_as_int(setting):
 
 
 def get_string(string_id):
-    return ADDON.getLocalizedString(string_id).encode('utf-8', 'ignore')
+    return compat_py23str(ADDON.getLocalizedString(string_id))
 
 
 def kodi_json_request(params):

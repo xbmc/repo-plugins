@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     Catch-up TV & More
-    Copyright (C) 2018  SylvainCecchetto
+    Copyright (C) 2019  SylvainCecchetto
 
     This file is part of Catch-up TV & More.
 
@@ -29,16 +29,17 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
-from resources.lib import resolver_proxy
+from resources.lib.listitem_utils import item_post_treatment, item2dict
 
-import json
 import re
 import urlquick
 
-# TO DO
+# TODO
 # Add Replay
 
-URL_LIVE = 'https://www.paramountchannel.it/tv/diretta'
+URL_ROOT = "http://grandlittoral.tv"
+
+URL_LIVE = "http://www.creacast.com/play.php?su=grandlittoral"
 
 
 def live_entry(plugin, item_id, item_dict, **kwargs):
@@ -48,10 +49,6 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
-    resp = urlquick.get(URL_LIVE, max_age=-1)
-    video_uri = re.compile(r'uri\"\:\"(.*?)\"').findall(resp.text)[0]
-    account_override = 'intl.mtvi.com'
-    ep = 'be84d1a2'
-
-    return resolver_proxy.get_mtvnservices_stream(
-        plugin, video_uri, False, '', account_override, ep)
+    resp = urlquick.get(
+        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua}, max_age=-1)
+    return re.compile(r'file\: \"(.*?)\"').findall(resp.text)[0]

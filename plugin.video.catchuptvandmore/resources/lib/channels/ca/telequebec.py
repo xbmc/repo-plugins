@@ -129,4 +129,4 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     resp = urlquick.get(URL_LIVE)
-    return 'https:' + re.compile(r'm3U8Url: "(.*?)"').findall(resp.text)[0]
+    return 'https:' + re.compile(r'm3U8Url:"(.*?)"').findall(resp.text)[0]

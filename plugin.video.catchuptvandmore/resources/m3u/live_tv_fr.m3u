@@ -358,6 +358,11 @@ plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=france3regions&
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Rhône-Alpes
 plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Rhône-Alpes"}
 
+##	France 3 Régions Nouvelle-Aquitaine
+##	france3regions
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Nouvelle-Aquitaine
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Nouvelle-Aquitaine"}
+
 ##	viàATV
 ##	viaatv
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viaatv.png" group-title="France Région",viàATV
@@ -427,6 +432,51 @@ plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=tvpifr&item_mod
 ##	idf1
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/idf1.png" group-title="France Région",IDF 1
 plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=idf1&item_module=resources.lib.channels.fr.idf1&item_dict={}
+
+##	Azur TV
+##	azurtv
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/azurtv.png" group-title="France Région",Azur TV
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=azurtv&item_module=resources.lib.channels.fr.azurtv&item_dict={}
+
+##	BIP TV
+##	biptv
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/biptv.png" group-title="France Région",BIP TV
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=biptv&item_module=resources.lib.channels.fr.biptv&item_dict={}
+
+##	Grand Lille TV
+##	grandlilletv
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/grandlilletv.png" group-title="France Région",Grand Lille TV
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=grandlilletv&item_module=resources.lib.channels.fr.grandlilletv&item_dict={}
+
+##	Grand Litorral TV
+##	grandlitorraltv
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/grandlitorraltv.png" group-title="France Région",Grand Litorral TV
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=grandlitorraltv&item_module=resources.lib.channels.fr.grandlitorraltv&item_dict={}
+
+##	La Chaine Normande
+##	lachainenormande
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/lachainenormande.png" group-title="France Région",La Chaine Normande
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=lachainenormande&item_module=resources.lib.channels.fr.lachainenormande&item_dict={}
+
+##	Sport en France
+##	sportenfrance
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/sportenfrance.png" group-title="France Satellite/FAI",Sport en France
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=sportenfrance&item_module=resources.lib.channels.fr.sportenfrance&item_dict={}
+
+##	Provence Azur TV
+##	provenceazurtv
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/provenceazurtv.png" group-title="France Région",Provence Azur TV
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=provenceazurtv&item_module=resources.lib.channels.fr.azurtv&item_dict={}
+
+##	TébéSud
+##	tebesud
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tebesud.png" group-title="France Région",TébéSud
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=tebesud&item_module=resources.lib.channels.fr.tebeo&item_dict={}
+
+##	MaTélé
+##	matele
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/matele.png" group-title="France Région",MaTélé
+plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=matele&item_module=resources.lib.channels.fr.matele&item_dict={}
 
 ##	Euronews
 ##	euronews

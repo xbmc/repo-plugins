@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     Catch-up TV & More
-    Copyright (C) 2018  SylvainCecchetto
+    Copyright (C) 2019  SylvainCecchetto
 
     This file is part of Catch-up TV & More.
 
@@ -29,16 +29,17 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
-from resources.lib import resolver_proxy
+from resources.lib.listitem_utils import item_post_treatment, item2dict
 
+import inputstreamhelper
 import json
 import re
 import urlquick
 
-# TO DO
+# TODO
 # Add Replay
 
-URL_LIVE = 'https://www.paramountchannel.it/tv/diretta'
+URL_ROOT = "https://www.lachainenormande.tv"
 
 
 def live_entry(plugin, item_id, item_dict, **kwargs):
@@ -48,10 +49,37 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
-    resp = urlquick.get(URL_LIVE, max_age=-1)
-    video_uri = re.compile(r'uri\"\:\"(.*?)\"').findall(resp.text)[0]
-    account_override = 'intl.mtvi.com'
-    ep = 'be84d1a2'
+    is_helper = inputstreamhelper.Helper('mpd')
+    if not is_helper.check_inputstream():
+        return False
 
-    return resolver_proxy.get_mtvnservices_stream(
-        plugin, video_uri, False, '', account_override, ep)
+    resp = urlquick.get(
+        URL_ROOT, headers={"User-Agent": web_utils.get_random_ua}, max_age=-1)
+    root = resp.parse()
+    url_live_datas = URL_ROOT + root.find(".//div[@class='HDR_VISIO']").get(
+        "data-url") + "&mode=html"
+
+    resp2 = urlquick.get(
+        url_live_datas,
+        headers={"User-Agent": web_utils.get_random_ua},
+        max_age=-1)
+    json_parser = json.loads(resp2.text)
+
+    item = Listitem()
+    item.path = json_parser["files"]["auto"]
+    item.property["inputstreamaddon"] = "inputstream.adaptive"
+    item.property["inputstream.adaptive.manifest_type"] = "mpd"
+    if item_dict:
+        if "label" in item_dict:
+            item.label = item_dict["label"]
+        if "info" in item_dict:
+            item.info.update(item_dict["info"])
+        if "art" in item_dict:
+            item.art.update(item_dict["art"])
+    else:
+        item.label = LABELS[item_id]
+        item.art["thumb"] = ""
+        item.art["icon"] = ""
+        item.art["fanart"] = ""
+        item.info["plot"] = LABELS[item_id]
+    return item

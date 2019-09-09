@@ -49,7 +49,7 @@ URL_REPLAY = URL_ROOT + '/%s/replay'
 
 URL_COMPTE_LOGIN_MODAL = URL_ROOT + '/compte/loginmodal'
 
-URL_COMPTE_LOGIN = URL_ROOT + '/compte/login'
+URL_COMPTE_LOGIN = URL_ROOT + '/compte/connexion'
 # TO DO add account for using Live Direct
 
 URL_LIVE_WITH_TOKEN = URL_ROOT + '/compte/live?channel=%s'

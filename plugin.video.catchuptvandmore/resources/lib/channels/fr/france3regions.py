@@ -75,7 +75,8 @@ LIVE_FR3_REGIONS = {
     "Picardie": "picardie",
     "Poitou-Charentes": "poitou-charentes",
     "Provence-Alpes": "provence-alpes",
-    "Rhône-Alpes": "rhone-alpes"
+    "Rhône-Alpes": "rhone-alpes",
+    "Nouvelle-Aquitaine": "nouvelle-aquitaine"
 }
 
 CORRECT_MONTH = {
@@ -211,6 +212,9 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
     json_parser = json.loads(resp.text)
 
     region = utils.ensure_unicode(final_region)
-    id_sivideo = json_parser[LIVE_FR3_REGIONS[region]]["id_sivideo"]
+    if 'Nouvelle-Aquitaine' in region:
+        id_sivideo = json_parser['noa']["id_sivideo"]
+    else:
+        id_sivideo = json_parser[LIVE_FR3_REGIONS[region]]["id_sivideo"]
     return resolver_proxy.get_francetv_live_stream(plugin,
                                                    id_sivideo.split('@')[0])

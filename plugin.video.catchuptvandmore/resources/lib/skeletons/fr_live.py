@@ -366,7 +366,7 @@ menu = {
             'Limousin', 'Lorraine', 'Midi-Pyrénées', 'Nord-Pas-de-Calais',
             'Basse-Normandie', 'Haute-Normandie', 'Paris Île-de-France',
             'Pays de la Loire', 'Picardie', 'Poitou-Charentes',
-            'Provence-Alpes', 'Rhône-Alpes'
+            'Provence-Alpes', 'Rhône-Alpes', 'Nouvelle-Aquitaine'
         ]
     },
     'viaatv': {
@@ -493,6 +493,69 @@ menu = {
         'thumb': 'channels/fr/idf1.png',
         'fanart': 'channels/fr/idf1_fanart.jpg',
         'module': 'resources.lib.channels.fr.idf1',
+        'm3u_group': 'Région'
+    },
+    'azurtv': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/azurtv.png',
+        'fanart': 'channels/fr/azurtv_fanart.jpg',
+        'module': 'resources.lib.channels.fr.azurtv',
+        'm3u_group': 'Région'
+    },
+    'biptv': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/biptv.png',
+        'fanart': 'channels/fr/biptv_fanart.jpg',
+        'module': 'resources.lib.channels.fr.biptv',
+        'm3u_group': 'Région'
+    },
+    'grandlilletv': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/grandlilletv.png',
+        'fanart': 'channels/fr/grandlilletv_fanart.jpg',
+        'module': 'resources.lib.channels.fr.grandlilletv',
+        'm3u_group': 'Région'
+    },
+    'grandlitorraltv': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/grandlitorraltv.png',
+        'fanart': 'channels/fr/grandlitorraltv_fanart.jpg',
+        'module': 'resources.lib.channels.fr.grandlitorraltv',
+        'm3u_group': 'Région'
+    },
+    'lachainenormande': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/lachainenormande.png',
+        'fanart': 'channels/fr/lachainenormande_fanart.jpg',
+        'module': 'resources.lib.channels.fr.lachainenormande',
+        'm3u_group': 'Région'
+    },
+    'sportenfrance': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/sportenfrance.png',
+        'fanart': 'channels/fr/sportenfrance_fanart.jpg',
+        'module': 'resources.lib.channels.fr.sportenfrance',
+        'm3u_group': 'Satellite/FAI'
+    },
+    'provenceazurtv': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/provenceazurtv.png',
+        'fanart': 'channels/fr/provenceazurtv_fanart.jpg',
+        'module': 'resources.lib.channels.fr.azurtv',
+        'm3u_group': 'Région'
+    },
+    'tebesud': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/tebesud.png',
+        'fanart': 'channels/fr/tebesud_fanart.jpg',
+        'module': 'resources.lib.channels.fr.tebeo',
+        'm3u_group': 'Région'
+    },
+    'matele': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/matele.png',
+        'fanart': 'channels/fr/matele_fanart.jpg',
+        'module': 'resources.lib.channels.fr.matele',
         'm3u_group': 'Région'
     }
 }

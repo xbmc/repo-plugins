@@ -601,7 +601,8 @@
             <setting label="BFM Paris" type="bool" id="bfmparis" default="true" visible="eq(-111,true)"/>
             <setting label="" type="number" visible="false" id="bfmparis.order" default="56"/>
 
-            <setting label="Onzéo" type="bool" id="onzeo" default="true" visible="eq(-113,true)"/>
+            <!-- REMOVE CHANNEL - CONFIGURATION TO KEEP ORDER -->
+            <setting label="Onzéo" type="bool" id="onzeo" default="false" visible="false"/>
             <setting label="" type="number" visible="false" id="onzeo.order" default="57"/>
 
             <setting label="Fun Radio" type="bool" id="fun_radio" default="true" visible="eq(-115,true)"/>
@@ -646,8 +647,7 @@
             <setting label="La Chaîne Météo" type="bool" id="lachainemeteo" default="true" visible="eq(-139,true)"/>
             <setting label="" type="number" visible="false" id="lachainemeteo.order" default="70"/>
 
-            <!-- REMOVE CHANNEL - CONFIGURATION TO KEEP ORDER -->
-            <setting label="J-One" type="bool" id="j_one" default="false" visible="false"/>
+            <setting label="J-One" type="bool" id="j_one" default="true" visible="eq(-141,true)"/>
             <setting label="" type="number" visible="false" id="j_one.order" default="71"/>
 
             <setting label="viàATV" type="bool" id="viaatv" default="true" visible="eq(-143,true)"/>
@@ -721,6 +721,33 @@
 
             <setting label="IDF 1" type="bool" id="idf1" default="true" visible="eq(-191,true)"/>
             <setting label="" type="number" visible="false" id="idf1.order" default="95"/>
+
+            <setting label="Azur TV" type="bool" id="azurtv" default="true" visible="eq(-193,true)"/>
+            <setting label="" type="number" visible="false" id="azurtv.order" default="96"/>
+
+            <setting label="BIP TV" type="bool" id="biptv" default="true" visible="eq(-195,true)"/>
+            <setting label="" type="number" visible="false" id="biptv.order" default="97"/>
+
+            <setting label="Grand Lille TV" type="bool" id="grandlilletv" default="true" visible="eq(-197,true)"/>
+            <setting label="" type="number" visible="false" id="grandlilletv.order" default="98"/>
+
+            <setting label="Grand Litorral TV" type="bool" id="grandlitorraltv" default="true" visible="eq(-199,true)"/>
+            <setting label="" type="number" visible="false" id="grandlitorraltv.order" default="99"/>
+
+            <setting label="La Chaine Normande" type="bool" id="lachainenormande" default="true" visible="eq(-201,true)"/>
+            <setting label="" type="number" visible="false" id="lachainenormande.order" default="100"/>
+
+            <setting label="Sport en France" type="bool" id="sportenfrance" default="true" visible="eq(-203,true)"/>
+            <setting label="" type="number" visible="false" id="sportenfrance.order" default="101"/>
+
+            <setting label="Provence Azur TV" type="bool" id="provenceazurtv" default="true" visible="eq(-205,true)"/>
+            <setting label="" type="number" visible="false" id="provenceazurtv.order" default="102"/>
+
+            <setting label="TébéSud" type="bool" id="tebesud" default="true" visible="eq(-207,true)"/>
+            <setting label="" type="number" visible="false" id="tebesud.order" default="103"/>
+
+            <setting label="MaTélé" type="bool" id="matele" default="true" visible="eq(-209,true)"/>
+            <setting label="" type="number" visible="false" id="matele.order" default="104"/>
         <!-- France -->
 
 
@@ -1177,7 +1204,7 @@
             <setting label="30080" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <!--<setting label="" type="bool" id="fr" default="true" visible="false"/>-->
 
-                <setting label="30158" type="labelenum" id="france3regions.language" values="Alpes|Alsace|Aquitaine|Auvergne|Bourgogne|Bretagne|Centre-Val de Loire|Chapagne-Ardenne|Corse|Côte d'Azur|Franche-Compté|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrénées|Nord-Pas-de-Calais|Basse-Normandie|Haute-Normandie|Paris Île-de-France|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes|Rhône-Alpes" default="Alpes"/>
+                <setting label="30158" type="labelenum" id="france3regions.language" values="Alpes|Alsace|Aquitaine|Auvergne|Bourgogne|Bretagne|Centre-Val de Loire|Chapagne-Ardenne|Corse|Côte d'Azur|Franche-Compté|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrénées|Nord-Pas-de-Calais|Basse-Normandie|Haute-Normandie|Paris Île-de-France|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes|Rhône-Alpes|Nouvelle-Aquitaine" default="Alpes"/>
                 <setting label="30159" type="labelenum" id="la_1ere.language" values="Guadeloupe|Guyane|Martinique|Mayotte|Nouvelle Calédonie|Polynésie|Réunion|St-Pierre et Miquelon|Wallis et Futuna|Outre-mer" default="Guadeloupe"/>
 
             <!-- Spain channels -->

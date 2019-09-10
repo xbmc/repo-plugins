@@ -200,13 +200,20 @@ def list_programs(plugin, item_id, sub_category_code_name, sub_category_url,
             'zones']:
         if sub_category_datas['code']['name'] == sub_category_code_name:
             for program_datas in sub_category_datas['data']:
-                if 'RC-' in program_datas['programId']:
+                if program_datas['programId'] is not None and 'RC-' in program_datas['programId']:
                     program_title = program_datas['title']
                     program_id = program_datas['programId']
                     program_image = ''
-                    for image_datas in program_datas['images']['landscape'][
-                            'resolutions']:
-                        program_image = image_datas['url']
+                    if program_datas['images']['landscape'] is not None:
+                        if 'resolutions' in program_datas['images']['landscape']:
+                            for image_datas in program_datas['images']['landscape'][
+                                    'resolutions']:
+                                program_image = image_datas['url']
+                    elif program_datas['images']['square'] is not None:
+                        if 'resolutions' in program_datas['images']['square']:
+                            for image_datas in program_datas['images']['square'][
+                                    'resolutions']:
+                                program_image = image_datas['url']
 
                     item = Listitem()
                     item.label = program_title
@@ -226,12 +233,18 @@ def list_programs(plugin, item_id, sub_category_code_name, sub_category_url,
                         video_title = program_datas['title']
                     video_id = program_datas['programId']
                     video_image = ''
-                    if 'resolutions' in program_datas['images']['landscape']:
-                        for video_image_datas in program_datas['images'][
-                                'landscape']['resolutions']:
-                            video_image = video_image_datas['url']
+                    if program_datas['images']['landscape'] is not None:
+                        if 'resolutions' in program_datas['images']['landscape']:
+                            for video_image_datas in program_datas['images'][
+                                    'landscape']['resolutions']:
+                                video_image = video_image_datas['url']
+                    elif program_datas['images']['square'] is not None:
+                        if 'resolutions' in program_datas['images']['square']:
+                            for image_datas in program_datas['images']['square'][
+                                    'resolutions']:
+                                program_image = image_datas['url']
                     video_duration = program_datas["duration"]
-                    video_plot = program_datas.get("description", "")
+                    video_plot = program_datas.get("shortDescription", '')
 
                     item = Listitem()
                     item.label = video_title
@@ -306,7 +319,7 @@ def list_videos_sub_category(plugin, item_id, sub_category_url,
                         'landscape']['resolutions']:
                     video_image = video_image_datas['url']
             video_duration = video_datas["duration"]
-            video_plot = video_datas.get("description", "")
+            video_plot = video_datas.get("shortDescription", '')
 
             item = Listitem()
             item.label = video_title
@@ -350,7 +363,7 @@ def list_videos_sub_category(plugin, item_id, sub_category_url,
                                 'landscape']['resolutions']:
                             video_image = video_image_datas['url']
                     video_duration = video_datas["duration"]
-                    video_plot = video_datas.get("description", "")
+                    video_plot = video_datas.get("shortDescription", '')
 
                     item = Listitem()
                     item.label = video_title
@@ -435,7 +448,7 @@ def list_videos_program_concert(plugin, item_id, program_url,
                         'landscape']['resolutions']:
                     video_image = video_image_datas['url']
             video_duration = video_datas["duration"]
-            video_plot = video_datas.get("description", "")
+            video_plot = video_datas.get("shortDescription", '')
 
             item = Listitem()
             item.label = video_title
@@ -477,7 +490,7 @@ def list_videos_program_concert(plugin, item_id, program_url,
                         'landscape']['resolutions']:
                     video_image = video_image_datas['url']
             video_duration = video_datas["duration"]
-            video_plot = video_datas.get("description", "")
+            video_plot = video_datas.get("shortDescription", '')
 
             item = Listitem()
             item.label = video_title

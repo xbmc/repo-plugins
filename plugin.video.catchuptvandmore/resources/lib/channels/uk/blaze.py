@@ -39,18 +39,16 @@ import urlquick
 # TO DO
 # Fix Replay (DRM)
 
+URL_ROOT = 'http://www.blaze.tv'
 # Live
-URL_LIVE_JSON = 'http://dbxm993i42r09.cloudfront.net/' \
-                'configs/blaze.json?callback=blaze'
+URL_LIVE_JSON = URL_ROOT + '/stream/live/widevine/%s'
 
 # Replay
-URL_SHOWS = 'http://www.blaze.tv/series'
+URL_SHOWS = URL_ROOT + '/series'
 # pageId
 
-URL_STREAM = 'https://www.blaze.tv/stream/replay/widevine/%s'
+URL_STREAM = URL_ROOT + '/stream/replay/widevine/%s'
 # apiKey, videoId
-
-URL_ROOT = 'http://www.blaze.tv'
 
 
 def replay_entry(plugin, item_id, **kwargs):
@@ -102,12 +100,12 @@ def list_programs(plugin, item_id, **kwargs):
 @Route.register
 def list_seasons(plugin, item_id, program_url, **kwargs):
 
-    resp = urlquick.get(program_url)
+    resp = urlquick.get(program_url, headers={"User-Agent": web_utils.get_random_ua})
     root = resp.parse("ul", attrs={"class": "nav nav-tabs"})
 
     for season_datas in root.iterfind(".//h3"):
-        season_title = 'Series %s' % season_datas.text.strip()
-        season_url = program_url + '#%s' % season_datas.text.split(' ')[2]
+        season_title = season_datas.text.strip()
+        season_url = program_url + '#%s' % season_datas.text.split(' ')[1]
 
         item = Listitem()
         item.label = season_title
@@ -133,7 +131,7 @@ def list_videos(plugin, item_id, season_url, **kwargs):
     root = resp.parse()
 
     for video_datas in root.iterfind(
-            ".//a[@class='thumbnail video vod-REPLAY']"):
+            ".//a[@class='thumbnail video vod-REPLAY play-video-trigger']"):
 
         video_title = video_datas.find('.//h3').get('title')
         video_image = video_datas.find('.//img').get('data-src')
@@ -160,7 +158,7 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(video_url)
-    stream_id = re.compile(r'uvid\"\:\"(.*?)\"').findall(resp.text)[0]
+    stream_id = re.compile(r'blaze\"\,\"uvid\"\:\"(.*?)\"').findall(resp.text)[0]
     resp2 = urlquick.get(URL_STREAM % stream_id,
                          headers={"x-requested-with": "XMLHttpRequest"},
                          max_age=-1)
@@ -180,5 +178,20 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
-    resp = urlquick.get(URL_LIVE_JSON)
-    return re.compile('"url": "(.*?)"').findall(resp.text)[0]
+    resp = urlquick.get(URL_ROOT)
+    live_id = re.compile(r'href\=\"\/live\/(.*?)\"').findall(resp.text)[0]
+    resp2 = urlquick.get(
+        URL_LIVE_JSON % live_id,
+        headers={"x-requested-with": "XMLHttpRequest"},
+        max_age=-1)
+    json_parser2 = json.loads(resp2.text)
+    resp3 = urlquick.get(
+        json_parser2["tokenizer"]["url"],
+        headers={
+            "Token": json_parser2["tokenizer"]["token"],
+            "Token-Expiry": json_parser2["tokenizer"]["expiry"],
+            "Uvid": "blaze"
+        },
+        max_age=-1)
+    json_parser3 = json.loads(resp3.text)
+    return json_parser3["Streams"]["Adaptive"]

@@ -62,20 +62,16 @@ def list_days(plugin, item_id, **kwargs):
     - ...
     """
     resp = urlquick.get(URL_DAYS % item_id.upper())
-    root = resp.parse("div", attrs={"class": "giorni clearfix"})
+    root = resp.parse(
+        "div", attrs={
+            "class": "wrapper-nav wrapper-nav-%s" % item_id
+        })
 
-    for day_datas in root.iterfind(".//a"):
-        day_title = ''
-        if day_datas.find(".//div[@class='dateRowWeek']") is not None:
-            day_title = day_datas.find(
-                ".//div[@class='dateRowWeek']").text + ' - ' + \
-                day_datas.find(".//div[@class='dateDay']").text + ' - ' + \
-                day_datas.find(".//div[@class='dateMonth']").text
-        else:
-            day_title = day_datas.find(
-                ".//div[@class='dateRowWeek active']").text + ' - ' + \
-                day_datas.find(".//div[@class='dateDay']").text + ' - ' + \
-                day_datas.find(".//div[@class='dateMonth']").text
+    for day_datas in root.find(".//div[@class='content']").iterfind(".//a"):
+        day_title = day_datas.find(".//div[@class='giorno-text']").text.strip(
+        ) + ' - ' + day_datas.find(".//div[@class='giorno-numero']").text.strip(
+        ) + ' - ' + day_datas.find(
+            ".//div[@class='giorno-mese']").text.strip()
         day_url = URL_ROOT + day_datas.get('href')
 
         item = Listitem()
@@ -91,27 +87,29 @@ def list_videos(plugin, item_id, day_url, **kwargs):
     resp = urlquick.get(day_url)
     root = resp.parse()
 
-    for video_datas in root.iterfind(
-            ".//div[@class='palinsesto_row             disponibile clearfix']"
-    ):
-        video_title = video_datas.find('.//img').get('title')
-        video_image = video_datas.find('.//img').get('src')
-        video_plot = ''
-        if video_datas.find('.//p') is not None:
-            video_plot = video_datas.find('.//p').text
-        video_url = video_datas.find(".//a[@class='thumbVideo']").get('href')
+    for video_datas in root.iterfind(".//div[@class='item item--guida-tv']"):
+        if video_datas.find(".//div[@class='label-no-replica']") is None:
+            video_title = video_datas.find(".//h2").text.strip()
+            video_image = 'https:' + video_datas.find(
+                ".//div[@class='bg-img lozad']").get('data-background-image')
+            video_plot = ''
+            if video_datas.find(".//div[@class='occhiello']").text is not None:
+                video_plot = video_datas.find(
+                    ".//div[@class='occhiello']").text.strip()
+            video_url = video_datas.find(".//a").get('href')
 
-        item = Listitem()
-        item.label = video_title
-        item.art['thumb'] = video_image
-        item.info['plot'] = video_plot
+            item = Listitem()
+            item.label = video_title
+            item.art['thumb'] = video_image
+            item.info['plot'] = video_plot
 
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          video_url=video_url)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
-        yield item
+            item.set_callback(
+                get_video_url,
+                item_id=item_id,
+                video_label=LABELS[item_id] + ' - ' + item.label,
+                video_url=video_url)
+            item_post_treatment(item, is_playable=True, is_downloadable=True)
+            yield item
 
 
 @Resolver.register
@@ -122,12 +120,18 @@ def get_video_url(plugin,
                   video_label=None,
                   **kwargs):
 
-    resp = urlquick.get(video_url)
+    resp = urlquick.get(video_url, max_age=-1)
     json_value = re.compile(r'src\: \{(.*?)\}\,').findall(resp.text)[0]
     json_parser = json.loads('{' + json_value + '}')
     if download_mode:
-        return download.download_video(json_parser["m3u8"], video_label)
-    return json_parser["m3u8"]
+        return download.download_video(json_parser["m3u8"].replace(
+            'http://la7-vh.akamaihd.net/i/,/content',
+            'https://vodpkg.iltrovatore.it/local/hls/,/content').replace(
+                'csmil', 'urlset'), video_label)
+    return json_parser["m3u8"].replace(
+        'http://la7-vh.akamaihd.net/i/,/content',
+        'https://vodpkg.iltrovatore.it/local/hls/,/content').replace(
+            'csmil', 'urlset')
 
 
 def live_entry(plugin, item_id, item_dict, **kwargs):
@@ -138,4 +142,7 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     resp = urlquick.get(URL_LIVE, max_age=-1)
-    return 'https:' + re.compile(r'var vS \= \'(.*?)\'').findall(resp.text)[0]
+    if 'http' in re.compile(r'var vS \= \"(.*?)\"').findall(resp.text)[0]:
+        return re.compile(r'var vS \= \"(.*?)\"').findall(resp.text)[0]
+    else:
+        return 'https:' + re.compile(r'var vS \= \"(.*?)\"').findall(resp.text)[0]

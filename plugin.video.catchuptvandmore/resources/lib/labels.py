@@ -577,6 +577,24 @@ LABELS = {
     'MTV (FR)',
     'idf1':
     'IDF 1',
+    'azurtv':
+    'Azur TV',
+    'biptv':
+    'BIP TV',
+    'grandlilletv':
+    'Grand Lille TV',
+    'grandlitorraltv':
+    'Grand Litorral TV',
+    'lachainenormande':
+    'La Chaine Normande',
+    'sportenfrance':
+    'Sport en France',
+    'provenceazurtv':
+    'Provence Azur TV',
+    'tebesud':
+    'TébéSud',
+    'matele':
+    'MaTélé',
 
     # Japan channels / live TV
     'nhknews':

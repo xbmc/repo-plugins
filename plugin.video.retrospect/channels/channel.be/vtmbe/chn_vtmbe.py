@@ -363,7 +363,6 @@ class Channel(chn_class.Channel):
         search.icon = self.icon
         search.thumb = self.noImage
         search.dontGroup = True
-        search.set_date(2200, 1, 1, text="")
         items.append(search)
         return data, items
 

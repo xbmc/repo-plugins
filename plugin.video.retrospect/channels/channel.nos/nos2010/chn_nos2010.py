@@ -327,7 +327,6 @@ class Channel(chn_class.Channel):
         search.icon = self.icon
         search.thumb = self.noImage
         search.dontGroup = True
-        search.set_date(2200, 1, 1, text="")
         search.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
         items.append(search)
 
@@ -341,7 +340,6 @@ class Channel(chn_class.Channel):
         favs.thumb = self.noImage
         favs.dontGroup = True
         favs.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
-        favs.set_date(2200, 1, 1, text="")
         items.append(favs)
 
         extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.LiveRadio),
@@ -350,7 +348,6 @@ class Channel(chn_class.Channel):
         extra.icon = self.icon
         extra.thumb = self.noImage
         extra.dontGroup = True
-        extra.set_date(2200, 1, 1, text="")
         items.append(extra)
 
         extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.LiveTv),
@@ -359,7 +356,6 @@ class Channel(chn_class.Channel):
         extra.icon = self.icon
         extra.thumb = self.noImage
         extra.dontGroup = True
-        extra.set_date(2200, 1, 1, text="")
         items.append(extra)
 
         extra = MediaItem(
@@ -374,7 +370,6 @@ class Channel(chn_class.Channel):
         extra.thumb = self.noImage
         extra.dontGroup = True
         extra.description = "Volledige programma lijst van NPO Start."
-        extra.set_date(2200, 1, 1, text="")
         extra.HttpHeaders = self.__jsonApiKeyHeader
         # API Key from here: https://packagist.org/packages/kro-ncrv/npoplayer?q=&p=0&hFR%5Btype%5D%5B0%5D=concrete5-package
         items.append(extra)
@@ -385,7 +380,6 @@ class Channel(chn_class.Channel):
         extra.icon = self.icon
         extra.thumb = self.noImage
         extra.dontGroup = True
-        extra.set_date(2200, 1, 1, text="")
         items.append(extra)
 
         extra = MediaItem(
@@ -396,7 +390,6 @@ class Channel(chn_class.Channel):
         extra.thumb = self.noImage
         extra.description = "Alfabetische lijst van de NPO.nl site."
         extra.dontGroup = True
-        extra.set_date(2200, 1, 1, text="")
         items.append(extra)
 
         recent = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Recent), "#recent")
@@ -404,7 +397,6 @@ class Channel(chn_class.Channel):
         recent.icon = self.icon
         recent.thumb = self.noImage
         recent.dontGroup = True
-        recent.set_date(2200, 1, 1, text="")
         items.append(recent)
 
         return data, items

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.0.4"
+        version="5.0.5"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -120,25 +120,32 @@
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
         <platform>all</platform>
-        <summary lang="en_GB">Retrospect (previously XBMC Online TV) is a plugin that allows the playback of a lot of TV shows that are available (legally) via the broadcasters websites.</summary>
-        <description lang="en_GB">Retrospect uses the official websites of a lot of different broadcasting companies (mainly Dutch, Belgian, British and Swedish) to make their re-run episodes available on the Kodi platform. More information can be found at www.rieter.net.[CR][CR]Retrospect reports back usage statistics to our servers. This option can be disabled from the add-on settings.</description>
-        <disclaimer lang="en_GB">Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched via this add-on or any consequences of using this add-on to watch the content using the content provider's platforms.</disclaimer>
+
+        <summary lang="en_GB">Retrospect enables playback of re-runs/catch-ups of TV shows available online.</summary>
+        <description lang="en_GB">Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform.[CR][CR]More information can be found at https://rieter.net or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
+        <disclaimer lang="en_GB">Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms.</disclaimer>
+
+        <summary lang="sv_SE">Retrospect möjliggör att visa playkanaler.</summary>
+        <description lang="sv_SE">Retrospect använder olika TV-kanalers (framförallt nederländska, belgiska, brittiska, norska och svenska) officiella webbsidor och fritt tillgängliga strömmar för att göra deras playkanaler tillgängliga i Kodi.[CR][CR]Mer information finns på https://rieter.net eller Retrospects wiki på https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
+        <disclaimer lang="sv_SE">Retrospect tillgängliggörs i befintligt skick. Vi tar inget som helst ansvar för möjliga (men högst osannolika) skador på ditt system. Vi tar inte heller ansvar för innehållet som kan ses med detta tillägg eller konsekvenser av att använda tillägget för att se innehållet via innehållsleverantörernas plattformar.</disclaimer>
+
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.0.4 - Changelog - 2019-08-28[/B]
+        <news>[B]Retrospect v5.0.5 - Changelog - 2019-09-10[/B]
 
-Mainly a release to update the Retrospect license from CC BY-NC-ND to CC BY-NC-SA.
+Another small update to fix some channel related issues and update some translations.
 
 [B]Framework related[/B]
-* Fixed: ignore Channel InputStream Adaptive settings if encryption is needed
-* Updated: license from CC-BY-NC-ND to CC-BY-NC-SA-4.0
+* Fixed: don&#x27;t set weird dates, as they are shown in Kodi 18.4 and higher
 
 [B]GUI/Settings/Language related[/B]
 -
 
 [B]Channel related[/B]
-* Added: Option to disable InputStream Adaptive for VRT.Nu (Fixes #1210)
-
+* Fixed: Swedish TV4, Sjuan and TV12 did not show subtitles (Fixes #1188)
+* Fixed: VRT.nu did not parse folders (Fixes #1218)
+* Fixed: listing of SVT shows did not work (Fixes #1217)
+* Fixed: invalid expire dates for OA items in SVT Play and set Geo protected warning (Fixes #1220)
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

@@ -3,7 +3,7 @@
     {
       "guid": "9EC8F612-2EA4-11DE-867C-B84656D89593",
       "name": "TV3 (Sverige)",
-      "description": "Sändningar från TV3 via Viafree.se.",
+      "description": "Sändningar från TV3 (Viafree.se).",
       "icon": "tv3selarge.png",
       "category": "National",
       "channelcode": "se3",
@@ -16,7 +16,7 @@
     {
       "guid": "FB34E1F0-2930-11DE-A339-255856D89593",
       "name": "TV6 (Sverige)",
-      "description": "Sändningar från TV6 via Viafree.se.",
+      "description": "Sändningar från TV6 (Viafree.se).",
       "icon": "tv6large.png",
       "category": "National",
       "channelcode": "se6",
@@ -29,7 +29,7 @@
     {
       "guid": "BDC1A5C5-2777-4D05-BB5B-742A88B89CC5",
       "name": "TV8 (Sverige)",
-      "description": "Sändningar från TV8 via Viafree.se.",
+      "description": "Sändningar från TV8 (Viafree.se).",
       "icon": "tv8selarge.png",
       "category": "National",
       "channelcode": "se8",
@@ -42,7 +42,7 @@
     {
       "guid": "584E7420-2867-11E3-AA01-F2806188709B",
       "name": "TV10",
-      "description": "Sändningar från TV10 via Viafree.se.",
+      "description": "Sändningar från TV10 (Viafree.se).",
       "icon": "tv10selarge.png",
       "category": "National",
       "channelcode": "se10",
@@ -68,7 +68,7 @@
     {
       "guid": "89673FF0-5EF3-11E0-8CC9-494DDFD72085",
       "name": "TV3 (Norge)",
-      "description": "Sendinger fra TV3 via Viafree.no.",
+      "description": "Sendinger fra TV3 (Viafree.no).",
       "icon": "tv3nolarge.png",
       "category": "National",
       "channelcode": "no3",
@@ -81,7 +81,7 @@
     {
       "guid": "90DD5C88-5EF3-11E0-93A2-4D4DDFD72085",
       "name": "Viasat 4",
-      "description": "Sendinger fra Viasat4 via Viafree.no.",
+      "description": "Sendinger fra Viasat 4 (Viafree.no).",
       "icon": "viasat4nolarge.png",
       "category": "National",
       "channelcode": "no4",
@@ -94,7 +94,7 @@
     {
       "guid": "3CD2662C-3C7A-4217-8375-079B2D850F27",
       "name": "TV6 (Norge)",
-      "description": "Sendinger fra TV6 via Viafree.no.",
+      "description": "Sendinger fra TV6 (Viafree.no).",
       "icon": "tv6large.png",
       "category": "National",
       "channelcode": "no6",

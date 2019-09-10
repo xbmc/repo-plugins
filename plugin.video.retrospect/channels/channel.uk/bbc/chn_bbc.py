@@ -392,7 +392,6 @@ class Channel(chn_class.Channel):
         extra.thumb = self.noImage
         extra.description = "Alphabetical show listing of BBC shows"
         extra.dontGroup = True
-        extra.set_date(2200, 1, 1, text="")
         items.append(extra)
 
         return data, items

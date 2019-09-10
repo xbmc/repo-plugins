@@ -578,7 +578,19 @@ msgctxt "#30360"
 msgid "Full list"
 msgstr ""
 
-# empty strings from id 30361 to 30400
+msgctxt "#30361"
+msgid "Tags"
+msgstr ""
+
+msgctxt "#30362"
+msgid "Last chance"
+msgstr ""
+
+msgctxt "#30363"
+msgid "Popular"
+msgstr ""
+
+# empty strings from id 30364 to 30400
 
 msgctxt "#30401"
 msgid "Dutch"

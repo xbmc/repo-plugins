@@ -57,6 +57,9 @@ class LanguageHelper(object):
     Episodes = 30358
     Genres = 30359
     FullList = 30360
+    Tags = 30361
+    LastChance = 30362
+    Popular = 30363
 
     ChannelSelection = 30507
     # Unused:

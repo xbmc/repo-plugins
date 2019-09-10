@@ -70,11 +70,11 @@ msgstr "Datum"
 
 msgctxt "#30019"
 msgid "Show DRM/Paid warning before playback"
-msgstr "Visa DRM-varningar"
+msgstr "Visa DRM-/betalvarningar innan uppspelning"
 
 msgctxt "#30020"
 msgid "Maximum Stream Bitrate"
-msgstr "Högsta strömbitshastighet"
+msgstr "Högsta bithastighet för strömmar"
 
 msgctxt "#30021"
 msgid "Enable subtitles by default when available"
@@ -242,7 +242,7 @@ msgstr "Kanalinställningar"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
-msgstr "Låt Kodi välja bästa strömbitshastighet"
+msgstr "Låt Kodi välja bästa bithastighet"
 
 msgctxt "#30071"
 msgid "Set the proxy and local IP to all channels related to this country"
@@ -509,7 +509,7 @@ msgstr "Kategorier"
 
 msgctxt "#30352"
 msgid "TV Shows"
-msgstr "Programmen"
+msgstr "TV-program"
 
 msgctxt "#30353"
 msgid "Currently Playing"
@@ -517,19 +517,43 @@ msgstr "Livesändningar"
 
 msgctxt "#30354"
 msgid "Most viewed episodes"
-msgstr "Mest sedda programmen just nu"
+msgstr "Mest sedda avsnitt"
 
 msgctxt "#30355"
 msgid "Most recent episodes"
-msgstr ""
+msgstr "Senaste avsnitt"
 
 msgctxt "#30356"
 msgid "Live TV"
-msgstr "Live-sändning"
+msgstr "TV-kanaler"
 
 msgctxt "#30357"
 msgid "Live Radio"
-msgstr ""
+msgstr "Radio"
+
+msgctxt "#30358"
+msgid "Episodes"
+msgstr "Avsnitt"
+
+msgctxt "#30359"
+msgid "Genres"
+msgstr "Genrer"
+
+msgctxt "#30360"
+msgid "Full list"
+msgstr "Alla program"
+
+msgctxt "#30361"
+msgid "Tags"
+msgstr "Taggar"
+
+msgctxt "#30362"
+msgid "Last chance"
+msgstr "Sista chansen"
+
+msgctxt "#30363"
+msgid "Popular"
+msgstr "Populära"
 
 msgctxt "#30401"
 msgid "Dutch"
@@ -848,12 +872,13 @@ msgid "Select Countries"
 msgstr "Välj länder"
 
 msgctxt "#30577"
-msgid "Channel Bitrate »"
-msgstr "Strömbitshastighet för kanal »"
+msgid "Bitrate »"
+msgstr "Bithastighet »"
 
 msgctxt "#30578"
 msgid "InputStream Adaptive add-on settings"
 msgstr "Inställningar för InputStream Adaptive-tillägget"
+
 msgctxt "#30579"
 msgid "InputStream Adaptive add-on »"
 msgstr "InputStream Adaptive-tillägget »"

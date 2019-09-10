@@ -193,6 +193,7 @@ class Channel(chn_class.Channel):
         item.icon = self.icon
         item.thumb = self.noImage
         item.complete = True
+        item.isGeoLocked = True
         return item
 
     def create_video_item(self, result_set):
@@ -250,6 +251,7 @@ class Channel(chn_class.Channel):
             Logger.debug("No date found")
 
         item.complete = False
+        item.isGeoLocked = True
         return item
 
     def update_video_item(self, item):

@@ -41,8 +41,8 @@ msgid "Alpha/Beta"
 msgstr "Alpha/Beta"
 
 msgctxt "#30007"
-msgid "via een andere add-on"
-msgstr ""
+msgid "via other add-on"
+msgstr "via een andere add-on"
 
 msgctxt "#30009"
 msgid "General"
@@ -55,6 +55,14 @@ msgstr "Kanalen"
 msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
 msgstr "Herstart van Retrospect nodig om te activeren."
+
+msgctxt "#30012"
+msgid "Login Failed"
+msgstr "Inloggen mislukt"
+
+msgctxt "#30013"
+msgid "Could not log on to the selected channel."
+msgstr "Het is niet gelukt om in te loggen voor dit kanaal."
 
 msgctxt "#30016"
 msgid "Sort by"
@@ -97,7 +105,7 @@ msgid "None"
 msgstr "Geen"
 
 msgctxt "#30026"
-msgid "Group list if exceeds # folders"
+msgid "Group list if it exceeds # folders"
 msgstr "Groepeer lijst met meer dan # mappen"
 
 msgctxt "#30027"
@@ -125,8 +133,8 @@ msgid "Channel Settings"
 msgstr "Kanaal instellingen"
 
 msgctxt "#30033"
-msgid "Verloopt op"
-msgstr ""
+msgid "Expires at"
+msgstr "Verloopt op"
 
 msgctxt "#30034"
 msgid "No channel selected"
@@ -237,8 +245,8 @@ msgid "Active"
 msgstr "Actief"
 
 msgctxt "#30069"
-msgid "Channel Settings"
-msgstr "Kanaal instellingen"
+msgid "Settings"
+msgstr "Instellingen"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
@@ -357,7 +365,7 @@ msgid "Logging & Diagnostics"
 msgstr "Logbestanden & Diagnostiek"
 
 msgctxt "#30099"
-msgid "Prefer HLS over Dash for non-encrypted streams"
+msgid "Use HLS instead of Dash for non-encrypted streams"
 msgstr "Gebruik HLS in plaats van Dash voor niet-encrypted streams"
 
 msgctxt "#30100"
@@ -533,16 +541,28 @@ msgid "Live Radio"
 msgstr "Live Radio"
 
 msgctxt "#30358"
-msgid "Afleveringen"
-msgstr ""
+msgid "Episodes"
+msgstr "Afleveringen"
 
 msgctxt "#30359"
 msgid "Genres"
-msgstr ""
+msgstr "Genres"
 
 msgctxt "#30360"
 msgid "Full list"
 msgstr "Hele lijst"
+
+msgctxt "#30361"
+msgid "Tags"
+msgstr "Tags"
+
+msgctxt "#30362"
+msgid "Last chance"
+msgstr "Laatste kans"
+
+msgctxt "#30363"
+msgid "Popular"
+msgstr "Populair"
 
 msgctxt "#30401"
 msgid "Dutch"
@@ -868,6 +888,18 @@ msgctxt "#30578"
 msgid "InputStream Adaptive add-on settings"
 msgstr "InputStream Adaptive stream add-on instellingen"
 
+msgctxt "#30579"
+msgid "InputStream Adaptive add-on »"
+msgstr "InputStream Adaptive add-on »"
+
+msgctxt "#30580"
+msgid "Channel Options »"
+msgstr "Kanaal Opties »"
+
+msgctxt "#30581"
+msgid "InputStream Adaptive add-on usage"
+msgstr "InputStream Adaptive add-on gebruik"
+
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
 msgstr "Stel een nieuwe Retrospect PIN in"
@@ -921,5 +953,5 @@ msgid "Error posting logfile"
 msgstr "Fout bij het versturen"
 
 msgctxt "#30603"
-msgid "Retrospect changed add-on ID. To prevent data loss, your user data will now be migrated. After this has been done, please restart Kodi to complete migration. After the restart update any shortcut you had to Retrospect. The Retrospect marked as <broken> can be uninstalled."
+msgid "Retrospect changed add-on ID. To prevent data loss, your user data will now be migrated. After this has been done, please restart Kodi to complete migration. After the restart update any shortcut you had to Retrospect. The Retrospect marked as \"broken\" in \"My add-ons\" can be uninstalled."
 msgstr "De Retrospect add-on ID is veranderd. De gebruikers-data zal nu worden gemigreerd zodat deze behouden blijft. Nadat dit is afgerond dient Kodi herstart te worden. Na de migratie dienen shortcuts naar Retrospect bijgewerkt te worden. De Retrospect add-on die gemarkeerd is als <Defect> onder \"My Add-ons\" kan daarna worden verwijderd."

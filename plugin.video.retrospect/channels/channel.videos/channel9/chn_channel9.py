@@ -135,7 +135,6 @@ class Channel(chn_class.Channel):
         item = MediaItem(result_set[self.pageNavigationRegexIndex], url)
         item.type = "page"
         item.complete = True
-        item.set_date(2022, 1, 1, text="")
 
         Logger.trace("Created '%s' for url %s", item.name, item.url)
         return item

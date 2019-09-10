@@ -16,6 +16,7 @@ from helpers.languagehelper import LanguageHelper
 from logger import Logger
 from streams.m3u8 import M3u8
 from urihandler import UriHandler
+from helpers.subtitlehelper import SubtitleHelper
 
 
 class Channel(chn_class.Channel):
@@ -342,8 +343,7 @@ class Channel(chn_class.Channel):
 
             if date is not None:
                 item.set_date(date.year, date.month, date.day, 0, 0, 0, text=date.strftime("%Y-%m-%d"))
-            else:
-                item.set_date(1901, 1, 1, 0, 0, 0, text="")
+
             items.append(item)
 
         if not self.channelCode == "tv4se":
@@ -615,11 +615,13 @@ class Channel(chn_class.Channel):
         part = item.create_new_empty_media_part()
 
         if AddonSettings.use_adaptive_stream_add_on() and False:
+            subtitle = M3u8.get_subtitle(m3u8_url, proxy=self.proxy)
             stream = part.append_media_stream(m3u8_url, 0)
             M3u8.set_input_stream_addon_input(stream, self.proxy)
             item.complete = True
         else:
             m3u8_data = UriHandler.open(m3u8_url, proxy=self.proxy, additional_headers=self.localIP)
+            subtitle = M3u8.get_subtitle(m3u8_url, proxy=self.proxy, play_list_data=m3u8_data)
             for s, b, a in M3u8.get_streams_from_m3u8(m3u8_url, self.proxy,
                                                       play_list_data=m3u8_data, map_audio=True):
                 item.complete = True
@@ -634,12 +636,11 @@ class Channel(chn_class.Channel):
                     s = a.replace(".m3u8", video_part)
                 part.append_media_stream(s, b)
 
-        # subtitle = M3u8.get_subtitle(m3u8Url, playListData=m3u8Data)
-        # Not working due to VTT format.
-        # if subtitle:
-        #     part.Subtitle = SubtitleHelper.download_subtitle(subtitle,
-        #                                                     format="m3u8srt",
-        #                                                     proxy=self.proxy)
+        if subtitle:
+            subtitle = subtitle.replace(".m3u8", ".webvtt")
+            part.Subtitle = SubtitleHelper.download_subtitle(subtitle,
+                                                             format="m3u8srt",
+                                                             proxy=self.proxy)
         return item
 
     def update_live_item(self, item):

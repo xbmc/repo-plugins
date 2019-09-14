@@ -1,3 +1,4 @@
+# Gotham is no longer supported!
 # Kodi SVT Play Addon
 
 With this addon you can stream content from SVT Play (svtplay.se).

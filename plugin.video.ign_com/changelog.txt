@@ -1,3 +1,6 @@
+2.3.11 (2019-09-14)
+- marked the addon broken due to api changes on the website :(
+
 2.3.10 (2019-04-07)
 - added 'Game Reviews' category. This was needed because not all game reviews show up the 'Reviews' category
 - fixed displaying the video in the correct resolution

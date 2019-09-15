@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.program.dnsleaktest"
+       version="1.1"
+       name="DNS Leak-Test"
+       provider-name="Space2Walker">
+<requires>
+  <import addon="xbmc.python" version="2.19.0"/>
+  <import addon="script.module.requests" />
+</requires>
+<extension point="xbmc.python.pluginsource" library="main.py">
+  <provides>executable</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en">DNS Leak-Test Plugin for Kodi</summary>
+  <description lang="en_GB">This addon performs a DNS leak test on https://bash.ws/dnsleak!
+  The Basic Code comes from https://github.com/macvk/dnsleaktest.
+  </description>
+  <disclaimer lang="en_GB">Use add your own risk!!</disclaimer>
+  <platform>all</platform>
+  <license>GPL-3.0</license>
+  <website>https://bash.ws</website>
+  <source>https://github.com/Space2Walker/plugin.program.dnsleaktest</source>
+  <assets>
+    <icon>icon.png</icon>
+    <fanart>fanart.jpg</fanart>
+  </assets>
+  <news>v1.1 (03/22/2019)
+    - should now work on all Platforms
+    - cmd pop-ups on Windows gone
+  </news>
+</extension>
+</addon>

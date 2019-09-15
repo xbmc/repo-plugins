@@ -1,3 +1,10 @@
+v1.2.16 (2019-09-15)
+- added premium video category
+- fixes due to website change (september 2019). Let's hope they keep working
+- added maximum video quality setting for the new m3u8 videos
+- fix for trailers
+- removed http:// urls
+
 v1.2.15 (2019-03-01)
 - vimeo disabled oauth1, causing the vimeo addon to break. Therefore not using that addon anymore
 - improved detecting if the video is a twitch live-stream

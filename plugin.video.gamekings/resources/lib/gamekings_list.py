@@ -122,7 +122,7 @@ class Main(object):
             # if item contains 'postcontainer, skip the item
             if str(item).find('postcontainer') >= 0:
 
-                log("skipped item containing 'postcontainer'", item)
+                # log("skipped item containing 'postcontainer'", item)
 
                 continue
 

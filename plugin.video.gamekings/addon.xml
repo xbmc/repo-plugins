@@ -2,7 +2,7 @@
 <addon 
     id="plugin.video.gamekings"
     name="GameKings"
-    version="1.2.15"
+    version="1.2.16"
     provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="2.26.0"/>
@@ -29,12 +29,12 @@
     <website>https://www.gamekings.tv</website>
     <email></email>
     <source>https://github.com/skipmodea1/plugin.video.gamekings</source>
-    <news>v1.2.15 (2019-03-01)
-    - vimeo disabled oauth1, causing the vimeo addon to break. Therefore not using that addon anymore
-    - improved detecting if the video is a twitch live-stream
-    - changed fanart
-    - switch to Leia (kodi 18)
-    - removed gamekings extra category
+    <news>v1.2.16 (2019-09-15)
+    - added premium video category
+    - fixes due to website change (september 2019). Let's hope they keep working
+    - added maximum video quality setting for the new m3u8 videos
+    - fix for trailers
+    - removed http:// urls
     </news>
     <assets>
       <icon>resources/icon.png</icon>

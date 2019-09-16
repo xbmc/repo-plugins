@@ -47,6 +47,10 @@ msgctxt "#30004"
 msgid "Search in Videos"
 msgstr ""
 
+msgctxt "#30005"
+msgid "Premium Videos"
+msgstr ""
+
 msgctxt "#30100"
 msgid "Version"
 msgstr ""
@@ -109,6 +113,26 @@ msgstr ""
 
 msgctxt "#30400"
 msgid "Debug"
+msgstr ""
+
+msgctxt "#30021"
+msgid "4K"
+msgstr ""
+
+msgctxt "#30022"
+msgid "1080P"
+msgstr ""
+
+msgctxt "#30023"
+msgid "720P"
+msgstr ""
+
+msgctxt "#30024"
+msgid "480P"
+msgstr ""
+
+msgctxt "#30025"
+msgid "360P"
 msgstr ""
 
 msgctxt "#30501"

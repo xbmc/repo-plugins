@@ -1,3 +1,5 @@
+0.5.2
+- Added season 23, Python3 support and downgraded LICENSE to GPLv2
 0.5.1
 - Fixed issues with http to https redirects
 0.5.0

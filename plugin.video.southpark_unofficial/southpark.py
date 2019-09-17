@@ -3,8 +3,6 @@
 import sys, os
 import json as _json
 import time
-import urllib
-import urllib2
 import datetime
 import xbmc
 import xbmcplugin
@@ -12,6 +10,15 @@ import xbmcgui
 import xbmcaddon
 import xml.etree.ElementTree as ET
 
+IS_PY3 = sys.version_info.major > 2
+
+if IS_PY3:
+	from urllib.request import Request
+	from urllib.request import urlopen
+	from urllib.parse import unquote_plus, quote_plus
+else:
+	from urllib2 import Request, urlopen
+	from urllib import unquote_plus, quote_plus
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0'
 WARNING_TIMEOUT_LONG  = 7000
@@ -40,6 +47,10 @@ def _date(string):
 	return string
 
 def _encode(string):
+	if IS_PY3:
+		if isinstance(string, (bytes, bytearray)):
+			return string.decode("utf-8")
+		return string
 	try:
 		return string.encode('UTF-8','replace')
 	except UnicodeError:
@@ -70,11 +81,13 @@ def log_error(message):
 
 def _http_get(url):
 	#log_debug("http get: {0}".format(url))
-	req = urllib2.Request(url)
+	req = Request(url)
 	req.add_header('User-Agent', USER_AGENT)
-	response = urllib2.urlopen(req)
+	response = urlopen(req)
 	link = response.read()
 	response.close()
+	if IS_PY3:
+		link = link.decode("utf-8")
 	return link
 
 def _parameters_string_to_dict(parameters):
@@ -89,6 +102,8 @@ def _parameters_string_to_dict(parameters):
 
 def _save_subs(fname, stream):
 	data = _unescape(_http_get(stream))
+	if IS_PY3:
+		data = data.encode("utf-8")
 	output = open(fname,'wb')
 	output.truncate()
 	output.write(data)
@@ -112,10 +127,10 @@ class KodiParams(object):
 	def __init__(self, param_string):
 		super(KodiParams, self).__init__()
 		params = _parameters_string_to_dict(param_string)
-		self.PARAM_MODE         = urllib.unquote_plus(params.get('mode'     , ''))
-		self.PARAM_URL          = urllib.unquote_plus(params.get('url'      , ''))
-		self.PARAM_EP_TITLE     = urllib.unquote_plus(params.get('title'    , ''))
-		self.PARAM_EP_THUMBNAIL = urllib.unquote_plus(params.get('thumbnail', ''))
+		self.PARAM_MODE         = unquote_plus(params.get('mode'     , ''))
+		self.PARAM_URL          = unquote_plus(params.get('url'      , ''))
+		self.PARAM_EP_TITLE     = unquote_plus(params.get('title'    , ''))
+		self.PARAM_EP_THUMBNAIL = unquote_plus(params.get('thumbnail', ''))
 
 	def debug(self):
 		log_debug("PARAM_MODE:         {0}".format(self.PARAM_MODE        ))
@@ -415,7 +430,8 @@ class SouthParkAddon(object):
 			##log_debug(rtmp)
 
 			videoname = "{title} ({i} of {n})".format(title=title, i=(i + 1), n=parts)
-			li = xbmcgui.ListItem(videoname, iconImage=thumbnail, thumbnailImage=thumbnail)
+			li = xbmcgui.ListItem(videoname)
+			li.setArt({'icon': thumbnail, 'thumb': thumbnail})
 			li.setInfo('video', {'Title': videoname})
 			li.setProperty('conn', "B:0")
 			if not "http" in rtmp:
@@ -550,9 +566,11 @@ class SouthParkAddon(object):
 		self.add_entry(ep_title, ep_url, ep_mode, ep_image, ep_desc, ep_seas, ep_numb, ep_aird, is_playable=True)
 
 	def add_directory(self, name, url, mode, iconimage="DefaultFolder.png"):
-		u = self.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+		u = self.argv[0]+"?url="+quote_plus(url)+"&mode="+str(mode)
 		ok = True
-		liz = xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
+		liz = xbmcgui.ListItem(name)
+		liz.setIsFolder(True)
+		liz.setArt({'icon': iconimage, 'thumb': iconimage})
 		liz.setInfo(type="Video", infoLabels={"Title": name})
 		liz.setProperty("fanart_image", self.paths.DEFAULT_FANART)
 		ok = xbmcplugin.addDirectoryItem(handle=self.phandle, url=u, listitem=liz, isFolder=True)
@@ -564,10 +582,12 @@ class SouthParkAddon(object):
 		if "?" in iconimage:
 			pos = iconimage.index('?') - len(iconimage)
 			iconimage = iconimage[:pos]
-		url       = "{0}?url={1}&mode={2}&title={3}&thumbnail={4}".format(self.argv[0], urllib.quote_plus(url), mode, name, iconimage)
+		url       = "{0}?url={1}&mode={2}&title={3}&thumbnail={4}".format(self.argv[0], quote_plus(url), mode, quote_plus(name), iconimage)
 		convdate  = _date(date)
 		is_folder = not is_playable
-		entry = xbmcgui.ListItem(name, thumbnailImage=iconimage)
+		entry = xbmcgui.ListItem(name)
+		entry.setIsFolder(is_folder)
+		entry.setArt({'thumb': iconimage})
 		entry.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Season": season, "Episode": episode, "Aired": convdate})
 		entry.setProperty("fanart_image", self.paths.DEFAULT_FANART)
 		entry.setProperty("isPlayable", "true" if is_playable else "false")

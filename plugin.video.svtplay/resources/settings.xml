@@ -4,10 +4,6 @@
     <setting id="alpha" type="bool" label="30502" default="false" />
     <setting id="hideonlysweden" type="bool" label="30505" default="false" />
     <setting id="showsubtitles" type="bool" label="30501" default="false" />
-    <setting id="debug" type="bool" label="30500" default="false" />
-  </category>
-  <category label="30602">
-    <setting id="bwselect" type="bool" label="30507" default="false" />
-    <setting id="bandwidth" type="select" label="30508" default="2500" values="300|500|900|1600|2500" enable="eq(-1,true)" />
+    <setting id="inappropriateForChildren" type="bool" label="30503" default="false" />
   </category>
 </settings>

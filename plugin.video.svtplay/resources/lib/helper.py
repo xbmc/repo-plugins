@@ -26,9 +26,6 @@ except ImportError:
 addon = xbmcaddon.Addon("plugin.video.svtplay")
 THUMB_SIZE = "extralarge"
 
-# Available bandwidths
-BANDWIDTH = [300, 500, 900, 1600, 2500, 5000]
-
 def getUrlParameters(arguments):
   """
   Return URL parameters as a dict from a query string
@@ -91,46 +88,6 @@ def prepareFanart(fanartUrl, baseUrl):
   fanartUrl = re.sub(r"\{format\}|small|medium|large|extralarge", "extralarge_imax", fanartUrl)
   return fanartUrl
 
-def getStreamForBW(url):
-  """
-  Returns a stream URL for the set bandwidth,
-  and an error message, if applicable.
-  """
-  low_bandwidth  = int(float(addon.getSetting("bandwidth")))
-  high_bandwidth = getHighBw(low_bandwidth)
-  f = urlopen(url)
-  lines = f.readlines()
-  hls_url = ""
-  marker = "#EXT-X-STREAM-INF"
-  found = False
-  for line in lines:
-    if found:
-      # The stream url is on the line proceeding the header
-      hls_url = line
-      break
-    if marker in line: # The header
-      match = re.match(r'.*BANDWIDTH=(\d+)000.+', line)
-      if match:
-        if low_bandwidth < int(match.group(1)) < high_bandwidth:
-          logging.log("Found stream with bandwidth " + match.group(1) + " for selected bandwidth " + str(low_bandwidth))
-          found = True
-  f.close()
-  if found:
-    hls_url = hls_url.rstrip()
-    return_url = urljoin(url, hls_url)
-    logging.log("Returned stream url: " + return_url)
-    return (return_url, '')
-  error_msg = "No stream found for bandwidth setting " + str(low_bandwidth)
-  __errorMsg(error_msg)
-  return (None, error_msg)
-
-def getHighBw(low):
-  """
-  Returns the higher bandwidth boundary
-  """
-  i = BANDWIDTH.index(low)
-  return BANDWIDTH[i+1]
-
 def getVideoURL(json_obj):
   """
   Returns the video URL from a SVT JSON object.
@@ -182,10 +139,6 @@ def resolveShowJSON(json_obj):
   video_url = getVideoURL(json_obj)
   if video_url:
     subtitle_url = getSubtitleUrl(json_obj)
-    extension = getVideoExtension(video_url)
-    if extension == "HLS":
-      if getSetting("bwselect"):
-        (video_url, _) = getStreamForBW(video_url)
     video_url = cleanUrl(video_url)
   return {"videoUrl": video_url, "subtitleUrl": subtitle_url}
 
@@ -214,20 +167,11 @@ def cleanUrl(video_url):
         newparas.append(para)
   return tmp[0]+"&".join(newparas).replace("?&", "?")
 
-def getVideoExtension(video_url):
-  """
-  Returns a string representation of the video extension.
-  """
-  # Remove all query strings
-  url = video_url.split("?")[0]
-  if url.endswith(".m3u8"):
-    return "HLS"
-  elif url.endswith(".mp4"):
-    return "MP4"
-  return None
-
 def getSetting(setting):
   return True if addon.getSetting(setting) == "true" else False
+
+def getSettingBool(setting):
+  return addon.getSettingBool(setting)
 
 def __errorMsg(msg):
   logging.error(msg)

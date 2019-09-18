@@ -41,10 +41,10 @@ MODE_VIEW_EPISODES = "view_episodes"
 MODE_VIEW_CLIPS = "view_clips"
 
 # settings keys
-S_DEBUG = "debug"
 S_SHOW_SUBTITLES = "showsubtitles"
 S_USE_ALPHA_CATEGORIES = "alpha"
 S_HIDE_RESTRICTED_TO_SWEDEN = "hideonlysweden"
+S_HIDE_INAPPROPRIATE_FOR_CHILDREN = "inappropriateForChildren"
 
 # plugin setup
 PLUGIN_HANDLE = int(sys.argv[1])
@@ -86,8 +86,8 @@ def view_programs_by_letter(letter):
 
 def __program_listing(programs):
   for program in programs:
-    if program["onlyAvailableInSweden"] and \
-        helper.getSetting(S_HIDE_RESTRICTED_TO_SWEDEN):
+    if __is_geo_restricted(program):
+      logging.log("Not showing {} as it is restricted to Sweden and geo setting is on".format(program["title"]))
       continue
     folder = True
     mode = MODE_PROGRAM
@@ -201,14 +201,29 @@ def __create_dir_item(article, mode):
   if mode == MODE_PROGRAM:
     folder = True
   info = None
-  if "info" in list(article.keys()):
-    if "onlyAvailableInSweden" in article["info"] and \
-        article["info"]["onlyAvailableInSweden"] and \
-        helper.getSetting(S_HIDE_RESTRICTED_TO_SWEDEN):
-      # Do not show geo restricted items
-      return
-    info = article["info"]
+  if __is_geo_restricted(article):
+    logging.log("Hiding geo restricted item {} as setting is on".format(article["title"]))
+    return
+  if not folder and __is_inappropriate_for_children(article):
+    logging.log("Hiding content {} not appropriate for children as setting is on".format(article["title"]))
+    return
+  info = article["info"]
   __add_directory_item(article["title"], params, article["thumbnail"], folder, False, info)
+
+def __is_geo_restricted(program):
+  if program["onlyAvailableInSweden"] and \
+    helper.getSettingBool(S_HIDE_RESTRICTED_TO_SWEDEN):
+      return True
+  return False
+
+def __is_inappropriate_for_children(video_item):
+  """
+  Can only be validated on video list items.
+  """
+  if video_item["inappropriateForChildren"] and \
+    helper.getSettingBool(S_HIDE_INAPPROPRIATE_FOR_CHILDREN):
+      return True
+  return False
 
 def __add_next_page_item(next_page, section):
   __add_directory_item("Next page",
@@ -255,7 +270,7 @@ def __add_directory_item(title, params, thumbnail="", folder=True, live=False, i
       del info["fanart"] # Unsupported by ListItem
     if "poster" in info:
       del info["poster"] # Unsupported by ListItem
-    list_item.setInfo("Video", info)
+    list_item.setInfo("video", info)
   list_item.setArt({
     "fanart": fanart,
     "poster": poster if poster else thumbnail,

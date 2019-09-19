@@ -1,3 +1,5 @@
+0.5.3
+- Added southparkstudios.nu support and fixed issue with Premiere episodes
 0.5.2
 - Added season 23, Python3 support and downgraded LICENSE to GPLv2
 0.5.1

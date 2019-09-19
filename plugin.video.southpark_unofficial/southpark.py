@@ -71,7 +71,7 @@ def _premier_timeout(premiere):
 	days = int(diff / 86400)
 	hours = int((diff % 86400) / 3600)
 	mins =  int((diff % 3600) / 60)
-	return "%02dd %02dh %02dm".format(days, hours, mins)
+	return "{:02d}d {:02d}h {:02d}m".format(days, hours, mins)
 
 def log_debug(message):
 	xbmc.log("[sp.addon] {0}".format(message), xbmc.LOGDEBUG)
@@ -164,8 +164,8 @@ class SP_Options(object):
 	def __init__(self, addon):
 		super(SP_Options, self).__init__()
 		self.addon = addon
-		self.GEO_LOCATIONS   = ["US","UK","ES","DE","IT"]
-		self.AUDIO_AVAILABLE = ["en","es","de"]
+		self.GEO_LOCATIONS   = ["US","UK","ES","DE","IT","SE"]
+		self.AUDIO_AVAILABLE = ["en","es","de","se"]
 		self.VIDEO_QUALITY   = ["high","low"]
 
 	def debug(self):
@@ -200,32 +200,38 @@ class SP_Helper(object):
 		self.PROTO_REF = [
 			"https", ## en
 			"https", ## es
-			"https"  ## de
+			"https", ## de
+			"https"  ## se
 		]
 		self.DOMAIN_REF = [
-			"southpark.cc.com", ## en
-			"southpark.cc.com", ## es
-			"www.southpark.de"  ## de
+			"southpark.cc.com",    ## en
+			"southpark.cc.com",    ## es
+			"www.southpark.de",    ## de
+			"southparkstudios.nu"  ## se
 		]
 		self.DOMAIN_URL = [
 			"southparkstudios.com", ## en
 			"southparkstudios.com", ## es
-			"southpark.de"          ## de
+			"southpark.de",         ## de
+			"southparkstudios.nu"   ## se
 		]
 		self.FULL_EPISODES = [
 			"/full-episodes/",        ## en
 			"/episodios-en-espanol/", ## es
 			"/alle-episoden/"         ## de
+			"/full-episodes/"         ## se
 		]
 		self.MEDIAGEN = [
-			"player",      ## en
-			"player",      ## es
-			"video-player" ## de
+			"player",       ## en
+			"player",       ## es
+			"video-player", ## de
+			"player"        ## se
 		]
 		self.MEDIAGEN_OPTS = [
-			"&suppressRegisterBeacon=true&lang=",  ## en
-			"&suppressRegisterBeacon=true&lang=",  ## es
-			"&device=Other&aspectRatio=16:9&lang=" ## de
+			"&suppressRegisterBeacon=true&lang=",   ## en
+			"&suppressRegisterBeacon=true&lang=",   ## es
+			"&device=Other&aspectRatio=16:9&lang=", ## de
+			"&suppressRegisterBeacon=true&lang="    ## se
 		]
 		self.RTMP_STREAMS = [
 			"rtmpe://viacommtvstrmfs.fplive.net:1935/viacommtvstrm",
@@ -280,6 +286,8 @@ class SP_Helper(object):
 		return "{0}://{1}{2}{3}".format(self.proto_ref(), self.domain_ref(), self.full_episodes(), suburl)
 
 	def mediagen_url(self, identifier):
+		if self.options.audio(True) == "se":
+			return "https://media.mtvnservices.com/pmt/e1/access/index.html?uri=mgid:arc:episode:{0}:{1}&configtype=edge".format(self.domain_url(), identifier)
 		return "{0}://{1}/feeds/video-player/mrss/mgid:arc:episode:{2}:{3}?lang={4}".format(self.proto_ref(), self.domain_ref(), self.domain_url(), identifier, self.options.audio(True))
 
 	def search(self, text):
@@ -527,18 +535,23 @@ class SouthParkAddon(object):
 		return Video(rtmpe, duration, captions)
 
 	def get_mediagen(self, identifier):
+		mediagen = []
 		comp = self.helper.mediagen_url(identifier)
 		feed = _http_get(comp)
-		root = ET.fromstring(feed)
-		mediagen = []
-		if sys.version_info >=  (2, 7):
-			for item in root.iter('{http://search.yahoo.com/mrss/}content'):
-				if item.attrib['url'] != None:
-					mediagen.append(_unescape(item.attrib['url']))
+		if self.options.audio(True) == "se":
+			jsondata = _json.loads(feed)
+			for media in jsondata["feed"]["items"]:
+				mediagen.append(media["group"]["content"])
 		else:
-			for item in root.getiterator('{http://search.yahoo.com/mrss/}content'):
-				if item.attrib['url'] != None:
-					mediagen.append(_unescape(item.attrib['url']))
+			root = ET.fromstring(feed)
+			if sys.version_info >=  (2, 7):
+				for item in root.iter('{http://search.yahoo.com/mrss/}content'):
+					if item.attrib['url'] != None:
+						mediagen.append(_unescape(item.attrib['url']))
+			else:
+				for item in root.getiterator('{http://search.yahoo.com/mrss/}content'):
+					if item.attrib['url'] != None:
+						mediagen.append(_unescape(item.attrib['url']))
 		return mediagen
 
 

@@ -108,10 +108,6 @@ msgctxt "#30403"
 msgid "Play"
 msgstr "Spela"
 
-msgctxt "#30500"
-msgid "Debug"
-msgstr "Debug"
-
 msgctxt "#30501"
 msgid "Show subtitles"
 msgstr "Visa undertexter"
@@ -121,30 +117,13 @@ msgid "Group programs in A-Ö by first character"
 msgstr "Gruppera program i A-Ö efter första bokstav"
 
 msgctxt "#30503"
-msgid "Number of programs per page"
-msgstr "Antal program per sida"
+msgid "Dölj innehåll olämpligt för barn"
+msgstr ""
 
 msgctxt "#30505"
 msgid "Hide programs that are restricted to Sweden"
 msgstr "Dölj program som endast kan visas i Sverige"
 
-msgctxt "#30506"
-msgid "Show both clips and episodes for programs"
-msgstr "Visa både klipp och avsnitt för program"
-
-msgctxt "#30507"
-msgid "Set bandwidth manually"
-msgstr "Ställ in bandbredd manuellt"
-
-msgctxt "#30508"
-msgid "Bandwidth"
-msgstr "Bandbredd"
-
 msgctxt "#30601"
 msgid "General"
 msgstr "Allmänt"
-
-msgctxt "#30602"
-msgid "Advanced"
-msgstr "Avancerat"
-

@@ -35,24 +35,28 @@ msgctxt "#30001"
 msgid "New"
 msgstr ""
 
-msgctxt "#30002"
-msgid "Themes"
-msgstr ""
-
-msgctxt "#30003"
-msgid "Flop"
-msgstr ""
-
 msgctxt "#30004"
 msgid "Search"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Top Time machine"
+msgid "Top Time machine (daily/weekly/montly Toppers)"
 msgstr ""
 
-msgctxt "#30006"
-msgid "Classics"
+msgctxt "#30007"
+msgid "Dumpert TV"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Daily Top"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Weekly Top"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Monthly Top"
 msgstr ""
 
 msgctxt "#30100"
@@ -99,10 +103,6 @@ msgctxt "#30303"
 msgid "High"
 msgstr ""
 
-msgctxt "#30400"
-msgid "Debug"
-msgstr ""
-
 msgctxt "#30501"
 msgid "%s to %s"
 msgstr ""
@@ -140,15 +140,15 @@ msgid "Pick a date"
 msgstr ""
 
 msgctxt "#30510"
-msgid "Day top for %s"
+msgid "Day top for day %s"
 msgstr ""
 
 msgctxt "#30511"
-msgid "Week top for %s"
+msgid "Week top for week %s %s"
 msgstr ""
 
 msgctxt "#30512"
-msgid "Month top for %s"
+msgid "Month top for month %s"
 msgstr ""
 
 msgctxt "#30600"

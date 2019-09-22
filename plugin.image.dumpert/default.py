@@ -17,8 +17,8 @@ ADDON = "plugin.image.dumpert"
 SETTINGS = xbmcaddon.Addon()
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGE_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
-DATE = "2018-02-23"
-VERSION = "1.0.2"
+DATE = "2019-09-21"
+VERSION = "1.0.3"
 
 MODE_LATEST = 1
 

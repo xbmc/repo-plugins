@@ -36,13 +36,20 @@ class Main(object):
 
         if keyboard.isConfirmed():
             search_term = keyboard.getText()
+            # If the user has entered nothing, we stop
+            if search_term == "":
+                sys.exit(0)
+        else:
+            # If the user cancels the input box, we stop
+            sys.exit(0)
 
         sys.argv[2] = convertToUnicodeString(sys.argv[2])
-        # Converting URL argument to proper query string like 'http://www.dumpert.nl/search/ALL/fiets/1/'
-        sys.argv[2] = sys.argv[2] + "/ALL/" + search_term + "/1/'"
+
+        # Converting URL argument to proper query string like 'https://api-live.dumpert.nl/mobile_api/json/search/fiets/0/'
+        sys.argv[2] = sys.argv[2] + search_term + "/0/"
 
         log("sys.argv[2]", sys.argv[2])
 
-        import dumpert_list as plugin
+        import dumpert_json as plugin
 
         plugin.Main()

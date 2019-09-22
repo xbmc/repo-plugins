@@ -1,3 +1,6 @@
+v1.0.3 (2019-09-21)
+- marked broken for gotham. A new version will be made for Krypton.
+
 v1.0.2 (2018-02-23)
 - added 'images' to icon
 - don't show popup when image url can't be found

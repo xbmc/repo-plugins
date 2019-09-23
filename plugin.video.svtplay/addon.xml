@@ -1,4 +1,4 @@
-<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.0.2">
+<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.0.3">
   <requires>
     <import addon="script.module.requests" version="2.22.0" />
     <import addon="xbmc.python" version="2.25.0" />
@@ -15,12 +15,11 @@
     <disclaimer lang="en_GB">This is an unofficial addon and it is not supported or maintained by SVT. Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
     <platform>all</platform>
     <license>GPL-3.0-only</license>
-    <website>https://svtplay.se</website>
+    <website>https://www.svtplay.se</website>
     <source>https://github.com/nilzen/xbmc-svtplay</source>
     <forum>https://forum.kodi.tv/showthread.php?tid=67110</forum>
     <news>
-- Added new addon setting "Hide content inappropriate for children"
-- Improved geo restriction
+- Fix broken addon on Kodi v17.x
 - Major under-the-hood changes, please report any issues in the Github tracker
     </news>
     <assets>

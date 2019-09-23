@@ -2,8 +2,8 @@
 <settings>
   <category label="30601">
     <setting id="alpha" type="bool" label="30502" default="false" />
-    <setting id="hideonlysweden" type="bool" label="30505" default="false" />
     <setting id="showsubtitles" type="bool" label="30501" default="false" />
+    <setting id="hideonlysweden" type="bool" label="30505" default="false" />
     <setting id="inappropriateForChildren" type="bool" label="30503" default="false" />
   </category>
 </settings>

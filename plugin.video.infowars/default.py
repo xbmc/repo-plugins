@@ -2,7 +2,7 @@
 ### ############################################################################################################
 ###	#	
 ### # Project: 			#		Infowars.com Plugin
-###	#	
+###	#	                        ver. 2.1.4
 #### Email @ thomasmeadows@gmail.com
 ### ############################################################################################################
 ### ############################################################################################################
@@ -46,7 +46,7 @@ IW_addon_path_art= ""
 IW_artPath		=xbmc.translatePath(os.path.join(IW_addonPath,IW_addon_path_art))
 IW_datapath 	=xbmc.translatePath(IW_addon.get_profile()); 
 IW_artIcon		=IW_addon.get_icon(); 
-IW_artFanart	=IW_addon.get_fanart()
+IW_artFanart	=IW_addon.get_fanart();
 IW_plugin = "Infowars"
 IW_authors = "Prafit, Spinalcracker"
 IW_credits= ""
@@ -60,6 +60,8 @@ DKSIcon = "https://static.infowars.com/images/DKS-logo.png"
 DKSFanart = "https://static.infowars.com/images/DKS-bg.jpg"
 WarRoomIcon = "https://static.infowars.com/images/war-room-logo-white.png"
 WarRoomFanart = "https://static.infowars.com/images/war-room-studio.jpg"
+FPIcon = "https://i.imgur.com/Nc3LAtC.png"
+FPFanart = "https://i.imgur.com/VsMhpSz.jpg"
 CTIcon = "https://imgur.com/XA1mZtd.png"
 CTFanart = "https://imgur.com/KloueqE.jpg"
 IWLiveSEIcon = "https://imgur.com/i4TqWhY.png"
@@ -344,9 +346,10 @@ def playYoutube(url):
 def Menu_MainMenu(): #The Main Menu
     WhereAmI('@ the Main Menu')
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream-infostream/_definst_/live.m3u8'},{'title':  cFL_('The Alex Jones Show - (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream2-infostream2/_definst_/live.m3u8'},{'title':  cFL_('The David Knight Show - (Loops After Airing)','red')},is_folder=False,img=DKSIcon,fanart=DKSFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream2-infostream2/_definst_/live.m3u8'},{'title':  cFL_('The David Knight Show - (Loops After Airing)','orange')},is_folder=False,img=DKSIcon,fanart=DKSFanart)
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream3-infostream3/_definst_/live.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - (Loops After Airing)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream-infostream/_definst_/live.m3u8'},{'title':  cFL_('Live Shows & Special Events','orange')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream4-infostream4/_definst_/live.m3u8'},{'title':  cFL_('Fire Power with Will Johnson - (Loops After Airing)','red')},is_folder=False,img=FPIcon,fanart=FPFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream-infostream/_definst_/live.m3u8'},{'title':  cFL_('Live Shows & Special Events','green')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
     IW_addon.add_directory({'mode': 'AJShowArchiveSubMenu','title':'On Demand Videos'},{'title':  cFL_('On Demand Videos','cyan')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
     IW_addon.add_directory({'mode': 'PaulJosephWatsonSubMenu','title':'Paul Joseph Watson (Youtube Video)'},{'title':  cFL_('Paul Joseph Watson (Youtube)','blue')},is_folder=True,img=PJWIcon,fanart=PJWFanart)
     IW_addon.add_directory({'mode': 'MillieWeaverSubMenu','title':'Millie Weaver (Youtube Video)'},{'title':  cFL_('Millie Weaver (Youtube)','pink')},is_folder=True,img=MWIcon,fanart=MWFanart)
@@ -422,32 +425,20 @@ def Full_Show_Sub_Menu(title=''):
        'Accept-Encoding': 'none',
        'Accept-Language': 'en-US,en;q=0.8',
        'Connection': 'keep-alive'}
-
-
-    #0 - Alex Jones Show
-    #1 - The David Knight Show
-    #2 - War Room
-    #3 - Special Reports
-    #4 - Infowars Archive
     
-    ### Keep UrlShows in correct order as per site menu
-    
-    urlShows = ['https://www.infowars.com/videos/', 'https://www.infowars.com/david-knight-show/', 'https://www.infowars.com/war-room/', 'https://www.infowars.com/special-reports/', 'https://www.infowars.com/video-archive/']
-    showID = []
+    urlBannedVideo = 'https://banned.video'
+    idBV = ""
 
-    for i in range(len(urlShows)):
-        IW_addon.log('*******  ' + urlShows[i])
-        dataSHOW = None
-        reqSHOW = urllib2.Request(urlShows[i], dataSHOW ,hdr)
-        responseSHOW = urllib2.urlopen(reqSHOW)
-        content = responseSHOW.read()
-        showID.append(find_multiple_matches(content,"var CHANNEL_ID = \"(.*?)\";"))
-    
+    dataBV = None
+    reqBV = urllib2.Request(urlBannedVideo, dataBV, hdr)
+    responseBV = urllib2.urlopen(reqBV)
+    contentBV = responseBV.read()
+    idBV = (find_multiple_matches(contentBV,"<a href=\"\/channel\/(.*?)\""))
     urlMAIN = 'https://api.infowarsmedia.com/api/channel/'
- 
-    for i in range(len(urlShows)):
+
+    for i in range(len(idBV)):
         dataMAIN = None
-        urlMAINID = urlMAIN + str(showID[i]).strip('[\']') + '/'
+        urlMAINID = urlMAIN + str(idBV[i]).strip('[\']') + '/'
         IW_addon.log('*******  ' + urlMAINID)
         reqMAIN = urllib2.Request(urlMAINID, dataMAIN ,hdr)
         responseMAIN = urllib2.urlopen(reqMAIN) 
@@ -461,7 +452,6 @@ def Full_Show_Sub_Menu(title=''):
         req = urllib2.Request(url, data ,hdr)
         response = urllib2.urlopen(req)
         data = json.load(response)
-
         for item in data["videos"]:
             title = titleCheck + " - " + item["title"]            
             plot = item["summary"]                               
@@ -484,32 +474,20 @@ def Alex_Jones_Show_Archive_Sub_Menu(title=''):
        'Accept-Encoding': 'none',
        'Accept-Language': 'en-US,en;q=0.8',
        'Connection': 'keep-alive'}
-
-
-    #0 - Alex Jones Show
-    #1 - The David Knight Show
-    #2 - War Room
-    #3 - Special Reports
-    #4 - Infowars Archive
     
-    ### Keep UrlShows in correct order as per site menu
-    
-    urlShows = ['https://www.infowars.com/videos/', 'https://www.infowars.com/david-knight-show/', 'https://www.infowars.com/war-room/', 'https://www.infowars.com/special-reports/', 'https://www.infowars.com/video-archive/']
-    showID = []
+    urlBannedVideo = 'https://banned.video'
+    idBV = ""
 
-    for i in range(len(urlShows)):
-        IW_addon.log('*******  ' + urlShows[i])
-        dataSHOW = None
-        reqSHOW = urllib2.Request(urlShows[i], dataSHOW ,hdr)
-        responseSHOW = urllib2.urlopen(reqSHOW)
-        content = responseSHOW.read()
-        showID.append(find_multiple_matches(content,"var CHANNEL_ID = \"(.*?)\";"))
-    
+    dataBV = None
+    reqBV = urllib2.Request(urlBannedVideo, dataBV, hdr)
+    responseBV = urllib2.urlopen(reqBV)
+    contentBV = responseBV.read()
+    idBV = (find_multiple_matches(contentBV,"<a href=\"\/channel\/(.*?)\""))
     urlMAIN = 'https://api.infowarsmedia.com/api/channel/'
 
-    for i in range(len(urlShows)):
+    for i in range(len(idBV)):
         dataMAIN = None
-        urlMAINID = urlMAIN + str(showID[i]).strip('[\']') + '/'
+        urlMAINID = urlMAIN + str(idBV[i]).strip('[\']') + '/'
         IW_addon.log('*******  ' + urlMAINID)
         reqMAIN = urllib2.Request(urlMAINID, dataMAIN ,hdr)
         responseMAIN = urllib2.urlopen(reqMAIN) 

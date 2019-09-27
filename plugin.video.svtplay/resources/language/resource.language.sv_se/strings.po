@@ -124,6 +124,10 @@ msgctxt "#30505"
 msgid "Hide programs that are restricted to Sweden"
 msgstr "Dölj program som endast kan visas i Sverige"
 
+msgctxt "#30506"
+msgid "Kids mode"
+msgstr "Barnläge"
+
 msgctxt "#30601"
 msgid "General"
 msgstr "Allmänt"

@@ -1,53 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.2.2" provider-name="Martijn Moreel, dagwieers">
-    <requires>
-        <import addon="plugin.video.youtube" version="6.0.0" optional="true"/>
-        <!-- import addon="resource.images.studios.coloured" version="0.0.16" optional="true"/ -->
-        <import addon="resource.images.studios.white" version="0.0.21"/>
-        <import addon="script.module.beautifulsoup4" version="4.5.3"/>
-        <import addon="script.module.dateutil" version="2.6.0"/>
-        <!-- import addon="inputstream.adaptive" version="2.0.20" optional="true"/ -->
-        <import addon="script.module.inputstreamhelper" version="0.3.5"/>
-        <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
-        <import addon="script.module.routing" version="0.2.0"/>
-        <import addon="xbmc.python" version="2.25.0"/>
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="resources/lib/addon_plugin.py">
-        <provides>video</provides>
-    </extension>
-    <extension point="xbmc.service" library="resources/lib/addon_service.py"/>
-    <extension point="xbmc.python.module" library="resources/lib/"/>
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Watch videos from VRT NU</summary>
-        <description lang="en_GB">
-This Kodi add-on can be used to watch all video content from VRT NU.
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.3.0" provider-name="Martijn Moreel, dagwieers">
+<requires>
+  <import addon="resource.images.studios.white" version="0.0.22"/>
+  <import addon="script.module.beautifulsoup4" version="4.6.2"/>
+  <import addon="script.module.dateutil" version="2.8.0"/>
+  <import addon="script.module.inputstreamhelper" version="0.4.2"/>
+  <import addon="script.module.routing" version="0.2.3"/>
+  <import addon="xbmc.python" version="2.25.0" />
+</requires>
+<extension point="xbmc.python.pluginsource" library="resources/lib/addon_entry.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.service" library="resources/lib/service_entry.py"/>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en_GB">Watch videos from VRT NU</summary>
+  <description lang="en_GB">
+VRT NU is the video-on-demand platform of the Flemish public broadcaster (VRT).
 
-- Track the programs you like
-- List all videos alphabetically by program, category, channel or feature
-- Watch live streams from Eén, Canvas, Ketnet, Ketnet Junior and Sporza
-- Discover recently added or soon offline content
-- Browse the online TV guides or search VRT NU
+  - Track the programs you like
+  - List all videos alphabetically by program, category, channel or feature
+  - Watch live streams from Eén, Canvas, Ketnet, Ketnet Junior and Sporza
+  - Discover recently added or soon offline content
+  - Browse the online TV guides or search VRT NU
 
-[B]The VRT NU add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.[/B]
-</description>
-        <disclaimer lang="en_GB">The VRT NU add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.</disclaimer>
-        <summary lang="nl_NL">VRT NU videos bekijken.</summary>
-        <description lang="nl_NL">
-Met deze Kodi add-on kan je alle video streams van VRT NU bekijken.
+[I]The VRT NU add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.[/I]
+  </description>
+  <disclaimer lang="en_GB">The VRT NU add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.</disclaimer>
+  <summary lang="nl_NL">VRT NU videos bekijken.</summary>
+  <description lang="nl_NL">
+VRT NU is het video-on-demand platform van de Vlaamse publieke omroep (VRT).
 
-- Volg je favoriete tv-programma's
-- Raadpleeg videos op basis van programma, categorie, kanaal of feature
-- Bekijk de livestreams van Eén, Canvas, Ketnet, Ketnet Junior en Sporza
-- Ontdek recent toegevoegde of binnenkort offline video's
-- Doorblader de online tv-gids of doorzoek VRT NU
+  - Volg je favoriete tv-programma's
+  - Raadpleeg video's op basis van programma, categorie, kanaal of feature
+  - Bekijk de livestreams van Eén, Canvas, Ketnet, Ketnet Junior en Sporza
+  - Ontdek recent toegevoegde of binnenkort offline video's
+  - Doorblader de online tv-gids of doorzoek VRT NU
 
-[B]Deze VRT NU add-on wordt niet ondersteund door de VRT, en wordt aangeboden 'as is', zonder enige garantie.[/B]
-</description>
-        <disclaimer lang="nl_NL">Deze VRT NU add-on wordt niet ondersteund door de VRT, en wordt aangeboden 'as is', zonder enige garantie.</disclaimer>
-        <language>en nl</language>
-        <platform>all</platform>
-        <license>GNU General Public License, v3</license>
-        <news>
+[I]Deze VRT NU add-on wordt niet ondersteund door de VRT, en wordt aangeboden 'as is', zonder enige garantie.[/I]
+  </description>
+  <disclaimer lang="nl_NL">Deze VRT NU add-on wordt niet ondersteund door de VRT, en wordt aangeboden 'as is', zonder enige garantie.</disclaimer>
+  <language>en nl</language>
+  <platform>all</platform>
+  <license>GPL-3.0-only</license>
+  <forum>https://www.facebook.com/kodivrtnu/</forum>
+  <website>https://github.com/pietje666/plugin.video.vrt.nu/wiki</website>
+  <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
+  <news>
+v2.3.0 (2020-01-01)
+- Cosmetic changes to metadata and plot
+- Store resume points and watchlater at VRT NU
+- Implement "Watch later"
+- Implement "Continue watching"
+- Add integration for Up Next add-on
+- Fixes to "Go to program", "TV guide" and "Live TV" entries
+- Fix Python 3.5 support
+
+v2.2.3 (2019-10-01)
+- Integrate new inputstreamhelper
+- Support user paths with unicode characters
+- Manage My favorites
+- Improve breadcrumbs support
+- Various translation fixes
+
 v2.2.2 (2019-09-01)
 - "Go to program" will now got to "All seasons" listing
 - Rename "My programs" to "My favorites"
@@ -79,18 +93,15 @@ v2.1.0 (2019-07-11)
 - Add YouTube channel support
 - Add Radio 1 live stream
 - Improve credential input
-        </news>
-        <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
-        <website>https://github.com/pietje666/plugin.video.vrt.nu/wiki</website>
-        <forum>https://www.facebook.com/kodivrtnu/</forum>
-        <assets>
-            <icon>resources/media/icon.png</icon>
-            <fanart>resources/media/fanart.png</fanart>
-            <screenshot>resources/media/screenshot01.jpg</screenshot>
-            <screenshot>resources/media/screenshot02.jpg</screenshot>
-            <screenshot>resources/media/screenshot03.jpg</screenshot>
-            <screenshot>resources/media/screenshot04.jpg</screenshot>
-        </assets>
-        <reuselanguageinvoker>true</reuselanguageinvoker>
-    </extension>
+  </news>
+  <assets>
+    <icon>resources/media/icon.png</icon>
+    <fanart>resources/media/fanart.png</fanart>
+    <screenshot>resources/media/screenshot01.jpg</screenshot>
+    <screenshot>resources/media/screenshot02.jpg</screenshot>
+    <screenshot>resources/media/screenshot03.jpg</screenshot>
+    <screenshot>resources/media/screenshot04.jpg</screenshot>
+  </assets>
+  <reuselanguageinvoker>true</reuselanguageinvoker>
+</extension>
 </addon>

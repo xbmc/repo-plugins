@@ -10,12 +10,14 @@
     <category label="30820"> <!-- Interface -->
         <setting label="30821" type="lsep"/> <!-- Features -->
         <setting label="30823" help="30824" type="bool" id="usefavorites" default="true"/>
-        <setting label="30825" help="30826" type="bool" id="addmymovies" default="true" enable="eq(-1,true)" subsetting="true"/>
-        <setting label="30827" help="30828" type="bool" id="addmydocu" default="true" enable="eq(-2,true)" subsetting="true"/>
-        <setting label="30829" help="30830" type="bool" id="showoneoff" default="true"/>
-        <setting label="30831" help="30832" type="bool" id="showfanart" default="true"/>
-        <setting label="30833" help="30834" type="bool" id="showyoutube" default="true" enable="System.HasAddon(plugin.video.youtube)"/>
-        <setting label="30835" help="30836" type="bool" id="showpermalink" default="false"/>
+        <setting label="30825" help="30826" type="action" id="manage_favorites" action="RunPlugin(plugin://plugin.video.vrt.nu/favorites/manage)" enable="eq(-1,true)" subsetting="true"/>
+        <setting label="30827" help="30828" type="bool" id="addmymovies" default="true" enable="eq(-2,true)" subsetting="true"/>
+        <setting label="30829" help="30830" type="bool" id="addmydocu" default="true" enable="eq(-3,true)" subsetting="true"/>
+        <setting type="sep"/>
+        <setting label="30831" help="30832" type="bool" id="showoneoff" default="true"/>
+        <setting label="30833" help="30834" type="bool" id="showfanart" default="true"/>
+        <setting label="30835" help="30836" type="bool" id="showyoutube" default="true" enable="System.HasAddon(plugin.video.youtube)"/>
+        <setting label="30837" help="30838" type="bool" id="showpermalink" default="false"/>
     </category>
     <category label="30860"> <!-- Playback -->
         <setting label="30861" type="lsep"/>
@@ -39,7 +41,7 @@
         <setting label="30893" type="bool" id="vrtnws" default="true"/> <!-- VRT NWS -->
         <setting label="30894" type="bool" id="vrtnxt" default="true"/> <!-- VRT NXT -->
     </category>
-    <category label="30900"> <!-- Troubleshooting -->
+    <category label="30900"> <!-- Expert -->
         <setting label="30901" type="lsep"/> <!-- Cache -->
         <setting label="30903" help="30904" type="action" id="delete_tokens" action="RunPlugin(plugin://plugin.video.vrt.nu/tokens/delete)"/>
         <setting label="30905" help="30906" type="action" id="refresh_favorites" action="RunPlugin(plugin://plugin.video.vrt.nu/favorites/refresh)"/>
@@ -50,8 +52,9 @@
         <setting label="30915" type="action" visible="!System.HasAddon(inputstream.adaptive)" enable="false"/>
         <setting label="30917" help="30918" type="bool" id="useinputstreamadaptive" default="true" visible="System.HasAddon(inputstream.adaptive)"/>
         <setting label="30919" help="30920" type="action" id="adaptive_settings" option="close" action="Addon.OpenSettings(inputstream.adaptive)" visible="System.HasAddon(inputstream.adaptive) + [String.StartsWith(System.BuildVersion,18) | String.StartsWith(System.BuildVersion,19)]" enable="eq(-1,true)" subsetting="true"/>
-        <setting label="30921" help="30922" type="action" id="widevine_install" option="close" action="RunPlugin(plugin://plugin.video.vrt.nu/widevine/install)" visible="System.HasAddon(inputstream.adaptive) + [String.StartsWith(System.BuildVersion,18) | String.StartsWith(System.BuildVersion,19)]" enable="eq(-2,true)" subsetting="true"/>
-        <setting label="30923" type="lsep"/> <!-- Logging -->
-        <setting label="30925" help="30926" type="select" id="max_log_level" values="Quiet|Info|Verbose|Debug" default="Info"/>
+        <setting label="30921" help="30922" type="action" id="ishelper_info" action="RunScript(script.module.inputstreamhelper, info)" enable="eq(-2,true)"/>
+        <setting label="30923" help="30924" type="action" id="ishelper_settings" option="close" action="Addon.OpenSettings(script.module.inputstreamhelper)" enable="eq(-3,true)" subsetting="true"/>
+        <setting label="30925" type="lsep"/> <!-- Logging -->
+        <setting label="30927" help="30928" type="select" id="max_log_level" values="Quiet|Info|Verbose|Debug" default="Info"/>
     </category>
 </settings>

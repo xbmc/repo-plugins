@@ -6,23 +6,23 @@ from __future__ import absolute_import, division, unicode_literals
 
 # Fallback list of categories so we don't depend on web scraping only
 CATEGORIES = [
-    dict(name='Audiodescriptie', id='met-audiodescriptie', msgctxt='30070'),
-    dict(name='Cultuur', id='cultuur', msgctxt='30071'),
-    dict(name='Docu', id='docu', msgctxt='30072'),
-    dict(name='Entertainment', id='entertainment', msgctxt='30073'),
-    dict(name='Films', id='films', msgctxt='30074'),
-    dict(name='Human interest', id='human-interest', msgctxt='30075'),
-    dict(name='Humor', id='humor', msgctxt='30076'),
-    dict(name='Kinderen', id='voor-kinderen', msgctxt='30077'),
-    dict(name='Koken', id='koken', msgctxt='30078'),
-    dict(name='Lifestyle', id='lifestyle', msgctxt='30079'),
-    dict(name='Muziek', id='muziek', msgctxt='30080'),
-    dict(name='Nieuws en actua', id='nieuws-en-actua', msgctxt='30081'),
-    dict(name='Series', id='series', msgctxt='30082'),
-    dict(name='Sport', id='sport', msgctxt='30083'),
-    dict(name='Talkshows', id='talkshows', msgctxt='30084'),
-    dict(name='Vlaamse Gebarentaal', id='met-gebarentaal', msgctxt='30085'),
-    dict(name='Wetenschap en natuur', id='wetenschap-en-natuur', msgctxt='30086'),
+    dict(name='Audiodescriptie', id='met-audiodescriptie', msgctxt=30070),
+    dict(name='Cultuur', id='cultuur', msgctxt=30071),
+    dict(name='Docu', id='docu', msgctxt=30072),
+    dict(name='Entertainment', id='entertainment', msgctxt=30073),
+    dict(name='Films', id='films', msgctxt=30074),
+    dict(name='Human interest', id='human-interest', msgctxt=30075),
+    dict(name='Humor', id='humor', msgctxt=30076),
+    dict(name='Kinderen', id='voor-kinderen', msgctxt=30077),
+    dict(name='Koken', id='koken', msgctxt=30078),
+    dict(name='Lifestyle', id='lifestyle', msgctxt=30079),
+    dict(name='Muziek', id='muziek', msgctxt=30080),
+    dict(name='Nieuws en actua', id='nieuws-en-actua', msgctxt=30081),
+    dict(name='Series', id='series', msgctxt=30082),
+    dict(name='Sport', id='sport', msgctxt=30083),
+    dict(name='Talkshows', id='talkshows', msgctxt=30084),
+    dict(name='Vlaamse Gebarentaal', id='met-gebarentaal', msgctxt=30085),
+    dict(name='Wetenschap en natuur', id='wetenschap-en-natuur', msgctxt=30086),
 ]
 
 # VRT: https://www.youtube.com/channel/UCojJNXcer3yKj9Q-RWOFZuw
@@ -149,12 +149,20 @@ CHANNELS = [
 
 FEATURED = [
     # Tijdsgerelateerd
-    dict(name='Exclusief online', id='exclusief-online', msgctxt='30087'),
-    dict(name='Laatste aflevering', id='laatste-aflevering', msgctxt='30088'),
-    dict(name='Laatste kans', id='laatste-kans', msgctxt='30089'),
-    dict(name='Nieuw', id='Nieuw', msgctxt='30090'),
-    dict(name='Volledig seizoen', id='volledig-seizoen', msgctxt='30091'),
-    dict(name='Volledige reeks', id='volledige-reeks', msgctxt='30092'),
+    dict(name='Exclusief online', id='exclusief-online', msgctxt=30087),
+    dict(name='Laatste aflevering', id='laatste-aflevering', msgctxt=30088),
+    dict(name='Laatste kans', id='laatste-kans', msgctxt=30089),
+    dict(name='Nieuw', id='Nieuw', msgctxt=30090),
+    dict(name='Volledig seizoen', id='volledig-seizoen', msgctxt=30091),
+    dict(name='Volledige reeks', id='volledige-reeks', msgctxt=30092),
     # Inhoudsgerelateerd
-    dict(name='Kortfilm', id='kortfilm', msgctxt='30093'),
+    dict(name='Kortfilm', id='kortfilm', msgctxt=30093),
+]
+
+RELATIVE_DATES = [
+    dict(id='2-days-ago', offset=-2, msgctxt=30330, permalink=False),
+    dict(id='yesterday', offset=-1, msgctxt=30331, permalink=True),
+    dict(id='today', offset=0, msgctxt=30332, permalink=True),
+    dict(id='tomorrow', offset=1, msgctxt=30333, permalink=True),
+    dict(id='in-2-days', offset=2, msgctxt=30334, permalink=False),
 ]

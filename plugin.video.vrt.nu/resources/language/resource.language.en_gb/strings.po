@@ -111,7 +111,7 @@ msgstr ""
 
 ### FAVORITES
 msgctxt "#30040"
-msgid "My favorite programs"
+msgid "My programs"
 msgstr ""
 
 msgctxt "#30041"
@@ -160,7 +160,7 @@ msgid "Culture"
 msgstr ""
 
 msgctxt "#30072"
-msgid "Docu"
+msgid "Documentary"
 msgstr ""
 
 msgctxt "#30073"
@@ -294,15 +294,27 @@ msgid "[COLOR red]Geo-blocked[/COLOR]\n"
 msgstr ""
 
 msgctxt "#30202"
-msgid "[COLOR blue]Available until {date}[/COLOR]\n"
+msgid "[COLOR blue][B]{years} more years[/B] available[/COLOR]\n"
 msgstr ""
 
 msgctxt "#30203"
-msgid "[COLOR gray]({days} days left)[/COLOR]\n"
+msgid "[COLOR blue][B]{months} more months[/B] available[/COLOR]\n"
 msgstr ""
 
 msgctxt "#30204"
-msgid "[COLOR gray]({hours} hours left)[/COLOR]\n"
+msgid "[COLOR blue][B]{days} more days[/B] available[/COLOR]\n"
+msgstr ""
+
+msgctxt "#30205"
+msgid "[COLOR blue][B]1 more day[/B] available[/COLOR]\n"
+msgstr ""
+
+msgctxt "#30206"
+msgid "[COLOR blue][B]{hours} more hours[/B] available[/COLOR]\n"
+msgstr ""
+
+msgctxt "#30207"
+msgid "[COLOR blue][B]1 more hour[/B] available[/COLOR]\n"
 msgstr ""
 
 msgctxt "#30300"
@@ -346,11 +358,11 @@ msgid "program"
 msgstr ""
 
 msgctxt "#30411"
-msgid "Follow"
+msgid "Follow {title}"
 msgstr ""
 
 msgctxt "#30412"
-msgid "Unfollow"
+msgid "Unfollow {title}"
 msgstr ""
 
 msgctxt "#30413"
@@ -367,6 +379,18 @@ msgstr ""
 
 msgctxt "#30417"
 msgid "Go to program"
+msgstr ""
+
+msgctxt "#30418"
+msgid "No favorites found"
+msgstr ""
+
+msgctxt "#30419"
+msgid "Currently you have not followed any programs."
+msgstr ""
+
+msgctxt "#30420"
+msgid "Please unselect/select favorites to unfollow/follow."
 msgstr ""
 
 msgctxt "#30421"
@@ -440,30 +464,34 @@ msgid "When enabled, the user can follow their favorite programs and list these 
 msgstr ""
 
 msgctxt "#30825"
-msgid "Add My movies"
+msgid "Manage My favorites..."
 msgstr ""
 
 msgctxt "#30827"
-msgid "Add My documentaries"
+msgid "Add My movies"
 msgstr ""
 
 msgctxt "#30829"
-msgid "Show one-off videos in between program folders"
+msgid "Add My documentaries"
 msgstr ""
 
 msgctxt "#30831"
-msgid "Show fanart"
+msgid "Show one-off videos in between program folders"
 msgstr ""
 
 msgctxt "#30833"
-msgid "Show YouTube channel content"
+msgid "Show fanart"
 msgstr ""
 
 msgctxt "#30835"
+msgid "Show YouTube channel content"
+msgstr ""
+
+msgctxt "#30837"
 msgid "Show episode permalink in plot"
 msgstr ""
 
-msgctxt "#30836"
+msgctxt "#30838"
 msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
 msgstr ""
 
@@ -560,7 +588,7 @@ msgid "VRT NWS"
 msgstr ""
 
 msgctxt "#30900"
-msgid "Troubleshooting"
+msgid "Expert"
 msgstr ""
 
 msgctxt "#30901"
@@ -580,7 +608,7 @@ msgid "Use menu caching"
 msgstr ""
 
 msgctxt "#30908"
-msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected."
+msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected. You can also use [B]Refresh[/B] from the context-menu."
 msgstr ""
 
 msgctxt "#30909"
@@ -608,14 +636,18 @@ msgid "InputStream Adaptive settings..."
 msgstr ""
 
 msgctxt "#30921"
-msgid "Install Widevine CDM... [COLOR gray][I](for protected content)[/I][/COLOR]"
+msgid "InputStream Helper information"
 msgstr ""
 
 msgctxt "#30923"
-msgid "Logging"
+msgid "InputStream Helper settings... [COLOR gray][I](for protected content)[/I][/COLOR]"
 msgstr ""
 
 msgctxt "#30925"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30927"
 msgid "Log level"
 msgstr ""
 
@@ -685,20 +717,8 @@ msgctxt "#30966"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
 msgstr ""
 
-msgctxt "#30971"
-msgid "Install Widevine using 'InputStream Helper' add-on"
-msgstr ""
-
-msgctxt "#30972"
-msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and the VRT NU add-on is not responsible for any results. Nor is it guaranteed that Widevine will be (re)installed correctly."
-msgstr ""
-
-msgctxt "#30973"
-msgid "Installation of Widevine failed!"
-msgstr ""
-
-msgctxt "#30974"
-msgid "Installation of Widevine completed!"
+msgctxt "#30967"
+msgid "Could not retrieve this program list. VRT Search API url is too long. Unfollowing some favorite programs will reduce url length and may fix this problem."
 msgstr ""
 
 msgctxt "#30975"

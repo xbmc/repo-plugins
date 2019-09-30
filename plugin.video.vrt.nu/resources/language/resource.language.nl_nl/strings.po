@@ -112,8 +112,8 @@ msgstr "Zoekresultaten"
 
 ### FAVORITES
 msgctxt "#30040"
-msgid "My favorite programs"
-msgstr "Mijn favoriete programma's"
+msgid "My programs"
+msgstr "Mijn programma's"
 
 msgctxt "#30041"
 msgid "Alphabetically sorted list of My TV programs"
@@ -151,6 +151,103 @@ msgctxt "#30049"
 msgid "My episodes that will soon be offline"
 msgstr "Mijn afleveringen die binnenkort verdwijnen"
 
+### CATEGORIES
+msgctxt "#30070"
+msgid "Audio description"
+msgstr "Audiodescriptie"
+
+msgctxt "#30071"
+msgid "Culture"
+msgstr "Cultuur"
+
+msgctxt "#30072"
+msgid "Documentary"
+msgstr "Docu"
+
+msgctxt "#30073"
+msgid "Entertainment"
+msgstr "Entertainment"
+
+msgctxt "#30074"
+msgid "Films"
+msgstr "Films"
+
+msgctxt "#30075"
+msgid "Human interest"
+msgstr "Human interest"
+
+msgctxt "#30076"
+msgid "Comedy"
+msgstr "Humor"
+
+msgctxt "#30077"
+msgid "Children"
+msgstr "Kinderen"
+
+msgctxt "#30078"
+msgid "Cooking"
+msgstr "Koken"
+
+msgctxt "#30079"
+msgid "Lifestyle"
+msgstr "Lifestyle"
+
+msgctxt "#30080"
+msgid "Music"
+msgstr "Muziek"
+
+msgctxt "#30081"
+msgid "News and current affairs"
+msgstr "Nieuws en actua"
+
+msgctxt "#30082"
+msgid "Series"
+msgstr "Series"
+
+msgctxt "#30083"
+msgid "Sports"
+msgstr "Sport"
+
+msgctxt "#30084"
+msgid "Talk shows"
+msgstr "Talkshows"
+
+msgctxt "#30085"
+msgid "Flemish Sign Language"
+msgstr "Vlaamse Gebarentaal"
+
+msgctxt "#30086"
+msgid "Science and nature"
+msgstr "Wetenschap en natuur"
+
+### FEATURED
+msgctxt "#30087"
+msgid "Online exclusive"
+msgstr "Exclusief online"
+
+msgctxt "#30088"
+msgid "Last episode"
+msgstr "Laatste aflevering"
+
+msgctxt "#30089"
+msgid "Last chance"
+msgstr "Laatste kans"
+
+msgctxt "#30090"
+msgid "New"
+msgstr "Nieuw"
+
+msgctxt "#30091"
+msgid "Full season"
+msgstr "Volledig seizoen"
+
+msgctxt "#30092"
+msgid "Complete series"
+msgstr "Volledige reeks"
+
+msgctxt "#30093"
+msgid "Short film"
+msgstr "Kortfilm"
 
 ### APPLICATION
 msgctxt "#30094"
@@ -198,16 +295,28 @@ msgid "[COLOR red]Geo-blocked[/COLOR]\n"
 msgstr "[COLOR red]Geo-geblokkeerd[/COLOR]\n"
 
 msgctxt "#30202"
-msgid "[COLOR blue]Available until {date}[/COLOR]\n"
-msgstr "[COLOR blue]Beschikbaar tot {date}[/COLOR]\n"
+msgid "[COLOR blue][B]{years} more years[/B] available[/COLOR]\n"
+msgstr "[COLOR blue]Nog [B]{years} jaren[/B] beschikbaar[/COLOR]\n"
 
 msgctxt "#30203"
-msgid "[COLOR gray]({days} days left)[/COLOR]\n"
-msgstr "[COLOR gray](nog {days} dagen)[/COLOR]\n"
+msgid "[COLOR blue][B]{months} more months[/B] available[/COLOR]\n"
+msgstr "[COLOR blue]Nog [B]{months} maanden[/B] beschikbaar[/COLOR]\n"
 
 msgctxt "#30204"
-msgid "[COLOR gray]({hours} hours left)[/COLOR]\n"
-msgstr "[COLOR gray](nog {hours} uur)[/COLOR]\n"
+msgid "[COLOR blue][B]{days} more days[/B] available[/COLOR]\n"
+msgstr "[COLOR blue]Nog [B]{days} dagen[/B] beschikbaar[/COLOR]\n"
+
+msgctxt "#30205"
+msgid "[COLOR blue][B]1 more day[/B] available[/COLOR]\n"
+msgstr "[COLOR blue]Nog [B]1 dag[/B] beschikbaar[/COLOR]\n"
+
+msgctxt "#30206"
+msgid "[COLOR blue][B]{hours} more hours[/B] available[/COLOR]\n"
+msgstr "[COLOR blue]Nog [B]{hours} uren[/B] beschikaar[/COLOR]\n"
+
+msgctxt "#30207"
+msgid "[COLOR blue][B]1 more hour[/B] available[/COLOR]\n"
+msgstr "[COLOR blue]Nog [B]1 uur[/B] beschikaar[/COLOR]\n"
 
 msgctxt "#30300"
 msgid "[B][COLOR yellow]More...[/COLOR][/B]"
@@ -250,12 +359,12 @@ msgid "program"
 msgstr "programma"
 
 msgctxt "#30411"
-msgid "Follow"
-msgstr "Volg"
+msgid "Follow {title}"
+msgstr "Volg {title}"
 
 msgctxt "#30412"
-msgid "Unfollow"
-msgstr "Vergeet"
+msgid "Unfollow {title}"
+msgstr "Vergeet {title}"
 
 msgctxt "#30413"
 msgid "Refresh"
@@ -273,13 +382,25 @@ msgctxt "#30417"
 msgid "Go to program"
 msgstr "Ga naar programma"
 
+msgctxt "#30418"
+msgid "No favorites found"
+msgstr "Geen favoriten gevonden"
+
+msgctxt "#30419"
+msgid "Currently you have not followed any programs."
+msgstr "Er werden geen gevolgde programma's gevonden."
+
+msgctxt "#30420"
+msgid "Please unselect/select favorites to unfollow/follow."
+msgstr "Duidt aan welke programma's je als favorieten wil volgen."
+
 msgctxt "#30421"
-msgid "Nu:"
-msgstr ""
+msgid "Now:"
+msgstr "Nu:"
 
 msgctxt "#30422"
-msgid "Straks:"
-msgstr ""
+msgid "Next:"
+msgstr "Straks:"
 
 msgctxt "#30423"
 msgid "Retransmissions"
@@ -315,9 +436,17 @@ msgctxt "#30803"
 msgid "Email address"
 msgstr "E-mailadres"
 
+msgctxt "#30804"
+msgid "Provide your VRT NU email address. In case this is a Google or Facebook account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
+msgstr "Geef je VRT NU e-mailadres in. In het geval je een Google of Facebook account gebruikt, controleer dat deze login geactiveerd werd voor normale gebruikersnaam/wachtwoord authenticatie. Zie de wiki pagina voor meer informatie."
+
 msgctxt "#30805"
 msgid "Password"
 msgstr "Wachtwoord"
+
+msgctxt "#30806"
+msgid "Provide your VRT NU account password."
+msgstr "Geef je VRT NU account paswoord in."
 
 msgctxt "#30820"
 msgid "Interface"
@@ -336,30 +465,34 @@ msgid "When enabled, the user can follow their favorite programs and list these 
 msgstr "Indien actief kan de gebruiker zijn favoriete programma's volgen en apart aanroepen. Dit zorgt er wel voor dat de VRT NU add-on een lijst van favoriete programma's download en aanpast op de VRT NU website."
 
 msgctxt "#30825"
+msgid "Manage My favorites..."
+msgstr "Beheer Mijn favorieten..."
+
+msgctxt "#30827"
 msgid "Add My movies"
 msgstr "Toon Mijn films"
 
-msgctxt "#30827"
+msgctxt "#30829"
 msgid "Add My documentaries"
 msgstr "Toon Mijn documentaires"
 
-msgctxt "#30829"
+msgctxt "#30831"
 msgid "Show one-off videos in between program folders"
 msgstr "Toon one-off video's tussen tv-programmafolders"
 
-msgctxt "#30831"
+msgctxt "#30833"
 msgid "Show fanart"
 msgstr "Toon fanart"
 
-msgctxt "#30833"
+msgctxt "#30835"
 msgid "Show YouTube channel content"
 msgstr "Toon YouTube kanaal video's"
 
-msgctxt "#30835"
+msgctxt "#30837"
 msgid "Show episode permalink in plot"
 msgstr "Toon aflevering permalink in beschrijving"
 
-msgctxt "#30836"
+msgctxt "#30838"
 msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
 msgstr "Indien actief zal de beschrijving van iedere video een permanent link bevatten die je rechtstreeks naar de VRT NU website brengt. Dit is handig om snel een aflevering of film to openen op een mobiel toestel."
 
@@ -456,8 +589,8 @@ msgid "VRT NWS"
 msgstr "VRT NWS"
 
 msgctxt "#30900"
-msgid "Troubleshooting"
-msgstr "Foutopsporing"
+msgid "Expert"
+msgstr "Expert"
 
 msgctxt "#30901"
 msgid "Cache"
@@ -475,9 +608,13 @@ msgctxt "#30907"
 msgid "Use menu caching"
 msgstr "Gebruik menu caching"
 
+msgctxt "#30908"
+msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected. You can also use [B]Refresh[/B] from the context-menu."
+msgstr "Indien geactiveerd worden Kodi menus gecached zodat ze sneller werken. Enkel in heel uitzonderlijke gevallen is het interessanter noodzakelijk om altijd nieuwe episodes te zijn als ze uitkomen. Je kan ook [B]Ververs[/B] gebruiken vanuit het context-menu."
+
 msgctxt "#30909"
 msgid "Use local HTTP caching"
-msgstr "Gebruik local HTTP caching"
+msgstr "Gebruik lokale HTTP caching"
 
 msgctxt "#30911"
 msgid "Invalidate local HTTP caches"
@@ -500,16 +637,20 @@ msgid "InputStream Adaptive settings..."
 msgstr "InputStream Adaptive instellingen..."
 
 msgctxt "#30921"
-msgid "Install Widevine CDM... [COLOR gray][I](for protected content)[/I][/COLOR]"
-msgstr "Installeer Widevine CDM... [COLOR gray][I](voor beveiligde video's)[/I][/COLOR]"
+msgid "InputStream Helper information"
+msgstr "InputStream Helper informatie"
 
 msgctxt "#30923"
+msgid "InputStream Helper settings... [COLOR gray][I](for protected content)[/I][/COLOR]"
+msgstr "InputStream Helper instellingen...[COLOR gray][I](voor beveiligde video's)[/I][/COLOR]"
+
+msgctxt "#30925"
 msgid "Logging"
 msgstr "Logboek"
 
-msgctxt "#30925"
+msgctxt "#30927"
 msgid "Log level"
-msgstr "Log level"
+msgstr "Log niveau"
 
 
 ### MESSAGES
@@ -577,21 +718,9 @@ msgctxt "#30966"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
 msgstr "Het gebruik van SOCKS proxies vereist dat de PySocks library (script.module.pysocks) geïnstalleerd is."
 
-msgctxt "#30971"
-msgid "Install Widevine using 'InputStream Helper' add-on"
-msgstr "Installeer Widevine met de 'InputStream Helper' add-on"
-
-msgctxt "#30972"
-msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and the VRT NU add-on is not responsible for any results. Nor is it guaranteed that Widevine will be (re)installed correctly."
-msgstr "Het installeren van de Widevine bestanden met de 'InputStream Helper' add-on is op eigen risico en de VRT NU add-on is niet verantwoordelijk voor enig resultaat. Ook wordt het niet gegarandeerd dat Widevine succesvol kan worden geinstalleerd."
-
-msgctxt "#30973"
-msgid "Installation of Widevine failed!"
-msgstr "Widevine installatie mislukt!"
-
-msgctxt "#30974"
-msgid "Installation of Widevine completed!"
-msgstr "Widevine installatie gelukt"
+msgctxt "#30967"
+msgid "Could not retrieve this program list. VRT Search API url is too long. Unfollowing some favorite programs will reduce url length and may fix this problem."
+msgstr "Deze programmalijst kan niet opgehaald worden. VRT Search API url is te lang. Enkele favoriete programma's vergeten zal de lengte van de URL verminderen en dit probleem mogelijk oplossen."
 
 msgctxt "#30975"
 msgid "Failed to get favorites token from VRT NU"

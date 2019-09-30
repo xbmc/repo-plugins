@@ -5,11 +5,12 @@
 from __future__ import absolute_import, division, unicode_literals
 
 try:  # Python 3
-    from urllib.parse import unquote, urlencode
-    from urllib.request import build_opener, install_opener, ProxyHandler, urlopen
+    from urllib.error import HTTPError
+    from urllib.parse import quote_plus, unquote
+    from urllib.request import build_opener, install_opener, ProxyHandler, Request, urlopen
 except ImportError:  # Python 2
-    from urllib import urlencode
-    from urllib2 import build_opener, install_opener, ProxyHandler, unquote, urlopen
+    from urllib import quote_plus
+    from urllib2 import build_opener, install_opener, ProxyHandler, Request, HTTPError, unquote, urlopen
 
 import statichelper
 from data import CHANNELS
@@ -36,7 +37,7 @@ class ApiHelper:
         self._proxies = _kodi.get_proxies()
         install_opener(build_opener(ProxyHandler(self._proxies)))
 
-    def list_tvshows(self, category=None, channel=None, feature=None, use_favorites=False):
+    def get_tvshows(self, category=None, channel=None, feature=None):
         ''' Get all TV shows for a given category, channel or feature, optionally filtered by favorites '''
         params = dict()
 
@@ -56,15 +57,22 @@ class ApiHelper:
         if not category and not channel and not feature:
             params['facets[transcodingStatus]'] = 'AVAILABLE'  # Required for getting results in Suggests API
             cache_file = 'programs.json'
-
-        # Get programs
-        suggest_json = self._kodi.get_cache(cache_file, ttl=60 * 60)  # Try the cache if it is fresh
-        if not suggest_json:
+        tvshows = self._kodi.get_cache(cache_file, ttl=60 * 60)  # Try the cache if it is fresh
+        if not tvshows:
             import json
-            suggest_url = self._VRTNU_SUGGEST_URL + '?' + urlencode(params)
-            self._kodi.log_notice('URL get: ' + unquote(suggest_url), 'Verbose')
-            suggest_json = json.load(urlopen(suggest_url))
-            self._kodi.update_cache(cache_file, suggest_json)
+            querystring = '&'.join('{}={}'.format(key, value) for key, value in list(params.items()))
+            suggest_url = self._VRTNU_SUGGEST_URL + '?' + querystring
+            self._kodi.log('URL get: {url}', 'Verbose', url=unquote(suggest_url))
+            tvshows = json.load(urlopen(suggest_url))
+            self._kodi.update_cache(cache_file, tvshows)
+
+        return tvshows
+
+    def list_tvshows(self, category=None, channel=None, feature=None, use_favorites=False):
+        ''' List all TV shows for a given category, channel or feature, optionally filtered by favorites '''
+
+        # Get tvshows
+        tvshows = self.get_tvshows(category=category, channel=channel, feature=feature)
 
         # Get oneoffs
         if self._kodi.get_setting('showoneoff', 'true') == 'true':
@@ -74,7 +82,7 @@ class ApiHelper:
             # Return empty list
             oneoffs = []
 
-        return self.__map_tvshows(suggest_json, oneoffs, use_favorites=use_favorites, cache_file=cache_file)
+        return self.__map_tvshows(tvshows, oneoffs, use_favorites=use_favorites, cache_file=cache_file)
 
     def tvshow_to_listitem(self, tvshow, program, cache_file):
         ''' Return a ListItem based on a Suggests API result '''
@@ -255,7 +263,7 @@ class ApiHelper:
             video_item = TitleItem(
                 title=self._metadata.get_label(episode),
                 art_dict=self._metadata.get_art(episode),
-                info_dict=self._metadata.get_info_labels(episode)
+                info_dict=self._metadata.get_info_labels(episode),
             )
             video = dict(listitem=video_item, video_id=episode.get('videoId'), publication_id=episode.get('publicationId'))
         return video
@@ -267,9 +275,8 @@ class ApiHelper:
         import dateutil.parser
         import dateutil.tz
         offairdate = None
-        try:
-            channel = next(c for c in CHANNELS if c.get('name') == channel_name)
-        except StopIteration:
+        channel = statichelper.find_entry(CHANNELS, 'name', channel_name)
+        if not channel:
             return None
         try:
             onairdate = dateutil.parser.parse(start_date, default=datetime.now(dateutil.tz.gettz('Europe/Brussels')))
@@ -326,7 +333,7 @@ class ApiHelper:
                     listitem=video_item,
                     video_id=channel.get('live_stream_id'),
                     start_date=start_date,
-                    end_date=end_date
+                    end_date=end_date,
                 )
                 return video
 
@@ -341,11 +348,11 @@ class ApiHelper:
         api_data = self.get_episodes(program=program, variety='single')
         if len(api_data) == 1:
             episode = api_data[0]
-        self._kodi.log_notice(str(episode))
+        self._kodi.log(str(episode))
         video_item = TitleItem(
             title=self._metadata.get_label(episode),
             art_dict=self._metadata.get_art(episode),
-            info_dict=self._metadata.get_info_labels(episode)
+            info_dict=self._metadata.get_info_labels(episode),
         )
         video = dict(listitem=video_item, video_id=episode.get('videoId'), publication_id=episode.get('publicationId'))
         return video
@@ -411,25 +418,41 @@ class ApiHelper:
 
         if keywords:
             season = 'allseasons'
-            params['q'] = keywords
+            params['q'] = quote_plus(statichelper.from_unicode(keywords))
             params['highlight'] = 'true'
 
         if whatson_id:
             params['facets[whatsonId]'] = whatson_id
 
         # Construct VRT NU Search API Url and get api data
-        search_url = self._VRTNU_SEARCH_URL + '?' + urlencode(params)
+        querystring = '&'.join('{}={}'.format(key, value) for key, value in list(params.items()))
+        search_url = self._VRTNU_SEARCH_URL + '?' + querystring
 
         import json
         if cache_file:
             # Get api data from cache if it is fresh
             search_json = self._kodi.get_cache(cache_file, ttl=60 * 60)
             if not search_json:
-                self._kodi.log_notice('URL get: ' + unquote(search_url), 'Verbose')
-                search_json = json.load(urlopen(search_url))
+                self._kodi.log('URL get: {url}', 'Verbose', url=unquote(search_url))
+                req = Request(search_url)
+                try:
+                    search_json = json.load(urlopen(req))
+                except HTTPError as exc:
+                    url_length = len(req.get_selector())
+                    if exc.code == 413 and url_length > 8192:
+                        self._kodi.show_ok_dialog(heading='HTTP Error 413', message=self._kodi.localize(30967))
+                        self._kodi.log_error('HTTP Error 413: Exceeded maximum url length: '
+                                             'VRT Search API url has a length of %d characters.' % url_length)
+                        return []
+                    if exc.code == 400 and 7600 <= url_length <= 8192:
+                        self._kodi.show_ok_dialog(heading='HTTP Error 400', message=self._kodi.localize(30967))
+                        self._kodi.log_error('HTTP Error 400: Probably exceeded maximum url length: '
+                                             'VRT Search API url has a length of %d characters.' % url_length)
+                        return []
+                    raise
                 self._kodi.update_cache(cache_file, search_json)
         else:
-            self._kodi.log_notice('URL get: ' + unquote(search_url), 'Verbose')
+            self._kodi.log('URL get: {url}', 'Verbose', url=unquote(search_url))
             search_json = json.load(urlopen(search_url))
 
         # Check for multiple seasons
@@ -526,7 +549,7 @@ class ApiHelper:
 
         return channel_items
 
-    def list_youtube(self, channels=None, live=True):
+    def list_youtube(self, channels=None):
         ''' Construct a list of youtube ListItems, either for Live TV or the TV Guide listing '''
 
         youtube_items = []
@@ -587,17 +610,17 @@ class ApiHelper:
             ))
         return featured_items
 
-    def localize_features(self, FEATURED):
+    def localize_features(self, featured):
         ''' Return a localized and sorted listing '''
         from copy import deepcopy
-        features = deepcopy(FEATURED)
+        features = deepcopy(featured)
 
         for feature in features:
-            for k, v in list(feature.items()):
-                if k == 'name':
-                    feature[k] = self._kodi.localize_from_data(v, FEATURED)
+            for key, val in list(feature.items()):
+                if key == 'name':
+                    feature[key] = self._kodi.localize_from_data(val, featured)
 
-        return sorted(features, key=lambda k: k.get('name'))
+        return sorted(features, key=lambda x: x.get('name'))
 
     def list_categories(self):
         ''' Construct a list of category ListItems '''
@@ -609,8 +632,8 @@ class ApiHelper:
         # Try to scrape from the web
         if not categories:
             try:
-                categories = self.get_categories(self._proxies)
-            except Exception:
+                categories = self.get_categories()
+            except Exception:  # pylint: disable=broad-except
                 categories = []
             else:
                 self._kodi.update_cache('categories.json', categories)
@@ -638,20 +661,20 @@ class ApiHelper:
             ))
         return category_items
 
-    def localize_categories(self, categories, CATEGORIES):
+    def localize_categories(self, categories, categories2):
         ''' Return a localized and sorted listing '''
 
         for category in categories:
-            for k, v in list(category.items()):
-                if k == 'name':
-                    category[k] = self._kodi.localize_from_data(v, CATEGORIES)
+            for key, val in list(category.items()):
+                if key == 'name':
+                    category[key] = self._kodi.localize_from_data(val, categories2)
 
-        return sorted(categories, key=lambda k: k.get('name'))
+        return sorted(categories, key=lambda x: x.get('name'))
 
-    def get_categories(self, proxies=None):
+    def get_categories(self):
         ''' Return a list of categories by scraping the website '''
         from bs4 import BeautifulSoup, SoupStrainer
-        self._kodi.log_notice('URL get: https://www.vrt.be/vrtnu/categorieen/', 'Verbose')
+        self._kodi.log('URL get: https://www.vrt.be/vrtnu/categorieen/', 'Verbose')
         response = urlopen('https://www.vrt.be/vrtnu/categorieen/')
         tiles = SoupStrainer('nui-list--content')
         soup = BeautifulSoup(response.read(), 'html.parser', parse_only=tiles)

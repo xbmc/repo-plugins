@@ -10,9 +10,9 @@ try:  # Python 3
 except ImportError:  # Python 2
     from HTMLParser import HTMLParser
 
-    def unescape(s):
+    def unescape(string):
         ''' Expose HTMLParser's unescape '''
-        return HTMLParser().unescape(s)
+        return HTMLParser().unescape(string)
 
 HTML_MAPPING = [
     (re.compile(r'<(/?)i(|\s[^>]+)>', re.I), '[\\1I]'),
@@ -22,13 +22,14 @@ HTML_MAPPING = [
     (re.compile(r'<li>', re.I), '- '),
     (re.compile(r'</?(div|li|p|span|ul)(|\s[^>]+)>', re.I), ''),
     (re.compile('<br>\n{0,1}', re.I), ' '),  # This appears to be specific formatting for VRT NU, but unwanted by us
+    (re.compile('(&nbsp;\n){2,}', re.I), '\n'),  # Remove repeating non-blocking spaced newlines
 ]
 
 
 def convert_html_to_kodilabel(text):
     ''' Convert VRT HTML content into Kodit formatted text '''
-    for (k, v) in HTML_MAPPING:
-        text = k.sub(v, text)
+    for key, val in HTML_MAPPING:
+        text = key.sub(val, text)
     return unescape(text).strip()
 
 
@@ -76,7 +77,7 @@ def to_unicode(text, encoding='utf-8'):
 def from_unicode(text, encoding='utf-8'):
     ''' Force unicode to text '''
     import sys
-    if sys.version_info.major == 2 and isinstance(text, unicode):  # pylint: disable=undefined-variable
+    if sys.version_info.major == 2 and isinstance(text, unicode):  # noqa: F821; pylint: disable=undefined-variable
         return text.encode(encoding)
     return text
 
@@ -108,24 +109,6 @@ def add_https_method(url):
     return url
 
 
-def distinct(sequence):
-    ''' Create a unique list that has no duplicates '''
-    seen = set()
-    for s in sequence:
-        if s not in seen:
-            seen.add(s)
-            yield s
-
-
-def boolean(value):
-    ''' Verify if a URL parameter values is a boolean '''
-    if value is True:
-        return True
-    if value in ('True', 'true'):
-        return True
-    return False
-
-
 def realpage(page):
     ''' Convert a URL parameter page value into an integer '''
     try:
@@ -135,3 +118,8 @@ def realpage(page):
     if page < 1:
         return 1
     return page
+
+
+def find_entry(dlist, key, value, default=None):
+    ''' Find (the first) dictionary in a list where key matches value '''
+    return next((entry for entry in dlist if entry.get(key) == value), default)

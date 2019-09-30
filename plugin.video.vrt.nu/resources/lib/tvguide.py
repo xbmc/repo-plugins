@@ -14,24 +14,11 @@ try:  # Python 3
 except ImportError:  # Python 2
     from urllib2 import build_opener, install_opener, ProxyHandler, urlopen
 
-from data import CHANNELS
+from data import CHANNELS, RELATIVE_DATES
 from favorites import Favorites
 from helperobjects import TitleItem
 from metadata import Metadata
-
-DATE_STRINGS = {
-    '-2': 30330,  # 2 days ago
-    '-1': 30331,  # Yesterday
-    '0': 30332,  # Today
-    '1': 30333,  # Tomorrow
-    '2': 30334,  # In 2 days
-}
-
-DATES = {
-    '-1': 'yesterday',
-    '0': 'today',
-    '1': 'tomorrow',
-}
+from statichelper import find_entry
 
 
 class TVGuide:
@@ -58,15 +45,21 @@ class TVGuide:
 
         elif not channel:
             channel_items = self.get_channel_items(date=date)
-            self._kodi.show_listing(channel_items, category=date)
+            entry = find_entry(RELATIVE_DATES, 'id', date)
+            date_name = self._kodi.localize(entry.get('msgctxt')) if entry else date
+            self._kodi.show_listing(channel_items, category=date_name)
 
         elif not date:
             date_items = self.get_date_items(channel=channel)
-            self._kodi.show_listing(date_items, category=channel, content='files')
+            channel_name = find_entry(CHANNELS, 'name', channel).get('label')
+            self._kodi.show_listing(date_items, category=channel_name, content='files')
 
         else:
             episode_items = self.get_episode_items(date, channel)
-            self._kodi.show_listing(episode_items, category='%s / %s' % (channel, date), content='episodes', cache=False)
+            channel_name = find_entry(CHANNELS, 'name', channel).get('label')
+            entry = find_entry(RELATIVE_DATES, 'id', date)
+            date_name = self._kodi.localize(entry.get('msgctxt')) if entry else date
+            self._kodi.show_listing(episode_items, category='%s / %s' % (channel_name, date_name), content='episodes', cache=False)
 
     def get_date_items(self, channel=None):
         ''' Offer a menu to select the TV-guide date '''
@@ -76,22 +69,21 @@ class TVGuide:
         if epg.hour < 6:
             epg += timedelta(days=-1)
         date_items = []
-        for i in range(7, -30, -1):
-            day = epg + timedelta(days=i)
+        for offset in range(7, -30, -1):
+            day = epg + timedelta(days=offset)
             title = self._kodi.localize_datelong(day)
+            date = day.strftime('%Y-%m-%d')
 
             # Highlight today with context of 2 days
-            if str(i) in DATE_STRINGS:
-                if i == 0:
-                    title = '[COLOR yellow][B]%s[/B], %s[/COLOR]' % (self._kodi.localize(DATE_STRINGS[str(i)]), title)
+            entry = find_entry(RELATIVE_DATES, 'offset', offset)
+            if entry:
+                date_name = self._kodi.localize(entry.get('msgctxt'))
+                if entry.get('permalink'):
+                    date = entry.get('id')
+                if offset == 0:
+                    title = '[COLOR yellow][B]{name}[/B], {date}[/COLOR]'.format(name=date_name, date=title)
                 else:
-                    title = '[B]%s[/B], %s' % (self._kodi.localize(DATE_STRINGS[str(i)]), title)
-
-            # Make permalinks for today, yesterday and tomorrow
-            if str(i) in DATES:
-                date = DATES[str(i)]
-            else:
-                date = day.strftime('%Y-%m-%d')
+                    title = '[B]{name}[/B], {date}'.format(name=date_name, date=title)
 
             # Show channel list or channel episodes
             if channel:
@@ -164,18 +156,17 @@ class TVGuide:
             # Try the cache if it is fresh
             schedule = self._kodi.get_cache(cache_file, ttl=60 * 60)
             if not schedule:
-                self._kodi.log_notice('URL get: ' + epg_url, 'Verbose')
+                self._kodi.log('URL get: {url}', 'Verbose', url=epg_url)
                 schedule = json.load(urlopen(epg_url))
                 self._kodi.update_cache(cache_file, schedule)
         else:
-            self._kodi.log_notice('URL get: ' + epg_url, 'Verbose')
+            self._kodi.log('URL get: {url}', 'Verbose', url=epg_url)
             schedule = json.load(urlopen(epg_url))
 
-        name = channel
-        try:
-            channel = next(c for c in CHANNELS if c.get('name') == name)
-            episodes = schedule.get(channel.get('id'), [])
-        except StopIteration:
+        entry = find_entry(CHANNELS, 'name', channel)
+        if entry:
+            episodes = schedule.get(entry.get('id'), [])
+        else:
             episodes = []
         episode_items = []
         for episode in episodes:
@@ -192,7 +183,7 @@ class TVGuide:
                 context_menu, favorite_marker = self._metadata.get_context_menu(episode, program, cache_file)
                 label += favorite_marker
 
-            info_labels = self._metadata.get_info_labels(episode, date=date, channel=channel)
+            info_labels = self._metadata.get_info_labels(episode, date=date, channel=entry)
             info_labels['title'] = label
 
             episode_items.append(TitleItem(
@@ -205,7 +196,8 @@ class TVGuide:
             ))
         return episode_items
 
-    def episode_description(self, episode):
+    @staticmethod
+    def episode_description(episode):
         ''' Return a formatted description for an episode '''
         return '{start} - {end}\n» {title}'.format(**episode)
 
@@ -220,15 +212,15 @@ class TVGuide:
         schedule = self._kodi.get_cache('schedule.today.json', ttl=60 * 60)
         if not schedule:
             epg_url = epg.strftime(self.VRT_TVGUIDE)
-            self._kodi.log_notice('URL get: ' + epg_url, 'Verbose')
+            self._kodi.log('URL get: {url}', 'Verbose', url=epg_url)
             schedule = json.load(urlopen(epg_url))
             self._kodi.update_cache('schedule.today.json', schedule)
-        name = channel
-        try:
-            channel = next(c for c in CHANNELS if c.get('name') == name)
-            episodes = iter(schedule[channel.get('id')])
-        except StopIteration:
+
+        entry = find_entry(CHANNELS, 'name', channel)
+        if not entry:
             return ''
+
+        episodes = iter(schedule[entry.get('id')])
 
         description = ''
         while True:
@@ -245,7 +237,7 @@ class TVGuide:
                 except StopIteration:
                     break
                 break
-            elif now < start_date:  # Nothing playing now, but this may be next
+            if now < start_date:  # Nothing playing now, but this may be next
                 description = '[B]%s[/B] %s\n' % (self._kodi.localize(30422), self.episode_description(episode))
                 try:
                     description += '[B]%s[/B] %s' % (self._kodi.localize(30422), self.episode_description(next(episodes)))
@@ -257,22 +249,18 @@ class TVGuide:
             description = '[COLOR yellow][B]%s[/B] %s - 06:00\n» %s[/COLOR]' % (self._kodi.localize(30421), episode.get('end'), self._kodi.localize(30423))
         return description
 
-    def parse(self, date, now):
+    @staticmethod
+    def parse(date, now):
         ''' Parse a given string and return a datetime object
             This supports 'today', 'yesterday' and 'tomorrow'
             It also compensates for TV-guides covering from 6AM to 6AM
         '''
-        if date == 'today':
-            if now.hour < 6:
-                return now + timedelta(days=-1)
-            return now
-        if date == 'yesterday':
-            if now.hour < 6:
-                return now + timedelta(days=-2)
-            return now + timedelta(days=-1)
-        if date == 'tomorrow':
-            if now.hour < 6:
-                return now
-            return now + timedelta(days=1)
+        entry = find_entry(RELATIVE_DATES, 'id', date)
+        if not entry:
+            return dateutil.parser.parse(date)
 
-        return dateutil.parser.parse(date)
+        offset = entry.get('offset')
+        if now.hour < 6:
+            return now + timedelta(days=offset - 1)
+
+        return now + timedelta(days=offset)

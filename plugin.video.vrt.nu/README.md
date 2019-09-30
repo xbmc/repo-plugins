@@ -50,6 +50,13 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 ![](./resources/media/screenshot04.jpg)
 
 ## Releases
+### v2.2.3 (2019-10-01)
+- Integrate new inputstreamhelper (@dagwieers)
+- Support user paths with unicode characters (@mediaminister)
+- Manage My favorites (@dagwieers)
+- Improve breadcrumbs support (@dagwieers)
+- Various translation fixes
+
 ### v2.2.2 (2019-09-01)
 - "Go to program" will now got to "All seasons" listing (@dagwieers)
 - Rename "My programs" to "My favorites" (@dagwieers)

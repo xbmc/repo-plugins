@@ -11,8 +11,9 @@ except ImportError:  # Python 2
     from urllib import unquote_plus
 
 from kodiwrapper import KodiWrapper
-from statichelper import to_unicode
+from statichelper import from_unicode, to_unicode
 
+# pylint: disable=invalid-name
 plugin = Plugin()
 kodi = KodiWrapper(globals())
 
@@ -38,24 +39,19 @@ def delete_tokens():
     TokenResolver(kodi).delete_tokens()
 
 
-@plugin.route('/widevine/install')
-def install_widevine():
-    ''' The API interface to install Widevine '''
-    kodi.install_widevine()
-
-
 @plugin.route('/follow/<program>/<title>')
 def follow(program, title):
     ''' The API interface to follow a program used by the context menu '''
     from favorites import Favorites
-    Favorites(kodi).follow(program=program, title=to_unicode(unquote_plus(title)))
+    Favorites(kodi).follow(program=program, title=to_unicode(unquote_plus(from_unicode(title))))
 
 
 @plugin.route('/unfollow/<program>/<title>')
 def unfollow(program, title):
     ''' The API interface to unfollow a program used by the context menu '''
+    move_down = bool(plugin.args.get('move_down'))
     from favorites import Favorites
-    Favorites(kodi).unfollow(program=program, title=to_unicode(unquote_plus(title)))
+    Favorites(kodi).unfollow(program=program, title=to_unicode(unquote_plus(from_unicode(title))), move_down=move_down)
 
 
 @plugin.route('/favorites')
@@ -100,6 +96,13 @@ def favorites_refresh():
     ''' The API interface to refresh the favorites cache '''
     from favorites import Favorites
     Favorites(kodi).refresh_favorites()
+
+
+@plugin.route('/favorites/manage')
+def favorites_manage():
+    ''' The API interface to manage your favorites '''
+    from favorites import Favorites
+    Favorites(kodi).manage_favorites()
 
 
 @plugin.route('/programs')
@@ -249,5 +252,5 @@ def play_by_air_date(channel, start_date, end_date=None):
 
 def run(argv):
     ''' Addon entry point from wrapper '''
-    kodi.log_access(to_unicode(argv[0]))
+    kodi.log_access(argv[0])
     plugin.run(argv)

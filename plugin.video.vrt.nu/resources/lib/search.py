@@ -19,6 +19,20 @@ class Search:
 
         self._search_history = _kodi.get_userdata_path() + 'search_history.json'
 
+    def read_history(self):
+        ''' Read search history from disk '''
+        try:
+            with self._kodi.open_file(self._search_history, 'r') as fdesc:
+                history = json.load(fdesc)
+        except Exception:  # pylint: disable=broad-except
+            history = []
+        return history
+
+    def write_history(self, history):
+        ''' Write search history to disk '''
+        with self._kodi.open_file(self._search_history, 'w') as fdesc:
+            json.dump(history, fdesc)
+
     def search_menu(self):
         ''' Main search menu '''
         menu_items = [
@@ -31,12 +45,7 @@ class Search:
             )
         ]
 
-        try:
-            with self._kodi.open_file(self._search_history, 'r') as f:
-                history = json.load(f)
-        except Exception:
-            history = []
-
+        history = self.read_history()
         for keywords in history:
             menu_items.append(TitleItem(
                 title=keywords,
@@ -92,17 +101,12 @@ class Search:
 
     def clear(self):
         ''' Clear the search history '''
-        with self._kodi.open_file(self._search_history, 'w') as f:
-            json.dump([], f)
+        self.write_history([])
         self._kodi.end_of_directory()
 
     def add(self, keywords):
         ''' Add new keywords to search history '''
-        try:
-            with self._kodi.open_file(self._search_history, 'r') as f:
-                history = json.load(f)
-        except Exception:
-            history = []
+        history = self.read_history()
 
         # Remove if keywords already was listed
         try:
@@ -112,24 +116,18 @@ class Search:
 
         history.insert(0, keywords)
 
-        with self._kodi.open_file(self._search_history, 'w') as f:
-            json.dump(history, f)
+        self.write_history(history)
 
     def remove(self, keywords):
         ''' Remove existing keywords from search history '''
-        try:
-            with self._kodi.open_file(self._search_history, 'r') as f:
-                history = json.load(f)
-        except Exception:
-            history = []
+        history = self.read_history()
 
         try:
             history.remove(keywords)
         except ValueError:
             return
 
-        self._kodi.container_refresh()
-
         # If keywords was successfully removed, write to disk
-        with self._kodi.open_file(self._search_history, 'w') as f:
-            json.dump(history, f)
+        self.write_history(history)
+
+        self._kodi.container_refresh()

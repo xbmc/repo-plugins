@@ -280,7 +280,13 @@ class SP_Helper(object):
 		return "true"
 
 	def carousel(self):
-		return "http://southpark.cc.com/feeds/carousel/video/2b6c5ab4-d717-4e84-9143-918793a3b636/14/2/json/!airdate/?lang={0}".format(self.options.audio(True))
+		if self.options.geolocation(True) == "DE":
+			return "{0}://www.southpark.de/feeds/carousel/video/e3748950-6c2a-4201-8e45-89e255c06df1/30/1/json".format(self.proto_ref())
+		elif self.options.geolocation(True) == "SE":
+			return "{0}://www.southparkstudios.nu/feeds/carousel/wiki/3fb9ffcb-1f70-42ed-907d-9171091a28f4/12/1/json".format(self.proto_ref())
+		elif self.options.geolocation(True) == "UK":
+			return "{0}://www.southparkstudios.co.uk/feeds/carousel/wiki/4d56eb84-60d9-417e-9550-31bbfa1e7fb9/12/1/json".format(self.proto_ref())
+		return "{0}://southpark.cc.com/feeds/carousel/video/2b6c5ab4-d717-4e84-9143-918793a3b636/14/2/json/!airdate/?lang={1}".format(self.proto_ref(), self.options.audio(True))
 
 	def random_episode(self, suburl=""):
 		return "{0}://{1}{2}{3}".format(self.proto_ref(), self.domain_ref(), self.full_episodes(), suburl)
@@ -296,6 +302,10 @@ class SP_Helper(object):
 	def season_data(self, season):
 		if self.options.audio(True) == "de":
 			return "{0}://www.southpark.de/feeds/carousel/video/e3748950-6c2a-4201-8e45-89e255c06df1/30/1/json/!airdate/season-{1}".format(self.proto_ref(), season)
+		elif self.options.geolocation(True) == "SE" and season < 23: # SE doesn't have the 23rd season.
+			return "{0}://www.southparkstudios.nu/feeds/carousel/video/9bbbbea3-a853-4f1c-b5cf-dc6edb9d4c00/30/1/json/!airdate/season-{1}".format(self.proto_ref(), season)
+		elif self.options.geolocation(True) == "UK":
+			return "{0}://www.southparkstudios.co.uk/feeds/carousel/video/02ea1fb4-2e7c-45e2-ad42-ec8a04778e64/30/1/json/!airdate/season-{1}".format(self.proto_ref(), season)
 		# cc.com is the ony one with jsons so descriptions will be in english
 		return "{0}://southpark.cc.com/feeds/carousel/video/06bb4aa7-9917-4b6a-ae93-5ed7be79556a/30/1/json/!airdate/season-{1}?lang={2}".format(self.proto_ref(), season, self.options.audio(True))
 
@@ -315,10 +325,10 @@ class Video(object):
 		if not "http" in rtmp:
 			if "viacomccstrm" in self.streams[vqual]:
 				playpath = "mp4:{0}".format(self.streams[vqual].split('viacomccstrm/')[1])
-				rtmp =  self.helper.rtmp_streams()
+				rtmp =  helper.rtmp_streams()
 			elif "cp9950.edgefcs.net" in self.streams[vqual]:
 				playpath = "mp4:{0}".format(self.streams[vqual].split('mtvnorigin/')[1])
-				rtmp =  self.helper.rtmp_streams()
+				rtmp =  helper.rtmp_streams()
 		return playpath, rtmp
 
 class SouthParkAddon(object):
@@ -435,7 +445,6 @@ class SouthParkAddon(object):
 				continue
 
 			playpath, rtmp = video.play_data(self.helper)
-			##log_debug(rtmp)
 
 			videoname = "{title} ({i} of {n})".format(title=title, i=(i + 1), n=parts)
 			li = xbmcgui.ListItem(videoname)
@@ -499,8 +508,10 @@ class SouthParkAddon(object):
 
 	def get_video_data(self, mediagen):
 		xml = ""
-		mediagen += "&deviceOsVersion=4.4.4&acceptMethods=hls";
-		mediagen = mediagen.replace('{device}', 'Android')
+		if self.options.audio(True) != "de":
+			mediagen = mediagen.replace('device={device}', 'device=Android&deviceOsVersion=4.4.4&acceptMethods=hls')
+		else:
+			mediagen = mediagen.replace('device={device}', 'acceptMethods=hls')
 		xml = _http_get(mediagen)
 		root = ET.fromstring(xml)
 		rtmpe = []
@@ -559,9 +570,9 @@ class SouthParkAddon(object):
 		ep_url   = "invalid"
 		ep_mode  = PLUGIN_MODE_PLAY_EP
 
-		ep_title = episode['title']
-		ep_image = episode['images']
-		ep_desc  = episode['description']
+		ep_title = _encode(episode['title'])
+		ep_image = _encode(episode['images'])
+		ep_desc  = _encode(episode['description'])
 		ep_seas  = episode['episodeNumber'][0] + episode['episodeNumber'][1] ## SEASON  NUMBER
 		ep_numb  = episode['episodeNumber'][2] + episode['episodeNumber'][3] ## EPISODE NUMBER
 		ep_aird  = episode['originalAirDate']
@@ -572,7 +583,7 @@ class SouthParkAddon(object):
 		elif episode['_availability'] == "beforepremiere":
 			ep_title += " [Premiere]"
 			ep_mode   = PLUGIN_MODE_PREMIERE
-			ep_desc   = "Premiere in {0}\n{1}".format(_premier_timeout(episode['originalAirDate']), ep_desc)
+			ep_desc   = "Premiere in {0}\n{1}".format(_premier_timeout(ep_aird), ep_desc)
 		else:
 			ep_url = episode['itemId']
 

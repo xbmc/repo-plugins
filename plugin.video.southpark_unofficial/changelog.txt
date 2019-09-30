@@ -1,3 +1,5 @@
+0.5.4
+- Added southparkstudios.co.uk and fixed issue with season 23 on southparkstudios.nu and video playback on southpark.de
 0.5.3
 - Added southparkstudios.nu support and fixed issue with Premiere episodes
 0.5.2

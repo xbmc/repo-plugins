@@ -123,36 +123,36 @@ class Channel(chn_class.Channel):
                 "thumb": TextureHandler.instance().get_texture_uri(self, "stubruimage.jpg"),
                 "icon": TextureHandler.instance().get_texture_uri(self, "stubruicon.png")
             },
-            "vualto_een": {
+            "vualto_een_geo": {
                 "title": "E&eacute;n",
                 "metaCode": "een",
                 "fanart": TextureHandler.instance().get_texture_uri(self, "eenfanart.jpg"),
                 "thumb": TextureHandler.instance().get_texture_uri(self, "eenimage.png"),
                 "icon": TextureHandler.instance().get_texture_uri(self, "eenlarge.png"),
-                "url": "https://live-vrt.akamaized.net/groupc/live/8edf3bdf-7db3-41c3-a318-72cb7f82de66/live_aes.isml/.m3u8"
+                # "url": "https://live-vrt.akamaized.net/groupc/live/8edf3bdf-7db3-41c3-a318-72cb7f82de66/live_aes.isml/.m3u8"
             },
-            "vualto_canvas": {
+            "vualto_canvas_geo": {
                 "title": "Canvas",
                 "metaCode": "canvas",
                 "fanart": TextureHandler.instance().get_texture_uri(self, "canvasfanart.png"),
                 "thumb": TextureHandler.instance().get_texture_uri(self, "canvasimage.png"),
                 "icon": TextureHandler.instance().get_texture_uri(self, "canvaslarge.png"),
-                "url": "https://live-vrt.akamaized.net/groupc/live/14a2c0f6-3043-4850-88a5-7fb062fe7f05/live_aes.isml/.m3u8"
+                # "url": "https://live-vrt.akamaized.net/groupc/live/14a2c0f6-3043-4850-88a5-7fb062fe7f05/live_aes.isml/.m3u8"
             },
-            "vualto_ketnet": {
+            "vualto_ketnet_geo": {
                 "title": "KetNet",
                 "metaCode": "ketnet",
                 "fanart": TextureHandler.instance().get_texture_uri(self, "ketnetfanart.jpg"),
                 "thumb": TextureHandler.instance().get_texture_uri(self, "ketnetimage.jpg"),
                 "icon": TextureHandler.instance().get_texture_uri(self, "ketnetlarge.png"),
-                "url": "https://live-vrt.akamaized.net/groupc/live/f132f1b8-d04d-404e-90e0-6da1abb4f4fc/live_aes.isml/.m3u8"
+                # "url": "https://live-vrt.akamaized.net/groupc/live/f132f1b8-d04d-404e-90e0-6da1abb4f4fc/live_aes.isml/.m3u8"
             },
-            "vualto_sporza": {  # not in the channel filter maps, so no metaCode
+            "vualto_sporza_geo": {  # not in the channel filter maps, so no metaCode
                 "title": "Sporza",
                 "fanart": TextureHandler.instance().get_texture_uri(self, "sporzafanart.jpg"),
                 "thumb": TextureHandler.instance().get_texture_uri(self, "sporzaimage.jpg"),
                 "icon": TextureHandler.instance().get_texture_uri(self, "sporzalarge.png"),
-                "url": "https://live-vrt.akamaized.net/groupa/live/7d5f0e4a-3429-4861-91d4-aa3229d7ad7b/live_aes.isml/.m3u8"
+                # "url": "https://live-vrt.akamaized.net/groupa/live/7d5f0e4a-3429-4861-91d4-aa3229d7ad7b/live_aes.isml/.m3u8"
             },
             "ketnet-jr": {  # Not in the live channels
                 "title": "KetNet Junior",
@@ -389,13 +389,14 @@ class Channel(chn_class.Channel):
             if not channel_data:
                 continue
 
-            url = channel_data["url"] if "url" in channel_data else stream_value["hls"]
+            url = channel_data["url"] if "url" in channel_data else stream_value["mpd"]
             live_item = MediaItem(channel_data["title"], url)
             live_item.isLive = True
             live_item.type = 'video'
             live_item.fanart = channel_data.get("fanart", self.fanart)
             live_item.thumb = channel_data.get("icon", self.icon)
             live_item.icon = channel_data.get("icon", self.icon)
+            live_item.metaData["channel_key"] = key_value
             items.append(live_item)
         return items
 
@@ -573,26 +574,10 @@ class Channel(chn_class.Channel):
 
         """
 
-        if "m3u8" not in item.url:
-            Logger.error("Cannot update live stream that is not an M3u8: %s", item.url)
+        mzid = item.metaData["channel_key"]
+        return self.update_video_for_mzid(item, mzid, live=True)
 
-        part = item.create_new_empty_media_part()
-        adaptive_available = AddonSettings.use_adaptive_stream_add_on(with_encryption=False)
-        if adaptive_available:
-            stream = part.append_media_stream(item.url, 0)
-            M3u8.set_input_stream_addon_input(stream, self.proxy)
-            return item
-
-        for s, b in M3u8.get_streams_from_m3u8(item.url, self.proxy):
-            item.complete = True
-            # apparently they split up M3u8 streams and audio streams, so we need to fix that here
-            # this is an ugly fix, but it will work!
-            if "-audio_" not in s:
-                s = s.replace(".m3u8", "-audio_track=96000.m3u8")
-            part.append_media_stream(s, b)
-        return item
-
-    def update_video_item(self, item):  # NOSONAR
+    def update_video_item(self, item):
         """ Updates an existing MediaItem with more data.
 
         Used to update none complete MediaItems (self.complete = False). This
@@ -625,6 +610,15 @@ class Channel(chn_class.Channel):
         data = UriHandler.open(secure_url, proxy=self.proxy, additional_headers=item.HttpHeaders)
         secure_data = JsonHelper(data, logger=Logger.instance())
         mzid = secure_data.get_value(list(secure_data.json.keys())[0], "videoid")
+        return self.update_video_for_mzid(item, mzid)
+
+    def update_video_for_mzid(self, item, mzid, live=False):  # NOSONAR
+        """ Updates a video item based on the MZID
+
+        :param MediaItem item: the parent item
+        :param str mzid:       the MZID
+
+        """
 
         # region New URL retrieval with DRM protection
         # We need a player token
@@ -648,7 +642,7 @@ class Channel(chn_class.Channel):
         srt = None
 
         # see if we prefer hls over dash
-        hls_prio = 2 if self._get_setting("hls_over_dash", False) else 0
+        hls_prio = 2 if self._get_setting("hls_over_dash", 'false') == 'true' else 0
 
         for target_url in asset_data.get_value("targetUrls"):
             video_type = target_url["type"]
@@ -657,7 +651,7 @@ class Channel(chn_class.Channel):
             if video_type == "hls_aes" and drm_protected and adaptive_available:
                 # no difference in encrypted or not.
                 Logger.debug("Found HLS AES encrypted stream and a DRM key")
-                stream = part.append_media_stream(video_url, 0)
+                stream = part.append_media_stream(video_url, hls_prio)
                 M3u8.set_input_stream_addon_input(stream, self.proxy)
 
             elif video_type == "hls" and not drm_protected:
@@ -678,7 +672,9 @@ class Channel(chn_class.Channel):
                         part.append_media_stream(s, b)
 
                     srt = M3u8.get_subtitle(video_url, play_list_data=m3u8_data, proxy=self.proxy)
-                    if not srt:
+                    if not srt or live:
+                        # If there is not SRT don't download it. If it a live stream with subs,
+                        # don't use it as it is not supported by Kodi
                         continue
 
                     srt = srt.replace(".m3u8", ".vtt")
@@ -703,9 +699,13 @@ class Channel(chn_class.Channel):
 
             if video_type.startswith("hls") and srt is None:
                 srt = M3u8.get_subtitle(video_url, proxy=self.proxy)
-                if srt:
-                    srt = srt.replace(".m3u8", ".vtt")
-                    part.Subtitle = SubtitleHelper.download_subtitle(srt, format="webvtt")
+                if not srt or live:
+                    # If there is not SRT don't download it. If it a live stream with subs,
+                    # don't use it as it is not supported by Kodi
+                    continue
+
+                srt = srt.replace(".m3u8", ".vtt")
+                part.Subtitle = SubtitleHelper.download_subtitle(srt, format="webvtt")
 
             item.complete = True
         # endregion

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.raitv"
+       name="Rai Play"
+       version="3.1.1"
+       provider-name="Nightflyer, cttynul, maxbambi">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.common.plugin.cache" version="2.5.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>it</language>
+    <platform>all</platform>
+    <summary lang="it">I programmi delle reti Rai e i servizi interattivi</summary>
+    <description lang="it">I canali radio e tv in diretta, gli ultimi 7 giorni di programmazione, le puntate integrali, i telegiornali.</description>
+    <summary lang="en">The broadcasts of Rai channels and its interactive services</summary>
+    <description lang="en">The live radio and TV channels, the latest 7 days of programming, the broadcast archive, the news.</description>
+    <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=155922</forum>
+    <website>https://github.com/maxbambi/plugin.video.raitv/</website>
+    <email></email>
+    <source>https://github.com/maxbambi/plugin.video.raitv/</source>
+  </extension>
+</addon>

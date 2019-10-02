@@ -1,0 +1,98 @@
+[B]3.1.1[/B]
+- add Rai sport web streams 
+
+[B]3.1.0[/B]
+- New epg source: 
+https://www.raiplay.it/palinsesto/guidatv/lista/
+
+[B]3.0.0[/B]
+- from https://github.com/cttynul/plugin.video.raitv 
+Storage Server used is a fork of Common Plugin Cache, edited to make it works with Python 3
+
+[B]2.0.0[/B]
+- Updated live tv, replay, on demand sections to new Raiplay API.
+- Updated live radio to new API.
+- Updated search to new API.
+- Cache TV and radio stations for 1 hour.
+- Updated addon icon.
+- Unavailable programmes in RAI Replay section are now written in italics.
+- Changed the User Agent in the relinker to Chrome. Thus the relinker returns higher bitrate HLS streams.
+- Log geolocation.
+- Better log messages.
+- Clean up.
+- Minor fixes.
+
+[B]1.0.13[/B]
+- Fix relinker. Now all live streams are playable again - including RAI1.
+- Some clean up.
+
+[B]1.0.12[/B]
+- Used the new ondemand progamme list available on rai.tv web site.
+- Updated "tematiche" and "editori".
+- Minor fixes.
+
+[B]1.0.11[/B]
+- Fixed #8. Now missing thumbnail in RAI Replay is handled better.
+
+[B]1.0.10[/B]
+- Force replay availability for Rai Gulp and Rai YoYo.
+- Better stream selection in RAI Replay. Plot is now shown too.
+- Show RAI Replay dates starting from yesterday.
+- Use bigger logo thumbnails in Dirette TV and RAI Replay.
+- Normalize relinker URLs if not properly encoded. Now "Sereno Variabile" works.
+- Minor fixes.
+
+[B]1.0.9[/B]
+- fixed RAI relinker (closes #7).
+
+[B]1.0.8[/B]
+- updated required python API version to 2.1.0: this addon should now work with both XBMC 12 (Frodo) and XBMC 13 (Gotham).
+- changed user agent string: now RAI 5 Replay works again (closes #4 and #5).
+
+[B]1.0.7[/B]
+- text search.
+- lastest editions of TG1, TG2 and TG3 are available again.
+- all searches are now handled using JSON.
+- ugly fix of RAI relinker.
+- try to choose best video format available.
+
+[B]1.0.6[/B]
+- fix in RAI Replay: now RAI Premium programmes work.
+- fix message on keyboard in "Programmi On Demand" search.
+
+[B]1.0.5[/B]
+- radio and tv channels are no longer static and they retrieved from rai.tv website now.
+- cache the station list for one hour. Now the plugin requires script.common.plugin.cache!!!
+- fixed displaying the wrong month in "Rai Replay".
+- fixed an error where the video url was not used in search result.
+- add baseurl to thumb only if it is not already present.
+- always use bigger thumbnail available.
+
+[B]1.0.4[/B]
+- do not use strftime() to format date according to the Italian locale. Now the addon should work on android and ATV.
+
+[B]1.0.3[/B]
+- manage RAI relinker. Now may more videos work.
+- support audio items and podcasts.
+- faster searches in ondemand programme list.
+- don't show hidden item in ondemand programme list.
+- don't crash if content_type parameter is provided at addon startup.
+- more debug strings printed.
+- fixed searching for an ondemand programme with a non ASCII character.
+- small bug fixes.
+
+[B]1.0.2[/B]
+- search for an on-demand programme by name
+- search for an on-demand programme by channel
+- search for an on-demand programme by theme
+- search for new on-demand programmes
+- fixed a bug when no thumbnail is available
+- fixed a bug when the item count is incorrect in upstream source
+
+[B]1.0.1[/B]
+- now using bigger thumbnails in many sections
+- show thumbnails while playing videos
+- don't show item if video url doesn't exist
+
+[B]1.0.0[/B]
+- first release

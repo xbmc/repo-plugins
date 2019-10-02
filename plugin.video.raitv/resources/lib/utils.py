@@ -1,7 +1,7 @@
 import datetime
 
 def sortedDictKeys(adict):
-    keys = adict.keys()
+    keys = list(adict.keys())
     keys.sort()
     return keys
 

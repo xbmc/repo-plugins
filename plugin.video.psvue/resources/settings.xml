@@ -45,4 +45,14 @@
         <setting id="inputstream_adaptive" type="bool" label="30310" default="true" />
         <setting id="alt_stream" type="bool" label="30320" default="false" />
     </category>
+    <!--EPG-->
+    <category label="30330">
+        <setting id="disable_epg" type="bool" label="30337"  default="true"/>
+        <setting id="epg_on_start" type="bool" label="30334"  default="false" enable="eq(-1,false)"/>
+        <setting id="epg_days" type="slider" label="30335" default="2" range="1,1,7" option="int" enable="eq(-2,false)"/>
+        <setting id="epg_interval" type="slider" label="30336" default="1" range="1,1,24" option="int" enable="eq(-3,false)"/>
+        <setting id="custom_directory" type="bool" label="30331"  default="false" enable="eq(-4,false)"/>
+        <setting id="location" type="folder" label="30332"  default="special://profile/addon_data/plugin.video.psvue" source="files" option="writeable" enable="eq(-5,false) + eq(-1,true)"/>
+        <setting type="action" label="30333" action="RunPlugin(plugin://plugin.video.psvue/?mode=997)" option="close" enable="eq(-6,false)"/>
+    </category>
 </settings>

@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.psvue" name="PS Vue" version="2018.10.9" provider-name="eracknaphobia">
-  <requires>
-   <import addon="xbmc.python" version="2.25.0"/>
-   <import addon="script.module.requests" version="2.9.1"/>
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="main.py">
+
+<addon id="plugin.video.psvue" name="PS Vue" version="2019.10.3" provider-name="eracknaphobia">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.requests" version="2.9.1"/>
+        <import addon="script.module.simplecache" version="1.0.11" />
+        <import addon="xbmc.python" version="2.25.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <platform>all</platform>
-    <summary lang="en_GB">PS Vue</summary>
-    <description lang="en_GB">PlayStation™Vue is a TV service that streams live TV, movies, and sports on a variety of your favorite devices without a cable or satellite subscription.  With powerful features that allow you to save thousands of hours of your favorite shows without recording conflicts, and Premium channels that can be purchased individually or with a multi-channel plan, TV has never been the same. No annual contracts, no conflicts, no problems.</description>
-    <disclaimer lang="en_GB">Requires a valid subscription to PS Vue which is currently only available in the US</disclaimer>
-    <news>
-        - Reworked badges for show/episode listings (thanks hackthis02)
-    </news>
-    <language>en</language>
-    <platform>all</platform>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.kodi.tv/showthread.php?tid=312858</forum>
-    <source>https://github.com/eracknaphobia/plugin.video.psvue</source>
-    <assets>
-      <icon>resources/icon.png</icon>
-      <fanart>resources/fanart.jpg</fanart>
-    </assets>
-  </extension>
+    </extension>
+    <extension point="xbmc.service" library="service.py" start="startup" />
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">PS Vue</summary>
+        <description lang="en_GB">PlayStation™Vue is a TV service that streams live TV, movies, and sports on a variety of your favorite devices without a cable or satellite subscription.  With powerful features that allow you to save thousands of hours of your favorite shows without recording conflicts, and Premium channels that can be purchased individually or with a multi-channel plan, TV has never been the same. No annual contracts, no conflicts, no problems.</description>
+        <disclaimer lang="en_GB">Requires a valid subscription to PS Vue which is currently only available in the US</disclaimer>
+        <news>
+            - Add EPG disable button
+            - Clean up merged code
+            - DVR resumetime default
+        </news>
+        <language>en</language>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=312858</forum>
+        <source>https://github.com/eracknaphobia/plugin.video.psvue</source>
+        <website>https://www.playstation.com/en-us/network/vue/</website>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
 </addon>

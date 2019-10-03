@@ -216,6 +216,38 @@ msgctxt "#30320"
 msgid "Play Alternate Stream"
 msgstr ""
 
+msgctxt "#30330"
+msgid "EPG"
+msgstr ""
+
+msgctxt "#30331"
+msgid "Enable Custom Directory"
+msgstr ""
+
+msgctxt "#30332"
+msgid "EPG Data Location"
+msgstr ""
+
+msgctxt "#30333"
+msgid "Reset EPG"
+msgstr ""
+
+msgctxt "#30334"
+msgid "Build On Start"
+msgstr ""
+
+msgctxt "#30335"
+msgid "Days"
+msgstr ""
+
+msgctxt "#30336"
+msgid "Refresh Interval (Hours)"
+msgstr ""
+
+msgctxt "#30337"
+msgid "Disable EPG Service (Restart After Changing)"
+msgstr ""
+
 msgctxt "#30897"
 msgid "<< Prev."
 msgstr ""
@@ -299,4 +331,8 @@ msgstr ""
 
 msgctxt "#30985"
 msgid "Western"
+msgstr ""
+
+msgctxt "#30986"
+msgid "Cookie Error"
 msgstr ""

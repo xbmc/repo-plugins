@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.eco99music" name="eco99music" version="0.0.3" provider-name="Nir Elbaz">
+<addon id="plugin.audio.eco99music" name="eco99music" version="0.0.4" provider-name="Nir Elbaz, Noam Stolero">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
-        <import addon="script.module.beautifulsoup4" version="4.5.3"/>
         <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="script.module.xmltodict"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>audio</provides>
@@ -14,12 +14,13 @@
         <description lang="he_IL">
             ברוכים הבאים לתוסף eco99music מבית תחנת הרדיו eco99fm. מחכים לכם כאן אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה.
 תהנו, האזנה נעימה!
-לתשומת לבכם - התוכן זמין ופעיל בישראל בלבד.
+לתשומת לבכם- התוכן זמין ופעיל בישראל בלבד.
         </description>
         <description lang="en_GB">
-            Welcome to eco99music, an innovative Kodi music add-on based on the consumer possibilities of the listener and browser, and adapts edited music playlists for the current and relevant status of each listener. The app offers the consumers
+            Welcome to eco99music, an innovative music application based on the consumer possibilities of the listener and browser, and adapts edited music playlists for the current and relevant status of each listener. The app offers the consumers
 a unique and personalizes service, based on their location, activity, time of the day and their mood.
 Enjoy!
+…
 FYI - our content is available only in Israel.
         </description>
         <disclaimer lang="en_GB">This is an official ECO 99FM Kodi add-on</disclaimer>

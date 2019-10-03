@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <!--Login-->
-  <category label="100">
+  <category label="30100">
     <setting id="cdn" type="labelenum" label="30110" values="Akamai|Level 3|No Preference" default="No Preference"/>
     <setting id="username" type="text" label="30140" default=""/>
     <setting id="password" type="text" label="30150" option="hidden" default=""/>

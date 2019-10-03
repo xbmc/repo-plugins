@@ -20,6 +20,8 @@ else:
 	from urllib2 import Request, urlopen
 	from urllib import unquote_plus, quote_plus
 
+KODI_VERSION_MAJOR = int(xbmc.getInfoLabel('System.BuildVersion')[0:2])
+
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0'
 WARNING_TIMEOUT_LONG  = 7000
 WARNING_TIMEOUT_SHORT = 3000
@@ -593,7 +595,8 @@ class SouthParkAddon(object):
 		u = self.argv[0]+"?url="+quote_plus(url)+"&mode="+str(mode)
 		ok = True
 		liz = xbmcgui.ListItem(name)
-		liz.setIsFolder(True)
+		if KODI_VERSION_MAJOR > 17:
+			liz.setIsFolder(True)
 		liz.setArt({'icon': iconimage, 'thumb': iconimage})
 		liz.setInfo(type="Video", infoLabels={"Title": name})
 		liz.setProperty("fanart_image", self.paths.DEFAULT_FANART)
@@ -610,7 +613,8 @@ class SouthParkAddon(object):
 		convdate  = _date(date)
 		is_folder = not is_playable
 		entry = xbmcgui.ListItem(name)
-		entry.setIsFolder(is_folder)
+		if KODI_VERSION_MAJOR > 17:
+			entry.setIsFolder(is_folder)
 		entry.setArt({'thumb': iconimage})
 		entry.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Season": season, "Episode": episode, "Aired": convdate})
 		entry.setProperty("fanart_image", self.paths.DEFAULT_FANART)

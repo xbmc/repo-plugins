@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <category label="30601">
-    <setting id="alpha" type="bool" label="30502" default="false" />
+    <setting id="kidsmode" type="bool" label="30506" default="false" />
+    <setting id="alpha" type="bool" label="30502" default="false" enable="eq(-1,false)" />
     <setting id="showsubtitles" type="bool" label="30501" default="false" />
     <setting id="hideonlysweden" type="bool" label="30505" default="false" />
-    <setting id="inappropriateForChildren" type="bool" label="30503" default="false" />
+    <setting id="inappropriateForChildren" type="bool" label="30503" default="false" enable="eq(-4,false)" />
   </category>
 </settings>

@@ -3,8 +3,7 @@ from __future__ import absolute_import,unicode_literals
 import datetime
 import json
 import re
-import xbmcaddon # pylint: disable=import-error
-import xbmc # pylint: disable=import-error
+from xbmc import Keyboard # pylint: disable=import-error
 
 from . import logging
 
@@ -15,15 +14,16 @@ try:
   from urlparse import urljoin
   from urllib import urlopen
   from urllib import unquote
+  from urllib import unquote_plus
 except ImportError:
   # Python 3
   from urllib.parse import parse_qs
   from urllib.parse import urlparse
   from urllib.parse import urljoin
-  from urllib.parse import unquote
   from urllib.request import urlopen
+  from urllib.parse import unquote
+  from urllib.parse import unquote_plus
 
-addon = xbmcaddon.Addon("plugin.video.svtplay")
 THUMB_SIZE = "extralarge"
 
 def getUrlParameters(arguments):
@@ -37,7 +37,6 @@ def getUrlParameters(arguments):
   except AttributeError:
     # Python 3 str is already unicode and needs no decode
     pass
-  logging.log("getUrlParameters: {}".format(arguments))
   if not arguments:
     return {}
   params = {}
@@ -47,6 +46,8 @@ def getUrlParameters(arguments):
     split = pair.split("=")
     if len(split) == 2:
       params[split[0]] = split[1]
+  if "url" in params:
+    params["url"] = unquote_plus(params["url"])
   return params
 
 def prepareImgUrl(url, baseUrl):
@@ -70,7 +71,7 @@ def prepareThumb(thumbUrl, baseUrl):
   return thumbUrl
 
 def getInputFromKeyboard(heading):
-    keyboard = xbmc.Keyboard(heading=heading)
+    keyboard = Keyboard(heading=heading)
     keyboard.doModal()
 
     if keyboard.isConfirmed():
@@ -166,9 +167,6 @@ def cleanUrl(video_url):
       else:
         newparas.append(para)
   return tmp[0]+"&".join(newparas).replace("?&", "?")
-
-def getSetting(setting):
-  return addon.getSetting(setting) == "true"
 
 def __errorMsg(msg):
   logging.error(msg)

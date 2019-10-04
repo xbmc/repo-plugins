@@ -4,6 +4,7 @@ import base64, hmac, hashlib
 from time import gmtime, strftime
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
+addon_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 ADDON = xbmcaddon.Addon()
 ROOTDIR = ADDON.getAddonInfo('path')
@@ -46,7 +47,8 @@ def list_movies(genre_id):
                 'mpaa':movie['Rating'],
                 'title':title,
                 'originaltitle':title,
-                'duration':movie['DurationInSeconds']
+                'duration':movie['DurationInSeconds'],
+                'mediatype': 'movie'
                 }
 
         add_stream(title,url,'movies',icon,fanart,info)
@@ -80,10 +82,11 @@ def list_shows(genre_id):
                 'mpaa':show['Rating'],
                 'title':title,
                 'originaltitle':title,
-                'duration':show['DurationInSeconds']
+                'duration':show['DurationInSeconds'],
+                'mediatype': 'tvshow'
                 }
 
-        add_dir(title,url,102,icon,fanart,info)
+        add_dir(title,url,102,icon,fanart,info,content_type='tvshows')
 
 
 def get_episodes(channel):
@@ -96,16 +99,17 @@ def get_episodes(channel):
         id = str(episode['Id'])
         icon = episode['Images']['Img_460x460']
         fanart = episode['Images']['Img_1920x1080']
-        info = None
         info = {'plot':episode['Description'],
                 #'genre':episode['Genre'],
                 'year':episode['ReleaseYear'],
                 'mpaa':episode['Rating'],
+                'tvshowtitle':episode['ShowName'],
                 'title':title,
                 'originaltitle':title,
                 'duration':episode['Duration'],
                 'season':episode['Season'],
-                'episode':episode['Episode']
+                'episode':episode['Episode'],
+                'mediatype': 'episode'
                 }
 
         add_stream(title,id,'tvshows',icon,fanart,info)
@@ -173,32 +177,29 @@ def get_auth(url):
 
 def add_stream(name, id, stream_type, icon, fanart, info=None):
     ok = True
-    u=sys.argv[0]+"?id="+urllib.quote_plus(id)+"&mode="+str(103)+"&type="+urllib.quote_plus(stream_type)
+    u=addon_url+"?id="+urllib.quote_plus(id)+"&mode="+str(103)+"&type="+urllib.quote_plus(stream_type)
     liz=xbmcgui.ListItem(name)
-    if fanart == None: fanart = FANART
-    liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
+    if fanart is None: fanart = FANART
+    liz.setArt({'icon': icon, 'thumb': icon, 'poster': icon, 'fanart': fanart})
     liz.setProperty("IsPlayable", "true")
-    liz.setInfo(type="Video", infoLabels={"Title": name})
     if info is not None:
-        liz.setInfo( type="Video", infoLabels=info)
+        liz.setInfo( type="video", infoLabels=info)
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=False)
     xbmcplugin.setContent(addon_handle, stream_type)
     return ok
 
 
-def add_dir(name, id, mode, icon, fanart=None, info=None, genre_id=None):
-    xbmc.log(ROOTDIR)
-    xbmc.log("ICON IMAGE = "+icon)
+def add_dir(name, id, mode, icon, fanart=None, info=None, genre_id=None, content_type='videos'):
     ok = True
-    u = sys.argv[0]+"?id="+urllib.quote_plus(id)+"&mode="+str(mode)
+    u = addon_url+"?id="+urllib.quote_plus(id)+"&mode="+str(mode)
     if genre_id is not None: u += "&genre_id=%s" % genre_id
     liz=xbmcgui.ListItem(name)
-    if fanart is not None: fanart = FANART
-    liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
+    if fanart is None: fanart = FANART
+    liz.setArt({'icon': icon, 'thumb': icon, 'poster': icon, 'fanart': fanart})
     if info is not None:
-        liz.setInfo( type="Video", infoLabels=info)
+        liz.setInfo( type="video", infoLabels=info)
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=True)
-    xbmcplugin.setContent(addon_handle, 'tvshows')
+    xbmcplugin.setContent(addon_handle, content_type)
     return ok
 
 

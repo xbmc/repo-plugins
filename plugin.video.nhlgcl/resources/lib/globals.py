@@ -88,7 +88,8 @@ def find(source, start_str, end_str):
 
 
 def color_string(string, color):
-    return '[COLOR=' + color + ']' + string + '[/COLOR]'
+    return string
+    # return '[COLOR=' + color + ']' + string + '[/COLOR]'
 
 
 def string_to_date(string, date_format):
@@ -164,12 +165,13 @@ def get_params():
 
 
 def add_stream(name, link_url, title, game_id, epg, icon=None, fanart=None, info=None, video_info=None, audio_info=None,
-               teams_stream=None, stream_date=None):
+               start_time=None):
     ok = True
     u = sys.argv[0] + "?url=" + urllib.quote_plus(link_url) + "&mode=" + str(104) + "&name=" + urllib.quote_plus(name) \
-        + "&game_id=" + urllib.quote_plus(str(game_id)) + "&epg=" + urllib.quote_plus(str(epg)) \
-        + "&teams_stream=" + urllib.quote_plus(str(teams_stream)) + "&stream_date=" + urllib.quote_plus(
-        str(stream_date))
+        + "&game_id=" + urllib.quote_plus(str(game_id)) + "&epg=" + urllib.quote_plus(str(epg))
+
+    if start_time is not None:
+        u += '&start_time='+start_time
 
     liz = xbmcgui.ListItem(name)
     if icon is not None:
@@ -183,6 +185,8 @@ def add_stream(name, link_url, title, game_id, epg, icon=None, fanart=None, info
         liz.setProperty('fanart_image', FANART)
 
     liz.setProperty("IsPlayable", "true")
+
+
     liz.setInfo(type="Video", infoLabels={"Title": title})
     if info is not None:
         liz.setInfo(type="Video", infoLabels=info)

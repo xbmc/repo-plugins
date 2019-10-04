@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 import chn_class
+from helpers.languagehelper import LanguageHelper
 
 from mediaitem import MediaItem
 from parserdata import ParserData
@@ -30,37 +31,35 @@ class Channel(chn_class.Channel):
         self.noImage = "urplayimage.png"
 
         # setup the urls
-        self.mainListUri = "https://urplay.se/sok?product_type=series&rows=1000&start=0"
+        self.mainListUri = "https://urplay.se/api/bff/v1/search?product_type=series&rows=10000&start=0"
         self.baseUrl = "https://urplay.se"
         self.swfUrl = "https://urplay.se/assets/jwplayer-6.12-17973009ab259c1dea1258b04bde6e53.swf"
 
-        # programs
-        program_reg = r'href="/(?<url>[^/]+/(?<id>\d+)[^"]+)"[^>]*>[^<]+</a>\W+<figure>[\W\w]' \
-                      r'{0,3000}?<h2[^>]*>(?<title>[^<]+)</h2>\W+<p[^>]+>(?<description>[^<]+)' \
-                      r'<span class="usp">(?<description2>[^<]+)'
-        program_reg = Regexer.from_expresso(program_reg)
-        self._add_data_parser(self.mainListUri,
+        # Match the "series" API -> shows TV Shows
+        self._add_data_parser(self.mainListUri, json=True,
                               name="Show parser with categories",
                               match_type=ParserData.MatchExact,
                               preprocessor=self.add_categories_and_search,
-                              parser=program_reg, creator=self.create_episode_item)
-
-        self._add_data_parser("https://urplay.se/bladdra/",
-                              name="Category show parser",
-                              match_type=ParserData.MatchStart,
-                              parser=program_reg,
-                              creator=self.create_episode_item)
+                              parser=["results"], creator=self.create_json_episode_item)
 
         # Categories
-        cat_reg = r'<a[^>]+href="(?<url>[^"]+)">\W*<img[^>]+data-src="(?<thumburl>[^"]+)' \
-                  r'"[^>]*>\W*<span>(?<title>[^<]+)<'
+        cat_reg = r'<a[^>]+href="(?<url>/blad[^"]+)"[^>]*>(?<title>[^<]+)<'
         cat_reg = Regexer.from_expresso(cat_reg)
         self._add_data_parser("https://urplay.se/", name="Category parser",
                               match_type=ParserData.MatchExact,
                               parser=cat_reg,
                               creator=self.create_category_item)
 
-        # Match Videos
+        # Match Videos (programs)
+        self._add_data_parser("https://urplay.se/api/bff/v1/search?product_type=program",
+                              name="Most viewed", json=True,
+                              parser=["results"], creator=self.create_json_video_item)
+
+        program_reg = r'href="/(?<url>[^/]+/(?<id>\d+)[^"]+)"[^>]*>[^<]+</a>\W+<figure>[\W\w]' \
+                      r'{0,3000}?<h2[^>]*>(?<title>[^<]+)</h2>\W+<p[^>]+>\s*(?<description>[^<]+?)' \
+                      r'\s*<span class="usp">(?<description2>[^<]+)'
+        program_reg = Regexer.from_expresso(program_reg)
+
         single_video_regex = r'<meta \w+="name" content="(?:[^:]+: )?(?<title>[^"]+)' \
                              r'"[^>]*>\W*<meta \w+="description" content="(?<description>[^"]+)"' \
                              r'[^>]*>\W*<meta \w+="url" content="(?:[^"]+/(?<url>\w+/' \
@@ -68,17 +67,24 @@ class Channel(chn_class.Channel):
                              r'content="(?<thumbnail>[^"]+)"[^>]*>\W+<meta \w+="uploadDate" ' \
                              r'content="(?<date>[^"]+)"'
         single_video_regex = Regexer.from_expresso(single_video_regex)
-        self._add_data_parser("https://urplay.se/sok?product_type=program",
-                              parser=program_reg, preprocessor=self.get_video_section,
-                              creator=self.create_video_item, updater=self.update_video_item)
 
         self._add_data_parser("*", parser=program_reg, preprocessor=self.get_video_section,
                               creator=self.create_video_item, updater=self.update_video_item)
         self._add_data_parser("*", parser=single_video_regex, preprocessor=self.get_video_section,
                               creator=self.create_single_video_item, updater=self.update_video_item)
 
+        # Folders (Seasons)
+        folder_regex = '<li[^>]+>[^>]+data-description="(?<description>[^"]+)"[^>]+' \
+                       'data-asset-id="(?<id>[^"]+)"[^>]+>[\n\r ]*(?<title>[^<]+?)[\n\r ]*<'
+        folder_regex = Regexer.from_expresso(folder_regex)
+        self._add_data_parser("*", name="Season Folders",
+                              parser=folder_regex, creator=self.create_folder_item)
+
+        # Searching
         self._add_data_parser("https://urplay.se/search/json", json=True,
-                              parser=["programs"], creator=self.create_search_result)
+                              parser=["programs"], creator=self.create_search_result_program)
+        self._add_data_parser("https://urplay.se/search/json", json=True,
+                              parser=["series"], creator=self.create_search_result_serie)
 
         self.mediaUrlRegex = r"urPlayer.init\(([^<]+)\);"
 
@@ -107,7 +113,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        if not result_set['thumburl'].startswith("http"):
+        if 'thumburl' in result_set and not result_set['thumburl'].startswith("http"):
             result_set['thumburl'] = "%s/%s" % (self.baseUrl, result_set["thumburl"])
 
         result_set["url"] = "%s?rows=1000&start=0" % (result_set["url"],)
@@ -129,16 +135,16 @@ class Channel(chn_class.Channel):
         items = []
         max_items = 200
         categories = {
-            # "\a.: Mest spelade :.": "https://urplay.se/Mest-spelade",
-            "\a.: Mest delade :.": "https://urplay.se/sok?product_type=program&query=&view=most_viewed&rows=%s&start=0" % (max_items, ),
-            "\a.: Senaste :.": "https://urplay.se/sok?product_type=program&query=&view=latest&rows=%s&start=0" % (max_items, ),
-            "\a.: Sista chansen :.": "https://urplay.se/sok?product_type=program&query=&view=default&rows=%s&start=0" % (max_items, ),
-            "\a.: Kategorier :.": "https://urplay.se/",
-            "\a.: S&ouml;k :.": "searchSite"
+            LanguageHelper.Popular: "https://urplay.se/api/bff/v1/search?product_type=program&query=&rows={}&start=0&view=most_viewed".format(max_items),
+            LanguageHelper.MostRecentEpisodes: "https://urplay.se/api/bff/v1/search?product_type=program&rows={}&start=0&view=published".format(max_items),
+            LanguageHelper.LastChance: "https://urplay.se/api/bff/v1/search?product_type=program&rows={}&start=0&view=last_chance".format(max_items),
+            LanguageHelper.Categories: "https://urplay.se/",
+            LanguageHelper.Search: "searchSite"
         }
 
         for cat in categories:
-            item = MediaItem(cat, categories[cat])
+            title = "\a.: {} :.".format(LanguageHelper.get_localized_string(cat))
+            item = MediaItem(title, categories[cat])
             item.thumb = self.noImage
             item.complete = True
             item.icon = self.icon
@@ -165,10 +171,10 @@ class Channel(chn_class.Channel):
 
         """
 
-        url = "https://urplay.se/search/json?query=%s&product_type=program"
+        url = "https://urplay.se/search/json?query=%s"
         return chn_class.Channel.search_site(self, url)
 
-    def create_episode_item(self, result_set):
+    def create_json_episode_item(self, result_set):
         """ Creates a new MediaItem for an episode.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -182,18 +188,20 @@ class Channel(chn_class.Channel):
 
         """
 
+        Logger.trace(result_set)
+
         title = "%(title)s" % result_set
-        url = "%s/%s" % (self.baseUrl, result_set["url"])
+        url = "%s/serie/%s" % (self.baseUrl, result_set["slug"])
         fanart = "https://assets.ur.se/id/%(id)s/images/1_hd.jpg" % result_set
         thumb = "https://assets.ur.se/id/%(id)s/images/1_l.jpg" % result_set
         item = MediaItem(title, url)
         item.thumb = thumb
-        item.description = "%(description)s\n%(description2)s" % result_set
+        item.description = result_set.get("description")
         item.fanart = fanart
         item.icon = self.icon
         return item
 
-    def create_search_result(self, result_set):
+    def create_folder_item(self, result_set):
         """ Creates a MediaItem of type 'folder' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -207,12 +215,12 @@ class Channel(chn_class.Channel):
 
         """
 
-        # Logger.trace(result_set)
+        result_set["url"] = "https://urplay.se/series/list_programs?ur_asset_id={}".format(result_set["id"])
+        item = chn_class.Channel.create_folder_item(self, result_set)
+        if item is None:
+            return item
 
-        url = "https://urplay.se/program/{slug}".format(**result_set)
-        item = MediaItem(result_set["title"], url)
-        item.thumb = "https://assets.ur.se/id/{ur_asset_id}/images/1_hd.jpg".format(**result_set)
-        item.fanart = "https://assets.ur.se/id/{ur_asset_id}/images/1_l.jpg".format(**result_set)
+        item.HttpHeaders["X-Requested-With"] = "XMLHttpRequest"
         return item
 
     def get_video_section(self, data):
@@ -234,34 +242,43 @@ class Channel(chn_class.Channel):
         Logger.debug("Pre-Processing finished")
         return data, items
 
-    # Is not longer used?
-    # def create_video_item_with_serie_name(self, result_set):
-    #     """ Creates a MediaItem of type 'video' using the result_set from the regex and includes
-    #     the name of the serie in the title.
-    #
-    #     This method creates a new MediaItem from the Regular Expression or Json
-    #     results <result_set>. The method should be implemented by derived classes
-    #     and are specific to the channel.
-    #
-    #     If the item is completely processed an no further data needs to be fetched
-    #     the self.complete property should be set to True. If not set to True, the
-    #     self.update_video_item method is called if the item is focussed or selected
-    #     for playback.
-    #
-    #     :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-    #
-    #     :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-    #     :rtype: MediaItem|None
-    #
-    #     """
-    #
-    #     item = self.create_video_item(result_set)
-    #     if item is None:
-    #         return item
-    #
-    #     if result_set["serie"]:
-    #         item.name = "%s - %s" % (result_set["serie"], item.name)
-    #     return item
+    def create_json_video_item(self, result_set):
+        """ This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        """
+
+        Logger.trace(result_set)
+
+        title = "%(title)s" % result_set
+        url = "%s/program/%s" % (self.baseUrl, result_set["slug"])
+        fanart = "https://assets.ur.se/id/%(id)s/images/1_hd.jpg" % result_set
+        thumb = "https://assets.ur.se/id/%(id)s/images/1_l.jpg" % result_set
+        item = MediaItem(title, url)
+        item.type = "video"
+        item.thumb = thumb
+        item.description = result_set.get("description")
+        item.fanart = fanart
+        item.icon = self.icon
+        if "duration" in result_set:
+            item.set_info_label("duration", result_set["duration"])
+
+        if "accessiblePlatforms" in result_set and "urplay" in result_set["accessiblePlatforms"]:
+            start_time = result_set["accessiblePlatforms"]["urplay"]["startTime"]
+            start_date_parts = [int(x) for x in start_time[0:10].split("-")]
+            item.set_date(*start_date_parts)
+        return item
 
     def create_single_video_item(self, result_set):
         """ If no items were found, we should find the main item on the page and create a
@@ -314,7 +331,7 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url)
         item.type = "video"
         item.thumb = thumb
-        item.description = result_set["description"]
+        item.description = "%(description)s\n%(description2)s" % result_set
         item.fanart = self.parentItem.fanart
         item.icon = self.icon
         item.complete = False
@@ -467,4 +484,38 @@ class Channel(chn_class.Channel):
         part.Subtitle = subtitle
 
         item.complete = True
+        return item
+
+    def create_search_result_program(self, result_set):
+        return self.__create_search_result(result_set, "program")
+
+    def create_search_result_serie(self, result_set):
+        return self.__create_search_result(result_set, "serie")
+
+    def __create_search_result(self, result_set, result_type):
+        """ Creates a MediaItem of type 'folder' using the result_set from the regex.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param str result_type:                    Either a Serie or Program
+
+        :return: A new MediaItem of type 'folder'.
+        :rtype: MediaItem|None
+
+        """
+
+        # Logger.trace(result_set)
+
+        url = "https://urplay.se/{}/{}".format(result_type, result_set["slug"])
+        item = MediaItem(result_set["title"], url)
+
+        asset_id = result_set["ur_asset_id"]
+        item.thumb = "https://assets.ur.se/id/{}/images/1_hd.jpg".format(asset_id)
+        item.fanart = "https://assets.ur.se/id/{}/images/1_l.jpg".format(asset_id)
+        if result_type == "program":
+            item.set_info_label("duration", result_set["duration"] * 60)
+            item.type = "video"
         return item

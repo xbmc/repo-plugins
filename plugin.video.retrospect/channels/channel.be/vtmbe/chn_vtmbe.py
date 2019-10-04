@@ -814,7 +814,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        show_id = Regexer.do_regex(r'\["(\d{15})"', data)[0]
+        show_id = Regexer.do_regex(r'[\[|=]"(\d{15})"', data)[0]
         url = "https://vod.medialaan.io/vod/v2/videos?limit=18" \
               "&apikey=%s" \
               "&sort=broadcastDate&sortDirection=desc" \

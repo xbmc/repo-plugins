@@ -1,5 +1,8 @@
 import re
 
 def regex(query, url):
-    return re.findall(r"%s" % (query), url)[0]
+    try:
+        return re.findall(r"%s" % (query), url)[0]
+    except IndexError:
+        return None
 

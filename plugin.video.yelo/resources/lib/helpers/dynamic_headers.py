@@ -78,6 +78,7 @@ def verify_header(device_Id, code):
 
 def create_login_payload(username, password):
 
+
     return {
         'j_username': '{}'.format(username),
         'j_password': '{}'.format(password),

@@ -30,7 +30,7 @@ msgstr "Password"
 
 msgctxt "#32003"
 msgid "Postal Code"
-msgstr "Postal Code"
+msgstr "Postal Code (Can be left at zero for default)"
 
 msgctxt "#32004"
 msgid "Bandwith Setting"
@@ -39,3 +39,43 @@ msgstr "Bandwith Setting"
 msgctxt "#32005"
 msgid "Max bandwith"
 msgstr "Max bandwith"
+
+msgctxt "#32006"
+msgid "Login failed"
+msgstr "Login failed"
+
+msgctxt "#32007"
+msgid "Please check your login details."
+msgstr "Please check your login details."
+
+msgctxt "#32008"
+msgid "Postal"
+msgstr "Postal"
+
+msgctxt "#32009"
+msgid "Please enter your postal code in settings."
+msgstr "Please enter your postal code in settings."
+
+msgctxt "#32010"
+msgid "Please enter your postal code in settings."
+msgstr "Please enter your postal code in settings."
+
+msgctxt "#32011"
+msgid "RESTRICTED"
+msgstr "RESTRICTED"
+
+msgctxt "#32012"
+msgid "This channel is only available within Europe."
+msgstr "This channel is only available within Europe."
+
+msgctxt "#32013"
+msgid "This channel is currently not viewable."
+msgstr "This channel is currently not viewable."
+
+msgctxt "#32014"
+msgid "Login"
+msgstr "Login"
+
+msgctxt "#32015"
+msgid "You need to fill in your credentials in settings."
+msgstr "You need to fill in your credentials in settings."

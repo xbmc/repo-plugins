@@ -2,7 +2,12 @@ import sys
 import xbmcaddon
 from resources.lib.kodiwrapper import kodiwrapper
 from resources.lib.yelo import yelo
-from urlparse import parse_qsl
+
+if sys.version_info[0] == 3:
+    from urllib.parse import parse_qsl
+else:
+    from urlparse import parse_qsl
+
 from resources.lib.enums.enums import protocols
 
 # Get the plugin url in plugin:// notation.
@@ -22,15 +27,16 @@ def router(paramstring):
     if params:
         if params['action'] == 'listing' and params['category'] == 'livestreams':
             data = yelo_player.fetch_channel_list()
-            yelo_player.list_channels(data)
+            if data:
+                yelo_player.list_channels(data)
 
         elif params['action'] == 'play':
             stream_url = yelo_player.select_manifest_url(params['livestream'])
-            yelo_player.play_live_stream(stream_url)
-
+            if stream_url:
+                yelo_player.play_live_stream(stream_url)
     else:
-        yelo_player.login()
-        yelo_player.display_main_menu()
+        if yelo_player.login():
+            yelo_player.display_main_menu()
 
 
 

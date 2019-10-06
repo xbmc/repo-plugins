@@ -92,9 +92,9 @@ def getMainMenu():
     addDirectory((translation(30001)).encode("utf-8"),news_banner,defaultbackdrop, "","","getAktuelles",pluginhandle)
     addDirectory((translation(30000)).encode("utf-8"),recently_added_banner,defaultbackdrop, "","","getNewShows",pluginhandle)
     addDirectory((translation(30002)).encode("utf-8"),shows_banner,defaultbackdrop, "","","getSendungen",pluginhandle)
-    addDirectory((translation(30003)).encode("utf-8"),topics_banner,defaultbackdrop, "","","getThemen",pluginhandle)
+    if useServiceAPI:
+        addDirectory((translation(30003)).encode("utf-8"),topics_banner,defaultbackdrop, "","","getThemen",pluginhandle)
     addDirectory((translation(30004)).encode("utf-8"),live_banner,defaultbackdrop, "","","getLive",pluginhandle)
-    addDirectory((translation(30005)).encode("utf-8"),tips_banner,defaultbackdrop, "","","getTipps",pluginhandle)
     if not useServiceAPI:
         addDirectory((translation(30057)).encode("utf-8"),focus_banner,defaultbackdrop, "","","getFocus",pluginhandle)
     addDirectory((translation(30006)).encode("utf-8"),most_popular_banner,defaultbackdrop, "","","getMostViewed",pluginhandle)
@@ -210,9 +210,6 @@ elif mode == 'openTopic':
     listCallback(False,pluginhandle)
 elif mode == 'openEpisode':
     scraper.getEpisode(link,playlist)
-    listCallback(False,pluginhandle)
-elif mode == 'liveStreamNotOnline':
-    scraper.getLiveNotOnline(link)
     listCallback(False,pluginhandle)
 elif mode == 'liveStreamRestart':
     scraper.liveStreamRestart(link)

@@ -21,7 +21,7 @@ from .Scraper import *
 class serviceAPI(Scraper):
 
 	__urlBase       = 'https://api-tvthek.orf.at/api/v3/'
-	__urlLive       = 'livestreams/24hours?limit=1000'
+	__urlLive       = 'livestreams/24hours?limit=20'
 	__urlMostViewed = 'page/startpage'
 	__urlNewest     = 'page/startpage/newest'
 	__urlSearch     = __urlBase + 'search/%s?limit=1000'
@@ -283,7 +283,9 @@ class serviceAPI(Scraper):
 				inputstreamAdaptive = True
 			except RuntimeError:
 				inputstreamAdaptive = False
-
+			
+			foundProgram = []
+			
 			for result in json.loads(response.read().decode('UTF-8')).get('_embedded').get('items'):
 				description     = result.get('description')
 				programName     = result.get('_embedded').get('channel').get('name')
@@ -291,52 +293,21 @@ class serviceAPI(Scraper):
 				livestreamEnd   = time.strptime(result.get('end')[0:19],   '%Y-%m-%dT%H:%M:%S')
 				duration        = max(time.mktime(livestreamEnd) - max(time.mktime(livestreamStart), time.mktime(time.localtime())), 1)
 				contextMenuItems = []
+				
+				if programName not in foundProgram:
+					foundProgram.append(programName)
 
-				# already finished
-				if time.mktime(livestreamEnd) < time.mktime(time.localtime()):
-					continue
-				# already playing
-				elif livestreamStart < time.localtime():
 					link = self.JSONStreamingURL(result.get('sources'))
 					if inputstreamAdaptive and result.get('restart'):
 						contextMenuItems.append(('Restart', 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (xbmcaddon.Addon().getAddonInfo('id'), result.get('id'))))
-				else:
-					link = sys.argv[0] + '?' + urllib.parse.urlencode({'mode': 'liveStreamNotOnline', 'link': result.get('id')})
 
-				title = "[%s]%s %s (%s)" % (programName, '[Restart]' if inputstreamAdaptive and result.get('restart') else '', result.get('title'), time.strftime('%H:%M', livestreamStart))
+					title = "[%s]%s %s (%s)" % (programName, '[Restart]' if inputstreamAdaptive and result.get('restart') else '', result.get('title'), time.strftime('%H:%M', livestreamStart))
 
-				banner = self.JSONImage(result.get('_embedded').get('image'))
+					banner = self.JSONImage(result.get('_embedded').get('image'))
 
-				createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), programName, link, True, False, self.defaultbackdrop, self.pluginhandle, contextMenuItems = contextMenuItems)
+					createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), programName, link, True, False, self.defaultbackdrop, self.pluginhandle, contextMenuItems = contextMenuItems)
 		else:
 			xbmcgui.Dialog().notification(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'), xbmcaddon.Addon().getAddonInfo('icon'))
-
-	def getLiveNotOnline(self,link):
-		try:
-			response = self.__makeRequest('livestream/' + link)
-			responseCode = response.getcode()
-		except urllib.error.HTTPError as error:
-			responseCode = error.getcode()
-
-		if responseCode == 200:
-			result = json.loads(response.read().decode('UTF-8'))
-
-			title       = result.get('title').encode('UTF-8')
-			image       = self.JSONImage(result.get('_embedded').get('image'))
-			description = result.get('description')
-			duration    = result.get('duration_seconds')
-			date        = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
-
-			dialog = xbmcgui.Dialog()
-			if dialog.yesno((self.translation(30030)).encode("utf-8"), ((self.translation(30031)).encode("utf-8")+" %s.\n"+(self.translation(30032)).encode("utf-8")) % time.strftime('%H:%M', date)):
-				sleepTime = int(time.mktime(date) - time.mktime(time.localtime()))
-				dialog.notification((self.translation(30033)).encode("utf-8"), '%s %s' % ((self.translation(30034)).encode("utf-8"),sleepTime))
-				self.xbmc.sleep(sleepTime * 1000)
-				if dialog.yesno('', (self.translation(30035)).encode("utf-8")):
-					streamingURL = link = self.JSONStreamingURL(result.get('sources'))
-					listItem = createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), streamingURL, True, False, self.defaultbackdrop, self.pluginhandle)
-					self.xbmc.Player().play(streamingURL, listItem)
-
 
 	def liveStreamRestart(self, link):
 		try:

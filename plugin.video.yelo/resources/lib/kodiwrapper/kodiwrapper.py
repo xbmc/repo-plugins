@@ -1,9 +1,13 @@
 import xbmcplugin
 import sys
-from urllib import quote
+
+if sys.version_info[0] == 3:
+    from urllib.parse import quote
+else:
+    from urllib import quote
+
 import inputstreamhelper
 import xbmcgui
-import xbmcaddon
 import xbmc
 from resources.lib.helpers.dynamic_headers import UA, widevine_payload_package
 
@@ -53,7 +57,12 @@ class KodiWrapper:
         return self.__addon.getSetting(setting_id)
 
     def get_addon_data_path(self):
-        profile = xbmc.translatePath(self.__addon.getAddonInfo('profile')).decode("utf-8")
+        global profile
+        if sys.version_info[0] == 3:
+            profile = xbmc.translatePath(self.__addon.getAddonInfo('profile'))
+        else:
+            profile = xbmc.translatePath(self.__addon.getAddonInfo('profile')).decode("utf-8")
+
         return profile
 
     @staticmethod
@@ -68,6 +77,9 @@ class KodiWrapper:
 
     def open_settings(self):
         self.__addon.openSettings()
+
+    def get_localized_string(self, number):
+        return self.__addon.getLocalizedString(number)
 
 
     def play_live_stream(self, device_Id, customer_Id, stream_url, max_bandwith):

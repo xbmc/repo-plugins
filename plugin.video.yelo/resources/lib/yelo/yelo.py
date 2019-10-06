@@ -1,18 +1,23 @@
 import requests
 import uuid
-import os
-from urllib import quote_plus, unquote_plus
+import os, sys
 from xbmcplugin import SORT_METHOD_LABEL_IGNORE_THE
 from resources.lib.helpers.dynamic_headers import *
 from resources.lib.helpers.helpermethods import *
 from resources.lib.statics.static import *
 from resources.lib.helpers import helperclasses
 
+if sys.version_info[0] == 3:
+    from urllib.parse import quote_plus, unquote_plus
+else:
+    from urllib import quote_plus, unquote_plus
+    from builtins import xrange as range
 
 class Tokens:
     def __init__(self, testing, kodiwrapper):
         self.testing = not testing
         self.kodi_wrapper = kodiwrapper
+        self.get_l_string = kodiwrapper.get_localized_string
         self.session = requests.Session()
 
     def _prepare_request(self):
@@ -84,20 +89,26 @@ class Tokens:
         self._register_device()
         self._authorize()
 
-
         self._login_do()
 
         callback_url = self._authorize()
-        self._callback(callback_url)
 
-        self._verify_token()
-        self._request_OAuthTokens()
-        self._request_entitlement()
+        if self._callback(callback_url):
+            self._verify_token()
+            self._request_OAuthTokens()
+            self._request_entitlement_and_postal()
+
+            return True
+        else:
+            self.kodi_wrapper.dialog_ok(self.get_l_string(32006),
+                                        self.get_l_string(32007))
+            return False
 
     def _login_do(self):
         creds = helperclasses.Credentials(self.kodi_wrapper)
         if not creds.are_filled_in():
-            self.kodi_wrapper.dialog_ok("Login", "You need to fill in your credentials in settings.")
+            self.kodi_wrapper.dialog_ok(self.get_l_string(32014),
+                                        self.get_l_string(32015))
             self.kodi_wrapper.open_settings()
             creds.reload()
 
@@ -107,9 +118,15 @@ class Tokens:
 
     def _callback(self, url):
         callbackKey = regex(r"(?<=code=)\w{0,32}", url)
+
+        if not callbackKey:
+            return False
+
         self.save_json_to_file("callbackKey.json", {"callbackKey": callbackKey})
 
         self.make_request("GET", url, default_headers, None, None, False, None, self.testing)
+
+        return True
 
     def _verify_token(self):
         Ids = self.fetch_Ids()
@@ -171,18 +188,31 @@ class Tokens:
             return CallbackKey["callbackKey"]
 
     def fetch_Entitlement(self):
-        EntitlemendId = self.open_json_from_file("entitlement.json")
+        Entitlement = self.open_json_from_file("entitlement.json")
 
-        if EntitlemendId:
-            return EntitlemendId["entitlementId"]
+        if Entitlement:
+            return Entitlement["entitlementId"]
+
+    def fetch_Postal(self):
+        PostalCode = self.open_json_from_file("postal_code.json")
+
+        if PostalCode:
+            return PostalCode["postal_code"]
 
     def fetch_channel_list(self):
         postal = helperclasses.PostalCode(self.kodi_wrapper)
 
+        # if postal is not filled in, in settings try to retrieve it from customerFeatures
         if not postal.are_filled_in():
-            self.kodi_wrapper.dialog_ok("Postal", "Please enter your postal code in settings.")
-            self.kodi_wrapper.open_settings()
-            postal.reload()
+            postal.postal_code = self.fetch_Postal()
+
+
+            # if that does not seem to work..
+            if postal.postal_code is None:
+                self.kodi_wrapper.dialog_ok(self.get_l_string(32008),
+                                            self.get_l_string(32009))
+                self.kodi_wrapper.open_settings()
+                postal.reload()
 
         r = self.make_request("GET", "https://api.yeloplay.be/api/v1/epg/channel/list?platform=Web"
                                      "&postalCode={}&postalCode={}".format(postal.postal_code, postal.postal_code),
@@ -209,21 +239,13 @@ class Tokens:
     def create_State(self, size):
         return str(uuid.uuid4()).replace("-", "")[0:size]
 
-    def fetch_customer_id(self, accessToken):
-        Ids = self.fetch_Ids()
-        callbackKey = self.fetch_CallbackKey()
+    def fetch_customer_id(self):
+        Entitlement = self.open_json_from_file("entitlement.json")
 
-        r = self.make_request("GET", "https://api.yeloplay.be/api/v1/session/lookup?include=customerFeatures",
-                              customer_features_header(callbackKey,
-                                                       Ids["deviceId"],
-                                                       accessToken),
-                              None, None, False, None, self.testing)
-        j = r.json()
+        if Entitlement:
+            return Entitlement["customer_id"]
 
-        customer_Id = j["loginSession"]["user"]["links"]["customerFeatures"]
-        return customer_Id
-
-    def _request_entitlement(self):
+    def _request_entitlement_and_postal(self):
         accessToken = self.fetch_OAuthTokens()["accessToken"]
         deviceId = self.fetch_Ids()["deviceId"]
 
@@ -233,9 +255,12 @@ class Tokens:
         j = r.json()
 
         entitlements = [int(item["id"]) for item in j["linked"]["customerFeatures"]["entitlements"]]
+        customer_Id = j["loginSession"]["user"]["links"]["customerFeatures"]
+        postal_code = j["linked"]["customerFeatures"]["idtvLines"][0]["region"]
 
-        self.save_json_to_file("entitlement.json", {"entitlementId": entitlements})
-
+        self.save_json_to_file("entitlement.json", {"entitlementId": entitlements,
+                                                    "customer_id": customer_Id})
+        self.save_json_to_file("postal_code.json", {"postal_code": postal_code})
 
 class YeloPlay(Tokens):
     def __init__(self, kodiwrapper, streaming_protocol, testing=False):
@@ -262,10 +287,11 @@ class YeloPlay(Tokens):
         listing = []
         entitlementId = self.fetch_Entitlement()
 
-        for i in xrange(len(tv_channels)):
+        for i in range(len(tv_channels)):
             if (
                     not bool(tv_channels[i]["channelProperties"]["radio"])
                     and bool(tv_channels[i]["channelProperties"]["live"])
+                    and any(tv_channels[i]["channelPolicies"]["linearEndpoints"])
                     and any(x in entitlementId for x in tv_channels[i]["channelAvailability"]["oasisId"])
             ):
                 list_item = self.kodi_wrapper.create_list_item(tv_channels[i]["channelIdentification"]["name"],
@@ -284,11 +310,8 @@ class YeloPlay(Tokens):
 
     def play_live_stream(self, stream_url):
         bit_rate = helperclasses.BitRate(self.kodi_wrapper)
-
-
-        accessToken = self.fetch_OAuthTokens()["accessToken"]
         deviceId = self.fetch_Ids()["deviceId"]
-        customerId = self.fetch_customer_id(accessToken)
+        customerId = self.fetch_customer_id()
 
         self.kodi_wrapper.play_live_stream(deviceId, customerId, stream_url, bit_rate.bitrate)
 
@@ -304,9 +327,17 @@ class YeloPlay(Tokens):
                                       False, None, self.testing)
 
                 j = r.json()
-                return j["stream"]["streamDescriptor"]["manifest"]
+
+                if not j.get("errors"):
+                    return j["stream"]["streamDescriptor"]["manifest"]
+                else:
+                    if j["errors"][0]["code"] == "EPG_RESTRICTED_EUROPE":
+                        self.kodi_wrapper.dialog_ok(self.get_l_string(32011),
+                                                    self.get_l_string(32012))
+                    elif j["errors"][0]["code"] == "EPG_RESTRICTED_NOWHERE":
+                        self.kodi_wrapper.dialog_ok(self.get_l_string(32011),
+                                                    self.get_l_string(32013))
+                    return False
             except ValueError:
                 """ Session might be expired """
                 self.login()
-
-

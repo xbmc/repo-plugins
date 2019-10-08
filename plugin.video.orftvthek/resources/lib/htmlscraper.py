@@ -25,7 +25,7 @@ from .Scraper import *
 
 class htmlScraper(Scraper):
 
-	__urlBase	   = 'http://tvthek.orf.at'
+	__urlBase	   = 'https://tvthek.orf.at'
 	__urlLive	   = __urlBase + '/live'
 	__urlMostViewed = __urlBase + '/most-viewed'
 	__urlNewest	 = __urlBase + '/newest'
@@ -211,9 +211,10 @@ class htmlScraper(Scraper):
 		url = urllib.parse.unquote(url)
 		html = common.fetchPage({'link': url})
 		container = common.parseDOM(html.get("content"),name='main',attrs={'class': "main"},ret=False)
-		teasers = common.parseDOM(container,name='ul',attrs={'class': "stage-item-list.*?"},ret=False)
-		items = common.parseDOM(teasers,name='li',attrs={'class': "stage-item.*?"},ret=False)
-
+		teasers = common.parseDOM(container,name='div',attrs={'class': "stage-item-list.*?"},ret=False)
+		items = common.parseDOM(teasers,name='a',attrs={'class': "stage-item.*?"},ret=False)
+		items_href = common.parseDOM(teasers,name='a',attrs={'class': "stage-item.*?"},ret='href')
+		current = 0;
 		for item in items:
 			subtitle = common.parseDOM(item,name='h2',attrs={'class': "stage-item-profile-title"},ret=False)
 			subtitle = common.replaceHTMLCodes(subtitle[0]).encode('UTF-8')			
@@ -225,8 +226,8 @@ class htmlScraper(Scraper):
 			image = common.parseDOM(figure,name='img',attrs={},ret='src')
 			image = common.replaceHTMLCodes(image[0]).encode('UTF-8')
 			
-			link = common.parseDOM(item,name='a',attrs={},ret='href')
-			link = link[0].encode('UTF-8')
+			link = items_href[current]
+			link = link.encode('UTF-8')
 			
 			#Reformat Title
 			if subtitle != title:
@@ -236,6 +237,7 @@ class htmlScraper(Scraper):
 
 			url = sys.argv[0] + '?' + urllib.parse.urlencode(parameters)
 			self.html2ListItem(title,image,"","","","","",url,None,True, False);
+			current = current + 1
 
 
 	def openArchiv(self,url):
@@ -737,7 +739,6 @@ class htmlScraper(Scraper):
 	# Returns Live Stream Listing
 	def getLiveStreams(self):
 		html = common.fetchPage({'link': self.__urlBase})
-		#html = common.fetchPage({'link': "https://office.lo-fi.at/tmp/"})
 		wrapper = common.parseDOM(html.get("content"),name='main',attrs={'class': 'main'})
 		section = common.parseDOM(wrapper,name='section',attrs={'class': 'b-live-program.*?'})
 		items = common.parseDOM(section,name='li',attrs={'class': 'channel orf.*?'})

@@ -59,6 +59,16 @@ class Channel(chn_class.Channel):
             self.noImage = "tv10seimage.png"
             self.channelId = (5462, )
 
+        elif self.channelCode == "ngse":
+            self.mainListUri = "https://www.viafree.se/program/"
+            self.noImage = "ngnoimage.jpg"
+            self.channelId = (7300, )
+
+        elif self.channelCode == "mtvse":
+            self.mainListUri = "https://www.viafree.se/program"
+            self.noImage = "mtvimage.png"
+            self.channelId = (6000, )
+
         elif self.channelCode == "viafreese":
             self.mainListUri = "https://www.viafree.se/program/"
             self.noImage = "viafreeimage.png"

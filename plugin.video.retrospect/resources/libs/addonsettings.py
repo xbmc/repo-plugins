@@ -621,21 +621,6 @@ class AddonSettings(object):
         return
 
     @staticmethod
-    def get_release_track():
-        """ Retrieves the current release track we are on:
-
-        0: Stable releases only.
-        1: Experimental releases.
-
-        :return: 0 for Stable, 1 for Experimental releases.
-        :rtype: int
-
-        """
-
-        release_channel = AddonSettings.store(KODI).get_integer_setting("release_channel")
-        return release_channel
-
-    @staticmethod
     def get_user_agent():
         """ Retrieves a user agent string for this Kodi instance.
 

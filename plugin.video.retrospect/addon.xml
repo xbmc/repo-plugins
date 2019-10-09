@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.0.6"
+        version="5.0.7"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -12,7 +12,7 @@
         <import addon="script.module.inputstreamhelper" version="0.3.5" />
         <import addon="script.module.pyscrypt" version="1.6.2" />
         <import addon="script.module.pyaes" version="1.6.1" />
-        <import addon="resource.images.retrospect" version="1.0.0" />
+        <import addon="resource.images.retrospect" version="1.0.1" />
     </requires>
 
     <extension  point="xbmc.python.pluginsource"
@@ -131,9 +131,9 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.0.6 - Changelog - 2019-10-02[/B]
+        <news>[B]Retrospect v5.0.7 - Changelog - 2019-10-09[/B]
 
-Just a minor update with some fixes for some channels.
+Updates for NPO that completely broke and added MTV and National Geographic for Sweden.
 
 [B]Framework related[/B]
 -
@@ -142,11 +142,9 @@ Just a minor update with some fixes for some channels.
 -
 
 [B]Channel related[/B]
-* Fixed: use Dumpert API as they updated their site
-* Fixed: UR Play updated their site and broke Retrospect (Fixes #1226)
-* Fixed: Use Dash for VRT.nu live streams and show subtitles (Fixes #1223)
-* Fixed: VTM.be did not parse all folders (Fixes #1222)
-
+* Added: Viafree&#x27;s MTV and National Geographic channels (Fixes #1229)
+* Fixed: Kanal 9 and Kanal 11 fanart
+* Fixed: NPO listings broke (Fixes #1233)
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

@@ -68,11 +68,11 @@ msgid "Recommendations"
 msgstr ""
 
 msgctxt "#30054"
-msgid "Newest shows (by topic)"
+msgid "Newest videos (by topic)"
 msgstr ""
 
 msgctxt "#30055"
-msgid "Most clicked shows (by topic)"
+msgid "Most clicked videos (by topic)"
 msgstr ""
 
 msgctxt "#30056"
@@ -97,4 +97,8 @@ msgstr ""
 
 msgctxt "#30074"
 msgid "SRF on YouTube"
+msgstr ""
+
+msgctxt "#30085"
+msgid "Search"
 msgstr ""

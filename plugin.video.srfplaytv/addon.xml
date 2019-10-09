@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.srfplaytv" name="SRF Play TV" version="1.5.0" provider-name="Alexander Seiler">
+<addon id="plugin.video.srfplaytv" name="SRF Play TV" version="1.6.0" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.srgssr" version="1.5.0"/>
+    <import addon="script.module.srgssr" version="1.7.0"/>
     <import addon="script.module.kodi-six" version="0.0.2"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
@@ -25,17 +25,16 @@
     <website>https://www.srf.ch/play/tv</website>
     <email>seileralex@gmail.com</email>
     <source>https://github.com/goggle/plugin.video.srfplaytv</source>
-    <news>v1.5.0 (2019-03-10)
+    <news>v1.6.0 (2019-10-09)
+ - Add search feature.
+ - Remove 'Newest YouTube videos' menu.
+
+v1.5.0 (2019-03-10)
  - Port all code that is reusable by other SRG SSR plugin's into seperate library script.module.srgssr.
  - Improve YouTube channels support.
  - Remove support of Live TV (DRM protected).
  - Fix extraction of Live events.
- - Add full Python 3 support.
-
-v1.2.1 (2018-12-01)
- - Improve SRF on YouTube.
- - Fix date parsing issue.
- - Improve extraction of video descriptions.</news>
+ - Add full Python 3 support.</news>
     <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.png</fanart>

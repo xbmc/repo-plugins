@@ -107,6 +107,7 @@ def run():
             'Soon_Offline',
             'Shows_By_Date',
             # 'Live_TV',
+            'Search',
             'SRF_Live',
             'SRF_YouTube'
         ]
@@ -145,12 +146,19 @@ def run():
         SRFPlayTV().pick_date()
     # elif mode == 26:
     #     SRFPlayTV().build_tv_menu()
+    elif mode == 27:
+        SRFPlayTV().build_search_menu()
+    elif mode == 28:
+        SRFPlayTV().build_search_media_menu(
+            mode=mode, name=name, page=page, page_hash=page_hash)
+    elif mode == 29:
+        SRFPlayTV().build_search_show_menu(name=name)
+    elif mode == 70:
+        SRFPlayTV().build_recent_search_menu('media')
+    elif mode == 71:
+        SRFPlayTV().build_recent_search_menu('show')
     elif mode == 30:
-        SRFPlayTV().build_youtube_main_menu()
-    elif mode == 31:
         SRFPlayTV().build_youtube_channel_overview_menu(33)
-    elif mode == 32:
-        SRFPlayTV().build_youtube_newest_videos_menu(mode, page=page)
     elif mode == 33:
         SRFPlayTV().build_youtube_channel_menu(
             name, mode, page=page, page_token=page_hash)

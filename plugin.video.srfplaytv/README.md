@@ -5,6 +5,7 @@
 <img src="https://github.com/goggle/plugin.video.srfplaytv/raw/master/resources/icon.png" width="256">
 
 **SRF Play TV** (plugin.video.srfplaytv) is a Kodi plugin to access the video library of the Swiss Radio and Television (SRF).
+This repository is kept as minimal as possible. All the relevant code resides in [script.module.srgssr](https://github.com/goggle/script.module.srgssr).
 
 ## Goals of the plugin
 Bring the full power of the [SRF Play TV media library](https://www.srf.ch/play/tv) on your TV (or another device) via [Kodi](https://kodi.tv/). The plugin aims to be close to the original media library, so that the experience of consuming media through the browser or through Kodi should be similar.
@@ -13,7 +14,8 @@ Bring the full power of the [SRF Play TV media library](https://www.srf.ch/play/
  - [x] Overview over all the shows.
  - [x] Manage a list of your favourite SRF shows and get a list of your recently aired favourite shows.
  - [x] List and play segments for shows (if available), so you don't have to watch the whole episode if you are only interested in a specific section.
- - [x] Various lists: Newest and most clicked shows by topic (e.g. News, Documentaries, etc.), trending shows, soon offline shows, shows by date. 
+ - [x] Various lists: Newest and most clicked shows by topic (e.g. News, Documentaries, etc.), trending shows, soon offline shows, shows by date.
+ - [x] Search videos and shows.
  - [x] Choose between SD and HD quality.
  - [x] Subtitle support.
  - [x] Livestreams that are exclusively broadcasted on SRF.ch (only available in Switzerland).

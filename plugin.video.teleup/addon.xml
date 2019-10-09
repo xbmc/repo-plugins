@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.teleup" name="TeleUp" provider-name="Lunatixz" version="2018.06.23">
+<addon id="plugin.video.teleup" name="TeleUp" provider-name="Lunatixz" version="2019.10.05">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/> 
         <import addon="script.module.requests" version="2.7.0"/> 
@@ -13,6 +13,7 @@
         <summary lang="en_GB">The Official plugin for the TeleUp Service.</summary>
         <description lang="en_GB">Entirely Legal and Free! Start watching instantly or record shows for later. Signup for one of three packages today!</description>
         <platform>all</platform>
+        <broken>Backend changed</broken>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
         <source>https://github.com/Lunatixz/KODI_Addons/tree/master/plugin.video.teleup</source>
         <website>http://teleup.com</website>

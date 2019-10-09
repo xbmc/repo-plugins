@@ -68,12 +68,12 @@ msgid "Recommendations"
 msgstr "Recommandations"
 
 msgctxt "#30054"
-msgid "Newest shows (by topic)"
-msgstr "Nouvelles émissions (par thème)"
+msgid "Newest videos (by topic)"
+msgstr "Nouvelles vidéos (par thème)"
 
 msgctxt "#30055"
-msgid "Most clicked shows (by topic)"
-msgstr "Emissions les plus consultées (par thème)"
+msgid "Most clicked videos (by topic)"
+msgstr "Vidéos les plus consultées (par thème)"
 
 msgctxt "#30056"
 msgid "Soon offline"
@@ -94,6 +94,10 @@ msgstr "RTS.ch Live"
 msgctxt "#30072"
 msgid "Live TV"
 msgstr "Live TV"
+
+msgctxt "#30085"
+msgid "Search"
+msgstr "Chercher"
 
 msgctxt "#30074"
 msgid "RSI on YouTube"

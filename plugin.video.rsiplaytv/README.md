@@ -11,7 +11,8 @@ Bring the full power of the [RSI Play TV media library](https://www.rsi.ch/play/
  - [x] Overview over all the shows.
  - [x] Manage a list of your favourite RSI shows and get a list of your recently aired favourite shows.
  - [x] List and play segments for shows (if available), so you don't have to watch the whole episode if you are only interested in a specific section.
- - [x] Various lists: Newest and most clicked shows by topic (e.g. News, Documentaries, etc.), shows by date. 
+ - [x] Search videos and shows.
+ - [x] Various lists: Newest and most clicked shows by topic (e.g. News, Documentaries, etc.), shows by date.
  - [x] Choose between SD and HD quality.
  - [x] Subtitle support.
  - [ ] Livestreams that are exclusively broadcasted on RSI.ch (only available in Switzerland).

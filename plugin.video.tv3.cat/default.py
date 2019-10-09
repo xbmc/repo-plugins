@@ -73,33 +73,21 @@ def listDestaquem():
    
         soup = BeautifulSoup(html_destacats)
         dest = None
-        try:
-            destacat = soup.find("section", {"class" : "subitem destacat"}).a["href"]
-            code = destacat[-8:-1]
-      
-            html_data = getHtml(url_datavideos + code + '&profile=pc')
-    
-            html_data = html_data.decode("ISO-8859-1")
-            data =json.loads(html_data)
-            
-            if len(data) > 0:
-                addVideo2(data)
-           
-        except AttributeError as e:
-            xbmc.log("Exception AtributeError Item destacat: " + str(e))
-        except KeyError as e:
-            xbmc.log("Exception KeyError Item destacat: " + str(e))
-        except Exception as e:
-            xbmc.log("Exception Item destacat: " + str(e))
-            
-            
-       
-        #destacatsPetits = soup.findAll("div", { "class" : "subitem R-petit"})
+        
         
         try:
-            destacatsPetits = soup.findAll("section", { "class" : "subitem R-petit"})
+          
             
-            for c in destacatsPetits:
+            destacats = soup.findAll("article", { "class" : re.compile("M-destacat")})
+            
+            destacats2 = soup.find("div", {"class" : "container C-nouGrid "}).findAll("div", { "class" : re.compile("swiper-slide")})
+            
+     
+           
+            destacats.extend(destacats2)
+            
+            
+            for c in destacats:
                 a = c.a["href"]
                 code = a[-8:-1]
             
@@ -120,9 +108,8 @@ def listDestaquem():
             xbmc.log("Exception KeyError Altres items: " + str(e))
         except Exception as e:
             xbmc.log("Exception Item destacat: " + str(e))
-        
-        
-        
+            
+    
        
         xbmcplugin.endOfDirectory(addon_handle)
     
@@ -728,6 +715,10 @@ def listVideos(url, cercar, program):
             if not links:
                 links = soup.findAll("div", {"class" : "F-itemContenidorIntern C-destacatVideo"})
                 
+            #Col·leccions 2
+            if not links:
+                links = soup.findAll("article", {"class" : "M-destacat  C-destacatVideo T-alacartaTema C-3linies   "})
+                
             #Zona Zapping
             if not links:
                 links = soup.findAll("article", {"class" : "M-destacat  C-destacatVideo T-alacartaTema C-3linies "})
@@ -1045,13 +1036,6 @@ if (name != None) and (len(name) > 0):
 program = args.get('program', None)
   
 
-
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
-
-
-    
     
 if mode==None:
    

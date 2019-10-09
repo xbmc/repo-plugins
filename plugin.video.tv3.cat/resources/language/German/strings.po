@@ -74,7 +74,7 @@ msgstr "Laufend A-Z"
 
 msgctxt "#30015"
 msgid ">>Next Page"
-msgstr ">>Nächste Seite"
+msgstr ">>NÃ¤chste Seite"
 
 msgctxt "#30016"
 msgid ">>Previous Page"

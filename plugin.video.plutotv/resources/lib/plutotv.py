@@ -56,7 +56,7 @@ VMURL        = 'plugin://plugin.video.vimeo/play/?video_id='
 BASE_URL     = 'http://pluto.tv/'#'http://silo.pluto.tv/'
 BASE_API     = 'https://api.pluto.tv'
 BASE_LINEUP  = BASE_API + '/v1/channels.json'
-BASE_GUIDE   = BASE_API + '/v1/timelines/%s.000Z/%s.000Z/matrix.json'
+BASE_GUIDE   = BASE_API + '/v2/channels?start=%s'
 LOGIN_URL    = BASE_API + '/v1/auth/local'
 BASE_CLIPS   = BASE_API + '/v2/episodes/%s/clips.json'
 REGION_URL   = 'http://ip-api.com/json'
@@ -149,7 +149,7 @@ class PlutoTV(object):
             xbmc.executebuiltin('RunScript("' + ADDON_PATH + '/country.py' + '")')
             
             
-    def openURL(self, url, life=datetime.timedelta(minutes=15)):
+    def openURL(self, url, life=datetime.timedelta(minutes=1)):
         log('openURL, url = ' + url)
         try:
             header_dict               = {}
@@ -190,7 +190,7 @@ class PlutoTV(object):
         log('getCategories')
         collect= []
         lineup = []
-        data = self.openURL(BASE_LINEUP)
+        data = self.getChannels()
         for channel in data: collect.append(channel['category'])
         counter = collections.Counter(collect)
         for key, value in sorted(counter.iteritems()): lineup.append(("%s"%(key) , BASE_LINEUP, 2))
@@ -223,7 +223,7 @@ class PlutoTV(object):
             region  = filter.get('include','US')
             exclude = filter.get('exclude','')
             name    = channel['name']
-            plot    = channel['description']
+            plot    = channel.get('description','')
             feat    = (channel.get('featured','') or 0) == -1
      
             if self.filter == True and (self.region in exclude or self.region not in region):
@@ -263,9 +263,8 @@ class PlutoTV(object):
         log('browseGuide')
         geowarn = False
         start   = 0 if start == BASE_LINEUP else int(start)
-        data    = list(self.pagination((self.openURL(BASE_LINEUP)), end))
+        data    = list(self.pagination(self.getChannels(), end))
         start   = 0 if start >= len(data) else start
-        link    = self.getGuidedata()
         # if start == 0 and end == 14: self.addDir(LANGUAGE(30014), '', 10)
         for channel in data[start]:
             chid    = channel['_id']
@@ -276,7 +275,7 @@ class PlutoTV(object):
             region  = filter.get('include','US')
             exclude = filter.get('exclude','')
             chname  = channel['name']
-            chplot  = channel['description']
+            chplot  = channel.get('description','')
             chthumb = ICON
             if 'thumbnail' in channel: chthumb = ((channel['thumbnail'].get('path','')).replace(' ','%20') or ICON)
             feat = (channel.get('featured','') or 0) == -1
@@ -285,10 +284,8 @@ class PlutoTV(object):
                     geowarn = True
                     xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30004), ICON, 4000)
                 continue
-
-            item = link[chid]
-            if len(item) == 0: continue
-            item      = item[0]
+            timelines = channel['timelines']
+            item      = timelines[0]
             epid      = (item['episode']['_id'])
             epname    = item['episode']['name']
             epplot    = (item['episode'].get('description',epname) or epname)
@@ -306,11 +303,14 @@ class PlutoTV(object):
     
     
     def playChannel(self, name, url):
-        log('playChannel')
+        log('playChannel, url = %s'%url)
         origurl  = url
         if PTVL_RUN: self.playContent(name, url)
-        link = self.getGuidedata()
-        item = link[origurl][0]
+        data = self.getChannels()
+        for link in data:
+            if link['_id'] == url:
+                break
+        item = link['timelines'][0]
         id = item['episode']['_id']
         ch_start = datetime.datetime.fromtimestamp(time.mktime(time.strptime((item["start"].split('.')[0]), "%Y-%m-%dT%H:%M:%S")))
         ch_timediff = (datetime.datetime.now() - ch_start).seconds
@@ -345,11 +345,14 @@ class PlutoTV(object):
      
      
     def playContent(self, name, url):
-        log('playContent')
+        log('playContent, url = %s'%(url))
         origurl = url
-        link = self.getGuidedata()
-        try: item = link[origurl][0]
-        except Exception as e: return log('playContent, failed! ' + str(e) + ', origurl = ' + str(link.get(origurl,[EMPTY])), xbmc.LOGERROR)
+        data = self.getGuidedata()
+        for link in data:
+            if link['_id'] == url:
+                break
+        try: item = link['timelines'][0]
+        except Exception as e: return
         id = item['episode']['_id']
         ch_start = datetime.datetime.fromtimestamp(time.mktime(time.strptime((item["start"].split('.')[0]), "%Y-%m-%dT%H:%M:%S")))
         ch_timediff = (datetime.datetime.now() - ch_start).seconds
@@ -441,15 +444,19 @@ class PlutoTV(object):
         return results
         
         
-    def getGuidedata(self):
-        return (self.openURL(BASE_GUIDE % (datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00'),(datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')), life=datetime.timedelta(hours=6)))
+    def getChannels(self):
+        return sorted(self.openURL(BASE_LINEUP, life=datetime.timedelta(minutes=5)), key=lambda i: i['number'])
         
+        
+    def getGuidedata(self):
+        return sorted((self.openURL(BASE_GUIDE %(datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00').replace('T','%20').replace(':00:00','%3A00%3A00.000-400')), life=datetime.timedelta(hours=1))), key=lambda i: i['number'])
+
         
     # @buildChannels({'refresh_path':urllib.quote("plugin://%s?mode=20"%ADDON_ID),'refresh_interval':"7200"})
     def uEPG(self):
         log('uEPG')
         #support for uEPG universal epg framework module available from the Kodi repository. https://github.com/Lunatixz/KODI_Addons/tree/master/script.module.uepg
-        data      = (self.openURL(BASE_LINEUP))
+        data      = self.getChannels()
         self.link = self.getGuidedata()
         return self.poolList(self.buildGuide, data)
         
@@ -465,7 +472,7 @@ class PlutoTV(object):
         region     = filter.get('include','US')
         exclude    = filter.get('exclude','')
         chname     = channel['name']
-        chplot     = channel['description']
+        chplot     = channel.get('description','')
         isFavorite = False #(channel.get('featured','') or 0) == -1
         if self.filter == True and (self.region in exclude or self.region not in region): return
         if 'thumbnail' in channel: chthumb = (channel['thumbnail'].get('path','') or '')

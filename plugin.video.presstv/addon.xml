@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.presstv"
+       name="PRESS TV"
+       version="1.1.0"
+       provider-name="pezhman">
+  <requires>
+    <import addon="xbmc.python" version="2.14.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">PRESSTV</summary>
+    <description lang="en">PRESS TV Addon for Kodi
+Press TV takes revolutionary steps as the first Iranian international news network,broadcasting in English on a round-the-clock basis.</description>
+    <platform>all</platform>
+    <language>fa</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website>https://www.presstv.com/</website>
+    <email>pezhmanshafigh@gmail.com</email>
+    <source>https://github.com/scriptik/plugin-video-presstv</source>
+  </extension>
+</addon>

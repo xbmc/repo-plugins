@@ -123,3 +123,6 @@ msgctxt "#30080"
 msgid "Shows"
 msgstr "Emissioni"
 
+msgctxt "#30085"
+msgid "Search"
+msgstr "Ricerca"

@@ -11,7 +11,8 @@ Bring the full power of the [SRF Play Radio media library](https://www.srf.ch/pl
  - [x] Overview over all the shows.
  - [x] List shows by topic.
  - [x] Manage a list of your favourite SRF shows and get a list of your recently aired favourite shows.
- - [x] Browse the content (shows, newest audios, most listened) of specific channels (SRF 1, SRF 2, SRF 3, SRF 4 News, SRF Musikwelle and SRF Virus). 
+ - [x] Browse the content (shows, newest audios, most listened) of specific channels (SRF 1, SRF 2, SRF 3, SRF 4 News, SRF Musikwelle and SRF Virus).
+ - [x] Search audios and shows.
  - [x] Live Radio.
 
 ## Installation

@@ -11,6 +11,7 @@
         <setting id="Radio_Channels" type="bool" label="30075" default="true" />
         <setting id="Most_Listened" type="bool" label="30077" default="true" />
         <setting id="Live_Radio" type="bool" label="30078" default="true" />
+        <setting id="Search" type="bool" label="30085" default="true" />
     </category>
     <category label="30011">
         <setting label="30005" type="action" action="RunPlugin(plugin://plugin.audio.srfplayradio?mode=19)" />

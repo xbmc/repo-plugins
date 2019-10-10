@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nhlgcl" name="NHL TV™" version="2018.4.19" provider-name="eracknaphobia">
+<addon id="plugin.video.nhlgcl" name="NHL TV™" version="2019.10.3" provider-name="eracknaphobia">
   <requires>
    <import addon="xbmc.python" version="2.24.0"/>
    <import addon="script.module.pytz" version="2014.2" />
    <import addon="script.module.beautifulsoup4" version="4.3.1" />
    <import addon="script.module.pil" version="1.1.7" />
    <import addon="script.module.requests" version="2.9.1"/>
+
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -14,15 +15,17 @@
     <platform>all</platform>
     <summary lang="en">Watch out-of-market games from around the League on Kodi, with HD quality streaming</summary>
     <description lang="en">With NHL.TV you can access revolutionary 60fps (frames per second) video through Kodi</description>
-    <disclaimer lang="en"></disclaimer>
+    <disclaimer lang="en">Requires a valid NHL TV account to view full Live and Archived games. Blackout and other restrictions apply, including national blackouts.</disclaimer>
     <news>
-- Add support for inputstream adaptive
+        - Code clean up
+        - Fix error when user cancel stream select
+        - Remove listitem colors
     </news>
     <language>en</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.kodi.tv/showthread.php?tid=243756</forum>
-    <website>http://www.nhl.tv</website>
+    <forum>https://forum.kodi.tv/showthread.php?tid=243756</forum>
+    <website>https://www.nhl.com/subscribe</website>
     <source>https://github.com/eracknaphobia/plugin.video.nhlgcl</source>
   </extension>
 </addon>

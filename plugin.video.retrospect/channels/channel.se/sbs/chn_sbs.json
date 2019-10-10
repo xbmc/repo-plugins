@@ -20,7 +20,7 @@
       "channelcode": "tv9json",
       "sortorder": 9,
       "language": "se",
-      "fanart": "http://a2.res.cloudinary.com/dumrsasw1/image/upload/Thewalkingdead_hqwfz1.jpg"
+      "fanart": "dplayfanart.jpg"
     },
     {
       "guid": "64E1CA5E-BC3C-4763-9A63-02BE76754BD3",
@@ -31,7 +31,7 @@
       "channelcode": "tv11json",
       "sortorder": 11,
       "language": "se",
-      "fanart": "http://a3.res.cloudinary.com/dumrsasw1/image/upload/unnamed_v3u5zt.jpg"
+      "fanart": "tv11seimage.jpg"
     },
     {
       "guid": "230A2F56-572B-470B-AD53-AFD20A768D54",

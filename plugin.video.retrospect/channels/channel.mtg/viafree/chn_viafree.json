@@ -66,6 +66,32 @@
       "adaptiveAddonSelectable": true
     },
     {
+      "guid": "D2FE9600-EFFB-4D15-A175-FBDE01907944",
+      "name": "National Geographic (Sverige)",
+      "description": "Sändningar från National Geographic (Viafree.se).",
+      "icon": "nationalgeographic.png",
+      "category": "National",
+      "channelcode": "ngse",
+      "sortorder": 11,
+      "language": "se",
+      "fanart": "nationalgeographic.jpg",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "CAACF71C-55B2-456A-86B9-F0A80710B286",
+      "name": "MTV (Sverige)",
+      "description": "Sändningar från MTV (Viafree.se).",
+      "icon": "mtvlarge.png",
+      "category": "National",
+      "channelcode": "mtvse",
+      "sortorder": 12,
+      "language": "se",
+      "fanart": "mtvfanart2.jpg",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
       "guid": "89673FF0-5EF3-11E0-8CC9-494DDFD72085",
       "name": "TV3 (Norge)",
       "description": "Sendinger fra TV3 (Viafree.no).",

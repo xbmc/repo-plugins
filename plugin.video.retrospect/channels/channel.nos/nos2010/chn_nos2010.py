@@ -179,7 +179,7 @@ class Channel(chn_class.Channel):
         # ===============================================================================================================
         # non standard items
         self.__NextPageAdded = False
-        self.__jsonApiKeyHeader = {"apikey": "e45fe473feaf42ad9a215007c6aa5e7e"}
+        self.__jsonApiKeyHeader = {"apikey": "07896f1ee72645f68bc75581d7f00d54"}
         self.__useJson = True
         self.__pageSize = 500
         self.__channelNames = {

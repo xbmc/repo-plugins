@@ -10,7 +10,8 @@ import xbmcgui
 import xbmcaddon
 import xml.etree.ElementTree as ET
 
-IS_PY3 = sys.version_info.major > 2
+# .major cannot be used in older versions, like kodi 16.
+IS_PY3 = sys.version_info[0] > 2
 
 if IS_PY3:
 	from urllib.request import Request
@@ -73,6 +74,8 @@ def _premier_timeout(premiere):
 	days = int(diff / 86400)
 	hours = int((diff % 86400) / 3600)
 	mins =  int((diff % 3600) / 60)
+	if KODI_VERSION_MAJOR < 17:
+		return "%02dd %02dh %02dm".format(days, hours, mins)
 	return "{:02d}d {:02d}h {:02d}m".format(days, hours, mins)
 
 def log_debug(message):

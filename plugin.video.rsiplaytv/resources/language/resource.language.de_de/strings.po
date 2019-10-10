@@ -68,12 +68,12 @@ msgid "Recommendations"
 msgstr "Empfehlungen"
 
 msgctxt "#30054"
-msgid "Newest shows (by topic)"
-msgstr "Neuste Sendungen (nach Thema)"
+msgid "Newest videos (by topic)"
+msgstr "Neuste Videos (nach Thema)"
 
 msgctxt "#30055"
-msgid "Most clicked shows (by topic)"
-msgstr "Meistgesehene Sendungen (nach Thema)"
+msgid "Most clicked videos (by topic)"
+msgstr "Meistgesehene Videos (nach Thema)"
 
 msgctxt "#30056"
 msgid "Soon offline"
@@ -94,6 +94,10 @@ msgstr "SRF.ch Live"
 msgctxt "#30072"
 msgid "Live TV"
 msgstr "Live TV"
+
+msgctxt "#30085"
+msgid "Search"
+msgstr "Suche"
 
 msgctxt "#30074"
 msgid "RSI on YouTube"

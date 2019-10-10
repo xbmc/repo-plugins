@@ -102,6 +102,7 @@ def run():
             'Radio_Channels',
             # 'Newest_Audios',
             'Most_Listened',
+            'Search',
             'Live_Radio',
         ]
         SRFPlayRadio().build_main_menu(identifiers)
@@ -131,6 +132,13 @@ def run():
     #     SRFPlayRadio().build_audio_menu('Newest', 45, page=page)
     elif mode == 46:
         SRFPlayRadio().build_audio_menu('Most clicked', 46, page=page)
+    elif mode == 27:
+        SRFPlayRadio().build_search_menu(audio=True)
+    elif mode == 28:
+        SRFPlayRadio().build_search_media_menu(
+            mode=mode, name=name, page=page, page_hash=page_hash, audio=True)
+    elif mode == 29:
+        SRFPlayRadio().build_search_show_menu(name=name, audio=True)
     elif mode == 47:
         SRFPlayRadio().build_live_radio_menu()
     elif mode == 48:

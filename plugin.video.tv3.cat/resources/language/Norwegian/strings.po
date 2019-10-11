@@ -54,7 +54,7 @@ msgstr "Dokumentaler"
 
 msgctxt "#30010"
 msgid "Divulgation"
-msgstr "Avsløring"
+msgstr "AvslÃ¸ring"
 
 msgctxt "#30011"
 msgid "Culture"
@@ -66,11 +66,11 @@ msgstr "Musikk"
 
 msgctxt "#30013"
 msgid "All A-Z"
-msgstr "Alt A-Å"
+msgstr "Alt A-Ã…"
 
 msgctxt "#30014"
 msgid "Aired A-Z"
-msgstr "Nåværende A-Å"
+msgstr "NÃ¥vÃ¦rende A-Ã…"
 
 msgctxt "#30015"
 msgid ">>Next Page"
@@ -102,7 +102,7 @@ msgstr "Esport 3"
 
 msgctxt "#30022"
 msgid "Search"
-msgstr "Søk"
+msgstr "SÃ¸k"
 
 msgctxt "#30023"
 msgid "Collections"

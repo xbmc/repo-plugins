@@ -26,7 +26,7 @@ msgstr "No te lo pierdas"
 
 msgctxt "#30003"
 msgid "Most viewed"
-msgstr "Lo m醩 visto"
+msgstr "Lo m谩s visto"
 
 msgctxt "#30004"
 msgid "Programs"
@@ -54,7 +54,7 @@ msgstr "Documentales"
 
 msgctxt "#30010"
 msgid "Divulgation"
-msgstr "Divulgaci髇"
+msgstr "Divulgaci贸n"
 
 msgctxt "#30011"
 msgid "Culture"
@@ -62,7 +62,7 @@ msgstr "Cultura"
 
 msgctxt "#30012"
 msgid "Music"
-msgstr "M鷖ica"
+msgstr "M煤sica"
 
 msgctxt "#30013"
 msgid "All A-Z"
@@ -70,15 +70,15 @@ msgstr "Todos A-Z"
 
 msgctxt "#30014"
 msgid "Aired A-Z"
-msgstr "En emisi髇 A-Z"
+msgstr "En emisi贸n A-Z"
 
 msgctxt "#30015"
 msgid ">>Next Page"
-msgstr ">>P醙ina siguiente"
+msgstr ">>P谩gina siguiente"
 
 msgctxt "#30016"
 msgid ">>Previous Page"
-msgstr ">>P醙ina anterior"
+msgstr ">>P谩gina anterior"
 
 msgctxt "#30017"
 msgid "Live channels"
@@ -110,16 +110,16 @@ msgstr "Colecciones"
 
 msgctxt "#30024"
 msgid "TV3 (International broadcast)"
-msgstr "TV3 (Emisi髇 internacional)"
+msgstr "TV3 (Emisi贸n internacional)"
 
 msgctxt "#30025"
 msgid "Canal 324 (International broadcast)"
-msgstr "Canal 324 (Emisi髇 internacional)"
+msgstr "Canal 324 (Emisi贸n internacional)"
 
 msgctxt "#30026"
 msgid "Canal 33-Super 3 (International broadcast)"
-msgstr "Canal 33-Super 3 (Emisi髇 internacional)"
+msgstr "Canal 33-Super 3 (Emisi贸n internacional)"
 
 msgctxt "#30027"
 msgid "Esport 3 (International broadcast)"
-msgstr "Esport 3 (Emisi髇 internacional)"
+msgstr "Esport 3 (Emisi贸n internacional)"

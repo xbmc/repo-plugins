@@ -1,4 +1,7 @@
-﻿v1.4.0
+﻿v1.4.1
+- Fixed website changes. Fixed errors in "Today featured" and "Colecctions"
+
+v1.4.0
 - Corregits canvis al website
 
 -Fixed website changes

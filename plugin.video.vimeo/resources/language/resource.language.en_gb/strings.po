@@ -1,7 +1,7 @@
 # Kodi Media Center language file
-# Addon Name: SoundCloud
+# Addon Name: Vimeo
 # Addon id: plugin.video.vimeo
-# Addon Provider: Jay Linski
+# Addon Provider: jaylinski
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Addons\n"

@@ -13,6 +13,7 @@ from resources.lib.models.group import Group
 from resources.lib.models.user import User
 from resources.lib.models.video import Video
 
+
 class Api:
     """This class uses the official Vimeo API."""
 
@@ -56,7 +57,8 @@ class Api:
     def channel(self, channel):
         params = self._get_default_params()
         params["sort"] = "added"
-        res = self._do_api_request("/channels/{id}/videos".format(id=urllib.parse.quote(channel)), params)
+        channel_id = urllib.parse.quote(channel)
+        res = self._do_api_request("/channels/{id}/videos".format(id=channel_id), params)
         return self._map_json_to_collection(res)
 
     def resolve_media_url(self, uri):
@@ -96,7 +98,8 @@ class Api:
 
                 if kind == "video":
                     video = Video(id=item["resource_key"], label=item["name"])
-                    video.thumb = item["pictures"]["sizes"][1]["link"]  # TODO Improve image extraction
+                    # TODO Improve image extraction
+                    video.thumb = item["pictures"]["sizes"][1]["link"]
                     video.uri = item["uri"]
                     video.info = {
                         "playcount": item["stats"].get("plays", 0),
@@ -109,7 +112,8 @@ class Api:
 
                 elif is_channel:
                     channel = Channel(id=item["resource_key"], label=item["name"])
-                    channel.thumb = item["pictures"]["sizes"][3]["link"]  # TODO Improve image extraction
+                    # TODO Improve image extraction
+                    channel.thumb = item["pictures"]["sizes"][3]["link"]
                     channel.uri = item["metadata"]["connections"]["videos"]["uri"]
                     channel.info = {
                         "date": item["created_time"],
@@ -119,7 +123,8 @@ class Api:
 
                 elif is_group:
                     group = Group(id=item["resource_key"], label=item["name"])
-                    group.thumb = item["pictures"]["sizes"][3]["link"]  # TODO Improve image extraction
+                    # TODO Improve image extraction
+                    group.thumb = item["pictures"]["sizes"][3]["link"]
                     group.uri = item["metadata"]["connections"]["videos"]["uri"]
                     group.info = {
                         "date": item["created_time"],
@@ -129,7 +134,8 @@ class Api:
 
                 elif is_user:
                     user = User(id=item["resource_key"], label=item["name"])
-                    user.thumb = item["pictures"]["sizes"][3]["link"]  # TODO Improve image extraction
+                    # TODO Improve image extraction
+                    user.thumb = item["pictures"]["sizes"][3]["link"]
                     user.uri = item["metadata"]["connections"]["videos"]["uri"]
                     user.info = {
                         "country": item.get("location", ""),
@@ -162,7 +168,7 @@ class Api:
         video_format = video_format.split(":")
         video_type = video_format[0]
         video_type_setting = video_format[1]
-        video_has_av1_codec = len(video_config["video"]["file_codecs"]["av1"])
+        video_has_av1_codec = len(video_config["request"]["file_codecs"]["av1"])
 
         if video_type == "hls" or video_has_av1_codec:
             hls_default_cdn = video_files["hls"]["default_cdn"]

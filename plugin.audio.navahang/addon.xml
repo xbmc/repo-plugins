@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.navahang" name="Navahang" version="2.3" provider-name="Amir Ammari">
+	<requires>
+        <import addon="xbmc.python"                     version="2.26.0"/>
+        <import addon="script.module.beautifulsoup4"    version="4.3.2"/>
+        <import addon="script.module.requests"          version="2.4.3"/>
+        <import addon="script.module.future"            version="0.0.1"/>
+        <import addon="script.module.html5lib"          version="0.999.0"/>
+	</requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+	<summary lang="en_GB">Plugin for Navahang</summary>
+	<description lang="en_GB">Navahang is a media company with one of the largest online archives, dedicated to Persian music along with 24/7 Live Radio.</description>
+	<disclaimer lang="en_GB">This plugin is not endorsed by Navahang LLC</disclaimer>
+	<summary lang="fa_IR">افزونه برای نواهنگ</summary>
+	<description lang="fa_IR">نواهنگ یک شرکت رسانه ای با یکی از بزرگترین آرشیو های آنلاین است که به موسیقی فارسی و همراه با ۲۴/۷ رادیو زنده اختصاص یافته است.</description>
+	<disclaimer lang="fa_IR">این افزونه توسط شرکت نواهنگ تایید نشده است</disclaimer>
+	<platform>all</platform>
+	<language>fa</language>
+	<license>GPL-2.0-only</license>
+	<forum></forum>
+	<website>https://www.navahang.com</website>
+	<email>amirrammari@gmail.com</email>
+	<source>https://github.com/amirrammari/kodi-repo-plugins/tree/master/plugin.audio.navahang</source>
+	<news>Compatible with Python 3</news>
+	<assets>
+		<icon>resources/media/icon.png</icon>
+			<fanart>resources/media/fanart.jpg</fanart>
+			<screenshot>resources/media/screenshot-01.jpg</screenshot>
+			<screenshot>resources/media/screenshot-02.jpg</screenshot>
+			<screenshot>resources/media/screenshot-03.jpg</screenshot>
+		</assets>
+	</extension>
+</addon>

@@ -1,0 +1,121 @@
+# Kodi Media Center language file
+# Addon Name: IRIB TV3
+# Addon id: plugin.video.iribtv
+# Addon Provider: Amir Ammari
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Persian (Iran) (http://www.transifex.com/projects/p/kodi-main/language/fa_IR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fa_IR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Please try again later."
+msgstr "لطفا بعدا دوباره امتحان کنید."
+
+msgctxt "#30001"
+msgid "Can't connect to server."
+msgstr "نمی توانم به سرور وصل شوم."
+
+msgctxt "#30002"
+msgid "An error occurred."
+msgstr "خطایی رخ داده است."
+
+msgctxt "#32000"
+msgid "General"
+msgstr "عمومی"
+
+msgctxt "#32001"
+msgid "Debug"
+msgstr "مشکل گشایی"
+
+msgctxt "#32002"
+msgid "Category"
+msgstr "طبقه بندی"
+
+msgctxt "#32003"
+msgid "شوها"
+msgstr ""
+
+msgctxt "#32004"
+msgid "!UNUSED!"
+msgstr "!استفاده نشده!"
+
+msgctxt "#32005"
+msgid "Recent"
+msgstr "اخیر"
+
+msgctxt "#32006"
+msgid "New"
+msgstr "جدید"
+
+msgctxt "#32007"
+msgid "Search"
+msgstr "جستجو"
+
+msgctxt "#32008"
+msgid "Featured"
+msgstr "ویژه"
+
+msgctxt "#32009"
+msgid "!UNUSED!"
+msgstr "!استفاده نشده!"
+
+msgctxt "#32010"
+msgid "Settings"
+msgstr "Settings"
+
+msgctxt "#32011"
+msgid "Page"
+msgstr "صفحه"
+
+msgctxt "#32012"
+msgid "Menu"
+msgstr "منو"
+
+msgctxt "#32013"
+msgid "!UNUSED!"
+msgstr "!استفاده نشده!"
+
+msgctxt "#32014"
+msgid "پاک کردن مشاهده های اخیراً"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Clear Searches"
+msgstr "پاک کردن جستجوها"
+
+msgctxt "#32016"
+msgid "New Search"
+msgstr "جستجوی جدید"
+
+msgctxt "#32017"
+msgid "Cache"
+msgstr "حافظه نهان"
+
+msgctxt "#32018"
+msgid "Clear Cache"
+msgstr "پاک کردن حافظه پنهان"
+
+msgctxt "#32019"
+msgid "Remove Search"
+msgstr "جستجو را حذف کنید"
+
+msgctxt "#32020"
+msgid "Save Searches"
+msgstr "ذخیره جستجوها"
+
+msgctxt "#32021"
+msgid "Save Recently Viewed"
+msgstr "ذخیره اخیراً مشاهده شده"
+
+msgctxt "#32022"
+msgid "Are you sure?"
+msgstr "شما مطمئن هستید؟"

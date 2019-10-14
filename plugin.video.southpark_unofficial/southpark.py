@@ -223,7 +223,7 @@ class SP_Helper(object):
 		self.FULL_EPISODES = [
 			"/full-episodes/",        ## en
 			"/episodios-en-espanol/", ## es
-			"/alle-episoden/"         ## de
+			"/alle-episoden/",        ## de
 			"/full-episodes/"         ## se
 		]
 		self.MEDIAGEN = [
@@ -398,6 +398,9 @@ class SouthParkAddon(object):
 			episode_data = seasonjson['results'][episode]
 			if episode_data['_availability'] == "banned":
 				log_error("Found banned episode s{0}e{1}. trying again!".format(season, episode))
+				continue
+			elif episode_data['_availability'] == "beforepremiere":
+				log_error("Found premiere episode s{0}e{1}. trying again!".format(season, episode))
 				continue
 			if self.options.playrandom():
 				self.play_episode(episode_data['itemId'], episode_data['title'], episode_data['images'])

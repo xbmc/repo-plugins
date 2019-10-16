@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.soundcloud" name="SoundCloud" version="3.0.1" provider-name="jaylinski">
+<addon id="plugin.audio.soundcloud" name="SoundCloud" version="3.1.0" provider-name="jaylinski">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.future" version="0.16.0"/>
@@ -10,19 +10,23 @@
     </extension>
     <extension point="xbmc.service" library="service.py" />
     <extension point="xbmc.addon.metadata">
-        <summary lang="de_DE">SoundCloud ist eine Musik- und Podcast-Streaming-Plattform, mit der Du Millionen von Songs aus der ganzen Welt anhören kannst.</summary>
-		<summary lang="en_GB">SoundCloud is a music and podcast streaming platform that lets you listen to millions of songs from around the world.</summary>
+        <summary lang="de_DE">SoundCloud – Musik- und Podcast-Streaming-Plattform</summary>
+        <summary lang="en_GB">SoundCloud – Music and podcast streaming platform</summary>
+        <description lang="de_DE">SoundCloud ist eine Musik- und Podcast-Streaming-Plattform, mit der Du Millionen von Songs aus der ganzen Welt anhören kannst.</description>
+		<description lang="en_GB">SoundCloud is a music and podcast streaming platform that lets you listen to millions of songs from around the world.</description>
         <language></language>
         <platform>all</platform>
         <license>MIT</license>
         <forum>https://forum.kodi.tv/showthread.php?tid=206635</forum>
         <website>https://soundcloud.com</website>
         <source>https://github.com/jaylinski/kodi-addon-soundcloud</source>
-        <news>3.0.1 (2019-08-16)
-[fix] Fixed sharing via Yatse remote
-[fix] Fixed sharing of mobile URLs (m.soundcloud.com)
+        <news>3.1.0 (2019-10-16)
+[upd] Added "Albums", "Playlists" and "Spotlight" folders to user pages
+[upd] Thumbnail images now have a higher resolution
+[fix] Fixed error when selecting the "Discover" folder
+[fix] Changed default format to "mp3" to fix a session timeout issue on tracks longer than 30 minutes
+[fix] Fixed Python 3 compatibility issue (Addon is now ready for Kodi 19)
 [lng] Improved German translations
-[upd] Improved search
         </news>
         <assets>
             <icon>resources/icon.png</icon>

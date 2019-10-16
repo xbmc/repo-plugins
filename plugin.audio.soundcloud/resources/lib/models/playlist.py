@@ -19,7 +19,7 @@ class Playlist(ListItem):
         })
         url = addon_base + "/?" + urllib.parse.urlencode({
             "action": "call",
-            "call": "https://api-v2.soundcloud.com/playlists/{id}".format(id=self.id)
+            "call": "/playlists/{id}".format(id=self.id)
         })
 
         return url, list_item, True

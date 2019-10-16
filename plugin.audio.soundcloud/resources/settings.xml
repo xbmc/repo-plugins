@@ -2,7 +2,7 @@
 <settings>
     <category label="30001">
         <setting label="30002" type="lsep"/>
-        <setting id="audio.format" type="enum" label="30003" values="opus (audio/ogg)|mp3 (audio/mpeg)" default="0" />
+        <setting id="audio.format" type="enum" label="30003" values="Opus (HLS)|mp3 (HLS)|mp3 (progressive)" default="2" />
         <setting label="30011" type="lsep"/>
         <setting id="search.items.size" type="labelenum" label="30012" values="5|10|15|20|25|30|40|50" default="20" />
         <setting id="search.history.size" type="labelenum" label="30013" values="0|5|10|15|20|30|50" default="10" />

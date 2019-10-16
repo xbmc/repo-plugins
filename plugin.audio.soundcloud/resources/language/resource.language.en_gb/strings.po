@@ -1,7 +1,7 @@
 # Kodi Media Center language file
 # Addon Name: SoundCloud
 # Addon id: plugin.audio.soundcloud
-# Addon Provider: Jay Linski
+# Addon Provider: jaylinski
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Addons\n"
@@ -104,14 +104,18 @@ msgctxt "#30213"
 msgid "Playlists"
 msgstr ""
 
+msgctxt "#30214"
+msgid "Spotlight"
+msgstr ""
+
 # GUI - Charts
 msgctxt "#30301"
 msgid "Top 50"
 msgstr ""
 
 msgctxt "#30302"
-msgid "Trending"
-msgstr "New & hot"
+msgid "New & hot"
+msgstr ""
 
 # GUI - Generic
 msgctxt "#30901"

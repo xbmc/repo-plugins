@@ -26,6 +26,7 @@ class ApiV2(ApiInterface):
     api_cache = {
         "discover": 120  # 2 hours
     }
+    thumbnail_size = 500
 
     def __init__(self, settings, lang, cache):
         self.cache = cache
@@ -43,11 +44,10 @@ class ApiV2(ApiInterface):
         return self._map_json_to_collection(res)
 
     def discover(self, selection_id=None):
-        res = self._do_request("/selections", {}, self.api_cache["discover"])
+        res = self._do_request("/mixed-selections", {}, self.api_cache["discover"])
 
         if selection_id and "collection" in res:
             res = self._find_id_in_selection(res["collection"], selection_id)
-            res = {"collection": res}
 
         return self._map_json_to_collection(res)
 
@@ -80,7 +80,7 @@ class ApiV2(ApiInterface):
         payload["app_locale"] = self.api_lang
         headers = {"Accept-Encoding": "gzip"}
         path = self.api_host + path
-        cache_key = hashlib.sha1(path + str(payload)).hexdigest()
+        cache_key = hashlib.sha1((path + str(payload)).encode()).hexdigest()
 
         xbmc.log(
             "plugin.audio.soundcloud::ApiV2() Calling %s with header %s and payload %s" %
@@ -115,14 +115,12 @@ class ApiV2(ApiInterface):
     def _find_id_in_selection(self, selection, selection_id):
         for category in selection:
             if category["id"] == selection_id:
-                if "playlists" in category:
-                    return category["playlists"]
-                elif "system_playlists" in category:
-                    return category["system_playlists"]
+                if "items" in category:
+                    return category["items"]
                 elif "tracks" in category:
-                    return category["tracks"]
-            elif "system_playlists" in category:
-                res = self._find_id_in_selection(category["system_playlists"], selection_id)
+                    return {"collection": category["tracks"]}
+            elif "items" in category:
+                res = self._find_id_in_selection(category["items"]["collection"], selection_id)
                 if res:
                     return res
 
@@ -153,7 +151,7 @@ class ApiV2(ApiInterface):
                 elif kind == "user":
                     user = User(id=item["id"], label=item["username"])
                     user.label2 = item.get("full_name", "")
-                    user.thumb = item.get("avatar_url", None)
+                    user.thumb = self._get_thumbnail(item, self.thumbnail_size)
                     user.info = {
                         "artist": item.get("description", None)
                     }
@@ -163,7 +161,7 @@ class ApiV2(ApiInterface):
                     playlist = Playlist(id=item["id"], label=item.get("title"))
                     playlist.is_album = item.get("is_album", False)
                     playlist.label2 = item.get("label_name", "")
-                    playlist.thumb = item.get("artwork_url", None)
+                    playlist.thumb = self._get_thumbnail(item, self.thumbnail_size)
                     playlist.info = {
                         "artist": item["user"]["username"]
                     }
@@ -172,7 +170,7 @@ class ApiV2(ApiInterface):
                 elif kind == "system-playlist":
                     # System playlists only appear inside selections
                     playlist = Selection(id=item["id"], label=item.get("title"))
-                    playlist.thumb = item.get("calculated_artwork_url", None)
+                    playlist.thumb = self._get_thumbnail(item, self.thumbnail_size)
                     collection.items.append(playlist)
 
                 elif kind == "selection":
@@ -222,7 +220,7 @@ class ApiV2(ApiInterface):
         track = Track(id=item["id"], label=item["title"])
         track.blocked = True if item.get("policy") == "BLOCK" else False
         track.preview = True if item.get("policy") == "SNIP" else False
-        track.thumb = item.get("artwork_url", None)
+        track.thumb = self._get_thumbnail(item, self.thumbnail_size)
         track.media = self._extract_media_url(item["media"]["transcodings"])
         track.info = {
             "artist": artist,
@@ -261,9 +259,30 @@ class ApiV2(ApiInterface):
 
     @staticmethod
     def _is_preferred_codec(codec, setting):
-        if codec["mime_type"] == setting["mime_type"] and codec["protocol"] == setting["protocol"]:
-            return True
+        return codec["mime_type"] == setting["mime_type"] and \
+               codec["protocol"] == setting["protocol"]
 
     @staticmethod
     def _sanitize_url(url):
         return url.replace("m.soundcloud.com/", "soundcloud.com/")
+
+    @staticmethod
+    def _get_thumbnail(item, size):
+        """
+        availableSizes: [
+          [ 20, 't20x20'],
+          [ 50, 't50x50'],
+          [120, 't120x120'],
+          [200, 't200x200'],
+          [500, 't500x500']
+        ]
+        """
+        url = item.get(
+            "artwork_url", item.get("avatar_url", item.get("calculated_artwork_url", False))
+        )
+
+        return re.sub(
+            r"^(.*/)(\w+)-([-a-zA-Z0-9]+)-([a-z0-9]+)\.(jpg|png|gif).*$",
+            r"\1\2-\3-t{x}x{y}.\5".format(x=size, y=size),
+            url
+        ) if url else None

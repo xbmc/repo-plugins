@@ -92,6 +92,35 @@ class Items:
 
         return items
 
+    def user(self, id):
+        items = []
+
+        # Albums
+        list_item = xbmcgui.ListItem(label=format_bold(self.addon.getLocalizedString(30212)))
+        url = self.addon_base + "/?" + urllib.parse.urlencode({
+            "action": "call",
+            "call": "/users/{id}/albums".format(id=id)
+        })
+        items.append((url, list_item, True))
+
+        # Playlists
+        list_item = xbmcgui.ListItem(label=format_bold(self.addon.getLocalizedString(30213)))
+        url = self.addon_base + "/?" + urllib.parse.urlencode({
+            "action": "call",
+            "call": "/users/{id}/playlists_without_albums".format(id=id)
+        })
+        items.append((url, list_item, True))
+
+        # Spotlight
+        list_item = xbmcgui.ListItem(label=format_bold(self.addon.getLocalizedString(30214)))
+        url = self.addon_base + "/?" + urllib.parse.urlencode({
+            "action": "call",
+            "call": "/users/{id}/spotlight".format(id=id)
+        })
+        items.append((url, list_item, True))
+
+        return items
+
     def charts(self):
         items = []
 

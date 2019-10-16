@@ -2,6 +2,8 @@
 # Addon Name: newgrounds
 # Addon id: plugin.program.newgrounds
 # Addon Provider: New Age Software LLC
+msgid ""
+msgstr ""
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "MIME-Version: 1.0\n"

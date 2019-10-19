@@ -153,6 +153,18 @@ def run():
         xbmcplugin.addDirectoryItems(handle, collection, len(collection))
         xbmcplugin.endOfDirectory(handle)
 
+    if path == PATH_USER:
+        user_id = args.get("id")[0]
+        default_action = args.get("call")[0]
+        if user_id:
+            items = listItems.user(user_id)
+            collection = listItems.from_collection(api.call(default_action))
+            xbmcplugin.addDirectoryItems(handle, items, len(items))
+            xbmcplugin.addDirectoryItems(handle, collection, len(collection))
+            xbmcplugin.endOfDirectory(handle)
+        else:
+            xbmc.log("Invalid user action", xbmc.LOGERROR)
+
     else:
         xbmc.log("Path not found", xbmc.LOGERROR)
 

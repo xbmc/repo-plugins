@@ -8,6 +8,10 @@ class Settings:
         "1": {
             "mime_type": "audio/mpeg",
             "protocol": "hls",
+        },
+        "2": {
+            "mime_type": "audio/mpeg",
+            "protocol": "progressive",
         }
     }
 

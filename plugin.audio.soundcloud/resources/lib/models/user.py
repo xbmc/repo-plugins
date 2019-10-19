@@ -2,6 +2,7 @@ from future import standard_library
 standard_library.install_aliases()  # noqa: E402
 
 from resources.lib.models.list_item import ListItem
+from resources.routes import *
 import urllib.parse
 import xbmcgui
 
@@ -16,9 +17,9 @@ class User(ListItem):
         list_item.setInfo("music", {
             "title": self.info.get("description")
         })
-        url = addon_base + "/?" + urllib.parse.urlencode({
-            "action": "call",
-            "call": "https://api-v2.soundcloud.com/users/{id}/spotlight".format(id=self.id)
+        url = addon_base + PATH_USER + "?" + urllib.parse.urlencode({
+            "id": self.id,
+            "call": "/users/{id}/tracks".format(id=self.id)
         })
 
         return url, list_item, True

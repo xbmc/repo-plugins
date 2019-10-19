@@ -120,11 +120,11 @@ class RequestAPI(object):
         request = self.req_api_url
         for arg in args:
             if arg:  # Don't add empty args
-                request = '{0}/{1}'.format(request, arg)
-        request = '{0}{1}'.format(request, self.req_api_key)
+                request = u'{0}/{1}'.format(request, arg)
+        request = u'{0}{1}'.format(request, self.req_api_key)
         for key, value in kwargs.items():
             if value:  # Don't add empty kwargs
-                request = '{0}&{1}={2}'.format(request, key, value)
+                request = u'{0}&{1}={2}'.format(request, key, value)
         return request
 
     def get_request_sc(self, *args, **kwargs):

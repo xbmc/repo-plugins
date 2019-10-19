@@ -33,7 +33,7 @@ _koditvshowdb = KodiLibrary(dbtype='tvshow')
 
 class Container(object):
     def __init__(self):
-        self.paramstring = sys.argv[2][1:]
+        self.paramstring = sys.argv[2][1:] if sys.version_info.major == 3 else sys.argv[2][1:].decode("utf-8")
         self.params = dict(parse_qsl(self.paramstring))
         self.plugincategory = 'TMDb Helper'
         self.containercontent = ''

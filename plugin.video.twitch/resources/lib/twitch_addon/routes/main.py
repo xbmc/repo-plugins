@@ -74,9 +74,6 @@ def route(api):
         context_menu.extend(menu_items.change_period('clips'))
         kodi.create_item({'label': '%s %s' % (i18n('browse'), i18n('clips')), 'path': {'mode': MODES.CLIPSLIST}, 'context_menu': context_menu,
                           'info': {'plot': '%s - %s' % (i18n('browse'), i18n('clips'))}})
-    if show_menu('communities', 'browse'):
-        kodi.create_item({'label': '%s %s' % (i18n('browse'), i18n('communities')), 'path': {'mode': MODES.COMMUNITIES},
-                          'info': {'plot': '%s - %s' % (i18n('browse'), i18n('communities'))}})
     if show_menu('games', 'browse'):
         kodi.create_item({'label': '%s %s' % (i18n('browse'), i18n('games')), 'path': {'mode': MODES.GAMES},
                           'info': {'plot': '%s - %s' % (i18n('browse'), i18n('games'))}})

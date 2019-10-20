@@ -1,3 +1,6 @@
+2.4.5
+[rem] Remove deprecated api Communities and related content
+
 2.4.4
 [fix] unable to clean up class left in memory; N9XBMCAddon7xbmcgui6WindowE |contrib: lekma|
 

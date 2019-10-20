@@ -462,10 +462,6 @@ msgctxt "#30136"
 msgid "Always ask"
 msgstr ""
 
-msgctxt "#30137"
-msgid "Communities"
-msgstr ""
-
 msgctxt "#30138"
 msgid "*** Do NOT share your OAuth token. ***"
 msgstr ""
@@ -640,14 +636,6 @@ msgstr ""
 
 msgctxt "#30181"
 msgid "Are you sure you want to blacklist %s?"
-msgstr ""
-
-msgctxt "#30182"
-msgid "Remove a community"
-msgstr ""
-
-msgctxt "#30183"
-msgid "Remove all communities"
 msgstr ""
 
 msgctxt "#30184"

@@ -79,21 +79,6 @@ class JsonListItemConverter(object):
                 'context_menu': context_menu,
                 'info': {u'plot': plot, u'plotoutline': plot, u'tagline': plot}}
 
-    def community_to_listitem(self, community):
-        name = community[Keys.NAME]
-        display_name = community.get(Keys.DISPLAY_NAME)
-        display_name = display_name if display_name else name
-        _id = community[Keys._ID]
-        image = community.get(Keys.AVATAR_IMAGE, Images.THUMB)
-        context_menu = list()
-        context_menu.extend(menu_items.refresh())
-        context_menu.extend(menu_items.add_blacklist(_id, display_name, list_type='community'))
-        return {'label': display_name,
-                'path': kodi.get_plugin_url({'mode': MODES.COMMUNITYSTREAMS, 'community_id': _id}),
-                'art': the_art({'poster': image, 'thumb': image, 'icon': image}),
-                'context_menu': context_menu,
-                'info': self.get_plot_for_community(community)}
-
     def collection_to_listitem(self, collection):
         title = collection[Keys.TITLE]
         _id = collection[Keys._ID]
@@ -512,24 +497,6 @@ class JsonListItemConverter(object):
                                     partner=self._format_key(Keys.PARTNER, headings, info),
                                     followers=self._format_key(Keys.FOLLOWERS, headings, info),
                                     date=date)
-
-        return {u'plot': plot, u'plotoutline': plot, u'tagline': title.rstrip('\r\n')}
-
-    def get_plot_for_community(self, community):
-        headings = {Keys.VIEWERS: i18n('viewers'),
-                    Keys.CHANNELS: i18n('channels')}
-        info = {
-            Keys.VIEWERS: str(community.get(Keys.VIEWERS)) if community.get(Keys.VIEWERS) else u'0',
-            Keys.CHANNELS: str(community.get(Keys.CHANNELS)) if community.get(Keys.CHANNELS) else u'0'
-        }
-        display_name = community.get(Keys.DISPLAY_NAME)
-        display_name = display_name if display_name else community.get(Keys.NAME)
-        title = display_name + u'\r\n'
-
-        plot_template = u'{title}{viewers}{channels}'
-
-        plot = plot_template.format(title=title, channels=self._format_key(Keys.CHANNELS, headings, info),
-                                    viewers=self._format_key(Keys.VIEWERS, headings, info))
 
         return {u'plot': plot, u'plotoutline': plot, u'tagline': title.rstrip('\r\n')}
 

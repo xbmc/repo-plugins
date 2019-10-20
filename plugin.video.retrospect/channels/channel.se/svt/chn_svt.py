@@ -201,7 +201,7 @@ class Channel(chn_class.Channel):
             ),
             "Film": (
                 "https://www.svtplay.se/genre/film",
-                "https://www.svtstatic.se/image-cms/svtse/1436202866/svtplay/article2952281.svt/ALTERNATES/large/film1280-jpg"
+                "https://www.svtstatic.se/image/medium/480/20888292/1548755428"
             ),
             "Barn": (
                 "https://www.svtplay.se/genre/barn",
@@ -359,6 +359,14 @@ class Channel(chn_class.Channel):
             # noinspection PyTypeChecker
             restrictions = self.__apollo_data[result_set["restrictions"]["id"]]
             item.isGeoLocked = restrictions.get('onlyAvailableInSweden', False)
+
+        duration = result_set.get("duration")
+        if bool(duration):
+            item.set_info_label("duration", duration)
+
+        valid_to = result_set.get("validTo")
+        if bool(valid_to):
+            self.__set_expire_time(valid_to, item)
 
         return item
 
@@ -629,11 +637,7 @@ class Channel(chn_class.Channel):
         # Set the expire date
         expire_date = result_set.get("expireDate")
         if expire_date is not None:
-            expire_date = expire_date.split("+")[0].replace("T", " ")
-            year = expire_date.split("-")[0]
-            if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
-                item.description = \
-                    "{}\n\n{}: {}".format(item.description or "", self.__expires_text, expire_date)
+            self.__set_expire_time(expire_date, item)
 
         length = result_set.get("materialLength", 0)
         if length > 0:
@@ -926,6 +930,13 @@ class Channel(chn_class.Channel):
 
         item.complete = True
         return item
+
+    def __set_expire_time(self, expire_date, item):
+        expire_date = expire_date.split("+")[0].replace("T", " ")
+        year = expire_date.split("-")[0]
+        if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
+            item.description = \
+                "{}\n\n{}: {}".format(item.description or "", self.__expires_text, expire_date)
 
     def __get_date(self, first, second, third):
         """ Tries to parse formats for dates like "Today 9:00" or "mon 9 jun" or "Tonight 9.00"

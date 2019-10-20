@@ -48,7 +48,7 @@ class Channel(chn_class.Channel):
             raise Exception("Invalid channel code")
 
         # setup the urls
-        # self.mainListUri = "http://webapi.tv4play.se/play/programs?is_active=true&platform=tablet&per_page=1000" \
+        # self.mainListUri = "https://api.tv4play.se/play/programs?is_active=true&platform=tablet&per_page=1000" \
         #                    "&fl=nid,name,program_image&start=0"
 
         self.mainListUri = "#mainlisting"
@@ -59,14 +59,14 @@ class Channel(chn_class.Channel):
         self._add_data_parser(self.mainListUri, preprocessor=self.add_categories_and_specials)
 
         self.episodeItemJson = ["results", ]
-        self._add_data_parser("http://webapi.tv4play.se/play/programs?", json=True,
+        self._add_data_parser("https://api.tv4play.se/play/programs?", json=True,
                               # No longer used:  requiresLogon=True,
                               parser=self.episodeItemJson, creator=self.create_episode_item)
 
-        self._add_data_parser("http://webapi.tv4play.se/play/categories.json",
+        self._add_data_parser("https://api.tv4play.se/play/categories.json",
                               json=True, match_type=ParserData.MatchExact,
                               parser=[], creator=self.create_category_item)
-        self._add_data_parser("http://webapi.tv4play.se/play/programs?platform=tablet&category=",
+        self._add_data_parser("https://api.tv4play.se/play/programs?platform=tablet&category=",
                               json=True,
                               parser=self.episodeItemJson, creator=self.create_episode_item)
 
@@ -217,7 +217,7 @@ class Channel(chn_class.Channel):
 
         program_id = json["nid"]
         program_id = HtmlEntityHelper.url_encode(program_id)
-        url = "http://webapi.tv4play.se/play/video_assets" \
+        url = "https://api.tv4play.se/play/video_assets" \
               "?platform=tablet&per_page=%s&is_live=false&type=episode&" \
               "page=1&node_nids=%s&start=0" % (self.maxPageSize, program_id, )
 
@@ -265,7 +265,7 @@ class Channel(chn_class.Channel):
         extras = {
             LanguageHelper.get_localized_string(LanguageHelper.Search): ("searchSite", None, False),
             LanguageHelper.get_localized_string(LanguageHelper.TvShows): (
-                "http://webapi.tv4play.se/play/programs?is_active=true&platform=tablet"
+                "https://api.tv4play.se/play/programs?is_active=true&platform=tablet"
                 "&per_page=1000&fl=nid,name,program_image,is_premium,updated_at,channel&start=0",
                 None,
                 False
@@ -276,10 +276,10 @@ class Channel(chn_class.Channel):
         if self.channelCode == "tv4se":
             extras.update({
                 LanguageHelper.get_localized_string(LanguageHelper.Categories): (
-                    "http://webapi.tv4play.se/play/categories.json", None, False
+                    "https://api.tv4play.se/play/categories.json", None, False
                 ),
                 LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes): (
-                    "http://webapi.tv4play.se/play/video_assets/most_viewed?type=episode"
+                    "https://api.tv4play.se/play/video_assets/most_viewed?type=episode"
                     "&platform=tablet&is_live=false&per_page=%s&start=0" % (self.maxPageSize,),
                     None, False
                 ),
@@ -312,7 +312,7 @@ class Channel(chn_class.Channel):
 
                 Logger.trace("Adding item for: %s - %s", start_date, end_date)
                 # Old URL:
-                # url = "http://webapi.tv4play.se/play/video_assets?exclude_node_nids=" \
+                # url = "https://api.tv4play.se/play/video_assets?exclude_node_nids=" \
                 #       "nyheterna,v%C3%A4der,ekonomi,lotto,sporten,nyheterna-blekinge,nyheterna-bor%C3%A5s," \
                 #       "nyheterna-dalarna,nyheterna-g%C3%A4vle,nyheterna-g%C3%B6teborg,nyheterna-halland," \
                 #       "nyheterna-helsingborg,nyheterna-j%C3%B6nk%C3%B6ping,nyheterna-kalmar,nyheterna-link%C3%B6ping," \
@@ -322,13 +322,13 @@ class Channel(chn_class.Channel):
                 #       "nyheterna-v%C3%A4xj%C3%B6,nyheterna-%C3%B6rebro,nyheterna-%C3%B6stersund,tv4-tolken," \
                 #       "fotbollskanalen-europa" \
                 #       "&platform=tablet&per_page=32&is_live=false&product_groups=2&type=episode&per_page=100"
-                url = "http://webapi.tv4play.se/play/video_assets?exclude_node_nids=" \
+                url = "https://api.tv4play.se/play/video_assets?exclude_node_nids=" \
                       "&platform=tablet&per_page=32&is_live=false&product_groups=2&type=episode&per_page=100"
                 url = "%s&broadcast_from=%s&broadcast_to=%s&" % (url, start_date.strftime("%Y%m%d"), end_date.strftime("%Y%m%d"))
                 extras[day] = (url, start_date, False)
 
         extras[LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes)] = (
-            "http://webapi.tv4play.se/play/video_assets?exclude_node_nids=&platform=tablet&"
+            "https://api.tv4play.se/play/video_assets?exclude_node_nids=&platform=tablet&"
             "per_page=32&is_live=true&product_groups=2&type=episode&per_page=100", None, False)
 
         for name in extras:
@@ -379,7 +379,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        url = "http://webapi.tv4play.se/play/video_assets?platform=tablet&per_page=%s&page=1" \
+        url = "https://api.tv4play.se/play/video_assets?platform=tablet&per_page=%s&page=1" \
               "&sort_order=desc&type=episode&q=%%s&start=0" % (self.maxPageSize, )
         return chn_class.Channel.search_site(self, url)
 
@@ -412,7 +412,7 @@ class Channel(chn_class.Channel):
             cat_id = self.parentItem.url[cat_start + 10:]
             Logger.debug("Currently doing CatId: '%s'", cat_id)
 
-            url = "http://webapi.tv4play.se/play/video_assets?platform=tablet&per_page=%s&" \
+            url = "https://api.tv4play.se/play/video_assets?platform=tablet&per_page=%s&" \
                   "type=clip&page=1&node_nids=%s&start=0" % (self.maxPageSize, cat_id,)
             clips_title = LanguageHelper.get_localized_string(LanguageHelper.Clips)
             clips = MediaItem(clips_title, url)
@@ -559,7 +559,7 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
 
         cat = HtmlEntityHelper.url_encode(result_set['nid'])
-        url = "http://webapi.tv4play.se/play/programs?platform=tablet&category=%s" \
+        url = "https://api.tv4play.se/play/programs?platform=tablet&category=%s" \
               "&fl=nid,name,program_image,category,logo,is_premium" \
               "&per_page=1000&is_active=true&start=0" % (cat, )
         item = MediaItem(result_set['name'], url)

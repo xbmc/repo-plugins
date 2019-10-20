@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.0.7"
+        version="5.0.8"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -131,20 +131,21 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.0.7 - Changelog - 2019-10-09[/B]
+        <news>[B]Retrospect v5.0.8 - Changelog - 2019-10-19[/B]
 
-Updates for NPO that completely broke and added MTV and National Geographic for Sweden.
+Fixed some Swedish channel related issues and a Python 3 issue for HTTP responses without encoding information.
 
 [B]Framework related[/B]
--
+* Fixed: possible issue with missing content-type that cause a byte object to return (See #1239)
 
 [B]GUI/Settings/Language related[/B]
 -
 
 [B]Channel related[/B]
-* Added: Viafree&#x27;s MTV and National Geographic channels (Fixes #1229)
-* Fixed: Kanal 9 and Kanal 11 fanart
-* Fixed: NPO listings broke (Fixes #1233)
+* Added: Expires at to SVT (Fixes #1213)
+* Fixed: UR Play site changes broke the channel (Fixes #1237)
+* Changed: Try to extract a duration from the description (Fixes #1238)
+* Fixed: TV4.se changed their API endpoint (Fixes #1240)
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

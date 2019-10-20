@@ -420,6 +420,10 @@ class _RequestsHandler(object):
             Logger.debug("Found 'ISO-8859-1' for 'text' content-type. Using UTF-8 instead.")
             r.encoding = 'utf-8'
 
+        elif r.encoding is None and self.__is_text_content_type(content_type):
+            Logger.debug("Found missing encoding content type '%s' is considered text. Using UTF-8 instead.", content_type)
+            r.encoding = 'utf-8'
+
         # We might need a better mechanism here.
         if not r.encoding and content_type.lower() in ["application/json", "application/javascript"]:
             return r.text
@@ -595,6 +599,9 @@ class _RequestsHandler(object):
             Logger.error("Error in Progress Callback", exc_info=True)
             # cancel the download
             return True
+
+    def __is_text_content_type(self, content_type):
+        return content_type.lower() in ["application/vnd.apple.mpegurl"]
 
     def __str__(self):
         return "UriHandler [id={0}, useCaching={1}, ignoreSslErrors={2}]"\

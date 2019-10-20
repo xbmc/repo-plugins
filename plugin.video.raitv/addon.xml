@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.raitv"
+       name="Rai Play"
+       version="3.1.1"
+       provider-name="Nightflyer, cttynul, maxbambi">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.common.plugin.cache" version="2.5.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>it</language>
+    <platform>all</platform>
+    <summary lang="it_IT">I programmi delle reti Rai e i servizi interattivi</summary>
+    <description lang="it_IT">I canali radio e tv in diretta, gli ultimi 7 giorni di programmazione, le puntate integrali, i telegiornali.</description>
+    <summary lang="en_GB">The broadcasts of Rai channels and its interactive services</summary>
+    <description lang="en_GB">The live radio and TV channels, the latest 7 days of programming, the broadcast archive, the news.</description>
+    <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=155922</forum>
+    <website>https://github.com/maxbambi/plugin.video.raitv/</website>
+    <email></email>
+    <news>
+[B]3.1.1[/B]
+- fix a stupid error of delimiters in json
+- add Rai Sport Video section
+- add Rai sport web streams 
+
+[B]3.1.0[/B]
+- New epg source: 
+https://www.raiplay.it/palinsesto/guidatv/lista/
+
+[B]3.0.0[/B]
+- from https://github.com/cttynul/plugin.video.raitv 
+Storage Server used is a fork of Common Plugin Cache, edited to make it works with Python 3
+
+[B]2.0.0[/B]
+- Updated live tv, replay, on demand sections to new Raiplay API.
+- Updated live radio to new API.
+- Updated search to new API.
+- Cache TV and radio stations for 1 hour.
+- Updated addon icon.
+- Unavailable programmes in RAI Replay section are now written in italics.
+- Changed the User Agent in the relinker to Chrome. Thus the relinker returns higher bitrate HLS streams.
+- Log geolocation.
+- Better log messages.
+- Clean up.
+- Minor fixes.
+    </news>
+    <source>https://github.com/maxbambi/plugin.video.raitv/</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

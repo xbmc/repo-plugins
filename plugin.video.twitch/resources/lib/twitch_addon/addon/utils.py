@@ -378,7 +378,7 @@ def get_stored_json():
     needs_save = False
     # set defaults
     if 'blacklist' not in json_data:
-        json_data['blacklist'] = {'user': [], 'game': [], 'community': []}
+        json_data['blacklist'] = {'user': [], 'game': []}
         needs_save = True
     if 'qualities' not in json_data:
         json_data['qualities'] = {'stream': [], 'video': [], 'clip': []}

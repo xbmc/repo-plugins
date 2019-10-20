@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='2.4.4' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.4.5' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
         <import addon='script.module.six' version='1.11.0'/>
@@ -13,13 +13,7 @@
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
         <news>
-2.4.4
-[fix] unable to clean up class left in memory; N9XBMCAddon7xbmcgui6WindowE |contrib: lekma|
-
-2.4.3
-[fix] ads causing playback issues with InputStream Adaptive
-[fix] migrate url shortener from Google URL Shortener to Google Firebase Dynamic Links
-[upd] move Live Notifications to it's own thread
+[rem] Remove deprecated api Communities and related content
         </news>
         <assets>
             <icon>icon.png</icon>

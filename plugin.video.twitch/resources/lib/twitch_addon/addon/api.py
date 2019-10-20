@@ -124,12 +124,6 @@ class Twitch:
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_top_communities(self, cursor, limit):
-        results = self.api.communities.get_top(cursor=cursor, limit=limit)
-        return self.error_check(results)
-
-    @api_error_handler
-    @cache.cache_method(cache_limit=cache.limit)
     def get_collections(self, channel_id, cursor, limit):
         results = self.api.collections.get_collections(channel_id=channel_id, cursor=cursor, limit=limit)
         return self.error_check(results)
@@ -186,12 +180,6 @@ class Twitch:
     @cache.cache_method(cache_limit=cache.limit)
     def get_game_streams(self, game, offset, limit, language=Language.ALL):
         results = self.api.streams.get_all(game=game, limit=limit, offset=offset, language=language)
-        return self.error_check(results)
-
-    @api_error_handler
-    @cache.cache_method(cache_limit=cache.limit)
-    def get_community_streams(self, community_id, offset, limit, language=Language.ALL):
-        results = self.api.streams.get_all(community_id=community_id, limit=limit, offset=offset, language=language)
         return self.error_check(results)
 
     @api_error_handler

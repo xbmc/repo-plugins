@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.mdrmediathek" name="MDR Mediathek" version="1.0.0" provider-name="membrane">
+<addon id="plugin.video.mdrmediathek" name="MDR Mediathek" version="1.1.2" provider-name="sarbes">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
-		<import addon="script.module.libmdr" version="1.0.0"/>
+		<import addon="script.module.libmdr" version="1.1.2"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>Content mirgrated to the ARD Mediathek.</broken>
         <platform>all</platform>
 		<language>de</language>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>

@@ -7,11 +7,17 @@ from resources.lib.helpers.helpermethods import *
 from resources.lib.statics.static import *
 from resources.lib.helpers import helperclasses
 
+#region Python_check
+
 if sys.version_info[0] == 3:
     from urllib.parse import quote_plus, unquote_plus
 else:
     from urllib import quote_plus, unquote_plus
     from builtins import xrange as range
+
+#endregion
+
+FILE_NAME = "data.json"
 
 class Tokens:
     def __init__(self, testing, kodiwrapper):
@@ -27,15 +33,16 @@ class Tokens:
 
         j = r.json()["OAuthPrepareParams"]
 
-        self.save_json_to_file("OAuthPrepareParams.json", {
-            "authorizeUrl": j["authorizeUrl"],
-            "clientId": j["clientId"],
-            "nonce": j["nonce"],
-            "redirectUri": j["redirectUri"],
-        })
+        self.append_json_to_file(FILE_NAME,
+        { "OAuthPrepareParams": {
+            'authorizeUrl': j["authorizeUrl"],
+            'clientId': j["clientId"],
+            'nonce': j["nonce"],
+            'redirectUri': j["redirectUri"]
+        }})
 
     def _authorize(self):
-        OAuthPrepareParams = self.fetch_OAuthPrepareParams()
+        OAuthPrepareParams = self.fetch_from_data("OAuthPrepareParams")
 
         authorize_Url = OAuthPrepareParams["authorizeUrl"]
         client_Id = OAuthPrepareParams["clientId"]
@@ -56,10 +63,11 @@ class Tokens:
         j = r.json()
 
         if j["deviceRegistration"]["resultCode"] == "CREATED":
-            self.save_json_to_file("IdTokens.json", {
+            self.append_json_to_file(FILE_NAME,
+            { "IdTokens" : {
                 'deviceId': j["deviceRegistration"]["id"],
                 'webId': j["deviceRegistration"]["deviceProperties"]["dict"][8]["value"]
-            })
+            }})
 
     def make_request(self, method, url, headers=None, data=None, json=None, allow_redirects=False, cookies=None,
                      verify=True):
@@ -122,21 +130,21 @@ class Tokens:
         if not callbackKey:
             return False
 
-        self.save_json_to_file("callbackKey.json", {"callbackKey": callbackKey})
+        self.append_json_to_file(FILE_NAME, {"callbackKey" : {"callbackKey": callbackKey}})
 
         self.make_request("GET", url, default_headers, None, None, False, None, self.testing)
 
         return True
 
     def _verify_token(self):
-        Ids = self.fetch_Ids()
-        callbackKey = self.fetch_CallbackKey()
+        Ids = self.fetch_from_data("IdTokens")
+        callbackKey = self.fetch_from_data("callbackKey")["callbackKey"]
         self.make_request("POST", "https://api.yeloplay.be/api/v1/device/verify",
-                          verify_header(Ids["deviceId"], callbackKey), None,
-                          json_verify_header(Ids["deviceId"], Ids["webId"]),
+                          verify_device_header(Ids["deviceId"], callbackKey), None,
+                          json_verify_data(Ids["deviceId"], Ids["webId"]),
                           False, None, self.testing)
 
-    def open_json_from_file(self, file_name):
+    def append_json_to_file(self, file_name, json_data):
         path = self.kodi_wrapper.get_addon_data_path()
 
         if not os.path.exists(path):
@@ -144,67 +152,28 @@ class Tokens:
 
         os.chdir(path)
 
-        for i in range(0, 2):
-            try:
-                with open(file_name, 'r') as file:
-                    return json.load(file)
-            except IOError:
-                """ Did we login? """
-                self.login()
+        data = {}
+        if os.path.isfile(file_name):
+            with open(file_name, "r") as jsonFile:
+                data = json.load(jsonFile)
 
-    def save_json_to_file(self, file_name, data):
-        path = self.kodi_wrapper.get_addon_data_path()
+        data.update(json_data)
 
-        if not os.path.exists(path):
-            os.mkdir(path, 0o775)
+        with open(file_name, "w") as jsonFile:
+            json.dump(data, jsonFile)
 
-        os.chdir(path)
+    def fetch_from_data(self, key):
+        with open(FILE_NAME, "r") as jsonFile:
+            data = json.load(jsonFile)
 
-        with open(file_name, 'w') as file:
-            json.dump(data, file)
-
-    def fetch_OAuthTokens(self):
-        OAuthTokens = self.open_json_from_file("OAuthTokens.json")
-
-        if OAuthTokens:
-            return OAuthTokens
-
-    def fetch_Ids(self):
-        IdTokens = self.open_json_from_file("IdTokens.json")
-
-        if IdTokens:
-            return IdTokens
-
-    def fetch_OAuthPrepareParams(self):
-        OAuthPrepareParams = self.open_json_from_file("OAuthPrepareParams.json")
-
-        if OAuthPrepareParams:
-            return OAuthPrepareParams
-
-    def fetch_CallbackKey(self):
-        CallbackKey = self.open_json_from_file("callbackKey.json")
-
-        if CallbackKey:
-            return CallbackKey["callbackKey"]
-
-    def fetch_Entitlement(self):
-        Entitlement = self.open_json_from_file("entitlement.json")
-
-        if Entitlement:
-            return Entitlement["entitlementId"]
-
-    def fetch_Postal(self):
-        PostalCode = self.open_json_from_file("postal_code.json")
-
-        if PostalCode:
-            return PostalCode["postal_code"]
+        return data[key]
 
     def fetch_channel_list(self):
         postal = helperclasses.PostalCode(self.kodi_wrapper)
 
         # if postal is not filled in, in settings try to retrieve it from customerFeatures
         if not postal.are_filled_in():
-            postal.postal_code = self.fetch_Postal()
+            postal.postal_code = self.fetch_from_data("postal")["postal_code"]
 
 
             # if that does not seem to work..
@@ -221,36 +190,30 @@ class Tokens:
         return r.json()["serviceCatalog"]["tvChannels"]
 
     def _request_OAuthTokens(self):
-        Ids = self.fetch_Ids()
-        OAuthPrepareParams = self.fetch_OAuthPrepareParams()
-        callbackKey = self.fetch_CallbackKey()
+        Ids = self.fetch_from_data("IdTokens")
+        OAuthPrepareParams = self.fetch_from_data("OAuthPrepareParams")
+        callbackKey = self.fetch_from_data("callbackKey")["callbackKey"]
 
         r = self.make_request("POST", "https://api.yeloplay.be/api/v1/oauth/token",
                               token_header(Ids["deviceId"], callbackKey), False,
-                              json__token_header(callbackKey,
+                              json_oauth_token_data(callbackKey,
                                                  unquote_plus(OAuthPrepareParams["redirectUri"])),
                               False, None, self.testing)
 
         j = r.json()["OAuthTokens"]
 
         if j["status"] == "SUCCESS":
-            self.save_json_to_file("OAuthTokens.json", j)
+            self.append_json_to_file(FILE_NAME, {"OAuthTokens": j})
 
     def create_State(self, size):
         return str(uuid.uuid4()).replace("-", "")[0:size]
 
-    def fetch_customer_id(self):
-        Entitlement = self.open_json_from_file("entitlement.json")
-
-        if Entitlement:
-            return Entitlement["customer_id"]
-
     def _request_entitlement_and_postal(self):
-        accessToken = self.fetch_OAuthTokens()["accessToken"]
-        deviceId = self.fetch_Ids()["deviceId"]
+        accessToken = self.fetch_from_data("OAuthTokens")["accessToken"]
+        deviceId = self.fetch_from_data("IdTokens")["deviceId"]
 
         r = self.make_request("GET", "https://api.yeloplay.be/api/v1/session/lookup?include=customerFeatures",
-                              authorization_header_json(deviceId, accessToken),
+                              authorization_header(deviceId, accessToken),
                               None, None, False, None, self.testing)
         j = r.json()
 
@@ -258,9 +221,9 @@ class Tokens:
         customer_Id = j["loginSession"]["user"]["links"]["customerFeatures"]
         postal_code = j["linked"]["customerFeatures"]["idtvLines"][0]["region"]
 
-        self.save_json_to_file("entitlement.json", {"entitlementId": entitlements,
-                                                    "customer_id": customer_Id})
-        self.save_json_to_file("postal_code.json", {"postal_code": postal_code})
+        self.append_json_to_file(FILE_NAME, {"entitlement": {"entitlementId": entitlements,
+                                                    "customer_id": customer_Id}})
+        self.append_json_to_file(FILE_NAME, {"postal": {"postal_code": postal_code}})
 
 class YeloPlay(Tokens):
     def __init__(self, kodiwrapper, streaming_protocol, testing=False):
@@ -285,7 +248,7 @@ class YeloPlay(Tokens):
 
     def list_channels(self, tv_channels, is_folder=False):
         listing = []
-        entitlementId = self.fetch_Entitlement()
+        entitlementId = self.fetch_from_data("entitlement")["entitlementId"]
 
         for i in range(len(tv_channels)):
             if (
@@ -310,20 +273,20 @@ class YeloPlay(Tokens):
 
     def play_live_stream(self, stream_url):
         bit_rate = helperclasses.BitRate(self.kodi_wrapper)
-        deviceId = self.fetch_Ids()["deviceId"]
-        customerId = self.fetch_customer_id()
+        deviceId = self.fetch_from_data("IdTokens")["deviceId"]
+        customerId = self.fetch_from_data("entitlement")["customer_id"]
 
         self.kodi_wrapper.play_live_stream(deviceId, customerId, stream_url, bit_rate.bitrate)
 
     def select_manifest_url(self, channel):
         for i in range(0, 2):
             try:
-                accessToken = self.fetch_OAuthTokens()["accessToken"]
-                deviceId = self.fetch_Ids()["deviceId"]
+                accessToken = self.fetch_from_data("OAuthTokens")["accessToken"]
+                deviceId = self.fetch_from_data("IdTokens")["deviceId"]
 
                 r = self.make_request("POST", "https://api.yeloplay.be/api/v1/stream/start",
-                                      authorization_header_json(deviceId, accessToken), None,
-                                      json_request_header(deviceId, channel, self.streaming_protocol),
+                                      authorization_header(deviceId, accessToken), None,
+                                      stream_start_data(deviceId, channel, self.streaming_protocol),
                                       False, None, self.testing)
 
                 j = r.json()

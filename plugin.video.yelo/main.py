@@ -1,7 +1,6 @@
 import sys
 import xbmcaddon
-from resources.lib.kodiwrapper import kodiwrapper
-from resources.lib.yelo import yelo
+from resources.lib.helpers import UAHelper
 
 if sys.version_info[0] == 3:
     from urllib.parse import parse_qsl
@@ -18,11 +17,19 @@ __handle__ = int(sys.argv[1])
 # Get the plugin addon.
 __addon__ = xbmcaddon.Addon()
 
+
+
 def router(paramstring):
+    params = dict(parse_qsl(paramstring[1:]))
+    if not params:
+        # Generate custom UA
+        UAHelper.set_UA()
+
+    from resources.lib.kodiwrapper import kodiwrapper
+    from resources.lib.yelo import yelo
+
     kodi_wrapper = kodiwrapper.KodiWrapper(__handle__, __url__, __addon__)
     yelo_player = yelo.YeloPlay(kodi_wrapper, protocols.DASH)
-
-    params = dict(parse_qsl(paramstring[1:]))
 
     if params:
         if params['action'] == 'listing' and params['category'] == 'livestreams':

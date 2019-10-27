@@ -94,7 +94,7 @@ class KodiWrapper:
             play_item.setProperty('inputstream.adaptive.license_type', DRM)
             play_item.setProperty('inputstream.adaptive.max_bandwidth', max_bandwith)
             play_item.setProperty('inputstream.adaptive.manifest_update_parameter', 'full')
-            play_item.setProperty('inputstream.adaptive.stream_headers', 'Referer: https://www.yeloplay.be/tv-kijken')
+            play_item.setProperty('inputstream.adaptive.stream_headers', 'user-agent =' + UA)
             play_item.setProperty('inputstream.adaptive.license_key',
                                   LICENSE_URL + '|Content-Type=text%2Fplain%3Bcharset%3DUTF-8&User-Agent=' + quote(UA) +
                                   '|' + 'b{' +

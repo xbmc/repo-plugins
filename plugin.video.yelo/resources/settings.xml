@@ -7,8 +7,8 @@
     </category>
 
     <category id="bandwith" label="32004">
-        <setting label="32005" type="select" id="bitrate" values="0|700000|900000|1300000|1800000|7000000"
-                 default="1800000"/>
+        <setting label="32005" type="select" id="bitrate" values="0|700000|900000|1300000|1800000|7000000|14000000"
+                 default="7000000"/>
     </category>
 </settings>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.yelo" name="Yelo" version="0.0.5" provider-name="shycoderX">
+<addon id="plugin.video.yelo" name="Yelo" version="0.0.6" provider-name="shycoderX">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.inputstreamhelper" version="0.3.4"/>

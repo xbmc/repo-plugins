@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Module: default
-# Author: dreamer
-# Created on: 07.10.2018
+# Author: Dreamer, Pander
+# Created on: 2018-10-07
 # License: GPL v.3 https://www.gnu.org/copyleft/gpl.html
 
 from json import load

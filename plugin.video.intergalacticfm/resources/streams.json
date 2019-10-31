@@ -3,21 +3,21 @@
         "label": "CBS TV",
         "url": "live/cbstv/",
         "tagline": "Nothing Beyond Our Reach",
-        "plot": "Cybernetic Broadcasting System dominates our galaxy for over a decade. This stream is non-commercial, non-conventional and nothing like it can be encountered on any planet. You can run all you want, but there is no escaping CBS TV.",
+        "plot": "Cybernetic Broadcasting System dominates 24/7 our galaxy for over a decade. This stream is non-commercial, non-conventional and nothing like it can be encountered on any planet. You can run all you want, but there is no escaping CBS TV.",
         "genre": "electro, acid, italo, disco"
     },
     "prc": {
-        "label": "Intergalactic TV",
-        "url": "live/smil:tv.smil/",
+        "label": "Murder Capital TV",
+        "url": "show/mtv/",
         "tagline": "No Station Such Dedication",
-        "plot": "This stream is Intergalactic FM's TV channel. Delivering a mix of live recordings from the Panama Racing Club, the best B movies and keeping you updated on UFO sighings.This is eh apex of the West Coast Sound of Holland.",
+        "plot": "This stream is Murder Capital's TV channel. Delivering a mix of live recordings from the Panama Racing Club, the best B movies and keeping you updated on UFO sighings. This is the apex of the West Coast Sound of Holland.",
         "genre": "electro, acid, italo, B movies"
     },
     "mw": {
         "label": "Magic Waves",
         "url": "show/mw/",
         "tagline": "Do you believe in Magic?",
-        "plot": "Hailing from the UK, Magic Waves has been broadcasting since 2006, and since 2009 as one of the main staples of Intergalactic FM. Known for championing underground music with no regard for the commercial or mainstream in their legendary regular Sunday night broadcasts, the Magic Waves team bring you music and culture from the future and past with the highest passion now on their very own TV channel.",
+        "plot": "Hailing from the UK, Magic Waves has been broadcasting since 2006. Known for underground music in their legendary regular Sunday night broadcasts, our team brings you music and culture from the future and past with the highest passion.",
         "genre": "Future Past"
     },
     "neon": {
@@ -26,13 +26,6 @@
         "tagline": "Dreams of Neon, Berlin",
         "plot": "Dreams of Neon transmits from Berlin offering streams from Neon studios and club nights by Lazercat, Naks and the Dreams of Neon residents.",
         "genre": "electro, acid, italo"
-    },
-    "vunk": {
-        "label": "Vunk",
-        "url": "live/vunk/",
-        "tagline": "Music from the Heart",
-        "plot": "Music straight from the heart is what David Vunk is all about. Known for his label Moustace Records and his envigorating dj sets and productions, watch his weekly stream on Wednesday evening from West Coast's Rotterdam.",
-        "genre": "techno, acid, italo, disco"
     },
     "submit": {
         "label": "Submit",
@@ -55,6 +48,34 @@
         "plot": "Shipwrec Radio is a Nijmegen-based label which focuses on acid, electro, house and techno, with excursions into braindance, ambient and IDM. Featuring DJ Shipwrec, Camiel, Yash and sometimes guest DJs.",
         "genre": "electronic music"
     },
+    "onderwereld": {
+        "label": "Onderwereld",
+        "url": "show/onderwereld/",
+        "tagline": "electronic music",
+        "plot": "Platform for all kinds of unique electronic music. Onderwereld is streaming from their bunker somewhere in the Hague.",
+        "genre": "electronic music"
+    },
+    "muledriver": {
+        "label": "Mule Driver",
+        "url": "show/muledriver/",
+        "tagline": "Mule driving is not a crime",
+        "plot": "Live stream from Mule Driver's machine room",
+        "genre": "electro, acid, techno"
+    },
+    "leftover": {
+        "label": "Leftover",
+        "url": "show/leftover/",
+        "tagline": "Straight from the bin",
+        "plot": "Taking from all corners of the underground, Leftover Radio brings weekly broadcasts from DIY communities and free spaces. Personal selections and experimental live-sets are transmitted over makeshift connections to a global audience.",
+        "genre": "electro, acid, tekno"
+    },
+    "vunk": {
+        "label": "Vunk",
+        "url": "live/vunk/",
+        "tagline": "Music from the Heart",
+        "plot": "Music straight from the heart is what David Vunk is all about. Known for his label Moustace Records and his envigorating dj sets and productions, watch his weekly stream on Wednesday evening from West Coast's Rotterdam.",
+        "genre": "techno, acid, italo, disco"
+    },
     "clone": {
         "label": "Clone",
         "url": "show/clone/",
@@ -67,13 +88,6 @@
         "url": "show/zahara/",
         "tagline": "Cocktailbar Scheveningen",
         "plot": "Live stream from Zahara cocktail bar which is located directly at the beach in Scheveningen, the Netherlands. A frequent location for Intergalactic FM djs and has hosted for many of the IFM's infamous top 100. The most West you can go on Holland's Coast.",
-        "genre": "electronic music"
-    },
-    "onderwereld": {
-        "label": "Onderwereld",
-        "url": "show/onderwereld/",
-        "tagline": "electronic music",
-        "plot": "Platform for all kinds of unique electronic music. Onderwereld is streaming from their bunker somewhere in the Hague.",
         "genre": "electronic music"
     }
 }

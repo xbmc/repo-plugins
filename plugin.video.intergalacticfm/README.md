@@ -5,8 +5,8 @@
 
 ## Installation
 
-This add-on can be installed directly from Kodi's
-main repository and it will update itself. For more information, see
+This add-on can be installed directly from Kodi's main repository and it will
+update itself. For more information, see
 http://kodi.wiki/view/Add-on:Intergalactic_FM_TV
 
 Stepts to take to install from the Kodi main repository are:
@@ -20,6 +20,11 @@ Stepts to take to install from the Kodi main repository are:
 ### Installing Kodi
 
 Instructions for installing Kodi can be found here: https://kodi.tv/download
+
+#### Android
+Please consider installing [Kodi](https://f-droid.org/en/packages/org.xbmc.kodi/)
+and its remote control [Kore](https://f-droid.org/en/packages/org.xbmc.kore/)
+from the F-Droid app store for Android.
 
 
 ## Screenshots
@@ -47,6 +52,28 @@ https://github.com/intergalacticfm/plugin.video.intergalacticfm/archive/master.z
 9. Install the file **master.zip**
 
 
+## Testing
+
+This version has been tested on the following configurations.
+
+|           | Kodi Krypton 17 | Kodi Leia 18 |
+|-----------|----------------:|-------------:|
+| Ubuntu    |     Disco 19.04 |  Disco 19.04 |
+| Debian    |       Stretch 9 |    Buster 10 |
+| Raspbian  |       Stretch 9 |    Buster 10 |
+| LibreELEC |               8 |            9 |
+| Android   |           Pie 9 |        Pie 9 |
+
+In general, the combination of latest stable version are supported. Most likely
+also all combinations with the one-but-latest versions of Kodi and an operating
+system are supported.
+
+
+## Maintenance
+
+See `resources/disabled` for (temporarily) disabled streams.
+
+
 ## See also
 
 See also the audio plugin called Intergalactic FM at
@@ -56,16 +83,17 @@ https://github.com/intergalacticfm/plugin.audio.intergalacticfm
 
 ## Thanks
 
-For version 2, thanks go to [dromor](https://github.com/dromer) for developing
-it. For version 1, thanks go to the authors of the original add-on that was
-developed for Channel 31 and forked from
+For version 2, thanks go to [Dreamer](https://github.com/dromer) and
+[Pander](https://github.com/PanderMusubi) for developing and maintining it. For
+version 1, thanks go to the authors of the original add-on that was developed
+for Channel 31 and forked from
 https://github.com/DamonToumbourou/plugin.video.c31
 
 Credits go to [Yulia Vilenksy](http://yuliavilensky.com) for persmission to use
 her photograph used as fanart.
 
-Last but not least, thank you I-f and others for creating
-[Intergalactic FM](https://intergalacticfm.com) and embracing new initiatives
-and technologies to keep us all in musical orbit.
+Last but not least, thank you (I-f)[https://en.wikipedia.org/wiki/I-F] and
+others for creating [Intergalactic FM](https://intergalacticfm.com) and
+embracing new initiatives and technologies to keep us all in musical orbit.
 
 *NO STATION SUCH DEDICATION*

@@ -681,7 +681,12 @@ class VideoInfo(object):
 
     def _method_get_video_info(self, video_id=None, player_config=None, cookies=None):
         def requires_cipher(_fmts):
-            fl = _fmts.split(',')
+            fl = []
+            if len(_fmts) > 0:
+                try:
+                    fl = _fmts[0].get('cipher').split(',')
+                except AttributeError:
+                    fl = _fmts[0].get('url', '').split('&')
             return (len(fl) > 0) and ('s' in dict(urllib.parse.parse_qsl(fl[0])))
 
         headers = {'Host': 'www.youtube.com',
@@ -714,7 +719,7 @@ class VideoInfo(object):
                 cookies_list.append('{0}={1};'.format(c.name, c.value))
             if cookies_list:
                 curl_headers = 'Cookie={cookies}' \
-                    .format(cookies=urllib.parse.quote(' '.join(cookies_list)))
+                    .format(cookies=urllib.parse.quote(''.join(cookies_list)))
         else:
             cookies = dict()
 
@@ -746,23 +751,31 @@ class VideoInfo(object):
         el_values = ['detailpage', 'embedded']
 
         params = dict()
+        fallback_player_response = dict()
 
         for el in el_values:
             http_params['el'] = el
             result = requests.get(video_info_url, params=http_params, headers=headers, cookies=cookies, verify=self._verify, allow_redirects=True)
             data = result.text
             params = dict(urllib.parse.parse_qsl(data))
-            if params.get('url_encoded_fmt_stream_map') or params.get('live_playback', '0') == '1':
+            fallback_player_response = json.loads(params.get('player_response', '{}'))
+            if fallback_player_response.get('streamingData', {}).get('formats', []) or \
+                    fallback_player_response.get('streamingData', {}).get('hlsManifestUrl', ''):
                 break
 
         if not player_response:
-            player_response = json.loads(params.get('player_response', '{}'))
+            player_response = fallback_player_response
             playability_status = player_response.get('playabilityStatus', {})
 
         playback_tracking = player_response.get('playbackTracking', {})
-
         captions = player_response.get('captions', {})
-        is_live = player_response.get('videoDetails', {}).get('isLiveContent') is True
+        video_details = player_response.get('videoDetails', {})
+        is_live_content = video_details.get('isLiveContent') is True
+        streaming_data = player_response.get('streamingData', {})
+
+        live_url = streaming_data.get('hlsManifestUrl', '') or \
+                   fallback_player_response.get('streamingData', {}).get('hlsManifestUrl', '')
+        is_live = is_live_content and live_url
 
         stream_list = []
 
@@ -770,23 +783,24 @@ class VideoInfo(object):
                      'channel': {},
                      'images': {},
                      'subtitles': []}
-        meta_info['video']['id'] = params.get('vid', params.get('video_id', ''))
-        meta_info['video']['title'] = player_args.get('title', params.get('title', ''))
-        meta_info['channel']['author'] = player_args.get('author', params.get('author', ''))
+
+        meta_info['video']['id'] = video_details.get('videoId', video_id)
+        meta_info['video']['title'] = video_details.get('title', '')
+        meta_info['channel']['author'] = video_details.get('author', '')
         try:
             meta_info['video']['title'] = meta_info['video']['title'].encode('utf-8', 'ignore').decode('utf-8')
             meta_info['channel']['author'] = meta_info['channel']['author'].encode('utf-8', 'ignore').decode('utf-8')
         except:
             pass
 
-        meta_info['channel']['id'] = params.get('ucid', '')
+        meta_info['channel']['id'] = video_details.get('channelId', '')
         image_data_list = [
             {'from': 'iurlhq', 'to': 'high', 'image': 'hqdefault.jpg'},
             {'from': 'iurlmq', 'to': 'medium', 'image': 'mqdefault.jpg'},
             {'from': 'iurlsd', 'to': 'standard', 'image': 'sddefault.jpg'},
             {'from': 'thumbnail_url', 'to': 'default', 'image': 'default.jpg'}]
         for image_data in image_data_list:
-            image_url = params.get(image_data['from'], 'https://i.ytimg.com/vi/{video_id}/{image}'.format(video_id=video_id, image=image_data['image']))
+            image_url = 'https://i.ytimg.com/vi/{video_id}/{image}'.format(video_id=video_id, image=image_data['image'])
             if image_url:
                 if is_live:
                     image_url = image_url.replace('.jpg', '_live.jpg')
@@ -811,12 +825,18 @@ class VideoInfo(object):
                         if reason_text:
                             reason = ''.join(reason_text)
                 else:
-                    reason = params.get('reason')
-                    if not reason and 'errorScreen' in playability_status and 'playerErrorMessageRenderer' in playability_status['errorScreen']:
-                        reason = playability_status['errorScreen']['playerErrorMessageRenderer'].get('reason', {}).get('simpleText', 'UNKNOWN')
-                    if not reason:
-                        reason = playability_status.get('reason')
+                    reason = playability_status.get('reason')
 
+                    if 'errorScreen' in playability_status and 'playerErrorMessageRenderer' in playability_status['errorScreen']:
+                        status_renderer = playability_status['errorScreen']['playerErrorMessageRenderer']
+                        descript_reason = status_renderer.get('subreason', {}).get('simpleText')
+                        if descript_reason:
+                            reason = descript_reason
+                        else:
+                            general_reason = status_renderer.get('reason', {}).get('simpleText')
+                            if general_reason:
+                                reason = general_reason
+                            
                 if not reason:
                     reason = 'UNKNOWN'
 
@@ -848,26 +868,24 @@ class VideoInfo(object):
             ])
 
         if is_live:
-            live_url = player_response.get('streamingData', {}).get('hlsManifestUrl', '') or params.get('hlsvp', '')
-            if live_url:
-                stream_list = self._load_manifest(live_url,
-                                                  video_id,
-                                                  meta_info=meta_info,
-                                                  curl_headers=curl_headers,
-                                                  playback_stats=playback_stats)
+            stream_list = self._load_manifest(live_url, video_id,
+                                              meta_info=meta_info,
+                                              curl_headers=curl_headers,
+                                              playback_stats=playback_stats)
 
-        httpd_is_live = self._context.get_settings().use_dash_videos() and is_httpd_live(port=self._context.get_settings().httpd_port())
+        httpd_is_live = (self._context.get_settings().use_dash_videos() and
+                         is_httpd_live(port=self._context.get_settings().httpd_port()))
 
         cipher = None
         s_info = dict()
 
-        adaptive_fmts = params.get('adaptive_fmts', player_args.get('adaptive_fmts', ''))
-        url_encoded_fmt_stream_map = params.get('url_encoded_fmt_stream_map', player_args.get('url_encoded_fmt_stream_map', ''))
-
-        mpd_url = player_response.get('streamingData', {}).get('dashManifestUrl') or params.get('dashmpd', player_args.get('dashmpd'))
+        adaptive_fmts = streaming_data.get('adaptiveFormats', [])
+        std_fmts = streaming_data.get('formats', [])
+        mpd_url = streaming_data.get('dashManifestUrl') or \
+                  fallback_player_response.get('streamingData', {}).get('dashManifestUrl', '')
 
         license_info = {'url': None, 'proxy': None, 'token': None}
-        pa_li_info = player_response.get('streamingData', {}).get('licenseInfos', [])
+        pa_li_info = streaming_data.get('licenseInfos', [])
         if pa_li_info and (pa_li_info != ['']) and not httpd_is_live:
             raise YouTubeException('Proxy is not running')
         for li_info in pa_li_info:
@@ -887,20 +905,20 @@ class VideoInfo(object):
                     license_info['token'] = self._access_token
                     break
 
-        if requires_cipher(adaptive_fmts) or requires_cipher(url_encoded_fmt_stream_map):
+        if requires_cipher(adaptive_fmts) or requires_cipher(std_fmts):
             js = self.get_player_js(video_id, player_config.get('assets', {}).get('js', ''))
             cipher = Cipher(self._context, javascript_url=js)
 
         if not license_info.get('url') and not is_live and httpd_is_live and adaptive_fmts:
             mpd_url, s_info = self.generate_mpd(video_id,
                                                 adaptive_fmts,
-                                                player_response.get('videoDetails', {}).get('lengthSeconds', '0'),
+                                                video_details.get('lengthSeconds', '0'),
                                                 cipher)
-        use_cipher_signature = 'True' == params.get('use_cipher_signature', None)
+
         if mpd_url:
             mpd_sig_deciphered = True
             if mpd_url.startswith('http'):
-                if (use_cipher_signature or re.search('/s/[0-9A-F.]+', mpd_url)) and (not re.search('/signature/[0-9A-F.]+', mpd_url)):
+                if (re.search('/s/[0-9A-F.]+', mpd_url)) and (not re.search('/signature/[0-9A-F.]+', mpd_url)):
                     mpd_sig_deciphered = False
                     if cipher:
                         sig_param = 'signature'
@@ -952,12 +970,15 @@ class VideoInfo(object):
                 raise YouTubeException('Failed to decipher signature')
 
         def parse_to_stream_list(streams):
-            fmts_list = streams.split(',')
-            for item in fmts_list:
-                stream_map = dict(urllib.parse.parse_qsl(item))
+            for item in streams:
+                stream_map = item
+                stream_map.update(dict(urllib.parse.parse_qsl(item.get('cipher', ''))))
 
                 url = stream_map.get('url', None)
                 conn = stream_map.get('conn', None)
+
+                stream_map['itag'] = str(stream_map['itag'])
+
                 if url:
                     sig_param = '&signature='
                     if 'sp' in stream_map:
@@ -1004,8 +1025,8 @@ class VideoInfo(object):
                         stream_list.append(stream)
 
         # extract streams from map
-        if url_encoded_fmt_stream_map:
-            parse_to_stream_list(url_encoded_fmt_stream_map)
+        if std_fmts:
+            parse_to_stream_list(std_fmts)
 
         if adaptive_fmts:
             parse_to_stream_list(adaptive_fmts)
@@ -1147,12 +1168,13 @@ class VideoInfo(object):
         stream_info = {'video': {'height': '0', 'fps': '0', 'codec': '', 'mime': '', 'quality_label': '', 'bandwidth': 0},
                        'audio': {'bitrate': '0', 'codec': '', 'mime': '', 'bandwidth': 0}}
 
-        fmts_list = adaptive_fmts.split(',')
         data = dict()
-        for item in fmts_list:
-            stream_map = dict(urllib.parse.parse_qsl(item))
+        for item in adaptive_fmts:
+            stream_map = item
+            stream_map.update(dict(urllib.parse.parse_qsl(item.get('cipher', ''))))
+            stream_map['itag'] = str(stream_map.get('itag'))
 
-            t = stream_map.get('type')
+            t = stream_map.get('mimeType')
             t = urllib.parse.unquote(t)
             t = t.split(';')
             mime = t[0]
@@ -1164,13 +1186,10 @@ class VideoInfo(object):
             data[mime][i]['codecs'] = t[1][1:]
             data[mime][i]['id'] = i
 
-            s = stream_map.get('size')
-            if s:
-                s = s.split('x')
-                data[mime][i]['width'] = s[0]
-                data[mime][i]['height'] = s[1]
+            data[mime][i]['width'] = stream_map.get('width')
+            data[mime][i]['height'] = stream_map.get('height')
 
-            data[mime][i]['quality_label'] = str(stream_map.get('quality_label'))
+            data[mime][i]['quality_label'] = str(stream_map.get('qualityLabel'))
 
             data[mime][i]['bandwidth'] = stream_map.get('bitrate')
 
@@ -1203,11 +1222,15 @@ class VideoInfo(object):
             url = url.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
             data[mime][i]['baseUrl'] = url
 
-            data[mime][i]['indexRange'] = stream_map.get('index')
-            data[mime][i]['init'] = stream_map.get('init')
-
-            if (not stream_map.get('index') or not stream_map.get('init') or
-                    (stream_map.get('index') == '0-0' and stream_map.get('init') == '0-0')):
+            data[mime][i]['indexRange'] = '0-0'
+            data[mime][i]['initRange'] = '0-0'
+            if 'indexRange' in stream_map and 'initRange' in stream_map:
+                data[mime][i]['indexRange'] = '-'.join([stream_map.get('indexRange').get('start'),
+                                                        stream_map.get('indexRange').get('end')])
+                data[mime][i]['init'] = '-'.join([stream_map.get('initRange').get('start'),
+                                                  stream_map.get('initRange').get('end')])
+            if ('indexRange' not in stream_map or 'initRange' not in stream_map or
+                    data[mime][i].get('indexRange') == '0-0' and data[mime][i].get('initRange') == '0-0'):
                 if mime.startswith('video'):
                     discarded_streams.append(get_discarded_video(mime, i, data[mime][i], 'no init or index'))
                 else:
@@ -1324,7 +1347,7 @@ class VideoInfo(object):
 
                         out_list.append(''.join(['\t\t\t<Representation id="',
                                                  i, '" ', data[mime][i]['codecs'],
-                                                 ' bandwidth="', data[mime][i]['bandwidth'],
+                                                 ' bandwidth="', str(data[mime][i]['bandwidth']),
                                                  '">\n']))
                         out_list.append('\t\t\t\t<AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>\n')
                     else:
@@ -1364,9 +1387,9 @@ class VideoInfo(object):
 
                         video_codec = data[mime][i]['codecs']
                         out_list.append(''.join(['\t\t\t<Representation id="', i, '" ', video_codec,
-                                                 ' startWithSAP="1" bandwidth="', data[mime][i]['bandwidth'],
-                                                 '" width="', data[mime][i]['width'], '" height="',
-                                                 data[mime][i]['height'], '" frameRate="', data[mime][i]['frameRate'],
+                                                 ' startWithSAP="1" bandwidth="', str(data[mime][i]['bandwidth']),
+                                                 '" width="', str(data[mime][i]['width']), '" height="',
+                                                 str(data[mime][i]['height']), '" frameRate="', str(data[mime][i]['frameRate']),
                                                  '">\n']))
 
                     out_list.append(''.join(['\t\t\t\t<BaseURL>', data[mime][i]['baseUrl'], '</BaseURL>\n']))

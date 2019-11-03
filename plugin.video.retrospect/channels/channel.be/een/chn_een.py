@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import chn_class
+from resources.lib import chn_class
 
-from mediaitem import MediaItem
-from regexer import Regexer
-from logger import Logger
-from streams.m3u8 import M3u8
-from urihandler import UriHandler
-from helpers.jsonhelper import JsonHelper
+from resources.lib.mediaitem import MediaItem
+from resources.lib.regexer import Regexer
+from resources.lib.logger import Logger
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.jsonhelper import JsonHelper
 
 
 class Channel(chn_class.Channel):

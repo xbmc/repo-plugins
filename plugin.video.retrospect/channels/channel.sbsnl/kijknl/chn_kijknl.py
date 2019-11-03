@@ -2,21 +2,21 @@
 
 import datetime
 
-import chn_class
-from helpers.languagehelper import LanguageHelper
-from helpers.subtitlehelper import SubtitleHelper
-from parserdata import ParserData
+from resources.lib import chn_class
+from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.helpers.subtitlehelper import SubtitleHelper
+from resources.lib.parserdata import ParserData
 
-from mediaitem import MediaItem
-from streams.m3u8 import M3u8
-from streams.mpd import Mpd
-from regexer import Regexer
-from helpers.jsonhelper import JsonHelper
-from helpers.datehelper import DateHelper
-from logger import Logger
-from urihandler import UriHandler
-from addonsettings import AddonSettings
-from xbmcwrapper import XbmcWrapper
+from resources.lib.mediaitem import MediaItem
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.streams.mpd import Mpd
+from resources.lib.regexer import Regexer
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.logger import Logger
+from resources.lib.urihandler import UriHandler
+from resources.lib.addonsettings import AddonSettings
+from resources.lib.xbmcwrapper import XbmcWrapper
 
 
 class Channel(chn_class.Channel):

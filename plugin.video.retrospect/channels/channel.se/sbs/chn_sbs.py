@@ -4,19 +4,19 @@
 import uuid
 import datetime
 
-import chn_class
-from mediaitem import MediaItem
-from addonsettings import AddonSettings
-from helpers.datehelper import DateHelper
-from helpers.jsonhelper import JsonHelper
-from helpers.languagehelper import LanguageHelper
-from helpers.subtitlehelper import SubtitleHelper
-from parserdata import ParserData
-from urihandler import UriHandler
-from streams.m3u8 import M3u8
-from helpers.htmlentityhelper import HtmlEntityHelper
-from logger import Logger
-from xbmcwrapper import XbmcWrapper
+from resources.lib import chn_class
+from resources.lib.mediaitem import MediaItem
+from resources.lib.addonsettings import AddonSettings
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.helpers.subtitlehelper import SubtitleHelper
+from resources.lib.parserdata import ParserData
+from resources.lib.urihandler import UriHandler
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.logger import Logger
+from resources.lib.xbmcwrapper import XbmcWrapper
 
 
 # noinspection PyIncorrectDocstring

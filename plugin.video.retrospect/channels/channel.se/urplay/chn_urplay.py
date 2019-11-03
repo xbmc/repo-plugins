@@ -1,16 +1,16 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import chn_class
-from helpers.languagehelper import LanguageHelper
+from resources.lib import chn_class
+from resources.lib.helpers.languagehelper import LanguageHelper
 
-from mediaitem import MediaItem
-from parserdata import ParserData
-from regexer import Regexer
-from helpers import subtitlehelper
-from logger import Logger
-from urihandler import UriHandler
-from helpers.jsonhelper import JsonHelper
+from resources.lib.mediaitem import MediaItem
+from resources.lib.parserdata import ParserData
+from resources.lib.regexer import Regexer
+from resources.lib.helpers import subtitlehelper
+from resources.lib.logger import Logger
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.jsonhelper import JsonHelper
 
 
 class Channel(chn_class.Channel):
@@ -47,9 +47,6 @@ class Channel(chn_class.Channel):
                               name="Most viewed", json=True,
                               parser=["results"], creator=self.create_json_video_item)
 
-        item_regex = r'href="/(?<url>[^/]+/(?<id>\d+)[^"]+)"[^>]*>[^<]+</a>\W+<figure>[\W\w]' \
-                     r'{0,3000}?<h2[^>]*>(?<title>[^<]+)</h2>\W+<p[^>]+>\s*(?<description>[^<]+?)' \
-                     r'\s*<span class="usp">(?<description2>[^<]+)'
         item_regex = r'href="/(?<url>[^/]+/(?<id>\d+)[^"]+)"[^>]*>[^<]+</a>\W+<figure>[\W\w]' \
                      r'{0,3000}?<h2[^>]*>(?<title>[^<]+)</h2>\W+<p[^>]+>\s{0,4}(?<description>[^<]*?)' \
                      r'\s+(?:(?<duration>\d{1,3})\smin\s.\s+)?<span class="usp">(?<description2>[^<]+)'

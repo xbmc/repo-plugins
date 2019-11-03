@@ -1,0 +1,16 @@
+{
+  "channels": [
+    {
+      "guid": "B11F7D22-941D-4228-A888-226542A442E7",
+      "name": "Ons",
+      "description": "ONS is dé tv-zender voor mensen die nostalgie een warm hart toedragen. ONS biedt een breed aanbod aan goede series, Nederlandse en buitenlandse speelfilms, geschiedenis, muziek en entertainment.",
+      "icon": "onsicon.png",
+      "category": "National",
+      "sortorder": 211,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "onsfanart.jpg",
+      "adaptiveAddonSelectable": false
+    }
+  ]
+}

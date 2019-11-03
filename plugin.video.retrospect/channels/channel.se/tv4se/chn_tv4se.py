@@ -4,19 +4,21 @@
 import math
 import datetime
 
-import chn_class
-from mediaitem import MediaItem
-from addonsettings import AddonSettings
-from helpers.jsonhelper import JsonHelper
+from resources.lib import chn_class
+from resources.lib.mediaitem import MediaItem
+from resources.lib.addonsettings import AddonSettings
+from resources.lib.helpers.jsonhelper import JsonHelper
 
-from parserdata import ParserData
-from regexer import Regexer
-from helpers.htmlentityhelper import HtmlEntityHelper
-from helpers.languagehelper import LanguageHelper
-from logger import Logger
-from streams.m3u8 import M3u8
-from urihandler import UriHandler
-from helpers.subtitlehelper import SubtitleHelper
+from resources.lib.parserdata import ParserData
+from resources.lib.regexer import Regexer
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.logger import Logger
+from resources.lib.streams.mpd import Mpd
+from resources.lib.xbmcwrapper import XbmcWrapper
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.subtitlehelper import SubtitleHelper
 
 
 class Channel(chn_class.Channel):
@@ -284,13 +286,6 @@ class Channel(chn_class.Channel):
                     None, False
                 ),
             })
-            # if self.loggedOn:
-            #     extras.update({
-            #         "\a.: Favoriter :.": (
-            #             "http://www.tv4play.se/program/favourites",
-            #             None, True
-            #         ),
-            #     })
 
             today = datetime.datetime.now()
             days = [LanguageHelper.get_localized_string(LanguageHelper.Monday),
@@ -486,7 +481,9 @@ class Channel(chn_class.Channel):
         program_id = result_set["id"]
         # Logger.Debug("ProgId = %s", programId)
 
-        url = "https://playback-api.b17g.net/media/%s?service=tv4&device=browser&protocol=hls" % (program_id,)
+        # We can either use M3u8 or Dash
+        # url = "https://playback-api.b17g.net/media/%s?service=tv4&device=browser&protocol=hls" % (program_id,)
+        url = "https://playback-api.b17g.net/media/%s?service=tv4&device=browser&protocol=dash" % (program_id,)
         name = result_set["title"]
 
         item = MediaItem(name, url)
@@ -539,6 +536,8 @@ class Channel(chn_class.Channel):
         item.isLive = result_set.get("is_live", False)
         if item.isLive:
             item.url = "{0}&is_live=true".format(item.url)
+        if item.isDrmProtected:
+            item.url = "{}&drm=widevine&is_drm=true".format(item.url)
 
         return item
 
@@ -608,21 +607,24 @@ class Channel(chn_class.Channel):
         # retrieve the mediaurl
         data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=self.localIP)
         stream_info = JsonHelper(data)
-        m3u8_url = stream_info.get_value("playbackItem", "manifestUrl")
-        if m3u8_url is None:
+        stream_url = stream_info.get_value("playbackItem", "manifestUrl")
+        if stream_url is None:
             return item
+
+        if ".mpd" in stream_url:
+            return self.__update_dash_video(item, stream_info)
 
         part = item.create_new_empty_media_part()
 
         if AddonSettings.use_adaptive_stream_add_on() and False:
-            subtitle = M3u8.get_subtitle(m3u8_url, proxy=self.proxy)
-            stream = part.append_media_stream(m3u8_url, 0)
+            subtitle = M3u8.get_subtitle(stream_url, proxy=self.proxy)
+            stream = part.append_media_stream(stream_url, 0)
             M3u8.set_input_stream_addon_input(stream, self.proxy)
             item.complete = True
         else:
-            m3u8_data = UriHandler.open(m3u8_url, proxy=self.proxy, additional_headers=self.localIP)
-            subtitle = M3u8.get_subtitle(m3u8_url, proxy=self.proxy, play_list_data=m3u8_data)
-            for s, b, a in M3u8.get_streams_from_m3u8(m3u8_url, self.proxy,
+            m3u8_data = UriHandler.open(stream_url, proxy=self.proxy, additional_headers=self.localIP)
+            subtitle = M3u8.get_subtitle(stream_url, proxy=self.proxy, play_list_data=m3u8_data)
+            for s, b, a in M3u8.get_streams_from_m3u8(stream_url, self.proxy,
                                                       play_list_data=m3u8_data, map_audio=True):
                 item.complete = True
                 if not item.isLive and "-video" not in s:
@@ -678,6 +680,46 @@ class Channel(chn_class.Channel):
         else:
             for s, b in M3u8.get_streams_from_m3u8(item.url, self.proxy):
                 part.append_media_stream(s, b)
+
+        item.complete = True
+        return item
+
+    def __update_dash_video(self, item, stream_info):
+        """
+
+        :param MediaItem item:          The item that was updated
+        :param JsonHelper stream_info:  The stream info
+        """
+
+        if not AddonSettings.use_adaptive_stream_add_on(with_encryption=True):
+            XbmcWrapper.show_dialog(
+                LanguageHelper.get_localized_string(LanguageHelper.DrmTitle),
+                LanguageHelper.get_localized_string(LanguageHelper.WidevineLeiaRequired))
+            return item
+
+        playback_item = stream_info.get_value("playbackItem")
+
+        stream_url = playback_item["manifestUrl"]
+        part = item.create_new_empty_media_part()
+        stream = part.append_media_stream(stream_url, 0)
+
+        license_info = playback_item.get("license", None)
+        if license_info is not None:
+            license_key_token = license_info["token"]
+            auth_token = license_info["castlabsToken"]
+            header = {
+                "x-dt-auth-token": auth_token,
+                "content-type": "application/octstream"
+            }
+            license_url = license_info["castlabsServer"]
+            license_key = Mpd.get_license_key(
+                license_url, key_value=license_key_token, key_headers=header)
+
+            Mpd.set_input_stream_addon_input(
+                stream, proxy=self.proxy, license_key=license_key)
+            item.isDrmProtected = False
+        else:
+            Mpd.set_input_stream_addon_input(stream, proxy=self.proxy)
 
         item.complete = True
         return item

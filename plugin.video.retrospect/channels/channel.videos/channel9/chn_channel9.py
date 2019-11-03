@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-from backtothefuture import PY2
+from resources.lib.backtothefuture import PY2
 if PY2:
     # noinspection PyUnresolvedReferences
     import urlparse as parse
@@ -8,16 +8,16 @@ else:
     # noinspection PyUnresolvedReferences
     import urllib.parse as parse
 
-import chn_class
+from resources.lib import chn_class
 
-from mediaitem import MediaItem
-from regexer import Regexer
-from logger import Logger
-from urihandler import UriHandler
-from helpers.htmlentityhelper import HtmlEntityHelper
-from helpers.datehelper import DateHelper
-from helpers.htmlhelper import HtmlHelper
-from helpers.xmlhelper import XmlHelper
+from resources.lib.mediaitem import MediaItem
+from resources.lib.regexer import Regexer
+from resources.lib.logger import Logger
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.helpers.htmlhelper import HtmlHelper
+from resources.lib.helpers.xmlhelper import XmlHelper
 
 
 class Channel(chn_class.Channel):

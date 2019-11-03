@@ -2,23 +2,23 @@
 
 import datetime
 
-import chn_class
-from mediaitem import MediaItem
-from addonsettings import AddonSettings
-from helpers.htmlhelper import HtmlHelper
-from regexer import Regexer
-from parserdata import ParserData
-from logger import Logger
-from urihandler import UriHandler
-from helpers.htmlentityhelper import HtmlEntityHelper
-from helpers.jsonhelper import JsonHelper
-from streams.m3u8 import M3u8
-from streams.mpd import Mpd
-from vault import Vault
-from helpers.datehelper import DateHelper
-from helpers.languagehelper import LanguageHelper
-from textures import TextureHandler
-from helpers.subtitlehelper import SubtitleHelper
+from resources.lib import chn_class
+from resources.lib.mediaitem import MediaItem
+from resources.lib.addonsettings import AddonSettings
+from resources.lib.helpers.htmlhelper import HtmlHelper
+from resources.lib.regexer import Regexer
+from resources.lib.parserdata import ParserData
+from resources.lib.logger import Logger
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.streams.mpd import Mpd
+from resources.lib.vault import Vault
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.textures import TextureHandler
+from resources.lib.helpers.subtitlehelper import SubtitleHelper
 
 
 class Channel(chn_class.Channel):

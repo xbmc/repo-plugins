@@ -1,6 +1,6 @@
 {
   "id": "channel.videos",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "textures": {
     "channel.videos.amt/applemovietrailersfanart.jpg": "881038572b21f04891d34fbff4e0f31d",
     "channel.videos.amt/applemovietrailersfanart2.jpg": "d4faa4401fdee5b84c20e0299486b0dc",
@@ -11,6 +11,8 @@
     "channel.videos.eredivisie/foxsportfanart.jpg": "664e7a3d672e4c6cdcc19402a2d2619f",
     "channel.videos.extreme/extremefanart.jpg": "e890567623640cba73d41e1e98c3e3a7",
     "channel.videos.hardwareinfo/hardwareinfofanart.jpg": "9057486d45b664e787951992014ad673",
+    "channel.videos.ons/onsfanart.jpg": "fcd787dc39207f4b2c124e371e608128",
+    "channel.videos.ons/onsimage.jpg": "88c3315af202d5e9f959639f49f03bd2",
     "channel.videos.pathenl/pathefanart.jpg": "84b46ebb90fce3e0c01cfd39cee5d649",
     "channel.videos.twit/twitfanart.jpg": "bb8502fbf668d954a8068f7617de0a92",
     "channel.videos.amt/amtimage.png": "56f05c4ac604ab5a397a05e97a417526",
@@ -27,6 +29,7 @@
     "channel.videos.extreme/extremelarge.png": "e865b410ee63f14b3fe70cd77abe8e52",
     "channel.videos.hardwareinfo/hardwareinfoimage.png": "1ba8392c4d72c5606bcd81ffa2fcc63d",
     "channel.videos.hardwareinfo/hardwareinfolarge.png": "cdf1a119f1c5c44b2b3c4210bfa6e095",
+    "channel.videos.ons/onsicon.png": "d1df54431b762a5c7823745bb250001d",
     "channel.videos.pathenl/patheimage.png": "a371da4e972b3144975271ecb8a0db02",
     "channel.videos.pathenl/pathelarge.png": "7f568cbd9dc1d0d86799f7e3c85ea5eb",
     "channel.videos.twit/twitimage.png": "ae15e53675b576ff12ba5ea71e5b1927",

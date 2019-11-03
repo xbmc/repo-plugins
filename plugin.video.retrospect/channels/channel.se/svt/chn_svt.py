@@ -3,22 +3,22 @@
 
 import datetime
 
-import chn_class
+from resources.lib import chn_class
 
-from mediaitem import MediaItem
-from regexer import Regexer
-from helpers import subtitlehelper
-from helpers.jsonhelper import JsonHelper
-from helpers.datehelper import DateHelper
-from helpers.languagehelper import LanguageHelper
-from streams.m3u8 import M3u8
-from streams.mpd import Mpd
-from channelinfo import ChannelInfo
-from addonsettings import AddonSettings
+from resources.lib.mediaitem import MediaItem
+from resources.lib.regexer import Regexer
+from resources.lib.helpers import subtitlehelper
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.streams.mpd import Mpd
+from resources.lib.channelinfo import ChannelInfo
+from resources.lib.addonsettings import AddonSettings
 
-from logger import Logger
-from urihandler import UriHandler
-from parserdata import ParserData
+from resources.lib.logger import Logger
+from resources.lib.urihandler import UriHandler
+from resources.lib.parserdata import ParserData
 
 
 class Channel(chn_class.Channel):

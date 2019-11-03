@@ -7,10 +7,10 @@ import sys
 
 import datetime
 
-from backtothefuture import basestring
-from urihandler import UriHandler
-from helpers.jsonhelper import JsonHelper
-from logger import Logger
+from resources.lib.backtothefuture import basestring
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.logger import Logger
 
 
 class AwsIdp:

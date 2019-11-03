@@ -1,12 +1,12 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import chn_class
+from resources.lib import chn_class
 
-from regexer import Regexer
-from parserdata import ParserData
-from logger import Logger
-from urihandler import UriHandler
+from resources.lib.regexer import Regexer
+from resources.lib.parserdata import ParserData
+from resources.lib.logger import Logger
+from resources.lib.urihandler import UriHandler
 
 
 class Channel(chn_class.Channel):

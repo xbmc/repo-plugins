@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import chn_class
+from resources.lib import chn_class
 
-from mediaitem import MediaItem
-from helpers import xmlhelper
-from streams.youtube import YouTube
-from urihandler import UriHandler
-from helpers.datehelper import DateHelper
-from logger import Logger
+from resources.lib.mediaitem import MediaItem
+from resources.lib.helpers import xmlhelper
+from resources.lib.streams.youtube import YouTube
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.logger import Logger
 
 
 class Channel(chn_class.Channel):

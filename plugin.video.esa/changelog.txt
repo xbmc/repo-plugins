@@ -1,3 +1,5 @@
+1.1.2 (2019.11.03)
+- Quick fix due to website new design.
 1.1.1 (2018.12.02)
 - Quick fix to play newer videos (thanks to idleloop-github).
 - Migrate deprecated language files from xml to po format.

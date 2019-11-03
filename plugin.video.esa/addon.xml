@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.esa" name="ESA Videos" version="1.1.1" provider-name="Jose Antonio Montes (jamontes)">
+<addon id="plugin.video.esa" name="ESA Videos" version="1.1.2" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
         <import addon="xbmc.python" version="2.14.0"/>
     </requires>
@@ -9,25 +9,25 @@
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <summary lang="en">Watch the ESA videos from the ESA web site.</summary>
-        <description lang="en">The European Space Agency (ESA) is Europe’s gateway to space. Its mission is to shape the development of Europe’s space capability and ensure that investment in space continues to deliver benefits to the citizens of Europe and the world.[CR]This plugin allows to watch directly the ESA videos from your XBMC.[CR]More than 1500 videos are available.</description>
+        <description lang="en">The European Space Agency (ESA) is Europe’s gateway to space. Its mission is to shape the development of Europe’s space capability and ensure that investment in space continues to deliver benefits to the citizens of Europe and the world.[CR]This plugin allows to watch directly the ESA videos from your Kodi.[CR]More than 1500 videos are available.</description>
         <summary lang="cs">ESA videa.</summary>
-        <description lang="cs">Evropská Kosmická Agentura (ESA) je v Evropě brána do vesmíru. Jejím posláním je utvářet vývoj vesmírných schopností Evropy a zajistit, aby investice do vesmíru i nadále přinášet výhody pro občany Evropy a světa.[CR]Tento modul umožňuje sledovat přímo v ESA videa z Vašeho XBMC.[CR]Více než 1500 videa jsou k dispozici.</description>
+        <description lang="cs">Evropská Kosmická Agentura (ESA) je v Evropě brána do vesmíru. Jejím posláním je utvářet vývoj vesmírných schopností Evropy a zajistit, aby investice do vesmíru i nadále přinášet výhody pro občany Evropy a světa.[CR]Tento modul umožňuje sledovat přímo v ESA videa z Vašeho Kodi.[CR]Více než 1500 videa jsou k dispozici.</description>
         <summary lang="es">Mira los vídeos de la ESA localizados en su página web.</summary>
-        <description lang="es">La Agencia Espacial Europea (ESA) es la puerta de Europa al espacio. Su misión es impulsar el desarrollo espacial en Europa, y asegurar que las inversiones en el espacio continuan produciendo beneficios a los ciudadanos de Europa y el mundo.[CR]Este plugin te permite ver los vídeos de la ESA directamente desde tu XBMC.[CR]Hay más de 1.500 vídeos disponibles.</description>
+        <description lang="es">La Agencia Espacial Europea (ESA) es la puerta de Europa al espacio. Su misión es impulsar el desarrollo espacial en Europa, y asegurar que las inversiones en el espacio continuan produciendo beneficios a los ciudadanos de Europa y el mundo.[CR]Este plugin te permite ver los vídeos de la ESA directamente desde tu Kodi.[CR]Hay más de 1.500 vídeos disponibles.</description>
         <summary lang="fr">ESA vidéos.</summary>
-        <description lang="fr">L'Agence Spatiale Européenne (ESA) est la porte de l'Europe à l'espace. Sa mission consiste à façonner le développement des capacités spatiales de l'Europe et de s'assurer que les investissements dans l'espace continue d'offrir des avantages aux citoyens de l'Europe et le monde.[CR]Ce plugin permet de regarder directement les vidéos ESA à partir de votre XBMC.[CR]Plus de 1500 vidéos sont disponibles.</description>
+        <description lang="fr">L'Agence Spatiale Européenne (ESA) est la porte de l'Europe à l'espace. Sa mission consiste à façonner le développement des capacités spatiales de l'Europe et de s'assurer que les investissements dans l'espace continue d'offrir des avantages aux citoyens de l'Europe et le monde.[CR]Ce plugin permet de regarder directement les vidéos ESA à partir de votre Kodi.[CR]Plus de 1500 vidéos sont disponibles.</description>
         <summary lang="de">ESA videos.</summary>
-        <description lang="de">Die Europäische Weltraumorganisation (ESA) ist Europas Tor zum Weltraum. Seine Mission ist es, die Entwicklung der europäischen Raum-Fähigkeit zu gestalten und sicherzustellen, dass Investitionen in die Raumfahrt weiterhin Vorteile für die Bürger Europas und der Welt.[CR]Dieses Plugin erlaubt es, direkt beobachten die ESA Videos von Ihrem XBMC.[CR]Mehr liefern als 1500 Videos stehen zur Verfügung.</description>
+        <description lang="de">Die Europäische Weltraumorganisation (ESA) ist Europas Tor zum Weltraum. Seine Mission ist es, die Entwicklung der europäischen Raum-Fähigkeit zu gestalten und sicherzustellen, dass Investitionen in die Raumfahrt weiterhin Vorteile für die Bürger Europas und der Welt.[CR]Dieses Plugin erlaubt es, direkt beobachten die ESA Videos von Ihrem Kodi.[CR]Mehr liefern als 1500 Videos stehen zur Verfügung.</description>
         <summary lang="el">ESA βίντεο.</summary>
-        <description lang="el">Ο Ευρωπαϊκός Οργανισμός Διαστήματος (ESA) αποτελεί την πύλη της Ευρώπης στο διάστημα. Η αποστολή του είναι η διαμόρφωση της ανάπτυξης της διαστημικής ικανότητας της Ευρώπης και να εξασφαλίσει ότι οι επενδύσεις στο χώρο συνεχίζει να προσφέρει οφέλη για τους πολίτες της Ευρώπης και του κόσμου.[CR]Αυτό το plugin σας επιτρέπει να παρακολουθήσετε απευθείας τα βίντεο ESA από το XBMC σας.[CR]Περισσότερα από 1500 βίντεο είναι διαθέσιμα.</description>
+        <description lang="el">Ο Ευρωπαϊκός Οργανισμός Διαστήματος (ESA) αποτελεί την πύλη της Ευρώπης στο διάστημα. Η αποστολή του είναι η διαμόρφωση της ανάπτυξης της διαστημικής ικανότητας της Ευρώπης και να εξασφαλίσει ότι οι επενδύσεις στο χώρο συνεχίζει να προσφέρει οφέλη για τους πολίτες της Ευρώπης και του κόσμου.[CR]Αυτό το plugin σας επιτρέπει να παρακολουθήσετε απευθείας τα βίντεο ESA από το Kodi σας.[CR]Περισσότερα από 1500 βίντεο είναι διαθέσιμα.</description>
         <summary lang="it">ESA video.</summary>
-        <description lang="it">L'Agenzia Spaziale Europea (ESA) è la porta dell'Europa verso lo spazio. La sua missione è quella di plasmare lo sviluppo delle capacità spaziali europee e garantire che gli investimenti nello spazio continua a fornire benefici per i cittadini d'Europa e del mondo.[CR]Questo plugin permette di guardare direttamente i video dell'ESA dal XBMC.[CR]Altri oltre 1500 video sono disponibili.</description>
+        <description lang="it">L'Agenzia Spaziale Europea (ESA) è la porta dell'Europa verso lo spazio. La sua missione è quella di plasmare lo sviluppo delle capacità spaziali europee e garantire che gli investimenti nello spazio continua a fornire benefici per i cittadini d'Europa e del mondo.[CR]Questo plugin permette di guardare direttamente i video dell'ESA dal Kodi.[CR]Altri oltre 1500 video sono disponibili.</description>
         <summary lang="pt">ESA vídeos.</summary>
-        <description lang="pt">A Agência Espacial Europeia (ESA) é a porta de entrada da Europa ao espaço. Sua missão é moldar o desenvolvimento da capacidade espacial da Europa e assegurar que o investimento no espaço continua a trazer benefícios para os cidadãos da Europa e do mundo.[CR]Este plugin permite assistir diretamente os vídeos do ESA a partir do seu XBMC.[CR]Mais de 1500 vídeos estão disponíveis.</description>
+        <description lang="pt">A Agência Espacial Europeia (ESA) é a porta de entrada da Europa ao espaço. Sua missão é moldar o desenvolvimento da capacidade espacial da Europa e assegurar que o investimento no espaço continua a trazer benefícios para os cidadãos da Europa e do mundo.[CR]Este plugin permite assistir diretamente os vídeos do ESA a partir do seu Kodi.[CR]Mais de 1500 vídeos estão disponíveis.</description>
         <language>cs en es fr de el it pt</language>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
-        <forum>http://forum.xbmc.org/showthread.php?tid=170058</forum>
+        <forum>https://forum.kodi.tv/showthread.php?tid=170058</forum>
         <source>https://github.com/jamontes/plugin.video.esa</source>
-        <website>http://www.esa.int/ESA</website>
+        <website>http://www.esa.int/ESA_Multimedia/Videos</website>
     </extension>
 </addon>

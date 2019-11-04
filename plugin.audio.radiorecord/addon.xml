@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.radiorecord" name="Radio Record" version="1.0.0" provider-name="Nemiroff">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0" />
+        <import addon="script.module.requests" version="2.4.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Radio Record</summary>
+        <summary lang="ru_RU">Радио Рекорд</summary>
+        <description lang="en_GB">RadioRecord.Ru in your Kodi!</description>
+        <description lang="ru_RU">Аддон для RadioRecord.Ru</description>
+        <disclaimer lang="en_GB">This is not official addon</disclaimer>
+        <disclaimer lang="ru_RU">Это не оффициальный аддон</disclaimer>
+        <language>ru en</language>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>https://github.com/Nemiroff/plugin.audio.radiorecord</source>
+        <platform>all</platform>
+        <website>www.radiorecord.ru</website>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

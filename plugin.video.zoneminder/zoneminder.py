@@ -23,6 +23,8 @@ _handle = int(sys.argv[1])
 _addon = xbmcaddon.Addon()
 _language = _addon.getLocalizedString
 _base_url = _addon.getSetting('base_url').strip()
+_zm_path = _addon.getSetting('zm_path').strip()
+_cgi_path = _addon.getSetting('cgi_path').strip()
 _auth_token = None
 _auth_cookies = None
 
@@ -56,10 +58,11 @@ def error_message(message, title='Error'):
     xbmcgui.Dialog().ok(title, message)
 
 def login ():
-    login_url = '{base_url}/api/host/login.json'.format(base_url=_base_url)
+    login_url = '{base_url}/{zm_path}/api/host/login.json'.format(base_url=_base_url, zm_path=_zm_path)
     creds = {
                 'user': _addon.getSetting('username').strip(),
-                'pass': _addon.getSetting('password').strip()
+                'pass': _addon.getSetting('password').strip(),
+                'stateful': 1
             }
     try:
         r = requests.post(login_url, data=creds)
@@ -78,7 +81,7 @@ def login ():
 
 def get_active_monitors ():
     # Get monitors from Zoneminder API
-    monitors_url = '{base_url}/api/monitors.json'.format(base_url=_base_url)
+    monitors_url = '{base_url}/{zm_path}/api/monitors.json'.format(base_url=_base_url, zm_path=_zm_path)
     r = requests.get(monitors_url, cookies=_auth_cookies)
     # Parse JSON response
     j = json.loads(r.text)
@@ -94,8 +97,9 @@ def get_active_monitors ():
         active_monitor = dict()
         active_monitor['id'] = monitor['Id']
         active_monitor['name'] = monitor['Name']
-        active_monitor['video'] = '{base_url}/cgi-bin/nph-zms?scale=auto&width={width}&height={height}&mode=jpeg&maxfps={fps}&monitor={monitor_id}&{auth}'.format( 
+        active_monitor['video'] = '{base_url}/{cgi_path}/nph-zms?scale=auto&width={width}&height={height}&mode=jpeg&maxfps={fps}&monitor={monitor_id}&{auth}'.format( 
             base_url=_base_url,
+            cgi_path=_cgi_path,
             width=monitor['Width'],
             height=monitor['Height'],
             fps=_addon.getSetting('fps'),
@@ -103,8 +107,9 @@ def get_active_monitors ():
             auth=_auth_token
             )
         
-        active_monitor['thumb'] = '{base_url}/cgi-bin/nph-zms?scale=auto&width={width}&height={height}&mode=single&maxfps={fps}&monitor={monitor_id}&{auth}'.format( 
+        active_monitor['thumb'] = '{base_url}/{cgi_path}/nph-zms?scale=auto&width={width}&height={height}&mode=single&maxfps={fps}&monitor={monitor_id}&{auth}'.format( 
             base_url=_addon.getSetting('base_url'),
+            cgi_path=_cgi_path,
             width=monitor['Width'],
             height=monitor['Height'],
             fps=_addon.getSetting('fps'),

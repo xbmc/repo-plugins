@@ -42,7 +42,11 @@ msgid "Frames per second (max)"
 msgstr ""
 
 msgctxt "#31006"
-msgid "Default View"
+msgid "ZM path"
+msgstr ""
+
+msgctxt "#31007"
+msgid "CGI Path"
 msgstr ""
 
 #

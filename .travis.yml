@@ -1,0 +1,21 @@
+dist: bionic
+language: python
+python: 3.8
+
+install:
+  - pip install kodi-addon-checker
+
+before_script:
+- git config core.quotepath false
+
+# command to run our tests
+script:
+  - kodi-addon-checker --branch=matrix $([ "$TRAVIS_PULL_REQUEST" != "false" ] && echo --PR $(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq))
+
+notifications:
+  webhooks: https://www.travisbuddy.com/
+  email:
+    on_failure: change # default: always
+
+travisBuddy:
+  successBuildLog: "true"

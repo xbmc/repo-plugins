@@ -1,0 +1,6 @@
+v2.0.1 (2019-11-04)
+- Allow modification of cgi-bin path, requires change to base URL
+- Support ZM v1.34 API
+
+v2.0.0 (2019-01-17)
+- initial version

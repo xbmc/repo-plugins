@@ -1,10 +1,11 @@
 <settings>
  <category label="31000">
-  <setting id="base_url" type="text" label="31001" default="http://zmhost:8080/zm"/>
+  <setting id="base_url" type="text" label="31001" default="http://zmhost:8080"/>
+  <setting id="zm_path" type="text" label="31006" default="zm" />
+  <setting id="cgi_path" type="text" label="31007" default="zm/cgi-bin" />
   <setting id="is_authenticated" type="bool" label="31002" default="false"/>
   <setting id="username" type="text" label="31003" default="admin" enable="eq(-1,true)"/>
   <setting id="password" type="text" label="31004" default="admin" enable="eq(-2,true)" option="hidden" />
   <setting id="fps" type="labelenum" label="31005" default="30" values="1|2|5|10|15|20|25|30|50"/>
-  <!-- <setting id="default_view" type="labelenum" label="31006"  lvalues="32000|32001|32002"/> -->
  </category>
 </settings>

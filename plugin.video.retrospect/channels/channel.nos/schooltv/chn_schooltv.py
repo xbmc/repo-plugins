@@ -1,15 +1,15 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import chn_class
+from resources.lib import chn_class
 
-from mediaitem import MediaItem
-from logger import Logger
-from helpers.jsonhelper import JsonHelper
-from urihandler import UriHandler
-from streams.npostream import NpoStream
-from helpers.languagehelper import LanguageHelper
-from helpers.htmlentityhelper import HtmlEntityHelper
-from helpers.datehelper import DateHelper
+from resources.lib.mediaitem import MediaItem
+from resources.lib.logger import Logger
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.urihandler import UriHandler
+from resources.lib.streams.npostream import NpoStream
+from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.helpers.datehelper import DateHelper
 
 
 class Channel(chn_class.Channel):
@@ -68,7 +68,7 @@ class Channel(chn_class.Channel):
         # Test cases:
         # schooltv-weekjournaal: paging
         # Aarde & Ruimte: -> has both ODI+MP4 and ODI+M3U8
-        # Wiskunden tweede fase: fylosofie en waarheid - waaronaan... -> ODI+M3u8
+        # Wiskunden tweede fase: fylosofie en waarheid - waaronaan.resources.lib.-> ODI+M3u8
 
         # ====================================== Actual channel setup STOPS here =======================================
         return

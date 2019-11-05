@@ -4,17 +4,17 @@
 import os
 import re
 
-import chn_class
-from retroconfig import Config
+from resources.lib import chn_class
+from resources.lib.retroconfig import Config
 
-from mediaitem import MediaItem
-from helpers.jsonhelper import JsonHelper
-from helpers.encodinghelper import EncodingHelper
-from helpers.htmlentityhelper import HtmlEntityHelper
-from regexer import Regexer
-from logger import Logger
-from streams.m3u8 import M3u8
-from urihandler import UriHandler
+from resources.lib.mediaitem import MediaItem
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.helpers.encodinghelper import EncodingHelper
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.regexer import Regexer
+from resources.lib.logger import Logger
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.urihandler import UriHandler
 
 
 class Channel(chn_class.Channel):

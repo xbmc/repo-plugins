@@ -3,22 +3,22 @@
 import datetime
 import re
 
-import chn_class
+from resources.lib import chn_class
 
-from logger import Logger
-from regexer import Regexer
-from helpers import subtitlehelper
-from helpers.jsonhelper import JsonHelper
-from streams.npostream import NpoStream
-from urihandler import UriHandler
-from helpers.datehelper import DateHelper
-from parserdata import ParserData
-from helpers.languagehelper import LanguageHelper
-from helpers.htmlentityhelper import HtmlEntityHelper
-from vault import Vault
-from addonsettings import AddonSettings, LOCAL
-from mediaitem import MediaItem
-from xbmcwrapper import XbmcWrapper
+from resources.lib.logger import Logger
+from resources.lib.regexer import Regexer
+from resources.lib.helpers import subtitlehelper
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.streams.npostream import NpoStream
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.parserdata import ParserData
+from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.vault import Vault
+from resources.lib.addonsettings import AddonSettings, LOCAL
+from resources.lib.mediaitem import MediaItem
+from resources.lib.xbmcwrapper import XbmcWrapper
 
 
 class Channel(chn_class.Channel):
@@ -189,6 +189,7 @@ class Channel(chn_class.Channel):
             "NOSJ": "NPO Nieuws"
         }
         self.__has_premium_cache = None
+        self.__is_dst = DateHelper.is_dst()
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
@@ -879,7 +880,8 @@ class Channel(chn_class.Channel):
         if date:
             time_stamp = DateHelper.get_date_from_string(date, date_format=date_format)
             if for_epg:
-                date_time = datetime.datetime(*time_stamp[:6]) + datetime.timedelta(hours=2)
+                time_delta = 2 if self.__is_dst else 1
+                date_time = datetime.datetime(*time_stamp[:6]) + datetime.timedelta(hours=time_delta)
                 item.name = "{:02}:{:02} - {}".format(
                     date_time.hour, date_time.minute, item.name)
             else:
@@ -898,7 +900,7 @@ class Channel(chn_class.Channel):
         item.fanart = self.parentItem.fanart
         for image_type, image_data in images.items():
             if image_type == "original" and "original" in image_data["formats"]:
-                pass
+                continue
                 # No fanart for now.
                 # item.fanart = image_data["formats"]["original"]["source"]
             elif image_type == "grid.tile":

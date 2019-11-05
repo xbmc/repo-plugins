@@ -1,26 +1,26 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import chn_class
-from helpers.htmlentityhelper import HtmlEntityHelper
-from helpers.jsonhelper import JsonHelper
-from mediaitem import MediaItem
-from logger import Logger
-from regexer import Regexer
-from urihandler import UriHandler
-from parserdata import ParserData
-from streams.m3u8 import M3u8
-from helpers.datehelper import DateHelper
-from addonsettings import AddonSettings
-from xbmcwrapper import XbmcWrapper
-from helpers.languagehelper import LanguageHelper
+from resources.lib import chn_class
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.mediaitem import MediaItem
+from resources.lib.logger import Logger
+from resources.lib.regexer import Regexer
+from resources.lib.urihandler import UriHandler
+from resources.lib.parserdata import ParserData
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.addonsettings import AddonSettings
+from resources.lib.xbmcwrapper import XbmcWrapper
+from resources.lib.helpers.languagehelper import LanguageHelper
 # noinspection PyUnresolvedReferences
 from awsidp import AwsIdp
-from vault import Vault
+from resources.lib.vault import Vault
 
 
 class Channel(chn_class.Channel):
     """
-    main class from which all channels inherit
+    main class from resources.lib.which all channels inherit
     """
 
     def __init__(self, channel_info):

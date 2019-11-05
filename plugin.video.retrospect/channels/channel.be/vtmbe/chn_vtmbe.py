@@ -5,23 +5,23 @@ import random
 import time
 import datetime
 
-import chn_class
-from helpers.htmlhelper import HtmlHelper
-from logger import Logger
-from mediaitem import MediaItem
-from streams.mpd import Mpd
-from vault import Vault
-from urihandler import UriHandler
-from addonsettings import AddonSettings, LOCAL
-from streams.m3u8 import M3u8
-from regexer import Regexer
-from xbmcwrapper import XbmcWrapper
-from parserdata import ParserData
+from resources.lib import chn_class
+from resources.lib.helpers.htmlhelper import HtmlHelper
+from resources.lib.logger import Logger
+from resources.lib.mediaitem import MediaItem
+from resources.lib.streams.mpd import Mpd
+from resources.lib.vault import Vault
+from resources.lib.urihandler import UriHandler
+from resources.lib.addonsettings import AddonSettings, LOCAL
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.regexer import Regexer
+from resources.lib.xbmcwrapper import XbmcWrapper
+from resources.lib.parserdata import ParserData
 
-from helpers.jsonhelper import JsonHelper
-from helpers.htmlentityhelper import HtmlEntityHelper
-from helpers.datehelper import DateHelper
-from helpers.languagehelper import LanguageHelper
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.helpers.languagehelper import LanguageHelper
 
 
 class Channel(chn_class.Channel):

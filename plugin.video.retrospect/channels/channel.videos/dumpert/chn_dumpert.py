@@ -1,16 +1,12 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import chn_class
+from resources.lib import chn_class
 
-from mediaitem import MediaItem
-from helpers import datehelper
-from regexer import Regexer
-from logger import Logger
-from urihandler import UriHandler
-from xbmcwrapper import XbmcWrapper
-from helpers.encodinghelper import EncodingHelper
-from helpers.jsonhelper import JsonHelper
-from streams.youtube import YouTube
+from resources.lib.mediaitem import MediaItem
+from resources.lib.logger import Logger
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.streams.youtube import YouTube
 
 
 class Channel(chn_class.Channel):
@@ -79,7 +75,7 @@ class Channel(chn_class.Channel):
 
         return data, items
 
-    def create_json_video_item(self, result_set):
+    def create_json_video_item(self, result_set):  # NOSONAR
         """ Creates a MediaItem of type 'video' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json

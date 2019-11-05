@@ -1,16 +1,16 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import chn_class
+from resources.lib import chn_class
 
-from mediaitem import MediaItem
-from logger import Logger
-from addonsettings import AddonSettings
-from streams.mpd import Mpd
-from regexer import Regexer
-from helpers.jsonhelper import JsonHelper
-from urihandler import UriHandler
-from helpers.languagehelper import LanguageHelper
-from xbmcwrapper import XbmcWrapper
+from resources.lib.mediaitem import MediaItem
+from resources.lib.logger import Logger
+from resources.lib.addonsettings import AddonSettings
+from resources.lib.streams.mpd import Mpd
+from resources.lib.regexer import Regexer
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.xbmcwrapper import XbmcWrapper
 
 
 class Channel(chn_class.Channel):

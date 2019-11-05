@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import chn_class
-from mediaitem import MediaItem
-from helpers import datehelper
+from resources.lib import chn_class
+from resources.lib.mediaitem import MediaItem
+from resources.lib.helpers import datehelper
 
 
 class Channel(chn_class.Channel):

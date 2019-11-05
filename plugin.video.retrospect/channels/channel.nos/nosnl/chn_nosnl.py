@@ -2,16 +2,16 @@
 
 import time
 import base64
-import chn_class
+from resources.lib import chn_class
 
-from logger import Logger
-from mediaitem import MediaItem
-from urihandler import UriHandler
-from helpers.jsonhelper import JsonHelper
-from helpers.encodinghelper import EncodingHelper
-from helpers.datehelper import DateHelper
-from helpers.languagehelper import LanguageHelper
-from streams.m3u8 import M3u8
+from resources.lib.logger import Logger
+from resources.lib.mediaitem import MediaItem
+from resources.lib.urihandler import UriHandler
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.helpers.encodinghelper import EncodingHelper
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.streams.m3u8 import M3u8
 
 
 class Channel(chn_class.Channel):

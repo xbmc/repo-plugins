@@ -1,4 +1,7 @@
-﻿v1.4.1
+﻿v1.4.2
+- Fixed website changes. Changed live urls channels
+
+v1.4.1
 - Fixed website changes. Fixed errors in "Today featured" and "Colecctions"
 
 v1.4.0

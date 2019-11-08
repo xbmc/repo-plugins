@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.regiotv" name="Regio TV" version="0.1.0" provider-name="dagwieers">
+<requires>
+  <import addon="script.module.routing" version="0.2.3"/>
+  <import addon="xbmc.python" version="2.25.0" />
+</requires>
+<extension point="xbmc.python.pluginsource" library="resources/lib/addon_entry.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en_GB">Flemish regional television</summary>
+  <description lang="en_GB">
+    The Regio TV add-on lists all available Flemish regional television stations.
+
+    Available channels: ATV, BRUZZ, Focus TV, ROB-tv, TVL, TV Oost, WTV
+
+    [I]This add-on is not endorsed by any television station, and is provided 'as is' without any warranty of any kind.[/I]
+  </description>
+  <disclaimer lang="en_GB">This add-on is not endorsed by any television station, and is provided 'as is' without any warranty of any kind.</disclaimer>
+  <summary lang="nl_NL">Vlaamse regionale televisie.</summary>
+  <description lang="nl_NL">
+    De Regio TV add-on geeft een overzicht van alle Vlaamse regionale televisiezenders.
+
+    Beschikbare zenders: ATV, BRUZZ, Focus TV, ROB-tv, TVL, TV Oost, WTV
+
+    [I]Deze add-on wordt niet ondersteund door een televisiezender, en wordt aangeboden 'as is', zonder enige garantie.[/I]
+  </description>
+  <disclaimer lang="nl_NL">Deze add-on wordt niet ondersteund door een televisiezender, en wordt aangeboden 'as is', zonder enige garantie.</disclaimer>
+  <language>en nl</language>
+  <platform>all</platform>
+  <license>GNU General Public License, v3</license>
+  <website>https://github.com/dagwieers/plugin.video.regiotv/wiki</website>
+  <source>https://github.com/dagwieers/plugin.video.regiotv</source>
+  <news>
+v0.1.0 (2019-11-08)
+- Initial public release
+  </news>
+  <reuselanguageinvoker>true</reuselanguageinvoker>
+</extension>
+</addon>

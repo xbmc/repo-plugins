@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.eco99music" name="eco99music" version="0.0.4" provider-name="Nir Elbaz, Noam Stolero">
+<addon id="plugin.audio.eco99music" name="eco99music" version="0.0.5" provider-name="Nir Elbaz, Noam Stolero">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.requests" version="2.12.4"/>
         <import addon="script.module.xmltodict"/>
+        <import addon="script.module.six"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>audio</provides>

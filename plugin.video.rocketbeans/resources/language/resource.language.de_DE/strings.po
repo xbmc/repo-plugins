@@ -1,0 +1,65 @@
+# Kodi Media Center language file
+# Addon Name: RocketBeansTV
+# Addon id: plugin.video.rocketbeans
+# Addon Provider: Razze
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Livestream Quelle"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Der Livestream."
+msgstr ""
+
+msgctxt "#32002"
+msgid "Spiel"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Mediathek auf Twitch"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Game-Two-Mediathek"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Gaming Mediathek"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Mediathek"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Rocket Beans TV Hängi"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Kino Plus"
+msgstr ""
+
+msgctxt "#32010"
+msgid "YouTube"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Twitch"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Allgemein"
+msgstr ""

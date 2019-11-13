@@ -1,14 +1,16 @@
 import xbmcplugin
+import xbmcgui
+import xbmc
+from xbmcaddon import Addon
+
 import sys
+import inputstreamhelper
 
 if sys.version_info[0] == 3:
     from urllib.parse import quote
 else:
     from urllib import quote
 
-import inputstreamhelper
-import xbmcgui
-import xbmc
 from resources.lib.helpers.dynamic_headers import UA, widevine_payload_package
 
 
@@ -19,17 +21,24 @@ LICENSE_URL = 'https://lwvdrm.yelo.prd.telenet-ops.be/WvLicenseProxy'
 
 class KodiWrapper:
     """ All Kodi controls are programmed here """
+    def __init__(self, globals):
+        self.globals = globals
+        self.__addon = Addon()
+        self.routing = globals['routing']
+        self.__handle = globals['routing'].handle
+        self.__url = globals['routing'].base_url
 
-    def __init__(self, handle, url, addon):
-        self.__handle = handle
-        self.__url = url
-        self.__addon = addon
 
-    def create_list_item(self, label, logo, fanart, playable):
+    def create_list_item(self, label, logo, fanart, extra_info = None, playable = "false"):
         list_item = xbmcgui.ListItem()
         list_item.setLabel(label)
-        list_item.setArt({'fanart': fanart, 'icon' : logo})
-        list_item.setInfo('video', {'title': label})
+        list_item.setArt({'fanart': fanart, 'icon' : logo, 'thumb': logo})
+
+        info = {'title': label}
+        if extra_info:
+            info.update(extra_info)
+
+        list_item.setInfo('video', info)
         list_item.setProperty('IsPlayable', playable)
 
         return list_item
@@ -43,12 +52,14 @@ class KodiWrapper:
     def sort_method(self, sort_method):
         xbmcplugin.addSortMethod(self.__handle, sort_method)
 
-    def construct_url(self, route, *args):
-        url = route.format(self.__url, args[0])
-        return url
+    def get_addon_url(self):
+        return self.__url
 
-    def add_dir_item(self, listing):
+    def add_dir_items(self, listing):
         xbmcplugin.addDirectoryItems(self.__handle, listing, len(listing))
+
+    def add_dir_item(self, url, item, total_items, isFolder=False):
+        xbmcplugin.addDirectoryItem(self.__handle, url, item, isFolder, total_items)
 
     def end_directory(self):
         xbmcplugin.endOfDirectory(self.__handle)
@@ -64,6 +75,10 @@ class KodiWrapper:
             profile = xbmc.translatePath(self.__addon.getAddonInfo('profile')).decode("utf-8")
 
         return profile
+
+    def url_for(self, name, *args, **kwargs):
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        return self.routing.url_for(self.globals[name], *args, **kwargs)
 
     @staticmethod
     def dialog_yes_no(header, message):
@@ -94,7 +109,7 @@ class KodiWrapper:
             play_item.setProperty('inputstream.adaptive.license_type', DRM)
             play_item.setProperty('inputstream.adaptive.max_bandwidth', max_bandwith)
             play_item.setProperty('inputstream.adaptive.manifest_update_parameter', 'full')
-            play_item.setProperty('inputstream.adaptive.stream_headers', 'Referer: https://www.yeloplay.be/tv-kijken')
+            play_item.setProperty('inputstream.adaptive.stream_headers', 'user-agent =' + UA)
             play_item.setProperty('inputstream.adaptive.license_key',
                                   LICENSE_URL + '|Content-Type=text%2Fplain%3Bcharset%3DUTF-8&User-Agent=' + quote(UA) +
                                   '|' + 'b{' +

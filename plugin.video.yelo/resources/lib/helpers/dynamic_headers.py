@@ -1,7 +1,8 @@
 import json
 from resources.lib.statics.static import UA
 
-def authorization_header_json(device_Id, accessToken):
+
+def authorization_header(device_Id, accessToken):
     return {
         'User-Agent': UA,
         'Accept': 'application/json, text/plain, */*',
@@ -21,7 +22,25 @@ def customer_features_header(code, device_Id, accessToken):
     }
 
 
-def json_request_header(device_id, channel, protocol):
+def token_header(device_Id, code):
+    return {
+        'User-Agent': UA,
+        'Referer': 'https://www.yeloplay.be/openid/callback?code={}'.format(code),
+        'Content-Type': 'application/json;charset=utf-8',
+        'X-Yelo-DeviceId': device_Id,
+    }
+
+
+def verify_device_header(device_Id, code):
+    return {
+        'User-Agent': UA,
+        'Referer': 'https://www.yeloplay.be/openid/callback?code={}'.format(code),
+        'Content-Type': 'application/json;charset=utf-8',
+        'X-Yelo-DeviceId': device_Id,
+    }
+
+
+def stream_start_data(device_id, channel, protocol):
     return {
         "meta": {"schema": "stream/Stream.json", "version": "4.1"},
         "stream": {
@@ -32,7 +51,7 @@ def json_request_header(device_id, channel, protocol):
     }
 
 
-def json_verify_header(device_Id, web_generated_id):
+def json_verify_data(device_Id, web_generated_id):
     return {
         "meta": {"schema": "devicemanagement/Device.json", "version": "4.1"}, "deviceRegistration": {
             "deviceProperties": {"dict": [{"key": "DEVICE_OS", "value": "Web"}, {"key": "OS_NAME", "value": "Windows"},
@@ -48,7 +67,7 @@ def json_verify_header(device_Id, web_generated_id):
     }
 
 
-def json__token_header(code, callback):
+def json_oauth_token_data(code, callback):
     return {
         "OAuthTokenParamsRequest":
             {
@@ -58,32 +77,13 @@ def json__token_header(code, callback):
     }
 
 
-def token_header(device_Id, code):
-    return {
-        'User-Agent': UA,
-        'Referer': 'https://www.yeloplay.be/openid/callback?code={}'.format(code),
-        'Content-Type': 'application/json;charset=utf-8',
-        'X-Yelo-DeviceId': device_Id,
-    }
-
-
-def verify_header(device_Id, code):
-    return {
-        'User-Agent': UA,
-        'Referer': 'https://www.yeloplay.be/openid/callback?code={}'.format(code),
-        'Content-Type': 'application/json;charset=utf-8',
-        'X-Yelo-DeviceId': device_Id,
-    }
-
-
 def create_login_payload(username, password):
-
-
     return {
         'j_username': '{}'.format(username),
         'j_password': '{}'.format(password),
         'rememberme': 'true'
     }
+
 
 def widevine_payload_package(device_Id, customer_Id):
     x = {

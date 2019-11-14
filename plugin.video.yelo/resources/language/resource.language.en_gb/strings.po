@@ -60,18 +60,6 @@ msgctxt "#32010"
 msgid "Please enter your postal code in settings."
 msgstr "Please enter your postal code in settings."
 
-msgctxt "#32011"
-msgid "RESTRICTED"
-msgstr "RESTRICTED"
-
-msgctxt "#32012"
-msgid "This channel is only available within Europe."
-msgstr "This channel is only available within Europe."
-
-msgctxt "#32013"
-msgid "This channel is currently not viewable."
-msgstr "This channel is currently not viewable."
-
 msgctxt "#32014"
 msgid "Login"
 msgstr "Login"
@@ -79,3 +67,19 @@ msgstr "Login"
 msgctxt "#32015"
 msgid "You need to fill in your credentials in settings."
 msgstr "You need to fill in your credentials in settings."
+
+msgctxt "#32016"
+msgid "Extra"
+msgstr "Extra"
+
+msgctxt "#32017"
+msgid "InputStream Helper information"
+msgstr "InputStream Helper information"
+
+msgctxt "#32018"
+msgid "InputStream Adaptive settings"
+msgstr "InputStream Adaptive settings"
+
+msgctxt "#32019"
+msgid "InputStream Helper settings"
+msgstr "InputStream Helper settings"

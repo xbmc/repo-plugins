@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.yelo" name="Yelo" version="0.0.5" provider-name="shycoderX">
+<addon id="plugin.video.yelo" name="Yelo" version="0.0.6" provider-name="shycoderX">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.inputstreamhelper" version="0.3.4"/>
         <import addon="script.module.requests" version="2.18.0"/>
+        <import addon="script.module.routing" version="0.2.3"/>
         <import addon="script.module.future" version="0.17.1" />
         <import addon="script.module.kodi-six" version="0.1.0" />
     </requires>
@@ -12,6 +13,15 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Stream live streams from Yelo Play</summary>
+        <description lang="en_GB">This plugin makes it possible to watch live streams that are available on the Telenet Yelo application for your region.</description>
+        <disclaimer lang="en_GB">
+            I do not own any of the listed content on this plugin.
+            The content belongs to Telenet N.V. All this plugin does is make simple HTTP requests to their servers to retrieve content just like any browser like Chrome, Firefox etc. would do!
+
+            There is nothing illegal going on, as this plugin uses inputstream.adaptive to handle DRM content. Like any browser the inputstream.adaptive plugin is using widevine to complete the transaction.
+
+            Without a valid Telenet subscription this plugin is useless for you!
+        </disclaimer>
         <language>nl</language>
         <platform>all</platform>
         <license>GNU General Public License, v3</license>

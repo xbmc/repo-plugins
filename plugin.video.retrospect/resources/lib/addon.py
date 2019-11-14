@@ -5,6 +5,10 @@ import sys
 
 import xbmc
 
+# setup the paths in Python
+from resources.lib.initializer import Initializer  # nopep8
+Initializer.set_unicode()
+
 
 def run_addon():
     """ Runs Retrospect as a Video Add-On """
@@ -69,11 +73,6 @@ def run_addon():
             log_file.close_log()
         raise
 
-
-# setup the paths in Python
-from resources.lib.initializer import Initializer  # nopep8
-Initializer.set_unicode()
-
 # ANY OF THESE SETTINGS SHOULD ONLY BE ENABLED FOR DEBUGGING PURPOSES
 # from debug import remotedebugger
 # debugger = remotedebugger.RemoteDebugger()
@@ -93,4 +92,4 @@ Initializer.set_unicode()
 # Profiled run
 # cProfile.runctx("run_addon()", globals(), locals(), statsPath)
 # Normal run
-run_addon()
+# run_addon()

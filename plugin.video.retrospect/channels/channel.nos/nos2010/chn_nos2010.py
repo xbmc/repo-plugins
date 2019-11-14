@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 import datetime
+import pytz
 import re
 
 from resources.lib import chn_class
@@ -189,7 +190,7 @@ class Channel(chn_class.Channel):
             "NOSJ": "NPO Nieuws"
         }
         self.__has_premium_cache = None
-        self.__is_dst = DateHelper.is_dst()
+        self.__timezone = pytz.timezone("Europe/Amsterdam")
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
@@ -878,14 +879,22 @@ class Channel(chn_class.Channel):
         date_format = "%Y-%m-%dT%H:%M:%SZ"
         date = result_set.get('broadcastDate')
         if date:
-            time_stamp = DateHelper.get_date_from_string(date, date_format=date_format)
+            # The dates are in UTC, so we need to calculate the actual
+            # time and take the DST in consideration for each item.
+            date_time = DateHelper.get_datetime_from_string(
+                date, date_format=date_format, time_zone="UTC")
+            date_time = date_time.astimezone(self.__timezone)
+
             if for_epg:
-                time_delta = 2 if self.__is_dst else 1
-                date_time = datetime.datetime(*time_stamp[:6]) + datetime.timedelta(hours=time_delta)
                 item.name = "{:02}:{:02} - {}".format(
                     date_time.hour, date_time.minute, item.name)
             else:
-                item.set_date(*time_stamp[0:6])
+                item.set_date(date_time.year, date_time.month, date_time.day,
+                              date_time.hour, date_time.minute, date_time.second)
+
+            # For #933 we check for NOS Journaal
+            if item.name == "NOS Journaal":
+                item.name = "{2} - {0:02d}:{1:02d}".format(date_time.hour, date_time.minute, item.name)
 
         item.isPaid = result_set.get("isOnlyOnNpoPlus", False)
         availability = result_set.get("availability")
@@ -949,7 +958,9 @@ class Channel(chn_class.Channel):
         """
 
         Logger.trace(result_set)
-        item = self.create_api_video_item(result_set["program"], for_epg=True)
+        epg_result_set = result_set["program"]
+        epg_result_set["broadcastDate"] = result_set.get("startsAt", epg_result_set["broadcastDate"])
+        item = self.create_api_video_item(epg_result_set, for_epg=True)
 
         return item
 
@@ -1423,6 +1434,8 @@ class Channel(chn_class.Channel):
             if date_time[-2].isalpha():
                 year = date_premium.tm_year if date_premium else datetime.datetime.now().year
                 date_time.insert(-1, year)
+
+            # For #933 we check for NOS Journaal
             if item.name.startswith("NOS Journaal"):
                 item.name = "{0} - {1}".format(item.name, date_time[-1])
             year = int(date_time[-2])

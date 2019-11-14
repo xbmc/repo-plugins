@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 import datetime
+import pytz
 import time
 
 
@@ -146,6 +147,29 @@ class DateHelper(object):
         #   to years in 1970 through 2038
         # return datetime.datetime.fromtimestamp(posix, tz)
         return datetime.datetime(1970, 1, 1, tzinfo=tz) + datetime.timedelta(seconds=posix)
+
+    @staticmethod
+    def get_datetime_from_string(value, date_format="%Y-%m-%dT%H:%M:%S", time_zone=None):
+        """ Parses a string and returns a TZ aware date time object
+
+        :param str value:           The string value to parse
+        :param str date_format:     The format to use
+        :param str time_zone:       The timezone name for the TZ to use
+
+        :return: A datetime object that might be timezone aware if a timezone was specified.
+        :rtype: datetime.datetime
+
+        """
+
+        time_tuple = DateHelper.get_date_from_string(value, date_format)
+        naive_datetime = datetime.datetime(*time_tuple[:6])
+
+        if time_zone is None:
+            return naive_datetime
+
+        tz_info = pytz.timezone(time_zone)
+        aware_datetime = tz_info.localize(naive_datetime)
+        return aware_datetime
 
     @staticmethod
     def get_date_from_string(value, date_format="%Y-%m-%dT%H:%M:%S+00:00"):

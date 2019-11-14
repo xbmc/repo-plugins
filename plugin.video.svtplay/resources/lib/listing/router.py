@@ -2,6 +2,7 @@ from __future__ import absolute_import,unicode_literals
 import re
 from resources.lib.listing.common import Common
 from resources.lib.api import svt
+from resources.lib.api.graphql import GraphQL
 from resources.lib import logging
 from resources.lib import helper
 
@@ -28,6 +29,7 @@ class Router:
 
     def __init__(self, addon, plugin_url, plugin_handle, default_fanart, settings):
         logging.log("Starting normal listing mode")
+        self.graphql = GraphQL()
         self.common = Common(addon, plugin_url, plugin_handle, default_fanart, settings)
         self.localize = addon.getLocalizedString
         self.settings = settings
@@ -46,7 +48,6 @@ class Router:
             self.view_category(url)
         elif mode == self.common.MODE_PROGRAM:
             self.view_episodes(url)
-            self.common.add_clip_dir_item(url)
         elif mode == self.common.MODE_CLIPS:
             self.view_clips(url)
         elif mode == self.common.MODE_VIDEO:
@@ -77,7 +78,7 @@ class Router:
         self.common.add_directory_item(self.localize(30006), {"mode": self.MODE_SEARCH})
 
     def view_a_to_z(self):
-        programs = svt.getAtoO()
+        programs = self.graphql.getAtoO()
         self.__program_listing(programs)
 
     def view_alpha_directories(self):
@@ -94,7 +95,7 @@ class Router:
             )
 
     def view_programs_by_letter(self, letter):
-        programs = svt.getProgramsByLetter(letter)
+        programs = self.graphql.getProgramsByLetter(letter)
         self.__program_listing(programs)
 
     def __program_listing(self, programs):
@@ -118,7 +119,7 @@ class Router:
             )
 
     def view_categories(self):
-        categories = svt.getCategories()
+        categories = self.graphql.getGenres()
         for category in categories:
             self.common.add_directory_item(
                 category["title"],
@@ -148,14 +149,14 @@ class Router:
             self.common.create_dir_item(channel, self.common.MODE_VIDEO)
 
     def view_latest_news(self ):
-        items = svt.getLatestNews()
+        items = self.graphql.getLatestNews()
         if not items:
             return
         for item in items:
             self.common.create_dir_item(item, self.common.MODE_VIDEO)
 
     def view_category(self, genre):
-        programs = svt.getProgramsForGenre(genre)
+        programs = self.graphql.getProgramsForGenre(genre)
         if not programs:
             return
         for program in programs:
@@ -165,8 +166,9 @@ class Router:
             self.common.create_dir_item(program, mode)
 
     def view_episodes(self, url):
-        logging.log("View episodes for {}".format(url))
-        episodes = svt.getEpisodes(url.split("/")[-1])
+        slug = url.split("/")[-1]
+        logging.log("View episodes for {}".format(slug))
+        episodes = self.graphql.getEpisodes(slug)
         self.common.view_episodes(episodes)
 
     def view_clips(self, url):
@@ -183,14 +185,21 @@ class Router:
         logging.log("Search string: " + keyword)
         keyword = re.sub(r" ", "+", keyword)
         keyword = keyword.strip()
-        results = svt.getSearchResults(keyword)
+        results = self.graphql.getSearchResults(keyword)
         for result in results:
             mode = self.common.MODE_VIDEO
             if result["type"] == "program":
                 mode = self.common.MODE_PROGRAM
-            self.common.create_dir_item(result["item"], mode)
+            self.common.create_dir_item(result, mode)
 
-    def start_video(self, video_id):
-        video_json = svt.getVideoJSON(video_id)
+    def start_video(self, video_url):
+        channel_pattern = re.compile(r'^ch\-')
+        logging.log("start video for {}".format(video_url))
+        if channel_pattern.search(video_url):
+            video_json = svt.getVideoJSON(video_url)
+        else:
+            legacy_id = video_url.split("/")[2]
+            svt_id = self.graphql.getSvtIdForlegacyId(legacy_id)
+            video_json = svt.getSvtVideoJson(svt_id)
         self.common.start_video(video_json)
         

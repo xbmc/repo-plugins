@@ -24,18 +24,6 @@ PLAY_API_URL = PLAY_BASE_URL+"/api/"
 SVT_API_BASE_URL = "https://api.svt.se/"
 VIDEO_API_URL= SVT_API_BASE_URL+"videoplayer-api/video/"
 
-def getAtoO():
-  """
-  Returns a list of all items, sorted A-Z.
-  """
-  json_data = __get_json("all_titles_and_singles")
-  if json_data is None:
-    return None
-  items = []
-  for title in json_data:
-    items.append(__create_item_by_title(title))
-  return sorted(items, key=lambda item: item["title"])
-
 def getCategories():
   """
   Returns a list of all categories.
@@ -71,11 +59,11 @@ def getLatestNews():
       url = __get_video_version(versions)
     program = {
       "title" : unescape(item["programTitle"] + " " + (item["title"] or "") + live_str),
-      "thumbnail" : helper.prepareThumb(thumbnail, baseUrl=PLAY_BASE_URL),
+      "thumbnail" : helper.get_thumb_url(thumbnail, baseUrl=PLAY_BASE_URL),
       "url" : url,
       "info" : { 
         "duration" : item.get("materialLength", 0), 
-        "fanart" : helper.prepareFanart(item.get("poster", ""), baseUrl=PLAY_BASE_URL)
+        "fanart" : helper.get_fanart_url(item.get("poster", ""), baseUrl=PLAY_BASE_URL)
       },
       "onlyAvailableInSweden": item.get("onlyAvailableInSweden", False),
       "inappropriateForChildren": item.get("inappropriateForChildren", False),
@@ -101,9 +89,9 @@ def getProgramsForGenre(genre):
       content_type = "program"
     title = json_item["programTitle"]
     plot = json_item.get("description", "")
-    thumbnail = helper.prepareThumb(json_item.get("thumbnail", ""), PLAY_BASE_URL)
+    thumbnail = helper.get_thumb_url(json_item.get("thumbnail", ""), PLAY_BASE_URL)
     if not thumbnail:
-      thumbnail = helper.prepareThumb(json_item.get("poster", ""), PLAY_BASE_URL)
+      thumbnail = helper.get_thumb_url(json_item.get("poster", ""), PLAY_BASE_URL)
     info = {"plot": plot, "thumbnail": thumbnail, "fanart": thumbnail}
     programs.append({
       "title": title,
@@ -155,21 +143,6 @@ def getAlphas():
   alphas.append("0-9")
   return alphas
 
-def getProgramsByLetter(letter):
-  """
-  Returns a list of all program starting with the supplied letter.
-  """
-  logging.log("getProgramsByLetter: {}".format(letter))
-  json_data = __get_json("all_titles_and_singles")
-  if json_data is None:
-    return None
-  pattern = "^[{}]".format(letter.upper())
-  items = []
-  for title in json_data:
-    if re.search(pattern, title["programTitle"]):
-      items.append(__create_item_by_title(title))
-  return items
-
 def __create_item_by_title(title):
   item = {}
   item["title"] = title["programTitle"]
@@ -207,16 +180,16 @@ def getSearchResults(search_term):
       item_type = "video"
       item["url"] = result["id"]
       item["title"] = unescape(result["title"])
-      item["thumbnail"] = helper.prepareThumb(result.get("thumbnail", ""), baseUrl=PLAY_BASE_URL)
+      item["thumbnail"] = helper.get_thumb_url(result.get("thumbnail", ""), baseUrl=PLAY_BASE_URL)
     elif result_type == "SERIES_OR_TV_SHOW":
       item["title"] = unescape(result["programTitle"] + " - " + result["title"])
-      item["thumbnail"] = helper.prepareThumb(result.get("poster", ""), baseUrl=PLAY_BASE_URL)
+      item["thumbnail"] = helper.get_thumb_url(result.get("poster", ""), baseUrl=PLAY_BASE_URL)
       item["info"] = {}
       item["info"]["plot"] = result.get("description", "")
     else:
       # MOVIE and folder
       item["title"] = unescape(result["programTitle"])
-      item["thumbnail"] = helper.prepareThumb(result.get("poster", ""), baseUrl=PLAY_BASE_URL)
+      item["thumbnail"] = helper.get_thumb_url(result.get("poster", ""), baseUrl=PLAY_BASE_URL)
     item["info"] = {}
     item["info"]["plot"] = result.get("description", "")
     item["onlyAvailableInSweden"] = result.get("onlyAvailableInSweden", False)
@@ -256,32 +229,6 @@ def getChannels():
 
   return items
 
-def getEpisodes(slug):
-  """
-  Returns the episodes for a slug
-  """
-  title_data = __get_title_for_slug(slug)
-  if title_data is None:
-    return None
-  article_id = title_data["articleId"]
-  api_action = "title_episodes_by_article_id?articleId={}".format(str(article_id))
-  json_data = __get_json(api_action)
-  if json_data is None:
-    return None
-  programs = []
-  for json_item in json_data:
-    versions = json_item.get("versions", [])
-    url = ""
-    if versions:
-      url = __get_video_version(versions)
-    if url is None or not versions:
-      logging.log("No video versions found for {}, skipping item!".format(json_item["title"]))
-      continue
-    item = __create_item_from_json(json_item)
-    item["url"] = url
-    programs.append(item)
-  return programs
-
 def getClips(slug):
   """
   Returns the clips for a slug.
@@ -299,7 +246,7 @@ def getClips(slug):
     clip = {}
     clip["title"] = item["title"]
     clip["url"] = str(item["id"])
-    clip["thumbnail"] = helper.prepareThumb(item.get("thumbnail", ""), PLAY_BASE_URL)
+    clip["thumbnail"] = helper.get_thumb_url(item.get("thumbnail", ""), PLAY_BASE_URL)
     info = {}
     info["title"] = clip["title"]
     info["plot"] = item.get("description", "")
@@ -316,6 +263,9 @@ def getVideoJSON(video_id):
     episode_id = video_id.split("/")[2]
     video_version_id = __get_video_id_for_episode_id(episode_id)
   return __get_video_json_for_video_id(video_version_id)
+
+def getSvtVideoJson(svt_id):
+  return __get_svt_json("/video/{}".format(svt_id))
 
 def getItems(section_name, page):
   if not page:
@@ -346,10 +296,10 @@ def __create_item_from_json(json_item):
   except KeyError:
     # Suppress
     pass
-  item["thumbnail"] = helper.prepareThumb(json_item.get("thumbnail", ""), baseUrl=PLAY_BASE_URL)
+  item["thumbnail"] = helper.get_thumb_url(json_item.get("thumbnail", ""), baseUrl=PLAY_BASE_URL)
   info = {}
   info["title"] = item["title"]
-  info["poster"] = helper.prepareFanart(json_item.get("poster", ""), PLAY_BASE_URL)
+  info["poster"] = helper.get_fanart_url(json_item.get("poster", ""), PLAY_BASE_URL)
   info["plot"] = json_item.get("description", "")
   info["duration"] = json_item.get("materialLength", 0)
   info["tagline"] = json_item.get("shortDescription", "")
@@ -360,7 +310,7 @@ def __create_item_from_json(json_item):
   item["onlyAvailableInSweden"] = json_item.get("onlyAvailableInSweden", False)
   item["inappropriateForChildren"] = json_item.get("inappropriateForChildren", False)
   try:
-    info["fanart"] = helper.prepareFanart(json_item["poster"], baseUrl=PLAY_BASE_URL)
+    info["fanart"] = helper.get_fanart_url(json_item["poster"], baseUrl=PLAY_BASE_URL)
   except KeyError:
     pass
   item["info"] = info
@@ -395,8 +345,8 @@ def __get_video_version(versions):
     for version in versions:
       # ungraceful access so we detect API changes
       if version["accessService"] == "none":
-        return version["id"]
-    return versions[0]["id"]
+        return version["contentUrl"]
+    return versions[0]["contentUrl"]
   return None
 
 def __get_video_json_for_video_id(video_id):

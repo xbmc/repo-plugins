@@ -15,5 +15,5 @@ The module responsible for parsing the SVT Play website has a couple of tests th
 
 To run these tests, execute the following commands from this repository's root folder:
 ```
-python -m unittest tests.testSvt
+python -m unittest discover -s tests/ -p test*.py
 ```

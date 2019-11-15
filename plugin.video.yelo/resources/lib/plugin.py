@@ -30,7 +30,9 @@ def channel_info(channel_name, logo, channel, channelId):
     import base64
 
     if channel_name and logo and channel:
-        yelo_player.show_info_stream(channel_name, base64.b64decode(logo), channel, channelId)
+        yelo_player.show_info_stream(
+            base64.b64decode(channel_name),
+            base64.b64decode(logo), channel, channelId)
 
 
 @routing.route('/livestream/<channel>')

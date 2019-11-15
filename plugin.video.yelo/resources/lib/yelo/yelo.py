@@ -1,6 +1,6 @@
 import requests
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime
 import os, sys
 from xbmcplugin import SORT_METHOD_LABEL_IGNORE_THE
 from resources.lib.helpers.dynamic_headers import *
@@ -20,23 +20,25 @@ else:
 
 FILE_NAME = "data.json"
 
+session = requests.Session()
+
 
 class Errors():
     def __init__(self, testing, kodiwrapper):
         self.testing = not testing
         self.kodi_wrapper = kodiwrapper
-        self.requests = requests
 
     def get_error_message(self, id):
-        r = make_request(self.requests, "GET", "https://api.yeloplay.be/api/v1/masterdata?"
-                                               "platform=Web&fields=errors",
-                              default_headers, None, None, False, None, self.testing)
+        r = make_request(session, "GET", "https://api.yeloplay.be/api/v1/masterdata?"
+                                         "platform=Web&fields=errors",
+                         default_headers, None, None, False, None, self.testing)
 
         errors = r.json()["masterData"]["errors"]
-        res = [error for error in errors if error["id"] == id]
+
+        res = next((error for error in errors if error["id"] == id), "")
 
         if res:
-            return res[0]["title"]["locales"]["en"], res[0]["subtitle"]["locales"]["en"]
+            return res["title"]["locales"]["en"], res["subtitle"]["locales"]["en"]
 
 
 class Prepare:
@@ -44,12 +46,11 @@ class Prepare:
         self.testing = not testing
         self.kodi_wrapper = kodiwrapper
         self.get_l_string = kodiwrapper.get_localized_string
-        self.session = requests.Session()
 
     def _prepare_request(self):
-        r = make_request(self.session, "POST",
-                              "https://api.yeloplay.be/api/v1/oauth/prepare",
-                              json_header, None, json_prepare_message, False, None, self.testing)
+        r = make_request(session, "POST",
+                         "https://api.yeloplay.be/api/v1/oauth/prepare",
+                         json_header, None, json_prepare_message, False, None, self.testing)
 
         j = r.json()["OAuthPrepareParams"]
 
@@ -70,16 +71,16 @@ class Prepare:
         state = self.create_State(20)
         redirect_Uri = quote_plus(OAuthPrepareParams["redirectUri"])
 
-        r = make_request(self.session, "GET", "{}?client_id={}&state={}&nonce={}&redirect_uri={}"
-                              .format(authorize_Url, client_Id, nonce, state, redirect_Uri)
-                              + "&response_type=code&prompt=login", default_headers, None, None, False, None,
-                              self.testing)
+        r = make_request(session, "GET", "{}?client_id={}&state={}&nonce={}&redirect_uri={}"
+                         .format(authorize_Url, client_Id, nonce, state, redirect_Uri)
+                         + "&response_type=code&prompt=login", default_headers, None, None, False, None,
+                         self.testing)
 
         return r.headers["Location"]
 
     def _register_device(self):
-        r = make_request(self.session, "POST", "https://api.yeloplay.be/api/v1/device/register", json_header, None,
-                              json_request_device, False, None, self.testing)
+        r = make_request(session, "POST", "https://api.yeloplay.be/api/v1/device/register", json_header, None,
+                         json_request_device, False, None, self.testing)
         j = r.json()
 
         if j["deviceRegistration"]["resultCode"] == "CREATED":
@@ -117,9 +118,9 @@ class Prepare:
             self.kodi_wrapper.open_settings()
             creds.reload()
 
-        make_request(self.session, "POST", "https://login.prd.telenet.be/openid/login.do",
-                          form_headers, create_login_payload(creds.username, creds.password),
-                          None, False, None, self.testing)
+        make_request(session, "POST", "https://login.prd.telenet.be/openid/login.do",
+                     form_headers, create_login_payload(creds.username, creds.password),
+                     None, False, None, self.testing)
 
     def _callback(self, url):
         callbackKey = regex(r"(?<=code=)\w{0,32}", url)
@@ -129,17 +130,17 @@ class Prepare:
 
         self.append_json_to_file(FILE_NAME, {"callbackKey": {"callbackKey": callbackKey}})
 
-        make_request(self.session, "GET", url, default_headers, None, None, False, None, self.testing)
+        make_request(session, "GET", url, default_headers, None, None, False, None, self.testing)
 
         return True
 
     def _verify_token(self):
         Ids = self.fetch_from_data("IdTokens")
         callbackKey = self.fetch_from_data("callbackKey")["callbackKey"]
-        make_request(self.session, "POST", "https://api.yeloplay.be/api/v1/device/verify",
-                          verify_device_header(Ids["deviceId"], callbackKey), None,
-                          json_verify_data(Ids["deviceId"], Ids["webId"]),
-                          False, None, self.testing)
+        make_request(session, "POST", "https://api.yeloplay.be/api/v1/device/verify",
+                     verify_device_header(Ids["deviceId"], callbackKey), None,
+                     json_verify_data(Ids["deviceId"], Ids["webId"]),
+                     False, None, self.testing)
 
     def append_json_to_file(self, file_name, json_data):
         path = self.kodi_wrapper.get_addon_data_path()
@@ -179,10 +180,10 @@ class Prepare:
                 self.kodi_wrapper.open_settings()
                 postal.reload()
 
-        r = make_request(self.session, "GET", "https://api.yeloplay.be/api/v1/epg/channel/list?platform=Web"
-                                     "&postalCode={}&postalCode={}".format(postal.postal_code, postal.postal_code),
-                              default_headers,
-                              None, None, False, None, self.testing)
+        r = make_request(session, "GET", "https://api.yeloplay.be/api/v1/epg/channel/list?platform=Web"
+                                         "&postalCode={}&postalCode={}".format(postal.postal_code, postal.postal_code),
+                         default_headers,
+                         None, None, False, None, self.testing)
         return r.json()["serviceCatalog"]["tvChannels"]
 
     def _request_OAuthTokens(self):
@@ -190,11 +191,11 @@ class Prepare:
         OAuthPrepareParams = self.fetch_from_data("OAuthPrepareParams")
         callbackKey = self.fetch_from_data("callbackKey")["callbackKey"]
 
-        r = make_request(self.session, "POST", "https://api.yeloplay.be/api/v1/oauth/token",
-                              token_header(Ids["deviceId"], callbackKey), False,
-                              json_oauth_token_data(callbackKey,
-                                                    unquote_plus(OAuthPrepareParams["redirectUri"])),
-                              False, None, self.testing)
+        r = make_request(session, "POST", "https://api.yeloplay.be/api/v1/oauth/token",
+                         token_header(Ids["deviceId"], callbackKey), False,
+                         json_oauth_token_data(callbackKey,
+                                               unquote_plus(OAuthPrepareParams["redirectUri"])),
+                         False, None, self.testing)
 
         j = r.json()["OAuthTokens"]
 
@@ -208,9 +209,9 @@ class Prepare:
         accessToken = self.fetch_from_data("OAuthTokens")["accessToken"]
         deviceId = self.fetch_from_data("IdTokens")["deviceId"]
 
-        r = make_request(self.session, "GET", "https://api.yeloplay.be/api/v1/session/lookup?include=customerFeatures",
-                              authorization_header(deviceId, accessToken),
-                              None, None, False, None, self.testing)
+        r = make_request(session, "GET", "https://api.yeloplay.be/api/v1/session/lookup?include=customerFeatures",
+                         authorization_header(deviceId, accessToken),
+                         None, None, False, None, self.testing)
         j = r.json()
 
         entitlements = [int(item["id"]) for item in j["linked"]["customerFeatures"]["entitlements"]]
@@ -247,33 +248,55 @@ class YeloPlay(Prepare, Errors):
         self.kodi_wrapper.end_directory()
 
     def _request_broadcast_info(self, channelId, datetime):
-        r = make_request(self.session, "GET", "https://pubba.yelo.prd.telenet-ops.be/v1/"
-                                              "events/schedule-time/outformat/json/lng/nl/start/"
-                                              "{}/range/{}/channel/{}/".
-                              format(datetime, 1, channelId),
-                              default_headers, None, None, False, None, self.testing)
+        r = make_request(session, "GET", "https://pubba.yelo.prd.telenet-ops.be/v1/"
+                                         "events/schedule-time/outformat/json/lng/nl/start/"
+                                         "{}/range/{}/channel/{}/".
+                         format(datetime, 2, channelId),
+                         default_headers, None, None, False, None, self.testing)
 
         schedules = r.json()["schedule"]
 
-        return [(broadcast_elem["title"], broadcast_elem["starttime"], broadcast_elem["endtime"],
-                 broadcast_elem["poster"])
-                for schedule_elem in schedules for broadcast_elem in schedule_elem["broadcast"]]
+        return [
+            {"title": broadcast_elem["title"],
+             "start": broadcast_elem["starttime"],
+             "end": broadcast_elem["endtime"],
+             "poster": broadcast_elem["poster"]
+            }
+            for schedule_elem in schedules for broadcast_elem in schedule_elem["broadcast"]]
+
+    def _timestamp_to_time(self, timestamp):
+        return datetime.fromtimestamp(timestamp).strftime("%H:%M:%S")
 
     def _get_broadcast_now(self, channelId):
         today = datetime.today().strftime("%Y%m%d%H")
         return self._request_broadcast_info(channelId, today)
 
-    def get_current_program_playing(self, channelId):
+    def _extract_schedule(self, schedule):
         timestamp = get_timestamp()
+
+        now = next((item for item in schedule if int(item["start"])
+                    <= timestamp <= int(item["end"])), "")
+
+        prev = next((item for item in schedule if int(item["end"]) == now.get("start")), "")
+
+        nxt = next((item for item in schedule if int(item["start"]) == now.get("end")), "")
+
+        if now:
+            now["start"] = self._timestamp_to_time(now.get("start"))
+            now["end"] = self._timestamp_to_time(now.get("end"))
+        if prev:
+            prev["start"] = self._timestamp_to_time(prev.get("start"))
+            prev["end"] = self._timestamp_to_time(prev.get("end"))
+        if nxt:
+            nxt["start"] = self._timestamp_to_time(nxt.get("start"))
+            nxt["end"] = self._timestamp_to_time(nxt.get("end"))
+
+        return  prev, now, nxt
+
+    def get_current_program_playing(self, channelId):
         schedule = self._get_broadcast_now(channelId)
 
-        if schedule:
-            query = [(x[0], x[3]) for x in schedule if timestamp >= int(x[1]) and timestamp <= int(x[2])]
-
-            if query:
-                return query[0]
-
-        return "", ""
+        return self._extract_schedule(schedule)
 
     def list_channels(self, tv_channels, is_folder=True):
         listing = []
@@ -287,23 +310,27 @@ class YeloPlay(Prepare, Errors):
                     and any(x in entitlementId for x in tv_channels[i]["channelAvailability"]["oasisId"])
             ):
 
-                name = tv_channels[i]["channelIdentification"]["name"]
+                if sys.version_info[0] == 3:
+                    name = tv_channels[i]["channelIdentification"]["name"]
+                else:
+                    name = (tv_channels[i]["channelIdentification"]["name"]). \
+                        encode("utf-8")
+
                 squareLogo = tv_channels[i]["channelProperties"]["squareLogo"]
                 liveThumbnailURL = tv_channels[i]["channelProperties"]["liveThumbnailURL"]
                 stbUniqueName = tv_channels[i]["channelIdentification"]["stbUniqueName"]
                 channelId = tv_channels[i]["channelIdentification"]["channelId"]
 
-                list_item = self.kodi_wrapper.\
-                    create_list_item(name if sys.version_info[0] == 3 else name.encode('utf-8'),
-                                     squareLogo, liveThumbnailURL, {"plot": name})
+                list_item = self.kodi_wrapper. \
+                    create_list_item(name, squareLogo, liveThumbnailURL, {"plot": name})
 
                 import base64
                 url = self.kodi_wrapper.url_for(
                     "channel_info",
-                    channel_name=name,
+                    channel_name=base64.b64encode(name),
                     logo=base64.b64encode(squareLogo),
                     channel=stbUniqueName,
-                    channelId=str(channelId)
+                    channelId=channelId
                 )
 
                 listing.append((url, list_item, is_folder))
@@ -313,11 +340,25 @@ class YeloPlay(Prepare, Errors):
         self.kodi_wrapper.end_directory()
 
     def show_info_stream(self, name, logo, channel, channel_id):
-        currently_playing, poster = self.get_current_program_playing(channel_id)
+        prev, now, nxt = self.get_current_program_playing(channel_id)
+
+        guide = ""
+        if prev:
+            guide += "[B]Previously: [/B]" + "\n" +  prev.get("title") + "\n" + "[COLOR green]" \
+                     + prev.get("start") + "[/COLOR]" + " >> " + "[COLOR red]" \
+                     + prev.get("end") + "[/COLOR] " + "\n\n"
+        if now:
+            guide += "[B]Currently Playing: [/B]" + "\n" + now.get("title") + "\n" + "[COLOR green]" \
+                     + now.get("start") + "[/COLOR]" + " >> " + "[COLOR red]" \
+                     + now.get("end") + "[/COLOR] " + "\n\n"
+        if nxt:
+            guide += "[B]Coming up next: [/B]" + "\n" + nxt.get("title") + "\n" + "[COLOR green]" \
+                     + nxt.get("start") + "[/COLOR]" + " >> " + "[COLOR red]" \
+                     + nxt.get("end") + "[/COLOR] " + "\n\n"
 
         list_item = self.kodi_wrapper. \
-            create_list_item(name, logo, poster,
-                             {"plot": currently_playing if currently_playing else name }, "true")
+            create_list_item(name, logo, now.get("poster"),
+                             {"plot": guide if now.get("title") else name}, "true")
 
         url = self.kodi_wrapper.url_for("play_livestream", channel=channel)
 
@@ -333,15 +374,15 @@ class YeloPlay(Prepare, Errors):
         self.kodi_wrapper.play_live_stream(deviceId, customerId, stream_url, bit_rate.bitrate)
 
     def select_manifest_url(self, channel):
-        for i in range(0, 2):
+        for _ in range(2):
             try:
                 accessToken = self.fetch_from_data("OAuthTokens")["accessToken"]
                 deviceId = self.fetch_from_data("IdTokens")["deviceId"]
 
-                r = make_request(self.session, "POST", "https://api.yeloplay.be/api/v1/stream/start",
-                                      authorization_header(deviceId, accessToken), None,
-                                      stream_start_data(deviceId, channel, self.streaming_protocol),
-                                      False, None, self.testing)
+                r = make_request(session, "POST", "https://api.yeloplay.be/api/v1/stream/start",
+                                 authorization_header(deviceId, accessToken), None,
+                                 stream_start_data(deviceId, channel, self.streaming_protocol),
+                                 False, None, self.testing)
 
                 j = r.json()
                 if not j.get("errors"):

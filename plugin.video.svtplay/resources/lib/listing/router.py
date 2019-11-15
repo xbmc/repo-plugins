@@ -168,7 +168,7 @@ class Router:
     def view_episodes(self, url):
         slug = url.split("/")[-1]
         logging.log("View episodes for {}".format(slug))
-        episodes = self.graphql.getEpisodes(slug)
+        episodes = self.graphql.getVideoContent(slug)
         self.common.view_episodes(episodes)
 
     def view_clips(self, url):
@@ -194,7 +194,7 @@ class Router:
 
     def start_video(self, video_url):
         channel_pattern = re.compile(r'^ch\-')
-        logging.log("start video for {}".format(video_url))
+        logging.log("Start video for {}".format(video_url))
         if channel_pattern.search(video_url):
             video_json = svt.getVideoJSON(video_url)
         else:

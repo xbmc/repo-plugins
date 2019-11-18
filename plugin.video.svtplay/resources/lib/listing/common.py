@@ -17,8 +17,6 @@ class Common:
     # Item types
     MODE_VIDEO = "video"
     MODE_PROGRAM = "pr"
-    # Shared modes
-    MODE_CLIPS = "clips"
 
     def __init__(self, addon, plugin_url, plugin_handle, default_fanart, settings):
         self.addon = addon
@@ -107,15 +105,6 @@ class Common:
             dialog = xbmcgui.Dialog()
             dialog.ok("SVT Play", self.localize(30100))
 
-    def add_clip_dir_item(self, url):
-        """
-        Adds the "Clips" directory item to a program listing.
-        """
-        params = {}
-        params["mode"] = self.MODE_CLIPS
-        params["url"] = url
-        self.add_directory_item(self.localize(30108), params)
-
     def view_episodes(self, episodes):
         """
         Displays the episodes for a program
@@ -125,13 +114,3 @@ class Common:
             return
         for episode in episodes:
             self.create_dir_item(episode, self.MODE_VIDEO)
-
-    def view_clips(self, clips):
-        """
-        Displays the latest clips for a program
-        """
-        if not clips:
-            logging.log("No clips found")
-            return
-        for clip in clips:
-            self.create_dir_item(clip, self.MODE_VIDEO)

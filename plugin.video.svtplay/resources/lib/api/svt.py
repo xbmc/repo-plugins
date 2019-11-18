@@ -143,60 +143,6 @@ def getAlphas():
   alphas.append("0-9")
   return alphas
 
-def __create_item_by_title(title):
-  item = {}
-  item["title"] = title["programTitle"]
-  item["url"] = title["contentUrl"]
-  item["thumbnail"] = ""
-  item["type"] = "program"
-  item["onlyAvailableInSweden"] = title.get("onlyAvailableInSweden", False)
-  if "/video/" in item["url"]:
-    item["type"] = "video"
-  return item
-
-def getSearchResults(search_term):
-  """
-  Returns a list of both clips and programs
-  for the supplied search URL.
-  """
-  search_term = search_term.strip()
-  json_data = __get_json("search?q="+search_term)
-  if json_data is None:
-    return None
-  items = []
-  for result in json_data["videosAndTitles"]:
-    item = {}
-    versions = result.get("versions", [])
-    result_type = result.get("titleType", "PROGRAM_FOLDER_OR_MOVIE")
-    item_type = "video"
-    if versions:
-      # MOVIE and episode
-      item["url"] = __get_video_version(versions)
-    else:
-      # Folder or clip
-      item["url"] = result["contentUrl"]
-      item_type = "program"
-    if result_type == "CLIP":
-      item_type = "video"
-      item["url"] = result["id"]
-      item["title"] = unescape(result["title"])
-      item["thumbnail"] = helper.get_thumb_url(result.get("thumbnail", ""), baseUrl=PLAY_BASE_URL)
-    elif result_type == "SERIES_OR_TV_SHOW":
-      item["title"] = unescape(result["programTitle"] + " - " + result["title"])
-      item["thumbnail"] = helper.get_thumb_url(result.get("poster", ""), baseUrl=PLAY_BASE_URL)
-      item["info"] = {}
-      item["info"]["plot"] = result.get("description", "")
-    else:
-      # MOVIE and folder
-      item["title"] = unescape(result["programTitle"])
-      item["thumbnail"] = helper.get_thumb_url(result.get("poster", ""), baseUrl=PLAY_BASE_URL)
-    item["info"] = {}
-    item["info"]["plot"] = result.get("description", "")
-    item["onlyAvailableInSweden"] = result.get("onlyAvailableInSweden", False)
-    item["inappropriateForChildren"] = result.get("inappropriateForChildren", False)
-    items.append({"item": item, "type": item_type})
-  return items
-
 def getChannels():
   """
   Returns the live channels from the page "Kanaler".
@@ -229,31 +175,6 @@ def getChannels():
 
   return items
 
-def getClips(slug):
-  """
-  Returns the clips for a slug.
-  """
-  title_data = __get_title_for_slug(slug)
-  if title_data is None:
-    return None
-  article_id = title_data["articleId"]
-  url = "title_clips_by_title_article_id?articleId={}".format(str(article_id))
-  json_data = __get_json(url)
-  if json_data is None:
-    return None
-  clips = []
-  for item in json_data:
-    clip = {}
-    clip["title"] = item["title"]
-    clip["url"] = str(item["id"])
-    clip["thumbnail"] = helper.get_thumb_url(item.get("thumbnail", ""), PLAY_BASE_URL)
-    info = {}
-    info["title"] = clip["title"]
-    info["plot"] = item.get("description", "")
-    clip["info"] = info
-    clips.append(clip)
-  return clips
-
 def getVideoJSON(video_id):
   video_version_id = video_id
   if video_id.startswith("/video/"):
@@ -266,67 +187,6 @@ def getVideoJSON(video_id):
 
 def getSvtVideoJson(svt_id):
   return __get_svt_json("/video/{}".format(svt_id))
-
-def getItems(section_name, page):
-  if not page:
-    page = 1
-  json_data = __get_json(section_name+"?page="+str(page)+"&excludedTagsString=lokalt")
-  if json_data is None:
-    return None
-  current_page = json_data["currentPage"]
-  total_pages = json_data["totalPages"]
-  returned_items = []
-  for json_item in json_data["data"]:
-    versions = json_item.get("versions", [])
-    if not versions:
-      logging.log("No video versions found for {}, skipping item!".format(item["title"]))
-      continue
-    url = __get_video_version(versions)
-    item = __create_item_from_json(json_item)
-    item["url"] = url
-    item["type"] = "video"
-    returned_items.append(item)
-  return (returned_items, total_pages > current_page)
-
-def __create_item_from_json(json_item):
-  item = {}
-  item["title"] = json_item["programTitle"]
-  try:
-    item["title"] = "{title} [COLOR gray](S{season}E{episode})[/COLOR]".format(title=item["title"], season=str(json_item["season"]), episode=str(json_item["episodeNumber"]))
-  except KeyError:
-    # Suppress
-    pass
-  item["thumbnail"] = helper.get_thumb_url(json_item.get("thumbnail", ""), baseUrl=PLAY_BASE_URL)
-  info = {}
-  info["title"] = item["title"]
-  info["poster"] = helper.get_fanart_url(json_item.get("poster", ""), PLAY_BASE_URL)
-  info["plot"] = json_item.get("description", "")
-  info["duration"] = json_item.get("materialLength", 0)
-  info["tagline"] = json_item.get("shortDescription", "")
-  info["season"] = json_item.get("season", "")
-  info["episode"] = json_item.get("episodeNumber", "")
-  info["dateadded"] = json_item.get("validFrom","2009-04-05 23:16:04")[:19]
-  info["playcount"] = 0
-  item["onlyAvailableInSweden"] = json_item.get("onlyAvailableInSweden", False)
-  item["inappropriateForChildren"] = json_item.get("inappropriateForChildren", False)
-  try:
-    info["fanart"] = helper.get_fanart_url(json_item["poster"], baseUrl=PLAY_BASE_URL)
-  except KeyError:
-    pass
-  item["info"] = info
-  if not item["thumbnail"] and info["fanart"]:
-    item["thumbnail"] = info["fanart"]
-  if json_item.get("broadcastedNow", False):
-    item["title"] = item["title"] + " [COLOR red](Live)[/COLOR]"
-  return item
-
-def __get_title_for_slug(slug):
-  url = "title?slug="+slug
-  json_data = __get_json(url)
-  if json_data is None:
-    return None
-  else:
-    return json_data
 
 def __get_video_id_for_episode_id(episode_id):
   url = "episode?id=" + episode_id

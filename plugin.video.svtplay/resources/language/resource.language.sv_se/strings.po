@@ -117,8 +117,12 @@ msgid "Group programs in A-Ö by first character"
 msgstr "Gruppera program i A-Ö efter första bokstav"
 
 msgctxt "#30503"
-msgid "Dölj innehåll olämpligt för barn"
-msgstr ""
+msgid "Block videos that are inapppropriate for children"
+msgstr "Blockera videor olämpliga för barn"
+
+msgctxt "#30504"
+msgid "This video is blocked for children"
+msgstr "Denna video är blockerad för barn"
 
 msgctxt "#30505"
 msgid "Hide programs that are restricted to Sweden"

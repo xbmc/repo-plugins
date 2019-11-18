@@ -21,34 +21,15 @@ class GraphQL:
   def __init__(self):
     pass
 
-  def __get_all_programs(self):
-    operation_name = "ProgramsListing"
-    query_hash = "1eeb0fb08078393c17658c1a22e7eea3fbaa34bd2667cec91bbc4db8d778580f"
-    json_data = self.__get(operation_name, query_hash)
-    if not json_data:
-      return None
-    items = []
-    for raw_item in json_data["programAtillO"]["flat"]:
-      if raw_item["oppetArkiv"]:
-        continue
-      title = raw_item["name"]
-      url = raw_item["urls"]["svtplay"]
-      geo_restricted = raw_item["restrictions"]["onlyAvailableInSweden"]
-      item = self.__create_item(title, url, geo_restricted)
-      items.append(item)
-    return sorted(items, key=lambda item: item["title"])
+  def getPopular(self):
+    return self.__get_start_page_selection("popular_start")
 
-  def __create_item(self, title, url, geo_restricted):
-    item = {}
-    item["title"] = title
-    item["url"] = url
-    item["thumbnail"] = ""
-    item["type"] = "program"
-    item["onlyAvailableInSweden"] = geo_restricted
-    if "/video/" in item["url"]:
-      item["type"] = "video"
-    return item
+  def getLatest(self):
+    return self.__get_start_page_selection("latest_start")
   
+  def getLastChance(self):
+    return self.__get_start_page_selection("lastchance_start")
+
   def getAtoO(self):
     return self.__get_all_programs()
 
@@ -212,7 +193,7 @@ class GraphQL:
       results.append(result)
     return results
 
-  def getSvtIdForlegacyId(self, legacy_id):
+  def getVideoDataForLegacyId(self, legacy_id):
     """
     legacy_id is the integer part of a video URL.
     24186626 in the case of /video/24186626/filip-och-mona/filip-och-mona-sasong-1-avsnitt-1
@@ -226,7 +207,10 @@ class GraphQL:
     if not json_data["listablesByEscenicId"]:
       logging.error("Could not find legacy ID {}".format(legacy_id))
       return None
-    return json_data["listablesByEscenicId"][0]["svtId"]
+    return {
+      "svtId" : json_data["listablesByEscenicId"][0]["svtId"],
+      "blockedForChildren" : json_data["listablesByEscenicId"][0]["restrictions"]["blockedForChildren"]
+    }
 
   def get_thumbnail_url(self, image_id, image_changed):
     return self.__get_image_url(image_id, image_changed, "thumbnail")
@@ -236,6 +220,76 @@ class GraphQL:
   
   def get_poster_url(self, image_id, image_changed):
     return self.__get_image_url(image_id, image_changed, "poster")
+
+  def __get_start_page_selection(self, selection_id):
+    operation_name = "StartPage"
+    query_hash = "c011159df51539c3604fc09a6ca856af833715d1477d0082afe5a9a871477569"
+    json_data = self.__get(operation_name, query_hash=query_hash)
+    if not json_data:
+      return None
+    selections = json_data["startForSvtPlay"]["selections"]
+    if not selections:
+      logging.error("No selections returned for start page")
+      return None
+    selection = {}
+    for raw_selection in selections:
+      if raw_selection["id"] == selection_id:
+        selection = raw_selection
+        break
+    if not selection:
+      logging.error("Selection {selection_id} was not found in selections".format(selection_id=selection_id))
+      return None
+    video_items = []
+    for item in selection["items"]:
+      image_id = item["images"]["cleanWide"]["id"]
+      image_changed = item["images"]["cleanWide"]["changed"]
+      title = "{show} - {episode}".format(show=item["heading"], episode=item["subHeading"])
+      item = item["item"]
+      video_item = {}
+      video_item ["type"] = "video"
+      video_item["title"] = title
+      video_item["url"] = item["urls"]["svtplay"]
+      video_item["parent"] = item["parent"]["id"]
+      parent_image_id = item["parent"]["images"]["wide"]["id"]
+      parent_image_changed = item["parent"]["images"]["wide"]["changed"]
+      video_item["thumbnail"] = self.get_thumbnail_url(image_id, image_changed)
+      video_item["onlyAvailableInSweden"] = item["restrictions"]["onlyAvailableInSweden"]
+      video_item["inappropriateForChildren"] = False
+      video_item["info"] = {
+        "plot": item["longDescription"],
+        "fanart": self.get_fanart_url(parent_image_id, parent_image_changed)
+      }
+      video_items.append(video_item)
+    return video_items
+
+
+  def __get_all_programs(self):
+    operation_name = "ProgramsListing"
+    query_hash = "1eeb0fb08078393c17658c1a22e7eea3fbaa34bd2667cec91bbc4db8d778580f"
+    json_data = self.__get(operation_name, query_hash)
+    if not json_data:
+      return None
+    items = []
+    for raw_item in json_data["programAtillO"]["flat"]:
+      if raw_item["oppetArkiv"]:
+        continue
+      title = raw_item["name"]
+      url = raw_item["urls"]["svtplay"]
+      geo_restricted = raw_item["restrictions"]["onlyAvailableInSweden"]
+      item = self.__create_item(title, url, geo_restricted)
+      items.append(item)
+    return sorted(items, key=lambda item: item["title"])
+
+  def __create_item(self, title, url, geo_restricted):
+    item = {}
+    item["title"] = title
+    item["url"] = url
+    item["thumbnail"] = ""
+    item["type"] = "program"
+    item["onlyAvailableInSweden"] = geo_restricted
+    if "/video/" in item["url"]:
+      item["type"] = "video"
+    return item
   
   def __get_image_url(self, image_id, image_changed, image_type):
     """

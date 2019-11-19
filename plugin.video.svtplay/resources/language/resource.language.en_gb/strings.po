@@ -117,7 +117,11 @@ msgid "Group programs in A-Ö by first character"
 msgstr ""
 
 msgctxt "#30503"
-msgid "Hide content inappropriate for children"
+msgid "Block videos that are inapppropriate for children"
+msgstr ""
+
+msgctxt "#30504"
+msgid "This video is blocked for children"
 msgstr ""
 
 msgctxt "#30505"

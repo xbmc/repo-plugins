@@ -13,6 +13,10 @@ except ImportError:
   # Python 3
   from urllib.parse import quote
 
+class BlockedForChildrenException(BaseException):
+    def __init__(self):
+        pass
+
 class Router:
     # List modes
     MODE_LIVE_PROGRAMS = "live"
@@ -34,7 +38,7 @@ class Router:
         self.localize = addon.getLocalizedString
         self.settings = settings
 
-    def route(self, mode, url, params, page):
+    def route(self, mode, url, params):
         if not mode:
             self.view_start()
         elif mode == self.MODE_A_TO_O:
@@ -48,15 +52,13 @@ class Router:
             self.view_category(url)
         elif mode == self.common.MODE_PROGRAM:
             self.view_episodes(url)
-        elif mode == self.common.MODE_CLIPS:
-            self.view_clips(url)
         elif mode == self.common.MODE_VIDEO:
             self.start_video(url)
         elif mode == self.MODE_POPULAR or \
             mode == self.MODE_LATEST or \
             mode == self.MODE_LAST_CHANCE or \
             mode == self.MODE_LIVE_PROGRAMS:
-            self.view_section(mode, page)
+            self.view_start_section(mode)
         elif mode == self.MODE_LATEST_NEWS:
             self.view_latest_news()
         elif mode == self.MODE_CHANNELS:
@@ -129,8 +131,16 @@ class Router:
                 }
             )
 
-    def view_section(self, section, page):
-        (items, more_items) = svt.getItems(section, page)
+    def view_start_section(self, section):
+        items = []
+        if section == self.MODE_POPULAR:
+            items = self.graphql.getPopular()
+        elif section == self.MODE_LATEST:
+            items = self.graphql.getLatest()
+        elif section == self.MODE_LAST_CHANCE:
+            items = self.graphql.getLastChance()
+        else:
+            raise AttributeError("Section {} is not supported!".format(section))
         if not items:
             return
         for item in items:
@@ -138,8 +148,6 @@ class Router:
             if item["type"] == "program":
                 mode = self.common.MODE_PROGRAM
             self.common.create_dir_item(item, mode)
-        if more_items:
-            self.common.add_next_page_item(page+1, section)
 
     def view_channels(self):
         channels = svt.getChannels()
@@ -171,11 +179,6 @@ class Router:
         episodes = self.graphql.getVideoContent(slug)
         self.common.view_episodes(episodes)
 
-    def view_clips(self, url):
-        logging.log("View clips for {}".format(url))
-        clips = svt.getClips(url.split("/")[-1])
-        self.common.view_clips(clips)
-
     def view_search(self):
         keyword = helper.getInputFromKeyboard(self.localize(30102))
         if keyword == "" or not keyword:
@@ -199,7 +202,9 @@ class Router:
             video_json = svt.getVideoJSON(video_url)
         else:
             legacy_id = video_url.split("/")[2]
-            svt_id = self.graphql.getSvtIdForlegacyId(legacy_id)
-            video_json = svt.getSvtVideoJson(svt_id)
+            video_data = self.graphql.getVideoDataForLegacyId(legacy_id)
+            if self.settings.inappropriate_for_children and video_data["blockedForChildren"]:
+                raise BlockedForChildrenException()
+            video_json = svt.getSvtVideoJson(video_data["svtId"])
         self.common.start_video(video_json)
         

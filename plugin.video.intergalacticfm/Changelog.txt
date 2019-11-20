@@ -1,8 +1,17 @@
+Version 2.1.2
+Fixes for kodi release
+
+Version 2.1.1
+Mtv url fix and some images improved
+
+Version 2.1.0
+Some channels added and some removed
+
 Version 2.0.1
 Number of new images and descriptions of channels
 
 Version 2.0.0
-Completely new implementation by dromer offering multiple streams
+Completely new implementation by Dreamer offering multiple streams
 
 Version 1.1.1
 Added more video streams, disabled youtube due to bug

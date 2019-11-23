@@ -25,16 +25,6 @@ def list_channels():
         yelo_player.list_channels(data)
 
 
-@routing.route('/info/<channel_name>/<logo>/<channel>/<channelId>')
-def channel_info(channel_name, logo, channel, channelId):
-    import base64
-
-    if channel_name and logo and channel:
-        yelo_player.show_info_stream(
-            base64.b64decode(channel_name),
-            base64.b64decode(logo), channel, channelId)
-
-
 @routing.route('/livestream/<channel>')
 def play_livestream(channel):
     stream_url = yelo_player.select_manifest_url(channel)

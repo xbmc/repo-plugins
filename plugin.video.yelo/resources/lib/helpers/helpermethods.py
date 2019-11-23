@@ -1,7 +1,6 @@
 import re
 import time
 
-
 def regex(query, url):
     try:
         return re.findall(r"%s" % (query), url)[0]
@@ -10,7 +9,7 @@ def regex(query, url):
 
 
 def get_timestamp():
-    return int(time.time())
+    return time.time()
 
 
 def make_request(req_instance, method, url, headers=None, data=None, json=None, allow_redirects=False, cookies=None,

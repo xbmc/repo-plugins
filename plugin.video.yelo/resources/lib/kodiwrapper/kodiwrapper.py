@@ -18,7 +18,6 @@ PROTOCOL = 'mpd'
 DRM = 'com.widevine.alpha'
 LICENSE_URL = 'https://lwvdrm.yelo.prd.telenet-ops.be/WvLicenseProxy'
 
-
 class KodiWrapper:
     """ All Kodi controls are programmed here """
     def __init__(self, globals):
@@ -29,10 +28,17 @@ class KodiWrapper:
         self.__url = globals['routing'].base_url
 
 
-    def create_list_item(self, label, logo, fanart, extra_info = None, playable = "false"):
+    def create_list_item(self, label, logo, fanart, extra_info = None, playable = False,
+                         refresh_item=False):
+
+        playable = "true" if playable else "false"
+
         list_item = xbmcgui.ListItem()
         list_item.setLabel(label)
         list_item.setArt({'fanart': fanart, 'icon' : logo, 'thumb': logo})
+
+        if refresh_item:
+            list_item.addContextMenuItems([("Refresh", 'Container.Refresh')])
 
         info = {'title': label}
         if extra_info:
@@ -92,6 +98,8 @@ class KodiWrapper:
 
     def open_settings(self):
         self.__addon.openSettings()
+
+
 
     def get_localized_string(self, number):
         return self.__addon.getLocalizedString(number)

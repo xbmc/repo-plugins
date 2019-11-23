@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.trakt_list_manager" name="Trakt.tv List Manager" version="0.1.6" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.trakt_list_manager" name="Trakt.tv List Manager" version="0.1.7" provider-name="Tristan Fischer (sphere@dersphere.de)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -8,6 +8,7 @@
         <provides>executable video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>This addon is not maintained anymore</broken> 
         <language />
         <platform>all</platform>
         <website>http://www.trakt.tv</website>

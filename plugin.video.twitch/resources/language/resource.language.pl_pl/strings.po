@@ -921,3 +921,7 @@ msgstr ""
 msgctxt "#30260"
 msgid "Limit to 30 fps"
 msgstr ""
+
+msgctxt "#30261"
+msgid "Private API Credentials"
+msgstr ""

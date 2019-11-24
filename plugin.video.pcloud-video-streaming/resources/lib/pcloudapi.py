@@ -1,21 +1,32 @@
-import urllib
-import urllib2
 import xbmc
 import xbmcaddon
 import json
 import hashlib
 from numbers import Number 	# to check whether a certain variable is numeric
-from loginfailedexception import LoginFailedException
+from .loginfailedexception import LoginFailedException
 import os
 import operator # it's for use sort with operator
+import sys
+if sys.version_info.major >= 3:
+	# Python 3 stuff
+	from urllib.parse import urlparse, urlencode
+	from urllib.request import urlopen, Request, build_opener
+	from urllib.error import HTTPError
+else:
+	# Python 2 stuff
+	from urlparse import urlparse
+	from urllib import urlencode
+	from urllib2 import urlopen, Request, HTTPError, build_opener
 
 class PCloudApi:
-	PCLOUD_BASE_URL = 'https://api.pcloud.com/'
-	TOKEN_EXPIRATION_SECONDS = 100 * 86400 # 100 days
 
 	def __init__(self):
 		# auth typically comes from xbmcaddon.Addon() followed by myAddon.getSetting("auth")
 		self.auth = None
+		self.PCLOUD_BASE_URL = 'https://api.pcloud.com/'
+		self.TOKEN_EXPIRATION_SECONDS = 100 * 86400 # 100 days
+		self.HttpHandler = build_opener()
+		self.HttpHandler.addheaders = [('Accept', 'application/json')]
 
 	def CheckIfAuthPresent(self):
 		if self.auth is None or self.auth == "":
@@ -55,32 +66,48 @@ class PCloudApi:
 	def SetAuth(self, auth):
 		self.auth = auth
 
+	def ExecuteRequest(self, api, data = None):
+		"""
+		Private method to execute a JSON POST request and return its results raw.
+		"""
+		url = '{0}{1}'.format(self.PCLOUD_BASE_URL, api)
+		xbmc.log ('Calling {0}...'.format(url))
+		requestData = {}
+		requestHeaders = {}
+		method = 'GET'
+		if data is not None:
+			requestData = data.encode('utf-8')
+			method = 'POST'
+		httpRequest = Request(
+			url,
+			data=requestData,
+			method=method)
+		response = self.HttpHandler.open(httpRequest)
+		responseStr = response.read().decode('utf-8')
+		self.HttpHandler.close()
+		return json.loads(responseStr)
+
 	def PerformLogon(self, username, password):
 		""" This must be the first API that gets called after the constructor
 			Returns auth
 		"""
-		url = self.PCLOUD_BASE_URL + "getdigest"
-		outputStream = urllib2.urlopen(url)
-		response = json.load(outputStream)
-		outputStream.close()
+		api = "getdigest"
+		response = self.ExecuteRequest(api)
 		if response["result"] != 0:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling getdigest: " + errorMessage)
 		sha1 = hashlib.sha1()
-		sha1.update(username)
+		sha1.update(username.encode('utf-8'))
 		usernameDigest = sha1.hexdigest() # hexdigest outputs hex-encoded bytes
 		sha1 = hashlib.sha1()
-		sha1.update(password + usernameDigest + response["digest"])
+		sha1.update(password.encode('utf-8') + usernameDigest.encode('utf-8') + response["digest"].encode('utf-8'))
 		passwordDigest = sha1.hexdigest()
 		# Here we use POST instead of GET in order to account for folders with lots of files
-		authUrl = self.PCLOUD_BASE_URL
+		authApi = 'userinfo'
 		params = { "getauth": 1, "logout": 1, "username": username, "digest": response["digest"],
 					"authexpire": str(self.TOKEN_EXPIRATION_SECONDS), "passworddigest": passwordDigest }
-		paramsEncoded = urllib.urlencode(params)
-		req = urllib2.Request(url, paramsEncoded)
-		outputStream = urllib2.urlopen(req) # https://docs.python.org/2/howto/urllib2.html
-		response = json.load(outputStream)
-		outputStream.close()
+		paramsUrlEncoded = urlencode(params)
+		response = self.ExecuteRequest(authApi, paramsUrlEncoded)
 		if response["result"] != 0:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling userinfo: " + errorMessage)
@@ -93,17 +120,15 @@ class PCloudApi:
 		while tryAgain:
 			if not isMyShares:
 				# This is for regular folders, i.e. anything else than the "My Shares" folder
-				url = self.PCLOUD_BASE_URL + "listfolder?auth=" + self.auth
+				url = "listfolder?auth=" + self.auth
 				if isinstance (folderNameOrID, Number):
 					url += "&folderid=" + str(folderNameOrID) # string coercion
 				else:
 					url += "&path=" + folderNameOrID
 			else:
 				# This is ONLY for the "My Shares" folder
-				url = self.PCLOUD_BASE_URL + "listpublinks?auth=" + self.auth
-			outputStream = urllib2.urlopen(url)
-			response = json.load(outputStream)
-			outputStream.close()
+				url = "listpublinks?auth=" + self.auth
+			response = self.ExecuteRequest(url)
 			errCode = response["result"]
 			if errCode == 2005: # directory does not exist
 				folderNameOrID = 0
@@ -123,10 +148,8 @@ class PCloudApi:
 
 	def GetStreamingUrl(self, fileID):
 		self.CheckIfAuthPresent()
-		url = self.PCLOUD_BASE_URL + "getfilelink?auth=" + self.auth + "&fileid=" + str(fileID)
-		outputStream = urllib2.urlopen(url)
-		response = json.load(outputStream)
-		outputStream.close()
+		url = "getfilelink?auth=" + self.auth + "&fileid=" + str(fileID)
+		response = self.ExecuteRequest(url)
 		if response["result"] != 0:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling getfilelink: " + errorMessage)
@@ -136,14 +159,11 @@ class PCloudApi:
 	def GetThumbnails (self, fileIDSequence):
 		self.CheckIfAuthPresent()
 		commaSeparated = ",".join(str(oneFileID) for oneFileID in fileIDSequence) # coerce to string before comma-joining
-		url = self.PCLOUD_BASE_URL + "getthumbslinks"
+		url = "getthumbslinks"
 		# Here we use POST instead of GET in order to account for folders with lots of files
 		params = { "auth": self.auth, "fileids": commaSeparated, "size": "256x256", "format": "png" }
-		paramsEncoded = urllib.urlencode(params)
-		req = urllib2.Request(url, paramsEncoded)
-		outputStream = urllib2.urlopen(req) # https://docs.python.org/2/howto/urllib2.html
-		response = json.load(outputStream)
-		outputStream.close()
+		paramsUrlEncoded = urlencode(params)
+		response = self.ExecuteRequest(url, paramsUrlEncoded)
 		if response["result"] != 0:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling getthumbslinks: " + errorMessage)
@@ -159,10 +179,8 @@ class PCloudApi:
 
 	def DeleteFile(self, fileID):
 		self.CheckIfAuthPresent()
-		url = self.PCLOUD_BASE_URL + "deletefile?auth=" + self.auth + "&fileid=" + str(fileID)
-		outputStream = urllib2.urlopen(url)
-		response = json.load(outputStream)
-		outputStream.close()
+		url = "deletefile?auth=" + self.auth + "&fileid=" + str(fileID)
+		self.ExecuteRequest(url)
 		if response["result"] != 0:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling deletefile: " + errorMessage)
@@ -170,9 +188,7 @@ class PCloudApi:
 	def DeleteFolder(self, folderID):
 		self.CheckIfAuthPresent()
 		url = self.PCLOUD_BASE_URL + "deletefolderrecursive?auth=" + self.auth + "&folderid=" + str(folderID)
-		outputStream = urllib2.urlopen(url)
-		response = json.load(outputStream)
-		outputStream.close()
+		response = self.ExecuteRequest(url)
 		if response["result"] != 0:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling deletefolderrecursive: " + errorMessage)

@@ -1,3 +1,10 @@
+v1.3.1 -- 24-Nov-2019
+- Removed superfluous files.
+
+v1.3.0 -- 21-Nov-2019
+- Fixed issue #21: now the add-on runs with Python 3, used in Kodi 19 and higher, as well as Python 2,
+  used in all previous Kodi versions.
+
 v1.2.11 -- 03-Dec-2018
 - Fixed issue #18: if the PCloud username (i.e. the email address) contained nonstandard symbols such as
   for example a "+", logon would fail.

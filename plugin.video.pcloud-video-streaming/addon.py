@@ -1,8 +1,6 @@
 import resources.lib.pcloudapi
 from resources.lib.loginfailedexception import LoginFailedException
 import sys
-import urllib
-import urlparse
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
@@ -10,7 +8,13 @@ from datetime import datetime, timedelta
 import time
 import xbmc
 import os
-
+if sys.version_info.major >= 3:
+	# Python 3 stuff
+	from urllib.parse import quote, unquote, parse_qs
+else:
+	# Python 2 stuff
+	from urllib import quote, unquote
+	from urlparse import parse_qs
 
 myAddon = xbmcaddon.Addon()
 
@@ -18,7 +22,7 @@ base_url = sys.argv[0] 						# The base URL of your add-on, e.g. 'plugin://plugi
 addon_handle = int(sys.argv[1])				# The process handle for this add-on, as a numeric string
 xbmcplugin.setContent(addon_handle, 'movies')
 
-args = urlparse.parse_qs(sys.argv[2][1:])	# The query string passed to your add-on, e.g. '?foo=bar&baz=quux'
+args = parse_qs(sys.argv[2][1:])	# The query string passed to your add-on, e.g. '?foo=bar&baz=quux'
 
 # Instance of PCloudApi
 pcloud = resources.lib.pcloudapi.PCloudApi()
@@ -152,7 +156,7 @@ if mode[0] in ("folder", "myshares"):
 			li = xbmcgui.ListItem(filename, iconImage='DefaultFolder.png')
 			# Add context menu item for "delete folder"
 			deleteActionMenuText = myAddon.getLocalizedString(30114) # "Delete from PCloud..."
-			deleteActionUrl = base_url + "?mode=delete&folderID=" + str(oneFileOrFolderItem["folderid"]) + "&filename=" + urllib.quote(oneFileOrFolderItem["name"].encode("utf-8"))
+			deleteActionUrl = base_url + "?mode=delete&folderID=" + str(oneFileOrFolderItem["folderid"]) + "&filename=" + quote(oneFileOrFolderItem["name"].encode("utf-8"))
 			li.addContextMenuItems(
 				[(deleteActionMenuText, "RunPlugin(" + deleteActionUrl + ")")])
 			# Finally add the list item to the directory
@@ -197,7 +201,7 @@ if mode[0] in ("folder", "myshares"):
 			li.setProperty("IsPlayable", "true")
 			# Add context menu item for delete file
 			deleteActionMenuText = myAddon.getLocalizedString(30114) # "Delete from PCloud..."
-			deleteActionUrl = base_url + "?mode=delete&fileID=" + str(oneFileOrFolderItem["fileid"]) + "&filename=" + urllib.quote(oneFileOrFolderItem["name"].encode("utf-8"))
+			deleteActionUrl = base_url + "?mode=delete&fileID=" + str(oneFileOrFolderItem["fileid"]) + "&filename=" + quote(oneFileOrFolderItem["name"].encode("utf-8"))
 			# Add context menu item for mark as watched
 			markAsWatchedMenuText = myAddon.getLocalizedString(30121) # "Mark as watched"
 			li.addContextMenuItems(
@@ -211,7 +215,7 @@ if mode[0] in ("folder", "myshares"):
 
 	# Now add the "virtual" entries ("go to parent folder", "my shares", and "go to root folder") where necessary
 	if not isMyShares:
-		thisIsTheRootFolder = not folderContents["metadata"].has_key("parentfolderid")
+		thisIsTheRootFolder = "parentfolderid" not in folderContents["metadata"]
 		if thisIsTheRootFolder:
 			# In the root folder, add the virtual "My Shares" folder
 			url = base_url + "?mode=myshares"
@@ -275,7 +279,7 @@ elif mode[0] == "delete":
 	else:
 		idToDelete = int(idToDelete[0])
 		deleteFolder = False
-	filename = urllib.unquote(args["filename"][0].decode("utf-8"))
+	filename = unquote(args["filename"][0].decode("utf-8"))
 	filenameShort = filename[:35] # first 35 char
 	if filenameShort != filename:
 		filenameShort += "..."

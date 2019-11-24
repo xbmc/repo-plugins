@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.pcloud-video-streaming" name="PCloud Video Streaming" version="1.2.11" provider-name="Guido Domenici">
+<addon id="plugin.video.pcloud-video-streaming" name="PCloud Video Streaming" version="1.3.1" provider-name="Guido Domenici">
   <requires>
     <import addon="xbmc.python" version="2.19.0"/>
   </requires>
@@ -10,7 +10,9 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Provides streaming from a pcloud.com bucket</summary>
     <description lang="en">Provides streaming from a pcloud.com video source. You need an account with pCloud to use this (free accounts are OK). Not affiliated with pcloud.com.</description>
-    <disclaimer lang="en"></disclaimer>
+    <disclaimer lang="en">
+      The plugin's author(s) are not affiliated with Kodi.
+    </disclaimer>
     <language>en</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>

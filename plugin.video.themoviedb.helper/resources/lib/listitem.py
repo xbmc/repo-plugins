@@ -6,7 +6,7 @@ try:
 except ImportError:
     from urllib import urlencode  # Py2
 _addonpath = xbmcaddon.Addon().getAddonInfo('path')
-_url = 'plugin://plugin.video.themoviedb.helper/'
+_url = 'plugin://plugin.video.themoviedb.helper/?'
 
 
 class ListItem:
@@ -32,7 +32,8 @@ class ListItem:
             self.infolabels['dbid'] = dbid
 
     def get_url(self, **kwargs):
-        return '{0}?{1}'.format(_url, urlencode(kwargs))
+        url = kwargs.pop('url', _url)
+        return '{0}{1}'.format(url, urlencode(kwargs))
 
     def create_listitem(self, handle=None, **kwargs):
         listitem = xbmcgui.ListItem(label=self.label, label2=self.label2)

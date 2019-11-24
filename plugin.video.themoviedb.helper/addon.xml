@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.themoviedb.helper"
-version="1.0.5"
+version="1.0.14"
 name="TheMovieDb Helper"
 provider-name="jurialmunkey">
 <requires>
@@ -13,9 +13,9 @@ provider-name="jurialmunkey">
 </extension>
 <extension point="xbmc.python.script" library="script.py" />
 <extension point="xbmc.addon.metadata">
-  <summary lang="en_GB">TheMovieDb Helper</summary>
-  <description lang="en_GB">TheMovieDb Helper provides skinners a number of ways to access TheMovieDb API</description>
-  <disclaimer lang="en_GB">Provided by TheMovieDb. Please make sure you have your own API key.</disclaimer>
+  <summary lang="en_GB">TheMovieDb Helper - Now With Trakt Support!</summary>
+  <description lang="en_GB">TheMovieDb Helper provides details about movies, tvshows and actors from TMDb. Users can access a variety of lists from TMDb and Trakt.</description>
+  <disclaimer lang="en_GB">Provided by TheMovieDb and Trakt.</disclaimer>
   <license>GPL-3.0</license>
   <assets>
     <icon>icon.png</icon>
@@ -23,6 +23,8 @@ provider-name="jurialmunkey">
     <screenshot>resources/screenshot-01.jpg</screenshot>
     <screenshot>resources/screenshot-02.jpg</screenshot>
   </assets>
-  <news>1.0.5 - Fix for python text encoding/decoding issues in both PY2 and PY3</news>
+  <news>1.0.14 - Remove script.module.trakt dependency for python 3 compatibility[CR]1.0.13 - Add Trakt In-Progress Shows plus better Recently Watched[CR]1.0.12 - Code cleanup[CR]1.0.11 - Add pagination to trakt lists[CR]1.0.10 - Add some 
+additional lists from Trakt[CR]1.0.9 - Add 
+genres for TMDb[CR]1.0.8 - Some small fixes for enditems[CR]1.0.7 - Trakt support[CR]1.0.6 - Fixes MPAA Rating Prefix[CR]1.0.5 - Fixes python text encoding/decoding issues</news>
 </extension>
 </addon>

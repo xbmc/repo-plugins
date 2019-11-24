@@ -7,5 +7,6 @@
         <setting label="$ADDON[plugin.video.themoviedb.helper 32003]" type="enum" id="cache_list_days" values="1|2|3|4|5|6|7|14|21|30"/>
         <setting label="$ADDON[plugin.video.themoviedb.helper 32004]" type="text" id="mpaa_prefix" default="Rated"/>
         <setting label="$ADDON[plugin.video.themoviedb.helper 32005]" type="select" id="language" lvalues="30000|30001|30002|30003|30004|30005|30006|30007|30008|30009|30010|30011|30012|30013|30014|30015|30016|30017|30018|30019|30020|30021|30022|30023|30024|30025|30026|30027|30028|30029|30030|30031|30030|30033|30034|30035|30036|30037|30038|30039|30040|30041|30042|30043|30044|30045|30046|30047|30048|30049|30050|30051|30052|30053|30054|30055|30056|30057|30058|30059|30060|30061|30062|30063|30064|30065|30066|30067" default="18"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32010]" type="action" action="RunScript(plugin.video.themoviedb.helper, authenticate_trakt)" option="close"/>
     </category>
 </settings>

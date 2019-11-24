@@ -1,4 +1,4 @@
-﻿# Kodi language file
+# Kodi language file
 # Addon Provider: Guido Domenici
 msgid ""
 msgstr ""

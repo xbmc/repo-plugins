@@ -1,4 +1,5 @@
 import sys
+import time
 import xbmc
 import xbmcgui
 import xbmcaddon
@@ -16,6 +17,43 @@ def busy_dialog():
         yield
     finally:
         xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
+
+
+def try_parse_float(string):
+    '''helper to parse float from string without erroring on empty or misformed string'''
+    try:
+        return float(string or 0)
+    except Exception:
+        return 0
+
+
+def rate_limiter(addon_name='plugin.video.themoviedb.helper', wait_time=None, api_name=None):
+    """
+    Simple rate limiter to prevent overloading APIs
+    """
+    wait_time = wait_time if wait_time else 2
+    api_name = '.{0}'.format(api_name) if api_name else ''
+    timestamp_id = '{0}{1}.timestamp'.format(addon_name, api_name)
+
+    # WAIT UNTIL UNLOCKED AND THEN SET LOCK TO PREVENT OTHERS RUNNING
+    lock_id = '{0}{1}.locked'.format(addon_name, api_name)
+    lock = xbmcgui.Window(10000).getProperty(lock_id)
+    while not xbmc.Monitor().abortRequested() and lock == 'True':
+        xbmc.Monitor().waitForAbort(1)
+        lock = xbmcgui.Window(10000).getProperty(lock_id)
+    xbmcgui.Window(10000).setProperty(lock_id, 'True')
+
+    # CHECK THAT WAIT TIME SINCE LAST REQUEST HAS ELAPSED ELSE WAIT
+    pre_timestamp = xbmcgui.Window(10000).getProperty(timestamp_id)
+    pre_timestamp = try_parse_float(pre_timestamp)
+    cur_timestamp = pre_timestamp - time.time() + wait_time
+    while not xbmc.Monitor().abortRequested() and cur_timestamp > 0:
+        xbmc.Monitor().waitForAbort(1)
+        cur_timestamp -= 1
+
+    # SET TIMESTAMP AND CLEAR LOCK
+    xbmcgui.Window(10000).setProperty(timestamp_id, str(time.time()))
+    xbmcgui.Window(10000).clearProperty(lock_id)
 
 
 def dialog_select_item(items=None, details=False):
@@ -58,6 +96,14 @@ def age_difference(birthday, deathday=''):
         if birthday.month * 100 + birthday.day > deathday.month * 100 + deathday.day:
             age = age - 1
         return age
+    except Exception:
+        return
+
+
+def convert_timestamp(time_str):
+    try:
+        time_obj = datetime.strptime(time_str[:19], '%Y-%m-%dT%H:%M:%S')
+        return time_obj
     except Exception:
         return
 

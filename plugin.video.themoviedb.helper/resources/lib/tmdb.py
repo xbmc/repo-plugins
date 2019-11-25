@@ -16,10 +16,10 @@ class TMDb(RequestAPI):
         self.req_api_key = '?api_key={0}'.format(api_key)
         self.req_api_name = 'TMDb'
         self.req_api_url = 'https://api.themoviedb.org/3'
-        self.req_wait_time = 1 if api_key == 'a07324c669cac4d96789197134ce272b' else 0.2
+        self.req_wait_time = 0
         self.req_append = append_to_response if append_to_response else None
-        self.imagepath_original = 'https://image.tmdb.org/t/p/original/'
-        self.imagepath_poster = 'https://image.tmdb.org/t/p/w500/'
+        self.imagepath_original = 'https://image.tmdb.org/t/p/original'
+        self.imagepath_poster = 'https://image.tmdb.org/t/p/w500'
         self.cache_long = 14 if not cache_long or cache_long < 14 else cache_long
         self.cache_short = 1 if not cache_short or cache_short < 1 else cache_short
         self.mpaa_prefix = '{0} '.format(mpaa_prefix) if mpaa_prefix else ''
@@ -76,8 +76,8 @@ class TMDb(RequestAPI):
         infolabels['imdbnumber'] = item.get('imdb_id')
         infolabels['tagline'] = item.get('tagline')
         infolabels['status'] = item.get('status')
-        infolabels['episode'] = item.get('episode_number') or item.get('number_of_episodes')
-        infolabels['season'] = item.get('season_number') or item.get('number_of_seasons')
+        infolabels['episode'] = item.get('episode_number') if item.get('episode_number') or item.get('episode_number') == 0 else item.get('number_of_episodes')
+        infolabels['season'] = item.get('season_number') if item.get('season_number') or item.get('season_number') == 0 else item.get('number_of_seasons')
         infolabels['genre'] = utils.dict_to_list(item.get('genres', []), 'name')
         if item.get('runtime'):
             infolabels['duration'] = item.get('runtime', 0) * 60
@@ -114,7 +114,8 @@ class TMDb(RequestAPI):
         infoproperties['character'] = item.get('character')
         infoproperties['department'] = item.get('department')
         infoproperties['job'] = item.get('job')
-        infoproperties['role'] = item.get('known_for_department')
+        infoproperties['known_for'] = item.get('known_for_department')
+        infoproperties['role'] = item.get('character') or item.get('job') or item.get('department') or item.get('known_for_department')
         infoproperties['born'] = item.get('place_of_birth')
         if item.get('genres'):
             infoproperties = utils.iter_props(item.get('genres'), 'Genre', infoproperties, name='name', tmdb_id='id')
@@ -273,6 +274,28 @@ class TMDb(RequestAPI):
                 request = utils.merge_two_dicts(request, extra_request)
             itemdict = self.set_cache(self.get_niceitem(request), cache_name, self.cache_long) if request else {}
         return itemdict
+
+    def get_externalid_item(self, itemtype, external_id, external_source):
+        """
+        Lookup an item using an external id such as IMDb or TVDb
+        """
+        cache_name = '{0}.find.{1}.{2}'.format(self.addon_name, external_source, external_id)
+        itemdict = self.get_cache(cache_name)
+        if not itemdict:
+            request = self.get_request_lc('find', external_id, language=self.req_language, append_to_response=self.req_append, external_source=external_source)
+            request = request.get('{0}_results'.format(itemtype), [])
+            itemdict = self.set_cache(self.get_niceitem(request[0]), cache_name, self.cache_long) if request else {}
+        if itemdict.get('tmdb_id'):
+            itemdict = self.get_detailed_item(itemtype, itemdict.get('tmdb_id'), cache_only=True) or itemdict
+        return itemdict
+
+    def get_item_externalid(self, itemtype, tmdb_id, external_id=None):
+        """
+        Lookup external ids for an item using tmdb_id
+        """
+        request = self.get_request_lc(itemtype, tmdb_id, 'external_ids') or {}
+        request = request.get(external_id) if external_id else request
+        return request
 
     def get_tmdb_id(self, itemtype=None, imdb_id=None, query=None, year=None, selectdialog=False, longcache=False):
         func = self.get_request_lc if longcache else self.get_request_sc

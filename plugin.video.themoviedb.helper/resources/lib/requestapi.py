@@ -1,4 +1,3 @@
-import time
 import datetime
 import simplecache
 import xbmcaddon
@@ -56,61 +55,32 @@ class RequestAPI(object):
             my_object = func(*args, **kwargs)
             return self.set_cache(my_object, cache_name, cache_days)
 
-    def rate_limiter(self, wait_time=None, api_name=None):
-        """
-        Simple rate limiter to prevent overloading APIs
-        """
-        wait_time = wait_time if wait_time else 2
-        api_name = api_name if api_name else ''
-        nart_time_id = '{0}{1}.nart_time_id'.format(self.addon_name, api_name)
-        nart_lock_id = '{0}{1}.nart_lock_id'.format(self.addon_name, api_name)
-        nart_time = xbmcgui.Window(10000).getProperty(nart_time_id)  # Get our saved time value
-        nart_time = float(nart_time) if nart_time else -1  # If no value set to -1 to skip rate limiter
-        nart_time = nart_time - time.time()
-        if nart_time > 0:  # Apply rate limiting if next allowed request time is still in the furture
-            nart_lock = xbmcgui.Window(10000).getProperty(nart_lock_id)
-            while not xbmc.Monitor().abortRequested() and nart_lock == 'True':  # If another instance is applying rate limiting then wait till it finishes
-                xbmc.Monitor().waitForAbort(1)
-                nart_lock = xbmcgui.Window(10000).getProperty(nart_lock_id)
-            nart_time = xbmcgui.Window(10000).getProperty(nart_time_id)  # Get nart again because it might have elapsed
-            nart_time = float(nart_time) if nart_time else -1
-            nart_time = nart_time - time.time()
-            if nart_time > 0:  # If nart still in the future then apply rate limiting
-                xbmcgui.Window(10000).setProperty(nart_lock_id, 'True')  # Set the lock to prevent concurrent limiters
-                while not xbmc.Monitor().abortRequested() and nart_time > 0:
-                    xbmc.Monitor().waitForAbort(1)
-                    nart_time = nart_time - 1
-        nart_time = time.time() + wait_time  # Set nart into future for next request
-        nart_time = str(nart_time)
-        xbmcgui.Window(10000).setProperty(nart_time_id, nart_time)  # Set the nart property
-        xbmcgui.Window(10000).setProperty(nart_lock_id, 'False')  # Unlock rate limiter so next instance can run
-
     def translate_xml(self, request):
         if request:
             request = ET.fromstring(request.content)
             request = utils.dictify(request)
         return request
 
-    def get_api_request(self, request=None, is_json=True):
+    def get_api_request(self, request=None, is_json=True, postdata=None, headers=None, dictify=True):
         """
         Make the request to the API by passing a url request string
         """
-        self.rate_limiter(wait_time=self.req_wait_time, api_name=self.req_api_name)
-        utils.kodi_log(request, 1)
-        request = requests.get(request)  # Request our data
+        if self.req_wait_time:
+            utils.rate_limiter(addon_name=self.addon_name, wait_time=self.req_wait_time, api_name=self.req_api_name)
+        utils.kodi_log(request, 0)
+        request = requests.post(request, data=postdata) if postdata else requests.get(request, headers=headers)  # Request our data
         if not request.status_code == requests.codes.ok:  # Error Checking
             if request.status_code == 401:
                 utils.kodi_log('HTTP Error Code: {0}'.format(request.status_code), 1)
                 self.invalid_apikey()
-            else:
+            elif not request.status_code == 400:  # Don't write 400 error to log
                 utils.kodi_log('HTTP Error Code: {0}'.format(request.status_code), 1)
             return {}
-        else:
-            if is_json:
-                request = request.json()  # Make the request nice
-            else:
-                request = self.translate_xml(request)
-            return request
+        if dictify and is_json:
+            request = request.json()  # Make the request nice
+        elif dictify:
+            request = self.translate_xml(request)
+        return request
 
     def get_request_url(self, *args, **kwargs):
         """
@@ -124,7 +94,8 @@ class RequestAPI(object):
         request = u'{0}{1}'.format(request, self.req_api_key)
         for key, value in kwargs.items():
             if value:  # Don't add empty kwargs
-                request = u'{0}&{1}={2}'.format(request, key, value)
+                sep = '?' if '?' not in request else ''
+                request = u'{0}{1}&{2}={3}'.format(request, sep, key, value)
         return request
 
     def get_request_sc(self, *args, **kwargs):

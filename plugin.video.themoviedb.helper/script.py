@@ -9,6 +9,7 @@ import xbmcaddon
 import resources.lib.utils as utils
 from resources.lib.globals import LANGUAGES, APPEND_TO_RESPONSE
 from resources.lib.tmdb import TMDb
+from resources.lib.traktapi import traktAPI
 _homewindow = xbmcgui.Window(10000)
 _prefixname = 'TMDbHelper.'
 _addon = xbmcaddon.Addon()
@@ -76,7 +77,9 @@ class Script:
 
     def router(self):
         if self.params:
-            if self.params.get('add_path'):
+            if self.params.get('authenticate_trakt'):
+                traktAPI(force=True)
+            elif self.params.get('add_path'):
                 self.position = self.position + 1
                 self.set_props(self.position, self.params.get('add_path'))
                 self.lock_path(self.params.get('prevent_del'))

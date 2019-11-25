@@ -74,6 +74,11 @@ msgctxt "#32009"
 msgid "You must enter a valid API key to use this add-on"
 msgstr ""
 
+#: /resources/settings.xml
+msgctxt "#32010"
+msgid "Authenticate Trakt Account..."
+msgstr ""
+
 msgctxt "#30002"
 msgid "Belarusian (Belarus)"
 msgstr ""

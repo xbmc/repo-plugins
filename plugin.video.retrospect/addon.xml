@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.1.1"
+        version="5.1.2"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,20 +132,22 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.1.1 - Changelog - 2019-11-14[/B]
+        <news>[B]Retrospect v5.1.2 - Changelog - 2019-11-25[/B]
 
-There was a rather annoying bug in 5.1.0 that cause Retrospect to run twice each time. We also fixed the NPO Timestamp issue (again).
+This update mainly contains channel fixes for NPO, NOS and the SVT channel.
 
 [B]Framework related[/B]
-* Added: Timezone options to the DateHelper
-* Fixed: we actually ran the add-on twice after the latest 5.1.0 version
+-
 
 [B]GUI/Settings/Language related[/B]
 -
 
 [B]Channel related[/B]
-* Fixed: add time to &#x27;NPO Journaal&#x27; items (Fixes #1253)
-* Added: use pytz to generate dates on a &#x27;broadcast-date&#x27; base (See #1251)
+* Fixed: NPO EPG titles had trailing &quot;-&quot; chars
+* Fixed: NOS.nl videos did not play (Fixes #1263)
+* Fixed: SVT major API rebuild (Fixes #1254)
+* Fixed: incorrect NPO Plus indicators (Fixes #1257)
+* Fixed: NPO Token expiring before cookies expires (Possibly Fixes #1260)
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

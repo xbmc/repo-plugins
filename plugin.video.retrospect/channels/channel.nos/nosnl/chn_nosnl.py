@@ -227,7 +227,7 @@ class Channel(chn_class.Channel):
             urls.append(url)
 
             # actually process the url
-            if not url.endswith(".m3u8"):
+            if ".m3u8" not in url:
                 part.append_media_stream(
                     url=url,
                     bitrate=qualities.get(stream.get("name", "other"), 0)
@@ -239,11 +239,7 @@ class Channel(chn_class.Channel):
             #     M3u8.SetInputStreamAddonInput(stream, self.proxy)
             #     item.complete = True
             else:
-                content_type, url = UriHandler.header(url, self.proxy)
-                for s, b in M3u8.get_streams_from_m3u8(url, self.proxy):
-                    item.complete = True
-                    part.append_media_stream(s, b)
-
+                M3u8.update_part_with_m3u8_streams(part, url, proxy=self.proxy, channel=self)
         return item
 
     def __ignore_cookie_law(self):

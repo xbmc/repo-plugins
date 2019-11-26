@@ -1,3 +1,6 @@
+v1.3.2 -- 26-Nov-2019
+- Fixed issue #23: fixed crash on Android and Mac when performing first network operation, on Kodi 18.
+
 v1.3.1 -- 24-Nov-2019
 - Removed superfluous files.
 

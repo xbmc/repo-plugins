@@ -78,10 +78,18 @@ class PCloudApi:
 		if data is not None:
 			requestData = data.encode('utf-8')
 			method = 'POST'
-		httpRequest = Request(
-			url,
-			data=requestData,
-			method=method)
+		if sys.version_info.major >= 3:
+			# Python 3 stuff
+			httpRequest = Request(
+				url,
+				data=requestData,
+				method=method)
+		else:
+			# Python 2 stuff. Request for Python 2 (at least on Android) does not
+			# support the "method" keyword.
+			httpRequest = Request(
+				url,
+				data=requestData)			
 		response = self.HttpHandler.open(httpRequest)
 		responseStr = response.read().decode('utf-8')
 		self.HttpHandler.close()

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-#
+
 # Advanced MAME Launcher constants and globals.
-#
 
 # Copyright (c) 2018-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
@@ -11,8 +10,8 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
 
 # --- Python standard library ---
 from __future__ import unicode_literals
@@ -21,18 +20,18 @@ from __future__ import unicode_literals
 # Addon configuration options
 # -------------------------------------------------------------------------------------------------
 # Compat, smaller size, non-human readable JSON.
-# This settings must be True when releasing.
+# This setting must be True when releasing.
 OPTION_COMPACT_JSON = True
 
 # Use less memory when writing big JSON files, but writing is slower.
-# This settings must be True when releasing.
+# This setting must be True when releasing.
 OPTION_LOWMEM_WRITE_JSON = True
 
 # -------------------------------------------------------------------------------------------------
 # DEBUG/TEST settings
 # -------------------------------------------------------------------------------------------------
 # If True MAME is not launched. Useful to test the Recently Played and Most Played code.
-# This settings must be False when releasing.
+# This setting must be False when releasing.
 DISABLE_MAME_LAUNCHING = False
 
 # -------------------------------------------------------------------------------------------------
@@ -108,6 +107,7 @@ SL_ITEMS_SCANNED      = 800
 SL_ASSETS_SCANNED     = 900
 
 # INI and DAT files default names.
+ALLTIME_INI   = 'Alltime.ini'
 ARTWORK_INI   = 'Artwork.ini'
 BESTGAMES_INI = 'bestgames.ini'
 CATEGORY_INI  = 'Category.ini'
@@ -151,7 +151,7 @@ SL_LAUNCH_CASE_ERROR = 'Case ERROR!'
 # --- ROM types ---
 ROM_TYPE_ROM    = 'ROM'  # Normal ROM (no merged, no BIOS)
 ROM_TYPE_BROM   = 'BROM' # BIOS merged ROM
-ROM_TYPE_XROM   = 'XROM' # BIOS non-merged
+ROM_TYPE_XROM   = 'XROM' # BIOS non-merged ROM
 ROM_TYPE_MROM   = 'MROM' # non-BIOS merged ROM
 ROM_TYPE_DROM   = 'DROM' # Device ROM
 ROM_TYPE_DISK   = 'DISK'

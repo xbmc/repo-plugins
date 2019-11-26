@@ -128,6 +128,7 @@
     <Plot>Arcade games by [COLOR orange]SNK[/COLOR].</Plot>
     <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
     <Manufacturer>has SNK or has Snk</Manufacturer>
+    <Exclude>ng_mv1, ng_mv2f, ng_mv4f, neogeo</Exclude>
 </MAMEFilter>
 
 <MAMEFilter>
@@ -135,6 +136,7 @@
     <Plot>Machines in [COLOR orange]SNK Neo Geo MVS[/COLOR] arcade board.</Plot>
     <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
     <Driver>NEOGEO_MVS_DRIVER</Driver>
+    <Exclude>ng_mv1, ng_mv2f, ng_mv4f, neogeo</Exclude>
 </MAMEFilter>
 
 <MAMEFilter>

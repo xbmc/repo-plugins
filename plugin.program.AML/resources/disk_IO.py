@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-#
-# Advanced MAME Launcher filesystem I/O functions
-#
+
+# Advanced MAME Launcher filesystem I/O functions.
 
 # Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
@@ -115,6 +114,7 @@ def fs_new_machine_dic():
         'softwarelists'   : [],
         'devices'         : [], # List of dictionaries. See comments avobe.
         # Custom AML data (from INI files or generated)
+        'alltime'         : '', # MASH Alltime.ini
         'artwork'         : [], # MASH Artwork.ini
         'bestgames'       : '', # betsgames.ini
         'category'        : [], # MASH category.ini
@@ -360,6 +360,7 @@ def fs_new_control_dic():
         'ver_mame'      : 0,
         'ver_mame_str'  : 'Undefined',
         # INI files
+        'ver_alltime'   : 'MAME database not built',
         'ver_artwork'   : 'MAME database not built',
         'ver_bestgames' : 'MAME database not built',
         'ver_category'  : 'MAME database not built',
@@ -408,28 +409,29 @@ def fs_new_control_dic():
         'stats_samples_parents'    : 0,
         'stats_samples_clones'     : 0,
 
-        # --- Filed in when building the MAME catalogs in  mame_build_MAME_catalogs() ---
-        'stats_MF_Normal_Total'          : 0,
-        'stats_MF_Normal_Good'           : 0,
-        'stats_MF_Normal_Imperfect'      : 0,
-        'stats_MF_Normal_Nonworking'     : 0,
-        'stats_MF_Unusual_Total'         : 0,
-        'stats_MF_Unusual_Good'          : 0,
-        'stats_MF_Unusual_Imperfect'     : 0,
-        'stats_MF_Unusual_Nonworking'    : 0,
-        'stats_MF_Nocoin_Total'          : 0,
-        'stats_MF_Nocoin_Good'           : 0,
-        'stats_MF_Nocoin_Imperfect'      : 0,
-        'stats_MF_Nocoin_Nonworking'     : 0,
-        'stats_MF_Mechanical_Total'      : 0,
-        'stats_MF_Mechanical_Good'       : 0,
-        'stats_MF_Mechanical_Imperfect'  : 0,
-        'stats_MF_Mechanical_Nonworking' : 0,
-        'stats_MF_Dead_Total'            : 0,
-        'stats_MF_Dead_Good'             : 0,
-        'stats_MF_Dead_Imperfect'        : 0,
-        'stats_MF_Dead_Nonworking'       : 0,
-        # Devices driver_status is always the empty string ''
+        # --- Main filter statistics ---
+        # Filed in when building the MAME catalogs in mame_build_MAME_catalogs()
+        # driver_status for device machines is always the empty string ''
+        'stats_MF_Normal_Total'          : 0, 'stats_MF_Normal_Total_parents'          : 0,
+        'stats_MF_Normal_Good'           : 0, 'stats_MF_Normal_Good_parents'           : 0,
+        'stats_MF_Normal_Imperfect'      : 0, 'stats_MF_Normal_Imperfect_parents'      : 0,
+        'stats_MF_Normal_Nonworking'     : 0, 'stats_MF_Normal_Nonworking_parents'     : 0,
+        'stats_MF_Unusual_Total'         : 0, 'stats_MF_Unusual_Total_parents'         : 0,
+        'stats_MF_Unusual_Good'          : 0, 'stats_MF_Unusual_Good_parents'          : 0,
+        'stats_MF_Unusual_Imperfect'     : 0, 'stats_MF_Unusual_Imperfect_parents'     : 0,
+        'stats_MF_Unusual_Nonworking'    : 0, 'stats_MF_Unusual_Nonworking_parents'    : 0,
+        'stats_MF_Nocoin_Total'          : 0, 'stats_MF_Nocoin_Total_parents'          : 0,
+        'stats_MF_Nocoin_Good'           : 0, 'stats_MF_Nocoin_Good_parents'           : 0,
+        'stats_MF_Nocoin_Imperfect'      : 0, 'stats_MF_Nocoin_Imperfect_parents'      : 0,
+        'stats_MF_Nocoin_Nonworking'     : 0, 'stats_MF_Nocoin_Nonworking_parents'     : 0,
+        'stats_MF_Mechanical_Total'      : 0, 'stats_MF_Mechanical_Total_parents'      : 0,
+        'stats_MF_Mechanical_Good'       : 0, 'stats_MF_Mechanical_Good_parents'       : 0,
+        'stats_MF_Mechanical_Imperfect'  : 0, 'stats_MF_Mechanical_Imperfect_parents'  : 0,
+        'stats_MF_Mechanical_Nonworking' : 0, 'stats_MF_Mechanical_Nonworking_parents' : 0,
+        'stats_MF_Dead_Total'            : 0, 'stats_MF_Dead_Total_parents'            : 0,
+        'stats_MF_Dead_Good'             : 0, 'stats_MF_Dead_Good_parents'             : 0,
+        'stats_MF_Dead_Imperfect'        : 0, 'stats_MF_Dead_Imperfect_parents'        : 0,
+        'stats_MF_Dead_Nonworking'       : 0, 'stats_MF_Dead_Nonworking_parents'       : 0,
 
         # --- Filed in when building the ROM audit databases ---
         'stats_audit_MAME_machines_runnable' : 0,
@@ -652,7 +654,7 @@ def change_control_dic(control_dic, field, value):
 # It gets converted to: aa.bb.cc Rdd -> int aab,bcc,Rdd
 # The number 2,147,483,647 is the maximum positive value for a 32-bit signed binary integer.
 #
-# aa.bb.cc.Rdd    formatted aab,bcc,Xdd
+# aa.bb.cc.Xdd    formatted aab,bcc,Xdd
 #  |  |  | | |--> Beta/Alpha flag 0, 1, ..., 99
 #  |  |  | |----> Release kind flag 
 #  |  |  |        5 for non-beta, non-alpha, non RC versions.
@@ -666,12 +668,12 @@ def change_control_dic(control_dic, field, value):
 def fs_AML_version_str_to_int(AML_version_str):
     log_verb('fs_AML_version_str_to_int() AML_version_str = "{0}"'.format(AML_version_str))
     version_int = 0
-    # Parse versions like 0.9.8[-|~]alpha[jj]
-    m_obj_alpha_n = re.search('^(\d+?)\.(\d+?)\.(\d+?)[\-\~](alpha|beta)(\d+?)', AML_version_str)
-    # Parse versions like 0.9.8[-|~]alpha
-    m_obj_alpha = re.search('^(\d+?)\.(\d+?)\.(\d+?)[\-\~](alpha|beta)', AML_version_str)
-    # Parse versions like 0.9.8
-    m_obj_standard = re.search('^(\d+?)\.(\d+?)\.(\d+?)', AML_version_str)
+    # Parse versions like "0.9.8[-|~]alpha[jj]"
+    m_obj_alpha_n = re.search('^(\d+?)\.(\d+?)\.(\d+?)[\-\~](alpha|beta)(\d+?)$', AML_version_str)
+    # Parse versions like "0.9.8[-|~]alpha"
+    m_obj_alpha = re.search('^(\d+?)\.(\d+?)\.(\d+?)[\-\~](alpha|beta)$', AML_version_str)
+    # Parse versions like "0.9.8"
+    m_obj_standard = re.search('^(\d+?)\.(\d+?)\.(\d+?)$', AML_version_str)
 
     if m_obj_alpha_n:
         major    = int(m_obj_alpha_n.group(1))
@@ -826,6 +828,8 @@ def fs_get_cataloged_dic_parents(PATHS, catalog_name):
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_BESTGAMES_PARENT_PATH.getPath())
     elif catalog_name == 'Series':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_SERIES_PARENT_PATH.getPath())
+    elif catalog_name == 'Alltime':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_ALLTIME_PARENT_PATH.getPath())
     elif catalog_name == 'Artwork':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_ARTWORK_PARENT_PATH.getPath())
     elif catalog_name == 'Version':
@@ -882,6 +886,8 @@ def fs_get_cataloged_dic_all(PATHS, catalog_name):
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_BESTGAMES_ALL_PATH.getPath())
     elif catalog_name == 'Series':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_SERIES_ALL_PATH.getPath())
+    elif catalog_name == 'Alltime':
+        catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_ALLTIME_ALL_PATH.getPath())
     elif catalog_name == 'Artwork':
         catalog_dic = fs_load_JSON_file_dic(PATHS.CATALOG_ARTWORK_ALL_PATH.getPath())
     elif catalog_name == 'Version':
@@ -1441,7 +1447,7 @@ def fs_render_cache_get_hash(catalog_name, category_name):
     return hashlib.md5(prop_key).hexdigest()
 
 def fs_build_render_cache(PATHS, settings, control_dic, cache_index_dic, machines_render):
-    log_info('fs_build_render_cache() Building ROM cache ...')
+    log_info('fs_build_render_cache() Initialising ...')
 
     # --- Clean 'cache' directory JSON ROM files ---
     log_info('Cleaning dir "{0}"'.format(PATHS.CACHE_DIR.getPath()))
@@ -1473,7 +1479,7 @@ def fs_build_render_cache(PATHS, settings, control_dic, cache_index_dic, machine
         catalog_index_dic = cache_index_dic[catalog_name]
         catalog_all = fs_get_cataloged_dic_all(PATHS, catalog_name)
 
-        pdialog_line1 = 'Building {0} MAME render cache ({1} of {2}) ...'.format(
+        pdialog_line1 = 'Building MAME {} render cache ({} of {}) ...'.format(
             catalog_name, catalog_count, num_catalogs)
         pDialog.update(0, pdialog_line1)
         total_items = len(catalog_index_dic)
@@ -1511,7 +1517,7 @@ def fs_load_render_dic_all(PATHS, cache_index_dic, catalog_name, category_name):
 # MAME asset cache
 # -------------------------------------------------------------------------------------------------
 def fs_build_asset_cache(PATHS, settings, control_dic, cache_index_dic, assets_dic):
-    log_info('fs_build_asset_cache() Building Asset cache ...')
+    log_info('fs_build_asset_cache() Initialising ...')
 
     # --- Clean 'cache' directory JSON Asset files ---
     log_info('Cleaning dir "{0}"'.format(PATHS.CACHE_DIR.getPath()))
@@ -1543,7 +1549,7 @@ def fs_build_asset_cache(PATHS, settings, control_dic, cache_index_dic, assets_d
         catalog_index_dic = cache_index_dic[catalog_name]
         catalog_all = fs_get_cataloged_dic_all(PATHS, catalog_name)
 
-        pdialog_line1 = 'Building {0} MAME asset cache ({1} of {2}) ...'.format(
+        pdialog_line1 = 'Building MAME {} asset cache ({} of {}) ...'.format(
             catalog_name, catalog_count, num_catalogs)
         pDialog.update(0, pdialog_line1)
         total_items = len(catalog_index_dic)

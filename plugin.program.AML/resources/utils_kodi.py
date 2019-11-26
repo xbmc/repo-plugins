@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-#
-# Advanced Emulator Launcher miscellaneous functions
-#
+
+# Advanced Emulator Launcher miscellaneous functions.
 
 # Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
@@ -11,8 +10,8 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
 
 # --- Python standard library ---
 from __future__ import unicode_literals
@@ -21,6 +20,7 @@ from __future__ import division
 import hashlib
 import json
 import os
+import pprint
 import random
 import shutil
 import sys
@@ -55,6 +55,11 @@ def set_log_level(level):
 
     current_log_level = level
 
+def log_variable(var_name, var):
+    if current_log_level < LOG_DEBUG: return
+    log_text = 'AML DUMP : Dumping variable "{}"\n{}'.format(var_name, pprint.pformat(var))
+    xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGERROR)
+
 # For Unicode stuff in Kodi log see http://forum.kodi.tv/showthread.php?tid=144677
 #
 def log_debug_KR(str_text):
@@ -64,31 +69,31 @@ def log_debug_KR(str_text):
         if isinstance(str_text, str): str_text = str_text.decode('utf-8')
                                   
         # At this point we are sure str_text is a unicode string.
-        log_text = u'AML DEBUG: ' + str_text
+        log_text = 'AML DEBUG: ' + str_text
         xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGNOTICE)
 
 def log_verb_KR(str_text):
     if current_log_level >= LOG_VERB:
         if isinstance(str_text, str): str_text = str_text.decode('utf-8')
-        log_text = u'AML VERB : ' + str_text
+        log_text = 'AML VERB : ' + str_text
         xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGNOTICE)
 
 def log_info_KR(str_text):
     if current_log_level >= LOG_INFO:
         if isinstance(str_text, str): str_text = str_text.decode('utf-8')
-        log_text = u'AML INFO : ' + str_text
+        log_text = 'AML INFO : ' + str_text
         xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGNOTICE)
 
 def log_warning_KR(str_text):
     if current_log_level >= LOG_WARNING:
         if isinstance(str_text, str): str_text = str_text.decode('utf-8')
-        log_text = u'AML WARN : ' + str_text
+        log_text = 'AML WARN : ' + str_text
         xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGWARNING)
 
 def log_error_KR(str_text):
     if current_log_level >= LOG_ERROR:
         if isinstance(str_text, str): str_text = str_text.decode('utf-8')
-        log_text = u'AML ERROR: ' + str_text
+        log_text = 'AML ERROR: ' + str_text
         xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGERROR)
 
 #

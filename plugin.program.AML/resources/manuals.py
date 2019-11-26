@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-#
+
 # Advanced MAME Launcher PDF/CBZ/CBR manual image extraction.
-#
 
 # Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
@@ -11,8 +10,8 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
 
 # --- Python standard library ---
 # NOTE String literals are needed in this file so unicode_literals cannot be defined.

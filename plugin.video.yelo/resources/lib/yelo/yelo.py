@@ -2,6 +2,8 @@ import requests
 import uuid
 from datetime import datetime
 import os, sys
+from threading import Thread
+
 from xbmcplugin import SORT_METHOD_LABEL_IGNORE_THE
 from resources.lib.helpers.dynamic_headers import *
 from resources.lib.helpers.helpermethods import *
@@ -238,7 +240,8 @@ class YeloPlay(Prepare, Errors):
             "thumb": "DefaultAddonPVRClient.png"
         }
 
-        list_item = self.kodi_wrapper.create_list_item(item["name"], item["thumb"], None, None, "false")
+        list_item = self.kodi_wrapper.create_list_item(item["name"], item["thumb"], None, None,
+                                                       False)
 
         url = self.kodi_wrapper.url_for("list_channels", category=item["name"].lower())
         listing.append((url, list_item, is_folder))
@@ -247,29 +250,29 @@ class YeloPlay(Prepare, Errors):
         self.kodi_wrapper.sort_method(SORT_METHOD_LABEL_IGNORE_THE)
         self.kodi_wrapper.end_directory()
 
-    def _request_broadcast_info(self, channelId, datetime):
+    def _request_broadcast_info(self, channelId, list_ref):
+        today = datetime.today().strftime("%Y%m%d%H")
         r = make_request(session, "GET", "https://pubba.yelo.prd.telenet-ops.be/v1/"
                                          "events/schedule-time/outformat/json/lng/nl/start/"
                                          "{}/range/{}/channel/{}/".
-                         format(datetime, 2, channelId),
+                         format(today, 2, channelId),
                          default_headers, None, None, False, None, self.testing)
 
         schedules = r.json()["schedule"]
 
-        return [
-            {"title": broadcast_elem["title"],
-             "start": broadcast_elem["starttime"],
-             "end": broadcast_elem["endtime"],
-             "poster": broadcast_elem["poster"]
-            }
-            for schedule_elem in schedules for broadcast_elem in schedule_elem["broadcast"]]
+        broadcast = next(
+            schedule_elem["broadcast"] for schedule_elem in schedules)
+
+        list_ref.extend([{
+            "id": channelId,
+            "title": broadcast_elem["title"],
+            "start": broadcast_elem["starttime"],
+            "end": broadcast_elem["endtime"],
+            "poster": broadcast_elem["poster"]
+        } for broadcast_elem in broadcast])
 
     def _timestamp_to_time(self, timestamp):
         return datetime.fromtimestamp(timestamp).strftime("%H:%M:%S")
-
-    def _get_broadcast_now(self, channelId):
-        today = datetime.today().strftime("%Y%m%d%H")
-        return self._request_broadcast_info(channelId, today)
 
     def _extract_schedule(self, schedule):
         timestamp = get_timestamp()
@@ -291,60 +294,31 @@ class YeloPlay(Prepare, Errors):
             nxt["start"] = self._timestamp_to_time(nxt.get("start"))
             nxt["end"] = self._timestamp_to_time(nxt.get("end"))
 
-        return  prev, now, nxt
+        return prev, now, nxt
 
-    def get_current_program_playing(self, channelId):
-        schedule = self._get_broadcast_now(channelId)
+    def _get_channel_info(self, tv_channels):
+        channel_ids = [sub["channelIdentification"]["channelId"] for sub in tv_channels]
 
-        return self._extract_schedule(schedule)
+        list_ref = []
+        threads = []
 
-    def list_channels(self, tv_channels, is_folder=True):
-        listing = []
-        entitlementId = self.fetch_from_data("entitlement")["entitlementId"]
+        for id in channel_ids:
+            thread = Thread(target=self._request_broadcast_info, args=(id, list_ref))
+            thread.start()
+            threads.append(thread)
 
-        for i in range(len(tv_channels)):
-            if (
-                    not bool(tv_channels[i]["channelProperties"]["radio"])
-                    and bool(tv_channels[i]["channelProperties"]["live"])
-                    and any(tv_channels[i]["channelPolicies"]["linearEndpoints"])
-                    and any(x in entitlementId for x in tv_channels[i]["channelAvailability"]["oasisId"])
-            ):
+        # wait for all threads to terminate
+        for thread in threads:
+            thread.join()
 
-                if sys.version_info[0] == 3:
-                    name = tv_channels[i]["channelIdentification"]["name"]
-                else:
-                    name = (tv_channels[i]["channelIdentification"]["name"]). \
-                        encode("utf-8")
+        return list_ref
 
-                squareLogo = tv_channels[i]["channelProperties"]["squareLogo"]
-                liveThumbnailURL = tv_channels[i]["channelProperties"]["liveThumbnailURL"]
-                stbUniqueName = tv_channels[i]["channelIdentification"]["stbUniqueName"]
-                channelId = tv_channels[i]["channelIdentification"]["channelId"]
-
-                list_item = self.kodi_wrapper. \
-                    create_list_item(name, squareLogo, liveThumbnailURL, {"plot": name})
-
-                import base64
-                url = self.kodi_wrapper.url_for(
-                    "channel_info",
-                    channel_name=base64.b64encode(name),
-                    logo=base64.b64encode(squareLogo),
-                    channel=stbUniqueName,
-                    channelId=channelId
-                )
-
-                listing.append((url, list_item, is_folder))
-
-        self.kodi_wrapper.add_dir_items(listing)
-        self.kodi_wrapper.sort_method(SORT_METHOD_LABEL_IGNORE_THE)
-        self.kodi_wrapper.end_directory()
-
-    def show_info_stream(self, name, logo, channel, channel_id):
-        prev, now, nxt = self.get_current_program_playing(channel_id)
+    def _create_guide_from_channel_info(self, info):
+        prev, now, nxt = self._extract_schedule(info)
 
         guide = ""
-        if prev:
-            guide += "[B]Previously: [/B]" + "\n" +  prev.get("title") + "\n" + "[COLOR green]" \
+        if prev and not nxt:
+            guide += "[B]Previously: [/B]" + "\n" + prev.get("title") + "\n" + "[COLOR green]" \
                      + prev.get("start") + "[/COLOR]" + " >> " + "[COLOR red]" \
                      + prev.get("end") + "[/COLOR] " + "\n\n"
         if now:
@@ -356,14 +330,47 @@ class YeloPlay(Prepare, Errors):
                      + nxt.get("start") + "[/COLOR]" + " >> " + "[COLOR red]" \
                      + nxt.get("end") + "[/COLOR] " + "\n\n"
 
-        list_item = self.kodi_wrapper. \
-            create_list_item(name, logo, now.get("poster"),
-                             {"plot": guide if now.get("title") else name}, "true")
+        return guide, now.get("poster")
 
-        url = self.kodi_wrapper.url_for("play_livestream", channel=channel)
+    def _filter_channels(self, tv_channels):
+        allowed_channels = []
+        entitlementId = self.fetch_from_data("entitlement")["entitlementId"]
 
-        self.kodi_wrapper.add_dir_item(url, list_item, 1)
-        self.kodi_wrapper.sort_method(SORT_METHOD_LABEL_IGNORE_THE)
+        for i in range(len(tv_channels)):
+            if (
+                    not bool(tv_channels[i]["channelProperties"]["radio"])
+                    and bool(tv_channels[i]["channelProperties"]["live"])
+                    and any(tv_channels[i]["channelPolicies"]["linearEndpoints"])
+                    and any(x in entitlementId for x in tv_channels[i]["channelAvailability"]["oasisId"])
+            ):
+                allowed_channels.append(tv_channels[i])
+
+        return allowed_channels
+
+    def list_channels(self, tv_channels, is_folder=False):
+        listing = []
+
+        tv_channels = self._filter_channels(tv_channels)
+        channel_info = self._get_channel_info(tv_channels)
+
+        for i in range(len(tv_channels)):
+            name = (tv_channels[i]["channelIdentification"]["name"])
+            squareLogo = tv_channels[i]["channelProperties"]["squareLogo"]
+            stbUniqueName = tv_channels[i]["channelIdentification"]["stbUniqueName"]
+            channelId = tv_channels[i]["channelIdentification"]["channelId"]
+
+            info = [info for info in channel_info if info["id"] == channelId]
+
+            guide, poster = self._create_guide_from_channel_info(info)
+
+            list_item = self.kodi_wrapper. \
+                create_list_item(name, squareLogo, poster, {"plot": guide}, True, True)
+
+            url = self.kodi_wrapper.url_for("play_livestream", channel=stbUniqueName)
+
+            listing.append((url, list_item, is_folder))
+
+        self.kodi_wrapper.add_dir_items(listing)
         self.kodi_wrapper.end_directory()
 
     def play_live_stream(self, stream_url):

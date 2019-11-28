@@ -11,6 +11,7 @@ from resources.lib.helpers import subtitlehelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.streams.mpd import Mpd
 from resources.lib.channelinfo import ChannelInfo
@@ -38,27 +39,54 @@ class Channel(chn_class.Channel):
         self.noImage = "svtimage.png"
 
         # Setup the urls
-        self.mainListUri = "https://www.svtplay.se/api/all_titles_and_singles"
+
+        self.mainListUri = self.__get_api_url(
+            "ProgramsListing", "1eeb0fb08078393c17658c1a22e7eea3fbaa34bd2667cec91bbc4db8d778580f", {})
+
         self.baseUrl = "https://www.svtplay.se"
         self.swfUrl = "https://media.svt.se/swf/video/svtplayer-2016.01.swf"
 
         # In case we use the All Titles and Singles with the API
-        self._add_data_parser("https://www.svtplay.se/api/all_titles_and_singles",
-                              match_type=ParserData.MatchExact, json=True,
+        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=ProgramsListing",
+                              match_type=ParserData.MatchStart, json=True,
                               preprocessor=self.add_live_items_and_genres,
-                              parser=[], creator=self.create_json_episode_item)
+                              parser=["data", "programAtillO", "flat"],
+                              creator=self.create_api_typed_item)
 
-        self._add_data_parser("https://www.svtplay.se/api/title?slug=",
-                              json=True, name="JSON API Videos via Slug",
-                              preprocessor=self.extract_article_id,
-                              parser=[], creator=self.create_json_item)
+        # This one contructs an API url using the metaData['slug'] and then retrieves either the all
+        # folders, just the videos in a folder if that is the only folder, or it retrieves the
+        # content of a folder with a given metaData['folder_id'].
+        self._add_data_parser("#program_item", json=True,
+                              name="Data retriever for API folder.",
+                              preprocessor=self.fetch_program_api_data)
+        self._add_data_parser("#program_item", json=True,
+                              name="Folder parser for show listing via API",
+                              parser=["folders"], creator=self.create_api_typed_item)
 
-        self._add_data_parser("https://www.svtplay.se/api/title_episodes_by_article_id?articleId=",
-                              json=True, name="JSON API Videos via ArticleID",
-                              parser=[], creator=self.create_json_item)
+        self._add_data_parser("#program_item", json=True,
+                              name="video parser for show listing via API",
+                              parser=["videos"], creator=self.create_api_typed_item)
 
-        self._add_data_parser("https://api.svt.se/videoplayer-api/video/",
-                              updater=self.update_video_api_item)
+        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=GridPage",
+                              name="Default GraphQL GridePage parsers", json=True,
+                              parser=["data", "startForSvtPlay", "selections", 0, "items"],
+                              creator=self.create_api_typed_item)
+
+        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=AllGenres",
+                              json=True, name="Genre GraphQL",
+                              parser=["data", "genresSortedByName", "genres"],
+                              creator=self.create_api_typed_item)
+        self._add_data_parser("#genre_item", json=True,
+                              name="Genre data retriever for GraphQL",
+                              preprocessor=self.fetch_genre_api_data)
+        self._add_data_parser("#genre_item", json=True,
+                              name="Genre episode parser for GraphQL",
+                              parser=["programs"],
+                              creator=self.create_api_typed_item)
+        self._add_data_parser("#genre_item", json=True,
+                              name="Genre clip parser for GraphQL",
+                              parser=["videos"],
+                              creator=self.create_api_typed_item)
 
         # Setup channel listing based on JSON data in the HTML
         self._add_data_parser("https://www.svtplay.se/kanaler", match_type=ParserData.MatchExact,
@@ -66,53 +94,28 @@ class Channel(chn_class.Channel):
                               preprocessor=self.extract_live_channel_data,
                               parser=[], creator=self.create_channel_item)
 
-        # Special pages (using JSON) using a generic pre-processor to extract the data
-        # Could also be done with
-        #   - https://www.svtplay.se/api/latest?page=1&excludedTagsString=lokalt
-        #   - https://www.svtplay.se/api/last_chance?page=1&excludedTagsString=lokalt
-        #   - https://www.svtplay.se/populara?sida=1
-        #   - https://www.svtplay.se/api/live?page=1&excludedTagsString=lokalt
-        special_json_pages = r"^https?://www.svtplay.se/(senaste|sista-chansen|populara|direkt)\?sida=\d+$"
-        self._add_data_parser(special_json_pages,
-                              match_type=ParserData.MatchRegex, preprocessor=self.extract_json_data)
-        self._add_data_parser(special_json_pages,
-                              match_type=ParserData.MatchRegex, json=True,
-                              parser=["gridPage", "content"],
-                              creator=self.create_json_item)
-        self._add_data_parser(special_json_pages,
-                              match_type=ParserData.MatchRegex, json=True,
-                              parser=["gridPage", "pagination"],
-                              creator=self.create_json_page_item)
-
-        # Genres/tags (using JSON)
-        self._add_data_parser("https://www.svtplay.se/api/clusters", json=True,
-                              name="Genre/Tags parser",
-                              parser=[], creator=self.create_json_tag_item)
-
-        self._add_data_parser("https://www.svtplay.se/api/cluster_titles_and_episodes?cluster=", json=True,
-                              name="Cluster List Generator",
-                              parser=[], creator=self.create_json_episode_item)
-
-        # Categories (SVT reverted the Apollo stuff (See #1080))
-        self._add_data_parser("https://www.svtplay.se/genre/",
-                              preprocessor=self.extract_apollo_json_data, json=True,
-                              name="Video/Folder parsers for items in a Genre/Tag")
-
         # Searching
-        self._add_data_parser("https://www.svtplay.se/api/search?q=", json=True,
-                              parser=["videosAndTitles"],
-                              creator=self.create_json_item_sok)
+        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=SearchPage",
+                              json=True,
+                              parser=["data", "search"], creator=self.create_api_typed_item)
 
+        # Generic updating of videos
+        self._add_data_parser("https://api.svt.se/videoplayer-api/video/",
+                              updater=self.update_video_api_item)
         # Update via HTML pages
         self._add_data_parser("https://www.svtplay.se/video/", updater=self.update_video_html_item)
         self._add_data_parser("https://www.svtplay.se/klipp/", updater=self.update_video_html_item)
+
         # Update via the new API urls
-        self._add_data_parser("https://www.svt.se/videoplayer-api/", updater=self.update_video_api_item)
+        # self._add_data_parser("https://www.svt.se/videoplayer-api/", updater=self.update_video_api_item)
 
         # ===============================================================================================================
         # non standard items
+        self.__folder_id = "folder_id"
+        self.__genre_id = "genre_id"
         self.__apollo_data = None
         self.__expires_text = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
+        self.__timezone = "Europe/Stockholm"
 
         # ===============================================================================================================
         # Test cases:
@@ -120,26 +123,6 @@ class Channel(chn_class.Channel):
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
-
-    def search_site(self, url=None):  # @UnusedVariable
-        """ Creates an list of items by searching the site.
-
-        This method is called when the URL of an item is "searchSite". The channel
-        calling this should implement the search functionality. This could also include
-        showing of an input keyboard and following actions.
-
-        The %s the url will be replaced with an URL encoded representation of the
-        text to search for.
-
-        :param str url:     Url to use to search with a %s for the search parameters.
-
-        :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
-
-        """
-
-        url = "https://www.svtplay.se/api/search?q=%s"
-        return chn_class.Channel.search_site(self, url)
 
     def add_live_items_and_genres(self, data):
         """ Adds the Live items, Channels and Last Episodes to the listing.
@@ -155,11 +138,28 @@ class Channel(chn_class.Channel):
 
         extra_items = {
             LanguageHelper.get_localized_string(LanguageHelper.LiveTv): "https://www.svtplay.se/kanaler",
-            LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes): "https://www.svtplay.se/direkt?sida=1",
+
+            LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes):
+                self.__get_api_url("GridPage",
+                                   "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
+                                   variables={"selectionId": "live"}),
+
             LanguageHelper.get_localized_string(LanguageHelper.Search): "searchSite",
-            LanguageHelper.get_localized_string(LanguageHelper.Recent): "https://www.svtplay.se/senaste?sida=1",
-            LanguageHelper.get_localized_string(LanguageHelper.LastChance): "https://www.svtplay.se/sista-chansen?sida=1",
-            LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes): "https://www.svtplay.se/populara?sida=1",
+
+            LanguageHelper.get_localized_string(LanguageHelper.Recent):
+                self.__get_api_url("GridPage",
+                                   "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
+                                   variables={"selectionId": "latest"}),
+
+            LanguageHelper.get_localized_string(LanguageHelper.LastChance):
+                self.__get_api_url("GridPage",
+                                   "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
+                                   variables={"selectionId": "lastchance"}),
+
+            LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes):
+                self.__get_api_url("GridPage",
+                                   "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
+                                   variables={"selectionId": "popular"}),
         }
 
         for title, url in extra_items.items():
@@ -169,230 +169,126 @@ class Channel(chn_class.Channel):
             new_item.dontGroup = True
             items.append(new_item)
 
-        # https://www.svtplay.se/ajax/dokumentar/titlar?filterAccessibility=&filterRights=
+        genre_tags = "\a.: {}/{} :.".format(
+            LanguageHelper.get_localized_string(LanguageHelper.Genres),
+            LanguageHelper.get_localized_string(LanguageHelper.Tags).lower()
+        )
+
+        genre_url = self.__get_api_url("AllGenres", "6bef51146d05b427fba78f326453127f7601188e46038c9a5c7b9c2649d4719c", {})
+        genre_item = MediaItem(genre_tags, genre_url)
+        genre_item.complete = True
+        genre_item.thumb = self.noImage
+        genre_item.dontGroup = True
+        items.append(genre_item)
+
         category_items = {
             "Drama": (
-                "https://www.svtplay.se/genre/drama",
+                "drama",
                 "https://www.svtstatic.se/play/play5/images/categories/posters/drama-d75cd2da2eecde36b3d60fad6b92ad42.jpg"
             ),
             "Dokumentär": (
-                "https://www.svtplay.se/genre/dokumentar",
+                "dokumentar",
                 "https://www.svtstatic.se/play/play5/images/categories/posters/dokumentar-00599af62aa8009dbc13577eff894b8e.jpg"
             ),
             "Humor": (
-                "https://www.svtplay.se/genre/humor",
+                "humor",
                 "https://www.svtstatic.se/play/play5/images/categories/posters/humor-abc329317eedf789d2cca76151213188.jpg"
             ),
             "Livsstil": (
-                "https://www.svtplay.se/genre/livsstil",
+                "livsstil",
                 "https://www.svtstatic.se/play/play5/images/categories/posters/livsstil-2d9cd77d86c086fb8908ce4905b488b7.jpg"
             ),
             "Underhållning": (
-                "https://www.svtplay.se/genre/underhallning",
+                "underhallning",
                 "https://www.svtstatic.se/play/play5/images/categories/posters/underhallning-a60da5125e715d74500a200bd4416841.jpg"
             ),
             "Kultur": (
-                "https://www.svtplay.se/genre/kultur",
+                "kultur",
                 "https://www.svtstatic.se/play/play5/images/categories/posters/kultur-93dca50ed1d6f25d316ac1621393851a.jpg"
             ),
             "Samhälle & Fakta": (
-                "https://www.svtplay.se/genre/samhalle-och-fakta",
+                "samhalle-och-fakta",
                 "https://www.svtstatic.se/play/play5/images/categories/posters/samhalle-och-fakta-3750657f72529a572f3698e01452f348.jpg"
             ),
             "Film": (
-                "https://www.svtplay.se/genre/film",
+                "film",
                 "https://www.svtstatic.se/image/medium/480/20888292/1548755428"
             ),
             "Barn": (
-                "https://www.svtplay.se/genre/barn",
+                "barn",
                 "https://www.svtstatic.se/play/play5/images/categories/posters/barn-c17302a6f7a9a458e0043b58bbe8ab79.jpg"
             ),
             "Nyheter": (
-                "https://www.svtplay.se/genre/nyheter",
+                "nyheter",
                 "https://www.svtstatic.se/play/play6/images/categories/posters/nyheter.e67ff1b5770152af4690ad188546f9e9.jpg"
             ),
             "Sport": (
-                "https://www.svtplay.se/genre/sport",
+                "sport",
                 "https://www.svtstatic.se/play/play6/images/categories/posters/sport.98b65f6627e4addbc4177542035ea504.jpg"
             )
         }
 
-        category_title = "\a.: {} :.".format(LanguageHelper.get_localized_string(LanguageHelper.Categories))
+        category_title = "\a.: {} :.".format(
+            LanguageHelper.get_localized_string(LanguageHelper.Categories))
         new_item = MediaItem(category_title, "https://www.svtplay.se/genre")
         new_item.complete = True
         new_item.thumb = self.noImage
         new_item.dontGroup = True
-        for title, (url, thumb) in category_items.items():
-            cat_item = MediaItem(title, url)
+        for title, (category_id, thumb) in category_items.items():
+            # https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=GenreProgramsAO&variables={"genre": ["action-och-aventyr"]}&extensions={"persistedQuery": {"version": 1, "sha256Hash": "189b3613ec93e869feace9a379cca47d8b68b97b3f53c04163769dcffa509318"}}
+            cat_item = MediaItem(title, "#genre_item")
             cat_item.complete = True
             cat_item.thumb = thumb or self.noImage
             cat_item.dontGroup = True
+            cat_item.metaData[self.__genre_id] = category_id
             new_item.items.append(cat_item)
         items.append(new_item)
 
-        genre_tags = "\a.: {}/{} :.".format(
-            LanguageHelper.get_localized_string(LanguageHelper.Genres),
-            LanguageHelper.get_localized_string(LanguageHelper.Tags)
-        )
-        new_item = MediaItem(genre_tags, "https://www.svtplay.se/api/clusters")
-        new_item.complete = True
-        new_item.thumb = self.noImage
-        new_item.dontGroup = True
-        items.append(new_item)
-
         return data, items
 
-    def extract_json_data(self, data):
-        """ Extracts JSON data from the HTML for __svtplay and __reduxStore json data.
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        return self.__extract_json_data(data, "(?:__svtplay|__reduxStore)")
-
-    def extract_apollo_json_data(self, data):
-        """ Extracts JSON data from the HTML for __svtplay_apollo json data.
-
-        :param str|unicode data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        data, items = self.__extract_json_data(data, "(?:__svtplay_apollo)")
-        self.__apollo_data = JsonHelper(data).json
-        for k, v in self.__apollo_data.items():
-            item = self.create_json_genre_item(v)
-            if item:
-                items.append(item)
-        return data, items
-
-    def extract_slug_data(self, data):
-        """ Extracts the correct Slugged Data for tabbed items
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        Logger.info("Extracting Slugged data during pre-processing")
-        data, items = self.extract_json_data(data)
-
-        json = JsonHelper(data)
-        slugs = json.get_value("relatedVideoContent", "relatedVideosAccordion")
-        for slug_data in slugs:
-            tab_slug = "?tab=%s" % (slug_data["slug"], )
-            if not self.parentItem.url.endswith(tab_slug):
-                continue
-
-            for item in slug_data["videos"]:
-                i = self.create_json_item(item)
-                if i:
-                    items.append(i)
-
-        return data, items
-
-    def create_json_genre_item(self, result_set):
-        """ Creates a MediaItem of type 'folder/video' using the result_set from the regex.
+    def create_api_typed_item(self, result_set, add_parent_title=False):
+        """ Creates a new MediaItem based on the __typename attribute.
 
         This method creates a new MediaItem from the Regular Expression or Json
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
         :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param bool add_parent_title: Should the parent's title be included?
 
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
 
         """
 
-        if "__typename" not in result_set:
-            return None
+        api_type = result_set["__typename"]
+        Logger.trace("%s: %s", api_type, result_set)
 
-        item_type = result_set["__typename"].lower()
-        if item_type not in ("episode", "single", "clip", "tvseries") or "name" not in result_set:
-            return None
-
-        Logger.trace("%s->%s", item_type, result_set)
-        title = result_set["name"]
-        if item_type == 'episode' and "parent" in result_set:
-            # noinspection PyTypeChecker
-            parent_data = self.__apollo_data[result_set["parent"]["id"]]
-            parent_title = parent_data["name"]
-            title = "{} - {}".format(parent_title, title)
-
-        if item_type == "clip":
-            url = "https://www.svtplay.se/klipp/{}/".format(result_set["id"])
-
-        elif "id" in result_set:
-            url = "https://www.svtplay.se/api/title_episodes_by_article_id?articleId={}".format(result_set['id'])
-
-        elif "urls" in result_set:
-            # noinspection PyTypeChecker
-            url_data = self.__apollo_data[result_set["urls"]["id"]]
-            url = url_data["svtplay"]
-            url = "{}{}".format(self.baseUrl, url)
+        if api_type == "TvSeries":
+            item = self.create_api_tvserie_type(result_set)
+        elif api_type == "Selection":
+            item = self.create_api_selection_type(result_set)
+        elif api_type == "Teaser":
+            item = self.create_api_teaser_type(result_set)
+        elif api_type == "Genre":
+            item = self.create_api_genre_type(result_set)
+        elif api_type == "TvShow" or api_type == "KidsTvShow":
+            item = self.create_api_tvshow_type(result_set)
+        elif api_type == "Single":
+            item = self.create_api_single_type(result_set)
+        elif api_type == "Clip":
+            item = self.create_api_clip_type(result_set)
+        elif api_type == "Episode":
+            item = self.create_api_episode_type(result_set, add_parent_title)
+        elif api_type == "SearchHit":
+            item = self.create_api_typed_item(result_set["item"], add_parent_title=True)
         else:
-            Logger.debug("No url found for: %s", title)
+            Logger.warning("Missing type: %s", api_type)
             return None
-
-        item = MediaItem(title, url)
-        item.description = result_set.get("longDescription")
-        item.fanart = self.parentItem.fanart
-        item.type = "video" if item_type != "tvseries" else "folder"
-
-        if "image" in result_set:
-            # noinspection PyTypeChecker
-            image = result_set["image"]["id"]
-            image_data = self.__apollo_data[image]
-            image_url = "https://www.svtstatic.se/image/medium/520/{id}/{changed}".format(**image_data)
-            item.thumb = image_url
-
-        if "restrictions" in result_set:
-            # noinspection PyTypeChecker
-            restrictions = self.__apollo_data[result_set["restrictions"]["id"]]
-            item.isGeoLocked = restrictions.get('onlyAvailableInSweden', False)
-
-        duration = result_set.get("duration")
-        if bool(duration):
-            item.set_info_label("duration", duration)
-
-        valid_to = result_set.get("validTo")
-        if bool(valid_to):
-            self.__set_expire_time(valid_to, item)
 
         return item
 
-    # Used at the moment
-    def extract_article_id(self, data):
-        """ Extracts the correct article_id from the json and fetches the data for that id
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-        items = []
-
-        json = JsonHelper(data)
-        article_id = json.get_value("articleId")
-        if not article_id:
-            return None, items
-
-        url = "https://www.svtplay.se/api/title_episodes_by_article_id?articleId={}".format(article_id)
-        data = UriHandler.open(url, proxy=self.proxy)
-        return data, items
-
-    # Used at the moment
-    def create_json_episode_item(self, result_set):
+    def create_api_tvserie_type(self, result_set):
         """ Creates a new MediaItem for an episode.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -406,31 +302,16 @@ class Channel(chn_class.Channel):
 
         """
 
-        Logger.trace(result_set)
-
-        if "titleArticleId" in result_set:
-            return None
-
-        url = result_set['contentUrl']
-        url = "https://www.svtplay.se/api/title?slug={0}".format(url.strip("/"))
-        if "video/" in url:
-            return None
-
-        item = MediaItem(result_set['programTitle'], url)
+        url = result_set["urls"]["svtplay"]
+        item = MediaItem(result_set['name'], "#program_item")
+        item.metaData["slug"] = url
         item.icon = self.icon
-        item.isGeoLocked = result_set.get('onlyAvailableInSweden', False)
+        item.isGeoLocked = result_set.get('restrictions', {}).get('onlyAvailableInSweden', False)
         item.description = result_set.get('description')
-
-        thumb = self.noImage
-        if "poster" in result_set:
-            thumb = result_set["poster"]
-            thumb = self.__get_thumb(thumb or self.noImage)
-
-        item.thumb = thumb
         return item
 
-    def create_json_item_sok(self, result_set):
-        """ Creates a new MediaItem for search results.
+    def create_api_tvshow_type(self, result_set):
+        """ Creates a new MediaItem for an episode.
 
         This method creates a new MediaItem from the Regular Expression or Json
         results <result_set>. The method should be implemented by derived classes
@@ -441,277 +322,307 @@ class Channel(chn_class.Channel):
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
 
+        This works for:
+            __typename=TvShow, KidsTvShow, Single
+
         """
 
-        content_type = result_set["contentType"].lower()
+        url = result_set["urls"]["svtplay"]
+        item = MediaItem(result_set['name'], "#program_item")
+        item.metaData["slug"] = url
+        item.icon = self.icon
+        item.isGeoLocked = result_set.get('restrictions', {}).get('onlyAvailableInSweden', False)
+        item.description = result_set.get('description')
+        image_info = result_set.get("image")
+        if image_info:
+            item.thumb = self.__get_thumb(image_info)
+        return item
 
-        if content_type == "titel":
-            return self.create_json_episode_item(result_set)
-        elif content_type == "videoepisod":
-            return self.create_json_item(result_set)
-        elif content_type == "singel":
-            return self.create_json_item(result_set)
-        elif content_type == "videoklipp":
-            return self.create_json_item(result_set)
-        else:
-            Logger.warning("Missing contentType: %s", content_type)
-            return None
-
-    def create_json_page_item(self, result_set):
-        """ Creates a MediaItem of type 'page' using the result_set from the regex.
+    def create_api_selection_type(self, result_set):
+        """ Creates a new MediaItem for the new GraphQL Api.
 
         This method creates a new MediaItem from the Regular Expression or Json
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
 
-        :return: A new MediaItem of type 'page'.
+        :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
+
+        This works for:
+            __typename=Selection
 
         """
 
-        Logger.trace(result_set)
-
-        if "nextPageUrl" not in result_set:
+        if result_set["type"].lower() == "upcoming":
             return None
 
-        title = "\b.: %s :." % (LanguageHelper.get_localized_string(LanguageHelper.MorePages),)
-        url = "%s%s" % (self.baseUrl, result_set["nextPageUrl"])
+        item = MediaItem(result_set["name"], self.parentItem.url)
+        item.metaData[self.__folder_id] = result_set["id"]
+        item.metaData.update(self.parentItem.metaData)
+        item.thumb = self.__get_thumb(result_set["thumb_data"], width=720)
+        item.fanart = self.__get_thumb(result_set["thumb_data"])
+        return item
+
+    def create_api_teaser_type(self, result_set):
+        """ Creates a MediaItem of type 'video' using the result_set from the API.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        This works for:
+            __typename=Teaser
+
+        """
+
+        title = result_set.get("heading")
+        sub_heading = result_set.get("subHeading")
+        if bool(sub_heading):
+            result_set["item"]["name"] = "{} - {}".format(title, sub_heading)
+        else:
+            result_set["item"]["name"] = title
+
+        item = self.create_api_typed_item(result_set["item"])
+        return item
+
+    def create_api_episode_type(self, result_set, add_parent_title=False):
+        """ Creates a MediaItem of type 'video' using the result_set from the API.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param bool add_parent_title: Should the parent's title be included?
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        This works for:
+            __typename=Episode
+
+        """
+
+        svt_video_id = result_set.get("videoSvtId", result_set.get("svtId", None))
+        if svt_video_id:
+            # API style
+            url = "https://api.svt.se/videoplayer-api/video/{}".format(svt_video_id)
+        else:
+            # HTML style
+            url = "{}{}".format(self.baseUrl, result_set['urls']['svtplay'])
+
+        title = result_set.get("name", "")
+        if "parent" in result_set and add_parent_title:
+            title = "{} - {}".format(result_set["parent"]["name"], title)
+
         item = MediaItem(title, url)
-        item.icon = self.icon
+        item.description = result_set.get("longDescription")
+        item.type = "video"
+        item.set_info_label("duration", int(result_set.get("duration", 0)))
+        item.isGeoLocked = result_set.get("restrictions", {}).get("onlyAvailableInSweden", False)
+        item.fanart = self.parentItem.fanart
+
+        if "image" in result_set:
+            item.thumb = self.__get_thumb(result_set["image"], width=720)
+
+        valid_to = result_set.get("validTo", None)
+        if valid_to:
+            self.__set_expire_time(valid_to, item)
+
+        live_data = result_set.get("live")
+        if live_data:
+            is_live_now = live_data["liveNow"]
+            if is_live_now:
+                item.name = "{} [COLOR gold](live)[/COLOR]".format(item.name)
+
+            start = live_data["start"].split('.')[0].split("+")[0]
+            start_time = DateHelper.get_date_from_string(start, "%Y-%m-%dT%H:%M:%S")
+            item.set_date(*start_time[0:6])
+            item.name = "{:02}:{:02} - {}".format(start_time.tm_hour, start_time.tm_min, item.name)
+
+        return item
+
+    def create_api_single_type(self, result_set):
+        """ Creates a MediaItem of type 'video' using the result_set from the API.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        This works for:
+            __typename=Episode
+
+        """
+
+        title = result_set['name']
+        url = '{}{}'.format(self.baseUrl, result_set['urls']['svtplay'])
+
+        item = MediaItem(title, url)
+        item.type = "video"
+        item.description = result_set.get('longDescription')
+
+        image_info = result_set.get("image")
+        if image_info:
+            item.thumb = self.__get_thumb(image_info)
+        item.isGeoLocked = result_set['restrictions']['onlyAvailableInSweden']
+        return item
+
+    def create_api_clip_type(self, result_set):
+        """ Creates a MediaItem of type 'video' using the result_set from the API.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        This works for:
+            __typename=Episode
+
+        """
+
+        title = result_set['name']
+        svt_video_id = result_set.get("videoSvtId", result_set.get("svtId", None))
+        if svt_video_id:
+            # API style
+            url = "https://api.svt.se/videoplayer-api/video/{}".format(svt_video_id)
+        else:
+            # HTML style
+            url = "{}{}".format(self.baseUrl, result_set['urls']['svtplay'])
+
+        item = MediaItem(title, url)
+        item.type = "video"
+        item.description = result_set.get('longDescription')
+        item.isGeoLocked = result_set['restrictions']['onlyAvailableInSweden']
+
+        image_info = result_set.get("image")
+        if image_info:
+            item.thumb = self.__get_thumb(image_info)
+
+        duration = int(result_set.get("duration", 0))
+        item.set_info_label("duration", duration)
+
+        return item
+
+    def create_api_genre_type(self, result_set):
+        """ Creates a MediaItem of type 'video' using the result_set from the API.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        This works for:
+            __typename=Genre
+
+        """
+
+        item = MediaItem(result_set["name"], "#genre_item")
+        item.fanart = self.fanart
         item.thumb = self.noImage
-        item.complete = True
+        item.metaData[self.__genre_id] = result_set["id"]
         return item
 
-    def create_json_tag_item(self, result_set):
-        """ Creates a MediaItem of type 'folder' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-        Logger.trace(result_set)
-
-        url = "https://www.svtplay.se/api/cluster_titles_and_episodes?cluster={}".format(result_set['slug'])
-
-        genre = MediaItem(result_set['name'], url)
-        genre.icon = self.icon
-        genre.description = result_set.get('description')
-        genre.fanart = result_set.get('backgroundImage') or self.parentItem.fanart
-        genre.fanart = self.__get_thumb(genre.fanart, thumb_size="/extralarge/")
-        genre.thumb = result_set.get('thumbnailImage') or self.noImage
-        genre.thumb = self.__get_thumb(genre.thumb)
-        return genre
-
-    def create_json_genre(self, result_set):
-        """ Creates a MediaItem of type 'folder' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        genres = []
-
-        for cluster in result_set['clusters']:
-            Logger.trace(cluster)
-            url = "%s%s" % (self.baseUrl, cluster['contentUrl'])
-            genre = MediaItem(cluster['name'], url)
-            genre.icon = self.icon
-            genre.description = cluster.get('description')
-            genre.fanart = cluster.get('backgroundImage') or self.parentItem.fanart
-            genre.fanart = self.__get_thumb(genre.fanart, thumb_size="/extralarge/")
-            genre.thumb = cluster.get('thumbnailImage') or self.noImage
-            genre.thumb = self.__get_thumb(genre.thumb)
-            genres.append(genre)
-
-        return genres
-
-    def create_json_item(self, result_set):  # NOSONAR
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        # determine the title
-        program_title = result_set.get("programTitle", "") or ""
-        show_title = result_set.get("title", "") or ""
-        if show_title == "" and program_title != "":
-            title = program_title
-        elif show_title != "" and program_title == "":
-            title = show_title
-        elif program_title == "" and show_title == "":
-            Logger.warning("Could not find title for item: %s", result_set)
-            return None
-        elif show_title != "" and show_title != program_title:
-            title = "%s - %s" % (program_title, show_title)
-        else:
-            # they are the same
-            title = show_title  # NOSONAR
-
-        if "live" in result_set and result_set["live"]:
-            title = "%s (&middot;Live&middot;)" % (title, )
-
-        item_type = result_set.get("contentType")
-        if "contentUrl" in result_set:
-            if "versions" in result_set and bool(result_set["versions"]):
-                video_id = result_set["versions"][0]["id"]
-            else:
-                video_id = result_set["id"]
-            url = "https://api.svt.se/videoplayer-api/video/{}".format(video_id)
-        else:
-            url = result_set["url"]
-        broad_cast_date = result_set.get("broadcastDate", None)
-
-        if item_type in ("videoEpisod", "videoKlipp", "singel"):
-            if "/video/" not in url and "/klipp/" not in url:
-                Logger.warning("Found video item without a /video/ or /klipp/ url.")
-                return None
-            item_type = "video"
-            if "programVersionId" in result_set:
-                url = "https://www.svt.se/videoplayer-api/video/%s" % (result_set["programVersionId"],)
-            elif not url.startswith("http"):
-                url = "%s%s" % (self.baseUrl, url)
-        else:
-            item_type = "folder"
-            url = "%s%s" % (self.baseUrl, url)
-
-        item = MediaItem(title, url)
-        item.icon = self.icon
-        item.type = item_type
-        item.isGeoLocked = result_set.get("onlyAvailableInSweden", False)
-        item.description = result_set.get("description", "")
-
-        if "season" in result_set and "episodeNumber" in result_set and result_set["episodeNumber"]:
-            season = int(result_set["season"])
-            episode = int(result_set["episodeNumber"])
-            if season > 0 and episode > 0:
-                item.name = "s%02de%02d - %s" % (season, episode, item.name)
-                item.set_season_info(season, episode)
-
-        thumb = self.noImage
-        if self.parentItem:
-            thumb = self.parentItem.thumb
-
-        for image_key in ("image", "imageMedium", "thumbnailMedium", "thumbnail", "poster"):
-            if image_key in result_set and result_set[image_key] is not None:
-                thumb = result_set[image_key]
-                break
-
-        item.thumb = self.__get_thumb(thumb or self.noImage)
-
-        if broad_cast_date is not None:
-            if "+" in broad_cast_date:
-                broad_cast_date = broad_cast_date.rsplit("+")[0]
-            time_stamp = DateHelper.get_date_from_string(broad_cast_date, "%Y-%m-%dT%H:%M:%S")
-            item.set_date(*time_stamp[0:6])
-
-        # Set the expire date
-        expire_date = result_set.get("expireDate")
-        if expire_date is not None:
-            self.__set_expire_time(expire_date, item)
-
-        length = result_set.get("materialLength", 0)
-        if length > 0:
-            item.set_info_label(MediaItem.LabelDuration, length)
-        return item
-
-    def create_category_item(self, result_set):
-        """ Creates a MediaItem of type 'video/folder' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        url = result_set["Url"]
-        if "http://" not in url and "https://" not in url:
-            url = "%s%s" % (self.baseUrl, url)
-
-        thumb = result_set["Thumb"]
-        if thumb.startswith("//"):
-            thumb = "https:%s" % (thumb,)
-
-        item = MediaItem(result_set['Title'], url)
-        item.icon = self.icon
-        item.thumb = thumb
-        item.isGeoLocked = result_set["Abroad"] == "false"
-
-        if result_set["Date1"] is not None and result_set["Date1"].lower() != "imorgon":
-            year, month, day, hour, minutes = self.__get_date(result_set["Date1"], result_set["Date2"], result_set["Date3"])
-            item.set_date(year, month, day, hour, minutes, 0)
-
-        if "/video/" in url:
-            item.type = "video"
-            video_id = url.split("/")[4]
-            item.url = "https://www.svtplay.se/video/%s?type=embed&output=json" % (video_id,)
-        # else:
-        #     # make sure we get the right tab for displaying
-        #     item.url = "%s?tab=program" % (item.url, )
-
-        return item
-
-    def extract_live_channel_data(self, data):
-        """ Adds the channel items to the listing.
+    # noinspection PyUnusedLocal
+    def fetch_program_api_data(self, data):
+        """ Loaded the data that contains the main episodes for a show.
 
         :param str data: The retrieve data that was loaded for the current item and URL.
 
         :return: A tuple of the data and a list of MediaItems that were generated.
         :rtype: tuple[str|JsonHelper,list[MediaItem]]
 
+        This is done to prevent performance issues of the self.__get_api_url() method when
+        a lot of items are generated.
+
         """
 
-        json_string, _ = self.extract_json_data(data)
-        json_data = JsonHelper(json_string)
-        channels = json_data.get_value("channelsPage", "schedule")
-        channel_list = []
-        for channel_name, channel_data in channels.items():
-            if "channel" not in channel_data:
-                continue
-            channel_list.append(channel_data)
+        items = []
+        slug = self.parentItem.metaData["slug"]
+        variables = {"titleSlugs": [slug.strip("/")]}
+        hash_value = "4122efcb63970216e0cfb8abb25b74d1ba2bb7e780f438bbee19d92230d491c5"
+        url = self.__get_api_url("TitlePage", hash_value, variables)
+        data = UriHandler.open(url, proxy=self.proxy)
+        json_data = JsonHelper(data)
 
-        json_data.json = channel_list
+        possible_folders = json_data.get_value("data", "listablesBySlug", 0, "associatedContent")
+        possible_folders = [p for p in possible_folders if p["id"] != "upcoming"]
+        if self.__folder_id in self.parentItem.metaData:
+            folder_id = self.parentItem.metaData[self.__folder_id]
+            Logger.debug("Retrieving folder with id='%s'", folder_id)
+            json_data.json = {"videos": [f for f in possible_folders if f["id"] == folder_id][0]["items"]}
+            return json_data, items
+
+        thumb_data = json_data.get_value("data", "listablesBySlug", 0, "image")
+        if len(possible_folders) == 1:
+            json_data.json = {"videos": possible_folders[0]["items"]}
+        else:
+            json_data.json = {"folders": possible_folders}
+            [folder.update({"thumb_data": thumb_data}) for folder in json_data.json["folders"]]
+
+        return json_data, items
+
+    # noinspection PyUnusedLocal
+    def fetch_genre_api_data(self, data):
+        url = self.__get_api_url(
+            "GenreProgramsAO",
+            "189b3613ec93e869feace9a379cca47d8b68b97b3f53c04163769dcffa509318",
+            {"genre": [self.parentItem.metaData[self.__genre_id]]}
+        )
+
+        data = UriHandler.open(url, proxy=self.proxy)
+        json_data = JsonHelper(data)
+        possible_lists = json_data.get_value("data", "genres", 0,  "selectionsForWeb")
+        program_items = [genres["items"] for genres in possible_lists if genres["selectionType"] == "all"]
+        clip_items = [genres["items"] for genres in possible_lists if genres["selectionType"] == "clips"]
+        json_data.json = {
+            "programs": [p["item"] for p in program_items[0]],
+            "videos": [c["item"] for c in clip_items[0]]
+        }
         return json_data, []
 
     def create_channel_item(self, channel):
@@ -759,7 +670,7 @@ class Channel(chn_class.Channel):
                        start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
         channel_item = MediaItem(
             title,
-            "https://www.svt.se/videoplayer-api/video/ch-%s" % (channel_id.lower(), )
+            "https://www.svt.se/videoplayer-api/video/ch-%s" % (channel_id.lower(),)
         )
         channel_item.type = "video"
         channel_item.description = description
@@ -768,51 +679,68 @@ class Channel(chn_class.Channel):
 
         channel_item.thumb = thumb
         if "titlePageThumbnailIds" in channel and channel["titlePageThumbnailIds"]:
-            channel_item.thumb = "https://www.svtstatic.se/image/wide/650/%s.jpg" % (channel["titlePageThumbnailIds"][0], )
+            channel_item.thumb = "https://www.svtstatic.se/image/wide/650/%s.jpg" % (
+                channel["titlePageThumbnailIds"][0],)
         return channel_item
 
-    def update_video_html_item(self, item):
-        """ Updates an existing MediaItem with more data.
+    def search_site(self, url=None):  # @UnusedVariable
+        """ Creates an list of items by searching the site.
 
-        Used to update none complete MediaItems (self.complete = False). This
-        could include opening the item's URL to fetch more data and then process that
-        data or retrieve it's real media-URL.
+        This method is called when the URL of an item is "searchSite". The channel
+        calling this should implement the search functionality. This could also include
+        showing of an input keyboard and following actions.
 
-        The method should at least:
-        * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
-        * set self.complete = True.
+        The %s the url will be replaced with an URL encoded representation of the
+        text to search for.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
-        will automatically be set back to False.
+        :param str url:     Url to use to search with a %s for the search parameters.
 
-        :param MediaItem item: the original MediaItem that needs updating.
-
-        :return: The original item with more data added to it's properties.
-        :rtype: MediaItem
+        :return: A list with search results as MediaItems.
+        :rtype: list[MediaItem]
 
         """
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
-        # Logger.Trace(data)
-        data = self.extract_json_data(data)[0]
-        json = JsonHelper(data, logger=Logger.instance())
+        url = self.__get_api_url(
+            "SearchPage", "5dc9b6838966c23614566893feed440e718c51069fc394bcbfd3096d13ccf72f",
+            {"querystring": "----"}
+        )
+        url = url.replace("%", "%%")
+        url = url.replace("----", "%s")
+        return chn_class.Channel.search_site(self, url)
 
-        # check for direct streams:
-        streams = json.get_value("videoTitlePage", "video", "videoReferences")
-        subtitles = json.get_value("videoTitlePage", "video", "subtitles")
+    def extract_json_data(self, data):
+        """ Extracts JSON data from the HTML for __svtplay and __reduxStore json data.
 
-        if streams:
-            Logger.info("Found stream information within HTML data")
-            return self.__update_item_from_video_references(item, streams, subtitles)
+        :param str data: The retrieve data that was loaded for the current item and URL.
 
-        video_id = json.get_value("videoPage", "video", "id")
-        # in case that did not work, try the old version.
-        if not video_id:
-            video_id = json.get_value("videoPage", "video", "programVersionId")
-        if video_id:
-            item.url = "https://api.svt.se/videoplayer-api/video/%s" % (video_id, )
-        return self.update_video_api_item(item)
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        return self.__extract_json_data(data, "(?:__svtplay|__reduxStore)")
+
+    def extract_live_channel_data(self, data):
+        """ Adds the channel items to the listing.
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        json_string, _ = self.extract_json_data(data)
+        json_data = JsonHelper(json_string)
+        channels = json_data.get_value("channelsPage", "schedule")
+        channel_list = []
+        for channel_name, channel_data in channels.items():
+            if "channel" not in channel_data:
+                continue
+            channel_list.append(channel_data)
+
+        json_data.json = channel_list
+        return json_data, []
 
     def update_video_api_item(self, item):
         """ Updates an existing MediaItem with more data.
@@ -845,6 +773,93 @@ class Channel(chn_class.Channel):
         subtitles = json.get_value("subtitleReferences")
         Logger.trace(videos)
         return self.__update_item_from_video_references(item, videos, subtitles)
+
+    def update_video_html_item(self, item):
+        """ Updates an existing MediaItem with more data.
+
+        Used to update none complete MediaItems (self.complete = False). This
+        could include opening the item's URL to fetch more data and then process that
+        data or retrieve it's real media-URL.
+
+        The method should at least:
+        * cache the thumbnail to disk (use self.noImage if no thumb is available).
+        * set at least one MediaItemPart with a single MediaStream.
+        * set self.complete = True.
+
+        if the returned item does not have a MediaItemPart then the self.complete flag
+        will automatically be set back to False.
+
+        :param MediaItem item: the original MediaItem that needs updating.
+
+        :return: The original item with more data added to it's properties.
+        :rtype: MediaItem
+
+        """
+
+        data = UriHandler.open(item.url, proxy=self.proxy)
+        video_id = Regexer.do_regex(r'data-video-id="([^"]+)"', data)[0]
+        item.url = "https://api.svt.se/video/{}".format(video_id)
+        return self.update_video_api_item(item)
+
+    def __set_expire_time(self, expire_date, item):
+        expire_date = expire_date.split("+")[0].replace("T", " ")
+        year = expire_date.split("-")[0]
+        if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
+            item.description = \
+                "{}\n\n{}: {}".format(item.description or "", self.__expires_text, expire_date)
+
+    def __get_thumb(self, thumb_data, width=1920):
+        """ Generates a full thumbnail url based on the "id" and "changed" values in a thumbnail
+        data object from the API.
+
+        :param dict[string, string] thumb_data: The data for the thumb
+
+        :return: full string url
+        :rtype: str
+        """
+
+        return "https://www.svtstatic.se/image/wide/{}/{}/{}?quality=70".format(
+            width, thumb_data["id"], thumb_data["changed"])
+
+    def __extract_json_data(self, data, root):
+        """ Performs pre-process actions for data processing
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        Logger.info("Extracting JSON data during pre-processing")
+        data = Regexer.do_regex(r'root\[[\'"]%s[\'"]\] = ([\w\W]+?);\W*root\[' % (root,), data)[-1]
+        items = []
+        Logger.trace("JSON data found: %s", data)
+        return data, items
+
+    def __get_api_url(self, operation, hash_value, variables):
+        """ Generates a GraphQL url
+
+        :param str operation:   The operation to use
+        :param str hash_value:  The hash of the Query
+        :param dict variables:  Any variables to pass
+
+        :return: A GraphQL string
+        :rtype: str
+
+        """
+
+        extensions = {"persistedQuery": {"version": 1, "sha256Hash": hash_value}}
+        extensions = HtmlEntityHelper.url_encode(JsonHelper.dump(extensions, pretty_print=False))
+
+        variables = HtmlEntityHelper.url_encode(JsonHelper.dump(variables, pretty_print=False))
+
+        url = "https://api.svt.se/contento/graphql?" \
+              "ua=svtplaywebb-play-render-prod-client&" \
+              "operationName={}&" \
+              "variables={}&" \
+              "extensions={}".format(operation, variables, extensions)
+        return url
 
     def __update_item_from_video_references(self, item, videos, subtitles=None):  # NOSONAR
         """
@@ -905,7 +920,9 @@ class Channel(chn_class.Channel):
 
             elif video["url"].startswith("rtmp"):
                 # just replace some data in the URL
-                part.append_media_stream(self.get_verifiable_video_url(video["url"]).replace("_definst_", "?slist="), video[1])
+                part.append_media_stream(
+                    self.get_verifiable_video_url(video["url"]).replace("_definst_", "?slist="),
+                    video[1])
             else:
                 part.append_media_stream(url, 0)
 
@@ -924,117 +941,11 @@ class Channel(chn_class.Channel):
                     # look for more
                     continue
 
-                part.Subtitle = subtitlehelper.SubtitleHelper.download_subtitle(sub_url, format="srt", proxy=self.proxy)
+                part.Subtitle = subtitlehelper.SubtitleHelper.download_subtitle(sub_url,
+                                                                                format="srt",
+                                                                                proxy=self.proxy)
                 # stop when finding one
                 break
 
         item.complete = True
         return item
-
-    def __set_expire_time(self, expire_date, item):
-        expire_date = expire_date.split("+")[0].replace("T", " ")
-        year = expire_date.split("-")[0]
-        if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
-            item.description = \
-                "{}\n\n{}: {}".format(item.description or "", self.__expires_text, expire_date)
-
-    def __get_date(self, first, second, third):
-        """ Tries to parse formats for dates like "Today 9:00" or "mon 9 jun" or "Tonight 9.00"
-
-        :param str first:   First part.
-        :param str second:  Second part.
-        :param str third:   Third part.
-
-        :return:  a tuple containing: year, month, day, hour, minutes
-        :rtype: tuple[int,int,int,int,int]
-
-        """
-
-        Logger.trace("Determining date for: ('%s', '%s', '%s')", first, second, third)
-        hour = minutes = 0
-
-        year = DateHelper.this_year()
-        if first.lower() == "idag" or first.lower() == "ikv&auml;ll":  # Today or Tonight
-            date = datetime.datetime.now()
-            month = date.month
-            day = date.day
-            hour = second
-            minutes = third
-
-        elif first.lower() == "ig&aring;r":  # Yesterday
-            date = datetime.datetime.now() - datetime.timedelta(1)
-            month = date.month
-            day = date.day
-            hour = second
-            minutes = third
-
-        elif second.isdigit():
-            day = int(second)
-            month = DateHelper.get_month_from_name(third, "se")
-            year = DateHelper.this_year()
-
-            # if the date was in the future, it must have been last year.
-            result = datetime.datetime(year, month, day)
-            if result > datetime.datetime.now() + datetime.timedelta(1):
-                Logger.trace("Found future date, setting it to one year earlier.")
-                year -= 1
-
-        elif first.isdigit() and third.isdigit() and not second.isdigit():
-            day = int(first)
-            month = DateHelper.get_month_from_name(second, "se")
-            year = int(third)
-
-        else:
-            Logger.warning("Unknonw date format: ('%s', '%s', '%s')", first, second, third)
-            year = month = day = hour = minutes = 0
-
-        return year, month, day, hour, minutes
-
-    def __get_thumb(self, thumb, thumb_size="/large/"):
-        """ Converts images into the correct url format
-
-        :param str thumb:        The original URL.
-        :param str thumb_size:   The size to make them.
-
-        :return: the actual url.
-        :rtype: str
-        
-        """
-
-        if "<>" in thumb:
-            thumb_parts = thumb.split("<>")
-            thumb_index = int(thumb_parts[1])
-            thumb_stores = ["https://www.svtstatic.se/image-cms-stage/svtse",
-                            "//www.svtstatic.se/image-cms-stage/svtse",
-                            "https://www.svtstatic.se/image-cms/svtse",
-                            "//www.svtstatic.se/image-cms/svtse",
-                            "https://www.svtstatic.se/image-cms-stage/barn",
-                            "//www.svtstatic.se/image-cms-stage/barn",
-                            "https://www.svtstatic.se/image-cms/barn",
-                            "//www.svtstatic.se/image-cms/barn"]
-            thumb = "%s%s" % (thumb_stores[thumb_index], thumb_parts[-1])
-
-        if thumb.startswith("//"):
-            thumb = "https:%s" % (thumb,)
-
-        thumb = thumb.replace("/{format}/", thumb_size)\
-            .replace("/medium/", thumb_size)\
-            .replace("/small/", thumb_size)
-        Logger.trace(thumb)
-        return thumb
-
-    def __extract_json_data(self, data, root):
-        """ Performs pre-process actions for data processing
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        Logger.info("Extracting JSON data during pre-processing")
-        data = Regexer.do_regex(r'root\[[\'"]%s[\'"]\] = ([\w\W]+?);\W*root\[' % (root,), data)[-1]
-        items = []
-        Logger.trace("JSON data found: %s", data)
-        return data, items

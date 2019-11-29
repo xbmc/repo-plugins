@@ -26,7 +26,7 @@ from .clientinfo import ClientInformation
 from .datamanager import DataManager, clear_cached_server_data
 from .server_detect import checkServer
 from .simple_logging import SimpleLogging
-from .menu_functions import displaySections, showMovieAlphaList, showTvShowAlphaList, showGenreList, showWidgets, show_search, showMoviePages
+from .menu_functions import displaySections, display_main_menu, display_menu, show_movie_alpha_list, show_tvshow_alpha_list, show_genre_list, show_search, show_movie_pages
 from .translation import string_load
 from .server_sessions import showServerSessions
 from .action_menu import ActionMenu
@@ -34,6 +34,7 @@ from .widgets import getWidgetContent, get_widget_content_cast, checkForNewConte
 from . import trakttokodi
 from .cache_images import CacheArtwork
 from .dir_functions import getContent, processDirectory
+from .tracking import timer
 
 __addon__ = xbmcaddon.Addon()
 __addondir__ = xbmc.translatePath(__addon__.getAddonInfo('profile'))
@@ -48,17 +49,18 @@ downloadUtils = DownloadUtils()
 dataManager = DataManager()
 
 
+@timer
 def mainEntryPoint():
     log.debug("===== EmbyCon START =====")
 
     settings = xbmcaddon.Addon()
-    profile_code = settings.getSetting('profile') == "true"
+    profile_count = int(settings.getSetting('profile_count'))
     pr = None
-    if profile_code:
-        return_value = xbmcgui.Dialog().yesno("Profiling Enabled", "Do you want to run profiling?")
-        if return_value:
-            pr = cProfile.Profile()
-            pr.enable()
+    if profile_count > 0:
+        profile_count = profile_count - 1
+        settings.setSetting('profile_count', str(profile_count))
+        pr = cProfile.Profile()
+        pr.enable()
 
     log.debug("Running Python: {0}", sys.version_info)
     log.debug("Running EmbyCon: {0}", ClientInformation().getVersion())
@@ -104,15 +106,13 @@ def mainEntryPoint():
         item_id = params["id"]
         playTrailer(item_id)
     elif mode == "MOVIE_ALPHA":
-        showMovieAlphaList()
+        show_movie_alpha_list(params)
     elif mode == "TVSHOW_ALPHA":
-        showTvShowAlphaList()
+        show_tvshow_alpha_list(params)
     elif mode == "GENRES":
-        showGenreList(params)
+        show_genre_list(params)
     elif mode == "MOVIE_PAGES":
-        showMoviePages(params)
-    elif mode == "WIDGETS":
-        showWidgets()
+        show_movie_pages(params)
     elif mode == "TOGGLE_WATCHED":
         toggle_watched(params)
     elif mode == "SHOW_MENU":
@@ -145,6 +145,8 @@ def mainEntryPoint():
         showServerSessions()
     elif mode == "TRAKTTOKODI":
         trakttokodi.entry_point(params)
+    elif mode == "SHOW_ADDON_MENU":
+        display_menu(params)
     else:
         log.debug("EmbyCon -> Mode: {0}", mode)
         log.debug("EmbyCon -> URL: {0}", param_url)
@@ -155,9 +157,10 @@ def mainEntryPoint():
             PLAY(params)
         else:
             checkServer()
-            displaySections()
+            #displaySections()
+            display_main_menu()
 
-    if (pr):
+    if pr:
         pr.disable()
 
         fileTimeStamp = time.strftime("%Y%m%d-%H%M%S")
@@ -323,7 +326,7 @@ def show_menu(params):
         li.setProperty('menu_id', 'play')
         action_items.append(li)
 
-    if result["Type"] in ["Season", "MusicAlbum"]:
+    if result["Type"] in ["Season", "MusicAlbum", "Playlist"]:
         li = xbmcgui.ListItem(string_load(30317))
         li.setProperty('menu_id', 'play_all')
         action_items.append(li)
@@ -331,6 +334,11 @@ def show_menu(params):
     if result["Type"] in ["Episode", "Movie", "Video", "TvChannel", "Program"]:
         li = xbmcgui.ListItem(string_load(30275))
         li.setProperty('menu_id', 'transcode')
+        action_items.append(li)
+
+    if result["Type"] in ["Episode", "Movie", "Music", "Video", "Audio"]:
+        li = xbmcgui.ListItem(string_load(30402))
+        li.setProperty('menu_id', 'add_to_playlist')
         action_items.append(li)
 
     if result["Type"] in ("Movie", "Series"):
@@ -452,6 +460,10 @@ def show_menu(params):
         params['force_transcode'] = 'true'
         PLAY(params)
 
+    elif selected_action == "add_to_playlist":
+        params["action"] = "add_to_playlist"
+        PLAY(params)
+
     elif selected_action == "emby_set_favorite":
         markFavorite(item_id)
 
@@ -510,6 +522,7 @@ def show_menu(params):
         CacheArtwork().delete_cached_images(item_id)
 
     elif selected_action == "info":
+        xbmc.executebuiltin("Dialog.Close(all,true)")
         xbmc.executebuiltin("Action(info)")
 
 def populate_listitem(item_id):
@@ -813,6 +826,8 @@ def PLAY(params):
     audio_stream_index = params.get("audio_stream_index")
     log.debug("audio_stream_index: {0}", audio_stream_index)
 
+    action = params.get("action", "play")
+
     # set the current playing item id
     # set all the playback info, this will be picked up by the service
     # the service will then start the playback
@@ -820,6 +835,7 @@ def PLAY(params):
     xbmc.Player().stop()
 
     play_info = {}
+    play_info["action"] = action
     play_info["item_id"] = item_id
     play_info["auto_resume"] = str(auto_resume)
     play_info["force_transcode"] = forceTranscode

@@ -27,6 +27,16 @@ downloadUtils = DownloadUtils()
 log = SimpleLogging(__name__)
 
 
+def get_emby_url(base_url, params):
+    params["format"] = "json"
+    param_list = []
+    for key in params:
+        if params[key] is not None:
+            param_list.append(key + "=" + str(params[key]))
+    param_string = "&".join(param_list)
+    return base_url + "?" + param_string
+
+
 ###########################################################################
 class PlayUtils():
     def getPlayUrl(self, id, media_source, force_transcode, play_session_id):
@@ -113,23 +123,22 @@ class PlayUtils():
         # do direct path playback
         elif playback_type == "0":
             playurl = media_source.get("Path")
+            playurl = playurl.replace("\\", "/")
+            playurl = playurl.strip()
 
             # handle DVD structure
-            if (media_source.get("VideoType") == "Dvd"):
+            if media_source.get("VideoType") == "Dvd":
                 playurl = playurl + "/VIDEO_TS/VIDEO_TS.IFO"
-            elif (media_source.get("VideoType") == "BluRay"):
+            elif media_source.get("VideoType") == "BluRay":
                 playurl = playurl + "/BDMV/index.bdmv"
 
-            smb_username = addonSettings.getSetting('smbusername')
-            smb_password = addonSettings.getSetting('smbpassword')
-
-            # add smb creds
-            if smb_username == '':
-                playurl = playurl.replace("\\\\", "smb://")
-            else:
-                playurl = playurl.replace("\\\\", "smb://" + smb_username + ':' + smb_password + '@')
-
-            playurl = playurl.replace("\\", "/")
+            if playurl.startswith("//"):
+                smb_username = addonSettings.getSetting('smbusername')
+                smb_password = addonSettings.getSetting('smbpassword')
+                if not smb_username:
+                    playurl = "smb://" + playurl[2:]
+                else:
+                    playurl = "smb://" + smb_username + ':' + smb_password + '@' + playurl[2:]
 
         # do direct http streaming playback
         elif playback_type == "1":

@@ -16,6 +16,7 @@ import urllib,urllib2,re,os,sys,htmllib,string,StringIO,logging,random,array,tim
 import copy
 import json,requests
 import HTMLParser, htmlentitydefs
+
 #import simplejson as json
 try: 		from sqlite3 										import dbapi2 as sqlite; print("Loading sqlite3 as DB engine")
 except: from pysqlite2 									import dbapi2 as sqlite; print("Loading pysqlite2 as DB engine")
@@ -73,9 +74,9 @@ MWFanart = "https://www.infowarsteam.com/wp-content/uploads/2016/10/Millie-Weave
 KBIcon = "https://imgur.com/6eHYGNi.jpg"
 KBFanart = "https://imgur.com/2tv5KdN.jpg"
 IWODIcon = "https://imgur.com/PcR2j1b.png"
-IWODFanart = "https://imgur.com/Un7aMqX.jpg"
+IWODFanart = "https://i.imgur.com/40Prkn5.jpg"##"https://imgur.com/Un7aMqX.jpg"
 IWODFLSIcon = "https://imgur.com/fgVD9Ps.png"
-
+IWBDVIcon = "https://i.imgur.com/i9YU0t9.png"
 
 ### ##### /\ ##### Plugin Settings ###
 
@@ -173,6 +174,7 @@ def add_item( action="" , title="" , plot="" , url="" ,thumbnail="" , folder=Tru
         itemurl = url
         listitem.setProperty('IsPlayable', 'true')
         xbmcplugin.addDirectoryItem( handle=int(sys.argv[1]), url=itemurl, listitem=listitem)
+                
     else:
         itemurl = '%s?action=%s&title=%s&url=%s&thumbnail=%s&plot=%s' % ( sys.argv[ 0 ] , action , urllib.quote_plus( title ) , urllib.quote_plus(url) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ))
         xbmcplugin.addDirectoryItem( handle=int(sys.argv[1]), url=itemurl, listitem=listitem, isFolder=folder)
@@ -338,6 +340,14 @@ def playYoutube(url):
     video_id = 'TSTaV8g3zwI'
     url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
     PlayURL(url)
+
+def ToTop():
+    wnd = xbmcgui.Window(xbmcgui.getCurrentWindowId())
+    id = wnd.getFocusId()
+    IW_addon.log(id)
+    IW_addon.log("===========================================")
+    xbmc.executebuiltin('SetFocus(id, 1)')
+
     
 ### ############################################################################################################
 ### ############################################################################################################
@@ -350,7 +360,7 @@ def Menu_MainMenu(): #The Main Menu
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream3-infostream3/_definst_/live.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - (Loops After Airing)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream4-infostream4/_definst_/live.m3u8'},{'title':  cFL_('Fire Power with Will Johnson - (Loops After Airing)','red')},is_folder=False,img=FPIcon,fanart=FPFanart)
     IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream-infostream/_definst_/live.m3u8'},{'title':  cFL_('Live Shows & Special Events','green')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
-    IW_addon.add_directory({'mode': 'AJShowArchiveSubMenu','title':'On Demand Videos'},{'title':  cFL_('On Demand Videos','cyan')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
+    IW_addon.add_directory({'mode': 'AJShowArchiveSubMenu','title':'On Demand Videos (Banned.video)'},{'title':  cFL_('On Demand Videos (Banned.video)','cyan')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
     IW_addon.add_directory({'mode': 'PaulJosephWatsonSubMenu','title':'Paul Joseph Watson (Youtube Video)'},{'title':  cFL_('Paul Joseph Watson (Youtube)','blue')},is_folder=True,img=PJWIcon,fanart=PJWFanart)
     IW_addon.add_directory({'mode': 'MillieWeaverSubMenu','title':'Millie Weaver (Youtube Video)'},{'title':  cFL_('Millie Weaver (Youtube)','pink')},is_folder=True,img=MWIcon,fanart=MWFanart)
     IW_addon.add_directory({'mode': 'KaitlinBennettSubMenu','title':'Kaitlin Bennett - Liberty Hangout (Youtube Video)'},{'title':  cFL_('Kaitlin Bennett - Liberty Hangout (Youtube)','yellow')},is_folder=True,img=KBIcon,fanart=KBFanart)
@@ -433,9 +443,10 @@ def Full_Show_Sub_Menu(title=''):
     reqBV = urllib2.Request(urlBannedVideo, dataBV, hdr)
     responseBV = urllib2.urlopen(reqBV)
     contentBV = responseBV.read()
-    idBV = (find_multiple_matches(contentBV,"<a href=\"\/channel\/(.*?)\""))
+    idBV = ["5b885d33e6646a0015a6fa2d","5b9301172abf762e22bc22fd","5b92d71e03deea35a4c6cdef","5d72c972f230520013554291","5d7a86b1f30956001545dd71","5d7faf08b468d500160c8e3f","5d7faa8432b5da0013fa65bd","5da504e060be810013cf7252","5d8d03dbd018a5001776876a","5da8c506da090400138c8a6a","5dbb4729ae9e840012c61293","5d9653676f2d2a00179b8a58","5b9429906a1af769bc31efeb","5d7fa9014ffcfc00130304fa","5cf7df690a17850012626701","5dae2e7f612f0a0012d147bf"]
+    ##idBV = (find_multiple_matches(contentBV,"<a href=\"\/channel\/(.*?)\""))  *** Save for future switch to javascript dynamic handling ***
     urlMAIN = 'https://api.infowarsmedia.com/api/channel/'
-
+    IW_addon.log('*******  ' + urlMAIN)
     for i in range(len(idBV)):
         dataMAIN = None
         urlMAINID = urlMAIN + str(idBV[i]).strip('[\']') + '/'
@@ -467,14 +478,15 @@ def Full_Show_Sub_Menu(title=''):
 def Alex_Jones_Show_Archive_Sub_Menu(title=''):
     #https://www.infowars.com/videos/
     WhereAmI('@ On Demand Videos')
+    IW_addon.add_directory({'mode': 'ToTop','title':'=^= Click Here To Return To Top =^='},{'title':  cFL('         ===== Welcome to Banned.video =====','cyan')},is_folder=True,img=IWBDVIcon,fanart=IWODFanart)
     IW_addon.add_directory({'mode': 'FullShowSubMenu','title':'Recent Full Length Shows'},{'title':  cFL('===[ Click Here For Recent Full Length Shows ]===','red')},is_folder=True,img=IWODFLSIcon,fanart=IWODFanart)
     hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
-       'Accept': 'text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
-       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-       'Accept-Encoding': 'none',
-       'Accept-Language': 'en-US,en;q=0.8',
-       'Connection': 'keep-alive'}
-    
+    'Accept': 'text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
+    'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+    'Accept-Encoding': 'none',
+    'Accept-Language': 'en-US,en;q=0.8',
+    'Connection': 'keep-alive'}
+
     urlBannedVideo = 'https://banned.video'
     idBV = ""
 
@@ -482,9 +494,10 @@ def Alex_Jones_Show_Archive_Sub_Menu(title=''):
     reqBV = urllib2.Request(urlBannedVideo, dataBV, hdr)
     responseBV = urllib2.urlopen(reqBV)
     contentBV = responseBV.read()
-    idBV = (find_multiple_matches(contentBV,"<a href=\"\/channel\/(.*?)\""))
+    idBV = ["5b885d33e6646a0015a6fa2d","5b9301172abf762e22bc22fd","5b92d71e03deea35a4c6cdef","5d72c972f230520013554291","5d7a86b1f30956001545dd71","5d7faf08b468d500160c8e3f","5d7faa8432b5da0013fa65bd","5da504e060be810013cf7252","5d8d03dbd018a5001776876a","5da8c506da090400138c8a6a","5dbb4729ae9e840012c61293","5d9653676f2d2a00179b8a58","5b9429906a1af769bc31efeb","5d7fa9014ffcfc00130304fa","5cf7df690a17850012626701","5dae2e7f612f0a0012d147bf"]
+    ##idBV = (find_multiple_matches(contentBV,"<a href=\"\/channel\/(.*?)\""))
     urlMAIN = 'https://api.infowarsmedia.com/api/channel/'
-
+    IW_addon.log('*******  ' + urlMAIN)
     for i in range(len(idBV)):
         dataMAIN = None
         urlMAINID = urlMAIN + str(idBV[i]).strip('[\']') + '/'
@@ -510,7 +523,8 @@ def Alex_Jones_Show_Archive_Sub_Menu(title=''):
            url = video_id
            if not "Full Show" in title:
                add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
-
+        IW_addon.add_directory({'mode': 'ToTop','title':'=^= Click Here To Return To Top =^='},{'title':  cFL('===[ Click Here To Return To Top ]===','grey')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
+ 
     eod()
 
 def check_mode(mode=''):
@@ -541,6 +555,7 @@ def check_mode(mode=''):
     elif (mode=='PlayURL'): PlayURL(_param['url']) ## Play Video
     elif (mode=='play'): play(params) ## Play Video
     elif (mode=='playYoutube'): playYoutube('url')
+    elif (mode=='ToTop'): ToTop()
     elif (mode=='PaulJosephWatsonSubMenu'): Paul_Joseph_Watson_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='MillieWeaverSubMenu'): Millie_Weaver_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='KaitlinBennettSubMenu'): Kaitlin_Bennett_Sub_Menu(_param['title']) ## Play Video

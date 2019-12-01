@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.soundcloud" name="SoundCloud" version="3.1.0" provider-name="jaylinski">
+<addon id="plugin.audio.soundcloud" name="SoundCloud" version="3.1.1" provider-name="jaylinski">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.future" version="0.16.0"/>
@@ -20,7 +20,11 @@
         <forum>https://forum.kodi.tv/showthread.php?tid=206635</forum>
         <website>https://soundcloud.com</website>
         <source>https://github.com/jaylinski/kodi-addon-soundcloud</source>
-        <news>3.1.0 (2019-10-16)
+        <news>3.1.1 (2019-12-01)
+[fix] Fixed client-ID extraction from SoundCloud website
+[lng] Added Dutch translations
+
+3.1.0 (2019-10-16)
 [upd] Added "Albums", "Playlists" and "Spotlight" folders to user pages
 [upd] Thumbnail images now have a higher resolution
 [fix] Fixed error when selecting the "Discover" folder

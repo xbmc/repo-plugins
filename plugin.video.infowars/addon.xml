@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.infowars"
        name="Infowars"
-       version="2.1.4"
+       version="2.1.5"
        provider-name="Thomas Meadows, Spinalcracker">
   <requires>
 		<import addon="xbmc.python" version="2.24.0"/>
@@ -15,10 +15,10 @@
     <summary lang="en_GB">Videos from Infowars.com Including live daily shows</summary>
     <description lang="en_GB">Videos from Infowars.com Including live daily shows</description>
 	<news>
-Version 2.1.4
-- Added Fire Power with Will Johnson
-- On demand section switched to Banned Video site
-- On demand section to include all contributors
+Version 2.1.5
+- Fixed On demand section
+- Added On demand menu navigation
+- Added Banned.video icon
 
 	</news>
 	<disclaimer lang="en_GB">This Project was made without association of the creators of infowars.com</disclaimer>

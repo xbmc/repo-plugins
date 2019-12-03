@@ -183,4 +183,4 @@ class Scripts:
     REFRESH = 'special://home/addons/plugin.video.twitch/resources/lib/twitch_addon/refresh.py'
 
 
-SCOPES = [scopes.user_read, scopes.user_follows_edit, scopes.user_subscriptions, scopes.chat_login]
+SCOPES = [scopes.user_read, scopes.user_follows_edit, scopes.user_subscriptions]

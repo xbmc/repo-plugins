@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-from kodiutils import kodi_json_request
+from resources.lib.kodiutils import kodi_json_request
 
 def return_duration_as_seconds(string):
     try:

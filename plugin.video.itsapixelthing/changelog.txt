@@ -1,5 +1,0 @@
-v1.0.1 (6/10/2018)
-- Add live streams, fix issue on first installation if the youtube addon is not installed
-
-v1.0.0
-- The first version of the addon

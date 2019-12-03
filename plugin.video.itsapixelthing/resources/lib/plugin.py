@@ -39,9 +39,9 @@ def index():
 @plugin.route('/videos')
 def all_videos():
     #grab kwargs
-    page_num = int(plugin.args["page"][0]) if "page" in plugin.args.keys() else 1
-    token = plugin.args["token"][0] if "token" in plugin.args.keys() else ""
-    playlist = plugin.args["playlist"][0] if "playlist" in plugin.args.keys() else "all"
+    page_num = int(plugin.args["page"][0]) if "page" in list(plugin.args.keys()) else 1
+    token = plugin.args["token"][0] if "token" in list(plugin.args.keys()) else ""
+    playlist = plugin.args["playlist"][0] if "playlist" in list(plugin.args.keys()) else "all"
     upload_playlist = youtubelib.get_upload_playlist() if playlist == "all" else playlist
 
     for liz in youtubelib.get_videos(playlist, upload_playlist, token, page_num):

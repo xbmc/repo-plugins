@@ -16,8 +16,6 @@ msgstr ""
 "Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#This is a comment
-
 msgctxt "#32000"
 msgid "All videos"
 msgstr "Todos os vídeos"

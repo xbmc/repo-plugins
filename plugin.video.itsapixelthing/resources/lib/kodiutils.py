@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import sys
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -9,6 +10,7 @@ import json as json
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo("id")
 
+PY3 = sys.version_info.major >= 3
 
 def notification(header, message, time=5000, icon=ADDON.getAddonInfo('icon'), sound=True):
     xbmcgui.Dialog().notification(header, message, icon, time, sound)
@@ -33,7 +35,10 @@ def log(message,level):
 
 
 def get_setting(setting):
-    return ADDON.getSetting(setting).strip().decode('utf-8')
+    setting = ADDON.getSetting(setting).strip()
+    if not PY3:
+        setting = setting.decode('utf-8')
+    return setting
 
 
 def set_setting(setting, value):
@@ -59,7 +64,10 @@ def get_setting_as_int(setting):
 
 
 def get_string(string_id):
-    return ADDON.getLocalizedString(string_id).encode('utf-8', 'ignore')
+    string = ADDON.getLocalizedString(string_id)
+    if not PY3:
+        string = string.encode('utf-8', 'ignore')
+    return string
 
 
 def kodi_json_request(params):

@@ -48,7 +48,7 @@ def index():
 def search():
 
     input_text = Dialog().input(kodiutils.get_string(32007), "", INPUT_ALPHANUM)
-    
+
     try:
         req = requests.get("https://www.rtp.pt/play/pesquisa?q={}".format(input_text), headers=HEADERS).text
     except:
@@ -65,7 +65,7 @@ def search():
         img = a.find('img').get('src')
         metas = a.find_next_sibling('i').find_all('meta')
         description = metas[1].get('content')
-        
+
         liz = ListItem("{}".format(kodiutils.compat_py23str(title)))
         liz.setArt({"thumb": img,
                     "icon": img,
@@ -187,7 +187,9 @@ def live_play():
 def programs():
     # Request dvr
     try:
-        req = requests.get("http://www.rtp.pt/play/programas", headers=HEADERS).text
+        req = requests.get("http://www.rtp.pt/play/programas", headers=HEADERS)
+        req.encoding = "latin-1"
+        req = req.text
     except:
         raise_notification()
 
@@ -213,7 +215,9 @@ def programs_category():
     try:
         req = requests.get("https://www.rtp.pt/play/bg_l_pg/?listcategory={}&page={}".format(
             cat_id,
-            page), headers=HEADERS).text
+            page), headers=HEADERS)
+        req.encoding = "latin-1"
+        req = req.text
     except:
         raise_notification()
 
@@ -230,7 +234,7 @@ def programs_category():
         metas = a.find_next_sibling('i').find_all('meta')
         description = metas[1].get('content')
         ep = metas[0].get('content')[-12:]
-        
+
         liz = ListItem("{} ({})".format(
             kodiutils.compat_py23str(title),
             kodiutils.compat_py23str(ep))
@@ -272,7 +276,9 @@ def programs_episodes():
     try:
         req = requests.get("https://www.rtp.pt/play/bg_l_ep/?listProgram={}&page={}".format(
             prog_id,
-            page), headers=HEADERS).text
+            page), headers=HEADERS)
+        req.encoding = "latin-1"
+        req = req.text
     except:
         raise_notification()
 
@@ -291,7 +297,7 @@ def programs_episodes():
         metas = a.find_next_sibling('i').find_all('meta')
         description = metas[1].get('content')
         ep = metas[0].get('content')
-        
+
         liz = ListItem(ep)
         liz.setArt({"thumb": img,
                     "icon": img,
@@ -312,14 +318,14 @@ def programs_episodes():
 
     newpage = str(int(page) + 1)
     nextpage = ListItem("[B]{}[/B] - {} {} >>>".format(kodiutils.compat_py23str(title), kodiutils.get_string(32009), newpage))
-    addDirectoryItem(handle=plugin.handle, 
-        listitem=nextpage, 
-        isFolder=True, 
-        url=plugin.url_for(programs_episodes, 
-            title=kodiutils.compat_py23str(title), 
+    addDirectoryItem(handle=plugin.handle,
+        listitem=nextpage,
+        isFolder=True,
+        url=plugin.url_for(programs_episodes,
+            title=kodiutils.compat_py23str(title),
             ep=kodiutils.compat_py23str(ep),
-            img=kodiutils.compat_py23str(img), 
-            url=kodiutils.compat_py23str(url), 
+            img=kodiutils.compat_py23str(img),
+            url=kodiutils.compat_py23str(url),
             page=newpage))
 
     endOfDirectory(plugin.handle)
@@ -333,12 +339,10 @@ def programs_play():
     url = plugin.args["url"][0]
 
     try:
-        req = requests.get("https://www.rtp.pt" + url, headers=HEADERS).text
-        
-        soup = BeautifulSoup(req, 'html.parser')
-    
-        script = soup.find_all('script')[-1].text
-        stream = re.search(r'file: "(.*)"', script).group(1)
+        req = requests.get("https://www.rtp.pt" + url, headers=HEADERS)
+        req.encoding = "utf-8"
+        stream = re.search(r'"https://(.+?)ondemand.rtp.pt(.*)"', req.text)
+        stream = "https://" + stream.group(1) + "ondemand.rtp.pt" + stream.group(2)
     except:
         raise_notification()
 

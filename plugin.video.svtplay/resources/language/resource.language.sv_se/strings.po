@@ -135,3 +135,7 @@ msgstr "Barnläge"
 msgctxt "#30601"
 msgid "General"
 msgstr "Allmänt"
+
+msgctxt "#30602"
+msgid "Go to show"
+msgstr "Gå till program"

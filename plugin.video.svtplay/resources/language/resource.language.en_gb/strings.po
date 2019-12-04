@@ -135,3 +135,7 @@ msgstr ""
 msgctxt "#30601"
 msgid "General"
 msgstr ""
+
+msgctxt "#30602"
+msgid "Go to show"
+msgstr ""

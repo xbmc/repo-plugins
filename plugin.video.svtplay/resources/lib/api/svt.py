@@ -65,8 +65,7 @@ def getLatestNews():
         "duration" : item.get("materialLength", 0), 
         "fanart" : helper.get_fanart_url(item.get("poster", ""), baseUrl=PLAY_BASE_URL)
       },
-      "onlyAvailableInSweden": item.get("onlyAvailableInSweden", False),
-      "inappropriateForChildren": item.get("inappropriateForChildren", False),
+      "onlyAvailableInSweden": item.get("onlyAvailableInSweden", False)
     }
     programs.append(program)
   return programs
@@ -99,8 +98,7 @@ def getProgramsForGenre(genre):
       "thumbnail": thumbnail,
       "info": info,
       "type" : content_type,
-      "onlyAvailableInSweden" : json_item["onlyAvailableInSweden"],
-      "inappropriateForChildren" : json_item.get("inappropriateForChildren", False)
+      "onlyAvailableInSweden" : json_item["onlyAvailableInSweden"]
     })
   return programs
 
@@ -170,9 +168,7 @@ def getChannels():
     item["url"] = "ch-" + ch_id
     item["thumbnail"] = ""
     item["onlyAvailableInSweden"] = True # Channels are always geo restricted
-    item["inappropriateForChildren"] = True # No way to guarantee otherwise
     items.append(item)
-
   return items
 
 def getVideoJSON(video_id):

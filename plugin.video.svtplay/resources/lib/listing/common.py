@@ -33,6 +33,14 @@ class Common:
             list_item.setProperty("IsLive", "true")
         if not folder and params["mode"] == self.MODE_VIDEO:
             list_item.setProperty("IsPlayable", "true")
+            show_url = helper.episodeUrlToShowUrl(params["url"])
+            if show_url:
+                context_go_to_params = {
+                    "mode" : self.MODE_PROGRAM,
+                    "url" : show_url
+                }
+                urlToShow = self.plugin_url + '?' + urlencode(context_go_to_params)
+                list_item.addContextMenuItems([(self.localize(30602), 'ActivateWindow(Videos,'+urlToShow+')')])            
         fanart = info.get("fanart", "") if info else self.default_fanart
         poster = info.get("poster", "") if info else ""
         if info:
@@ -64,31 +72,12 @@ class Common:
         if self.is_geo_restricted(article):
             logging.log("Hiding geo restricted item {} as setting is on".format(article["title"]))
             return
-        if not folder and self.is_inappropriate_for_children(article):
-            logging.log("Hiding content {} not appropriate for children as setting is on".format(article["title"]))
-            return
         info = article["info"]
         self.add_directory_item(article["title"], params, article["thumbnail"], folder, False, info)
 
     def is_geo_restricted(self, program):
         return program["onlyAvailableInSweden"] and \
             self.settings.geo_restriction
-
-    def is_inappropriate_for_children(self, video_item):
-        """
-        Can only be validated on video list items.
-        """
-        return video_item["inappropriateForChildren"] and \
-            self.settings.inappropriate_for_children
-
-    def add_next_page_item(self, next_page, section):
-        self.add_directory_item(
-            "Next page", 
-            {
-                "page": next_page, 
-                "mode": section
-            }
-        )
     
     def start_video(self, video_json):
         if video_json is None:

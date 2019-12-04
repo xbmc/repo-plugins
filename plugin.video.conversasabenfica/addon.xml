@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.conversasabenfica" name="Conversas à Benfica" version="1.0.0" provider-name="enen92">
+<addon id="plugin.video.conversasabenfica" name="Conversas à Benfica" version="1.1.0" provider-name="enen92">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.routing" version="0.2.0"/>
-        <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="script.module.requests" version="2.22.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
@@ -20,8 +20,7 @@
         <website>https://www.youtube.com/channel/UCpWxnp_Pe3PlJYBFeMIvitA</website>
         <email>enen92@kodi.tv</email>
         <source>https://github.com/enen92/plugin.video.conversasabenfica</source>
-        <news>The first version of the addon</news>
-        <disclaimer></disclaimer>
+        <news>Support for python3</news>
         <assets>
             <icon>resources/images/icon.png</icon>
             <fanart>resources/images/fanart.jpg</fanart>

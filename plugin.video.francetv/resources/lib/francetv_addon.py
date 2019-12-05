@@ -75,7 +75,7 @@ class FranceTVAddon(object):
     def _build_url(self, **query):
         # Remove None values from the query string
         return '{}?{}'.format(
-            self._addon_base_url, urlencode(dict((k, v) for k, v in query.items() if v))
+            self._addon_base_url, urlencode(dict((k, v) for k, v in list(query.items()) if v))
         )
 
     def _add_menu_item(self, item_list, label, url, info=None, art=None, is_folder=True,

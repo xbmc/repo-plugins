@@ -107,9 +107,11 @@ class Router:
                 continue
             folder = True
             mode = self.common.MODE_PROGRAM
+            info = {}
             if program["type"] == "video":
                 mode = self.common.MODE_VIDEO
                 folder = False
+                info["title"] = program["title"] # Needed for now to trigger xbmcgui.ListItem::setInfo which makes the video playable
             self.common.add_directory_item(
                 program["title"],
                 {
@@ -117,7 +119,8 @@ class Router:
                     "url": program["url"]
                 },
                 thumbnail=program["thumbnail"],
-                folder=folder
+                folder=folder,
+                info=info
             )
 
     def view_categories(self):

@@ -1,4 +1,4 @@
-<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.1.3">
+<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.1.4">
   <requires>
     <import addon="script.module.requests" version="2.22.0" />
     <import addon="xbmc.python" version="2.25.0" />
@@ -19,10 +19,7 @@
     <source>https://github.com/nilzen/xbmc-svtplay</source>
     <forum>https://forum.kodi.tv/showthread.php?tid=67110</forum>
     <news>
-- "Go to show" is now available in the context menu for a video item in Popular, Last Chance
-Keyboard button "c" opens the context menu.
-Contribution by bohmandan
-- Better fanart images for episodes.
+- Movie items in "Programs A-Z" are now playable again
 - Please report any issues in the Github tracker
     </news>
     <assets>

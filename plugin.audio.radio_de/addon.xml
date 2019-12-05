@@ -1,20 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.radio_de" name="Radio" version="2.3.2" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="2.3.4">
     <requires>
-        <import addon="xbmc.python" version="2.1.0"/>
-        <import addon="script.module.xbmcswift2" version="2.4.0"/>
+        <import addon="xbmc.python" version="2.14.0" />
+        <import addon="script.module.xbmcswift2" version="2.5.0" />
     </requires>
-    <extension point="xbmc.python.pluginsource" library="addon.py">
+    <extension library="addon.py" point="xbmc.python.pluginsource">
         <provides>audio</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <language></language>
         <platform>all</platform>
-        <website>http://www.radio.de</website>
-        <source>https://github.com/dersphere/plugin.audio.radio_de</source>
-        <forum>http://forum.xbmc.org/showthread.php?tid=119362</forum>
-        <email>sphere@dersphere.de</email>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <website>https://www.radio.de</website>
+        <source>https://github.com/XBMC-Addons/plugin.audio.radio_de</source>
+        <forum>https://forum.xbmc.org/showthread.php?tid=119362</forum>
+        <license>GPL-2.0-only</license>
+        <news>v2.3.4 (4/12/2019)
+            [new] Update to support python 3
+            [new] New language files
+            [new] Remove deprecated methods
+        </news>
         <summary lang="be">Access &gt;7000 radio broadcasts</summary>
         <summary lang="ca">accedeix a mes de 7000 emissores de radio</summary>
         <summary lang="da">Få adgang til &gt;7000 radioudsendelser</summary>

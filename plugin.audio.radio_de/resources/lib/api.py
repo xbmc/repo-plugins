@@ -17,9 +17,18 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 import json
-from urllib import urlencode
-from urllib2 import urlopen, Request, HTTPError, URLError
+import sys
 import random
+import xbmc
+
+PY3 = sys.version_info.major >= 3
+
+if PY3:
+    from urllib.parse import urlencode
+    from urllib.request import urlopen, Request, HTTPError, URLError
+else:
+    from urllib import urlencode
+    from urllib2 import urlopen, Request, HTTPError, URLError
 
 
 class RadioApiError(Exception):
@@ -154,21 +163,21 @@ class RadioApi():
             self.log('__resolve_playlist found .m3u file')
             servers = [
                 l for l in response.splitlines()
-                if l.strip() and not l.strip().startswith('#')
+                if l.strip() and not l.strip().startswith(self.__versioned_string('#'))
             ]
         elif stream_url.lower().endswith('pls'):
             response = self.__urlopen(stream_url)
             self.log('__resolve_playlist found .pls file')
             servers = [
-                l.split('=')[1] for l in response.splitlines()
-                if l.lower().startswith('file')
+                l.split(self.__versioned_string('='))[1] for l in response.splitlines()
+                if l.lower().startswith(self.__versioned_string('file'))
             ]
         elif stream_url.lower().endswith('asx'):
             response = self.__urlopen(stream_url)
             self.log('__resolve_playlist found .asx file')
             servers = [
-                l.split('href="')[1].split('"')[0]
-                for l in response.splitlines() if 'href' in l
+                l.split(self.__versioned_string('href="'))[1].split('"')[0]
+                for l in response.splitlines() if self.__versioned_string('href') in l
             ]
         elif stream_url.lower().endswith('xml'):
             self.log('__resolve_playlist found .xml file')
@@ -195,10 +204,10 @@ class RadioApi():
         req.add_header('User-Agent', self.user_agent)
         try:
             response = urlopen(req).read()
-        except HTTPError, error:
+        except HTTPError as error:
             self.log('__urlopen HTTPError: %s' % error)
             raise RadioApiError('HTTPError: %s' % error)
-        except URLError, error:
+        except URLError as error:
             self.log('__urlopen URLError: %s' % error)
             raise RadioApiError('URLError: %s' % error)
         return response
@@ -245,5 +254,11 @@ class RadioApi():
         return False
 
     @staticmethod
+    def __versioned_string(string):
+        if PY3:
+            return bytearray(string, 'utf-8')
+        return string
+
+    @staticmethod
     def log(text):
-        print 'RadioApi: %s' % repr(text)
+        xbmc.log('RadioApi: %s' % repr(text))

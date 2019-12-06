@@ -19,9 +19,6 @@
 		<assets>
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
-			<banner></banner>
-			<clearlogo></clearlogo>
-			<screenshot></screenshot>
 		</assets>
 	</extension>
 </addon>

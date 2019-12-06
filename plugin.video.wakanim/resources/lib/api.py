@@ -16,21 +16,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 from cgi import parse_header
 from bs4 import BeautifulSoup
 from time import timezone
-try:
-    from urllib import urlencode, quote_plus
-except ImportError:
+
+PY3 = sys.version_info.major >= 3
+if PY3:
     from urllib.parse import urlencode, quote_plus
-try:
-    from urllib2 import urlopen, build_opener, HTTPCookieProcessor, install_opener
-except ImportError:
     from urllib.request import urlopen, build_opener, HTTPCookieProcessor, install_opener
-try:
-    from cookielib import LWPCookieJar, Cookie
-except ImportError:
     from http.cookiejar import LWPCookieJar, Cookie
+else:
+    from urllib import urlencode, quote_plus
+    from urllib2 import urlopen, build_opener, HTTPCookieProcessor, install_opener
+    from cookielib import LWPCookieJar, Cookie
 
 import xbmc
 import xbmcgui

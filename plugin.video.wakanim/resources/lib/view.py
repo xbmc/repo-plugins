@@ -15,10 +15,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    from urllib import quote_plus
-except ImportError:
+import sys
+
+PY3 = sys.version_info.major >= 3
+if PY3:
     from urllib.parse import quote_plus
+else:
+    from urllib import quote_plus
 
 import xbmc
 import xbmcgui

@@ -16,11 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-try:
+
+PY3 = sys.version_info.major >= 3
+if PY3:
+    from urllib.parse import parse_qs, unquote_plus
+else:
     from urlparse import parse_qs
     from urllib import unquote_plus
-except ImportError:
-    from urllib.parse import parse_qs, unquote_plus
 
 
 def parse(argv):

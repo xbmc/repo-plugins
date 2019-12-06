@@ -16,11 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+import sys
 import json
-try:
-    from urllib import unquote, urlencode
-except ImportError:
-    from urllib.parse import unquote, urlencode
+
+PY3 = sys.version_info.major >= 3
+if PY3:
+    from urllib.parse import urlencode
+else:
+    from urllib import urlencode
 
 import xbmc
 import xbmcgui
@@ -193,8 +196,6 @@ def getStreamParams(args, html):
         # play HLS with Kodi buildin playback
         return {'legacy': True, 'url': result['url'] + getCookies(args), 'content-type': "application/vnd.apple.mpegurl", 'properties': {}}
     if result['proto'] == "dash":
-        m = re.search(r"manifest=(.+?)\&", result['url'])
-        if m: result['url'] = unquote(m.group(1))
         result['proto'] = "mpd"
         result['content-type'] = "application/dash+xml"
     else:

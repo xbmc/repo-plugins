@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.wakanim" name="Wakanim" version="0.7.6" provider-name="MrKrabat">
+<addon id="plugin.video.wakanim" name="Wakanim" version="0.8.0" provider-name="MrKrabat">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.beautifulsoup4" version="4.5.3"/>
@@ -23,8 +23,8 @@
         <disclaimer lang="de_DE">HINWEIS: Du MUSST PREMIUM Mitglied sein oder Videos KAUFEN um dieses Plugin zu benutzen</disclaimer>
         <disclaimer lang="fr_FR">AVERTISSEMENT: VOUS DEVEZ être un membre PREMIUM ou ACHETER des vidéos pour utiliser ce plugin</disclaimer>
         <disclaimer lang="ru_RU">ВНИМАНИЕ: Для использования этого плагина Вы должны оформить подписку или купить аниме</disclaimer>
-        <news>v0.7.6 (2019.05.06)[CR]- Fix login not working[CR]- Small fixes</news>
-        <license>GNU Affero General Public License, v3</license>
+        <news>v0.8.0 (2019.12.01)[CR]- Fix playing with dash proto (thanks ex0hunt)[CR]- Fix search[CR]- Fix second season not opening info-tab[CR]- Fix trailer[CR]- Removed watchlist and collection</news>
+        <license>AGPL-3.0-only</license>
         <forum>https://forum.kodi.tv/showthread.php?tid=322763</forum>
         <website>https://www.wakanim.tv/</website>
         <source>https://github.com/MrKrabat/plugin.video.wakanim</source>

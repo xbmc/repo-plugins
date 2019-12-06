@@ -1,6 +1,7 @@
 from __future__ import absolute_import,unicode_literals
 import re
 from resources.lib.listing.common import Common
+from resources.lib.listing.listitem import PlayItem
 from resources.lib.api import svt
 from resources.lib.api.graphql import GraphQL
 from resources.lib import logging
@@ -79,9 +80,6 @@ class Router:
         self.common.add_directory_item(self.localize(30001), {"mode": self.MODE_CATEGORIES})
         self.common.add_directory_item(self.localize(30006), {"mode": self.MODE_SEARCH})
 
-    def view_a_to_z(self):
-        programs = self.graphql.getAtoO()
-        self.__program_listing(programs)
 
     def view_alpha_directories(self):
         letters = svt.getAlphas()
@@ -96,32 +94,13 @@ class Router:
                 }
             )
 
+    def view_a_to_z(self):
+        programs = self.graphql.getAtoO()
+        self.common.create_dir_items(programs)
+
     def view_programs_by_letter(self, letter):
         programs = self.graphql.getProgramsByLetter(letter)
-        self.__program_listing(programs)
-
-    def __program_listing(self, programs):
-        for program in programs:
-            if self.common.is_geo_restricted(program):
-                logging.log("Not showing {} as it is restricted to Sweden and geo setting is on".format(program["title"]))
-                continue
-            folder = True
-            mode = self.common.MODE_PROGRAM
-            info = {}
-            if program["type"] == "video":
-                mode = self.common.MODE_VIDEO
-                folder = False
-                info["title"] = program["title"] # Needed for now to trigger xbmcgui.ListItem::setInfo which makes the video playable
-            self.common.add_directory_item(
-                program["title"],
-                {
-                    "mode": mode,
-                    "url": program["url"]
-                },
-                thumbnail=program["thumbnail"],
-                folder=folder,
-                info=info
-            )
+        self.common.create_dir_items(programs)
 
     def view_categories(self):
         categories = self.graphql.getGenres()
@@ -142,39 +121,31 @@ class Router:
             items = self.graphql.getLatest()
         elif section == self.MODE_LAST_CHANCE:
             items = self.graphql.getLastChance()
+        elif section == self.MODE_LIVE_PROGRAMS:
+            items = self.graphql.getLive()
         else:
             raise AttributeError("Section {} is not supported!".format(section))
         if not items:
             return
-        for item in items:
-            mode = self.common.MODE_VIDEO
-            if item["type"] == "program":
-                mode = self.common.MODE_PROGRAM
-            self.common.create_dir_item(item, mode)
+        self.common.create_dir_items(items)
 
     def view_channels(self):
         channels = svt.getChannels()
         if not channels:
             return
-        for channel in channels:
-            self.common.create_dir_item(channel, self.common.MODE_VIDEO)
+        self.common.create_dir_items(channels)
 
     def view_latest_news(self ):
         items = self.graphql.getLatestNews()
         if not items:
             return
-        for item in items:
-            self.common.create_dir_item(item, self.common.MODE_VIDEO)
+        self.common.create_dir_items(items)
 
     def view_category(self, genre):
-        programs = self.graphql.getProgramsForGenre(genre)
-        if not programs:
+        play_items = self.graphql.getProgramsForGenre(genre)
+        if not play_items:
             return
-        for program in programs:
-            mode = self.common.MODE_PROGRAM
-            if program["type"] == "video":
-                mode = self.common.MODE_VIDEO
-            self.common.create_dir_item(program, mode)
+        self.common.create_dir_items(play_items)
 
     def view_episodes(self, url):
         slug = url.split("/")[-1]
@@ -191,12 +162,8 @@ class Router:
         logging.log("Search string: " + keyword)
         keyword = re.sub(r" ", "+", keyword)
         keyword = keyword.strip()
-        results = self.graphql.getSearchResults(keyword)
-        for result in results:
-            mode = self.common.MODE_VIDEO
-            if result["type"] == "program":
-                mode = self.common.MODE_PROGRAM
-            self.common.create_dir_item(result, mode)
+        play_items = self.graphql.getSearchResults(keyword)
+        self.common.create_dir_items(play_items)
 
     def start_video(self, video_url):
         channel_pattern = re.compile(r'^ch\-')

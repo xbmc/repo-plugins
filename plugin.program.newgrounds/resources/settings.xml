@@ -1,9 +1,0 @@
-<settings>
-   <setting id="username" type="text" label="30000" default=""/>
-   <setting id="password" type="text" label="30001" default=""/>
-   <setting id="adult" type="bool" label="30002" default="false"/>
-   <setting id="mature" type="bool" label="30003" default="true"/>
-   <setting id="teen" type="bool" label="30004" default="true"/>
-   <setting id="everyone" type="bool" label="30005" default="true"/>
-   <setting id="vquality" type="select" label="30006" lvalues="720p|1080p" />
-</settings>

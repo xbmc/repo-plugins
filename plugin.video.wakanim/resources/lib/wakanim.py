@@ -135,12 +135,6 @@ def showMainMenue(args):
                   {"title": args._addon.getLocalizedString(30021),
                    "mode":   "search"})
     view.add_item(args,
-                  {"title": args._addon.getLocalizedString(30027),
-                   "mode":   "watchlist"})
-    view.add_item(args,
                   {"title": args._addon.getLocalizedString(30022),
                    "mode":   "downloads"})
-    view.add_item(args,
-                  {"title": args._addon.getLocalizedString(30023),
-                   "mode":   "collection"})
     view.endofdirectory(args)

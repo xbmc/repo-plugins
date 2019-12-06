@@ -1,3 +1,10 @@
+v0.8.0 (2019.12.01)
+- Fix playing with dash proto (thanks ex0hunt)
+- Fix search
+- Fix second season not opening info-tab
+- Fix trailer
+- Removed watchlist and collection
+
 v0.7.6 (2019.05.06)
 - Fix login not working
 - Small fixes

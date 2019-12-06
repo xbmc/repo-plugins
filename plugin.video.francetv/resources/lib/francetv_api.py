@@ -13,6 +13,8 @@
 # 02110-1301, USA.
 
 
+from __future__ import unicode_literals
+
 import time
 import sys
 
@@ -35,8 +37,6 @@ class FranceTVAPI(object):
     class _UTF8DictNotEmpty(dict):
         def __setitem__(self, key, value):
             if value:
-                if isinstance(value, str):
-                    value = value.encode('utf-8')
                 dict.__setitem__(self, key, value)
             else:
                 if key in self:
@@ -115,8 +115,8 @@ class FranceTVAPI(object):
 
         presenter = data.get('presenter')
         if presenter:
-            info['cast'] = [presenter.encode('utf-8')]
-        cast = [d for d in (data.get('casting') or '').encode('utf-8').split(', ') if d]
+            info['cast'] = [presenter]
+        cast = [d for d in (data.get('casting') or '').split(', ') if d]
         info['cast'] = info.get('cast', []) + cast
 
         if live:

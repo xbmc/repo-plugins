@@ -7,6 +7,7 @@ import time
 # own imports
 from resources.lib import logging
 from resources.lib import helper
+from resources.lib.listing.listitem import VideoItem
 
 try:
   # Python 2
@@ -23,84 +24,6 @@ PLAY_BASE_URL = "https://www.svtplay.se"
 PLAY_API_URL = PLAY_BASE_URL+"/api/"
 SVT_API_BASE_URL = "https://api.svt.se/"
 VIDEO_API_URL= SVT_API_BASE_URL+"videoplayer-api/video/"
-
-def getCategories():
-  """
-  Returns a list of all categories.
-  """
-  json_data = __get_json("clusters")
-  if json_data is None:
-    return None
-  categories = []
-  for cluster in json_data:
-    category = {}
-    category["title"] = cluster["name"]
-    category["url"] = cluster["contentUrl"]
-    category["genre"] = cluster["slug"]
-    categories.append(category)
-  return categories
-
-def getLatestNews():
-  """
-  Returns a list of latest news programs.
-  """
-  json_data = __get_json("cluster_latest?cluster=nyheter")
-  if json_data is None:
-    return None
-  programs = []
-  for item in json_data:
-    live_str = ""
-    thumbnail = item.get("thumbnail", "")
-    if item["broadcastedNow"]:
-      live_str = " " + "[COLOR red](Live)[/COLOR]"
-    versions = item.get("versions", [])
-    url = "video/" + item["contentUrl"]
-    if versions:
-      url = __get_video_version(versions)
-    program = {
-      "title" : unescape(item["programTitle"] + " " + (item["title"] or "") + live_str),
-      "thumbnail" : helper.get_thumb_url(thumbnail, baseUrl=PLAY_BASE_URL),
-      "url" : url,
-      "info" : { 
-        "duration" : item.get("materialLength", 0), 
-        "fanart" : helper.get_fanart_url(item.get("poster", ""), baseUrl=PLAY_BASE_URL)
-      },
-      "onlyAvailableInSweden": item.get("onlyAvailableInSweden", False)
-    }
-    programs.append(program)
-  return programs
-
-def getProgramsForGenre(genre):
-  """
-  Returns a list of all programs for a genre.
-  """
-  json_data = __get_json("cluster_titles_and_episodes?cluster="+genre)
-  if json_data is None:
-    return None
-  programs = []
-  for json_item in json_data:
-    versions = json_item.get("versions", [])
-    content_type = "video"
-    if versions:
-      url = __get_video_version(versions)
-    else:
-      url = json_item["contentUrl"]
-      content_type = "program"
-    title = json_item["programTitle"]
-    plot = json_item.get("description", "")
-    thumbnail = helper.get_thumb_url(json_item.get("thumbnail", ""), PLAY_BASE_URL)
-    if not thumbnail:
-      thumbnail = helper.get_thumb_url(json_item.get("poster", ""), PLAY_BASE_URL)
-    info = {"plot": plot, "thumbnail": thumbnail, "fanart": thumbnail}
-    programs.append({
-      "title": title,
-      "url": url,
-      "thumbnail": thumbnail,
-      "info": info,
-      "type" : content_type,
-      "onlyAvailableInSweden" : json_item["onlyAvailableInSweden"]
-    })
-  return programs
 
 def getAlphas():
   """
@@ -152,23 +75,24 @@ def getChannels():
     return None
   items = []
   for channel in json_data["hits"]:
-    item = {}
     program_title = channel["programmeTitle"]
     ch_id = channel["channel"].lower()
     if channel["channel"] == "SVTK":
       ch_id="kunskapskanalen"
     elif channel["channel"] == "SVTB":
       ch_id="barnkanalen"
-    item["title"] = ch_id.upper() + " - " + program_title
+    title = ch_id.upper() + " - " + program_title
     if channel["live"]:
-      item["title"] = item["title"] + " [COLOR red]Live[/COLOR]"
-    item["info"] = {}
-    item["info"]["plot"] = channel.get("longDescription", "No description")
-    item["info"]["title"] = item["title"]
-    item["url"] = "ch-" + ch_id
-    item["thumbnail"] = ""
-    item["onlyAvailableInSweden"] = True # Channels are always geo restricted
-    items.append(item)
+      title = title + " [COLOR red]Live[/COLOR]"
+    info = {
+      "plot" : channel.get("longDescription", "No description"),
+      "title" : title
+    }
+    video_id = "ch-" + ch_id
+    thumbnail = ""
+    geo_restricted = True # Channels are always geo restricted
+    video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info)
+    items.append(video_item)
   return items
 
 def getVideoJSON(video_id):

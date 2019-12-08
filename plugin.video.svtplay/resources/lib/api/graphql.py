@@ -5,6 +5,7 @@ import json
 import re
 import requests
 from resources.lib import logging
+from resources.lib.listing.listitem import VideoItem, ShowItem
 
 class GraphQL:
   """
@@ -30,6 +31,9 @@ class GraphQL:
   def getLastChance(self):
     return self.__get_start_page_selection("lastchance_start")
 
+  def getLive(self):
+    return self.__get_start_page_selection("live_start")
+
   def getAtoO(self):
     return self.__get_all_programs()
 
@@ -44,7 +48,7 @@ class GraphQL:
     items = []
     pattern = "^[{}]".format(letter.upper())
     for item in programs:
-      if re.search(pattern, item["title"]):
+      if re.search(pattern, item.title):
         items.append(item)
     return items
 
@@ -81,20 +85,21 @@ class GraphQL:
     for item in raw_items["items"]:
       item = item["item"]
       title = item["name"]
-      url = item["urls"]["svtplay"]
-      plot = item["longDescription"]
-      programs.append({
-        "title": title,
-        "url": url,
-        "thumbnail": self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else "",
-        "info": {
-          "plot": plot, 
-          "fanart": self.get_fanart_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
-        },
-        "type" : "video" if item["__typename"] == "Single" or item["__typename"] == "Episode" else "program",
-        "onlyAvailableInSweden" : item["restrictions"]["onlyAvailableInSweden"]
-        }
-      )
+      item_id = item["urls"]["svtplay"]
+      thumbnail = self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
+      geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
+      info = {
+        "plot" : item["longDescription"]
+      }
+      play_item = None
+      if item["__typename"] == "Single" or item["__typename"] == "Episode":
+        play_item = VideoItem(title, item_id, thumbnail, geo_restricted, info)
+      else:
+        play_item = ShowItem(title, item_id, thumbnail, geo_restricted, info)
+      if play_item:
+        programs.append(play_item)
+      else:
+        logging.error("Could not create PlayItem for: {}".format(item))
     return programs
   
   def getVideoContent(self, slug):
@@ -106,7 +111,7 @@ class GraphQL:
       return None
     if not json_data["listablesBySlug"]:
       return None
-    episodes = []
+    video_items = []
     show_data = json_data["listablesBySlug"][0]
     show_image_id = show_data["image"]["id"]
     show_image_changed = show_data["image"]["changed"]
@@ -114,20 +119,19 @@ class GraphQL:
       if content["id"] == "upcoming":
         continue
       for item in content["items"]:
-        episode = {}
         item = item["item"]
-        episode["title"] = item["name"]
-        episode["url"] = item["urls"]["svtplay"]
-        episode["onlyAvailableInSweden"] = item["restrictions"]["onlyAvailableInSweden"]
-        episode["type"] = "video"
-        episode["thumbnail"] = self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
-        info = {}
-        info["plot"] = item["longDescription"]
-        info["duration"] = item.get("duration", 0)
-        info["fanart"] = self.get_fanart_url(show_image_id, show_image_changed) if "image" in item else ""
-        episode["info"] = info
-        episodes.append(episode)
-    return episodes
+        title = item["name"]
+        video_id = item["urls"]["svtplay"]
+        geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
+        thumbnail = self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
+        fanart = self.get_fanart_url(show_image_id, show_image_changed)
+        info = {
+          "plot" : item["longDescription"],
+          "duration" : item.get("duration", 0)
+        }
+        video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info, fanart)
+        video_items.append(video_item)
+    return video_items
 
   def getLatestNews(self):
     return self.__get_latest_for_genre("nyheter")
@@ -147,20 +151,19 @@ class GraphQL:
         continue
       raw_items = selection["items"]
     latest_items = []
-    for item in raw_items:
-      title = "{show} - {episode}".format(show=item["heading"], episode=item["subHeading"])
-      images = item["images"]
-      item = item["item"]
-      episode = {}
-      episode["title"] = title
-      episode["url"] = item["urls"]["svtplay"]
-      episode["thumbnail"] = self.get_thumbnail_url(images["wide"]["id"], images["wide"]["changed"]) if images else ""
-      episode["onlyAvailableInSweden"] = item["restrictions"].get("onlyAvailableInSweden", False)
-      episode["info"] = {
-        "duration": item["duration"],
-        "fanart": self.get_fanart_url(images["wide"]["id"], images["wide"]["changed"]) if images else ""
+    for teaser in raw_items:
+      title = "{show} - {episode}".format(show=teaser["heading"], episode=teaser["subHeading"])
+      images = teaser.get("images", None)
+      item = teaser["item"]
+      video_id = item["urls"]["svtplay"]
+      thumbnail = self.get_thumbnail_url(images["wide"]["id"], images["wide"]["changed"]) if images else ""
+      fanart = self.get_fanart_url(images["wide"]["id"], images["wide"]["changed"]) if images else ""
+      geo_restricted = item["restrictions"].get("onlyAvailableInSweden", False)
+      info = {
+        "duration": item["duration"]
       }
-      latest_items.append(episode)
+      video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info, fanart)
+      latest_items.append(video_item)
     return latest_items
 
   def getSearchResults(self, query_string):
@@ -170,28 +173,31 @@ class GraphQL:
     json_data = self.__get(operation_name, query_hash, variables=variables)
     if not json_data:
       return None
+    supported_show_types = ["TvShow", "KidsTvShow", "TvSeries"]
+    supported_video_types = ["Episode", "Clip"]
     results = []
     for search_hit in json_data["search"]:
       item = search_hit["item"]
-      content_type = "video"
-      if item["__typename"] == "TvShow":
-        content_type = "program"
-      elif item["__typename"] in ["Episode", "Clip"]:
-        content_type = "video"
-      else:
+      type_name = item["__typename"]
+      if type_name not in supported_show_types + supported_video_types:
+        logging.log("Unsupported search result type \"{}\"".format(type_name))
+        logging.log(item)
         continue
-      result = {}
-      result["title"] = item["name"]
+      title = item["name"]
       if "parent" in item:
-        result["title"] = "{parent} - {name}".format(name=item["name"], parent=item["parent"]["name"])
-      result["onlyAvailableInSweden"] = item["restrictions"]["onlyAvailableInSweden"]
-      result["url"] = item["urls"]["svtplay"]
-      result["thumbnail"] = self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
-      result["type"] = content_type
-      info = {}
-      info["plot"] = item["longDescription"]
-      result["info"] = info
-      results.append(result)
+        title = "{parent} - {name}".format(name=item["name"], parent=item["parent"]["name"])
+      geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
+      item_id = item["urls"]["svtplay"]
+      thumbnail = self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
+      info = {
+        "plot" : item["longDescription"]
+      }
+      play_item = None
+      if type_name in supported_show_types:
+        play_item = ShowItem(title, item_id, thumbnail, geo_restricted, info)
+      elif type_name in supported_video_types:
+        play_item = VideoItem(title, item_id, thumbnail, geo_restricted, info)
+      results.append(play_item)
     return results
 
   def getVideoDataForLegacyId(self, legacy_id):
@@ -246,19 +252,16 @@ class GraphQL:
       image_changed = item["images"]["cleanWide"]["changed"]
       title = "{show} - {episode}".format(show=item["heading"], episode=item["subHeading"])
       item = item["item"]
-      video_item = {}
-      video_item ["type"] = "video"
-      video_item["title"] = title
-      video_item["url"] = item["urls"]["svtplay"]
-      video_item["parent"] = item["parent"]["id"]
+      video_id = item["urls"]["svtplay"]
       parent_image_id = item["parent"]["images"]["wide"]["id"]
       parent_image_changed = item["parent"]["images"]["wide"]["changed"]
-      video_item["thumbnail"] = self.get_thumbnail_url(image_id, image_changed)
-      video_item["onlyAvailableInSweden"] = item["restrictions"]["onlyAvailableInSweden"]
-      video_item["info"] = {
-        "plot": item["longDescription"],
-        "fanart": self.get_fanart_url(parent_image_id, parent_image_changed)
+      thumbnail = self.get_thumbnail_url(image_id, image_changed)
+      geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
+      video_info = {
+        "plot": item["longDescription"]
       }
+      fanart = self.get_fanart_url(parent_image_id, parent_image_changed)
+      video_item = VideoItem(title, video_id, thumbnail, geo_restricted, video_info, fanart)
       video_items.append(video_item)
     return video_items
 
@@ -278,19 +281,14 @@ class GraphQL:
       geo_restricted = raw_item["restrictions"]["onlyAvailableInSweden"]
       item = self.__create_item(title, url, geo_restricted)
       items.append(item)
-    return sorted(items, key=lambda item: item["title"])
+    return sorted(items, key=lambda item: item.title)
 
-  def __create_item(self, title, url, geo_restricted):
-    item = {}
-    item["title"] = title
-    item["url"] = url
-    item["thumbnail"] = ""
-    item["type"] = "program"
-    item["onlyAvailableInSweden"] = geo_restricted
-    if "/video/" in item["url"]:
-      item["type"] = "video"
-    return item
-  
+  def __create_item(self, title, item_id, geo_restricted):
+    if "/video/" in item_id:
+      return VideoItem(title, item_id, "", geo_restricted)
+    else:
+      return ShowItem(title, item_id, "", geo_restricted)
+
   def __get_image_url(self, image_id, image_changed, image_type):
     """
     image_id is expected to look like "12345/6789"
@@ -309,7 +307,8 @@ class GraphQL:
         size = 1080
     else:
       raise ValueError("Image type {} is not supported!".format(image_type))
-    return "{base_url}/{ratio}/{size}/{image_id}/{image_changed}".format(base_url=base_url, ratio=ratio, size=size, image_type=image_type, image_id=image_id, image_changed=image_changed)
+    return "{base_url}/{ratio}/{size}/{image_id}/{image_changed}"\
+      .format(base_url=base_url, ratio=ratio, size=size, image_type=image_type, image_id=image_id, image_changed=image_changed)
     
   def __get(self, operation_name, query_hash="", variables = {}):
     base_url = "https://api.svt.se/contento/graphql"
@@ -317,7 +316,7 @@ class GraphQL:
     ext = {}
     if query_hash:
         ext["persistedQuery"] = {"version":1,"sha256Hash":query_hash}
-    query_params = "ua={ua}&operationName={op}&variables={variables}&extensions={ext}"\
+    query_params = "operationName={op}&variables={variables}&extensions={ext}&ua={ua}"\
       .format(\
         ua=param_ua, \
         op=operation_name, \

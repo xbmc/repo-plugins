@@ -3,28 +3,23 @@ from __future__ import absolute_import,unicode_literals
 import datetime
 import json
 import re
+import requests
 from xbmc import Keyboard # pylint: disable=import-error
 
 from . import logging
 
 try:
   # Python 2
-  from urlparse import parse_qs
   from urlparse import parse_qsl
-  from urlparse import urlparse
   from urlparse import urljoin
   from urlparse import urlsplit
-  from urllib import urlopen
   from urllib import unquote
   from urllib import unquote_plus
 except ImportError:
   # Python 3
-  from urllib.parse import parse_qs
   from urllib.parse import parse_qsl
-  from urllib.parse import urlparse
   from urllib.parse import urljoin
   from urllib.parse import urlsplit
-  from urllib.request import urlopen
   from urllib.parse import unquote
   from urllib.parse import unquote_plus
 
@@ -73,23 +68,20 @@ def getVideoURL(json_obj):
   video_url = None
   for video in json_obj["videoReferences"]:
     if video["format"] == "hls":
-      alt = getAltUrl(video["url"])
-      if alt is None:
-        video_url = video["url"]
-      else:
-        video_url = alt
+      if "resolve" in video:
+         video_url = getResolvedUrl(video["resolve"])
+      if video_url is None:
+          video_url = video["url"]
   return video_url
 
-def getAltUrl(video_url):
-  o = urlparse(video_url)
-  query = parse_qs(o.query)
+def getResolvedUrl(resolve_url):
+  location = None
   try:
-    alt = query["alt"][0]
-    ufile = urlopen(alt)
-    alt = ufile.geturl()
-  except KeyError:
-    alt = None
-  return alt
+    response = requests.get(resolve_url, timeout=2)
+    location = response.json()["location"]
+  except Exception:
+    logging.error("Exception when querying " + resolve_url)
+  return location
 
 def getSubtitleUrl(json_obj):
   """

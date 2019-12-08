@@ -3,6 +3,7 @@ import xbmcgui # pylint: disable=import-error
 import xbmcplugin # pylint: disable=import-error
 
 from resources.lib.playback import Playback
+from resources.lib.listing.listitem import PlayItem
 from resources.lib import helper
 from resources.lib import logging
 
@@ -27,7 +28,7 @@ class Common:
         self.playback = Playback(plugin_handle)
         self.settings = settings
 
-    def add_directory_item(self, title, params, thumbnail="", folder=True, live=False, info=None):
+    def add_directory_item(self, title, params, thumbnail="", folder=True, live=False, info=None, fanart=""):
         list_item = xbmcgui.ListItem(title)
         if live:
             list_item.setProperty("IsLive", "true")
@@ -41,42 +42,39 @@ class Common:
                 }
                 urlToShow = self.plugin_url + '?' + urlencode(context_go_to_params)
                 list_item.addContextMenuItems([(self.localize(30602), 'ActivateWindow(Videos,'+urlToShow+')')])            
-        fanart = info.get("fanart", "") if info else self.default_fanart
-        poster = info.get("poster", "") if info else ""
         if info:
-            if "fanart" in info:
-                del info["fanart"] # Unsupported by ListItem
-            if "poster" in info:
-                del info["poster"] # Unsupported by ListItem
+            info["playcount"] = 0
             list_item.setInfo("video", info)
+        else:
+            list_item.setInfo("video", { "title" : title, "playcount" : 0 })
         list_item.setArt({
             "fanart": fanart,
-            "poster": poster if poster else thumbnail,
             "thumb": thumbnail
         })
         url = self.plugin_url + '?' + urlencode(params)
         xbmcplugin.addDirectoryItem(self.plugin_handle, url, list_item, folder)
 
-    def create_dir_item(self, article, mode):
-        """
-        Given an article and a mode; create directory item
-        for the article.
-        """
+    def create_dir_items(self, play_items):
+        for play_item in play_items:
+            self.create_dir_item(play_item)
+
+    def create_dir_item(self, play_item):
         params = {}
-        params["mode"] = mode
-        params["url"] = article["url"]
+        params["mode"] = self.MODE_PROGRAM if play_item.item_type == PlayItem.SHOW_ITEM else self.MODE_VIDEO
+        params["url"] = play_item.id
         folder = False
-        if mode == self.MODE_PROGRAM:
+        if play_item.item_type == PlayItem.SHOW_ITEM:
             folder = True
         info = None
-        if self.is_geo_restricted(article):
-            logging.log("Hiding geo restricted item {} as setting is on".format(article["title"]))
+        if self.is_geo_restricted(play_item):
+            logging.log("Hiding geo restricted item {} as setting is on".format(play_item.title))
             return
-        info = article["info"]
-        self.add_directory_item(article["title"], params, article["thumbnail"], folder, False, info)
+        info = play_item.info
+        fanart = play_item.fanart if play_item.item_type == PlayItem.VIDEO_ITEM else ""
+        self.add_directory_item(play_item.title, params, play_item.thumbnail, folder, False, info, fanart)
 
-    def is_geo_restricted(self, program):
-        return program["onlyAvailableInSweden"] and \
+    def is_geo_restricted(self, play_item):
+        return play_item.geo_restricted and \
             self.settings.geo_restriction
     
     def start_video(self, video_json):
@@ -101,5 +99,4 @@ class Common:
         if episodes is None:
             logging.log("No episodes found")
             return
-        for episode in episodes:
-            self.create_dir_item(episode, self.MODE_VIDEO)
+        self.create_dir_items(episodes)

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-  <setting id="quality" type="enum" label="30001" values="auto|128k|256k|512k|1024k|1800k" default="0" />
+  <setting id="quality" type="enum" label="30010" values="auto|128k|256k|512k|1024k|1800k" default="0" />
+  <setting id="update" type="enum" label="30020" lvalues="30102|30103|30104" default="0" />
+  <setting id="interval" type="slider" label="30030" default="24" range="1,24" option="int" visible="eq(-1,0)" />
 </settings>

@@ -16,10 +16,11 @@
 #
 
 import sys
+import threading
 
 from sandmann import getEpisodeData
 
-# import xbmc
+import xbmc
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
@@ -27,14 +28,41 @@ import xbmcaddon
 episodes_url = "https://appdata.ardmediathek.de/appdata/servlet/tv/Sendung?documentId=6503982&json"
 
 addon = xbmcaddon.Addon()
-quality = int(addon.getSetting("quality"))
-
-title, thumbnail_image, fanart_image, stream = getEpisodeData(
-    episodes_url, quality)
-
-li = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_image)
-li.setProperty("fanart_image", fanart_image)
+# addon_name = addon.getAddonInfo('name')
+# addon_icon = addon.getAddonInfo('icon')
 
 addon_handle = int(sys.argv[1])
-xbmcplugin.addDirectoryItem(addon_handle, stream, li, False)
+base_path = sys.argv[0]
+
+quality = addon.getSettingInt("quality")
+update = addon.getSettingInt("update")
+interval = addon.getSettingInt("interval")
+
+title, description, thumbnail_image, fanart_image, stream = getEpisodeData(
+    episodes_url, quality)
+
+li_episode = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_image)
+li_episode.setProperty("fanart_image", fanart_image)
+li_episode.setInfo(type="Video", infoLabels={
+                   "Title": title, "Plot": description})
+xbmcplugin.addDirectoryItem(addon_handle, stream, li_episode, False)
+
+
+def reload():
+    # xbmc.executebuiltin('Notification(%s, %s, %d, %s)' %
+    #                     (addon_name, "Updating...", 5000, addon_icon))
+    xbmc.executebuiltin('Container.Refresh()')
+    threading.Timer(interval * 60 * 60, reload).start()
+
+
+if update == 0:
+    threading.Timer(interval * 60 * 60, reload).start()
+
+
+if update == 1:
+    li_refresh = xbmcgui.ListItem(
+        label=addon.getLocalizedString(30020))
+    xbmcplugin.addDirectoryItem(addon_handle, base_path, li_refresh, True)
+
+
 xbmcplugin.endOfDirectory(addon_handle)

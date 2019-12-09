@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting id="enter_all_videos" type="bool" label="32007" default="false" />
-    <setting id="items_per_page" type="slider" label="32006" default="25" range="0,50" />
-    <setting id="api_key" type="text" default="AIzaSyAxaHJTQ5zgh86wk7geOwm-y0YyNMcEkSc" visible="false"/>
-    <setting id="channel_id" type="text" default="UCpWxnp_Pe3PlJYBFeMIvitA" visible="false"/>
+    <category label="32009">
+        <setting id="enter_all_videos" type="bool" label="32007" default="false" />
+        <setting id="items_per_page" type="slider" label="32006" default="25" range="0,50" />
+        <setting id="api_key" type="text" default="AIzaSyAxaHJTQ5zgh86wk7geOwm-y0YyNMcEkSc" visible="false"/>
+        <setting id="channel_id" type="text" default="UCpWxnp_Pe3PlJYBFeMIvitA" visible="false"/>
+    </category>
 </settings>
 

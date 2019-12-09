@@ -16,8 +16,6 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#This is a comment
-
 msgctxt "#32000"
 msgid "All videos"
 msgstr ""
@@ -52,4 +50,8 @@ msgstr ""
 
 msgctxt "#32008"
 msgid "Next page"
+msgstr ""
+
+msgctxt "#32009"
+msgid "General"
 msgstr ""

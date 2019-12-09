@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import sys
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -9,6 +10,7 @@ import json as json
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo("id")
 
+PY3 = sys.version_info.major >= 3
 
 def notification(header, message, time=5000, icon=ADDON.getAddonInfo('icon'), sound=True):
     xbmcgui.Dialog().notification(header, message, icon, time, sound)
@@ -29,6 +31,8 @@ def log(message,level):
 
 
 def get_setting(setting):
+    if PY3:
+        return ADDON.getSetting(setting).strip()
     return ADDON.getSetting(setting).strip().decode('utf-8')
 
 
@@ -55,6 +59,8 @@ def get_setting_as_int(setting):
 
 
 def get_string(string_id):
+    if PY3:
+        return ADDON.getLocalizedString(string_id)
     return ADDON.getLocalizedString(string_id).encode('utf-8', 'ignore')
 
 

@@ -1,3 +1,5 @@
+2.2.0 Removed sports section, added paging, stability fixes
+2.1.0 Added live stream quality selection, added sports section, removed useless format setting,
 2.0.0 Rewritten using xbmcswift2 and requests libraries, added podcasts, various other fixes
 1.0.4 Added required elements to addon.xml
 1.0.3 Proper handling of broadcast date

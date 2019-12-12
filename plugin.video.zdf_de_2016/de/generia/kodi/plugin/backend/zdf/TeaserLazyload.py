@@ -1,5 +1,6 @@
 import re
 import urllib
+from json import JSONDecoder
 from datetime import datetime
 
 from de.generia.kodi.plugin.backend.zdf.Regex import getAttrPattern
@@ -7,7 +8,7 @@ from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
 
 
 def getJsonAttrPattern(attr):
-    return re.compile('&quot;' + attr + '&quot;:&quot;([^&]*)&quot;', re.DOTALL)
+    return re.compile('&quot;' + attr + '&quot;\s*:\s*&quot;([^&]*)&quot;', re.DOTALL)
 
 idPattern = getJsonAttrPattern('sophoraId')
 stylePattern = getJsonAttrPattern('style')
@@ -33,13 +34,16 @@ class TeaserLazyload(object):
         if teaserMatch is None:
             return -1
         teaser = teaserMatch.group(0)
-
         endPos = teaserMatch.end(0)
-        id = self._parseAttr(teaser, idPattern)
-        style = self._parseAttr(teaser, stylePattern)
-        headline = self._parseAttr(teaser, headlinePattern)
-        text = self._parseAttr(teaser, textPattern)
-        sourceModuleType = self._parseAttr(teaser, sourceModuleTypePattern)
+
+        teaser = teaser.replace('\&quot;', '\\"');
+        jsonDecoder = JSONDecoder('UTF-8')
+
+        id = self._parseAttr(jsonDecoder, teaser, idPattern)
+        style = self._parseAttr(jsonDecoder, teaser, stylePattern)
+        headline = self._parseAttr(jsonDecoder, teaser, headlinePattern)
+        text = self._parseAttr(jsonDecoder, teaser, textPattern)
+        sourceModuleType = self._parseAttr(jsonDecoder, teaser, sourceModuleTypePattern)
         
         url = None
         url = self._appendUrl(url, 'sophoraId', id)
@@ -55,18 +59,25 @@ class TeaserLazyload(object):
         
         return endPos
 
-    def _parseAttr(self, teaser, pattern):
+    def _parseAttr(self, jsonDecoder, teaser, pattern):
         match = pattern.search(teaser)
         value = None
         if match is not None:
             value = match.group(1)
+
+            if value is not None:
+                obj = '{"s":"' + value + '"}'
+                entry = jsonDecoder.decode(obj)
+                if entry is not None:
+                    value = entry['s']
+
         return value
 
 
     def _appendUrl(self, url, attr, value):
         if value is None:
             return url
-        encodedValue = urllib.quote(value, '')
+        encodedValue = urllib.quote(value.encode('UTF-8'), '')
         if url is None:
             return '?' + attr + '=' + encodedValue
          

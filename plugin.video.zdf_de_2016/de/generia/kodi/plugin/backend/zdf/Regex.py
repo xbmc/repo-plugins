@@ -24,4 +24,6 @@ def stripTag(tag, string):
 
 
 def cleanTags(string):
-    return re.sub(r'</?[^>]*>', '', string)
+    cleaned = re.sub(r'</?[^>]*>', '', string)
+    cleaned = cleaned.replace("&#39;", "'")
+    return cleaned

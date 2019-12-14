@@ -1,3 +1,8 @@
+v1.1.10 (2019-12-12) (thanks for the help Nixxor)
+- Removed Top as it is basically the same as Daily Top
+- Using different url for DumpertTV so that most recent items are at the top of the list
+- Moved DumpertTV up in the main list
+
 v1.1.9 (2019-09-19) (thanks for the help NightFox89)
 - MAJOR changes in the addon due to redesigned website
 - updated logos

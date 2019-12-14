@@ -37,14 +37,13 @@ class Main(object):
                       "next_page_possible": "True"}
         self.add_dir(parameters, title)
 
-
         #
-        # Toppers
+        # Dumpert TV
         #
-        title = LANGUAGE(30000)
+        title = LANGUAGE(30007)
         parameters = {"action": "json",
                       "plugin_category": title,
-                      "url": TOPPERS_URL,
+                      "url": DUMPERT_TV_URL,
                       "next_page_possible": "True"}
         self.add_dir(parameters, title)
 
@@ -87,16 +86,6 @@ class Main(object):
         title = LANGUAGE(30005)
         parameters = {"action": "timemachine",
                       "plugin_category": title,
-                      "next_page_possible": "True"}
-        self.add_dir(parameters, title)
-
-        #
-        # Dumpert TV
-        #
-        title = LANGUAGE(30007)
-        parameters = {"action": "json",
-                      "plugin_category": title,
-                      "url": DUMPERT_TV_URL,
                       "next_page_possible": "True"}
         self.add_dir(parameters, title)
 

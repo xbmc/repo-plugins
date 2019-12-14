@@ -1,3 +1,9 @@
+* 0.10.0
+- python2/3 compatible
+- added 'play full video' for htmlscraper
+- show listitems are absolute now and can be added to favourites
+- minor fixes for serviceapi & htmlscraper 
+
 0.9.2
 - fixed frontpage (new html markup)
 - removed 'im fokus' & 'orf tipps'

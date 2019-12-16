@@ -34,11 +34,11 @@ class Common:
             list_item.setProperty("IsLive", "true")
         if not folder and params["mode"] == self.MODE_VIDEO:
             list_item.setProperty("IsPlayable", "true")
-            show_url = helper.episodeUrlToShowUrl(params["url"])
+            show_url = helper.episodeUrlToShowUrl(params["id"])
             if show_url:
                 context_go_to_params = {
                     "mode" : self.MODE_PROGRAM,
-                    "url" : show_url
+                    "id" : show_url
                 }
                 urlToShow = self.plugin_url + '?' + urlencode(context_go_to_params)
                 list_item.addContextMenuItems([(self.localize(30602), 'ActivateWindow(Videos,'+urlToShow+')')])            
@@ -61,7 +61,7 @@ class Common:
     def create_dir_item(self, play_item):
         params = {}
         params["mode"] = self.MODE_PROGRAM if play_item.item_type == PlayItem.SHOW_ITEM else self.MODE_VIDEO
-        params["url"] = play_item.id
+        params["id"] = play_item.id
         folder = False
         if play_item.item_type == PlayItem.SHOW_ITEM:
             folder = True

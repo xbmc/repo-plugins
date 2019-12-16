@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.orftvthek" name="ORF TVthek" version="0.9.2" provider-name="sofaking">
+<addon id="plugin.video.orftvthek" name="ORF TVthek" version="0.10.0" provider-name="sofaking">
     <requires>
         <import addon="xbmc.python" version="2.14.0"/>
-        <import addon="script.module.future" version="0.16.0" />
-        <import addon="script.module.parsedom" version="0.9.1"/>
-        <import addon="script.common.plugin.cache" version="0.9.1"/>
+        <import addon="script.module.future" version="0.16.0"/>
+        <import addon="script.module.kodi-six" version="0.0.5"/>
         <import addon="script.module.simplejson" version="2.0.10" optional="false"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
@@ -17,7 +16,7 @@
         <summary lang="en">ORF TVthek</summary>
         <description lang="de">ORF TVthek - Ermöglicht Ihnen den Zugriff auf die ORF TVthek Video Platform</description>
         <description lang="en">ORF TVthek - This plugin provides access to the Austrian "ORF TVthek"</description>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <license>GPL-2.0-only</license>
         <forum>https://forum.kodi.tv/showthread.php?tid=159835</forum>
         <email>sofaking@gettingmoney.at</email>
         <website>https://tvthek.orf.at</website>

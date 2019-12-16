@@ -1,3 +1,13 @@
+1.5.0-git
+- Migrate to API 4.0 / webapi
+1.5.0
+- Migrated to API 3.1
+1.4.2
+- Fix for API change
+1.4.1
+- Fixed Playback
+1.4.0
+- Code rewrite for the new API
 1.3.1
 - Code cleanup
 1.3.0

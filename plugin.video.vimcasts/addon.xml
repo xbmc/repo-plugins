@@ -1,15 +1,25 @@
-<addon id="plugin.video.vimcasts" name="VimCasts" provider-name="Jonathan Beluch (jbel)" version="1.1.1">
+<addon id="plugin.video.vimcasts" name="VimCasts" provider-name="Jonathan Beluch (jbel), enen92" version="1.2.0">
   <requires>
-    <import addon="xbmc.python" version="2.1.0" />
-    <import addon="script.module.xbmcswift2" version="1.1.1" />
+    <import addon="xbmc.python" version="2.14.0" />
+    <import addon="script.module.xbmcswift2" version="2.5.0" />
   </requires>
   <extension library="addon.py" point="xbmc.python.pluginsource">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <language />
-    <summary>Watch screencasts about Vim, the text editor, from http://vimcasts.org</summary>
-    <description>Vimcasts publishes free screencasts about Vim, the text editor. Vim has been around in one form or another for over 20 years. The learning curve is famously difficult, but those who manage to climb it insist that nothing can match Vim's modal editing model for speed and efficiency.[CR][CR]The patterns of use that make a Vim master productive are not easily discovered. Trial and error will get you so far, but the best way to learn is to watch an experienced Vim user at work. By providing short videos with digestible advice, Vimcasts gives you something you can take away and use immediately to improve your productivity. Vimcasts aims to be the expert Vim colleague you never had.[CR][CR]Vimcasts is produced by Drew Neil (aka nelstrom), who came to Vim from TextMate. He made the switch when starting work at a company that uses Linux workstations. His choice of text editor was influenced by colleagues.</description>
+    <language>en</language>
+    <license>GPL-3.0-only</license>
+    <source>https://github.com/XBMC-Addons/plugin.video.vimcasts</source>
+    <news>
+      Version 1.2.0
+        * Update to python3
+        * Update to new xbmcswift2
+        * Add duration
+        * Remove unplayable items
+        * New addon requirements
+    </news>
+    <summary lang="en">Watch screencasts about Vim, the text editor, from http://vimcasts.org</summary>
+    <description lang="en">Vimcasts publishes free screencasts about Vim, the text editor. Vim has been around in one form or another for over 20 years. The learning curve is famously difficult, but those who manage to climb it insist that nothing can match Vim's modal editing model for speed and efficiency.[CR][CR]The patterns of use that make a Vim master productive are not easily discovered. Trial and error will get you so far, but the best way to learn is to watch an experienced Vim user at work. By providing short videos with digestible advice, Vimcasts gives you something you can take away and use immediately to improve your productivity. Vimcasts aims to be the expert Vim colleague you never had.[CR][CR]Vimcasts is produced by Drew Neil (aka nelstrom), who came to Vim from TextMate. He made the switch when starting work at a company that uses Linux workstations. His choice of text editor was influenced by colleagues.</description>
   </extension>
 </addon>

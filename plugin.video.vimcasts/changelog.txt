@@ -1,3 +1,11 @@
+Version 1.2.0
+-----------
+* Update to python3
+* Update to new xbmcswift2
+* Add duration
+* Remove unplayable items
+* New addon requirements
+
 Version 1.1
 -----------
 

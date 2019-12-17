@@ -1,0 +1,46 @@
+# Kodi Media Center language file
+# Addon Name: Radio
+# Addon id: plugin.audio.radio_de
+# Addon Provider: Tristan Fischer, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi_FI\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30102"
+msgid "Browse by genre"
+msgstr "Selaa lajityypeittäin"
+
+msgctxt "#30104"
+msgid "Browse by country"
+msgstr "Selaa maittain"
+
+msgctxt "#30300"
+msgid "Language"
+msgstr "Kieli"
+
+msgctxt "#30301"
+msgid "English"
+msgstr "Englanti"
+
+msgctxt "#30302"
+msgid "German"
+msgstr "Saksa"
+
+msgctxt "#30303"
+msgid "French"
+msgstr "Ranska"
+
+msgctxt "#30600"
+msgid "Network Error"
+msgstr "Verkkovirhe"
+

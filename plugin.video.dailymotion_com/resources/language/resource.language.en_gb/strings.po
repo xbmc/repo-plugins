@@ -256,3 +256,11 @@ msgstr "Miscellaneous"
 msgctxt "#30114"
 msgid "Mature Content"
 msgstr "Mature Content"
+
+msgctxt "#30115"
+msgid "Search history"
+msgstr "Search history"
+
+msgctxt "#30116"
+msgid "Clear search history"
+msgstr "Clear search history"

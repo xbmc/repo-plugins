@@ -253,3 +253,11 @@ msgstr "שונות"
 msgctxt "#30114"
 msgid "Mature Content"
 msgstr "תוכן למבוגרים"
+
+msgctxt "#30115"
+msgid "Search history"
+msgstr "היסטוריית החיפושים"
+
+msgctxt "#30116"
+msgid "Clear search history"
+msgstr "נקה את היסטוריית החיפוש"

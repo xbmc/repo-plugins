@@ -1,7 +1,10 @@
+2.4.1 [20191208]
+ - Fix Search (Thanks to johngf)
+ - Add Search keyword History (Thanks to johngf)
+
 2.4.0 [20191208]
  - Fix for playback due to api changes
  - Flake8 linting
- - Known issue: cannot download videos anymore
 
 2.3.9 [20190523]
  - Make code Python 3 compatible

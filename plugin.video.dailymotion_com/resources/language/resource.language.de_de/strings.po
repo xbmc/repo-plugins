@@ -251,3 +251,11 @@ msgstr "Sonstiges"
 msgctxt "#30114"
 msgid "Mature Content"
 msgstr "Reifer Inhalt"
+
+msgctxt "#30115"
+msgid "Search history"
+msgstr "Suchverlauf"
+
+msgctxt "#30116"
+msgid "Clear search history"
+msgstr "Suchverlauf löschen"

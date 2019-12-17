@@ -244,3 +244,11 @@ msgstr "Divers"
 msgctxt "#30114"
 msgid "Mature Content"
 msgstr "Contenus adultes"
+
+msgctxt "#30115"
+msgid "Search history"
+msgstr "Historique des recherches"
+
+msgctxt "#30116"
+msgid "Clear search history"
+msgstr "Effacer l'historique des recherches"

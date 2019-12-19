@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -38,8 +39,8 @@ import json
 import re
 import requests
 import urlquick
-import xbmc
-import xbmcgui
+from kodi_six import xbmc
+from kodi_six import xbmcgui
 
 # TO DO
 # Mode code brightcove protected by DRM in resolver_proxy

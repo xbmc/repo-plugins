@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -136,5 +137,5 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
     live_id = re.compile(r'telemb.fcst.tv/player/embed\/(.*?)[\?\"]').findall(
         resp.text)[0]
     resp2 = urlquick.get(URL_STREAM_LIVE % live_id, max_age=-1)
-    return 'https://tvl-live.l3.freecaster.net' + re.compile(
-        r'freecaster\.net(.*?)\"').findall(resp2.text)[0]
+    return 'https://tvl-live.l3.freecaster.net/live/telemb/telemb.m3u8?token=' + re.compile(
+        r'\?token\=(.*?)\"').findall(resp2.text)[0]

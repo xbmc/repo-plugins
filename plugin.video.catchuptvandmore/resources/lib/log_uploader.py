@@ -22,12 +22,13 @@
 
 # Inspired by https://gitlab.com/ronie/script.kodi.loguploader/blob/master/default.py
 
+from builtins import str
 import os
 import re
 
-import xbmc
-import xbmcvfs
-import xbmcgui
+from kodi_six import xbmc
+from kodi_six import xbmcvfs
+from kodi_six import xbmcgui
 import pyqrcode
 
 from codequick import Script

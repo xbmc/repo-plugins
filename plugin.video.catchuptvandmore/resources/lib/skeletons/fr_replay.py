@@ -480,5 +480,11 @@ menu = {
         'thumb': 'channels/fr/tebesud.png',
         'fanart': 'channels/fr/tebesud_fanart.jpg',
         'module': 'resources.lib.channels.fr.tebeo'
+    },
+    'bfmlyon': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/fr/bfmlyon.png',
+        'fanart': 'channels/fr/bfmlyon_fanart.jpg',
+        'module': 'resources.lib.channels.fr.bfmlyon'
     }
 }

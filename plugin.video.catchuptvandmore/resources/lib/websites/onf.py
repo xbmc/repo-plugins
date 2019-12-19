@@ -60,20 +60,20 @@ GENRE_VIDEOS = {
 
 def root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
-    for category_id, category_title in GENRE_VIDEOS.items():
+    for category_id, category_title in list(GENRE_VIDEOS.items()):
         item = Listitem()
         item.label = category_title
         item.set_callback(list_videos,
                           item_id=item_id,
-                          category_id=category_id,
+                          category_title=category_title,
                           page=1)
         item_post_treatment(item)
         yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, category_id, page, **kwargs):
-    replay_episodes_json = urlquick.get(URL_VIDEOS % (category_id, page)).text
+def list_videos(plugin, item_id, category_title, page, **kwargs):
+    replay_episodes_json = urlquick.get(URL_VIDEOS % (category_title, page)).text
     replay_episodes_jsonparser = json.loads(replay_episodes_json)
     at_least_one = False
     for replay_episodes_datas in replay_episodes_jsonparser["items_html"]:
@@ -100,7 +100,7 @@ def list_videos(plugin, item_id, category_id, page, **kwargs):
     if at_least_one:
         # More videos...
         yield Listitem.next_page(item_id=item_id,
-                                 category_id=category_id,
+                                 category_title=category_title,
                                  page=page + 1)
     else:
         plugin.notify(plugin.localize(LABELS['No videos found']), '')

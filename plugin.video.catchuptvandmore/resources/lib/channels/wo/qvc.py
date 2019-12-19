@@ -40,7 +40,7 @@ import urlquick
 URL_LIVE_QVC_IT = 'https://www.qvc.%s/tv/live.html'
 # language
 
-URL_LIVE_QVC_JP = 'http://qvc.jp/cont/live/Main'
+URL_LIVE_QVC_JP = 'https://qvc.jp/content/shop-live-tv.html'
 
 URL_LIVE_QVC_DE_UK_US = 'http://www.qvc%s/content/shop-live-tv.qvc.html'
 # language
@@ -82,9 +82,8 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
     elif final_language == 'JP':
         resp = urlquick.get(URL_LIVE_QVC_JP)
         resp.encoding = "shift_jis"
-        return 'https://cdn-live1.qvc.jp' + re.compile(
-            r'cdn-live1\.qvc\.jp(.*?)\'').findall(
-                resp.text)[0] + '|referer=https://qvc.jp/cont/live/Main'
+        return 'https:' + re.compile(
+            r'url\"\:\"(.*?)\"').findall(resp.text)[0]
     elif final_language == 'DE' or\
             final_language == 'UK' or\
             final_language == 'US':

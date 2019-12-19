@@ -6,105 +6,40 @@
 ##	Realmadrid TV EN
 ##	realmadridtv
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/realmadridtv.png" group-title="Spain",Realmadrid TV EN
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=realmadridtv&item_module=resources.lib.channels.es.realmadridtv&item_dict={"language":"EN"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=realmadridtv&item_module=resources.lib.channels.es.realmadridtv&item_dict={"language":"EN"}
 
 ##	Realmadrid TV ES
 ##	realmadridtv
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/realmadridtv.png" group-title="Spain",Realmadrid TV ES
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=realmadridtv&item_module=resources.lib.channels.es.realmadridtv&item_dict={"language":"ES"}
-
-##	Antena 3
-##	antena3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/antena3.png" group-title="Spain",Antena 3
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=antena3&item_module=resources.lib.channels.es.atresplayer&item_dict={}
-
-##	La Sexta
-##	lasexta
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/lasexta.png" group-title="Spain",La Sexta
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=lasexta&item_module=resources.lib.channels.es.atresplayer&item_dict={}
-
-##	Neox
-##	neox
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/neox.png" group-title="Spain",Neox
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=neox&item_module=resources.lib.channels.es.atresplayer&item_dict={}
-
-##	Nova
-##	nova
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/nova.png" group-title="Spain",Nova
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=nova&item_module=resources.lib.channels.es.atresplayer&item_dict={}
-
-##	Mega
-##	mega
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/mega.png" group-title="Spain",Mega
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=mega&item_module=resources.lib.channels.es.atresplayer&item_dict={}
-
-##	Atreseries
-##	atreseries
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/atreseries.png" group-title="Spain",Atreseries
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=atreseries&item_module=resources.lib.channels.es.atresplayer&item_dict={}
-
-##	Telecinco
-##	telecinco
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/telecinco.png" group-title="Spain",Telecinco
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=telecinco&item_module=resources.lib.channels.es.mitele&item_dict={}
-
-##	Cuatro
-##	cuatro
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/cuatro.png" group-title="Spain",Cuatro
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=cuatro&item_module=resources.lib.channels.es.mitele&item_dict={}
-
-##	Factoria de Ficcion
-##	fdf
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/fdf.png" group-title="Spain",Factoria de Ficcion
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=fdf&item_module=resources.lib.channels.es.mitele&item_dict={}
-
-##	Boing
-##	boing
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/boing.png" group-title="Spain",Boing
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=boing&item_module=resources.lib.channels.es.mitele&item_dict={}
-
-##	Energy TV
-##	energy
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/energy.png" group-title="Spain",Energy TV
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=energy&item_module=resources.lib.channels.es.mitele&item_dict={}
-
-##	Divinity
-##	divinity
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/divinity.png" group-title="Spain",Divinity
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=divinity&item_module=resources.lib.channels.es.mitele&item_dict={}
-
-##	Be Mad
-##	bemad
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/bemad.png" group-title="Spain",Be Mad
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=bemad&item_module=resources.lib.channels.es.mitele&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=realmadridtv&item_module=resources.lib.channels.es.realmadridtv&item_dict={"language":"ES"}
 
 ##	Paramount Channel (ES)
 ##	paramountchannel_es
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/paramountchannel_es.png" group-title="Spain",Paramount Channel (ES)
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=paramountchannel_es&item_module=resources.lib.channels.es.paramountchannel_es&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=paramountchannel_es&item_module=resources.lib.channels.es.paramountchannel_es&item_dict={}
 
 ##	Euronews
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="Spain",Euronews
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"ES"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"ES"}
 
 ##	DW
 ##	dw
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/dw.png" group-title="Spain",DW
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"ES"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"ES"}
 
 ##	France 24
 ##	france24
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="Spain",France 24
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"ES"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"ES"}
 
 ##	CGTN
 ##	cgtn
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/cgtn.png" group-title="Spain",CGTN
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"ES"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"ES"}
 
 ##	RT
 ##	rt
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/rt.png" group-title="Spain",RT
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&item_dict={"language":"ES"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&item_dict={"language":"ES"}
 

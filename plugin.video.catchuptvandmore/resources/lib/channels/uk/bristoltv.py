@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -137,7 +138,7 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(video_url,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     video_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]',
                           re.DOTALL).findall(resp.text)[0]
@@ -154,7 +155,7 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
     """Get video URL and start video player"""
 
     resp = urlquick.get(URL_ROOT,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]',
                          re.DOTALL).findall(resp.text)[0]

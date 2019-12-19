@@ -48,7 +48,7 @@ URL_PROGRAMS_JSON = 'https://player.api.stv.tv/v1/programmes/?limit=300&orderBy=
 URL_VIDEOS_JSON = 'https://player.api.stv.tv/v1/episodes'
 # guidProgramm
 
-URL_BRIGHTCOVE_DATAS = 'https://player.stv.tv/assets/build/sites/playerv3/js/script.js'
+URL_BRIGHTCOVE_DATAS = 'https://player.stv.tv/player-web/players/vod/bundle.js'
 
 
 def replay_entry(plugin, item_id, **kwargs):
@@ -146,6 +146,9 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 
 @Resolver.register
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+
+    if item_id == 'stv_plusone':
+        item_id = 'stv-plus-1'
 
     resp = urlquick.get(URL_LIVE_JSON % item_id)
     json_parser = json.loads(resp.text)

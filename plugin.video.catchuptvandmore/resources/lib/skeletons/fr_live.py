@@ -551,11 +551,88 @@ menu = {
         'module': 'resources.lib.channels.fr.tebeo',
         'm3u_group': 'Région'
     },
-    'matele': {
+    'viamatele': {
         'callback': 'live_bridge',
-        'thumb': 'channels/fr/matele.png',
-        'fanart': 'channels/fr/matele_fanart.jpg',
-        'module': 'resources.lib.channels.fr.matele',
+        'thumb': 'channels/fr/viamatele.png',
+        'fanart': 'channels/fr/viamatele_fanart.jpg',
+        'module': 'resources.lib.channels.fr.via',
         'm3u_group': 'Région'
+    },
+    'telegrenoble': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/telegrenoble.png',
+        'fanart': 'channels/fr/telegrenoble_fanart.jpg',
+        'module': 'resources.lib.channels.fr.telegrenoble',
+        'm3u_group': 'Région'
+    },
+    'telenantes': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/telenantes.png',
+        'fanart': 'channels/fr/telenantes_fanart.jpg',
+        'module': 'resources.lib.channels.fr.telenantes',
+        'm3u_group': 'Région'
+    },
+    'bfmlyon': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/bfmlyon.png',
+        'fanart': 'channels/fr/bfmlyon_fanart.jpg',
+        'module': 'resources.lib.channels.fr.bfmlyon',
+        'm3u_group': 'Région'
+    },
+    'tlc': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/tlc.png',
+        'fanart': 'channels/fr/tlc_fanart.jpg',
+        'module': 'resources.lib.channels.fr.tlc',
+        'm3u_group': 'Région'
+    },
+    'tvvendee': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/tvvendee.png',
+        'fanart': 'channels/fr/tvvendee_fanart.jpg',
+        'module': 'resources.lib.channels.fr.tvvendee',
+        'm3u_group': 'Région'
+    },
+    'tv7bordeaux': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/tv7bordeaux.png',
+        'fanart': 'channels/fr/tv7bordeaux_fanart.jpg',
+        'module': 'resources.lib.channels.fr.tv7bordeaux',
+        'm3u_group': 'Région'
+    },
+    'tvt': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/tvt.png',
+        'fanart': 'channels/fr/tvt_fanart.jpg',
+        'module': 'resources.lib.channels.fr.tvt',
+        'm3u_group': 'Région'
+    },
+    'tvr': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/tvr.png',
+        'fanart': 'channels/fr/tvr_fanart.jpg',
+        'module': 'resources.lib.channels.fr.tvr',
+        'm3u_group': 'Région'
+    },
+    'weo': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/weo.png',
+        'fanart': 'channels/fr/weo_fanart.jpg',
+        'module': 'resources.lib.channels.fr.weo',
+        'm3u_group': 'Région'
+    },
+    'dicitv': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/dicitv.png',
+        'fanart': 'channels/fr/dicitv_fanart.jpg',
+        'module': 'resources.lib.channels.fr.dicitv',
+        'm3u_group': 'Région'
+    },
+    'franceinter': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/franceinter.png',
+        'fanart': 'channels/fr/franceinter_fanart.jpg',
+        'module': 'resources.lib.channels.fr.franceinter',
+        'm3u_group': 'Radio'
     }
 }

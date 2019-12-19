@@ -80,7 +80,7 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
         final_language = item_dict['language']
 
     resp = urlquick.get(URL_LIVE,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     root = resp.parse()
 
@@ -105,6 +105,6 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
         # Add Notification
         return False
     lives_html = urlquick.get(URL_STREAM % live_id,
-                              headers={'User-Agent': web_utils.get_random_ua},
+                              headers={'User-Agent': web_utils.get_random_ua()},
                               max_age=-1)
     return re.compile(r'src:\'(.*?)\'').findall(lives_html.text)[0]

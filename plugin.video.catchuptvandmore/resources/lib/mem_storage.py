@@ -6,12 +6,13 @@ SimplePlugin micro-framework for Kodi content plugins
 **License**: `GPL v.3 <https://www.gnu.org/copyleft/gpl.html>`_
 """
 
+
 try:
-    import cPickle as pickle
+    import pickle as pickle
 except ImportError:
     import pickle
 from collections import MutableMapping
-import xbmcgui
+from kodi_six import xbmcgui
 from six import string_types
 
 
@@ -64,7 +65,7 @@ class MemStorage(MutableMapping):
         :rtype: str
         """
         lines = []
-        for key, val in self.items():
+        for key, val in list(self.items()):
             lines.append('{0}: {1}'.format(repr(key), repr(val)))
         return ', '.join(lines)
 
@@ -80,14 +81,14 @@ class MemStorage(MutableMapping):
         full_key = '{0}__{1}'.format(self._id, key)
         raw_item = self._window.getProperty(full_key)
         if raw_item:
-            return pickle.loads(raw_item)
+            return pickle.loads(raw_item.encode('latin-1'))
         else:
             raise KeyError(key)
 
     def __setitem__(self, key, value):
         self._check_key(key)
         full_key = '{0}__{1}'.format(self._id, key)
-        self._window.setProperty(full_key, pickle.dumps(value))
+        self._window.setProperty(full_key, pickle.dumps(value, protocol=0).decode('latin-1'))
         if key != '__keys__':
             keys = self['__keys__']
             keys.append(key)

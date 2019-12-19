@@ -36,7 +36,7 @@ import json
 import re
 import requests
 import urlquick
-import xbmcgui
+from kodi_six import xbmcgui
 
 # TO DO
 # Add Paid contents ?

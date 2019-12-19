@@ -24,7 +24,10 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
+from __future__ import division
 
+from builtins import str
+import sys
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -32,12 +35,13 @@ from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib import download
 from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.common import old_div
 
 import json
 import time
 import re
 import urlquick
-import xbmcgui
+from kodi_six import xbmcgui
 
 # TO DO
 
@@ -123,7 +127,7 @@ def list_videos(plugin, item_id, program_category, page, **kwargs):
         description = video_datas['description']
         # begin_date = video['begin_date']  # 1486725600,
         image = video_datas['image']
-        duration = video_datas['video_duration_ms'] / 1000
+        duration = old_div(video_datas['video_duration_ms'], 1000)
 
         value_date = time.strftime('%d %m %Y',
                                    time.localtime(video_datas["begin_date"]))
@@ -216,11 +220,11 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     if item_id == 'bfmtv':
         resp = urlquick.get(URL_LIVE_BFMTV,
-                            headers={'User-Agent': web_utils.get_random_ua},
+                            headers={'User-Agent': web_utils.get_random_ua()},
                             max_age=-1)
     elif item_id == 'bfmbusiness':
         resp = urlquick.get(URL_LIVE_BFMBUSINESS,
-                            headers={'User-Agent': web_utils.get_random_ua},
+                            headers={'User-Agent': web_utils.get_random_ua()},
                             max_age=-1)
 
     root = resp.parse()

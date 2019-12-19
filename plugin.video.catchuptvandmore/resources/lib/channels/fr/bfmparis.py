@@ -70,7 +70,7 @@ def list_categories(plugin, item_id, **kwargs):
 def list_videos(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_REPLAY_BFMPARIS,
-                        headers={'User-Agent': web_utils.get_random_ua})
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
 
     for video_datas in root.iterfind(
@@ -122,7 +122,7 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     resp = urlquick.get(URL_LIVE_BFM_PARIS,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
 
     root = resp.parse()

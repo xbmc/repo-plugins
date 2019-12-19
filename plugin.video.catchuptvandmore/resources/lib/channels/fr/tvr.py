@@ -37,9 +37,9 @@ import urlquick
 # TODO
 # Add Replay
 
-URL_ROOT = "http://www.matele.tv"
+URL_ROOT = "https://www.tvr.bzh"
 
-URL_LIVE = URL_ROOT + '/direct/'
+URL_LIVE = URL_ROOT + '/interactiv_video_player/direct?ap=1'
 
 
 def live_entry(plugin, item_id, item_dict, **kwargs):
@@ -50,5 +50,5 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     resp = urlquick.get(
-        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua}, max_age=-1)
-    return re.compile(r'file\"\:\"(.*?)[\?\"]').findall(resp.text)[0]
+        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
+    return re.compile(r'base_m3u8_url \= \"(.*?)\"').findall(resp.text)[0]

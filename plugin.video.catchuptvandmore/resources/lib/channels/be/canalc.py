@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -34,9 +35,9 @@ import re
 import urlquick
 # Working for Python 2/3
 try:
-    import urllib.parse as urllib
+    from urllib.parse import unquote_plus
 except ImportError:
-    import urllib
+    from urllib import unquote_plus
 
 # TO DO
 # Add Replay
@@ -54,5 +55,5 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     resp = urlquick.get(URL_LIVE, max_age=-1)
-    return urllib.unquote_plus(
+    return unquote_plus(
         re.compile(r'sourceURL\"\:\"(.*?)\"').findall(resp.text)[0])

@@ -41,43 +41,50 @@ menu = {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/blaze.png',
         'fanart': 'channels/uk/blaze_fanart.jpg',
-        'module': 'resources.lib.channels.uk.blaze'
+        'module': 'resources.lib.channels.uk.blaze',
+        'xmltv_id': '1013.tvguide.co.uk'
     },
     'skynews': {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/skynews.png',
         'fanart': 'channels/uk/skynews_fanart.jpg',
-        'module': 'resources.lib.channels.uk.sky'
+        'module': 'resources.lib.channels.uk.sky',
+        'xmltv_id': '257.tvguide.co.uk'
     },
     'stv': {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/stv.png',
         'fanart': 'channels/uk/stv_fanart.jpg',
-        'module': 'resources.lib.channels.uk.stv'
+        'module': 'resources.lib.channels.uk.stv',
+        'xmltv_id': '178.tvguide.co.uk'
     },
     'kerrang': {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/kerrang.png',
         'fanart': 'channels/uk/kerrang_fanart.jpg',
-        'module': 'resources.lib.channels.uk.boxplus'
+        'module': 'resources.lib.channels.uk.boxplus',
+        'xmltv_id': '1207.tvguide.co.uk'
     },
     'magic': {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/magic.png',
         'fanart': 'channels/uk/magic_fanart.jpg',
-        'module': 'resources.lib.channels.uk.boxplus'
+        'module': 'resources.lib.channels.uk.boxplus',
+        'xmltv_id': '185.tvguide.co.uk'
     },
     'kiss': {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/kiss.png',
         'fanart': 'channels/uk/kiss_fanart.jpg',
-        'module': 'resources.lib.channels.uk.boxplus'
+        'module': 'resources.lib.channels.uk.boxplus',
+        'xmltv_id': '182.tvguide.co.uk'
     },
     'the-box': {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/thebox.png',
         'fanart': 'channels/uk/thebox_fanart.jpg',
-        'module': 'resources.lib.channels.uk.boxplus'
+        'module': 'resources.lib.channels.uk.boxplus',
+        'xmltv_id': '279.tvguide.co.uk'
     },
     'box-upfront': {
         'callback': 'live_bridge',
@@ -89,19 +96,22 @@ menu = {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/boxhits.png',
         'fanart': 'channels/uk/boxhits_fanart.jpg',
-        'module': 'resources.lib.channels.uk.boxplus'
+        'module': 'resources.lib.channels.uk.boxplus',
+        'xmltv_id': '267.tvguide.co.uk'
     },
     'questtv': {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/questtv.png',
         'fanart': 'channels/uk/questtv_fanart.jpg',
-        'module': 'resources.lib.channels.uk.questod'
+        'module': 'resources.lib.channels.uk.questod',
+        'xmltv_id': '1230.tvguide.co.uk'
     },
     'questred': {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/questred.png',
         'fanart': 'channels/uk/questred_fanart.jpg',
-        'module': 'resources.lib.channels.uk.questod'
+        'module': 'resources.lib.channels.uk.questod',
+        'xmltv_id': '1014.tvguide.co.uk'
     },
     'bristoltv': {
         'callback': 'live_bridge',
@@ -113,30 +123,33 @@ menu = {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/drama.png',
         'fanart': 'channels/uk/drama_fanart.jpg',
-        'module': 'resources.lib.channels.uk.uktvplay'
+        'module': 'resources.lib.channels.uk.uktvplay',
+        'xmltv_id': '871.tvguide.co.uk'
     },
     'dave': {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/dave.png',
         'fanart': 'channels/uk/dave_fanart.jpg',
-        'module': 'resources.lib.channels.uk.uktvplay'
-    },
-    'really': {
-        'callback': 'live_bridge',
-        'thumb': 'channels/uk/really.png',
-        'fanart': 'channels/uk/really_fanart.jpg',
-        'module': 'resources.lib.channels.uk.uktvplay'
+        'module': 'resources.lib.channels.uk.uktvplay',
+        'xmltv_id': '432.tvguide.co.uk'
     },
     'yesterday': {
         'callback': 'live_bridge',
         'thumb': 'channels/uk/yesterday.png',
         'fanart': 'channels/uk/yesterday_fanart.jpg',
-        'module': 'resources.lib.channels.uk.uktvplay'
+        'module': 'resources.lib.channels.uk.uktvplay',
+        'xmltv_id': '320.tvguide.co.uk'
     },
-    'home_uktvplay': {
+    'freesports': {
         'callback': 'live_bridge',
-        'thumb': 'channels/uk/home.png',
-        'fanart': 'channels/uk/home_fanart.jpg',
-        'module': 'resources.lib.channels.uk.uktvplay'
+        'thumb': 'channels/uk/freesports.png',
+        'fanart': 'channels/uk/freesports_fanart.jpg',
+        'module': 'resources.lib.channels.uk.stv'
+    },
+    'stv_plusone': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/uk/stv_plusone.png',
+        'fanart': 'channels/uk/stv_plusone_fanart.jpg',
+        'module': 'resources.lib.channels.uk.stv'
     }
 }

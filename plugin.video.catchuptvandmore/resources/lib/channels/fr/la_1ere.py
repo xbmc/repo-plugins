@@ -191,7 +191,7 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
         final_region = item_dict['language']
 
     resp = urlquick.get(URL_LIVES_JSON,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     json_parser = json.loads(resp.text)
 

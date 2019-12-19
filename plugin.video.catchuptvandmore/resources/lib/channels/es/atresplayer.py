@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -36,7 +37,7 @@ import inputstreamhelper
 import json
 import re
 import urlquick
-import xbmc
+from kodi_six import xbmc
 from six import text_type
 
 # TO DO
@@ -233,7 +234,7 @@ def get_video_url(plugin,
     response = xbmc.executeJSONRPC(json.dumps(payload))
     responses_uni = text_type(response, 'utf-8', errors='ignore')
     response_serialized = json.loads(responses_uni)
-    if 'error' not in response_serialized.keys():
+    if 'error' not in list(response_serialized.keys()):
         result = response_serialized.get('result', {})
         addon = result.get('addon', {})
         if addon.get('enabled', False) is True:
@@ -258,13 +259,13 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     resp = urlquick.get(URL_ROOT,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     lives_json = re.compile(r'window.__ENV__ = (.*?)\;').findall(resp.text)[0]
     json_parser = json.loads(lives_json)
     live_stream_json = urlquick.get(
         URL_LIVE_STREAM % json_parser[LIVE_ATRES_PLAYER[item_id]],
-        headers={'User-Agent': web_utils.get_random_ua},
+        headers={'User-Agent': web_utils.get_random_ua()},
         max_age=-1)
     live_stream_jsonparser = json.loads(live_stream_json.text)
     if "sources" in live_stream_jsonparser:

@@ -26,6 +26,8 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
+from builtins import range
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -43,8 +45,8 @@ import json
 import os
 import re
 import urlquick
-import xbmc
-import xbmcgui
+from kodi_six import xbmc
+from kodi_six import xbmcgui
 
 # TO DO
 # Readd Playlist (if needed)
@@ -93,12 +95,12 @@ def list_categories(plugin, item_id, **kwargs):
     headers = {
         'content-type': 'application/json',
         'referer': 'https://www.tf1.fr/programmes-tv',
-        'User-Agent': web_utils.get_random_ua
+        'User-Agent': web_utils.get_random_ua()
     }
     resp = urlquick.get(URL_API, params=params, headers=headers)
     json_parser = json.loads(resp.text)
 
-    for json_key in json_parser['data'].keys():
+    for json_key in list(json_parser['data'].keys()):
         if json_parser['data'][json_key]['label']:
             category_name = json_parser['data'][json_key]['label']
             category_id = json_parser['data'][json_key]['id']
@@ -128,7 +130,7 @@ def list_programs(plugin, item_id, category_id, **kwargs):
     headers = {
         'content-type': 'application/json',
         'referer': 'https://www.tf1.fr/programmes-tv',
-        'User-Agent': web_utils.get_random_ua
+        'User-Agent': web_utils.get_random_ua()
     }
     resp = urlquick.get(URL_API, params=params, headers=headers)
     json_parser = json.loads(resp.text)
@@ -142,10 +144,12 @@ def list_programs(plugin, item_id, category_id, **kwargs):
             program_name = program_datas['name']
             program_slug = program_datas['slug']
             program_image = program_datas['decoration']['image']['sources'][0]['url']
+            program_background = program_datas['decoration']['background']['sources'][0]['url']
 
             item = Listitem()
             item.label = program_name
             item.art["thumb"] = program_image
+            item.art["fanart"] = program_background
             item.set_callback(list_program_categories,
                               item_id=item_id,
                               program_slug=program_slug)
@@ -162,7 +166,7 @@ def list_program_categories(plugin, item_id, program_slug, **kwargs):
     - Saison 1
     - ...
     """
-    for video_type_title, video_type_value in VIDEO_TYPES.items():
+    for video_type_title, video_type_value in list(VIDEO_TYPES.items()):
         item = Listitem()
         item.label = video_type_title
         item.set_callback(list_videos,
@@ -184,14 +188,17 @@ def list_videos(plugin, item_id, program_slug, video_type_value, offset, **kwarg
     headers = {
         'content-type': 'application/json',
         'referer': 'https://www.tf1.fr/programmes-tv',
-        'User-Agent': web_utils.get_random_ua
+        'User-Agent': web_utils.get_random_ua()
     }
     resp = urlquick.get(URL_API, params=params, headers=headers)
     json_parser = json.loads(resp.text)
 
     for video_datas in json_parser['data']['programBySlug']['videos']['items']:
         video_title = video_datas['title']
-        video_image = video_datas['decoration']['images'][1]['sources'][0]['url']
+        try:
+            video_image = video_datas['decoration']['images'][1]['sources'][0]['url']
+        except Exception:
+            video_image = ''
         video_plot = video_datas['decoration']['description']
         video_duration = video_datas['publicPlayingInfos']['duration']
         video_id = video_datas['streamId']
@@ -230,7 +237,7 @@ def get_video_url(plugin,
     video_format = 'hls'
     url_json = URL_VIDEO_STREAM % (video_id, video_format)
     htlm_json = urlquick.get(url_json,
-                             headers={'User-Agent': web_utils.get_random_ua},
+                             headers={'User-Agent': web_utils.get_random_ua()},
                              max_age=-1)
     json_parser = json.loads(htlm_json.text)
 
@@ -241,7 +248,7 @@ def get_video_url(plugin,
     # Check DRM in the m3u8 file
     manifest = urlquick.get(json_parser["url"],
                             headers={
-                                'User-Agent': web_utils.get_random_ua},
+                                'User-Agent': web_utils.get_random_ua()},
                             max_age=-1).text
     if 'drm' in manifest:
 
@@ -253,46 +260,7 @@ def get_video_url(plugin,
 
     if video_format == 'hls':
 
-        root = os.path.dirname(json_parser["url"])
-
-        url_without_max_bitrate_list = json_parser["url"].split(
-            '&max_bitrate=')
-        if '&' in url_without_max_bitrate_list[1]:
-            url_without_max_bitrate = url_without_max_bitrate_list[
-                0] + '&' + url_without_max_bitrate_list[1].split('&')[1]
-        else:
-            url_without_max_bitrate = url_without_max_bitrate_list[0]
-        manifest = urlquick.get(
-            url_without_max_bitrate,
-            headers={'User-Agent': web_utils.get_random_ua},
-            max_age=-1)
-
-        lines = manifest.text.splitlines()
-        final_video_url = ''
-        all_datas_videos_quality = []
-        all_datas_videos_path = []
-        for k in range(0, len(lines) - 1):
-            if 'RESOLUTION=' in lines[k]:
-                all_datas_videos_quality.append(
-                    re.compile(r'RESOLUTION=(.*?),').findall(lines[k])[0])
-                all_datas_videos_path.append(root + '/' + lines[k + 1])
-        if DESIRED_QUALITY == "DIALOG":
-            seleted_item = xbmcgui.Dialog().select(
-                plugin.localize(LABELS['choose_video_quality']),
-                all_datas_videos_quality)
-
-            if seleted_item == -1:
-                return False
-
-            final_video_url = all_datas_videos_path[seleted_item]
-        elif DESIRED_QUALITY == 'BEST':
-            # Last video in the Best
-            for k in all_datas_videos_path:
-                url = k
-            final_video_url = url
-        else:
-            final_video_url = all_datas_videos_path[0]
-
+        final_video_url = json_parser["url"].replace('2800000', '4000000')
         if download_mode:
             return download.download_video(final_video_url, video_label)
         return final_video_url
@@ -305,7 +273,7 @@ def get_video_url(plugin,
         url_json = URL_VIDEO_STREAM % (video_id, video_format)
         htlm_json = urlquick.get(
             url_json,
-            headers={'User-Agent': web_utils.get_random_ua},
+            headers={'User-Agent': web_utils.get_random_ua()},
             max_age=-1)
         json_parser = json.loads(htlm_json.text)
 
@@ -339,9 +307,13 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
     video_format = 'hls'
     url_json = URL_VIDEO_STREAM % (video_id, video_format)
     htlm_json = urlquick.get(url_json,
-                             headers={'User-Agent': web_utils.get_random_ua},
+                             headers={'User-Agent': web_utils.get_random_ua()},
                              max_age=-1)
     json_parser = json.loads(htlm_json.text)
 
-    return json_parser['url'].replace('master_2000000.m3u8',
-                                      'master_4000000.m3u8')
+    if json_parser['code'] > 400:
+        plugin.notify('ERROR', plugin.localize(30713))
+        return False
+    else:
+        return json_parser['url'].replace('master_2000000.m3u8',
+                                          'master_4000000.m3u8')

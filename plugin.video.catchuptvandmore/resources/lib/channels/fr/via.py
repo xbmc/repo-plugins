@@ -144,14 +144,14 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
         live_html = urlquick.get(
             URL_LIVE_VIAVOSGES,
-            headers={'User-Agent': web_utils.get_random_ua},
+            headers={'User-Agent': web_utils.get_random_ua()},
             max_age=-1)
         root = live_html.parse()
         url_live_datas = URL_ROOT_VIAVOSGES + root.find(
             ".//div[@class='HDR_VISIO']").get('data-url') + '&mode=html'
 
         resp = urlquick.get(url_live_datas,
-                            headers={'User-Agent': web_utils.get_random_ua},
+                            headers={'User-Agent': web_utils.get_random_ua()},
                             max_age=-1)
         json_parser = json.loads(resp.text)
 
@@ -177,12 +177,12 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
         if item_id == 'viamirabelle':
             live_html = urlquick.get(
                 URL_LIVE_VIAMIRABELLE % item_id,
-                headers={'User-Agent': web_utils.get_random_ua},
+                headers={'User-Agent': web_utils.get_random_ua()},
                 max_age=-1)
         else:
             live_html = urlquick.get(
                 URL_LIVE % item_id,
-                headers={'User-Agent': web_utils.get_random_ua},
+                headers={'User-Agent': web_utils.get_random_ua()},
                 max_age=-1)
         root = live_html.parse()
         list_lives_datas = root.findall('.//iframe')
@@ -200,14 +200,14 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
             player_id = src_datas.split('player=')[1]
             resp2 = urlquick.get(
                 URL_STREAM_INFOMANIAK % player_id,
-                headers={'User-Agent': web_utils.get_random_ua},
+                headers={'User-Agent': web_utils.get_random_ua()},
                 max_age=-1)
             json_parser = json.loads(resp2.text)
             return 'https://' + json_parser["sPlaylist"]
         elif 'creacast' in src_datas:
             resp2 = urlquick.get(
                 src_datas,
-                headers={'User-Agent': web_utils.get_random_ua},
+                headers={'User-Agent': web_utils.get_random_ua()},
                 max_age=-1)
             return re.compile(r'file\: \"(.*?)\"').findall(resp2.text)[0]
         else:
@@ -218,7 +218,7 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
                     'action': 'video_info',
                     'refvideo': live_id
                 },
-                headers={'User-Agent': web_utils.get_random_ua},
+                headers={'User-Agent': web_utils.get_random_ua()},
                 max_age=-1)
             stream_jsonparser = json.loads(stream_json.text)
             return stream_jsonparser["data"]["bitrates"]["hls"]

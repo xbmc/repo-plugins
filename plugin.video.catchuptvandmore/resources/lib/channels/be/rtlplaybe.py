@@ -26,6 +26,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -37,8 +38,8 @@ import inputstreamhelper
 import json
 import re
 import urlquick
-import xbmc
-import xbmcgui
+from kodi_six import xbmc
+from kodi_six import xbmcgui
 
 # TO DO
 # Playlists (cas les blagues de TOTO)
@@ -123,7 +124,7 @@ def list_categories(plugin, item_id, **kwargs):
     """
     resp = urlquick.get(URL_ROOT % ('rtlbe_' + item_id),
                         headers={
-                            'User-Agent': web_utils.get_random_ua,
+                            'User-Agent': web_utils.get_random_ua(),
                             'x-customer-name': 'rtlbe'})
     json_parser = json.loads(resp.text)
 
@@ -149,7 +150,7 @@ def list_programs(plugin, item_id, category_id, **kwargs):
     """
     resp = urlquick.get(URL_CATEGORY % category_id,
                         headers={
-                            'User-Agent': web_utils.get_random_ua,
+                            'User-Agent': web_utils.get_random_ua(),
                             'x-customer-name': 'rtlbe'
                         })
     json_parser = json.loads(resp.text)
@@ -192,7 +193,7 @@ def list_program_categories(plugin, item_id, program_id, **kwargs):
     """
     resp = urlquick.get(URL_SUBCATEGORY % program_id,
                         headers={
-                            'User-Agent': web_utils.get_random_ua,
+                            'User-Agent': web_utils.get_random_ua(),
                             'x-customer-name': 'rtlbe'
                         })
     json_parser = json.loads(resp.text)
@@ -229,7 +230,7 @@ def list_videos(plugin, item_id, program_id, sub_category_id, **kwargs):
         url = URL_VIDEOS % (program_id, sub_category_id)
     resp = urlquick.get(url,
                         headers={
-                            'User-Agent': web_utils.get_random_ua,
+                            'User-Agent': web_utils.get_random_ua(),
                             'x-customer-name': 'rtlbe'
                         })
     json_parser = json.loads(resp.text)
@@ -312,7 +313,7 @@ def get_video_url(plugin,
     if cqu.get_kodi_version() < 18:
         video_json = urlquick.get(URL_JSON_VIDEO % video_id,
                                   headers={
-                                      'User-Agent': web_utils.get_random_ua,
+                                      'User-Agent': web_utils.get_random_ua(),
                                       'x-customer-name': 'rtlbe'
                                   },
                                   max_age=-1)
@@ -333,7 +334,7 @@ def get_video_url(plugin,
             elif 'h264' in asset["type"]:
                 manifest = urlquick.get(
                     asset['full_physical_path'],
-                    headers={'User-Agent': web_utils.get_random_ua},
+                    headers={'User-Agent': web_utils.get_random_ua()},
                     max_age=-1)
                 if 'drm' not in manifest.text:
                     all_datas_videos_quality.append(asset["video_quality"])
@@ -370,7 +371,7 @@ def get_video_url(plugin,
     else:
         video_json = urlquick.get(URL_JSON_VIDEO % video_id,
                                   headers={
-                                      'User-Agent': web_utils.get_random_ua,
+                                      'User-Agent': web_utils.get_random_ua(),
                                       'x-customer-name': 'rtlbe'
                                   },
                                   max_age=-1)
@@ -410,7 +411,7 @@ def get_video_url(plugin,
         resp2 = urlquick.post(URL_COMPTE_LOGIN,
                               data=payload,
                               headers={
-                                  'User-Agent': web_utils.get_random_ua,
+                                  'User-Agent': web_utils.get_random_ua(),
                                   'referer': 'https://www.rtlplay.be/connexion'
                               })
         json_parser = json.loads(
@@ -431,7 +432,7 @@ def get_video_url(plugin,
             'x-auth-gigya-signature': account_signature,
             'x-auth-gigya-signature-timestamp': account_timestamp,
             'x-auth-gigya-uid': account_id,
-            'User-Agent': web_utils.get_random_ua,
+            'User-Agent': web_utils.get_random_ua(),
             'x-customer-name': 'rtlbe'
         }
         token_json = urlquick.get(URL_TOKEN_DRM % (account_id, video_id),
@@ -516,7 +517,7 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
     resp2 = urlquick.post(URL_COMPTE_LOGIN,
                           data=payload,
                           headers={
-                              'User-Agent': web_utils.get_random_ua,
+                              'User-Agent': web_utils.get_random_ua(),
                               'referer': 'https://www.rtlplay.be/connexion'
                           })
     json_parser = json.loads(
@@ -538,7 +539,7 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
         'x-auth-gigya-signature': account_signature,
         'x-auth-gigya-signature-timestamp': account_timestamp,
         'x-auth-gigya-uid': account_id,
-        'User-Agent': web_utils.get_random_ua,
+        'User-Agent': web_utils.get_random_ua(),
         'x-customer-name': 'rtlbe'
     }
     channel = 'rtlbe_' + item_id
@@ -551,7 +552,7 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     video_json = urlquick.get(URL_LIVE_JSON % (channel),
                               headers={
-                                  'User-Agent': web_utils.get_random_ua,
+                                  'User-Agent': web_utils.get_random_ua(),
                                   'x-customer-name': 'rtlbe'},
                               max_age=-1)
     json_parser = json.loads(video_json.text)

@@ -16,7 +16,9 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+
 # Settings tabs/categories (from 30000 to 30019)
+
 msgctxt "#30000"
 msgid "Main menu"
 msgstr ""
@@ -50,8 +52,8 @@ msgid "Websites"
 msgstr ""
 
 
-
 # Settings line separators (from 30010 to 30029)
+
 msgctxt "#30010"
 msgid "Hide main menu categories"
 msgstr ""
@@ -82,6 +84,7 @@ msgstr ""
 
 
 # Main menu (from 30030 to 30049)
+
 msgctxt "#30030"
 msgid "Live TV"
 msgstr ""
@@ -100,6 +103,7 @@ msgstr ""
 
 
 # Countries (from 30050 to 30079)
+
 msgctxt "#30050"
 msgid "France"
 msgstr ""
@@ -156,7 +160,9 @@ msgctxt "#30063"
 msgid "China"
 msgstr ""
 
+
 # Channels (from 30080 to 30129)
+
 msgctxt "#30080"
 msgid "French channels"
 msgstr ""
@@ -213,11 +219,13 @@ msgctxt "#30093"
 msgid "Chinese channels"
 msgstr ""
 
+
 # Websites (from 30130 to 30149)
 
 
 
 # Quality and content (from 30150 to 30199)
+
 msgctxt "#30150"
 msgid "Video quality"
 msgstr ""
@@ -298,6 +306,7 @@ msgctxt "#30169"
 msgid "Enable Subtitle if present in the content"
 msgstr ""
 
+
 # Download (from 30200 to 30239)
 
 msgctxt "#30200"
@@ -367,6 +376,7 @@ msgctxt "#30251"
 msgid "UKTVPlay Password"
 msgstr ""
 
+
 # Reserved space for other tab/category in settins (from 30260 to 30339)
 
 
@@ -381,11 +391,25 @@ msgctxt "#30371"
 msgid "Cache cleared"
 msgstr ""
 
+msgctxt "#30372"
+msgid "Send Kodi log to the developers when an error occurred"
+msgstr ""
+
+msgctxt "#30373"
+msgid "Delete favourites"
+msgstr ""
+
+msgctxt "#30374"
+msgid "Favourites deleted"
+msgstr ""
+
 
 # Reserved space for other tab/category in settins (from 30400 to 30499)
 
 
+
 # Context menu (from 30500 to 30599)
+
 msgctxt "#30500"
 msgid "Move down"
 msgstr ""
@@ -402,8 +426,17 @@ msgctxt "#30503"
 msgid "Download"
 msgstr ""
 
+msgctxt "#30504"
+msgid "List Videos (type=extrait)"
+msgstr ""
+
+msgctxt "#30505"
+msgid "List Videos (type=episode)"
+msgstr ""
+
 
 # Dialog boxes (from 30600 to 30699)
+
 msgctxt "#30600"
 msgid "Information"
 msgstr ""
@@ -434,6 +467,7 @@ msgstr ""
 
 
 # Others (from 30700 to 30799)
+
 msgctxt "#30700"
 msgid "More videos..."
 msgstr ""
@@ -522,6 +556,15 @@ msgctxt "#30721"
 msgid "Content requiring a subscription"
 msgstr ""
 
+msgctxt "#30722"
+msgid "TV guide"
+msgstr ""
+
+msgctxt "#30723"
+msgid "An error occurred while getting TV guide"
+msgstr ""
+
+
 # Favourites (from 30800 to 30859)
 
 msgctxt "#30800"
@@ -556,6 +599,7 @@ msgctxt "#30807"
 msgid "This favourite raises an error, would you like to delete it?"
 msgstr ""
 
+
 # Log uploader (from 30860 to 30889)
 
 msgctxt "#30860"
@@ -571,3 +615,28 @@ msgid "Sorry, sharing your error log failed"
 msgstr ""
 
 
+# HTTP error (from 30890 to 30919)
+
+msgctxt "#30890"
+msgid "HTTP Error code"
+msgstr ""
+
+msgctxt "#30891"
+msgid "Inaccessible content"
+msgstr ""
+
+msgctxt "#30892"
+msgid "Authentication is required to access the resource"
+msgstr ""
+
+msgctxt "#30893"
+msgid "Access denied (Geographical restriction?)"
+msgstr ""
+
+msgctxt "#30894"
+msgid "This resource requires a payment or a subscription"
+msgstr ""
+
+msgctxt "#30895"
+msgid "This resource is no longer available"
+msgstr ""

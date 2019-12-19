@@ -24,7 +24,10 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
+from __future__ import division
 
+from builtins import str
+from resources.lib.common import old_div
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -37,8 +40,8 @@ import inputstreamhelper
 import json
 import re
 import urlquick
-import xbmc
-import xbmcgui
+from kodi_six import xbmc
+from kodi_six import xbmcgui
 
 # TO DO
 
@@ -87,8 +90,8 @@ def list_categories(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    for category_name_title, category_name_value in CATEGORIES_MODE.items(
-    ):
+    for category_name_title, category_name_value in list(CATEGORIES_MODE.items(
+    )):
 
         item = Listitem()
         item.label = category_name_title
@@ -98,8 +101,8 @@ def list_categories(plugin, item_id, **kwargs):
         item_post_treatment(item)
         yield item
 
-    for category_name_title, category_name_value in CATEGORIES_MODE_AZ.items(
-    ):
+    for category_name_title, category_name_value in list(CATEGORIES_MODE_AZ.items(
+    )):
 
         item = Listitem()
         item.label = category_name_title
@@ -199,7 +202,7 @@ def list_videos(plugin, item_id, program_id, program_season_number, **kwargs):
                     program_season_number)]:
                 at_least_one_item = True
                 video_title = video_datas["title"]
-                video_duration = int(video_datas["videoDuration"]) / 1000
+                video_duration = old_div(int(video_datas["videoDuration"]), 1000)
                 video_plot = video_datas["description"]
                 video_image = video_datas["image"]["src"]
                 video_id = video_datas["path"]

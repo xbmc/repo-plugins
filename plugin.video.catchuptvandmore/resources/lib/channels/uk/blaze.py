@@ -100,7 +100,7 @@ def list_programs(plugin, item_id, **kwargs):
 @Route.register
 def list_seasons(plugin, item_id, program_url, **kwargs):
 
-    resp = urlquick.get(program_url, headers={"User-Agent": web_utils.get_random_ua})
+    resp = urlquick.get(program_url, headers={"User-Agent": web_utils.get_random_ua()})
     root = resp.parse("ul", attrs={"class": "nav nav-tabs"})
 
     for season_datas in root.iterfind(".//h3"):

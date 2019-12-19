@@ -102,7 +102,7 @@ def get_video_url(plugin,
                   **kwargs):
     """Get video URL and start video player"""
     video_html = urlquick.get(video_url).text
-    video_id = re.compile(r'www.youtube.com/embed/(.*?)[\?\"]').findall(
+    video_id = re.compile(r'videoID\=\"(.*?)\"').findall(
         video_html)[0]
 
     return resolver_proxy.get_stream_youtube(plugin, video_id, download_mode,

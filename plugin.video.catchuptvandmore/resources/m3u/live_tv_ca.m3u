@@ -6,25 +6,25 @@
 ##	NTV
 ##	ntvca
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ca/ntvca.png" group-title="Canada",NTV
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=ntvca&item_module=resources.lib.channels.ca.ntvca&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ntvca&item_module=resources.lib.channels.ca.ntvca&item_dict={}
 
 ##	TVA
 ##	tva
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ca/tva.png" group-title="Canada",TVA
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=tva&item_module=resources.lib.channels.ca.tva&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tva&item_module=resources.lib.channels.ca.tva&item_dict={}
 
 ##	Télé-Québec
 ##	telequebec
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ca/telequebec.png" group-title="Canada",Télé-Québec
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=telequebec&item_module=resources.lib.channels.ca.telequebec&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telequebec&item_module=resources.lib.channels.ca.telequebec&item_dict={}
 
 ##	ICI Télé
 ##	icitele
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ca/icitele.png" group-title="Canada",ICI Télé
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={}
 
 ##	Télé-Mag
 ##	telemag
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ca/telemag.png" group-title="Canada",Télé-Mag
-plugin://plugin.video.catchuptvandmore/main/live_bridge/?item_id=telemag&item_module=resources.lib.channels.ca.telemag&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telemag&item_module=resources.lib.channels.ca.telemag&item_dict={}
 

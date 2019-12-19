@@ -36,7 +36,7 @@ import urlquick
 
 # TO DO
 
-URL_ROOT = 'http://icitelevision.ca'
+URL_ROOT = 'https://icitelevision.ca'
 
 URL_LIVE = URL_ROOT + '/live-video/'
 

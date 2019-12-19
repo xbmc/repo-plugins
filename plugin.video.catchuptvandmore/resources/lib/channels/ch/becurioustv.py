@@ -61,7 +61,7 @@ def list_categories(plugin, item_id, **kwargs):
     - ...
     """
     resp = urlquick.get(URL_ROOT,
-                        headers={'User-Agent': web_utils.get_random_ua})
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse("ul", attrs={"class": "sub-menu"})
 
     for category_datas in root.iterfind(".//li"):

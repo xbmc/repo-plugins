@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -154,7 +155,7 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(
-        video_url, headers={'User-Agent': web_utils.get_random_ua}, max_age=-1)
+        video_url, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
     data_account = re.compile(r'data-account\=\"(.*?)\"').findall(resp.text)[0]
     data_player = re.compile(r'data-player\=\"(.*?)\"').findall(resp.text)[0]
     data_video_id = re.compile(r'data-video-id\=\"(.*?)\"').findall(

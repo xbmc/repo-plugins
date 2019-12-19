@@ -108,7 +108,7 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(video_url,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     root = resp.parse()
     stream_url = root.find(".//iframe[@id='main_video']").get('src')

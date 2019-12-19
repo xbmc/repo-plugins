@@ -63,7 +63,7 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
         final_language = item_dict['language']
 
     resp = urlquick.get(URL_LIVE,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     url_lives = re.compile(r'data-stream-hsl-url=\'(.*?)\'').findall(resp.text)
 

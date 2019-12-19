@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -79,7 +80,7 @@ def list_categories(plugin, item_id, **kwargs):
     - ...
     """
     CATEGORIES_VIDEOS = eval('CATEGORIES_VIDEOS_%s' % DESIRED_LANGUAGE)
-    for category_url, category_title in CATEGORIES_VIDEOS.items():
+    for category_url, category_title in list(CATEGORIES_VIDEOS.items()):
         if 'magazines' in category_url or 'shows' in category_url:
             item = Listitem()
             item.label = category_title
@@ -382,11 +383,15 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
     if final_language == 'EN':
         url_live = URL_LIVE_EN
         resp = urlquick.get(url_live, max_age=-1)
-        return re.compile(r'file\: \'(.*?)\'').findall(resp.text)[0]
+        live_id = re.compile(r'youtube\.com\/embed\/(.*?)[\?\"]').findall(
+            resp.text)[0]
+        return resolver_proxy.get_stream_youtube(plugin, live_id, False)
     elif final_language == 'AR':
         url_live = URL_LIVE_AR
         resp = urlquick.get(url_live, max_age=-1)
-        return re.compile(r'file\'\: \'(.*?)\'').findall(resp.text)[0]
+        live_id = re.compile(r'youtube\.com\/embed\/(.*?)[\?\"]').findall(
+            resp.text)[0]
+        return resolver_proxy.get_stream_youtube(plugin, live_id, False)
     elif final_language == 'FR':
         url_live = URL_LIVE_FR
         resp = urlquick.get(url_live, max_age=-1)
@@ -394,6 +399,6 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
     elif final_language == 'ES':
         url_live = URL_LIVE_ES
         resp = urlquick.get(url_live, max_age=-1)
-        live_id = re.compile(r'youtube\.com\/embed\/(.*?)\?').findall(
+        live_id = re.compile(r'youtube\.com\/embed\/(.*?)[\?\"]').findall(
             resp.text)[0]
         return resolver_proxy.get_stream_youtube(plugin, live_id, False)

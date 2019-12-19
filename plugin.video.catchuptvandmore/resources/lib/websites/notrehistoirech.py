@@ -46,7 +46,7 @@ def root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     item = Listitem()
     item.label = plugin.localize(LABELS['All videos'])
-    category_url = URL_ROOT + '/search?types=video&page=%s&sort=-origin_date'
+    category_url = URL_ROOT + '/search?scope=media&types[0]=video&page=%s'
 
     item.set_callback(list_videos,
                       item_id=item_id,
@@ -55,25 +55,6 @@ def root(plugin, item_id, **kwargs):
     item_post_treatment(item)
     yield item
 
-    resp = urlquick.get(URL_ROOT + '/search?types=video')
-    root = resp.parse("div",
-                      attrs={"class": "facet-group facet-group--tags open"})
-
-    for category in root.iterfind(".//label"):
-        item = Listitem()
-        item.label = category.find('input').tail.strip()
-        category_id = category.find('input').get('value')
-        category_url = URL_ROOT + '/search?types=video' + \
-            '&tags=%s&sort=-origin_date' % category_id + \
-            '&page=%s'
-
-        item.set_callback(list_videos,
-                          item_id=item_id,
-                          category_url=category_url,
-                          page=1)
-        item_post_treatment(item)
-        yield item
-
 
 @Route.register
 def list_videos(plugin, item_id, category_url, page, **kwargs):
@@ -81,11 +62,16 @@ def list_videos(plugin, item_id, category_url, page, **kwargs):
     resp = urlquick.get(category_url % page)
     root = resp.parse()
 
-    for episode in root.iterfind(".//div[@class='media-item']"):
+    for episode in root.iterfind(".//div[@class='w-full sm:w-1/2 md:w-1/3 px-2 md:px-3 mb-5 md:mb-6 group']"):
         item = Listitem()
-        item.label = episode.get('title')
-        video_url = URL_ROOT + episode.find('.//a').get('href')
-        item.art['thumb'] = episode.find('.//img').get('src')
+        item.label = episode.find(
+            ".//a[@class='text-black text-sm leading-xs font-semibold block']").text.strip()
+        video_url = episode.find(
+            ".//a[@class='text-black text-sm leading-xs font-semibold block']").get('href')
+        item.art['thumb'] = episode.find(
+            ".//img[@class='w-full h-auto align-top']").get('data-src')
+        item.info['plot'] = episode.find(
+            ".//div[@class='text-grey-darker text-sm leading-xs mb-3']").text
 
         item.set_callback(get_video_url,
                           item_id=item_id,
@@ -111,7 +97,7 @@ def get_video_url(plugin,
 
     video_html = urlquick.get(video_url).text
     video_url = re.compile(
-        r'property=\"og\:video\" content=\"(.*?)\"').findall(video_html)[0]
+        r'source src=\"(.*?)\"').findall(video_html)[0]
 
     if download_mode:
         return download.download_video(video_url, video_label)

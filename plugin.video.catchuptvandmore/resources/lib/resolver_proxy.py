@@ -32,10 +32,11 @@ from resources.lib import web_utils
 from resources.lib import cq_utils
 from resources.lib import download
 
+import inputstreamhelper
 import json
 import re
 import urlquick
-import xbmcgui
+from kodi_six import xbmcgui
 
 # TO DO
 # Quality VIMEO
@@ -76,10 +77,13 @@ URL_MTVNSERVICES_STREAM_ACCOUNT_EP = 'https://media-utils.mtvnservices.com/servi
                                      '&accountOverride=%s&ep=%s'
 # videoURI, accountOverride, ep
 
-URL_FRANCETV_LIVE_PROGRAM_INFO = 'http://sivideo.webservices.francetelevisions.fr/tools/getInfosOeuvre/v2/?idDiffusion=%s'
+URL_FRANCETV_LIVE_PROGRAM_INFO = 'https://sivideo.webservices.francetelevisions.fr/tools/getInfosOeuvre/v2/?idDiffusion=%s'
 # VideoId
 
-URL_FRANCETV_HDFAUTH_URL = 'http://hdfauth.francetv.fr/esi/TA?format=json&url=%s'
+URL_FRANCETV_CATCHUP_PROGRAM_INFO = 'https://player.webservices.francetelevisions.fr/v1/videos/%s?country_code=%s&device_type=mobile&browser=chrome'
+# VideoId
+
+URL_FRANCETV_HDFAUTH_URL = 'https://hdfauthftv-a.akamaihd.net/esi/TA?format=json&url=%s'
 # Url
 
 
@@ -124,14 +128,14 @@ def get_stream_vimeo(plugin,
     if referer is not None:
         html_vimeo = urlquick.get(url_vimeo,
                                   headers={
-                                      'User-Agent': web_utils.get_random_ua,
+                                      'User-Agent': web_utils.get_random_ua(),
                                       'Referer': referer
                                   },
                                   max_age=-1)
     else:
         html_vimeo = urlquick.get(
             url_vimeo,
-            headers={'User-Agent': web_utils.get_random_ua},
+            headers={'User-Agent': web_utils.get_random_ua()},
             max_age=-1)
     json_vimeo = json.loads(
         '{' +
@@ -182,10 +186,12 @@ def get_brightcove_video_json(plugin,
         URL_BRIGHTCOVE_VIDEO_JSON % (data_account, data_video_id),
         headers={
             'User-Agent':
-            web_utils.get_random_ua,
+            web_utils.get_random_ua(),
             'Accept':
             'application/json;pk=%s' %
-            (get_brightcove_policy_key(data_account, data_player))
+            (get_brightcove_policy_key(data_account, data_player)),
+            'X-Forwarded-For':
+            plugin.setting.get_string('header_x-forwarded-for')
         })
     json_parser = json.loads(resp.text)
 
@@ -249,136 +255,77 @@ def get_francetv_video_stream(plugin,
                               download_mode=False,
                               video_label=None):
 
-    resp = urlquick.get(URL_FRANCETV_LIVE_PROGRAM_INFO % id_diffusion,
+    geoip_value = web_utils.geoip()
+    resp = urlquick.get(URL_FRANCETV_CATCHUP_PROGRAM_INFO % (id_diffusion, geoip_value),
                         max_age=-1)
     json_parser = json.loads(resp.text)
 
-    if 'videos' not in json_parser:
+    if 'video' not in json_parser:
         plugin.notify('ERROR', plugin.localize(30716))
         return False
 
-    subtitles = []
-    if plugin.setting.get_boolean('active_subtitle'):
-        if json_parser['subtitles']:
-            subtitles_list = json_parser['subtitles']
-            for subtitle in subtitles_list:
-                if subtitle['format'] == 'vtt':
-                    subtitles.append(subtitle['url'])
-
-    url_selected = ''
-
-    if DESIRED_QUALITY == "DIALOG":
-        all_datas_videos_quality = []
-        all_datas_videos_path = []
-
-        for video in json_parser['videos']:
-            if 'hds' not in video['format']:
-                if video['format'] == 'hls_v5_os':
-                    all_datas_videos_quality.append("HD")
-                else:
-                    all_datas_videos_quality.append("SD")
-                all_datas_videos_path.append((video['url'], video['drm']))
-
-        seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(LABELS['choose_video_quality']),
-            all_datas_videos_quality)
-
-        if seleted_item == -1:
-            return False
-
-        url_selected = all_datas_videos_path[seleted_item][0]
-        drm = all_datas_videos_path[seleted_item][1]
-
-    elif DESIRED_QUALITY == "BEST":
-        for video in json_parser['videos']:
-            if 'hds' not in video['format']:
-                if video['format'] == 'hls_v5_os':
-                    url_selected = video['url']
-                    drm = video['drm']
-                    break
-                else:
-                    url_selected = video['url']
-                    drm = video['drm']
+    all_video_datas = []
+    video_datas = json_parser['video']
+    # Implementer Caption (found case)
+    # Implement DRM (found case)
+    if video_datas['drm'] is not None:
+        all_video_datas.append((video_datas['format'], 'True', video_datas['token']))
     else:
-        for video in json_parser['videos']:
-            if 'hds' not in video['format']:
-                if video['format'] == 'm3u8-download':
-                    url_selected = video['url']
-                    drm = video['drm']
-                    break
-                else:
-                    url_selected = video['url']
-                    drm = video['drm']
+        all_video_datas.append((video_datas['format'], 'False', video_datas['token']))
 
-    if drm:
-        file_prgm2 = urlquick.get(
-            URL_FRANCETV_HDFAUTH_URL % (url_selected),
-            headers={'User-Agent': web_utils.get_random_ua},
-            max_age=-1)
-        json_parser3 = json.loads(file_prgm2.text)
-        url_selected = json_parser3['url']
-        url_selected = url_selected.replace('.m3u8:', '.m4u9:')
+    url_selected = all_video_datas[0][2]
+    if 'hls' in all_video_datas[0][0]:
+        json_parser2 = json.loads(
+            urlquick.get(url_selected, max_age=-1).text)
+        final_video_url = json_parser2['url']
+        if download_mode:
+            return download.download_video(final_video_url, video_label)
+        return final_video_url
+    elif 'dash' in all_video_datas[0][0]:
+        if download_mode:
+            xbmcgui.Dialog().ok('Info', plugin.localize(30603))
+            return False
+        is_helper = inputstreamhelper.Helper('mpd')
+        if not is_helper.check_inputstream():
+            return False
+        json_parser2 = json.loads(
+            urlquick.get(url_selected, max_age=-1).text)
 
-    if url_selected is None:
-        plugin.notify('ERROR', plugin.localize(30716))
-        return False
-
-    if 'cloudreplayfrancetv' in url_selected:
-        file_prgm2 = urlquick.get(
-            URL_FRANCETV_HDFAUTH_URL % (url_selected),
-            headers={'User-Agent': web_utils.get_random_ua},
-            max_age=-1)
-        json_parser3 = json.loads(file_prgm2.text)
-        url_selected = json_parser3['url']
-        if drm:
-            url_selected = url_selected.replace('.m3u8:', '.m4u9:')
-
-    final_video_url = url_selected
-
-    if download_mode:
-        return download.download_video(final_video_url, video_label)
-
-    if len(subtitles) > 0:
         item = Listitem()
-        item.path = final_video_url
-        for subtitle in subtitles:
-            item.subtitles.append(subtitle)
+        item.path = json_parser2['url']
+        item.property['inputstreamaddon'] = 'inputstream.adaptive'
+        item.property['inputstream.adaptive.manifest_type'] = 'mpd'
         item.label = item_dict['label']
         item.info.update(item_dict['info'])
         item.art.update(item_dict['art'])
+
         return item
     else:
-        return final_video_url
+        # Return info the format is not known
+        return False
 
 
 def get_francetv_live_stream(plugin, live_id):
 
+    # Move Live TV on the new API
     json_parser_liveId = json.loads(
         urlquick.get(URL_FRANCETV_LIVE_PROGRAM_INFO % live_id,
                      max_age=-1).text)
-    url_hls_v1 = ''
-    url_hls_v5 = ''
-    url_hls = ''
-
-    for video in json_parser_liveId['videos']:
-        if 'format' in video:
-            if 'hls_v1_os' in video['format']:
-                url_hls_v1 = video['url']
-            if 'hls_v5_os' in video['format']:
-                url_hls_v5 = video['url']
-            if 'hls' in video['format']:
-                url_hls = video['url']
 
     final_url = ''
+    geoip_value = web_utils.geoip()
+    for video in json_parser_liveId['videos']:
+        if 'format' in video:
+            if 'hls_v' in video['format'] or video['format'] == 'hls':
+                if video['geoblocage'] is not None:
+                    for value_geoblocage in video['geoblocage']:
+                        if geoip_value == value_geoblocage:
+                            final_url = video['url']
+                else:
+                    final_url = video['url']
 
-    # Case France 3 Région
-    if url_hls_v1 == '' and url_hls_v5 == '':
-        final_url = url_hls
-
-    if final_url == '' and url_hls_v5 != '':
-        final_url = url_hls_v5
-    elif final_url == '':
-        final_url = url_hls_v1
+    if final_url == '':
+        return None
 
     json_parser2 = json.loads(
         urlquick.get(URL_FRANCETV_HDFAUTH_URL % (final_url), max_age=-1).text)

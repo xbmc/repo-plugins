@@ -25,8 +25,12 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-import xbmc
-import xbmcgui
+import os
+from builtins import str
+from builtins import range
+from kodi_six import xbmc
+from kodi_six import xbmcgui
+from kodi_six import xbmcvfs
 
 from codequick import utils, storage, Script
 from hashlib import md5
@@ -118,7 +122,7 @@ def add_item_to_favourites(plugin, item_dict={}, **kwargs):
     with storage.PersistentDict("favourites.pickle") as db:
 
         # Compute hash value used as key in the DB
-        item_hash = md5(str(item_dict)).hexdigest()
+        item_hash = md5(str(item_dict).encode('utf-8')).hexdigest()
 
         item_dict['params']['order'] = len(db)
 
@@ -158,7 +162,7 @@ def remove_favourite_item(plugin, item_hash):
         # We need to fix the order param
         # in order to not break the move up/down action
         menu = []
-        for item_hash, item_dict in db.items():
+        for item_hash, item_dict in list(db.items()):
             item = (item_dict['params']['order'], item_hash)
 
             menu.append(item)
@@ -189,7 +193,7 @@ def move_favourite_item(plugin, direction, item_hash):
         item_to_move_order = db[item_hash]['params']['order']
 
         menu = []
-        for item_hash, item_dict in db.items():
+        for item_hash, item_dict in list(db.items()):
             item = (item_dict['params']['order'], item_hash, item_dict)
 
             menu.append(item)
@@ -237,3 +241,15 @@ def ask_to_delete_error_fav_item(params):
                                Script.localize(30807))
     if r:
         remove_favourite_item(plugin=None, item_hash=params['item_hash'])
+
+
+@Script.register
+def delete_favourites(plugin):
+    """
+    Callback function of 'Delete favourites'
+    setting button
+    """
+
+    Script.log('Delete favourites db')
+    xbmcvfs.delete(os.path.join(Script.get_info('profile'), 'favourites.pickle'))
+    Script.notify(Script.localize(30374), '')

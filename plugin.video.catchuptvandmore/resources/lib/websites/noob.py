@@ -52,7 +52,7 @@ CATEGORIES = {
 
 def root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
-    for category_name, category_url in CATEGORIES.items():
+    for category_name, category_url in list(CATEGORIES.items()):
         item = Listitem()
         item.label = category_name
         item.set_callback(list_shows,

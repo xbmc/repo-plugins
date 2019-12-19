@@ -49,8 +49,8 @@ def item2dict(item):
     item_dict['art'] = dict(item.art)
     item_dict['info'] = dict(item.info)
     item_dict['stream'] = dict(item.stream)
-    item_dict['context'] = dict(item.context)
-    item_dict['properties'] = item.property
+    item_dict['context'] = list(item.context)
+    item_dict['properties'] = dict(item.property)
     item_dict['params'] = item.params
     item_dict['label'] = item.label
     return item_dict
@@ -63,9 +63,6 @@ def item_post_treatment(item, **kwargs):
     - is_downloadable (bool) (default: False)
     """
 
-    # Add `Add to favourites` context menu to the item
-    add_fav_context(item, item2dict(item), **kwargs)
-
     # Add `Download` context menu to the item
     # if is_downloadable is given and True
     if kwargs.get('is_downloadable', False):
@@ -73,5 +70,8 @@ def item_post_treatment(item, **kwargs):
                             Script.localize(LABELS['Download']),
                             download_mode=True,
                             **item.params)
+
+    # Add `Add to favourites` context menu to the item
+    add_fav_context(item, item2dict(item), **kwargs)
 
     return

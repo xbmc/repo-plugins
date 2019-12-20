@@ -88,7 +88,7 @@ class Adaptive(object):
         if manifest_type is None:
             raise ValueError("No manifest type set")
 
-        strm.Adaptive = True
+        strm.Adaptive = True    # NOSONAR
 
         # See https://github.com/peak3d/inputstream.adaptive/blob/master/inputstream.adaptive/addon.xml.in
         strm.add_property("inputstreamaddon", addon)

@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 import datetime
+import pytz
 
 from resources.lib import chn_class
 
@@ -107,7 +108,7 @@ class Channel(chn_class.Channel):
         self._add_data_parser("https://www.svtplay.se/klipp/", updater=self.update_video_html_item)
 
         # Update via the new API urls
-        # self._add_data_parser("https://www.svt.se/videoplayer-api/", updater=self.update_video_api_item)
+        self._add_data_parser("https://www.svt.se/videoplayer-api/", updater=self.update_video_api_item)
 
         # ===============================================================================================================
         # non standard items
@@ -115,7 +116,7 @@ class Channel(chn_class.Channel):
         self.__genre_id = "genre_id"
         self.__apollo_data = None
         self.__expires_text = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
-        self.__timezone = "Europe/Stockholm"
+        self.__timezone = pytz.timezone("Europe/Stockholm")
 
         # ===============================================================================================================
         # Test cases:
@@ -276,7 +277,7 @@ class Channel(chn_class.Channel):
             item = self.create_api_tvshow_type(result_set)
         elif api_type == "Single":
             item = self.create_api_single_type(result_set)
-        elif api_type == "Clip":
+        elif api_type == "Clip" or api_type == "Trailer":
             item = self.create_api_clip_type(result_set)
         elif api_type == "Episode":
             item = self.create_api_episode_type(result_set, add_parent_title)
@@ -452,10 +453,22 @@ class Channel(chn_class.Channel):
             if is_live_now:
                 item.name = "{} [COLOR gold](live)[/COLOR]".format(item.name)
 
-            start = live_data["start"].split('.')[0].split("+")[0]
-            start_time = DateHelper.get_date_from_string(start, "%Y-%m-%dT%H:%M:%S")
-            item.set_date(*start_time[0:6])
-            item.name = "{:02}:{:02} - {}".format(start_time.tm_hour, start_time.tm_min, item.name)
+            start = live_data["start"]
+            if start.endswith("Z"):
+                start_time = DateHelper.get_datetime_from_string(start, "%Y-%m-%dT%H:%M:%SZ", "UTC")
+                start_time = start_time.astimezone(self.__timezone)
+                item.set_date(start_time.year, start_time.month, start_time.day,
+                              start_time.hour, start_time.minute, start_time.second)
+                hour = start_time.hour
+                minute = start_time.minute
+            else:
+                start = start.split('.')[0].split("+")[0]
+                start_time = DateHelper.get_date_from_string(start, "%Y-%m-%dT%H:%M:%S")
+                item.set_date(*start_time[0:6])
+                hour = start_time.tm_hour
+                minute = start_time.tm_min
+
+            item.name = "{:02}:{:02} - {}".format(hour, minute, item.name)
 
         return item
 

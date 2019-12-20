@@ -47,9 +47,10 @@ class Channel(chn_class.Channel):
                               name="Most viewed", json=True,
                               parser=["results"], creator=self.create_json_video_item)
 
-        item_regex = r'href="/(?<url>[^/]+/(?<id>\d+)[^"]+)"[^>]*>[^<]+</a>\W+<figure>[\W\w]' \
-                     r'{0,3000}?<h2[^>]*>(?<title>[^<]+)</h2>\W+<p[^>]+>\s{0,4}(?<description>[^<]*?)' \
-                     r'\s+(?:(?<duration>\d{1,3})\smin\s.\s+)?<span class="usp">(?<description2>[^<]+)'
+        item_regex = r'href="/(?<url>[^/]+/(?<id>\d+)[^"]+)"[^>]*>[^<]+</a>\W+<figure[^>]*>[\W\w]' \
+                     r'{0,3000}?<h2[^>]*>(?<title>[^<]+)</h2>\W+<p[^>]+>[^>]*<span[^>]+>' \
+                     r'(?<description>[^<]*).{2}<[^>]+>\s*<span[^>]+>(?<duration>\d{1,3})\smin[^>]+' \
+                     r'>\s*<span[^>]*>(?<description2>[^<]+)'
         item_regex = Regexer.from_expresso(item_regex)
 
         single_video_regex = r'<meta \w+="name" content="(?:[^:]+: )?(?<title>[^"]+)' \
@@ -73,20 +74,17 @@ class Channel(chn_class.Channel):
                               parser=season_regex, creator=self.create_folder_item)
 
         # Categories
-        cat_reg = r'<a[^>]+href="(?<url>/blad[^"]+)"[^>]*>(?<title>[^<]+)<'
+        cat_reg = r'<a[^>]+href="(?<url>/blad[^"]+/(?<slug>[^"]+))"[^>]*>(?<title>[^<]+)<'
         cat_reg = Regexer.from_expresso(cat_reg)
         self._add_data_parser("https://urplay.se/", name="Category parser",
                               match_type=ParserData.MatchExact,
                               parser=cat_reg,
                               creator=self.create_category_item)
 
-        self._add_data_parser("https://urplay.se/bladdra/", name="Category listing Videos",
-                              preprocessor=self.__find_category_videos,
-                              parser=item_regex, creator=self.create_video_item)
-
-        self._add_data_parser("https://urplay.se/bladdra/", name="Category listing Folders",
-                              preprocessor=self.__find_category_folders,
-                              parser=item_regex, creator=self.create_folder_item)
+        self._add_data_parsers(["https://urplay.se/api/bff/v1/search?play_category",
+                                "https://urplay.se/api/bff/v1/search?response_type=category"],
+                               name="Category content", json=True,
+                               parser=["results"], creator=self.create_json_item)
 
         # Searching
         self._add_data_parser("https://urplay.se/search/json", json=True,
@@ -99,6 +97,29 @@ class Channel(chn_class.Channel):
         #===========================================================================================
         # non standard items
         self.__videoItemFound = False
+        self.__cateogory_slugs = {
+            "dokumentarfilmer": "dokument%C3%A4rfilmer",
+            "forelasningar": "f%C3%B6rel%C3%A4sningar",
+            "kultur-och-historia": "kultur%20och%20historia",
+            "reality-och-livsstil": "reality%20och%20livsstil",
+            "samhalle": "samh%C3%A4lle"
+        }
+        self.__cateogory_urls = {
+            "radio": "https://urplay.se/api/bff/v1/search?response_type=category"
+                     "&singles_and_series=true"
+                     "&rows=1000&start=0"
+                     "&type=programradio&view=title",
+            "syntolkat": "https://urplay.se/api/bff/v1/search?response_type=category"
+                         "&singles_and_series=true"
+                         "&rows=1000&start=0"
+                         "&view=title"
+                         "&with_audio_description=true",
+            "teckensprak": "https://urplay.se/api/bff/v1/search?response_type=category"
+                           "&language=sgn-SWE"
+                           "&rows=1000&start=0"
+                           "&view=title"                         
+                           "&singles_and_series=true&view=title"
+        }
 
         #===========================================================================================
         # Test cases:
@@ -124,7 +145,20 @@ class Channel(chn_class.Channel):
         if 'thumburl' in result_set and not result_set['thumburl'].startswith("http"):
             result_set['thumburl'] = "%s/%s" % (self.baseUrl, result_set["thumburl"])
 
-        result_set["url"] = "%s?rows=1000&start=0" % (result_set["url"],)
+        slug = result_set["slug"]
+        url = self.__cateogory_urls.get(slug)
+        slug = self.__cateogory_slugs.get(slug, slug)
+
+        if url is None:
+            result_set["url"] = "https://urplay.se/api/bff/v1/search?play_category={}" \
+                                "&response_type=category" \
+                                "&rows=1000" \
+                                "&singles_and_series=true" \
+                                "&start=0" \
+                                "&view=title".format(slug)
+        else:
+            result_set["url"] = url
+
         return chn_class.Channel.create_folder_item(self, result_set)
 
     def add_categories_and_search(self, data):
@@ -181,6 +215,32 @@ class Channel(chn_class.Channel):
 
         url = "https://urplay.se/search/json?query=%s"
         return chn_class.Channel.search_site(self, url)
+
+    def create_json_item(self, result_set):
+        """ Creates a new MediaItem for an folder or video.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'folder'.
+        :rtype: MediaItem|None
+
+        """
+
+        Logger.trace(result_set)
+
+        item_type = result_set["format"]
+        if item_type == "video":
+            return self.create_json_video_item(result_set)
+        elif item_type == "audio":
+            # Apparently the audio is always linking to a show folder.
+            return self.create_json_episode_item(result_set)
+        else:
+            Logger.warning("Found unknown type: %s", item_type)
+            return None
 
     def create_json_episode_item(self, result_set):
         """ Creates a new MediaItem for an episode.
@@ -509,16 +569,6 @@ class Channel(chn_class.Channel):
 
     def create_search_result_serie(self, result_set):
         return self.__create_search_result(result_set, "serie")
-
-    def __find_category_videos(self, data):
-        data = data[:data.find("product-browsing-list")]
-        return self.__split_categories(data)[0], []
-
-    def __find_category_folders(self, data):
-        return self.__split_categories(data)[1], []
-
-    def __split_categories(self, data):
-        return data.split("product-browsing-list")
 
     def __create_search_result(self, result_set, result_type):
         """ Creates a MediaItem of type 'folder' using the result_set from the regex.

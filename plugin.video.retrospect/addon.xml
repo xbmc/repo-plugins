@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.1.2"
+        version="5.1.3"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,9 +132,9 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.1.2 - Changelog - 2019-11-25[/B]
+        <news>[B]Retrospect v5.1.3 - Changelog - 2019-12-20[/B]
 
-This update mainly contains channel fixes for NPO, NOS and the SVT channel.
+This update mainly contains channel fixes for the SVT and UR Play channel.
 
 [B]Framework related[/B]
 -
@@ -143,11 +143,10 @@ This update mainly contains channel fixes for NPO, NOS and the SVT channel.
 -
 
 [B]Channel related[/B]
-* Fixed: NPO EPG titles had trailing &quot;-&quot; chars
-* Fixed: NOS.nl videos did not play (Fixes #1263)
-* Fixed: SVT major API rebuild (Fixes #1254)
-* Fixed: incorrect NPO Plus indicators (Fixes #1257)
-* Fixed: NPO Token expiring before cookies expires (Possibly Fixes #1260)
+* Fixed: SVT &quot;trailer&quot; type was not recognised
+* Fixed: Timestamp issue with SVT
+* Fixed: SVT live streams (Fixes #1266)
+* Fixed: UR Play did not list (Fixes #1267)
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

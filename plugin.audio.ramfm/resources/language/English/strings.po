@@ -1,0 +1,162 @@
+# Kodi Media Center language file
+# Addon Name: RAM FM Eighties Hit Radio
+# Addon id: plugin.audio.ramfm
+# Addon Provider: spoyser
+msgid ""
+msgstr ""
+
+msgctxt "#30017"
+msgid "RAM FM is a non-profit organisation run by volunteers"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Please show your support by visiting www.ramfm.org"
+msgstr ""
+
+msgctxt "#30019"
+msgid "and clicking the [COLOR ffffa500]orange donate[/COLOR] button"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Now Recording Stream to"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Click Cancel to Stop Recording"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Record to folder..."
+msgstr ""
+
+msgctxt "#30023"
+msgid "You have not set the default recordings folder."
+msgstr ""
+
+msgctxt "#30024"
+msgid "Please update the add-on settings and try again."
+msgstr ""
+
+msgctxt "#30025"
+msgid "files"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Record stream as..."
+msgstr ""
+
+msgctxt "#30027"
+msgid "if you are listening to RAM FM"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Listen Now"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#30030"
+msgid "You can only use the 'Song Requester'"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Song Requester"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Your request was approved"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Thank you for using"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Oooooops......"
+msgstr ""
+
+msgctxt "#30035"
+msgid "We're sorry but we can't play your request"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Record Stream"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Podcasts"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Song recently played"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Artist recently played"
+msgstr ""
+
+msgctxt "#30046"
+msgid "You cannot use the 'Song Requester'"
+msgstr ""
+
+msgctxt "#30047"
+msgid "feature during a live DJ broadcast."
+msgstr ""
+
+msgctxt "#30048"
+msgid "Please try again later."
+msgstr ""
+
+msgctxt "#30049"
+msgid "Please wait [COLOR lime]%s[/COLOR] minutes before making another request"
+msgstr ""
+
+msgctxt "#30050"
+msgid "RAM FM Failed to respond, please try again later"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Listen to Stream (192kbps)"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Listen to Stream (128kbps)"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Listen to Stream ( 64kbps)"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Listen to Stream (320kbps)"
+msgstr ""
+	
+msgctxt "#30100"
+msgid "General"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Play stream automatically"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Hide recently requested artists"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Recordings"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Default recordings folder"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Ask for folder"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Ask for filename"
+msgstr ""

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.booksshouldbefree" name="Loyal Books" version="1.0.8" provider-name="spoyser">
+<addon id="plugin.audio.booksshouldbefree" name="Loyal Books" version="1.0.9" provider-name="spoyser">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -9,6 +9,7 @@
   </extension>
   
   <extension point="xbmc.addon.metadata">
+    <broken>The addon is not maintained anymore</broken> 
     <summary>Loyal Books (formerly Books Should Be Free)</summary>
     <description lang="en">Over 7000 free public domain audiobooks</description>
      <platform>all</platform>

@@ -20,4 +20,5 @@ class ZBPlayableItem(ZBDirectoryItem):
 	def get_listItem(self):
 		li = xbmcgui.ListItem(label=self.Title, label2=self.Title2, iconImage=self.Image)
 		li.setProperty('IsPlayable', 'true')
+		li.setInfo( type="video", infoLabels=None)
 		return li

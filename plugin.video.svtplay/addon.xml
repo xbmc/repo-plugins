@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.svtplay"
        name="SVT Play"
-       version="4.1.0"
+       version="4.1.1"
        provider-name="nilzen">
   <requires>
     <import addon="script.module.parsedom" version="1.2.0"/>
@@ -24,7 +24,8 @@
     <source>https://github.com/nilzen/xbmc-svtplay</source>
     <forum>http://forum.xbmc.org/showthread.php?tid=67110</forum>
     <news>
-- Major under-the-hood changes. Please reports any regressions.
+    Kodi >=17.x (krypton) is required to use this addon.
     </news>
+    <broken>Kodi >=17.x (krypton) is required</broken>
   </extension>
 </addon>

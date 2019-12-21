@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="General">
-        <setting label="30104" default="false"                    type="bool" id="is-premium-member"/>
-        <setting label="30105" default=""                         type="text" id="username"                 enable="eq(-1,true)"/>
-        <setting label="30106" default=""                         type="text" id="password"                 enable="eq(-2,true)" option="hidden"/>
-       	<setting label="30610" default="false"                    type="bool" id="onlyshowvideoscategory"/>
-    </category>
-</settings>

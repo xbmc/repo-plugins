@@ -1,14 +1,16 @@
+dist: xenial
 language: python
-python:
-  - "3.6"
+python: 3.7
 
 install:
   - pip install kodi-addon-checker
 
+before_script:
+- git config core.quotepath false
+
 # command to run our tests
 script:
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then kodi-addon-checker --branch=gotham; fi'
-  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then kodi-addon-checker --branch=gotham --PR $(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq); fi'
+  - kodi-addon-checker --branch=gotham $([ "$TRAVIS_PULL_REQUEST" != "false" ] && echo --PR $(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq))
 
 notifications:
   webhooks: https://www.travisbuddy.com/

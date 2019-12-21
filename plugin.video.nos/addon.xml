@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nos" name="NOS" version="4.0.1" provider-name="Erwin Junge">
+<addon id="plugin.video.nos" name="NOS" version="4.0.2" provider-name="Erwin Junge,Nerbert Fekkes">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="xbmc.python" version="2.14.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
     <import addon="script.module.requests" version="2.9.1"/>
     <import addon="script.module.beautifulsoup" version="3.2.1"/>
@@ -11,7 +11,9 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <news>v4.0.1 (2018-08-11)
+    <news>v4.0.2 (2019-07-25)
+	- Update parser to new NOS website structure
+	v4.0.1 (2018-08-11)
     - Update parser to new NOS css classes
     - Drop support for Sportjournaal due to DRM
     v4.0.0 (2017-10-07)
@@ -19,14 +21,14 @@
     <platform>all</platform>
     <language>nl</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <source>https://github.com/ErwinJunge/XBMC-plugin.video.nos</source>
-    <email>erwin@junge.nl</email>
+    <source>https://github.com/artofcode/XBMC-plugin.video.nos</source>
+    <email>nerbert@artofcode.nl</email>
     <assets>
       <icon>icon.png</icon>
     </assets>
     <summary lang="en">Watch videos from NOS (Dutch news service)</summary>
     <summary lang="nl">Bekijk videos van de NOS</summary>
-    <description lang="en">Watch videos from various NOS sites. For feature requests and bug reports: erwin@junge.nl</description>
-    <description lang="nl">Bekijk videos van verscheidene NOS sites. Voor functie verzoeken en het rapporteren van bugs: erwin@junge.nl</description>
+    <description lang="en">Watch videos from various NOS sites. For feature requests and bug reports: nerbert@artofcode.nl</description>
+    <description lang="nl">Bekijk videos van verscheidene NOS sites. Voor functie verzoeken en het rapporteren van bugs: nerbert@artofcode.nl</description>
   </extension>
 </addon>

@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: ORF TVthek
 # Addon id: plugin.video.orftvthek
-# Addon version: 0.7.0
+# Addon version: 0.9.0
 # Addon Provider: sofaking
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: 2017-02-05 22:17+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-11-09 14:05+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"
@@ -198,17 +198,37 @@ msgid "This Video is offline"
 msgstr "Dieses Video ist offline"
 
 msgctxt "#30053"
-msgid "Adaptiv"
-msgstr ""
+msgid "Adaptive"
+msgstr "Adaptiv"
 
 msgctxt "#30054"
-msgid "Stream Methode"
-msgstr ""
+msgid "Stream Method"
+msgstr "Stream Methode"
 
 msgctxt "#30055"
 msgid "HLS"
 msgstr ""
 
 msgctxt "#30056"
-msgid "Progressive Streaming aktivieren"
-msgstr ""
+msgid "Enable Progressive Streaming Method"
+msgstr "Progressive Streaming aktivieren"
+
+msgctxt "#30057"
+msgid "In Focus"
+msgstr "Im Fokus"
+
+msgctxt "#30058"
+msgid "Show 'Play Chapters'"
+msgstr "'Kapitel abspielen' anzeigen"
+
+msgctxt "#30059"
+msgid "Play Full Video"
+msgstr "Ganzes Video abspielen"
+
+msgctxt "#30060"
+msgid "Play Chapters"
+msgstr "Kapitel abspielen"
+
+msgctxt "#30061"
+msgid "Show Full Livestream Schedule"
+msgstr "Livestream Programm anzeigen"

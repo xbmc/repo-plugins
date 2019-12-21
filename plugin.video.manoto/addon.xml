@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.manoto"
        name="Manoto TV"
-       version="2.1.0"
+       version="2.1.1"
        provider-name="babak">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>
-    <import addon="script.module.beautifulsoup" version="3.2.1"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>Manoto TV</summary>
-    <description>Manoto TV Addon for Kodi</description>
+    <summary lang="en">Manoto TV</summary>
+    <description lang="en">Manoto TV Addon for Kodi</description>
     <platform>all</platform>
     <language>fa</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <forum></forum>
-    <website></website>
+    <website>https://www.manototv.com/</website>
     <email>babak@habibis.net</email>
     <source>https://github.com/bbk79/xbmc-glwiz-addon</source>
   </extension>

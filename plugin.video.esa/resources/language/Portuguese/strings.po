@@ -1,0 +1,67 @@
+# Kodi Media Center language file
+# Addon Name: ESA Videos
+# Addon id: plugin.video.esa
+# Addon Provider: Jose Antonio Montes (jamontes)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Jose Antonio Montes (jamontes)\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/xbmc-addons/language/pt/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "Next page"
+msgstr "Próxima página"
+
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "Vídeo não suportado"
+
+msgctxt "#30012"
+msgid "Couldn't locate video url"
+msgstr "Não foi possível localizar o vídeo url"
+
+# Empty strings from id 30013 to 30100
+
+msgctxt "#30101"
+msgid "Language (for videos)"
+msgstr "Language (vídeos)"
+
+msgctxt "#30102"
+msgid "Debug (enable logs)"
+msgstr "Debug (enable registos)"
+
+msgctxt "#30103"
+msgid "Sort criteria"
+msgstr "Critério de ordenação"
+
+msgctxt "#30104"
+msgid "Search"
+msgstr "Pesquisa"
+
+msgctxt "#30105"
+msgid "Search text"
+msgstr "Texto Pesquisa"
+
+msgctxt "#30106"
+msgid "Previous page"
+msgstr "Página Anterior"
+
+msgctxt "#30107"
+msgid "All the videos"
+msgstr "Todos os Vídeos"
+
+msgctxt "#30108"
+msgid "Other Categories"
+msgstr "Outras Categorias"
+
+msgctxt "#30109"
+msgid "Show thumbnails as fanart"
+msgstr "Exibir miniaturas como fanart"

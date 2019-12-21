@@ -1,8 +1,0 @@
-fanart.jpg
-URL: http://www.perez-colomer.com
-
-incon.png
-URL: http://vimeo.com/attactv
-
-logo.png
-URL: http://vimeo.com/attactv

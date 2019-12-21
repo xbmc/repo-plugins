@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: ORF TVthek
 # Addon id: plugin.video.orftvthek
-# Addon version: 0.7.0
+# Addon version: 0.9.0
 # Addon Provider: sofaking
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: 2017-02-05 22:17+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-11-09 14:00+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"
@@ -57,19 +57,13 @@ msgctxt "#30007"
 msgid "Search"
 msgstr ""
 
-#empty string with id 30008
-
 msgctxt "#30009"
 msgid "Broadcasted: "
 msgstr ""
 
-#empty string with id 30010
-
 msgctxt "#30011"
 msgid "Runtime"
 msgstr ""
-
-#empty strings from id 30012 to 30013
 
 msgctxt "#30014"
 msgid "No Results"
@@ -78,8 +72,6 @@ msgstr ""
 msgctxt "#30015"
 msgid "Play all"
 msgstr ""
-
-#empty strings from id 30016 to 30017
 
 msgctxt "#30018"
 msgid "Missed a Show?"
@@ -92,8 +84,6 @@ msgstr ""
 msgctxt "#30020"
 msgid "Stream Offline"
 msgstr ""
-
-#empty string with id 30021
 
 msgctxt "#30022"
 msgid "Video Resolution"
@@ -151,8 +141,6 @@ msgctxt "#30035"
 msgid "Start the stream?"
 msgstr ""
 
-#empty string with id 30036
-
 msgctxt "#30037"
 msgid "Blacklist"
 msgstr ""
@@ -160,8 +148,6 @@ msgstr ""
 msgctxt "#30038"
 msgid "# Blacklist"
 msgstr ""
-
-#empty string with id 30039
 
 msgctxt "#30040"
 msgid "# Remove %s from the Blacklist #"
@@ -225,4 +211,24 @@ msgstr ""
 
 msgctxt "#30056"
 msgid "Enable Progressive Streaming Method"
+msgstr ""
+
+msgctxt "#30057"
+msgid "In Focus"
+msgstr ""
+
+msgctxt "#30058"
+msgid "Show 'Play Chapters'"
+msgstr ""
+
+msgctxt "#30059"
+msgid "Play Full Video"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Play Chapters"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Show Full Livestream Schedule"
 msgstr ""

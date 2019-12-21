@@ -1,3 +1,10 @@
+﻿[B]Version 5.0.12 - 2018-02-05[/B]
+- Updated copyright(readded) + added new strings.po language format for EN/DA translations.
+
+[B]Version 5.0.11 - 2018-02-05[/B]
+- Fixing encrypted streams - Thanks to @krogsbell on the kodi forums.
+- Moving "ownership" of the addon, hence Tommy have stopped developing on the addon.
+
 [B]Version 5.0.10 - 2017-11-01[/B]
 - Rollback to DR API v1.2
 

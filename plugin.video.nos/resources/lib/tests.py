@@ -10,7 +10,7 @@ def test_tree_walk():
         assert 'endpoint' in item['path']
         assert 'category_url' in item['path']
         videos = nos.show_category(item['path']['category_url'])
-        assert len(videos) > 1
+        assert len(videos) >= 1
         for video in videos:
             assert 'label' in video
             assert 'path' in video

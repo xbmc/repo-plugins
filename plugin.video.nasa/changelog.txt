@@ -1,3 +1,10 @@
+2.1.0 (04.12.2019)
+  - update to python3
+  - fix live streams
+  - use new version of xbmcswift2
+  - smaller entrypoint
+  - fix languages
+
 2.0.3 (01.11.2015)
   - added 720p ISS HD Earth Viewing Experiment stream (thx to weekendsource)
 

@@ -1,8 +1,6 @@
 from __future__ import division
 
-from builtins import str
 from builtins import object
-from past.utils import old_div
 import re
 import xbmc
 import urllib.parse
@@ -634,7 +632,7 @@ class TV3cat(object):
             durada = ""
 
             if milisec != None:
-                durada = old_div(milisec, 1000)
+                durada = milisec // 1000
 
 
             if descripcio == None:

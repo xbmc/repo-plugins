@@ -1,4 +1,6 @@
-﻿v1.4.2
+﻿v1.4.3
+- Code redesigned and added Python 2/3 compatibility
+v1.4.2
 - Fixed website changes. Changed live urls channels
 
 v1.4.1

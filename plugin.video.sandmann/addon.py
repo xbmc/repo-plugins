@@ -41,10 +41,11 @@ interval = addon.getSettingInt("interval")
 title, description, thumbnail_image, fanart_image, stream = getEpisodeData(
     episodes_url, quality)
 
-li_episode = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_image)
-li_episode.setProperty("fanart_image", fanart_image)
+li_episode = xbmcgui.ListItem(label=title)
+li_episode.setArt({'thumb': thumbnail_image, 'fanart': fanart_image})
 li_episode.setInfo(type="Video", infoLabels={
-                   "Title": title, "Plot": description})
+    "Title": title, "Plot": description
+})
 xbmcplugin.addDirectoryItem(addon_handle, stream, li_episode, False)
 
 

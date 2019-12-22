@@ -32,9 +32,14 @@ def getTitle(content):
     return content["ueberschrift"]
 
 
+def getDescription(content):
+    return content["dachzeile"]
+
+
 def getImage(content, width):
-    image_url = content["bilder"][0]["schemaUrl"]
-    return image_url.replace("##width##", str(width))
+    schema_url = content["bilder"][0]["schemaUrl"]
+    image_url = schema_url.replace("##width##", str(width))
+    return image_url.replace("?mandant=ard", "")
 
 
 def getEpisodeUrl(content):
@@ -49,7 +54,10 @@ def getStreamId(episode_url):
 def getEpisodeData(episodes_url, quality):
     episodes = getJsonFromUrl(episodes_url)
     episode_data = episodes["sections"][0]["modCons"][1]["mods"][0]["inhalte"][0]
+    # episode_data = episodes["sections"][0]["modCons"][1]["mods"][0]["inhalte"][1]
+
     title = getTitle(episode_data)
+    description = getDescription(episode_data)
     thumbnail_image = getImage(episode_data, 640)
     fanart_image = getImage(episode_data, 1920)
 
@@ -69,4 +77,4 @@ def getEpisodeData(episodes_url, quality):
         5: mediaStreamArray[3]["_stream"][1]  # "1800k
     }
 
-    return [title, thumbnail_image, fanart_image, streams[quality]]
+    return [title, description, thumbnail_image, fanart_image, streams[quality]]

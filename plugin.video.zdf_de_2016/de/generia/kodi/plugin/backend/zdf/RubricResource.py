@@ -20,7 +20,7 @@ moduleItemVideoPattern = compile('&quot;1280x720&quot;:&quot;([^\?]*)\?cb')
 stageTeaserPattern = getTagPattern('div', 'title-table')
 stageTeaserTextPattern = compile('class="teaser-text"[^>]*>([^<]*)</?[^>]*>')
 
-listPattern = compile('class="([^"]*b-cluster\s[^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-(content|video)-module[^"]*|[^"]*stage-content[^"]|[^"]*(b-topics-module|b-newsstream)[^"]*)"[^>]*>')
+listPattern = compile('class="([^"]*b-cluster|[^"]*b-cluster\s[^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-(content|video)-module[^"]*|[^"]*stage-content[^"]|[^"]*(b-topics-module|b-newsstream)[^"]*)"[^>]*>')
 
 sectionTitlePattern = compile('<h2\s*class="[^"]*title[^"]*"[^>]*>([^<]*)</h2>')
 sectionItemPattern = getTagPattern('article', 'b-content-teaser-item')

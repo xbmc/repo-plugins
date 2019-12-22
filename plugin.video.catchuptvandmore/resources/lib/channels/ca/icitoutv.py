@@ -36,8 +36,8 @@ import inputstreamhelper
 import json
 import re
 import urlquick
-import xbmc
-import xbmcgui
+from kodi_six import xbmc
+from kodi_six import xbmcgui
 
 # TO DO
 # some videos are paid video (add account ?)

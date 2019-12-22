@@ -25,18 +25,22 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
+from builtins import range
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import download
+import resources.lib.cq_utils as cqu
 from resources.lib.listitem_utils import item_post_treatment, item2dict
 
+import inputstreamhelper
 import json
 import re
 import os
 import urlquick
-import xbmcgui
+from kodi_six import xbmcgui
 
 # TO DO
 # Move WAT to resolver.py (merge with mytf1 code)
@@ -49,7 +53,13 @@ URL_VIDEOS = 'https://www.%s.fr/videos'
 
 URL_WAT_BY_ID = 'https://www.wat.tv/embedframe/%s'
 
-URL_VIDEO_STREAM = 'https://www.wat.tv/get/webhtml/%s'
+URL_VIDEO_STREAM_WAT = 'https://www.wat.tv/get/webhtml/%s'
+
+URL_VIDEO_STREAM = 'https://delivery.tf1.fr/mytf1-wrd/%s?format=%s'
+# videoId, format['hls', 'dash']
+
+URL_LICENCE_KEY = 'https://drm-wide.tf1.fr/proxy?id=%s|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=drm-wide.tf1.fr|R{SSM}|'
+# videoId
 
 DESIRED_QUALITY = Script.setting['quality']
 
@@ -72,7 +82,10 @@ def list_categories(plugin, item_id, **kwargs):
     """
     item = Listitem()
     item.label = plugin.localize(LABELS['All videos'])
-    item.set_callback(list_videos, item_id=item_id, page='1')
+    if item_id == 'histoire':
+        item.set_callback(list_videos, item_id=item_id, page='0')
+    else:
+        item.set_callback(list_videos, item_id=item_id, page='1')
     item_post_treatment(item)
     yield item
 
@@ -80,6 +93,7 @@ def list_categories(plugin, item_id, **kwargs):
 @Route.register
 def list_videos(plugin, item_id, page, **kwargs):
 
+    resp = urlquick.get(URL_VIDEOS % item_id)
     if item_id == 'tvbreizh':
         resp = urlquick.get(URL_VIDEOS % item_id)
     else:
@@ -106,7 +120,8 @@ def list_videos(plugin, item_id, page, **kwargs):
         item.set_callback(get_video_url,
                           item_id=item_id,
                           video_label=LABELS[item_id] + ' - ' + item.label,
-                          video_url=video_url)
+                          video_url=video_url,
+                          item_dict=item2dict(item))
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -118,64 +133,130 @@ def list_videos(plugin, item_id, page, **kwargs):
 def get_video_url(plugin,
                   item_id,
                   video_url,
+                  item_dict=None,
                   download_mode=False,
                   video_label=None,
                   **kwargs):
 
     resp = urlquick.get(video_url,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
-    video_id = re.compile(r'www.wat.tv/embedframe/(.*?)[\"\?]').findall(
-        resp.text)[0]
-    url_wat_embed = URL_WAT_BY_ID % video_id
-    wat_embed_html = urlquick.get(
-        url_wat_embed,
-        headers={'User-Agent': web_utils.get_random_ua},
-        max_age=-1)
-    stream_id = re.compile('UVID=(.*?)&').findall(wat_embed_html.text)[0]
-    url_json = URL_VIDEO_STREAM % stream_id
-    htlm_json = urlquick.get(url_json,
-                             headers={'User-Agent': web_utils.get_random_ua},
-                             max_age=-1)
-    json_parser = json.loads(htlm_json.text)
+    if len(re.compile(r'www.wat.tv/embedframe/(.*?)[\"\?]').findall(resp.text)) > 0:
+        video_id = re.compile(r'www.wat.tv/embedframe/(.*?)[\"\?]').findall(
+            resp.text)[0]
+        url_wat_embed = URL_WAT_BY_ID % video_id
+        wat_embed_html = urlquick.get(
+            url_wat_embed,
+            headers={'User-Agent': web_utils.get_random_ua()},
+            max_age=-1)
+        stream_id = re.compile('UVID=(.*?)&').findall(wat_embed_html.text)[0]
+        url_json = URL_VIDEO_STREAM_WAT % stream_id
+        htlm_json = urlquick.get(url_json,
+                                 headers={'User-Agent': web_utils.get_random_ua()},
+                                 max_age=-1)
+        json_parser = json.loads(htlm_json.text)
 
-    # Check DRM in the m3u8 file
-    manifest = urlquick.get(json_parser["hls"],
-                            headers={'User-Agent': web_utils.get_random_ua},
-                            max_age=-1)
-    if 'drm' in manifest:
-        Script.notify("TEST", plugin.localize(LABELS['drm_notification']),
-                      Script.NOTIFY_INFO)
-        return False
+        # Check DRM in the m3u8 file
+        manifest = urlquick.get(json_parser["hls"],
+                                headers={'User-Agent': web_utils.get_random_ua()},
+                                max_age=-1)
+        if 'drm' in manifest:
+            Script.notify("TEST", plugin.localize(LABELS['drm_notification']),
+                          Script.NOTIFY_INFO)
+            return False
 
-    root = os.path.dirname(json_parser["hls"])
+        root = os.path.dirname(json_parser["hls"])
 
-    manifest = urlquick.get(json_parser["hls"].split('&max_bitrate=')[0],
-                            headers={'User-Agent': web_utils.get_random_ua},
-                            max_age=-1)
+        manifest = urlquick.get(json_parser["hls"].split('&max_bitrate=')[0],
+                                headers={'User-Agent': web_utils.get_random_ua()},
+                                max_age=-1)
 
-    lines = manifest.text.splitlines()
-    final_video_url = ''
-    all_datas_videos_quality = []
-    all_datas_videos_path = []
-    for k in range(0, len(lines) - 1):
-        if 'RESOLUTION=' in lines[k]:
-            all_datas_videos_quality.append(
-                re.compile(r'RESOLUTION=(.*?),').findall(lines[k])[0])
-            all_datas_videos_path.append(root + '/' + lines[k + 1])
-    if DESIRED_QUALITY == "DIALOG":
-        seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(LABELS['choose_video_quality']),
-            all_datas_videos_quality)
-        final_video_url = all_datas_videos_path[seleted_item]
-    elif DESIRED_QUALITY == 'BEST':
-        # Last video in the Best
-        for k in all_datas_videos_path:
-            url = k
-        final_video_url = url
+        lines = manifest.text.splitlines()
+        final_video_url = ''
+        all_datas_videos_quality = []
+        all_datas_videos_path = []
+        for k in range(0, len(lines) - 1):
+            if 'RESOLUTION=' in lines[k]:
+                all_datas_videos_quality.append(
+                    re.compile(r'RESOLUTION=(.*?)$').findall(lines[k])[0].split(',')[0])
+                all_datas_videos_path.append(root + '/' + lines[k + 1])
+        if DESIRED_QUALITY == "DIALOG":
+            seleted_item = xbmcgui.Dialog().select(
+                plugin.localize(LABELS['choose_video_quality']),
+                all_datas_videos_quality)
+            final_video_url = all_datas_videos_path[seleted_item]
+        elif DESIRED_QUALITY == 'BEST':
+            # Last video in the Best
+            for k in all_datas_videos_path:
+                url = k
+            final_video_url = url
+        else:
+            final_video_url = all_datas_videos_path[0]
+
+        if download_mode:
+            return download.download_video(final_video_url, video_label)
+        return final_video_url
+
     else:
-        final_video_url = all_datas_videos_path[0]
+        video_id = re.compile(r'tf1.fr/embedplayer/(.*?)[\"\?]').findall(
+            resp.text)[0]
+        video_format = 'hls'
+        url_json = URL_VIDEO_STREAM % (video_id, video_format)
+        htlm_json = urlquick.get(url_json,
+                                 headers={'User-Agent': web_utils.get_random_ua()},
+                                 max_age=-1)
+        json_parser = json.loads(htlm_json.text)
 
-    if download_mode:
-        return download.download_video(final_video_url, video_label)
-    return final_video_url
+        if json_parser['code'] >= 400:
+            plugin.notify('ERROR', plugin.localize(30716))
+            return False
+
+        # Check DRM in the m3u8 file
+        manifest = urlquick.get(json_parser["url"],
+                                headers={
+                                    'User-Agent': web_utils.get_random_ua()},
+                                max_age=-1).text
+        if 'drm' in manifest:
+
+            if cqu.get_kodi_version() < 18:
+                xbmcgui.Dialog().ok('Info', plugin.localize(30602))
+                return False
+            else:
+                video_format = 'dash'
+
+        if video_format == 'hls':
+
+            final_video_url = json_parser["url"].replace('2800000', '4000000')
+            if download_mode:
+                return download.download_video(final_video_url, video_label)
+            return final_video_url
+
+        else:
+            if download_mode:
+                xbmcgui.Dialog().ok('Info', plugin.localize(30603))
+                return False
+
+            url_json = URL_VIDEO_STREAM % (video_id, video_format)
+            htlm_json = urlquick.get(
+                url_json,
+                headers={'User-Agent': web_utils.get_random_ua()},
+                max_age=-1)
+            json_parser = json.loads(htlm_json.text)
+
+            is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+            if not is_helper.check_inputstream():
+                return False
+
+            item = Listitem()
+            item.path = json_parser["url"]
+            item.label = item_dict['label']
+            item.info.update(item_dict['info'])
+            item.art.update(item_dict['art'])
+            item.property['inputstreamaddon'] = 'inputstream.adaptive'
+            item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+            item.property[
+                'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+            item.property[
+                'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % video_id
+
+            return item

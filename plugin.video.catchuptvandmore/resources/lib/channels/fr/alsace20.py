@@ -175,14 +175,14 @@ def get_video_url(plugin,
         return False
 
     resp = urlquick.get(
-        video_url, headers={"User-Agent": web_utils.get_random_ua}, max_age=-1)
+        video_url, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
     root = resp.parse()
     url_stream_datas = URL_ROOT + root.find(".//div[@class='HDR_VISIO']").get(
         "data-url") + "&mode=html"
 
     resp2 = urlquick.get(
         url_stream_datas,
-        headers={"User-Agent": web_utils.get_random_ua},
+        headers={"User-Agent": web_utils.get_random_ua()},
         max_age=-1)
     json_parser = json.loads(resp2.text)
 
@@ -211,14 +211,14 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
         return False
 
     resp = urlquick.get(
-        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua}, max_age=-1)
+        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
     root = resp.parse()
     url_live_datas = URL_ROOT + root.find(".//div[@class='HDR_VISIO']").get(
         "data-url") + "&mode=html"
 
     resp2 = urlquick.get(
         url_live_datas,
-        headers={"User-Agent": web_utils.get_random_ua},
+        headers={"User-Agent": web_utils.get_random_ua()},
         max_age=-1)
     json_parser = json.loads(resp2.text)
 

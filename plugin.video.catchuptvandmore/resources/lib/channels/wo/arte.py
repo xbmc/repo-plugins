@@ -35,7 +35,7 @@ from resources.lib.listitem_utils import item_post_treatment, item2dict
 import json
 import re
 import urlquick
-import xbmcgui
+from kodi_six import xbmcgui
 
 # TO DO
 #   Most recent

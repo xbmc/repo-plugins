@@ -22,6 +22,9 @@
 """
 from random import randint
 
+import json
+import urlquick
+
 user_agents = [
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
     '(KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
@@ -43,3 +46,17 @@ def get_ua():
 
 def get_random_ua():
     return user_agents[randint(0, len(user_agents) - 1)]
+
+
+# code adapted from weather.weatherbit.io - Thanks Ronie
+def geoip():
+    # list of alternative providers https://ahmadawais.com/best-api-geolocating-an-ip-address/)
+    try:
+        resp = urlquick.get('http://ip-api.com/json', max_age=-1)
+        data = json.loads(resp.text)
+        if 'countryCode' in data:
+            return data['countryCode']
+        else:
+            return None
+    except Exception:
+        return None

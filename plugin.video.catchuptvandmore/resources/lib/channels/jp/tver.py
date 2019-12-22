@@ -110,7 +110,7 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(video_url,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     stream_datas = resp.text.split('addPlayer(')[1].split(');')[0].replace(
         "\n", "").replace("\r", "").split(',')

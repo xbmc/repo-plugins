@@ -39,8 +39,7 @@ import urlquick
 # TO DO
 # Add Region
 # Check different cases of getting videos
-# Add more button videos
-# Fix images in list videos
+# Passer sur l'API V2 ?
 
 URL_API = 'https://api.radio-canada.ca/validationMedia/v1/Validation.html'
 
@@ -49,6 +48,9 @@ URL_LIVE = URL_API + '?connectionType=broadband&output=json&multibitrate=true&de
 URL_ROOT = 'https://ici.radio-canada.ca'
 
 URL_EMISSION = URL_ROOT + '/tele/emissions'
+
+URL_EMISSION_VIDEOS = URL_ROOT + '/v35/Component/EpisodeSummaries/Content?seasonId=%s&pageIndex=%s'
+# ProgramId, Page
 
 URL_STREAM_REPLAY = URL_API + '?connectionType=broadband&output=json&multibitrate=true&deviceType=ipad&appCode=medianet&idMedia=%s'
 # VideoId
@@ -74,8 +76,6 @@ def list_programs(plugin, item_id, **kwargs):
 
         if '/tele/' in programs_datas["url"]:
             program_title = programs_datas["title"]
-            program_image = programs_datas["picture"]["url"].replace(
-                '{0}', '648').replace('{1}', '4x3')
             program_url = ''
             if 'telejournal-22h' in programs_datas["url"] or \
                     'telejournal-18h' in programs_datas["url"]:
@@ -87,51 +87,41 @@ def list_programs(plugin, item_id, **kwargs):
 
             item = Listitem()
             item.label = program_title
-            item.art['thumb'] = program_image
             item.set_callback(list_videos,
                               item_id=item_id,
-                              program_url=program_url)
+                              program_url=program_url,
+                              page='1')
             item_post_treatment(item)
             yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, program_url, **kwargs):
+def list_videos(plugin, item_id, program_url, page, **kwargs):
 
     resp = urlquick.get(program_url)
-    root = resp.parse()
-    if root.find(".//ul[@class='episodes-container']") is not None:
+    program_id = re.compile(r'data-seasonid\=\"(.*?)\"').findall(
+        resp.text)[0]
+    resp2 = urlquick.get(URL_EMISSION_VIDEOS % (program_id, page))
+    root = resp2.parse()
 
-        for video_datas in root.find(
-                ".//ul[@class='episodes-container']").iterfind('.//li'):
+    for video_datas in root.iterfind(".//a[@class='medianet-content']"):
 
-            # Check the IF maybe keep just icon-play?
-            if 'icon-play' in video_datas.find('.//a').get('class') or \
-                    video_datas.find(".//div[@class='play medium']") is not None:
-                video_title = utils.strip_tags(
-                    video_datas.find('.//a').get('title'))
-                video_image = ''
-                if video_datas.find('.//img') is not None:
-                    if 'http' in video_datas.find('.//img').get('src'):
-                        video_image = video_datas.find('.//img').get('src')
-                    else:
-                        video_image = URL_ROOT + video_datas.find(
-                            './/img').get('src')
-                video_url = URL_ROOT + video_datas.find('.//a').get('href')
+        video_title = video_datas.get('title')
+        video_image = URL_ROOT + video_datas.find(".//img").get('src')
+        video_url = URL_ROOT + video_datas.get('href')
 
-                item = Listitem()
-                item.label = video_title
-                item.art['thumb'] = video_image
+        item = Listitem()
+        item.label = video_title
+        item.art['thumb'] = video_image
 
-                item.set_callback(get_video_url,
-                                  item_id=item_id,
-                                  video_label=LABELS[item_id] + ' - ' +
-                                  item.label,
-                                  video_url=video_url)
-                item_post_treatment(item,
-                                    is_playable=True,
-                                    is_downloadable=True)
-                yield item
+        item.set_callback(get_video_url,
+                          item_id=item_id,
+                          video_label=LABELS[item_id] + ' - ' + item.label,
+                          video_url=video_url)
+        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        yield item
+
+    yield Listitem.next_page(item_id=item_id, program_url=program_url, page=str(int(page) + 1))
 
 
 @Resolver.register
@@ -143,9 +133,8 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(video_url)
-    root = resp.parse()
-    video_id = root.find(".//div[@class='Main-Player-Console']").get(
-        'id').split('-')[0]
+    video_id = re.compile(r'idMedia\"\:\"(.*?)\"').findall(
+        resp.text)[0]
     resp2 = urlquick.get(URL_STREAM_REPLAY % video_id)
     json_parser = json.loads(resp2.text)
     final_video_url = json_parser["url"]

@@ -25,15 +25,13 @@ import json
 
 from codequick import Route, Resolver, Listitem, Script
 import urlquick
-import xbmcgui
+from kodi_six import xbmcgui
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.listitem_utils import item_post_treatment, item2dict
 
-# TO DO
-# Playlist
 
 URL_ROOT = 'http://www.culturepub.fr'
 
@@ -84,6 +82,18 @@ def root(plugin, item_id, **kwargs):
             item_post_treatment(item)
             yield item
 
+        elif 'playlists' in category.get('href'):
+            item = Listitem()
+            item.label = category.text.strip()
+            category_url = URL_ROOT + category.get('href')
+
+            item.set_callback(list_playlists,
+                              item_id=item_id,
+                              category_url=category_url,
+                              page=1)
+            item_post_treatment(item)
+            yield item
+
 
 @Route.register
 def list_shows(plugin, item_id, category_url, **kwargs):
@@ -105,6 +115,72 @@ def list_shows(plugin, item_id, category_url, **kwargs):
 
 
 @Route.register
+def list_playlists(plugin, item_id, page, category_url, **kwargs):
+    """Build playlists listing"""
+    resp = urlquick.get(category_url + '?paged=%s' % page)
+    root = resp.parse()
+
+    for playlist in root.iterfind(".//article"):
+        item = Listitem()
+        item.label = playlist.find('.//h2').find('a').get('title')
+        if playlist.find('.//img').get('data-src'):
+            item.art['thumb'] = playlist.find('.//img').get('data-src')
+        else:
+            item.art['thumb'] = playlist.find('.//img').get('src')
+        videos_url = URL_ROOT + playlist.find('.//h2').find('a').get('href')
+
+        item.set_callback(list_playlist_videos,
+                          item_id=item_id,
+                          videos_url=videos_url)
+        item_post_treatment(item)
+        yield item
+
+    # More videos...
+    yield Listitem.next_page(item_id=item_id,
+                             category_url=category_url,
+                             page=page + 1)
+
+
+@Resolver.register
+def list_playlist_videos(plugin, item_id, videos_url, **kwargs):
+    """Build playlist videos listing"""
+    resp = urlquick.get(videos_url)
+    root = resp.parse()
+
+    playlist_items = []
+
+    for video in root.find(".//div[@class='spots-overflow']").iterfind(".//article"):
+        item = Listitem()
+        item.label = video.find('.//h2').text
+        if video.find('.//img').get('data-src'):
+            item.art['thumb'] = video.find('.//img').get('data-src')
+        else:
+            item.art['thumb'] = video.find('.//img').get('src')
+
+        video_id = video.find(".//a").get('data-src')
+        video_id = re.compile('player=7&pod=(.*?)[\"\&]').findall(
+            video_id)[0]
+
+        info_video_json = urlquick.get(INFO_VIDEO % video_id).text
+        info_video_json = json.loads(info_video_json)
+
+        stream_id = re.compile('images/(.*).jpg').findall(
+            info_video_json["thumbnail_url_static"])[0].split('/')[1]
+
+        all_datas_videos_path = []
+        for quality in QUALITIES_STREAM:
+            all_datas_videos_path.append(INFO_STREAM % (quality, stream_id))
+
+        item.set_callback(all_datas_videos_path[-1],
+                          video_label=LABELS[item_id] + ' - ' + item.label,
+                          is_playable=True)
+
+        playlist_items.append(item)
+
+    return playlist_items
+
+
+@Route.register
 def list_videos(plugin, item_id, page, category_url, **kwargs):
     """Build videos listing"""
     resp = urlquick.get(category_url + '?paged=%s' % page)
@@ -118,8 +194,6 @@ def list_videos(plugin, item_id, page, category_url, **kwargs):
         else:
             item.art['thumb'] = video.find('.//img').get('src')
         video_url = URL_ROOT + video.find('.//h2').find('a').get('href')
-
-        # TO DO Playlist
 
         item.set_callback(get_video_url,
                           item_id=item_id,
@@ -145,7 +219,7 @@ def get_video_url(plugin,
 
     info_video_html = urlquick.get(video_url,
                                    headers={
-                                       'User-Agent': web_utils.get_random_ua
+                                       'User-Agent': web_utils.get_random_ua()
                                    },
                                    max_age=-1).text
     video_id = re.compile('player=7&pod=(.*?)[\"\&]').findall(

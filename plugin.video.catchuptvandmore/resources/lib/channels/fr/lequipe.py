@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -43,6 +44,8 @@ import urlquick
 URL_ROOT = 'https://www.lequipe.fr'
 
 URL_LIVE = URL_ROOT + '/lachainelequipe/'
+
+URL_INFO_STREAM_LIVE = URL_ROOT + '/js/app.%s.js'
 
 URL_API_LEQUIPE = URL_ROOT + '/equipehd/applis/filtres/videosfiltres.json'
 
@@ -127,8 +130,13 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     resp = urlquick.get(URL_LIVE,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
-    live_id = re.compile(r'/lachainelequipe/live/(.*?)[\?\"]',
-                         re.DOTALL).findall(resp.text)[0]
+    js_live_id = re.compile(r'\/js\/app\.(.*?)\.',
+                            re.DOTALL).findall(resp.text)[0]
+    resp2 = urlquick.get(URL_INFO_STREAM_LIVE % js_live_id,
+                         headers={'User-Agent': web_utils.get_random_ua()},
+                         max_age=-1)
+    live_id = re.compile(r'channelLiveDmId\:\"(.*?)\"',
+                         re.DOTALL).findall(resp2.text)[0]
     return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)

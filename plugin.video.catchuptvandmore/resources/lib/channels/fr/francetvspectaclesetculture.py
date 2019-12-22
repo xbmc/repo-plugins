@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -71,26 +72,28 @@ def list_categories(plugin, item_id, **kwargs):
 
     for category_datas in root.iterfind(".//a"):
         category_title = category_datas.text
-        category_url = URL_ROOT + '/spectacles-et-culture/' + category_datas.get('href')
+        category_url = URL_ROOT + category_datas.get('href')
 
         item = Listitem()
         item.label = category_title
         item.set_callback(
-            list_videos, item_id=item_id, category_url=category_url)
+            list_videos, item_id=item_id, category_url=category_url, page='0')
         item_post_treatment(item)
         yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, category_url, **kwargs):
+def list_videos(plugin, item_id, category_url, page, **kwargs):
 
-    resp = urlquick.get(category_url)
+    resp = urlquick.get(category_url + '?page=%s' % page)
     root = resp.parse()
 
     for video_data in root.iterfind(
-            ".//div[@class='c-card-video js-card h-flex c-slider__item']"):
+            ".//div[@class='c-card-video js-card h-flex c-wall__item']"):
         video_title = video_data.get('title')
-        video_image = 'https:' + video_data.find('.//img').get('data-src')
+        video_image = ''
+        if video_data.find('.//img') is not None:
+            video_image = 'https:' + video_data.find('.//img').get('data-src')
         video_url = URL_ROOT + video_data.find('.//a').get('href')
         video_duration = 0  # TODO
 
@@ -107,6 +110,11 @@ def list_videos(plugin, item_id, category_url, **kwargs):
             item_dict=item2dict(item))
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
+
+    # More videos...
+    yield Listitem.next_page(item_id=item_id,
+                             category_url=category_url,
+                             page=str(int(page) + 1))
 
 
 @Resolver.register

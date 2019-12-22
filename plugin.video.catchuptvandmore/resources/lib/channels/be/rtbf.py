@@ -142,7 +142,7 @@ def list_programs(plugin, item_id, **kwargs):
     root = resp.parse()
 
     for program_datas in root.iterfind(
-            ".//article[@class='rtbf-media-item col-xxs-12 col-xs-6 col-md-4 col-lg-3 ']"
+            ".//article[@class='rtbf-media-item rtbf-media-item--program-wide col-xxs-12 col-xs-6 col-md-4 col-lg-3 ']"
     ):
         program_title = program_datas.find('.//a').get('title')
         program_image = ''
@@ -277,20 +277,11 @@ def list_videos_sub_category(plugin, item_id, category_url, sub_category_id,
 
             for video_datas in list_videos_datas:
 
-                if video_datas.get('data-type') == 'media':
-                    if video_datas.find('.//h4') is not None:
-                        video_title = video_datas.find('.//h3').find(
-                            './/a').get('title') + ' - ' + \
-                            video_datas.find('.//h4').text
-                    else:
-                        video_title = video_datas.find('.//h3').find(
-                            './/a').get('title')
-                    video_image = ''
-                    image_datas = video_datas.find('.//img').get(
-                        'data-srcset').split(',')
-                    for image_data in image_datas:
-                        video_image = image_data.split(' ')[0]
-                    video_id = video_datas.get('data-id')
+                json_parser = json.loads(video_datas.get('data-card'))
+                if json_parser["isVideo"]:
+                    video_title = json_parser["title"] + ' - ' + json_parser["subtitle"]
+                    video_image = json_parser["illustration"]["format1248"]
+                    video_id = json_parser["mediaId"]
 
                     item = Listitem()
                     item.label = video_title
@@ -326,20 +317,11 @@ def list_videos_sub_category_dl(plugin, item_id, sub_category_data_uuid,
 
             for video_datas in list_videos_datas:
 
-                if video_datas.get('data-type') == 'media':
-                    if video_datas.find('.//h4') is not None:
-                        video_title = video_datas.find('.//h3').find(
-                            './/a').get('title') + ' - ' + \
-                            video_datas.find('.//h4').text
-                    else:
-                        video_title = video_datas.find('.//h3').find(
-                            './/a').get('title')
-                    video_image = ''
-                    image_datas = video_datas.find('.//img').get(
-                        'data-srcset').split(',')
-                    for image_data in image_datas:
-                        video_image = image_data.split(' ')[0]
-                    video_id = video_datas.get('data-id')
+                json_parser = json.loads(video_datas.get('data-card'))
+                if json_parser["isVideo"]:
+                    video_title = json_parser["title"] + ' - ' + json_parser["subtitle"]
+                    video_image = json_parser["illustration"]["format1248"]
+                    video_id = json_parser["mediaId"]
 
                     item = Listitem()
                     item.label = video_title

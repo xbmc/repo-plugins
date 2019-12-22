@@ -26,7 +26,7 @@
 from __future__ import unicode_literals
 
 import os
-import xbmcvfs
+from kodi_six import xbmcvfs
 from codequick import Script
 from resources.lib import cq_utils
 

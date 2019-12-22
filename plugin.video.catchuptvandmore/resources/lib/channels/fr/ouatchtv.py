@@ -110,7 +110,7 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(video_url,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     video_id = re.compile(r'video: "(.*?)"').findall(resp.text)[0]
     return resolver_proxy.get_stream_dailymotion(plugin, video_id,

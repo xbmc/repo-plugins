@@ -37,9 +37,11 @@ import urlquick
 
 # TO DO
 
-URL_ROOT = 'http://tbd.com'
+URL_ROOT = 'https://tbd.com'
 
 URL_REPLAY = URL_ROOT + '/shows'
+
+URL_LIVE = URL_ROOT + '/live'
 
 
 def replay_entry(plugin, item_id, **kwargs):
@@ -85,8 +87,11 @@ def list_videos(plugin, item_id, program_url, **kwargs):
     root = resp.parse()
 
     for video_datas in root.iterfind(".//div[@class='event-item episode']"):
-        video_title = video_datas.find('.//h3').text + video_datas.find(
-            './/h3/span').text
+        if video_datas.find(".//p[@class='content-label-secondary']/span") is not None:
+            video_title = video_datas.find('.//h3').text + video_datas.find(
+                ".//p[@class='content-label-secondary']/span").text
+        else:
+            video_title = video_datas.find('.//h3').text
         video_image = ''
         for image_datas in video_datas.findall('.//img'):
             if 'jpg' in image_datas.get('src'):
@@ -132,5 +137,5 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
-    resp = urlquick.get(URL_ROOT)
+    resp = urlquick.get(URL_LIVE)
     return re.compile(r'file\': "(.*?)"').findall(resp.text)[0]

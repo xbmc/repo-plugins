@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -34,7 +35,7 @@ from resources.lib.listitem_utils import item_post_treatment, item2dict
 
 import json
 import urlquick
-import xbmcgui
+from kodi_six import xbmcgui
 
 # TO DO
 # Fix Live TV

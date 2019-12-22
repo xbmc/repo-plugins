@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -81,8 +82,8 @@ def list_categories(plugin, item_id, **kwargs):
     item_post_treatment(item)
     yield item
 
-    for category_title, category_type in CATEGORIES_VIDEOS_TV5MONDE.items(
-    ):
+    for category_title, category_type in list(CATEGORIES_VIDEOS_TV5MONDE.items(
+    )):
         item = Listitem()
         item.label = category_title
         item.set_callback(list_videos_category,
@@ -207,7 +208,7 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(video_url,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     video_json = re.compile('data-broadcast=\'(.*?)\'').findall(resp.text)[0]
     json_parser = json.loads(video_json)
@@ -227,11 +228,11 @@ def live_entry(plugin, item_id, item_dict, **kwargs):
 def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     live_id = ''
-    for channel_name, live_id_value in LIST_LIVE_TV5MONDE.items():
+    for channel_name, live_id_value in list(LIST_LIVE_TV5MONDE.items()):
         if item_id == channel_name:
             live_id = live_id_value
     resp = urlquick.get(URL_TV5MONDE_LIVE + '%s.html' % live_id,
-                        headers={'User-Agent': web_utils.get_random_ua},
+                        headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     live_json = re.compile(r'data-broadcast=\'(.*?)\'').findall(resp.text)[0]
     json_parser = json.loads(live_json)

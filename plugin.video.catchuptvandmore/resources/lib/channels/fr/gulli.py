@@ -25,6 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
@@ -104,7 +105,7 @@ def list_categories(plugin, item_id, **kwargs):
     - Les feux de l'amour
     - ...
     """
-    for category_title, program_url in CATEGORIES.items():
+    for category_title, program_url in list(CATEGORIES.items()):
         item = Listitem()
         item.label = category_title
         item.set_callback(list_programs,
@@ -122,7 +123,7 @@ def list_programs(plugin, item_id, program_url, **kwargs):
     - ...
     """
     resp = urlquick.get(program_url,
-                        headers={'User-Agent': web_utils.get_random_ua})
+                        headers={'User-Agent': web_utils.get_random_ua()})
     json_parser = json.loads(resp.text)
 
     for program in json_parser['res']:
@@ -143,7 +144,7 @@ def list_programs(plugin, item_id, program_url, **kwargs):
 def list_videos(plugin, item_id, program_id, **kwargs):
 
     resp = urlquick.get(URL_LIST_SHOW % (get_api_key(), program_id),
-                        headers={'User-Agent': web_utils.get_random_ua})
+                        headers={'User-Agent': web_utils.get_random_ua()})
     json_parser = json.loads(resp.text)
 
     for show in json_parser['res']:
@@ -198,7 +199,7 @@ def get_video_url(plugin,
                   **kwargs):
     url_root = video_url.replace('playlist.m3u8', '')
     m3u8_content = urlquick.get(
-        video_url, headers={'User-Agent': web_utils.get_random_ua}, max_age=-1)
+        video_url, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
     last_url = ''
 
     for line in m3u8_content.text.splitlines():
@@ -219,13 +220,13 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     url_live = ''
     live_html = urlquick.get(URL_LIVE_TV,
-                             headers={'User-Agent': web_utils.get_random_ua},
+                             headers={'User-Agent': web_utils.get_random_ua()},
                              max_age=-1)
     url_live_embeded = re.compile('<iframe src=\"(.*?)\"').findall(
         live_html.text)[0]
     root_live_embeded_html = urlquick.get(
         url_live_embeded,
-        headers={'User-Agent': web_utils.get_random_ua},
+        headers={'User-Agent': web_utils.get_random_ua()},
         max_age=-1)
     all_url_video = re.compile(r'file: \'(.*?)\'').findall(
         root_live_embeded_html.text)

@@ -20,6 +20,8 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
+from builtins import range
 from codequick import Route, Resolver, Listitem, utils
 import urlquick
 import xml.etree.ElementTree as ET

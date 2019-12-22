@@ -16,7 +16,9 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+
 # Settings tabs/categories (from 30000 to 30019)
+
 msgctxt "#30000"
 msgid "Main menu"
 msgstr "Menu principal"
@@ -50,8 +52,8 @@ msgid "Websites"
 msgstr "Sites internet"
 
 
-
 # Settings line separators (from 30010 to 30029)
+
 msgctxt "#30010"
 msgid "Hide main menu categories"
 msgstr "Masquer des catégories du menu principal"
@@ -82,6 +84,7 @@ msgstr "Masquer des pays pour le replay TV"
 
 
 # Main menu (from 30030 to 30049)
+
 msgctxt "#30030"
 msgid "Live TV"
 msgstr "TV en direct"
@@ -100,6 +103,7 @@ msgstr "Favoris"
 
 
 # Countries (from 30050 to 30079)
+
 msgctxt "#30050"
 msgid "France"
 msgstr "France"
@@ -156,7 +160,9 @@ msgctxt "#30063"
 msgid "China"
 msgstr "Chine"
 
+
 # Channels (from 30080 to 30129)
+
 msgctxt "#30080"
 msgid "French channels"
 msgstr "Chaînes françaises"
@@ -213,11 +219,13 @@ msgctxt "#30093"
 msgid "Chinese channels"
 msgstr "Chaînes chinoises"
 
+
 # Websites (from 30130 to 30149)
 
 
 
 # Quality and content (from 30150 to 30199)
+
 msgctxt "#30150"
 msgid "Video quality"
 msgstr "Qualité vidéo"
@@ -298,6 +306,7 @@ msgctxt "#30169"
 msgid "Enable Subtitle if present in the content"
 msgstr "Activer les sous-titres si présent dans le contenu"
 
+
 # Download (from 30200 to 30239)
 
 msgctxt "#30200"
@@ -367,6 +376,7 @@ msgctxt "#30251"
 msgid "UKTVPlay Password"
 msgstr "Mot de passe UKTVPlay"
 
+
 # Reserved space for other tab/category in settins (from 30260 to 30339)
 
 
@@ -382,11 +392,25 @@ msgctxt "#30371"
 msgid "Cache cleared"
 msgstr "Cache vidé"
 
+msgctxt "#30372"
+msgid "Send Kodi log to the developers when an error occurred"
+msgstr "Envoyer le log de Kodi aux développeurs en cas d'erreur"
+
+msgctxt "#30373"
+msgid "Delete favourites"
+msgstr "Supprimer les favoris"
+
+msgctxt "#30374"
+msgid "Favourites deleted"
+msgstr "Favoris supprimés"
+
 
 # Reserved space for other tab/category in settins (from 30400 to 30499)
 
 
+
 # Context menu (from 30500 to 30599)
+
 msgctxt "#30500"
 msgid "Move down"
 msgstr "Descendre"
@@ -403,8 +427,17 @@ msgctxt "#30503"
 msgid "Download"
 msgstr "Télécharger"
 
+msgctxt "#30504"
+msgid "List Videos (type=extrait)"
+msgstr "Liste des Videos (type=extrait)"
+
+msgctxt "#30505"
+msgid "List Videos (type=episode)"
+msgstr "Liste des Videos (type=episode)"
+
 
 # Dialog boxes (from 30600 to 30699)
+
 msgctxt "#30600"
 msgid "Information"
 msgstr "Information"
@@ -435,6 +468,7 @@ msgstr "Voulez-vous voir cette information la prochaine fois ?"
 
 
 # Others (from 30700 to 30799)
+
 msgctxt "#30700"
 msgid "More videos..."
 msgstr "Plus de vidéos..."
@@ -523,6 +557,15 @@ msgctxt "#30721"
 msgid "Content requiring a subscription"
 msgstr "Contenu nécessitant un abonnement"
 
+msgctxt "#30722"
+msgid "TV guide"
+msgstr "Guide TV"
+
+msgctxt "#30723"
+msgid "An error occurred while getting TV guide"
+msgstr "Une erreur s'est produite lors de l'obtention du guide TV"
+
+
 # Favourites (from 30800 to 30859)
 
 msgctxt "#30800"
@@ -557,6 +600,7 @@ msgctxt "#30807"
 msgid "This favourite raises an error, would you like to delete it?"
 msgstr "Ce favori déclenche une erreur, souhaitez vous le supprimer ?"
 
+
 # Log uploader (from 30860 to 30889)
 
 msgctxt "#30860"
@@ -570,3 +614,30 @@ msgstr "Partagez nous l'URL URL_TO_REPLACE par mail directement via le QR code o
 msgctxt "#30862"
 msgid "Sorry, sharing your error log failed"
 msgstr "Désolé, le partage de votre journal d'erreurs a échoué"
+
+
+# HTTP error (from 30890 to 30919)
+
+msgctxt "#30890"
+msgid "HTTP Error code"
+msgstr "Erreur HTTP code"
+
+msgctxt "#30891"
+msgid "Inaccessible content"
+msgstr "Contenu inaccessible"
+
+msgctxt "#30892"
+msgid "Authentication is required to access the resource"
+msgstr "Une authentification est requise pour accéder à cette ressource"
+
+msgctxt "#30893"
+msgid "Access denied (Geographical restriction?)"
+msgstr "Accès refusé (restriction géographique ?)"
+
+msgctxt "#30894"
+msgid "This resource requires a payment or a subscription"
+msgstr "Cette ressource requiert un paiement ou un abonnement"
+
+msgctxt "#30895"
+msgid "This resource is no longer available"
+msgstr "Cette ressource n'est plus disponible"

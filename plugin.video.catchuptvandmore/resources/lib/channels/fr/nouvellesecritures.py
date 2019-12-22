@@ -43,7 +43,7 @@ Channels:
     * Studio 4
 '''
 
-URL_ROOT_NOUVELLES_ECRITURES = 'http://%s.nouvelles-ecritures.francetv.fr'
+URL_ROOT_NOUVELLES_ECRITURES = 'https://%s.nouvelles-ecritures.francetv.fr'
 # channel name
 
 

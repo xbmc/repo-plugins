@@ -41,85 +41,99 @@ menu = {
         'callback': 'live_bridge',
         'thumb': 'channels/it/la7.png',
         'fanart': 'channels/it/la7_fanart.jpg',
-        'module': 'resources.lib.channels.it.la7'
+        'module': 'resources.lib.channels.it.la7',
+        'xmltv_id': 'www.la7.it'
     },
     'rainews24': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/rainews24.png',
         'fanart': 'channels/it/rainews24_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'rainews.guidatv.sky.it'
     },
     'rai1': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/rai1.png',
         'fanart': 'channels/it/rai1_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'www.raiuno.rai.it'
     },
     'rai2': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/rai2.png',
         'fanart': 'channels/it/rai2_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'www.raidue.rai.it'
     },
     'rai3': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/rai3.png',
         'fanart': 'channels/it/rai3_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'www.raitre.rai.it'
     },
     'rai4': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/rai4.png',
         'fanart': 'channels/it/rai4_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'rai4.raisat.it'
     },
     'rai5': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/rai5.png',
         'fanart': 'channels/it/rai5_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'rai5.rai.it'
     },
     'raisportpiuhd': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/raisportpiuhd.png',
         'fanart': 'channels/it/raisportpiuhd_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'raisport.guidatv.sky.it'
     },
     'raimovie': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/raimovie.png',
         'fanart': 'channels/it/raimovie_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'raimovie.rai.it'
     },
     'raipremium': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/raipremium.png',
         'fanart': 'channels/it/raipremium_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'raipremium.guidatv.sky.it'
     },
     'raiyoyo': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/raiyoyo.png',
         'fanart': 'channels/it/raiyoyo_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'yoyo.raisat.it'
     },
     'raigulp': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/raigulp.png',
         'fanart': 'channels/it/raigulp_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'raigulp.rai.it'
     },
     'raistoria': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/raistoria.png',
         'fanart': 'channels/it/raistoria_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'raistoria.rai.it'
     },
     'raiscuola': {
         'callback': 'live_bridge',
         'thumb': 'channels/it/raiscuola.png',
         'fanart': 'channels/it/raiscuola_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'xmltv_id': 'raiscuola.rai.it'
     },
     'paramountchannel_it': {
         'callback': 'live_bridge',

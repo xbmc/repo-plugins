@@ -20,12 +20,13 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+from builtins import str
 from codequick import Route, Resolver, Listitem, utils
 import urlquick
 
 import json
 import re
-import xbmcgui
+from kodi_six import xbmcgui
 import resources.lib.cq_utils as cqu
 
 from resources.lib.labels import LABELS

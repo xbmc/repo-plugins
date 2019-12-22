@@ -27,12 +27,13 @@ from codequick import Route, Resolver, Listitem
 import urlquick
 
 from resources.lib.labels import LABELS
+from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib.listitem_utils import item_post_treatment, item2dict
 
-URL_ROOT = 'https://national.fff.fr'
+URL_ROOT = 'https://ffftv.fff.fr'
 
-URL_REPLAY = URL_ROOT + '/#replay'
+URL_REPLAY = URL_ROOT + '/playback/loadmore/national/%s'
 
 # TODO Add Live
 
@@ -46,64 +47,63 @@ def website_entry(plugin, item_id, **kwargs):
 
 def root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
-    resp = urlquick.get(URL_REPLAY)
-    list_categories_title = re.compile(
-        r'title                 : \'(.*?)\'').findall(resp.text)
-
-    category_id = 0
-    for category_title in list_categories_title:
-        item = Listitem()
-        item.label = category_title
-        category_id += 1
-
-        item.set_callback(list_videos,
-                          item_id=item_id,
-                          category_id=category_id)
-        item_post_treatment(item)
-        yield item
+    item = Listitem()
+    item.label = plugin.localize(LABELS['All videos'])
+    item.set_callback(list_videos, item_id=item_id, page='0')
+    item_post_treatment(item)
+    yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, category_id, **kwargs):
+def list_videos(plugin, item_id, page, **kwargs):
     """Build videos listing"""
 
-    resp = urlquick.get(URL_REPLAY)
-    list_videos_datas = re.compile(r'videos            : \[(.*?)\]').findall(
-        resp.text)
+    resp = urlquick.get(URL_REPLAY % page)
+    root = resp.parse()
 
-    json_parser = json.loads('[' + list_videos_datas[category_id - 1] + ']')
+    for video_datas in root.iterfind(".//a"):
+        if video_datas.get('href') is not None:
+            video_title = video_datas.find('.//h3').text
+            video_image = video_datas.find('.//img').get('src')
+            video_url = URL_ROOT + video_datas.get('href')
 
-    for video_datas in json_parser:
-        video_title = video_datas['overlayTitle']
-        video_image = ''
-        if 'backgroundImage' in video_datas:
-            video_image = video_datas['backgroundImage']
-        video_id = video_datas['dailymotionId']
+            item = Listitem()
+            item.label = video_title
+            item.art['thumb'] = video_image
 
-        item = Listitem()
-        item.label = video_title
-        item.art['thumb'] = video_image
+            if 'overlayDescription' in video_datas:
+                date_value = video_datas['overlayDescription'].split('|')[0]
+                item.info.date(date_value, '%d/%m/%Y')
 
-        if 'overlayDescription' in video_datas:
-            date_value = video_datas['overlayDescription'].split('|')[0]
-            item.info.date(date_value, '%d/%m/%Y')
+            item.set_callback(get_video_url,
+                              item_id=item_id,
+                              video_label=LABELS[item_id] + ' - ' + item.label,
+                              video_url=video_url)
+            item_post_treatment(item, is_playable=True, is_downloadable=True)
+            yield item
 
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          video_id=video_id)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
-        yield item
+    yield Listitem.next_page(item_id=item_id, page=str(int(page) + 1))
 
 
 @Resolver.register
 def get_video_url(plugin,
                   item_id,
-                  video_id,
+                  video_url,
                   download_mode=False,
                   video_label=None,
                   **kwargs):
     """Get video URL and start video player"""
 
-    return resolver_proxy.get_stream_dailymotion(plugin, video_id,
-                                                 download_mode, video_label)
+    resp = urlquick.get(video_url,
+                        headers={'User-Agent': web_utils.get_random_ua()},
+                        max_age=-1)
+    root = resp.parse()
+    video_datas = root.find(".//video[@class='player-fff vjs-fluid video-js margin_b16 resp_iframe']")
+
+    data_account = video_datas.get('data-account')
+    data_video_id = video_datas.get('data-video-id')
+    data_player = video_datas.get('data-player')
+
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
+                                                    data_player, data_video_id,
+                                                    download_mode, video_label)

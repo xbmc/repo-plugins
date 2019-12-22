@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-#
+
 # Advanced MAME Launcher miscellaneous functions.
 # Functions in this module only depend on the Python standard library.
 # This module can be loaded anywhere without creating circular dependencies.
 # These functions do not event use log_*().
-#
 
 # Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
@@ -14,8 +13,8 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
 
 # --- Python standard library ---
 from __future__ import unicode_literals
@@ -23,6 +22,15 @@ from __future__ import unicode_literals
 # -------------------------------------------------------------------------------------------------
 # Functions
 # -------------------------------------------------------------------------------------------------
+# Builds a string separated by a | character. Replaces | ocurrences with _
+# The string can be separated with str.split('|')
+def misc_build_db_str_3(str1, str2, str3):
+    if str1.find('|') >= 0: str1 = str1.replace('|', '_')
+    if str2.find('|') >= 0: str2 = str2.replace('|', '_')
+    if str3.find('|') >= 0: str3 = str3.replace('|', '_')
+
+    return '{}|{}|{}'.format(str1, str2, str3)
+
 # Used in mame_build_MAME_plots()
 def misc_get_mame_control_str(control_type_list):
     control_set = set()

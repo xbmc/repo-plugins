@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-#
-# Advanced MAME Launcher main script file
-#
+
+# Advanced MAME Launcher main script file.
 
 # Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
@@ -11,8 +10,8 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
 
 # --- Python standard library ---
 # Division operator: https://www.python.org/dev/peps/pep-0238/
@@ -136,6 +135,8 @@ class AML_Paths:
         self.CATALOG_BESTGAMES_ALL_PATH           = self.CATALOG_DIR.pjoin('catalog_bestgames_all.json')
         self.CATALOG_SERIES_PARENT_PATH           = self.CATALOG_DIR.pjoin('catalog_series_parents.json')
         self.CATALOG_SERIES_ALL_PATH              = self.CATALOG_DIR.pjoin('catalog_series_all.json')
+        self.CATALOG_ALLTIME_PARENT_PATH          = self.CATALOG_DIR.pjoin('catalog_alltime_parents.json')
+        self.CATALOG_ALLTIME_ALL_PATH             = self.CATALOG_DIR.pjoin('catalog_alltime_all.json')
         self.CATALOG_ARTWORK_PARENT_PATH          = self.CATALOG_DIR.pjoin('catalog_artwork_parents.json')
         self.CATALOG_ARTWORK_ALL_PATH             = self.CATALOG_DIR.pjoin('catalog_artwork_all.json')
         self.CATALOG_VERADDED_PARENT_PATH         = self.CATALOG_DIR.pjoin('catalog_version_parents.json')
@@ -624,6 +625,7 @@ root_Main = {}
 root_Binary = {}
 root_categories = {}
 root_special = {}
+root_SL = {}
 root_special_CM = {}
 
 def set_render_root_data():
@@ -631,83 +633,349 @@ def set_render_root_data():
     global root_Binary
     global root_categories
     global root_special
+    global root_SL
     global root_special_CM
 
+    # Tuple: catalog_name, catalog_key, title, plot
     root_Main = {
-        'Normal' : {
-            'title' : '',
-            'plot' : '',
-        },
-    }
-
-    root_Binary = {
-        'BIOS' : {
-            'title' : '',
-            'plot' : '',
-        },
-    }
-
-    # Tuple: title, URL, plot
-    root_categories = {
-        'Catver' : [
-            '',
-            '',
-            '',
+        # Main filter Catalog
+        'Main_Normal' : [
+            'Main', 'Normal',
+            'Machines with coin slot (Normal)',
+            ('[COLOR orange]Main filter[/COLOR] of MAME machines [COLOR violet]with coin '
+             'slot[/COLOR] and normal controls. This list includes the machines you would '
+             'typically find in Europe and USA amusement arcades some decades ago.'),
+        ],
+        'Main_Unusual' : [
+            'Main', 'Unusual',
+            'Machines with coin slot (Unusual)',
+            ('[COLOR orange]Main filter[/COLOR] of MAME machines [COLOR violet]with coin '
+             'slot[/COLOR] and Only buttons, Gambling, Hanafuda and Mahjong controls. '
+             'This corresponds to slot, gambling and Japanese card and mahjong machines.'),
+        ],
+        'Main_NoCoin' : [
+            'Main', 'NoCoin',
+            'Machines with no coin slot',
+            ('[COLOR orange]Main filter[/COLOR] of MAME machines [COLOR violet]with no coin '
+             'slot[/COLOR]. Here you will find the good old MESS machines, including computers, '
+             'video game consoles, hand-held video game consoles, etc.'),
+        ],
+        'Main_Mechanical' : [
+            'Main', 'Mechanical',
+            'Mechanical machines',
+            ('[COLOR orange]Main filter[/COLOR] of [COLOR violet]mechanical[/COLOR] MAME machines. '
+             'These machines have mechanical parts, for example pinballs, and currently do not work with MAME. '
+             'They are here for preservation and historical reasons.'),
+        ],
+        'Main_Dead' : [
+            'Main', 'Dead',
+            'Dead machines',
+            ('[COLOR orange]Main filter[/COLOR] of [COLOR violet]dead[/COLOR] MAME machines. '
+             'Dead machines do not work and have no controls, so you cannot interact with them in any way.'),
+        ],
+        'Main_Devices' : [
+            'Main', 'Devices',
+            'Device machines',
+            ('[COLOR orange]Main filter[/COLOR] of [COLOR violet]device machines[/COLOR]. '
+             'Device machines, for example the Zilog Z80 CPU, are components used by other machines '
+             'and cannot be run on their own.'),
         ],
     }
 
-    # Tuple: title, URL, plot
-    root_special = { }
+    # Tuple: catalog_name, catalog_key, title, plot
+    root_Binary = {
+        # Binary filters Catalog
+        'BIOS' : [
+            'Binary', 'BIOS',
+            'Machines [BIOS]',
+            ('[COLOR orange]Binary filter[/COLOR] of [COLOR violet]BIOS[/COLOR] machines. Some BIOS '
+             'machines can be run and usually will display a message like "Game not found".'),
+        ],
+        'CHD' : [
+            'Binary', 'CHD',
+            'Machines [with CHDs]',
+            ('[COLOR orange]Binary filter[/COLOR] of machines that need one or more '
+             '[COLOR violet]CHDs[/COLOR] to run. They may also need ROMs and/or BIOS or not.'),
+        ],
+        'Samples' : [
+            'Binary', 'Samples',
+            'Machines [with Samples]',
+            ('[COLOR orange]Binary filter[/COLOR] of machines that require '
+             '[COLOR violet]samples[/COLOR]. Samples are optional and will increase the quality '
+             'of the emulated sound.'),
+        ],
+        'SoftwareLists' : [
+            'Binary', 'SoftwareLists',
+            'Machines [with Software Lists]',
+            ('[COLOR orange]Binary filter[/COLOR] of machines that have one or more '
+             '[COLOR violet]Software Lists[/COLOR] associated.'),
+        ],
+    }
 
-    # Tuple: title, URL, plot, context_menu_list
+    # Tuple: title, plot, URL
+    root_categories = {
+        # Cataloged filters (optional DAT/INI files required)
+        'Catver' : [
+            'Machines by Category (Catver)',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by category. '
+             'This filter requires that you configure [COLOR violet]catver.ini[/COLOR].'),
+            misc_url_1_arg('catalog', 'Catver'),
+        ],
+        'Catlist' : [
+            'Machines by Category (Catlist)',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by category. '
+             'This filter requires that you configure [COLOR violet]catlist.ini[/COLOR].'),
+            misc_url_1_arg('catalog', 'Catlist'),
+        ],
+        'Genre' : [
+            'Machines by Category (Genre)',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by Genre. '
+             'This filter requires that you configure [COLOR violet]genre.ini[/COLOR].'),
+            misc_url_1_arg('catalog', 'Genre'),
+        ],
+        'Category' : [
+            'Machines by Category (MASH)',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by Category. '
+             'This filter requires that you configure [COLOR violet]Category.ini[/COLOR] by MASH.'),
+            misc_url_1_arg('catalog', 'Category'),
+        ],
+        'NPlayers' : [
+            'Machines by Number of players',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by the number of '
+             'players that can play simultaneously or alternatively. This filter requires '
+             'that you configure [COLOR violet]nplayers.ini[/COLOR].'),
+            misc_url_1_arg('catalog', 'NPlayers'),
+        ],
+        'Bestgames' : [
+            'Machines by Rating',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by rating. The rating '
+             'is subjective but is a good indicator about the quality of the games. '
+             'This filter requires that you configure [COLOR violet]bestgames.ini[/COLOR].'),
+            misc_url_1_arg('catalog', 'Bestgames'),
+        ],
+        'Series' : [
+            'Machines by Series',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by series. '
+             'This filter requires that you configure [COLOR violet]series.ini[/COLOR].'),
+            misc_url_1_arg('catalog', 'Series'),
+        ],
+        'Alltime' : [
+            'Machines by Alltime (MASH)',
+            ('[COLOR orange]Catalog filter[/COLOR] of a best-quality machine selection '
+             'sorted by year. '
+             'This filter requires that you configure [COLOR violet]Alltime.ini[/COLOR] by MASH.'),
+            misc_url_1_arg('catalog', 'Alltime'),
+        ],
+        'Artwork' : [
+            'Machines by Artwork (MASH)',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by Artwork. '
+             'This filter requires that you configure [COLOR violet]Artwork.ini[/COLOR] by MASH.'),
+            misc_url_1_arg('catalog', 'Artwork'),
+        ],
+        'Version' : [
+            'Machines by Version Added (Catver)',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by Version Added. '
+             'This filter requires that you configure [COLOR violet]catver.ini[/COLOR].'),
+            misc_url_1_arg('catalog', 'Version'),
+        ],
+
+        # Cataloged filters (always there, extracted from MAME XML)
+        # NOTE: use the same names as MAME executable
+        # -listdevices   list available devices                  XML tag <device_ref>
+        # -listslots     list available slots and slot devices   XML tag <slot>
+        # -listmedia     list available media for the system     XML tag <device>
+        'Controls_Expanded' : [
+            'Machines by Controls (Expanded)',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by control. '
+             'For each machine, all controls are included in the list.'),
+            misc_url_1_arg('catalog', 'Controls_Expanded'),
+        ],
+        'Controls_Compact' : [
+            'Machines by Controls (Compact)',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by control. '
+             'Machines may have additional controls.'),
+            misc_url_1_arg('catalog', 'Controls_Compact'),
+        ],
+        'Devices_Expanded' : [
+            'Machines by Pluggable Devices (Expanded)',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by pluggable devices. '
+             'For each machine, all pluggable devices are included in the list.'),
+            misc_url_1_arg('catalog', 'Devices_Expanded'),
+        ],
+        'Devices_Compact' : [
+            'Machines by Pluggable Devices (Compact)',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by pluggable devices. '
+             'Machines may have additional pluggable devices.'),
+            misc_url_1_arg('catalog', 'Devices_Compact'),
+        ],
+        'Display_Type' : [
+            'Machines by Display Type',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by display type '
+             'and rotation.'),
+            misc_url_1_arg('catalog', 'Display_Type'),
+        ],
+        'Display_VSync' : [
+            'Machines by Display VSync freq',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by the display '
+             'vertical synchronisation (VSync) frequency, also known as the display refresh rate or '
+             'frames per second (FPS).'),
+            misc_url_1_arg('catalog', 'Display_VSync'),
+        ],
+        'Display_Resolution' : [
+            'Machines by Display Resolution',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by display resolution.'),
+            misc_url_1_arg('catalog', 'Display_Resolution'),
+        ],
+        'CPU' : [
+            'Machines by CPU',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by the CPU used.'),
+            misc_url_1_arg('catalog', 'CPU'),
+        ],
+        'Driver' : [
+            'Machines by Driver',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by driver. '
+             'Brother machines have the same driver.'),
+            misc_url_1_arg('catalog', 'Driver'),
+        ],
+        'Manufacturer' : [
+            'Machines by Manufacturer',
+            ('[COLOR orange]Catalog filter[/COLOR] of MAME machines sorted by '
+             'manufacturer.'),
+            misc_url_1_arg('catalog', 'Manufacturer'),
+        ],
+        'ShortName' : [
+            'Machines by MAME short name',
+            ('[COLOR orange]Catalog filter[/COLOR] of MAME machines sorted alphabetically '
+             'by the MAME short name. The short name originated during the old MS-DOS days '
+             'where filenames were restricted to 8 ASCII characters.'),
+            misc_url_1_arg('catalog', 'ShortName'),
+        ],
+        'LongName' : [
+            'Machines by MAME long name',
+            ('[COLOR orange]Catalog filter[/COLOR] of MAME machines sorted alphabetically '
+             'by the machine description or long name.'),
+            misc_url_1_arg('catalog', 'LongName'),
+        ],
+        'BySL' : [
+            'Machines by Software List',
+            ('[COLOR orange]Catalog filter[/COLOR] of the Software Lists and the machines '
+             'that run items belonging to that Software List.'),
+            misc_url_1_arg('catalog', 'BySL'),
+        ],
+        'Year' : [
+            'Machines by Year',
+            ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by release year.'),
+            misc_url_1_arg('catalog', 'Year'),
+        ],
+    }
+
+    # Tuple: title, plot, URL
+    root_special = {
+        # DAT browser: history.dat, mameinfo.dat, gameinit.dat, command.dat.
+        'History' : [
+            'History DAT',
+            ('Browse the contents of [COLOR orange]history.dat[/COLOR]. Note that '
+             'history.dat is also available on the MAME machines and SL items context menu.'),
+            misc_url_1_arg('catalog', 'History'),
+        ],
+        'MAMEINFO' : [
+            'MAMEINFO DAT',
+            ('Browse the contents of [COLOR orange]mameinfo.dat[/COLOR]. Note that '
+             'mameinfo.dat is also available on the MAME machines context menu.'),
+            misc_url_1_arg('catalog', 'MAMEINFO'),
+        ],
+        'Gameinit' : [
+            'Gameinit DAT',
+            ('Browse the contents of [COLOR orange]gameinit.dat[/COLOR]. Note that '
+             'gameinit.dat is also available on the MAME machines context menu.'),
+            misc_url_1_arg('catalog', 'Gameinit'),
+        ],
+        'Command' : [
+            'Command DAT',
+            ('Browse the contents of [COLOR orange]command.dat[/COLOR]. Note that '
+             'command.dat is also available on the MAME machines context menu.'),
+            misc_url_1_arg('catalog', 'Command'),
+        ],
+    }
+
+    # Tuple: title, plot, URL
+    root_SL = {
+        'SL' : [
+            'Software Lists (all)',
+            ('Display all [COLOR orange]Software Lists[/COLOR].'),
+            misc_url_1_arg('catalog', 'SL'),
+        ],
+        'SL_ROM' : [
+            'Software Lists (with ROMs)',
+            ('Display [COLOR orange]Software Lists[/COLOR] that have only ROMs and not CHDs (disks).'),
+            misc_url_1_arg('catalog', 'SL_ROM'),
+        ],
+        'SL_ROM_CHD' : [
+            'Software Lists (with ROMs and CHDs)',
+            ('Display [COLOR orange]Software Lists[/COLOR] that have both ROMs and CHDs.'),
+            misc_url_1_arg('catalog', 'SL_ROM_CHD'),
+        ],
+        'SL_CHD' : [
+            'Software Lists (with CHDs)',
+            ('Display [COLOR orange]Software Lists[/COLOR] that have only CHDs and not ROMs.'),
+            misc_url_1_arg('catalog', 'SL_CHD'),
+        ],
+        'SL_empty' : [
+            'Software Lists (no ROMs nor CHDs)',
+            ('Display [COLOR orange]Software Lists[/COLOR] with no ROMs nor CHDs.'),
+            misc_url_1_arg('catalog', 'SL_empty'),
+        ],
+    }
+
+    # Tuple: title, plot, URL, context_menu_list
     root_special_CM = {
         'MAME_Favs' : [
             '<Favourite MAME machines>',
-            misc_url_1_arg('command', 'SHOW_MAME_FAVS'),
             ('Display your [COLOR orange]Favourite MAME machines[/COLOR]. '
              'To add machines to the Favourite list use the context menu on any MAME machine list.'),
+            misc_url_1_arg('command', 'SHOW_MAME_FAVS'),
             [('Manage Favourites', misc_url_1_arg_RunPlugin('command', 'MANAGE_MAME_FAV'))],
         ],
         'MAME_Most' : [
             '{Most Played MAME machines}',
-            misc_url_1_arg('command', 'SHOW_MAME_MOST_PLAYED'),
             ('Display the MAME machines that you play most, sorted by the number '
              'of times you have launched them.'),
+            misc_url_1_arg('command', 'SHOW_MAME_MOST_PLAYED'),
             [('Manage Most Played', misc_url_1_arg_RunPlugin('command', 'MANAGE_MAME_MOST_PLAYED'))],
         ],
         'MAME_Recent' : [
             '{Recently Played MAME machines}',
-            misc_url_1_arg('command', 'SHOW_MAME_RECENTLY_PLAYED'),
             ('Display the MAME machines that you have launched recently.'),
+            misc_url_1_arg('command', 'SHOW_MAME_RECENTLY_PLAYED'),
             [('Manage Recently Played', misc_url_1_arg_RunPlugin('command', 'MANAGE_MAME_RECENT_PLAYED'))],
         ],
         'SL_Favs' : [
             '<Favourite Software Lists ROMs>',
-            misc_url_1_arg('command', 'SHOW_SL_FAVS'),
             ('Display your [COLOR orange]Favourite Software List items[/COLOR]. '
              'To add machines to the SL Favourite list use the context menu on any SL item list.'),
+            misc_url_1_arg('command', 'SHOW_SL_FAVS'),
             [('Manage SL Favourites', misc_url_1_arg_RunPlugin('command', 'MANAGE_SL_FAV'))],
         ],
         'SL_Most' : [
             '{Most Played SL ROMs}',
-            misc_url_1_arg('command', 'SHOW_SL_MOST_PLAYED'),
             ('Display the Software List itmes that you play most, sorted by the number '
              'of times you have launched them.'),
+            misc_url_1_arg('command', 'SHOW_SL_MOST_PLAYED'),
             [('Manage SL Most Played', misc_url_1_arg_RunPlugin('command', 'MANAGE_SL_MOST_PLAYED'))],
         ],
         'SL_Recent' : [
             '{Recently Played SL ROMs}',
-            misc_url_1_arg('command', 'SHOW_SL_RECENTLY_PLAYED'),
             'Display the Software List items that you have launched recently.',
+            misc_url_1_arg('command', 'SHOW_SL_RECENTLY_PLAYED'),
             [('Manage SL Recently Played', misc_url_1_arg_RunPlugin('command', 'MANAGE_SL_RECENT_PLAYED'))],
         ],
         'Custom_Filters' : [
             '[Custom MAME filters]',
-            misc_url_1_arg('command', 'SHOW_CUSTOM_FILTERS'),
             ('[COLOR orange]Custom filters[/COLOR] allows to generate machine '
              'listings perfectly tailored to your whises. For example, you can define a filter of all '
              'the machines released in the 1980s that use a joystick. AML includes a fairly '
              'complete default set of filters in XML format which can be edited.'),
+            misc_url_1_arg('command', 'SHOW_CUSTOM_FILTERS'),
             [('Setup custom filters', misc_url_1_arg_RunPlugin('command', 'SETUP_CUSTOM_FILTERS'))],
         ],
     }
@@ -753,6 +1021,7 @@ def render_root_list():
         num_cat_NPlayers = len(cache_index_dic['NPlayers'])
         num_cat_Bestgames = len(cache_index_dic['Bestgames'])
         num_cat_Series = len(cache_index_dic['Series'])
+        num_cat_Alltime = len(cache_index_dic['Alltime'])
         num_cat_Artwork = len(cache_index_dic['Artwork'])
         num_cat_Version = len(cache_index_dic['Version'])
 
@@ -810,223 +1079,70 @@ def render_root_list():
         num_SL_empty = 0
         log_debug('render_root_list() SL_counters_available = False')
 
-    # >> Main filter
-    machines_n_str = 'Machines with coin slot (Normal)'
-    machines_u_str = 'Machines with coin slot (Unusual)'
-    nocoin_str     = 'Machines with no coin slot'
-    mecha_str      = 'Mechanical machines'
-    dead_str       = 'Dead machines'
-    devices_str    = 'Device machines'
-
-    # >> Binary filters
-    bios_str       = 'Machines [BIOS]'
-    chd_str        = 'Machines [with CHDs]'
-    samples_str    = 'Machines [with Samples]'
-    softlists_str  = 'Machines [with Software Lists]'
-
-    # >> Cataloged filters (optional)
-    catver_str   = 'Machines by Category (Catver)'
-    catlist_str  = 'Machines by Category (Catlist)'
-    genre_str    = 'Machines by Category (Genre)'
-    category_str = 'Machines by Category (MASH)'
-    NPlayers_str = 'Machines by Number of players'
-    rating_str   = 'Machines by Rating'
-    series_str   = 'Machines by Series'
-    artwork_str  = 'Machines by Artwork (MASH)'
-    version_str  = 'Machines by Version Added (Catver)'
-
-    # >> Cataloged filters (always there)
-    # NOTE: use the same names as MAME executable
-    # -listdevices   list available devices                  XML tag <device_ref>
-    # -listslots     list available slots and slot devices   XML tag <slot>
-    # -listmedia     list available media for the system     XML tag <device>
-    ctype_expanded_str  = 'Machines by Controls (Expanded)'
-    ctype_compact_str   = 'Machines by Controls (Compact)'
-    device_expanded_str = 'Machines by Pluggable Devices (Expanded)'
-    device_compact_str  = 'Machines by Pluggable Devices (Compact)'
-    dtype_str           = 'Machines by Display Type'
-    d_vsync_freq_str    = 'Machines by Display VSync freq'
-    d_resolution_str    = 'Machines by Display Resolution'
-    CPU_str             = 'Machines by CPU'
-    driver_str          = 'Machines by Driver'
-    manufacturer_str    = 'Machines by Manufacturer'
-    shortname_str       = 'Machines by MAME short name'
-    longname_str        = 'Machines by MAME long name'
-    SL_str              = 'Machines by Software List'
-    year_str            = 'Machines by Year'
-
-    # --- Root window plots ---
-    machines_n_plot = ('[COLOR orange]Main filter[/COLOR] of MAME machines [COLOR violet]with coin '
-        'slot[/COLOR] and normal controls. This list includes the machines you would '
-        'typically find in Europe and USA amusement arcades some decades ago.')
-    machines_u_plot = ('[COLOR orange]Main filter[/COLOR] of MAME machines [COLOR violet]with coin '
-        'slot[/COLOR] and Only buttons, Gambling, Hanafuda and Mahjong controls. '
-        'This corresponds to slot, gambling and Japanese card and mahjong machines.')
-    nocoin_plot = ('[COLOR orange]Main filter[/COLOR] of MAME machines [COLOR violet]with no coin '
-        'slot[/COLOR]. Here you will find the good old MESS machines, including computers, '
-        'video game consoles, hand-held video game consoles, etc.')
-    mecha_plot = ('[COLOR orange]Main filter[/COLOR] of [COLOR violet]mechanical[/COLOR] MAME machines. '
-        'These machines have mechanical parts, for example pinballs, and currently do not work with MAME. '
-        'They are here for preservation and historical reasons.')
-    dead_plot = ('[COLOR orange]Main filter[/COLOR] of [COLOR violet]dead[/COLOR] MAME machines. '
-        'Dead machines do not work and have no controls, so you cannot interact with them in any way.')
-    devices_plot = ('[COLOR orange]Main filter[/COLOR] of [COLOR violet]device machines[/COLOR]. '
-        'Device machines, for example the Zilog Z80 CPU, are components used by other machines '
-        'and cannot be run on their own.')
-
-    bios_plot = ('[COLOR orange]Binary filter[/COLOR] of [COLOR violet]BIOS[/COLOR] machines. Some BIOS '
-        'machines can be run and usually will display a message like "Game not found".')
-    chd_plot = ('[COLOR orange]Binary filter[/COLOR] of machines that need one or more '
-        '[COLOR violet]CHDs[/COLOR] to run. They may also need ROMs and/or BIOS or not.')
-    samples_plot = ('[COLOR orange]Binary filter[/COLOR] of machines that require '
-        '[COLOR violet]samples[/COLOR]. Samples are optional and will increase the quality'
-        ' of the emulated sound.')
-    softlists_plot = ('[COLOR orange]Binary filter[/COLOR] of machines that have one or more '
-        '[COLOR violet]Software Lists[/COLOR] associated.')
-
-    catver_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by category. '
-        'This filter requires that you configure [COLOR violet]catver.ini[/COLOR].')
-    catlist_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by category. '
-        'This filter requires that you configure [COLOR violet]catlist.ini[/COLOR].')
-    genre_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by Genre. '
-        'This filter requires that you configure [COLOR violet]genre.ini[/COLOR].')
-    category_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by Category. '
-        'This filter requires that you configure [COLOR violet]Category.ini[/COLOR] by MASH.')
-    NPlayers_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by the number of '
-        'players that can play simultaneously or alternatively. This filter requires '
-        'that you configure [COLOR violet]nplayers.ini[/COLOR].')
-    rating_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by rating. The rating '
-        'is subjective but is a good indicator about the quality of the games. '
-        'This filter requires that you configure [COLOR violet]bestgames.ini[/COLOR].')
-    series_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by series. '
-        'This filter requires that you configure [COLOR violet]series.ini[/COLOR].')
-    artwork_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by Artwork. '
-        'This filter requires that you configure [COLOR violet]Artwork.ini[/COLOR] by MASH.')
-    version_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by Version Added. '
-        'This filter requires that you configure [COLOR violet]catver.ini[/COLOR].')
-
-    ctype_expanded_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by control. '
-        'For each machine, all controls are included in the list.')
-    ctype_compact_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by control. '
-        'Machines may have additional controls.')
-    device_expanded_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by pluggable devices. '
-        'For each machine, all pluggable devices are included in the list.')
-    device_compact_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by pluggable devices. '
-        'Machines may have additional pluggable devices.')
-    dtype_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by display type '
-        'and rotation.')
-    d_vsync_freq_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by the display '
-        'vertical synchronisation (VSync) frequency, also known as the display refresh rate or '
-        'frames per second (FPS).')
-    d_resolution_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by display resolution.')
-    CPU_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by the CPU used.')
-    driver_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by driver. '
-        'Brother machines have the same driver.')
-    manufacturer_plot = ('[COLOR orange]Catalog filter[/COLOR] of MAME machines sorted by '
-        'manufacturer.')
-    shortname_plot = ('[COLOR orange]Catalog filter[/COLOR] of MAME machines sorted alphabetically '
-        'by the MAME short name. The short name originated during the old MS-DOS days '
-        'where filenames were restricted to 8 ASCII characters.')
-    longname_plot = ('[COLOR orange]Catalog filter[/COLOR] of MAME machines sorted alphabetically '
-        'by the machine description or long name.')
-    SL_plot = ('[COLOR orange]Catalog filter[/COLOR] of the Software Lists and the machines '
-        'that run items belonging to that Software List.')
-    year_plot = ('[COLOR orange]Catalog filter[/COLOR] of machines sorted by release year.')
-
-    History_plot = ('Browse the contents of [COLOR orange]history.dat[/COLOR]. Note that '
-        'history.dat is also available on the MAME machines and SL items context menu.')
-    MAMEInfo_plot = ('Browse the contents of [COLOR orange]mameinfo.dat[/COLOR]. Note that '
-        'mameinfo.dat is also available on the MAME machines context menu.')
-    Gameinit_plot = ('Browse the contents of [COLOR orange]gameinit.dat[/COLOR]. Note that '
-        'gameinit.dat is also available on the MAME machines context menu.')
-    Command_plot = ('Browse the contents of [COLOR orange]command.dat[/COLOR]. Note that '
-        'command.dat is also available on the MAME machines context menu.')
-
-    SL_all_plot = ('Display all [COLOR orange]Software Lists[/COLOR].')
-    SL_ROM_plot = ('Display [COLOR orange]Software Lists[/COLOR] that have only ROMs and not CHDs (disks).')
-    SL_ROM_CHD_plot = ('Display [COLOR orange]Software Lists[/COLOR] that have both ROMs and CHDs.')
-    SL_CHD_plot = ('Display [COLOR orange]Software Lists[/COLOR] that have only CHDs and not ROMs.')
-    SL_empty_plot = ('Display [COLOR orange]Software Lists[/COLOR] with no ROMs nor CHDs.')
-
-    ROLS_plot = ('[COLOR orange]AEL Read Only Launchers[/COLOR] are special launchers '
-        'exported to AEL. You can select your Favourite MAME machines or setup a custom '
-        'filter to enjoy your MAME games in AEL togheter with other emulators.')
-
-    Utilities_plot = ('Execute several [COLOR orange]Utilities[/COLOR]. For example, to '
-        'check you AML configuration.')
-    Global_Reports_plot = ('View the [COLOR orange]Global Reports[/COLOR] and '
-        'machine and audit [COLOR orange]Statistics[/COLOR].')
-
     # --- Machine counters ---
     if counters_available:
-        # --- Special catalogs rended in root menu ---
         if mame_view_mode == VIEW_MODE_FLAT:
-            a = ' [COLOR orange]({0} machines)[/COLOR]'
-            machines_n_str += a.format(num_m_Main_Normal)
-            machines_u_str += a.format(num_m_Main_Unusual)
-            nocoin_str     += a.format(num_m_Main_NoCoin)
-            mecha_str      += a.format(num_m_Main_Mechanical)
-            dead_str       += a.format(num_m_Main_Dead)
-            devices_str    += a.format(num_m_Main_Devices)
-            bios_str       += a.format(num_m_Binary_BIOS)
-            chd_str        += a.format(num_m_Binary_CHD)
-            samples_str    += a.format(num_m_Binary_Samples)
-            softlists_str  += a.format(num_m_Binary_SoftwareLists)
+            a = ' [COLOR orange]({} machines)[/COLOR]'
+            root_Main['Main_Normal'][2] += a.format(num_m_Main_Normal)
+            root_Main['Main_Unusual'][2] += a.format(num_m_Main_Unusual)
+            root_Main['Main_NoCoin'][2] += a.format(num_m_Main_NoCoin)
+            root_Main['Main_Mechanical'][2] += a.format(num_m_Main_Mechanical)
+            root_Main['Main_Dead'][2] += a.format(num_m_Main_Dead)
+            root_Main['Main_Devices'][2] += a.format(num_m_Main_Devices)
+            root_Binary['BIOS'][2] += a.format(num_m_Binary_BIOS)
+            root_Binary['CHD'][2] += a.format(num_m_Binary_CHD)
+            root_Binary['Samples'][2] += a.format(num_m_Binary_Samples)
+            root_Binary['SoftwareLists'][2] += a.format(num_m_Binary_SoftwareLists)
         elif mame_view_mode == VIEW_MODE_PCLONE:
-            a = ' [COLOR orange]({0} parents)[/COLOR]'
-            machines_n_str += a.format(num_p_Main_Normal)
-            machines_u_str += a.format(num_p_Main_Unusual)
-            nocoin_str     += a.format(num_p_Main_NoCoin)
-            mecha_str      += a.format(num_p_Main_Mechanical)
-            dead_str       += a.format(num_p_Main_Dead)
-            devices_str    += a.format(num_p_Main_Devices)
-            bios_str       += a.format(num_p_Binary_BIOS)
-            chd_str        += a.format(num_p_Binary_CHD)
-            samples_str    += a.format(num_p_Binary_Samples)
-            softlists_str  += a.format(num_p_Binary_SoftwareLists)
+            a = ' [COLOR orange]({} parents)[/COLOR]'
+            root_Main['Main_Normal'][2] += a.format(num_p_Main_Normal)
+            root_Main['Main_Unusual'][2] += a.format(num_p_Main_Unusual)
+            root_Main['Main_NoCoin'][2] += a.format(num_p_Main_NoCoin)
+            root_Main['Main_Mechanical'][2] += a.format(num_p_Main_Mechanical)
+            root_Main['Main_Dead'][2] += a.format(num_p_Main_Dead)
+            root_Main['Main_Devices'][2] += a.format(num_p_Main_Devices)
+            root_Binary['BIOS'][2] += a.format(num_p_Binary_BIOS)
+            root_Binary['CHD'][2] += a.format(num_p_Binary_CHD)
+            root_Binary['Samples'][2] += a.format(num_p_Binary_Samples)
+            root_Binary['SoftwareLists'][2] += a.format(num_p_Binary_SoftwareLists)
 
-        # --- Standard catalog filters ---
-        a = ' [COLOR gold]({0} items)[/COLOR]'
+        a = ' [COLOR gold]({} items)[/COLOR]'
         # Optional
-        catver_str          += a.format(num_cat_Catver)
-        catlist_str         += a.format(num_cat_Catlist)
-        genre_str           += a.format(num_cat_Genre)
-        category_str        += a.format(num_cat_Category)
-        NPlayers_str        += a.format(num_cat_NPlayers)
-        rating_str          += a.format(num_cat_Bestgames)
-        series_str          += a.format(num_cat_Series)
-        artwork_str         += a.format(num_cat_Artwork)
-        version_str         += a.format(num_cat_Version)
+        root_categories['Catver'][0] += a.format(num_cat_Catver)
+        root_categories['Catlist'][0] += a.format(num_cat_Catlist)
+        root_categories['Genre'][0] += a.format(num_cat_Genre)
+        root_categories['Category'][0] += a.format(num_cat_Category)
+        root_categories['NPlayers'][0] += a.format(num_cat_NPlayers)
+        root_categories['Bestgames'][0] += a.format(num_cat_Bestgames)
+        root_categories['Series'][0] += a.format(num_cat_Series)
+        root_categories['Alltime'][0] += a.format(num_cat_Alltime)
+        root_categories['Artwork'][0] += a.format(num_cat_Artwork)
+        root_categories['Version'][0] += a.format(num_cat_Version)
         # Always present
-        ctype_expanded_str  += a.format(num_cat_Controls_Expanded)
-        ctype_compact_str   += a.format(num_cat_Controls_Compact)
-        device_expanded_str += a.format(num_cat_Devices_Expanded)
-        device_compact_str  += a.format(num_cat_Devices_Compact)
-        dtype_str           += a.format(num_cat_Display_Type)
-        d_vsync_freq_str    += a.format(num_cat_Display_VSync)
-        d_resolution_str    += a.format(num_cat_Display_Resolution)
-        CPU_str             += a.format(num_cat_CPU)
-        driver_str          += a.format(num_cat_Driver)
-        manufacturer_str    += a.format(num_cat_Manufacturer)
-        shortname_str       += a.format(num_cat_ShortName)
-        longname_str        += a.format(num_cat_LongName)
-        SL_str              += a.format(num_cat_BySL)
-        year_str            += a.format(num_cat_Year)
+        root_categories['Controls_Expanded'][0] += a.format(num_cat_Controls_Expanded)
+        root_categories['Controls_Compact'][0] += a.format(num_cat_Controls_Compact)
+        root_categories['Devices_Expanded'][0] += a.format(num_cat_Devices_Expanded)
+        root_categories['Devices_Compact'][0] += a.format(num_cat_Devices_Compact)
+        root_categories['Display_Type'][0] += a.format(num_cat_Display_Type)
+        root_categories['Display_VSync'][0] += a.format(num_cat_Display_VSync)
+        root_categories['Display_Resolution'][0] += a.format(num_cat_Display_Resolution)
+        root_categories['CPU'][0] += a.format(num_cat_CPU)
+        root_categories['Driver'][0] += a.format(num_cat_Driver)
+        root_categories['Manufacturer'][0] += a.format(num_cat_Manufacturer)
+        root_categories['ShortName'][0] += a.format(num_cat_ShortName)
+        root_categories['LongName'][0] += a.format(num_cat_LongName)
+        root_categories['BySL'][0] += a.format(num_cat_BySL)
+        root_categories['Year'][0] += a.format(num_cat_Year)
 
-    SL_all_str = 'Software Lists (all)'
-    SL_ROM_str = 'Software Lists (with ROMs)'
-    SL_mixed_str = 'Software Lists (with ROMs and CHDs)'
-    SL_CHD_str = 'Software Lists (with CHDs)'
-    SL_empty_str = 'Software Lists (no ROMs nor CHDs)'
     if SL_counters_available:
-        a = ' [COLOR orange]({0} lists)[/COLOR]'
-        SL_all_str   += a.format(num_SL_all)
-        SL_ROM_str   += a.format(num_SL_ROMs)
-        SL_mixed_str += a.format(num_SL_mixed)
-        SL_CHD_str   += a.format(num_SL_CHDs)
-        SL_empty_str += a.format(num_SL_empty)
+        a = ' [COLOR orange]({} lists)[/COLOR]'
+        root_SL['SL'][0] += a.format(num_SL_all)
+        root_SL['SL_ROM'][0] += a.format(num_SL_ROMs)
+        root_SL['SL_ROM_CHD'][0] += a.format(num_SL_mixed)
+        root_SL['SL_CHD'][0] += a.format(num_SL_CHDs)
+        root_SL['SL_empty'][0] += a.format(num_SL_empty)
 
-    # >> If everything deactivated render the main filters so user has access to the context menu.
+    # If everything deactivated render the main filters so user has access to the context menu.
     big_OR = g_settings['display_main_filters'] or g_settings['display_binary_filters'] or \
              g_settings['display_catalog_filters'] or g_settings['display_DAT_browser'] or \
              g_settings['display_SL_browser'] or g_settings['display_MAME_favs'] or \
@@ -1034,73 +1150,77 @@ def render_root_list():
     if not big_OR:
         g_settings['display_main_filters'] = True
 
-    # >> Main filters (Virtual catalog 'Main')
+    # Main filters (Virtual catalog 'Main')
     if g_settings['display_main_filters']:
-        render_root_catalog_row(machines_n_str, 'Main', 'Normal', machines_n_plot)
-        render_root_catalog_row(machines_u_str, 'Main', 'Unusual', machines_u_plot)
-        render_root_catalog_row(nocoin_str, 'Main', 'NoCoin', nocoin_plot)
-        render_root_catalog_row(mecha_str, 'Main', 'Mechanical', mecha_plot)
-        render_root_catalog_row(dead_str, 'Main', 'Dead', dead_plot)
-        render_root_catalog_row(devices_str, 'Main', 'Devices', devices_plot)
+        render_root_catalog_row(*root_Main['Main_Normal'])
+        render_root_catalog_row(*root_Main['Main_Unusual'])
+        render_root_catalog_row(*root_Main['Main_NoCoin'])
+        render_root_catalog_row(*root_Main['Main_Mechanical'])
+        render_root_catalog_row(*root_Main['Main_Dead'])
+        render_root_catalog_row(*root_Main['Main_Devices'])
 
-    # >> Binary filters (Virtual catalog 'Binary')
+    # Binary filters (Virtual catalog 'Binary')
     if g_settings['display_binary_filters']:
-        render_root_catalog_row(bios_str, 'Binary', 'BIOS', bios_plot)
-        render_root_catalog_row(chd_str, 'Binary', 'CHD', chd_plot)
-        render_root_catalog_row(samples_str, 'Binary', 'Samples', samples_plot)
-        render_root_catalog_row(softlists_str, 'Binary', 'SoftwareLists', softlists_plot)
+        render_root_catalog_row(*root_Binary['BIOS'])
+        render_root_catalog_row(*root_Binary['CHD'])
+        render_root_catalog_row(*root_Binary['Samples'])
+        render_root_catalog_row(*root_Binary['SoftwareLists'])
 
     if g_settings['display_catalog_filters']:
-        # >> Optional cataloged filters (depend on a INI file)
-        render_root_category_row(catver_str, misc_url_1_arg('catalog', 'Catver'), catver_plot)
-        render_root_category_row(catlist_str, misc_url_1_arg('catalog', 'Catlist'), catlist_plot)
-        render_root_category_row(genre_str, misc_url_1_arg('catalog', 'Genre'), genre_plot)
-        render_root_category_row(category_str, misc_url_1_arg('catalog', 'Category'), category_plot)
-        render_root_category_row(NPlayers_str, misc_url_1_arg('catalog', 'NPlayers'), NPlayers_plot)
-        render_root_category_row(rating_str, misc_url_1_arg('catalog', 'Bestgames'), rating_plot)
-        render_root_category_row(series_str, misc_url_1_arg('catalog', 'Series'), series_plot)
-        render_root_category_row(artwork_str, misc_url_1_arg('catalog', 'Artwork'), artwork_plot)
-        render_root_category_row(version_str, misc_url_1_arg('catalog', 'Version'), version_plot)
+        # Optional cataloged filters (depend on a INI file)
+        render_root_category_row(*root_categories['Catver'])
+        render_root_category_row(*root_categories['Catlist'])
+        render_root_category_row(*root_categories['Genre'])
+        render_root_category_row(*root_categories['Category'])
+        render_root_category_row(*root_categories['NPlayers'])
+        render_root_category_row(*root_categories['Bestgames'])
+        render_root_category_row(*root_categories['Series'])
+        render_root_category_row(*root_categories['Alltime'])
+        render_root_category_row(*root_categories['Artwork'])
+        render_root_category_row(*root_categories['Version'])
 
-        # >> Cataloged filters (always there)
-        render_root_category_row(ctype_expanded_str, misc_url_1_arg('catalog', 'Controls_Expanded'), ctype_expanded_plot)
-        render_root_category_row(ctype_compact_str, misc_url_1_arg('catalog', 'Controls_Compact'), ctype_compact_plot)
-        render_root_category_row(device_expanded_str, misc_url_1_arg('catalog', 'Devices_Expanded'), device_expanded_plot)
-        render_root_category_row(device_compact_str, misc_url_1_arg('catalog', 'Devices_Compact'), device_compact_plot)
-        render_root_category_row(dtype_str, misc_url_1_arg('catalog', 'Display_Type'), dtype_plot)
-        render_root_category_row(d_vsync_freq_str, misc_url_1_arg('catalog', 'Display_VSync'), d_vsync_freq_plot)
-        render_root_category_row(d_resolution_str, misc_url_1_arg('catalog', 'Display_Resolution'), d_resolution_plot)
-        render_root_category_row(CPU_str, misc_url_1_arg('catalog', 'CPU'), CPU_plot)
-        render_root_category_row(driver_str, misc_url_1_arg('catalog', 'Driver'), driver_plot)
-        render_root_category_row(manufacturer_str, misc_url_1_arg('catalog', 'Manufacturer'), manufacturer_plot)
-        render_root_category_row(shortname_str, misc_url_1_arg('catalog', 'ShortName'), shortname_plot)
-        render_root_category_row(longname_str, misc_url_1_arg('catalog', 'LongName'), longname_plot)
-        render_root_category_row(SL_str, misc_url_1_arg('catalog', 'BySL'), SL_plot)
-        render_root_category_row(year_str, misc_url_1_arg('catalog', 'Year'), year_plot)
+        # Cataloged filters (always there)
+        render_root_category_row(*root_categories['Controls_Expanded'])
+        render_root_category_row(*root_categories['Controls_Compact'])
+        render_root_category_row(*root_categories['Devices_Expanded'])
+        render_root_category_row(*root_categories['Devices_Compact'])
+        render_root_category_row(*root_categories['Display_Type'])
+        render_root_category_row(*root_categories['Display_VSync'])
+        render_root_category_row(*root_categories['Display_Resolution'])
+        render_root_category_row(*root_categories['CPU'])
+        render_root_category_row(*root_categories['Driver'])
+        render_root_category_row(*root_categories['Manufacturer'])
+        render_root_category_row(*root_categories['ShortName'])
+        render_root_category_row(*root_categories['LongName'])
+        render_root_category_row(*root_categories['BySL'])
+        render_root_category_row(*root_categories['Year'])
 
-    # >> history.dat, mameinfo.dat, gameinit.dat, command.dat
+    # --- DAT browsers ---
     if g_settings['display_DAT_browser']:
-        render_root_category_row('History DAT', misc_url_1_arg('catalog', 'History'), History_plot)
-        render_root_category_row('MAMEINFO DAT', misc_url_1_arg('catalog', 'MAMEINFO'), MAMEInfo_plot)
-        render_root_category_row('Gameinit DAT', misc_url_1_arg('catalog', 'Gameinit'), Gameinit_plot)
-        render_root_category_row('Command DAT', misc_url_1_arg('catalog', 'Command'), Command_plot)
+        render_root_category_row(*root_special['History'])
+        render_root_category_row(*root_special['MAMEINFO'])
+        render_root_category_row(*root_special['Gameinit'])
+        render_root_category_row(*root_special['Command'])
 
     # --- Software lists ---
     if g_settings['display_SL_browser'] and g_settings['enable_SL']:
-        render_root_category_row(SL_all_str, misc_url_1_arg('catalog', 'SL'), SL_all_plot)
-        render_root_category_row(SL_ROM_str, misc_url_1_arg('catalog', 'SL_ROM'), SL_ROM_plot)
-        render_root_category_row(SL_mixed_str, misc_url_1_arg('catalog', 'SL_ROM_CHD'), SL_ROM_CHD_plot)
-        render_root_category_row(SL_CHD_str, misc_url_1_arg('catalog', 'SL_CHD'), SL_CHD_plot)
+        render_root_category_row(*root_SL['SL'])
+        render_root_category_row(*root_SL['SL_ROM'])
+        render_root_category_row(*root_SL['SL_ROM_CHD'])
+        render_root_category_row(*root_SL['SL_CHD'])
         if num_SL_empty > 0:
-            render_root_category_row(SL_empty_str, misc_url_1_arg('catalog', 'SL_empty'), SL_empty_plot)
+            render_root_category_row(*root_SL['SL_empty'])
 
     # --- Special launchers ---
     if g_settings['display_custom_filters']:
         render_root_category_row_custom_CM(*root_special_CM['Custom_Filters'])
 
     if g_settings['display_ROLs']:
+        ROLS_plot = ('[COLOR orange]AEL Read Only Launchers[/COLOR] are special launchers '
+            'exported to AEL. You can select your Favourite MAME machines or setup a custom '
+            'filter to enjoy your MAME games in AEL togheter with other emulators.')
         URL = misc_url_1_arg('command', 'SHOW_AEL_ROLS')
-        render_root_category_row('[AEL Read Only Launchers]', URL, ROLS_plot)
+        render_root_category_row('[AEL Read Only Launchers]', ROLS_plot, URL)
 
     # --- MAME Favourite stuff ---
     if g_settings['display_MAME_favs']:
@@ -1120,24 +1240,29 @@ def render_root_list():
 
     # --- Always render these two ---
     if g_settings['display_utilities']:
+        Utilities_plot = ('Execute several [COLOR orange]Utilities[/COLOR]. For example, to '
+            'check you AML configuration.')
         URL = misc_url_1_arg('command', 'SHOW_UTILITIES_VLAUNCHERS')
-        render_root_category_row('Utilities', URL, Utilities_plot)
+        render_root_category_row('Utilities', Utilities_plot, URL)
     if g_settings['display_global_reports']:
+        Global_Reports_plot = ('View the [COLOR orange]Global Reports[/COLOR] and '
+            'machine and audit [COLOR orange]Statistics[/COLOR].')
         URL = misc_url_1_arg('command', 'SHOW_GLOBALREPORTS_VLAUNCHERS')
-        render_root_category_row('Global Reports', URL, Global_Reports_plot)
+        render_root_category_row('Global Reports', Global_Reports_plot, URL)
 
     # --- End of directory ---
     xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
 
 #
 # These _render_skin_* functions used by skins to display widgets.
-# These functions must never fail and be silent. They are called by skin widgets.
+# These functions must never fail and be silent in case of error.
+# They are called by skin widgets.
 #
 def render_skin_fav_slots():
     try:
         set_render_root_data()
-        rsCM = root_special_CM.copy()
         # Remove special markers (first and last character)
+        rsCM = root_special_CM.copy()
         for key, value in rsCM.iteritems(): value[0] = value[0][1:-1]
         render_root_category_row_custom_CM(*rsCM['MAME_Favs'])
         render_root_category_row_custom_CM(*rsCM['MAME_Most'])
@@ -1150,123 +1275,83 @@ def render_skin_fav_slots():
     xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
 
 def render_skin_main_filters():
-    machines_n_str = 'Machines with coin slot (Normal)'
-    machines_u_str = 'Machines with coin slot (Unusual)'
-    nocoin_str = 'Machines with no coin slot'
-    mecha_str = 'Mechanical machines'
-    dead_str = 'Dead machines'
-    devices_str = 'Device machines'
-
     try:
-        render_root_catalog_row(machines_n_str, 'Main', 'Normal')
-        render_root_catalog_row(machines_u_str, 'Main', 'Unusual')
-        render_root_catalog_row(nocoin_str, 'Main', 'NoCoin')
-        render_root_catalog_row(mecha_str, 'Main', 'Mechanical')
-        render_root_catalog_row(dead_str, 'Main', 'Dead')
-        render_root_catalog_row(devices_str, 'Main', 'Devices')
+        set_render_root_data()
+        render_root_catalog_row(*root_Main['Main_Normal'])
+        render_root_catalog_row(*root_Main['Main_Unusual'])
+        render_root_catalog_row(*root_Main['Main_NoCoin'])
+        render_root_catalog_row(*root_Main['Main_Mechanical'])
+        render_root_catalog_row(*root_Main['Main_Dead'])
+        render_root_catalog_row(*root_Main['Main_Devices'])
     except:
         log_error('Excepcion in render_skin_main_filters()')
     xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
 
 def render_skin_binary_filters():
-    bios_str = 'Machines [BIOS]'
-    chd_str = 'Machines [with CHDs]'
-    samples_str = 'Machines [with Samples]'
-    softlists_str  = 'Machines [with Software Lists]'
-
     try:
-        render_root_catalog_row(bios_str, 'Binary', 'BIOS')
-        render_root_catalog_row(chd_str, 'Binary', 'CHD')
-        render_root_catalog_row(samples_str, 'Binary', 'Samples')
-        render_root_catalog_row(softlists_str, 'Binary', 'SoftwareLists')
+        set_render_root_data()
+        render_root_catalog_row(*root_Binary['BIOS'])
+        render_root_catalog_row(*root_Binary['CHD'])
+        render_root_catalog_row(*root_Binary['Samples'])
+        render_root_catalog_row(*root_Binary['SoftwareLists'])
     except:
         log_error('Excepcion in render_skin_binary_filters()')
     xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
 
 def render_skin_catalog_filters():
-    # A mechanism to render only configured filters must be developed.
-    catver_str   = 'Machines by Category (Catver)'
-    catlist_str  = 'Machines by Category (Catlist)'
-    genre_str    = 'Machines by Category (Genre)'
-    category_str = 'Machines by Category (MASH)'
-    NPlayers_str = 'Machines by Number of players'
-    rating_str   = 'Machines by Rating'
-    series_str   = 'Machines by Series'
-    artwork_str  = 'Machines by Artwork (MASH)'
-    version_str  = 'Machines by Added Version'
-
-    ctype_expanded_str  = 'Machines by Controls (Expanded)'
-    ctype_compact_str   = 'Machines by Controls (Compact)'
-    device_expanded_str = 'Machines by Plugabble Devices (Expanded)'
-    device_compact_str  = 'Machines by Plugabble Devices (Compact)'
-    dtype_str           = 'Machines by Display Type'
-    d_vsync_freq_str    = 'Machines by Display VSync freq'
-    d_resolution_str    = 'Machines by Display Resolution'
-    CPU_str             = 'Machines by CPU'
-    driver_str          = 'Machines by Driver'
-    manufacturer_str    = 'Machines by Manufacturer'
-    shortname_str       = 'Machines by MAME short name'
-    longname_str        = 'Machines by MAME long name'
-    SL_str              = 'Machines by Software List'
-    year_str            = 'Machines by Year'
-
     try:
-        # >> Optional cataloged filters (depend on a INI file)
-        render_root_category_row(catver_str, misc_url_1_arg('catalog', 'Catver'))
-        render_root_category_row(catlist_str, misc_url_1_arg('catalog', 'Catlist'))
-        render_root_category_row(genre_str, misc_url_1_arg('catalog', 'Genre'))
-        render_root_category_row(category_str, misc_url_1_arg('catalog', 'Category'))
-        render_root_category_row(NPlayers_str, misc_url_1_arg('catalog', 'NPlayers'))
-        render_root_category_row(rating_str, misc_url_1_arg('catalog', 'Bestgames'))
-        render_root_category_row(series_str, misc_url_1_arg('catalog', 'Series'))
-        render_root_category_row(artwork_str, misc_url_1_arg('catalog', 'Artwork'))
-        render_root_category_row(version_str, misc_url_1_arg('catalog', 'Version'))
-
-        # >> Cataloged filters (always there)
-        render_root_category_row(ctype_expanded_str, misc_url_1_arg('catalog', 'Controls_Expanded'))
-        render_root_category_row(ctype_compact_str, misc_url_1_arg('catalog', 'Controls_Compact'))
-        render_root_category_row(device_expanded_str, misc_url_1_arg('catalog', 'Devices_Expanded'))
-        render_root_category_row(device_compact_str, misc_url_1_arg('catalog', 'Devices_Compact'))
-        render_root_category_row(dtype_str, misc_url_1_arg('catalog', 'Display_Type'))
-        render_root_category_row(d_vsync_freq_str, misc_url_1_arg('catalog', 'Display_VSync'))
-        render_root_category_row(d_resolution_str, misc_url_1_arg('catalog', 'Display_Resolution'))
-        render_root_category_row(CPU_str, misc_url_1_arg('catalog', 'CPU'))
-        render_root_category_row(driver_str, misc_url_1_arg('catalog', 'Driver'))
-        render_root_category_row(manufacturer_str, misc_url_1_arg('catalog', 'Manufacturer'))
-        render_root_category_row(shortname_str, misc_url_1_arg('catalog', 'ShortName'))
-        render_root_category_row(longname_str, misc_url_1_arg('catalog', 'LongName'))
-        render_root_category_row(SL_str, misc_url_1_arg('catalog', 'BySL'))
-        render_root_category_row(year_str, misc_url_1_arg('catalog', 'Year'))
+        # A mechanism to render only configured filters must be developed.
+        set_render_root_data()
+        render_root_category_row(*root_categories['Catver'])
+        render_root_category_row(*root_categories['Catlist'])
+        render_root_category_row(*root_categories['Genre'])
+        render_root_category_row(*root_categories['Category'])
+        render_root_category_row(*root_categories['NPlayers'])
+        render_root_category_row(*root_categories['Bestgames'])
+        render_root_category_row(*root_categories['Series'])
+        render_root_category_row(*root_categories['Alltime'])
+        render_root_category_row(*root_categories['Artwork'])
+        render_root_category_row(*root_categories['Version'])
+        render_root_category_row(*root_categories['Controls_Expanded'])
+        render_root_category_row(*root_categories['Controls_Compact'])
+        render_root_category_row(*root_categories['Devices_Expanded'])
+        render_root_category_row(*root_categories['Devices_Compact'])
+        render_root_category_row(*root_categories['Display_Type'])
+        render_root_category_row(*root_categories['Display_VSync'])
+        render_root_category_row(*root_categories['Display_Resolution'])
+        render_root_category_row(*root_categories['CPU'])
+        render_root_category_row(*root_categories['Driver'])
+        render_root_category_row(*root_categories['Manufacturer'])
+        render_root_category_row(*root_categories['ShortName'])
+        render_root_category_row(*root_categories['LongName'])
+        render_root_category_row(*root_categories['BySL'])
+        render_root_category_row(*root_categories['Year'])
     except:
         log_error('Excepcion in render_skin_catalog_filters()')
     xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
 
 def render_skin_dat_slots():
     try:
-        render_root_category_row('History DAT',  misc_url_1_arg('catalog', 'History'))
-        render_root_category_row('MAMEINFO DAT', misc_url_1_arg('catalog', 'MAMEINFO'))
-        render_root_category_row('Gameinit DAT', misc_url_1_arg('catalog', 'Gameinit'))
-        render_root_category_row('Command DAT',  misc_url_1_arg('catalog', 'Command'))
+        set_render_root_data()
+        render_root_category_row(*root_special['History'])
+        render_root_category_row(*root_special['MAMEINFO'])
+        render_root_category_row(*root_special['Gameinit'])
+        render_root_category_row(*root_special['Command'])
     except:
-        pass
+        log_error('Excepcion in render_skin_dat_slots()')
     xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
 
 def render_skin_SL_filters():
     if not g_settings['enable_SL']:
         xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
         return
-    SL_all_str = 'Software Lists (all)'
-    SL_ROM_str = 'Software Lists (with ROMs)'
-    SL_mixed_str = 'Software Lists (with ROMs and CHDs)'
-    SL_CHD_str = 'Software Lists (with CHDs)'
-    SL_empty_str = 'Software Lists (no ROMs nor CHDs)'
-
     try:
-        render_root_category_row(SL_all_str, misc_url_1_arg('catalog', 'SL'))
-        render_root_category_row(SL_ROM_str, misc_url_1_arg('catalog', 'SL_ROM'))
-        render_root_category_row(SL_mixed_str, misc_url_1_arg('catalog', 'SL_ROM_CHD'))
-        render_root_category_row(SL_CHD_str, misc_url_1_arg('catalog', 'SL_CHD'))
-        render_root_category_row(SL_empty_str, misc_url_1_arg('catalog', 'SL_empty'))
+        set_render_root_data()
+        render_root_category_row(*root_SL['SL'])
+        render_root_category_row(*root_SL['SL_ROM'])
+        render_root_category_row(*root_SL['SL_ROM_CHD'])
+        render_root_category_row(*root_SL['SL_CHD'])
+        render_root_category_row(*root_SL['SL_empty'])
     except:
         log_error('Excepcion in render_skin_SL_filters()')
     xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
@@ -1274,7 +1359,7 @@ def render_skin_SL_filters():
 #
 # A Catalog is equivalent to a Launcher in AEL.
 #
-def render_root_catalog_row(display_name, catalog_name, catalog_key, plot_str = ''):
+def render_root_catalog_row(catalog_name, catalog_key, display_name, plot_str):
     # --- Create listitem row ---
     ICON_OVERLAY = 6
     listitem = xbmcgui.ListItem(display_name)
@@ -1303,11 +1388,11 @@ def render_root_catalog_row(display_name, catalog_name, catalog_key, plot_str = 
 #
 # A Category is equivalent to a Category in AEL. It contains a list of Launchers (catalogs).
 #
-def render_root_category_row(root_name, root_URL, plot_str = ''):
+def render_root_category_row(display_name, plot_str, root_URL):
     # --- Create listitem row ---
     ICON_OVERLAY = 6
-    listitem = xbmcgui.ListItem(root_name)
-    listitem.setInfo('video', {'title' : root_name, 'overlay' : ICON_OVERLAY, 'plot' : plot_str})
+    listitem = xbmcgui.ListItem(display_name)
+    listitem.setInfo('video', {'title' : display_name, 'overlay' : ICON_OVERLAY, 'plot' : plot_str})
 
     # --- Artwork ---
     icon_path   = g_PATHS.ICON_FILE_PATH.getPath()
@@ -1323,11 +1408,11 @@ def render_root_category_row(root_name, root_URL, plot_str = ''):
     listitem.addContextMenuItems(commands)
     xbmcplugin.addDirectoryItem(g_addon_handle, root_URL, listitem, isFolder = True)
 
-def render_root_category_row_custom_CM(root_name, root_URL, plot_str, cmenu_list):
+def render_root_category_row_custom_CM(display_name, plot_str, root_URL, cmenu_list):
     # --- Create listitem row ---
     ICON_OVERLAY = 6
-    listitem = xbmcgui.ListItem(root_name)
-    listitem.setInfo('video', {'title' : root_name, 'overlay' : ICON_OVERLAY, 'plot' : plot_str})
+    listitem = xbmcgui.ListItem(display_name)
+    listitem.setInfo('video', {'title' : display_name, 'overlay' : ICON_OVERLAY, 'plot' : plot_str})
 
     # --- Artwork ---
     icon_path   = g_PATHS.ICON_FILE_PATH.getPath()
@@ -1365,6 +1450,14 @@ def render_Utilities_vlaunchers():
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
         ('AML addon settings', 'Addon.OpenSettings({0})'.format(__addon_id__)),
     ]
+
+    # --- Check MAME version ---
+    listitem = aux_get_generic_listitem(
+        'Check MAME version',
+        'Check MAME version',
+        commands)
+    url_str = misc_url_2_arg('command', 'EXECUTE_UTILITY', 'which', 'CHECK_MAME_VERSION')
+    xbmcplugin.addDirectoryItem(g_addon_handle, url_str, listitem, isFolder = False)
 
     # --- Check AML configuration ---
     listitem = aux_get_generic_listitem(
@@ -2181,7 +2274,7 @@ def command_context_display_settings(catalog_name, category_name):
 # Software Lists
 #----------------------------------------------------------------------------------------------
 def render_SL_list(catalog_name):
-    log_debug('render_SL_list() catalog_name = {0}\n'.format(catalog_name))
+    log_debug('render_SL_list() catalog_name = {}\n'.format(catalog_name))
 
     # --- General AML plugin check ---
     control_dic = fs_load_JSON_file_dic(g_PATHS.MAIN_CONTROL_PATH.getPath())
@@ -2189,10 +2282,8 @@ def render_SL_list(catalog_name):
         xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
         return
 
-    # >> Load Software List catalog
+    # --- Load Software List catalog and build render catalog ---
     SL_main_catalog_dic = fs_load_JSON_file_dic(g_PATHS.SL_INDEX_PATH.getPath())
-
-    # >> Build SL
     SL_catalog_dic = {}
     if catalog_name == 'SL':
         for SL_name, SL_dic in SL_main_catalog_dic.iteritems():
@@ -2214,9 +2305,9 @@ def render_SL_list(catalog_name):
             if SL_dic['num_with_ROMs'] == 0 and SL_dic['num_with_CHDs'] == 0:
                 SL_catalog_dic[SL_name] = SL_dic
     else:
-        kodi_dialog_OK('Wrong catalog_name {0}'.format(catalog_name))
+        kodi_dialog_OK('Wrong catalog_name {}'.format(catalog_name))
         return
-    log_debug('render_SL_list() len(catalog_name) = {0}\n'.format(len(SL_catalog_dic)))
+    log_debug('render_SL_list() len(catalog_name) = {}\n'.format(len(SL_catalog_dic)))
 
     set_Kodi_all_sorting_methods()
     for SL_name in SL_catalog_dic:
@@ -2233,14 +2324,14 @@ def render_SL_ROMs(SL_name):
         xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
         return
 
-    # >> Load ListItem properties (Not used at the moment)
+    # Load ListItem properties (Not used at the moment)
     # SL_properties_dic = fs_load_JSON_file_dic(g_PATHS.SL_MACHINES_PROP_PATH.getPath()) 
     # prop_dic = SL_properties_dic[SL_name]
-    # >> Global properties
+    # Global properties
     view_mode_property = g_settings['sl_view_mode']
     log_debug('render_SL_ROMs() view_mode_property = {0}'.format(view_mode_property))
 
-    # >> Load Software List ROMs
+    # Load Software List ROMs
     SL_PClone_dic = fs_load_JSON_file_dic(g_PATHS.SL_PCLONE_DIC_PATH.getPath())
     SL_catalog_dic = fs_load_JSON_file_dic(g_PATHS.SL_INDEX_PATH.getPath())
     file_name =  SL_catalog_dic[SL_name]['rom_DB_noext'] + '_items.json'
@@ -2253,22 +2344,22 @@ def render_SL_ROMs(SL_name):
     set_Kodi_all_sorting_methods()
     SL_proper_name = SL_catalog_dic[SL_name]['display_name']
     if view_mode_property == VIEW_MODE_PCLONE:
+        # Get list of parents
         log_debug('render_SL_ROMs() Rendering Parent/Clone launcher')
-        # >> Get list of parents
         parent_list = []
         for parent_name in sorted(SL_PClone_dic[SL_name]): parent_list.append(parent_name)
         for parent_name in parent_list:
             ROM        = SL_roms[parent_name]
             assets     = SL_asset_dic[parent_name] if parent_name in SL_asset_dic else fs_new_SL_asset()
             num_clones = len(SL_PClone_dic[SL_name][parent_name])
-            ROM['genre'] = SL_proper_name # >> Add the SL name as 'genre'
+            ROM['genre'] = SL_proper_name # Add the SL name as 'genre'
             render_SL_ROM_row(SL_name, parent_name, ROM, assets, True, num_clones)
     elif view_mode_property == VIEW_MODE_FLAT:
         log_debug('render_SL_ROMs() Rendering Flat launcher')
         for rom_name in SL_roms:
             ROM    = SL_roms[rom_name]
             assets = SL_asset_dic[rom_name] if rom_name in SL_asset_dic else fs_new_SL_asset()
-            ROM['genre'] = SL_proper_name # >> Add the SL name as 'genre'
+            ROM['genre'] = SL_proper_name # Add the SL name as 'genre'
             render_SL_ROM_row(SL_name, rom_name, ROM, assets)
     else:
         kodi_dialog_OK('Wrong vm = "{0}". This is a bug, please report it.'.format(prop_dic['vm']))
@@ -2310,32 +2401,40 @@ def render_SL_pclone_set(SL_name, parent_name):
     xbmcplugin.endOfDirectory(handle = g_addon_handle, succeeded = True, cacheToDisc = False)
 
 def render_SL_list_row(SL_name, SL):
-    if SL['num_with_CHDs'] == 0:
-        if SL['num_with_ROMs'] == 1:
-            display_name = '{0}  [COLOR orange]({1} ROM)[/COLOR]'.format(SL['display_name'], SL['num_with_ROMs'])
-        else:
-            display_name = '{0}  [COLOR orange]({1} ROMs)[/COLOR]'.format(SL['display_name'], SL['num_with_ROMs'])
-    elif SL['num_with_ROMs'] == 0:
-        if SL['num_with_CHDs'] == 1:
-            display_name = '{0}  [COLOR orange]({1} CHD)[/COLOR]'.format(SL['display_name'], SL['num_with_CHDs'])
-        else:
-            display_name = '{0}  [COLOR orange]({1} CHDs)[/COLOR]'.format(SL['display_name'], SL['num_with_CHDs'])
+    # --- Display number of ROMs and CHDs ---
+    # if SL['num_with_CHDs'] == 0:
+    #     if SL['num_with_ROMs'] == 1: f_str = '{}  [COLOR orange]({} ROM)[/COLOR]'
+    #     else:                        f_str = '{}  [COLOR orange]({} ROMs)[/COLOR]'
+    #     display_name = f_str.format(SL['display_name'], SL['num_with_ROMs'])
+    # elif SL['num_with_ROMs'] == 0:
+    #     if SL['num_with_CHDs'] == 1: f_str = '{}  [COLOR orange]({} CHD)[/COLOR]'
+    #     else:                        f_str = '{}  [COLOR orange]({} CHDs)[/COLOR]'
+    #     display_name = f_str.format(SL['display_name'], SL['num_with_CHDs'])
+    # else:
+    #     display_name = '{}  [COLOR orange]({} ROMs and {} CHDs)[/COLOR]'.format(
+    #         SL['display_name'], SL['num_with_ROMs'], SL['num_with_CHDs'])
+
+    # --- Display Parents or Total SL items ---
+    view_mode_property = g_settings['sl_view_mode']
+    if view_mode_property == VIEW_MODE_PCLONE:
+        if SL['num_parents'] == 1: f_str = '{}  [COLOR orange]({} parent)[/COLOR]'
+        else:                      f_str = '{}  [COLOR orange]({} parents)[/COLOR]'
+        display_name = f_str.format(SL['display_name'], SL['num_parents'])
+    elif view_mode_property == VIEW_MODE_FLAT:
+        if SL['num_items'] == 1: f_str = '{}  [COLOR orange]({} item)[/COLOR]'
+        else:                    f_str = '{}  [COLOR orange]({} items)[/COLOR]'
+        display_name = f_str.format(SL['display_name'], SL['num_items'])
     else:
-        display_name = '{0}  [COLOR orange]({1} ROMs and {2} CHDs)[/COLOR]'.format(SL['display_name'], SL['num_with_ROMs'], SL['num_with_CHDs'])
+        raise TypeError('Wrong view_mode_property {}'.format(view_mode_property))
 
     # --- Create listitem row ---
     ICON_OVERLAY = 6
     listitem = xbmcgui.ListItem(display_name)
     listitem.setInfo('video', {'title' : display_name, 'overlay' : ICON_OVERLAY } )
-
-    # --- Create context menu ---
-    commands = [
+    listitem.addContextMenuItems([
         ('Kodi File Manager', 'ActivateWindow(filemanager)' ),
-        ('AML addon settings', 'Addon.OpenSettings({0})'.format(__addon_id__))
-    ]
-    listitem.addContextMenuItems(commands)
-
-    # --- Add row ---
+        ('AML addon settings', 'Addon.OpenSettings({})'.format(__addon_id__))
+    ])
     URL = misc_url_2_arg('catalog', 'SL', 'category', SL_name)
     xbmcplugin.addDirectoryItem(g_addon_handle, URL, listitem, isFolder = True)
 
@@ -2421,76 +2520,81 @@ def render_DAT_list(catalog_name):
     commands = [
         ('View', misc_url_1_arg_RunPlugin('command', 'VIEW')),
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-        ('AML addon settings', 'Addon.OpenSettings({0})'.format(__addon_id__))
+        ('AML addon settings', 'Addon.OpenSettings({0})'.format(__addon_id__)),
     ]
     # --- Unrolled variables ---
     ICON_OVERLAY = 6
 
-    # >> Load Software List catalog
     if catalog_name == 'History':
+        # Render list of categories.
         DAT_idx_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_IDX_PATH.getPath())
         if not DAT_idx_dic:
-            kodi_dialog_OK('DAT database file "{0}" empty.'.format(catalog_name))
+            kodi_dialog_OK('DAT database file "{}" empty.'.format(catalog_name))
             xbmcplugin.endOfDirectory(g_addon_handle, succeeded = True, cacheToDisc = False)
             return
         set_Kodi_all_sorting_methods()
         for key in DAT_idx_dic:
-            category_name = '{0} [COLOR lightgray]({1})[/COLOR]'.format(DAT_idx_dic[key]['name'], key)
+            category_name = '{} [COLOR lightgray]({})[/COLOR]'.format(DAT_idx_dic[key]['name'], key)
             listitem = xbmcgui.ListItem(category_name)
             listitem.setInfo('video', {'title' : category_name, 'overlay' : ICON_OVERLAY } )
             listitem.addContextMenuItems(commands)
             URL = misc_url_2_arg('catalog', catalog_name, 'category', key)
             xbmcplugin.addDirectoryItem(g_addon_handle, url = URL, listitem = listitem, isFolder = True)
     elif catalog_name == 'MAMEINFO':
+        # Render list of categories.
         DAT_idx_dic = fs_load_JSON_file_dic(g_PATHS.MAMEINFO_IDX_PATH.getPath())
         if not DAT_idx_dic:
-            kodi_dialog_OK('DAT database file "{0}" empty.'.format(catalog_name))
+            kodi_dialog_OK('DAT database file "{}" empty.'.format(catalog_name))
             xbmcplugin.endOfDirectory(g_addon_handle, succeeded = True, cacheToDisc = False)
             return
         set_Kodi_all_sorting_methods()
         for key in DAT_idx_dic:
-            category_name = '{0}'.format(key)
+            category_name = '{}'.format(key)
             listitem = xbmcgui.ListItem(category_name)
             listitem.setInfo('video', {'title' : category_name, 'overlay' : ICON_OVERLAY } )
             listitem.addContextMenuItems(commands)
             URL = misc_url_2_arg('catalog', catalog_name, 'category', key)
             xbmcplugin.addDirectoryItem(g_addon_handle, URL, listitem, isFolder = True)
     elif catalog_name == 'Gameinit':
-        DAT_idx_list = fs_load_JSON_file_dic(g_PATHS.GAMEINIT_IDX_PATH.getPath())
-        if not DAT_idx_list:
+        # Render list of machines.
+        DAT_idx_dic = fs_load_JSON_file_dic(g_PATHS.GAMEINIT_IDX_PATH.getPath())
+        if not DAT_idx_dic:
             kodi_dialog_OK('DAT database file "{0}" empty.'.format(catalog_name))
             xbmcplugin.endOfDirectory(g_addon_handle, succeeded = True, cacheToDisc = False)
             return
         set_Kodi_all_sorting_methods()
-        for machine_name_list in DAT_idx_list:
-            machine_name = '{0} [COLOR lightgray]({1})[/COLOR]'.format(machine_name_list[1], machine_name_list[0])
+        for machine_key in DAT_idx_dic:
+            machine_name = '{} [COLOR lightgray]({})[/COLOR]'.format(DAT_idx_dic[machine_key], machine_key)
             listitem = xbmcgui.ListItem(machine_name)
             listitem.setInfo('video', {'title' : machine_name, 'overlay' : ICON_OVERLAY } )
             listitem.addContextMenuItems(commands)
-            URL = misc_url_3_arg('catalog', catalog_name, 'category', 'None', 'machine', machine_name_list[0])
+            URL = misc_url_3_arg('catalog', catalog_name, 'category', 'None', 'machine', machine_key)
             xbmcplugin.addDirectoryItem(g_addon_handle, URL, listitem, isFolder = False)
     elif catalog_name == 'Command':
-        DAT_idx_list = fs_load_JSON_file_dic(g_PATHS.COMMAND_IDX_PATH.getPath())
-        if not DAT_idx_list:
-            kodi_dialog_OK('DAT database file "{0}" empty.'.format(catalog_name))
+        # Render list of machines.
+        DAT_idx_dic = fs_load_JSON_file_dic(g_PATHS.COMMAND_IDX_PATH.getPath())
+        if not DAT_idx_dic:
+            kodi_dialog_OK('DAT database file "{}" empty.'.format(catalog_name))
             xbmcplugin.endOfDirectory(g_addon_handle, succeeded = True, cacheToDisc = False)
             return
         set_Kodi_all_sorting_methods()
-        for machine_name_list in DAT_idx_list:
-            machine_name = '{0} [COLOR lightgray]({1})[/COLOR]'.format(machine_name_list[1], machine_name_list[0])
+        for machine_key in DAT_idx_dic:
+            machine_name = '{} [COLOR lightgray]({})[/COLOR]'.format(DAT_idx_dic[machine_key], machine_key)
             listitem = xbmcgui.ListItem(machine_name)
             listitem.setInfo('video', {'title' : machine_name, 'overlay' : ICON_OVERLAY } )
             listitem.addContextMenuItems(commands)
-            URL = misc_url_3_arg('catalog', catalog_name, 'category', 'None', 'machine', machine_name_list[0])
+            URL = misc_url_3_arg('catalog', catalog_name, 'category', 'None', 'machine', machine_key)
             xbmcplugin.addDirectoryItem(g_addon_handle, URL, listitem, isFolder = False)
     else:
-        kodi_dialog_OK('DAT database file "{0}" not found. Check out "Setup plugin" context menu.'.format(catalog_name))
+        kodi_dialog_OK(
+            'DAT database file "{}" not found. Check out "Setup plugin" context menu.'.format(catalog_name))
         xbmcplugin.endOfDirectory(g_addon_handle, succeeded = True, cacheToDisc = False)
         return
     xbmcplugin.endOfDirectory(g_addon_handle, succeeded = True, cacheToDisc = False)
 
+# Only History.dat and MAMEinfo.dat have categories.
 def render_DAT_category(catalog_name, category_name):
-    # >> Load Software List catalog
+    # Load Software List catalog
     if catalog_name == 'History':
         DAT_catalog_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_IDX_PATH.getPath())
     elif catalog_name == 'MAMEINFO':
@@ -2503,35 +2607,34 @@ def render_DAT_category(catalog_name, category_name):
         kodi_dialog_OK('DAT database file "{0}" empty.'.format(catalog_name))
         xbmcplugin.endOfDirectory(g_addon_handle, succeeded = True, cacheToDisc = False)
         return
+
     set_Kodi_all_sorting_methods()
     if catalog_name == 'History':
-        category_machine_list = DAT_catalog_dic[category_name]['machines']
-        for machine_tuple in category_machine_list:
-            render_DAT_category_row(catalog_name, category_name, machine_tuple)
+        category_machine_dic = DAT_catalog_dic[category_name]['machines']
+        for machine_key in category_machine_dic:
+            display_name, db_list, db_machine = category_machine_dic[machine_key].split('|')
+            render_DAT_category_row(catalog_name, category_name, machine_key, display_name)
     elif catalog_name == 'MAMEINFO':
-        category_machine_list = DAT_catalog_dic[category_name]
-        for machine_tuple in category_machine_list:
-            render_DAT_category_row(catalog_name, category_name, machine_tuple)
+        category_machine_dic = DAT_catalog_dic[category_name]
+        for machine_key in category_machine_dic:
+            display_name = category_machine_dic[machine_key]
+            render_DAT_category_row(catalog_name, category_name, machine_key, display_name)
     xbmcplugin.endOfDirectory(g_addon_handle, succeeded = True, cacheToDisc = False)
 
-def render_DAT_category_row(catalog_name, category_name, machine_tuple):
-    display_name = '{0} [COLOR lightgray]({1})[/COLOR]'.format(machine_tuple[1], machine_tuple[0])
-
+def render_DAT_category_row(catalog_name, category_name, machine_key, display_name):
     # --- Create listitem row ---
     ICON_OVERLAY = 6
+    display_name = '{} [COLOR lightgray]({})[/COLOR]'.format(display_name, machine_key)
     listitem = xbmcgui.ListItem(display_name)
     listitem.setInfo('video', {'title' : display_name, 'overlay' : ICON_OVERLAY } )
-
-    # --- Create context menu ---
     commands = [
-        ('View', misc_url_1_arg_RunPlugin('command', 'VIEW')),
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
         ('Add-on Settings', 'Addon.OpenSettings({0})'.format(__addon_id__))
     ]
     listitem.addContextMenuItems(commands)
 
     # --- Add row ---
-    URL = misc_url_3_arg('catalog', catalog_name, 'category', category_name, 'machine', machine_tuple[0])
+    URL = misc_url_3_arg('catalog', catalog_name, 'category', category_name, 'machine', machine_key)
     xbmcplugin.addDirectoryItem(g_addon_handle, URL, listitem, isFolder = False)
 
 def render_DAT_machine_info(catalog_name, category_name, machine_name):
@@ -2539,30 +2642,34 @@ def render_DAT_machine_info(catalog_name, category_name, machine_name):
     log_debug('render_DAT_machine_info() category_name "{0}"'.format(category_name))
     log_debug('render_DAT_machine_info() machine_name "{0}"'.format(machine_name))
 
-    # >> Load Software List catalog
     if catalog_name == 'History':
+        DAT_idx_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_IDX_PATH.getPath())
         DAT_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_DB_PATH.getPath())
-        info_str = DAT_dic[category_name][machine_name]
-        info_text = info_str
+        display_name, db_list, db_machine = DAT_idx_dic[category_name]['machines'][machine_name].split('|')
+        t_str = ('History for [COLOR=orange]{}[/COLOR] item [COLOR=orange]{}[/COLOR] '
+            '(DB entry [COLOR=orange]{}[/COLOR] / [COLOR=orange]{}[/COLOR])')
+        window_title = t_str.format(category_name, machine_name, db_list, db_machine)
+        info_text = DAT_dic[db_list][db_machine]
     elif catalog_name == 'MAMEINFO':
         DAT_dic = fs_load_JSON_file_dic(g_PATHS.MAMEINFO_DB_PATH.getPath())
-        info_str = DAT_dic[category_name][machine_name]
-        info_text = info_str
+        t_str = 'MAMEINFO information for [COLOR=orange]{}[/COLOR] item [COLOR=orange]{}[/COLOR]'
+        window_title = t_str.format(category_name, machine_name)
+        info_text = DAT_dic[category_name][machine_name]
     elif catalog_name == 'Gameinit':
         DAT_dic = fs_load_JSON_file_dic(g_PATHS.GAMEINIT_DB_PATH.getPath())
-        info_str = DAT_dic[machine_name]
-        info_text = info_str
+        window_title = 'Gameinit information for [COLOR=orange]{}[/COLOR]'.format(machine_name)
+        info_text = DAT_dic[machine_name]
     elif catalog_name == 'Command':
         DAT_dic = fs_load_JSON_file_dic(g_PATHS.COMMAND_DB_PATH.getPath())
-        info_str = DAT_dic[machine_name]
-        info_text = info_str
+        window_title = 'Command information for [COLOR=orange]{}[/COLOR]'.format(machine_name)
+        info_text = DAT_dic[machine_name]
     else:
-        kodi_dialog_OK('Wrong catalog_name "{0}". '.format(catalog_name) +
-                       'This is a bug, please report it.')
+        kodi_dialog_OK(
+            'Wrong catalog_name "{}". This is a bug, please report it.'.format(catalog_name))
         return
 
     # --- Show information window ---
-    display_text_window('{0} information'.format(catalog_name), info_text)
+    display_text_window(window_title, info_text)
 
 #
 # Not used at the moment -> There are global display settings.
@@ -2629,43 +2736,36 @@ def command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
         view_type = VIEW_MAME_MACHINE
     elif SL_name:
         view_type = VIEW_SL_ROM
+    else:
+        raise TypeError('Logic error in command_context_view_DAT()')
     log_debug('command_context_view_DAT() view_type = {0}'.format(view_type))
 
     if view_type == VIEW_MAME_MACHINE:
-        # >> Load DAT indices
+        # --- Load DAT indices ---
         History_idx_dic   = fs_load_JSON_file_dic(g_PATHS.HISTORY_IDX_PATH.getPath())
         Mameinfo_idx_dic  = fs_load_JSON_file_dic(g_PATHS.MAMEINFO_IDX_PATH.getPath())
         Gameinit_idx_list = fs_load_JSON_file_dic(g_PATHS.GAMEINIT_IDX_PATH.getPath())
         Command_idx_list  = fs_load_JSON_file_dic(g_PATHS.COMMAND_IDX_PATH.getPath())
 
-        # >> Check if DAT information is available for this machine
+        # --- Check if DAT information is available for this machine ---
         if History_idx_dic:
-            # >> Python Set Comprehension
-            History_MAME_set = { machine[0] for machine in History_idx_dic['mame']['machines'] }
-            if machine_name in History_MAME_set: History_str = 'Found'
-            else:                                History_str = 'Not found'
+            History_str = 'Found' if machine_name in History_idx_dic['mame']['machines'] else 'Not found'
         else:
             History_str = 'Not configured'
         if Mameinfo_idx_dic:
-            Mameinfo_MAME_set = { machine[0] for machine in Mameinfo_idx_dic['mame'] }
-            if machine_name in Mameinfo_MAME_set: Mameinfo_str = 'Found'
-            else:                                 Mameinfo_str = 'Not found'
+            Mameinfo_str = 'Found' if machine_name in Mameinfo_idx_dic['mame'] else 'Not found'
         else:
             Mameinfo_str = 'Not configured'
         if Gameinit_idx_list:
-            Gameinit_MAME_set = { machine[0] for machine in Gameinit_idx_list }
-            if machine_name in Gameinit_MAME_set: Gameinit_str = 'Found'
-            else:                                 Gameinit_str = 'Not found'
+            Gameinit_str = 'Found' if machine_name in Gameinit_idx_list else 'Not found'
         else:
             Gameinit_str = 'Not configured'
         if Command_idx_list:
-            Command_MAME_set = { machine[0] for machine in Command_idx_list }
-            if machine_name in Command_MAME_set: Command_str = 'Found'
-            else:                                Command_str = 'Not found'
+            Command_str = 'Found' if machine_name in Command_idx_list else 'Not found'
         else:
             Command_str = 'Not configured'
 
-        # >> Check Fanart and Manual. Load hashed databases.
+        # Check Fanart and Manual. Load hashed databases.
         # NOTE A ROM loading factory need to be coded to deal with the different ROM
         #      locations to avoid duplicate code. Have a look at ACTION_VIEW_MACHINE_DATA
         #      in function _command_context_view()
@@ -2673,28 +2773,26 @@ def command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
         # Manual_str = 
 
     elif view_type == VIEW_SL_ROM:
-        History_idx_dic   = fs_load_JSON_file_dic(g_PATHS.HISTORY_IDX_PATH.getPath())
+        History_idx_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_IDX_PATH.getPath())
         if History_idx_dic:
             if SL_name in History_idx_dic:
-                History_MAME_set = { machine[0] for machine in History_idx_dic[SL_name]['machines'] }
-                if SL_ROM in History_MAME_set: History_str = 'Found'
-                else:                          History_str = 'Not found'
+                History_str = 'Found' if SL_ROM in History_idx_dic[SL_name]['machines'] else 'Not found'
             else:
                 History_str = 'SL not found'
         else:
             History_str = 'Not configured'
 
-        # >> Check Fanart and Manual.
+        # Check Fanart and Manual.
         # Fanart_str =
         # Manual_str =
 
     # --- Build menu base on view_type ---
     if view_type == VIEW_MAME_MACHINE:
         d_list = [
-          'View History DAT ({0})'.format(History_str),
-          'View MAMEinfo DAT ({0})'.format(Mameinfo_str),
-          'View Gameinit DAT ({0})'.format(Gameinit_str),
-          'View Command DAT ({0})'.format(Command_str),
+          'View History DAT ({})'.format(History_str),
+          'View MAMEinfo DAT ({})'.format(Mameinfo_str),
+          'View Gameinit DAT ({})'.format(Gameinit_str),
+          'View Command DAT ({})'.format(Command_str),
           'View Fanart',
           'View Manual',
           'Display brother machines',
@@ -2703,7 +2801,7 @@ def command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
         ]
     elif view_type == VIEW_SL_ROM:
         d_list = [
-          'View History DAT ({0})'.format(History_str),
+          'View History DAT ({})'.format(History_str),
           'View Fanart',
           'View Manual',
         ]
@@ -2725,63 +2823,71 @@ def command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
         elif selected_value == 7: action = ACTION_VIEW_SAME_GENRE
         elif selected_value == 8: action = ACTION_VIEW_SAME_MANUFACTURER
         else:
-            kodi_dialog_OK('view_type == VIEW_MAME_MACHINE and selected_value = {0}. '.format(selected_value) +
-                           'This is a bug, please report it.')
+            kodi_dialog_OK(
+                'view_type == VIEW_MAME_MACHINE and selected_value = {0}. '.format(selected_value) +
+                'This is a bug, please report it.')
             return
     elif view_type == VIEW_SL_ROM:
         if   selected_value == 0: action = ACTION_VIEW_HISTORY
         elif selected_value == 1: action = ACTION_VIEW_FANART
         elif selected_value == 2: action = ACTION_VIEW_MANUAL
         else:
-            kodi_dialog_OK('view_type == VIEW_SL_ROM and selected_value = {0}. '.format(selected_value) +
-                           'This is a bug, please report it.')
+            kodi_dialog_OK(
+                'view_type == VIEW_SL_ROM and selected_value = {}. '.format(selected_value) +
+                'This is a bug, please report it.')
             return
 
     # --- Execute action ---
     if action == ACTION_VIEW_HISTORY:
         if view_type == VIEW_MAME_MACHINE:
-            if machine_name not in History_MAME_set:
-                kodi_dialog_OK('MAME machine {0} not in History DAT'.format(machine_name))
+            if machine_name not in History_idx_dic['mame']['machines']:
+                kodi_dialog_OK('MAME machine {} not in History DAT'.format(machine_name))
                 return
+            m_str = History_idx_dic['mame']['machines'][machine_name]
+            display_name, db_list, db_machine = m_str.split('|')
             DAT_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_DB_PATH.getPath())
-            window_title = 'History DAT for MAME machine {0}'.format(machine_name)
-            info_text = DAT_dic['mame'][machine_name]
+            t_str = ('History DAT for MAME machine [COLOR=orange]{}[/COLOR] '
+                '(DB entry [COLOR=orange]{}[/COLOR])')
+            window_title = t_str.format(machine_name, db_machine)
         elif view_type == VIEW_SL_ROM:
-            if SL_ROM not in History_MAME_set:
-                kodi_dialog_OK('SL item {0} not in History DAT'.format(SL_ROM))
+            if SL_name not in History_idx_dic:
+                kodi_dialog_OK('SL {} not found in History DAT'.format(SL_name))
                 return
+            if SL_ROM not in History_idx_dic[SL_name]['machines']:
+                kodi_dialog_OK('SL {} item {} not in History DAT'.format(SL_name, SL_ROM))
+                return
+            m_str = History_idx_dic[SL_name]['machines'][SL_ROM]
+            display_name, db_list, db_machine = m_str.split('|')
             DAT_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_DB_PATH.getPath())
-            window_title = 'History DAT for SL item {0}'.format(SL_ROM)
-            info_text = DAT_dic[SL_name][SL_ROM]
-        display_text_window(window_title, info_text)
+            t_str = ('History DAT for SL [COLOR=orange]{}[/COLOR] item [COLOR=orange]{}[/COLOR] '
+                '(DB entry [COLOR=orange]{}[/COLOR] / [COLOR=orange]{}[/COLOR])')
+            window_title = t_str.format(SL_name, SL_ROM, db_list, db_machine)
+        display_text_window(window_title, DAT_dic[db_list][db_machine])
 
     elif action == ACTION_VIEW_MAMEINFO:
-        if machine_name not in Mameinfo_MAME_set:
-            kodi_dialog_OK('Machine {0} not in Mameinfo DAT'.format(machine_name))
+        if machine_name not in Mameinfo_idx_dic['mame']:
+            kodi_dialog_OK('Machine {} not in Mameinfo DAT'.format(machine_name))
             return
         DAT_dic = fs_load_JSON_file_dic(g_PATHS.MAMEINFO_DB_PATH.getPath())
-        info_text = DAT_dic['mame'][machine_name]
-
-        window_title = 'MAMEinfo DAT for machine {0}'.format(machine_name)
-        display_text_window(window_title, info_text)
+        t_str = 'MAMEINFO information for [COLOR=orange]{}[/COLOR] item [COLOR=orange]{}[/COLOR]'
+        window_title = t_str.format('mame', machine_name)
+        display_text_window(window_title, DAT_dic['mame'][machine_name])
 
     elif action == ACTION_VIEW_GAMEINIT:
-        if machine_name not in Gameinit_MAME_set:
-            kodi_dialog_OK('Machine {0} not in Gameinit DAT'.format(machine_name))
+        if machine_name not in Gameinit_idx_list:
+            kodi_dialog_OK('Machine {} not in Gameinit DAT'.format(machine_name))
             return
         DAT_dic = fs_load_JSON_file_dic(g_PATHS.GAMEINIT_DB_PATH.getPath())
-        window_title = 'Gameinit DAT for machine {0}'.format(machine_name)
-        info_text = DAT_dic[machine_name]
-        display_text_window(window_title, info_text)
+        window_title = 'Gameinit information for [COLOR=orange]{}[/COLOR]'.format(machine_name)
+        display_text_window(window_title, DAT_dic[machine_name])
 
     elif action == ACTION_VIEW_COMMAND:
-        if machine_name not in Command_MAME_set:
-            kodi_dialog_OK('Machine {0} not in Command DAT'.format(machine_name))
+        if machine_name not in Command_idx_list:
+            kodi_dialog_OK('Machine {} not in Command DAT'.format(machine_name))
             return
         DAT_dic = fs_load_JSON_file_dic(g_PATHS.COMMAND_DB_PATH.getPath())
-        window_title = 'Command DAT for machine {0}'.format(machine_name)
-        info_text = DAT_dic[machine_name]
-        display_text_window(window_title, info_text)
+        window_title = 'Command information for [COLOR=orange]{}[/COLOR]'.format(machine_name)
+        display_text_window(window_title, DAT_dic[machine_name])
 
     # --- View Fanart ---
     elif action == ACTION_VIEW_FANART:
@@ -2794,7 +2900,7 @@ def command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
                 mame_favs_dic = fs_load_JSON_file_dic(g_PATHS.FAV_MACHINES_PATH.getPath())
                 m_assets = mame_favs_dic[machine_name]['assets']
             if not m_assets['fanart']:
-                kodi_dialog_OK('Fanart for machine {0} not found.'.format(machine_name))
+                kodi_dialog_OK('Fanart for machine {} not found.'.format(machine_name))
                 return
         elif view_type == VIEW_SL_ROM:
             SL_catalog_dic = fs_load_JSON_file_dic(g_PATHS.SL_INDEX_PATH.getPath())
@@ -2807,8 +2913,8 @@ def command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
                 return
 
         # >> If manual found then display it.
-        log_debug('Rendering FS fanart "{0}"'.format(m_assets['fanart']))
-        xbmc.executebuiltin('ShowPicture("{0}")'.format(m_assets['fanart']))
+        log_debug('Rendering FS fanart "{}"'.format(m_assets['fanart']))
+        xbmc.executebuiltin('ShowPicture("{}")'.format(m_assets['fanart']))
 
     # --- View Manual ---
     # When Pictures menu is clicked on Home, the window pictures (MyPics.xml) opens.
@@ -3237,7 +3343,6 @@ def command_context_view(machine_name, SL_name, SL_ROM, location):
 
         # --- Table header ---
         # Table cell padding: left, right
-        # Table columns: Type - ROM name - Size - CRC/SHA1 - Merge - BIOS - Location
         table_str = [
             ['right', 'left',     'right', 'left',     'left',  'left'],
             ['Type',  'ROM name', 'Size',  'CRC/SHA1', 'Merge', 'BIOS/Device'],
@@ -4019,7 +4124,6 @@ def command_context_manage_mame_most_played(machine_name):
     # --- Execute actions ---
     if action == ACTION_DELETE_MACHINE:
         log_debug('command_context_manage_mame_most_played() ACTION_DELETE_MACHINE')
-        log_debug('machine_name "{0}"'.format(machine_name))
         db_files = [
             ['most_played_roms', 'MAME Most Played machines', g_PATHS.MAME_MOST_PLAYED_FILE_PATH.getPath()],
         ]
@@ -5330,39 +5434,23 @@ def check_SL_DB_before_rendering_machines(g_PATHS, g_settings, control_dic):
 # -------------------------------------------------------------------------------------------------
 def command_context_setup_plugin():
     dialog = xbmcgui.Dialog()
-    menu_item = dialog.select(
-        'Setup plugin',
-        ['Check MAME version',
-         'All in one (Extract, Build, Scan, Filters)',
-         'All in one (Extract, Build, Scan, Filters, Audit)',
-         'Extract/Process MAME.xml',
-         'Build all databases',
-         'Scan everything and build plots',
-         'Build Fanarts/3D Boxes ...',
-         'Audit MAME machine ROMs/CHDs',
-         'Audit SL ROMs/CHDs',
-         'Step by step ...'])
+    menu_item = dialog.select('Setup plugin', [
+        'All in one (Extract, Build, Scan, Filters)',
+        'All in one (Extract, Build, Scan, Filters, Audit)',
+        'Extract/Process MAME.xml',
+        'Build all databases',
+        'Scan everything and build plots',
+        'Build Fanarts/3D Boxes ...',
+        'Audit MAME machine ROMs/CHDs',
+        'Audit SL ROMs/CHDs',
+        'Step by step ...',
+    ])
     if menu_item < 0: return
-
-    # --- Check MAME version ---
-    # >> Run 'mame -?' and extract version from stdout
-    if menu_item == 0:
-        log_info('command_context_setup_plugin() Check MAME version starting ...')
-
-        # --- Check for errors ---
-        if not g_settings['mame_prog']:
-            kodi_dialog_OK('MAME executable is not set.')
-            return
-        mame_prog_FN = FileName(g_settings['mame_prog'])
-
-        # --- Check MAME version ---
-        mame_version_str = fs_extract_MAME_version(g_PATHS, mame_prog_FN)
-        kodi_dialog_OK('MAME version is {0}'.format(mame_version_str))
 
     # --- All in one (Extract, Build, Scan, Filters) ---
     # --- All in one (Extract, Build, Scan, Filters, Audit) ---
-    elif menu_item == 1 or menu_item == 2:
-        DO_AUDIT = False if menu_item == 1 else True
+    if menu_item == 0 or menu_item == 1:
+        DO_AUDIT = True if menu_item == 1 else False
         log_info('command_context_setup_plugin() All in one step starting ...')
         log_info('Operation mode {0}'.format(g_settings['op_mode']))
         log_info('DO_AUDIT {0}'.format(DO_AUDIT))
@@ -5506,7 +5594,7 @@ def command_context_setup_plugin():
             kodi_notify('Finished extracting, DB build, scanning and filters')
 
     # --- Extract MAME.xml ---
-    elif menu_item == 3:
+    elif menu_item == 2:
         log_info('command_context_setup_plugin() Extract/Process MAME.xml starting ...')
         options_dic = {}
         if g_settings['op_mode'] == OP_MODE_EXTERNAL:
@@ -5533,7 +5621,7 @@ def command_context_setup_plugin():
             'Size is {0} MB and there are {1} machines.'.format(size_MB, num_m))
 
     # --- Build everything ---
-    elif menu_item == 4:
+    elif menu_item == 3:
         log_info('command_context_setup_plugin() Build everything starting ...')
 
         # --- Build main MAME database, PClone list and hashed database (mandatory) ---
@@ -5596,7 +5684,7 @@ def command_context_setup_plugin():
         kodi_notify('All databases built')
 
     # --- Scan everything ---
-    elif menu_item == 5:
+    elif menu_item == 4:
         log_info('command_setup_plugin() Scanning everything starting ...')
 
         # --- MAME -------------------------------------------------------------------------------
@@ -5694,21 +5782,21 @@ def command_context_setup_plugin():
         kodi_notify('All ROM/asset scanning finished')
 
     # --- Build Fanarts ---
-    elif menu_item == 6:
-        submenu = dialog.select('Build Fanarts',
-            ['Test MAME Fanart',
-             'Test Software List item Fanart',
-             'Test MAME 3D Box',
-             'Test Software List item 3D Box',
-             'Build missing MAME Fanarts',
-             'Rebuild all MAME Fanarts',
-             'Build missing Software Lists Fanarts',
-             'Rebuild all Software Lists Fanarts',
-             'Build missing MAME 3D Boxes',
-             'Rebuild all MAME 3D Boxes',
-             'Build missing Software Lists 3D Boxes',
-             'Rebuild all Software Lists 3D Boxes',
-             ])
+    elif menu_item == 5:
+        submenu = dialog.select('Build Fanarts', [
+            'Test MAME Fanart',
+            'Test Software List item Fanart',
+            'Test MAME 3D Box',
+            'Test Software List item 3D Box',
+            'Build missing MAME Fanarts',
+            'Rebuild all MAME Fanarts',
+            'Build missing Software Lists Fanarts',
+            'Rebuild all Software Lists Fanarts',
+            'Build missing MAME 3D Boxes',
+            'Rebuild all MAME 3D Boxes',
+            'Build missing Software Lists 3D Boxes',
+            'Rebuild all Software Lists 3D Boxes',
+        ])
         if submenu < 0: return
         # >> Check if Pillow library is available. Abort if not.
         if not PILLOW_AVAILABLE:
@@ -5926,7 +6014,7 @@ def command_context_setup_plugin():
     # --- Audit MAME machine ROMs/CHDs ---
     # NOTE It is likekely that this function will take a looong time. It is important that the
     #      audit process can be canceled and a partial report is written.
-    elif menu_item == 7:
+    elif menu_item == 6:
         log_info('command_context_setup_plugin() Audit MAME machines ROMs/CHDs ...')
 
         # --- Check for requirements/errors ---
@@ -5947,7 +6035,7 @@ def command_context_setup_plugin():
         kodi_notify('ROM and CHD audit finished')
 
     # --- Audit SL ROMs/CHDs ---
-    elif menu_item == 8:
+    elif menu_item == 7:
         log_info('command_context_setup_plugin() Audit SL ROMs/CHDs ...')
 
         # --- Check for requirements/errors ---
@@ -5960,7 +6048,7 @@ def command_context_setup_plugin():
         kodi_notify('Software Lists audit finished')
 
     # --- Build Step by Step ---
-    elif menu_item == 9:
+    elif menu_item == 8:
         submenu = dialog.select('Setup plugin (step by step)', [
             'Build MAME databases',
             'Build MAME Audit/Scanner databases',
@@ -5973,7 +6061,7 @@ def command_context_setup_plugin():
             'Build MAME machine plots',
             'Build Software List item plots',
             'Rebuild MAME machine and asset caches',
-            ])
+        ])
         if submenu < 0: return
 
         # --- Build main MAME database, PClone list and hashed database ---
@@ -6285,8 +6373,21 @@ def command_context_setup_plugin():
 def command_exec_utility(which_utility):
     log_debug('command_exec_utility() which_utility = "{0}" starting ...'.format(which_utility))
 
+    # Check MAME version
+    # Run 'mame -?' and extract version from stdout
+    if which_utility == 'CHECK_MAME_VERSION':
+        # --- Check for errors ---
+        if not g_settings['mame_prog']:
+            kodi_dialog_OK('MAME executable is not set.')
+            return
+
+        # --- Check MAME version ---
+        mame_prog_FN = FileName(g_settings['mame_prog'])
+        mame_version_str = fs_extract_MAME_version(g_PATHS, mame_prog_FN)
+        kodi_dialog_OK('MAME version is {0}'.format(mame_version_str))
+
     # Check AML configuration
-    if which_utility == 'CHECK_CONFIG':
+    elif which_utility == 'CHECK_CONFIG':
         # Functions defined here can see local variables defined in this code block.
         def aux_check_dir_ERR(slist, dir_str, msg):
             if dir_str:
@@ -6438,6 +6539,7 @@ def command_exec_utility(which_utility):
                 slist.append('{0} MAME INI/DAT path "{1}"'.format(OK, g_settings['dats_path']))
 
                 DATS_dir_FN = FileName(g_settings['dats_path'])
+                ALLTIME_FN = DATS_dir_FN.pjoin(ALLTIME_INI)
                 ARTWORK_FN = DATS_dir_FN.pjoin(ARTWORK_INI)
                 BESTGAMES_FN = DATS_dir_FN.pjoin(BESTGAMES_INI)
                 CATEGORY_FN = DATS_dir_FN.pjoin(CATEGORY_INI)
@@ -6452,6 +6554,7 @@ def command_exec_utility(which_utility):
                 HISTORY_FN = DATS_dir_FN.pjoin(HISTORY_DAT)
                 MAMEINFO_FN = DATS_dir_FN.pjoin(MAMEINFO_DAT)
 
+                aux_check_file_WARN(slist, ALLTIME_FN.getPath(), ALLTIME_INI + ' file')
                 aux_check_file_WARN(slist, ARTWORK_FN.getPath(), ARTWORK_INI + ' file')
                 aux_check_file_WARN(slist, BESTGAMES_FN.getPath(), BESTGAMES_INI + ' file')
                 aux_check_file_WARN(slist, CATEGORY_FN.getPath(), CATEGORY_INI + ' file')

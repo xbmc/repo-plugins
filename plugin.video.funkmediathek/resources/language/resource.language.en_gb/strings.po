@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: XBMC Main\n"
 
 msgctxt "#30003"
-msgid "Skip to series (hide formats)"
-msgstr "Skip to series (hide formats)"
+msgid "Show series only (hide formats)"
+msgstr "Show series only (hide formats)"
 
 msgctxt "#30503"
 msgid "Formats"

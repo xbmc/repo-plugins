@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.funkmediathek" name="Funk Mediathek" version="1.3.1" provider-name="sarbes">
+<addon id="plugin.video.funkmediathek" name="Funk Mediathek" version="1.5.0" provider-name="sarbes">
     <requires>
 		<import addon="xbmc.python" version="2.25.0"/>
 		<import addon="script.module.libmediathek3" version="1.5.0"/>
@@ -13,11 +13,15 @@
 		<language>de</language>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<source>https://github.com/prof-membrane/plugin.video.funkmediathek</source>
-		<forum>http://forum.kodi.tv/showthread.php?tid=303100</forum>
+        <forum>https://forum.kodi.tv/showthread.php?tid=303100</forum>
         <summary lang="en">This is an add-on for www.funk.net</summary>
         <description lang="en">This add-on provides access to the German VOD platform www.funk.net. The content is only accessable from Germany.</description>
         <summary lang="de">Serien und Videos von www.funk.net</summary>
         <description lang="de">Dieses Add-on bietet Zugriff auf die Bibliothek von www.funk.net. Hier gibt es Serien wie z.B. Fargo in FullHD, aber auch Eigenproduktionen von ARD/ZDF. Die Serien sind in der Regel nur innerhalb Deutschlands erreichbar.</description>
         <disclaimer lang="de">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
     </extension>
 </addon>

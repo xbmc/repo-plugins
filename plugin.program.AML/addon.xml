@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.AML" name="Advanced MAME Launcher" version="0.9.10" provider-name="Wintermute0110">
+<addon id="plugin.program.AML" name="Advanced MAME Launcher" version="0.9.11" provider-name="Wintermute0110">
   <requires>
     <!--
         Check addon versions in https://github.com/xbmc/xbmc/tree/master/addons

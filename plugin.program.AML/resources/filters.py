@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-#
+
 # Advanced MAME Launcher MAME filter engine.
-#
 
 # Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
 #
@@ -11,8 +10,8 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
 
 # --- Python standard library ---
 # Division operator: https://www.python.org/dev/peps/pep-0238/

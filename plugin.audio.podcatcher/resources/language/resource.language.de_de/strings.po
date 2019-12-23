@@ -1,0 +1,36 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.mediathek\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=1; plural=0\n" 
+
+msgctxt "#30000"
+msgid "OPML-File"
+msgstr "OPML-Datei"
+
+msgctxt "#30010"
+msgid "Mark all as read"
+msgstr "Alles als gelesen markieren"
+
+msgctxt "#30011"
+msgid "Play all unreaded"
+msgstr "Alles ungelesene abspielen"
+
+msgctxt "#30020"
+msgid "Mark as read"
+msgstr "Als gelesen markieren"
+
+msgctxt "#30030"
+msgid "Force refresh"
+msgstr "Aktualisierung erzwingen"
+
+msgctxt "#30040"
+msgid "OPML-file unreadable"
+msgstr "PML Datei nicht lesbar"
+
+msgctxt "#30041"
+msgid "Unable to read the OPML-File"
+msgstr "Die OPML Datei kann nicht gefunden werden."

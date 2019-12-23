@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="plugin.audio.podcatcher"
+  version="0.2.1"
+  name="AudioPodcatcher"
+  provider-name="Raptor 2101">
+  <requires>
+   <import addon="xbmc.python" version="2.25.0"/>
+   <import addon="script.module.requests" version="2.18.4"/>
+  </requires>
+  <extension 
+    point="xbmc.python.pluginsource"
+    library="default.py">
+   <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="de">Ein Plugin um Podcast etwas komfortabler abzuspielen</summary>
+    <summary lang="en">A plugin to play Podcasts</summary>
+    <description lang="de">
+      PodCatcher ist ein Plugin zum komfortablen abspielen von Podcasts. Die Oberfläche ist einfach gehalten um möglichst wenig zu stören und eine schnelle navigation möglich zu machen.
+      
+      WICHTIG: das Plugin ist nicht ohne eine vom User erstellte opml.xml lauffähig. Bitte die README-Datei lesen.
+    </description>
+    <description lang="en">
+      A Plugin to listen and organize podcast.
+      IMPORTANT: This plugins needs a user-generated opml.xml to be runable. Please read the README-File first.    
+    </description>
+    <language>de</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <forum>https://github.com/raptor2101/PodCatcher/issues</forum>
+    <website>https://github.com/raptor2101/PodCatcher</website>
+    <source>https://github.com/raptor2101/PodCatcher</source>
+    <email>raptor2101@gmx.de</email>
+    <assets>
+        <icon>resources/icon.png</icon>
+    </assets>
+  </extension>
+</addon>

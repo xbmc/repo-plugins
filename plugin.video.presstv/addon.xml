@@ -11,12 +11,12 @@
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">PRESSTV</summary>
-    <description lang="en">PRESS TV Addon for Kodi
+    <summary lang="en_GB">PRESSTV</summary>
+    <description lang="en_GB">PRESS TV Addon for Kodi
 Press TV takes revolutionary steps as the first Iranian international news network,broadcasting in English on a round-the-clock basis.</description>
     <platform>all</platform>
     <language>fa</language>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <license>GNU General Public License v2.0 only</license>
     <forum></forum>
     <website>https://www.presstv.com/</website>
     <email>pezhmanshafigh@gmail.com</email>

@@ -24,7 +24,7 @@ FILE_NAME = "data.json"
 
 session = requests.Session()
 
-
+# noinspection PyTypeChecker,PyUnresolvedReferences
 class Errors():
     def __init__(self, testing, kodiwrapper):
         self.testing = not testing
@@ -42,7 +42,7 @@ class Errors():
         if res:
             return res["title"]["locales"]["en"], res["subtitle"]["locales"]["en"]
 
-
+# noinspection PyTypeChecker,PyUnresolvedReferences
 class Prepare:
     def __init__(self, testing, kodiwrapper):
         self.testing = not testing
@@ -225,6 +225,7 @@ class Prepare:
         self.append_json_to_file(FILE_NAME, {"postal": {"postal_code": postal_code}})
 
 
+# noinspection PyTypeChecker,PyUnresolvedReferences
 class YeloPlay(Prepare, Errors):
     def __init__(self, kodiwrapper, streaming_protocol, testing=False):
         Prepare.__init__(self, testing, kodiwrapper)
@@ -277,22 +278,31 @@ class YeloPlay(Prepare, Errors):
     def _extract_schedule(self, schedule):
         timestamp = get_timestamp()
 
-        now = next((item for item in schedule if int(item["start"])
-                    <= timestamp <= int(item["end"])), "")
+        try:
+            now = next((item for item in schedule if int(item["start"])
+                        <= timestamp <= int(item["end"])), "")
+        except Exception:
+            now = ""
 
-        prev = next((item for item in schedule if int(item["end"]) == now.get("start")), "")
+        try:
+            prev = next((item for item in schedule if int(item["end"]) == now["start"]), "")
+        except Exception:
+            prev = ""
 
-        nxt = next((item for item in schedule if int(item["start"]) == now.get("end")), "")
+        try:
+            nxt = next((item for item in schedule if int(item["start"]) == now["end"]), "")
+        except Exception:
+            nxt = ""
 
         if now:
-            now["start"] = self._timestamp_to_time(now.get("start"))
-            now["end"] = self._timestamp_to_time(now.get("end"))
+            now["start"] = self._timestamp_to_time(now["start"])
+            now["end"] = self._timestamp_to_time(now["end"])
         if prev:
-            prev["start"] = self._timestamp_to_time(prev.get("start"))
-            prev["end"] = self._timestamp_to_time(prev.get("end"))
+            prev["start"] = self._timestamp_to_time(prev["start"])
+            prev["end"] = self._timestamp_to_time(prev["end"])
         if nxt:
-            nxt["start"] = self._timestamp_to_time(nxt.get("start"))
-            nxt["end"] = self._timestamp_to_time(nxt.get("end"))
+            nxt["start"] = self._timestamp_to_time(nxt["start"])
+            nxt["end"] = self._timestamp_to_time(nxt["end"])
 
         return prev, now, nxt
 
@@ -318,19 +328,19 @@ class YeloPlay(Prepare, Errors):
 
         guide = ""
         if prev and not nxt:
-            guide += "[B]Previously: [/B]" + "\n" + prev.get("title") + "\n" + "[COLOR green]" \
-                     + prev.get("start") + "[/COLOR]" + " >> " + "[COLOR red]" \
-                     + prev.get("end") + "[/COLOR] " + "\n\n"
+            guide += "[B]Previously: [/B]" + "\n" + prev["title"] + "\n" + "[COLOR green]" \
+                     + prev["start"] + "[/COLOR]" + " >> " + "[COLOR red]" \
+                     + prev["end"] + "[/COLOR] " + "\n\n"
         if now:
-            guide += "[B]Currently Playing: [/B]" + "\n" + now.get("title") + "\n" + "[COLOR green]" \
-                     + now.get("start") + "[/COLOR]" + " >> " + "[COLOR red]" \
-                     + now.get("end") + "[/COLOR] " + "\n\n"
+            guide += "[B]Currently Playing: [/B]" + "\n" + now["title"] + "\n" + "[COLOR green]" \
+                     + now["start"] + "[/COLOR]" + " >> " + "[COLOR red]" \
+                     + now["end"] + "[/COLOR] " + "\n\n"
         if nxt:
-            guide += "[B]Coming up next: [/B]" + "\n" + nxt.get("title") + "\n" + "[COLOR green]" \
-                     + nxt.get("start") + "[/COLOR]" + " >> " + "[COLOR red]" \
-                     + nxt.get("end") + "[/COLOR] " + "\n\n"
+            guide += "[B]Coming up next: [/B]" + "\n" + nxt["title"] + "\n" + "[COLOR green]" \
+                     + nxt["start"] + "[/COLOR]" + " >> " + "[COLOR red]" \
+                     + nxt["end"] + "[/COLOR] " + "\n\n"
 
-        return guide, now.get("poster")
+        return guide, now["poster"] if now else ""
 
     def _filter_channels(self, tv_channels):
         allowed_channels = []

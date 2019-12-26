@@ -8,4 +8,4 @@ from resources.lib.requestapi import _cache
 
 if __name__ == '__main__':
     if _cache:
-        Container()
+        Container().router()

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.themoviedb.helper"
-version="1.0.14"
+version="2.0.18"
 name="TheMovieDb Helper"
 provider-name="jurialmunkey">
 <requires>
@@ -11,7 +11,27 @@ provider-name="jurialmunkey">
 <extension point="xbmc.python.pluginsource" library="plugin.py">
   <provides>video</provides>
 </extension>
+<extension point="xbmc.service" library="service.py" />
 <extension point="xbmc.python.script" library="script.py" />
+<extension point="kodi.context.item">
+  <menu id="kodi.core.main">
+    <menu>
+      <label>TMDbHelper - Trakt Manager</label>
+      <item library="context-watchlist.py">
+        <label>Trakt - Watchlist Add/Remove</label>
+        <visible>!String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)]</visible>
+      </item>
+      <item library="context-history.py">
+        <label>Trakt - Watched History Add/Remove</label>
+        <visible>!String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)]</visible>
+      </item>
+      <item library="context-collection.py">
+        <label>Trakt - Collection Add/Remove</label>
+        <visible>!String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)]</visible>
+      </item>
+    </menu>
+  </menu>
+</extension>
 <extension point="xbmc.addon.metadata">
   <summary lang="en_GB">TheMovieDb Helper - Now With Trakt Support!</summary>
   <description lang="en_GB">TheMovieDb Helper provides details about movies, tvshows and actors from TMDb. Users can access a variety of lists from TMDb and Trakt.</description>
@@ -23,8 +43,6 @@ provider-name="jurialmunkey">
     <screenshot>resources/screenshot-01.jpg</screenshot>
     <screenshot>resources/screenshot-02.jpg</screenshot>
   </assets>
-  <news>1.0.14 - Remove script.module.trakt dependency for python 3 compatibility[CR]1.0.13 - Add Trakt In-Progress Shows plus better Recently Watched[CR]1.0.12 - Code cleanup[CR]1.0.11 - Add pagination to trakt lists[CR]1.0.10 - Add some 
-additional lists from Trakt[CR]1.0.9 - Add 
-genres for TMDb[CR]1.0.8 - Some small fixes for enditems[CR]1.0.7 - Trakt support[CR]1.0.6 - Fixes MPAA Rating Prefix[CR]1.0.5 - Fixes python text encoding/decoding issues</news>
+  <news>2.0.18 - Add steps to player[CR]2.0.17 - Options for Randomised Widget Lists[CR]2.0.16 - Add option to merge details with kodi db[CR]2.0.15 - Cleanup[CR]2.0.14 - Trakt watched indicators[CR]2.0.12 - Changes to players download setting[CR]2.0.11 - Hotfix for some trakt lists[CR]2.0.10 - Fix for add_path if info=play[CR]2.0.9 - Add &amp;fanarttv=True param plus additional fanart tv options for widget[CR]2.0.8 - Add pagination for tmdb[CR]2.0.7 - Fix for multiple player files for one plugin[CR]2.0.6 - Add default player function thanks to drinfernoo[CR]2.0.4 - Add additional caching for fanart.tv[CR]2.0.3 - Add fanart.tv optional support (increase load times significantly)[CR]2.0.2 - Player URL downloader[CR]2.0.1 - Widget player params[CR]2.0.0 - Code refactor[CR]1.0.30/29 - Addition of new infoproperties[CR]1.0.28/27/26/25/24 - Optimisation updates to service monitor[CR]1.0.23 - Add service monitor[CR]1.0.22 - Trakt management functiosn must be enabled in settings to display in details list[CR]1.0.21 - External Players and Search for items not in library[CR]1.0.20 - Hotfix[CR]1.0.19 - Trakt management options[CR]1.0.18 - Add ISO Lang and del N/A keys[CR]1.0.17 - Play detailed items in Kodi DB</news>
 </extension>
 </addon>

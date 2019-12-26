@@ -1,0 +1,6 @@
+{
+    "name"              : "YouTube",
+    "plugin"            : "plugin.video.youtube",
+    "search_movie"      : "plugin://plugin.video.youtube/search/?q={name}&amp;search_type=notvalid",
+    "search_episode"    : "plugin://plugin.video.youtube/search/?q={name}&amp;search_type=notvalid"
+}

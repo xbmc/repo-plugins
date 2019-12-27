@@ -47,11 +47,12 @@ class SimpleXbmcGui(object):
       title = "(*) %s"%(title);
     else:
       title = "%s"%(title);
-    self.log(element.picture)
+
+    liz=xbmcgui.ListItem(title);
     if(element.picture is not ""):
-      liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=element.picture)
+      liz.setArt({"icon":"DefaultFolder.png", "thumb":element.picture});
     else :
-      liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png",)
+      liz.setArt({"icon":"DefaultFolder.png"});
     liz.setInfo("music",{
       "size": element.size,
       "date": time.strftime("%d.%m.%Y",element.date),

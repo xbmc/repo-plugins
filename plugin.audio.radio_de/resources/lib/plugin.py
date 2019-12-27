@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-from xbmcswift2 import Plugin, xbmc
+from xbmcswift2 import Plugin, xbmc, listitem
 from resources.lib.api import RadioApi, RadioApiError
 
 STRINGS = {
@@ -178,12 +178,22 @@ def show_stations_by_category(category_type, category):
 @plugin.route('/station/<station_id>')
 def get_stream_url(station_id):
     if my_stations.get(station_id, {}).get('is_custom', False):
-        stream_url = my_stations[station_id]['stream_url']
+        station = my_stations[station_id]
+        stream_url = station['stream_url']
     else:
         station = radio_api.get_station_by_station_id(station_id)
         stream_url = station['stream_url']
     __log('get_stream_url result: %s' % stream_url)
-    return plugin.set_resolved_url(stream_url)
+    return plugin.set_resolved_url(
+        listitem.ListItem(
+            label=station['name'],
+            label2=station['current_track'],
+            path=stream_url,
+            icon=station['thumbnail'],
+            thumbnail=station['thumbnail'],
+            fanart=plugin.fanart
+        )
+    )
 
 
 def __add_stations(stations, add_custom=False):

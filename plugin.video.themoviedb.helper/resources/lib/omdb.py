@@ -3,14 +3,11 @@ from resources.lib.requestapi import RequestAPI
 
 
 class OMDb(RequestAPI):
-    def __init__(self, api_key=None, cache_short=None, cache_long=None, addon_name=None):
-        self.req_api_key = '?apikey={0}'.format(api_key)
-        self.req_api_name = 'OMDb'
-        self.req_api_url = 'http://www.omdbapi.com/'
-        self.req_wait_time = 1
-        self.cache_long = 14 if not cache_long or cache_long < 14 else cache_long
-        self.cache_short = 1 if not cache_short or cache_short < 1 else cache_short
-        self.addon_name = addon_name if addon_name else 'plugin.video.themoviedb.helper'
+    def __init__(self, api_key=None, cache_short=None, cache_long=None):
+        super(OMDb, self).__init__(
+            cache_short=cache_short, cache_long=cache_long,
+            req_api_key='?apikey={0}'.format(api_key), req_api_name='OMDb',
+            req_api_url='http://www.omdbapi.com/', req_wait_time=1)
 
     def get_request_item(self, imdb_id=None, title=None, year=None, tomatoes=True, fullplot=True, cache_only=False):
         kwparams = {}
@@ -44,6 +41,7 @@ class OMDb(RequestAPI):
         infolabels['mediatype'] = item.get('type', None)
         infolabels['imdbnumber'] = item.get('imdbID', None)
         infolabels['studio'] = item.get('Production', None)
+        infolabels = utils.del_empty_keys(infolabels, ['N/A'])
         return infolabels
 
     def get_infoproperties(self, item):
@@ -54,12 +52,13 @@ class OMDb(RequestAPI):
         infoproperties['imdb_votes'] = item.get('imdbVotes', None)
         infoproperties['rottentomatoes_rating'] = item.get('tomatoMeter', None)
         infoproperties['rottentomatoes_image'] = item.get('tomatoImage', None)
-        infoproperties['rottentomatoes_reviewtotal'] = item.get('tomatoReviews', None)
-        infoproperties['rottentomatoes_reviewsfresh'] = item.get('tomatoFresh', None)
-        infoproperties['rottentomatoes_reviewsrotten'] = item.get('tomatoRotten', None)
+        infoproperties['rottentomatoes_reviewstotal'] = '{:0,.0f}'.format(utils.try_parse_int(item.get('tomatoReviews'))) if item.get('tomatoReviews') else None
+        infoproperties['rottentomatoes_reviewsfresh'] = '{:0,.0f}'.format(utils.try_parse_int(item.get('tomatoFresh'))) if item.get('tomatoFresh') else None
+        infoproperties['rottentomatoes_reviewsrotten'] = '{:0,.0f}'.format(utils.try_parse_int(item.get('tomatoRotten'))) if item.get('tomatoRotten') else None
         infoproperties['rottentomatoes_consensus'] = item.get('tomatoConsensus', None)
         infoproperties['rottentomatoes_usermeter'] = item.get('tomatoUserMeter', None)
-        infoproperties['rottentomatoes_userreviews'] = item.get('tomatoUserReviews', None)
+        infoproperties['rottentomatoes_userreviews'] = '{:0,.0f}'.format(utils.try_parse_int(item.get('tomatoUserReviews'))) if item.get('tomatoUserReviews') else None
+        infoproperties = utils.del_empty_keys(infoproperties, ['N/A'])
         return infoproperties
 
     def get_ratings_awards(self, imdb_id=None, title=None, year=None, cache_only=False):

@@ -24,61 +24,6 @@ msgctxt "#30001"
 msgid "Arabic (Saudi Arabia)"
 msgstr ""
 
-#: /resources/settings.xml
-msgctxt "#32000"
-msgid "TMDb API Key"
-msgstr ""
-
-#: /resources/settings.xml
-msgctxt "#32001"
-msgid "OMDb API Key"
-msgstr ""
-
-#: /resources/settings.xml
-msgctxt "#32002"
-msgid "Days to cache details"
-msgstr ""
-
-#: /resources/settings.xml
-msgctxt "#32003"
-msgid "Days to cache lists"
-msgstr ""
-
-#: /resources/settings.xml
-msgctxt "#32004"
-msgid "MPAA Rating Prefix"
-msgstr ""
-
-#: /resources/settings.xml
-msgctxt "#32005"
-msgid "Language and Country"
-msgstr ""
-
-#: /resources/lib/utils.py
-msgctxt "#32006"
-msgid "Choose item"
-msgstr ""
-
-#: /resources/lib/requestapi.py
-msgctxt "#32007"
-msgid "Missing/Invalid"
-msgstr ""
-
-#: /resources/lib/requestapi.py
-msgctxt "#32008"
-msgid "API Key"
-msgstr ""
-
-#: /resources/lib/requestapi.py
-msgctxt "#32009"
-msgid "You must enter a valid API key to use this add-on"
-msgstr ""
-
-#: /resources/settings.xml
-msgctxt "#32010"
-msgid "Authenticate Trakt Account..."
-msgstr ""
-
 msgctxt "#30002"
 msgid "Belarusian (Belarus)"
 msgstr ""
@@ -189,6 +134,196 @@ msgstr ""
 
 msgctxt "#30029"
 msgid "Hebrew (Israel)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32028"
+msgid "Use fanart.tv for widget artwork"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32029"
+msgid "OMDb API"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32030"
+msgid "Fanart.tv API"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32031"
+msgid "Trakt API"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32032"
+msgid "Download Players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32033"
+msgid "Default Players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32034"
+msgid "Get watched indicators from Trakt"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32035"
+msgid "Get watched episode counts for tvshows and seasons from Trakt (slow)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32036"
+msgid "Bundled Players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32037"
+msgid "Use bundled Netflix and YouTube players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32038"
+msgid "Get additional details from the local Kodi library database"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32039"
+msgid "Kodi Library DB"
+msgstr ""
+
+#: /resources/lib/player.py
+msgctxt "#32040"
+msgid "Item not found."
+msgstr ""
+
+#: /resources/lib/player.py
+msgctxt "#32041"
+msgid "The plugin returned no results."
+msgstr ""
+
+#: /resources/lib/player.py
+msgctxt "#32042"
+msgid "Choose Action"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32043"
+msgid "Up Next"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32044"
+msgid "Enter Search Query"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32045"
+msgid "Cache Refresh"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32046"
+msgid "Cached details were refreshed"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32047"
+msgid "Remove from Trakt Collection"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32048"
+msgid "Add to Trakt Collection"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32049"
+msgid "Remove from Trakt Watchlist"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32050"
+msgid "Add to Trakt Watchlist"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32051"
+msgid "Remove from Trakt Watched History"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32052"
+msgid "Add to Trakt Watched History"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32053"
+msgid "Refresh Cache"
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32054"
+msgid "Would you like to clear existing players first?"
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32055"
+msgid "Authentication Failed."
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32056"
+msgid "Either the username or password were invalid. Would you like to try again?"
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32057"
+msgid "Retry"
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32058"
+msgid "The provided URL is either invalid or inaccesible."
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32059"
+msgid "Success!"
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32060"
+msgid "files extracted"
+msgstr ""
+
+#: /resources/lib/player.py
+msgctxt "#32061"
+msgid "Play with"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32062"
+msgid "Successfully Added TMDb ID {0} to {1}"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32063"
+msgid "Successfully Removed TMDb ID {0} from {1}"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32064"
+msgid "Do you wish to remove {0} from your Trakt {1}?\n\nTMDb {2} ID {3}"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32065"
+msgid "Do you wish to add {0} to your Trakt {1}?\n\nTMDb {2} ID {3}"
 msgstr ""
 
 msgctxt "#30030"
@@ -341,4 +476,144 @@ msgstr ""
 
 msgctxt "#30067"
 msgid "Zulu (South Africa)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32000"
+msgid "TMDb API key"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32001"
+msgid "OMDb API key"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32002"
+msgid "Days to cache details"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32003"
+msgid "Days to cache lists"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32004"
+msgid "MPAA rating prefix"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32005"
+msgid "Language and country"
+msgstr ""
+
+#: /resources/lib/utils.py
+msgctxt "#32006"
+msgid "Choose item"
+msgstr ""
+
+#: /resources/lib/requestapi.py
+msgctxt "#32007"
+msgid "Missing/Invalid"
+msgstr ""
+
+#: /resources/lib/requestapi.py
+msgctxt "#32008"
+msgid "API Key"
+msgstr ""
+
+#: /resources/lib/requestapi.py
+msgctxt "#32009"
+msgid "You must enter a valid API key to use this add-on"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32010"
+msgid "Authenticate Trakt account..."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32011"
+msgid "Token"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32012"
+msgid "You must authenticate your Trakt account to use this feature."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32013"
+msgid "Display Trakt list management options in TMDb details list"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32014"
+msgid "Players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32015"
+msgid "Players URL"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32016"
+msgid "Update players from URL"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32017"
+msgid "Accounts / API Keys"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32018"
+msgid "Fanart.tv API key"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32019"
+msgid "Fanart.tv client key"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32020"
+msgid "Only use if default api key is deactivated"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32021"
+msgid "Use fanart.tv for additional artwork (increases load times)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32022"
+msgid "Play / Open"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32023"
+msgid "Default select action in addon"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32024"
+msgid "Default player for movies"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32025"
+msgid "Default player for episodes"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32026"
+msgid "Choose default players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32027"
+msgid "Clear default players"
 msgstr ""

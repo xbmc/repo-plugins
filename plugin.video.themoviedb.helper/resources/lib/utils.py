@@ -6,6 +6,7 @@ import xbmcaddon
 from datetime import datetime
 from copy import copy
 from contextlib import contextmanager
+from resources.lib.constants import TYPE_CONVERSION
 _addonlogname = '[plugin.video.themoviedb.helper]\n'
 _addon = xbmcaddon.Addon()
 
@@ -17,6 +18,18 @@ def busy_dialog():
         yield
     finally:
         xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
+
+
+def type_convert(original, converted):
+    return TYPE_CONVERSION.get(original, {}).get(converted, '')
+
+
+def try_parse_int(string):
+    '''helper to parse int from string without erroring on empty or misformed string'''
+    try:
+        return int(string)
+    except Exception:
+        return 0
 
 
 def try_parse_float(string):
@@ -31,6 +44,7 @@ def rate_limiter(addon_name='plugin.video.themoviedb.helper', wait_time=None, ap
     """
     Simple rate limiter to prevent overloading APIs
     """
+    sleep_time = wait_time if wait_time and 0 < wait_time < 1 else 1
     wait_time = wait_time if wait_time else 2
     api_name = '.{0}'.format(api_name) if api_name else ''
     timestamp_id = '{0}{1}.timestamp'.format(addon_name, api_name)
@@ -48,8 +62,8 @@ def rate_limiter(addon_name='plugin.video.themoviedb.helper', wait_time=None, ap
     pre_timestamp = try_parse_float(pre_timestamp)
     cur_timestamp = pre_timestamp - time.time() + wait_time
     while not xbmc.Monitor().abortRequested() and cur_timestamp > 0:
-        xbmc.Monitor().waitForAbort(1)
-        cur_timestamp -= 1
+        xbmc.Monitor().waitForAbort(sleep_time)
+        cur_timestamp -= sleep_time
 
     # SET TIMESTAMP AND CLEAR LOCK
     xbmcgui.Window(10000).setProperty(timestamp_id, str(time.time()))
@@ -74,18 +88,12 @@ def dialog_select_item(items=None, details=False):
         return item_list[item_index]
 
 
-def filtered_item(item, key, value, false_val=False):
-    true_val = False if false_val else True  # Flip values if we want to exclude instead of include
+def filtered_item(item, key, value, exclude=False):
+    boolean = False if exclude else True  # Flip values if we want to exclude instead of include
     if key and value:
-        if item.get(key):
-            if item.get(key) == value:
-                return false_val
-            else:
-                return true_val
-        else:
-            return true_val
-    else:
-        return False
+        if item.get(key) and item.get(key) == value:
+            boolean = exclude
+        return boolean
 
 
 def age_difference(birthday, deathday=''):
@@ -101,10 +109,16 @@ def age_difference(birthday, deathday=''):
 
 
 def convert_timestamp(time_str):
+    time_str = time_str[:19]
+    time_fmt = "%Y-%m-%dT%H:%M:%S"
     try:
-        time_obj = datetime.strptime(time_str[:19], '%Y-%m-%dT%H:%M:%S')
+        time_obj = datetime.strptime(time_str, time_fmt)
         return time_obj
-    except Exception:
+    except TypeError:
+        time_obj = datetime(*(time.strptime(time_str, time_fmt)[0:6]))
+        return time_obj
+    except Exception as exc:
+        kodi_log(exc, 1)
         return
 
 
@@ -140,51 +154,56 @@ def concatinate_names(items, key, separator):
     concat = ''
     for i in items:
         if i.get(key):
-            if concat:
-                concat = '{0} {1} {2}'.format(concat, separator, i.get(key))
-            else:
-                concat = i.get(key)
+            concat = u'{0} {1} {2}'.format(concat, separator, i.get(key)) if concat else i.get(key)
     return concat
 
 
 def dict_to_list(items, key):
-    mylist = []
-    for i in items:
-        if i.get(key):
-            mylist.append(i.get(key))
-    return mylist
+    return [i.get(key) for i in items if i.get(key)]
 
 
 def find_dict_in_list(list_of_dicts, key, value):
-    index_list = []
-    for list_index, dic in enumerate(list_of_dicts):
-        if dic.get(key) == value:
-            index_list.append(list_index)
-    return index_list
+    return [list_index for list_index, dic in enumerate(list_of_dicts) if dic.get(key) == value]
+
+
+def get_dict_in_list(list_of_dicts, key, value, basekeys=[]):
+    for d in list_of_dicts:
+        if not isinstance(d, dict):
+            continue
+        base = d
+        for basekey in basekeys:
+            d = d.get(basekey, {}) if basekey else d
+        if d.get(key) == value:
+            return base
 
 
 def split_items(items, separator='/'):
     separator = ' {0} '.format(separator)
-    if separator in items:
+    if items and separator in items:
         items = items.split(separator)
-    items = [items] if isinstance(items, str) else items  # Make sure we return a list to prevent a string being iterated over characters
+    items = [items] if not isinstance(items, list) else items  # Make sure we return a list to prevent a string being iterated over characters
     return items
 
 
 def iter_props(items, property, itemprops, **kwargs):
-    x = 0
-    for i in items:
-        x = x + 1
-        for key, value in kwargs.items():
-            if i.get(value):
-                itemprops['{0}.{1}.{2}'.format(property, x, key)] = i.get(value)
+    func = kwargs.pop('func', None)
+    for k, v in kwargs.items():
+        x = 0
+        while x < 10 and itemprops.get('{0}.{1}.{2}'.format(property, x + 1, k)):
+            x += 1  # Find next empty prop
+        for i in items:
+            if x > 9:
+                break  # only add ten items
+            if i.get(v):
+                x += 1
+                itemprops['{0}.{1}.{2}'.format(property, x, k)] = i.get(v) if not func else func(i.get(v))
     return itemprops
 
 
-def del_empty_keys(d):
+def del_empty_keys(d, values=[]):
     my_dict = d.copy()
     for k, v in d.items():
-        if not v:
+        if not v or v in values:
             del my_dict[k]
     return my_dict
 

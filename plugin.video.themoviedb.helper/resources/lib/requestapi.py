@@ -7,23 +7,28 @@ import requests
 import resources.lib.utils as utils
 import xml.etree.ElementTree as ET
 _cache = simplecache.SimpleCache()
-_xbmcdialog = xbmcgui.Dialog()
-_addon = xbmcaddon.Addon()
 
 
 class RequestAPI(object):
-    def __init__(self):
-        self.req_api_url = ''
-        self.req_api_key = ''
-        self.req_api_name = ''
-        self.req_wait_time = 1
-        self.cache_long = 14
-        self.cache_short = 1
+    def __init__(self, cache_short=None, cache_long=None, req_api_url=None, req_api_key=None, req_api_name=None, req_wait_time=None):
+        self.req_api_url = req_api_url or ''
+        self.req_api_key = req_api_key or ''
+        self.req_api_name = req_api_name or ''
+        self.req_wait_time = req_wait_time or 0
+        self.cache_long = 14 if not cache_long or cache_long < 14 else cache_long
+        self.cache_short = 1 if not cache_short or cache_short < 1 else cache_short
+        self.cache_name = 'plugin.video.themoviedb.helper'
         self.addon_name = 'plugin.video.themoviedb.helper'
+        self.addon = xbmcaddon.Addon(self.addon_name)
+        self.dialog_noapikey_header = '{0} {1} {2}'.format(self.addon.getLocalizedString(32007), self.req_api_name, self.addon.getLocalizedString(32008))
+        self.dialog_noapikey_text = self.addon.getLocalizedString(32009)
+        self.dialog_noapikey_check = None
 
-    def invalid_apikey(self, api_name='TMDb'):
-        _xbmcdialog.ok('{0} {1} {2}'.format(_addon.getLocalizedString(32007), api_name, _addon.getLocalizedString(32008)),
-                       _addon.getLocalizedString(32009))
+    def invalid_apikey(self):
+        if self.dialog_noapikey_check == self.req_api_key:
+            return  # We've already asked once so don't ask again for this container
+        self.dialog_noapikey_check = self.req_api_key
+        xbmcgui.Dialog().ok(self.dialog_noapikey_header, self.dialog_noapikey_text)
         xbmc.executebuiltin('Addon.OpenSettings({0})'.format(self.addon_name))
 
     def get_cache(self, cache_name):
@@ -40,15 +45,16 @@ class RequestAPI(object):
         Returns the cached item if it exists otherwise does the function
         """
         cache_days = kwargs.pop('cache_days', 14)
-        cache_name = kwargs.pop('cache_name', self.addon_name)
+        cache_name = kwargs.pop('cache_name', self.cache_name)
         cache_only = kwargs.pop('cache_only', False)
+        cache_refresh = kwargs.pop('cache_refresh', False)
         for arg in args:
             if arg:
                 cache_name = u'{0}/{1}'.format(cache_name, arg)
         for key, value in kwargs.items():
             if value:
                 cache_name = u'{0}&{1}={2}'.format(cache_name, key, value)
-        my_cache = self.get_cache(cache_name)
+        my_cache = self.get_cache(cache_name) if not cache_refresh else None
         if my_cache:
             return my_cache
         elif not cache_only:
@@ -66,21 +72,20 @@ class RequestAPI(object):
         Make the request to the API by passing a url request string
         """
         if self.req_wait_time:
-            utils.rate_limiter(addon_name=self.addon_name, wait_time=self.req_wait_time, api_name=self.req_api_name)
-        utils.kodi_log(request, 0)
-        request = requests.post(request, data=postdata) if postdata else requests.get(request, headers=headers)  # Request our data
-        if not request.status_code == requests.codes.ok:  # Error Checking
-            if request.status_code == 401:
-                utils.kodi_log('HTTP Error Code: {0}'.format(request.status_code), 1)
+            utils.rate_limiter(addon_name=self.cache_name, wait_time=self.req_wait_time, api_name=self.req_api_name)
+        response = requests.post(request, data=postdata, headers=headers) if postdata else requests.get(request, headers=headers)  # Request our data
+        if not response.status_code == requests.codes.ok:  # Error Checking
+            if response.status_code == 401:
+                utils.kodi_log('HTTP Error Code: {0}'.format(response.status_code), 1)
                 self.invalid_apikey()
-            elif not request.status_code == 400:  # Don't write 400 error to log
-                utils.kodi_log('HTTP Error Code: {0}'.format(request.status_code), 1)
-            return {}
+            elif not response.status_code == 400:  # Don't write 400 error to log
+                utils.kodi_log('HTTP Error Code: {0}\nRequest: {1}'.format(response.status_code, request), 1)
+            return {} if dictify else None
         if dictify and is_json:
-            request = request.json()  # Make the request nice
+            response = response.json()  # Make the response nice
         elif dictify:
-            request = self.translate_xml(request)
-        return request
+            response = self.translate_xml(response)
+        return response
 
     def get_request_url(self, *args, **kwargs):
         """
@@ -111,9 +116,12 @@ class RequestAPI(object):
     def get_request(self, *args, **kwargs):
         """ Get API request from cache (or online if no cached version) """
         cache_days = kwargs.pop('cache_days', self.cache_long)
-        cache_name = kwargs.pop('cache_name', self.addon_name)
+        cache_name = kwargs.pop('cache_name', self.cache_name)
         cache_only = kwargs.pop('cache_only', False)
+        cache_refresh = kwargs.pop('cache_refresh', False)
         is_json = kwargs.pop('is_json', True)
         request_url = self.get_request_url(*args, **kwargs)
-        return self.use_cache(self.get_api_request, request_url, is_json=is_json,
-                              cache_days=cache_days, cache_name=cache_name, cache_only=cache_only)
+        # utils.kodi_log(request_url, 1)
+        return self.use_cache(
+            self.get_api_request, request_url, is_json=is_json, cache_refresh=cache_refresh,
+            cache_days=cache_days, cache_name=cache_name, cache_only=cache_only)

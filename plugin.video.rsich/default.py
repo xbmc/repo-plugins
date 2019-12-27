@@ -1,6 +1,10 @@
 from phate89lib import kodiutils, rutils, staticutils
-import urllib, datetime, calendar, os
-from urlparse import urlparse
+import datetime, calendar, os
+try:
+    from urllib.parse import urlparse, quote_plus
+except ImportError:
+    from urlparse import urlparse
+    from urllib import quote_plus
 import dateutil.parser
 import xml.etree.ElementTree as ET
 from tempfile import mkstemp
@@ -9,7 +13,6 @@ import datetime
 webutils=rutils.RUtils()
 webutils.log=kodiutils.log
 useragent = "RSI.CH Video Addon"
-useragent_q = urllib.quote_plus(useragent)
 webutils.USERAGENT = useragent
 
 #site logic
@@ -40,7 +43,7 @@ def getAuthString(url):
     sUrl=urlparse(url).path.split('/')
     if len(sUrl) < 3:
         return False
-    auth=webutils.getJson('http://tp.srgssr.ch/akahd/token?acl={path}*'.format(path=urllib.quote_plus('/{p1}/{p2}/'.format(p1=sUrl[1],p2=sUrl[2]))))
+    auth=webutils.getJson('http://tp.srgssr.ch/akahd/token?acl={path}*'.format(path=quote_plus('/{p1}/{p2}/'.format(p1=sUrl[1],p2=sUrl[2]))))
     if 'token' in auth and 'authparams' in auth['token']:
         return '?' + auth['token']['authparams']
     else:
@@ -291,7 +294,7 @@ def watchLiveSport(url):
     # If the token request was successful, play the video URL.
     if auth:
         subs = []
-        kodiutils.setResolvedUrl('{url}?{auth}|User-Agent={ua}'.format(url=url,auth=auth,ua=urllib.quote_plus(useragent)), subs=subs)
+        kodiutils.setResolvedUrl('{url}?{auth}|User-Agent={ua}'.format(url=url,auth=auth,ua=quote_plus(useragent)), subs=subs)
     kodiutils.setResolvedUrl("",solved=False)
 
 def watchVideo(id):
@@ -317,7 +320,7 @@ def watchVideo(id):
                         subpath = ttmlToSrt(url['url'])
                         if subpath:
                             subs.append(subpath)
-            kodiutils.setResolvedUrl('{url}?{auth}|User-Agent={ua}'.format(url=fUrl,auth=auth,ua=urllib.quote_plus(useragent)), subs=subs)
+            kodiutils.setResolvedUrl('{url}?{auth}|User-Agent={ua}'.format(url=fUrl,auth=auth,ua=quote_plus(useragent)), subs=subs)
     kodiutils.setResolvedUrl("",solved=False)
 
 #main

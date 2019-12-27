@@ -1,7 +1,7 @@
 import datetime, re
 from phate89lib import rutils, kodiutils, staticutils
 
-home = "http://www.comingsoon.it"
+home = "https://www.comingsoon.it"
 webutils=rutils.RUtils()
 rutils.log=kodiutils.log
 webutils.USERAGENT = "Comingsoon video addon"
@@ -18,117 +18,136 @@ def getMoviesList(url, fullDetails = False):
     bpage = webutils.getSoup(url)
     if not bpage:
         return -1, []
-    htmlmovies = bpage.find_all("a", attrs={"class": "col-xs-12 cinema"})
+    htmlmovies = bpage.find_all(True, attrs={"class": "cards cards-horiz-box box-office min film brd-c"})
     if not htmlmovies:
         return -1, []
     movies = []
     for htmlmovie in htmlmovies:
-        if (htmlmovie and htmlmovie.has_attr('href')):
+        if (htmlmovie.has_attr('href')):
             res = re.search(".*?\/.*?\/([0-9]+)\/scheda\/", htmlmovie['href'])
-            if res:
-                if (fullDetails):
-                    movie = getFullMovieDetails(res.group(1))
-                else:
-                    movie = getBaseMovieDetails(htmlmovie)
-                movie['id'] = res.group(1)
-                movie['image']='https://mr.comingsoon.it/imgdb/locandine/big/{id}.jpg'.format(id=movie['id'])
-                movies.append( movie )
+        else:
+            a = htmlmovie.find('a')
+            if a and a.has_attr('href'):
+                res = re.search(".*?\/.*?\/([0-9]+)\/scheda\/", a['href'])
+        if res:
+            if (fullDetails):
+                movie = getFullMovieDetails(res.group(1))
+            else:
+                movie = getBaseMovieDetails(htmlmovie.find('div',attrs={"class": 'testo plr0'}))
+            movie['id'] = res.group(1)
+            movie['image']='https://mr.comingsoon.it/imgdb/locandine/big/{id}.jpg'.format(id=movie['id'])
+            movies.append( movie )
     lastPage=-1
-    i = bpage.find("i", attrs={"class": "fa fa-fast-forward"})
-    if i and len(i.parent['class']) > 0 and not 'disattivato' in i.parent['class']:
+    i = bpage.find("i", attrs={"class": "fa fa-forward"})
+    if i and len(i.parent['class']) > 0 and not 'disabled' in i.parent['class']:
         lastPage = i.parent['href'].split('=')[-1]
     return lastPage, movies
 
 def getBaseMovieDetails(htmlmovie):
     movie = {}
-    div = htmlmovie.find("div", attrs={"class": "h3 titolo cat-hover-color anim25"})
+    if not htmlmovie:
+        return movie
+    div = htmlmovie.find(True, 'titolo h2')
+    if div:
+        movie['title'] = div.string.strip()
+    div = htmlmovie.find("div", attrs={"class": "descrizione p mbs"})
     if (div):
-        movie['title'] = div.string
-    div = htmlmovie.find("div", attrs={"class": "h5 sottotitolo"})
+        movie['originaltitle'] = div.string[1:-1].strip()
+    div = htmlmovie.find("div", attrs={"class": "titolo p mbs"})
     if (div):
-        movie['originaltitle'] = div.string
-    ul = htmlmovie.find("ul", attrs={"class": "col-xs-9 box-descrizione"})
-    if (ul):
-        infos = ul.find_all('li')
-        if (infos):
-            for info in infos:
-                if (info.span):
-                    if (info.span.string == 'ANNO'):
-                        movie['year'] = info.contents[1][1:].strip()
-                    elif (info.span.string == 'DATA USCITA'):
-                        movie['premiered'] = info.contents[1][1:].strip()
-                    elif (info.span.string == 'GENERE'):
-                        movie['genre'] = info.contents[1][1:].strip().replace(',', '/')
-                    elif (info.span.string == 'NAZIONALITA&#39;'):
-                        movie['country'] = info.contents[1][1:].strip().replace(',', '/')
-                    elif (info.span.string == 'REGIA'):
-                        movie['director'] = info.contents[1][1:].strip().replace(',', '/')
-                    elif (info.span.string == 'CAST'):
-                        movie['cast'] = info.contents[1][1:].strip().split(", ")
+        movie['originaltitle'] = div.string[1:-1].strip()
+    infos = htmlmovie.find_all("div", attrs={"class": "p"})
+    if (infos):
+        for info in infos:
+            if (info.b and info.span):
+                if (info.b.string == 'Anno:'):
+                    movie['year'] = info.span.string.strip()
+                elif (info.b.string == 'Uscita:'):
+                    movie['premiered'] = info.span.string.strip()
+                elif (info.b.string == 'Genere:'):
+                    movie['genre'] = info.span.get_text().strip().split(', ')
+                elif (info.b.string == 'NAZIONALITA&#39;'):
+                    movie['country'] = info.span.get_text().strip().split(', ')
+                elif (info.b.string == 'Regia:'):
+                    movie['director'] = info.span.get_text().strip().split(', ')
+                elif (info.b.string == 'Cast:'):
+                    movie['cast'] = info.span.get_text().strip().split(', ')
+    div = htmlmovie.find('div',attrs={"class": "c p"})
+    if div:
+        movie['studio']=div.string.strip()
+    div = htmlmovie.find('div',attrs={"class": "voto p pbs"})
+    if div:
+        movie['rating'] = float(div.contents[1].strip().replace(',','.'))*2
+      
     return movie
 
 def getFullMovieDetails(id):
-    page = webutils.getSoup("{home}/film/movie/{id}/scheda/".format(home=home, id=id))
+    page = webutils.getSoup("{home}/film/movie/{id}/scheda/".format(home=home, id=id),parser='html5lib')
     if not page:
         return {}
-    frame = page.find("div", attrs={"class": "contenitore-scheda col-xs-12"})
+    frame = page.find("div", attrs={"class": "container pbm"})
     if not frame:
         return {}
     movie = {}
-    res = page.find("h1", attrs={"class": "titolo scheda col-sm-10"})
+    res = frame.find("h1", attrs={"class": "titolo h1"})
     if res:
-            movie['title'] = res.string
-    res = page.find("p", attrs={"class": "box-dati col-xs-12 h4"})
+        movie['title'] = res.string.strip()
+    res = frame.find("div", attrs={"class": "sottotitolo h3"})
     if res:
-            movie['originaltitle'] = res.string
-    res = frame.find("div", attrs={"id": "voto-pubblico"})
+        movie['originaltitle'] = res.string[1:-1].strip()
+    res = frame.find("div", attrs={"id": "_voto-pubblico"})
     if res:
-            movie['userrating'] = float(res['data-rating'])*2
-    res = frame.find("div", attrs={"class": "voto voto-comingsoon col-xs-12 col-sm-4 h6"})
-    if res:
-            movie['rating'] = float(res['data-rating'])
-    res = frame.find("div", attrs={"class": "voto voto-comingsoon col-xs-12 col-sm-4 h6"})
-    if res:
+        movie['userrating'] = float(res['data-rating'])*2
+        res = res.find_next_sibling("div", attrs={"class": "voto mrl"})
+        if res:
             movie['rating'] = float(res['data-rating'])*2
-    res = frame.find("div", attrs={"class": "contenuto-scheda-destra col-xs-8"})
+    res = frame.find("div", attrs={"class": "descrizione p"})
     if res:
-            movie['plot'] = res.contents[-4].string
-    res = frame.find("div", attrs={"class": "box-descrizione"})
+        movie['plot'] = res.get_text()
+    frame = page.find("div", attrs={"class": "container mobile mtl"})
+    if not frame:
+        return movie
+    res = frame.find("div", attrs={"class": 'meta-l mbl'})
     if res:
-        uls = res.find_all('ul')
-        if uls:
-            for ul in uls:
-                infos = ul.find_all('li')
-                if (infos):
-                    for info in infos:
-                        if (info.span):
-                            field = info.span.string
-                            info.span.extract()
-                            movie['studio'] = ''
-                            if (field == 'ANNO'):
-                                movie['year'] = info.text.strip()[2:]
-                            if (field == 'DATA USCITA'):
-                                movie['premiered'] = info.time['datetime']
-                            elif (field == 'GENERE'):
-                                movie['genre'] = info.text.strip()[2:].replace(', ', ' / ')
-                            elif (field == 'PAESE'):
-                                movie['country'] = info.text.strip()[2:].replace(', ', ' / ')
-                            elif (field == 'REGIA'):
-                                movie['director'] = info.text.strip()[2:].replace(', ', ' / ')
-                            elif (field == 'ATTORI'):
-                                movie['cast'] = info.text.strip()[2:].split(", ")
-                            elif (field == 'SCENEGGIATURA'):
-                                movie['writer'] = info.text.strip()[2:].replace(', ', ' / ')
-                            elif (field == 'PRODUZIONE'):
-                                movie['studio'] += info.text.strip().rstrip(':')[2:].replace(', ', ' / ') + ' / '
-                            elif (field == 'DISTRIBUZIONE'):
-                                movie['studio'] += info.text.strip().rstrip(':')[2:].replace(', ', ' / ') + ' / '
-                            elif (field == 'DURATA'):
-                                try:
-                                    movie['duration'] = int(info.text.strip()[2:].split(" ")[0])
-                                except:
-                                    pass
+        infos = res.find_all("div", attrs={"class": 'p'})
+        if (infos):
+            for info in infos:
+                if (info.span):
+                    field = info.b.string
+                    movie['studio'] = []
+                    if (field == 'Anno:'):
+                        movie['year'] = info.span.get_text().strip()
+                    # if (field == 'Data di uscita:'):
+                    #     movie['premiered'] = info.span.get_text()
+                    elif (field == 'Genere:'):
+                        movie['genre'] = info.span.get_text().strip().split(', ')
+                    elif (field == 'Paese:'):
+                        movie['country'] = info.span.get_text().strip().split(', ')
+                    elif (field == 'Regia:'):
+                        movie['director'] = info.span.get_text().strip().split(', ')
+                    elif (field == 'Attori:'):
+                        movie['cast'] = info.span.get_text().strip().split(', ')
+                    elif (field == 'Sceneggiatura:'):
+                        movie['writer'] = info.span.get_text().strip().split(', ')
+                    elif (field == 'Produzione:'):
+                        movie['studio'].extend(info.span.get_text().strip().split(', '))
+                    elif (field == 'Distribuzione:'):
+                        movie['studio'].extend(info.span.get_text().strip().split(', '))
+                    elif (field == 'Durata:'):
+                        try:
+                            movie['duration'] = int(info.span.string.strip().split(" ")[0])
+                        except:
+                            pass
     return movie
+
+def extractFromLinks(item):
+    res = []
+    items = item.find_all('a')
+    if items:
+        for a in items:
+            res.append(a.text)
+    return res
+
 
 def getMovieVideos(id):
     page = webutils.getSoup("http://www.comingsoon.it/film/movie/{id}/video/".format(id=id)) # url http://www.comingsoon.it/film/something/{movieid}/scheda/
@@ -136,26 +155,13 @@ def getMovieVideos(id):
         return []
     videos = []
     #load the main video
-    htmlvideo = page.find("link", attrs={"rel": "canonical"})
-    if htmlvideo:
-        firstvid = htmlvideo['href'].split('=')[-1]
-        nome = ""
-        div = page.find("div", attrs={"class": "h5 descrizione"})
-        if div:
-            nome = div.string
-        videos.append( { "id": firstvid,  "title": nome, "image": "http://mr.comingsoon.it/imgdb/video/{id}_big.jpg".format(id=firstvid) } )
-    #search other videos
-    htmlrows = page.find_all("div", attrs={"class": "video-player-xl-articolo video-player-xl-sinistra"})
-    if htmlrows:
-        for htmlrow in htmlrows:
-            htmlvideos = htmlrow.find_all('a')
-            if htmlvideos:
-                for htmlvideo in htmlvideos:
-                    vid = htmlvideo['href'].split('=')[-1]
-                    if vid != firstvid:
-                        div = htmlvideo.find("div", attrs={"class": "h6 descrizione"})
-                        if div:
-                            videos.append( { "id": vid,  "title": div.string, "image": "http://mr.comingsoon.it/imgdb/video/{id}_big.jpg".format(id=vid) } )
+    htmlvideos = page.find_all("a", attrs={"class": "cards brd-c mbl"})
+    if htmlvideos:
+        for htmlvideo in htmlvideos:
+            vid = htmlvideo['href'].split('=')[-1]
+            div = htmlvideo.find("div", attrs={"class": "titolo h3"})
+            if div:
+                videos.append( { "id": vid,  "title": div.string, "image": "http://mr.comingsoon.it/imgdb/video/{id}_big.jpg".format(id=vid) } )
     return videos
 
 def getVideoUrls(id):
@@ -186,7 +192,7 @@ def addTheatersList(page = 1):
     kodiutils.setContent('movies')
     maxPage, movies = getTheatersList(page, kodiutils.getSettingAsBool('fullDetails'))
     addMoviesList(movies)
-    if page < maxPage:
+    if page < int(maxPage):
         kodiutils.addListItem(kodiutils.LANGUAGE(32002), {"mode": "moviesintheaters", "page": page + 1 })
     kodiutils.endScript()
 
@@ -205,7 +211,7 @@ def addMoviesList(movies):
     for movie in movies:
         movie['mediatype']='movie'
         kodiutils.addListItem(movie['title'], {"id": movie['id'], "mode": "videos" }, videoInfo=movie, 
-            thumb=movie['image'])
+            thumb=movie['image'], poster=movie['image'])
 
 def loadDates(offset = 0):
     offset = int(offset)

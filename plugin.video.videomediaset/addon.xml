@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.videomediaset" name="Video Mediaset" provider-name="phate89, aracnoz" version="1.3.2">
+<addon id="plugin.video.videomediaset" name="Video Mediaset" provider-name="phate89, aracnoz" version="1.4.0">
     <requires>
         <import addon="xbmc.python" version="2.24.0" />
         <import addon="script.module.phate89" version="1.0.0"/>
@@ -20,5 +20,6 @@
         <news>v1.3.2
 - fixed live channel urls (thx to LEOSCHUMY)
 </news>
+        <broken>For updates of VideoMediaset, please upgrade to krypton or above</broken>
     </extension>
 </addon>

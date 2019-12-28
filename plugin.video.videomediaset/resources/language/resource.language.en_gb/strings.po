@@ -1,0 +1,135 @@
+# Kodi Media Center language file
+# Addon Name: Mediaset Play
+# Addon id: plugin.video.videomediaset
+# Addon Provider: phate89
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: phate89\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: label impostazioni
+
+msgctxt "#32001"
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgctxt "#32002"
+msgid "Password"
+msgstr "Password"
+
+msgctxt "#32003"
+msgid "Elementi per pagina"
+msgstr "Items per page"
+
+msgctxt "#32004"
+msgid "Mostra in guida tv anche elementi non riproducibili"
+msgstr "Show in tv guide unplayable items"
+
+msgctxt "#32005"
+msgid "Installa widevine per i contenuti protetti"
+msgstr "Install widevine CDM for protected content"
+
+msgctxt "#32101"
+msgid "Tutto A-Z"
+msgstr "All A-Z"
+
+msgctxt "#32102"
+msgid "Fiction e Serie TV"
+msgstr "Fiction and TV shows"
+
+msgctxt "#32103"
+msgid "Film"
+msgstr "Movies"
+
+msgctxt "#32104"
+msgid "Kids"
+msgstr "Kids"
+
+msgctxt "#32105"
+msgid "Documentari"
+msgstr "Documentaries"
+
+msgctxt "#32106"
+msgid "Programmi TV"
+msgstr "TV Programs"
+
+msgctxt "#32107"
+msgid "Cerca"
+msgstr "Search"
+
+msgctxt "#32111"
+msgid "Dirette"
+msgstr "Live TV"
+
+msgctxt "#32112"
+msgid "Canali"
+msgstr "Channels"
+
+msgctxt "#32113"
+msgid "Guida TV"
+msgstr "TV Guide"
+
+msgctxt "#32115"
+msgid "Programmi"
+msgstr "TV Programs"
+
+msgctxt "#32116"
+msgid "Clip"
+msgstr "Clips"
+
+msgctxt "#32117"
+msgid "Episodi"
+msgstr "Episodes"
+
+msgctxt "#32121"
+msgid "Tutti"
+msgstr "All"
+
+msgctxt "#32122"
+msgid "In Onda"
+msgstr "On Air"
+
+msgctxt "#32130"
+msgid "Prossima pagina"
+msgstr "Next Page"
+
+msgctxt "#32131"
+msgid "Inserisci testo da cercare"
+msgstr "Insert text to find"
+
+msgctxt "#32132"
+msgid "Errore"
+msgstr "eRROR"
+
+msgctxt "#32133"
+msgid "Per riprodurre il video serve un addon inputstream compatibile"
+msgstr "To play this video you need a compatible inputstream addon"
+
+msgctxt "#32134"
+msgid "Serve effettuare il login per riprodurre questo video"
+msgstr "You have to log in to play this video"
+
+msgctxt "#32135"
+msgid "Login fallito. Correggere e riprovare"
+msgstr "Log in failed. Try again"
+
+msgctxt "#32136"
+msgid "L'elemento non è riproducibile on demand"
+msgstr "The element is not playable on demand"
+
+msgctxt "#32137"
+msgid "Diretta"
+msgstr "Live"
+
+msgctxt "#32138"
+msgid "Ricomincia"
+msgstr "Restart"

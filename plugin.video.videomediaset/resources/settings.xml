@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+		<setting label="32001" type="text" id="email" default=""/>
+        <setting label="32002" type="text" id="password" option="hidden" default=""/>
+        <setting label="32003" type="number" id="itemsperpage" default="500"/>
+        <setting label="32004" type="bool" id="fullguide" default="false"/>
+        <setting label="32005" type="action" action="RunScript(script.module.inputstreamhelper,widevine_install)" visible="!system.platform.android"/>
+</settings>

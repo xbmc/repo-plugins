@@ -34,7 +34,7 @@ msgctxt "#32004"
 msgid "Add subtitles to videos (slower video start)"
 msgstr "Add subtitles to videos (slower video start)"
 
-#plugin labels
+#: plugin labels
 
 msgctxt "#32011"
 msgid "Next page"
@@ -64,7 +64,7 @@ msgctxt "#32017"
 msgid "Live Sports"
 msgstr "Live Sports"
 
-#label date
+#: label date
 msgctxt "#32020"
 msgid "{dayname} {day} {month} {year}"
 msgstr "{dayname} {day} {month} {year}"

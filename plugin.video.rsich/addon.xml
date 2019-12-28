@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rsich" name="RSI.CH play" version="1.1.0" provider-name="phate89">
+<addon id="plugin.video.rsich" name="RSI.CH play" version="1.2.0" provider-name="phate89">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
     <import addon="script.module.dateutil" version="2.4.2"/>
-    <import addon="script.module.phate89" version="1.0.0"/>
+    <import addon="script.module.phate89" version="1.2.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -15,14 +15,13 @@
 	<summary lang="en">RSI channels broadcasts</summary>
     <description lang="it">I canali tv in diretta, la programmazione giorno per giorno, le puntate delle trasmissioni, i telegiornali.</description>
 	<description lang="en">The live TV channels, the programming day by day, the broadcast archive, the news.</description>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <license>GPL-2.0-only</license>
     <forum>http://forum.xbmc.org/showthread.php?tid=303064</forum>
     <website>https://github.com/phate89/plugin.video.rsich</website>
     <email></email>
     <source>https://github.com/phate89/plugin.video.rsich</source>
-    <news>1.1.0
-Fixed live channels
-Added live sports support (thx to riccardo1991)
+    <news>1.2.0
+Support for Python 3.x
     </news>
   </extension>
 </addon>

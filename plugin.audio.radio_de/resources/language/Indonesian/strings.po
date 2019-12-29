@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "Rekomendasi Editor"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "100 Stasiun Teratas"
+msgid "Top Stations"
+msgstr "Stasiun Teratas"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "Stasiun Saya"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "Cari stasiun"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "Masukkan nama, negara atau bahasa"
 
 msgctxt "#30300"
 msgid "Language"

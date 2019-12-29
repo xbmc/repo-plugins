@@ -1,3 +1,11 @@
+v2.4.0 (29/12/2019)
+    - [new] Use radio API v2
+    - [fix] Remove dead code
+    - [new] Add radio.pt
+    - [new] Page listings
+    - [new] Better quality logos
+    - [new] Hide fanart setting
+
 v2.3.5 (25/12/2019)
     - [fix] Artwork not available in player
 

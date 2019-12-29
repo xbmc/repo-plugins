@@ -1,4 +1,4 @@
-<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="2.3.5">
+<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="2.4.0">
     <requires>
         <import addon="xbmc.python" version="2.14.0" />
         <import addon="script.module.xbmcswift2" version="2.5.0" />
@@ -10,10 +10,15 @@
         <platform>all</platform>
         <website>https://www.radio.de</website>
         <source>https://github.com/XBMC-Addons/plugin.audio.radio_de</source>
-        <forum>https://forum.xbmc.org/showthread.php?tid=119362</forum>
+        <forum>https://forum.kodi.tv/showthread.php?tid=119362</forum>
         <license>GPL-2.0-only</license>
-        <news>v2.3.5 (25/12/2019)
-            [fix] Artwork not available in player
+        <news>v2.4.0 (29/12/2019)
+            [new] Use radio API v2
+            [fix] Remove dead code
+            [new] Add radio.pt
+            [new] Page listings
+            [new] Better quality logos
+            [new] Hide fanart setting
         </news>
         <summary lang="be">Access &gt;7000 radio broadcasts</summary>
         <summary lang="ca">accedeix a mes de 7000 emissores de radio</summary>
@@ -46,7 +51,7 @@
         <description lang="da">Musikplugin som giver adgang til over 7000 internationale radioudsendelser fra rad.io, radio.de og radio.fr[CR]Nuværende funktioner[CR]- Oversat til engelsk, tysk og fransk[CR]- Gennemse stationer efter lokalitet, genre, emne, land, by og sprog[CR]- Søg efter stationer[CR]- 115 genrer, 59 emner, 94 lande, 1010 byer og 63 sprog</description>
         <description lang="de">Das Radio im Internet mit über 7000 Radiosendern, Internetradio Stationen, gratis Streams und Podcasts live von rad.io, radio.de und radio.fr.[CR]Features[CR]- Auf deutsch, englisch und französisch übersetzt[CR]- Sortiert nach: in der Nähe, Genre, Thema, Land und Sprache[CR]- nach Sendern suchen[CR]- 115 Genre, 59 Themen, 94 Länder, 1010 Städte, 63 Sprachen</description>
         <description lang="el">Μουσικό plugin για πρόσβαση σε περισσότερους από 7000 διεθνείς ραδιοφωνικές εκπομπές από τα rad.io, radio.de και radio.fr[CR]Υποστηρίζονται[CR]- Μεταφράσεις σε Αγγλικά, Γερμανικά και Γαλλικά[CR]- Περιήγηση σταθμών ανά τοποθεσία, είδος, θέμα, χώρα, πόλη και γλώσσα[CR]- Αναζήτηση σταθμών[CR]- 115 είδη, 59 θέματα, 94 χώρες, 1010 πόλεις, 63 γλώσσες</description>
-        <description lang="en">Music plugin to access over 7000 international radio broadcasts from rad.io, radio.de and radio.fr[CR]Currently features[CR]- English, german and french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages</description>
+        <description lang="en">Music plugin to access over 7000 international radio broadcasts from rad.io, radio.de, radio.fr and radio.pt[CR]Currently features[CR]- English, german and french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages</description>
         <description lang="en_NZ">Music plugin to access over 7000 international radio broadcasts from rad.io, radio.de and radio.fr[CR]Currently features[CR]- English, german and french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages</description>
         <description lang="en_US">Music plugin to access over 7000 international radio broadcasts from rad.io, radio.de and radio.fr[CR]Currently features[CR]- English, german and french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages</description>
         <description lang="es">Plugin de música para escuchar más de 7.000 emisoras de radio internacionales desde rad.io, radio.de y radio.fr.[CR]Características:[CR]- Traducciones al inglés, alemán, francés y español.[CR]- Buscador de emisoras por ubicación, género, tema, país, ciudad o idioma.[CR]- Buscador de emisoras.[CR]- 115 géneros, 59 temas, 94 países, 1.010 ciudades, 63 idiomas.</description>
@@ -61,8 +66,8 @@
         <description lang="lt">Muzikos įskiepio prieiga prie daugiau nei 7000 tarptautinių radijo transliacijų iš rad.io, radio.de ir radio.fr [CR] Šiuo metu programoja išversta į [Cr] - anglų, vokiečių ir prancūzų kalbas [CR] - Naršyti stotis pagal: vietovę, žanrą, temą, šalį, miestą ir/ar kalbą [CR] - Ieškoti radio stočių pagal:[Cr] - 115 žanrai, 59 temos, 94 šalys, 1010 miestų, 63 kalbos</description>
         <description lang="nl">muziek plug-in om toegang te krijgen tot over 7000 internationale radiouitzendingen van rad.io, radio.de en radio.fr[CR]Huidige functies[CR]- engels, duits en frans vertaalt[CR]- Zoek naar stations vanuit locatie, genre, onderwerp, land, plaats en taal[CR]- zoek voor stations[CR]- 115 genres. 59 onderwerpen, 94 landen. 1010 plaatsen, 63 talen</description>
         <description lang="pl">Wtyczka muzyczna dająca dostęp do ponad 7000 międzynarodowych stacji radiowych z[CR]rad.io, radio.de, daio.fr[CR]Obecnie w językach[CR]- Angielski, Niemiecki i Francuski[CR]- Szukaj stacji według lokacji, gatunku, tematu, kraju, miasta czy języka[CR]- 115 gatunków, 59 tematów, 94 kraje, 1010 miasta, 63 języki</description>
-        <description lang="pt">Plugin de música para aceder a mais de 7000 transmissões de rádio internacionais de rad.io, radio.de e radio.fr[CR]Actualmente, disponibiliza:[CR]- Traduções em vários idiomas[CR]- Navegar estações por localização, género, tópico, país, cidade e idioma[CR]- Procurar por estações[CR]- 115 géneros, 59 tópicos, 94 países, 1010 cidades, 63 idiomas</description>
-        <description lang="pt_BR">Plugin de música para acessar mais de 7000 emissoras de rádio internacionais de rad.io, radio.de e radio.fr [CR] Principais características [CR] - Inglês, Alemão e Francês traduzido [CR] - Procure estações por localização, gênero, tópico, país , cidade e  linguagem [CR] - Procure estações [CR] - 115 gêneros, 59 temas, 94 países, 1010 cidades, 63 idiomas</description>
+        <description lang="pt">Plugin de música para aceder a mais de 7000 transmissões de rádio internacionais de rad.io, radio.de, radio.fr e radio.pt[CR]Actualmente, disponibiliza:[CR]- Traduções em vários idiomas[CR]- Navegar estações por localização, género, tópico, país, cidade e idioma[CR]- Procurar por estações[CR]- 115 géneros, 59 tópicos, 94 países, 1010 cidades, 63 idiomas</description>
+        <description lang="pt_BR">Plugin de música para acessar mais de 7000 emissoras de rádio internacionais de rad.io, radio.de, radio.fr e radio.pt [CR] Principais características [CR] - Inglês, Alemão e Francês traduzido [CR] - Procure estações por localização, gênero, tópico, país , cidade e  linguagem [CR] - Procure estações [CR] - 115 gêneros, 59 temas, 94 países, 1010 cidades, 63 idiomas</description>
         <description lang="sk">Hudobný doplnok na prístup k vyše 7000 medzinárodným rádio vysielaniam z rad.io, radio.de a radio.fr&#10;Momentálne podporuje:&#10;- anglické, nemecké a francúzske preklady&#10;- prehliadanie staníc podľa umiestnenia, žánru, témy, krajiny, mesta a jazyka&#10;- vyhľadávanie staníc&#10;- 115 žánrov, 59 tém, 94 krajín, 1010 miest, 63 jazykov</description>
         <description lang="sv">Musiktillägg som ger åtkomst till över 7000 internationella radiosändningar från rad.io, radio.de och radio.fr[CR]Nuvarande funktioner[CR]- Engelsk, tysk, svensk och fransk översättning[]- Bläddra efter stationer baserat på genre, ämne, land, stad och språk[CR]- Sök efter stationer[CR]-115 genres, 59 ämnen, 94 länder, 1010 städer, 63 språk</description>
         <description lang="ta_IN">இசை துணை பயன் rad.io, radio.de மற்றும் radio.fr இருந்து 7000 க்கும் மேல் வானொலி ஒளிபரப்புகளை அணுக உதவி செய்யும்[CR]தற்போதைய அம்சங்கள்[CR]- ஆங்கிலம், ஜெர்மன் மற்றும் பிரெஞ்சு மொழியாக்கம்[CR]- இருப்பிடம், வகை, தலைப்பு, நாடு, நகரம் மற்றும் மொழி கொண்டு நிலையங்களை உலாவ முடியும்[CR]- நிலையங்களை தேடுதல்[CR]- 115 வகைகள், 59 தலைப்புகள், 94 நாடுகள், 1010 நகரங்கள், 63 மொழிகள்</description>

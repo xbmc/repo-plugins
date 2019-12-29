@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "ஆசிரியர் பரிந்துரைகள்"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "உச்சி 100 நிலையங்கள்"
+msgid "Top Stations"
+msgstr "உச்சி நிலையங்கள்"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "என்னுடைய நிலையங்கள்"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "நிலையத்தை தேடுக"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "பெயர், நாடு அல்லது மொழி உள்ளிடவும்"
 
 msgctxt "#30300"
 msgid "Language"

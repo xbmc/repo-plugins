@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.filmarkivet"
        name="Filmarkivet"
-       version="3.0.0"
+       version="3.1.0"
        provider-name="Anders Piniesjö (pugo@pugo.org)">
   <requires>
-    <import addon="xbmc.python" version="2.14.0"/>
+    <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    <import addon="script.module.requests-cache" version="0.4.13"/>
+    <import addon="script.module.requests" version="2.22.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -20,10 +22,19 @@
     <website></website>
     <summary lang="en">Watch movies from the Swedish Film Institute film archive</summary>
     <summary lang="sv">Se filmer från Svenska Filminstitutets Filmarkivet</summary>
-    <summary lang="de">Filme von dem Filmarchiv des schwedisches Filminstituts</summary>
+    <summary lang="de">Filme vom Filmarchiv des schwedisches Filminstituts</summary>
     <description lang="en">Filmarkivet is an archive of historical Swedish films, provided by the Swedish Film Institute.</description>
     <description lang="sv">Filmarkivet är ett arkiv med historiska svenska filmer, publicerade av Svenska Filminstitutet.</description>
     <description lang="de">Filmarkivet ist ein Archiv von historischen schwedischen Filmen, veröffentlicht bei Svenska Filminstitutet.</description>
-    <news>v3.0.0 (2016-10-24)[CR]- Total rewrite to match new Filmarkivet site.[CR]- Caching gives huge speed-up.</news>
+    <news>v3.1.0 (2019-12-29)
+      [fix] Support Filmarkivet web changes
+    </news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart></fanart>
+      <banner></banner>
+      <clearlogo></clearlogo>
+      <screenshot></screenshot>
+    </assets>
   </extension>
 </addon>

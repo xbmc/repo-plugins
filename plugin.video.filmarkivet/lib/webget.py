@@ -15,55 +15,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import os
-import urllib
-import hashlib
-import datetime
-import urllib2
+import requests
+import requests_cache
+
+session = requests.Session()
+session.headers['User-Agent'] = 'kodi.tv'
 
 
 class GetException(Exception):
-	pass
+    pass
+
 
 class WebGet(object):
-	API_URL = "http://www.filmarkivet.se"
+    API_URL = "https://www.filmarkivet.se"
 
-	def __init__(self, cache_path):
-		self.cache_path = cache_path
+    def __init__(self, cache_file):
+        requests_cache.install_cache(cache_file, backend='sqlite', expire_after=604800)
 
-	def getURL(self, url='/'):
-		print 'getURL:', url
-		return self.__http_request(url)
+    def getURL(self, url='/'):
+        try:
+            if not (url.startswith('http://') or url.startswith('https://')):
+                url = self.API_URL + url
 
-	def __http_request(self, url, params=None, cache_minutes = 120):
-		try:
-			if not url.startswith('http://'):
-				url = self.API_URL + url
-			if params:
-				url += '?' + urllib.urlencode(params, doseq=True)
-			if self.cache_path:
-				cache_path = os.path.join(self.cache_path, hashlib.md5(url).hexdigest() + '.cache')
-				cache_until = datetime.datetime.now() - datetime.timedelta(minutes=cache_minutes)
-				if not os.path.exists(cache_path) or datetime.datetime.fromtimestamp(os.path.getmtime(cache_path)) < cache_until:
-					return self.__download_url(url, cache_path)
-				else:
-					with open(cache_path) as f:
-						return f.read()
-			else:
-				return self.__download_url(url, None)
-		except Exception as ex:
-			raise GetException(ex)
-
-	def __download_url(self, url, destination):
-		u = urllib2.urlopen(url, timeout=30)
-		data = u.read()
-		u.close()
-
-		if destination:
-			try:
-				with open(destination, 'w') as dest:
-					dest.write(data)
-			except:
-				print 'Filmarkivet failed storing to cache.'
-
-		return data
+            request = session.get(url)
+            request.raise_for_status()
+            return request.text
+        except Exception as ex:
+            raise GetException(ex)

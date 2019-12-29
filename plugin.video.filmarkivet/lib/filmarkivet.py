@@ -17,7 +17,7 @@
 
 from bs4 import BeautifulSoup
 import lib.webget
-import urllib
+import requests
 import re
 
 class Filmarkivet(object):
@@ -41,7 +41,7 @@ class Filmarkivet(object):
 
 	def __init__(self, info):
 		self.info = info
-		self.webget = lib.webget.WebGet(info.cache if info.do_cache else None)
+		self.webget = lib.webget.WebGet(info.cache_file)
 		self.movies_regex = re.compile('.*Visar.*av (.*) filmer')
 		self.meta_regex = re.compile('(\d+) / (\d+) min')
 
@@ -86,7 +86,7 @@ class Filmarkivet(object):
 		mode_url = self.mode_url('watch')
 		for movie in movies:
 			title = movie.h3.contents[0].strip()
-			movie_url = '{}&url={}'.format(mode_url, urllib.quote(movie['href'].replace('#038;', '')))
+			movie_url = '{}&url={}'.format(mode_url, requests.utils.quote(movie['href'].replace('#038;', '')))
 			meta = movie.h3.span.string.strip()
 			desc = u'{} ({})'.format(movie.p.string.strip(), meta)
 			img = movie.figure.img['src']
@@ -101,7 +101,7 @@ class Filmarkivet(object):
 				pass
 			result.append(li)
 		if _range[1] < range_max:
-			next_url = '{}&url={}&page={}'.format(self.mode_url(mode), urllib.quote(url), page + 1)
+			next_url = '{}&url={}&page={}'.format(self.mode_url(mode), requests.utils.quote(url), page + 1)
 			result.append(self.ListItem(self.info.trans(30001), next_url, None, None))
 		return result
 
@@ -119,7 +119,7 @@ class Filmarkivet(object):
 		result = []
 		for movie in movies:
 			title = movie.contents[0].strip()
-			url = '{}&url={}'.format(mode_url, urllib.quote(movie['href']))
+			url = '{}&url={}'.format(mode_url, requests.utils.quote(movie['href']))
 			li = self.ListItem(title, url, None, None)
 			li.playable = True
 			result.append(li)
@@ -132,7 +132,7 @@ class Filmarkivet(object):
 		lists = soup.find_all('ul')
 		items = lists[1].find_all('li')
 		mode_url = self.mode_url('theme')
-		return [self.ListItem(item.a.string, '{}&url={}'.format(mode_url, urllib.quote(item.a['href'])), '', '') for item in items[1:]]
+		return [self.ListItem(item.a.string, '{}&url={}'.format(mode_url, requests.utils.quote(item.a['href'])), '', '') for item in items[1:]]
 
 	def get_media_url(self, url):
 		html = self.webget.getURL(url)

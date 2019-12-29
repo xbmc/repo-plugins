@@ -1,0 +1,54 @@
+# Kodi Media Center language file
+# Addon Name: Filmarkivet
+# Addon id: plugin.video.filmarkivet
+# Addon Provider: Anders Piniesjö (pugo@pugo.org)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Next page..."
+msgstr "Nästa sida..."
+
+msgctxt "#30002"
+msgid "Add-on error"
+msgstr "Tilläggsfel"
+
+msgctxt "#30003"
+msgid "The add-on was unable to get data from Filmarkivet.se."
+msgstr "Tillägget kunde inte hämta data from Filmarkivet."
+
+msgctxt "#30004"
+msgid "Please try again later."
+msgstr "Vänligen försök igen senare."
+
+msgctxt "#30005"
+msgid "Sometimes the server fails to serve categories."
+msgstr "Ibland misslyckas servern att serva vissa kategorier."
+
+msgctxt "#30010"
+msgid "Categories"
+msgstr "Kategorier"
+
+msgctxt "#30011"
+msgid "All films (A-Ö)"
+msgstr "Alla filmer (A-Ö)"
+
+msgctxt "#30012"
+msgid "Themes"
+msgstr "Teman"
+
+msgctxt "#30023"
+msgid "Search"
+msgstr "Sök"
+

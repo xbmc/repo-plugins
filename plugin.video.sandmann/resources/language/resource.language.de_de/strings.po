@@ -16,6 +16,14 @@ msgstr ""
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Our Sandman"
+msgstr "Unser Sandmännchen"
+
+msgctxt "#30002"
+msgid "from"
+msgstr "vom"
+
 msgctxt "#30010"
 msgid "Preferred Quality"
 msgstr "Bevorzugte Qualität"
@@ -27,6 +35,10 @@ msgstr "Aktualisieren"
 msgctxt "#30030"
 msgid "Interval (in hours)"
 msgstr "Intervall (in Stunden)"
+
+msgctxt "#30040"
+msgid "Sign Language"
+msgstr "Gebärdensprache"
 
 #  msgctxt "#30101"
 #  msgid "Automatic"

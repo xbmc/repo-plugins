@@ -2,7 +2,7 @@
 <addon
     id="plugin.video.sandmann"
     name="Sandmann"
-    version="1.1.0"
+    version="1.2.0"
     provider-name="sorax">
   <requires>
     <import addon="xbmc.python" version="2.26.0" />
@@ -11,7 +11,7 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en_GB">Unser Sandmännchen</summary>
+    <summary lang="en_GB">Our Sandman</summary>
     <summary lang="de_DE">Unser Sandmännchen</summary>
     <description lang="en_GB">The Sandman has been sending the children to bed in the evening for over 50 years. With a bedtime story that shouldn't upset, the show is a ritual every evening for 1 million children (and their parents) to end the day.</description>
     <description lang="de_DE">Seit über 50 Jahren schickt das Sandmännchen die Kinder abends ins Bett. Mit einer Gute-Nacht-Geschichte, die nicht aufregen soll, ist die Sendung allabendlich für 1 Million Kinder (und ihre Eltern) ein Ritual, um den Tag zu beenden.</description>

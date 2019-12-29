@@ -1,3 +1,7 @@
+version 1.2.0:
+ * list all episodes
+ * add switch for sign language
+ * fix a bug with the "&" in episode titles
 version 1.1.0:
  * add reload functionality (can be configured in the addon-settings)
 version 1.0.3:

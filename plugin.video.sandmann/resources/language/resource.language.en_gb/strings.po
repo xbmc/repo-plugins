@@ -16,6 +16,14 @@ msgstr ""
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Our Sandman"
+msgstr ""
+
+msgctxt "#30002"
+msgid "from"
+msgstr ""
+
 msgctxt "#30010"
 msgid "Preferred Quality"
 msgstr ""
@@ -26,6 +34,10 @@ msgstr ""
 
 msgctxt "#30030"
 msgid "Interval (in hours)"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Sign Language"
 msgstr ""
 
 #  msgctxt "#30101"

@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "Editörlerin Önerileri"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "En iyi 100 İstasyon"
+msgid "Top Stations"
+msgstr "En iyi İstasyon"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "Benim İstasyonlarım"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "İstasyona Göre Ara"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "İsim, Şehir veya Dil Giriniz"
 
 msgctxt "#30300"
 msgid "Language"

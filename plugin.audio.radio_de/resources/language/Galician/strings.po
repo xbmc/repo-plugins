@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "Emisoras suxeridas polos editores"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "Mellores 100 Emisoras"
+msgid "Top Stations"
+msgstr "Mellores Emisoras"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "As miñas Emisoras"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "Buscar por emisora"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "Introduza nome, país ou idioma"
 
 msgctxt "#30300"
 msgid "Language"

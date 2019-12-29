@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "Szerkesztők ajánlata"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "Legjobb 100 állomás"
+msgid "Top Stations"
+msgstr "Legjobb állomás"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "Saját adók"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "Adó keresése"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "Adja meg a nevet, országot vagy várost"
 
 msgctxt "#30300"
 msgid "Language"

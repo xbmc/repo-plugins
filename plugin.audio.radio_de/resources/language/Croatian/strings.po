@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "Preporuke uredništva"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "Top 100 stanica"
+msgid "Top Stations"
+msgstr "Top stanica"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "Moje stanice"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "Pretraži stanice"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "Upišite naziv, zemlju ili jezik"
 
 msgctxt "#30300"
 msgid "Language"

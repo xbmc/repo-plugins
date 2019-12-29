@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "Redactionele aanbevelingen"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "Top 100 zenders"
+msgid "Top Stations"
+msgstr "Top zenders"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "Mijn zenders"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "Zoek naar zender"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "Voer naam, land of taal in"
 
 msgctxt "#30300"
 msgid "Language"

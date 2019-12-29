@@ -21,7 +21,7 @@ msgid "Editorials Recommendations"
 msgstr ""
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
+msgid "Top Stations"
 msgstr ""
 
 msgctxt "#30102"
@@ -56,10 +56,6 @@ msgctxt "#30200"
 msgid "Search for station"
 msgstr ""
 
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr ""
-
 msgctxt "#30300"
 msgid "Language"
 msgstr ""
@@ -74,6 +70,10 @@ msgstr ""
 
 msgctxt "#30303"
 msgid "French"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Portuguese"
 msgstr ""
 
 msgctxt "#30310"
@@ -116,3 +116,26 @@ msgctxt "#30600"
 msgid "Network Error"
 msgstr ""
 
+msgctxt "#30601"
+msgid "General"
+msgstr ""
+
+msgctxt "#30602"
+msgid "Hide fanart"
+msgstr ""
+
+msgctxt "#30603"
+msgid "Most Popular"
+msgstr ""
+
+msgctxt "#30604"
+msgid "A-Z"
+msgstr ""
+
+msgctxt "#30605"
+msgid "Page (%s/%s) | Next >>"
+msgstr ""
+
+msgctxt "#30606"
+msgid "By country"
+msgstr ""

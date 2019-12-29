@@ -95,7 +95,7 @@ class Filmarkivet(object):
 			try:
 				match = self.meta_regex.match(meta)
 				if match:
-					li.year = int(match.group(1)),
+					li.year = int(match.group(1))
 					li.duration = int(match.group(2)) * 60
 			except:
 				pass

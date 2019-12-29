@@ -4,7 +4,7 @@
        version="3.1.0"
        provider-name="Anders Piniesjö (pugo@pugo.org)">
   <requires>
-    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="xbmc.python" version="2.14.0"/>
     <import addon="script.module.beautifulsoup4" version="4.3.2"/>
     <import addon="script.module.requests-cache" version="0.4.13"/>
     <import addon="script.module.requests" version="2.22.0"/>
@@ -19,7 +19,6 @@
     <license>GNU General Public License, v3</license>
     <source>https://github.com/pugo/filmarkivet-xbmc</source>
     <forum></forum>
-    <website></website>
     <summary lang="en">Watch movies from the Swedish Film Institute film archive</summary>
     <summary lang="sv">Se filmer från Svenska Filminstitutets Filmarkivet</summary>
     <summary lang="de">Filme vom Filmarchiv des schwedisches Filminstituts</summary>
@@ -30,11 +29,7 @@
       [fix] Support Filmarkivet web changes
     </news>
     <assets>
-      <icon>resources/icon.png</icon>
-      <fanart></fanart>
-      <banner></banner>
-      <clearlogo></clearlogo>
-      <screenshot></screenshot>
+      <icon>icon.png</icon>
     </assets>
   </extension>
 </addon>

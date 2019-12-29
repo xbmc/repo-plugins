@@ -35,7 +35,8 @@ __translation = addon.getLocalizedString
 def view_menu(menu):
     for item in menu:
         title = u'{} | {}'.format(item.title, item.description) if item.description else item.title
-        li = xbmcgui.ListItem(title, iconImage=item.icon)
+        li = xbmcgui.ListItem(title)
+        li.setArt({'thumb': item.icon})
         li.setInfo('video', {'title': item.title, 'year': item.year, 'duration': item.duration})
         if item.playable:
             li.setProperty('isplayable', 'true')

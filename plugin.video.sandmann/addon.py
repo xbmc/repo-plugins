@@ -18,7 +18,7 @@
 import sys
 import threading
 
-from sandmann import getEpisodeData
+from sandmann import getEpisodes
 
 import xbmc
 import xbmcplugin
@@ -28,8 +28,8 @@ import xbmcaddon
 episodes_url = "https://appdata.ardmediathek.de/appdata/servlet/tv/Sendung?documentId=6503982&json"
 
 addon = xbmcaddon.Addon()
-# addon_name = addon.getAddonInfo('name')
-# addon_icon = addon.getAddonInfo('icon')
+# addon_name = addon.getAddonInfo("name")
+# addon_icon = addon.getAddonInfo("icon")
 
 addon_handle = int(sys.argv[1])
 base_path = sys.argv[0]
@@ -37,22 +37,34 @@ base_path = sys.argv[0]
 quality = addon.getSettingInt("quality")
 update = addon.getSettingInt("update")
 interval = addon.getSettingInt("interval")
+dgs = addon.getSettingBool("dgs")
 
-title, description, thumbnail_image, fanart_image, stream = getEpisodeData(
-    episodes_url, quality)
+episodes = getEpisodes(episodes_url, quality, dgs)
+episode_list = []
+for episode in episodes:
+    li = xbmcgui.ListItem(label=episode["title"])
+    li.setArt({
+        "thumb": episode["thumb"],
+        "fanart": episode["fanart"]
+    })
+    li.setInfo(
+        type="video",
+        infoLabels={
+            "title": episode["title"],
+            "plot": episode["desc"],
+            "duration": episode["duration"]
+        }
+    )
+    li.setProperty("IsPlayable", "true")
+    episode_list.append((episode["stream"], li, False))
 
-li_episode = xbmcgui.ListItem(label=title)
-li_episode.setArt({'thumb': thumbnail_image, 'fanart': fanart_image})
-li_episode.setInfo(type="Video", infoLabels={
-    "Title": title, "Plot": description
-})
-xbmcplugin.addDirectoryItem(addon_handle, stream, li_episode, False)
+xbmcplugin.addDirectoryItems(addon_handle, episode_list, len(episode_list))
 
 
 def reload():
-    # xbmc.executebuiltin('Notification(%s, %s, %d, %s)' %
+    # xbmc.executebuiltin("Notification(%s, %s, %d, %s)" %
     #                     (addon_name, "Updating...", 5000, addon_icon))
-    xbmc.executebuiltin('Container.Refresh()')
+    xbmc.executebuiltin("Container.Refresh()")
     threading.Timer(interval * 60 * 60, reload).start()
 
 

@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.filmarkivet"
-       name="Filmarkivet"
-       version="3.1.0"
-       provider-name="Anders Piniesjö (pugo@pugo.org)">
+<addon id="plugin.video.filmarkivet" name="Filmarkivet" provider-name="Anders Piniesjö (pugo@pugo.org)" version="3.1.0">
   <requires>
-    <import addon="xbmc.python" version="2.14.0"/>
-    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
-    <import addon="script.module.requests-cache" version="0.4.13"/>
-    <import addon="script.module.requests" version="2.22.0"/>
+    <import addon="xbmc.python" version="2.14.0" />
+    <import addon="script.module.beautifulsoup4" version="4.3.2" />
+    <import addon="script.module.requests-cache" version="0.4.13" />
+    <import addon="script.module.requests" version="2.22.0" />
   </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
+  <extension library="default.py" point="xbmc.python.pluginsource">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
@@ -18,13 +14,13 @@
     <email>pugo@pugo.org</email>
     <license>GNU General Public License, v3</license>
     <source>https://github.com/pugo/filmarkivet-xbmc</source>
-    <forum></forum>
-    <summary lang="en">Watch movies from the Swedish Film Institute film archive</summary>
-    <summary lang="sv">Se filmer från Svenska Filminstitutets Filmarkivet</summary>
-    <summary lang="de">Filme vom Filmarchiv des schwedisches Filminstituts</summary>
-    <description lang="en">Filmarkivet is an archive of historical Swedish films, provided by the Swedish Film Institute.</description>
-    <description lang="sv">Filmarkivet är ett arkiv med historiska svenska filmer, publicerade av Svenska Filminstitutet.</description>
-    <description lang="de">Filmarkivet ist ein Archiv von historischen schwedischen Filmen, veröffentlicht bei Svenska Filminstitutet.</description>
+    <forum />
+    <summary lang="en_GB">Watch movies from the Swedish Film Institute film archive</summary>
+    <summary lang="sv_SE">Se filmer från Svenska Filminstitutets Filmarkivet</summary>
+    <summary lang="de_DE">Filme vom Filmarchiv des schwedisches Filminstituts</summary>
+    <description lang="en_GB">Filmarkivet is an archive of historical Swedish films, provided by the Swedish Film Institute.</description>
+    <description lang="sv_SE">Filmarkivet är ett arkiv med historiska svenska filmer, publicerade av Svenska Filminstitutet.</description>
+    <description lang="de_DE">Filmarkivet ist ein Archiv von historischen schwedischen Filmen, veröffentlicht bei Svenska Filminstitutet.</description>
     <news>v3.1.0 (2019-12-29)
       [fix] Support Filmarkivet web changes
     </news>

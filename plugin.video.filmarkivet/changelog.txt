@@ -1,7 +1,0 @@
-v3.1.0  (2019-12-29)
-- Added support for https URI:s, to support changes on www.filmarkivet.se.
-- Use requests module for Python 2/3 support.
-
-v3.0.0  (2016-10-24)
-- Total rewrite to match new Filmarkivet site.
-- Added caching of data.

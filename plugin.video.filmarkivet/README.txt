@@ -1,4 +1,4 @@
-XBMC Filmarkivet addon
+Kodi Filmarkivet addon
 ----------------------
 
 By Anders Piniesjö (pugo@pugo.org)

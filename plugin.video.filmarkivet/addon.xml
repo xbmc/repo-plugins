@@ -12,9 +12,8 @@
     <platform>all</platform>
     <language>sv</language>
     <email>pugo@pugo.org</email>
-    <license>GNU General Public License, v3</license>
+    <license>GPL-3.0-or-later</license>
     <source>https://github.com/pugo/filmarkivet-xbmc</source>
-    <forum />
     <summary lang="en_GB">Watch movies from the Swedish Film Institute film archive</summary>
     <summary lang="sv_SE">Se filmer från Svenska Filminstitutets Filmarkivet</summary>
     <summary lang="de_DE">Filme vom Filmarchiv des schwedisches Filminstituts</summary>

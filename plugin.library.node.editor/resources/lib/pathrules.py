@@ -2,33 +2,24 @@
 import os, sys, shutil
 import xbmc, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs
 import xml.etree.ElementTree as xmltree
-import urllib
 from traceback import print_exc
 import json
 
-ADDON        = xbmcaddon.Addon()
-ADDONID      = ADDON.getAddonInfo('id').decode( 'utf-8' )
-ADDONVERSION = ADDON.getAddonInfo('version')
-ADDONNAME    = ADDON.getAddonInfo('name').decode("utf-8")
-LANGUAGE     = ADDON.getLocalizedString
-CWD          = ADDON.getAddonInfo('path').decode("utf-8")
-DEFAULTPATH  = xbmc.translatePath( os.path.join( CWD, 'resources' ).encode("utf-8") ).decode("utf-8")
-DATAPATH     = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')).decode('utf-8')
-ltype        = sys.modules[ '__main__' ].ltype
+from resources.lib.common import *
 
-def log(txt):
-    if isinstance (txt,str):
-        txt = txt.decode('utf-8')
-    message = u'%s: %s' % (ADDONID, txt)
-    xbmc.log(msg=message.encode('utf-8'), level=xbmc.LOGDEBUG)
+if PY3:
+    from urllib.parse import quote, unquote
+else:
+    from urllib import quote, unquote
 
 class PathRuleFunctions():
-    def __init__(self):
+    def __init__(self, ltype):
         self.nodeRules = None
         self.ATTRIB = None
+        self.ltype = ltype
 
     def _load_rules( self ):
-        if ltype.startswith('video'):
+        if self.ltype.startswith('video'):
             overridepath = os.path.join( DEFAULTPATH , "videorules.xml" )
         else:
             overridepath = os.path.join( DEFAULTPATH , "musicrules.xml" )
@@ -41,8 +32,7 @@ class PathRuleFunctions():
     def translateComponent( self, component, splitPath ):
         if component[ 0 ] is None:
             return splitPath[ 0 ]
-
-        if unicode( component[ 0 ], "utf-8" ).isnumeric():
+        if (not PY3 and unicode( component[0], "utf-8" ).isnumeric()) or (PY3 and component[0].isdigit()):
             string = LANGUAGE( int( component[ 0 ] ) )
             if string != "": return string
             return xbmc.getLocalizedString( int( component[ 0 ] ) )
@@ -62,12 +52,13 @@ class PathRuleFunctions():
             return splitPath[ ruleNum ][ 1 ]
 
         json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Files.GetDirectory", "params": { "properties": ["title"], "directory": "%s", "media": "files" } }' % rule[ 3 ] )
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        if not PY3:
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = json.loads(json_query)
         listings = []
         values = []
         # Add all directories returned by the json query
-        if json_response.has_key('result') and json_response['result'].has_key('files') and json_response['result']['files'] is not None:
+        if json_response.get('result') and json_response['result'].get('files') and json_response['result']['files'] is not None:
             for item in json_response['result']['files']:
                 if "id" in item and item[ "id" ] == value:
                     return "(%d) %s" %( value, item[ "label" ] )
@@ -78,7 +69,7 @@ class PathRuleFunctions():
     def displayRule( self, actionPath, ruleNum ):
         try:
             # Load the xml file
-            tree = xmltree.parse( actionPath )
+            tree = xmltree.parse( unquote(actionPath) )
             root = tree.getroot()
             # Get the path
             path = root.find( "path" ).text
@@ -97,17 +88,18 @@ class PathRuleFunctions():
                 translatedValue = self.translateValue( rule, splitPath, ruleNum )
 
             #Component
-            listitem = xbmcgui.ListItem( label="%s" % ( self.translateComponent( rule, splitPath[ ruleNum ] ) ) )
-            action = "plugin://plugin.library.node.editor?ltype=%s&type=editPathMatch&actionPath=%s&rule=%d" %( ltype, actionPath, ruleNum )
+            listitem = xbmcgui.ListItem( label="%s" % ( self.translateComponent( rule, splitPath[ruleNum] ) ) )
+            action = "plugin://plugin.library.node.editor?ltype=%s&type=editPathMatch&actionPath=%s&rule=%d" %( self.ltype, actionPath, ruleNum )
             xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
+
             # Value
             listitem = xbmcgui.ListItem( label="%s" % ( translatedValue ) )
-            action = "plugin://plugin.library.node.editor?ltype=%s&type=editPathValue&actionPath=%s&rule=%s" %( ltype, actionPath, ruleNum )
+            action = "plugin://plugin.library.node.editor?ltype=%s&type=editPathValue&actionPath=%s&rule=%s" %( self.ltype, actionPath, ruleNum )
             xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
             # Browse
             if rule[ 3 ] is not None:
                 listitem = xbmcgui.ListItem( label=LANGUAGE(30107) )
-                action = "plugin://plugin.library.node.editor?ltype=%s&type=browsePathValue&actionPath=%s&rule=%s" %( ltype, actionPath, ruleNum )
+                action = "plugin://plugin.library.node.editor?ltype=%s&type=browsePathValue&actionPath=%s&rule=%s" %( self.ltype, actionPath, ruleNum )
                 xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
 
             xbmcplugin.setContent(int(sys.argv[1]), 'files')
@@ -119,7 +111,6 @@ class PathRuleFunctions():
 
     def getRulesForPath( self, path ):
         # This function gets all valid rules for a given path
-
         # Load the rules
         tree = self._load_rules()
         subSearch = None
@@ -176,7 +167,7 @@ class PathRuleFunctions():
         # Change the match element of a path component
 
         # Load the xml file
-        tree = xmltree.parse( actionPath )
+        tree = xmltree.parse( unquote(actionPath) )
         root = tree.getroot()
         # Get the path
         path = root.find( "path" ).text
@@ -207,7 +198,7 @@ class PathRuleFunctions():
         elif selectedOperator == len( rules ):
             # User choose custom property
             self.manuallyEditMatch( actionPath, ruleNum, splitPath[ ruleNum ][ 0 ], currentValue )
-            return            
+            return
         else:
             self.ATTRIB.writeUpdatedPath( actionPath, ( ruleNum, rules[ selectedOperator ][ 1 ], currentValue ) )
 
@@ -215,13 +206,13 @@ class PathRuleFunctions():
         type = xbmcgui.INPUT_ALPHANUM
         returnVal = xbmcgui.Dialog().input( LANGUAGE( 30318 ), currentName, type=type )
         if returnVal != "":
-            self.ATTRIB.writeUpdatedPath( actionPath, ( ruleNum, returnVal.decode( "utf-8" ), currentValue ) )       
+            self.ATTRIB.writeUpdatedPath( actionPath, ( ruleNum, returnVal.decode( "utf-8" ), currentValue ) )
 
     def editValue( self, actionPath, ruleNum ):
         # Let the user edit the value of a path component
 
         # Load the xml file
-        tree = xmltree.parse( actionPath )
+        tree = xmltree.parse( unquote(actionPath) )
         root = tree.getroot()
         # Get the path
         path = root.find( "path" ).text
@@ -247,7 +238,7 @@ class PathRuleFunctions():
                 type = xbmcgui.INPUT_NUMERIC
             returnVal = xbmcgui.Dialog().input( LANGUAGE( 30307 ), splitPath[ ruleNum ][ 1 ], type=type )
             if returnVal != "":
-                self.ATTRIB.writeUpdatedPath( actionPath, ( ruleNum, splitPath[ ruleNum ][ 0 ], returnVal.decode( "utf-8" ) ) )
+                self.ATTRIB.writeUpdatedPath( actionPath, ( ruleNum, splitPath[ ruleNum ][ 0 ], six_decoder(returnVal) ) )
 
 
     def browse( self, actionPath, ruleNum ):
@@ -257,7 +248,7 @@ class PathRuleFunctions():
         pDialog.create( ADDONNAME, LANGUAGE( 30317 ) )
 
         # Load the xml file
-        tree = xmltree.parse( actionPath )
+        tree = xmltree.parse( unquote(actionPath) )
         root = tree.getroot()
         # Get the path
         path = root.find( "path" ).text
@@ -272,12 +263,13 @@ class PathRuleFunctions():
         browsePath = self.getBrowsePath( splitPath, rule[ 3 ], ruleNum )
 
         json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Files.GetDirectory", "params": { "properties": ["title", "file", "thumbnail"], "directory": "%s", "media": "files" } }' % browsePath )
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        if not PY3:
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = json.loads(json_query)
         listings = []
         values = []
         # Add all directories returned by the json query
-        if json_response.has_key('result') and json_response['result'].has_key('files') and json_response['result']['files'] is not None:
+        if json_response.get('result') and json_response['result'].get('files') and json_response['result']['files'] is not None:
             total = len( json_response[ 'result' ][ 'files' ] )
             for item in json_response['result']['files']:
                 if item[ "label" ] == "..":
@@ -285,7 +277,8 @@ class PathRuleFunctions():
                 thumb = None
                 if item[ "thumbnail" ] is not "":
                     thumb = item[ "thumbnail" ]
-                listitem = xbmcgui.ListItem(label=item[ "label" ], iconImage=thumb )
+                listitem = xbmcgui.ListItem(label=item[ "label" ] )
+                listitem.setArt({'icon': thumb})
                 listitem.setProperty( "thumbnail", thumb )
                 listings.append( listitem )
                 if rule[ 2 ] == "integer" and "id" in item:
@@ -327,10 +320,10 @@ class PathRuleFunctions():
                 if x == 0:
                     returnText = newBase
                 elif not addedQ:
-                    returnText += "?%s=%s" %( component[ 0 ], urllib.quote( component[ 1 ].encode( "utf-8" ) ).decode( "utf-8" ) )
+                    returnText += "?%s=%s" %( component[ 0 ], six_decoder(quote(component[1] if PY3 else component[1].encode( "utf-8" ))) )
                     addedQ = True
                 else:
-                    returnText += "&%s=%s" %( component[ 0 ], urllib.quote( component[ 1 ].encode( "utf-8" ) ).decode( "utf-8" ) )
+                    returnText += "&%s=%s" %( component[ 0 ], six_decoder(quote(component[1] if PY3 else component[1].encode( "utf-8" ))) )
         return returnText
 
     # in-place prettyprint formatter
@@ -369,7 +362,8 @@ class ShowDialog( xbmcgui.WindowXMLDialog ):
         self.getControl(5).setVisible(False)
         self.getControl(1).setLabel(self.windowtitle)
         for item in self.listing :
-            listitem = xbmcgui.ListItem(label=item.getLabel(), label2=item.getLabel2(), iconImage=item.getProperty( "icon" ), thumbnailImage=item.getProperty( "thumbnail" ))
+            listitem = xbmcgui.ListItem(label=item.getLabel(), label2=item.getLabel2())
+            listitem.setArt({'icon': item.getProperty( "icon" ), 'thumb': item.getProperty( "thumbnail" )})
             listitem.setProperty( "Addon.Summary", item.getLabel2() )
             self.fav_list.addItem( listitem )
         self.setFocus(self.fav_list)

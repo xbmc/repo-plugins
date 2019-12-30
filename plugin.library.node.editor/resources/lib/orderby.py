@@ -2,31 +2,21 @@
 import os, sys
 import xbmc, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs
 import xml.etree.ElementTree as xmltree
-import urllib
 from traceback import print_exc
 
-ADDON        = xbmcaddon.Addon()
-ADDONID      = ADDON.getAddonInfo('id').decode( 'utf-8' )
-ADDONVERSION = ADDON.getAddonInfo('version')
-KODIVERSION  = xbmc.getInfoLabel( "System.BuildVersion" ).split(".")[0]
-LANGUAGE     = ADDON.getLocalizedString
-CWD          = ADDON.getAddonInfo('path').decode("utf-8")
-ADDONNAME    = ADDON.getAddonInfo('name').decode("utf-8")
-DEFAULTPATH  = xbmc.translatePath( os.path.join( CWD, 'resources' ).encode("utf-8") ).decode("utf-8")
-ltype        = sys.modules[ '__main__' ].ltype
+from resources.lib.common import *
 
-def log(txt):
-    if isinstance (txt,str):
-        txt = txt.decode('utf-8')
-    message = u'%s: %s' % (ADDONID, txt)
-    xbmc.log(msg=message.encode('utf-8'), level=xbmc.LOGDEBUG)
+if PY3:
+    from urllib.parse import unquote
+else:
+    from urllib import unquote
 
 class OrderByFunctions():
-    def __init__(self):
-        pass
+    def __init__(self, ltype):
+        self.ltype = ltype
 
     def _load_rules( self ):
-        if ltype.startswith('video'):
+        if self.ltype.startswith('video'):
             overridepath = os.path.join( DEFAULTPATH , "videorules.xml" )
         else:
             overridepath = os.path.join( DEFAULTPATH , "musicrules.xml" )
@@ -63,10 +53,10 @@ class OrderByFunctions():
             directionVal = tree.getroot().find( "orderby" ).find( "type" ).text
         return [ [ match, rule[ 0 ] ], [ direction, directionVal ] ]
 
-    def displayOrderBy( self, actionPath ):
+    def displayOrderBy( self, actionPath):
         try:
             # Load the xml file
-            tree = xmltree.parse( actionPath )
+            tree = xmltree.parse( unquote(actionPath) )
             root = tree.getroot()
             # Get the content type
             content = root.find( "content" ).text
@@ -83,13 +73,13 @@ class OrderByFunctions():
                 direction = ""
             translated = self.translateOrderBy( [match, direction ] )
             listitem = xbmcgui.ListItem( label="%s" % ( translated[ 0 ][ 0 ] ) )
-            action = "plugin://plugin.library.node.editor?ltype=%s&type=editOrderBy&actionPath=" % ltype + actionPath + "&content=" + content + "&default=" + translated[ 0 ][ 1 ]
+            action = "plugin://plugin.library.node.editor?ltype=%s&type=editOrderBy&actionPath=" % self.ltype + actionPath + "&content=" + content + "&default=" + translated[0][1]
             xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
             listitem = xbmcgui.ListItem( label="%s" % ( translated[ 1 ][ 0 ] ) )
-            action = "plugin://plugin.library.node.editor?ltype=%s&type=editOrderByDirection&actionPath=" % ltype + actionPath + "&default=" + translated[ 1 ][ 1 ]
+            action = "plugin://plugin.library.node.editor?ltype=%s&type=editOrderByDirection&actionPath=" % self.ltype + actionPath + "&default=" + translated[1][1]
             xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
             xbmcplugin.setContent(int(sys.argv[1]), 'files')
-            xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
+            xbmcplugin.endOfDirectory(int(sys.argv[1]))
         except:
             print_exc()
 
@@ -139,7 +129,7 @@ class OrderByFunctions():
         # This function writes an updated orderby rule
         try:
             # Load the xml file
-            tree = xmltree.parse( actionPath )
+            tree = xmltree.parse( unquote(unquote(actionPath)) )
             root = tree.getroot()
             # Get all the rules
             orderby = root.find( "order" )
@@ -149,7 +139,7 @@ class OrderByFunctions():
                 orderby.set( "direction", direction )
             # Save the file
             self.indent( root )
-            tree.write( actionPath, encoding="UTF-8" )
+            tree.write( unquote(actionPath), encoding="UTF-8" )
         except:
             print_exc()
 
@@ -187,7 +177,7 @@ class OrderByFunctions():
             newRule.set( "direction", direction )
             # Save the file
             self.indent( root )
-            tree.write( urllib.unquote( actionPath ), encoding="UTF-8" )
+            tree.write( unquote( actionPath ), encoding="UTF-8" )
         except:
             print_exc()
 

@@ -2,32 +2,24 @@
 import os, sys, shutil
 import xbmc, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs
 import xml.etree.ElementTree as xmltree
-import urllib
 from traceback import print_exc
 import json
 
-ADDON        = xbmcaddon.Addon()
-ADDONID      = ADDON.getAddonInfo('id').decode( 'utf-8' )
-ADDONVERSION = ADDON.getAddonInfo('version')
-ADDONNAME    = ADDON.getAddonInfo('name').decode("utf-8")
-LANGUAGE     = ADDON.getLocalizedString
-CWD          = ADDON.getAddonInfo('path').decode("utf-8")
-DEFAULTPATH  = xbmc.translatePath( os.path.join( CWD, 'resources' ).encode("utf-8") ).decode("utf-8")
-DATAPATH     = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')).decode('utf-8')
-ltype        = sys.modules[ '__main__' ].ltype
+from resources.lib.common import *
 
-def log(txt):
-    if isinstance (txt,str):
-        txt = txt.decode('utf-8')
-    message = u'%s: %s' % (ADDONID, txt)
-    xbmc.log(msg=message.encode('utf-8'), level=xbmc.LOGDEBUG)
+if PY3:
+    from urllib.parse import quote, unquote
+else:
+    from urllib import quote, unquote
+
 
 class RuleFunctions():
-    def __init__(self):
+    def __init__(self, ltype):
         self.nodeRules = None
+        self.ltype = ltype
 
     def _load_rules( self ):
-        if ltype.startswith('video'):
+        if self.ltype.startswith('video'):
             overridepath = os.path.join( DEFAULTPATH , "videorules.xml" )
         else:
             overridepath = os.path.join( DEFAULTPATH , "musicrules.xml" )
@@ -77,7 +69,7 @@ class RuleFunctions():
             return
         try:
             # Load the xml file
-            tree = xmltree.parse( actionPath )
+            tree = xmltree.parse( unquote(actionPath) )
             root = tree.getroot()
             actionPath = actionPath
             # Get the content type
@@ -91,7 +83,7 @@ class RuleFunctions():
             rules = root.findall( "rule" )
             if len( rules ) == int( ruleNum ):
                 # This rule doesn't exist - create it
-                self.newRule( tree, urllib.unquote( actionPath ) )
+                self.newRule( tree, unquote( actionPath ) )
                 rules = root.findall( "rule" )
             if rules is not None:
                 for rule in rules:
@@ -104,20 +96,20 @@ class RuleFunctions():
                         translated = self.translateRule( [ rule.attrib.get( "field" ), rule.attrib.get( "operator" ), value ] )
                         # Rule to change match
                         listitem = xbmcgui.ListItem( label="%s" % ( translated[ 0 ][ 0 ] ) )
-                        action = "plugin://plugin.library.node.editor?ltype=%s&type=editMatch&actionPath=" % ltype + actionPath + "&content=" + content + "&default=" + translated[ 0 ][ 1 ] + "&rule=" + str( ruleCount )
+                        action = "plugin://plugin.library.node.editor?ltype=%s&type=editMatch&actionPath=" % self.ltype + actionPath + "&content=" + content + "&default=" + translated[ 0 ][ 1 ] + "&rule=" + str( ruleCount )
                         xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                         listitem = xbmcgui.ListItem( label="%s" % ( translated[ 1 ][ 0 ] ) )
-                        action = "plugin://plugin.library.node.editor?ltype=%s&type=editOperator&actionPath=" % ltype + actionPath + "&group=" + translated[ 1 ][ 1 ] + "&default=" + translated[ 1 ][ 2 ] + "&rule=" + str( ruleCount )
+                        action = "plugin://plugin.library.node.editor?ltype=%s&type=editOperator&actionPath=" % self.ltype + actionPath + "&group=" + translated[ 1 ][ 1 ] + "&default=" + translated[ 1 ][ 2 ] + "&rule=" + str( ruleCount )
                         xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                         if not ( translated[ 2 ][ 0 ] ) == "|NONE|":
                             listitem = xbmcgui.ListItem( label="%s" % ( translated[ 2 ][ 1 ] ) )
-                            action = "plugin://plugin.library.node.editor?ltype=%s&type=editValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount )
+                            action = "plugin://plugin.library.node.editor?ltype=%s&type=editValue&actionPath=" % self.ltype + actionPath + "&rule=" + str( ruleCount )
                             xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                             # Check if this match type can be browsed
                             if self.canBrowse( translated[ 0 ][ 1 ], content ):
-                                #listitem.addContextMenuItems( [(LANGUAGE(30107), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content + ")" )], replaceItems = True )
+                                #listitem.addContextMenuItems( [(LANGUAGE(30107), "RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content + ")" )], replaceItems = True )
                                 listitem = xbmcgui.ListItem( label=LANGUAGE(30107) )
-                                action = "plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content
+                                action = "plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % self.ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content
                                 xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                             #self.browse( translated[ 0 ][ 1 ], content )
                         xbmcplugin.setContent(int(sys.argv[1]), 'files')
@@ -179,7 +171,7 @@ class RuleFunctions():
             if actionPath.endswith( "index.xml" ):
                 ( filePath, fileName ) = os.path.split( actionPath )
                 # Load the rules file
-                if ltype.startswith('video'):
+                if self.ltype.startswith('video'):
                     tree = xmltree.parse( os.path.join( DATAPATH, "videorules.xml" ) )
                 else:
                     tree = xmltree.parse( os.path.join( DATAPATH, "musicrules.xml" ) )
@@ -203,7 +195,7 @@ class RuleFunctions():
                             ruleCount += 1
             else:
                 # Load the xml file
-                tree = xmltree.parse( actionPath )
+                tree = xmltree.parse( unquote(actionPath) )
                 root = tree.getroot()
                 # Get all the rules
                 ruleCount = 0
@@ -247,7 +239,7 @@ class RuleFunctions():
                 type = xbmcgui.INPUT_ALPHANUM
             returnVal = xbmcgui.Dialog().input( LANGUAGE( 30307 ), curValue, type=type )
             if returnVal != "":
-                self.writeUpdatedRule( actionPath, ruleNum, value=returnVal.decode( "utf-8" ) )
+                self.writeUpdatedRule( actionPath, ruleNum, value=returnVal if PY3 else returnVal.decode( "utf-8" ) )
         except:
             print_exc()
 
@@ -261,7 +253,7 @@ class RuleFunctions():
             return
         try:
             # Load the xml file
-            tree = xmltree.parse( actionPath )
+            tree = xmltree.parse( unquote(actionPath) )
             root = tree.getroot()
             # Get all the rules
             ruleCount = 0
@@ -295,7 +287,7 @@ class RuleFunctions():
                     ruleCount = ruleCount + 1
             # Save the file
             self.indent( root )
-            tree.write( actionPath, encoding="UTF-8" )
+            tree.write( unquote(actionPath), encoding="UTF-8" )
         except:
             print_exc()
 
@@ -337,7 +329,7 @@ class RuleFunctions():
             xmltree.SubElement( newRule, "value" )
             # Save the file
             self.indent( root )
-            tree.write( actionPath, encoding="UTF-8" )
+            tree.write( unquote(actionPath), encoding="UTF-8" )
             if actionPath.endswith( "index.xml" ):
                 ( filePath, fileName ) = os.path.split( actionPath )
                 newRule = self.translateRule( [ match, operator, "" ] )
@@ -382,7 +374,7 @@ class RuleFunctions():
                     ruleCount = ruleCount + 1
             # Save the file
             self.indent( root )
-            tree.write( actionPath, encoding="UTF-8" )
+            tree.write( unquote(actionPath), encoding="UTF-8" )
         except:
             print_exc()
 
@@ -394,7 +386,7 @@ class RuleFunctions():
         ( filePath, fileName ) = os.path.split( actionPath )
         try:
             # Load the rules file
-            if ltype.startswith('video'):
+            if self.ltype.startswith('video'):
                 tree = xmltree.parse( os.path.join( DATAPATH, "videorules.xml" ) )
             else:
                 tree = xmltree.parse( os.path.join( DATAPATH, "musicrules.xml" ) )
@@ -426,24 +418,24 @@ class RuleFunctions():
                     else:
                         value = value.text
                     translated = self.translateRule( [ rule.attrib.get( "field" ), rule.attrib.get( "operator" ), value ] )
-                    actionPath = urllib.quote( actionPath )
+                    actionPath = quote( actionPath )
                     # Rule to change match
                     listitem = xbmcgui.ListItem( label="%s" % ( translated[ 0 ][ 0 ] ) )
-                    action = "plugin://plugin.library.node.editor?ltype=%s&type=editMatch&actionPath=" % ltype + actionPath + "&default=" + translated[ 0 ][ 1 ] + "&rule=" + str( ruleCount ) + "&content=NONE"
+                    action = "plugin://plugin.library.node.editor?ltype=%s&type=editMatch&actionPath=" % self.ltype + actionPath + "&default=" + translated[ 0 ][ 1 ] + "&rule=" + str( ruleCount ) + "&content=NONE"
                     xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
 
                     listitem = xbmcgui.ListItem( label="%s" % ( translated[ 1 ][ 0 ] ) )
-                    action = "plugin://plugin.library.node.editor?ltype=%s&type=editOperator&actionPath=" % ltype + actionPath + "&group=" + translated[ 1 ][ 1 ] + "&default=" + translated[ 1 ][ 2 ] + "&rule=" + str( ruleCount )
+                    action = "plugin://plugin.library.node.editor?ltype=%s&type=editOperator&actionPath=" % self.ltype + actionPath + "&group=" + translated[ 1 ][ 1 ] + "&default=" + translated[ 1 ][ 2 ] + "&rule=" + str( ruleCount )
                     xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                     if not ( translated[ 2 ][ 0 ] ) == "|NONE|":
                         listitem = xbmcgui.ListItem( label="%s" % ( translated[ 2 ][ 1 ] ) )
-                        action = "plugin://plugin.library.node.editor?ltype=%s&type=editValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount )
+                        action = "plugin://plugin.library.node.editor?ltype=%s&type=editValue&actionPath=" % self.ltype + actionPath + "&rule=" + str( ruleCount )
                         xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                         # Check if this match type can be browsed
                         if self.canBrowse( translated[ 0 ][ 1 ] ):
-                            #listitem.addContextMenuItems( [(LANGUAGE(30107), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content + ")" )], replaceItems = True )
+                            #listitem.addContextMenuItems( [(LANGUAGE(30107), "RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content + ")" )], replaceItems = True )
                             listitem = xbmcgui.ListItem( label=LANGUAGE(30107) )
-                            action = "plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=NONE"
+                            action = "plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % self.ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=NONE"
                             xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                         #self.browse( translated[ 0 ][ 1 ], content )
                     xbmcplugin.setContent(int(sys.argv[1]), 'files')
@@ -460,7 +452,7 @@ class RuleFunctions():
         # Split the actionPath, to make things easier
         ( filePath, fileName ) = os.path.split( actionPath )
         # Open the rules file if it exists, else create it
-        if ltype.startswith('video'):
+        if self.ltype.startswith('video'):
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
@@ -532,7 +524,7 @@ class RuleFunctions():
     def editNodeRule( self, actionPath, ruleNum, match, operator, value ):
         ( filePath, fileName ) = os.path.split( actionPath )
         # Update the rule in the rules file
-        if ltype.startswith('video'):
+        if self.ltype.startswith('video'):
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
@@ -689,7 +681,7 @@ class RuleFunctions():
                     print_exc()
 
     def deleteAllNodeRules( self, actionPath ):
-        if ltype.startswith('video'):
+        if self.ltype.startswith('video'):
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
@@ -753,7 +745,7 @@ class RuleFunctions():
         self.nodeRules = []
         # Load all the node rules for current directory
         #actionPath = os.path.join( actionPath, "index.xml" )
-        if ltype.startswith('video'):
+        if self.ltype.startswith('video'):
             filename = os.path.join( DATAPATH, "videorules.xml" )
         else:
             filename = os.path.join( DATAPATH, "musicrules.xml" )
@@ -792,7 +784,7 @@ class RuleFunctions():
         #BETA2 ONLY CODE
         # This function will move any parent node rules out of the index.xml, and into the rules file in the plugins appdata folder
         # Open the rules file if it exists, else create it
-        if ltype.startswith('video'):
+        if self.ltype.startswith('video'):
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
@@ -815,7 +807,7 @@ class RuleFunctions():
             ruleNode = xmltree.SubElement( ruleRoot, "node" )
             ruleNode.set( "name", path )
         try:
-            tree = xmltree.parse( actionPath )
+            tree = xmltree.parse( unquote(actionPath) )
             root = tree.getroot()
             rules = root.findall( "rule" )
             if rules is not None:
@@ -831,7 +823,7 @@ class RuleFunctions():
                     root.remove( rule )
             # Write both files
             self.indent( root )
-            tree.write( actionPath, encoding="UTF-8" )
+            tree.write( unquote(actionPath), encoding="UTF-8" )
             self.indent( ruleRoot )
             ruleTree.write( os.path.join( DATAPATH, rulesfile ), encoding="UTF-8" )
         except:
@@ -941,7 +933,7 @@ class RuleFunctions():
             self.createBrowseNode( content, "studios" )
             returnVal = self.browser( self.niceMatchName( match ) )
         elif match == "path":
-            returnVal = xbmcgui.Dialog().browse(0, self.niceMatchName( match ), ltype )
+            returnVal = xbmcgui.Dialog().browse(0, self.niceMatchName( match ), self.ltype )
         elif match == "set":
             self.createBrowseNode( content, "sets" )
             returnVal = self.browser( self.niceMatchName( match ) )
@@ -957,11 +949,10 @@ class RuleFunctions():
             returnVal = self.browser( self.niceMatchName( match ) )
         try:
             # Delete any fake node
-            xbmcvfs.delete( os.path.join( xbmc.translatePath( "special://profile".decode('utf-8') ), "library", ltype, "plugin.library.node.editor", "temp.xml" ) )
+            xbmcvfs.delete( os.path.join( xbmc.translatePath( "special://profile" if PY3 else "special://profile".decode('utf-8') ), "library", self.ltype, "plugin.library.node.editor", "temp.xml" ) )
         except:
             print_exc()
-        if returnVal is not None:
-            returnVal = returnVal.decode( "utf-8" )
+
         self.writeUpdatedRule( actionPath, ruleNum, value = returnVal )
 
     def niceMatchName( self, match ):
@@ -975,7 +966,7 @@ class RuleFunctions():
 
     def createBrowseNode( self, content, grouping = None ):
         # This function creates a fake node which we'll use for browsing
-        targetDir = os.path.join( xbmc.translatePath( "special://profile".decode('utf-8') ), "library", ltype, "plugin.library.node.editor" )
+        targetDir = os.path.join( xbmc.translatePath( "special://profile" if PY3 else "special://profile".decode('utf-8') ), "library", self.ltype, "plugin.library.node.editor" )
         if not os.path.exists( targetDir ):
             xbmcvfs.mkdirs( targetDir )
         # Create a new etree
@@ -995,23 +986,43 @@ class RuleFunctions():
 
     def browser( self, title ):
         # Browser instance used by majority of browses
-        json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Files.GetDirectory", "params": { "properties": ["title", "file", "thumbnail"], "directory": "library://%s/plugin.library.node.editor/temp.xml", "media": "files" } }' % ltype)
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Files.GetDirectory", "params": { "properties": ["title", "file", "genre", "studio", "director", "thumbnail"], "directory": "library://%s/plugin.library.node.editor/temp.xml", "media": "files" } }' % self.ltype)
+        if not PY3:
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = json.loads(json_query)
         listings = []
         values = []
         # Add all directories returned by the json query
-        if json_response.has_key('result') and json_response['result'].has_key('files') and json_response['result']['files'] is not None:
+        if json_response.get('result') and json_response['result'].get('files') and json_response['result']['files'] is not None:
             for item in json_response['result']['files']:
                 if item[ "label" ] == "..":
                     continue
                 thumb = None
                 if item[ "thumbnail" ] is not "":
                     thumb = item[ "thumbnail" ]
-                listitem = xbmcgui.ListItem(label=item[ "label" ], iconImage=thumb )
-                listitem.setProperty( "thumbnail", thumb )
-                listings.append( listitem )
-                values.append( item[ "label" ] )
+
+                if "videodb://" not in item["file"]:
+                    if title.lower() == "genre":
+                        for genre in item["genre"]:
+                            label = genre
+                    elif title.lower() == "studios":
+                        for studio in item["studio"]:
+                            label = studio
+                    elif title.lower() == "director":
+                        for director in item["director"]:
+                            label = director
+                    else:
+                        label = item["label"]
+                else:
+                    label = item["label"]
+
+                if label not in values:
+                    listitem = xbmcgui.ListItem(label=label)
+                    if thumb:
+                        listitem.setArt({'icon': thumb, 'thumb': thumb})
+                        listitem.setProperty( "thumbnail", thumb )
+                    listings.append( listitem )
+                    values.append( label )
         # Show dialog
         w = ShowDialog( "DialogSelect.xml", CWD, listing=listings, windowtitle=title )
         w.doModal()
@@ -1023,20 +1034,22 @@ class RuleFunctions():
 
     def browserPlaylist( self, title ):
         # Browser instance used by playlists
-        json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Files.GetDirectory", "params": { "properties": ["title", "file", "thumbnail"], "directory": "special://%splaylists/", "media": "files" } }' % ltype)
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Files.GetDirectory", "params": { "properties": ["title", "file", "thumbnail"], "directory": "special://%splaylists/", "media": "files" } }' % self.ltype)
+        if not PY3:
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = json.loads(json_query)
         listings = []
         values = []
         # Add all directories returned by the json query
-        if json_response.has_key('result') and json_response['result'].has_key('files') and json_response['result']['files'] is not None:
+        if json_response.get('result') and json_response['result'].get('files') and json_response['result']['files'] is not None:
             for item in json_response['result']['files']:
                 if item[ "label" ] == "..":
                     continue
                 thumb = None
                 if item[ "thumbnail" ] is not "":
                     thumb = item[ "thumbnail" ]
-                listitem = xbmcgui.ListItem(label=item[ "label" ], iconImage=thumb )
+                listitem = xbmcgui.ListItem(label=item[ "label" ])
+                listitem.setArt({"icon": thumb, "thumbnail": thumb})
                 listitem.setProperty( "thumbnail", thumb )
                 listings.append( listitem )
                 values.append( item[ "label" ] )
@@ -1085,7 +1098,8 @@ class ShowDialog( xbmcgui.WindowXMLDialog ):
         self.getControl(5).setVisible(False)
         self.getControl(1).setLabel(self.windowtitle)
         for item in self.listing :
-            listitem = xbmcgui.ListItem(label=item.getLabel(), label2=item.getLabel2(), iconImage=item.getProperty( "icon" ), thumbnailImage=item.getProperty( "thumbnail" ))
+            listitem = xbmcgui.ListItem(label=item.getLabel(), label2=item.getLabel2())
+            listitem.setArt({"icon": item.getProperty( "icon" ), "thumbnail": item.getProperty( "thumbnail" )})
             listitem.setProperty( "Addon.Summary", item.getLabel2() )
             self.fav_list.addItem( listitem )
         self.setFocus(self.fav_list)

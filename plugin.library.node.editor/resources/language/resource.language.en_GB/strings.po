@@ -61,8 +61,6 @@ msgctxt "#30010"
 msgid "Manually edit..."
 msgstr ""
 
-#empty strings from id 30011 to 30090
-
 msgctxt "#30091"
 msgid "Video Library"
 msgstr ""
@@ -71,9 +69,6 @@ msgctxt "#30092"
 msgid "Music Library"
 msgstr ""
 
-#empty strings from id 30093 to 30099
-
-# Context menu items
 msgctxt "#30100"
 msgid "Delete"
 msgstr ""
@@ -106,9 +101,6 @@ msgctxt "#30107"
 msgid "Browse for value"
 msgstr ""
 
-#empty strings from id 30108 to 30199
-
-# Other menu item labels
 msgctxt "#30200"
 msgid "Content"
 msgstr ""
@@ -137,9 +129,6 @@ msgctxt "#30206"
 msgid "Match"
 msgstr ""
 
-#empty strings from id 30207 to 30299
-
-# Titles for dialogs
 msgctxt "#30300"
 msgid "Set name"
 msgstr ""
@@ -216,9 +205,6 @@ msgctxt "#30318"
 msgid "Property"
 msgstr ""
 
-#empty strings from id 30319 to 30399
-
-# Messages for dialogs
 msgctxt "#30400"
 msgid "Unable to copy default library nodes"
 msgstr ""
@@ -266,10 +252,6 @@ msgstr ""
 msgctxt "#30411"
 msgid "Link path to here"
 msgstr ""
-
-#empty strings from id 30412 to 30499
-
-# Labels for path rules
 
 msgctxt "#30500"
 msgid "Genre ID"

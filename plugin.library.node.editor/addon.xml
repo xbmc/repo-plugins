@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.library.node.editor" name="Library Node Editor" version="1.0.6" provider-name="Unfledged, Team-Kodi">
+<addon id="plugin.library.node.editor" name="Library Node Editor" version="1.0.7" provider-name="Unfledged, Team-Kodi">
     <requires>
 		<import addon="xbmc.python" version="2.25.0"/>
 		<import addon="script.module.unidecode" version="0.4.16"/>
 	</requires>
-	<extension point="xbmc.python.pluginsource" library="addon.py">
+	<extension point="xbmc.python.pluginsource" library="plugin.py">
 		<provides>executable</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
@@ -33,14 +33,16 @@
 		<description lang="nl">Creëer en wijzig aangepaste bibliotheek nodes.</description>
 		<description lang="pl">Tworzenie i edytowanie niestandardowych węzłów biblioteki.</description>
 		<description lang="pt_BR">Crie e edite nós customizados na biblioteca</description>
-		<language></language>
 		<platform>all</platform>
-		<license>GNU General Public License, v2</license>
+		<license>GPL-2.0-only</license>
 		<forum>https://forum.kodi.tv/showthread.php?tid=224512</forum>
-		<email></email>
 		<source>https://github.com/XBMC-Addons/plugin.library.node.editor</source>
 		<assets>
 			<icon>icon.png</icon>
 		</assets>
+		<news>
+			1.0.7 (30/12/2019)
+				- Python3 compatibility
+		</news>
 	</extension>
 </addon>

@@ -437,14 +437,16 @@ def get_stream_url(station_id):
     if my_stations.get(station_id, {}).get('is_custom', False):
         station = my_stations[station_id]
         stream_url = station['stream_url']
+        current_track = ''
     else:
         station = radio_api.get_station_by_station_id(station_id)
         stream_url = station['stream_url']
+        current_track = station['current_track']
     __log('get_stream_url result: %s' % stream_url)
     return plugin.set_resolved_url(
         listitem.ListItem(
             label=station['name'],
-            label2=station['current_track'],
+            label2=current_track,
             path=stream_url,
             icon=station['thumbnail'],
             thumbnail=station['thumbnail'],

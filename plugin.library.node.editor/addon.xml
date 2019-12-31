@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.library.node.editor" name="Library Node Editor" version="1.0.7" provider-name="Unfledged, Team-Kodi">
+<addon id="plugin.library.node.editor" name="Library Node Editor" version="1.0.8" provider-name="Unfledged, Team-Kodi">
     <requires>
 		<import addon="xbmc.python" version="2.25.0"/>
 		<import addon="script.module.unidecode" version="0.4.16"/>
@@ -41,8 +41,8 @@
 			<icon>icon.png</icon>
 		</assets>
 		<news>
-			1.0.7 (30/12/2019)
-				- Python3 compatibility
+			1.0.8 (31/12/2019)
+				- Fixes for move node and change node name
 		</news>
 	</extension>
 </addon>

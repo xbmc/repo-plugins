@@ -2,12 +2,12 @@
 import sys
 import xbmc, xbmcaddon, xbmcgui
 
-ADDON        = xbmcaddon.Addon()
-LANGUAGE     = ADDON.getLocalizedString
+from resources.lib.common import *
+
 
 def getNewOrder( currentPositions, indexToMove ):
     # Show select dialog
-    w = ShowDialog( "DialogSelect.xml", sys.modules[ "__main__" ].CWD, order=currentPositions, focus=indexToMove, windowtitle=LANGUAGE(30104) )
+    w = ShowDialog( "DialogSelect.xml", CWD, order=currentPositions, focus=indexToMove, windowtitle=LANGUAGE(30104) )
     w.doModal()
     newOrder = w.newOrder
     del w

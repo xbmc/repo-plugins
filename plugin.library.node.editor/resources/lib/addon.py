@@ -97,7 +97,7 @@ class Main:
                 keyboard = xbmc.Keyboard( label, LANGUAGE( 30300 ), False )
                 keyboard.doModal()
                 if ( keyboard.isConfirmed() ):
-                    newlabel = keyboard.getText().decode( "utf-8" )
+                    newlabel = keyboard.getText() if PY3 else keyboard.getText().decode( "utf-8" )
                     if newlabel != "" and newlabel != label:
                         # We've got a new label, update the xml file
                         self.changeViewElement( self.PARAMS[ "actionPath" ], "label", newlabel )

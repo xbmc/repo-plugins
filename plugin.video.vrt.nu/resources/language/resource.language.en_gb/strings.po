@@ -25,7 +25,7 @@ msgid "Browse only the programs you follow"
 msgstr ""
 
 msgctxt "#30012"
-msgid "A-Z"
+msgid "All programs"
 msgstr ""
 
 msgctxt "#30013"
@@ -111,7 +111,7 @@ msgstr ""
 
 ### FAVORITES
 msgctxt "#30040"
-msgid "My favorite programs"
+msgid "My programs"
 msgstr ""
 
 msgctxt "#30041"
@@ -119,7 +119,7 @@ msgid "Alphabetically sorted list of My TV programs"
 msgstr ""
 
 msgctxt "#30042"
-msgid "My movies"
+msgid "Movies"
 msgstr ""
 
 msgctxt "#30043"
@@ -127,7 +127,7 @@ msgid "All movies available on VRT NU"
 msgstr ""
 
 msgctxt "#30044"
-msgid "My documentaries"
+msgid "Documentaries"
 msgstr ""
 
 msgctxt "#30045"
@@ -135,7 +135,7 @@ msgid "All [I]one-off[/I] documentaries on VRT NU"
 msgstr ""
 
 msgctxt "#30046"
-msgid "My most recent"
+msgid "Most recent"
 msgstr ""
 
 msgctxt "#30047"
@@ -143,12 +143,29 @@ msgid "Recently published episodes of My TV programs"
 msgstr ""
 
 msgctxt "#30048"
-msgid "My soon offline"
+msgid "Soon offline"
 msgstr ""
 
 msgctxt "#30049"
 msgid "My episodes that will soon be offline"
 msgstr ""
+
+msgctxt "#30050"
+msgid "Watch later"
+msgstr ""
+
+msgctxt "#30051"
+msgid "The videos you like to watch later"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Continue watching"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Continue watching the videos you started earlier"
+msgstr ""
+
 
 ### CATEGORIES
 msgctxt "#30070"
@@ -160,7 +177,7 @@ msgid "Culture"
 msgstr ""
 
 msgctxt "#30072"
-msgid "Docu"
+msgid "Documentary"
 msgstr ""
 
 msgctxt "#30073"
@@ -220,93 +237,117 @@ msgid "Science and nature"
 msgstr ""
 
 ### FEATURED
-msgctxt "#30087"
+msgctxt "#30100"
 msgid "Online exclusive"
 msgstr ""
 
-msgctxt "#30088"
+msgctxt "#30101"
 msgid "Last episode"
 msgstr ""
 
-msgctxt "#30089"
+msgctxt "#30102"
 msgid "Last chance"
 msgstr ""
 
-msgctxt "#30090"
+msgctxt "#30103"
 msgid "New"
 msgstr ""
 
-msgctxt "#30091"
+msgctxt "#30104"
 msgid "Full season"
 msgstr ""
 
-msgctxt "#30092"
+msgctxt "#30105"
 msgid "Complete series"
 msgstr ""
 
-msgctxt "#30093"
+msgctxt "#30106"
+msgid "Brand new"
+msgstr ""
+
+msgctxt "#30107"
+msgid "New episodes"
+msgstr ""
+
+msgctxt "#30120"
 msgid "Short film"
 msgstr ""
 
 ### APPLICATION
-msgctxt "#30094"
+msgctxt "#30131"
 msgid "Season"
 msgstr ""
 
-msgctxt "#30095"
+msgctxt "#30132"
 msgid "Episode"
 msgstr ""
 
-msgctxt "#30096"
+msgctxt "#30133"
 msgid "* All seasons"
 msgstr ""
 
-msgctxt "#30097"
+msgctxt "#30134"
 msgid "Enter search string"
 msgstr ""
 
-msgctxt "#30098"
+msgctxt "#30135"
 msgid "Nothing found"
 msgstr ""
 
-msgctxt "#30099"
+msgctxt "#30136"
 msgid "Nothing was found when searching for: {keywords}"
 msgstr ""
 
-msgctxt "#30101"
+msgctxt "#30141"
 msgid "{label} live"
 msgstr ""
 
-msgctxt "#30102"
+msgctxt "#30142"
 msgid "Watch [B]{label}[/B] live via Internet"
 msgstr ""
 
-msgctxt "#30103"
+msgctxt "#30143"
 msgid "{label} on YouTube"
 msgstr ""
 
-msgctxt "#30104"
+msgctxt "#30144"
 msgid "Watch [B]{label}[/B] on YouTube"
 msgstr ""
 
 msgctxt "#30201"
-msgid "[COLOR red]Geo-blocked[/COLOR]\n"
+msgid "[COLOR red]Geo-blocked[/COLOR]"
 msgstr ""
 
 msgctxt "#30202"
-msgid "[COLOR blue]Available until {date}[/COLOR]\n"
+msgid "[COLOR blue][B]{years} more years[/B] available[/COLOR]"
 msgstr ""
 
 msgctxt "#30203"
-msgid "[COLOR gray]({days} days left)[/COLOR]\n"
+msgid "[COLOR blue][B]{months} more months[/B] available[/COLOR]"
 msgstr ""
 
 msgctxt "#30204"
-msgid "[COLOR gray]({hours} hours left)[/COLOR]\n"
+msgid "[COLOR blue][B]{days} more days[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30205"
+msgid "[COLOR blue][B]1 more day[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30206"
+msgid "[COLOR blue][B]{hours} more hours[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30207"
+msgid "[COLOR blue][B]1 more hour[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30208"
+msgid "[COLOR blue][B]{minutes} more minutes[/B] available[/COLOR]"
 msgstr ""
 
 msgctxt "#30300"
-msgid "[B][COLOR yellow]More...[/COLOR][/B]"
+msgid "[B][COLOR yellow]More…[/COLOR][/B]"
 msgstr ""
 
 msgctxt "#30301"
@@ -341,20 +382,40 @@ msgctxt "#30334"
 msgid "In 2 days"
 msgstr ""
 
+msgctxt "#30401"
+msgid "Watch later"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Remove from watch later"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Add {title} to watch later"
+msgstr ""
+
+msgctxt "#30404"
+msgid "Remove {title} from watch later"
+msgstr ""
+
+msgctxt "#30409"
+msgid "episode"
+msgstr ""
+
 msgctxt "#30410"
 msgid "program"
 msgstr ""
 
 msgctxt "#30411"
-msgid "Follow"
+msgid "Follow {title}"
 msgstr ""
 
 msgctxt "#30412"
-msgid "Unfollow"
+msgid "Unfollow {title}"
 msgstr ""
 
 msgctxt "#30413"
-msgid "Refresh"
+msgid "Refresh menu"
 msgstr ""
 
 msgctxt "#30415"
@@ -367,6 +428,18 @@ msgstr ""
 
 msgctxt "#30417"
 msgid "Go to program"
+msgstr ""
+
+msgctxt "#30418"
+msgid "No favorites found"
+msgstr ""
+
+msgctxt "#30419"
+msgid "Currently you have not followed any programs."
+msgstr ""
+
+msgctxt "#30420"
+msgid "Please unselect/select favorites to unfollow/follow."
 msgstr ""
 
 msgctxt "#30421"
@@ -382,7 +455,7 @@ msgid "Retransmissions"
 msgstr ""
 
 msgctxt "#30424"
-msgid "[B]New search...[/B]"
+msgid "[B]New search…[/B]"
 msgstr ""
 
 msgctxt "#30425"
@@ -397,225 +470,337 @@ msgctxt "#30427"
 msgid "Clear the search history"
 msgstr ""
 
+msgctxt "#30428"
+msgid "My"
+msgstr ""
+
+msgctxt "#30430"
+msgid "Quiet"
+msgstr ""
+
+msgctxt "#30431"
+msgid "Info"
+msgstr ""
+
+msgctxt "#30432"
+msgid "Verbose"
+msgstr ""
+
+msgctxt "#30433"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#30440"
+msgid "A-Z"
+msgstr ""
+
 
 ### SETTINGS
-msgctxt "#30800"
+msgctxt "#30700"
 msgid "Credentials"
 msgstr ""
 
-msgctxt "#30801"
+msgctxt "#30701"
 msgid "VRT NU login"
 msgstr ""
 
-msgctxt "#30803"
+msgctxt "#30703"
 msgid "Email address"
 msgstr ""
 
-msgctxt "#30804"
+msgctxt "#30704"
 msgid "Provide your VRT NU email address. In case this is a Google or Facebook account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
 msgstr ""
 
-msgctxt "#30805"
+msgctxt "#30705"
 msgid "Password"
 msgstr ""
 
-msgctxt "#30806"
+msgctxt "#30706"
 msgid "Provide your VRT NU account password."
 msgstr ""
 
-msgctxt "#30820"
+msgctxt "#30740"
 msgid "Interface"
 msgstr ""
 
-msgctxt "#30821"
+msgctxt "#30741"
 msgid "Features"
 msgstr ""
 
-msgctxt "#30823"
+msgctxt "#30743"
 msgid "Enable My favorites"
 msgstr ""
 
-msgctxt "#30824"
+msgctxt "#30744"
 msgid "When enabled, the user can follow their favorite programs and list these separately. In this case the VRT NU add-on will download and update a list of your followed programs on the VRT NU website."
 msgstr ""
 
-msgctxt "#30825"
-msgid "Add My movies"
+msgctxt "#30745"
+msgid "Manage My favorites…"
 msgstr ""
 
-msgctxt "#30827"
-msgid "Add My documentaries"
+msgctxt "#30747"
+msgid "Enable watching activity"
 msgstr ""
 
-msgctxt "#30829"
+msgctxt "#30748"
+msgid "This enables 'watch later' and 'continue watching' menus and syncs playback position between different devices using the same VRT NU account."
+msgstr ""
+
+msgctxt "#30749"
+msgid "Add Movies subsection"
+msgstr ""
+
+msgctxt "#30751"
+msgid "Add Documentaries subsection"
+msgstr ""
+
+msgctxt "#30753"
 msgid "Show one-off videos in between program folders"
 msgstr ""
 
-msgctxt "#30831"
+msgctxt "#30755"
 msgid "Show fanart"
 msgstr ""
 
-msgctxt "#30833"
-msgid "Show YouTube channel content"
+msgctxt "#30757"
+msgid "Number of items per page"
 msgstr ""
 
-msgctxt "#30835"
+msgctxt "#30759"
 msgid "Show episode permalink in plot"
 msgstr ""
 
-msgctxt "#30836"
+msgctxt "#30760"
 msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
 msgstr ""
 
-msgctxt "#30860"
+msgctxt "#30780"
 msgid "Playback"
 msgstr ""
 
-msgctxt "#30861"
+msgctxt "#30781"
 msgid "Subtitles"
 msgstr ""
 
-msgctxt "#30863"
-msgid "Show subtitles when available"
+msgctxt "#30783"
+msgid "Always show subtitles when available"
 msgstr ""
 
-msgctxt "#30864"
+msgctxt "#30784"
 msgid "This enables subtitles by default for all content that includes subtitles."
 msgstr ""
 
-msgctxt "#30865"
-msgid "Streaming"
+msgctxt "#30785"
+msgid "Streaming and DRM"
 msgstr ""
 
-msgctxt "#30867"
+msgctxt "#30787"
 msgid "Use Widevine DRM [COLOR gray][I](for protected content)[/I][/COLOR]"
 msgstr ""
 
-msgctxt "#30868"
+msgctxt "#30788"
 msgid "Most live streams are available in 720p HD-quality, but may require DRM to be enabled."
 msgstr ""
 
-msgctxt "#30869"
-msgid "Maximum bandwidth (kbps)"
+msgctxt "#30789"
+msgid "Maximum bandwidth [COLOR gray](in kbps)[/COLOR]"
 msgstr ""
 
-msgctxt "#30870"
+msgctxt "#30790"
 msgid "In case you have limited bandwidth available, you may want to specify a maximum bandwidth so that a lower bitrate stream can be selected for playback."
 msgstr ""
 
-msgctxt "#30880"
+msgctxt "#30820"
 msgid "Channels"
 msgstr ""
 
-msgctxt "#30881"
+msgctxt "#30821"
 msgid "Select channels to use for 'Most recent' and 'Soon offline' listings"
 msgstr ""
 
-msgctxt "#30883"
+msgctxt "#30823"
 msgid "Eén"
 msgstr ""
 
-msgctxt "#30884"
+msgctxt "#30824"
 msgid "Canvas"
 msgstr ""
 
-msgctxt "#30885"
+msgctxt "#30825"
 msgid "Ketnet"
 msgstr ""
 
-msgctxt "#30886"
+msgctxt "#30826"
 msgid "Ketnet Junior"
 msgstr ""
 
-msgctxt "#30887"
+msgctxt "#30827"
 msgid "Sporza"
 msgstr ""
 
-msgctxt "#30888"
+msgctxt "#30828"
 msgid "Radio 1"
 msgstr ""
 
-msgctxt "#30889"
+msgctxt "#30829"
 msgid "Radio 2"
 msgstr ""
 
-msgctxt "#30890"
+msgctxt "#30830"
 msgid "Klara"
 msgstr ""
 
-msgctxt "#30891"
+msgctxt "#30831"
 msgid "Studio Brussel"
 msgstr ""
 
-msgctxt "#30892"
+msgctxt "#30832"
 msgid "MNM"
 msgstr ""
 
-msgctxt "#30893"
+msgctxt "#30833"
 msgid "VRT NXT"
 msgstr ""
 
-msgctxt "#30894"
+msgctxt "#30834"
 msgid "VRT NWS"
 msgstr ""
 
+msgctxt "#30860"
+msgid "Integration"
+msgstr ""
+
+msgctxt "#30861"
+msgid "Integration with other Kodi add-ons"
+msgstr ""
+
+msgctxt "#30863"
+msgid "Install YouTube add-on"
+msgstr ""
+
+msgctxt "#30864"
+msgid "Show YouTube channel content in the Channels menu."
+msgstr ""
+
+msgctxt "#30865"
+msgid "Enable YouTube integration"
+msgstr ""
+
+msgctxt "#30867"
+msgid "YouTube settings…"
+msgstr ""
+
+msgctxt "#30869"
+msgid "Install Up Next add-on"
+msgstr ""
+
+msgctxt "#30870"
+msgid "This enables a Netflix style pop up notification for watching the next episode using the Up Next service add-on."
+msgstr ""
+
+msgctxt "#30871"
+msgid "Enable Up Next integration"
+msgstr ""
+
+msgctxt "#30873"
+msgid "Up Next settings…"
+msgstr ""
+
+msgctxt "#30874"
+msgid "Open Up Next service add-on settings."
+msgstr ""
+
+msgctxt "#30875"
+msgid "Install Twitter add-on"
+msgstr ""
+
+msgctxt "#30877"
+msgid "Enable Twitter integration"
+msgstr ""
+
+msgctxt "#30879"
+msgid "Twitter settings…"
+msgstr ""
+
+msgctxt "#30881"
+msgid "Install PySocks library"
+msgstr ""
+
 msgctxt "#30900"
-msgid "Troubleshooting"
+msgid "Expert"
 msgstr ""
 
 msgctxt "#30901"
-msgid "Cache"
+msgid "Streaming and DRM"
 msgstr ""
 
 msgctxt "#30903"
-msgid "Clear VRT tokens"
-msgstr ""
-
-msgctxt "#30905"
-msgid "Refresh favorites"
-msgstr ""
-
-msgctxt "#30907"
-msgid "Use menu caching"
-msgstr ""
-
-msgctxt "#30908"
-msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected."
-msgstr ""
-
-msgctxt "#30909"
-msgid "Use local HTTP caching"
-msgstr ""
-
-msgctxt "#30911"
-msgid "Invalidate local HTTP caches"
-msgstr ""
-
-msgctxt "#30913"
-msgid "Streaming"
-msgstr ""
-
-msgctxt "#30915"
 msgid "Please install or enable InputStream Adaptive to use this setting"
 msgstr ""
 
-msgctxt "#30917"
+msgctxt "#30905"
 msgid "Use InputStream Adaptive"
 msgstr ""
 
+msgctxt "#30907"
+msgid "InputStream Adaptive settings…"
+msgstr ""
+
+msgctxt "#30909"
+msgid "InputStream Helper information"
+msgstr ""
+
+msgctxt "#30911"
+msgid "InputStream Helper settings… [COLOR gray][I](for protected content)[/I][/COLOR]"
+msgstr ""
+
+msgctxt "#30913"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30915"
+msgid "Clear VRT tokens"
+msgstr ""
+
+msgctxt "#30917"
+msgid "Refresh favorites"
+msgstr ""
+
 msgctxt "#30919"
-msgid "InputStream Adaptive settings..."
+msgid "Refresh watching activity"
 msgstr ""
 
 msgctxt "#30921"
-msgid "Install Widevine CDM... [COLOR gray][I](for protected content)[/I][/COLOR]"
+msgid "Use menu caching"
+msgstr ""
+
+msgctxt "#30922"
+msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected. You can also use [B]Refresh[/B] from the context-menu."
 msgstr ""
 
 msgctxt "#30923"
-msgid "Logging"
+msgid "Use local HTTP caching"
 msgstr ""
 
 msgctxt "#30925"
+msgid "Invalidate local HTTP caches"
+msgstr ""
+
+msgctxt "#30927"
+msgid "Direct HTTP cache time-to-live [COLOR gray](in minutes)[/COLOR]"
+msgstr ""
+
+msgctxt "#30929"
+msgid "Indirect HTTP cache time-to-live [COLOR gray](in minutes)[/COLOR]"
+msgstr ""
+
+msgctxt "#30931"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30933"
 msgid "Log level"
 msgstr ""
 
@@ -685,28 +870,20 @@ msgctxt "#30966"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
 msgstr ""
 
-msgctxt "#30971"
-msgid "Install Widevine using 'InputStream Helper' add-on"
-msgstr ""
-
-msgctxt "#30972"
-msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and the VRT NU add-on is not responsible for any results. Nor is it guaranteed that Widevine will be (re)installed correctly."
-msgstr ""
-
-msgctxt "#30973"
-msgid "Installation of Widevine failed!"
-msgstr ""
-
-msgctxt "#30974"
-msgid "Installation of Widevine completed!"
+msgctxt "#30967"
+msgid "Could not retrieve this program list. VRT Search API url is too long. Unfollowing some favorite programs will reduce url length and may fix this problem."
 msgstr ""
 
 msgctxt "#30975"
-msgid "Failed to get favorites token from VRT NU"
+msgid "Failed to get user token from VRT NU"
 msgstr ""
 
 msgctxt "#30976"
 msgid "Failed to (un)follow program '{program}' at VRT NU"
+msgstr ""
+
+msgctxt "#30977"
+msgid "Failed to update watch activity '{title}' at VRT NU"
 msgstr ""
 
 msgctxt "#30978"
@@ -723,6 +900,10 @@ msgstr ""
 
 msgctxt "#30982"
 msgid "Successfully refreshed favorites."
+msgstr ""
+
+msgctxt "#30983"
+msgid "Successfully refreshed watching activity."
 msgstr ""
 
 msgctxt "#30985"

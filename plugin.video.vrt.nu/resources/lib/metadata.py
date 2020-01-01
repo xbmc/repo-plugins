@@ -2,7 +2,7 @@
 
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-''' Implements a class for video metadata '''
+"""Implements a class for video metadata"""
 
 from __future__ import absolute_import, division, unicode_literals
 
@@ -11,21 +11,23 @@ try:  # Python 3
 except ImportError:  # Python 2
     from urllib import quote_plus
 
-import statichelper
-from data import CHANNELS
+from data import CHANNELS, SECONDS_MARGIN
+from kodiutils import get_setting, localize, localize_datelong, log, url_for
+from utils import (add_https_proto, assetpath_to_id, capitalize, find_entry, from_unicode,
+                   html_to_kodilabel, reformat_url, shorten_link, to_unicode, unescape,
+                   url_to_episode)
 
 
 class Metadata:
-    ''' This class creates appropriate Kodi ListItem metadata from single item json api data '''
+    """This class creates appropriate Kodi ListItem metadata from single item json api data"""
 
-    def __init__(self, _kodi, _favorites):
-        self._kodi = _kodi
+    def __init__(self, _favorites, _resumepoints):
         self._favorites = _favorites
-        self._showfanart = _kodi.get_setting('showfanart', 'true') == 'true'
-        self._showpermalink = _kodi.get_setting('showpermalink', 'false') == 'true'
+        self._resumepoints = _resumepoints
 
-    def get_studio(self, api_data):
-        ''' Get studio string from single item json api data '''
+    @staticmethod
+    def get_studio(api_data):
+        """Get studio string from single item json api data"""
 
         # VRT NU Search API or VRT NU Suggest API
         if api_data.get('type') == 'episode' or api_data.get('type') == 'program':
@@ -33,33 +35,75 @@ class Metadata:
             if brands:
                 try:
                     channel = next(c for c in CHANNELS if c.get('name') == brands[0])
-                    studio = channel.get('studio')
                 except StopIteration:
                     # Retain original (unknown) brand, unless it is empty
                     studio = brands[0] or 'VRT'
+                else:
+                    studio = channel.get('studio')
             else:
                 # No brands ? Use VRT instead
                 studio = 'VRT'
             return studio
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return ''
 
         # Not Found
         return ''
 
     def get_context_menu(self, api_data, program, cache_file):
-        ''' Get context menu '''
+        """Get context menu"""
+        from addon import plugin
         favorite_marker = ''
+        watchlater_marker = ''
         context_menu = []
+
+        # WATCH LATER
+        if self._resumepoints.is_activated():
+            assetpath = None
+
+            # VRT NU Search API
+            if api_data.get('type') == 'episode':
+                program_title = api_data.get('program')
+                assetpath = api_data.get('assetPath')
+
+            # VRT NU Schedule API (some are missing vrt.whatson-id)
+            elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
+                program_title = api_data.get('title')
+                assetpath = api_data.get('assetPath')
+
+            if assetpath is not None:
+                # We need to ensure forward slashes are quoted
+                program_title = to_unicode(quote_plus(from_unicode(program_title)))
+                url = url_to_episode(api_data.get('url', ''))
+                asset_id = assetpath_to_id(assetpath)
+                if self._resumepoints.is_watchlater(asset_id):
+                    extras = {}
+                    # If we are in a watchlater menu, move cursor down before removing a favorite
+                    if plugin.path.startswith('/resumepoints/watchlater'):
+                        extras = dict(move_down=True)
+                    # Unwatch context menu
+                    context_menu.append((
+                        capitalize(localize(30402)),
+                        'RunPlugin(%s)' % url_for('unwatchlater', asset_id=asset_id, title=program_title, url=url, **extras)
+                    ))
+                    watchlater_marker = '[COLOR yellow]ᶫ[/COLOR]'
+                else:
+                    # Watch context menu
+                    context_menu.append((
+                        capitalize(localize(30401)),
+                        'RunPlugin(%s)' % url_for('watchlater', asset_id=asset_id, title=program_title, url=url)
+                    ))
+
+        # FOLLOW PROGRAM
         if self._favorites.is_activated():
 
             # VRT NU Search API
             if api_data.get('type') == 'episode':
                 program_title = api_data.get('program')
                 program_type = api_data.get('programType')
-                follow_suffix = (' ' + self._kodi.localize(30410) if program_type != 'oneoff' else '')
+                follow_suffix = localize(30410) if program_type != 'oneoff' else ''  # program
                 follow_enabled = True
 
             # VRT NU Suggest API
@@ -68,42 +112,109 @@ class Metadata:
                 follow_suffix = ''
                 follow_enabled = True
 
-            # VRT NU Schedule API
-            elif api_data.get('vrt.whatson-id'):
+            # VRT NU Schedule API (some are missing vrt.whatson-id)
+            elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
                 program_title = api_data.get('title')
-                follow_suffix = (' ' + self._kodi.localize(30410))
+                follow_suffix = localize(30410)  # program
                 follow_enabled = bool(api_data.get('url'))
 
             if follow_enabled:
-                program_title = quote_plus(statichelper.from_unicode(program_title))  # We need to ensure forward slashes are quoted
+                program_title = to_unicode(quote_plus(from_unicode(program_title)))  # We need to ensure forward slashes are quoted
                 if self._favorites.is_favorite(program):
-                    # Unfollow context menu
+                    extras = {}
+                    # If we are in a favorites menu, move cursor down before removing a favorite
+                    if plugin.path.startswith('/favorites'):
+                        extras = dict(move_down=True)
                     context_menu.append((
-                        self._kodi.localize(30412) + follow_suffix,
-                        'RunPlugin(%s)' % self._kodi.url_for('unfollow', program=program, title=program_title)
+                        localize(30412, title=follow_suffix),  # Unfollow
+                        'RunPlugin(%s)' % url_for('unfollow', program=program, title=program_title, **extras)
                     ))
                     favorite_marker = '[COLOR yellow]ᵛ[/COLOR]'
                 else:
-                    # Follow context menu
                     context_menu.append((
-                        self._kodi.localize(30411) + follow_suffix,
-                        'RunPlugin(%s)' % self._kodi.url_for('follow', program=program, title=program_title)
+                        localize(30411, title=follow_suffix),  # Follow
+                        'RunPlugin(%s)' % url_for('follow', program=program, title=program_title)
                     ))
 
-        # Go to program context menu
-        if cache_file and cache_file.startswith(('my-offline', 'my-recent', 'offline', 'recent')):
-            plugin_url = self._kodi.url_for('programs', program=program, season='allseasons')
-            # NOTE: Because of a bug in ActivateWindow(), return does not work
-            # context_menu.append((self._kodi.localize(30417), 'ActivateWindow(Videos,%s,return)' % plugin_url))
-            context_menu.append((self._kodi.localize(30417), 'ActivateWindow(Videos,%s)' % plugin_url))
+        # GO TO PROGRAM
+        if api_data.get('programType') != 'oneoff':
+            if plugin.path.startswith(('/favorites/offline', '/favorites/recent', '/offline', '/recent',
+                                       '/resumepoints/continue', '/resumepoints/watchlater', '/tvguide')):
+                context_menu.append((
+                    localize(30417),  # Go to program
+                    'Container.Update(%s)' % url_for('programs', program=program, season='allseasons')
+                ))
 
-        # Refresh context menu
-        context_menu.append((self._kodi.localize(30413), 'RunPlugin(%s)' % self._kodi.url_for('delete_cache', cache_file=cache_file)))
+        # REFRESH MENU
+        context_menu.append((
+            localize(30413),  # Refresh menu
+            'RunPlugin(%s)' % url_for('delete_cache', cache_file=cache_file)
+        ))
 
-        return context_menu, favorite_marker
+        return context_menu, favorite_marker, watchlater_marker
 
-    def get_tvshowtitle(self, api_data):
-        ''' Get tvshowtitle string from single item json api data '''
+    @staticmethod
+    def get_assetpath(api_data):
+        """Get assetpath from single item json api data"""
+        assetpath = None
+
+        # VRT NU Search API
+        if api_data.get('type') == 'episode':
+            assetpath = api_data.get('assetPath')
+
+        return assetpath
+
+    def get_playcount(self, api_data):
+        """Get playcount from single item json api data"""
+        playcount = -1
+        # Only fill in playcount when using VRT NU resumepoints because setting playcount breaks standard Kodi watched status
+        if self._resumepoints.is_activated():
+            assetpath = self.get_assetpath(api_data)
+            if assetpath:
+                asset_id = assetpath_to_id(assetpath)
+                position = self._resumepoints.get_position(asset_id)
+                total = self._resumepoints.get_total(asset_id)
+                if position and total and position > total - SECONDS_MARGIN:
+                    playcount = 1
+        return playcount
+
+    def get_properties(self, api_data):
+        """Get properties from single item json api data"""
+        properties = {}
+
+        # Only fill in properties when using VRT NU resumepoints because setting resumetime/totaltime breaks standard Kodi watched status
+        if self._resumepoints.is_activated():
+            assetpath = self.get_assetpath(api_data)
+            if assetpath:
+                # We need to ensure forward slashes are quoted
+                program_title = to_unicode(quote_plus(from_unicode(api_data.get('program'))))
+
+                asset_id = assetpath_to_id(assetpath)
+                url = reformat_url(api_data.get('url', ''), 'medium')
+                properties.update(asset_id=asset_id, url=url, title=program_title)
+
+                position = self._resumepoints.get_position(asset_id)
+                total = self._resumepoints.get_total(asset_id)
+                # Master over Kodi watch status
+                if position and total and SECONDS_MARGIN < position < total - SECONDS_MARGIN:
+                    properties['resumetime'] = position
+                    properties['totaltime'] = total
+                    log(2, '[Metadata] manual resumetime set to %d' % position)
+
+            episode = self.get_episode(api_data)
+            season = self.get_season(api_data)
+            if episode and season:
+                properties['episodeno'] = 's%se%s' % (season, episode)
+
+            year = self.get_year(api_data)
+            if year:
+                properties['year'] = year
+
+        return properties
+
+    @staticmethod
+    def get_tvshowtitle(api_data):
+        """Get tvshowtitle string from single item json api data"""
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
@@ -113,15 +224,16 @@ class Metadata:
         if api_data.get('type') == 'program':
             return api_data.get('title', '???')
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return api_data.get('title', 'Untitled')
 
         # Not Found
         return ''
 
-    def get_duration(self, api_data):
-        ''' Get duration int from single item json api data '''
+    @staticmethod
+    def get_duration(api_data):
+        """Get duration int from single item json api data"""
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
@@ -131,8 +243,8 @@ class Metadata:
         if api_data.get('type') == 'program':
             return int()
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             from datetime import timedelta
             import dateutil.parser
             start_time = dateutil.parser.parse(api_data.get('startTime'))
@@ -144,8 +256,8 @@ class Metadata:
         # Not Found
         return ''
 
-    def get_plot(self, api_data, season=False, date=None, channel=None):
-        ''' Get plot string from single item json api data '''
+    def get_plot(self, api_data, season=False, date=None):
+        """Get plot string from single item json api data"""
         from datetime import datetime
         import dateutil.parser
         import dateutil.tz
@@ -153,76 +265,90 @@ class Metadata:
         # VRT NU Search API
         if api_data.get('type') == 'episode':
             if season:
-                plot = statichelper.convert_html_to_kodilabel(api_data.get('programDescription'))
+                plot = html_to_kodilabel(api_data.get('programDescription'))
 
                 # Add additional metadata to plot
                 plot_meta = ''
                 if api_data.get('allowedRegion') == 'BE':
-                    # Show Geo-blocked
-                    plot_meta += self._kodi.localize(30201) + '\n'
+                    plot_meta += localize(30201) + '\n\n'  # Geo-blocked
                 plot = '%s[B]%s[/B]\n%s' % (plot_meta, api_data.get('program'), plot)
                 return plot
 
-            plot = statichelper.convert_html_to_kodilabel(api_data.get('description'))
-            now = datetime.now(dateutil.tz.tzlocal())
-
             # Add additional metadata to plot
             plot_meta = ''
-            if api_data.get('allowedRegion') == 'BE':
-                # Show Geo-blocked
-                plot_meta += self._kodi.localize(30201)
-
             # Only display when a video disappears if it is within the next 3 months
             if api_data.get('assetOffTime'):
                 offtime = dateutil.parser.parse(api_data.get('assetOffTime'))
-            if offtime and (offtime - now).days < 93:
-                # Show date when episode is removed
-                plot_meta += self._kodi.localize(30202, date=self._kodi.localize_dateshort(offtime))
+
                 # Show the remaining days/hours the episode is still available
-                if (offtime - now).days > 0:
-                    plot_meta += self._kodi.localize(30203, days=(offtime - now).days)
-                else:
-                    plot_meta += self._kodi.localize(30204, hours=int((offtime - now).seconds / 3600))
+                if offtime:
+                    now = datetime.now(dateutil.tz.tzlocal())
+                    remaining = offtime - now
+                    if remaining.days / 365 > 5:
+                        pass  # If it is available for more than 5 years, do not show
+                    elif remaining.days / 365 > 2:
+                        plot_meta += localize(30202, years=int(remaining.days / 365))  # X years remaining
+                    elif remaining.days / 30.5 > 3:
+                        plot_meta += localize(30203, months=int(remaining.days / 30.5))  # X months remaining
+                    elif remaining.days > 1:
+                        plot_meta += localize(30204, days=remaining.days)  # X days to go
+                    elif remaining.days == 1:
+                        plot_meta += localize(30205)  # 1 day to go
+                    elif remaining.seconds // 3600 > 1:
+                        plot_meta += localize(30206, hours=remaining.seconds // 3600)  # X hours to go
+                    elif remaining.seconds // 3600 == 1:
+                        plot_meta += localize(30207)  # 1 hour to go
+                    else:
+                        plot_meta += localize(30208, minutes=remaining.seconds // 60)  # X minutes to go
 
-            plot = '%s\n%s' % (plot_meta, plot)
+            if api_data.get('allowedRegion') == 'BE':
+                if plot_meta:
+                    plot_meta += '  '
+                plot_meta += localize(30201)  # Geo-blocked
 
-            permalink = statichelper.shorten_link(api_data.get('permalink')) or api_data.get('externalPermalink')
-            if self._showpermalink and permalink:
+            plot = html_to_kodilabel(api_data.get('description'))
+
+            if plot_meta:
+                plot = '%s\n\n%s' % (plot_meta, plot)
+
+            permalink = shorten_link(api_data.get('permalink')) or api_data.get('externalPermalink')
+            if permalink and get_setting('showpermalink', 'false') == 'true':
                 plot = '%s\n\n[COLOR yellow]%s[/COLOR]' % (plot, permalink)
             return plot
 
         # VRT NU Suggest API
         if api_data.get('type') == 'program':
-            plot = statichelper.unescape(api_data.get('description', '???'))
-            permalink = statichelper.shorten_link(api_data.get('targetUrl'))
-            if self._showpermalink and permalink:
-                plot = '%s\n\n[COLOR yellow]%s[/COLOR]' % (plot, permalink)
+            plot = unescape(api_data.get('description', '???'))
+            # permalink = shorten_link(api_data.get('programUrl'))
+            # if permalink and get_setting('showpermalink', 'false') == 'true':
+            #     plot = '%s\n\n[COLOR yellow]%s[/COLOR]' % (plot, permalink)
             return plot
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
-            title = '%s - %s' % (api_data.get('start'), api_data.get('title'))
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
+            title = api_data.get('title')
             now = datetime.now(dateutil.tz.tzlocal())
             epg = self.parse(date, now)
-            datelong = self._kodi.localize_datelong(epg)
+            datelong = localize_datelong(epg)
             start = api_data.get('start')
             end = api_data.get('end')
-            plot = '[B]%s[/B]\n%s\n%s - %s\n[I]%s[/I]' % (title, datelong, start, end, channel.get('label'))
+            plot = '[B]%s[/B]\n%s\n%s - %s' % (title, datelong, start, end)
             return plot
 
         # Not Found
         return ''
 
-    def get_plotoutline(self, api_data, season=False):
-        ''' Get plotoutline string from single item json api data '''
+    @staticmethod
+    def get_plotoutline(api_data, season=False):
+        """Get plotoutline string from single item json api data"""
         # VRT NU Search API
         if api_data.get('type') == 'episode':
             if season:
-                plotoutline = statichelper.convert_html_to_kodilabel(api_data.get('programDescription'))
+                plotoutline = html_to_kodilabel(api_data.get('programDescription'))
                 return plotoutline
 
-            if api_data.get('displayOptions', dict()).get('showShortDescription'):
-                plotoutline = statichelper.convert_html_to_kodilabel(api_data.get('shortDescription'))
+            if api_data.get('displayOptions', {}).get('showShortDescription'):
+                plotoutline = html_to_kodilabel(api_data.get('shortDescription'))
                 return plotoutline
 
             plotoutline = api_data.get('subtitle')
@@ -232,15 +358,16 @@ class Metadata:
         if api_data.get('type') == 'program':
             return ''
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return ''
 
         # Not Found
         return ''
 
-    def get_season(self, api_data):
-        ''' Get season int from single item json api data '''
+    @staticmethod
+    def get_season(api_data):
+        """Get season int from single item json api data"""
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
@@ -250,22 +377,23 @@ class Metadata:
                 try:
                     season = int(api_data.get('seasonName'))
                 except ValueError:
-                    season = None
+                    season = api_data.get('seasonTitle')
             return season
 
         # VRT NU Suggest API
         if api_data.get('type') == 'program':
             return None
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return None
 
         # Not Found
         return None
 
-    def get_episode(self, api_data):
-        ''' Get episode int from single item json api data '''
+    @staticmethod
+    def get_episode(api_data):
+        """Get episode int from single item json api data"""
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
@@ -279,15 +407,16 @@ class Metadata:
         if api_data.get('type') == 'program':
             return int()
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return int()
 
         # Not Found
         return int()
 
-    def get_date(self, api_data):
-        ''' Get date string from single item json api data '''
+    @staticmethod
+    def get_date(api_data):
+        """Get date string from single item json api data"""
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
@@ -298,15 +427,16 @@ class Metadata:
         if api_data.get('type') == 'program':
             return ''
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return ''
 
         # Not Found
         return ''
 
-    def get_aired(self, api_data):
-        ''' Get aired string from single item json api data '''
+    @staticmethod
+    def get_aired(api_data):
+        """Get aired string from single item json api data"""
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
@@ -321,8 +451,8 @@ class Metadata:
         if api_data.get('type') == 'program':
             return ''
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             from datetime import datetime
             import dateutil.parser
             import dateutil.tz
@@ -332,8 +462,9 @@ class Metadata:
         # Not Found
         return ''
 
-    def get_dateadded(self, api_data):
-        ''' Get dateadded string from single item json api data '''
+    @staticmethod
+    def get_dateadded(api_data):
+        """Get dateadded string from single item json api data"""
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
@@ -344,15 +475,16 @@ class Metadata:
         if api_data.get('type') == 'program':
             return ''
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return ''
 
         # Not Found
         return ''
 
-    def get_year(self, api_data):
-        ''' Get year integer from single item json api data '''
+    @staticmethod
+    def get_year(api_data):
+        """Get year integer from single item json api data"""
         from datetime import datetime
 
         # VRT NU Search API
@@ -370,32 +502,35 @@ class Metadata:
         if api_data.get('type') == 'program':
             return int()
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return int()
 
         # Not Found
         return ''
 
-    def get_art(self, api_data, season=False):
-        ''' Get art dict from single item json api data '''
-        art_dict = dict()
+    @staticmethod
+    def get_art(api_data, season=False):
+        """Get art dict from single item json api data"""
+        art_dict = {}
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
             if season:
-                if self._showfanart:
-                    art_dict['fanart'] = statichelper.add_https_method(api_data.get('programImageUrl', 'DefaultSets.png'))
+                if get_setting('showfanart', 'true') == 'true':
+                    art_dict['fanart'] = add_https_proto(api_data.get('programImageUrl', 'DefaultSets.png'))
+                    art_dict['banner'] = art_dict.get('fanart')
                     if season != 'allseasons':
-                        art_dict['thumb'] = statichelper.add_https_method(api_data.get('videoThumbnailUrl', art_dict.get('fanart')))
+                        art_dict['thumb'] = add_https_proto(api_data.get('videoThumbnailUrl', art_dict.get('fanart')))
                     else:
                         art_dict['thumb'] = art_dict.get('fanart')
                 else:
                     art_dict['thumb'] = 'DefaultSets.png'
             else:
-                if self._showfanart:
-                    art_dict['thumb'] = statichelper.add_https_method(api_data.get('videoThumbnailUrl', 'DefaultAddonVideo.png'))
-                    art_dict['fanart'] = statichelper.add_https_method(api_data.get('programImageUrl', art_dict.get('thumb')))
+                if get_setting('showfanart', 'true') == 'true':
+                    art_dict['thumb'] = add_https_proto(api_data.get('videoThumbnailUrl', 'DefaultAddonVideo.png'))
+                    art_dict['fanart'] = add_https_proto(api_data.get('programImageUrl', art_dict.get('thumb')))
+                    art_dict['banner'] = art_dict.get('fanart')
                 else:
                     art_dict['thumb'] = 'DefaultAddonVideo.png'
 
@@ -403,19 +538,21 @@ class Metadata:
 
         # VRT NU Suggest API
         if api_data.get('type') == 'program':
-            if self._showfanart:
-                art_dict['thumb'] = statichelper.add_https_method(api_data.get('thumbnail', 'DefaultAddonVideo.png'))
+            if get_setting('showfanart', 'true') == 'true':
+                art_dict['thumb'] = add_https_proto(api_data.get('thumbnail', 'DefaultAddonVideo.png'))
                 art_dict['fanart'] = art_dict.get('thumb')
+                art_dict['banner'] = art_dict.get('fanart')
             else:
                 art_dict['thumb'] = 'DefaultAddonVideo.png'
 
             return art_dict
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
-            if self._showfanart:
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
+            if get_setting('showfanart', 'true') == 'true':
                 art_dict['thumb'] = api_data.get('image', 'DefaultAddonVideo.png')
                 art_dict['fanart'] = art_dict.get('thumb')
+                art_dict['banner'] = art_dict.get('fanart')
             else:
                 art_dict['thumb'] = 'DefaultAddonVideo.png'
 
@@ -425,7 +562,7 @@ class Metadata:
         return art_dict
 
     def get_info_labels(self, api_data, season=False, date=None, channel=None):
-        ''' Get infoLabels dict from single item json api data '''
+        """Get infoLabels dict from single item json api data"""
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
@@ -439,13 +576,15 @@ class Metadata:
                 dateadded=self.get_dateadded(api_data),
                 episode=self.get_episode(api_data),
                 season=self.get_season(api_data),
+                playcount=self.get_playcount(api_data),
                 plot=self.get_plot(api_data, season=season),
                 plotoutline=self.get_plotoutline(api_data, season=season),
                 tagline=self.get_plotoutline(api_data, season=season),
                 duration=self.get_duration(api_data),
                 mediatype=api_data.get('type', 'episode'),
                 studio=self.get_studio(api_data),
-                year=self.get_year(api_data)
+                year=self.get_year(api_data),
+                tag=self.get_tag(api_data),
             )
             return info_labels
 
@@ -454,32 +593,34 @@ class Metadata:
             info_labels = dict(
                 tvshowtitle=self.get_tvshowtitle(api_data),
                 plot=self.get_plot(api_data),
-                studio=self.get_studio(api_data)
+                studio=self.get_studio(api_data),
+                tag=self.get_tag(api_data),
             )
             return info_labels
 
-        # VRT NU Schedule API
-        if api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             info_labels = dict(
                 title=self.get_label(api_data),
                 tvshowtitle=self.get_tvshowtitle(api_data),
                 aired=self.get_aired(api_data),
-                plot=self.get_plot(api_data, date=date, channel=channel),
+                plot=self.get_plot(api_data, date=date),
                 duration=self.get_duration(api_data),
                 mediatype=api_data.get('type', 'episode'),
-                studio=channel.get('studio')
+                studio=channel.get('studio'),
             )
             return info_labels
 
         # Not Found
-        return dict()
+        return {}
 
-    def get_label(self, api_data, titletype=None, return_sort=False):
-        ''' Get an appropriate label string matching the type of listing and VRT NU provided displayOptions from single item json api data '''
+    @staticmethod
+    def get_label(api_data, titletype=None, return_sort=False):
+        """Get an appropriate label string matching the type of listing and VRT NU provided displayOptions from single item json api data"""
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
-            display_options = api_data.get('displayOptions', dict())
+            display_options = api_data.get('displayOptions', {})
 
             # NOTE: Hard-code showing seasons because it is unreliable (i.e; Thuis or Down the Road have it disabled)
             display_options['showSeason'] = True
@@ -489,16 +630,16 @@ class Metadata:
                 titletype = program_type
 
             if display_options.get('showEpisodeTitle'):
-                label = statichelper.convert_html_to_kodilabel(api_data.get('title') or api_data.get('shortDescription'))
+                label = html_to_kodilabel(api_data.get('title') or api_data.get('shortDescription'))
             elif display_options.get('showShortDescription'):
-                label = statichelper.convert_html_to_kodilabel(api_data.get('shortDescription') or api_data.get('title'))
+                label = html_to_kodilabel(api_data.get('shortDescription') or api_data.get('title'))
             else:
-                label = statichelper.convert_html_to_kodilabel(api_data.get('title') or api_data.get('shortDescription'))
+                label = html_to_kodilabel(api_data.get('title') or api_data.get('shortDescription'))
 
             sort = 'unsorted'
             ascending = True
 
-            if titletype in ('offline', 'recent'):
+            if titletype in ('continue', 'offline', 'recent', 'watchlater'):
                 ascending = False
                 label = '[B]%s[/B] - %s' % (api_data.get('program'), label)
                 sort = 'dateadded'
@@ -513,13 +654,14 @@ class Metadata:
                         and api_data.get('seasonName') and api_data.get('episodeNumber')):
                     try:
                         label = 'S%02dE%02d: %s' % (int(api_data.get('seasonName')), int(api_data.get('episodeNumber')), label)
-                        sort = 'dateadded'
-                    except Exception:
+                    except ValueError:
                         # Season may not always be a perfect number
                         sort = 'episode'
+                    else:
+                        sort = 'dateadded'
                 elif display_options.get('showEpisodeNumber') and api_data.get('episodeNumber') and ascending:
                     # NOTE: Do not prefix with "Episode X" when sorting by episode
-                    # label = '%s %s: %s' % (self._kodi.localize(30095), api_data.get('episodeNumber'), label)
+                    # label = '%s %s: %s' % (localize(30132), api_data.get('episodeNumber'), label)
                     sort = 'episode'
                 elif display_options.get('showBroadcastDate') and api_data.get('formattedBroadcastShortDate'):
                     label = '%s - %s' % (api_data.get('formattedBroadcastShortDate'), label)
@@ -540,8 +682,8 @@ class Metadata:
         elif api_data.get('type') == 'program':
             label = api_data.get('title', '???')
 
-        # VRT NU Schedule API
-        elif api_data.get('vrt.whatson-id'):
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             from datetime import datetime
             import dateutil.parser
             import dateutil.tz
@@ -551,11 +693,11 @@ class Metadata:
             end_date = dateutil.parser.parse(api_data.get('endTime'))
             if api_data.get('url'):
                 if start_date <= now <= end_date:  # Now playing
-                    label = '[COLOR yellow]%s[/COLOR] %s' % (label, self._kodi.localize(30301))
+                    label = '[COLOR yellow]%s[/COLOR] %s' % (label, localize(30301))
             else:
                 # This is a non-actionable item
                 if start_date < now <= end_date:  # Now playing
-                    label = '[COLOR gray]%s[/COLOR] %s' % (label, self._kodi.localize(30301))
+                    label = '[COLOR gray]%s[/COLOR] %s' % (label, localize(30301))
                 else:
                     label = '[COLOR gray]%s[/COLOR]' % label
 
@@ -568,11 +710,28 @@ class Metadata:
 
         return label
 
-    def parse(self, date, now):
-        ''' Parse a given string and return a datetime object
+    @staticmethod
+    def get_tag(api_data):
+        """Return categories for a given episode"""
+
+        # VRT NU Search API
+        if api_data.get('type') == 'episode':
+            from data import CATEGORIES
+            return sorted([localize(find_entry(CATEGORIES, 'id', category).get('msgctxt'))
+                           for category in api_data.get('categories')])
+
+        # VRT NU Suggest API
+        if api_data.get('type') == 'program':
+            return ['Series']
+
+        return []
+
+    @staticmethod
+    def parse(date, now):
+        """Parse a given string and return a datetime object
             This supports 'today', 'yesterday' and 'tomorrow'
             It also compensates for TV-guides covering from 6AM to 6AM
-        '''
+       """
         from datetime import timedelta
         import dateutil.parser
 

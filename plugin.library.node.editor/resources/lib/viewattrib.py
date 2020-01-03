@@ -129,7 +129,7 @@ class ViewAttribFunctions():
             return
         if selectValue[ selectedContent ] == "::PLUGIN::":
             # The user has asked to browse for a plugin
-            path = pluginBrowser.getPluginPath()
+            path = pluginBrowser.getPluginPath(self.ltype)
             if path is not None:
                 # User has selected a plugin
                 self.writeUpdatedPath( actionPath, (0, path), addFolder = True)

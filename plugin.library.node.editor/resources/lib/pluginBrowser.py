@@ -5,7 +5,7 @@ import json
 
 from resources.lib.common import *
 
-def getPluginPath( location = None ):
+def getPluginPath( ltype, location = None ):
     listings = []
     listingsLabels = []
 
@@ -26,11 +26,12 @@ def getPluginPath( location = None ):
     dialog.create( ADDONNAME, LANGUAGE( 30410 ) )
 
     json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Files.GetDirectory", "params": { "properties": ["title", "file", "thumbnail", "episode", "showtitle", "season", "album", "artist", "imdbnumber", "firstaired", "mpaa", "trailer", "studio", "art"], "directory": "' + location + '", "media": "files" } }')
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    if not PY3:
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = json.loads(json_query)
 
     # Add all directories returned by the json query
-    if json_response.has_key('result') and json_response['result'].has_key('files') and json_response['result']['files']:
+    if json_response.get('result') and json_response['result'].get('files') and json_response['result']['files']:
         json_result = json_response['result']['files']
 
         for item in json_result:
@@ -52,4 +53,4 @@ def getPluginPath( location = None ):
         return location
     else:
         # User has chosen a sub-level to display, add details and re-call this function
-        return getPluginPath( selectedAction )
+        return getPluginPath(ltype, selectedAction)

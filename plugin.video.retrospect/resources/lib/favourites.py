@@ -133,6 +133,10 @@ class Favourites:
                 os.remove(fav)
                 continue
 
+            # clean up the .: from titles
+            if ".:" in item.name and ":." in item.name:
+                item.name = item.name.strip(".:\0\b ")
+
             # add the channel name
             if channel is None:
                 item.name = "%s [%s]" % (item.name, channel_name)

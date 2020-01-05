@@ -85,6 +85,7 @@ class Channel(chn_class.Channel):
         #===============================================================================================================
         # non standard items
         self.maxPageSize = 25  # The Android app uses a page size of 20
+        self.__expires_text = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
 
         #===============================================================================================================
         # Test cases:
@@ -241,6 +242,7 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url)
         item.icon = self.icon
         item.thumb = result_set.get("program_image", self.noImage)
+        item.fanart = result_set.get("program_image", self.fanart)
         item.isPaid = result_set.get("is_premium", False)
         return item
 
@@ -412,7 +414,8 @@ class Channel(chn_class.Channel):
             clips_title = LanguageHelper.get_localized_string(LanguageHelper.Clips)
             clips = MediaItem(clips_title, url)
             clips.icon = self.icon
-            clips.thumb = self.noImage
+            clips.thumb = self.parentItem.thumb
+            clips.fanart = self.parentItem.fanart
             clips.complete = True
             items.append(clips)
 
@@ -430,6 +433,7 @@ class Channel(chn_class.Channel):
 
             # what are the total number of pages?
             current_page = 1
+            # noinspection PyTypeChecker
             total_pages = int(math.ceil(1.0 * total_items / self.maxPageSize))
 
             current_url = self.parentItem.url
@@ -485,13 +489,31 @@ class Channel(chn_class.Channel):
         # url = "https://playback-api.b17g.net/media/%s?service=tv4&device=browser&protocol=hls" % (program_id,)
         url = "https://playback-api.b17g.net/media/%s?service=tv4&device=browser&protocol=dash" % (program_id,)
         name = result_set["title"]
+        season = result_set.get("season", 0)
+        episode = result_set.get("episode", 0)
+        is_episodic = 0 < season < 1900 and not episode == 0
+        if is_episodic:
+            name, episode_text = result_set["title"].split(" del ", 1)
+            episode_text = episode_text.lstrip("0123456789")
+            if episode_text:
+                episode_text = episode_text.lstrip(" -")
+                name = "{} - s{:02d}e{:02d} - {}".format(name, season, episode, episode_text)
+            else:
+                name = "{} - s{:02d}e{:02d}".format(name, season, episode, episode_text)
 
         item = MediaItem(name, url)
         item.description = result_set["description"]
         if item.description is None:
             item.description = item.name
 
+        if is_episodic:
+            item.set_season_info(season, episode)
+
         # premium_expire_date_time=2099-12-31T00:00:00+01:00
+        expire_date = result_set.get("expire_date_time")
+        if bool(expire_date):
+            self.__set_expire_time(expire_date, item)
+
         date = result_set["broadcast_date_time"]
         (date_part, time_part) = date.split("T")
         (year, month, day) = date_part.split("-")
@@ -499,6 +521,7 @@ class Channel(chn_class.Channel):
         item.set_date(year, month, day, hour, minutes, 00)
         broadcast_date = datetime.datetime(int(year), int(month), int(day), int(hour), int(minutes))
 
+        item.fanart = self.parentItem.fanart
         thumb_url = result_set.get("image", result_set.get("program_image"))
         # some images need to come via a proxy:
         if thumb_url and "://img.b17g.net/" in thumb_url:
@@ -539,6 +562,7 @@ class Channel(chn_class.Channel):
         if item.isDrmProtected:
             item.url = "{}&drm=widevine&is_drm=true".format(item.url)
 
+        item.set_info_label("duration", int(result_set.get("duration", 0)))
         return item
 
     def create_category_item(self, result_set):
@@ -683,6 +707,13 @@ class Channel(chn_class.Channel):
 
         item.complete = True
         return item
+
+    def __set_expire_time(self, expire_date, item):
+        expire_date = expire_date.split("+")[0].replace("T", " ")
+        year = expire_date.split("-")[0]
+        if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
+            item.description = \
+                "{}\n\n{}: {}".format(item.description or "", self.__expires_text, expire_date)
 
     def __update_dash_video(self, item, stream_info):
         """

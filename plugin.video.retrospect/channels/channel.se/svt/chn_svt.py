@@ -114,6 +114,8 @@ class Channel(chn_class.Channel):
         # non standard items
         self.__folder_id = "folder_id"
         self.__genre_id = "genre_id"
+        self.__filter_subheading = "filter_subheading"
+        self.__parent_images = "parent_thumb_data"
         self.__apollo_data = None
         self.__expires_text = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
         self.__timezone = pytz.timezone("Europe/Stockholm")
@@ -137,37 +139,46 @@ class Channel(chn_class.Channel):
 
         items = []
 
+        # Specify the name, url and whether or not to filter out some subheadings:
         extra_items = {
-            LanguageHelper.get_localized_string(LanguageHelper.LiveTv): "https://www.svtplay.se/kanaler",
+            LanguageHelper.get_localized_string(LanguageHelper.LiveTv): (
+                "https://www.svtplay.se/kanaler",
+                False),
 
-            LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes):
+            LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes): (
                 self.__get_api_url("GridPage",
                                    "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
                                    variables={"selectionId": "live"}),
+                True),
 
-            LanguageHelper.get_localized_string(LanguageHelper.Search): "searchSite",
+            LanguageHelper.get_localized_string(LanguageHelper.Search): (
+                "searchSite", False),
 
-            LanguageHelper.get_localized_string(LanguageHelper.Recent):
+            LanguageHelper.get_localized_string(LanguageHelper.Recent): (
                 self.__get_api_url("GridPage",
                                    "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
                                    variables={"selectionId": "latest"}),
+                False),
 
-            LanguageHelper.get_localized_string(LanguageHelper.LastChance):
+            LanguageHelper.get_localized_string(LanguageHelper.LastChance): (
                 self.__get_api_url("GridPage",
                                    "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
                                    variables={"selectionId": "lastchance"}),
+                False),
 
-            LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes):
+            LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes): (
                 self.__get_api_url("GridPage",
                                    "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
                                    variables={"selectionId": "popular"}),
+                False)
         }
 
-        for title, url in extra_items.items():
+        for title, (url, include_subheading) in extra_items.items():
             new_item = MediaItem("\a.: %s :." % (title, ), url)
             new_item.complete = True
             new_item.thumb = self.noImage
             new_item.dontGroup = True
+            new_item.metaData[self.__filter_subheading] = include_subheading
             items.append(new_item)
 
         genre_tags = "\a.: {}/{} :.".format(
@@ -185,47 +196,63 @@ class Channel(chn_class.Channel):
         category_items = {
             "Drama": (
                 "drama",
-                "https://www.svtstatic.se/play/play5/images/categories/posters/drama-d75cd2da2eecde36b3d60fad6b92ad42.jpg"
+                "https://www.svtstatic.se/image/medium/480/7166155/1458037803"
             ),
             "Dokumentär": (
                 "dokumentar",
-                "https://www.svtstatic.se/play/play5/images/categories/posters/dokumentar-00599af62aa8009dbc13577eff894b8e.jpg"
+                "https://www.svtstatic.se/image/medium/480/7166209/1458037873"
             ),
             "Humor": (
                 "humor",
-                "https://www.svtstatic.se/play/play5/images/categories/posters/humor-abc329317eedf789d2cca76151213188.jpg"
+                "https://www.svtstatic.se/image/medium/480/7166065/1458037609"
             ),
             "Livsstil": (
                 "livsstil",
-                "https://www.svtstatic.se/play/play5/images/categories/posters/livsstil-2d9cd77d86c086fb8908ce4905b488b7.jpg"
+                "https://www.svtstatic.se/image/medium/480/7166101/1458037687"
             ),
             "Underhållning": (
                 "underhallning",
-                "https://www.svtstatic.se/play/play5/images/categories/posters/underhallning-a60da5125e715d74500a200bd4416841.jpg"
+                "https://www.svtstatic.se/image/medium/480/7166041/1458037574"
             ),
             "Kultur": (
                 "kultur",
-                "https://www.svtstatic.se/play/play5/images/categories/posters/kultur-93dca50ed1d6f25d316ac1621393851a.jpg"
+                "https://www.svtstatic.se/image/medium/480/7166119/1458037729"
             ),
             "Samhälle & Fakta": (
                 "samhalle-och-fakta",
-                "https://www.svtstatic.se/play/play5/images/categories/posters/samhalle-och-fakta-3750657f72529a572f3698e01452f348.jpg"
+                "https://www.svtstatic.se/image/medium/480/7166173/1458037837"
             ),
-            "Film": (
-                "film",
+            "Filmer": (
+                "filmer",
                 "https://www.svtstatic.se/image/medium/480/20888292/1548755428"
             ),
             "Barn": (
                 "barn",
-                "https://www.svtstatic.se/play/play5/images/categories/posters/barn-c17302a6f7a9a458e0043b58bbe8ab79.jpg"
+                "https://www.svtstatic.se/image/medium/480/22702778/1560934663"
             ),
             "Nyheter": (
                 "nyheter",
-                "https://www.svtstatic.se/play/play6/images/categories/posters/nyheter.e67ff1b5770152af4690ad188546f9e9.jpg"
+                "https://www.svtstatic.se/image/medium/480/7166089/1458037651"
             ),
             "Sport": (
                 "sport",
-                "https://www.svtstatic.se/play/play6/images/categories/posters/sport.98b65f6627e4addbc4177542035ea504.jpg"
+                "https://www.svtstatic.se/image/medium/480/7166143/1458037766"
+            ),
+            "Serier": (
+                "serier",
+                "https://www.svtstatic.se/image/medium/480/20888260/1548755402"
+            ),
+            "Reality": (
+                "reality",
+                "https://www.svtstatic.se/image/medium/480/21866138/1555059667"
+            ),
+            "Ung": (
+                "ung-i-play",
+                "https://www.svtstatic.se/image/medium/480/20888300/1548755484"
+            ),
+            "Musik": (
+                "musik",
+                "https://www.svtstatic.se/image/medium/480/19417384/1537791920"
             )
         }
 
@@ -240,6 +267,7 @@ class Channel(chn_class.Channel):
             cat_item = MediaItem(title, "#genre_item")
             cat_item.complete = True
             cat_item.thumb = thumb or self.noImage
+            cat_item.fanart = thumb or self.fanart
             cat_item.dontGroup = True
             cat_item.metaData[self.__genre_id] = category_id
             new_item.items.append(cat_item)
@@ -308,7 +336,12 @@ class Channel(chn_class.Channel):
         item.metaData["slug"] = url
         item.icon = self.icon
         item.isGeoLocked = result_set.get('restrictions', {}).get('onlyAvailableInSweden', False)
-        item.description = result_set.get('description')
+        item.description = result_set.get('longDescription')
+
+        image_info = result_set.get("image")
+        if image_info:
+            item.thumb = self.__get_thumb(image_info, width=720)
+            item.fanart = self.__get_thumb(image_info)
         return item
 
     def create_api_tvshow_type(self, result_set):
@@ -362,8 +395,8 @@ class Channel(chn_class.Channel):
         item = MediaItem(result_set["name"], self.parentItem.url)
         item.metaData[self.__folder_id] = result_set["id"]
         item.metaData.update(self.parentItem.metaData)
-        item.thumb = self.__get_thumb(result_set["thumb_data"], width=720)
-        item.fanart = self.__get_thumb(result_set["thumb_data"])
+        item.thumb = self.__get_thumb(result_set[self.__parent_images], width=720)
+        item.fanart = self.__get_thumb(result_set[self.__parent_images])
         return item
 
     def create_api_teaser_type(self, result_set):
@@ -390,11 +423,29 @@ class Channel(chn_class.Channel):
 
         title = result_set.get("heading")
         sub_heading = result_set.get("subHeading")
-        if bool(sub_heading):
-            result_set["item"]["name"] = "{} - {}".format(title, sub_heading)
-        else:
-            result_set["item"]["name"] = title
+        new_result_set = result_set["item"]
 
+        new_result_set["name"] = title
+        # We need to get rid of some subheadings for which we already have information elsewhere.
+        if bool(sub_heading):
+            new_result_set["name"] = "{} - {}".format(title, sub_heading)
+            # See if we need to filter out some of the headings? Defaults to True
+            if self.parentItem.metaData.get(self.__filter_subheading, True) and (
+                    "Idag" in sub_heading
+                    or "Ikväll" in sub_heading
+                    or "Igår" in sub_heading
+                    or sub_heading.endswith(" sek")
+                    or sub_heading.endswith(" min")
+                    or sub_heading.endswith(" tim")):
+                Logger.trace("Ignoring subheading: %s", sub_heading)
+                new_result_set["name"] = title
+
+        # Transfer some items
+        new_result_set[self.__parent_images] = result_set.get(self.__parent_images)
+        if "images" in result_set:
+            images = result_set.get("images", {}).get("wide")
+            if images:
+                new_result_set["image"] = images
         item = self.create_api_typed_item(result_set["item"])
         return item
 
@@ -438,10 +489,28 @@ class Channel(chn_class.Channel):
         item.type = "video"
         item.set_info_label("duration", int(result_set.get("duration", 0)))
         item.isGeoLocked = result_set.get("restrictions", {}).get("onlyAvailableInSweden", False)
-        item.fanart = self.parentItem.fanart
+
+        parent_images = result_set.get(self.__parent_images)
+        if bool(parent_images):
+            item.fanart = self.__get_thumb(parent_images)
 
         if "image" in result_set:
             item.thumb = self.__get_thumb(result_set["image"], width=720)
+            if not bool(item.fanart):
+                item.fanart = self.__get_thumb(result_set["image"])
+
+        valid_from = result_set.get("validFrom", None)
+        if bool(valid_from) and valid_from.endswith("Z"):
+            # We need to change the timezone
+            valid_from_date = DateHelper.get_datetime_from_string(valid_from[:-1], time_zone="UTC")
+            valid_from_date = valid_from_date.astimezone(self.__timezone)
+            item.set_date(valid_from_date.year, valid_from_date.month, valid_from_date.day,
+                          valid_from_date.hour, valid_from_date.minute, valid_from_date.second)
+        elif bool(valid_from):
+            # Remove the Timezone information
+            valid_from = valid_from.split("+")[0]
+            valid_from_date = DateHelper.get_date_from_string(valid_from, "%Y-%m-%dT%H:%M:%S")
+            item.set_date(*valid_from_date[0:6])
 
         valid_to = result_set.get("validTo", None)
         if valid_to:
@@ -469,6 +538,22 @@ class Channel(chn_class.Channel):
                 minute = start_time.tm_min
 
             item.name = "{:02}:{:02} - {}".format(hour, minute, item.name)
+
+        season_info = result_set.get("positionInSeason")
+        if bool(season_info):
+            Logger.debug("Found season info: %s", season_info)
+            try:
+                episode_info = season_info.split(" ")
+                if not len(episode_info) == 5:
+                    return item
+
+                item.set_season_info(episode_info[1], episode_info[4])
+                item.name = "s{:02}e{:02} - {}".format(
+                    int(episode_info[1]),
+                    int(episode_info[4]),
+                    result_set.get("nameRaw", item.name) or item.name)
+            except:
+                Logger.warning("Failed to set season info: %s", season_info, exc_info=True)
 
         return item
 
@@ -503,7 +588,8 @@ class Channel(chn_class.Channel):
 
         image_info = result_set.get("image")
         if image_info:
-            item.thumb = self.__get_thumb(image_info)
+            item.thumb = self.__get_thumb(image_info, width=720)
+            item.fanart = self.__get_thumb(image_info)
         item.isGeoLocked = result_set['restrictions']['onlyAvailableInSweden']
         return item
 
@@ -602,20 +688,27 @@ class Channel(chn_class.Channel):
         data = UriHandler.open(url, proxy=self.proxy)
         json_data = JsonHelper(data)
 
+        # Get the parent thumb info
+        parent_item_thumb_data = json_data.get_value("data", "listablesBySlug", 0, "image")
+
         possible_folders = json_data.get_value("data", "listablesBySlug", 0, "associatedContent")
         possible_folders = [p for p in possible_folders if p["id"] != "upcoming"]
+
         if self.__folder_id in self.parentItem.metaData:
             folder_id = self.parentItem.metaData[self.__folder_id]
             Logger.debug("Retrieving folder with id='%s'", folder_id)
             json_data.json = {"videos": [f for f in possible_folders if f["id"] == folder_id][0]["items"]}
-            return json_data, items
 
-        thumb_data = json_data.get_value("data", "listablesBySlug", 0, "image")
-        if len(possible_folders) == 1:
+        elif len(possible_folders) == 1:
             json_data.json = {"videos": possible_folders[0]["items"]}
+
         else:
             json_data.json = {"folders": possible_folders}
-            [folder.update({"thumb_data": thumb_data}) for folder in json_data.json["folders"]]
+
+        if "folders" in json_data.json:
+            [folder.update({self.__parent_images: parent_item_thumb_data}) for folder in json_data.json["folders"]]
+        if "videos" in json_data.json:
+            [video.update({self.__parent_images: parent_item_thumb_data}) for video in json_data.json["videos"]]
 
         return json_data, items
 
@@ -956,7 +1049,8 @@ class Channel(chn_class.Channel):
 
                 part.Subtitle = subtitlehelper.SubtitleHelper.download_subtitle(sub_url,
                                                                                 format="srt",
-                                                                                proxy=self.proxy)
+                                                                                proxy=self.proxy,
+                                                                                replace={"&amp;": "&"})
                 # stop when finding one
                 break
 

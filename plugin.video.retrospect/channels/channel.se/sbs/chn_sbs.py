@@ -502,6 +502,8 @@ class Channel(chn_class.Channel):
 
         if "videoDuration" in video_info:
             item.set_info_label(MediaItem.LabelDuration, video_info["videoDuration"] / 1000)
+
+        item.fanart = self.parentItem.fanart
         return item
 
     def update_channel_item(self, item):

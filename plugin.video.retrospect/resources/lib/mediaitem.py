@@ -671,7 +671,7 @@ class MediaItem:
             name = "%s %s" % (LanguageHelper.get_localized_string(LanguageHelper.Page), name)
             Logger.debug("MediaItem.__get_title :: Adding Page Prefix")
 
-        elif self.__date != '' and not self.is_playable():
+        elif self.__date != '' and not self.is_playable() and not AddonSettings.is_min_version(18):
             # not playable items should always show date
             name = "%s [COLOR=dimgray](%s)[/COLOR]" % (name, self.__date)
 

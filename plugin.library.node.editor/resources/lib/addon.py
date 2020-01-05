@@ -70,18 +70,19 @@ class Main:
             # We're performing a specific action
             if self.PARAMS[ "type" ] == "delete":
                 message = LANGUAGE( 30401 )
+                actionpath = unquote(self.PARAMS["actionPath"])
                 if self.PARAMS[ "actionPath" ] == targetDir:
                     # Ask the user is they want to reset all nodes
                     message = LANGUAGE( 30402 )
                 result = xbmcgui.Dialog().yesno(ADDONNAME, message )
                 if result:
-                    if self.PARAMS[ "actionPath" ].endswith( ".xml" ):
+                    if actionpath.endswith( ".xml" ):
                         # Delete single file
-                        xbmcvfs.delete( self.PARAMS[ "actionPath" ] )
+                        xbmcvfs.delete(actionpath)
                     else:
                         # Delete folder
-                        self.RULE.deleteAllNodeRules( self.PARAMS[ "actionPath" ] )
-                        shutil.rmtree( self.PARAMS[ "actionPath" ] )
+                        self.RULE.deleteAllNodeRules(actionpath)
+                        shutil.rmtree(actionpath)
                 else:
                     return
             elif self.PARAMS[ "type" ] == "deletenode":
@@ -185,7 +186,7 @@ class Main:
                     root = tree.getroot()
                     subtree = xmltree.SubElement( root, "label" ).text = newNode
                     # Ask user if they want to import defaults
-                    if ltype.startswith( "video" ):
+                    if self.ltype.startswith( "video" ):
                         defaultNames = [ xbmc.getLocalizedString( 231 ), xbmc.getLocalizedString( 342 ), xbmc.getLocalizedString( 20343 ), xbmc.getLocalizedString( 20389 ) ]
                         defaultValues = [ "", "movies", "tvshows", "musicvideos" ]
                         selected = xbmcgui.Dialog().select( LANGUAGE( 30304 ), defaultNames )
@@ -226,7 +227,7 @@ class Main:
                 self.RULE.editOperator( self.PARAMS[ "actionPath" ], self.PARAMS[ "rule" ], self.PARAMS[ "group" ], self.PARAMS[ "default" ] )
             elif self.PARAMS[ "type" ] == "editValue":
                 # Editing the value of a rule
-                self.RULE.editValue( self.PARAMS[ "actionPath" ], self.PARAMS[ "rule" ] )
+                self.RULE.editValue(self.PARAMS["actionPath"], self.PARAMS[ "rule" ] )
             elif self.PARAMS[ "type" ] == "browseValue":
                 # Browse for the new value of a rule
                 self.RULE.browse( self.PARAMS[ "actionPath" ], self.PARAMS[ "rule" ], self.PARAMS[ "match" ], self.PARAMS[ "content" ] )
@@ -355,15 +356,15 @@ class Main:
                         # 2 = operator
                         # 3 = value (optional)
                         if len(rule) == 3:
-                            translated = RULE.translateRule( [ rule[ 1 ], rule[ 2 ] ] )
+                            translated = self.RULE.translateRule( [ rule[ 1 ], rule[ 2 ] ] )
                         else:
-                            translated = RULE.translateRule( [ rule[ 1 ], rule[ 2 ], rule[ 3 ] ] )
+                            translated = self.RULE.translateRule( [ rule[ 1 ], rule[ 2 ], rule[ 3 ] ] )
                         if len(translated) == 2:
                             listitem = xbmcgui.ListItem( label="%s: %s %s" % ( LANGUAGE(30205), translated[ 0 ][ 0 ], translated[ 1 ][ 0 ] ) )
                         else:
                             listitem = xbmcgui.ListItem( label="%s: %s %s %s" % ( LANGUAGE(30205), translated[ 0 ][ 0 ], translated[ 1 ][ 0 ], translated[ 2 ][ 1 ] ) )
-                        commands.append( ( LANGUAGE( 30100 ), "RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deleteRule&actionPath=" % ltype + os.path.join( self.PATH, "index.xml" ) + "&rule=" + str( rulecount ) + ")" ) )
-                        action = "plugin://plugin.library.node.editor?ltype=%s&type=rule&actionPath=" % ltype + os.path.join( self.PATH, "index.xml" ) + "&rule=" + str( rulecount )
+                        commands.append( ( LANGUAGE( 30100 ), "RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deleteRule&actionPath=" % self.ltype + os.path.join( self.PATH, "index.xml" ) + "&rule=" + str( rulecount ) + ")" ) )
+                        action = "plugin://plugin.library.node.editor?ltype=%s&type=rule&actionPath=" % self.ltype + os.path.join( self.PATH, "index.xml" ) + "&rule=" + str( rulecount )
                         rulecount += 1
                     listitem.addContextMenuItems( commands, replaceItems = True )
                     if rule[ 0 ] == "rule" or rule[ 0 ] == "order":

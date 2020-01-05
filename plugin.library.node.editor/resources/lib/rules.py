@@ -167,9 +167,10 @@ class RuleFunctions():
         # This function is the entry point for editing the value of a rule
         # Because we can't always pass the current value through the uri, we first need
         # to retrieve it, and the operator data type
+        actionPath = unquote(actionPath)
         try:
             if actionPath.endswith( "index.xml" ):
-                ( filePath, fileName ) = os.path.split( actionPath )
+                ( filePath, fileName ) = os.path.split(unquote(actionPath))
                 # Load the rules file
                 if self.ltype.startswith('video'):
                     tree = xmltree.parse( os.path.join( DATAPATH, "videorules.xml" ) )
@@ -239,7 +240,7 @@ class RuleFunctions():
                 type = xbmcgui.INPUT_ALPHANUM
             returnVal = xbmcgui.Dialog().input( LANGUAGE( 30307 ), curValue, type=type )
             if returnVal != "":
-                self.writeUpdatedRule( actionPath, ruleNum, value=returnVal if PY3 else returnVal.decode( "utf-8" ) )
+                self.writeUpdatedRule( unquote(actionPath), ruleNum, value=returnVal if PY3 else returnVal.decode( "utf-8" ) )
         except:
             print_exc()
 
@@ -249,7 +250,7 @@ class RuleFunctions():
             # This is a parent node rule, so call the relevant function
             #( filePath, fileName ) = os.path.split( actionPath )
             #self.editNodeRule( filePath, originalRule, translated )
-            self.editNodeRule( actionPath, ruleNum, match, operator, value )
+            self.editNodeRule( unquote(actionPath), ruleNum, match, operator, value )
             return
         try:
             # Load the xml file
@@ -346,10 +347,10 @@ class RuleFunctions():
             # This is a parent node rule, so call the relevant function
             #( filePath, fileName ) = os.path.split( actionPath )
             #self.deleteNodeRule( filePath, originalRule )
-            self.deleteNodeRule( actionPath, ruleNum )
+            self.deleteNodeRule( unquote(actionPath), ruleNum )
         try:
             # Load the xml file
-            tree = xmltree.parse( actionPath )
+            tree = xmltree.parse( unquote(actionPath) )
             root = tree.getroot()
             # Get all the rules
             ruleCount = 0
@@ -383,7 +384,7 @@ class RuleFunctions():
         # This function will load and display a parent node rule
         # (and create one, if the ruleNum specified doesn't exist)
         # Split the actionPath, to make things easier
-        ( filePath, fileName ) = os.path.split( actionPath )
+        ( filePath, fileName ) = os.path.split( unquote(actionPath) )
         try:
             # Load the rules file
             if self.ltype.startswith('video'):
@@ -450,7 +451,7 @@ class RuleFunctions():
     def newNodeRule( self, actionPath, ruleNum ):
         # This function creates a new node rule, then re-calls the displayNodeRule function
         # Split the actionPath, to make things easier
-        ( filePath, fileName ) = os.path.split( actionPath )
+        ( filePath, fileName ) = os.path.split( unquote(actionPath) )
         # Open the rules file if it exists, else create it
         if self.ltype.startswith('video'):
             rulesfile = 'videorules.xml'
@@ -616,7 +617,7 @@ class RuleFunctions():
     def deleteNodeRule( self, actionPath, ruleNum ):
         ( filePath, fileName ) = os.path.split( actionPath )
         # Delete the rule from the rules file
-        if ltype.startswith('video'):
+        if self.ltype.startswith('video'):
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
@@ -866,7 +867,7 @@ class RuleFunctions():
                 matches = {}
                 for elem in elems:
                     if elem.attrib.get( "name" ) == match:
-                        if ltype.startswith('video'):
+                        if self.ltype.startswith('video'):
                             matches["movies"] = elem.find( "movies" )
                             matches["tvshows"] = elem.find( "tvshows" )
                             matches["episodes"] = elem.find( "episodes" )
@@ -952,7 +953,6 @@ class RuleFunctions():
             xbmcvfs.delete( os.path.join( xbmc.translatePath( "special://profile" if PY3 else "special://profile".decode('utf-8') ), "library", self.ltype, "plugin.library.node.editor", "temp.xml" ) )
         except:
             print_exc()
-
         self.writeUpdatedRule( actionPath, ruleNum, value = returnVal )
 
     def niceMatchName( self, match ):

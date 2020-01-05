@@ -57,7 +57,6 @@ class Plugin(ParameterParser):
         self.channelFile = ""
         self.channelCode = None
 
-        self.contentType = "episodes"
         self.methodContainer = dict()   # : storage for the inspect.getmembers(channel) method. Improves performance
 
         # are we in session?
@@ -342,7 +341,7 @@ class Plugin(ParameterParser):
             xbmcplugin.addSortMethod(handle=self.handle, sortMethod=xbmcplugin.SORT_METHOD_UNSORTED)
             xbmcplugin.addSortMethod(handle=self.handle, sortMethod=xbmcplugin.SORT_METHOD_TITLE)
             xbmcplugin.addSortMethod(handle=self.handle, sortMethod=xbmcplugin.SORT_METHOD_GENRE)
-            xbmcplugin.setContent(handle=self.handle, content=self.contentType)
+            xbmcplugin.setContent(handle=self.handle, content="tvshows")
             xbmcplugin.endOfDirectory(self.handle, ok)
         except:
             xbmcplugin.endOfDirectory(self.handle, False)
@@ -452,8 +451,8 @@ class Plugin(ParameterParser):
             self.__add_sort_method_to_handle(self.handle, media_items)
             self.__add_breadcrumb(self.handle, self.channelObject, selected_item)
 
-            # set the content
-            xbmcplugin.setContent(handle=self.handle, content=self.contentType)
+            # set the content. It needs to be "episodes" to make the MediaItem.set_season_info() work
+            xbmcplugin.setContent(handle=self.handle, content="episodes")
 
             xbmcplugin.endOfDirectory(self.handle, ok)
         except Exception:

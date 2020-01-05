@@ -156,6 +156,7 @@ class Channel(chn_class.Channel):
         self.episodeLabel = LanguageHelper.get_localized_string(LanguageHelper.EpisodeId)
         self.seasonLabel = LanguageHelper.get_localized_string(LanguageHelper.SeasonId)
         self.__categories = {}
+        self.__expires_text = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
 
         # ===============================================================================================================
         # Test Cases
@@ -354,7 +355,8 @@ class Channel(chn_class.Channel):
         if clip_url is not None:
             clip_title = LanguageHelper.get_localized_string(LanguageHelper.Clips)
             clip_item = MediaItem("\a.: %s :." % (clip_title,), clip_url)
-            clip_item.thumb = self.noImage
+            clip_item.thumb = self.parentItem.thumb
+            clip_item.fanart = self.parentItem.fanart
             items.append(clip_item)
 
         Logger.debug("Pre-Processing finished")
@@ -487,21 +489,20 @@ class Channel(chn_class.Channel):
 
         elif result_set["format_position"]["is_episodic"]:  # and resultSet["format_position"]["episode"] != "0":
             # make sure we show the episodes and seaso
-            # season = int(resultSet["format_position"]["season"])
+            season = result_set["format_position"].get("season", 0)
             episode = int(result_set["format_position"]["episode"] or "0")
-            webisode = result_set.get("webisode", False)
+
+            # Was it a webisode?
+            # webisode = result_set.get("webisode", False)
 
             # if the name had the episode in it, translate it
-            if episode > 0 and not webisode:
+            if episode > 0 and season >0:  # and not webisode:
                 description = "%s\n\n%s" % (title, description)
-                title = "%s - %s %s %s %s" % (result_set["format_title"],
-                                              self.seasonLabel,
-                                              result_set["format_position"]["season"],
-                                              self.episodeLabel,
-                                              result_set["format_position"]["episode"])
+                title = "{0} - s{1:02d}e{2:02d}".format(result_set["format_title"],
+                                                        season,
+                                                        episode)
             else:
-                Logger.debug("Found episode number '0' for '%s', "
-                             "using name instead of episode number", title)
+                Logger.debug("Found episode '0' or websido '%s': using name instead of episode number", title)
 
         url = result_set["_links"]["stream"]["href"]
         item = MediaItem(title, url)
@@ -538,6 +539,8 @@ class Channel(chn_class.Channel):
         item.isGeoLocked = geo_blocked
         item.isDrmProtected = drm_locked
 
+        item.thumb = self.parentItem.thumb
+        item.fanart = self.parentItem.fanart
         thumb_data = result_set['_links'].get('image', None)
         if thumb_data is not None:
             # Older version
@@ -545,6 +548,10 @@ class Channel(chn_class.Channel):
             item.thumb = self.__get_thumb_image(thumb_data['href'])
 
         item.description = description
+        # unpublish_at=2099-12-31T00:00:00+01:00
+        expire_date = result_set["unpublish_at"]
+        if bool(expire_date):
+            self.__set_expire_time(expire_date, item)
 
         srt = result_set.get("sami_path")
         if not srt:
@@ -553,6 +560,8 @@ class Channel(chn_class.Channel):
             Logger.debug("Storing SRT/WebVTT path: %s", srt)
             part = item.create_new_empty_media_part()
             part.Subtitle = srt
+
+        item.set_info_label("duration", int(result_set.get("duration", 0)))
         return item
 
     def update_video_item(self, item):
@@ -748,9 +757,13 @@ class Channel(chn_class.Channel):
             url = "http://playapi.mtgx.tv/v3/videos?format=%(guid)s&order=-airdate&type=program" % result_set
         item = MediaItem(result_set['title'], url)
         item.icon = self.icon
-        item.thumb = self.__get_thumb_image(result_set.get("image") or self.noImage)
-        # No fanart for now
-        # item.fanart = self.__get_thumb_image(resultSet.get("image") or self.fanart, fanartSize=True)
+        item.thumb = self.noImage
+        if "images" in result_set and "landscape" in result_set["images"]:
+            image_url = result_set["images"]["landscape"]["href"]
+            item.thumb = self.__get_thumb_image(image_url)
+            item.fanart = self.__get_thumb_image(image_url, True)
+        elif "image" in result_set:
+            item.thumb = self.__get_thumb_image(result_set["image"])
 
         item.isGeoLocked = result_set.get('onlyAvailableInSweden', False)
         return item
@@ -772,3 +785,10 @@ class Channel(chn_class.Channel):
         if fanart_size:
             return url.replace("{size}", "1280x720")
         return url.replace("{size}", "230x150")
+
+    def __set_expire_time(self, expire_date, item):
+        expire_date = expire_date.split("+")[0].replace("T", " ")
+        year = expire_date.split("-")[0]
+        if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
+            item.description = \
+                "{}\n\n{}: {}".format(item.description or "", self.__expires_text, expire_date)

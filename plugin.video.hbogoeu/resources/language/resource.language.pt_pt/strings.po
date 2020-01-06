@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: plugin.video.hbogoeu\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-12-26 11:02+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2020-01-04 21:37+0100\n"
+"Last-Translator: arvvoid\n"
 "Language-Team: arvvoid\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -21,17 +21,45 @@ msgctxt "#30000"
 msgid "ENG"
 msgstr "POR"
 
+#, fuzzy
 msgctxt "#30001"
 msgid "ERROR"
-msgstr ""
+msgstr "ERRO"
 
+#, fuzzy
 msgctxt "#30002"
 msgid "Setup failed"
-msgstr ""
+msgstr "A configuração falhou"
 
+#, fuzzy
 msgctxt "#30003"
 msgid "Unsupported region"
-msgstr ""
+msgstr "Região sem suporte"
+
+#, fuzzy
+msgctxt "#30004"
+msgid "An unexpected error has occurred."
+msgstr "Um erro inesperado ocorreu."
+
+#, fuzzy
+msgctxt "#30005"
+msgid "Error getting content from Hbo go"
+msgstr "Erro recebendo conteúdo da Hbo ir"
+
+#, fuzzy
+msgctxt "#30006"
+msgid "Error sending data to Hbo go"
+msgstr "Erro de envio de dados para hbo ir"
+
+#, fuzzy
+msgctxt "#30007"
+msgid "Error deleting data from Hbo go"
+msgstr "Erro de exclusão de dados da Hbo ir"
+
+#, fuzzy
+msgctxt "#30008"
+msgid "Communication error, returned STATUS: "
+msgstr "Erro de comunicação, status retornado: "
 
 #, fuzzy
 msgctxt "#30100"

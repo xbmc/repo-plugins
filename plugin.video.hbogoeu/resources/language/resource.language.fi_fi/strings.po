@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: plugin.video.hbogoeu\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-12-26 11:00+0100\n"
+"PO-Revision-Date: 2020-01-04 21:30+0100\n"
 "Last-Translator: arvvoid\n"
 "Language-Team: arvvoid\n"
 "Language: fi_FI\n"
@@ -23,15 +23,42 @@ msgstr "fi_hbon"
 
 msgctxt "#30001"
 msgid "ERROR"
-msgstr ""
+msgstr "VIRHE"
 
+#, fuzzy
 msgctxt "#30002"
 msgid "Setup failed"
-msgstr ""
+msgstr "Asennus epäonnistui"
 
+#, fuzzy
 msgctxt "#30003"
 msgid "Unsupported region"
-msgstr ""
+msgstr "Aluetta ei tueta"
+
+#, fuzzy
+msgctxt "#30004"
+msgid "An unexpected error has occurred."
+msgstr "Ilmeni odottamaton virhe."
+
+#, fuzzy
+msgctxt "#30005"
+msgid "Error getting content from Hbo go"
+msgstr "Virhe noudettaessa sisältöä HBO GO-palvelusta"
+
+#, fuzzy
+msgctxt "#30006"
+msgid "Error sending data to Hbo go"
+msgstr "Virhe lähetettäessä tietoja HBO GO-tieto lähteeseen"
+
+#, fuzzy
+msgctxt "#30007"
+msgid "Error deleting data from Hbo go"
+msgstr "Virhe poistettaessa tietoja HBO GO-palvelusta"
+
+#, fuzzy
+msgctxt "#30008"
+msgid "Communication error, returned STATUS: "
+msgstr "Tiedon siirto virhe, palautettu tila:"
 
 msgctxt "#30100"
 msgid "Web registration on "

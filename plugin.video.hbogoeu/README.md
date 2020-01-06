@@ -1,7 +1,7 @@
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/arvvoid/plugin.video.hbogoeu)](https://github.com/arvvoid/plugin.video.hbogoeu#downloadinstall-instructions) 
 [![Python Version](https://img.shields.io/badge/python-2.7%20%7C%203.7-blue)](https://kodi.tv/article/attention-addon-developers-migration-python-3)
 [![Kodi Version](https://img.shields.io/badge/kodi-18%20or%20%2B-blue)](https://kodi.tv/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9168cc04d56d480ea3987db569d89f44)](https://www.codacy.com/manual/arvvoid/plugin.video.hbogoeu?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=arvvoid/plugin.video.hbogoeu&amp;utm_campaign=Badge_Grade) [![GitHub](https://img.shields.io/github/license/arvvoid/plugin.video.hbogoeu?style=flat)](https://opensource.org/licenses/gpl-2.0.php) [![Contributors](https://img.shields.io/github/contributors/arvvoid/plugin.video.hbogoeu.svg)](https://github.com/arvvoid/plugin.video.hbogoeu/graphs/contributors) [![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors-) [![HitCount](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu.svg)](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9168cc04d56d480ea3987db569d89f44)](https://www.codacy.com/manual/arvvoid/plugin.video.hbogoeu?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=arvvoid/plugin.video.hbogoeu&amp;utm_campaign=Badge_Grade) [![GitHub](https://img.shields.io/github/license/arvvoid/plugin.video.hbogoeu?style=flat)](https://opensource.org/licenses/gpl-2.0.php) [![Contributors](https://img.shields.io/github/contributors/arvvoid/plugin.video.hbogoeu.svg)](https://github.com/arvvoid/plugin.video.hbogoeu/graphs/contributors) [![All Contributors](https://img.shields.io/badge/all_contributors-29-orange.svg?style=flat-square)](#contributors-) [![HitCount](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu.svg)](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu)
 
 
 # Disclaimer
@@ -148,6 +148,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/durip"><img src="https://avatars3.githubusercontent.com/u/13102223?v=4" width="100px;" alt=""/><br /><sub><b>durip</b></sub></a><br /><a href="#userTesting-durip" title="User Testing">📓</a></td>
     <td align="center"><a href="https://github.com/splichy"><img src="https://avatars3.githubusercontent.com/u/16658908?v=4" width="100px;" alt=""/><br /><sub><b>splichy</b></sub></a><br /><a href="#ideas-splichy" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/arvvoid/plugin.video.hbogoeu/commits?author=splichy" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/boblo1"><img src="https://avatars1.githubusercontent.com/u/58788554?v=4" width="100px;" alt=""/><br /><sub><b>boblo1</b></sub></a><br /><a href="#translation-boblo1" title="Translation">🌍</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://marianfocsa.info"><img src="https://avatars3.githubusercontent.com/u/17079638?v=4" width="100px;" alt=""/><br /><sub><b>Marian FX</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/commits?author=marianfx" title="Code">💻</a></td>
   </tr>
 </table>
 

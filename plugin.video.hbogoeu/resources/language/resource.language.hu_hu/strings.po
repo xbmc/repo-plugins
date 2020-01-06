@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: hbogo kodi addon\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-12-26 11:01+0100\n"
-"Last-Translator: Ajnasz <ajnasz@ajnasz.hu>\n"
+"PO-Revision-Date: 2020-01-04 21:32+0100\n"
+"Last-Translator: arvvoid\n"
 "Language-Team: \n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
@@ -19,15 +19,42 @@ msgstr "HUN"
 
 msgctxt "#30001"
 msgid "ERROR"
-msgstr ""
+msgstr "HIBA"
 
+#, fuzzy
 msgctxt "#30002"
 msgid "Setup failed"
-msgstr ""
+msgstr "A telepítés nem sikerült."
 
+#, fuzzy
 msgctxt "#30003"
 msgid "Unsupported region"
-msgstr ""
+msgstr "Nem támogatott terület"
+
+#, fuzzy
+msgctxt "#30004"
+msgid "An unexpected error has occurred."
+msgstr "Váratlan hiba történt."
+
+#, fuzzy
+msgctxt "#30005"
+msgid "Error getting content from Hbo go"
+msgstr "Hiba az HBO-ból érkező tartalom beolvasása közben"
+
+#, fuzzy
+msgctxt "#30006"
+msgid "Error sending data to Hbo go"
+msgstr "Hiba a HBO-nak történő adatküldéskor"
+
+#, fuzzy
+msgctxt "#30007"
+msgid "Error deleting data from Hbo go"
+msgstr "Hiba az adatok törlése az HBO-ból megy"
+
+#, fuzzy
+msgctxt "#30008"
+msgid "Communication error, returned STATUS: "
+msgstr "Kommunikációs hiba, visszaadott állapot: "
 
 msgctxt "#30100"
 msgid "Web registration on "

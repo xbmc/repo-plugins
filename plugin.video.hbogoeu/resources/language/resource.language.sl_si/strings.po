@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: plugin.video.hbogoeu\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-12-26 11:03+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2020-01-04 21:44+0100\n"
+"Last-Translator: arvvoid\n"
 "Language-Team: arvvoid\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
@@ -22,22 +22,49 @@ msgctxt "#30000"
 msgid "ENG"
 msgstr "SLV"
 
+#, fuzzy
 msgctxt "#30001"
 msgid "ERROR"
-msgstr ""
-
-msgctxt "#30002"
-msgid "Setup failed"
-msgstr ""
-
-msgctxt "#30003"
-msgid "Unsupported region"
-msgstr ""
+msgstr "NAPAKA"
 
 #, fuzzy
+msgctxt "#30002"
+msgid "Setup failed"
+msgstr "Namestitveni program ni uspel"
+
+#, fuzzy
+msgctxt "#30003"
+msgid "Unsupported region"
+msgstr "Nepodprta regija"
+
+#, fuzzy
+msgctxt "#30004"
+msgid "An unexpected error has occurred."
+msgstr "Prišlo je do nepričakovane napake."
+
+#, fuzzy
+msgctxt "#30005"
+msgid "Error getting content from Hbo go"
+msgstr "Napaka pri pridobivanju vsebine iz HBO go"
+
+#, fuzzy
+msgctxt "#30006"
+msgid "Error sending data to Hbo go"
+msgstr "Napaka pri pošiljanju podatkov v HBO go"
+
+#, fuzzy
+msgctxt "#30007"
+msgid "Error deleting data from Hbo go"
+msgstr "Napaka pri brisanju podatkov iz HBO go"
+
+#, fuzzy
+msgctxt "#30008"
+msgid "Communication error, returned STATUS: "
+msgstr "Sporočilo zmota, vrnjen STALEŽ: "
+
 msgctxt "#30100"
 msgid "Web registration on "
-msgstr "Spletna registracija na"
+msgstr "Spletna registracija na "
 
 #, fuzzy
 msgctxt "#30101"

@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
+"Last-Translator: arvvoid\n"
 "Language-Team: \n"
 "Language: hr_HR\n"
 "MIME-Version: 1.0\n"
@@ -18,15 +18,35 @@ msgstr "HRV"
 
 msgctxt "#30001"
 msgid "ERROR"
-msgstr ""
+msgstr "GREŠKA"
 
 msgctxt "#30002"
 msgid "Setup failed"
-msgstr ""
+msgstr "Postavljanje nije uspjelo, pokušajte ponovno"
 
 msgctxt "#30003"
 msgid "Unsupported region"
-msgstr ""
+msgstr "Područje koje nije podržano"
+
+msgctxt "#30004"
+msgid "An unexpected error has occurred."
+msgstr "Došlo je do neočekivane pogreške."
+
+msgctxt "#30005"
+msgid "Error getting content from Hbo go"
+msgstr "Pogreška uzimajući sadržaj s HBO go"
+
+msgctxt "#30006"
+msgid "Error sending data to Hbo go"
+msgstr "Pogreška slanja podataka na HBO go"
+
+msgctxt "#30007"
+msgid "Error deleting data from Hbo go"
+msgstr "Pogreška pri brisanju podataka s HBO go"
+
+msgctxt "#30008"
+msgid "Communication error, returned STATUS: "
+msgstr "Pogreška u komunikaciji, vraćeni STATUS: "
 
 msgctxt "#30100"
 msgid "Web registration on "

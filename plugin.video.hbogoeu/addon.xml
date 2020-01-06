@@ -1,4 +1,4 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.1.1">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.1.5">
   <requires>
     <import addon="xbmc.python" version="2.26.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
@@ -12,7 +12,7 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en_GB">HBO GO EU</summary>
+    <summary lang="en_GB">Watch HBO® GO EU+Nordic content in Kodi. Valid HBO® account required.</summary>
     <description lang="en_GB">
 Simple, Kodi add-on to access HBO® Go EU content. (This add-on is not officially commissioned/supported by HBO®.)
 
@@ -40,17 +40,12 @@ Important: HBO® Go must be paid for!!! You need a valid HBO® Go account for th
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-v.2.1.1
-- Language files updates
-- Option to ignore Kodi watched status if Get Hbo Go Watched status is enabled
-- Report playstatus back to Hbo Go (EU only)
-- Fix UPC CZ and SK
-- Fix UPC Romania
-- Use Video as media type
-- Start screen customization
-- History (EU only option)
-- Continue watching (only display the category, EU only option)
-- Fix Skylink CZ and SK (contribution ferdabasek)
+v.2.1.5
+- fix Telekom Romania (My Account) login
+- new logo
+- fix some encoding errors on log
+- better error handling on communication errors
+- media info optimizations
     </news>
     <assets>
      <icon>resources/icon.png</icon>

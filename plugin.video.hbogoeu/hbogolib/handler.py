@@ -142,14 +142,23 @@ class HbogoHandler(object):
         try:
             r = requests.post(url, headers=headers, data=data)
             self.log("POST TO HBO RETURNED STATUS: " + str(r.status_code))
+
+            if int(r.status_code) != 200:
+                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008)+str(r.status_code))
+                return False
+
             if response_format == 'json':
                 return r.json()
             elif response_format == 'xml':
                 return ET.fromstring(py2_encode(r.text))
         except requests.RequestException as e:
             self.log("POST TO HBO ERROR: " + repr(e))
-            resp = {"Data": {"ErrorMessage": "POST TO HBO ERROR"}, "ErrorMessage": "POST TO HBO ERROR"}
-            return resp
+            xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30006))
+            return False
+        except Exception:
+            self.log("POST TO HBO UNEXPECTED ERROR: " + traceback.format_exc())
+            xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30004))
+            return False
 
     def get_from_hbogo(self, url, response_format='json'):
         self.log("GET FROM HBO URL: " + url)
@@ -157,14 +166,23 @@ class HbogoHandler(object):
         try:
             r = requests.get(url, headers=self.loggedin_headers)
             self.log("GET FROM HBO STATUS: " + str(r.status_code))
+
+            if int(r.status_code) != 200:
+                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008)+str(r.status_code))
+                return False
+
             if response_format == 'json':
                 return r.json()
             elif response_format == 'xml':
                 return ET.fromstring(py2_encode(r.text))
         except requests.RequestException as e:
             self.log("GET FROM HBO ERROR: " + repr(e))
-            resp = {"Data": {"ErrorMessage": "GET FROM HBO ERROR"}, "ErrorMessage": "GET FROM HBO ERROR"}
-            return resp
+            xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30005))
+            return False
+        except Exception:
+            self.log("POST TO HBO UNEXPECTED ERROR: " + traceback.format_exc())
+            xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30004))
+            return False
 
     def delete_from_hbogo(self, url, response_format='json'):
         self.log("DEL FROM HBO URL: " + url)
@@ -172,14 +190,23 @@ class HbogoHandler(object):
         try:
             r = requests.delete(url, headers=self.loggedin_headers)
             self.log("DEL FROM HBO STATUS: " + str(r.status_code))
+
+            if int(r.status_code) != 200:
+                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008)+str(r.status_code))
+                return False
+
             if response_format == 'json':
                 return r.json()
             elif response_format == 'xml':
                 return ET.fromstring(py2_encode(r.text))
         except requests.RequestException as e:
             self.log("DEL FROM HBO ERROR: " + repr(e))
-            resp = {"Data": {"ErrorMessage": "DELETE FROM HBO ERROR"}, "ErrorMessage": "DELETE FROM HBO ERROR"}
-            return resp
+            xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30007))
+            return False
+        except Exception:
+            self.log("POST TO HBO UNEXPECTED ERROR: " + traceback.format_exc())
+            xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30004))
+            return False
 
     def del_login(self):
         try:
@@ -198,8 +225,6 @@ class HbogoHandler(object):
         self.addon.setSetting('operator_redirect_url', '')
         self.addon.setSetting('individualization', '')
         self.addon.setSetting('customerId', '')
-        self.addon.setSetting('FavoritesGroupId', '')
-        self.addon.setSetting('KidsGroupId', '')
         self.addon.setSetting('username', '')
         self.addon.setSetting('password', '')
         self.log("Removed stored setup")
@@ -332,6 +357,9 @@ class HbogoHandler(object):
         pass
 
     def procContext(self, action_type, content_id, optional=""):
+        pass
+
+    def construct_media_info(self, title):
         pass
 
     def addLink(self, title, mode):

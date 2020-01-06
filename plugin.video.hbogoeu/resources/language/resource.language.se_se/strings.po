@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: plugin.video.hbogoeu\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-12-26 11:03+0100\n"
+"PO-Revision-Date: 2020-01-04 21:40+0100\n"
 "Last-Translator: arvvoid\n"
 "Language-Team: arvvoid\n"
 "Language: se_SE\n"
@@ -21,16 +21,38 @@ msgctxt "#30000"
 msgid "ENG"
 msgstr "sv_hbon"
 
+#, fuzzy
 msgctxt "#30001"
 msgid "ERROR"
-msgstr ""
+msgstr "FEL"
 
+#, fuzzy
 msgctxt "#30002"
 msgid "Setup failed"
-msgstr ""
+msgstr "Konfigurationen misslyckades, försök igen"
 
 msgctxt "#30003"
 msgid "Unsupported region"
+msgstr ""
+
+msgctxt "#30004"
+msgid "An unexpected error has occurred."
+msgstr ""
+
+msgctxt "#30005"
+msgid "Error getting content from Hbo go"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Error sending data to Hbo go"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Error deleting data from Hbo go"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Communication error, returned STATUS: "
 msgstr ""
 
 msgctxt "#30100"

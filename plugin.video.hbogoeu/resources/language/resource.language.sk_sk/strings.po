@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: plugin.video.hbogoeu\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-12-26 11:03+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2020-01-04 21:42+0100\n"
+"Last-Translator: arvvoid\n"
 "Language-Team: arvvoid\n"
 "Language: sk_SK\n"
 "MIME-Version: 1.0\n"
@@ -21,17 +21,45 @@ msgctxt "#30000"
 msgid "ENG"
 msgstr "SLO"
 
+#, fuzzy
 msgctxt "#30001"
 msgid "ERROR"
-msgstr ""
+msgstr "CHYBA"
 
+#, fuzzy
 msgctxt "#30002"
 msgid "Setup failed"
-msgstr ""
+msgstr "Inštalácia zlyhala"
 
+#, fuzzy
 msgctxt "#30003"
 msgid "Unsupported region"
-msgstr ""
+msgstr "Nepodporovaný región"
+
+#, fuzzy
+msgctxt "#30004"
+msgid "An unexpected error has occurred."
+msgstr "Vyskytla sa neočakávaná chyba."
+
+#, fuzzy
+msgctxt "#30005"
+msgid "Error getting content from Hbo go"
+msgstr "Chyba pri získavaní obsahu z HBO Go"
+
+#, fuzzy
+msgctxt "#30006"
+msgid "Error sending data to Hbo go"
+msgstr "Chyba pri odosielaní údajov do HBO Go"
+
+#, fuzzy
+msgctxt "#30007"
+msgid "Error deleting data from Hbo go"
+msgstr "Chyba pri odstraňovaní údajov z HBO Go"
+
+#, fuzzy
+msgctxt "#30008"
+msgid "Communication error, returned STATUS: "
+msgstr "Chyba komunikácie, vrátený stav: "
 
 #, fuzzy
 msgctxt "#30100"

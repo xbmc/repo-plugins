@@ -1,4 +1,4 @@
-#   Copyright (C) 2018 Lunatixz
+#   Copyright (C) 2020 Lunatixz
 #
 #
 # This file is part of PlutoTV.
@@ -21,14 +21,14 @@ import cookielib
 import gzip
 import re
 import StringIO
-import urllib
-import urllib2
 import socket
+
+from six.moves import urllib
 
 #Set Global timeout - Useful for slow connections and Putlocker.
 socket.setdefaulttimeout(30)
 
-class HeadRequest(urllib2.Request):
+class HeadRequest(urllib.request.Request):
     '''A Request class that sends HEAD requests'''
     def get_method(self):
         return 'HEAD'
@@ -141,25 +141,25 @@ class Net:
     def _update_opener(self):
         '''
         Builds and installs a new opener to be used by all future calls to 
-        :func:`urllib2.urlopen`.
+        :func:`urllib.request.urlopen`.
         '''
         if self._http_debug:
-            http = urllib2.HTTPHandler(debuglevel=1)
+            http = urllib.request.HTTPHandler(debuglevel=1)
         else:
-            http = urllib2.HTTPHandler()
+            http = urllib.request.HTTPHandler()
             
         if self._proxy:
-            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self._cj),
-                                          urllib2.ProxyHandler({'http': 
+            opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self._cj),
+                                          urllib.request.ProxyHandler({'http': 
                                                                 self._proxy}), 
-                                          urllib2.HTTPBasicAuthHandler(),
+                                          urllib.request.HTTPBasicAuthHandler(),
                                           http)
         
         else:
-            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self._cj),
-                                          urllib2.HTTPBasicAuthHandler(),
+            opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self._cj),
+                                          urllib.request.HTTPBasicAuthHandler(),
                                           http)
-        urllib2.install_opener(opener)
+        urllib.request.install_opener(opener)
         
 
     def http_GET(self, url, headers={}, compression=True):
@@ -226,7 +226,7 @@ class Net:
         req.add_header('User-Agent', self._user_agent)
         for k, v in headers.items():
             req.add_header(k, v)
-        response = urllib2.urlopen(req)
+        response = urllib.request.urlopen(req)
         return HttpResponse(response)
 
 
@@ -252,16 +252,16 @@ class Net:
             meta-information about the page and the page content.
         '''
         encoding = ''
-        req = urllib2.Request(url)
+        req = urllib.request.Request(url)
         if form_data:
             form_data = urllib.urlencode(form_data)
-            req = urllib2.Request(url, form_data)
+            req = urllib.request.Request(url, form_data)
         req.add_header('User-Agent', self._user_agent)
         for k, v in headers.items():
             req.add_header(k, v)
         if compression:
             req.add_header('Accept-Encoding', 'gzip')
-        response = urllib2.urlopen(req)
+        response = urllib.request.urlopen(req)
         return HttpResponse(response)
 
 
@@ -285,7 +285,7 @@ class HttpResponse:
         '''
         Args:
             response (:class:`mimetools.Message`): The object returned by a call
-            to :func:`urllib2.urlopen`.
+            to :func:`urllib.request.urlopen`.
         '''
         self._response = response
         html = response.read()

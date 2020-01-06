@@ -28,21 +28,42 @@
             <focusedlayout height="0" width="0">
             </focusedlayout>
         </control>
-        <control type="image">
-            <left>1055</left>
-            <top>30</top>  
-            <width>835</width>
-            <height>475</height>
-            <visible>!Player.Playing</visible>
-            <aspectratio scalediffuse="true" align="center" aligny="center">scale</aspectratio>
-            <texture fallback="PlutoTV.jpg" background="true">$INFO[Container(40000).ListItem.Art(clearart)]</texture>
-        </control> 
         <control type="image"> 
             <width>1920</width>
             <height>1080</height>
             <visible>Player.Playing</visible>
             <aspectratio scalediffuse="true" align="center" aligny="center">scale</aspectratio>
             <texture colordiffuse="FF000000">white.png</texture>
+        </control> 
+        <control type="image">
+            <left>1055</left>
+            <top>30</top>  
+            <width>835</width>
+            <height>475</height>
+            <visible>!Player.Playing + !String.IsEmpty(Container(40000).ListItem.Art(fanart)</visible>
+            <aspectratio scalediffuse="true" align="center" aligny="center">scale</aspectratio>
+            <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+            <texture fallback="PlutoTV.jpg" background="true">$INFO[Container(40000).ListItem.Art(fanart)]</texture>
+        </control> 
+        <control type="image">
+            <left>1055</left>
+            <top>30</top>  
+            <width>835</width>
+            <height>475</height>
+            <visible>!Player.Playing + !String.IsEmpty(Container(40000).ListItem.Art(poster)</visible>
+            <animation effect="fade" start="10" end="10" condition="True">Conditional</animation>
+            <aspectratio scalediffuse="true" align="center" aligny="center">scale</aspectratio>
+            <texture fallback="PlutoTV.jpg" background="true">$INFO[Container(40000).ListItem.Art(poster)]</texture>
+        </control>
+        <control type="image">
+            <left>1055</left>
+            <top>30</top>  
+            <width>835</width>
+            <height>475</height>
+            <visible>!Player.Playing + !String.IsEmpty(Container(40000).ListItem.Art(poster)</visible>
+            <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
+            <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+            <texture fallback="PlutoTV.jpg" background="true">$INFO[Container(40000).ListItem.Art(poster)]</texture>
         </control> 
         <control type="videowindow">
             <description>VideoWindow</description>
@@ -59,7 +80,7 @@
             <width>148</width>
             <height>148</height>
             <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
-            <texture fallback="PlutoTV.png" background="true">$INFO[Container(40000).ListItem.Art(thumb)]</texture>
+            <texture fallback="PlutoTV.png" background="true">$INFO[Container(40000).ListItem.Art(clearart)]</texture>
             <animation effect="fade" time="500">VisibleChange</animation> 
             <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
         </control>
@@ -68,11 +89,6 @@
             <height>1080</height>
             <texture>Background.png</texture>
         </control>
-        <!-- <control type="image"> -->
-            <!-- <width>1920</width> -->
-            <!-- <height>1080</height> -->
-            <!-- <texture>test.jpg</texture> -->
-        <!-- </control> -->
         <control type="group">
             <left>35</left>
             <top>2</top>
@@ -107,7 +123,7 @@
             <control type="label">
                 <description>Show Info</description>
                 <left>175</left>
-                <top>275</top>
+                <top>235</top>
                 <width>800</width>
                 <height>250</height>
                 <font>font12</font>
@@ -138,6 +154,14 @@
                 <scrollsuffix> - </scrollsuffix>
                 <label>$INFO[Container(40000).ListItem.genre]</label>
             </control>
+        </control>
+        <control type="image" id="33009">
+            <description>Optional Channel Focus Highlight</description>
+            <width>1585</width>
+            <height>63</height>
+            <visible>true</visible>
+            <animation effect="fade" start="10" end="10" condition="True">Conditional</animation>
+            <texture colordiffuse="FFC0C0C0">white.png</texture>
         </control>
         <control type="group">
             <left>-30</left>
@@ -279,17 +303,13 @@
         <control type="image" id="33012"> 
             <description>Timebar Optional future fade</description>
             <visible>false</visible>
-        </control>
-        <control type="image" id="33009">
-            <description>Optional Channel Focus Highlight</description>
-            <visible>false</visible>
         </control> 
         <control type="image" id="33010">
             <description>Optional Channel Playing Highlight</description>
             <visible>false</visible>
         </control>
         <control type="grouplist">
-            <left>35</left>
+            <left>55</left>
             <top>182</top>
             <itemgap>0</itemgap>
             <orientation>vertical</orientation>
@@ -300,7 +320,7 @@
                 <height>75</height>
                 <label></label>
                 <font>font10</font>
-                <align>right</align>
+                <align>left</align>
                 <aligny>center</aligny>
                 <textcolor>FFFFFFFF</textcolor>
                 <shadowcolor>FF000000</shadowcolor>
@@ -311,7 +331,7 @@
                 <height>75</height>
                 <label></label>
                 <font>font10</font>
-                <align>right</align>
+                <align>left</align>
                 <aligny>center</aligny>
                 <textcolor>FFFFFFFF</textcolor>
                 <shadowcolor>FF000000</shadowcolor>
@@ -322,7 +342,7 @@
                 <height>75</height>
                 <label></label>
                 <font>font10</font>
-                <align>right</align>
+                <align>left</align>
                 <aligny>center</aligny>
                 <textcolor>FFFFFFFF</textcolor>
                 <shadowcolor>FF000000</shadowcolor>
@@ -333,7 +353,7 @@
                 <height>75</height>
                 <label></label>
                 <font>font10</font>
-                <align>right</align>
+                <align>left</align>
                 <aligny>center</aligny>
                 <textcolor>FFFFFFFF</textcolor>
                 <shadowcolor>FF000000</shadowcolor>
@@ -344,7 +364,7 @@
                 <height>75</height>
                 <label></label>
                 <font>font10</font>
-                <align>right</align>
+                <align>left</align>
                 <aligny>center</aligny>
                 <textcolor>FFFFFFFF</textcolor>
                 <shadowcolor>FF000000</shadowcolor>

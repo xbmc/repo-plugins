@@ -37,7 +37,7 @@ msgid "Select User Region"
 msgstr ""
 
 msgctxt "#30006"
-msgid "Welcome Back "
+msgid "Welcome Back, %s"
 msgstr ""
 
 msgctxt "#30007"
@@ -57,7 +57,7 @@ msgid "Sign-In"
 msgstr ""
 
 msgctxt "#30011"
-msgid "Channels"
+msgid "Live"
 msgstr ""
 
 msgctxt "#30012"
@@ -77,5 +77,57 @@ msgid ">> Next"
 msgstr ""
 
 msgctxt "#30016"
-msgid "Featured"   
+msgid "Featured"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Lineup"
+msgstr ""
+
+msgctxt "#30019"
+msgid "&deviceMake=&deviceModel=&sid"
+msgstr ""
+
+msgctxt "#30020"
+msgid "&deviceMake=&deviceModel=&sid=%s&deviceId=%s"
+msgstr ""
+
+msgctxt "#30021"
+msgid "%s%s&deviceVersion=unknown&appVersion=unknown&deviceDNT=0&userId=&advertisingId=&deviceLat=40.6805&deviceLon=-73.8442&app_name=&appName=&buildVersion=&appStoreUrl=&architecture="
+msgstr ""
+
+msgctxt "#30022"
+msgid "sid=%s&deviceId=%s"
+msgstr ""
+
+msgctxt "#30023"
+msgid "On Now"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Channel lineup"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Channel by genre"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Video On Demand"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Open uEPG Guide"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Unable to Connect, Check User Credentials"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Coming Up Next..."
 msgstr ""

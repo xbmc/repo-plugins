@@ -1,3 +1,5 @@
+[B]1.6.3[/B]
+- Deprecating
 [B]1.6.2[/B]
 - Fixing issue #16
 - Code cleanup

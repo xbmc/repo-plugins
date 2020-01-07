@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.deejayIt.reloaded" name="DeeJay reloaded" version="1.6.2" provider-name="Filippo Carra">
+<addon id="plugin.audio.deejayIt.reloaded" name="DeeJay reloaded" version="1.6.3" provider-name="Filippo Carra">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.beautifulsoup" version="3.2.1"/>
@@ -23,5 +23,6 @@
         <website>https://github.com/karrukola/plugin.audio.deejayIt.reloaded</website>
         <email>Filippo dot Carra at gMail dot com</email>
         <source>https://github.com/karrukola/plugin.audio.deejayIt.reloaded.git</source>
+        <broken>Website has substantially changed.</broken>
     </extension>
 </addon>

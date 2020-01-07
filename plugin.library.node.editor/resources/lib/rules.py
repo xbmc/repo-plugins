@@ -523,7 +523,7 @@ class RuleFunctions():
 
     #def editNodeRule( self, actionPath, originalRule, newRule ):
     def editNodeRule( self, actionPath, ruleNum, match, operator, value ):
-        ( filePath, fileName ) = os.path.split( actionPath )
+        ( filePath, fileName ) = os.path.split( unquote(actionPath) )
         # Update the rule in the rules file
         if self.ltype.startswith('video'):
             rulesfile = 'videorules.xml'

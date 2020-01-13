@@ -28,6 +28,10 @@ msgctxt "#32002"
 msgid "Spiel"
 msgstr ""
 
+msgctxt "#32003"
+msgid "Sendeplan"
+msgstr ""
+
 msgctxt "#32004"
 msgid "Mediathek auf Twitch"
 msgstr ""

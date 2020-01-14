@@ -9,9 +9,9 @@ from xbmc import getInfoLabel, Player, PlayList
 from apihelper import ApiHelper
 from data import CHANNELS
 from favorites import Favorites
-from kodiutils import addon_id, get_setting, has_addon, kodi_version, log, notify, set_property
+from kodiutils import addon_id, get_setting_bool, has_addon, kodi_version, log, notify, set_property
 from resumepoints import ResumePoints
-from utils import assetpath_to_id, play_url_to_id, to_unicode, url_to_episode
+from utils import play_url_to_id, to_unicode, url_to_episode
 
 
 class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
@@ -53,6 +53,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
         log(3, '[PlayerInfo %d] Event onPlayBackStarted' % self.thread_id)
 
+        # Set property to let wait_for_resumepoints function know that update resume is busy
+        set_property('vrtnu_resumepoints', 'busy')
+
         # Update previous episode when using "Up Next"
         if self.path.startswith('plugin://plugin.video.vrt.nu/play/upnext'):
             self.push_position(position=self.last_pos, total=self.total)
@@ -70,6 +73,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             if ep_id.get('video_id') and ep_id.get('video_id') == channel.get('live_stream_id'):
                 log(3, '[PlayerInfo %d] Avoid setting resumepoints for livestream %s' % (self.thread_id, ep_id.get('video_id')))
                 self.listen = False
+
+                # Reset vrtnu_resumepoints property before return
+                set_property('vrtnu_resumepoints', None)
                 return
 
         # Get episode data needed to update resumepoints from VRT NU Search API
@@ -77,9 +83,12 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
         # Avoid setting resumepoints without episode data
         if episode is None:
+            # Reset vrtnu_resumepoints property before return
+            set_property('vrtnu_resumepoints', None)
             return
 
-        self.asset_id = assetpath_to_id(episode.get('assetPath'))
+        from metadata import Metadata
+        self.asset_id = Metadata(None, None).get_asset_id(episode)
         self.title = episode.get('program')
         self.url = url_to_episode(episode.get('url', ''))
         self.whatson_id = episode.get('whatsonId') or None  # Avoid empty string
@@ -114,15 +123,10 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         log(3, '[PlayerInfo %d] Event onPlayBackSeek time=%d offset=%d' % (self.thread_id, time, seekOffset))
         self.last_pos = time // 1000
 
-        # If we seek beyond the start or end, set property to let wait_for_resumepoints function know that update resume is busy
+        # If we seek beyond the end, exit Player
         if self.last_pos >= self.total:
-            set_property('vrtnu_resumepoints', 'busy')
-            # Exit Player faster
             self.quit.set()
             self.stop()
-
-        if self.last_pos < 0:
-            set_property('vrtnu_resumepoints', 'busy')
 
     def onPlayBackPaused(self):  # pylint: disable=invalid-name
         """Called when user pauses a playing file"""
@@ -169,6 +173,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         self.positionthread = None
         self.push_position(position=self.last_pos, total=self.total)
 
+        # Set property to let wait_for_resumepoints function know that update resume is done
+        set_property('vrtnu_resumepoints', 'ready')
+
     def stream_position(self):
         """Get latest stream position while playing"""
         while self.isPlaying() and not self.quit.is_set():
@@ -179,6 +186,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
     def add_upnext(self, video_id):
         """Add Up Next url to Kodi Player"""
+        # Reset vrtnu_resumepoints property
+        set_property('vrtnu_resumepoints', None)
+
         url = 'plugin://plugin.video.vrt.nu/play/upnext/%s' % video_id
         self.update_position()
         self.update_total()
@@ -191,7 +201,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
     def push_upnext(self):
         """Push episode info to Up Next service add-on"""
-        if has_addon('service.upnext') and get_setting('useupnext', 'true') == 'true' and self.isPlaying():
+        if has_addon('service.upnext') and get_setting_bool('useupnext', default=True) and self.isPlaying():
             info_tag = self.getVideoInfoTag()
             next_info = self.apihelper.get_upnext(dict(
                 program=to_unicode(info_tag.getTVShowTitle()),
@@ -230,9 +240,6 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         if not self.asset_id:
             return
 
-        # Set property to let wait_for_resumepoints function know that update resume is busy
-        set_property('vrtnu_resumepoints', 'busy')
-
         # Push resumepoint to VRT NU
         self.resumepoints.update(
             asset_id=self.asset_id,
@@ -240,8 +247,6 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             url=self.url,
             position=position,
             total=total,
-            whatson_id=self.whatson_id
+            whatson_id=self.whatson_id,
+            path=self.path
         )
-
-        # Set property to let wait_for_resumepoints function know that update resume is done
-        set_property('vrtnu_resumepoints', 'ready')

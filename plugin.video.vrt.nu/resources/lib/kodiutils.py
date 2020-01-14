@@ -21,6 +21,7 @@ SORT_METHODS = dict(
     # genre=xbmcplugin.SORT_METHOD_GENRE,
     # label=xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
     label=xbmcplugin.SORT_METHOD_LABEL,
+    title=xbmcplugin.SORT_METHOD_TITLE,
     # none=xbmcplugin.SORT_METHOD_UNSORTED,
     # FIXME: We would like to be able to sort by unprefixed title (ignore date/episode prefix)
     # title=xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE,
@@ -129,7 +130,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
     set_property('container.url', 'plugin://' + addon_id() + plugin.path)
     xbmcplugin.setPluginFanart(handle=plugin.handle, image=from_unicode(addon_fanart()))
 
-    usemenucaching = get_setting('usemenucaching', 'true') == 'true'
+    usemenucaching = get_setting_bool('usemenucaching', default=True)
     if cache is None:
         cache = usemenucaching
     elif usemenucaching is False:
@@ -159,7 +160,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
         sort = 'unsorted'
 
     # NOTE: When showing tvshow listings and 'showoneoff' was set, force 'unsorted'
-    if get_setting('showoneoff', 'true') == 'true' and sort == 'label' and content == 'tvshows':
+    if get_setting_bool('showoneoff', default=True) and sort == 'label' and content == 'tvshows':
         sort = 'unsorted'
 
     # Add all sort methods to GUI (start with preferred)
@@ -177,7 +178,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
 #        xbmcplugin.setProperty(handle=plugin.handle, key='sort.order', value=str(SORT_METHODS['unsorted']))
 
     listing = []
-    showfanart = bool(get_setting('showfanart', 'true') == 'true')
+    showfanart = get_setting_bool('showfanart', default=True)
     for title_item in list_items:
         # Three options:
         #  - item is a virtual directory/folder (not playable, path)
@@ -186,7 +187,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
         is_folder = bool(not title_item.is_playable and title_item.path)
         is_playable = bool(title_item.is_playable and title_item.path)
 
-        list_item = ListItem(label=title_item.title)
+        list_item = ListItem(label=title_item.label)
 
         prop_dict = dict(
             IsInternetStream='true' if is_playable else 'false',
@@ -255,7 +256,7 @@ def play(stream, video=None):
 
     play_item = ListItem(path=stream.stream_url)
     if video and hasattr(video, 'info_dict'):
-        play_item.setProperty('subtitle', video.title)
+        play_item.setProperty('subtitle', video.label)
         play_item.setArt(video.art_dict)
         play_item.setInfo(
             type='video',
@@ -275,7 +276,7 @@ def play(stream, video=None):
                 play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
                 play_item.setProperty('inputstream.adaptive.license_key', stream.license_key)
 
-    subtitles_visible = get_setting('showsubtitles', 'true') == 'true'
+    subtitles_visible = get_setting_bool('showsubtitles', default=True)
     # Separate subtitle url for hls-streams
     if subtitles_visible and stream.subtitle_url is not None:
         log(2, 'Subtitle URL: {url}', url=unquote(stream.subtitle_url))
@@ -384,7 +385,7 @@ def localize_from_data(name, data):
 
 
 def get_setting(key, default=None):
-    """Get an add-on setting"""
+    """Get an add-on setting as string"""
     try:
         value = to_unicode(ADDON.getSetting(key))
     except RuntimeError:  # Occurs when the add-on is disabled
@@ -394,9 +395,78 @@ def get_setting(key, default=None):
     return value
 
 
+def get_setting_bool(key, default=None):
+    """Get an add-on setting as boolean"""
+    try:
+        return ADDON.getSettingBool(key)
+    except (AttributeError, TypeError):  # On Krypton or older, or when not a boolean
+        value = get_setting(key, default)
+        if value not in ('false', 'true'):
+            return default
+        return bool(value == 'true')
+    except RuntimeError:  # Occurs when the add-on is disabled
+        return default
+
+
+def get_setting_int(key, default=None):
+    """Get an add-on setting as integer"""
+    try:
+        return ADDON.getSettingInt(key)
+    except (AttributeError, TypeError):  # On Krypton or older, or when not an integer
+        value = get_setting(key, default)
+        try:
+            return int(value)
+        except ValueError:
+            return default
+    except RuntimeError:  # Occurs when the add-on is disabled
+        return default
+
+
+def get_setting_float(key, default=None):
+    """Get an add-on setting"""
+    try:
+        return ADDON.getSettingNumber(key)
+    except (AttributeError, TypeError):  # On Krypton or older, or when not a float
+        value = get_setting(key, default)
+        try:
+            return float(value)
+        except ValueError:
+            return default
+    except RuntimeError:  # Occurs when the add-on is disabled
+        return default
+
+
 def set_setting(key, value):
     """Set an add-on setting"""
     return ADDON.setSetting(key, from_unicode(str(value)))
+
+
+def set_setting_bool(key, value):
+    """Set an add-on setting as boolean"""
+    try:
+        return ADDON.setSettingBool(key, value)
+    except (AttributeError, TypeError):  # On Krypton or older, or when not a boolean
+        if value in ['false', 'true']:
+            return set_setting(key, value)
+        if value:
+            return set_setting(key, 'true')
+        return set_setting(key, 'false')
+
+
+def set_setting_int(key, value):
+    """Set an add-on setting as integer"""
+    try:
+        return ADDON.setSettingInt(key, value)
+    except (AttributeError, TypeError):  # On Krypton or older, or when not an integer
+        return set_setting(key, value)
+
+
+def set_setting_float(key, value):
+    """Set an add-on setting"""
+    try:
+        return ADDON.setSettingNumber(key, value)
+    except (AttributeError, TypeError):  # On Krypton or older, or when not a float
+        return set_setting(key, value)
 
 
 def open_settings():
@@ -483,7 +553,7 @@ def get_playerid():
 
 def get_max_bandwidth():
     """Get the max bandwidth based on Kodi and add-on settings"""
-    vrtnu_max_bandwidth = int(get_setting('max_bandwidth', '0'))
+    vrtnu_max_bandwidth = get_setting_int('max_bandwidth', default=0)
     global_max_bandwidth = int(get_global_setting('network.bandwidth'))
     if vrtnu_max_bandwidth != 0 and global_max_bandwidth != 0:
         return min(vrtnu_max_bandwidth, global_max_bandwidth)
@@ -557,7 +627,7 @@ def get_cond_visibility(condition):
 
 def has_inputstream_adaptive():
     """Whether InputStream Adaptive is installed and enabled in add-on settings"""
-    return get_setting('useinputstreamadaptive', 'true') == 'true' and has_addon('inputstream.adaptive')
+    return get_setting_bool('useinputstreamadaptive', default=True) and has_addon('inputstream.adaptive')
 
 
 def has_addon(name):
@@ -577,7 +647,7 @@ def kodi_version():
 
 def can_play_drm():
     """Whether this Kodi can do DRM using InputStream Adaptive"""
-    return get_setting('usedrm', 'true') == 'true' and get_setting('useinputstreamadaptive', 'true') == 'true' and supports_drm()
+    return get_setting_bool('usedrm', default=True) and get_setting_bool('useinputstreamadaptive', default=True) and supports_drm()
 
 
 def supports_drm():
@@ -751,7 +821,7 @@ def wait_for_resumepoints():
 def log(level=1, message='', **kwargs):
     """Log info messages to Kodi"""
     debug_logging = get_global_setting('debug.showloginfo')  # Returns a boolean
-    max_log_level = int(get_setting('max_log_level', 0))
+    max_log_level = get_setting_int('max_log_level', default=0)
     if not debug_logging and not (level <= max_log_level and max_log_level != 0):
         return
     if kwargs:
@@ -821,8 +891,8 @@ def human_delta(seconds):
 
 
 def get_cache(path, ttl=None):  # pylint: disable=redefined-outer-name
-    """Get the content from cache, if it's still fresh"""
-    if get_setting('usehttpcaching', 'true') == 'false':
+    """Get the content from cache, if it is still fresh"""
+    if not get_setting_bool('usehttpcaching', default=True):
         return None
 
     fullpath = get_cache_path() + path
@@ -845,7 +915,7 @@ def get_cache(path, ttl=None):  # pylint: disable=redefined-outer-name
 
 def update_cache(path, data):
     """Update the cache, if necessary"""
-    if get_setting('usehttpcaching', 'true') == 'false':
+    if not get_setting_bool('usehttpcaching', default=True):
         return
 
     fullpath = get_cache_path() + path
@@ -887,9 +957,9 @@ def update_timestamp(path):
 def ttl(kind='direct'):
     """Return the HTTP cache ttl in seconds based on kind of relation"""
     if kind == 'direct':
-        return int(get_setting('httpcachettldirect', 5)) * 60
+        return get_setting_int('httpcachettldirect', default=5) * 60
     if kind == 'indirect':
-        return int(get_setting('httpcachettlindirect', 60)) * 60
+        return get_setting_int('httpcachettlindirect', default=60) * 60
     return 5 * 60
 
 

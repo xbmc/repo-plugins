@@ -50,6 +50,13 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 ![](./resources/media/screenshot04.jpg)
 
 ## Releases
+### v2.3.1 (2020-01-13)
+- Fix an issue related to type-handling for settings (@dagwieers)
+- Fix an issue related to marking played videos as watched when using Up Next (@mediaminister)
+- Small fix for livestreams (@mediaminister)
+- Improvements to metadata handling specific to Kodi rendering (@dagwieers)
+- Support multiple YouTube links per channel (@dagwieers)
+
 ### v2.3.0 (2020-01-01)
 - Add integration for Up Next add-on (@mediaminister)
 - Store resume points and watchlater at VRT NU (@dagwieers, @mediaminister)

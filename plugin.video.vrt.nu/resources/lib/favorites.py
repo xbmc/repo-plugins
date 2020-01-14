@@ -12,7 +12,7 @@ try:  # Python 3
 except ImportError:  # Python 2
     from urllib2 import build_opener, HTTPError, install_opener, ProxyHandler, unquote
 
-from kodiutils import (container_refresh, get_cache, get_proxies, get_setting, get_url_json,
+from kodiutils import (container_refresh, get_cache, get_proxies, get_setting_bool, get_url_json,
                        has_credentials, input_down, invalidate_caches, localize, log_error,
                        multiselect, notification, ok_dialog, update_cache)
 from utils import program_to_id
@@ -29,7 +29,7 @@ class Favorites:
     @staticmethod
     def is_activated():
         """Is favorites activated in the menu and do we have credentials ?"""
-        return get_setting('usefavorites') == 'true' and has_credentials()
+        return get_setting_bool('usefavorites', default=True) and has_credentials()
 
     def refresh(self, ttl=None):
         """Get a cached copy or a newer favorites from VRT, or fall back to a cached file"""

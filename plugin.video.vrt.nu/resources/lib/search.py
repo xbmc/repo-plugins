@@ -6,7 +6,7 @@
 from __future__ import absolute_import, division, unicode_literals
 from favorites import Favorites
 from kodiutils import (addon_profile, container_refresh, end_of_directory, get_json_data,
-                       get_search_string, get_setting, localize, ok_dialog, open_file, show_listing,
+                       get_search_string, get_setting_int, localize, ok_dialog, open_file, show_listing,
                        ttl, url_for)
 from resumepoints import ResumePoints
 
@@ -36,7 +36,7 @@ class Search:
         from helperobjects import TitleItem
         menu_items = [
             TitleItem(
-                title=localize(30424),  # New search...
+                label=localize(30424),  # New search...
                 path=url_for('search_query'),
                 art_dict=dict(thumb='DefaultAddonsSearch.png'),
                 info_dict=dict(plot=localize(30425)),
@@ -47,7 +47,7 @@ class Search:
         history = self.read_history()
         for keywords in history:
             menu_items.append(TitleItem(
-                title=keywords,
+                label=keywords,
                 path=url_for('search_query', keywords=keywords),
                 art_dict=dict(thumb='DefaultAddonsSearch.png'),
                 is_playable=False,
@@ -59,7 +59,7 @@ class Search:
 
         if history:
             menu_items.append(TitleItem(
-                title=localize(30426),  # Clear search history
+                label=localize(30426),  # Clear search history
                 path=url_for('clear_search'),
                 info_dict=dict(plot=localize(30427)),
                 art_dict=dict(thumb='icons/infodialogs/uninstall.png'),
@@ -91,9 +91,9 @@ class Search:
 
         # Add 'More…' entry at the end
         from helperobjects import TitleItem
-        if len(search_items) == int(get_setting('itemsperpage', 50)):
+        if len(search_items) == get_setting_int('itemsperpage', default=50):
             search_items.append(TitleItem(
-                title=localize(30300),  # More…
+                label=localize(30300),  # More…
                 path=url_for('search_query', keywords=keywords, page=page + 1),
                 art_dict=dict(thumb='DefaultAddonSearch.png'),
                 info_dict=dict(),

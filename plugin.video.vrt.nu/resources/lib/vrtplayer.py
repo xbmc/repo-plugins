@@ -6,9 +6,10 @@ from __future__ import absolute_import, division, unicode_literals
 from apihelper import ApiHelper
 from favorites import Favorites
 from helperobjects import TitleItem
-from kodiutils import (delete_cached_thumbnail, end_of_directory, get_addon_info, get_setting,
-                       has_credentials, localize, log_error, ok_dialog, play, set_setting,
-                       show_listing, ttl, url_for, wait_for_resumepoints)
+from kodiutils import (delete_cached_thumbnail, end_of_directory, get_addon_info,
+                       get_setting, get_setting_bool, get_setting_int, has_credentials,
+                       localize, log_error, ok_dialog, play, set_setting, show_listing,
+                       ttl, url_for, wait_for_resumepoints)
 from resumepoints import ResumePoints
 from utils import find_entry, realpage
 
@@ -31,46 +32,46 @@ class VRTPlayer:
         # Only add 'My favorites' when it has been activated
         if self._favorites.is_activated():
             main_items.append(TitleItem(
-                title=localize(30010),  # My favorites
+                label=localize(30010),  # My favorites
                 path=url_for('favorites_menu'),
                 art_dict=dict(thumb='DefaultFavourites.png'),
                 info_dict=dict(plot=localize(30011)),
             ))
 
         main_items.extend([
-            TitleItem(title=localize(30012),  # All programs
+            TitleItem(label=localize(30012),  # All programs
                       path=url_for('programs'),
                       art_dict=dict(thumb='DefaultMovieTitle.png'),
                       info_dict=dict(plot=localize(30013))),
-            TitleItem(title=localize(30014),  # Categories
+            TitleItem(label=localize(30014),  # Categories
                       path=url_for('categories'),
                       art_dict=dict(thumb='DefaultGenre.png'),
                       info_dict=dict(plot=localize(30015))),
-            TitleItem(title=localize(30016),  # Channels
+            TitleItem(label=localize(30016),  # Channels
                       path=url_for('channels'),
                       art_dict=dict(thumb='DefaultTags.png'),
                       info_dict=dict(plot=localize(30017))),
-            TitleItem(title=localize(30018),  # Live TV
+            TitleItem(label=localize(30018),  # Live TV
                       path=url_for('livetv'),
                       art_dict=dict(thumb='DefaultTVShows.png'),
                       info_dict=dict(plot=localize(30019))),
-            TitleItem(title=localize(30020),  # Recent items
+            TitleItem(label=localize(30020),  # Recent items
                       path=url_for('recent'),
                       art_dict=dict(thumb='DefaultRecentlyAddedEpisodes.png'),
                       info_dict=dict(plot=localize(30021))),
-            TitleItem(title=localize(30022),  # Soon offline
+            TitleItem(label=localize(30022),  # Soon offline
                       path=url_for('offline'),
                       art_dict=dict(thumb='DefaultYear.png'),
                       info_dict=dict(plot=localize(30023))),
-            TitleItem(title=localize(30024),  # Featured content
+            TitleItem(label=localize(30024),  # Featured content
                       path=url_for('featured'),
                       art_dict=dict(thumb='DefaultCountry.png'),
                       info_dict=dict(plot=localize(30025))),
-            TitleItem(title=localize(30026),  # TV guide
+            TitleItem(label=localize(30026),  # TV guide
                       path=url_for('tvguide'),
                       art_dict=dict(thumb='DefaultAddonTvInfo.png'),
                       info_dict=dict(plot=localize(30027))),
-            TitleItem(title=localize(30028),  # Search
+            TitleItem(label=localize(30028),  # Search
                       path=url_for('search'),
                       art_dict=dict(thumb='DefaultAddonsSearch.png'),
                       info_dict=dict(plot=localize(30029))),
@@ -81,12 +82,6 @@ class VRTPlayer:
     def _version_check(self):
         first_run, settings_version, addon_version = self._first_run()
         if first_run:
-            # 2.2.3 version: max_log_level to be an integer
-            try:
-                int(get_setting('max_log_level', 0))  # May return string
-            except ValueError:
-                set_setting('max_log_level', 0)
-
             # 2.0.0 version: changed plugin:// url interface: show warning that Kodi favourites and what-was-watched will break
             if settings_version == '' and has_credentials():
                 ok_dialog(localize(30978), localize(30979))
@@ -104,7 +99,7 @@ class VRTPlayer:
         '''Check if this add-on version is run for the first time'''
 
         # Get version from settings.xml
-        settings_version = get_setting('version', '')
+        settings_version = get_setting('version', default='')
 
         # Get version from addon.xml
         addon_version = get_addon_info('version')
@@ -124,15 +119,15 @@ class VRTPlayer:
         """The VRT NU addon 'My programs' menu"""
         self._favorites.refresh(ttl=ttl('indirect'))
         favorites_items = [
-            TitleItem(title=localize(30040),  # My programs
+            TitleItem(label=localize(30040),  # My programs
                       path=url_for('favorites_programs'),
                       art_dict=dict(thumb='DefaultMovieTitle.png'),
                       info_dict=dict(plot=localize(30041))),
-            TitleItem(title=localize(30046),  # My recent items
+            TitleItem(label=localize(30046),  # My recent items
                       path=url_for('favorites_recent'),
                       art_dict=dict(thumb='DefaultRecentlyAddedEpisodes.png'),
                       info_dict=dict(plot=localize(30047))),
-            TitleItem(title=localize(30048),  # My soon offline
+            TitleItem(label=localize(30048),  # My soon offline
                       path=url_for('favorites_offline'),
                       art_dict=dict(thumb='DefaultYear.png'),
                       info_dict=dict(plot=localize(30049))),
@@ -141,29 +136,29 @@ class VRTPlayer:
         # Only add 'My watch later' and 'Continue watching' when it has been activated
         if self._resumepoints.is_activated():
             favorites_items.append(TitleItem(
-                title=localize(30050),  # My watch later
+                label=localize(30050),  # My watch later
                 path=url_for('resumepoints_watchlater'),
                 art_dict=dict(thumb='DefaultVideoPlaylists.png'),
                 info_dict=dict(plot=localize(30051)),
             ))
             favorites_items.append(TitleItem(
-                title=localize(30052),  # Continue Watching
+                label=localize(30052),  # Continue Watching
                 path=url_for('resumepoints_continue'),
                 art_dict=dict(thumb='DefaultInProgressShows.png'),
                 info_dict=dict(plot=localize(30053)),
             ))
 
-        if get_setting('addmymovies', 'true') == 'true':
+        if get_setting_bool('addmymovies', default=True):
             favorites_items.append(
-                TitleItem(title=localize(30042),  # My movies
+                TitleItem(label=localize(30042),  # My movies
                           path=url_for('categories', category='films'),
                           art_dict=dict(thumb='DefaultAddonVideo.png'),
                           info_dict=dict(plot=localize(30043))),
             )
 
-        if get_setting('addmydocu', 'true') == 'true':
+        if get_setting_bool('addmydocu', default=True):
             favorites_items.append(
-                TitleItem(title=localize(30044),  # My documentaries
+                TitleItem(label=localize(30044),  # My documentaries
                           path=url_for('favorites_docu'),
                           art_dict=dict(thumb='DefaultMovies.png'),
                           info_dict=dict(plot=localize(30045))),
@@ -256,13 +251,13 @@ class VRTPlayer:
         episode_items, sort, ascending, content = self._apihelper.list_episodes(page=page, use_favorites=use_favorites, variety='recent')
 
         # Add 'More...' entry at the end
-        if len(episode_items) == int(get_setting('itemsperpage', 50)):
+        if len(episode_items) == get_setting_int('itemsperpage', default=50):
             if use_favorites:
                 recent = 'favorites_recent'
             else:
                 recent = 'recent'
             episode_items.append(TitleItem(
-                title=localize(30300),
+                label=localize(30300),
                 path=url_for(recent, page=page + 1),
                 art_dict=dict(thumb='DefaultRecentlyAddedEpisodes.png'),
                 info_dict=dict(),
@@ -280,13 +275,13 @@ class VRTPlayer:
         episode_items, sort, ascending, content = self._apihelper.list_episodes(page=page, use_favorites=use_favorites, variety='offline')
 
         # Add 'More...' entry at the end
-        if len(episode_items) == int(get_setting('itemsperpage', 50)):
+        if len(episode_items) == get_setting_int('itemsperpage', default=50):
             if use_favorites:
                 offline = 'favorites_offline'
             else:
                 offline = 'offline'
             episode_items.append(TitleItem(
-                title=localize(30300),
+                label=localize(30300),
                 path=url_for(offline, page=page + 1),
                 art_dict=dict(thumb='DefaultYear.png'),
                 info_dict=dict(),

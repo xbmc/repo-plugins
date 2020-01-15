@@ -32,9 +32,9 @@ class StreamURLS:
 class TitleItem:
     """This helper object holds all information to be used with Kodi xbmc's ListItem object"""
 
-    def __init__(self, title, path=None, art_dict=None, info_dict=None, stream_dict=None, prop_dict=None, context_menu=None, is_playable=False):
+    def __init__(self, label, path=None, art_dict=None, info_dict=None, stream_dict=None, prop_dict=None, context_menu=None, is_playable=False):
         """The constructor for the TitleItem class"""
-        self.title = title
+        self.label = label
         self.path = path
         self.art_dict = art_dict
         self.info_dict = info_dict

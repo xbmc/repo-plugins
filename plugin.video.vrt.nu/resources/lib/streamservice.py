@@ -14,7 +14,7 @@ except ImportError:  # Python 2
 
 from helperobjects import ApiData, StreamURLS
 from kodiutils import (addon_profile, can_play_drm, exists, end_of_directory, get_max_bandwidth,
-                       get_proxies, get_setting, get_url_json, has_inputstream_adaptive,
+                       get_proxies, get_setting_bool, get_url_json, has_inputstream_adaptive,
                        kodi_version, localize, log, log_error, mkdir, ok_dialog, open_settings,
                        supports_drm, to_unicode)
 
@@ -103,22 +103,15 @@ class StreamService:
             api_data = ApiData(self._CLIENT, self._VUALTO_API_URL, video_id, '', True)
         # Webscrape api_data with video_id fallback
         elif video_url:
-            api_data = self._webscrape_api_data(video_url) or ApiData(self._CLIENT, self._VUALTO_API_URL, video_id, '', True)
+            api_data = self._webscrape_api_data(video_url)
+            if video_id:
+                api_data = ApiData(self._CLIENT, self._VUALTO_API_URL, video_id, '', True)
         return api_data
 
     def _webscrape_api_data(self, video_url):
         """Scrape api data from VRT NU html page"""
-        from bs4 import BeautifulSoup, SoupStrainer
-        log(2, 'URL get: {url}', url=unquote(video_url))
-        html_page = urlopen(video_url).read()
-        strainer = SoupStrainer(['section', 'div'], {'class': ['video-player', 'livestream__player']})
-        soup = BeautifulSoup(html_page, 'html.parser', parse_only=strainer)
-        try:
-            video_data = soup.find(lambda tag: tag.name == 'nui-media').attrs
-        except Exception as exc:  # pylint: disable=broad-except
-            # Web scraping failed, log error
-            log_error('Web scraping api data failed: {error}', error=exc)
-            return None
+        from webscraper import get_video_attributes
+        video_data = get_video_attributes(video_url)
 
         # Web scraping failed, log error
         if not video_data:
@@ -146,6 +139,8 @@ class StreamService:
 
     def _get_stream_json(self, api_data, roaming=False):
         """Get JSON with stream details from VRT API"""
+        if not api_data:
+            return None
         token_url = api_data.media_api_url + '/tokens'
         if api_data.is_live_stream:
             playertoken = self._tokenresolver.get_playertoken(token_url, token_variant='live', roaming=roaming)
@@ -288,11 +283,11 @@ class StreamService:
         # HLS AES DRM failed
         if protocol == 'hls_aes' and not supports_drm():
             message = localize(30962, protocol=protocol.upper(), version=kodi_version())
-        elif protocol == 'hls_aes' and not has_inputstream_adaptive() and get_setting('usedrm', 'true') == 'false':
+        elif protocol == 'hls_aes' and not has_inputstream_adaptive() and not get_setting_bool('usedrm', default=True):
             message = localize(30958, protocol=protocol.upper(), component=localize(30959), state=localize(30961))
         elif protocol == 'hls_aes' and has_inputstream_adaptive():
             message = localize(30958, protocol=protocol.upper(), component='Widevine DRM', state=localize(30961))
-        elif protocol == 'hls_aes' and get_setting('usedrm', 'true') == 'true':
+        elif protocol == 'hls_aes' and get_setting_bool('usedrm', default=True):
             message = localize(30958, protocol=protocol.upper(), component='InputStream Adaptive', state=localize(30961))
         else:
             message = localize(30958, protocol=protocol.upper(), component='InputStream Adaptive', state=localize(30960))
@@ -350,7 +345,7 @@ class StreamService:
                 hls_variant_url = hls_base_url + match_audio.group('AUDIO_URI') + '-' + hls_variant_url.split('-')[-1]
 
         # Get subtitle url, works only for on demand streams
-        if get_setting('showsubtitles', 'true') == 'true' and '/live/' not in master_hls_url and hls_subtitle_id:
+        if get_setting_bool('showsubtitles', default=True) and '/live/' not in master_hls_url and hls_subtitle_id:
             subtitle_regex = re.compile(r'#EXT-X-MEDIA:TYPE=SUBTITLES[\w\-=,\.\"\/]+?GROUP-ID=\"' + hls_subtitle_id + ''
                                         r'\"[\w\-=,\.\"\/]+URI=\"(?P<SUBTITLE_URI>[\w\-=]+)\.m3u8\"')
             match_subtitle = re.search(subtitle_regex, hls_playlist)

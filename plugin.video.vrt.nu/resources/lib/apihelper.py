@@ -6,19 +6,19 @@ from __future__ import absolute_import, division, unicode_literals
 
 try:  # Python 3
     from urllib.parse import quote_plus, unquote
-    from urllib.request import build_opener, install_opener, ProxyHandler, urlopen
+    from urllib.request import build_opener, install_opener, ProxyHandler
 except ImportError:  # Python 2
     from urllib import quote_plus
-    from urllib2 import build_opener, install_opener, ProxyHandler, unquote, urlopen
+    from urllib2 import build_opener, install_opener, ProxyHandler, unquote
 
 from data import CHANNELS
 from helperobjects import TitleItem
-from kodiutils import (delete_cached_thumbnail, get_cache, get_cached_url_json, get_global_setting,
-                       get_proxies, get_setting, get_url_json, has_addon, localize, localize_from_data,
-                       log, ttl, update_cache, url_for)
+from kodiutils import (delete_cached_thumbnail, get_cached_url_json, get_global_setting,
+                       get_proxies, get_setting_bool, get_setting_int, get_url_json, has_addon, localize,
+                       localize_from_data, log, ttl, url_for)
 from metadata import Metadata
-from utils import (add_https_proto, html_to_kodilabel, find_entry, from_unicode, play_url_to_id,
-                   program_to_url, realpage, strip_newlines, url_to_program)
+from utils import (html_to_kodilabel, find_entry, from_unicode, play_url_to_id,
+                   program_to_url, realpage, url_to_program, youtube_to_plugin_url)
 
 
 class ApiHelper:
@@ -68,10 +68,11 @@ class ApiHelper:
         tvshows = self.get_tvshows(category=category, channel=channel, feature=feature)
 
         # Get oneoffs
-        if get_setting('showoneoff', 'true') == 'true':
+        if get_setting_bool('showoneoff', default=True):
             cache_file = 'oneoff.json'
             oneoffs = self.get_episodes(variety='oneoff', cache_file=cache_file)
         else:
+            cache_file = None
             # Return empty list
             oneoffs = []
 
@@ -87,7 +88,7 @@ class ApiHelper:
             label += favorite_marker
 
         return TitleItem(
-            title=label,
+            label=label,
             path=url_for('programs', program=program),
             art_dict=self._metadata.get_art(tvshow),
             info_dict=self._metadata.get_info_labels(tvshow),
@@ -97,12 +98,12 @@ class ApiHelper:
     def list_episodes(self, program=None, season=None, category=None, feature=None, programtype=None, page=None, use_favorites=False, variety=None):
         """Construct a list of episode or season TitleItems from VRT NU Search API data and filtered by favorites"""
         # Caching
-        cache_file = None
-        if variety:
-            if use_favorites:
-                cache_file = 'my-%s-%s.json' % (variety, page)
-            else:
-                cache_file = '%s-%s.json' % (variety, page)
+        if not variety:
+            cache_file = None
+        elif use_favorites:
+            cache_file = 'my-%s-%s.json' % (variety, page)
+        else:
+            cache_file = '%s-%s.json' % (variety, page)
 
         # Titletype
         titletype = None
@@ -169,7 +170,7 @@ class ApiHelper:
         # Add an "* All seasons" list item
         if get_global_setting('videolibrary.showallitems') is True:
             season_items.append(TitleItem(
-                title=localize(30133),  # All seasons
+                label=localize(30133),  # All seasons
                 path=url_for('programs', program=program, season='allseasons'),
                 art_dict=self._metadata.get_art(episode, season='allseasons'),
                 info_dict=info_labels,
@@ -188,7 +189,7 @@ class ApiHelper:
 
             label = '%s %s' % (localize(30131), season_key)  # Season X
             season_items.append(TitleItem(
-                title=label,
+                label=label,
                 path=url_for('programs', program=program, season=season_key),
                 art_dict=self._metadata.get_art(episode, season=True),
                 info_dict=info_labels,
@@ -232,10 +233,11 @@ class ApiHelper:
             label += favorite_marker + watchlater_marker
 
         info_labels = self._metadata.get_info_labels(episode)
+        # FIXME: Due to a bug in Kodi, ListItem.Title is used when Sort methods are used, not ListItem.Label
         info_labels['title'] = label
 
         return TitleItem(
-            title=label,
+            label=label,
             path=url_for('play_id', video_id=episode.get('videoId'), publication_id=episode.get('publicationId')),
             art_dict=self._metadata.get_art(episode),
             info_dict=info_labels,
@@ -369,7 +371,7 @@ class ApiHelper:
         episode = self.get_single_episode_data(video_id=video_id, whatson_id=whatson_id, video_url=video_url)
         if episode:
             video_item = TitleItem(
-                title=self._metadata.get_label(episode),
+                label=self._metadata.get_label(episode),
                 art_dict=self._metadata.get_art(episode),
                 info_dict=self._metadata.get_info_labels(episode),
                 prop_dict=self._metadata.get_properties(episode),
@@ -436,7 +438,7 @@ class ApiHelper:
 
             if start_date and end_date:
                 video_item = TitleItem(
-                    title=self._metadata.get_label(episode_guess_on),
+                    label=self._metadata.get_label(episode_guess_on),
                     art_dict=self._metadata.get_art(episode_guess_on),
                     info_dict=self._metadata.get_info_labels(episode_guess_on, channel=channel, date=start_date),
                     prop_dict=self._metadata.get_properties(episode_guess_on),
@@ -462,7 +464,7 @@ class ApiHelper:
         episode = api_data[0]
         log(2, str(episode))
         video_item = TitleItem(
-            title=self._metadata.get_label(episode),
+            label=self._metadata.get_label(episode),
             art_dict=self._metadata.get_art(episode),
             info_dict=self._metadata.get_info_labels(episode),
             prop_dict=self._metadata.get_properties(episode),
@@ -478,7 +480,7 @@ class ApiHelper:
         if page:
             page = realpage(page)
             all_items = False
-            items_per_page = int(get_setting('itemsperpage', 50))
+            items_per_page = get_setting_int('itemsperpage', default=50)
             params = {
                 'from': ((page - 1) * items_per_page) + 1,
                 'i': 'video',
@@ -522,7 +524,7 @@ class ApiHelper:
                 program_urls = [program_to_url(p, 'medium') for p in self._favorites.programs()]
                 params['facets[programUrl]'] = '[%s]' % (','.join(program_urls))
             elif variety in ('offline', 'recent'):
-                channel_filter = [channel.get('name') for channel in CHANNELS if get_setting(channel.get('name'), 'true') == 'true']
+                channel_filter = [channel.get('name') for channel in CHANNELS if get_setting_bool(channel.get('name'), default=True)]
                 params['facets[programBrands]'] = '[%s]' % (','.join(channel_filter))
 
         if program:
@@ -640,7 +642,7 @@ class ApiHelper:
                     label = '[B]%s[/B]' % label
                 is_playable = True
                 if channel.get('name') in ['een', 'canvas', 'ketnet']:
-                    if get_setting('showfanart', 'true') == 'true':
+                    if get_setting_bool('showfanart', default=True):
                         art_dict['fanart'] = self.get_live_screenshot(channel.get('name', art_dict.get('fanart')))
                     plot = '%s\n\n%s' % (localize(30142, **channel), _tvguide.live_description(channel.get('name')))
                 else:
@@ -657,7 +659,7 @@ class ApiHelper:
                 continue
 
             channel_items.append(TitleItem(
-                title=label,
+                label=label,
                 path=path,
                 art_dict=art_dict,
                 info_dict=info_dict,
@@ -674,7 +676,7 @@ class ApiHelper:
 
         youtube_items = []
 
-        if not has_addon('plugin.video.youtube') or get_setting('showyoutube', 'true') == 'false':
+        if not has_addon('plugin.video.youtube') or not get_setting_bool('showyoutube', default=True):
             return youtube_items
 
         for channel in CHANNELS:
@@ -690,31 +692,28 @@ class ApiHelper:
             else:
                 art_dict['thumb'] = 'DefaultTags.png'
 
-            if channel.get('youtube'):
-                path = channel.get('youtube')
-                label = localize(30143, **channel)  # Channel on YouTube
+            for youtube in channel.get('youtube', []):
+                path = youtube_to_plugin_url(youtube['url'])
+                label = localize(30143, **youtube)  # Channel on YouTube
                 # A single Live channel means it is the entry for channel's TV Show listing, so make it stand out
                 if channels and len(channels) == 1:
                     label = '[B]%s[/B]' % label
-                plot = localize(30144, **channel)  # Watch on YouTube
+                plot = localize(30144, **youtube)  # Watch on YouTube
                 # NOTE: Playcount is required to not have live streams as "Watched"
                 info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video', playcount=0)
                 context_menu.append((
                     localize(30413),  # Refresh menu
                     'RunPlugin(%s)' % url_for('delete_cache', cache_file='channel.%s.json' % channel)
                 ))
-            else:
-                # Not a playable channel
-                continue
 
-            youtube_items.append(TitleItem(
-                title=label,
-                path=path,
-                art_dict=art_dict,
-                info_dict=info_dict,
-                context_menu=context_menu,
-                is_playable=False,
-            ))
+                youtube_items.append(TitleItem(
+                    label=label,
+                    path=path,
+                    art_dict=art_dict,
+                    info_dict=info_dict,
+                    context_menu=context_menu,
+                    is_playable=False,
+                ))
 
         return youtube_items
 
@@ -726,7 +725,7 @@ class ApiHelper:
         for feature in self.localize_features(FEATURED):
             featured_name = feature.get('name')
             featured_items.append(TitleItem(
-                title=featured_name,
+                label=featured_name,
                 path=url_for('featured', feature=feature.get('id')),
                 art_dict=dict(thumb='DefaultCountry.png'),
                 info_dict=dict(plot='[B]%s[/B]' % feature.get('name'), studio='VRT'),
@@ -748,38 +747,17 @@ class ApiHelper:
 
     def list_categories(self):
         """Construct a list of category ListItems"""
-        categories = []
-
-        # Try the cache if it is fresh
-        categories = get_cache('categories.json', ttl=7 * 24 * 60 * 60)
-
-        # Try to scrape from the web
-        if not categories:
-            try:
-                categories = self.get_categories()
-            except Exception:  # pylint: disable=broad-except
-                categories = []
-            else:
-                from json import dumps
-                update_cache('categories.json', dumps(categories))
-
-        # Use the cache anyway (better than hard-coded)
-        if not categories:
-            categories = get_cache('categories.json', ttl=None)
-
-        # Fall back to internal hard-coded categories if all else fails
-        from data import CATEGORIES
-        if not categories:
-            categories = CATEGORIES
-
+        from webscraper import get_categories
+        categories = get_categories()
         category_items = []
+        from data import CATEGORIES
         for category in self.localize_categories(categories, CATEGORIES):
-            if get_setting('showfanart', 'true') == 'true':
+            if get_setting_bool('showfanart', default=True):
                 thumbnail = category.get('thumbnail', 'DefaultGenre.png')
             else:
                 thumbnail = 'DefaultGenre.png'
             category_items.append(TitleItem(
-                title=category.get('name'),
+                label=category.get('name'),
                 path=url_for('categories', category=category.get('id')),
                 art_dict=dict(thumb=thumbnail, icon='DefaultGenre.png'),
                 info_dict=dict(plot='[B]%s[/B]' % category.get('name'), studio='VRT'),
@@ -796,38 +774,3 @@ class ApiHelper:
                     category[key] = localize_from_data(val, categories2)
 
         return sorted(categories, key=lambda x: x.get('name'))
-
-    def get_categories(self):
-        """Return a list of categories by scraping the website"""
-        from bs4 import BeautifulSoup, SoupStrainer
-        log(2, 'URL get: https://www.vrt.be/vrtnu/categorieen/')
-        response = urlopen('https://www.vrt.be/vrtnu/categorieen/')
-        tiles = SoupStrainer('nui-list--content')
-        soup = BeautifulSoup(response.read(), 'html.parser', parse_only=tiles)
-
-        categories = []
-        for tile in soup.find_all('nui-tile'):
-            categories.append(dict(
-                id=tile.get('href').split('/')[-2],
-                thumbnail=self.get_category_thumbnail(tile),
-                name=self.get_category_title(tile),
-            ))
-
-        return categories
-
-    @staticmethod
-    def get_category_thumbnail(element):
-        """Return a category thumbnail, if available"""
-        if get_setting('showfanart', 'true') == 'true':
-            raw_thumbnail = element.find(class_='media').get('data-responsive-image', 'DefaultGenre.png')
-            return add_https_proto(raw_thumbnail)
-        return 'DefaultGenre.png'
-
-    @staticmethod
-    def get_category_title(element):
-        """Return a category title, if available"""
-        found_element = element.find('a')
-        if found_element:
-            return strip_newlines(found_element.contents[0])
-        # FIXME: We should probably fall back to something sensible here, or raise an exception instead
-        return ''

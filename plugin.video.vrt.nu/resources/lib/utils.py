@@ -143,6 +143,9 @@ def url_to_episode(url):
     if url.startswith('//www.vrt.be/vrtnu/a-z/'):
         # medium episode url
         return url.replace('//www.vrt.be/vrtnu/a-z/', '/vrtnu/a-z/')
+    if url.startswith('/vrtnu/a-z/'):
+        # short episode url
+        return url
     return None
 
 
@@ -223,3 +226,11 @@ def realpage(page):
 def find_entry(dlist, key, value, default=None):
     """Find (the first) dictionary in a list where key matches value"""
     return next((entry for entry in dlist if entry.get(key) == value), default)
+
+
+def youtube_to_plugin_url(url):
+    """Convert a YouTube URL to a Kodi plugin URL"""
+    url = url.replace('https://www.youtube.com/', 'plugin://plugin.video.youtube/')
+    if not url.endswith('/'):
+        url += '/'
+    return url

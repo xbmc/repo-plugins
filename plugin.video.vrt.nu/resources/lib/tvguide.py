@@ -71,7 +71,7 @@ class TVGuide:
         date_items = []
         for offset in range(7, -30, -1):
             day = epg + timedelta(days=offset)
-            title = localize_datelong(day)
+            label = localize_datelong(day)
             date = day.strftime('%Y-%m-%d')
 
             # Highlight today with context of 2 days
@@ -81,9 +81,9 @@ class TVGuide:
                 if entry.get('permalink'):
                     date = entry.get('id')
                 if offset == 0:
-                    title = '[COLOR yellow][B]{name}[/B], {date}[/COLOR]'.format(name=date_name, date=title)
+                    label = '[COLOR yellow][B]{name}[/B], {date}[/COLOR]'.format(name=date_name, date=label)
                 else:
-                    title = '[B]{name}[/B], {date}'.format(name=date_name, date=title)
+                    label = '[B]{name}[/B], {date}'.format(name=date_name, date=label)
 
             # Show channel list or channel episodes
             if channel:
@@ -93,7 +93,7 @@ class TVGuide:
 
             cache_file = 'schedule.%s.json' % date
             date_items.append(TitleItem(
-                title=title,
+                label=label,
                 path=path,
                 art_dict=dict(thumb='DefaultYear.png'),
                 info_dict=dict(plot=localize_datelong(day)),
@@ -130,16 +130,16 @@ class TVGuide:
                 art_dict['thumb'] = 'DefaultTags.png'
 
             if date:
-                title = chan.get('label')
+                label = chan.get('label')
                 path = url_for('tvguide', date=date, channel=chan.get('name'))
                 plot = '%s\n%s' % (localize(30302, **chan), datelong)
             else:
-                title = '[B]%s[/B]' % localize(30303, **chan)
+                label = '[B]%s[/B]' % localize(30303, **chan)
                 path = url_for('tvguide_channel', channel=chan.get('name'))
                 plot = '%s\n\n%s' % (localize(30302, **chan), self.live_description(chan.get('name')))
 
             channel_items.append(TitleItem(
-                title=title,
+                label=label,
                 path=path,
                 art_dict=art_dict,
                 info_dict=dict(plot=plot, studio=chan.get('studio')),
@@ -153,6 +153,7 @@ class TVGuide:
         epg_url = epg.strftime(self.VRT_TVGUIDE)
 
         self._favorites.refresh(ttl=ttl('indirect'))
+        self._resumepoints.refresh(ttl=ttl('indirect'))
 
         cache_file = 'schedule.%s.json' % date
         if date in ('today', 'yesterday', 'tomorrow'):
@@ -180,10 +181,11 @@ class TVGuide:
                 label += favorite_marker + watchlater_marker
 
             info_labels = self._metadata.get_info_labels(episode, date=date, channel=entry)
+            # FIXME: Due to a bug in Kodi, ListItem.Title is used when Sort methods are used, not ListItem.Label
             info_labels['title'] = label
 
             episode_items.append(TitleItem(
-                title=label,
+                label=label,
                 path=path,
                 art_dict=self._metadata.get_art(episode),
                 info_dict=info_labels,

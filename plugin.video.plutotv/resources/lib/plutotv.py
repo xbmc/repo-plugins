@@ -37,7 +37,7 @@ ADDON_ID      = 'plugin.video.plutotv'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
 ADDON_NAME    = REAL_SETTINGS.getAddonInfo('name')
 SETTINGS_LOC  = REAL_SETTINGS.getAddonInfo('profile')
-ADDON_PATH    = REAL_SETTINGS.getAddonInfo('path').decode('utf-8')
+ADDON_PATH    = REAL_SETTINGS.getAddonInfo('path')
 ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
 ICON          = REAL_SETTINGS.getAddonInfo('icon')
 FANART        = REAL_SETTINGS.getAddonInfo('fanart')
@@ -85,13 +85,13 @@ def timezone():
     else: return time.timezone / -(60*60) * 100
     
 def setUUID():
-    if REAL_SETTINGS.getSetting("sid"): return
+    if REAL_SETTINGS.getSetting("sid1"): return
     log('setUUID, creating uuid')
-    REAL_SETTINGS.setSetting("sid",uuid.uuid1().hex[:18])
-    REAL_SETTINGS.setSetting("deviceId",uuid.uuid4().hex[:18])
+    REAL_SETTINGS.setSetting("sid1",str(uuid.uuid1()))
+    REAL_SETTINGS.setSetting("deviceId1",str(uuid.uuid4()))
 
 def getUUID():
-    return REAL_SETTINGS.setSetting("sid",uuid.uuid1().hex[:18]), REAL_SETTINGS.setSetting("deviceId",uuid.uuid4().hex[:18])
+    return REAL_SETTINGS.getSetting("sid1"), REAL_SETTINGS.getSetting("deviceId1")
     
 def cookieJar():
     if not xbmcvfs.exists(COOKIE_JAR):
@@ -468,7 +468,9 @@ class PlutoTV(object):
         
     def playVideo(self, name, url, liz=None):
         if url.lower() == 'next_show': return notificationDialog(LANGUAGE(30029), time=4000)
-        elif LANGUAGE(30019) not in url: url = LANGUAGE(30021)%(url,LANGUAGE(30020)%(getUUID()))
+        if url.endswith('?deviceType='): url = url.replace('deviceType=','deviceType=&deviceMake=&deviceModel=&&deviceVersion=unknown&appVersion=unknown&deviceDNT=0&userId=&advertisingId=&app_name=&appName=&buildVersion=&appStoreUrl=&architecture=&includeExtendedEvents=false')#todo lazy fix replace
+        if 'sid' not in url: url = url.replace('deviceModel=&','deviceModel=&' + LANGUAGE(30022)%(getUUID()))
+        url = url.replace('deviceType=&','deviceType=web&').replace('deviceMake=&','deviceMake=Chrome&') .replace('deviceModel=&','deviceModel=Chrome&').replace('appName=&','appName=web&')#todo replace with regex!
         log('playVideo, url = %s'%url)
         if liz is None: liz = xbmcgui.ListItem(name, path=url)
         if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream() and not DEBUG:

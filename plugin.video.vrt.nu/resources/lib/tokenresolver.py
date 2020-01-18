@@ -191,7 +191,7 @@ class TokenResolver:
             return None
 
         from json import dumps
-        login_cookie = 'glt_%s=%s' % (self._API_KEY, login_token)
+        login_cookie = 'glt_{api_key}={token}'.format(api_key=self._API_KEY, token=login_token)
         payload = dict(
             uid=login_json.get('UID'),
             uidsig=login_json.get('UIDSignature'),

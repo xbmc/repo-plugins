@@ -115,7 +115,7 @@ class Metadata:
                 follow_suffix = localize(30410)  # program
                 follow_enabled = bool(api_data.get('url'))
 
-            if follow_enabled:
+            if follow_enabled and program:
                 program_title = to_unicode(quote_plus(from_unicode(program_title)))  # We need to ensure forward slashes are quoted
                 if self._favorites.is_favorite(program):
                     extras = {}
@@ -134,7 +134,7 @@ class Metadata:
                     ))
 
         # GO TO PROGRAM
-        if api_data.get('programType') != 'oneoff':
+        if api_data.get('programType') != 'oneoff' and program:
             if plugin.path.startswith(('/favorites/offline', '/favorites/recent', '/offline', '/recent',
                                        '/resumepoints/continue', '/resumepoints/watchlater', '/tvguide')):
                 context_menu.append((
@@ -269,7 +269,7 @@ class Metadata:
         # VRT NU Search API
         if api_data.get('type') == 'episode':
             if season:
-                plot = html_to_kodilabel(api_data.get('programDescription'))
+                plot = html_to_kodilabel(api_data.get('programDescription', ''))
 
                 # Add additional metadata to plot
                 plot_meta = ''
@@ -310,7 +310,7 @@ class Metadata:
                     plot_meta += '  '
                 plot_meta += localize(30201)  # Geo-blocked
 
-            plot = html_to_kodilabel(api_data.get('description'))
+            plot = html_to_kodilabel(api_data.get('description', ''))
 
             if plot_meta:
                 plot = '%s\n\n%s' % (plot_meta, plot)
@@ -330,13 +330,14 @@ class Metadata:
 
         # VRT NU Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
-            title = api_data.get('title')
             now = datetime.now(dateutil.tz.tzlocal())
             epg = self.parse(date, now)
-            datelong = localize_datelong(epg)
-            start = api_data.get('start')
-            end = api_data.get('end')
-            plot = '[B]%s[/B]\n%s\n%s - %s' % (title, datelong, start, end)
+            plot = '[B]{datelong}[/B]\n{start} - {end}\n\n{description}'.format(
+                datelong=localize_datelong(epg),
+                start=api_data.get('start'),
+                end=api_data.get('end'),
+                description=html_to_kodilabel(api_data.get('description', '')),
+            )
             return plot
 
         # Not Found
@@ -348,11 +349,11 @@ class Metadata:
         # VRT NU Search API
         if api_data.get('type') == 'episode':
             if season:
-                plotoutline = html_to_kodilabel(api_data.get('programDescription'))
+                plotoutline = html_to_kodilabel(api_data.get('programDescription', ''))
                 return plotoutline
 
             if api_data.get('displayOptions', {}).get('showShortDescription'):
-                plotoutline = html_to_kodilabel(api_data.get('shortDescription'))
+                plotoutline = html_to_kodilabel(api_data.get('shortDescription', ''))
                 return plotoutline
 
             plotoutline = api_data.get('subtitle')
@@ -364,7 +365,7 @@ class Metadata:
 
         # VRT NU Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
-            return ''
+            return html_to_kodilabel(api_data.get('shortDescription', '') or api_data.get('subtitle', ''))
 
         # Not Found
         return ''
@@ -540,7 +541,7 @@ class Metadata:
 
         # VRT NU Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
-            return 'video'
+            return 'episode'
 
         return ''
 
@@ -585,7 +586,7 @@ class Metadata:
         # VRT NU Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             if get_setting_bool('showfanart', default=True):
-                art_dict['thumb'] = api_data.get('image', 'DefaultAddonVideo.png')
+                art_dict['thumb'] = add_https_proto(api_data.get('image', 'DefaultAddonVideo.png'))
                 art_dict['fanart'] = art_dict.get('thumb')
                 art_dict['banner'] = art_dict.get('fanart')
             else:
@@ -664,7 +665,7 @@ class Metadata:
 
         # VRT NU Schedule API (some are missing vrt.whatson-id)
         elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
-            title = api_data.get('title', '???')
+            title = api_data.get('subtitle', '???')
 
         return title
 
@@ -684,11 +685,11 @@ class Metadata:
                 titletype = program_type
 
             if display_options.get('showEpisodeTitle'):
-                label = html_to_kodilabel(api_data.get('title') or api_data.get('shortDescription'))
+                label = html_to_kodilabel(api_data.get('title', '') or api_data.get('shortDescription', ''))
             elif display_options.get('showShortDescription'):
-                label = html_to_kodilabel(api_data.get('shortDescription') or api_data.get('title'))
+                label = html_to_kodilabel(api_data.get('shortDescription', '') or api_data.get('title', ''))
             else:
-                label = html_to_kodilabel(api_data.get('title') or api_data.get('shortDescription'))
+                label = html_to_kodilabel(api_data.get('title', '') or api_data.get('shortDescription', ''))
 
             sort = 'unsorted'
             ascending = True
@@ -741,7 +742,12 @@ class Metadata:
             from datetime import datetime
             import dateutil.parser
             import dateutil.tz
-            label = '%s - %s' % (api_data.get('start'), api_data.get('title'))
+            title = html_to_kodilabel(api_data.get('subtitle', '') or api_data.get('shortDescription', ''))
+            label = '{start} - [B]{program}[/B]{title}'.format(
+                start=api_data.get('start'),
+                program=api_data.get('title'),
+                title=' - ' + title if title else '',
+            )
             now = datetime.now(dateutil.tz.tzlocal())
             start_date = dateutil.parser.parse(api_data.get('startTime'))
             end_date = dateutil.parser.parse(api_data.get('endTime'))

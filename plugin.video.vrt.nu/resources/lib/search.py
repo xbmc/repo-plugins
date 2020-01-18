@@ -49,11 +49,10 @@ class Search:
             menu_items.append(TitleItem(
                 label=keywords,
                 path=url_for('search_query', keywords=keywords),
-                art_dict=dict(thumb='DefaultAddonsSearch.png'),
                 is_playable=False,
                 context_menu=[(
                     localize(30030),  # Remove
-                    'RunPlugin(%s)' % url_for('remove_search', keywords=keywords)
+                    'RunPlugin(%s)' % url_for('remove_search', keywords=keywords),
                 )],
             ))
 

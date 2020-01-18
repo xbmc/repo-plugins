@@ -39,7 +39,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         self.whatson_id = None
         from random import randint
         self.thread_id = randint(1, 10001)
-        log(3, '[PlayerInfo %d] Initialized' % self.thread_id)
+        log(3, '[PlayerInfo {id}] Initialized', id=self.thread_id)
         super(PlayerInfo, self).__init__()
 
     def onPlayBackStarted(self):  # pylint: disable=invalid-name
@@ -51,7 +51,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             self.listen = False
             return
 
-        log(3, '[PlayerInfo %d] Event onPlayBackStarted' % self.thread_id)
+        log(3, '[PlayerInfo {id}] Event onPlayBackStarted', id=self.thread_id)
 
         # Set property to let wait_for_resumepoints function know that update resume is busy
         set_property('vrtnu_resumepoints', 'busy')
@@ -71,7 +71,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         # Avoid setting resumepoints for livestreams
         for channel in CHANNELS:
             if ep_id.get('video_id') and ep_id.get('video_id') == channel.get('live_stream_id'):
-                log(3, '[PlayerInfo %d] Avoid setting resumepoints for livestream %s' % (self.thread_id, ep_id.get('video_id')))
+                log(3, '[PlayerInfo {id}] Avoid setting resumepoints for livestream {video_id}', id=self.thread_id, video_id=ep_id.get('video_id'))
                 self.listen = False
 
                 # Reset vrtnu_resumepoints property before return
@@ -101,7 +101,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         """Called when Kodi has a video or audiostream"""
         if not self.listen:
             return
-        log(3, '[PlayerInfo %d] Event onAVStarted' % self.thread_id)
+        log(3, '[PlayerInfo {id}] Event onAVStarted', id=self.thread_id)
         self.quit.clear()
         self.update_position()
         self.update_total()
@@ -120,7 +120,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         """Called when user seeks to a time"""
         if not self.listen:
             return
-        log(3, '[PlayerInfo %d] Event onPlayBackSeek time=%d offset=%d' % (self.thread_id, time, seekOffset))
+        log(3, '[PlayerInfo {id}] Event onPlayBackSeek time={time} offset={offset}', id=self.thread_id, time=time, offset=seekOffset)
         self.last_pos = time // 1000
 
         # If we seek beyond the end, exit Player
@@ -132,7 +132,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         """Called when user pauses a playing file"""
         if not self.listen:
             return
-        log(3, '[PlayerInfo %d] Event onPlayBackPaused' % self.thread_id)
+        log(3, '[PlayerInfo {id}] Event onPlayBackPaused', id=self.thread_id)
         self.update_position()
         self.push_position(position=self.last_pos, total=self.total)
         self.paused = True
@@ -142,7 +142,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         if not self.listen:
             return
         suffix = 'after pausing' if self.paused else 'after playlist change'
-        log(3, '[PlayerInfo %d] Event onPlayBackResumed %s' % (self.thread_id, suffix))
+        log(3, '[PlayerInfo {id}] Event onPlayBackResumed {suffix}', id=self.thread_id, suffix=suffix)
         self.paused = False
 
     def onPlayBackEnded(self):  # pylint: disable=invalid-name
@@ -151,25 +151,25 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             return
         self.last_pos = self.total
         self.quit.set()
-        log(3, '[PlayerInfo %d] Event onPlayBackEnded' % self.thread_id)
+        log(3, '[PlayerInfo {id}] Event onPlayBackEnded', id=self.thread_id)
 
     def onPlayBackError(self):  # pylint: disable=invalid-name
         """Called when playback stops due to an error"""
         if not self.listen:
             return
         self.quit.set()
-        log(3, '[PlayerInfo %d] Event onPlayBackError' % self.thread_id)
+        log(3, '[PlayerInfo {id}] Event onPlayBackError', id=self.thread_id)
 
     def onPlayBackStopped(self):  # pylint: disable=invalid-name
         """Called when user stops Kodi playing a file"""
         if not self.listen:
             return
         self.quit.set()
-        log(3, '[PlayerInfo %d] Event onPlayBackStopped' % self.thread_id)
+        log(3, '[PlayerInfo {id}] Event onPlayBackStopped', id=self.thread_id)
 
     def onPlayerExit(self):  # pylint: disable=invalid-name
         """Called when player exits"""
-        log(3, '[PlayerInfo %d] Event onPlayerExit' % self.thread_id)
+        log(3, '[PlayerInfo {id}] Event onPlayerExit', id=self.thread_id)
         self.positionthread = None
         self.push_position(position=self.last_pos, total=self.total)
 
@@ -189,14 +189,14 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         # Reset vrtnu_resumepoints property
         set_property('vrtnu_resumepoints', None)
 
-        url = 'plugin://plugin.video.vrt.nu/play/upnext/%s' % video_id
+        url = 'plugin://plugin.video.vrt.nu/play/upnext/{video_id}'.format(video_id=video_id)
         self.update_position()
         self.update_total()
         if self.isPlaying() and self.total - self.last_pos < 1:
-            log(3, '[PlayerInfo] %d Add %s to Kodi Playlist' % (self.thread_id, url))
+            log(3, '[PlayerInfo {id}] Add {url} to Kodi Playlist', id=self.thread_id, url=url)
             PlayList(1).add(url)
         else:
-            log(3, '[PlayerInfo] %d Add %s to Kodi Player' % (self.thread_id, url))
+            log(3, '[PlayerInfo {id}] Add {url} to Kodi Player', id=self.thread_id, url=url)
             self.play(url)
 
     def push_upnext(self):
@@ -214,7 +214,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
                 from base64 import b64encode
                 from json import dumps
                 data = [to_unicode(b64encode(dumps(next_info).encode()))]
-                sender = '%s.SIGNAL' % addon_id()
+                sender = '{addon_id}.SIGNAL'.format(addon_id=addon_id())
                 notify(sender=sender, message='upnext_data', data=data)
 
     def update_position(self):

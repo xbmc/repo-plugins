@@ -116,8 +116,8 @@ def url_to_program(url):
           - a long programUrl (e.g. https://www.vrt.be/vrtnu/a-z/de-campus-cup/)
         to a program url component (e.g. de-campus-cup).
         Any season or episode information is removed as well.
-   """
-    program = None
+    """
+    program = ''
     if url.startswith('https://www.vrt.be/vrtnu/a-z/'):
         # long programUrl or targetUrl
         program = url.split('/')[5]

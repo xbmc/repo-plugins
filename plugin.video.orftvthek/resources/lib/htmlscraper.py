@@ -847,7 +847,11 @@ class htmlScraper(Scraper):
 
 			ApiKey = '2e9f11608ede41f1826488f1e23c4a8d'
 			response = url_get_request('https://playerapi-restarttv.ors.at/livestreams/%s/sections/?state=active&X-Api-Key=%s' % (bitmovinStreamId, ApiKey))
-			response_raw = response.read().decode(response.headers.get_content_charset())
+			try:
+				charset = response.headers.get_content_charset()
+				response_raw = response.read().decode(charset)
+			except AttributeError:
+				response_raw = response.read().decode('utf-8')
 
 			section = json.loads(response_raw)
 			if len(section):

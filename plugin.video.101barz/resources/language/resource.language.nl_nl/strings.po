@@ -50,5 +50,13 @@ msgid "Next Page"
 msgstr "Volgende Pagina"
 
 msgctxt "#30101"
-msgid "Only show All videos category"
-msgstr "Laat alleen de Alle Videos categorie zien"
+msgid "Number of videos shown"
+msgstr "Aantal getoonde videos"
+
+msgctxt "#30611"
+msgid "Error"
+msgstr "Fout"
+
+msgctxt "#30612"
+msgid "Video not found"
+msgstr "Video niet gevonden"

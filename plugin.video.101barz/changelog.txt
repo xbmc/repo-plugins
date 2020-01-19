@@ -1,2 +1,5 @@
+1.1.0 (2020-01-15)
+- changes due to major website changes
+
 1.0.0 (2019-02-13)
 - initial version

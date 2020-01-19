@@ -2,13 +2,15 @@
 <addon
 	id="plugin.video.101barz"
 	name="101barz"
-	version="1.0.0"
+	version="1.1.0"
 	provider-name="Skipmode A1">
     <requires>
         <import addon="xbmc.python"                     version="2.26.0"/>
-        <import addon="script.module.future"            version="0.0.1"/>
+        <import addon="script.module.beautifulsoup4"    version="4.3.2"/>
         <import addon="script.module.requests"          version="2.4.3"/>
-        <import addon="plugin.video.youtube"            version="5.1.7"/>
+        <import addon="script.module.future"            version="0.0.1"/>
+        <import addon="script.module.html5lib"          version="0.999.0"/>
+        <import addon="plugin.video.youtube" 		    version="5.1.7" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
@@ -22,14 +24,14 @@
             <disclaimer lang="nl_NL">Bugs of andere feedback op deze plugin kan geplaatst worden in de 101barz thread op het Kodi forum.</disclaimer>
         <language>nl</language>
         <platform>all</platform>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <forum></forum>
+        <license>GPL-2.0-or-later</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=340958</forum>
         <website>https://101barz.bnnvara.nl</website>
         <source>https://github.com/skipmodea1/plugin.video.101barz</source>
         <email></email>
         <platform>all</platform>
-        <news>1.0.0 (2019-02-13)
-        - initial version
+        <news>1.1.0 (2020-01-15)
+        - changes due to major website changes
         </news>
         <assets>
             <icon>resources/icon.png</icon>

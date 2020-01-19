@@ -44,7 +44,7 @@ def createPlayAllItem(name, pluginhandle, stream_info=False):
     else:
         description = ""
     play_all_item.setInfo(type="Video", infoLabels={"Title": name, "Plot": description})
-    xbmcplugin.addDirectoryItem(pluginhandle, play_all_url, play_all_item, isFolder=True, totalItems=-1)
+    xbmcplugin.addDirectoryItem(pluginhandle, play_all_url, play_all_item, isFolder=False, totalItems=-1)
 
 
 def createListItem(title, banner, description, duration, date, channel, videourl, playable, folder, backdrop, pluginhandle, subtitles=None, blacklist=False, contextMenuItems=None):

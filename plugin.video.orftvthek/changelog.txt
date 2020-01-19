@@ -1,3 +1,6 @@
+* 0.10.1
+- fixed kodi crash when using the playlist listitem
+
 * 0.10.0
 - python2/3 compatible
 - added 'play full video' for htmlscraper

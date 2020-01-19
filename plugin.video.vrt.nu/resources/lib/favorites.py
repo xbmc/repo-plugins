@@ -79,7 +79,7 @@ class Favorites:
         data = dumps(payload).encode('utf-8')
         program_id = program_to_id(program)
         try:
-            get_url_json('https://video-user-data.vrt.be/favorites/%s' % program_id, headers=headers, data=data)
+            get_url_json('https://video-user-data.vrt.be/favorites/{program_id}'.format(program_id=program_id), headers=headers, data=data)
         except HTTPError as exc:
             log_error("Failed to (un)follow program '{program}' at VRT NU ({error})", program=program, error=exc)
             notification(message=localize(30976, program=program))

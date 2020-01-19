@@ -151,7 +151,7 @@ class ResumePoints:
         """Update resumepoint online"""
         from json import dumps
         try:
-            get_url_json('https://video-user-data.vrt.be/resume_points/%s' % asset_id,
+            get_url_json('https://video-user-data.vrt.be/resume_points/{asset_id}'.format(asset_id=asset_id),
                          headers=self.resumepoint_headers(url), data=dumps(payload).encode())
         except HTTPError as exc:
             log_error('Failed to (un)watch episode {title} at VRT NU ({error})', title=title, error=exc)
@@ -180,7 +180,7 @@ class ResumePoints:
 
     def delete_online(self, asset_id):
         """Delete resumepoint online"""
-        req = Request('https://video-user-data.vrt.be/resume_points/%s' % asset_id, headers=self.resumepoint_headers())
+        req = Request('https://video-user-data.vrt.be/resume_points/{asset_id}'.format(asset_id=asset_id), headers=self.resumepoint_headers())
         req.get_method = lambda: 'DELETE'
         try:
             result = urlopen(req)

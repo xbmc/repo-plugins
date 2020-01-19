@@ -10,7 +10,7 @@ try:  # Python 3
 except ImportError:  # Python 2
     from urllib import unquote_plus
 
-from kodiutils import localize, log_access, notification, refresh_caches
+from kodiutils import end_of_directory, localize, log_access, notification, refresh_caches
 from utils import from_unicode, to_unicode
 
 plugin = Plugin()  # pylint: disable=invalid-name
@@ -21,6 +21,12 @@ def main_menu():
     """The VRT NU plugin main menu"""
     from vrtplayer import VRTPlayer
     VRTPlayer().show_main_menu()
+
+
+@plugin.route('/noop')
+def noop():
+    """The API interface to do nothing"""
+    end_of_directory()
 
 
 @plugin.route('/cache/delete')

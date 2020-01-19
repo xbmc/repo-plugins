@@ -88,7 +88,7 @@ class StreamService:
                 raise ValueError('Missing D{SSM} placeholder')
             key_value = quote(key_value)
 
-        return '%s|%s|%s|' % (key_url, header, key_value)
+        return '{key_url}|{header}|{key_value}|'.format(key_url=key_url, header=header, key_value=key_value)
 
     def _get_api_data(self, video):
         """Create api data object from video dictionary"""
@@ -291,7 +291,7 @@ class StreamService:
             message = localize(30958, protocol=protocol.upper(), component='InputStream Adaptive', state=localize(30961))
         else:
             message = localize(30958, protocol=protocol.upper(), component='InputStream Adaptive', state=localize(30960))
-        heading = 'HTTP Error %s: %s' % (code, reason) if code and reason else None
+        heading = 'HTTP Error {code}: {reason}'.format(code=code, reason=reason) if code and reason else None
         log_error('Unable to play stream. {error}', error=heading)
         ok_dialog(heading=heading, message=message)
         end_of_directory()

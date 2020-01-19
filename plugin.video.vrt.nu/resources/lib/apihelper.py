@@ -42,15 +42,15 @@ class ApiHelper:
 
         if category:
             params['facets[categories]'] = category
-            cache_file = 'category.%s.json' % category
+            cache_file = 'category.{category}.json'.format(category=category)
 
         if channel:
             params['facets[programBrands]'] = channel
-            cache_file = 'channel.%s.json' % channel
+            cache_file = 'channel.{channel}.json'.format(channel=channel)
 
         if feature:
             params['facets[programTags.title]'] = feature
-            cache_file = 'featured.%s.json' % feature
+            cache_file = 'featured.{feature}.json'.format(feature=feature)
 
         # If no facet-selection is done, we return the 'All programs' listing
         if not category and not channel and not feature:
@@ -101,9 +101,9 @@ class ApiHelper:
         if not variety:
             cache_file = None
         elif use_favorites:
-            cache_file = 'my-%s-%s.json' % (variety, page)
+            cache_file = 'my-{variety}-{page}.json'.format(variety=variety, page=page)
         else:
-            cache_file = '%s-%s.json' % (variety, page)
+            cache_file = '{variety}-{page}.json'.format(variety=variety, page=page)
 
         # Titletype
         titletype = None
@@ -407,7 +407,7 @@ class ApiHelper:
         else:
             schedule_date = onairdate
         schedule_datestr = schedule_date.isoformat().split('T')[0]
-        url = 'https://www.vrt.be/bin/epg/schedule.%s.json' % schedule_datestr
+        url = 'https://www.vrt.be/bin/epg/schedule.{date}.json'.format(date=schedule_datestr)
         schedule_json = get_url_json(url, fail={})
         episodes = schedule_json.get(channel.get('id'), [])
         if not episodes:
@@ -628,6 +628,7 @@ class ApiHelper:
                 is_playable = False
                 info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video')
                 stream_dict = []
+                prop_dict = {}
             elif channel.get('live_stream') or channel.get('live_stream_id'):
                 if channel.get('live_stream_id'):
                     path = url_for('play_id', video_id=channel.get('live_stream_id'))
@@ -647,12 +648,13 @@ class ApiHelper:
                     plot = '%s\n\n%s' % (localize(30142, **channel), _tvguide.live_description(channel.get('name')))
                 else:
                     plot = localize(30142, **channel)  # Watch live
-                # NOTE: Playcount is required to not have live streams as "Watched"
+                # NOTE: Playcount and resumetime are required to not have live streams as "Watched" and resumed
                 info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video', playcount=0, duration=0)
+                prop_dict = dict(resumetime=0)
                 stream_dict = dict(duration=0)
                 context_menu.append((
                     localize(30413),  # Refresh menu
-                    'RunPlugin(%s)' % url_for('delete_cache', cache_file='channel.%s.json' % channel)
+                    'RunPlugin(%s)' % url_for('delete_cache', cache_file='channel.{channel}.json'.format(channel=channel)),
                 ))
             else:
                 # Not a playable channel
@@ -663,6 +665,7 @@ class ApiHelper:
                 path=path,
                 art_dict=art_dict,
                 info_dict=info_dict,
+                prop_dict=prop_dict,
                 stream_dict=stream_dict,
                 context_menu=context_menu,
                 is_playable=is_playable,
@@ -683,7 +686,6 @@ class ApiHelper:
             if channels and channel.get('name') not in channels:
                 continue
 
-            context_menu = []
             art_dict = {}
 
             # Try to use the white icons for thumbnails (used for icons as well)
@@ -701,10 +703,11 @@ class ApiHelper:
                 plot = localize(30144, **youtube)  # Watch on YouTube
                 # NOTE: Playcount is required to not have live streams as "Watched"
                 info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video', playcount=0)
-                context_menu.append((
+
+                context_menu = [(
                     localize(30413),  # Refresh menu
-                    'RunPlugin(%s)' % url_for('delete_cache', cache_file='channel.%s.json' % channel)
-                ))
+                    'RunPlugin(%s)' % url_for('delete_cache', cache_file='channel.{channel}.json'.format(channel=channel)),
+                )]
 
                 youtube_items.append(TitleItem(
                     label=label,

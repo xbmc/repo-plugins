@@ -353,6 +353,12 @@ def localize(string_id, **kwargs):
     return ADDON.getLocalizedString(string_id)
 
 
+def localize_time(time):
+    """Return localized time"""
+    time_format = xbmc.getRegion('time').replace(':%S', '')  # Strip off seconds
+    return time.strftime(time_format).lstrip('0')  # Remove leading zero on all platforms
+
+
 def localize_date(date, strftime):
     """Return a localized date, even if the system does not support your locale"""
     has_locale = set_locale()
@@ -596,24 +602,23 @@ def get_proxies():
         return None
 
     proxy_types = ['http', 'socks4', 'socks4a', 'socks5', 'socks5h']
-    if 0 <= httpproxytype < 5:
-        httpproxyscheme = proxy_types[httpproxytype]
-    else:
-        httpproxyscheme = 'http'
 
-    httpproxyserver = get_global_setting('network.httpproxyserver')
-    httpproxyport = get_global_setting('network.httpproxyport')
-    httpproxyusername = get_global_setting('network.httpproxyusername')
-    httpproxypassword = get_global_setting('network.httpproxypassword')
+    proxy = dict(
+        scheme=proxy_types[httpproxytype] if 0 <= httpproxytype < 5 else 'http',
+        server=get_global_setting('network.httpproxyserver'),
+        port=get_global_setting('network.httpproxyport'),
+        username=get_global_setting('network.httpproxyusername'),
+        password=get_global_setting('network.httpproxypassword'),
+    )
 
-    if httpproxyserver and httpproxyport and httpproxyusername and httpproxypassword:
-        proxy_address = '%s://%s:%s@%s:%s' % (httpproxyscheme, httpproxyusername, httpproxypassword, httpproxyserver, httpproxyport)
-    elif httpproxyserver and httpproxyport and httpproxyusername:
-        proxy_address = '%s://%s@%s:%s' % (httpproxyscheme, httpproxyusername, httpproxyserver, httpproxyport)
-    elif httpproxyserver and httpproxyport:
-        proxy_address = '%s://%s:%s' % (httpproxyscheme, httpproxyserver, httpproxyport)
-    elif httpproxyserver:
-        proxy_address = '%s://%s' % (httpproxyscheme, httpproxyserver)
+    if proxy.get('username') and proxy.get('password') and proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{username}:{password}@{server}:{port}'.format(**proxy)
+    elif proxy.get('username') and proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{username}@{server}:{port}'.format(**proxy)
+    elif proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{server}:{port}'.format(**proxy)
+    elif proxy.get('server'):
+        proxy_address = '{scheme}://{server}'.format(**proxy)
     else:
         return None
 

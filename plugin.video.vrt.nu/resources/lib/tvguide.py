@@ -85,18 +85,20 @@ class TVGuide:
                 else:
                     label = '[B]{name}[/B], {date}'.format(name=date_name, date=label)
 
+            plot = '[B]{datelong}[/B]'.format(datelong=localize_datelong(day))
+
             # Show channel list or channel episodes
             if channel:
                 path = url_for('tvguide', date=date, channel=channel)
             else:
                 path = url_for('tvguide', date=date)
 
-            cache_file = 'schedule.%s.json' % date
+            cache_file = 'schedule.{date}.json'.format(date=date)
             date_items.append(TitleItem(
                 label=label,
                 path=path,
                 art_dict=dict(thumb='DefaultYear.png'),
-                info_dict=dict(plot=localize_datelong(day)),
+                info_dict=dict(plot=plot),
                 context_menu=[(
                     localize(30413),  # Refresh menu
                     'RunPlugin(%s)' % url_for('delete_cache', cache_file=cache_file)
@@ -132,16 +134,22 @@ class TVGuide:
             if date:
                 label = chan.get('label')
                 path = url_for('tvguide', date=date, channel=chan.get('name'))
-                plot = '%s\n%s' % (localize(30302, **chan), datelong)
+                plot = '[B]%s[/B]\n%s' % (datelong, localize(30302, **chan))
             else:
                 label = '[B]%s[/B]' % localize(30303, **chan)
                 path = url_for('tvguide_channel', channel=chan.get('name'))
                 plot = '%s\n\n%s' % (localize(30302, **chan), self.live_description(chan.get('name')))
 
+            context_menu = [(
+                localize(30413),  # Refresh menu
+                'RunPlugin(%s)' % url_for('delete_cache', cache_file='channel.{channel}.json'.format(channel=chan.get('name'))),
+            )]
+
             channel_items.append(TitleItem(
                 label=label,
                 path=path,
                 art_dict=art_dict,
+                context_menu=context_menu,
                 info_dict=dict(plot=plot, studio=chan.get('studio')),
             ))
         return channel_items
@@ -155,7 +163,7 @@ class TVGuide:
         self._favorites.refresh(ttl=ttl('indirect'))
         self._resumepoints.refresh(ttl=ttl('indirect'))
 
-        cache_file = 'schedule.%s.json' % date
+        cache_file = 'schedule.{date}.json'.format(date=date)
         if date in ('today', 'yesterday', 'tomorrow'):
             schedule = get_cached_url_json(url=epg_url, cache=cache_file, ttl=ttl('indirect'), fail={})
         else:
@@ -168,17 +176,18 @@ class TVGuide:
             episodes = []
         episode_items = []
         for episode in episodes:
-
             label = self._metadata.get_label(episode)
-
-            context_menu = []
-            path = None
+            program = url_to_program(episode.get('url', ''))
             if episode.get('url'):
                 video_url = add_https_proto(episode.get('url'))
                 path = url_for('play_url', video_url=video_url)
-                program = url_to_program(episode.get('url'))
                 context_menu, favorite_marker, watchlater_marker = self._metadata.get_context_menu(episode, program, cache_file)
                 label += favorite_marker + watchlater_marker
+                is_playable = True
+            else:
+                path = url_for('noop')
+                context_menu, _, _ = self._metadata.get_context_menu(episode, program, cache_file)
+                is_playable = False
 
             info_labels = self._metadata.get_info_labels(episode, date=date, channel=entry)
             # FIXME: Due to a bug in Kodi, ListItem.Title is used when Sort methods are used, not ListItem.Label
@@ -189,8 +198,8 @@ class TVGuide:
                 path=path,
                 art_dict=self._metadata.get_art(episode),
                 info_dict=info_labels,
-                is_playable=True,
                 context_menu=context_menu,
+                is_playable=is_playable,
             ))
         return episode_items
 

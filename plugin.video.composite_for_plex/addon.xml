@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.composite_for_plex" name="Composite" version="0.8.1" provider-name="anxdpanic">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.kodi-six" version="0.0.2"/>
+        <import addon="script.module.six" version="1.11.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="script.module.pyxbmct" version="1.2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="resources/lib/entry_point.py">
+        <provides>video audio image</provides>
+        <medialibraryscanpath content="movies">library/movies/</medialibraryscanpath>
+        <medialibraryscanpath content="tvshows">library/tvshows/</medialibraryscanpath>
+    </extension>
+    <extension point="xbmc.service" library="resources/lib/service_entry_point.py"/>
+    <extension point="xbmc.addon.metadata">
+        <news>
+[upd] updates for official repository review
+        </news>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.png</fanart>
+        </assets>
+        <platform>all</platform>
+        <license>GPL-2.0-or-later</license>
+        <source>https://github.com/anxdpanic/plugin.video.composite_for_plex</source>
+        <description lang="en_GB">Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay</description>
+        <disclaimer lang="en_GB">Composite is NOT an official Plex add-on and is not supported or endorsed by Plex.</disclaimer>
+        <description lang="de_DE">Durchsuchen und Abspielen von Videos, Musik und Fotos, die vom Plex Media Server verwaltet werden.[CR][CR]Fork von Hippojay's PleXBMC</description>
+        <disclaimer lang="de_DE">Composite ist KEIN offizielles Plex Add-on und wird von Plex weder unterstützt noch gebilligt.</disclaimer>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+    </extension>
+</addon>

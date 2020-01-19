@@ -254,7 +254,7 @@ class Net:
         encoding = ''
         req = urllib.request.Request(url)
         if form_data:
-            form_data = urllib.urlencode(form_data)
+            form_data = urllib.parse.urlencode(form_data)
             req = urllib.request.Request(url, form_data)
         req.add_header('User-Agent', self._user_agent)
         for k, v in headers.items():

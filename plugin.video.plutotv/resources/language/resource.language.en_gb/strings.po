@@ -97,7 +97,7 @@ msgid "&deviceMake=&deviceModel=&sid=%s&deviceId=%s"
 msgstr ""
 
 msgctxt "#30021"
-msgid "%s%s&deviceVersion=unknown&appVersion=unknown&deviceDNT=0&userId=&advertisingId=&deviceLat=40.6805&deviceLon=-73.8442&app_name=&appName=&buildVersion=&appStoreUrl=&architecture="
+msgid ""
 msgstr ""
 
 msgctxt "#30022"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.1.4"
+        version="5.1.5"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,34 +132,23 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.1.4 - Changelog - 2020-01-05[/B]
+        <news>[B]Retrospect v5.1.5 - Changelog - 2020-01-22[/B]
 
-This update contains some appearances fixes to both Retrospect and some Swedish channels.
+This update contains a fix for VRT.nu that broken, Nickelodeon and more appearances fixes for Swedish channels.
 
 [B]Framework related[/B]
 -
 
 [B]GUI/Settings/Language related[/B]
-* Changed: Added more view modes to the channel listings (Fixes #1268)
-* Fixed: Don&#x27;t set dates in titles for Kodi Leia and up (See #1271)
-* Fixed: Don&#x27;t show the &#x27;.:&#x27; in front of favourites (See #1271)
+-
 
 [B]Channel related[/B]
-* Updated: thumbs/fanart for SVT, TV4 and DPlay (See #1268)
-* Added: Add season/episode info instead of &quot;del #&quot; to TV4 (See #1271)
-* Added: Expire date to TV4 items (See #1271 and Fixes #1269)
-* Added: Duration to TV4 shows (See #1271)
-* Updated: Artwork for ViaFree (Fixes #1272)
-* Added: Expire date for ViaFree (Fixes #1272)
-* Changed: Moved to sXXeXX for seasons for ViaFree (Fixes #1272)
-* Fixed: &amp;amp; in SVT subtitles
-* Added: Missing fanart and thumbs to SVT (Fixes #1273)
-* Fixed: `Filmer` category and missing ones in SVT (Fixes #1273)
-* Added: Date to some videos (See #1273)
-* Changed: Filter titles for some videos to not include a date or time (See #1273)
-* Added: Some season information to shows that have it in SVT (See #1273)
-* Updated: a bit more season info for ViaFree (See #1272)
-* Fixed: We removed too much episode information in ee9358b0 (See #1271)
+* Fixed: VRT.nu updated some HTML pages (Fixes #1276)
+* Updated: thumbs/fanart for DPlay (Fixes #1277)
+* Fixed: Kanal 5 and DPlay did not work (Fixes #1275)
+* Fixed: Use RTMPE for NickJr (Fixes #1279)
+* Fixed: Use HLS for Nickelodeon (Fixes #1279)
+* Fixed: TV4 Play thumbs and fanart (Fixes #1280)
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

@@ -44,7 +44,7 @@ class Channel(chn_class.Channel):
         self.baseUrl = "https://www.vrt.be"
 
         # first regex is a bit tighter than the second one.
-        episode_regex = r'<a[^>]+href="(?<url>/vrtnu[^"]+)"[^>]*>(?<title>[^<]+)\s*</a>\s*</h3>\s*<div[^>]+>(?:<p>)?(?<description>[^<]*)(?:<br[^>]*>)?(?<descriptionMore>[^<]*)?(?:</p>)?\W*</div>\s*(?:<p[^>]*data-brand="(?<channel>[^"]+)"[^>]*>[^<]+</p>)?\s*(?:<img[\w\W]{0,100}?data-responsive-image="(?<thumburl>//[^" ]+)")?'
+        episode_regex = r'<nui-tile href="(?<url>/vrtnu[^"]+)"[^>]*>\s*<h3[^>]*>(?<title>[^<]+)</h3>\s*<div[^>]+>(?:<p>)?(?<description>[^<]*)(?:<br[^>]*>)?(?<descriptionMore>[^<]*)?(?:</p>)?\W*</div>\s*(?:<p[^>]*data-brand="(?<channel>[^"]+)"[^>]*>[^<]+</p>)?\s*(?:<img[\w\W]{0,100}?data-responsive-image="(?<thumburl>//[^" ]+)")?'
         episode_regex = Regexer.from_expresso(episode_regex)
         self._add_data_parser(self.mainListUri, name="Main A-Z listing",
                               preprocessor=self.add_categories,
@@ -71,9 +71,10 @@ class Channel(chn_class.Channel):
 
         catregex = r'<a[^>]+href="(?<url>/vrtnu/categorieen/(?<catid>[^"]+)/)"[^>]*>(?<title>[^<]+)\s*</a>\s*</h3>\s*<img[\w\W]{0,100}?data-responsive-image="(?<thumburl>//[^" ]+)"'
         catregex = Regexer.from_expresso(catregex)
-        self._add_data_parser("https://www.vrt.be/vrtnu/categorieen/", name="Category parser",
+        self._add_data_parser("https://www.vrt.be/vrtnu/categorieen.model.json", name="Category parser",
+                              json=True,
                               match_type=ParserData.MatchExact,
-                              parser=catregex,
+                              parser=[":items", "par", ":items", "categories", "items"],
                               creator=self.create_category)
 
         folder_regex = r'<li class="vrt-labelnav--item "[^>]*>\s*(?:<h2[^<]*>\s*)?<a[^>]*href="' \
@@ -285,7 +286,7 @@ class Channel(chn_class.Channel):
             Logger.info("Only showing items for channel: '%s'", self.__currentChannel)
             return data, items
 
-        cat = MediaItem("\a.: Categori&euml;n :.", "https://www.vrt.be/vrtnu/categorieen/")
+        cat = MediaItem("\a.: Categori&euml;n :.", "https://www.vrt.be/vrtnu/categorieen.model.json")
         cat.fanart = self.fanart
         cat.thumb = self.noImage
         cat.icon = self.icon
@@ -354,11 +355,20 @@ class Channel(chn_class.Channel):
         """
 
         # https://search.vrt.be/suggest?facets[categories]=met-audiodescriptie
-        result_set["url"] = "https://search.vrt.be/suggest?facets[categories]=%(catid)s" % result_set
-        item = chn_class.Channel.create_folder_item(self, result_set)
-        if item is not None and item.thumb and item.thumb.startswith("//"):
-            item.thumb = "https:%s" % (item.thumb, )
+        url = "https://search.vrt.be/suggest?facets[categories]=%(name)s" % result_set
+        title = result_set["title"]
+        thumb = result_set["imageStoreUrl"]
+        if thumb.startswith("//"):
+            thumb = "https:{}".format(thumb)
 
+        item = MediaItem(title, url)
+        item.description = title
+        item.thumb = thumb
+        item.icon = self.icon
+        item.type = 'folder'
+        item.fanart = self.fanart
+        item.HttpHeaders = self.httpHeaders
+        item.complete = True
         return item
 
     def create_live_stream(self, result_set):

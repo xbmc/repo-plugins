@@ -297,7 +297,6 @@ class Channel(chn_class.Channel):
             rtmp_datas = stream.get_value("package", "video", "item", 0, "rendition")
             for rtmp_data in rtmp_datas:
                 rtmp_url = rtmp_data["src"]
-                rtmp_url = rtmp_url.replace("rtmpe://", "rtmp://")
                 bitrate = rtmp_data["bitrate"]
                 part.append_media_stream(rtmp_url, bitrate)
 

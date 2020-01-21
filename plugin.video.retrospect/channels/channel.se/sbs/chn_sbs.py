@@ -2,11 +2,12 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 import uuid
+import time
 import datetime
 
 from resources.lib import chn_class
 from resources.lib.mediaitem import MediaItem
-from resources.lib.addonsettings import AddonSettings
+from resources.lib.addonsettings import AddonSettings, LOCAL
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
@@ -190,7 +191,14 @@ class Channel(chn_class.Channel):
 
         #===========================================================================================
         # non standard items
-        if not UriHandler.get_cookie("st", self.baseUrlApi):
+        api_cookie = UriHandler.get_cookie("st", self.baseUrlApi)
+        api_cookie_set = AddonSettings.get_channel_setting(self, "api_cookie_set", store=LOCAL) or 0
+        # The cookie is invalid earler then its expire date. Let's limit it at 30 days
+        if time.time() - api_cookie_set > 30 * 24 * 3600:
+            Logger.debug("Resetting api_cookie for %s", self)
+            api_cookie = None
+
+        if not api_cookie:
             guid = uuid.uuid4()
             guid = str(guid).replace("-", "")
             # https://disco-api.dplay.se/token?realm=dplayse&deviceId
@@ -198,6 +206,8 @@ class Channel(chn_class.Channel):
             url = "https://{0}/token?realm=dplay{1}&deviceId={2}&shortlived=true"\
                 .format(self.baseUrlApi, self.language, guid)
             JsonHelper(UriHandler.open(url, proxy=self.proxy))
+            # noinspection PyTypeChecker
+            AddonSettings.set_channel_setting(self, "api_cookie_set", time.time(), store=LOCAL)
 
         self.imageLookup = {}
         self.showLookup = {}
@@ -494,16 +504,19 @@ class Channel(chn_class.Channel):
             item.name = "s{0:02d}e{1:02d} - {2}".format(season, episode, item.name)
             item.set_season_info(season, episode)
 
+        item.fanart = self.parentItem.fanart
         if include_show_title:
             show_id = result_set["relationships"].get("show", {}).get("data", {}).get("id")
             if show_id:
                 show = self.showLookup[show_id]
                 item.name = "{0} - {1}".format(show, item.name)
 
+            if item.thumb != self.noImage:
+                item.fanart = item.thumb
+
         if "videoDuration" in video_info:
             item.set_info_label(MediaItem.LabelDuration, video_info["videoDuration"] / 1000)
 
-        item.fanart = self.parentItem.fanart
         return item
 
     def update_channel_item(self, item):
@@ -604,7 +617,7 @@ class Channel(chn_class.Channel):
 
     # noinspection PyTypeChecker
     def __update_image_lookup(self, json_data):
-        images = filter(lambda a: a["type"] == "image", json_data.get_value("included"))
+        images = filter(lambda a: a["type"] == "image" and "src" in a["attributes"], json_data.get_value("included"))
         images = {str(image["id"]): image["attributes"]["src"] for image in images}
 
         shows = filter(lambda a: a["type"] == "show", json_data.get_value("included"))

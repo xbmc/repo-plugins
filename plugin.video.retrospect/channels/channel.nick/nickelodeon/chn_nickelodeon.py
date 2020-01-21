@@ -71,6 +71,32 @@ class Channel(chn_class.Channel):
         # ====================================== Actual channel setup STOPS here =======================================
         return
 
+    def create_video_item(self, result_set):
+        """ Creates a MediaItem of type 'video' using the result_set from the regex.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        """
+
+        item = chn_class.Channel.create_video_item(self, result_set)
+        if item is None:
+            return item
+
+        item.isGeoLocked = True
+        return item
+
     def no_nick_jr(self, data):
         """ Performs pre-process actions for data processing.
 
@@ -166,30 +192,15 @@ class Channel(chn_class.Channel):
             # let's try the alternative then (for the new channels)
             playlist_guids = Regexer.do_regex('local_playlist[", -]+([a-f0-9]{20})"', data)
         playlist_guid = playlist_guids[0]
-        # Logger.Trace(playlist_guid)
+        play_list_url = "http://api.mtvnn.com/v2/nl/NL/local_playlists/{}.json?video_format=m3u8".format(playlist_guid)
 
-        # now we can get the playlist meta data
-        # http://api.mtvnn.com/v2/mrss.xml?uri=mgid%3Asensei%3Avideo%3Amtvnn.com%3Alocal_playlist-39ce0652b0b3c09258d9-SE-uma_site--ad_site-nickelodeon.se-ad_site_referer-video/9764-barjakt&adSite=nickelodeon.se&umaSite={umaSite}&show_images=true&url=http%3A//www.nickelodeon.se/video/9764-barjakt
-        # but this seems to work.
-        # http://api.mtvnn.com/v2/mrss.xml?uri=mgid%3Asensei%3Avideo%3Amtvnn.com%3Alocal_playlist-39ce0652b0b3c09258d9
-        play_list_url = "http://api.mtvnn.com/v2/mrss.xml?uri=mgid%3Asensei%3Avideo%3Amtvnn.com%3Alocal_playlist-" + playlist_guid
-        play_list_data = UriHandler.open(play_list_url, proxy=self.proxy)
+        data = UriHandler.open(play_list_url, proxy=self.proxy)
 
-        # now get the real RTMP data
-        rtmp_meta_data = Regexer.do_regex(
-            '<media:content[^>]+[^>]+url="([^"]+)&amp;force_country=', play_list_data)[0]
-        rtmp_data = UriHandler.open(rtmp_meta_data, proxy=self.proxy)
+        from resources.lib.helpers.jsonhelper import JsonHelper
+        from resources.lib.streams.m3u8 import M3u8
 
-        rtmp_urls = Regexer.do_regex(
-            r'<rendition[^>]+bitrate="(\d+)"[^>]*>\W+<src>([^<]+ondemand)/([^<]+)</src>', rtmp_data)
-
+        json_data = JsonHelper(data)
+        m3u8_url = json_data.get_value("local_playlist_videos", 0, "url")
         part = item.create_new_empty_media_part()
-        for rtmp_url in rtmp_urls:
-            url = "%s/%s" % (rtmp_url[1], rtmp_url[2])
-            bitrate = rtmp_url[0]
-            converted_url = self.get_verifiable_video_url(url)
-            part.append_media_stream(converted_url, bitrate)
-
-        item.complete = True
-        Logger.trace("Media url: %s", item)
+        item.complete = M3u8.update_part_with_m3u8_streams(part, m3u8_url, proxy=self.proxy, channel=self, encrypted=True)
         return item

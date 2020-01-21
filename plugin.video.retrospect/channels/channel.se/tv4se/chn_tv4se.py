@@ -428,6 +428,8 @@ class Channel(chn_class.Channel):
             more = MediaItem(more_title, "")
             more.icon = self.icon
             more.thumb = self.noImage
+            more.thumb = self.parentItem.thumb
+            more.fanart = self.parentItem.fanart
             more.complete = True
             items.append(more)
 
@@ -447,6 +449,8 @@ class Channel(chn_class.Channel):
                 page = MediaItem(str(current_page), url)
                 page.icon = self.icon
                 page.thumb = self.noImage
+                page.thumb = self.parentItem.thumb
+                page.fanart = self.parentItem.fanart
                 page.type = "page"
                 page.complete = True
 
@@ -521,7 +525,7 @@ class Channel(chn_class.Channel):
         item.set_date(year, month, day, hour, minutes, 00)
         broadcast_date = datetime.datetime(int(year), int(month), int(day), int(hour), int(minutes))
 
-        item.fanart = self.parentItem.fanart
+        item.fanart = result_set.get("program_image", self.parentItem.fanart)
         thumb_url = result_set.get("image", result_set.get("program_image"))
         # some images need to come via a proxy:
         if thumb_url and "://img.b17g.net/" in thumb_url:
@@ -558,6 +562,7 @@ class Channel(chn_class.Channel):
         item.isDrmProtected = result_set["is_drm_protected"]
         item.isLive = result_set.get("is_live", False)
         if item.isLive:
+            item.name = "{}:{} - {}".format(hour, minutes, name)
             item.url = "{0}&is_live=true".format(item.url)
         if item.isDrmProtected:
             item.url = "{}&drm=widevine&is_drm=true".format(item.url)

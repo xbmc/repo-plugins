@@ -1,3 +1,18 @@
+0.4.0
+* Added Livestream
+* Kodi19 support
+* Add categorys like 'ganze videos' to Shows
+* Since the API is slow, added possibility to cache API calls to improve loading time
+* Updated Icon/Banner handling
+* Code restructure/cleanup
+
+0.3.0
+* Removed id from xbmcaddon.Addon()
+
+0.2.3
+* Implemented new API Calls
+* Code Cleanup
+
 0.2.1
 * Fixed Errors caused by API Change
 * Added new Logo and App Icon

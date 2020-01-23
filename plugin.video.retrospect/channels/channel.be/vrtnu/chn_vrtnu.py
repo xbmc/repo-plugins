@@ -44,7 +44,11 @@ class Channel(chn_class.Channel):
         self.baseUrl = "https://www.vrt.be"
 
         # first regex is a bit tighter than the second one.
-        episode_regex = r'<nui-tile href="(?<url>/vrtnu[^"]+)"[^>]*>\s*<h3[^>]*>(?<title>[^<]+)</h3>\s*<div[^>]+>(?:<p>)?(?<description>[^<]*)(?:<br[^>]*>)?(?<descriptionMore>[^<]*)?(?:</p>)?\W*</div>\s*(?:<p[^>]*data-brand="(?<channel>[^"]+)"[^>]*>[^<]+</p>)?\s*(?:<img[\w\W]{0,100}?data-responsive-image="(?<thumburl>//[^" ]+)")?'
+        episode_regex = r'<nui-tile href="(?<url>/vrtnu[^"]+)"[^>]*>\s*<h3[^>]*>\s*<a[^>]+>' \
+                        r'(?<title>[^<]+)</a>\s*</h3>\s*<div[^>]+>(?:\s*<p>)?(?<description>[^<]*)' \
+                        r'(?:<br[^>]*>)?(?<descriptionMore>[^<]*)?(?:</p>)?\W*</div>\s*(?:<p[^>]*' \
+                        r'data-brand="(?<channel>[^"]+)"[^>]*>[^<]+</p>)?\s*(?:<img[\w\W]{0,100}?' \
+                        r'data-responsive-image="(?<thumburl>//[^" ]+)")?'
         episode_regex = Regexer.from_expresso(episode_regex)
         self._add_data_parser(self.mainListUri, name="Main A-Z listing",
                               preprocessor=self.add_categories,
@@ -69,8 +73,6 @@ class Channel(chn_class.Channel):
                               name="Live streams updater",
                               updater=self.update_live_video)
 
-        catregex = r'<a[^>]+href="(?<url>/vrtnu/categorieen/(?<catid>[^"]+)/)"[^>]*>(?<title>[^<]+)\s*</a>\s*</h3>\s*<img[\w\W]{0,100}?data-responsive-image="(?<thumburl>//[^" ]+)"'
-        catregex = Regexer.from_expresso(catregex)
         self._add_data_parser("https://www.vrt.be/vrtnu/categorieen.model.json", name="Category parser",
                               json=True,
                               match_type=ParserData.MatchExact,
@@ -83,12 +85,11 @@ class Channel(chn_class.Channel):
         self._add_data_parser("*", name="Folder/Season parser",
                               parser=folder_regex, creator=self.create_folder_item)
 
-        video_regex = r'<a[^>]+href="(?<url>/vrtnu/(?:[^/]+/){2}[^/]*?(?<year>\d*)/[^"]+)"[^>]*>\W*' \
-                      r'<div[^>]*>\W*<h[23][^>]*>\s*(?<title>[^<]+)\s*(?:<br />\s*)*</h[23]>\W*' \
-                      r'<p[^>]*>\W*(?:<span[^>]*class="vrtnu-list--item-meta[^>]*>\W*(?<day>\d+)/' \
-                      r'(?<month>\d+)[^<]*</span>\W*<span[^>]+>[^<]*</span>|)' \
-                      r'(\W*(?<subtitle>[^|]+)\W*\|)?[^<]*<abbr[\w\W]{0,1000}?' \
-                      r'<source srcset="[^"]+(?<thumburl>//[^ ]+)'
+        video_regex = r'<a[^>]+href="(?<url>/vrtnu/(?:[^/]+/){2}[^/]*?(?<year2>\d*)/[^"]+)"[^>]*>' \
+                      r'\W*(?<title>[^<]+)(?:<br\s*/>\s*)?</a>\s*</h3>\s*<p[^>]*>\W*(?<channel>[^<]+)' \
+                      r'</p>\s*(?:<p[^<]+</p>\s*)?<div[^>]*class="meta[^>]*>\s*<time[^>]+datetime=' \
+                      r'"(?<year>\d+)-(?<month>\d+)-(?<day>\d+)[\w\W]{0,1000}?ata-responsive-image=' \
+                      r'"(?<thumburl>[^"]+)'
 
         # No need for a subtitle for now as it only includes the textual date
         video_regex = Regexer.from_expresso(video_regex)

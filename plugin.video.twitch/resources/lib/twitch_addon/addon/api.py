@@ -15,7 +15,7 @@ from . import cache, utils
 from .common import kodi, log_utils
 from .constants import Keys, SCOPES
 from .error_handling import api_error_handler
-from .twitch_exceptions import TwitchException
+from .twitch_exceptions import PlaybackFailed, TwitchException
 
 from twitch import queries as twitch_queries
 from twitch import oauth
@@ -306,7 +306,12 @@ class Twitch:
     @cache.cache_method(cache_limit=cache.limit)
     def get_followed_streams(self, stream_type, offset, limit):
         results = self.api.streams.get_followed(stream_type=stream_type, limit=limit, offset=offset)
-        return self.error_check(results)
+        results = self.error_check(results)
+        if isinstance(results.get('streams'), list):
+            results['streams'] = sorted(results['streams'],
+                                        key=lambda x: int(x.get('viewers', 0)),
+                                        reverse=True)
+        return results
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
@@ -363,7 +368,12 @@ class Twitch:
 
     @staticmethod
     def error_check(results):
-        if 'error' in results: raise TwitchException(results)
+        if 'stream' in results and results['stream'] is None:
+            raise PlaybackFailed()
+
+        if 'error' in results:
+            raise TwitchException(results)
+
         return results
 
     @staticmethod

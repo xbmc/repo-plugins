@@ -21,8 +21,6 @@ def route():
     context_menu = list()
     kodi.create_item({'label': i18n('live_channels'), 'path': {'mode': MODES.STREAMLIST, 'stream_type': StreamType.LIVE},
                       'context_menu': context_menu, 'info': {'plot': '%s - %s' % (i18n('browse'), i18n('live_channels'))}})
-    kodi.create_item({'label': i18n('playlists'), 'path': {'mode': MODES.STREAMLIST, 'stream_type': StreamType.PLAYLIST},
-                      'info': {'plot': '%s - %s' % (i18n('browse'), i18n('playlists'))}})
     kodi.create_item({'label': i18n('xbox_one'), 'path': {'mode': MODES.STREAMLIST, 'platform': Platform.XBOX_ONE},
                       'context_menu': context_menu, 'info': {'plot': '%s - %s' % (i18n('browse'), i18n('xbox_one'))}})
     kodi.create_item({'label': i18n('ps4'), 'path': {'mode': MODES.STREAMLIST, 'platform': Platform.PS4}, 'context_menu': context_menu,
@@ -36,4 +34,4 @@ def route():
                       'info': {'plot': '%s - %s' % (i18n('browse'), i18n('clips'))}})
     kodi.create_item({'label': i18n('games'), 'path': {'mode': MODES.GAMES},
                       'info': {'plot': '%s - %s' % (i18n('browse'), i18n('games'))}})
-    kodi.end_of_directory(cache_to_disc=True)
+    kodi.end_of_directory(cache_to_disc=False)

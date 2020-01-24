@@ -31,4 +31,4 @@ def route(content):
             context_menu.extend(menu_items.remove_search_history(content, item, do_refresh=True))
             kodi.create_item({'label': item, 'path': {'mode': MODES.SEARCHRESULTS, 'content': content, 'query': item},
                               'info': {'plot': item}, 'context_menu': context_menu})
-    kodi.end_of_directory(cache_to_disc=True)
+    kodi.end_of_directory(cache_to_disc=False)

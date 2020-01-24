@@ -20,13 +20,11 @@
         <setting label="30004" id="menu_settings" type="bool" default="true"/>
         <setting label="30002" type="lsep"/>
         <setting label="30009" id="menu_following_live" type="bool" default="false"/>
-        <setting label="30170" id="menu_following_playlists" type="bool" default="false"/>
         <setting label="30008" id="menu_following_channels" type="bool" default="false"/>
         <setting label="30001" id="menu_following_games" type="bool" default="false"/>
         <setting label="30176" id="menu_following_clips" type="bool" default="false"/>
         <setting label="30172" type="lsep"/>
         <setting label="30009" id="menu_browse_live" type="bool" default="false"/>
-        <setting label="30170" id="menu_browse_playlists" type="bool" default="false"/>
         <setting label="30173" id="menu_browse_xbox_one" type="bool" default="false"/>
         <setting label="30174" id="menu_browse_ps4" type="bool" default="false"/>
         <setting label="30175" id="menu_browse_videos" type="bool" default="false"/>

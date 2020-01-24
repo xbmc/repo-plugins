@@ -50,11 +50,11 @@ def process_xml(context, url, tree=None):
     append_item = items.append
     branches = tree.getiterator()
     for branch in branches:
-        details = {
-            'title': encode_utf8(branch.get('title'))
-        }
+        details = {}
+        if branch.get('title'):
+            details['title'] = encode_utf8(branch.get('title'))
 
-        if not details['title']:
+        if not details.get('title'):
             details['title'] = encode_utf8(branch.get('name', i18n('Unknown')))
 
         extra_data = {

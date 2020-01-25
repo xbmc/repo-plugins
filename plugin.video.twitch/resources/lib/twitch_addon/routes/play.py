@@ -183,7 +183,9 @@ def route(api, seek_time=0, channel_id=None, video_id=None, slug=None, ask=False
                             utils.exec_irc_script(username, name)
                 return
             else:
+                kodi.set_resolved_url(kodi.ListItem(), succeeded=False)
                 return
+
         raise PlaybackFailed()
     except:
         _reset()

@@ -1,3 +1,10 @@
+2.4.8
+[fix] resolve indefinite busy dialog on failed playback
+[fix] sort by viewers for followed live channels, restoring previous behavior
+[fix] menu settings not taking effect
+[fix] handle no stream available error
+[rem] remove Playlists
+
 2.4.7
 [fix] remaining private api calls ie. following games, toggle following games
 

@@ -589,7 +589,7 @@ msgstr "Medienmarkierungen überspringen"
 
 msgctxt "#30552"
 msgid "Skip Context Menus"
-msgstr "Kontextmenü überspringen"
+msgstr "Kontextmenüelemente überspringen"
 
 msgctxt "#30553"
 msgid "Off"
@@ -1103,7 +1103,7 @@ msgstr "Entfernen von %s von der Wiedergabeliste '%s' fehlgeschlagen"
 
 msgctxt "#30683"
 msgid "Show the 'Delete' context menu"
-msgstr "Zeige das Kontextmenü 'Löschen' an"
+msgstr "Zeige 'Löschen' im Kontextmenü an"
 
 msgctxt "#30684"
 msgid "Up Next"
@@ -1279,4 +1279,4 @@ msgstr "Wiedergabeliste wirklich löschen?"
 
 msgctxt "#30727"
 msgid "Notification encoding"
-msgstr ""
+msgstr "Benachrichtigungscodierung"

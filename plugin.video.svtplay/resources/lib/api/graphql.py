@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# system imports
 from __future__ import absolute_import,unicode_literals
 import json
 import re
@@ -91,15 +90,9 @@ class GraphQL:
       info = {
         "plot" : item["longDescription"]
       }
-      play_item = None
-      if item["__typename"] == "Single" or item["__typename"] == "Episode":
-        play_item = VideoItem(title, item_id, thumbnail, geo_restricted, info)
-      else:
-        play_item = ShowItem(title, item_id, thumbnail, geo_restricted, info)
-      if play_item:
-        programs.append(play_item)
-      else:
-        logging.error("Could not create PlayItem for: {}".format(item))
+      type_name = item["__typename"]
+      play_item = self.__create_item(title, type_name, item_id, geo_restricted, thumbnail, info)
+      programs.append(play_item)
     return programs
   
   def getVideoContent(self, slug):
@@ -173,13 +166,11 @@ class GraphQL:
     json_data = self.__get(operation_name, query_hash, variables=variables)
     if not json_data:
       return None
-    supported_show_types = ["TvShow", "KidsTvShow", "TvSeries"]
-    supported_video_types = ["Episode", "Clip", "Single"]
     results = []
     for search_hit in json_data["search"]:
       item = search_hit["item"]
       type_name = item["__typename"]
-      if type_name not in supported_show_types + supported_video_types:
+      if not self.__is_supported_type(type_name):
         logging.log("Unsupported search result type \"{}\"".format(type_name))
         logging.log(item)
         continue
@@ -192,11 +183,7 @@ class GraphQL:
       info = {
         "plot" : item["longDescription"]
       }
-      play_item = None
-      if type_name in supported_show_types:
-        play_item = ShowItem(title, item_id, thumbnail, geo_restricted, info)
-      elif type_name in supported_video_types:
-        play_item = VideoItem(title, item_id, thumbnail, geo_restricted, info)
+      play_item = self.__create_item(title, type_name, item_id, geo_restricted, thumbnail, info)
       results.append(play_item)
     return results
 
@@ -265,7 +252,6 @@ class GraphQL:
       video_items.append(video_item)
     return video_items
 
-
   def __get_all_programs(self):
     operation_name = "ProgramsListing"
     query_hash = "1eeb0fb08078393c17658c1a22e7eea3fbaa34bd2667cec91bbc4db8d778580f"
@@ -277,17 +263,33 @@ class GraphQL:
       if raw_item["oppetArkiv"]:
         continue
       title = raw_item["name"]
-      id = raw_item["urls"]["svtplay"]
+      item_id = raw_item["urls"]["svtplay"]
+      item_type = raw_item["__typename"]
       geo_restricted = raw_item["restrictions"]["onlyAvailableInSweden"]
-      item = self.__create_item(title, id, geo_restricted)
+      item = self.__create_item(title, item_type, item_id, geo_restricted)
       items.append(item)
     return sorted(items, key=lambda item: item.title)
 
-  def __create_item(self, title, item_id, geo_restricted):
-    if "/video/" in item_id:
-      return VideoItem(title, item_id, "", geo_restricted)
+  def __create_item(self, title, type_name, item_id, geo_restricted, thumbnail="", info={}, fanart=""):
+    if self.__is_video(type_name):
+      return VideoItem(title, item_id, thumbnail, geo_restricted, info=info, fanart=fanart)
+    elif self.__is_show(type_name):
+      slug = item_id.split("/")[-1]
+      return ShowItem(title, slug, thumbnail, geo_restricted, info=info, fanart=fanart)
     else:
-      return ShowItem(title, item_id, "", geo_restricted)
+      raise ValueError("Type {} is not supported!".format(type_name))
+
+  SHOW_TYPES = ["TvShow", "KidsTvShow", "TvSeries"]
+  VIDEO_TYPES = ["Episode", "Clip", "Single"]
+
+  def __is_supported_type(self, type_name):
+    return type_name in self.SHOW_TYPES + self.VIDEO_TYPES
+
+  def __is_video(self, type_name):
+    return type_name in self.VIDEO_TYPES
+
+  def __is_show(self, type_name):
+    return type_name in self.SHOW_TYPES    
 
   def __get_image_url(self, image_id, image_changed, image_type):
     """

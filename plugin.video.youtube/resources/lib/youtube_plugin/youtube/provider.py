@@ -8,8 +8,9 @@
     See LICENSES/GPL-2.0-only for more information.
 """
 
-import os
 import json
+import os
+import re
 import shutil
 import socket
 from base64 import b64decode
@@ -167,6 +168,7 @@ class Provider(kodion.AbstractProvider):
                  'youtube.subscribed.to.channel': 30719,
                  'youtube.unsubscribed.from.channel': 30720,
                  'youtube.uploads': 30726,
+                 'youtube.video.play_ask_for_quality': 30730,
                  }
 
     def __init__(self):
@@ -588,21 +590,32 @@ class Provider(kodion.AbstractProvider):
         if addon_id:
             item_params.update({'addon_id': addon_id})
 
-        if page == 1:
-            playlists_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.playlists'])),
-                                           context.create_uri(['channel', channel_id, 'playlists'], item_params),
-                                           image=context.create_resource_path('media', 'playlist.png'))
-            playlists_item.set_fanart(channel_fanarts.get(channel_id, self.get_fanart(context)))
-            result.append(playlists_item)
+        hide_folders = str(context.get_param('hide_folders', False)).lower() == 'true'
+
+        if page == 1 and not hide_folders:
+            hide_playlists = str(context.get_param('hide_playlists', False)).lower() == 'true'
+            hide_search = str(context.get_param('hide_search', False)).lower() == 'true'
+            hide_live = str(context.get_param('hide_live', False)).lower() == 'true'
+
+            if not hide_playlists:
+                playlists_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.playlists'])),
+                                               context.create_uri(['channel', channel_id, 'playlists'], item_params),
+                                               image=context.create_resource_path('media', 'playlist.png'))
+                playlists_item.set_fanart(channel_fanarts.get(channel_id, self.get_fanart(context)))
+                result.append(playlists_item)
+
             search_live_id = mine_id if mine_id else channel_id
-            search_item = kodion.items.NewSearchItem(context, alt_name=context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.search'])),
-                                                     image=context.create_resource_path('media', 'search.png'),
-                                                     fanart=self.get_fanart(context), channel_id=search_live_id, incognito=incognito, addon_id=addon_id)
-            result.append(search_item)
-            live_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.live'])),
-                                      context.create_uri(['channel', search_live_id, 'live'], item_params),
-                                      image=context.create_resource_path('media', 'live.png'))
-            result.append(live_item)
+            if not hide_search:
+                search_item = kodion.items.NewSearchItem(context, alt_name=context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.search'])),
+                                                         image=context.create_resource_path('media', 'search.png'),
+                                                         fanart=self.get_fanart(context), channel_id=search_live_id, incognito=incognito, addon_id=addon_id)
+                result.append(search_item)
+
+            if not hide_live:
+                live_item = DirectoryItem(context.get_ui().bold(context.localize(self.LOCAL_MAP['youtube.live'])),
+                                          context.create_uri(['channel', search_live_id, 'live'], item_params),
+                                          image=context.create_resource_path('media', 'live.png'))
+                result.append(live_item)
 
         playlists = resource_manager.get_related_playlists(channel_id)
         upload_playlist = playlists.get('uploads', '')
@@ -695,6 +708,9 @@ class Provider(kodion.AbstractProvider):
         if context.get_ui().get_home_window_property('audio_only') != params.get('video_id'):
             context.get_ui().clear_home_window_property('audio_only')
 
+        if context.get_ui().get_home_window_property('ask_for_quality') != params.get('video_id'):
+            context.get_ui().clear_home_window_property('ask_for_quality')
+
         if 'prompt_for_subtitles' in params:
             prompt_subtitles = params['prompt_for_subtitles'] == '1'
             del params['prompt_for_subtitles']
@@ -710,6 +726,15 @@ class Provider(kodion.AbstractProvider):
             if audio_only and 'video_id' in params and 'playlist_id' not in params:
                 # redirect to builtin after setting home window property, so playback url matches playable listitems
                 context.get_ui().set_home_window_property('audio_only', params['video_id'])
+                context.log_debug('Redirecting audio only playback')
+                redirect = True
+
+        elif 'ask_for_quality' in params:
+            ask_for_quality = params['ask_for_quality'] == '1'
+            del params['ask_for_quality']
+            if ask_for_quality and 'video_id' in params and 'playlist_id' not in params:
+                # redirect to builtin after setting home window property, so playback url matches playable listitems
+                context.get_ui().set_home_window_property('ask_for_quality', params['video_id'])
                 context.log_debug('Redirecting audio only playback')
                 redirect = True
 
@@ -970,8 +995,26 @@ class Provider(kodion.AbstractProvider):
 
         return self.on_search(query, context, re_match)
 
-    def on_search(self, search_text, context, re_match):
+    def _search_channel_or_playlist(self, context, id_string):
+        json_data = {}
         result = []
+
+        if re.match(r'U[CU][0-9a-zA-Z_\-]{20,24}', id_string):
+            json_data = self.get_client(context).get_channels(id_string)
+
+        elif re.match(r'[OP]L[0-9a-zA-Z_\-]{30,40}', id_string):
+            json_data = self.get_client(context).get_playlists(id_string)
+
+        if not json_data or not v3.handle_error(self, context, json_data):
+            return []
+
+        result.extend(v3.response_to_items(self, context, json_data))
+        return result
+
+    def on_search(self, search_text, context, re_match):
+        result = self._search_channel_or_playlist(context, search_text)
+        if result:  # found a channel or playlist matching search_text
+            return result
 
         channel_id = context.get_param('channel_id', '')
         event_type = context.get_param('event_type', '')

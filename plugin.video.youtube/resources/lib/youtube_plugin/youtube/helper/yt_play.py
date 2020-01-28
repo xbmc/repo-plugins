@@ -31,6 +31,10 @@ def play_video(provider, context):
         settings = context.get_settings()
 
         ask_for_quality = None
+        if video_id and context.get_ui().get_home_window_property('ask_for_quality') == video_id:
+            ask_for_quality = True
+        context.get_ui().clear_home_window_property('ask_for_quality')
+
         screensaver = False
         if context.get_param('screensaver', None) and str(context.get_param('screensaver')).lower() == 'true':
             ask_for_quality = False
@@ -75,9 +79,11 @@ def play_video(provider, context):
         video_item = VideoItem(title, video_stream['url'])
 
         incognito = str(context.get_param('incognito', False)).lower() == 'true'
-        use_history = not is_live and not screensaver and not incognito and settings.use_playback_history()
+        use_history = not is_live and not screensaver and not incognito
+        playback_history = use_history and settings.use_playback_history()
 
-        video_item = utils.update_play_info(provider, context, video_id, video_item, video_stream, use_play_data=use_history)
+        video_item = utils.update_play_info(provider, context, video_id, video_item, video_stream,
+                                            use_play_data=playback_history)
 
         seek_time = None
         play_count = 0
@@ -104,6 +110,7 @@ def play_video(provider, context):
             "playing_file": video_item.get_uri(),
             "play_count": play_count,
             "use_history": use_history,
+            "playback_history": playback_history,
             "playback_stats": playback_stats,
             "seek_time": seek_time,
             "refresh_only": screensaver

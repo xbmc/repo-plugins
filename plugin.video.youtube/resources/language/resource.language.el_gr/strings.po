@@ -836,7 +836,7 @@ msgstr "Τα προσωπικά κλειδιά API έχουν απενεργοπ
 
 msgctxt "#30638"
 msgid "Bookmark this page to quickly add your keys in the future."
-msgstr ""
+msgstr "Αποθηκεύστε αυτήν την σελίδα στους σελιδοδείκτες ώστε να μπορειτε να προσθέστε τα κλειδιά σας στο μέλλον"
 
 msgctxt "#30639"
 msgid "Found personal API keys in api_keys.json, would you like to restore them? Choosing no will overwrite them."
@@ -1192,8 +1192,16 @@ msgstr "Απεσταλμένα"
 
 msgctxt "#30727"
 msgid "Adaptive (MP4/H264)"
-msgstr ""
+msgstr "Προσαρμοζόμενη (MP4/H264)"
 
 msgctxt "#30728"
 msgid "Adaptive (WEBM/VP9)"
-msgstr ""
+msgstr "Προσαρμοζόμενη (WEBM/VP9)"
+
+msgctxt "#30729"
+msgid "Remote friendly search"
+msgstr "Αναζήτηση φιλική για χειριστήριο"
+
+msgctxt "#30730"
+msgid "Play (Ask for quality)"
+msgstr "Αναπαραγωγή (Ερώτηση για ποιότητα)"

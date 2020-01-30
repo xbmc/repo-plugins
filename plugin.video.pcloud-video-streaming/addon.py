@@ -208,6 +208,8 @@ if mode[0] in ("folder", "myshares"):
 				[(deleteActionMenuText, "RunPlugin(" + deleteActionUrl + ")"),
 				(markAsWatchedMenuText, "Action(ToggleWatched)")]
 				)
+			# Set the date from what's stored in PCloud
+			li.setInfo('video', { 'date': pcloud.translateDate(oneFileOrFolderItem["modified"]) })
 			# Finally add the list item to the directory
 			if contentType[:6] == "image/":
 				fileUrl += "&isPicture=1" # We will need this info later on
@@ -239,6 +241,10 @@ if mode[0] in ("folder", "myshares"):
 		parentFolderText = "[I]{0}[/I]".format(myAddon.getLocalizedString(30123))
 		li = xbmcgui.ListItem(parentFolderText, iconImage="DefaultFolder.png")
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+
+	# Add various sort methods
+	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_LABEL)
+	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
 
 	xbmcplugin.endOfDirectory(addon_handle)
 	myAddon.setSetting("lastUsedFolderID", str(folderID))

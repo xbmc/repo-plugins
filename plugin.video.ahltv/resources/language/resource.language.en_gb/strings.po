@@ -1,0 +1,221 @@
+# Kodi Media Center language file
+# Addon Name: AHLTV
+# Addon id: plugin.video.ahltv
+# Addon Provider: sobralik
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Login"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Logout"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Use FFmpeg instead of InputStream Adaptive"
+msgstr ""
+
+msgctxt "#31000"
+msgid "Please enter your username"
+msgstr ""
+
+msgctxt "#31001"
+msgid "Please enter your password"
+msgstr ""
+
+msgctxt "#31002"
+msgid "Login Failed"
+msgstr ""
+
+msgctxt "#31003"
+msgid "Incorrect username/password"
+msgstr ""
+
+msgctxt "#31004"
+msgid "Login Error"
+msgstr ""
+
+msgctxt "#31005"
+msgid "There was an error when attempting to login. Please try again later."
+msgstr ""
+
+msgctxt "#31006"
+msgid "Logout Successful"
+msgstr ""
+
+msgctxt "#31007"
+msgid "Logout completed successfully"
+msgstr ""
+
+msgctxt "#31008"
+msgid "Login Expired"
+msgstr ""
+
+msgctxt "#31009"
+msgid "Your session has expired. Please try again and your login will be refreshed."
+msgstr ""
+
+msgctxt "#31010"
+msgid "Error"
+msgstr ""
+
+msgctxt "#31011"
+msgid "Error loading stream info"
+msgstr ""
+
+msgctxt "#31012"
+msgid "Home Audio"
+msgstr ""
+
+msgctxt "#31013"
+msgid "Away Audio"
+msgstr ""
+
+msgctxt "#31014"
+msgid "Access Error"
+msgstr ""
+
+msgctxt "#31015"
+msgid "You do not have an active AHLTV subscription for this game. To access this content please purchase a subscription at TheAHL.com/AHLTV."
+msgstr ""
+
+msgctxt "#31016"
+msgid "There was an error logging out. Please try again."
+msgstr ""
+
+msgctxt "#32000"
+msgid "Today’s Games"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Yesterday’s Games"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Select Date"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Previous Day"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Next Day"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Failed to load schedule for"
+msgstr ""
+
+msgctxt "#32007"
+msgid "(0 games)"
+msgstr ""
+
+msgctxt "#32008"
+msgid "(Live)"
+msgstr ""
+
+msgctxt "#32009"
+msgid "(Final)"
+msgstr ""
+
+msgctxt "#32010"
+msgid "(FREE)"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Streams Not Found"
+msgstr ""
+
+msgctxt "#32012"
+msgid "No playable streams found"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Select Stream"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Choose Year"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Choose Month"
+msgstr ""
+
+msgctxt "#32016"
+msgid "January"
+msgstr ""
+
+msgctxt "#32017"
+msgid "February"
+msgstr ""
+
+msgctxt "#32018"
+msgid "March"
+msgstr ""
+
+msgctxt "#32019"
+msgid "April"
+msgstr ""
+
+msgctxt "#32020"
+msgid "May"
+msgstr ""
+
+msgctxt "#32021"
+msgid "June"
+msgstr ""
+
+msgctxt "#32022"
+msgid "September"
+msgstr ""
+
+msgctxt "#32023"
+msgid "October"
+msgstr ""
+
+msgctxt "#32024"
+msgid "November"
+msgstr ""
+
+msgctxt "#32025"
+msgid "December"
+msgstr ""
+
+msgctxt "#32026"
+msgid "Choose Day"
+msgstr ""
+
+msgctxt "#32027"
+msgid "games"
+msgstr ""
+
+msgctxt "#32028"
+msgid "at"
+msgstr ""

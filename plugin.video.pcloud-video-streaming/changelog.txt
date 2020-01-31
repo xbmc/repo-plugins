@@ -1,3 +1,6 @@
+v1.4.0 -- 30-Jan-2020
+- Fixed issue #24: it is now possible to also sort by date.
+
 v1.3.2 -- 26-Nov-2019
 - Fixed issue #23: fixed crash on Android and Mac when performing first network operation, on Kodi 18.
 

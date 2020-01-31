@@ -7,6 +7,8 @@ from .loginfailedexception import LoginFailedException
 import os
 import operator # it's for use sort with operator
 import sys
+import re
+from datetime import date
 if sys.version_info.major >= 3:
 	# Python 3 stuff
 	from urllib.parse import urlparse, urlencode
@@ -200,6 +202,21 @@ class PCloudApi:
 		if response["result"] != 0:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling deletefolderrecursive: " + errorMessage)
+
+	def translateDate(self, dateInPCloudFormat):
+		""" Translates a date from the PCloud format ("Thu, 19 Sep 2013 07:31:46 +0000") to
+		the Kodi format ("19.09.2013")
+		"""
+		match = re.search("^[A-Za-z]{3}, (\d{1,2}) ([A-Za-z]{3}) (\d{4})", dateInPCloudFormat)
+		if match is None or match.lastindex < 3:
+			return date.today().strftime("%d.%m.%Y")
+		# Group 1 is the day, group 2 is the month abbreviation, group 3 is the year
+		day = int(match.group(1))
+		monthDict = { "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
+			"Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12  }
+		month = monthDict[match.group(2)]
+		year = int(match.group(3))
+		return date(year, month, day).strftime("%d.%m.%Y")
 
 #auth = PerformLogon("username@example.com", "password")
 #ListFolderContents("/Vcast")

@@ -131,14 +131,14 @@ def __get_video_version(versions):
 def episodeUrlToShowUrl(url):
   """
   Returns the show URL from episode url.
-  Example: "/video/22132986/abel-och-fant/abel-och-fant-sasong-2-kupa-pa-rymmen" > "/abel-och-fant"
+  Example: "/video/22132986/abel-och-fant/abel-och-fant-sasong-2-kupa-pa-rymmen" > "abel-och-fant"
 
   Returns None for single video items (movies etc)
   """
   new_url = None
   stub_url = url.split("/")
   if len(stub_url) >= 5:
-    new_url = "/" + stub_url[3]
+    new_url = stub_url[3]
   return new_url
 
 def resolveShowJson(json_obj):

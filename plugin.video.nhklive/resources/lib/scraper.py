@@ -10,32 +10,26 @@ import xbmc
 import calendar
 import datetime
 import sys
-import xml.etree.ElementTree as ET
 
 UTF8 = 'utf-8'
-NHKBASE = 'http://www3.nhk.or.jp/%s'
+NHKBASE = 'https://www3.nhk.or.jp/%s'
 
 class myAddon(t1mAddon):
 
 
   def getAddonMenu(self,url,ilist):
       xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
-      html = self.getRequest('http://www3.nhk.or.jp/nhkworld/app/tv/hlslive_tv.xml')
-      root = ET.fromstring(html)
-      a ={}
-      for utype in root:
-          a[utype.tag] = {}
-          for url in utype:
-              a[utype.tag][url.tag] = url.text
-      nhkurl = a['tv_url']['wstrm']
+      html = self.getRequest('https://www3.nhk.or.jp/nhkworld/app/tv/hlslive_web.json')
+      a = json.loads(html)
+      nhkurl = a['main']['wstrm']
 
       html = self.getRequest('http://www3.nhk.or.jp/nhkworld/common/js/common.js')
       nw_api_prefix, nw_api_key = re.compile('nw_api_prefix\|\|"(.+?)".+?nw_api_key\|\|"(.+?)"', re.DOTALL).search(html).groups()
       nw_region = 'world'
       nw_api_prefix = nw_api_prefix.replace('nhkworldstg','nhkworld')
-      url = nw_api_prefix + 'epg/v6/' + nw_region + '/now.json' + '?apikey=' + nw_api_key
+      url = nw_api_prefix + 'epg/v7/' + nw_region + '/now.json' + '?apikey=' + nw_api_key
       if not url.startswith('http'):
-         url = 'http:' + url
+         url = 'https:' + url
       html = self.getRequest(url)
       b = json.loads(html)
       for a in b['channel']['item']:
@@ -60,12 +54,3 @@ class myAddon(t1mAddon):
          ilist = self.addMenuItem(name,'GV', ilist, nhkurl, thumb, fanart, infoList, isFolder=False)
       return(ilist)
 
-  def processAddonEvent(self):
-      p = self.getAddonParms()
-      mode = p('mode',None)
-
-      if mode==  None:  
-         self.procDir(self.getAddonMenu, p('url'), 'files', 'default_view', cache2Disc=False)
-         return(p)
-      else:
-         return super(myAddon, self).processAddonEvent()

@@ -1,3 +1,25 @@
+2.4.8
+[fix] resolve indefinite busy dialog on failed playback
+[fix] sort by viewers for followed live channels, restoring previous behavior
+[fix] menu settings not taking effect
+[fix] handle no stream available error
+[rem] remove Playlists
+
+2.4.7
+[fix] remaining private api calls ie. following games, toggle following games
+
+2.4.6
+[add] Settings - Login - Private API Credentials
+[fix] basic playback, set default Private API Credentials - Client ID
+[fix] oauth short link generation w/ python 3
+[rem] Remove deprecated scope chat_login
+
+2.4.5
+[rem] Remove deprecated api Communities and related content
+
+2.4.4
+[fix] unable to clean up class left in memory; N9XBMCAddon7xbmcgui6WindowE |contrib: lekma|
+
 2.4.3
 [fix] ads causing playback issues with InputStream Adaptive
 [fix] migrate url shortener from Google URL Shortener to Google Firebase Dynamic Links

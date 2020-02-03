@@ -12,6 +12,7 @@ from six.moves import range
 from six import string_types, PY2
 from six.moves import urllib
 
+import copy
 import re
 import json
 import random
@@ -680,7 +681,12 @@ class VideoInfo(object):
 
     def _method_get_video_info(self, video_id=None, player_config=None, cookies=None):
         def requires_cipher(_fmts):
-            fl = _fmts.split(',')
+            fl = []
+            if len(_fmts) > 0:
+                try:
+                    fl = _fmts[0].get('cipher').split(',')
+                except AttributeError:
+                    fl = _fmts[0].get('url', '').split('&')
             return (len(fl) > 0) and ('s' in dict(urllib.parse.parse_qsl(fl[0])))
 
         headers = {'Host': 'www.youtube.com',
@@ -713,7 +719,7 @@ class VideoInfo(object):
                 cookies_list.append('{0}={1};'.format(c.name, c.value))
             if cookies_list:
                 curl_headers = 'Cookie={cookies}' \
-                    .format(cookies=urllib.parse.quote(' '.join(cookies_list)))
+                    .format(cookies=urllib.parse.quote(''.join(cookies_list)))
         else:
             cookies = dict()
 
@@ -745,23 +751,31 @@ class VideoInfo(object):
         el_values = ['detailpage', 'embedded']
 
         params = dict()
+        fallback_player_response = dict()
 
         for el in el_values:
             http_params['el'] = el
             result = requests.get(video_info_url, params=http_params, headers=headers, cookies=cookies, verify=self._verify, allow_redirects=True)
             data = result.text
             params = dict(urllib.parse.parse_qsl(data))
-            if params.get('url_encoded_fmt_stream_map') or params.get('live_playback', '0') == '1':
+            fallback_player_response = json.loads(params.get('player_response', '{}'))
+            if fallback_player_response.get('streamingData', {}).get('formats', []) or \
+                    fallback_player_response.get('streamingData', {}).get('hlsManifestUrl', ''):
                 break
 
         if not player_response:
-            player_response = json.loads(params.get('player_response', '{}'))
+            player_response = fallback_player_response
             playability_status = player_response.get('playabilityStatus', {})
 
         playback_tracking = player_response.get('playbackTracking', {})
-
         captions = player_response.get('captions', {})
-        is_live = params.get('live_playback', '0') == '1'
+        video_details = player_response.get('videoDetails', {})
+        is_live_content = video_details.get('isLiveContent') is True
+        streaming_data = player_response.get('streamingData', {})
+
+        live_url = streaming_data.get('hlsManifestUrl', '') or \
+                   fallback_player_response.get('streamingData', {}).get('hlsManifestUrl', '')
+        is_live = is_live_content and live_url
 
         stream_list = []
 
@@ -769,23 +783,24 @@ class VideoInfo(object):
                      'channel': {},
                      'images': {},
                      'subtitles': []}
-        meta_info['video']['id'] = params.get('vid', params.get('video_id', ''))
-        meta_info['video']['title'] = player_args.get('title', params.get('title', ''))
-        meta_info['channel']['author'] = player_args.get('author', params.get('author', ''))
+
+        meta_info['video']['id'] = video_details.get('videoId', video_id)
+        meta_info['video']['title'] = video_details.get('title', '')
+        meta_info['channel']['author'] = video_details.get('author', '')
         try:
             meta_info['video']['title'] = meta_info['video']['title'].encode('utf-8', 'ignore').decode('utf-8')
             meta_info['channel']['author'] = meta_info['channel']['author'].encode('utf-8', 'ignore').decode('utf-8')
         except:
             pass
 
-        meta_info['channel']['id'] = params.get('ucid', '')
+        meta_info['channel']['id'] = video_details.get('channelId', '')
         image_data_list = [
             {'from': 'iurlhq', 'to': 'high', 'image': 'hqdefault.jpg'},
             {'from': 'iurlmq', 'to': 'medium', 'image': 'mqdefault.jpg'},
             {'from': 'iurlsd', 'to': 'standard', 'image': 'sddefault.jpg'},
             {'from': 'thumbnail_url', 'to': 'default', 'image': 'default.jpg'}]
         for image_data in image_data_list:
-            image_url = params.get(image_data['from'], 'https://i.ytimg.com/vi/{video_id}/{image}'.format(video_id=video_id, image=image_data['image']))
+            image_url = 'https://i.ytimg.com/vi/{video_id}/{image}'.format(video_id=video_id, image=image_data['image'])
             if image_url:
                 if is_live:
                     image_url = image_url.replace('.jpg', '_live.jpg')
@@ -810,11 +825,17 @@ class VideoInfo(object):
                         if reason_text:
                             reason = ''.join(reason_text)
                 else:
-                    reason = params.get('reason')
-                    if not reason and 'errorScreen' in playability_status and 'playerErrorMessageRenderer' in playability_status['errorScreen']:
-                        reason = playability_status['errorScreen']['playerErrorMessageRenderer'].get('reason', {}).get('simpleText', 'UNKNOWN')
-                    if not reason:
-                        reason = playability_status.get('reason')
+                    reason = playability_status.get('reason')
+
+                    if 'errorScreen' in playability_status and 'playerErrorMessageRenderer' in playability_status['errorScreen']:
+                        status_renderer = playability_status['errorScreen']['playerErrorMessageRenderer']
+                        descript_reason = status_renderer.get('subreason', {}).get('simpleText')
+                        if descript_reason:
+                            reason = descript_reason
+                        else:
+                            general_reason = status_renderer.get('reason', {}).get('simpleText')
+                            if general_reason:
+                                reason = general_reason
 
                 if not reason:
                     reason = 'UNKNOWN'
@@ -847,38 +868,57 @@ class VideoInfo(object):
             ])
 
         if is_live:
-            live_url = player_response.get('streamingData', {}).get('hlsManifestUrl', '') or params.get('hlsvp', '')
-            if live_url:
-                stream_list = self._load_manifest(live_url,
-                                                  video_id,
-                                                  meta_info=meta_info,
-                                                  curl_headers=curl_headers,
-                                                  playback_stats=playback_stats)
+            stream_list = self._load_manifest(live_url, video_id,
+                                              meta_info=meta_info,
+                                              curl_headers=curl_headers,
+                                              playback_stats=playback_stats)
 
-        httpd_is_live = self._context.get_settings().use_dash_videos() and is_httpd_live(port=self._context.get_settings().httpd_port())
+        httpd_is_live = (self._context.get_settings().use_dash_videos() and
+                         is_httpd_live(port=self._context.get_settings().httpd_port()))
 
         cipher = None
         s_info = dict()
 
-        adaptive_fmts = params.get('adaptive_fmts', player_args.get('adaptive_fmts', ''))
-        url_encoded_fmt_stream_map = params.get('url_encoded_fmt_stream_map', player_args.get('url_encoded_fmt_stream_map', ''))
+        adaptive_fmts = streaming_data.get('adaptiveFormats', [])
+        std_fmts = streaming_data.get('formats', [])
+        mpd_url = streaming_data.get('dashManifestUrl') or \
+                  fallback_player_response.get('streamingData', {}).get('dashManifestUrl', '')
 
-        mpd_url = player_response.get('streamingData', {}).get('dashManifestUrl') or params.get('dashmpd', player_args.get('dashmpd'))
+        license_info = {'url': None, 'proxy': None, 'token': None}
+        pa_li_info = streaming_data.get('licenseInfos', [])
+        if pa_li_info and (pa_li_info != ['']) and not httpd_is_live:
+            raise YouTubeException('Proxy is not running')
+        for li_info in pa_li_info:
+            if li_info.get('drmFamily') == 'WIDEVINE':
+                license_info['url'] = li_info.get('url', None)
+                if license_info['url']:
+                    self._context.log_debug('Found widevine license url: |%s|' % license_info['url'])
+                    li_ipaddress = self._context.get_settings().httpd_listen()
+                    if li_ipaddress == '0.0.0.0':
+                        li_ipaddress = '127.0.0.1'
+                    proxy_addr = \
+                        ['http://{ipaddress}:{port}/widevine'.format(
+                            ipaddress=li_ipaddress,
+                            port=self._context.get_settings().httpd_port()
+                        ), '||R{SSM}|']
+                    license_info['proxy'] = ''.join(proxy_addr)
+                    license_info['token'] = self._access_token
+                    break
 
-        if requires_cipher(adaptive_fmts) or requires_cipher(url_encoded_fmt_stream_map):
+        if requires_cipher(adaptive_fmts) or requires_cipher(std_fmts):
             js = self.get_player_js(video_id, player_config.get('assets', {}).get('js', ''))
             cipher = Cipher(self._context, javascript_url=js)
 
-        if not mpd_url and not is_live and httpd_is_live and adaptive_fmts:
+        if not license_info.get('url') and not is_live and httpd_is_live and adaptive_fmts:
             mpd_url, s_info = self.generate_mpd(video_id,
                                                 adaptive_fmts,
-                                                params.get('length_seconds', '0'),
+                                                video_details.get('lengthSeconds', '0'),
                                                 cipher)
-        use_cipher_signature = 'True' == params.get('use_cipher_signature', None)
+
         if mpd_url:
             mpd_sig_deciphered = True
             if mpd_url.startswith('http'):
-                if (use_cipher_signature or re.search('/s/[0-9A-F.]+', mpd_url)) and (not re.search('/signature/[0-9A-F.]+', mpd_url)):
+                if (re.search('/s/[0-9A-F.]+', mpd_url)) and (not re.search('/signature/[0-9A-F.]+', mpd_url)):
                     mpd_sig_deciphered = False
                     if cipher:
                         sig_param = 'signature'
@@ -895,27 +935,6 @@ class VideoInfo(object):
                     else:
                         raise YouTubeException('Cipher: Not Found')
             if mpd_sig_deciphered:
-                license_info = {'url': None, 'proxy': None, 'token': None}
-                pa_li_info = player_response.get('streamingData', {}).get('licenseInfos', [])
-                if pa_li_info and (pa_li_info != ['']) and not httpd_is_live:
-                    raise YouTubeException('Proxy is not running')
-                for li_info in pa_li_info:
-                    if li_info.get('drmFamily') == 'WIDEVINE':
-                        license_info['url'] = li_info.get('url', None)
-                        if license_info['url']:
-                            self._context.log_debug('Found widevine license url: |%s|' % license_info['url'])
-                            li_ipaddress = self._context.get_settings().httpd_listen()
-                            if li_ipaddress == '0.0.0.0':
-                                li_ipaddress = '127.0.0.1'
-                            proxy_addr = \
-                                ['http://{ipaddress}:{port}/widevine'.format(
-                                    ipaddress=li_ipaddress,
-                                    port=self._context.get_settings().httpd_port()
-                                ), '||R{SSM}|']
-                            license_info['proxy'] = ''.join(proxy_addr)
-                            license_info['token'] = self._access_token
-                            break
-
                 video_stream = {'url': mpd_url,
                                 'meta': meta_info,
                                 'headers': curl_headers,
@@ -951,12 +970,15 @@ class VideoInfo(object):
                 raise YouTubeException('Failed to decipher signature')
 
         def parse_to_stream_list(streams):
-            fmts_list = streams.split(',')
-            for item in fmts_list:
-                stream_map = dict(urllib.parse.parse_qsl(item))
+            for item in streams:
+                stream_map = item
+                stream_map.update(dict(urllib.parse.parse_qsl(item.get('cipher', ''))))
 
                 url = stream_map.get('url', None)
                 conn = stream_map.get('conn', None)
+
+                stream_map['itag'] = str(stream_map['itag'])
+
                 if url:
                     sig_param = '&signature='
                     if 'sp' in stream_map:
@@ -1003,8 +1025,8 @@ class VideoInfo(object):
                         stream_list.append(stream)
 
         # extract streams from map
-        if url_encoded_fmt_stream_map:
-            parse_to_stream_list(url_encoded_fmt_stream_map)
+        if std_fmts:
+            parse_to_stream_list(std_fmts)
 
         if adaptive_fmts:
             parse_to_stream_list(adaptive_fmts)
@@ -1016,7 +1038,9 @@ class VideoInfo(object):
         return stream_list
 
     def generate_mpd(self, video_id, adaptive_fmts, duration, cipher):
-        def get_discarded_audio(fmt, mime_type, itag, stream):
+        discarded_streams = list()
+
+        def get_discarded_audio(fmt, mime_type, itag, stream, reason='unsupported'):
             _discarded_stream = dict()
             _discarded_stream['audio'] = dict()
             _discarded_stream['audio']['itag'] = str(itag)
@@ -1030,9 +1054,10 @@ class VideoInfo(object):
             if codec_match:
                 _discarded_stream['audio']['codec'] = codec_match.group('codec')
             _discarded_stream['audio']['bandwidth'] = int(stream['bandwidth'])
+            _discarded_stream['reason'] = reason
             return _discarded_stream
 
-        def get_discarded_video(mime_type, itag, stream):
+        def get_discarded_video(mime_type, itag, stream, reason='unsupported'):
             _discarded_stream = dict()
             _discarded_stream['video'] = dict()
             _discarded_stream['video']['itag'] = str(itag)
@@ -1047,7 +1072,86 @@ class VideoInfo(object):
             if codec_match:
                 _discarded_stream['video']['codec'] = codec_match.group('codec')
             _discarded_stream['video']['bandwidth'] = int(stream['bandwidth'])
+            _discarded_stream['reason'] = reason
             return _discarded_stream
+
+        def filter_qualities(stream_data, container, sorted_qualities, fps_limit):
+
+            data_copy = copy.deepcopy(stream_data)
+
+            if container == 'mp4':
+                discard_mime = 'video/webm'
+                mime_type = 'video/mp4'
+            elif container == 'webm':
+                discard_mime = 'video/mp4'
+                mime_type = 'video/webm'
+            else:
+                return data_copy
+
+            if fps_limit and mime_type in stream_data:
+                # if 30 fps limit enabled, discard streams that are greater than 30fps
+                if any(k for k in list(data_copy[mime_type].keys())
+                       if data_copy[mime_type][k]['fps'] <= 30):
+                    for k in list(data_copy[mime_type].keys()):
+                        if data_copy[mime_type][k]['fps'] > 30:
+                            discarded_streams.append(get_discarded_video(mime_type, k,
+                                                                         data_copy[mime_type][k],
+                                                                         'frame rate'))
+                            del data_copy[mime_type][k]
+
+            if discard_mime in data_copy:
+                # discard streams with unwanted mime type
+                for itag in list(data_copy[discard_mime].keys()):
+                    discarded_streams.append(get_discarded_video(discard_mime, itag,
+                                                                 data_copy[discard_mime][itag],
+                                                                 'mime type'))
+                    del data_copy[discard_mime][itag]
+                del data_copy[discard_mime]
+
+            itag_matches = []
+            itag_match = None
+
+            for idx, q in enumerate(sorted_qualities):
+                # find all streams with matching height
+                if any(itag for itag in list(data_copy[mime_type].keys())
+                       if int(data_copy[mime_type][itag].get('height', 0)) == q):
+                    i_matches = [itag for itag in list(data_copy[mime_type].keys())
+                                 if int(data_copy[mime_type][itag].get('height', 0)) == q]
+                    itag_matches.extend(i_matches)
+                    break
+
+            if not itag_matches:
+                # find best match for quality if there were no exact height candidates
+                for idx, q in enumerate(sorted_qualities):
+                    if idx != len(sorted_qualities) - 1:
+                        if any(itag for itag in list(data_copy[mime_type].keys())
+                               if ((int(data_copy[mime_type][itag].get('height', 0)) < q) and
+                                   (int(data_copy[mime_type][itag].get('height', 0)) >= sorted_qualities[idx + 1]))):
+                            i_match = next(itag for itag in list(data_copy[mime_type].keys())
+                                           if ((int(data_copy[mime_type][itag].get('height', 0)) < q) and
+                                               (int(data_copy[mime_type][itag].get('height', 0)) >=
+                                                sorted_qualities[idx + 1])))
+                            itag_matches.append(i_match)
+                            break
+
+            for itag in list(data_copy[mime_type].keys()):
+                # find highest fps and bandwidth itag out of all candidates
+                if itag in itag_matches:
+                    if (not itag_match or itag_match.get('fps') < data_copy[mime_type][itag].get('fps') or
+                            (itag_match.get('fps') == data_copy[mime_type][itag].get('fps') and
+                             itag_match.get('bandwidth') < data_copy[mime_type][itag].get('bandwidth'))):
+                        itag_match = data_copy[mime_type][itag]
+
+            if itag_match:
+                for itag in list(data_copy[mime_type].keys()):
+                    # discard all streams except the best match
+                    if itag != itag_match.get('id'):
+                        discarded_streams.append(get_discarded_video(mime_type, itag,
+                                                                     data_copy[mime_type][itag],
+                                                                     'quality'))
+                        del data_copy[mime_type][itag]
+
+            return data_copy
 
         basepath = 'special://temp/plugin.video.youtube/'
         if not make_dirs(basepath):
@@ -1064,14 +1168,13 @@ class VideoInfo(object):
         stream_info = {'video': {'height': '0', 'fps': '0', 'codec': '', 'mime': '', 'quality_label': '', 'bandwidth': 0},
                        'audio': {'bitrate': '0', 'codec': '', 'mime': '', 'bandwidth': 0}}
 
-        discarded_streams = list()
-
-        fmts_list = adaptive_fmts.split(',')
         data = dict()
-        for item in fmts_list:
-            stream_map = dict(urllib.parse.parse_qsl(item))
+        for item in adaptive_fmts:
+            stream_map = item
+            stream_map.update(dict(urllib.parse.parse_qsl(item.get('cipher', ''))))
+            stream_map['itag'] = str(stream_map.get('itag'))
 
-            t = stream_map.get('type')
+            t = stream_map.get('mimeType')
             t = urllib.parse.unquote(t)
             t = t.split(';')
             mime = t[0]
@@ -1083,13 +1186,10 @@ class VideoInfo(object):
             data[mime][i]['codecs'] = t[1][1:]
             data[mime][i]['id'] = i
 
-            s = stream_map.get('size')
-            if s:
-                s = s.split('x')
-                data[mime][i]['width'] = s[0]
-                data[mime][i]['height'] = s[1]
+            data[mime][i]['width'] = stream_map.get('width')
+            data[mime][i]['height'] = stream_map.get('height')
 
-            data[mime][i]['quality_label'] = str(stream_map.get('quality_label'))
+            data[mime][i]['quality_label'] = str(stream_map.get('qualityLabel'))
 
             data[mime][i]['bandwidth'] = stream_map.get('bitrate')
 
@@ -1099,7 +1199,8 @@ class VideoInfo(object):
             fps_scale_map = {24: 1001, 30: 1001, 60: 1001}
             if 'fps' in stream_map:
                 fps = int(stream_map.get('fps'))
-                scale = fps_scale_map.get(fps) if fps_scale_map.get(fps) else 1000
+                data[mime][i]['fps'] = fps
+                scale = fps_scale_map.get(fps, 1000)
                 frame_rate = '%d/%d' % (fps * 1000, scale)
 
             data[mime][i]['frameRate'] = frame_rate
@@ -1121,42 +1222,99 @@ class VideoInfo(object):
             url = url.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
             data[mime][i]['baseUrl'] = url
 
-            data[mime][i]['indexRange'] = stream_map.get('index')
-            data[mime][i]['init'] = stream_map.get('init')
+            data[mime][i]['indexRange'] = '0-0'
+            data[mime][i]['initRange'] = '0-0'
+            if 'indexRange' in stream_map and 'initRange' in stream_map:
+                data[mime][i]['indexRange'] = '-'.join([stream_map.get('indexRange').get('start'),
+                                                        stream_map.get('indexRange').get('end')])
+                data[mime][i]['init'] = '-'.join([stream_map.get('initRange').get('start'),
+                                                  stream_map.get('initRange').get('end')])
+            if ('indexRange' not in stream_map or 'initRange' not in stream_map or
+                    data[mime][i].get('indexRange') == '0-0' and data[mime][i].get('initRange') == '0-0'):
+                if mime.startswith('video'):
+                    discarded_streams.append(get_discarded_video(mime, i, data[mime][i], 'no init or index'))
+                else:
+                    discarded_streams.append(get_discarded_audio(mime, i, data[mime][i], 'no init or index'))
+                del data[mime][i]
 
+        if not data.get('video/mp4') and not data.get('video/webm'):
+            self._context.log_debug('Generate MPD: No video mime-types found')
+            return None, None
+
+        mpd_quality = self._context.get_settings().get_mpd_quality()
+        hdr = self._context.get_settings().include_hdr() and 'vp9.2' in ia_capabilities
+        limit_30fps = self._context.get_settings().mpd_30fps_limit()
+
+        supported_mime_types = []
         default_mime_type = 'mp4'
-        supported_mime_types = ['audio/mp4', 'video/mp4']
+        if data.get('video/mp4'):
+            supported_mime_types.append('video/mp4')
+        if data.get('audio/mp4'):
+            supported_mime_types.append('audio/mp4')
 
-        if ('vp9' in ia_capabilities or 'vp9.2' in ia_capabilities) and any(m for m in data if m == 'video/webm'):
+        if (('vp9' in ia_capabilities or 'vp9.2' in ia_capabilities) and
+                any(m for m in data if m == 'video/webm') and
+                data.get('video/webm')):
             supported_mime_types.append('video/webm')
 
-        if ('vorbis' in ia_capabilities or 'opus' in ia_capabilities) and any(m for m in data if m == 'audio/webm'):
+        if (('vorbis' in ia_capabilities or 'opus' in ia_capabilities) and
+                any(m for m in data if m == 'audio/webm') and
+                data.get('audio/webm')):
             supported_mime_types.append('audio/webm')
 
-        if 'video/webm' in supported_mime_types and self._context.get_settings().use_webm_adaptation_set():
+        if ('video/webm' in supported_mime_types and
+                ((isinstance(mpd_quality, str) and mpd_quality == 'webm') or
+                 (isinstance(mpd_quality, int) and mpd_quality > 1080) or
+                 hdr)):
             default_mime_type = 'webm'
 
-        if ('video/webm' in supported_mime_types and
-                'vp9.2' in ia_capabilities and
-                self._context.get_settings().include_hdr() and
-                self._context.inputstream_adaptive_auto_stream_selection() and
-                any(k for k in list(data['video/webm'].keys()) if '"vp9.2"' in data['video/webm'][k]['codecs'])):
-            # when hdr enabled and inputstream adaptive stream selection is set to automatic
-            # replace vp9 streams with vp9.2 (hdr) of the same resolution
-            webm_streams = {}
+        limit_qualities = self._context.get_settings().mpd_video_qualities()
+        apply_filters = isinstance(mpd_quality, int) and isinstance(limit_qualities, list)
 
-            for key in list(data['video/webm'].keys()):
-                if '"vp9.2"' in data['video/webm'][key]['codecs']:
-                    webm_streams[key] = data['video/webm'][key]
-                elif '"vp9"' in data['video/webm'][key]['codecs']:
-                    if not any(k for k in list(data['video/webm'].keys())
-                               if '"vp9.2"' in data['video/webm'][k]['codecs'] and
-                                  data['video/webm'][key]['height'] == data['video/webm'][k]['height'] and
-                                  data['video/webm'][key]['width'] == data['video/webm'][k]['width']):
+        self._context.log_debug('Generating MPD: Apply filters |{apply_filters}| '
+                                'Quality selection |{quality}| Limit 30FPS |{limit_fps}| HDR |{hdr}|'
+                                .format(apply_filters=str(apply_filters),
+                                        quality=(limit_qualities if isinstance(limit_qualities, str)
+                                                 else str(next(iter(limit_qualities), None))),
+                                        limit_fps=str(limit_30fps),
+                                        hdr=str(hdr)))
+
+        if 'video/webm' in supported_mime_types:
+            webm_streams = {}
+            if hdr and any(k for k in list(data['video/webm'].keys()) if '"vp9.2"' in data['video/webm'][k]['codecs']):
+                # when hdr enabled and available replace vp9 streams with vp9.2 (hdr)
+                for key in list(data['video/webm'].keys()):
+                    if '"vp9.2"' in data['video/webm'][key]['codecs']:
                         webm_streams[key] = data['video/webm'][key]
+
+                discard_webm = [data['video/webm'][i] for i in (set(data['video/webm']) - set(webm_streams))
+                                if i in data['video/webm']]
+
+                for d in discard_webm:
+                    discarded_streams.append(get_discarded_video('video/webm',
+                                                                 d['id'],
+                                                                 data['video/webm'][d['id']],
+                                                                 'replaced by hdr'))
+            elif not hdr:
+                # when hdr disabled and remove vp9.2 (hdr) streams
+                for key in list(data['video/webm'].keys()):
+                    if '"vp9"' in data['video/webm'][key]['codecs']:
+                        webm_streams[key] = data['video/webm'][key]
+
+                discard_webm = [data['video/webm'][i] for i in (set(data['video/webm']) - set(webm_streams))
+                                if i in data['video/webm']]
+
+                for d in discard_webm:
+                    discarded_streams.append(get_discarded_video('video/webm',
+                                                                 d['id'],
+                                                                 data['video/webm'][d['id']],
+                                                                 'hdr disabled'))
 
             if webm_streams:
                 data['video/webm'] = webm_streams
+
+        if apply_filters:
+            data = filter_qualities(data, default_mime_type, limit_qualities, limit_30fps)
 
         out_list = ['<?xml version="1.0" encoding="UTF-8"?>\n'
                     '<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:xlink="http://www.w3.org/1999/xlink" '
@@ -1201,7 +1359,7 @@ class VideoInfo(object):
 
                         out_list.append(''.join(['\t\t\t<Representation id="',
                                                  i, '" ', data[mime][i]['codecs'],
-                                                 ' bandwidth="', data[mime][i]['bandwidth'],
+                                                 ' bandwidth="', str(data[mime][i]['bandwidth']),
                                                  '">\n']))
                         out_list.append('\t\t\t\t<AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>\n')
                     else:
@@ -1212,7 +1370,10 @@ class VideoInfo(object):
 
                         if 'vp9.2' == video_codec.lower() and ('vp9.2' not in ia_capabilities or
                                                                not self._context.get_settings().include_hdr()):
-                            discarded_streams.append(get_discarded_video(mime, i, data[mime][i]))
+                            if not self._context.get_settings().include_hdr() and 'vp9.2' in ia_capabilities:
+                                discarded_streams.append(get_discarded_video(mime, i, data[mime][i], 'hdr not selected'))
+                            else:
+                                discarded_streams.append(get_discarded_video(mime, i, data[mime][i]))
                             continue
                         elif 'vp9' == video_codec.lower() and 'vp9' not in ia_capabilities:
                             discarded_streams.append(get_discarded_video(mime, i, data[mime][i]))
@@ -1222,24 +1383,25 @@ class VideoInfo(object):
                             continue
 
                         has_video_stream = True
-                        if int(data[mime][i]['bandwidth']) > int(stream_info['video']['bandwidth']):
-                            stream_info['video']['height'] = str(data[mime][i]['height'])
-                            stream_info['video']['fps'] = str(data[mime][i]['frameRate'])
-                            stream_info['video']['mime'] = str(mime)
-                            stream_info['video']['codec'] = video_codec
-                            stream_info['video']['bandwidth'] = int(data[mime][i]['bandwidth'])
-                            if data[mime][i].get('quality_label'):
-                                stream_info['video']['quality_label'] = str(data[mime][i]['quality_label'])
-                            if stream_format:
-                                stream_info['video']['codec'] = stream_format.get('video', {}).get('encoding')
-                            if not stream_info['video'].get('codec'):
+                        if default:
+                            if int(data[mime][i]['bandwidth']) > int(stream_info['video']['bandwidth']):
+                                stream_info['video']['height'] = str(data[mime][i]['height'])
+                                stream_info['video']['fps'] = str(data[mime][i]['frameRate'])
+                                stream_info['video']['mime'] = str(mime)
                                 stream_info['video']['codec'] = video_codec
+                                stream_info['video']['bandwidth'] = int(data[mime][i]['bandwidth'])
+                                if data[mime][i].get('quality_label'):
+                                    stream_info['video']['quality_label'] = str(data[mime][i]['quality_label'])
+                                if stream_format:
+                                    stream_info['video']['codec'] = stream_format.get('video', {}).get('encoding')
+                                if not stream_info['video'].get('codec'):
+                                    stream_info['video']['codec'] = video_codec
 
                         video_codec = data[mime][i]['codecs']
                         out_list.append(''.join(['\t\t\t<Representation id="', i, '" ', video_codec,
-                                                 ' startWithSAP="1" bandwidth="', data[mime][i]['bandwidth'],
-                                                 '" width="', data[mime][i]['width'], '" height="',
-                                                 data[mime][i]['height'], '" frameRate="', data[mime][i]['frameRate'],
+                                                 ' startWithSAP="1" bandwidth="', str(data[mime][i]['bandwidth']),
+                                                 '" width="', str(data[mime][i]['width']), '" height="',
+                                                 str(data[mime][i]['height']), '" frameRate="', str(data[mime][i]['frameRate']),
                                                  '">\n']))
 
                     out_list.append(''.join(['\t\t\t\t<BaseURL>', data[mime][i]['baseUrl'], '</BaseURL>\n']))
@@ -1264,7 +1426,7 @@ class VideoInfo(object):
         self._context.log_debug('Generated MPD highest supported quality found: |%s|' % str(stream_info))
         if discarded_streams:
             discarded_streams = sorted(discarded_streams, key=lambda k: k.get('audio', k.get('video', {}))['bandwidth'], reverse=True)
-            self._context.log_debug('Generated MPD unsupported streams: \n%s' % '\n'.join(str(stream) for stream in discarded_streams))
+            self._context.log_debug('Generated MPD discarded streams: \n%s' % '\n'.join(str(stream) for stream in discarded_streams))
 
         if not has_video_stream:
             self._context.log_debug('Generated MPD no supported video streams found')

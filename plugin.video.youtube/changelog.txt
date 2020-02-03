@@ -1,3 +1,54 @@
+6.6.0
+[add] 'Play (Ask for quality)' context menu
+[add] search by channel or playlist id
+[add] hide_folders, hide_playlists, hide_search, and hide_live to /channel/<channel_id>/ end-point
+    - ie. plugin://plugin.video.youtube/channel/UC4PooiX37Pld1T8J5SYT-SQ/?hide_folders=true will hide all folders(Playlists, Search, and Live) in the channel listing
+[fix] playback for some videos (ie. music videos)
+[fix] playback of some videos with no adaptive video streams
+[fix] don't update watch history when incognito/screensaver/live |contrib: regseb|
+[fix] search prompting for input after video playback or refresh
+[lang] el_gr strings |contrib: twilight0|
+[lang] es_es strings |contrib: roliverosc|
+[lang] pt_br strings |contrib: MediaBrasil|
+[lang] cs_cz strings |contrib: llzn.cz|
+[lang] it_it strings |contrib: SebastianoPistore|
+[lang] de_de strings |contrib: tweimer|
+
+6.5.2
+[fix] playback (No streams found)
+[fix] missing metadata
+[fix] ended live streams not using mpeg-dash when enabled
+[fix] subscriptions not showing latest videos
+[upd] simplify youtube_resolver regex |contrib: Twilight0|
+[lang] de_de strings |contrib: TehTux|
+[lang] pl_pl strings |contrib: drrak|
+[lang] nl_nl strings |contrib: Markman-B|
+
+6.5.1
+[add] get_live to youtube_requests module to retrieve live stream info for a channel
+[add] Adaptive (MP4) and Adaptive (WEBM) to MPEG-DASH - Video quality
+[fix] live stream playback
+[fix] unable to seek when using mpeg-dash
+[fix] mpeg-dash video quality selection
+[fix] sqlite requests breaking when another add-on/module uses sqlite3.register_converter(..)
+[fix] signal endofdirectory in case of a provider navigation exception |contrib: enen92|
+
+6.5.0
+[add] Video quality selection to Settings - MPEG-DASH
+[add] Limit to 30fps to Settings - MPEG-DASH
+[add] Uploads playlist to channel playlists
+[chg] Use search for channel videos instead of the Uploads playlist
+[fix] Signature cipher, some videos unplayable (ie. music videos)
+[fix] Playback monitoring using Python 3
+[fix] unescape html entities in title and plot
+[fix] handling of invalid grant when refreshing access token
+[fix] adding suggested videos when played from some widgets
+[fix] http server /client_ip using Python 3 |contrib: t6|
+[upd] refactor youtube_resolver.resolve
+[lang] el_gr strings |contrib: twilight0|
+[lang] es_es strings |contrib: roliverosc|
+[lang] ko_kr strings |contrib: parkmino|
+
 6.4.1
 [upd] Use the activation url provided by the authentication request
 [add] add Settings - MPEG-DASH - Default to WEBM adaptation set

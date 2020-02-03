@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="6.4.1" provider-name="anxdpanic, bromix">
+<addon id="plugin.video.youtube" name="YouTube" version="6.6.0" provider-name="anxdpanic, bromix">
     <requires>
         <import addon="xbmc.python" version="2.20.0"/>
         <import addon="script.module.six" version="1.11.0"/>
@@ -13,22 +13,20 @@
     <extension point="xbmc.python.module" library="resources/lib/"/>
     <extension point="xbmc.addon.metadata">
         <news>
-6.4.1
-[upd] Use the activation url provided by the authentication request
-[add] add Settings - MPEG-DASH - Default to WEBM adaptation set
-        - required for 4k stream automatic selection
-[add] add Settings - MPEG-DASH - Include VP9.2
-        - includes HDR content in the manifest
-[add] add support for &amp;hide_folders=true parameter in search query urls
-        - when added to the url it will hide the Playlists, Channels, and Live folders
-[add] &amp;seek=&lt;time_in_seconds&gt; to play urls
-[fix] fix playback of Purchases
-[fix] fixed saved playlists that don't belong to a channel
-[fix] mpeg-dash frame rate representation
-[fix] datetime parsing if no datetime string is available
-[chg] handle playback monitoring in threads
-[lang] nl_nl strings |contrib: MB1968|
+[add] 'Play (Ask for quality)' context menu
+[add] search by channel or playlist id
+[add] hide_folders, hide_playlists, hide_search, and hide_live to /channel/&lt;channel_id&gt;/ end-point
+    - ie. plugin://plugin.video.youtube/channel/UC4PooiX37Pld1T8J5SYT-SQ/?hide_folders=true will hide all folders(Playlists, Search, and Live) in the channel listing
+[fix] playback for some videos (ie. music videos)
+[fix] playback of some videos with no adaptive video streams
+[fix] don't update watch history when incognito/screensaver/live |contrib: regseb|
+[fix] search prompting for input after video playback or refresh
 [lang] el_gr strings |contrib: twilight0|
+[lang] es_es strings |contrib: roliverosc|
+[lang] pt_br strings |contrib: MediaBrasil|
+[lang] cs_cz strings |contrib: llzn.cz|
+[lang] it_it strings |contrib: SebastianoPistore|
+[lang] de_de strings |contrib: tweimer|
         </news>
         <assets>
             <icon>icon.png</icon>
@@ -69,10 +67,16 @@
         <description lang="nb_NO">YouTube er en av verdens største nettsider for videodeling.</description>
         <summary lang="ko_KR">유튜브 플러그인</summary>
         <description lang="ko_KR">유튜브는 세상에서 가장 큰 동영상 공유 사이트 중의 하나입니다.</description>
+        <summary lang="cs_CZ">Plugin pro YouTube</summary>
+        <description lang="cs_CZ">YouTube je jedna z největších webových stránek světa sdílející video.</description>
+        <disclaimer lang="cs_CZ">Tento plugin není schválen společností Google</disclaimer>
+        <summary lang="tr_TR">YouTube için eklenti</summary>
+        <description lang="tr_TR">YouTube, dünya üzerindeki en büyük video paylaşma platformlarından birisidir</description>
+        <disclaimer lang="tr_TR">Bu eklenti Google tarafından üretilmemiştir</disclaimer>
         <language></language>
         <platform>all</platform>
         <license>GPL-2.0-only</license>
-        <forum>https://forum.kodi.tv/showthread.php?tid=325740</forum>
+        <forum>https://forum.kodi.tv/showthread.php?tid=348464</forum>
         <website>https://www.youtube.com</website>
         <email>ytplugin at datanet dot ws</email>
         <source>https://github.com/jdf76/plugin.video.youtube</source>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.cook" name="Cooking with Kodi" version="1.0.0" provider-name="Damon Toumbourou">
+<addon id="plugin.image.cook" name="Cooking with Kodi" version="1.0.1" provider-name="Damon Toumbourou">
   <requires>
     <import addon="xbmc.python"                     version="2.20.0"/>
     <import addon="script.module.xbmcswift2"        version="2.4.0"/>
@@ -17,6 +17,7 @@
     </summary>
     <description lang="en_GB">A comprehensive collection of recipes, cooking tips, ideas and inspiration.
     </description>
+    <broken>Broken due to site changes and no update activity in recent years.</broken>
     <license>The MIT License (MIT)</license>
     <forum>http://forum.xbmc.org/showthread.php?tid=184904</forum>
     <email>dtoumbourou@gmail.com</email>

@@ -1,9 +1,0 @@
-Maybe use the mobile feed? Gives some extra options:
-- Nieuw: http://dumpert.nl/mobile_api/json/hotshiz/0/
-- Classics: http://dumpert.nl/mobile_api/json/classics/0/
-- Top Dag: http://dumpert.nl/mobile_api/json/top5/dag/2016-03-19/0/
-- Top Week: http://dumpert.nl/mobile_api/json/top5/week/201611/0/
-- Top Maand: http://dumpert.nl/mobile_api/json/top5/maand/201603/0/
-
-Mobile feed misses:
-- youtube embeds

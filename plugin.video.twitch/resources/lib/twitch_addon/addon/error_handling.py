@@ -56,6 +56,7 @@ def error_handler(func):
                 message = error.message
             log_utils.log('Playback Failed |{0}|'.format(message), log_utils.LOGDEBUG)
             kodi.notify(kodi.get_name(), i18n('playback_failed'), duration=5000, sound=False)
+            kodi.set_resolved_url(kodi.ListItem(), succeeded=False)
         except TwitchException as error:
             _error = ''
             if PY3:

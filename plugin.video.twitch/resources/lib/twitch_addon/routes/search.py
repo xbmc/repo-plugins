@@ -46,4 +46,4 @@ def route():
         kodi.create_item({'label': i18n('video_id_url'), 'path': {'mode': MODES.NEWSEARCH, 'content': 'id_url'},
                           'info': {'plot': '%s - %s[CR]%s' % (i18n('search'), i18n('video_id_url'), i18n('search_id_url_description'))}})
 
-    kodi.end_of_directory(cache_to_disc=True)
+    kodi.end_of_directory(cache_to_disc=False)

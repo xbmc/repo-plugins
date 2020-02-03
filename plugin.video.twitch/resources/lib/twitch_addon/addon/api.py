@@ -15,7 +15,7 @@ from . import cache, utils
 from .common import kodi, log_utils
 from .constants import Keys, SCOPES
 from .error_handling import api_error_handler
-from .twitch_exceptions import TwitchException
+from .twitch_exceptions import PlaybackFailed, TwitchException
 
 from twitch import queries as twitch_queries
 from twitch import oauth
@@ -124,12 +124,6 @@ class Twitch:
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_top_communities(self, cursor, limit):
-        results = self.api.communities.get_top(cursor=cursor, limit=limit)
-        return self.error_check(results)
-
-    @api_error_handler
-    @cache.cache_method(cache_limit=cache.limit)
     def get_collections(self, channel_id, cursor, limit):
         results = self.api.collections.get_collections(channel_id=channel_id, cursor=cursor, limit=limit)
         return self.error_check(results)
@@ -190,12 +184,6 @@ class Twitch:
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_community_streams(self, community_id, offset, limit, language=Language.ALL):
-        results = self.api.streams.get_all(community_id=community_id, limit=limit, offset=offset, language=language)
-        return self.error_check(results)
-
-    @api_error_handler
-    @cache.cache_method(cache_limit=cache.limit)
     def get_channel_search(self, search_query, offset, limit):
         results = self.api.search.channels(search_query=search_query, limit=limit, offset=offset)
         return self.error_check(results)
@@ -233,19 +221,19 @@ class Twitch:
     @api_error_handler
     def check_follow_game(self, game):
         username = self.get_username()
-        results = self.api.games._check_follows(username=username, name=game)
+        results = self.api.games._check_follows(username=username, name=game, headers=self.get_private_credential_headers())
         return self.return_boolean(results)
 
     @api_error_handler
     def follow_game(self, game):
         username = self.get_username()
-        results = self.api.games._follow(username=username, name=game)
+        results = self.api.games._follow(username=username, name=game, headers=self.get_private_credential_headers())
         return self.error_check(results)
 
     @api_error_handler
     def unfollow_game(self, game):
         username = self.get_username()
-        results = self.api.games._unfollow(username=username, name=game)
+        results = self.api.games._unfollow(username=username, name=game, headers=self.get_private_credential_headers())
         return self.error_check(results)
 
     @api_error_handler
@@ -311,19 +299,24 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_followed_games(self, name, offset, limit):
-        results = self.api.games._get_followed(username=name, limit=limit, offset=offset)
+        results = self.api.games._get_followed(username=name, limit=limit, offset=offset, headers=self.get_private_credential_headers())
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_followed_streams(self, stream_type, offset, limit):
         results = self.api.streams.get_followed(stream_type=stream_type, limit=limit, offset=offset)
-        return self.error_check(results)
+        results = self.error_check(results)
+        if isinstance(results.get('streams'), list):
+            results['streams'] = sorted(results['streams'],
+                                        key=lambda x: int(x.get('viewers', 0)),
+                                        reverse=True)
+        return results
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_vod(self, video_id):
-        results = self.usher.video(video_id)
+        results = self.usher.video(video_id, headers=self.get_private_credential_headers())
         return self.error_check(results)
 
     @api_error_handler
@@ -334,25 +327,25 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_live(self, name):
-        results = self.usher.live(name)
+        results = self.usher.live(name, headers=self.get_private_credential_headers())
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def live_request(self, name):
         if not utils.inputstream_adpative_supports('EXT-X-DISCONTINUITY'):
-            results = self.usher.live_request(name, platform='ps4')
+            results = self.usher.live_request(name, platform='ps4', headers=self.get_private_credential_headers())
         else:
-            results = self.usher.live_request(name)
+            results = self.usher.live_request(name, headers=self.get_private_credential_headers())
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def video_request(self, video_id):
         if not utils.inputstream_adpative_supports('EXT-X-DISCONTINUITY'):
-            results = self.usher.video_request(video_id, platform='ps4')
+            results = self.usher.video_request(video_id, platform='ps4', headers=self.get_private_credential_headers())
         else:
-            results = self.usher.video_request(video_id)
+            results = self.usher.video_request(video_id, headers=self.get_private_credential_headers())
         return self.error_check(results)
 
     def get_user_blocks(self):
@@ -375,7 +368,12 @@ class Twitch:
 
     @staticmethod
     def error_check(results):
-        if 'error' in results: raise TwitchException(results)
+        if 'stream' in results and results['stream'] is None:
+            raise PlaybackFailed()
+
+        if 'error' in results:
+            raise TwitchException(results)
+
         return results
 
     @staticmethod
@@ -386,3 +384,16 @@ class Twitch:
             raise TwitchException(results)
         else:
             return True
+
+    @staticmethod
+    def get_private_credential_headers():
+        headers = {}
+        private_client_id = utils.get_private_client_id()
+        private_oauth_token = utils.get_private_oauth_token()
+        if private_client_id:
+            headers['Client-ID'] = private_client_id
+            headers['Authorization'] = ''
+        if private_oauth_token:
+            headers['Authorization'] = 'OAuth {token}'.format(token=private_oauth_token)
+            headers['Client-ID'] = ''
+        return headers

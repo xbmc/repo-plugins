@@ -35,25 +35,29 @@ msgctxt "#30001"
 msgid "New"
 msgstr "Filmpjes"
 
-msgctxt "#30002"
-msgid "Themes"
-msgstr "Themas"
-
-msgctxt "#30003"
-msgid "Flop"
-msgstr "Floppers"
-
 msgctxt "#30004"
 msgid "Search"
 msgstr "Zoeken"
 
 msgctxt "#30005"
-msgid "Top Time machine"
-msgstr "Toppers Tijdmachine"
+msgid "Top Time machine (daily/weekly/montly Toppers)"
+msgstr "Toppers Tijdmachine: Toppers per dag/week/maand"
 
-msgctxt "#30006"
-msgid "Classics"
-msgstr "Klassiekerts"
+msgctxt "#30007"
+msgid "Dumpert TV"
+msgstr "Dumpert TV"
+
+msgctxt "#30008"
+msgid "Daily Top"
+msgstr "Dagelijkse Toppers"
+
+msgctxt "#30009"
+msgid "Weekly Top"
+msgstr "Wekelijkse Toppers"
+
+msgctxt "#30010"
+msgid "Monthly Top"
+msgstr "Maandelijkse Toppers"
 
 msgctxt "#30100"
 msgid "Version"
@@ -140,16 +144,16 @@ msgid "Pick a date"
 msgstr "Kies een datum"
 
 msgctxt "#30510"
-msgid "Day top for %s"
-msgstr "Dagtop voor %s"
+msgid "Day top for day %s"
+msgstr "Dagtop voor dag %s"
 
 msgctxt "#30511"
-msgid "Week top for %s"
-msgstr "Weektop voor %s"
+msgid "Week top for week %s %s"
+msgstr "Weektop voor week %s %s"
 
 msgctxt "#30512"
-msgid "Month top for %s"
-msgstr "Maandtop voor %s"
+msgid "Month top for month %s"
+msgstr "Maandtop voor maand %s"
 
 msgctxt "#30600"
 msgid "Show NSFW content"

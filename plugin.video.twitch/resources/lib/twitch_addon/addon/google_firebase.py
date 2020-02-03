@@ -21,7 +21,10 @@ __key = 'QUl6YVN5RDBtVGtVUU1TQnZ2dzVobnN4LTRZeGktNXNKSmdRR0E4'
 
 
 def dynamic_links_short_url(url):
-    post_url = 'https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=%s' % b64decode(__key)
+    key = b64decode(__key)
+    if isinstance(key, bytes):
+        key = key.decode('utf-8')
+    post_url = 'https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=%s' % key
     data = {
         'longDynamicLink': 'https://twitchaddon.page.link/?link=%s' % quote(url),
         'suffix': {

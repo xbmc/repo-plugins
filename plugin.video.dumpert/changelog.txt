@@ -1,3 +1,12 @@
+v1.1.10 (2019-12-12) (thanks for the help Nixxor)
+- Removed Top as it is basically the same as Daily Top
+- Using different url for DumpertTV so that most recent items are at the top of the list
+- Moved DumpertTV up in the main list
+
+v1.1.9 (2019-09-19) (thanks for the help NightFox89)
+- MAJOR changes in the addon due to redesigned website
+- updated logos
+
 v1.1.8 (2018-12-30)
 - added stream videos
 - switched to isengard
@@ -25,9 +34,9 @@ v1.1.3 (2017-03-03):
 - fixed url in addon.xml as per request
 
 v1.1.2 (2016-12-20) (kudos to MartijnKaiser):
-- Use higher resolution thumbnails 
-- Set content to video so skins can set correct view 
-- Set video duration when available 
+- Use higher resolution thumbnails
+- Set content to video so skins can set correct view
+- Set video duration when available
 - using po-files (Skipmode A1)
 - changed addon debugging info to kodi debugging info (Skipmode A1)
 
@@ -65,7 +74,7 @@ v1.0.5 (2015-04-17):
 
 v1.0.4 (2014-06-06):
 - adjustments due to changes in the website: changed get-method
- 
+
 v1.0.3 (2014-04-14):
 - adjustments due to changes in the website. Thanks to TheGroove for helping out with the base64 stuff
 - video quality can be set in the settings now

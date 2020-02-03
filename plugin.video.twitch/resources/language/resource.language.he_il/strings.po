@@ -461,10 +461,6 @@ msgctxt "#30136"
 msgid "Always ask"
 msgstr "שאל תמיד"
 
-msgctxt "#30137"
-msgid "Communities"
-msgstr "קהילות"
-
 msgctxt "#30138"
 msgid "*** Do NOT share your OAuth token. ***"
 msgstr "*** אל תשתף אתהאסימון OAuth שלך. ***"
@@ -640,14 +636,6 @@ msgstr "עבור אל '%s' - '%s' - '%s' כדי ליצור אסימון חדש"
 msgctxt "#30181"
 msgid "Are you sure you want to blacklist %s?"
 msgstr "האם אתה בטוח שברצונך להוסיף לרשימה השחורה %s?"
-
-msgctxt "#30182"
-msgid "Remove a community"
-msgstr "הסר קהילה"
-
-msgctxt "#30183"
-msgid "Remove all communities"
-msgstr "הסר קהילות"
 
 msgctxt "#30184"
 msgid "Change sort by"
@@ -955,4 +943,8 @@ msgstr ""
 
 msgctxt "#30260"
 msgid "Limit to 30 fps"
+msgstr ""
+
+msgctxt "#30261"
+msgid "Private API Credentials"
 msgstr ""

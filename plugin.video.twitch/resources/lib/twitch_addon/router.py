@@ -87,13 +87,6 @@ def _list_all_games(offset=0):
     games.route(twitch_api, offset)
 
 
-@dispatcher.register(MODES.COMMUNITIES, kwargs=['cursor'])
-@error_handler
-def _list_all_communities(cursor='MA=='):
-    from .routes import communities
-    communities.route(twitch_api, cursor)
-
-
 @dispatcher.register(MODES.STREAMLIST, kwargs=['stream_type', 'offset', 'platform'])
 @error_handler
 def _list_streams(stream_type=StreamType.LIVE, offset=0, platform=Platform.ALL):
@@ -155,13 +148,6 @@ def _game_lists(game):
 def _list_game_streams(game, offset=0):
     from .routes import game_streams
     game_streams.route(twitch_api, game, offset)
-
-
-@dispatcher.register(MODES.COMMUNITYSTREAMS, args=['community_id'], kwargs=['offset'])
-@error_handler
-def _list_community_streams(community_id, offset=0):
-    from .routes import community_streams
-    community_streams.route(twitch_api, community_id, offset)
 
 
 @dispatcher.register(MODES.PLAY, kwargs=['seek_time', 'channel_id', 'video_id', 'slug', 'ask', 'use_player', 'quality', 'channel_name'])

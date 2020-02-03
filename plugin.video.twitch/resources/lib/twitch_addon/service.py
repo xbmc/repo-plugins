@@ -53,7 +53,7 @@ class LiveNotificationsThread(threading.Thread):
         abort = False
         first_run = True
 
-        player = TwitchPlayer()
+        player = TwitchPlayer(window)
 
         while not monitor.abortRequested() and not self.stopped():
             time_diff = get_stamp_diff(timestamp)

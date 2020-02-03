@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='2.4.3' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.4.8' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
         <import addon='script.module.six' version='1.11.0'/>
-        <import addon='script.module.python.twitch' version='2.0.7'/>
+        <import addon='script.module.python.twitch' version='2.0.10'/>
         <import addon='script.module.requests' version='2.9.1'/>
     </requires>
     <extension point='xbmc.python.pluginsource' library='resources/lib/addon_runner.py'>
@@ -13,10 +13,11 @@
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
         <news>
-2.4.3
-[fix] ads causing playback issues with InputStream Adaptive
-[fix] migrate url shortener from Google URL Shortener to Google Firebase Dynamic Links
-[upd] move Live Notifications to it's own thread
+[fix] resolve indefinite busy dialog on failed playback
+[fix] sort by viewers for followed live channels, restoring previous behavior
+[fix] menu settings not taking effect
+[fix] handle no stream available error
+[rem] remove Playlists
         </news>
         <assets>
             <icon>icon.png</icon>

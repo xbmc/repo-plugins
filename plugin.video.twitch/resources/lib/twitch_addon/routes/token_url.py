@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-    Copyright (C) 2012-2018 Twitch-on-Kodi
+    Copyright (C) 2012-2019 Twitch-on-Kodi
 
     This file is part of Twitch-on-Kodi (plugin.video.twitch)
 

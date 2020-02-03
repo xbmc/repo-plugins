@@ -38,8 +38,6 @@ MODES = __enum(
     INSTALLIRCCHAT='install_ircchat',
     PLAY='play',
     TOKENURL='get_token_url',
-    COMMUNITIES='communities',
-    COMMUNITYSTREAMS='community_streams',
     EDITFOLLOW='edit_user_follows',
     EDITBLOCK='edit_user_blocks',
     EDITBLACKLIST='edit_blacklist',
@@ -109,7 +107,6 @@ class Keys:
     CHUNKS = 'chunks'
     CLIPS = 'clips'
     COLLECTIONS = 'collections'
-    COMMUNITIES = 'communities'
     CONNECT = 'connect'
     CREATED_AT = 'created_at'
     CURATOR = 'curator'
@@ -186,4 +183,4 @@ class Scripts:
     REFRESH = 'special://home/addons/plugin.video.twitch/resources/lib/twitch_addon/refresh.py'
 
 
-SCOPES = [scopes.user_read, scopes.user_follows_edit, scopes.user_subscriptions, scopes.chat_login]
+SCOPES = [scopes.user_read, scopes.user_follows_edit, scopes.user_subscriptions]

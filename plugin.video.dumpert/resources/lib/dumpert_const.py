@@ -14,8 +14,23 @@ ADDON = "plugin.video.dumpert"
 SETTINGS = xbmcaddon.Addon(id=ADDON)
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'resources', 'images')
-DATE = "2018-12-30"
-VERSION = "1.1.8"
+LATEST_URL = "https://api-live.dumpert.nl/mobile_api/json/video/latest/0/"
+TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/video/toppers/0/"
+DUMPERT_TV_URL = "https://api.dumpert.nl/mobile_api/json/dumperttv/0/"
+SEARCH_URL = "https://api-live.dumpert.nl/mobile_api/json/search/"
+DAY_TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/video/top5/dag/"
+WEEK_TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/video/top5/week/"
+MONTH_TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/video/top5/maand/"
+SFW_HEADERS = {'X-Dumpert-NSFW': '0'}
+NSFW_HEADERS = {'X-Dumpert-NSFW': '1'}
+DAY = "day"
+WEEK = "week"
+MONTH = "month"
+VIDEO_QUALITY_MOBILE = "mobile"
+VIDEO_QUALITY_TABLET = "tablet"
+VIDEO_QUALITY_720P = "720p"
+DATE = "2019-12-14"
+VERSION = "1.1.10"
 
 
 if sys.version_info[0] > 2:
@@ -38,11 +53,18 @@ def convertToByteString(s, encoding='utf-8'):
 
 def log(name_object, object):
     try:
+        # Let's try and remove any non-ascii stuff first
+        object = object.encode('ascii', 'ignore')
+    except:
+        pass
+
+    try:
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
             ADDON, VERSION, DATE, name_object, convertToUnicodeString(object)), xbmc.LOGDEBUG)
     except:
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, name_object, "Unable to log the object due to an error while converting it to an unicode string"), xbmc.LOGDEBUG)
+            ADDON, VERSION, DATE, name_object,
+            "Unable to log the object due to an error while converting it to an unicode string"), xbmc.LOGDEBUG)
 
 
 def getSoup(html,default_parser="html5lib"):

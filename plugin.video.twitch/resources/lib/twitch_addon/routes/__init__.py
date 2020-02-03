@@ -11,7 +11,7 @@
 
 __all__ = ['browse', 'channel_video_categories', 'channel_videos', 'clear_list',
            'clear_search_history', 'clips', 'collection_videos',
-           'collections', 'communities', 'community_streams', 'configure_inputstream_adaptive',
+           'collections', 'configure_inputstream_adaptive',
            'edit_blacklist', 'edit_languages', 'edit_qualities', 'edit_sorting',
            'edit_user_follows', 'featured_streams', 'followed', 'following',
            'game_categories', 'game_streams', 'games', 'install_ircchat', 'main',

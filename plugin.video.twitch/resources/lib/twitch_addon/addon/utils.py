@@ -126,6 +126,17 @@ def get_client_id(default=False):
         return kodi.decode_utf8(b64decode(CLIENT_ID))
 
 
+def get_private_client_id():
+    settings_id = kodi.get_setting('private_oauth_clientid')
+    stripped_id = settings_id.strip()
+    if settings_id != stripped_id:
+        settings_id = stripped_id
+        kodi.set_setting('private_oauth_clientid', settings_id)
+    if not settings_id:
+        return ""
+    return kodi.decode_utf8(settings_id)
+
+
 def clear_client_id():
     kodi.set_setting('oauth_clientid', '')
 
@@ -153,6 +164,17 @@ def get_oauth_token(token_only=True, required=False):
                     oauth_token = oauth_token[idx + 1:]
                 oauth_token = 'oauth:{0}'.format(oauth_token)
     return kodi.decode_utf8(oauth_token)
+
+
+def get_private_oauth_token():
+    settings_id = kodi.get_setting('private_oauth_token')
+    stripped_id = settings_id.strip()
+    if settings_id != stripped_id:
+        settings_id = stripped_id
+        kodi.set_setting('private_oauth_token', settings_id)
+    if not settings_id:
+        return ""
+    return kodi.decode_utf8(settings_id)
 
 
 def get_search_history_size():
@@ -378,7 +400,7 @@ def get_stored_json():
     needs_save = False
     # set defaults
     if 'blacklist' not in json_data:
-        json_data['blacklist'] = {'user': [], 'game': [], 'community': []}
+        json_data['blacklist'] = {'user': [], 'game': []}
         needs_save = True
     if 'qualities' not in json_data:
         json_data['qualities'] = {'stream': [], 'video': [], 'clip': []}

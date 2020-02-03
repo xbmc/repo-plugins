@@ -29,49 +29,30 @@ if len(sys.argv[2]) == 0:
                  xbmc.LOGDEBUG)
 
     if SETTINGS.getSetting('onlyshownewvideocategory') == 'true':
-        import dumpert_list as plugin
+        import dumpert_json as plugin
     else:
         import dumpert_main as plugin
 else:
     action = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['action'][0]
     #
-    # Themas
-    #
-    if action == 'list-themas':
-        import dumpert_list_themas as plugin
-    #
-    # List
-    #
-    elif action == 'list':
-        import dumpert_list as plugin
-    #
-    # Play
-    #
-    elif action == 'play':
-        import dumpert_play as plugin
-
-    #
-    # Play file
-    #
-    elif action == 'play-file':
-        import dumpert_play_file as plugin
-
-    #
     # Search
     #
-    elif action == 'search':
+    if action == 'search':
         import dumpert_search as plugin
-
     #
     # Timemachine
     #
     elif action == 'timemachine':
         import dumpert_timemachine as plugin
-
     #
     # JSON
     #
-    elif action == 'json':
+    if action == 'json':
         import dumpert_json as plugin
+    #
+    # Play file
+    #
+    if action == 'play-file':
+        import dumpert_play_file as plugin
 
 plugin.Main()

@@ -2,7 +2,6 @@ import re
 import sys
 import json
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
-import urllib
 import random
 import time
 

@@ -1,6 +1,6 @@
-from resources.lib.globals import *
-from resources.lib.api import *
-from resources.lib.utils import *
+from .globals import *
+from .api import *
+from .utils import *
 import sys
 import requests
 from time import gmtime
@@ -41,7 +41,7 @@ def daily_games(game_day):
         list_item = xbmcgui.ListItem(label=day_games_label, thumbnailImage=AHL_LOGO)
         list_item.setProperty('fanart_image', FANART)
 
-        u = sys.argv[0] + "?mode=" + str(101) + "&game_day=" + urllib.quote_plus(game_day)
+        u = sys.argv[0] + "?mode=" + str(101) + "&game_day=" + quote(game_day)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=list_item, isFolder=False)
 
         if "games" in json_source:
@@ -110,7 +110,7 @@ def color_string(string, color):
 def add_game_listitem(name, title, game_id, icon=None, fanart=None, info=None, video_info=None, audio_info=None):
     ok = True
 
-    u = sys.argv[0] + "?url=&mode=" + str(104) + "&name=" + urllib.quote_plus(name) + "&game_id=" + urllib.quote_plus(str(game_id))
+    u = sys.argv[0] + "?url=&mode=" + str(104) + "&name=" + quote(name) + "&game_id=" + quote(str(game_id))
 
     liz = xbmcgui.ListItem(name)
 
@@ -242,7 +242,7 @@ def add_dir(name, mode, icon, fanart=None, game_day=None, info=None, content_typ
     ok = True
     u = addon_url+"?mode="+str(mode)
     if game_day is not None:
-        u = u + "&game_day=" + urllib.quote_plus(game_day)
+        u = u + "&game_day=" + quote(game_day)
     liz=xbmcgui.ListItem(name)
     if fanart is None: fanart = FANART
     liz.setArt({'icon': icon, 'thumb': icon, 'poster': icon, 'fanart': fanart})

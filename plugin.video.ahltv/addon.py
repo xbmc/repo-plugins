@@ -8,9 +8,9 @@ game_id = None
 if 'mode' in params:
     mode = int(params["mode"])
 if 'game_day' in params:
-    game_day = urllib.unquote_plus(params["game_day"])
+    game_day = quote(params["game_day"])
 if 'game_id' in params:
-    game_id = urllib.unquote_plus(params["game_id"])
+    game_id = quote(params["game_id"])
 
 if mode is None: # or url is None:
     main_menu()

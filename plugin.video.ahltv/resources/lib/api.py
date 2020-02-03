@@ -5,7 +5,7 @@ import sys
 import json
 import os
 import inputstreamhelper
-from utils import log
+from .utils import log
 
 def get_request_headers(authorized = False):
     headers = {

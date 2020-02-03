@@ -2,9 +2,12 @@ import pytz, time
 import os
 import calendar
 from datetime import date, datetime, timedelta
-from cStringIO import StringIO
+from io import StringIO
 from resources.lib.globals import ROOTDIR, ICON
-import urllib
+try:
+    from urllib import quote  # Python 2.X
+except ImportError:
+    from urllib.parse import quote  # Python 3+
 import sys
 import xbmc
 

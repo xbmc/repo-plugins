@@ -22,23 +22,23 @@ msgid "Available Streams"
 msgstr ""
 
 msgctxt "#30003"
-msgid "Bitgravity (hls high)"
+msgid "Mixer HLS stream"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Bitgravity (hls low)"
+msgid "Ustream (multibitrate hls)"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Bitgravity (http 1 mbps)"
+msgid "YouTube add-on"
 msgstr ""
 
 msgctxt "#30006"
-msgid "Bitgravity (http 400 kbps)"
+msgid ""
 msgstr ""
 
 msgctxt "#30007"
-msgid "Ustream (multibitrate hls)"
+msgid ""
 msgstr ""
 
 msgctxt "#30008"
@@ -46,19 +46,19 @@ msgid "Search"
 msgstr ""
 
 msgctxt "#30009"
-msgid "Flosoft.biz (multibitrate hls)"
+msgid ""
 msgstr ""
 
 msgctxt "#30010"
-msgid "Flosoft.biz (hls 720x1280)"
+msgid ""
 msgstr ""
 
 msgctxt "#30011"
-msgid "Flosoft.biz (hls 540x960)"
+msgid ""
 msgstr ""
 
 msgctxt "#30012"
-msgid "Flosoft.biz (hls 360x640)"
+msgid ""
 msgstr ""
 
 msgctxt "#30013"
@@ -70,15 +70,15 @@ msgid "Playback Type"
 msgstr ""
 
 msgctxt "#30015"
-msgid "Video (HD) 1280x720 Bitrate 2500"
+msgid "Video (HD)"
 msgstr ""
 
 msgctxt "#30016"
-msgid "Video (SD) 864x480 Bitrate 500"
+msgid "Video (SD)"
 msgstr ""
 
 msgctxt "#30017"
-msgid "Video (low/mobile) 640x368 Bitrate 256"
+msgid "Video (low/mobile)"
 msgstr ""
 
 msgctxt "#30018"

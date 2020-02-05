@@ -1,3 +1,6 @@
+v3.0.47
+Fixed broken DASH streaming due to discontinuation of http service.
+
 v3.0.46
 Fixed sign in.
 Fixed CRLF in changelog.txt

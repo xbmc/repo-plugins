@@ -2,7 +2,7 @@ import pytz, time
 import os
 import calendar
 from datetime import date, datetime, timedelta
-import io
+from io import BytesIO
 from resources.lib.globals import ROOTDIR, ICON
 try:
     from urllib import quote  # Python 2.X
@@ -81,13 +81,13 @@ def create_game_icon(homeSrcImg, awaySrcImg, image_path):
     size = 200, 200
 
     img_file = urlopen(homeSrcImg)
-    im = io.BytesIO(img_file.read())
+    im = BytesIO(img_file.read())
     home_image = Image.open(im)
     home_image.thumbnail(size, Image.ANTIALIAS)
     home_image = home_image.convert("RGBA")
 
     img_file = urlopen(awaySrcImg)
-    im = io.BytesIO(img_file.read())
+    im = BytesIO(img_file.read())
     away_image = Image.open(im)
     away_image.thumbnail(size, Image.ANTIALIAS)
     away_image = away_image.convert("RGBA")

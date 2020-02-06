@@ -1177,14 +1177,14 @@ def ParseDASHStreams(stream_id):
     retlist = []
     # print "Parsing streams for PID: %s"%stream_id
     # Open the page with the actual strem information and display the various available streams.
-    NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id
+    NEW_URL = "https://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id
     html = OpenURL(NEW_URL)
 
     # Check if this is a webcast.
     check_webcast = re.search('webcast', html)
     if check_webcast:
         # This appears to be a webcast. Load PC mediaselector to get DASH streams.
-        NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/pc/vpid/%s" % stream_id
+        NEW_URL = "https://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/pc/vpid/%s" % stream_id
         html = OpenURL(NEW_URL)
         # Parse the different streams and add them as new directory entries.
         match = re.compile(
@@ -1287,7 +1287,7 @@ def ParseLiveStreams(channelname, providers):
 def ParseLiveDASHStreams(channelname):
     streams = []
 
-    url = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/pc/vpid/%s" % channelname
+    url = "https://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/pc/vpid/%s" % channelname
     html = OpenURL(url)
     # Parse the different streams and add them as new directory entries.
     match = re.compile(

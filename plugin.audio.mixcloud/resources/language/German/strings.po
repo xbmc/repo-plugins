@@ -7,177 +7,169 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
+"Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.1.1\n"
 
 # common
-
 msgctxt "#30000"
 msgid "Mixcloud"
 msgstr "Mixcloud"
 
 msgctxt "#30001"
-msgid "More"
-msgstr "Plus..."
+msgid "More..."
+msgstr "Mehr..."
 
 msgctxt "#30002"
 msgid "Failed resolving url. Use different resolver?"
-msgstr "Échec de la résolution de l'url.  Utiliser un résolveur différent?"
+msgstr "Auflösen der URL gescheitert. Anderen Resolver verwenden?"
 
 msgctxt "#30003"
 msgid "No (valid) access token found."
-msgstr "Pas de token d'accès (valide) trouvé."
+msgstr "Kein (gültiger) Zugriffstoken gefunden."
 
 msgctxt "#30004"
 msgid "Please provide your authentication code."
-msgstr "Entrez votre code d'autorisation."
-
-
+msgstr "Bitte deinen Authentifizierungscode eingeben."
 
 # main menu
-
 msgctxt "#30100"
 msgid "Trending"
-msgstr "Tendances"
+msgstr "Beliebt"
 
 msgctxt "#30101"
 msgid "Your Favorites"
-msgstr "Vos favoris"
+msgstr "Deine Favoriten"
 
 msgctxt "#30102"
 msgid "Your Followings"
-msgstr "Vos abonnements"
+msgstr "Deine Followings"
 
 msgctxt "#30103"
 msgid "Categories"
-msgstr "Catégories"
+msgstr "Kategorien"
 
 msgctxt "#30104"
 msgid "Search"
-msgstr "Recherche"
+msgstr "Suche"
 
 msgctxt "#30105"
 msgid "History"
-msgstr "Historique"
+msgstr "Verlauf"
 
 msgctxt "#30106"
 msgid "jackyNIX's cloudcasts (shameless plug :p)"
-msgstr "Cloudcast de jackyNIX's (plugin sans gêne :p)"
+msgstr "Cloudcasts von jackyNIX  (Plugin-Autor)"
 
 msgctxt "#30107"
 msgid "Feed"
-msgstr "Flux"
+msgstr "Feed"
 
 msgctxt "#30108"
 msgid "Your Followers"
-msgstr "Vos abonnés"
+msgstr "Deine Follower"
 
 msgctxt "#30109"
 msgid "Your Listens"
-msgstr "Vos écoutes"
+msgstr "Deine Zuhörer"
 
 msgctxt "#30113"
 msgid "Your Uploads"
-msgstr "Vos uploads"
+msgstr "Deine Uploads"
 
 msgctxt "#30114"
 msgid "Your Playlists"
-msgstr "Vos listes de lecture"
+msgstr "Deine Playlisten"
 
 msgctxt "#30115"
 msgid "Listen Later"
-msgstr "Écouter plus tard"
+msgstr "Später anhören"
 
 msgctxt "#30116"
 msgid "Account..."
-msgstr "Compte..."
+msgstr "Account..."
 
 msgctxt "#30117"
 msgid "Logoff Account"
-msgstr "Se Déconnecter"
-
+msgstr "Account Ausloggen"
 
 # search menu
-
 msgctxt "#30200"
 msgid "Cloudcasts..."
 msgstr "Cloudcasts..."
 
 msgctxt "#30201"
 msgid "Users..."
-msgstr "Utilisateurs..."
+msgstr "Benutzer..."
 
 msgctxt "#30202"
 msgid "History..."
-msgstr "Historique..."
-
+msgstr "Verlauf..."
 
 # context menu
-
 msgctxt "#30300"
 msgid "Favorite cloudcast"
-msgstr "Ajouter le cloudcast aux favoris"
+msgstr "Cloudcast zu Favoriten hinzufügen"
 
 msgctxt "#30301"
 msgid "Unfavorite cloudcast"
-msgstr "Retirer le cloudcast des favoris"
+msgstr "Cloudcast aus Favoriten entfernen"
 
 msgctxt "#30302"
 msgid "Follow user"
-msgstr "Suivre cet utilisateur"
+msgstr "Benutzer folgen"
 
 msgctxt "#30303"
 msgid "Unfollow user"
-msgstr "Ne plus suivre cet utilisateur"
+msgstr ""
 
 msgctxt "#30304"
 msgid "Add cloudcast to Listen Later"
-msgstr "Ajouter le cloudcast à la liste Écouter plus tard"
+msgstr ""
 
 msgctxt "#30305"
 msgid "Remove cloudcast from Listen Later"
-msgstr "Retirer le cloudcast de la liste Écouter plus tard"
-
+msgstr ""
 
 # general settings
-
 msgctxt "#30400"
 msgid "General"
-msgstr "Général"
+msgstr ""
 
 msgctxt "#30401"
 msgid "Maximum cloudcasts on page"
-msgstr "Nombre maximal de cloudcasts par page"
+msgstr ""
 
 msgctxt "#30402"
 msgid "Download thumbnail size"
-msgstr "Taille des vignettes téléchargées"
+msgstr ""
 
 msgctxt "#30403"
 msgid "Debug mode"
-msgstr "Mode debug"
+msgstr ""
 
 msgctxt "#30404"
 msgid "Extended cloudcast info (slower)"
-msgstr "Infos cloudcast détaillées (plus lent)"
+msgstr ""
 
 msgctxt "#30405"
 msgid "Resolver"
-msgstr "Résolveur"
-
+msgstr ""
 
 # history settings
-
 msgctxt "#30500"
 msgid "History"
-msgstr "Historique"
+msgstr ""
 
 msgctxt "#30501"
 msgid "Maximum played cloudcasts"
-msgstr "Nombre maximal de cloudcasts écoutés"
+msgstr ""
 
 msgctxt "#30502"
 msgid "Maximum searches"
-msgstr "Nombre maximal de recherches"
+msgstr ""

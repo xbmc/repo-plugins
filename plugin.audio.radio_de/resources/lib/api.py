@@ -21,7 +21,8 @@ import sys
 import random
 import xbmc
 
-PY3 = sys.version_info.major >= 3
+# avoid using named attributes since they were introduced with python 2.7 only
+PY3 = sys.version_info[0] >= 3
 
 if PY3:
     from urllib.parse import urlencode
@@ -109,7 +110,7 @@ class RadioApi():
             raise ValueError('Bad category_type')
         return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
 
-    def get_station_by_station_id(self, station_id, resolve_playlists=True):
+    def get_station_by_station_id(self, station_id, resolve_playlists=True, force_http=False):
         self.log('get_station_by_station_id started with station_id=%s'
                  % station_id)
         path = 'v2/search/station'
@@ -117,8 +118,19 @@ class RadioApi():
         station = self.__api_call(path, param)
 
         streams = station.get('streamUrls')
+
         if streams:
-            station['streamUrl'] = station.get('streamUrls')[0]['streamUrl']
+            station['streamUrl'] = streams[0].get('streamUrl')
+
+            if force_http:
+                for stream in streams:
+                    if "http://" in stream.get('streamUrl'):
+                        station['streamUrl'] = stream['streamUrl']
+                        break
+
+        if not station.get('streamUrl'):
+            self.log('Unable to detect a playable stream for station')
+            return None
 
         if resolve_playlists and self.__check_paylist(station['streamUrl']):
             playlist_url = station['streamUrl']
@@ -246,7 +258,7 @@ class RadioApi():
         self.log('__resolve_playlist started with station=%s'
                  % station['id'])
         servers = []
-        stream_url = station['streamUrl']
+        stream_url = station['streamURL']
         if stream_url.lower().endswith('m3u'):
             response = self.__urlopen(stream_url)
             self.log('__resolve_playlist found .m3u file')

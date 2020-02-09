@@ -139,3 +139,7 @@ msgstr ""
 msgctxt "#30606"
 msgid "By country"
 msgstr ""
+
+msgctxt "#30607"
+msgid "Prefer HTTP streams over HTTS"
+msgstr ""

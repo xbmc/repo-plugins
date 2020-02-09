@@ -1,3 +1,11 @@
+v2.4.2 (9/2/2020)
+    - [add] sort methods for categories
+    - [add] setting to prefer http connections over https if http streams are available
+    - [fix] use sys.version_info[0] for compatibility with python2.6
+
+v2.4.1 (31/12/2019)
+    - [fix] Custom radio tracks
+
 v2.4.0 (29/12/2019)
     - [new] Use radio API v2
     - [fix] Remove dead code

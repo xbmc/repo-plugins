@@ -18,6 +18,12 @@ WIP      [CORE] AML/AEL must report the aspect ratio of artwork to the skin.
 
 [B]AML ideas and planned features (read to implement)[/B]
 
+WIP      [CORE] Implement the "Read-only launchers". ROLs are XML files that include the
+         launcher information as well as the ROMs information. ROLs are generated with AML,
+         can be exported as XML and then used with AEL. AEL will trear ROLs are read-only
+         (cannot be edited). If a ROL should be changed, then the XML is edited or regenerated
+         and then imported again into AML.
+
 WIP      [DOCS] Improve the AML wiki in Github and move documentation from Kodi forum to
          Github wiki.
 
@@ -28,7 +34,7 @@ WIP      [MANUALS] Support for CBZ/CBR manuals.
          In theory Kodi VFS is able to read RAR files.
          Wait until this is implemented in AEL and then port it from AEL into AML?
 
-WIP      [CORE] [LEIA] Recursive context menus.
+WIP      [CORE] Recursive context menus.
          Pay attention to the select() bug in Kodi Krypton.
          This requires Kodi version detection and having different code for Krypton/Leia.
          Start with the context menu in which recursiveness ir more useful.
@@ -38,28 +44,43 @@ WIP      [GRAPHICS] Optimize the generation of 3D boxes.
 
 WIP      [GRAPHICS] Respect the aspect ratio in 3D boxes. For example, if the poster in the
          front size of the 3D box is square the 3D box must be square, do not strech the
-         poster texture.
+         poster texture. ScreenScraper respects the aspect ratio of the 3D boxes, have
+         a look at examples there.
 
 WIP      Retroarch core MAME 2003 Plus allows to save the MAME XML file needed by AML.
          In this core, the XML is extracted using the MAME internal menu, which must be
          opened with the Retroarch core options menu. The XML file is saved in the SAVES
          directory with name mame2003-plus/mame2003-plus.xml
-         TTBOMK, currently it is the only core to support this feature.
          Exploit this to give support to MAME 2003 and then Android. According to
          Chrisism, Retroarch is currently the best way to use MAME in Android.
+         TTBOMK, currently it is the only core to support this feature. Investigate if there
+         are more Retroarch cores with this feature.
 
          See https://github.com/libretro/mame2003-libretro/pull/348
          See https://github.com/libretro/mame2003-plus-libretro/pull/8
          See https://github.com/libretro/mame2010-libretro/pull/123
          See https://github.com/libretro/mame2010-libretro/tree/master/metadata
 
-WIP      [CORE] Implement the "Read-only launchers". ROLs are XML files that include the
-         launcher information as well as the ROMs information. ROLs are generated with AML,
-         can be exported as XML and then used with AEL. AEL will trear ROLs are read-only
-         (cannot be edited). If a ROL should be changed, then the XML is edited or regenerated
-         and then imported again into AML.
 
-[B]Advanced MAME Launcher | version 0.9.12 | xx xxxxx 2020[/B]
+[B]Advanced MAME Launcher | version 0.9.12 | 10 February 2020[/B]
+
+FEATURE  Create a new infolabel $INFO[ListItem.Property(history)] which shows the contents
+         of history.dat for a machine. Add an option to include the contents of History.DAT
+         in the asset database.
+         Once this is tested remove the code to include History.DAT in the plot.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2916270#pid2916270
+
+FEATURE  Option to hide MAME machine flags.
+         Contributed by Rychem28.
+
+FEATURE  Option to hide SL item flags.
+         Contributed by Rychem28.
+
+FEATURE  Option to display only SL items with ROMs/CHDs available.
+         Contributed by Rychem28.
+
+FIX      Fixed parsing of History.dat 2.17.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2913592#pid2913592
 
 
 [B]Advanced MAME Launcher | version 0.9.11 | 26 November 2019[/B]

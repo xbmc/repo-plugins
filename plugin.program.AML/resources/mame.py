@@ -2,7 +2,7 @@
 
 # Advanced MAME Launcher MAME specific stuff.
 
-# Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
+# Copyright (c) 2016-2020 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -167,7 +167,7 @@ SL_better_name_dic = {
     'COMX-35 diskettes' : 'COMX COMX-35 diskettes',
     'EPSON PX-4 ROM capsules' : 'Epson PX-4 ROM capsules',
     'EPSON PX-8 ROM capsules' : 'Epson PX-8 ROM capsules',
-    # Unicode here causes trobule. I have to investigate this.
+    # Unicode here causes trouble. I have to investigate why.
     # 'IQ-151 cartridges' : 'ZPA Nový Bor IQ-151 cartridges',
     # 'IQ-151 disk images' : 'ZPA Nový Bor IQ-151 disk images',
     'IQ-151 cartridges' : 'ZPA Novy Bor IQ-151 cartridges',
@@ -738,7 +738,8 @@ def mame_load_History_DAT(filename):
     # check if the data is OK before adding it to the index and the DB.
     # 0 -> Looking for '$info=machine_name_1,machine_name_2,' or '$SL_name=item_1,item_2,'
     #      If '$bio' found go to 1.
-    # 1 -> Reading information. If '$end' found go to 0.
+    # 1 -> Reading information. If '$end' found go to 2.
+    # 2 -> Add information to database if no errors. Then go to 0.
     read_status = 0
 
     # Open file
@@ -747,8 +748,6 @@ def mame_load_History_DAT(filename):
     except IOError:
         log_info('mame_load_History_DAT() (IOError) opening "{0}"'.format(filename))
         return (history_idx_dic, history_dic, version_str)
-
-    # Parse file
     for file_line in f:
         line_number += 1
         stripped_line = file_line.strip()
@@ -766,15 +765,17 @@ def mame_load_History_DAT(filename):
             # Machine list line
             # Parses lines like "$info=99lstwar,99lstwara,99lstwarb,"
             # Parses lines like "$info=99lstwar,99lstwara,99lstwarb"
-            # History.dat has syntactic errors like "$dc=,", beware the dog!
-            m = re.search(r'^\$(.+?)=(.+?),?$', line_str)
+            # History.dat has syntactic errors like "$dc=,".
+            # History.dat has syntactic errors like "$megadriv=".
+            m = re.search(r'^\$(.+?)=(.*?),?$', line_str)
             if m:
                 num_header_line += 1
                 list_name = m.group(1)
                 machine_name_raw = m.group(2)
                 # Remove trailing ',' to fix history.dat syntactic errors like
                 # "$snes_bspack=bsfami,,"
-                if machine_name_raw[-1] == ',': machine_name_raw = machine_name_raw[:-1]
+                if len(machine_name_raw) > 1 and machine_name_raw[-1] == ',':
+                    machine_name_raw = machine_name_raw[:-1]
                 # Transform some special list names
                 if list_name in {'info', 'info,megatech', 'info,stv'}: list_name = 'mame'
                 mname_list = machine_name_raw.split(',')
@@ -793,61 +794,84 @@ def mame_load_History_DAT(filename):
                 if bio_str[0] == '\n': bio_str = bio_str[1:]
                 if bio_str[-1] == '\n': bio_str = bio_str[:-1]
 
-                # Clean m_data of bad data due to History.dat syntax errors.
+                # Clean m_data of bad data due to History.dat syntax errors, for example
+                # empty machine names.
+                # clean_m_data = [
+                #     (list_name, [machine_name_1, machine_name_2, ...] ),
+                #     ...,
+                # ]
                 clean_m_data = []
                 for dtuple in m_data:
                     line_num, list_name, mname_list = dtuple
                     # If list_name is empty drop the full line
                     if not list_name: continue
                     # Clean empty machine names.
-                    clean_mname_list = [machine_name for machine_name in mname_list if machine_name]
+                    clean_mname_list = []
+                    for machine_name in mname_list:
+                        # Skip bad/wrong machine names.
+                        if not machine_name: continue
+                        if machine_name == ',': continue
+                        clean_mname_list.append(machine_name)
                     clean_m_data.append((list_name, clean_mname_list))
 
                 # Reset FSM status
-                read_status = 0
+                read_status = 2
                 num_header_line = 0
                 m_data = []
                 info_str_list = []
-
-                # If errors do not insert data in the databases.
-                if len(clean_m_data) == 0 or len(clean_m_data[0][1]) == 0:
-                    log_warning('On History.dat line {:,}'.format(line_number))
-                    log_warning('len(clean_m_data) < 0 or len(clean_m_data[0][1]) < 0')
-                    log_warning('Ignoring entry in History.dat database')
-                    continue
-
-                # The database list name and machine name are the first list and machine in
-                # the list.
-                db_list_name = clean_m_data[0][0]
-                db_machine_name = clean_m_data[0][1][0]
-                if not db_list_name:
-                    log_warning('On History.dat line {:,}'.format(line_number))
-                    log_warning('Empty db_list_name "{}"'.format(db_list_name))
-                if not db_machine_name:
-                    log_warning('On History.dat line {:,}'.format(line_number))
-                    log_warning('Empty db_machine_name "{}"'.format(db_machine_name))
-
-                # Add list and machine names to index database.
-                for dtuple in clean_m_data:
-                    list_name, mname_list = dtuple
-                    if list_name not in history_idx_dic:
-                        history_idx_dic[list_name] = {'name' : list_name, 'machines' : {}}
-                    for machine_name in mname_list:
-                        m_str = misc_build_db_str_3(machine_name, db_list_name, db_machine_name)
-                        history_idx_dic[list_name]['machines'][machine_name] = m_str
-
-                # Add biography string to main database.
-                if db_list_name not in history_dic: history_dic[db_list_name] = {}
-                history_dic[db_list_name][db_machine_name] = bio_str
             else:
                 info_str_list.append(line_str)
+        elif read_status == 2:
+            # Go to state 0 of the FSM.
+            read_status = 0
+
+            # Ignore machine if no valid data at all.
+            if len(clean_m_data) == 0:
+                log_warning('On History.dat line {:,}'.format(line_number))
+                log_warning('clean_m_data is empty.')
+                log_warning('Ignoring entry in History.dat database')
+                continue
+            # Ignore if empty list name.
+            if not clean_m_data[0][0]:
+                log_warning('On History.dat line {:,}'.format(line_number))
+                log_warning('clean_m_data empty list name.')
+                log_warning('Ignoring entry in History.dat database')
+                continue
+            # Ignore if empty machine list.
+            if not clean_m_data[0][1]:
+                log_warning('On History.dat line {:,}'.format(line_number))
+                log_warning('Empty machine name list.')
+                log_warning('db_list_name "{}"'.format(clean_m_data[0][0]))
+                log_warning('Ignoring entry in History.dat database')
+                continue
+            if not clean_m_data[0][1][0]:
+                log_warning('On History.dat line {:,}'.format(line_number))
+                log_warning('Empty machine name first element.')
+                log_warning('db_list_name "{}"'.format(clean_m_data[0][0]))
+                log_warning('Ignoring entry in History.dat database')
+                continue
+            db_list_name = clean_m_data[0][0]
+            db_machine_name = clean_m_data[0][1][0]
+
+            # Add list and machine names to index database.
+            for dtuple in clean_m_data:
+                list_name, machine_name_list = dtuple
+                if list_name not in history_idx_dic:
+                    history_idx_dic[list_name] = {'name' : list_name, 'machines' : {}}
+                for machine_name in machine_name_list:
+                    m_str = misc_build_db_str_3(machine_name, db_list_name, db_machine_name)
+                    history_idx_dic[list_name]['machines'][machine_name] = m_str
+
+            # Add biography string to main database.
+            if db_list_name not in history_dic: history_dic[db_list_name] = {}
+            history_dic[db_list_name][db_machine_name] = bio_str
         else:
             raise TypeError('Wrong read_status = {} (line {:,})'.format(read_status, line_number))
     # Close file
     f.close()
-    log_info('mame_load_History_DAT() Version "{0}"'.format(version_str))
-    log_info('mame_load_History_DAT() Rows in history_idx_dic {0}'.format(len(history_idx_dic)))
-    log_info('mame_load_History_DAT() Rows in history_dic {0}'.format(len(history_dic)))
+    log_info('mame_load_History_DAT() Version "{}"'.format(version_str))
+    log_info('mame_load_History_DAT() Rows in history_idx_dic {}'.format(len(history_idx_dic)))
+    log_info('mame_load_History_DAT() Rows in history_dic {}'.format(len(history_dic)))
 
     return (history_idx_dic, history_dic, version_str)
 
@@ -1563,6 +1587,7 @@ def mame_info_MAME_print(slist, location, machine_name, machine, assets):
     slist.append("[COLOR violet]fanart[/COLOR]: '{0}'".format(assets['fanart']))
     slist.append("[COLOR violet]flags[/COLOR]: '{0}'".format(assets['flags']))
     slist.append("[COLOR violet]flyer[/COLOR]: '{0}'".format(assets['flyer']))
+    slist.append("[COLOR violet]history[/COLOR]: '{0}'".format(assets['history']))
     slist.append("[COLOR violet]manual[/COLOR]: '{0}'".format(assets['manual']))
     slist.append("[COLOR violet]marquee[/COLOR]: '{0}'".format(assets['marquee']))
     slist.append("[COLOR violet]PCB[/COLOR]: '{0}'".format(assets['PCB']))
@@ -2430,10 +2455,10 @@ def mame_update_SL_RecentPlay_objects(PATHS, control_dic, SL_catalog_dic):
     pDialog.update(100)
     pDialog.close()
 
-# -------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
 # Build MAME and SL plots
-# -------------------------------------------------------------------------------------------------
-# ---------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
+
 # Generate plot for MAME machines.
 # Line 1) Controls are {Joystick}
 # Line 2) {One Vertical Raster screen}
@@ -2441,11 +2466,45 @@ def mame_update_SL_RecentPlay_objects(PATHS, control_dic, SL_catalog_dic):
 # Line 4) Machine has [no coin slots| N coin slots]
 # Line 5) Artwork, Manual, History, Info, Gameinit, Command
 # Line 6) Machine [supports|does not support] a Software List.
-# ---------------------------------------------------------------------------------------------
+def mame_MAME_plot_slits(mname, m, assets_dic,
+    history_info_set, mameinfo_info_set, gameinit_idx_dic, command_idx_dic):
+    Flag_list = []
+    if assets_dic[mname]['artwork']: Flag_list.append('Artwork')
+    if assets_dic[mname]['manual']: Flag_list.append('Manual')
+    if mname in history_info_set: Flag_list.append('History')
+    if mname in mameinfo_info_set: Flag_list.append('Info')
+    if mname in gameinit_idx_dic: Flag_list.append('Gameinit')
+    if mname in command_idx_dic: Flag_list.append('Command')
+    Flag_str = ', '.join(Flag_list)
+    if m['input']:
+        control_list = [ctrl_dic['type'] for ctrl_dic in m['input']['control_list']]
+    else:
+        control_list = []
+    if control_list:
+        controls_str = 'Controls {}'.format(misc_get_mame_control_str(control_list))
+    else:
+        controls_str = 'No controls'
+    mecha_str = 'Mechanical' if m['isMechanical'] else 'Non-mechanical'
+    n_coins = m['input']['att_coins'] if m['input'] else 0
+    coin_str = 'Machine has {} coin slots'.format(n_coins) if n_coins > 0 else 'Machine has no coin slots'
+    SL_str = ', '.join(m['softwarelists']) if m['softwarelists'] else ''
+
+    plot_str_list = []
+    plot_str_list.append('{}'.format(controls_str))
+    plot_str_list.append('{}'.format(misc_get_mame_screen_str(mname, m)))
+    plot_str_list.append('{} / Driver is {}'.format(mecha_str, m['sourcefile']))
+    plot_str_list.append('{}'.format(coin_str))
+    if Flag_str: plot_str_list.append('{}'.format(Flag_str))
+    if SL_str: plot_str_list.append('SL {}'.format(SL_str))
+
+    return plot_str_list
+
+# Setting id="MAME_plot" values="Info|History DAT|Info + History DAT"
 def mame_build_MAME_plots(PATHS, settings, control_dic,
-    machines, machines_render, assets_dic, 
+    machines, machines_render, assets_dic,
     history_idx_dic, mameinfo_idx_dic, gameinit_idx_dic, command_idx_dic):
     log_info('mame_build_MAME_plots() Building machine plots/descriptions ...')
+
     # Do not crash if DAT files are not configured.
     history_info_set  = {m for m in history_idx_dic['mame']['machines']} if history_idx_dic else set()
     mameinfo_info_set = {m for m in mameinfo_idx_dic['mame']} if mameinfo_idx_dic else set()
@@ -2456,49 +2515,19 @@ def mame_build_MAME_plots(PATHS, settings, control_dic,
     pDialog.update(0, 'Generating MAME machine plots ...')
     total_machines = len(machines)
     num_machines = 0
-    for machine_name, m in machines.iteritems():
-        Flag_list = []
-        if assets_dic[machine_name]['artwork']: Flag_list.append('Artwork')
-        if assets_dic[machine_name]['manual']: Flag_list.append('Manual')
-        if machine_name in history_info_set: Flag_list.append('History')
-        if machine_name in mameinfo_info_set: Flag_list.append('Info')
-        if machine_name in gameinit_idx_dic: Flag_list.append('Gameinit')
-        if machine_name in command_idx_dic: Flag_list.append('Command')
-        Flag_str = ', '.join(Flag_list)
-        if m['input']:
-            control_list = [ctrl_dic['type'] for ctrl_dic in m['input']['control_list']]
-        else:
-            control_list = []
-        if control_list:
-            controls_str = 'Controls {0}'.format(misc_get_mame_control_str(control_list))
-        else:
-            controls_str = 'No controls'
-        mecha_str = 'Mechanical' if m['isMechanical'] else 'Non-mechanical'
-        n_coins = m['input']['att_coins'] if m['input'] else 0
-        coin_str  = 'Machine has {0} coin slots'.format(n_coins) if n_coins > 0 else 'Machine has no coin slots'
-        SL_str    = ', '.join(m['softwarelists']) if m['softwarelists'] else ''
-
-        plot_str_list = []
-        plot_str_list.append('{0}'.format(controls_str))
-        plot_str_list.append('{0}'.format(misc_get_mame_screen_str(machine_name, m)))
-        plot_str_list.append('{0} / Driver is {1}'.format(mecha_str, m['sourcefile']))
-        plot_str_list.append('{0}'.format(coin_str))
-        if Flag_str: plot_str_list.append('{0}'.format(Flag_str))
-        if SL_str: plot_str_list.append('SL {0}'.format(SL_str))
-        assets_dic[machine_name]['plot'] = '\n'.join(plot_str_list)
-
-        # --- Update progress ---
+    for mname, m in machines.iteritems():
+        plot_str_list = mame_MAME_plot_slits(mname, m, assets_dic,
+            history_info_set, mameinfo_info_set, gameinit_idx_dic, command_idx_dic)
+        assets_dic[mname]['plot'] = '\n'.join(plot_str_list)
         num_machines += 1
         pDialog.update((num_machines*100)//total_machines)
     pDialog.close()
 
-    # --- Timestamp ---
+    # Timestamp
     change_control_dic(control_dic, 't_MAME_plots_build', time.time())
-
-    # --- Save the MAME asset database ---
+    # Save the MAME asset database. Save control_dic at the end.
     db_files = [
         (assets_dic, 'MAME machine assets', PATHS.MAIN_ASSETS_DB_PATH.getPath()),
-        # Save control_dic after everything is saved
         (control_dic, 'Control dictionary', PATHS.MAIN_CONTROL_PATH.getPath()),
     ]
     fs_save_files(db_files)
@@ -4307,11 +4336,22 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
             if machine_name not in main_pclone_dic: main_pclone_dic[machine_name] = []
 
     # ---------------------------------------------------------------------------------------------
-    # Make empty asset list
+    # Initialise asset list
     # ---------------------------------------------------------------------------------------------
+    log_debug('Initializing MAME asset database...')
+    log_debug('Option generate_history_infolabel is {}'.format(settings['generate_history_infolabel']))
     assets_dic = {key : fs_new_MAME_asset() for key in machines}
-    for m_name, asset in assets_dic.iteritems():
-        asset['flags'] = fs_initial_flags(machines[m_name], machines_render[m_name], machines_roms[m_name])
+    if settings['generate_history_infolabel'] and history_idx_dic:
+        log_debug('Adding History.DAT to MAME asset database.')
+        for m_name, asset in assets_dic.iteritems():
+            asset['flags'] = fs_initial_flags(machines[m_name], machines_render[m_name], machines_roms[m_name])
+            if m_name in history_idx_dic['mame']['machines']:
+                d_name, db_list, db_machine = history_idx_dic['mame']['machines'][m_name].split('|')
+                asset['history'] = history_dic[db_list][db_machine]
+    else:
+        log_debug('Not including History.DAT in MAME asset database.')
+        for m_name, asset in assets_dic.iteritems():
+            asset['flags'] = fs_initial_flags(machines[m_name], machines_render[m_name], machines_roms[m_name])
 
     # ---------------------------------------------------------------------------------------------
     # Improve information fields in Main Render database
@@ -4323,7 +4363,7 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     else:
         log_info('MAME machine Mature flag not available.')
 
-    # >> Add genre infolabel into render database
+    # Add genre infolabel into render database.
     if genre_dic:
         log_info('Using genre.ini for MAME genre information.')
         for machine_name in machines_render:
@@ -4342,12 +4382,12 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
     # ---------------------------------------------------------------------------------------------
     # --- History DAT categories are Software List names ---
     if history_idx_dic:
-        log_debug('Updating History DAT cateogories and machine names ...')
+        log_debug('Updating History DAT categories and machine names ...')
         SL_names_dic = fs_load_JSON_file_dic(PATHS.SL_NAMES_PATH.getPath())
         for cat_name in history_idx_dic:
             if cat_name == 'mame':
-                history_idx_dic[cat_name]['name'] = 'MAME'
                 # Improve MAME machine names
+                history_idx_dic[cat_name]['name'] = 'MAME'
                 for machine_name in history_idx_dic[cat_name]['machines']:
                     if machine_name not in machines_render: continue
                     # Rebuild the CSV string.
@@ -4356,11 +4396,10 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
                     display_name = machines_render[machine_name]['description']
                     m_str = misc_build_db_str_3(display_name, db_list_name, db_machine_name)
                     history_idx_dic[cat_name]['machines'][machine_name] = m_str
-
             elif cat_name in SL_names_dic:
-                history_idx_dic[cat_name]['name'] = SL_names_dic[cat_name]
                 # Improve SL machine names. This must be done when building the SL databases
                 # and not here.
+                history_idx_dic[cat_name]['name'] = SL_names_dic[cat_name]
 
     # MameInfo DAT machine names.
     if mameinfo_idx_dic:
@@ -4493,6 +4532,7 @@ def mame_build_MAME_main_database(PATHS, settings, control_dic, AML_version_str)
         'mameinfo_idx_dic' : mameinfo_idx_dic,
         'gameinit_idx_list' : gameinit_idx_dic,
         'command_idx_list' : command_idx_dic,
+        'history_dic' : history_dic,
     }
 
     return data_dic

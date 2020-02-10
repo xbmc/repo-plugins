@@ -1,39 +1,3 @@
-## MAME machine boolean options ##
-
-A machine has the boolean option or not.
-
- * Parent / Clone (integrated on filter menu)
-
- * Working / NonWorking (display tag)
-
- * BIOS / NoBIOS (display tag)
-
- * Coins / NoCoins (own menu `Machines (with coin slot)` and `Machines (no coin slot)`)
-
- * Mechanical / NonMechanical (own menu `Machines (mechanical)`)
-
- * CHD / NoCHD (own menu `Machines with CHDs`)
-
- * Sample / NoSamples (own menu `Machines with Samples`)
-
- * Devices / Nodevices (filtered out when making main database)
-
-
-## Input data and directories ##
-
- Directory                  | Explanation
-----------------------------|---------------------------------
-`~/AML-ROMs/`               | MAME ROMs
-`~/AML-CHDs/`               | MAME CHDs
-`~/AML-SL-ROMs/`            | SL ROMs
-`~/AML-SL-CHDs/`            | SL CHDs
-`~/AML-assets/`             | All assets
-`~/AML-assets/samples/`     |
-`~/AML-assets/Catver.ini`   |
-`~/AML-assets/Catlist.ini`  |
-`~/AML-assets/Genre.ini`    |
-`~/AML-assets/nplayers.ini` |
-
 ## Launching MAME machines with media types (former MESS) ##
 
 http://www.mess.org/mess/howto
@@ -99,7 +63,6 @@ Launching command example.
 mame abc110 -cart1 foo1.bin -cart2 foo2.bin
 ```
 
-
 ## Launching Software Lists ##
 
 http://www.mess.org/mess/howto#software_lists
@@ -126,8 +89,8 @@ Example of machines with SL: `32x`.
 
 ### Implicit ROM merging ###
 
-Software List XMLs do not have the ROM `merge` attribute. However, ClrMAME Pro merges SL clone ROMs
-implicitely if a ROM with same CRC exists in the parent set.
+Software List XMLs do not have the ROM `merge` attribute. However, ClrMAME Pro merges SL
+clone ROMs implicitly if a ROM with same CRC exists in the parent set.
 
 SL `sms`, item `teddyboy` and `teddyboyc`.
 
@@ -225,3 +188,38 @@ fs_write_JSON_file_lowmem() Writing time 20.663000 s
 ```
 
 The iterative JSON encoder consumes much less memory and is about twice as slow.
+
+## Publishing AML into the Kodi repository (Tortoise Git) ##
+
+[CONTRIBUTING](https://github.com/xbmc/repo-plugins/blob/master/CONTRIBUTING.md)
+
+**Setup**
+
+First make sure the remote repository is OK. In `Tortoise Git`, `Settings`, in the `Remote`
+option there should be a remote named `upstream` with 
+URL `https://github.com/xbmc/repo-plugins.git`.
+
+**Updating repository**
+
+Suppose we want to update the branch `krypton`. Use `Git show log` to make sure the
+repository is on the `krypton` branch.
+
+To update the working copy with the contents of upstream use `Pull` with remote `upstream` and
+remote branch `krypton`.
+
+**Update addon**
+
+Create a branch with `Create branch...`. The branch name must be `plugin.program.AML`.
+Make the description the same as the branch name. Use the `Switch/Checkout...` command to
+switch to the new branch.
+
+Make sure the repository is on the branch `plugin.program.AML`. Make the changes to update
+the addon and then do a single commit named `[plugin.program.AML] x.y.z`.
+
+Push the branch `plugin.program.AML` to the remote `origin`. Finally, open the pull request
+in Github.
+
+**Updating the pull request**
+
+Updating your pull request can be done by applying your changes and squashing them
+in the already present commit.

@@ -2,7 +2,7 @@
 
 # Advanced MAME Launcher filesystem I/O functions.
 
-# Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
+# Copyright (c) 2016-2020 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -94,26 +94,26 @@ from .utils_kodi import *
 #
 def fs_new_machine_dic():
     return {
-        # <machine> attributes
+        # --- <machine> tag attributes ---
+        'isMechanical'    : False,
         'romof'           : '',
         'sampleof'        : '',
         'sourcefile'      : '',
-        'isMechanical'    : False,
+        # --- Other tags inside <machine> from MAME XML ---
         # <!ATTLIST chip type (cpu|audio) #REQUIRED>
         # <!ATTLIST chip name CDATA #REQUIRED>
         # Name of the chip when type == 'cpu'
         # Example <chip type="cpu" tag="maincpu" name="Zilog Z80" />
         'chip_cpu_name'   : [],
-        # Other <machine> tags from MAME XML
-        'display_type'    : [], # <!ATTLIST display type (raster|vector|lcd|svg|unknown) #REQUIRED>
-        'display_rotate'  : [], # <!ATTLIST display rotate (0|90|180|270) #IMPLIED>
-        'display_width'   : [], # <!ATTLIST display width CDATA #IMPLIED>
+        'devices'         : [], # List of dictionaries. See comments above.
         'display_height'  : [], # <!ATTLIST display height CDATA #IMPLIED>
         'display_refresh' : [], # <!ATTLIST display refresh CDATA #REQUIRED>
+        'display_rotate'  : [], # <!ATTLIST display rotate (0|90|180|270) #IMPLIED>
+        'display_type'    : [], # <!ATTLIST display type (raster|vector|lcd|svg|unknown) #REQUIRED>
+        'display_width'   : [], # <!ATTLIST display width CDATA #IMPLIED>
         'input'           : {},
         'softwarelists'   : [],
-        'devices'         : [], # List of dictionaries. See comments avobe.
-        # Custom AML data (from INI files or generated)
+        # --- Custom AML data (from INI files or generated) ---
         'alltime'         : '', # MASH Alltime.ini
         'artwork'         : [], # MASH Artwork.ini
         'bestgames'       : '', # betsgames.ini
@@ -123,7 +123,7 @@ def fs_new_machine_dic():
         'genre'           : '', # genre.ini
         'series'          : [], # series.ini
         'veradded'        : '', # catver.ini
-        # AML generated field.
+        # --- AML generated field ---
         'isDead'          : False,
     }
 
@@ -132,16 +132,16 @@ def fs_new_machine_dic():
 #
 def fs_new_machine_render_dic():
     return {
-        # <machine> attributes
+        # --- <machine> attributes ---
         'cloneof'        : '', # Must be in the render DB to generate the PClone flag
         'isBIOS'         : False,
         'isDevice'       : False,
-        # Other <machine> tags from MAME XML
+        # --- Other tags inside <machine> from MAME XML ---
         'description'    : '',
         'year'           : '',
         'manufacturer'   : '',
         'driver_status'  : '',
-        # Custom AML data
+        # --- Custom AML data (from INI files or generated) ---
         'isMature'       : False, # Taken from mature.ini
         'nplayers'       : '',    # Taken from NPlayers.ini
         # Genre used in AML for the skin
@@ -200,7 +200,7 @@ def fs_new_audit_dic():
     }
 
 #
-# First is the database dictionary key of the asset, second is the subdirectory name.
+# First element is the database dictionary key of the asset, second element is the subdirectory name.
 # List used in mame_scan_MAME_assets()
 #
 ASSET_MAME_T_LIST  = [
@@ -245,6 +245,7 @@ def fs_new_MAME_asset():
         'fanart'     : '',
         'flags'      : '-----',
         'flyer'      : '',
+        'history'    : '',
         'manual'     : '',
         'marquee'    : '',
         'PCB'        : '',

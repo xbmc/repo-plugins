@@ -29,6 +29,7 @@
 
     <setting id="separator" type="lsep" label="Misc" />
     <setting label="Custom filter XML path" type="file" id="filter_XML" default="" />
+    <setting label="Generate History DAT infolabel" type="bool" id="generate_history_infolabel" default="false" />
 </category>
 <category label="Display I">
     <!-- <setting id="separator" type="lsep" label="General"/> -->
@@ -41,8 +42,10 @@
     <setting label="Hide non-working machines" type="bool" default="false" id="display_hide_nonworking" />
     <setting label="Display machines with available ROMs only" type="bool" default="false" id="display_rom_available" />
     <setting label="Display machines with available CHDs only" type="bool" default="false" id="display_chd_available" />
+    <setting label="Display SL items with available ROMS/CHDs only" type="bool" default="false" id="display_SL_items_available" />
+    <setting label="Display MAME ROM flags" type="bool" default="true" id="display_MAME_flags" />
+    <setting label="Display SL ROM flags" type="bool" default="true" id="display_SL_flags" />
 </category>
-
 <category label="Display II">
     <!-- <setting id="separator" type="lsep" label="Addon filters" /> -->
     <setting label="Display Main filters" type="bool" default="true" id="display_main_filters" />
@@ -62,11 +65,11 @@
     <setting label="Display Global Reports" type="bool" default="true" id="display_global_reports" />
 </category>
 <category label="Artwork / Assets">
+    <setting label="Do not render trailers" type="bool" default="false" id="display_hide_trailers" />
     <setting label="MAME Icon" type="enum" id="artwork_mame_icon"  default="0" values="Title|Snap|Flyer|Cabinet|PCB" />
     <setting label="MAME Fanart" type="enum" id="artwork_mame_fanart"  default="0" values="Fanart|Snap|Title|Flyer|CPanel" />
     <setting label="Software Lists Icon" type="enum" id="artwork_SL_icon"  default="0" values="Boxfront|Title|Snap" />
     <setting label="Software Lists Fanart" type="enum" id="artwork_SL_fanart"  default="0" values="Fanart|Snap|Title" />
-    <setting label="Do not render trailers" type="bool" default="false" id="display_hide_trailers" />
 </category>
 <category label="Advanced">
     <setting label="Action on Kodi playing media" type="enum" id="media_state_action" default="0" values="Stop|Pause|Keep playing" />

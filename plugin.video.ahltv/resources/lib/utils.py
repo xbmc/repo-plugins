@@ -3,7 +3,7 @@ import os
 import calendar
 from datetime import date, datetime, timedelta
 from io import BytesIO
-from resources.lib.globals import ROOTDIR, ICON
+from resources.lib.globals import ROOTDIR, ADDON_PATH_PROFILE, ICON
 try:
     from urllib import quote  # Python 2.X
     from urllib import urlopen
@@ -55,7 +55,7 @@ def string_to_date(string, date_format):
 
 def get_game_icon(homeId, homeImgPath, awayId, awayImgPath):
     # Check if game image already exists
-    image_path = ROOTDIR + '/resources/media/game_icons/' + str(awayId) + '_at_' + str(homeId) + '.png'
+    image_path = ADDON_PATH_PROFILE + 'game_icons/' + str(awayId) + '_at_' + str(homeId) + '.png'
     file_name = os.path.join(image_path)
     if not os.path.isfile(file_name):
         try:
@@ -94,6 +94,14 @@ def create_game_icon(homeSrcImg, awaySrcImg, image_path):
 
     bg.paste(away_image, (0, 60), away_image)
     bg.paste(home_image, (200, 60), home_image)
+
+    if not os.path.exists(os.path.dirname(image_path)):
+        try:
+            os.makedirs(os.path.dirname(image_path))
+        except OSError as exc: # Guard against race condition
+            if exc.errno != errno.EEXIST:
+                raise
+
     bg.save(image_path)
 
 def log(msg, error = False):

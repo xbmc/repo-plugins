@@ -115,9 +115,9 @@ def add_game_listitem(name, title, game_id, icon=None, fanart=None, info=None, v
     liz = xbmcgui.ListItem(name)
 
     if icon is not None:
-        liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart, 'clearlogo': CLEARLOGO})
+        liz.setArt({'icon': icon, 'thumb': icon, 'clearlogo': CLEARLOGO})
     else:
-        liz.setArt({'icon': ICON, 'thumb': ICON, 'fanart': fanart, 'clearlogo': CLEARLOGO})
+        liz.setArt({'icon': ICON, 'thumb': ICON, 'clearlogo': CLEARLOGO})
 
     if fanart is not None:
         liz.setProperty('fanart_image', fanart)

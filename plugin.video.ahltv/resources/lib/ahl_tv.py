@@ -176,8 +176,8 @@ def select_game(game_id):
 
             track_minute = gmtime().tm_min
 
-            while xbmc.Player().isPlayingVideo():
-                xbmc.sleep(10000)
+            while xbmc.Player().isPlayingVideo() and not xbmc.Monitor().abortRequested():
+                xbmc.Monitor().waitForAbort(10.00)
                 new_minute = gmtime().tm_min # Update watched status every minute
                 if new_minute > track_minute:
                     track_minute = new_minute

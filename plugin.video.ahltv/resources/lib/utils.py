@@ -113,6 +113,6 @@ def log(msg, error = False):
     try:
         import xbmc
         full_msg = "plugin.video.ahltv: {}".format(msg)
-        xbmc.log(full_msg, level=xbmc.LOGERROR if error else xbmc.LOGINFO)
+        xbmc.log(full_msg, level=xbmc.LOGERROR if error else xbmc.LOGDEBUG)
     except:
         print(msg)

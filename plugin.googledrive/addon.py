@@ -76,23 +76,38 @@ class GoogleDriveAddon(CloudDriveAddon):
                 page_token = Utils.get_safe_value(response, 'nextPageToken')
         return change_token
     
-    def _get_item_play_url(self, file_name, driveid, item_driveid=None, item_id=None):
-        url = None
-        if KodiUtils.get_addon_setting('ask_stream_format') == 'true':
-            url = self._select_stream_format(driveid, item_driveid, item_id)
-        if not url:
-            url = super(GoogleDriveAddon, self)._get_item_play_url(file_name, driveid, item_driveid, item_id)
+    def _get_url_original(self, driveid, item_driveid=None, item_id=None):
+        self._provider.configure(self._account_manager, driveid)
+        item = self._provider.get_item(item_driveid=item_driveid, item_id=item_id, include_download_info = True)
+        url = item['download_info']['url']
+        url += "|Authorization=%s" % urllib.quote("Bearer %s" % self._provider.get_access_tokens()['access_token'])
         return url
     
-    def _select_stream_format(self, driveid, item_driveid=None, item_id=None):
+    def _get_item_play_url(self, file_name, driveid, item_driveid=None, item_id=None, is_subtitle=False):
         url = None
-        self._progress_dialog.update(0, self._addon.getLocalizedString(32009))
+        if self._content_type == 'video' and not is_subtitle:
+            if KodiUtils.get_addon_setting('ask_stream_format') == 'false':
+                if KodiUtils.get_addon_setting('default_stream_quality') == 'Original':
+                    url = self._get_url_original(driveid, item_driveid, item_id)
+                else:
+                    url = self._select_stream_format(driveid, item_driveid, item_id, True)
+            else:
+                url = self._select_stream_format(driveid, item_driveid, item_id, False)
+        if not url:
+            url = self._get_url_original(driveid, item_driveid, item_id)
+        return url
+    
+    def _select_stream_format(self, driveid, item_driveid=None, item_id=None, auto=False):
+        url = None
+        if not auto:
+            self._progress_dialog.update(0, self._addon.getLocalizedString(32009))
         self._provider.configure(self._account_manager, driveid)
         self._provider.get_item(item_driveid, item_id)
         request = Request('https://drive.google.com/get_video_info', urllib.urlencode({'docid' : item_id}), {'authorization': 'Bearer %s' % self._provider.get_access_tokens()['access_token']})
         response_text = request.request()
         response_params = dict(urlparse.parse_qsl(response_text))
-        self._progress_dialog.close()
+        if not auto:
+            self._progress_dialog.close()
         if Utils.get_safe_value(response_params, 'status', '') == 'ok':
             fmt_list = Utils.get_safe_value(response_params, 'fmt_list', '').split(',')
             stream_formats = []
@@ -101,7 +116,11 @@ class GoogleDriveAddon(CloudDriveAddon):
                 stream_formats.append(data[1])
             stream_formats.append(self._addon.getLocalizedString(32015))
             Logger.debug('Stream formats: %s' % Utils.str(stream_formats))
-            select = self._dialog.select(self._addon.getLocalizedString(32016), stream_formats, 8000, 0)
+            select = -1
+            if auto:
+                select = self._auto_select_stream(stream_formats)
+            else:
+                select = self._dialog.select(self._addon.getLocalizedString(32016), stream_formats, 8000, 0)
             Logger.debug('Selected: %s' % Utils.str(select))
             if select == -1:
                 self._cancel_operation = True
@@ -120,8 +139,56 @@ class GoogleDriveAddon(CloudDriveAddon):
                         if cookie_header: cookie_header += ';'
                         cookie_header += cookie.name + '=' + cookie.value;
                     url += '|cookie=' + urllib.quote(cookie_header)
-        return url;
+        return url
+
+    def _auto_select_stream(self, streams):
+        select = -1
+        allowedQualitied = ['Original format','1920x1080','1280x720','854x480','640x360']
+        max_qual = KodiUtils.get_addon_setting('default_stream_quality')
+        if max_qual == '1080p':
+            allowedQualitied = ['1920x1080','1280x720','854x480','640x360','Original format']
+        elif max_qual == '720p':
+            allowedQualitied = ['1280x720','854x480','640x360','Original format']
+        elif max_qual == '480p':
+            allowedQualitied = ['854x480','640x360','Original format']
+        elif max_qual == '360p':
+            allowedQualitied = ['640x360','Original format']
+        for q in allowedQualitied:
+            if q in streams:
+                select = streams.index(q)
+                break
+        return select
     
+    def get_context_options(self, list_item, params, is_folder):
+        context_options = []
+        if Utils.get_safe_value(params, 'action', '') == 'play':
+            p = params.copy()
+            p['action'] = 'check_google_ban'
+            context_options.append((self._addon.getLocalizedString(32071), 'RunPlugin('+self._addon_url + '?' + urllib.urlencode(p)+')'))
+        return context_options
+    
+    def check_google_ban(self, driveid, item_driveid=None, item_id=None):
+        self._provider.configure(self._account_manager, driveid)
+        self._progress_dialog.update(0, '')
+        item = self._provider.get_item(item_driveid=item_driveid, item_id=item_id, include_download_info = True)
+        url = item['download_info']['url']
+        request_params = {
+            'read_content' : False,
+            'on_complete': lambda request: self.display_google_ban_result(request),
+        }
+        self._provider.prepare_request('get', url, request_params = request_params).request()
+
+    def display_google_ban_result(self, request):
+        self._progress_dialog.close()
+        color = 'lime'
+        ban = self._common_addon.getLocalizedString(32013)
+        if request.response_code == 403 or request.response_code == 429:
+            color = 'red'
+            ban = self._common_addon.getLocalizedString(32033)
+        self._dialog.ok(self._addon_name, 
+                        self._addon.getLocalizedString(32072) % '[B][COLOR %s]%s[/COLOR][/B]' % (color, ban,),
+                        self._addon.getLocalizedString(32073) % '[B]%s[/B]' % Utils.str(request.response_code),
+                        request.response_text
+        )
 if __name__ == '__main__':
     GoogleDriveAddon().route()
-

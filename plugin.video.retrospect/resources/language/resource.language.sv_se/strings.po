@@ -56,6 +56,18 @@ msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
 msgstr "Omstart av Retrospect krävs."
 
+msgctxt "#30012"
+msgid "Login Failed"
+msgstr "Inloggningen misslyckades"
+
+msgctxt "#30013"
+msgid "Could not log on to the selected channel."
+msgstr "Det gick inte att logga in på den valda kanalen."
+
+msgctxt "#30014"
+msgid "Show info"
+msgstr "Visa info"
+
 msgctxt "#30016"
 msgid "Sort by"
 msgstr "Sortera efter"

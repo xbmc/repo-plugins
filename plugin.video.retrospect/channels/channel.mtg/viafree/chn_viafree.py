@@ -441,7 +441,10 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(page, url)
         item.type = "page"
-        Logger.debug("Created '%s' for url %s", item.name, item.url)
+        item.thumb = self.parentItem.thumb
+        item.fanart = self.parentItem.fanart
+
+        Logger.trace("Created '%s' for url %s", item.name, item.url)
         return item
 
     def create_video_item(self, result_set):

@@ -64,6 +64,10 @@ msgctxt "#30013"
 msgid "Could not log on to the selected channel."
 msgstr "Het is niet gelukt om in te loggen voor dit kanaal."
 
+msgctxt "#30014"
+msgid "Show info"
+msgstr "Toon informatie"
+
 msgctxt "#30016"
 msgid "Sort by"
 msgstr "Sorteren op"

@@ -74,7 +74,7 @@ class HtmlHelper(taghelperbase.TagHelperBase):
             return html
 
         if not HtmlHelper.__ToTextRegex:
-            HtmlHelper.__ToTextRegex = re.compile(r'</?([^ >]+)(?: [^>]+)?>',
+            HtmlHelper.__ToTextRegex = re.compile(r'<(/?)([^ >]+)(?: [^>]+)?>',
                                                   re.DOTALL + re.IGNORECASE)
 
         text = HtmlHelper.__ToTextRegex.sub(HtmlHelper.__html_replace, html)
@@ -82,7 +82,10 @@ class HtmlHelper(taghelperbase.TagHelperBase):
 
     @staticmethod
     def __html_replace(match):
-        tag = match.group(1).lower()
+        tag = match.group(2).lower()
+        is_start = match.group(1) == ""
         if tag == 'br':
             return '\n'
+        elif is_start and tag == "li":
+            return '- '
         return ''

@@ -1,7 +1,10 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
+import pytz
 
 from resources.lib import chn_class
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 
 from resources.lib.mediaitem import MediaItem
@@ -40,38 +43,20 @@ class Channel(chn_class.Channel):
                               name="Show parser with categories",
                               match_type=ParserData.MatchExact,
                               preprocessor=self.add_categories_and_search,
-                              parser=["results"], creator=self.create_json_episode_item)
+                              parser=["results"], creator=self.create_episode_json_item)
 
         # Match Videos (programs)
         self._add_data_parser("https://urplay.se/api/bff/v1/search?product_type=program",
                               name="Most viewed", json=True,
-                              parser=["results"], creator=self.create_json_video_item)
+                              parser=["results"], creator=self.create_video_item_json)
 
-        item_regex = r'href="/(?<url>[^/]+/(?<id>\d+)[^"]+)"[^>]*>[^<]+</a>\W+<figure[^>]*>[\W\w]' \
-                     r'{0,3000}?<h2[^>]*>(?<title>[^<]+)</h2>\W+<p[^>]+>[^>]*<span[^>]+>' \
-                     r'(?<description>[^<]*).{2}<[^>]+>\s*<span[^>]+>(?<duration>\d{1,3})\smin[^>]+' \
-                     r'>\s*<span[^>]*>(?<description2>[^<]+)'
-        item_regex = Regexer.from_expresso(item_regex)
+        self._add_data_parser("*", json=True,
+                              name="Json based video parser",
+                              preprocessor=self.extract_json_data,
+                              parser=["currentProduct", "series", "programs"],
+                              creator=self.create_video_item_json)
 
-        single_video_regex = r'<meta \w+="name" content="(?:[^:]+: )?(?<title>[^"]+)' \
-                             r'"[^>]*>\W*<meta \w+="description" content="(?<description>[^"]+)"' \
-                             r'[^>]*>\W*<meta \w+="url" content="(?:[^"]+/(?<url>\w+/' \
-                             r'(?<id>\d+)[^"]+))"[^>]*>\W*<meta \w+="thumbnailURL[^"]*" ' \
-                             r'content="(?<thumbnail>[^"]+)"[^>]*>\W+<meta \w+="uploadDate" ' \
-                             r'content="(?<date>[^"]+)"'
-        single_video_regex = Regexer.from_expresso(single_video_regex)
-
-        self._add_data_parser("*", parser=item_regex, preprocessor=self.get_video_section,
-                              creator=self.create_video_item)
-        self._add_data_parser("*", parser=single_video_regex, preprocessor=self.get_video_section,
-                              creator=self.create_single_video_item, updater=self.update_video_item)
-
-        # Folders (Seasons)
-        season_regex = '<li[^>]+>[^>]+data-description="(?<description>[^"]+)"[^>]+' \
-                       'data-asset-id="(?<id>[^"]+)"[^>]+>[\n\r ]*(?<title>[^<]+?)[\n\r ]*<'
-        season_regex = Regexer.from_expresso(season_regex)
-        self._add_data_parser("*", name="Season Folders",
-                              parser=season_regex, creator=self.create_folder_item)
+        self._add_data_parser("*", updater=self.update_video_item)
 
         # Categories
         cat_reg = r'<a[^>]+href="(?<url>/blad[^"]+/(?<slug>[^"]+))"[^>]*>(?<title>[^<]+)<'
@@ -121,6 +106,9 @@ class Channel(chn_class.Channel):
                            "&singles_and_series=true&view=title"
         }
 
+        self.__timezone = pytz.timezone("Europe/Amsterdam")
+        self.__expires_text = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
+        self.__episode_text = LanguageHelper.get_localized_string(LanguageHelper.EpisodeId)
         #===========================================================================================
         # Test cases:
         #   Anaconda Auf Deutch : RTMP, Subtitles
@@ -196,6 +184,27 @@ class Channel(chn_class.Channel):
         Logger.debug("Pre-Processing finished")
         return data, items
 
+    def extract_json_data(self, data):
+        """ Extracts the JSON data for video parsing
+
+        The return values should always be instantiated in at least ("", []).
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[JsonHelper,list[MediaItem]]
+
+        """
+
+        Logger.info("Performing Pre-Processing")
+        items = []
+        json_text = Regexer.do_regex(r'ProgramDescription" data-react-props="([^"]+)', data)[0]
+        json_text = HtmlEntityHelper.convert_html_entities(json_text)
+        json_data = JsonHelper(json_text)
+
+        Logger.debug("Pre-Processing finished")
+        return json_data, items
+
     def search_site(self, url=None):
         """ Creates an list of items by searching the site.
 
@@ -234,15 +243,15 @@ class Channel(chn_class.Channel):
 
         item_type = result_set["format"]
         if item_type == "video":
-            return self.create_json_video_item(result_set)
+            return self.create_video_item_json(result_set)
         elif item_type == "audio":
             # Apparently the audio is always linking to a show folder.
-            return self.create_json_episode_item(result_set)
+            return self.create_episode_json_item(result_set)
         else:
             Logger.warning("Found unknown type: %s", item_type)
             return None
 
-    def create_json_episode_item(self, result_set):
+    def create_episode_json_item(self, result_set):
         """ Creates a new MediaItem for an episode.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -269,114 +278,7 @@ class Channel(chn_class.Channel):
         item.icon = self.icon
         return item
 
-    def create_folder_item(self, result_set):
-        """ Creates a MediaItem of type 'folder' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        result_set["url"] = "https://urplay.se/series/list_programs?ur_asset_id={}".format(result_set["id"])
-        item = chn_class.Channel.create_folder_item(self, result_set)
-        if item is None:
-            return item
-
-        item.HttpHeaders["X-Requested-With"] = "XMLHttpRequest"
-        return item
-
-    def get_video_section(self, data):
-        """ Finds the part in the HTML that contains the videos for a show.
-
-        The return values should always be instantiated in at least ("", []).
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        Logger.info("Performing Pre-Processing")
-        items = []
-
-        data = data[:data.find('<h2>Relaterade</h2>')]
-        Logger.debug("Pre-Processing finished")
-        return data, items
-
-    def create_json_video_item(self, result_set):
-        """ This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        main_title = result_set.get("mainTitle")
-        if main_title:
-            title = "{} - {}".format(main_title, result_set["title"])
-        else:
-            title = "%(title)s" % result_set
-        url = "%s/program/%s" % (self.baseUrl, result_set["slug"])
-        fanart = "https://assets.ur.se/id/%(id)s/images/1_hd.jpg" % result_set
-        thumb = "https://assets.ur.se/id/%(id)s/images/1_l.jpg" % result_set
-        item = MediaItem(title, url)
-        item.type = "video"
-        item.thumb = thumb
-        item.description = result_set.get("description")
-        item.fanart = fanart
-        item.icon = self.icon
-        if "duration" in result_set:
-            item.set_info_label("duration", result_set["duration"])
-
-        if "accessiblePlatforms" in result_set and "urplay" in result_set["accessiblePlatforms"]:
-            start_time = result_set["accessiblePlatforms"]["urplay"]["startTime"]
-            start_date_parts = [int(x) for x in start_time[0:10].split("-")]
-            item.set_date(*start_date_parts)
-        return item
-
-    def create_single_video_item(self, result_set):
-        """ If no items were found, we should find the main item on the page and create a
-        MediaItem of type 'video' using the result_set from the regex for this item.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        if self.__videoItemFound:
-            return None
-        return self.create_video_item(result_set)
-
-    def create_video_item(self, result_set):
+    def create_video_item_json(self, result_set):
         """ Creates a MediaItem of type 'video' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -395,24 +297,67 @@ class Channel(chn_class.Channel):
 
         """
 
-        # Logger.Trace(resultSet)
+        Logger.trace(result_set)
 
         title = result_set["title"]
-        url = "%s/%s" % (self.baseUrl, result_set["url"])
-        thumb = "https://assets.ur.se/id/%(id)s/images/1_l.jpg" % result_set
+        # We could add the main title
+        # show_title = result_set.get('mainTitle')
+        # if show_title:
+        #     title = "{} - {}".format(show_title, title)
+        episode = result_set.get('episodeNumber')
+        if bool(episode):
+            title = "{} {:02d} - {}".format(self.__episode_text, episode, title)
+
+        slug = result_set['slug']
+        url = "%s/%s" % (self.baseUrl, slug)
+
         item = MediaItem(title, url)
         item.type = "video"
-        item.thumb = thumb
-        item.description = "%(description)s\n%(description2)s" % result_set
-        item.fanart = self.parentItem.fanart
         item.icon = self.icon
+        item.description = result_set['description']
         item.complete = False
+
+        item.fanart = self.parentItem.fanart
+        images = result_set["image"]
+        thumb_fanart = None
+        for dimension, url in images.items():
+            if dimension.startswith("640x"):
+                item.thumb = url
+            elif dimension.startswith("1280x"):
+                thumb_fanart = url
+
+            if item.thumb and thumb_fanart:
+                break
+
+        # if there was a high quality thumb and no fanart (default one), the use the thumb.
+        if item.fanart == self.fanart and thumb_fanart:
+            item.fanart = thumb_fanart
 
         duration = result_set.get("duration")
         if duration:
-            item.set_info_label("duration", int(duration) * 60)
+            item.set_info_label("duration", int(duration))
 
-        self.__videoItemFound = True
+        # Determine the date and keep timezones into account
+        # date = result_set.get('publishedAt')
+        if "accessiblePlatforms" in result_set and "urplay" in result_set["accessiblePlatforms"]:
+            start_date = result_set["accessiblePlatforms"]["urplay"]["startTime"]
+            end_date = result_set["accessiblePlatforms"]["urplay"]["endTime"]
+
+            if start_date:
+                date_time = DateHelper.get_datetime_from_string(
+                    start_date, date_format="%Y-%m-%dT%H:%M:%SZ", time_zone="UTC")
+                date_time = date_time.astimezone(self.__timezone)
+                item.set_date(date_time.year, date_time.month, date_time.day,
+                              date_time.hour, date_time.minute, date_time.second)
+            if end_date:
+                end_date_time = DateHelper.get_datetime_from_string(
+                    end_date, date_format="%Y-%m-%dT%H:%M:%SZ", time_zone="UTC")
+                end_date_time = end_date_time.astimezone(self.__timezone)
+                item.description = "{}\n\n{}: {:%Y-%m-%d %H:%M}".format(
+                    item.description or "",
+                    self.__expires_text,
+                    end_date_time)
+
         return item
 
     def update_video_item(self, item):

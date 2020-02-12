@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 from resources.lib import chn_class
+from resources.lib.helpers.htmlhelper import HtmlHelper
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers.datehelper import DateHelper
@@ -197,7 +198,7 @@ class Channel(chn_class.Channel):
         item.icon = self.icon
         item.thumb = thumb or self.noImage
         item.complete = True
-        item.description = result_set.get("text")
+        item.description = HtmlHelper.to_text(result_set.get("text"))
         part = item.create_new_empty_media_part()
         M3u8.update_part_with_m3u8_streams(part, url, proxy=self.proxy, channel=self)
 

@@ -9,7 +9,8 @@
       "channelcode": null,
       "sortorder": 4,
       "language": "be",
-      "fanart": "vierfanart.jpg"
+      "fanart": "vierfanart.jpg",
+      "adaptiveAddonSelectable": true
     },
     {
      "guid": "9F44A86D-D62F-4775-A5BC-B99D1AE038FE",
@@ -20,7 +21,8 @@
       "channelcode": "vijfbe",
       "sortorder": 5,
       "language": "be",
-      "fanart": "vijffanart.jpg"
+      "fanart": "vijffanart.jpg",
+      "adaptiveAddonSelectable": true
     },
     {
      "guid": "AF79856C-95E1-4181-8636-C479E447F092",
@@ -31,7 +33,8 @@
       "channelcode": "zesbe",
       "sortorder": 6,
       "language": "be",
-      "fanart": "zesfanart.jpg"
+      "fanart": "zesfanart.jpg",
+      "adaptiveAddonSelectable": true
     }
   ],
   "settings": [

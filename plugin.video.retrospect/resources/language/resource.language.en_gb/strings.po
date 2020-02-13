@@ -68,7 +68,11 @@ msgctxt "#30013"
 msgid "Could not log on to the selected channel."
 msgstr ""
 
-# empty strings from id 30014 to 30015
+msgctxt "#30014"
+msgid "Show info"
+msgstr ""
+
+# empty strings from id 30014 to 30014
 
 msgctxt "#30016"
 msgid "Sort by"

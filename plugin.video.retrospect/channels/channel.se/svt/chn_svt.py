@@ -307,7 +307,7 @@ class Channel(chn_class.Channel):
             item = self.create_api_single_type(result_set)
         elif api_type == "Clip" or api_type == "Trailer":
             item = self.create_api_clip_type(result_set)
-        elif api_type == "Episode":
+        elif api_type == "Episode" or api_type == "Variant":
             item = self.create_api_episode_type(result_set, add_parent_title)
         elif api_type == "SearchHit":
             item = self.create_api_typed_item(result_set["item"], add_parent_title=True)
@@ -756,11 +756,13 @@ class Channel(chn_class.Channel):
         title = channel["programmeTitle"]
         episode = channel.get("episodeTitle", None)
         thumb = self.noImage
-        channel_title = channel["channelName"]
-        description = channel.get("description")
-        channel_id = channel["channel"].lower()
-        if channel_id == "svtbarn":
+        channel_title = channel["displayName"]
+        description = channel.get("longDescription")
+        channel_id = channel["urlName"]
+        if channel_id == "svtb":
             channel_id = "barnkanalen"
+        elif channel_id == "svtk":
+            channel_id = "kunskapskanalen"
 
         date_format = "%Y-%m-%dT%H:%M:%S"
         start_time = DateHelper.get_date_from_string(channel["publishingTime"][:19], date_format)
@@ -784,9 +786,9 @@ class Channel(chn_class.Channel):
         channel_item.isGeoLocked = True
 
         channel_item.thumb = thumb
-        if "titlePageThumbnailIds" in channel and channel["titlePageThumbnailIds"]:
+        if "episodeThumbnailIds" in channel and channel["episodeThumbnailIds"]:
             channel_item.thumb = "https://www.svtstatic.se/image/wide/650/%s.jpg" % (
-                channel["titlePageThumbnailIds"][0],)
+                channel["episodeThumbnailIds"][0],)
         return channel_item
 
     def search_site(self, url=None):  # @UnusedVariable
@@ -838,14 +840,42 @@ class Channel(chn_class.Channel):
 
         json_string, _ = self.extract_json_data(data)
         json_data = JsonHelper(json_string)
-        channels = json_data.get_value("channelsPage", "schedule")
-        channel_list = []
-        for channel_name, channel_data in channels.items():
-            if "channel" not in channel_data:
-                continue
-            channel_list.append(channel_data)
+        channels = json_data.get_value("guidePage", "channels")
+        channel_list = {}
 
-        json_data.json = channel_list
+        # get a dictionary with channels
+        for channel_data in channels:
+            channel_tag = channel_data["urlName"]
+            # find the corresponding episode
+            channel_list[channel_tag] = channel_data
+            
+        programs = dict([kv for kv in json_data.get_value("guidePage", "programs").items() if kv[1].get("isActiveBroadcast", False)])
+        schedules = json_data.get_value("guidePage", "schedules")
+        for channel_name, program_ids in schedules.items():
+            channel_tag = channel_name.split(":")[0]
+            channel = channel_list.get(channel_tag, None)
+            if channel is None:
+                continue
+
+            # see what program is playing
+            program_id = [p for p in program_ids if p in programs]
+            if not program_id:
+                del channel_list[channel_tag]
+                continue
+
+            program_id = program_id[0]
+            if program_id.startswith("TT"):
+                del channel_list[channel_tag]
+                continue
+
+            program = programs.get(program_id)
+            if program is None:
+                del channel_list[channel_tag]
+                continue
+
+            channel.update(program)
+
+        json_data.json = channel_list.values()
         return json_data, []
 
     def update_video_api_item(self, item):
@@ -1039,10 +1069,8 @@ class Channel(chn_class.Channel):
                 url = sub["url"]
                 if sub_format == "websrt":
                     sub_url = url
-                # elif subFormat == "webvtt":
-                #     Logger.Info("Found M3u8 subtitle, replacing with WSRT")
-                #     start, name, index = sub[-1].rsplit("/", 2)
-                #     subUrl = "%s/%s/%s.wsrt" % (start, name, name)
+                elif sub_format == "webvtt":
+                    sub_url = url
                 else:
                     # look for more
                     continue

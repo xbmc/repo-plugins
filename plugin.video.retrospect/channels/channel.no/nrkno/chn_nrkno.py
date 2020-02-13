@@ -54,7 +54,7 @@ class Channel(chn_class.Channel):
 
         self._add_data_parsers(
             ["https://psapi.nrk.no/medium/tv/recommendedprograms",
-             "https://psapi.nrk.no/medium/tv/popularprogramssuper",
+             "https://psapi.nrk.no/medium/tv/popularprograms",
              "https://psapi.nrk.no/medium/tv/recentlysentprograms"],
             json=True, parser=[], creator=self.create_video_item)
 
@@ -161,7 +161,7 @@ class Channel(chn_class.Channel):
             live_tv: "https://psapi.nrk.no/tv/live?apiKey={}".format(self.__api_key),
             live_radio: "https://psapi.nrk.no/radio/live?apiKey={}".format(self.__api_key),
             "Recommended": "https://psapi.nrk.no/medium/tv/recommendedprograms?maxnumber=100&startRow=0&apiKey={}".format(self.__api_key),
-            "Popular": "https://psapi.nrk.no/medium/tv/popularprogramssuper?maxnumber=100&startRow=0&apiKey={}".format(self.__api_key),
+            "Popular": "https://psapi.nrk.no/medium/tv/popularprograms/week?maxnumber=100&startRow=0&apiKey={}".format(self.__api_key),
             "Recent": "https://psapi.nrk.no/medium/tv/recentlysentprograms?maxnumber=100&startRow=0&apiKey={}".format(self.__api_key),
             "Categories": "https://psapi.nrk.no/medium/tv/categories?apiKey={}".format(self.__api_key),
             "A - Å": "https://psapi.nrk.no/medium/tv/letters?apiKey={}".format(self.__api_key),

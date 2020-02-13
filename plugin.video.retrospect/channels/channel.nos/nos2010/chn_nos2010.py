@@ -860,20 +860,8 @@ class Channel(chn_class.Channel):
         """
 
         Logger.trace(result_set)
-        if for_epg:
-            channel = result_set["channel"]
-            channel = self.__channelNames.get(channel, channel)
-            if not channel:
-                Logger.trace("Invalid EPG channel: %s", channel)
-                return None
-            name = "{} - {}".format(channel, result_set["title"])
-            if result_set["episodeTitle"] and result_set["title"] != result_set["episodeTitle"]:
-                name = "{} - {}".format(name, result_set["episodeTitle"])
-        else:
-            name = result_set.get('episodeTitle')
-            if not bool(name):
-                name = result_set.get('franchiseTitle')
-
+        
+        name = self.__get_name_for_api_video(result_set, for_epg)
         description = result_set.get('descriptionLong')
         if not description:
             description = result_set.get('description')
@@ -882,6 +870,13 @@ class Channel(chn_class.Channel):
         item = MediaItem(name, video_id)
         item.description = description
         item.type = "video"
+
+        season = result_set.get("seasonNumber")
+        episode = result_set.get("episodeNumber")
+        if bool(season) and bool(episode) and season < 100:
+            item.set_season_info(season, episode)
+            # TODO: setting it now is to messy. Perhaps we should make it configurable?
+            # item.name = "s{0:02d}e{1:02d} - {2}".format(season, episode, item.name)
 
         date_format = "%Y-%m-%dT%H:%M:%SZ"
         date = result_set.get('broadcastDate')
@@ -1498,3 +1493,41 @@ class Channel(chn_class.Channel):
         xsrf_token = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl").value
         xsrf_token = HtmlEntityHelper.url_decode(xsrf_token)
         return xsrf_token, token
+
+    def __get_name_for_api_video(self, result_set, for_epg):
+        """ Determines the name of the video item given the episode name, franchise name and
+        show title.
+
+        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param bool for_epg: use this item in an EPG listing
+
+        :return: The name of the video item
+        :rtype: string
+
+        """
+
+        # We need to strip the : because some shows have them and they make no sense.
+        show_title = result_set["title"].strip(":")
+        episode_title = result_set["episodeTitle"]
+        if for_epg:
+            channel = result_set["channel"]
+            channel = self.__channelNames.get(channel, channel)
+            if not channel:
+                Logger.trace("Invalid EPG channel: %s", channel)
+                return None
+            name = "{} - {}".format(channel, show_title)
+            if episode_title and show_title != episode_title:
+                name = "{} - {}".format(name, episode_title)
+        else:
+            name = episode_title
+            if not bool(name):
+                name = result_set.get('franchiseTitle')
+
+            # In some cases the title of the show (not episode) is different from the franchise
+            # title. In that case we want to add the title of the show in front of the name, but
+            # only if that does not lead to duplication
+            elif show_title != result_set.get('franchiseTitle') \
+                    and show_title != name:
+                name = "{} - {}".format(show_title, name)
+
+        return name

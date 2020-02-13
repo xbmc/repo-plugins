@@ -1,0 +1,166 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-05-19 11:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30001"
+msgid "TWiT Live"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Available Streams"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Mixer HLS stream"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Ustream (multibitrate hls)"
+msgstr ""
+
+msgctxt "#30005"
+msgid "YouTube add-on"
+msgstr ""
+
+msgctxt "#30006"
+msgid ""
+msgstr ""
+
+msgctxt "#30007"
+msgid ""
+msgstr ""
+
+msgctxt "#30008"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30009"
+msgid ""
+msgstr ""
+
+msgctxt "#30010"
+msgid ""
+msgstr ""
+
+msgctxt "#30011"
+msgid ""
+msgstr ""
+
+msgctxt "#30012"
+msgid ""
+msgstr ""
+
+msgctxt "#30013"
+msgid "Audio TWiT.am/listen"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Playback Type"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Video (HD)"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Video (SD)"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Video (low/mobile)"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Audio"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Run IrcChat when TWiT Live is started"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Chat Nickname"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Chat User Name"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Nickname and User Name are required"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Set View Mode For Episodes"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Default"
+msgstr ""
+
+msgctxt "#30027"
+msgid "List"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Big List"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Thumbnail"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Poster Wrap"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Fanart"
+msgstr ""
+
+msgctxt "#30032"
+msgid ""
+msgstr ""
+
+msgctxt "#30033"
+msgid ""
+msgstr ""
+
+msgctxt "#30034"
+msgid ""
+msgstr ""
+
+msgctxt "#30035"
+msgid "Download"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Retired Shows"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Download Location"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Select a location to download files."
+msgstr ""

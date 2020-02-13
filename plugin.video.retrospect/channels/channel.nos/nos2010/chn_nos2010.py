@@ -183,14 +183,21 @@ class Channel(chn_class.Channel):
         self.__jsonApiKeyHeader = {"apikey": "07896f1ee72645f68bc75581d7f00d54"}
         self.__useJson = True
         self.__pageSize = 500
-        self.__channelNames = {
-            "_101_": None,  # "NPO1 Extra", -> Mainly paid
-            "CULT": None,  # "NPO2 Extra", -> Mainly paid
-            "OPVO": None,  # "NPO Zappelin", -> Mainly paid
-            "NOSJ": "NPO Nieuws"
-        }
         self.__has_premium_cache = None
         self.__timezone = pytz.timezone("Europe/Amsterdam")
+
+        # use a dictionary so the lookup is O(1)
+        self.__channel_name_map = {
+            "_101_": None,  # "NPO1 Extra", -> Mainly paid
+            "CULT": None,   # "NPO2 Extra", -> Mainly paid
+            "OPVO": None,   # "NPO Zappelin", -> Mainly paid
+            "NOSJ": None,   # "NPO Nieuws" -> Cannot be played
+            "_mcr_": None,  # "NPO Politiek" -> Niet gevonden
+            "PO24": None,   # Cannot be played,
+            "NED1": "NPO 1",
+            "NED2": "NPO 2",
+            "NED3": "NPO 3",
+        }
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
@@ -866,6 +873,8 @@ class Channel(chn_class.Channel):
         if not description:
             description = result_set.get('description')
         video_id = result_set['id']
+        if video_id is None:
+            return None
 
         item = MediaItem(name, video_id)
         item.description = description
@@ -931,8 +940,16 @@ class Channel(chn_class.Channel):
 
         json = JsonHelper(data)
         epg_data = []
-        for epg_item in json.get_value("epg"):
-            epg_data += epg_item.get("schedule", [])
+
+        for channel_epg in json.get_value("epg"):
+            # Find the channel name
+            channel = channel_epg["channel"]
+            channel_name = channel["channel"]
+
+            # Update all videos that don't have a channel specified
+            epg_items = channel_epg.get("schedule", [])
+            [e["program"].update({"channel": channel_name}) for e in epg_items if not e["program"]["channel"]]
+            epg_data += epg_items
 
         json.json = epg_data
         return json, []
@@ -961,6 +978,17 @@ class Channel(chn_class.Channel):
 
         Logger.trace(result_set)
         epg_result_set = result_set["program"]
+
+        # Check to see if the channel name needs updating. We check the mapping, if it is not
+        # in the mapping, the channel name stays the same.
+        # If the result from the mapping is None (or the channel name is None) filter them.
+        channel_name = epg_result_set["channel"]
+        channel_name = self.__channel_name_map.get(channel_name, channel_name)
+        if channel_name is None:
+            Logger.trace("Invalid EPG channel: %s", channel_name)
+            return None
+
+        epg_result_set["channel"] = channel_name
         epg_result_set["broadcastDate"] = result_set.get("startsAt", epg_result_set["broadcastDate"])
         item = self.create_api_video_item(epg_result_set, for_epg=True)
 
@@ -1106,6 +1134,8 @@ class Channel(chn_class.Channel):
         next_up = result_set[3]
         name = "%s: %s" % (name, now_playing)
         if next_up:
+            next_up = next_up.strip()
+            next_up = next_up.replace("Straks: ", "")
             description = "Nu: %s\nStraks om %s" % (now_playing, next_up)
         else:
             description = "Nu: %s" % (result_set[3].strip(),)
@@ -1511,10 +1541,6 @@ class Channel(chn_class.Channel):
         episode_title = result_set["episodeTitle"]
         if for_epg:
             channel = result_set["channel"]
-            channel = self.__channelNames.get(channel, channel)
-            if not channel:
-                Logger.trace("Invalid EPG channel: %s", channel)
-                return None
             name = "{} - {}".format(channel, show_title)
             if episode_title and show_title != episode_title:
                 name = "{} - {}".format(name, episode_title)

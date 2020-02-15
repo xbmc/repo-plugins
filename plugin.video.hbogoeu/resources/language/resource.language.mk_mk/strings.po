@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: plugin.video.hbogoeu\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-01-04 21:34+0100\n"
+"PO-Revision-Date: 2020-02-13 00:56+0100\n"
 "Last-Translator: arvvoid\n"
 "Language-Team: arvvoid\n"
 "Language: mk_MK\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n%10==1 && n%100!=11);\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 
 msgctxt "#30000"
 msgid "ENG"
@@ -43,23 +43,27 @@ msgstr "Се случи неочекувана грешка."
 
 #, fuzzy
 msgctxt "#30005"
-msgid "Error getting content from Hbo go"
+msgid "Error getting content from Hbo Go"
 msgstr "Грешка при добивање содржина од Hbo одат"
 
 #, fuzzy
 msgctxt "#30006"
-msgid "Error sending data to Hbo go"
+msgid "Error sending data to Hbo Go"
 msgstr "Грешка при испраќање на податоци до Hbo одат"
 
 #, fuzzy
 msgctxt "#30007"
-msgid "Error deleting data from Hbo go"
+msgid "Error deleting data from Hbo Go"
 msgstr "Грешка при бришење податоци од Hbo одат"
 
 #, fuzzy
 msgctxt "#30008"
 msgid "Communication error, returned STATUS: "
 msgstr "Грешка во комуникацијата, СТАТУС: "
+
+msgctxt "#30009"
+msgid "The content is availible from:"
+msgstr ""
 
 #, fuzzy
 msgctxt "#30100"
@@ -341,6 +345,18 @@ msgctxt "#30733"
 msgid "Home Lists"
 msgstr "Домашни списоци"
 
+msgctxt "#30734"
+msgid "New search"
+msgstr ""
+
+msgctxt "#30735"
+msgid "Clear search history"
+msgstr ""
+
+msgctxt "#30736"
+msgid "Remove"
+msgstr ""
+
 msgctxt "#30650"
 msgid "Language"
 msgstr "Jазик"
@@ -378,6 +394,10 @@ msgstr "ÐÐ¾ÑÐ°"
 msgctxt "#30671"
 msgid "Force scraper friendly titles"
 msgstr "Натерајте наслови за пријателски гребење"
+
+msgctxt "#30672"
+msgid "Use generic video media type in listings"
+msgstr ""
 
 msgctxt "#30680"
 msgid "Session"
@@ -470,3 +490,15 @@ msgid "Ignore Kodi Watched status (Only display HBO Go Watched status)"
 msgstr ""
 "Игнорирај го статусот на гледање на Kodi (Само прикажување статус HBO Go "
 "Watched статус)"
+
+msgctxt "#30806"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30807"
+msgid "Use request cache"
+msgstr ""
+
+msgctxt "#30808"
+msgid "Clear request cache"
+msgstr ""

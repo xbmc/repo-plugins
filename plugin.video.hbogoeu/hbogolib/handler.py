@@ -13,12 +13,15 @@ import json
 import os
 import sys
 import traceback
+import sqlite3
 
 import defusedxml.ElementTree as ET
 import requests
 from kodi_six import xbmc, xbmcaddon, xbmcplugin, xbmcgui
 from kodi_six.utils import py2_encode, py2_decode
 
+from hbogolib.constants import HbogoConstants
+from hbogolib.kodiutil import KodiUtil
 from hbogolib.util import Util
 
 try:
@@ -53,12 +56,14 @@ class HbogoHandler(object):
         self.base_url = base_url
         self.handle = handle
         self.DEBUG_ID_STRING = "[" + str(self.addon_id) + "] "
-        self.SESSION_VALIDITY = 0.5  # stored session valid for half hour
+        self.SESSION_VALIDITY = 4  # stored session valid for 4 hours
+        self.max_comm_retry = 1  # if unauthorized del sessionrelogin and try again max times
+        self.max_play_retry = 1  # max play retry on soft error
+        self.db_version = 1
 
         self.base_addon_cat = ""
         self.cur_loc = ""
 
-        self.search_string = unquote(self.addon.getSetting('lastsearch'))
         xbmcplugin.setPluginFanart(self.handle, image=self.get_resource("fanart.jpg"))
 
         # LABELS
@@ -78,7 +83,10 @@ class HbogoHandler(object):
         self.LB_NO_OPERATOR = py2_encode(self.language(30710))
         self.LB_SEARCH = py2_encode(self.language(30711))
 
-        self.use_content_type = "videos"
+        self.n_movies = 0
+        self.n_tvshows = 0
+        self.n_seasons = 0
+        self.n_episodes = 0
 
         self.force_original_names = self.addon.getSetting('origtitles')
         if self.force_original_names == "true":
@@ -104,6 +112,12 @@ class HbogoHandler(object):
         else:
             self.lograwdata = False
 
+        self.use_cache = self.addon.getSetting('use_req_cache')
+        if self.use_cache == "true":
+            self.use_cache = True
+        else:
+            self.use_cache = False
+
         if self.sensitive_debug:
             ret = xbmcgui.Dialog().yesno(self.LB_INFO, self.language(30712), self.language(30714), self.language(30715))
             if not ret:
@@ -111,6 +125,114 @@ class HbogoHandler(object):
 
         self.loggedin_headers = None  # DEFINE IN SPECIFIC HANDLER
         self.API_PLATFORM = 'COMP'
+
+        self.log("Starting database connection...")
+        self.db = sqlite3.connect(xbmc.translatePath(self.addon.getAddonInfo('profile'))+'hgo.db')
+        cur = self.db.cursor()
+        try:
+            cur.execute("SELECT val_int FROM settings WHERE set_id='db_ver'")
+            r = cur.fetchone()
+            if r[0] != self.db_version:
+                self.log("Database version mismatch updating database.")
+                self.ceate_db(r[0])
+        except Exception:
+            self.log("Database error: " + traceback.format_exc())
+            self.ceate_db()
+
+    def __del__(self):
+        self.log("Checking DB VACUUM")
+        self.db_vacuum()  # vacuum database if more then 30 days have passed
+        self.log("Handler ended. Database connection closed.")
+        self.db.close()
+
+    def ceate_db(self, cur_ver=0):
+        self.log("Creating database, current version: " + str(cur_ver) + " add-on needs version: " + str(self.db_version))
+
+        cur = self.db.cursor()
+        if cur_ver < 1:
+            self.log("Databae create STAGE 1...")
+            cur.execute("create table settings (set_id text primary key, val_int integer, val_str text)")
+            cur.execute("create table request_cache (url_hash text primary key, request_data text, last_update text)")
+            cur.execute("create table request_cache_exclude (url_hash text primary key)")
+            cur.execute("create table search_history (search_query text primary key)")
+            cur.execute("INSERT INTO settings VALUES ('db_ver',1,'')")
+            self.log("Databae create STAGE 1...done.")
+        self.db.commit()
+
+    def db_vacuum(self):
+        try:
+            cur = self.db.cursor()
+            cur.execute("SELECT (DATE(val_str, '+30 days')<DATE('now')) as tdiff FROM settings WHERE set_id='last_vacuum'")
+            r = cur.fetchone()
+
+            if r is None:
+                self.log("NO LAST VACUUMING DATA, inserting...")
+                cur.execute("INSERT INTO settings VALUES ('last_vacuum',0,DateTime('now'))")
+                self.db.commit()
+                return
+
+            if r[0] > 0:
+                self.log("LAST VACUUM OLDER THEN 30 DAYS, VACUUMING DB...")
+                cur.execute("UPDATE settings SET val_str=DateTime('now') WHERE set_id='last_vacuum'")
+                self.db.commit()
+                cur.execute("VACUUM")
+        except Exception:
+            self.log("Vacuum error: " + traceback.format_exc())
+
+    def searchlist_del_history(self):
+        cur = self.db.cursor()
+        cur.execute("DELETE FROM search_history;")
+        self.db.commit()
+        self.log("Database: Truncate search_history")
+
+    def searchlist_del_history_item(self, itm):
+        cur = self.db.cursor()
+        cur.execute("DELETE FROM search_history WHERE search_query=?;", (py2_decode(itm),),)
+        self.db.commit()
+        self.log("Database: Del "+itm+" from search_history")
+
+    def get_search_history(self):
+        cur = self.db.cursor()
+        cur.execute("SELECT * FROM search_history")
+        self.log("Database: Get search_history")
+        return cur.fetchall()
+
+    def add_to_search_history(self, itm):
+        cur = self.db.cursor()
+        self.log("Database: add " + itm + " to search_history")
+        try:
+            cur.execute("INSERT INTO search_history(search_query) VALUES (?)", (py2_decode(itm),),)
+            self.db.commit()
+            return True
+        except Exception:
+            self.log("Add to search history WARNING: " + traceback.format_exc())
+            return False
+
+    def reset_media_type_counters(self):
+        self.n_movies = 0
+        self.n_tvshows = 0
+        self.n_seasons = 0
+        self.n_episodes = 0
+
+    def decide_media_type(self):
+        if self.addon.getSetting('forceepispdelisting') == "true":
+            return "videos"
+        if self.n_movies + self.n_tvshows + self.n_seasons + self.n_episodes == 0:
+            return "files"
+        # 0- movies
+        # 1- tvshows
+        # 2- seasons
+        # 3- episodes
+        media_types = [self.n_movies, self.n_tvshows, self.n_seasons, self.n_episodes]
+        sel_type = media_types.index(max(media_types))
+        if sel_type == 0:
+            return "movies"
+        if sel_type == 1:
+            return "tvshows"
+        if sel_type == 2:
+            return "seasons"
+        if sel_type == 3:
+            return "episodes"
 
     @staticmethod
     def get_resource(resourcefile):
@@ -136,7 +258,7 @@ class HbogoHandler(object):
         xbmcplugin.setPluginCategory(self.handle, cur_loc)
         self.cur_loc = cur_loc
 
-    def post_to_hbogo(self, url, headers, data, response_format='json'):
+    def post_to_hbogo(self, url, headers, data, response_format='json', retry=0):
         self.log("POST TO HBO URL: " + url)
         self.log("POST TO HBO FORMAT: " + response_format)
         try:
@@ -144,6 +266,11 @@ class HbogoHandler(object):
             self.log("POST TO HBO RETURNED STATUS: " + str(r.status_code))
 
             if int(r.status_code) != 200:
+                if retry < self.max_comm_retry:
+                    self.log("RETURNED STATUS " + str(r.status_code) + " resetting login and retrying request...")
+                    self.del_login()
+                    self.login()
+                    return self.post_to_hbogo(url, headers, data, response_format, retry+1)
                 xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008)+str(r.status_code))
                 return False
 
@@ -160,16 +287,83 @@ class HbogoHandler(object):
             xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30004))
             return False
 
-    def get_from_hbogo(self, url, response_format='json'):
+    def get_from_cache(self, url_hash):
+        cur = self.db.cursor()
+        cur.execute("SELECT url_hash FROM request_cache_exclude WHERE url_hash=?", (url_hash,), )
+        if cur.fetchone() is not None:
+            self.log("URL IN CACHE EXCLUDE LIST")
+            return False
+        cur.execute("DELETE FROM request_cache WHERE last_update <= datetime('now','-1 day');")
+        self.db.commit()
+        cur.execute("SELECT request_data FROM request_cache WHERE url_hash=?", (url_hash,),)
+        result = cur.fetchone()
+        if result is not None:
+            self.log("URL FOUND IN CACHE")
+            return result[0]
+        return None
+
+    def cache(self, url_hash, data):
+        cur = self.db.cursor()
+        cur.execute("INSERT INTO request_cache(url_hash, request_data, last_update) VALUES (?, ?, datetime('now'))", (url_hash, data), )
+        self.db.commit()
+
+    def exclude_url_from_cache(self, url):
+        try:
+            cur = self.db.cursor()
+            cur.execute("INSERT INTO request_cache_exclude(url_hash) VALUES (?)", (Util.hash225_string(url), ), )
+            self.db.commit()
+        except Exception:
+            self.log("Exclude from cache WARNING: " + traceback.format_exc())
+
+    def clear_request_cache(self):
+        cur = self.db.cursor()
+        cur.execute("DELETE FROM request_cache;")
+        self.db.commit()
+        xbmcgui.Dialog().notification(self.language(30809), self.LB_SUCESS, self.get_resource("icon.png"))
+
+    def get_from_hbogo(self, url, response_format='json', use_cache=True, retry=0):
         self.log("GET FROM HBO URL: " + url)
         self.log("GET FROM HBO RESPONSE FORMAT: " + response_format)
+
+        if not self.use_cache:
+            use_cache = False
+
+        url_hash = Util.hash225_string(url)
+
+        if use_cache:
+            self.log("GET FROM HBO USING CACHE...")
+            cached_data = self.get_from_cache(url_hash)
+
+            if cached_data is not None and cached_data is not False:
+                self.log("GET FROM HBO Serving from cache...")
+                if response_format == 'json':
+                    return json.loads(py2_encode(cached_data))
+                elif response_format == 'xml':
+                    return ET.fromstring(py2_encode(cached_data))
+            if cached_data is False:
+                self.log("GET FROM HBO, URL on exclude list, cache disabled...")
+                use_cache = False
+
         try:
+            self.log("GET FROM HBO, requesting from Hbo Go...")
             r = requests.get(url, headers=self.loggedin_headers)
             self.log("GET FROM HBO STATUS: " + str(r.status_code))
 
             if int(r.status_code) != 200:
+                if retry < self.max_comm_retry:
+                    self.log("RETURNED STATUS " + str(r.status_code) + " resetting login and retrying request...")
+                    self.del_login()
+                    self.login()
+                    return self.get_from_hbogo(url, response_format, use_cache, retry+1)
                 xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008)+str(r.status_code))
                 return False
+
+            if use_cache:
+                try:
+                    self.log("SAVING URL TO CACHE")
+                    self.cache(url_hash, r.text)
+                except Exception:
+                    self.log("Caching WARNING: " + traceback.format_exc())
 
             if response_format == 'json':
                 return r.json()
@@ -180,11 +374,11 @@ class HbogoHandler(object):
             xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30005))
             return False
         except Exception:
-            self.log("POST TO HBO UNEXPECTED ERROR: " + traceback.format_exc())
+            self.log("GET TO HBO UNEXPECTED ERROR: " + traceback.format_exc())
             xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30004))
             return False
 
-    def delete_from_hbogo(self, url, response_format='json'):
+    def delete_from_hbogo(self, url, response_format='json', retry=0):
         self.log("DEL FROM HBO URL: " + url)
         self.log("DEL FROM HBO RESPONSE FORMAT: " + response_format)
         try:
@@ -192,6 +386,11 @@ class HbogoHandler(object):
             self.log("DEL FROM HBO STATUS: " + str(r.status_code))
 
             if int(r.status_code) != 200:
+                if retry < self.max_comm_retry:
+                    self.log("RETURNED STATUS "+str(r.status_code)+" resetting login and retrying request...")
+                    self.del_login()
+                    self.login()
+                    return self.delete_from_hbogo(url, response_format, retry+1)
                 xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008)+str(r.status_code))
                 return False
 
@@ -327,9 +526,43 @@ class HbogoHandler(object):
             self.log("Decrypt credentials error: " + traceback.format_exc())
             return None
 
+    def searchlist(self):
+        try:
+            from urllib import quote_plus as quote, urlencode
+        except ImportError:
+            from urllib.parse import quote_plus as quote, urlencode
+        self.reset_media_type_counters()
+        self.addCat(self.language(30734), "INTERNAL_SEARCH", self.get_media_resource('search.png'), HbogoConstants.ACTION_SEARCH)
+        self.addCat(self.language(30735), "DEL_SEARCH_HISTORY", self.get_media_resource('remove.png'), HbogoConstants.ACTION_SEARCH_CLEAR_HISTORY)
+        history_items = self.get_search_history()
+        for history_itm in history_items:
+            tmp_url = '%s?%s' % (self.base_url, urlencode({
+                'url': "INTERNAL_SEARCH",
+                'mode': HbogoConstants.ACTION_SEARCH,
+                'name': py2_encode(self.language(30734))+': '+py2_encode(history_itm[0]),
+                'query': py2_encode(history_itm[0]),
+            }))
+            liz = xbmcgui.ListItem(py2_encode(history_itm[0]))
+            liz.setArt({'fanart': self.get_resource("fanart.jpg"), 'thumb': self.get_media_resource('search.png'), 'icon': self.get_media_resource('search.png')})
+            liz.setInfo(type="Video", infoLabels={"Title": py2_encode(self.language(30734))+': '+py2_encode(history_itm[0])})
+            liz.setProperty('isPlayable', "false")
+
+            runplugin = 'RunPlugin(%s?%s)'
+
+            rem_search_query = urlencode({
+                'url': 'REM_SEARCH_QUERY',
+                'mode': HbogoConstants.ACTION_SEARCH_REMOVE_HISTOY_ITEM,
+                'itm': py2_encode(history_itm[0]),
+            })
+            rem_search = (py2_encode(self.language(30736)), runplugin %
+                          (self.base_url, rem_search_query))
+            liz.addContextMenuItems(items=[rem_search])
+            xbmcplugin.addDirectoryItem(handle=self.handle, url=tmp_url, listitem=liz, isFolder=True)
+        KodiUtil.endDir(self.handle, None, True)
+
     # IMPLEMENT THESE IN SPECIFIC REGIONAL HANDLER
 
-    def setup(self, country):
+    def setup(self, country, forceeng=False):
         pass
 
     def logout(self):
@@ -350,10 +583,10 @@ class HbogoHandler(object):
     def episode(self, url):
         pass
 
-    def search(self):
+    def search(self, query=None):
         pass
 
-    def play(self, content_id):
+    def play(self, content_id, retry=0):
         pass
 
     def procContext(self, action_type, content_id, optional=""):

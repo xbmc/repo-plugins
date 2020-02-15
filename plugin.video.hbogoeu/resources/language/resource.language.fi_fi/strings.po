@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: plugin.video.hbogoeu\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-01-04 21:30+0100\n"
+"PO-Revision-Date: 2020-02-13 00:55+0100\n"
 "Last-Translator: arvvoid\n"
 "Language-Team: arvvoid\n"
 "Language: fi_FI\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 
 msgctxt "#30000"
 msgid "ENG"
@@ -40,25 +40,25 @@ msgctxt "#30004"
 msgid "An unexpected error has occurred."
 msgstr "Ilmeni odottamaton virhe."
 
-#, fuzzy
 msgctxt "#30005"
-msgid "Error getting content from Hbo go"
-msgstr "Virhe noudettaessa sisältöä HBO GO-palvelusta"
+msgid "Error getting content from Hbo Go"
+msgstr "Virhe noudettaessa sisältöä HBO GO -palvelusta"
 
-#, fuzzy
 msgctxt "#30006"
-msgid "Error sending data to Hbo go"
-msgstr "Virhe lähetettäessä tietoja HBO GO-tieto lähteeseen"
+msgid "Error sending data to Hbo Go"
+msgstr "Virhe lähetettäessä tietoja HBO GO -palveluun"
 
-#, fuzzy
 msgctxt "#30007"
-msgid "Error deleting data from Hbo go"
-msgstr "Virhe poistettaessa tietoja HBO GO-palvelusta"
+msgid "Error deleting data from Hbo Go"
+msgstr "Virhe poistettaessa tietoja HBO GO -palvelusta"
 
-#, fuzzy
 msgctxt "#30008"
 msgid "Communication error, returned STATUS: "
-msgstr "Tiedon siirto virhe, palautettu tila:"
+msgstr "Tiedonsiirtovirhe, palautettu tila:"
+
+msgctxt "#30009"
+msgid "The content is availible from:"
+msgstr ""
 
 msgctxt "#30100"
 msgid "Web registration on "
@@ -108,7 +108,7 @@ msgstr "Asetukset"
 
 msgctxt "#30441"
 msgid "Choose your Country"
-msgstr "Valitse maa"
+msgstr "Valitse maasi"
 
 msgctxt "#30442"
 msgid "Enter e-mail/username"
@@ -309,6 +309,18 @@ msgctxt "#30733"
 msgid "Home Lists"
 msgstr "Kotilistat"
 
+msgctxt "#30734"
+msgid "New search"
+msgstr "Uusi haku"
+
+msgctxt "#30735"
+msgid "Clear search history"
+msgstr "Tyhjennä hakuhistoria"
+
+msgctxt "#30736"
+msgid "Remove"
+msgstr "Poista"
+
 msgctxt "#30650"
 msgid "Language"
 msgstr "Kieli"
@@ -340,6 +352,10 @@ msgstr "Asiantuntija"
 msgctxt "#30671"
 msgid "Force scraper friendly titles"
 msgstr "Käytä scraper-ystävällisiä nimiä"
+
+msgctxt "#30672"
+msgid "Use generic video media type in listings"
+msgstr "Käytä geneeristä videomedian tyyppiä listauksissa"
 
 msgctxt "#30680"
 msgid "Session"
@@ -381,7 +397,7 @@ msgid ""
 "Cryptodome dependency not present on your system, HBO Go add-on can't run. "
 "For help consult install instructions/official support thread"
 msgstr ""
-"HBO Go -lisäosa ei toimi, koska Cryptodome-riippuvuutta ei ole asennettu. "
+"HBO GO -lisäosa ei toimi, koska Cryptodome-riippuvuutta ei ole asennettu. "
 "Lisäohjeita löydät asennusohjeista ja/tai viralliselta tukisivustolta"
 
 msgctxt "#30696"
@@ -394,24 +410,36 @@ msgstr "Ryhmittele Kotilistat erikoiskategorioissa"
 
 msgctxt "#30800"
 msgid "Sync play time with HBO Go"
-msgstr "Synkronoi toistoaika Hbo Go:n kanssa"
+msgstr "Synkronoi toistoaika HBO GO:n kanssa"
 
 msgctxt "#30801"
 msgid "Send elapsed time to HBO Go"
-msgstr "Lähetä kulunut aika Hbo Go:hun"
+msgstr "Lähetä kulunut aika HBO GO:hun"
 
 msgctxt "#30802"
 msgid "Get elapsed time from HBO Go"
-msgstr "Hae kulunut aika Hbo Go:sta"
+msgstr "Hae kulunut aika HBO GO:sta"
 
 msgctxt "#30803"
 msgid "Set as watched on HBO Go"
-msgstr "Aseta katsotuksi Hbo Go:ssa"
+msgstr "Aseta katsotuksi HBO GO:ssa"
 
 msgctxt "#30804"
 msgid "Set as unwatched on HBO Go"
-msgstr "Aseta katsomattomaksi Hbo Go:ssa"
+msgstr "Aseta katsomattomaksi HBO GO:ssa"
 
 msgctxt "#30805"
 msgid "Ignore Kodi Watched status (Only display HBO Go Watched status)"
-msgstr "Näytä Hbo Go:n Katsottu-tila Kodi:n Katsottu-tilan sijaan"
+msgstr "Näytä HBO GO:n Katsottu-tila Kodi:n Katsottu-tilan sijaan"
+
+msgctxt "#30806"
+msgid "Cache"
+msgstr "Välimuisti"
+
+msgctxt "#30807"
+msgid "Use request cache"
+msgstr "Käytä välimuistia"
+
+msgctxt "#30808"
+msgid "Clear request cache"
+msgstr "Tyhjennä välimuisti"

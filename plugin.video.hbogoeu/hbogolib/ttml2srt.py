@@ -43,7 +43,7 @@ class Ttml2srt(object):
             if node.localName == 'br':
                 dialogue = dialogue + '\n'
             elif node.nodeValue:
-                dialogue = dialogue + node.nodeValue
+                dialogue = dialogue + node.nodeValue.replace("\n", "")
             if node.hasChildNodes():
                 dialogue = dialogue + self.extract_dialogue(node.childNodes)
         return dialogue

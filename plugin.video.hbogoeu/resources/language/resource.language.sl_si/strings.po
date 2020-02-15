@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: plugin.video.hbogoeu\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-01-04 21:44+0100\n"
+"PO-Revision-Date: 2020-02-13 00:58+0100\n"
 "Last-Translator: arvvoid\n"
 "Language-Team: arvvoid\n"
 "Language: sl_SI\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
 "%100<=4 ? 2 : 3);\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 
 msgctxt "#30000"
 msgid "ENG"
@@ -44,23 +44,27 @@ msgstr "Prišlo je do nepričakovane napake."
 
 #, fuzzy
 msgctxt "#30005"
-msgid "Error getting content from Hbo go"
-msgstr "Napaka pri pridobivanju vsebine iz HBO go"
+msgid "Error getting content from Hbo Go"
+msgstr "Napaka pri pridobivanju vsebine iz HBO Go"
 
 #, fuzzy
 msgctxt "#30006"
-msgid "Error sending data to Hbo go"
-msgstr "Napaka pri pošiljanju podatkov v HBO go"
+msgid "Error sending data to Hbo Go"
+msgstr "Napaka pri pošiljanju podatkov v HBO Go"
 
 #, fuzzy
 msgctxt "#30007"
-msgid "Error deleting data from Hbo go"
-msgstr "Napaka pri brisanju podatkov iz HBO go"
+msgid "Error deleting data from Hbo Go"
+msgstr "Napaka pri brisanju podatkov iz HBO Go"
 
 #, fuzzy
 msgctxt "#30008"
 msgid "Communication error, returned STATUS: "
 msgstr "Sporočilo zmota, vrnjen STALEŽ: "
+
+msgctxt "#30009"
+msgid "The content is availible from:"
+msgstr ""
 
 msgctxt "#30100"
 msgid "Web registration on "
@@ -354,6 +358,18 @@ msgctxt "#30733"
 msgid "Home Lists"
 msgstr "Domači seznami"
 
+msgctxt "#30734"
+msgid "New search"
+msgstr ""
+
+msgctxt "#30735"
+msgid "Clear search history"
+msgstr ""
+
+msgctxt "#30736"
+msgid "Remove"
+msgstr ""
+
 msgctxt "#30650"
 msgid "Language"
 msgstr "Jezik"
@@ -392,6 +408,10 @@ msgstr "Strokovnjak"
 msgctxt "#30671"
 msgid "Force scraper friendly titles"
 msgstr "Force strna prijateljski naslovi"
+
+msgctxt "#30672"
+msgid "Use generic video media type in listings"
+msgstr ""
 
 msgctxt "#30680"
 msgid "Session"
@@ -480,3 +500,15 @@ msgstr "Nastavi kot nespremljano na HBO go"
 msgctxt "#30805"
 msgid "Ignore Kodi Watched status (Only display HBO Go Watched status)"
 msgstr "Prezreti kodi bedeti stalež (šele izložba HBO teči bedeti stalež)"
+
+msgctxt "#30806"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30807"
+msgid "Use request cache"
+msgstr ""
+
+msgctxt "#30808"
+msgid "Clear request cache"
+msgstr ""

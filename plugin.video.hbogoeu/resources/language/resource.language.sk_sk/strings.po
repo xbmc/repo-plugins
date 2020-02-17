@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: plugin.video.hbogoeu\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-01-04 21:42+0100\n"
+"PO-Revision-Date: 2020-02-13 00:58+0100\n"
 "Last-Translator: arvvoid\n"
 "Language-Team: arvvoid\n"
 "Language: sk_SK\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 
 msgctxt "#30000"
 msgid "ENG"
@@ -43,23 +43,27 @@ msgstr "Vyskytla sa neočakávaná chyba."
 
 #, fuzzy
 msgctxt "#30005"
-msgid "Error getting content from Hbo go"
+msgid "Error getting content from Hbo Go"
 msgstr "Chyba pri získavaní obsahu z HBO Go"
 
 #, fuzzy
 msgctxt "#30006"
-msgid "Error sending data to Hbo go"
+msgid "Error sending data to Hbo Go"
 msgstr "Chyba pri odosielaní údajov do HBO Go"
 
 #, fuzzy
 msgctxt "#30007"
-msgid "Error deleting data from Hbo go"
+msgid "Error deleting data from Hbo Go"
 msgstr "Chyba pri odstraňovaní údajov z HBO Go"
 
 #, fuzzy
 msgctxt "#30008"
 msgid "Communication error, returned STATUS: "
 msgstr "Chyba komunikácie, vrátený stav: "
+
+msgctxt "#30009"
+msgid "The content is availible from:"
+msgstr ""
 
 #, fuzzy
 msgctxt "#30100"
@@ -351,6 +355,18 @@ msgctxt "#30733"
 msgid "Home Lists"
 msgstr "Domovské zoznamy"
 
+msgctxt "#30734"
+msgid "New search"
+msgstr ""
+
+msgctxt "#30735"
+msgid "Clear search history"
+msgstr ""
+
+msgctxt "#30736"
+msgid "Remove"
+msgstr ""
+
 msgctxt "#30650"
 msgid "Language"
 msgstr "Jazyk"
@@ -388,6 +404,10 @@ msgstr "Odborník"
 msgctxt "#30671"
 msgid "Force scraper friendly titles"
 msgstr "Sila škrabka priateľské tituly"
+
+msgctxt "#30672"
+msgid "Use generic video media type in listings"
+msgstr ""
 
 msgctxt "#30680"
 msgid "Session"
@@ -474,3 +494,15 @@ msgstr "Nastaviť ako Nesledované na HBO Go"
 msgctxt "#30805"
 msgid "Ignore Kodi Watched status (Only display HBO Go Watched status)"
 msgstr "Ignorovať Kodi sledoval stav (iba zobrazenie HBO Go sledoval status)"
+
+msgctxt "#30806"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30807"
+msgid "Use request cache"
+msgstr ""
+
+msgctxt "#30808"
+msgid "Clear request cache"
+msgstr ""

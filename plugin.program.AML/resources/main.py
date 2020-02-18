@@ -2,7 +2,7 @@
 
 # Advanced MAME Launcher main script file.
 
-# Copyright (c) 2016-2019 Wintermute0110 <wintermute0110@gmail.com>
+# Copyright (c) 2016-2020 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -547,20 +547,26 @@ def get_settings():
     # --- ROM sets ---
     g_settings['mame_rom_set'] = int(o.getSetting('mame_rom_set'))
     g_settings['mame_chd_set'] = int(o.getSetting('mame_chd_set'))
-    g_settings['SL_rom_set']   = int(o.getSetting('SL_rom_set'))
-    g_settings['SL_chd_set']   = int(o.getSetting('SL_chd_set'))
-    g_settings['filter_XML']   = o.getSetting('filter_XML').decode('utf-8')
+    g_settings['SL_rom_set'] = int(o.getSetting('SL_rom_set'))
+    g_settings['SL_chd_set'] = int(o.getSetting('SL_chd_set'))
+
+    # Misc separator
+    g_settings['filter_XML'] = o.getSetting('filter_XML').decode('utf-8')
+    g_settings['generate_history_infolabel'] = True if o.getSetting('generate_history_infolabel') == 'true' else False
 
     # --- Display I ---
-    g_settings['display_launcher_notify'] = True if o.getSetting('display_launcher_notify') == 'true' else False
-    g_settings['mame_view_mode']          = int(o.getSetting('mame_view_mode'))
-    g_settings['sl_view_mode']            = int(o.getSetting('sl_view_mode'))
-    g_settings['display_hide_Mature']     = True if o.getSetting('display_hide_Mature') == 'true' else False
-    g_settings['display_hide_BIOS']       = True if o.getSetting('display_hide_BIOS') == 'true' else False
-    g_settings['display_hide_imperfect']  = True if o.getSetting('display_hide_imperfect') == 'true' else False
-    g_settings['display_hide_nonworking'] = True if o.getSetting('display_hide_nonworking') == 'true' else False
-    g_settings['display_rom_available']   = True if o.getSetting('display_rom_available') == 'true' else False
-    g_settings['display_chd_available']   = True if o.getSetting('display_chd_available') == 'true' else False
+    g_settings['display_launcher_notify']    = True if o.getSetting('display_launcher_notify') == 'true' else False
+    g_settings['mame_view_mode']             = int(o.getSetting('mame_view_mode'))
+    g_settings['sl_view_mode']               = int(o.getSetting('sl_view_mode'))
+    g_settings['display_hide_Mature']        = True if o.getSetting('display_hide_Mature') == 'true' else False
+    g_settings['display_hide_BIOS']          = True if o.getSetting('display_hide_BIOS') == 'true' else False
+    g_settings['display_hide_imperfect']     = True if o.getSetting('display_hide_imperfect') == 'true' else False
+    g_settings['display_hide_nonworking']    = True if o.getSetting('display_hide_nonworking') == 'true' else False
+    g_settings['display_rom_available']      = True if o.getSetting('display_rom_available') == 'true' else False
+    g_settings['display_chd_available']      = True if o.getSetting('display_chd_available') == 'true' else False
+    g_settings['display_SL_items_available'] = True if o.getSetting('display_SL_items_available') == 'true' else False
+    g_settings['display_MAME_flags']         = True if o.getSetting('display_MAME_flags') == 'true' else False
+    g_settings['display_SL_flags']           = True if o.getSetting('display_SL_flags') == 'true' else False
 
     # --- Display II ---
     g_settings['display_main_filters']    = True if o.getSetting('display_main_filters') == 'true' else False
@@ -579,15 +585,12 @@ def get_settings():
     g_settings['display_utilities']       = True if o.getSetting('display_utilities') == 'true' else False
     g_settings['display_global_reports']  = True if o.getSetting('display_global_reports') == 'true' else False
 
-    # --- Display ---
-    g_settings['artwork_mame_icon']     = int(o.getSetting('artwork_mame_icon'))
-    g_settings['artwork_mame_fanart']   = int(o.getSetting('artwork_mame_fanart'))
-    g_settings['artwork_SL_icon']       = int(o.getSetting('artwork_SL_icon'))
-    g_settings['artwork_SL_fanart']     = int(o.getSetting('artwork_SL_fanart'))
-    g_settings['display_hide_trailers'] = True if o.getSetting('display_hide_trailers') == 'true' else False
-
-    # --- Utilities ---
-    # Call to RunPlugin() built-in function.
+    # --- Artwork / Assets ---
+    g_settings['display_hide_trailers']    = True if o.getSetting('display_hide_trailers') == 'true' else False
+    g_settings['artwork_mame_icon']        = int(o.getSetting('artwork_mame_icon'))
+    g_settings['artwork_mame_fanart']      = int(o.getSetting('artwork_mame_fanart'))
+    g_settings['artwork_SL_icon']          = int(o.getSetting('artwork_SL_icon'))
+    g_settings['artwork_SL_fanart']        = int(o.getSetting('artwork_SL_fanart'))
 
     # --- Advanced ---
     g_settings['media_state_action']             = int(o.getSetting('media_state_action'))
@@ -1908,10 +1911,10 @@ def render_catalog_parent_list(catalog_name, category_name):
 
     # --- Compute loading times ---
     catalog_t = l_cataloged_dic_end - l_cataloged_dic_start
-    render_t = l_render_db_end - l_render_db_start
-    assets_t = l_assets_db_end - l_assets_db_start
-    pclone_t = l_pclone_dic_end - l_pclone_dic_start
-    favs_t   = l_favs_end - l_favs_start
+    render_t  = l_render_db_end - l_render_db_start
+    assets_t  = l_assets_db_end - l_assets_db_start
+    pclone_t  = l_pclone_dic_end - l_pclone_dic_start
+    favs_t    = l_favs_end - l_favs_start
     loading_time = catalog_t + render_t + assets_t + pclone_t + favs_t
 
     # --- Check if catalog is empty ---
@@ -1924,28 +1927,26 @@ def render_catalog_parent_list(catalog_name, category_name):
     processing_ticks_start = time.time()
     r_list = render_process_machines(catalog_dic, catalog_name, category_name,
         render_db_dic, assets_db_dic, fav_machines, True, main_pclone_dic, False)
-    processing_ticks_end = time.time()
-    processing_time = processing_ticks_end - processing_ticks_start
+    processing_time = time.time() - processing_ticks_start
 
     # --- Commit ROMs ---
     rendering_ticks_start = time.time()
     set_Kodi_all_sorting_methods()
     render_commit_machines(r_list)
     xbmcplugin.endOfDirectory(g_addon_handle, succeeded = True, cacheToDisc = False)
-    rendering_ticks_end = time.time()
-    rendering_time = rendering_ticks_end - rendering_ticks_start
+    rendering_time = time.time() - rendering_ticks_start
 
     # --- DEBUG Data loading/rendering statistics ---
     total_time = loading_time + processing_time + rendering_time
-    # log_debug('Loading catalog    {0:.4f} s'.format(catalog_t))
-    # log_debug('Loading render db  {0:.4f} s'.format(render_t))
-    # log_debug('Loading assets db  {0:.4f} s'.format(assets_t))
-    # log_debug('Loading pclone dic {0:.4f} s'.format(pclone_t))
-    # log_debug('Loading MAME favs  {0:.4f} s'.format(favs_t))
-    log_debug('Loading time       {0:.4f} s'.format(loading_time))
-    log_debug('Processing time    {0:.4f} s'.format(processing_time))
-    log_debug('Rendering time     {0:.4f} s'.format(rendering_time))
-    log_debug('Total time         {0:.4f} s'.format(total_time))
+    # log_debug('Loading catalog     {0:.4f} s'.format(catalog_t))
+    # log_debug('Loading render db   {0:.4f} s'.format(render_t))
+    # log_debug('Loading assets db   {0:.4f} s'.format(assets_t))
+    # log_debug('Loading pclone dic  {0:.4f} s'.format(pclone_t))
+    # log_debug('Loading MAME favs   {0:.4f} s'.format(favs_t))
+    log_debug('Loading time        {0:.4f} s'.format(loading_time))
+    log_debug('Processing time     {0:.4f} s'.format(processing_time))
+    log_debug('Rendering time      {0:.4f} s'.format(rendering_time))
+    log_debug('Total time          {0:.4f} s'.format(total_time))
 
 #
 # Renders a list of MAME Clone machines (including parent).
@@ -2044,9 +2045,9 @@ def render_process_machines(catalog_dic, catalog_name, category_name,
     if catalog_name == 'None' and category_name == 'BIOS': display_hide_BIOS = False
     display_hide_nonworking = g_settings['display_hide_nonworking']
     display_hide_imperfect  = g_settings['display_hide_imperfect']
-    # >> Think about how to implement these settings ...
     display_rom_available = g_settings['display_rom_available']
-    display_chd_available  = g_settings['display_chd_available']
+    display_chd_available = g_settings['display_chd_available']
+    display_MAME_flags = g_settings['display_MAME_flags']
 
     # --- Traverse machines ---
     r_list = []
@@ -2069,45 +2070,38 @@ def render_process_machines(catalog_dic, catalog_name, category_name,
 
         # main_pclone_dic and num_clones only used when rendering parents.
         if flag_parent_list:
-            if machine_name in main_pclone_dic:
-                num_clones = len(main_pclone_dic[machine_name])
-            else:
-                num_clones = 0
+            num_clones = len(main_pclone_dic[machine_name]) if machine_name in main_pclone_dic else 0
 
-        # --- Render a Parent only list ---
+        # --- Render machine name string ---
         display_name = render_name
+        if display_MAME_flags:
+            # Mark Flags, BIOS, Devices, BIOS, Parent/Clone and Driver status.
+            flags_str = ' [COLOR skyblue]{}[/COLOR]'.format(m_assets['flags'])
+            if machine['isBIOS']: flags_str += ' [COLOR cyan][BIOS][/COLOR]'
+            if machine['isDevice']: flags_str += ' [COLOR violet][Dev][/COLOR]'
+            if machine['driver_status'] == 'imperfect':
+                flags_str += ' [COLOR yellow][Imp][/COLOR]'
+            elif machine['driver_status'] == 'preliminary':
+                flags_str += ' [COLOR red][Pre][/COLOR]'
+        else:
+            flags_str = ''
         if flag_parent_list and num_clones > 0:
-            # NOTE all machines here are parents
-
-            # --- Mark number of clones ---
-            display_name += ' [COLOR orange] ({0} clones)[/COLOR]'.format(num_clones)
-
-            # --- Mark Flags, BIOS, Devices, BIOS, Parent/Clone and Driver status ---
-            display_name += ' [COLOR skyblue]{0}[/COLOR]'.format(m_assets['flags'])
-            if machine['isBIOS']:   display_name += ' [COLOR cyan][BIOS][/COLOR]'
-            if machine['isDevice']: display_name += ' [COLOR violet][Dev][/COLOR]'
-            if   machine['driver_status'] == 'imperfect':   display_name += ' [COLOR yellow][Imp][/COLOR]'
-            elif machine['driver_status'] == 'preliminary': display_name += ' [COLOR red][Pre][/COLOR]'
-
-            # --- Skin flags ---
+            # All machines here are parents. Mark number of clones.
+            display_name += ' [COLOR orange] ({} clones)[/COLOR]'.format(num_clones)
+            # Machine flags.
+            if flags_str: display_name += flags_str
+            # Skin flags.
             if machine_name in fav_machines:
                 display_name += ' [COLOR violet][Fav][/COLOR]'
                 AEL_InFav_bool_value = AEL_INFAV_BOOL_VALUE_TRUE
             AEL_PClone_stat_value = AEL_PCLONE_STAT_VALUE_PARENT
         else:
-            # --- Mark Flags, BIOS, Devices, BIOS, Parent/Clone and Driver status ---
-            display_name += ' [COLOR skyblue]{0}[/COLOR]'.format(m_assets['flags'])
-            if machine['isBIOS']:   display_name += ' [COLOR cyan][BIOS][/COLOR]'
-            if machine['isDevice']: display_name += ' [COLOR violet][Dev][/COLOR]'
-            if machine['cloneof']:  display_name += ' [COLOR orange][Clo][/COLOR]'
-            if   machine['driver_status'] == 'imperfect':   display_name += ' [COLOR yellow][Imp][/COLOR]'
-            elif machine['driver_status'] == 'preliminary': display_name += ' [COLOR red][Pre][/COLOR]'
-
-            # --- Skin flags ---
+            if flags_str: display_name += flags_str
             if machine_name in fav_machines:
                 display_name += ' [COLOR violet][Fav][/COLOR]'
                 AEL_InFav_bool_value = AEL_INFAV_BOOL_VALUE_TRUE
             if machine['cloneof']:
+                display_name += ' [COLOR orange][Clo][/COLOR]'
                 AEL_PClone_stat_value = AEL_PCLONE_STAT_VALUE_CLONE
             else:
                 AEL_PClone_stat_value = AEL_PCLONE_STAT_VALUE_PARENT
@@ -2120,26 +2114,26 @@ def render_process_machines(catalog_dic, catalog_name, category_name,
         poster_path    = m_assets['3dbox'] if m_assets['3dbox'] else m_assets['flyer']
 
         # --- Create listitem row ---
-        # >> Make all the infolabels compatible with Advanced Emulator Launcher
+        # Make all the infolabels compatible with Advanced Emulator Launcher
         ICON_OVERLAY = 6
         r_dict['render_name'] = display_name
         if g_settings['display_hide_trailers']:
             r_dict['info'] = {
-                'title'   : display_name,     'year'    : machine['year'],
-                'genre'   : machine['genre'], 'studio'  : machine['manufacturer'],
-                'plot'    : m_assets['plot'],
-                'overlay' : ICON_OVERLAY
+                'title' : display_name, 'year' : machine['year'],
+                'genre' : machine['genre'], 'studio' : machine['manufacturer'],
+                'plot' : m_assets['plot'], 'overlay' : ICON_OVERLAY,
             }
         else:
             r_dict['info'] = {
-                'title'   : display_name,     'year'    : machine['year'],
-                'genre'   : machine['genre'], 'studio'  : machine['manufacturer'],
-                'plot'    : m_assets['plot'], 'trailer' : m_assets['trailer'],
-                'overlay' : ICON_OVERLAY
+                'title' : display_name, 'year' : machine['year'],
+                'genre' : machine['genre'], 'studio' : machine['manufacturer'],
+                'plot' : m_assets['plot'], 'overlay' : ICON_OVERLAY,
+                'trailer' : m_assets['trailer'],
             }
         r_dict['props'] = {
             'nplayers' : machine['nplayers'],
             'platform' : 'MAME',
+            'history' : m_assets['history'],
             AEL_PCLONE_STAT_LABEL : AEL_PClone_stat_value,
             AEL_INFAV_BOOL_LABEL : AEL_InFav_bool_value,
         }
@@ -2160,7 +2154,7 @@ def render_process_machines(catalog_dic, catalog_name, category_name,
         URL_view     = misc_url_2_arg_RunPlugin('command', 'VIEW', 'machine', machine_name)
         URL_fav      = misc_url_2_arg_RunPlugin('command', 'ADD_MAME_FAV', 'machine', machine_name)
         if flag_parent_list and num_clones > 0:
-            URL_clones = misc_url_4_arg_RunPlugin('command', 'EXEC_SHOW_MAME_CLONES', 
+            URL_clones = misc_url_4_arg_RunPlugin('command', 'EXEC_SHOW_MAME_CLONES',
                 'catalog', catalog_name, 'category', category_name, 'parent', machine_name)
             commands = [
                 ('Info / Utils', URL_view_DAT),
@@ -2168,7 +2162,7 @@ def render_process_machines(catalog_dic, catalog_name, category_name,
                 ('Show clones', URL_clones),
                 ('Add to MAME Favourites', URL_fav),
                 ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-                ('AML addon settings', 'Addon.OpenSettings({0})'.format(__addon_id__)),
+                ('AML addon settings', 'Addon.OpenSettings({})'.format(__addon_id__)),
             ]
         else:
             commands = [
@@ -2176,11 +2170,11 @@ def render_process_machines(catalog_dic, catalog_name, category_name,
                 ('View / Audit', URL_view),
                 ('Add to MAME Favourites', URL_fav),
                 ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-                ('AML addon settings', 'Addon.OpenSettings({0})'.format(__addon_id__)),
+                ('AML addon settings', 'Addon.OpenSettings({})'.format(__addon_id__)),
             ]
         r_dict['context'] = commands
 
-        # --- Add row to the list ---
+        # Add row to the list.
         r_dict['URL'] = misc_url_2_arg('command', 'LAUNCH', 'machine', machine_name)
         r_list.append(r_dict)
 
@@ -2193,8 +2187,8 @@ def render_process_machines(catalog_dic, catalog_name, category_name,
 def render_commit_machines(r_list):
     listitem_list = []
 
-    # Kodi Leia and up.
     if kodi_running_version >= KODI_VERSION_LEIA:
+        # Kodi Leia and up.
         log_debug('Rendering machine list in Kodi Leia and up.')
         for r_dict in r_list:
             # --- New offscreen parameter in Leia ---
@@ -2209,9 +2203,8 @@ def render_commit_machines(r_list):
             listitem.setArt(r_dict['art'])
             listitem.addContextMenuItems(r_dict['context'])
             listitem_list.append((r_dict['URL'], listitem, False))
-
-    # Kodi Krypton and down.
     else:
+        # Kodi Krypton and down.
         log_debug('Rendering machine list in Kodi Krypton and down.')
         for r_dict in r_list:
             listitem = xbmcgui.ListItem(r_dict['render_name'])
@@ -2247,7 +2240,7 @@ def command_context_display_settings(catalog_name, category_name):
                               'Default Banner', 'Default Poster',
                               'Default Clearlogo'])
     if menu_item < 0: return
-    
+
     # --- Display settings ---
     if menu_item == 0:
         # >> Krypton feature: preselect the current item.
@@ -2325,7 +2318,7 @@ def render_SL_ROMs(SL_name):
         return
 
     # Load ListItem properties (Not used at the moment)
-    # SL_properties_dic = fs_load_JSON_file_dic(g_PATHS.SL_MACHINES_PROP_PATH.getPath()) 
+    # SL_properties_dic = fs_load_JSON_file_dic(g_PATHS.SL_MACHINES_PROP_PATH.getPath())
     # prop_dic = SL_properties_dic[SL_name]
     # Global properties
     view_mode_property = g_settings['sl_view_mode']
@@ -2438,16 +2431,27 @@ def render_SL_list_row(SL_name, SL):
     URL = misc_url_2_arg('catalog', 'SL', 'category', SL_name)
     xbmcplugin.addDirectoryItem(g_addon_handle, URL, listitem, isFolder = True)
 
+# TODO: render flag is SL item is in Favourites.
 def render_SL_ROM_row(SL_name, rom_name, ROM, assets, flag_parent_list = False, num_clones = 0):
+    only_display_SL_items_available = g_settings['display_SL_items_available']
+    display_SL_flags = g_settings['display_SL_flags']
+
+    # Skip SL item rendering if not available. Only skip SL items when the scanner
+    # has been done, always render if status is unknown.
+    item_not_available = ROM['status_ROM'] == 'r' or ROM['status_CHD'] == 'c'
+    if only_display_SL_items_available and item_not_available: return
     display_name = ROM['description']
     if flag_parent_list and num_clones > 0:
-        display_name += ' [COLOR orange] ({0} clones)[/COLOR]'.format(num_clones)
-        status = '{0}{1}'.format(ROM['status_ROM'], ROM['status_CHD'])
-        display_name += ' [COLOR skyblue]{0}[/COLOR]'.format(status)
+        # Print (n clones) and '--' flags.
+        display_name += ' [COLOR orange] ({} clones)[/COLOR]'.format(num_clones)
+        if display_SL_flags:
+            status = '{}{}'.format(ROM['status_ROM'], ROM['status_CHD'])
+            display_name += ' [COLOR skyblue]{}[/COLOR]'.format(status)
     else:
-        # --- Mark flags and status ---
-        status = '{0}{1}'.format(ROM['status_ROM'], ROM['status_CHD'])
-        display_name += ' [COLOR skyblue]{0}[/COLOR]'.format(status)
+        # Print '--' flags and '[Clo]' flag.
+        if display_SL_flags:
+            status = '{}{}'.format(ROM['status_ROM'], ROM['status_CHD'])
+            display_name += ' [COLOR skyblue]{}[/COLOR]'.format(status)
         if ROM['cloneof']: display_name += ' [COLOR orange][Clo][/COLOR]'
 
     # --- Assets/artwork ---
@@ -2458,20 +2462,22 @@ def render_SL_ROM_row(SL_name, rom_name, ROM, assets, flag_parent_list = False, 
     # --- Create listitem row ---
     ICON_OVERLAY = 6
     listitem = xbmcgui.ListItem(display_name)
-    # >> Make all the infolabels compatible with Advanced Emulator Launcher
+    # Make all the infolabels compatible with Advanced Emulator Launcher
     if g_settings['display_hide_trailers']:
-        listitem.setInfo('video', {'title'   : display_name,      'year'    : ROM['year'],
-                                   'genre'   : ROM['genre'],      'studio'  : ROM['publisher'],
-                                   'plot'    : ROM['plot'],       'overlay' : ICON_OVERLAY })
+        listitem.setInfo('video', {
+            'title'   : display_name,      'year'    : ROM['year'],
+            'genre'   : ROM['genre'],      'studio'  : ROM['publisher'],
+            'plot'    : ROM['plot'],       'overlay' : ICON_OVERLAY })
     else:
-        listitem.setInfo('video', {'title'   : display_name,      'year'    : ROM['year'],
-                                   'genre'   : ROM['genre'],      'studio'  : ROM['publisher'],
-                                   'plot'    : ROM['plot'],       'overlay' : ICON_OVERLAY,
-                                   'trailer' : assets['trailer'] })
+        listitem.setInfo('video', {
+            'title'   : display_name,      'year'    : ROM['year'],
+            'genre'   : ROM['genre'],      'studio'  : ROM['publisher'],
+            'plot'    : ROM['plot'],       'overlay' : ICON_OVERLAY,
+            'trailer' : assets['trailer'] })
     listitem.setProperty('platform', 'MAME Software List')
 
     # --- Assets ---
-    # >> AEL custom artwork fields
+    # AEL custom artwork fields.
     listitem.setArt({
         'title' : assets['title'], 'snap' : assets['snap'],
         'boxfront' : assets['boxfront'], '3dbox' : assets['3dbox'],
@@ -2687,7 +2693,7 @@ def command_context_display_settings_SL(SL_name):
     dialog = xbmcgui.Dialog()
     menu_item = dialog.select('Display settings',
                              ['Display mode (currently {0})'.format(dmode_str),
-                              'Default Icon', 'Default Fanart', 
+                              'Default Icon', 'Default Fanart',
                               'Default Banner', 'Default Poster', 'Default Clearlogo'])
     if menu_item < 0: return
 
@@ -2769,8 +2775,8 @@ def command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
         # NOTE A ROM loading factory need to be coded to deal with the different ROM
         #      locations to avoid duplicate code. Have a look at ACTION_VIEW_MACHINE_DATA
         #      in function _command_context_view()
-        # Fanart_str = 
-        # Manual_str = 
+        # Fanart_str =
+        # Manual_str =
 
     elif view_type == VIEW_SL_ROM:
         History_idx_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_IDX_PATH.getPath())
@@ -2845,7 +2851,7 @@ def command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
                 return
             m_str = History_idx_dic['mame']['machines'][machine_name]
             display_name, db_list, db_machine = m_str.split('|')
-            DAT_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_DB_PATH.getPath())
+            History_DAT_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_DB_PATH.getPath())
             t_str = ('History DAT for MAME machine [COLOR=orange]{}[/COLOR] '
                 '(DB entry [COLOR=orange]{}[/COLOR])')
             window_title = t_str.format(machine_name, db_machine)
@@ -2858,11 +2864,11 @@ def command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
                 return
             m_str = History_idx_dic[SL_name]['machines'][SL_ROM]
             display_name, db_list, db_machine = m_str.split('|')
-            DAT_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_DB_PATH.getPath())
+            History_DAT_dic = fs_load_JSON_file_dic(g_PATHS.HISTORY_DB_PATH.getPath())
             t_str = ('History DAT for SL [COLOR=orange]{}[/COLOR] item [COLOR=orange]{}[/COLOR] '
                 '(DB entry [COLOR=orange]{}[/COLOR] / [COLOR=orange]{}[/COLOR])')
             window_title = t_str.format(SL_name, SL_ROM, db_list, db_machine)
-        display_text_window(window_title, DAT_dic[db_list][db_machine])
+        display_text_window(window_title, History_DAT_dic[db_list][db_machine])
 
     elif action == ACTION_VIEW_MAMEINFO:
         if machine_name not in Mameinfo_idx_dic['mame']:
@@ -2919,10 +2925,10 @@ def command_context_view_DAT(machine_name, SL_name, SL_ROM, location):
     # --- View Manual ---
     # When Pictures menu is clicked on Home, the window pictures (MyPics.xml) opens.
     # Pictures are browsed with the pictures window. When an image is clicked with ENTER the
-    # window changes to slideshow (SlideShow.xml) and the pictures are displayed in full 
+    # window changes to slideshow (SlideShow.xml) and the pictures are displayed in full
     # screen with not pan/zoom effects. Pictures can be changed with the arrow keys (they
-    # do not change automatically). The slideshow can also be started from the side menu 
-    # "View slideshow". Initiated this way, the slideshow has a pan/zooming effects and all 
+    # do not change automatically). The slideshow can also be started from the side menu
+    # "View slideshow". Initiated this way, the slideshow has a pan/zooming effects and all
     # pictures in the list are changed every few seconds.
     #
     # Use the builtin function SlideShow("{0}",pause) to show a set of pictures in full screen.
@@ -3595,7 +3601,7 @@ def command_context_view(machine_name, SL_name, SL_ROM, location):
         assets = fs_get_machine_assets_db_hash(g_PATHS, machine_name)
         pDialog.update(100, pdialog_line1)
         pDialog.close()
-            
+
         if not assets['manual']:
             kodi_dialog_OK('Manual not found in database.')
             return
@@ -3753,7 +3759,7 @@ def command_context_utilities(catalog_name, category_name):
 
         # >> Ask user for a path to export the launcher configuration
         vlauncher_str_name = 'AML_VLauncher_' + catalog_name + '_' + category_name + '.xml'
-        dir_path = xbmcgui.Dialog().browse(0, 'Select XML export directory', 'files', 
+        dir_path = xbmcgui.Dialog().browse(0, 'Select XML export directory', 'files',
                                            '', False, False).decode('utf-8')
         if not dir_path: return
         export_FN = FileName(dir_path).pjoin(vlauncher_str_name)
@@ -3827,7 +3833,7 @@ def render_fav_machine_row(m_name, machine, m_assets, location):
 
     # --- Mark Flags, BIOS, Devices, BIOS, Parent/Clone and Driver status ---
     display_name = machine['description']
-    display_name += ' [COLOR skyblue]{0}[/COLOR]'.format(m_assets['flags'])            
+    display_name += ' [COLOR skyblue]{0}[/COLOR]'.format(m_assets['flags'])
     if machine['isBIOS']:   display_name += ' [COLOR cyan][BIOS][/COLOR]'
     if machine['isDevice']: display_name += ' [COLOR violet][Dev][/COLOR]'
     if machine['cloneof']:  display_name += ' [COLOR orange][Clo][/COLOR]'
@@ -4558,7 +4564,7 @@ def command_context_manage_sl_fav(SL_name, ROM_name):
         SL_machine_desc_list = []
         SL_machine_names_list.append('')
         SL_machine_desc_list.append('[ Not set ]')
-        for SL_machine in SL_machine_list: 
+        for SL_machine in SL_machine_list:
             SL_machine_names_list.append(SL_machine['machine'])
             SL_machine_desc_list.append(SL_machine['description'])
         # Krypton feature: preselect current machine.
@@ -5232,7 +5238,7 @@ def render_custom_filter_machines(filter_name):
     # log_debug('Loading catalog   {0:.4f} s'.format(catalog_t))
     # log_debug('Loading render db {0:.4f} s'.format(render_t))
     # log_debug('Loading assets db {0:.4f} s'.format(assets_t))
-    # log_debug('Loading MAME favs {0:.4f} s'.format(favs_t))    
+    # log_debug('Loading MAME favs {0:.4f} s'.format(favs_t))
     log_debug('Loading time      {0:.4f} s'.format(loading_time))
     log_debug('Processing time   {0:.4f} s'.format(processing_time))
     log_debug('Rendering time    {0:.4f} s'.format(rendering_ticks_end - rendering_ticks_start))
@@ -5657,7 +5663,7 @@ def command_context_setup_plugin():
 
         # --- Regenerate the render and assets cache ---
         if g_settings['debug_enable_MAME_render_cache']:
-            fs_build_render_cache(g_PATHS, g_settings, control_dic, 
+            fs_build_render_cache(g_PATHS, g_settings, control_dic,
                 db_dic['cache_index'], db_dic['render'])
         if g_settings['debug_enable_MAME_asset_cache']:
             fs_build_asset_cache(g_PATHS, g_settings, control_dic,
@@ -5699,10 +5705,10 @@ def command_context_setup_plugin():
             ['Sample_ZIP_list', 'ROM List index', g_PATHS.ROM_SET_SAM_LIST_DB_PATH.getPath()],
             ['CHD_archive_list', 'CHD list index', g_PATHS.ROM_SET_CHD_LIST_DB_PATH.getPath()],
             ['cache_index', 'MAME cache index', g_PATHS.CACHE_INDEX_PATH.getPath()],
-            ['history_idx_dic', 'History DAT', g_PATHS.HISTORY_IDX_PATH.getPath()],
-            ['mameinfo_idx_dic', 'Mameinfo DAT', g_PATHS.MAMEINFO_IDX_PATH.getPath()],
-            ['gameinit_idx_list', 'Gameinit DAT', g_PATHS.GAMEINIT_IDX_PATH.getPath()],
-            ['command_idx_list', 'Command DAT', g_PATHS.COMMAND_IDX_PATH.getPath()],
+            ['history_idx_dic', 'History DAT index', g_PATHS.HISTORY_IDX_PATH.getPath()],
+            ['mameinfo_idx_dic', 'Mameinfo DAT index', g_PATHS.MAMEINFO_IDX_PATH.getPath()],
+            ['gameinit_idx_list', 'Gameinit DAT index', g_PATHS.GAMEINIT_IDX_PATH.getPath()],
+            ['command_idx_list', 'Command DAT index', g_PATHS.COMMAND_IDX_PATH.getPath()],
         ]
         db_dic = fs_load_files(db_files)
         # For compatibility with "All in one step" and "Step by step" functions.
@@ -6132,7 +6138,7 @@ def command_context_setup_plugin():
             db_dic = fs_load_files(db_files)
 
             # --- Build MAME catalog ---
-            # At this time the asset database will be empty (scanner has not been run). However, 
+            # At this time the asset database will be empty (scanner has not been run). However,
             # the asset cache with an empty database is required to render the machines in the catalogs.
             # 1) Creates cache_index_dic and saves it.
             # 2) Updates control_dic and saves it.
@@ -6303,10 +6309,10 @@ def command_context_setup_plugin():
                 ['render', 'MAME machines Render', g_PATHS.RENDER_DB_PATH.getPath()],
                 ['assets', 'MAME machine Assets', g_PATHS.MAIN_ASSETS_DB_PATH.getPath()],
                 ['cache_index', 'MAME cache index', g_PATHS.CACHE_INDEX_PATH.getPath()],
-                ['history_idx_dic', 'History DAT', g_PATHS.HISTORY_IDX_PATH.getPath()],
-                ['mameinfo_idx_dic', 'Mameinfo DAT', g_PATHS.MAMEINFO_IDX_PATH.getPath()],
-                ['gameinit_idx_list', 'Gameinit DAT', g_PATHS.GAMEINIT_IDX_PATH.getPath()],
-                ['command_idx_list', 'Command DAT', g_PATHS.COMMAND_IDX_PATH.getPath()],
+                ['history_idx_dic', 'History DAT index', g_PATHS.HISTORY_IDX_PATH.getPath()],
+                ['mameinfo_idx_dic', 'Mameinfo DAT index', g_PATHS.MAMEINFO_IDX_PATH.getPath()],
+                ['gameinit_idx_list', 'Gameinit DAT index', g_PATHS.GAMEINIT_IDX_PATH.getPath()],
+                ['command_idx_list', 'Command DAT index', g_PATHS.COMMAND_IDX_PATH.getPath()],
             ]
             db_dic = fs_load_files(db_files)
 
@@ -7314,11 +7320,11 @@ def run_machine(machine_name, location):
 #   B) Machine has only one device with a valid <instance> and SL ROM has multiple parts.
 #      In this case, user should choose which part to plug.
 #      Currently not implemented and launch using easy syntax.
-#      Valid examples: 
+#      Valid examples:
 #      Launch as: $ mame machine_name -part_attrib_name SL_ROM_name
 #
 #   C) Machine has two or more devices with a valid <instance> and SL ROM has only one part.
-#      Traverse the machine devices until there is a match of the <part> interface attribute 
+#      Traverse the machine devices until there is a match of the <part> interface attribute
 #      with the <machine> interface attribute. After the match is found, check also that
 #      SL ROM <part> name attribute matches with machine <device> <intance> briefname attribute.
 #      Valid examples:
@@ -7515,12 +7521,12 @@ def run_SL_machine(SL_name, SL_ROM_name, location):
     # >> Display some DEBUG information.
     kodi_dialog_OK('Launch case {0}. '.format(launch_case) +
                    'Machine has {0} device interface/s and '.format(num_machine_interfaces) +
-                   'SL ROM has {0} part/s. '.format(num_SL_ROM_parts) + 
+                   'SL ROM has {0} part/s. '.format(num_SL_ROM_parts) +
                    'Media name is "{0}"'.format(media_name))
 
     # --- Launch machine using subprocess module ---
     (mame_dir, mame_exec) = os.path.split(mame_prog_FN.getPath())
-    log_debug('run_SL_machine() mame_prog_FN "{0}"'.format(mame_prog_FN.getPath()))    
+    log_debug('run_SL_machine() mame_prog_FN "{0}"'.format(mame_prog_FN.getPath()))
     log_debug('run_SL_machine() mame_dir     "{0}"'.format(mame_dir))
     log_debug('run_SL_machine() mame_exec    "{0}"'.format(mame_exec))
     log_debug('run_SL_machine() launch_machine_name "{0}"'.format(launch_machine_name))
@@ -7707,7 +7713,8 @@ def run_after_execution():
     log_verb('run_after_execution() g_flag_kodi_was_playing is {0}'.format(g_flag_kodi_was_playing))
     if g_flag_kodi_was_playing and media_state_action == 1:
         log_verb('run_after_execution() Executing built-in PlayerControl(play)')
-        xbmc.executebuiltin('PlayerControl(play)')
+        # When Kodi is in "pause" mode, resume is used to continue play.
+        xbmc.executebuiltin('PlayerControl(resume)')
     log_debug('run_after_execution() Function ENDS')
 
 # ---------------------------------------------------------------------------------------------
@@ -7765,7 +7772,7 @@ def misc_url_2_arg(arg_name_1, arg_value_1, arg_name_2, arg_value_2):
     return '{0}?{1}={2}&{3}={4}'.format(
         g_base_url, arg_name_1, arg_value_1_escaped, arg_name_2, arg_value_2_escaped)
 
-def misc_url_3_arg(arg_name_1, arg_value_1, arg_name_2, arg_value_2, 
+def misc_url_3_arg(arg_name_1, arg_value_1, arg_name_2, arg_value_2,
                           arg_name_3, arg_value_3):
     arg_value_1_escaped = arg_value_1.replace('&', '%26')
     arg_value_2_escaped = arg_value_2.replace('&', '%26')
@@ -7776,7 +7783,7 @@ def misc_url_3_arg(arg_name_1, arg_value_1, arg_name_2, arg_value_2,
         arg_name_1, arg_value_1_escaped, arg_name_2, arg_value_2_escaped,
         arg_name_3, arg_value_3_escaped)
 
-def misc_url_4_arg(arg_name_1, arg_value_1, arg_name_2, arg_value_2, 
+def misc_url_4_arg(arg_name_1, arg_value_1, arg_name_2, arg_value_2,
                           arg_name_3, arg_value_3, arg_name_4, arg_value_4):
     arg_value_1_escaped = arg_value_1.replace('&', '%26')
     arg_value_2_escaped = arg_value_2.replace('&', '%26')
@@ -7816,7 +7823,7 @@ def misc_url_3_arg_RunPlugin(arg_n_1, arg_v_1, arg_n_2, arg_v_2, arg_n_3, arg_v_
     return 'XBMC.RunPlugin({0}?{1}={2}&{3}={4}&{5}={6})'.format(
         g_base_url, arg_n_1, arg_v_1_esc, arg_n_2, arg_v_2_esc, arg_n_3, arg_v_3_esc)
 
-def misc_url_4_arg_RunPlugin(arg_n_1, arg_v_1, arg_n_2, arg_v_2, 
+def misc_url_4_arg_RunPlugin(arg_n_1, arg_v_1, arg_n_2, arg_v_2,
                               arg_n_3, arg_v_3, arg_n_4, arg_v_4):
     arg_v_1_esc = arg_v_1.replace('&', '%26')
     arg_v_2_esc = arg_v_2.replace('&', '%26')

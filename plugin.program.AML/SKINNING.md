@@ -15,6 +15,7 @@ AML metadata/assets model is as much compatible with [Advanced Emulator Launcher
 | Plot          | plot          |                   | `$INFO[ListItem.Plot]`               |
 | NPlayers      |               | nplayers          | `$INFO[ListItem.Property(nplayers)]` |
 | Platform      |               | platform          | `$INFO[ListItem.Property(platform)]` |
+| History.DAT   |               | history           | `$INFO[ListItem.Property(history)]`  |
 
 ## MAME machine asset labels ##
 

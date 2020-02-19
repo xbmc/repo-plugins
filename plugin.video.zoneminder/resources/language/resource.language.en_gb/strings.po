@@ -17,50 +17,54 @@ msgstr ""
 #
 # Configuration Options
 #
-msgctxt "#31000"
+msgctxt "#32000"
 msgid "Connection"
 msgstr ""
 
-msgctxt "#31001"
+msgctxt "#32001"
 msgid "Base URL"
 msgstr ""
 
-msgctxt "#31002"
+msgctxt "#32002"
 msgid "Auth Enabled"
 msgstr ""
 
-msgctxt "#31003"
+msgctxt "#32003"
 msgid "Username"
 msgstr ""
 
-msgctxt "#31004"
+msgctxt "#32004"
 msgid "Password"
 msgstr ""
 
-msgctxt "#31005"
+msgctxt "#32005"
 msgid "Frames per second (max)"
 msgstr ""
 
-msgctxt "#31006"
+msgctxt "#32006"
 msgid "ZM path"
 msgstr ""
 
-msgctxt "#31007"
+msgctxt "#32007"
 msgid "CGI Path"
+msgstr ""
+
+msgctxt "#32008"
+msgid "API Version"
 msgstr ""
 
 #
 # Interface Strings
 #
-msgctxt "#32000"
+msgctxt "#33000"
 msgid "Events"
 msgstr ""
 
-msgctxt "#32001"
+msgctxt "#33001"
 msgid "Monitors"
 msgstr ""
 
-msgctxt "#32002"
+msgctxt "#33002"
 msgid "Montage"
 msgstr ""
 
@@ -68,10 +72,10 @@ msgstr ""
 #
 # Error Messages
 #
-msgctxt "#33000"
+msgctxt "#34000"
 msgid "Zoneminder Connection Error"
 msgstr ""
 
-msgctxt "#33001"
+msgctxt "#34001"
 msgid "Login failed"
 msgstr ""

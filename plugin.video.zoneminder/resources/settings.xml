@@ -1,11 +1,12 @@
 <settings>
- <category label="31000">
-  <setting id="base_url" type="text" label="31001" default="http://zmhost:8080"/>
-  <setting id="zm_path" type="text" label="31006" default="zm" />
-  <setting id="cgi_path" type="text" label="31007" default="zm/cgi-bin" />
-  <setting id="is_authenticated" type="bool" label="31002" default="false"/>
-  <setting id="username" type="text" label="31003" default="admin" enable="eq(-1,true)"/>
-  <setting id="password" type="text" label="31004" default="admin" enable="eq(-2,true)" option="hidden" />
-  <setting id="fps" type="labelenum" label="31005" default="30" values="1|2|5|10|15|20|25|30|50"/>
+ <category label="32000">
+  <setting id="base_url" type="text" label="32001" default="http://zmhost:8080"/>
+  <setting id="zm_path" type="text" label="32006" default="zm" />
+  <setting id="cgi_path" type="text" label="32007" default="zm/cgi-bin" />
+  <setting id="api_version" type="labelenum" label="32008" default="2.0" values="1.0|2.0"/>
+  <setting id="is_authenticated" type="bool" label="32002" default="false"/>
+  <setting id="username" type="text" label="32003" default="admin" enable="eq(-1,true)"/>
+  <setting id="password" type="text" label="32004" default="admin" enable="eq(-2,true)" option="hidden" />
+  <setting id="fps" type="labelenum" label="32005" default="30" values="1|2|5|10|15|20|25|30|50"/>
  </category>
 </settings>

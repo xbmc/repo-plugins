@@ -1,3 +1,8 @@
+2.4.3
+- handle exclusive cloudcasts
+- removed obsolete menu items
+- fixed local resolver
+
 2.4.2
 - fixed local resolver
 - added german language

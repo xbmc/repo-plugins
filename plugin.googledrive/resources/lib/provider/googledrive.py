@@ -27,7 +27,16 @@ from clouddrive.common.ui.logger import Logger
 from clouddrive.common.cache.cache import Cache
 from clouddrive.common.ui.utils import KodiUtils
 from clouddrive.common.exception import RequestException, ExceptionUtils
-from urllib2 import HTTPError
+try:
+    from urllib.error import HTTPError
+except ImportError:
+    from urllib2 import HTTPError
+
+try:
+    long
+except NameError:
+    long = int
+
 
 class GoogleDrive(Provider):
     _default_parameters = {'spaces': 'drive', 'prettyPrint': 'false'}
@@ -153,7 +162,7 @@ class GoogleDrive(Provider):
     def search(self, query, item_driveid=None, item_id=None, on_items_page_completed=None):
         item_driveid = Utils.default(item_driveid, self._driveid)
         parameters = self.prepare_parameters()
-        parameters['fields'] = 'files(%s)' % self._get_field_parameters()
+        parameters['fields'] = 'files(%s),kind,nextPageToken' % self._get_field_parameters()
         query = 'fullText contains \'%s\'' % Utils.str(query)
         if item_id:
             query += ' and \'%s\' in parents' % item_id
@@ -244,8 +253,12 @@ class GoogleDrive(Provider):
             }
         if is_media_items:
             item['url'] = f['baseUrl'] + '=d'
+            item['thumbnail'] = f['baseUrl'] + '=w100-h100'
             if 'mediaMetadata' in f:
+                
                 metadata = f['mediaMetadata']
+                if 'video' in metadata:
+                    item['url'] += 'v'
                 item['video'] = {
                     'width' : Utils.get_safe_value(metadata, 'width'),
                     'height' : Utils.get_safe_value(metadata, 'height')
@@ -275,14 +288,14 @@ class GoogleDrive(Provider):
             else:
                 parameters = {
                     'alt': 'media',
-                    'access_token': self.get_access_tokens()['access_token']
                 }
                 url = self._get_api_url() + '/files/%s' % item['id']
                 if 'size' not in f and item['mimetype'] == 'application/vnd.google-apps.document':
                     url += '/export'
                     parameters['mimeType'] = Utils.default(Utils.get_mimetype_by_extension(item['name_extension']), Utils.get_mimetype_by_extension('pdf'))
+                url += '?%s' % urllib.urlencode(parameters)
                 item['download_info'] =  {
-                    'url' : url + '?%s' % urllib.urlencode(parameters)
+                    'url' : url
                 }
         return item
     
@@ -328,7 +341,7 @@ class GoogleDrive(Provider):
         files = self.get('/files', parameters = parameters)
         for f in files['files']:
             subtitle = self._extract_item(f, include_download_info)
-            if subtitle['name_extension'] == 'srt' or subtitle['name_extension'] == 'sub' or subtitle['name_extension'] == 'sbv':
+            if subtitle['name_extension'].lower() in ('srt','idx','sub','sbv','ass','ssa','smi'):
                 subtitles.append(subtitle)
         return subtitles
     

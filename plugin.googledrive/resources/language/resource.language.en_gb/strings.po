@@ -127,3 +127,19 @@ msgstr ""
 msgctxt "#32069"
 msgid "     Source server port  -  http://localhost:<port>/source"
 msgstr ""
+
+msgctxt "#32070"
+msgid "Default stream quality"
+msgstr ""
+
+msgctxt "#32071"
+msgid "Check for Google ban"
+msgstr ""
+
+msgctxt "#32072"
+msgid "Banned: %s"
+msgstr ""
+
+msgctxt "#32073"
+msgid "Response code: %s"
+msgstr ""

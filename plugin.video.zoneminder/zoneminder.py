@@ -25,8 +25,9 @@ _language = _addon.getLocalizedString
 _base_url = _addon.getSetting('base_url').strip()
 _zm_path = _addon.getSetting('zm_path').strip()
 _cgi_path = _addon.getSetting('cgi_path').strip()
+_api_version = _addon.getSetting('api_version')
 _auth_token = None
-_auth_cookies = None
+_auth_token_param = None
 
 def get_url(**kwargs):
     """
@@ -61,28 +62,34 @@ def login ():
     login_url = '{base_url}/{zm_path}/api/host/login.json'.format(base_url=_base_url, zm_path=_zm_path)
     creds = {
                 'user': _addon.getSetting('username').strip(),
-                'pass': _addon.getSetting('password').strip(),
-                'stateful': 1
+                'pass': _addon.getSetting('password').strip()
             }
     try:
         r = requests.post(login_url, data=creds)
     except requests.exceptions.RequestException as e:
-        error_message(title=_language(33000), message=str(e))
+        error_message(title=_language(34000), message=str(e))
 
     if r.status_code != 200:
         # Login failed
-        error_message(title=_language(33001), message='{}: {}'.format(r.status_code, r.reason))
+        error_message(title=_language(34001), message='{}: {}'.format(r.status_code, r.reason))
 
     j = json.loads(r.text)
 
-    auth_token = j['credentials']
-    auth_cookies = r.cookies
-    return auth_token, auth_cookies
+    if _api_version == "1.0":
+        auth_token = j['credentials'].split('=')[1]
+        auth_token_param = j['credentials']
+    elif _api_version == "2.0":
+        auth_token = j['access_token']
+        auth_token_param = 'token={}'.format(j['access_token'])
+    else:
+        error_message(title=_language(34000), message='Unknown API version {}'.format(_api_version))
+
+    return auth_token, auth_token_param
 
 def get_active_monitors ():
     # Get monitors from Zoneminder API
-    monitors_url = '{base_url}/{zm_path}/api/monitors.json'.format(base_url=_base_url, zm_path=_zm_path)
-    r = requests.get(monitors_url, cookies=_auth_cookies)
+    monitors_url = '{}/{}/api/monitors.json?{}'.format(_base_url, _zm_path, _auth_token_param)
+    r = requests.get(monitors_url)
     # Parse JSON response
     j = json.loads(r.text)
 
@@ -104,7 +111,7 @@ def get_active_monitors ():
             height=monitor['Height'],
             fps=_addon.getSetting('fps'),
             monitor_id=monitor['Id'],
-            auth=_auth_token
+            auth=_auth_token_param
             )
         
         active_monitor['thumb'] = '{base_url}/{cgi_path}/nph-zms?scale=auto&width={width}&height={height}&mode=single&maxfps={fps}&monitor={monitor_id}&{auth}'.format( 
@@ -114,7 +121,7 @@ def get_active_monitors ():
             height=monitor['Height'],
             fps=_addon.getSetting('fps'),
             monitor_id=monitor['Id'],
-            auth=_auth_token
+            auth=_auth_token_param
             )
         
         active_monitors.append(active_monitor)
@@ -130,7 +137,7 @@ def list_monitors():
     """
     # Set plugin category. It is displayed in some skins as the name
     # of the current section.
-    xbmcplugin.setPluginCategory(_handle, _language(32001))
+    xbmcplugin.setPluginCategory(_handle, _language(33001))
     # Set plugin content. It allows Kodi to select appropriate views
     # for this type of content.
     xbmcplugin.setContent(_handle, 'videos')
@@ -173,8 +180,8 @@ def router(paramstring):
     :type paramstring: str
     """
     # Log into Zoneminder
-    global _auth_token, _auth_cookies
-    _auth_token, _auth_cookies = login()
+    global _auth_token, _auth_token_param
+    _auth_token, _auth_token_param = login()
 
     # Parse a URL-encoded paramstring to the dictionary of
     # {<parameter>: <value>} elements

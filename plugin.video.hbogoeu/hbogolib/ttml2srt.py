@@ -8,7 +8,7 @@ from __future__ import absolute_import, division
 
 import sys
 
-from defusedxml import minidom
+from defusedxml import minidom  # type: ignore
 
 
 class Ttml2srt(object):
@@ -78,8 +78,7 @@ class Ttml2srt(object):
         except KeyError:
             tick_rate = None
 
-        lines = [i for i in data.getElementsByTagName('p') if 'begin' \
-                 in list(i.attributes.keys())]
+        lines = [i for i in data.getElementsByTagName('p') if 'begin' in list(i.attributes.keys())]
 
         return {'fps': fps, 'tick_rate': tick_rate, 'lines': lines, 'lang': lang}
 

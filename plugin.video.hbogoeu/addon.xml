@@ -1,4 +1,4 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.3.5">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.3.8">
   <requires>
     <import addon="xbmc.python" version="2.26.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
@@ -44,21 +44,13 @@ If an official app is available for your platform, use it instead of this.
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-v.2.3.5
-- If not currently available, show available from date and time in the plot
-- BUGFIX: Correct available from date and time
-- Detect not available content before attempt play (show dialog when the content will be available)
-- On playback start long inactivity error, silently re-login and retry playback automatically
-- Request caching                           
-- Optimize re-login on unauthorized
-- Local SQlight database
-- Search history
-- external add-ons can search now (ability to create TMDB Helper Player)
-- improved search
-- double new line fix in ttml2srt on some subtitles
-- Translations update
-- Set content type for listings based on the media type of the majority of the items in the list
-- Option to force generic "video" media type for listings
+v.2.3.8
+- Update to hr_hr translation (by @arvvoid)
+- Update to hu_hu translation (by @Ajnasz)
+- Update to es_es translation (by @boblo1)
+- Update to ro_ro translation (by @tmihai20)
+- Update to fi_fi translation (by @jumakki)
+- Minor fixes
     </news>
     <assets>
      <icon>resources/icon.png</icon>

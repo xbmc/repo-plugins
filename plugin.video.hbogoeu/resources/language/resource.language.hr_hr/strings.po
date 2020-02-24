@@ -49,8 +49,8 @@ msgid "Communication error, returned STATUS: "
 msgstr "Pogreška u komunikaciji, vraćeni STATUS: "
 
 msgctxt "#30009"
-msgid "The content is availible from:"
-msgstr ""
+msgid "The content is available from:"
+msgstr "Sadržaj je dostupan od:"
 
 msgctxt "#30100"
 msgid "Web registration on "

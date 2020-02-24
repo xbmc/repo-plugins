@@ -6,9 +6,10 @@
 
 from __future__ import absolute_import, division
 
+
 class HbogoConstants(object):
 
-    #supported countrys:
+    # supported countries:
     #   0 name
     #   1 national domain
     #   2 country code short
@@ -44,7 +45,6 @@ class HbogoConstants(object):
     CONTEXT_MODE_DEFAULT = 0
     CONTEXT_MODE_MOVIE = 1
     CONTEXT_MODE_EPISODE = 2
-
 
     countries = [
         ['Bosnia and Herzegovina', 'ba', 'ba', 'BIH', 'HRV', '', HANDLER_EU],
@@ -110,7 +110,7 @@ class HbogoConstants(object):
 
     # Special data for OAUTH that require custom actions
     # each entry is one operator
-    # each operator has: 
+    # each operator has:
     #   id: the id of the operator for easy retrieval
     #   confirm_uri: the URI that is called at a 2nd callback for auth success
     #   payload: the data to send in this 2nd request
@@ -133,5 +133,3 @@ class HbogoConstants(object):
         '972706fe-094c-4ea5-ae98-e8c5d907f6a2': ['https://my.telekom.ro/oam/server/auth_cred_submit', 'username', 'password', {"username": None, "password": None}],  # Romania: Telekom Romania (My Account)
         '41a660dc-ee15-4125-8e92-cdb8c2602c5d': ['https://www.upc.ro/rest/v40/session/start?protocol=oidc&rememberMe=false', 'username', 'credential', {"username": None, "credential": None}],  # Romania: UPC Romania
     }
-
-

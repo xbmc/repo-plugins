@@ -12,13 +12,13 @@ import traceback
 from hbogolib.constants import HbogoConstants
 
 try:
-    import urlparse as parse
-    from urllib import unquote_plus as unquote
+    import urlparse as parse  # type: ignore
+    from urllib import unquote_plus as unquote  # type: ignore
 except ImportError:
-    import urllib.parse as parse
-    from urllib.parse import unquote_plus as unquote
+    import urllib.parse as parse  # type: ignore
+    from urllib.parse import unquote_plus as unquote  # type: ignore
 
-from kodi_six import xbmc, xbmcaddon, xbmcgui
+from kodi_six import xbmc, xbmcaddon, xbmcgui  # type: ignore
 
 
 class hbogo(object):
@@ -66,7 +66,7 @@ class hbogo(object):
 
     def setup(self):
         # STEP 0 - SETUP DRM
-        from inputstreamhelper import Helper
+        from inputstreamhelper import Helper  # type: ignore
         is_helper = Helper('mpd', drm='com.widevine.alpha')
         is_helper.check_inputstream()
 

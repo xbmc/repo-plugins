@@ -16,7 +16,12 @@ class Util(object):
     @staticmethod
     def is_utc_datetime_past_now(date_string, date_string_format="%Y-%m-%dT%H:%M:%SZ", output_format="%d/%m/%Y %H:%M:%S"):
         from datetime import datetime
-        from dateutil import tz
+        try:
+            from dateutil import tz
+        except ImportError:
+            # dateutil not available, ignore to prevent add-on crash on key functionality, usualy happens if dateutil
+            # module just got installed, after Kodi restart all is fine later on.
+            return True
         import time
         from_zone = tz.tzutc()  # UTC ZONE
         to_zone = tz.tzlocal()  # LOCAL TIMEZONE
@@ -30,8 +35,7 @@ class Util(object):
         current_time = current_time.replace(tzinfo=to_zone)
         if current_time < avail_datetime:
             return avail_datetime.strftime(output_format)  # if not past current date time return the local datetime as string
-        else:
-            return True  # if available return True
+        return True  # if available return True
 
     @staticmethod
     def base64enc(data):

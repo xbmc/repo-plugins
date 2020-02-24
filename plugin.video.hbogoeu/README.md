@@ -1,7 +1,11 @@
+[![Build Status](https://travis-ci.org/arvvoid/plugin.video.hbogoeu.svg?branch=master)](https://travis-ci.org/arvvoid/plugin.video.hbogoeu)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/arvvoid/plugin.video.hbogoeu)](https://github.com/arvvoid/plugin.video.hbogoeu/blob/master/README.md#install-instructions) 
 [![Python Version](https://img.shields.io/badge/python-2.7%20%7C%203.7-blue)](https://kodi.tv/article/attention-addon-developers-migration-python-3)
 [![Kodi Version](https://img.shields.io/badge/kodi-18%20or%20%2B-blue)](https://kodi.tv/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9168cc04d56d480ea3987db569d89f44)](https://www.codacy.com/manual/arvvoid/plugin.video.hbogoeu?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=arvvoid/plugin.video.hbogoeu&amp;utm_campaign=Badge_Grade) [![GitHub](https://img.shields.io/github/license/arvvoid/plugin.video.hbogoeu?style=flat)](https://opensource.org/licenses/gpl-2.0.php) [![Contributors](https://img.shields.io/github/contributors/arvvoid/plugin.video.hbogoeu.svg)](https://github.com/arvvoid/plugin.video.hbogoeu/graphs/contributors) [![All Contributors](https://img.shields.io/badge/all_contributors-29-orange.svg?style=flat-square)](#contributors-)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9ba05a937e1f498581ac06c2f23d2178)](https://www.codacy.com/manual/arvvoid/plugin.video.hbogoeu?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=arvvoid/plugin.video.hbogoeu&amp;utm_campaign=Badge_Grade)
+[![GitHub](https://img.shields.io/github/license/arvvoid/plugin.video.hbogoeu?style=flat)](https://opensource.org/licenses/gpl-2.0.php)
+[![Contributors](https://img.shields.io/github/contributors/arvvoid/plugin.video.hbogoeu.svg)](https://github.com/arvvoid/plugin.video.hbogoeu/graphs/contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-29-orange.svg?style=flat-square)](#contributors-)
 
 
 # Disclaimer

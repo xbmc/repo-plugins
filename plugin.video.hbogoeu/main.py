@@ -8,7 +8,7 @@ from __future__ import absolute_import, division
 
 import sys
 from hbogolib.base import hbogo
-from kodi_six import xbmc, xbmcaddon
+from kodi_six import xbmc, xbmcaddon  # type: ignore
 
 
 # Setup plugin
@@ -23,4 +23,3 @@ if __name__ == '__main__':
     xbmc.log("[" + add_on.getAddonInfo('id') + "]  STARING VERSION: " + add_on.getAddonInfo('version'), xbmc.LOGDEBUG)
     addon_main = hbogo(PLUGIN_HANDLE, BASE_URL)
     addon_main.router(REQUEST_PARAMS)
-

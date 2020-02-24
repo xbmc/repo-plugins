@@ -6,7 +6,7 @@
 
 from __future__ import absolute_import, division
 
-from kodi_six import xbmcplugin
+from kodi_six import xbmcplugin  # type: ignore
 
 
 class KodiUtil(object):

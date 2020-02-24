@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='2.4.8' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.4.9' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
         <import addon='script.module.six' version='1.11.0'/>
@@ -13,11 +13,7 @@
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
         <news>
-[fix] resolve indefinite busy dialog on failed playback
-[fix] sort by viewers for followed live channels, restoring previous behavior
-[fix] menu settings not taking effect
-[fix] handle no stream available error
-[rem] remove Playlists
+[fix] fix listing live streams
         </news>
         <assets>
             <icon>icon.png</icon>

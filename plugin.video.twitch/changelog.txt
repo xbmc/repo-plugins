@@ -1,3 +1,6 @@
+2.4.9
+[fix] fix listing live streams
+
 2.4.8
 [fix] resolve indefinite busy dialog on failed playback
 [fix] sort by viewers for followed live channels, restoring previous behavior

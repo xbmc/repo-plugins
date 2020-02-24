@@ -11,7 +11,7 @@ class User(ListItem):
     info = {}
     uri = ""
 
-    def to_list_item(self, addon_base):
+    def to_list_item(self, addon, addon_base):
         list_item = xbmcgui.ListItem(label=self.label, label2=self.label2)
         list_item.setArt({"thumb": self.thumb})
         list_item.setInfo("video", {

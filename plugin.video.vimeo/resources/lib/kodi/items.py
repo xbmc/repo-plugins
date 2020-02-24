@@ -148,7 +148,7 @@ class Items:
         items = []
 
         for item in collection.items:
-            items.append(item.to_list_item(self.addon_base))
+            items.append(item.to_list_item(self.addon, self.addon_base))
 
         if collection.next_href:
             next_item = xbmcgui.ListItem(label=self.addon.getLocalizedString(30901))

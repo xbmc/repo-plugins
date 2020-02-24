@@ -1,12 +1,12 @@
 from future import standard_library
 standard_library.install_aliases()  # noqa: E402
 
-import os
-import re
 import requests
 import urllib.parse
+import xbmc
 
 from .client import VimeoClient
+from .auth import GrantFailed
 from .api_collection import ApiCollection
 from resources.lib.models.channel import Channel
 from resources.lib.models.group import Group
@@ -18,30 +18,74 @@ class Api:
     """This class uses the official Vimeo API."""
 
     api_player = "https://player.vimeo.com"
-    api_client = None
-    api_access_token = "d284acb5ed7c011ec0d79f79e3479f8c"
-    api_client_id = ""
-    api_client_secret = ""
     api_limit = 10
-    video_stream = ""
-    video_hls_file_name = "hls.playlist.master.m3u8"
 
-    def __init__(self, settings, lang, vfs):
+    # Extracted from public Vimeo Android App
+    # This is a special client ID which will return playable URLs
+    api_client_id = "74fa89b811a1cbb750d8528d163f48af28a2dbe1"
+    api_client_secret = "VJjDTzlnL6Vm/GbUDuwCwcc1mrdFUa9XFlg4ZoMQ4xX2UWuzbBomapujUcGKLNrt" \
+                        "wdtIIvy0paa7kFN0asWp2ooNSdqaEdwVkBLqau7MJFe0tSWez7HOakg/8BKtYzDe"
+
+    # Access token of registered API app
+    # Is used as a fallback if the client login request fails
+    api_access_token_default = "d284acb5ed7c011ec0d79f79e3479f8c"
+    api_access_token_cache_duration = 720  # 12 hours
+    api_access_token_cache_key = "api-access-token"
+
+    video_stream = ""
+
+    def __init__(self, settings, lang, vfs, cache):
         self.settings = settings
         self.lang = lang
         self.vfs = vfs
+        self.cache = cache
 
         self.api_limit = int(self.settings.get("search.items.size"))
         self.video_stream = self.settings.get("video.format")
+        self.video_av1 = True if self.settings.get("video.codec.av1") == "true" else False
 
-        if self.settings.get("api.accesstoken"):
-            self.api_access_token = self.settings.get("api.accesstoken")
+    @property
+    def api_client(self):
+        # It is possible to set a custom access token in the settings
+        access_token_settings = self.settings.get("api.accesstoken")
+        if access_token_settings:
+            xbmc.log("plugin.video.vimeo::Api() Using custom access token", xbmc.LOGDEBUG)
+            return VimeoClient(token=access_token_settings)
 
-        self.api_client = VimeoClient(
-            token=self.api_access_token,
-            key=self.api_client_id,
-            secret=self.api_client_secret
+        # Check if there is a cached access token
+        access_token_cached = self.cache.get(
+            self.api_access_token_cache_key,
+            self.api_access_token_cache_duration
         )
+        if access_token_cached:
+            xbmc.log("plugin.video.vimeo::Api() Using cached access token", xbmc.LOGDEBUG)
+            return VimeoClient(token=access_token_cached)
+
+        # Request an access token and cache it
+        try:
+            client = VimeoClient(
+                key=self.api_client_id,
+                secret=self.api_client_secret
+            )
+            access_token = client.load_client_credentials(["public"])
+            self.cache.add(self.api_access_token_cache_key, str(access_token))
+            xbmc.log("plugin.video.vimeo::Api() Using new access token", xbmc.LOGDEBUG)
+            return client
+        except GrantFailed:
+            xbmc.log("plugin.video.vimeo::Api() Grant failed, using fallback", xbmc.LOGDEBUG)
+            pass
+
+        # Fallback
+        return VimeoClient(token=self.api_access_token_default)
+
+    @property
+    def search_template(self):
+        search_template = self.settings.get("search.template")
+
+        if "{}" in search_template:
+            return search_template
+
+        return "{}"
 
     def call(self, url):
         params = self._get_default_params()
@@ -50,7 +94,7 @@ class Api:
 
     def search(self, query, kind):
         params = self._get_default_params()
-        params["query"] = query
+        params["query"] = self.search_template.format(query)
         res = self._do_api_request("/{kind}".format(kind=kind), params)
         return self._map_json_to_collection(res)
 
@@ -62,6 +106,12 @@ class Api:
         return self._map_json_to_collection(res)
 
     def resolve_media_url(self, uri):
+        # If we have a full URL, we don't need to resolve it, because it already is
+        if uri.startswith("https://"):
+            xbmc.log("plugin.video.vimeo::Api() directly resolved", xbmc.LOGDEBUG)
+            return uri
+
+        xbmc.log("plugin.video.vimeo::Api() extra resolved", xbmc.LOGDEBUG)
         uri = uri.replace("/videos/", "/video/")
         res = self._do_player_request(uri)
 
@@ -81,7 +131,7 @@ class Api:
 
     def _map_json_to_collection(self, json_obj):
         collection = ApiCollection()
-        collection.items = []  # Reset list in order to resolve problems in unit tests.
+        collection.items = []  # Reset list in order to resolve problems in unit tests
         collection.next_href = json_obj.get("paging", {"next": None})["next"]
 
         if "type" in json_obj and json_obj["type"] == "video":
@@ -92,55 +142,62 @@ class Api:
 
             for item in json_obj["data"]:
                 kind = item.get("type", None)
+                is_video = kind == "video"
                 is_channel = "/channels/" in item.get("uri", "")
                 is_group = "/groups/" in item.get("uri", "")
                 is_user = item.get("account", False)
+                # Requests made with the fallback token won't include media URLs:
+                contains_media_url = "play" in item
 
-                if kind == "video":
+                if is_video:
+                    if contains_media_url:
+                        video_url = self._extract_url_from_search_response(item.get("play"))
+                    else:
+                        video_url = item["uri"]
+
                     video = Video(id=item["resource_key"], label=item["name"])
-                    # TODO Improve image extraction
-                    video.thumb = item["pictures"]["sizes"][1]["link"]
-                    video.uri = item["uri"]
+                    video.thumb = self._get_picture(item["pictures"])
+                    video.uri = video_url
                     video.info = {
-                        "playcount": item["stats"].get("plays", 0),
                         "date": item["release_time"],
-                        "duration": item["duration"],
                         "description": item["description"],
-                        "user": item["user"]["name"]
+                        "duration": item["duration"],
+                        "picture": self._get_picture(item["pictures"], 4),
+                        "playcount": item["stats"].get("plays", 0),
+                        "user": item["user"]["name"],
+                        "userThumb": self._get_picture(item["user"]["pictures"], 3),
+                        "mediaUrlResolved": contains_media_url,
                     }
                     collection.items.append(video)
 
                 elif is_channel:
                     channel = Channel(id=item["resource_key"], label=item["name"])
-                    # TODO Improve image extraction
-                    channel.thumb = item["pictures"]["sizes"][3]["link"]
+                    channel.thumb = self._get_picture(item["pictures"], 3)
                     channel.uri = item["metadata"]["connections"]["videos"]["uri"]
                     channel.info = {
                         "date": item["created_time"],
-                        "description": item.get("description", "")
+                        "description": item.get("description", ""),
                     }
                     collection.items.append(channel)
 
                 elif is_group:
                     group = Group(id=item["resource_key"], label=item["name"])
-                    # TODO Improve image extraction
-                    group.thumb = item["pictures"]["sizes"][3]["link"]
+                    group.thumb = self._get_picture(item["pictures"], 3)
                     group.uri = item["metadata"]["connections"]["videos"]["uri"]
                     group.info = {
                         "date": item["created_time"],
-                        "description": item.get("description", "")
+                        "description": item.get("description", ""),
                     }
                     collection.items.append(group)
 
                 elif is_user:
                     user = User(id=item["resource_key"], label=item["name"])
-                    # TODO Improve image extraction
-                    user.thumb = item["pictures"]["sizes"][3]["link"]
+                    user.thumb = self._get_picture(item["pictures"], 3)
                     user.uri = item["metadata"]["connections"]["videos"]["uri"]
                     user.info = {
                         "country": item.get("location", ""),
                         "date": item["created_time"],
-                        "description": item["bio"]
+                        "description": item["bio"],
                     }
                     collection.items.append(user)
 
@@ -159,8 +216,34 @@ class Api:
             # Avoid rate limiting:
             # https://developer.vimeo.com/guidelines/rate-limiting#avoid-rate-limiting
             "fields": "uri,resource_key,name,description,type,duration,created_time,location,"
-                      "bio,stats,user,account,release_time,pictures,metadata"
+                      "bio,stats,user,account,release_time,pictures,metadata,play"
         }
+
+    def _video_matches(self, video, video_format):
+        video_height = video_format[1].replace("p", "")
+        video_codec = self.settings.VIDEO_CODEC["AV1"] if self.video_av1 else \
+            self.settings.VIDEO_CODEC["H.264"]
+
+        return str(video["height"]) == video_height and video["codec"] == video_codec
+
+    def _extract_url_from_search_response(self, video_files):
+        video_format = self.settings.VIDEO_FORMAT[self.video_stream]
+        video_format = video_format.split(":")
+        video_type = video_format[0]
+
+        if video_type == "hls":
+            return video_files["hls"]["link"]
+
+        elif video_type == "progressive":
+            for video_file in video_files["progressive"]:
+                if self._video_matches(video_file, video_format):
+                    return video_file["link"]
+
+            # Fallback if no matching quality was found
+            return video_files["progressive"][0]["link"]
+
+        else:
+            raise RuntimeError("Could not extract video URL")
 
     def _extract_url_from_video_config(self, video_config):
         video_files = video_config["request"]["files"]
@@ -168,56 +251,29 @@ class Api:
         video_format = video_format.split(":")
         video_type = video_format[0]
         video_type_setting = video_format[1]
-        video_has_av1_codec = len(video_config["request"]["file_codecs"]["av1"])
+        video_has_av1_codec = len(video_config["request"]["file_codecs"]["av1"]) > 0
 
-        if video_type == "hls" or video_has_av1_codec:
+        if video_type == "hls" or (video_has_av1_codec and not self.video_av1):
             hls_default_cdn = video_files["hls"]["default_cdn"]
-            hls_playlist = video_files["hls"]["cdns"][hls_default_cdn]["url"]
-            return self._hls_playlist_master_remove_av1_streams(hls_playlist)
+            if self.video_av1:
+                return video_files["hls"]["cdns"][hls_default_cdn]["av1_url"]
+            else:
+                return video_files["hls"]["cdns"][hls_default_cdn]["avc_url"]
 
         elif video_type == "progressive":
             for video_file in video_files["progressive"]:
                 if video_file["quality"] == video_type_setting:
                     return video_file["url"]
 
-            # Fallback if no matching quality was found.
+            # Fallback if no matching quality was found
             return video_files["progressive"][0]["url"]
 
         else:
             raise RuntimeError("Could not extract video URL")
 
-    def _hls_playlist_master_remove_av1_streams(self, playlist):
-        """
-        Kodi doesn't support AV1 yet: https://forum.kodi.tv/showthread.php?tid=346272
-        That's why we have to remove those streams until there is support in Kodi.
-        Also the Vimeo HLS streaming servers don't seem to support the AV1 codec yet:
-        > code=404, message=Could not chop_open: AV1 in MPEG-TS is unsupported.
-        """
-        # Download the playlist
-        headers = {"Accept-Encoding": "gzip"}
-        response = requests.get(playlist, headers=headers)
-        response.encoding = "utf-8"
-        hls_master_playlist = response.text
-        hls_master_playlist_without_av1 = ""
-
-        # Strip AV1 codec streams and create a new playlist
-        remove_line = False
-        for line in hls_master_playlist.splitlines():
-            av1 = re.search(r"CODECS=\"av01", line)
-            url = re.search(r"\.\./", line)
-            if remove_line:
-                remove_line = False
-                continue
-            elif not av1:
-                if url:
-                    hls_master_playlist_without_av1 += urllib.parse.urljoin(playlist, line)
-                else:
-                    hls_master_playlist_without_av1 += line
-
-                hls_master_playlist_without_av1 += os.linesep
-                remove_line = False
-            else:
-                remove_line = True
-
-        # Write the playlist and return the path
-        return self.vfs.write(self.video_hls_file_name, str(hls_master_playlist_without_av1))
+    @staticmethod
+    def _get_picture(data, size=1):
+        try:
+            return data["sizes"][size]["link"]
+        except IndexError:
+            return data["sizes"][0]["link"]

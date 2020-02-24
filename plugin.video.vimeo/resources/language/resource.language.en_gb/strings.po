@@ -33,17 +33,25 @@ msgctxt "#30013"
 msgid "History size"
 msgstr ""
 
-# Settings - Advanced
-msgctxt "#30051"
-msgid "Advanced"
+msgctxt "#30014"
+msgid "Template"
 msgstr ""
 
-msgctxt "#30060"
+msgctxt "#30020"
 msgid "Video"
 msgstr ""
 
-msgctxt "#30061"
+msgctxt "#30021"
 msgid "Streaming"
+msgstr ""
+
+msgctxt "#30022"
+msgid "AOMedia Video 1 (AV1)"
+msgstr ""
+
+# Settings - Advanced
+msgctxt "#30051"
+msgid "Advanced"
 msgstr ""
 
 msgctxt "#30070"
@@ -52,6 +60,14 @@ msgstr ""
 
 msgctxt "#30071"
 msgid "Access Token"
+msgstr ""
+
+msgctxt "#30080"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30081"
+msgid "Clear cache"
 msgstr ""
 
 # GUI - Root
@@ -111,6 +127,16 @@ msgstr ""
 
 msgctxt "#30306"
 msgid "Vimeo Curation channels"
+msgstr ""
+
+# GUI - Settings
+msgctxt "#30401"
+msgid "Cache cleared"
+msgstr ""
+
+# GUI - Info
+msgctxt "#30401"
+msgid "Vimeo account"
 msgstr ""
 
 # GUI - Generic

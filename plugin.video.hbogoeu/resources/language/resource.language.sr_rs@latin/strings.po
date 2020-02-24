@@ -51,7 +51,7 @@ msgid "Communication error, returned STATUS: "
 msgstr "Greška u komunikaciji, vraćeni STATUS: "
 
 msgctxt "#30009"
-msgid "The content is availible from:"
+msgid "The content is available from:"
 msgstr ""
 
 msgctxt "#30100"

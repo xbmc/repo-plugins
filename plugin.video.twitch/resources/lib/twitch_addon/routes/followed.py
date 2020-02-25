@@ -28,13 +28,17 @@ def route(api, content, offset=0, cursor='MA=='):
         if content == StreamType.LIVE:
             utils.refresh_previews()
         kodi.set_view('videos', set_sort=True)
-        streams = None
+
         all_items = list()
         requests = 0
-        while (per_page >= (len(all_items) + 1)) and (requests < MAX_REQUESTS):
+        total = 1000
+
+        while ((per_page >= (len(all_items) + 1)) and
+               (requests < MAX_REQUESTS) and (int(offset) <= 900)):
             requests += 1
             streams = api.get_followed_streams(stream_type=content, offset=offset, limit=REQUEST_LIMIT)
-            if (streams[Keys.TOTAL] > 0) and (Keys.STREAMS in streams):
+
+            if (total > 0) and (Keys.STREAMS in streams):
                 filtered = \
                     blacklist_filter.by_type(streams, Keys.STREAMS, parent_keys=[Keys.CHANNEL], id_key=Keys._ID, list_type='user')
                 filtered = \
@@ -49,7 +53,7 @@ def route(api, content, offset=0, cursor='MA=='):
                     else:
                         break
                 offset = utils.get_offset(offset, last, streams[Keys.STREAMS])
-                if (offset is None) or (streams[Keys.TOTAL] <= offset) or (streams[Keys.TOTAL] <= REQUEST_LIMIT):
+                if (offset is None) or (total <= offset) or (total <= REQUEST_LIMIT):
                     break
             else:
                 break
@@ -58,7 +62,8 @@ def route(api, content, offset=0, cursor='MA=='):
             has_items = True
             for stream in all_items:
                 kodi.create_item(converter.stream_to_listitem(stream))
-        if streams[Keys.TOTAL] > (offset + 1):
+
+        if (total - 100) > (int(offset) + 1) and (len(all_items) == per_page):
             has_items = True
             kodi.create_item(utils.link_to_next_page({'mode': MODES.FOLLOWED, 'content': content, 'offset': offset}))
         if has_items:

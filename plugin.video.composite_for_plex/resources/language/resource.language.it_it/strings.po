@@ -1,0 +1,1225 @@
+# Kodi language file
+# Addon Name: Composite
+# Addon id: plugin.video.composite_for_plex
+# Addon Provider: anxdpanic
+msgid ""
+msgstr ""
+"Project-Id-Version: Composite\n"
+"Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
+"POT-Creation-Date: 2014-10-26 17:05+0000\n"
+"PO-Revision-Date: 2020-01-18 21:15+0500\n"
+"Last-Translator: GITHUB USERNAME\n"
+"Language-Team: Italian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it_IT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Confirm file delete?"
+msgstr "Confermi l'eliminazione del file?"
+
+msgctxt "#30001"
+msgid "Delete this item? This action will delete media and associated data files."
+msgstr "Elimino questo elemento? Quest'azione cancellerà il media e i file di dati associati."
+
+msgctxt "#30002"
+msgid "Plex Online"
+msgstr "Plex Online"
+
+msgctxt "#30003"
+msgid "About to install"
+msgstr "Sto per installare"
+
+msgctxt "#30004"
+msgid "This plugin is already installed"
+msgstr "Questo plugin è già stato installato"
+
+msgctxt "#30005"
+msgid "Switch Failed"
+msgstr "Il cambio è fallito"
+
+msgctxt "#30006"
+msgid "Sign Out"
+msgstr "Esci"
+
+msgctxt "#30007"
+msgid "To sign out you must be logged in as an admin user. Switch user and try again"
+msgstr "Per uscire devi essere loggato come utente amministrativo. Per favore cambia utente e prova di nuovo"
+
+msgctxt "#30008"
+msgid "myPlex"
+msgstr "myples"
+
+msgctxt "#30009"
+msgid "You are currently signed into myPlex. Are you sure you want to sign out?"
+msgstr "Hai eseguito l'accesso in myPlex. Sei sicuro di voler uscire?"
+
+#  30010
+
+msgctxt "#30011"
+msgid "You are not currently logged into myPlex. Continue to sign in, or cancel to return"
+msgstr "Non sei attualmente loggato in myPlex. Per favore continua il login, oppure annulla per tornare indietro"
+
+msgctxt "#30012"
+msgid "To access these screens you must be logged in as an admin user. Switch user and try again"
+msgstr "Per accedere a queste schermate devi essere loggato come utente amministrativo. Per favore cambia utente e prova di nuovo"
+
+msgctxt "#30013"
+msgid "All"
+msgstr "Tutte"
+
+msgctxt "#30014"
+msgid "Unwatched"
+msgstr "Non Viste"
+
+msgctxt "#30015"
+msgid "Recently Aired"
+msgstr "Trasmesse di Recente"
+
+msgctxt "#30016"
+msgid "Recently Added"
+msgstr "Aggiunte di Recente"
+
+msgctxt "#30017"
+msgid "Recently Viewed Episodes"
+msgstr "Episodi Visti di Recente"
+
+msgctxt "#30018"
+msgid "Recently Viewed Shows"
+msgstr "Serie TV Viste di Recente"
+
+msgctxt "#30019"
+msgid "On Deck"
+msgstr "In Primo Piano"
+
+msgctxt "#30020"
+msgid "By Collection"
+msgstr "Per Collezione"
+
+msgctxt "#30021"
+msgid "By First Letter"
+msgstr "Per Prima Lettera"
+
+msgctxt "#30022"
+msgid "By Genre"
+msgstr "Per Genere"
+
+msgctxt "#30023"
+msgid "By Year"
+msgstr "Per Anno"
+
+msgctxt "#30024"
+msgid "By Content Rating"
+msgstr "Per Classificazione"
+
+msgctxt "#30025"
+msgid "By Folder"
+msgstr "Per Cartella"
+
+msgctxt "#30026"
+msgid "Search Shows..."
+msgstr "Cerca Serie TV..."
+
+msgctxt "#30027"
+msgid "Search Episodes..."
+msgstr "Cerca Episodi..."
+
+msgctxt "#30028"
+msgid "All"
+msgstr "Tutti"
+
+msgctxt "#30029"
+msgid "By Album"
+msgstr "Per Album"
+
+msgctxt "#30030"
+msgid "By Genre"
+msgstr "Per Genere"
+
+msgctxt "#30031"
+msgid "By Year"
+msgstr "Per Anno"
+
+msgctxt "#30032"
+msgid "By Collection"
+msgstr "Per Collezione"
+
+msgctxt "#30033"
+msgid "Recently Added"
+msgstr "Aggiunti di Recente"
+
+msgctxt "#30034"
+msgid "By Folder"
+msgstr "Per Cartella"
+
+msgctxt "#30035"
+msgid "Search Artists..."
+msgstr "Cerca Artisti..."
+
+msgctxt "#30036"
+msgid "Search Albums..."
+msgstr "Cerca Album..."
+
+msgctxt "#30037"
+msgid "Search Tracks..."
+msgstr "Cerca Tracce"
+
+msgctxt "#30038"
+msgid "All"
+msgstr "Tutti"
+
+msgctxt "#30039"
+msgid "Unwatched"
+msgstr "Da Vedere"
+
+msgctxt "#30040"
+msgid "Recently Released"
+msgstr "Usciti di Recente"
+
+msgctxt "#30041"
+msgid "Recently Added"
+msgstr "Aggiunti di Recente"
+
+msgctxt "#30042"
+msgid "Recently Viewed"
+msgstr "Visti di Recente"
+
+msgctxt "#30043"
+msgid "On Deck"
+msgstr "In Primo Piano"
+
+msgctxt "#30044"
+msgid "By Collection"
+msgstr "Per Collezione"
+
+msgctxt "#30045"
+msgid "By Genre"
+msgstr "Per Genere"
+
+msgctxt "#30046"
+msgid "By Year"
+msgstr "Per Anno"
+
+msgctxt "#30047"
+msgid "By Decade"
+msgstr "Per Decade"
+
+msgctxt "#30048"
+msgid "By Director"
+msgstr "Per Regista"
+
+msgctxt "#30049"
+msgid "By Starring Actor"
+msgstr "Per Attore Principale"
+
+msgctxt "#30050"
+msgid "By Country"
+msgstr "Per Paese"
+
+msgctxt "#30051"
+msgid "By Content Rating"
+msgstr "Per Classificazione"
+
+msgctxt "#30052"
+msgid "By Rating"
+msgstr "Per Voto"
+
+msgctxt "#30053"
+msgid "By Resolution"
+msgstr "Per Risoluzione"
+
+msgctxt "#30054"
+msgid "By First Letter"
+msgstr "Per Prima Lettera"
+
+msgctxt "#30055"
+msgid "By Folder"
+msgstr "Per Cartella"
+
+msgctxt "#30056"
+msgid "Search..."
+msgstr "Cerca..."
+
+msgctxt "#30057"
+msgid "All"
+msgstr "Tutte"
+
+msgctxt "#30058"
+msgid "By Year"
+msgstr "Per Anno"
+
+msgctxt "#30059"
+msgid "Recently Added"
+msgstr "Aggiunte di Recente"
+
+msgctxt "#30060"
+msgid "Camera Make"
+msgstr "Marca Fotocamera"
+
+msgctxt "#30061"
+msgid "Camera Model"
+msgstr "Modello Fotocamera"
+
+msgctxt "#30062"
+msgid "Aperture"
+msgstr "Apertura"
+
+msgctxt "#30063"
+msgid "Shutter Speed"
+msgstr "Velocità Otturatore"
+
+msgctxt "#30064"
+msgid "ISO"
+msgstr "ISO"
+
+msgctxt "#30065"
+msgid "Lens"
+msgstr "Lenti"
+
+msgctxt "#30066"
+msgid "Unable to see any media servers"
+msgstr "Non è possible vedere nessun media server"
+
+msgctxt "#30067"
+msgid "Unable to contact server:"
+msgstr "Non è possibile contattare il server:"
+
+msgctxt "#30068"
+msgid "Library refresh started"
+msgstr "iniziato aggiornamento libreria"
+
+msgctxt "#30069"
+msgid "myPlex not configured"
+msgstr "myPlex non configurato"
+
+msgctxt "#30070"
+msgid "Resume"
+msgstr "Riprendi"
+
+msgctxt "#30071"
+msgid "Select media to play"
+msgstr "Seleziona media da riprodurre"
+
+msgctxt "#30072"
+msgid "Select subtitle"
+msgstr "Seleziona sottotitolo"
+
+msgctxt "#30073"
+msgid "Select audio"
+msgstr "Seleziona audio"
+
+msgctxt "#30074"
+msgid "Select master server"
+msgstr "Seleziona server master"
+
+msgctxt "#30075"
+msgid "Known server list"
+msgstr "Lista server conosciuta"
+
+msgctxt "#30076"
+msgid "Switch User"
+msgstr "Cambia Utente"
+
+msgctxt "#30077"
+msgid "Enter PIN"
+msgstr "Inserisci PIN"
+
+msgctxt "#30078"
+msgid "Resume from"
+msgstr "Riprendi da"
+
+msgctxt "#30079"
+msgid "Start from beginning"
+msgstr "Parti dall'inizio"
+
+msgctxt "#30080"
+msgid "myPlex Queue"
+msgstr "Coda myPlex"
+
+msgctxt "#30081"
+msgid "Sign In"
+msgstr "Login"
+
+msgctxt "#30082"
+msgid "Display Servers"
+msgstr "Visualizza i Server"
+
+msgctxt "#30083"
+msgid "Refresh Data"
+msgstr "Aggiorna i dati"
+
+msgctxt "#30084"
+msgid "Channels"
+msgstr "Canali"
+
+msgctxt "#30085"
+msgid "Playlists"
+msgstr "Playlist"
+
+msgctxt "#30086"
+msgid "Play Transcoded"
+msgstr "Riproduci con transcodifica"
+
+msgctxt "#30087"
+msgid "All episodes"
+msgstr "Tutti gli episodi"
+
+msgctxt "#30088"
+msgid "Season"
+msgstr "Stagione"
+
+msgctxt "#30089"
+msgid "Search for"
+msgstr "Ricerca per"
+
+msgctxt "#30090"
+msgid "Unplayed"
+msgstr ""
+
+###### SETTINGS
+
+msgctxt "#30500"
+msgid "Primary Server Address"
+msgstr "Indirizzo Server Primario"
+
+msgctxt "#30501"
+msgid "Stream from PMS"
+msgstr "Stream da PMS"
+
+msgctxt "#30502"
+msgid "Get extended metadata from PMS"
+msgstr "Ottieni metadata estesi da PMS"
+
+msgctxt "#30503"
+msgid "Enable extra filter menus"
+msgstr "Abilita i filtri aggiuntivi nei menu"
+
+msgctxt "#30504"
+msgid "Server Discovery"
+msgstr "Ricerca Server"
+
+msgctxt "#30505"
+msgid "PMS Username: "
+msgstr "Nome Utente PMS"
+
+msgctxt "#30506"
+msgid "PMS Password: "
+msgstr "Password PMS"
+
+msgctxt "#30507"
+msgid "Always Transcode"
+msgstr "Transcodifica Sempre"
+
+msgctxt "#30508"
+msgid "Transcode format "
+msgstr "Formato di transcodifica "
+
+msgctxt "#30509"
+msgid "Recent & OnDeck items"
+msgstr "Elementi Recenti e In Primo Piano"
+
+msgctxt "#30510"
+msgid "Debug log"
+msgstr "Log di Debug"
+
+msgctxt "#30511"
+msgid "Auto"
+msgstr "Auto"
+
+msgctxt "#30512"
+msgid "http"
+msgstr "http"
+
+msgctxt "#30513"
+msgid "smb"
+msgstr "smb"
+
+msgctxt "#30514"
+msgid "Debug level"
+msgstr ""
+
+msgctxt "#30515"
+msgid "Use transcoding proxy"
+msgstr "Utilizza un proxy per la transcodifica"
+
+msgctxt "#30516"
+msgid "Server"
+msgstr "Server"
+
+msgctxt "#30517"
+msgid "Playback"
+msgstr "Riproduzione"
+
+msgctxt "#30518"
+msgid "Transcoding"
+msgstr "Transcodifica"
+
+msgctxt "#30519"
+msgid "Wake On LAN"
+msgstr "Wake On LAN"
+
+msgctxt "#30520"
+msgid "Look and Feel"
+msgstr "Aspetto"
+
+msgctxt "#30521"
+msgid "Skin Home Shelf"
+msgstr "Scaffale"
+
+msgctxt "#30522"
+msgid "Advanced"
+msgstr "Avanzato"
+
+msgctxt "#30523"
+msgid "Use Wake On LAN"
+msgstr "Utilizza Wake On LAN"
+
+msgctxt "#30524"
+msgid "myPlex user"
+msgstr "Utente myPlex"
+
+msgctxt "#30525"
+msgid "myPlex password"
+msgstr "Password myPlex"
+
+msgctxt "#30526"
+msgid "Select master server..."
+msgstr "Seleziona il server master"
+
+msgctxt "#30527"
+msgid "Authentication required?"
+msgstr "Autenticazione richiesta?"
+
+msgctxt "#30528"
+msgid "Load External Subtitles?"
+msgstr "Carica i sottotitoli esterni?"
+
+msgctxt "#30529"
+msgid "Always display subtitles?"
+msgstr "Visualizza sempre i sottotitoli?"
+
+msgctxt "#30530"
+msgid "Port Number"
+msgstr "Numero porta"
+
+msgctxt "#30536"
+msgid "Kodi Control"
+msgstr "Controllo Kodi"
+
+msgctxt "#30538"
+msgid "Audio and subtitle selector"
+msgstr "Selezione audio e sottotitoli"
+
+msgctxt "#30539"
+msgid "Never show subtitles"
+msgstr "Non visualizzare mai i sottotitoli"
+
+msgctxt "#30540"
+msgid "Quality"
+msgstr "Qualità"
+
+msgctxt "#30542"
+msgid "Plex Channel View"
+msgstr "Vista Canale Plex"
+
+msgctxt "#30543"
+msgid "Flatten TV Shows"
+msgstr "Spiana le Serie TV"
+
+msgctxt "#30546"
+msgid "Windows Media Server?"
+msgstr ""
+
+# 30548
+
+msgctxt "#30549"
+msgid "Skip Genre/director/writer"
+msgstr "Evita i metadata Genere/Regista/Scrittore"
+
+msgctxt "#30550"
+msgid "Skip images (thumbs, fanart)"
+msgstr "Evita le immagini (miniature, fanart)"
+
+msgctxt "#30551"
+msgid "Skip Media Flags"
+msgstr "Evita i Media Flags"
+
+msgctxt "#30552"
+msgid "Skip Context Menus"
+msgstr "Evita i menu contestuali"
+
+msgctxt "#30553"
+msgid "Off"
+msgstr "Spento"
+
+msgctxt "#30557"
+msgid "Select audio output"
+msgstr "Seleziona l'audio di uscita"
+
+msgctxt "#30558"
+msgid "If only one season"
+msgstr "Se c'è solo una stagione"
+
+msgctxt "#30559"
+msgid "All seasons"
+msgstr "Tutte le stagioni"
+
+msgctxt "#30560"
+msgid "Force DVD playback"
+msgstr "Forza la riproduzione DVD"
+
+msgctxt "#30561"
+msgid "Override SMB location"
+msgstr "Correggi la posizione SMB"
+
+msgctxt "#30562"
+msgid "NAS IP Address"
+msgstr "Indirizzo IP NAS"
+
+msgctxt "#30563"
+msgid "AFP"
+msgstr "AFP"
+
+msgctxt "#30564"
+msgid "NAS Username"
+msgstr "Nome utente NAS"
+
+msgctxt "#30565"
+msgid "NAS password"
+msgstr "Password NAS"
+
+msgctxt "#30566"
+msgid "NAS Root Folder"
+msgstr "Cartella Principale NAS"
+
+msgctxt "#30567"
+msgid "Plex Control"
+msgstr "Controllo Plex"
+
+msgctxt "#30568"
+msgid "Subtitle Size"
+msgstr "Dimensione Sottotitolo"
+
+msgctxt "#30569"
+msgid "Audio Boost"
+msgstr "Aumento Livello Audio"
+
+msgctxt "#30571"
+msgid "Current Master Server"
+msgstr "Master Server Corrente"
+
+msgctxt "#30572"
+msgid "Shelf Items"
+msgstr "Elementi Scaffale"
+
+msgctxt "#30573"
+msgid "Recently Added"
+msgstr "Aggiunti di Recente"
+
+msgctxt "#30574"
+msgid "On Deck"
+msgstr "In Primo Piano"
+
+msgctxt "#30575"
+msgid "Force Skin Views"
+msgstr "Forza la vista della skin"
+
+msgctxt "#30576"
+msgid "Skin Name"
+msgstr "Nome Skin"
+
+msgctxt "#30577"
+msgid "Movie View"
+msgstr "Vista Film"
+
+msgctxt "#30578"
+msgid "TV View"
+msgstr "Vista Serie TV"
+
+msgctxt "#30579"
+msgid "Season View"
+msgstr "Vista Stagioni"
+
+msgctxt "#30580"
+msgid "Episode View"
+msgstr "Vista Episodi"
+
+msgctxt "#30581"
+msgid "Music View"
+msgstr "Vista Musica"
+
+msgctxt "#30582"
+msgid "Enable Movie Shelf"
+msgstr "Abilita lo Scaffale per i Film"
+
+msgctxt "#30583"
+msgid "Enable TV Shelf"
+msgstr "Abilita lo Scaffale per le Serie TV"
+
+msgctxt "#30584"
+msgid "Enable Music Shelf"
+msgstr "Abilita lo Scaffale per la Musica"
+
+msgctxt "#30585"
+msgid "Enable Channel Shelf"
+msgstr "Abilita lo Scaffale per i Canali"
+
+msgctxt "#30586"
+msgid "Content filter"
+msgstr "Filtro Contenuti"
+
+msgctxt "#30587"
+msgid "Map unknown content as:"
+msgstr "Mappa il contenuto sconosciuto come:"
+
+msgctxt "#30588"
+msgid "RA Library filter"
+msgstr "Filtro Libreria RA"
+
+msgctxt "#30589"
+msgid "Kids"
+msgstr "Bambini"
+
+msgctxt "#30590"
+msgid "Teens"
+msgstr "Ragazzi"
+
+msgctxt "#30591"
+msgid "Adults"
+msgstr "Adulti"
+
+msgctxt "#30592"
+msgid "Use menu for shared sections"
+msgstr "Utilizza il menù per le sezioni condivise"
+
+msgctxt "#30594"
+msgid "Manual"
+msgstr "Manuale"
+
+msgctxt "#30595"
+msgid "Use full resolution thumbs"
+msgstr "Utilizza le miniature a piena risoluzione"
+
+msgctxt "#30596"
+msgid "Use full resolution fanart"
+msgstr "Utilizza le fanart a piena risoluzione"
+
+msgctxt "#30597"
+msgid "Hide watched recently added items"
+msgstr "Nascondi gli elementi visti e aggiunti di recente"
+
+msgctxt "#30601"
+msgid "Transcoder"
+msgstr "Transcodificatore"
+
+msgctxt "#30602"
+msgid "Name"
+msgstr "Nome"
+
+msgctxt "#30603"
+msgid "Disable 'All Episodes'"
+msgstr "Disabilita 'Tutti gli Episodi'"
+
+msgctxt "#30604"
+msgid "Enable Kodi view cache"
+msgstr "Abilita la cache di Kodi"
+
+msgctxt "#30605"
+msgid "Manage myPlex"
+msgstr "Gestisci myPlex"
+
+msgctxt "#30606"
+msgid "Prefer Season artwork"
+msgstr "Preferisci la grafica delle Stagioni"
+
+msgctxt "#30607"
+msgid "Hide Unique Information in log"
+msgstr "Nascondi le informazioni uniche nel log"
+
+msgctxt "#30608"
+msgid "Use Kodi client name?"
+msgstr "Utilizza il nome del client Kodi"
+
+msgctxt "#30609"
+msgid "Switch off playback monitor"
+msgstr "Spegni il monitoraggio per la riproduzione"
+
+msgctxt "#30610"
+msgid "Use HTTPS"
+msgstr ""
+
+msgctxt "#30611"
+msgid "Transcode > 1080p"
+msgstr ""
+
+msgctxt "#30612"
+msgid "Transcode HEVC"
+msgstr ""
+
+msgctxt "#30613"
+msgid "MAC Address"
+msgstr ""
+
+msgctxt "#30614"
+msgid "Universal"
+msgstr ""
+
+msgctxt "#30615"
+msgid "Legacy"
+msgstr ""
+
+msgctxt "#30616"
+msgid "Refresh library section"
+msgstr ""
+
+msgctxt "#30617"
+msgid "Username:"
+msgstr ""
+
+msgctxt "#30618"
+msgid "Password:"
+msgstr ""
+
+msgctxt "#30619"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#30620"
+msgid "Submit"
+msgstr ""
+
+msgctxt "#30621"
+msgid "Manual"
+msgstr ""
+
+msgctxt "#30622"
+msgid "Use PIN"
+msgstr ""
+
+msgctxt "#30623"
+msgid "Done"
+msgstr ""
+
+msgctxt "#30624"
+msgid "Unable to sign in"
+msgstr ""
+
+msgctxt "#30625"
+msgid "From your computer, go to %s and enter the code below"
+msgstr ""
+
+msgctxt "#30626"
+msgid "Successfully signed in"
+msgstr ""
+
+msgctxt "#30627"
+msgid "Sign in not successful"
+msgstr ""
+
+msgctxt "#30628"
+msgid "Email:"
+msgstr ""
+
+msgctxt "#30629"
+msgid "Plex Pass:"
+msgstr ""
+
+msgctxt "#30630"
+msgid "Joined:"
+msgstr ""
+
+msgctxt "#30631"
+msgid "Exit"
+msgstr ""
+
+#  30632
+
+#  30633
+
+msgctxt "#30634"
+msgid "Enter your myPlex details below"
+msgstr ""
+
+#  30635
+
+msgctxt "#30636"
+msgid "Unknown"
+msgstr ""
+
+msgctxt "#30637"
+msgid "myPlex Login"
+msgstr ""
+
+msgctxt "#30638"
+msgid "Enter search term"
+msgstr ""
+
+msgctxt "#30639"
+msgid "Enter value"
+msgstr ""
+
+msgctxt "#30640"
+msgid "Transcode Profile"
+msgstr ""
+
+msgctxt "#30641"
+msgid "Transcode Profiles"
+msgstr ""
+
+msgctxt "#30642"
+msgid "Offline"
+msgstr ""
+
+msgctxt "#30643"
+msgid "Remote"
+msgstr ""
+
+msgctxt "#30644"
+msgid "Nearby"
+msgstr ""
+
+msgctxt "#30645"
+msgid "SSL"
+msgstr ""
+
+msgctxt "#30646"
+msgid "Not Secure"
+msgstr ""
+
+msgctxt "#30647"
+msgid "Certificate Verification"
+msgstr ""
+
+msgctxt "#30648"
+msgid "Message"
+msgstr ""
+
+msgctxt "#30649"
+msgid "blank"
+msgstr ""
+
+msgctxt "#30650"
+msgid "Server Discovery"
+msgstr ""
+
+msgctxt "#30651"
+msgid "Please wait..."
+msgstr ""
+
+msgctxt "#30652"
+msgid "myPlex discovery..."
+msgstr ""
+
+msgctxt "#30653"
+msgid "GDM discovery..."
+msgstr ""
+
+msgctxt "#30654"
+msgid "User provided..."
+msgstr ""
+
+msgctxt "#30655"
+msgid "Caching results..."
+msgstr ""
+
+msgctxt "#30656"
+msgid "Finished"
+msgstr ""
+
+msgctxt "#30657"
+msgid "Found servers:"
+msgstr ""
+
+msgctxt "#30658"
+msgid "No servers found"
+msgstr ""
+
+msgctxt "#30659"
+msgid "Transcode > 8-bit"
+msgstr ""
+
+msgctxt "#30660"
+msgid "Device Name"
+msgstr ""
+
+msgctxt "#30661"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30662"
+msgid "Server Cache TTL (minutes)"
+msgstr ""
+
+msgctxt "#30663"
+msgid "Server detection notification"
+msgstr ""
+
+msgctxt "#30664"
+msgid "installed"
+msgstr ""
+
+msgctxt "#30665"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30666"
+msgid "Music"
+msgstr ""
+
+msgctxt "#30667"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#30668"
+msgid "Photos"
+msgstr ""
+
+msgctxt "#30669"
+msgid "Server name prefix on the main menu"
+msgstr ""
+
+msgctxt "#30670"
+msgid "Always"
+msgstr ""
+
+msgctxt "#30671"
+msgid "Default"
+msgstr ""
+
+msgctxt "#30672"
+msgid "Go to %s"
+msgstr ""
+
+msgctxt "#30673"
+msgid "Delete %s from the %s playlist?"
+msgstr ""
+
+msgctxt "#30674"
+msgid "Confirm playlist item delete?"
+msgstr ""
+
+msgctxt "#30675"
+msgid "Delete from playlist"
+msgstr ""
+
+msgctxt "#30676"
+msgid "Select playlist"
+msgstr ""
+
+msgctxt "#30677"
+msgid "Add to playlist"
+msgstr ""
+
+msgctxt "#30678"
+msgid "Added %s to the %s playlist"
+msgstr ""
+
+msgctxt "#30679"
+msgid "Failed to add %s to the %s playlist"
+msgstr ""
+
+msgctxt "#30680"
+msgid "%s is already in the %s playlist"
+msgstr ""
+
+msgctxt "#30681"
+msgid "%s has been removed the %s playlist"
+msgstr ""
+
+msgctxt "#30682"
+msgid "Unable to remove %s from the %s playlist"
+msgstr ""
+
+msgctxt "#30683"
+msgid "Show the 'Delete' context menu"
+msgstr ""
+
+msgctxt "#30684"
+msgid "Up Next"
+msgstr ""
+
+msgctxt "#30685"
+msgid "Enable Up Next"
+msgstr ""
+
+msgctxt "#30686"
+msgid "Open Up Next settings"
+msgstr ""
+
+msgctxt "#30687"
+msgid "Install Up Next"
+msgstr ""
+
+msgctxt "#30688"
+msgid "Up Next is enabled in the settings, however Up Next appears to be disabled. Would you like to enable Up Next now?"
+msgstr ""
+
+msgctxt "#30689"
+msgid "Up Next requires Kodi 18 or higher"
+msgstr ""
+
+msgctxt "#30690"
+msgid "From your computer, go to [B]%s[/B] and enter the following code: [B]%s[/B]"
+msgstr ""
+
+msgctxt "#30691"
+msgid "Use episode thumbnails"
+msgstr ""
+
+msgctxt "#30692"
+msgid "Widgets"
+msgstr ""
+
+msgctxt "#30693"
+msgid "Show [B]Widgets[/B] menu"
+msgstr ""
+
+msgctxt "#30694"
+msgid "Clear Caches"
+msgstr ""
+
+msgctxt "#30695"
+msgid "Data Cache TTL (minutes)"
+msgstr ""
+
+msgctxt "#30696"
+msgid "Clear data cache on refresh"
+msgstr ""
+
+msgctxt "#30697"
+msgid "Movies on Deck"
+msgstr ""
+
+msgctxt "#30698"
+msgid "TV Shows on Deck"
+msgstr ""
+
+msgctxt "#30699"
+msgid "Recently Released Movies"
+msgstr ""
+
+msgctxt "#30700"
+msgid "Recently Aired TV Shows"
+msgstr ""
+
+msgctxt "#30701"
+msgid "Recently Added Movies"
+msgstr ""
+
+msgctxt "#30702"
+msgid "Recently Added TV Shows"
+msgstr ""
+
+msgctxt "#30703"
+msgid "Data Cache"
+msgstr ""
+
+msgctxt "#30704"
+msgid "Companion receiver is unable to start due to a port conflict"
+msgstr ""
+
+msgctxt "#30705"
+msgid "Companion receiver has started"
+msgstr ""
+
+msgctxt "#30706"
+msgid "Companion receiver has been stopped"
+msgstr ""
+
+msgctxt "#30707"
+msgid "Companion Receiver"
+msgstr ""
+
+msgctxt "#30708"
+msgid "Enabled"
+msgstr ""
+
+msgctxt "#30709"
+msgid "Port"
+msgstr ""
+
+msgctxt "#30710"
+msgid "Kodi's Web Server Settings"
+msgstr ""
+
+msgctxt "#30711"
+msgid "[COLOR=red]EXPERIMENTAL[/COLOR] - This feature is experimental[CR]Any changes to these settings will require a restart to take effect"
+msgstr ""
+
+msgctxt "#30712"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30713"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30714"
+msgid "Main Menu"
+msgstr ""
+
+msgctxt "#30715"
+msgid "Show [B]myPlex Queue[/B] menu"
+msgstr ""
+
+msgctxt "#30716"
+msgid "Show [B]Channels[/B] menu"
+msgstr ""
+
+msgctxt "#30717"
+msgid "Show [B]Plex Online[/B] menu"
+msgstr ""
+
+msgctxt "#30718"
+msgid "Show [B]Playlists[/B] menu"
+msgstr ""
+
+msgctxt "#30719"
+msgid "Context Menu"
+msgstr ""
+
+msgctxt "#30720"
+msgid "Metadata"
+msgstr ""
+
+msgctxt "#30721"
+msgid "Transcoding"
+msgstr ""
+
+msgctxt "#30722"
+msgid "Create a playlist"
+msgstr ""
+
+msgctxt "#30723"
+msgid "Enter a playlist title"
+msgstr ""
+
+msgctxt "#30724"
+msgid "Delete playlist"
+msgstr ""
+
+msgctxt "#30725"
+msgid "Confirm playlist delete?"
+msgstr ""
+
+msgctxt "#30726"
+msgid "Are you sure you want to delete this playlist?"
+msgstr ""
+
+msgctxt "#30727"
+msgid "Notification encoding"
+msgstr ""
+
+msgctxt "#30728"
+msgid "Episode sort method"
+msgstr ""
+
+msgctxt "#30729"
+msgid "Plex"
+msgstr ""
+
+msgctxt "#30730"
+msgid "Kodi"
+msgstr ""

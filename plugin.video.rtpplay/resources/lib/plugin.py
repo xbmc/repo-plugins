@@ -340,8 +340,8 @@ def programs_play():
 
     try:
         req = requests.get("https://www.rtp.pt" + url, headers=HEADERS)
-        req.encoding = "utf-8"
-        stream = re.search(r'"https://(.+?)ondemand.rtp.pt(.*)"', req.text)
+        req.encoding = "latin-1"
+        stream = re.search(r'"https://(.+?)ondemand.rtp.pt(.*?)"', req.text)
         stream = "https://" + stream.group(1) + "ondemand.rtp.pt" + stream.group(2)
     except:
         raise_notification()

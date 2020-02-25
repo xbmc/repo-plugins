@@ -15,19 +15,14 @@ import sys
 import traceback
 import sqlite3
 
-import defusedxml.ElementTree as ET
+import defusedxml.ElementTree as ET  # type: ignore
 import requests
-from kodi_six import xbmc, xbmcaddon, xbmcplugin, xbmcgui
-from kodi_six.utils import py2_encode, py2_decode
+from kodi_six import xbmc, xbmcaddon, xbmcplugin, xbmcgui  # type: ignore
+from kodi_six.utils import py2_encode, py2_decode  # type: ignore
 
 from hbogolib.constants import HbogoConstants
 from hbogolib.kodiutil import KodiUtil
 from hbogolib.util import Util
-
-try:
-    from urllib import unquote_plus as unquote
-except ImportError:
-    from urllib.parse import unquote_plus as unquote
 
 try:
     from Cryptodome import Random
@@ -38,7 +33,7 @@ except ImportError:
     msg = xbmcaddon.Addon().getLocalizedString(30694)
     xbmc.log("[" + str(
         xbmcaddon.Addon().getAddonInfo('id')) + "] MISSING Cryptodome dependency...exiting..." + traceback.format_exc(),
-             xbmc.LOGDEBUG)
+        xbmc.LOGDEBUG)
     xbmcgui.Dialog().ok(xbmcaddon.Addon().getAddonInfo('name') + " ERROR", msg)
     sys.exit()
 
@@ -127,7 +122,7 @@ class HbogoHandler(object):
         self.API_PLATFORM = 'COMP'
 
         self.log("Starting database connection...")
-        self.db = sqlite3.connect(xbmc.translatePath(self.addon.getAddonInfo('profile'))+'hgo.db')
+        self.db = sqlite3.connect(xbmc.translatePath(self.addon.getAddonInfo('profile')) + 'hgo.db')
         cur = self.db.cursor()
         try:
             cur.execute("SELECT val_int FROM settings WHERE set_id='db_ver'")
@@ -189,7 +184,7 @@ class HbogoHandler(object):
         cur = self.db.cursor()
         cur.execute("DELETE FROM search_history WHERE search_query=?;", (py2_decode(itm),),)
         self.db.commit()
-        self.log("Database: Del "+itm+" from search_history")
+        self.log("Database: Del " + itm + " from search_history")
 
     def get_search_history(self):
         cur = self.db.cursor()
@@ -270,8 +265,8 @@ class HbogoHandler(object):
                     self.log("RETURNED STATUS " + str(r.status_code) + " resetting login and retrying request...")
                     self.del_login()
                     self.login()
-                    return self.post_to_hbogo(url, headers, data, response_format, retry+1)
-                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008)+str(r.status_code))
+                    return self.post_to_hbogo(url, headers, data, response_format, retry + 1)
+                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008) + str(r.status_code))
                 return False
 
             if response_format == 'json':
@@ -354,8 +349,8 @@ class HbogoHandler(object):
                     self.log("RETURNED STATUS " + str(r.status_code) + " resetting login and retrying request...")
                     self.del_login()
                     self.login()
-                    return self.get_from_hbogo(url, response_format, use_cache, retry+1)
-                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008)+str(r.status_code))
+                    return self.get_from_hbogo(url, response_format, use_cache, retry + 1)
+                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008) + str(r.status_code))
                 return False
 
             if use_cache:
@@ -387,11 +382,11 @@ class HbogoHandler(object):
 
             if int(r.status_code) != 200:
                 if retry < self.max_comm_retry:
-                    self.log("RETURNED STATUS "+str(r.status_code)+" resetting login and retrying request...")
+                    self.log("RETURNED STATUS " + str(r.status_code) + " resetting login and retrying request...")
                     self.del_login()
                     self.login()
-                    return self.delete_from_hbogo(url, response_format, retry+1)
-                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008)+str(r.status_code))
+                    return self.delete_from_hbogo(url, response_format, retry + 1)
+                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30008) + str(r.status_code))
                 return False
 
             if response_format == 'json':
@@ -528,9 +523,9 @@ class HbogoHandler(object):
 
     def searchlist(self):
         try:
-            from urllib import quote_plus as quote, urlencode
+            from urllib import quote_plus as quote, urlencode  # noqa: F401
         except ImportError:
-            from urllib.parse import quote_plus as quote, urlencode
+            from urllib.parse import quote_plus as quote, urlencode  # noqa: F401
         self.reset_media_type_counters()
         self.addCat(self.language(30734), "INTERNAL_SEARCH", self.get_media_resource('search.png'), HbogoConstants.ACTION_SEARCH)
         self.addCat(self.language(30735), "DEL_SEARCH_HISTORY", self.get_media_resource('remove.png'), HbogoConstants.ACTION_SEARCH_CLEAR_HISTORY)
@@ -539,12 +534,12 @@ class HbogoHandler(object):
             tmp_url = '%s?%s' % (self.base_url, urlencode({
                 'url': "INTERNAL_SEARCH",
                 'mode': HbogoConstants.ACTION_SEARCH,
-                'name': py2_encode(self.language(30734))+': '+py2_encode(history_itm[0]),
+                'name': py2_encode(self.language(30734)) + ': ' + py2_encode(history_itm[0]),
                 'query': py2_encode(history_itm[0]),
             }))
             liz = xbmcgui.ListItem(py2_encode(history_itm[0]))
             liz.setArt({'fanart': self.get_resource("fanart.jpg"), 'thumb': self.get_media_resource('search.png'), 'icon': self.get_media_resource('search.png')})
-            liz.setInfo(type="Video", infoLabels={"Title": py2_encode(self.language(30734))+': '+py2_encode(history_itm[0])})
+            liz.setInfo(type="Video", infoLabels={"Title": py2_encode(self.language(30734)) + ': ' + py2_encode(history_itm[0])})
             liz.setProperty('isPlayable', "false")
 
             runplugin = 'RunPlugin(%s?%s)'

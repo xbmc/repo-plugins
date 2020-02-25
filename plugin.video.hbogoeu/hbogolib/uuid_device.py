@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import sys
 
-from kodi_six import xbmc, xbmcaddon
+from kodi_six import xbmc, xbmcaddon  # type: ignore
 
 __CRYPT_KEY__ = None
 
@@ -76,9 +76,9 @@ def _get_windows_uuid():
     uuid_value = None
     try:
         try:  # Python 2
-            import _winreg as winreg
+            import _winreg as winreg  # type: ignore
         except ImportError:  # Python 3
-            import winreg as winreg
+            import winreg as winreg  # type: ignore
         registry = winreg.HKEY_LOCAL_MACHINE
         address = 'SOFTWARE\\Microsoft\\Cryptography'
         keyargs = winreg.KEY_READ | winreg.KEY_WOW64_64KEY

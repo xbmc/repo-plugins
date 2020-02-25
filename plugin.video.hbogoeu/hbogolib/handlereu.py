@@ -25,14 +25,14 @@ from hbogolib.kodiutil import KodiUtil
 from hbogolib.util import Util
 
 try:
-    import urlparse as parse
-    from urllib import quote_plus as quote, urlencode
+    import urlparse as parse  # type: ignore
+    from urllib import quote_plus as quote, urlencode  # type: ignore
 except ImportError:
-    import urllib.parse as parse
-    from urllib.parse import quote_plus as quote, urlencode
+    import urllib.parse as parse  # type: ignore
+    from urllib.parse import quote_plus as quote, urlencode  # type: ignore
 
-from kodi_six import xbmc, xbmcplugin, xbmcgui
-from kodi_six.utils import py2_encode
+from kodi_six import xbmc, xbmcplugin, xbmcgui  # type: ignore
+from kodi_six.utils import py2_encode  # type: ignore
 
 
 class HbogoHandler_eu(HbogoHandler):
@@ -899,7 +899,7 @@ class HbogoHandler_eu(HbogoHandler):
             if position_week_top != -1:
                 self.addCat(py2_encode(self.language(30730)), jsonrsp2['Items'][position_week_top]['ObjectUrl'].replace(
                     '/0/{sort}/{pageIndex}/{pageSize}/0/0', '/0/0/1/1024/0/0'),
-                            self.get_media_resource('DefaultFolder.png'), HbogoConstants.ACTION_LIST)
+                    self.get_media_resource('DefaultFolder.png'), HbogoConstants.ACTION_LIST)
             else:
                 self.log("No Week Top Category found")
 
@@ -1095,7 +1095,7 @@ class HbogoHandler_eu(HbogoHandler):
             avail_datetime = Util.is_utc_datetime_past_now(availfrom)
             if avail_datetime is not True:
                 self.log("Content is not available, aborting play")
-                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30009)+" "+avail_datetime)
+                xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30009) + " " + avail_datetime)
                 return
 
         media_info = self.construct_media_info(item_info)
@@ -1172,7 +1172,7 @@ class HbogoHandler_eu(HbogoHandler):
         self.log('Licence key: ' + self.mask_sensitive_data(str(license_key)))
         protocol = 'ism'
         drm = 'com.widevine.alpha'
-        from inputstreamhelper import Helper
+        from inputstreamhelper import Helper  # type: ignore
         is_helper = Helper(protocol, drm=drm)
         if is_helper.check_inputstream():
             list_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
@@ -1416,8 +1416,7 @@ class HbogoHandler_eu(HbogoHandler):
             liz.setInfo(type="Video", infoLabels={"PlayCount": "0"})
             liz.setProperty("resumetime", str(0))
         if hbogo_position > -1:
-            self.log("Found elapsed time on Hbo go for " +
-                     cid + " External ID: " + externalid + " Elapsed: " + str(hbogo_position) + " of " + str(title['Duration']))
+            self.log("Found elapsed time on Hbo go for " + cid + " External ID: " + externalid + " Elapsed: " + str(hbogo_position) + " of " + str(title['Duration']))
             liz.setProperty("totaltime", str(title['Duration']))
             liz.setProperty("resumetime", str(hbogo_position))
             if int(hbogo_position) == 0:
@@ -1549,8 +1548,7 @@ class HbogoHandler_eu(HbogoHandler):
             if monitor.waitForAbort(0.3):
                 break
 
-        self.log("TRACKING ELAPSED for " + str(externalid) +
-                 ": Current time: " + str(current_time) + " of " + str(total_time) + " " + str(percent_elapsed) + "%")
+        self.log("TRACKING ELAPSED for " + str(externalid) + ": Current time: " + str(current_time) + " of " + str(total_time) + " " + str(percent_elapsed) + "%")
         if percent_elapsed > 89:
             self.log("TRACKING ELAPSED for " + str(externalid) + ": 90% reached setting as watched")
             self.update_history(externalid, mediatype, str(total_time), str(100))

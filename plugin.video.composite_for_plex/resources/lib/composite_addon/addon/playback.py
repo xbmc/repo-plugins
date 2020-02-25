@@ -19,6 +19,7 @@ from kodi_six import xbmcplugin  # pylint: disable=import-error
 from kodi_six import xbmcvfs  # pylint: disable=import-error
 
 from .common import get_handle
+from .common import is_resuming_video
 from .constants import CONFIG
 from .constants import StreamControl
 from .containers import Item
@@ -110,13 +111,19 @@ def play_library_media(context, data):
         else:
             details['resume'] = data['force']
 
+    if CONFIG['kodi_version'] >= 18:
+        details['resuming'] = is_resuming_video()
+    else:
+        details['resuming'] = int(details.get('resume', 0)) > 0
+
     LOG.debug('Resume has been set to %s' % details['resume'])
 
-    list_item = create_playback_item(url, session, stream, stream_data, details)
+    list_item = create_playback_item(url, stream, stream_data, details)
 
     if stream['type'] in ['music', 'video']:
         server.settings = None  # can't pickle xbmcaddon.Addon()
         write_pickled('playback_monitor.pickle', {
+            'details': details,
             'media_id': media_id,
             'playing_file': url,
             'session': session,
@@ -133,7 +140,7 @@ def play_library_media(context, data):
     set_now_playing_properties(server, media_id)
 
 
-def create_playback_item(url, session, streams, data, details):
+def create_playback_item(url, streams, data, details):
     if CONFIG['kodi_version'] >= 18:
         list_item = xbmcgui.ListItem(path=url, offscreen=True)
     else:
@@ -151,9 +158,11 @@ def create_playback_item(url, session, streams, data, details):
         })
 
     list_item.setProperty('TotalTime', str(details['duration']))
-    if session is not None and details.get('resume'):
+    if details.get('resuming') and details.get('resume'):
         list_item.setProperty('ResumeTime', str(details['resume']))
         list_item.setProperty('StartOffset', str(details['resume']))
+        list_item.setProperty('StartPercent', '%.2f' % (float(details['resume']) /
+                                                        float(details['duration'])))
         LOG.debug('Playback from resume point: %s' % details['resume'])
 
     return list_item

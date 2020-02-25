@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.composite_for_plex" name="Composite" version="0.8.2" provider-name="anxdpanic">
+<addon id="plugin.video.composite_for_plex" name="Composite" version="0.8.3" provider-name="anxdpanic">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.kodi-six" version="0.0.2"/>
@@ -15,8 +15,8 @@
     <extension point="xbmc.service" library="resources/lib/service_entry_point.py"/>
     <extension point="xbmc.addon.metadata">
         <news>
-[fix] listing of playlists in some cases |contrib: Maven85|
-[lang] German (de_DE) |contrib: Maven85|
+[fix] resuming playback
+[add] Settings - Look and Feel - Episode sort method: Kodi/Plex
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

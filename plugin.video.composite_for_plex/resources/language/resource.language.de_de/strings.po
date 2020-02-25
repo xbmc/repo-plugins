@@ -1280,3 +1280,15 @@ msgstr "Wiedergabeliste wirklich löschen?"
 msgctxt "#30727"
 msgid "Notification encoding"
 msgstr "Benachrichtigungscodierung"
+
+msgctxt "#30728"
+msgid "Episode sort method"
+msgstr ""
+
+msgctxt "#30729"
+msgid "Plex"
+msgstr ""
+
+msgctxt "#30730"
+msgid "Kodi"
+msgstr ""

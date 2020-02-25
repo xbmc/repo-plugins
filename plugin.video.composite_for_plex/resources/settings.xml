@@ -61,6 +61,7 @@
         <setting id="secondary" type="bool" label="30503" default="true"/>
         <setting id="flatten" type="enum" label="30543" lvalues="30553|30558|30559" default="0"/>
         <setting id="disable_all_season" type="bool" label="30603" default="false"/>
+        <setting id="ep_sort_method" type="enum" label="30728" lvalues="30730|30729" default="0"/>
         <setting type="lsep" label="30714"/>
         <setting id="prefix_server" type="enum" label="30669" lvalues="30670|30671" default="1"/>
         <setting id="show_myplex_queue_menu" type="bool" label="30715" default="true"/>

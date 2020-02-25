@@ -14,19 +14,34 @@ class Video(ListItem):
     uri = ""
     info = {}
 
-    def to_list_item(self, addon_base):
+    def to_list_item(self, addon, addon_base):
         list_item = xbmcgui.ListItem(label=self.label)
-        url = addon_base + "/play/?" + urllib.parse.urlencode({"uri": self.uri})
-        list_item.setArt({"thumb": self.thumb})
+        list_item.setArt({
+            "thumb": self.thumb,
+            "poster": self.info.get("picture", ""),
+        })
+        list_item.setCast([
+            {
+                "name": self.info.get("user", ""),
+                "role": addon.getLocalizedString(30401),
+                "thumbnail": self.info.get("userThumb", ""),
+            },
+        ])
         list_item.setInfo("video", {
-            "playcount": self.info.get("artist"),
+            "artist": [self.info.get("user", "")],
             "duration": self.info.get("duration"),
-            "year": self.info.get("date")[:4],
-            "title": self.label,
+            "playcount": self.info.get("playcount"),
             "plot": self.info.get("description", ""),
-            "artist": [self.info.get("user", "")]
+            "title": self.label,
+            "year": self.info.get("date")[:4],
         })
         list_item.setProperty("isPlayable", "true")
-        list_item.setProperty("mediaUrl", self.uri)
+
+        if self.info.get("mediaUrlResolved"):
+            url = self.uri
+            list_item.setProperty("mediaUrl", url)
+        else:
+            url = addon_base + "/play/?" + urllib.parse.urlencode({"uri": self.uri})
+            list_item.setProperty("mediaUrl", self.uri)
 
         return url, list_item, False

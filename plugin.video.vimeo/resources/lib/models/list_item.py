@@ -10,5 +10,5 @@ class ListItem:
         self.id = id
         self.label = label
 
-    def to_list_item(self, addon_base):
+    def to_list_item(self, addon, addon_base):
         return addon_base, xbmcgui.ListItem(label=self.label), False

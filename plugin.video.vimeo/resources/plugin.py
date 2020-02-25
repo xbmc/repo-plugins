@@ -3,11 +3,13 @@ from future.utils import PY2
 standard_library.install_aliases()  # noqa: E402
 
 from resources.lib.vimeo.api import Api
+from resources.lib.kodi.cache import Cache
 from resources.lib.kodi.items import Items
 from resources.lib.kodi.search_history import SearchHistory
 from resources.lib.kodi.settings import Settings
 from resources.lib.kodi.vfs import VFS
 from resources.routes import *
+import os
 import sys
 import urllib.parse
 import xbmc
@@ -22,8 +24,10 @@ addon_profile_path = xbmc.translatePath(addon.getAddonInfo('profile'))
 if PY2:
     addon_profile_path = addon_profile_path.decode('utf-8')
 vfs = VFS(addon_profile_path)
+vfs_cache = VFS(os.path.join(addon_profile_path, "cache/"))
 settings = Settings(addon)
-api = Api(settings, xbmc.getLanguage(xbmc.ISO_639_1), vfs)
+cache = Cache(settings, vfs_cache)
+api = Api(settings, xbmc.getLanguage(xbmc.ISO_639_1), vfs, cache)
 search_history = SearchHistory(settings, vfs)
 listItems = Items(addon, addon_base, search_history)
 
@@ -119,6 +123,11 @@ def run():
                 search(handle, query)
             else:
                 xbmc.log("Invalid search action", xbmc.LOGERROR)
+
+    elif path == PATH_SETTINGS_CACHE_CLEAR:
+        vfs_cache.destroy()
+        dialog = xbmcgui.Dialog()
+        dialog.ok('Vimeo', addon.getLocalizedString(30401))
 
     else:
         xbmc.log("Path not found", xbmc.LOGERROR)

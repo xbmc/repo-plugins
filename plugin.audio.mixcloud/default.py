@@ -3,22 +3,22 @@
 '''
 @author: jackyNIX
 
-Copyright (C) 2011-2018 jackyNIX
+Copyright (C) 2011-2020 jackyNIX
 
-This file is part of XBMC MixCloud Plugin.
+This file is part of KODI MixCloud Plugin.
 
-XBMC MixCloud Plugin is free software: you can redistribute it and/or modify
+KODI MixCloud Plugin is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-XBMC MixCloud Plugin is distributed in the hope that it will be useful,
+KODI MixCloud Plugin is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with XBMC MixCloud Plugin.  If not, see <http://www.gnu.org/licenses/>.
+along with KODI MixCloud Plugin.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 
@@ -106,6 +106,7 @@ STR_HISTORY=        u'history'
 STR_HLSURL=         u'hlsUrl'
 STR_ID=             u'id'
 STR_IMAGE=          u'image'
+STR_ISEXCLUSIVE=    u'isExclusive'
 STR_FORMAT=         u'format'
 STR_KEY=            u'key'
 STR_LIMIT=          u'limit'
@@ -146,6 +147,11 @@ class Resolver:
     m4a=3
     mixclouddownloader1=4
     mixclouddownloader2=5
+
+resolver_order=[Resolver.local,
+                Resolver.mixclouddownloader1,
+                Resolver.offliberty,
+                Resolver.mixclouddownloader2]
 
 
 
@@ -239,7 +245,6 @@ def add_folder_item(name,infolabels={},parameters={},img=''):
 
 def show_home_menu():
     if access_token!='':
-#        add_folder_item(name=STRLOC_MAINMENU_FEED,parameters={STR_MODE:MODE_FEED})
         add_folder_item(name=STRLOC_MAINMENU_FOLLOWINGS,parameters={STR_MODE:MODE_FOLLOWINGS},img=get_icon('yourfollowings.png'))
         add_folder_item(name=STRLOC_MAINMENU_FOLLOWERS,parameters={STR_MODE:MODE_FOLLOWERS},img=get_icon('yourfollowers.png'))
         add_folder_item(name=STRLOC_MAINMENU_FAVORITES,parameters={STR_MODE:MODE_FAVORITES},img=get_icon('yourfavorites.png'))
@@ -250,11 +255,9 @@ def show_home_menu():
         add_folder_item(name=STRLOC_MAINMENU_LOGOFF+'...',parameters={STR_MODE:MODE_LOGOFF})
     else:
         add_folder_item(name=STRLOC_MAINMENU_LOGIN,parameters={STR_MODE:MODE_LOGIN})
-    add_folder_item(name=STRLOC_MAINMENU_HOT,parameters={STR_MODE:MODE_HOT,STR_OFFSET:0},img=get_icon('hot.png'))
     add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0},img=get_icon('categories.png'))
     add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH},img=get_icon('search.png'))
     add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY},img=get_icon('history.png'))
-    add_folder_item(name=STRLOC_MAINMENU_JACKYNIX,parameters={STR_MODE:MODE_JACKYNIX},img=get_icon('jackynix.png'))
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -635,20 +638,23 @@ def get_stream_local(cloudcast_key):
         request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
         response = urllib2.urlopen(request)
         data=response.read()
-        match=re.search('<script id="relay-data" type="text/x-mixcloud">(.*)', data)
+        match=re.search('<script id="relay-data" type="text/x-mixcloud">\[(.*)', data)
         if match:
-            match=re.search('(.*)</script>', match.group(1))
+            match=re.search('(.*)\]</script>', match.group(1))
             if match:
                 decoded=match.group(1).replace('&quot;','"')
                 json_content=json.loads(decoded)
+                json_isexclusive=False
+                json_url=None
                 for json_item in json_content:
-
                     if STR_CLOUDCASTLOOKUP in json_item and json_item[STR_CLOUDCASTLOOKUP]:
                         json_cloudcastLookupA = json_item[STR_CLOUDCASTLOOKUP]
                         if STR_DATA in json_cloudcastLookupA and json_cloudcastLookupA[STR_DATA]:
                             json_data = json_cloudcastLookupA[STR_DATA]
                             if STR_CLOUDCASTLOOKUP in json_data and json_data[STR_CLOUDCASTLOOKUP]:
                                 json_cloudcastLookupB = json_data[STR_CLOUDCASTLOOKUP]
+                                if STR_ISEXCLUSIVE in json_cloudcastLookupB and json_cloudcastLookupB[STR_ISEXCLUSIVE]:
+                                    json_isexclusive = json_cloudcastLookupB[STR_ISEXCLUSIVE]
                                 if STR_STREAMINFO in json_cloudcastLookupB and json_cloudcastLookupB[STR_STREAMINFO]:
                                     json_streaminfo = json_cloudcastLookupB[STR_STREAMINFO]
                                     if STR_URL in json_streaminfo and json_streaminfo[STR_URL]:
@@ -657,24 +663,8 @@ def get_stream_local(cloudcast_key):
                                         json_url = json_streaminfo[STR_HLSURL]
                                     elif STR_DASHURL in json_streaminfo and json_streaminfo[STR_DASHURL]:
                                         json_url = json_streaminfo[STR_DASHURL]
-
-
-#				if STR_CLOUDCAST in json_item and json_item[STR_CLOUDCAST]:
-#                        json_cloudcast=json_item[STR_CLOUDCAST]
-#                        if STR_DATA in json_cloudcast and json_cloudcast[STR_DATA]:
-#                            json_data=json_cloudcast[STR_DATA]
-#                            if STR_CLOUDCASTLOOKUP in json_data and json_data[STR_CLOUDCASTLOOKUP]:
-#                                json_cloudcastlookup=json_data[STR_CLOUDCASTLOOKUP]
-#                                if STR_STREAMINFO in json_cloudcastlookup and json_cloudcastlookup[STR_STREAMINFO]:
-#                                    json_streaminfo=json_cloudcastlookup[STR_STREAMINFO]
-#                                    if STR_URL in json_streaminfo and json_streaminfo[STR_URL]:
-#                                        json_url=json_streaminfo[STR_URL]
-#                                    elif STR_HLSURL in json_streaminfo and json_streaminfo[STR_HLSURL]:
-#                                        json_url=json_streaminfo[STR_HLSURL]
-#                                    elif STR_DASHURL in json_streaminfo and json_streaminfo[STR_DASHURL]:
-#                                        json_url=json_streaminfo[STR_DASHURL]
-
-
+                    if json_url:
+                        break
 
                 if json_url:
                     log_if_debug('encoded url: '+json_url)
@@ -682,6 +672,9 @@ def get_stream_local(cloudcast_key):
                     url=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(decoded_url,cycle(STR_MAGICSTRING)))
                     log_if_debug('url: '+url)
                     return url
+                elif json_isexclusive:
+                    log_if_debug('Cloudcast is exclusive')
+                    return STR_ISEXCLUSIVE
                 else:
                     log_if_debug('Unable to find url in json')
             else:
@@ -767,40 +760,49 @@ def get_stream(cloudcast_key):
     global resolverid_curr
     global resolverid_orig
 
-    resolverid_start=resolverid_curr
+    if not resolverid_curr in resolver_order:
+        resolverid_curr=resolver_order[0]
 
-    log_if_debug('Resolverid _curr=%s _orig=%s' % (resolverid_curr,resolverid_orig))
+    resolver_functions={Resolver.local : get_stream_local,
+                        Resolver.offliberty : get_stream_offliberty,
+                        Resolver.m4a : get_stream_m4a,
+                        Resolver.mixclouddownloader1 : get_stream_mixclouddownloader1,
+                        Resolver.mixclouddownloader2 : get_stream_mixclouddownloader2}
 
-    resolvers={Resolver.auto : get_stream_local,
-               Resolver.local : get_stream_local,
-               Resolver.offliberty : get_stream_offliberty,
-               Resolver.m4a : get_stream_m4a,
-               Resolver.mixclouddownloader1 : get_stream_mixclouddownloader1,
-               Resolver.mixclouddownloader2 : get_stream_mixclouddownloader2}
+    strm_url=None
+    strm_isexclusive=False
+    while not (strm_url or xbmc.Monitor().abortRequested()):
+        strm_url=resolver_functions[resolverid_curr](cloudcast_key)
 
-    strm=resolvers[resolverid_curr](cloudcast_key)
+        # local resolver can detect exclusive cloudcasts
+        if strm_url==STR_ISEXCLUSIVE:
+            if resolverid_orig==Resolver.local:
+                strm_isexclusive=True
+            strm_url=None
 
-    if not strm:
-        log_if_debug('Cannot solve using current resolver')
+        # resolver failed
+        if not strm_url:
+            if (resolverid_orig!=Resolver.auto) and (resolverid_curr==resolverid_orig) and (not strm_isexclusive):
+                dialog=xbmcgui.Dialog()
+                if not dialog.yesno('MixCloud',STRLOC_COMMON_RESOLVER_ERROR):
+                    break
 
-        if (resolverid_orig!=Resolver.auto):
-            dialog=xbmcgui.Dialog()
-            if not dialog.yesno('MixCloud',STRLOC_COMMON_RESOLVER_ERROR):
-                return strm
+            # try next resolver
+            resolverid_index=resolver_order.index(resolverid_curr)+1
+            if resolverid_index>=len(resolver_order):
+                resolverid_index=0
+            resolverid_curr=resolver_order[resolverid_index]
 
-        while (not strm):
-            resolverid_curr=resolverid_curr+1
-            if resolverid_curr>Resolver.mixclouddownloader2:
-                resolverid_curr=Resolver.auto
-            if resolverid_curr==resolverid_start:
+            # stop when tried all
+            if resolverid_curr==resolverid_orig:
                 break
-            log_if_debug('Changing resolver to %d' % (resolverid_curr))
-            strm=resolvers[resolverid_curr](cloudcast_key)
-            if strm and (resolverid_orig!=Resolver.auto):
+        else:
+            if (resolverid_orig!=Resolver.auto) and (resolverid_curr!=resolverid_orig) and (not strm_isexclusive):
                 __addon__.setSetting('resolver',str(resolverid_curr))
                 resolverid_orig=resolverid_curr
+            
 
-    return strm
+    return strm_url
 
 
 

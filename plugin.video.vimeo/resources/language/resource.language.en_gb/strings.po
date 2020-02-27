@@ -143,3 +143,7 @@ msgstr ""
 msgctxt "#30901"
 msgid "Next page"
 msgstr ""
+
+msgctxt "#30902"
+msgid "Trailer"
+msgstr ""

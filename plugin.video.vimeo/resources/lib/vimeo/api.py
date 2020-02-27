@@ -111,7 +111,13 @@ class Api:
             xbmc.log("plugin.video.vimeo::Api() directly resolved", xbmc.LOGDEBUG)
             return uri
 
-        xbmc.log("plugin.video.vimeo::Api() extra resolved", xbmc.LOGDEBUG)
+        # If we have a on-demand URL, we need to fetch the trailer and return the uri
+        if uri.startswith("/ondemand/"):
+            xbmc.log("plugin.video.vimeo::Api() resolving on-demand", xbmc.LOGDEBUG)
+            return self._get_on_demand_trailer(uri)
+
+        # Fallback
+        xbmc.log("plugin.video.vimeo::Api() resolving fallback", xbmc.LOGDEBUG)
         uri = uri.replace("/videos/", "/video/")
         res = self._do_player_request(uri)
 
@@ -146,12 +152,18 @@ class Api:
                 is_channel = "/channels/" in item.get("uri", "")
                 is_group = "/groups/" in item.get("uri", "")
                 is_user = item.get("account", False)
+
                 # Requests made with the fallback token won't include media URLs:
-                contains_media_url = "play" in item
+                contains_media_url = "play" in item and item["play"]["status"] == "playable"
+
+                # On-demand videos don't contain playable video links:
+                purchase_required = item.get("play", {}).get("status", "") == "purchase_required"
 
                 if is_video:
                     if contains_media_url:
                         video_url = self._extract_url_from_search_response(item.get("play"))
+                    elif purchase_required:
+                        video_url = item["metadata"]["connections"]["trailer"]["uri"]
                     else:
                         video_url = item["uri"]
 
@@ -167,6 +179,7 @@ class Api:
                         "user": item["user"]["name"],
                         "userThumb": self._get_picture(item["user"]["pictures"], 3),
                         "mediaUrlResolved": contains_media_url,
+                        "onDemand": purchase_required,
                     }
                     collection.items.append(video)
 
@@ -244,6 +257,10 @@ class Api:
 
         else:
             raise RuntimeError("Could not extract video URL")
+
+    def _get_on_demand_trailer(self, uri):
+        res = self._do_api_request(uri, {"fields": "uri,type,play"})
+        return self._extract_url_from_search_response(res["play"])
 
     def _extract_url_from_video_config(self, video_config):
         video_files = video_config["request"]["files"]

@@ -90,6 +90,16 @@ def _get_command_parameter(url):
     return command
 
 
+def is_resuming_video():
+    try:
+        _resume_arg = get_argv()[3].split(':')
+        if _resume_arg[0] == 'resume' and _resume_arg[1] == 'true':
+            return True
+        return False
+    except:  # pylint: disable=bare-except
+        return False
+
+
 def get_plugin_url_path():
     plugin_url = get_argv()[0]
     path = plugin_url.replace('plugin://%s/' % CONFIG['id'], '').rstrip('/')

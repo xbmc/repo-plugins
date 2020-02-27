@@ -35,12 +35,11 @@ def process_episodes(context, url, tree=None, rating_key=None, library=False):
     if tree is None:
         return
 
-    if tree.get('mixedParents') == '1':
-        LOG.debug('Setting plex sort')
+    if tree.get('mixedParents') == '1' or context.settings.episode_sort_method() == 'plex':
         xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_UNSORTED)
     else:
-        LOG.debug('Setting KODI sort')
-        xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_EPISODE)  # episode
+        xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_EPISODE)
+        xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_UNSORTED)
 
     xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE)

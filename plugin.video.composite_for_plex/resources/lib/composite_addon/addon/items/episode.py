@@ -59,16 +59,17 @@ def create_episode_item(context, item, library=False):
     if item.data.get('sorttitle'):
         info_labels['sorttitle'] = encode_utf8(item.data.get('sorttitle'))
 
-    if item.tree.get('mixedParents') == '1':
-        if item.tree.get('parentIndex') == '1':
-            info_labels['title'] = '%sx%s %s' % (info_labels['season'],
-                                                 str(info_labels['episode']).zfill(2),
-                                                 info_labels['title'])
-        else:
-            info_labels['title'] = '%s - %sx%s %s' % (info_labels['tvshowtitle'],
-                                                      info_labels['season'],
-                                                      str(info_labels['episode']).zfill(2),
-                                                      info_labels['title'])
+    prefix_sxee = (item.tree.get('mixedParents') == '1' or
+                   context.settings.episode_sort_method() == 'plex')
+    prefix_tvshow = (item.tree.get('parentIndex') != '1' and
+                     context.params.get('mode') == '0')
+
+    if prefix_sxee:
+        info_labels['title'] = '%sx%s %s' % (info_labels['season'],
+                                             str(info_labels['episode']).zfill(2),
+                                             info_labels['title'])
+        if prefix_tvshow:
+            info_labels['title'] = '%s - %s' % (info_labels['tvshowtitle'], info_labels['title'])
 
     # Gather some data
     view_offset = item.data.get('viewOffset', 0)

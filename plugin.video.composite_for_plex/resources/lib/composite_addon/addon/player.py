@@ -40,6 +40,9 @@ class PlaybackMonitorThread(threading.Thread):
         self.daemon = True
         self.start()
 
+    def details(self):
+        return self._monitor_dict.get('details')
+
     def media_id(self):
         return self._monitor_dict.get('media_id')
 
@@ -166,6 +169,20 @@ class PlaybackMonitorThread(threading.Thread):
 
         return current_time, total_time, progress
 
+    def resume(self, current_time):
+        resume_time = float(self.details().get('resume', 0))
+
+        if (resume_time <= 1  # don't resume if only 1 second
+                or resume_time <= float(current_time)):  # don't seek backwards or to current time
+            return True
+
+        if resume_time > float(current_time):
+            # seek to resume time if it's greater than the current time
+            self.PLAYER.seekTime(int(resume_time) - 1)
+            return True
+
+        return False
+
     def run(self):
         current_time = 0
         played_time = 0
@@ -184,6 +201,7 @@ class PlaybackMonitorThread(threading.Thread):
         waited = 0.0
 
         notified_upnext = False
+        resumed = not self.details().get('resuming')
 
         # Whilst the file is playing back
         while self.PLAYER.isPlaying() and not self.MONITOR.abortRequested():
@@ -203,9 +221,13 @@ class PlaybackMonitorThread(threading.Thread):
                 played_time = self.report_playback_progress(current_time, total_time,
                                                             progress, played_time)
 
-            if not notified_upnext and current_time > 0:
-                notified_upnext = True
-                self.notify_upnext()
+            if current_time > 0:
+                if not resumed:
+                    resumed = self.resume(current_time)
+
+                if not notified_upnext:
+                    notified_upnext = True
+                    self.notify_upnext()
 
             if self.MONITOR.waitForAbort(wait_time):
                 break

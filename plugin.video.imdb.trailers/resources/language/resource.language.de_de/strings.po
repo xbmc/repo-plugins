@@ -80,5 +80,9 @@ msgid "Televison Tonight"
 msgstr "TV heute Abend"
 
 msgctxt "#30206"
+msgid "Search Title"
+msgstr "Titel suchen"
+
+msgctxt "#30207"
 msgid "Clear Cache"
 msgstr "Cache leeren"

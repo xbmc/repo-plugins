@@ -1,5 +1,9 @@
 plugin.video.imdb.trailers:
 ---------------------------
+v2.1.9 (28.02.2020)
+[fix] Playback shifted to HLS
+[new] Search option
+
 v2.1.8 (15.06.2019)
 [fix] Rewrite using requests-cache module
 

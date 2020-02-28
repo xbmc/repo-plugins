@@ -79,5 +79,9 @@ msgid "Television Tonight"
 msgstr "Bu akşam televizyon"
 
 msgctxt "#30206"
+msgid "Search Title"
+msgstr "Başlık Ara"
+
+msgctxt "#30207"
 msgid "Clear Cache"
 msgstr "Önbelleği Temizle"

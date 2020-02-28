@@ -49,7 +49,7 @@ _icon = _addon.getAddonInfo('icon')
 _fanart = _addon.getAddonInfo('fanart')
 _language = _addon.getLocalizedString
 _settings = _addon.getSetting
-_addonpath = f'special://profile/addon_data/{_addonID}/'
+_addonpath = 'special://profile/addon_data/{}/'.format(_addonID)
 
 force_mode = _settings("forceViewMode") == "true"
 if force_mode:

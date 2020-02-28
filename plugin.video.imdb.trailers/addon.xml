@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.9" provider-name="gujal">
+<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.10" provider-name="gujal">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
     <import addon="script.module.requests" version="2.4.3"/>
@@ -29,12 +29,11 @@
     <language></language>
     <platform>all</platform>
     <license>GPL-2.0</license>
-    <forum>https://forum.kodi.tv/showthread.php?tid=95603</forum>
+    <forum>https://forum.kodi.tv/showthread.php?tid=352127</forum>
     <website>https://www.imdb.com/trailers/</website>
     <email>gujal at protonmail dot com</email>
-    <news>v2.1.9 (20200228)
-      [fix] Playback shifted to HLS
-      [new] Search option
+    <news>v2.1.10 (20200229)
+      [fix] Python2 syntax issue breaking on Kodi18
     </news>
     <assets>
       <icon>icon.png</icon>

@@ -5,9 +5,10 @@
   version="0.9.3"
   provider-name="Raptor 2101">
   <requires>
-   <import addon="xbmc.python" version="2.25.0"/>
-   <import addon="script.module.beautifulsoup4" version="4.3.2"/>
-   <import addon="script.module.requests" version="2.18.4"/>
+      <import addon="xbmc.python" version="2.25.0"/>
+      <import addon="script.module.future" version="0.17.1"/>
+   <import addon="script.module.beautifulsoup4" version="4.6.2"/>
+   <import addon="script.module.requests" version="2.22.0"/>
   </requires>
   <extension 
     point="xbmc.python.pluginsource"
@@ -37,6 +38,9 @@ Al momento sono supportate le seguenti emittenti:
     <website>https://github.com/raptor2101/Mediathek</website>
     <source>https://github.com/raptor2101/Mediathek</source>
     <email>raptor2101@gmx.de</email>
+    <news>0.9.3 (2020-01-05)
+- [fix] arte categories
+    </news>
     <assets>
         <icon>resources/icon.png</icon>
     </assets>

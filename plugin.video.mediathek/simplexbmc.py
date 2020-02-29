@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-------------LicenseHeader--------------
+# -------------LicenseHeader--------------
 # plugin.video.mediathek - display german mediathekes
 # Copyright (C) 2010  Raptor 2101 [raptor2101@gmx.de]
 #
@@ -15,202 +15,223 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import xbmc, xbmcgui, xbmcplugin,xbmcaddon, sys, urllib, os, time, re
-from bs4 import BeautifulSoup;
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
+import os
+import re
+import sys
+import time
+import urllib.request, urllib.parse, urllib.error
+import xbmc
+import xbmcaddon
+import xbmcgui
+import xbmcplugin
+
+from bs4 import BeautifulSoup
 import json
 import hashlib
-from mediathek import ComplexLink;
+from mediathek import ComplexLink
 
-regex_findLink = re.compile("mms://[^\"]*wmv");
+regex_findLink = re.compile("mms://[^\"]*wmv")
 
 __plugin__ = "Mediathek"
 
 settings = xbmcaddon.Addon(id='plugin.video.mediathek')
 translation = settings.getLocalizedString
 
+
 class SimpleXbmcGui(object):
-  def __init__(self,settings):
-    self.settings = xbmcaddon.Addon(id='plugin.video.mediathek');
-    self.quality = int(xbmcplugin.getSetting(int(sys.argv[1]), "quality" ));
-    self.preferedStreamTyp = int(xbmcplugin.getSetting(int(sys.argv[1]), "preferedStreamType"));
-    self.log("quality: %s"%(self.quality));
-    self.plugin_profile_dir = xbmc.translatePath(settings.getAddonInfo("profile"))
-    if not os.path.exists(self.plugin_profile_dir):
-      os.mkdir(self.plugin_profile_dir);
+    def __init__(self, settings):
+        self.__addon_handle = int(sys.argv[1])
+        self.__addon_name = 'plugin.video.mediathek'
+        xbmcplugin.setContent(self.__addon_handle, 'tvshows')
+        self.settings = xbmcaddon.Addon(id='plugin.video.mediathek')
+        self.quality = int(xbmcplugin.getSetting(int(sys.argv[1]), "quality"))
+        self.preferedStreamTyp = int(xbmcplugin.getSetting(int(sys.argv[1]), "preferedStreamType"))
+        self.log("quality: %s" % self.quality)
+        self.plugin_profile_dir = xbmc.translatePath(settings.getAddonInfo("profile"))
+        if not os.path.exists(self.plugin_profile_dir):
+            os.mkdir(self.plugin_profile_dir)
 
-  def log(self, msg):
-    if not isinstance(msg, (str, unicode)):
-      xbmc.log("[%s]: %s" % (__plugin__, type(msg)))
-    else:
-      xbmc.log("[%s]: %s" % (__plugin__, msg.encode('utf8')))
+    def log(self, msg):
+        if not isinstance(msg, (str, str)):
+            xbmc.log("[%s]: %s" % (__plugin__, type(msg)))
+        else:
+            xbmc.log("[%s]: %s" % (__plugin__, msg.encode('utf8')))
 
-  def buildVideoLink(self, displayObject, mediathek, objectCount):
-    metaData = self.BuildMeteData(displayObject)
-    if displayObject.picture is not None:
-      listItem=xbmcgui.ListItem(metaData["title"], iconImage="DefaultFolder.png", thumbnailImage=displayObject.picture)
-    else:
-      listItem=xbmcgui.ListItem(metaData["title"], iconImage="DefaultFolder.png")
-    listItem.setInfo("video",metaData);
+    def buildVideoLink(self, displayObject, mediathek, objectCount):
+        metaData = self.BuildMetaData(displayObject)
+        if displayObject.picture is not None:
+            listItem = xbmcgui.ListItem(metaData["title"], iconImage="DefaultFolder.png", thumbnailImage=displayObject.picture)
+        else:
+            listItem = xbmcgui.ListItem(metaData["title"], iconImage="DefaultFolder.png")
+        listItem.setInfo("Video", metaData)
+        listItem.setInfo("video", metaData)
 
-    if(displayObject.isPlayable):
-      if(displayObject.isPlayable == "PlayList"):
-        link = displayObject.link[0]
-        url = "%s?type=%s&action=openPlayList&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(link.basePath))
-        listItem.setProperty('IsPlayable', 'true');
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]),url,listItem,False,objectCount)
-      elif(displayObject.isPlayable == "JsonLink"):
-        link = displayObject.link
-        url = "%s?type=%s&action=openJsonLink&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(link))
-        listItem.setProperty('IsPlayable', 'true');
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]),url,listItem, False, objectCount)
-      else:
-        link = self.extractLink(displayObject.link);
-        if(isinstance(link,ComplexLink)):
-          self.log("PlayPath:"+ link.playPath);
-          listItem.setProperty("PlayPath", link.playPath);
-        listItem.setProperty('IsPlayable', 'true');
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]),link.basePath,listItem,False,objectCount)
-    else:
-      try:
-        url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(displayObject.link))
-      except:
-        url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(displayObject.link.encode('utf-8')))
-      xbmcplugin.addDirectoryItem(int(sys.argv[1]),url,listItem,True,objectCount)
+        if displayObject.isPlayable:
+            if displayObject.isPlayable == "PlayList":
+                link = displayObject.link[0]
+                url = "%s?type=%s&action=openPlayList&link=%s" % (sys.argv[0], mediathek.name(), urllib.parse.quote_plus(link.basePath))
+                listItem.setProperty('IsPlayable', 'true')
+                xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listItem, False, objectCount)
+            elif displayObject.isPlayable == "JsonLink":
+                link = displayObject.link
+                url = "%s?type=%s&action=openJsonLink&link=%s" % (sys.argv[0], mediathek.name(), urllib.parse.quote_plus(link))
+                listItem.setProperty('IsPlayable', 'true')
+                xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listItem, False, objectCount)
+            else:
+                link = self.extractLink(displayObject.link)
+                if isinstance(link, ComplexLink):
+                    self.log("PlayPath:" + link.playPath)
+                    listItem.setProperty("PlayPath", link.playPath)
+                listItem.setProperty('IsPlayable', 'true')
+                xbmcplugin.addDirectoryItem(int(sys.argv[1]), link.basePath, listItem, False, objectCount)
+        else:
+            #listItem.setIsFolder(True) #not for >= leia only
+            try:
+                url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0], mediathek.name(), urllib.parse.quote_plus(displayObject.link))
+            except:
+                url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0], mediathek.name(), urllib.parse.quote_plus(displayObject.link.encode('utf-8')))
+            xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listItem, True, objectCount)
 
-  def BuildMeteData(self, displayObject):
-    if(displayObject.subTitle is None or displayObject.subTitle == "" or displayObject.subTitle == displayObject.title):
-      title = self.transformHtmlCodes(displayObject.title.rstrip());
-    else:
-      title = self.transformHtmlCodes(displayObject.title.rstrip() +" - "+ displayObject.subTitle.rstrip());
-    if displayObject.date is not None:
-      title = "(%s) %s"%(time.strftime("%d.%m",displayObject.date),title.rstrip());
+    def BuildMetaData(self, displayObject):
+        if displayObject.subTitle is None or displayObject.subTitle == "" or displayObject.subTitle == displayObject.title:
+            title = self.transformHtmlCodes(displayObject.title.rstrip())
+        else:
+            title = self.transformHtmlCodes(displayObject.title.rstrip() + " - " + displayObject.subTitle.rstrip())
+        if displayObject.date is not None:
+            title = "(%s) %s" % (time.strftime("%d.%m", displayObject.date), title.rstrip())
 
-    metaData = {
-      "mediatype":"video",
-      "title": title,
-      "plotoutline":  self.transformHtmlCodes(displayObject.description)
-    }
+        metaData = {
+            "mediatype": "video",
+            "title": title,
+            "plotoutline": self.transformHtmlCodes(displayObject.description)
+        }
 
-    if(displayObject.duration is not None):
-      metaData["duration"] = int(displayObject.duration);
+        if displayObject.duration is not None:
+            metaData["duration"] = int(displayObject.duration)
 
-    if(displayObject.date is not None):
-          metaData["date"] =time.strftime("%d.%m.%Y",displayObject.date);
-          metaData["year"] =int(time.strftime("%Y",displayObject.date));
-    return metaData;
+        if displayObject.date is not None:
+            metaData["date"] = time.strftime("%Y-%m-%d", displayObject.date)
+            metaData["year"] = int(time.strftime("%Y", displayObject.date))
+        return metaData
 
-  def transformHtmlCodes(self, content):
-    return BeautifulSoup(content,"html.parser").prettify(formatter=None);
+    def transformHtmlCodes(self, content):
+        return BeautifulSoup(content, "html.parser").prettify(formatter=None)
 
-  def buildMenuLink(self,menuObject,mediathek,objectCount):
-    title = menuObject.name;
-    listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
-    url = "%s?type=%s&action=openMenu&path=%s" % (sys.argv[0],mediathek.name(), menuObject.path)
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True,totalItems = objectCount)
+    def buildMenuLink(self, menuObject, mediathek, objectCount):
+        title = menuObject.name
+        listItem = xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
+        url = "%s?type=%s&action=openMenu&path=%s" % (sys.argv[0], mediathek.name(), menuObject.path)
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listItem, isFolder=True, totalItems=objectCount)
 
-  def storeJsonFile(self,jsonObject,additionalIdentifier = None):
-    hashGenerator = hashlib.md5();
-    hashGenerator.update(sys.argv[2]);
-    if(additionalIdentifier is not None):
-      hashGenerator.update(additionalIdentifier);
-    callhash = hashGenerator.hexdigest();
-    storedJsonFile = os.path.join(self.plugin_profile_dir,"%s.json"%callhash);
-    with open(storedJsonFile, 'wb') as output:
-      json.dump(jsonObject,output);
-    return callhash;
+    def storeJsonFile(self, jsonObject, additionalIdentifier=None):
+        hashGenerator = hashlib.md5()
+        hashGenerator.update(sys.argv[2])
+        if additionalIdentifier is not None:
+            hashGenerator.update(additionalIdentifier)
+        callhash = hashGenerator.hexdigest()
+        storedJsonFile = os.path.join(self.plugin_profile_dir, "%s.json" % callhash)
+        with open(storedJsonFile, 'wb') as output:
+            json.dump(jsonObject, output)
+        return callhash
 
-  def loadJsonFile(self,callhash):
-    storedJsonFile = os.path.join(self.plugin_profile_dir,"%s.json"%callhash);
-    with open(storedJsonFile,"rb") as input:
-      return json.load(input);
+    def loadJsonFile(self, callhash):
+        storedJsonFile = os.path.join(self.plugin_profile_dir, "%s.json" % callhash)
+        with open(storedJsonFile, "rb") as input:
+            return json.load(input)
 
-  def buildJsonLink(self,mediathek,title,jsonPath,callhash,objectCount):
-    listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
-    url = "%s?type=%s&action=openJsonPath&path=%s&callhash=%s" % (sys.argv[0],mediathek.name(), jsonPath,callhash)
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True,totalItems = objectCount)
+    def buildJsonLink(self, mediathek, title, jsonPath, callhash, objectCount):
+        listItem = xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
+        url = "%s?type=%s&action=openJsonPath&path=%s&callhash=%s" % (sys.argv[0], mediathek.name(), jsonPath, callhash)
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listItem, isFolder=True, totalItems=objectCount)
 
-  def listAvailableMediathekes(self, mediathekNames):
-    rootPath = os.path.join(self.settings.getAddonInfo('path'),"resources/logos/png/");
-    for name in mediathekNames:
-      listItem=xbmcgui.ListItem(name, iconImage="DefaultFolder.png",thumbnailImage=os.path.join(rootPath,name+".png"))
-      url = "%s?type=%s" % (sys.argv[0], name)
-      xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
-  def openMenuContext(self):
-    self.dialogProgress = xbmcgui.DialogProgress();
+    def listAvailableMediathekes(self, mediathekNames):
+        rootPath = os.path.join(self.settings.getAddonInfo('path'), "resources/logos/png/")
+        for name in mediathekNames:
+            listItem = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=os.path.join(rootPath, name + ".png"))
+            url = "%s?type=%s" % (sys.argv[0], name)
+            xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listItem, isFolder=True)
 
-  def closeMenuContext(self):
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    def openMenuContext(self):
+        self.dialogProgress = xbmcgui.DialogProgress()
 
-  def getHomeDir(self):
-    return self.settings.getAddonInfo("profile");
+    def closeMenuContext(self):
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-  def back(self):
-    xbmc.executebuiltin("Action(PreviousMenu)");
+    def getHomeDir(self):
+        return self.settings.getAddonInfo("profile")
 
-  def keyboardInput(self):
-    keyboard = xbmc.Keyboard("")
-    keyboard.doModal();
-    return keyboard;
+    def back(self):
+        xbmc.executebuiltin("Action(PreviousMenu)")
 
-  def addSearchButton(self,mediathek):
-    title = translation(30100);
-    listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
-    if(mediathek is not None):
-      url = "%s?type=%s&action=search" % (sys.argv[0],mediathek.name())
-    else:
-      url = "%s?action=search" % (sys.argv[0])
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
+    def keyboardInput(self):
+        keyboard = xbmc.Keyboard("")
+        keyboard.doModal()
+        return keyboard
 
-  def readText(self,node,textNode):
-    try:
-      node = node.getElementsByTagName(textNode)[0].firstChild;
-      return unicode(node.data);
-    except:
-      return "";
+    def addSearchButton(self, mediathek):
+        title = translation(30100)
+        listItem = xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
+        if mediathek is not None:
+            url = "%s?type=%s&action=search" % (sys.argv[0], mediathek.name())
+        else:
+            url = "%s?action=search" % (sys.argv[0])
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listItem, isFolder=True)
 
-  def playPlaylist(self, remotePlaylist):
-    player = xbmc.Player();
+    def readText(self, node, textNode):
+        try:
+            node = node.getElementsByTagName(textNode)[0].firstChild
+            return str(node.data)
+        except:
+            return ""
 
-    playerItem = xbmcgui.ListItem(remotePlaylist);
-    playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO);
-    playlist.clear();
-    for link in regex_findLink.findall(remotePlaylist):
-      listItem=xbmcgui.ListItem(link);
-      listItem.setProperty("PlayPath", link);
-      playlist.add(url=link, listitem=listItem);
+    def playPlaylist(self, remotePlaylist):
+        player = xbmc.Player()
 
-    player.play(playlist, playerItem, false);
+        playerItem = xbmcgui.ListItem(remotePlaylist)
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.clear()
+        for link in regex_findLink.findall(remotePlaylist):
+            listItem = xbmcgui.ListItem(link)
+            listItem.setProperty("PlayPath", link)
+            playlist.add(url=link, listitem=listItem)
 
-  def errorOK(self,title="", msg=""):
-    e = str( sys.exc_info()[ 1 ] )
-    self.log(e)
-    if not title:
-      title = __plugin__
-    if not msg:
-      msg = "ERROR!"
-    if(e == None):
-      xbmcgui.Dialog().ok( title, msg, e )
-    else:
-      xbmcgui.Dialog().ok( title, msg)
-  def play(self,links):
-    link = self.extractLink(links);
-    listItem = xbmcgui.ListItem(path=link.basePath)
-    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem=listItem)
+        player.play(playlist, playerItem, False)
 
-  def extractLink(self, links):
-    if(self.quality in links):
-      return links[self.quality];
-    else:
-      selectedKey = -1;
-      keys = list(links.keys())
-      for key in keys:
-        if(key < self.quality and key > selectedKey):
-          selectedKey = key;
-      if(selectedKey > -1):
-        return links[selectedKey];
-      else:
-        selectedKey = keys[0];
-        for key in keys:
-          if(key < selectedKey):
-            selectedKey = key;
-        return links[selectedKey];
+    def errorOK(self, title="", msg=""):
+        e = str(sys.exc_info()[1])
+        self.log(e)
+        if not title:
+            title = __plugin__
+        if not msg:
+            msg = "ERROR!"
+        if e is None:
+            xbmcgui.Dialog().ok(title, msg, e)
+        else:
+            xbmcgui.Dialog().ok(title, msg)
+
+    def play(self, links):
+        link = self.extractLink(links)
+        listItem = xbmcgui.ListItem(path=link.basePath)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem=listItem)
+
+    def extractLink(self, links):
+        if self.quality in links:
+            return links[self.quality]
+        else:
+            selectedKey = -1
+            keys = list(links.keys())
+            for key in keys:
+                if self.quality > key > selectedKey:
+                    selectedKey = key
+            if selectedKey > -1:
+                return links[selectedKey]
+            else:
+                selectedKey = keys[0]
+                for key in keys:
+                    if key < selectedKey:
+                        selectedKey = key
+                return links[selectedKey]

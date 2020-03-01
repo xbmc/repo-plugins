@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.iranintl"
+       name="Iran International TV"
+       version="1.0.0"
+       provider-name="babak">
+  <requires>
+    <import addon="xbmc.python" version="2.14.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Iran International TV</summary>
+    <description lang="en_GB">Launched in May 2017, Iran International TV is a mix of rolling news, current affairs and documentaries, sport, lifestyle, health and technology, programmed to attract a wide audience, especially younger people. Iran International is a privately-owned UK entity.</description>
+    <platform>all</platform>
+    <language>fa</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website>https://iranintl.com/</website>
+    <email>babak@habibis.net</email>
+    <source>https://github.com/bbk79/xbmc-glwiz-addon</source>
+  </extension>
+</addon>

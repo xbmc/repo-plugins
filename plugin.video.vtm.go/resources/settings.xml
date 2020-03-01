@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="credentials_hash" visible="false"/>
+    <setting id="metadata_last_updated" visible="false"/>
+    <category label="30800"> <!-- Credentials -->
+        <setting label="30801" type="lsep"/> <!-- VTM GO login -->
+        <setting label="30803" type="text" id="username"/>
+        <setting label="30805" type="text" id="password" option="hidden"/>
+        <setting label="30809" type="lsep"/> <!-- Profile -->
+        <setting label="30810" type="bool" id="auto_login" default="false" enable="!eq(-3,) + !eq(-2,)"/>
+        <setting type="text" id="profile" visible="false"/>
+        <setting label="30811" type="text" id="profile_name" enable="false" visible="!eq(-1,)" />
+    </category>
+    <category label="30820"> <!-- Interface -->
+        <setting label="30821" type="lsep"/> <!-- Features -->
+        <setting label="30822" type="bool" id="interface_show_recommendations" default="true"/>
+        <setting label="30823" type="bool" id="interface_show_mylist" default="true"/>
+        <setting label="30826" type="bool" id="interface_show_continuewatching" default="false" visible="false"/>
+        <setting label="30827" type="lsep"/> <!-- Metadata -->
+        <setting label="30829" type="bool" id="metadata_update" default="true" subsetting="true"/>
+        <setting label="30831" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/metadata/update)"/>
+        <setting label="30833" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/metadata/clean)"/>
+    </category>
+    <category label="30860"> <!-- Playback -->
+        <setting label="30861" type="lsep"/> <!-- Subtitles -->
+        <setting label="30862" type="bool" id="showsubtitles" default="true"/>
+        <setting label="30865" type="lsep"/> <!-- Up Next -->
+        <setting label="30866" type="action" action="InstallAddon(service.upnext)" option="close" visible="!System.HasAddon(service.upnext)"/>
+        <setting label="30867" type="bool" id="useupnext" default="true" visible="System.HasAddon(service.upnext)" />
+        <setting label="30868" type="action" action="Addon.OpenSettings(service.upnext)" enable="eq(-1,true)" option="close" visible="System.HasAddon(service.upnext)" subsetting="true"/>
+        <setting label="30863" type="lsep"/> <!-- Streaming -->
+        <setting label="30864" type="select" id="max_bandwidth" default="0" values="0|256|512|1024|1536|2048|2560|3072|4096|6144|8192|10240|15360|20480|25600|30720"/>
+    </category>
+    <category label="30880"> <!-- Expert -->
+        <setting label="30881" type="lsep"/> <!-- Streaming -->
+        <setting label="30883" type="action" id="ishelper_info" action="RunScript(script.module.inputstreamhelper, info)"/>
+        <setting label="30885" type="action" id="adaptive_settings" option="close" action="Addon.OpenSettings(inputstream.adaptive)" visible="System.HasAddon(inputstream.adaptive) + [String.StartsWith(System.BuildVersion,18) | String.StartsWith(System.BuildVersion,19)]"/>
+        <setting label="30887" type="action" id="ishelper_settings" option="close" action="Addon.OpenSettings(script.module.inputstreamhelper)"/>
+        <setting label="30889" type="lsep"/> <!-- Logging -->
+        <setting label="30891" type="bool" id="debug_logging" default="false"/>
+    </category>
+</settings>

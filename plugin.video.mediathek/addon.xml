@@ -2,7 +2,7 @@
 <addon
   id="plugin.video.mediathek"
   name="Mediathek"
-  version="0.9.3"
+  version="0.9.4"
   provider-name="Raptor 2101">
   <requires>
    <import addon="xbmc.python" version="2.25.0"/>
@@ -37,6 +37,7 @@ Al momento sono supportate le seguenti emittenti:
     <website>https://github.com/raptor2101/Mediathek</website>
     <source>https://github.com/raptor2101/Mediathek</source>
     <email>raptor2101@gmx.de</email>
+    <broken>For updates of Mediathek, please upgrade to leia or above</broken>
     <assets>
         <icon>resources/icon.png</icon>
     </assets>

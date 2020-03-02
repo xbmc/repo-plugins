@@ -41,18 +41,24 @@ menu = {
         'callback': 'replay_bridge',
         'thumb': 'channels/it/la7.png',
         'fanart': 'channels/it/la7_fanart.jpg',
-        'module': 'resources.lib.channels.it.la7'
+        'module': 'resources.lib.channels.it.la7',
+        'enabled': True,
+        'order': 1
     },
     'la7d': {
         'callback': 'replay_bridge',
         'thumb': 'channels/it/la7d.png',
         'fanart': 'channels/it/la7d_fanart.jpg',
-        'module': 'resources.lib.channels.it.la7'
+        'module': 'resources.lib.channels.it.la7',
+        'enabled': True,
+        'order': 15
     },
     'raiplay': {
         'callback': 'replay_bridge',
         'thumb': 'channels/it/raiplay.png',
         'fanart': 'channels/it/raiplay_fanart.jpg',
-        'module': 'resources.lib.channels.it.raiplay'
+        'module': 'resources.lib.channels.it.raiplay',
+        'enabled': True,
+        'order': 16
     }
 }

@@ -29,8 +29,8 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
-import resources.lib.cq_utils as cqu
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
 
 import inputstreamhelper
 import json
@@ -210,9 +210,7 @@ def list_videos_programs(plugin, item_id, program_url, season_name, **kwargs):
                     item.set_callback(
                         get_video_url,
                         item_id=item_id,
-                        video_label=LABELS[item_id] + ' - ' + item.label,
-                        video_id=video_id,
-                        item_dict=item2dict(item))
+                        video_id=video_id)
                     item_post_treatment(
                         item, is_playable=True, is_downloadable=False)
                     yield item
@@ -278,9 +276,7 @@ def list_videos_days(plugin, item_id, day_id, **kwargs):
                     item.set_callback(
                         get_video_url,
                         item_id=item_id,
-                        video_label=LABELS[item_id] + ' - ' + item.label,
-                        video_id=video_id,
-                        item_dict=item2dict(item))
+                        video_id=video_id)
                     item_post_treatment(
                         item, is_playable=True, is_downloadable=False)
                     yield item
@@ -290,12 +286,10 @@ def list_videos_days(plugin, item_id, day_id, **kwargs):
 def get_video_url(plugin,
                   item_id,
                   video_id,
-                  item_dict,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
-    if cqu.get_kodi_version() < 18:
+    if get_kodi_version() < 18:
         xbmcgui.Dialog().ok('Info', plugin.localize(30602))
         return False
 
@@ -325,9 +319,9 @@ def get_video_url(plugin,
         item = Listitem()
         item.path = json_parser["url"].replace('filter=',
                                                'format=mpd-time-csf,filter=')
-        item.label = item_dict['label']
-        item.info.update(item_dict['info'])
-        item.art.update(item_dict['art'])
+        item.label = get_selected_item_label()
+        item.art.update(get_selected_item_art())
+        item.info.update(get_selected_item_info())
         item.property['inputstreamaddon'] = 'inputstream.adaptive'
         item.property['inputstream.adaptive.manifest_type'] = 'mpd'
         item.property[

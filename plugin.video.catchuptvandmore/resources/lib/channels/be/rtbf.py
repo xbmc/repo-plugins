@@ -31,7 +31,7 @@ from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import htmlement
 import re
@@ -198,7 +198,6 @@ def list_videos_program(plugin, item_id, program_id, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -279,22 +278,22 @@ def list_videos_sub_category(plugin, item_id, category_url, sub_category_id,
 
                 json_parser = json.loads(video_datas.get('data-card'))
                 if json_parser["isVideo"]:
-                    video_title = json_parser["title"] + ' - ' + json_parser["subtitle"]
-                    video_image = json_parser["illustration"]["format1248"]
-                    video_id = json_parser["mediaId"]
+                    if "mediaId" in json_parser:
+                        video_title = json_parser["title"] + ' - ' + json_parser["subtitle"]
+                        video_image = json_parser["illustration"]["format1248"]
+                        video_id = json_parser["mediaId"]
 
-                    item = Listitem()
-                    item.label = video_title
-                    item.art['thumb'] = video_image
+                        item = Listitem()
+                        item.label = video_title
+                        item.art['thumb'] = video_image
 
-                    item.set_callback(get_video_url,
-                                      item_id=item_id,
-                                      video_label=LABELS[item_id] + ' - ' + item.label,
-                                      video_id=video_id)
-                    item_post_treatment(item,
-                                        is_playable=True,
-                                        is_downloadable=True)
-                    yield item
+                        item.set_callback(get_video_url,
+                                          item_id=item_id,
+                                          video_id=video_id)
+                        item_post_treatment(item,
+                                            is_playable=True,
+                                            is_downloadable=True)
+                        yield item
 
 
 @Route.register
@@ -316,25 +315,26 @@ def list_videos_sub_category_dl(plugin, item_id, sub_category_data_uuid,
             list_videos_datas = sub_category_dl_datas.findall('.//article')
 
             for video_datas in list_videos_datas:
+                data_card = video_datas.get('data-card')
+                if data_card:
+                    json_parser = json.loads(data_card)
+                    if json_parser["isVideo"]:
+                        if "mediaId" in json_parser:
+                            video_title = json_parser["title"] + ' - ' + json_parser["subtitle"]
+                            video_image = json_parser["illustration"]["format1248"]
+                            video_id = json_parser["mediaId"]
 
-                json_parser = json.loads(video_datas.get('data-card'))
-                if json_parser["isVideo"]:
-                    video_title = json_parser["title"] + ' - ' + json_parser["subtitle"]
-                    video_image = json_parser["illustration"]["format1248"]
-                    video_id = json_parser["mediaId"]
+                            item = Listitem()
+                            item.label = video_title
+                            item.art['thumb'] = video_image
 
-                    item = Listitem()
-                    item.label = video_title
-                    item.art['thumb'] = video_image
-
-                    item.set_callback(get_video_url,
-                                      item_id=item_id,
-                                      video_label=LABELS[item_id] + ' - ' + item.label,
-                                      video_id=video_id)
-                    item_post_treatment(item,
-                                        is_playable=True,
-                                        is_downloadable=True)
-                    yield item
+                            item.set_callback(get_video_url,
+                                              item_id=item_id,
+                                              video_id=video_id)
+                            item_post_treatment(item,
+                                                is_playable=True,
+                                                is_downloadable=True)
+                            yield item
 
 
 @Resolver.register
@@ -342,7 +342,6 @@ def get_video_url(plugin,
                   item_id,
                   video_id,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     resp = urlquick.get(URL_VIDEO_BY_ID % video_id, max_age=-1)
@@ -354,8 +353,7 @@ def get_video_url(plugin,
         if 'youtube.com' in json_parser["url"]:
             video_id = json_parser["url"].rsplit('/', 1)[1]
             return resolver_proxy.get_stream_youtube(plugin, video_id,
-                                                     download_mode,
-                                                     video_label)
+                                                     download_mode)
         else:
             return json_parser["url"]
     else:
@@ -364,7 +362,7 @@ def get_video_url(plugin,
             stream_url = json_parser["urlHlsAes128"]
 
     if download_mode:
-        return download.download_video(stream_url, video_label)
+        return download.download_video(stream_url)
     return stream_url
 
 

@@ -29,8 +29,9 @@ from codequick import Script, Listitem
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
-from resources.lib import cq_utils
+from resources.lib import addon_utils
 from resources.lib import download
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info
 
 import inputstreamhelper
 import json
@@ -89,38 +90,33 @@ URL_FRANCETV_HDFAUTH_URL = 'https://hdfauthftv-a.akamaihd.net/esi/TA?format=json
 
 def get_stream_default(plugin,
                        video_url,
-                       download_mode=False,
-                       video_label=None):
+                       download_mode=False):
     if download_mode:
-        return download.download_video(video_url, video_label)
+        return download.download_video(video_url)
 
-    quality = cq_utils.get_quality_YTDL(download_mode=download_mode)
+    quality = addon_utils.get_quality_YTDL(download_mode=download_mode)
     return plugin.extract_source(video_url, quality)
 
 
 # Kaltura Part
 def get_stream_kaltura(plugin,
                        video_url,
-                       download_mode=False,
-                       video_label=None):
-    return get_stream_default(plugin, video_url, download_mode, video_label)
+                       download_mode=False):
+    return get_stream_default(plugin, video_url, download_mode)
 
 
 # DailyMotion Part
 def get_stream_dailymotion(plugin,
                            video_id,
-                           download_mode=False,
-                           video_label=None):
+                           download_mode=False):
     url_dailymotion = URL_DAILYMOTION_EMBED % video_id
-    return get_stream_default(plugin, url_dailymotion, download_mode,
-                              video_label)
+    return get_stream_default(plugin, url_dailymotion, download_mode)
 
 
 # Vimeo Part
 def get_stream_vimeo(plugin,
                      video_id,
                      download_mode=False,
-                     video_label=None,
                      referer=None):
 
     url_vimeo = URL_VIMEO_BY_ID % (video_id)
@@ -146,24 +142,22 @@ def get_stream_vimeo(plugin,
     final_video_url = hls_json["cdns"][default_cdn]["url"]
 
     if download_mode:
-        return download.download_video(final_video_url, video_label)
+        return download.download_video(final_video_url)
     return final_video_url
 
 
 # Facebook Part
 def get_stream_facebook(plugin,
                         video_id,
-                        download_mode=False,
-                        video_label=None):
+                        download_mode=False):
     url_facebook = URL_FACEBOOK_BY_ID % (video_id)
-    return get_stream_default(plugin, url_facebook, download_mode, video_label)
+    return get_stream_default(plugin, url_facebook, download_mode)
 
 
 # Youtube Part
-def get_stream_youtube(plugin, video_id, download_mode=False,
-                       video_label=None):
+def get_stream_youtube(plugin, video_id, download_mode=False):
     url_youtube = URL_YOUTUBE % video_id
-    return get_stream_default(plugin, url_youtube, download_mode, video_label)
+    return get_stream_default(plugin, url_youtube, download_mode)
 
 
 # BRIGHTCOVE Part
@@ -178,8 +172,7 @@ def get_brightcove_video_json(plugin,
                               data_account,
                               data_player,
                               data_video_id,
-                              download_mode=False,
-                              video_label=None):
+                              download_mode=False):
 
     # Method to get JSON from 'edge.api.brightcove.com'
     resp = urlquick.get(
@@ -210,7 +203,7 @@ def get_brightcove_video_json(plugin,
         return False
 
     if download_mode:
-        return download.download_video(video_url, video_label)
+        return download.download_video(video_url)
     return video_url
 
 
@@ -218,7 +211,6 @@ def get_brightcove_video_json(plugin,
 def get_mtvnservices_stream(plugin,
                             video_uri,
                             download_mode=False,
-                            video_label=None,
                             account_override=None,
                             ep=None):
 
@@ -243,7 +235,7 @@ def get_mtvnservices_stream(plugin,
     video_url = json_video_stream_parser["package"]["video"]["item"][0][
         "rendition"][0]["src"]
     if download_mode:
-        return download.download_video(video_url, video_label)
+        return download.download_video(video_url)
     return video_url
 
 
@@ -251,9 +243,7 @@ def get_mtvnservices_stream(plugin,
 # FranceTV, FranceTV Sport, France Info, ...
 def get_francetv_video_stream(plugin,
                               id_diffusion,
-                              item_dict=None,
-                              download_mode=False,
-                              video_label=None):
+                              download_mode=False):
 
     geoip_value = web_utils.geoip()
     resp = urlquick.get(URL_FRANCETV_CATCHUP_PROGRAM_INFO % (id_diffusion, geoip_value),
@@ -279,7 +269,7 @@ def get_francetv_video_stream(plugin,
             urlquick.get(url_selected, max_age=-1).text)
         final_video_url = json_parser2['url']
         if download_mode:
-            return download.download_video(final_video_url, video_label)
+            return download.download_video(final_video_url)
         return final_video_url
     elif 'dash' in all_video_datas[0][0]:
         if download_mode:
@@ -290,14 +280,13 @@ def get_francetv_video_stream(plugin,
             return False
         json_parser2 = json.loads(
             urlquick.get(url_selected, max_age=-1).text)
-
         item = Listitem()
         item.path = json_parser2['url']
         item.property['inputstreamaddon'] = 'inputstream.adaptive'
         item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-        item.label = item_dict['label']
-        item.info.update(item_dict['info'])
-        item.art.update(item_dict['art'])
+        item.label = get_selected_item_label()
+        item.art.update(get_selected_item_art())
+        item.info.update(get_selected_item_info())
 
         return item
     else:

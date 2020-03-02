@@ -37,22 +37,28 @@ the addon's tree architecture.
 """
 
 menu = {
-    'japanetshoppingdx': {
-        'callback': 'live_bridge',
-        'thumb': 'channels/jp/japanetshoppingdx.png',
-        'fanart': 'channels/jp/japanetshoppingdx_fanart.jpg',
-        'module': 'resources.lib.channels.jp.japanetshoppingdx'
-    },
     'ntvnews24': {
         'callback': 'live_bridge',
         'thumb': 'channels/jp/ntvnews24.png',
         'fanart': 'channels/jp/ntvnews24_fanart.jpg',
-        'module': 'resources.lib.channels.jp.ntvnews24'
+        'module': 'resources.lib.channels.jp.ntvnews24',
+        'enabled': True,
+        'order': 11
+    },
+    'japanetshoppingdx': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/jp/japanetshoppingdx.png',
+        'fanart': 'channels/jp/japanetshoppingdx_fanart.jpg',
+        'module': 'resources.lib.channels.jp.japanetshoppingdx',
+        'enabled': True,
+        'order': 12
     },
     'weathernewsjp': {
         'callback': 'live_bridge',
         'thumb': 'channels/jp/weathernewsjp.png',
         'fanart': 'channels/jp/weathernewsjp_fanart.jpg',
-        'module': 'resources.lib.channels.jp.weathernewsjp'
+        'module': 'resources.lib.channels.jp.weathernewsjp',
+        'enabled': True,
+        'order': 14
     }
 }

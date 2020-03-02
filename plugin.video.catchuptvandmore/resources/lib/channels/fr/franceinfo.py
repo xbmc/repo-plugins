@@ -33,8 +33,8 @@ from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib import download
-import resources.lib.cq_utils as cqu
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info
 
 import json
 import time
@@ -181,9 +181,7 @@ def list_videos(plugin, item_id, next_url, page, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_url=video_url,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          item_dict=item2dict(item))
+                          video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -200,9 +198,7 @@ def list_videos(plugin, item_id, next_url, page, **kwargs):
 def get_video_url(plugin,
                   item_id,
                   video_url,
-                  item_dict=None,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     resp = urlquick.get(video_url)
@@ -225,7 +221,7 @@ def get_video_url(plugin,
             return media['sourceUrl']
     if method == 'id_diffusion':
         return resolver_proxy.get_francetv_video_stream(
-            plugin, id_diffusion, item_dict, download_mode, video_label)
+            plugin, id_diffusion, download_mode)
     elif method == 'stream_videos':
         url_hd = ''
         url_default = ''
@@ -254,18 +250,18 @@ def get_video_url(plugin,
             else:
                 url_selected = url_default
         if download_mode:
-            return download.download_video(url_selected, video_label)
+            return download.download_video(url_selected)
         return url_selected
     else:
         return False
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE_JSON,
                         headers={'User-Agent': web_utils.get_random_ua()},

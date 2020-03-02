@@ -31,17 +31,16 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import json
 import time
 import re
 import urlquick
-import xml.etree.ElementTree as ET
 
 URL_ROOT = 'http://www3.nhk.or.jp/'
 
-URL_LIVE_NHK = 'http://www3.nhk.or.jp/%s/app/tv/hlslive_tv.xml'
+URL_LIVE_NHK = 'https://www3.nhk.or.jp/nhkworld/app/tv/hlslive_web.json'
 # Channel_Name...
 
 URL_COMMONJS_NHK = 'http://www3.nhk.or.jp/%s/common/js/common.js'
@@ -124,7 +123,6 @@ def list_videos(plugin, item_id, category_id, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -135,7 +133,6 @@ def get_video_url(plugin,
                   item_id,
                   video_id,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     resp = urlquick.get(URL_VIDEO_VOD % video_id)
@@ -150,31 +147,23 @@ def get_video_url(plugin,
     final_video_url = json_parser2["response"]["WsProgramResponse"]["program"]["asset"]["ipadM3u8Url"]
 
     if download_mode:
-        return download.download_video(final_video_url, video_label)
+        return download.download_video(final_video_url)
     return final_video_url
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
-    desired_country = Script.setting[item_id + '.language']
+def get_live_url(plugin, item_id, video_id, **kwargs):
+    desired_country = kwargs.get('language', Script.setting[item_id + '.language'])
 
-    # If we come from the M3U file and the language
-    # is set in the M3U URL, then we overwrite
-    # Catch Up TV & More language setting
-    if type(item_dict) is not dict:
-        item_dict = eval(item_dict)
-    if 'language' in item_dict:
-        desired_country = item_dict['language']
-
-    resp = urlquick.get(URL_LIVE_NHK % item_id)
-    xmlElements = ET.XML(resp.text)
+    resp = urlquick.get(URL_LIVE_NHK)
+    json_parser = json.loads(resp.text)
     stream_url = ''
     if desired_country == 'Outside Japan':
-        stream_url = xmlElements.find("tv_url").findtext("wstrm")
+        stream_url = json_parser["main"]["wstrm"]
     else:
-        stream_url = xmlElements.find("tv_url").findtext("jstrm")
+        stream_url = json_parser["main"]["jstrm"]
     return stream_url

@@ -33,7 +33,7 @@ from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
@@ -48,17 +48,14 @@ import urlquick
 
 URL_ROOT = 'http://www.lcp.fr'
 
-URL_LIVE_SITE = 'http://www.lcp.fr/le-direct'
+URL_LIVE_SITE = URL_ROOT + '/le-direct'
+
+URL_CATEGORIES = URL_ROOT + '/revoir'
 
 URL_VIDEO_REPLAY = 'http://play1.qbrick.com/config/avp/v1/player/' \
                    'media/%s/darkmatter/%s/'
 # VideoID, AccountId
 
-CATEGORIES = {
-    URL_ROOT + '/actualites': 'Actualités',
-    URL_ROOT + '/emissions': 'Émissions',
-    URL_ROOT + '/documentaires': 'Documentaires'
-}
 
 CORRECT_MONTH = {
     'janvier': '01',
@@ -92,37 +89,24 @@ def list_categories(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    for category_url, category_name in list(CATEGORIES.items()):
+    resp = urlquick.get(URL_CATEGORIES)
+    root = resp.parse()
 
-        if 'actualites' in category_url:
-            item = Listitem()
-            item.label = category_name
-            item.set_callback(list_videos_actualites,
-                              item_id=item_id,
-                              next_url=category_url,
-                              page='0')
-            item_post_treatment(item)
-            yield item
-        if 'emissions' in category_url:
-            item = Listitem()
-            item.label = category_name
-            item.set_callback(list_programs,
-                              item_id=item_id,
-                              next_url=category_url)
-            item_post_treatment(item)
-            yield item
-        if 'documentaires' in category_url:
-            item = Listitem()
-            item.label = category_name
-            item.set_callback(list_videos_documentaires,
-                              item_id=item_id,
-                              next_url=category_url)
-            item_post_treatment(item)
-            yield item
+    for category_datas in root.iterfind(".//div[@class='title-word']"):
+        category_title = category_datas.find(".//span").text
+
+        item = Listitem()
+        item.label = category_title
+        item.set_callback(list_programs,
+                          item_id=item_id,
+                          next_url=URL_CATEGORIES,
+                          category_title=category_title)
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register
-def list_programs(plugin, item_id, next_url, **kwargs):
+def list_programs(plugin, item_id, next_url, category_title, **kwargs):
     """
     Build programs listing
     - Journal de 20H
@@ -131,37 +115,70 @@ def list_programs(plugin, item_id, next_url, **kwargs):
     resp = urlquick.get(next_url)
     root = resp.parse()
 
-    for program_datas in root.iterfind(".//div[@class='content']"):
-        program_title = program_datas.find('.//h2').text
-        program_image = program_datas.find('.//img').get('src')
-        program_url = URL_ROOT + program_datas.find('.//a').get('href')
+    for program_datas in root.iterfind(".//section[@class='block block-views clearfix']"):
+        if program_datas.find(".//div[@class='title-word']") is not None:
+            if category_title == program_datas.find(".//span").text:
+                for video_datas in program_datas.findall(".//div[@class='node node-lcp-tv-episode node-teaser clearfix']"):
+                    if video_datas.find(".//h4/a") is not None:
+                        video_label = video_datas.find(".//h2/a").text + \
+                            ' - ' + video_datas.find(".//h4/a").text
+                    else:
+                        video_label = video_datas.find(".//h2/a").text
+                    video_image = video_datas.find(".//img").get('src')
+                    video_url = URL_ROOT + video_datas.find(".//a").get('href')
+                    date_value = video_datas.find(".//span[@class='date']").text
+                    date = date_value.split(' ')
+                    day = date[0]
+                    try:
+                        month = CORRECT_MONTH[date[1]]
+                    except Exception:
+                        month = '00'
+                    year = date[2]
+                    date_value = year + '-' + month + '-' + day
 
-        item = Listitem()
-        item.label = program_title
-        item.art['thumb'] = program_image
-        item.set_callback(list_videos_program,
-                          item_id=item_id,
-                          next_url=program_url,
-                          page='0')
-        item_post_treatment(item)
-        yield item
+                    item = Listitem()
+                    item.label = video_label
+                    item.art['thumb'] = video_image
+                    item.info.date(date_value, '%Y-%m-%d')
+                    item.set_callback(get_video_url,
+                                      item_id=item_id,
+                                      video_url=video_url)
+                    item_post_treatment(item, is_playable=True, is_downloadable=True)
+                    yield item
+
+                for real_program_datas in program_datas.findall(".//div[@class='node node-lcp-tv-series node-teaser clearfix']"):
+                    program_label = real_program_datas.find(".//h2").text
+                    program_image = real_program_datas.find(".//img").get('src')
+                    program_url = URL_ROOT + real_program_datas.find(".//a").get('href')
+
+                    item = Listitem()
+                    item.label = program_label
+                    item.art['thumb'] = program_image
+                    item.set_callback(list_videos_program,
+                                      item_id=item_id,
+                                      program_url=program_url,
+                                      page='0')
+                    item_post_treatment(item)
+                    yield item
 
 
 @Route.register
-def list_videos_documentaires(plugin, item_id, next_url, **kwargs):
+def list_videos_program(plugin, item_id, program_url, page, **kwargs):
 
-    resp = urlquick.get(next_url)
+    resp = urlquick.get(program_url + '?page=%s' % page, timeout=120)
     root = resp.parse()
 
-    for video_datas in root.iterfind(
-            ".//div[@class='col-md-3 col-sm-6 col-xs-12']"):
-        video_title = video_datas.find(
-            ".//span[@class='rdf-meta element-hidden']").get('content')
-        video_image = video_datas.find('.//img').get('src')
-        video_duration = int(
-            video_datas.find(".//div[@class='duration']").find('.//div').find(
-                './/span').text) * 60
-        video_url = URL_ROOT + video_datas.find('.//a').get('href')
+    for video_datas in root.iterfind(".//div[@class='node node-lcp-tv-episode node-teaser clearfix']"):
+        if video_datas.find(".//h4/a") is not None:
+            video_label = video_datas.find(".//h2/a").text + \
+                ' - ' + video_datas.find(".//h4/a").text
+        else:
+            video_label = video_datas.find(".//h2/a").text
+        if video_datas.find(".//img") is not None:
+            video_image = video_datas.find(".//img").get('src')
+        else:
+            video_image = ''
+        video_url = URL_ROOT + video_datas.find(".//a").get('href')
         date_value = video_datas.find(".//span[@class='date']").text
         date = date_value.split(' ')
         day = date[0]
@@ -173,120 +190,17 @@ def list_videos_documentaires(plugin, item_id, next_url, **kwargs):
         date_value = year + '-' + month + '-' + day
 
         item = Listitem()
-        item.label = video_title
+        item.label = video_label
         item.art['thumb'] = video_image
-        item.info['duration'] = video_duration
         item.info.date(date_value, '%Y-%m-%d')
-
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          video_url=video_url)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
-        yield item
-
-
-@Route.register
-def list_videos_actualites(plugin, item_id, next_url, page, **kwargs):
-
-    if page == '0':
-        videos_actualites_url = next_url
-    else:
-        videos_actualites_url = next_url + '?page=' + page
-
-    resp = urlquick.get(videos_actualites_url)
-    root = resp.parse()
-
-    for video_datas in root.iterfind(
-            ".//div[@class='col-md-6 col-sm-6 col-xs-12']"):
-        if len(video_datas.findall(".//svg[@class='icon icon-play2']")) > 0:
-            video_title = video_datas.find(
-                ".//span[@class='rdf-meta element-hidden']").get('content')
-            video_image = video_datas.find('.//img').get('src')
-            video_url = URL_ROOT + video_datas.find('.//a').get('href')
-            date_value = video_datas.find(
-                ".//div[@class='field field_submitted']").text
-            date = date_value.split('/')
-            date_value = date[2] + '-' + date[1] + '-' + date[0]
-
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = video_image
-            item.info.date(date_value, '%Y-%m-%d')
-
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_label=LABELS[item_id] + ' - ' + item.label,
-                              video_url=video_url)
-            item_post_treatment(item, is_playable=True, is_downloadable=True)
-            yield item
-
-    yield Listitem.next_page(item_id=item_id,
-                             next_url=next_url,
-                             page=str(int(page) + 1))
-
-
-@Route.register
-def list_videos_program(plugin, item_id, next_url, page, **kwargs):
-
-    # Cas emission (2 cas) (-0) ou (sans -0)
-    # 1ère page http://www.lcp.fr/emissions/evenements/replay-0
-    # (url départ => http://www.lcp.fr/emissions/evenements-0)
-    # 1ère page http://www.lcp.fr/emissions/evenements/replay-0?page=1
-    # ainsi de suite
-    # 1ère page : http://www.lcp.fr/emissions/en-voiture-citoyens/replay
-    # (url départ => http://www.lcp.fr/emissions/en-voiture-citoyens)
-    # 2ème page :
-    # http://www.lcp.fr/emissions/en-voiture-citoyens/replay?page=1
-    # ainsi de suite
-    # TODO fix some cases http://www.lcp.fr/emissions/questions-au-gouvernement/replay-2 http://www.lcp.fr/emissions/questions-au-gouvernement-2
-
-    if page == '0' and '-0' not in next_url:
-        video_program_url = next_url + '/replay'
-    elif int(page) > 0 and '-0' not in next_url:
-        video_program_url = next_url + '/replay?page=' + page
-    elif page == '0' and '-0' in next_url:
-        video_program_url = next_url[:-2] + '/replay-0'
-    elif int(page) > 0 and '-0' in next_url:
-        video_program_url = next_url[:-2] + '/replay-0?page=' + page
-
-    resp = urlquick.get(video_program_url)
-    root = resp.parse()
-
-    for video_datas in root.iterfind(
-            ".//div[@class='col-md-3 col-sm-6 col-xs-12']"):
-        video_title = video_datas.find(
-            ".//span[@class='rdf-meta element-hidden']").get('content')
-        video_image = video_datas.find('.//img').get('src')
-        video_duration = int(
-            video_datas.find(".//div[@class='duration']").find('.//div').find(
-                './/span').text) * 60
-        video_url = URL_ROOT + video_datas.find('.//a').get('href')
-        date_value = video_datas.find(".//span[@class='date']").text
-        date = date_value.split(' ')
-        day = date[0]
-        try:
-            month = CORRECT_MONTH[date[1]]
-        except Exception:
-            month = '00'
-        year = date[2]
-        date_value = year + '-' + month + '-' + day
-
-        item = Listitem()
-        item.label = video_title
-        item.art['thumb'] = video_image
-        item.info['duration'] = video_duration
-        item.info.date(date_value, '%Y-%m-%d')
-
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
     yield Listitem.next_page(item_id=item_id,
-                             next_url=next_url,
+                             program_url=program_url,
                              page=str(int(page) + 1))
 
 
@@ -295,20 +209,19 @@ def get_video_url(plugin,
                   item_id,
                   video_url,
                   download_mode=False,
-                  video_label=False,
                   **kwargs):
 
     resp = urlquick.get(video_url,
                         headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
+                        max_age=-1,
+                        timeout=120)
 
     if 'dailymotion' in resp.text:
         video_id = re.compile(
             r'www.dailymotion.com/embed/video/(.*?)[\?\"]').findall(
                 resp.text)[0]
         return resolver_proxy.get_stream_dailymotion(plugin, video_id,
-                                                     download_mode,
-                                                     video_label)
+                                                     download_mode)
     else:
         # get videoId and accountId
         videoId, accountId = re.compile(r'embed/(.*?)/(.*?)/').findall(
@@ -326,16 +239,16 @@ def get_video_url(plugin,
                 url = data['Url']
 
         if download_mode:
-            return download.download_video(url, video_label)
+            return download.download_video(url)
         return url
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE_SITE,
                         headers={'User-Agent': web_utils.get_random_ua()},

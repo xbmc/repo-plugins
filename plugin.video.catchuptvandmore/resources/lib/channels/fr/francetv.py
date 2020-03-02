@@ -31,8 +31,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
-import resources.lib.cq_utils as cqu
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import json
 import time
@@ -187,9 +186,7 @@ def list_videos_last(plugin, item_id, page=1, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          broadcast_id=broadcast_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          item_dict=item2dict(item))
+                          broadcast_id=broadcast_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -240,9 +237,7 @@ def list_videos(plugin, item_id, program_part_url, filter_value, page=0, **kwarg
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          broadcast_id=broadcast_id,
-                          video_label=LABELS[item_id] + " - " + item.label,
-                          item_dict=item2dict(item))
+                          broadcast_id=broadcast_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -274,9 +269,7 @@ def list_videos_other(plugin, item_id, program_part_url, page=0, **kwargs):
 
             item.set_callback(get_video_url,
                               item_id=item_id,
-                              broadcast_id=broadcast_id,
-                              video_label=LABELS[item_id] + " - " + item.label,
-                              item_dict=item2dict(item))
+                              broadcast_id=broadcast_id)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
 
@@ -396,9 +389,7 @@ def list_videos_search(plugin, item_id, search_query, page=0, **kwargs):
 
             item.set_callback(get_video_url,
                               item_id=item_id,
-                              id_yatta=show['id'],
-                              video_label=LABELS[item_id] + " - " + item.label,
-                              item_dict=item2dict(item))
+                              id_yatta=show['id'])
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
         page = page + 1
@@ -415,9 +406,7 @@ def get_video_url(plugin,
                   item_id,
                   broadcast_id=None,
                   id_yatta=None,
-                  item_dict=None,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     if id_yatta is not None:
@@ -430,16 +419,15 @@ def get_video_url(plugin,
                 break
 
     return resolver_proxy.get_francetv_video_stream(plugin, broadcast_id,
-                                                    item_dict, download_mode,
-                                                    video_label)
+                                                    download_mode)
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     broadcast_id = 'SIM_France%s'
     return resolver_proxy.get_francetv_live_stream(

@@ -31,8 +31,8 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import download
-import resources.lib.cq_utils as cqu
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
 
 import inputstreamhelper
 import datetime
@@ -209,7 +209,6 @@ def list_videos_category(plugin, item_id, category_url, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -246,7 +245,6 @@ def list_videos_program(plugin, item_id, program_id, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -257,7 +255,6 @@ def get_video_url(plugin,
                   item_id,
                   video_url,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     video_id = video_url.split('=')[1]
@@ -292,16 +289,16 @@ def get_video_url(plugin,
         final_video_url = stream_url + '?' + token
 
     if download_mode:
-        return download.download_video(final_video_url, video_label)
+        return download.download_video(final_video_url)
     return final_video_url
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE_JSON % item_id[:3])
     json_parser = json.loads(resp.text)
@@ -325,7 +322,7 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
                     is_drm = True
 
     if is_drm:
-        if cqu.get_kodi_version() < 18:
+        if get_kodi_version() < 18:
             xbmcgui.Dialog().ok('Info', plugin.localize(30602))
             return False
 
@@ -351,19 +348,9 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
         item.property[
             'inputstream.adaptive.license_key'] = licence_drm_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=srg.live.ott.irdeto.com|R{SSM}|'
 
-        if item_dict:
-            if 'label' in item_dict:
-                item.label = item_dict['label']
-            if 'info' in item_dict:
-                item.info.update(item_dict['info'])
-            if 'art' in item_dict:
-                item.art.update(item_dict['art'])
-        else:
-            item.label = LABELS[item_id]
-            item.art["thumb"] = ""
-            item.art["icon"] = ""
-            item.art["fanart"] = ""
-            item.info["plot"] = LABELS[item_id]
+        item.label = get_selected_item_label()
+        item.art.update(get_selected_item_art())
+        item.info.update(get_selected_item_info())
         return item
 
     else:

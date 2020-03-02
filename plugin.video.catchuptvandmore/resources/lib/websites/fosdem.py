@@ -28,7 +28,7 @@ import xml.etree.ElementTree as ET
 
 from resources.lib.labels import LABELS
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 # TO DO
 # YEARS BEFORE 2012 (VIDEO in different format and accessible differently)
@@ -37,7 +37,7 @@ URL_SCHEDULE_XML = 'https://fosdem.org/%s/schedule/xml'
 # Year
 
 BEGINING_YEAR_XML = 2012
-LAST_YEAR_XML = 2019
+LAST_YEAR_XML = 2020
 
 
 def website_entry(plugin, item_id, **kwargs):
@@ -87,7 +87,6 @@ def list_videos(plugin, item_id, category_url, **kwargs):
 
             item.set_callback(get_video_url,
                               item_id=item_id,
-                              video_label=LABELS[item_id] + ' - ' + item.label,
                               video_url=video_url)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
@@ -98,9 +97,8 @@ def get_video_url(plugin,
                   item_id,
                   video_url,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
     """Get video URL and start video player"""
     if download_mode:
-        return download.download_video(video_url, video_label)
+        return download.download_video(video_url)
     return video_url

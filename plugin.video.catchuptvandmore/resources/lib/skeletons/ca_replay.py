@@ -37,52 +37,60 @@ the addon's tree architecture.
 """
 
 menu = {
-    'tva': {
+    'tv5unis': {
         'callback': 'replay_bridge',
-        'thumb': 'channels/ca/tva.png',
-        'fanart': 'channels/ca/tva_fanart.jpg',
-        'module': 'resources.lib.channels.ca.tva'
-    },
-    'tv5': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/ca/tv5.png',
-        'fanart': 'channels/ca/tv5_fanart.jpg',
-        'module': 'resources.lib.channels.ca.tv5'
-    },
-    'unis': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/ca/unis.png',
-        'fanart': 'channels/ca/unis_fanart.jpg',
-        'module': 'resources.lib.channels.ca.tv5'
+        'thumb': 'channels/ca/tv5unis.png',
+        'fanart': 'channels/ca/tv5unis_fanart.jpg',
+        'module': 'resources.lib.channels.ca.tv5unis',
+        'enabled': True,
+        'order': 1
     },
     'telequebec': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ca/telequebec.png',
         'fanart': 'channels/ca/telequebec_fanart.jpg',
-        'module': 'resources.lib.channels.ca.telequebec'
+        'module': 'resources.lib.channels.ca.telequebec',
+        'enabled': True,
+        'order': 4
     },
-    'icitoutv': {
+    'tva': {
         'callback': 'replay_bridge',
-        'thumb': 'channels/ca/icitoutv.png',
-        'fanart': 'channels/ca/icitoutv_fanart.jpg',
-        'module': 'resources.lib.channels.ca.icitoutv'
+        'thumb': 'channels/ca/tva.png',
+        'fanart': 'channels/ca/tva_fanart.jpg',
+        'module': 'resources.lib.channels.ca.tva',
+        'enabled': True,
+        'order': 5
     },
     'icitele': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ca/icitele.png',
         'fanart': 'channels/ca/icitele_fanart.jpg',
-        'module': 'resources.lib.channels.ca.icitele'
+        'module': 'resources.lib.channels.ca.icitele',
+        'enabled': True,
+        'order': 6
+    },
+    'icitoutv': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/ca/icitoutv.png',
+        'fanart': 'channels/ca/icitoutv_fanart.jpg',
+        'module': 'resources.lib.channels.ca.icitoutv',
+        'enabled': True,
+        'order': 8
     },
     'telemag': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ca/telemag.png',
         'fanart': 'channels/ca/telemag_fanart.jpg',
-        'module': 'resources.lib.channels.ca.telemag'
+        'module': 'resources.lib.channels.ca.telemag',
+        'enabled': True,
+        'order': 9
     },
     'noovo': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ca/noovo.png',
         'fanart': 'channels/ca/noovo_fanart.jpg',
-        'module': 'resources.lib.channels.ca.noovo'
+        'module': 'resources.lib.channels.ca.noovo',
+        'enabled': True,
+        'order': 10
     }
 }

@@ -30,7 +30,7 @@ from kodi_six import xbmcgui
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 
 URL_ROOT = 'http://www.culturepub.fr'
@@ -172,7 +172,6 @@ def list_playlist_videos(plugin, item_id, videos_url, **kwargs):
             all_datas_videos_path.append(INFO_STREAM % (quality, stream_id))
 
         item.set_callback(all_datas_videos_path[-1],
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           is_playable=True)
 
         playlist_items.append(item)
@@ -197,7 +196,6 @@ def list_videos(plugin, item_id, page, category_url, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -213,7 +211,6 @@ def get_video_url(plugin,
                   item_id,
                   video_url,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
     """Get video URL and start video player"""
 
@@ -255,5 +252,5 @@ def get_video_url(plugin,
         url = all_datas_videos_path[0]
 
     if download_mode:
-        return download.download_video(url, video_label)
+        return download.download_video(url)
     return url

@@ -41,79 +41,105 @@ menu = {
         'callback': 'replay_bridge',
         'thumb': 'channels/wo/tv5mondeafrique.png',
         'fanart': 'channels/wo/tv5mondeafrique_fanart.jpg',
-        'module': 'resources.lib.channels.wo.tv5mondeafrique'
-    },
-    'tivi5monde': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/wo/tivi5monde.png',
-        'fanart': 'channels/wo/tivi5monde_fanart.jpg',
-        'module': 'resources.lib.channels.wo.tivi5monde'
-    },
-    'tv5monde': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/wo/tv5monde.png',
-        'fanart': 'channels/wo/tv5monde_fanart.jpg',
-        'module': 'resources.lib.channels.wo.tv5monde'
+        'module': 'resources.lib.channels.wo.tv5mondeafrique',
+        'enabled': True,
+        'order': 1
     },
     'arte': {
         'callback': 'replay_bridge',
         'thumb': 'channels/wo/arte.png',
         'fanart': 'channels/wo/arte_fanart.jpg',
-        'module': 'resources.lib.channels.wo.arte'
-    },
-    'arirang': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/wo/arirang.png',
-        'fanart': 'channels/wo/arirang_fanart.jpg',
-        'module': 'resources.lib.channels.wo.arirang'
-    },
-    'afriquemedia': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/wo/afriquemedia.png',
-        'fanart': 'channels/wo/afriquemedia_fanart.jpg',
-        'module': 'resources.lib.channels.wo.afriquemedia'
-    },
-    'beinsports': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/wo/beinsports.png',
-        'fanart': 'channels/wo/beinsports_fanart.jpg',
-        'module': 'resources.lib.channels.wo.beinsports'
-    },
-    'bvn': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/wo/bvn.png',
-        'fanart': 'channels/wo/bvn_fanart.jpg',
-        'module': 'resources.lib.channels.wo.bvn'
-    },
-    'nhkworld': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/wo/nhkworld.png',
-        'fanart': 'channels/wo/nhkworld_fanart.jpg',
-        'module': 'resources.lib.channels.wo.nhkworld'
-    },
-    'channelnewsasia': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/wo/channelnewsasia.png',
-        'fanart': 'channels/wo/channelnewsasia_fanart.jpg',
-        'module': 'resources.lib.channels.wo.channelnewsasia'
+        'module': 'resources.lib.channels.wo.arte',
+        'enabled': True,
+        'order': 3
     },
     'france24': {
         'callback': 'replay_bridge',
         'thumb': 'channels/wo/france24.png',
         'fanart': 'channels/wo/france24_fanart.jpg',
-        'module': 'resources.lib.channels.wo.france24'
+        'module': 'resources.lib.channels.wo.france24',
+        'enabled': True,
+        'order': 4
+    },
+    'nhkworld': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/wo/nhkworld.png',
+        'fanart': 'channels/wo/nhkworld_fanart.jpg',
+        'module': 'resources.lib.channels.wo.nhkworld',
+        'enabled': True,
+        'order': 5
+    },
+    'tv5monde': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/wo/tv5monde.png',
+        'fanart': 'channels/wo/tv5monde_fanart.jpg',
+        'module': 'resources.lib.channels.wo.tv5monde',
+        'enabled': True,
+        'order': 6
+    },
+    'tivi5monde': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/wo/tivi5monde.png',
+        'fanart': 'channels/wo/tivi5monde_fanart.jpg',
+        'module': 'resources.lib.channels.wo.tivi5monde',
+        'enabled': True,
+        'order': 7
+    },
+    'bvn': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/wo/bvn.png',
+        'fanart': 'channels/wo/bvn_fanart.jpg',
+        'module': 'resources.lib.channels.wo.bvn',
+        'enabled': True,
+        'order': 8
+    },
+    'arirang': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/wo/arirang.png',
+        'fanart': 'channels/wo/arirang_fanart.jpg',
+        'module': 'resources.lib.channels.wo.arirang',
+        'enabled': True,
+        'order': 11
+    },
+    'beinsports': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/wo/beinsports.png',
+        'fanart': 'channels/wo/beinsports_fanart.jpg',
+        'module': 'resources.lib.channels.wo.beinsports',
+        'enabled': True,
+        'order': 13
+    },
+    'afriquemedia': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/wo/afriquemedia.png',
+        'fanart': 'channels/wo/afriquemedia_fanart.jpg',
+        'module': 'resources.lib.channels.wo.afriquemedia',
+        'enabled': True,
+        'order': 20
+    },
+    'channelnewsasia': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/wo/channelnewsasia.png',
+        'fanart': 'channels/wo/channelnewsasia_fanart.jpg',
+        'module': 'resources.lib.channels.wo.channelnewsasia',
+        'enabled': True,
+        'order': 23
     },
     'rt': {
         'callback': 'replay_bridge',
         'thumb': 'channels/wo/rt.png',
         'fanart': 'channels/wo/rt_fanart.jpg',
         'module': 'resources.lib.channels.wo.rt',
-        'available_languages': ['FR', 'EN']
+        'available_languages': ['FR', 'EN'],
+        'enabled': True,
+        'order': 24
     },
     'africa24': {
         'callback': 'replay_bridge',
         'thumb': 'channels/wo/africa24.png',
         'fanart': 'channels/wo/africa24_fanart.jpg',
-        'module': 'resources.lib.channels.wo.africa24'
+        'module': 'resources.lib.channels.wo.africa24',
+        'enabled': True,
+        'order': 25
     }
 }

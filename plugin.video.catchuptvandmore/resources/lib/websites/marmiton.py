@@ -24,7 +24,7 @@ from __future__ import unicode_literals
 from codequick import Route, Resolver, Listitem, youtube
 
 from resources.lib.labels import LABELS
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 
 def website_entry(plugin, item_id, **kwargs):

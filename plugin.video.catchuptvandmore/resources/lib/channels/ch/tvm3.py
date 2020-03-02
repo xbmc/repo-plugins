@@ -30,7 +30,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
@@ -116,7 +116,6 @@ def list_videos(plugin, item_id, program_url, **kwargs):
                 get_video_url,
                 item_id=item_id,
                 video_id=video_id,
-                video_label=LABELS[item_id] + ' - ' + item.label,
                 is_youtube=is_youtube)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
@@ -128,23 +127,21 @@ def get_video_url(plugin,
                   video_id,
                   is_youtube,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     if is_youtube:
         return resolver_proxy.get_stream_youtube(plugin, video_id,
-                                                 download_mode, video_label)
+                                                 download_mode)
     else:
-        return resolver_proxy.get_stream_vimeo(plugin, video_id, download_mode,
-                                               video_label)
+        return resolver_proxy.get_stream_vimeo(plugin, video_id, download_mode)
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(URL_ROOT,
                         headers={'User-Agent': web_utils.get_random_ua()},

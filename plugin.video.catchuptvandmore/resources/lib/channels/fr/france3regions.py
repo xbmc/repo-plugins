@@ -31,8 +31,8 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
-import resources.lib.cq_utils as cqu
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info
 
 import json
 import re
@@ -169,9 +169,7 @@ def list_videos(plugin, item_id, program_url, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          id_diffusion=id_diffusion,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          item_dict=item2dict(item))
+                          id_diffusion=id_diffusion)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -180,31 +178,20 @@ def list_videos(plugin, item_id, program_url, **kwargs):
 def get_video_url(plugin,
                   item_id,
                   id_diffusion,
-                  item_dict=None,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     return resolver_proxy.get_francetv_video_stream(plugin, id_diffusion,
-                                                    item_dict, download_mode,
-                                                    video_label)
+                                                    download_mode)
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
-    final_region = Script.setting['france3regions.language']
-
-    # If we come from the M3U file and the language
-    # is set in the M3U URL, then we overwrite
-    # Catch Up TV & More language setting
-    if type(item_dict) is not dict:
-        item_dict = eval(item_dict)
-    if 'language' in item_dict:
-        final_region = item_dict['language']
+def get_live_url(plugin, item_id, video_id, **kwargs):
+    final_region = kwargs.get('language', Script.setting['france3regions.language'])
 
     resp = urlquick.get(URL_LIVES_JSON,
                         headers={'User-Agent': web_utils.get_random_ua()},

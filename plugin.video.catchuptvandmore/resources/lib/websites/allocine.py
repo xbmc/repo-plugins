@@ -32,7 +32,7 @@ from kodi_six import xbmcgui
 from resources.lib import resolver_proxy
 from resources.lib import download
 from resources.lib.labels import LABELS
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 # TO DO
 # Get Last_Page (for Programs, Videos) / Fix Last_page
@@ -329,7 +329,6 @@ def list_videos_films_series_1(plugin, item_id, page, show_url, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -369,7 +368,6 @@ def list_videos_emissions_1(plugin, item_id, show_url,
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -436,7 +434,6 @@ def list_videos_emissions_2(plugin, item_id, page, show_url, last_page,
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -471,7 +468,6 @@ def list_videos_search(plugin, item_id, page, search_query, **kwargs):
 
             item.set_callback(get_video_url,
                               item_id=item_id,
-                              video_label=LABELS[item_id] + ' - ' + item.label,
                               video_id=video_id)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
@@ -487,7 +483,6 @@ def get_video_url(plugin,
                   item_id,
                   video_id,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
     """Get video URL and start video player"""
 
@@ -525,7 +520,7 @@ def get_video_url(plugin,
             Script.notify(label, label)
             return False
         if download_mode:
-            return download.download_video(final_url, video_label)
+            return download.download_video(final_url)
 
         return final_url
     else:
@@ -545,29 +540,28 @@ def get_video_url(plugin,
                 video_id = re.compile(r'www.youtube.com/embed/(.*?)[\?\"\&]'
                                       ).findall(url_video_resolver)[0]
                 return resolver_proxy.get_stream_youtube(
-                    plugin, video_id, download_mode, video_label)
+                    plugin, video_id, download_mode)
 
             # Case DailyMotion
             elif 'dailymotion' in url_video_resolver:
                 video_id = re.compile(r'embed/video/(.*?)[\"\?]').findall(
                     url_video_resolver)[0]
                 return resolver_proxy.get_stream_dailymotion(
-                    plugin, video_id, download_mode, video_label)
+                    plugin, video_id, download_mode)
 
             # Case Facebook
             elif 'facebook' in url_video_resolver:
                 video_id = re.compile('www.facebook.com/allocine/videos/(.*?)/'
                                       ).findall(url_video_resolver)[0]
                 return resolver_proxy.get_stream_facebook(
-                    plugin, video_id, download_mode, video_label)
+                    plugin, video_id, download_mode)
 
             # Case Vimeo
             elif 'vimeo' in url_video_resolver:
                 video_id = re.compile('player.vimeo.com/video/(.*?)[\?\"]'
                                       ).findall(url_video_resolver)[0]
                 return resolver_proxy.get_stream_vimeo(plugin, video_id,
-                                                       download_mode,
-                                                       video_label)
+                                                       download_mode)
 
             # TO DO ? (return an error)
             else:
@@ -578,7 +572,7 @@ def get_video_url(plugin,
                 video_id = re.compile('www.youtube.com/embed/(.*?)[\?\"\&]'
                                       ).findall(url_video_embeded)[0]
                 return resolver_proxy.get_stream_youtube(
-                    plugin, video_id, download_mode, video_label)
+                    plugin, video_id, download_mode)
 
             # TO DO ? (return an error)
             else:
@@ -612,8 +606,6 @@ def list_videos_news_videos(plugin, item_id, category_url, page, **kwargs):
                                         plugin.localize(LABELS['Download']),
                                         video_url=video_url,
                                         item_id=item_id,
-                                        video_label=LABELS[item_id] + ' - ' +
-                                        item.label,
                                         download_mode=True)
 
                     item.set_callback(get_video_url_news_videos,
@@ -632,7 +624,6 @@ def get_video_url_news_videos(plugin,
                               item_id,
                               video_url,
                               download_mode=False,
-                              video_label=None,
                               **kwargs):
 
     resp = urlquick.get(video_url)
@@ -647,15 +638,14 @@ def get_video_url_news_videos(plugin,
         video_id = re.compile(r'www.youtube.com/embed/(.*?)$').findall(
             url_video_resolver)[0]
         return resolver_proxy.get_stream_youtube(plugin, video_id,
-                                                 download_mode, video_label)
+                                                 download_mode)
 
     # Case DailyMotion
     elif 'dailymotion' in url_video_resolver:
         video_id = re.compile(r'embed/video/(.*?)$').findall(
             url_video_resolver)[0]
         return resolver_proxy.get_stream_dailymotion(plugin, video_id,
-                                                     download_mode,
-                                                     video_label)
+                                                     download_mode)
 
     # Case Facebook
     elif 'facebook' in url_video_resolver:
@@ -663,14 +653,13 @@ def get_video_url_news_videos(plugin,
                               ).findall(url_video_resolver)[0]
         # print 'video_id facebook ' + video_id
         return resolver_proxy.get_stream_facebook(plugin, video_id,
-                                                  download_mode, video_label)
+                                                  download_mode)
 
     # Case Vimeo
     elif 'vimeo' in url_video_resolver:
         video_id = re.compile(r'player.vimeo.com/video/(.*?)$').findall(
             url_video_resolver)[0]
-        return resolver_proxy.get_stream_vimeo(plugin, video_id, download_mode,
-                                               video_label)
+        return resolver_proxy.get_stream_vimeo(plugin, video_id, download_mode)
     # TO DO ? (return an error)
     else:
         return False

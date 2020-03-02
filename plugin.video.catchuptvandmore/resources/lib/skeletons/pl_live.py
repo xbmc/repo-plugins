@@ -50,24 +50,32 @@ menu = {
             "Białystok", "Bydgoszcz", "Gdańsk", "Gorzów Wielkopolski",
             "Katowice", "Kielce", "Kraków", "Lublin", "Łódź", "Olsztyn",
             "Opole", "Poznań", "Rzeszów", "Szczecin", "Warszawa", "Wrocław"
-        ]
+        ],
+        'enabled': True,
+        'order': 2
     },
     'tvpinfo': {
         'callback': 'live_bridge',
         'thumb': 'channels/pl/tvpinfo.png',
         'fanart': 'channels/pl/tvpinfo_fanart.jpg',
-        'module': 'resources.lib.channels.pl.tvp'
+        'module': 'resources.lib.channels.pl.tvp',
+        'enabled': True,
+        'order': 3
     },
     'tvppolonia': {
         'callback': 'live_bridge',
         'thumb': 'channels/pl/tvppolonia.png',
         'fanart': 'channels/pl/tvppolonia_fanart.jpg',
-        'module': 'resources.lib.channels.pl.tvp'
+        'module': 'resources.lib.channels.pl.tvp',
+        'enabled': True,
+        'order': 4
     },
     'tvppolandin': {
         'callback': 'live_bridge',
         'thumb': 'channels/pl/tvppolandin.png',
         'fanart': 'channels/pl/tvppolandin_fanart.jpg',
-        'module': 'resources.lib.channels.pl.tvp'
+        'module': 'resources.lib.channels.pl.tvp',
+        'enabled': True,
+        'order': 5
     }
 }

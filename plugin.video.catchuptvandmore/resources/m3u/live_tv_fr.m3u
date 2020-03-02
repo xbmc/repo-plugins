@@ -63,15 +63,15 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=t
 #EXTINF:-1 tvg-id="C444.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/nrj12.png" group-title="France TNT",NRJ 12
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nrj12&item_module=resources.lib.channels.fr.nrj&item_dict={}
 
-##	Public Sénat
-##	publicsenat
-#EXTINF:-1 tvg-id="C234.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/publicsenat.png" group-title="France TNT",Public Sénat
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=publicsenat&item_module=resources.lib.channels.fr.publicsenat&item_dict={}
-
 ##	LCP Assemblée Nationale
 ##	lcp
 #EXTINF:-1 tvg-id="C234.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/lcp.png" group-title="France TNT",LCP Assemblée Nationale
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lcp&item_module=resources.lib.channels.fr.lcp&item_dict={}
+
+##	Public Sénat
+##	publicsenat
+#EXTINF:-1 tvg-id="C234.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/publicsenat.png" group-title="France TNT",Public Sénat
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=publicsenat&item_module=resources.lib.channels.fr.publicsenat&item_dict={}
 
 ##	France 4
 ##	france-4
@@ -143,46 +143,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=l
 #EXTINF:-1 tvg-id="C2111.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/franceinfo.png" group-title="France TNT",France Info
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=franceinfo&item_module=resources.lib.channels.fr.franceinfo&item_dict={}
 
-##	RTL 2
-##	rtl2
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/rtl2.png" group-title="France Radio",RTL 2
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtl2&item_module=resources.lib.channels.fr.6play&item_dict={}
-
-##	Fun Radio
-##	fun_radio
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/funradio.png" group-title="France Radio",Fun Radio
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=fun_radio&item_module=resources.lib.channels.fr.6play&item_dict={}
-
-##	viàOccitanie
-##	viaoccitanie
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viaoccitanie.png" group-title="France Région",viàOccitanie
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viaoccitanie&item_module=resources.lib.channels.fr.via&item_dict={}
-
-##	Antenne Réunion
-##	antennereunion
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/antennereunion.png" group-title="France Région",Antenne Réunion
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=antennereunion&item_module=resources.lib.channels.fr.antennereunion&item_dict={}
-
-##	Canal 10
-##	canal10
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/canal10.png" group-title="France Région",Canal 10
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=canal10&item_module=resources.lib.channels.fr.canal10&item_dict={}
-
-##	BFM Paris
-##	bfmparis
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmparis.png" group-title="France Région",BFM Paris
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmparis&item_module=resources.lib.channels.fr.bfmparis&item_dict={}
-
-##	BFM Business
-##	bfmbusiness
-#EXTINF:-1 tvg-id="C1073.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmbusiness.png" group-title="France Satellite/FAI",BFM Business
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmbusiness&item_module=resources.lib.channels.fr.bfmtv&item_dict={}
-
-##	Gong
-##	gong
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/gong.png" group-title="France Satellite/FAI",Gong
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=gong&item_module=resources.lib.channels.fr.gong&item_dict={}
-
 ##	La 1ère Guadeloupe
 ##	la_1ere
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France Région",La 1ère Guadeloupe
@@ -228,15 +188,10 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=l
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France Région",La 1ère Wallis et Futuna
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&item_dict={"language":"Wallis et Futuna"}
 
-##	KTO
-##	kto
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/kto.png" group-title="France Satellite/FAI",KTO
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=kto&item_module=resources.lib.channels.fr.kto&item_dict={}
-
-##	Ouatch TV
-##	ouatchtv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/ouatchtv.png" group-title="France Satellite/FAI",Ouatch TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ouatchtv&item_module=resources.lib.channels.fr.ouatchtv&item_dict={}
+##	BFM Business
+##	bfmbusiness
+#EXTINF:-1 tvg-id="C1073.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmbusiness.png" group-title="France Satellite/FAI",BFM Business
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmbusiness&item_module=resources.lib.channels.fr.bfmtv&item_dict={}
 
 ##	France 3 Régions Alpes
 ##	france3regions
@@ -363,6 +318,46 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=f
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Nouvelle-Aquitaine
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Nouvelle-Aquitaine"}
 
+##	Gong
+##	gong
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/gong.png" group-title="France Satellite/FAI",Gong
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=gong&item_module=resources.lib.channels.fr.gong&item_dict={}
+
+##	BFM Paris
+##	bfmparis
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmparis.png" group-title="France Région",BFM Paris
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmparis&item_module=resources.lib.channels.fr.bfmregion&item_dict={}
+
+##	Fun Radio
+##	fun_radio
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/funradio.png" group-title="France Radio",Fun Radio
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=fun_radio&item_module=resources.lib.channels.fr.6play&item_dict={}
+
+##	KTO
+##	kto
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/kto.png" group-title="France Satellite/FAI",KTO
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=kto&item_module=resources.lib.channels.fr.kto&item_dict={}
+
+##	Antenne Réunion
+##	antennereunion
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/antennereunion.png" group-title="France Région",Antenne Réunion
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=antennereunion&item_module=resources.lib.channels.fr.antennereunion&item_dict={}
+
+##	viàOccitanie
+##	viaoccitanie
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viaoccitanie.png" group-title="France Région",viàOccitanie
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viaoccitanie&item_module=resources.lib.channels.fr.via&item_dict={}
+
+##	Ouatch TV
+##	ouatchtv
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/ouatchtv.png" group-title="France Satellite/FAI",Ouatch TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ouatchtv&item_module=resources.lib.channels.fr.ouatchtv&item_dict={}
+
+##	RTL 2
+##	rtl2
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/rtl2.png" group-title="France Radio",RTL 2
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtl2&item_module=resources.lib.channels.fr.6play&item_dict={}
+
 ##	viàATV
 ##	viaatv
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viaatv.png" group-title="France Région",viàATV
@@ -443,15 +438,15 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=a
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/biptv.png" group-title="France Région",BIP TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=biptv&item_module=resources.lib.channels.fr.biptv&item_dict={}
 
-##	Grand Lille TV
-##	grandlilletv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/grandlilletv.png" group-title="France Région",Grand Lille TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=grandlilletv&item_module=resources.lib.channels.fr.grandlilletv&item_dict={}
+##	BFM Lille
+##	bfmlille
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmlille.png" group-title="France Région",BFM Lille
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmlille&item_module=resources.lib.channels.fr.bfmregion&item_dict={}
 
-##	Grand Litorral TV
-##	grandlitorraltv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/grandlitorraltv.png" group-title="France Région",Grand Litorral TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=grandlitorraltv&item_module=resources.lib.channels.fr.grandlitorraltv&item_dict={}
+##	BFM Littoral
+##	bfmgrandlittoral
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmgrandlittoral.png" group-title="France Région",BFM Littoral
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmgrandlittoral&item_module=resources.lib.channels.fr.bfmregion&item_dict={}
 
 ##	La Chaine Normande
 ##	lachainenormande
@@ -473,11 +468,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=p
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tebesud.png" group-title="France Région",TébéSud
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tebesud&item_module=resources.lib.channels.fr.tebeo&item_dict={}
 
-##	viàMaTélé
-##	viamatele
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viamatele.png" group-title="France Région",viàMaTélé
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viamatele&item_module=resources.lib.channels.fr.via&item_dict={}
-
 ##	TéléGrenoble
 ##	telegrenoble
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/telegrenoble.png" group-title="France Région",TéléGrenoble
@@ -491,7 +481,7 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=t
 ##	BFM Lyon
 ##	bfmlyon
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmlyon.png" group-title="France Région",BFM Lyon
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmlyon&item_module=resources.lib.channels.fr.bfmlyon&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmlyon&item_module=resources.lib.channels.fr.bfmregion&item_dict={}
 
 ##	TLC
 ##	tlc
@@ -528,10 +518,20 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=w
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/dicitv.png" group-title="France Région",DiCi TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dicitv&item_module=resources.lib.channels.fr.dicitv&item_dict={}
 
+##	viàMaTélé
+##	viamatele
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viamatele.png" group-title="France Région",viàMaTélé
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viamatele&item_module=resources.lib.channels.fr.via&item_dict={}
+
 ##	France Inter
 ##	franceinter
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/franceinter.png" group-title="France Radio",France Inter
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=franceinter&item_module=resources.lib.channels.fr.franceinter&item_dict={}
+
+##	RTL
+##	rtl
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/rtl.png" group-title="France Radio",RTL
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtl&item_module=resources.lib.channels.fr.rtl&item_dict={}
 
 ##	Euronews
 ##	euronews

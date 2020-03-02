@@ -41,108 +41,144 @@ menu = {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv1.png',
         'fanart': 'channels/cn/cctv1_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 1
     },
     'cctv2': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv2.png',
         'fanart': 'channels/cn/cctv2_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 2
     },
     'cctv3': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv3.png',
         'fanart': 'channels/cn/cctv3_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 3
     },
     'cctv4': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv4.png',
         'fanart': 'channels/cn/cctv4_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 4
     },
     'cctveurope': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctveurope.png',
         'fanart': 'channels/cn/cctveurope_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 5
     },
     'cctvamerica': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctvamerica.png',
         'fanart': 'channels/cn/cctvamerica_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 6
     },
     'cctv5': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv5.png',
         'fanart': 'channels/cn/cctv5_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 7
     },
     'cctv5plus': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv5plus.png',
         'fanart': 'channels/cn/cctv5plus_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 8
     },
     'cctv6': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv6.png',
         'fanart': 'channels/cn/cctv6_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 9
     },
     'cctv7': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv7.png',
         'fanart': 'channels/cn/cctv7_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 10
     },
     'cctv8': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv8.png',
         'fanart': 'channels/cn/cctv8_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 11
     },
     'cctvjilu': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctvjilu.png',
         'fanart': 'channels/cn/cctvjilu_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 12
     },
     'cctv10': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv10.png',
         'fanart': 'channels/cn/cctv10_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 13
     },
     'cctv11': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv11.png',
         'fanart': 'channels/cn/cctv11_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 14
     },
     'cctv12': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv12.png',
         'fanart': 'channels/cn/cctv12_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 15
     },
     'cctv13': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv13.png',
         'fanart': 'channels/cn/cctv13_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 16
     },
     'cctvchild': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctvchild.png',
         'fanart': 'channels/cn/cctvchild_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 17
     },
     'cctv15': {
         'callback': 'live_bridge',
         'thumb': 'channels/cn/cctv15.png',
         'fanart': 'channels/cn/cctv15_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv'
+        'module': 'resources.lib.channels.cn.cctv',
+        'enabled': True,
+        'order': 18
     }
 }

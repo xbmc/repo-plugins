@@ -30,7 +30,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import htmlement
 import json
@@ -47,9 +47,7 @@ URL_ROOT = 'https://www.nrj-play.fr'
 URL_REPLAY = URL_ROOT + '/%s/replay'
 # channel_name (nrj12, ...)
 
-URL_COMPTE_LOGIN_MODAL = URL_ROOT + '/compte/loginmodal'
-
-URL_COMPTE_LOGIN = URL_ROOT + '/compte/connexion'
+URL_COMPTE_LOGIN = 'https://user-api2.nrj.fr/api/5/login'
 # TO DO add account for using Live Direct
 
 URL_LIVE_WITH_TOKEN = URL_ROOT + '/compte/live?channel=%s'
@@ -144,7 +142,6 @@ def list_videos(plugin, item_id, program_title, program_url, **kwargs):
 
             item.set_callback(get_video_url,
                               item_id=item_id,
-                              video_label=LABELS[item_id] + ' - ' + item.label,
                               video_url=video_url)
             yield item
     else:
@@ -160,7 +157,6 @@ def list_videos(plugin, item_id, program_title, program_url, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -171,7 +167,6 @@ def get_video_url(plugin,
                   item_id,
                   video_url,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
     # Just One format of each video (no need of QUALITY)
     resp = urlquick.get(video_url)
@@ -183,16 +178,16 @@ def get_video_url(plugin,
             stream_url = stream.get('content')
 
     if download_mode:
-        return download.download_video(stream_url, video_label)
+        return download.download_video(stream_url)
     return stream_url
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     # Live TV Not working / find a way to dump html received
 
@@ -200,28 +195,15 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
     # KO - session_urlquick = urlquick.Session()
     session_requests = requests.session()
 
-    # Get Token
-    # KO - resp = session_urlquick.get(URL_COMPTE_LOGIN)
-    resp = session_requests.get(URL_COMPTE_LOGIN_MODAL)
-    token_form_login = re.compile(
-        r'name=\"login_form\[_token\]\" value=\"(.*?)\"').findall(resp.text)[0]
-
-    if plugin.setting.get_string('nrj.login') == '' or\
-            plugin.setting.get_string('nrj.password') == '':
-        xbmcgui.Dialog().ok(
-            'Info',
-            plugin.localize(30604) % ('NRJ', 'http://www.nrj-play.fr'))
-        return False
-
     # Build PAYLOAD
     payload = {
-        "login_form[email]": plugin.setting.get_string('nrj.login'),
-        "login_form[password]": plugin.setting.get_string('nrj.password'),
-        "login_form[_token]": token_form_login
+        "email": plugin.setting.get_string('nrj.login'),
+        "password": plugin.setting.get_string('nrj.password')
     }
     headers = {
         'accept': 'application/json, text/javascript, */*; q=0.01',
-        'referer': 'https://www.nrj-play.fr/%s' % item_id
+        'origin': 'https://www.nrj-play.fr',
+        'referer': 'https://www.nrj-play.fr/'
     }
 
     # LOGIN

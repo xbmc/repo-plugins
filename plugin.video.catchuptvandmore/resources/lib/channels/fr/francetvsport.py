@@ -32,8 +32,8 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
-import resources.lib.cq_utils as cqu
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info
 
 import re
 import json
@@ -107,9 +107,7 @@ def list_videos(plugin, item_id, mode, page, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_url=video_url,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          item_dict=item2dict(item))
+                          video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -122,9 +120,7 @@ def list_videos(plugin, item_id, mode, page, **kwargs):
 def get_video_url(plugin,
                   item_id,
                   video_url,
-                  item_dict=None,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     resp = urlquick.get(video_url)
@@ -135,8 +131,7 @@ def get_video_url(plugin,
         break
 
     return resolver_proxy.get_francetv_video_stream(plugin, id_diffusion,
-                                                    item_dict, download_mode,
-                                                    video_label)
+                                                    download_mode)
 
 
 def multi_live_entry(plugin, item_id, **kwargs):

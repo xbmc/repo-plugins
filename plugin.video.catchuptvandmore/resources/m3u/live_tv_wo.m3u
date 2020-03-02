@@ -3,21 +3,6 @@
 # International
 # wo_live
 
-##	Tivi 5Monde
-##	tivi5monde
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/tivi5monde.png" group-title="International",Tivi 5Monde
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tivi5monde&item_module=resources.lib.channels.wo.tivi5monde&item_dict={}
-
-##	TV5Monde France Belgique Suisse
-##	tv5mondefbs
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/tv5mondefbs.png" group-title="International",TV5Monde France Belgique Suisse
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv5mondefbs&item_module=resources.lib.channels.wo.tv5monde&item_dict={}
-
-##	TV5Monde Info
-##	tv5mondeinfo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/tv5mondeinfo.png" group-title="International",TV5Monde Info
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv5mondeinfo&item_module=resources.lib.channels.wo.tv5monde&item_dict={}
-
 ##	Euronews FR
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews FR
@@ -88,15 +73,55 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=a
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/arte.png" group-title="International",Arte DE
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arte&item_module=resources.lib.channels.wo.arte&item_dict={"language":"DE"}
 
+##	France 24 FR
+##	france24
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 FR
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"FR"}
+
+##	France 24 EN
+##	france24
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 EN
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"EN"}
+
+##	France 24 AR
+##	france24
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 AR
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"AR"}
+
+##	France 24 ES
+##	france24
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 ES
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"ES"}
+
+##	NHK World Outside Japan
+##	nhkworld
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/nhkworld.png" group-title="International",NHK World Outside Japan
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nhkworld&item_module=resources.lib.channels.wo.nhkworld&item_dict={"language":"Outside Japan"}
+
+##	NHK World In Japan
+##	nhkworld
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/nhkworld.png" group-title="International",NHK World In Japan
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nhkworld&item_module=resources.lib.channels.wo.nhkworld&item_dict={"language":"In Japan"}
+
+##	Tivi 5Monde
+##	tivi5monde
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/tivi5monde.png" group-title="International",Tivi 5Monde
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tivi5monde&item_module=resources.lib.channels.wo.tivi5monde&item_dict={}
+
+##	BVN
+##	bvn
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/bvn.png" group-title="International",BVN
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bvn&item_module=resources.lib.channels.wo.bvn&item_dict={}
+
+##	ICI Télévision
+##	icitelevision
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/icitelevision.png" group-title="International",ICI Télévision
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitelevision&item_module=resources.lib.channels.wo.icitelevision&item_dict={}
+
 ##	Arirang (아리랑)
 ##	arirang
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/arirang.png" group-title="International",Arirang (아리랑)
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arirang&item_module=resources.lib.channels.wo.arirang&item_dict={}
-
-##	Afrique Media
-##	afriquemedia
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/afriquemedia.png" group-title="International",Afrique Media
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=afriquemedia&item_module=resources.lib.channels.wo.afriquemedia&item_dict={}
 
 ##	DW EN
 ##	dw
@@ -117,36 +142,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=d
 ##	dw
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/dw.png" group-title="International",DW DE
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"DE"}
-
-##	ICI RDI
-##	icirdi
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/icirdi.png" group-title="International",ICI RDI
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icirdi&item_module=resources.lib.channels.wo.icirdi&item_dict={}
-
-##	BVN
-##	bvn
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/bvn.png" group-title="International",BVN
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bvn&item_module=resources.lib.channels.wo.bvn&item_dict={}
-
-##	France 24 FR
-##	france24
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 FR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"FR"}
-
-##	France 24 EN
-##	france24
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 EN
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"EN"}
-
-##	France 24 AR
-##	france24
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 AR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"AR"}
-
-##	France 24 ES
-##	france24
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 ES
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"ES"}
 
 ##	QVC JP
 ##	qvc
@@ -173,25 +168,10 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=q
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/qvc.png" group-title="International",QVC US
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"US"}
 
-##	NHK World Outside Japan
-##	nhkworld
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/nhkworld.png" group-title="International",NHK World Outside Japan
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nhkworld&item_module=resources.lib.channels.wo.nhkworld&item_dict={"language":"Outside Japan"}
-
-##	NHK World In Japan
-##	nhkworld
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/nhkworld.png" group-title="International",NHK World In Japan
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nhkworld&item_module=resources.lib.channels.wo.nhkworld&item_dict={"language":"In Japan"}
-
-##	ICI Télévision
-##	icitelevision
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/icitelevision.png" group-title="International",ICI Télévision
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitelevision&item_module=resources.lib.channels.wo.icitelevision&item_dict={}
-
-##	Channel NewsAsia
-##	channelnewsasia
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/channelnewsasia.png" group-title="International",Channel NewsAsia
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=channelnewsasia&item_module=resources.lib.channels.wo.channelnewsasia&item_dict={}
+##	ICI RDI
+##	icirdi
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/icirdi.png" group-title="International",ICI RDI
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icirdi&item_module=resources.lib.channels.wo.icirdi&item_dict={}
 
 ##	CGTN FR
 ##	cgtn
@@ -222,6 +202,26 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=c
 ##	cgtndocumentary
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/cgtndocumentary.png" group-title="International",CGTN Documentary
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtndocumentary&item_module=resources.lib.channels.wo.cgtn&item_dict={}
+
+##	Afrique Media
+##	afriquemedia
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/afriquemedia.png" group-title="International",Afrique Media
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=afriquemedia&item_module=resources.lib.channels.wo.afriquemedia&item_dict={}
+
+##	TV5Monde France Belgique Suisse
+##	tv5mondefbs
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/tv5mondefbs.png" group-title="International",TV5Monde France Belgique Suisse
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv5mondefbs&item_module=resources.lib.channels.wo.tv5monde&item_dict={}
+
+##	TV5Monde Info
+##	tv5mondeinfo
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/tv5mondeinfo.png" group-title="International",TV5Monde Info
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv5mondeinfo&item_module=resources.lib.channels.wo.tv5monde&item_dict={}
+
+##	Channel NewsAsia
+##	channelnewsasia
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/channelnewsasia.png" group-title="International",Channel NewsAsia
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=channelnewsasia&item_module=resources.lib.channels.wo.channelnewsasia&item_dict={}
 
 ##	RT FR
 ##	rt

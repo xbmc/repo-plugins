@@ -30,8 +30,8 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
-import resources.lib.cq_utils as cqu
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
+from resources.lib.menu_utils import item_post_treatment
 
 import htmlement
 import inputstreamhelper
@@ -189,8 +189,7 @@ def list_videos_episodes(plugin, item_id, program_url, **kwargs):
     item.set_callback(
         get_video_url,
         item_id=item_id,
-        video_id=video_id,
-        item_dict=item2dict(item))
+        video_id=video_id)
     item_post_treatment(item, is_playable=True, is_downloadable=False)
     yield item
 
@@ -227,8 +226,7 @@ def list_videos_franchise(plugin, item_id, program_url, **kwargs):
             item.set_callback(
                 get_video_url,
                 item_id=item_id,
-                video_id=video_id,
-                item_dict=item2dict(item))
+                video_id=video_id)
             item_post_treatment(item, is_playable=True, is_downloadable=False)
             yield item
 
@@ -266,8 +264,7 @@ def list_videos_franchise(plugin, item_id, program_url, **kwargs):
             item.set_callback(
                 get_video_url,
                 item_id=item_id,
-                video_id=video_id,
-                item_dict=item2dict(item))
+                video_id=video_id)
             item_post_treatment(item, is_playable=True, is_downloadable=False)
             yield item
 
@@ -282,12 +279,10 @@ def list_videos_franchise(plugin, item_id, program_url, **kwargs):
 def get_video_url(plugin,
                   item_id,
                   video_id,
-                  item_dict,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
-    if cqu.get_kodi_version() < 18:
+    if get_kodi_version() < 18:
         xbmcgui.Dialog().ok('Info', plugin.localize(30602))
         return False
 
@@ -331,9 +326,9 @@ def get_video_url(plugin,
 
     item = Listitem()
     item.path = json_parser2["stream"]["src"]
-    item.label = item_dict['label']
-    item.info.update(item_dict['info'])
-    item.art.update(item_dict['art'])
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
     if plugin.setting.get_boolean('active_subtitle'):
         item.subtitles.append(URL_SUBTITLE % video_id)
     item.property['inputstreamaddon'] = 'inputstream.adaptive'
@@ -345,14 +340,14 @@ def get_video_url(plugin,
     return item
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
-    if cqu.get_kodi_version() < 18:
+    if get_kodi_version() < 18:
         xbmcgui.Dialog().ok('Info', plugin.localize(30602))
         return False
 
@@ -400,19 +395,9 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     item = Listitem()
     item.path = json_parser2["stream"]["src"]
-    if item_dict:
-        if 'label' in item_dict:
-            item.label = item_dict['label']
-        if 'info' in item_dict:
-            item.info.update(item_dict['info'])
-        if 'art' in item_dict:
-            item.art.update(item_dict['art'])
-    else:
-        item.label = LABELS[item_id]
-        item.art["thumb"] = ""
-        item.art["icon"] = ""
-        item.art["fanart"] = ""
-        item.info["plot"] = LABELS[item_id]
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
     if plugin.setting.get_boolean('active_subtitle'):
         item.subtitles.append(URL_SUBTITLE % video_id)
     item.property['inputstreamaddon'] = 'inputstream.adaptive'

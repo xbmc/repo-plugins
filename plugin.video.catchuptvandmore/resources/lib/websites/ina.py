@@ -24,7 +24,7 @@ from codequick import Route, Resolver, Listitem, utils
 
 from resources.lib import download
 from resources.lib.labels import LABELS
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import htmlement
 import json
@@ -156,7 +156,6 @@ def list_videos(plugin, item_id, program_url, nb_videos, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -213,7 +212,6 @@ def list_videos_search(plugin, item_id, nb_videos, search_query, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -229,7 +227,6 @@ def get_video_url(plugin,
                   item_id,
                   video_id,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
     """Get video URL and start video player"""
     stream_xml = urlquick.get(URL_STREAM % video_id).text
@@ -242,6 +239,6 @@ def get_video_url(plugin,
                 stream_url = child.attrib['url']
 
     if download_mode:
-        return download.download_video(stream_url, video_label)
+        return download.download_video(stream_url)
 
     return stream_url

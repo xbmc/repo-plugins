@@ -40,12 +40,12 @@ import urlquick
 URL_LIVE = 'http://www.paramountnetwork.es/en-directo/4ypes1'
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE)
     video_uri = re.compile(r'\"config"\:\{\"uri\"\:\"(.*?)\"').findall(

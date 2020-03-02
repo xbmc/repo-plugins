@@ -30,7 +30,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
@@ -107,8 +107,6 @@ def list_videos(plugin, item_id, program_url, **kwargs):
             item.set_callback(
                 get_video_url,
                 item_id=item_id,
-                video_label=LABELS[item_id] + ' - ' +
-                item.label,
                 video_url=video_url)
             item_post_treatment(
                 item, is_playable=True, is_downloadable=True)
@@ -146,8 +144,6 @@ def list_videos(plugin, item_id, program_url, **kwargs):
                                 item.set_callback(
                                     get_video_url,
                                     item_id=item_id,
-                                    video_label=LABELS[item_id] + ' - ' +
-                                    item.label,
                                     video_url=video_url)
                                 item_post_treatment(
                                     item, is_playable=True, is_downloadable=True)
@@ -165,7 +161,6 @@ def get_video_url(plugin,
                   item_id,
                   video_url,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     resp = urlquick.get(video_url)
@@ -184,4 +179,4 @@ def get_video_url(plugin,
     ep = '00a43210'
 
     return resolver_proxy.get_mtvnservices_stream(plugin, video_uri,
-                                                  download_mode, video_label, account_override, ep)
+                                                  download_mode, account_override, ep)

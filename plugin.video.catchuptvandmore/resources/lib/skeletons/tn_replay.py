@@ -41,6 +41,8 @@ menu = {
         'callback': 'replay_bridge',
         'thumb': 'channels/tn/nessma.png',
         'fanart': 'channels/tn/nessma_fanart.jpg',
-        'module': 'resources.lib.channels.tn.nessma'
+        'module': 'resources.lib.channels.tn.nessma',
+        'enabled': True,
+        'order': 3
     }
 }

@@ -31,7 +31,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import json
 import urlquick
@@ -108,7 +108,6 @@ def list_videos_weather(plugin, item_id, **kwargs):
     item.art['thumb'] = video_image
     item.set_callback(get_video_weather_url,
                       item_id=item_id,
-                      video_label=LABELS[item_id] + ' - ' + item.label,
                       video_url=video_url)
     item_post_treatment(item, is_playable=True, is_downloadable=True)
     yield item
@@ -164,7 +163,6 @@ def list_videos_news(plugin, item_id, page, **kwargs):
         item.set_callback(get_video_news_url,
                           item_id=item_id,
                           video_id=video_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_date=video_date)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -178,12 +176,11 @@ def get_video_news_url(plugin,
                        video_id,
                        video_date,
                        download_mode=False,
-                       video_label=None,
                        **kwargs):
 
     resp = urlquick.get(URL_STREAM_NHK_NEWS % (video_date, video_id))
     json_parser = json.loads(resp.text)
     final_video_url = json_parser["mediaResource"]["url"]
     if download_mode:
-        return download.download_video(final_video_url, video_label)
+        return download.download_video(final_video_url)
     return final_video_url

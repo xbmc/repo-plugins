@@ -35,6 +35,8 @@ from kodi_six import xbmcvfs
 from codequick import Script
 import urlquick
 
+from resources.lib.labels import LABELS
+
 
 # The Python-XMLTV version
 VERSION = "1.4.3"
@@ -386,36 +388,44 @@ def get_xmltv_url(menu_id):
     return xmltv_infos[menu_id]['url'].format(xmltv_date_s)
 
 
-def grab_tv_guide(menu_id, menu):
-    xmltv_url = get_xmltv_url(menu_id)
-    Script.log('xmltv url of {}: {}'.format(menu_id, xmltv_url))
+def grab_tv_guide(menu_id):
+    try:
+        xmltv_url = get_xmltv_url(menu_id)
+        Script.log('xmltv url of {}: {}'.format(menu_id, xmltv_url))
 
-    xmltv_fn = os.path.basename(urlparse(xmltv_url).path)
-    Script.log('xmltv filename of {}: {}'.format(menu_id, xmltv_fn))
+        xmltv_fn = os.path.basename(urlparse(xmltv_url).path)
+        Script.log('xmltv filename of {}: {}'.format(menu_id, xmltv_fn))
 
-    xmltv_fp = os.path.join(Script.get_info('profile'), xmltv_fn)
+        xmltv_fp = os.path.join(Script.get_info('profile'), xmltv_fn)
 
-    # Remove old xmltv files of this country
-    dirs, files = xbmcvfs.listdir(Script.get_info('profile'))
-    for fn in files:
-        if xmltv_infos[menu_id]['keyword'] in fn and fn != xmltv_fn:
-            Script.log('Remove old xmltv file: {}'.format(fn))
-            xbmcvfs.delete(os.path.join(Script.get_info('profile'), fn))
+        # Remove old xmltv files of this country
+        dirs, files = xbmcvfs.listdir(Script.get_info('profile'))
+        for fn in files:
+            if xmltv_infos[menu_id]['keyword'] in fn and fn != xmltv_fn:
+                Script.log('Remove old xmltv file: {}'.format(fn))
+                xbmcvfs.delete(os.path.join(Script.get_info('profile'), fn))
 
-    # Check if we need to download a fresh xmltv file
-    if not xbmcvfs.exists(xmltv_fp):
-        Script.log("xmltv file of {} for today does not exist, let's download it".format(menu_id))
-        r = urlquick.get(xmltv_url)
-        with open(xmltv_fp, 'wb') as f:
-            f.write(r.content)
+        # Check if we need to download a fresh xmltv file
+        if not xbmcvfs.exists(xmltv_fp):
+            Script.log("xmltv file of {} for today does not exist, let's download it".format(menu_id))
+            r = urlquick.get(xmltv_url)
+            with open(xmltv_fp, 'wb') as f:
+                f.write(r.content)
 
-    # Grab programmes in xmltv file
-    programmes = read_current_programmes(xmltv_fp)
+        # Grab programmes in xmltv file
+        programmes = read_current_programmes(xmltv_fp)
 
-    # Use the channel as key
-    tv_guide = {}
-    for programme in programmes:
-        programme = programme_post_treatment(programme)
-        tv_guide[programme['channel']] = programme
+        # Use the channel as key
+        tv_guide = {}
+        for programme in programmes:
+            programme = programme_post_treatment(programme)
+            tv_guide[programme['channel']] = programme
 
-    return tv_guide
+        return tv_guide
+    except Exception as e:
+        Script.notify(
+            Script.localize(LABELS['TV guide']),
+            Script.localize(LABELS['An error occurred while getting TV guide']),
+            display_time=7000)
+        Script.log('xmltv module failed with error: {}'.format(e, lvl=Script.ERROR))
+        return {}

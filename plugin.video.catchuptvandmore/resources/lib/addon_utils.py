@@ -25,43 +25,72 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+# Core imports
 import os
-import sys
-import pickle
-import binascii
 
+# Kodi imports
 from kodi_six import xbmcgui
 from kodi_six import xbmc
 from kodi_six import xbmcvfs
-
-try:
-    from urllib.parse import urlunsplit
-except ImportError:
-    from urlparse import urlunsplit
-
+from codequick import Script, utils
 import urlquick
-from codequick import Script
+
+
+# Local imports
 from resources.lib.labels import LABELS
 
 
-PY3 = sys.version_info[0] >= 3
+def get_item_label(item_id):
+    """Get (translated) label of 'item_id'
+
+    Args:
+        item_id (str)
+    Returns:
+        str: (translated) label of 'item_id'
+    """
+    label = item_id
+    if item_id in LABELS:
+        label = LABELS[item_id]
+        if isinstance(label, int):
+            label = Script.localize(label)
+    return label
 
 
-def build_kodi_url(route_path, raw_params):
-    # route_path: /resources/lib/channels/fr/mytf1/get_video_url/
-    # raw_params: params dict
-    if raw_params:
-        pickled = binascii.hexlify(
-            pickle.dumps(raw_params, protocol=pickle.HIGHEST_PROTOCOL))
-        query = "_pickle_={}".format(
-            pickled.decode("ascii") if PY3 else pickled)
+def get_item_media_path(item_media_path):
+    """Get full path or URL of an item_media
 
-    # Build kodi url
-    return urlunsplit(
-        ("plugin", "plugin.video.catchuptvandmore", route_path, query, ""))
+    Args:
+        item_media_path (str or list): Partial media path of the item (e.g. channels/fr/tf1.png)
+    Returns:
+        str: Full path or URL of the item_pedia
+    """
+    full_path = ''
+
+    # Local image in ressources/media folder
+    if type(item_media_path) is list:
+        full_path = os.path.join(Script.get_info("path"), "resources", "media",
+                                 *(item_media_path))
+
+    # Remote image with complete URL
+    elif 'http' in item_media_path:
+        full_path = item_media_path
+
+    # Image in our resource.images add-on
+    else:
+        full_path = 'resource://resource.images.catchuptvandmore/' + item_media_path
+
+    return utils.ensure_native_str(full_path)
 
 
 def get_quality_YTDL(download_mode=False):
+    """Get YoutTubeDL quality setting
+
+    Args:
+        download_mode (bool)
+    Returns:
+        int: YoutTubeDL quality
+    """
+
     # If not download mode get the 'quality' setting
     if not download_mode:
         quality = Script.setting.get_string('quality')
@@ -93,14 +122,13 @@ def get_quality_YTDL(download_mode=False):
         return 3
 
 
-def get_kodi_version():
-    xbmc_version = xbmc.getInfoLabel("System.BuildVersion")
-    return int(xbmc_version.split('-')[0].split('.')[0])
-
-
 @Script.register
 def clear_cache(plugin):
-    # Callback function of clear cache setting button
+    """Callback function of clear cache setting button
+
+    Args:
+        plugin (codequick.script.Script)
+    """
 
     # Clear urlquick cache
     urlquick.cache_cleanup(-1)

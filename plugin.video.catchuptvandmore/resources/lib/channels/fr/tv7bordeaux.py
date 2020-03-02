@@ -30,7 +30,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import re
 import urlquick
@@ -41,16 +41,17 @@ import urlquick
 URL_ROOT = "http://www.tv7.com"
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(
         URL_ROOT, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    live_id = re.compile(r'videoId \= \"(.*?)\"').findall(resp.text)[0]
-    return resolver_proxy.get_stream_dailymotion(plugin,
-                                                 live_id,
-                                                 False)
+    live_id = re.compile("youtube.com/embed/(.*?)\"").findall(
+        resp.text)[0]
+    return resolver_proxy.get_stream_youtube(plugin,
+                                             live_id,
+                                             False)

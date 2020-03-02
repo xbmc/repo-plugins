@@ -29,7 +29,8 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info
 
 import inputstreamhelper
 import json
@@ -154,9 +155,7 @@ def list_videos(plugin, item_id, program_url, **kwargs):
         item.set_callback(
             get_video_url,
             item_id=item_id,
-            video_label=LABELS[item_id] + ' - ' + item.label,
-            video_url=video_url,
-            item_dict=item2dict(item))
+            video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=False)
         yield item
 
@@ -165,9 +164,7 @@ def list_videos(plugin, item_id, program_url, **kwargs):
 def get_video_url(plugin,
                   item_id,
                   video_url,
-                  item_dict,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     is_helper = inputstreamhelper.Helper('mpd')
@@ -190,21 +187,18 @@ def get_video_url(plugin,
     item.path = json_parser["files"]["auto"]
     item.property["inputstreamaddon"] = "inputstream.adaptive"
     item.property["inputstream.adaptive.manifest_type"] = "mpd"
-    if "label" in item_dict:
-        item.label = item_dict["label"]
-    if "info" in item_dict:
-        item.info.update(item_dict["info"])
-    if "art" in item_dict:
-        item.art.update(item_dict["art"])
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
     return item
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     is_helper = inputstreamhelper.Helper('mpd')
     if not is_helper.check_inputstream():
@@ -226,17 +220,7 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
     item.path = json_parser["files"]["auto"]
     item.property["inputstreamaddon"] = "inputstream.adaptive"
     item.property["inputstream.adaptive.manifest_type"] = "mpd"
-    if item_dict:
-        if "label" in item_dict:
-            item.label = item_dict["label"]
-        if "info" in item_dict:
-            item.info.update(item_dict["info"])
-        if "art" in item_dict:
-            item.art.update(item_dict["art"])
-    else:
-        item.label = LABELS[item_id]
-        item.art["thumb"] = ""
-        item.art["icon"] = ""
-        item.art["fanart"] = ""
-        item.info["plot"] = LABELS[item_id]
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
     return item

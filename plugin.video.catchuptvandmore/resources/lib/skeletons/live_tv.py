@@ -36,65 +36,95 @@ the addon's tree architecture.
     - module: Item module to load in order to work (like 6play.py)
 """
 
+TV_GUIDE = Script.setting.get_boolean('tv_guide')
+
 menu = {
     'fr_live': {
         'callback': 'tv_guide_menu'
-        if Script.setting.get_boolean('tv_guide') else 'generic_menu',
-        'thumb': 'channels/fr.png'
-    },
-    'be_live': {
-        'callback': 'tv_guide_menu'
-        if Script.setting.get_boolean('tv_guide') else 'generic_menu',
-        'thumb': 'channels/be.png'
-    },
-    'ca_live': {
-        'callback': 'generic_menu',
-        'thumb': 'channels/ca.png'
+        if TV_GUIDE else 'generic_menu',
+        'thumb': 'channels/fr.png',
+        'enabled': True,
+        'order': 1
     },
     'ch_live': {
         'callback': 'generic_menu',
-        'thumb': 'channels/ch.png'
+        'thumb': 'channels/ch.png',
+        'enabled': True,
+        'order': 2
     },
     'uk_live': {
         'callback': 'tv_guide_menu'
-        if Script.setting.get_boolean('tv_guide') else 'generic_menu',
-        'thumb': 'channels/uk.png'
+        if TV_GUIDE else 'generic_menu',
+        'thumb': 'channels/uk.png',
+        'enabled': True,
+        'order': 3
     },
     'wo_live': {
         'callback': 'generic_menu',
-        'thumb': 'channels/wo.png'
+        'thumb': 'channels/wo.png',
+        'enabled': True,
+        'order': 4
     },
-    'us_live': {
-        'callback': 'generic_menu',
-        'thumb': 'channels/us.png'
-    },
-    'pl_live': {
-        'callback': 'generic_menu',
-        'thumb': 'channels/pl.png'
-    },
-    'es_live': {
-        'callback': 'generic_menu',
-        'thumb': 'channels/es.png'
+    'be_live': {
+        'callback': 'tv_guide_menu'
+        if TV_GUIDE else 'generic_menu',
+        'thumb': 'channels/be.png',
+        'enabled': True,
+        'order': 5
     },
     'jp_live': {
         'callback': 'generic_menu',
-        'thumb': 'channels/jp.png'
+        'thumb': 'channels/jp.png',
+        'enabled': True,
+        'order': 6
+    },
+    'ca_live': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/ca.png',
+        'enabled': True,
+        'order': 7
+    },
+    'us_live': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/us.png',
+        'enabled': True,
+        'order': 8
+    },
+    'pl_live': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/pl.png',
+        'enabled': True,
+        'order': 9
+    },
+    'es_live': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/es.png',
+        'enabled': True,
+        'order': 10
     },
     'tn_live': {
         'callback': 'generic_menu',
-        'thumb': 'channels/tn.png'
+        'thumb': 'channels/tn.png',
+        'enabled': True,
+        'order': 11
     },
     'it_live': {
         'callback': 'tv_guide_menu'
-        if Script.setting.get_boolean('tv_guide') else 'generic_menu',
-        'thumb': 'channels/it.png'
+        if TV_GUIDE else 'generic_menu',
+        'thumb': 'channels/it.png',
+        'enabled': True,
+        'order': 12
     },
     'nl_live': {
         'callback': 'generic_menu',
-        'thumb': 'channels/nl.png'
+        'thumb': 'channels/nl.png',
+        'enabled': True,
+        'order': 13
     },
     'cn_live': {
         'callback': 'generic_menu',
-        'thumb': 'channels/cn.png'
+        'thumb': 'channels/cn.png',
+        'enabled': True,
+        'order': 14
     }
 }

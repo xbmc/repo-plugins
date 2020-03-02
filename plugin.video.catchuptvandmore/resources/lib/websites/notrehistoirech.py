@@ -24,7 +24,7 @@ from codequick import Route, Resolver, Listitem
 
 from resources.lib.labels import LABELS
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import re
 import urlquick
@@ -75,7 +75,6 @@ def list_videos(plugin, item_id, category_url, page, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -91,7 +90,6 @@ def get_video_url(plugin,
                   item_id,
                   video_url,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
     """Get video URL and start video player"""
 
@@ -100,6 +98,6 @@ def get_video_url(plugin,
         r'source src=\"(.*?)\"').findall(video_html)[0]
 
     if download_mode:
-        return download.download_video(video_url, video_label)
+        return download.download_video(video_url)
 
     return video_url

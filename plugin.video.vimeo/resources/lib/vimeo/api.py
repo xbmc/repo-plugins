@@ -244,10 +244,10 @@ class Api:
         video_format = video_format.split(":")
         video_type = video_format[0]
 
-        if video_type == "hls":
+        if video_type == "hls" and video_files.get("hls") is not None:
             return video_files["hls"]["link"]
 
-        elif video_type == "progressive":
+        elif video_type == "progressive" or video_files.get("hls") is None:
             for video_file in video_files["progressive"]:
                 if self._video_matches(video_file, video_format):
                     return video_file["link"]

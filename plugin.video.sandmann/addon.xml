@@ -2,7 +2,7 @@
 <addon
     id="plugin.video.sandmann"
     name="Sandmann"
-    version="1.2.0"
+    version="1.2.1"
     provider-name="sorax">
   <requires>
     <import addon="xbmc.python" version="2.26.0" />

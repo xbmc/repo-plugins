@@ -16,7 +16,7 @@
 #
 
 import sys
-import threading
+from threading import Timer
 
 from sandmann import getEpisodes
 
@@ -39,37 +39,47 @@ update = addon.getSettingInt("update")
 interval = addon.getSettingInt("interval")
 dgs = addon.getSettingBool("dgs")
 
-episodes = getEpisodes(episodes_url, quality, dgs)
-episode_list = []
-for episode in episodes:
-    li = xbmcgui.ListItem(label=episode["title"])
+refresh_timer = None
+
+
+def addEpisodes():
+    episodes = getEpisodes(episodes_url, quality, dgs)
+    episode_list = []
+    for episode in episodes:
+        episode_list.append((episode["stream"], getListItem(episode), False))
+
+    xbmcplugin.addDirectoryItems(addon_handle, episode_list, len(episode_list))
+
+
+def getListItem(item):
+    li = xbmcgui.ListItem(label=item["title"])
     li.setArt({
-        "thumb": episode["thumb"],
-        "fanart": episode["fanart"]
+        "thumb": item["thumb"],
+        "fanart": item["fanart"]
     })
     li.setInfo(
         type="video",
         infoLabels={
-            "title": episode["title"],
-            "plot": episode["desc"],
-            "duration": episode["duration"]
+            "title": item["title"],
+            "plot": item["desc"],
+            "duration": item["duration"]
         }
     )
     li.setProperty("IsPlayable", "true")
-    episode_list.append((episode["stream"], li, False))
-
-xbmcplugin.addDirectoryItems(addon_handle, episode_list, len(episode_list))
+    return li
 
 
 def reload():
-    # xbmc.executebuiltin("Notification(%s, %s, %d, %s)" %
-    #                     (addon_name, "Updating...", 5000, addon_icon))
     xbmc.executebuiltin("Container.Refresh()")
-    threading.Timer(interval * 60 * 60, reload).start()
 
 
 if update == 0:
-    threading.Timer(interval * 60 * 60, reload).start()
+    global refresh_timer
+    # xbmc.executebuiltin("Notification(%s, %s, %d, %s)" %
+    #                     (addon_name, "Updating...", 5000, addon_icon))
+    refresh_timer = Timer(interval * 60 * 60, reload)
+    refresh_timer.start()
+    # refresh_timer.cancel()
 
 
 if update == 1:
@@ -78,4 +88,5 @@ if update == 1:
     xbmcplugin.addDirectoryItem(addon_handle, base_path, li_refresh, True)
 
 
+addEpisodes()
 xbmcplugin.endOfDirectory(addon_handle)

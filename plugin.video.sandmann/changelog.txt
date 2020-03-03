@@ -1,3 +1,5 @@
+version 1.2.1:
+ * fix a bug where the update-interval was initiated multiple times
 version 1.2.0:
  * list all episodes
  * add switch for sign language

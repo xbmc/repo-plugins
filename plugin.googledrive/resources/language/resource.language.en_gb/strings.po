@@ -143,3 +143,11 @@ msgstr ""
 msgctxt "#32073"
 msgid "Response code: %s"
 msgstr ""
+
+msgctxt "#32074"
+msgid "Export .nfo files"
+msgstr ""
+
+msgctxt "#32075"
+msgid "Skip unmodified files"
+msgstr ""

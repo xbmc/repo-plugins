@@ -10,6 +10,8 @@
         <setting label="32070" type="labelenum" id="default_stream_quality" subsetting="true" values="Original|1080p|720p|480p|360p" default="Original" value="Original"  enable="eq(-1,false)"/>
         <setting label="32001" type="lsep"/>
         <setting label="32003" type="bool" id="clean_folder" default="true" value="true"/>
+        <setting label="32074" type="bool" id="nfo_export" default="false" value="false"/>
+        <setting label="32075" type="bool" id="skip_unmodified" default="true" value="false"/>
         <setting label="32002" type="lsep"/>
         <setting label="32068" type="bool" id="allow_directory_listing" default="true"/>
         <setting label="32069" type="number" id="port_directory_listing" default="8587"/>

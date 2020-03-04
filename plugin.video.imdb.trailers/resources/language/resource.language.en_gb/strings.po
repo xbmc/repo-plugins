@@ -1,0 +1,88 @@
+# XBMC Media Center language file
+# Addon Name: IMDb Trailers
+# Addon id: plugin.video.imdb.trailers
+
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-11-03 00:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "IMDb Trailers video add-on"
+msgstr "IMDb Trailers video add-on"
+
+msgctxt "Addon Description"
+msgid "Watch movie trailers available on IMDb."
+msgstr "Watch movie trailers available on IMDb."
+
+msgctxt "Addon Disclaimer"
+msgid "This third party addon is not in any way commissioned or endorsed by Amazon or IMDb"
+msgstr "This third party addon is not in any way commissioned or endorsed by Amazon or IMDb"
+
+
+msgctxt "#30000"
+msgid "IMDb Trailers"
+msgstr "IMDb Trailers"
+
+msgctxt "#30001"
+msgid "Video Quality"
+msgstr "Video Quality"
+
+msgctxt "#30002"
+msgid "Cache Timeout in hours"
+msgstr "Cache Timeout in hours"
+
+msgctxt "#30003"
+msgid "View Mode"
+msgstr "View Mode"
+
+msgctxt "#30004"
+msgid "Force View Mode"
+msgstr "Force View Mode"
+
+msgctxt "#30005"
+msgid "Main Menu Mode"
+msgstr "Main Menu Mode"
+
+msgctxt "#30006"
+msgid "Video Menu Mode"
+msgstr "Video Menu Mode"
+
+# empty strings from id 30007 to 30200
+
+msgctxt "#30201"
+msgid "In Cinemas"
+msgstr "In Cinemas"
+
+msgctxt "#30202"
+msgid "Coming Soon"
+msgstr "Coming Soon"
+
+msgctxt "#30203"
+msgid "Popular Trailers"
+msgstr "Popular Trailers"
+
+msgctxt "#30204"
+msgid "Recent Trailers"
+msgstr "Recent Trailers"
+
+msgctxt "#30205"
+msgid "Television Tonight"
+msgstr "Television Tonight"
+
+msgctxt "#30206"
+msgid "Search Title"
+msgstr "Search Title"
+
+msgctxt "#30207"
+msgid "Clear Cache"
+msgstr "Clear Cache"

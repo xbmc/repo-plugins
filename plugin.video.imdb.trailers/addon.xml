@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.11" provider-name="gujal">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" version="2.4.3"/>
+	  <import addon="script.module.requests-cache" version="0.0.1"/>
+	  <import addon="script.module.beautifulsoup4" version="4.0.0"/>
+    <import addon="script.module.future" version="0.0.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">IMDb Trailers video add-on</summary>
+    <summary lang="tr_TR">IMDb Fragmanları video eklentisi</summary>
+    <summary lang="es_ES">IMDb Trailers video añadido</summary>
+    <summary lang="de_DE">IMDb Trailers Video-Add-On</summary>
+    <summary lang="fr_FR">Module vidéo IMDb Trailers</summary>
+    <description lang="en_GB">Watch movie trailers available on IMDb</description>
+    <description lang="tr_TR">IMDb'de bulunan film fragmanlarını izle</description>
+    <description lang="es_ES">Ver trailers de películas disponibles en IMDb</description>
+    <description lang="de_DE">Filmtrailer auf IMDb ansehen</description>
+    <description lang="fr_FR">Regarder les bandes-annonces disponibles sur IMDb</description>
+    <disclaimer lang="en_GB">This third party addon is not in any way commissioned or endorsed by Amazon or IMDb</disclaimer>
+    <disclaimer lang="tr_TR">Bu üçüncü taraf eklentisi, Amazon veya IMDb tarafından hiçbir şekilde görevlendirilmemiştir veya onaylanmamıştır.</disclaimer>
+    <disclaimer lang="es_ES">Este complemento de terceros no está en modo alguno comisionado o respaldado por Amazon o IMDb</disclaimer>
+    <disclaimer lang="de_DE">Dieses Drittanbieter-Addon wird in keiner Weise von Amazon oder IMDb in Auftrag gegeben oder unterstützt</disclaimer>
+    <disclaimer lang="fr_FR">Cet additif tiers n'est en aucun cas commandé ou approuvé par Amazon ou IMDb</disclaimer>
+    <language></language>
+    <platform>all</platform>
+    <license>GPL-2.0</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=352127</forum>
+    <website>https://www.imdb.com/trailers/</website>
+    <email>gujal at protonmail dot com</email>
+    <news>v2.1.11 (20200229)
+      Matrix release
+    </news>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+      <screenshot>resources/images/screenshot-01.jpg</screenshot>
+      <screenshot>resources/images/screenshot-02.jpg</screenshot>
+      <screenshot>resources/images/screenshot-03.jpg</screenshot>
+    </assets>
+  </extension>
+</addon>

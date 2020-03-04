@@ -15,7 +15,7 @@
     <setting id="oath_code" type="text" label="30911" enable="false"/>
     <setting id="access_token" type="text" label="30912" enable="false"/>
     <setting type="sep" />
-    <setting type="action" label="30913" enable="!eq(-2,) + !eq(-2,'')" option="close" action="RunPlugin(plugin://plugin.audio.mixcloud?mode=profile&key=logout)"/>
+    <setting type="action" label="30913" enable="!eq(-2,) + !eq(-2,'')" option="close" action="RunPlugin(plugin://plugin.audio.mixcloud?mode=profile&amp;key=logout)"/>
   </category>
 
   <!-- Resolver -->
@@ -30,7 +30,7 @@
     <setting id="play_history_max" type="slider" label="30931" range="50,50,500" option="int" default="100"/>
     <setting id="search_history_max" type="slider" label="30932" range="50,50,500" option="int" default="100"/>
     <setting type="sep" />
-    <setting type="action" label="30933" option="close" action="RunPlugin(plugin://plugin.audio.mixcloud?mode=history&key=clear)"/>
+    <setting type="action" label="30933" option="close" action="RunPlugin(plugin://plugin.audio.mixcloud?mode=history&amp;key=clear)"/>
   </category>
 
 </settings>

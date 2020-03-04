@@ -1,3 +1,6 @@
+* 0.10.2
+- tvthek added new quality strings. caused error on full hd setting
+
 * 0.10.1
 - fixed kodi crash when using the playlist listitem
 

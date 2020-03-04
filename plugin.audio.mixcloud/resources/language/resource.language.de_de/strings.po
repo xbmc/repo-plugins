@@ -1,0 +1,231 @@
+# Kodi Media Center language file
+# Addon Name: Mixcloud
+# Addon id: plugin.audio.mixcloud
+# Addon Provider: jackyNIX
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.1.1\n"
+
+# common# main menu
+
+msgctxt "#30100"    
+msgid "Profile..."
+msgstr "Profil..."
+
+msgctxt "#30101"
+msgid "Followings"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Followers"
+msgstr "Anhänger"
+
+msgctxt "#30103"
+msgid "Favorites"
+msgstr "Favoriten"
+
+msgctxt "#30104"
+msgid "Uploads"
+msgstr "Uploads"
+
+msgctxt "#30105"
+msgid "Playlists"
+msgstr "Playlisten"
+
+msgctxt "#30106"
+msgid "Listen Later"
+msgstr "Später anhören"
+
+msgctxt "#30107"
+msgid "Categories"
+msgstr "Kategorien"
+
+msgctxt "#30108"
+msgid "History"
+msgstr "Verlauf"
+
+msgctxt "#30109"
+msgid "Search"
+msgstr "Suche"
+
+msgctxt "#30110"
+msgid "More..."
+msgstr "Mehr..."
+
+
+
+# search menu
+
+msgctxt "#30200"
+msgid "Search cloudcasts..."
+msgstr "Cloudcasts suchen..."
+
+msgctxt "#30201"
+msgid "Search users..."
+msgstr "Benutzer suchen"
+
+
+
+# context menu
+
+msgctxt "#30300"
+msgid "Favorite cloudcast"
+msgstr "Cloudcast zu Favoriten hinzufügen"
+
+msgctxt "#30301"
+msgid "Unfavorite cloudcast"
+msgstr "Cloudcast aus Favoriten entfernen"
+
+msgctxt "#30302"
+msgid "Follow user"
+msgstr "Benutzer folgen"
+
+msgctxt "#30303"
+msgid "Unfollow user"
+msgstr "Benutzer nicht mehr folgen"
+
+msgctxt "#30304"
+msgid "Listen later"
+msgstr "Später hören"
+
+msgctxt "#30305"
+msgid "Do not listen later"
+msgstr "Nicht später hören"
+
+
+
+# others
+
+msgctxt "#30400"
+msgid "No valid access token found."
+msgstr "Kein gültiger zugriffstoken gefunden."
+
+msgctxt "#30401"
+msgid "Please provide your authentication code."
+msgstr "Bitte deinen authentifizierungscode eingeben."
+
+msgctxt "#30402"
+msgid "Logout?"
+msgstr "Ausloggen?"
+
+msgctxt "#30403"
+msgid "Clear history?"
+msgstr "Verlauf entfernen?"
+
+
+
+# general settings
+
+msgctxt "#30900"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30901"
+msgid "Maximum rows on page"
+msgstr "Maximale zeilen auf seite"
+
+msgctxt "#30902"
+msgid "Thumbnail size"
+msgstr "Thumbnail größe"
+
+msgctxt "#30903"
+msgid "Debug mode"
+msgstr "Debug-modus"
+
+msgctxt "#30904"
+msgid "Extended info (slower)"
+msgstr "Erweiterte info (langsamer)"
+
+
+
+# profile settings
+
+msgctxt "#30910"
+msgid "Profile"
+msgstr "Profil"
+
+msgctxt "#30911"
+msgid "OAuth code"
+msgstr "Authentifizierungscode"
+
+msgctxt "#30912"
+msgid "Access token"
+msgstr "Zugriffstoken"
+
+msgctxt "#30913"
+msgid "Log out..."
+msgstr "Ausloggen..."
+
+
+
+# resolver settings
+
+msgctxt "#30920"
+msgid "Resolvers"
+msgstr ""
+
+msgctxt "#30921"
+msgid "mixcloud.com"
+msgstr ""
+
+msgctxt "#30922"
+msgid "mixcloud-downloader.com"
+msgstr ""
+
+msgctxt "#30923"
+msgid "offliberty.com (slower)"
+msgstr "offliberty.com (langsamer)"
+
+
+
+# history settings
+
+msgctxt "#30930"
+msgid "History"
+msgstr "Verlauf"
+
+msgctxt "#30931"
+msgid "Maximum play history"
+msgstr "Maximaler playverlauf"
+
+msgctxt "#30932"
+msgid "Maximum search history"
+msgstr "Maximaler suchverlauf"
+
+msgctxt "#30933"
+msgid "Clear history..."
+msgstr "Verlauf entfernen..."
+
+
+
+# thumbnail sizes
+
+msgctxt "#30940"
+msgid "very small (25x25)"
+msgstr "sehr klein (25x25)"
+
+msgctxt "#30941"
+msgid "small (50x50)"
+msgstr "klein (50x50)"
+
+msgctxt "#30942"
+msgid "medium (100x100)"
+msgstr "mittel (100x100)"
+
+msgctxt "#30943"
+msgid "large (300x300)"
+msgstr "groß (300x300)"
+
+msgctxt "#30944"
+msgid "extra large (600x600)"
+msgstr "extra groß (600x600)"

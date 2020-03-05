@@ -1,0 +1,424 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+### MENUS
+msgctxt "#30001"
+msgid "A-Z"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Alphabetically sorted list of programs"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Catalogue"
+msgstr ""
+
+msgctxt "#30004"
+msgid "TV Shows and Movies listed by category"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Watch TV channels live via Internet"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Show channel based overview"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Search VTM GO"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Search the VTM GO catalogue"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Switch Profile ([B]{profile}[/B])"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Select a different profile to use"
+msgstr ""
+
+msgctxt "#30013"
+msgid "TV guide"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Browse the TV Guide"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Recommendations"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Show the VTM GO recommendations"
+msgstr ""
+
+msgctxt "#30017"
+msgid "My List"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Show your personal favourites"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Continue watching"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Continue watching where you left off"
+msgstr ""
+
+
+### SUBMENUS
+msgctxt "#30051"
+msgid "Watch [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Watch live [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30053"
+msgid "TV Guide for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Browse the TV Guide for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Catalog for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Browse the Catalog for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30057"
+msgid "Select Profile"
+msgstr ""
+
+
+### CONTEXT MENU
+
+msgctxt "#30100"
+msgid "Add to My List"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Remove from My List"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Go to Program"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Watch Live"
+msgstr ""
+
+msgctxt "#30104"
+msgid "TV Guide"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Play from Catalog"
+msgstr ""
+
+
+### CODE
+msgctxt "#30200"
+msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
+msgstr ""
+
+msgctxt "#30201"
+msgid "[B][COLOR lightblue]Kids zone[/COLOR][/B]"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Credentials are correct!"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Your credentials are not valid!"
+msgstr ""
+
+msgctxt "#30204"
+msgid "All seasons"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Season {season}"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Watch [B]{label}[/B] on YouTube"
+msgstr ""
+
+msgctxt "#30207"
+msgid "[COLOR red]Geo-blocked[/COLOR]\n"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Available [B]until midnight[/B]"
+msgstr ""
+
+msgctxt "#30209"
+msgid "[B]One more day[/B] remaining"
+msgstr ""
+
+msgctxt "#30210"
+msgid "[B]{years} more years[/B] remaining"
+msgstr ""
+
+msgctxt "#30211"
+msgid "[B]{months} more months[/B] remaining"
+msgstr ""
+
+msgctxt "#30212"
+msgid "[B]{days} more days[/B] remaining"
+msgstr ""
+
+msgctxt "#30213"
+msgid "[B]Now:[/B] {start} - {end}\n» {title}"
+msgstr ""
+
+msgctxt "#30214"
+msgid "[B]Next:[/B] {start} - {end}\n» {title}"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Browse the TV-Guide of [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30216"
+msgid "All ages"
+msgstr ""
+
+
+### Dates
+msgctxt "#30300"
+msgid "2 days ago"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Yesterday"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Tomorrow"
+msgstr ""
+
+msgctxt "#30304"
+msgid "In 2 days"
+msgstr ""
+
+
+### MESSAGES
+msgctxt "#30701"
+msgid "You need to configure your credentials before you can access the content of VTM GO."
+msgstr ""
+
+msgctxt "#30702"
+msgid "Unknown error while logging in: {code}"
+msgstr ""
+
+msgctxt "#30703"
+msgid "Your account has no profiles defined. Please login on vtm.be/vtmgo and create a profile."
+msgstr ""
+
+msgctxt "#30704"
+msgid "This video may be geo-blocked, or your account is already being used currently."
+msgstr ""
+
+msgctxt "#30708"
+msgid "Please restart Kodi."
+msgstr ""
+
+msgctxt "#30709"
+msgid "Geo-blocked video"
+msgstr ""
+
+msgctxt "#30710"
+msgid "This video is geo-blocked and can't be played from your location."
+msgstr ""
+
+msgctxt "#30711"
+msgid "Unavailable video"
+msgstr ""
+
+msgctxt "#30712"
+msgid "The video is unavailable and can't be played right now."
+msgstr ""
+
+msgctxt "#30713"
+msgid "The requested video was not found in the guide."
+msgstr ""
+
+msgctxt "#30714"
+msgid "Local metadata is cleared."
+msgstr ""
+
+msgctxt "#30715"
+msgid "Updating metadata"
+msgstr ""
+
+msgctxt "#30716"
+msgid "Updating metadata ({index}/{total})"
+msgstr ""
+
+msgctxt "#30717"
+msgid "This program is not available in the VTM GO catalogue."
+msgstr ""
+
+
+### SETTINGS
+msgctxt "#30800"
+msgid "Credentials"
+msgstr ""
+
+msgctxt "#30801"
+msgid "VTM GO credentials"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Email address"
+msgstr ""
+
+msgctxt "#30805"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30809"
+msgid "Profile"
+msgstr ""
+
+msgctxt "#30810"
+msgid "Always use the current profile"
+msgstr ""
+
+msgctxt "#30811"
+msgid "Current profile"
+msgstr ""
+
+msgctxt "#30820"
+msgid "Interface"
+msgstr ""
+
+msgctxt "#30821"
+msgid "Features"
+msgstr ""
+
+msgctxt "#30822"
+msgid "Show recommendations"
+msgstr ""
+
+msgctxt "#30823"
+msgid "Show My List"
+msgstr ""
+
+msgctxt "#30826"
+msgid "Show Continue watching"
+msgstr ""
+
+msgctxt "#30827"
+msgid "Metadata"
+msgstr ""
+
+msgctxt "#30829"
+msgid "Periodically refresh metadata in the background"
+msgstr ""
+
+msgctxt "#30831"
+msgid "Update local metadata now"
+msgstr ""
+
+msgctxt "#30833"
+msgid "Clear local metadata"
+msgstr ""
+
+msgctxt "#30860"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30861"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#30862"
+msgid "Always show subtitles when available"
+msgstr ""
+
+msgctxt "#30863"
+msgid "Streaming"
+msgstr ""
+
+msgctxt "#30864"
+msgid "Maximum bandwidth (kbps)"
+msgstr ""
+
+msgctxt "#30865"
+msgid "Up Next"
+msgstr ""
+
+msgctxt "#30866"
+msgid "Install Up Next add-on"
+msgstr ""
+
+msgctxt "#30867"
+msgid "Use Up Next to play next episode automatically"
+msgstr ""
+
+msgctxt "#30868"
+msgid "Up Next settings…"
+msgstr ""
+
+msgctxt "#30880"
+msgid "Expert"
+msgstr ""
+
+msgctxt "#30881"
+msgid "Streaming"
+msgstr ""
+
+msgctxt "#30883"
+msgid "InputStream Helper information"
+msgstr ""
+
+msgctxt "#30885"
+msgid "InputStream Adaptive settings…"
+msgstr ""
+
+msgctxt "#30887"
+msgid "InputStream Helper settings…"
+msgstr ""
+
+msgctxt "#30889"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30891"
+msgid "Enable debug logging"
+msgstr "Activeer debug logging"

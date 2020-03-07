@@ -1,0 +1,53 @@
+# Kodi Media Center language file
+# Addon Name: RivediLa7
+# Addon id: plugin.video.rivedila7
+# Addon Provider: Luivit, Testato
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Italian (http://www.transifex.com/projects/p/xbmc-addons/language/it/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "LA7 Replay"
+msgstr ""
+
+msgctxt "#32004"
+msgid "LA7d Replay"
+msgstr ""
+
+msgctxt "#32002"
+msgid "LA7 Live"
+msgstr ""
+
+msgctxt "#32009"
+msgid "LA7d Live"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Unable to view this program"
+msgstr ""
+
+msgctxt "#32007"
+msgid "News & Weather"
+msgstr ""
+
+msgctxt "#32006"
+msgid "On-Demand Programs"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Teche LA7 - The Protagonists"
+msgstr ""

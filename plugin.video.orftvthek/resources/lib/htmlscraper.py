@@ -665,16 +665,17 @@ class htmlScraper(Scraper):
 					gapless_name = '-- %s --' % self.translation(30059)
 					if playlist_json['is_gapless']:
 						gapless_videourl = self.getVideoUrl(playlist_json['gapless_video']['sources'])
-						if "subtitles" in playlist_json['gapless_video']:
-							for sub in playlist_json['gapless_video']["subtitles"]:
-								gapless_subtitles.append(sub.get(u'src'))
-						else:
-							global_subtitles = None
-						if "duration_in_seconds" in playlist_json:
-							gapless_duration = playlist_json["duration_in_seconds"]
-						else:
-							gapless_duration = ""
-						liz = self.html2ListItem(gapless_name, stream_infos['teaser_image'], "", stream_infos['full_description'], gapless_duration, '', '', gapless_videourl, gapless_subtitles, False, True)
+						if gapless_videourl:
+							if "subtitles" in playlist_json['gapless_video']:
+								for sub in playlist_json['gapless_video']["subtitles"]:
+									gapless_subtitles.append(sub.get(u'src'))
+							else:
+								global_subtitles = None
+							if "duration_in_seconds" in playlist_json:
+								gapless_duration = playlist_json["duration_in_seconds"]
+							else:
+								gapless_duration = ""
+							liz = self.html2ListItem(gapless_name, stream_infos['teaser_image'], "", stream_infos['full_description'], gapless_duration, '', '', gapless_videourl, gapless_subtitles, False, True)
 			except IndexError as e:
 				debugLog("No gapless video added for %s" % url)
 

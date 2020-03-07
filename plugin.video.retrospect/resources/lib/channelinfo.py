@@ -7,7 +7,6 @@ import sys
 import xbmcgui
 
 
-from resources.lib.backtothefuture import unichr
 from resources.lib.environments import Environments
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -124,8 +123,8 @@ class ChannelInfo(object):
         description = HtmlEntityHelper.convert_html_entities(self.channelDescription)
 
         if self.uses_external_addon:
-            other = LanguageHelper.get_localized_string(LanguageHelper.OtherAddon)
-            name = "{0} {1} [COLOR gold]{2}[/COLOR]".format(name, unichr(187), other)
+            from resources.lib.xbmcwrapper import XbmcWrapper
+            name = "{} {}".format(name, XbmcWrapper.get_external_add_on_label(self.addonUrl))
 
         self.icon = self.__get_image_path(self.icon)
         item = xbmcgui.ListItem(name, description)

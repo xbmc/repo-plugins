@@ -83,7 +83,7 @@ class Channel(chn_class.Channel):
         # ==========================================================================================
         # Channel specific stuff
         self.__idToken = None
-        self.__meta_playlist = "current_playlist";
+        self.__meta_playlist = "current_playlist"
         self.__no_clips = False
 
         # ==========================================================================================
@@ -210,8 +210,6 @@ class Channel(chn_class.Channel):
             # Add clips folder
             clip_title = LanguageHelper.get_localized_string(LanguageHelper.Clips)
             clips = MediaItem("\a.: %s :." % (clip_title,), self.parentItem.url)
-            clips.fanart = self.parentItem.fanart
-            clips.thumb = self.parentItem.thumb
             clips.metaData[self.__meta_playlist] = "clips"
             self.__no_clips = True
             items.append(clips)
@@ -277,8 +275,6 @@ class Channel(chn_class.Channel):
         """
 
         folder = MediaItem(result_set["title"], self.parentItem.url)
-        folder.fanart = self.parentItem.fanart
-        folder.thumb = self.parentItem.thumb
         folder.metaData["current_playlist"] = result_set["id"]
         return folder
 
@@ -338,7 +334,6 @@ class Channel(chn_class.Channel):
         item.type = "video"
         item.description = HtmlHelper.to_text(result_set.get("description").replace(">\r\n", ">"))
         item.thumb = result_set["image"]
-        item.fanart = self.parentItem.fanart
         item.isGeoLocked = result_set.get("isProtected")
 
         date_time = DateHelper.get_date_from_posix(result_set["createdDate"])

@@ -77,7 +77,8 @@ class AwsIdp:
             "Content-Type": "application/x-amz-json-1.1"
         }
         auth_response = UriHandler.open(self.url, proxy=self.__proxy,
-                                        params=auth_data, additional_headers=auth_headers)
+                                        params=auth_data, additional_headers=auth_headers,
+                                        force_text=True)
         auth_response_json = JsonHelper(auth_response)
         challenge_parameters = auth_response_json.get_value("ChallengeParameters")
         if self.__logger:
@@ -85,8 +86,9 @@ class AwsIdp:
 
         challenge_name = auth_response_json.get_value("ChallengeName")
         if not challenge_name == "PASSWORD_VERIFIER":
+            message = auth_response_json.get_value("message")
             if self.__logger:
-                self.__logger.error("Cannot start authentication challenge")
+                self.__logger.error("Cannot start authentication challenge: %s", message or None)
             return None
 
         # Step 2: Respond to the Challenge with a valid ChallengeResponse
@@ -97,7 +99,8 @@ class AwsIdp:
             "Content-Type": "application/x-amz-json-1.1"
         }
         auth_response = UriHandler.open(self.url, proxy=self.__proxy,
-                                        params=challenge_data, additional_headers=challenge_headers)
+                                        params=challenge_data, additional_headers=challenge_headers,
+                                        force_text=True)
 
         auth_response_json = JsonHelper(auth_response)
         if "message" in auth_response_json.json:
@@ -192,7 +195,7 @@ class AwsIdp:
             bytearray(secret_block_bytes) + \
             bytearray(timestamp, 'utf-8')
         hmac_obj = hmac.new(hkdf, msg, digestmod=hashlib.sha256)
-        signature_string = base64.standard_b64encode(hmac_obj.digest())
+        signature_string = base64.standard_b64encode(hmac_obj.digest()).decode('utf-8')
         challenge_request = {
             "ChallengeResponses": {
                 "USERNAME": user_id,

@@ -354,16 +354,15 @@ class Channel(chn_class.Channel):
         if not self.__adaptiveStreamingAvailable:
             return data, items
 
-        programs = MediaItem("\b.: Programma's :.", "https://vod.medialaan.io/vod/v2/programs?offset=0&limit=0")
-        programs.dontGroup = True
-        items.append(programs)
-
-        search = MediaItem("Zoeken", "searchSite")
-        search.complete = True
-        search.icon = self.icon
-        search.thumb = self.noImage
-        search.dontGroup = True
-        items.append(search)
+        # No more programs. Stievie became VTM GO
+        # programs = MediaItem("\b.: Programma's :.", "https://vod.medialaan.io/vod/v2/programs?offset=0&limit=0")
+        # programs.dontGroup = True
+        # items.append(programs)
+        #
+        # search = MediaItem("Zoeken", "searchSite")
+        # search.complete = True
+        # search.dontGroup = True
+        # items.append(search)
         return data, items
 
     def stievie_channel_menu(self, data):
@@ -389,7 +388,6 @@ class Channel(chn_class.Channel):
         live.type = "video"
         live.description = self.parentItem.description
         live.metaData = self.parentItem.metaData
-        live.thumb = self.parentItem.thumb
         items.append(live)
 
         if not self.__adaptiveStreamingAvailable:
@@ -399,43 +397,42 @@ class Channel(chn_class.Channel):
         # https://epg.medialaan.io/epg/v2/schedule?date=2017-04-25&channels%5B%5D=vtm&channels%5B%5D=2be&channels%5B%5D=vitaya&channels%5B%5D=caz&channels%5B%5D=kzoom&channels%5B%5D=kadet&channels%5B%5D=qmusic
         # https://epg.medialaan.io/epg/v2/schedule?date=2017-04-25&channels[]=vtm&channels[]=2be&channels[]=vitaya&channels[]=caz&channels[]=kzoom&channels[]=kadet&channels[]=qmusic
         # https://epg.medialaan.io/epg/v2/schedule?date=2017-05-04&channels[]=vtm&channels[]=2be&channels[]=vitaya&channels[]=caz&channels[]=kzoom&channels[]=kadet&channels[]=qmusic
-        channel_id = self.parentItem.metaData["channelId"]
-        channels = (channel_id, )
-        query = "channels%%5B%%5D=%s" % ("&channels%5B%5D=".join(channels), )
 
-        today = datetime.datetime.now()
-        days = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"]
-        for i in range(0, 7, 1):
-            air_date = today - datetime.timedelta(i)
-            until_air_date = today - datetime.timedelta(i) + datetime.timedelta(1)
-            Logger.trace("Adding item for: %s", air_date)
-
-            day = days[air_date.weekday()]
-            if i == 0:
-                day = "Vandaag"
-            elif i == 1:
-                day = "Gisteren"
-            elif i == 2:
-                day = "Eergisteren"
-            title = "%04d-%02d-%02d - %s" % (air_date.year, air_date.month, air_date.day, day)
-            # url = "https://epg.medialaan.io/epg/v2/schedule?date=%d-%02d-%02d%s" % (air_date.year, air_date.month, air_date.day, query)
-            # https://epg.medialaan.io/epg/v3/broadcasts?channels%5B%5D=zes&from=2019-05-29T03%3A00%3A00.000Z&until=2019-05-30T03%3A00%3A00.000Z
-
-            url = "https://epg.medialaan.io/epg/v3/broadcasts?%s&" \
-                  "from=%d-%02d-%02dT03%%3A00%%3A00.000Z&" \
-                  "until=%d-%02d-%02dT03%%3A00%%3A00.000Z" % (
-                    query,
-                    air_date.year, air_date.month, air_date.day,
-                    until_air_date.year, until_air_date.month, until_air_date.day)
-
-            extra = MediaItem(title, url)
-            extra.complete = True
-            extra.icon = self.icon
-            extra.thumb = self.noImage
-            extra.dontGroup = True
-            extra.set_date(air_date.year, air_date.month, air_date.day, text="")
-            extra.metaData["airDate"] = air_date
-            items.append(extra)
+        # No more EPG items as Stievie became VTM GO
+        # channel_id = self.parentItem.metaData["channelId"]
+        # channels = (channel_id, )
+        # query = "channels%%5B%%5D=%s" % ("&channels%5B%5D=".join(channels), )
+        # today = datetime.datetime.now()
+        # days = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"]
+        # for i in range(0, 7, 1):
+        #     air_date = today - datetime.timedelta(i)
+        #     until_air_date = today - datetime.timedelta(i) + datetime.timedelta(1)
+        #     Logger.trace("Adding item for: %s", air_date)
+        #
+        #     day = days[air_date.weekday()]
+        #     if i == 0:
+        #         day = "Vandaag"
+        #     elif i == 1:
+        #         day = "Gisteren"
+        #     elif i == 2:
+        #         day = "Eergisteren"
+        #     title = "%04d-%02d-%02d - %s" % (air_date.year, air_date.month, air_date.day, day)
+        #     # url = "https://epg.medialaan.io/epg/v2/schedule?date=%d-%02d-%02d%s" % (air_date.year, air_date.month, air_date.day, query)
+        #     # https://epg.medialaan.io/epg/v3/broadcasts?channels%5B%5D=zes&from=2019-05-29T03%3A00%3A00.000Z&until=2019-05-30T03%3A00%3A00.000Z
+        #
+        #     url = "https://epg.medialaan.io/epg/v3/broadcasts?%s&" \
+        #           "from=%d-%02d-%02dT03%%3A00%%3A00.000Z&" \
+        #           "until=%d-%02d-%02dT03%%3A00%%3A00.000Z" % (
+        #             query,
+        #             air_date.year, air_date.month, air_date.day,
+        #             until_air_date.year, until_air_date.month, until_air_date.day)
+        #
+        #     extra = MediaItem(title, url)
+        #     extra.complete = True
+        #     extra.dontGroup = True
+        #     extra.set_date(air_date.year, air_date.month, air_date.day, text="")
+        #     extra.metaData["airDate"] = air_date
+        #     items.append(extra)
 
         return data, items
 
@@ -463,9 +460,13 @@ class Channel(chn_class.Channel):
         if result_set['premium'] and not self.__hasPremium:
             return None
 
-        item = MediaItem(result_set["name"], "#channel")
+        item = MediaItem(result_set["name"], "#livestream")
         item.description = result_set.get("slogan", None)
         item.metaData["channelId"] = result_set["id"]
+        item.type = "video"
+        item.isLive = True
+        item.isPaid = True  # result_set.get("premium", False)  All content requires a premium account
+        item.isGeoLocked = True
 
         if "icons" in result_set:
             # noinspection PyTypeChecker
@@ -487,7 +488,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -642,7 +643,6 @@ class Channel(chn_class.Channel):
               "&sort=broadcastDate&sortDirection=desc" \
               "&programIds=%s" % (self.__apiKey, result_set['id'],)
         item = MediaItem(title, url)
-        item.fanart = self.fanart
         item.thumb = self.__find_image(result_set, self.noImage)
         return item
     # endregion
@@ -740,8 +740,6 @@ class Channel(chn_class.Channel):
               "&programIds=%s" % (self.__apiKey, result_set['parent_series_oid'],)
 
         item = MediaItem(title, url)
-        item.fanart = self.fanart
-        item.thumb = self.noImage
         item.description = result_set.get('body', None)
         if item.description:
             # Clean HTML
@@ -789,9 +787,6 @@ class Channel(chn_class.Channel):
 
             more = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
             item = MediaItem(more, url)
-            item.thumb = self.noImage
-            item.icon = self.icon
-            item.fanart = self.parentItem.fanart
             item.complete = True
             items.append(item)
 
@@ -947,18 +942,15 @@ class Channel(chn_class.Channel):
             item = MediaItem("Live Q2", "#livestream")
         item.type = "video"
         item.isLive = True
-        item.fanart = self.fanart
-        item.thumb = self.noImage
         now = datetime.datetime.now()
         item.set_date(now.year, now.month, now.day, now.hour, now.minute, now.second)
         items.append(item)
 
-        if self.channelCode == "vtm":
-            recent = MediaItem("\a.: Recent :.", "https://vtm.be/video/volledige-afleveringen/id")
-            item.fanart = self.fanart
-            item.thumb = self.noImage
-            item.dontGroup = True
-            items.append(recent)
+        # No more recent items
+        # if self.channelCode == "vtm":
+        #     recent = MediaItem("\a.: Recent :.", "https://vtm.be/video/volledige-afleveringen/id")
+        #     item.dontGroup = True
+        #     items.append(recent)
 
         Logger.debug("Pre-Processing finished")
         return data, items
@@ -1004,8 +996,6 @@ class Channel(chn_class.Channel):
         # http://vtm.be/video/?amp%3Bf[1]=sm_field_program_active%3AAlloo%20bij%20de%20Wegpolitie&f[0]=sm_field_video_origin_cms_longform%3AVolledige%20afleveringen&f[1]=sm_field_program_active%3AAlloo%20bij%20de%20Wegpolitie
 
         item = MediaItem(title, url)
-        item.fanart = self.fanart
-        item.thumb = self.noImage
         return item
 
     def add_more_recent_videos(self, data):
@@ -1145,6 +1135,8 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug("Updating Live stream")
+        item.isPaid = item.isPaid and not self.__hasPremium
+
         # let's request a token
         token = self.__get_token()
 

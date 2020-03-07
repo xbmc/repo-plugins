@@ -169,8 +169,6 @@ class Channel(chn_class.Channel):
         }
         for name, url in links.items():
             item = MediaItem(name, url)
-            item.icon = self.icon
-            item.thumb = self.noImage
             item.complete = True
             item.HttpHeaders = self.httpHeaders
             items.append(item)
@@ -226,10 +224,7 @@ class Channel(chn_class.Channel):
 
         title = LanguageHelper.get_localized_string(LanguageHelper.StartWith) % (title, )
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.type = 'folder'
-        item.fanart = self.fanart
-        item.thumb = self.noImage
         return item
 
     def create_category_item(self, result_set):
@@ -251,9 +246,7 @@ class Channel(chn_class.Channel):
         url = "https://psapi.nrk.no/medium/tv/categories/{}/indexelements?apiKey={}"\
             .format(category_id, self.__api_key)
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.type = 'folder'
-        item.fanart = self.fanart
         item.thumb = self.__category_thumbs.get(category_id.lower(), self.noImage)
         return item
 
@@ -386,7 +379,6 @@ class Channel(chn_class.Channel):
             item = MediaItem(title, url)
             item.type = 'folder'
 
-        item.icon = self.icon
         item.isGeoLocked = result_set.get("isGeoBlocked", result_set.get("usageRights", {}).get("isGeoBlocked", False))
 
         description = result_set.get("description")
@@ -431,8 +423,6 @@ class Channel(chn_class.Channel):
         url = "{}/seasons/{}/episodes?apiKey={}".format(parent_url, season_id, self.__api_key)
         item = MediaItem(title, url)
         item.type = 'folder'
-        item.thumb = self.parentItem.thumb
-        item.fanart = self.parentItem.fanart
         return item
 
     def create_series_video_item(self, result_set):
@@ -505,8 +495,6 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(title, url)
         item.type = 'folder'
-        item.thumb = self.parentItem.thumb
-        item.fanart = self.parentItem.fanart
         return item
 
     def create_instalment_video_item(self, result_set):
@@ -540,7 +528,6 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url)
         item.type = 'video'
         item.thumb = self.__get_image(result_set["image"], "width", "url")
-        item.fanart = self.parentItem.fanart
 
         # noinspection PyTypeChecker
         item.isGeoLocked = result_set.get("usageRights", {}).get("geoBlock", {}).get("isGeoBlocked", False)

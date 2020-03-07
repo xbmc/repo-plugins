@@ -17,6 +17,9 @@ class JsonHelper(object):
 
         """
 
+        if isinstance(data, bytes):
+            data = data.decode('utf-8')
+
         self.logger = logger
         self.data = data.strip()
         self.json = dict()

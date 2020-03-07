@@ -61,7 +61,6 @@ class Channel(chn_class.Channel):
         """
 
         item = MediaItem(result_set[1], "%s%s?page=1" % (self.baseUrl, result_set[0]))
-        item.icon = self.icon
         item.complete = True
         return item
 

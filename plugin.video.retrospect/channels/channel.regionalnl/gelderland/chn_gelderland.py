@@ -64,7 +64,6 @@ class Channel(chn_class.Channel):
         """
 
         item = MediaItem(result_set[2], "%s%s" % (self.baseUrl, result_set[0]))
-        item.icon = self.icon
         item.thumb = "%s%s" % (self.baseUrl, result_set[1])
         item.complete = True
         return item
@@ -104,7 +103,6 @@ class Channel(chn_class.Channel):
         
         item = MediaItem(name, url)
         item.thumb = thumb_url
-        item.icon = self.icon
         item.type = 'video'
         item.append_single_stream(video_url)
         

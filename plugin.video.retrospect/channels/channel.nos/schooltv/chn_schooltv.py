@@ -92,8 +92,6 @@ class Channel(chn_class.Channel):
         url = "http://m.schooltv.nl/api/v1/programmas/%s/afleveringen.json?size=%s&sort=Nieuwste" % (result_set['mid'], self.__PageSize)
         item = MediaItem(result_set['title'], url)
         item.thumb = result_set.get('image', self.noImage)
-        item.icon = self.icon
-
         item.description = result_set.get('description', None)
         age_groups = result_set.get('ageGroups', ['Onbekend'])
         item.description = "%s\n\nLeeftijden: %s" % (item.description, ", ".join(age_groups))
@@ -121,27 +119,18 @@ class Channel(chn_class.Channel):
 
         cat = MediaItem("\b.: Categorie&euml;n :.",
                         "http://m.schooltv.nl/api/v1/categorieen.json?size=100")
-        cat.thumb = self.noImage
-        cat.icon = self.icon
-        cat.fanart = self.fanart
         cat.complete = True
         cat.dontGroup = True
         items.append(cat)
 
         tips = MediaItem("\b.: Tips :.",
                          "http://m.schooltv.nl/api/v1/programmas/tips.json?size=100")
-        tips.thumb = self.noImage
-        tips.icon = self.icon
-        tips.fanart = self.fanart
         tips.complete = True
         tips.dontGroup = True
         items.append(tips)
 
         data = JsonHelper(data)
         ages = MediaItem("\b.: Leeftijden :.", "")
-        ages.thumb = self.noImage
-        ages.icon = self.icon
-        ages.fanart = self.fanart
         ages.complete = True
         ages.dontGroup = True
         for age in ("0-4", "5-6", "7-8", "9-12", "13-15", "16-18"):
@@ -149,9 +138,6 @@ class Channel(chn_class.Channel):
                 "%s Jaar" % (age,),
                 "http://m.schooltv.nl/api/v1/leeftijdscategorieen/%s/afleveringen.json?"
                 "size=%s&sort=Nieuwste" % (age, self.__PageSize))
-            age_item.thumb = self.noImage
-            age_item.icon = self.icon
-            age_item.fanart = self.fanart
             age_item.complete = True
             age_item.dontGroup = True
             ages.items.append(age_item)
@@ -186,7 +172,6 @@ class Channel(chn_class.Channel):
         item = MediaItem(result_set['title'], url)
         item.thumb = result_set.get('image', self.noImage)
         item.description = "Totaal %(count)s videos" % result_set
-        item.icon = self.icon
         return item
 
     def add_page_items(self, data):
@@ -220,9 +205,6 @@ class Channel(chn_class.Channel):
             Logger.debug("Adding next-page item from %s to %s", from_value + size_value, from_value + size_value + size_value)
 
             next_page = MediaItem(more_pages, url)
-            next_page.icon = self.parentItem.icon
-            next_page.fanart = self.parentItem.fanart
-            next_page.thumb = self.parentItem.thumb
             next_page.dontGroup = True
             items.append(next_page)
 
@@ -265,9 +247,7 @@ class Channel(chn_class.Channel):
         item.description = "%s\n\nLeeftijden: %s" % (item.description, ", ".join(age_groups))
 
         item.thumb = result_set.get("image", "")
-        item.icon = self.icon
         item.type = 'video'
-        item.fanart = self.fanart
         item.complete = False
         item.set_info_label("duration", result_set['duration'])
 

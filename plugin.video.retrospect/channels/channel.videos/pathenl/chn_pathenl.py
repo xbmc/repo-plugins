@@ -91,13 +91,11 @@ class Channel(chn_class.Channel):
 
         Logger.trace(result_set)
         cinema = MediaItem(result_set["name"], "")
-        cinema.icon = self.icon
         cinema.thumb = result_set["image"].replace("nocropthumb/[format]/", "")
         cinema.complete = True
 
         now_playing_url = "%s/cinemas/%s/movies/nowplaying" % (self.baseUrl, result_set["id"])
         now_playing = MediaItem("Trailers", now_playing_url)
-        now_playing.icon = self.icon
         # https://www.pathe.nl/nocropthumb/[format]/gfx_content/bioscoop/foto/pathe.nl_380x218px_amersfoort.jpg
         now_playing.complete = True
         now_playing.HttpHeaders = self.httpHeaders
@@ -109,7 +107,6 @@ class Channel(chn_class.Channel):
             title = "%s-%02d-%02d" % (date.year, date.month, date.day)
             schedule_url = "%s/cinemas/%s/schedules?date=%s" % (self.baseUrl, result_set["id"], title)
             schedule = MediaItem("Agenda: %s" % (title,), schedule_url)
-            schedule.icon = self.icon
             schedule.complete = True
             schedule.thumb = cinema.thumb
             schedule.HttpHeaders = self.httpHeaders
@@ -134,7 +131,6 @@ class Channel(chn_class.Channel):
         movie_id = result_set['id']
         url = "%s/movies/%s" % (self.baseUrl, movie_id)
         item = MediaItem(result_set["name"], url)
-        item.icon = self.icon
         item.thumb = result_set["thumb"].replace("nocropthumb/[format]/", "")
         item.complete = True
         item.HttpHeaders = self.httpHeaders
@@ -196,7 +192,6 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
         url = self.parentItem.url
         item = MediaItem(result_set["caption"], url, "video")
-        item.icon = self.icon
         item.thumb = result_set["still"].replace("nocropthumb/[format]/", "")
         item.fanart = item.thumb
         item.append_single_stream(result_set['filename'])
@@ -243,8 +238,6 @@ class Channel(chn_class.Channel):
         """
 
         item = MediaItem(result_set[1], result_set[0])
-        item.icon = self.icon
-        item.thumb = self.noImage
         item.complete = True
         return item
 
@@ -271,8 +264,6 @@ class Channel(chn_class.Channel):
         name = result_set[4]
 
         item = MediaItem(name.title(), url)
-        item.thumb = self.noImage
-        item.icon = self.icon
 
         day = result_set[0]
         month = result_set[1]
@@ -320,7 +311,6 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(name, url)
         item.thumb = thumb_url
-        item.icon = self.icon
         item.type = 'video'
 
         # more description stuff

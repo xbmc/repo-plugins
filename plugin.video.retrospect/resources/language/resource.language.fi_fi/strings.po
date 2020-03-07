@@ -268,10 +268,6 @@ msgctxt "#30087"
 msgid "Mix folders and streams while sorting"
 msgstr "Näytä kansiot ja striimit lajiteltuna"
 
-msgctxt "#30088"
-msgid "Finnish"
-msgstr "Suomi"
-
 msgctxt "#30089"
 msgid "Password Vault"
 msgstr "Password Vault"

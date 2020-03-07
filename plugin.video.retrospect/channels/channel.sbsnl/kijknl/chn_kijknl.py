@@ -176,8 +176,6 @@ class Channel(chn_class.Channel):
 
         search = MediaItem("\b.: Zoeken :.", "searchSite")
         search.complete = True
-        search.icon = self.icon
-        search.thumb = self.noImage
         search.dontGroup = True
         search.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
         items.append(search)
@@ -186,8 +184,6 @@ class Channel(chn_class.Channel):
             live = LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId)
             live_radio = MediaItem("Radio Veronica {}".format(live), "")
             live_radio.type = "video"
-            live_radio.icon = self.icon
-            live_radio.thumb = self.noImage
             live_radio.dontGroup = True
 
             part = live_radio.create_new_empty_media_part()
@@ -355,8 +351,6 @@ class Channel(chn_class.Channel):
 
         url = "{}?limit=100&offset=1".format(result_set["episodesLink"])
         item = MediaItem(result_set["title"], url)
-        item.fanart = self.parentItem.fanart
-        item.thumb = self.parentItem.thumb
         return item
 
     def create_json_episode_item(self, result_set):

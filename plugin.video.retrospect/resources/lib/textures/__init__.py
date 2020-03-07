@@ -32,6 +32,13 @@ class TextureHandler:
 
     @staticmethod
     def instance():
+        """ Returns the TextureHandler singleton
+
+        :return: The TextureHandler
+        :rtype: TextureHandler
+
+        """
+
         return TextureHandler.__TextureHandler
 
     @staticmethod
@@ -112,6 +119,18 @@ class TextureHandler:
 
         # Should be implemented
         pass
+
+    def is_texture_or_empty(self, uri):
+        """ Returns whether the uri points to a local resource or remote
+
+        :param str uri: The URI for the texture
+
+        :returns: Indicator whether or not the resource is local
+        :rtype: bool
+
+        """
+
+        raise NotImplementedError
 
     def _get_cdn_sub_folder(self, channel):
         """ Determines the CDN folder, e.g.: channel.be.canvas

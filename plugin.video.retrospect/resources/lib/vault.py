@@ -152,6 +152,7 @@ class Vault(object):
         Logger.info("Decrypting value for setting '%s'", setting_id)
         encrypted_value = AddonSettings.get_setting(setting_id)
         if not encrypted_value:
+            Logger.warning("Found empty string as encrypted data")
             return encrypted_value
 
         try:

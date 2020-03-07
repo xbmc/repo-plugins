@@ -114,8 +114,6 @@ class Channel(chn_class.Channel):
             # "&_=1483280915489%%02d%%02d%%02d"
             title = "Afleveringen van %02d-%02d-%02d" % (current.year, current.month, current.day)
             date_item = MediaItem(title, url)
-            date_item.icon = self.icon
-            date_item.thumb = self.noImage
             date_item.complete = True
             items.append(date_item)
             current = current + datetime.timedelta(1)
@@ -141,8 +139,6 @@ class Channel(chn_class.Channel):
 
         # add live stuff
         live = MediaItem("\bLive streams", self.__liveUrl)
-        live.icon = self.icon
-        live.thumb = self.noImage
         live.complete = True
         live.HttpHeaders = self.__authenticationHeaders
         items = [live]
@@ -168,8 +164,6 @@ class Channel(chn_class.Channel):
         items = []
 
         slam = MediaItem("Slam! TV", "https://hls.slam.nl/streaming/hls/SLAM!/playlist.m3u8")
-        slam.icon = self.icon
-        slam.thumb = self.noImage
         slam.type = "video"
         slam.isLive = True
         items.append(slam)
@@ -177,8 +171,6 @@ class Channel(chn_class.Channel):
         slam_fm = MediaItem("Slam! FM", "https://18973.live.streamtheworld.com/SLAM_AAC.aac"
                                         "?ttag=PLAYER%3ANOPREROLL&tdsdk=js-2.9"
                                         "&pname=TDSdk&pversion=2.9&banners=none")
-        slam_fm.icon = self.icon
-        slam_fm.thumb = self.noImage
         slam_fm.type = "audio"
         slam_fm.isLive = True
         slam_fm.append_single_stream(slam_fm.url)
@@ -283,13 +275,11 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, "", type="video")
         item.description = result_set.get("description")
 
-        item.thumb = self.noImage
         if "image" in result_set:
             if not item.description:
                 item.description = result_set["image"].get("alt", None)
             item.thumb = "https://static.538.nl/%s" % (result_set["image"]['src'],)
 
-        item.icon = self.icon
         item.set_date(*start_time_stamp[0:6])
         item.description = result_set.get('description')
         if "playbackUrls" in result_set and result_set["playbackUrls"]:

@@ -138,8 +138,6 @@ class Channel(chn_class.Channel):
         title = "\a.: %s :." % (self.searchInfo.get(self.language, self.searchInfo["se"])[1], )
         Logger.trace("Adding search item: %s", title)
         search_item = MediaItem(title, "searchSite")
-        search_item.thumb = self.noImage
-        search_item.fanart = self.fanart
         search_item.dontGroup = True
         items.append(search_item)
 

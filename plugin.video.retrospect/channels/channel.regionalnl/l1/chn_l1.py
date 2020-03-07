@@ -2,7 +2,6 @@
 
 from resources.lib import chn_class
 from resources.lib.mediaitem import MediaItem
-from resources.lib.helpers import datehelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.logger import Logger
 from resources.lib.streams.m3u8 import M3u8
@@ -44,8 +43,7 @@ class Channel(chn_class.Channel):
         # live stuff
         self._add_data_parsers(["#livetv", "#liveradio"], updater=self.update_live_stream)
 
-        video_regex = r'<a[^>]*class="mediaItem"[^>]*href="(?<url>[^"]+)"[^>]*title="(?<title>' \
-                      r'[^"]+)"[^>]*>[\w\W]{0,500}?<img[^>]+src="/(?<thumburl>[^"]+)'
+        video_regex = r'<a[^>]*href="(?<url>/[^"]+)"[^>]*title="(?<title>[^"]+)"[^>]*>\W*<img[^>]+src="/(?<thumburl>[^"]+)'
         video_regex = Regexer.from_expresso(video_regex)
         self._add_data_parser("*", parser=video_regex, creator=self.create_video_item, updater=self.update_video_item)
 
@@ -151,50 +149,6 @@ class Channel(chn_class.Channel):
             item.thumb = "%s/%s" % (self.baseUrl, item.thumb)
         return item
 
-    def create_video_item_old(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        thumb_url = result_set[1]
-        url = "%s%s" % (self.baseUrl, result_set[2])
-        title = result_set[6]
-
-        item = MediaItem(title, url)
-        item.thumb = self.noImage
-        if thumb_url:
-            item.thumb = thumb_url
-        item.icon = self.icon
-        item.type = 'video'
-
-        if result_set[3]:
-            # set date
-            day = result_set[3]
-            month = result_set[4]
-            year = result_set[5]
-            Logger.trace("%s-%s-%s", year, month, day)
-            month = datehelper.DateHelper.get_month_from_name(month, "nl", True)
-            item.set_date(year, month, day)
-
-        item.complete = False
-        return item
-
     def update_live_stream(self, item):
         """ Updates an existing MediaItem with more data.
 
@@ -261,7 +215,7 @@ class Channel(chn_class.Channel):
                 Logger.warning("Cannot find stream-id for L1 stream.")
                 return item
 
-            data_url = "https://l1.bbvms.com/p/video/c/{}.json".format(data_id[0])
+            data_url = "https://limburg.bbvms.com/p/L1_video/c/{}.json".format(data_id[0])
         else:
             data_url = item.url
 

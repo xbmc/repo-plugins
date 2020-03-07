@@ -105,8 +105,6 @@ class Channel(chn_class.Channel):
 
         for cat in cats:
             item = MediaItem(cat, cats[cat])
-            item.thumb = self.noImage
-            item.icon = self.icon
             item.complete = True
             items.append(item)
 
@@ -132,8 +130,6 @@ class Channel(chn_class.Channel):
             title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
             url = result_set['next']
             item = MediaItem(title, url)
-            item.fanart = self.parentItem.fanart
-            item.thumb = self.parentItem.thumb
             items.append(item)
 
         return items
@@ -165,7 +161,6 @@ class Channel(chn_class.Channel):
 
         url = "https://api.nos.nl/mobile/video/%s/phone.json" % (video_id, )
         item = MediaItem(result_set['title'], url, type="video")
-        item.icon = self.icon
         if 'image' in result_set:
             images = result_set['image']["formats"]
             matched_image = images[-1]

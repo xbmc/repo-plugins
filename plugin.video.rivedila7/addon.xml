@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rivedila7" name="La7-La7d" version="3.1.1" provider-name="Luivit, Testato">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="inputstream.adaptive"/>
+    <import addon="script.module.beautifulsoup4" version="4.5.3"/>
+    <import addon="script.module.html5lib" version="0.999.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">La7-La7d</summary>
+    <description lang="en_GB">Live Streaming La7, News and Weather, Replay the last week, Programs on-demand (italian television)</description>
+    <summary lang="it_IT">La7-La7d</summary>
+    <description lang="it_IT">Diretta Live La7, Telegiornali e Meteo, Rivedi ultima settimana, Programmi on-demand</description>
+    <language>it</language>
+    <platform>all</platform>
+    <license>GNU General Public License v3.0</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=331064</forum>
+    <website>http://www.la7.it</website>
+    <email>luivit39@gmail.com</email>
+    <source>https://github.com/luivit/plugin.video.rivedila7</source>
+	<assets>
+        <icon>resources/icon.png</icon>
+		<fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <news>3.1.1 (2019-08-03)
+- update addon structure to kodi 17
+</news>
+  </extension>
+</addon>

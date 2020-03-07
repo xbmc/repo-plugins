@@ -129,14 +129,14 @@ msgctxt "#30306"
 msgid "Vimeo Curation channels"
 msgstr ""
 
-# GUI - Settings
-msgctxt "#30401"
-msgid "Cache cleared"
-msgstr ""
-
 # GUI - Info
 msgctxt "#30401"
 msgid "Vimeo account"
+msgstr ""
+
+# GUI - Settings
+msgctxt "#30501"
+msgid "Cache cleared"
 msgstr ""
 
 # GUI - Generic

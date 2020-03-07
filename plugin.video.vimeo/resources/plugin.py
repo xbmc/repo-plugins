@@ -127,7 +127,7 @@ def run():
     elif path == PATH_SETTINGS_CACHE_CLEAR:
         vfs_cache.destroy()
         dialog = xbmcgui.Dialog()
-        dialog.ok('Vimeo', addon.getLocalizedString(30401))
+        dialog.ok('Vimeo', addon.getLocalizedString(30501))
 
     else:
         xbmc.log("Path not found", xbmc.LOGERROR)

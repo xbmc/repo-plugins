@@ -5,8 +5,10 @@ import os
 
 import xbmcgui
 import xbmc
+import xbmcaddon
 
-from resources.lib.backtothefuture import basestring
+from resources.lib.backtothefuture import basestring, unichr
+from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.retroconfig import Config
 from resources.lib.locker import LockWithDialog
 
@@ -115,8 +117,41 @@ class XbmcWrapper:
     Warning = "warning"
     Info = "info"
 
+    __add_on_name_lookup = dict()
+
     def __init__(self):
         pass
+
+    @staticmethod
+    def get_external_add_on_label(add_on_url):
+        """ Returns the formatting string for the label of an item with an external add-on url
+
+        :param str add_on_url:   The plugin://-handle for the add-on
+        
+        :return: the name of the add-on or None if not installed
+        :rtype: str
+
+        """
+
+        if add_on_url is None:
+            return "{}"
+
+        # We need the add-on ID
+        add_on_id = add_on_url.split("/", 3)[2]
+        add_on_label = XbmcWrapper.__add_on_name_lookup.get(add_on_id)
+        if add_on_label is not None:
+            return add_on_label
+
+        try:
+            add_on_name = xbmcaddon.Addon(add_on_id).getAddonInfo('name')
+            via = LanguageHelper.get_localized_string(LanguageHelper.OtherAddon)
+        except:
+            add_on_name = add_on_id
+            via = LanguageHelper.get_localized_string(LanguageHelper.MissingAddon)
+
+        add_on_label = "{0} [COLOR gold]{1} '{2}'[/COLOR]".format(unichr(187), via, add_on_name)
+        XbmcWrapper.__add_on_name_lookup[add_on_id] = add_on_label
+        return add_on_label
 
     @staticmethod
     def show_key_board(default="", heading="", hidden=False):

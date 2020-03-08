@@ -104,7 +104,7 @@ class UriHandler(object):
 
     @staticmethod
     def open(uri, proxy=None, params=None, data=None, json=None,
-             referer=None, additional_headers=None, no_cache=False):
+             referer=None, additional_headers=None, no_cache=False, force_text=False):
         """ Open an URL Async using a thread
 
         :param str uri:                   The URI to download.
@@ -116,6 +116,7 @@ class UriHandler(object):
         :param str referer:               The http referer to use.
         :param dict additional_headers:   The optional headers.
         :param bool no_cache:             Should cache be disabled.
+        :param bool force_text:           In case no content type is specified, force text.
 
         :return: The data that was retrieved from the URI.
         :rtype: str|unicode
@@ -123,7 +124,7 @@ class UriHandler(object):
         """
 
         return UriHandler.instance().open(uri, proxy, params, data, json,
-                                          referer, additional_headers, no_cache)
+                                          referer, additional_headers, no_cache, force_text)
 
     @staticmethod
     def header(uri, proxy=None, referer=None, additional_headers=None):
@@ -389,7 +390,7 @@ class _RequestsHandler(object):
         return download_path
 
     def open(self, uri, proxy=None, params=None, data=None, json=None,
-             referer=None, additional_headers=None, no_cache=False):
+             referer=None, additional_headers=None, no_cache=False, force_text=False):
         """ Open an URL Async using a thread
 
         :param str uri:                         The URI to download.
@@ -401,6 +402,7 @@ class _RequestsHandler(object):
         :param str referer:                     The http referer to use.
         :param dict|None additional_headers:    The optional headers.
         :param bool no_cache:                   Should cache be disabled.
+        :param bool force_text:                 In case no content type is specified, force text.
 
         :return: The data that was retrieved from the URI.
         :rtype: str|unicode
@@ -418,8 +420,12 @@ class _RequestsHandler(object):
             Logger.debug("Found 'ISO-8859-1' for 'text' content-type. Using UTF-8 instead.")
             r.encoding = 'utf-8'
 
+        elif r.encoding is None and force_text:
+            Logger.debug("Found missing encoding and 'force_text' was specified. Using UTF-8.")
+            r.encoding = 'utf-8'
+
         elif r.encoding is None and self.__is_text_content_type(content_type):
-            Logger.debug("Found missing encoding content type '%s' is considered text. Using UTF-8 instead.", content_type)
+            Logger.debug("Found missing encoding for content type '%s' is considered text. Using UTF-8 instead.", content_type)
             r.encoding = 'utf-8'
 
         # We might need a better mechanism here.

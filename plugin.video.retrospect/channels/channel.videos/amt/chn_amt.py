@@ -78,7 +78,6 @@ class Channel(chn_class.Channel):
 
         # dummy class
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.thumb = thumb_url.replace("poster.jpg", "poster-xlarge.jpg")
         item.fanart = fanart
         item.set_date(year, month, day)
@@ -154,11 +153,9 @@ class Channel(chn_class.Channel):
         thumb = result_set["thumb"]
         year, month, day = result_set["posted"].split("-")
         item = MediaItem(title, self.parentItem.url)
-        item.icon = self.icon
         item.description = self.parentItem.description
         item.type = 'video'
         item.thumb = thumb
-        item.fanart = self.parentItem.fanart
         item.set_date(year, month, day)
 
         runtime = result_set.get("runtime").split(":")

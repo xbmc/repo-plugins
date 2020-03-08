@@ -61,16 +61,13 @@ class Channel(chn_class.Channel):
 
         for page in range(0, 2):
             item = MediaItem("Toppertjes - Pagina %s" % (page + 1, ), url_pattern % ('toppers', page))
-            item.icon = self.icon
             items.append(item)
 
         for page in range(0, 10):
             item = MediaItem("Filmpjes - Pagina %s" % (page + 1, ), url_pattern % ('latest', page))
-            item.icon = self.icon
             items.append(item)
 
         item = MediaItem("Zoeken", "searchSite")
-        item.icon = self.icon
         items.append(item)
 
         return data, items

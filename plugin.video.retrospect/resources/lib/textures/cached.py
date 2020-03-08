@@ -189,6 +189,21 @@ class Cached(TextureHandler):
 
         return
 
+    def is_texture_or_empty(self, uri):
+        """ Returns whether the uri points to a local resource or remote
+
+        :param str uri: The URI for the texture
+
+        :returns: Indicator whether or not the resource is local
+        :rtype: bool
+
+        """
+
+        if not uri:
+            return True
+
+        return uri.startswith("special://")
+
     def __fetch_texture(self, uri, texture_path):
         """ Fetches a texture
 

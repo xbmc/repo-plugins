@@ -55,7 +55,7 @@
     <category id="channelsettings" label="30032">
         <setting type="lsep" label="30063" />
         <!-- start of active channels -->
-        <setting id="config_channel" type="select" label="30040" values="NPO Start|Vier|Vijf|Zes|VTM.be|Q2.be|Stievie|VRT NU" />
+        <setting id="config_channel" type="select" label="30040" values="NPO Start|Vier|Vijf|Zes|VTM.be|Stievie|VRT NU" />
         <!-- end of active channels -->
 
         <setting type="lsep" label="30032" />
@@ -77,10 +77,10 @@
         <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_password" default="" visible="eq(-12,VRT NU)" />
         <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_hls_over_dash" label="30099" type="bool" default="" visible="eq(-13,VRT NU)" />
         <!-- chn_vtmbe.py -->
-        <setting id="mediaan_username" type="text" label="30094" default="" visible="eq(-14,Stievie)|eq(-14,Q2.be)|eq(-14,VTM.be)" />
-        <setting id="mediaan_password" default="" visible="eq(-15,Stievie)|eq(-15,Q2.be)|eq(-15,VTM.be)" />
-        <setting id="mediaan_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=mediaan_password&amp;settingname=Mediaan Wachtwoord.be&amp;tabfocus=102)" option="close" visible="eq(-16,Stievie)|eq(-16,Q2.be)|eq(-16,VTM.be)" />
-        <setting id="mediaan_signature" default="" visible="eq(-17,Stievie)|eq(-17,Q2.be)|eq(-17,VTM.be)" />
+        <setting id="mediaan_username" type="text" label="30094" default="" visible="eq(-14,Stievie)|eq(-14,VTM.be)" />
+        <setting id="mediaan_password" default="" visible="eq(-15,Stievie)|eq(-15,VTM.be)" />
+        <setting id="mediaan_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=mediaan_password&amp;settingname=Mediaan Wachtwoord.be&amp;tabfocus=102)" option="close" visible="eq(-16,Stievie)|eq(-16,VTM.be)" />
+        <setting id="mediaan_signature" default="" visible="eq(-17,Stievie)|eq(-17,VTM.be)" />
         <!-- end of channel settings -->
     </category>
 
@@ -90,6 +90,7 @@
         <setting id="empty_folder" type="select" label="30075" default="2" lvalues="30076|30077|30078" />
         <setting id="folder_prefix" type="text" label="30043" default="" />
         <setting id="hide_fanart" type="bool" label="30086" default="false" />
+        <setting id="use_thumbs_as_fanart" type="bool" label="30088" default="false" />
         <setting id="ignore_ssl_errors" type="bool" label="30569" default="false" />
         <setting id="http_cache" type="bool" label="30031" default="true" />
 

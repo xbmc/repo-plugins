@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.1.8"
+        version="5.1.9"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,34 +132,35 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.1.8 - Changelog - 2020-02-13[/B]
+        <news>[B]Retrospect v5.1.9 - Changelog - 2020-03-07[/B]
 
-This is a quick fix for an NPO issue. It also contains from version 5.1.7:
-That update contains fixes for a number of channels (Dutch, Swedish, Belgian and Norwegian). We
-also added some small improvements such as &quot;air date&quot; infolabels and a new context menu entry to
-show the video information dialog window.
+This release focus on some generic GUI stuff, that makes things appear a bit nicer:
+
+ * You can now enable the setting &quot;Show thumbnail as fanart if no fanart is available&quot; to fallback to the thumbnail as fanart instead of the channel&#x27;s fanart.
+ * We introduced a standard way of showing the &quot;expire&quot; date of an item
+ * And we clarified some things in the GUI, such as when another add-on is used to display content or when an items is geographically restricted.
+
+Besides this we fixed the following channels: L1, TV4Play.se and Stievie.be.
 
 [B]Framework related[/B]
--
+* Added: option for UriHandler to open a link as text (utf-8) in case no encoding was specified.
+* Fixed: Amazon AWS sign-in
+* Added: Check to see if external add-on is installed
 
 [B]GUI/Settings/Language related[/B]
-* Added: context menu to show the video info dialog (See #1288)
-* Added: show &quot;air date&quot; as InfoLabel if a date is available
+* Changed: Move &#x27;expire&#x27; date to MediaItem (Fixes #1301)
+* Translated: Dutch(nl_NL) translations
+* Translated: Swedish (sv_SE) translations
+* Added: Add-on setting that allows the showing of thumbs as fanart if no fanart is present
 
 [B]Channel related[/B]
-* Fixed: refactoring broke NPO &#x27;recent items&#x27; (Fixes #1295)
-* Fixed: Most recent shows were not working for NRK.no (Fixes #1274)
-* Fixed: missing video item type &#x27;Variant&#x27; caused missing episodes (Fixes #1284)
-* Updated: MTG Viafree channel - enhance look and feel (Fixes #1285)
-* Fixed: VRT.nu updated some HTML pages again! (Fixes #1281)
-* Fixed: SVT Live channels (Fixes #1289)
-* Fixed: Missing subtitles for some videos on SVT (Fixes #1283)
-* Added: More meta info to Apple Movie Trailers (Fixes #1288)
-* Fixed: franchise name to NPO videos in case it differs from the main show (Fixes #1291)
-* Added: seasons and episodes to items of NPO (See #1291)
-* Fixed: Remove AT5 HTML tags in description (Fixes #1292)
-* Fixed: Vier/Vijf/Zes.be broke (Fixes #1290)
-* Fixed: UR Play broke (Fixes #1286)
+* Fixed: Stievie became VTM GO. Only live streams are available (Fixes #1310)
+* Removed: premium Norwegian channels (Fixes #1300)
+* Changed: page size to 100 for TV4 Play.se (Fixes #1313)
+* Added: duration to `single` item type (Fixes 1312)
+* Fixed: Some missing artwork in ViaFree.se (Fixes #1311)
+* Fixed: L1 Video items parsing (Fixes #1324)
+
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

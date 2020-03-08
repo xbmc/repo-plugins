@@ -72,7 +72,9 @@ msgctxt "#30014"
 msgid "Show info"
 msgstr ""
 
-# empty strings from id 30014 to 30014
+msgctxt "#30015"
+msgid "via missing add-on"
+msgstr ""
 
 msgctxt "#30016"
 msgid "Sort by"
@@ -341,7 +343,7 @@ msgid "Mix folders and streams while sorting"
 msgstr ""
 
 msgctxt "#30088"
-msgid "Finnish"
+msgid "Show thumbnail as fanart if no fanart is available"
 msgstr ""
 
 msgctxt "#30089"

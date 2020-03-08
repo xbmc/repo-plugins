@@ -34,6 +34,7 @@ class LanguageHelper(object):
     Enabled = 30042
     Disabled = 30074
     Retrospect = 30008
+    MissingAddon = 30015
 
     Monday = 30190
     Tuesday = 30191

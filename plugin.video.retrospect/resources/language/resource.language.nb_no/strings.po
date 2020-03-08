@@ -268,10 +268,6 @@ msgctxt "#30087"
 msgid "Mix folders and streams while sorting"
 msgstr "Bland mapper og strømmer mens du sorterer"
 
-msgctxt "#30088"
-msgid "Finnish"
-msgstr "Avslutt"
-
 msgctxt "#30089"
 msgid "Password Vault"
 msgstr "Passord hvelv"

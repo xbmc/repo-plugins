@@ -117,7 +117,6 @@ class Channel(chn_class.Channel):
         self.__filter_subheading = "filter_subheading"
         self.__parent_images = "parent_thumb_data"
         self.__apollo_data = None
-        self.__expires_text = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
         self.__timezone = pytz.timezone("Europe/Stockholm")
 
         # ===============================================================================================================
@@ -176,7 +175,6 @@ class Channel(chn_class.Channel):
         for title, (url, include_subheading) in extra_items.items():
             new_item = MediaItem("\a.: %s :." % (title, ), url)
             new_item.complete = True
-            new_item.thumb = self.noImage
             new_item.dontGroup = True
             new_item.metaData[self.__filter_subheading] = include_subheading
             items.append(new_item)
@@ -189,7 +187,6 @@ class Channel(chn_class.Channel):
         genre_url = self.__get_api_url("AllGenres", "6bef51146d05b427fba78f326453127f7601188e46038c9a5c7b9c2649d4719c", {})
         genre_item = MediaItem(genre_tags, genre_url)
         genre_item.complete = True
-        genre_item.thumb = self.noImage
         genre_item.dontGroup = True
         items.append(genre_item)
 
@@ -260,7 +257,6 @@ class Channel(chn_class.Channel):
             LanguageHelper.get_localized_string(LanguageHelper.Categories))
         new_item = MediaItem(category_title, "https://www.svtplay.se/genre")
         new_item.complete = True
-        new_item.thumb = self.noImage
         new_item.dontGroup = True
         for title, (category_id, thumb) in category_items.items():
             # https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=GenreProgramsAO&variables={"genre": ["action-och-aventyr"]}&extensions={"persistedQuery": {"version": 1, "sha256Hash": "189b3613ec93e869feace9a379cca47d8b68b97b3f53c04163769dcffa509318"}}
@@ -324,7 +320,7 @@ class Channel(chn_class.Channel):
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
@@ -334,7 +330,6 @@ class Channel(chn_class.Channel):
         url = result_set["urls"]["svtplay"]
         item = MediaItem(result_set['name'], "#program_item")
         item.metaData["slug"] = url
-        item.icon = self.icon
         item.isGeoLocked = result_set.get('restrictions', {}).get('onlyAvailableInSweden', False)
         item.description = result_set.get('longDescription')
 
@@ -351,7 +346,7 @@ class Channel(chn_class.Channel):
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
@@ -364,7 +359,6 @@ class Channel(chn_class.Channel):
         url = result_set["urls"]["svtplay"]
         item = MediaItem(result_set['name'], "#program_item")
         item.metaData["slug"] = url
-        item.icon = self.icon
         item.isGeoLocked = result_set.get('restrictions', {}).get('onlyAvailableInSweden', False)
         item.description = result_set.get('description')
         image_info = result_set.get("image")
@@ -411,7 +405,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -461,7 +455,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
         :param bool add_parent_title: Should the parent's title be included?
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
@@ -496,8 +490,6 @@ class Channel(chn_class.Channel):
 
         if "image" in result_set:
             item.thumb = self.__get_thumb(result_set["image"], width=720)
-            if not bool(item.fanart):
-                item.fanart = self.__get_thumb(result_set["image"])
 
         valid_from = result_set.get("validFrom", None)
         if bool(valid_from) and valid_from.endswith("Z"):
@@ -569,7 +561,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -591,6 +583,10 @@ class Channel(chn_class.Channel):
             item.thumb = self.__get_thumb(image_info, width=720)
             item.fanart = self.__get_thumb(image_info)
         item.isGeoLocked = result_set['restrictions']['onlyAvailableInSweden']
+
+        duration = int(result_set.get("duration", 0))
+        if duration > 0:
+            item.set_info_label("duration", duration)
         return item
 
     def create_api_clip_type(self, result_set):
@@ -605,7 +601,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -661,8 +657,6 @@ class Channel(chn_class.Channel):
         """
 
         item = MediaItem(result_set["name"], "#genre_item")
-        item.fanart = self.fanart
-        item.thumb = self.noImage
         item.metaData[self.__genre_id] = result_set["id"]
         return item
 
@@ -941,8 +935,8 @@ class Channel(chn_class.Channel):
         expire_date = expire_date.split("+")[0].replace("T", " ")
         year = expire_date.split("-")[0]
         if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
-            item.description = \
-                "{}\n\n{}: {}".format(item.description or "", self.__expires_text, expire_date)
+            expire_date = DateHelper.get_datetime_from_string(expire_date, date_format="%Y-%m-%d %H:%M:%S")
+            item.set_expire_datetime(timestamp=expire_date)
 
     def __get_thumb(self, thumb_data, width=1920):
         """ Generates a full thumbnail url based on the "id" and "changed" values in a thumbnail

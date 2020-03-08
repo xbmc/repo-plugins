@@ -75,14 +75,10 @@ class Channel(chn_class.Channel):
         items = []
 
         item = MediaItem("\a.: TWiT.TV Live :.", "http://live.twit.tv/")
-        item.thumb = self.noImage
-        item.icon = self.icon
         item.complete = True
 
         playback_item = MediaItem("Play Live", "http://live.twit.tv/")
         playback_item.type = "playlist"
-        playback_item.thumb = self.noImage
-        playback_item.icon = self.icon
         playback_item.isLive = True
         playback_part = playback_item.create_new_empty_media_part()
 
@@ -159,8 +155,6 @@ class Channel(chn_class.Channel):
         if not item.thumb.startswith("http"):
             item.thumb = "%s%s" % (self.baseUrl, item.thumb)
         item.thumb = item.thumb.replace("coverart-small", "coverart")
-
-        item.icon = self.icon
         item.complete = True
         return item
 
@@ -192,9 +186,6 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(name, url)
         item.type = 'video'
-        item.icon = self.icon
-        item.thumb = self.noImage
-
         month = result_set["month"]
         month = DateHelper.get_month_from_name(month, "en", False)
         day = result_set["day"]

@@ -126,7 +126,6 @@ class Channel(chn_class.Channel):
               "?key=networkapp1.0&brand=mtv&platform=android&region=%s&version=2.2" % \
               (result_set["id"], self.__region)
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.description = result_set.get("description", None)
         item.complete = True
 
@@ -178,11 +177,7 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(title, url)
         item.type = "video"
-        item.icon = self.icon
         item.description = result_set.get("description", None)
-
-        item.thumb = self.parentItem.thumb
-        item.fanart = self.parentItem.fanart
         item.isGeoLocked = True
         images = result_set.get("images", [])
         if images:
@@ -241,7 +236,6 @@ class Channel(chn_class.Channel):
         url = "%sepisodes.json?per=2147483647&franchise_id=%s" % (self.mainListUri[0:43], serie_id)
 
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.complete = True
 
         # thumbs
@@ -315,7 +309,6 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url)
         item.thumb = thumb
         item.description = description
-        item.icon = self.icon
         item.type = 'video'
         item.set_date(date[0], date[1], date[2])
         item.complete = False

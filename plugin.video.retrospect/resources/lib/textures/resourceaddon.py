@@ -32,5 +32,20 @@ class Resources(TextureHandler):
         self._logger.debug("Resolved texture '%s' to '%s'", file_name, return_value)
         return return_value
 
+    def is_texture_or_empty(self, uri):
+        """ Returns whether the uri points to a local resource or remote
+
+        :param str uri: The URI for the texture
+
+        :returns: Indicator whether or not the resource is local
+        :rtype: bool
+
+        """
+
+        if not uri:
+            return True
+
+        return uri.startswith("resource://")
+
     def purge_texture_cache(self, channel):
         TextureHandler.purge_texture_cache(self, channel)

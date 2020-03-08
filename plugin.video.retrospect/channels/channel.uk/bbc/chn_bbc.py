@@ -388,8 +388,6 @@ class Channel(chn_class.Channel):
 
         extra = MediaItem("Shows (A-Z)", "#alphalisting")
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.description = "Alphabetical show listing of BBC shows"
         extra.dontGroup = True
         items.append(extra)
@@ -418,8 +416,6 @@ class Channel(chn_class.Channel):
                 char = "0-9"
             sub_item = MediaItem(title_format % (char.upper(),), url_format % (char,))
             sub_item.complete = True
-            sub_item.icon = self.icon
-            sub_item.thumb = self.noImage
             sub_item.dontGroup = True
             sub_item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
             items.append(sub_item)

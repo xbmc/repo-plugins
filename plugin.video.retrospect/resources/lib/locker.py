@@ -48,6 +48,7 @@ class LockWithDialog(object):
 
             xbmc.executebuiltin("ActivateWindow({0})".format(LockWithDialog.BusyDialog))
             try:
+                # noinspection PyArgumentList
                 response = wrapped_function(*args, **kwargs)
                 # time.sleep(2)
             finally:

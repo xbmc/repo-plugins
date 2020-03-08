@@ -278,6 +278,17 @@ class AddonSettings(object):
         return AddonSettings.store(KODI).get_boolean_setting("hide_fanart")
 
     @staticmethod
+    def use_thumbs_as_fanart():
+        """ Should we show thumbs if fanart is missing?
+
+        :rtype: bool
+        :return: indicator if we should show thumbs as fanart.
+
+        """
+
+        return AddonSettings.store(KODI).get_boolean_setting("use_thumbs_as_fanart", False)
+
+    @staticmethod
     def hide_drm_items():
         """ Returns whether or not to hide DRM protected items.
 

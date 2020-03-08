@@ -117,7 +117,6 @@ class Channel(chn_class.Channel):
             result_set["url"] = "https://mediazone.vrt.be/api/v1/een/assets/%(url)s" % result_set
 
         item = chn_class.Channel.create_video_item(self, result_set)
-        item.fanart = self.parentItem.fanart
         if "year" in result_set and result_set["year"]:
             item.set_date(result_set["year"], result_set["month"], result_set["day"])
         return item
@@ -150,7 +149,6 @@ class Channel(chn_class.Channel):
         # # dummy class
         # url = "http://www.een.be/mediatheek/tag/%s"
         item = MediaItem(result_set["title"], result_set["url"])
-        item.icon = self.icon
         item.type = "folder"
         item.complete = True
 

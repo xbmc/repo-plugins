@@ -151,8 +151,6 @@ class Channel(chn_class.Channel):
 
         url = "https://at5news.vinsontv.com/api/news?source=web&externalid={}".format(result_set["externalId"])
         item = MediaItem(result_set["title"], url)
-        item.icon = self.icon
-        item.thumb = self.noImage
         item.complete = True
         item.description = result_set.get("text")
 
@@ -195,7 +193,6 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(result_set["title"], url)
         item.type = "video"
-        item.icon = self.icon
         item.thumb = thumb or self.noImage
         item.complete = True
         item.description = HtmlHelper.to_text(result_set.get("text"))

@@ -61,6 +61,7 @@
         <setting id="empty_folder" type="select" label="30075" default="2" lvalues="30076|30077|30078" />
         <setting id="folder_prefix" type="text" label="30043" default="" />
         <setting id="hide_fanart" type="bool" label="30086" default="false" />
+        <setting id="use_thumbs_as_fanart" type="bool" label="30088" default="false" />
         <setting id="ignore_ssl_errors" type="bool" label="30569" default="false" />
         <setting id="http_cache" type="bool" label="30031" default="true" />
 

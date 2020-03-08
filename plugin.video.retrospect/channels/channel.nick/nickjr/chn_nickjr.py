@@ -134,9 +134,7 @@ class Channel(chn_class.Channel):
         # http://www.nickjr.nl/data/propertyStreamPage.json?&urlKey=dora&apiKey=nl_global_Nickjr_web&page=1
         url = "%s/data/propertyStreamPage.json?&urlKey=%s&apiKey=%s&page=1" % (self.baseUrl, result_set["seriesKey"], self.__apiKey)
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.complete = True
-        item.fanart = self.fanart
         item.HttpHeaders = self.httpHeaders
         return item
 
@@ -163,9 +161,6 @@ class Channel(chn_class.Channel):
         more = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
         url = "%s=%s" % (self.parentItem.url.rsplit("=", 1)[0], next_page)
         item = MediaItem(more, url)
-        item.thumb = self.parentItem.thumb
-        item.icon = self.icon
-        item.fanart = self.parentItem.fanart
         item.complete = True
         return item
 
@@ -236,8 +231,6 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url)
         item.description = result_set.get("description", None)
         item.type = "video"
-        item.icon = self.icon
-        item.fanart = self.fanart
         item.HttpHeaders = self.httpHeaders
         item.complete = False
 

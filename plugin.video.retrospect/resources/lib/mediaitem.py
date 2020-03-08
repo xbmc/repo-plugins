@@ -2,13 +2,12 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 import os
-import datetime
+from datetime import datetime
 import binascii
 from functools import reduce
 
 import xbmcgui
 
-from resources.lib.backtothefuture import unichr
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.logger import Logger
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
@@ -38,6 +37,7 @@ class MediaItem:
 
     LabelTrackNumber = "TrackNumber"
     LabelDuration = "Duration"
+    ExpiresAt = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
 
     def __dir__(self):
         """ Required in order for the Pickler().Validate to work! """
@@ -94,7 +94,8 @@ class MediaItem:
         self.icon = ""                            # : low quality icon for list
 
         self.__date = ""                          # : value show in interface
-        self.__timestamp = datetime.datetime.min  # : value for sorting, this one is set to minimum so if non is set, it's shown at the bottom
+        self.__timestamp = datetime.min           # : value for sorting, this one is set to minimum so if non is set, it's shown at the bottom
+        self.__expires_datetime = None            # : datetime value of the expire time
 
         self.type = type                          # : video, audio, folder, append, page, playlist
         self.dontGroup = False                    # : if set to True this item will not be auto grouped.
@@ -204,12 +205,12 @@ class MediaItem:
 
         """
 
-        return self.__timestamp > datetime.datetime.min
+        return self.__timestamp > datetime.min
 
     def clear_date(self):
         """ Resets the date (used for favourites for example). """
 
-        self.__timestamp = datetime.datetime.min
+        self.__timestamp = datetime.min
         self.__date = ""
 
     def has_info(self):
@@ -248,6 +249,26 @@ class MediaItem:
         self.__infoLabels["Season"] = int(season)
         return
 
+    def set_expire_datetime(self, timestamp, year=0, month=0, day=0, hour=0, minutes=0, seconds=0):
+        """ Sets the datetime value until when the item can be streamed.
+
+        :param datetime|None timestamp: A full datetime object.
+        :param int|str year:            The year of the datetime.
+        :param int|str month:           The month of the datetime.
+        :param int|str day:             The day of the datetime.
+        :param int|str|None hour:       The hour of the datetime (Optional)
+        :param int|str|None minutes:    The minutes of the datetime (Optional)
+        :param int|str|None seconds:    The seconds of the datetime (Optional)
+
+        """
+
+        if timestamp is not None:
+            self.__expires_datetime = timestamp
+            return
+
+        self.__expires_datetime = datetime(
+            int(year), int(month), int(day), int(hour), int(minutes), int(seconds))
+
     def set_date(self, year, month, day,
                  hour=None, minutes=None, seconds=None, only_if_newer=False, text=None):
         """ Sets the datetime of the MediaItem.
@@ -281,7 +302,7 @@ class MediaItem:
                                         datetime is also set.
 
         :return: The datetime that was set.
-        :rtype: datetime.datetime
+        :rtype: datetime
 
         """
 
@@ -297,10 +318,10 @@ class MediaItem:
             date_time_format = date_format + " %H:%M"
 
             if hour is None and minutes is None and seconds is None:
-                time_stamp = datetime.datetime(int(year), int(month), int(day))
+                time_stamp = datetime(int(year), int(month), int(day))
                 date = time_stamp.strftime(date_format)
             else:
-                time_stamp = datetime.datetime(int(year), int(month), int(day), int(hour), int(minutes), int(seconds))
+                time_stamp = datetime(int(year), int(month), int(day), int(hour), int(minutes), int(seconds))
                 date = time_stamp.strftime(date_time_format)
 
             if only_if_newer and self.__timestamp > time_stamp:
@@ -314,7 +335,7 @@ class MediaItem:
 
         except ValueError:
             Logger.error("Error setting date: Year=%s, Month=%s, Day=%s, Hour=%s, Minutes=%s, Seconds=%s", year, month, day, hour, minutes, seconds, exc_info=True)
-            self.__timestamp = datetime.datetime.min
+            self.__timestamp = datetime.min
             self.__date = ""
 
         return self.__timestamp
@@ -333,27 +354,27 @@ class MediaItem:
         """
 
         # Update name and descriptions
-        name_post_fix, description_post_fix = self.__update_title_and_description_with_limitations()
+        name_post_fix, description_pre_fix = self.__update_title_and_description_with_limitations()
 
         name = self.__get_title(name)
-        name = "%s%s" % (name, name_post_fix)
+        name = "%s %s" % (name, name_post_fix)
         name = self.__full_decode_text(name)
-
-        if self.uses_external_addon:
-            other = LanguageHelper.get_localized_string(LanguageHelper.OtherAddon)
-            name = "{0} {1} [COLOR gold]{2}[/COLOR]".format(name, unichr(187), other)
 
         if self.description is None:
             self.description = ''
 
-        description = "%s%s" % (self.description.lstrip(), description_post_fix)
+        if description_pre_fix != "":
+            description = "%s\n\n%s" % (description_pre_fix, self.description)
+        else:
+            description = self.description
+
         description = self.__full_decode_text(description)
         if description is None:
             description = ""
 
         # the Kodi ListItem date
         # date: string (%d.%m.%Y / 01.01.2009) - file date
-        if self.__timestamp > datetime.datetime.min:
+        if self.__timestamp > datetime.min:
             kodi_date = self.__timestamp.strftime("%d.%m.%Y")
             kodi_year = self.__timestamp.year
         else:
@@ -628,38 +649,49 @@ class MediaItem:
         drm_lock = "^"       # ^
         paid = "&ordf;"     # ª
         cloaked = "&uml;"   # ¨
-        description_addition = []
+        description_prefix = []
         title_postfix = []
 
         description = ""
         title = ""
 
+        if self.__expires_datetime is not None:
+            expires = "{}: {}".format(MediaItem.ExpiresAt, self.__expires_datetime.strftime("%Y-%m-%d %H:%M"))
+            description_prefix.append(expires)
+
         if self.isDrmProtected:
             title_postfix.append(drm_lock)
-            description_addition.append(
+            description_prefix.append(
                 LanguageHelper.get_localized_string(LanguageHelper.DrmProtected))
 
         if self.isGeoLocked:
             title_postfix.append(geo_lock)
-            description_addition.append(
+            description_prefix.append(
                 LanguageHelper.get_localized_string(LanguageHelper.GeoLockedId))
 
         if self.isPaid:
             title_postfix.append(paid)
-            description_addition.append(
+            description_prefix.append(
                 LanguageHelper.get_localized_string(LanguageHelper.PremiumPaid))
 
         if self.isCloaked:
             title_postfix.append(cloaked)
-            description_addition.append(
+            description_prefix.append(
                 LanguageHelper.get_localized_string(LanguageHelper.HiddenItem))
 
+        if self.uses_external_addon:
+            from resources.lib.xbmcwrapper import XbmcWrapper
+            external = XbmcWrapper.get_external_add_on_label(self.url)
+            title_postfix.append(external)
+
         # actually update it
-        if description_addition:
-            description_addition = ", ".join(description_addition)
-            description = "\n\n[COLOR gold][I]%s[/I][/COLOR]" % (description_addition, )
+        if description_prefix:
+            description_prefix = "\n".join(description_prefix)
+            description = "[COLOR gold][I]%s[/I][/COLOR]" % (description_prefix.rstrip(), )
+
         if title_postfix:
-            title = " [COLOR gold]%s[/COLOR]" % ("".join(title_postfix), )
+            title = "".join(title_postfix)
+            title = "[COLOR gold]%s[/COLOR]" % (title.lstrip(), )
 
         return title, description
 

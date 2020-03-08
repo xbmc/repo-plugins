@@ -234,6 +234,7 @@ class Channel(chn_class.Channel):
         v = Vault()
         password = v.get_channel_setting(self.guid, "password")
         if not bool(password):
+            Logger.warning("No password found for %s", self)
             return False
 
         xsrf_token = self.__get_xsrf_token()[0]
@@ -319,8 +320,6 @@ class Channel(chn_class.Channel):
             title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
             title = "\a.: %s :." % (title,)
             more = MediaItem(title, next_page)
-            more.thumb = self.parentItem.thumb
-            more.fanart = self.parentItem.fanart
             more.HttpHeaders = http_headers
             more.HttpHeaders.update(self.parentItem.HttpHeaders)
             items.append(more)
@@ -340,8 +339,6 @@ class Channel(chn_class.Channel):
         items = []
         search = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Search), "searchSite")
         search.complete = True
-        search.icon = self.icon
-        search.thumb = self.noImage
         search.dontGroup = True
         search.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
         items.append(search)
@@ -352,8 +349,6 @@ class Channel(chn_class.Channel):
         favs.complete = True
         favs.description = "Favorieten van de NPO.nl website. Het toevoegen van favorieten " \
                            "wordt nog niet ondersteund."
-        favs.icon = self.icon
-        favs.thumb = self.noImage
         favs.dontGroup = True
         favs.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
         items.append(favs)
@@ -361,16 +356,12 @@ class Channel(chn_class.Channel):
         extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.LiveRadio),
                           "http://radio-app.omroep.nl/player/script/player.js")
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.dontGroup = True
         items.append(extra)
 
         extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.LiveTv),
                           "%s/live" % (self.baseUrlLive,))
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.dontGroup = True
         items.append(extra)
 
@@ -382,8 +373,6 @@ class Channel(chn_class.Channel):
             "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize))
 
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.dontGroup = True
         extra.description = "Volledige programma lijst van NPO Start."
         extra.HttpHeaders = self.__jsonApiKeyHeader
@@ -393,8 +382,6 @@ class Channel(chn_class.Channel):
         extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Genres),
                           "https://www.npostart.nl/programmas")
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.dontGroup = True
         items.append(extra)
 
@@ -402,16 +389,12 @@ class Channel(chn_class.Channel):
             "{} (A-Z)".format(LanguageHelper.get_localized_string(LanguageHelper.TvShows)),
             "#alphalisting")
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.description = "Alfabetische lijst van de NPO.nl site."
         extra.dontGroup = True
         items.append(extra)
 
         recent = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Recent), "#recent")
         recent.complete = True
-        recent.icon = self.icon
-        recent.thumb = self.noImage
         recent.dontGroup = True
         items.append(recent)
 
@@ -453,8 +436,6 @@ class Channel(chn_class.Channel):
                       (air_date.year, air_date.month, air_date.day)
             extra = MediaItem(title, url)
             extra.complete = True
-            extra.icon = self.icon
-            extra.thumb = self.noImage
             extra.dontGroup = True
             if self.__useJson:
                 extra.HttpHeaders = self.__jsonApiKeyHeader
@@ -558,8 +539,6 @@ class Channel(chn_class.Channel):
                 char = "0-9"
             sub_item = MediaItem(title_format % (char,), url_format % (char,))
             sub_item.complete = True
-            sub_item.icon = self.icon
-            sub_item.thumb = self.noImage
             sub_item.dontGroup = True
             sub_item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
             items.append(sub_item)
@@ -680,7 +659,6 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(name, url)
         item.type = 'folder'
-        item.icon = self.icon
         item.complete = True
         item.description = description
         if self.__useJson:
@@ -753,10 +731,8 @@ class Channel(chn_class.Channel):
         channel = result_set["channel"].replace("NED", "NPO ")
         title = "{0[hours]}:{0[minutes]} - {1} - {0[title]}".format(result_set, channel)
         item = MediaItem(title, result_set["url"])
-        item.icon = self.icon
         item.description = result_set["channel"]
         item.type = 'video'
-        item.fanart = self.fanart
         item.HttpHeaders = self.httpHeaders
         item.complete = False
         return item
@@ -836,7 +812,6 @@ class Channel(chn_class.Channel):
         if next_url:
             next_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
             item = MediaItem(next_title, next_url)
-            item.fanart = self.parentItem.fanart
             item.complete = True
             item.HttpHeaders = self.__jsonApiKeyHeader
             items.append(item)
@@ -917,7 +892,6 @@ class Channel(chn_class.Channel):
         item.set_info_label("duration", result_set['duration'])
 
         images = result_set["images"]
-        item.fanart = self.parentItem.fanart
         for image_type, image_data in images.items():
             if image_type == "original" and "original" in image_data["formats"]:
                 continue
@@ -1051,7 +1025,6 @@ class Channel(chn_class.Channel):
         title = " - ".join(set(names))
 
         item = MediaItem(title, video_id)
-        item.icon = self.icon
         item.type = 'video'
         item.complete = False
         item.description = description
@@ -1094,10 +1067,7 @@ class Channel(chn_class.Channel):
 
         url = "https://www.npostart.nl/media/collections/%s?page=1&tileMapping=normal&tileType=asset&pageType=collection" % (result_set[0],)
         item = MediaItem(result_set[1], url)
-        item.thumb = self.parentItem.thumb
-        item.icon = self.parentItem.icon
         item.type = 'folder'
-        item.fanart = self.parentItem.fanart
         item.HttpHeaders["X-Requested-With"] = "XMLHttpRequest"
         item.complete = True
         return item
@@ -1150,7 +1120,6 @@ class Channel(chn_class.Channel):
         else:
             item.thumb = "%s%s" % (self.baseUrlLive, result_set[1].replace("regular_", "").replace("larger_", ""))
 
-        item.icon = self.icon
         item.complete = False
         item.isLive = True
         return item
@@ -1181,8 +1150,6 @@ class Channel(chn_class.Channel):
             return None
 
         item = MediaItem(name, "", type="audio")
-        item.thumb = self.parentItem.thumb
-        item.icon = self.icon
         item.isLive = True
         item.complete = False
 

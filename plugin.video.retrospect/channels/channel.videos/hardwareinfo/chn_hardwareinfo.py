@@ -110,8 +110,6 @@ class Channel(chn_class.Channel):
         title = "Hardware Info TV %04d-%04d" % (result_set[0], result_set[0] + result_set[1])
         item = MediaItem(title, url)
         item.complete = True
-        item.icon = self.icon
-        item.thumb = self.noImage
         return item
 
     def create_video_item(self, result_set):
@@ -146,7 +144,6 @@ class Channel(chn_class.Channel):
         url = "http://www.youtube.com/watch?v=%s" % (video_id, )
 
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.type = 'video'
 
         # date stuff
@@ -168,8 +165,6 @@ class Channel(chn_class.Channel):
         # <media:thumbnail url="http://i.ytimg.com/vi/5sTMRR0_Wo8/0.jpg" height="360" width="480" time="00:09:52.500" xmlns:media="http://search.yahoo.com/mrss/" />
         if thumb_url != "":
             item.thumb = thumb_url
-        else:
-            item.thumb = self.noImage
 
         # finish up
         item.complete = False
@@ -203,7 +198,6 @@ class Channel(chn_class.Channel):
         Logger.trace(url)
 
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.type = 'video'
 
         # date stuff
@@ -214,12 +208,11 @@ class Channel(chn_class.Channel):
         Logger.trace("%s-%s-%s %s:%s", year, month, day, hour, minute)
         item.set_date(year, month, day, hour, minute, 0)
 
-        # # description stuff
+        # description stuff
         description = xml_data.get_single_node_content("description")
         item.description = description
 
-        # # thumbnail stuff
-        item.thumb = self.noImage
+        # thumbnail stuff
         thumb_urls = xml_data.get_tag_attribute("enclosure", {'url': None}, {'type': 'image/jpg'}, firstOnly=False)
         for thumb_url in thumb_urls:
             if thumb_url != "" and "thumb" not in thumb_url:

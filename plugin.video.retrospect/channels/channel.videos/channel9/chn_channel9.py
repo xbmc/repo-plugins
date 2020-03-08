@@ -85,7 +85,6 @@ class Channel(chn_class.Channel):
             url = "%s?sort=atoz" % (url,)
 
         item = MediaItem(name, url)
-        item.icon = self.icon
         item.complete = True
         return item
 
@@ -158,7 +157,6 @@ class Channel(chn_class.Channel):
             url = parse.urljoin(self.baseUrl, HtmlEntityHelper.convert_html_entities(result_set[3]))
             name = "\a.: %s :." % (result_set[4],)
             item = MediaItem(name, url)
-            item.thumb = self.noImage
             item.complete = True
             item.type = "folder"
             return item
@@ -170,7 +168,6 @@ class Channel(chn_class.Channel):
         description = helper.get_tag_content("div", {'class': 'description'})
 
         item = MediaItem(name, "%s/RSS" % (url,))
-        item.thumb = self.noImage
         item.type = 'folder'
         item.description = description.strip()
 
@@ -226,8 +223,6 @@ class Channel(chn_class.Channel):
         item.type = 'video'
         item.complete = False
         item.description = description
-        item.thumb = self.noImage
-        item.icon = self.icon
 
         date = xml_data.get_single_node_content("pubDate")
         date_result = Regexer.do_regex(r"\w+, (\d+) (\w+) (\d+)", date)[-1]

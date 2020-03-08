@@ -86,8 +86,6 @@ class Channel(chn_class.Channel):
                 "\a.: Live TV :.",
                 "https://d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/tv/index.m3u8"
             )
-            live_item.icon = self.icon
-            live_item.thumb = self.noImage
             live_item.type = 'video'
             live_item.dontGroup = True
             now = datetime.datetime.now()
@@ -98,8 +96,6 @@ class Channel(chn_class.Channel):
                 "\a.: Live Radio :.",
                 "https://d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/radio/index.m3u8"
             )
-            live_item.icon = self.icon
-            live_item.thumb = self.noImage
             live_item.type = 'video'
             live_item.dontGroup = True
             now = datetime.datetime.now()
@@ -113,9 +109,6 @@ class Channel(chn_class.Channel):
         url = "{}={}".format(url, int(page) + 1)
 
         item = MediaItem(more, url)
-        item.thumb = self.noImage
-        item.icon = self.icon
-        item.fanart = self.fanart
         item.complete = True
         items.append(item)
 

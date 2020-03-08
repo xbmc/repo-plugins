@@ -134,6 +134,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_TRACE, *args, **kwargs)
         return
 
@@ -150,6 +151,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_DEBUG, *args, **kwargs)
         return
 
@@ -166,6 +168,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_INFO, *args, **kwargs)
         return
 
@@ -182,6 +185,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_ERROR, *args, **kwargs)
         return
 
@@ -198,6 +202,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_WARNING, *args, **kwargs)
         return
 
@@ -214,6 +219,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_CRITICAL, *args, **kwargs)
         return
 
@@ -319,6 +325,7 @@ class Logger:
             timestamp = datetime.datetime.today().strftime(self.timeFormat)
 
             # check for exception info, if present, add to end of string:
+            # noinspection PyArgumentList
             msg = self.__process_exc_info(msg, **kwargs)
 
             # now split lines and write everyline into the logfile:

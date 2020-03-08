@@ -101,7 +101,6 @@ class Channel(chn_class.Channel):
         item.type = 'video'
         item.description = json.get_value("description", fallback=None)
         item.thumb = json.get_value("image", fallback=self.noImage)
-        item.fanart = self.parentItem.fanart
         item.complete = False
         items.append(item)
 

@@ -164,8 +164,6 @@ class Channel(chn_class.Channel):
         if self.liveUrl:
             Logger.debug("Adding live item")
             live_item = MediaItem("\aLive TV", self.liveUrl)
-            live_item.icon = self.icon
-            live_item.thumb = self.noImage
             live_item.dontGroup = True
             items.append(live_item)
 
@@ -198,8 +196,6 @@ class Channel(chn_class.Channel):
             title = "{} - {}".format(self.channelName, LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId))
             live_item = MediaItem(title, self.liveUrl)
             live_item.type = 'video'
-            live_item.icon = self.icon
-            live_item.thumb = self.noImage
             live_item.isLive = True
             if self.channelCode == "rtvdrenthe":
                 # RTV Drenthe actually has a buggy M3u8 without master index.
@@ -231,8 +227,6 @@ class Channel(chn_class.Channel):
             live_item = MediaItem(title, self.liveUrl)
             live_item.type = 'video'
             live_item.complete = True
-            live_item.icon = self.icon
-            live_item.thumb = self.noImage
             live_item.isLive = True
             part = live_item.create_new_empty_media_part()
             for stream in streams:
@@ -327,8 +321,6 @@ class Channel(chn_class.Channel):
             link = parse.urljoin(self.baseUrl, link)
 
         item = MediaItem(title, link)
-        item.icon = self.icon
-        item.thumb = self.noImage
         item.complete = True
         return item
 
@@ -364,7 +356,6 @@ class Channel(chn_class.Channel):
             url = parse.urljoin(self.baseUrl, url)
 
         item = MediaItem(title, url)
-        item.thumb = self.noImage
 
         if media_link:
             item.append_single_stream(media_link, self.channelBitrate)
@@ -382,13 +373,10 @@ class Channel(chn_class.Channel):
         if thumb_url and not thumb_url.startswith("http"):
             thumb_url = parse.urljoin(self.baseUrl, thumb_url)
 
-        item.thumb = self.noImage
         if thumb_url:
             item.thumb = thumb_url
 
-        item.icon = self.icon
         item.type = 'video'
-
         item.description = HtmlHelper.to_text(result_set.get("text"))
 
         posix = result_set.get("timestamp", None)

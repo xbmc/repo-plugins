@@ -288,25 +288,16 @@ class Channel(chn_class.Channel):
             return data, items
 
         cat = MediaItem("\a.: Categori&euml;n :.", "https://www.vrt.be/vrtnu/categorieen.model.json")
-        cat.fanart = self.fanart
-        cat.thumb = self.noImage
-        cat.icon = self.icon
         cat.dontGroup = True
         items.append(cat)
 
         live = MediaItem("\a.: Live Streams :.", "https://services.vrt.be/videoplayer/r/live.json")
-        live.fanart = self.fanart
-        live.thumb = self.noImage
-        live.icon = self.icon
         live.dontGroup = True
         live.isLive = True
         items.append(live)
 
         channel_text = LanguageHelper.get_localized_string(30010)
         channels = MediaItem("\a.: %s :." % (channel_text, ), "#channels")
-        channels.fanart = self.fanart
-        channels.thumb = self.noImage
-        channels.icon = self.icon
         channels.dontGroup = True
         items.append(channels)
 
@@ -365,9 +356,7 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url)
         item.description = title
         item.thumb = thumb
-        item.icon = self.icon
         item.type = 'folder'
-        item.fanart = self.fanart
         item.HttpHeaders = self.httpHeaders
         item.complete = True
         return item
@@ -462,9 +451,7 @@ class Channel(chn_class.Channel):
         # update artswork
         if item.thumb and item.thumb.startswith("//"):
             item.thumb = "https:%s" % (item.thumb, )
-        else:
-            item.thumb = self.noImage
-        item.fanart = self.fanart
+
         return item
 
     def create_folder_item(self, result_set):
@@ -519,8 +506,6 @@ class Channel(chn_class.Channel):
         description = HtmlHelper.to_text(json_data.get_value("description"))
         item = MediaItem(title, url, type="video")
         item.description = description
-        item.thumb = self.parentItem.thumb
-        item.fanart = self.parentItem.fanart
         return item
 
     def create_video_item(self, result_set):
@@ -560,7 +545,6 @@ class Channel(chn_class.Channel):
             item.thumb = "https:%s" % (item.thumb, )
 
         self.__hasAlreadyVideoItems = True
-        item.fanart = self.parentItem.fanart
         return item
 
     def update_live_video(self, item):

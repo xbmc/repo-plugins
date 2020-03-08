@@ -140,8 +140,6 @@ class Channel:
         Logger.debug("Initializing channel (init_channel): %s", self)
 
         # Make sure all images are from the correct absolute location
-        # self.icon = self.get_image_location(self.icon) -> already in the __init__
-        # self.fanart = self.get_image_location(self.fanart) -> already in the __init__
         self.noImage = TextureHandler.instance().get_texture_uri(self, self.noImage)
         return
 
@@ -362,7 +360,6 @@ class Channel:
                         item = MediaItem(title_format.replace("'", "") % (char,), "")
                     else:
                         item = MediaItem(title_format % (char.upper(),), "")
-                    item.thumb = self.noImage
                     item.complete = True
                     # item.set_date(2100 + ord(char[0]), 1, 1, text='')
                     result[char] = item
@@ -436,7 +433,6 @@ class Channel:
         items = []
         if url is None:
             item = MediaItem("Search Not Implented", "", type='video')
-            item.icon = self.icon
             items.append(item)
         else:
             items = []
@@ -487,9 +483,7 @@ class Channel:
         item = MediaItem(title, url)
         item.thumb = result_set.get("thumburl", None)
         item.description = result_set.get("description", "")
-        item.icon = self.icon
         item.complete = True
-        item.fanart = self.fanart
         item.HttpHeaders = self.httpHeaders
         return item
 
@@ -543,7 +537,6 @@ class Channel:
             item = MediaItem("0", "")
 
         item.type = "page"
-        item.fanart = self.fanart
         item.HttpHeaders = self.httpHeaders
 
         Logger.debug("Created '%s' for url %s", item.name, item.url)
@@ -585,9 +578,7 @@ class Channel:
         item = MediaItem(title, url)
         item.description = result_set.get("description", "")
         item.thumb = result_set.get("thumburl", "")
-        item.icon = self.icon
         item.type = 'folder'
-        item.fanart = self.fanart
         item.HttpHeaders = self.httpHeaders
         item.complete = True
         return item
@@ -637,9 +628,7 @@ class Channel:
         item = MediaItem(title, url)
         item.thumb = self._prefix_urls(result_set.get("thumburl", ""))
         item.description = result_set.get("description", "")
-        item.icon = self.icon
         item.type = 'video'
-        item.fanart = self.fanart
         item.HttpHeaders = self.httpHeaders
         item.complete = False
         return item
@@ -679,7 +668,6 @@ class Channel:
         if not item.thumb and self.noImage:
             # no thumb was set yet and no url
             Logger.debug("Setting thumb to %s", item.thumb)
-            item.thumb = self.noImage
 
         if not item.has_media_item_parts():
             item.complete = False

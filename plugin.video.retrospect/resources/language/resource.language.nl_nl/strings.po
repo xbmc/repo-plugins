@@ -1,11 +1,15 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
+# Translators:
+# Bas Rieter <basrieter@gmail.com>, 2020
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Bas Rieter\n"
+"PO-Revision-Date: 2020-03-04 08:53+0000\n"
+"Last-Translator: Bas Rieter <basrieter@gmail.com>, 2020\n"
+"Language-Team: Dutch (Netherlands) (https://www.transifex.com/retrospect/teams/107652/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,7 +18,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "Stream Quality"
-msgstr "Stream Kwaliteit"
+msgstr "Stream kwaliteit"
 
 msgctxt "#30001"
 msgid "Low"
@@ -30,7 +34,7 @@ msgstr "Hoog"
 
 msgctxt "#30004"
 msgid "Release channel for update notifications"
-msgstr "Release kanaal voor update notificaties"
+msgstr "Release kanaal voor update meldingen"
 
 msgctxt "#30005"
 msgid "Stable"
@@ -44,6 +48,10 @@ msgctxt "#30007"
 msgid "via other add-on"
 msgstr "via een andere add-on"
 
+msgctxt "#30008"
+msgid "Retrospect"
+msgstr "Retrospect"
+
 msgctxt "#30009"
 msgid "General"
 msgstr "Algemeen"
@@ -54,7 +62,7 @@ msgstr "Kanalen"
 
 msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
-msgstr "Herstart van Retrospect nodig om te activeren."
+msgstr "Er is een herstart van Retrospect nodig om dit te activeren."
 
 msgctxt "#30012"
 msgid "Login Failed"
@@ -67,6 +75,10 @@ msgstr "Het is niet gelukt om in te loggen voor dit kanaal."
 msgctxt "#30014"
 msgid "Show info"
 msgstr "Toon informatie"
+
+msgctxt "#30015"
+msgid "via missing add-on"
+msgstr "via ontbrekende add-on"
 
 msgctxt "#30016"
 msgid "Sort by"
@@ -82,7 +94,7 @@ msgstr "Datum"
 
 msgctxt "#30019"
 msgid "Show DRM/Paid warning before playback"
-msgstr "Toon DRM waarschuwing voor afspelen"
+msgstr "Toon DRM waarschuwing voor het afspelen"
 
 msgctxt "#30020"
 msgid "Maximum Stream Bitrate"
@@ -130,11 +142,11 @@ msgstr "Poort"
 
 msgctxt "#30031"
 msgid "Cache HTTP(S) requests"
-msgstr "Cache HTTP(S) berichten"
+msgstr "Cache HTTP(S) verzoeken"
 
 msgctxt "#30032"
 msgid "Channel Settings"
-msgstr "Kanaal instellingen"
+msgstr "Kanaalinstellingen"
 
 msgctxt "#30033"
 msgid "Expires at"
@@ -152,13 +164,18 @@ msgctxt "#30036"
 msgid "Password"
 msgstr "Wachtwoord"
 
+# empty string with id 30037
 msgctxt "#30038"
 msgid "Confirm proxy changes"
-msgstr "Bevestig proxy wijzigingen"
+msgstr "Bevestig proxy-wijzigingen"
 
 msgctxt "#30039"
-msgid "Are you sure you want to update all channels for this country with this proxy?"
-msgstr "Weet je zeker dat je alle kanalen van dit land wilt updaten met de geselecteerde proxy?"
+msgid ""
+"Are you sure you want to update all channels for this country with this "
+"proxy?"
+msgstr ""
+"Weet je zeker dat je alle kanalen van dit land wilt updaten met de "
+"geselecteerde proxy?"
 
 msgctxt "#30040"
 msgid "Channels"
@@ -166,7 +183,7 @@ msgstr "Kanalen"
 
 msgctxt "#30041"
 msgid "Show \"All Favourites\" in main Channel listing"
-msgstr "Toon \"Alle Favorieten\" in het kanalenoverzicht"
+msgstr "Toon \"Alle favorieten\" in het kanalenoverzicht"
 
 msgctxt "#30042"
 msgid "Enabled"
@@ -174,15 +191,17 @@ msgstr "Ingeschakeld"
 
 msgctxt "#30043"
 msgid "Folder prefix"
-msgstr "Folder voorvoegsel"
+msgstr "Folder-voorvoegsel"
 
+# empty strings from id 30044 to 30045
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
-msgstr "DRM/GEO-geblokkeerd/Premium filters"
+msgstr "DRM/Geo-geblokkeerd/Premium filters"
 
+# empty string with id 30047
 msgctxt "#30048"
 msgid "Log level"
-msgstr "Log level"
+msgstr "Log-level"
 
 msgctxt "#30049"
 msgid "Premium/Paid"
@@ -190,7 +209,7 @@ msgstr "Premium/Betaald"
 
 msgctxt "#30050"
 msgid "DRM Protected"
-msgstr "DRM-Beschermd"
+msgstr "DRM-beschermd"
 
 msgctxt "#30051"
 msgid "Hidden item"
@@ -204,17 +223,19 @@ msgctxt "#30053"
 msgid "Appearance"
 msgstr "Weergaven"
 
+# empty string with id 30054
 msgctxt "#30055"
 msgid "Advanced"
 msgstr "Geavanceerd"
 
+# empty strings from id 30056 to 30058
 msgctxt "#30059"
 msgid "Other Countries"
 msgstr "Overige landen"
 
 msgctxt "#30060"
 msgid "Enable/Disable channels by country of origin"
-msgstr "Toon/Verberg kanalen gebaseerd op land van herkomst"
+msgstr "Toon/verberg kanalen gebaseerd op land van herkomst"
 
 msgctxt "#30061"
 msgid "Channel Origin"
@@ -230,11 +251,11 @@ msgstr "Kanaal om in te stellen"
 
 msgctxt "#30064"
 msgid "Proxy Group"
-msgstr "Proxy groep"
+msgstr "Proxy-groep"
 
 msgctxt "#30065"
 msgid "Country Settings"
-msgstr "Land instellingen"
+msgstr "Landinstellingen"
 
 msgctxt "#30066"
 msgid "DNS"
@@ -266,7 +287,7 @@ msgstr "Proxy type"
 
 msgctxt "#30073"
 msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
-msgstr "- Geo-geblokkeerde = º, DRM-beschermd = ^ en betaald = ª."
+msgstr "- Geo-geblokkeerd = º, DRM-beschermd = ^ en betaald = ª."
 
 msgctxt "#30074"
 msgid "Disabled"
@@ -314,7 +335,7 @@ msgstr "Enkel streams"
 
 msgctxt "#30085"
 msgid "Geo Location"
-msgstr "Geo Locatie"
+msgstr "Geo locatie"
 
 msgctxt "#30086"
 msgid "Hide Fanart"
@@ -325,24 +346,27 @@ msgid "Mix folders and streams while sorting"
 msgstr "Mix folders en streams bij het sorteren"
 
 msgctxt "#30088"
-msgid "Finnish"
-msgstr "Fins"
+msgid "Show thumbnail as fanart if no fanart is available"
+msgstr "Thumbnails weergeven als fanart als er geen fanart beschikbaar is"
 
 msgctxt "#30089"
 msgid "Password Vault"
-msgstr "Wachtwoord Kluis"
+msgstr "Wachtwoord kluis"
 
 msgctxt "#30090"
-msgid "The 'Password Vault' protects stored password with encryption using a PIN."
-msgstr "De 'Wachtwoord Kluis' beschermt wachtwoorden door middel van encryptie en een PIN."
+msgid ""
+"The 'Password Vault' protects stored password with encryption using a PIN."
+msgstr ""
+"De 'Wachtwoord kluis' beschermt wachtwoorden door middel van encryptie en "
+"een PIN."
 
 msgctxt "#30091"
 msgid "Change Vault Pin"
-msgstr "Verander Kluis PIN"
+msgstr "Verander kluis PIN"
 
 msgctxt "#30092"
 msgid "Reset Vault"
-msgstr "Reset de Kluis"
+msgstr "Reset de kluis"
 
 msgctxt "#30093"
 msgid "Password"
@@ -366,7 +390,7 @@ msgstr "Lokaal IP"
 
 msgctxt "#30098"
 msgid "Logging & Diagnostics"
-msgstr "Logbestanden & Diagnostiek"
+msgstr "Logbestanden & diagnostiek"
 
 msgctxt "#30099"
 msgid "Use HLS instead of Dash for non-encrypted streams"
@@ -398,7 +422,7 @@ msgstr "Sport"
 
 msgctxt "#30106"
 msgid "Kids"
-msgstr "Kids"
+msgstr "Kinderen"
 
 msgctxt "#30107"
 msgid "Tech"
@@ -408,6 +432,8 @@ msgctxt "#30108"
 msgid "Other"
 msgstr "Overige"
 
+# used for list limits
+# empty strings from id 30109 to 30189
 msgctxt "#30190"
 msgid "Monday"
 msgstr "Maandag"
@@ -464,10 +490,13 @@ msgctxt "#30205"
 msgid "1000"
 msgstr "1000"
 
+# language and countries
+# empty strings from id 30206 to 30299
 msgctxt "#30300"
 msgid "Other Countries"
 msgstr "Andere landen"
 
+# nl
 msgctxt "#30301"
 msgid "The Netherlands"
 msgstr "Nederland"
@@ -486,7 +515,7 @@ msgstr "Letland"
 
 msgctxt "#30305"
 msgid "Norway"
-msgstr "Norwegen"
+msgstr "Noorwegen"
 
 msgctxt "#30306"
 msgid "Belgium"
@@ -512,17 +541,18 @@ msgctxt "#30311"
 msgid "Finland"
 msgstr "Finland"
 
+# empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
 msgstr "Zoeken"
 
 msgctxt "#30351"
 msgid "Categories"
-msgstr "Categorien"
+msgstr "Categorieën"
 
 msgctxt "#30352"
 msgid "TV Shows"
-msgstr "TV Programma's"
+msgstr "TV programma's"
 
 msgctxt "#30353"
 msgid "Currently Playing"
@@ -542,7 +572,7 @@ msgstr "Live TV"
 
 msgctxt "#30357"
 msgid "Live Radio"
-msgstr "Live Radio"
+msgstr "Live radio"
 
 msgctxt "#30358"
 msgid "Episodes"
@@ -568,53 +598,65 @@ msgctxt "#30363"
 msgid "Popular"
 msgstr "Populair"
 
+# empty strings from id 30364 to 30400
 msgctxt "#30401"
 msgid "Dutch"
 msgstr "Nederlands"
 
+# se
 msgctxt "#30402"
 msgid "Swedish"
 msgstr "Zweeds"
 
+# lt
 msgctxt "#30403"
 msgid "Lithuanian"
 msgstr "Litouws"
 
+# lv
 msgctxt "#30404"
 msgid "Latvian"
 msgstr "Lets"
 
+# no
 msgctxt "#30405"
 msgid "Norwegian"
-msgstr "Norweegs"
+msgstr "Noors"
 
+# be
 msgctxt "#30406"
 msgid "Belgian"
-msgstr "Belgium"
+msgstr "Belgisch"
 
+# en-gb
 msgctxt "#30407"
 msgid "British"
 msgstr "Brits"
 
+# ee
 msgctxt "#30408"
 msgid "Estonian"
-msgstr "Estisch"
+msgstr "Estlands"
 
+# de
 msgctxt "#30409"
 msgid "German"
 msgstr "Duits"
 
+# dk
 msgctxt "#30410"
 msgid "Danish"
 msgstr "Deens"
 
+# fi
 msgctxt "#30411"
 msgid "Finnish"
 msgstr "Fins"
 
+# empty strings from id 30412 to 30499
 msgctxt "#30500"
 msgid "All Favourites"
-msgstr "Alle Favorieten"
+msgstr "Alle favorieten"
 
 msgctxt "#30501"
 msgid "Favourite"
@@ -642,7 +684,7 @@ msgstr "Verwijder uit favorieten"
 
 msgctxt "#30507"
 msgid "Select Channels »"
-msgstr "Kanalen Selecteren »"
+msgstr "Kanalen selecteren »"
 
 msgctxt "#30508"
 msgid "No favourites available"
@@ -656,21 +698,31 @@ msgctxt "#30510"
 msgid "New version available"
 msgstr "Nieuwe versie beschikbaar"
 
+# empty strings from id 30511 to 30515
 msgctxt "#30516"
 msgid "New Version Available."
 msgstr "Nieuwe versie beschikbaar."
 
 msgctxt "#30517"
-msgid "A new version of %s is available: %s. Please visit the website to download it."
-msgstr "Een nieuwe versie van %s is beschikbaar: %s. Bezoek de website om deze te downloaden."
+msgid ""
+"A new version of %s is available: %s. Please visit the website to download "
+"it."
+msgstr ""
+"Een nieuwe versie van %s is beschikbaar: %s. Bezoek de website om deze te "
+"downloaden."
 
+# empty strings from id 30518 to 30519
 msgctxt "#30520"
 msgid "Repository Warning"
 msgstr "Repository waarschuwing"
 
 msgctxt "#30521"
-msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
-msgstr "De Retrospect repository is niet geïnstalleerd.|Installeer deze om toekomstige updates te ontvangen."
+msgid ""
+"The Retrospect repository is not installed.|Please install it to allow "
+"future updates."
+msgstr ""
+"De Retrospect repository is niet geïnstalleerd.|Installeer deze om "
+"toekomstige updates te ontvangen."
 
 msgctxt "#30522"
 msgid "Channel message"
@@ -688,6 +740,7 @@ msgctxt "#30525"
 msgid "The selected item does not have|any streams associated."
 msgstr "Het geselecteerde item heeft geen streams beschikbaar."
 
+# empty strings from id 30526 to 30527
 msgctxt "#30528"
 msgid "Add-on Settings"
 msgstr "Add-on instellingen"
@@ -698,31 +751,44 @@ msgstr "Ververs lijst"
 
 msgctxt "#30530"
 msgid "Check for Retrospect updates"
-msgstr "Controleer Retrospect updates"
+msgstr "Controleer op nieuwe Retrospect updates"
 
 msgctxt "#30531"
 msgid "Missing 'InputStream Helper' add-on. Cannot install."
-msgstr "'InputStream Helper' add-on ontbreekt. Kan Widevine niet installeren."
+msgstr "'InputStream Helper'-add-on ontbreekt. Kan Widevine niet installeren."
 
 msgctxt "#30532"
 msgid "Install Widevine using 'InputStream Helper' add-on"
-msgstr "Installeer Widevine met de 'InputStream Helper' add-on"
+msgstr "Installeer Widevine met de 'InputStream Helper'-add-on"
 
 msgctxt "#30533"
-msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and Retrospect is not responsible for any results. Nor is it guaranteed that Widevine will be installed correctly."
-msgstr "Het installeren van de Widevine bestanden met de 'InputStream Helper' add-on is op eigen risico en Retrospect is niet verantwoordelijk voor enig resultaat. Ook wordt het niet gegarandeerd dat Widevine succesvol kan worden geinstalleerd."
+msgid ""
+"Installing Widevine libraries using the 'InputStream Helper' add-on is done "
+"at your own risk and Retrospect is not responsible for any results. Nor is "
+"it guaranteed that Widevine will be installed correctly."
+msgstr ""
+"Het installeren van de Widevine bestanden met de 'InputStream Helper'-add-on"
+" is op eigen risico en Retrospect is niet verantwoordelijk voor enig "
+"resultaat. Ook wordt het niet gegarandeerd dat Widevine succesvol kan worden"
+" geïnstalleerd."
 
 msgctxt "#30534"
 msgid "Installation of Widevine failed!"
-msgstr "Widevine installatie mislukt!"
+msgstr "Widevine installatie is mislukt!"
 
 msgctxt "#30535"
 msgid "Installation of Widevine completed!"
-msgstr "Widevine installatie gelukt"
+msgstr "Widevine installatie is gelukt."
 
 msgctxt "#30536"
-msgid "This stream requires Kodi Leia, an enabled InputStream Adaptive add-on and the Widevine library to be installed. The latter can be installed from within the Retrospect add-on settings."
-msgstr "Deze stream heeft minimaal Kodi Leia, een ingeschakelde InputStream Adaptive add-on en geïnstalleerde Widevine libraries nodig. Deze laatste kunnen worden geïnstalleerd via de Retrospect add-on instellingen."
+msgid ""
+"This stream requires Kodi Leia, an enabled InputStream Adaptive add-on and "
+"the Widevine library to be installed. The latter can be installed from "
+"within the Retrospect add-on settings."
+msgstr ""
+"Deze stream heeft minimaal Kodi Leia, een ingeschakelde InputStream Adaptive"
+" add-on en geïnstalleerde Widevine libraries nodig. Deze laatste kunnen "
+"worden geïnstalleerd via de Retrospect add-on instellingen."
 
 msgctxt "#30537"
 msgid "Page"
@@ -730,11 +796,11 @@ msgstr "Pagina"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."
-msgstr "De geselecteerde live stream is nog|niet begonnen."
+msgstr "De geselecteerde live-stream is nog niet begonnen."
 
 msgctxt "#30539"
 msgid "Live stream"
-msgstr "Live uitzending"
+msgstr "Live-uitzending"
 
 msgctxt "#30540"
 msgid "Geo-blocked"
@@ -742,7 +808,7 @@ msgstr "Geo-geblokkeerd"
 
 msgctxt "#30541"
 msgid "Queue item"
-msgstr "Queue item"
+msgstr "Aan afspeellijst toevoegen"
 
 msgctxt "#30542"
 msgid "Starting %s."
@@ -794,27 +860,36 @@ msgstr "Eergisteren"
 
 msgctxt "#30554"
 msgid "DRM Protection"
-msgstr "DRM Bescherming"
+msgstr "DRM-bescherming"
 
 msgctxt "#30555"
 msgid "The selected item is DRM protected and might not play on Kodi."
-msgstr "Het geselecteerde item is DRM-beschermd en werkt wellicht niet in Kodi."
+msgstr ""
+"Het geselecteerde item is DRM-beschermd en werkt wellicht niet in Kodi."
 
 msgctxt "#30556"
 msgid "Initialising channel(s)."
 msgstr "Kanaal/kanalen initialiseren."
 
 msgctxt "#30557"
-msgid "Channels have been updated or installed. Performing first time actions. This could take some time."
-msgstr "Er zijn kanalen bijgewerkt of geïnstalleerd. Initiële acties worden uitgevoerd. Dit kan even duren."
+msgid ""
+"Channels have been updated or installed. Performing first time actions. This"
+" could take some time."
+msgstr ""
+"Er zijn kanalen bijgewerkt of geïnstalleerd. Initiële acties worden "
+"uitgevoerd. Dit kan even duren."
 
 msgctxt "#30558"
 msgid "Fetching Textures"
-msgstr "Textures worden bijgewerkt"
+msgstr "Texturen worden bijgewerkt"
 
 msgctxt "#30559"
-msgid "Fetching missing textures. This could take some time depending on the internet and system speed."
-msgstr "Ontbrekende textures worden opgehaald. Dit kan enige tijd duren afhankelijk van het systeem en internet snelheid."
+msgid ""
+"Fetching missing textures. This could take some time depending on the "
+"internet and system speed."
+msgstr ""
+"Ontbrekende texturen worden opgehaald. Dit kan enige tijd duren afhankelijk "
+"van het systeem en internet snelheid."
 
 msgctxt "#30560"
 msgid "Paid video"
@@ -826,7 +901,8 @@ msgstr "Het geselecteerde item is niet gratis en werkt wellicht niet in Kodi."
 
 msgctxt "#30562"
 msgid "Username and/or password not set in Add-on settings"
-msgstr "Gebruikersnaam en/of wachtwoord niet ingesteld in de Add-on instellingen."
+msgstr ""
+"Gebruikersnaam en/of wachtwoord niet ingesteld in de Add-on instellingen."
 
 msgctxt "#30563"
 msgid "Hide Item"
@@ -841,20 +917,33 @@ msgid "Hidden items"
 msgstr "Items verbergen/tonen"
 
 msgctxt "#30566"
-msgid "To show a hidden item, first configure Retrospect to show hidden items. Then use the context menu's \"Show hidden item\"."
-msgstr "Om een item weer te tonen zal Retrospect eerst geconfigureerd moeten worden om verborgen items te tonen. Daarna kan het context menu gebruikt worden om een item weer te tonen."
+msgid ""
+"To show a hidden item, first configure Retrospect to show hidden items. Then"
+" use the context menu's \"Show hidden item\"."
+msgstr ""
+"Om een item weer te tonen zal Retrospect eerst geconfigureerd moeten worden "
+"om verborgen items te tonen. Daarna kan het context menu gebruikt worden om "
+"een item weer te tonen."
 
 msgctxt "#30567"
 msgid "Add-on(s) disabled"
 msgstr "Add-on(s) uitgeschakeld"
 
 msgctxt "#30568"
-msgid "Some of the Retrospect Channel Add-ons are not enabled which will prevent them from auto updating. The Kodi add-on browser will now open and you should enable all Retrospect related add-ons. See http://kodi.wiki/view/add-on_manager."
-msgstr "Enkele Retrospect kanaal add-ons zijn uitgeschakeld waardoor ze niet auto-updaten. De Kodi addon-verkenner zal worden geopend waarin de Retrospect gerelateerde add-ons kunen worden geactiveerd. Zie http://kodi.wiki/view/add-on_manager."
+msgid ""
+"Some of the Retrospect Channel Add-ons are not enabled which will prevent "
+"them from auto updating. The Kodi add-on browser will now open and you "
+"should enable all Retrospect related add-ons. See http://kodi.wiki/view/add-"
+"on_manager."
+msgstr ""
+"Enkele Retrospect kanaal add-ons zijn uitgeschakeld waardoor ze niet "
+"automatisch bijgewerkt worden. De Kodi addon-verkenner zal worden geopend "
+"waarin de Retrospect gerelateerde add-ons kunnen worden geactiveerd. Zie "
+"http://kodi.wiki/view/add-on_manager."
 
 msgctxt "#30569"
 msgid "Ignore SSL verification errors (Security Risk!)"
-msgstr "SSL verificatiefouten negeren (Veiligheids risico!)"
+msgstr "SSL verificatiefouten negeren (Veiligheidsrisico!)"
 
 msgctxt "#30570"
 msgid "Hide channel initialisation messages"
@@ -866,7 +955,7 @@ msgstr "Gebruik de InputStream Adaptive add-on wanneer mogelijk"
 
 msgctxt "#30572"
 msgid "Retrospect Settings »"
-msgstr "Retrospect Instellingen »"
+msgstr "Retrospect instellingen »"
 
 msgctxt "#30573"
 msgid "(Un-)Hide item »"
@@ -878,15 +967,15 @@ msgstr "Kanaal verbergen"
 
 msgctxt "#30575"
 msgid "Retrospect Favourites »"
-msgstr "Retrospect Favorieten »"
+msgstr "Retrospect favorieten »"
 
 msgctxt "#30576"
 msgid "Select Countries"
-msgstr "Landen Selecteren"
+msgstr "Landen selecteren"
 
 msgctxt "#30577"
-msgid "Channel Bitrate »"
-msgstr "Kanaal Bitrate »"
+msgid "Bitrate »"
+msgstr "Bitrate »"
 
 msgctxt "#30578"
 msgid "InputStream Adaptive add-on settings"
@@ -898,12 +987,13 @@ msgstr "InputStream Adaptive add-on »"
 
 msgctxt "#30580"
 msgid "Channel Options »"
-msgstr "Kanaal Opties »"
+msgstr "Kanaal opties »"
 
 msgctxt "#30581"
 msgid "InputStream Adaptive add-on usage"
 msgstr "InputStream Adaptive add-on gebruik"
 
+# empty strings from id 30582 to 30589
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
 msgstr "Stel een nieuwe Retrospect PIN in"
@@ -933,16 +1023,26 @@ msgid "Incorrect Retrospect PIN specified"
 msgstr "Foutieve Retrospect PIN ingevoerd"
 
 msgctxt "#30597"
-msgid "Resetting the vault will invalidate all existing encrypted values. Are you sure?"
-msgstr "Het resetten van de kluis zal alle bestaande versleutelde instellingen onleesbaar maken. Doorgaan met resetten?"
+msgid ""
+"Resetting the vault will invalidate all existing encrypted values. Are you "
+"sure?"
+msgstr ""
+"Het resetten van de kluis zal alle bestaande versleutelde instellingen "
+"onleesbaar maken. Doorgaan met resetten?"
 
 msgctxt "#30598"
 msgid "Send retrospect.log"
 msgstr "Stuur retrospect.log"
 
 msgctxt "#30599"
-msgid "Logfile posted to: %s\n\nNote the URL (especially the last characters) and use them to refer to these log files in posts."
-msgstr "Logfile verstuurd naar: %s\n\nNoteer deze URL (vooral de laatste karakters) en gebruik deze om naar de logbestanden te verwijzen."
+msgid ""
+"Logfile posted to: %s\n"
+"\n"
+"Note the URL (especially the last characters) and use them to refer to these log files in posts."
+msgstr ""
+"Logfile verstuurd naar: %s\n"
+"\n"
+"Noteer deze URL (vooral de laatste karakters) en gebruik deze om naar de logbestanden te verwijzen."
 
 msgctxt "#30600"
 msgid "Logfile successfully posted"
@@ -957,5 +1057,14 @@ msgid "Error posting logfile"
 msgstr "Fout bij het versturen"
 
 msgctxt "#30603"
-msgid "Retrospect changed add-on ID. To prevent data loss, your user data will now be migrated. After this has been done, please restart Kodi to complete migration. After the restart update any shortcut you had to Retrospect. The Retrospect marked as \"broken\" in \"My add-ons\" can be uninstalled."
-msgstr "De Retrospect add-on ID is veranderd. De gebruikers-data zal nu worden gemigreerd zodat deze behouden blijft. Nadat dit is afgerond dient Kodi herstart te worden. Na de migratie dienen shortcuts naar Retrospect bijgewerkt te worden. De Retrospect add-on die gemarkeerd is als <Defect> onder \"My Add-ons\" kan daarna worden verwijderd."
+msgid ""
+"Retrospect changed add-on ID. To prevent data loss, your user data will now "
+"be migrated. After this has been done, please restart Kodi to complete "
+"migration. After the restart update any shortcut you had to Retrospect. The "
+"Retrospect marked as \"broken\" in \"My add-ons\" can be uninstalled."
+msgstr ""
+"De Retrospect add-on ID is veranderd. De gebruikers-data zal nu worden "
+"gemigreerd zodat deze behouden blijft. Nadat dit is afgerond dient Kodi "
+"herstart te worden. Na de migratie dienen shortcuts naar Retrospect "
+"bijgewerkt te worden. De Retrospect add-on die gemarkeerd is als <Defect> "
+"onder \"My Add-ons\" kan daarna worden verwijderd."

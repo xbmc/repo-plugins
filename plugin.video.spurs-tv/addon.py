@@ -58,9 +58,14 @@ PLAYLIST_XML_FMT = urlunparse((MEDIA_SCHEME, MEDIA_HOST,
                                "index.php/partnerservices2/executeplaylist?" +
                                "partner_id={}&playlist_id={{}}".format(PARTNER_ID), None, None, None))
 
-STADIUM_THUMB = ("https://tot-tmp.azureedge.net/media/4363/"
-                 "newstadium-concept-internalbowl-eveninggamewithfans.jpg?"
-                 "anchor=center&mode=crop&width=750")
+COMPETITIONS = [
+    ('Premier League', 43172, '23676/premier-league-2048.jpg'),
+    ('Champions League', 44679,
+     '1093/ticket-details-for-our-ucl-away-matches-updated-with-real-madrid-champions_league_trophy730.jpg'),
+    ('FA Cup', 43996, '2654/facup_draw730a.jpg'),
+    ('Carabao Cup', 44729, '1203/carabao-cup-spurs-v-barnsley-ticket-news-carabao_cup730.jpg')
+]
+
 
 plugin = Plugin()
 
@@ -184,14 +189,27 @@ def show_index():
 
     yield {
         'label': plugin.get_string(30010),
-        'path': plugin.url_for('show_videos'),
+        'path': plugin.url_for('show_videos_page', tag_id=56552, page=1),
         'thumbnail': plugin.addon.getAddonInfo('icon')
     }
 
     yield {
+        'label': plugin.get_string(30020),
+        'path': plugin.url_for('show_videos_page', tag_id=45833, page=1),
+        'thumbnail': api.image_url('23675/match-highlights.jpg')
+    }
+
+    for competition, tag_id, thumbnail_path in COMPETITIONS:
+        yield {
+            'label': competition,
+            'path': plugin.url_for('show_videos', tag_id=tag_id),
+            'thumbnail': api.image_url(thumbnail_path)
+        }
+
+    yield {
         'label': plugin.get_string(30017),
-        'path': plugin.url_for('show_stadium_index'),
-        'thumbnail': STADIUM_THUMB
+        'path': plugin.url_for('show_stadium_video_gallery'),
+        'thumbnail': api.image_url('4363/newstadium-concept-internalbowl-eveninggamewithfans.jpg')
     }
 
     yield {
@@ -206,16 +224,38 @@ def show_index():
         'thumbnail': os.path.join(image_path, 'YouTube-logo-light.png')
     }
 
-@plugin.route('/videos')
-def show_videos():
-    for video in api.videos():
+
+def video_page_items(tag_id, page):
+    page = int(page)
+    videos, end = api.videos(tag_id, page=page, items=12)
+
+    if page > 1:
+        yield {
+            'label': u'[B]<< {} ({:d})[/B]'.format(plugin.get_string(30013), page - 1),
+            'path': plugin.url_for('show_videos_page', tag_id=tag_id, page=page - 1)
+        }
+    if not end:
+        yield {
+            'label': u'[B]{} ({:d}) >> [/B]'.format(plugin.get_string(30012), page + 1),
+            'path': plugin.url_for('show_videos_page', tag_id=tag_id, page=page + 1)
+        }
+
+    for video in videos:
         yield video_item(video.entry_id, video.title)
 
-@plugin.cached_route('/stadium')
-def show_stadium_index():
-    return list(get_stadium_index())
 
-@plugin.route('/stadium/video-gallery')
+@plugin.route('/tag/<tag_id>/page/<page>')
+def show_videos_page(tag_id, page):
+    return plugin.finish(video_page_items(tag_id, page), update_listing=(int(page) > 1))
+
+
+@plugin.route('/tag/<tag_id>')
+def show_videos(tag_id):
+    videos, _ = api.videos(tag_id=tag_id)
+    return (video_item(video.entry_id, video.title) for video in videos)
+
+
+@plugin.route('/stadium')
 def show_stadium_video_gallery():
     return (video_item(entry_id, title)
             for title, entry_id in new_stadium.get_video_gallery())

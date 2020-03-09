@@ -1,3 +1,8 @@
+v2.16.0 (2020-03-09)
+ - Added pagination to improve loading speed
+ - Added a category for each competition
+ - Removed the old stadium webcam links
+
 v2.15.5 (2019-04-21)
  - Fixed YouTube videos listing
 

@@ -26,15 +26,6 @@ def get_soup(path):
     return BS(response.text, 'html.parser')
 
 
-def get_cams():
-    '''Generator for live stadium cameras'''
-    soup = get_soup("interact")
-    for stream in soup(text=re.compile(RE_LIVE_STREAM)):
-        iframe = stream.find_next('iframe', 'video-class')
-        yield Video(title=RE_LIVE_STREAM.search(stream.string).group(1),
-                    id=os.path.basename(urlparse(iframe['src']).path))
-
-
 def get_video_gallery():
     '''Generator for the new stadium video gallery videos'''
     soup = get_soup("video-gallery")

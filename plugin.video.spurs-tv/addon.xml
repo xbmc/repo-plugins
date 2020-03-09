@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.spurs-tv" name="Spurs TV" version="2.15.5" provider-name="Leopold">
+<addon id="plugin.video.spurs-tv" name="Spurs TV" version="2.16.0" provider-name="Leopold">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.kodiswift" version="0.0.8" optional="false"/>
@@ -26,7 +26,8 @@
       <fanart>resources/images/fanart.jpg</fanart>
     </assets>
     <news>
-      Fixed YouTube videos listing
+      Added pagination
+      Added competition categories
     </news>
   </extension>
 </addon>

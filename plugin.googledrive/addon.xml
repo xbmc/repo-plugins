@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.googledrive" name="Google Drive" version="1.3.3" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.googledrive" name="Google Drive" version="1.3.4" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0" />
-		<import addon="script.module.clouddrive.common" version="1.2.10"/>
+		<import addon="script.module.clouddrive.common" version="1.2.12"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>image audio video</provides>
@@ -32,7 +32,7 @@ Play all your media from Google Drive including Videos, Music and Pictures (incl
   - שימוש ב-Google Drive כמקור
   - תוכנית זו אינה קשורה או ממומנת על ידי Google.
 		</description>
-		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<license>GPL-3.0-or-later</license>
 		<source>https://github.com/cguZZman/plugin.googledrive</source>
 		<forum>https://github.com/cguZZman/plugin.googledrive/issues</forum>
 		<website>https://addons.kodi.tv/show/plugin.googledrive</website>
@@ -41,55 +41,8 @@ Play all your media from Google Drive including Videos, Music and Pictures (incl
 			<fanart>fanart.jpg</fanart>
 		</assets>
 		<news>
-v1.3.3 released Feb 14, 2020:
-- Check for google ban
-v1.3.2 released Feb 12, 2020:
-- Fix video playback in google photos
-- Fix search
-v1.3.1 released Feb 10, 2020:
-- Fix playback
-v1.3.0 released Jan 4, 2019:
-- Ability to specify default playback quality
-v1.2.12 released Oct 2, 2018:
-- Google Photos resolution fix
-v1.2.11 released Sep 20, 2018:
-- Resume points and watched status for strm files in library
-v1.2.10 released Sep 12, 2018:
-- Google Photos fix
-- Order by date fix
-v1.2.8 released Sep 11, 2018:
-- Subtitles assigned in source mode
-- Fixes
-v1.2.6 released Aug 26, 2018:
-- Team drive list fix
-v1.2.4 released Aug 24, 2018:
-- strm files saved in the cloud are exported as is.
-v1.2.3 released Aug 17, 2018:
-- Auto export and watch export folder.
-- Fixes
-v1.2.2 released Jul 15, 2018:
-- Fix requesting files with a single quote in the name in source mode.
-v1.2.1 released Jul 14, 2018:
-- Source mode fix
-v1.2.0 released Jul 12, 2018:
-- Team Drive support
-v1.1.0 released Jul 11, 2018:
-- New mode for source and download services. Both moved to respective addons.
-- Source service fixed.
-v1.0.5 released July 6, 2018:
-- Fix display more than 100 files in source mode
-v1.0.4 released July 5, 2018:
-- Fix exporting and google photos
-v1.0.3 released April 13, 2018:
-- Fix bug playing files with a single quote in the name.
-v1.0.2 released March 15, 2018:
-- Bug fixes
-- Auto export strm
-- Select stream format
-v1.0.1 released Nov 30, 2017:
-- Bug fixes
-v1.0.0 Nov 6, 2017:
-- First release
+v1.3.4 released Mar 3, 2020:
+- NFO export
 		</news>
 		<disclaimer lang="en_GB">
 This cloud drive addon uses a third-party authentication mechanism commonly known as OAuth 2.0.

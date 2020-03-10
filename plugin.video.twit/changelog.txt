@@ -1,0 +1,157 @@
+Version 2.1.8
+code cleanup and refactor for Python 2/3 compatibility
+
+Version 2.1.7
+Added Norwegian translation thanks to solbu
+Updated show listings
+Twit live
+	removed dead streams
+	added Mixer HLS stream
+	added play from Youtube add-on
+	*you may need to adjust your stream setting
+
+Version 2.1.6
+fix for format changes in RSS feed
+fix Ustream live feed
+
+Version 2.1.5
+release for Kodi repository
+upgrade language file to strings.po
+
+Version 2.1.4
+testing/beta release
+fix/workaround for Python V2 SSL bug
+
+Version 2.1.3
+bug fixes
+release for Kodi repository
+
+Version 2.1.2
+testing/beta release
+fix script errors on systems running python 2.6(android)
+fix for shows "Radio Leo" and "All TWiT.tv Shows"
+we now use the RSS feed for the initial episode directory of a show
+
+Version 2.1.1
+fix website changes
+
+Version 2.1.0
+code cleanup
+release for Kodi repository
+
+Version 2.0.9
+testing/beta reworked for the twit.tv update
+added search
+added download option to context menu for episodes
+
+Version 2.0.8
+fix new shows not being added
+fix launching ircchat addon
+update the shows list
+
+Version 2.0.7
+fix new shows being cached with a bad urls
+fix remove retired shows from the active show cache
+
+Version 2.0.6
+fix the tech guy episodes
+release to xbmc.org repository
+
+Version 2.0.5
+testing/beta release
+code overhaul
+fix justin & ustream live streams, now using hls
+added higher res artwork
+added setting 'use show art as fanart' default is True 
+
+Version 2.0.4
+fix TWiT Live urls changed
+
+Version 2.0.3
+added retired shows
+
+Version 2.0.2
+fix new shows, this week in youtube, omgcraft
+added support for IrcChat addon when watching twit live
+added add-on setting for setting the view mode for episodes
+
+Version 2.0.1
+fix ustream live stream
+
+Version 2.0.0
+major version bump for frodo
+fix latest episodes, we now scrape the web-page as the rss isn't viable anymore
+added set-content-type as tv-shows, episodes; this enables more view modes
+added flowsoft hls strems for twit live
+added add-on setting "TWiT Live", select from the various live streams here instead of adding a directory
+
+Version 1.1.0
+fix for website changes
+added support for 'content_type' parameter, when launched as a music add-on, the playback setting is ignored and audio will be selected 
+
+Version 1.0.9
+added scraping and caching of shows
+
+Version 1.0.8
+fix show listings for "The Tech Guy" and "Before You Buy"
+
+Version 1.0.7
+fix for website changes
+
+Version 1.0.6
+fix for UnicodeDecodeError
+added Trey's Variety Hour
+
+Version  1.0.5
+fix for site changes
+new playback settings
+
+Version 1.0.4
+added new shows - Game On, Before You Buy
+added new category - Latest Episodes, this scrapes http://twit.tv/node/feed
+fix for episodes that don't yet have video links 
+
+Version 1.0.3
+updated shows
+new icon and fanart
+added TWiT Live via Justin.tv - 1 Mbs
+
+Version 1.0.2
+added TWiT Live via Ustream - 1.5 Mbs
+
+Version 1.0.1
+show updates
+
+Version 1.0.0
+new for eden-pre
+
+Version 0.0.9
+added new shows: Triangulation, Mostly Photo, All About Android
+added links for the live stream
+
+Version 0.0.8
+fixed an issue with TNT
+
+Version 0.0.7
+twit live no longer ask if you want to resume
+resume working again for most shows
+
+Version 0.0.6
+now if video isn't up on the web site, we get the latest episode from the rss: feed
+
+Version 0.0.5
+added five new shows
+added addon settings for video quality
+
+Version 0.0.4
+fixed an issue with TNT
+
+Version 0.0.3
+added release date to title
+added subtitle as plot
+
+Version 0.0.2
+updated icon.png
+
+Version 0.0.1
+inital

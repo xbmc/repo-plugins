@@ -527,8 +527,8 @@ class HbogoHandler(object):
         except ImportError:
             from urllib.parse import quote_plus as quote, urlencode  # noqa: F401
         self.reset_media_type_counters()
-        self.addCat(self.language(30734), "INTERNAL_SEARCH", self.get_media_resource('search.png'), HbogoConstants.ACTION_SEARCH)
-        self.addCat(self.language(30735), "DEL_SEARCH_HISTORY", self.get_media_resource('remove.png'), HbogoConstants.ACTION_SEARCH_CLEAR_HISTORY)
+        self.addCat(py2_encode(self.language(30734)), "INTERNAL_SEARCH", self.get_media_resource('search.png'), HbogoConstants.ACTION_SEARCH)
+        self.addCat(py2_encode(self.language(30735)), "DEL_SEARCH_HISTORY", self.get_media_resource('remove.png'), HbogoConstants.ACTION_SEARCH_CLEAR_HISTORY)
         history_items = self.get_search_history()
         for history_itm in history_items:
             tmp_url = '%s?%s' % (self.base_url, urlencode({

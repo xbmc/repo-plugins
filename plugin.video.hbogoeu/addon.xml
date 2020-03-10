@@ -1,4 +1,4 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.3.9">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.3.10">
   <requires>
     <import addon="xbmc.python" version="2.26.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
@@ -44,12 +44,7 @@ If an official app is available for your platform, use it instead of this.
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-- Update to hr_hr translation (by @arvvoid)
-- Update to hu_hu translation (by @Ajnasz)
-- Update to es_es translation (by @boblo1)
-- Update to ro_ro translation (by @tmihai20)
-- Update to fi_fi translation (by @jumakki)
-- Minor fixes
+- Fixed encoding error on opening search category
     </news>
     <assets>
      <icon>resources/icon.png</icon>

@@ -63,37 +63,6 @@ def getAlphas():
   alphas.append("0-9")
   return alphas
 
-def getChannels():
-  """
-  Returns the live channels from the page "Kanaler".
-  """
-  time_str = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
-  url = "/program-guide/programs?channel=svt1,svt2,svt24,svtb,svtk&includePartiallyOverlapping=true&from={timestamp}&to={timestamp}".format(timestamp=time_str)
-  json_data = __get_svt_json(url)
-  if json_data is None:
-    return None
-  items = []
-  for channel in json_data["hits"]:
-    program_title = channel["programmeTitle"]
-    ch_id = channel["channel"].lower()
-    if channel["channel"] == "SVTK":
-      ch_id="kunskapskanalen"
-    elif channel["channel"] == "SVTB":
-      ch_id="barnkanalen"
-    title = ch_id.upper() + " - " + program_title
-    if channel["live"]:
-      title = title + " [COLOR red]Live[/COLOR]"
-    info = {
-      "plot" : channel.get("longDescription", "No description"),
-      "title" : title
-    }
-    video_id = "ch-" + ch_id
-    thumbnail = ""
-    geo_restricted = True # Channels are always geo restricted
-    video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info)
-    items.append(video_item)
-  return items
-
 def getVideoJSON(video_id):
   video_version_id = video_id
   if video_id.startswith("/video/"):

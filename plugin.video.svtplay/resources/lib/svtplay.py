@@ -176,7 +176,7 @@ class SvtPlay:
         self.__create_dir_items(items)
 
     def view_channels(self):
-        channels = svt.getChannels()
+        channels = self.graphql.getChannels()
         if not channels:
             return
         self.__create_dir_items(channels)

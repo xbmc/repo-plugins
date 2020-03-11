@@ -24,6 +24,12 @@ class PlayItem(object):
         self.info = info
         self.fanart = fanart
 
+    def __str__(self):
+        return "{title:" + self.title + ", id:" + self.id + "}"
+
+    def __repr__(self):
+        return self.__str__()
+
 class VideoItem(PlayItem):
     """
     A video list item.

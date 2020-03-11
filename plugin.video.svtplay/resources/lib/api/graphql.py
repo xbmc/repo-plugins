@@ -206,6 +206,30 @@ class GraphQL:
       "blockedForChildren" : json_data["listablesByEscenicId"][0]["restrictions"]["blockedForChildren"]
     }
 
+  def getChannels(self):
+    operation_name = "ChannelsQuery"
+    query_hash = "65ceeccf67cc8334bc14eb495eb921cffebf34300562900076958856e1a58d37"
+    json_data = self.__get(operation_name, query_hash)
+    if not json_data:
+      return None
+    channels = []
+    for channel in json_data["channels"]["channels"]:
+      video_id = channel["id"]
+      running_show = channel.get("running", None)
+      if not running_show:
+        continue
+      title = channel["name"] + " - " + running_show["name"]
+      info = {
+        "plot": running_show["description"],
+        "title": title
+      }
+      geo_restricted = True # Channels are always geo restricted
+      thumbnail = self.get_thumbnail_url(running_show["image"]["id"], running_show["image"]["changed"])
+      video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info)
+      channels.append(video_item)
+    return channels
+
+
   def get_thumbnail_url(self, image_id, image_changed):
     return self.__get_image_url(image_id, image_changed, "thumbnail")
 

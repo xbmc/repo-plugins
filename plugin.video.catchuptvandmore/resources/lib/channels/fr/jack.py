@@ -30,7 +30,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import re
 import json
@@ -120,8 +120,6 @@ def list_videos(plugin, item_id, program_title, **kwargs):
                                 get_video_url,
                                 item_id=item_id,
                                 video_id=video_id,
-                                video_label=LABELS[item_id] + ' - ' +
-                                item.label,
                                 video_source=video_source)
                             item_post_treatment(
                                 item, is_playable=True, is_downloadable=True)
@@ -134,12 +132,11 @@ def get_video_url(plugin,
                   video_id,
                   video_source,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     if 'youtube' in video_source:
         return resolver_proxy.get_stream_youtube(plugin, video_id,
-                                                 download_mode, video_label)
+                                                 download_mode)
     elif 'dailymotion' in video_source:
         return resolver_proxy.get_stream_dailymotion(
-            plugin, video_id, download_mode, video_label)
+            plugin, video_id, download_mode)

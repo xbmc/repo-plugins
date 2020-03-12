@@ -36,53 +36,88 @@ the addon's tree architecture.
 """
 
 menu = {
-    'be_replay': {
-        'callback': 'generic_menu',
-        'thumb': 'channels/be.png'
-    },
-    'ca_replay': {
-        'callback': 'generic_menu',
-        'thumb': 'channels/ca.png'
-    },
     'fr_replay': {
         'callback': 'generic_menu',
-        'thumb': 'channels/fr.png'
-    },
-    'jp_replay': {
-        'callback': 'generic_menu',
-        'thumb': 'channels/jp.png'
+        'thumb': 'channels/fr.png',
+        'enabled': True,
+        'order': 1
     },
     'ch_replay': {
         'callback': 'generic_menu',
-        'thumb': 'channels/ch.png'
+        'thumb': 'channels/ch.png',
+        'enabled': True,
+        'order': 2
     },
     'uk_replay': {
         'callback': 'generic_menu',
-        'thumb': 'channels/uk.png'
+        'thumb': 'channels/uk.png',
+        'enabled': True,
+        'order': 3
     },
     'wo_replay': {
         'callback': 'generic_menu',
-        'thumb': 'channels/wo.png'
+        'thumb': 'channels/wo.png',
+        'enabled': True,
+        'order': 4
+    },
+    'be_replay': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/be.png',
+        'enabled': True,
+        'order': 5
+    },
+    'jp_replay': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/jp.png',
+        'enabled': True,
+        'order': 6
+    },
+    'ca_replay': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/ca.png',
+        'enabled': True,
+        'order': 7
     },
     'us_replay': {
         'callback': 'generic_menu',
-        'thumb': 'channels/us.png'
+        'thumb': 'channels/us.png',
+        'enabled': True,
+        'order': 8
     },
-    # ,
-    # 'es_replay': {
-    #    'callback': 'generic_menu',
-    #    'thumb': 'channels/es.png'
-    # }
-    'it_replay': {
+    'pl_replay': {
         'callback': 'generic_menu',
-        'thumb': 'channels/it.png'
+        'thumb': 'channels/us.png',
+        'enabled': False,
+        'order': 9
+    },
+    'es_replay': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/es.png',
+        'enabled': False,
+        'order': 10
     },
     'tn_replay': {
         'callback': 'generic_menu',
-        'thumb': 'channels/tn.png'
+        'thumb': 'channels/tn.png',
+        'enabled': True,
+        'order': 11
+    },
+    'it_replay': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/it.png',
+        'enabled': True,
+        'order': 12
     },
     'nl_replay': {
         'callback': 'generic_menu',
-        'thumb': 'channels/nl.png'
+        'thumb': 'channels/nl.png',
+        'enabled': True,
+        'order': 13
+    },
+    'cn_replay': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/nl.png',
+        'enabled': False,
+        'order': 14
     }
 }

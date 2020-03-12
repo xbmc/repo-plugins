@@ -42,12 +42,16 @@ menu = {
         'thumb': 'channels/es/realmadridtv.png',
         'fanart': 'channels/es/realmadridtv_fanart.jpg',
         'module': 'resources.lib.channels.es.realmadridtv',
-        'available_languages': ['EN', 'ES']
+        'available_languages': ['EN', 'ES'],
+        'enabled': True,
+        'order': 8
     },
     'paramountchannel_es': {
         'callback': 'live_bridge',
         'thumb': 'channels/es/paramountchannel_es.png',
         'fanart': 'channels/es/paramountchannel_es_fanart.jpg',
-        'module': 'resources.lib.channels.es.paramountchannel_es'
+        'module': 'resources.lib.channels.es.paramountchannel_es',
+        'enabled': True,
+        'order': 16
     }
 }

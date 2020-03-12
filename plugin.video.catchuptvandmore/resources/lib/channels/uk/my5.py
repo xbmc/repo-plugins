@@ -29,7 +29,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import json
 import urlquick
@@ -146,14 +146,13 @@ def list_videos(plugin, item_id, season_id, **kwargs):
         item.set_callback(
             get_video_url,
             item_id=item_id,
-            video_id=video_id,
-            item_dict=item2dict(item))
+            video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=False)
         yield item
 
 
 @Resolver.register
-def get_video_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_video_url(plugin, item_id, video_id, **kwargs):
 
     # TO UNCOMMENT
     # resp = urlquick.get(URL_VIDEO_DATAS % video_id)

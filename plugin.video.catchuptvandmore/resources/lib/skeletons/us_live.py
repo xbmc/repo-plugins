@@ -37,28 +37,36 @@ the addon's tree architecture.
 """
 
 menu = {
-    'pbskids': {
+    'cbsnews': {
         'callback': 'live_bridge',
-        'thumb': 'channels/us/pbskids.png',
-        'fanart': 'channels/us/pbskids_fanart.jpg',
-        'module': 'resources.lib.channels.us.pbskids'
+        'thumb': 'channels/us/cbsnews.png',
+        'fanart': 'channels/us/cbsnews_fanart.jpg',
+        'module': 'resources.lib.channels.us.cbsnews',
+        'enabled': True,
+        'order': 1
     },
     'tbd': {
         'callback': 'live_bridge',
         'thumb': 'channels/us/tbd.png',
         'fanart': 'channels/us/tbd_fanart.jpg',
-        'module': 'resources.lib.channels.us.tbd'
-    },
-    'cbsnews': {
-        'callback': 'live_bridge',
-        'thumb': 'channels/us/cbsnews.png',
-        'fanart': 'channels/us/cbsnews_fanart.jpg',
-        'module': 'resources.lib.channels.us.cbsnews'
+        'module': 'resources.lib.channels.us.tbd',
+        'enabled': True,
+        'order': 2
     },
     'abcnews': {
         'callback': 'live_bridge',
         'thumb': 'channels/us/abcnews.png',
         'fanart': 'channels/us/abcnews_fanart.jpg',
-        'module': 'resources.lib.channels.us.abcnews'
+        'module': 'resources.lib.channels.us.abcnews',
+        'enabled': True,
+        'order': 4
+    },
+    'pbskids': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/us/pbskids.png',
+        'fanart': 'channels/us/pbskids_fanart.jpg',
+        'module': 'resources.lib.channels.us.pbskids',
+        'enabled': True,
+        'order': 5
     }
 }

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     Catch-up TV & More
-    Copyright (C) 2019  SylvainCecchetto
+    Copyright (C) 2016  SylvainCecchetto
 
     This file is part of Catch-up TV & More.
 
@@ -25,30 +25,24 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Route, Resolver, Listitem, utils, Script
-
-from resources.lib.labels import LABELS
-from resources.lib import web_utils
-from resources.lib.listitem_utils import item_post_treatment, item2dict
-
-import re
-import urlquick
-
-# TODO
-# Add Replay
-
-URL_ROOT = "http://grandlittoral.tv"
-
-URL_LIVE = "http://www.creacast.com/play.php?su=grandlittoral"
+import numbers
+import time
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def old_div(a, b):
+    """Python 2 and 3 Integer division cheat (https://python-future.org/compatible_idioms.html#division)
+
+    """
+    if isinstance(a, numbers.Integral) and isinstance(b, numbers.Integral):
+        return a // b
+    else:
+        return a / b
 
 
-@Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def current_timestamp():
+    """Get current timestamp (Unix time, the same given here https://timestamp.online)
 
-    resp = urlquick.get(
-        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    return re.compile(r'file\: \"(.*?)\"').findall(resp.text)[0]
+    Returns:
+        float: Current timestamp
+    """
+    return time.time()

@@ -27,12 +27,11 @@ import urlquick
 import json
 import re
 from kodi_six import xbmcgui
-import resources.lib.cq_utils as cqu
 
 from resources.lib.labels import LABELS
 from resources.lib import download
 from resources.lib import resolver_proxy
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 # TO DO
 # Fix Bonus
@@ -196,9 +195,7 @@ def list_videos(plugin, item_id, category_url, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_url=video_url,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          item_dict=item2dict(item))
+                          video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -211,9 +208,7 @@ def list_videos(plugin, item_id, category_url, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_url=video_url,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          item_dict=item2dict(item))
+                          video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -236,9 +231,7 @@ def list_videos_bonus(plugin, item_id, category_url, page, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_url=video_url,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          item_dict=item2dict(item))
+                          video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -251,9 +244,7 @@ def list_videos_bonus(plugin, item_id, category_url, page, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_url=video_url,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          item_dict=item2dict(item))
+                          video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -271,9 +262,7 @@ def list_videos_bonus(plugin, item_id, category_url, page, **kwargs):
 def get_video_url(plugin,
                   item_id,
                   video_url,
-                  item_dict=None,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
     """Get video URL and start video player"""
     url_selected = ''
@@ -321,7 +310,7 @@ def get_video_url(plugin,
             json_value_parser = json.loads(json_value.text)
             id_diffusion = json_value_parser["video_id"]
             return resolver_proxy.get_francetv_video_stream(
-                plugin, id_diffusion, item_dict, download_mode=download_mode)
+                plugin, id_diffusion, download_mode=download_mode)
 
     final_url = ''
     if len(all_datas_videos_quality) > 1:
@@ -336,6 +325,6 @@ def get_video_url(plugin,
         final_url = all_datas_videos_path[0]
 
     if download_mode:
-        return download.download_video(final_url, video_label)
+        return download.download_video(final_url)
 
     return final_url

@@ -31,7 +31,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
@@ -56,25 +56,19 @@ def list_categories(plugin, item_id, **kwargs):
     - ...
     """
     resp = urlquick.get(URL_ROOT)
-    root = resp.parse()
+    root = resp.parse("div", attrs={"id": "menu_right_replay"})
 
-    for category_datas in root.iterfind(".//a[@class='un_bloc_bloc']"):
-        if 'catch-up' in category_datas.get('href'):
-            category_title = category_datas.find(
-                ".//div[@class='un_bloc_btn']").text.strip()
-            category_image = re.compile(r'background\:url\(\'(.*?)\'').findall(
-                category_datas.find(".//div[@class='un_bloc_img_zoom']").get(
-                    'style'))[0]
-            category_url = category_datas.get('href')
+    for category_datas in root.iterfind(".//a"):
+        category_title = category_datas.text
+        category_url = category_datas.get('href')
 
-            item = Listitem()
-            item.label = category_title
-            item.art['thumb'] = category_image
-            item.set_callback(list_videos,
-                              item_id=item_id,
-                              category_url=category_url)
-            item_post_treatment(item)
-            yield item
+        item = Listitem()
+        item.label = category_title
+        item.set_callback(list_videos,
+                          item_id=item_id,
+                          category_url=category_url)
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register
@@ -99,7 +93,6 @@ def list_videos(plugin, item_id, category_url, **kwargs):
         item.set_callback(get_video_url,
                           item_id=item_id,
                           video_id=video_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           referer=category_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -110,9 +103,8 @@ def get_video_url(plugin,
                   item_id,
                   video_id,
                   download_mode=False,
-                  video_label=None,
                   referer=None,
                   **kwargs):
 
     return resolver_proxy.get_stream_vimeo(plugin, video_id, download_mode,
-                                           video_label, referer)
+                                           referer)

@@ -37,53 +37,68 @@ the addon's tree architecture.
 """
 
 menu = {
-    'questod': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/uk/questod.png',
-        'fanart': 'channels/uk/questod_fanart.jpg',
-        'module': 'resources.lib.channels.uk.questod'
-    },
     'blaze': {
         'callback': 'replay_bridge',
         'thumb': 'channels/uk/blaze.png',
         'fanart': 'channels/uk/blaze_fanart.jpg',
-        'module': 'resources.lib.channels.uk.blaze'
+        'module': 'resources.lib.channels.uk.blaze',
+        'enabled': True,
+        'order': 1
     },
     'skynews': {
         'callback': 'replay_bridge',
         'thumb': 'channels/uk/skynews.png',
         'fanart': 'channels/uk/skynews_fanart.jpg',
-        'module': 'resources.lib.channels.uk.sky'
+        'module': 'resources.lib.channels.uk.sky',
+        'enabled': True,
+        'order': 6
     },
     'skysports': {
         'callback': 'replay_bridge',
         'thumb': 'channels/uk/skysports.png',
         'fanart': 'channels/uk/skysports_fanart.jpg',
-        'module': 'resources.lib.channels.uk.sky'
+        'module': 'resources.lib.channels.uk.sky',
+        'enabled': True,
+        'order': 7
     },
     'stv': {
         'callback': 'replay_bridge',
         'thumb': 'channels/uk/stv.png',
         'fanart': 'channels/uk/stv_fanart.jpg',
-        'module': 'resources.lib.channels.uk.stv'
+        'module': 'resources.lib.channels.uk.stv',
+        'enabled': True,
+        'order': 8
+    },
+    'questod': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/uk/questod.png',
+        'fanart': 'channels/uk/questod_fanart.jpg',
+        'module': 'resources.lib.channels.uk.questod',
+        'enabled': True,
+        'order': 9
     },
     'uktvplay': {
         'callback': 'replay_bridge',
         'thumb': 'channels/uk/uktvplay.png',
         'fanart': 'channels/uk/uktvplay_fanart.jpg',
-        'module': 'resources.lib.channels.uk.uktvplay'
+        'module': 'resources.lib.channels.uk.uktvplay',
+        'enabled': True,
+        'order': 17
+    },
+    'fiveusa': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/uk/fiveusa.png',
+        'fanart': 'channels/uk/fiveusa_fanart.jpg',
+        'module': 'resources.lib.channels.uk.my5',
+        'enabled': False,
+        'order': 20
     },
     'bristoltv': {
         'callback': 'replay_bridge',
         'thumb': 'channels/uk/bristoltv.png',
         'fanart': 'channels/uk/bristoltv_fanart.jpg',
-        'module': 'resources.lib.channels.uk.bristoltv'
+        'module': 'resources.lib.channels.uk.bristoltv',
+        'enabled': True,
+        'order': 21
     }
-    # ,
-    # 'fiveusa': {
-    #     'callback': 'replay_bridge',
-    #     'thumb': 'channels/uk/fiveusa.png',
-    #     'fanart': 'channels/uk/fiveusa_fanart.jpg',
-    #     'module': 'resources.lib.channels.uk.my5'
-    # }
 }

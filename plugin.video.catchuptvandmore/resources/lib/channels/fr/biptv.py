@@ -29,8 +29,9 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
+import os
 import re
 import urlquick
 
@@ -42,13 +43,25 @@ URL_ROOT = "http://www.biptv.tv"
 URL_LIVE = URL_ROOT + "/direct.html"
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(
         URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    return re.compile(r'source src=\"(.*?)\"').findall(resp.text)[0]
+    url_m3u8 = re.compile(r'source src=\"(.*?)\"').findall(resp.text)[0]
+    root = os.path.dirname(url_m3u8)
+    manifest = urlquick.get(
+        url_m3u8,
+        headers={'User-Agent': web_utils.get_random_ua()},
+        max_age=-1)
+
+    real_stream = ''
+    lines = manifest.text.splitlines()
+    for k in range(0, len(lines) - 1):
+        if 'biptvstream_orig' in lines[k]:
+            real_stream = root + '/' + lines[k]
+    return real_stream

@@ -30,7 +30,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
@@ -254,8 +254,6 @@ def list_programs(plugin, item_id, sub_category_code_name, sub_category_url,
 
                     item.set_callback(get_video_url,
                                       item_id=item_id,
-                                      video_label=LABELS[item_id] + ' - ' +
-                                      item.label,
                                       video_id=video_id)
                     item_post_treatment(item,
                                         is_playable=True,
@@ -304,7 +302,7 @@ def list_videos_sub_category(plugin, item_id, sub_category_url,
                              **kwargs):
 
     if '/api/' in sub_category_url:
-        resp = urlquick.get(sub_category_url.replace('https://api-cdn.arte.tv', 'https://www.arte.tv/guide'))
+        resp = urlquick.get(sub_category_url.replace('https://api-internal.arte.tv', 'https://www.arte.tv/guide'))
         json_parser = json.loads(resp.text)
         for video_datas in json_parser['data']:
             if video_datas['subtitle'] is not None:
@@ -329,8 +327,6 @@ def list_videos_sub_category(plugin, item_id, sub_category_url,
 
             item.set_callback(get_video_url,
                               item_id=item_id,
-                              video_label=LABELS[item_id] + ' - ' +
-                              item.label,
                               video_id=video_id)
             item_post_treatment(item,
                                 is_playable=True,
@@ -373,8 +369,6 @@ def list_videos_sub_category(plugin, item_id, sub_category_url,
 
                     item.set_callback(get_video_url,
                                       item_id=item_id,
-                                      video_label=LABELS[item_id] + ' - ' +
-                                      item.label,
                                       video_id=video_id)
                     item_post_treatment(item,
                                         is_playable=True,
@@ -422,7 +416,6 @@ def list_videos_program(plugin, item_id, sub_category_code_name, program_id,
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -433,7 +426,7 @@ def list_videos_program_concert(plugin, item_id, program_url,
                                 **kwargs):
 
     if '/api/' in program_url:
-        resp = urlquick.get(program_url.replace('https://api-cdn.arte.tv', 'https://www.arte.tv/guide'))
+        resp = urlquick.get(program_url.replace('https://api-internal.arte.tv', 'https://www.arte.tv/guide'))
         json_parser = json.loads(resp.text)
         for video_datas in json_parser['data']:
             if video_datas['subtitle'] is not None:
@@ -458,8 +451,6 @@ def list_videos_program_concert(plugin, item_id, program_url,
 
             item.set_callback(get_video_url,
                               item_id=item_id,
-                              video_label=LABELS[item_id] + ' - ' +
-                              item.label,
                               video_id=video_id)
             item_post_treatment(item,
                                 is_playable=True,
@@ -500,8 +491,6 @@ def list_videos_program_concert(plugin, item_id, program_url,
 
             item.set_callback(get_video_url,
                               item_id=item_id,
-                              video_label=LABELS[item_id] + ' - ' +
-                              item.label,
                               video_id=video_id)
             item_post_treatment(item,
                                 is_playable=True,
@@ -518,7 +507,6 @@ def get_video_url(plugin,
                   item_id,
                   video_id,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     resp = urlquick.get(URL_REPLAY_ARTE % (DESIRED_LANGUAGE.lower(), video_id))
@@ -552,26 +540,18 @@ def get_video_url(plugin,
         url_selected = stream_datas['HTTPS_HQ_1']['url']
 
     if download_mode:
-        return download.download_video(url_selected, video_label)
+        return download.download_video(url_selected)
 
     return url_selected
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
-    final_language = DESIRED_LANGUAGE
-
-    # If we come from the M3U file and the language
-    # is set in the M3U URL, then we overwrite
-    # Catch Up TV & More language setting
-    if type(item_dict) is not dict:
-        item_dict = eval(item_dict)
-    if 'language' in item_dict:
-        final_language = item_dict['language']
+def get_live_url(plugin, item_id, video_id, **kwargs):
+    final_language = kwargs.get('language', DESIRED_LANGUAGE)
 
     resp = urlquick.get(URL_LIVE_ARTE % final_language.lower())
     json_parser = json.loads(resp.text)

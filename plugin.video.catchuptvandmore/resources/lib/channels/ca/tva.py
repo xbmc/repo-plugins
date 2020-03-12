@@ -31,11 +31,15 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
 import urlquick
+try:
+    from urllib.parse import quote
+except ImportError:
+    from urllib import quote
 
 # TO DO
 # Add info LIVE TV
@@ -48,6 +52,8 @@ URL_LIVE = URL_ROOT + '/page/direct'
 URL_EMISSIONS = URL_ROOT + '/page/touslescontenus'
 
 URL_VIDEOS = URL_ROOT + '/page/rattrapage'
+
+URL_SEARCH = URL_ROOT + '/search'
 
 
 def replay_entry(plugin, item_id, **kwargs):
@@ -78,6 +84,56 @@ def list_categories(plugin, item_id, **kwargs):
     item_post_treatment(item)
     yield item
 
+    item = Listitem.search(list_videos_search, item_id=item_id)
+    item_post_treatment(item)
+    yield item
+
+
+@Route.register
+def list_videos_search(plugin, item_id, search_query, page=1, **kwargs):
+    resp = urlquick.get(URL_SEARCH + '/' + quote(search_query) + '/' + str(page))
+    json_parser = json.loads(
+        re.compile(r'__INITIAL_STATE__ = (.*?)\}\;').findall(resp.text)[0] +
+        '}')
+
+    data_account = json_parser["configurations"]["accountId"]
+    data_player = json_parser["configurations"]["playerId"]
+    at_least_one = False
+    for video_datas in json_parser['items']:
+
+        if '_' in video_datas:
+            at_least_one = True
+            video_title = json_parser['items'][str(
+                video_datas)]["content"]["attributes"]["title"]
+            video_plot = ''
+            if 'description' in json_parser['items'][str(
+                    video_datas)]["content"]["attributes"]:
+                video_plot = json_parser['items'][str(
+                    video_datas)]["content"]["attributes"]["description"]
+            video_image = ''
+            if 'image-background' in json_parser['items'][str(
+                    video_datas)]["content"]["attributes"]:
+                video_image = json_parser['items'][str(video_datas)][
+                    "content"]["attributes"]["image-background"]
+            video_id = json_parser['items'][str(
+                video_datas)]["content"]["attributes"]["assetId"]
+
+            item = Listitem()
+            item.label = video_title
+            item.art['thumb'] = video_image
+            item.info['plot'] = video_plot
+
+            item.set_callback(get_video_url,
+                              item_id=item_id,
+                              data_account=data_account,
+                              data_player=data_player,
+                              data_video_id=video_id)
+            item_post_treatment(item, is_playable=True, is_downloadable=True)
+            yield item
+    if at_least_one:
+        yield Listitem.next_page(
+            item_id=item_id, search_query=search_query, page=page + 1)
+
 
 @Route.register
 def list_programs(plugin, item_id, **kwargs):
@@ -90,8 +146,13 @@ def list_programs(plugin, item_id, **kwargs):
     for program_datas in json_parser['items']:
         program_title = json_parser['items'][str(program_datas)]["content"][
             "attributes"]["name"].replace(' - Navigation', '')
-        program_image = json_parser['items'][str(program_datas)]["content"][
-            "attributes"]["image-landscape-medium"]
+        attributes = json_parser['items'][str(program_datas)]["content"][
+            "attributes"]
+        program_image = ''
+        if "image-landscape-medium" in attributes:
+            program_image = attributes["image-landscape-medium"]
+        elif "image-background-medium" in attributes:
+            program_image = attributes["image-background-medium"]
         program_url = None
         if 'pageId' in json_parser['items'][str(program_datas)]["content"][
                 "attributes"]:
@@ -146,7 +207,6 @@ def list_videos(plugin, item_id, next_url, **kwargs):
                               item_id=item_id,
                               data_account=data_account,
                               data_player=data_player,
-                              video_label=LABELS[item_id] + ' - ' + item.label,
                               data_video_id=video_id)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
@@ -159,20 +219,19 @@ def get_video_url(plugin,
                   data_player,
                   data_video_id,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     return resolver_proxy.get_brightcove_video_json(plugin, data_account,
                                                     data_player, data_video_id,
-                                                    download_mode, video_label)
+                                                    download_mode)
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE)
     data_account = re.compile(r'accountId":"(.*?)"').findall(resp.text)[0]

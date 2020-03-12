@@ -41,18 +41,24 @@ menu = {
         'callback': 'live_bridge',
         'thumb': 'channels/tn/watania1.png',
         'fanart': 'channels/tn/watania1_fanart.jpg',
-        'module': 'resources.lib.channels.tn.watania'
+        'module': 'resources.lib.channels.tn.watania',
+        'enabled': True,
+        'order': 1
     },
     'watania2': {
         'callback': 'live_bridge',
         'thumb': 'channels/tn/watania2.png',
         'fanart': 'channels/tn/watania2_fanart.jpg',
-        'module': 'resources.lib.channels.tn.watania'
+        'module': 'resources.lib.channels.tn.watania',
+        'enabled': True,
+        'order': 2
     },
     'nessma': {
         'callback': 'live_bridge',
         'thumb': 'channels/tn/nessma.png',
         'fanart': 'channels/tn/nessma_fanart.jpg',
-        'module': 'resources.lib.channels.tn.nessma'
+        'module': 'resources.lib.channels.tn.nessma',
+        'enabled': True,
+        'order': 3
     }
 }

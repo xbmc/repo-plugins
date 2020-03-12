@@ -41,18 +41,24 @@ menu = {
         'callback': 'replay_bridge',
         'thumb': 'channels/us/tbd.png',
         'fanart': 'channels/us/tbd_fanart.jpg',
-        'module': 'resources.lib.channels.us.tbd'
+        'module': 'resources.lib.channels.us.tbd',
+        'enabled': True,
+        'order': 2
     },
     'nycmedia': {
         'callback': 'replay_bridge',
         'thumb': 'channels/us/nycmedia.png',
         'fanart': 'channels/us/nycmedia_fanart.jpg',
-        'module': 'resources.lib.channels.us.nycmedia'
+        'module': 'resources.lib.channels.us.nycmedia',
+        'enabled': True,
+        'order': 3
     },
     'abcnews': {
         'callback': 'replay_bridge',
         'thumb': 'channels/us/abcnews.png',
         'fanart': 'channels/us/abcnews_fanart.jpg',
-        'module': 'resources.lib.channels.us.abcnews'
+        'module': 'resources.lib.channels.us.abcnews',
+        'enabled': True,
+        'order': 4
     }
 }

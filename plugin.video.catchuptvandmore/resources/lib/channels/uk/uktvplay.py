@@ -31,8 +31,9 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
-import resources.lib.cq_utils as cqu
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
+from resources.lib.menu_utils import item_post_treatment
+
 
 import inputstreamhelper
 import json
@@ -252,8 +253,7 @@ def list_videos(plugin, item_id, serie_id, **kwargs):
         item.info['duration'] = video_duration
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          data_video_id=video_id,
-                          item_dict=item2dict(item))
+                          data_video_id=video_id)
         item_post_treatment(item)
         yield item
 
@@ -267,9 +267,9 @@ def get_brightcove_policy_key(data_account, data_player):
 
 
 @Resolver.register
-def get_video_url(plugin, item_id, data_video_id, item_dict, **kwargs):
+def get_video_url(plugin, item_id, data_video_id, **kwargs):
 
-    if cqu.get_kodi_version() < 18:
+    if get_kodi_version() < 18:
         xbmcgui.Dialog().ok('Info', plugin.localize(30602))
         return False
 
@@ -321,9 +321,9 @@ def get_video_url(plugin, item_id, data_video_id, item_dict, **kwargs):
 
     item = Listitem()
     item.path = video_url
-    item.label = item_dict['label']
-    item.info.update(item_dict['info'])
-    item.art.update(item_dict['art'])
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
     item.property['inputstreamaddon'] = 'inputstream.adaptive'
     item.property['inputstream.adaptive.manifest_type'] = 'mpd'
     item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
@@ -333,14 +333,14 @@ def get_video_url(plugin, item_id, data_video_id, item_dict, **kwargs):
     return item
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
-    if cqu.get_kodi_version() < 18:
+    if get_kodi_version() < 18:
         xbmcgui.Dialog().ok('Info', plugin.localize(30602))
         return False
 
@@ -417,19 +417,9 @@ def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
 
     item = Listitem()
     item.path = json_parser["response"]["drm"]["widevine"]["stream"]
-    if item_dict:
-        if 'label' in item_dict:
-            item.label = item_dict['label']
-        if 'info' in item_dict:
-            item.info.update(item_dict['info'])
-        if 'art' in item_dict:
-            item.art.update(item_dict['art'])
-    else:
-        item.label = LABELS[channel_uktvplay_id]
-        item.art["thumb"] = ""
-        item.art["icon"] = ""
-        item.art["fanart"] = ""
-        item.info["plot"] = LABELS[channel_uktvplay_id]
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
     item.property['inputstreamaddon'] = 'inputstream.adaptive'
     item.property['inputstream.adaptive.manifest_type'] = 'mpd'
     item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'

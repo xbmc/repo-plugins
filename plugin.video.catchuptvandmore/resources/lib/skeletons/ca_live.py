@@ -37,34 +37,44 @@ the addon's tree architecture.
 """
 
 menu = {
-    'ntvca': {
+    'telequebec': {
         'callback': 'live_bridge',
-        'thumb': 'channels/ca/ntvca.png',
-        'fanart': 'channels/ca/ntvca_fanart.jpg',
-        'module': 'resources.lib.channels.ca.ntvca'
+        'thumb': 'channels/ca/telequebec.png',
+        'fanart': 'channels/ca/telequebec_fanart.jpg',
+        'module': 'resources.lib.channels.ca.telequebec',
+        'enabled': True,
+        'order': 4
     },
     'tva': {
         'callback': 'live_bridge',
         'thumb': 'channels/ca/tva.png',
         'fanart': 'channels/ca/tva_fanart.jpg',
-        'module': 'resources.lib.channels.ca.tva'
-    },
-    'telequebec': {
-        'callback': 'live_bridge',
-        'thumb': 'channels/ca/telequebec.png',
-        'fanart': 'channels/ca/telequebec_fanart.jpg',
-        'module': 'resources.lib.channels.ca.telequebec'
+        'module': 'resources.lib.channels.ca.tva',
+        'enabled': True,
+        'order': 5
     },
     'icitele': {
         'callback': 'live_bridge',
         'thumb': 'channels/ca/icitele.png',
         'fanart': 'channels/ca/icitele_fanart.jpg',
-        'module': 'resources.lib.channels.ca.icitele'
+        'module': 'resources.lib.channels.ca.icitele',
+        'enabled': True,
+        'order': 6
+    },
+    'ntvca': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/ca/ntvca.png',
+        'fanart': 'channels/ca/ntvca_fanart.jpg',
+        'module': 'resources.lib.channels.ca.ntvca',
+        'enabled': True,
+        'order': 7
     },
     'telemag': {
         'callback': 'live_bridge',
         'thumb': 'channels/ca/telemag.png',
         'fanart': 'channels/ca/telemag_fanart.jpg',
-        'module': 'resources.lib.channels.ca.telemag'
+        'module': 'resources.lib.channels.ca.telemag',
+        'enabled': True,
+        'order': 9
     }
 }

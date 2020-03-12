@@ -42,15 +42,19 @@ URL_ROOT = 'http://ntv.ca'
 URL_LIVE = URL_ROOT + '/web-tv/'
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE)
+    resp = urlquick.get(URL_LIVE, max_age=-1)
     root = resp.parse()
     live_datas = root.find('.//iframe')
-    resp2 = urlquick.get('http:' + live_datas.get('src'))
-    return re.compile(r'\"url\"\:\"(.*?)\"').findall(resp2.text)[0]
+    resp2 = urlquick.get(live_datas.get('src'), max_age=-1)
+    stream_url = ''
+    for url in re.compile(r'\"url\"\:\"(.*?)\"').findall(resp2.text):
+        if 'm3u8' in url and 'msoNum' not in url:
+            stream_url = url
+    return stream_url

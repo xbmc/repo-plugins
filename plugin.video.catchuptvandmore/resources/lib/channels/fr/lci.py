@@ -33,7 +33,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 # Verify md5 still present in hashlib python 3 (need to find another way if it is not the case)
 # https://docs.python.org/3/library/hashlib.html
@@ -129,7 +129,6 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           program_id=program_id)
         item_post_treatment(item,
                             is_playable=True,
@@ -147,7 +146,6 @@ def get_video_url(plugin,
                   item_id,
                   program_id,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     if 'www.wat.tv/embedframe' in program_id:
@@ -219,16 +217,16 @@ def get_video_url(plugin,
         final_video_url = all_datas_videos_path[0]
 
     if download_mode:
-        return download.download_video(final_video_url, video_label)
+        return download.download_video(final_video_url)
     return final_video_url
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     video_id = 'L_%s' % item_id.upper()
 

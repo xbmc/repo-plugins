@@ -8,6 +8,21 @@
 #EXTINF:-1 tvg-id="1013.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/blaze.png" group-title="United Kingdom",Blaze
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=blaze&item_module=resources.lib.channels.uk.blaze&item_dict={}
 
+##	Dave
+##	dave
+#EXTINF:-1 tvg-id="432.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/dave.png" group-title="United Kingdom",Dave
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dave&item_module=resources.lib.channels.uk.uktvplay&item_dict={}
+
+##	Yesterday
+##	yesterday
+#EXTINF:-1 tvg-id="320.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/yesterday.png" group-title="United Kingdom",Yesterday
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=yesterday&item_module=resources.lib.channels.uk.uktvplay&item_dict={}
+
+##	Drama
+##	drama
+#EXTINF:-1 tvg-id="871.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/drama.png" group-title="United Kingdom",Drama
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=drama&item_module=resources.lib.channels.uk.uktvplay&item_dict={}
+
 ##	Sky News
 ##	skynews
 #EXTINF:-1 tvg-id="257.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/skynews.png" group-title="United Kingdom",Sky News
@@ -38,15 +53,15 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=k
 #EXTINF:-1 tvg-id="279.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/thebox.png" group-title="United Kingdom",The Box
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=the-box&item_module=resources.lib.channels.uk.boxplus&item_dict={}
 
-##	Box Upfront
-##	box-upfront
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/boxupfront.png" group-title="United Kingdom",Box Upfront
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=box-upfront&item_module=resources.lib.channels.uk.boxplus&item_dict={}
-
 ##	Box Hits
 ##	box-hits
 #EXTINF:-1 tvg-id="267.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/boxhits.png" group-title="United Kingdom",Box Hits
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=box-hits&item_module=resources.lib.channels.uk.boxplus&item_dict={}
+
+##	Box Upfront
+##	box-upfront
+#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/boxupfront.png" group-title="United Kingdom",Box Upfront
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=box-upfront&item_module=resources.lib.channels.uk.boxplus&item_dict={}
 
 ##	Quest TV
 ##	questtv
@@ -62,21 +77,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=q
 ##	bristoltv
 #EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/bristoltv.png" group-title="United Kingdom",Bristol TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bristoltv&item_module=resources.lib.channels.uk.bristoltv&item_dict={}
-
-##	Drama
-##	drama
-#EXTINF:-1 tvg-id="871.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/drama.png" group-title="United Kingdom",Drama
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=drama&item_module=resources.lib.channels.uk.uktvplay&item_dict={}
-
-##	Dave
-##	dave
-#EXTINF:-1 tvg-id="432.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/dave.png" group-title="United Kingdom",Dave
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dave&item_module=resources.lib.channels.uk.uktvplay&item_dict={}
-
-##	Yesterday
-##	yesterday
-#EXTINF:-1 tvg-id="320.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/yesterday.png" group-title="United Kingdom",Yesterday
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=yesterday&item_module=resources.lib.channels.uk.uktvplay&item_dict={}
 
 ##	Free Sports
 ##	freesports

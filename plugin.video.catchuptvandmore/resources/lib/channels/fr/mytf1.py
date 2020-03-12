@@ -33,8 +33,8 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import download
-import resources.lib.cq_utils as cqu
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
 
 # Verify md5 still present in hashlib python 3 (need to find another way if it is not the case)
 # https://docs.python.org/3/library/hashlib.html
@@ -212,9 +212,7 @@ def list_videos(plugin, item_id, program_slug, video_type_value, offset, **kwarg
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
-                          video_id=video_id,
-                          item_dict=item2dict(item))
+                          video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -229,9 +227,7 @@ def list_videos(plugin, item_id, program_slug, video_type_value, offset, **kwarg
 def get_video_url(plugin,
                   item_id,
                   video_id,
-                  item_dict=None,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
 
     video_format = 'hls'
@@ -252,7 +248,7 @@ def get_video_url(plugin,
                             max_age=-1).text
     if 'drm' in manifest:
 
-        if cqu.get_kodi_version() < 18:
+        if get_kodi_version() < 18:
             xbmcgui.Dialog().ok('Info', plugin.localize(30602))
             return False
         else:
@@ -262,7 +258,7 @@ def get_video_url(plugin,
 
         final_video_url = json_parser["url"].replace('2800000', '4000000')
         if download_mode:
-            return download.download_video(final_video_url, video_label)
+            return download.download_video(final_video_url)
         return final_video_url
 
     else:
@@ -283,9 +279,9 @@ def get_video_url(plugin,
 
         item = Listitem()
         item.path = json_parser["url"]
-        item.label = item_dict['label']
-        item.info.update(item_dict['info'])
-        item.art.update(item_dict['art'])
+        item.label = get_selected_item_label()
+        item.art.update(get_selected_item_art())
+        item.info.update(get_selected_item_info())
         item.property['inputstreamaddon'] = 'inputstream.adaptive'
         item.property['inputstream.adaptive.manifest_type'] = 'mpd'
         item.property[
@@ -296,12 +292,12 @@ def get_video_url(plugin,
         return item
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
     video_id = 'L_%s' % item_id.upper()
 
     video_format = 'hls'

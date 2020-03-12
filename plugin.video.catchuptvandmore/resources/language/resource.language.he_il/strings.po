@@ -51,6 +51,10 @@ msgctxt "#30007"
 msgid "Websites"
 msgstr "אתרי רשת"
 
+msgctxt "#30008"
+msgid "Menus"
+msgstr ""
+
 
 # Settings line separators (from 30010 to 30029)
 
@@ -80,6 +84,22 @@ msgstr ""
 
 msgctxt "#30016"
 msgid "Hide catch-up TV countries"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Default values"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Unmask main menus items"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Unmask live TV channels"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Unmask replay TV channels"
 msgstr ""
 
 
@@ -405,7 +425,46 @@ msgid "Favourites deleted"
 msgstr ""
 
 
-# Reserved space for other tab/category in settins (from 30400 to 30499)
+# Settings of 'Menus' category (from 30400 to 30429)
+
+msgctxt "#30400"
+msgid "Restore default order of all menus"
+msgstr ""
+
+msgctxt "#30401"
+msgid "Unmask all hidden items"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Main menu items"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Live TV countries"
+msgstr ""
+
+msgctxt "#30404"
+msgid "Catch-up TV countries"
+msgstr ""
+
+msgctxt "#30405"
+msgid "Websites"
+msgstr ""
+
+msgctxt "#30406"
+msgid "Select item to unmask"
+msgstr ""
+
+msgctxt "#30407"
+msgid "Default order of all menus have been restored"
+msgstr ""
+
+msgctxt "#30408"
+msgid "All hidden items have been unmasked"
+msgstr ""
+
+
+# Reserved space for other tab/category in settins (from 30430 to 30499)
 
 
 

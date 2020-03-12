@@ -28,7 +28,7 @@ import urlquick
 
 from resources.lib.labels import LABELS
 from resources.lib import resolver_proxy
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 # TO DO
 # Play Spanish Videos
@@ -111,8 +111,6 @@ def list_videos_1(plugin, item_id, category_url, page, **kwargs):
 
                 item.set_callback(get_video_url,
                                   item_id=item_id,
-                                  video_label=LABELS[item_id] + ' - ' +
-                                  item.label,
                                   video_url=video_url)
                 item_post_treatment(item,
                                     is_playable=True,
@@ -131,7 +129,6 @@ def list_videos_1(plugin, item_id, category_url, page, **kwargs):
 
             item.set_callback(get_video_url,
                               item_id=item_id,
-                              video_label=LABELS[item_id] + ' - ' + item.label,
                               video_url=video_url)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
@@ -160,7 +157,6 @@ def list_videos_2(plugin, item_id, category_url, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_label=LABELS[item_id] + ' - ' + item.label,
                           video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
@@ -171,7 +167,6 @@ def get_video_url(plugin,
                   item_id,
                   video_url,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
     """Get video URL and start video player"""
 
@@ -184,5 +179,4 @@ def get_video_url(plugin,
         # TO DO Espagnol Video / Return 404 (TO REMOVE)
         return False
 
-    return resolver_proxy.get_stream_youtube(plugin, video_id, download_mode,
-                                             video_label)
+    return resolver_proxy.get_stream_youtube(plugin, video_id, download_mode)

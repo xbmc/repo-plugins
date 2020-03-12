@@ -29,7 +29,8 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib import resolver_proxy
+from resources.lib.menu_utils import item_post_treatment
 
 import re
 import urlquick
@@ -37,18 +38,21 @@ import urlquick
 # TODO
 # Add Replay
 
-URL_ROOT = "https://www.grandlille.tv"
+URL_ROOT = "https://www.rtl.fr"
 
-URL_LIVE = "https://www.creacast.com/play.php?su=grandlilletv"
+URL_LIVE = URL_ROOT + '/direct/videoplayer'
 
 
-def live_entry(plugin, item_id, item_dict, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper(), item_dict)
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, item_dict, **kwargs):
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(
         URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    return re.compile(r'file\: \"(.*?)\"').findall(resp.text)[0]
+    live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]').findall(resp.text)[0]
+    return resolver_proxy.get_stream_dailymotion(plugin,
+                                                 live_id,
+                                                 False)

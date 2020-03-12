@@ -31,7 +31,7 @@ import urlquick
 
 from resources.lib.labels import LABELS
 from resources.lib import download
-from resources.lib.listitem_utils import item_post_treatment, item2dict
+from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = 'https://live.philharmoniedeparis.fr'
 
@@ -87,7 +87,6 @@ def list_videos(plugin, item_id, page, **kwargs):
             item.set_callback(
                 get_video_url,
                 item_id=item_id,
-                video_label=LABELS[item_id] + ' - ' + item.label,
                 video_id=video_id)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
@@ -100,7 +99,6 @@ def get_video_url(plugin,
                   item_id,
                   video_id,
                   download_mode=False,
-                  video_label=None,
                   **kwargs):
     """Get video URL and start video player"""
 
@@ -109,5 +107,5 @@ def get_video_url(plugin,
     final_url = URL_ROOT + json_parser["files"]["desktop"]["file"]
 
     if download_mode:
-        return download.download_video(final_url, video_label)
+        return download.download_video(final_url)
     return final_url

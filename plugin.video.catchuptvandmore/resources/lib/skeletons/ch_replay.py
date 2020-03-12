@@ -41,48 +41,64 @@ menu = {
         'callback': 'replay_bridge',
         'thumb': 'channels/ch/rts.png',
         'fanart': 'channels/ch/rts_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr'
+        'module': 'resources.lib.channels.ch.srgssr',
+        'enabled': True,
+        'order': 1
     },
     'rsi': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ch/rsi.png',
         'fanart': 'channels/ch/rsi_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr'
+        'module': 'resources.lib.channels.ch.srgssr',
+        'enabled': True,
+        'order': 2
     },
     'srf': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ch/srf.png',
         'fanart': 'channels/ch/srf_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr'
+        'module': 'resources.lib.channels.ch.srgssr',
+        'enabled': True,
+        'order': 3
     },
     'rtr': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ch/rtr.png',
         'fanart': 'channels/ch/rtr_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr'
+        'module': 'resources.lib.channels.ch.srgssr',
+        'enabled': True,
+        'order': 4
     },
     'swissinfo': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ch/swissinfo.png',
         'fanart': 'channels/ch/swissinfo_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr'
+        'module': 'resources.lib.channels.ch.srgssr',
+        'enabled': True,
+        'order': 5
     },
     'tvm3': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ch/tvm3.png',
         'fanart': 'channels/ch/tvm3_fanart.jpg',
-        'module': 'resources.lib.channels.ch.tvm3'
+        'module': 'resources.lib.channels.ch.tvm3',
+        'enabled': True,
+        'order': 7
     },
     'becurioustv': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ch/becurioustv.png',
         'fanart': 'channels/ch/becurioustv_fanart.jpg',
-        'module': 'resources.lib.channels.ch.becurioustv'
+        'module': 'resources.lib.channels.ch.becurioustv',
+        'enabled': True,
+        'order': 8
     },
     'lemanbleu': {
         'callback': 'replay_bridge',
         'thumb': 'channels/ch/lemanbleu.png',
         'fanart': 'channels/ch/lemanbleu_fanart.jpg',
-        'module': 'resources.lib.channels.ch.lemanbleu'
+        'module': 'resources.lib.channels.ch.lemanbleu',
+        'enabled': True,
+        'order': 22
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nos" name="NOS" version="4.0.2" provider-name="Erwin Junge,Nerbert Fekkes">
+<addon id="plugin.video.nos" name="NOS" version="4.0.3" provider-name="Erwin Junge, Nerbert Fekkes">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -11,13 +11,10 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <news>v4.0.2 (2019-07-25)
-	- Update parser to new NOS website structure
-	v4.0.1 (2018-08-11)
-    - Update parser to new NOS css classes
-    - Drop support for Sportjournaal due to DRM
-    v4.0.0 (2017-10-07)
-    - Use new NOS website structure</news>
+    <news>v4.0.3 (2020-02-13)
+    - Updated parser to handle NOS website update
+	- Added filtering of duplicate video links
+	- Updated labels</news>
     <platform>all</platform>
     <language>nl</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>

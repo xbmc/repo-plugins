@@ -1,3 +1,6 @@
+* 0.10.3
+- fixed broken livestream when "bundesland heute" videos are available
+
 * 0.10.2
 - tvthek added new quality strings. caused error on full hd setting
 

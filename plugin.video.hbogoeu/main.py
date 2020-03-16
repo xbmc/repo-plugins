@@ -20,6 +20,6 @@ REQUEST_PARAMS = sys.argv[2][1:]
 
 if __name__ == '__main__':
     add_on = xbmcaddon.Addon()
-    xbmc.log("[" + add_on.getAddonInfo('id') + "]  STARING VERSION: " + add_on.getAddonInfo('version'), xbmc.LOGDEBUG)
+    xbmc.log("[" + add_on.getAddonInfo('id') + "]  STARTING VERSION: " + add_on.getAddonInfo('version'), xbmc.LOGDEBUG)
     addon_main = hbogo(PLUGIN_HANDLE, BASE_URL)
     addon_main.router(REQUEST_PARAMS)

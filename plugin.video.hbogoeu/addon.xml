@@ -1,4 +1,4 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.3.10">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.4.1">
   <requires>
     <import addon="xbmc.python" version="2.26.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
@@ -44,7 +44,14 @@ If an official app is available for your platform, use it instead of this.
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-- Fixed encoding error on opening search category
+- New enhanced Kids category (EU handler)
+- Legacy Kids category removed (removed from API, EU handler)
+- Enhanced search too include Kids shows and movies (EU handler)
+- Kids only mode (activate in settings to display only Kids category and nothing else)
+  [mainly intended for use with Kodi profiles, you have to prevent changing settings with the profile where you want too enforce this]
+- Search result limits fixes
+- Language files fixes
+- Minor fixes
     </news>
     <assets>
      <icon>resources/icon.png</icon>

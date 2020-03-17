@@ -2,15 +2,17 @@
 
 import random
 
+from resources.lib.retroconfig import Config
 from resources.lib.logger import Logger
 from resources.lib.pickler import Pickler
 
 
 class ParameterParser(object):
-    def __init__(self, addon_name, params):
+    def __init__(self, addon_name, handle, params):
         """
 
         :param str addon_name:  The name of the add-on
+        :param int handle:      The handle for this run
         :param str params:      The parameteters used to start the ParameterParser
 
         """
@@ -50,24 +52,35 @@ class ParameterParser(object):
         self.actionPostLog = "postlog"                                  # : Used for sending log files to pastebin.com
         self.actionProxy = "setproxy"                                   # : Used for setting a proxy
 
-        self.propertyRetrospect = "Retrospect"
-        self.propertyRetrospectChannel = "RetrospectChannel"
-        self.propertyRetrospectChannelSetting = "RetrospectChannelSettings"
-        self.propertyRetrospectFolder = "RetrospectFolder"
-        self.propertyRetrospectVideo = "RetrospectVideo"
-        self.propertyRetrospectCloaked = "RetrospectCloaked"
-        self.propertyRetrospectCategory = "RetrospectCategory"
-        self.propertyRetrospectFavorite = "RetrospectFavorite"
-        self.propertyRetrospectAdaptive = "RetrospectAdaptive"
+        self.handle = int(handle)
 
         # determine the query parameters
+        self._params = params
         self.params = self.__get_parameters(params)
         self.pluginName = addon_name
 
         # We need a picker for this instance
-        self._pickler = Pickler()
+        self._pickler = Pickler(Config.profileDir)
 
-    def _create_action_url(self, channel, action, item=None, category=None):
+        # Field for property
+        self.__media_item = None
+
+        # For remote debugging and log reading purpose we need the full pickle string.
+        if Logger.instance().minLogLevel <= Logger.LVL_DEBUG \
+                and self.media_item is not None \
+                and self._pickler.is_pickle_store_id(self.params[self.keywordPickle]):
+            Logger.debug("Replacing PickleStore pickle '%s' with full pickle", self.params[self.keywordPickle])
+            self.params[self.keywordPickle] = self._pickler.pickle_media_item(self.media_item)
+
+    @property
+    def media_item(self):
+
+        if self.__media_item is None and self.keywordPickle in self.params:
+            self.__media_item = self._pickler.de_pickle_media_item(self.params[self.keywordPickle])
+
+        return self.__media_item
+
+    def _create_action_url(self, channel, action, item=None, store_id=None, category=None):
         """ Creates an URL that includes an action.
 
         Arguments:
@@ -77,10 +90,11 @@ class ParameterParser(object):
         Keyword Arguments:
         item : MediaItem -
 
-        :param ChannelInfo|Channel channel:     The channel object to use for the URL.
+        :param ChannelInfo|Channel channel:     The channel object to use for the URL
         :param str action:                      Action to create an url for
         :param MediaItem item:                  The media item to add
-        :param str category:                    The category to use.
+        :param str store_id:                    The ID of the pickle store
+        :param str category:                    The category to use
 
         :return: a complete action url with all keywords and values
         :rtype: str|unicode
@@ -107,7 +121,7 @@ class ParameterParser(object):
 
         # it might have an item or not
         if item is not None:
-            params[self.keywordPickle] = self._pickler.pickle_media_item(item)
+            params[self.keywordPickle] = "{}--{}".format(store_id, item.guid)
 
             if action == self.actionPlayVideo and item.isLive:
                 params[self.keywordRandomLive] = random.randint(10000, 99999)
@@ -122,6 +136,23 @@ class ParameterParser(object):
         url = url.strip('&')
         # Logger.Trace("Created url: '%s'", url)
         return url
+
+    def _get_parent_guid(self, channel, parent_item):
+        """ Returns the parent guid of an item
+
+        :param channel:         The parent channel object
+        :param parent_item:     The parent items
+
+        :return: a guid of either the parent channel or item
+        :rtype: str
+
+        """
+
+        if channel is None and parent_item is None:
+            # we should not use the store
+            return None
+
+        return channel.guid if parent_item is None else parent_item.guid
 
     def __get_parameters(self, query_string):
         """ Extracts the actual parameters as a dictionary from the passed in querystring.
@@ -152,3 +183,9 @@ class ParameterParser(object):
             raise
 
         return result
+
+    def __str__(self):
+        return "Plugin Params: {} ({})\n" \
+               "Handle:      {}\n" \
+               "Name:        {}\n" \
+               "Query:       {}".format(self.params, len(self.params), self.handle, self.pluginName, self._params)

@@ -1,6 +1,6 @@
 {
   "id": "channel.nick",
-  "version": "5.1.1",
+  "version": "5.2.0",
   "textures": {
     "channel.nick.nickelodeon/nickfanart.jpg": "665bd6007b2099beabc3cb9d051e6050",
     "channel.nick.nickjr/nickfanart.jpg": "665bd6007b2099beabc3cb9d051e6050",

@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import time
 import os
 
 import xbmcgui
@@ -50,6 +49,7 @@ class XbmcDialogProgressWrapper(object):
         """
 
         if not completed:
+            # noinspection PyTypeChecker
             self.progressBarDialog.update(int(perc), self.Line1, self.Line2, status)
         else:
             self.progressBarDialog.close()
@@ -98,6 +98,7 @@ class XbmcDialogProgressBgWrapper:
         """
 
         if not completed:
+            # noinspection PyTypeChecker
             self.progressBarDialog.update(percent=int(perc), heading=self.Heading, message=status)
         else:
             self.progressBarDialog.close()
@@ -362,89 +363,3 @@ class XbmcWrapper:
         if logger:
             logger.trace("Received result: %s", response)
         return response
-
-    @staticmethod
-    def wait_for_player_to_start(player, timeout=10, logger=None, url=None):
-        """ Waits for the status of the player to start.
-
-        Requires: <import addon="xbmc.python" version="2.0"/>
-
-        :param xbmc.Player player:  The Kodi player.
-        :param int timeout:         The time-out to wait for.
-        :param any logger:          A `Logger` instance for logging.
-        :param str url:             The URL that should be playing.
-
-        :return: Indication whether or not the player is playing.
-        :rtype: bool
-
-        """
-        return XbmcWrapper.__wait_for_player(player, 1, timeout, logger, url)
-
-    @staticmethod
-    def wait_for_player_to_end(player, timeout=10, logger=None):
-        """ waits for the status of the player to end
-
-        Requires: <import addon="xbmc.python" version="2.0"/>
-
-        :param xbmc.Player player:  The Kodi player.
-        :param int timeout:         The time-out to wait for.
-        :param any logger:          A `Logger` instance for logging.
-
-        :return: indication if player has stopped.
-        :rtype: bool
-
-        """
-
-        return XbmcWrapper.__wait_for_player(player, 0, timeout, logger, None)
-
-    @staticmethod
-    def __wait_for_player(player, play_state, timeout, logger, url):  # NOSONAR
-        """ waits for the status of the player to be the desired value
-
-        Requires: <import addon="xbmc.python" version="2.0"/>
-
-        :param xbmc.Player player:  The Kodi player.
-        :param in play_state:         The desired play value (1 = start, 0 = stop).
-        :param int timeout:         The time-out to wait for.
-        :param any logger:          A `Logger` instance for logging.
-        :param str|None url:        The URL that should be playing.
-
-        :return: indication if player has started or has stopped.
-        :rtype: bool
-
-        """
-
-        start = time.time()
-
-        if logger:
-            logger.debug("Waiting for Player status '%s'", play_state)
-            if url is None:
-                logger.debug("player.isPlaying is '%s', preferred value is '%s'", player.isPlaying(), play_state)
-            else:
-                logger.debug("player.isPlaying is '%s', preferred value is %s and stream: '%s'",
-                             player.isPlaying(), play_state, url)
-
-        while time.time() - start < timeout:
-            if player.isPlaying() == play_state:
-                if url is None or url.startswith("plugin://"):
-                    # the player stopped in time
-                    if logger:
-                        logger.debug("player.isPlaying obtained the desired value '%s'", play_state)
-                    return True
-
-                playing_file = player.getPlayingFile()
-                if url == playing_file:
-                    if logger:
-                        logger.debug("player.isPlaying obtained the desired value '%s' and correct stream.", play_state)
-                    return True
-
-                if logger:
-                    logger.debug("player.isPlaying obtained the desired value '%s', but incorrect stream: %s",
-                                 play_state, playing_file)
-
-            if logger:
-                logger.debug("player.isPlaying is %s, waiting a cycle", player.isPlaying())
-            time.sleep(1.)
-
-        # a time out occurred
-        return False

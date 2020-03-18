@@ -738,7 +738,7 @@ class htmlScraper(Scraper):
 			channel = replaceHTMLCodes(channel[0])
 
 			bundesland_article = parseDOM(item, name='li', attrs={'class': '.*?is-bundesland-heute.*?'}, ret='data-jsb')
-			article = parseDOM(item, name='article', attrs={'class': 'b-livestream-teaser.*?'})
+			article = parseDOM(item, name='article', attrs={'class': 'b-livestream-teaser is-live.*?'})
 			if not len(bundesland_article) and len(article):
 				figure = parseDOM(article, name='figure', attrs={'class': 'teaser-img'}, ret=False)
 				image = parseDOM(figure, name='img', attrs={}, ret='data-src')
@@ -770,14 +770,14 @@ class htmlScraper(Scraper):
 			elif len(bundesland_article):
 				bundesland_data = replaceHTMLCodes(bundesland_article[0])
 				bundesland_data = json.loads(bundesland_data)
-
 				for bundesland_item_key in bundesland_data:
 					bundesland_item = bundesland_data.get(bundesland_item_key)
-					bundesland_title = bundesland_item.get('title')
-					bundesland_image = bundesland_item.get('img')
-					bundesland_link = bundesland_item.get('url')
+					if bundesland_item and bundesland_item is not True and len(bundesland_item):
+						bundesland_title = bundesland_item.get('title')
+						bundesland_image = bundesland_item.get('img')
+						bundesland_link = bundesland_item.get('url')
 
-					self.buildLivestream(bundesland_title, bundesland_link, "", True, channel, bundesland_image, True)
+						self.buildLivestream(bundesland_title, bundesland_link, "", True, channel, bundesland_image, True)
 
 	def buildLivestream(self, title, link, time, restart, channel, banner, online):
 		html = fetchPage({'link': link})

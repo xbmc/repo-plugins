@@ -23,13 +23,13 @@
         <setting label="30802" type="bool" id="get_elapsed" default="true"/>
         <setting label="30805" type="bool" id="ignore_kodi_watched" default="false"/>
     </category>
-    <!-- Home Catgory -->
+    <!-- Home Category -->
     <category label="30696">
         <setting label="30707" type="bool" id="show_mylist" default="true"/>
         <setting label="30731" type="bool" id="show_history" default="false"/>
         <setting label="30732" type="bool" id="show_continue" default="true"/>
-        <setting label="30730" type="bool" id="show_week_top" default="false"/>
         <setting label="30729" type="bool" id="show_kids" default="true"/>
+        <setting label="30737" type="bool" id="enforce_kids" default="false"/>
         <setting label="30697" type="bool" id="group_home" default="false"/>
     </category>
     <!-- Streaming -->

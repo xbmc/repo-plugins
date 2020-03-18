@@ -204,7 +204,8 @@ class HbogoHandler_sp(HbogoHandler):
 
         self.setDispCat(self.operator_name)
 
-        self.addCat(self.LB_SEARCH, "INTERNAL_SEARCH", self.get_media_resource('search.png'), HbogoConstants.ACTION_SEARCH_LIST)
+        if self.addon.getSetting('enforce_kids') != 'true':
+            self.addCat(self.LB_SEARCH, "INTERNAL_SEARCH", self.get_media_resource('search.png'), HbogoConstants.ACTION_SEARCH_LIST)
 
         browse_xml = self.get_from_hbogo(self.API_URL_BROWSE + self.LANGUAGE_CODE, response_format='xml')
         if browse_xml is False:
@@ -229,6 +230,14 @@ class HbogoHandler_sp(HbogoHandler):
                 kids = item
             else:
                 pass
+
+        if self.addon.getSetting('enforce_kids') == 'true':
+            if kids is not None:
+                self.list(kids.find('link').text, True)
+                KodiUtil.endDir(self.handle, None, True)
+                return
+            else:
+                self.log("No Kids Category found")
 
         if self.addon.getSetting('show_mylist') == 'true':
             if watchlist is not None:

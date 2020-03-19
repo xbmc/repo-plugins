@@ -498,7 +498,12 @@ class Channel(chn_class.Channel):
             else:
                 Logger.debug("Found episode '0' or websido '%s': using name instead of episode number", title)
 
-        url = result_set["_links"]["stream"]["href"]
+        mpx_guid = result_set.get('mpx_guid')
+        if mpx_guid is None:
+            url = result_set["_links"]["stream"]["href"]
+        else:
+            # we can use mpx_guid and https://viafree.mtg-api.com/stream-links/viafree/web/se/clear-media-guids/{}/streams
+            url = "https://viafree.mtg-api.com/stream-links/viafree/web/{}/clear-media-guids/{}/streams".format(self.language, mpx_guid)
         item = MediaItem(title, url)
 
         date_info = None
@@ -593,6 +598,10 @@ class Channel(chn_class.Channel):
 
         data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=headers or None)
         json = JsonHelper(data)
+
+        embedded_data = json.get_value("embedded")
+        if embedded_data is not None:
+            return self.__update_embedded(item, embedded_data)
 
         # see if there was an srt already
         if item.MediaItemParts:
@@ -788,3 +797,27 @@ class Channel(chn_class.Channel):
         if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
             expire_date = DateHelper.get_datetime_from_string(expire_date, date_format="%Y-%m-%d %H:%M:%S")
             item.set_expire_datetime(timestamp=expire_date)
+
+    def __update_embedded(self, item, embedded_data):
+        """ Updates a new "embedded" stream based on the json data
+
+        :param MediaItem item:  The item to update
+        :param embedded_data:   The json data
+
+        :return: Updated MediaItem
+        :rtype: MediaItem
+
+        """
+
+        stream_url = embedded_data["prioritizedStreams"][0]["links"]["stream"]["href"]
+        part = item.create_new_empty_media_part()
+        stream = part.append_media_stream(stream_url, 0)
+        M3u8.set_input_stream_addon_input(stream, self.proxy)
+        item.complete = True
+
+        subtitle_urls = embedded_data["subtitles"]
+        if subtitle_urls:
+            subtitle_url = subtitle_urls[0]["link"]["href"]
+            part.Subtitle = SubtitleHelper.download_subtitle(subtitle_url)
+
+        return item

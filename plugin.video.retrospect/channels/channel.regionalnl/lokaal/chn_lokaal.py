@@ -93,10 +93,11 @@ class Channel(chn_class.Channel):
             self.channelBitrate = 1500
 
         elif self.channelCode == "omroepgelderland":
+            # TODO: move to chn_rpoapp?
             self.noImage = "omroepgelderlandimage.png"
-            self.mainListUri = "http://web.omroepgelderland.nl/json/v400/programmas.json"
-            self.baseUrl = "http://web.omroepgelderland.nl"
-            self.liveUrl = "http://app.gld.nl/data/json/v500/tv_live.json"
+            self.mainListUri = "https://web.omroepgelderland.nl/json/v400/programmas.json"
+            self.baseUrl = "https://web.omroepgelderland.nl"
+            self.liveUrl = "https://gelderland.rpoapp.nl/v02/livestreams/AndroidTablet.json"
             self.channelBitrate = 1500
 
         elif self.channelCode == "omroepbrabant":
@@ -124,8 +125,12 @@ class Channel(chn_class.Channel):
                               parser=self.episodeItemJson, creator=self.create_episode_item,
                               json=True)
 
-        if self.liveUrl:
+        if self.liveUrl and "rpoapp" not in self.liveUrl:
             self._add_data_parser(self.liveUrl, preprocessor=self.process_live_items, updater=self.update_video_item)
+
+        elif self.liveUrl:
+            self._add_data_parser(self.liveUrl, name="Live Stream Creator",
+                                  creator=self.create_live_item, json=True, parser=[])
 
         self._add_data_parser("*", parser=self.videoItemJson, creator=self.create_video_item, updater=self.update_video_item,
                               json=True)
@@ -390,6 +395,38 @@ class Channel(chn_class.Channel):
                           broadcast_date.second)
 
         item.complete = True
+        return item
+
+    def create_live_item(self, result_set):
+        """ Creates a live MediaItem of type 'video' using the result_set from the regex.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param dict[str,str|dict[str,str]] result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        """
+
+        url = result_set["stream"]["highQualityUrl"]
+        title = result_set["title"] or result_set["id"].title()
+        item = MediaItem(title, url)
+        item.type = "video"
+        item.isLive = True
+
+        if result_set["mediaType"].lower() == "audio":
+            item.append_single_stream(item.url)
+            item.complete = True
+            return item
+
         return item
 
     def update_video_item(self, item):

@@ -76,6 +76,7 @@ class SubtitleHelper(object):
 
             # no need to download it again!
             if os.path.exists(local_complete_path):
+                Logger.debug("Found exisiting subtitle: %s", local_complete_path)
                 return local_complete_path
 
             Logger.trace("Opening Subtitle URL")
@@ -106,28 +107,17 @@ class SubtitleHelper(object):
                 Logger.info("Discovered subtitle format 'webvtt' instead of '%s'", format)
                 format = "webvtt"
 
-            if format.lower() == 'sami':
-                srt = SubtitleHelper.__convert_sami_to_srt(raw)
-            elif format.lower() == 'srt':
-                srt = raw
-            elif format.lower() == 'webvtt':
-                srt = SubtitleHelper.__convert_web_vtt_to_srt(raw)  # With Krypton and Leia VTT is supported natively
-            elif format.lower() == 'ttml':
-                srt = SubtitleHelper.__convert_ttml_to_srt(raw)
-            elif format.lower() == 'dcsubtitle':
-                srt = SubtitleHelper.__convert_dc_subtitle_to_srt(raw)
-            elif format.lower() == 'json':
-                srt = SubtitleHelper.__convert_json_subtitle_to_srt(raw)
-            elif format.lower() == 'm3u8srt':
-                srt = SubtitleHelper.__convert_m3u8_srt_to_subtitle_to_srt(raw, url, proxy)
-            else:
-                error = "Uknown subtitle format: %s" % (format,)
-                raise NotImplementedError(error)
+            # Actually transform the subtitle
+            srt = SubtitleHelper.__transform(raw, sub_format=format, url=url, proxy=proxy)
 
             if replace:
                 Logger.debug("Replacing SRT data: %s", replace)
                 for needle in replace:
                     srt = srt.replace(needle, replace[needle])
+
+            if not srt or not srt.strip():
+                Logger.error("Transformed data was empty!")
+                return ""
 
             with io.open(local_complete_path, 'w', encoding="utf-8") as f:
                 f.write(srt)
@@ -429,3 +419,35 @@ class SubtitleHelper(object):
         secs = int(timestamp) // 1000
         sync = time.strftime("%H:%M:%S", time.gmtime(secs)) + ',' + msecs
         return sync
+
+    @staticmethod
+    def __transform(raw, sub_format, url, proxy):
+        """ Transforms subtitle into a specific format
+
+        @param str url:         URL location of the SAMI file
+        @param str raw:         The raw subtitle data
+        @param str sub_format:  Defines the source format. Defaults to Sami.
+        @param Proxy proxy:     If specified, a proxy will be used
+
+        """
+
+        if sub_format.lower() == 'sami':
+            srt = SubtitleHelper.__convert_sami_to_srt(raw)
+        elif sub_format.lower() == 'srt':
+            srt = raw
+        elif sub_format.lower() == 'webvtt':
+            srt = SubtitleHelper.__convert_web_vtt_to_srt(
+                raw)  # With Krypton and Leia VTT is supported natively
+        elif sub_format.lower() == 'ttml':
+            srt = SubtitleHelper.__convert_ttml_to_srt(raw)
+        elif sub_format.lower() == 'dcsubtitle':
+            srt = SubtitleHelper.__convert_dc_subtitle_to_srt(raw)
+        elif sub_format.lower() == 'json':
+            srt = SubtitleHelper.__convert_json_subtitle_to_srt(raw)
+        elif sub_format.lower() == 'm3u8srt':
+            srt = SubtitleHelper.__convert_m3u8_srt_to_subtitle_to_srt(raw, url, proxy)
+        else:
+            error = "Uknown subtitle format: %s" % (sub_format,)
+            raise NotImplementedError(error)
+
+        return srt

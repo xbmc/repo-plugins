@@ -10,6 +10,12 @@ import json as json
 
 PY3 =  sys.version_info > (3, 0)
 
+if PY3:
+    from html.parser import HTMLParser
+else:
+    from HTMLParser import HTMLParser
+
+
 # read settings
 ADDON = xbmcaddon.Addon()
 ICON = xbmc.translatePath(ADDON.getAddonInfo("icon"))
@@ -17,13 +23,31 @@ FANART = xbmc.translatePath(ADDON.getAddonInfo("fanart"))
 
 logger = logging.getLogger(__name__)
 
+
+class HTMLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        if PY3:
+            self.strict = False
+            self.convert_charrefs = True
+        self.fed = []
+    def handle_data(self, d):
+        self.fed.append(d)
+    def get_data(self):
+        return ''.join(self.fed)
+
+def strip_html_tags(html):
+    s = HTMLStripper()
+    s.feed(html)
+    return s.get_data()
+
 def compat_py23str(x):
     if PY3:
         return str(x)
     else:
         if isinstance(x, unicode):
             try:
-                return unicode(x).encode("latin-1")
+                return unicode(x).encode("utf-8")
             except UnicodeEncodeError:
                 try:
                     return unicode(x).encode("utf-8")

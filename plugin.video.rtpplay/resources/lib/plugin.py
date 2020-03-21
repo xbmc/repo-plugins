@@ -70,7 +70,7 @@ def search():
         liz.setArt({"thumb": img,
                     "icon": img,
                     "fanart": kodiutils.FANART})
-        liz.setInfo("Video", infoLabels={"plot": kodiutils.compat_py23str(description), "title": kodiutils.compat_py23str(title)})
+        liz.setInfo("Video", infoLabels={"plot": kodiutils.strip_html_tags(kodiutils.compat_py23str(description)), "title": kodiutils.compat_py23str(title)})
 
         addDirectoryItem(
             plugin.handle,
@@ -111,14 +111,14 @@ def live():
 
         liz = ListItem("[B][COLOR blue]{}[/COLOR][/B] ({}) [B]{}%[/B]".format(
             kodiutils.compat_py23str(rtp_channel["name"]),
-            kodiutils.compat_py23str(dvr),
+            kodiutils.strip_html_tags(kodiutils.compat_py23str(dvr)),
             kodiutils.compat_py23str(progpercent))
         )
         liz.setArt({"thumb": progimg,
                     "icon": progimg,
                     "fanart": kodiutils.FANART})
         liz.setProperty('IsPlayable', 'true')
-        liz.setInfo("Video", infoLabels={"plot": kodiutils.compat_py23str(dvr)})
+        liz.setInfo("Video", infoLabels={"plot": kodiutils.strip_html_tags(kodiutils.compat_py23str(dvr))})
         addDirectoryItem(
             plugin.handle,
             plugin.url_for(
@@ -242,7 +242,7 @@ def programs_category():
         liz.setArt({"thumb": img,
                     "icon": img,
                     "fanart": kodiutils.FANART})
-        liz.setInfo("Video", infoLabels={"plot": kodiutils.compat_py23str(description), "title": kodiutils.compat_py23str(title)})
+        liz.setInfo("Video", infoLabels={"plot": kodiutils.strip_html_tags(kodiutils.compat_py23str(description)), "title": kodiutils.compat_py23str(title)})
 
         addDirectoryItem(
             plugin.handle,
@@ -302,7 +302,7 @@ def programs_episodes():
         liz.setArt({"thumb": img,
                     "icon": img,
                     "fanart": kodiutils.FANART})
-        liz.setInfo("Video", infoLabels={"plot": kodiutils.compat_py23str(description), "title": kodiutils.compat_py23str(ep)})
+        liz.setInfo("Video", infoLabels={"plot": kodiutils.strip_html_tags(kodiutils.compat_py23str(description)) + "...", "title": kodiutils.compat_py23str(ep)})
         liz.setProperty('IsPlayable', 'true')
 
         addDirectoryItem(

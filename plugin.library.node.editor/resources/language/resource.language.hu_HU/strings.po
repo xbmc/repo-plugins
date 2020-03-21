@@ -1,0 +1,81 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Hungarian (http://www.transifex.com/projects/p/xbmc-addons/language/hu/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "Videó könytár"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "Zene könyvtár"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "Törlés"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "Cím szerkesztése"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "Ikon keresése"
+
+msgctxt "#30200"
+msgid "Content"
+msgstr "Tartalom"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "Útvonal"
+
+msgctxt "#30305"
+msgid "Field"
+msgstr "Mező"
+
+msgctxt "#30306"
+msgid "Operator"
+msgstr "Üzemeltető"
+
+msgctxt "#30307"
+msgid "Value"
+msgstr "Érték"
+
+msgctxt "#30309"
+msgid "Content"
+msgstr "Tartalom"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "Csoport"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "Útvonal"
+
+msgctxt "#30313"
+msgid "Icon"
+msgstr "Ikon"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "Rendezés"
+
+msgctxt "#30315"
+msgid "Direction"
+msgstr "Irány"

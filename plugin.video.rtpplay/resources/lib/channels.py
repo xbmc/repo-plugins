@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Mobile Safari/537.36"
-    #"Referer": "http://www.rtp.pt/play/"
+    "User-Agent": "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Mobile Safari/537.36",
+    "Referer": "https://www.rtp.pt/play/direto/",
 }
 
 RTP_CHANNELS = [

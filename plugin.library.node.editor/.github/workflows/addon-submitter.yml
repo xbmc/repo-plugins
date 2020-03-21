@@ -1,0 +1,45 @@
+name: Kodi Addon-Submitter
+
+on:
+  create:
+    tags:
+      - v*
+
+jobs:
+  kodi-addon-submitter:
+    runs-on: ubuntu-latest
+    name: Kodi addon submitter
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Generate distribution zip and submit to official kodi repository
+      id: kodi-addon-submitter
+      uses: xbmc/action-kodi-addon-submitter@v1.0
+      with: # Replace all the below values
+        kodi-repository: repo-plugins
+        kodi-version: matrix
+        addon-id: plugin.library.node.editor
+      env: # Make sure you create the below secrets (GH_TOKEN and EMAIL)
+        GH_USERNAME: enenbot
+        GH_TOKEN: ${{secrets.GH_TOKEN}}
+        EMAIL: ${{secrets.EMAIL}}
+    - name: Create Github Release
+      id: create_release
+      uses: actions/create-release@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+    - name: Upload Addon zip to github release
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.kodi-addon-submitter.outputs.addon-zip }}
+        asset_name: ${{ steps.kodi-addon-submitter.outputs.addon-zip }}
+        asset_content_type: application/zip

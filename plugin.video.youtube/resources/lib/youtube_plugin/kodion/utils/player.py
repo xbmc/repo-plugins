@@ -29,6 +29,8 @@ class PlaybackMonitorThread(threading.Thread):
 
         self.playback_json = playback_json
         self.video_id = self.playback_json.get('video_id')
+        self.channel_id = self.playback_json.get('channel_id')
+        self.video_status = self.playback_json.get('video_status')
 
         self.total_time = 0.0
         self.current_time = 0.0
@@ -108,7 +110,17 @@ class PlaybackMonitorThread(threading.Thread):
         plugin_play_path = 'plugin://plugin.video.youtube/play/'
         video_id_param = 'video_id=%s' % self.video_id
 
+        notification_sent = False
+
         while player.isPlaying() and not self.context.abort_requested() and not self.stopped():
+            if not notification_sent:
+                notification_sent = True
+                self.context.send_notification('PlaybackStarted', {
+                    'video_id': self.video_id,
+                    'channel_id': self.channel_id,
+                    'status': self.video_status,
+                })
+
             last_total_time = self.total_time
             last_current_time = self.current_time
             last_segment_start = self.segment_start
@@ -238,6 +250,11 @@ class PlaybackMonitorThread(threading.Thread):
                                     format(self.current_time, '.3f'),
                                     self.percent_complete, state))
 
+        self.context.send_notification('PlaybackStopped', {
+            'video_id': self.video_id,
+            'channel_id': self.channel_id,
+            'status': self.video_status,
+        })
         self.context.log_debug('Playback stopped [%s]: %s secs of %s @ %s%%' %
                                (self.video_id, format(self.current_time, '.3f'),
                                 format(self.total_time, '.3f'), self.percent_complete))

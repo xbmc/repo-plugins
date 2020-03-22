@@ -1,0 +1,15 @@
+{
+  "channels": [
+    {
+      "guid": "79569D55-6298-402A-8AF0-A16955EA052F",
+      "name": "RTBF",
+      "description": "Émissions de RTBF Auvio",
+      "icon": "rtbficon.png",
+      "category": "National",
+      "channelcode": null,
+      "sortorder": 14,
+      "language": "be",
+      "fanart": "rtbffanart.png"
+    }
+  ]
+}

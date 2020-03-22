@@ -1,0 +1,136 @@
+{
+  "channels": [
+    {
+      "guid": "9EC8F612-2EA4-11DE-867C-B84656D89593",
+      "name": "TV3 (Sverige)",
+      "description": "Sändningar från TV3 (Viafree.se).",
+      "icon": "tv3selarge.png",
+      "category": "National",
+      "channelcode": "se3",
+      "sortorder": 3,
+      "language": "se",
+      "fanart": "tv3sefanart.png",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "FB34E1F0-2930-11DE-A339-255856D89593",
+      "name": "TV6 (Sverige)",
+      "description": "Sändningar från TV6 (Viafree.se).",
+      "icon": "tv6large.png",
+      "category": "National",
+      "channelcode": "se6",
+      "sortorder": 6,
+      "language": "se",
+      "fanart": "tv6viasatfanart.png",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "BDC1A5C5-2777-4D05-BB5B-742A88B89CC5",
+      "name": "TV8 (Sverige)",
+      "description": "Sändningar från TV8 (Viafree.se).",
+      "icon": "tv8selarge.png",
+      "category": "National",
+      "channelcode": "se8",
+      "sortorder": 8,
+      "language": "se",
+      "fanart": "tv8sefanart.jpg",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "584E7420-2867-11E3-AA01-F2806188709B",
+      "name": "TV10",
+      "description": "Sändningar från TV10 (Viafree.se).",
+      "icon": "tv10selarge.png",
+      "category": "National",
+      "channelcode": "se10",
+      "sortorder": 10,
+      "language": "se",
+      "fanart": "tv10sefanart.png",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "FF998410-CAD5-4FDC-9E48-E28BC4E51BC4",
+      "name": "ViaFree (Sverige)",
+      "description": "Sändningar från Viafree.se.",
+      "icon": "viafreese.png",
+      "category": "National",
+      "channelcode": "viafreese",
+      "sortorder": 10,
+      "language": "se",
+      "fanart": "viafreesefanart.png",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "D2FE9600-EFFB-4D15-A175-FBDE01907944",
+      "name": "National Geographic (Sverige)",
+      "description": "Sändningar från National Geographic (Viafree.se).",
+      "icon": "nationalgeographic.png",
+      "category": "National",
+      "channelcode": "ngse",
+      "sortorder": 11,
+      "language": "se",
+      "fanart": "nationalgeographic.jpg",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "CAACF71C-55B2-456A-86B9-F0A80710B286",
+      "name": "MTV (Sverige)",
+      "description": "Sändningar från MTV (Viafree.se).",
+      "icon": "mtvlarge.png",
+      "category": "National",
+      "channelcode": "mtvse",
+      "sortorder": 12,
+      "language": "se",
+      "fanart": "mtvfanart2.jpg",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "89673FF0-5EF3-11E0-8CC9-494DDFD72085",
+      "name": "TV3 (Norge)",
+      "description": "Sendinger fra TV3 (Viafree.no).",
+      "icon": "tv3nolarge.png",
+      "category": "National",
+      "channelcode": "no3",
+      "sortorder": 3,
+      "language": "no",
+      "fanart": "tv3fanart.jpg",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "90DD5C88-5EF3-11E0-93A2-4D4DDFD72085",
+      "name": "Viasat 4",
+      "description": "Sendinger fra Viasat 4 (Viafree.no).",
+      "icon": "viasat4nolarge.png",
+      "category": "National",
+      "channelcode": "no4",
+      "sortorder": 4,
+      "language": "no",
+      "fanart": "viasat4fanart.jpg",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "3CD2662C-3C7A-4217-8375-079B2D850F27",
+      "name": "TV6 (Norge)",
+      "description": "Sendinger fra TV6 (Viafree.no).",
+      "icon": "tv6large.png",
+      "category": "National",
+      "channelcode": "no6",
+      "sortorder": 6,
+      "language": "no",
+      "fanart": "tv6viasatfanart.png",
+      "localIPSupported": true,
+      "adaptiveAddonSelectable": true
+    }
+  ],
+  "settings": [
+  ]
+}

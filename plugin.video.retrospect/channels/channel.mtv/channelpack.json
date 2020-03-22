@@ -1,0 +1,12 @@
+{
+  "id": "channel.mtv",
+  "version": "5.2.0",
+  "textures": {
+    "channel.mtv.mtvnl/mtvfanart.jpg": "6138a5524e8eeec6637b60daa0955714",
+    "channel.mtv.mtvnl/mtvfanart2.jpg": "256792d58de0c066505266ef8ade34b4",
+    "channel.mtv.mtvnl/mtvnlimage.png": "ec8b1b46f315b43e8897cccf38ea8d90",
+    "channel.mtv.mtvnl/mtvnllarge.png": "eeeb40ab6da0acddacc04b655119082d",
+    "channel.mtv.southpark/southparkimage.png": "1d4705cd4835cd451a71fbeeea3a2366",
+    "channel.mtv.southpark/southparklarge.png": "ff3427802003a036803214b888f0f066"
+  }
+}

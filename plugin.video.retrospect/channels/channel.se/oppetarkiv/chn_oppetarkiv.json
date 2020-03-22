@@ -1,0 +1,19 @@
+{
+  "channels": [
+    {
+      "guid": "F638A42C-E419-11E2-AB44-9E636188709B",
+      "name": "SVT Öppet arkiv",
+      "description": "Sändningar från SVT Öppet arkiv (www.oppetarkiv.se).",
+      "icon": "oppetarkivlarge.png",
+      "category": "National",
+      "channelcode": "oppetarkiv",
+      "sortorder": 1,
+      "language": "se",
+      "compatible": "Environments.All",
+      "fanart": "oppetarkivfanart.jpg",
+      "localIPSupported": true
+    }
+  ],
+  "settings": [
+  ]
+}

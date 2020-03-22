@@ -1,0 +1,23 @@
+{
+  "id": "channel.sbsnl",
+  "version": "5.2.0",
+  "textures": {
+    "channel.sbsnl.kijknl/net5fanart.jpg": "b1b55db8fef4e59f74413dd11d1d21e8",
+    "channel.sbsnl.kijknl/sbs6fanart.jpg": "de93531e18f9c0cbf21e7c4962fe0325",
+    "channel.sbsnl.kijknl/sbs6image.jpg": "9da440937bce453497bd50d60241f1e0",
+    "channel.sbsnl.kijknl/sbs9fanart.jpg": "1cdf2c0edf987a2ee58e8b480068237f",
+    "channel.sbsnl.kijknl/kijkfanart.png": "a0d61579eb8c65b3fbe4543eebb6baa1",
+    "channel.sbsnl.kijknl/kijkimage.png": "cf29cf3a36eb3d23e40b08d758ea0d51",
+    "channel.sbsnl.kijknl/kijklarge.png": "2d008856e6b17b29c950e2ad262b760f",
+    "channel.sbsnl.kijknl/net5image.png": "d5ff69a373ba9ce905f4af8b5aeae3b0",
+    "channel.sbsnl.kijknl/net5large.png": "9dbd4d7ceb89ba93f7b044655a176e34",
+    "channel.sbsnl.kijknl/sbs6image.png": "bf4781cfdee320de1bfd0f708926461c",
+    "channel.sbsnl.kijknl/sbs6large.png": "85cb9e886e1e74c8b6d896d8dda3057e",
+    "channel.sbsnl.kijknl/sbs9fanart.png": "1d2623df5cef42c4e28bef154527aed1",
+    "channel.sbsnl.kijknl/sbs9image.png": "dea349ec6381cc9e5765ff04f139e4b9",
+    "channel.sbsnl.kijknl/sbs9large.png": "a7afe54c5252a276cf6b5e052ca0cf77",
+    "channel.sbsnl.kijknl/veronicafanart.png": "b90114d085eed7e26c59912202cdef31",
+    "channel.sbsnl.kijknl/veronicaimage.png": "e50fe1453e2e9576d0ddb96a72f46469",
+    "channel.sbsnl.kijknl/veronicalarge.png": "aeaca96300c388719f94bb97f966426c"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "channel.rtlnl",
+  "version": "5.2.0",
+  "textures": {
+    "channel.rtlnl.rtl/rtl.png": "46f410339e8e23162a5dc0075fbae1fb",
+    "channel.rtlnl.rtl/rtl4large.png": "c48507f68edc430c086c3bf8912dff2f",
+    "channel.rtlnl.rtl/rtl5large.png": "6cd7ce52a19ae670cbddd333cf9baec3",
+    "channel.rtlnl.rtl/rtl7large.png": "bca2df05c1b13648d22f35812f6ceabe",
+    "channel.rtlnl.rtl/rtl8large.png": "606ef68602e40ae1b1a1fe06b3e042f9",
+    "channel.rtlnl.rtl/rtlfanart.png": "3f6d077caf0997eeff549747382a90b8",
+    "channel.rtlnl.rtl/rtlimage.png": "6fcf685e21ee2b95429709fe4417f8d7",
+    "channel.rtlnl.rtl/rtllarge.png": "c9a87fc1d2f6201ef2956ef4d61a2c94"
+  }
+}

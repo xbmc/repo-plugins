@@ -1,0 +1,16 @@
+{
+  "channels": [
+    {
+      "guid": "870EAD32-F2F9-11DD-B0E7-747356D89593",
+      "name": "AT5",
+      "description": "AT5 Uitzendinggemist",
+      "icon": "at5large.png",
+      "category": "Regional",
+      "sortorder": 100,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "at5fanart.jpg",
+      "adaptiveAddonSelectable": true
+    }
+  ]
+}

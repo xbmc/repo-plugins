@@ -1,0 +1,15 @@
+{
+  "channels": [
+    {
+      "guid": "CC524DC0-C846-11E0-871B-984F4824019B",
+      "name": "Fox Sports",
+      "description": "Videos van de foxsports.nl website.",
+      "icon": "foxsportlarge.png",
+      "category": "Sport",
+      "channelcode": "eredivisie",
+      "sortorder": 210,
+      "language": "nl",
+      "fanart": "foxsportfanart.jpg"
+    }
+  ]
+}

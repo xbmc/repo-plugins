@@ -1,0 +1,34 @@
+{
+  "channels": [
+    {
+      "guid": "ED8FDB9C-3870-11E2-B1C2-192A6288709B",
+      "name": "NPO Start",
+      "description": "Uitzendingen van de publieke zenders beschikbaar via www.npostart.nl.",
+      "icon": "npolarge.png",
+      "category": "National",
+      "channelcode": "uzgjson",
+      "sortorder": 1,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "nosfanart4.jpg",
+      "message": "By using the NPO Start channel you are accepting the NPO Terms of Use: https://www.npostart.nl/npo-id-gebruiksvoorwaarden."
+    }
+  ],
+  "settings": [
+    {
+      "order": 1,
+      "value": "type=\"text\" label=\"30094\" default=\"\"",
+      "id": "username"
+    },
+    {
+      "order": 2,
+      "value": "label=\"30093\" type=\"action\" action=\"RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_ED8FDB9C-3870-11E2-B1C2-192A6288709B_password&amp;settingname=NPO.nl password&amp;tabfocus=102)\" option=\"close\"",
+      "id": "password_set"
+    },
+    {
+      "order": 3,
+      "value": "default=\"\"",
+      "id": "password"
+    }
+  ]
+}

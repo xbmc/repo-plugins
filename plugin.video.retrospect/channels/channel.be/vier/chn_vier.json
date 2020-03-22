@@ -1,0 +1,62 @@
+{
+  "channels": [
+    {
+      "guid": "50E04907-8983-4552-A775-E70F3D91FB99",
+      "name": "Vier",
+      "description": "Online uitzendingen van www.vier.be.",
+      "icon": "viericon.png",
+      "category": "National",
+      "channelcode": null,
+      "sortorder": 4,
+      "language": "be",
+      "fanart": "vierfanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+     "guid": "9F44A86D-D62F-4775-A5BC-B99D1AE038FE",
+      "name": "Vijf",
+      "description": "Online uitzendingen van www.vijf.be.",
+      "icon": "vijficon.png",
+      "category": "National",
+      "channelcode": "vijfbe",
+      "sortorder": 5,
+      "language": "be",
+      "fanart": "vijffanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+     "guid": "AF79856C-95E1-4181-8636-C479E447F092",
+      "name": "Zes",
+      "description": "Online uitzendingen van www.zestv.be.",
+      "icon": "zesiconlight.png",
+      "category": "National",
+      "channelcode": "zesbe",
+      "sortorder": 6,
+      "language": "be",
+      "fanart": "zesfanart.jpg",
+      "adaptiveAddonSelectable": true
+    }
+  ],
+  "settings": [
+    {
+      "order": 1,
+      "id": "viervijfzes_username",
+      "value": "id=\"viervijfzes_username\" type=\"text\" label=\"30094\" default=\"\""
+    },
+    {
+      "order": 2,
+      "id": "viervijfzes_password_set",
+      "value": "id=\"viervijfzes_password_set\" label=\"30093\" type=\"action\" action=\"RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=viervijfzes_password&amp;settingname=Vier/Vijf/Zes.be password&amp;tabfocus=102)\" option=\"close\""
+    },
+    {
+      "order": 3,
+      "id": "viervijfzes_password",
+      "value": "id=\"viervijfzes_password\" default=\"\""
+    },
+    {
+      "order": 4,
+      "id": "viervijfzes_refresh_token",
+      "value": "id=\"viervijfzes_refresh_token\" default=\"\""
+    }
+  ]
+}

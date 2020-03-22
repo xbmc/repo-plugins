@@ -1,0 +1,27 @@
+{
+  "channels": [
+    {
+      "guid": "3D4C7F88-FAB8-11E1-868D-8CDA6088709B",
+      "name": "Pathé Nederland (HTML)",
+      "description": "Films die draaien in de Nederlandse Pathé bioscopen.",
+      "icon": "pathelarge.png",
+      "category": "Video",
+      "channelcode": "pathe",
+      "sortorder": 50,
+      "language": "nl",
+      "compatible": "Environments.NoPlatform"
+    },
+    {
+      "guid": "66252BE4-E952-4AE5-B8EB-43E6271C688B",
+      "name": "Pathé Nederland",
+      "description": "Films die draaien in de Nederlandse Pathé bioscopen.",
+      "icon": "pathelarge.png",
+      "category": "Video",
+      "channelcode": "pathejson",
+      "sortorder": 50,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "pathefanart.jpg"
+    }
+  ]
+}

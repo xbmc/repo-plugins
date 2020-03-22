@@ -1,0 +1,39 @@
+{
+  "channels": [
+    {
+      "guid": "F530A9EC-3C0D-49B6-96C2-480273417460",
+      "name": "VRT NU",
+      "description": "VRT NU is het online videoplatform van VRT waarop je je favoriete programma’s van de VRT-merken kan bekijken. Je kan live naar de televisiezenders Eén, Canvas en Ketnet kijken en naar een selectie video’s van radiozenders MNM en Studio Brussel. Een groot aantal van de programma’s van deze merken kan je ook achteraf herbekijken.",
+      "icon": "vrtnuicon.png",
+      "category": "National",
+      "channelcode": "vrtnu",
+      "sortorder": 11,
+      "language": "be",
+      "fanart": "vrtnufanart.jpg",
+      "message": "Streams from VRT NU require a VRT account. It can be configured via the Channel settings.",
+      "adaptiveAddonSelectable": true
+    }
+  ],
+  "settings": [
+    {
+      "order": 1,
+      "id": "username",
+      "value": "label=\"30094\" type=\"text\" default=\"\""
+    },
+    {
+      "order": 2,
+      "id": "password_set",
+      "value": "label=\"30093\" type=\"action\" action=\"RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_F530A9EC-3C0D-49B6-96C2-480273417460_password&amp;settingname=VRT NU password&amp;tabfocus=102)\" option=\"close\""
+    },
+    {
+      "order": 3,
+      "id": "password",
+      "value": "default=\"\""
+    },
+    {
+      "order": 3,
+      "id": "hls_over_dash",
+      "value": "label=\"30099\" type=\"bool\" default=\"\""
+    }
+  ]
+}

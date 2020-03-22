@@ -1,0 +1,13 @@
+{
+  "channels": [
+    {
+      "guid": "21D74788-8084-11E0-9A28-39E64824019B",
+      "name": "MSDN Channel 9",
+      "description": "Channel 9 videos @ MSDN.com",
+      "icon": "channel9large.png",
+      "category": "Tech",
+      "channelcode": "channel9",
+      "fanart": "channel9fanart.png"
+    }
+  ]
+}

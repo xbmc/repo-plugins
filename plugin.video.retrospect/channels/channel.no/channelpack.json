@@ -1,0 +1,9 @@
+{
+  "id": "channel.no",
+  "version": "5.2.0",
+  "textures": {
+    "channel.no.nrkno/nrkfanart.jpg": "3b3df86edb7e6f20ecdbf77679b7b964",
+    "channel.no.nrkno/nrknoimage.png": "97130b4c02374dc4784e27135fbe8441",
+    "channel.no.nrkno/nrknolarge.png": "3f91fb3dcdb03715d4d10d75f7cdd0a7"
+  }
+}

@@ -1,0 +1,769 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: Retrospect Add-on\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Bas Rieter\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nb-NO\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30000"
+msgid "Stream Quality"
+msgstr "Strømkvalitet"
+
+msgctxt "#30001"
+msgid "Low"
+msgstr "Lav"
+
+msgctxt "#30002"
+msgid "Medium"
+msgstr "Middels"
+
+msgctxt "#30003"
+msgid "High"
+msgstr "Høy"
+
+msgctxt "#30009"
+msgid "General"
+msgstr "Generelt"
+
+msgctxt "#30010"
+msgid "Channels"
+msgstr "Kanaler"
+
+msgctxt "#30011"
+msgid "Requires restart of Retrospect to take effect."
+msgstr "Krever omstart av Retrospect."
+
+msgctxt "#30016"
+msgid "Sort by"
+msgstr "Sorter etter"
+
+msgctxt "#30017"
+msgid "Name"
+msgstr "Navn"
+
+msgctxt "#30018"
+msgid "Date"
+msgstr "Dato"
+
+msgctxt "#30019"
+msgid "Show DRM/Paid warning before playback"
+msgstr "Vis advarsel om DRM/Betalt innhold før avspilling"
+
+msgctxt "#30020"
+msgid "Maximum stream bitrate"
+msgstr "Maksimal strømbitrate"
+
+msgctxt "#30021"
+msgid "Enable subtitles by default when available"
+msgstr "Bruk teksting"
+
+msgctxt "#30022"
+msgid "If available"
+msgstr "Hvis tilgjengelig"
+
+msgctxt "#30023"
+msgid "Never show"
+msgstr "Aldri vis"
+
+msgctxt "#30025"
+msgid "None"
+msgstr "Ingen"
+
+msgctxt "#30026"
+msgid "Group list if exceeds # folders"
+msgstr "Gruppér oppføringsliste hvis den overgår # mapper"
+
+msgctxt "#30028"
+msgid "Proxy"
+msgstr "Middeltjener"
+
+msgctxt "#30029"
+msgid "Server"
+msgstr "Tjener"
+
+msgctxt "#30030"
+msgid "Port"
+msgstr "Port"
+
+msgctxt "#30031"
+msgid "Cache HTTP(S) requests"
+msgstr "Mellomlagre HTTP(S)-forespørsler"
+
+msgctxt "#30032"
+msgid "Channel Settings"
+msgstr "Kanalinnstillinger"
+
+msgctxt "#30034"
+msgid "No channel selected"
+msgstr "Ingen kanal valgt"
+
+msgctxt "#30035"
+msgid "Username"
+msgstr "Brukernavn"
+
+msgctxt "#30036"
+msgid "Password"
+msgstr "Passord"
+
+msgctxt "#30038"
+msgid "Confirm proxy changes"
+msgstr "Bekreft mellomtjener endringer"
+
+msgctxt "#30039"
+msgid "Are you sure you want to update all channels for this country with this proxy?"
+msgstr "Er du sikker på at du vil oppdatere alle kanalene for dette landet med denne mellomtjeneren?"
+
+msgctxt "#30040"
+msgid "Channels"
+msgstr "Kanaler"
+
+msgctxt "#30042"
+msgid "Enabled"
+msgstr "Aktivert"
+
+msgctxt "#30043"
+msgid "Folder prefix"
+msgstr "Mappeprefiks"
+
+msgctxt "#30046"
+msgid "DRM/Geo Location/Premium filters"
+msgstr "DRM/Geo lokasjon/Premium filtre"
+
+msgctxt "#30048"
+msgid "Log level"
+msgstr "Loggnivå"
+
+msgctxt "#30052"
+msgid "Send usage statistics"
+msgstr "Send bruksstatistikk"
+
+msgctxt "#30053"
+msgid "Appearance"
+msgstr "Utseende"
+
+msgctxt "#30055"
+msgid "Advanced"
+msgstr "Avansert"
+
+msgctxt "#30059"
+msgid "Other Countries"
+msgstr "Other Countries"
+
+msgctxt "#30060"
+msgid "Enable/Disable channels by country of origin"
+msgstr "Velg opprinnelsesland for å administrere kanaler"
+
+msgctxt "#30061"
+msgid "Channel Origin"
+msgstr "Kanalopprinnelse"
+
+msgctxt "#30062"
+msgid "HTTP"
+msgstr "HTTP"
+
+msgctxt "#30063"
+msgid "Channel to configure"
+msgstr "Kanal å konfigurere"
+
+msgctxt "#30064"
+msgid "Proxy Group"
+msgstr "Mellomtjener-gruppe"
+
+msgctxt "#30065"
+msgid "Country Settings"
+msgstr "Landinnstillinger"
+
+msgctxt "#30066"
+msgid "DNS"
+msgstr "DNS"
+
+msgctxt "#30067"
+msgid "Show channels in categories"
+msgstr "Vis kanaler i kategorier"
+
+msgctxt "#30068"
+msgid "Active"
+msgstr "Aktiv"
+
+msgctxt "#30069"
+msgid "Channel Settings"
+msgstr "Kanalinnstillinger"
+
+msgctxt "#30070"
+msgid "Let Kodi determine bitrate if possible"
+msgstr "La Kodi bestemme bithastighet hvis mulig"
+
+msgctxt "#30071"
+msgid "Set the proxy and local IP to all channels related to this country"
+msgstr "Sett mellomtjener og lokal IP for kanaler relatert til dette landet"
+
+msgctxt "#30072"
+msgid "Proxy Type"
+msgstr "Type mellomtjener"
+
+msgctxt "#30073"
+msgid "- Geo-Locked = º, DRM protected = ^ and Premium = ª."
+msgstr "- Geo-Låst = º, DRM beskyttet = ^ og Premium = ª."
+
+msgctxt "#30074"
+msgid "Disabled"
+msgstr "Deaktivert"
+
+msgctxt "#30075"
+msgid "Empty list behaviour"
+msgstr "Ved tom liste"
+
+msgctxt "#30076"
+msgid "Show error"
+msgstr "Vis en feilmelding"
+
+msgctxt "#30077"
+msgid "Show empty list"
+msgstr "Vis tom liste"
+
+msgctxt "#30078"
+msgid "Show dummy item"
+msgstr "Vis eksempeloppføring"
+
+msgctxt "#30079"
+msgid "Local IP (0.0.0.0=disabled)"
+msgstr "Lokal IP (0.0.0.0 = deaktivert)"
+
+msgctxt "#30080"
+msgid "Filter DRM protected items"
+msgstr "Filtrér DRM-beskyttede oppføringer"
+
+msgctxt "#30081"
+msgid "Filter Premium/Paid items"
+msgstr "Filtrer Premium/betalte oppføringer"
+
+msgctxt "#30082"
+msgid "Apply filter to"
+msgstr "Bruk filter på"
+
+msgctxt "#30083"
+msgid "Folders & Streams"
+msgstr "Mapper og strømmer"
+
+msgctxt "#30084"
+msgid "Streams Only"
+msgstr "Kun strømmer"
+
+msgctxt "#30085"
+msgid "Geo Location"
+msgstr "Geo lokasjon"
+
+msgctxt "#30086"
+msgid "Hide Fanart"
+msgstr "Skjul fankunst"
+
+msgctxt "#30087"
+msgid "Mix folders and streams while sorting"
+msgstr "Bland mapper og strømmer mens du sorterer"
+
+msgctxt "#30089"
+msgid "Password Vault"
+msgstr "Passord hvelv"
+
+msgctxt "#30090"
+msgid "The 'Password Vault' protects stored password with encryption using a PIN."
+msgstr "'Password hvelv' beskytter lagrede passord med kryptering - låst med en PIN-kode."
+
+msgctxt "#30091"
+msgid "Change Vault Pin"
+msgstr "Endre hvelv PIN-kode"
+
+msgctxt "#30092"
+msgid "Reset Vault"
+msgstr "Tilbakestill hvelv"
+
+msgctxt "#30093"
+msgid "Password"
+msgstr "Passord"
+
+msgctxt "#30094"
+msgid "Username"
+msgstr "Brukernavn"
+
+msgctxt "#30095"
+msgid "Show Hidden Items"
+msgstr "Vis skjulte oppføringer"
+
+msgctxt "#30096"
+msgid "Country"
+msgstr "Land"
+
+msgctxt "#30097"
+msgid "Local IP"
+msgstr "Lokal IP"
+
+msgctxt "#30098"
+msgid "Logging & Diagnostics"
+msgstr ""
+
+msgctxt "#30100"
+msgid "None"
+msgstr "Ingen"
+
+msgctxt "#30101"
+msgid "Regional"
+msgstr "Regionalt"
+
+msgctxt "#30102"
+msgid "National"
+msgstr "Nasjonalt"
+
+msgctxt "#30103"
+msgid "Video"
+msgstr "Video"
+
+msgctxt "#30104"
+msgid "Radio"
+msgstr "Radio"
+
+msgctxt "#30105"
+msgid "Sport"
+msgstr "Sport"
+
+msgctxt "#30106"
+msgid "Kids"
+msgstr "Barn"
+
+msgctxt "#30107"
+msgid "Tech"
+msgstr "Teknisk"
+
+msgctxt "#30108"
+msgid "Other"
+msgstr "Annet"
+
+msgctxt "#30199"
+msgid "10"
+msgstr "10"
+
+msgctxt "#30200"
+msgid "50"
+msgstr "50"
+
+msgctxt "#30201"
+msgid "75"
+msgstr "75"
+
+msgctxt "#30202"
+msgid "100"
+msgstr "100"
+
+msgctxt "#30203"
+msgid "150"
+msgstr "150"
+
+msgctxt "#30204"
+msgid "200"
+msgstr "200"
+
+msgctxt "#30205"
+msgid "1000"
+msgstr "1000"
+
+msgctxt "#30300"
+msgid "Other Countries"
+msgstr "Andre land"
+
+msgctxt "#30301"
+msgid "The Netherlands"
+msgstr "Nederland"
+
+msgctxt "#30302"
+msgid "Sweden"
+msgstr "Sverige"
+
+msgctxt "#30303"
+msgid "Lithuania"
+msgstr "Litauen"
+
+msgctxt "#30304"
+msgid "Latvia"
+msgstr "Latvia"
+
+msgctxt "#30305"
+msgid "Norway"
+msgstr "Norge"
+
+msgctxt "#30306"
+msgid "Belgium"
+msgstr "Belgia"
+
+msgctxt "#30307"
+msgid "United Kingdom"
+msgstr "Storbritannia"
+
+msgctxt "#30308"
+msgid "Estonia"
+msgstr "Estland"
+
+msgctxt "#30309"
+msgid "Germany"
+msgstr "Tyskland"
+
+msgctxt "#30310"
+msgid "Denmark"
+msgstr "Danmark"
+
+msgctxt "#30311"
+msgid "Finland"
+msgstr "Finland"
+
+msgctxt "#30401"
+msgid "Dutch"
+msgstr "Nederlandsk"
+
+msgctxt "#30402"
+msgid "Swedish"
+msgstr "Svensk"
+
+msgctxt "#30403"
+msgid "Lithuanian"
+msgstr "Litauisk"
+
+msgctxt "#30404"
+msgid "Latvian"
+msgstr "Latvisk"
+
+msgctxt "#30405"
+msgid "Norwegian"
+msgstr "Norsk"
+
+msgctxt "#30406"
+msgid "Belgian"
+msgstr "Belgisk"
+
+msgctxt "#30407"
+msgid "British"
+msgstr "Britisk"
+
+msgctxt "#30408"
+msgid "Estonian"
+msgstr "Estisk"
+
+msgctxt "#30409"
+msgid "German"
+msgstr "Tysk"
+
+msgctxt "#30410"
+msgid "Danish"
+msgstr "Dansk"
+
+msgctxt "#30411"
+msgid "Finnish"
+msgstr "Finsk"
+
+msgctxt "#30500"
+msgid "All Favourites"
+msgstr "Alle favoritter"
+
+msgctxt "#30501"
+msgid "Favourite"
+msgstr "Favoritt"
+
+msgctxt "#30502"
+msgid "Favourites"
+msgstr "Favoritter"
+
+msgctxt "#30503"
+msgid "Channel Favourites"
+msgstr "Kanal favoritter"
+
+msgctxt "#30504"
+msgid "Add to Favourites"
+msgstr "Legg til i"
+
+msgctxt "#30505"
+msgid "Hide"
+msgstr "Skjul"
+
+msgctxt "#30506"
+msgid "Remove Favourite"
+msgstr "Fjern"
+
+msgctxt "#30507"
+msgid "Select Channels »"
+msgstr "Kanaler"
+
+msgctxt "#30508"
+msgid "No favourites available"
+msgstr "Ingen favoritter tilgjengelig"
+
+msgctxt "#30509"
+msgid "Cannot start playback"
+msgstr "Kan ikke starte avspilling"
+
+msgctxt "#30510"
+msgid "New version available"
+msgstr "Ny versjon tilgjengelig"
+
+msgctxt "#30516"
+msgid "New Version Available."
+msgstr "Ny versjon tilgjengelig."
+
+msgctxt "#30517"
+msgid "A new version of %s is available: %s. Please visit the website to download it."
+msgstr "En ny versjon av %s is available: %s. Vennligst besøk nettstedet for å laste ned denne versjonen."
+
+msgctxt "#30520"
+msgid "Repository Warning"
+msgstr "Pakkelager advarsel"
+
+msgctxt "#30521"
+msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
+msgstr "Retrospect-pakkelageret er ikke installert.|Installer det for fremtidige oppdateringer."
+
+msgctxt "#30522"
+msgid "Channel message"
+msgstr "Kanalmelding"
+
+msgctxt "#30523"
+msgid "Error"
+msgstr "Feil"
+
+msgctxt "#30524"
+msgid "No videos were found for the selected item."
+msgstr "Ingen videoer ble funnet for denne oppføringen."
+
+msgctxt "#30525"
+msgid "The selected item does not have|any streams associated."
+msgstr "Den valgte oppføringen har ikke|noen strømmer tilknyttet."
+
+msgctxt "#30528"
+msgid "Add-on Settings"
+msgstr "Utvidelseinnstillinger"
+
+msgctxt "#30529"
+msgid "Refresh list"
+msgstr "Oppdatér liste"
+
+msgctxt "#30530"
+msgid "Check for Retrospect updates"
+msgstr "Se etter etter Retrospect oppdateringer"
+
+msgctxt "#30538"
+msgid "The selected live stream has not yet|begun."
+msgstr "Den valgte direktesendingen har ikke startet ennå."
+
+msgctxt "#30539"
+msgid "Live stream"
+msgstr "Direktesending"
+
+msgctxt "#30540"
+msgid "Geo-Locked"
+msgstr "Geo-låst"
+
+msgctxt "#30541"
+msgid "Queue item"
+msgstr "Legg til i kø"
+
+msgctxt "#30542"
+msgid "Starting %s."
+msgstr "Starter %s."
+
+msgctxt "#30543"
+msgid "Season"
+msgstr "Sesong"
+
+msgctxt "#30544"
+msgid "Episode"
+msgstr "Episode"
+
+msgctxt "#30545"
+msgid "Titles with '%s'"
+msgstr "Titler med '%s'"
+
+msgctxt "#30546"
+msgid "Other Chars"
+msgstr "Andre tegn"
+
+msgctxt "#30547"
+msgid "More Pages"
+msgstr "Flere sider"
+
+msgctxt "#30548"
+msgid "Clips"
+msgstr "Klipp"
+
+msgctxt "#30549"
+msgid "Error retrieving the list of items."
+msgstr "Feil ved henting av liste med oppføringer."
+
+msgctxt "#30550"
+msgid "No episodes found for the selected item."
+msgstr "Ingen episoder funnet for den valgte oppføringen."
+
+msgctxt "#30551"
+msgid "Today"
+msgstr "I dag"
+
+msgctxt "#30552"
+msgid "Yesterday"
+msgstr "I går"
+
+msgctxt "#30553"
+msgid "Day before yesterday"
+msgstr "Dag for i går"
+
+msgctxt "#30554"
+msgid "DRM Protection"
+msgstr "DRM-beskyttelse"
+
+msgctxt "#30555"
+msgid "The selected item is DRM protected and might not play on Kodi."
+msgstr "Det valgte elementet er DRM-beskyttet og kan ikke spilles av på Kodi."
+
+msgctxt "#30556"
+msgid "Initialising channel(s)."
+msgstr "Initialiserer kanal(er)."
+
+msgctxt "#30557"
+msgid "Channels have been updated or installed. Performing first time actions. This could take some time."
+msgstr "Kanaler har blitt oppdatert eller installert. Utfører førstegangs handlinger. Dette kan ta litt tid."
+
+msgctxt "#30558"
+msgid "Fetching Textures"
+msgstr "Henter grafiske elementer"
+
+msgctxt "#30559"
+msgid "Fetching missing textures. This could take some time depending on the internet and system speed."
+msgstr "Henter manglende grafiske elementer. Dette kan ta litt tid, avhengig av internett- og systemhastighet."
+
+msgctxt "#30560"
+msgid "Paid video"
+msgstr "Betalt video"
+
+msgctxt "#30561"
+msgid "The selected item is not free and might not play on Kodi."
+msgstr "Den valgte oppføringen er ikke gratis og kan muligens ikke avspilles på Kodi."
+
+msgctxt "#30562"
+msgid "Username and/or password not set in Add-on settings"
+msgstr "Brukernavn og/eller passord ikke angitt i utvidelsesinnstillinger"
+
+msgctxt "#30563"
+msgid "Hide Item"
+msgstr "Skjul oppføring"
+
+msgctxt "#30564"
+msgid "Show Item"
+msgstr "Gjør skjult oppføring synlig"
+
+msgctxt "#30565"
+msgid "(Un-)Hiding items"
+msgstr "Skjuler/synliggjør oppføring"
+
+msgctxt "#30566"
+msgid "To un-hide an item, configure Retrospect to show hidden items first. Then un-hide them via the context menu."
+msgstr "For å synliggjøre en oppføring, konfigurér Retrospect til å vise skjulte oppføringer først. Deretter syngliggjør dem via kontekstmenyen."
+
+msgctxt "#30567"
+msgid "Add-on(s) disabled"
+msgstr "Utvidelse(r) deaktivert"
+
+msgctxt "#30568"
+msgid "Some of the Retrospect Channel Add-ons are not enabled which will prevent them from auto updating. The Kodi add-on browser will now open and you should enable all Retrospect related add-ons. See http://kodi.wiki/view/add-on_manager."
+msgstr "Noen av kanalutvidelsene til Retrospect er ikke aktivert, noe som forhindrer dem fra å bli oppdatert. Kodis utvidelsebehandler åpnes nå, og du bør aktivere alle Retrospect-relaterte utvidelser. Se http://kodi.wiki/view/add-on_manager."
+
+msgctxt "#30569"
+msgid "Ignore SSL verification errors (Security Risk!)"
+msgstr "Ignorer SSL-verifikasjonsfeil (sikkerhetsrisiko!)"
+
+msgctxt "#30570"
+msgid "Hide channel initialisation messages"
+msgstr "Skjul kanal initialiseringsmeldinger"
+
+msgctxt "#30571"
+msgid "Use Kodi Adaptive Stream add-on when possible"
+msgstr "Bruk Kodi Adaptive Stream utvidelse når det er mulig"
+
+msgctxt "#30572"
+msgid "Retrospect Settings »"
+msgstr "Retrospect Innstillinger »"
+
+msgctxt "#30573"
+msgid "(Un-)Hide item »"
+msgstr "Skjuler/synliggjør oppføring »"
+
+msgctxt "#30574"
+msgid "Hide Channel"
+msgstr "Hide Channel"
+
+msgctxt "#30575"
+msgid "Retrospect Favourites »"
+msgstr "Retrospect Favourites »"
+
+msgctxt "#30576"
+msgid "Select Countries"
+msgstr "Select Countries"
+
+msgctxt "#30577"
+msgid "Channel Bitrate »"
+msgstr ""
+
+msgctxt "#30578"
+msgid "Adaptive stream add-on settings"
+msgstr ""
+
+msgctxt "#30590"
+msgid "Set a new Retrospect PIN"
+msgstr "Fastsett en ny Retrospect-PIN"
+
+msgctxt "#30591"
+msgid "No Retrospect PIN specified"
+msgstr "Ingen Retrospect-PIN spesifisert"
+
+msgctxt "#30592"
+msgid "Repeat the new Retrospect PIN"
+msgstr "Gjenta den nye Retrospect-PIN koden"
+
+msgctxt "#30593"
+msgid "PINs don't match"
+msgstr "PIN-kodene samsvarer ikke"
+
+msgctxt "#30594"
+msgid "Specify value for setting: '%s'"
+msgstr "Angi verdi for innstilling: '% s'"
+
+msgctxt "#30595"
+msgid "Input Retrospect PIN"
+msgstr "Angi Retrospect-PIN"
+
+msgctxt "#30596"
+msgid "Incorrect Retrospect PIN specified"
+msgstr "Feil Retrospect-PIN kode angitt"
+
+msgctxt "#30597"
+msgid "Resetting the vault will invalidate all existing encrypted values. Are you sure?"
+msgstr "Tilbakestilling av hvelvet vil ugyldiggjøre alle eksisterende krypterte oppføringer. Er du sikker?"
+
+msgctxt "#30598"
+msgid "Send retrospect.log"
+msgstr "Send retrospect.log"
+
+msgctxt "#30599"
+msgid "Logfile posted to: %s\n\nNote the URL (especially the last characters) and use them to refer to these log files in posts."
+msgstr "Loggfil sendt til: %s\n\nNotér URL-adressen (spesielt de siste tegnene) og bruk dem til å referere til disse loggfilene i innlegg."
+
+msgctxt "#30600"
+msgid "Logfile successfully posted"
+msgstr "Loggfil er postet"
+
+msgctxt "#30601"
+msgid "Error posting logfile: %s"
+msgstr "Feil ved posting av loggfil: %s"
+
+msgctxt "#30602"
+msgid "Error posting logfile"
+msgstr "Feil ved posting av loggfil"

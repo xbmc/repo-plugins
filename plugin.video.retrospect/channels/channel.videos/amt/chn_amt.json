@@ -1,0 +1,14 @@
+{
+  "channels": [
+    {
+      "guid": "887F773F-E4E5-4E80-AD7D-65F627D1CA44",
+      "name": "Apple Movie Trailers",
+      "description": "Trailers from the AMT site.",
+      "icon": "amtlarge.png",
+      "category": "Video",
+      "channelcode": null,
+      "compatible": "Environments.All",
+      "fanart": "applemovietrailersfanart.jpg"
+    }
+  ]
+}

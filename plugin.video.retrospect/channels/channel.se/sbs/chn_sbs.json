@@ -1,0 +1,138 @@
+{
+  "channels": [
+    {
+      "guid": "C72D24F6-5FAE-11E0-9935-5F41E0D72085",
+      "name": "Kanal 5",
+      "description": "Sändningar från Kanal 5 (Dplay.se).",
+      "icon": "tv5selarge.png",
+      "category": "National",
+      "channelcode": "tv5json",
+      "sortorder": 5,
+      "language": "se",
+      "fanart": "kanal5fanart.jpg"
+    },
+    {
+      "guid": "32B4A9AB-583C-4F78-A057-6D79C797B45C",
+      "name": "Kanal 9",
+      "description": "Sändningar från Kanal 9 (Dplay.se).",
+      "icon": "tv9selarge2014.png",
+      "category": "National",
+      "channelcode": "tv9json",
+      "sortorder": 9,
+      "language": "se",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "64E1CA5E-BC3C-4763-9A63-02BE76754BD3",
+      "name": "Kanal 11",
+      "description": "Sändningar från Kanal 11 (Dplay.se).",
+      "icon": "tv11selarge.png",
+      "category": "National",
+      "channelcode": "tv11json",
+      "sortorder": 11,
+      "language": "se",
+      "fanart": "tv11seimage.jpg"
+    },
+    {
+      "guid": "230A2F56-572B-470B-AD53-AFD20A768D54",
+      "name": "Dplay (Sverige)",
+      "description": "Sändningar från Dplay.se.",
+      "icon": "dplaylarge.png",
+      "category": "National",
+      "channelcode": "dplayse",
+      "sortorder": 7,
+      "language": "se",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "90C8695D-23AE-45B5-BD51-CEA780A770B0",
+      "name": "Dplay (Norge)",
+      "description": "Sendinger fra Dplay.no.",
+      "icon": "dplaylarge.png",
+      "category": "National",
+      "channelcode": "dplayno",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "E0D572B5-D992-4F90-960E-F0D82A8C9E51",
+      "name": "TVNorge",
+      "description": "Sendinger fra TVNorge (Dplay.no).",
+      "icon": "tvnorgelarge.png",
+      "category": "National",
+      "channelcode": "tvnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "tvnorgefanart.jpg"
+    },
+    {
+      "guid": "AA14585A-F519-42FF-824B-7ABAC76F18FD",
+      "name": "Max (Norge)",
+      "description": "Sendinger fra Max (Dplay.no).",
+      "icon": "maxnorgelarge.png",
+      "category": "National",
+      "channelcode": "maxnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "94951B96-77FD-4519-8AE2-55C6133CB9EC",
+      "name": "FEM",
+      "description": "Sendinger fra FEM (Dplay.no).",
+      "icon": "femnorgelarge.png",
+      "category": "National",
+      "channelcode": "femnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "79B3216B-3485-4522-B963-38D0F452C032",
+      "name": "VOX",
+      "description": "Sendinger fra VOX (Dplay.no).",
+      "icon": "voxnorgelarge.png",
+      "category": "National",
+      "channelcode": "voxnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg"
+    },
+    {
+      "guid": "A4F6C1DA-A485-4504-B6C2-840E5548E87D",
+      "name": "Discovery Science (Norge)",
+      "description": "Sendinger fra Discovery Science (Dplay.no).",
+      "icon": "discoverysciencenorgelarge.png",
+      "category": "National",
+      "channelcode": "discoverysciencenorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg",
+      "compatible": "Environments.NoPlatform"
+    },
+    {
+      "guid": "1A272A28-3655-4991-B983-5EEBC1282534",
+      "name": "Discovery World (Norge)",
+      "description": "Sendinger fra Discovery World (Dplay.no).",
+      "icon": "discoverynorgelarge.png",
+      "category": "National",
+      "channelcode": "discoveryworldnorge",
+      "sortorder": 7,
+      "language": "no",
+      "fanart": "dplayfanart.jpg",
+      "compatible": "Environments.NoPlatform"
+    },
+    {
+      "guid": "5141DFDF-3B9D-4368-8943-2F8D500BC2D1",
+      "name": "Dplay (Danmark)",
+      "description": "Udsendelser fra Dplay.dk.",
+      "icon": "dplaylarge.png",
+      "category": "National",
+      "channelcode": "dplaydk",
+      "sortorder": 7,
+      "language": "dk",
+      "fanart": "dplayfanart.jpg"
+    }
+  ]
+}

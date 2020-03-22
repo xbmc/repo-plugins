@@ -1,0 +1,12 @@
+{
+  "id": "channel.streams",
+  "version": "5.2.0",
+  "textures": {
+    "channel.streams.radio538/radio538fanart.jpg": "b973540d8e6c83e8b218bcd0f4c58ffe",
+    "channel.streams.24classic/24classicfanart.png": "7f37cbec71ec71744fd1dc230831432b",
+    "channel.streams.24classic/24classicsicon.png": "a15adc41b4cbb357cc63205aa37c6917",
+    "channel.streams.24classic/24classicsimage.png": "0bb70d8c5227163d2bbbec2a3f9c78cf",
+    "channel.streams.radio538/radio538image.png": "9d14902c01864ed13c011815d226aebf",
+    "channel.streams.radio538/radio538large.png": "0c5bbce1f01eee86c4d0bb1ba698a559"
+  }
+}

@@ -1,0 +1,529 @@
+<rules>
+	<matches>
+		<match name="title">
+			<label>556</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="tvshow">
+			<label>20364</label>
+			<episodes>True</episodes>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="plot">
+			<label>207</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+		</match>
+		<match name="status">
+			<label>126</label>
+			<tvshows>True</tvshows>
+			<operator>string</operator>
+		</match>
+		<match name="votes">
+			<movies>True</movies>
+			<label>205</label>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<operator>string</operator>
+		</match>
+		<match name="plotoutline">
+			<label>203</label>
+			<movies>True</movies>
+			<operator>string</operator>
+		</match>
+		<match name="tagline">
+			<label>202</label>
+			<movies>True</movies>
+			<operator>string</operator>
+		</match>
+		<match name="rating">
+			<label>563</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<operator>numeric</operator>
+		</match>
+		<match name="time">
+			<label>180</label>
+			<movies>True</movies>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>time</operator>
+		</match>
+		<match name="writers">
+			<label>20417</label>
+			<movies>True</movies>
+			<episodes>True</episodes>
+			<operator>string</operator>
+		</match>
+		<match name="airdate">
+			<label>20416</label>
+			<episodes>True</episodes>
+			<operator>date</operator>
+		</match>
+		<match name="playcount">
+			<label>567</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>numeric</operator>
+		</match>
+		<match name="lastplayed">
+			<label>568</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>date</operator>
+		</match>
+		<match name="inprogress">
+			<label>575</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<operator>boolean</operator>
+		</match>
+		<match name="genre">
+			<label>515</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="album">
+			<label>558</label>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="country">
+			<label>574</label>
+			<movies>True</movies>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="year">
+			<label>562</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>numeric</operator>
+			<browse>True</browse>
+		</match>
+		<match name="artist">
+			<label>557</label>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="director">
+			<label>20339</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="actor">
+			<label>20337</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="episode">
+			<label>20359</label>
+			<episodes>True</episodes>
+			<operator>numeric</operator>
+		</match>
+		<match name="season">
+			<label>20373</label>
+			<episodes>True</episodes>
+			<operator>numeric</operator>
+		</match>
+		<match name="numepisodes">
+			<label>20360</label>
+			<tvshows>True</tvshows>
+			<operator>numeric</operator>
+		</match>
+		<match name="numwatched">
+			<label>21457</label>
+			<tvshows>True</tvshows>
+			<operator>numeric</operator>
+		</match>
+		<match name="mpaarating">
+			<label>20074</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<operator>string</operator>
+		</match>
+		<match name="top250">
+			<label>13409</label>
+			<movies>True</movies>
+			<operator>numeric</operator>
+		</match>
+		<match name="studio">
+			<label>20388</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="hastrailer">
+			<label>20423</label>
+			<movies>True</movies>
+			<operator>boolean</operator>
+		</match>
+		<match name="filename">
+			<label>561</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+		</match>
+		<match name="path">
+			<label>573</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="set">
+			<label>20457</label>
+			<movies>True</movies>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="tag">
+			<label>20459</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="dateadded">
+			<label>570</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>date</operator>
+		</match>
+		<match name="videoresolution">
+			<label>21443</label>
+			<movies>True</movies>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>numeric</operator>
+		</match>
+		<match name="audiochannels">
+			<label>21444</label>
+			<movies>True</movies>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>string</operator>
+		</match>
+		<match name="videocodec">
+			<label>21445</label>
+			<movies>True</movies>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>isornot</operator>
+		</match>
+		<match name="audiocodec">
+			<label>21446</label>
+			<movies>True</movies>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>isornot</operator>
+		</match>
+		<match name="audiolanguage">
+			<label>21447</label>
+			<movies>True</movies>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>isornot</operator>
+		</match>
+		<match name="subtitlelanguage">
+			<label>21448</label>
+			<movies>True</movies>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>isornot</operator>
+		</match>
+		<match name="videoaspect">
+			<label>21374</label>
+			<movies>True</movies>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>numeric</operator>
+		</match>
+		<match name="playlist">
+			<label>559</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>isornot</operator>
+			<browse>True</browse>
+		</match>
+		<match name="virtualfolder">
+			<label>614</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+			<operator>isornot</operator>
+			<browse>True</browse>
+		</match>
+	</matches>
+	<operators>
+		<group name="string">
+			<operator label="21400">contains</operator>
+			<operator label="21401">doesnotcontain</operator>
+			<operator label="21404">startswith</operator>
+			<operator label="21405">endswith</operator>
+			<operator label="21402">is</operator>
+			<operator label="21403">isnot</operator>
+		</group>
+		<group name="numeric">
+			<operator label="21402">is</operator>
+			<operator label="21403">isnot</operator>
+			<operator label="21406">greaterthan</operator>
+			<operator label="21407">lessthan</operator>
+		</group>
+		<group name="time">
+			<operator label="21402">is</operator>
+			<operator label="21403">isnot</operator>
+			<operator label="21406">greaterthan</operator>
+			<operator label="21407">lessthan</operator>
+		</group>
+		<group name="date">
+			<operator label="21408">after</operator>
+			<operator label="21409">before</operator>
+			<operator label="21410" type="integer">inthelast</operator>
+			<operator label="21411" type="integer">notinthelast</operator>
+		</group>
+		<group name="boolean" option="novalue">
+			<operator label="20122">true</operator>
+			<operator label="20424">false</operator>
+		</group>
+		<group name="isornot">
+			<operator label="21402">is</operator>
+			<operator label="21403">isnot</operator>
+		</group>
+	</operators>
+	<groupings>
+		<grouping name="none">
+			<label>16018</label>
+			<movies>True</movies>
+		</grouping>
+		<grouping name="genres">
+			<label>135</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<musicvideos>True</musicvideos>
+		</grouping>
+		<grouping name="years">
+			<label>652</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<musicvideos>True</musicvideos>
+		</grouping>
+		<grouping name="actors">
+			<label>344</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+		</grouping>
+		<grouping name="artists">
+			<label>133</label>
+			<musicvideos>True</musicvideos>
+		</grouping>
+		<grouping name="directors">
+			<label>20348</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<episodes>True</episodes>
+			<musicvideos>True</musicvideos>
+		</grouping>
+		<grouping name="studios">
+			<label>20388</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<musicvideos>True</musicvideos>
+		</grouping>
+		<grouping name="countries">
+			<label>20451</label>
+			<movies>True</movies>
+		</grouping>
+		<grouping name="sets">
+			<label>20434</label>
+			<movies>True</movies>
+		</grouping>
+		<grouping name="tags">
+			<label>20459</label>
+			<movies>True</movies>
+			<tvshows>True</tvshows>
+			<musicvideos>True</musicvideos>
+		</grouping>
+	</groupings>
+	<orderby>
+		<type label="21430">ascending</type>
+		<type label="21431">descending</type>
+	</orderby>
+	<content>
+		<type label="342">movies</type>
+		<type label="20343">tvshows</type>
+		<type label="20360">episodes</type>
+		<type label="20389">musicvideos</type>
+	</content>
+
+	<paths>
+		<type label="342" name="videodb://movies">
+			<content>movies</content>
+			<type label="135" name="genres"/>
+			<type label="369" name="titles"/>
+			<type label="652" name="years"/>
+			<type label="344" name="actors"/>
+			<type label="20348" name="directors"/>
+			<type label="20388" name="studios"/>
+			<type label="20434" name="sets"/>
+			<type label="20451" name="countries"/>
+			<type label="20459" name="tags"/>
+		</type>
+		<type label="20343" name="videodb://tvshows">
+			<content>tvshows</content>
+			<type label="135" name="genres"/>
+			<type label="369" name="titles"/>
+			<type label="652" name="years"/>
+			<type label="344" name="actors"/>
+			<type label="20388" name="studios"/>
+			<type label="20459" name="tags"/>
+		</type>
+		<type label="20389" name="videodb://musicvideos">
+			<content>musicvideos</content>
+			<type label="135" name="genres"/>
+			<type label="369" name="titles"/>
+			<type label="652" name="years"/>
+			<type label="133" name="artists"/>
+			<type label="132" name="albums"/>
+			<type label="20348" name="directors"/>
+			<type label="20388" name="studios"/>
+			<type label="20459" name="tags"/>
+		</type>
+		<type label="20386" name="videodb://recentlyaddedmovies">
+			<content>movies</content>
+		</type>
+		<type label="20387" name="videodb://recentlyaddedepisodes">
+			<content>tvshows</content>
+		</type>
+		<type label="20390" name="videodb://recentlyaddedmusicvideos">
+			<content>musicvideos</content>
+		</type>
+		<type label="626" name="videodb://inprogresstvshows">
+			<content>tvshows</content>
+		</type>
+		<type label="744" name="sources://video">
+			<content>None</content>
+		</type>
+		<type label="136" name="special://videoplaylists">
+			<content>None</content>
+		</type>
+		<type label="1037" name="addons://sources/video">
+			<content>None</content>
+		</type>
+	</paths>
+	<pathRules>
+		<rule label="30500" name="genreid">
+			<value>integer</value>
+			<content>movies</content>
+			<content>tvshows</content>
+			<content>musicvideos</content>
+			<browse>videodb://::root::/genres/</browse>
+		</rule>
+		<rule label="30501" name="countryid">
+			<value>integer</value>
+			<content>movies</content>
+			<browse>videodb://movies/countries/</browse>
+		</rule>
+		<rule label="30502" name="studioid">
+			<value>integer</value>
+			<content>movies</content>
+			<content>tvshows</content>
+			<content>musicvideos</content>
+			<browse>videodb://::root::/studios/</browse>
+		</rule>
+		<rule label="30503" name="directorid">
+			<value>integer</value>
+			<content>movies</content>
+			<content>tvshows</content>
+			<content>musicvideos</content>
+			<browse>videodb://::root::/directors/</browse>
+		</rule>
+		<rule label="345" name="year">
+			<value>integer</value>
+			<content>movies</content>
+			<content>tvshows</content>
+			<content>musicvideos</content>
+			<browse>videodb://::root::/years/</browse>
+		</rule>
+		<rule label="30504" name="actorid">
+			<value>integer</value>
+			<content>movies</content>
+			<content>tvshows</content>
+			<browse>videodb://::root::/actors/</browse>
+		</rule>
+		<rule label="30505" name="setid">
+			<value>integer</value>
+			<content>movies</content>
+			<browse>videodb://::root::/sets/</browse>
+		</rule>
+		<rule label="30506" name="tagid">
+			<value>integer</value>
+			<content>movies</content>
+			<content>tvshows</content>
+			<browse>videodb://::root::/tags/</browse>
+		</rule>
+		<rule label="30507" name="tvshowid">
+			<value>integer</value>
+			<content>tvshows</content>
+			<browse>videodb://tvshows/</browse>
+		</rule>
+		<rule label="20373" name="season">
+			<value>integer</value>
+			<content>tvshows</content>
+		</rule>
+		<rule label="30508" name="artistid">
+			<value>integer</value>
+			<content>musicvideos</content>
+			<browse>videodb://musicvideos/artists/</browse>
+		</rule>
+		<rule label="30509" name="albumid">
+			<value>integer</value>
+			<content>musicvideos</content>
+			<browse>videodb://musicvideos/albums/</browse>
+		</rule>
+	</pathRules>
+</rules>

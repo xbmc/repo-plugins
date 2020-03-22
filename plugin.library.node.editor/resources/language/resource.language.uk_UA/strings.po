@@ -1,0 +1,53 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Ukrainian (http://www.transifex.com/projects/p/xbmc-addons/language/uk/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "Бібліотека відео"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "Бібліотека музики"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "Видалити"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "Змінити назву"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "Вибрати значок"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "Шлях"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "Група"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "Шлях"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "Упорядкувати за"

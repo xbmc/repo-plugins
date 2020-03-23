@@ -1,0 +1,769 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: Retrospect Add-on\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Bas Rieter\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi_FI\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Stream Quality"
+msgstr "Toiston Laatu"
+
+msgctxt "#30001"
+msgid "Low"
+msgstr "Matala"
+
+msgctxt "#30002"
+msgid "Medium"
+msgstr "Keski"
+
+msgctxt "#30003"
+msgid "High"
+msgstr "Korkea"
+
+msgctxt "#30009"
+msgid "General"
+msgstr "Yleinen"
+
+msgctxt "#30010"
+msgid "Channels"
+msgstr "Kanavat"
+
+msgctxt "#30011"
+msgid "Requires restart of Retrospect to take effect."
+msgstr "Vaatii Retrospectin uudelleenkäynnistyksen."
+
+msgctxt "#30016"
+msgid "Sort by"
+msgstr "Lajittele"
+
+msgctxt "#30017"
+msgid "Name"
+msgstr "Nimi"
+
+msgctxt "#30018"
+msgid "Date"
+msgstr "Päivämäärä"
+
+msgctxt "#30019"
+msgid "Show DRM/Paid warning before playback"
+msgstr "Näytä DRM/Maksullinen varoitus ennen toistoa"
+
+msgctxt "#30020"
+msgid "Maximum stream bitrate"
+msgstr "Toiston maksimi bittinopeus"
+
+msgctxt "#30021"
+msgid "Enable subtitles by default when available"
+msgstr "Tekstityksen moodi"
+
+msgctxt "#30022"
+msgid "If available"
+msgstr "Jos saatavilla"
+
+msgctxt "#30023"
+msgid "Never show"
+msgstr "Älä näytä koskaan"
+
+msgctxt "#30025"
+msgid "None"
+msgstr "Ei mitään"
+
+msgctxt "#30026"
+msgid "Group list if exceeds # folders"
+msgstr "Ryhmitä listaus jos # määrä kansioita ylittyy"
+
+msgctxt "#30028"
+msgid "Proxy"
+msgstr "Proxy"
+
+msgctxt "#30029"
+msgid "Server"
+msgstr "Palvelin"
+
+msgctxt "#30030"
+msgid "Port"
+msgstr "Portti"
+
+msgctxt "#30031"
+msgid "Cache HTTP(S) requests"
+msgstr "HTTP(S)-pyyntöjen välimuisti"
+
+msgctxt "#30032"
+msgid "Channel Settings"
+msgstr "Kanavan Asetukset"
+
+msgctxt "#30034"
+msgid "No channel selected"
+msgstr "Kanavaa ei ole valittu"
+
+msgctxt "#30035"
+msgid "Username"
+msgstr "Käyttäjänimi"
+
+msgctxt "#30036"
+msgid "Password"
+msgstr "Salasana"
+
+msgctxt "#30038"
+msgid "Confirm proxy changes"
+msgstr "Vahvista välityspalvelimen muutokset"
+
+msgctxt "#30039"
+msgid "Are you sure you want to update all channels for this country with this proxy?"
+msgstr "Oletko varma, että haluat päivittää kaikki kanavat tässä maassa tämän proxy?"
+
+msgctxt "#30040"
+msgid "Channels"
+msgstr "Kanavat"
+
+msgctxt "#30042"
+msgid "Enabled"
+msgstr "Käytössä"
+
+msgctxt "#30043"
+msgid "Folder prefix"
+msgstr "Kansion etuliite"
+
+msgctxt "#30046"
+msgid "DRM/Geo Location/Premium filters"
+msgstr "DRM/Geolokaatio/Maksullinen suodattimet"
+
+msgctxt "#30048"
+msgid "Log level"
+msgstr "Login taso"
+
+msgctxt "#30052"
+msgid "Send usage statistics"
+msgstr "Lähetä statistiikkaa käytöstä"
+
+msgctxt "#30053"
+msgid "Appearance"
+msgstr "Ulkonäkö"
+
+msgctxt "#30055"
+msgid "Advanced"
+msgstr "Kehittyneet"
+
+msgctxt "#30059"
+msgid "Other Countries"
+msgstr "Muut maat"
+
+msgctxt "#30060"
+msgid "Enable/Disable channels by country of origin"
+msgstr "Valitse kieli ja muokkaa sen kanavia"
+
+msgctxt "#30061"
+msgid "Channel Origin"
+msgstr "Kanavan Kieli"
+
+msgctxt "#30062"
+msgid "HTTP"
+msgstr "HTTP"
+
+msgctxt "#30063"
+msgid "Channel to configure"
+msgstr "Kanavan asennus"
+
+msgctxt "#30064"
+msgid "Proxy Group"
+msgstr "Proxyryhmä"
+
+msgctxt "#30065"
+msgid "Country Settings"
+msgstr "Maa-asetusten"
+
+msgctxt "#30066"
+msgid "DNS"
+msgstr "Valitse asennettava proxyryhmä"
+
+msgctxt "#30067"
+msgid "Show channels in categories"
+msgstr "Näytä eri kategorioiden kanavat"
+
+msgctxt "#30068"
+msgid "Active"
+msgstr "Aktiivi"
+
+msgctxt "#30069"
+msgid "Channel Settings"
+msgstr "Kanava-asetukset"
+
+msgctxt "#30070"
+msgid "Let Kodi determine bitrate if possible"
+msgstr "Anna Kodin määrätä bittinopeus, jos mahdollista"
+
+msgctxt "#30071"
+msgid "Set the proxy and local IP to all channels related to this country"
+msgstr "Asettaa tämän proksi paikallinen IP kaikille kanaville tämän maan"
+
+msgctxt "#30072"
+msgid "Proxy Type"
+msgstr "Proxy Tyyppi"
+
+msgctxt "#30073"
+msgid "- Geo-Locked = º, DRM protected = ^ and Premium = ª."
+msgstr "- Geolukittu = º, DRM-suojattu = ^ ja Maksullinen = ª."
+
+msgctxt "#30074"
+msgid "Disabled"
+msgstr "Pois käytöstä"
+
+msgctxt "#30075"
+msgid "Empty list behaviour"
+msgstr "Tyhjän listan asetukset"
+
+msgctxt "#30076"
+msgid "Show error"
+msgstr "Näytä virhe"
+
+msgctxt "#30077"
+msgid "Show empty list"
+msgstr "Näytä tyhjä listan"
+
+msgctxt "#30078"
+msgid "Show dummy item"
+msgstr "Näytä tyhjät kohteet"
+
+msgctxt "#30079"
+msgid "Local IP (0.0.0.0=disabled)"
+msgstr "Paikallinen IP (0.0.0.0=pois käytöstä)"
+
+msgctxt "#30080"
+msgid "Filter DRM protected items"
+msgstr "Suodata DRM-suojatut kohteet"
+
+msgctxt "#30081"
+msgid "Filter Premium/Paid items"
+msgstr "Suodata Maksulliset kohteet"
+
+msgctxt "#30082"
+msgid "Apply filter to"
+msgstr "Sovella suodatinta"
+
+msgctxt "#30083"
+msgid "Folders & Streams"
+msgstr "Kansiot & Striimit"
+
+msgctxt "#30084"
+msgid "Streams Only"
+msgstr "Vain Striimit"
+
+msgctxt "#30085"
+msgid "Geo Location"
+msgstr "Geolokaatio"
+
+msgctxt "#30086"
+msgid "Hide Fanart"
+msgstr "Piilota Fanitaide"
+
+msgctxt "#30087"
+msgid "Mix folders and streams while sorting"
+msgstr "Näytä kansiot ja striimit lajiteltuna"
+
+msgctxt "#30089"
+msgid "Password Vault"
+msgstr "Password Vault"
+
+msgctxt "#30090"
+msgid "The 'Password Vault' protects stored password with encryption using a PIN."
+msgstr "The 'Password Vault' protects stored password with encryption using a PIN."
+
+msgctxt "#30091"
+msgid "Change Vault Pin"
+msgstr "Change Vault Pin"
+
+msgctxt "#30092"
+msgid "Reset Vault"
+msgstr "Reset Vault"
+
+msgctxt "#30093"
+msgid "Password"
+msgstr "Salasana"
+
+msgctxt "#30094"
+msgid "Username"
+msgstr "Käyttäjänimi"
+
+msgctxt "#30095"
+msgid "Show Hidden Items"
+msgstr "Show Cloaked Items"
+
+msgctxt "#30096"
+msgid "Country"
+msgstr "Maa"
+
+msgctxt "#30097"
+msgid "Local IP"
+msgstr "Paikallinen IP"
+
+msgctxt "#30098"
+msgid "Logging & Diagnostics"
+msgstr ""
+
+msgctxt "#30100"
+msgid "None"
+msgstr "Ei mitään"
+
+msgctxt "#30101"
+msgid "Regional"
+msgstr "Alueellinen"
+
+msgctxt "#30102"
+msgid "National"
+msgstr "Maakohtainen"
+
+msgctxt "#30103"
+msgid "Video"
+msgstr "Video"
+
+msgctxt "#30104"
+msgid "Radio"
+msgstr "Radio"
+
+msgctxt "#30105"
+msgid "Sport"
+msgstr "Urheilu"
+
+msgctxt "#30106"
+msgid "Kids"
+msgstr "Lasten"
+
+msgctxt "#30107"
+msgid "Tech"
+msgstr "Teknologia"
+
+msgctxt "#30108"
+msgid "Other"
+msgstr "Muut"
+
+msgctxt "#30199"
+msgid "10"
+msgstr "10"
+
+msgctxt "#30200"
+msgid "50"
+msgstr "50"
+
+msgctxt "#30201"
+msgid "75"
+msgstr "75"
+
+msgctxt "#30202"
+msgid "100"
+msgstr "100"
+
+msgctxt "#30203"
+msgid "150"
+msgstr "150"
+
+msgctxt "#30204"
+msgid "200"
+msgstr "200"
+
+msgctxt "#30205"
+msgid "1000"
+msgstr "1000"
+
+msgctxt "#30300"
+msgid "Other Countries"
+msgstr "Other Countries"
+
+msgctxt "#30301"
+msgid "The Netherlands"
+msgstr "The Netherlands"
+
+msgctxt "#30302"
+msgid "Sweden"
+msgstr "Sweden"
+
+msgctxt "#30303"
+msgid "Lithuania"
+msgstr "Lithuania"
+
+msgctxt "#30304"
+msgid "Latvia"
+msgstr "Latvia"
+
+msgctxt "#30305"
+msgid "Norway"
+msgstr "Norway"
+
+msgctxt "#30306"
+msgid "Belgium"
+msgstr "Belgium"
+
+msgctxt "#30307"
+msgid "United Kingdom"
+msgstr "United Kingdom"
+
+msgctxt "#30308"
+msgid "Estonia"
+msgstr "Estonia"
+
+msgctxt "#30309"
+msgid "Germany"
+msgstr "Germany"
+
+msgctxt "#30310"
+msgid "Denmark"
+msgstr "Denmark"
+
+msgctxt "#30311"
+msgid "Finland"
+msgstr "Finland"
+
+msgctxt "#30401"
+msgid "Dutch"
+msgstr "Dutch"
+
+msgctxt "#30402"
+msgid "Swedish"
+msgstr "Swedish"
+
+msgctxt "#30403"
+msgid "Lithuanian"
+msgstr "Lithuanian"
+
+msgctxt "#30404"
+msgid "Latvian"
+msgstr "Latvian"
+
+msgctxt "#30405"
+msgid "Norwegian"
+msgstr "Norwegian"
+
+msgctxt "#30406"
+msgid "Belgian"
+msgstr "Belgium"
+
+msgctxt "#30407"
+msgid "British"
+msgstr "British"
+
+msgctxt "#30408"
+msgid "Estonian"
+msgstr "Estonian"
+
+msgctxt "#30409"
+msgid "German"
+msgstr "German"
+
+msgctxt "#30410"
+msgid "Danish"
+msgstr "Danish"
+
+msgctxt "#30411"
+msgid "Finnish"
+msgstr "Finnish"
+
+msgctxt "#30500"
+msgid "All Favourites"
+msgstr "Kaikki Suosikit"
+
+msgctxt "#30501"
+msgid "Favourite"
+msgstr "Suosikki"
+
+msgctxt "#30502"
+msgid "Favourites"
+msgstr "Suosikit"
+
+msgctxt "#30503"
+msgid "Channel Favourites"
+msgstr "Kanavasuosikit"
+
+msgctxt "#30504"
+msgid "Add to Favourites"
+msgstr "Lisää kohteeseen"
+
+msgctxt "#30505"
+msgid "Hide"
+msgstr "Piilota"
+
+msgctxt "#30506"
+msgid "Remove Favourite"
+msgstr "Poista"
+
+msgctxt "#30507"
+msgid "Select Channels »"
+msgstr "Kanavat"
+
+msgctxt "#30508"
+msgid "No favourites available"
+msgstr "Suosikkeja ei saatavilla"
+
+msgctxt "#30509"
+msgid "Cannot start playback"
+msgstr "Toistoa ei voi aloittaa"
+
+msgctxt "#30510"
+msgid "New version available"
+msgstr "Uusi versio saatavilla"
+
+msgctxt "#30516"
+msgid "New Version Available."
+msgstr "Uusi Versio Saatavilla."
+
+msgctxt "#30517"
+msgid "A new version of %s is available: %s. Please visit the website to download it."
+msgstr "%s Uusi versio saatavilla: %s. Ole hyvä ja käy verkkosivustolla lataaksesi."
+
+msgctxt "#30520"
+msgid "Repository Warning"
+msgstr "Ohjelmavaraston Varoitus"
+
+msgctxt "#30521"
+msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
+msgstr "Retrospectin ohjelmavarastoa ei ole asennettu.|Ole hyvä ja asenna se varmistaaksesi tulevat päivitykset."
+
+msgctxt "#30522"
+msgid "Channel message"
+msgstr "Kanava viesti"
+
+msgctxt "#30523"
+msgid "Error"
+msgstr "Virhe"
+
+msgctxt "#30524"
+msgid "No videos were found for the selected item."
+msgstr "Valitusta kohteesta ei löytynyt videoita."
+
+msgctxt "#30525"
+msgid "The selected item does not have|any streams associated."
+msgstr "Valitussa kohteessa|ei ole liitettyjä striimejä."
+
+msgctxt "#30528"
+msgid "Add-on Settings"
+msgstr "Lisäosan Asetukset"
+
+msgctxt "#30529"
+msgid "Refresh list"
+msgstr "Päivitä lista"
+
+msgctxt "#30530"
+msgid "Check for Retrospect updates"
+msgstr "Tarkista Retrospectin päivitykset"
+
+msgctxt "#30538"
+msgid "The selected live stream has not yet|begun."
+msgstr "Valittu live-striimi ei ole vielä|alkanut."
+
+msgctxt "#30539"
+msgid "Live stream"
+msgstr "Live-striimi"
+
+msgctxt "#30540"
+msgid "Geo-Locked"
+msgstr "Geolukittu"
+
+msgctxt "#30541"
+msgid "Queue item"
+msgstr "Laita jonoon"
+
+msgctxt "#30542"
+msgid "Starting %s."
+msgstr "Aloitetaan %s."
+
+msgctxt "#30543"
+msgid "Season"
+msgstr "Kausi"
+
+msgctxt "#30544"
+msgid "Episode"
+msgstr "Jakso"
+
+msgctxt "#30545"
+msgid "Titles with '%s'"
+msgstr "Kohteet joissa '%s'"
+
+msgctxt "#30546"
+msgid "Other Chars"
+msgstr "Muut Merkit"
+
+msgctxt "#30547"
+msgid "More Pages"
+msgstr "Lisää Sivuja"
+
+msgctxt "#30548"
+msgid "Clips"
+msgstr "Pätkät"
+
+msgctxt "#30549"
+msgid "Error retrieving the list of items."
+msgstr "Virhe haettaessa listaa kohteista."
+
+msgctxt "#30550"
+msgid "No episodes found for the selected item."
+msgstr "Valitusta kohteesta ei löytynyt jaksoja."
+
+msgctxt "#30551"
+msgid "Today"
+msgstr "Tänään"
+
+msgctxt "#30552"
+msgid "Yesterday"
+msgstr "Eilen"
+
+msgctxt "#30553"
+msgid "Day before yesterday"
+msgstr "Toissapäivänä"
+
+msgctxt "#30554"
+msgid "DRM Protection"
+msgstr "DRM-suojaus"
+
+msgctxt "#30555"
+msgid "The selected item is DRM protected and might not play on Kodi."
+msgstr "Valittu kohde on DRM-suojattu eikä välttämättä toistu Kodissa."
+
+msgctxt "#30556"
+msgid "Initialising channel(s)."
+msgstr "Alustetaan kanavaa(ia)."
+
+msgctxt "#30557"
+msgid "Channels have been updated or installed. Performing first time actions. This could take some time."
+msgstr "Kanavat ovat päivitetty tai asennettu. Suoritetaan ensimmäisen käyttökerran asennusta. Tähän voi kulua jonkin verran aikaa."
+
+msgctxt "#30558"
+msgid "Fetching Textures"
+msgstr "Haetaan Tekstuureja"
+
+msgctxt "#30559"
+msgid "Fetching missing textures. This could take some time depending on the internet and system speed."
+msgstr "Haetaan puuttuvat tekstuurit. Tähän voi kulua jonkin verran aikaa internet-yhteyden ja koneen nopeudesta riippuen."
+
+msgctxt "#30560"
+msgid "Paid video"
+msgstr "Maksullinen video"
+
+msgctxt "#30561"
+msgid "The selected item is not free and might not play on Kodi."
+msgstr "Valitut kohteet eivät ole ilmaisia ja niitä ei voi toistaa Kodissa."
+
+msgctxt "#30562"
+msgid "Username and/or password not set in Add-on settings"
+msgstr "Username and/or password not set in Add-on settings"
+
+msgctxt "#30563"
+msgid "Hide Item"
+msgstr "Cloak Item"
+
+msgctxt "#30564"
+msgid "Show Item"
+msgstr "Un-Cloak Item"
+
+msgctxt "#30565"
+msgid "(Un-)Hiding items"
+msgstr "(Un-)Cloaking items"
+
+msgctxt "#30566"
+msgid "To un-hide an item, configure Retrospect to show hidden items first. Then un-hide them via the context menu."
+msgstr "To un-cloak an item, configure Retrospect to show cloaked items first. Then un-cloak them via the context menu."
+
+msgctxt "#30567"
+msgid "Add-on(s) disabled"
+msgstr "Add-on(s) disabled"
+
+msgctxt "#30568"
+msgid "Some of the Retrospect Channel Add-ons are not enabled which will prevent them from auto updating. The Kodi add-on browser will now open and you should enable all Retrospect related add-ons. See http://kodi.wiki/view/add-on_manager."
+msgstr "Some of the Retrospect Channel Add-ons are not enabled which will prevent them from auto updating. The Kodi add-on browser will now open and you should enable all Retrospect related add-ons. See http://kodi.wiki/view/add-on_manager."
+
+msgctxt "#30569"
+msgid "Ignore SSL verification errors (Security Risk!)"
+msgstr "Ohita SSL vahvistusvirheet (turvallisuusriski!)"
+
+msgctxt "#30570"
+msgid "Hide channel initialisation messages"
+msgstr "Piilota kanavan alustusviestejä"
+
+msgctxt "#30571"
+msgid "Use Kodi Adaptive Stream add-on when possible"
+msgstr "Käytä Code Adaptive Stream Addonia, kun mahdollista"
+
+msgctxt "#30572"
+msgid "Retrospect Settings »"
+msgstr "Retrospect Asetukset »"
+
+msgctxt "#30573"
+msgid "(Un-)Hide item »"
+msgstr "(Un-)Cloak item »"
+
+msgctxt "#30574"
+msgid "Hide Channel"
+msgstr "Hide Channel"
+
+msgctxt "#30575"
+msgid "Retrospect Favourites »"
+msgstr "Retrospect Favourites »"
+
+msgctxt "#30576"
+msgid "Select Countries"
+msgstr "Select Countries"
+
+msgctxt "#30577"
+msgid "Channel Bitrate »"
+msgstr ""
+
+msgctxt "#30578"
+msgid "Adaptive stream add-on settings"
+msgstr ""
+
+msgctxt "#30590"
+msgid "Set a new Retrospect PIN"
+msgstr "Set a new Retrospect PIN"
+
+msgctxt "#30591"
+msgid "No Retrospect PIN specified"
+msgstr "No Retrospect PIN specified"
+
+msgctxt "#30592"
+msgid "Repeat the new Retrospect PIN"
+msgstr "Repeat the new Retrospect PIN"
+
+msgctxt "#30593"
+msgid "PINs don't match"
+msgstr "PINs don't match"
+
+msgctxt "#30594"
+msgid "Specify value for setting: '%s'"
+msgstr "Specify value for setting: '%s'"
+
+msgctxt "#30595"
+msgid "Input Retrospect PIN"
+msgstr "Input Retrospect PIN"
+
+msgctxt "#30596"
+msgid "Incorrect Retrospect PIN specified"
+msgstr "Incorrect Retrospect PIN specified"
+
+msgctxt "#30597"
+msgid "Resetting the vault will invalidate all existing encrypted values. Are you sure?"
+msgstr "Resetting the vault will invalidate all existing encrypted values. Are you sure?"
+
+msgctxt "#30598"
+msgid "Send retrospect.log"
+msgstr "Send retrospect.log"
+
+msgctxt "#30599"
+msgid "Logfile posted to: %s\n\nNote the URL (especially the last characters) and use them to refer to these log files in posts."
+msgstr "Logfile posted to: %s\n\nNote the URL (especially the last characters) and use them to refer to these log files in posts."
+
+msgctxt "#30600"
+msgid "Logfile successfully posted"
+msgstr "Logfile successfully posted"
+
+msgctxt "#30601"
+msgid "Error posting logfile: %s"
+msgstr "Error posting logfile: %s"
+
+msgctxt "#30602"
+msgid "Error posting logfile"
+msgstr "Error posting logfile"

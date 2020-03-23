@@ -1,0 +1,1021 @@
+# Kodi Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: Retrospect Add-on\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Bas Rieter\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Stream Quality"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Low"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Medium"
+msgstr ""
+
+msgctxt "#30003"
+msgid "High"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Release channel for update notifications"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Stable"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Alpha/Beta"
+msgstr ""
+
+msgctxt "#30007"
+msgid "via other add-on"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Retrospect"
+msgstr ""
+
+msgctxt "#30009"
+msgid "General"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Requires restart of Retrospect to take effect."
+msgstr ""
+
+msgctxt "#30012"
+msgid "Login Failed"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Could not log on to the selected channel."
+msgstr ""
+
+msgctxt "#30014"
+msgid "Show info"
+msgstr ""
+
+msgctxt "#30015"
+msgid "via missing add-on"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Sort by"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Name"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Date"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Show DRM/Paid warning before playback"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Maximum Stream Bitrate"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Enable subtitles by default when available"
+msgstr ""
+
+msgctxt "#30022"
+msgid "If available"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Never show"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Recent"
+msgstr ""
+
+msgctxt "#30025"
+msgid "None"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Group list if it exceeds # folders"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Autorun Retrospect on Kodi start"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Proxy"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Server"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Port"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Cache HTTP(S) requests"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Channel Settings"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Expires at"
+msgstr ""
+
+msgctxt "#30034"
+msgid "No channel selected"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Password"
+msgstr ""
+
+# empty string with id 30037
+
+msgctxt "#30038"
+msgid "Confirm proxy changes"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Are you sure you want to update all channels for this country with this proxy?"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Show \"All Favourites\" in main Channel listing"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Enabled"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Folder prefix"
+msgstr ""
+
+# empty strings from id 30044 to 30045
+
+msgctxt "#30046"
+msgid "DRM/Geo-blocked/Premium filters"
+msgstr ""
+
+# empty string with id 30047
+
+msgctxt "#30048"
+msgid "Log level"
+msgstr ""
+
+msgctxt "#30049"
+msgid "Premium/Paid"
+msgstr ""
+
+msgctxt "#30050"
+msgid "DRM Protected"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Hidden item"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Send usage statistics"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Appearance"
+msgstr ""
+
+# empty string with id 30054
+
+msgctxt "#30055"
+msgid "Advanced"
+msgstr ""
+
+# empty strings from id 30056 to 30058
+
+msgctxt "#30059"
+msgid "Other Countries"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Enable/Disable channels by country of origin"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Channel Origin"
+msgstr ""
+
+msgctxt "#30062"
+msgid "HTTP"
+msgstr ""
+
+msgctxt "#30063"
+msgid "Channel to configure"
+msgstr ""
+
+msgctxt "#30064"
+msgid "Proxy Group"
+msgstr ""
+
+msgctxt "#30065"
+msgid "Country Settings"
+msgstr ""
+
+msgctxt "#30066"
+msgid "DNS"
+msgstr ""
+
+msgctxt "#30067"
+msgid "Show channels in categories"
+msgstr ""
+
+msgctxt "#30068"
+msgid "Active"
+msgstr ""
+
+msgctxt "#30069"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30070"
+msgid "Let Kodi determine bitrate if possible"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Set the proxy and local IP to all channels related to this country"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Proxy Type"
+msgstr ""
+
+msgctxt "#30073"
+msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
+msgstr ""
+
+msgctxt "#30074"
+msgid "Disabled"
+msgstr ""
+
+msgctxt "#30075"
+msgid "Empty list behaviour"
+msgstr ""
+
+msgctxt "#30076"
+msgid "Show error"
+msgstr ""
+
+msgctxt "#30077"
+msgid "Show empty list"
+msgstr ""
+
+msgctxt "#30078"
+msgid "Show dummy item"
+msgstr ""
+
+msgctxt "#30079"
+msgid "Local IP (0.0.0.0=disabled)"
+msgstr ""
+
+msgctxt "#30080"
+msgid "Filter DRM protected items"
+msgstr ""
+
+msgctxt "#30081"
+msgid "Filter Premium/Paid items"
+msgstr ""
+
+msgctxt "#30082"
+msgid "Apply filter to"
+msgstr ""
+
+msgctxt "#30083"
+msgid "Folders & Streams"
+msgstr ""
+
+msgctxt "#30084"
+msgid "Streams Only"
+msgstr ""
+
+msgctxt "#30085"
+msgid "Geo Location"
+msgstr ""
+
+msgctxt "#30086"
+msgid "Hide Fanart"
+msgstr ""
+
+msgctxt "#30087"
+msgid "Mix folders and streams while sorting"
+msgstr ""
+
+msgctxt "#30088"
+msgid "Show thumbnail as fanart if no fanart is available"
+msgstr ""
+
+msgctxt "#30089"
+msgid "Password Vault"
+msgstr ""
+
+msgctxt "#30090"
+msgid "The 'Password Vault' protects stored password with encryption using a PIN."
+msgstr ""
+
+msgctxt "#30091"
+msgid "Change Vault Pin"
+msgstr ""
+
+msgctxt "#30092"
+msgid "Reset Vault"
+msgstr ""
+
+msgctxt "#30093"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30094"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30095"
+msgid "Show Hidden Items"
+msgstr ""
+
+msgctxt "#30096"
+msgid "Country"
+msgstr ""
+
+msgctxt "#30097"
+msgid "Local IP"
+msgstr ""
+
+msgctxt "#30098"
+msgid "Logging & Diagnostics"
+msgstr ""
+
+msgctxt "#30099"
+msgid "Use HLS instead of Dash for non-encrypted streams"
+msgstr ""
+
+msgctxt "#30100"
+msgid "None"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Regional"
+msgstr ""
+
+msgctxt "#30102"
+msgid "National"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Video"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Radio"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Sport"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Kids"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Tech"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Other"
+msgstr ""
+
+# used for list limits
+# empty strings from id 30109 to 30189
+
+msgctxt "#30190"
+msgid "Monday"
+msgstr ""
+
+msgctxt "#30191"
+msgid "Tuesday"
+msgstr ""
+
+msgctxt "#30192"
+msgid "Wednesday"
+msgstr ""
+
+msgctxt "#30193"
+msgid "Thursday"
+msgstr ""
+
+msgctxt "#30194"
+msgid "Friday"
+msgstr ""
+
+msgctxt "#30195"
+msgid "Saturday"
+msgstr ""
+
+msgctxt "#30196"
+msgid "Sunday"
+msgstr ""
+
+msgctxt "#30199"
+msgid "10"
+msgstr ""
+
+msgctxt "#30200"
+msgid "50"
+msgstr ""
+
+msgctxt "#30201"
+msgid "75"
+msgstr ""
+
+msgctxt "#30202"
+msgid "100"
+msgstr ""
+
+msgctxt "#30203"
+msgid "150"
+msgstr ""
+
+msgctxt "#30204"
+msgid "200"
+msgstr ""
+
+msgctxt "#30205"
+msgid "1000"
+msgstr ""
+
+# language and countries
+# empty strings from id 30206 to 30299
+
+msgctxt "#30300"
+msgid "Other Countries"
+msgstr ""
+
+# nl
+
+msgctxt "#30301"
+msgid "The Netherlands"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Sweden"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Lithuania"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Latvia"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Norway"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Belgium"
+msgstr ""
+
+msgctxt "#30307"
+msgid "United Kingdom"
+msgstr ""
+
+msgctxt "#30308"
+msgid "Estonia"
+msgstr ""
+
+msgctxt "#30309"
+msgid "Germany"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Denmark"
+msgstr ""
+
+msgctxt "#30311"
+msgid "Finland"
+msgstr ""
+
+# empty strings from id 30312 to 30349
+
+msgctxt "#30350"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30351"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30352"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#30353"
+msgid "Currently Playing"
+msgstr ""
+
+msgctxt "#30354"
+msgid "Most viewed episodes"
+msgstr ""
+
+msgctxt "#30355"
+msgid "Most recent episodes"
+msgstr ""
+
+msgctxt "#30356"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30357"
+msgid "Live Radio"
+msgstr ""
+
+msgctxt "#30358"
+msgid "Episodes"
+msgstr ""
+
+msgctxt "#30359"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Full list"
+msgstr ""
+
+msgctxt "#30361"
+msgid "Tags"
+msgstr ""
+
+msgctxt "#30362"
+msgid "Last chance"
+msgstr ""
+
+msgctxt "#30363"
+msgid "Popular"
+msgstr ""
+
+# empty strings from id 30364 to 30400
+
+msgctxt "#30401"
+msgid "Dutch"
+msgstr ""
+
+# se
+
+msgctxt "#30402"
+msgid "Swedish"
+msgstr ""
+
+# lt
+
+msgctxt "#30403"
+msgid "Lithuanian"
+msgstr ""
+
+# lv
+
+msgctxt "#30404"
+msgid "Latvian"
+msgstr ""
+
+# no
+
+msgctxt "#30405"
+msgid "Norwegian"
+msgstr ""
+
+# be
+
+msgctxt "#30406"
+msgid "Belgian"
+msgstr ""
+
+# en-gb
+
+msgctxt "#30407"
+msgid "British"
+msgstr ""
+
+# ee
+
+msgctxt "#30408"
+msgid "Estonian"
+msgstr ""
+
+# de
+
+msgctxt "#30409"
+msgid "German"
+msgstr ""
+
+# dk
+
+msgctxt "#30410"
+msgid "Danish"
+msgstr ""
+
+# fi
+
+msgctxt "#30411"
+msgid "Finnish"
+msgstr ""
+
+# empty strings from id 30412 to 30499
+
+msgctxt "#30500"
+msgid "All Favourites"
+msgstr ""
+
+msgctxt "#30501"
+msgid "Favourite"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Favourites"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Channel Favourites"
+msgstr ""
+
+msgctxt "#30504"
+msgid "Add to Favourites"
+msgstr ""
+
+msgctxt "#30505"
+msgid "Hide"
+msgstr ""
+
+msgctxt "#30506"
+msgid "Remove Favourite"
+msgstr ""
+
+msgctxt "#30507"
+msgid "Select Channels »"
+msgstr ""
+
+msgctxt "#30508"
+msgid "No favourites available"
+msgstr ""
+
+msgctxt "#30509"
+msgid "Cannot start playback"
+msgstr ""
+
+msgctxt "#30510"
+msgid "New version available"
+msgstr ""
+
+# empty strings from id 30511 to 30515
+
+msgctxt "#30516"
+msgid "New Version Available."
+msgstr ""
+
+msgctxt "#30517"
+msgid "A new version of %s is available: %s. Please visit the website to download it."
+msgstr ""
+
+# empty strings from id 30518 to 30519
+
+msgctxt "#30520"
+msgid "Repository Warning"
+msgstr ""
+
+msgctxt "#30521"
+msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
+msgstr ""
+
+msgctxt "#30522"
+msgid "Channel message"
+msgstr ""
+
+msgctxt "#30523"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30524"
+msgid "No videos were found for the selected item."
+msgstr ""
+
+msgctxt "#30525"
+msgid "The selected item does not have|any streams associated."
+msgstr ""
+
+# empty strings from id 30526 to 30527
+
+msgctxt "#30528"
+msgid "Add-on Settings"
+msgstr ""
+
+msgctxt "#30529"
+msgid "Refresh list"
+msgstr ""
+
+msgctxt "#30530"
+msgid "Check for Retrospect updates"
+msgstr ""
+
+msgctxt "#30531"
+msgid "Missing 'InputStream Helper' add-on. Cannot install."
+msgstr ""
+
+msgctxt "#30532"
+msgid "Install Widevine using 'InputStream Helper' add-on"
+msgstr ""
+
+msgctxt "#30533"
+msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and Retrospect is not responsible for any results. Nor is it guaranteed that Widevine will be installed correctly."
+msgstr ""
+
+msgctxt "#30534"
+msgid "Installation of Widevine failed!"
+msgstr ""
+
+msgctxt "#30535"
+msgid "Installation of Widevine completed!"
+msgstr ""
+
+msgctxt "#30536"
+msgid "This stream requires Kodi Leia, an enabled InputStream Adaptive add-on and the Widevine library to be installed. The latter can be installed from within the Retrospect add-on settings."
+msgstr ""
+
+msgctxt "#30537"
+msgid "Page"
+msgstr ""
+
+msgctxt "#30538"
+msgid "The selected live stream has not yet|begun."
+msgstr ""
+
+msgctxt "#30539"
+msgid "Live stream"
+msgstr ""
+
+msgctxt "#30540"
+msgid "Geo-blocked"
+msgstr ""
+
+msgctxt "#30541"
+msgid "Queue item"
+msgstr ""
+
+msgctxt "#30542"
+msgid "Starting %s."
+msgstr ""
+
+msgctxt "#30543"
+msgid "Season"
+msgstr ""
+
+msgctxt "#30544"
+msgid "Episode"
+msgstr ""
+
+msgctxt "#30545"
+msgid "Titles with '%s'"
+msgstr ""
+
+msgctxt "#30546"
+msgid "Other Chars"
+msgstr ""
+
+msgctxt "#30547"
+msgid "More Pages"
+msgstr ""
+
+msgctxt "#30548"
+msgid "Clips"
+msgstr ""
+
+msgctxt "#30549"
+msgid "Error retrieving the list of items."
+msgstr ""
+
+msgctxt "#30550"
+msgid "No episodes found for the selected item."
+msgstr ""
+
+msgctxt "#30551"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30552"
+msgid "Yesterday"
+msgstr ""
+
+msgctxt "#30553"
+msgid "Day before yesterday"
+msgstr ""
+
+msgctxt "#30554"
+msgid "DRM Protection"
+msgstr ""
+
+msgctxt "#30555"
+msgid "The selected item is DRM protected and might not play on Kodi."
+msgstr ""
+
+msgctxt "#30556"
+msgid "Initialising channel(s)."
+msgstr ""
+
+msgctxt "#30557"
+msgid "Channels have been updated or installed. Performing first time actions. This could take some time."
+msgstr ""
+
+msgctxt "#30558"
+msgid "Fetching Textures"
+msgstr ""
+
+msgctxt "#30559"
+msgid "Fetching missing textures. This could take some time depending on the internet and system speed."
+msgstr ""
+
+msgctxt "#30560"
+msgid "Paid video"
+msgstr ""
+
+msgctxt "#30561"
+msgid "The selected item is not free and might not play on Kodi."
+msgstr ""
+
+msgctxt "#30562"
+msgid "Username and/or password not set in Add-on settings"
+msgstr ""
+
+msgctxt "#30563"
+msgid "Hide Item"
+msgstr ""
+
+msgctxt "#30564"
+msgid "Show Hidden Item"
+msgstr ""
+
+msgctxt "#30565"
+msgid "Hidden items"
+msgstr ""
+
+msgctxt "#30566"
+msgid "To show a hidden item, first configure Retrospect to show hidden items. Then use the context menu's \"Show hidden item\"."
+msgstr ""
+
+msgctxt "#30567"
+msgid "Add-on(s) disabled"
+msgstr ""
+
+msgctxt "#30568"
+msgid "Some of the Retrospect Channel Add-ons are not enabled which will prevent them from auto updating. The Kodi add-on browser will now open and you should enable all Retrospect related add-ons. See http://kodi.wiki/view/add-on_manager."
+msgstr ""
+
+msgctxt "#30569"
+msgid "Ignore SSL verification errors (Security Risk!)"
+msgstr ""
+
+msgctxt "#30570"
+msgid "Hide channel initialisation messages"
+msgstr ""
+
+msgctxt "#30571"
+msgid "Use Kodi InputStream Adaptive add-on when possible"
+msgstr ""
+
+msgctxt "#30572"
+msgid "Retrospect Settings »"
+msgstr ""
+
+msgctxt "#30573"
+msgid "(Un-)Hide item »"
+msgstr ""
+
+msgctxt "#30574"
+msgid "Hide Channel"
+msgstr ""
+
+msgctxt "#30575"
+msgid "Retrospect Favourites »"
+msgstr ""
+
+msgctxt "#30576"
+msgid "Select Countries"
+msgstr ""
+
+msgctxt "#30577"
+msgid "Bitrate »"
+msgstr ""
+
+msgctxt "#30578"
+msgid "InputStream Adaptive add-on settings"
+msgstr ""
+
+msgctxt "#30579"
+msgid "InputStream Adaptive add-on »"
+msgstr ""
+
+msgctxt "#30580"
+msgid "Channel Options »"
+msgstr ""
+
+msgctxt "#30581"
+msgid "InputStream Adaptive add-on usage"
+msgstr ""
+
+# empty strings from id 30582 to 30589
+
+msgctxt "#30590"
+msgid "Set a new Retrospect PIN"
+msgstr ""
+
+msgctxt "#30591"
+msgid "No Retrospect PIN specified"
+msgstr ""
+
+msgctxt "#30592"
+msgid "Repeat the new Retrospect PIN"
+msgstr ""
+
+msgctxt "#30593"
+msgid "PINs don't match"
+msgstr ""
+
+msgctxt "#30594"
+msgid "Specify value for setting: '%s'"
+msgstr ""
+
+msgctxt "#30595"
+msgid "Input Retrospect PIN"
+msgstr ""
+
+msgctxt "#30596"
+msgid "Incorrect Retrospect PIN specified"
+msgstr ""
+
+msgctxt "#30597"
+msgid "Resetting the vault will invalidate all existing encrypted values. Are you sure?"
+msgstr ""
+
+msgctxt "#30598"
+msgid "Send retrospect.log"
+msgstr ""
+
+msgctxt "#30599"
+msgid "Logfile posted to: %s\n\nNote the URL (especially the last characters) and use them to refer to these log files in posts."
+msgstr ""
+
+msgctxt "#30600"
+msgid "Logfile successfully posted"
+msgstr ""
+
+msgctxt "#30601"
+msgid "Error posting logfile: %s"
+msgstr ""
+
+msgctxt "#30602"
+msgid "Error posting logfile"
+msgstr ""
+
+msgctxt "#30603"
+msgid "Retrospect changed add-on ID. To prevent data loss, your user data will now be migrated. After this has been done, please restart Kodi to complete migration. After the restart update any shortcut you had to Retrospect. The Retrospect marked as \"broken\" in \"My add-ons\" can be uninstalled."
+msgstr ""

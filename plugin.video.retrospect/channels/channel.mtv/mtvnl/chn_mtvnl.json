@@ -1,0 +1,28 @@
+{
+  "channels": [
+    {
+      "guid": "7C52452A-F2F9-11DD-BE3F-3F7356D89593",
+      "name": "MTV.nl",
+      "description": "MTV.nl Episodes",
+      "icon": "mtvnllarge.png",
+      "category": "Video",
+      "channelcode": "mtvnl",
+      "sortorder": 20,
+      "language": "nl",
+      "compatible": "Environments.All",
+      "fanart": "mtvfanart2.jpg"
+    },
+    {
+      "guid": "55635AAA-183C-11E2-ABEC-36706188709B",
+      "name": "MTV.de",
+      "description": "MTV.de Episodes",
+      "icon": "mtvnllarge.png",
+      "category": "Video",
+      "channelcode": "mtvde",
+      "sortorder": 20,
+      "language": "de",
+      "compatible": "Environments.All",
+      "fanart": "mtvfanart2.jpg"
+    }
+  ]
+}

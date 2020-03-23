@@ -1,0 +1,15 @@
+{
+  "channels": [
+    {
+      "guid": "9F0F57D6-B897-11E0-AF2E-92314924019B",
+      "name": "UR Play",
+      "description": "Sändningar från Sveriges Utbildningsradio (URPlay.se).",
+      "icon": "urplaylarge.png",
+      "category": "National",
+      "channelcode": null,
+      "sortorder": 2,
+      "language": "se",
+      "fanart": "urplayfanart.jpg"
+    }
+  ]
+}

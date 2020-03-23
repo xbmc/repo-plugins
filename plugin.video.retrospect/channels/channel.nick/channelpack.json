@@ -1,0 +1,17 @@
+{
+  "id": "channel.nick",
+  "version": "5.2.0",
+  "textures": {
+    "channel.nick.nickelodeon/nickfanart.jpg": "665bd6007b2099beabc3cb9d051e6050",
+    "channel.nick.nickjr/nickfanart.jpg": "665bd6007b2099beabc3cb9d051e6050",
+    "channel.nick.nickjr/nickjrfanart.jpg": "7b7a6c13892225ab999f766d50c50ecb",
+    "channel.nick.nickjr/nickjrimage.jpg": "c6dc3b8f06f5255c4b7f928abcd44017",
+    "channel.nick.nickelodeon/nickelodeonimage.png": "f00147795469ed090504c5b72a7caeb2",
+    "channel.nick.nickelodeon/nickelodeonlarge.png": "dc472aa091392c9dccf388feb158ccd3",
+    "channel.nick.nickelodeon/nickjrimage.png": "acb0ae3d7bdd591c474d1db569e03b4f",
+    "channel.nick.nickelodeon/nickjrlarge.png": "da8c5ace75d177e60474ff6c9631d222",
+    "channel.nick.nickjr/nickelodeonimage.png": "f00147795469ed090504c5b72a7caeb2",
+    "channel.nick.nickjr/nickelodeonlarge.png": "dc472aa091392c9dccf388feb158ccd3",
+    "channel.nick.nickjr/nickjrlarge.png": "da8c5ace75d177e60474ff6c9631d222"
+  }
+}

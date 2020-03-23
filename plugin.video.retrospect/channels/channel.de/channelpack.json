@@ -1,0 +1,13 @@
+{
+  "id": "channel.de",
+  "version": "5.2.0",
+  "textures": {
+    "channel.de.srf/srffanart.jpg": "a403956b8829c54c7df6d7df5606e5bc",
+    "channel.de.srf/srffanart3.jpg": "424652fc701c24d5cd94e2d4d8edf30a",
+    "channel.de.srf/srf1.png": "40bbbd20115dbe3bdb565824213c3dc3",
+    "channel.de.srf/srf2.png": "5a070b7d6e4ef64bd9f02aa10b5b4663",
+    "channel.de.srf/srficon.png": "ff284de660f3a8c818220de0c2247e46",
+    "channel.de.srf/srfimage.png": "14610767fb527db2c352b6e38523aa71",
+    "channel.de.srf/srfinfo.png": "7502c2bfa3d31f93d3885eae4a32188f"
+  }
+}

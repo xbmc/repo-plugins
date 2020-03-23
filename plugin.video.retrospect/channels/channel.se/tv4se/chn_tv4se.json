@@ -1,0 +1,62 @@
+{
+  "channels": [
+    {
+      "guid": "98506F58-CD6F-11DE-99BA-187F55D89593",
+      "name": "TV4 Play",
+      "description": "Sändningar från TV4Play.se.",
+      "icon": "tv4large.png",
+      "category": "National",
+      "channelcode": "tv4se",
+      "sortorder": 4,
+      "language": "se",
+      "fanart": "tv4playsefanart.jpg",
+      "localIPSupported": true
+    },
+    {
+      "guid": "66174057-D5E3-4102-AF46-B2D8E800E0D9",
+      "name": "Sjuan",
+      "description": "Sändningar från Sjuan (TV4Play.se).",
+      "icon": "tv7large.png",
+      "category": "National",
+      "channelcode": "tv7se",
+      "sortorder": 7,
+      "language": "se",
+      "fanart": "tv7fanart.png",
+      "localIPSupported": true
+    },
+    {
+      "guid": "F2D31759-71BD-4DD1-A1FB-FF8FD99CE03E",
+      "name": "TV12",
+      "description": "Sändningar från TV12 (TV4Play.se).",
+      "icon": "tv12large.png",
+      "category": "National",
+      "channelcode": "tv12se",
+      "sortorder": 12,
+      "language": "se",
+      "fanart": "tv12playfanart.jpg",
+      "localIPSupported": true
+    }
+  ],
+  "settings_old": [
+    {
+      "order": 1,
+      "id": "username",
+      "value": "id=\"channel_tv4play_se_username\" label=\"30094\" default=\"\""
+    },
+    {
+      "order": 2,
+      "id": "password_set",
+      "value": "id=\"channel_tv4play_se_password_set\" label=\"30093\" action=\"RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_tv4play_se_password&amp;settingname=TV4Play.se password&amp;tabfocus=102)\" option=\"close\""
+    },
+    {
+      "order": 3,
+      "id": "password",
+      "value": "id=\"channel_tv4play_se_password\" default=\"\""
+    },
+    {
+      "order": 4,
+      "id": "cookie",
+      "value": "id=\"channel_tv4play_se_token\" default=\"\""
+    }
+  ]
+}

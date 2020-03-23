@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- more info in GUIDialogAddonSettings -->
+<settings>
+    <setting id="application_key" default="" />
+
+    <category id="general" label="30009">
+        <setting id="cloud_sync_enabled" default="true" />
+        <setting id="stream_bitrate" type="select" label="30020" default="4000" values="100|250|500|750|1000|1500|2000|2500|4000|8000|20000" />
+        <setting id="show_subtitles" type="bool" label="30021" default="true" />
+        <setting id="list_limit" type="enum" label="30026" default="5" lvalues="30074|30199|30200|30201|30202|30203|30204|30205" />
+        <setting id="show_cloaked_items" type="bool" label="30095" default="false" />
+        <setting id="use_adaptive_addon" type="bool" label="30571" default="true" enable="System.HasAddon(inputstream.adaptive)" />
+        <setting id="adaptive_addon_settings" subsetting="true" type="action" label="30578" action="Addon.OpenSettings(inputstream.adaptive)" option="close" enable="System.HasAddon(inputstream.adaptive)" visible="eq(-1,true)" />
+        <setting id="widevine_install" subsetting="true" type="action" label="30532" option="close" action="RunScript(special://home/addons/plugin.video.retrospect/menu_install_widevine.py,plugin.video.retrospect)" enable="System.HasAddon(script.module.inputstreamhelper)" visible="eq(-2,true)"/>
+
+        <setting type="lsep" label="30089" />
+        <!-- we need the option="close" here to make sure we don't overwrite settings that were
+             already done while updating the settings from the script -->
+        <setting id="set_pin" label="30091" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=changepin&amp;tabfocus=100&amp;settingfocus=209)" option="close" />
+        <setting id="reset_vault" label="30092" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=resetvault&amp;tabfocus=100&amp;settingfocus=210)" option="close" />
+        <setting id="pin_label" type="text" label="30090" enable="false" />
+
+        <setting type="lsep" label="30046" />
+        <setting id="show_drm_warning" type="bool" label="30019" enable="true" default="true" />
+        <setting id="hide_drm" type="bool" label="30080" enable="true" default="false" />
+        <setting id="hide_premium" type="bool" label="30081" enable="true" default="false" />
+        <setting id="hide_types" type="enum" label="30082" lvalues="30083|30084" default="1" />
+        <setting id="geo_region" type="select" label="30085" lvalues="30074|30306|30309|30308|30307|30303|30304|30301|30305|30302" />
+        <setting id="geo_label" type="text" label="30073" enable="false" />
+    </category>
+
+    <category id="channels" label="30040">
+        <setting id="show_categories" type="bool" label="30067" default="true" />
+        <setting id="hide_first_time_message" type="bool" label="30570" default="false" />
+        <setting id="show_favourites" type="bool" label="30041" default="false" />
+
+        <setting type="lsep" label="30060" />
+        <!--<setting type="action" label="30598" action="RunScript(special://home/addons/plugin.video.retrospect/menu_enable.py)" option="close" />-->
+        <!-- start of channel selection -->
+        <!-- This is just a template and should be replaced after the first run -->
+        <!-- end of channel selection -->
+    </category>
+
+    <category id="channelsettings" label="30032">
+        <setting type="lsep" label="30063" />
+        <!-- start of active channels -->
+        <!-- This is just a template and should be replaced after the first run -->
+        <!-- end of active channels -->
+
+        <setting type="lsep" label="30032" />
+        <setting id="channel_00000000-0000-0000-0000-000000000000_none" label="30034" type="text" enable="false" visible="eq(%config_channel%,)" />
+
+        <!-- begin of channel settings -->
+        <!-- This is just a template and should be replaced after the first run -->
+        <!-- end of channel settings -->
+    </category>
+
+    <category id="advancedsettings" label="30055">
+        <setting id="auto_run" type="bool" label="30027" default="false" />
+        <setting id="folders_as_video" type="bool" label="30087" default="false" />
+        <setting id="empty_folder" type="select" label="30075" default="2" lvalues="30076|30077|30078" />
+        <setting id="folder_prefix" type="text" label="30043" default="" />
+        <setting id="hide_fanart" type="bool" label="30086" default="false" />
+        <setting id="use_thumbs_as_fanart" type="bool" label="30088" default="false" />
+        <setting id="ignore_ssl_errors" type="bool" label="30569" default="false" />
+        <setting id="http_cache" type="bool" label="30031" default="true" />
+
+        <setting type="lsep" label="30098" />
+        <setting id="log_level" type="enum" label="30048" values="Trace|Debug|Info" default="2" />
+        <setting id="send_log" type="action" label="30598" action="RunScript(plugin.video.retrospect, 0, ?action=postlog)" option="close" visible="eq(-1,0)|eq(-1,1)" />
+    </category>
+</settings>

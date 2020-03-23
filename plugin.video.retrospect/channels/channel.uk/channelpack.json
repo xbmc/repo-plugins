@@ -1,0 +1,19 @@
+{
+  "id": "channel.uk",
+  "version": "5.2.0",
+  "textures": {
+    "channel.uk.bbc/bbc1large.png": "b0fdb57f5b1df337691ffe9b64820a3c",
+    "channel.uk.bbc/bbc2large.png": "294185e907e938fb7128f569a627969f",
+    "channel.uk.bbc/bbc3large.png": "5e3a9fd08bd6e9af679b48a4c854bc6e",
+    "channel.uk.bbc/bbc4large.png": "f0fdde27da353a946e2acfb88027874a",
+    "channel.uk.bbc/bbcalbalarge.png": "74fc402d2041040c0be19eebb4a2fdd0",
+    "channel.uk.bbc/bbcfanart.png": "2a0679fdfa7157d6bc9ffab3c6678efd",
+    "channel.uk.bbc/bbchdlarge.png": "fa25ee6f3132e31e5316b550467fbab7",
+    "channel.uk.bbc/bbciplayerimage.png": "05330ba5f7c92b74a7c9b81620076dd0",
+    "channel.uk.bbc/bbciplayerlarge.png": "28a06cb46fa4dca72dfb86a5ce99a9bf",
+    "channel.uk.bbc/bbcnewslarge.png": "3a1498b687278223ba207fabf0800726",
+    "channel.uk.bbc/bbcparliamentlarge.png": "078e489fdc62777f29cc5d046fe2514b",
+    "channel.uk.bbc/cbbclarge.png": "e573cb2f4b7de1d47a660a461cc83b4c",
+    "channel.uk.bbc/cbeebieslarge.png": "8f0ee5b4e9fe965d9ffc45a68669c15a"
+  }
+}

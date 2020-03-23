@@ -1,0 +1,16 @@
+{
+  "channels": [
+    {
+      "guid": "A9BE95B0-2ED6-4E75-B5DF-C3ECAF0441E6",
+      "name": "SRF.ch Play",
+      "description": "Schweizer Radio und Fernsehen Play content.",
+      "icon": "srficon.png",
+      "category": "National",
+      "channelcode": "srf",
+      "sortorder": 101,
+      "language": "de",
+      "compatible": "Environments.All",
+      "fanart": "srffanart.jpg"
+    }
+  ]
+}

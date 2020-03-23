@@ -1,0 +1,19 @@
+{
+  "channels": [
+    {
+      "guid": "2FB36241-5BB1-4D38-AD36-F48EAE91CDB5",
+      "name": "NRK TV",
+      "description": "Sendinger fra Norsk rikskringkasting (tv.nrk.no).",
+      "icon": "nrknolarge.png",
+      "category": "National",
+      "channelcode": "nrkno",
+      "sortorder": 1,
+      "language": "no",
+      "fanart": "nrkfanart.jpg",
+      "localIPSupported": true,
+      "compatible": "Environments.All"
+    }
+  ],
+  "settings": [
+  ]
+}

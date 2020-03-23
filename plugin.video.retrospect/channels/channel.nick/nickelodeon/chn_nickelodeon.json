@@ -1,0 +1,26 @@
+{
+  "channels": [
+    {
+      "guid": "8D4EBAE8-F3C6-11DD-92EE-F2FE55D89593",
+      "name": "Nickelodeon",
+      "description": "Afleveringen van Nickelodeon",
+      "icon": "nickelodeonlarge.png",
+      "category": "Kids",
+      "channelcode": "nickelodeon",
+      "sortorder": 22,
+      "language": "nl",
+      "fanart": "nickfanart.jpg"
+    },
+    {
+      "guid": "47AA717E-F919-11E1-977F-0DEC6188709B",
+      "name": "Nickelodeon (Norge)",
+      "description": "Sendinger fra Nickelodeon.no.",
+      "icon": "nickelodeonlarge.png",
+      "category": "Kids",
+      "channelcode": "nickno",
+      "sortorder": 22,
+      "language": "no",
+      "fanart": "nickfanart.jpg"
+    }
+  ]
+}

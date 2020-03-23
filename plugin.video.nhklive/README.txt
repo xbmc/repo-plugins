@@ -4,6 +4,8 @@ plugin.video.nhklive
 Kodi Video Addon for NHK TV Live
 For Kodi Isengard and above releases
 
+Version 3.0.12 website change
+Version 3.0.8 website change
 Version 3.0.7 website change
 Version 3.0.6 website change
 Version 3.0.5 website change

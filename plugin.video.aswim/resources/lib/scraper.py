@@ -19,17 +19,19 @@ class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
       html = self.getRequest(ASBASE+'/videos')
-      html = re.compile('__AS_INITIAL_STATE__ = (.+?)</script>', re.DOTALL).search(html).group(1)
+      html = re.compile('type="application/json">(.+?)</script>', re.DOTALL).search(html).group(1)
       a = json.loads(html)
-      for b in a['showsIndex']['shows']:
+      for b in a['props']['pageProps']['shows']:
          name = b['title']
          url = b['url']
+         thumb = b['poster']
+         fanart = thumb
          infoList = {}
          infoList['TVShowTitle'] = name
          infoList['Title'] = name
          infoList['Plot'] = name
          infoList['mediatype'] = 'tvshow'
-         ilist = self.addMenuItem(name,'GE', ilist, url, self.addonIcon, self.addonFanart, infoList, isFolder=True)
+         ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
       return(ilist)
 
   def getAddonEpisodes(self,url,ilist):
@@ -48,13 +50,11 @@ class myAddon(t1mAddon):
               url = b['_id']
               infoList = {}
               infoList['title'] = name
-#              infoList['TVShowTitle'] = b.get('collection_title')
               infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
               infoList['mediatype'] = 'episode'
               infoList['Plot'] = b.get('description')
               infoList['Duration'] = b.get('duration')
               infoList['MPAA'] = b.get('tvRating')
-#              infoList['Season'] = b.get('seasonNumber')
               infoList['Episode'] = b.get('episodeNumber')
               infoList['Premiered'] = b.get('launchDate').split('T',1)[0]
               ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)

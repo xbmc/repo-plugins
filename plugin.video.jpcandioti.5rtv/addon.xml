@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.jpcandioti.5rtv"
+version="1.0.0"
+name="5RTV Addon"
+provider-name="@JPCandioti">
+<requires>
+  <import addon="xbmc.python" version="2.20.0"/>
+  <import addon="plugin.video.livestream" version="2017.4.3"/>
+  <import addon="plugin.video.youtube" version="5.4.0"/>
+</requires>
+<extension point="xbmc.python.pluginsource" library="main.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en_GB">5RTV is the Public Channel of the Province of Santa Fe, Argentina.</summary>
+  <summary lang="es_AR">5RTV es el Canal Público de la Provincia de Santa Fe, Argentina.</summary>
+  <description lang="es_AR">5RTV es un canal de los llamados generalistas.
+No es un canal temático, ni es un canal “cultural”.
+No es tampoco una productora de contenidos.
+Es un medio de comunicación público de alcance provincial.
+Esto significa que su programación no está basada en documentales unitarios sino en ciclos de programas de interés general que abarcan distintos rubros como Noticias, Política, Información de Municipios, Salud, Tecnología, Deportes, Gastronomía, Tradiciones, Ruralidad, Música, Humor, Empresariales, Entretenimiento, Arte, Infantiles, Ficción, Dibujos Animados, Clips de Oficios, Efemérides, Break News locales, provinciales, nacionales e internacionales etcétera.
+El tratamiento de estos temas se realiza siempre preservando los principios esenciales que motivaron la creación de este medio de comunicación: TERRITORIO, IDENTIDAD y PLURALISMO, con la CALIDAD como paradigma innegociable y la CREATIVIDAD como filosofía de trabajo.
+Se apuesta al dinamismo que propone el formato de media hora para la mayoría de los programas con unas pocas excepciones que por su trascendencia lo justifiquen.
+  </description>
+  <assets>
+    <icon>icon.png</icon>
+    <fanart>fanart.jpg</fanart>
+  </assets>
+  <platform>all</platform>
+  <license>Apache License Version 2.0</license>
+  <source>https://github.com/jpcandioti/plugin.video.jpcandioti.5rtv</source>
+</extension>
+</addon>

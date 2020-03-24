@@ -547,18 +547,25 @@ class VideoInfo(object):
         result = requests.get(url, params=params, headers=headers, verify=self._verify, allow_redirects=True)
         return {'html': result.text, 'cookies': result.cookies}
 
-    @staticmethod
-    def get_player_config(html):
-        _player_config = '{}'
-
+    def get_player_config(self, html):
+        _player_config = {}
         lead = 'ytplayer.config = '
-        tail = ';ytplayer.load'
-        pos = html.find(lead)
-        if pos >= 0:
-            html2 = html[pos + len(lead):]
-            pos = html2.find(tail)
+        tails = ['ytplayer.load', 'ytplayer.web_player_context_config']
+
+        for tail in tails:
+            pos = html.find(lead)
             if pos >= 0:
-                _player_config = html2[:pos]
+                html2 = html[pos + len(lead):]
+                pos = html2.find(tail)
+                if pos >= 0:
+                    _player_config = html2[:pos].rstrip().rstrip(';').rstrip()
+                    try:
+                        _player_config = json.loads(_player_config)
+                        break
+                    except (TypeError, ValueError):
+                        _player_config = {}
+
+        self._context.log_debug('Found valid player config |%s|' % str(_player_config != {}))
 
         blank_config = re.search(r'var blankSwfConfig\s*=\s*(?P<player_config>{.+?});\s*var fillerData', html)
         if not blank_config:
@@ -569,10 +576,7 @@ class VideoInfo(object):
             except TypeError:
                 player_config = dict()
 
-        try:
-            player_config.update(json.loads(_player_config))
-        except TypeError:
-            pass
+        player_config.update(_player_config)
 
         if 'args' not in player_config:
             player_config['args'] = dict()
@@ -805,6 +809,15 @@ class VideoInfo(object):
                 if is_live:
                     image_url = image_url.replace('.jpg', '_live.jpg')
                 meta_info['images'][image_data['to']] = image_url
+
+        microformat = player_response.get('microformat', {}).get('playerMicroformatRenderer', {})
+        meta_info['video']['status'] = {
+            'unlisted': microformat.get('isUnlisted', False),
+            'private': video_details.get('isPrivate', False),
+            'crawlable': video_details.get('isCrawlable', False),
+            'family_safe': microformat.get('isFamilySafe', False),
+            'live': is_live,
+        }
 
         if (params.get('status', '') == 'fail') or (playability_status.get('status', 'ok').lower() != 'ok'):
             if not ((playability_status.get('desktopLegacyAgeGateReason', 0) == 1) and not self._context.get_settings().age_gate()):

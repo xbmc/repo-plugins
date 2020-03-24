@@ -1206,3 +1206,7 @@ msgstr "Fernbedienungsfreundliche Suche"
 msgctxt "#30730"
 msgid "Play (Ask for quality)"
 msgstr "Abspielen (nach Qualität fragen)"
+
+msgctxt "#30731"
+msgid "The YouTube add-on now requires that you use your own API keys.[CR]For more information see the wiki: [B]https://ytaddon.page.link/keys[/B][CR][CR]Sorry for the inconvenience."
+msgstr "Das YouTube-Addon erfordert nun, dass Sie Ihre eigenen API-Schlüssel verwenden.[CR]Weitere Informationen finden Sie im Wiki: [B]https://ytaddon.page.link/keys[/B][CR][CR]Wir bedauern diese Unannehmlichkeiten."

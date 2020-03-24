@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="3.0.47" provider-name="CaptainT, Cas, ihurst, primaeval">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="3.0.48" provider-name="CaptainT, Cas, ihurst, primaeval">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.requests" version="2.7.0"/>
@@ -20,8 +20,8 @@
         <fanart>resources/fanart.jpg</fanart>
     </assets>
     <news>
-v3.0.47
-Fixed broken DASH streaming due to discontinuation of http service.
+v3.0.48
+Added support for BBC Scotland.
    </news>
   </extension>
 </addon>

@@ -1,3 +1,6 @@
+v3.0.48
+Added support for BBC Scotland.
+
 v3.0.47
 Fixed broken DASH streaming due to discontinuation of http service.
 

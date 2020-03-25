@@ -845,5 +845,6 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
 
         return self.get_formatted_url(full_url,
                                       options={
-                                          'X-Plex-Device': 'Plex Home Theater'
+                                          'X-Plex-Device': 'Plex Home Theater',
+                                          'X-Plex-Client-Profile-Name': 'Chrome',
                                       }), session

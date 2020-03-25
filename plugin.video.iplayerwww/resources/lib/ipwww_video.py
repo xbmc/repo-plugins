@@ -102,6 +102,7 @@ def ListLive():
         ('bbc_news24',                       'BBC News Channel'),
         ('bbc_parliament',                   'BBC Parliament'),
         ('bbc_alba',                         'Alba'),
+        ('bbc_scotland_hd',                  'BBC Scotland',),
         ('s4cpbs',                           'S4C'),
         ('bbc_one_london',                   'BBC One London'),
         ('bbc_one_scotland_hd',              'BBC One Scotland'),
@@ -177,6 +178,7 @@ def ListChannelAtoZ():
         ('tv/bbcnews',       'bbc_news24',     'BBC News Channel'),
         ('tv/bbcparliament', 'bbc_parliament',   'BBC Parliament'),
         ('tv/bbcalba',       'bbc_alba',                   'Alba'),
+        ('tv/bbcscotland',   'bbc_scotland_hd',    'BBC Scotland'),
         ('tv/s4c',           's4cpbs',                      'S4C'),
     ]
     for id, img, name in channel_list:
@@ -455,6 +457,7 @@ def ListChannelHighlights():
         ('tv/bbcnews',       'bbc_news24',     'BBC News Channel'),
         ('tv/bbcparliament', 'bbc_parliament',   'BBC Parliament'),
         ('tv/bbcalba',       'bbc_alba',                   'Alba'),
+        ('tv/bbcscotland',   'bbc_scotland_hd',    'BBC Scotland'),
         ('tv/s4c',           's4cpbs',                      'S4C'),
     ]
     for id, img, name in channel_list:
@@ -1078,7 +1081,8 @@ def ParseLiveStreams(channelname, providers):
                            'bbc_one_east', 'bbc_one_east_midlands', 'bbc_one_east_yorkshire',
                            'bbc_one_north_east', 'bbc_one_north_west', 'bbc_one_oxford',
                            'bbc_one_south', 'bbc_one_south_east', 'bbc_one_south_west',
-                           'bbc_one_west', 'bbc_one_west_midlands', 'bbc_one_yorks']:
+                           'bbc_one_west', 'bbc_one_west_midlands', 'bbc_one_yorks',
+                           'bbc_scotland']:
             device = 'hls_tablet'
         else:
             device = 'abr_hdtv'

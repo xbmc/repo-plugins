@@ -1,3 +1,6 @@
+v2.5.55
+Added support for BBC Scotland.
+
 v2.5.54
 Fixed sign in.
 Fixed CRLF in changelog.txt

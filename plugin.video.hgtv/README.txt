@@ -9,6 +9,7 @@ https://commons.wikimedia.org/wiki/File:HGTV_Logo.svg
 fanart.jpg sourced from public domain:
 https://commons.wikimedia.org/wiki/File:HGTV_Logo.svg (converted to .jpg)
 
+Version 3.0.13 website change
 Version 3.0.12 use ignorecase for regex
 Version 3.0.11 minor website change
 Version 3.0.10 minor website change

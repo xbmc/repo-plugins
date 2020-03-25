@@ -25,10 +25,11 @@ class myAddon(t1mAddon):
   def getAddonMenu(self,url,ilist):
       url = 'http://www.hgtv.com/shows/full-episodes'
       html = self.getRequest(url)
-#      html = re.compile('<div class="capsule editorialPromo parbase section">(.+?)<div class="textPromo capsule parbase section">', re.DOTALL).search(html).group(1)
       a = re.compile('<div class="m-MediaBlock o-Capsule__m-MediaBlock m-MediaBlock--PLAYLIST">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText.+?>(.+?)<.+?AssetInfo">(.+?)<', re.IGNORECASE | re.DOTALL).findall(html)
       for (url, thumb, name, vidcnt) in a:
-          name=name.strip()
+          if not url.startswith('http'):
+              url = 'http:'+url
+          name=name.strip().replace('<i>','')
           name=h.unescape(name)
           vidcnt = vidcnt.strip()
           infoList = {}
@@ -85,12 +86,6 @@ class myAddon(t1mAddon):
           mpaa = re.compile('ratings="(.+?)"',re.DOTALL).search(html)
           if mpaa is not None: 
               infoList['MPAA'] = mpaa.group(1).split(':',1)[1]
-          epinum = re.compile('"episodeNumber" value=".(.+?)H"',re.DOTALL).search(html)
-          if epinum is not None:
-              infoList['Episode'] = int(epinum.group(1).replace('Z','').replace('I','').replace('S',''), 16)
-          seanum = re.compile('"episodeNumber" value="(.+?)H"',re.DOTALL).search(html)
-          if seanum is not None:
-              infoList['Season'] = int(seanum.group(1).replace('Z','').replace('S','').replace('I',''),16)/256
           infoList['mediatype'] = 'episode'
           ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
       return(ilist)

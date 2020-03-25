@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.metv"
+       name="MeTV"
+       version="3.0.8"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.t1mlib" version="1.0.18"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">MeTV</summary>
+    <description lang="en_GB">Chosen from a wide array of genres, the programs of Me-TV pay tribute to classic television. Comedies like The Mary Tyler Moore Show, I Love Lucy, The Honeymooners and The Bob Newhart Show. Dramas such as Perry Mason, Ironside, The Streets of San Francisco, The Rockford Files and Columbo great westerns like Gunsmoke, Bonanza, The Rifleman and The Big Valley and otherworldly classics like Star Trek, Lost In Space and The Twilight Zone</description>
+    <disclaimer lang="en_GB">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>LGPL-2.0-or-later</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=193014</forum>
+    <website>www.metv.com</website>
+    <source>https://github.com/learningit/plugin.video.metv</source>
+    <news>Version 3.0.8 Update/Leia Release
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

@@ -164,5 +164,13 @@ menu = {
         'module': 'resources.lib.channels.ch.lemanbleu',
         'enabled': True,
         'order': 22
+    },
+    'telem1': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/ch/telem1.png',
+        'fanart': 'channels/ch/telem1_fanart.jpg',
+        'module': 'resources.lib.channels.ch.telem1',
+        'enabled': True,
+        'order': 23
     }
 }

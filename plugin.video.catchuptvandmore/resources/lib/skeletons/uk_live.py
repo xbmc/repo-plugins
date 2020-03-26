@@ -185,5 +185,13 @@ menu = {
         'module': 'resources.lib.channels.uk.stv',
         'enabled': True,
         'order': 24
+    },
+    'edgesport': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/uk/edgesport.png',
+        'fanart': 'channels/uk/edgesport_fanart.jpg',
+        'module': 'resources.lib.channels.uk.stv',
+        'enabled': True,
+        'order': 25
     }
 }

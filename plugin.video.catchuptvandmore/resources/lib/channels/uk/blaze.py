@@ -40,15 +40,17 @@ import urlquick
 # Fix Replay (DRM)
 
 URL_ROOT = 'http://www.blaze.tv'
+
+URL_API = 'https://watch.blaze.tv'
 # Live
-URL_LIVE_JSON = URL_ROOT + '/stream/live/widevine/%s'
+URL_LIVE = URL_API + '/live/'
+URL_LIVE_JSON = 'https://live.blaze.tv/stream-live.php?key=%s&platform=chrome'
+# Key
 
 # Replay
-URL_SHOWS = URL_ROOT + '/series'
+URL_REPLAY = URL_ROOT + '/replay/'
 # pageId
-
-URL_STREAM = URL_ROOT + '/stream/replay/widevine/%s'
-# apiKey, videoId
+URL_REPLAY_JSON = 'https://vod.blaze.tv/stream-vod.php?key=%s&platform=chrome'
 
 
 def replay_entry(plugin, item_id, **kwargs):
@@ -66,76 +68,28 @@ def list_categories(plugin, item_id, **kwargs):
     - ...
     """
     item = Listitem()
-    item.label = plugin.localize(LABELS['All programs'])
-    item.set_callback(list_programs, item_id=item_id)
+    item.label = plugin.localize(LABELS['All videos'])
+    item.set_callback(list_videos, item_id=item_id)
     item_post_treatment(item)
     yield item
 
 
 @Route.register
-def list_programs(plugin, item_id, **kwargs):
-    """
-    Build programs listing
-    - Les feux de l'amour
-    - ...
-    """
-    resp = urlquick.get(URL_SHOWS)
-    root = resp.parse()
+def list_videos(plugin, item_id, **kwargs):
 
-    for program_datas in root.iterfind(".//div[@class='col-sm-4']"):
-        program_title = program_datas.find('.//h3').get('title')
-        program_image = program_datas.find('.//img').get('data-src')
-        program_url = URL_ROOT + program_datas.find('a').get('href')
-
-        item = Listitem()
-        item.label = program_title
-        item.art['thumb'] = program_image
-        item.set_callback(list_seasons,
-                          item_id=item_id,
-                          program_url=program_url)
-        item_post_treatment(item)
-        yield item
-
-
-@Route.register
-def list_seasons(plugin, item_id, program_url, **kwargs):
-
-    resp = urlquick.get(program_url, headers={"User-Agent": web_utils.get_random_ua()})
-    root = resp.parse("ul", attrs={"class": "nav nav-tabs"})
-
-    for season_datas in root.iterfind(".//h3"):
-        season_title = season_datas.text.strip()
-        season_url = program_url + '#%s' % season_datas.text.split(' ')[1]
-
-        item = Listitem()
-        item.label = season_title
-        item.set_callback(list_videos, item_id=item_id, season_url=season_url)
-        item_post_treatment(item)
-        yield item
-
-    if root.find('.//h2') is not None:
-        season_title = 'Series %s' % root.find('.//h2').text.strip()
-        season_url = program_url
-
-        item = Listitem()
-        item.label = season_title
-        item.set_callback(list_videos, item_id=item_id, season_url=season_url)
-        item_post_treatment(item)
-        yield item
-
-
-@Route.register
-def list_videos(plugin, item_id, season_url, **kwargs):
-
-    resp = urlquick.get(season_url)
+    resp = urlquick.get(URL_REPLAY)
     root = resp.parse()
 
     for video_datas in root.iterfind(
-            ".//a[@class='thumbnail video vod-REPLAY play-video-trigger user-can-watch']"):
+            ".//div[@class='col-xs-12 col-sm-6 col-md-3']"):
 
-        video_title = video_datas.find('.//h3').get('title')
+        video_title = ''
+        if video_datas.find('.//h3') is not None:
+            video_title = video_datas.find('.//h3').text
+        if video_datas.find(".//span[@class='pull-left']") is not None:
+            video_title = video_title + ' - ' + video_datas.find(".//span[@class='pull-left']").text
         video_image = video_datas.find('.//img').get('data-src')
-        video_url = URL_ROOT + video_datas.get('href')
+        video_url = URL_API + video_datas.find('.//a').get('href')
 
         item = Listitem()
         item.label = video_title
@@ -156,17 +110,26 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(video_url)
-    stream_id = re.compile(r'blaze\"\,\"uvid\"\:\"(.*?)\"').findall(resp.text)[0]
-    resp2 = urlquick.get(URL_STREAM % stream_id,
-                         headers={"x-requested-with": "XMLHttpRequest"},
-                         max_age=-1)
+
+    key_value = re.compile(
+        r'data-key\=\"(.*?)\"').findall(resp.text)[0]
+    token_value = re.compile(
+        r'data-token\=\"(.*?)\"').findall(resp.text)[0]
+    token_expiry_value = re.compile(
+        r'data-expiry\=\"(.*?)\"').findall(resp.text)[0]
+    uvid_value = re.compile(
+        r'data-uvid\=\"(.*?)\"').findall(resp.text)[0]
+    resp2 = urlquick.get(
+        URL_REPLAY_JSON % key_value,
+        headers={
+            'User-Agent': web_utils.get_random_ua(),
+            'token': token_value,
+            'token-expiry': token_expiry_value,
+            'uvid': uvid_value
+        },
+        max_age=-1)
     json_parser2 = json.loads(resp2.text)
-    stream_url = ''
-    for stream_datas in json_parser2["playerSource"]["sources"]:
-        stream_url = stream_datas["src"]
-    if download_mode:
-        return download.download_video(stream_url)
-    return stream_url
+    return json_parser2["Streams"]["Adaptive"]
 
 
 def live_entry(plugin, item_id, **kwargs):
@@ -176,20 +139,23 @@ def live_entry(plugin, item_id, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, video_id, **kwargs):
 
-    resp = urlquick.get(URL_ROOT)
-    live_id = re.compile(r'href\=\"\/live\/(.*?)\"').findall(resp.text)[0]
+    resp = urlquick.get(URL_LIVE)
+    live_id = re.compile(
+        r'data-player-key\=\"(.*?)\"').findall(resp.text)[0]
+    token_value = re.compile(
+        r'data-player-token\=\"(.*?)\"').findall(resp.text)[0]
+    token_expiry_value = re.compile(
+        r'data-player-expiry\=\"(.*?)\"').findall(resp.text)[0]
+    uvid_value = re.compile(
+        r'data-player-uvid\=\"(.*?)\"').findall(resp.text)[0]
     resp2 = urlquick.get(
         URL_LIVE_JSON % live_id,
-        headers={"x-requested-with": "XMLHttpRequest"},
-        max_age=-1)
-    json_parser2 = json.loads(resp2.text)
-    resp3 = urlquick.get(
-        json_parser2["tokenizer"]["url"],
         headers={
-            "Token": json_parser2["tokenizer"]["token"],
-            "Token-Expiry": json_parser2["tokenizer"]["expiry"],
-            "Uvid": "blaze"
+            'User-Agent': web_utils.get_random_ua(),
+            'token': token_value,
+            'token-expiry': token_expiry_value,
+            'uvid': uvid_value
         },
         max_age=-1)
-    json_parser3 = json.loads(resp3.text)
-    return json_parser3["Streams"]["Adaptive"]
+    json_parser2 = json.loads(resp2.text)
+    return json_parser2["Streams"]["Adaptive"]

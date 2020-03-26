@@ -252,6 +252,7 @@ def add_context_menus_to_item(item, item_id, item_index, menu_id, menu_len, is_p
                         item_id=item_id,
                         menu_id=menu_id)
 
+
     # Add to add-on favourites
     item.context.script(fav.add_item_to_favourites,
                         Script.localize(LABELS['Add to add-on favourites']),

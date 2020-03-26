@@ -37,12 +37,20 @@ the addon's tree architecture.
 """
 
 menu = {
-    'mitele': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/es/mitele.png',
-        'fanart': 'channels/es/mitele_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
+    'crtv': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/cm/crtv.png',
+        'fanart': 'channels/cm/crtv_fanart.jpg',
+        'module': 'resources.lib.channels.cm.crtv',
         'enabled': True,
         'order': 1
+    },
+    'crtvnews': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/cm/crtvnews.png',
+        'fanart': 'channels/cm/crtvnews_fanart.jpg',
+        'module': 'resources.lib.channels.cm.crtv',
+        'enabled': True,
+        'order': 2
     }
 }

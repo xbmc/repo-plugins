@@ -39,17 +39,201 @@ import urlquick
 from kodi_six import xbmcgui
 
 # TO DO
-# Add Replay
 
 DESIRED_QUALITY = Script.setting['quality']
 
-URL_LIVE_DATAS = 'http://indalo.mediaset.es/mmc-player/api/mmc/v1/%s/live/flash.json'
+URL_ROOT = 'https://www.mitele.es'
+
+URL_LIVE_DATAS = 'http://indalo.mediaset.es/mmc-player/api/mmc/v1/%s/live/html5.json'
 # channel name
 
 URL_LIVE_STREAM = 'https://pubads.g.doubleclick.net/ssai/event/%s/streams'
 # Live Id
 
 URL_LIVE_HASH = 'https://gatekeeper.mediaset.es/'
+
+URL_MAB = 'https://mab.mediaset.es/1.0.0/get'
+
+URL_STREAM_DATAS = 'https://caronte.mediaset.es/delivery/vod/ooyala/%s/mtweb'
+
+LIST_PROGRAMS = {
+    "Informativos": "informativos",
+    "Música": "musica",
+    "Documentales": "documentales",
+    "Cine": "peliculas",
+    "Miniseries": "miniseries",
+    "Programas": "programas-tv",
+    "TV Movies": "tv-movies",
+    "Series": "series-online",
+    "Más deporte": "deportes"
+}
+
+
+def replay_entry(plugin, item_id, **kwargs):
+    """
+    First executed function after replay_bridge
+    """
+    return list_categories(plugin, item_id)
+
+
+@Route.register
+def list_categories(plugin, item_id, **kwargs):
+    """
+    Build categories listing
+    - Tous les programmes
+    - Séries
+    - Informations
+    - ...
+    """
+    for category_title, category_program in list(LIST_PROGRAMS.items(
+    )):
+        item = Listitem()
+        item.label = category_title
+        item.set_callback(list_programs,
+                          item_id=item_id,
+                          category_program=category_program,
+                          page='1')
+        item_post_treatment(item)
+        yield item
+
+
+@Route.register
+def list_programs(plugin, item_id, category_program, page, **kwargs):
+    """
+    Build programs listing
+    - Les feux de l'amour
+    - ...
+    """
+    datas = {
+        'oid': 'bitban',
+        'eid': '/automaticIndex/mtweb?url=www.mitele.es/%s/&page=%s&id=a-z&size=24' % (category_program, page)
+    }
+    resp = urlquick.get(URL_MAB, params=datas)
+    json_parser = json.loads(resp.text)
+
+    for program_datas in json_parser["editorialObjects"]:
+        program_title = program_datas["title"]
+        program_image = program_datas["image"]["src"]
+        program_url = URL_ROOT + program_datas["image"]["href"]
+
+        item = Listitem()
+        item.label = program_title
+        item.art['thumb'] = program_image
+        item.set_callback(list_sub_programs,
+                          item_id=item_id,
+                          program_url=program_url)
+        item_post_treatment(item)
+        yield item
+
+    yield Listitem.next_page(item_id=item_id,
+                             category_program=category_program,
+                             page=str(int(page) + 1))
+
+
+@Route.register
+def list_sub_programs(plugin, item_id, program_url, **kwargs):
+
+    resp = urlquick.get(program_url)
+    json_sub_programs_datas = re.compile(
+        r'container_mtweb \= (.*?) \<\/script\>').findall(resp.text)[0]
+
+    json_parser = json.loads(json_sub_programs_datas)
+
+    for sub_program_datas in json_parser["container"]["tabs"]:
+
+        if 'detail' not in sub_program_datas["type"]:
+            sub_program_title = sub_program_datas["title"]
+            sub_program_part_url = sub_program_datas["link"]["href"]
+            sub_program_id = sub_program_datas["id"]
+
+            item = Listitem()
+            item.label = sub_program_title
+            item.set_callback(list_videos,
+                              item_id=item_id,
+                              sub_program_part_url=sub_program_part_url,
+                              sub_program_id=sub_program_id)
+            item_post_treatment(item)
+            yield item
+
+
+@Route.register
+def list_videos(plugin, item_id, sub_program_part_url, sub_program_id, **kwargs):
+
+    datas = {
+        'oid': 'bitban',
+        'eid': '/tabs/mtweb?url=www.mitele.es%s&tabId=%s' % (sub_program_part_url, sub_program_id)
+    }
+    resp = urlquick.get(URL_MAB, params=datas)
+    json_parser = json.loads(resp.text)
+
+    for video_datas in json_parser["contents"]:
+        video_title = video_datas["title"] + ' - ' + video_datas["subtitle"]
+        video_image = video_datas["images"]["thumbnail"]["src"]
+        video_plot = video_datas["info"]["synopsis"]
+        video_duration = 0
+        if 'duration' in video_datas["info"]:
+            video_duration = video_datas["info"]["duration"]
+        video_url = URL_ROOT + video_datas["link"]["href"]
+        content_id = video_datas["id"]
+
+        item = Listitem()
+        item.label = video_title
+        item.art['thumb'] = video_image
+        item.info['plot'] = video_plot
+        item.info['duration'] = video_duration
+        item.set_callback(get_video_url,
+                          item_id=item_id,
+                          video_url=video_url,
+                          content_id=content_id)
+        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        yield item
+
+
+@Resolver.register
+def get_video_url(plugin,
+                  item_id,
+                  video_url,
+                  content_id,
+                  download_mode=False,
+                  **kwargs):
+
+    session = urlquick.Session()
+
+    resp = session.get(video_url,
+                       headers={'User-Agent': web_utils.get_random_ua()},
+                       max_age=-1)
+    video_id = re.compile(
+        r'dataMediaId\"\:\"(.*?)\"').findall(resp.text)[0]
+
+    resp2 = session.get(URL_STREAM_DATAS % video_id,
+                        headers={'User-Agent': web_utils.get_random_ua()},
+                        max_age=-1)
+    json_parser2 = json.loads(resp2.text)
+
+    url_stream = ''
+    for stream_datas in json_parser2["dls"]:
+        if 'hls' in stream_datas["format"]:
+            url_stream = stream_datas["stream"]
+
+    datas = {
+        'oid': 'bitban_api',
+        'eid': '/api/greenBox?contentId=%s&platform=mtweb' % content_id
+    }
+    resp3 = session.get(URL_MAB, params=datas)
+    json_parser3 = json.loads(resp3.text)
+
+    session.get(json_parser2["cerbero"] + '/geo', headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
+
+    payload = {
+        'bbx': json_parser2["bbx"],
+        'gbx': json_parser3["gbx"]
+    }
+    resp4 = session.post(json_parser2["cerbero"],
+                         json=payload,
+                         headers={'User-Agent': web_utils.get_random_ua()},
+                         max_age=-1)
+    json_parser4 = json.loads(resp4.text)
+    return url_stream + '?' + json_parser4["tokens"]["2"]["cdn"]
 
 
 def live_entry(plugin, item_id, **kwargs):

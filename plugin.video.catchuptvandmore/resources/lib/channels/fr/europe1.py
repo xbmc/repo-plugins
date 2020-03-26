@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     Catch-up TV & More
-    Copyright (C) 2016  SylvainCecchetto
+    Copyright (C) 2019  SylvainCecchetto
 
     This file is part of Catch-up TV & More.
 
@@ -24,25 +24,35 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from codequick import Script
-"""
-The following dictionaries describe
-the addon's tree architecture.
-* Key: item id
-* Value: item infos
-    - callback: Callback function to run once this item is selected
-    - thumb: Item thumb path relative to "media" folder
-    - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
-"""
 
-menu = {
-    'mitele': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/es/mitele.png',
-        'fanart': 'channels/es/mitele_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
-        'enabled': True,
-        'order': 1
-    }
-}
+from codequick import Route, Resolver, Listitem, utils, Script
+
+from resources.lib.labels import LABELS
+from resources.lib import web_utils
+from resources.lib import resolver_proxy
+from resources.lib.menu_utils import item_post_treatment
+
+import json
+import urlquick
+
+# TODO
+# Add Replay
+
+URL_ROOT = "https://api.lejdd.fr"
+
+URL_LIVE = URL_ROOT + '/v2/data/live/'
+
+
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
+
+
+@Resolver.register
+def get_live_url(plugin, item_id, video_id, **kwargs):
+
+    resp = urlquick.get(
+        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
+    json_parser = json.loads(resp.text)
+    return resolver_proxy.get_stream_dailymotion(plugin,
+                                                 json_parser["data"]["current"]["videoFile"]["src"],
+                                                 False)

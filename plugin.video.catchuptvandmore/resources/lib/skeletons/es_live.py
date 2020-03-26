@@ -37,6 +37,62 @@ the addon's tree architecture.
 """
 
 menu = {
+    'telecinco': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/es/telecinco.png',
+        'fanart': 'channels/es/telecinco_fanart.jpg',
+        'module': 'resources.lib.channels.es.mitele',
+        'enabled': True,
+        'order': 1
+    },
+    'cuatro': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/es/cuatro.png',
+        'fanart': 'channels/es/cuatro_fanart.jpg',
+        'module': 'resources.lib.channels.es.mitele',
+        'enabled': True,
+        'order': 2
+    },
+    'fdf': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/es/fdf.png',
+        'fanart': 'channels/es/fdf_fanart.jpg',
+        'module': 'resources.lib.channels.es.mitele',
+        'enabled': True,
+        'order': 3
+    },
+    'boing': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/es/boing.png',
+        'fanart': 'channels/es/boing_fanart.jpg',
+        'module': 'resources.lib.channels.es.mitele',
+        'enabled': True,
+        'order': 4
+    },
+    'energy': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/es/energy.png',
+        'fanart': 'channels/es/energy_fanart.jpg',
+        'module': 'resources.lib.channels.es.mitele',
+        'enabled': True,
+        'order': 5
+    },
+    'divinity': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/es/divinity.png',
+        'fanart': 'channels/es/divinity_fanart.jpg',
+        'module': 'resources.lib.channels.es.mitele',
+        'enabled': True,
+        'order': 6
+    },
+    'bemad': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/es/bemad.png',
+        'fanart': 'channels/es/bemad_fanart.jpg',
+        'module': 'resources.lib.channels.es.mitele',
+        'enabled': True,
+        'order': 7
+    },
     'realmadridtv': {
         'callback': 'live_bridge',
         'thumb': 'channels/es/realmadridtv.png',

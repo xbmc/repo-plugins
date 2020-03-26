@@ -5,26 +5,26 @@
 
 ##	CBS News
 ##	cbsnews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/us/cbsnews.png" group-title="United States of America",CBS News
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/cbsnews.png" group-title="United States of America",CBS News
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbsnews&item_module=resources.lib.channels.us.cbsnews&item_dict={}
 
 ##	TBD
 ##	tbd
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/us/tbd.png" group-title="United States of America",TBD
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/tbd.png" group-title="United States of America",TBD
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tbd&item_module=resources.lib.channels.us.tbd&item_dict={}
 
 ##	ABC News
 ##	abcnews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/us/abcnews.png" group-title="United States of America",ABC News
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/abcnews.png" group-title="United States of America",ABC News
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=abcnews&item_module=resources.lib.channels.us.abcnews&item_dict={}
 
 ##	PBS Kids
 ##	pbskids
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/us/pbskids.png" group-title="United States of America",PBS Kids
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/pbskids.png" group-title="United States of America",PBS Kids
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=pbskids&item_module=resources.lib.channels.us.pbskids&item_dict={}
 
 ##	QVC
 ##	qvc
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/qvc.png" group-title="United States of America",QVC
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="United States of America",QVC
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"US"}
 

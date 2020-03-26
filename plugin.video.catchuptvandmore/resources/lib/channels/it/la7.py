@@ -29,12 +29,17 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
+from resources.lib.kodi_utils import get_kodi_version
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info
 
+import inputstreamhelper
 import json
 import re
 import urlquick
+from kodi_six import xbmc
+from kodi_six import xbmcgui
 
 # TO DO
 
@@ -45,6 +50,8 @@ URL_DAYS = URL_ROOT + '/rivedila7/0/%s'
 
 # Live
 URL_LIVE = URL_ROOT + '/dirette-tv'
+
+URL_LICENCE_KEY = 'https://la7.prod.conax.cloud/widevine/license|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&preauthorization=%s|R{SSM}|'
 
 
 def replay_entry(plugin, item_id, **kwargs):
@@ -139,8 +146,32 @@ def live_entry(plugin, item_id, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, video_id, **kwargs):
 
+    if get_kodi_version() < 18:
+        xbmcgui.Dialog().ok('Info', plugin.localize(30602))
+        return False
+
+    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+    if not is_helper.check_inputstream():
+        return False
+
     resp = urlquick.get(URL_LIVE, max_age=-1)
-    if 'http' in re.compile(r'var vS \= \"(.*?)\"').findall(resp.text)[0]:
-        return re.compile(r'var vS \= \"(.*?)\"').findall(resp.text)[0]
-    else:
-        return 'https:' + re.compile(r'var vS \= \"(.*?)\"').findall(resp.text)[0]
+    live_url = re.compile(
+        r'\'(.*?)mpd').findall(resp.text)[0] + 'mpd'
+
+    preauthorization_url = re.compile(
+        r'preTokenUrl = \"(.*?)\"').findall(resp.text)[0]
+    resp2 = urlquick.get(preauthorization_url, max_age=-1)
+    json_parser = json.loads(resp2.text)
+
+    item = Listitem()
+    item.path = live_url
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
+    item.property['inputstreamaddon'] = 'inputstream.adaptive'
+    item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+    item.property[
+        'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+    item.property[
+        'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % json_parser["preAuthToken"]
+    return item

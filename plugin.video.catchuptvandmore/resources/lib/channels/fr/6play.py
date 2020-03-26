@@ -127,7 +127,8 @@ def list_categories(plugin, item_id, **kwargs):
     """
     if item_id == 'rtl2' or \
             item_id == 'fun_radio' or \
-            item_id == 'courses':
+            item_id == 'courses' or \
+            item_id == '100foot':
         resp = urlquick.get(URL_ROOT % item_id)
     else:
         resp = urlquick.get(URL_ROOT % (item_id + 'replay'))

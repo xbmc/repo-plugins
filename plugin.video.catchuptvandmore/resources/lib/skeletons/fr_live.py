@@ -791,5 +791,14 @@ menu = {
         'm3u_group': 'Radio',
         'enabled': True,
         'order': 118
+    },
+    'europe1': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/fr/europe1.png',
+        'fanart': 'channels/fr/europe1_fanart.jpg',
+        'module': 'resources.lib.channels.fr.europe1',
+        'm3u_group': 'Radio',
+        'enabled': True,
+        'order': 120
     }
 }

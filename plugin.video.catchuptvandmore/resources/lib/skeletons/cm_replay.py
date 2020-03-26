@@ -36,13 +36,4 @@ the addon's tree architecture.
     - module: Item module to load in order to work (like 6play.py)
 """
 
-menu = {
-    'mitele': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/es/mitele.png',
-        'fanart': 'channels/es/mitele_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
-        'enabled': True,
-        'order': 1
-    }
-}
+menu = {}

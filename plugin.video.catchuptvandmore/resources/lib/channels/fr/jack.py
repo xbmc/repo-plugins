@@ -39,10 +39,10 @@ import urlquick
 # TO DO
 # ....
 
-URL_ROOT = 'https://jack.canal.fr'
+URL_API = 'https://api.canalplus.pro'
 # ChannelName
 
-URL_VIDEOS = URL_ROOT + '/video'
+URL_VIDEOS = URL_API + '/creativemedia/video'
 
 # PageId
 
@@ -63,12 +63,17 @@ def list_programs(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    resp = urlquick.get(URL_VIDEOS)
-    json_value = re.compile(r'window.APP_STATE\=(.*?)\}\;').findall(
-        resp.text)[0]
-    json_parser = json.loads(json_value + '}')
+    headers = {
+        'X-MINISITE-DOMAIN':
+        'jack.mycanal.fr',
+        'User-Agent':
+        web_utils.get_random_ua()
+    }
+    resp = urlquick.get(URL_VIDEOS, headers=headers)
+    print(repr(resp.text))
+    json_parser = json.loads(resp.text)
 
-    for program_datas in json_parser["page"]["data"]["blocks"]:
+    for program_datas in json_parser["blocks"]:
         if program_datas["container"] == 'content':
             if 'template' in program_datas["content"]:
                 program_title = program_datas["content"]["title"]
@@ -84,12 +89,17 @@ def list_programs(plugin, item_id, **kwargs):
 @Route.register
 def list_videos(plugin, item_id, program_title, **kwargs):
 
-    resp = urlquick.get(URL_VIDEOS)
-    json_value = re.compile(r'window.APP_STATE\=(.*?)\}\;').findall(
-        resp.text)[0]
-    json_parser = json.loads(json_value + '}')
+    headers = {
+        'X-MINISITE-DOMAIN':
+        'jack.mycanal.fr',
+        'User-Agent':
+        web_utils.get_random_ua()
+    }
+    resp = urlquick.get(URL_VIDEOS, headers=headers)
+    print(repr(resp.text))
+    json_parser = json.loads(resp.text)
 
-    for program_datas in json_parser["page"]["data"]["blocks"]:
+    for program_datas in json_parser["blocks"]:
         if program_datas["container"] == 'content':
             if 'template' in program_datas["content"]:
                 if program_title == program_datas["content"]["title"]:

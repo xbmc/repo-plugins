@@ -47,8 +47,12 @@ URL_ROOT = 'https://noovo.ca'
 URL_EMISSIONS = URL_ROOT + '/emissions'
 
 URL_VIDEOS = 'https://noovo.ca/index.php/actions/noovo/show/getPaginatedEpisodes/p%s?seasonId=%s'
-
 # Page, SeasonId
+
+URL_LIVE = URL_ROOT + '/en-direct'
+
+URL_LIVE_INFOS = URL_ROOT + '/dist/js/noovo.%s.js'
+# Id
 
 
 def replay_entry(plugin, item_id, **kwargs):
@@ -162,3 +166,27 @@ def get_video_url(plugin,
     return resolver_proxy.get_brightcove_video_json(plugin, data_account,
                                                     data_player, data_video_id,
                                                     download_mode)
+
+
+def live_entry(plugin, item_id, **kwargs):
+    return get_live_url(plugin, item_id, item_id.upper())
+
+
+@Resolver.register
+def get_live_url(plugin, item_id, video_id, **kwargs):
+
+    resp = urlquick.get(
+        URL_LIVE, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
+    live_info_id = re.compile(
+        r'dist\/js\/noovo\.(.*?)\.').findall(resp.text)[0]
+
+    resp2 = urlquick.get(
+        URL_LIVE_INFOS % live_info_id, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
+
+    data_account = re.compile(r'data-account\=\"(.*?)\"').findall(resp2.text)[0]
+    data_player = re.compile(r'data-player\=\"(.*?)\"').findall(resp2.text)[0]
+    data_video_id = re.compile(r'data-video-id\=\"(.*?)\"').findall(
+        resp2.text)[0]
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
+                                                    data_player, data_video_id,
+                                                    False)

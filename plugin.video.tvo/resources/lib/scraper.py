@@ -32,26 +32,39 @@ class myAddon(t1mAddon):
       return(ilist)
 
   def getAddonShows(self,url,ilist):
-      html = self.getRequest("https://tvo.org/programs/%s/filter-ajax" % url)
-      a = re.compile('href="(.+?)">(.+?)<',re.DOTALL).findall(html)
-      for url,name in a:
+      html = self.getRequest("https://www.tvo.org/documentaries/browse/filters/ajax/%s" % url)
+      html = html[11:-12]
+      a = json.loads(html)
+      a = a["data"]
+      a = re.compile('<div class="views\-row">.+?href="(.+?)".+?<div class="bc-thumb-(.+?)".+?src="(.+?)".+?results">(.+?)<.+?field\-\-item">(.+?)<',re.DOTALL).findall(a)
+      for url,playable,thumb,name,plot in a:
           infoList = {}
+          name = name.strip()
+          name = h.unescape(name)
+          plot = h.unescape(plot)
+          url = 'https://tvo.org%s' % url
+          infoList['Plot'] = plot
           infoList['mediatype'] = 'tvshow'
-          ilist = self.addMenuItem(name,'GE', ilist, url, self.addonIcon, self.addonFanart, infoList, isFolder=True)
+          if playable == 'wrapper':
+              ilist = self.addMenuItem(name,'GV', ilist, url, thumb, thumb, infoList, isFolder=False)
+          else:
+              ilist = self.addMenuItem(name+' (Series)','GE', ilist, url, thumb, thumb, infoList, isFolder=True)
       return(ilist)
 
   def getAddonEpisodes(self,url,ilist):
       self.defaultVidStream['width']  = 640
       self.defaultVidStream['height'] = 480
-      html = self.getRequest('https://tvo.org%s' % url)
+      html = self.getRequest(url)
       vids = re.compile('<div class="content-list__first.+?href="(.+?)".+?src="(.+?)".+?href=.+?>(.+?)<.+?field-summary"><div class="field-content">(.+?)<',re.DOTALL).findall(html)
       if vids == []:
           vids = re.compile('"og:url" content="(.+?)".+?content="(.+?)".+?content="(.+?)".+?".+?content="(.+?)"',re.DOTALL).search(html).groups()
           vids = [(vids[0],vids[2],vids[1],vids[3])]
-      TVShowTitle = re.compile('property="dc:title" content="(.+?)"', re.DOTALL).search(html).group(1)
+      TVShowTitle = re.compile('property="og:title" content="(.+?)"', re.DOTALL).search(html).group(1)
       for (url, thumb, name, plot) in vids:
           if not url.startswith('http'):
               url = 'https://tvo.org' + url
+          if not thumb.startswith('http'):
+              thumb = 'https://tvo.org' + thumb[1:]
           fanart = thumb
           infoList = {}
           infoList['Title'] = h.unescape(name)
@@ -66,29 +79,6 @@ class myAddon(t1mAddon):
   def getAddonVideo(self,url):
       html = self.getRequest(url)
       vid = re.compile('data-video-id="(.+?)"',re.DOTALL).search(html).group(1)
-      url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=1280&height=720&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=756015080001&playerKey=AQ~~,AAAABDk7A3E~,xYAUE9lVY9-LlLNVmcdybcRZ8v_nIl00&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+vid+'&secureConnections=true&secureHTMLConnections=true'
-      html = self.getRequest(url)
-      m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
-      a = json.loads(html[m.start(1):m.end(1)+1])
-      b = a['data']['programmedContent']['videoPlayer']['mediaDTO']['IOSRenditions']
-      u =''
-      rate = 0
-      suburl = a['data']['programmedContent']['videoPlayer']['mediaDTO'].get('captions')
-      if suburl is not None:
-          suburl = suburl[0].get('URL')
-      for c in b:
-          if c['encodingRate'] > rate:
-              rate = c['encodingRate']
-              u = c['defaultURL']
-          b = a['data']['programmedContent']['videoPlayer']['mediaDTO']['renditions']
-          for c in b:
-              if c['encodingRate'] > rate:
-                 rate = c['encodingRate']
-                 u = c['defaultURL']
-              if rate == 0:
-                 u = a['data']['programmedContent']['videoPlayer']['mediaDTO'].get('FLVFullLengthURL')
-      liz = xbmcgui.ListItem(path = u)
-      if suburl is not None :
-          subfile = self.procConvertSubtitles(suburl)
-          liz.setSubtitles([(subfile)])
+      u = 'http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?videoId=%s&pubId=18140038001' % vid
+      liz = xbmcgui.ListItem(path=u)
       xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)

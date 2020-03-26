@@ -38,7 +38,7 @@ class BackgroundService(Monitor):
 
         self.kodi.log('Service stopped', LOG_INFO)
 
-    def onSettingsChanged(self):
+    def onSettingsChanged(self):  # pylint: disable=invalid-name
         """ Callback when a setting has changed """
         # Refresh our VtmGo instance
         self.vtm_go = VtmGo(self.kodi)
@@ -57,7 +57,7 @@ class BackgroundService(Monitor):
         # Clear outdated metadata
         self.kodi.invalidate_cache(self.cache_expiry)
 
-        def update_status(i, total):
+        def update_status(_i, _total):
             """ Allow to cancel the background job """
             return self.abortRequested() or not self.kodi.get_setting_as_bool('metadata_update')
 

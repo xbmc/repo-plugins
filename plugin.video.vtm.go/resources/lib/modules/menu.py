@@ -21,83 +21,90 @@ class Menu:
     def show_mainmenu(self):
         """ Show the main menu """
         listing = []
-        listing.append(
-            TitleItem(title=self._kodi.localize(30001),  # A-Z
-                      path=self._kodi.url_for('show_catalog_all'),
-                      art_dict=dict(
-                          icon='DefaultMovieTitle.png',
-                          fanart=self._kodi.get_addon_info('fanart'),
-                      ),
-                      info_dict=dict(
-                          plot=self._kodi.localize(30002),
-                      )))
-        listing.append(
-            TitleItem(title=self._kodi.localize(30003),  # Catalogue
-                      path=self._kodi.url_for('show_catalog'),
-                      art_dict=dict(
-                          icon='DefaultGenre.png',
-                          fanart=self._kodi.get_addon_info('fanart'),
-                      ),
-                      info_dict=dict(
-                          plot=self._kodi.localize(30004),
-                      )))
-        listing.append(
-            TitleItem(title=self._kodi.localize(30007),  # TV Channels
-                      path=self._kodi.url_for('show_channels'),
-                      art_dict=dict(
-                          icon='DefaultAddonPVRClient.png',
-                          fanart=self._kodi.get_addon_info('fanart'),
-                      ),
-                      info_dict=dict(
-                          plot=self._kodi.localize(30008),
-                      )))
+        listing.append(TitleItem(
+            title=self._kodi.localize(30001),  # A-Z
+            path=self._kodi.url_for('show_catalog_all'),
+            art_dict=dict(
+                icon='DefaultMovieTitle.png',
+                fanart=self._kodi.get_addon_info('fanart'),
+            ),
+            info_dict=dict(
+                plot=self._kodi.localize(30002),
+            ),
+        ))
+        listing.append(TitleItem(
+            title=self._kodi.localize(30003),  # Catalogue
+            path=self._kodi.url_for('show_catalog'),
+            art_dict=dict(
+                icon='DefaultGenre.png',
+                fanart=self._kodi.get_addon_info('fanart'),
+            ),
+            info_dict=dict(
+                plot=self._kodi.localize(30004),
+            ),
+        ))
+        listing.append(TitleItem(
+            title=self._kodi.localize(30007),  # TV Channels
+            path=self._kodi.url_for('show_channels'),
+            art_dict=dict(
+                icon='DefaultAddonPVRClient.png',
+                fanart=self._kodi.get_addon_info('fanart'),
+            ),
+            info_dict=dict(
+                plot=self._kodi.localize(30008),
+            ),
+        ))
 
         if self._kodi.get_setting_as_bool('interface_show_recommendations'):
-            listing.append(
-                TitleItem(title=self._kodi.localize(30015),  # Recommendations
-                          path=self._kodi.url_for('show_recommendations'),
-                          art_dict=dict(
-                              icon='DefaultFavourites.png',
-                              fanart=self._kodi.get_addon_info('fanart'),
-                          ),
-                          info_dict=dict(
-                              plot=self._kodi.localize(30016),
-                          )))
+            listing.append(TitleItem(
+                title=self._kodi.localize(30015),  # Recommendations
+                path=self._kodi.url_for('show_recommendations'),
+                art_dict=dict(
+                    icon='DefaultFavourites.png',
+                    fanart=self._kodi.get_addon_info('fanart'),
+                ),
+                info_dict=dict(
+                    plot=self._kodi.localize(30016),
+                ),
+            ))
 
         if self._kodi.get_setting_as_bool('interface_show_mylist') and self._kodi.has_credentials():
-            listing.append(
-                TitleItem(title=self._kodi.localize(30017),  # My List
-                          path=self._kodi.url_for('show_mylist'),
-                          art_dict=dict(
-                              icon='DefaultPlaylist.png',
-                              fanart=self._kodi.get_addon_info('fanart'),
-                          ),
-                          info_dict={
-                              'plot': self._kodi.localize(30018),
-                          }))
+            listing.append(TitleItem(
+                title=self._kodi.localize(30017),  # My List
+                path=self._kodi.url_for('show_mylist'),
+                art_dict=dict(
+                    icon='DefaultPlaylist.png',
+                    fanart=self._kodi.get_addon_info('fanart'),
+                ),
+                info_dict=dict(
+                    plot=self._kodi.localize(30018),
+                ),
+            ))
 
         if self._kodi.get_setting_as_bool('interface_show_continuewatching') and self._kodi.has_credentials():
-            listing.append(
-                TitleItem(title=self._kodi.localize(30019),  # Continue watching
-                          path=self._kodi.url_for('show_continuewatching'),
-                          art_dict=dict(
-                              icon='DefaultInProgressShows.png',
-                              fanart=self._kodi.get_addon_info('fanart'),
-                          ),
-                          info_dict=dict(
-                              plot=self._kodi.localize(30020),
-                          )))
+            listing.append(TitleItem(
+                title=self._kodi.localize(30019),  # Continue watching
+                path=self._kodi.url_for('show_continuewatching'),
+                art_dict=dict(
+                    icon='DefaultInProgressShows.png',
+                    fanart=self._kodi.get_addon_info('fanart'),
+                ),
+                info_dict=dict(
+                    plot=self._kodi.localize(30020),
+                ),
+            ))
 
-        listing.append(
-            TitleItem(title=self._kodi.localize(30009),  # Search
-                      path=self._kodi.url_for('show_search'),
-                      art_dict=dict(
-                          icon='DefaultAddonsSearch.png',
-                          fanart=self._kodi.get_addon_info('fanart'),
-                      ),
-                      info_dict=dict(
-                          plot=self._kodi.localize(30010),
-                      )))
+        listing.append(TitleItem(
+            title=self._kodi.localize(30009),  # Search
+            path=self._kodi.url_for('show_search'),
+            art_dict=dict(
+                icon='DefaultAddonsSearch.png',
+                fanart=self._kodi.get_addon_info('fanart'),
+            ),
+            info_dict=dict(
+                plot=self._kodi.localize(30010),
+            ),
+        ))
 
         self._kodi.show_listing(listing, sort=['unsorted'])
 
@@ -200,13 +207,15 @@ class Menu:
                 'width': 1920,
             }
 
-            return TitleItem(title=item.name,
-                             path=self._kodi.url_for('play', category='movies', item=item.movie_id),
-                             art_dict=art_dict,
-                             info_dict=info_dict,
-                             stream_dict=stream_dict,
-                             context_menu=context_menu,
-                             is_playable=True)
+            return TitleItem(
+                title=item.name,
+                path=self._kodi.url_for('play', category='movies', item=item.movie_id),
+                art_dict=art_dict,
+                info_dict=info_dict,
+                stream_dict=stream_dict,
+                context_menu=context_menu,
+                is_playable=True,
+            )
 
         #
         # Program
@@ -233,11 +242,13 @@ class Menu:
                 'season': len(item.seasons),
             })
 
-            return TitleItem(title=item.name,
-                             path=self._kodi.url_for('show_catalog_program', program=item.program_id),
-                             art_dict=art_dict,
-                             info_dict=info_dict,
-                             context_menu=context_menu)
+            return TitleItem(
+                title=item.name,
+                path=self._kodi.url_for('show_catalog_program', program=item.program_id),
+                art_dict=art_dict,
+                info_dict=info_dict,
+                context_menu=context_menu,
+            )
 
         #
         # Episode
@@ -282,13 +293,15 @@ class Menu:
                     'TotalTime': item.progress + 1,
                 })
 
-            return TitleItem(title=info_dict['title'],
-                             path=self._kodi.url_for('play', category='episodes', item=item.episode_id),
-                             art_dict=art_dict,
-                             info_dict=info_dict,
-                             stream_dict=stream_dict,
-                             prop_dict=prop_dict,
-                             context_menu=context_menu,
-                             is_playable=True)
+            return TitleItem(
+                title=info_dict['title'],
+                path=self._kodi.url_for('play', category='episodes', item=item.episode_id),
+                art_dict=art_dict,
+                info_dict=info_dict,
+                stream_dict=stream_dict,
+                prop_dict=prop_dict,
+                context_menu=context_menu,
+                is_playable=True,
+            )
 
         raise Exception('Unknown video_type')

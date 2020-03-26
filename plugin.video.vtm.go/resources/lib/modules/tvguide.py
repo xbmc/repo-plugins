@@ -31,18 +31,18 @@ class TvGuide:
             else:
                 title = day.get('title')
 
-            listing.append(
-                TitleItem(title=title,
-                          path=self._kodi.url_for('show_tvguide_detail', channel=channel, date=day.get('key')),
-                          art_dict={
-                              'icon': 'DefaultYear.png',
-                              'thumb': 'DefaultYear.png',
-                          },
-                          info_dict={
-                              'plot': None,
-                              'date': day.get('date'),
-                          })
-            )
+            listing.append(TitleItem(
+                title=title,
+                path=self._kodi.url_for('show_tvguide_detail', channel=channel, date=day.get('key')),
+                art_dict=dict(
+                    icon='DefaultYear.png',
+                    thumb='DefaultYear.png',
+                ),
+                info_dict=dict(
+                    plot=None,
+                    date=day.get('date'),
+                ),
+            ))
 
         self._kodi.show_listing(listing, 30013, content='files', sort=['date'])
 
@@ -89,28 +89,28 @@ class TvGuide:
             if broadcast.title == self.EPG_NO_BROADCAST:
                 title = '[COLOR gray]' + title + '[/COLOR]'
 
-            listing.append(
-                TitleItem(title=title,
-                          path=path,
-                          art_dict={
-                              'icon': broadcast.image,
-                              'thumb': broadcast.image,
-                          },
-                          info_dict={
-                              'title': title,
-                              'plot': broadcast.description,
-                              'duration': broadcast.duration,
-                              'mediatype': 'video',
-                          },
-                          stream_dict={
-                              'duration': broadcast.duration,
-                              'codec': 'h264',
-                              'height': 1080,
-                              'width': 1920,
-                          },
-                          context_menu=context_menu,
-                          is_playable=True)
-            )
+            listing.append(TitleItem(
+                title=title,
+                path=path,
+                art_dict=dict(
+                    icon=broadcast.image,
+                    thumb=broadcast.image,
+                ),
+                info_dict=dict(
+                    title=title,
+                    plot=broadcast.description,
+                    duration=broadcast.duration,
+                    mediatype='video',
+                ),
+                stream_dict=dict(
+                    duration=broadcast.duration,
+                    codec='h264',
+                    height=1080,
+                    width=1920,
+                ),
+                context_menu=context_menu,
+                is_playable=True,
+            ))
 
         self._kodi.show_listing(listing, 30013, content='episodes', sort=['unsorted'])
 

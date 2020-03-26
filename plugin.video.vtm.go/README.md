@@ -1,8 +1,8 @@
-[![GitHub release](https://img.shields.io/github/release/michaelarnauts/plugin.video.vtm.go.svg?include_prereleases)](https://github.com/michaelarnauts/plugin.video.vtm.go/releases)
-[![Build Status](https://travis-ci.com/michaelarnauts/plugin.video.vtm.go.svg?branch=master)](https://travis-ci.com/michaelarnauts/plugin.video.vtm.go)
-[![Codecov status](https://img.shields.io/codecov/c/github/michaelarnauts/plugin.video.vtm.go/master)](https://codecov.io/gh/michaelarnauts/plugin.video.vtm.go/branch/master)
+[![GitHub release](https://img.shields.io/github/release/add-ons/plugin.video.vtm.go.svg)](https://github.com/add-ons/plugin.video.vtm.go/releases)
+[![Build Status](https://img.shields.io/github/workflow/status/add-ons/plugin.video.vtm.go/CI/master)](https://github.com/add-ons/plugin.video.vtm.go/actions?query=branch%3Amaster)
+[![Codecov status](https://img.shields.io/codecov/c/github/add-ons/plugin.video.vtm.go/master)](https://codecov.io/gh/add-ons/plugin.video.vtm.go/branch/master)
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
-[![Contributors](https://img.shields.io/github/contributors/michaelarnauts/plugin.video.vtm.go.svg)](https://github.com/michaelarnauts/plugin.video.vtm.go/graphs/contributors)
+[![Contributors](https://img.shields.io/github/contributors/add-ons/plugin.video.vtm.go.svg)](https://github.com/add-ons/plugin.video.vtm.go/graphs/contributors)
 
 # VTM GO Kodi add-on
 
@@ -20,7 +20,7 @@ This is the preferred way to install this addon, since it allows Kodi to automat
 
 ### Manual installation
 
-You can also download the [latest release](https://github.com/michaelarnauts/plugin.video.vtm.go/releases) or download a [development zip](https://github.com/michaelarnauts/plugin.video.vtm.go/archive/master.zip) from Github for the latest changes.
+You can also download the [latest release](https://github.com/add-ons/plugin.video.vtm.go/releases) or download a [development zip](https://github.com/add-ons/plugin.video.vtm.go/archive/master.zip) from Github for the latest changes.
 
 ## Features
 

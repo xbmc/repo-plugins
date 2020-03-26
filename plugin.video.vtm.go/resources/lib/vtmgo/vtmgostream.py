@@ -95,12 +95,12 @@ class VtmGoStream:
         # https://github.com/peak3d/inputstream.adaptive/issues/286
         url = self._redirect_manifest(url)
 
-        # Extract subtitle info from our stream_info.
-        subtitle_info = self._extract_subtitles_from_stream_info(stream_info)
+        # Extract subtitles from our stream_info.
+        subtitles = self._extract_subtitles_from_stream_info(stream_info)
 
         # Delay subtitles taking into account advertisements breaks.
-        if subtitle_info:
-            subtitle_info = self._delay_subtitles(subtitle_info, json_manifest)
+        if subtitles:
+            subtitles = self._delay_subtitles(subtitles, json_manifest)
 
         if stream_type == 'episodes':
             # TV episode
@@ -110,7 +110,7 @@ class VtmGoStream:
                 title=stream_info['video']['metadata']['title'],
                 duration=stream_info['video']['duration'],
                 url=url,
-                subtitles=subtitle_info,
+                subtitles=subtitles,
                 license_url=license_url,
                 cookies=self._session.cookies.get_dict()
             )
@@ -122,7 +122,7 @@ class VtmGoStream:
                 title=stream_info['video']['metadata']['title'],
                 duration=stream_info['video']['duration'],
                 url=url,
-                subtitles=subtitle_info,
+                subtitles=subtitles,
                 license_url=license_url,
                 cookies=self._session.cookies.get_dict()
             )
@@ -139,7 +139,7 @@ class VtmGoStream:
                 title=stream_info['video']['metadata']['title'],
                 duration=None,
                 url=url,
-                subtitles=subtitle_info,
+                subtitles=subtitles,
                 license_url=license_url,
                 cookies=self._session.cookies.get_dict()
             )
@@ -218,21 +218,21 @@ class VtmGoStream:
         :rtype str
         """
         sub_timings = list()
-        for ts in match.groups():
-            h, m, s, f = (int(x) for x in [ts[:-10], ts[-9:-7], ts[-6:-4], ts[-3:]])
-            sub_timings.append(timedelta(hours=h, minutes=m, seconds=s, milliseconds=f))
+        for timestamp in match.groups():
+            hours, minutes, seconds, millis = (int(x) for x in [timestamp[:-10], timestamp[-9:-7], timestamp[-6:-4], timestamp[-3:]])
+            sub_timings.append(timedelta(hours=hours, minutes=minutes, seconds=seconds, milliseconds=millis))
         for ad_break in ad_breaks:
             # time format: seconds.fraction or seconds
             ad_break_start = timedelta(milliseconds=ad_break.get('start') * 1000)
             ad_break_duration = timedelta(milliseconds=ad_break.get('duration') * 1000)
             if ad_break_start < sub_timings[0]:
-                for i, item in enumerate(sub_timings):
-                    sub_timings[i] += ad_break_duration
-        for i, item in enumerate(sub_timings):
-            h, s_remainder = divmod(item.seconds, 3600)
-            m, s = divmod(s_remainder, 60)
-            f = item.microseconds // 1000
-            sub_timings[i] = '%02d:%02d:%02d,%03d' % (h, m, s, f)
+                for idx, item in enumerate(sub_timings):
+                    sub_timings[idx] += ad_break_duration
+        for idx, item in enumerate(sub_timings):
+            hours, remainder = divmod(item.seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            millis = item.microseconds // 1000
+            sub_timings[idx] = '%02d:%02d:%02d,%03d' % (hours, minutes, seconds, millis)
         delayed_webvtt_timing = '\n{} --> {} '.format(sub_timings[0], sub_timings[1])
         return delayed_webvtt_timing
 

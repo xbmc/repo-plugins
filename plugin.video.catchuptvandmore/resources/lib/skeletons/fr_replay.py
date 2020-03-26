@@ -325,22 +325,6 @@ menu = {
         'enabled': True,
         'order': 44
     },
-    'studio-4': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/fr/studio4.png',
-        'fanart': 'channels/fr/studio4_fanart.jpg',
-        'module': 'resources.lib.channels.fr.nouvellesecritures',
-        'enabled': True,
-        'order': 45
-    },
-    'irl': {
-        'callback': 'replay_bridge',
-        'thumb': 'channels/fr/irl.png',
-        'fanart': 'channels/fr/irl_fanart.jpg',
-        'module': 'resources.lib.channels.fr.nouvellesecritures',
-        'enabled': True,
-        'order': 46
-    },
     'seasons': {
         'callback': 'replay_bridge',
         'thumb': 'channels/fr/seasons.png',
@@ -397,11 +381,11 @@ menu = {
         'enabled': True,
         'order': 53
     },
-    'francetveducation': {
+    'lumni': {
         'callback': 'replay_bridge',
-        'thumb': 'channels/fr/francetveducation.png',
-        'fanart': 'channels/fr/francetveducation_fanart.jpg',
-        'module': 'resources.lib.channels.fr.francetveducation',
+        'thumb': 'channels/fr/lumni.png',
+        'fanart': 'channels/fr/lumni_fanart.jpg',
+        'module': 'resources.lib.channels.fr.lumni',
         'enabled': True,
         'order': 54
     },
@@ -668,5 +652,13 @@ menu = {
         'module': 'resources.lib.channels.fr.6play',
         'enabled': True,
         'order': 119
+    },
+    '100foot': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/fr/100foot.png',
+        'fanart': 'channels/fr/100foot_fanart.jpg',
+        'module': 'resources.lib.channels.fr.6play',
+        'enabled': True,
+        'order': 121
     }
 }

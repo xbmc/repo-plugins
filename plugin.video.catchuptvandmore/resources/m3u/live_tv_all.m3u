@@ -5,528 +5,533 @@
 
 ##	TF1
 ##	tf1
-#EXTINF:-1 tvg-id="C192.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tf1.png" group-title="France",TF1
+#EXTINF:-1 tvg-id="C192.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tf1.png" group-title="France",TF1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tf1&item_module=resources.lib.channels.fr.mytf1&item_dict={}
 
 ##	France 2
 ##	france-2
-#EXTINF:-1 tvg-id="C4.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france2.png" group-title="France",France 2
+#EXTINF:-1 tvg-id="C4.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france2.png" group-title="France",France 2
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france-2&item_module=resources.lib.channels.fr.francetv&item_dict={}
 
 ##	France 3
 ##	france-3
-#EXTINF:-1 tvg-id="C80.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3.png" group-title="France",France 3
+#EXTINF:-1 tvg-id="C80.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3.png" group-title="France",France 3
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france-3&item_module=resources.lib.channels.fr.francetv&item_dict={}
 
 ##	Canal +
 ##	canalplus
-#EXTINF:-1 tvg-id="C34.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/canalplus.png" group-title="France",Canal +
+#EXTINF:-1 tvg-id="C34.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/canalplus.png" group-title="France",Canal +
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=canalplus&item_module=resources.lib.channels.fr.mycanal&item_dict={}
 
 ##	France 5
 ##	france-5
-#EXTINF:-1 tvg-id="C47.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france5.png" group-title="France",France 5
+#EXTINF:-1 tvg-id="C47.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france5.png" group-title="France",France 5
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france-5&item_module=resources.lib.channels.fr.francetv&item_dict={}
 
 ##	M6
 ##	m6
-#EXTINF:-1 tvg-id="C118.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/m6.png" group-title="France",M6
+#EXTINF:-1 tvg-id="C118.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/m6.png" group-title="France",M6
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=m6&item_module=resources.lib.channels.fr.6play&item_dict={}
 
 ##	C8
 ##	c8
-#EXTINF:-1 tvg-id="C445.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/c8.png" group-title="France",C8
+#EXTINF:-1 tvg-id="C445.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/c8.png" group-title="France",C8
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=c8&item_module=resources.lib.channels.fr.mycanal&item_dict={}
 
 ##	W9
 ##	w9
-#EXTINF:-1 tvg-id="C119.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/w9.png" group-title="France",W9
+#EXTINF:-1 tvg-id="C119.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/w9.png" group-title="France",W9
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=w9&item_module=resources.lib.channels.fr.6play&item_dict={}
 
 ##	TMC
 ##	tmc
-#EXTINF:-1 tvg-id="C195.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tmc.png" group-title="France",TMC
+#EXTINF:-1 tvg-id="C195.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tmc.png" group-title="France",TMC
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tmc&item_module=resources.lib.channels.fr.mytf1&item_dict={}
 
 ##	TFX
 ##	tfx
-#EXTINF:-1 tvg-id="C446.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tfx.png" group-title="France",TFX
+#EXTINF:-1 tvg-id="C446.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tfx.png" group-title="France",TFX
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tfx&item_module=resources.lib.channels.fr.mytf1&item_dict={}
 
 ##	NRJ 12
 ##	nrj12
-#EXTINF:-1 tvg-id="C444.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/nrj12.png" group-title="France",NRJ 12
+#EXTINF:-1 tvg-id="C444.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/nrj12.png" group-title="France",NRJ 12
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nrj12&item_module=resources.lib.channels.fr.nrj&item_dict={}
 
 ##	LCP Assemblée Nationale
 ##	lcp
-#EXTINF:-1 tvg-id="C234.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/lcp.png" group-title="France",LCP Assemblée Nationale
+#EXTINF:-1 tvg-id="C234.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/lcp.png" group-title="France",LCP Assemblée Nationale
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lcp&item_module=resources.lib.channels.fr.lcp&item_dict={}
 
 ##	Public Sénat
 ##	publicsenat
-#EXTINF:-1 tvg-id="C234.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/publicsenat.png" group-title="France",Public Sénat
+#EXTINF:-1 tvg-id="C234.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/publicsenat.png" group-title="France",Public Sénat
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=publicsenat&item_module=resources.lib.channels.fr.publicsenat&item_dict={}
 
 ##	France 4
 ##	france-4
-#EXTINF:-1 tvg-id="C78.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france4.png" group-title="France",France 4
+#EXTINF:-1 tvg-id="C78.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france4.png" group-title="France",France 4
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france-4&item_module=resources.lib.channels.fr.francetv&item_dict={}
 
 ##	BFM TV
 ##	bfmtv
-#EXTINF:-1 tvg-id="C481.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmtv.png" group-title="France",BFM TV
+#EXTINF:-1 tvg-id="C481.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmtv.png" group-title="France",BFM TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmtv&item_module=resources.lib.channels.fr.bfmtv&item_dict={}
 
 ##	CNews
 ##	cnews
-#EXTINF:-1 tvg-id="C226.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/cnews.png" group-title="France",CNews
+#EXTINF:-1 tvg-id="C226.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/cnews.png" group-title="France",CNews
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cnews&item_module=resources.lib.channels.fr.cnews&item_dict={}
 
 ##	CStar
 ##	cstar
-#EXTINF:-1 tvg-id="C458.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/cstar.png" group-title="France",CStar
+#EXTINF:-1 tvg-id="C458.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/cstar.png" group-title="France",CStar
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cstar&item_module=resources.lib.channels.fr.mycanal&item_dict={}
 
 ##	Gulli
 ##	gulli
-#EXTINF:-1 tvg-id="C482.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/gulli.png" group-title="France",Gulli
+#EXTINF:-1 tvg-id="C482.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/gulli.png" group-title="France",Gulli
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=gulli&item_module=resources.lib.channels.fr.gulli&item_dict={}
 
 ##	France Ô
 ##	france-o
-#EXTINF:-1 tvg-id="C160.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/franceo.png" group-title="France",France Ô
+#EXTINF:-1 tvg-id="C160.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/franceo.png" group-title="France",France Ô
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france-o&item_module=resources.lib.channels.fr.francetv&item_dict={}
 
 ##	TF1 Séries Films
 ##	tf1-series-films
-#EXTINF:-1 tvg-id="C1404.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tf1seriesfilms.png" group-title="France",TF1 Séries Films
+#EXTINF:-1 tvg-id="C1404.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tf1seriesfilms.png" group-title="France",TF1 Séries Films
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tf1-series-films&item_module=resources.lib.channels.fr.mytf1&item_dict={}
 
 ##	L'Équipe
 ##	lequipe
-#EXTINF:-1 tvg-id="C1401.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/lequipe.png" group-title="France",L'Équipe
+#EXTINF:-1 tvg-id="C1401.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/lequipe.png" group-title="France",L'Équipe
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lequipe&item_module=resources.lib.channels.fr.lequipe&item_dict={}
 
 ##	6ter
 ##	6ter
-#EXTINF:-1 tvg-id="C1403.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/6ter.png" group-title="France",6ter
+#EXTINF:-1 tvg-id="C1403.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/6ter.png" group-title="France",6ter
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=6ter&item_module=resources.lib.channels.fr.6play&item_dict={}
 
 ##	RMC Story
 ##	rmcstory
-#EXTINF:-1 tvg-id="C1402.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/rmcstory.png" group-title="France",RMC Story
+#EXTINF:-1 tvg-id="C1402.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rmcstory.png" group-title="France",RMC Story
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcstory&item_module=resources.lib.channels.fr.rmcstory&item_dict={}
 
 ##	RMC Découverte
 ##	rmcdecouverte
-#EXTINF:-1 tvg-id="C1400.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/rmcdecouverte.png" group-title="France",RMC Découverte
+#EXTINF:-1 tvg-id="C1400.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rmcdecouverte.png" group-title="France",RMC Découverte
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcdecouverte&item_module=resources.lib.channels.fr.rmcdecouverte&item_dict={}
 
 ##	Chérie 25
 ##	cherie25
-#EXTINF:-1 tvg-id="C1399.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/cherie25.png" group-title="France",Chérie 25
+#EXTINF:-1 tvg-id="C1399.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/cherie25.png" group-title="France",Chérie 25
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cherie25&item_module=resources.lib.channels.fr.nrj&item_dict={}
 
 ##	LCI
 ##	lci
-#EXTINF:-1 tvg-id="C112.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/lci.png" group-title="France",LCI
+#EXTINF:-1 tvg-id="C112.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/lci.png" group-title="France",LCI
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lci&item_module=resources.lib.channels.fr.lci&item_dict={}
 
 ##	France Info
 ##	franceinfo
-#EXTINF:-1 tvg-id="C2111.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/franceinfo.png" group-title="France",France Info
+#EXTINF:-1 tvg-id="C2111.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/franceinfo.png" group-title="France",France Info
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=franceinfo&item_module=resources.lib.channels.fr.franceinfo&item_dict={}
 
 ##	La 1ère Guadeloupe
 ##	la_1ere
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France",La 1ère Guadeloupe
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France",La 1ère Guadeloupe
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&item_dict={"language":"Guadeloupe"}
 
 ##	La 1ère Guyane
 ##	la_1ere
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France",La 1ère Guyane
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France",La 1ère Guyane
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&item_dict={"language":"Guyane"}
 
 ##	La 1ère Martinique
 ##	la_1ere
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France",La 1ère Martinique
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France",La 1ère Martinique
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&item_dict={"language":"Martinique"}
 
 ##	La 1ère Mayotte
 ##	la_1ere
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France",La 1ère Mayotte
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France",La 1ère Mayotte
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&item_dict={"language":"Mayotte"}
 
 ##	La 1ère Nouvelle Calédonie
 ##	la_1ere
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France",La 1ère Nouvelle Calédonie
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France",La 1ère Nouvelle Calédonie
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&item_dict={"language":"Nouvelle Calédonie"}
 
 ##	La 1ère Polynésie
 ##	la_1ere
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France",La 1ère Polynésie
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France",La 1ère Polynésie
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&item_dict={"language":"Polynésie"}
 
 ##	La 1ère Réunion
 ##	la_1ere
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France",La 1ère Réunion
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France",La 1ère Réunion
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&item_dict={"language":"Réunion"}
 
 ##	La 1ère St-Pierre et Miquelon
 ##	la_1ere
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France",La 1ère St-Pierre et Miquelon
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France",La 1ère St-Pierre et Miquelon
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&item_dict={"language":"St-Pierre et Miquelon"}
 
 ##	La 1ère Wallis et Futuna
 ##	la_1ere
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/la1ere.png" group-title="France",La 1ère Wallis et Futuna
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France",La 1ère Wallis et Futuna
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&item_dict={"language":"Wallis et Futuna"}
 
 ##	BFM Business
 ##	bfmbusiness
-#EXTINF:-1 tvg-id="C1073.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmbusiness.png" group-title="France",BFM Business
+#EXTINF:-1 tvg-id="C1073.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmbusiness.png" group-title="France",BFM Business
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmbusiness&item_module=resources.lib.channels.fr.bfmtv&item_dict={}
 
 ##	France 3 Régions Alpes
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Alpes
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Alpes
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Alpes"}
 
 ##	France 3 Régions Alsace
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Alsace
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Alsace
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Alsace"}
 
 ##	France 3 Régions Aquitaine
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Aquitaine
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Aquitaine
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Aquitaine"}
 
 ##	France 3 Régions Auvergne
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Auvergne
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Auvergne
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Auvergne"}
 
 ##	France 3 Régions Bourgogne
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Bourgogne
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Bourgogne
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Bourgogne"}
 
 ##	France 3 Régions Bretagne
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Bretagne
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Bretagne
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Bretagne"}
 
 ##	France 3 Régions Centre-Val de Loire
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Centre-Val de Loire
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Centre-Val de Loire
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Centre-Val de Loire"}
 
 ##	France 3 Régions Chapagne-Ardenne
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Chapagne-Ardenne
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Chapagne-Ardenne
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Chapagne-Ardenne"}
 
 ##	France 3 Régions Corse
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Corse
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Corse
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Corse"}
 
 ##	France 3 Régions Côte d'Azur
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Côte d'Azur
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Côte d'Azur
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Côte d'Azur"}
 
 ##	France 3 Régions Franche-Compté
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Franche-Compté
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Franche-Compté
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Franche-Compté"}
 
 ##	France 3 Régions Languedoc-Roussillon
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Languedoc-Roussillon
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Languedoc-Roussillon
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Languedoc-Roussillon"}
 
 ##	France 3 Régions Limousin
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Limousin
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Limousin
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Limousin"}
 
 ##	France 3 Régions Lorraine
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Lorraine
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Lorraine
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Lorraine"}
 
 ##	France 3 Régions Midi-Pyrénées
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Midi-Pyrénées
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Midi-Pyrénées
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Midi-Pyrénées"}
 
 ##	France 3 Régions Nord-Pas-de-Calais
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Nord-Pas-de-Calais
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Nord-Pas-de-Calais
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Nord-Pas-de-Calais"}
 
 ##	France 3 Régions Basse-Normandie
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Basse-Normandie
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Basse-Normandie
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Basse-Normandie"}
 
 ##	France 3 Régions Haute-Normandie
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Haute-Normandie
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Haute-Normandie
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Haute-Normandie"}
 
 ##	France 3 Régions Paris Île-de-France
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Paris Île-de-France
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Paris Île-de-France
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Paris Île-de-France"}
 
 ##	France 3 Régions Pays de la Loire
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Pays de la Loire
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Pays de la Loire
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Pays de la Loire"}
 
 ##	France 3 Régions Picardie
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Picardie
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Picardie
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Picardie"}
 
 ##	France 3 Régions Poitou-Charentes
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Poitou-Charentes
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Poitou-Charentes
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Poitou-Charentes"}
 
 ##	France 3 Régions Provence-Alpes
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Provence-Alpes
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Provence-Alpes
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Provence-Alpes"}
 
 ##	France 3 Régions Rhône-Alpes
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Rhône-Alpes
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Rhône-Alpes
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Rhône-Alpes"}
 
 ##	France 3 Régions Nouvelle-Aquitaine
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/france3regions.png" group-title="France",France 3 Régions Nouvelle-Aquitaine
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France",France 3 Régions Nouvelle-Aquitaine
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&item_dict={"language":"Nouvelle-Aquitaine"}
 
 ##	Gong
 ##	gong
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/gong.png" group-title="France",Gong
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/gong.png" group-title="France",Gong
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=gong&item_module=resources.lib.channels.fr.gong&item_dict={}
 
 ##	BFM Paris
 ##	bfmparis
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmparis.png" group-title="France",BFM Paris
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmparis.png" group-title="France",BFM Paris
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmparis&item_module=resources.lib.channels.fr.bfmregion&item_dict={}
 
 ##	Fun Radio
 ##	fun_radio
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/funradio.png" group-title="France",Fun Radio
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/funradio.png" group-title="France",Fun Radio
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=fun_radio&item_module=resources.lib.channels.fr.6play&item_dict={}
 
 ##	KTO
 ##	kto
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/kto.png" group-title="France",KTO
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/kto.png" group-title="France",KTO
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=kto&item_module=resources.lib.channels.fr.kto&item_dict={}
 
 ##	Antenne Réunion
 ##	antennereunion
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/antennereunion.png" group-title="France",Antenne Réunion
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/antennereunion.png" group-title="France",Antenne Réunion
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=antennereunion&item_module=resources.lib.channels.fr.antennereunion&item_dict={}
 
 ##	viàOccitanie
 ##	viaoccitanie
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viaoccitanie.png" group-title="France",viàOccitanie
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viaoccitanie.png" group-title="France",viàOccitanie
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viaoccitanie&item_module=resources.lib.channels.fr.via&item_dict={}
 
 ##	Ouatch TV
 ##	ouatchtv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/ouatchtv.png" group-title="France",Ouatch TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/ouatchtv.png" group-title="France",Ouatch TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ouatchtv&item_module=resources.lib.channels.fr.ouatchtv&item_dict={}
 
 ##	RTL 2
 ##	rtl2
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/rtl2.png" group-title="France",RTL 2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rtl2.png" group-title="France",RTL 2
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtl2&item_module=resources.lib.channels.fr.6play&item_dict={}
 
 ##	viàATV
 ##	viaatv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viaatv.png" group-title="France",viàATV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viaatv.png" group-title="France",viàATV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viaatv&item_module=resources.lib.channels.fr.via&item_dict={}
 
 ##	viàGrandParis
 ##	viagrandparis
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viagrandparis.png" group-title="France",viàGrandParis
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viagrandparis.png" group-title="France",viàGrandParis
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viagrandparis&item_module=resources.lib.channels.fr.via&item_dict={}
 
 ##	Tébéo
 ##	tebeo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tebeo.png" group-title="France",Tébéo
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tebeo.png" group-title="France",Tébéo
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tebeo&item_module=resources.lib.channels.fr.tebeo&item_dict={}
 
 ##	M6 Boutique
 ##	mb
-#EXTINF:-1 tvg-id="C184.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/mb.png" group-title="France",M6 Boutique
+#EXTINF:-1 tvg-id="C184.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/mb.png" group-title="France",M6 Boutique
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=mb&item_module=resources.lib.channels.fr.6play&item_dict={}
 
 ##	viàLMTv Sarthe
 ##	vialmtv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/vialmtv.png" group-title="France",viàLMTv Sarthe
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/vialmtv.png" group-title="France",viàLMTv Sarthe
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=vialmtv&item_module=resources.lib.channels.fr.via&item_dict={}
 
 ##	viàMirabelle
 ##	viamirabelle
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viamirabelle.png" group-title="France",viàMirabelle
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viamirabelle.png" group-title="France",viàMirabelle
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viamirabelle&item_module=resources.lib.channels.fr.via&item_dict={}
 
 ##	viàVosges
 ##	viavosges
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viavosges.png" group-title="France",viàVosges
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viavosges.png" group-title="France",viàVosges
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viavosges&item_module=resources.lib.channels.fr.via&item_dict={}
 
 ##	Télévision Loire 7
 ##	tl7
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tl7.png" group-title="France",Télévision Loire 7
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tl7.png" group-title="France",Télévision Loire 7
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tl7&item_module=resources.lib.channels.fr.tl7&item_dict={}
 
 ##	Lucky Jack
 ##	luckyjack
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/luckyjack.png" group-title="France",Lucky Jack
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/luckyjack.png" group-title="France",Lucky Jack
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=luckyjack&item_module=resources.lib.channels.fr.abweb&item_dict={}
 
 ##	Mont Blanc Live TV
 ##	mblivetv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/mblivetv.png" group-title="France",Mont Blanc Live TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/mblivetv.png" group-title="France",Mont Blanc Live TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=mblivetv&item_module=resources.lib.channels.fr.mblivetv&item_dict={}
 
 ##	8 Mont-Blanc
 ##	tv8montblanc
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tv8montblanc.png" group-title="France",8 Mont-Blanc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tv8montblanc.png" group-title="France",8 Mont-Blanc
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv8montblanc&item_module=resources.lib.channels.fr.tv8montblanc&item_dict={}
 
 ##	Alsace 20
 ##	alsace20
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/alsace20.png" group-title="France",Alsace 20
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/alsace20.png" group-title="France",Alsace 20
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=alsace20&item_module=resources.lib.channels.fr.alsace20&item_dict={}
 
 ##	TVPI télévision d'ici
 ##	tvpifr
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tvpifr.png" group-title="France",TVPI télévision d'ici
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tvpifr.png" group-title="France",TVPI télévision d'ici
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvpifr&item_module=resources.lib.channels.fr.tvpifr&item_dict={}
 
 ##	IDF 1
 ##	idf1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/idf1.png" group-title="France",IDF 1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/idf1.png" group-title="France",IDF 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=idf1&item_module=resources.lib.channels.fr.idf1&item_dict={}
 
 ##	Azur TV
 ##	azurtv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/azurtv.png" group-title="France",Azur TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/azurtv.png" group-title="France",Azur TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=azurtv&item_module=resources.lib.channels.fr.azurtv&item_dict={}
 
 ##	BIP TV
 ##	biptv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/biptv.png" group-title="France",BIP TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/biptv.png" group-title="France",BIP TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=biptv&item_module=resources.lib.channels.fr.biptv&item_dict={}
 
 ##	BFM Lille
 ##	bfmlille
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmlille.png" group-title="France",BFM Lille
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmlille.png" group-title="France",BFM Lille
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmlille&item_module=resources.lib.channels.fr.bfmregion&item_dict={}
 
 ##	BFM Littoral
 ##	bfmgrandlittoral
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmgrandlittoral.png" group-title="France",BFM Littoral
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmgrandlittoral.png" group-title="France",BFM Littoral
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmgrandlittoral&item_module=resources.lib.channels.fr.bfmregion&item_dict={}
 
 ##	La Chaine Normande
 ##	lachainenormande
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/lachainenormande.png" group-title="France",La Chaine Normande
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/lachainenormande.png" group-title="France",La Chaine Normande
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lachainenormande&item_module=resources.lib.channels.fr.lachainenormande&item_dict={}
 
 ##	Sport en France
 ##	sportenfrance
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/sportenfrance.png" group-title="France",Sport en France
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/sportenfrance.png" group-title="France",Sport en France
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=sportenfrance&item_module=resources.lib.channels.fr.sportenfrance&item_dict={}
 
 ##	Provence Azur TV
 ##	provenceazurtv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/provenceazurtv.png" group-title="France",Provence Azur TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/provenceazurtv.png" group-title="France",Provence Azur TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=provenceazurtv&item_module=resources.lib.channels.fr.azurtv&item_dict={}
 
 ##	TébéSud
 ##	tebesud
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tebesud.png" group-title="France",TébéSud
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tebesud.png" group-title="France",TébéSud
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tebesud&item_module=resources.lib.channels.fr.tebeo&item_dict={}
 
 ##	TéléGrenoble
 ##	telegrenoble
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/telegrenoble.png" group-title="France",TéléGrenoble
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/telegrenoble.png" group-title="France",TéléGrenoble
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telegrenoble&item_module=resources.lib.channels.fr.telegrenoble&item_dict={}
 
 ##	TéléNantes
 ##	telenantes
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/telenantes.png" group-title="France",TéléNantes
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/telenantes.png" group-title="France",TéléNantes
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telenantes&item_module=resources.lib.channels.fr.telenantes&item_dict={}
 
 ##	BFM Lyon
 ##	bfmlyon
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/bfmlyon.png" group-title="France",BFM Lyon
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmlyon.png" group-title="France",BFM Lyon
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmlyon&item_module=resources.lib.channels.fr.bfmregion&item_dict={}
 
 ##	TLC
 ##	tlc
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tlc.png" group-title="France",TLC
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tlc.png" group-title="France",TLC
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tlc&item_module=resources.lib.channels.fr.tlc&item_dict={}
 
 ##	TV Vendée
 ##	tvvendee
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tvvendee.png" group-title="France",TV Vendée
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tvvendee.png" group-title="France",TV Vendée
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvvendee&item_module=resources.lib.channels.fr.tvvendee&item_dict={}
 
 ##	TV7 Bordeaux
 ##	tv7bordeaux
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tv7bordeaux.png" group-title="France",TV7 Bordeaux
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tv7bordeaux.png" group-title="France",TV7 Bordeaux
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv7bordeaux&item_module=resources.lib.channels.fr.tv7bordeaux&item_dict={}
 
 ##	TVT Val de Loire
 ##	tvt
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tvt.png" group-title="France",TVT Val de Loire
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tvt.png" group-title="France",TVT Val de Loire
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvt&item_module=resources.lib.channels.fr.tvt&item_dict={}
 
 ##	TVR
 ##	tvr
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/tvr.png" group-title="France",TVR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tvr.png" group-title="France",TVR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvr&item_module=resources.lib.channels.fr.tvr&item_dict={}
 
 ##	Wéo TV
 ##	weo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/weo.png" group-title="France",Wéo TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/weo.png" group-title="France",Wéo TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=weo&item_module=resources.lib.channels.fr.weo&item_dict={}
 
 ##	DiCi TV
 ##	dicitv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/dicitv.png" group-title="France",DiCi TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/dicitv.png" group-title="France",DiCi TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dicitv&item_module=resources.lib.channels.fr.dicitv&item_dict={}
 
 ##	viàMaTélé
 ##	viamatele
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/viamatele.png" group-title="France",viàMaTélé
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viamatele.png" group-title="France",viàMaTélé
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viamatele&item_module=resources.lib.channels.fr.via&item_dict={}
 
 ##	France Inter
 ##	franceinter
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/franceinter.png" group-title="France",France Inter
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/franceinter.png" group-title="France",France Inter
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=franceinter&item_module=resources.lib.channels.fr.franceinter&item_dict={}
 
 ##	RTL
 ##	rtl
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/fr/rtl.png" group-title="France",RTL
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rtl.png" group-title="France",RTL
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtl&item_module=resources.lib.channels.fr.rtl&item_dict={}
+
+##	Europe 1
+##	europe1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/europe1.png" group-title="France",Europe 1
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=europe1&item_module=resources.lib.channels.fr.europe1&item_dict={}
 
 
 
@@ -535,83 +540,88 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=r
 
 ##	Rouge TV
 ##	rougetv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rougetv.png" group-title="Switzerland",Rouge TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rougetv.png" group-title="Switzerland",Rouge TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rougetv&item_module=resources.lib.channels.ch.rougetv&item_dict={}
 
 ##	TVM3
 ##	tvm3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/tvm3.png" group-title="Switzerland",TVM3
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/tvm3.png" group-title="Switzerland",TVM3
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvm3&item_module=resources.lib.channels.ch.tvm3&item_dict={}
 
 ##	RTS Un
 ##	rtsun
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtsun.png" group-title="Switzerland",RTS Un
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtsun.png" group-title="Switzerland",RTS Un
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtsun&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTS Deux
 ##	rtsdeux
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtsdeux.png" group-title="Switzerland",RTS Deux
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtsdeux.png" group-title="Switzerland",RTS Deux
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtsdeux&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTS Info
 ##	rtsinfo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtsinfo.png" group-title="Switzerland",RTS Info
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtsinfo.png" group-title="Switzerland",RTS Info
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtsinfo&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTS Couleur 3
 ##	rtscouleur3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtscouleur3.png" group-title="Switzerland",RTS Couleur 3
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtscouleur3.png" group-title="Switzerland",RTS Couleur 3
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtscouleur3&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RSI La 1
 ##	rsila1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rsila1.png" group-title="Switzerland",RSI La 1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rsila1.png" group-title="Switzerland",RSI La 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rsila1&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RSI La 2
 ##	rsila2
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rsila2.png" group-title="Switzerland",RSI La 2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rsila2.png" group-title="Switzerland",RSI La 2
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rsila2&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	SRF 1
 ##	srf1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/srf1.png" group-title="Switzerland",SRF 1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/srf1.png" group-title="Switzerland",SRF 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=srf1&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	SRF Info
 ##	srfinfo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/srfinfo.png" group-title="Switzerland",SRF Info
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/srfinfo.png" group-title="Switzerland",SRF Info
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=srfinfo&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	SRF Zwei
 ##	srfzwei
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/srfzwei.png" group-title="Switzerland",SRF Zwei
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/srfzwei.png" group-title="Switzerland",SRF Zwei
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=srfzwei&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTR auf SRF 1
 ##	rtraufsrf1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtraufsrf1.png" group-title="Switzerland",RTR auf SRF 1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtraufsrf1.png" group-title="Switzerland",RTR auf SRF 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtraufsrf1&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTR auf SRF Info
 ##	rtraufsrfinfo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtraufsrfinfo.png" group-title="Switzerland",RTR auf SRF Info
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtraufsrfinfo.png" group-title="Switzerland",RTR auf SRF Info
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtraufsrfinfo&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTR auf SRF 2
 ##	rtraufsrf2
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtraufsrf2.png" group-title="Switzerland",RTR auf SRF 2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtraufsrf2.png" group-title="Switzerland",RTR auf SRF 2
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtraufsrf2&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	Teleticino
 ##	teleticino
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/teleticino.png" group-title="Switzerland",Teleticino
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/teleticino.png" group-title="Switzerland",Teleticino
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=teleticino&item_module=resources.lib.channels.ch.teleticino&item_dict={}
 
 ##	Léman Bleu
 ##	lemanbleu
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/lemanbleu.png" group-title="Switzerland",Léman Bleu
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/lemanbleu.png" group-title="Switzerland",Léman Bleu
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lemanbleu&item_module=resources.lib.channels.ch.lemanbleu&item_dict={}
+
+##	Tele M1
+##	telem1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/telem1.png" group-title="Switzerland",Tele M1
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telem1&item_module=resources.lib.channels.ch.telem1&item_dict={}
 
 
 
@@ -620,88 +630,93 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=l
 
 ##	Blaze
 ##	blaze
-#EXTINF:-1 tvg-id="1013.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/blaze.png" group-title="United Kingdom",Blaze
+#EXTINF:-1 tvg-id="1013.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/blaze.png" group-title="United Kingdom",Blaze
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=blaze&item_module=resources.lib.channels.uk.blaze&item_dict={}
 
 ##	Dave
 ##	dave
-#EXTINF:-1 tvg-id="432.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/dave.png" group-title="United Kingdom",Dave
+#EXTINF:-1 tvg-id="432.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/dave.png" group-title="United Kingdom",Dave
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dave&item_module=resources.lib.channels.uk.uktvplay&item_dict={}
 
 ##	Yesterday
 ##	yesterday
-#EXTINF:-1 tvg-id="320.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/yesterday.png" group-title="United Kingdom",Yesterday
+#EXTINF:-1 tvg-id="320.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/yesterday.png" group-title="United Kingdom",Yesterday
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=yesterday&item_module=resources.lib.channels.uk.uktvplay&item_dict={}
 
 ##	Drama
 ##	drama
-#EXTINF:-1 tvg-id="871.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/drama.png" group-title="United Kingdom",Drama
+#EXTINF:-1 tvg-id="871.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/drama.png" group-title="United Kingdom",Drama
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=drama&item_module=resources.lib.channels.uk.uktvplay&item_dict={}
 
 ##	Sky News
 ##	skynews
-#EXTINF:-1 tvg-id="257.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/skynews.png" group-title="United Kingdom",Sky News
+#EXTINF:-1 tvg-id="257.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/skynews.png" group-title="United Kingdom",Sky News
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=skynews&item_module=resources.lib.channels.uk.sky&item_dict={}
 
 ##	STV
 ##	stv
-#EXTINF:-1 tvg-id="178.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/stv.png" group-title="United Kingdom",STV
+#EXTINF:-1 tvg-id="178.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/stv.png" group-title="United Kingdom",STV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=stv&item_module=resources.lib.channels.uk.stv&item_dict={}
 
 ##	Kerrang
 ##	kerrang
-#EXTINF:-1 tvg-id="1207.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/kerrang.png" group-title="United Kingdom",Kerrang
+#EXTINF:-1 tvg-id="1207.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/kerrang.png" group-title="United Kingdom",Kerrang
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=kerrang&item_module=resources.lib.channels.uk.boxplus&item_dict={}
 
 ##	Magic
 ##	magic
-#EXTINF:-1 tvg-id="185.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/magic.png" group-title="United Kingdom",Magic
+#EXTINF:-1 tvg-id="185.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/magic.png" group-title="United Kingdom",Magic
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=magic&item_module=resources.lib.channels.uk.boxplus&item_dict={}
 
 ##	Kiss
 ##	kiss
-#EXTINF:-1 tvg-id="182.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/kiss.png" group-title="United Kingdom",Kiss
+#EXTINF:-1 tvg-id="182.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/kiss.png" group-title="United Kingdom",Kiss
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=kiss&item_module=resources.lib.channels.uk.boxplus&item_dict={}
 
 ##	The Box
 ##	the-box
-#EXTINF:-1 tvg-id="279.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/thebox.png" group-title="United Kingdom",The Box
+#EXTINF:-1 tvg-id="279.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/thebox.png" group-title="United Kingdom",The Box
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=the-box&item_module=resources.lib.channels.uk.boxplus&item_dict={}
 
 ##	Box Hits
 ##	box-hits
-#EXTINF:-1 tvg-id="267.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/boxhits.png" group-title="United Kingdom",Box Hits
+#EXTINF:-1 tvg-id="267.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/boxhits.png" group-title="United Kingdom",Box Hits
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=box-hits&item_module=resources.lib.channels.uk.boxplus&item_dict={}
 
 ##	Box Upfront
 ##	box-upfront
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/boxupfront.png" group-title="United Kingdom",Box Upfront
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/boxupfront.png" group-title="United Kingdom",Box Upfront
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=box-upfront&item_module=resources.lib.channels.uk.boxplus&item_dict={}
 
 ##	Quest TV
 ##	questtv
-#EXTINF:-1 tvg-id="1230.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/questtv.png" group-title="United Kingdom",Quest TV
+#EXTINF:-1 tvg-id="1230.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/questtv.png" group-title="United Kingdom",Quest TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=questtv&item_module=resources.lib.channels.uk.questod&item_dict={}
 
 ##	Quest RED
 ##	questred
-#EXTINF:-1 tvg-id="1014.tvguide.co.uk" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/questred.png" group-title="United Kingdom",Quest RED
+#EXTINF:-1 tvg-id="1014.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/questred.png" group-title="United Kingdom",Quest RED
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=questred&item_module=resources.lib.channels.uk.questod&item_dict={}
 
 ##	Bristol TV
 ##	bristoltv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/bristoltv.png" group-title="United Kingdom",Bristol TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/bristoltv.png" group-title="United Kingdom",Bristol TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bristoltv&item_module=resources.lib.channels.uk.bristoltv&item_dict={}
 
 ##	Free Sports
 ##	freesports
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/freesports.png" group-title="United Kingdom",Free Sports
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/freesports.png" group-title="United Kingdom",Free Sports
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=freesports&item_module=resources.lib.channels.uk.stv&item_dict={}
 
 ##	STV+1
 ##	stv_plusone
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/uk/stv_plusone.png" group-title="United Kingdom",STV+1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/stv_plusone.png" group-title="United Kingdom",STV+1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=stv_plusone&item_module=resources.lib.channels.uk.stv&item_dict={}
+
+##	EDGE Sport
+##	edgesport
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/edgesport.png" group-title="United Kingdom",EDGE Sport
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=edgesport&item_module=resources.lib.channels.uk.stv&item_dict={}
 
 
 
@@ -710,247 +725,247 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=s
 
 ##	Euronews FR
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews FR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews FR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"FR"}
 
 ##	Euronews EN
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews EN
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews EN
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"EN"}
 
 ##	Euronews AR
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews AR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews AR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"AR"}
 
 ##	Euronews DE
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews DE
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews DE
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"DE"}
 
 ##	Euronews IT
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews IT
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews IT
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"IT"}
 
 ##	Euronews ES
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews ES
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews ES
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"ES"}
 
 ##	Euronews PT
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews PT
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews PT
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"PT"}
 
 ##	Euronews RU
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews RU
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews RU
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"RU"}
 
 ##	Euronews TR
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews TR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews TR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"TR"}
 
 ##	Euronews FA
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews FA
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews FA
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"FA"}
 
 ##	Euronews GR
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews GR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews GR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"GR"}
 
 ##	Euronews HU
 ##	euronews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/euronews.png" group-title="International",Euronews HU
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews HU
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"HU"}
 
 ##	Arte FR
 ##	arte
-#EXTINF:-1 tvg-id="C111.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/arte.png" group-title="International",Arte FR
+#EXTINF:-1 tvg-id="C111.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/arte.png" group-title="International",Arte FR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arte&item_module=resources.lib.channels.wo.arte&item_dict={"language":"FR"}
 
 ##	Arte DE
 ##	arte
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/arte.png" group-title="International",Arte DE
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/arte.png" group-title="International",Arte DE
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arte&item_module=resources.lib.channels.wo.arte&item_dict={"language":"DE"}
 
 ##	France 24 FR
 ##	france24
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 FR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/france24.png" group-title="International",France 24 FR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"FR"}
 
 ##	France 24 EN
 ##	france24
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 EN
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/france24.png" group-title="International",France 24 EN
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"EN"}
 
 ##	France 24 AR
 ##	france24
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 AR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/france24.png" group-title="International",France 24 AR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"AR"}
 
 ##	France 24 ES
 ##	france24
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/france24.png" group-title="International",France 24 ES
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/france24.png" group-title="International",France 24 ES
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"ES"}
 
 ##	NHK World Outside Japan
 ##	nhkworld
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/nhkworld.png" group-title="International",NHK World Outside Japan
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/nhkworld.png" group-title="International",NHK World Outside Japan
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nhkworld&item_module=resources.lib.channels.wo.nhkworld&item_dict={"language":"Outside Japan"}
 
 ##	NHK World In Japan
 ##	nhkworld
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/nhkworld.png" group-title="International",NHK World In Japan
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/nhkworld.png" group-title="International",NHK World In Japan
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nhkworld&item_module=resources.lib.channels.wo.nhkworld&item_dict={"language":"In Japan"}
 
 ##	Tivi 5Monde
 ##	tivi5monde
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/tivi5monde.png" group-title="International",Tivi 5Monde
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/tivi5monde.png" group-title="International",Tivi 5Monde
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tivi5monde&item_module=resources.lib.channels.wo.tivi5monde&item_dict={}
 
 ##	BVN
 ##	bvn
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/bvn.png" group-title="International",BVN
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/bvn.png" group-title="International",BVN
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bvn&item_module=resources.lib.channels.wo.bvn&item_dict={}
 
 ##	ICI Télévision
 ##	icitelevision
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/icitelevision.png" group-title="International",ICI Télévision
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/icitelevision.png" group-title="International",ICI Télévision
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitelevision&item_module=resources.lib.channels.wo.icitelevision&item_dict={}
 
 ##	Arirang (아리랑)
 ##	arirang
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/arirang.png" group-title="International",Arirang (아리랑)
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/arirang.png" group-title="International",Arirang (아리랑)
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arirang&item_module=resources.lib.channels.wo.arirang&item_dict={}
 
 ##	DW EN
 ##	dw
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/dw.png" group-title="International",DW EN
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/dw.png" group-title="International",DW EN
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"EN"}
 
 ##	DW AR
 ##	dw
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/dw.png" group-title="International",DW AR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/dw.png" group-title="International",DW AR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"AR"}
 
 ##	DW ES
 ##	dw
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/dw.png" group-title="International",DW ES
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/dw.png" group-title="International",DW ES
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"ES"}
 
 ##	DW DE
 ##	dw
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/dw.png" group-title="International",DW DE
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/dw.png" group-title="International",DW DE
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"DE"}
 
 ##	QVC JP
 ##	qvc
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/qvc.png" group-title="International",QVC JP
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="International",QVC JP
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"JP"}
 
 ##	QVC DE
 ##	qvc
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/qvc.png" group-title="International",QVC DE
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="International",QVC DE
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"DE"}
 
 ##	QVC IT
 ##	qvc
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/qvc.png" group-title="International",QVC IT
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="International",QVC IT
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"IT"}
 
 ##	QVC UK
 ##	qvc
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/qvc.png" group-title="International",QVC UK
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="International",QVC UK
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"UK"}
 
 ##	QVC US
 ##	qvc
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/qvc.png" group-title="International",QVC US
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="International",QVC US
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"US"}
 
 ##	ICI RDI
 ##	icirdi
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/icirdi.png" group-title="International",ICI RDI
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/icirdi.png" group-title="International",ICI RDI
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icirdi&item_module=resources.lib.channels.wo.icirdi&item_dict={}
 
 ##	CGTN FR
 ##	cgtn
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/cgtn.png" group-title="International",CGTN FR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="International",CGTN FR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"FR"}
 
 ##	CGTN EN
 ##	cgtn
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/cgtn.png" group-title="International",CGTN EN
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="International",CGTN EN
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"EN"}
 
 ##	CGTN AR
 ##	cgtn
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/cgtn.png" group-title="International",CGTN AR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="International",CGTN AR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"AR"}
 
 ##	CGTN ES
 ##	cgtn
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/cgtn.png" group-title="International",CGTN ES
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="International",CGTN ES
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"ES"}
 
 ##	CGTN RU
 ##	cgtn
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/cgtn.png" group-title="International",CGTN RU
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="International",CGTN RU
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"RU"}
 
 ##	CGTN Documentary
 ##	cgtndocumentary
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/cgtndocumentary.png" group-title="International",CGTN Documentary
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtndocumentary.png" group-title="International",CGTN Documentary
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtndocumentary&item_module=resources.lib.channels.wo.cgtn&item_dict={}
 
 ##	Afrique Media
 ##	afriquemedia
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/afriquemedia.png" group-title="International",Afrique Media
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/afriquemedia.png" group-title="International",Afrique Media
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=afriquemedia&item_module=resources.lib.channels.wo.afriquemedia&item_dict={}
 
 ##	TV5Monde France Belgique Suisse
 ##	tv5mondefbs
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/tv5mondefbs.png" group-title="International",TV5Monde France Belgique Suisse
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/tv5mondefbs.png" group-title="International",TV5Monde France Belgique Suisse
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv5mondefbs&item_module=resources.lib.channels.wo.tv5monde&item_dict={}
 
 ##	TV5Monde Info
 ##	tv5mondeinfo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/tv5mondeinfo.png" group-title="International",TV5Monde Info
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/tv5mondeinfo.png" group-title="International",TV5Monde Info
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv5mondeinfo&item_module=resources.lib.channels.wo.tv5monde&item_dict={}
 
 ##	Channel NewsAsia
 ##	channelnewsasia
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/channelnewsasia.png" group-title="International",Channel NewsAsia
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/channelnewsasia.png" group-title="International",Channel NewsAsia
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=channelnewsasia&item_module=resources.lib.channels.wo.channelnewsasia&item_dict={}
 
 ##	RT FR
 ##	rt
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/rt.png" group-title="International",RT FR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/rt.png" group-title="International",RT FR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&item_dict={"language":"FR"}
 
 ##	RT EN
 ##	rt
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/rt.png" group-title="International",RT EN
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/rt.png" group-title="International",RT EN
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&item_dict={"language":"EN"}
 
 ##	RT AR
 ##	rt
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/rt.png" group-title="International",RT AR
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/rt.png" group-title="International",RT AR
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&item_dict={"language":"AR"}
 
 ##	RT ES
 ##	rt
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/rt.png" group-title="International",RT ES
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/rt.png" group-title="International",RT ES
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&item_dict={"language":"ES"}
 
 ##	Africa 24
 ##	africa24
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/wo/africa24.png" group-title="International",Africa 24
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/africa24.png" group-title="International",Africa 24
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=africa24&item_module=resources.lib.channels.wo.africa24&item_dict={}
 
 
@@ -960,98 +975,118 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=a
 
 ##	RTL-TVI
 ##	rtl_tvi
-#EXTINF:-1 tvg-id="C168.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/rtltvi.png" group-title="Belgium",RTL-TVI
+#EXTINF:-1 tvg-id="C168.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/rtltvi.png" group-title="Belgium",RTL-TVI
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtl_tvi&item_module=resources.lib.channels.be.rtlplaybe&item_dict={}
 
 ##	PLUG RTL
 ##	plug_rtl
-#EXTINF:-1 tvg-id="C377.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/plugrtl.png" group-title="Belgium",PLUG RTL
+#EXTINF:-1 tvg-id="C377.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/plugrtl.png" group-title="Belgium",PLUG RTL
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=plug_rtl&item_module=resources.lib.channels.be.rtlplaybe&item_dict={}
 
 ##	CLUB RTL
 ##	club_rtl
-#EXTINF:-1 tvg-id="C50.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/clubrtl.png" group-title="Belgium",CLUB RTL
+#EXTINF:-1 tvg-id="C50.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/clubrtl.png" group-title="Belgium",CLUB RTL
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=club_rtl&item_module=resources.lib.channels.be.rtlplaybe&item_dict={}
 
 ##	Télé MB
 ##	telemb
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/telemb.png" group-title="Belgium",Télé MB
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/telemb.png" group-title="Belgium",Télé MB
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telemb&item_module=resources.lib.channels.be.telemb&item_dict={}
 
 ##	RTC Télé Liège
 ##	rtc
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/rtc.png" group-title="Belgium",RTC Télé Liège
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/rtc.png" group-title="Belgium",RTC Télé Liège
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtc&item_module=resources.lib.channels.be.rtc&item_dict={}
 
 ##	TV Lux
 ##	tvlux
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/tvlux.png" group-title="Belgium",TV Lux
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/tvlux.png" group-title="Belgium",TV Lux
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvlux&item_module=resources.lib.channels.be.tvlux&item_dict={}
 
 ##	RTL INFO
 ##	rtl_info
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/rtlinfo.png" group-title="Belgium",RTL INFO
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/rtlinfo.png" group-title="Belgium",RTL INFO
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtl_info&item_module=resources.lib.channels.be.rtlplaybe&item_dict={}
 
 ##	BEL RTL
 ##	bel_rtl
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/belrtl.png" group-title="Belgium",BEL RTL
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/belrtl.png" group-title="Belgium",BEL RTL
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bel_rtl&item_module=resources.lib.channels.be.rtlplaybe&item_dict={}
 
 ##	Contact
 ##	contact
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/contact.png" group-title="Belgium",Contact
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/contact.png" group-title="Belgium",Contact
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=contact&item_module=resources.lib.channels.be.rtlplaybe&item_dict={}
 
 ##	BX1
 ##	bx1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/bx1.png" group-title="Belgium",BX1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/bx1.png" group-title="Belgium",BX1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bx1&item_module=resources.lib.channels.be.bx1&item_dict={}
 
 ##	Één
 ##	een
-#EXTINF:-1 tvg-id="C23.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/een.png" group-title="Belgium",Één
+#EXTINF:-1 tvg-id="C23.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/een.png" group-title="Belgium",Één
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=een&item_module=resources.lib.channels.be.vrt&item_dict={}
 
 ##	Canvas
 ##	canvas
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/canvas.png" group-title="Belgium",Canvas
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/canvas.png" group-title="Belgium",Canvas
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=canvas&item_module=resources.lib.channels.be.vrt&item_dict={}
 
 ##	Ketnet
 ##	ketnet
-#EXTINF:-1 tvg-id="C1280.api.telerama.fr" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/ketnet.png" group-title="Belgium",Ketnet
+#EXTINF:-1 tvg-id="C1280.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/ketnet.png" group-title="Belgium",Ketnet
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ketnet&item_module=resources.lib.channels.be.vrt&item_dict={}
 
 ##	NRJ Hits TV
 ##	nrjhitstvbe
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/nrjhitstvbe.png" group-title="Belgium",NRJ Hits TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/nrjhitstvbe.png" group-title="Belgium",NRJ Hits TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nrjhitstvbe&item_module=resources.lib.channels.be.nrjhitstvbe&item_dict={}
 
 ##	RTL Sport
 ##	rtl_sport
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/rtlsport.png" group-title="Belgium",RTL Sport
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/rtlsport.png" group-title="Belgium",RTL Sport
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtl_sport&item_module=resources.lib.channels.be.rtlplaybe&item_dict={}
 
 ##	TV Com
 ##	tvcom
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/tvcom.png" group-title="Belgium",TV Com
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/tvcom.png" group-title="Belgium",TV Com
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvcom&item_module=resources.lib.channels.be.tvcom&item_dict={}
 
 ##	Canal C
 ##	canalc
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/canalc.png" group-title="Belgium",Canal C
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/canalc.png" group-title="Belgium",Canal C
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=canalc&item_module=resources.lib.channels.be.canalc&item_dict={}
 
 ##	ABXPLORE
 ##	abxplore
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/abxplore.png" group-title="Belgium",ABXPLORE
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/abxplore.png" group-title="Belgium",ABXPLORE
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=abxplore&item_module=resources.lib.channels.be.abbe&item_dict={}
 
 ##	AB3
 ##	ab3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/be/ab3.png" group-title="Belgium",AB3
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/ab3.png" group-title="Belgium",AB3
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ab3&item_module=resources.lib.channels.be.abbe&item_dict={}
+
+##	LN24
+##	ln24
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/ln24.png" group-title="Belgium",LN24
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ln24&item_module=resources.lib.channels.be.ln24&item_dict={}
+
+##	La Une
+##	laune
+#EXTINF:-1 tvg-id="C164.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/laune.png" group-title="Belgium",La Une
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=laune&item_module=resources.lib.channels.be.rtbf&item_dict={}
+
+##	La Deux
+##	ladeux
+#EXTINF:-1 tvg-id="C187.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/ladeux.png" group-title="Belgium",La Deux
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ladeux&item_module=resources.lib.channels.be.rtbf&item_dict={}
+
+##	La Trois
+##	latrois
+#EXTINF:-1 tvg-id="C892.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/latrois.png" group-title="Belgium",La Trois
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=latrois&item_module=resources.lib.channels.be.rtbf&item_dict={}
 
 
 
@@ -1060,17 +1095,17 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=a
 
 ##	日テレ News24
 ##	ntvnews24
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/jp/ntvnews24.png" group-title="Japan",日テレ News24
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/jp/ntvnews24.png" group-title="Japan",日テレ News24
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ntvnews24&item_module=resources.lib.channels.jp.ntvnews24&item_dict={}
 
 ##	ジャパネットチャンネルDX
 ##	japanetshoppingdx
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/jp/japanetshoppingdx.png" group-title="Japan",ジャパネットチャンネルDX
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/jp/japanetshoppingdx.png" group-title="Japan",ジャパネットチャンネルDX
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=japanetshoppingdx&item_module=resources.lib.channels.jp.japanetshoppingdx&item_dict={}
 
 ##	株式会社ウェザーニューズ
 ##	weathernewsjp
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/jp/weathernewsjp.png" group-title="Japan",株式会社ウェザーニューズ
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/jp/weathernewsjp.png" group-title="Japan",株式会社ウェザーニューズ
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=weathernewsjp&item_module=resources.lib.channels.jp.weathernewsjp&item_dict={}
 
 
@@ -1080,28 +1115,158 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=w
 
 ##	Télé-Québec
 ##	telequebec
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ca/telequebec.png" group-title="Canada",Télé-Québec
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/telequebec.png" group-title="Canada",Télé-Québec
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telequebec&item_module=resources.lib.channels.ca.telequebec&item_dict={}
 
 ##	TVA
 ##	tva
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ca/tva.png" group-title="Canada",TVA
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/tva.png" group-title="Canada",TVA
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tva&item_module=resources.lib.channels.ca.tva&item_dict={}
 
-##	ICI Télé
+##	ICI Télé Vancouver
 ##	icitele
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ca/icitele.png" group-title="Canada",ICI Télé
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={}
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/icitele.png" group-title="Canada",ICI Télé Vancouver
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={"language":"Vancouver"}
+
+##	ICI Télé Regina
+##	icitele
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/icitele.png" group-title="Canada",ICI Télé Regina
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={"language":"Regina"}
+
+##	ICI Télé Toronto
+##	icitele
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/icitele.png" group-title="Canada",ICI Télé Toronto
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={"language":"Toronto"}
+
+##	ICI Télé Edmonton
+##	icitele
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/icitele.png" group-title="Canada",ICI Télé Edmonton
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={"language":"Edmonton"}
+
+##	ICI Télé Rimouski
+##	icitele
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/icitele.png" group-title="Canada",ICI Télé Rimouski
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={"language":"Rimouski"}
+
+##	ICI Télé Québec
+##	icitele
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/icitele.png" group-title="Canada",ICI Télé Québec
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={"language":"Québec"}
+
+##	ICI Télé Winnipeg
+##	icitele
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/icitele.png" group-title="Canada",ICI Télé Winnipeg
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={"language":"Winnipeg"}
+
+##	ICI Télé Moncton
+##	icitele
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/icitele.png" group-title="Canada",ICI Télé Moncton
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={"language":"Moncton"}
+
+##	ICI Télé Ottawa
+##	icitele
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/icitele.png" group-title="Canada",ICI Télé Ottawa
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={"language":"Ottawa"}
+
+##	ICI Télé Montréal
+##	icitele
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/icitele.png" group-title="Canada",ICI Télé Montréal
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitele&item_module=resources.lib.channels.ca.icitele&item_dict={"language":"Montréal"}
 
 ##	NTV
 ##	ntvca
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ca/ntvca.png" group-title="Canada",NTV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/ntvca.png" group-title="Canada",NTV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ntvca&item_module=resources.lib.channels.ca.ntvca&item_dict={}
 
 ##	Télé-Mag
 ##	telemag
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ca/telemag.png" group-title="Canada",Télé-Mag
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/telemag.png" group-title="Canada",Télé-Mag
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telemag&item_module=resources.lib.channels.ca.telemag&item_dict={}
+
+##	V Télé
+##	vtele
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/vtele.png" group-title="Canada",V Télé
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=vtele&item_module=resources.lib.channels.ca.noovo&item_dict={}
+
+##	CBC Ottawa
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Ottawa
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Ottawa"}
+
+##	CBC Montreal
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Montreal
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Montreal"}
+
+##	CBC Charlottetown
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Charlottetown
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Charlottetown"}
+
+##	CBC Fredericton
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Fredericton
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Fredericton"}
+
+##	CBC Halifax
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Halifax
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Halifax"}
+
+##	CBC Windsor
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Windsor
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Windsor"}
+
+##	CBC Yellowknife
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Yellowknife
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Yellowknife"}
+
+##	CBC Winnipeg
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Winnipeg
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Winnipeg"}
+
+##	CBC Regina
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Regina
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Regina"}
+
+##	CBC Calgary
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Calgary
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Calgary"}
+
+##	CBC Edmonton
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Edmonton
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Edmonton"}
+
+##	CBC Vancouver
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Vancouver
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Vancouver"}
+
+##	CBC Toronto
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC Toronto
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"Toronto"}
+
+##	CBC St. John's
+##	cbc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC St. John's
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbc&item_module=resources.lib.channels.ca.cbc&item_dict={"language":"St. John's"}
+
+##	LCN
+##	lcn
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/lcn.png" group-title="Canada",LCN
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lcn&item_module=resources.lib.channels.ca.tva&item_dict={}
+
+##	Yoopa
+##	yoopa
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/yoopa.png" group-title="Canada",Yoopa
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=yoopa&item_module=resources.lib.channels.ca.tva&item_dict={}
 
 
 
@@ -1110,22 +1275,22 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=t
 
 ##	CBS News
 ##	cbsnews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/us/cbsnews.png" group-title="United States of America",CBS News
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/cbsnews.png" group-title="United States of America",CBS News
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cbsnews&item_module=resources.lib.channels.us.cbsnews&item_dict={}
 
 ##	TBD
 ##	tbd
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/us/tbd.png" group-title="United States of America",TBD
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/tbd.png" group-title="United States of America",TBD
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tbd&item_module=resources.lib.channels.us.tbd&item_dict={}
 
 ##	ABC News
 ##	abcnews
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/us/abcnews.png" group-title="United States of America",ABC News
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/abcnews.png" group-title="United States of America",ABC News
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=abcnews&item_module=resources.lib.channels.us.abcnews&item_dict={}
 
 ##	PBS Kids
 ##	pbskids
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/us/pbskids.png" group-title="United States of America",PBS Kids
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/pbskids.png" group-title="United States of America",PBS Kids
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=pbskids&item_module=resources.lib.channels.us.pbskids&item_dict={}
 
 
@@ -1135,97 +1300,97 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=p
 
 ##	TVP 3 Białystok
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Białystok
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Białystok
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Białystok"}
 
 ##	TVP 3 Bydgoszcz
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Bydgoszcz
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Bydgoszcz
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Bydgoszcz"}
 
 ##	TVP 3 Gdańsk
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Gdańsk
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Gdańsk
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Gdańsk"}
 
 ##	TVP 3 Gorzów Wielkopolski
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Gorzów Wielkopolski
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Gorzów Wielkopolski
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Gorzów Wielkopolski"}
 
 ##	TVP 3 Katowice
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Katowice
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Katowice
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Katowice"}
 
 ##	TVP 3 Kielce
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Kielce
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Kielce
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Kielce"}
 
 ##	TVP 3 Kraków
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Kraków
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Kraków
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Kraków"}
 
 ##	TVP 3 Lublin
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Lublin
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Lublin
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Lublin"}
 
 ##	TVP 3 Łódź
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Łódź
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Łódź
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Łódź"}
 
 ##	TVP 3 Olsztyn
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Olsztyn
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Olsztyn
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Olsztyn"}
 
 ##	TVP 3 Opole
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Opole
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Opole
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Opole"}
 
 ##	TVP 3 Poznań
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Poznań
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Poznań
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Poznań"}
 
 ##	TVP 3 Rzeszów
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Rzeszów
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Rzeszów
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Rzeszów"}
 
 ##	TVP 3 Szczecin
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Szczecin
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Szczecin
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Szczecin"}
 
 ##	TVP 3 Warszawa
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Warszawa
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Warszawa
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Warszawa"}
 
 ##	TVP 3 Wrocław
 ##	tvp3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvp3.png" group-title="Poland",TVP 3 Wrocław
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvp3.png" group-title="Poland",TVP 3 Wrocław
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvp3&item_module=resources.lib.channels.pl.tvp&item_dict={"language":"Wrocław"}
 
 ##	TVP Info
 ##	tvpinfo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvpinfo.png" group-title="Poland",TVP Info
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvpinfo.png" group-title="Poland",TVP Info
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvpinfo&item_module=resources.lib.channels.pl.tvp&item_dict={}
 
 ##	TVP Polonia
 ##	tvppolonia
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvppolonia.png" group-title="Poland",TVP Polonia
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvppolonia.png" group-title="Poland",TVP Polonia
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvppolonia&item_module=resources.lib.channels.pl.tvp&item_dict={}
 
 ##	TVP Poland IN
 ##	tvppolandin
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/pl/tvppolandin.png" group-title="Poland",TVP Poland IN
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/pl/tvppolandin.png" group-title="Poland",TVP Poland IN
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvppolandin&item_module=resources.lib.channels.pl.tvp&item_dict={}
 
 
@@ -1233,19 +1398,54 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=t
 # Spain
 # es_live
 
+##	Telecinco
+##	telecinco
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/telecinco.png" group-title="Spain",Telecinco
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telecinco&item_module=resources.lib.channels.es.mitele&item_dict={}
+
+##	Cuatro
+##	cuatro
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/cuatro.png" group-title="Spain",Cuatro
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cuatro&item_module=resources.lib.channels.es.mitele&item_dict={}
+
+##	Factoria de Ficcion
+##	fdf
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/fdf.png" group-title="Spain",Factoria de Ficcion
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=fdf&item_module=resources.lib.channels.es.mitele&item_dict={}
+
+##	Boing
+##	boing
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/boing.png" group-title="Spain",Boing
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=boing&item_module=resources.lib.channels.es.mitele&item_dict={}
+
+##	Energy TV
+##	energy
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/energy.png" group-title="Spain",Energy TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=energy&item_module=resources.lib.channels.es.mitele&item_dict={}
+
+##	Divinity
+##	divinity
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/divinity.png" group-title="Spain",Divinity
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=divinity&item_module=resources.lib.channels.es.mitele&item_dict={}
+
+##	Be Mad
+##	bemad
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/bemad.png" group-title="Spain",Be Mad
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bemad&item_module=resources.lib.channels.es.mitele&item_dict={}
+
 ##	Realmadrid TV EN
 ##	realmadridtv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/realmadridtv.png" group-title="Spain",Realmadrid TV EN
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/realmadridtv.png" group-title="Spain",Realmadrid TV EN
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=realmadridtv&item_module=resources.lib.channels.es.realmadridtv&item_dict={"language":"EN"}
 
 ##	Realmadrid TV ES
 ##	realmadridtv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/realmadridtv.png" group-title="Spain",Realmadrid TV ES
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/realmadridtv.png" group-title="Spain",Realmadrid TV ES
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=realmadridtv&item_module=resources.lib.channels.es.realmadridtv&item_dict={"language":"ES"}
 
 ##	Paramount Channel (ES)
 ##	paramountchannel_es
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/es/paramountchannel_es.png" group-title="Spain",Paramount Channel (ES)
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/paramountchannel_es.png" group-title="Spain",Paramount Channel (ES)
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=paramountchannel_es&item_module=resources.lib.channels.es.paramountchannel_es&item_dict={}
 
 
@@ -1255,17 +1455,17 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=p
 
 ##	التلفزة التونسية الوطنية 1
 ##	watania1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/tn/watania1.png" group-title="Tunisia",التلفزة التونسية الوطنية 1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/tn/watania1.png" group-title="Tunisia",التلفزة التونسية الوطنية 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=watania1&item_module=resources.lib.channels.tn.watania&item_dict={}
 
 ##	التلفزة التونسية الوطنية 2
 ##	watania2
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/tn/watania2.png" group-title="Tunisia",التلفزة التونسية الوطنية 2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/tn/watania2.png" group-title="Tunisia",التلفزة التونسية الوطنية 2
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=watania2&item_module=resources.lib.channels.tn.watania&item_dict={}
 
 ##	نسمة تي في
 ##	nessma
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/tn/nessma.png" group-title="Tunisia",نسمة تي في
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/tn/nessma.png" group-title="Tunisia",نسمة تي في
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nessma&item_module=resources.lib.channels.tn.nessma&item_dict={}
 
 
@@ -1275,77 +1475,77 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=n
 
 ##	La7
 ##	la7
-#EXTINF:-1 tvg-id="www.la7.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/la7.png" group-title="Italia",La7
+#EXTINF:-1 tvg-id="www.la7.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/la7.png" group-title="Italia",La7
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la7&item_module=resources.lib.channels.it.la7&item_dict={}
 
 ##	Rai News 24
 ##	rainews24
-#EXTINF:-1 tvg-id="rainews.guidatv.sky.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/rainews24.png" group-title="Italia",Rai News 24
+#EXTINF:-1 tvg-id="rainews.guidatv.sky.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rainews24.png" group-title="Italia",Rai News 24
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rainews24&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai 1
 ##	rai1
-#EXTINF:-1 tvg-id="www.raiuno.rai.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/rai1.png" group-title="Italia",Rai 1
+#EXTINF:-1 tvg-id="www.raiuno.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rai1.png" group-title="Italia",Rai 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rai1&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai 2
 ##	rai2
-#EXTINF:-1 tvg-id="www.raidue.rai.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/rai2.png" group-title="Italia",Rai 2
+#EXTINF:-1 tvg-id="www.raidue.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rai2.png" group-title="Italia",Rai 2
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rai2&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai 3
 ##	rai3
-#EXTINF:-1 tvg-id="www.raitre.rai.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/rai3.png" group-title="Italia",Rai 3
+#EXTINF:-1 tvg-id="www.raitre.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rai3.png" group-title="Italia",Rai 3
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rai3&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai 4
 ##	rai4
-#EXTINF:-1 tvg-id="rai4.raisat.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/rai4.png" group-title="Italia",Rai 4
+#EXTINF:-1 tvg-id="rai4.raisat.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rai4.png" group-title="Italia",Rai 4
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rai4&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai 5
 ##	rai5
-#EXTINF:-1 tvg-id="rai5.rai.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/rai5.png" group-title="Italia",Rai 5
+#EXTINF:-1 tvg-id="rai5.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rai5.png" group-title="Italia",Rai 5
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rai5&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai Sport
 ##	raisportpiuhd
-#EXTINF:-1 tvg-id="raisport.guidatv.sky.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/raisportpiuhd.png" group-title="Italia",Rai Sport
+#EXTINF:-1 tvg-id="raisport.guidatv.sky.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raisportpiuhd.png" group-title="Italia",Rai Sport
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raisportpiuhd&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai Movie
 ##	raimovie
-#EXTINF:-1 tvg-id="raimovie.rai.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/raimovie.png" group-title="Italia",Rai Movie
+#EXTINF:-1 tvg-id="raimovie.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raimovie.png" group-title="Italia",Rai Movie
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raimovie&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai Premium
 ##	raipremium
-#EXTINF:-1 tvg-id="raipremium.guidatv.sky.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/raipremium.png" group-title="Italia",Rai Premium
+#EXTINF:-1 tvg-id="raipremium.guidatv.sky.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raipremium.png" group-title="Italia",Rai Premium
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raipremium&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai Yoyo
 ##	raiyoyo
-#EXTINF:-1 tvg-id="yoyo.raisat.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/raiyoyo.png" group-title="Italia",Rai Yoyo
+#EXTINF:-1 tvg-id="yoyo.raisat.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raiyoyo.png" group-title="Italia",Rai Yoyo
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raiyoyo&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai Gulp
 ##	raigulp
-#EXTINF:-1 tvg-id="raigulp.rai.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/raigulp.png" group-title="Italia",Rai Gulp
+#EXTINF:-1 tvg-id="raigulp.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raigulp.png" group-title="Italia",Rai Gulp
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raigulp&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai Storia
 ##	raistoria
-#EXTINF:-1 tvg-id="raistoria.rai.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/raistoria.png" group-title="Italia",Rai Storia
+#EXTINF:-1 tvg-id="raistoria.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raistoria.png" group-title="Italia",Rai Storia
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raistoria&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Rai Scuola
 ##	raiscuola
-#EXTINF:-1 tvg-id="raiscuola.rai.it" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/raiscuola.png" group-title="Italia",Rai Scuola
+#EXTINF:-1 tvg-id="raiscuola.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raiscuola.png" group-title="Italia",Rai Scuola
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raiscuola&item_module=resources.lib.channels.it.raiplay&item_dict={}
 
 ##	Paramount Channel (IT)
 ##	paramountchannel_it
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/it/paramountchannel_it.png" group-title="Italia",Paramount Channel (IT)
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/paramountchannel_it.png" group-title="Italia",Paramount Channel (IT)
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=paramountchannel_it&item_module=resources.lib.channels.it.paramountchannel_it&item_dict={}
 
 
@@ -1355,47 +1555,47 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=p
 
 ##	NPO 1
 ##	npo-1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/nl/npo1.png" group-title="Netherlands",NPO 1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npo1.png" group-title="Netherlands",NPO 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-1&item_module=resources.lib.channels.nl.npo&item_dict={}
 
 ##	NPO 2
 ##	npo-2
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/nl/npo2.png" group-title="Netherlands",NPO 2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npo2.png" group-title="Netherlands",NPO 2
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-2&item_module=resources.lib.channels.nl.npo&item_dict={}
 
 ##	NPO Zapp
 ##	npo-zapp
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/nl/npozapp.png" group-title="Netherlands",NPO Zapp
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npozapp.png" group-title="Netherlands",NPO Zapp
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-zapp&item_module=resources.lib.channels.nl.npo&item_dict={}
 
 ##	NPO 1 Extra
 ##	npo-1-extra
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/nl/npo1extra.png" group-title="Netherlands",NPO 1 Extra
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npo1extra.png" group-title="Netherlands",NPO 1 Extra
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-1-extra&item_module=resources.lib.channels.nl.npo&item_dict={}
 
 ##	NPO 2 Extra
 ##	npo-2-extra
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/nl/npo2extra.png" group-title="Netherlands",NPO 2 Extra
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npo2extra.png" group-title="Netherlands",NPO 2 Extra
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-2-extra&item_module=resources.lib.channels.nl.npo&item_dict={}
 
 ##	NPO Zappelin Extra
 ##	npo-zappelin-extra
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/nl/npozappelinextra.png" group-title="Netherlands",NPO Zappelin Extra
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npozappelinextra.png" group-title="Netherlands",NPO Zappelin Extra
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-zappelin-extra&item_module=resources.lib.channels.nl.npo&item_dict={}
 
 ##	NPO Nieuws
 ##	npo-nieuws
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/nl/nponieuws.png" group-title="Netherlands",NPO Nieuws
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/nponieuws.png" group-title="Netherlands",NPO Nieuws
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-nieuws&item_module=resources.lib.channels.nl.npo&item_dict={}
 
 ##	NPO Politiek
 ##	npo-politiek
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/nl/npopolitiek.png" group-title="Netherlands",NPO Politiek
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npopolitiek.png" group-title="Netherlands",NPO Politiek
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-politiek&item_module=resources.lib.channels.nl.npo&item_dict={}
 
 ##	AT5
 ##	at5
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/nl/at5.png" group-title="Netherlands",AT5
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/at5.png" group-title="Netherlands",AT5
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=at5&item_module=resources.lib.channels.nl.at5&item_dict={}
 
 
@@ -1405,93 +1605,108 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=a
 
 ##	CCTV-1 综合
 ##	cctv1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv1.png" group-title="China",CCTV-1 综合
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv1.png" group-title="China",CCTV-1 综合
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv1&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-2 财经
 ##	cctv2
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv2.png" group-title="China",CCTV-2 财经
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv2.png" group-title="China",CCTV-2 财经
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv2&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-3 综艺
 ##	cctv3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv3.png" group-title="China",CCTV-3 综艺
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv3.png" group-title="China",CCTV-3 综艺
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv3&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-4 中文国际（亚）
 ##	cctv4
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv4.png" group-title="China",CCTV-4 中文国际（亚）
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv4.png" group-title="China",CCTV-4 中文国际（亚）
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv4&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-4 中文国际（欧）
 ##	cctveurope
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctveurope.png" group-title="China",CCTV-4 中文国际（欧）
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctveurope.png" group-title="China",CCTV-4 中文国际（欧）
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctveurope&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-4 中文国际（美）
 ##	cctvamerica
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctvamerica.png" group-title="China",CCTV-4 中文国际（美）
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctvamerica.png" group-title="China",CCTV-4 中文国际（美）
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctvamerica&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-5 体育
 ##	cctv5
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv5.png" group-title="China",CCTV-5 体育
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv5.png" group-title="China",CCTV-5 体育
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv5&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-5+ 体育赛事
 ##	cctv5plus
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv5plus.png" group-title="China",CCTV-5+ 体育赛事
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv5plus.png" group-title="China",CCTV-5+ 体育赛事
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv5plus&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-6 电影
 ##	cctv6
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv6.png" group-title="China",CCTV-6 电影
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv6.png" group-title="China",CCTV-6 电影
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv6&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-7 军事农业
 ##	cctv7
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv7.png" group-title="China",CCTV-7 军事农业
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv7.png" group-title="China",CCTV-7 军事农业
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv7&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-8 电视剧
 ##	cctv8
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv8.png" group-title="China",CCTV-8 电视剧
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv8.png" group-title="China",CCTV-8 电视剧
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv8&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-9 纪录
 ##	cctvjilu
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctvjilu.png" group-title="China",CCTV-9 纪录
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctvjilu.png" group-title="China",CCTV-9 纪录
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctvjilu&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-10 科教
 ##	cctv10
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv10.png" group-title="China",CCTV-10 科教
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv10.png" group-title="China",CCTV-10 科教
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv10&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-11 戏曲
 ##	cctv11
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv11.png" group-title="China",CCTV-11 戏曲
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv11.png" group-title="China",CCTV-11 戏曲
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv11&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-12 社会与法
 ##	cctv12
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv12.png" group-title="China",CCTV-12 社会与法
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv12.png" group-title="China",CCTV-12 社会与法
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv12&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-13 新闻
 ##	cctv13
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv13.png" group-title="China",CCTV-13 新闻
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv13.png" group-title="China",CCTV-13 新闻
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv13&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-14 少儿
 ##	cctvchild
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctvchild.png" group-title="China",CCTV-14 少儿
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctvchild.png" group-title="China",CCTV-14 少儿
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctvchild&item_module=resources.lib.channels.cn.cctv&item_dict={}
 
 ##	CCTV-15 音乐
 ##	cctv15
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/cn/cctv15.png" group-title="China",CCTV-15 音乐
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cn/cctv15.png" group-title="China",CCTV-15 音乐
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cctv15&item_module=resources.lib.channels.cn.cctv&item_dict={}
+
+
+
+# Cameroon
+# cm_live
+
+##	CRTV
+##	crtv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cm/crtv.png" group-title="Cameroon",CRTV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=crtv&item_module=resources.lib.channels.cm.crtv&item_dict={}
+
+##	CRTV News
+##	crtvnews
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cm/crtvnews.png" group-title="Cameroon",CRTV News
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=crtvnews&item_module=resources.lib.channels.cm.crtv&item_dict={}
 
 
 

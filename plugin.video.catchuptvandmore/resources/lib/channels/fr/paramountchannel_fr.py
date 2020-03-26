@@ -66,7 +66,7 @@ def list_programs(plugin, item_id, **kwargs):
     resp = urlquick.get(URL_PROGRAMS)
     root = resp.parse()
 
-    for program_datas in root.iterfind(".//div[@class='item poster']"):
+    for program_datas in root.iterfind(".//li[@class='item poster css-1u1rran-Wrapper e19yuxbf0']"):
         program_title = program_datas.find(".//div[@class='header']/span").text
         program_image = ''
         list_images = program_datas.findall(".//img")
@@ -125,35 +125,36 @@ def list_videos(plugin, item_id, program_url, **kwargs):
         for main_contents_datas in json_parser['children']:
             if 'MainContainer' in main_contents_datas['type']:
                 for video_child in main_contents_datas['children']:
-                    if 'LineList' in video_child['type']:
-                        video_props = video_child['props']
-                        if 'video-guide' in video_props['type']:
-                            for video_datas in video_props['items']:
-                                video_title = video_datas['meta']['header'][
-                                    'title']
-                                video_image = video_datas['media']['image']['url']
-                                video_plot = video_datas['meta']['description']
-                                # TODO add duration / date
-                                video_url = URL_ROOT + video_datas['url']
+                    if video_child['type'] is not None:
+                        if 'LineList' in video_child['type']:
+                            video_props = video_child['props']
+                            if 'video-guide' in video_props['type']:
+                                for video_datas in video_props['items']:
+                                    video_title = video_datas['meta']['header'][
+                                        'title']
+                                    video_image = video_datas['media']['image']['url']
+                                    video_plot = video_datas['meta']['description']
+                                    # TODO add duration / date
+                                    video_url = URL_ROOT + video_datas['url']
 
-                                item = Listitem()
-                                item.label = video_title
-                                item.art['thumb'] = video_image
-                                item.info['plot'] = video_plot
+                                    item = Listitem()
+                                    item.label = video_title
+                                    item.art['thumb'] = video_image
+                                    item.info['plot'] = video_plot
 
-                                item.set_callback(
-                                    get_video_url,
-                                    item_id=item_id,
-                                    video_url=video_url)
-                                item_post_treatment(
-                                    item, is_playable=True, is_downloadable=True)
-                                yield item
+                                    item.set_callback(
+                                        get_video_url,
+                                        item_id=item_id,
+                                        video_url=video_url)
+                                    item_post_treatment(
+                                        item, is_playable=True, is_downloadable=True)
+                                    yield item
 
-                            if 'loadMore' in video_props:
-                                new_program_url = URL_ROOT + video_props['loadMore']['url']
-                                yield Listitem.next_page(
-                                    item_id=item_id,
-                                    program_url=new_program_url)
+                                if 'loadMore' in video_props:
+                                    new_program_url = URL_ROOT + video_props['loadMore']['url']
+                                    yield Listitem.next_page(
+                                        item_id=item_id,
+                                        program_url=new_program_url)
 
 
 @Resolver.register
@@ -172,9 +173,10 @@ def get_video_url(plugin,
     for main_contents_datas in json_parser['children']:
         if 'MainContainer' in main_contents_datas['type']:
             for stream_child in main_contents_datas['children']:
-                if 'VideoPlayer' in stream_child['type']:
-                    video_uri = stream_child['props']['media']['video'][
-                        'config']['uri']
+                if stream_child['type'] is not None:
+                    if 'VideoPlayer' in stream_child['type']:
+                        video_uri = stream_child['props']['media']['video'][
+                            'config']['uri']
     account_override = 'intl.mtvi.com'
     ep = '00a43210'
 

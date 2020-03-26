@@ -220,5 +220,41 @@ menu = {
         'm3u_group': 'Belgique fr',
         'enabled': True,
         'order': 22
+    },
+    'ln24': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/be/ln24.png',
+        'fanart': 'channels/be/ln24_fanart.jpg',
+        'module': 'resources.lib.channels.be.ln24',
+        'm3u_group': 'Belgique fr',
+        'enabled': True,
+        'order': 23
+    },
+    'laune': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/be/laune.png',
+        'fanart': 'channels/be/laune_fanart.jpg',
+        'module': 'resources.lib.channels.be.rtbf',
+        'xmltv_id': 'C164.api.telerama.fr',
+        'enabled': True,
+        'order': 24
+    },
+    'ladeux': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/be/ladeux.png',
+        'fanart': 'channels/be/ladeux_fanart.jpg',
+        'module': 'resources.lib.channels.be.rtbf',
+        'xmltv_id': 'C187.api.telerama.fr',
+        'enabled': True,
+        'order': 25
+    },
+    'latrois': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/be/latrois.png',
+        'fanart': 'channels/be/latrois_fanart.jpg',
+        'module': 'resources.lib.channels.be.rtbf',
+        'xmltv_id': 'C892.api.telerama.fr',
+        'enabled': True,
+        'order': 26
     }
 }

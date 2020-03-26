@@ -58,6 +58,11 @@ menu = {
         'thumb': 'channels/ca/icitele.png',
         'fanart': 'channels/ca/icitele_fanart.jpg',
         'module': 'resources.lib.channels.ca.icitele',
+        'available_languages': [
+            'Vancouver', 'Regina', 'Toronto', 'Edmonton', 'Rimouski',
+            'Québec', 'Winnipeg', 'Moncton', 'Ottawa',
+            'Montréal'
+        ],
         'enabled': True,
         'order': 6
     },
@@ -76,5 +81,43 @@ menu = {
         'module': 'resources.lib.channels.ca.telemag',
         'enabled': True,
         'order': 9
+    },
+    'vtele': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/ca/vtele.png',
+        'fanart': 'channels/ca/vtele_fanart.jpg',
+        'module': 'resources.lib.channels.ca.noovo',
+        'enabled': True,
+        'order': 10
+    },
+    'cbc': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/ca/cbc.png',
+        'fanart': 'channels/ca/cbc_fanart.jpg',
+        'module': 'resources.lib.channels.ca.cbc',
+        'available_languages': [
+            'Ottawa', 'Montreal', 'Charlottetown', 'Fredericton',
+            'Halifax', 'Windsor', 'Yellowknife', 'Winnipeg',
+            'Regina', 'Calgary', 'Edmonton', 'Vancouver',
+            'Toronto', 'St. John\'s'
+        ],
+        'enabled': True,
+        'order': 11
+    },
+    'lcn': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/ca/lcn.png',
+        'fanart': 'channels/ca/lcn_fanart.jpg',
+        'module': 'resources.lib.channels.ca.tva',
+        'enabled': True,
+        'order': 12
+    },
+    'yoopa': {
+        'callback': 'live_bridge',
+        'thumb': 'channels/ca/yoopa.png',
+        'fanart': 'channels/ca/yoopa_fanart.jpg',
+        'module': 'resources.lib.channels.ca.tva',
+        'enabled': True,
+        'order': 13
     }
 }

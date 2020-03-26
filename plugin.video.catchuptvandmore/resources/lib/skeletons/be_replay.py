@@ -164,5 +164,13 @@ menu = {
         'module': 'resources.lib.channels.be.tvcom',
         'enabled': True,
         'order': 19
+    },
+    'canalc': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/be/canalc.png',
+        'fanart': 'channels/be/canalc_fanart.jpg',
+        'module': 'resources.lib.channels.be.canalc',
+        'enabled': True,
+        'order': 20
     }
 }

@@ -55,6 +55,10 @@ msgctxt "#30008"
 msgid "Menus"
 msgstr ""
 
+msgctxt "#30009"
+msgid "General"
+msgstr ""
+
 
 # Settings line separators (from 30010 to 30029)
 
@@ -180,6 +184,10 @@ msgctxt "#30063"
 msgid "China"
 msgstr "China"
 
+msgctxt "#30064"
+msgid "Cameroon"
+msgstr ""
+
 
 # Channels (from 30080 to 30129)
 
@@ -239,6 +247,9 @@ msgctxt "#30093"
 msgid "Chinese channels"
 msgstr "Chinese kanalen"
 
+msgctxt "#30094"
+msgid "Cameroon channels"
+msgstr "Cameroon kanalen"
 
 # Websites (from 30130 to 30149)
 
@@ -303,8 +314,8 @@ msgid "CGTN: Choose Channel"
 msgstr "CGTN: Kies kanaal"
 
 msgctxt "#30164"
-msgid "Paramount Channel: Choose Channel"
-msgstr "Paramount Channel: Kies kanaal"
+msgid "ICI Télé: Choose region"
+msgstr "ICI Télé : Kies regio"
 
 msgctxt "#30165"
 msgid "Realmadrid TV: Choose Channel"
@@ -325,6 +336,10 @@ msgstr "Activeer tv-gids (langzamer)"
 msgctxt "#30169"
 msgid "Enable Subtitle if present in the content"
 msgstr "Activeer ondertiteling wanneer beschikbaar"
+
+msgctxt "#30170"
+msgid "CBC: Choose region"
+msgstr "CBC : Kies regio"
 
 
 # Download (from 30200 to 30239)
@@ -401,6 +416,8 @@ msgstr "UKTVPlay wachtwoord"
 
 
 
+
+
 # Advanced settings (from 30370 to 30399)
 
 msgctxt "#30370"
@@ -463,7 +480,14 @@ msgid "All hidden items have been unmasked"
 msgstr ""
 
 
-# Reserved space for other tab/category in settins (from 30430 to 30499)
+# Advanced settings (from 30430 to 30449)
+
+msgctxt "#30430"
+msgid "Automatically start Catch-up TV & More when Kodi starts"
+msgstr ""
+
+
+# Reserved space for other tab/category in settins (from 30450 to 30499)
 
 
 

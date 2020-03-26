@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 
+    <!-- General -->
+    <category label="30009">
+        <setting label="30430" type="bool" id="auto_run" default="false"/>
+        <setting label="30373" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/favourites/delete_favourites/)"/>
+    </category>
+    <!-- General -->
+
+
     <!-- Menus -->
     <category label="30008">
         
@@ -73,6 +81,9 @@
             <!-- Chinese channels -->
             <setting label="30093" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=cn_live)"/>
 
+            <!-- Cameroon channels -->
+            <setting label="30094" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=cm_live)"/>
+
        <!-- Unmask replay TV channels -->
         <setting label="30020" type="lsep" />
 
@@ -117,6 +128,9 @@
 
             <!-- Chinese channels -->
             <setting label="30093" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=cn_replay)"/>
+
+            <!-- Cameroon channels -->
+            <setting label="30094" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=cm_replay)"/>
 
     </category>
     <!-- Menus -->
@@ -171,6 +185,13 @@
             <!--<setting label="" type="bool" id="pl" default="true" visible="false"/>-->
 
                 <setting label="30167" type="labelenum" id="tvp3.language" values="Białystok|Bydgoszcz|Gdańsk|Gorzów Wielkopolski|Katowice|Kielce|Kraków|Lublin|Łódź|Olsztyn|Opole|Poznań|Rzeszów|Szczecin|Warszawa|Wrocław" default="Białystok"/>
+
+            <!-- Canadian channels -->
+            <setting label="30086" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <!--<setting label="" type="bool" id="pl" default="true" visible="false"/>-->
+
+                <setting label="30164" type="labelenum" id="icitele.language" values="Vancouver|Regina|Toronto|Edmonton|Rimouski|Québec|Winnipeg|Moncton|Ottawa|Montréal" default="Montréal"/>
+                <setting label="30170" type="labelenum" id="cbc.language" values="Ottawa|Montreal|Charlottetown|Fredericton|Halifax|Windsor|Yellowknife|Winnipeg|Regina|Calgary|Edmonton|Vancouver|Toronto|St. John\'s" default="Ottawa"/>
 
     </category>
     <!-- Quality and Content -->
@@ -228,11 +249,14 @@
 
 
 
+
+
+
+
     <!-- Advanced settings / Tools and other things to save -->
     <category label="30005">
         <setting label="30372" type="bool" id="log_pop_up" default="true"/>
         <setting label="30370" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/addon_utils/clear_cache/)"/>
-        <setting label="30373" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/favourites/delete_favourites/)"/>
         <setting label="" type="bool" id="show_hidden_items_information" default="true" visible="false"/>
         <setting label="" type="bool" id="show_live_tv_m3u_info" default="true" visible="false"/>
         <setting label="X-Forwarded-For" type="text" id="header_x-forwarded-for" default=""/>

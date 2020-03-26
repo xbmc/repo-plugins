@@ -5,81 +5,86 @@
 
 ##	Rouge TV
 ##	rougetv
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rougetv.png" group-title="Switzerland",Rouge TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rougetv.png" group-title="Switzerland",Rouge TV
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rougetv&item_module=resources.lib.channels.ch.rougetv&item_dict={}
 
 ##	TVM3
 ##	tvm3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/tvm3.png" group-title="Switzerland",TVM3
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/tvm3.png" group-title="Switzerland",TVM3
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvm3&item_module=resources.lib.channels.ch.tvm3&item_dict={}
 
 ##	RTS Un
 ##	rtsun
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtsun.png" group-title="Switzerland",RTS Un
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtsun.png" group-title="Switzerland",RTS Un
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtsun&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTS Deux
 ##	rtsdeux
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtsdeux.png" group-title="Switzerland",RTS Deux
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtsdeux.png" group-title="Switzerland",RTS Deux
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtsdeux&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTS Info
 ##	rtsinfo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtsinfo.png" group-title="Switzerland",RTS Info
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtsinfo.png" group-title="Switzerland",RTS Info
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtsinfo&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTS Couleur 3
 ##	rtscouleur3
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtscouleur3.png" group-title="Switzerland",RTS Couleur 3
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtscouleur3.png" group-title="Switzerland",RTS Couleur 3
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtscouleur3&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RSI La 1
 ##	rsila1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rsila1.png" group-title="Switzerland",RSI La 1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rsila1.png" group-title="Switzerland",RSI La 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rsila1&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RSI La 2
 ##	rsila2
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rsila2.png" group-title="Switzerland",RSI La 2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rsila2.png" group-title="Switzerland",RSI La 2
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rsila2&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	SRF 1
 ##	srf1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/srf1.png" group-title="Switzerland",SRF 1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/srf1.png" group-title="Switzerland",SRF 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=srf1&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	SRF Info
 ##	srfinfo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/srfinfo.png" group-title="Switzerland",SRF Info
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/srfinfo.png" group-title="Switzerland",SRF Info
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=srfinfo&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	SRF Zwei
 ##	srfzwei
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/srfzwei.png" group-title="Switzerland",SRF Zwei
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/srfzwei.png" group-title="Switzerland",SRF Zwei
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=srfzwei&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTR auf SRF 1
 ##	rtraufsrf1
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtraufsrf1.png" group-title="Switzerland",RTR auf SRF 1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtraufsrf1.png" group-title="Switzerland",RTR auf SRF 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtraufsrf1&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTR auf SRF Info
 ##	rtraufsrfinfo
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtraufsrfinfo.png" group-title="Switzerland",RTR auf SRF Info
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtraufsrfinfo.png" group-title="Switzerland",RTR auf SRF Info
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtraufsrfinfo&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	RTR auf SRF 2
 ##	rtraufsrf2
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/rtraufsrf2.png" group-title="Switzerland",RTR auf SRF 2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtraufsrf2.png" group-title="Switzerland",RTR auf SRF 2
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtraufsrf2&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	Teleticino
 ##	teleticino
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/teleticino.png" group-title="Switzerland",Teleticino
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/teleticino.png" group-title="Switzerland",Teleticino
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=teleticino&item_module=resources.lib.channels.ch.teleticino&item_dict={}
 
 ##	Léman Bleu
 ##	lemanbleu
-#EXTINF:-1 tvg-id="" tvg-logo="https://github.com/Catch-up-TV-and-More/images/raw/master/channels/ch/lemanbleu.png" group-title="Switzerland",Léman Bleu
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/lemanbleu.png" group-title="Switzerland",Léman Bleu
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lemanbleu&item_module=resources.lib.channels.ch.lemanbleu&item_dict={}
+
+##	Tele M1
+##	telem1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/telem1.png" group-title="Switzerland",Tele M1
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telem1&item_module=resources.lib.channels.ch.telem1&item_dict={}
 

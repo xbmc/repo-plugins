@@ -45,17 +45,15 @@ Channels:
 
 # Add search button
 
-URL_ROOT_EDUCATION = 'http://education.francetv.fr'
+URL_ROOT_EDUCATION = 'https://www.lumni.fr'
 
-URL_VIDEO_DATA_EDUCATION = URL_ROOT_EDUCATION + '/video/%s/sisters'
+URL_CONTENUS = URL_ROOT_EDUCATION + '/%s/tous-les-contenus'
 # TitleVideo
 
-URL_SERIE_DATA_EDUCATION = URL_ROOT_EDUCATION + '/recherche?q=%s&type=video&xtmc=%s'
-# TitleSerie, page
-
 CATEGORIES_EDUCATION = {
-    'Séries': URL_ROOT_EDUCATION + '/recherche?q=&type=series&page=%s',
-    'Vidéos': URL_ROOT_EDUCATION + '/recherche?q=&type=video&page=%s'
+    'Primaire': URL_CONTENUS % 'primaire',
+    'Collège': URL_CONTENUS % 'college',
+    'Lycée': URL_CONTENUS % 'lycee'
 }
 
 
@@ -77,65 +75,72 @@ def list_categories(plugin, item_id, **kwargs):
     """
     for category_title, category_url in list(CATEGORIES_EDUCATION.items()):
 
-        if category_title == 'Séries':
-            next_value = 'list_programs'
-        else:
-            next_value = 'list_videos'
-
         item = Listitem()
         item.label = category_title
-        item.set_callback(eval(next_value),
+        item.set_callback(list_contents,
                           item_id=item_id,
-                          next_url=category_url,
+                          category_url=category_url,
                           page='1')
         item_post_treatment(item)
         yield item
 
 
 @Route.register
-def list_programs(plugin, item_id, next_url, page, **kwargs):
+def list_contents(plugin, item_id, category_url, page, **kwargs):
     """
     Build programs listing
     - Les feux de l'amour
     - ...
     """
-    resp = urlquick.get(next_url % page)
+    resp = urlquick.get(category_url + '?page=%s' % page)
     root = resp.parse()
 
-    for program_datas in root.iterfind(".//div[@class='ftve-thumbnail ']"):
-        program_data_content = program_datas.get('data-contenu')
-        program_title = program_datas.find('.//h4').find('.//a').get('title')
-        program_image = program_datas.find(
-            ".//div[@class='thumbnail-img lazy']").get('data-original')
-        program_url = URL_SERIE_DATA_EDUCATION % (
-            program_data_content, program_data_content) + '&page=%s'
+    for program_datas in root.iterfind(".//div[@class='serie']"):
+
+        program_title = program_datas.find(".//a").get('title')
+        program_image = program_datas.findall(".//img")[1].get('data-src')
+        program_url = URL_ROOT_EDUCATION + program_datas.find(".//a").get('href')
 
         item = Listitem()
         item.label = program_title
         item.art['thumb'] = program_image
         item.set_callback(list_videos,
                           item_id=item_id,
-                          next_url=program_url,
-                          page='1')
+                          next_url=program_url)
         item_post_treatment(item)
         yield item
 
+    for program_datas in root.iterfind(".//div[@class='video']"):
+
+        program_title = program_datas.find(".//div[@class='video-txt']/p").text.strip()
+        program_image = program_datas.find(".//img").get('data-src')
+        program_url = URL_ROOT_EDUCATION + program_datas.find(".//a").get('href')
+
+        item = Listitem()
+        item.label = program_title
+        item.art['thumb'] = program_image
+        item.set_callback(get_video_url,
+                          item_id=item_id,
+                          next_url=program_url)
+        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        yield item
+
     yield Listitem.next_page(item_id=item_id,
-                             next_url=next_url,
+                             category_url=category_url,
                              page=str(int(page) + 1))
 
 
 @Route.register
-def list_videos(plugin, item_id, next_url, page, **kwargs):
+def list_videos(plugin, item_id, next_url, **kwargs):
 
-    resp = urlquick.get(next_url % page)
-    root = resp.parse()
+    resp = urlquick.get(next_url)
+    root = resp.parse("div",
+                      attrs={"class": "contenu-capsule"})
 
-    for video_data in root.iterfind(".//div[@class='ftve-thumbnail ']"):
-        video_title = video_data.find('.//h4').find('.//a').get('title')
-        video_image = video_data.find(
-            ".//div[@class='thumbnail-img lazy']").get('data-original')
-        video_data_contenu = video_data.get('data-contenu')
+    for video_data in root.iterfind(".//a"):
+        video_title = video_data.find(".//div[@class='capsule-text']/p").text.strip()
+        video_image = video_data.find(".//img").get('data-src')
+        video_url = URL_ROOT_EDUCATION + video_data.get('href')
 
         item = Listitem()
         item.label = video_title
@@ -143,24 +148,20 @@ def list_videos(plugin, item_id, next_url, page, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_data_contenu=video_data_contenu)
+                          next_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
-
-    yield Listitem.next_page(item_id=item_id,
-                             next_url=next_url,
-                             page=str(int(page) + 1))
 
 
 @Resolver.register
 def get_video_url(plugin,
                   item_id,
-                  video_data_contenu,
+                  next_url,
                   download_mode=False,
                   **kwargs):
 
-    resp = urlquick.get(URL_VIDEO_DATA_EDUCATION % video_data_contenu)
-    id_diffusion = re.compile(r'videos.francetv.fr\/video\/(.*?)\@').findall(
+    resp = urlquick.get(next_url)
+    id_diffusion = re.compile(r'data-factoryid\=\"(.*?)\"').findall(
         resp.text)[0]
     return resolver_proxy.get_francetv_video_stream(plugin, id_diffusion,
                                                     download_mode)

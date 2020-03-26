@@ -119,5 +119,11 @@ menu = {
         'thumb': 'channels/nl.png',
         'enabled': False,
         'order': 14
+    },
+    'cm_replay': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/cm.png',
+        'enabled': False,
+        'order': 15
     }
 }

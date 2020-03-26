@@ -126,5 +126,11 @@ menu = {
         'thumb': 'channels/cn.png',
         'enabled': True,
         'order': 14
+    },
+    'cm_live': {
+        'callback': 'generic_menu',
+        'thumb': 'channels/cm.png',
+        'enabled': True,
+        'order': 15
     }
 }

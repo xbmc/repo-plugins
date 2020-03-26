@@ -222,8 +222,13 @@ class KodiWrapper:
             play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
             play_item.setProperty('inputstream.adaptive.license_key', license_key)
 
-        if title_item.subtitles_path:
-            play_item.setSubtitles(title_item.subtitles_path)
+        # Note: Adding the subtitle directly on the ListItem could cause sync issues, therefore
+        # we add the subtitles trough the Player after playback has started.
+        # See https://github.com/michaelarnauts/plugin.video.vtm.go/issues/148
+        # This is probably a Kodi or inputstream.adaptive issue
+
+        # if title_item.subtitles_path:
+        #     play_item.setSubtitles(title_item.subtitles_path)
 
         # To support video playback directly from RunPlugin() we need to use xbmc.Player().play instead of
         # setResolvedUrl that only works with PlayMedia() or with internal playable menu items
@@ -252,6 +257,14 @@ class KodiWrapper:
         if not heading:
             heading = ADDON.getAddonInfo('name')
         return Dialog().ok(heading=heading, line1=message)
+
+    @staticmethod
+    def show_yesno_dialog(heading='', message=''):
+        """ Show Kodi's YES/NO dialog """
+        from xbmcgui import Dialog
+        if not heading:
+            heading = ADDON.getAddonInfo('name')
+        return Dialog().yesno(heading=heading, line1=message)
 
     @staticmethod
     def show_notification(heading='', message='', icon='info', time=8000):
@@ -592,11 +605,11 @@ class KodiPlayer(xbmc.Player):
 
         self._kodi = kodi
         self.__monitor = xbmc.Monitor()
-        self.__playBackEventsTriggered = False
-        self.__playPlayBackEndedEventsTriggered = False
-        self.__pollInterval = 1
+        self.__playBackEventsTriggered = False  # pylint: disable=invalid-name
+        self.__playPlayBackEndedEventsTriggered = False  # pylint: disable=invalid-name
+        self.__pollInterval = 1  # pylint: disable=invalid-name
 
-    def waitForPlayBack(self, url=None, time_out=30):
+    def waitForPlayBack(self, url=None, time_out=30):  # pylint: disable=invalid-name
         """ Blocks the call until playback is started. If an url was specified, it will wait
         for that url to be the active one playing before returning.
         :type url: str
@@ -627,22 +640,22 @@ class KodiPlayer(xbmc.Player):
         self._kodi.log("Player: time-out occurred waiting for playback (%s)" % time_out, LOG_WARNING)
         return False
 
-    def onAVStarted(self):
+    def onAVStarted(self):  # pylint: disable=invalid-name
         """ Will be called when Kodi has a video or audiostream """
         self._kodi.log("Player: [onAVStarted] called", LOG_DEBUG)
         self.__playback_started()
 
-    def onPlayBackEnded(self):
+    def onPlayBackEnded(self):  # pylint: disable=invalid-name
         """ Will be called when [Kodi] stops playing a file """
         self._kodi.log("Player: [onPlayBackEnded] called", LOG_DEBUG)
         self.__playback_stopped()
 
-    def onPlayBackStopped(self):
+    def onPlayBackStopped(self):  # pylint: disable=invalid-name
         """ Will be called when [user] stops Kodi playing a file """
         self._kodi.log("Player: [onPlayBackStopped] called", LOG_DEBUG)
         self.__playback_stopped()
 
-    def onPlayBackError(self):
+    def onPlayBackError(self):  # pylint: disable=invalid-name
         """ Will be called when playback stops due to an error. """
         self._kodi.log("Player: [onPlayBackError] called", LOG_DEBUG)
         self.__playback_stopped()

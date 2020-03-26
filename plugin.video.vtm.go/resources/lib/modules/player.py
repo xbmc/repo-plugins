@@ -25,6 +25,10 @@ class Player:
         :type item: str
         :type channel: str
         """
+        if not self._check_credentials():
+            self._kodi.end_of_directory()
+            return
+
         res = self._kodi.show_context_menu([self._kodi.localize(30103), self._kodi.localize(30105)])  # Watch Live | Play from Catalog
         if res == -1:  # user has cancelled
             return
@@ -41,16 +45,12 @@ class Player:
         :type category: string
         :type item: string
         """
-        # Check if inputstreamhelper is correctly installed
-        try:
-            from inputstreamhelper import Helper
-            is_helper = Helper('mpd', drm='com.widevine.alpha')
-            if not is_helper.check_inputstream():
-                # inputstreamhelper has already shown an error
-                return
+        if not self._check_credentials():
+            self._kodi.end_of_directory()
+            return
 
-        except ImportError:
-            self._kodi.show_ok_dialog(message=self._kodi.localize(30708))  # Please reboot Kodi
+        # Check if inputstreamhelper is correctly installed
+        if not self._check_inputstream():
             return
 
         try:
@@ -152,13 +152,51 @@ class Player:
             # Playback didn't start
             return
 
-        # Turn on subtitles if needed
-        if resolved_stream.subtitles and self._kodi.get_setting_as_bool('showsubtitles'):
-            kodi_player.showSubtitles(True)
+        # Add subtitles
+        if resolved_stream.subtitles:
+            self._kodi.log('Setting subtitles')
+            kodi_player.setSubtitles(resolved_stream.subtitles[0])
+
+            # Turn on subtitles if needed
+            if self._kodi.get_setting_as_bool('showsubtitles'):
+                self._kodi.log('Enabling subtitles')
+                kodi_player.showSubtitles(True)
 
         # Send Up Next data
         if upnext_data:
+            self._kodi.log("Sending Up Next data: %s" % upnext_data)
             self.send_upnext(upnext_data)
+
+    def _check_credentials(self):
+        """ Check if the user has credentials """
+        if self._kodi.has_credentials():
+            return True
+
+        # You need to configure your credentials before you can access the content of VTM GO.
+        confirm = self._kodi.show_yesno_dialog(message=self._kodi.localize(30701))
+        if confirm:
+            self._kodi.open_settings()
+            if self._kodi.has_credentials():
+                return True
+
+        return False
+
+    def _check_inputstream(self):
+        """ Check if inputstreamhelper and inputstream.adaptive are fine.
+        :rtype boolean
+        """
+        try:
+            from inputstreamhelper import Helper
+            is_helper = Helper('mpd', drm='com.widevine.alpha')
+            if not is_helper.check_inputstream():
+                # inputstreamhelper has already shown an error
+                return False
+
+        except ImportError:
+            self._kodi.show_ok_dialog(message=self._kodi.localize(30708))  # Please reboot Kodi
+            return False
+
+        return True
 
     @staticmethod
     def generate_upnext(current_episode, next_episode):
@@ -208,8 +246,6 @@ class Player:
         """ Send a message to Up Next with information about the next Episode.
         :type upnext_info: object
         """
-        self._kodi.log("Sending Up Next data: %s" % upnext_info)
-
         from base64 import b64encode
         from json import dumps
         data = [to_unicode(b64encode(dumps(upnext_info).encode()))]

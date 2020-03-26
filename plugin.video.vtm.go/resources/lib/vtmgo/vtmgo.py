@@ -24,6 +24,10 @@ class UnavailableException(Exception):
     """ Is thrown when an item is unavailable. """
 
 
+class ApiUpdateRequired(Exception):
+    """ Is thrown when the an API update is required. """
+
+
 class Profile:
     """ Defines a profile under your account. """
 
@@ -260,7 +264,6 @@ class VtmGo:
         'x-persgroep-mobile-app': 'true',
         'x-persgroep-os': 'android',
         'x-persgroep-os-version': '23',
-        'User-Agent': 'VTMGO/6.11.3 (be.vmma.vtm.zenderapp; build:11672; Android 23) okhttp/3.14.2'
     }
 
     def __init__(self, kodi):
@@ -643,17 +646,18 @@ class VtmGo:
         :type number: int
         :rtype Episode
         """
-        # First, try to find a match in the current season
-        for s in list(program.seasons.values()):
-            for e in list(s.episodes.values()):
-                if e.season == season and e.number == number + 1:
-                    return e
+        next_season_episode = None
 
-        # No match, try to find the first episode of next season
-        for s in list(program.seasons.values()):
-            for e in list(s.episodes.values()):
-                if e.season == season + 1 and e.number == 1:
-                    return e
+        # First, try to find a match in the current season
+        for episode in [e for s in list(program.seasons.values()) for e in list(s.episodes.values())]:
+            if episode.season == season and episode.number == number + 1:
+                return episode
+            if episode.season == season + 1 and episode.number == 1:
+                next_season_episode = episode
+
+        # No match, use the first episode of next season
+        if next_season_episode:
+            return next_season_episode
 
         # We are playing the last episode
         return None
@@ -757,10 +761,17 @@ class VtmGo:
 
         response = requests.session().get('https://lfvp-api.dpgmedia.net' + url, params=params, headers=headers, proxies=self._proxies)
 
+        # Set encoding to UTF-8 if no charset is indicated in http headers (https://github.com/psf/requests/issues/1604)
+        if not response.encoding:
+            response.encoding = 'utf-8'
+
         self._kodi.log('Got response (status={code}): {response}', LOG_DEBUG, code=response.status_code, response=response.text)
 
         if response.status_code == 404:
             raise UnavailableException()
+
+        if response.status_code == 426:
+            raise ApiUpdateRequired()
 
         if response.status_code not in [200, 204]:
             raise Exception('Error %s.' % response.status_code)
@@ -790,6 +801,9 @@ class VtmGo:
         if response.status_code == 404:
             raise UnavailableException()
 
+        if response.status_code == 426:
+            raise ApiUpdateRequired()
+
         if response.status_code not in [200, 204]:
             raise Exception('Error %s.' % response.status_code)
 
@@ -818,6 +832,9 @@ class VtmGo:
         if response.status_code == 404:
             raise UnavailableException()
 
+        if response.status_code == 426:
+            raise ApiUpdateRequired()
+
         if response.status_code not in [200, 204]:
             raise Exception('Error %s.' % response.status_code)
 
@@ -845,6 +862,9 @@ class VtmGo:
 
         if response.status_code == 404:
             raise UnavailableException()
+
+        if response.status_code == 426:
+            raise ApiUpdateRequired()
 
         if response.status_code not in [200, 204]:
             raise Exception('Error %s.' % response.status_code)

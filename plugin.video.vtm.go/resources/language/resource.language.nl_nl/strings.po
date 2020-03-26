@@ -99,11 +99,11 @@ msgstr "Kijk live [B]{channel}[/B]"
 
 msgctxt "#30053"
 msgid "TV Guide for [B]{channel}[/B]"
-msgstr "TV-gids voor [B]{channel}[/B]"
+msgstr "Tv-gids voor [B]{channel}[/B]"
 
 msgctxt "#30054"
 msgid "Browse the TV Guide for [B]{channel}[/B]"
-msgstr "Doorblader de TV-gids voor [B]{channel}[/B]"
+msgstr "Doorblader de tv-gids voor [B]{channel}[/B]"
 
 msgctxt "#30055"
 msgid "Catalog for [B]{channel}[/B]"
@@ -138,7 +138,7 @@ msgstr "Kijk live"
 
 msgctxt "#30104"
 msgid "TV Guide"
-msgstr "TV-gids"
+msgstr "Tv-gids"
 
 msgctxt "#30105"
 msgid "Play from Catalog"
@@ -239,8 +239,8 @@ msgstr "Overmorgen"
 
 ### MESSAGES
 msgctxt "#30701"
-msgid "You need to configure your credentials before you can access the content of VTM GO."
-msgstr "Je moet je inloggegevens configureren voordat je VTM GO kan gebruiken."
+msgid "You need to configure your credentials before you can access the content of VTM GO. Do you want to enter them now?"
+msgstr "Je moet je inloggegevens configureren voordat je VTM GO kan gebruiken. Wil je dit nu doen?"
 
 msgctxt "#30702"
 msgid "Unknown error while logging in: {code}"
@@ -253,6 +253,10 @@ msgstr "Je account heeft geen profielen. Gelieve in te loggen op vtm.be/vtmgo en
 msgctxt "#30704"
 msgid "This video may be geo-blocked, or your account is already being used currently."
 msgstr "Deze video werd wellicht geografisch geblokkeerd, of je account is reeds in gebruik."
+
+msgctxt "#30705"
+msgid "The VTM GO Service has been updated, but this add-on hasn't been modified yet for these changes. Please check for an update."
+msgstr "De VTM GO Service is geüpdate, maar deze add-on is helaas nog niet aangepast hiervoor. Gelieve te controleren of er een update beschikbaar is."
 
 msgctxt "#30708"
 msgid "Please restart Kodi."
@@ -280,7 +284,7 @@ msgstr "De gevraagde video werd niet gevonden in de tv-gids."
 
 msgctxt "#30714"
 msgid "Local metadata is cleared."
-msgstr "De locale metadata is verwijderd."
+msgstr "De lokale metadata is verwijderd."
 
 msgctxt "#30715"
 msgid "Updating metadata"
@@ -349,15 +353,15 @@ msgstr "Metadata"
 
 msgctxt "#30829"
 msgid "Periodically refresh metadata in the background"
-msgstr "Vernieuw de metdata automatisch in de achtergrond"
+msgstr "Vernieuw de metadata automatisch in de achtergrond"
 
 msgctxt "#30831"
 msgid "Update local metadata now"
-msgstr "De locale metadata nu vernieuwen"
+msgstr "De lokale metadata nu vernieuwen"
 
 msgctxt "#30833"
 msgid "Clear local metadata"
-msgstr "De locale metadata verwijderen"
+msgstr "De lokale metadata verwijderen"
 
 msgctxt "#30860"
 msgid "Playback"

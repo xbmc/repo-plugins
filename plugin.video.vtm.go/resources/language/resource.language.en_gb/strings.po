@@ -238,7 +238,7 @@ msgstr ""
 
 ### MESSAGES
 msgctxt "#30701"
-msgid "You need to configure your credentials before you can access the content of VTM GO."
+msgid "You need to configure your credentials before you can access the content of VTM GO. Do you want to enter them now?"
 msgstr ""
 
 msgctxt "#30702"
@@ -251,6 +251,10 @@ msgstr ""
 
 msgctxt "#30704"
 msgid "This video may be geo-blocked, or your account is already being used currently."
+msgstr ""
+
+msgctxt "#30705"
+msgid "The VTM GO Service has been updated, but this add-on hasn't been modified yet for these changes. Please check for an update."
 msgstr ""
 
 msgctxt "#30708"
@@ -421,4 +425,4 @@ msgstr ""
 
 msgctxt "#30891"
 msgid "Enable debug logging"
-msgstr "Activeer debug logging"
+msgstr ""

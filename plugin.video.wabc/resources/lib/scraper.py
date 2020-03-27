@@ -7,118 +7,86 @@ import urllib
 import xbmc
 import xbmcplugin
 import xbmcgui
-import HTMLParser
+#import HTMLParser
 import sys
 import os
 import json
 
-h = HTMLParser.HTMLParser()
+
+#h = HTMLParser.HTMLParser()
 qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
-UTF8     = 'utf-8'
+UTF8 = 'utf-8'
 
 
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      urls = {}
-      html = self.getRequest('https://abc.go.com/shows?category=a-z')
-      html = re.compile('<section  data-m-id=(.+?)<section  data-m-id=', re.DOTALL).search(html).group(1)
-      a = re.compile('data-sm-id="".+?href="(.+?)".+?class="tablet-source.+?srcset="(.+?) ',re.DOTALL).findall(html)
-      for url, thumb in a:
-        if not '/' in url:
-          continue
-        if urls.get(url,None) is None:
-          if url.endswith('/index'):
-              url = url.replace('/index','',1)
-          urls[url] = url
-          name = url.rsplit('/',1)[1]
-          name = name.replace('-',' ').title()
-          fanart = thumb
-          infoList ={}
-          infoList['Title'] = name
-          infoList['TVShowTitle'] = name
-          infoList['mediatype'] = 'tvshow'
-          contextMenu = [('Add To Library','XBMC.RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
-          ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
+      html = self.getRequest('https://abc.go.com/shows?category=A-Z')
+      html = re.compile("window\['__abc_com__'\]=(.+?);</script>", re.DOTALL).search(html).group(1)
+      a = json.loads(html)
+      a = a["page"]["content"]["shows"]["categoryTilegroups"][1]["tiles"]
+      for b in a:
+        name = b["title"]
+        url = b["link"]["urlValue"]
+        thumb = b["images"][-1]["value"]
+        fanart = thumb
+        infoList ={}
+        infoList['Title'] = name
+        infoList['TVShowTitle'] = name
+        infoList['mediatype'] = 'tvshow'
+        ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
       return(ilist)
 
 
   def getAddonEpisodes(self,url,ilist, getFileData = False):
       if not url.startswith('http'):
-          url = 'https://abc.go.com'+url
-      if not url.endswith('/episode-guide'):
+          url = 'https://abc.com'+url
+      if not url.endswith('/episode-guide') and (not 'movies-and-specials' in url):
           url = url+'/episode-guide'
       html = self.getRequest(url)
-      vids = re.compile('data-video-id="VDKA(.+?)".+?data-title="(.+?)".+?data-background="(.+?)".+?class="tablet-source".+?srcset="(.+?) .+?class="season-number(.+?)<.+?class="episode-number(.+?)<.+?class="m-episode-summary.+?<p>(.+?)</p>.+?<div class="m-episode-meta(.+?)</div',re.DOTALL).findall(html)
-      for url, name, fanart, thumb, season, episode, plot, meta in vids:
-          name = h.unescape(name.decode(UTF8))
-          name = h.unescape(name) # get rid of &apos; as well
-          plot = h.unescape(plot.decode(UTF8))
-          thumb = thumb.strip()
+      html = re.compile("window\['__abc_com__'\]=(.+?);</script>", re.DOTALL).search(html)
+      if html == None:
+          return(ilist)
+      html= html.group(1)
+      a = json.loads(html)
+      if a["page"]["content"].get("show", None) != None:
+          b = a["page"]["content"]["show"]["modulesData"]
+          for a in b:
+             if a.get("tiles",None) != None:
+                 break
+          a = a.get("tiles",None)
+          if a == None:
+             return(ilist)
+      else:
+          a = [a["page"]["content"]["video"]["layout"]]
+      for b in a:
           infoList = {}
-          season = season.split('>S',1)
-          if len(season) > 1 and season[1].strip().isdigit():
-              infoList['Season'] = int(season[1])
-          episode = episode.split('>E',1)
-          if len(season) > 1 and episode[1].strip().isdigit():
-              infoList['Episode'] = int(episode[1])
+          name = b.get("title", b["video"]["title"])
           infoList['Title'] = name
-          infoList['Plot'] = plot
-          meta1 = re.compile('<span class="m-episode-meta-item m-episode-meta-duration">(.+?)</span>', re.DOTALL).findall(meta)
-          if meta1 is not None:
-              duration = 0
-              tmp = meta1[0].split(':')
-              for dur in tmp:
-                  duration = duration*60 + int(dur) 
-              infoList['Duration'] = duration
-
-          meta1 = re.compile('<span class="m-episode-meta-item">(.+?)</span>', re.DOTALL).findall(meta)
-          if meta1 is not None:
-              mo, day, year = meta1[0].split('/')
-              year = int(year)
-              if year < 55:
-                  year = year + 2000
-              else:
-                  year = year + 1900
-              infoList['Date'] = '%s-%s-%s' % ( str(year), mo, day)
-              infoList['Aired'] = infoList['Date']
-              infoList['Year'] = int(infoList['Aired'].split('-',1)[0])
-              if len(meta1)>1:
-                  infoList['MPAA'] = meta1[1]
-          infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
+          infoList['Plot'] = b["video"]["longdescription"]
+          url = b["id"].strip('video.')
+          if not url.startswith('V'):
+              url = b["video"]["id"].strip('video.')
+          thumb = b.get("images", None)
+          if thumb == None:
+              thumb = b["theme"]["images"][-1]["value"]
+          else:
+              thumb = b["images"][-1]["value"]
+          fanart = thumb
+          infoList['Season'] = int(b["video"].get('seasonNumber','0'))
+          infoList['Episode'] = int(b["video"].get('episodeNumber','0'))
+          infoList['TVShowTitle'] = b["video"].get("showTitle",name)
           infoList['Studio'] = 'ABC'
           infoList['mediatype'] = 'episode'
-          if getFileData == False:
-              ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
-          else:
-              if infoList.get('Season') is not None and infoList.get('Episode') is not None:
-                  ilist.append((infoList['Season'], infoList['Episode'], url))
+          ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
       return(ilist)
-
-  def doFunction(self, url):
-    func = url[0:2]
-    url  = url[2:]
-    if func == 'AL':
-      name  = xbmc.getInfoLabel('ListItem.Title')
-      profile = self.addon.getAddonInfo('profile').decode(UTF8)
-      moviesDir  = xbmc.translatePath(os.path.join(profile,'TV Shows'))
-      movieDir  = xbmc.translatePath(os.path.join(moviesDir, name))
-      if not os.path.isdir(movieDir):
-           os.makedirs(movieDir)
-      ilist = []
-      ilist = self.getAddonEpisodes(url, ilist, getFileData = True)
-      for season, episode, url in ilist:
-            se = 'S%sE%s' % (str(season), str(episode))
-            xurl = '%s?mode=GV&url=%s' % (sys.argv[0], url)
-            strmFile = xbmc.translatePath(os.path.join(movieDir, se+'.strm'))
-            with open(strmFile, 'w') as outfile:
-               outfile.write(xurl)         
-    json_cmd = '{"jsonrpc":"2.0","method":"VideoLibrary.Scan", "params": {"directory":"%s/"},"id":1}' % movieDir.replace('\\','/')
-    jsonRespond = xbmc.executeJSONRPC(json_cmd)
 
   def getAddonVideo(self,url):
       vd = uqp(url)
+      url = 'https://prod.gatekeeper.us-abc.symphony.edgedatg.com/api/ws/pluto/v1/module/videoplayer/2185737?brand=001&device=001&authlevel=0&layout=2185698&video='+str(vd)
+      html = self.getRequest(url)
+      ua = re.compile('"ULNK","value":"(.+?)"', re.DOTALL).search(html).group(1)
       url = 'https://api.entitlement.watchabc.go.com/vp2/ws-secure/entitlement/2020/authorize.json'
       udata = 'video%5Fid=VDKA'+str(vd)+'&device=001&video%5Ftype=lf&brand=001'
       uheaders = self.defaultHeaders.copy()
@@ -133,12 +101,7 @@ class myAddon(t1mAddon):
           return
 
       sessionKey = a['uplynkData']['sessionKey']
-      if not '&cid=' in sessionKey:
-          oid, eid = re.compile('&oid=(.+?)&eid=(.+?)&', re.DOTALL).search(sessionKey).groups()
-          url = 'http://content.uplynk.com/ext/%s/%s.m3u8?%s' % (oid, eid, sessionKey)
-      else:
-          cid = re.compile('&cid=(.+?)&', re.DOTALL).search(sessionKey).group(1)
-          url = 'http://content.uplynk.com/%s.m3u8?%s' % (cid, sessionKey)
+      url = ua+'?'+sessionKey
       html = self.getRequest(url)
       url = re.compile('#UPLYNK-MEDIA0.+?http(.+?)\n',re.DOTALL).search(html).group(1)
       url = 'http'+url

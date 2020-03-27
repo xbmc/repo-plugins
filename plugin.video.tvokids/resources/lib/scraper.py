@@ -42,74 +42,26 @@ class myAddon(t1mAddon):
 
   def getAddonEpisodes(self,url,ilist):
      html = self.getRequest('https://tvokids.com%s' % url)
-     html = re.compile('<footer class(.+?)</footer',re.DOTALL).search(html).group(1)
-     a = re.compile('<a href="(.+?)".+?aria-label="(.+?)"', re.DOTALL).findall(html)
-     for url, name in a:
-         name = h.unescape(name).replace('&#039;',"'")
-         html = self.getRequest('https://tvokids.com%s' % (url))
-         url = re.compile('data-video-id="(.+?)"', re.DOTALL).search(html).group(1)
-         vurl = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=48543011001&playerKey=&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+url+'&secureConnections=true&secureHTMLConnections=true'
-         html = self.getRequest(vurl)
-         m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
-         a = json.loads(html[m.start(1):m.end(1)+1])
-         a = a.get('data',{'x':None}).get('programmedContent',{'x':None}).get('videoPlayer',{'x':None}).get('mediaDTO',{'x':None})
-         thumb = a.get('videoStillURL')
-         fanart = thumb
-         plot = a.get('longDescription')
+     a = re.compile('tvokids-tile tile-small.+?href="(.+?)".+?class="tile-title">(.+?)<.+?src="(.+?)".+?</div>', re.DOTALL).findall(html)
+     for url, name, thumb in a:
          infoList = {}
+         name = name.strip()
+         name = h.unescape(name).replace('&#039;',"'")
          infoList['Title'] = name
          infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
+         thumb = xbmc.getInfoLabel('ListItem.Thumb')
+         fanart = thumb
          infoList['Studio'] = 'TVO Kids'
-         infoList['Plot'] = h.unescape(plot)
+#         infoList['Plot'] = h.unescape(plot)
          infoList['mediatype'] = 'episode'
          ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
      return(ilist)
-
+         
 
   def getAddonVideo(self,url):
-     url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=48543011001&playerKey=&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+url+'&secureConnections=true&secureHTMLConnections=true'
-     html = self.getRequest(url)
-     m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
-     a = json.loads(html[m.start(1):m.end(1)+1])
-     a = a.get('data',{'x':None}).get('programmedContent',{'x':None}).get('videoPlayer',{'x':None}).get('mediaDTO',{'x':None})
-     suburl = a.get('captions',[{'x':None}])
-     if not suburl is None:
-         suburl = suburl[0].get('URL')
-     b = a.get('IOSRenditions',[])
-     u = None
-     rate = 0
-     for c in b:
-         if c['encodingRate'] > rate:
-             rate = c['encodingRate']
-             u = c['defaultURL']
-     b = a.get('renditions',[])
-     for c in b:
-         if c['encodingRate'] > rate:
-             rate = c['encodingRate']
-             u = c['defaultURL']
-     if rate == 0:
-             u = a.get('FLVFullLengthURL')
-     if u is None:
-         return
-
+     html = self.getRequest('https://tvokids.com%s' % (url))
+     vid = re.compile('data-video-id="(.+?)"', re.DOTALL).search(html).group(1)
+     u = 'http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?videoId=%s&pubId=15364602001' % vid
      liz = xbmcgui.ListItem(path=u)
-     infoList ={}
-     infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')
-     infoList['Title'] = xbmc.getInfoLabel('ListItem.Title')
-     infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
-     infoList['Year'] = xbmc.getInfoLabel('ListItem.Year')
-     infoList['Premiered'] = xbmc.getInfoLabel('Premiered')
-     infoList['Plot'] = xbmc.getInfoLabel('ListItem.Plot')
-     infoList['Studio'] = xbmc.getInfoLabel('ListItem.Studio')
-     infoList['Genre'] = xbmc.getInfoLabel('ListItem.Genre')
-     infoList['Duration'] = xbmc.getInfoLabel('ListItem.Duration')
-     infoList['MPAA'] = xbmc.getInfoLabel('ListItem.Mpaa')
-     infoList['Aired'] = xbmc.getInfoLabel('ListItem.Aired')
-     infoList['Season'] = xbmc.getInfoLabel('ListItem.Season')
-     infoList['Episode'] = xbmc.getInfoLabel('ListItem.Episode')
-     liz.setInfo('video', infoList)
-     if not suburl is None:
-         subfile = self.procConvertSubtitles(suburl)
-         liz.setSubtitles([subfile])
      xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 

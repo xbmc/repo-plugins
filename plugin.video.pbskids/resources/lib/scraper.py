@@ -20,22 +20,26 @@ UTF8 = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      pg = self.getRequest('http://pbskids.org/video/')
-      a = re.compile('<dd class="category-list-button.+?data-slug="(.+?)">(.+?)<.+?src="(.+?)".+?</dd', re.DOTALL).findall(pg)
-      for url, name, thumb in a:
-          url = 'https://cms-tc.pbskids.org/pbskidsvideoplaylists/%s.json' % url
+      html = self.getRequest('https://content.services.pbskids.org/v2/kidspbsorg/home/?imgsizes=showLogo:88x88,showLogoSquare:100x100')
+      a = json.loads(html)
+      a = a["collections"]
+      b = a["kids-programs-tier-1"]["content"]
+      for c in b:
+          name = c["title"]
+          url = c["slug"]
+          thumb = c["images"]["mezzanine_16x9"]
+          fanart = c["images"]["background"]
           infoList = {}
-          name = h.unescape(name)
           infoList['Title'] = name
           infoList['TVShowTitle'] = name
           infoList['mediatype'] = 'tvshow'
-          ilist = self.addMenuItem(name,'GE', ilist, url, thumb, self.addonFanart, infoList, isFolder=True)
+          ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
       return(ilist)
 
 
   def getAddonEpisodes(self,url,ilist):
-      pg = self.getRequest(url)
-      a = json.loads(pg)
+      html = self.getRequest('https://content.services.pbskids.org/v2/kidspbsorg/programs/'+url+'?imgsizes=showLogo:88x88,showLogoSquare:100x100')
+      a = json.loads(html)
       a = a['collections']['episodes']['content']
       for b in a:
           url = b.get('mp4')

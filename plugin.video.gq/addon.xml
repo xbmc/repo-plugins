@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.gq"
        name="GQ"
-       version="3.0.3"
+       version="3.0.4"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
     <import addon="script.module.t1mlib" version="1.0.18"/>
-
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
@@ -20,8 +19,7 @@
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <forum>http://forum.xbmc.org/showthread.php?tid=193395</forum>
-    <website>video.gq.com</website>
-    <email></email>
-    <source>https://github.com/learningit/plugin.video.gq/</source>
+    <website>https://www.gq.com/</website>
+    <source>https://github.com/learningit/</source>
   </extension>
 </addon>

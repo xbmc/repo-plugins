@@ -1,3 +1,6 @@
+2.4.1 (29.3.2020)
+ - Fix requests
+
 2.4.0 (5.12.2019)
  - Python3 compatibility for matrix
  - Dependency bump

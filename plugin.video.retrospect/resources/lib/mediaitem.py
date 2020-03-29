@@ -113,7 +113,7 @@ class MediaItem:
         self.isCloaked = False
         self.metaData = dict()                    # : Additional data that is for internal / routing use only
 
-        # GUID used for identifcation of the object. Do not set from script, MD5 needed
+        # GUID used for identification of the object. Do not set from script, MD5 needed
         # to prevent UTF8 issues
         try:
             self.guid = "%s%s" % (EncodingHelper.encode_md5(title), EncodingHelper.encode_md5(url or ""))
@@ -867,7 +867,7 @@ class MediaItemPart:
         * Name
         * Subtitle
         * Length of the MediaStreams
-        * Compares all the MediaStreams in the slef.MediaStreams
+        * Compares all the MediaStreams in the self.MediaStreams
 
          :param MediaItemPart other: The part the test for equality.
 
@@ -885,7 +885,7 @@ class MediaItemPart:
         if not other.Subtitle == self.Subtitle:
             return False
 
-        # now check the strea
+        # now check the stream
         if not len(self.MediaStreams) == len(other.MediaStreams):
             return False
 

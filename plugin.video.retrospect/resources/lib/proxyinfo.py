@@ -8,7 +8,7 @@ class ProxyInfo(object):
         :param str proxy:       Name or IP of the Proxy server.
         :param int port:        The port of the proxy server.
         :param str scheme:      The type of proxy (http is default).
-        :param str username:    The username to use (if empty or ommitted no authentication is done.
+        :param str username:    The username to use (if empty or omitted no authentication is done.
         :param str password:    The password to use.
 
         """
@@ -61,7 +61,7 @@ class ProxyInfo(object):
         """ An easy way of determining if this server should use proxy authentication.
 
         :return: Boolean indicating of proxy authentication should be used.
-        :rtyp: bool
+        :rtype: bool
 
         """
 

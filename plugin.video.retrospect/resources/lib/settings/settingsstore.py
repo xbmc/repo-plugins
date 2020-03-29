@@ -44,7 +44,7 @@ class SettingsStore(object):
         pass
 
     def get_integer_setting(self, setting_id, channel=None, default=None):
-        """ Returns an interger value for the given setting_id.
+        """ Returns an integer value for the given setting_id.
 
         :param str|unicode setting_id:  The ID of the setting that is to be retrieved.
         :param channel:                 If specified the specific channel setting is retrieved.
@@ -72,7 +72,7 @@ class SettingsStore(object):
         pass
 
     def get_localized_string(self, string_id):
-        """ Returns an interger value for the given setting_id.
+        """ Returns an integer value for the given setting_id.
 
         :param int string_id:   The ID of the localization to retrieve.
 

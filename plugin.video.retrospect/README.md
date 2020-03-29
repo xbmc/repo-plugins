@@ -1,6 +1,6 @@
 # Retrospect - Public GIT Repository #
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/retrospect-addon/plugin.video.retrospect)](https://github.com/retrospect-addon/plugin.video.retrospect/releases)
-[![Build Status](https://travis-ci.com/retrospect-addon/plugin.video.retrospect.svg?branch=master)](https://travis-ci.com/retrospect-addon/plugin.video.retrospect)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/retrospect-addon/plugin.video.retrospect/CI/master)](https://github.com/retrospect-addon/plugin.video.retrospect/actions)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=retrospect-addon:plugin.video.retrospect&metric=alert_status)](https://sonarcloud.io/dashboard?id=retrospect-addon:plugin.video.retrospect)
 [![License](https://img.shields.io/badge/license-cc_by--nc--sa-brightgreen?logo=creative-commons)](https://github.com/retrospect-addon/plugin.video.retrospect/blob/master/LICENSE.md)
 [![Python](https://img.shields.io/badge/python-2.7%20%7C%203.6-blue?logo=python)](https://kodi.tv/article/attention-addon-developers-migration-python-3)
@@ -39,9 +39,9 @@ If you are running Kodi Krypton (v17) the only way to install Retrospect is to i
 
 More detailed information can be found in the [Retrospect Wiki](https://github.com/retrospect-addon/plugin.video.retrospect/wiki/Installation).
 
-**Note:** Since Retrospect isn't available in the official Kodi add-on repository for Kodi Krypton (v17), it will not automagically update. Retrospect will notifiy you of new versions. You will then have to manually update Retrospect using the steps above.
+**Note:** Since Retrospect isn't available in the official Kodi add-on repository for Kodi Krypton (v17), it will not automagically update. Retrospect will notify you of new versions. You will then have to manually update Retrospect using the steps above.
 
-# Contritbuting #
+# Contributing #
 You can help developing Retrospect via our [Github](https://github.com/retrospect-addon/plugin.video.retrospect) page and/or help translating Retrospect via [Transifex](https://www.transifex.com/retrospect/public/) (A big thanks to Transifex for providing an OS license).
 
 # Troubleshooting #

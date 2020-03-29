@@ -780,7 +780,7 @@ class Channel(chn_class.Channel):
         :param bool fanart_size:    Should we fetch fanart-size (1280x720) images or normal thumbs.
 
         :return: A full URL to a thumb or fanart image.
-        :rtyp: str
+        :rtype: str
 
         """
 

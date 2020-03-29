@@ -236,7 +236,7 @@ class Version(Comparable):
                 return "%d.%d.%d.%d" % (self.major, self.minor, self.revision, self.build)
 
     def __lt__(self, other):
-        """ Tests two versios for 'Lower Then' 
+        """ Tests two versions for 'Lower Then'
         
         Arguments:
         other : Version - The version to compare with.

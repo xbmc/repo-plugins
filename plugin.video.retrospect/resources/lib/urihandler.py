@@ -94,7 +94,7 @@ class UriHandler(object):
         :param function progress_callback:  The callback for progress update. The format is
                                             function(retrievedSize, totalSize, perc, completed, status)
 
-        :return: The full path of the loccation to which it was downloaded.
+        :return: The full path of the location to which it was downloaded.
         :rtype: str
 
         """
@@ -336,7 +336,7 @@ class _RequestsHandler(object):
         :param function progress_callback:  The callback for progress update. The format is
                                             function(retrievedSize, totalSize, perc, completed, status)
 
-        :return: The full path of the loccation to which it was downloaded.
+        :return: The full path of the location to which it was downloaded.
         :rtype: str
 
         """

@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 class Initializer:
-    StartTime = datetime.now()  # : Used for duration determinination
+    StartTime = datetime.now()  # : Used for duration determination
 
     def __init__(self):
         """ It is a static method, so we con't get here """

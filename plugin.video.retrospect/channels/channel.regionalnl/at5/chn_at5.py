@@ -152,7 +152,7 @@ class Channel(chn_class.Channel):
         url = "https://at5news.vinsontv.com/api/news?source=web&externalid={}".format(result_set["externalId"])
         item = MediaItem(result_set["title"], url)
         item.complete = True
-        item.description = result_set.get("text")
+        item.description = HtmlHelper.to_text(result_set.get("text"))
 
         date_time = DateHelper.get_date_from_posix(time_stamp)
         item.set_date(date_time.year, date_time.month, date_time.day)

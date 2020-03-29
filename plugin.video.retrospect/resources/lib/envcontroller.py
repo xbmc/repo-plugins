@@ -289,7 +289,7 @@ class EnvController:
 
         * Linux   - Normal Linux
         * Linux64 - 64-bit Linux
-        * OS X    - For Apple decices
+        * OS X    - For Apple devices
         * win32   - Windows / UWP
 
         :return: String representation for the current environment.

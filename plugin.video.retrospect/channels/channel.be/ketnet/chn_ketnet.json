@@ -23,5 +23,12 @@
       "language": "be",
       "compatible": "Environments.NoPlatform"
     }
+  ],
+  "settings": [
+    {
+      "order": 1,
+      "id": "hls_over_dash",
+      "value": "label=\"30099\" type=\"bool\" default=\"\""
+    }
   ]
 }

@@ -28,7 +28,7 @@ class AwsIdp:
 
         self.pool_id = pool_id
         if "_" not in self.pool_id:
-            raise ValueError("Invalid pool_id format. Shoud be <region>_<poolid>.")
+            raise ValueError("Invalid pool_id format. Should be <region>_<poolid>.")
 
         self.client_id = client_id
         self.region = self.pool_id.split("_")[0]

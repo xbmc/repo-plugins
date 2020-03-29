@@ -331,8 +331,8 @@ class Channel:
             # let's filter them by alphabet if the number is exceeded
             Logger.debug("Creating Groups for list exceeding '%s' folder items. Total folders found '%s'.",
                          limit, folders)
-            other = LanguageHelper.get_localized_string(LanguageHelper.OtherChars)
-            title_format = LanguageHelper.get_localized_string(LanguageHelper.StartWith)
+            other = "\a{}".format(LanguageHelper.get_localized_string(LanguageHelper.OtherChars))
+            title_format = "\a{}".format(LanguageHelper.get_localized_string(LanguageHelper.StartWith))
             result = dict()
             non_grouped = []
             # Should we remove prefixes just as Kodi does?

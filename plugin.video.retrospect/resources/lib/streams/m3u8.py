@@ -158,12 +158,12 @@ class M3u8(object):
         :param bool encrypted:          Is the stream encrypted?
         :param dict[str,str] headers:   Possible HTTP Headers
         :param ProxyInfo proxy:         The proxy to use for opening
-        :param bool map_audio:          Should audio tracks be mapped seperately?
-        :param int bitrate:             Initial bitrate to use. Will be overriden later.
+        :param bool map_audio:          Should audio tracks be mapped separately?
+        :param int bitrate:             Initial bitrate to use. Will be overridden later.
         :param ChannelInfo channel:     If specified, the channel specific configuration is
                                         considered.
 
-        :return: indication if updating was succesful.
+        :return: indication if updating was successful.
         :rtype: bool
 
         """

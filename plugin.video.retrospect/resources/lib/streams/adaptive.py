@@ -10,7 +10,7 @@ class Adaptive(object):
 
     @staticmethod
     def get_license_key(key_url, key_type="R", key_headers=None, key_value=None, json_filter=""):
-        """ Generates a propery license key value
+        """ Generates a property license key value
 
         # A{SSM} -> not implemented
         # R{SSM} -> raw format
@@ -25,11 +25,11 @@ class Adaptive(object):
         :param str key_url:                 The URL where the license key can be obtained.
         :param str|None key_type:           The key type (A, R, B or D).
         :param dict[str,str] key_headers:   A dictionary that contains the HTTP headers to pass.
-        :param str key_value:               The value that is beging passed on as the key value.
+        :param str key_value:               The value that is being passed on as the key value.
         :param str json_filter:             If specified selects that json element to extract the
                                             key response.
 
-        :return: A formated license string that can be passed to the adaptive input add-on.
+        :return: A formatted license string that can be passed to the adaptive input add-on.
         :rtype: str
 
         """

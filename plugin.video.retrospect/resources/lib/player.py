@@ -63,7 +63,7 @@ class Player(xbmc.Player):
         Logger.warning("Player: time-out occurred waiting for playback (%s)", time_out)
         return
 
-    # The end of playback is 100% working, as a next track does not trigger any revents.
+    # The end of playback is 100% working, as a next track does not trigger any events.
     # def waitForPlayBackEnded(self):
     #     Logger.debug("Player: Waiting for playback to end")
     #

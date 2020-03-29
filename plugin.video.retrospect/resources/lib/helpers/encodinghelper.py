@@ -70,7 +70,7 @@ class EncodingHelper(object):
         chars.
 
         Arguments:
-        exc : UnicodeDecodeError - Excpetion thrown by Decode.
+        exc : UnicodeDecodeError - Exception thrown by Decode.
 
 
         Returns the same as the input but then Unicode:

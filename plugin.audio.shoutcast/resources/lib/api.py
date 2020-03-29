@@ -164,7 +164,7 @@ class ShoutcastApi():
 
     def __urlopen(self, url):
         req = Request(url)
-        req.add_header('User Agent', self.USER_AGENT)
+        # req.add_header('User Agent', self.USER_AGENT)
         try:
             response = urlopen(req).read()
         except HTTPError as error:

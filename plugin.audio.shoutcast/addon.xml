@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.shoutcast" name="SHOUTcast" version="2.4.0" provider-name="Tristan Fischer (sphere@dersphere.de), enen92">
+<addon id="plugin.audio.shoutcast" name="SHOUTcast" version="2.4.1" provider-name="Tristan Fischer (sphere@dersphere.de), enen92">
     <requires>
         <import addon="xbmc.python" version="2.14.0"/>
         <import addon="script.module.simplejson" version="3.16.1"/>
@@ -81,10 +81,8 @@
         <description lang="ta_IN">இந்த துணை பயன் மூலம் நீங்கள் 50.000 மேற்பட்ட இலவச இணைய வானொலி நிலையங்களை உலாவ முடியும். தற்போதய சிறப்பியல்:[CR]- உச்சி 500 நிலையங்கள்[CR]- வகைபடி உலாவு (துணை வகைப்படி சேர்க்கவும் - அமைப்புகளில் தேர்வு செய்யவும்)[CR]- பெயர்படி நிலையத்தனி தேடுக[CR]- பெயர்படி நிலையத்தனி தேடுக[CR]- "என்னுடைய நிலையங்கள்" பட்டியலை நீங்கள் நிர்வகிக்க முடியும்[CR]- பிட்வீதம் மற்றும் கேட்போர் அளவுகளை பார்க்கவும் மற்றும் வரிசைபடுத்தவும்[CR]- ஒரு பக்கத்தில் 500 நிலையங்கள் (அமைப்புகளில் மாற்ற இயலும்)[CR]- தேக்கத்தை பயன்படுத்தவும் (24 மணிநேர வகை, 1 மணிநேர நிலைய பட்டியல்)</description>
         <description lang="zh">你可以使用本插件浏览超过50.000免费网络电台。当前功能：[CR]- 500强电台[CR]- 按类别浏览（可设置子类）[CR]- 按名字搜索电台[CR]- 按当前播放曲目搜索电台[CR]- 管理“我的电台”-列表[CR]- 按比特率和收听人数排序[CR]- 每页500个电台（可设置）[CR]- 使用缓存（24小时类别，1小时站点列表）</description>
         <news>
-            2.4.0 (5.12.2019)
-            - Python3 compatibility for matrix
-            - Dependency bump
-            - Change art
+            2.4.1 (29.3.2020)
+            - Fix requests
         </news>
     </extension>
 </addon>

@@ -76,7 +76,7 @@ class SubtitleHelper(object):
 
             # no need to download it again!
             if os.path.exists(local_complete_path):
-                Logger.debug("Found exisiting subtitle: %s", local_complete_path)
+                Logger.debug("Found existing subtitle: %s", local_complete_path)
                 return local_complete_path
 
             Logger.trace("Opening Subtitle URL")
@@ -447,7 +447,7 @@ class SubtitleHelper(object):
         elif sub_format.lower() == 'm3u8srt':
             srt = SubtitleHelper.__convert_m3u8_srt_to_subtitle_to_srt(raw, url, proxy)
         else:
-            error = "Uknown subtitle format: %s" % (sub_format,)
+            error = "Unknown subtitle format: %s" % (sub_format,)
             raise NotImplementedError(error)
 
         return srt

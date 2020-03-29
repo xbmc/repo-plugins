@@ -110,7 +110,7 @@ class Cached(TextureHandler):
 
         self._logger.info("Fetching missing textures.")
 
-        bytes_transfered = 0
+        bytes_transferred = 0
         textures_total = len(self.__textureQueue)
         textures_completed = 0
 
@@ -119,7 +119,7 @@ class Cached(TextureHandler):
             if os.path.isfile(uri):
                 shutil.copyfile(uri, texture_path)
             else:
-                bytes_transfered += self.__fetch_texture(uri, texture_path)
+                bytes_transferred += self.__fetch_texture(uri, texture_path)
             textures_completed += 1
             file_name = os.path.split(texture_path)[-1]
 
@@ -132,7 +132,7 @@ class Cached(TextureHandler):
                 self._logger.warning("Texture retrieval cancelled")
                 break
 
-        return bytes_transfered
+        return bytes_transferred
 
     def purge_texture_cache(self, channel):
         """ Removes those entries from the textures cache that are no longer required.

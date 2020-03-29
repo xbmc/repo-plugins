@@ -551,11 +551,11 @@ msgid "Categories"
 msgstr "Categorieën"
 
 msgctxt "#30352"
-msgid "TV Shows"
+msgid "TV shows"
 msgstr "TV programma's"
 
 msgctxt "#30353"
-msgid "Currently Playing"
+msgid "Currently playing"
 msgstr "Nu uitgezonden"
 
 msgctxt "#30354"
@@ -993,7 +993,16 @@ msgctxt "#30581"
 msgid "InputStream Adaptive add-on usage"
 msgstr "InputStream Adaptive add-on gebruik"
 
-# empty strings from id 30582 to 30589
+msgctxt "#30582"
+msgid "Split TV shows and single episodes in separate folders"
+msgstr ""
+"Splits TV programma's en enkelvoudige afleveringen in verschillende mappen"
+
+msgctxt "#30583"
+msgid "Single episodes"
+msgstr "Eenmalige afleveringen"
+
+# empty strings from id 30584 to 30589
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
 msgstr "Stel een nieuwe Retrospect PIN in"

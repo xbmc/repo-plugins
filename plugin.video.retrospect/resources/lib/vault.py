@@ -32,16 +32,16 @@ class Vault(object):
 
             # was there a key? No, let's initialize it.
             if key is None:
-                Logger.warning("No Application Key present. Intializing a new one.")
+                Logger.warning("No Application Key present. Initializing a new one.")
                 key = self.__get_new_key()
                 if not self.change_pin(key):
                     raise RuntimeError("Error creating Application Key.")
-                Logger.info("Created a new Application Key with MD5: %s (lengt=%s)",
+                Logger.info("Created a new Application Key with MD5: %s (length=%s)",
                             EncodingHelper.encode_md5(key), len(key))
                 self.__newKeyGeneratedInConstructor = True
 
             Vault.__Key = key
-            Logger.trace("Using Application Key with MD5: %s (lengt=%s)", EncodingHelper.encode_md5(key), len(key))
+            Logger.trace("Using Application Key with MD5: %s (length=%s)", EncodingHelper.encode_md5(key), len(key))
 
     def change_pin(self, application_key=None):
         """ Stores an existing ApplicationKey using a new PIN.
@@ -170,10 +170,10 @@ class Vault(object):
         return decrypted_value
 
     def set_setting(self, setting_id, setting_name=None, setting_action_id=None):
-        """ Reads a value for a setting from the keyboard and encryptes it in the Kodi
+        """ Reads a value for a setting from the keyboard and encrypts it in the Kodi
         Add-on settings.
 
-        The setttingActionId defaults to <settingId>_set
+        The settingActionId defaults to <settingId>_set
 
         :param str setting_id:          The ID for the Kodi Add-on setting to set.
         :param str setting_name:        The name to display in the keyboard.
@@ -292,7 +292,7 @@ class Vault(object):
     def __get_new_key(self, length=32):
         """ Returns a random key.
 
-        :param int length:  The lenght of the key.
+        :param int length:  The length of the key.
 
         :return: A random key of the given length.
         :rtype: bytes

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.0+matrix.1"
+        version="5.2.1+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,22 +132,24 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.0 - Changelog - 2020-03-18[/B]
+        <news>[B]Retrospect v5.2.1 - Changelog - 2020-03-28[/B]
 
-In this version of Retrospect we fixed some minor bugs in channels and introduced two new major changes. The first one is related to the way we detect whether playback started: we now properly inherit from the Kodi classes instead of having our own code. Secondly, we finally got rid of our `pickle` data in the item&#x27;s urls. This caused minor updates to items, such as images or dates, to make Kodi see the items as new, because the `pickle` in its url changed. We now store a reference to a pickled file in the Retrospect user data folder.
+This version removes some methods from the Kodi Python ABI that have been removed. Because of this, Retrospect broke on Kodi Matrix. Besides this, a number of channel related issues were resolved.
 
 [B]Framework related[/B]
-* Fixed: Issue where empty subtitle files could be stored after download (Fixes #1338)
-* Removed: The url no longer contains the full pickle of an item. Instead, it only contains a reference to an item that is located on disk (Fixes #1261)
-* Changed: use child class of `xbmc.Player` to detect playback start and stop
+* Fixed: handle versions with +matrix
+* Added: Vualto class to handle both VRT.Nu and KetNet
+* Removed: deprecated Kodi ABI methods
 
 [B]GUI/Settings/Language related[/B]
--
+* Fixed: if items are grouped in folders, make sure those appear at the top (See #1326)
 
 [B]Channel related[/B]
-* Fixed: TV4 episodic items would breakt without &quot;del&quot; in title
-* Fixed: ViaFree.se streams no longer worked (Fixes #1329)
-* Fixed: Omroep Gelderland (Fixes #1331)
+* Fixed: Live channel for SVT moved to GraphQL (See #1326)
+* Fixed: descriptions of AT5 had HTML tags (Fixes #1343)
+* Fixed: KetNet streams broke (Fixes #1344)
+* Fixed: issue with naming of episodes without title (Fixes #1345)
+* Changed: move clips from main list of SVT into their own folder (Fixes #1326)
 
         </news>
         <assets>

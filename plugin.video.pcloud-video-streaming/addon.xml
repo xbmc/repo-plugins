@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.pcloud-video-streaming" name="PCloud Video Streaming" version="1.4.0" provider-name="Guido Domenici">
+<addon id="plugin.video.pcloud-video-streaming" name="PCloud Video Streaming" version="1.4.1" provider-name="Guido Domenici">
   <requires>
     <import addon="xbmc.python" version="2.19.0"/>
   </requires>
   <!-- addon.py, below, is the entry point -->
   <extension point="xbmc.python.pluginsource" library="addon.py">
-    <provides>video image</provides>
+    <provides>video image audio</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Provides streaming from a pcloud.com bucket</summary>

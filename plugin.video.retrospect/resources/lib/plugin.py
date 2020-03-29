@@ -575,8 +575,7 @@ class Plugin(ParameterParser):
                 if textures_to_retrieve > 4:
                     w = XbmcDialogProgressWrapper(
                         "%s: %s" % (Config.appName, LanguageHelper.get_localized_string(LanguageHelper.InitChannelTitle)),
-                        LanguageHelper.get_localized_string(LanguageHelper.FetchTexturesTitle),
-                        # Config.textureUrl
+                        LanguageHelper.get_localized_string(LanguageHelper.FetchTexturesTitle)
                     )
                 else:
                     w = XbmcDialogProgressBgWrapper(
@@ -665,7 +664,7 @@ class Plugin(ParameterParser):
 
         context_menu_items = []
 
-        # Genenric, none-Python menu items that would normally cause an unwanted reload of the
+        # Generic, none-Python menu items that would normally cause an unwanted reload of the
         # Python interpreter instance within Kodi.
         refresh = LanguageHelper.get_localized_string(LanguageHelper.RefreshListId)
         context_menu_items.append((refresh, 'XBMC.Container.Refresh()'))

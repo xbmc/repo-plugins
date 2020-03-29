@@ -287,7 +287,7 @@ class Channel(chn_class.Channel):
         if not username or not password:
             XbmcWrapper.show_dialog(
                 title=None,
-                lines=LanguageHelper.get_localized_string(LanguageHelper.MissingCredentials),
+                message=LanguageHelper.get_localized_string(LanguageHelper.MissingCredentials),
             )
             return False
         Logger.debug("Using: %s / %s", username, "*" * len(password))

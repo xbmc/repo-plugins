@@ -34,7 +34,7 @@ class AddonSettings(object):
     __MD5_HASH_VALUE = "md_hash_value"
     __CLIENT_ID = "client_id"
 
-    #region Setting-stores properties and intialization
+    #region Setting-stores properties and initialization
     __setting_stores = {}
     __settings_lock = threading.Lock()
 
@@ -226,7 +226,7 @@ class AddonSettings(object):
     def show_cloaked_items():
         """ Should we show cloaked items?
 
-        :return: Indication weheter or not to show cloaked items.
+        :return: Indication whether or not to show cloaked items.
         :rtype: bool
 
         """
@@ -314,7 +314,7 @@ class AddonSettings(object):
     def hide_restricted_folders():
         """ Should we hide restricted folders?
 
-        :return: Indaction if the restricted folders should be hidden
+        :return: Indication if the restricted folders should be hidden
         :rtype: bool
 
         """
@@ -341,7 +341,7 @@ class AddonSettings(object):
     def get_available_countries(as_string=False, as_country_codes=False):
         """ returns the all available ProxyGroupId's in order. The countries are:
 
-             :param bool as_country_codes:  Returns alls the actual country codes values.
+             :param bool as_country_codes:  Returns all the actual country codes values.
              :param bool as_string:         Returns the translation ID for all the possible country
                                             codes as strings.
 
@@ -355,7 +355,7 @@ class AddonSettings(object):
              * de    - Germany
              * be    - Belgium
              * ee    - Estonia
-             * lt    - Lithuani
+             * lt    - Lithuania
              * lv    - Latvia
              * dk    - Danish
 
@@ -374,7 +374,7 @@ class AddonSettings(object):
 
     @staticmethod
     def hide_geo_locked_items_for_location(channel_region, value_only=False):
-        """ Returs the config value that indicates what if we should hide items that are geografically
+        """ Returns the config value that indicates what if we should hide items that are geographically
         locked to the region of the channel (indicated by the channel language).
 
         :param str|None channel_region:  the channel region (actually the channel language)
@@ -390,17 +390,17 @@ class AddonSettings(object):
         # Disabled |be   |de   |ee   |en-gb|lt   |lv   |nl   |no   |se   |dk
         values = [None, "be", "de", "ee", "en-gb", "lt", "lv", "nl", "no", "se", "dk"]
         value_index = AddonSettings.store(KODI).get_integer_setting("geo_region", default=0)
-        current_geograffical_region = values[value_index]
+        current_geographical_region = values[value_index]
 
         if value_only:
-            return current_geograffical_region
+            return current_geographical_region
 
         # if no geo region is selected, always show everything.
-        if current_geograffical_region is None:
+        if current_geographical_region is None:
             return False
 
         # only hide if the regions don't match
-        return not current_geograffical_region == channel_region
+        return not current_geographical_region == channel_region
     #endregion
 
     #region Language caching
@@ -440,7 +440,7 @@ class AddonSettings(object):
     def get_current_addon_xml_md5():
         """ Retrieves the current addons.xml.md5 content that was cached in the settings.
 
-        :return: the curreent addons.xml.md5 content
+        :return: the current addons.xml.md5 content
         :rtype: str
 
         """
@@ -509,7 +509,7 @@ class AddonSettings(object):
 
         :param bool with_encryption:        do we need to decrypte script.
         :param bool ignore_add_on_config:   ignore the Retrospect setting, use the InputStream
-                                            Adaptive add-onand only validate other criteria.
+                                            Adaptive add-on and only validate other criteria.
         :param ChannelInfo channel:         If specified, the channel specific configuration is
                                             considered.
 
@@ -667,7 +667,7 @@ class AddonSettings(object):
     def cache_http_responses():
         """ Returns True if the HTTP responses need to be cached
 
-        :return: Incidation if HTTP(s) requests should be cached or not.
+        :return: Indication if HTTP(s) requests should be cached or not.
         :rtype: bool
 
         """
@@ -748,7 +748,7 @@ class AddonSettings(object):
 
         :rtype: bool
         :return: Indication of folders and videos should be mixed while sorting (True) or sort them
-                 seperately.
+                 separately.
 
         """
 
@@ -821,7 +821,7 @@ class AddonSettings(object):
         return int(level) * 10
 
     @staticmethod
-    def set_channel_visiblity(channel, visible):
+    def set_channel_visibility(channel, visible):
         """ Sets the visibility for the give channel.
 
         :param channel: the ChannelInfo object
@@ -908,7 +908,7 @@ class AddonSettings(object):
          * lv    - Latvian
          * be    - Belgium
          * en-gb - British
-         * ee    - Estoniam
+         * ee    - Estonian
          * no    - Norwegian
          * dk    - Danish
          * None  - Other languages
@@ -1061,7 +1061,7 @@ class AddonSettings(object):
     #noinspection PyUnresolvedReferences
     @staticmethod
     def update_add_on_settings_with_channels(channels, config):
-        """ updats the settings.xml to include all the channels
+        """ Updates the settings.xml to include all the channels
 
         :param list[any] channels:  The channels to add to the settings.xml
         :param type[Config] config: The configuration object
@@ -1132,7 +1132,7 @@ class AddonSettings(object):
             shutil.move(filename_temp, filename)
             return
 
-        Logger.info("Settings.xml updated succesfully. Reloading settings.")
+        Logger.info("Settings.xml updated successfully. Reloading settings.")
         AddonSettings.__refresh(KODI)
         return
 
@@ -1349,7 +1349,7 @@ class AddonSettings(object):
         value = pattern % (value, "MaxStreamBitrate", AddonSettings.get_max_stream_bitrate())
         value = pattern % (value, "Show_subtitles", AddonSettings.show_subtitles())
         value = pattern % (value, "Cache_http_responses", AddonSettings.cache_http_responses())
-        value = pattern % (value, "Folder Prefx", "'%s'" % AddonSettings.get_folder_prefix())
+        value = pattern % (value, "Folder Prefix", "'%s'" % AddonSettings.get_folder_prefix())
         value = pattern % (value, "Mix Folders & Videos", AddonSettings.mix_folders_and_videos())
         value = pattern % (value, "Empty List Behaviour", AddonSettings.get_empty_list_behaviour())
         value = pattern % (value, "ListLimit", AddonSettings.get_list_limit())

@@ -96,7 +96,7 @@ class Channel(chn_class.Channel):
         Logger.trace(json_data[0])
         json = JsonHelper(json_data[0])
         title = json.get_value("title")
-        url = json.get_value("source", "hls") or ""
+        url = json.get_value("mzid") or self.parentItem.url
         item = MediaItem(title, url)
         item.type = 'video'
         item.description = json.get_value("description", fallback=None)
@@ -149,6 +149,48 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
+        if item.url.startswith("http"):
+            data = UriHandler.open(item.url, proxy=self.proxy)
+            json_data = Regexer.do_regex(self.mediaUrlRegex, data)
+
+            json = JsonHelper(json_data[0])
+            mzid = json.get_value("mzid")
+            if not mzid:
+                item.url = json.get_value("source", "hls")
+                return self.__update_from_source(item)
+        else:
+            mzid = item.url
+
+        hls_over_dash = self._get_setting("hls_over_dash", 'false') == 'true'
+
+        from resources.lib.streams.vualto import Vualto
+        v = Vualto(self, "ketnet@prod")
+        item = v.get_stream_info(item, mzid, hls_over_dash=hls_over_dash)
+        return item
+
+    def __update_from_source(self, item):
+        """ Updates an existing MediaItem with more data.
+
+        Used to update none complete MediaItems (self.complete = False). This
+        could include opening the item's URL to fetch more data and then process that
+        data or retrieve it's real media-URL.
+
+        The method should at least:
+        * cache the thumbnail to disk (use self.noImage if no thumb is available).
+        * set at least one MediaItemPart with a single MediaStream.
+        * set self.complete = True.
+
+        if the returned item does not have a MediaItemPart then the self.complete flag
+        will automatically be set back to False.
+
+        :param MediaItem item: the original MediaItem that needs updating.
+
+        :return: The original item with more data added to it's properties.
+        :rtype: MediaItem
+
+        """
+
+        Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
         if not item.url.endswith("m3u8"):
             data = UriHandler.open(item.url, proxy=self.proxy)
@@ -172,4 +214,4 @@ class Channel(chn_class.Channel):
             part.append_media_stream(s, b)
 
         # var playerConfig = {"id":"mediaplayer","width":"100%","height":"100%","autostart":"false","image":"http:\/\/www.ketnet.be\/sites\/default\/files\/thumb_5667ea22632bc.jpg","brand":"ketnet","source":{"hls":"http:\/\/vod.stream.vrt.be\/ketnet\/_definst_\/mp4:ketnet\/2015\/12\/Ben_ik_familie_van_R001_A0023_20151208_143112_864.mp4\/playlist.m3u8"},"analytics":{"type_stream":"vod","playlist":"Ben ik familie van?","program":"Ben ik familie van?","episode":"Ben ik familie van?: Warre - Aflevering 3","parts":"1","whatson":"270157835527"},"title":"Ben ik familie van?: Warre - Aflevering 3","description":"Ben ik familie van?: Warre - Aflevering 3"}
-        return item    
+        return item

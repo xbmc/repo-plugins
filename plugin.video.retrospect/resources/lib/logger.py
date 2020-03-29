@@ -48,7 +48,7 @@ class Logger:
     @staticmethod
     def create_logger(log_file_name, application_name, min_log_level=10,
                       append=False, dual_logger=None):
-        """ Intialises the Logger instance and opens it for writing
+        """ Initialises the Logger instance and opens it for writing
 
         :param str|None log_file_name:      Path of the log file to write to.
         :param str application_name:        The name of the current application.
@@ -73,7 +73,7 @@ class Logger:
 
     def __init__(self, log_file_name, application_name, min_log_level=10,
                  append=False, dual_logger=None):
-        """ Intialises the Logger instance and opens it for writing.
+        """ Initialises the Logger instance and opens it for writing.
 
         :param str|None log_file_name:      Path of the log file to write to.
         :param str application_name:        The name of the current application.

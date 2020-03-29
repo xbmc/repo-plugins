@@ -6,27 +6,25 @@ import xbmcgui
 import xbmc
 import xbmcaddon
 
-from resources.lib.backtothefuture import basestring, unichr
+from resources.lib.backtothefuture import unichr
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.retroconfig import Config
 from resources.lib.locker import LockWithDialog
 
 
 class XbmcDialogProgressWrapper(object):
-    def __init__(self, title, line1, line2=""):
+    def __init__(self, title, message):
         """ Initialises a XbmcDialogProgressWrapper that wraps an Kodi DialogProgress object.
 
         :param str title: Title of it
-        :param str line1: The first line to show
-        :param str line2: The second line to show
+        :param str message: The first line to show
 
         """
 
-        self.Title = title
-        self.Line1 = line1
-        self.Line2 = line2
+        self.title = title
+        self.message = message
         self.progressBarDialog = xbmcgui.DialogProgress()
-        self.progressBarDialog.create(title, line1)
+        self.progressBarDialog.create(title, message)
 
     def __call__(self, *args):
         return self.progress_update(*args)
@@ -49,8 +47,8 @@ class XbmcDialogProgressWrapper(object):
         """
 
         if not completed:
-            # noinspection PyTypeChecker
-            self.progressBarDialog.update(int(perc), self.Line1, self.Line2, status)
+            message = "{}\n\n{}".format(self.message, status)
+            self.progressBarDialog.update(int(perc), message)
         else:
             self.progressBarDialog.close()
 
@@ -256,11 +254,11 @@ class XbmcWrapper:
         return input_dialog.select(title, options)
 
     @staticmethod
-    def show_yes_no(title, lines):
+    def show_yes_no(title, message):
         """ Shows a dialog yes/no box with title and text
 
-        :param str title:           The title of the box.
-        :param list[str] lines:     The lines to display.
+        :param str title:       The title of the box.
+        :param str message:     The message to display.
 
         :return: Ok or not OK (boolean)
         :rtype: bool
@@ -276,21 +274,15 @@ class XbmcWrapper:
         else:
             header = "%s - %s" % (Config.appName, title)
 
-        if len(lines) == 0:
-            ok = msg_box.yesno(header, "")
-        elif isinstance(lines, basestring):
-            # it was just a string, no list or tuple
-            ok = msg_box.yesno(header, lines)
-        else:
-            ok = False
+        ok = msg_box.yesno(header, message or "")
         return ok
 
     @staticmethod
-    def show_dialog(title, lines):
+    def show_dialog(title, message):
         """ Shows a dialog box with title and text
 
-        :param str|None title:          The title of the box
-        :param list[str]|str lines:     The lines to display.
+        :param str|None title:      The title of the box
+        :param str message:         The lines to display.
 
         :return: True for OK, False for cancelled.
         :rtype: bool
@@ -306,17 +298,7 @@ class XbmcWrapper:
         else:
             header = "%s - %s" % (Config.appName, title)
 
-        if len(lines) == 0:
-            ok = msg_box.ok(header, "")
-        elif isinstance(lines, basestring):
-            # it was just a string, no list or tuple
-            ok = msg_box.ok(header, lines)
-        elif len(lines) == 1:
-            ok = msg_box.ok(header, lines[0])
-        elif len(lines) == 2:
-            ok = msg_box.ok(header, lines[0], lines[1])
-        else:
-            ok = msg_box.ok(header, lines[0], lines[1], lines[2])
+        ok = msg_box.ok(header, message or "")
         return ok
 
     @staticmethod

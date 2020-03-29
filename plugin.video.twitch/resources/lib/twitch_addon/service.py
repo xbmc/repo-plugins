@@ -132,26 +132,30 @@ class LiveNotificationsThread(threading.Thread):
         return notify, audible, start, group
 
     def get_followed_streams(self, twitch_api, monitor, blacklist_filter):
-        streams = {Keys.TOTAL: 0}
-        offset = 0
         all_followed = {Keys.STREAMS: []}
-        while streams[Keys.TOTAL] > (offset - 100):
+        offset = 0
+        stream_count = 100
+
+        while stream_count == 100:
             if offset > 0:
                 if monitor.waitForAbort(1):
                     return None
+
             try:
                 streams = twitch_api.get_followed_streams(stream_type='live', offset=offset, limit=100)
+                stream_count = len(streams.get(Keys.STREAMS, []))
             except:
                 break
-            if streams[Keys.TOTAL] == 0:
-                break
-            if (streams[Keys.TOTAL] > 0) and (Keys.STREAMS in streams):
+
+            if (stream_count > 0) and (Keys.STREAMS in streams):
                 for stream in streams[Keys.STREAMS]:
                     all_followed[Keys.STREAMS].append(stream)
-                if streams[Keys.TOTAL] <= (offset + 100):
-                    break
-                else:
-                    offset += 100
+
+            if stream_count < 100:
+                break
+            else:
+                offset += 100
+
         filtered = \
             blacklist_filter.by_type(all_followed, Keys.STREAMS, parent_keys=[Keys.CHANNEL], id_key=Keys._ID, list_type='user')
         filtered = \

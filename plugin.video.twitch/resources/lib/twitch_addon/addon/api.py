@@ -322,7 +322,7 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_clip(self, slug):
-        return self.usher.clip(slug)
+        return self.usher.clip(slug, headers=self.get_private_credential_headers())
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)

@@ -1,3 +1,8 @@
+2.4.10
+[fix] fix live notifications
+[fix] fix clips
+[fix] double entries in followed live streams
+
 2.4.9
 [fix] fix listing live streams
 

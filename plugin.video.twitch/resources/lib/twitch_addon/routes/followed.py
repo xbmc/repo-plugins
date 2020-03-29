@@ -33,16 +33,21 @@ def route(api, content, offset=0, cursor='MA=='):
         requests = 0
         total = 1000
 
+        last_page = False
         while ((per_page >= (len(all_items) + 1)) and
                (requests < MAX_REQUESTS) and (int(offset) <= 900)):
             requests += 1
             streams = api.get_followed_streams(stream_type=content, offset=offset, limit=REQUEST_LIMIT)
+
+            if len(streams.get(Keys.STREAMS, [])) < per_page:
+                last_page = True
 
             if (total > 0) and (Keys.STREAMS in streams):
                 filtered = \
                     blacklist_filter.by_type(streams, Keys.STREAMS, parent_keys=[Keys.CHANNEL], id_key=Keys._ID, list_type='user')
                 filtered = \
                     blacklist_filter.by_type(filtered, Keys.STREAMS, game_key=Keys.GAME, list_type='game')
+
                 last = None
                 for stream in filtered[Keys.STREAMS]:
                     last = stream
@@ -52,11 +57,17 @@ def route(api, content, offset=0, cursor='MA=='):
                             all_items.append(add_item)
                     else:
                         break
+
                 offset = utils.get_offset(offset, last, streams[Keys.STREAMS])
                 if (offset is None) or (total <= offset) or (total <= REQUEST_LIMIT):
                     break
+
             else:
                 break
+
+            if last_page:
+                break
+
         has_items = False
         if len(all_items) > 0:
             has_items = True

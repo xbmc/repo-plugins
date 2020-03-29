@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='2.4.9' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.4.10' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
         <import addon='script.module.six' version='1.11.0'/>
-        <import addon='script.module.python.twitch' version='2.0.10'/>
+        <import addon='script.module.python.twitch' version='2.0.12'/>
         <import addon='script.module.requests' version='2.9.1'/>
     </requires>
     <extension point='xbmc.python.pluginsource' library='resources/lib/addon_runner.py'>
@@ -13,13 +13,14 @@
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
         <news>
-[fix] fix listing live streams
+[fix] fix live notifications
+[fix] fix clips
+[fix] double entries in followed live streams
         </news>
         <assets>
             <icon>icon.png</icon>
-            <fanart>fanart.png</fanart>
+            <fanart>fanart.jpg</fanart>
         </assets>
-        <language></language>
         <source>https://github.com/MrSprigster/Twitch-on-Kodi</source>
         <license>GPL-3.0-only</license>
         <forum>https://forum.kodi.tv/showthread.php?tid=134538</forum>

@@ -9,8 +9,8 @@ class ContextMenuItem:
 
         :param str label:               The label/name of the item.
         :param str function_name:       The name of the method that is called when the
-                                        item is selcted.
-        :param list[str] item_types:    The MediaItem types for which the contextitem should be
+                                        item is selected.
+        :param list[str] item_types:    The MediaItem types for which the contextmenu item should be
                                         shown [optional].
 
         """

@@ -43,7 +43,7 @@ class JsonHelper(object):
     @staticmethod
     def convert_special_chars(text, do_quotes=True):
         """ Converts special characters in json to their Unicode equivalents. Quotes can
-        be ommitted by specifying the doQuotes as False. The input text should be able to
+        be omitted by specifying the doQuotes as False. The input text should be able to
         hold the output format. That means that for UTF-8 charachters
         to be allowed, the string should be UTF-8 decoded because, Python will otherwise
         assume it to be ASCII.

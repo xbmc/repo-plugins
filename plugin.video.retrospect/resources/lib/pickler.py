@@ -19,7 +19,7 @@ from resources.lib.mediaitem import MediaItem
 
 
 class Pickler:
-    # hack for Base64 chars that are URL encoded. We only need 3 (or 6 to make it case-insenstive)
+    # hack for Base64 chars that are URL encoded. We only need 3 (or 6 to make it case-insensitive)
     # and then we don't need to use urlencode which is slow in Python.
     __Base64CharsDecode = {
         "-": "\n",

@@ -128,7 +128,7 @@ class ChannelIndex(object):
             else:
                 Logger.warning("Found updated channel_set: %s.", channel_set_info_path)
 
-            # new we should init all channels by loading them all, just to be shure that all is ok
+            # new we should init all channels by loading them all, just to be sure that all is ok
             Logger.debug("Going to fetching all channels to init them all.")
             self.get_channels()
             return self.get_channel(class_name, channel_code)
@@ -404,7 +404,7 @@ class ChannelIndex(object):
             return None, None
 
     def __get_channel_pack_folders(self):
-        """ Returns the paths of all the avialable channel packs.
+        """ Returns the paths of all the available channel packs.
 
         :return: All full paths to Retrospect channel packs.
         :rtype: tuple[str|unicode, list[str|unicode]]
@@ -532,7 +532,7 @@ class ChannelIndex(object):
                             channel_info.firstTimeMessage, channel_info.moduleName)
 
                 title = LanguageHelper.get_localized_string(LanguageHelper.ChannelMessageId)
-                XbmcWrapper.show_dialog(title, channel_info.firstTimeMessage.split("|"))
+                XbmcWrapper.show_dialog(title, channel_info.firstTimeMessage)
             else:
                 Logger.debug("Not showing first time message due to add-on setting set to '%s'.",
                              hide_first_time)
@@ -576,12 +576,12 @@ class ChannelIndex(object):
         first_version = channels[list(channels.keys())[0]][self.__CHANNEL_INDEX_CHANNEL_VERSION_KEY]
         first_version = Version(first_version)
         if not Config.version.are_compatible(first_version):
-            Logger.warning("Inconsisten version 'index' vs 'add-on': %s vs %s", first_version, Config.version)
+            Logger.warning("Inconsistent version 'index' vs 'add-on': %s vs %s", first_version, Config.version)
             return False
 
         first_path = channels[list(channels.keys())[0]][self.__CHANNEL_INDEX_CHANNEL_INFO_KEY]
         if not first_path.startswith(Config.rootDir.rstrip(os.sep)):
-            Logger.warning("Inconsisten path for ChannelSet and main add-on:\n"
+            Logger.warning("Inconsistent path for ChannelSet and main add-on:\n"
                            "Channel: '%s'\n"
                            "Add-on:  '%s'", first_path, Config.rootDir)
             return False

@@ -59,7 +59,7 @@ class Menu(ParameterParser):
         """ Hides a specific channel """
 
         Logger.info("Hiding channel: %s", self.channelObject)
-        AddonSettings.set_channel_visiblity(self.channelObject, False)
+        AddonSettings.set_channel_visibility(self.channelObject, False)
         self.refresh()
 
     def select_channels(self):
@@ -95,11 +95,11 @@ class Menu(ParameterParser):
         indices_to_add = [i for i in selected_channels if i not in selected_indices]
         for i in indices_to_remove:
             Logger.info("Hiding channel: %s", channels_to_show[i])
-            AddonSettings.set_channel_visiblity(channels_to_show[i], False)
+            AddonSettings.set_channel_visibility(channels_to_show[i], False)
 
         for i in indices_to_add:
             Logger.info("Showing channel: %s", channels_to_show[i])
-            AddonSettings.set_channel_visiblity(channels_to_show[i], True)
+            AddonSettings.set_channel_visibility(channels_to_show[i], True)
 
         self.refresh()
         return

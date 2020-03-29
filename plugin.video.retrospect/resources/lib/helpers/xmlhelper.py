@@ -13,7 +13,7 @@ class XmlHelper(TagHelperBase):
     """Class that helps getting the content of XML nodes"""
 
     def get_single_node_content(self, node_tag, *args, **kwargs):
-        """Retreives a single node 
+        """Retrieves a single node
         
         Arguments:
         nodeTag : string     - Name of the node to retrieve 
@@ -46,7 +46,7 @@ class XmlHelper(TagHelperBase):
             return ""
     
     def get_nodes_content(self, node_tag, *args):
-        """Retreives all nodes with nodeTag as name 
+        """Retrieves all nodes with nodeTag as name
         
         Arguments:
         nodeTag : string     - Name of the node to retrieve 

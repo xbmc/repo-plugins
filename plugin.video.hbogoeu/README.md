@@ -4,7 +4,7 @@
 [![Kodi Version](https://img.shields.io/badge/kodi-18%20or%20%2B-blue)](https://kodi.tv/)
 [![GitHub](https://img.shields.io/github/license/arvvoid/plugin.video.hbogoeu?style=flat)](https://opensource.org/licenses/gpl-2.0.php)
 [![Contributors](https://img.shields.io/github/contributors/arvvoid/plugin.video.hbogoeu.svg)](https://github.com/arvvoid/plugin.video.hbogoeu/graphs/contributors)
-[![All Contributors](https://img.shields.io/badge/all_contributors-30-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-31-orange.svg?style=flat-square)](#contributors-)
 [![HitCount](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu.svg)](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu)
 
 # Disclaimer
@@ -63,16 +63,10 @@ PLEASE IF YOU ARE REPORTING AN ISSUE PROVIDE Kodi Debug Logs: https://kodi.wiki/
 
 * Works on Kodi 18 (Leia) or later
 * A valid HBO® Go account is needed for the add-on to work
-* Simply install from the Kodi add-on repository
+* Simply install from the Kodi add-on repository (search hgo or hbo to find quickly or browse under the video category)
 * Follow the setup wizard at first add-on run
 * The add-on should install the [inputstreamhelper](https://github.com/emilsvennesson/script.module.inputstreamhelper) add-on which will help with [inputstream.adaptive](https://github.com/peak3d/inputstream.adaptive) and DRM setup if needed
 * The add-on will auto-update from repository as soon as a stable release is available
-* *MIGHT BE NECESSARY: On OSMC/Raspbian/Debian you might have to install some dependency manually from shell, but first try to run the add-on, if you get a message informing you that pycryptodomex is missing perform this steps (or consult specific pycryptodomex install instructions for your distribution/platform):*
-```
-sudo apt update
-sudo apt install build-essential python-setuptools python-pip libnss3 libnspr4
-sudo pip install wheel pycryptodomex
-```
 * *OPTIONAL: Configure additional preferences in the add-on config*
 
 ## Manual Download/Install
@@ -128,13 +122,14 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/all-contributors/all-contributors-bot"><img src="https://avatars3.githubusercontent.com/u/46843839?v=4" width="100px;" alt=""/><br /><sub><b>allcontributors[bot]</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/commits?author=allcontributors" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/mata007"><img src="https://avatars1.githubusercontent.com/u/22648433?v=4" width="100px;" alt=""/><br /><sub><b>mata007</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3Amata007" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/ferdabasek"><img src="https://avatars2.githubusercontent.com/u/58233539?v=4" width="100px;" alt=""/><br /><sub><b>ferdabasek</b></sub></a><br /><a href="#ideas-ferdabasek" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/arvvoid/plugin.video.hbogoeu/commits?author=ferdabasek" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/durip"><img src="https://avatars3.githubusercontent.com/u/13102223?v=4" width="100px;" alt=""/><br /><sub><b>durip</b></sub></a><br /><a href="#userTesting-durip" title="User Testing">📓</a></td>
+    <td align="center"><a href="https://github.com/durip"><img src="https://avatars3.githubusercontent.com/u/13102223?v=4" width="100px;" alt=""/><br /><sub><b>durip</b></sub></a><br /><a href="#userTesting-durip" title="User Testing">📓</a> <a href="#translation-durip" title="Translation">🌍</a></td>
     <td align="center"><a href="https://github.com/splichy"><img src="https://avatars3.githubusercontent.com/u/16658908?v=4" width="100px;" alt=""/><br /><sub><b>splichy</b></sub></a><br /><a href="#ideas-splichy" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/arvvoid/plugin.video.hbogoeu/commits?author=splichy" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/boblo1"><img src="https://avatars1.githubusercontent.com/u/58788554?v=4" width="100px;" alt=""/><br /><sub><b>boblo1</b></sub></a><br /><a href="#translation-boblo1" title="Translation">🌍</a></td>
   </tr>
   <tr>
     <td align="center"><a href="http://marianfocsa.info"><img src="https://avatars3.githubusercontent.com/u/17079638?v=4" width="100px;" alt=""/><br /><sub><b>Marian FX</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/commits?author=marianfx" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/artemplaksiy"><img src="https://avatars0.githubusercontent.com/u/34888588?v=4" width="100px;" alt=""/><br /><sub><b>artemplaksiy</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3Aartemplaksiy" title="Bug reports">🐛</a> <a href="#ideas-artemplaksiy" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://dag.wiee.rs/blog/"><img src="https://avatars0.githubusercontent.com/u/388198?v=4" width="100px;" alt=""/><br /><sub><b>Dag Wieers</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3Adagwieers" title="Bug reports">🐛</a> <a href="#ideas-dagwieers" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 

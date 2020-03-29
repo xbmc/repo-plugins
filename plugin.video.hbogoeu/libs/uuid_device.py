@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 # based on https://github.com/CastagnaIT/plugin.video.netflix/blob/master/resources/lib/common/uuid_device.py
+#
+# Copyright (C) 2017 Sebastian Golasch (plugin.video.netflix)
+# Copyright (C) 2019 Stefano Gottardo - @CastagnaIT (original implementation module)
+# Get the UUID of the device
+# SPDX-License-Identifier: MIT
+#    -----------------------------
+# Some minor modifications have been made to the code to adapt to this project
+# see original source file in link above.
 
 from __future__ import absolute_import, division, unicode_literals
 

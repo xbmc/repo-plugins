@@ -1,8 +1,6 @@
 # encoding: utf-8
-# util class for Hbo Go Kodi add-on
-# Copyright (C) 2019 ArvVoid (https://github.com/arvvoid)
-# Relesed under GPL version 2
-#########################################################
+# Copyright (C) 2019-2020 ArvVoid (https://github.com/arvvoid)
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 from __future__ import absolute_import, division
 
@@ -57,18 +55,18 @@ class Util(object):
         return base64.b64decode(base64data)
 
     @staticmethod
-    def hash225_bytes(data):
+    def hash256_bytes(data):
         if sys.version_info < (3, 0):
-            return hashlib.sha256(bytes(data)).digest()
+            return hashlib.sha256(bytes(data.encode('utf8'))).digest()
         try:
             return hashlib.sha256(bytes(data, 'utf8')).digest()
         except TypeError:
             return hashlib.sha256(bytes(data)).digest()
 
     @staticmethod
-    def hash225_string(data):
+    def hash256_string(data):
         if sys.version_info < (3, 0):
-            return hashlib.sha256(bytes(data)).hexdigest()
+            return hashlib.sha256(bytes(data.encode('utf8'))).hexdigest()
         try:
             return hashlib.sha256(bytes(data, 'utf8')).hexdigest()
         except TypeError:

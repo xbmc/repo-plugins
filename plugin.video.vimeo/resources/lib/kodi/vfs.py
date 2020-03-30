@@ -21,7 +21,7 @@ class VFS:
 
     def write(self, filename, string):
         filepath = os.path.join(self.path, filename)
-        file = xbmcvfs.File(filepath, 'w')
+        file = xbmcvfs.File(filepath, "w")
         success = file.write(string)
         file.close()
         return filepath if success else False

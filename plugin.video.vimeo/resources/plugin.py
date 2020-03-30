@@ -2,13 +2,6 @@ from future import standard_library
 from future.utils import PY2
 standard_library.install_aliases()  # noqa: E402
 
-from resources.lib.vimeo.api import Api
-from resources.lib.kodi.cache import Cache
-from resources.lib.kodi.items import Items
-from resources.lib.kodi.search_history import SearchHistory
-from resources.lib.kodi.settings import Settings
-from resources.lib.kodi.vfs import VFS
-from resources.routes import *
 import os
 import sys
 import urllib.parse
@@ -17,12 +10,20 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
+from resources.lib.vimeo.api import Api
+from resources.lib.kodi.cache import Cache
+from resources.lib.kodi.items import Items
+from resources.lib.kodi.search_history import SearchHistory
+from resources.lib.kodi.settings import Settings
+from resources.lib.kodi.vfs import VFS
+from resources.routes import *
+
 addon = xbmcaddon.Addon()
 addon_id = addon.getAddonInfo("id")
 addon_base = "plugin://" + addon_id
-addon_profile_path = xbmc.translatePath(addon.getAddonInfo('profile'))
+addon_profile_path = xbmc.translatePath(addon.getAddonInfo("profile"))
 if PY2:
-    addon_profile_path = addon_profile_path.decode('utf-8')
+    addon_profile_path = addon_profile_path.decode("utf-8")
 vfs = VFS(addon_profile_path)
 vfs_cache = VFS(os.path.join(addon_profile_path, "cache/"))
 settings = Settings(addon)
@@ -37,7 +38,7 @@ def run():
     path = url.path
     handle = int(sys.argv[1])
     args = urllib.parse.parse_qs(sys.argv[2][1:])
-    xbmcplugin.setContent(handle, 'videos')
+    xbmcplugin.setContent(handle, "videos")
 
     if path == PATH_ROOT:
         action = args.get("action", None)
@@ -94,17 +95,17 @@ def run():
             if action is None:
                 search(handle, query)
             elif "people" in action:
-                xbmcplugin.setContent(handle, 'artists')
+                xbmcplugin.setContent(handle, "artists")
                 collection = listItems.from_collection(api.search(query, "users"))
                 xbmcplugin.addDirectoryItems(handle, collection, len(collection))
                 xbmcplugin.endOfDirectory(handle)
             elif "channels" in action:
-                xbmcplugin.setContent(handle, 'albums')
+                xbmcplugin.setContent(handle, "albums")
                 collection = listItems.from_collection(api.search(query, "channels"))
                 xbmcplugin.addDirectoryItems(handle, collection, len(collection))
                 xbmcplugin.endOfDirectory(handle)
             elif "groups" in action:
-                xbmcplugin.setContent(handle, 'albums')
+                xbmcplugin.setContent(handle, "albums")
                 collection = listItems.from_collection(api.search(query, "groups"))
                 xbmcplugin.addDirectoryItems(handle, collection, len(collection))
                 xbmcplugin.endOfDirectory(handle)
@@ -127,7 +128,7 @@ def run():
     elif path == PATH_SETTINGS_CACHE_CLEAR:
         vfs_cache.destroy()
         dialog = xbmcgui.Dialog()
-        dialog.ok('Vimeo', addon.getLocalizedString(30501))
+        dialog.ok("Vimeo", addon.getLocalizedString(30501))
 
     else:
         xbmc.log("Path not found", xbmc.LOGERROR)

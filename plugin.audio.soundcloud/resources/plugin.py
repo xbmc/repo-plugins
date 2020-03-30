@@ -20,9 +20,9 @@ import xbmcplugin
 addon = xbmcaddon.Addon()
 addon_id = addon.getAddonInfo("id")
 addon_base = "plugin://" + addon_id
-addon_profile_path = xbmc.translatePath(addon.getAddonInfo('profile'))
+addon_profile_path = xbmc.translatePath(addon.getAddonInfo("profile"))
 if PY2:
-    addon_profile_path = addon_profile_path.decode('utf-8')
+    addon_profile_path = addon_profile_path.decode("utf-8")
 vfs = VFS(addon_profile_path)
 vfs_cache = VFS(os.path.join(addon_profile_path, "cache"))
 settings = Settings(addon)
@@ -37,7 +37,7 @@ def run():
     path = url.path
     handle = int(sys.argv[1])
     args = urllib.parse.parse_qs(sys.argv[2][1:])
-    xbmcplugin.setContent(handle, 'songs')
+    xbmcplugin.setContent(handle, "songs")
 
     if path == PATH_ROOT:
         action = args.get("action", None)
@@ -118,18 +118,20 @@ def run():
             if action is None:
                 search(handle, query)
             elif "people" in action:
-                xbmcplugin.setContent(handle, 'artists')
+                xbmcplugin.setContent(handle, "artists")
                 collection = listItems.from_collection(api.search(query, "users"))
                 xbmcplugin.addDirectoryItems(handle, collection, len(collection))
                 xbmcplugin.endOfDirectory(handle)
             elif "albums" in action:
-                xbmcplugin.setContent(handle, 'albums')
+                xbmcplugin.setContent(handle, "albums")
                 collection = listItems.from_collection(api.search(query, "albums"))
                 xbmcplugin.addDirectoryItems(handle, collection, len(collection))
                 xbmcplugin.endOfDirectory(handle)
             elif "playlists" in action:
-                xbmcplugin.setContent(handle, 'albums')
-                collection = listItems.from_collection(api.search(query, "playlists_without_albums"))
+                xbmcplugin.setContent(handle, "albums")
+                collection = listItems.from_collection(
+                    api.search(query, "playlists_without_albums")
+                )
                 xbmcplugin.addDirectoryItems(handle, collection, len(collection))
                 xbmcplugin.endOfDirectory(handle)
             else:
@@ -153,7 +155,7 @@ def run():
         xbmcplugin.addDirectoryItems(handle, collection, len(collection))
         xbmcplugin.endOfDirectory(handle)
 
-    if path == PATH_USER:
+    elif path == PATH_USER:
         user_id = args.get("id")[0]
         default_action = args.get("call")[0]
         if user_id:

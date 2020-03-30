@@ -22,6 +22,7 @@ class ApiV2(ApiInterface):
     api_host = "https://api-v2.soundcloud.com"
     api_client_id = "KT6UCHXC9iNnI8wn4UUfwMSlAPe4Z8zx"
     api_limit = 20
+    api_limit_tracks = 50
     api_lang = "en"
     api_cache = {
         "discover": 120  # 2 hours
@@ -200,14 +201,16 @@ class ApiV2(ApiInterface):
 
         # Load unresolved tracks
         if collection.load:
-            track_ids = ",".join(str(x) for x in collection.load)
-            loaded_tracks = self._do_request("/tracks", {"ids": track_ids})
-            # Because returned tracks are not sorted, we have to manually match them
-            for track_id in collection.load:
-                loaded_track = [lt for lt in loaded_tracks if lt["id"] == track_id]
-                if len(loaded_track):  # Sometimes a track cannot be resolved
-                    track = self._build_track(loaded_track[0])
-                    collection.items.append(track)
+            # The API only supports a max of 50 track IDs per request:
+            for chunk in self._chunks(collection.load, self.api_limit_tracks):
+                track_ids = ",".join(str(x) for x in chunk)
+                loaded_tracks = self._do_request("/tracks", {"ids": track_ids})
+                # Because returned tracks are not sorted, we have to manually match them
+                for track_id in chunk:
+                    loaded_track = [lt for lt in loaded_tracks if lt["id"] == track_id]
+                    if len(loaded_track):  # Sometimes a track cannot be resolved
+                        track = self._build_track(loaded_track[0])
+                        collection.items.append(track)
 
         return collection
 
@@ -287,3 +290,8 @@ class ApiV2(ApiInterface):
             r"\1\2-\3-t{x}x{y}.\5".format(x=size, y=size),
             url
         ) if url else None
+
+    @staticmethod
+    def _chunks(lst, size):
+        for i in range(0, len(lst), size):
+            yield lst[i:i + size]

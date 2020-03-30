@@ -312,6 +312,10 @@ msgctxt "#30736"
 msgid "Remove"
 msgstr "Ukloni"
 
+msgctxt "#30737"
+msgid "Kids only mode"
+msgstr "Način rada Samo za djecu"
+
 msgctxt "#30650"
 msgid "Language"
 msgstr "Jezik"

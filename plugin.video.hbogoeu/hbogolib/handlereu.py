@@ -1,14 +1,6 @@
 # encoding: utf-8
-# HboGo EU handler class for Hbo Go Kodi add-on
-# Copyright (C) 2019 ArvVoid (https://github.com/arvvoid)
-# Derived from version v.2.0-beta5 of the add-on, witch was initialy
-# derived from https://github.com/billsuxx/plugin.video.hbogohu witch is
-# derived from https://kodibg.org/forum/thread-504.html
-# Oauth login/solution for providers with login redirection derived from https://github.com/kszaq/plugin.video.hbogopl
-# Relesed under GPL version 2
-#########################################################
-# http://hbogo.eu HBOGO EU HANDLER CLASS
-#########################################################
+# Copyright (C) 2019-2020 ArvVoid (https://github.com/arvvoid)
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 from __future__ import absolute_import, division
 
@@ -21,8 +13,8 @@ import requests
 
 from hbogolib.constants import HbogoConstants
 from hbogolib.handler import HbogoHandler
-from hbogolib.kodiutil import KodiUtil
-from hbogolib.util import Util
+from libs.kodiutil import KodiUtil
+from libs.util import Util
 
 try:
     import urlparse as parse  # type: ignore
@@ -75,7 +67,6 @@ class HbogoHandler_eu(HbogoHandler):
         self.API_URL_ADD_RATING = ""
         self.API_URL_ADD_MYLIST = ""
         self.API_URL_HIS = ""
-        self.KidsGroup = ""
 
         self.individualization = ""
         self.goToken = ""
@@ -85,6 +76,7 @@ class HbogoHandler_eu(HbogoHandler):
         self.FavoritesGroupId = ""
         self.HistoryGroupId = ""
         self.ContinueWatchingGroupId = ""
+        self.KidsGroupId = ""
         self.loggedin_headers = {}
         self.JsonHis = ""
 
@@ -303,7 +295,7 @@ class HbogoHandler_eu(HbogoHandler):
         self.FavoritesGroupId = jsonrsp['FavoritesGroupId']
         self.HistoryGroupId = jsonrsp['HistoryGroupId']
         self.ContinueWatchingGroupId = jsonrsp['ContinueWatchingGroupId']
-        self.KidsGroup = jsonrsp['KidsGroupId']
+        self.KidsGroupId = jsonrsp['KidsGroupId']
         # add to cache exclude list
         self.exclude_url_from_cache(self.API_URL_CUSTOMER_GROUP + self.FavoritesGroupId + '/-/-/-/1000/-/-/false')
         self.exclude_url_from_cache(self.API_URL_CUSTOMER_GROUP + self.HistoryGroupId + '/-/-/-/1000/-/-/false')
@@ -578,7 +570,7 @@ class HbogoHandler_eu(HbogoHandler):
             self.loggedin_headers['GO-CustomerId'] = str(self.GOcustomerId)
             # save the session with validity of n hours to not relogin every run of the add-on
 
-            login_hash = Util.hash225_string(
+            login_hash = Util.hash256_string(
                 self.individualization + self.customerId + username + password + self.op_id)
             self.log("LOGIN HASH: " + login_hash)
 
@@ -615,7 +607,7 @@ class HbogoHandler_eu(HbogoHandler):
             sys.exit()
             return False
 
-        login_hash = Util.hash225_string(
+        login_hash = Util.hash256_string(
             self.individualization + self.customerId + username + password + self.op_id)
         self.log("LOGIN HASH: " + login_hash)
 
@@ -783,7 +775,7 @@ class HbogoHandler_eu(HbogoHandler):
         self.loggedin_headers['GO-CustomerId'] = str(self.GOcustomerId)
         # save the session with validity of n hours to not relogin every run of the add-on
 
-        login_hash = Util.hash225_string(
+        login_hash = Util.hash256_string(
             self.individualization + self.customerId + username + password + self.op_id)
         self.log("LOGIN HASH: " + login_hash)
 
@@ -807,7 +799,7 @@ class HbogoHandler_eu(HbogoHandler):
         self.getCustomerGroups()
 
         if self.addon.getSetting('enforce_kids') == 'true':
-            self.list(self.API_URL_GROUP + self.KidsGroup + '/0/0/0/0/0/0/True', True)
+            self.list(self.API_URL_GROUP + self.KidsGroupId + '/0/0/0/0/0/0/True', True)
             KodiUtil.endDir(self.handle, None, True)
             return
 
@@ -880,7 +872,7 @@ class HbogoHandler_eu(HbogoHandler):
             self.log("No Movies Category found")
 
         if self.addon.getSetting('show_kids') == 'true':
-            self.addCat(py2_encode(self.language(30729)), self.API_URL_GROUP + self.KidsGroup + '/0/0/0/0/0/0/True', self.get_media_resource('kids.png'), HbogoConstants.ACTION_LIST)
+            self.addCat(py2_encode(self.language(30729)), self.API_URL_GROUP + self.KidsGroupId + '/0/0/0/0/0/0/True', self.get_media_resource('kids.png'), HbogoConstants.ACTION_LIST)
 
         if position_home != -1:
             if self.addon.getSetting('group_home') == 'true':
@@ -1067,7 +1059,6 @@ class HbogoHandler_eu(HbogoHandler):
             except Exception:
                 self.log("Unexpected error: " + traceback.format_exc())
                 xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30004))
-                return
 
         KodiUtil.endDir(self.handle, self.decide_media_type())
 

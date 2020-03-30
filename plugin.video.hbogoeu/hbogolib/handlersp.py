@@ -1,11 +1,7 @@
 # encoding: utf-8
-# Hbo Spain and Nordic handler class for Hbo Go Kodi add-on
 # Copyright (C) 2019 Sakerdot (https://github.com/Sakerdot)
-# Copyright (C) 2019 ArvVoid (https://github.com/arvvoid)
-# Relesed under GPL version 2
-#########################################################
-# HBO Spain and Nordic HANDLER CLASS
-#########################################################
+# Copyright (C) 2019-2020 ArvVoid (https://github.com/arvvoid)
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 from __future__ import absolute_import, division
 
@@ -22,9 +18,9 @@ from kodi_six.utils import py2_encode  # type: ignore
 
 from hbogolib.constants import HbogoConstants
 from hbogolib.handler import HbogoHandler
-from hbogolib.kodiutil import KodiUtil
-from hbogolib.ttml2srt import Ttml2srt
-from hbogolib.util import Util
+from libs.kodiutil import KodiUtil
+from libs.ttml2srt import Ttml2srt
+from libs.util import Util
 
 try:
     from urllib import quote_plus as quote, urlencode  # type: ignore
@@ -124,7 +120,7 @@ class HbogoHandler_sp(HbogoHandler):
             self.addon.setSetting('individualization', str(self.API_DEVICE_ID))
 
         self.log("DEVICE ID: " + str(self.API_DEVICE_ID))
-        login_hash = Util.hash225_string(str(self.API_DEVICE_ID) + str(username) + str(password))
+        login_hash = Util.hash256_string(str(self.API_DEVICE_ID) + str(username) + str(password))
         self.log("LOGIN HASH: " + login_hash)
 
         loaded_session = self.load_obj(self.addon_id + "_es_session")
@@ -155,7 +151,7 @@ class HbogoHandler_sp(HbogoHandler):
             self.API_ACCOUNT_GUID = response.find('accountGuid').text
             self.init_api()
 
-            login_hash = Util.hash225_string(str(self.API_DEVICE_ID) + str(username) + str(password))
+            login_hash = Util.hash256_string(str(self.API_DEVICE_ID) + str(username) + str(password))
             self.log("LOGIN HASH: " + login_hash)
             saved_session = {
 
@@ -234,10 +230,10 @@ class HbogoHandler_sp(HbogoHandler):
         if self.addon.getSetting('enforce_kids') == 'true':
             if kids is not None:
                 self.list(kids.find('link').text, True)
-                KodiUtil.endDir(self.handle, None, True)
-                return
             else:
                 self.log("No Kids Category found")
+            KodiUtil.endDir(self.handle, None, True)
+            return
 
         if self.addon.getSetting('show_mylist') == 'true':
             if watchlist is not None:
@@ -399,7 +395,7 @@ class HbogoHandler_sp(HbogoHandler):
 
         mpd_pre_url = media_item.find('.//media:content[@profile="HBO-DASH-WIDEVINE"]', namespaces=self.NAMESPACES).get('url') + '&responseType=xml'
 
-        mpd = self.get_from_hbogo(mpd_pre_url, 'xml')
+        mpd = self.get_from_hbogo(mpd_pre_url, 'xml', False)
         if mpd is False:
             return
         if self.lograwdata:

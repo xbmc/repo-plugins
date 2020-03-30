@@ -1,10 +1,6 @@
 # encoding: utf-8
-# generic handler class for Hbo Go Kodi add-on
-# Copyright (C) 2019 ArvVoid (https://github.com/arvvoid)
-# Relesed under GPL version 2
-#########################################################
-# GENERIC HBOGO HANDLER CLASS
-#########################################################
+# Copyright (C) 2019-2020 ArvVoid (https://github.com/arvvoid)
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 from __future__ import absolute_import, division
 
@@ -21,21 +17,10 @@ from kodi_six import xbmc, xbmcaddon, xbmcplugin, xbmcgui  # type: ignore
 from kodi_six.utils import py2_encode, py2_decode  # type: ignore
 
 from hbogolib.constants import HbogoConstants
-from hbogolib.kodiutil import KodiUtil
-from hbogolib.util import Util
+from libs.kodiutil import KodiUtil
+from libs.util import Util
 
-try:
-    from Cryptodome import Random
-    from Cryptodome.Cipher import AES
-    from Cryptodome.Util import Padding
-except ImportError:
-    # no Cryptodome gracefully fail with an informative message
-    msg = xbmcaddon.Addon().getLocalizedString(30694)
-    xbmc.log("[" + str(
-        xbmcaddon.Addon().getAddonInfo('id')) + "] MISSING Cryptodome dependency...exiting..." + traceback.format_exc(),
-        xbmc.LOGDEBUG)
-    xbmcgui.Dialog().ok(xbmcaddon.Addon().getAddonInfo('name') + " ERROR", msg)
-    sys.exit()
+import pyaes  # type: ignore
 
 
 class HbogoHandler(object):
@@ -305,7 +290,7 @@ class HbogoHandler(object):
     def exclude_url_from_cache(self, url):
         try:
             cur = self.db.cursor()
-            cur.execute("INSERT INTO request_cache_exclude(url_hash) VALUES (?)", (Util.hash225_string(url), ), )
+            cur.execute("INSERT INTO request_cache_exclude(url_hash) VALUES (?)", (Util.hash256_string(url), ), )
             self.db.commit()
         except Exception:
             self.log("Exclude from cache WARNING: " + traceback.format_exc())
@@ -323,7 +308,7 @@ class HbogoHandler(object):
         if not self.use_cache:
             use_cache = False
 
-        url_hash = Util.hash225_string(url)
+        url_hash = Util.hash256_string(url)
 
         if use_cache:
             self.log("GET FROM HBO USING CACHE...")
@@ -495,28 +480,25 @@ class HbogoHandler(object):
         self.addon.setSetting(credential_id, self.addon_id + '.credentials.v1.' + self.encrypt_credential_v1(value))
 
     def get_device_id_v1(self):
-        from .uuid_device import get_crypt_key
+        from libs.uuid_device import get_crypt_key
         dev_key = get_crypt_key()
-        return Util.hash225_bytes(dev_key + self.addon_id + '.credentials.v1.' + codecs.encode(dev_key, 'rot_13'))
+        return Util.hash256_bytes(dev_key + self.addon_id + '.credentials.v1.' + codecs.encode(dev_key, 'rot_13'))
 
     def encrypt_credential_v1(self, raw):
         if sys.version_info < (3, 0):
-            raw = bytes(raw)
+            raw = bytes(py2_encode(raw))
         else:
             raw = bytes(raw, 'utf-8')
-        raw = bytes(Padding.pad(data_to_pad=raw, block_size=32))
-        iv = Random.new().read(AES.block_size)
-        cipher = AES.new(self.get_device_id_v1(), AES.MODE_CBC, iv)
-        return Util.base64enc(iv + cipher.encrypt(raw))
+        aes = pyaes.AESModeOfOperationCTR(self.get_device_id_v1())
+        return Util.base64enc(aes.encrypt(raw))
 
     def decrypt_credential_v1(self, enc):
         try:
             enc = Util.base64dec_bytes(enc)
-            iv = enc[:AES.block_size]
-            cipher = AES.new(self.get_device_id_v1(), AES.MODE_CBC, iv)
+            aes = pyaes.AESModeOfOperationCTR(self.get_device_id_v1())
             if sys.version_info < (3, 0):
-                return py2_decode(Padding.unpad(padded_data=cipher.decrypt(enc[AES.block_size:]), block_size=32))
-            return Padding.unpad(padded_data=cipher.decrypt(enc[AES.block_size:]), block_size=32).decode('utf8')
+                return py2_decode(aes.decrypt(enc))
+            return aes.decrypt(enc).decode('utf8')
         except Exception:
             self.log("Decrypt credentials error: " + traceback.format_exc())
             return None

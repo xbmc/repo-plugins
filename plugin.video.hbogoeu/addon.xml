@@ -1,9 +1,9 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.4.1">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.5.3">
   <requires>
     <import addon="xbmc.python" version="2.26.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
     <import addon="script.module.requests" version="2.12.4" />
-    <import addon="script.module.pycryptodome" version="3.4.3" />
+    <import addon="script.module.pyaes" version="1.6.1" />
     <import addon="script.module.defusedxml" version="0.6.0" />
     <import addon="script.module.dateutil" version="2.8.1" />
     <import addon="script.module.inputstreamhelper" version="0.4.2" />
@@ -39,19 +39,21 @@ If an official app is available for your platform, use it instead of this.
     </disclaimer>
     <language>en</language>
     <platform>all</platform>
-    <license>GPL-2.0</license>
+    <license>GPL-2.0-or-later</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=339798</forum>
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-- New enhanced Kids category (EU handler)
-- Legacy Kids category removed (removed from API, EU handler)
-- Enhanced search too include Kids shows and movies (EU handler)
-- Kids only mode (activate in settings to display only Kids category and nothing else)
-  [mainly intended for use with Kodi profiles, you have to prevent changing settings with the profile where you want too enforce this]
-- Search result limits fixes
-- Language files fixes
-- Minor fixes
+- Fix playing the same content twice with caching enabled for Spain/Nordic region
+- Minor code/style fixes
+- Update translations
+- Support for non  ascii username/password
+- Remove pycryptodomex dependency ,use a pure python aes implementation (pyaes)
+  [THIS VERSION WILL ASK TO RE-ENTER CREDENTIALS]
+  [THIS IMPROVE OUT OF THE BOX COMPATIBILITY WITH MORE DEVICES, NO NOTICEABLE PERFORMANCE DIFFERENCE]
+  [pycryptodomex had to be installed from command line on many Linux, macOS]
+
+NOTE: If the add-on fail after the update probably the required module didn't get loaded, simply restart Kodi and all should work.
     </news>
     <assets>
      <icon>resources/icon.png</icon>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.soundcloud" name="SoundCloud" version="3.1.1" provider-name="jaylinski">
+<addon id="plugin.audio.soundcloud" name="SoundCloud" version="3.1.2" provider-name="jaylinski">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.future" version="0.16.0"/>
@@ -14,13 +14,16 @@
         <summary lang="en_GB">SoundCloud – Music and podcast streaming platform</summary>
         <description lang="de_DE">SoundCloud ist eine Musik- und Podcast-Streaming-Plattform, mit der Du Millionen von Songs aus der ganzen Welt anhören kannst.</description>
 		<description lang="en_GB">SoundCloud is a music and podcast streaming platform that lets you listen to millions of songs from around the world.</description>
-        <language></language>
+        <disclaimer lang="en_GB">This plugin is not official, approved or endorsed by SoundCloud.</disclaimer>
         <platform>all</platform>
         <license>MIT</license>
         <forum>https://forum.kodi.tv/showthread.php?tid=206635</forum>
         <website>https://soundcloud.com</website>
         <source>https://github.com/jaylinski/kodi-addon-soundcloud</source>
-        <news>3.1.1 (2019-12-01)
+        <news>3.1.2 (2020-03-30)
+[fix] Fix loading of large (> 50) track lists
+
+3.1.1 (2019-12-01)
 [fix] Fixed client-ID extraction from SoundCloud website
 [lng] Added Dutch translations
 

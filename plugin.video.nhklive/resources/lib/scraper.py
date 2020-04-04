@@ -21,20 +21,20 @@ class myAddon(t1mAddon):
   def getAddonMenu(self,url,ilist):
       infoList = {}
       ilist = self.addMenuItem('NHK Live','GS', ilist, url, self.addonIcon, self.addonFanart, infoList, isFolder=True)
-      html = self.getRequest('https://www3.nhk.or.jp/nhkworld/apibase/tv_programs_en.json')
+      html = self.getRequest('https://api.nhk.or.jp/nhkworld/vodpglist/v7a/en/voice/list.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k')
       b = json.loads(html)
-      b = b['programs']['item']
-      b = sorted(b, key = lambda i: i['title'])
+      b = b['vod_programs']['programs']
+      b = sorted(b.items(),key=lambda t:t[1]["sort_key"])
       for a in b:
-       if len(a["pgm_gr_id"]) > 0:
          infoList = {}
-         url = 'https://api.nhk.or.jp/nhkworld/vodesdlist/v7a/program/'+str(a["pgm_gr_id"])+'/en/all/all.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k' 
+         url = 'https://api.nhk.or.jp/nhkworld/vodesdlist/v7a/program/'+a[0]+'/en/all/all.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
+         a = a[1]
          plot = a['description']
          name = a['title']
-         thumb  =  a['thumbnail_s']
-         if not thumb.startswith('http'): thumb  = NHKBASE % a['thumbnail_s']
-         fanart =  a['thumbnail']
-         if not fanart.startswith('http'): fanart = NHKBASE % a['thumbnail']
+         thumb  =  a['image']
+         if not thumb.startswith('http'): thumb  = NHKBASE % a['image']
+         fanart =  a['image_l']
+         if not fanart.startswith('http'): fanart = NHKBASE % a['image_l']
          infoList['Title'] = name
          infoList['Plot']  = plot
          infoList['mediatype'] = 'tvshow'
@@ -68,11 +68,7 @@ class myAddon(t1mAddon):
 
   def getAddonShows(self,url,ilist):
       xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
-#      html = self.getRequest('https://www3.nhk.or.jp/nhkworld/app/tv/hlslive_web.json')
-#      a = json.loads(html)
-#      nhkurl = a['main']['wstrm']
-      nhkurl = 'https://nhkwlive-xjp.akamaized.net/hls/live/2003458/nhkwlive-xjp/index_1M.m3u8'
-
+      nhkurl = 'https://nhkwlive-ojp.akamaized.net/hls/live/2003459/nhkwlive-ojp/index_4M.m3u8'
       html = self.getRequest('http://www3.nhk.or.jp/nhkworld/common/js/common.js')
       nw_api_prefix, nw_api_key = re.compile('nw_api_prefix\|\|"(.+?)".+?nw_api_key\|\|"(.+?)"', re.DOTALL).search(html).groups()
       nw_region = 'world'
@@ -114,7 +110,7 @@ class myAddon(t1mAddon):
      uuid = re.compile("'data-de-program-uuid','(.+?)'", re.DOTALL).search(html).group(1)
      html = self.getRequest('https://movie-s.nhk.or.jp/ws/ws_program/api/'+akey+'/apiv/5/mode/json?v='+uuid)
      a = json.loads(html)
-     url = a['response']['WsProgramResponse']['program']['asset']['iphoneM3u8Url']
+     url = a['response']['WsProgramResponse']['program']['asset']['ipadM3u8Url']
    liz = xbmcgui.ListItem(path = url)
    liz.setMimeType('application/x-mpegURL')
    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)

@@ -11,3 +11,4 @@ class Directory:
         self.backdrop = backdrop
         self.station = station
         self.logo = logo
+

@@ -1,6 +1,6 @@
 ORF Radiothek KODI Addon
 =======
-This is a Kodi Addon to provides access to the ORF Radiothek (Austrian public service broadcaster) Streaming Portal (Live Radio, Podcasts, Archive, ...)
+This Kodi Addon provides access to the ORF Radiothek (Austrian public service broadcaster) Streaming Portal (Live Radio, Podcasts, Archive, ...)
 
 
 Supported platforms

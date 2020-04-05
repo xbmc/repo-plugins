@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vimeo" name="Vimeo" version="5.1.2" provider-name="jaylinski">
+<addon id="plugin.video.vimeo" name="Vimeo" version="5.1.3" provider-name="jaylinski">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.future" version="0.16.0"/>
@@ -17,7 +17,12 @@
         <forum>https://forum.kodi.tv/showthread.php?tid=220437</forum>
         <website>https://vimeo.com</website>
         <source>https://github.com/jaylinski/kodi-addon-vimeo</source>
-        <news>5.1.2 (2020-03-02)
+        <news>5.1.3 (2020-03-29)
+FIX: Use H264 fallback if video resolution is not available
+FIX: Videos are now marked as watched again
+FIX: Plugin now works with live video streams
+
+5.1.2 (2020-03-02)
 FIX: Add fallback for videos without a HLS stream
 FIX: Use correct localization in info view
 

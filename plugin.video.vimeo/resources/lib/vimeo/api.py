@@ -19,6 +19,7 @@ class Api:
 
     api_player = "https://player.vimeo.com"
     api_limit = 10
+    api_fallback = False
 
     # Extracted from public Vimeo Android App
     # This is a special client ID which will return playable URLs
@@ -46,6 +47,8 @@ class Api:
 
     @property
     def api_client(self):
+        self.api_fallback = False
+
         # It is possible to set a custom access token in the settings
         access_token_settings = self.settings.get("api.accesstoken")
         if access_token_settings:
@@ -76,6 +79,7 @@ class Api:
             pass
 
         # Fallback
+        self.api_fallback = True
         return VimeoClient(token=self.api_access_token_default)
 
     @property
@@ -106,22 +110,22 @@ class Api:
         return self._map_json_to_collection(res)
 
     def resolve_media_url(self, uri):
-        # If we have a full URL, we don't need to resolve it, because it already is
-        if uri.startswith("https://"):
-            xbmc.log("plugin.video.vimeo::Api() directly resolved", xbmc.LOGDEBUG)
-            return uri
-
         # If we have a on-demand URL, we need to fetch the trailer and return the uri
         if uri.startswith("/ondemand/"):
             xbmc.log("plugin.video.vimeo::Api() resolving on-demand", xbmc.LOGDEBUG)
             return self._get_on_demand_trailer(uri)
 
         # Fallback
-        xbmc.log("plugin.video.vimeo::Api() resolving fallback", xbmc.LOGDEBUG)
-        uri = uri.replace("/videos/", "/video/")
-        res = self._do_player_request(uri)
+        if self.api_fallback:
+            xbmc.log("plugin.video.vimeo::Api() resolving fallback", xbmc.LOGDEBUG)
+            uri = uri.replace("/videos/", "/video/")
+            res = self._do_player_request(uri)
+            return self._extract_url_from_video_config(res)
 
-        return self._extract_url_from_video_config(res)
+        xbmc.log("plugin.video.vimeo::Api() resolving video uri", xbmc.LOGDEBUG)
+        params = self._get_default_params()
+        res = self._do_api_request(uri, params)
+        return self._extract_url_from_search_response(res["play"])
 
     def resolve_id(self, video_id):
         params = self._get_default_params()
@@ -147,22 +151,22 @@ class Api:
         if "data" in json_obj:
 
             for item in json_obj["data"]:
+                if "play" in item and item.get("play").get("status", "") == "unavailable":
+                    # Don't show unavailable items (like scheduled live streams)
+                    continue
+
                 kind = item.get("type", None)
                 is_video = kind == "video"
+                is_live = kind == "live"
                 is_channel = "/channels/" in item.get("uri", "")
                 is_group = "/groups/" in item.get("uri", "")
                 is_user = item.get("account", False)
 
-                # Requests made with the fallback token won't include media URLs:
-                contains_media_url = "play" in item and item["play"]["status"] == "playable"
-
                 # On-demand videos don't contain playable video links:
                 purchase_required = item.get("play", {}).get("status", "") == "purchase_required"
 
-                if is_video:
-                    if contains_media_url:
-                        video_url = self._extract_url_from_search_response(item.get("play"))
-                    elif purchase_required:
+                if is_video or is_live:
+                    if purchase_required:
                         video_url = item["metadata"]["connections"]["trailer"]["uri"]
                     else:
                         video_url = item["uri"]
@@ -175,11 +179,10 @@ class Api:
                         "description": item["description"],
                         "duration": item["duration"],
                         "picture": self._get_picture(item["pictures"], 4),
-                        "playcount": item["stats"].get("plays", 0),
                         "user": item["user"]["name"],
                         "userThumb": self._get_picture(item["user"]["pictures"], 3),
-                        "mediaUrlResolved": contains_media_url,
                         "onDemand": purchase_required,
+                        "live": is_live,
                     }
                     collection.items.append(video)
 
@@ -222,22 +225,13 @@ class Api:
 
         return collection
 
-    def _get_default_params(self):
-        return {
-            "per_page": self.api_limit,
-            "total": self.api_limit,
-            # Avoid rate limiting:
-            # https://developer.vimeo.com/guidelines/rate-limiting#avoid-rate-limiting
-            "fields": "uri,resource_key,name,description,type,duration,created_time,location,"
-                      "bio,stats,user,account,release_time,pictures,metadata,play"
-        }
+    def _get_on_demand_trailer(self, uri):
+        res = self._do_api_request(uri, {"fields": "uri,type,play"})
+        return self._extract_url_from_search_response(res["play"])
 
     def _video_matches(self, video, video_format):
         video_height = video_format[1].replace("p", "")
-        video_codec = self.settings.VIDEO_CODEC["AV1"] if self.video_av1 else \
-            self.settings.VIDEO_CODEC["H.264"]
-
-        return str(video["height"]) == video_height and video["codec"] == video_codec
+        return str(video["height"]) == video_height and video["codec"] == self._get_video_codec()
 
     def _extract_url_from_search_response(self, video_files):
         video_format = self.settings.VIDEO_FORMAT[self.video_stream]
@@ -247,20 +241,25 @@ class Api:
         if video_type == "hls" and video_files.get("hls") is not None:
             return video_files["hls"]["link"]
 
+        elif video_files.get("progressive") is None:
+            # We are probably dealing with a live stream, so we can't use the progressive format
+            return video_files["hls"]["link"]
+
         elif video_type == "progressive" or video_files.get("hls") is None:
             for video_file in video_files["progressive"]:
                 if self._video_matches(video_file, video_format):
                     return video_file["link"]
 
             # Fallback if no matching quality was found
+            for video_file in video_files["progressive"]:
+                if video_file["codec"] == self._get_video_codec():
+                    return video_file["link"]
+
+            # Fallback if fallback failed
             return video_files["progressive"][0]["link"]
 
         else:
             raise RuntimeError("Could not extract video URL")
-
-    def _get_on_demand_trailer(self, uri):
-        res = self._do_api_request(uri, {"fields": "uri,type,play"})
-        return self._extract_url_from_search_response(res["play"])
 
     def _extract_url_from_video_config(self, video_config):
         video_files = video_config["request"]["files"]
@@ -287,6 +286,20 @@ class Api:
 
         else:
             raise RuntimeError("Could not extract video URL")
+
+    def _get_video_codec(self):
+        return self.settings.VIDEO_CODEC["AV1"] if self.video_av1 else \
+            self.settings.VIDEO_CODEC["H.264"]
+
+    def _get_default_params(self):
+        return {
+            "per_page": self.api_limit,
+            "total": self.api_limit,
+            # Avoid rate limiting:
+            # https://developer.vimeo.com/guidelines/rate-limiting#avoid-rate-limiting
+            "fields": "uri,resource_key,name,description,type,duration,created_time,location,"
+                      "bio,stats,user,account,release_time,pictures,metadata,play,live.status"
+        }
 
     @staticmethod
     def _get_picture(data, size=1):

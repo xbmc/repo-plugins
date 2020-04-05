@@ -1,9 +1,10 @@
 from future import standard_library
 standard_library.install_aliases()  # noqa: E402
 
-from resources.lib.models.list_item import ListItem
 import urllib.parse
 import xbmcgui
+
+from resources.lib.models.list_item import ListItem
 
 
 class Group(ListItem):

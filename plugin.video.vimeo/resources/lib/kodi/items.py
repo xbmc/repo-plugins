@@ -1,11 +1,11 @@
 from future import standard_library
 standard_library.install_aliases()  # noqa: E402
 
-from resources.lib.kodi.utils import format_bold
-from resources.routes import *
-
 import urllib.parse
 import xbmcgui
+
+from resources.lib.kodi.utils import format_bold
+from resources.routes import *
 
 
 class Items:

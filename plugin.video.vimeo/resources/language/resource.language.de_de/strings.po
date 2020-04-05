@@ -145,5 +145,9 @@ msgid "Next page"
 msgstr "Nächste Seite"
 
 msgctxt "#30902"
+msgid "LIVE"
+msgstr ""
+
+msgctxt "#30903"
 msgid "Trailer"
 msgstr ""

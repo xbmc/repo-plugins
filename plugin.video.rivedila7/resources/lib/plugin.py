@@ -10,6 +10,9 @@ import urllib
 import urllib2
 import urlparse
 import html5lib
+import time
+import requests
+import inputstreamhelper
 from bs4 import BeautifulSoup
 
 
@@ -18,7 +21,8 @@ addon = xbmcaddon.Addon()
 language = addon.getLocalizedString
 handle = int(sys.argv[1])
 url_base = "https://www.la7.it"
-url_live = "https://www.la7.it/dirette-tv"
+url_live_la7 = "https://www.la7.it/dirette-tv"
+url_live_la7d = "https://www.la7.it/live-la7d"
 url_tgla7d = "https://tg.la7.it/listing/tgla7d"
 url_rivedila7 = "https://www.la7.it/rivedila7/0/la7"
 url_rivedila7d = "https://www.la7.it/rivedila7/0/la7d"
@@ -26,7 +30,21 @@ url_programmi = "https://www.la7.it/programmi"
 url_programmila7d = "https://www.la7.it/programmi-la7d"
 url_tutti_programmi = "https://www.la7.it/tutti-i-programmi"
 url_teche_la7 = "https://www.la7.it/i-protagonisti"
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36'}
+#DRM
+PROTOCOL = 'mpd'
+DRM = 'com.widevine.alpha'
+key_widevine = "https://la7.prod.conax.cloud/widevine/license"
+headers_set = {
+    'host_token': 'pat.la7.it',
+    'host_license': 'la7.prod.conax.cloud',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36',
+    'accept': '*/*',
+    'accept-language': 'en,en-US;q=0.9,it;q=0.8',
+    'dnt': '1',
+    'te': 'trailers',
+    'origin': 'https://www.la7.it',
+    'referer': 'https://www.la7.it/',
+}
 titolo_global = ''
 thumb_global = ''
 plot_global = ''
@@ -37,8 +55,9 @@ tg_cronache = False
 filtro_cronache = 'TG LA7 Cronache'
 omnibus_news = False
 filtro_omnibus = 'Omnibus News'
+fanart_path = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'fanart.jpg')
 thumb_path = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
-fanart_path = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'fanart.jpg')
+
 
 
 def parameters_string_to_dict(parameters):
@@ -50,10 +69,10 @@ def show_root_menu():
     ''' Show the plugin root menu '''
     liStyle = xbmcgui.ListItem('[B]'+language(32002)+'[/B]')
     liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'direttalivela7.jpg'), 'fanart' : fanart_path })
-    addDirectoryItem_nodup({"mode": "diretta_live"},liStyle, folder=False)
-    liStyle = xbmcgui.ListItem('[B]'+language(32007)+'[/B]')
-    liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'tgmeteo.jpg'), 'fanart' : fanart_path })
-    addDirectoryItem_nodup({"mode": "tg_meteo"},liStyle)    
+    addDirectoryItem_nodup({"mode": "diretta_la7"},liStyle, folder=False)
+    liStyle = xbmcgui.ListItem('[B]'+language(32009)+'[/B]')
+    liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'direttalivela7d.jpg'), 'fanart' : fanart_path })
+    addDirectoryItem_nodup({"mode": "diretta_la7d"},liStyle, folder=False)   
     liStyle = xbmcgui.ListItem('[B]'+language(32001)+'[/B]')
     liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'rivedila7.jpg'), 'fanart' : fanart_path })
     addDirectoryItem_nodup({"mode": "rivedi_la7"},liStyle)
@@ -63,6 +82,9 @@ def show_root_menu():
     liStyle = xbmcgui.ListItem('[B]'+language(32006)+'[/B]')
     liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'programmila7la7d.jpg'), 'fanart' : fanart_path })
     addDirectoryItem_nodup({"mode": "tutti_programmi"},liStyle)
+    liStyle = xbmcgui.ListItem('[B]'+language(32007)+'[/B]')
+    liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'tgmeteo.jpg'), 'fanart' : fanart_path })
+    addDirectoryItem_nodup({"mode": "tg_meteo"},liStyle) 
     liStyle = xbmcgui.ListItem('[B]'+language(32008)+'[/B]')
     liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'techela7.jpg'), 'fanart' : fanart_path })
     addDirectoryItem_nodup({"mode": "teche_la7"},liStyle)
@@ -83,19 +105,66 @@ def addDirectoryItem_nodup(parameters, li, title=titolo_global, folder=True):
         return xbmcplugin.addDirectoryItem(handle=handle, url=url, listitem=li, isFolder=folder)
 
 
-def play_video(video,live):
+def play_dirette(url):
+    response = requests.get(url, headers={'user-agent': headers_set['user-agent']},verify=False).content
+    preulr = re.findall('preTokenUrl = "(.+?)"',response)[0]
+    response=response.replace("\'",'"')
+    mpdurl=re.findall('dash.+?"(.+?)"',response,re.DOTALL)[0]
+    headersTok = {
+        'host': headers_set['host_token'],
+        'user-agent': headers_set['user-agent'],
+        'accept': headers_set['accept'],
+        'accept-language': headers_set['accept-language'],
+        'dnt': headers_set['dnt'],
+        'te': headers_set['te'],
+        'origin': headers_set['origin'],
+        'referer': headers_set['referer'],
+    }
+    response = requests.get(preulr, headers=headersTok,verify=False).json()
+    preAuthToken=response['preAuthToken']
+    
+    headersLic = {
+        'host': headers_set['host_license'],
+        'user-agent': headers_set['user-agent'],
+        'accept': headers_set['accept'],
+        'accept-language': headers_set['accept-language'],
+        'preAuthorization': preAuthToken,
+        'origin': headers_set['origin'],
+        'referer': headers_set['referer'],
+    }
+    preLic= '&'.join(['%s=%s' % (name, value) for (name, value) in headersLic.items()])
+    #xbmc.log('LICENSE1------: '+str(preLic),xbmc.LOGNOTICE)
+
+    tsatmp=str(int(time.time()))
+    license_url= key_widevine + '?d=%s'%tsatmp
+    lic_url='%s|%s|R{SSM}|'%(license_url,preLic)
+    #xbmc.log('LICENSE2------: '+str(lic_url),xbmc.LOGNOTICE)
+    is_helper = inputstreamhelper.Helper(PROTOCOL, drm=DRM)
+    if is_helper.check_inputstream():
+        newItem = xbmcgui.ListItem(path=mpdurl) 
+        newItem.setProperty("inputstreamaddon", is_helper.inputstream_addon)
+        newItem.setProperty("inputstream.adaptive.manifest_type", PROTOCOL)
+        newItem.setProperty("inputstream.adaptive.license_type", DRM)
+        newItem.setProperty("inputstream.adaptive.license_key", lic_url)
+        newItem.setMimeType('application/dash+xml')
+        xbmcplugin.setResolvedUrl(handle, True, listitem=newItem)  
+
+
+
+def play_video(page_video,live):
+    #xbmc.log('PAGE VIDEO-----: '+str(page_video),xbmc.LOGNOTICE)
     link_video = ''
-    regex1 = 'vS = "(.*?)"'
+    # regex1 = 'vS = "(.*?)"'
     regex2 = '/content/(.*?).mp4'
     regex3 = 'm3u8: "(.*?)"'
-    regex4 = '  <iframe src="(.*?)"'
+    #regex4 = '  <iframe src="(.*?)"'
 
-    req = urllib2.Request(video,headers=headers)
+    req = urllib2.Request(page_video,headers={'user-agent': headers_set['user-agent']})
     page=urllib2.urlopen(req)
     html=page.read()
     if live:
         if re.findall(regex1, html):
-            #xbmc.log('REGEX1-----: '+str(re.findall(regex1, html)),xbmc.LOGNOTICE)
+            # xbmc.log('REGEX1-----: '+str(re.findall(regex1, html)),xbmc.LOGNOTICE)
             link_video = re.findall(regex1, html)[0]
     else:
         if re.findall(regex2, html):
@@ -105,15 +174,18 @@ def play_video(video,live):
         elif re.findall(regex3, html):
             #xbmc.log('REGEX3-----: '+str(re.findall(regex3, html)),xbmc.LOGNOTICE)
             link_video = re.findall(regex3, html)[0]
-        elif re.findall(regex4, html):
-            #xbmc.log('REGEX4-----: '+str(re.findall(regex4, html)),xbmc.LOGNOTICE)
-            iframe = re.findall(regex4, html)[0]
-            req2 = urllib2.Request(iframe,headers=headers)
-            page2=urllib2.urlopen(req2)
-            html2=page2.read()
-            if re.findall(regex2, html2):
-                #xbmc.log('REGEX2-B---: '+str(re.findall(regex2, html)),xbmc.LOGNOTICE)
-                link_video = str("https:")+re.findall(regex2, html2)[0]
+        else:
+            play_dirette(page_video)
+            exit()
+        # elif re.findall(regex4, html):
+        #     #xbmc.log('REGEX4-----: '+str(re.findall(regex4, html)),xbmc.LOGNOTICE)
+        #     iframe = re.findall(regex4, html)[0]
+        #     req2 = urllib2.Request(iframe,headers={'user-agent': headers_set['user-agent']})
+        #     page2=urllib2.urlopen(req2)
+        #     html2=page2.read()
+        #     if re.findall(regex2, html2):
+        #         #xbmc.log('REGEX2-B---: '+str(re.findall(regex2, html)),xbmc.LOGNOTICE)
+        #         link_video = str("https:")+re.findall(regex2, html2)[0]
 
     listitem =xbmcgui.ListItem(titolo_global)
     listitem.setInfo('video', {'Title': titolo_global})
@@ -132,7 +204,7 @@ def play_video(video,live):
 
 
 def rivedi(url, thumb):
-    req = urllib2.Request(url,headers=headers) 
+    req = urllib2.Request(url,headers={'user-agent': headers_set['user-agent']})
     page=urllib2.urlopen(req)
     html=BeautifulSoup(page,'html5lib')
     giorno=html.find('div',class_='block block-system').find_all('div',class_=['item item--menu-guida-tv ','item item--menu-guida-tv active '])
@@ -150,7 +222,7 @@ def rivedi(url, thumb):
 
 
 def rivedi_giorno():
-    req = urllib2.Request(url_base+giorno,headers=headers) 
+    req = urllib2.Request(url_base+giorno,headers={'user-agent': headers_set['user-agent']})
     page=urllib2.urlopen(req)
     html=BeautifulSoup(page,'html5lib')
     guida_tv=html.find(id="content_guida_tv_rivedi").find_all('div',class_='item item--guida-tv')
@@ -175,16 +247,16 @@ def rivedi_giorno():
 
 
 def programmi_lettera():
-    req_p = urllib2.Request(url_programmi,headers=headers) 
+    req_p = urllib2.Request(url_programmi,headers={'user-agent': headers_set['user-agent']})
     page_p=urllib2.urlopen(req_p)
     html_p=BeautifulSoup(page_p,'html5lib') 
     programmi=html_p.find(id='container-programmi-list').find_all('div',class_='list-item')
     #xbmc.log('PROGRAMMI----------: '+str(programmi),xbmc.LOGNOTICE)
-    req_pd = urllib2.Request(url_programmila7d,headers=headers) 
+    req_pd = urllib2.Request(url_programmila7d,headers={'user-agent': headers_set['user-agent']})
     page_pd=urllib2.urlopen(req_pd)
     html_pd=BeautifulSoup(page_pd,'html5lib') 
     programmila7d=html_pd.find(id='container-programmi-list').find_all('div',class_='list-item')
-    req_tp = urllib2.Request(url_tutti_programmi,headers=headers) 
+    req_tp = urllib2.Request(url_tutti_programmi,headers={'user-agent': headers_set['user-agent']})
     page_tp=urllib2.urlopen(req_tp)
     html_tp=BeautifulSoup(page_tp,'html5lib') 
     tutti_programmi=html_tp.find_all('div',class_='list-item')
@@ -199,6 +271,12 @@ def programmi_lettera():
                 if url_trovato !='/meteola7' and url_trovato !='/tgla7':
                     if url_trovato == '/facciaafaccia':
                         url_trovato='/faccia-a-faccia'
+                    if url_trovato == '/il-boss-dei-comici':
+                        url_trovato='/boss-dei-comici'
+                    if url_trovato == '/lariadestate':
+                        url_trovato='/laria-destate'
+                    if url_trovato == '/taga-doc':
+                        url_trovato='/tagada-doc'
                     link=url_base+url_trovato
                     #xbmc.log('LINK-----: '+str(link),xbmc.LOGNOTICE)
                     if(len(dati)>0):
@@ -226,6 +304,12 @@ def programmi_lettera():
                 if url_trovato !='/meteola7' and url_trovato !='/tgla7':
                     if url_trovato == '/facciaafaccia':
                         url_trovato='/faccia-a-faccia'
+                    if url_trovato == '/il-boss-dei-comici':
+                        url_trovato='/boss-dei-comici'
+                    if url_trovato == '/lariadestate':
+                        url_trovato='/laria-destate'
+                    if url_trovato == '/taga-doc':
+                        url_trovato='/tagada-doc'
                     link=url_base+url_trovato
                     #xbmc.log('LINK-----: '+str(link),xbmc.LOGNOTICE)
                     if(len(dati)>0):
@@ -251,9 +335,16 @@ def programmi_lettera():
                 #xbmc.log('TITLE2: '+str(titolo),xbmc.LOGNOTICE)
                 liStyle = xbmcgui.ListItem(titolo)
                 url_trovato=dati.a.get('href').strip()
+                #xbmc.log('URL TROVATO-----: '+str(url_trovato),xbmc.LOGNOTICE)
                 if url_trovato !='/meteola7' and url_trovato !='/tgla7':
                     if url_trovato == '/facciaafaccia':
                         url_trovato='/faccia-a-faccia'
+                    if url_trovato == '/il-boss-dei-comici':
+                        url_trovato='/boss-dei-comici'
+                    if url_trovato == '/lariadestate':
+                        url_trovato='/laria-destate'
+                    if url_trovato == '/taga-doc':
+                        url_trovato='/tagada-doc'
                     link=url_base+url_trovato
                     #xbmc.log('LINK-----: '+str(link),xbmc.LOGNOTICE)
                     if(len(dati)>0):
@@ -299,7 +390,7 @@ def programmi_lettera():
 
 
 def programmi_lettera_teche_la7():
-    req_teche = urllib2.Request(url_teche_la7,headers=headers) 
+    req_teche = urllib2.Request(url_teche_la7,headers={'user-agent': headers_set['user-agent']})
     page_teche=urllib2.urlopen(req_teche)
     html_teche=BeautifulSoup(page_teche,'html5lib') 
     teche_la7=html_teche.find_all('div',class_='list-item')
@@ -380,7 +471,7 @@ def video_programma():
     global omnibus_news
 
     #xbmc.log('LINK GLOBAL----: '+str(link_global),xbmc.LOGNOTICE)
-    if link_global == url_base+'/atlantide':
+    if link_global == url_base+'/atlantide' or link_global == url_base+'/atlantidefiles' or link_global == url_base+'/film-e-fiction' or link_global == url_base+'/giardinieri-in-affitto' or link_global == url_base+'/hawthorne' or link_global == url_base+'/il-commissario-cordier' or link_global == url_base+'/indovina-cosa-sceglie-la-sposa' or link_global == url_base+'/italia-fashion-show' or link_global == url_base+'/josephineangegardien' or link_global == url_base+'/lunionefalaforza' or link_global == url_base+'/little-murders' or link_global == url_base+'/mister-nat' or link_global == url_base+'/professort' or link_global == url_base+'/sfera' or link_global == url_base+'/specialguest' or link_global == url_base+'/tagada-doc' or link_global == url_base+'/the-dr-oz-show':
         video_programma_landpage()
 
     if link_global == 'flag_tg_cronache':
@@ -392,7 +483,7 @@ def video_programma():
         link_global = url_base+'/omnibus'
     
     if link_global != url_tgla7d:
-        req = urllib2.Request(link_global+"/rivedila7",headers=headers)
+        req = urllib2.Request(link_global+"/rivedila7",headers={'user-agent': headers_set['user-agent']})
         try:
             page=urllib2.urlopen(req)
         except Exception as e:
@@ -426,11 +517,12 @@ def video_programma():
                 first_video(first, titolo, titolo.find(filtro_omnibus) == -1)
             else:
                 first_video(first, titolo, True)
-
+            #xbmc.log('FIRST VIDEO----: '+str(titolo),xbmc.LOGNOTICE)
 
             # WEEK VIDEO
-            if html.findAll(text=" LA SETTIMANA "):
+            if html.findAll(text=" LA SETTIMANA"):
                 video_settimana = html.find('div',class_='home-block__content-carousel container-vetrina').find_all('div',class_='item')
+                #xbmc.log('LA SETTIMANA----: '+str(video_settimana),xbmc.LOGNOTICE)
                 if video_settimana:
                     get_rows_video(video_settimana)
             else:
@@ -439,9 +531,9 @@ def video_programma():
         # CULT VIDEO
         if html.findAll(text="Puntate Cult"):
             if link_global == url_base+'/chi-sceglie-la-seconda-casa':
-                req2 = urllib2.Request(link_global+"/rivedila7",headers=headers)
+                req2 = urllib2.Request(link_global+"/rivedila7",headers={'user-agent': headers_set['user-agent']})
             else:
-                req2 = urllib2.Request(link_global+"/rivedila7/archivio?page="+str(pagenum),headers=headers)
+                req2 = urllib2.Request(link_global+"/rivedila7/archivio?page="+str(pagenum),headers={'user-agent': headers_set['user-agent']})
             page2 = urllib2.urlopen(req2)
             html2 = BeautifulSoup(page2,'html5lib')
             video_archivio = html2.find('div',class_='view-content clearfix').find_all('div',class_='views-row')
@@ -453,7 +545,7 @@ def video_programma():
                     pagenext(page)
     #Tg La7d
     else:
-        req = urllib2.Request(link_global+"?page="+str(pagenum),headers=headers)
+        req = urllib2.Request(link_global+"?page="+str(pagenum),headers={'user-agent': headers_set['user-agent']})
         page = urllib2.urlopen(req)
         html=BeautifulSoup(page,'html5lib')
         video_tgla7d = html.find('div',class_='tgla7-category').find_all('article',class_='tgla7-new clearfix')
@@ -470,7 +562,7 @@ def video_programma_teche_la7():
     global link_global
 
     #xbmc.log('LINK------: '+str(link_global),xbmc.LOGNOTICE)
-    req = urllib2.Request(link_global+"?page="+str(pagenum),headers=headers)
+    req = urllib2.Request(link_global+"?page="+str(pagenum),headers={'user-agent': headers_set['user-agent']})
     page = urllib2.urlopen(req)
     html=BeautifulSoup(page,'html5lib')
     
@@ -494,7 +586,12 @@ def video_programma_teche_la7():
 
 def first_video(first, titolo, filtro):
     if filtro:
-        thumb='https:'+first.find('div',class_='holder-bg lozad').get('data-background-image')
+        thumblink=first.find('div',class_='holder-bg lozad').get('data-background-image')
+        if thumblink.startswith('//'):
+            thumb='https:'+thumblink
+        else:
+            thumb=thumblink
+        #xbmc.log('THUMB 1------: '+str(thumb),xbmc.LOGNOTICE)
         data='[I] - ('+first.find('div',class_='scritta_ultima').text.encode('utf-8').strip()+')[/I]'
         try:
             plot=first.find('div',class_='occhiello').text.encode('utf-8').strip()
@@ -511,7 +608,12 @@ def first_video(first, titolo, filtro):
 
 def video_list(div, titolo, filtro):
     if filtro:
-        thumb='https:'+div.find('div',class_='bg-img lozad').get('data-background-image')
+        thumblink=div.find('div',class_='bg-img lozad').get('data-background-image')
+        if thumblink.startswith('//'):
+            thumb='https:'+thumblink
+        else:
+            thumb=thumblink
+        #xbmc.log('THUMB 2------: '+str(thumb),xbmc.LOGNOTICE)
         #subdata=div.find('a').get('href').encode('utf-8')
         #data='[I] - ('+subdata[24:34]+')[/I]'
         try:
@@ -599,9 +701,8 @@ def get_rows_video_techela7(video):
 
 def video_programma_landpage():
     global link_global
-    
     #xbmc.log('LINK GLOBAL------: '+str(link_global),xbmc.LOGNOTICE)
-    req = urllib2.Request(link_global,headers=headers)
+    req = urllib2.Request(link_global,headers={'user-agent': headers_set['user-agent']})
     page = urllib2.urlopen(req)
     html=BeautifulSoup(page,'html5lib')
     
@@ -611,7 +712,7 @@ def video_programma_landpage():
         get_rows_video_landpage_preview(first_video)
 
     # PUNTATE    
-    if html.findAll(text="puntate "):
+    if html.findAll(text="puntate"):
         #xbmc.log('TEST------: '+str(html.find('div',class_='home-block__content-inner')),xbmc.LOGNOTICE)
         video_puntate_1r = html.find('div',class_='home-block__content-inner').select('div[class="item"]')
         video_puntate_2r = html.find('section',class_='home-block home-block--oggi-striscia home-block--fixed').find_all('div',class_='item')
@@ -629,7 +730,11 @@ def get_rows_video_landpage_preview(video):
     #xbmc.log('TEST-----: '+str(video),xbmc.LOGNOTICE)
     titolo = video.find('div',class_='title_puntata').text.encode('utf-8').strip()
     data='[I] - ('+video.find('div',class_='scritta_ultima').text.encode('utf-8').strip()+')[/I]'
-    thumb='https:'+video.find('div',class_='holder-bg lozad').get('data-background-image')
+    thumblink=video.find('div',class_='holder-bg lozad').get('data-background-image')
+    if thumblink.startswith('//'):
+        thumb='https:'+thumblink
+    else:
+        thumb=thumblink
     plot=video.find('div',class_='occhiello').text.encode('utf-8').strip()
     link=url_base+video.find('a').get('href')
     liStyle = xbmcgui.ListItem(titolo+data)
@@ -643,7 +748,11 @@ def get_rows_video_landpage(video):
         titolo=div.find('div',class_='title').text.encode('utf-8').strip()
         #xbmc.log('TITOLO-----: '+str(titolo),xbmc.LOGNOTICE)
         data='[I] - ('+div.find('div',class_='data').text.encode('utf-8').strip()+')[/I]'
-        thumb='https:'+div.find('div',class_='bg-img lozad').get('data-background-image')
+        thumblink=div.find('div',class_='bg-img lozad').get('data-background-image')
+        if thumblink.startswith('//'):
+            thumb='https:'+thumblink
+        else:
+            thumb=thumblink
         plot=""
         link=url_base+div.a.get('href').strip()
         liStyle = xbmcgui.ListItem(titolo+data)
@@ -677,9 +786,14 @@ if params.get("page", "")=="":
 else:
     pagenum=int(params.get("page", ""))
 
-if mode=="diretta_live":
+if mode=="diretta_la7":
     titolo_global=language(32002)
-    play_video(url_live,True)    
+    #play_video(url_live,True)    
+    play_dirette(url_live_la7)
+
+if mode=="diretta_la7d":
+    titolo_global=language(32009)    
+    play_dirette(url_live_la7d)
 
 elif mode=="tg_meteo":
     if play=="":

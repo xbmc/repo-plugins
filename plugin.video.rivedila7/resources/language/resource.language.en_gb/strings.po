@@ -17,15 +17,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#32001"
-msgid "La7 Replay"
+msgid "LA7 Replay"
 msgstr ""
 
 msgctxt "#32004"
-msgid "La7d Replay"
+msgid "LA7d Replay"
 msgstr ""
 
 msgctxt "#32002"
-msgid "Live Streaming La7"
+msgid "LA7 Live"
+msgstr ""
+
+msgctxt "#32009"
+msgid "LA7d Live"
 msgstr ""
 
 msgctxt "#32003"
@@ -41,9 +45,9 @@ msgid "News & Weather"
 msgstr ""
 
 msgctxt "#32006"
-msgid "Programs On-Demand"
+msgid "On-Demand Programs"
 msgstr ""
 
 msgctxt "#32008"
-msgid "Teche La7 - The Protagonists"
+msgid "Teche LA7 - The Protagonists"
 msgstr ""

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+   <setting type="lsep" label="30009"/>
+   <setting id="username"  type="text" label="30003"/>
+   <setting id="password"  type="text" label="30004" option="hidden"/>
+</settings>

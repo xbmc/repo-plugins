@@ -1,0 +1,57 @@
+# Kodi Media Center language file
+# Addon Name: RTP Play
+# Addon id: plugin.video.rtpplay
+# Addon Provider: enen92
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "RTP Play"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Could not complete request. The plugin needs an update."
+msgstr "Não foi possível completar o pedido. O plugin precisa de uma atualização."
+
+msgctxt "#32002"
+msgid "Could not grab stream url. The plugin needs an update."
+msgstr "Não foi possível obter o url da stream. O plugin precisa de uma atualização."
+
+msgctxt "#32003"
+msgid "Debug"
+msgstr "Depuração"
+
+msgctxt "#32004"
+msgid "Live TV"
+msgstr "Em direto"
+
+msgctxt "#32005"
+msgid "Programs"
+msgstr "Programas"
+
+msgctxt "#32006"
+msgid "Search"
+msgstr "Pesquisar"
+
+msgctxt "#32007"
+msgid "Search query"
+msgstr "Texto para pesquisar"
+
+msgctxt "#32008"
+msgid "Results for"
+msgstr "Resultados para"
+
+msgctxt "#32009"
+msgid "Page"
+msgstr "Página"

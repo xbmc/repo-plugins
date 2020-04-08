@@ -431,7 +431,7 @@ class HbogoHandler_sp(HbogoHandler):
             folder = xbmc.translatePath(self.addon.getAddonInfo('profile'))
             folder = folder + 'subs' + os.sep + media_guid + os.sep
             if self.addon.getSetting('forcesubs') == 'true':
-                self.log("Force subtitles enabled, downloading and converting subtitles in: " + str(folder))
+                self.log("Cache subtitles enabled, downloading and converting subtitles in: " + str(folder))
                 if not os.path.exists(os.path.dirname(folder)):
                     try:
                         os.makedirs(os.path.dirname(folder))
@@ -454,7 +454,7 @@ class HbogoHandler_sp(HbogoHandler):
                         self.log("Subtitle added: " + srt_file)
                     self.log("Setting subtitles: " + str(subs_paths))
                     li.setSubtitles(subs_paths)
-                    self.log("Subtitles set")
+                    self.log("Local subtitles set")
                 except Exception:
                     self.log("Unexpected error in subtitles processing: " + traceback.format_exc())
 

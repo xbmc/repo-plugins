@@ -8,15 +8,6 @@ from __future__ import absolute_import, division
 
 class HbogoConstants(object):
 
-    # supported countries:
-    #   0 name
-    #   1 national domain
-    #   2 country code short
-    #   3 country code long
-    #   4 default language code
-    #   5 special domain
-    #   6 hbogo region/handler to use
-
     HANDLER_EU = 0
     HANDLER_NORDIC = 1
     HANDLER_SPAIN = 1
@@ -45,6 +36,15 @@ class HbogoConstants(object):
     CONTEXT_MODE_MOVIE = 1
     CONTEXT_MODE_EPISODE = 2
 
+    # supported countries:
+    #   0 name
+    #   1 national domain
+    #   2 country code short
+    #   3 country code long
+    #   4 default language code
+    #   5 special domain
+    #   6 hbogo region/handler to use
+
     countries = [
         ['Bosnia and Herzegovina', 'ba', 'ba', 'BIH', 'HRV', '', HANDLER_EU],
         ['Bulgaria', 'bg', 'bg', 'BGR', 'BUL', '', HANDLER_EU],
@@ -65,6 +65,8 @@ class HbogoConstants(object):
         ['Spain', 'es', 'es', 'ESP', 'es_hboespana', 'https://es.hboespana.com', HANDLER_SPAIN],
         ['Sweden', 'se', 'se', 'SWE', 'sv_hbon', 'https://se.hbonordic.com/', HANDLER_NORDIC]
     ]
+
+    fallback_operator_icon_eu = 'https://www.hbo-europe.com/images/hbo_eu_logo.png'
 
     platforms = {
 

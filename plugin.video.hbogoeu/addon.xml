@@ -1,4 +1,4 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.5.3+matrix.2">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.5.5+matrix.1">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
@@ -44,16 +44,8 @@ If an official app is available for your platform, use it instead of this.
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-- Fix playing the same content twice with caching enabled for Spain/Nordic region
-- Minor code/style fixes
-- Update translations
-- Support for non  ascii username/password
-- Remove pycryptodomex dependency ,use a pure python aes implementation (pyaes)
-  [THIS VERSION WILL ASK TO RE-ENTER CREDENTIALS]
-  [THIS IMPROVE OUT OF THE BOX COMPATIBILITY WITH MORE DEVICES, NO NOTICEABLE PERFORMANCE DIFFERENCE]
-  [pycryptodomex had to be installed from command line on many Linux, macOS]
-
-NOTE: If the add-on fail after the update probably the required module didn't get loaded, simply restart Kodi and all should work.
+- Fix setup for operators with direct (affiliate) login. Fix setup and login for these operators: Bulgaria: Telekabel, NET1; Czech Republic: Vodafone Česká republika, Skylink CZ from 1.4.2020, UPC TV (from 1.4.2020); Montenegro: MTEL; Romania:  Telekom Romania; Serbia: Test RS 1, Supernova; Slovakia: Skylink SK from 1.4.2020; Portugal: Vodafone TV, Vodafone Móvel
+- Cache subtitles for the EU region if inject subtitles option is enabled (default), workaround to avoid the sometimes disappearing internal subtitles defined in the manifest
     </news>
     <assets>
      <icon>resources/icon.png</icon>

@@ -4,7 +4,7 @@
 [![Kodi Version](https://img.shields.io/badge/kodi-18%20or%20%2B-blue)](https://kodi.tv/)
 [![GitHub](https://img.shields.io/github/license/arvvoid/plugin.video.hbogoeu?style=flat)](https://opensource.org/licenses/gpl-2.0.php)
 [![Contributors](https://img.shields.io/github/contributors/arvvoid/plugin.video.hbogoeu.svg)](https://github.com/arvvoid/plugin.video.hbogoeu/graphs/contributors)
-[![All Contributors](https://img.shields.io/badge/all_contributors-31-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-32-orange.svg?style=flat-square)](#contributors-)
 [![HitCount](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu.svg)](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu)
 
 # Disclaimer
@@ -37,7 +37,7 @@ Simple Kodi add-on to access HBO® Go content from Kodi Media Center (http://kod
 
 Legend: ✔ - feature availible for the region and working in the add-on, ✖ - feature availible for the region but not implemented or broken in the add-on, ⛔ feature not availible for the region
 
-This add-on support 18 countries atm: 
+This add-on support 18 countries atm ([FULL OPERATOR LIST](https://github.com/arvvoid/plugin.video.hbogoeu/blob/master/operators.md)): 
 *  __Bosnia and Herzegovina__ *[EU]*
 *  __Bulgaria__ *[EU]*
 *  __Croatia__ *[EU]*
@@ -130,6 +130,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://marianfocsa.info"><img src="https://avatars3.githubusercontent.com/u/17079638?v=4" width="100px;" alt=""/><br /><sub><b>Marian FX</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/commits?author=marianfx" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/artemplaksiy"><img src="https://avatars0.githubusercontent.com/u/34888588?v=4" width="100px;" alt=""/><br /><sub><b>artemplaksiy</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3Aartemplaksiy" title="Bug reports">🐛</a> <a href="#ideas-artemplaksiy" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="http://dag.wiee.rs/blog/"><img src="https://avatars0.githubusercontent.com/u/388198?v=4" width="100px;" alt=""/><br /><sub><b>Dag Wieers</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3Adagwieers" title="Bug reports">🐛</a> <a href="#ideas-dagwieers" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/Buraddo23"><img src="https://avatars0.githubusercontent.com/u/28982082?v=4" width="100px;" alt=""/><br /><sub><b>vladsing</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3ABuraddo23" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 

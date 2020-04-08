@@ -37,7 +37,7 @@ class HbogoHandler(object):
         self.handle = handle
         self.DEBUG_ID_STRING = "[" + str(self.addon_id) + "] "
         self.SESSION_VALIDITY = 4  # stored session valid for 4 hours
-        self.max_comm_retry = 1  # if unauthorized del sessionrelogin and try again max times
+        self.max_comm_retry = 1  # if unauthorized del session and re-login and try again max times
         self.max_play_retry = 1  # max play retry on soft error
         self.db_version = 1
 

@@ -110,22 +110,28 @@ class Api:
         return self._map_json_to_collection(res)
 
     def resolve_media_url(self, uri):
+        media_url = None
+
         # If we have a on-demand URL, we need to fetch the trailer and return the uri
         if uri.startswith("/ondemand/"):
             xbmc.log("plugin.video.vimeo::Api() resolving on-demand", xbmc.LOGDEBUG)
-            return self._get_on_demand_trailer(uri)
+            media_url = self._get_on_demand_trailer(uri)
 
-        # Fallback
-        if self.api_fallback:
+        # Fallback (if official API client ID doesn't work)
+        elif self.api_fallback:
             xbmc.log("plugin.video.vimeo::Api() resolving fallback", xbmc.LOGDEBUG)
             uri = uri.replace("/videos/", "/video/")
             res = self._do_player_request(uri)
-            return self._extract_url_from_video_config(res)
+            media_url = self._extract_url_from_video_config(res)
 
-        xbmc.log("plugin.video.vimeo::Api() resolving video uri", xbmc.LOGDEBUG)
-        params = self._get_default_params()
-        res = self._do_api_request(uri, params)
-        return self._extract_url_from_search_response(res["play"])
+        # Fetch media URL
+        else:
+            xbmc.log("plugin.video.vimeo::Api() resolving video uri", xbmc.LOGDEBUG)
+            params = self._get_default_params()
+            res = self._do_api_request(uri, params)
+            media_url = self._extract_url_from_search_response(res["play"])
+
+        return self._append_user_agent(media_url)
 
     def resolve_id(self, video_id):
         params = self._get_default_params()
@@ -300,6 +306,19 @@ class Api:
             "fields": "uri,resource_key,name,description,type,duration,created_time,location,"
                       "bio,stats,user,account,release_time,pictures,metadata,play,live.status"
         }
+
+    @staticmethod
+    def _append_user_agent(url):
+        """
+        Kodi automatically uses a operating system based User-Agent for HTTP requests.
+        This causes an issue with the Vimeo API endpoint when a request is made from macOS,
+        because the Vimeo endpoint then thinks it can deliver the DASH format to an iOS device.
+        By appending a custom User-Agent at the end of the URL, the User-Agent can be overwritten.
+        """
+        if "Mac OS X" in xbmc.getUserAgent():
+            return "{}|User-Agent={}".format(url, urllib.parse.quote(VimeoClient.USER_AGENT))
+
+        return url
 
     @staticmethod
     def _get_picture(data, size=1):

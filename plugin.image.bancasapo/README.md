@@ -1,5 +1,8 @@
 # plugin.image.bancasapo
 
+![Kodi Addon-Check (Krypton)](https://github.com/enen92/plugin.image.bancasapo/workflows/Kodi%20Addon-Check%20(Krypton)/badge.svg)
+![Kodi Addon-Check (Matrix)](https://github.com/enen92/plugin.image.bancasapo/workflows/Kodi%20Addon-Check%20(Matrix)/badge.svg)
+
 Daily portuguese newspapper covers in Kodi
 
 * Screenshots

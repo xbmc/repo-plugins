@@ -1,9 +1,9 @@
 # coding=utf-8
 
 ##################################
-# Zappylib V1.0.4
+# Zappylib V1.0.6
 # ZapiSession
-# (c) 2014-2018 Pascal Nançoz
+# (c) 2014-2020 Pascal Nançoz
 ##################################
 
 import os, re, base64
@@ -97,9 +97,22 @@ class ZapiSession:
 		return None
 
 	def fetch_appToken(self):
-		handle = urllib2.urlopen(self.ZAPI_URL + '/')
-		html = handle.read()
-		return re.search("window\.appToken\s*=\s*'(.*)'", html).group(1)
+		try:
+			handle = urllib2.urlopen(self.ZAPI_URL + '/int')
+			html = handle.read()
+			reMatch = re.search("window\.appToken\s*=\s*'(.*)'", html)
+			if reMatch is not None:
+				return reMatch.group(1)
+		except Exception:
+			pass
+		try:
+			handle = urllib2.urlopen(self.ZAPI_URL + '/token-46a1dfccbd4c3bdaf6182fea8f8aea3f.json')
+			resultData = json.loads(handle.read())
+			return resultData['session_token']
+		except Exception:
+			pass
+		return None
+		
 
 	def announce(self):
 		api = '/zapi/v2/session/hello'
@@ -120,7 +133,7 @@ class ZapiSession:
 			if self.CACHE_ENABLED:
 				self.persist_accountData(accountData)
 			return True
-		return False		
+		return False
 
 	def renew_session(self):
 		return self.announce() and self.login()

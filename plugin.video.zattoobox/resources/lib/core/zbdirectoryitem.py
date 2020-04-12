@@ -3,7 +3,7 @@
 ##################################
 # ZattooBox Directory item
 # Base class
-# (c) 2014-2015 Pascal Nançoz
+# (c) 2014-2020 Pascal Nançoz
 ##################################
 
 import xbmcgui, urllib

@@ -3,7 +3,7 @@
 ##################################
 # ZattooBox Playable item
 # 
-# (c) 2014-2018 Pascal Nançoz
+# (c) 2014-2020 Pascal Nançoz
 ##################################
 
 from resources.lib.core.zbdirectoryitem import ZBDirectoryItem

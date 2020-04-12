@@ -1,0 +1,114 @@
+# Kodi Media Center language file
+# Addon Name: Radio
+# Addon id: plugin.audio.radio_de
+# Addon Provider: Tristan Fischer, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl_PL\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30100"
+msgid "Editorials Recommendations"
+msgstr "Rekomendacje redakcyjne"
+
+msgctxt "#30101"
+msgid "Top Stations"
+msgstr "Top stacji"
+
+msgctxt "#30102"
+msgid "Browse by genre"
+msgstr "Przeglądaj według gatunku"
+
+msgctxt "#30103"
+msgid "Browse by topic"
+msgstr "Przeglądaj według tematu"
+
+msgctxt "#30104"
+msgid "Browse by country"
+msgstr "Przeglądaj według kraju"
+
+msgctxt "#30105"
+msgid "Browse by city"
+msgstr "Przeglądaj według miasta"
+
+msgctxt "#30106"
+msgid "Browse by language"
+msgstr "Przeglądaj według języka"
+
+msgctxt "#30107"
+msgid "Local Stations"
+msgstr "Lokalne stacje"
+
+msgctxt "#30108"
+msgid "My Stations"
+msgstr "Moje stacje"
+
+msgctxt "#30200"
+msgid "Search for station"
+msgstr "Szukaj stacji"
+
+msgctxt "#30300"
+msgid "Language"
+msgstr "Język"
+
+msgctxt "#30301"
+msgid "English"
+msgstr "angielski"
+
+msgctxt "#30302"
+msgid "German"
+msgstr "niemiecki"
+
+msgctxt "#30303"
+msgid "French"
+msgstr "francuski"
+
+msgctxt "#30310"
+msgid "Force ViewMode to Thumbnail"
+msgstr "Wymuszaj widok Miniatury"
+
+msgctxt "#30400"
+msgid "Add to 'My Stations'"
+msgstr "Dodaj do 'Moich stacji'"
+
+msgctxt "#30401"
+msgid "Remove from 'My Stations'"
+msgstr "Usuń z 'Moich stacji'"
+
+msgctxt "#30402"
+msgid "Edit custom Station"
+msgstr "Edytuj niestandardową stację"
+
+msgctxt "#30500"
+msgid "Please enter %s"
+msgstr "Proszę wpisz %s"
+
+msgctxt "#30501"
+msgid "title"
+msgstr "tytuł"
+
+msgctxt "#30502"
+msgid "thumbnail url or path"
+msgstr "Ścieżka lub adres miniatury"
+
+msgctxt "#30503"
+msgid "stream url"
+msgstr "url strumienia"
+
+msgctxt "#30504"
+msgid "Add custom Station..."
+msgstr "Dodaj niestandardową stację..."
+
+msgctxt "#30600"
+msgid "Network Error"
+msgstr "Błąd sieci"
+

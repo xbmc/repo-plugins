@@ -1,3 +1,6 @@
+3.0.0 (12.04.2020)
+  - Automated submissions for gotham
+
 2.1.0 (04.12.2019)
   - update to python3
   - fix live streams

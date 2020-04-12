@@ -1,0 +1,54 @@
+# Kodi Media Center language file
+# Addon Name: Radio
+# Addon id: plugin.audio.radio_de
+# Addon Provider: Tristan Fischer, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar_SA\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+msgctxt "#30102"
+msgid "Browse by genre"
+msgstr "الاستعراض حسب النوع"
+
+msgctxt "#30108"
+msgid "My Stations"
+msgstr "المحطات الخاصة بي "
+
+msgctxt "#30300"
+msgid "Language"
+msgstr "اللغة"
+
+msgctxt "#30301"
+msgid "English"
+msgstr "الإنجليزية"
+
+msgctxt "#30302"
+msgid "German"
+msgstr "الجرمانية"
+
+msgctxt "#30303"
+msgid "French"
+msgstr "الفرنسية"
+
+msgctxt "#30400"
+msgid "Add to 'My Stations'"
+msgstr "الاضافة الى 'محطاتي المفضلة' "
+
+msgctxt "#30401"
+msgid "Remove from 'My Stations'"
+msgstr "الازالة من قائمة محطاتي المفضلة   "
+
+msgctxt "#30600"
+msgid "Network Error"
+msgstr "خطاء بالشبكة "
+

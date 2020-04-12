@@ -1,3 +1,9 @@
+3.0.0 (12/4/2020)
+    - [fix] playlist based stations (backport)
+    - [fix] ratings (backport)
+    - [new] removed python3 compatibility
+    - [new] automated submissions to repository
+
 v2.4.2 (9/2/2020)
     - [add] sort methods for categories
     - [add] setting to prefer http connections over https if http streams are available

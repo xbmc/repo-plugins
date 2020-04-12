@@ -3,7 +3,7 @@
 ##################################
 # ZattooBox extension
 # Recordings
-# (c) 2014-2015 Pascal Nançoz
+# (c) 2014-2020 Pascal Nançoz
 ##################################
 
 from resources.lib.core.zbextension import ZBExtension

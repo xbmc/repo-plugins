@@ -16,6 +16,8 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: This is a comment
+
 msgctxt "#32000"
 msgid "Banca Sapo"
 msgstr ""

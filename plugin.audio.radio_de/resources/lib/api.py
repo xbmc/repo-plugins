@@ -258,7 +258,7 @@ class RadioApi():
         self.log('__resolve_playlist started with station=%s'
                  % station['id'])
         servers = []
-        stream_url = station['streamURL']
+        stream_url = station['streamUrl']
         if stream_url.lower().endswith('m3u'):
             response = self.__urlopen(stream_url)
             self.log('__resolve_playlist found .m3u file')

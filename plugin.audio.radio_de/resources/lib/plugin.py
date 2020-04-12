@@ -530,7 +530,7 @@ def __add_stations(stations, add_custom=False, browse_more=None):
             'fanart': __get_plugin_fanart(),
             'info': {
                 'title': station.get('name', ''),
-                'rating': str(station.get('rating', '0.0')),
+                'rating': (10.0 - 0.0)*((float(station.get('rating', 0.0))-30.000)/(1.0-30.000)), # linear interpolation
                 'genre': station.get('genre', ''),
                 'size': int(station.get('bitrate', 0)),
                 'comment': station.get('description', ''),

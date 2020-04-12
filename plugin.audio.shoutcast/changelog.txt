@@ -1,3 +1,7 @@
+2.5.0 (12.4.2020)
+ - Automated submissions to gotham branch
+ - Addon.xml cosmetics
+
 2.4.1 (29.3.2020)
  - Fix requests
 

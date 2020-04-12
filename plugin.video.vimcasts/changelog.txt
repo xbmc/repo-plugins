@@ -1,0 +1,20 @@
+Version 1.3.0+matrix.1
+-----------
+* Dropped python 2
+* Addon.xml updates for matrix
+* Language updates for matrix
+* Automated submissions for matrix
+
+
+Version 1.2.0
+-----------
+* Update to python3
+* Update to new xbmcswift2
+* Add duration
+* Remove unplayable items
+* New addon requirements
+
+Version 1.1
+-----------
+
+* Initial version

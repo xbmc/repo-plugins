@@ -69,7 +69,7 @@ def list_videos(plugin, item_id, page, **kwargs):
 
             item = Listitem()
             item.label = video_title
-            item.art['thumb'] = video_image
+            item.art['thumb'] = item.art['landscape'] = video_image
 
             if 'overlayDescription' in video_datas:
                 date_value = video_datas['overlayDescription'].split('|')[0]

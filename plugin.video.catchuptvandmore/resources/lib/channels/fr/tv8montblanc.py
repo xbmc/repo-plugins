@@ -74,7 +74,7 @@ def list_videos(plugin, item_id, url, **kwargs):
         item.label = video['title']
         item.info['plot'] = video['description']
         item.info['duration'] = video['duration']
-        item.art["thumb"] = video['thumbnail_large_url']
+        item.art['thumb'] = item.art['landscape'] = video['thumbnail_large_url']
         vid = video['id']
 
         item.set_callback(get_video_url,

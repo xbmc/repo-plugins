@@ -149,7 +149,7 @@ def list_programs(plugin, item_id, category_part_url, page=0, **kwargs):
             if program['media_image'] is not None:
                 for image in program['media_image']['patterns']:
                     if "vignette_16x9" in image['type']:
-                        item.art['thumb'] = URL_API(image['urls']['w:1024'])
+                        item.art['thumb'] = item.art['landscape'] = URL_API(image['urls']['w:1024'])
 
         if "description" in program:
             item.info['plot'] = program['description']
@@ -357,7 +357,7 @@ def list_videos_search(plugin, item_id, search_query, page=0, **kwargs):
             item.info['title'] = label
             item.info['tvshowtitle'] = program_name
             item.art['fanart'] = URL_API(image_1024)
-            item.art['thumb'] = URL_API(image_400)
+            item.art['thumb'] = item.art['landscape'] = URL_API(image_400)
             item.info.date(publication_date, "%Y-%m-%d")
             item.info['plot'] = plot
             item.info['duration'] = show['duration']
@@ -517,6 +517,6 @@ def populate_item(item, video, include_program_name=True, **kwargs):
             item.info['castandrole'] = list(zip_longest(actors, characters))
 
     item.art['fanart'] = image_url
-    item.art['thumb'] = image_url
+    item.art['thumb'] = item.art['landscape'] = image_url
 
     return broadcast_id

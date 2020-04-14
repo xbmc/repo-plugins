@@ -143,7 +143,7 @@ def list_programs(plugin, item_id, category_filter_argument,
 
         item = Listitem()
         item.label = program_title
-        item.art['thumb'] = program_image
+        item.art['thumb'] = item.art['landscape'] = program_image
         item.info['plot'] = program_plot
         if 'franchise' in program_url:
             item.set_callback(
@@ -182,7 +182,7 @@ def list_videos_episodes(plugin, item_id, program_url, **kwargs):
 
     item = Listitem()
     item.label = video_title
-    item.art['thumb'] = video_image
+    item.art['thumb'] = item.art['landscape'] = video_image
     item.info['plot'] = video_plot
     item.info['duration'] = video_duration
     item.info.date(date_value, "%Y-%m-%d")
@@ -219,7 +219,7 @@ def list_videos_franchise(plugin, item_id, program_url, **kwargs):
 
             item = Listitem()
             item.label = video_title
-            item.art['thumb'] = video_image
+            item.art['thumb'] = item.art['landscape'] = video_image
             item.info['plot'] = video_plot
             item.info['duration'] = video_duration
             item.info.date(date_value, "%Y-%m-%d")
@@ -257,7 +257,7 @@ def list_videos_franchise(plugin, item_id, program_url, **kwargs):
 
             item = Listitem()
             item.label = video_title
-            item.art['thumb'] = video_image
+            item.art['thumb'] = item.art['landscape'] = video_image
             item.info['plot'] = video_plot
             item.info['duration'] = video_duration
             item.info.date(date_value, "%Y-%m-%d")

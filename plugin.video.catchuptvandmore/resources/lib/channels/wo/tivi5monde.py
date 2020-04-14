@@ -111,7 +111,7 @@ def list_programs(plugin, item_id, next_url, page, **kwargs):
 
         item = Listitem()
         item.label = program_title
-        item.art['thumb'] = program_image
+        item.art['thumb'] = item.art['landscape'] = program_image
         item.set_callback(list_videos,
                           item_id=item_id,
                           next_url=program_url,
@@ -137,7 +137,7 @@ def list_videos(plugin, item_id, next_url, page, **kwargs):
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
 
         item.set_callback(get_video_url,
                           item_id=item_id,
@@ -167,7 +167,7 @@ def list_videos_search(plugin, search_query, item_id, page, **kwargs):
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
 
         item.set_callback(get_video_url, item_id=item_id, video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)

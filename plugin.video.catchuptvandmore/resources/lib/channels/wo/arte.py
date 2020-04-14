@@ -217,7 +217,7 @@ def list_programs(plugin, item_id, sub_category_code_name, sub_category_url,
 
                     item = Listitem()
                     item.label = program_title
-                    item.art['thumb'] = program_image
+                    item.art['thumb'] = item.art['landscape'] = program_image
                     item.set_callback(
                         list_videos_program,
                         item_id=item_id,
@@ -248,7 +248,7 @@ def list_programs(plugin, item_id, sub_category_code_name, sub_category_url,
 
                     item = Listitem()
                     item.label = video_title
-                    item.art['thumb'] = video_image
+                    item.art['thumb'] = item.art['landscape'] = video_image
                     item.info['duration'] = video_duration
                     item.info['plot'] = video_plot
 
@@ -288,7 +288,7 @@ def list_programs_concert(plugin, item_id, sub_category_code_name, sub_category_
 
                 item = Listitem()
                 item.label = program_title
-                item.art['thumb'] = program_image
+                item.art['thumb'] = item.art['landscape'] = program_image
                 item.set_callback(
                     list_videos_program_concert,
                     item_id=item_id,
@@ -321,7 +321,7 @@ def list_videos_sub_category(plugin, item_id, sub_category_url,
 
             item = Listitem()
             item.label = video_title
-            item.art['thumb'] = video_image
+            item.art['thumb'] = item.art['landscape'] = video_image
             item.info['duration'] = video_duration
             item.info['plot'] = video_plot
 
@@ -363,7 +363,7 @@ def list_videos_sub_category(plugin, item_id, sub_category_url,
 
                     item = Listitem()
                     item.label = video_title
-                    item.art['thumb'] = video_image
+                    item.art['thumb'] = item.art['landscape'] = video_image
                     item.info['duration'] = video_duration
                     item.info['plot'] = video_plot
 
@@ -409,7 +409,7 @@ def list_videos_program(plugin, item_id, sub_category_code_name, program_id,
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = vudeo_image
+        item.art['thumb'] = item.art['landscape'] = vudeo_image
         item.info['duration'] = video_duration
         item.info['plot'] = video_plot
         item.info.date(date_value, '%Y-%m-%d')
@@ -445,7 +445,7 @@ def list_videos_program_concert(plugin, item_id, program_url,
 
             item = Listitem()
             item.label = video_title
-            item.art['thumb'] = video_image
+            item.art['thumb'] = item.art['landscape'] = video_image
             item.info['duration'] = video_duration
             item.info['plot'] = video_plot
 
@@ -485,7 +485,7 @@ def list_videos_program_concert(plugin, item_id, program_url,
 
             item = Listitem()
             item.label = video_title
-            item.art['thumb'] = video_image
+            item.art['thumb'] = item.art['landscape'] = video_image
             item.info['duration'] = video_duration
             item.info['plot'] = video_plot
 

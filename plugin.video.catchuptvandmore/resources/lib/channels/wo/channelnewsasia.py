@@ -141,7 +141,7 @@ def list_programs_videos_on_demand(plugin, item_id, page, **kwargs):
 
         item = Listitem()
         item.label = program_title
-        item.art['thumb'] = program_image
+        item.art['thumb'] = item.art['landscape'] = program_image
         item.set_callback(list_videos_on_demand,
                           item_id=item_id,
                           program_url=program_url,
@@ -165,7 +165,7 @@ def list_videos(plugin, item_id, context_id, program_id, page, **kwargs):
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
 
         item.set_callback(get_video_url,
                           item_id=item_id,
@@ -200,7 +200,7 @@ def list_videos_on_demand(plugin, item_id, program_url, page, **kwargs):
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
 
         item.set_callback(get_video_url,
                           item_id=item_id,

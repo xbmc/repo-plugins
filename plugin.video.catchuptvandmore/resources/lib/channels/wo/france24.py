@@ -146,7 +146,7 @@ def list_direct_tv_jts(plugin, item_id, guid, **kwargs):
             if json_image['code'] == '1920x1080':
                 item.art['fanart'] = json_image['url']
             if json_image['code'] == '720x405':
-                item.art['thumb'] = json_image['url'
+                item.art['thumb'] = item.art['landscape'] = json_image['url'
         '''
 
         youtube_playlist_id = ''
@@ -181,7 +181,7 @@ def list_videos(plugin, item_id, guid, page=1, **kwargs):
         try:
             for json_image in json_video['images']['formats']:
                 item.art['fanart'] = json_image['url']
-                item.art['thumb'] = json_image['url']
+                item.art['thumb'] = item.art['landscape'] = json_image['url']
         except Exception:
             pass
 
@@ -222,7 +222,7 @@ def list_last_edition(plugin, item_id, guid, **kwargs):
         try:
             for json_image in json_video['images']['formats']:
                 item.art['fanart'] = json_image['url']
-                item.art['thumb'] = json_image['url']
+                item.art['thumb'] = item.art['landscape'] = json_image['url']
         except Exception:
             pass
 
@@ -258,7 +258,7 @@ def list_all_programs(plugin, item_id, guid, guid_program, page=1, **kwargs):
         try:
             for json_image in json_video['images']['formats']:
                 item.art['fanart'] = json_image['url']
-                item.art['thumb'] = json_image['url']
+                item.art['thumb'] = item.art['landscape'] = json_image['url']
         except Exception:
             pass
 
@@ -308,7 +308,7 @@ def list_program_video(plugin, item_id, nid, guid_program, page=1, **kwargs):
             try:
                 for json_image in json_video['images']['formats']:
                     item.art['fanart'] = json_image['url']
-                    item.art['thumb'] = json_image['url']
+                    item.art['thumb'] = item.art['landscape'] = json_image['url']
             except Exception:
                 pass
 

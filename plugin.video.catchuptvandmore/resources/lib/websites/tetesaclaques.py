@@ -77,7 +77,7 @@ def list_shows(plugin, item_id, category_url, page, **kwargs):
     for personnage in root.iterfind(".//a"):
         item = Listitem()
         item.label = personnage.get('title')
-        item.art['thumb'] = URL_ROOT(personnage.find('.//img').get('src'))
+        item.art['thumb'] = item.art['landscape'] = URL_ROOT(personnage.find('.//img').get('src'))
         show_url = URL_ROOT(personnage.get('href'))
 
         item.set_callback(list_videos_2,
@@ -107,7 +107,7 @@ def list_videos_1(plugin, item_id, category_url, page, **kwargs):
                                           ).text.strip() + ' ' + episode.find(
                                               './/img').get('alt')
                 video_url = URL_ROOT(episode.find('.//a').get('href'))
-                item.art['thumb'] = URL_ROOT(episode.find('.//img').get('src'))
+                item.art['thumb'] = item.art['landscape'] = URL_ROOT(episode.find('.//img').get('src'))
 
                 item.set_callback(get_video_url,
                                   item_id=item_id,
@@ -125,7 +125,7 @@ def list_videos_1(plugin, item_id, category_url, page, **kwargs):
             item = Listitem()
             item.label = episode.find('.//img').get('alt')
             video_url = URL_ROOT(episode.get('href'))
-            item.art['thumb'] = URL_ROOT(episode.find('.//img').get('src'))
+            item.art['thumb'] = item.art['landscape'] = URL_ROOT(episode.find('.//img').get('src'))
 
             item.set_callback(get_video_url,
                               item_id=item_id,
@@ -153,7 +153,7 @@ def list_videos_2(plugin, item_id, category_url, **kwargs):
         item = Listitem()
         item.label = episode.find('.//img').get('alt')
         video_url = URL_ROOT(episode.get('href'))
-        item.art['thumb'] = URL_ROOT(episode.find('.//img').get('src'))
+        item.art['thumb'] = item.art['landscape'] = URL_ROOT(episode.find('.//img').get('src'))
 
         item.set_callback(get_video_url,
                           item_id=item_id,

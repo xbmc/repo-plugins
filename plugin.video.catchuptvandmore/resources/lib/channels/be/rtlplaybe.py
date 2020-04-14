@@ -173,8 +173,8 @@ def list_programs(plugin, item_id, category_id, **kwargs):
                 program_fanart = URL_IMG % (external_key)
 
         item.label = program_title
-        item.art["thumb"] = program_img
-        item.art["fanart"] = program_fanart
+        item.art['thumb'] = item.art['landscape'] = program_img
+        item.art['fanart'] = program_fanart
         item.info['plot'] = program_desc
         item.set_callback(list_program_categories,
                           item_id=item_id,
@@ -276,8 +276,8 @@ def list_videos(plugin, item_id, program_id, sub_category_id, **kwargs):
         item.label = title
         item.info['plot'] = description
         item.info['duration'] = duration
-        item.art["thumb"] = program_img
-        item.art["fanart"] = program_img
+        item.art['thumb'] = item.art['landscape'] = program_img
+        item.art['fanart'] = program_img
         try:
             item.info.date(aired, '%Y-%m-%d')
         except Exception:

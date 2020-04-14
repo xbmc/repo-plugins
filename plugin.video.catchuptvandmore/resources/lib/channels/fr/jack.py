@@ -122,7 +122,7 @@ def list_videos(plugin, item_id, program_title, **kwargs):
 
                             item = Listitem()
                             item.label = video_title
-                            item.art['thumb'] = video_image
+                            item.art['thumb'] = item.art['landscape'] = video_image
                             item.info['plot'] = video_plot
                             item.info.date(date_value, '%Y-%m-%d')
 

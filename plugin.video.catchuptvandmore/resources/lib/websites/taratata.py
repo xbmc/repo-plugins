@@ -90,7 +90,7 @@ def list_shows_taratata(plugin, item_id, category_url, page, **kwargs):
     for live in root.iterfind(".//div[@class='col-md-6']"):
         item = Listitem()
         item.label = live.find('.//img').get('alt')
-        item.art['thumb'] = live.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = live.find('.//img').get('src')
         show_url = URL_ROOT(live.find('.//a').get('href'))
 
         item.set_callback(list_videos, item_id=item_id, category_url=show_url)
@@ -131,7 +131,7 @@ def list_shows_artistes_2(plugin, item_id, category_url, **kwargs):
         item = Listitem()
         item.label = artiste.find('.//img').get('alt')
         artiste_url = URL_ROOT(artiste.find('.//a').get('href'))
-        item.art['thumb'] = 'https:' + artiste.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = 'https:' + artiste.find('.//img').get('src')
 
         item.set_callback(
             list_shows_artistes_3,
@@ -191,7 +191,7 @@ def list_videos(plugin, item_id, category_url, **kwargs):
         item = Listitem()
         item.label = video_integral.find('.//img').get('alt')
         video_url = URL_ROOT(video_integral.find('.//a').get('href'))
-        item.art['thumb'] = video_integral.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = video_integral.find('.//img').get('src')
 
         item.set_callback(get_video_url,
                           item_id=item_id,
@@ -204,7 +204,7 @@ def list_videos(plugin, item_id, category_url, **kwargs):
         item = Listitem()
         item.label = video.find('.//img').get('alt')
         video_url = URL_ROOT(video.find('.//a').get('href'))
-        item.art['thumb'] = video.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = video.find('.//img').get('src')
 
         item.set_callback(get_video_url,
                           item_id=item_id,
@@ -227,7 +227,7 @@ def list_videos_bonus(plugin, item_id, category_url, page, **kwargs):
         item = Listitem()
         item.label = video_integral.find('.//img').get('alt')
         video_url = URL_ROOT(video_integral.find('.//a').get('href'))
-        item.art['thumb'] = video_integral.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = video_integral.find('.//img').get('src')
 
         item.set_callback(get_video_url,
                           item_id=item_id,
@@ -240,7 +240,7 @@ def list_videos_bonus(plugin, item_id, category_url, page, **kwargs):
         item = Listitem()
         item.label = video.find('.//img').get('alt')
         video_url = URL_ROOT(video.find('.//a').get('href'))
-        item.art['thumb'] = video.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = video.find('.//img').get('src')
 
         item.set_callback(get_video_url,
                           item_id=item_id,

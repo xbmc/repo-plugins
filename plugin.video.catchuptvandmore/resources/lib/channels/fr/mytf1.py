@@ -148,8 +148,8 @@ def list_programs(plugin, item_id, category_id, **kwargs):
 
             item = Listitem()
             item.label = program_name
-            item.art["thumb"] = program_image
-            item.art["fanart"] = program_background
+            item.art['thumb'] = item.art['landscape'] = program_image
+            item.art['fanart'] = program_background
             item.set_callback(list_program_categories,
                               item_id=item_id,
                               program_slug=program_slug)
@@ -205,7 +205,7 @@ def list_videos(plugin, item_id, program_slug, video_type_value, offset, **kwarg
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
         item.info['plot'] = video_plot
         item.info['duration'] = video_duration
         item.info.date(video_datas['date'].split('T')[0], '%Y-%m-%d')

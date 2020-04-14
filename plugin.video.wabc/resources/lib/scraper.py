@@ -22,11 +22,13 @@ UTF8 = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      html = self.getRequest('https://abc.go.com/shows?category=A-Z')
+      html = self.getRequest('https://abc.com/shows?category=A-Z')
       html = re.compile("window\['__abc_com__'\]=(.+?);</script>", re.DOTALL).search(html).group(1)
       a = json.loads(html)
-      a = a["page"]["content"]["shows"]["categoryTilegroups"][1]["tiles"]
-      for b in a:
+      c = a["page"]["content"]["shows"]["categoryTilegroups"][1]["tiles"]
+      if c == []:
+          c = a["page"]["content"]["shows"]["categoryTilegroups"][2]["tiles"]
+      for b in c:
         name = b["title"]
         url = b["link"]["urlValue"]
         thumb = b["images"][-1]["value"]

@@ -16,20 +16,23 @@ h = HTMLParser.HTMLParser()
 qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
 UTF8 = 'utf-8'
+BASEURL = 'https://video.foxnews.com'
 
 
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      ilist = self.addMenuItem('Live','GV', ilist, '5614615980001', self.addonIcon, self.addonFanart, {}, isFolder=False)
-      ilist = self.addMenuItem('Show Clips','GM', ilist, 'show', self.addonIcon, self.addonFanart, {}, isFolder=True)
-      ilist = self.addMenuItem('News Clips','GM', ilist, 'news', self.addonIcon, self.addonFanart, {}, isFolder=True)
+      html = self.getRequest(BASEURL)
+      a1,a2,a3 = re.compile('<a href="#">Video.+?">(.+?)<.+?">(.+?)<.+?">(.+?)<', re.DOTALL).search(html).groups()
+      ilist = self.addMenuItem(a1,'GV', ilist, '5614615980001', self.addonIcon, self.addonFanart, {}, isFolder=False)
+      ilist = self.addMenuItem(a2,'GM', ilist, 'show', self.addonIcon, self.addonFanart, {}, isFolder=True)
+      ilist = self.addMenuItem(a3,'GM', ilist, 'news', self.addonIcon, self.addonFanart, {}, isFolder=True)
       return(ilist)
 
 
 
   def getAddonMovies(self,url,ilist):
-      html = self.getRequest('https://video.foxnews.com')
+      html = self.getRequest(BASEURL)
       html = re.compile('<div class="column footer-'+url+'-clips">(.+?)</div', re.DOTALL).search(html).group(1)
       a = re.compile('href="(.+?)">(.+?)<', re.DOTALL).findall(html)
       for url, name in a:
@@ -43,7 +46,7 @@ class myAddon(t1mAddon):
       return(ilist)
 
   def getAddonShows(self,url,ilist):
-      html = self.getRequest('https://video.foxnews.com'+url)
+      html = self.getRequest(BASEURL+url)
       html = re.compile('<div class="main">.+?<ul>(.+?)</ul>', re.DOTALL).search(html).group(1)
       a = re.compile('aria-label="(.+?)".+?href="(.+?)"', re.DOTALL).findall(html)
       if len(a) > 15 :
@@ -59,7 +62,7 @@ class myAddon(t1mAddon):
       return(ilist)
       
   def getAddonEpisodes(self,url,ilist):
-      html = self.getRequest('https://video.foxnews.com'+url)
+      html = self.getRequest(BASEURL+url)
       s,p = re.compile('site: "(.+?)".+?playlistId: "(.+?)"', re.DOTALL).search(html).groups()
       base_url = 'https://video.%s.com/v/feed/playlist/%s.json?template=fox&cb=' % (s,p)
       html = self.getRequest(base_url)
@@ -88,7 +91,7 @@ class myAddon(t1mAddon):
 
 
   def getAddonVideo(self,url):
-      url = 'https://video.foxnews.com/v/feed/video/%s.json?template=fox&cb=' % url
+      url = BASEURL+'/v/feed/video/%s.json?template=fox&cb=' % url
       html = self.getRequest(url)
       a = json.loads(html)
       a = a["channel"]["item"]

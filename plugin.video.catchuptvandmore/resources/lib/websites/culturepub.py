@@ -124,9 +124,9 @@ def list_playlists(plugin, item_id, page, category_url, **kwargs):
         item = Listitem()
         item.label = playlist.find('.//h2').find('a').get('title')
         if playlist.find('.//img').get('data-src'):
-            item.art['thumb'] = playlist.find('.//img').get('data-src')
+            item.art['thumb'] = item.art['landscape'] = playlist.find('.//img').get('data-src')
         else:
-            item.art['thumb'] = playlist.find('.//img').get('src')
+            item.art['thumb'] = item.art['landscape'] = playlist.find('.//img').get('src')
         videos_url = URL_ROOT + playlist.find('.//h2').find('a').get('href')
 
         item.set_callback(list_playlist_videos,
@@ -153,9 +153,9 @@ def list_playlist_videos(plugin, item_id, videos_url, **kwargs):
         item = Listitem()
         item.label = video.find('.//h2').text
         if video.find('.//img').get('data-src'):
-            item.art['thumb'] = video.find('.//img').get('data-src')
+            item.art['thumb'] = item.art['landscape'] = video.find('.//img').get('data-src')
         else:
-            item.art['thumb'] = video.find('.//img').get('src')
+            item.art['thumb'] = item.art['landscape'] = video.find('.//img').get('src')
 
         video_id = video.find(".//a").get('data-src')
         video_id = re.compile('player=7&pod=(.*?)[\"\&]').findall(
@@ -189,9 +189,9 @@ def list_videos(plugin, item_id, page, category_url, **kwargs):
         item = Listitem()
         item.label = video.find('.//h2').find('a').get('title')
         if video.find('.//img').get('data-src'):
-            item.art['thumb'] = video.find('.//img').get('data-src')
+            item.art['thumb'] = item.art['landscape'] = video.find('.//img').get('data-src')
         else:
-            item.art['thumb'] = video.find('.//img').get('src')
+            item.art['thumb'] = item.art['landscape'] = video.find('.//img').get('src')
         video_url = URL_ROOT + video.find('.//h2').find('a').get('href')
 
         item.set_callback(get_video_url,

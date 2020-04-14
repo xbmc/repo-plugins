@@ -102,7 +102,7 @@ def list_videos(plugin, item_id, mode, page, **kwargs):
         item = Listitem()
         item.label = video_title
         item.info['duration'] = video_duration
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
         item.info.date(date_value, '%Y-%m-%d')
 
         item.set_callback(get_video_url,
@@ -166,7 +166,7 @@ def list_lives(plugin, item_id, **kwargs):
 
             item = Listitem()
             item.label = live_title
-            item.art['thumb'] = live_image
+            item.art['thumb'] = item.art['landscape'] = live_image
             item.info['plot'] = live_plot
             item.info.date(date_value, '%Y-%m-%d')
             item.set_callback(get_live_url,
@@ -192,7 +192,7 @@ def list_lives(plugin, item_id, **kwargs):
 
         item = Listitem()
         item.label = live_title
-        item.art['thumb'] = live_image
+        item.art['thumb'] = item.art['landscape'] = live_image
         item.info['plot'] = live_plot
         item.info.date(date_value, '%Y-%m-%d')
         yield item

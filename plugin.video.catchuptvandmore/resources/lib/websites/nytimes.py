@@ -84,7 +84,7 @@ def list_videos(plugin, item_id, category_url, **kwargs):
     #     item.label = video_data["headline"]
     #     video_id = str(video_data["id"])
     #     for image in video_data["images"]:
-    #         item.art['thumb'] = URL_ROOT + '/' + image["url"]
+    #         item.art['thumb'] = item.art['landscape'] = URL_ROOT + '/' + image["url"]
     #     item.info['plot'] = video_data["summary"]
 
     #     item.set_callback(get_video_url,

@@ -133,7 +133,7 @@ def list_programs_mode(plugin, item_id, category_name_value, **kwargs):
 
         item = Listitem()
         item.label = program_title
-        item.art["thumb"] = program_image
+        item.art['thumb'] = item.art['landscape'] = program_image
         item.set_callback(list_program_seasons,
                           item_id=item_id,
                           program_id=program_id)
@@ -210,8 +210,8 @@ def list_videos(plugin, item_id, program_id, program_season_number, **kwargs):
 
                 item = Listitem()
                 item.label = video_title
-                item.art["thumb"] = video_image
-                item.art["fanart"] = video_image
+                item.art['thumb'] = item.art['landscape'] = video_image
+                item.art['fanart'] = video_image
                 item.info["plot"] = video_plot
                 item.info["duration"] = video_duration
 

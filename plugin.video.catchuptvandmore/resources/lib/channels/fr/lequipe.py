@@ -94,7 +94,7 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
 
         item = Listitem()
         item.label = title
-        item.art['thumb'] = img
+        item.art['thumb'] = item.art['landscape'] = img
         item.info['duration'] = duration
 
         item.set_callback(get_video_url,

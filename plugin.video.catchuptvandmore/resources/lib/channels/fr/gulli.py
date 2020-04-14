@@ -133,8 +133,8 @@ def list_programs(plugin, item_id, program_url, **kwargs):
 
         item = Listitem()
         item.label = program_title
-        item.art["thumb"] = program_image
-        item.art["fanart"] = program_image
+        item.art['thumb'] = item.art['landscape'] = program_image
+        item.art['fanart'] = program_image
         item.set_callback(list_videos, item_id=item_id, program_id=program_id)
         item_post_treatment(item)
         yield item
@@ -179,8 +179,8 @@ def list_videos(plugin, item_id, program_id, **kwargs):
         item.info['date'] = date
         item.info['aired'] = aired
         item.info['year'] = year
-        item.art["thumb"] = thumb
-        item.art["fanart"] = fanart
+        item.art['thumb'] = item.art['landscape'] = thumb
+        item.art['fanart'] = fanart
 
         item.set_callback(get_video_url,
                           item_id=item_id,

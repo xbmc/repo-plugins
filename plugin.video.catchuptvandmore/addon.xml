@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.18" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.19" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.youtube.dl" version="18.225.0"/>
@@ -42,28 +42,12 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.18]
-[Add] Setting to autorun the plugin when Kodi starts
-[Add] Live TV - EDGE Sport (UK)
-[Add] Live TV - ICI Télé (CA) - Add Live TV for each Region (Vancouver|Regina|Toronto|Edmonton|Rimouski|Québec|Winnipeg|Moncton|Ottawa|Montréal)
-[Fix] Catch-up TV and Live TV - Blaze TV (UK)
-[Add] Live TV - Europe 1 (FR)
-[Add] Live TV - LN24 (BE)
-[Add] Catch-up TV - Canal C (BE)
-[Fix] Catch-up TV - Game One (FR)
-[Rename/Fix] Catch-up TV - Lumni (FR) - Previously FranceTV Education
-[Remove] Catch-up TV - IRL and Studio 4 (FR) - Contents are available in France TV Slash
-[Add] Live TV - CBC (CA) (Ottawa|Montreal|Charlottetown|Fredericton|Halifax|Windsor|Yellowknife|Winnipeg|Regina|Calgary|Edmonton|Vancouver|Toronto|St. John's)
-[Add] Catch-up TV - 100% Foot - 6play (FR)
-[Add] Live TV - V Télé (CA)
-[ReAdd] Live TV - MiTele (Télécinco, Cuatro, ...) (ES)
-[Add] Live TV - CRTV and CRTV News (CM)
-[Fix] Catch-up TV - Paramount Channel (FR)
-[Add] Live TV - Tele M1 (CH)
-[Add] Live TV - Yoopa, LCN (CA)
-[Fix] Catch-up TV - Jack (mycanal) (FR)
-[Fix] Live TV - La7 (IT) - DRM content
-[Fix] Catch-up TV - RTBF (BE)
+[Version 0.2.19]
+[Fix] Download mode - NRJ12 (FR)
+[Fix] Catch-up TV - Public Sénat (FR)
+[Fix] Dailymotion Playback - Dowload mode return False for dailymotion video
+[Fix] Set landscape art field in addition to thumb field (fix for some skins like Arctic horizon)
+[Fix] Remove duplicate RTBF channels in Live TV BE
     </news>
     <assets>
       <icon>icon.png</icon>

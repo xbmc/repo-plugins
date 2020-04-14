@@ -126,7 +126,7 @@ def list_programs(plugin, item_id, category_key, **kwargs):
 
             item = Listitem()
             item.label = program_title
-            item.art["thumb"] = program_image
+            item.art['thumb'] = item.art['landscape'] = program_image
             item.info["plot"] = program_plot
             if 'épisodes' in program_datas["Description"]:
                 item.set_callback(
@@ -200,7 +200,7 @@ def list_videos_programs(plugin, item_id, program_url, season_name, **kwargs):
 
                     item = Listitem()
                     item.label = video_title
-                    item.art['thumb'] = video_image
+                    item.art['thumb'] = item.art['landscape'] = video_image
                     item.info['plot'] = video_plot
                     item.info['duration'] = video_duration
                     if video_datas["Details"]["AirDate"] is not None:
@@ -271,7 +271,7 @@ def list_videos_days(plugin, item_id, day_id, **kwargs):
 
                     item = Listitem()
                     item.label = video_title
-                    item.art['thumb'] = video_image
+                    item.art['thumb'] = item.art['landscape'] = video_image
                     item.info['plot'] = video_plot
                     item.set_callback(
                         get_video_url,

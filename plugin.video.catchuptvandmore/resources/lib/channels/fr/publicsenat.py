@@ -80,7 +80,7 @@ def list_categories(plugin, item_id, **kwargs):
         item.set_callback(list_videos,
                           item_id=item_id,
                           category_url=category_url,
-                          page='1')
+                          page='0')
         item_post_treatment(item)
         yield item
 
@@ -97,7 +97,10 @@ def list_videos(plugin, item_id, category_url, page, **kwargs):
             list_texts = video_datas.findall(
                 ".//div[@class='field-item even']")
             if len(list_texts) > 2:
-                video_title = list_texts[1].text + ' - ' + list_texts[2].text
+                if list_texts[2].text is not None:
+                    video_title = list_texts[1].text + ' - ' + list_texts[2].text
+                else:
+                    video_title = list_texts[1].text
             elif len(list_texts) > 1:
                 video_title = list_texts[1].text
             else:
@@ -113,7 +116,7 @@ def list_videos(plugin, item_id, category_url, page, **kwargs):
 
             item = Listitem()
             item.label = video_title
-            item.art['thumb'] = video_image
+            item.art['thumb'] = item.art['landscape'] = video_image
             item.info['duration'] = video_duration
             item.info['plot'] = video_plot
 

@@ -74,7 +74,7 @@ def list_videos(plugin, item_id, page, category_url, **kwargs):
         item = Listitem()
         item.label = episode.find('.//a').get('title')
         video_url = URL_ROOT + episode.find('.//a').get('href')
-        item.art['thumb'] = URL_ROOT + episode.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = URL_ROOT + episode.find('.//img').get('src')
 
         item.set_callback(get_video_url,
                           item_id=item_id,

@@ -99,7 +99,7 @@ def list_videos(plugin, item_id, category_url, **kwargs):
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
 
         item.set_callback(get_video_url,
                           item_id=item_id,

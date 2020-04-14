@@ -154,7 +154,7 @@ def list_videos_sports(plugin, item_id, category_url, page, **kwargs):
             at_least_one_item = True
             item = Listitem()
             item.label = video_title
-            item.art['thumb'] = video_image
+            item.art['thumb'] = item.art['landscape'] = video_image
 
             item.set_callback(get_video_url,
                               item_id=item_id,

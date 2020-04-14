@@ -1,3 +1,6 @@
+3.0.1 (13/4/2020)
+    - [new] Use internal playlist resolver also in custom stations
+
 3.0.0 (12/4/2020)
     - [fix] playlist based stations (backport)
     - [fix] ratings (backport)

@@ -440,8 +440,6 @@ class HbogoHandler_eu(HbogoHandler):
 
             payload = HbogoConstants.eu_redirect_login[self.op_id][3]
 
-            self.log("LOGIN FORM PAYLOAD: " + str(payload))
-
             if self.op_id == HbogoConstants.SkylinkID:  # Perform special steps for Skylink
                 import re
                 payload['__VIEWSTATE'] = re.compile('<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="(.+?)" />').findall(r.text)[0]
@@ -516,8 +514,8 @@ class HbogoHandler_eu(HbogoHandler):
 
             try:
                 if jsonrspl['ErrorMessage']:
-                    self.log("OAuth Login Error: " + str(str(jsonrspl['ErrorMessage'])))
-                    xbmcgui.Dialog().ok(self.LB_LOGIN_ERROR, str(jsonrspl['ErrorMessage']))
+                    self.log("OAuth Login Error: " + py2_encode(jsonrspl['ErrorMessage']))
+                    xbmcgui.Dialog().ok(self.LB_LOGIN_ERROR, jsonrspl['ErrorMessage'])
                     self.logout()
                     return False
             except Exception:
@@ -720,8 +718,8 @@ class HbogoHandler_eu(HbogoHandler):
 
         try:
             if jsonrspl['ErrorMessage']:
-                self.log("LOGIN ERROR: " + str(jsonrspl['ErrorMessage']))
-                xbmcgui.Dialog().ok(self.LB_LOGIN_ERROR, str(jsonrspl['ErrorMessage']))
+                self.log("LOGIN ERROR: " + py2_encode(jsonrspl['ErrorMessage']))
+                xbmcgui.Dialog().ok(self.LB_LOGIN_ERROR, jsonrspl['ErrorMessage'])
                 self.logout()
                 return False
         except KeyError:
@@ -1008,9 +1006,6 @@ class HbogoHandler_eu(HbogoHandler):
             if self.addon.getSetting('get_elapsed') == 'true':
                 self.JsonHis = self.get_from_hbogo(self.API_URL_HIS + self.GOcustomerId + '/' + self.COUNTRY_CODE + '/3', 'json', False)
 
-            if self.lograwdata:
-                self.log(str(jsonrsp))
-
             try:
                 if jsonrsp['ErrorMessage']:
                     self.log("Search Error: " + py2_encode(jsonrsp['ErrorMessage']))
@@ -1113,10 +1108,10 @@ class HbogoHandler_eu(HbogoHandler):
         try:
             if jsonrspp['ErrorMessage']:
                 self.logout()
-                self.log("Purchase error: " + str(jsonrspp['ErrorMessage']))
+                self.log("Purchase error: " + py2_encode(jsonrspp['ErrorMessage']))
                 if retry < self.max_play_retry:
                     #  probably to long inactivity, retry playback after re-login, avoid try again after login again message
-                    self.log("Try again playback after error: " + str(jsonrspp['ErrorMessage']))
+                    self.log("Try again playback after error: " + py2_encode(jsonrspp['ErrorMessage']))
                     return self.play(content_id, retry + 1)
                 xbmcgui.Dialog().ok(self.LB_ERROR, jsonrspp['ErrorMessage'])
                 return
@@ -1163,7 +1158,7 @@ class HbogoHandler_eu(HbogoHandler):
             folder = folder + 'subs' + os.sep + content_id + os.sep
             if self.addon.getSetting('forcesubs') == 'true':
                 #  if inject subtitles is enable cache direct subtitle links if available and set subtitles from cache
-                self.log("Cache subtitles enabled, downloading and converting subtitles in: " + str(folder))
+                self.log("Cache subtitles enabled, downloading and converting subtitles in: " + folder)
                 if not os.path.exists(os.path.dirname(folder)):
                     try:
                         os.makedirs(os.path.dirname(folder))
@@ -1175,12 +1170,11 @@ class HbogoHandler_eu(HbogoHandler):
                     if len(subtitles) > 0:
                         subs_paths = []
                         for sub in subtitles:
-                            self.log("Processing subtitle language code: " + str(sub['Code']) + " URL: " + str(sub['Url']))
+                            self.log("Processing subtitle language code: " + sub['Code'] + " URL: " + sub['Url'])
                             r = requests.get(sub['Url'])
-                            with open(str(folder) + str(sub['Code']) + ".srt", 'wb') as f:
+                            with open(folder + sub['Code'] + ".srt", 'wb') as f:
                                 f.write(r.content)
-                            subs_paths.append(str(folder) + str(sub['Code']) + ".srt")
-                        self.log("Setting subtitles: " + str(subs_paths))
+                            subs_paths.append(folder + sub['Code'] + ".srt")
                         list_item.setSubtitles(subs_paths)
                         self.log("Local subtitles set")
                     else:
@@ -1402,8 +1396,6 @@ class HbogoHandler_eu(HbogoHandler):
         }
 
     def addLink(self, title, mode):
-        if self.lograwdata:
-            self.log("Adding Link: " + str(title) + " MODE: " + str(mode))
         cid = title['ObjectUrl'].rsplit('/', 2)[1]
         externalid = title['Tracking']['ExternalId']
         hbogo_position = self.get_elapsed(externalid)
@@ -1457,8 +1449,6 @@ class HbogoHandler_eu(HbogoHandler):
         xbmcplugin.addDirectoryItem(handle=self.handle, url=item_url, listitem=liz, isFolder=False)
 
     def addDir(self, item, mode, media_type):
-        if self.lograwdata:
-            self.log("Adding Dir: " + str(item) + " MODE: " + str(mode))
         directory_url = "%s?%s" % (self.base_url, urlencode({
             'url': item['ObjectUrl'],
             'mode': mode,
@@ -1494,8 +1484,6 @@ class HbogoHandler_eu(HbogoHandler):
         xbmcplugin.addDirectoryItem(handle=self.handle, url=directory_url, listitem=liz, isFolder=True)
 
     def addCat(self, name, url, icon, mode):
-        if self.lograwdata:
-            self.log("Adding Cat: " + str(name) + "," + str(url) + "," + str(icon) + " MODE: " + str(mode))
         category_url = '%s?%s' % (self.base_url, urlencode({
             'url': url,
             'mode': mode,

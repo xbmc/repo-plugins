@@ -98,6 +98,12 @@ class HbogoHandler(object):
         else:
             self.use_cache = False
 
+        self.usedevkey = self.addon.getSetting('usedevkey')
+        if self.usedevkey == "true":
+            self.usedevkey = True
+        else:
+            self.usedevkey = False
+
         if self.sensitive_debug:
             ret = xbmcgui.Dialog().yesno(self.LB_INFO, self.language(30712), self.language(30714), self.language(30715))
             if not ret:
@@ -429,7 +435,14 @@ class HbogoHandler(object):
             return None
 
     def inputCredentials(self):
-        username = xbmcgui.Dialog().input(self.language(30442), type=xbmcgui.INPUT_ALPHANUM)
+        if not self.usedevkey:
+            ret = xbmcgui.Dialog().yesno('[COLOR red]' + self.language(30813) + '[/COLOR]', self.language(30810))
+            if not ret:
+                return False
+        encrypted_info_label = "[COLOR green][B]" + self.language(30811) + "[/B][/COLOR]"
+        if not self.usedevkey:
+            encrypted_info_label = "[COLOR red][B]" + self.language(30812) + "[/B][/COLOR]"
+        username = xbmcgui.Dialog().input('[B]' + self.addon.getAddonInfo('name') + '[/B]: ' + self.language(30442) + ' ' + encrypted_info_label, type=xbmcgui.INPUT_ALPHANUM)
         if len(username) == 0:
             ret = xbmcgui.Dialog().yesno(self.LB_ERROR, self.language(30728))
             if not ret:
@@ -437,7 +450,7 @@ class HbogoHandler(object):
                 self.addon.setSetting('password', '')
                 return False
             return self.inputCredentials()
-        password = xbmcgui.Dialog().input(self.language(30443), type=xbmcgui.INPUT_ALPHANUM,
+        password = xbmcgui.Dialog().input('[B]' + self.addon.getAddonInfo('name') + '[/B]: ' + self.language(30443) + ' ' + encrypted_info_label, type=xbmcgui.INPUT_ALPHANUM,
                                           option=xbmcgui.ALPHANUM_HIDE_INPUT)
         if len(password) == 0:
             ret = xbmcgui.Dialog().yesno(self.LB_ERROR, self.language(30728))
@@ -480,8 +493,11 @@ class HbogoHandler(object):
         self.addon.setSetting(credential_id, self.addon_id + '.credentials.v1.' + self.encrypt_credential_v1(value))
 
     def get_device_id_v1(self):
-        from libs.uuid_device import get_crypt_key
-        dev_key = get_crypt_key()
+        if self.usedevkey:
+            from libs.uuid_device import get_crypt_key
+            dev_key = get_crypt_key()
+        else:
+            dev_key = HbogoConstants.fallback_ck
         return Util.hash256_bytes(dev_key + self.addon_id + '.credentials.v1.' + codecs.encode(dev_key, 'rot_13'))
 
     def encrypt_credential_v1(self, raw):

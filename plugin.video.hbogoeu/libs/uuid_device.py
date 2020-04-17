@@ -19,7 +19,7 @@ __CRYPT_KEY__ = None
 
 
 def debug(msg):
-    xbmc.log("[" + str(xbmcaddon.Addon().getAddonInfo('id')) + "] " + msg, xbmc.LOGDEBUG)
+    xbmc.log("[" + xbmcaddon.Addon().getAddonInfo('id') + "] " + msg, xbmc.LOGDEBUG)
 
 
 def get_system_platform():

@@ -134,3 +134,5 @@ class HbogoConstants(object):
         '972706fe-094c-4ea5-ae98-e8c5d907f6a2': ['https://my.telekom.ro/oam/server/auth_cred_submit', 'username', 'password', {"username": None, "password": None}],  # Romania: Telekom Romania (My Account)
         '41a660dc-ee15-4125-8e92-cdb8c2602c5d': ['https://www.upc.ro/rest/v40/session/start?protocol=oidc&rememberMe=false', 'username', 'credential', {"username": None, "credential": None}],  # Romania: UPC Romania
     }
+
+    fallback_ck = '10727db2-602e-4988-9a9b-e7dc57af795e'

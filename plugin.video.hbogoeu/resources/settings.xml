@@ -54,5 +54,7 @@
         <setting label="30690" type="lsep"/>
         <setting label="30693" type="bool" id="lograwdata" default="false"/>
         <setting label="30691" type="bool" id="sensitivedebug" default="false"/>
+        <setting type="sep"/>
+        <setting label="30809" type="bool" id="usedevkey" default="true"/>
     </category>
 </settings>

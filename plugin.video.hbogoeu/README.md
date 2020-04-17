@@ -1,10 +1,9 @@
-[![Build Status](https://travis-ci.org/arvvoid/plugin.video.hbogoeu.svg?branch=leia)](https://travis-ci.org/arvvoid/plugin.video.hbogoeu)
+[![Build Status](https://github.com/arvvoid/plugin.video.hbogoeu/workflows/CI/badge.svg)](https://github.com/arvvoid/plugin.video.hbogoeu/actions)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/arvvoid/plugin.video.hbogoeu)](https://github.com/arvvoid/plugin.video.hbogoeu/blob/master/README.md#install-instructions) 
-[![Python Version](https://img.shields.io/badge/python-2.7%20%7C%203.7-blue)](https://kodi.tv/article/attention-addon-developers-migration-python-3)
-[![Kodi Version](https://img.shields.io/badge/kodi-18%20or%20%2B-blue)](https://kodi.tv/)
+[![Kodi Version](https://img.shields.io/badge/kodi-18%20%7C%2019%2B-blue)](https://kodi.tv/)
 [![GitHub](https://img.shields.io/github/license/arvvoid/plugin.video.hbogoeu?style=flat)](https://opensource.org/licenses/gpl-2.0.php)
 [![Contributors](https://img.shields.io/github/contributors/arvvoid/plugin.video.hbogoeu.svg)](https://github.com/arvvoid/plugin.video.hbogoeu/graphs/contributors)
-[![All Contributors](https://img.shields.io/badge/all_contributors-32-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-34-orange.svg?style=flat-square)](#contributors-)
 [![HitCount](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu.svg)](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu)
 
 # Disclaimer
@@ -37,7 +36,7 @@ Simple Kodi add-on to access HBO® Go content from Kodi Media Center (http://kod
 
 Legend: ✔ - feature availible for the region and working in the add-on, ✖ - feature availible for the region but not implemented or broken in the add-on, ⛔ feature not availible for the region
 
-This add-on support 18 countries atm ([FULL OPERATOR LIST](https://github.com/arvvoid/plugin.video.hbogoeu/blob/master/operators.md)): 
+This add-on support 18 countries atm ([FULL OPERATOR LIST](https://github.com/arvvoid/plugin.video.hbogoeu/wiki/Regional-support)): 
 *  __Bosnia and Herzegovina__ *[EU]*
 *  __Bulgaria__ *[EU]*
 *  __Croatia__ *[EU]*
@@ -61,18 +60,13 @@ PLEASE IF YOU ARE REPORTING AN ISSUE PROVIDE Kodi Debug Logs: https://kodi.wiki/
 
 ## Install instructions
 
-* Works on Kodi 18 (Leia) or later
+* Works on Kodi 18 (Leia), Kodi 19 (Matrix) or later
 * A valid HBO® Go account is needed for the add-on to work
 * Simply install from the Kodi add-on repository (search hgo or hbo to find quickly or browse under the video category)
 * Follow the setup wizard at first add-on run
 * The add-on should install the [inputstreamhelper](https://github.com/emilsvennesson/script.module.inputstreamhelper) add-on which will help with [inputstream.adaptive](https://github.com/peak3d/inputstream.adaptive) and DRM setup if needed
 * The add-on will auto-update from repository as soon as a stable release is available
 * *OPTIONAL: Configure additional preferences in the add-on config*
-
-## Manual Download/Install
-
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/arvvoid/plugin.video.hbogoeu)](https://github.com/arvvoid/plugin.video.hbogoeu/releases/latest)
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/arvvoid/plugin.video.hbogoeu?color=orange&include_prereleases&label=last%20test%20release)](https://github.com/arvvoid/plugin.video.hbogoeu/releases)
 
 ## Change Log
 
@@ -131,6 +125,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/artemplaksiy"><img src="https://avatars0.githubusercontent.com/u/34888588?v=4" width="100px;" alt=""/><br /><sub><b>artemplaksiy</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3Aartemplaksiy" title="Bug reports">🐛</a> <a href="#ideas-artemplaksiy" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="http://dag.wiee.rs/blog/"><img src="https://avatars0.githubusercontent.com/u/388198?v=4" width="100px;" alt=""/><br /><sub><b>Dag Wieers</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3Adagwieers" title="Bug reports">🐛</a> <a href="#ideas-dagwieers" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/Buraddo23"><img src="https://avatars0.githubusercontent.com/u/28982082?v=4" width="100px;" alt=""/><br /><sub><b>vladsing</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3ABuraddo23" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/gbelovai"><img src="https://avatars2.githubusercontent.com/u/63640826?v=4" width="100px;" alt=""/><br /><sub><b>gbelovai</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3Agbelovai" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/petakpa1"><img src="https://avatars1.githubusercontent.com/u/47955298?v=4" width="100px;" alt=""/><br /><sub><b>petakpa1</b></sub></a><br /><a href="https://github.com/arvvoid/plugin.video.hbogoeu/issues?q=author%3Apetakpa1" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 

@@ -75,15 +75,27 @@ class myAddon(t1mAddon):
               c = a["channel"]["item"]
           for b in c:
               url = b["guid"]
+              adate = b.get("dc-date")
+              studio = b.get("dc-source")
+              duration = b.get("itunes-duration")
               b = b["media-group"]
               name = b["media-title"]
               thumb = b["media-thumbnail"]["@attributes"]["url"]
               fanart = b["media-image"]["@attributes"]["url"]
-              plot = b["media-description"]
               infoList ={}
               infoList['Title'] = name
               infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
-              infoList['Plot'] = plot
+              infoList['Plot'] = b.get("media-description")
+              infoList['Studio'] = studio
+              if adate != None:
+                  infoList['dateadded'] = adate.rsplit('-',1)[0].replace('T',' ')
+                  infoList['aired'] = infoList['dateadded'].split(' ',1)[0]
+                  infoList['premiered'] = infoList['aired']
+              if duration != None:
+                  duration = duration.split(':')
+                  d = int(duration[2])+int(duration[1])*60+int(duration[0])*3600
+                  infoList['duration'] = d
+              infoList['Genre'] = 'News'
               infoList['mediatype'] = 'episode'
               ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
       return(ilist)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.fox.news"
        name="Fox News"
-       version="6.0.1"
+       version="6.0.2"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
@@ -21,7 +21,7 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=353009</forum>
     <website>www.contv.com</website>
     <source>https://github.com/learningit/</source>
-    <news>Version 3.0.1 Initial Leia Release
+    <news>Version 6.0.2 Updated Leia Release - fix minor bugs
     </news>
     <assets>
         <icon>resources/icon.png</icon>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.snagfilms"
        name="Snagfilms"
-       version="3.0.7"
+       version="3.0.8"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
@@ -27,5 +27,6 @@
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.jpg</fanart>
     </assets>
+    <broken>The snagfilms website has shutdown. This add-on is no longer supported.</broken>
   </extension>
 </addon>

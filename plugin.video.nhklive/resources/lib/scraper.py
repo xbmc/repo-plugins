@@ -49,19 +49,26 @@ class myAddon(t1mAddon):
       for a in b:
          infoList = {}
          url = NHKBASE % a['url'] 
-         plot = a['description']
+         plot = a['description_clean']
          name = a['sub_title_clean']
          if name == "":
              name = a['title_clean']
          thumb = a['image']
-         if not thumb.startswith('http'): thumb  = NHKBASE % a['image']
+         if not thumb.startswith('http'):
+             thumb  = NHKBASE % a['image']
          fanart = a['image_l']
-         if not fanart.startswith('http'): fanart = NHKBASE % a['image_l']
+         if not fanart.startswith('http'):
+             fanart = NHKBASE % a['image_l']
          infoList['Title'] = name
          infoList['TVShowTitle'] = a['title_clean']
+         infoList['duration'] = a['movie_duration']
+         dt = a.get('onair')
+         if dt != None:
+             aired = datetime.datetime.fromtimestamp(dt/1000)
+             infoList['aired'] = aired.strftime("%Y-%m-%d")
          infoList['Plot']  = plot
-         infoList['mediatype'] = 'tvshow'
          infoList['studio'] = 'NHK'
+         infoList['mediatype'] = 'episode'
          ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
       return(ilist)
 

@@ -66,6 +66,14 @@ msgctxt "#30064"
 msgid "disabled"
 msgstr "deaktiviert"
 
+msgctxt "#30070"
+msgid "Cache"
+msgstr "Cache"
+
+msgctxt "#30071"
+msgid "Clear cache"
+msgstr "Cache leeren"
+
 # GUI - Root
 msgctxt "#30101"
 msgid "Search"
@@ -116,6 +124,11 @@ msgstr "Top 50"
 msgctxt "#30302"
 msgid "New & hot"
 msgstr "Neu und angesagt"
+
+# GUI - Settings
+msgctxt "#30501"
+msgid "Cache cleared"
+msgstr "Cache gelöscht"
 
 # GUI - Generic
 msgctxt "#30901"

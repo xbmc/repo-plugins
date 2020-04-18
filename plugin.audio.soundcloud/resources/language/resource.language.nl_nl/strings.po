@@ -65,6 +65,14 @@ msgctxt "#30064"
 msgid "disabled"
 msgstr "uitgeschakeld"
 
+msgctxt "#30070"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Clear cache"
+msgstr "Cache wissen"
+
 # GUI - Root
 msgctxt "#30101"
 msgid "Search"
@@ -115,6 +123,11 @@ msgstr ""
 msgctxt "#30302"
 msgid "New & hot"
 msgstr "Nieuw & Populair"
+
+# GUI - Settings
+msgctxt "#30501"
+msgid "Cache cleared"
+msgstr "Cache gewist"
 
 # GUI - Generic
 msgctxt "#30901"

@@ -24,7 +24,24 @@ class VFS:
         file = xbmcvfs.File(filepath, "w")
         success = file.write(string)
         file.close()
-        return success
+        return filepath if success else False
+
+    def remove_dir(self, path):
+        dir_list, file_list = xbmcvfs.listdir(path)
+
+        for file in file_list:
+            xbmcvfs.delete(os.path.join(path, file))
+
+        for directory in dir_list:
+            self.remove_dir(os.path.join(path, directory))
+
+        xbmcvfs.rmdir(path)
+
+    def destroy(self):
+        """
+        Deletes the VFS folder and all files in it.
+        """
+        self.remove_dir(self.path)
 
     def get_mtime(self, filename):
         """

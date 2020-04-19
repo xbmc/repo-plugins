@@ -28,9 +28,8 @@ class Track(ListItem):
             "duration": self.info.get("duration"),
             "genre": self.info.get("genre"),
             "title": self.label,
-            "year": self.info.get("date")[:4]
-            # Is there a way to add the description?
-            # "xxx": item.info.get("description")
+            "year": self.info.get("date")[:4],
+            "comment": self.info.get("description")
         })
         list_item.setProperty("isPlayable", "true")
         list_item.setProperty("mediaUrl", self.media)

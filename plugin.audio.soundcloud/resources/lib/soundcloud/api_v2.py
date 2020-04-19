@@ -20,7 +20,8 @@ class ApiV2(ApiInterface):
     """This class uses the unofficial API used by the SoundCloud website."""
 
     api_host = "https://api-v2.soundcloud.com"
-    api_client_id = "KT6UCHXC9iNnI8wn4UUfwMSlAPe4Z8zx"
+    api_client_id_cache_duration = 1440  # 24 hours
+    api_client_id_cache_key = "api-client-id"
     api_limit = 20
     api_limit_tracks = 50
     api_lang = "en"
@@ -34,11 +35,32 @@ class ApiV2(ApiInterface):
         self.settings = settings
         self.api_limit = int(self.settings.get("search.items.size"))
 
-        if self.settings.get("apiv2.clientid"):
-            self.api_client_id = self.settings.get("apiv2.clientid")
-
         if self.settings.get("apiv2.locale") == self.settings.APIV2_LOCALE["auto"]:
             self.api_lang = lang
+
+    @property
+    def api_client_id(self):
+        # It is possible to set a custom client ID in the settings
+        client_id_settings = self.settings.get("apiv2.client_id")
+        if client_id_settings:
+            xbmc.log("plugin.audio.soundcloud::ApiV2() Using custom client ID", xbmc.LOGDEBUG)
+            return client_id_settings
+
+        # Check if there is a cached client ID
+        client_id_cached = self.cache.get(
+            self.api_client_id_cache_key,
+            self.api_client_id_cache_duration
+        )
+        if client_id_cached:
+            xbmc.log("plugin.audio.soundcloud::ApiV2() Using cached client ID", xbmc.LOGDEBUG)
+            return client_id_cached
+
+        # Extract client ID from website and cache it
+        client_id = self.fetch_client_id()
+        self.cache.add(self.api_client_id_cache_key, str(client_id))
+        xbmc.log("plugin.audio.soundcloud::ApiV2() Using new client ID", xbmc.LOGDEBUG)
+
+        return client_id
 
     def search(self, query, kind="tracks"):
         res = self._do_request("/search/" + kind, {"q": query, "limit": self.api_limit})

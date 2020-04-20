@@ -163,7 +163,7 @@ def list_programs(plugin, item_id, **kwargs):
         item = Listitem()
         item.label = program_title
 
-        item.art['thumb'] = program_image
+        item.art['thumb'] = item.art['landscape'] = program_image
         item.set_callback(list_videos_program,
                           item_id=item_id,
                           program_id=program_id)
@@ -195,7 +195,7 @@ def list_videos_program(plugin, item_id, program_id, **kwargs):
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
         item.info['plot'] = video_plot
         item.info['duration'] = video_duration
         item.info.date(date_value, '%d-%m-%Y')
@@ -290,7 +290,7 @@ def list_videos_sub_category(plugin, item_id, category_url, sub_category_id,
 
                             item = Listitem()
                             item.label = video_title
-                            item.art['thumb'] = video_image
+                            item.art['thumb'] = item.art['landscape'] = video_image
 
                             item.set_callback(get_video_url,
                                               item_id=item_id,
@@ -332,7 +332,7 @@ def list_videos_sub_category_dl(plugin, item_id, sub_category_data_uuid,
 
                                 item = Listitem()
                                 item.label = video_title
-                                item.art['thumb'] = video_image
+                                item.art['thumb'] = item.art['landscape'] = video_image
 
                                 item.set_callback(get_video_url,
                                                   item_id=item_id,
@@ -381,7 +381,7 @@ def multi_live_entry(plugin, item_id, **kwargs):
 
 def live_entry(plugin, item_id, **kwargs):
     """
-    First executed function after replay_bridge
+    First executed function after live_bridge
     """
     return set_live_url(plugin, item_id, item_id.upper())
 
@@ -395,21 +395,18 @@ def set_live_url(plugin, item_id, video_id, **kwargs):
     if "url_streaming" in json_parser:
         live_url = json_parser["url_streaming"]["url_hls"]
     live_channel_title = json_parser["channel"]["label"]
-    start_time_value = format_hours(json_parser["start_date"])
-    end_time_value = format_hours(json_parser["end_date"])
-    date_value = format_day(json_parser["start_date"])
+    # start_time_value = format_hours(json_parser["start_date"])
+    # end_time_value = format_hours(json_parser["end_date"])
+    # date_value = format_day(json_parser["start_date"])
     live_title = live_channel_title + " - " + json_parser["title"]
     if json_parser['subtitle']:
         live_title += " - " + json_parser['subtitle']
-    live_plot = 'Début le %s à %s (CET)' % (date_value, start_time_value) + \
-        '\n\r' + 'Fin le %s à %s (CET)' % (date_value, end_time_value) + '\n\r' + \
-        'Accessibilité: ' + json_parser["geolock"]["title"] + '\n\r' + \
-        json_parser["description"]
+    live_plot = json_parser["description"]
     live_image = json_parser["images"]["illustration"]["16x9"]["1248x702"]
 
     item = Listitem()
     item.label = live_title
-    item.art['thumb'] = live_image
+    item.art['thumb'] = item.art['landscape'] = live_image
     item.info['plot'] = live_plot
     item.set_callback(get_live_url, item_id=item_id, live_url=live_url)
     item_post_treatment(item, is_playable=True)
@@ -432,7 +429,8 @@ def list_lives(plugin, item_id, **kwargs):
             live_channel_title = live_datas["channel"]["label"]
         else:
             live_channel_title = 'Exclu Auvio'
-
+        if live_channel_title in ['La Une', 'La Deux', 'La Trois']:
+            continue
         start_time_value = format_hours(live_datas["start_date"])
         end_time_value = format_hours(live_datas["end_date"])
         date_value = format_day(live_datas["start_date"])
@@ -447,7 +445,7 @@ def list_lives(plugin, item_id, **kwargs):
 
         item = Listitem()
         item.label = live_title
-        item.art['thumb'] = live_image
+        item.art['thumb'] = item.art['landscape'] = live_image
         item.info['plot'] = live_plot
         # commented this line because othrewie sorting is made by date and then by title
         # and doesn't help to find the direct

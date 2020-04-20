@@ -174,8 +174,8 @@ def list_programs(plugin, item_id, category_id, **kwargs):
                 program_fanart = URL_IMG % (external_key)
 
         item.label = program_title
-        item.art["thumb"] = program_img
-        item.art["fanart"] = program_fanart
+        item.art['thumb'] = item.art['landscape'] = program_img
+        item.art['fanart'] = program_fanart
         item.info['plot'] = program_desc
         item.set_callback(list_program_categories,
                           item_id=item_id,
@@ -238,8 +238,8 @@ def populate_item(item, clip_dict):
         if img['role'] == 'vignette':
             external_key = img['external_key']
             program_img = URL_IMG % (external_key)
-            item.art["thumb"] = program_img
-            item.art["fanart"] = program_img
+            item.art['thumb'] = item.art['landscape'] = program_img
+            item.art['fanart'] = program_img
             break
 
 

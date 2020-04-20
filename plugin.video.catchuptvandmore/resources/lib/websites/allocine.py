@@ -210,9 +210,9 @@ def list_shows_emissions_4(plugin, item_id, page, programs_url, **kwargs):
         if program.find('.//img').get('data-attr') is not None:
             image_json_parser = json.loads(
                 program.find('.//img').get('data-attr'))
-            item.art['thumb'] = image_json_parser['src']
+            item.art['thumb'] = item.art['landscape'] = image_json_parser['src']
         else:
-            item.art['thumb'] = program.find('.//img').get('src')
+            item.art['thumb'] = item.art['landscape'] = program.find('.//img').get('src')
         program_url = URL_ROOT + program.find(".//h2[@class='title ']").find(
             './/span').find('.//a').get('href')
 
@@ -323,9 +323,9 @@ def list_videos_films_series_1(plugin, item_id, page, show_url, **kwargs):
         except IndexError:
             continue
         if episode.find('.//img').get('data-src') is not None:
-            item.art['thumb'] = episode.find('.//img').get('data-src')
+            item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('data-src')
         else:
-            item.art['thumb'] = episode.find('.//img').get('src')
+            item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('src')
 
         item.set_callback(get_video_url,
                           item_id=item_id,
@@ -350,11 +350,11 @@ def list_videos_emissions_1(plugin, item_id, show_url,
         if episode.find('.//img').get('data-attr') is not None:
             image_json_parser = json.loads(
                 episode.find('.//img').get('data-attr'))
-            item.art['thumb'] = image_json_parser['src']
+            item.art['thumb'] = item.art['landscape'] = image_json_parser['src']
         elif episode.find('.//img').get('data-src') is not None:
-            item.art['thumb'] = episode.find('.//img').get('data-src')
+            item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('data-src')
         else:
-            item.art['thumb'] = episode.find('.//img').get('src')
+            item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('src')
 
         if '?cmedia=' in episode.find('.//a').get('href'):
             video_id = episode.find('.//a').get('href').split('?cmedia=')[1]
@@ -423,14 +423,14 @@ def list_videos_emissions_2(plugin, item_id, page, show_url, last_page,
                     './/p'):
             item.info['plot'] = plot_value.text.strip()
         if episode.find('.//meta') is not None:
-            item.art['thumb'] = episode.find('.//meta').get('content')
+            item.art['thumb'] = item.art['landscape'] = episode.find('.//meta').get('content')
         else:
             if episode.find('.//img').get('data-attr') is not None:
                 image_json_parser = json.loads(
                     episode.find('.//img').get('data-attr'))
-                item.art['thumb'] = image_json_parser['src']
+                item.art['thumb'] = item.art['landscape'] = image_json_parser['src']
             else:
-                item.art['thumb'] = episode.find('.//img').get('src')
+                item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('src')
 
         item.set_callback(get_video_url,
                           item_id=item_id,
@@ -464,7 +464,7 @@ def list_videos_search(plugin, item_id, page, search_query, **kwargs):
             elif 'video-' in episode.find('.//a').get('href'):
                 video_id = episode.find('.//a').get('href').split(
                     '-')[1].replace('/', '')
-            item.art['thumb'] = episode.find('.//img').get('src')
+            item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('src')
 
             item.set_callback(get_video_url,
                               item_id=item_id,
@@ -593,10 +593,10 @@ def list_videos_news_videos(plugin, item_id, category_url, page, **kwargs):
                     item.label = episode.find(
                         ".//a[@class='meta-title-link']").text
                     if episode.find('.//img').get('data-src') is not None:
-                        item.art['thumb'] = episode.find('.//img').get(
+                        item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get(
                             'data-src')
                     else:
-                        item.art['thumb'] = episode.find('.//img').get('src')
+                        item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('src')
                     video_url = URL_ROOT + episode.find(
                         ".//a[@class='meta-title-link']").get('href')
                     if episode.find(".//div[@class='meta-body']") is not None:

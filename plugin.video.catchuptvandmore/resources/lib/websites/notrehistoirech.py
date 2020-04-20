@@ -68,7 +68,7 @@ def list_videos(plugin, item_id, category_url, page, **kwargs):
             ".//a[@class='text-black text-sm leading-xs font-semibold block']").text.strip()
         video_url = episode.find(
             ".//a[@class='text-black text-sm leading-xs font-semibold block']").get('href')
-        item.art['thumb'] = episode.find(
+        item.art['thumb'] = item.art['landscape'] = episode.find(
             ".//img[@class='w-full h-auto align-top']").get('data-src')
         item.info['plot'] = episode.find(
             ".//div[@class='text-grey-darker text-sm leading-xs mb-3']").text

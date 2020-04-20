@@ -93,7 +93,7 @@ def list_shows(plugin, item_id, category_mode, page, **kwargs):
     for program_datas in root.iterfind(".//div[@class='media']"):
         item = Listitem()
         item.label = program_datas.find('.//img').get('alt')
-        item.art['thumb'] = URL_ROOT + program_datas.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = URL_ROOT + program_datas.find('.//img').get('src')
         program_url = URL_ROOT + program_datas.find('.//a').get('href')
 
         item.set_callback(list_videos,
@@ -132,7 +132,7 @@ def list_videos(plugin, item_id, program_url, nb_videos, **kwargs):
         else:
             item.label = episode.find('.//img').get('alt')
         video_id = episode.find('.//a').get('href').split('/')[2]
-        item.art['thumb'] = URL_ROOT + episode.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = URL_ROOT + episode.find('.//img').get('src')
         video_duration_text_datas = episode.find(
             ".//span[@class='duration']").text.split(' ')
         video_duration = 0
@@ -188,7 +188,7 @@ def list_videos_search(plugin, item_id, nb_videos, search_query, **kwargs):
         else:
             item.label = episode.find('.//img').get('alt')
         video_id = episode.find('.//a').get('href').split('/')[2]
-        item.art['thumb'] = URL_ROOT + episode.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = URL_ROOT + episode.find('.//img').get('src')
         video_duration_text_datas = episode.find(
             ".//span[@class='duration']").text.split(' ')
         video_duration = 0

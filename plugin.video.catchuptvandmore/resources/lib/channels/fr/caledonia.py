@@ -95,7 +95,7 @@ def list_videos(plugin, item_id, program_url, **kwargs):
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
         # try:
         #     item.info.date(date_value, '%d/%m/%Y')
         # except:

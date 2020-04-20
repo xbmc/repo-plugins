@@ -123,7 +123,7 @@ def list_programs(plugin, item_id, root_url, **kwargs):
 
         item = Listitem()
         item.label = program_title
-        item.art['thumb'] = program_image
+        item.art['thumb'] = item.art['landscape'] = program_image
         item.set_callback(list_videos, item_id=item_id, next_url=program_url)
         item_post_treatment(item)
         yield item
@@ -143,7 +143,7 @@ def list_categories(plugin, item_id, root_url, **kwargs):
 
         item = Listitem()
         item.label = category_title
-        item.art['thumb'] = category_image
+        item.art['thumb'] = item.art['landscape'] = category_image
         item.set_callback(list_category_programs,
                           item_id=item_id,
                           next_url=category_url)
@@ -166,7 +166,7 @@ def list_category_programs(plugin, item_id, next_url, **kwargs):
 
         item = Listitem()
         item.label = category_program_title
-        item.art['thumb'] = category_program_image
+        item.art['thumb'] = item.art['landscape'] = category_program_image
         item.set_callback(list_videos,
                           item_id=item_id,
                           next_url=category_program_url)
@@ -194,7 +194,7 @@ def list_videos(plugin, item_id, next_url, **kwargs):
 
             item = Listitem()
             item.label = video_title
-            item.art['thumb'] = video_image
+            item.art['thumb'] = item.art['landscape'] = video_image
             item.info['plot'] = video_plot
 
             item.set_callback(get_video_url,
@@ -214,7 +214,7 @@ def list_videos(plugin, item_id, next_url, **kwargs):
 
             item = Listitem()
             item.label = video_title
-            item.art['thumb'] = video_image
+            item.art['thumb'] = item.art['landscape'] = video_image
             item.info['plot'] = video_plot
 
             item.set_callback(get_video_url,

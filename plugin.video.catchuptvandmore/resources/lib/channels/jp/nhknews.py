@@ -105,7 +105,7 @@ def list_videos_weather(plugin, item_id, **kwargs):
 
     item = Listitem()
     item.label = video_title
-    item.art['thumb'] = video_image
+    item.art['thumb'] = item.art['landscape'] = video_image
     item.set_callback(get_video_weather_url,
                       item_id=item_id,
                       video_url=video_url)
@@ -156,7 +156,7 @@ def list_videos_news(plugin, item_id, page, **kwargs):
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
         item.info['duration'] = video_duration
         item.info.date(date_value, '%Y-%m-%d')
 

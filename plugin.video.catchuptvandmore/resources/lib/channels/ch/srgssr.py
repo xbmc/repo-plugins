@@ -173,7 +173,7 @@ def list_programs(plugin, item_id, category_url, **kwargs):
 
             item = Listitem()
             item.label = program_title
-            item.art['thumb'] = program_image
+            item.art['thumb'] = item.art['landscape'] = program_image
             item.set_callback(list_videos_program,
                               item_id=item_id,
                               program_id=program_id)
@@ -204,7 +204,7 @@ def list_videos_category(plugin, item_id, category_url, **kwargs):
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
         item.info['plot'] = video_plot
 
         item.set_callback(get_video_url,
@@ -240,7 +240,7 @@ def list_videos_program(plugin, item_id, program_id, **kwargs):
 
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = video_image
+        item.art['thumb'] = item.art['landscape'] = video_image
         item.info['plot'] = video_plot
 
         item.set_callback(get_video_url,

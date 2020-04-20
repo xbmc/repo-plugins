@@ -126,7 +126,7 @@ def list_programs(plugin, item_id, category_slug, **kwargs):
 
                             item = Listitem()
                             item.label = program_title
-                            item.art['thumb'] = program_image
+                            item.art['thumb'] = item.art['landscape'] = program_image
                             item.info['plot'] = program_plot
                             if 'EPISODE' in program_type or 'MOVIE' in program_type or 'TRAILER' in program_type:
                                 isVideo = False
@@ -212,7 +212,7 @@ def list_videos(plugin, item_id, program_slug, program_season_number, **kwargs):
 
                 item = Listitem()
                 item.label = video_title
-                item.art['thumb'] = video_image
+                item.art['thumb'] = item.art['landscape'] = video_image
                 item.info['plot'] = video_plot
                 item.info['duration'] = video_duration
                 item.set_callback(

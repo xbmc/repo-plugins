@@ -70,7 +70,7 @@ def list_videos(plugin, item_id, page, **kwargs):
         info_first_video_jsonparser = json.loads(info_first_video_json + '}')
 
         item.label = info_first_video_jsonparser["metadata"]["title"]
-        item.art['thumb'] = info_first_video_jsonparser["metadata"][
+        item.art['thumb'] = item.art['landscape'] = info_first_video_jsonparser["metadata"][
             "posters"]["1080"]
 
         item.set_callback(get_video_url_first_video,
@@ -85,7 +85,7 @@ def list_videos(plugin, item_id, page, **kwargs):
 
         item.label = episode.find('.//img').get('alt')
         video_url = URL_ROOT + episode.find('.//a').get('href')
-        item.art['thumb'] = episode.find('.//img').get('src').replace(
+        item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('src').replace(
             '|', '%7C')
 
         item.set_callback(get_video_url,

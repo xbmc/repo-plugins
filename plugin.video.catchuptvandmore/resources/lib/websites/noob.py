@@ -88,7 +88,7 @@ def list_videos(plugin, item_id, show_url, **kwargs):
         item = Listitem()
         item.label = episode.find('.//h5').find('a').text.strip()
         video_url = URL_ROOT + '/' + episode.find('.//a').get('href')
-        item.art['thumb'] = URL_ROOT + '/' + episode.find('.//img').get('src')
+        item.art['thumb'] = item.art['landscape'] = URL_ROOT + '/' + episode.find('.//img').get('src')
         item.info['plot'] = ''
         if episode.find(".//span[@class='mod-articles-category-date']"
                         ).text is not None:

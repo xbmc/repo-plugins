@@ -104,7 +104,7 @@ def list_videos(plugin, item_id, category_slug, page, **kwargs):
             if video_url is not None:
                 item = Listitem()
                 item.label = video_title
-                item.art['thumb'] = video_image
+                item.art['thumb'] = item.art['landscape'] = video_image
                 item.info['plot'] = video_plot
 
                 item.set_callback(get_video_url,
@@ -118,7 +118,7 @@ def list_videos(plugin, item_id, category_slug, page, **kwargs):
             if video_id is not None:
                 item = Listitem()
                 item.label = video_title
-                item.art['thumb'] = video_image
+                item.art['thumb'] = item.art['landscape'] = video_image
                 item.info['plot'] = video_plot
 
                 item.set_callback(get_video_yt_url,

@@ -61,70 +61,8 @@ class LogSender(object):
         if self.__logger:
             self.__logger.info("Sending log at: %s", file_path)
 
-        if self.__mode == 'gist':
-            return self.send_files(name, [file_path])
-
         code = self.__read_file_bytes(file_path)
         return self.send(name, code, expire, paste_format, user_key)
-
-    def send_files(self, name, file_paths):
-        """ Sends multiple files.
-
-        :param str|unicode name:                Name for the gist/paste.
-        :param list[str|unicode] file_paths:    List of file paths.
-
-        :return: The result of the upload.
-        :rtype: any
-
-        """
-
-        if self.__mode != "gist":
-            raise ValueError("Invalid mode for multiple files")
-
-        params = {
-            "description": name,
-            "public": False,
-            "files": {
-                # name: {
-                #     "content": code
-                # }
-            }
-        }
-
-        for file_path in file_paths:
-            if not os.path.isfile(file_path):
-                continue
-            code = self.__read_file_bytes(file_path)
-            file_name = os.path.split(file_path)
-            params["files"][file_name[-1]] = {"content": code}
-
-        headers = {
-            "Content-Type": "application/json"
-        }
-        post_data = JsonHelper.dump(params, pretty_print=False)
-        data = UriHandler.open("https://api.github.com/gists", params=post_data,
-                               proxy=self.__proxy, additional_headers=headers)
-        if not data:
-            raise IOError("Error posting Gist to GitHub")
-
-        json_data = JsonHelper(data)
-        url = json_data.get_value("html_url")
-        if self.__logger:
-            self.__logger.info("Gist: %s", url)
-
-        # minify with google
-        # POST https://www.googleapis.com/urlshortener/v1/url
-        # Content-Type: application/json
-        shortener = {"longUrl": url}
-        google = "https://www.googleapis.com/urlshortener/v1/url?key=%s" % (self.__apiKey,)
-        google_data = UriHandler.open(google, params=JsonHelper.dump(shortener, False),
-                                      proxy=self.__proxy,
-                                      additional_headers={"Content-Type": "application/json"})
-
-        google_url = JsonHelper(google_data).get_value("id")
-        if self.__logger:
-            self.__logger.info("Goo.gl: %s", google_url)
-        return google_url
 
     def send(self, name, code, expire='1M', paste_format=None, user_key=None):
         """ Sends a data to Github or Pastebin.com.
@@ -150,52 +88,7 @@ class LogSender(object):
         elif self.__mode == 'hastebin':
             return self.__send_haste_bin(code)
         else:
-            return self.__send_git_hub_gist(name, code)
-
-    def __send_git_hub_gist(self, name, code):
-        """ Send a file to a Github gist.
-
-        :param str|unicode name:            Name of the logfile paste/gist.
-        :param str code:                    The content to post.
-
-        :return: the ID of the gist
-        :rtype: int
-
-        """
-
-        params = {
-            "description": name,
-            "public": False,
-            "files": {
-                name: {
-                    "content": code
-                }
-            }
-        }
-        headers = {
-            "Content-Type": "application/json"
-        }
-        post_data = JsonHelper.dump(params, pretty_print=False)
-        data = UriHandler.open("https://api.github.com/gists", params=post_data.encode(),
-                               proxy=self.__proxy, additional_headers=headers)
-        if not data:
-            raise IOError("Error posting Gist to GitHub")
-
-        json_data = JsonHelper(data)
-        url = json_data.get_value("html_url")
-        if self.__logger:
-            self.__logger.info("Gist: %s", url)
-
-        # minify with google
-        # POST https://www.googleapis.com/urlshortener/v1/url
-        # Content-Type: application/json
-        shortener = {"longUrl": url}
-        google = "https://www.googleapis.com/urlshortener/v1/url?key=%s" % (self.__apiKey, )
-        google_data = UriHandler.open(google, params=JsonHelper.dump(shortener, False),
-                                      proxy=self.__proxy,
-                                      additional_headers={"Content-Type": "application/json"})
-
-        return JsonHelper(google_data).get_value("id")
+            raise IndexError("'{}' not supported", self.__mode)
 
     def __send_paste_bin(self, name, code, expire='1M', paste_format=None, user_key=None):
         """ Send a file to pastebin.com

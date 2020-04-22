@@ -52,7 +52,8 @@ class Channel(chn_class.Channel):
             self.mainListUri = "https://www.vier.be/"
             self.baseUrl = "https://www.vier.be"
 
-        episode_regex = '<a class="program-overview__link" href="(?<url>[^"]+)">\s+<span class="program-overview__title">\s+(?<title>[^<]+)</span>.*?</a>'
+        episode_regex = r'<a class="program-overview__link" href="(?<url>[^"]+)">\s+' \
+                        r'<span class="program-overview__title">\s+(?<title>[^<]+)</span>.*?</a>'
         episode_regex = Regexer.from_expresso(episode_regex)
         self._add_data_parser(self.mainListUri, match_type=ParserData.MatchExact,
                               parser=episode_regex,
@@ -230,7 +231,7 @@ class Channel(chn_class.Channel):
             return hero_json, items
 
         # list the correct folder
-        current_list = [l for l in hero_playlists if l["id"] == current]
+        current_list = [lst for lst in hero_playlists if lst["id"] == current]
         if current_list:
             # we are listing a subfolder, put that one on index 0 and then also
             hero_playlists.insert(0, current_list[0])
@@ -366,7 +367,7 @@ class Channel(chn_class.Channel):
         """
 
         if self.__no_clips:
-            return  None
+            return None
 
         item = chn_class.Channel.create_video_item(self, result_set)
 

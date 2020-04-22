@@ -749,8 +749,8 @@ msgid "Resetting the vault will invalidate all existing encrypted values. Are yo
 msgstr "Tilbakestilling av hvelvet vil ugyldiggjøre alle eksisterende krypterte oppføringer. Er du sikker?"
 
 msgctxt "#30598"
-msgid "Send retrospect.log"
-msgstr "Send retrospect.log"
+msgid "Send retrospect.log »"
+msgstr "Send retrospect.log »"
 
 msgctxt "#30599"
 msgid "Logfile posted to: %s\n\nNote the URL (especially the last characters) and use them to refer to these log files in posts."

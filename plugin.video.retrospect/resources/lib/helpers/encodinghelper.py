@@ -2,7 +2,7 @@
 import base64
 import hashlib
 
-from resources.lib.backtothefuture import PY3, unichr
+from resources.lib.backtothefuture import PY3
 
 
 class EncodingHelper(object):
@@ -10,24 +10,6 @@ class EncodingHelper(object):
     of text.
 
     """
-
-    def __init__(self):
-        """Initialises the class with a text-encoder and -decoder.
-
-        Python explanation of text encoding and decoding:
-
-        s.decode(encoding)
-            * <type 'str'> to <type 'unicode'>
-        u.encode(encoding)
-            * <type 'unicode'> to <type 'str'> (or Binary data)
-
-        """
-
-        # What to do with Encoding errors?
-        #codecs.register_error('keep', EncodingHelper.__keep_handler)
-        #self.decoder = decoder
-        #self.encoder = encoder
-        return
 
     @staticmethod
     def decode_base64(data):
@@ -61,28 +43,3 @@ class EncodingHelper(object):
             return hash_tool.hexdigest().upper()
         else:
             return hash_tool.hexdigest()
-
-    @staticmethod
-    def __keep_handler(exc):
-        """Sometimes the unicode decoding fails due to strange UTF-8 chars in
-        string that should not be there. This method just converts the chars
-        in the string to Unicode chars and then returns the as their unicode
-        chars.
-
-        Arguments:
-        exc : UnicodeDecodeError - Exception thrown by Decode.
-
-
-        Returns the same as the input but then Unicode:
-        'Barnen p\xe5 Luna p\xe5 Svt.se' returns u'Barnen p\xe5 Luna p\xe5 Svt.se'
-
-        """
-
-        try:
-            return_value = u''
-            for c in exc.object[exc.start:exc.end]:
-                # just convert each character as if it was Unicode to it's Unicode equivalent.
-                return_value = u'%s%s' % (return_value, unichr(ord(c)))
-        except:
-            return_value = exc.object[exc.start:exc.end].decode(exc.encoding, 'replace')
-        return return_value, exc.end

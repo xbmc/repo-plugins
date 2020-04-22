@@ -64,6 +64,7 @@
         <setting id="use_thumbs_as_fanart" type="bool" label="30088" default="false" />
         <setting id="ignore_ssl_errors" type="bool" label="30569" default="false" />
         <setting id="http_cache" type="bool" label="30031" default="true" />
+        <setting id="cleanup_retrospect" type="action" label="30604" action="RunScript(plugin.video.retrospect, 0, ?action=cleanup)"  option="close" />
 
         <setting type="lsep" label="30098" />
         <setting id="log_level" type="enum" label="30048" values="Trace|Debug|Info" default="2" />

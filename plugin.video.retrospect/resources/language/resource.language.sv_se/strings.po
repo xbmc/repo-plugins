@@ -193,7 +193,21 @@ msgctxt "#30043"
 msgid "Folder prefix"
 msgstr "Mapprefix"
 
-# empty strings from id 30044 to 30045
+msgctxt "#30044"
+msgid "Kodi update required"
+msgstr "Kodi måste uppdateras"
+
+msgctxt "#30045"
+msgid ""
+"This feature of Retrospect requires a more recent version of Kodi. Please "
+"install the most recent version of your current Kodi build. Depending on "
+"your installation this can either be a 'stable' or 'nightly' build."
+msgstr ""
+"Den här funktionen av Retrospect kräver en nyare version av Kodi. Installera"
+" därför den senaste versionen av din nuvarande Kodi-version. Beroende på din"
+" installation kan detta antingen vara en \"stabil\" eller \"daglig\" "
+"version\"."
+
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
 msgstr "DRM-/geoblockerings-/premiumfilter"
@@ -1035,8 +1049,8 @@ msgstr ""
 "säker?"
 
 msgctxt "#30598"
-msgid "Send retrospect.log"
-msgstr "Skicka retrospect.log"
+msgid "Send retrospect.log »"
+msgstr "Skicka retrospect.log »"
 
 msgctxt "#30599"
 msgid ""

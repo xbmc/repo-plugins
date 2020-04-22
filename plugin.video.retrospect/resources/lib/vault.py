@@ -177,7 +177,8 @@ class Vault(object):
 
         :param str setting_id:          The ID for the Kodi Add-on setting to set.
         :param str setting_name:        The name to display in the keyboard.
-        :param str setting_action_id:   The name of the action that was called.
+        :param str setting_action_id:   The name of setting that shows the ***** if an value was
+                                         encrypted.
 
         :rtype: None
 

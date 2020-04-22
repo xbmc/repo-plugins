@@ -519,11 +519,3 @@ class Channel(chn_class.Channel):
             part.append_media_stream(s, b)
 
         return item
-
-    def __get_date(self, date):
-        # actual_start=2014-12-07T10:03:56+0000
-        date_part, time_part = date.split("T")
-        year, month, day = date_part.split("-")
-        hour, minute, ignore = time_part.split(":")
-        # Logger.Trace((year, month, day, hour, minute, 0))
-        return year, month, day, hour, minute, 0

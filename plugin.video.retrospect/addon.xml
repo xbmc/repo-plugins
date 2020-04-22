@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.1+matrix.1"
+        version="5.2.2+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -26,22 +26,22 @@
 
     <extension point="kodi.context.item">
         <menu id="kodi.core.main">
-            <item library="menu_queue.py">
+            <item library="retromenu.py" args="queue">
                 <label>30541</label>
                 <visible>ListItem.Property(RetrospectVideo)|ListItem.Property(RetrospectFolder)</visible>
             </item>
 
-            <item library="menu_hide_channel.py">
+            <item library="retromenu.py" args="hidechannel">
                 <label>30574</label>
                 <visible>ListItem.Property(RetrospectChannel)</visible>
             </item>
 
-            <item library="menu_cloak.py">
+            <item library="retromenu.py" args="cloak">
                 <label>30563</label>
                 <visible>ListItem.Property(RetrospectFolder)+!ListItem.Property(RetrospectCloaked)+!ListItem.Property(RetrospectFavorite)</visible>
             </item>
 
-            <item library="menu_uncloak.py">
+            <item library="retromenu.py" args="uncloak">
                 <label>30564</label>
                 <visible>ListItem.Property(RetrospectCloaked)</visible>
             </item>
@@ -50,17 +50,17 @@
             <menu>
                 <label>30580</label>
 
-                <item library="menu_bitrate.py">
+                <item library="retromenu.py" args="bitrate">
                     <label>30577</label>
                     <visible>ListItem.Property(Retrospect)+!ListItem.Property(RetrospectCategory)+!ListItem.Property(RetrospectFavorite)</visible>
                 </item>
 
-                <item library="menu_adaptive.py">
+                <item library="retromenu.py" args="adaptive">
                     <label>30579</label>
                     <visible>ListItem.Property(RetrospectAdaptive)+System.HasAddon(inputstream.adaptive)</visible>
                 </item>
 
-                <item library="menu_channelsettings.py">
+                <item library="retromenu.py" args="channel_settings">
                     <label>30069</label>
                     <visible>ListItem.Property(RetrospectChannelSettings)+!ListItem.Property(RetrospectCategory)</visible>
                 </item>
@@ -70,22 +70,22 @@
             <menu>
                 <label>30575</label>
 
-                <item library="menu_channel_favs.py">
+                <item library="retromenu.py" args="channel_favs">
                     <label>30503</label>
                     <visible>ListItem.Property(RetrospectVideo)|ListItem.Property(RetrospectFolder)|ListItem.Property(RetrospectChannel)</visible>
                 </item>
 
-                <item library="menu_all_favs.py">
+                <item library="retromenu.py" args="all_favs">
                     <label>30500</label>
                     <visible>ListItem.Property(RetrospectChannel)</visible>
                 </item>
 
-                <item library="menu_add_fav.py">
+                <item library="retromenu.py" args="add_fav">
                     <label>30504</label>
                     <visible>ListItem.Property(RetrospectFolder)+!ListItem.Property(RetrospectFavorite)</visible>
                 </item>
 
-                <item library="menu_remove_fav.py">
+                <item library="retromenu.py" args="remove_fav">
                     <label>30506</label>
                     <visible>ListItem.Property(RetrospectFavorite)</visible>
                 </item>
@@ -95,25 +95,20 @@
             <menu>
                 <label>30572</label>
 
-                <item library="menu_channel_selection.py">
+                <item library="retromenu.py" args="channel_selection">
                     <label>30507</label>
                     <visible>ListItem.Property(RetrospectChannel)</visible>
                 </item>
 
-                <item library="menu_country_selection.py">
+                <item library="retromenu.py" args="country_selection">
                     <label>30576</label>
                     <visible>ListItem.Property(RetrospectChannel)</visible>
                 </item>
 
-                <item library="menu_settings.py">
+                <item library="retromenu.py" args="settings">
                     <label>30528</label>
                     <visible>ListItem.Property(Retrospect)</visible>
                 </item>
-
-                <!--item library="menu_install_widevine.py">
-                    <label>30532</label>
-                    <visible>ListItem.Property(Retrospect)+System.HasAddon(inputstream.adaptive)+System.HasAddon(script.module.inputstreamhelper)</visible>
-                </item-->
             </menu>
         </menu>
     </extension>
@@ -132,24 +127,25 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.1 - Changelog - 2020-03-28[/B]
+        <news>[B]Retrospect v5.2.2 - Changelog - 2020-04-22[/B]
 
-This version removes some methods from the Kodi Python ABI that have been removed. Because of this, Retrospect broke on Kodi Matrix. Besides this, a number of channel related issues were resolved.
+This new version of Retrospect mainly has some under the hood changes. These should not change functionality of Retrospect.
+
+Besides this, the kijk.nl channel was updated to use the new GraphQL backend and NOS.nl and VRT.nu were fixed.
 
 [B]Framework related[/B]
-* Fixed: handle versions with +matrix
-* Added: Vualto class to handle both VRT.Nu and KetNet
-* Removed: deprecated Kodi ABI methods
+* Removed: some debugging code
+* Changed: moved a large part of the code from plugin.py into different `actions`
+* Fixed: internal Youtube parsing
+* Added: option to clean up Retrospect cache and session files
 
 [B]GUI/Settings/Language related[/B]
-* Fixed: if items are grouped in folders, make sure those appear at the top (See #1326)
+_None_
 
 [B]Channel related[/B]
-* Fixed: Live channel for SVT moved to GraphQL (See #1326)
-* Fixed: descriptions of AT5 had HTML tags (Fixes #1343)
-* Fixed: KetNet streams broke (Fixes #1344)
-* Fixed: issue with naming of episodes without title (Fixes #1345)
-* Changed: move clips from main list of SVT into their own folder (Fixes #1326)
+* Fixed: VRT.nu had some missing episodes (Fixes #1351)
+* Fixed: NOS.nl issue with Kodi Matrix
+* Updated: Kijk.nl moved to a GraphQL backend
 
         </news>
         <assets>

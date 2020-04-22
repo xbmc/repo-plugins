@@ -4,6 +4,7 @@ import xbmc
 
 from resources.lib.logger import Logger
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.regexer import Regexer
 from resources.lib.urihandler import UriHandler
 from resources.lib.proxyinfo import ProxyInfo
@@ -96,21 +97,17 @@ class YouTube(object):
         # get the stream data from the page
 
         # Up to 720p with audio and video combined.
-        url_encoded_fmt_stream_map = Regexer.do_regex("url_encoded_fmt_stream_map=([^&]+)", data)
+        url_encoded_fmt_stream_map = Regexer.do_regex(r"player_response=([^&]+)", data)
         # Up to 4K with audio and video split.
         # url_encoded_fmt_stream_map = Regexer.do_regex("adaptive_fmts=([^&]+)", data)
         url_encoded_fmt_stream_map_data = HtmlEntityHelper.url_decode(url_encoded_fmt_stream_map[0])
         # split per stream
-        streams = url_encoded_fmt_stream_map_data.split(',')
+        stream_json = JsonHelper(url_encoded_fmt_stream_map_data)
+        streams = stream_json.get_value("streamingData", "formats")
 
         for stream in streams:
-            # let's create a new part
-            # noinspection PyTypeChecker
-            qs_data = dict([x.split("=") for x in stream.split("&")])
-            Logger.trace(qs_data)
-
-            if "itag" in qs_data and "bitrate" not in qs_data:
-                i_tag = int(qs_data.get('itag', -1))
+            if "itag" in stream and "bitrate" not in stream:
+                i_tag = int(stream.get('itag', -1))
                 stream_encoding = YouTube.__YouTubeEncodings.get(i_tag, None)
                 if stream_encoding is None:
                     # if the i_tag was not in the list, skip it.
@@ -119,20 +116,21 @@ class YouTube(object):
                     continue
                 bitrate = stream_encoding[0]
             else:
-                bitrate = int(qs_data['bitrate'])/1000
+                bitrate = int(stream['bitrate'])/1000
 
-            signature = qs_data.get('s', None)
-            quality = qs_data.get('quality_label', qs_data.get('quality'))
+            signature = stream.get('s', None)
+            quality = stream.get('quality_label', stream.get('quality'))
             if not quality:
-                Logger.debug("Missing 'quality_label', skipping: %s", qs_data)
+                Logger.debug("Missing 'quality_label', skipping: %s", stream)
                 continue
 
-            video_url = HtmlEntityHelper.url_decode(qs_data['url'])
+            video_url = HtmlEntityHelper.url_decode(stream['url'])
             if signature is None:
                 url = video_url
             else:
                 url = "%s&signature=%s" % (video_url, signature)
 
+            Logger.debug("Found stream {}={:01.2f}kbps for {}".format(quality, bitrate, url))
             you_tube_streams.append((url, bitrate))
 
         return you_tube_streams

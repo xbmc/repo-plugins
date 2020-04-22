@@ -58,8 +58,7 @@ class Adaptive(object):
                                      persist_storage=False,
                                      service_certificate=None,
                                      manifest_update=None):
-        """ Parsers standard M3U8 lists and returns a list of tuples with streams and bitrates that
-        can be used by other methods.
+        """ Updates an existing stream with parameters for the inputstream adaptive add-on.
 
         :param strm:                    (MediaStream) the MediaStream to update
         :param proxy:                   (Proxy) The proxy to use for opening
@@ -72,6 +71,9 @@ class Adaptive(object):
         :param bool persist_storage:    Should we store certificates? And request server certificates?
         :param str service_certificate: Use the specified server certificate
         :param str manifest_update:     How should the manifest be updated
+
+        :returns: The updated stream
+        :rtype: MediaStream
 
         Can be used like this:
 

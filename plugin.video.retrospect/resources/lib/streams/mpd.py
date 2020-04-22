@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 from resources.lib.streams.adaptive import Adaptive
+from resources.lib.mediaitem import MediaStream
 
 
 class Mpd(object):
@@ -14,8 +15,7 @@ class Mpd(object):
                                      persist_storage=False,
                                      service_certificate=None,
                                      manifest_update=None):
-        """ Parsers standard M3U8 lists and returns a list of tuples with streams and bitrates that
-        can be used by other methods.
+        """ Updates an existing stream with parameters for the inputstream adaptive add-on.
 
         :param strm:                    (MediaStream) the MediaStream to update
         :param proxy:                   (Proxy) The proxy to use for opening
@@ -25,6 +25,9 @@ class Mpd(object):
         :param int max_bit_rate:        The maximum bitrate to use (optional)
         :param bool persist_storage:    Should we store certificates? And request server certificates?
         :param str service_certificate: Use the specified server certificate
+
+        :returns: The updated stream
+        :rtype: MediaStream
 
         Can be used like this:
 

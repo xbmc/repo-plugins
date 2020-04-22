@@ -193,7 +193,20 @@ msgctxt "#30043"
 msgid "Folder prefix"
 msgstr "Folder-voorvoegsel"
 
-# empty strings from id 30044 to 30045
+msgctxt "#30044"
+msgid "Kodi update required"
+msgstr "Kodi update vereist"
+
+msgctxt "#30045"
+msgid ""
+"This feature of Retrospect requires a more recent version of Kodi. Please install the most "
+"recent version of your current Kodi build. Depending on your installation this can either be "
+"a 'stable' or 'nightly' build."
+msgstr ""
+"Deze functionaliteit van Retrospect vereist een recentere versie van Kodi. Installeer de meest"
+"recente versie van jou huidige Kodi version. Afhankelijk van de installatie kan dit een "
+"'stable' of 'nightly' build zijn."
+
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
 msgstr "DRM/Geo-geblokkeerd/Premium filters"
@@ -1040,8 +1053,8 @@ msgstr ""
 "onleesbaar maken. Doorgaan met resetten?"
 
 msgctxt "#30598"
-msgid "Send retrospect.log"
-msgstr "Stuur retrospect.log"
+msgid "Send retrospect.log »"
+msgstr "Stuur retrospect.log »"
 
 msgctxt "#30599"
 msgid ""

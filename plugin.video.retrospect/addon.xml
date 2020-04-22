@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.1"
+        version="5.2.2"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,24 +132,25 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.1 - Changelog - 2020-03-28[/B]
+        <news>[B]Retrospect v5.2.2 - Changelog - 2020-04-22[/B]
 
-This version removes some methods from the Kodi Python ABI that have been removed. Because of this, Retrospect broke on Kodi Matrix. Besides this, a number of channel related issues were resolved.
+This new version of Retrospect mainly has some under the hood changes. These should not change functionality of Retrospect.
+
+Besides this, the kijk.nl channel was updated to use the new GraphQL backend and NOS.nl and VRT.nu were fixed.
 
 [B]Framework related[/B]
-* Fixed: handle versions with +matrix
-* Added: Vualto class to handle both VRT.Nu and KetNet
-* Removed: deprecated Kodi ABI methods
+* Removed: some debugging code
+* Changed: moved a large part of the code from plugin.py into different `actions`
+* Fixed: internal Youtube parsing
+* Added: option to clean up Retrospect cache and session files
 
 [B]GUI/Settings/Language related[/B]
-* Fixed: if items are grouped in folders, make sure those appear at the top (See #1326)
+_None_
 
 [B]Channel related[/B]
-* Fixed: Live channel for SVT moved to GraphQL (See #1326)
-* Fixed: descriptions of AT5 had HTML tags (Fixes #1343)
-* Fixed: KetNet streams broke (Fixes #1344)
-* Fixed: issue with naming of episodes without title (Fixes #1345)
-* Changed: move clips from main list of SVT into their own folder (Fixes #1326)
+* Fixed: VRT.nu had some missing episodes (Fixes #1351)
+* Fixed: NOS.nl issue with Kodi Matrix
+* Updated: Kijk.nl moved to a GraphQL backend
 
         </news>
         <assets>

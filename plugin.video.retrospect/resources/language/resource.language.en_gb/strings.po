@@ -186,7 +186,16 @@ msgctxt "#30043"
 msgid "Folder prefix"
 msgstr ""
 
-# empty strings from id 30044 to 30045
+msgctxt "#30044"
+msgid "Kodi update required"
+msgstr ""
+
+msgctxt "#30045"
+msgid ""
+"This feature of Retrospect requires a more recent version of Kodi. Please install the most "
+"recent version of your current Kodi build. Depending on your installation this can either be "
+"a 'stable' or 'nightly' build."
+msgstr ""
 
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
@@ -1005,7 +1014,7 @@ msgid "Resetting the vault will invalidate all existing encrypted values. Are yo
 msgstr ""
 
 msgctxt "#30598"
-msgid "Send retrospect.log"
+msgid "Send retrospect.log »"
 msgstr ""
 
 msgctxt "#30599"
@@ -1026,4 +1035,12 @@ msgstr ""
 
 msgctxt "#30603"
 msgid "Retrospect changed add-on ID. To prevent data loss, your user data will now be migrated. After this has been done, please restart Kodi to complete migration. After the restart update any shortcut you had to Retrospect. The Retrospect marked as \"broken\" in \"My add-ons\" can be uninstalled."
+msgstr ""
+
+msgctxt "#30604"
+msgid "Clean-up cache and cookies »"
+msgstr ""
+
+msgctxt "#30605"
+msgid "Are you sure you want to clean all of Retrospect's cache and cookies? This action cannot be undone."
 msgstr ""

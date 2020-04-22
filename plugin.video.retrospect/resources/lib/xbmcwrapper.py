@@ -157,13 +157,16 @@ class XbmcWrapper:
         """ Displays the Kodi keyboard.
 
         :param str default:     The default value
-        :param str heading:     The heading for the dialog
+        :param str|int heading: The heading for the dialog or its language ID
         :param bool hidden:     Should the input be hidden?
 
         :rtype: str
         :return: returns the text that was entered or None if cancelled.
 
         """
+
+        if isinstance(heading, int):
+            heading = LanguageHelper.get_localized_string(heading)
 
         # let's just unlock the interface, in case it's locked.
         LockWithDialog.close_busy_dialog()
@@ -180,14 +183,17 @@ class XbmcWrapper:
                           fallback=True, logger=None):
         """ Shows an Kodi Notification
 
-        :param str|None title:          The title to show.
-        :param str|list[str] lines:     The content to show.
+        :param str|int|None title:      The title to show or its language ID.
+        :param str|int|list[str] lines: The content to show or its language ID.
         :param str notification_type:   The type of notification: info, error, warning.
         :param int display_time:        Time to display the notification. Defaults to 1500 ms.
         :param bool fallback:           Should we fallback on XbmcWrapper.show_dialog on error?
         :param any logger:              A possible `Logger` object.
 
         """
+
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
 
         # check for a title
         if title:
@@ -202,7 +208,9 @@ class XbmcWrapper:
         if not lines:
             notification_content = ""
         else:
-            if isinstance(lines, (tuple, list)):
+            if isinstance(lines, int):
+                notification_content = LanguageHelper.get_localized_string(lines)
+            elif isinstance(lines, (tuple, list)):
                 notification_content = " ".join(lines)
             else:
                 notification_content = lines
@@ -242,13 +250,16 @@ class XbmcWrapper:
     def show_selection_dialog(title, options):
         """ Shows a Kodi Selection Dialog.
 
-        :param str title:           The title of the dialog
+        :param str|int title:       The title of the dialog or its language ID
         :param list[str]options:    The list options to show
 
         :return: The index of the selected item
         :rtype: int
 
         """
+
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
 
         input_dialog = xbmcgui.Dialog()
         return input_dialog.select(title, options)
@@ -257,13 +268,18 @@ class XbmcWrapper:
     def show_yes_no(title, message):
         """ Shows a dialog yes/no box with title and text
 
-        :param str title:       The title of the box.
-        :param str message:     The message to display.
+        :param str|int title:       The title of the box or its language ID.
+        :param str|int message:     The message to display or its language ID.
 
         :return: Ok or not OK (boolean)
         :rtype: bool
 
         """
+
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
+        if isinstance(message, int):
+            message = LanguageHelper.get_localized_string(message)
 
         # let's just unlock the interface, in case it's locked.
         LockWithDialog.close_busy_dialog()
@@ -281,19 +297,24 @@ class XbmcWrapper:
     def show_dialog(title, message):
         """ Shows a dialog box with title and text
 
-        :param str|None title:      The title of the box
-        :param str message:         The lines to display.
+        :param str|None|int title:      The title of the box or its language ID.
+        :param str|int message:         The lines to display or its language ID.
 
         :return: True for OK, False for cancelled.
         :rtype: bool
 
         """
 
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
+        if isinstance(message, int):
+            message = LanguageHelper.get_localized_string(message)
+
         # let's just unlock the interface, in case it's locked.
         LockWithDialog.close_busy_dialog()
 
         msg_box = xbmcgui.Dialog()
-        if title == "":
+        if not title:
             header = Config.appName
         else:
             header = "%s - %s" % (Config.appName, title)
@@ -310,7 +331,7 @@ class XbmcWrapper:
         * 2 : ShowAndGetImage
         * 3 : ShowAndGetWriteableDirectory
 
-        :param str title:           The title of the box.
+        :param str|int title:        The title of the box or its language ID.
         :param str default_path:     Default path or file.
         :param int dialog_type:      Type of file/folder selection type.
         :param str mask:            '|' separated file mask. (i.e. '.jpg|.png').
@@ -319,6 +340,9 @@ class XbmcWrapper:
         :rtype: str
 
         """
+
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
 
         if default_path is None:
             default_path = xbmc.translatePath("special://home")

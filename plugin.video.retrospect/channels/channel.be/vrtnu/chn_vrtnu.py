@@ -82,8 +82,8 @@ class Channel(chn_class.Channel):
 
         video_regex = r'<a[^>]+href="(?<url>/vrtnu/(?:[^/]+/){2}[^/]*?(?<year2>\d*)/[^"]+)"[^>]*>' \
                       r'\W*(?<title>[^<]+)(?:<br\s*/>\s*)?</a>\s*</h3>\s*<p[^>]*>\W*(?<channel>[^<]+)' \
-                      r'</p>\s*(?:<p[^<]+</p>\s*)?<div[^>]*class="meta[^>]*>\s*<time[^>]+datetime=' \
-                      r'"(?<year>\d+)-(?<month>\d+)-(?<day>\d+)[\w\W]{0,1000}?ata-responsive-image=' \
+                      r'</p>\s*(?:<p[^<]+</p>\s*)?<div[^>]*class="meta[^>]*>\s*(?:<time[^>]+datetime=' \
+                      r'"(?<year>\d+)-(?<month>\d+)-(?<day>\d+))?[\w\W]{0,1000}?ata-responsive-image=' \
                       r'"(?<thumburl>[^"]+)'
 
         # No need for a subtitle for now as it only includes the textual date
@@ -446,6 +446,10 @@ class Channel(chn_class.Channel):
         # update artswork
         if item.thumb and item.thumb.startswith("//"):
             item.thumb = "https:%s" % (item.thumb, )
+
+        # API url's
+        # item.url = "https://vrtnu-api.vrt.be/search?i=video&facets[programUrl]={}&size=300".format(
+        #     item.url.replace("https:", "").replace(".relevant", ""))
 
         return item
 

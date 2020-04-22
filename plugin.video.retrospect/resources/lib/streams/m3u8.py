@@ -4,7 +4,7 @@ from resources.lib.urihandler import UriHandler
 from resources.lib.logger import Logger
 from resources.lib.regexer import Regexer
 from resources.lib.streams.adaptive import Adaptive
-from resources.lib.mediaitem import MediaItemPart
+from resources.lib.mediaitem import MediaItemPart, MediaStream
 from resources.lib.proxyinfo import ProxyInfo
 from resources.lib.addonsettings import AddonSettings
 
@@ -81,8 +81,7 @@ class M3u8(object):
                                      persist_storage=False,
                                      service_certificate=None,
                                      manifest_update=None):
-        """ Parsers standard M3U8 lists and returns a list of tuples with streams and bitrates that
-        can be used by other methods.
+        """ Updates an existing stream with parameters for the inputstream adaptive add-on.
 
         :param strm:                    (MediaStream) the MediaStream to update
         :param proxy:                   (Proxy) The proxy to use for opening
@@ -92,6 +91,9 @@ class M3u8(object):
         :param int max_bit_rate:        The maximum bitrate to use (optional)
         :param bool persist_storage:    Should we store certificates? And request server certificates?
         :param str service_certificate: Use the specified server certificate
+
+        :returns: The updated stream
+        :rtype: MediaStream
 
         Can be used like this:
 

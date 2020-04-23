@@ -35,7 +35,7 @@ class myAddon(t1mAddon):
           infoList['Genre'] = b.get('genre_titles')
           infoList['mediatype'] = 'tvshow'
           c = (name, url, thumb, infoList)
-          contextMenu = [(self.addon.getLocalizedString(30009),'XBMC.RunPlugin(%s?mode=DF&url=AS%s)' % (sys.argv[0], str(c)))]
+          contextMenu = [(self.addon.getLocalizedString(30009),'RunPlugin(%s?mode=DF&url=AS%s)' % (sys.argv[0], str(c)))]
           ilist = self.addMenuItem(name, 'GE', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
       return(ilist)
 
@@ -126,7 +126,7 @@ class myAddon(t1mAddon):
                   b = eval(b)
                   name,url,thumb,infoList = b
                   fanart = thumb
-                  contextMenu = [(self.addon.getLocalizedString(30010),'XBMC.Container.Update(%s?mode=DF&url=DS%s)' % (sys.argv[0], name))]
+                  contextMenu = [(self.addon.getLocalizedString(30010),'Container.Update(%s?mode=DF&url=DS%s)' % (sys.argv[0], name))]
                   ilist = self.addMenuItem(name, 'GE', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
       return(ilist)
  

@@ -30,6 +30,11 @@ logger = logging.getLogger(ADDON.getAddonInfo('id'))
 kodilogging.config()
 plugin = routing.Plugin()
 
+HEADERS_VOD = {
+    "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Mobile Safari/537.36",
+    "Cookie": "rtp_cookie_privacy=permit 1,2,3,4;"
+}
+
 @plugin.route('/')
 def index():
     direto = ListItem("[B]{}[/B]".format(kodiutils.get_string(32004)))
@@ -50,7 +55,7 @@ def search():
     input_text = Dialog().input(kodiutils.get_string(32007), "", INPUT_ALPHANUM)
 
     try:
-        req = requests.get("https://www.rtp.pt/play/pesquisa?q={}".format(input_text), headers=HEADERS).text
+        req = requests.get("https://www.rtp.pt/play/pesquisa?q={}".format(input_text), headers=HEADERS_VOD).text
     except:
         raise_notification()
 
@@ -276,7 +281,7 @@ def programs_episodes():
     try:
         req = requests.get("https://www.rtp.pt/play/bg_l_ep/?listProgram={}&page={}".format(
             prog_id,
-            page), headers=HEADERS)
+            page), headers=HEADERS_VOD)
         req.encoding = "latin-1"
         req = req.text
     except:
@@ -346,7 +351,10 @@ def programs_play():
     except:
         raise_notification()
 
-    liz = ListItem("{} ({})".format(title, ep))
+    liz = ListItem("{} ({})".format(
+        kodiutils.compat_py23str(title),
+        kodiutils.compat_py23str(ep))
+    )
     liz.setArt({"thumb": img, "icon": img})
     liz.setProperty('IsPlayable', 'true')
     liz.setPath("{}|{}".format(stream, urlencode(HEADERS)))

@@ -476,7 +476,7 @@ def sub_menu_entry(option, category, value, page=1):
 def get_stream_url(station_id):
     if my_stations.get(station_id, {}).get('is_custom', False):
         station = my_stations[station_id]
-        stream_url = station['stream_url']
+        stream_url = radio_api.internal_resolver(station)
         current_track = ''
     else:
         station = radio_api.get_station_by_station_id(

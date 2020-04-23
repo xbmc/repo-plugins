@@ -1,4 +1,4 @@
-<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="3.0.0+matrix.1">
+<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="3.0.1+matrix.1">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.xbmcswift2" version="19.0.0" />
@@ -12,12 +12,8 @@
         <source>https://github.com/XBMC-Addons/plugin.audio.radio_de</source>
         <forum>https://forum.kodi.tv/showthread.php?tid=119362</forum>
         <license>GPL-2.0-only</license>
-        <news>v3.0.0+matrix.1 (12/4/2020)
-            [new] Automated submissions to matrix
-            [new] Python3 only version
-            [new] New language layout and other matrix fixes
-            [fix] Playlist based stations
-            [fix] Ratings
+        <news>v3.0.1+matrix.1 (13/4/2020)
+            [new] Use internal playlist resolver also in custom stations
         </news>
         <summary lang="be_BY">Access &gt;7000 radio broadcasts</summary>
         <summary lang="ca_ES">accedeix a mes de 7000 emissores de radio</summary>

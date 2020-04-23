@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rtpplay" name="RTP Play" version="5.0.6+matrix.1" provider-name="enen92, guipenedo">
+<addon id="plugin.video.rtpplay" name="RTP Play" version="5.0.7+matrix.1" provider-name="enen92, guipenedo">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.routing" version="0.2.0"/>

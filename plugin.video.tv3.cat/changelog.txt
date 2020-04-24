@@ -1,8 +1,13 @@
 
+v1.4.5
+- Fixed server changes
+
 v1.4.4
 - Fixed error in Libreelec with import lib2to3 script. Deleted old_div
+
 v1.4.3
 - Code redesigned and added Python 2/3 compatibility
+
 v1.4.2
 - Fixed website changes. Changed live urls channels
 

@@ -191,15 +191,20 @@ class TV3cat(object):
 
             try:
 
-                colecc = soup.findAll("a", {"class": "media-object"})
+                colecc = soup.findAll("article", {"class": "M-destacat T-alacartaTema C-compacte     "})
 
 
-                for a in colecc:
-                    url = a["href"]
+                for el in colecc:
+
+                    url = el.a["href"]
                     url = Urls.url_base + url
-                    t = a["title"]
+                    t = el.header.h1.a.string
+
                     titol = t.encode("utf-8")
-                    img = a.img["src"]
+
+
+                    img = el.figure.img["data-src"]
+
 
                     foldVideo = FolderVideo(titol,url, 'getlistvideos', img, img)
                     lFolderVideos.append(foldVideo)
@@ -487,8 +492,8 @@ class TV3cat(object):
 
                                 folderVideo = FolderVideo(titol, url_final, 'getlistvideos', "", "")
                                 lFolderVideos.append(folderVideo)
-                                xbmc.log("progsAZ - Titol: " + titol)
-                                xbmc.log("progsAZ - url: " + url_final)
+                                #xbmc.log("progsAZ - Titol: " + titol)
+                                #xbmc.log("progsAZ - url: " + url_final)
 
 
         return  lFolderVideos
@@ -555,7 +560,10 @@ class TV3cat(object):
 
                         urlvideo = l.a["href"]
 
-                        code = urlvideo[-8:-1]
+                        code = urlvideo.split('/')[-1]
+
+                        if len(code) == 0:
+                            code = urlvideo.split('/')[-2]
 
 
                         html_data = getHtml(Urls.url_datavideos + code + '&profile=pc')

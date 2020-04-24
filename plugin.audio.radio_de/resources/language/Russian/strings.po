@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "Рекоменованные"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "Топ 100 станций"
+msgid "Top Stations"
+msgstr "Топ станций"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "Мои станции"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "Поиск станции"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "Введите имя, страну или язык"
 
 msgctxt "#30300"
 msgid "Language"

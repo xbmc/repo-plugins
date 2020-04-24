@@ -27,15 +27,16 @@ def index():
     for category in categories:
         category_anchor = category.findAll(u'a')[0]
         category_text = category_anchor.findAll('span')[1].text
+        category_time = category_anchor.findAll('time')[0].text
         category_url = category_anchor[u'href']
         if category_text in nl_only_categories:
             category_text = u'{category_text} (georestricted NL only)'.format(
-                category_text=category_text
+                category_text = category_text
             )
         if category_url.startswith(u'/uitzending/'):
             data.append(
                 {
-                    u'label': category_text,
+                    u'label': category_text + ' - ' + category_time,
                     u'path': {
                         u'endpoint': u'show_category',
                         u'category_url': (
@@ -60,6 +61,7 @@ def show_category(category_url):
     )
 
     for video in videos:
+        data_unique = []
         title = video.findAll(
             u'h1',
             {u'class': u'broadcast-player-meta__title'},
@@ -70,23 +72,25 @@ def show_category(category_url):
             title=title,
             time=parsed_timecode.strftime(u'%Y-%m-%d %H:%M'),
         )
+        videoJSONStr = video.find("script").contents[0]
+        videoJSON = json.loads(videoJSONStr)
         # add each quality version of the video as an entry
-        sub_videos = video.findAll("source")
-        for sub_video in sub_videos:
-            video_url = sub_video["src"]
-            sub_label = label + ' ' + sub_video["data-label"]
-            data.append(
-                {
-                    u'label': sub_label,
-                    u'path': {
-                        u'endpoint': u'show_video',
-                        u'video_url': u'{video_url}'.format(
-                            video_url=video_url,
-                        ),
-                    },
-                    u'is_playable': True,
-                }
-            )
+        for vid in videoJSON['formats']:
+            if vid['name'] not in data_unique:
+                data_unique.append(vid['name'])
+                file_url = vid['url']['mp4'].replace("&legacy=resolve.php", "")
+                data.append(
+                    {
+                        u'label': label + ' (' + vid['name'] + ')',
+                        u'path': {
+                            u'endpoint': u'show_video',
+                            u'video_url': u'{video_url}'.format(
+                                video_url = file_url,
+                            ),
+                        },
+                        u'is_playable': True,
+                    }
+                )
     return data
 
 

@@ -665,16 +665,17 @@ class htmlScraper(Scraper):
 					gapless_name = '-- %s --' % self.translation(30059)
 					if playlist_json['is_gapless']:
 						gapless_videourl = self.getVideoUrl(playlist_json['gapless_video']['sources'])
-						if "subtitles" in playlist_json['gapless_video']:
-							for sub in playlist_json['gapless_video']["subtitles"]:
-								gapless_subtitles.append(sub.get(u'src'))
-						else:
-							global_subtitles = None
-						if "duration_in_seconds" in playlist_json:
-							gapless_duration = playlist_json["duration_in_seconds"]
-						else:
-							gapless_duration = ""
-						liz = self.html2ListItem(gapless_name, stream_infos['teaser_image'], "", stream_infos['full_description'], gapless_duration, '', '', gapless_videourl, gapless_subtitles, False, True)
+						if gapless_videourl:
+							if "subtitles" in playlist_json['gapless_video']:
+								for sub in playlist_json['gapless_video']["subtitles"]:
+									gapless_subtitles.append(sub.get(u'src'))
+							else:
+								global_subtitles = None
+							if "duration_in_seconds" in playlist_json:
+								gapless_duration = playlist_json["duration_in_seconds"]
+							else:
+								gapless_duration = ""
+							liz = self.html2ListItem(gapless_name, stream_infos['teaser_image'], "", stream_infos['full_description'], gapless_duration, '', '', gapless_videourl, gapless_subtitles, False, True)
 			except IndexError as e:
 				debugLog("No gapless video added for %s" % url)
 
@@ -737,7 +738,7 @@ class htmlScraper(Scraper):
 			channel = replaceHTMLCodes(channel[0])
 
 			bundesland_article = parseDOM(item, name='li', attrs={'class': '.*?is-bundesland-heute.*?'}, ret='data-jsb')
-			article = parseDOM(item, name='article', attrs={'class': 'b-livestream-teaser.*?'})
+			article = parseDOM(item, name='article', attrs={'class': 'b-livestream-teaser is-live.*?'})
 			if not len(bundesland_article) and len(article):
 				figure = parseDOM(article, name='figure', attrs={'class': 'teaser-img'}, ret=False)
 				image = parseDOM(figure, name='img', attrs={}, ret='data-src')
@@ -769,14 +770,14 @@ class htmlScraper(Scraper):
 			elif len(bundesland_article):
 				bundesland_data = replaceHTMLCodes(bundesland_article[0])
 				bundesland_data = json.loads(bundesland_data)
-
 				for bundesland_item_key in bundesland_data:
 					bundesland_item = bundesland_data.get(bundesland_item_key)
-					bundesland_title = bundesland_item.get('title')
-					bundesland_image = bundesland_item.get('img')
-					bundesland_link = bundesland_item.get('url')
+					if bundesland_item and bundesland_item is not True and len(bundesland_item):
+						bundesland_title = bundesland_item.get('title')
+						bundesland_image = bundesland_item.get('img')
+						bundesland_link = bundesland_item.get('url')
 
-					self.buildLivestream(bundesland_title, bundesland_link, "", True, channel, bundesland_image, True)
+						self.buildLivestream(bundesland_title, bundesland_link, "", True, channel, bundesland_image, True)
 
 	def buildLivestream(self, title, link, time, restart, channel, banner, online):
 		html = fetchPage({'link': link})
@@ -847,7 +848,11 @@ class htmlScraper(Scraper):
 
 			ApiKey = '2e9f11608ede41f1826488f1e23c4a8d'
 			response = url_get_request('https://playerapi-restarttv.ors.at/livestreams/%s/sections/?state=active&X-Api-Key=%s' % (bitmovinStreamId, ApiKey))
-			response_raw = response.read().decode(response.headers.get_content_charset())
+			try:
+				charset = response.headers.get_content_charset()
+				response_raw = response.read().decode(charset)
+			except AttributeError:
+				response_raw = response.read().decode('utf-8')
 
 			section = json.loads(response_raw)
 			if len(section):

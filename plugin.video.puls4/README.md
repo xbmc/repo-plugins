@@ -18,6 +18,9 @@ Current Features
 * All Shows
 * H264 Stream (HD/SD)
 * Highlights
+* Missed a Show?
+* New Videos
+* Popular Videos
 
 
 Known Issues

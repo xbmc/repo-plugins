@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "Editorials Recommendations"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "Top 100 Stations"
+msgid "Top Stations"
+msgstr "Top Stations"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "My Stations"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "Search for station"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "Enter name, country or language"
 
 msgctxt "#30300"
 msgid "Language"

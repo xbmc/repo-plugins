@@ -1,9 +1,9 @@
 # coding=utf-8
 
 ##################################
-# ZattooBox v1.0.5
+# ZattooBox v1.0.6
 # Kodi Addon for Zattoo
-# (c) 2014-2019 Pascal Nançoz
+# (c) 2014-2020 Pascal Nançoz
 # nancpasc@gmail.com
 ##################################
 
@@ -22,7 +22,7 @@ from resources.lib.extensions.recordings import Recordings
 ext_dict['Recordings'] = Recordings
 
 #Main
-kodi_addon	= xbmcaddon.Addon()
+kodi_addon = xbmcaddon.Addon()
 args = dict(urlparse.parse_qsl(sys.argv[2][1:]))
 
 zbAddonProxy = ZBAddonProxy(kodi_addon, sys.argv[0], int(sys.argv[1]))

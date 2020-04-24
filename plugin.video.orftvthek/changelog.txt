@@ -1,3 +1,12 @@
+* 0.10.3
+- fixed broken livestream when "bundesland heute" videos are available
+
+* 0.10.2
+- tvthek added new quality strings. caused error on full hd setting
+
+* 0.10.1
+- fixed kodi crash when using the playlist listitem
+
 * 0.10.0
 - python2/3 compatible
 - added 'play full video' for htmlscraper

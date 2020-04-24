@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "Redakcijos rekomendacijos"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "Top 100 stotys"
+msgid "Top Stations"
+msgstr "Top stotys"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "Mano radio stotys"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "Ieškoti radio stoties"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "Įveskite vardą, pavardę, šalį ar kalbą"
 
 msgctxt "#30300"
 msgid "Language"

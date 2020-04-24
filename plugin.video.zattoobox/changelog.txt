@@ -1,3 +1,6 @@
+[B]1.0.6[/B]
+- [Fix] The plugin stopped working due to provider changes. Fixed.
+
 [B]1.0.5[/B]
 - [Fix] Fixed v18 playing issues
 

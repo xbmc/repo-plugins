@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "המלצות העורכים"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "100 התחנות הגדולות"
+msgid "Top Stations"
+msgstr "התחנות הגדולות"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "התחנות שלי"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "חיפוש תחנה"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "יש להזין שם, מדינה או שפה"
 
 msgctxt "#30300"
 msgid "Language"

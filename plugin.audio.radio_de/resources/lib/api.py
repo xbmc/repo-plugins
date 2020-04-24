@@ -21,7 +21,8 @@ import sys
 import random
 import xbmc
 
-PY3 = sys.version_info.major >= 3
+# avoid using named attributes since they were introduced with python 2.7 only
+PY3 = sys.version_info[0] >= 3
 
 if PY3:
     from urllib.parse import urlencode
@@ -38,14 +39,11 @@ class RadioApiError(Exception):
 class RadioApi():
 
     MAIN_URLS = {
-        'english': 'http://rad.io/info',
-        'german': 'http://radio.de/info',
-        'french': 'http://radio.fr/info',
+        'english': 'http://api.rad.io/info',
+        'german': 'http://api.radio.de/info',
+        'french': 'http://api.radio.fr/info',
+        'portuguese': 'http://api.radio.pt/info',
     }
-
-    CATEGORY_TYPES = (
-        'genre', 'topic', 'country', 'city', 'language',
-    )
 
     USER_AGENT = 'XBMC Addon Radio'
 
@@ -60,88 +58,201 @@ class RadioApi():
             raise ValueError('Invalid language')
         self.api_url = RadioApi.MAIN_URLS[language]
 
+    def get_genres(self):
+        self.log('get_genres started')
+        path = 'v2/search/getgenres'
+        return self.__api_call(path)
+
+    def get_topics(self):
+        self.log('get_topics started')
+        path = 'v2/search/gettopics'
+        return self.__api_call(path)
+
+    def get_languages(self):
+        self.log('get_topics started')
+        path = 'v2/search/getlanguages'
+        return self.__api_call(path)
+
+    def get_countries(self):
+        self.log('get_countries started')
+        path = 'v2/search/getcountries'
+        return self.__api_call(path)
+
+    def get_cities(self, country=None):
+        self.log('get_cities_by_country started with country = %s' % country)
+        path = 'v2/search/getcities'
+        if country:
+            param = {
+                'country': country
+            }
+            return self.__api_call(path, param)
+        else:
+            return self.__api_call(path)
+
     def get_recommendation_stations(self):
         self.log('get_recommendation_stations started')
-        path = 'broadcast/editorialreccomendationsembedded'
-        stations = self.__api_call(path)
-        return self.__format_stations(stations)
+        path = 'v2/search/editorstips'
+        return self.__format_stations_v2(self.__api_call(path))
 
-    def get_top_stations(self):
-        self.log('get_top_stations started')
-        path = 'menu/broadcastsofcategory'
-        param = {'category': '_top'}
-        stations = self.__api_call(path, param)
-        return self.__format_stations(stations)
-
-    def get_local_stations(self, num_entries=25):
-        self.log('get_local_stations started with num_entries=%d'
-                 % num_entries)
-        most_wanted_stations = self._get_most_wanted(num_entries)
-        return self.__format_stations(most_wanted_stations['localBroadcasts'])
-
-    def get_category_types(self):
-        self.log('get_category_types started')
-        return RadioApi.CATEGORY_TYPES
-
-    def get_categories(self, category_type):
-        self.log('get_categories started with category_type=%s'
-                 % category_type)
-        if not category_type in RadioApi.CATEGORY_TYPES:
-            raise ValueError('Bad category_type')
-        path = 'menu/valuesofcategory'
-        param = {'category': '_%s' % category_type}
-        categories = self.__api_call(path, param)
-        return categories
-
-    def get_stations_by_category(self, category_type, category_value):
-        self.log(('get_stations_by_category started with category_type=%s, '
-                  'category_value=%s') % (category_type, category_value))
-        if not category_type in self.get_category_types():
-            raise ValueError('Bad category_type')
-        path = 'menu/broadcastsofcategory'
+    def get_stations_by_genre(self, genre, sorttype, sizeperpage, pageindex):
+        self.log(('get_stations_by_genre started with genre=%s, '
+                  'sorttype=%s, sizeperpage=%s, pageindex=%s') % (
+                      genre, sorttype, sizeperpage, pageindex))
+        path = 'v2/search/stationsbygenre'
         param = {
-            'category': '_%s' % category_type,
-            'value': category_value,
+            'genre': genre,
+            'sorttype': sorttype,
+            'sizeperpage': sizeperpage,
+            'pageindex': pageindex
         }
-        stations = self.__api_call(path, param)
-        return self.__format_stations(stations)
+        response = self.__api_call(path, param)
+        if not response.get('categories'):
+            raise ValueError('Bad category_type')
+        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
 
-    def search_stations_by_string(self, search_string):
-        self.log('search_stations_by_string started with search_string=%s'
-                 % search_string)
-        path = 'index/searchembeddedbroadcast'
-        param = {
-            'q': search_string,
-            'start': '0',
-            'rows': '10000',
-            'streamcontentformats': 'aac,mp3',
-        }
-        stations = self.__api_call(path, param)
-        return self.__format_stations(stations)
-
-    def get_station_by_station_id(self, station_id, resolve_playlists=True):
+    def get_station_by_station_id(self, station_id, resolve_playlists=True, force_http=False):
         self.log('get_station_by_station_id started with station_id=%s'
                  % station_id)
-        path = 'broadcast/getbroadcastembedded'
-        param = {'broadcast': str(station_id)}
+        path = 'v2/search/station'
+        param = {'station': str(station_id)}
         station = self.__api_call(path, param)
-        if self.__check_redirect(station['streamURL']):
-            station['streamURL'] = self.__follow_redirect(station['streamURL'])
-        if resolve_playlists and self.__check_paylist(station['streamURL']):
-            playlist_url = station['streamURL']
-            station['streamURL'] = self.__resolve_playlist(station)
-        stations = (station, )
-        return self.__format_stations(stations)[0]
 
-    def _get_most_wanted(self, num_entries=25):
-        self.log('get_most_wanted started with num_entries=%d'
-                 % num_entries)
-        if not isinstance(num_entries, int):
-            raise TypeError('Need int')
-        path = 'account/getmostwantedbroadcastlists'
-        param = {'sizeoflists': str(num_entries)}
-        stations_lists = self.__api_call(path, param)
-        return stations_lists
+        streams = station.get('streamUrls')
+
+        if streams:
+            station['streamUrl'] = streams[0].get('streamUrl')
+
+            if force_http:
+                for stream in streams:
+                    if "http://" in stream.get('streamUrl'):
+                        station['streamUrl'] = stream['streamUrl']
+                        break
+
+        if not station.get('streamUrl'):
+            self.log('Unable to detect a playable stream for station')
+            return None
+
+        if resolve_playlists and self.__check_paylist(station['streamUrl']):
+            playlist_url = station['streamUrl']
+            station['streamUrl'] = self.__resolve_playlist(station)
+        stations = (station, )
+        return self.__format_stations_v2(stations)[0]
+
+    def internal_resolver(self, station, ):
+        if station.get('is_custom', False):
+            stream_url = station['stream_url']
+        else:
+            stream_url = station['streamUrl']
+
+        if self.__check_paylist(stream_url):
+            return self.__resolve_playlist(station)
+        else:
+            return station
+
+    def get_top_stations(self, sizeperpage, pageindex):
+        self.log(('get_top_stations started with '
+                  'sizeperpage=%s, pageindex=%s') % (
+                      sizeperpage, pageindex))
+        path = 'v2/search/topstations'
+        param = {
+            'sizeperpage': sizeperpage,
+            'pageindex': pageindex
+        }
+        response = self.__api_call(path, param)
+        if not response.get('categories'):
+            raise ValueError('Bad category_type')
+        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+
+    def get_stations_by_country(self, country, sorttype, sizeperpage, pageindex):
+        self.log(('get_stations_by_country started with country=%s, '
+                  'sorttype=%s, sizeperpage=%s, pageindex=%s') % (
+                      country, sorttype, sizeperpage, pageindex))
+        path = 'v2/search/stationsbycountry'
+        param = {
+            'country': country,
+            'sorttype': sorttype,
+            'sizeperpage': sizeperpage,
+            'pageindex': pageindex
+        }
+        response = self.__api_call(path, param)
+        if not response.get('categories'):
+            raise ValueError('Bad category_type')
+        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+
+    def get_stations_by_city(self, city, sorttype, sizeperpage, pageindex):
+        self.log(('get_stations_by_city started with city=%s, '
+                  'sorttype=%s, sizeperpage=%s, pageindex=%s') % (
+                      city, sorttype, sizeperpage, pageindex))
+        path = 'v2/search/stationsbycity'
+        param = {
+            'city': city,
+            'sorttype': sorttype,
+            'sizeperpage': sizeperpage,
+            'pageindex': pageindex
+        }
+        response = self.__api_call(path, param)
+        if not response.get('categories'):
+            raise ValueError('Bad category_type')
+        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+
+    def get_stations_by_topic(self, topic, sorttype, sizeperpage, pageindex):
+        self.log(('get_stations_by_topic started with topic=%s, '
+                  'sorttype=%s, sizeperpage=%s, pageindex=%s') % (
+                      topic, sorttype, sizeperpage, pageindex))
+        path = 'v2/search/stationsbytopic'
+        param = {
+            'topic': topic,
+            'sorttype': sorttype,
+            'sizeperpage': sizeperpage,
+            'pageindex': pageindex
+        }
+        response = self.__api_call(path, param)
+        if not response.get('categories'):
+            raise ValueError('Bad category_type')
+        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+
+    def get_stations_by_language(self, language, sorttype, sizeperpage, pageindex):
+        self.log(('get_stations_by_language started with language=%s, '
+                  'sorttype=%s, sizeperpage=%s, pageindex=%s') % (
+                      language, sorttype, sizeperpage, pageindex))
+        path = 'v2/search/stationsbylanguage'
+        param = {
+            'language': language,
+            'sorttype': sorttype,
+            'sizeperpage': sizeperpage,
+            'pageindex': pageindex
+        }
+        response = self.__api_call(path, param)
+        if not response.get('categories'):
+            raise ValueError('Bad category_type')
+        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+
+    def get_stations_nearby(self, sizeperpage, pageindex):
+        self.log(('get_stations_nearby started with, '
+                  'sizeperpage=%s, pageindex=%s') % (sizeperpage, pageindex))
+        path = 'v2/search/localstations'
+        param = {
+            'sizeperpage': sizeperpage,
+            'pageindex': pageindex
+        }
+        response = self.__api_call(path, param)
+        if not response.get('categories'):
+            raise ValueError('Bad category_type')
+        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+
+    def search_stations_by_string(self, search_string, sizeperpage, pageindex):
+        self.log('search_stations_by_string started with search_string=%s'
+                 % search_string)
+        path = 'v2/search/stations'
+        param = {
+            'query': search_string,
+            'sizeperpage': sizeperpage,
+            'pageindex': pageindex
+        }
+        response = self.__api_call(path, param)
+        if not response.get('categories'):
+            raise ValueError('Bad category_type')
+        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
 
     def __api_call(self, path, param=None):
         self.log('__api_call started with path=%s, param=%s'
@@ -149,6 +260,7 @@ class RadioApi():
         url = '%s/%s' % (self.api_url, path)
         if param:
             url += '?%s' % urlencode(param)
+
         response = self.__urlopen(url)
         json_data = json.loads(response)
         return json_data
@@ -157,7 +269,13 @@ class RadioApi():
         self.log('__resolve_playlist started with station=%s'
                  % station['id'])
         servers = []
-        stream_url = station['streamURL']
+
+        # Check if it is a custom station
+        if station.get('is_custom', False):
+            stream_url = station['stream_url']
+        else:
+            stream_url = station['streamUrl']
+
         if stream_url.lower().endswith('m3u'):
             response = self.__urlopen(stream_url)
             self.log('__resolve_playlist found .m3u file')
@@ -213,28 +331,41 @@ class RadioApi():
         return response
 
     @staticmethod
-    def __format_stations(stations):
+    def __format_stations_v2(stations):
         formated_stations = []
         for station in stations:
             thumbnail = (
-                station.get('picture4TransName') or
-                station.get('picture4Name') or
-                station.get('picture1TransName').replace('_1_', '_4_') or
-                station.get('picture1Name').replace('_1_', '_4_')
+                station.get('logo300x300') or
+                station.get('logo175x175') or
+                station.get('logo100x100') or
+                station.get('logo44x44')
             )
-            genre = station.get('genresAndTopics') or ','.join(
-                station.get('genres', []) + station.get('topics', []),
-            )
+
+            try:
+                genre = [g['value'] for g in station.get('genres')]
+            except:
+                genre = [g for g in station.get('genres')]
+
+            try:
+                description = station.get('description')['value'] if station.get('description') else ''
+            except:
+                description = station.get('description')
+
+            try:
+                name = station['name']['value'] if station.get('name') else ''
+            except:
+                name = station.get('name')
+
             formated_stations.append({
-                'name': station['name'],
-                'thumbnail': station['pictureBaseURL'] + thumbnail,
-                'rating': station['rating'],
-                'genre': genre,
-                'bitrate': station['bitrate'],
+                'name': name,
+                'thumbnail': thumbnail,
+                'rating': station.get('rank', ''),
+                'genre': ','.join(genre),
+                'mediatype': 'song',
                 'id': station['id'],
-                'current_track': station['currentTrack'],
-                'stream_url': station.get('streamURL', ''),
-                'description': station.get('description', '')
+                'current_track': station.get('nowPlaying', ''),
+                'stream_url': station.get('streamUrl', ''),
+                'description': description
             })
         return formated_stations
 

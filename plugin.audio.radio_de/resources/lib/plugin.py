@@ -16,12 +16,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-from xbmcswift2 import Plugin, xbmc
-from resources.lib.api import RadioApi, RadioApiError
+from xbmcswift2 import Plugin, xbmc, listitem
+from resources.lib.api import RadioApi, RadioApiError, PY3
 
 STRINGS = {
     'editorials_recommendations': 30100,
-    'top_100_stations': 30101,
+    'top_stations': 30101,
     'browse_by_genre': 30102,
     'browse_by_topic': 30103,
     'browse_by_country': 30104,
@@ -30,7 +30,6 @@ STRINGS = {
     'local_stations': 30107,
     'my_stations': 30108,
     'search_for_station': 30200,
-    'enter_name_country_or_language': 30201,
     'add_to_my_stations': 30400,
     'remove_from_my_stations': 30401,
     'edit_custom_station': 30402,
@@ -38,9 +37,19 @@ STRINGS = {
     'name': 30501,
     'thumbnail': 30502,
     'stream_url': 30503,
-    'add_custom': 30504
+    'add_custom': 30504,
+    'most_popular': 30603,
+    'az': 30604,
+    'next_page': 30605,
+    'by_country': 30606
 }
 
+SORT_TYPES = {
+    'popular': 'RANK',
+    'az': 'STATION_NAME'
+}
+
+STATIONS_PER_PAGE = 50
 
 plugin = Plugin()
 radio_api = RadioApi()
@@ -50,65 +59,106 @@ my_stations = plugin.get_storage('my_stations.json', file_format='json')
 @plugin.route('/')
 def show_root_menu():
     items = (
-        {'label': _('local_stations'), 'icon': plugin.icon, 'fanart': plugin.fanart,
-         'path': plugin.url_for('show_local_stations')},
-        {'label': _('editorials_recommendations'),  'icon': plugin.icon, 'fanart': plugin.fanart,
+        {'label': _('local_stations'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for('show_local_stations', page=1)},
+        {'label': _('editorials_recommendations'),  'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
          'path': plugin.url_for('show_recommendation_stations')},
-        {'label': _('top_100_stations'), 'icon': plugin.icon, 'fanart': plugin.fanart,
-         'path': plugin.url_for('show_top_stations')},
-        {'label': _('browse_by_genre'), 'icon': plugin.icon, 'fanart': plugin.fanart,
-         'path': plugin.url_for('show_station_categories',
-                                category_type='genre')},
-        {'label': _('browse_by_topic'), 'icon': plugin.icon, 'fanart': plugin.fanart,
-         'path': plugin.url_for('show_station_categories',
-                                category_type='topic')},
-        {'label': _('browse_by_country'), 'icon': plugin.icon, 'fanart': plugin.fanart,
-         'path': plugin.url_for('show_station_categories',
-                                category_type='country')},
-        {'label': _('browse_by_city'), 'icon': plugin.icon, 'fanart': plugin.fanart,
-         'path': plugin.url_for('show_station_categories',
-                                category_type='city')},
-        {'label': _('browse_by_language'), 'icon': plugin.icon, 'fanart': plugin.fanart,
-         'path': plugin.url_for('show_station_categories',
-                                category_type='language')},
-        {'label': _('search_for_station'), 'icon': plugin.icon, 'fanart': plugin.fanart,
+        {'label': _('top_stations'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for('show_top_stations', page=1)},
+        {'label': _('browse_by_genre'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for('show_genres')},
+        {'label': _('browse_by_topic'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for('show_topics')},
+        {'label': _('browse_by_country'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for('show_countries')},
+        {'label': _('browse_by_city'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for('show_cities_submenu')},
+        {'label': _('browse_by_language'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for('show_languages')},
+        {'label': _('search_for_station'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
          'path': plugin.url_for('search')},
-        {'label': _('my_stations'), 'icon': plugin.icon, 'fanart': plugin.fanart,
+        {'label': _('my_stations'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
          'path': plugin.url_for('show_my_stations')},
     )
     return plugin.finish(items)
 
 
-@plugin.route('/stations/local/')
-def show_local_stations():
-    stations = radio_api.get_local_stations()
-    return __add_stations(stations)
+@plugin.route('/stations/local/<page>')
+def show_local_stations(page=1):
+    total_pages, stations = radio_api.get_stations_nearby(STATIONS_PER_PAGE, page)
+
+    next_page = None
+    if int(page) < (total_pages):
+        next_page = {
+            'url': plugin.url_for(
+                'show_local_stations',
+                page = int(page) + 1),
+            'page': page,
+            'total_pages': total_pages,
+            'icon': plugin.icon,
+            'fanart': __get_plugin_fanart()
+        }
+
+    return __add_stations(stations, browse_more=next_page)
 
 
-@plugin.route('/stations/recommended/')
+@plugin.route('/stations/recommended')
 def show_recommendation_stations():
     stations = radio_api.get_recommendation_stations()
     return __add_stations(stations)
 
 
-@plugin.route('/stations/top/')
-def show_top_stations():
-    stations = radio_api.get_top_stations()
-    return __add_stations(stations)
+@plugin.route('/stations/top/<page>')
+def show_top_stations(page=1):
+    total_pages, stations = radio_api.get_top_stations(STATIONS_PER_PAGE, page)
+    next_page = None
+    if int(page) < (total_pages):
+        next_page = {
+            'url': plugin.url_for(
+                'show_top_stations',
+                page = int(page) + 1),
+            'page': page,
+            'total_pages': total_pages,
+            'icon': plugin.icon,
+            'fanart': __get_plugin_fanart()
+        }
+    return __add_stations(stations, browse_more=next_page)
 
 
 @plugin.route('/stations/search/')
 def search():
-    query = plugin.keyboard(heading=_('enter_name_country_or_language'))
+    query = plugin.keyboard(heading=_('search_for_station'))
     if query:
-        url = plugin.url_for('search_result', search_string=query)
+        url = plugin.url_for('search_result', search_string=query, page=1)
         plugin.redirect(url)
 
 
-@plugin.route('/stations/search/<search_string>/')
-def search_result(search_string):
-    stations = radio_api.search_stations_by_string(search_string)
-    return __add_stations(stations)
+@plugin.route('/stations/search/<search_string>/<page>')
+def search_result(search_string, page):
+    total_pages, stations = radio_api.search_stations_by_string(search_string, STATIONS_PER_PAGE, page)
+    next_page = None
+    if int(page) < (total_pages):
+        next_page = {
+            'url': plugin.url_for(
+                'search_result',
+                search_string = search_string,
+                page = int(page) + 1),
+            'page': page,
+            'total_pages': total_pages,
+            'icon': plugin.icon,
+            'fanart': __get_plugin_fanart()
+        }
+    return __add_stations(stations, browse_more=next_page)
 
 
 @plugin.route('/stations/my/')
@@ -128,7 +178,7 @@ def custom_my_station(station_id):
         heading = _('please_enter') % _(param)
         station[param] = plugin.keyboard(station.get(param, ''), heading) or ''
     station_name = station.get('name', 'custom')
-    station_id = station_name.decode('ascii', 'ignore').encode('ascii')
+    station_id = station_name if PY3 else station_name.decode('ascii', 'ignore').encode('ascii')
     station['id'] = station_id
     station['is_custom'] = '1'
     if station_id:
@@ -151,42 +201,306 @@ def del_from_my_stations(station_id):
         my_stations.sync()
 
 
-@plugin.route('/stations/<category_type>/')
-def show_station_categories(category_type):
-    categories = radio_api.get_categories(category_type)
+@plugin.route('/stations/genres')
+def show_genres():
+    genres = radio_api.get_genres()
     items = []
-    for category in categories:
-        category = category.encode('utf-8')
+    for genre in genres:
         items.append({
-            'label': category,
+            'label': __encode(genre["systemEnglish"]),
+            'icon': plugin.icon,
+            'fanart': __get_plugin_fanart(),
             'path': plugin.url_for(
-                'show_stations_by_category',
-                category_type=category_type,
-                category=category,
+                'show_popular_and_az',
+                category='genres',
+                value=__encode(genre["systemEnglish"])
             ),
         })
-    return plugin.finish(items)
+    finish_kwargs = {
+        'sort_methods': [
+            ('LABEL', '%X'),
+        ],
+    }
+    return plugin.finish(items, **finish_kwargs)
+
+@plugin.route('/stations/topics')
+def show_topics():
+    topics = radio_api.get_topics()
+    items = []
+    for topic in topics:
+        items.append({
+            'label': __encode(topic["systemEnglish"]),
+            'icon': plugin.icon,
+            'fanart': __get_plugin_fanart(),
+            'path': plugin.url_for(
+                'show_popular_and_az',
+                category='topics',
+                value=__encode(topic["systemEnglish"])
+            ),
+        })
+    finish_kwargs = {
+        'sort_methods': [
+            ('LABEL', '%X'),
+        ],
+    }
+    return plugin.finish(items, **finish_kwargs)
+
+@plugin.route('/stations/countries')
+def show_countries():
+    countries = radio_api.get_countries()
+    items = []
+    for country in countries:
+        items.append({
+            'label': __encode(country["systemEnglish"]),
+            'icon': plugin.icon,
+            'fanart': __get_plugin_fanart(),
+            'path': plugin.url_for(
+                'show_popular_and_az',
+                category='countries',
+                value=__encode(country["systemEnglish"])
+            ),
+        })
+    finish_kwargs = {
+        'sort_methods': [
+            ('LABEL', '%X'),
+        ],
+    }
+    return plugin.finish(items, **finish_kwargs)
+
+@plugin.route('/menu/languages')
+def show_languages():
+    languages = radio_api.get_languages()
+    items = []
+    for lang in languages:
+        items.append({
+            'label': __encode(lang["systemEnglish"]),
+            'icon': plugin.icon,
+            'fanart': __get_plugin_fanart(),
+            'path': plugin.url_for(
+                'show_popular_and_az',
+                category='languages',
+                value=__encode(lang["systemEnglish"])
+            ),
+        })
+    finish_kwargs = {
+        'sort_methods': [
+            ('LABEL', '%X'),
+        ],
+    }
+    return plugin.finish(items, **finish_kwargs)
+
+@plugin.route('/menu/cities')
+def show_cities_submenu():
+    items = (
+        {'label': _('by_country'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for(
+             'show_cities_list',
+             option = 'country')},
+        {'label': _('az'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for(
+             'show_cities_list',
+             option = 'az')}
+    )
+    finish_kwargs = {
+        'sort_methods': [
+            ('LABEL', '%X'),
+        ],
+    }
+    return plugin.finish(items, **finish_kwargs)
+
+@plugin.route('/menu/cities/select/<option>')
+def show_cities_list(option):
+    items = []
+    if option == "country":
+        countries = radio_api.get_countries()
+        for country in countries:
+            items.append({
+                'label': __encode(country["systemEnglish"]),
+                'icon': plugin.icon,
+                'fanart': __get_plugin_fanart(),
+                'path': plugin.url_for(
+                    'show_cities_by_country',
+                    country = __encode(country["systemEnglish"]),
+                ),
+            })
+    else:
+        cities = radio_api.get_cities()
+        for city in cities:
+            items.append({
+                'label': __encode(city["systemEnglish"]),
+                'icon': plugin.icon,
+                'fanart': __get_plugin_fanart(),
+                'path': plugin.url_for(
+                    'show_popular_and_az',
+                    category = 'cities',
+                    value = __encode(city["systemEnglish"]),
+                ),
+            })
+    finish_kwargs = {
+        'sort_methods': [
+            ('LABEL', '%X'),
+        ],
+    }
+    return plugin.finish(items, **finish_kwargs)
+
+@plugin.route('/menu/cities/list/<country>')
+def show_cities_by_country(country):
+    items = []
+    cities = radio_api.get_cities(country=country)
+    for city in cities:
+        items.append({
+            'label': __encode(city["systemEnglish"]),
+            'icon': plugin.icon,
+            'fanart': __get_plugin_fanart(),
+            'path': plugin.url_for(
+                'show_popular_and_az',
+                category = 'cities',
+                value = __encode(city["systemEnglish"]),
+            )
+        })
+    finish_kwargs = {
+        'sort_methods': [
+            ('LABEL', '%X'),
+        ],
+    }
+    return plugin.finish(items, **finish_kwargs)
 
 
-@plugin.route('/stations/<category_type>/<category>/')
-def show_stations_by_category(category_type, category):
-    stations = radio_api.get_stations_by_category(category_type,
-                                                  category)
-    return __add_stations(stations)
+@plugin.route('/menu/<category>/<value>')
+def show_popular_and_az(category, value):
+    items = (
+        {'label': _('most_popular'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for(
+             'sub_menu_entry',
+             option = 'popular',
+             category = category,
+             value = value,
+             page = 1)},
+        {'label': _('az'), 'icon': plugin.icon,
+         'fanart': __get_plugin_fanart(),
+         'path': plugin.url_for(
+             'sub_menu_entry',
+             option = 'az',
+             category=category,
+             value = value,
+             page=1)}
+    )
+    finish_kwargs = {
+        'sort_methods': [
+            ('LABEL', '%X'),
+        ],
+    }
+    return plugin.finish(items, **finish_kwargs)
+
+@plugin.route('/stations/city/<city>/<option>/<page>')
+def list_stations_by_city(city, option, page=1):
+    total_pages, stations = radio_api.get_stations_by_city(
+            city,
+            SORT_TYPES[option],
+            STATIONS_PER_PAGE,
+            page)
+    next_page = None
+    if int(page) < (total_pages):
+        next_page = {
+            'url': plugin.url_for(
+                'list_stations_by_city',
+                city = city,
+                option= option,
+                page = int(page) + 1),
+            'page': page,
+            'total_pages': total_pages,
+            'icon': plugin.icon,
+            'fanart': __get_plugin_fanart()
+        }
+    return __add_stations(stations, browse_more=next_page)
+
+
+@plugin.route('/stations/<option>/<category>/<value>/<page>')
+def sub_menu_entry(option, category, value, page=1):
+    if category == 'genres':
+        total_pages, stations = radio_api.get_stations_by_genre(
+            value,
+            SORT_TYPES[option],
+            STATIONS_PER_PAGE,
+            page)
+
+    elif category == 'countries':
+        total_pages, stations = radio_api.get_stations_by_country(
+            value,
+            SORT_TYPES[option],
+            STATIONS_PER_PAGE,
+            page)
+
+    elif category == 'cities':
+        total_pages, stations = radio_api.get_stations_by_city(
+            value,
+            SORT_TYPES[option],
+            STATIONS_PER_PAGE,
+            page)
+
+    elif category == 'topics':
+        total_pages, stations = radio_api.get_stations_by_topic(
+            value,
+            SORT_TYPES[option],
+            STATIONS_PER_PAGE,
+            page)
+
+    elif category == 'languages':
+        total_pages, stations = radio_api.get_stations_by_language(
+            value,
+            SORT_TYPES[option],
+            STATIONS_PER_PAGE,
+            page)
+
+    next_page = None
+    if int(page) < (total_pages):
+        next_page = {
+            'url': plugin.url_for(
+                'sub_menu_entry',
+                option = option,
+                category = category,
+                value = value,
+                page = int(page) + 1),
+            'page': page,
+            'total_pages': total_pages,
+            'icon': plugin.icon,
+            'fanart': __get_plugin_fanart()
+        }
+    return __add_stations(stations, browse_more=next_page)
 
 
 @plugin.route('/station/<station_id>')
 def get_stream_url(station_id):
     if my_stations.get(station_id, {}).get('is_custom', False):
-        stream_url = my_stations[station_id]['stream_url']
+        station = my_stations[station_id]
+        stream_url = radio_api.internal_resolver(station)
+        current_track = ''
     else:
-        station = radio_api.get_station_by_station_id(station_id)
-        stream_url = station['stream_url']
-    __log('get_stream_url result: %s' % stream_url)
-    return plugin.set_resolved_url(stream_url)
+        station = radio_api.get_station_by_station_id(
+            station_id,
+            force_http=plugin.get_setting('prefer-http', bool)
+        )
+        if station:
+            stream_url = station['stream_url']
+            current_track = station['current_track']
+    if station:
+        __log('get_stream_url result: %s' % stream_url)
+        return plugin.set_resolved_url(
+            listitem.ListItem(
+                label=station['name'],
+                label2=current_track,
+                path=stream_url,
+                icon=station['thumbnail'],
+                thumbnail=station['thumbnail'],
+                fanart=__get_plugin_fanart(),
+            )
+        )
 
 
-def __add_stations(stations, add_custom=False):
+def __add_stations(stations, add_custom=False, browse_more=None):
     items = []
     my_station_ids = my_stations.keys()
     for i, station in enumerate(stations):
@@ -209,16 +523,17 @@ def __add_stations(stations, add_custom=False):
                 'RunPlugin(%s)' % plugin.url_for('custom_my_station',
                                                       station_id=station_id),
             ))
+
         items.append({
             'label': station.get('name', ''),
             'thumbnail': station['thumbnail'],
-            'fanart': plugin.fanart,
+            'fanart': __get_plugin_fanart(),
             'info': {
                 'title': station.get('name', ''),
-                'rating': str(station.get('rating', '0.0')),
+                'rating': (10.0 - 0.0)*((float(station.get('rating', 0.0))-30.000)/(1.0-30.000)), # linear interpolation
                 'genre': station.get('genre', ''),
                 'size': int(station.get('bitrate', 0)),
-                'comment': station.get('current_track', ''),
+                'comment': station.get('description', ''),
                 'count': i,
             },
             'context_menu': context_menu,
@@ -233,6 +548,16 @@ def __add_stations(stations, add_custom=False):
             'label': _('add_custom'),
             'path': plugin.url_for('custom_my_station', station_id='new'),
         })
+
+    if browse_more:
+        items.append({
+            'label': '[B]%s[/B]' % _('next_page') % (browse_more['page'], browse_more['total_pages']),
+            'path': browse_more['url'],
+            'icon': browse_more['icon'],
+            'fanart': browse_more['fanart']
+        })
+
+
     finish_kwargs = {
         'sort_methods': [
             ('UNSORTED', '%X'),
@@ -241,11 +566,13 @@ def __add_stations(stations, add_custom=False):
         ],
     }
 
+    plugin.set_content('songs')
+
     return plugin.finish(items, **finish_kwargs)
 
 
 def __get_language():
-    languages = ('english', 'german', 'french')
+    languages = ('english', 'german', 'french', 'portuguese')
     if not plugin.get_setting('not_first_run', str):
         xbmc_language = xbmc.getLanguage().lower()
         __log('__get_language has first run with xbmc_language=%s'
@@ -262,6 +589,14 @@ def __get_language():
 def __log(text):
     plugin.log.info(text)
 
+
+def __get_plugin_fanart():
+    return plugin.fanart if not plugin.get_setting('hide-fanart', bool) else ''
+
+def __encode(string):
+    if PY3:
+        return string
+    return string.encode('utf-8')
 
 def _(string_id):
     if string_id in STRINGS:

@@ -1,9 +1,13 @@
-﻿1.4.5
+
+v1.4.5
 - Fixed server changes
+
 v1.4.4
 - Fixed error in Libreelec with import lib2to3 script. Deleted old_div
+
 v1.4.3
 - Code redesigned and added Python 2/3 compatibility
+
 v1.4.2
 - Fixed website changes. Changed live urls channels
 
@@ -43,11 +47,7 @@ v1.3.6
 v1.3.5
 - Improved video info
 - Updated python version
-<<<<<<< HEAD
 - Added new section Coleccions
-=======
-- Added new section Col·leccions
->>>>>>> 9ac9dbf9e533374637b0d13c1303e0211a28784b
 
 v1.3.4
 - Fixed website changes

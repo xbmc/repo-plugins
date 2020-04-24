@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "编辑推荐"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "100强站点"
+msgid "Top Stations"
+msgstr "强站点"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "我的电台"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "搜索站点"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "输入名字、国家或语言"
 
 msgctxt "#30300"
 msgid "Language"

@@ -21,8 +21,8 @@ msgid "Editorials Recommendations"
 msgstr "Προτάσεις Συντακτών"
 
 msgctxt "#30101"
-msgid "Top 100 Stations"
-msgstr "Κορυφαίοι 1000 Σταθμοί"
+msgid "Top Stations"
+msgstr "Κορυφαίοι Σταθμοί"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -55,10 +55,6 @@ msgstr "Οι Σταθμοί μου"
 msgctxt "#30200"
 msgid "Search for station"
 msgstr "Αναζήτηση σταθμού"
-
-msgctxt "#30201"
-msgid "Enter name, country or language"
-msgstr "Εισάγετε όνομα, χώρα ή γλώσσα"
 
 msgctxt "#30300"
 msgid "Language"

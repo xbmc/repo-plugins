@@ -4,16 +4,23 @@ KODI Mixcloud Plugin - jackyNIX
 
 ============================================
 
-Contributors:
+Developer:
   - jackyNIX
+  
+============================================
+
+Contributors:
   - Bochi
   - SilentException
   - fleshgolem
   - gordielachance
+  - understatement
+  - peat8
 
 ============================================
 
-Current version: 2.4.1
+Current version: 2.4.3
+  - Leia
   - Krypton
   - Jarvis
   - Isengard
@@ -51,6 +58,7 @@ Features:
     - English
     - Dutch
     - French
+    - German
   - jackyNIX's own cloudcasts :p
 
 ============================================

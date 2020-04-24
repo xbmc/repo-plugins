@@ -3,7 +3,7 @@
 ##################################
 # ZattooBox extension
 # LiveTV
-# (c) 2014-2018 Pascal Nançoz
+# (c) 2014-2020 Pascal Nançoz
 ##################################
 
 from resources.lib.core.zbextension import ZBExtension

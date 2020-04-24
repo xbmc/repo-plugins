@@ -1,3 +1,13 @@
+2.4.3
+- handle exclusive cloudcasts
+- removed obsolete menu items
+- fixed local resolver
+
+2.4.2
+- fixed local resolver
+- added german language
+- minor syntax modifications
+
 2.4.1
 - fixed offliberty resolver
 - fixed mixcloud-downloader resolver

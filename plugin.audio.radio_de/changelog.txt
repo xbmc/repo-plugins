@@ -1,3 +1,31 @@
+3.0.1 (13/4/2020)
+    - [new] Use internal playlist resolver also in custom stations
+
+3.0.0 (12/4/2020)
+    - [fix] playlist based stations (backport)
+    - [fix] ratings (backport)
+    - [new] removed python3 compatibility
+    - [new] automated submissions to repository
+
+v2.4.2 (9/2/2020)
+    - [add] sort methods for categories
+    - [add] setting to prefer http connections over https if http streams are available
+    - [fix] use sys.version_info[0] for compatibility with python2.6
+
+v2.4.1 (31/12/2019)
+    - [fix] Custom radio tracks
+
+v2.4.0 (29/12/2019)
+    - [new] Use radio API v2
+    - [fix] Remove dead code
+    - [new] Add radio.pt
+    - [new] Page listings
+    - [new] Better quality logos
+    - [new] Hide fanart setting
+
+v2.3.5 (25/12/2019)
+    - [fix] Artwork not available in player
+
 2.3.2 (07.06.2017)
     - fixed playback
 

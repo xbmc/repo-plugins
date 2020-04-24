@@ -12,7 +12,7 @@ msgstr ""
 
 
 
-#common
+# common
 
 msgctxt "#30000"
 msgid "Mixcloud"
@@ -36,7 +36,7 @@ msgstr "Entrez votre code d'autorisation."
 
 
 
-#main menu
+# main menu
 
 msgctxt "#30100"
 msgid "Trending"
@@ -99,7 +99,7 @@ msgid "Logoff Account"
 msgstr "Se Déconnecter"
 
 
-#search menu
+# search menu
 
 msgctxt "#30200"
 msgid "Cloudcasts..."
@@ -114,7 +114,7 @@ msgid "History..."
 msgstr "Historique..."
 
 
-#context menu
+# context menu
 
 msgctxt "#30300"
 msgid "Favorite cloudcast"
@@ -134,14 +134,14 @@ msgstr "Ne plus suivre cet utilisateur"
 
 msgctxt "#30304"
 msgid "Add cloudcast to Listen Later"
-msgstr "Ajouter le cloudcast à la liste "Écouter plus tard""
+msgstr "Ajouter le cloudcast à la liste Écouter plus tard"
 
 msgctxt "#30305"
 msgid "Remove cloudcast from Listen Later"
-msgstr "Retirer le cloudcast de la liste "Écouter plus tard""
+msgstr "Retirer le cloudcast de la liste Écouter plus tard"
 
 
-#general settings
+# general settings
 
 msgctxt "#30400"
 msgid "General"
@@ -168,7 +168,7 @@ msgid "Resolver"
 msgstr "Résolveur"
 
 
-#history settings
+# history settings
 
 msgctxt "#30500"
 msgid "History"

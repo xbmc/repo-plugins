@@ -55,3 +55,7 @@ msgstr "Resultados para"
 msgctxt "#32009"
 msgid "Page"
 msgstr "Página"
+
+msgctxt "#32010"
+msgid "#EstudoEmCasa"
+msgstr "#EstudoEmCasa"

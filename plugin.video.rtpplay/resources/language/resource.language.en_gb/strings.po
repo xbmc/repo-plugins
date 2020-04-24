@@ -55,3 +55,7 @@ msgstr ""
 msgctxt "#32009"
 msgid "Page"
 msgstr ""
+
+msgctxt "#32010"
+msgid "#EstudoEmCasa"
+msgstr ""

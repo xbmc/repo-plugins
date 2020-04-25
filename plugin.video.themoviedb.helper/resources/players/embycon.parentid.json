@@ -1,0 +1,9 @@
+{
+    "name" : "EmbyCon (by ParentID)",
+    "plugin" : "plugin.video.embycon",
+    "priority" : 200,
+    "search_episode" : [
+                      "plugin://plugin.video.embycon/?content_type=video&mode=GET_CONTENT_BY_TV_SHOW&media_type=episodes&show_ids=tvdb.{tvdb},imdb.{imdb},tmdb.{tmdb},trakt.{trakt}&url=%7Bserver%7D%2Femby%2FUsers%2F%7Buserid%7D%2FItems%3FYears%3D{year}%26IncludeItemTypes%3Depisode%26IncludeMedia%3Dtrue%26filters%3DIsNotFolder%26fields%3DMediaStreams%26Recursive%3Dtrue%26ImageTypeLimit%3D1%26Limit%3D16%26MinPremiereDate%3D{premiered}T00:00:00%26MaxPremiereDate%3D{premiered}T23:59:59",
+                      {"dialog":"auto"}
+                      ]
+}

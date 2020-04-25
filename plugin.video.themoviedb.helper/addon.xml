@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.themoviedb.helper"
-version="2.0.18"
+version="2.4.36"
 name="TheMovieDb Helper"
 provider-name="jurialmunkey">
 <requires>
   <import addon="xbmc.python" version="2.26.0"/>
   <import addon="script.module.simplecache" version="1.0.11" />
-  <import addon="script.module.requests" version="2.9.1"/> 
+  <import addon="script.module.requests" version="2.9.1"/>
+  <import addon="script.module.pil" version="1.1.7"/>
 </requires>
 <extension point="xbmc.python.pluginsource" library="plugin.py">
   <provides>video</provides>
@@ -16,18 +17,46 @@ provider-name="jurialmunkey">
 <extension point="kodi.context.item">
   <menu id="kodi.core.main">
     <menu>
-      <label>TMDbHelper - Trakt Manager</label>
+      <label>$ADDON[plugin.video.themoviedb.helper 32145]</label>
+      <item library="context-play.py">
+        <label>$ADDON[plugin.video.themoviedb.helper 32146]</label>
+        <visible>[String.IsEqual(ListItem.dbtype,episode) + !String.IsEmpty(ListItem.Property(tvshow.tmdb_id)) + !String.IsEmpty(ListItem.Season) + !String.IsEmpty(ListItem.Episode)] | [String.IsEqual(ListItem.dbtype,movie) + !String.IsEmpty(ListItem.Property(tmdb_id))] </visible>
+      </item>
+      <item library="context-open.py">
+        <label>$ADDON[plugin.video.themoviedb.helper 32147]</label>
+        <visible>String.IsEqual(ListItem.dbtype,episode) + !String.IsEmpty(ListItem.Property(tvshow.tmdb_id))</visible>
+      </item>
       <item library="context-watchlist.py">
-        <label>Trakt - Watchlist Add/Remove</label>
-        <visible>!String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)]</visible>
+        <label>$ADDON[plugin.video.themoviedb.helper 32148]</label>
+        <visible>!String.IsEmpty(ListItem.Property(Container.Info)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + !String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)]</visible>
       </item>
       <item library="context-history.py">
-        <label>Trakt - Watched History Add/Remove</label>
-        <visible>!String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)]</visible>
+        <label>$ADDON[plugin.video.themoviedb.helper 32149]</label>
+        <visible>!String.IsEmpty(ListItem.Property(Container.Info)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + !String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)]</visible>
       </item>
       <item library="context-collection.py">
-        <label>Trakt - Collection Add/Remove</label>
-        <visible>!String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)]</visible>
+        <label>$ADDON[plugin.video.themoviedb.helper 32150]</label>
+        <visible>!String.IsEmpty(ListItem.Property(Container.Info)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + !String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)]</visible>
+      </item>
+      <item library="context-library.py">
+        <label>$ADDON[plugin.video.themoviedb.helper 32151]</label>
+        <visible>!String.IsEmpty(ListItem.Property(Container.Info)) + !String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,season)]</visible>
+      </item>
+      <item library="context-library-userlist.py">
+        <label>$ADDON[plugin.video.themoviedb.helper 32151]</label>
+        <visible>!String.IsEmpty(ListItem.Property(Container.Info)) + String.IsEqual(ListItem.Property(Item.Info),trakt_userlist)</visible>
+      </item>
+      <item library="context-addtouserlist.py">
+        <label>$ADDON[plugin.video.themoviedb.helper 32140]</label>
+        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)] + [!String.IsEmpty(ListItem.Property(tmdb_id)) | !String.IsEmpty(ListItem.DBID)]</visible>
+      </item>
+      <item library="context-removefromuserlist.py">
+        <label>$ADDON[plugin.video.themoviedb.helper 32152]</label>
+        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.TraktUserSlug)) + !String.IsEmpty(ListItem.Property(Container.User_Slug)) + !String.IsEmpty(ListItem.Property(Container.List_Slug)) + String.IsEqual(Window(Home).Property(TMDbHelper.TraktUserSlug),ListItem.Property(Container.User_Slug))</visible>
+      </item>
+      <item library="context-refresh-item.py">
+        <label>$ADDON[plugin.video.themoviedb.helper 32153]</label>
+        <visible>!String.IsEmpty(ListItem.Property(Container.Info)) + !String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,tvshow)]</visible>
       </item>
     </menu>
   </menu>
@@ -36,13 +65,12 @@ provider-name="jurialmunkey">
   <summary lang="en_GB">TheMovieDb Helper - Now With Trakt Support!</summary>
   <description lang="en_GB">TheMovieDb Helper provides details about movies, tvshows and actors from TMDb. Users can access a variety of lists from TMDb and Trakt.</description>
   <disclaimer lang="en_GB">Provided by TheMovieDb and Trakt.</disclaimer>
-  <license>GPL-3.0</license>
+  <license>GPL-3.0-or-later</license>
   <assets>
     <icon>icon.png</icon>
     <fanart>fanart.jpg</fanart>
     <screenshot>resources/screenshot-01.jpg</screenshot>
     <screenshot>resources/screenshot-02.jpg</screenshot>
   </assets>
-  <news>2.0.18 - Add steps to player[CR]2.0.17 - Options for Randomised Widget Lists[CR]2.0.16 - Add option to merge details with kodi db[CR]2.0.15 - Cleanup[CR]2.0.14 - Trakt watched indicators[CR]2.0.12 - Changes to players download setting[CR]2.0.11 - Hotfix for some trakt lists[CR]2.0.10 - Fix for add_path if info=play[CR]2.0.9 - Add &amp;fanarttv=True param plus additional fanart tv options for widget[CR]2.0.8 - Add pagination for tmdb[CR]2.0.7 - Fix for multiple player files for one plugin[CR]2.0.6 - Add default player function thanks to drinfernoo[CR]2.0.4 - Add additional caching for fanart.tv[CR]2.0.3 - Add fanart.tv optional support (increase load times significantly)[CR]2.0.2 - Player URL downloader[CR]2.0.1 - Widget player params[CR]2.0.0 - Code refactor[CR]1.0.30/29 - Addition of new infoproperties[CR]1.0.28/27/26/25/24 - Optimisation updates to service monitor[CR]1.0.23 - Add service monitor[CR]1.0.22 - Trakt management functiosn must be enabled in settings to display in details list[CR]1.0.21 - External Players and Search for items not in library[CR]1.0.20 - Hotfix[CR]1.0.19 - Trakt management options[CR]1.0.18 - Add ISO Lang and del N/A keys[CR]1.0.17 - Play detailed items in Kodi DB</news>
 </extension>
 </addon>

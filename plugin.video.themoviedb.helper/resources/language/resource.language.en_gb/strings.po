@@ -173,7 +173,7 @@ msgstr ""
 
 #: /resources/settings.xml
 msgctxt "#32035"
-msgid "Get watched episode counts for tvshows and seasons from Trakt (slow)"
+msgid "Get unwatched episode counts for tvshows and seasons from Trakt (slow)"
 msgstr ""
 
 #: /resources/settings.xml
@@ -318,12 +318,458 @@ msgstr ""
 
 #: /resources/lib/context.py
 msgctxt "#32064"
-msgid "Do you wish to remove {0} from your Trakt {1}?\n\nTMDb {2} ID {3}"
+msgid ""
+"Do you wish to remove {0} from your Trakt {1}?\n"
+"\n"
+"TMDb {2} ID {3}"
 msgstr ""
 
 #: /resources/lib/context.py
 msgctxt "#32065"
-msgid "Do you wish to add {0} to your Trakt {1}?\n\nTMDb {2} ID {3}"
+msgid ""
+"Do you wish to add {0} to your Trakt {1}?\n"
+"\n"
+"TMDb {2} ID {3}"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32066"
+msgid "Debug logging"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32067"
+msgid "Fuzzy local library matching"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32068"
+msgid "Allow fuzzy matches (ignore year) for movies"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32069"
+msgid "Allow fuzzy matches (ignore year) for tvshows"
+msgstr ""
+
+#: /resources/lib/tmdb.py
+msgctxt "#32070"
+msgid "Male"
+msgstr ""
+
+#: /resources/lib/tmdb.py
+msgctxt "#32071"
+msgid "Female"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32072"
+msgid "Unaired Items"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32073"
+msgid "Hide unaired movies"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32074"
+msgid "Library Integration"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32075"
+msgid "TV"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32076"
+msgid "Update library after adding items"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32077"
+msgid "Ignore folder creation checks"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32078"
+msgid "Expand Trakt list limit to 20 items"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32079"
+msgid "System Use Only"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32080"
+msgid "Other"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32081"
+msgid "Show next page item on widgets (requires skin reload)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32082"
+msgid "Watchlist sort method"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32083"
+msgid "Accounts"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32084"
+msgid "Hide unaired episodes"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32085"
+msgid "Flatten seasons"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32086"
+msgid "Auto-update library and add new/missing episodes"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32087"
+msgid "Use resolvedURL method for suppressing strm next playlist error"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32088"
+msgid "Navigation"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32089"
+msgid "Select Action"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32090"
+msgid "Content"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32091"
+msgid "Hide specials / up next folders"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32092"
+msgid "Widgets"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32093"
+msgid "Next episodes sort method"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32094"
+msgid "Prioritise local files"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32095"
+msgid "Enter the code"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32096"
+msgid "Go to [B]https://trakt.tv/activate[/B]"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32097"
+msgid "Trakt Authentication"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32098"
+msgid "Exists"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32099"
+msgid "A value has already been set for this parameter"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32100"
+msgid "Do you wish to clear the existing items or add more?"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32101"
+msgid "Clear Items"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32102"
+msgid "Add Items"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32103"
+msgid "No Value Added"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32104"
+msgid "TMDb ID for {} not found or none selected.\\nDo you want to add another value?"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32105"
+msgid "Do you want to add another value?"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32106"
+msgid "Added"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32107"
+msgid "Set Match Method"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32108"
+msgid "Choose matching method for parameters with multiple values."
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32109"
+msgid "Match ANY Value"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32110"
+msgid "Match ALL Values"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32111"
+msgid "Select Items"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32112"
+msgid "Select Genres"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32113"
+msgid "Also accepts X days relative from today in the format T-X or T+X (e.g. T-10 is ten days ago)"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32114"
+msgid "Enter"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32115"
+msgid "Company"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32116"
+msgid "Network"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32117"
+msgid "Keyword"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32118"
+msgid "Person"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32119"
+msgid "Select Release Types"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32120"
+msgid "Select Region for Release"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32121"
+msgid "Clear Search History"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32122"
+msgid "XBMCVFS reports unable to create path"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32123"
+msgid "If error persists and the folders are created correctly, please disable folder path creation checking in TMDBHelper settings."
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32124"
+msgid "Adding"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32125"
+msgid "Add Trakt list to Kodi library"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32126"
+msgid "Do you wish to add this Trakt list to your Kodi library?"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32127"
+msgid "by user"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32128"
+msgid "This list contains"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32129"
+msgid "items"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32130"
+msgid "Auto-update library every X hours"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32131"
+msgid "Auto-update library from Trakt list"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32132"
+msgid "Do you wish to update the library using this Trakt list now?"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32133"
+msgid "Select List"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32134"
+msgid "User slug"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32135"
+msgid "Successfully removed {} {} from {} list."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32136"
+msgid "Successfully added {} {} to {} list."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32137"
+msgid "Failed to remove {} {} from {} list."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32138"
+msgid "Failed to add {} {} to {} list."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32139"
+msgid "Remove from Trakt list"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32140"
+msgid "Add to Trakt list"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32141"
+msgid "Create new list..."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32142"
+msgid "Hide watched items on widgets"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32143"
+msgid "Cached details for {} successfully refreshed!"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32144"
+msgid "Refresh TheMovieDb Details"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32145"
+msgid "TMDbHelper Options"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32146"
+msgid "Play Using"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32147"
+msgid "Browse Seasons"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32148"
+msgid "Add/Remove from Trakt Watchlist"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32149"
+msgid "Add/Remove from Trakt History"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32150"
+msgid "Add/Remove from Trakt Collection"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32151"
+msgid "Add to Kodi Library"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32152"
+msgid "Remove from list"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32153"
+msgid "Refresh cached details"
 msgstr ""
 
 msgctxt "#30030"
@@ -515,7 +961,7 @@ msgstr ""
 
 #: /resources/lib/requestapi.py
 msgctxt "#32007"
-msgid "Missing/Invalid"
+msgid "Unauthorised 401 Error"
 msgstr ""
 
 #: /resources/lib/requestapi.py
@@ -525,7 +971,7 @@ msgstr ""
 
 #: /resources/lib/requestapi.py
 msgctxt "#32009"
-msgid "You must enter a valid API key to use this add-on"
+msgid "API returned 401 unauthorised error. If you have entered an API key for this service$COMMA please check that it is correct. If this error relates to TMDb API$COMMA please post a debug log to [B]https://github.com/jurialmunkey/plugin.video.themoviedb.helper/issues[/B]"
 msgstr ""
 
 #: /resources/settings.xml
@@ -565,7 +1011,7 @@ msgstr ""
 
 #: /resources/settings.xml
 msgctxt "#32017"
-msgid "Accounts / API Keys"
+msgid "API Keys"
 msgstr ""
 
 #: /resources/settings.xml

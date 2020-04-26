@@ -1,3 +1,14 @@
+6.8.0
+[add] support for video comments, Comments in the More... dialog |contrib: doko-desuka|
+[add] simulate deprecated recommended home API |contrib: hedleyroos|
+[fix] error caused by timestamp formatting
+[fix] fix Premiere's exiting after 5 seconds |contrib: jpfox156|
+[fix] playlists over json-rpc |contrib: JasperE84|
+[lang] de_de strings |contrib: tweimer|
+[lang] el_gr strings |contrib: twilight0|
+[lang] es_es strings |contrib: roliverosc|
+[lang] pt_pt strings |contrib: daniel3x|
+
 6.7.0
 [add] send PlaybackInit, PlaybackStarted, PlaybackStopped notifications containing video id, channel id, and the status of the playing video
 [fix] allow playback regardless of API status

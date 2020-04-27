@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings version="1">
+	<section id="default">
+		<category id="general" label="30000" help="">
+			<group id="0" label="">
+				<setting type="action" label="30012" id="libraryPicker">
+					<level>0</level>
+					<data>RunScript(plugin.video.filmfriend, libraryPicker)</data>
+					<control type="button" format="action"/>
+				</setting>
+
+				<setting type="string" label="30010" id="library">
+					<level>0</level>
+					<default/>
+					<enable>false</enable>
+					<control type="edit" format="string">
+						<heading>30010</heading>
+					</control>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+				</setting>
+
+				<setting type="string" label="30500" id="username">
+					<level>0</level>
+					<default/>
+					<enable>false</enable>
+					<control type="edit" format="string">
+						<heading>30500</heading>
+					</control>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+				</setting>
+
+			</group>
+
+			<group id="1" label="">
+				<setting id="language" type="string" label="30020" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<options>
+							<option label="30021">system</option>
+							<option label="30022">en</option>
+							<option label="30023">de</option>
+							<option label="30024">fr</option>
+							<option label="30025">it</option>
+						</options>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+			</group>
+		</category>
+
+
+		<category id="expert" label="30001" help="">
+			<group id="2" label="">
+				<setting type="string" label="30050" id="domain">
+					<level>3</level>
+					<default/>
+					<enable>false</enable>
+					<control type="edit" format="string">
+						<heading>30050</heading>
+					</control>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+				</setting>
+				<setting type="string" label="30051" id="tenant">
+					<level>3</level>
+					<default/>
+					<enable>false</enable>
+					<control type="edit" format="string">
+						<heading>30051</heading>
+					</control>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+				</setting>
+			</group>
+			<group id="3" label="">
+				<setting type="string" label="30052" id="access_token">
+					<level>3</level>
+					<default/>
+					<enable>false</enable>
+					<control type="edit" format="string">
+						<heading>30052</heading>
+					</control>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+				</setting>
+				<setting type="string" label="30053" id="refresh_token">
+					<level>3</level>
+					<default/>
+					<enable>false</enable>
+					<control type="edit" format="string">
+						<heading>30053</heading>
+					</control>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>

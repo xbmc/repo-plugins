@@ -1,0 +1,112 @@
+# KODI Media Center language file
+# Addon Name: filmfriend
+# Addon id: script.module.filmfriend
+# Addon version: 1.0.0
+# Addon Provider: sarbes
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30001"
+msgid "Expert Info"
+msgstr "Expert Info"
+
+msgctxt "#30010"
+msgid "Library"
+msgstr "Library"
+
+msgctxt "#30011"
+msgid "Select library"
+msgstr "Select library"
+
+msgctxt "#30012"
+msgid "Login"
+msgstr "Login"
+
+msgctxt "#30020"
+msgid "Language"
+msgstr "Language"
+
+msgctxt "#30021"
+msgid "System (if available)"
+msgstr "System (if available)"
+
+msgctxt "#30022"
+msgid "English"
+msgstr "English"
+
+msgctxt "#30023"
+msgid "German"
+msgstr "German"
+
+msgctxt "#30024"
+msgid "French"
+msgstr "French"
+
+msgctxt "#30025"
+msgid "Italian"
+msgstr "Italian"
+
+msgctxt "#30050"
+msgid "Domain"
+msgstr "Domain"
+
+msgctxt "#30051"
+msgid "Library ID"
+msgstr "Library ID"
+
+msgctxt "#30052"
+msgid "Access Token"
+msgstr "Access Token"
+
+msgctxt "#30053"
+msgid "Refresh Token"
+msgstr "Refresh Token"
+
+msgctxt "#30500"
+msgid "Username"
+msgstr "Username"
+
+msgctxt "#30501"
+msgid "Username is empty"
+msgstr "Username is empty"
+
+msgctxt "#30502"
+msgid "The username field can't be empty"
+msgstr "The username field can't be empty"
+
+msgctxt "#30503"
+msgid "Password"
+msgstr "Password"
+
+msgctxt "#30504"
+msgid "Password is empty"
+msgstr "Password is empty"
+
+msgctxt "#30505"
+msgid "The password field can't be empty"
+msgstr "The password field can't be empty"
+
+msgctxt "#30506"
+msgid "Error"
+msgstr "Error"
+
+msgctxt "#30507"
+msgid "An error occured during the login process"
+msgstr "An error occured during the login process"
+
+msgctxt "#30508"
+msgid "Login credentials wrong"
+msgstr "Login credentials wrong"
+
+msgctxt "#30600"
+msgid "Shows"
+msgstr "Shows"
+
+msgctxt "#30601"
+msgid "Movies"
+msgstr "Movies"

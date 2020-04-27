@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.mdrplus" name="MDR+" version="1.0.0" provider-name="sarbes">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.libmediathek4" version="1.0.0"/>
+		<import addon="script.module.requests" version="2.19.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<language>de</language>
+		<license>GPL-2.0-only</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=353903</forum>
+		<source>https://github.com/sarbes/plugin.video.mdrmediathek</source>
+        <website>https://www.mdr.de/</website>
+        <summary lang="en_GB">This is an add-on for http://www.mdr.de/.</summary>
+        <description lang="en_GB">This add-on provides access to the German VOD platform http://www.mdr.de/.</description>
+        <summary lang="de_DE">Sendebeiträge von MDR+.</summary>
+        <description lang="de_DE">Dieses Add-on bietet Zugriff auf die Bibliothek von MDR+. Der Inhalt beschränkt sich auf Livestreams und deren Aufzeichnungen.</description>
+        <disclaimer lang="de_DE">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

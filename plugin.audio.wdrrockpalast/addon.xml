@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.wdrrockpalast" name="WDR Rockpalast" version="2.0.0" provider-name="sarbes">
+    <requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.libwdr" version="2.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<language>de</language>
+		<license>GPL-2.0-only</license>
+		<source>https://github.com/sarbes/plugin.video.wdrrockpalast</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=353899</forum>
+        <website>https://www1.wdr.de/fernsehen/rockpalast/startseite/index.html</website>
+        <summary lang="en_GB">This add-on lists all videos of the WDR Rockpalast.</summary>
+        <description lang="en_GB">This is a music add-on for the WDR Rockpalast. The content may be geolocked.</description>
+        <summary lang="de_DE">Dies ist ein Music Add-on für den WDR Rockpalast.</summary>
+        <description lang="de_DE">Dieses Add-on listet alle Videos vom WDR Rockpalast. Die Inhalte sind unter Umständen nur aus Deutschland erreichbar.</description>
+        <disclaimer lang="de_DE">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

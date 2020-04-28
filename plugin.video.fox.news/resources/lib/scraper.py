@@ -24,7 +24,6 @@ class myAddon(t1mAddon):
   def getAddonMenu(self,url,ilist):
       html = self.getRequest(BASEURL)
       a1,a2,a3 = re.compile('<a href="#">Video.+?">(.+?)<.+?">(.+?)<.+?">(.+?)<', re.DOTALL).search(html).groups()
-      ilist = self.addMenuItem(a1,'GV', ilist, '5614615980001', self.addonIcon, self.addonFanart, {}, isFolder=False)
       ilist = self.addMenuItem(a2,'GM', ilist, 'show', self.addonIcon, self.addonFanart, {}, isFolder=True)
       ilist = self.addMenuItem(a3,'GM', ilist, 'news', self.addonIcon, self.addonFanart, {}, isFolder=True)
       return(ilist)

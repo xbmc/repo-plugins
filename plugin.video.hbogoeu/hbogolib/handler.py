@@ -305,7 +305,7 @@ class HbogoHandler(object):
         cur = self.db.cursor()
         cur.execute("DELETE FROM request_cache;")
         self.db.commit()
-        xbmcgui.Dialog().notification(self.language(30809), self.LB_SUCESS, self.get_resource("icon.png"))
+        xbmcgui.Dialog().notification(self.language(30808), self.LB_SUCESS, self.get_resource("icon.png"))
 
     def get_from_hbogo(self, url, response_format='json', use_cache=True, retry=0):
         self.log("GET FROM HBO URL: " + url)

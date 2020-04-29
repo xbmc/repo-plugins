@@ -1,0 +1,1 @@
+Artist Slideshow is licensed under the GNU GENERAL PUBLIC LICENSE (Version 2, June 1991).  You may only copy this code if you adhere to the license.  See LICENSE.txt for more information.

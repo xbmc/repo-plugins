@@ -1,0 +1,87 @@
+#EXTM3U
+#EXTINF:-1 tvg-id="een" tvg-name="Eén" group-title="VRT NU" tvg-logo="https://images.vrt.be/height100/logo/een/een_LOGO_zwart.png",Eén
+plugin://plugin.video.vrt.nu/play/id/vualto_een_geo?ext=.pvr
+
+#EXTINF:-1 tvg-id="canvas" tvg-name="Canvas", group-title="VRT NU" tvg-logo="https://images.vrt.be/height100/logo/canvas/CANVAS_logo_lichtblauw.jpg",Canvas
+plugin://plugin.video.vrt.nu/play/id/vualto_canvas_geo?ext=.pvr
+
+#EXTINF:-1 tvg-id="ketnet" tvg-name="Ketnet group-title="VRT NU" tvg-logo="https://images.vrt.be/height100/logo/ketnet/ketnet_LOGO_rood_geel.png",Ketnet
+plugin://plugin.video.vrt.nu/play/id/vualto_ketnet_geo?ext=.pvr
+
+#EXTINF:-1 tvg-id="ketnetjr" tvg-name="Ketnet Junior" group-title="VRT NU" tvg-logo="https://images.vrt.be/height100/logo/ketnet/ketnet_LOGO_rood_geel.png",Ketnet Junior
+plugin://plugin.video.vrt.nu/play/id/ketnet_jr?ext=.pvr
+
+#EXTINF:-1 tvg-id="sporza" tvg-name="Sporza" group-title="VRT NU" tvg-logo="https://images.vrt.be/height100/logo/sporza/sporza_logo_zwart.png",Sporza
+plugin://plugin.video.vrt.nu/play/id/vualto_sporza_geo?ext=.pvr
+
+#EXTINF:-1 tvg-id="vrtnws" tvg-name="VRT NWS" group-title="VRT NU" tvg-logo="https://images.vrt.be/height100/logos/vrtnws.png",VRT NWS
+plugin://plugin.video.vrt.nu/play/id/vualto_nieuws?ext=.pvr
+
+#EXTINF:-1 tvg-id="radio1tv" tvg-name="Radio 1" group-title="VRT NU" tvg-logo="https://images.vrt.be/height100/logos/radio1.png",Radio 1
+plugin://plugin.video.vrt.nu/play/id/vualto_radio1?ext=.pvr
+
+#EXTINF:-1 tvg-id="radio2tv" tvg-name="Radio 2" group-title="VRT NU" tvg-logo="https://images.vrt.be/height100/logo/radio2/RADIO2_RED_RGB.png",Radio 2
+plugin://plugin.video.vrt.nu/play/id/vualto_radio2?ext=.pvr
+
+#EXTINF:-1 tvg-id="klaratv" tvg-name="Klara" group-title="VRT NU" tvg-logo="https://images.vrt.be/height100/logos/klara.png",Klara
+plugin://plugin.video.vrt.nu/play/id/vualto_klara?ext=.pvr
+
+#EXTINF:-1 tvg-id="stubrutv" tvg-name="Studio Brussel" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/2019/03/12/1e383cf5-44a7-11e9-abcc-02b7b76bf47f.png",Studio Brussel
+plugin://plugin.video.vrt.nu/play/id/vualto_stubru?ext=.pvr
+
+#EXTINF:-1 tvg-id="mnm" tvg-name="MNM" group-title="VRT NU" tvg-logo="https://images.vrt.be/height100/logo/mnm/logo_witte_achtergrond.png",MNM
+plugin://plugin.video.vrt.nu/play/id/vualto_mnm?ext=.pvr
+
+#EXTINF:-1 tvg-id="vrt-events1" tvg-name="VRT Events stream 1" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/vrt.png",VRT Events stream 1
+plugin://plugin.video.vrt.nu/play/id/vualto_events1_geo?ext=.pvr
+
+#EXTINF:-1 tvg-id="vrt-events2" tvg-name="VRT Events stream 2" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/vrt.png",VRT Events stream 2
+plugin://plugin.video.vrt.nu/play/id/vualto_events2_geo?ext=.pvr
+
+#EXTINF:-1 tvg-id="vrt-events3" tvg-name="VRT Events stream 3" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/vrt.png",VRT Events stream 3
+plugin://plugin.video.vrt.nu/play/id/vualto_events3_geo?ext=.pvr
+
+#EXTINF:-1 radio="true" tvg-id="radio1" tvg-name="Radio 1" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/logos/radio1.png",Radio 1
+http://icecast.vrtcdn.be/radio1-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="radio1-classics" tvg-name="Radio 1 Classics" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/2020/04/08/b1c35b45-7961-11ea-aae0-02b7b76bf47f.png",Radio 1 Classics
+http://icecast.vrtcdn.be/radio1_classics_high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="radio2" tvg-name="Radio 2" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/logo/radio2/RADIO2_RED_RGB.png",Radio 2
+http://icecast.vrtcdn.be/ra2ovl-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="klara" tvg-name="Klara" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/logos/klara.png",Klara
+http://icecast.vrtcdn.be/klara-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="klara-continuo" tvg-name="Klara Continuo" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/logos/klara_continuo.png",Klara Continuo
+http://icecast.vrtcdn.be/klaracontinuo-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="stubru" tvg-name="Studio Brussel" group-title="VRT Radio" tvg-logo="https://images.vrt.be/orig/2019/03/12/1e383cf5-44a7-11e9-abcc-02b7b76bf47f.png",Studio Brussel
+http://icecast.vrtcdn.be/stubru-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="stubru-tijdloze" tvg-name="StuBru De Tijdloze" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/2019/02/21/923b0fe2-35ce-11e9-abcc-02b7b76bf47f.png",StuBru De Tijdloze
+http://icecast.vrtcdn.be/stubru_tijdloze-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="stubru-tgs" tvg-name="StuBru #ikluisterbelgisch" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/2020/04/02/53dad354-74af-11ea-aae0-02b7b76bf47f.png",StuBru #ikluisterbelgisch
+http://icecast.vrtcdn.be/stubru_tgs-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="mnm" tvg-name="MNM" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/logo/mnm/logo_witte_achtergrond.png",MNM
+http://icecast.vrtcdn.be/mnm-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="mnm-backtothe90sand00s" tvg-name="MNM Back to the 90's & 00's" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/2019/02/21/76e54cd8-35f1-11e9-abcc-02b7b76bf47f.png",MNM Back to the 90's & 00's
+http://icecast.vrtcdn.be/mnm_90s00s-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="mnm-hits" tvg-name="MNM Hits" group-title="VRT Radio" tvg-logo="https://images.vrt.be/orig/logo/mnm/mnm_hits_logo_2018.png",MNM Hits
+http://icecast.vrtcdn.be/mnm_hits-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="mnm-urbanice" tvg-name="MNM UrbaNice" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/logo/mnm_urbanice_logo.png",MNM UrbaNice
+http://icecast.vrtcdn.be/mnm_urb-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="ketnet-hits" tvg-name="Ketnet Hits" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/logo/ketnet/ketnet_hits_rgb.png",Ketnet Hits
+http://icecast.vrtcdn.be/ketnetradio-high.mp3
+
+#EXTINF:-1 radio="true" tvg-id="vrtnws-radio" tvg-name="VRT NWS" group-title="VRT Radio" tvg-logo="https://images.vrt.be/height100/logos/vrtnws.png",VRT NWS
+https://progressive-audio.lwc.vrtcdn.be/content/fixed/11_11niws-snip_hi.mp3
+
+#EXTINF:-1 radio="true" tvg-id="vrt-events-radio" tvg-name="VRT Events" group-title="VRT Radio" tvg-logo="https://images.vrt.be/orig/logo/vrt.png",VRT Events
+http://icecast.vrtcdn.be/vrtevent-high.mp3

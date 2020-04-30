@@ -8,17 +8,25 @@
         <setting id="credentials_hash" visible="false"/>
     </category>
     <category label="30740"> <!-- Interface -->
-        <setting label="30741" type="lsep"/> <!-- Features -->
+        <setting label="30741" type="lsep"/> <!-- My favorites -->
         <setting label="30743" help="30744" type="bool" id="usefavorites" default="true"/>
         <setting label="30745" help="30746" type="action" action="RunPlugin(plugin://plugin.video.vrt.nu/favorites/manage)" enable="eq(-1,true)" subsetting="true"/>  <!-- Manage favorites -->
         <setting label="30747" help="30748" type="bool" id="useresumepoints" default="true" enable="eq(-2,true)" subsetting="true"/>
         <setting label="30749" help="30750" type="bool" id="addmymovies" default="true" enable="eq(-3,true)" subsetting="true"/>
         <setting label="30751" help="30752" type="bool" id="addmydocu" default="true" enable="eq(-4,true)" subsetting="true"/>
+        <setting label="30753" help="30754" type="bool" id="addmymusic" default="true" enable="eq(-5,true)" subsetting="true"/>
+        <setting label="30755" type="lsep"/> <!-- Features -->
         <setting type="sep"/>
-        <setting label="30753" help="30754" type="bool" id="showoneoff" default="true"/>
-        <setting label="30755" help="30756" type="bool" id="showfanart" default="true"/>
-        <setting label="30757" help="30758" type="slider" id="itemsperpage" default="50" range="10,10,300" option="int"/>
-        <setting label="30759" help="30760" type="bool" id="showpermalink" default="false"/>
+        <setting label="30757" help="30758" type="bool" id="showoneoff" default="true"/>
+        <setting label="30759" help="30760" type="bool" id="showfanart" default="true"/>
+        <setting label="30761" help="30762" type="slider" id="itemsperpage" default="50" range="10,10,300" option="int"/>
+        <setting label="30763" help="30764" type="bool" id="showpermalink" default="false"/>
+        <setting label="30765" type="lsep"/> <!-- Colours -->
+        <setting label="30767" help="30768" type="select" id="colour_theme" default="dark" values="custom|dark|light"/>
+        <setting label="30769" help="30770" type="select" id="colour_highlighted" default="yellow" values="black|blue|brown|cyan|gray|green|magenta|maroon|orange|pink|purple|red|white|yellow" visible="eq(-1,custom)" subsetting="true"/>
+        <setting label="30771" help="30772" type="select" id="colour_greyedout" default="gray" values="black|blue|brown|cyan|gray|green|magenta|maroon|orange|pink|purple|red|white|yellow" visible="eq(-2,custom)" subsetting="true"/>
+        <setting label="30773" help="30774" type="select" id="colour_availability" default="blue" values="black|blue|brown|cyan|gray|green|magenta|maroon|orange|pink|purple|red|white|yellow" visible="eq(-3,custom)" subsetting="true"/>
+        <setting label="30775" help="30776" type="select" id="colour_geoblocked" default="red" values="black|blue|brown|cyan|gray|green|magenta|maroon|orange|pink|purple|red|white|yellow" visible="eq(-4,custom)" subsetting="true"/>
     </category>
     <category label="30780"> <!-- Playback -->
         <setting label="30781" type="lsep"/>

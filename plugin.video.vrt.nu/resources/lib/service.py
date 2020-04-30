@@ -17,7 +17,7 @@ class VrtMonitor(Monitor, object):  # pylint: disable=useless-object-inheritance
     """This is the class that monitors Kodi for the VRT NU video plugin"""
 
     def __init__(self):
-        """VRT Monitor initialisiation"""
+        """VRT Monitor initialisation"""
         self._resumepoints = ResumePoints()
         self._playerinfo = None
         self._favorites = None

@@ -9,7 +9,7 @@ from xbmc import getInfoLabel, Player, PlayList
 from apihelper import ApiHelper
 from data import CHANNELS
 from favorites import Favorites
-from kodiutils import addon_id, get_setting_bool, has_addon, kodi_version, log, notify, set_property
+from kodiutils import addon_id, get_setting_bool, has_addon, kodi_version_major, log, notify, set_property
 from resumepoints import ResumePoints
 from utils import play_url_to_id, to_unicode, url_to_episode
 
@@ -31,7 +31,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         self.asset_id = None
         # FIXME On Kodi 17, use ListItem.Filenameandpath because Player.FilenameAndPath returns the stream manifest url and
         # this definitely breaks "Up Next" on Kodi 17, but this is not supported or available through the Kodi add-on repo anyway
-        self.path_infolabel = 'ListItem.Filenameandpath' if kodi_version() < 18 else 'Player.FilenameAndPath'
+        self.path_infolabel = 'ListItem.Filenameandpath' if kodi_version_major() < 18 else 'Player.FilenameAndPath'
         self.path = None
         self.title = None
         self.ep_id = None
@@ -94,7 +94,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         self.whatson_id = episode.get('whatsonId') or None  # Avoid empty string
 
         # Kodi 17 doesn't have onAVStarted
-        if kodi_version() < 18:
+        if kodi_version_major() < 18:
             self.onAVStarted()
 
     def onAVStarted(self):  # pylint: disable=invalid-name

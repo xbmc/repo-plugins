@@ -34,7 +34,7 @@ class ResumePoints:
         """Generate http headers for VRT NU Resumepoints API"""
         from tokenresolver import TokenResolver
         xvrttoken = TokenResolver().get_xvrttoken(token_variant='user')
-        headers = None
+        headers = {}
         if xvrttoken:
             url = 'https://www.vrt.be' + url if url else 'https://www.vrt.be/vrtnu'
             headers = {
@@ -75,10 +75,11 @@ class ResumePoints:
         # Update
         if (self.still_watching(position, total) or watch_later is True
                 or (path and path.startswith('plugin://plugin.video.vrt.nu/play/upnext'))):
-            # Normally, VRT NU resumepoints are deleted when an episode is (un)watched and Kodi GUI automatically sets the (un)watched status when Kodi Player exits.
-            # This mechanism doesn't work with "Up Next" episodes because these episodes are not initiated from a ListItem in Kodi GUI.
-            # For "Up Next" episodes, we should never delete the VRT NU resumepoints to make sure the watched status can be forced in Kodi GUI using the playcount infolabel.
-
+            # Normally, VRT NU resumepoints are deleted when an episode is (un)watched and Kodi GUI automatically sets
+            # the (un)watched status when Kodi Player exits. This mechanism doesn't work with "Up Next" episodes because
+            # these episodes are not initiated from a ListItem in Kodi GUI.
+            # For "Up Next" episodes, we should never delete the VRT NU resumepoints to make sure the watched status
+            # can be forced in Kodi GUI using the playcount infolabel.
             log(3, "[Resumepoints] Update resumepoint '{asset_id}' {position}/{total}", asset_id=asset_id, position=position, total=total)
 
             if asset_id is None:
@@ -169,14 +170,12 @@ class ResumePoints:
 
     def delete_local(self, asset_id, menu_caches=None):
         """Delete resumepoint locally and update cache"""
-        try:
+        if asset_id in self._data:
             del self._data[asset_id]
             from json import dumps
             update_cache('resume_points.json', dumps(self._data))
             if menu_caches:
                 invalidate_caches(*menu_caches)
-        except KeyError:
-            pass
 
     def delete_online(self, asset_id):
         """Delete resumepoint online"""

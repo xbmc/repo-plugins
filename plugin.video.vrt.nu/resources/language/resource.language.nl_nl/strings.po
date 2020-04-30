@@ -108,6 +108,10 @@ msgctxt "#30032"
 msgid "Search results"
 msgstr "Zoekresultaten"
 
+msgctxt "#30033"
+msgid "Edit"
+msgstr "Bewerk"
+
 
 ### FAVORITES
 msgctxt "#30040"
@@ -135,34 +139,42 @@ msgid "All [I]one-off[/I] documentaries on VRT NU"
 msgstr "Alle [I]one-off[/I] documentaires op VRT NU"
 
 msgctxt "#30046"
+msgid "Music"
+msgstr "Muziek"
+
+msgctxt "#30047"
+msgid "All [I]one-off[/I] music on VRT NU"
+msgstr "Alle [I]one-off[/I] muziek op VRT NU"
+
+msgctxt "#30048"
 msgid "Most recent"
 msgstr "Meest recent"
 
-msgctxt "#30047"
+msgctxt "#30049"
 msgid "Recently published episodes of My TV programs"
 msgstr "Recent gepubliceerde afleveringen van tv-programma's die je volgt"
 
-msgctxt "#30048"
+msgctxt "#30050"
 msgid "Soon offline"
 msgstr "Binnenkort offline"
 
-msgctxt "#30049"
+msgctxt "#30051"
 msgid "My episodes that will soon be offline"
 msgstr "Mijn afleveringen die binnenkort verdwijnen"
 
-msgctxt "#30050"
+msgctxt "#30052"
 msgid "Watch later"
 msgstr "Later bekijken"
 
-msgctxt "#30051"
+msgctxt "#30053"
 msgid "The videos you like to watch later"
 msgstr "Mijn afleveringen die ik later wil bekijken"
 
-msgctxt "#30052"
+msgctxt "#30054"
 msgid "Continue watching"
 msgstr "Verder kijken"
 
-msgctxt "#30053"
+msgctxt "#30055"
 msgid "Continue watching the videos you started earlier"
 msgstr "Bekijk de programma's verder die je eerder bent gestart"
 
@@ -315,40 +327,40 @@ msgid "Watch [B]{label}[/B] on YouTube"
 msgstr "Bekijk [B]{label}[/B] op YouTube"
 
 msgctxt "#30201"
-msgid "[COLOR red]Geo-blocked[/COLOR]"
-msgstr "[COLOR red]Geo-geblokkeerd[/COLOR]"
+msgid "[COLOR={geoblocked}]Geo-blocked[/COLOR]"
+msgstr "[COLOR={geoblocked}]Geo-geblokkeerd[/COLOR]"
 
 msgctxt "#30202"
-msgid "[COLOR blue][B]{years} more years[/B] available[/COLOR]"
-msgstr "[COLOR blue]Nog [B]{years} jaren[/B] beschikbaar[/COLOR]"
+msgid "[COLOR={availability}][B]{years} more years[/B] available[/COLOR]"
+msgstr "[COLOR={availability}]Nog [B]{years} jaren[/B] beschikbaar[/COLOR]"
 
 msgctxt "#30203"
-msgid "[COLOR blue][B]{months} more months[/B] available[/COLOR]"
-msgstr "[COLOR blue]Nog [B]{months} maanden[/B] beschikbaar[/COLOR]"
+msgid "[COLOR={availability}][B]{months} more months[/B] available[/COLOR]"
+msgstr "[COLOR={availability}]Nog [B]{months} maanden[/B] beschikbaar[/COLOR]"
 
 msgctxt "#30204"
-msgid "[COLOR blue][B]{days} more days[/B] available[/COLOR]"
-msgstr "[COLOR blue]Nog [B]{days} dagen[/B] beschikbaar[/COLOR]"
+msgid "[COLOR={availability}][B]{days} more days[/B] available[/COLOR]"
+msgstr "[COLOR={availability}]Nog [B]{days} dagen[/B] beschikbaar[/COLOR]"
 
 msgctxt "#30205"
-msgid "[COLOR blue][B]1 more day[/B] available[/COLOR]"
-msgstr "[COLOR blue]Nog [B]1 dag[/B] beschikbaar[/COLOR]"
+msgid "[COLOR={availability}][B]1 more day[/B] available[/COLOR]"
+msgstr "[COLOR={availability}]Nog [B]1 dag[/B] beschikbaar[/COLOR]"
 
 msgctxt "#30206"
-msgid "[COLOR blue][B]{hours} more hours[/B] available[/COLOR]"
-msgstr "[COLOR blue]Nog [B]{hours} uren[/B] beschikaar[/COLOR]"
+msgid "[COLOR={availability}][B]{hours} more hours[/B] available[/COLOR]"
+msgstr "[COLOR={availability}]Nog [B]{hours} uren[/B] beschikaar[/COLOR]"
 
 msgctxt "#30207"
-msgid "[COLOR blue][B]1 more hour[/B] available[/COLOR]"
-msgstr "[COLOR blue]Nog [B]1 uur[/B] beschikaar[/COLOR]"
+msgid "[COLOR={availability}][B]1 more hour[/B] available[/COLOR]"
+msgstr "[COLOR={availability}]Nog [B]1 uur[/B] beschikaar[/COLOR]"
 
 msgctxt "#30208"
-msgid "[COLOR blue][B]{minutes} more minutes[/B] available[/COLOR]"
-msgstr "[COLOR blue]Nog [B]{minutes} minuten[/B] beschikbaar[/COLOR]"
+msgid "[COLOR={availability}][B]{minutes} more minutes[/B] available[/COLOR]"
+msgstr "[COLOR={availability}]Nog [B]{minutes} minuten[/B] beschikbaar[/COLOR]"
 
 msgctxt "#30300"
-msgid "[B][COLOR yellow]More…[/COLOR][/B]"
-msgstr "[B][COLOR yellow]Meer…[/COLOR][/B]"
+msgid "[B][COLOR={highlighted}]More…[/COLOR][/B]"
+msgstr "[B][COLOR={highlighted}]Meer…[/COLOR][/B]"
 
 msgctxt "#30301"
 msgid "[B][I]Now on live TV[/I][/B]"
@@ -484,7 +496,7 @@ msgstr "Info"
 
 msgctxt "#30432"
 msgid "Verbose"
-msgstr "Meer"
+msgstr "Uitgebreid"
 
 msgctxt "#30433"
 msgid "Debug"
@@ -525,8 +537,8 @@ msgid "Interface"
 msgstr "Interface"
 
 msgctxt "#30741"
-msgid "Features"
-msgstr "Functionaliteit"
+msgid "My favorites"
+msgstr "Mijn favorieten"
 
 msgctxt "#30743"
 msgid "Enable My favorites"
@@ -557,24 +569,56 @@ msgid "Add Documentaries subsection"
 msgstr "Toon Documentaires rubriek"
 
 msgctxt "#30753"
+msgid "Add Music subsection"
+msgstr "Toon Muziek rubriek"
+
+msgctxt "#30755"
+msgid "Features"
+msgstr "Functionaliteit"
+
+msgctxt "#30757"
 msgid "Show one-off videos in between program folders"
 msgstr "Toon one-off video's tussen tv-programmafolders"
 
-msgctxt "#30755"
+msgctxt "#30759"
 msgid "Show fanart"
 msgstr "Toon fanart"
 
-msgctxt "#30757"
+msgctxt "#30761"
 msgid "Number of items per page"
 msgstr "Aantal items per pagina"
 
-msgctxt "#30759"
+msgctxt "#30763"
 msgid "Show episode permalink in plot"
 msgstr "Toon aflevering permalink in beschrijving"
 
-msgctxt "#30760"
+msgctxt "#30764"
 msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
 msgstr "Indien actief zal de beschrijving van iedere video een permanent link bevatten die je rechtstreeks naar de VRT NU website brengt. Dit is handig om snel een aflevering of film to openen op een mobiel toestel."
+
+msgctxt "#30765"
+msgid "Colour preferences"
+msgstr "Kleurvoorkeuren"
+
+msgctxt "#30767"
+msgid "Colour theme"
+msgstr "Kleurenthema"
+
+msgctxt "#30769"
+msgid "Highlighted text"
+msgstr "Benadrukte tekst"
+
+msgctxt "#30771"
+msgid "Greyed-out text"
+msgstr "Vergrijsde tekst"
+
+msgctxt "#30773"
+msgid "Availability text"
+msgstr "Beschikbaarheidstekst"
+
+msgctxt "#30775"
+msgid "Geo-blocked text"
+msgstr "Geo-blocked tekst"
 
 msgctxt "#30780"
 msgid "Playback"
@@ -597,16 +641,16 @@ msgid "Streaming and DRM"
 msgstr "Streaming en DRM"
 
 msgctxt "#30787"
-msgid "Use Widevine DRM [COLOR gray][I](for protected content)[/I][/COLOR]"
-msgstr "Gebruik Widevine DRM [COLOR gray][I](voor beveiligde video's)[/I][/COLOR]"
+msgid "Use Widevine DRM [COLOR=gray][I](for protected content)[/I][/COLOR]"
+msgstr "Gebruik Widevine DRM [COLOR=gray][I](voor beveiligde video's)[/I][/COLOR]"
 
 msgctxt "#30788"
 msgid "Most live streams are available in 720p HD-quality, but may require DRM to be enabled."
 msgstr "De meeste livestreams zijn beschikbaar in 720p HD-kwaliteit, maar hiervoor moet mogelijk DRM worden ingeschakeld."
 
 msgctxt "#30789"
-msgid "Maximum bandwidth [COLOR gray](in kbps)[/COLOR]"
-msgstr "Maximale bandbreedte [COLOR gray](in kbps)[/COLOR]"
+msgid "Maximum bandwidth [COLOR=gray](in kbps)[/COLOR]"
+msgstr "Maximale bandbreedte [COLOR=gray](in kbps)[/COLOR]"
 
 msgctxt "#30790"
 msgid "In case you have limited bandwidth available, you may want to specify a maximum bandwidth so that a lower bitrate stream can be selected for playback."
@@ -753,8 +797,8 @@ msgid "InputStream Helper information"
 msgstr "InputStream Helper informatie"
 
 msgctxt "#30911"
-msgid "InputStream Helper settings… [COLOR gray][I](for protected content)[/I][/COLOR]"
-msgstr "InputStream Helper instellingen…[COLOR gray][I](voor beveiligde video's)[/I][/COLOR]"
+msgid "InputStream Helper settings… [COLOR=gray][I](for protected content)[/I][/COLOR]"
+msgstr "InputStream Helper instellingen… [COLOR=gray][I](voor beveiligde video's)[/I][/COLOR]"
 
 msgctxt "#30913"
 msgid "Cache"
@@ -789,12 +833,12 @@ msgid "Invalidate local HTTP caches"
 msgstr "Maak lokale HTTP caches ongeldig"
 
 msgctxt "#30927"
-msgid "Direct HTTP cache time-to-live [COLOR gray](in minutes)[/COLOR]"
-msgstr "Directe HTTP cache time-to-live [COLOR gray](in minuten)[/COLOR]"
+msgid "Direct HTTP cache time-to-live [COLOR=gray](in minutes)[/COLOR]"
+msgstr "Directe HTTP cache levensduur [COLOR=gray](in minuten)[/COLOR]"
 
 msgctxt "#30929"
-msgid "Indirect HTTP cache time-to-live [COLOR gray](in minutes)[/COLOR]"
-msgstr "Indirecte HTTP cache time-to-live [COLOR gray](in minuten)[/COLOR]"
+msgid "Indirect HTTP cache time-to-live [COLOR=gray](in minutes)[/COLOR]"
+msgstr "Indirecte HTTP cache levensduur [COLOR=gray](in minuten)[/COLOR]"
 
 msgctxt "#30931"
 msgid "Logging"
@@ -815,7 +859,7 @@ msgid "Login succeeded."
 msgstr "Inloggen gelukt."
 
 msgctxt "#30953"
-msgid "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
+msgid "Invalid email address or password. Only VRT logins are supported, no Google or Facebook logins."
 msgstr "Ongeldig e-mailadres of wachtwoord. Alleen VRT-logins worden ondersteund, geen Google- of Facebook-logins."
 
 msgctxt "#30954"
@@ -871,8 +915,8 @@ msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) 
 msgstr "Het gebruik van SOCKS proxies vereist dat de PySocks library (script.module.pysocks) geïnstalleerd is."
 
 msgctxt "#30967"
-msgid "Could not retrieve this program list. VRT Search API url is too long. Unfollowing some favorite programs will reduce url length and may fix this problem."
-msgstr "Deze programmalijst kan niet opgehaald worden. VRT Search API url is te lang. Enkele favoriete programma's vergeten zal de lengte van de URL verminderen en dit probleem mogelijk oplossen."
+msgid "Could not retrieve this program list. VRT Search API url is too long. Go to [B]VRT NU settings » Interface » Manage My favorites…[/B] and unfollow older favorite programs to fix this problem."
+msgstr "Deze programmalijst kan niet opgehaald worden. VRT Search API url is te lang. Ga naar [B]VRT NU instellingen » Interface » Beheer Mijn favorieten[/B] en verwijder een aantal favoriete programma's om dit probleem op te lossen. "
 
 msgctxt "#30975"
 msgid "Failed to get user token from VRT NU"
@@ -912,4 +956,8 @@ msgstr "VRT tokens werden verwijderd."
 
 msgctxt "#30986"
 msgid "No on demand stream available for {title}."
-msgstr "Geen on demand stream beschikbaar voor {title}"
+msgstr "Geen on demand stream beschikbaar voor {title}."
+
+msgctxt "#30987"
+msgid "No stream found, please try again!"
+msgstr "Geen stream gevonden, gelieve opnieuw te proberen!"

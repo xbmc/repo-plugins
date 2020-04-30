@@ -108,6 +108,10 @@ msgctxt "#30032"
 msgid "Search results"
 msgstr ""
 
+msgctxt "#30033"
+msgid "Edit"
+msgstr ""
+
 
 ### FAVORITES
 msgctxt "#30040"
@@ -135,34 +139,42 @@ msgid "All [I]one-off[/I] documentaries on VRT NU"
 msgstr ""
 
 msgctxt "#30046"
-msgid "Most recent"
+msgid "Music"
 msgstr ""
 
 msgctxt "#30047"
-msgid "Recently published episodes of My TV programs"
+msgid "All [I]one-off[/I] music on VRT NU"
 msgstr ""
 
 msgctxt "#30048"
-msgid "Soon offline"
+msgid "Most recent"
 msgstr ""
 
 msgctxt "#30049"
-msgid "My episodes that will soon be offline"
+msgid "Recently published episodes of My TV programs"
 msgstr ""
 
 msgctxt "#30050"
-msgid "Watch later"
+msgid "Soon offline"
 msgstr ""
 
 msgctxt "#30051"
-msgid "The videos you like to watch later"
+msgid "My episodes that will soon be offline"
 msgstr ""
 
 msgctxt "#30052"
-msgid "Continue watching"
+msgid "Watch later"
 msgstr ""
 
 msgctxt "#30053"
+msgid "The videos you like to watch later"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Continue watching"
+msgstr ""
+
+msgctxt "#30055"
 msgid "Continue watching the videos you started earlier"
 msgstr ""
 
@@ -315,39 +327,39 @@ msgid "Watch [B]{label}[/B] on YouTube"
 msgstr ""
 
 msgctxt "#30201"
-msgid "[COLOR red]Geo-blocked[/COLOR]"
+msgid "[COLOR={geoblocked}]Geo-blocked[/COLOR]"
 msgstr ""
 
 msgctxt "#30202"
-msgid "[COLOR blue][B]{years} more years[/B] available[/COLOR]"
+msgid "[COLOR={availability}][B]{years} more years[/B] available[/COLOR]"
 msgstr ""
 
 msgctxt "#30203"
-msgid "[COLOR blue][B]{months} more months[/B] available[/COLOR]"
+msgid "[COLOR={availability}][B]{months} more months[/B] available[/COLOR]"
 msgstr ""
 
 msgctxt "#30204"
-msgid "[COLOR blue][B]{days} more days[/B] available[/COLOR]"
+msgid "[COLOR={availability}][B]{days} more days[/B] available[/COLOR]"
 msgstr ""
 
 msgctxt "#30205"
-msgid "[COLOR blue][B]1 more day[/B] available[/COLOR]"
+msgid "[COLOR={availability}][B]1 more day[/B] available[/COLOR]"
 msgstr ""
 
 msgctxt "#30206"
-msgid "[COLOR blue][B]{hours} more hours[/B] available[/COLOR]"
+msgid "[COLOR={availability}][B]{hours} more hours[/B] available[/COLOR]"
 msgstr ""
 
 msgctxt "#30207"
-msgid "[COLOR blue][B]1 more hour[/B] available[/COLOR]"
+msgid "[COLOR={availability}][B]1 more hour[/B] available[/COLOR]"
 msgstr ""
 
 msgctxt "#30208"
-msgid "[COLOR blue][B]{minutes} more minutes[/B] available[/COLOR]"
+msgid "[COLOR={availability}][B]{minutes} more minutes[/B] available[/COLOR]"
 msgstr ""
 
 msgctxt "#30300"
-msgid "[B][COLOR yellow]More…[/COLOR][/B]"
+msgid "[B][COLOR={highlighted}]More…[/COLOR][/B]"
 msgstr ""
 
 msgctxt "#30301"
@@ -525,7 +537,7 @@ msgid "Interface"
 msgstr ""
 
 msgctxt "#30741"
-msgid "Features"
+msgid "My favorites"
 msgstr ""
 
 msgctxt "#30743"
@@ -557,23 +569,55 @@ msgid "Add Documentaries subsection"
 msgstr ""
 
 msgctxt "#30753"
-msgid "Show one-off videos in between program folders"
+msgid "Add Music subsection"
 msgstr ""
 
 msgctxt "#30755"
-msgid "Show fanart"
+msgid "Features"
 msgstr ""
 
 msgctxt "#30757"
-msgid "Number of items per page"
+msgid "Show one-off videos in between program folders"
 msgstr ""
 
 msgctxt "#30759"
+msgid "Show fanart"
+msgstr ""
+
+msgctxt "#30761"
+msgid "Number of items per page"
+msgstr ""
+
+msgctxt "#30763"
 msgid "Show episode permalink in plot"
 msgstr ""
 
-msgctxt "#30760"
+msgctxt "#30764"
 msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
+msgstr ""
+
+msgctxt "#30765"
+msgid "Colour preferences"
+msgstr ""
+
+msgctxt "#30767"
+msgid "Colour theme"
+msgstr ""
+
+msgctxt "#30769"
+msgid "Highlighted text"
+msgstr ""
+
+msgctxt "#30771"
+msgid "Greyed-out text"
+msgstr ""
+
+msgctxt "#30773"
+msgid "Availability text"
+msgstr ""
+
+msgctxt "#30775"
+msgid "Geo-blocked text"
 msgstr ""
 
 msgctxt "#30780"
@@ -597,7 +641,7 @@ msgid "Streaming and DRM"
 msgstr ""
 
 msgctxt "#30787"
-msgid "Use Widevine DRM [COLOR gray][I](for protected content)[/I][/COLOR]"
+msgid "Use Widevine DRM [COLOR=gray][I](for protected content)[/I][/COLOR]"
 msgstr ""
 
 msgctxt "#30788"
@@ -605,7 +649,7 @@ msgid "Most live streams are available in 720p HD-quality, but may require DRM t
 msgstr ""
 
 msgctxt "#30789"
-msgid "Maximum bandwidth [COLOR gray](in kbps)[/COLOR]"
+msgid "Maximum bandwidth [COLOR=gray](in kbps)[/COLOR]"
 msgstr ""
 
 msgctxt "#30790"
@@ -753,7 +797,7 @@ msgid "InputStream Helper information"
 msgstr ""
 
 msgctxt "#30911"
-msgid "InputStream Helper settings… [COLOR gray][I](for protected content)[/I][/COLOR]"
+msgid "InputStream Helper settings… [COLOR=gray][I](for protected content)[/I][/COLOR]"
 msgstr ""
 
 msgctxt "#30913"
@@ -789,11 +833,11 @@ msgid "Invalidate local HTTP caches"
 msgstr ""
 
 msgctxt "#30927"
-msgid "Direct HTTP cache time-to-live [COLOR gray](in minutes)[/COLOR]"
+msgid "Direct HTTP cache time-to-live [COLOR=gray](in minutes)[/COLOR]"
 msgstr ""
 
 msgctxt "#30929"
-msgid "Indirect HTTP cache time-to-live [COLOR gray](in minutes)[/COLOR]"
+msgid "Indirect HTTP cache time-to-live [COLOR=gray](in minutes)[/COLOR]"
 msgstr ""
 
 msgctxt "#30931"
@@ -815,7 +859,7 @@ msgid "Login succeeded."
 msgstr ""
 
 msgctxt "#30953"
-msgid "Invalid email adress or password. Only VRT logins are supported, no Google or Facebook logins."
+msgid "Invalid email address or password. Only VRT logins are supported, no Google or Facebook logins."
 msgstr ""
 
 msgctxt "#30954"
@@ -871,7 +915,7 @@ msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) 
 msgstr ""
 
 msgctxt "#30967"
-msgid "Could not retrieve this program list. VRT Search API url is too long. Unfollowing some favorite programs will reduce url length and may fix this problem."
+msgid "Could not retrieve this program list. VRT Search API url is too long. Go to [B]VRT NU settings » Interface » Manage My favorites…[/B] and unfollow older favorite programs to fix this problem."
 msgstr ""
 
 msgctxt "#30975"
@@ -912,4 +956,8 @@ msgstr ""
 
 msgctxt "#30986"
 msgid "No on demand stream available for {title}."
+msgstr ""
+
+msgctxt "#30987"
+msgid "No stream found, please try again!"
 msgstr ""

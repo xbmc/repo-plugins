@@ -5,9 +5,9 @@
 
 from __future__ import absolute_import, division, unicode_literals
 from favorites import Favorites
-from kodiutils import (addon_profile, container_refresh, end_of_directory, get_json_data,
-                       get_search_string, get_setting_int, localize, ok_dialog, open_file, show_listing,
-                       ttl, url_for)
+from kodiutils import (colour, addon_profile, container_refresh, container_update, end_of_directory, get_json_data,
+                       get_search_string, get_setting_int, input_down, localize, ok_dialog, open_file,
+                       show_listing, ttl, url_for)
 from resumepoints import ResumePoints
 
 
@@ -51,6 +51,9 @@ class Search:
                 path=url_for('search_query', keywords=keywords),
                 is_playable=False,
                 context_menu=[(
+                    localize(30033),  # Edit
+                    'RunPlugin(%s)' % url_for('edit_search', keywords=keywords),
+                ), (
                     localize(30030),  # Remove
                     'RunPlugin(%s)' % url_for('remove_search', keywords=keywords),
                 )],
@@ -67,13 +70,16 @@ class Search:
 
         show_listing(menu_items, category=30031, cache=False)
 
-    def search(self, keywords=None, page=None):
+    def search(self, keywords=None, page=0, edit=False):
         """The VRT NU add-on Search functionality and results"""
-        if keywords is None:
-            keywords = get_search_string()
+        if keywords is None or edit is True:
+            keywords = get_search_string(keywords)
 
         if not keywords:
             end_of_directory()
+            return
+        if edit is True:
+            container_update(url_for('search_query', keywords=keywords))
             return
 
         from apihelper import ApiHelper
@@ -92,7 +98,7 @@ class Search:
         from helperobjects import TitleItem
         if len(search_items) == get_setting_int('itemsperpage', default=50):
             search_items.append(TitleItem(
-                label=localize(30300),  # More…
+                label=colour(localize(30300)),  # More…
                 path=url_for('search_query', keywords=keywords, page=page + 1),
                 art_dict=dict(thumb='DefaultAddonSearch.png'),
                 info_dict=dict(),
@@ -132,4 +138,5 @@ class Search:
         # If keywords was successfully removed, write to disk
         self.write_history(history)
 
+        input_down()
         container_refresh()

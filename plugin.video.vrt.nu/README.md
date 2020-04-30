@@ -1,8 +1,8 @@
-[![GitHub release](https://img.shields.io/github/release/pietje666/plugin.video.vrt.nu.svg)](https://github.com/pietje666/plugin.video.vrt.nu/releases)
-[![Build Status](https://travis-ci.org/pietje666/plugin.video.vrt.nu.svg?branch=master)](https://travis-ci.org/pietje666/plugin.video.vrt.nu)
-[![Codecov status](https://img.shields.io/codecov/c/github/pietje666/plugin.video.vrt.nu/master)](https://codecov.io/gh/pietje666/plugin.video.vrt.nu/branch/master)
+[![GitHub release](https://img.shields.io/github/release/add-ons/plugin.video.vrt.nu.svg)](https://github.com/add-ons/plugin.video.vrt.nu/releases)
+[![Build status](https://github.com/add-ons/plugin.video.vrt.nu/workflows/CI/badge.svg)](https://github.com/add-ons/plugin.video.vrt.nu/actions)
+[![Codecov status](https://img.shields.io/codecov/c/github/add-ons/plugin.video.vrt.nu/master)](https://codecov.io/gh/add-ons/plugin.video.vrt.nu/branch/master)
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
-[![Contributors](https://img.shields.io/github/contributors/pietje666/plugin.video.vrt.nu.svg)](https://github.com/pietje666/plugin.video.vrt.nu/graphs/contributors)
+[![Contributors](https://img.shields.io/github/contributors/add-ons/plugin.video.vrt.nu.svg)](https://github.com/add-ons/plugin.video.vrt.nu/graphs/contributors)
 [![Donate!](https://img.shields.io/static/v1.svg?label=&message=Donate!&color=lightgrey&logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6C58R2PNAWTNW&source=url)
 
 # VRT NU Kodi add-on
@@ -24,7 +24,7 @@ This Kodi add-on can be used to watch all video content from VRT NU.
 ## Installing
 In Kodi, simply search the add-ons for `VRT` and install the VRT NU video add-on.
 
-> Note: Detailed information about installing and updating the VRT NU add-on is available on [our Wiki](https://github.com/pietje666/plugin.video.vrt.nu/wiki).
+> Note: Detailed information about installing and updating the VRT NU add-on is available on [our Wiki](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
 
 ## Using the plugin
 The [VRT NU](https://vrt.be/vrtnu) platform requires users to sign in before gaining access to video-on-demand content.
@@ -40,16 +40,26 @@ have a VRT NU account and sign in with another method, it is easy to get a passw
 You will receive an email that allows you to set a password. Use this password to enter in the plugin when
 prompted.
 
-> For more information about the VRT NU Kodi add-on, look at [our GitHub Wiki page](https://github.com/pietje666/plugin.video.vrt.nu/wiki).
+> For more information about the VRT NU Kodi add-on, look at [our GitHub Wiki page](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
 
 ## Reporting issues
-You can report issues at [our GitHub project](https://github.com/pietje666/plugin.video.vrt.nu) or
+You can report issues at [our GitHub project](https://github.com/add-ons/plugin.video.vrt.nu) or
 leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 
 ## Screenshots
 ![](./resources/media/screenshot04.jpg)
 
 ## Releases
+### v2.3.3 (2020-04-30)
+- Fix Radio 1 livestream (@dagwieers)
+- Fix watching VRT NU abroad (@mediaminister)
+- Add support for Kodi 19 Matrix "pre-release" builds (@mediaminister)
+- Add colour preferences to accomodate light skins (@dagwieers @mediaminister)
+- Add a favourites music subsection (@dagwieers)
+- Allow editing a search query from search history (@dagwieers)
+- Expand TV guide range (@dagwieers)
+- Add livestreams for Radio 2 and Klara (@dagwieers @mediaminister)
+
 ### v2.3.2 (2020-01-18)
 - Fix issues related to categories scraping and caching (@mediaminister)
 - Various improvements to TV guide (@dagwieers)
@@ -132,7 +142,7 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 - Fix localized date strings for JeOS platforms (@dagwieers)
 - Add "Search" functionality in main menu (@dagwieers)
 - Add Ketnet Junior 24/7 live stream (@dagwieers)
-- Add Kodi "* All seasons" support in season listings (@dagwieers)
+- Add Kodi "- All seasons" support in season listings (@dagwieers)
 - Add 720p live stream support (without DRM) (@dagwieers)
 - Extend the "Troubleshooting" settings with logging and caching options (@dagwieers)
 - Support bandwidth limitation (useful for mobile internet connections) (@mediaminister)
@@ -177,13 +187,13 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 
 ### v1.6.0 (2019-03-07)
 - Use VRT search api (greatly improves stability)
-- Fix for users with Non ASCII compatible user path
-- Fix for roaming token
+- Fix for users with Non ASCII compatible user path (@pietje666)
+- Fix for roaming token (@pietje666)
 
 ### v1.5.2 (2019-01-28)
-- Bug fix where the vrt token would be stored in a wrong format
-- Inputstream helper for easier widevine installation
-- Token resets when settings are being changed
+- Bug fix where the vrt token would be stored in a wrong format (@pietje666)
+- Inputstream helper for easier widevine installation (@pietje666)
+- Token resets when settings are being changed (@pietje666)
 
 ### v1.5.1 (2019-01-20)
 - Fixed subtitle issue where subtitles would always be visible (@mediaminister)
@@ -192,78 +202,78 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 
 ### v1.5.0 (2018-12-27)
 - 720p Livestreams when enabling in settings + having kodi 18 + having widevine.dll present (@mediaminister)
-- Fixed bug where watched icon was not showing in Kodi 18
+- Fixed bug where watched icon was not showing in Kodi 18 (@pietje666)
 - Implemented different way of working with subtitles (@mediaminister)
 
 ### v1.4.3 (2018-11-07)
-- Livestreams working again
+- Livestreams working again (@pietje666)
 
 ### v1.4.2 (2018-10-11)
-- Changed way of working with urls when a season is referring to href="#"
+- Changed way of working with urls when a season is referring to href="#" (@pietje666)
 
 ### v1.4.1 (2018-09-24)
-- Adapted plugin to new vrtnu layout for showing multiple seasons
+- Adapted plugin to new vrtnu layout for showing multiple seasons (@pietje666)
 
 ### v1.4.0 (2018-09-20)
-- Using the new vrtnu login method and video services
+- Using the new vrtnu login method and video services (@pietje666)
 - Fixed bug where some videos would not be able to play (@dagwieers)
 
 ### v1.3.4 (2018-09-10)
-- Fixed A-Z menu to parse the new vrtnu layout
+- Fixed A-Z menu to parse the new vrtnu layout (@pietje666)
 
 ### v1.3.3 (2018-09-02)
-- Fixed bug where some items would not want to play
-- Fixed bug where some videos would only show one episodes while multiple episodes are present
-- Updated Requests and Beautifulsoup modules
+- Fixed bug where some items would not want to play (@pietje666)
+- Fixed bug where some videos would only show one episodes while multiple episodes are present (@pietje666)
+- Updated Requests and Beautifulsoup modules (@pietje666)
 
 ### v1.3.2 (2018-08-03)
-- Changed way of selecting multiple episodes, this fixes a bug where the "active" episodes would not be shown
+- Changed way of selecting multiple episodes, this fixes a bug where the "active" episodes would not be shown (@pietje666)
 
 ### v1.3.1 (2018-07-20)
-- Changed way of selecting item title for single videos
+- Changed way of selecting item title for single videos (@pietje666)
 
 ### v1.3.0 (2018-07-14)
-- Adapted code to new vrtnu website layout, this fixes a bug where only the first episode would be shown while multiple episodes are present
+- Adapted code to new vrtnu website layout, this fixes a bug where only the first episode would be shown while multiple episodes are present (@pietje666)
 
 ### v1.2.0 (2018-06-17)
-- Changed live streaming mechanism
+- Changed live streaming mechanism (@pietje666)
 
 ### v1.1.2 (2018-06-14)
 - New stream links for live streaming (@yorickps)
 
 ### v1.1.1 (2018-03-13)
-- Fixed bug where seasons do not show when there is one malfunctioning
+- Fixed bug where seasons do not show when there is one malfunctioning (@pietje666)
 
 ### v1.1.0 (2017-12-15)
-- Refactored internal code
+- Refactored internal code (@pietje666)
 
 ### v1.0.0 (2017-10-01)
-- Fixed issue where all the videos would not be able to play, implemented new way of getting the streaming urls
-- Fixed bug where a single video would not be listed when there is also a part "ANDEREN BEKEKEN OOK" present
-- New versioning system now starting from 1.0.0
+- Fixed issue where all the videos would not be able to play, implemented new way of getting the streaming urls (@pietje666)
+- Fixed bug where a single video would not be listed when there is also a part "ANDEREN BEKEKEN OOK" present (@pietje666)
+- New versioning system now starting from 1.0.0 (@pietje666)
 
 ### v0.0.7 (2017-09-09)
-- Fixed bug where dates were not always shown
+- Fixed bug where dates were not always shown (@pietje666)
 
 ### v0.0.6 (2017-08-06)
-- Fixed ordering bug for videos
+- Fixed ordering bug for videos (@pietje666)
 
 ### v0.0.5 (2017-07-24)
-- Fixed broken Sporza logo 
+- Fixed broken Sporza logo (@pietje666)
 
 ### v0.0.4 (2017-07-20)
-- Added Sporza livestream
+- Added Sporza livestream (@pietje666)
 - Added dates to videos (@stevenv)
-- Fixed bug where seasons did not get listed
+- Fixed bug where seasons did not get listed (@pietje666)
 
 ### v0.0.3 (2017-05-22)
-- Fixed broken livestreams
+- Fixed broken livestreams (@pietje666)
 
 ### v0.0.2 (2017-05-07)
-- Fixed installation issue
+- Fixed installation issue (@pietje666)
 
 ### v0.0.1 (2017-05-01)
-- Initial working release
+- Initial working release (@pietje666)
 
 ## Donating
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6C58R2PNAWTNW&source=url)

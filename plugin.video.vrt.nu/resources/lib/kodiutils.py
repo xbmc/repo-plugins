@@ -265,10 +265,13 @@ def play(stream, video=None):
     play_item.setProperty('inputstream.adaptive.max_bandwidth', str(get_max_bandwidth() * 1000))
     play_item.setProperty('network.bandwidth', str(get_max_bandwidth() * 1000))
     if stream.stream_url is not None and stream.use_inputstream_adaptive:
-        play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+        if kodi_version_major() < 19:
+            play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+        else:
+            play_item.setProperty('inputstream', 'inputstream.adaptive')
         play_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
-        play_item.setMimeType('application/dash+xml')
         play_item.setContentLookup(False)
+        play_item.setMimeType('application/dash+xml')
         if stream.license_key is not None:
             import inputstreamhelper
             is_helper = inputstreamhelper.Helper('mpd', drm='com.widevine.alpha')
@@ -290,10 +293,9 @@ def play(stream, video=None):
     xbmc.Player().showSubtitles(subtitles_visible)
 
 
-def get_search_string():
+def get_search_string(search_string=None):
     """Ask the user for a search string"""
-    search_string = None
-    keyboard = xbmc.Keyboard('', localize(30134))
+    keyboard = xbmc.Keyboard(search_string, localize(30134))
     keyboard.doModal()
     if keyboard.isConfirmed():
         search_string = to_unicode(keyboard.getText())
@@ -305,7 +307,9 @@ def ok_dialog(heading='', message=''):
     from xbmcgui import Dialog
     if not heading:
         heading = addon_name()
-    return Dialog().ok(heading=heading, line1=message)
+    if kodi_version_major() < 19:
+        return Dialog().ok(heading=heading, line1=message)
+    return Dialog().ok(heading=heading, message=message)
 
 
 def notification(heading='', message='', icon='info', time=4000):
@@ -636,8 +640,10 @@ def has_inputstream_adaptive():
 
 
 def has_addon(name):
-    """Checks if add-on is installed"""
-    return xbmc.getCondVisibility('System.HasAddon(%s)' % name) == 1
+    """Checks if add-on is installed and enabled"""
+    if kodi_version_major() < 19:
+        return xbmc.getCondVisibility('System.HasAddon(%s)' % name) == 1
+    return xbmc.getCondVisibility('System.AddonIsEnabled(%s)' % name) == 1
 
 
 def has_credentials():
@@ -646,8 +652,13 @@ def has_credentials():
 
 
 def kodi_version():
-    """Returns major Kodi version"""
-    return int(xbmc.getInfoLabel('System.BuildVersion').split('.')[0])
+    """Returns full Kodi version as string"""
+    return xbmc.getInfoLabel('System.BuildVersion').split(' ')[0]
+
+
+def kodi_version_major():
+    """Returns major Kodi version as integer"""
+    return int(kodi_version().split('.')[0])
 
 
 def can_play_drm():
@@ -657,7 +668,7 @@ def can_play_drm():
 
 def supports_drm():
     """Whether this Kodi version supports DRM decryption using InputStream Adaptive"""
-    return kodi_version() > 17
+    return kodi_version_major() > 17
 
 
 def get_tokens_path():
@@ -665,6 +676,32 @@ def get_tokens_path():
     if not hasattr(get_tokens_path, 'cached'):
         get_tokens_path.cached = addon_profile() + 'tokens/'
     return getattr(get_tokens_path, 'cached')
+
+
+COLOUR_THEMES = dict(
+    dark=dict(highlighted='yellow', availability='blue', geoblocked='red', greyedout='gray'),
+    light=dict(highlighted='brown', availability='darkblue', geoblocked='darkred', greyedout='darkgray'),
+    custom=dict(
+        highlighted=get_setting('colour_highlighted'),
+        availability=get_setting('colour_availability'),
+        geoblocked=get_setting('colour_geoblocked'),
+        greyedout=get_setting('colour_greyedout')
+    )
+)
+
+
+def themecolour(kind):
+    """Get current theme color by kind (highlighted, availability, geoblocked, greyedout)"""
+    theme = get_setting('colour_theme', 'dark')
+    color = COLOUR_THEMES.get(theme).get(kind, COLOUR_THEMES.get('dark').get(kind))
+    return color
+
+
+def colour(text):
+    """Convert stub color bbcode into colors from the settings"""
+    theme = get_setting('colour_theme', 'dark')
+    text = text.format(**COLOUR_THEMES.get(theme))
+    return text
 
 
 def get_cache_path():
@@ -972,7 +1009,7 @@ def get_json_data(response, fail=None):
     """Return json object from HTTP response"""
     from json import load, loads
     try:
-        if (3, 0, 0) <= version_info <= (3, 5, 9):  # the JSON object must be str, not 'bytes'
+        if (3, 0, 0) <= version_info < (3, 6, 0):  # the JSON object must be str, not 'bytes'
             return loads(to_unicode(response.read()))
         return load(response)
     except TypeError as exc:  # 'NoneType' object is not callable
@@ -1009,14 +1046,19 @@ def get_url_json(url, cache=None, headers=None, data=None, fail=None):
             url_length = len(req.selector)
         else:  # Python 2.7
             url_length = len(req.get_selector())
+        if exc.code == 400 and 7600 <= url_length <= 8192:
+            ok_dialog(heading='HTTP Error 400', message=localize(30967))
+            log_error('HTTP Error 400: Probably exceeded maximum url length: '
+                      'VRT Search API url has a length of {length} characters.', length=url_length)
+            return fail
         if exc.code == 413 and url_length > 8192:
             ok_dialog(heading='HTTP Error 413', message=localize(30967))
             log_error('HTTP Error 413: Exceeded maximum url length: '
                       'VRT Search API url has a length of {length} characters.', length=url_length)
             return fail
-        if exc.code == 400 and 7600 <= url_length <= 8192:
-            ok_dialog(heading='HTTP Error 400', message=localize(30967))
-            log_error('HTTP Error 400: Probably exceeded maximum url length: '
+        if exc.code == 431:
+            ok_dialog(heading='HTTP Error 431', message=localize(30967))
+            log_error('HTTP Error 431: Request header fields too large: '
                       'VRT Search API url has a length of {length} characters.', length=url_length)
             return fail
         json_data = get_json_data(exc, fail=fail)

@@ -16,8 +16,8 @@ except ImportError:  # Python 2
 from data import CHANNELS, RELATIVE_DATES
 from favorites import Favorites
 from helperobjects import TitleItem
-from kodiutils import (get_cached_url_json, get_proxies, get_url_json, has_addon, localize,
-                       localize_datelong, show_listing, ttl, url_for)
+from kodiutils import (colour, get_cached_url_json, get_proxies, get_url_json, has_addon, localize,
+                       localize_datelong, show_listing, themecolour, ttl, url_for)
 from metadata import Metadata
 from resumepoints import ResumePoints
 from utils import add_https_proto, find_entry, url_to_program
@@ -69,7 +69,7 @@ class TVGuide:
         if epg.hour < 6:
             epg += timedelta(days=-1)
         date_items = []
-        for offset in range(7, -30, -1):
+        for offset in range(14, -19, -1):
             day = epg + timedelta(days=offset)
             label = localize_datelong(day)
             date = day.strftime('%Y-%m-%d')
@@ -81,7 +81,7 @@ class TVGuide:
                 if entry.get('permalink'):
                     date = entry.get('id')
                 if offset == 0:
-                    label = '[COLOR yellow][B]{name}[/B], {date}[/COLOR]'.format(name=date_name, date=label)
+                    label = '[COLOR={highlighted}][B]{name}[/B], {date}[/COLOR]'.format(highlighted=themecolour('highlighted'), name=date_name, date=label)
                 else:
                     label = '[B]{name}[/B], {date}'.format(name=date_name, date=label)
 
@@ -176,25 +176,25 @@ class TVGuide:
             episodes = []
         episode_items = []
         for episode in episodes:
-            label = self._metadata.get_label(episode)
             program = url_to_program(episode.get('url', ''))
             if episode.get('url'):
                 video_url = add_https_proto(episode.get('url'))
                 path = url_for('play_url', video_url=video_url)
                 context_menu, favorite_marker, watchlater_marker = self._metadata.get_context_menu(episode, program, cache_file)
-                label += favorite_marker + watchlater_marker
+                label = self._metadata.get_label(episode) + favorite_marker + watchlater_marker
                 is_playable = True
             else:
+                label = '[COLOR={greyedout}]%s[/COLOR]' % self._metadata.get_label(episode)
                 path = url_for('noop')
                 context_menu, _, _ = self._metadata.get_context_menu(episode, program, cache_file)
                 is_playable = False
 
             info_labels = self._metadata.get_info_labels(episode, date=date, channel=entry)
             # FIXME: Due to a bug in Kodi, ListItem.Title is used when Sort methods are used, not ListItem.Label
-            info_labels['title'] = label
+            info_labels['title'] = colour(label)
 
             episode_items.append(TitleItem(
-                label=label,
+                label=colour(label),
                 path=path,
                 art_dict=self._metadata.get_art(episode),
                 info_dict=info_labels,
@@ -260,7 +260,7 @@ class TVGuide:
             start_date = dateutil.parser.parse(episode.get('startTime'))
             end_date = dateutil.parser.parse(episode.get('endTime'))
             if start_date <= now <= end_date:  # Now playing
-                description = '[COLOR yellow][B]%s[/B] %s[/COLOR]\n' % (localize(30421), self.episode_description(episode))
+                description = '[COLOR={highlighted}][B]%s[/B] %s[/COLOR]\n' % (localize(30421), self.episode_description(episode))
                 try:
                     description += '[B]%s[/B] %s' % (localize(30422), self.episode_description(next(episodes)))
                 except StopIteration:
@@ -275,8 +275,8 @@ class TVGuide:
                 break
         if not description:
             # Add a final 'No transmission' program
-            description = '[COLOR yellow][B]%s[/B] %s - 06:00\n» %s[/COLOR]' % (localize(30421), episode.get('end'), localize(30423))
-        return description
+            description = '[COLOR={highlighted}][B]%s[/B] %s - 06:00\n» %s[/COLOR]' % (localize(30421), episode.get('end'), localize(30423))
+        return colour(description)
 
     @staticmethod
     def parse(date, now):

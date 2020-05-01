@@ -1,4 +1,4 @@
-<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="3.0.3+matrix.5">
+<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="3.0.3+matrix.6">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.xbmcswift2" version="19.0.0" />
@@ -12,7 +12,7 @@
         <source>https://github.com/XBMC-Addons/plugin.audio.radio_de</source>
         <forum>https://forum.kodi.tv/showthread.php?tid=119362</forum>
         <license>GPL-2.0-only</license>
-        <news>v3.0.3+matrix.5 (13/4/2020)
+        <news>v3.0.3+matrix.6 (1/5/2020)
             [fix] Custom stations if the url is not a playlist
             [new] Spanish website radio.es and improved translations
             [new] screenshot support for addon-website

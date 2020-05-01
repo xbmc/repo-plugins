@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="version" default="" visible="false"/>
+    <category label="30700"> <!-- Credentials -->
+        <setting label="30701" type="lsep"/> <!-- VRT NU login -->
+        <setting label="30703" help="30704" type="text" id="username"/>
+        <setting label="30705" help="30706" type="text" id="password" option="hidden"/>
+        <setting id="credentials_hash" visible="false"/>
+    </category>
+    <category label="30740"> <!-- Interface -->
+        <setting label="30741" type="lsep"/> <!-- My favorites -->
+        <setting label="30743" help="30744" type="bool" id="usefavorites" default="true"/>
+        <setting label="30745" help="30746" type="action" action="RunPlugin(plugin://plugin.video.vrt.nu/favorites/manage)" enable="eq(-1,true)" subsetting="true"/>  <!-- Manage favorites -->
+        <setting label="30747" help="30748" type="bool" id="useresumepoints" default="true" enable="eq(-2,true)" subsetting="true"/>
+        <setting label="30749" help="30750" type="bool" id="addmymovies" default="true" enable="eq(-3,true)" subsetting="true"/>
+        <setting label="30751" help="30752" type="bool" id="addmydocu" default="true" enable="eq(-4,true)" subsetting="true"/>
+        <setting label="30753" help="30754" type="bool" id="addmymusic" default="true" enable="eq(-5,true)" subsetting="true"/>
+        <setting label="30755" type="lsep"/> <!-- Features -->
+        <setting type="sep"/>
+        <setting label="30757" help="30758" type="bool" id="showoneoff" default="true"/>
+        <setting label="30759" help="30760" type="bool" id="showfanart" default="true"/>
+        <setting label="30761" help="30762" type="slider" id="itemsperpage" default="50" range="10,10,300" option="int"/>
+        <setting label="30763" help="30764" type="bool" id="showpermalink" default="false"/>
+        <setting label="30765" type="lsep"/> <!-- Colours -->
+        <setting label="30767" help="30768" type="select" id="colour_theme" default="dark" values="custom|dark|light"/>
+        <setting label="30769" help="30770" type="select" id="colour_highlighted" default="yellow" values="black|blue|brown|cyan|gray|green|magenta|maroon|orange|pink|purple|red|white|yellow" visible="eq(-1,custom)" subsetting="true"/>
+        <setting label="30771" help="30772" type="select" id="colour_greyedout" default="gray" values="black|blue|brown|cyan|gray|green|magenta|maroon|orange|pink|purple|red|white|yellow" visible="eq(-2,custom)" subsetting="true"/>
+        <setting label="30773" help="30774" type="select" id="colour_availability" default="blue" values="black|blue|brown|cyan|gray|green|magenta|maroon|orange|pink|purple|red|white|yellow" visible="eq(-3,custom)" subsetting="true"/>
+        <setting label="30775" help="30776" type="select" id="colour_geoblocked" default="red" values="black|blue|brown|cyan|gray|green|magenta|maroon|orange|pink|purple|red|white|yellow" visible="eq(-4,custom)" subsetting="true"/>
+    </category>
+    <category label="30780"> <!-- Playback -->
+        <setting label="30781" type="lsep"/>
+        <setting label="30783" help="30784" type="bool" id="showsubtitles" default="true"/>
+        <setting label="30785" type="lsep"/> <!-- InputStream Adaptive -->
+        <setting label="30787" help="30788" type="bool" id="usedrm" visible="String.StartsWith(System.BuildVersion,18) | String.StartsWith(System.BuildVersion,19)" default="false"/>
+        <setting label="30789" help="30790" type="labelenum" id="max_bandwidth" default="0" values="0|256|512|1024|1536|2048|2560|3072|4096|6144|8192|10240|15360|20480|25600|30720"/>
+    </category>
+    <category label="30820"> <!--Channels -->
+        <setting label="30821" type="lsep"/>
+        <setting label="30823" type="bool" id="een" default="true"/> <!-- Eén -->
+        <setting label="30824" type="bool" id="canvas" default="true"/> <!-- Canvas -->
+        <setting label="30825" type="bool" id="ketnet" default="false"/> <!-- Ketnet -->
+        <setting label="30826" type="bool" id="ketnet-jr" default="false"/> <!-- Ketnet Junior -->
+        <setting label="30827" type="bool" id="sporza" default="true"/> <!-- Sporza -->
+        <setting label="30828" type="bool" id="radio1" default="true"/> <!-- Radio 1 -->
+        <setting label="30829" type="bool" id="radio2" default="true"/> <!-- Radio 2 -->
+        <setting label="30830" type="bool" id="klara" default="true"/> <!-- Klara -->
+        <setting label="30831" type="bool" id="stubru" default="true"/> <!-- Studio Brussel -->
+        <setting label="30832" type="bool" id="mnm" default="true"/> <!-- MNM -->
+        <setting label="30833" type="bool" id="vrtnws" default="true"/> <!-- VRT NWS -->
+        <setting label="30834" type="bool" id="vrtnxt" default="true"/> <!-- VRT NXT -->
+    </category>
+    <category label="30860"> <!--Integration -->
+        <setting label="30861" type="lsep"/> <!-- Integration with other add-ons -->
+        <!-- YouTube -->
+        <setting label="30863" help="30864" type="action" action="InstallAddon(plugin.video.youtube)" option="close" visible="!System.HasAddon(plugin.video.youtube)"/> <!-- Install YouTube add-on -->
+        <setting label="30865" help="30866" type="bool" id="showyoutube" default="true" visible="System.HasAddon(plugin.video.youtube)"/>
+        <setting label="30867" help="30868" type="action" option="close" action="Addon.OpenSettings(plugin.video.youtube)" enable="eq(-1,true)" visible="System.HasAddon(plugin.video.youtube)" subsetting="true"/> <!-- YouTube settings -->
+        <!-- UpNext -->
+        <setting label="30869" help="30870" type="action" action="InstallAddon(service.upnext)" option="close" visible="!System.HasAddon(service.upnext)"/> <!-- Install Up Next add-on -->
+        <setting label="30871" help="30872" type="bool" id="useupnext" default="true" visible="System.HasAddon(service.upnext)" />
+        <setting label="30873" help="30874" type="action" action="Addon.OpenSettings(service.upnext)" enable="eq(-1,true)" option="close" visible="System.HasAddon(service.upnext)" subsetting="true"/> <!-- Up Next settings -->
+        <!-- Twitter -->
+        <!-- setting label="30875" help="30876" type="action" action="InstallAddon(service.twitter)" option="close" visible="!System.HasAddon(service.twitter)"/ -->
+        <setting label="30877" help="30878" type="bool" id="usetwitter" default="true" visible="System.HasAddon(service.twitter)"/>
+        <setting label="30879" help="30880" type="action" option="close" action="Addon.OpenSettings(service.twitter)" enable="eq(-1,true)" visible="System.HasAddon(service.twitter)" subsetting="true"/>
+        <!-- PySocks -->
+        <setting label="30881" help="30882" type="action" action="InstallAddon(script.module.pysocks)" option="close" visible="!System.HasAddon(script.module.pysocks)"/>
+    </category>
+    <category label="30900"> <!-- Expert -->
+        <setting label="30901" type="lsep"/> <!-- InputStream Adaptive -->
+        <setting label="30903" type="action" visible="!System.HasAddon(inputstream.adaptive)" enable="false"/>
+        <setting label="30905" help="30906" type="bool" id="useinputstreamadaptive" default="true" visible="System.HasAddon(inputstream.adaptive)"/>
+        <setting label="30907" help="30908" type="action" option="close" action="Addon.OpenSettings(inputstream.adaptive)" visible="System.HasAddon(inputstream.adaptive) + [String.StartsWith(System.BuildVersion,18) | String.StartsWith(System.BuildVersion,19)]" enable="eq(-1,true)" subsetting="true"/> <!-- InputStream Adaptive settings -->
+        <setting label="30909" help="30910" type="action" action="RunScript(script.module.inputstreamhelper, info)" enable="eq(-2,true)"/> <!-- InputStream Helper information -->
+        <setting label="30911" help="30912" type="action" option="close" action="Addon.OpenSettings(script.module.inputstreamhelper)" enable="eq(-3,true)" subsetting="true"/> <!-- InputStream Helper settings -->
+        <setting label="30913" type="lsep"/> <!-- Cache -->
+        <setting label="30915" help="30916" type="action" action="RunPlugin(plugin://plugin.video.vrt.nu/tokens/delete)"/> <!-- Delete tokens -->
+        <setting label="30917" help="30918" type="action" action="RunPlugin(plugin://plugin.video.vrt.nu/favorites/refresh)"/> <!-- Refresh favorites -->
+        <setting label="30919" help="30920" type="action" action="RunPlugin(plugin://plugin.video.vrt.nu/resumepoints/refresh)"/> <!-- Refresh resumepoints -->
+        <setting label="30921" help="30922" type="bool" id="usemenucaching" default="true"/>
+        <setting label="30923" help="30924" type="bool" id="usehttpcaching" default="true"/>
+        <setting label="30925" help="30926" type="action" action="RunPlugin(plugin://plugin.video.vrt.nu/cache/delete)" enable="eq(-1,true)" subsetting="true"/>
+        <setting label="30927" help="30928" type="slider" id="httpcachettldirect" default="5" range="1,1,240" option="int" enable="eq(-2,true)" subsetting="true"/>
+        <setting label="30929" help="30930" type="slider" id="httpcachettlindirect" default="60" range="1,1,240" option="int" enable="eq(-3,true)" subsetting="true"/>
+        <setting label="30931" type="lsep"/> <!-- Logging -->
+        <setting label="30933" help="30934" type="enum" id="max_log_level" lvalues="30430|30431|30432|30433" default="0"/>
+    </category>
+</settings>

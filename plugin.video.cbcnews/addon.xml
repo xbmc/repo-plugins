@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cbcnews"
        name="CBC.ca News"
-       version="3.0.2"
-       provider-name="t1m">
+       version="3.0.4"
+       provider-name="t1m, evan">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.t1mlib" version="1.0.14"/>
+    <import addon="script.module.t1mlib" version="1.0.18"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">

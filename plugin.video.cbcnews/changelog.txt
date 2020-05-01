@@ -1,1 +1,2 @@
+v3.0.4 fixes from evan
 V3.0.1 Initial version CBC News

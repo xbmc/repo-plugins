@@ -2,6 +2,7 @@
 # KodiAddon (CBC News)
 #
 from t1mlib import t1mAddon
+import datetime
 import json
 import re
 import urllib
@@ -13,17 +14,18 @@ import sys
 import xbmc
 
 h = HTMLParser.HTMLParser()
-uqp = urllib.unquote_plus
 UTF8 = 'utf-8'
 
 class myAddon(t1mAddon):
 
-
  def getAddonMenu(self,url,ilist):
-   html  = self.getRequest('http://www.cbc.ca/player/news')
-   html = re.compile('<section class="section-cats full">(.+?)</section', re.DOTALL).search(html).group(1)
-   shows = re.compile('a href="(.+?)">(.+?)<', re.DOTALL).findall(html)
-   shows.append(('/player/news/TV%20Shows/The%20National/Latest%20Broadcast', 'The National / Latest Broadcast'))
+   html  = self.getRequest('http://www.cbc.ca/player')
+   shows = re.compile('<h2 class="section-title"[^>]*><a[^>]* href="(.+?)">(.+?)</a>', re.DOTALL).findall(html)
+   shows.append(('/player/news/TV%20Shows/MarketPlace', 'Marketplace'))
+   shows.append(('/player/news/TV%20Shows/Power%20&%20Politics', 'Power & Politics'))
+   shows.append(('/player/news/TV%20Shows/The%20Fifth%20Estate', 'The Fifth Estate'))
+   shows.append(('/player/news/TV%20Shows/The%20National/Latest%20Broadcast', 'The National'))
+   shows.append(('/player/news/TV%20Shows/The%20Weekly', 'The Weekly'))
    for url, name in shows:
       infoList = {}
       infoList['mediatype'] = 'tvshow'
@@ -32,102 +34,99 @@ class myAddon(t1mAddon):
       ilist = self.addMenuItem(name, 'GS', ilist, url, self.addonIcon, self.addonFanart, infoList, isFolder=True)
    return(ilist)
 
+ def getAddonCats(self,url,ilist):
+   html  = self.getRequest('http://www.cbc.ca')
+   html  = re.compile('<!-- -->My Local Settings(.+?)href="/news">Top Stories', re.DOTALL).search(html).group(1)
+   shows = re.compile('<li class="regionsListItem"><.+?data-path="(.+?)".+?value="(.+?)".+?</li>', re.DOTALL).findall(html)
+   for url, name in shows:
+       infoList = {}
+       infoList['mediatype'] = 'tvshow'
+       infoList['Title'] = name
+       infoList['TVShowTitle'] = name
+       lurl = "/player/"+url
+       # Manual fixes for multi-word locations
+       if lurl == '/player/news/canada/british-columbia':
+          lurl = '/player/news/canada/bc'
+       if lurl == '/player/news/canada/thunder-bay':
+          lurl = '/player/news/canada/thunder%20bay'
+       if lurl == '/player/news/canada/new-brunswick':
+          lurl = '/player/news/canada/nb'
+       if lurl == '/player/news/canada/prince-edward-island':
+          lurl = '/player/news/canada/pei'
+       if lurl == '/player/news/canada/nova-scotia':
+          lurl = '/player/news/canada/ns'
+       if lurl == '/player/news/canada/newfoundland-labrador':
+          lurl = '/player/news/canada/nl'
+       ilist = self.addMenuItem(name, 'GE', ilist, lurl, self.addonIcon, self.addonFanart, infoList, isFolder=True)
+       if lurl == '/player/news/canada/toronto':
+          ilist = self.addMenuItem('Ottawa', 'GE', ilist, '/player/news/canada/ottawa', self.addonIcon, self.addonFanart, infoList, isFolder=True)
+   return(ilist)
+
  def getAddonShows(self,url,ilist):
    html  = self.getRequest('http://www.cbc.ca%s' % url)
-   html1 = re.compile('<section class="category-subs full">(.+?)</section', re.DOTALL).search(html)
-   if not html1 is None:
-       html = html1.group(1)
-       shows = re.compile('a href="(.+?)">(.+?)<', re.DOTALL).findall(html)
+   shows = re.compile('<h2 class="section-title"[^>]*><a[^>]* href="(.+?)">(.+?)</a>', re.DOTALL).findall(html)
+   count = 0
+   for lurl, name in shows:
+       count+=1
+   if (count <= 0) or (url.find('TV%20Shows') > 0):
+       self.getAddonEpisodes(url, ilist)
    else:
-       html1 = re.compile('<section class="category-content full">(.+?)</section', re.DOTALL).search(html)
-       if not html1 is None:
-           ilist = self.getAddonEpisodes(url, ilist)
-           return(ilist)
-       else:
-           html = re.compile('<section class="section-cats full">(.+?)</section', re.DOTALL).search(html).group(1)
-           shows = re.compile('a href="(.+?)">(.+?)<', re.DOTALL).findall(html)
-   for url, name in shows:
+       for lurl, name in shows:
+           infoList = {}
+           infoList['mediatype'] = 'tvshow'
+           infoList['Title'] = name
+           infoList['TVShowTitle'] = name
+           if lurl == '/player/news/canada':
+              ilist = self.addMenuItem(name, 'GC', ilist, lurl, self.addonIcon, self.addonFanart, infoList, isFolder=True)
+           else:
+              ilist = self.addMenuItem(name, 'GS', ilist, lurl, self.addonIcon, self.addonFanart, infoList, isFolder=True)
+   return(ilist)
+
+ def getAddonEpisodes(self,url,ilist):
+   self.defaultVidStream['width']  = 1280
+   self.defaultVidStream['height'] = 720
+   cat = re.compile('/([^/]+?)$', re.DOTALL).search(url).group(1).replace('%20', ' ')
+   html = self.getRequest('http://www.cbc.ca%s' % url)
+   html = re.compile('window.__INITIAL_STATE__ = (.+?);</script>', re.DOTALL).search(html).group(1)
+   a = json.loads(html)
+   # Locate exact category name
+   for b in a['video']['clipsByCategory']:
+       if re.search(cat+"$", b, re.IGNORECASE):  # category must be at end of string
+          idxcat = b
+   for b in a['video']['clipsByCategory'][idxcat]['items']:
+      name = b['title'].replace(u"\u2018", "'").replace(u"\u2019", "'").encode('ascii', 'xmlcharrefreplace')
+      plot = b['description'].replace(u"\u2018", "'").replace(u"\u2019", "'").encode('ascii', 'xmlcharrefreplace')
+      vurl = str(b['id'])  # mediaID
+      thumb = b['thumbnail']
+      fanart = thumb
+      if b['captions']:
+         captions = b['captions']['src']
+      else:
+         captions = 'N0NE'
       infoList = {}
       infoList['mediatype'] = 'tvshow'
       infoList['Title'] = name
       infoList['TVShowTitle'] = name
-      ilist = self.addMenuItem(name, 'GE', ilist, url, self.addonIcon, self.addonFanart, infoList, isFolder=True)
+      infoList['Plot'] = plot
+      infoList['Duration'] = b['duration']
+      infoList['Aired'] = datetime.datetime.fromtimestamp(b['airDate']/1000).strftime('%Y-%m-%d')
+      infoList['MPAA'] = captions  # Hack to store closed captions
+      ilist = self.addMenuItem(name, 'GV', ilist, vurl, thumb, fanart, infoList, isFolder=False)
    return(ilist)
 
-
-
- def getAddonEpisodes(self,url,ilist):
-   self.defaultVidStream['width']  = 960
-   self.defaultVidStream['height'] = 540
-
-   geurl = url.replace('%3A',':',1)
-   html  = self.getRequest('http://www.cbc.ca%s' % geurl)
-   html  = re.compile('<section class="category-content full">(.+?)</section', re.DOTALL).search(html).group(1)
-   epis  = re.compile('<a href="(.+?)" aria-label="(.+?)".+?src="(.+?)"(.+?)</a', re.DOTALL).findall(html)
-   for (url,name,img, meta) in epis:
-     name = name.decode('utf-8','replace')
-     infoList={}
-     if 'title">' in meta:
-         name = re.compile('title">(.+?)<', re.DOTALL).search(meta).group(1)
-         if 'date">' in meta:
-             name = re.compile('date">(.+?)<', re.DOTALL).search(meta).group(1) + ' - ' +name
-
-     if 'description">' in meta:
-         plot = re.compile('description">(.+?)<', re.DOTALL).search(meta).group(1)
-     else:
-         plot = name
-
-     infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
-     infoList['Title'] = name
-     try:
-        infoList['Plot'] = h.unescape(plot.decode('utf-8'))
-     except:
-        infoList['Plot'] = h.unescape(plot)
-     infoList['mediatype'] = 'episode'
-     fanart = img
-     ilist = self.addMenuItem(name,'GV', ilist, url, img, fanart, infoList, isFolder=False)
-   return(ilist)
-
-
- def getAddonVideo(self,lurl):
-      vid = uqp(lurl)
-      vid = vid.rsplit('/',1)[1]
-      html = self.getRequest('http://tpfeed.cbc.ca/f/ExhSPC/vms_5akSXx4Ng_Zn?q=*&byGuid=%s' % vid)
-      a = json.loads(html)
-      a = a['entries'][0]['content']
-      u = ''
-      vwid = 0
-      for b in a:
-         if b['width'] >= vwid:
-            u = b['url']
-            vwid = b['width']
-
-      u = u.split('/meta.smil',1)[0]
+ def getAddonVideo(self,url):
+      # u = url.split('/meta.smil',1)[0]
+      u = 'https://link.theplatform.com/s/ExhSPC/media/guid/2655402169/' + url
+      u = u + '/meta.smil'
       u = u + '?mbr=true&manifest=m3u&feed=Player%20Selector%20-%20Prod'
       html = self.getRequest(u)
-      u = re.compile('src="(.+?)"', re.DOTALL).search(html)
+      u = re.compile('RESOLUTION=1280x720.+?\n(http.+?)\?', re.DOTALL).search(html).group(1)
       if u is None:
            return
-      u = u.group(1)
-      liz = xbmcgui.ListItem(path=u)
-      suburl = re.compile('<textstream src="(.+?)".+?/>', re.DOTALL).findall(html)
-      for sub in suburl:
-          if '.srt' in sub:
-              liz.setSubtitles([sub])
-              break
-      infoList={}
-      infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')
-      infoList['Title'] = xbmc.getInfoLabel('ListItem.Title')
-      infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
-      infoList['Year'] = xbmc.getInfoLabel('ListItem.Year')
-      infoList['Premiered'] = xbmc.getInfoLabel('Premiered')
-      infoList['Plot'] = xbmc.getInfoLabel('ListItem.Plot')
-      infoList['Studio'] = xbmc.getInfoLabel('ListItem.Studio')
-      infoList['Genre'] = xbmc.getInfoLabel('ListItem.Genre')
-      infoList['Duration'] = xbmc.getInfoLabel('ListItem.Duration')
-      infoList['MPAA'] = xbmc.getInfoLabel('ListItem.Mpaa')
-      infoList['Aired'] = xbmc.getInfoLabel('ListItem.Aired')
-      infoList['Season'] = xbmc.getInfoLabel('ListItem.Season')
-      infoList['Episode'] = xbmc.getInfoLabel('ListItem.Episode')
-      liz.setInfo('video', infoList)
+      liz = xbmcgui.ListItem(path = u.strip())
+      captions = xbmc.getInfoLabel('ListItem.MPAA')
+      #xbmc.log("gAV captions: "+captions, xbmc.LOGNOTICE)
+      #if captions.find('.srt') > 0:
+      #   liz.setSubtitles([captions])
+      liz.setSubtitles([captions])
       xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)

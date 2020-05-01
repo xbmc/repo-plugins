@@ -12,7 +12,7 @@ except ImportError:  # Python 2
     from urllib import quote_plus
 
 from data import CHANNELS, SECONDS_MARGIN
-from kodiutils import get_setting_bool, localize, localize_datelong, log, url_for
+from kodiutils import colour, get_setting_bool, localize, localize_datelong, log, url_for
 from utils import (add_https_proto, assetpath_to_id, capitalize, find_entry, from_unicode,
                    html_to_kodilabel, reformat_url, shorten_link, to_unicode, unescape,
                    url_to_episode)
@@ -85,7 +85,7 @@ class Metadata:
                         capitalize(localize(30402)),
                         'RunPlugin(%s)' % url_for('unwatchlater', asset_id=asset_id, title=program_title, url=url, **extras)
                     ))
-                    watchlater_marker = '[COLOR yellow]ᶫ[/COLOR]'
+                    watchlater_marker = '[COLOR={highlighted}]ᶫ[/COLOR]'
                 else:
                     # Watch context menu
                     context_menu.append((
@@ -126,7 +126,7 @@ class Metadata:
                         localize(30412, title=follow_suffix),  # Unfollow
                         'RunPlugin(%s)' % url_for('unfollow', program=program, title=program_title, **extras)
                     ))
-                    favorite_marker = '[COLOR yellow]ᵛ[/COLOR]'
+                    favorite_marker = '[COLOR={highlighted}]ᵛ[/COLOR]'
                 else:
                     context_menu.append((
                         localize(30411, title=follow_suffix),  # Follow
@@ -148,7 +148,7 @@ class Metadata:
             'RunPlugin(%s)' % url_for('delete_cache', cache_file=cache_file)
         ))
 
-        return context_menu, favorite_marker, watchlater_marker
+        return context_menu, colour(favorite_marker), colour(watchlater_marker)
 
     @staticmethod
     def get_asset_id(api_data):
@@ -276,7 +276,7 @@ class Metadata:
                 if api_data.get('allowedRegion') == 'BE':
                     plot_meta += localize(30201) + '\n\n'  # Geo-blocked
                 plot = '%s[B]%s[/B]\n%s' % (plot_meta, api_data.get('program'), plot)
-                return plot
+                return colour(plot)
 
             # Add additional metadata to plot
             plot_meta = ''
@@ -317,16 +317,16 @@ class Metadata:
 
             permalink = shorten_link(api_data.get('permalink')) or api_data.get('externalPermalink')
             if permalink and get_setting_bool('showpermalink', default=False):
-                plot = '%s\n\n[COLOR yellow]%s[/COLOR]' % (plot, permalink)
-            return plot
+                plot = '%s\n\n[COLOR={highlighted}]%s[/COLOR]' % (plot, permalink)
+            return colour(plot)
 
         # VRT NU Suggest API
         if api_data.get('type') == 'program':
             plot = unescape(api_data.get('description', '???'))
             # permalink = shorten_link(api_data.get('programUrl'))
             # if permalink and get_setting_bool('showpermalink', default=False):
-            #     plot = '%s\n\n[COLOR yellow]%s[/COLOR]' % (plot, permalink)
-            return plot
+            #     plot = '%s\n\n[COLOR={highlighted}]%s[/COLOR]' % (plot, permalink)
+            return colour(plot)
 
         # VRT NU Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
@@ -338,7 +338,7 @@ class Metadata:
                 end=api_data.get('end'),
                 description=html_to_kodilabel(api_data.get('description', '')),
             )
-            return plot
+            return colour(plot)
 
         # Not Found
         return ''
@@ -753,22 +753,22 @@ class Metadata:
             end_date = dateutil.parser.parse(api_data.get('endTime'))
             if api_data.get('url'):
                 if start_date <= now <= end_date:  # Now playing
-                    label = '[COLOR yellow]%s[/COLOR] %s' % (label, localize(30301))
+                    label = '[COLOR={highlighted}]%s[/COLOR] %s' % (label, localize(30301))
             else:
                 # This is a non-actionable item
                 if start_date < now <= end_date:  # Now playing
-                    label = '[COLOR gray]%s[/COLOR] %s' % (label, localize(30301))
+                    label = '[COLOR={greyedout}]%s[/COLOR] %s' % (label, localize(30301))
                 else:
-                    label = '[COLOR gray]%s[/COLOR]' % label
+                    label = '[COLOR={greyedout}]%s[/COLOR]' % label
 
         # Not Found
         else:
             label = ''
 
         if return_sort:
-            return label, sort, ascending
+            return colour(label), sort, ascending
 
-        return label
+        return colour(label)
 
     @staticmethod
     def get_tag(api_data):

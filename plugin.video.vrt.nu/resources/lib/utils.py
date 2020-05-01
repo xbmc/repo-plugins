@@ -17,10 +17,11 @@ except ImportError:  # Python 2
 HTML_MAPPING = [
     (re.compile(r'<(/?)i(|\s[^>]+)>', re.I), '[\\1I]'),
     (re.compile(r'<(/?)b(|\s[^>]+)>', re.I), '[\\1B]'),
-    (re.compile(r'<em(|\s[^>]+)>', re.I), '[B][COLOR yellow]'),
+    (re.compile(r'<em(|\s[^>]+)>', re.I), '[B][COLOR={highlighted}]'),
     (re.compile(r'</em>', re.I), '[/COLOR][/B]'),
     (re.compile(r'<li>', re.I), '- '),
-    (re.compile(r'</?(div|li|p|span|ul)(|\s[^>]+)>', re.I), ''),
+    (re.compile(r'</?(li|ul)(|\s[^>]+)>', re.I), '\n'),
+    (re.compile(r'</?(div|p|span)(|\s[^>]+)>', re.I), ''),
     (re.compile('<br>\n{0,1}', re.I), ' '),  # This appears to be specific formatting for VRT NU, but unwanted by us
     (re.compile('(&nbsp;\n){2,}', re.I), '\n'),  # Remove repeating non-blocking spaced newlines
 ]
@@ -48,7 +49,7 @@ def capitalize(string):
 
 
 def strip_newlines(text):
-    """Strip newlines and whitespaces"""
+    """Strip newlines and trailing whitespaces"""
     return text.replace('\n', '').strip()
 
 

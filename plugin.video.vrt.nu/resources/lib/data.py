@@ -113,7 +113,7 @@ CHANNELS = [
         name='radio1',
         label='Radio 1',
         studio='Radio 1',
-        live_stream_id='vualto_events3_geo',
+        live_stream_id='vualto_radio1',
         youtube=[
             dict(label='Radio 1', url='https://www.youtube.com/user/vrtradio1'),
             dict(label='Universiteit van Vlaanderen', url='https://www.youtube.com/channel/UC7WpOKbKfzOOnD0PyUN_SYg'),
@@ -124,6 +124,7 @@ CHANNELS = [
         name='radio2',
         label='Radio 2',
         studio='Radio 2',
+        live_stream_id='vualto_radio2',
         youtube=[
             dict(label='Radio 2', url='https://www.youtube.com/user/radio2inbeeld'),
             dict(label='Aha!', url='https://www.youtube.com/channel/UCa9lGLvXB-xJg3d0BjK_tIQ'),
@@ -134,6 +135,7 @@ CHANNELS = [
         name='klara',
         label='Klara',
         studio='Klara',
+        live_stream_id='vualto_klara',
         youtube=[
             dict(label='Klara', url='https://www.youtube.com/user/klararadio'),
             dict(label='Iedereen klassiek', url='https://www.youtube.com/channel/UCgyfqQgt5_K8_zrxHgh_J2w'),
@@ -178,6 +180,27 @@ CHANNELS = [
         youtube=[
             dict(label='De Warmste Week', url='https://www.youtube.com/channel/UC_PsMpKLAp4hSGSXyUCPtxw'),
         ],
+    ),
+    dict(
+        id='',
+        name='vrt-events1',
+        label='VRT Events stream 1',
+        studio='VRT',
+        live_stream_id='vualto_events1_geo',
+    ),
+    dict(
+        id='',
+        name='vrt-events2',
+        label='VRT Events stream 2',
+        studio='VRT',
+        live_stream_id='vualto_events2_geo',
+    ),
+    dict(
+        id='',
+        name='vrt-events3',
+        label='VRT Events stream 3',
+        studio='VRT',
+        live_stream_id='vualto_events3_geo',
     ),
 ]
 

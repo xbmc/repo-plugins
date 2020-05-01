@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.3.2" provider-name="Martijn Moreel, dagwieers">
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.3.3" provider-name="Martijn Moreel, dagwieers">
 <requires>
   <import addon="resource.images.studios.white" version="0.0.22"/>
   <import addon="script.module.beautifulsoup4" version="4.6.2"/>
@@ -39,12 +39,22 @@
   <platform>all</platform>
   <license>GPL-3.0-only</license>
   <forum>https://www.facebook.com/kodivrtnu/</forum>
-  <website>https://github.com/pietje666/plugin.video.vrt.nu/wiki</website>
-  <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
+  <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
+  <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
   <news>
+v2.3.3 (2020-04-30)
+- Fix Radio 1 livestream
+- Fix watching VRT NU abroad
+- Add support for Kodi 19 Matrix "pre-release" builds
+- Add colour preferences to accomodate light skins
+- Add a favourites music subsection
+- Allow editing a search query from search history
+- Expand TV guide range
+- Add livestreams for Radio 2 and Klara
+
 v2.3.2 (2020-01-18)
-- Fix issues related to categories scraping and caching (@mediaminister)
-- Various improvements to TV guide (@dagwieers)
+- Fix issues related to categories scraping and caching
+- Various improvements to TV guide
 
 v2.3.1 (2020-01-14)
 - Fix an issue related to type-handling for settings
@@ -72,11 +82,6 @@ v2.2.3 (2019-10-01)
 v2.2.2 (2019-09-01)
 - "Go to program" will now got to "All seasons" listing
 - Rename "My programs" to "My favorites"
-
-v2.2.1 (2019-08-16)
-- Small unicode fix
-- Implement Kodi-approved thumb removal
-- Fix broken streamservice webscraper (again)
   </news>
   <assets>
     <icon>resources/media/icon.png</icon>

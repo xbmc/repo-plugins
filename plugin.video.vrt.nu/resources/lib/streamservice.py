@@ -13,9 +13,9 @@ except ImportError:  # Python 2
     from urllib2 import build_opener, install_opener, urlopen, ProxyHandler, quote, unquote, HTTPError
 
 from helperobjects import ApiData, StreamURLS
-from kodiutils import (addon_profile, can_play_drm, exists, end_of_directory, get_max_bandwidth,
+from kodiutils import (addon_profile, can_play_drm, container_reload, exists, end_of_directory, get_max_bandwidth,
                        get_proxies, get_setting_bool, get_url_json, has_inputstream_adaptive,
-                       kodi_version, localize, log, log_error, mkdir, ok_dialog, open_settings,
+                       invalidate_caches, kodi_version_major, localize, log, log_error, mkdir, ok_dialog, open_settings,
                        supports_drm, to_unicode)
 
 
@@ -212,6 +212,11 @@ class StreamService:
             else:
                 protocol = 'hls'
 
+            # Workaround for Radio 1 live stream slow starts with HTTP 415
+            # https://github.com/add-ons/plugin.video.vrt.nu/issues/735
+            if video.get('video_id') == 'vualto_radio1':
+                protocol = 'hls'
+
             # Get stream manifest url
             manifest_url = next(stream.get('url') for stream in stream_json.get('targetUrls') if stream.get('type') == protocol)
 
@@ -261,6 +266,12 @@ class StreamService:
 
             message = localize(30964)  # Geoblock error: Cannot be played, need Belgian phone number validation
             return self._handle_stream_api_error(message, stream_json)
+        if stream_json.get('code') == 'VIDEO_NOT_FOUND':
+            # Refresh listing
+            invalidate_caches('*.json')
+            container_reload()
+            message = localize(30987)  # No stream found
+            return self._handle_stream_api_error(message, stream_json)
 
         # Failed to get stream, handle error
         message = localize(30954)  # Whoops something went wrong
@@ -282,7 +293,7 @@ class StreamService:
        """
         # HLS AES DRM failed
         if protocol == 'hls_aes' and not supports_drm():
-            message = localize(30962, protocol=protocol.upper(), version=kodi_version())
+            message = localize(30962, protocol=protocol.upper(), version=kodi_version_major())
         elif protocol == 'hls_aes' and not has_inputstream_adaptive() and not get_setting_bool('usedrm', default=True):
             message = localize(30958, protocol=protocol.upper(), component=localize(30959), state=localize(30961))
         elif protocol == 'hls_aes' and has_inputstream_adaptive():
@@ -314,7 +325,7 @@ class StreamService:
         max_bandwidth = get_max_bandwidth()
         stream_bandwidth = None
 
-        # Get hls variant url based on max_bandwith setting
+        # Get hls variant url based on max_bandwidth setting
         import re
         hls_variant_regex = re.compile(r'#EXT-X-STREAM-INF:[\w\-.,=\"]*?BANDWIDTH=(?P<BANDWIDTH>\d+),'
                                        r'[\w\-.,=\"]+\d,(?:AUDIO=\"(?P<AUDIO>[\w\-]+)\",)?(?:SUBTITLES=\"'

@@ -93,6 +93,14 @@ def favorites_docu():
     VRTPlayer().show_favorites_docu_menu()
 
 
+@plugin.route('/favorites/music')
+def favorites_music():
+    """The favorites music listing"""
+    from vrtplayer import VRTPlayer
+    VRTPlayer().show_favorites_music_menu()
+
+
+@plugin.route('/favorites/recent')
 @plugin.route('/favorites/recent')
 @plugin.route('/favorites/recent/<page>')
 def favorites_recent(page=1):
@@ -245,11 +253,12 @@ def add_search(keywords):
     Search().add(keywords)
 
 
-@plugin.route('/search/remove/<keywords>')
-def remove_search(keywords):
-    """Remove from search history"""
+@plugin.route('/search/edit')
+@plugin.route('/search/edit/<keywords>')
+def edit_search(keywords=None):
+    """Edit from search history"""
     from search import Search
-    Search().remove(keywords)
+    Search().search(keywords=keywords, edit=True)
 
 
 @plugin.route('/search/query')
@@ -259,6 +268,13 @@ def search_query(keywords=None, page=1):
     """The Search interface and query listing"""
     from search import Search
     Search().search(keywords=keywords, page=page)
+
+
+@plugin.route('/search/remove/<keywords>')
+def remove_search(keywords):
+    """Remove from search history"""
+    from search import Search
+    Search().remove(keywords)
 
 
 @plugin.route('/play/id/<video_id>')

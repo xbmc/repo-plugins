@@ -54,7 +54,7 @@ msgstr "Mis emisoras"
 
 msgctxt "#30200"
 msgid "Search for station"
-msgstr "Buscar emisora"
+msgstr "Buscar por nombre"
 
 msgctxt "#30300"
 msgid "Language"
@@ -72,9 +72,17 @@ msgctxt "#30303"
 msgid "French"
 msgstr "Francés"
 
+msgctxt "#30304"
+msgid "Portuguese"
+msgstr "Portugués"
+
+msgctxt "#30305"
+msgid "Spanish"
+msgstr "Español"
+
 msgctxt "#30310"
 msgid "Force ViewMode to Thumbnail"
-msgstr "Forzar al modo de vista miniatura"
+msgstr "Forzar el modo vista en miniatura"
 
 msgctxt "#30400"
 msgid "Add to 'My Stations'"
@@ -82,7 +90,7 @@ msgstr "Añadir a 'Mis emisoras'"
 
 msgctxt "#30401"
 msgid "Remove from 'My Stations'"
-msgstr "Quitar de 'Mis emisoras'"
+msgstr "Eliminar de 'Mis emisoras'"
 
 msgctxt "#30402"
 msgid "Edit custom Station"
@@ -102,13 +110,40 @@ msgstr "la URL o ruta del icono"
 
 msgctxt "#30503"
 msgid "stream url"
-msgstr "la URL del flujo"
+msgstr "la URL de la transmisión"
 
 msgctxt "#30504"
 msgid "Add custom Station..."
-msgstr "Añadir una emisora personalizada..."
+msgstr "Añadir emisora personalizada..."
 
 msgctxt "#30600"
 msgid "Network Error"
 msgstr "Error de conexión"
 
+msgctxt "#30601"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30602"
+msgid "Hide fanart"
+msgstr "Ocultar fanart"
+
+msgctxt "#30603"
+msgid "Most Popular"
+msgstr "Las más populares"
+
+msgctxt "#30604"
+msgid "A-Z"
+msgstr "De la A a la Z"
+
+msgctxt "#30605"
+msgid "Page (%s/%s) | Next >>"
+msgstr "Página %s de %s | Siguiente >>"
+
+msgctxt "#30606"
+msgid "By country"
+msgstr "Por país"
+
+msgctxt "#30607"
+msgid "Prefer HTTP streams over HTTS"
+msgstr "Preferir protocolo HTTP a HTTS"

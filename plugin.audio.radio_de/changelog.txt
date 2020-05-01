@@ -1,3 +1,11 @@
+v3.0.3+matrix.5 (13/4/2020)
+    - [fix] Custom stations if the url is not a playlist
+    - [new] Spanish website radio.es and improved translations
+    - [new] screenshot support for addon-website
+
+v3.0.2+matrix.1 (1/5/2020)
+    - [fix] Custom stations if the url is not a playlist
+
 v3.0.1+matrix.1 (13/4/2020)
     - [new] Use internal playlist resolver also in custom stations
 

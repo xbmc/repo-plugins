@@ -43,6 +43,7 @@ class RadioApi():
         'german': 'http://api.radio.de/info',
         'french': 'http://api.radio.fr/info',
         'portuguese': 'http://api.radio.pt/info',
+        'spanish': 'http://api.radio.es/info',
     }
 
     USER_AGENT = 'XBMC Addon Radio'
@@ -147,7 +148,7 @@ class RadioApi():
         if self.__check_paylist(stream_url):
             return self.__resolve_playlist(station)
         else:
-            return station
+            return stream_url
 
     def get_top_stations(self, sizeperpage, pageindex):
         self.log(('get_top_stations started with '

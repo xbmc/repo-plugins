@@ -1,3 +1,8 @@
+v3.0.3 (1/5/2020)
+    - [fix] Custom stations if the url is not a playlist (backport)
+    - [new] Spanish website radio.es and improved translations
+    - [new] screenshot support for addon-website (backport)
+
 3.0.1 (13/4/2020)
     - [new] Use internal playlist resolver also in custom stations
 

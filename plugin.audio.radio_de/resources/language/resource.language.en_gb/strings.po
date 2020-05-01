@@ -76,6 +76,10 @@ msgctxt "#30304"
 msgid "Portuguese"
 msgstr ""
 
+msgctxt "#30305"
+msgid "Spanish"
+msgstr ""
+
 msgctxt "#30310"
 msgid "Force ViewMode to Thumbnail"
 msgstr ""

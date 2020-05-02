@@ -39,7 +39,7 @@ class Main(object):
         self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][
             0]
 
-        # log("self.url", self.video_list_page_url)
+        log("self.url", self.video_list_page_url)
 
         #
         # Get the videos...
@@ -68,18 +68,16 @@ class Main(object):
 
         try:
             json_data = json.loads(html_source)
-
-            # for item in json_data['data']:
-            #     log("attribute1", item['canonical_links']['self'])
-            #     log("attribute2", item['attributes']['title'])
-            #     exit(1)
-
         except (ValueError, KeyError, TypeError):
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30109))
             exit(1)
 
         for item in json_data['data']:
             serie_title = item['attributes']['title']
+
+            summary = item['attributes']['summary']
+            last_episode_golive_at = item['attributes']['last_episode_golive_at']
+            last_episode_golive_at = last_episode_golive_at[0:10]
 
             # this part looks like this f.e.: /series/nature-town
             serie_url_middle_part = item['canonical_links']['self']
@@ -103,6 +101,9 @@ class Main(object):
 
             # Add to list...
             list_item = xbmcgui.ListItem(title)
+            list_item.setInfo("video",
+                             {"title": title, "mediatype": "video",
+                              "plot": summary + '\n' + LANGUAGE(30319) + ' ' + last_episode_golive_at})
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(RESOURCES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'false')
@@ -124,7 +125,7 @@ class Main(object):
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems
         # instead of adding one by ove via addDirectoryItem.
         xbmcplugin.addDirectoryItems(self.plugin_handle, listing, len(listing))
-        # Disable sorting
-        xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
+        # Set initial sorting
+        xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATEADDED)
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)

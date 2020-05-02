@@ -280,7 +280,6 @@ class TV3cat(object):
                                 url_final = urlProg + 'ultims-programes/'
 
 
-                        xbmc.log("programsSections url final: " + str(url_final))
 
                         foldVideo = FolderVideo(titol, url_final, 'getlistvideos', "", "")
                         lFolderVideos.append(foldVideo)

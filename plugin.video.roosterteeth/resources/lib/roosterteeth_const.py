@@ -24,33 +24,15 @@ ROOSTERTEETH_GET_EVERYTHING_IN_ONE_PAGE_URL_PART = '?per_page=1000&filter=all&pa
 NUMBER_OF_EPISODES_PER_PAGE = '24'
 ROOSTERTEETH_PAGE_URL_PART = '?per_page=' + NUMBER_OF_EPISODES_PER_PAGE + '&filter=all&page=001'
 ROOSTERTEETH_ORDER_URL_PART = '&order=desc'
-
+# Channels
+ROOSTERTEETH_CHANNELS_URL = 'https://svod-be.roosterteeth.com/api/v1/channels'
+# Channel
+ROOSTERTEETH_CHANNEL_URL_PART = "&channel_id="
 # Shows
 ROOSTERTEETH_SERIES_BASE_URL = 'https://svod-be.roosterteeth.com/api/v1/shows'
-ROOSTERTEETH_SERIES_URL = 'https://svod-be.roosterteeth.com/api/v1/shows' + ROOSTERTEETH_GET_EVERYTHING_IN_ONE_PAGE_URL_PART
+ROOSTERTEETH_SERIES_URL = ROOSTERTEETH_SERIES_BASE_URL + ROOSTERTEETH_GET_EVERYTHING_IN_ONE_PAGE_URL_PART
 
-# Recent video's per channel
-ROOSTERTEETH_CHANNEL_BASE_URL = "https://svod-be.roosterteeth.com/api/v1/episodes"
-ROOSTERTEETH_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
-                                              + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=rooster-teeth"
-ACHIEVEMENTHUNTER_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
-                                                   + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=achievement-hunter"
-FUNHAUS_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
-                                         + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=funhaus"
-INSIDE_GAMING_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
-                                               + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=inside-gaming"
-SCREWATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
-                                             + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=screwattack"
-SUGARPINE7_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
-                                            + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=sugar-pine-7"
-COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
-                                         + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=cow-chop"
-JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
-                                         + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=jt-music"
-KINDAFUNNY_RECENTLY_ADDED_VIDEOS_SERIES_URL = ROOSTERTEETH_CHANNEL_BASE_URL + ROOSTERTEETH_PAGE_URL_PART \
-                                            + ROOSTERTEETH_ORDER_URL_PART + "&channel_id=kinda-funny"
-
-SPONSOR_ONLY_VIDEO_TITLE_PREFIX = '* '
+FIRST_MEMBER_ONLY_VIDEO_TITLE_PREFIX = '* '
 INDEX_DOT_M3U8 = "index.m3u8"
 VQ4K = '4k'
 VQ1080P = '1080p'
@@ -60,8 +42,8 @@ VQ360P = '360p'
 VQ240P = '240p'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-DATE = "2019-06-09"
-VERSION = "1.4.1"
+DATE = "2020-05-02"
+VERSION = "1.5.0"
 
 if sys.version_info[0] > 2:
     unicode = str

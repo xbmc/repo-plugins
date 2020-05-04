@@ -1,3 +1,9 @@
+1.5.0 (2020-05-02)
+- dynamic channels instead of hardcoded channels
+- set initial sorting, changing the sort order in Kodi now seems to actually do something
+- added channel shows
+- changes due to sponsership to First membership change
+
 1.4.1 (2019-06-09)
 - added adapted inputstream switch. When this is on, the videoplayer inputstream addon 'Inputstream Adaptive'
 (kudo's to peak3d) is used. The addon 'Inputstream Adaptive' determines what resolution it will display based upon the

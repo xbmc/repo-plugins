@@ -16,7 +16,7 @@ import xbmcplugin
 import json
 
 from roosterteeth_const import RESOURCES_PATH, HEADERS, LANGUAGE, convertToUnicodeString, log, \
-    SPONSOR_ONLY_VIDEO_TITLE_PREFIX, ROOSTERTEETH_BASE_URL
+    FIRST_MEMBER_ONLY_VIDEO_TITLE_PREFIX, ROOSTERTEETH_BASE_URL
 
 
 #
@@ -60,7 +60,7 @@ class Main(object):
 
                 self.next_url = self.url.replace('page=' + page_number_str, 'page=' + page_number_next_str)
 
-                log("self.next_url", self.next_url)
+                # log("self.next_url", self.next_url)
 
         #
         # Get the videos...
@@ -89,17 +89,13 @@ class Main(object):
 
         try:
             json_data = json.loads(html_source)
-
-            # for item in json_data['data']:
-            #     log("attribute1", item['canonical_links']['self'])
-            #     log("attribute2", item['attributes']['title'])
-            #     exit(1)
-
         except (ValueError, KeyError, TypeError):
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30109))
             exit(1)
 
         for item in json_data['data']:
+
+            # log("item", item)
 
             episode_title = item['attributes']['title']
 
@@ -128,7 +124,11 @@ class Main(object):
 
             serie_title = item['attributes']['show_title']
 
-            is_sponsor_only = item['attributes']['is_sponsors_only']
+            original_air_date = item['attributes']['original_air_date']
+            original_air_date = original_air_date[0:10]
+
+            # The backend still calls it sponsor instead of first member
+            is_first_member_only = item['attributes']['is_sponsors_only']
 
             # let's put some more info in the title of the episode
             if self.show_serie_name == "True":
@@ -136,8 +136,8 @@ class Main(object):
             else:
                 title = episode_title
 
-            if is_sponsor_only:
-                title = SPONSOR_ONLY_VIDEO_TITLE_PREFIX + ' ' + title
+            if is_first_member_only:
+                title = FIRST_MEMBER_ONLY_VIDEO_TITLE_PREFIX + ' ' + title
 
             title = convertToUnicodeString(title)
 
@@ -155,8 +155,9 @@ class Main(object):
             # Add to list...
             list_item = xbmcgui.ListItem(title)
             list_item.setInfo("video",
-                             {"title": title, "studio": studio, "mediatype": "video",
-                              "plot": plot, "duration": duration_in_seconds})
+                             {"title": title, "studio": studio, "mediatype": "video", \
+                              "plot": plot + '\n' + LANGUAGE(30318) + ' ' + original_air_date, \
+                              "aired": original_air_date, "duration": duration_in_seconds})
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                              'fanart': os.path.join(RESOURCES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
@@ -166,7 +167,7 @@ class Main(object):
             title = title.encode('ascii', 'ignore')
 
             parameters = {"action": "play", "functional_url": functional_url, "technical_url": technical_url,
-                          "title": title, "is_sponsor_only": is_sponsor_only, "next_page_possible": "False"}
+                          "title": title, "is_first_member_only": is_first_member_only, "next_page_possible": "False"}
 
             plugin_url_with_parms = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
@@ -198,7 +199,7 @@ class Main(object):
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems
         # instead of adding one by ove via addDirectoryItem.
         xbmcplugin.addDirectoryItems(self.plugin_handle, listing, len(listing))
-        # Disable sorting
-        xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
+        # Set initial sorting
+        xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATEADDED)
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)

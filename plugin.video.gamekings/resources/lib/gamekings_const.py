@@ -19,8 +19,8 @@ BASE_URL_GAMEKINGS_TV = "https://www.gamekings.tv/"
 TWITCH_URL_GAMEKINGS_TV = "https://player.twitch.tv/?channel=gamekings"
 PREMIUM_ONLY_VIDEO_TITLE_PREFIX = '* '
 LOGIN_URL = 'https://www.gamekings.tv/wp-login.php'
-DATE = "2019-09-15"
-VERSION = "1.2.16"
+DATE = "2020-05-02"
+VERSION = "1.2.17"
 NUMBER_OF_ENCODED_DIGITS_FOR_ONE_DECRYPTED_DIGIT = 2
 MASTER_DOT_M3U8 = "master.m3u8"
 VQ4K = '4k'

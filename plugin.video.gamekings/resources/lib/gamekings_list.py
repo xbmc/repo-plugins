@@ -111,7 +111,13 @@ class Main(object):
         #       <a href="https://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/#comments" class="meta__item  meta--comments  disqus-comment-count" data-disqus-url="https://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/">0</a>
         #     </div>
 
-        items = soup.findAll('div', attrs={'class': re.compile("^" + "post")})
+        # Sometimes the videos on the frontpage are not yet present on the video page, therefore added an videos on frontpage section
+        if self.video_list_page_url == BASE_URL_GAMEKINGS_TV:
+            # find the videos on the frontpage
+            items = soup.findAll('a', attrs={'class': re.compile("^" + "slider__link")})
+        else:
+            # find the videos on the video page
+            items = soup.findAll('div', attrs={'class': re.compile("^" + "post")})
 
         log("len(items", len(items))
 
@@ -119,47 +125,57 @@ class Main(object):
 
             item = convertToUnicodeString(item)
 
-            # if item contains 'postcontainer, skip the item
-            if str(item).find('postcontainer') >= 0:
-
-                # log("skipped item containing 'postcontainer'", item)
-
-                continue
-
             # log("item", item)
 
-            video_page_url = item.a['href']
+            if self.video_list_page_url == BASE_URL_GAMEKINGS_TV:
+                title = item.text
 
-            # log("video_page_url", video_page_url)
+                video_page_url = item['href']
 
-            # if link ends with a '/': process the link, if not: skip the link
-            if video_page_url.endswith('/'):
-                pass
+                log("video_page_url", video_page_url)
+
+                thumbnail_url = ""
+
             else:
+                # if item contains 'postcontainer, skip the item
+                if str(item).find('postcontainer') >= 0:
 
-                log("skipped video_page_url not ending on '/'", video_page_url)
-
-                continue
-
-            # Make title
-            try:
-                title = item.a['title']
-            except:
-                # skip the item if it's got no title
-                continue
-
-            # this is category Gamekings Extra
-            if self.plugin_category == LANGUAGE(30002):
-                if str(title).lower().find('extra') >= 0:
-                    pass
-                elif str(title).lower().find('extra') >= 0:
-                    pass
-                else:
-                    # skip the url
-
-                    log("skipped non-extra title in gamekings extra category", video_page_url)
+                    # log("skipped item containing 'postcontainer'", item)
 
                     continue
+
+                video_page_url = item.a['href']
+
+                log("video_page_url", video_page_url)
+
+                # if link ends with a '/': process the link, if not: skip the link
+                if video_page_url.endswith('/'):
+                    pass
+                else:
+
+                    log("skipped video_page_url not ending on '/'", video_page_url)
+
+                    continue
+
+                # Make title
+                try:
+                    title = item.a['title']
+                except:
+                    # skip the item if it's got no title
+                    continue
+
+                # this is category Gamekings Extra
+                if self.plugin_category == LANGUAGE(30002):
+                    if str(title).lower().find('extra') >= 0:
+                        pass
+                    elif str(title).lower().find('extra') >= 0:
+                        pass
+                    else:
+                        # skip the url
+
+                        log("skipped non-extra title in gamekings extra category", video_page_url)
+
+                        continue
 
             title = title.replace('-', ' ')
             title = title.replace('/', ' ')
@@ -193,18 +209,16 @@ class Main(object):
             title = title.replace(' xxviii ', ' XXVIII ')
             title = title.replace(' xxix ', ' XXIX ')
             title = title.replace(' xxx ', ' XXX ')
-
-            # remove space on first position in the title
-            if title[0:1] == " ":
-                title = title[1:]
-
             title = title.replace("aflevering", "Aflevering")
             title = title.replace("Aflevering", (LANGUAGE(30204)))
             title = title.replace("Gamekings Extra: ", "")
             title = title.replace("Gamekings Extra over ", "")
             title = title.replace("Extra: ", "")
             title = title.replace("Extra over ", "")
+            title = title.strip()
             title = title.capitalize()
+
+            # log("title", title)
 
             if str(item).find("title--premium") >= 0:
                 title = PREMIUM_ONLY_VIDEO_TITLE_PREFIX + ' ' + title
@@ -213,11 +227,14 @@ class Main(object):
             try:
                 thumbnail_url = item.a.img['data-original']
             except:
-                # skip the item if it has no thumbnail
+                if self.video_list_page_url == BASE_URL_GAMEKINGS_TV:
+                    pass
+                else:
+                    # skip the item if it has no thumbnail
 
-                log("skipping item with no thumbnail", item)
+                    log("skipping item with no thumbnail", item)
 
-                continue
+                    continue
 
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
             list_item.setInfo("video", {"title": title, "studio": ADDON})

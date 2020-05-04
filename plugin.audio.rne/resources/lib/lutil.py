@@ -29,50 +29,61 @@ from datetime import date
 
 debug_enable = False # The debug logs are disabled by default.
 
-def set_debug_mode(debug_flag):
+
+def local_log(message):
+    """This function logs the debug messages under development and testing process.
+    It is never invoked when the add-on in run under KODI.
+    Called from the library modules by other functions."""
+
+    if debug_enable:
+        print("%s" % message)
+
+
+log = local_log # Use local log function by default.
+
+
+def set_debug_mode(debug_flag, func_log=local_log):
     """This function sets the debug_enable var to log everything if debug option is true."""
+
     global debug_enable
+    global log
     debug_enable = debug_flag in ("true", True)
-
-
-def log(message):
-    """This function logs the messages into the main KODI log file. Called from main plugin module."""
-    if debug_enable:
-        print "%s" % message
-
-
-def _log(message):
-    """This function logs the messages into the main KODI log file. Called from the libraries module by other functions."""
-    if debug_enable:
-        print "lutils.%s" % message
+    log = func_log
 
 
 def get_url_decoded(url):
     """This function returns the URL decoded."""
-    _log('get_url_decoded URL: "%s"' % url)
+
+    log('get_url_decoded URL: "%s"' % url)
     return urllib.unquote_plus(url)
 
 
 def get_url_encoded(url):
     """This function returns the URL encoded."""
-    _log('get_url_encoded URL: "%s"' % url)
+
+    log('get_url_encoded URL: "%s"' % url)
     return urllib.quote_plus(url)
 
 
 def get_parms_encoded(**kwars):
     """This function returns the params encoded to form an URL or data post."""
+
     param_list = urllib.urlencode(kwars)
-    _log('get_parms_encoded params: "%s"' % param_list)  
+    log('get_parms_encoded params: "%s"' % param_list)
     return param_list
 
 
 def carga_web(url):
     """This function loads the html code from a webserver and returns it into a string."""
-    _log("carga_web " + url)
 
-    MiReq = urllib2.Request(url) # We use the Request method because we need to add a header into the HTTP GET to the web site.
+    log('carga_web URL: "%s"' % url)
+    MiReq = urllib2.Request(url) # We use the Request method because we need to add some headers into the HTTP GET to the web site.
     # We have to tell the web site we are using a real browser.
-    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0') # This is a true Firefox header.
+    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0')
+    MiReq.add_header('Accept', '*/*')
+    MiReq.add_header('Accept-Language', 'es-ES,es;q=0.8,en-US;q=0.7,en;q=0.5,zh-TW;q=0.3,zh-CN;q=0.2')
+    MiReq.add_header('DNT', '1')
+    MiReq.add_header('Connection', 'keep-alive')
     MiConex = urllib2.urlopen(MiReq) # We open the HTTP connection to the URL.
     MiHTML = MiConex.read() # We load all the HTML contents from the web page and store it into a var.
     MiConex.close() # We close the HTTP connection as we have all the info required.
@@ -83,11 +94,11 @@ def carga_web(url):
 def carga_web_cookies(url, headers=''):
     """This function loads the html code from a webserver passsing the headers into the GET message
     and returns it into a string along with the cookies collected from the website."""
-    _log("carga_web_cookies " + url)
 
-    MiReq = urllib2.Request(url) # We use the Request method because we need to add a header into the HTTP GET to the web site.
+    log('carga_web_cookies URL: "%s"' % url)
+    MiReq = urllib2.Request(url) # We use the Request method because we need to add some headers into the HTTP GET to the web site.
     # We have to tell the web site we are using a real browser.
-    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0') # This is a true Firefox header.
+    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0')
     for key in headers:
         MiReq.add_header(key, headers[key])
     MiConex = urllib2.urlopen(MiReq) # We open the HTTP connection to the URL.
@@ -103,18 +114,18 @@ def carga_web_cookies(url, headers=''):
 
     MiConex.close() # We close the HTTP connection as we have all the info required.
 
-    _log("carga_web Cookie:%s" % my_cookies)
+    log('carga_web Cookie: "%s"' % my_cookies)
     return MiHTML, my_cookies
 
 
 def send_post_data(url, headers='', data=''):
     """This function sends an HTTP POST request with theirr corresponding headers and data to a webserver
     and returns the html code into a string along with the cookies collected from the website."""
-    _log("send_post_data " + url)
 
+    log("send_post_data " + url)
     MiReq = urllib2.Request(url, data) # We use the Request method because we need to send a HTTP POST to the web site.
     # We have to tell the web site we are using a real browser.
-    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0') # This is a true Firefox header.
+    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0')
     for key in headers:
         MiReq.add_header(key, headers[key])
     MiConex = urllib2.urlopen(MiReq) # We open the HTTP connection to the URL.
@@ -130,14 +141,14 @@ def send_post_data(url, headers='', data=''):
 
     MiConex.close() # We close the HTTP connection as we have all the info required.
 
-    _log("carga_web Cookie:%s" % my_cookies)
+    log('send_post_data Cookie: "%s"' % my_cookies)
     return MiHTML, my_cookies
 
 
 def get_redirect(url):
     """This function returns the redirected URL from a 30X response received from the webserver."""
-    _log("get_redirect " + url)
 
+    log('get_redirect URL: "%s"' % url)
     MiConex = urllib.urlopen(url) # Opens the http connection to the URL.
     MiHTML = MiConex.geturl() # Gets the URL redirect link and stores it into MiHTML.
     MiConex.close() # Close the http connection as we get what we need.
@@ -145,20 +156,20 @@ def get_redirect(url):
     return MiHTML
 
 
-def find_multiple(text,pattern):
+def find_multiple(buffer_text, pattern):
     """This function allows us to find multiples matches from a regexp into a string."""
 
     pat_url_par = re.compile(pattern, re.DOTALL)
    
-    return pat_url_par.findall(text)
+    return pat_url_par.findall(buffer_text)
 
 
-def find_first(text,pattern):
+def find_first(buffer_text, pattern):
     """This function gets back the first match from a regexp into a string."""
 
     pat_url_par = re.compile(pattern, re.DOTALL)
     try:
-        return  pat_url_par.findall(text)[0]
+        return  pat_url_par.findall(buffer_text)[0]
     except:
         return ""
 

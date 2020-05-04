@@ -25,11 +25,11 @@
 
 import lutil as l
 
-root_url = 'se.evtr.www//:ptth'[::-1]
+root_url = 'se.evtr.www//:sptth'[::-1]
 
-def set_debug(debug_flag):
+def set_debug(debug_flag, func_log=l.local_log):
     """This function is a wrapper to setup the debug flag into the lutil module"""
-    l.set_debug_mode(debug_flag)
+    l.set_debug_mode(debug_flag, func_log)
 
 
 def get_clean_title(title):
@@ -94,17 +94,22 @@ def get_clean_title(title):
         replace('<br />',      '').\
         replace('<b>',         '').\
         replace('</b>',        '').\
+        replace('<p>',         '').\
+        replace('</p>',        '').\
+        replace('<em>',       "'").\
+        replace('</em>',      "'").\
+        replace('<strong>',    '').\
+        replace('</strong>',   '').\
         strip()
 
 
 def get_channels_menu(html_channels):
     """This function makes the program menu parammeters data structure for all the channel menus."""
 
-    channel_sep       = '<ul class="layercanales">'
     channel_pattern   = '<li class="rn."><a href="([^"]*?)" rel="nofollow"><span></span><strong>([^<]*?)</strong></a></li>'
 
     menu_level = []
-    for url, channel in l.find_multiple(html_channels.split(channel_sep)[1], channel_pattern):
+    for url, channel in l.find_multiple(html_channels, channel_pattern):
         menu_item   = {
                 'action' : 'program_list',
                 'title'  : channel,
@@ -118,10 +123,9 @@ def get_channels_menu(html_channels):
 def get_create_index():
     """This function gets the the first level index menu."""
 
-    main_url = root_url + '/enr/atracala/'[::-1]
+    main_url = root_url + 'sanedac#/enr/atracala/'[::-1]
 
     menu_patterns = (
-            ( 'program_list', '<a href="([^"]*?)">(Todo RNE)</a>'),
             ( 'menu_direct',  'href="([^"]*?)".*?([Rr]adio [Ee]n [Dd]irecto)'),
             )
 
@@ -147,8 +151,8 @@ def get_program_list(menu_url, all_programmes_flag=False, localized=lambda x: x)
     suffix                = 'zaSP=ldom'[::-1]
     channel_pattern       = '<span class="last">([^<]*?)</span></h1>'
     page_num_pattern      = 'pbq=([0-9]+)'
-    page_url_pattern      = '<a name="paginaIR" href="([^"]*?)"><span>%s'
-    page_num_url_pattern  = '<a name="paginaIR" href=".*?pbq=([0-9]+)[^"]*?"><span>%s'
+    page_url_pattern      = 'class="%s">.*?<a name="paginaIR" href="([^"]*?)"'
+    last_page_sep         = ' class="ultimo">'
     base_url_pattern      = '(^[^?]*?)\?'
     suffix_pattern        = '([^/]+)/$'
     suffix_string         = 'zaSP=ldom&se=gnal&=adeuqsuBartel&s%=xtc&1=qbp?'[::-1]
@@ -163,9 +167,9 @@ def get_program_list(menu_url, all_programmes_flag=False, localized=lambda x: x)
     canal                 = l.find_first(buffer_url, channel_pattern)
     base_url              = l.find_first(menu_url, base_url_pattern)
 
-    curr_page_num = l.find_first(menu_url, page_num_pattern) or '1'
+    curr_page_num         = l.find_first(menu_url, page_num_pattern) or '1'
     if curr_page_num != '1':
-        previous_page_url = l.find_first(buffer_url, page_url_pattern % 'Anterior')
+        previous_page_url = l.find_first(buffer_url, page_url_pattern % 'anterior')
         prev_page_num     = l.find_first(previous_page_url, page_num_pattern)
         program_entry     = {
                 'url'     : base_url + previous_page_url.replace('&amp;', '&'),
@@ -188,10 +192,9 @@ def get_program_list(menu_url, all_programmes_flag=False, localized=lambda x: x)
                 }
         program_list.append(program_entry)
 
-
-    last_page_num = l.find_first(buffer_url, page_num_url_pattern % 'Último')
+    last_page_num         = l.find_first(buffer_url.split(last_page_sep)[1], page_num_pattern) if last_page_sep in buffer_url else ""
     if last_page_num and curr_page_num != last_page_num:
-        next_page_url     = l.find_first(buffer_url, page_url_pattern % 'Siguiente')
+        next_page_url     = l.find_first(buffer_url, page_url_pattern % 'siguiente')
         next_page_num     = l.find_first(next_page_url, page_num_pattern)
         program_entry     = {
                 'url'     : base_url + next_page_url.replace('&amp;', '&'),
@@ -219,8 +222,8 @@ def get_audio_list(program_url, localized=lambda x: x):
     audio_rating_pattern  = '<span class="col_pop"><span title="([^"]*?)" class="pc([0-9]*?)">'
     audio_year_pattern    = '([0-9]{4})'
     page_num_pattern      = 'pbq=([0-9]+)'
-    page_url_pattern      = '<a name="paginaIR" href="([^"]*?)"><span>%s'
-    page_num_url_pattern  = '<a name="paginaIR" href=".*?pbq=([0-9]+)[^"]*?"><span>%s'
+    last_page_sep         = ' class="ultimo">'
+    page_url_pattern      = 'class="%s">.*?<a name="paginaIR" href="([^"]*?)"'
     url_options           = ')ung-xunil(02%4.91.1F2%tegW=tnegA-resU|'[::-1]
 
     buffer_url            = l.carga_web(program_url)
@@ -231,7 +234,7 @@ def get_audio_list(program_url, localized=lambda x: x):
 
     curr_page_num         = l.find_first(program_url, page_num_pattern) or '1'
     if curr_page_num != '1':
-        previous_page_url = l.find_first(buffer_url, page_url_pattern % 'Anterior')
+        previous_page_url = l.find_first(buffer_url, page_url_pattern % 'anterior')
         prev_page_num     = l.find_first(previous_page_url, page_num_pattern)
         audio_entry       = {
                 'url'        : root_url + previous_page_url.replace('&amp;', '&').replace(' ', '%20'),
@@ -242,7 +245,7 @@ def get_audio_list(program_url, localized=lambda x: x):
         audio_list.append(audio_entry)
         reset_cache = True
     else:
-        first_page_url = l.find_first(buffer_url, page_url_pattern % 'Primero')
+        first_page_url = l.find_first(buffer_url, page_url_pattern % 'primero')
         if not 'titleFilter' in first_page_url:
             audio_entry       = {
                     'url'        : root_url + first_page_url.replace('&amp;', '&') + '&titleFilter=%s',
@@ -293,9 +296,9 @@ def get_audio_list(program_url, localized=lambda x: x):
         if url: # This is to make sure the URL is valid.
             audio_list.append(audio_entry)
 
-    last_page_num     = l.find_first(buffer_url, page_num_url_pattern % 'Último')
+    last_page_num     = l.find_first(buffer_url.split(last_page_sep)[1], page_num_pattern) if last_page_sep in buffer_url else ""
     if last_page_num and curr_page_num != last_page_num:
-        next_page_url = l.find_first(buffer_url, page_url_pattern % 'Siguiente')
+        next_page_url = l.find_first(buffer_url, page_url_pattern % 'siguiente')
         next_page_num = l.find_first(next_page_url, page_num_pattern)
         audio_entry   = {
                 'url'        : root_url + next_page_url.replace('&amp;', '&').replace(' ', '%20'),

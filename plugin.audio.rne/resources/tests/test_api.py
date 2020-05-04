@@ -17,19 +17,19 @@ class ITTests(unittest.TestCase):
 
     def test_1_create_index(self):
         menu_list = api.get_create_index()
-        self.assertTrue(menu_list is not None and len(menu_list) == 8)
+        self.assertTrue(menu_list is not None and len(menu_list) == 7)
         self.assertTrue(menu_list[0]['action'] == 'program_list')
         self.assertTrue(menu_list[1]['action'] == 'program_list')
         self.assertTrue(menu_list[2]['action'] == 'program_list')
-        self.assertTrue(menu_list[6]['action'] == 'program_list')
-        self.assertTrue(menu_list[7]['action'] == 'menu_direct')
+        self.assertTrue(menu_list[5]['action'] == 'program_list')
+        self.assertTrue(menu_list[6]['action'] == 'menu_direct')
 
     def test_2_program_list(self):
-        programs = api.get_program_list('http://www.rtve.es/alacarta/rne/?pbq=2&ctx=rne&letraBusqueda=&lang=es&modl=PSaz')
+        programs = api.get_program_list('/acisalc-oidar/enr/atracala/se.evtr.www//:sptth'[::-1])
         self.assertTrue(programs is not None and len(programs['program_list']) > 30)
         self.assertTrue(programs['program_list'][0]['title'] != '')
         self.assertTrue(programs['program_list'][0]['url'].startswith('http'))
-        self.assertTrue(programs['program_list'][0]['action'] == 'program_list')
+        self.assertTrue(programs['program_list'][0]['action'] == 'audio_list')
         self.assertTrue(programs['program_list'][1]['title'] != '')
         self.assertTrue(programs['program_list'][1]['url'].startswith('http'))
         self.assertTrue(programs['program_list'][1]['action'] == 'audio_list')
@@ -38,7 +38,7 @@ class ITTests(unittest.TestCase):
         self.assertTrue(programs['program_list'][-1]['action'] == 'program_list')
 
     def test_3_audio_list(self):
-        audios = api.get_audio_list('http://www.rtve.es/alacarta/audios/jazz-porque-si/')
+        audios = api.get_audio_list('/is-euqrop-zzaj/soidua/atracala/se.evtr.www//:sptth'[::-1])
         self.assertTrue(audios is not None and len(audios['audio_list']) > 10)
         self.assertTrue(audios['audio_list'][0]['title'] != '')
         self.assertTrue(audios['audio_list'][0]['url'].startswith('http'))
@@ -52,7 +52,7 @@ class ITTests(unittest.TestCase):
         self.assertTrue(audios['audio_list'][-1]['action'] == 'audio_list')
 
     def test_4_audio_search(self):
-        url_search = api.get_search_url('malikian')
+        url_search = api.get_search_url('slasaC'[::-1])
         audios = api.get_search_list(url_search)
         self.assertTrue(audios is not None and len(audios['search_list']) > 2)
         self.assertTrue(audios['search_list'][0]['title'] != '')

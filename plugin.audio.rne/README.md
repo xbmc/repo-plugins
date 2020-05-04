@@ -28,7 +28,7 @@ From the add-on settings menu, it can be configured to navigate through all the 
 To install it simply download the zip file, and then proceed as with any other plugin from KODI:
  System->Settings->Add-ons->Install from zip file.
 
-Any issues detected can be reported using this forum thread for official support: http://forum.xbmc.org/showthread.php?tid=224126
+Any issues detected can be reported using this forum thread for official support: https://forum.kodi.tv/showthread.php?tid=224126
 
 Enjoy it!
 

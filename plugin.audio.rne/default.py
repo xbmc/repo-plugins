@@ -46,7 +46,7 @@ debug_flag = settings.getSetting("debug") == "true"
 all_programmes_flag = settings.getSetting("all_programmes") == "1"
 
 p.set_debug_mode(debug_flag)
-api.set_debug(debug_flag)
+api.set_debug(debug_flag, p.log)
 
 p.log("rne %s flag is set" % {True : 'all_the_programmes', False : 'only_emission'}[all_programmes_flag])
 

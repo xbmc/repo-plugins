@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.rne" name="RNE Podcasts" version="1.0.12" provider-name="Jose Antonio Montes (jamontes)">
+<addon id="plugin.audio.rne" name="RNE Podcasts" version="1.0.13" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
         <import addon="xbmc.python" version="2.19.0"/>
     </requires>
@@ -17,9 +17,9 @@
 	<summary lang="fr">Ecoute tous les podcasts de RNE.</summary>
 	<description lang="fr">Cette add-on permet d'écouter tous les podcasts de les émissions des programmes de la Radio National Espagnole RNE présents sur sa page web.[CR]Depuis le menu de préférences du add-on, on peut choisir entre l´option de montrer tous les programmes ou seulement ceux en émission (valeur par défault).</description>
         <language>es</language>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <license>GPL-3.0-or-later</license>
         <forum>https://forum.kodi.tv/showthread.php?tid=224126</forum>
         <source>https://github.com/jamontes/plugin.audio.rne</source>
-        <website>http://www.rtve.es/alacarta/rne/</website>
+        <website>https://www.rtve.es/alacarta/rne/</website>
     </extension>
 </addon>

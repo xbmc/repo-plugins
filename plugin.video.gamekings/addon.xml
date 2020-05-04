@@ -2,7 +2,7 @@
 <addon 
     id="plugin.video.gamekings"
     name="GameKings"
-    version="1.2.16"
+    version="1.2.17"
     provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="2.26.0"/>
@@ -24,17 +24,12 @@
       <disclaimer lang="nl_NL">Bugs of andere feedback op deze plugin kan geplaatst worden in de Gamekings.tv thread op het Kodi forum.</disclaimer>
     <language>nl</language>
     <platform>all</platform>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <license>GPL-2.0-or-later</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=161375</forum>
     <website>https://www.gamekings.tv</website>
-    <email></email>
     <source>https://github.com/skipmodea1/plugin.video.gamekings</source>
-    <news>v1.2.16 (2019-09-15)
-    - added premium video category
-    - fixes due to website change (september 2019). Let's hope they keep working
-    - added maximum video quality setting for the new m3u8 videos
-    - fix for trailers
-    - removed http:// urls
+    <news>v1.2.17 (2020-05-02)
+    - added video on frontpage category
     </news>
     <assets>
       <icon>resources/icon.png</icon>

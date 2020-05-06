@@ -818,6 +818,7 @@ class Channel(chn_class.Channel):
         subtitle_urls = embedded_data["subtitles"]
         if subtitle_urls:
             subtitle_url = subtitle_urls[0]["link"]["href"]
-            part.Subtitle = SubtitleHelper.download_subtitle(subtitle_url)
+            sub_format = subtitle_urls[0].get("data", {}).get("format", "").lower()
+            part.Subtitle = SubtitleHelper.download_subtitle(subtitle_url, format=sub_format)
 
         return item

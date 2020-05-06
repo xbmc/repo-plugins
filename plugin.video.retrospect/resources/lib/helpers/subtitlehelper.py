@@ -431,6 +431,8 @@ class SubtitleHelper(object):
 
         """
 
+        Logger.debug("Converting subtitle from '%s' to 'srt' (%s)", sub_format, url)
+
         if sub_format.lower() == 'sami':
             srt = SubtitleHelper.__convert_sami_to_srt(raw)
         elif sub_format.lower() == 'srt':

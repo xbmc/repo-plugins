@@ -64,7 +64,8 @@ class Channel(chn_class.Channel):
             self.noImage = "kijkimage.png"
             self.mainListUri = self.__get_api_query_url(
                 "programs(programTypes:[SERIES],limit:1000)",
-                "{items{__typename,title,description,guid,updated,seriesTvSeasons{id},imageMedia{url,label}}}")
+                "{items{__typename,title,description,guid,updated,seriesTvSeasons{id},"
+                "imageMedia{url,label}}}")
 
             self._add_data_parser("#recentgraphql", preprocessor=self.add_graphql_recents,
                                   name="GraphQL Recent listing")
@@ -77,7 +78,7 @@ class Channel(chn_class.Channel):
             self._add_data_parser("https://graph.kijk.nl/graphql?query=query%7Bprograms%28guid",
                                   name="Main GraphQL season overview parser", json=True,
                                   parser=["data", "programs", "items", 0, "seriesTvSeasons"],
-                                  creator=self.create_api_typed_item)
+                                  creator=self.create_api_tvseason_type)
 
             self._add_data_parser("https://graph.kijk.nl/graphql?query=query%7BprogramsByDate",
                                   name="Main GraphQL programs per date parser", json=True,
@@ -89,9 +90,11 @@ class Channel(chn_class.Channel):
                                   parser=["data", "trendingPrograms"],
                                   creator=self.create_api_typed_item)
 
-            self._add_data_parser("https://graph.kijk.nl/graphql?operationName=programs",
-                                  name="GraphQL season video listing parsing", json=True,
-                                  parser=["data", "programs", "items"], creator=self.create_api_typed_item)
+            self._add_data_parsers(["https://graph.kijk.nl/graphql?operationName=programs",
+                                    "https://graph.kijk.nl/graphql?query=query%7Bprograms%28tvSeasonId"],
+                                   name="GraphQL season video listing parsing", json=True,
+                                   parser=["data", "programs", "items"],
+                                   creator=self.create_api_typed_item)
 
             self._add_data_parser("https://graph.kijk.nl/graphql?query=query%7Bsearch",
                                   name="GraphQL search", json=True,
@@ -141,6 +144,10 @@ class Channel(chn_class.Channel):
 
         #===============================================================================================================
         # non standard items
+        self.__video_fields = \
+            "{items{__typename,title,description,guid,updated,seriesTvSeasons{id}," \
+            "imageMedia{url,label},type,sources{type,drm,file},series{title}," \
+            "seasonNumber,tvSeasonEpisodeNumber,lastPubDate,duration,displayGenre}}"
         
         #===============================================================================================================
         # Test cases:
@@ -799,8 +806,7 @@ class Channel(chn_class.Channel):
         if use_adaptive_with_encryption:
             Logger.info("Using InputStreamAddon for playback of HLS stream")
             strm = part.append_media_stream(stream_url, 0)
-            strm.add_property("inputstreamaddon", "inputstream.adaptive")
-            strm.add_property("inputstream.adaptive.manifest_type", "hls")
+            M3u8.set_input_stream_addon_input(strm, proxy=self.proxy)
             item.complete = True
             return item
 
@@ -951,11 +957,9 @@ class Channel(chn_class.Channel):
         if len(seasons) == 1:
             # List the videos in that season
             season_id = seasons[0]["id"].rsplit("/", 1)[-1]
-            url = self.__get_api_persisted_url(
-                "programs",
-                "76458972ecff15df43ab75bd550d6a85ffd0e90fee2c267d14df087065ee37e2",
-                variables={"tvSeasonId": season_id, "programTypes": "EPISODE", "skip": 0,
-                           "limit": 100})
+            url = self.__get_api_query_url(
+                query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:100)'.format(season_id),
+                fields=self.__video_fields)
         else:
             # Fetch the season information
             url = self.__get_api_query_url(
@@ -992,11 +996,11 @@ class Channel(chn_class.Channel):
         title = "{} {:02d}".format(title, season_number)
 
         season_id = result_set["id"].rsplit("/", 1)[-1]
-        url = self.__get_api_persisted_url(
-            "programs",
-            "76458972ecff15df43ab75bd550d6a85ffd0e90fee2c267d14df087065ee37e2",
-            variables={"tvSeasonId": season_id, "programTypes": "EPISODE", "skip": 0,
-                       "limit": 100})
+        url = self.__get_api_query_url(
+            query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:100)'.format(season_id),
+            fields="{items{__typename,title,description,guid,updated,seriesTvSeasons{id},"
+                   "imageMedia{url,label},type,sources{type,drm,file},series{title},seasonNumber,"
+                   "tvSeasonEpisodeNumber,lastPubDate}}")
 
         item = MediaItem(title, url)
         return item

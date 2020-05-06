@@ -520,7 +520,7 @@ class MediaItem:
         elif not proxy.use_proxy_for_url(stream_url):
             Logger.debug("Not adding proxy due to filter mismatch")
         else:
-            if AddonSettings.is_min_version(17):
+            if AddonSettings.is_min_version(AddonSettings.KodiKrypton):
                 # See ffmpeg proxy in https://github.com/xbmc/xbmc/commit/60b21973060488febfdc562a415e11cb23eb9764
                 kodi_item.setProperty("proxy.host", proxy.Proxy)
                 kodi_item.setProperty("proxy.port", str(proxy.Port))
@@ -713,7 +713,8 @@ class MediaItem:
             name = "%s %s" % (LanguageHelper.get_localized_string(LanguageHelper.Page), name)
             Logger.debug("MediaItem.__get_title :: Adding Page Prefix")
 
-        elif self.__date != '' and not self.is_playable() and not AddonSettings.is_min_version(18):
+        elif self.__date != '' and not self.is_playable() \
+                and not AddonSettings.is_min_version(AddonSettings.KodiLeia):
             # not playable items should always show date
             name = "%s [COLOR=dimgray](%s)[/COLOR]" % (name, self.__date)
 
@@ -945,7 +946,7 @@ class MediaStream:
         these properties will be set to the Kodi PlaylistItem as properties.
 
         Example:    
-        strm.add_property("inputstreamaddon", "inputstream.adaptive")
+        strm.add_property("inputstream", "inputstream.adaptive")
         strm.add_property("inputstream.adaptive.manifest_type", "mpd")
 
         :param str name:    The name of the property.

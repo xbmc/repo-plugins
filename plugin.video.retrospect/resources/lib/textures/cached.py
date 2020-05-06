@@ -40,14 +40,15 @@ class Cached(TextureHandler):
 
         self.__textureQueue = {}
 
-    def get_texture_uri(self, channel, file_name):
-        """ Gets the full URI for the image file. Depending on the type of textures handling, it might also cache
-        the texture and return that path.
+    def _get_texture_uri(self, channel_path, file_name):
+        """ Gets the full URI for the image file. Depending on the type of textures handling,
+        it might also cache the texture and return that path.
 
-        @param file_name: the file name
-        @param channel:  the channel
+        :param str channel_path:    the path of the channel's to which the file belongs
+        :param str file_name:       the file name
 
-        @return: the texture path
+        :returns: the local url/path to the file
+        :rtype: str
 
         """
 
@@ -63,7 +64,7 @@ class Cached(TextureHandler):
             return file_name
 
         # Check if we already have the file
-        cdn_folder = self._get_cdn_sub_folder(channel)
+        cdn_folder = self._get_cdn_sub_folder(channel_path)
         texture_dir = os.path.join(self.__channelTexturePath, cdn_folder)
         if not os.path.isdir(texture_dir):
             os.makedirs(texture_dir)
@@ -73,7 +74,7 @@ class Cached(TextureHandler):
 
         if not os.path.isfile(texture_path):
             # Missing item. Fetch it
-            local_path = os.path.join(channel.path, file_name)
+            local_path = os.path.join(channel_path, file_name)
             # if False:
             if os.path.isfile(local_path):
                 self._logger.trace("Queueing texture '%s' for caching from '%s'", file_name, local_path)
@@ -98,15 +99,16 @@ class Cached(TextureHandler):
     def fetch_textures(self, dialog_call_back=None):
         """ Fetches all the needed textures
 
-        @param dialog_call_back:  Callback method with signature
-                                  Function(self, retrieved, total, perc, completed, status)
+        :param dialog_call_back:    Callback method with signature
+                                     Function(self, retrieved, total, perc, completed, status)
 
-        @return: the number of bytes fetched
+        :return: the number of bytes fetched
+        :rtype: int
 
         """
 
         if len(self.__textureQueue) == 0:
-            return
+            return 0
 
         self._logger.info("Fetching missing textures.")
 
@@ -123,7 +125,7 @@ class Cached(TextureHandler):
             textures_completed += 1
             file_name = os.path.split(texture_path)[-1]
 
-            if dialog_call_back(
+            if dialog_call_back and dialog_call_back(
                     textures_completed,
                     textures_total,
                     100 * textures_completed // textures_total,
@@ -134,23 +136,23 @@ class Cached(TextureHandler):
 
         return bytes_transferred
 
-    def purge_texture_cache(self, channel):
+    def _purge_texture_cache(self, channel_path):
         """ Removes those entries from the textures cache that are no longer required.
 
-        @param channel:  the channel
+        :param str channel_path:  the channel path
 
         """
 
-        self._logger.info("Purging Texture for: %s", channel.path)
+        self._logger.info("Purging Texture for: %s", channel_path)
 
         # read the md5 hashes
-        with io.open(os.path.join(channel.path, "..", "channelpack.json"), 'rt', encoding='utf-8') as fd:
+        with io.open(os.path.join(channel_path, "..", "channelpack.json"), 'rt', encoding='utf-8') as fd:
             lines = fd.read()
 
         textures = JsonHelper(lines).get_value("textures")
 
         # remove items not in the textures.md5
-        cdn_folder = self._get_cdn_sub_folder(channel)
+        cdn_folder = self._get_cdn_sub_folder(channel_path)
         texture_path = os.path.join(self.__channelTexturePath, cdn_folder)
         if not os.path.isdir(texture_path):
             self._logger.warning("Missing path '%s' to purge", texture_path)
@@ -177,7 +179,7 @@ class Cached(TextureHandler):
 
                     # and fetch the updated one if it was already used
                     if file_path in Cached.__retrievedTexturePaths:
-                        self.get_texture_uri(channel, image)
+                        self._get_texture_uri(channel_path, image)
             else:
                 self._logger.warning("Texture no longer required: %s", file_path)
                 os.remove(file_path)

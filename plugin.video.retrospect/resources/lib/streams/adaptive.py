@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
+from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 
 
@@ -92,8 +93,13 @@ class Adaptive(object):
 
         strm.Adaptive = True    # NOSONAR
 
+        # See https://forum.kodi.tv/showthread.php?tid=353560
+        if AddonSettings.is_min_version(AddonSettings.KodiMatrix):
+            strm.add_property("inputstream", addon)
+        else:
+            strm.add_property("inputstreamaddon", addon)
+
         # See https://github.com/peak3d/inputstream.adaptive/blob/master/inputstream.adaptive/addon.xml.in
-        strm.add_property("inputstreamaddon", addon)
         strm.add_property("inputstream.adaptive.manifest_type", manifest_type)
         if license_key:
             strm.add_property("inputstream.adaptive.license_key", license_key)

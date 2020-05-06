@@ -311,7 +311,7 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
         url_format = "https://{0}/content/videos?decorators=viewingHistory&" \
                      "include=images%2CprimaryChannel%2Cshow&" \
-                     "filter%5BvideoType%5D=EPISODE%2CLIVE%2CFOLLOW_UP&" \
+                     "filter%5BvideoType%5D=EPISODE%2CLIVE%2CFOLLOW_UP%2CSTANDALONE&" \
                      "filter%5Bshow.id%5D={{0}}&" \
                      "page%5Bsize%5D={1}&" \
                      "page%5Bnumber%5D=1&" \

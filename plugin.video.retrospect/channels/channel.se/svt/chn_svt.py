@@ -1030,11 +1030,26 @@ class Channel(chn_class.Channel):
         return self.update_video_api_item(item)
 
     def __set_expire_time(self, expire_date, item):
-        expire_date = expire_date.split("+")[0].replace("T", " ")
-        year = expire_date.split("-")[0]
-        if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
-            expire_date = DateHelper.get_datetime_from_string(expire_date, date_format="%Y-%m-%d %H:%M:%S")
-            item.set_expire_datetime(timestamp=expire_date)
+        """ Sets the expire time
+
+        :param str expire_date:
+        :param MediaItem item:
+
+        """
+
+        try:
+            if expire_date.endswith("z"):
+                valid_to = DateHelper.get_datetime_from_string(expire_date, "%Y-%m-%dT%H:%M:%SZ", "UTC")
+                valid_to = valid_to.astimezone(self.__timezone)
+                item.set_expire_datetime(timestamp=valid_to)
+            else:
+                expire_date = expire_date.split("+")[0].replace("T", " ")
+                year = expire_date.split("-")[0]
+                if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
+                    expire_date = DateHelper.get_datetime_from_string(expire_date, date_format="%Y-%m-%d %H:%M:%S")
+                    item.set_expire_datetime(timestamp=expire_date)
+        except:
+            Logger.warning("Error setting expire date from: %s", expire_date)
 
     def __get_thumb(self, thumb_data, width=1920):
         """ Generates a full thumbnail url based on the "id" and "changed" values in a thumbnail

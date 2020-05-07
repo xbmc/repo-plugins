@@ -2,7 +2,7 @@
 <addon 
     id="plugin.audio.ilovemusic"
     name="[COLOR white]I Love Music[/COLOR]"
-    version="2.0.2" 
+    version="2.0.2.1" 
     provider-name="adiko01">
     <requires>
 		<import addon="xbmc.python" version="2.26.0"/>
@@ -15,7 +15,7 @@
 		<summary lang="de_DE">[COLOR white]I Love Music[/COLOR]</summary>
 		<description lang="de_DE"> [COLOR white]I Love Music - Webstreams[/COLOR] \n https://www.ilovemusic.de </description>
 		<language>de</language>	
-		<source></source>
+		<source>https://github.com/adiko01/plugin.audio.ilovemusic</source>
 		<email></email>
 	<assets>
         <icon>resources/icon.png</icon>

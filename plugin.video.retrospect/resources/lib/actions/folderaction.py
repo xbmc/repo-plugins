@@ -53,6 +53,7 @@ class FolderAction(AddonAction):
                 media_items = self.__channel.process_folder_list(selected_item)
                 watcher.lap("Class process_folder_list finished")
             else:
+                parent_guid = "{}.fav".format(parent_guid)
                 watcher = StopWatch("Plugin process_folder_list With Items", Logger.instance())
                 media_items = self.__favorites
 

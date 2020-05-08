@@ -9,12 +9,15 @@ class Local(TextureHandler):
     def __init__(self, logger):
         TextureHandler.__init__(self, logger)
 
-    def get_texture_uri(self, channel, file_name):
-        """ Gets the full URI for the image file. Depending on the type of textures handling, it might also cache
-        the texture and return that path.
+    def _get_texture_uri(self, channel_path, file_name):
+        """ Gets the full URI for the image file. Depending on the type of textures handling,
+        it might also cache the texture and return that path.
 
-        @param file_name: the file name
-        @param channel:  the channel
+        :param str channel_path:    the path of the channel's to which the file belongs
+        :param str file_name:       the file name
+
+        :returns: the local url/path to the file
+        :rtype: str
 
         """
 
@@ -28,7 +31,7 @@ class Local(TextureHandler):
         if os.path.isabs(file_name):
             return_value = file_name
         else:
-            return_value = os.path.join(channel.path, file_name)
+            return_value = os.path.join(channel_path, file_name)
 
         self._logger.trace("Resolved texture '%s' to '%s'", file_name, return_value)
         return return_value
@@ -47,3 +50,11 @@ class Local(TextureHandler):
             return True
 
         return not uri.startswith("http://") and not uri.startswith("https://")
+
+    def _purge_texture_cache(self, channel_path):
+        """ Removes those entries from the textures cache that are no longer required.
+
+        :param str channel_path:  the channel path
+
+        """
+        pass

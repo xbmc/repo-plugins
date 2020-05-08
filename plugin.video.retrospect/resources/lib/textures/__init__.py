@@ -77,16 +77,31 @@ class TextureHandler:
         return TextureHandler.__TextureHandler
 
     def get_texture_uri(self, channel, file_name):
-        """ Gets the full URI for the image file. Depending on the type of textures handling, it might also cache
-        the texture and return that path.
+        """ Gets the full URI for the image file. Depending on the type of textures handling,
+        it might also cache the texture and return that path.
 
-        @param file_name: the file name
-        @param channel:  the channel
+        :param ChannelInfo|Channel channel:     the channel to which the file belongs.
+        :param str file_name:                   the file name
+
+        :return: The full URI to the local resource of the file.
+        :rtype: str
 
         """
 
-        # Should be implemented
-        pass
+        return self._get_texture_uri(channel.path, file_name)
+
+    def _get_texture_uri(self, channel_path, file_name):
+        """ Gets the full URI for the image file. Depending on the type of textures handling,
+        it might also cache the texture and return that path.
+
+        :param str channel_path:    the path of the channel's to which the file belongs
+        :param str file_name:       the file name
+
+        :returns: the local url/path to the file
+        :rtype: str
+
+        """
+        raise NotImplementedError
 
     def number_of_missing_textures(self):
         """ Indication whether or not textures need to be retrieved.
@@ -113,12 +128,20 @@ class TextureHandler:
     def purge_texture_cache(self, channel):
         """ Removes those entries from the textures cache that are no longer required.
 
-        @param channel:  the channel
+        :param ChannelInfo|Channel channel:     the channel to which the file belongs.
 
         """
 
-        # Should be implemented
-        pass
+        return self._purge_texture_cache(channel.path)
+
+    def _purge_texture_cache(self, channel_path):
+        """ Removes those entries from the textures cache that are no longer required.
+
+        :param str channel_path:  the channel path
+
+        """
+
+        raise NotImplementedError
 
     def is_texture_or_empty(self, uri):
         """ Returns whether the uri points to a local resource or remote
@@ -132,23 +155,26 @@ class TextureHandler:
 
         raise NotImplementedError
 
-    def _get_cdn_sub_folder(self, channel):
+    def _get_cdn_sub_folder(self, channel_path):
         """ Determines the CDN folder, e.g.: channel.be.canvas
 
-        @param channel: the channel to determine the CDN folder for.
+        :param str channel_path:    the path of the channel's to which the file belongs
+
+        :return: The texture folder in the texture storage.
+        :rtype: str
 
         Remark: we cache some stuff for performance improvements
 
         """
 
-        if channel.path in self.__cdnPaths:
-            return self.__cdnPaths[channel.path]
+        if channel_path in self.__cdnPaths:
+            return self.__cdnPaths[channel_path]
 
-        parts = channel.path.rsplit(os.sep, 2)[-2:]
+        parts = channel_path.rsplit(os.sep, 2)[-2:]
         cdn = ".".join(parts)
         if cdn.startswith(Config.addonId):
             cdn = cdn[len(Config.addonId) + 1:]
-        self.__cdnPaths[channel.path] = cdn
+        self.__cdnPaths[channel_path] = cdn
         return cdn
 
     def _purge_kodi_cache(self, channel_texture_path):

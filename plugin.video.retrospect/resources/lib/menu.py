@@ -111,7 +111,7 @@ class Menu(ActionParser):
         """ Shows the country settings page where channels can be shown/hidden based on the
         country of origin. """
 
-        if AddonSettings.is_min_version(18):
+        if AddonSettings.is_min_version(AddonSettings.KodiLeia):
             AddonSettings.show_settings(-99)
         else:
             AddonSettings.show_settings(101)

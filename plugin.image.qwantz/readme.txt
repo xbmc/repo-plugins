@@ -1,0 +1,1 @@
+This is a Dinosaur Comics add-on for Kodi. It lets you view comics from the site qwantz.com

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.filmy"
+version="0.1.0"
+name="Filmy"
+provider-name="Filmy">
+<requires>
+  <import addon="xbmc.python" version="2.25.0"/>
+  <import addon="script.module.requests" version="1.1.0"/>
+</requires>
+<extension point="xbmc.python.pluginsource" library="main.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="de">Das einzigartiges Fernsehenapp für Kinder, jetzt auf Kodi.</summary>
+  <description lang="de">Filmy ist das einzigartiges (und kostenloses) Fernseh-App für Kinder. Filmy ist sicher und einfach zu benutzen. Man kann auch mit Filmy Live-Sendungen pausieren.</description>
+  <summary lang="en">The new and different live TV app for kids in Germany, now available for Kodi.</summary>
+  <description lang="en">Filmy is the unique, free, and legal live TV app for kids. It's safe, and provides several useful features.</summary>
+  <assets>
+    <icon>Filmy.png</icon>
+  </assets>
+</extension>
+</addon>

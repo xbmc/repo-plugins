@@ -42,7 +42,7 @@ class myAddon(t1mAddon):
       for b in x:
           if b.startswith("Video:"):
             b = a["props"]["pageProps"]["__APOLLO_STATE__"][b]
-            if b.get('auth',False) == False:
+            if b.get('auth',True) == False:
               infoList = {}
               name = b['title']
               thumb = b.get('poster')

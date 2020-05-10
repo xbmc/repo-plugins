@@ -15,8 +15,11 @@ provider-name="Filmy">
   <description lang="de_DE">Filmy ist das einzigartiges (und kostenloses) Fernseh-App für Kinder. Filmy ist sicher und einfach zu benutzen. Man kann auch mit Filmy Live-Sendungen pausieren.</description>
   <summary lang="en_GB">The new and different live TV app for kids in Germany, now available for Kodi.</summary>
   <description lang="en_GB">Filmy is the unique, free, and legal live TV app for kids. It's safe, and provides several useful features.</description>
+  <language>de</language>
+  <license>MIT</license>
   <assets>
     <icon>Filmy.png</icon>
   </assets>
+  <source>https://github.com/filmyapp/plugin.video.filmy</source>
 </extension>
 </addon>

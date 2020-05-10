@@ -11,10 +11,10 @@ provider-name="Filmy">
   <provides>video</provides>
 </extension>
 <extension point="xbmc.addon.metadata">
-  <summary lang="de">Das einzigartiges Fernsehenapp für Kinder, jetzt auf Kodi.</summary>
-  <description lang="de">Filmy ist das einzigartiges (und kostenloses) Fernseh-App für Kinder. Filmy ist sicher und einfach zu benutzen. Man kann auch mit Filmy Live-Sendungen pausieren.</description>
-  <summary lang="en">The new and different live TV app for kids in Germany, now available for Kodi.</summary>
-  <description lang="en">Filmy is the unique, free, and legal live TV app for kids. It's safe, and provides several useful features.</description>
+  <summary lang="de_DE">Das einzigartiges Fernsehenapp für Kinder, jetzt auf Kodi.</summary>
+  <description lang="de_DE">Filmy ist das einzigartiges (und kostenloses) Fernseh-App für Kinder. Filmy ist sicher und einfach zu benutzen. Man kann auch mit Filmy Live-Sendungen pausieren.</description>
+  <summary lang="en_GB">The new and different live TV app for kids in Germany, now available for Kodi.</summary>
+  <description lang="en_GB">Filmy is the unique, free, and legal live TV app for kids. It's safe, and provides several useful features.</description>
   <assets>
     <icon>Filmy.png</icon>
   </assets>

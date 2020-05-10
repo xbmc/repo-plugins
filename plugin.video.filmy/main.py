@@ -3,11 +3,12 @@ import xbmcgui
 import xbmcplugin
 import requests
 from urlparse import parse_qsl
+import json
 
 __url__ = sys.argv[0]
 __handle__ = int(sys.argv[1])
 
-channels = eval(requests.get(url='https://filmy.ml/app/channels.js').text.split("var channels = ")[1].split(";")[0].replace('title', '"title"').replace('description', '"description"').replace('previewImage', '"previewImage"').replace('liveStream', '"liveStream"'))
+channels = json.loads(requests.get(url='https://filmy.ml/app/channels.js').text.split("var channels = ")[1].split(";")[0].replace('title', '"title"').replace('description', '"description"').replace('previewImage', '"previewImage"').replace('liveStream', '"liveStream"'))
 
 def list_videos():
     listing = []

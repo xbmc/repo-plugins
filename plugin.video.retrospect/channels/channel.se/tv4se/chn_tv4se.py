@@ -5,6 +5,7 @@ import math
 import datetime
 
 from resources.lib import chn_class
+from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -84,8 +85,7 @@ class Channel(chn_class.Channel):
 
         #===============================================================================================================
         # non standard items
-        self.maxPageSize = 25  # The Android app uses a page size of 20
-        self.__expires_text = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
+        self.maxPageSize = 100  # The Android app uses a page size of 20
 
         #===============================================================================================================
         # Test cases:
@@ -240,7 +240,6 @@ class Channel(chn_class.Channel):
             return None
 
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.thumb = result_set.get("program_image", self.noImage)
         item.fanart = result_set.get("program_image", self.fanart)
         item.isPaid = result_set.get("is_premium", False)
@@ -334,7 +333,6 @@ class Channel(chn_class.Channel):
             item = MediaItem(title, url)
             item.dontGroup = True
             item.complete = True
-            item.thumb = self.noImage
             item.HttpHeaders = self.httpHeaders
             item.isLive = is_live
 
@@ -413,9 +411,6 @@ class Channel(chn_class.Channel):
                   "type=clip&page=1&node_nids=%s&start=0" % (self.maxPageSize, cat_id,)
             clips_title = LanguageHelper.get_localized_string(LanguageHelper.Clips)
             clips = MediaItem(clips_title, url)
-            clips.icon = self.icon
-            clips.thumb = self.parentItem.thumb
-            clips.fanart = self.parentItem.fanart
             clips.complete = True
             items.append(clips)
 
@@ -426,10 +421,6 @@ class Channel(chn_class.Channel):
             # create a group item
             more_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
             more = MediaItem(more_title, "")
-            more.icon = self.icon
-            more.thumb = self.noImage
-            more.thumb = self.parentItem.thumb
-            more.fanart = self.parentItem.fanart
             more.complete = True
             items.append(more)
 
@@ -447,10 +438,6 @@ class Channel(chn_class.Channel):
                 url = current_url.replace("%s1" % (needle, ), "%s%s" % (needle, current_page))
                 Logger.debug("Adding next page: %s\n%s", current_page, url)
                 page = MediaItem(str(current_page), url)
-                page.icon = self.icon
-                page.thumb = self.noImage
-                page.thumb = self.parentItem.thumb
-                page.fanart = self.parentItem.fanart
                 page.type = "page"
                 page.complete = True
 
@@ -497,13 +484,16 @@ class Channel(chn_class.Channel):
         episode = result_set.get("episode", 0)
         is_episodic = 0 < season < 1900 and not episode == 0
         if is_episodic:
-            name, episode_text = result_set["title"].split(" del ", 1)
-            episode_text = episode_text.lstrip("0123456789")
+            episode_text = None
+            if " del " in name:
+                name, episode_text = name.split(" del ", 1)
+                episode_text = episode_text.lstrip("0123456789")
+
             if episode_text:
                 episode_text = episode_text.lstrip(" -")
                 name = "{} - s{:02d}e{:02d} - {}".format(name, season, episode, episode_text)
             else:
-                name = "{} - s{:02d}e{:02d}".format(name, season, episode, episode_text)
+                name = "{} - s{:02d}e{:02d}".format(name, season, episode)
 
         item = MediaItem(name, url)
         item.description = result_set["description"]
@@ -557,7 +547,6 @@ class Channel(chn_class.Channel):
 
         item.type = "video"
         item.complete = False
-        item.icon = self.icon
         item.isGeoLocked = result_set["is_geo_restricted"]
         item.isDrmProtected = result_set["is_drm_protected"]
         item.isLive = result_set.get("is_live", False)
@@ -591,7 +580,6 @@ class Channel(chn_class.Channel):
               "&fl=nid,name,program_image,category,logo,is_premium" \
               "&per_page=1000&is_active=true&start=0" % (cat, )
         item = MediaItem(result_set['name'], url)
-        item.thumb = self.noImage
         item.type = 'folder'
         item.complete = True
         return item
@@ -714,11 +702,18 @@ class Channel(chn_class.Channel):
         return item
 
     def __set_expire_time(self, expire_date, item):
-        expire_date = expire_date.split("+")[0].replace("T", " ")
-        year = expire_date.split("-")[0]
+        """ Parses and sets the correct expire date.
+
+        :param str expire_date:  The expire date value
+        :param MediaItem item:   The item to update
+
+        """
+
+        expire_date = expire_date.split("+")[0]  # .replace("T", " ")
+        year = expire_date.split("-", 1)[0]
         if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
-            item.description = \
-                "{}\n\n{}: {}".format(item.description or "", self.__expires_text, expire_date)
+            expire_date = DateHelper.get_datetime_from_string(expire_date)
+            item.set_expire_datetime(timestamp=expire_date)
 
     def __update_dash_video(self, item, stream_info):
         """

@@ -35,7 +35,7 @@ class Main(object):
 
         # Get plugin settings
         self.PREFERRED_QUALITY = SETTINGS.getSetting('quality')
-        self.IS_SPONSOR = SETTINGS.getSetting('is_sponsor')
+        self.IS_FIRST_MEMBER = SETTINGS.getSetting('is_first_member')
         self.USE_ADAPTIVE_STREAM = SETTINGS.getSetting('use_adaptive_inputstream')
 
         # log("ARGV", repr(sys.argv))
@@ -45,7 +45,7 @@ class Main(object):
         self.technical_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['technical_url'][0]
         self.title = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['title'][0]
         self.title = convertToUnicodeString(self.title)
-        self.is_sponsor_only = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['is_sponsor_only'][0]
+        self.is_first_member_only = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['is_first_member_only'][0]
 
         log("self.functional_url", self.functional_url)
 
@@ -73,8 +73,8 @@ class Main(object):
         #
         title = xbmc.getInfoLabel("listitem.Title")
         # thumbnail_url = xbmc.getInfoImage("list_item.Thumb")
-        studio = xbmc.getInfoLabel("list_item.Studio")
-        mediatype = xbmc.getInfoLabel("list_item.Mediatype")
+        # studio = xbmc.getInfoLabel("list_item.Studio")
+        # mediatype = xbmc.getInfoLabel("list_item.Mediatype")
         # plot = xbmc.getInfoLabel("list_item.Plot")
         # genre = xbmc.getInfoLabel("list_item.Genre")
 
@@ -83,11 +83,11 @@ class Main(object):
             # requests is sooooo nice, respect!
             session = requests.Session()
 
-            if self.is_sponsor_only == "True":
-                must_login_sponsored_user = True
+            if self.is_first_member_only == "True":
+                must_login_first_member_user = True
                 video_is_not_yet_available = False
             else:
-                # try and get the non-sponsored video without being logged in
+                # try and get the non-first_member video without being logged in
                 # get the page that contains the video
                 response = session.get(self.url, headers=HEADERS)
 
@@ -96,28 +96,28 @@ class Main(object):
 
                 # log("html_source without authorization", html_source)
 
-                # sometimes a non-sponsor video is not available. However this video will (!) be available for a sponsor
-                # after logging in. One of the perks of being a sponsor, i reckon. This is what you get back in that
+                # sometimes a non-first_member video is not available. However this video will (!) be available for a first_member
+                # after logging in. One of the perks of being a first_member, i reckon. This is what you get back in that
                 # case: {"access":false,"message":"not yet available"}
                 if html_source.find("not yet available") >= 0:
-                    # let's try and get this non-sponsored video after login in the sponsored user then
-                    must_login_sponsored_user = True
+                    # let's try and get this non-first_member video after login in the first_member user then
+                    must_login_first_member_user = True
                     video_is_not_yet_available = True
                 else:
-                    must_login_sponsored_user = False
+                    must_login_first_member_user = False
                     video_is_not_yet_available = False
 
-            #log("must_login_sponsored_user", must_login_sponsored_user)
+            log("must_login_first_member_user", must_login_first_member_user)
 
             # login if needed
-            if must_login_sponsored_user:
-                # is the sponsor switch in the settings of this addon turned on?
-                if self.IS_SPONSOR == 'true':
-                    # is it a sponsored video or not?
-                    if self.is_sponsor_only == "True":
-                        log("logging in with user for this sponsored video", self.url)
+            if must_login_first_member_user:
+                # is the first_member switch in the settings of this addon turned on?
+                if self.IS_FIRST_MEMBER == 'true':
+                    # is it a first_member video or not?
+                    if self.is_first_member_only == "True":
+                        log("logging in with user for this first member video", self.url)
                     else:
-                        log("logging in with user for this non-sponsored video", self.url)
+                        log("logging in with user for this non-first member video", self.url)
 
                     # let's try and get authorization
                     try:
@@ -155,7 +155,7 @@ class Main(object):
                                 end_pos_access_token = html_source.find('"', start_pos_access_token_url)
                                 access_token = html_source[start_pos_access_token_url:end_pos_access_token]
 
-                                # log("access_token", access_token)
+                                log("access_token", access_token)
 
                                 # let's make a new header dictionary
                                 headers_with_access_token = HEADERS
@@ -174,6 +174,18 @@ class Main(object):
 
                                 # log("html_source with authorization", html_source)
 
+                                # Some videos are not available yet to non-First members
+                                # {"access":false,"message":"not yet available"}
+                                if html_source.find('not yet available') >= 0:
+                                   xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30120))
+                                   exit(1)
+
+                                # Some videos are only available to First members (which for some reason is still called sponsor in the backend)
+                                # {"access":false,"message":"This content is sponsor only. No access."}
+                                if html_source.find('This content is') >= 0:
+                                    if html_source.find('only') >= 0:
+                                        xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30130))
+                                        exit(1)
                             else:
 
                                 log('login was NOT successful!', 'login was NOT successful!')
@@ -192,7 +204,10 @@ class Main(object):
                                 del dialog_wait
                             except:
                                 pass
-                            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30104) % (convertToUnicodeString(response.status_code)))
+                            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30104), LANGUAGE(30111))
+
+                            log('login was NOT successful!!, response.status_code: ', response.status_code)
+
                             exit(1)
 
                     except urllib.error.HTTPError as error:
@@ -422,7 +437,7 @@ class Main(object):
                 # let's convert the line to prevent python 2/3 troubles
                 line = convertToUnicodeString(line)
 
-                log("line", line)
+                # log("line", line)
 
                 if line.find(quality) >= 0:
                     video_url_part2 = line

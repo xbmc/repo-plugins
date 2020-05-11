@@ -48,7 +48,7 @@ class Logger:
     @staticmethod
     def create_logger(log_file_name, application_name, min_log_level=10,
                       append=False, dual_logger=None):
-        """ Intialises the Logger instance and opens it for writing
+        """ Initialises the Logger instance and opens it for writing
 
         :param str|None log_file_name:      Path of the log file to write to.
         :param str application_name:        The name of the current application.
@@ -73,7 +73,7 @@ class Logger:
 
     def __init__(self, log_file_name, application_name, min_log_level=10,
                  append=False, dual_logger=None):
-        """ Intialises the Logger instance and opens it for writing.
+        """ Initialises the Logger instance and opens it for writing.
 
         :param str|None log_file_name:      Path of the log file to write to.
         :param str application_name:        The name of the current application.
@@ -134,6 +134,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_TRACE, *args, **kwargs)
         return
 
@@ -150,6 +151,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_DEBUG, *args, **kwargs)
         return
 
@@ -166,6 +168,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_INFO, *args, **kwargs)
         return
 
@@ -182,6 +185,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_ERROR, *args, **kwargs)
         return
 
@@ -198,6 +202,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_WARNING, *args, **kwargs)
         return
 
@@ -214,6 +219,7 @@ class Logger:
 
         """
 
+        # noinspection PyArgumentList
         Logger.__logger.__write(msg, level=Logger.LVL_CRITICAL, *args, **kwargs)
         return
 
@@ -319,6 +325,7 @@ class Logger:
             timestamp = datetime.datetime.today().strftime(self.timeFormat)
 
             # check for exception info, if present, add to end of string:
+            # noinspection PyArgumentList
             msg = self.__process_exc_info(msg, **kwargs)
 
             # now split lines and write everyline into the logfile:

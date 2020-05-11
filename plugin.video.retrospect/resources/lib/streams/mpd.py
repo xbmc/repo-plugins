@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 from resources.lib.streams.adaptive import Adaptive
+from resources.lib.mediaitem import MediaStream
 
 
 class Mpd(object):
@@ -14,8 +15,7 @@ class Mpd(object):
                                      persist_storage=False,
                                      service_certificate=None,
                                      manifest_update=None):
-        """ Parsers standard M3U8 lists and returns a list of tuples with streams and bitrates that
-        can be used by other methods.
+        """ Updates an existing stream with parameters for the inputstream adaptive add-on.
 
         :param strm:                    (MediaStream) the MediaStream to update
         :param proxy:                   (Proxy) The proxy to use for opening
@@ -25,6 +25,9 @@ class Mpd(object):
         :param int max_bit_rate:        The maximum bitrate to use (optional)
         :param bool persist_storage:    Should we store certificates? And request server certificates?
         :param str service_certificate: Use the specified server certificate
+
+        :returns: The updated stream
+        :rtype: MediaStream
 
         Can be used like this:
 
@@ -45,7 +48,7 @@ class Mpd(object):
 
             is_helper = inputstreamhelper.Helper('mpd', drm=license_type)
             if is_helper.check_inputstream():
-                Logger.info("Widevine library was already installed or installed succesfully.")
+                Logger.info("Widevine library was already installed or installed successfully.")
             else:
                 Logger.error("Widevine was not installed or failed to install.")
 
@@ -75,11 +78,11 @@ class Mpd(object):
         :param str key_url:                 The URL where the license key can be obtained.
         :param str|None key_type:           The key type (A, R, B or D).
         :param dict[str,str] key_headers:   A dictionary that contains the HTTP headers to pass.
-        :param str key_value:               The value that is beging passed on as the key value.
+        :param str key_value:               The value that is being passed on as the key value.
         :param str json_filter:             If specified selects that json element to extract the
                                             key response.
 
-        :return: A formated license string that can be passed to the adaptive input add-on.
+        :return: A formatted license string that can be passed to the adaptive input add-on.
         :rtype: str
 
         """

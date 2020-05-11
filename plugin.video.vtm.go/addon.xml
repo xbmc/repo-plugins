@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.vtm.go" name="VTM GO" version="1.0.2" provider-name="Michaël Arnauts">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.dateutil" version="2.6.0"/>
+        <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.inputstreamhelper" version="0.3.4"/>
+        <import addon="inputstream.adaptive" version="2.4.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Access the VTM GO library</summary>
+        <description lang="en_GB">This add-on gives access to all live tv channels and all video-on-demand content available on the VTM GO platform.</description>
+        <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by DPG Media and is provided 'as is' without any warranty of any kind. The VTM GO name, VTM GO logo and channel icons are property of DPG Media and are used according to the fair use policy.</disclaimer>
+        <summary lang="nl_NL">Bekijk VTM GO</summary>
+        <description lang="nl_NL">Deze add-on geeft toegang tot alle live TV kanalen en alle video-on-demand content dat beschikbaar is op het VTM GO platform.</description>
+        <disclaimer lang="nl_NL">Deze add-on wordt niet ondersteund door DPG Media en wordt aangeboden 'as is', zonder enige garantie. De VTM GO naam, VTM GO logo en de kanaallogo's zijn eigendom van DPG Media en worden gebruikt in overeenstemming met de fair use policy.</disclaimer>
+        <platform>all</platform>
+        <license>GPL-3.0</license>
+        <news>v1.0.2
+- Fixes authentication errors</news>
+        <source>https://github.com/add-ons/plugin.video.vtm.go</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.png</fanart>
+            <screenshot>resources/screenshot01.jpg</screenshot>
+            <screenshot>resources/screenshot02.jpg</screenshot>
+            <screenshot>resources/screenshot03.jpg</screenshot>
+        </assets>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+    </extension>
+</addon>

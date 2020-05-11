@@ -88,18 +88,14 @@ class Channel(chn_class.Channel):
 
         search_item = MediaItem("\a.: S&ouml;k :.", "searchSite")
         search_item.complete = True
-        search_item.thumb = self.noImage
         search_item.dontGroup = True
-        search_item.fanart = self.fanart
         # search_item.set_date(2099, 1, 1, text="")
         # -> No items have dates, so adding this will force a date sort in Retrospect
         items.append(search_item)
 
         genres_item = MediaItem("\a.: Genrer :.", "")
         genres_item.complete = True
-        genres_item.thumb = self.noImage
         genres_item.dontGroup = True
-        genres_item.fanart = self.fanart
         items.append(genres_item)
 
         # find the actual genres
@@ -112,8 +108,6 @@ class Channel(chn_class.Channel):
                 continue
             genre_item = MediaItem(genre["title"], self.mainListUri)
             genre_item.complete = True
-            genre_item.thumb = self.noImage
-            genre_item.fanart = self.fanart
             genre_item.metaData = {"genre": genre["genre"]}
             genres_item.items.append(genre_item)
 
@@ -190,8 +184,6 @@ class Channel(chn_class.Channel):
         url = "%s?sida=1&amp;sort=tid_stigande&embed=true" % (url, )
 
         item = MediaItem(result_set[2], url)
-        item.icon = self.icon
-        item.thumb = self.noImage
         item.complete = True
         item.isGeoLocked = True
         return item
@@ -234,7 +226,6 @@ class Channel(chn_class.Channel):
         url = "http://www.oppetarkiv.se/video/%s?output=json" % (video_id,)
         item = MediaItem(name, url)
         item.type = 'video'
-        item.icon = self.icon
         item.thumb = thumb_url
 
         date = result_set[5]

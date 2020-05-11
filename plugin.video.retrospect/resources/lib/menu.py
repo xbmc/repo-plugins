@@ -23,20 +23,23 @@ Logger.create_logger(os.path.join(Config.profileDir, Config.logFileNameAddon),
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.addonsettings import AddonSettings, LOCAL
 from resources.lib.favourites import Favourites
-from resources.lib.paramparser import ParameterParser
+from resources.lib.actions.actionparser import ActionParser
 from resources.lib.helpers.channelimporter import ChannelIndex
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.locker import LockWithDialog
 from resources.lib.cloaker import Cloaker
 from resources.lib.xbmcwrapper import XbmcWrapper
+from resources.lib.actions import keyword
+from resources.lib.actions import action
+
 Logger.instance().minLogLevel = AddonSettings.get_log_level()
 
 
-class Menu(ParameterParser):
+class Menu(ActionParser):
 
-    def __init__(self, action):
+    def __init__(self, menu_action):
         Logger.info("**** Starting menu '%s' for %s add-on version %s ****",
-                    action, Config.appName, Config.version)
+                    menu_action, Config.appName, Config.version)
 
         # noinspection PyUnresolvedReferences
         self.kodiItem = sys.listitem
@@ -50,23 +53,16 @@ class Menu(ParameterParser):
         params = "?{0}".format(params)
 
         # Main constructor parses
-        super(Menu, self).__init__(name, params)
+        super(Menu, self).__init__(name, -1, params)
 
         self.channelObject = self.__get_channel()
-        Logger.debug("Plugin Params: %s (%s)\n"
-                     "Name:        %s\n"
-                     "Query:       %s", self.params, len(self.params), self.pluginName, params)
-
-        if self.keywordPickle in self.params:
-            self.mediaItem = self._pickler.de_pickle_media_item(self.params[self.keywordPickle])
-        else:
-            self.mediaItem = None
+        Logger.debug(self)
 
     def hide_channel(self):
         """ Hides a specific channel """
 
         Logger.info("Hiding channel: %s", self.channelObject)
-        AddonSettings.set_channel_visiblity(self.channelObject, False)
+        AddonSettings.set_channel_visibility(self.channelObject, False)
         self.refresh()
 
     def select_channels(self):
@@ -102,11 +98,11 @@ class Menu(ParameterParser):
         indices_to_add = [i for i in selected_channels if i not in selected_indices]
         for i in indices_to_remove:
             Logger.info("Hiding channel: %s", channels_to_show[i])
-            AddonSettings.set_channel_visiblity(channels_to_show[i], False)
+            AddonSettings.set_channel_visibility(channels_to_show[i], False)
 
         for i in indices_to_add:
             Logger.info("Showing channel: %s", channels_to_show[i])
-            AddonSettings.set_channel_visiblity(channels_to_show[i], True)
+            AddonSettings.set_channel_visibility(channels_to_show[i], True)
 
         self.refresh()
         return
@@ -115,7 +111,7 @@ class Menu(ParameterParser):
         """ Shows the country settings page where channels can be shown/hidden based on the
         country of origin. """
 
-        if AddonSettings.is_min_version(18):
+        if AddonSettings.is_min_version(AddonSettings.KodiLeia):
             AddonSettings.show_settings(-99)
         else:
             AddonSettings.show_settings(101)
@@ -143,33 +139,34 @@ class Menu(ParameterParser):
         """
 
         # it's just the channel, so only add the favourites
-        cmd_url = self._create_action_url(
+        cmd_url = self.create_action_url(
             None if all_favorites else self.channelObject,
-            action=self.actionAllFavourites if all_favorites else self.actionFavourites
+            action=action.ALL_FAVOURITES if all_favorites else action.CHANNEL_FAVOURITES
         )
 
-        xbmc.executebuiltin("XBMC.Container.Update({0})".format(cmd_url))
+        xbmc.executebuiltin("Container.Update({0})".format(cmd_url))
 
     @LockWithDialog(logger=Logger.instance())
     def add_favourite(self):
         """ Adds the selected item to the favourites. The opens the favourite list. """
 
         # remove the item
-        item = self._pickler.de_pickle_media_item(self.params[self.keywordPickle])
+        item = self.media_item
+
         # no need for dates in the favourites
         # item.clear_date()
         Logger.debug("Adding favourite: %s", item)
 
         f = Favourites(Config.favouriteDir)
         if item.is_playable():
-            action = self.actionPlayVideo
+            action_value = action.PLAY_VIDEO
         else:
-            action = self.actionListFolder
+            action_value = action.LIST_FOLDER
 
         # add the favourite
         f.add(self.channelObject,
               item,
-              self._create_action_url(self.channelObject, action, item))
+              self.create_action_url(self.channelObject, action_value, item))
 
         # we are finished, so just open the Favorites
         self.favourites()
@@ -179,7 +176,7 @@ class Menu(ParameterParser):
         """ Remove the selected favourite and then refresh the favourite list. """
 
         # remove the item
-        item = self._pickler.de_pickle_media_item(self.params[self.keywordPickle])
+        item = self.media_item
         Logger.debug("Removing favourite: %s", item)
         f = Favourites(Config.favouriteDir)
         f.remove(item)
@@ -189,12 +186,12 @@ class Menu(ParameterParser):
 
     def refresh(self):
         """ Refreshes the current Kodi list """
-        xbmc.executebuiltin("XBMC.Container.Refresh()")
+        xbmc.executebuiltin("Container.Refresh()")
 
     def toggle_cloak(self):
         """ Toggles the cloaking (showing/hiding) of the selected folder. """
 
-        item = self._pickler.de_pickle_media_item(self.params[self.keywordPickle])
+        item = self.media_item
         Logger.info("Cloaking current item: %s", item)
         c = Cloaker(self.channelObject, AddonSettings.store(LOCAL), logger=Logger.instance())
 
@@ -276,13 +273,13 @@ class Menu(ParameterParser):
         AddonSettings.set_adaptive_mode(self.channelObject, selected_value)
 
         # Refresh if we have a video item selected, so the cached urls are removed.
-        if self.keywordPickle in self.params:
+        if keyword.PICKLE in self.params:
             Logger.debug("Refreshing list to clear URL caches")
             self.refresh()
 
     def __get_channel(self):
-        chn = self.params.get(self.keywordChannel, None)
-        code = self.params.get(self.keywordChannelCode, None)
+        chn = self.params.get(keyword.CHANNEL, None)
+        code = self.params.get(keyword.CHANNEL_CODE, None)
         if not chn:
             return None
 
@@ -296,7 +293,7 @@ class Menu(ParameterParser):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_val:
-            Logger.critical("Error in menu handling: %s", exc_val.message, exc_info=True)
+            Logger.critical("Error in menu handling: %s", str(exc_val), exc_info=True)
 
         # make sure we leave no references behind
         AddonSettings.clear_cached_addon_settings_object()

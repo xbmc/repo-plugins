@@ -161,6 +161,14 @@ class AddonSettings:  # pylint: disable=too-many-public-methods
             'widgets': self._get_setting('show_widget_menu'),
         }
 
+    def episode_sort_method(self):
+        method = self._get_setting('ep_sort_method')
+        if method == '0':
+            return 'kodi'
+        if method == '1':
+            return 'plex'
+        raise Exception('Unknown sort method')
+
     def device_name(self):
         return self._get_setting('devicename')
 

@@ -1,21 +1,12 @@
 # encoding: utf-8
-# Hbo Go constants
-# Copyright (C) 2019 ArvVoid (https://github.com/arvvoid)
-# Relesed under GPL version 2
+# Copyright (C) 2019-2020 ArvVoid (https://github.com/arvvoid)
+# SPDX-License-Identifier: GPL-2.0-or-later
 #########################################################
 
 from __future__ import absolute_import, division
 
-class HbogoConstants(object):
 
-    #supported countrys:
-    #   0 name
-    #   1 national domain
-    #   2 country code short
-    #   3 country code long
-    #   4 default language code
-    #   5 special domain
-    #   6 hbogo region/handler to use
+class HbogoConstants(object):
 
     HANDLER_EU = 0
     HANDLER_NORDIC = 1
@@ -36,11 +27,23 @@ class HbogoConstants(object):
     ACTION_REMOVE_MY_LIST = 10
     ACTION_MARK_WATCHED = 11
     ACTION_MARK_UNWATCHED = 12
+    ACTION_SEARCH_LIST = 13
+    ACTION_SEARCH_CLEAR_HISTORY = 14
+    ACTION_SEARCH_REMOVE_HISTOY_ITEM = 15
+    ACTION_CLEAR_REQUEST_CACHE = 16
 
     CONTEXT_MODE_DEFAULT = 0
     CONTEXT_MODE_MOVIE = 1
     CONTEXT_MODE_EPISODE = 2
 
+    # supported countries:
+    #   0 name
+    #   1 national domain
+    #   2 country code short
+    #   3 country code long
+    #   4 default language code
+    #   5 special domain
+    #   6 hbogo region/handler to use
 
     countries = [
         ['Bosnia and Herzegovina', 'ba', 'ba', 'BIH', 'HRV', '', HANDLER_EU],
@@ -62,6 +65,8 @@ class HbogoConstants(object):
         ['Spain', 'es', 'es', 'ESP', 'es_hboespana', 'https://es.hboespana.com', HANDLER_SPAIN],
         ['Sweden', 'se', 'se', 'SWE', 'sv_hbon', 'https://se.hbonordic.com/', HANDLER_NORDIC]
     ]
+
+    fallback_operator_icon_eu = 'https://www.hbo-europe.com/images/hbo_eu_logo.png'
 
     platforms = {
 
@@ -106,7 +111,7 @@ class HbogoConstants(object):
 
     # Special data for OAUTH that require custom actions
     # each entry is one operator
-    # each operator has: 
+    # each operator has:
     #   id: the id of the operator for easy retrieval
     #   confirm_uri: the URI that is called at a 2nd callback for auth success
     #   payload: the data to send in this 2nd request
@@ -130,4 +135,4 @@ class HbogoConstants(object):
         '41a660dc-ee15-4125-8e92-cdb8c2602c5d': ['https://www.upc.ro/rest/v40/session/start?protocol=oidc&rememberMe=false', 'username', 'credential', {"username": None, "credential": None}],  # Romania: UPC Romania
     }
 
-
+    fallback_ck = '10727db2-602e-4988-9a9b-e7dc57af795e'

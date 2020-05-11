@@ -11,7 +11,7 @@
         <setting id="show_cloaked_items" type="bool" label="30095" default="false" />
         <setting id="use_adaptive_addon" type="bool" label="30571" default="true" enable="System.HasAddon(inputstream.adaptive)" />
         <setting id="adaptive_addon_settings" subsetting="true" type="action" label="30578" action="Addon.OpenSettings(inputstream.adaptive)" option="close" enable="System.HasAddon(inputstream.adaptive)" visible="eq(-1,true)" />
-        <setting id="widevine_install" subsetting="true" type="action" label="30532" option="close" action="RunScript(special://home/addons/plugin.video.retrospect/resources/menus/menu_install_widevine.py,plugin.video.retrospect)" enable="System.HasAddon(script.module.inputstreamhelper)" visible="eq(-2,true)"/>
+        <setting id="widevine_install" subsetting="true" type="action" label="30532" option="close" action="RunScript(special://home/addons/plugin.video.retrospect/menu_install_widevine.py,plugin.video.retrospect)" enable="System.HasAddon(script.module.inputstreamhelper)" visible="eq(-2,true)"/>
 
         <setting type="lsep" label="30089" />
         <!-- we need the option="close" here to make sure we don't overwrite settings that were
@@ -35,7 +35,7 @@
         <setting id="show_favourites" type="bool" label="30041" default="false" />
 
         <setting type="lsep" label="30060" />
-        <!--<setting type="action" label="30598" action="RunScript(special://home/addons/plugin.video.retrospect/resources/menus/menu_enable.py)" option="close" />-->
+        <!--<setting type="action" label="30598" action="RunScript(special://home/addons/plugin.video.retrospect/menu_enable.py)" option="close" />-->
         <!-- start of channel selection -->
         <!-- This is just a template and should be replaced after the first run -->
         <!-- end of channel selection -->
@@ -61,8 +61,10 @@
         <setting id="empty_folder" type="select" label="30075" default="2" lvalues="30076|30077|30078" />
         <setting id="folder_prefix" type="text" label="30043" default="" />
         <setting id="hide_fanart" type="bool" label="30086" default="false" />
+        <setting id="use_thumbs_as_fanart" type="bool" label="30088" default="false" />
         <setting id="ignore_ssl_errors" type="bool" label="30569" default="false" />
         <setting id="http_cache" type="bool" label="30031" default="true" />
+        <setting id="cleanup_retrospect" type="action" label="30604" action="RunScript(plugin.video.retrospect, 0, ?action=cleanup)"  option="close" />
 
         <setting type="lsep" label="30098" />
         <setting id="log_level" type="enum" label="30048" values="Trace|Debug|Info" default="2" />

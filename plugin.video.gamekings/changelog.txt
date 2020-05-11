@@ -1,3 +1,6 @@
+v1.2.17 (2020-05-02)
+- added video on frontpage category
+
 v1.2.16 (2019-09-15)
 - added premium video category
 - fixes due to website change (september 2019). Let's hope they keep working

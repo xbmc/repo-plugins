@@ -19,9 +19,12 @@ from kodi_six import xbmcplugin  # pylint: disable=import-error
 from kodi_six import xbmcvfs  # pylint: disable=import-error
 
 from .common import get_handle
+from .common import is_resuming_video
 from .constants import CONFIG
 from .constants import StreamControl
 from .containers import Item
+from .items.common import get_banner_image
+from .items.common import get_fanart_image
 from .items.common import get_thumb_image
 from .items.track import create_track_item
 from .logger import Logger
@@ -110,13 +113,19 @@ def play_library_media(context, data):
         else:
             details['resume'] = data['force']
 
+    if CONFIG['kodi_version'] >= 18:
+        details['resuming'] = is_resuming_video()
+    else:
+        details['resuming'] = int(details.get('resume', 0)) > 0
+
     LOG.debug('Resume has been set to %s' % details['resume'])
 
-    list_item = create_playback_item(url, session, stream, stream_data, details)
+    list_item = create_playback_item(url, stream, stream_data, details)
 
     if stream['type'] in ['music', 'video']:
         server.settings = None  # can't pickle xbmcaddon.Addon()
         write_pickled('playback_monitor.pickle', {
+            'details': details,
             'media_id': media_id,
             'playing_file': url,
             'session': session,
@@ -133,27 +142,48 @@ def play_library_media(context, data):
     set_now_playing_properties(server, media_id)
 
 
-def create_playback_item(url, session, streams, data, details):
+def create_playback_item(url, streams, data, details):
+    stream_art = streams.get('art', {})
+
     if CONFIG['kodi_version'] >= 18:
         list_item = xbmcgui.ListItem(path=url, offscreen=True)
     else:
         list_item = xbmcgui.ListItem(path=url)
 
     if data:
-        thumb = data.get('thumbnail', CONFIG['icon'])
-        if 'thumbnail' in data:
-            del data['thumbnail']  # not a valid info label
+        fanart = stream_art.get('fanart', '')
+        if not fanart:
+            fanart = stream_art.get('section_art', '')
+
+        thumb = stream_art.get('thumb', '')
+        if not thumb:
+            thumb = stream_art.get('section_art', '')
+        if not thumb:
+            thumb = stream_art.get('fanart', '')
+
+        poster = ''
+        if data.get('mediatype', '') == 'movie':
+            poster = thumb
+        elif data.get('mediatype', '') == 'episode':
+            poster = stream_art.get('season_thumb', '')
+            if not poster:
+                poster = stream_art.get('show_thumb', '')
 
         list_item.setInfo(type=streams['type'], infoLabels=data)
         list_item.setArt({
             'icon': thumb,
-            'thumb': thumb
+            'thumb': thumb,
+            'poster': poster,
+            'fanart': fanart,
+            'banner': stream_art.get('banner')
         })
 
     list_item.setProperty('TotalTime', str(details['duration']))
-    if session is not None and details.get('resume'):
+    if details.get('resuming') and details.get('resume'):
         list_item.setProperty('ResumeTime', str(details['resume']))
         list_item.setProperty('StartOffset', str(details['resume']))
+        list_item.setProperty('StartPercent', '%.2f' % (float(details['resume']) /
+                                                        float(details['duration'])))
         LOG.debug('Playback from resume point: %s' % details['resume'])
 
     return list_item
@@ -245,6 +275,8 @@ class StreamData:
         if self.data['type'] == 'music':
             self._get_track_data()
 
+        self._get_art()
+
         self._get_media_details()
 
         if (self.data['type'] == 'video' and
@@ -296,7 +328,6 @@ class StreamData:
             'mpaa': encode_utf8(self._content.get('contentRating', '')),
             'year': int(self._content.get('year', 0)),
             'tagline': self._content.get('tagline', ''),
-            'thumbnail': get_thumb_image(self.context, self.server, self._content),
             'mediatype': 'video'
         }
 
@@ -334,11 +365,65 @@ class StreamData:
             'artist': encode_utf8(self._content.get('grandparentTitle',
                                                     self.tree.get('grandparentTitle', ''))),
             'duration': int(self._content.get('duration', 0)) / 1000,
-            'thumbnail': get_thumb_image(self.context, self.server, self._content)
         }
 
         self.data['extra']['album'] = self._content.get('parentKey')
         self.data['extra']['index'] = self._content.get('index')
+
+    def _get_art(self):
+        art = {
+            'banner': '',
+            'fanart': '',
+            'season_thumb': '',
+            'section_art': '',
+            'show_thumb': '',
+            'thumb': '',
+        }
+
+        if self.context.settings.skip_images():
+            self.data['art'] = art
+            return
+
+        art.update({
+            'banner': get_banner_image(self.context, self.server, self.tree),
+            'fanart': get_fanart_image(self.context, self.server, self._content),
+            'season_thumb': '',
+            'section_art': get_fanart_image(self.context, self.server, self.tree),
+            'show_thumb': '',
+            'thumb': get_thumb_image(self.context, self.server, self._content),
+        })
+
+        if '/:/resources/show-fanart.jpg' in art['section_art']:
+            art['section_art'] = art.get('fanart', '')
+
+        if art['fanart'] == '':
+            art['fanart'] = art.get('section_art', '')
+
+        if (self._content.get('grandparentThumb', '') and
+                '/:/resources/show.png' not in self._content.get('grandparentThumb', '')):
+            art['show_thumb'] = \
+                get_thumb_image(self.context, self.server, {
+                    'thumb': self._content.get('grandparentThumb', '')
+                })
+
+        if (art.get('season_thumb', '') and
+                '/:/resources/show.png' not in art.get('season_thumb', '')):
+            art['season_thumb'] = get_thumb_image(self.context, self.server, {
+                'thumb': art.get('season_thumb')
+            })
+
+        # get ALL SEASONS or TVSHOW thumb
+        if (not art.get('season_thumb', '') and self._content.get('parentThumb', '') and
+                '/:/resources/show.png' not in self._content.get('parentThumb', '')):
+            art['season_thumb'] = \
+                get_thumb_image(self.context, self.server, {
+                    'thumb': self._content.get('parentThumb', '')
+                })
+
+        elif not art.get('season_thumb', '') and art['show_thumb']:
+            art['season_thumb'] = art['show_thumb']
+
+        self.data['art'] = art
 
     def _get_media_details(self):
         media = self._content.findall('Media')

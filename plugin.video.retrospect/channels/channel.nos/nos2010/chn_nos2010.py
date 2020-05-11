@@ -183,14 +183,21 @@ class Channel(chn_class.Channel):
         self.__jsonApiKeyHeader = {"apikey": "07896f1ee72645f68bc75581d7f00d54"}
         self.__useJson = True
         self.__pageSize = 500
-        self.__channelNames = {
-            "_101_": None,  # "NPO1 Extra", -> Mainly paid
-            "CULT": None,  # "NPO2 Extra", -> Mainly paid
-            "OPVO": None,  # "NPO Zappelin", -> Mainly paid
-            "NOSJ": "NPO Nieuws"
-        }
         self.__has_premium_cache = None
         self.__timezone = pytz.timezone("Europe/Amsterdam")
+
+        # use a dictionary so the lookup is O(1)
+        self.__channel_name_map = {
+            "_101_": None,  # "NPO1 Extra", -> Mainly paid
+            "CULT": None,   # "NPO2 Extra", -> Mainly paid
+            "OPVO": None,   # "NPO Zappelin", -> Mainly paid
+            "NOSJ": None,   # "NPO Nieuws" -> Cannot be played
+            "_mcr_": None,  # "NPO Politiek" -> Niet gevonden
+            "PO24": None,   # Cannot be played,
+            "NED1": "NPO 1",
+            "NED2": "NPO 2",
+            "NED3": "NPO 3",
+        }
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
@@ -227,6 +234,7 @@ class Channel(chn_class.Channel):
         v = Vault()
         password = v.get_channel_setting(self.guid, "password")
         if not bool(password):
+            Logger.warning("No password found for %s", self)
             return False
 
         xsrf_token = self.__get_xsrf_token()[0]
@@ -312,8 +320,6 @@ class Channel(chn_class.Channel):
             title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
             title = "\a.: %s :." % (title,)
             more = MediaItem(title, next_page)
-            more.thumb = self.parentItem.thumb
-            more.fanart = self.parentItem.fanart
             more.HttpHeaders = http_headers
             more.HttpHeaders.update(self.parentItem.HttpHeaders)
             items.append(more)
@@ -333,8 +339,6 @@ class Channel(chn_class.Channel):
         items = []
         search = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Search), "searchSite")
         search.complete = True
-        search.icon = self.icon
-        search.thumb = self.noImage
         search.dontGroup = True
         search.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
         items.append(search)
@@ -345,8 +349,6 @@ class Channel(chn_class.Channel):
         favs.complete = True
         favs.description = "Favorieten van de NPO.nl website. Het toevoegen van favorieten " \
                            "wordt nog niet ondersteund."
-        favs.icon = self.icon
-        favs.thumb = self.noImage
         favs.dontGroup = True
         favs.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
         items.append(favs)
@@ -354,16 +356,12 @@ class Channel(chn_class.Channel):
         extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.LiveRadio),
                           "http://radio-app.omroep.nl/player/script/player.js")
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.dontGroup = True
         items.append(extra)
 
         extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.LiveTv),
                           "%s/live" % (self.baseUrlLive,))
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.dontGroup = True
         items.append(extra)
 
@@ -375,8 +373,6 @@ class Channel(chn_class.Channel):
             "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize))
 
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.dontGroup = True
         extra.description = "Volledige programma lijst van NPO Start."
         extra.HttpHeaders = self.__jsonApiKeyHeader
@@ -386,8 +382,6 @@ class Channel(chn_class.Channel):
         extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Genres),
                           "https://www.npostart.nl/programmas")
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.dontGroup = True
         items.append(extra)
 
@@ -395,16 +389,12 @@ class Channel(chn_class.Channel):
             "{} (A-Z)".format(LanguageHelper.get_localized_string(LanguageHelper.TvShows)),
             "#alphalisting")
         extra.complete = True
-        extra.icon = self.icon
-        extra.thumb = self.noImage
         extra.description = "Alfabetische lijst van de NPO.nl site."
         extra.dontGroup = True
         items.append(extra)
 
         recent = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Recent), "#recent")
         recent.complete = True
-        recent.icon = self.icon
-        recent.thumb = self.noImage
         recent.dontGroup = True
         items.append(recent)
 
@@ -446,8 +436,6 @@ class Channel(chn_class.Channel):
                       (air_date.year, air_date.month, air_date.day)
             extra = MediaItem(title, url)
             extra.complete = True
-            extra.icon = self.icon
-            extra.thumb = self.noImage
             extra.dontGroup = True
             if self.__useJson:
                 extra.HttpHeaders = self.__jsonApiKeyHeader
@@ -551,8 +539,6 @@ class Channel(chn_class.Channel):
                 char = "0-9"
             sub_item = MediaItem(title_format % (char,), url_format % (char,))
             sub_item.complete = True
-            sub_item.icon = self.icon
-            sub_item.thumb = self.noImage
             sub_item.dontGroup = True
             sub_item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
             items.append(sub_item)
@@ -673,7 +659,6 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(name, url)
         item.type = 'folder'
-        item.icon = self.icon
         item.complete = True
         item.description = description
         if self.__useJson:
@@ -746,10 +731,8 @@ class Channel(chn_class.Channel):
         channel = result_set["channel"].replace("NED", "NPO ")
         title = "{0[hours]}:{0[minutes]} - {1} - {0[title]}".format(result_set, channel)
         item = MediaItem(title, result_set["url"])
-        item.icon = self.icon
         item.description = result_set["channel"]
         item.type = 'video'
-        item.fanart = self.fanart
         item.HttpHeaders = self.httpHeaders
         item.complete = False
         return item
@@ -829,7 +812,6 @@ class Channel(chn_class.Channel):
         if next_url:
             next_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
             item = MediaItem(next_title, next_url)
-            item.fanart = self.parentItem.fanart
             item.complete = True
             item.HttpHeaders = self.__jsonApiKeyHeader
             items.append(item)
@@ -860,28 +842,25 @@ class Channel(chn_class.Channel):
         """
 
         Logger.trace(result_set)
-        if for_epg:
-            channel = result_set["channel"]
-            channel = self.__channelNames.get(channel, channel)
-            if not channel:
-                Logger.trace("Invalid EPG channel: %s", channel)
-                return None
-            name = "{} - {}".format(channel, result_set["title"])
-            if result_set["episodeTitle"] and result_set["title"] != result_set["episodeTitle"]:
-                name = "{} - {}".format(name, result_set["episodeTitle"])
-        else:
-            name = result_set.get('episodeTitle')
-            if not bool(name):
-                name = result_set.get('franchiseTitle')
-
+        
+        name = self.__get_name_for_api_video(result_set, for_epg)
         description = result_set.get('descriptionLong')
         if not description:
             description = result_set.get('description')
         video_id = result_set['id']
+        if video_id is None:
+            return None
 
         item = MediaItem(name, video_id)
         item.description = description
         item.type = "video"
+
+        season = result_set.get("seasonNumber")
+        episode = result_set.get("episodeNumber")
+        if bool(season) and bool(episode) and season < 100:
+            item.set_season_info(season, episode)
+            # TODO: setting it now is to messy. Perhaps we should make it configurable?
+            # item.name = "s{0:02d}e{1:02d} - {2}".format(season, episode, item.name)
 
         date_format = "%Y-%m-%dT%H:%M:%SZ"
         date = result_set.get('broadcastDate')
@@ -913,7 +892,6 @@ class Channel(chn_class.Channel):
         item.set_info_label("duration", result_set['duration'])
 
         images = result_set["images"]
-        item.fanart = self.parentItem.fanart
         for image_type, image_data in images.items():
             if image_type == "original" and "original" in image_data["formats"]:
                 continue
@@ -936,8 +914,16 @@ class Channel(chn_class.Channel):
 
         json = JsonHelper(data)
         epg_data = []
-        for epg_item in json.get_value("epg"):
-            epg_data += epg_item.get("schedule", [])
+
+        for channel_epg in json.get_value("epg"):
+            # Find the channel name
+            channel = channel_epg["channel"]
+            channel_name = channel["channel"]
+
+            # Update all videos that don't have a channel specified
+            epg_items = channel_epg.get("schedule", [])
+            [e["program"].update({"channel": channel_name}) for e in epg_items if not e["program"]["channel"]]
+            epg_data += epg_items
 
         json.json = epg_data
         return json, []
@@ -966,6 +952,17 @@ class Channel(chn_class.Channel):
 
         Logger.trace(result_set)
         epg_result_set = result_set["program"]
+
+        # Check to see if the channel name needs updating. We check the mapping, if it is not
+        # in the mapping, the channel name stays the same.
+        # If the result from the mapping is None (or the channel name is None) filter them.
+        channel_name = epg_result_set["channel"]
+        channel_name = self.__channel_name_map.get(channel_name, channel_name)
+        if channel_name is None:
+            Logger.trace("Invalid EPG channel: %s", channel_name)
+            return None
+
+        epg_result_set["channel"] = channel_name
         epg_result_set["broadcastDate"] = result_set.get("startsAt", epg_result_set["broadcastDate"])
         item = self.create_api_video_item(epg_result_set, for_epg=True)
 
@@ -1028,7 +1025,6 @@ class Channel(chn_class.Channel):
         title = " - ".join(set(names))
 
         item = MediaItem(title, video_id)
-        item.icon = self.icon
         item.type = 'video'
         item.complete = False
         item.description = description
@@ -1071,10 +1067,7 @@ class Channel(chn_class.Channel):
 
         url = "https://www.npostart.nl/media/collections/%s?page=1&tileMapping=normal&tileType=asset&pageType=collection" % (result_set[0],)
         item = MediaItem(result_set[1], url)
-        item.thumb = self.parentItem.thumb
-        item.icon = self.parentItem.icon
         item.type = 'folder'
-        item.fanart = self.parentItem.fanart
         item.HttpHeaders["X-Requested-With"] = "XMLHttpRequest"
         item.complete = True
         return item
@@ -1111,6 +1104,8 @@ class Channel(chn_class.Channel):
         next_up = result_set[3]
         name = "%s: %s" % (name, now_playing)
         if next_up:
+            next_up = next_up.strip()
+            next_up = next_up.replace("Straks: ", "")
             description = "Nu: %s\nStraks om %s" % (now_playing, next_up)
         else:
             description = "Nu: %s" % (result_set[3].strip(),)
@@ -1125,7 +1120,6 @@ class Channel(chn_class.Channel):
         else:
             item.thumb = "%s%s" % (self.baseUrlLive, result_set[1].replace("regular_", "").replace("larger_", ""))
 
-        item.icon = self.icon
         item.complete = False
         item.isLive = True
         return item
@@ -1156,8 +1150,6 @@ class Channel(chn_class.Channel):
             return None
 
         item = MediaItem(name, "", type="audio")
-        item.thumb = self.parentItem.thumb
-        item.icon = self.icon
         item.isLive = True
         item.complete = False
 
@@ -1498,3 +1490,38 @@ class Channel(chn_class.Channel):
         xsrf_token = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl").value
         xsrf_token = HtmlEntityHelper.url_decode(xsrf_token)
         return xsrf_token, token
+
+    def __get_name_for_api_video(self, result_set, for_epg):
+        """ Determines the name of the video item given the episode name, franchise name and
+        show title.
+
+        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param bool for_epg: use this item in an EPG listing
+
+        :return: The name of the video item
+        :rtype: string
+
+        """
+
+        # We need to strip the : because some shows have them and they make no sense.
+        show_title = result_set["title"] or result_set["franchiseTitle"]
+        show_title = show_title.strip(":")
+        episode_title = result_set["episodeTitle"]
+        if for_epg:
+            channel = result_set["channel"]
+            name = "{} - {}".format(channel, show_title)
+            if episode_title and show_title != episode_title:
+                name = "{} - {}".format(name, episode_title)
+        else:
+            name = episode_title
+            if not bool(name):
+                name = result_set.get('franchiseTitle')
+
+            # In some cases the title of the show (not episode) is different from the franchise
+            # title. In that case we want to add the title of the show in front of the name, but
+            # only if that does not lead to duplication
+            elif show_title != result_set.get('franchiseTitle') \
+                    and show_title != name:
+                name = "{} - {}".format(show_title, name)
+
+        return name

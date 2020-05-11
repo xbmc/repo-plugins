@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.twit"
+             name="TWiT"
+             version="2.1.8"
+             provider-name="divingmule">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+    <import addon="script.module.feedparser" version="5.2.1"/>
+    <import addon="script.ircchat" version="1.0.1" optional="true"/>
+    <import addon="script.module.simple.downloader" version="1.9.5"/>
+    <import addon="script.module.beautifulsoup4" version="4.6.2"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>audio video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_US">The TWiT.tv Netcast Network</summary>
+    <summary lang="no_NO">TWiT.tv Netcast-nettverk</summary>
+    <description lang="en_US">
+      https://twit.tv/about/what-is-twit-tv
+      [CR]The TWiT.tv Netcast Network with Leo Laporte features the #1 ranked technology podcast This Week in Tech, along with over 20 other top-ranked online shows.
+    </description>
+    <description lang="no_NO">
+      https://twit.tv/about/what-is-twit-tv
+      [CR]TWiT.tv Netcast-nettverket med Leo Laporte har den topprangerte teknologi-podkasten «This Week in Tech», sammen med over 20 andre topprangerte online show.
+    </description>
+    <platform>all</platform>
+    <language>en_US no_NO</language>
+    <license>GPL-2.0-or-later</license>
+    <source>https://github.com/divingmule/plugin.video.twit</source>
+    <forum>https://forum.kodi.tv/showthread.php?tid=183336</forum>
+    <website>https://twit.tv/</website>
+    <news>v2.1.8 (03/10/2020)
+      [new] Updated show lists
+      [fix] Live stream options
+    </news>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

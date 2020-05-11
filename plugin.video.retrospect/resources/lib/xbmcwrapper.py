@@ -1,31 +1,30 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import time
 import os
 
 import xbmcgui
 import xbmc
+import xbmcaddon
 
-from resources.lib.backtothefuture import basestring
+from resources.lib.backtothefuture import unichr
+from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.retroconfig import Config
 from resources.lib.locker import LockWithDialog
 
 
 class XbmcDialogProgressWrapper(object):
-    def __init__(self, title, line1, line2=""):
+    def __init__(self, title, message):
         """ Initialises a XbmcDialogProgressWrapper that wraps an Kodi DialogProgress object.
 
         :param str title: Title of it
-        :param str line1: The first line to show
-        :param str line2: The second line to show
+        :param str message: The first line to show
 
         """
 
-        self.Title = title
-        self.Line1 = line1
-        self.Line2 = line2
+        self.title = title
+        self.message = message
         self.progressBarDialog = xbmcgui.DialogProgress()
-        self.progressBarDialog.create(title, line1)
+        self.progressBarDialog.create(title, message)
 
     def __call__(self, *args):
         return self.progress_update(*args)
@@ -48,7 +47,8 @@ class XbmcDialogProgressWrapper(object):
         """
 
         if not completed:
-            self.progressBarDialog.update(int(perc), self.Line1, self.Line2, status)
+            message = "{}\n\n{}".format(self.message, status)
+            self.progressBarDialog.update(int(perc), message)
         else:
             self.progressBarDialog.close()
 
@@ -96,6 +96,7 @@ class XbmcDialogProgressBgWrapper:
         """
 
         if not completed:
+            # noinspection PyTypeChecker
             self.progressBarDialog.update(percent=int(perc), heading=self.Heading, message=status)
         else:
             self.progressBarDialog.close()
@@ -115,21 +116,57 @@ class XbmcWrapper:
     Warning = "warning"
     Info = "info"
 
+    __add_on_name_lookup = dict()
+
     def __init__(self):
         pass
+
+    @staticmethod
+    def get_external_add_on_label(add_on_url):
+        """ Returns the formatting string for the label of an item with an external add-on url
+
+        :param str add_on_url:   The plugin://-handle for the add-on
+        
+        :return: the name of the add-on or None if not installed
+        :rtype: str
+
+        """
+
+        if add_on_url is None:
+            return "{}"
+
+        # We need the add-on ID
+        add_on_id = add_on_url.split("/", 3)[2]
+        add_on_label = XbmcWrapper.__add_on_name_lookup.get(add_on_id)
+        if add_on_label is not None:
+            return add_on_label
+
+        try:
+            add_on_name = xbmcaddon.Addon(add_on_id).getAddonInfo('name')
+            via = LanguageHelper.get_localized_string(LanguageHelper.OtherAddon)
+        except:
+            add_on_name = add_on_id
+            via = LanguageHelper.get_localized_string(LanguageHelper.MissingAddon)
+
+        add_on_label = "{0} [COLOR gold]{1} '{2}'[/COLOR]".format(unichr(187), via, add_on_name)
+        XbmcWrapper.__add_on_name_lookup[add_on_id] = add_on_label
+        return add_on_label
 
     @staticmethod
     def show_key_board(default="", heading="", hidden=False):
         """ Displays the Kodi keyboard.
 
         :param str default:     The default value
-        :param str heading:     The heading for the dialog
+        :param str|int heading: The heading for the dialog or its language ID
         :param bool hidden:     Should the input be hidden?
 
         :rtype: str
         :return: returns the text that was entered or None if cancelled.
 
         """
+
+        if isinstance(heading, int):
+            heading = LanguageHelper.get_localized_string(heading)
 
         # let's just unlock the interface, in case it's locked.
         LockWithDialog.close_busy_dialog()
@@ -146,14 +183,17 @@ class XbmcWrapper:
                           fallback=True, logger=None):
         """ Shows an Kodi Notification
 
-        :param str|None title:          The title to show.
-        :param str|list[str] lines:     The content to show.
+        :param str|int|None title:      The title to show or its language ID.
+        :param str|int|list[str] lines: The content to show or its language ID.
         :param str notification_type:   The type of notification: info, error, warning.
         :param int display_time:        Time to display the notification. Defaults to 1500 ms.
         :param bool fallback:           Should we fallback on XbmcWrapper.show_dialog on error?
         :param any logger:              A possible `Logger` object.
 
         """
+
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
 
         # check for a title
         if title:
@@ -168,7 +208,9 @@ class XbmcWrapper:
         if not lines:
             notification_content = ""
         else:
-            if isinstance(lines, (tuple, list)):
+            if isinstance(lines, int):
+                notification_content = LanguageHelper.get_localized_string(lines)
+            elif isinstance(lines, (tuple, list)):
                 notification_content = " ".join(lines)
             else:
                 notification_content = lines
@@ -208,7 +250,7 @@ class XbmcWrapper:
     def show_selection_dialog(title, options):
         """ Shows a Kodi Selection Dialog.
 
-        :param str title:           The title of the dialog
+        :param str|int title:       The title of the dialog or its language ID
         :param list[str]options:    The list options to show
 
         :return: The index of the selected item
@@ -216,21 +258,29 @@ class XbmcWrapper:
 
         """
 
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
+
         input_dialog = xbmcgui.Dialog()
         return input_dialog.select(title, options)
 
     @staticmethod
-    def show_yes_no(title, lines):
+    def show_yes_no(title, message):
         """ Shows a dialog yes/no box with title and text
 
-        :param str title:           The title of the box.
-        :param list[str] lines:     The lines to display.
+        :param str|int title:       The title of the box or its language ID.
+        :param str|int message:     The message to display or its language ID.
 
         :return: Ok or not OK (boolean)
         :rtype: bool
 
         """
 
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
+        if isinstance(message, int):
+            message = LanguageHelper.get_localized_string(message)
+
         # let's just unlock the interface, in case it's locked.
         LockWithDialog.close_busy_dialog()
 
@@ -240,47 +290,36 @@ class XbmcWrapper:
         else:
             header = "%s - %s" % (Config.appName, title)
 
-        if len(lines) == 0:
-            ok = msg_box.yesno(header, "")
-        elif isinstance(lines, basestring):
-            # it was just a string, no list or tuple
-            ok = msg_box.yesno(header, lines)
-        else:
-            ok = False
+        ok = msg_box.yesno(header, message or "")
         return ok
 
     @staticmethod
-    def show_dialog(title, lines):
+    def show_dialog(title, message):
         """ Shows a dialog box with title and text
 
-        :param str|None title:          The title of the box
-        :param list[str]|str lines:     The lines to display.
+        :param str|None|int title:      The title of the box or its language ID.
+        :param str|int message:         The lines to display or its language ID.
 
         :return: True for OK, False for cancelled.
         :rtype: bool
 
         """
 
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
+        if isinstance(message, int):
+            message = LanguageHelper.get_localized_string(message)
+
         # let's just unlock the interface, in case it's locked.
         LockWithDialog.close_busy_dialog()
 
         msg_box = xbmcgui.Dialog()
-        if title == "":
+        if not title:
             header = Config.appName
         else:
             header = "%s - %s" % (Config.appName, title)
 
-        if len(lines) == 0:
-            ok = msg_box.ok(header, "")
-        elif isinstance(lines, basestring):
-            # it was just a string, no list or tuple
-            ok = msg_box.ok(header, lines)
-        elif len(lines) == 1:
-            ok = msg_box.ok(header, lines[0])
-        elif len(lines) == 2:
-            ok = msg_box.ok(header, lines[0], lines[1])
-        else:
-            ok = msg_box.ok(header, lines[0], lines[1], lines[2])
+        ok = msg_box.ok(header, message or "")
         return ok
 
     @staticmethod
@@ -292,7 +331,7 @@ class XbmcWrapper:
         * 2 : ShowAndGetImage
         * 3 : ShowAndGetWriteableDirectory
 
-        :param str title:           The title of the box.
+        :param str|int title:        The title of the box or its language ID.
         :param str default_path:     Default path or file.
         :param int dialog_type:      Type of file/folder selection type.
         :param str mask:            '|' separated file mask. (i.e. '.jpg|.png').
@@ -301,6 +340,9 @@ class XbmcWrapper:
         :rtype: str
 
         """
+
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
 
         if default_path is None:
             default_path = xbmc.translatePath("special://home")
@@ -327,89 +369,3 @@ class XbmcWrapper:
         if logger:
             logger.trace("Received result: %s", response)
         return response
-
-    @staticmethod
-    def wait_for_player_to_start(player, timeout=10, logger=None, url=None):
-        """ Waits for the status of the player to start.
-
-        Requires: <import addon="xbmc.python" version="2.0"/>
-
-        :param xbmc.Player player:  The Kodi player.
-        :param int timeout:         The time-out to wait for.
-        :param any logger:          A `Logger` instance for logging.
-        :param str url:             The URL that should be playing.
-
-        :return: Indication whether or not the player is playing.
-        :rtype: bool
-
-        """
-        return XbmcWrapper.__wait_for_player(player, 1, timeout, logger, url)
-
-    @staticmethod
-    def wait_for_player_to_end(player, timeout=10, logger=None):
-        """ waits for the status of the player to end
-
-        Requires: <import addon="xbmc.python" version="2.0"/>
-
-        :param xbmc.Player player:  The Kodi player.
-        :param int timeout:         The time-out to wait for.
-        :param any logger:          A `Logger` instance for logging.
-
-        :return: indication if player has stopped.
-        :rtype: bool
-
-        """
-
-        return XbmcWrapper.__wait_for_player(player, 0, timeout, logger, None)
-
-    @staticmethod
-    def __wait_for_player(player, play_state, timeout, logger, url):  # NOSONAR
-        """ waits for the status of the player to be the desired value
-
-        Requires: <import addon="xbmc.python" version="2.0"/>
-
-        :param xbmc.Player player:  The Kodi player.
-        :param in play_state:         The desired play value (1 = start, 0 = stop).
-        :param int timeout:         The time-out to wait for.
-        :param any logger:          A `Logger` instance for logging.
-        :param str|None url:        The URL that should be playing.
-
-        :return: indication if player has started or has stopped.
-        :rtype: bool
-
-        """
-
-        start = time.time()
-
-        if logger:
-            logger.debug("Waiting for Player status '%s'", play_state)
-            if url is None:
-                logger.debug("player.isPlaying is '%s', preferred value is '%s'", player.isPlaying(), play_state)
-            else:
-                logger.debug("player.isPlaying is '%s', preferred value is %s and stream: '%s'",
-                             player.isPlaying(), play_state, url)
-
-        while time.time() - start < timeout:
-            if player.isPlaying() == play_state:
-                if url is None or url.startswith("plugin://"):
-                    # the player stopped in time
-                    if logger:
-                        logger.debug("player.isPlaying obtained the desired value '%s'", play_state)
-                    return True
-
-                playing_file = player.getPlayingFile()
-                if url == playing_file:
-                    if logger:
-                        logger.debug("player.isPlaying obtained the desired value '%s' and correct stream.", play_state)
-                    return True
-
-                if logger:
-                    logger.debug("player.isPlaying obtained the desired value '%s', but incorrect stream: %s",
-                                 play_state, playing_file)
-
-            if logger:
-                logger.debug("player.isPlaying is %s, waiting a cycle", player.isPlaying())
-            time.sleep(1.)
-
-        # a time out occurred
-        return False

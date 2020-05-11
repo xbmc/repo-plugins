@@ -39,7 +39,7 @@ class Main(object):
         self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][
             0]
 
-        # log("self.url", self.video_list_page_url)
+        log("self.url", self.video_list_page_url)
 
         #
         # Get the videos...
@@ -68,12 +68,6 @@ class Main(object):
 
         try:
             json_data = json.loads(html_source)
-
-            # for item in json_data['data']:
-            #     log("attribute1", item['canonical_links']['self'])
-            #     log("attribute2", item['attributes']['title'])
-            #     exit(1)
-
         except (ValueError, KeyError, TypeError):
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30109))
             exit(1)
@@ -93,7 +87,7 @@ class Main(object):
                 serie_url = serie_url[0: pos_of_questionmark]
                 serie_url = serie_url + ROOSTERTEETH_PAGE_URL_PART + ROOSTERTEETH_ORDER_URL_PART
 
-            log("serie_url", serie_url)
+            # log("serie_url", serie_url)
 
             thumb = self.thumbnail_url
 
@@ -126,7 +120,7 @@ class Main(object):
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems
         # instead of adding one by ove via addDirectoryItem.
         xbmcplugin.addDirectoryItems(self.plugin_handle, listing, len(listing))
-        # Disable sorting
-        xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
+        # Set initial sorting
+        xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATEADDED)
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)

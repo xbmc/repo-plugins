@@ -106,7 +106,6 @@ class Channel(chn_class.Channel):
               "r=default&page=luister&serial=&subserial=&hook=%s" % (result_set["hook"],)
 
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.thumb = thumb
         item.description = "%s\n\n%s" % (description_nl, description)
         item.description = item.description.strip()
@@ -137,11 +136,9 @@ class Channel(chn_class.Channel):
         url = "https://www.24classics.com/app/ajax/auth.php?serial=%(serial)s" % result_set
 
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.type = "video"
         # seems to not really work well with track numbers (not showing)
         # item.type = "audio"
-        item.thumb = self.parentItem.thumb
         item.complete = False
         item.description = "Composers: %(composers)s\nPerformers: %(performers)s" % result_set
         item.set_info_label("TrackNumber", result_set["order"])

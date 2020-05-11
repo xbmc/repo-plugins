@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.1.6"
+        version="5.2.3"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,18 +132,24 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.1.6 - Changelog - 2020-01-23[/B]
+        <news>[B]Retrospect v5.2.3 - Changelog - 2020-05-07[/B]
 
-This update contains a fix for VRT.nu that broken again!
+This new version of Retrospect fixes some channel related issues and some minor core refactoring.
 
 [B]Framework related[/B]
--
+* Fixed: issue where shutil.copy() or shutil.move() no longer overrides existing files in Py3
+* Fixed: issue where an empty favourite list would replace the PickleStore cache for the mainlist (Fixes #1365)
+* Changed: Use `inputstream` instead of `inputstreamaddon` for Matrix and up
 
 [B]GUI/Settings/Language related[/B]
--
+_None_
 
 [B]Channel related[/B]
-* Fixed: VRT.nu updated some HTML pages again! (Fixes #1281)
+* Fixed: Kijk.nl PersistedQueries seem unstable
+* Fixed: Include &quot;standalone&quot; video&#x27;s for Dplay (Fixes #1361)
+* Fixed: For some ViaFree streams no subtitles were present (Fixes #1362)
+* Fixed: failed parsing of showlisting due to UTC timestamp (Fixes #1369)
+
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

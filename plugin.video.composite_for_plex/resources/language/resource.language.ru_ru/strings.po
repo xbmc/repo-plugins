@@ -1255,3 +1255,15 @@ msgstr ""
 msgctxt "#30727"
 msgid "Notification encoding"
 msgstr ""
+
+msgctxt "#30728"
+msgid "Episode sort method"
+msgstr ""
+
+msgctxt "#30729"
+msgid "Plex"
+msgstr ""
+
+msgctxt "#30730"
+msgid "Kodi"
+msgstr ""

@@ -1,8 +1,18 @@
+from __future__ import absolute_import, division, unicode_literals
+
+import datetime
 import json
+import os
 import threading
 import time
-import datetime
-import os
+
+import arlo
+import xbmc
+import xbmcaddon
+import xbmcgui
+import xbmcplugin
+from resources.lib import *
+
 try:
     # For Python 3.0 and later
     from urllib.parse import urlencode
@@ -11,24 +21,15 @@ except ImportError:
     # Fall back to Python 2's urllib2
     from urllib import urlencode
     from urlparse import parse_qsl
-import xbmc
-import xbmcaddon
-import xbmcgui
-import xbmcplugin
 
-import arlo
 
 # Plugin Info
 ADDON_ID = 'plugin.video.arloview'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
 ADDON_NAME = REAL_SETTINGS.getAddonInfo('name')
-SETTINGS_LOC = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')).decode('utf-8')
-ADDON_PATH = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path')).decode('utf-8') 
+SETTINGS_LOC = py2_decode(xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')))
+ADDON_PATH = py2_decode(xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path'))) 
 ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
-
-# # GLOBALS ##
-# TIMEOUT = 15
-# CONTENT_TYPE = 'files'
 
 
 def get_params(args):
@@ -58,11 +59,12 @@ class ArloStream(object):
         self.arlo = None
         self.basestation = None
         self.cameras = None
-        self.addon_logging = REAL_SETTINGS.getSettingBool('enable_debug')
+        self.addon_debug_logging = REAL_SETTINGS.getSettingBool('enable_debug')
 
     def log(self, msg, level=xbmc.LOGNOTICE):
 
-        if self.addon_logging :
+        # Only log messages (via this function) if debug-logging is turned on in plugin settings
+        if self.addon_debug_logging :
             if level < xbmc.LOGNOTICE:
                 level = xbmc.LOGNOTICE
             xbmc.log("[{}-{}] {}".format(ADDON_ID, ADDON_VERSION, msg), level)
@@ -95,14 +97,6 @@ class ArloStream(object):
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self._handle)
 
-        # Update the gui to reflect signal and battery strength
-        # TODO: Find a better way to update the gui
-        # gui_update_timer = threading.Timer(120, self._refresh_gui)
-        # gui_update_timer.start()
-
-    #def _refresh_gui(self):
-    #    # self.log("Refresh container UI", xbmc.LOGDEBUG)
-    #    xbmc.executebuiltin('Container.Refresh')
 
     def _get_arlo_cameras(self):
         if self.cameras is None:
@@ -150,7 +144,6 @@ class ArloStream(object):
                               camera['batteryLevel'],
                               camera['signalStrength'])
 
-    
     
     def _get_camera_snapshot(self, device_id):
         if not REAL_SETTINGS.getSettingBool('show_snapshots'):
@@ -217,40 +210,6 @@ class ArloStream(object):
         # Pass the item to the Kodi player.
         xbmcplugin.setResolvedUrl(self._handle, True, listitem=play_item)
 
-        #wait_secs = 5
-        #is_playing = False
-        #timed_out = False
-        #start_time = time.time()
-        #while not (is_playing or timed_out):
-        #    is_playing = xbmc.Player().isPlaying()
-        #    if is_playing:
-        #        self.log("Player has started...", xbmc.LOGDEBUG)
-        #    else:
-        #        if time.time() - start_time < wait_secs:
-        #            self.log("Waiting for player to start..", xbmc.LOGDEBUG)
-        #            time.sleep(1)
-        #        else:
-        #            self.log("Timed out waiting for player to start", xbmc.LOGWARNING)
-        #            timed_out = True
-
-        #while is_playing:
-        #    # self.log("Player is playing...", xbmc.LOGDEBUG)
-        #    time.sleep(1)
-        #    is_playing = xbmc.Player().isPlaying()
-        #    if not is_playing:
-        #        self.log("Player has stopped.", xbmc.LOGDEBUG)
-
-        # TODO: Figure out how to update the UI
-        # Update camera details after viewing (battery strength, signal strength,...)
-        # Code below does it for current camera, but should we do it for all cameras?
-        # doesn't update UI, need some kind of refresh?
-        #self._update_arlo_cameras_details()
-        #camera = self._get_camera(device_id)
-        #camera_info = self._get_camera_info(camera)
-        #play_item.setInfo('video', {'title': camera["deviceName"],
-        #                            'plot': camera_info,
-        #                            'mediatype': 'video'})
-
     def _arlo_login(self):
         self.log("BEGIN _arlo_login()", xbmc.LOGDEBUG)
         user_name = REAL_SETTINGS.getSetting('userid')
@@ -271,7 +230,7 @@ class ArloStream(object):
             icon = REAL_SETTINGS.getAddonInfo('icon')
             xbmcgui.Dialog().notification(ADDON_NAME, msg, icon, 5000)
             REAL_SETTINGS.openSettings()
-            self.addon_logging = REAL_SETTINGS.getSettingBool('enable_debug')
+            self.addon_debug_logging = REAL_SETTINGS.getSettingBool('enable_debug')
 
 
     def run(self):

@@ -1,7 +1,6 @@
 # encoding: utf-8
-# base class for Hbo Go Kodi add-on
-# Copyright (C) 2019 ArvVoid (https://github.com/arvvoid)
-# Relesed under GPL version 2
+# Copyright (C) 2019-2020 ArvVoid (https://github.com/arvvoid)
+# SPDX-License-Identifier: GPL-2.0-or-later
 #########################################################
 
 from __future__ import absolute_import, division
@@ -12,13 +11,13 @@ import traceback
 from hbogolib.constants import HbogoConstants
 
 try:
-    import urlparse as parse
-    from urllib import unquote_plus as unquote
+    import urlparse as parse  # type: ignore
+    from urllib import unquote_plus as unquote  # type: ignore
 except ImportError:
-    import urllib.parse as parse
-    from urllib.parse import unquote_plus as unquote
+    import urllib.parse as parse  # type: ignore
+    from urllib.parse import unquote_plus as unquote  # type: ignore
 
-from kodi_six import xbmc, xbmcaddon, xbmcgui
+from kodi_six import xbmc, xbmcaddon, xbmcgui  # type: ignore
 
 
 class hbogo(object):
@@ -42,7 +41,7 @@ class hbogo(object):
 
         return index
 
-    def start(self):
+    def start(self, forceeng=False):
         country_id = self.addon.getSetting('country_code')
         country_index = self.country_index(country_id)
 
@@ -56,17 +55,17 @@ class hbogo(object):
 
         if HbogoConstants.countries[country_index][6] == HbogoConstants.HANDLER_EU:
             from hbogolib.handlereu import HbogoHandler_eu
-            self.handler = HbogoHandler_eu(self.handle, self.base_url, HbogoConstants.countries[country_index])
+            self.handler = HbogoHandler_eu(self.handle, self.base_url, HbogoConstants.countries[country_index], forceeng)
         elif HbogoConstants.countries[country_index][6] == HbogoConstants.HANDLER_SPAIN:
             from hbogolib.handlersp import HbogoHandler_sp
-            self.handler = HbogoHandler_sp(self.handle, self.base_url, HbogoConstants.countries[country_index])
+            self.handler = HbogoHandler_sp(self.handle, self.base_url, HbogoConstants.countries[country_index], forceeng)
         else:
             xbmcgui.Dialog().ok(self.language(30001), self.language(30003))
             sys.exit()
 
     def setup(self):
         # STEP 0 - SETUP DRM
-        from inputstreamhelper import Helper
+        from inputstreamhelper import Helper  # type: ignore
         is_helper = Helper('mpd', drm='com.widevine.alpha')
         is_helper.check_inputstream()
 
@@ -148,10 +147,44 @@ class hbogo(object):
             self.handler.setDispCat(name)
             self.handler.episode(url)
 
-        elif mode == HbogoConstants.ACTION_SEARCH:
+        elif mode == HbogoConstants.ACTION_SEARCH_LIST:
             self.start()
+            self.handler.setDispCat(name)
+            self.handler.searchlist()
+
+        elif mode == HbogoConstants.ACTION_SEARCH_CLEAR_HISTORY:
+            from hbogolib.handler import HbogoHandler
+            handler = HbogoHandler(self.handle, self.base_url)
+            handler.searchlist_del_history()
+            xbmc.executebuiltin('Container.Refresh')
+
+        elif mode == HbogoConstants.ACTION_SEARCH_REMOVE_HISTOY_ITEM:
+            from hbogolib.handler import HbogoHandler
+            handler = HbogoHandler(self.handle, self.base_url)
+            itm = None
+            try:
+                itm = unquote(params["itm"])
+            except KeyError:
+                pass
+            if itm is not None:
+                handler.searchlist_del_history_item(itm)
+            xbmc.executebuiltin('Container.Refresh')
+
+        elif mode == HbogoConstants.ACTION_SEARCH:
+            if url == "EXTERNAL_SEARCH_FORCE_ENG":
+                self.start(True)
+            else:
+                self.start()
             self.handler.setDispCat(self.language(30711))
-            self.handler.search()
+            query = None
+            try:
+                query = unquote(params["query"])
+            except KeyError:
+                pass
+            if query is None:
+                self.handler.search()
+            else:
+                self.handler.search(query)
 
         elif mode == HbogoConstants.ACTION_PLAY:
             self.start()
@@ -164,6 +197,11 @@ class hbogo(object):
                 handler = HbogoHandler(self.handle, self.base_url)
                 handler.del_setup()
                 xbmc.executebuiltin('Container.Refresh')
+
+        elif mode == HbogoConstants.ACTION_CLEAR_REQUEST_CACHE:  # reset request cache
+            from hbogolib.handler import HbogoHandler
+            handler = HbogoHandler(self.handle, self.base_url)
+            handler.clear_request_cache()
 
         elif mode == HbogoConstants.ACTION_RESET_SESSION:  # reset session
             from hbogolib.handler import HbogoHandler

@@ -1,11 +1,11 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.1.5">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.6.0">
   <requires>
     <import addon="xbmc.python" version="2.26.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
     <import addon="script.module.requests" version="2.12.4" />
-    <import addon="script.module.pycryptodome" version="3.4.3" />
+    <import addon="script.module.pyaes" version="1.6.1" />
     <import addon="script.module.defusedxml" version="0.6.0" />
-    <import addon="inputstream.adaptive" version="2.3.18" />
+    <import addon="script.module.dateutil" version="2.8.1" />
     <import addon="script.module.inputstreamhelper" version="0.4.2" />
   </requires>
   <extension library="main.py" point="xbmc.python.pluginsource">
@@ -26,33 +26,35 @@ Curently support: Bosnia and Herzegovina, Bulgaria, Croatia, Czech Republic, Hun
 To report bugs or request assistence with the add-on go to: https://github.com/arvvoid/plugin.video.hbogoeu
     </description>
     <disclaimer lang="en_GB">
-This add-on is not officially commissioned/supported by HBO®. The trademark HBO® Go is registered by Home Box Office, Inc. For more information visit the official HBO® Go website for your region.
-I do not own any of the content this add-on lists. The content belongs to Home Box Office, Inc. All this add-on does is make simple HTTP requests to Hbo go servers to retrieve content just like any browser like Chrome, Firefox etc. would do!
-Playback is handled through inputstream.adaptive that use widevine to handle the DRM content like any web browser.
-THERE IS NO WARRANTY FOR THE ADD-ON, IT CAN BREAK AND STOP WORKING AT ANY TIME.
-If an official app is available for your platform, use it instead of this.
+This add-on is not officially commissioned/supported by HBO®. The trademark HBO® Go is registered by Home Box Office, Inc. 
+For more information on HBO® Go visit the official HBO® Go website for your region.
+I do not own any of the content this add-on lists. The content belongs to Home Box Office, Inc. 
+All this add-on does is make simple HTTP requests to Hbo go servers to retrieve and display content just like any web browser would do!
+
 Important: HBO® Go must be paid for!!! You need a valid HBO® Go account for the add-on to work! Register on the official HBO® Go website for your region
+
+THERE IS NO WARRANTY FOR THE ADD-ON, IT MIGHT NOT WORK AT ALL AND IT CAN BREAK AND STOP WORKING AT ANY TIME.
+
+If an official app is available for your platform, use it instead of this.
     </disclaimer>
     <language>en</language>
     <platform>all</platform>
-    <license>GPL-2.0</license>
+    <license>GPL-2.0-or-later</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=339798</forum>
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-v.2.1.5
-- fix Telekom Romania (My Account) login
-- new logo
-- fix some encoding errors on log
-- better error handling on communication errors
-- media info optimizations
+- Updated and improved subtitle support for Spain/Nordic region (major ttml2srt update)
+- Improve elapsed time function (prevent failed report play status to Hbo in some cases)
+- Alternative method to retrieve season listing (slower) in case standard one fail for some reason (happen rarely, usually its just temporary error, but the add-on can deal with it now without bothering the user)
+- Translations update
     </news>
     <assets>
      <icon>resources/icon.png</icon>
      <fanart>resources/fanart.jpg</fanart>
-     <screenshot>resources/screen1.png</screenshot>
-     <screenshot>resources/screen7.png</screenshot>
-     <screenshot>resources/screen8.png</screenshot>
+     <screenshot>resources/screen1.jpg</screenshot>
+     <screenshot>resources/screen2.jpg</screenshot>
+     <screenshot>resources/screen3.jpg</screenshot>
     </assets>
   </extension>
 </addon>

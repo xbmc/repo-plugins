@@ -78,11 +78,21 @@ class Channel(chn_class.Channel):
 
         # dummy class
         item = MediaItem(title, url)
-        item.icon = self.icon
         item.thumb = thumb_url.replace("poster.jpg", "poster-xlarge.jpg")
         item.fanart = fanart
         item.set_date(year, month, day)
         item.complete = True
+
+        # Set some info labels
+        studio = result_set["studio"]
+        item.set_info_label("studio", studio)
+        directors = result_set["directors"]
+        item.set_info_label("Director", directors)
+        actors_data = result_set["actors"][:]
+        item.set_info_label("cast", actors_data)
+        genre_data = result_set["genre"][:]
+        item.set_info_label("genre", genre_data)
+
         return item
 
     def get_movie_id(self, data):
@@ -143,12 +153,15 @@ class Channel(chn_class.Channel):
         thumb = result_set["thumb"]
         year, month, day = result_set["posted"].split("-")
         item = MediaItem(title, self.parentItem.url)
-        item.icon = self.icon
         item.description = self.parentItem.description
         item.type = 'video'
         item.thumb = thumb
-        item.fanart = self.parentItem.fanart
         item.set_date(year, month, day)
+
+        runtime = result_set.get("runtime").split(":")
+        if runtime:
+            duration = (int(runtime[0]) * 60) + int(runtime[1])
+            item.set_info_label("duration", duration)
 
         part = item.create_new_empty_media_part()
         part.HttpHeaders["User-Agent"] = "QuickTime/7.6 (qtver=7.6;os=Windows NT 6.0Service Pack 2)"

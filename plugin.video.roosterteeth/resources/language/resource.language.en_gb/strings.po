@@ -28,7 +28,7 @@ msgid "For bugs, requests or general questions visit the Roosterteeth.com thread
 msgstr ""
 
 msgctxt "#30015"
-msgid "Rooster Teeth Sponsor"
+msgid "Rooster Teeth First member"
 msgstr ""
 
 msgctxt "#30016"
@@ -76,7 +76,7 @@ msgid "Getting video location..."
 msgstr ""
 
 msgctxt "#30101"
-msgid "Login has failed for this Sponsored video. In settings enter"
+msgid "Login has failed for this First video. In settings enter"
 msgstr ""
 
 msgctxt "#30102"
@@ -84,15 +84,15 @@ msgid "the correct username and password. Or turn off the Rooster"
 msgstr ""
 
 msgctxt "#30103"
-msgid "Teeth Sponsor-switch if you aren't a Sponsor."
+msgid "Teeth First-switch if you haven't signed up to First membership."
 msgstr ""
 
 msgctxt "#30104"
-msgid "Login Failed: %s."
+msgid "Login Failed."
 msgstr ""
 
 msgctxt "#30105"
-msgid "Sorry. You must be a Sponsor to see this video."
+msgid "Sorry. You must be a First member to see this video."
 msgstr ""
 
 msgctxt "#30106"
@@ -112,89 +112,38 @@ msgid "Error loading Json file."
 msgstr ""
 
 msgctxt "#30110"
-msgid "Sorry. The video is not yet available for non-Sponsors."
+msgid "Sorry. The video is not yet available for non-First members."
+msgstr ""
+
+msgctxt "#30111"
+msgid "In settings enter the correct username and password."
+msgstr ""
+
+msgctxt "#30120"
+msgid "Sorry. The login was successful, but the video is not yet available to non-First members."
+msgstr ""
+
+msgctxt "#30130"
+msgid "Sorry. The login was successful, but the video is only available for First members."
 msgstr ""
 
 msgctxt "#30200"
 msgid "Next page"
 msgstr ""
 
-msgctxt "#30301"
-msgid "Roosterteeth Recently Added Episodes"
+msgctxt "#30318"
+msgid "First aired on"
+msgstr ""
+
+msgctxt "#30319"
+msgid "Latest episode date: "
 msgstr ""
 
 msgctxt "#30302"
 msgid "Series"
 msgstr ""
 
-msgctxt "#30303"
-msgid "Achievement Hunter Recently Added Episodes"
+msgctxt "#30321"
+msgid "Recently Added Episodes"
 msgstr ""
 
-msgctxt "#30304"
-msgid "Achievement Hunter Series"
-msgstr ""
-
-msgctxt "#30305"
-msgid "Fun Haus Recently Added Episodes"
-msgstr ""
-
-msgctxt "#30306"
-msgid "Fun Haus Series"
-msgstr ""
-
-msgctxt "#30307"
-msgid "Screw Attack Recently Added Episodes"
-msgstr ""
-
-msgctxt "#30308"
-msgid "Screw Attack Series"
-msgstr ""
-
-msgctxt "#30309"
-msgid "Cow Chop Recently Added Episodes"
-msgstr ""
-
-msgctxt "#30310"
-msgid "Cow Chop Series"
-msgstr ""
-
-msgctxt "#30311"
-msgid "Sugar Pine 7 Recently Added Episodes"
-msgstr ""
-
-msgctxt "#30312"
-msgid "Sugar Pine 7 Series"
-msgstr ""
-
-msgctxt "#30313"
-msgid "Game Attack Recently Added Episodes"
-msgstr ""
-
-msgctxt "#30314"
-msgid "Game Attack Series"
-msgstr ""
-
-msgctxt "#30315"
-msgid "Inside Gaming Recently Added Episodes"
-msgstr ""
-
-msgctxt "#30316"
-msgid "Inside Gaming Series"
-msgstr ""
-
-msgctxt "#30317"
-msgid "JT Music Recently Added Episodes"
-msgstr ""
-
-msgctxt "#30318"
-msgid "JT Music Series"
-msgstr "
-
-msgctxt "#30319"
-msgid "Kinda Funny Recently Added Episodes"
-msgstr ""
-
-msgctxt "#30320"
-msgid "Kinda Funny Series"
-msgstr ""

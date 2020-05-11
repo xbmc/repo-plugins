@@ -1,6 +1,13 @@
 {
     "name"              : "Netflix",
     "plugin"            : "plugin.video.netflix",
+    "priority"          : 500,
+    "assert"            : {
+                            "play_movie":       ["title", "year"],
+                            "play_episode":     ["showname", "season", "episode"],
+                            "search_movie":     ["title"],
+                            "search_episode":   ["showname"]
+                          },
     "play_movie"        : [
                             "plugin://plugin.video.netflix/directory/search/search/{title}/",
                             {"title": "{title}", "year": "{year}"}
@@ -8,7 +15,7 @@
     "play_episode"      : [
                             "plugin://plugin.video.netflix/directory/search/search/{showname}/",
                             {"title": "{showname}"},
-                            {"position": "{season}"},
+                            {"season": "{season}"},
                             {"season": "{season}", "episode": "{episode}"}
                           ],
     "search_movie"      : "plugin://plugin.video.netflix/directory/search/search/{title}/",

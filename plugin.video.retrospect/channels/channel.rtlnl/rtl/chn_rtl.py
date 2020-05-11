@@ -104,15 +104,11 @@ class Channel(chn_class.Channel):
 
         # let's add the RTL-Z live stream
         rtlz_live = MediaItem("RTL Z Live Stream", "")
-        rtlz_live.icon = self.icon
-        rtlz_live.thumb = self.noImage
         rtlz_live.complete = True
         rtlz_live.isLive = True
         rtlz_live.dontGroup = True
 
         stream_item = MediaItem("RTL Z: Live Stream", "http://www.rtl.nl/(config=RTLXLV2,channel=rtlxl,progid=rtlz,zone=inlineplayer.rtl.nl/rtlz,ord=0)/system/video/wvx/components/financien/rtlz/miMedia/livestream/rtlz_livestream.xml/1500.wvx")
-        stream_item.icon = self.icon
-        stream_item.thumb = self.noImage
         stream_item.complete = True
         stream_item.type = "video"
         stream_item.dontGroup = True
@@ -168,8 +164,6 @@ class Channel(chn_class.Channel):
                   "{0:04d}{1:02d}{2:02d}/".format(air_date.year, air_date.month, air_date.day)
             extra = MediaItem(title, url)
             extra.complete = True
-            extra.icon = self.icon
-            extra.thumb = self.noImage
             extra.dontGroup = True
             extra.set_date(air_date.year, air_date.month, air_date.day, text="")
 
@@ -202,8 +196,6 @@ class Channel(chn_class.Channel):
         key = result_set.get("key", result_set["abstract_key"])
         url = "http://www.rtl.nl/system/s4m/vfd/version=1/d=pc/output=json/fun=getseasons/ak=%s" % (key,)
         item = MediaItem(title, url)
-        item.icon = self.icon
-        item.fanart = self.fanart
         item.complete = True
 
         desc = result_set.get("synopsis", "")
@@ -491,8 +483,6 @@ class Channel(chn_class.Channel):
         abstract_key = result_set["AbstractKey"]
         url = "http://www.rtl.nl/system/s4m/vfd/version=1/d=pc/output=json/fun=getseasons/ak={}".format(abstract_key)
         item = MediaItem(title, url)
-        item.thumb = self.parentItem.thumb
-        item.fanart = self.parentItem.fanart
 
         time_stamp = result_set["LastBroadcastDate"]  # =1546268400000
         date_time = DateHelper.get_date_from_posix(int(time_stamp)/1000)

@@ -74,7 +74,6 @@ class Channel(chn_class.Channel):
         url = "%s/feeds/full-episode/carousel/%s/%s" % (self.baseUrl, result_set[2], self.promotionId)
 
         item = MediaItem("Season %02d" % int(result_set[2]), url)
-        item.icon = self.icon
         item.complete = True
         return item
 
@@ -113,7 +112,6 @@ class Channel(chn_class.Channel):
         #
         # item = MediaItem(title, url)
         # item.thumb = helper.GetNamedValue("thumbnail_190")
-        # item.icon = self.icon
         # item.description = helper.GetNamedValue("description")
         # item.type = 'video'
         # item.complete = False

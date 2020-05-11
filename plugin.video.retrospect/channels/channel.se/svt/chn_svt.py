@@ -39,18 +39,26 @@ class Channel(chn_class.Channel):
         # ============== Actual channel setup STARTS here and should be overwritten from derived classes ===============
         self.noImage = "svtimage.png"
 
-        # Setup the urls
-
-        self.mainListUri = self.__get_api_url(
+        self.__show_program_folder = self._get_setting("show_programs_folder", "true") == "true"
+        self.__program_url = self.__get_api_url(
             "ProgramsListing", "1eeb0fb08078393c17658c1a22e7eea3fbaa34bd2667cec91bbc4db8d778580f", {})
+        self.mainListUri = "#mainlist"
 
+        # Setup the urls
         self.baseUrl = "https://www.svtplay.se"
         self.swfUrl = "https://media.svt.se/swf/video/svtplayer-2016.01.swf"
 
-        # In case we use the All Titles and Singles with the API
-        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=ProgramsListing",
+        # If we have a separate listing for the mainlist (#mainlist) then only run a preprocessor
+        # that generates the list
+        self._add_data_parser("#mainlist", preprocessor=self.add_live_items_and_genres)
+
+        # # If there is an actual url, then include the pre-processor:
+        # self._add_data_parser(self.__program_url,
+        #                       preprocessor=self.add_live_items_and_genres)
+        # And the other video items depending on the url.
+        self._add_data_parser(self.__program_url,
                               match_type=ParserData.MatchStart, json=True,
-                              preprocessor=self.add_live_items_and_genres,
+                              preprocessor=self.folders_or_clips,
                               parser=["data", "programAtillO", "flat"],
                               creator=self.create_api_typed_item)
 
@@ -90,10 +98,10 @@ class Channel(chn_class.Channel):
                               creator=self.create_api_typed_item)
 
         # Setup channel listing based on JSON data in the HTML
-        self._add_data_parser("https://www.svtplay.se/kanaler", match_type=ParserData.MatchExact,
+        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=ChannelsQuery",
                               name="Live streams", json=True,
-                              preprocessor=self.extract_live_channel_data,
-                              parser=[], creator=self.create_channel_item)
+                              parser=["data", "channels", "channels"],
+                              creator=self.create_channel_item)
 
         # Searching
         self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=SearchPage",
@@ -117,8 +125,10 @@ class Channel(chn_class.Channel):
         self.__filter_subheading = "filter_subheading"
         self.__parent_images = "parent_thumb_data"
         self.__apollo_data = None
-        self.__expires_text = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
         self.__timezone = pytz.timezone("Europe/Stockholm")
+
+        self.__show_videos = True
+        self.__show_folders = True
 
         # ===============================================================================================================
         # Test cases:
@@ -142,7 +152,7 @@ class Channel(chn_class.Channel):
         # Specify the name, url and whether or not to filter out some subheadings:
         extra_items = {
             LanguageHelper.get_localized_string(LanguageHelper.LiveTv): (
-                "https://www.svtplay.se/kanaler",
+                self.__get_api_url("ChannelsQuery", "65ceeccf67cc8334bc14eb495eb921cffebf34300562900076958856e1a58d37", {}),
                 False),
 
             LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes): (
@@ -176,7 +186,6 @@ class Channel(chn_class.Channel):
         for title, (url, include_subheading) in extra_items.items():
             new_item = MediaItem("\a.: %s :." % (title, ), url)
             new_item.complete = True
-            new_item.thumb = self.noImage
             new_item.dontGroup = True
             new_item.metaData[self.__filter_subheading] = include_subheading
             items.append(new_item)
@@ -189,7 +198,6 @@ class Channel(chn_class.Channel):
         genre_url = self.__get_api_url("AllGenres", "6bef51146d05b427fba78f326453127f7601188e46038c9a5c7b9c2649d4719c", {})
         genre_item = MediaItem(genre_tags, genre_url)
         genre_item.complete = True
-        genre_item.thumb = self.noImage
         genre_item.dontGroup = True
         items.append(genre_item)
 
@@ -260,7 +268,6 @@ class Channel(chn_class.Channel):
             LanguageHelper.get_localized_string(LanguageHelper.Categories))
         new_item = MediaItem(category_title, "https://www.svtplay.se/genre")
         new_item.complete = True
-        new_item.thumb = self.noImage
         new_item.dontGroup = True
         for title, (category_id, thumb) in category_items.items():
             # https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=GenreProgramsAO&variables={"genre": ["action-och-aventyr"]}&extensions={"persistedQuery": {"version": 1, "sha256Hash": "189b3613ec93e869feace9a379cca47d8b68b97b3f53c04163769dcffa509318"}}
@@ -272,6 +279,53 @@ class Channel(chn_class.Channel):
             cat_item.metaData[self.__genre_id] = category_id
             new_item.items.append(cat_item)
         items.append(new_item)
+
+        progs = MediaItem(
+            LanguageHelper.get_localized_string(LanguageHelper.TvShows),
+            self.__program_url)
+        items.append(progs)
+
+        if self.__show_program_folder:
+            clips = MediaItem(
+                "\a.: {} :.".format(LanguageHelper.get_localized_string(LanguageHelper.SingleEpisodes)),
+                self.__program_url
+            )
+            items.append(clips)
+
+            # split the item types
+            clips.metaData["list_type"] = "videos"
+            progs.metaData["list_type"] = "folders"
+
+        # Clean up the titles
+        for item in items:
+            item.name = item.name.strip("\a.: ")
+
+        return data, items
+
+    def folders_or_clips(self, data):
+        """ Adds the Live items, Channels and Last Episodes to the listing.
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        items = []
+        if self.parentItem:
+            list_type = self.parentItem.metaData.get("list_type")
+            if list_type == "folders":
+                self.__show_folders = True
+                self.__show_videos = False
+            elif list_type == "videos":
+                self.__show_folders = False
+                self.__show_videos = True
+
+        # For now we either show all or none.
+        # else:
+        #     self.__show_folders = True
+        #     self.__show_videos = False
 
         return data, items
 
@@ -303,14 +357,18 @@ class Channel(chn_class.Channel):
             item = self.create_api_genre_type(result_set)
         elif api_type == "TvShow" or api_type == "KidsTvShow":
             item = self.create_api_tvshow_type(result_set)
+
+        # Search Result
+        elif api_type == "SearchHit":
+            item = self.create_api_typed_item(result_set["item"], add_parent_title=True)
+
+        # Video items
         elif api_type == "Single":
             item = self.create_api_single_type(result_set)
         elif api_type == "Clip" or api_type == "Trailer":
             item = self.create_api_clip_type(result_set)
-        elif api_type == "Episode":
+        elif api_type == "Episode" or api_type == "Variant":
             item = self.create_api_episode_type(result_set, add_parent_title)
-        elif api_type == "SearchHit":
-            item = self.create_api_typed_item(result_set["item"], add_parent_title=True)
         else:
             Logger.warning("Missing type: %s", api_type)
             return None
@@ -324,17 +382,19 @@ class Channel(chn_class.Channel):
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
 
         """
 
+        if not self.__show_folders:
+            return None
+
         url = result_set["urls"]["svtplay"]
         item = MediaItem(result_set['name'], "#program_item")
         item.metaData["slug"] = url
-        item.icon = self.icon
         item.isGeoLocked = result_set.get('restrictions', {}).get('onlyAvailableInSweden', False)
         item.description = result_set.get('longDescription')
 
@@ -351,7 +411,7 @@ class Channel(chn_class.Channel):
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
@@ -361,10 +421,12 @@ class Channel(chn_class.Channel):
 
         """
 
+        if not self.__show_folders:
+            return None
+
         url = result_set["urls"]["svtplay"]
         item = MediaItem(result_set['name'], "#program_item")
         item.metaData["slug"] = url
-        item.icon = self.icon
         item.isGeoLocked = result_set.get('restrictions', {}).get('onlyAvailableInSweden', False)
         item.description = result_set.get('description')
         image_info = result_set.get("image")
@@ -389,6 +451,9 @@ class Channel(chn_class.Channel):
 
         """
 
+        if not self.__show_folders:
+            return None
+
         if result_set["type"].lower() == "upcoming":
             return None
 
@@ -411,7 +476,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -420,6 +485,9 @@ class Channel(chn_class.Channel):
             __typename=Teaser
 
         """
+
+        if not self.__show_folders:
+            return None
 
         title = result_set.get("heading")
         sub_heading = result_set.get("subHeading")
@@ -461,7 +529,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
         :param bool add_parent_title: Should the parent's title be included?
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
@@ -471,6 +539,9 @@ class Channel(chn_class.Channel):
             __typename=Episode
 
         """
+
+        if not self.__show_videos:
+            return None
 
         svt_video_id = result_set.get("videoSvtId", result_set.get("svtId", None))
         if svt_video_id:
@@ -496,8 +567,6 @@ class Channel(chn_class.Channel):
 
         if "image" in result_set:
             item.thumb = self.__get_thumb(result_set["image"], width=720)
-            if not bool(item.fanart):
-                item.fanart = self.__get_thumb(result_set["image"])
 
         valid_from = result_set.get("validFrom", None)
         if bool(valid_from) and valid_from.endswith("Z"):
@@ -569,7 +638,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -578,6 +647,9 @@ class Channel(chn_class.Channel):
             __typename=Episode
 
         """
+
+        if not self.__show_videos:
+            return None
 
         title = result_set['name']
         url = '{}{}'.format(self.baseUrl, result_set['urls']['svtplay'])
@@ -591,6 +663,10 @@ class Channel(chn_class.Channel):
             item.thumb = self.__get_thumb(image_info, width=720)
             item.fanart = self.__get_thumb(image_info)
         item.isGeoLocked = result_set['restrictions']['onlyAvailableInSweden']
+
+        duration = int(result_set.get("duration", 0))
+        if duration > 0:
+            item.set_info_label("duration", duration)
         return item
 
     def create_api_clip_type(self, result_set):
@@ -605,7 +681,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -614,6 +690,12 @@ class Channel(chn_class.Channel):
             __typename=Episode
 
         """
+
+        if not self.__show_videos:
+            return None
+
+        if not self.__show_videos:
+            return None
 
         title = result_set['name']
         svt_video_id = result_set.get("videoSvtId", result_set.get("svtId", None))
@@ -660,9 +742,10 @@ class Channel(chn_class.Channel):
 
         """
 
+        if not self.__show_folders:
+            return None
+
         item = MediaItem(result_set["name"], "#genre_item")
-        item.fanart = self.fanart
-        item.thumb = self.noImage
         item.metaData[self.__genre_id] = result_set["id"]
         return item
 
@@ -744,7 +827,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict channel: The result_set of the self.episodeItemRegex
+        :param dict channel: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -753,40 +836,52 @@ class Channel(chn_class.Channel):
 
         Logger.trace(channel)
 
-        title = channel["programmeTitle"]
-        episode = channel.get("episodeTitle", None)
-        thumb = self.noImage
-        channel_title = channel["channelName"]
-        description = channel.get("description")
-        channel_id = channel["channel"].lower()
-        if channel_id == "svtbarn":
+        # Channel data
+        channel_title = channel["name"]
+        channel_id = channel["id"]
+        if channel_id == "svtb":
             channel_id = "barnkanalen"
+        elif channel_id == "svtk":
+            channel_id = "kunskapskanalen"
 
+        # Running data
+        running = channel["running"]
+        title = running["name"]
+        episode = running.get("subHeading", None)
+        thumb = self.__get_thumb(running["image"], width=720)
         date_format = "%Y-%m-%dT%H:%M:%S"
-        start_time = DateHelper.get_date_from_string(channel["publishingTime"][:19], date_format)
-        end_time = DateHelper.get_date_from_string(channel["publishingEndTime"][:19], date_format)
+        start_time = DateHelper.get_date_from_string(running["start"][:19], date_format)
+        end_time = DateHelper.get_date_from_string(running["end"][:19], date_format)
+        description = running.get("description")
 
         if episode:
             title = "%s: %s - %s (%02d:%02d - %02d:%02d)" \
                     % (channel_title, title, episode,
                        start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
+            description = "{:02d}:{:02d} - {:02d}:{:02d}: {} - {}\n\n{}".format(
+                start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min,
+                title, episode or "", description)
         else:
             title = "%s: %s (%02d:%02d - %02d:%02d)" \
                     % (channel_title, title,
                        start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
+            description = "{:02d}:{:02d} - {:02d}:{:02d}: {}\n\n{}".format(
+                start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min,
+                title, description)
+
         channel_item = MediaItem(
             title,
-            "https://www.svt.se/videoplayer-api/video/ch-%s" % (channel_id.lower(),)
+            "https://www.svt.se/videoplayer-api/video/%s" % (channel_id.lower(),)
         )
         channel_item.type = "video"
-        channel_item.description = description
         channel_item.isLive = True
         channel_item.isGeoLocked = True
+        channel_item.description = description
 
         channel_item.thumb = thumb
-        if "titlePageThumbnailIds" in channel and channel["titlePageThumbnailIds"]:
+        if "episodeThumbnailIds" in channel and channel["episodeThumbnailIds"]:
             channel_item.thumb = "https://www.svtstatic.se/image/wide/650/%s.jpg" % (
-                channel["titlePageThumbnailIds"][0],)
+                channel["episodeThumbnailIds"][0],)
         return channel_item
 
     def search_site(self, url=None):  # @UnusedVariable
@@ -836,16 +931,43 @@ class Channel(chn_class.Channel):
 
         """
 
-        json_string, _ = self.extract_json_data(data)
-        json_data = JsonHelper(json_string)
-        channels = json_data.get_value("channelsPage", "schedule")
-        channel_list = []
-        for channel_name, channel_data in channels.items():
-            if "channel" not in channel_data:
-                continue
-            channel_list.append(channel_data)
+        json_data = JsonHelper(data)
+        channels = json_data.get_value("data", "channels", "channels")
+        channel_list = {}
 
-        json_data.json = channel_list
+        # get a dictionary with channels
+        for channel_data in channels:
+            channel_tag = channel_data["urlName"]
+            # find the corresponding episode
+            channel_list[channel_tag] = channel_data
+            
+        programs = dict([kv for kv in json_data.get_value("guidePage", "programs").items() if kv[1].get("isActiveBroadcast", False)])
+        schedules = json_data.get_value("guidePage", "schedules")
+        for channel_name, program_ids in schedules.items():
+            channel_tag = channel_name.split(":")[0]
+            channel = channel_list.get(channel_tag, None)
+            if channel is None:
+                continue
+
+            # see what program is playing
+            program_id = [p for p in program_ids if p in programs]
+            if not program_id:
+                del channel_list[channel_tag]
+                continue
+
+            program_id = program_id[0]
+            if program_id.startswith("TT"):
+                del channel_list[channel_tag]
+                continue
+
+            program = programs.get(program_id)
+            if program is None:
+                del channel_list[channel_tag]
+                continue
+
+            channel.update(program)
+
+        json_data.json = channel_list.values()
         return json_data, []
 
     def update_video_api_item(self, item):
@@ -908,11 +1030,26 @@ class Channel(chn_class.Channel):
         return self.update_video_api_item(item)
 
     def __set_expire_time(self, expire_date, item):
-        expire_date = expire_date.split("+")[0].replace("T", " ")
-        year = expire_date.split("-")[0]
-        if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
-            item.description = \
-                "{}\n\n{}: {}".format(item.description or "", self.__expires_text, expire_date)
+        """ Sets the expire time
+
+        :param str expire_date:
+        :param MediaItem item:
+
+        """
+
+        try:
+            if expire_date.endswith("z"):
+                valid_to = DateHelper.get_datetime_from_string(expire_date, "%Y-%m-%dT%H:%M:%SZ", "UTC")
+                valid_to = valid_to.astimezone(self.__timezone)
+                item.set_expire_datetime(timestamp=valid_to)
+            else:
+                expire_date = expire_date.split("+")[0].replace("T", " ")
+                year = expire_date.split("-")[0]
+                if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
+                    expire_date = DateHelper.get_datetime_from_string(expire_date, date_format="%Y-%m-%d %H:%M:%S")
+                    item.set_expire_datetime(timestamp=expire_date)
+        except:
+            Logger.warning("Error setting expire date from: %s", expire_date)
 
     def __get_thumb(self, thumb_data, width=1920):
         """ Generates a full thumbnail url based on the "id" and "changed" values in a thumbnail
@@ -1039,10 +1176,8 @@ class Channel(chn_class.Channel):
                 url = sub["url"]
                 if sub_format == "websrt":
                     sub_url = url
-                # elif subFormat == "webvtt":
-                #     Logger.Info("Found M3u8 subtitle, replacing with WSRT")
-                #     start, name, index = sub[-1].rsplit("/", 2)
-                #     subUrl = "%s/%s/%s.wsrt" % (start, name, name)
+                elif sub_format == "webvtt":
+                    sub_url = url
                 else:
                     # look for more
                     continue

@@ -93,10 +93,11 @@ class Channel(chn_class.Channel):
             self.channelBitrate = 1500
 
         elif self.channelCode == "omroepgelderland":
+            # TODO: move to chn_rpoapp?
             self.noImage = "omroepgelderlandimage.png"
-            self.mainListUri = "http://web.omroepgelderland.nl/json/v400/programmas.json"
-            self.baseUrl = "http://web.omroepgelderland.nl"
-            self.liveUrl = "http://app.gld.nl/data/json/v500/tv_live.json"
+            self.mainListUri = "https://web.omroepgelderland.nl/json/v400/programmas.json"
+            self.baseUrl = "https://web.omroepgelderland.nl"
+            self.liveUrl = "https://gelderland.rpoapp.nl/v02/livestreams/AndroidTablet.json"
             self.channelBitrate = 1500
 
         elif self.channelCode == "omroepbrabant":
@@ -124,8 +125,12 @@ class Channel(chn_class.Channel):
                               parser=self.episodeItemJson, creator=self.create_episode_item,
                               json=True)
 
-        if self.liveUrl:
+        if self.liveUrl and "rpoapp" not in self.liveUrl:
             self._add_data_parser(self.liveUrl, preprocessor=self.process_live_items, updater=self.update_video_item)
+
+        elif self.liveUrl:
+            self._add_data_parser(self.liveUrl, name="Live Stream Creator",
+                                  creator=self.create_live_item, json=True, parser=[])
 
         self._add_data_parser("*", parser=self.videoItemJson, creator=self.create_video_item, updater=self.update_video_item,
                               json=True)
@@ -164,8 +169,6 @@ class Channel(chn_class.Channel):
         if self.liveUrl:
             Logger.debug("Adding live item")
             live_item = MediaItem("\aLive TV", self.liveUrl)
-            live_item.icon = self.icon
-            live_item.thumb = self.noImage
             live_item.dontGroup = True
             items.append(live_item)
 
@@ -198,8 +201,6 @@ class Channel(chn_class.Channel):
             title = "{} - {}".format(self.channelName, LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId))
             live_item = MediaItem(title, self.liveUrl)
             live_item.type = 'video'
-            live_item.icon = self.icon
-            live_item.thumb = self.noImage
             live_item.isLive = True
             if self.channelCode == "rtvdrenthe":
                 # RTV Drenthe actually has a buggy M3u8 without master index.
@@ -231,8 +232,6 @@ class Channel(chn_class.Channel):
             live_item = MediaItem(title, self.liveUrl)
             live_item.type = 'video'
             live_item.complete = True
-            live_item.icon = self.icon
-            live_item.thumb = self.noImage
             live_item.isLive = True
             part = live_item.create_new_empty_media_part()
             for stream in streams:
@@ -327,8 +326,6 @@ class Channel(chn_class.Channel):
             link = parse.urljoin(self.baseUrl, link)
 
         item = MediaItem(title, link)
-        item.icon = self.icon
-        item.thumb = self.noImage
         item.complete = True
         return item
 
@@ -364,7 +361,6 @@ class Channel(chn_class.Channel):
             url = parse.urljoin(self.baseUrl, url)
 
         item = MediaItem(title, url)
-        item.thumb = self.noImage
 
         if media_link:
             item.append_single_stream(media_link, self.channelBitrate)
@@ -382,13 +378,10 @@ class Channel(chn_class.Channel):
         if thumb_url and not thumb_url.startswith("http"):
             thumb_url = parse.urljoin(self.baseUrl, thumb_url)
 
-        item.thumb = self.noImage
         if thumb_url:
             item.thumb = thumb_url
 
-        item.icon = self.icon
         item.type = 'video'
-
         item.description = HtmlHelper.to_text(result_set.get("text"))
 
         posix = result_set.get("timestamp", None)
@@ -402,6 +395,38 @@ class Channel(chn_class.Channel):
                           broadcast_date.second)
 
         item.complete = True
+        return item
+
+    def create_live_item(self, result_set):
+        """ Creates a live MediaItem of type 'video' using the result_set from the regex.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param dict[str,str|dict[str,str]] result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        """
+
+        url = result_set["stream"]["highQualityUrl"]
+        title = result_set["title"] or result_set["id"].title()
+        item = MediaItem(title, url)
+        item.type = "video"
+        item.isLive = True
+
+        if result_set["mediaType"].lower() == "audio":
+            item.append_single_stream(item.url)
+            item.complete = True
+            return item
+
         return item
 
     def update_video_item(self, item):

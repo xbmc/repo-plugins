@@ -26,6 +26,7 @@ class LanguageHelper(object):
     AddOnSettingsId = 30528
     RefreshListId = 30529
     CheckUpdatesId = 30530
+    ItemInfo = 30014
     BitrateSelection = 30020
     Recent = 30024
     OtherAddon = 30007
@@ -33,6 +34,9 @@ class LanguageHelper(object):
     Enabled = 30042
     Disabled = 30074
     Retrospect = 30008
+    MissingAddon = 30015
+    UpdateRequired = 30044
+    UpdateToNewKodi = 30045
 
     Monday = 30190
     Tuesday = 30191
@@ -87,6 +91,7 @@ class LanguageHelper(object):
     Clips = 30548
     ErrorList = 30549
     ErrorNoEpisodes = 30550
+    SingleEpisodes = 30583
     DrmTitle = 30554
     DrmText = 30555
     PaidTitle = 30560
@@ -120,6 +125,8 @@ class LanguageHelper(object):
     LogPostSuccessTitle = 30600
     LogPostError = 30601
     LogPostErrorTitle = 30602
+    CleanupCache = 30604
+    CleanupConfirmation = 30605
 
     Today = 30551
     Yesterday = 30552

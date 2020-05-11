@@ -156,7 +156,6 @@ class Channel(chn_class.Channel):
         self.episodeLabel = LanguageHelper.get_localized_string(LanguageHelper.EpisodeId)
         self.seasonLabel = LanguageHelper.get_localized_string(LanguageHelper.SeasonId)
         self.__categories = {}
-        self.__expires_text = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
 
         # ===============================================================================================================
         # Test Cases
@@ -288,8 +287,6 @@ class Channel(chn_class.Channel):
         url = "http://playapi.mtgx.tv/v3/videos/stream/%(id)s" % result_set
         item = MediaItem(result_set["title"], url)
         item.type = "video"
-        item.thumb = self.parentItem.thumb
-        item.icon = self.parentItem.icon
         item.description = result_set.get("summary", None)
 
         aired_at = result_set.get("airedAt", None)
@@ -355,8 +352,6 @@ class Channel(chn_class.Channel):
         if clip_url is not None:
             clip_title = LanguageHelper.get_localized_string(LanguageHelper.Clips)
             clip_item = MediaItem("\a.: %s :." % (clip_title,), clip_url)
-            clip_item.thumb = self.parentItem.thumb
-            clip_item.fanart = self.parentItem.fanart
             items.append(clip_item)
 
         Logger.debug("Pre-Processing finished")
@@ -380,8 +375,6 @@ class Channel(chn_class.Channel):
         title = "\a.: %s :." % (self.searchInfo.get(self.language, self.searchInfo["se"])[1], )
         Logger.trace("Adding search item: %s", title)
         search_item = MediaItem(title, "searchSite")
-        search_item.thumb = self.noImage
-        search_item.fanart = self.fanart
         search_item.dontGroup = True
         items.append(search_item)
 
@@ -441,7 +434,8 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(page, url)
         item.type = "page"
-        Logger.debug("Created '%s' for url %s", item.name, item.url)
+
+        Logger.trace("Created '%s' for url %s", item.name, item.url)
         return item
 
     def create_video_item(self, result_set):
@@ -496,7 +490,7 @@ class Channel(chn_class.Channel):
             # webisode = result_set.get("webisode", False)
 
             # if the name had the episode in it, translate it
-            if episode > 0 and season >0:  # and not webisode:
+            if episode > 0 and season > 0:  # and not webisode:
                 description = "%s\n\n%s" % (title, description)
                 title = "{0} - s{1:02d}e{2:02d}".format(result_set["format_title"],
                                                         season,
@@ -504,7 +498,12 @@ class Channel(chn_class.Channel):
             else:
                 Logger.debug("Found episode '0' or websido '%s': using name instead of episode number", title)
 
-        url = result_set["_links"]["stream"]["href"]
+        mpx_guid = result_set.get('mpx_guid')
+        if mpx_guid is None:
+            url = result_set["_links"]["stream"]["href"]
+        else:
+            # we can use mpx_guid and https://viafree.mtg-api.com/stream-links/viafree/web/se/clear-media-guids/{}/streams
+            url = "https://viafree.mtg-api.com/stream-links/viafree/web/{}/clear-media-guids/{}/streams".format(self.language, mpx_guid)
         item = MediaItem(title, url)
 
         date_info = None
@@ -535,12 +534,9 @@ class Channel(chn_class.Channel):
 
         item.type = "video"
         item.complete = False
-        item.icon = self.icon
         item.isGeoLocked = geo_blocked
         item.isDrmProtected = drm_locked
 
-        item.thumb = self.parentItem.thumb
-        item.fanart = self.parentItem.fanart
         thumb_data = result_set['_links'].get('image', None)
         if thumb_data is not None:
             # Older version
@@ -602,6 +598,10 @@ class Channel(chn_class.Channel):
 
         data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=headers or None)
         json = JsonHelper(data)
+
+        embedded_data = json.get_value("embedded")
+        if embedded_data is not None:
+            return self.__update_embedded(item, embedded_data)
 
         # see if there was an srt already
         if item.MediaItemParts:
@@ -725,9 +725,8 @@ class Channel(chn_class.Channel):
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
-        :param list[str]|dict[str,any] result_set: The result_set of the self.episodeItemRegex
-        :param bool check_channel:                 Compare channel ID's and ignore that that do
-                                                   not match.
+        :param dict[str,any] result_set: The result_set of the self.episodeItemRegex
+        :param bool check_channel:       Compare channel ID's and ignore that that do not match.
 
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
@@ -756,14 +755,20 @@ class Channel(chn_class.Channel):
         else:
             url = "http://playapi.mtgx.tv/v3/videos?format=%(guid)s&order=-airdate&type=program" % result_set
         item = MediaItem(result_set['title'], url)
-        item.icon = self.icon
-        item.thumb = self.noImage
+
+        # Find the possible images
         if "images" in result_set and "landscape" in result_set["images"]:
             image_url = result_set["images"]["landscape"]["href"]
             item.thumb = self.__get_thumb_image(image_url)
             item.fanart = self.__get_thumb_image(image_url, True)
+
         elif "image" in result_set:
             item.thumb = self.__get_thumb_image(result_set["image"])
+
+        elif "_links" in result_set and "image" in result_set["_links"]:
+            thumb_data = result_set["_links"]["image"]
+            item.thumb = self.__get_thumb_image(thumb_data['href'])
+            item.fanart = self.__get_thumb_image(thumb_data['href'], True)
 
         item.isGeoLocked = result_set.get('onlyAvailableInSweden', False)
         return item
@@ -775,7 +780,7 @@ class Channel(chn_class.Channel):
         :param bool fanart_size:    Should we fetch fanart-size (1280x720) images or normal thumbs.
 
         :return: A full URL to a thumb or fanart image.
-        :rtyp: str
+        :rtype: str
 
         """
 
@@ -790,5 +795,30 @@ class Channel(chn_class.Channel):
         expire_date = expire_date.split("+")[0].replace("T", " ")
         year = expire_date.split("-")[0]
         if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
-            item.description = \
-                "{}\n\n{}: {}".format(item.description or "", self.__expires_text, expire_date)
+            expire_date = DateHelper.get_datetime_from_string(expire_date, date_format="%Y-%m-%d %H:%M:%S")
+            item.set_expire_datetime(timestamp=expire_date)
+
+    def __update_embedded(self, item, embedded_data):
+        """ Updates a new "embedded" stream based on the json data
+
+        :param MediaItem item:  The item to update
+        :param embedded_data:   The json data
+
+        :return: Updated MediaItem
+        :rtype: MediaItem
+
+        """
+
+        stream_url = embedded_data["prioritizedStreams"][0]["links"]["stream"]["href"]
+        part = item.create_new_empty_media_part()
+        stream = part.append_media_stream(stream_url, 0)
+        M3u8.set_input_stream_addon_input(stream, self.proxy)
+        item.complete = True
+
+        subtitle_urls = embedded_data["subtitles"]
+        if subtitle_urls:
+            subtitle_url = subtitle_urls[0]["link"]["href"]
+            sub_format = subtitle_urls[0].get("data", {}).get("format", "").lower()
+            part.Subtitle = SubtitleHelper.download_subtitle(subtitle_url, format=sub_format)
+
+        return item

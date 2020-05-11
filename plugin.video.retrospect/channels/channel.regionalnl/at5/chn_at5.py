@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 from resources.lib import chn_class
+from resources.lib.helpers.htmlhelper import HtmlHelper
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers.datehelper import DateHelper
@@ -150,10 +151,8 @@ class Channel(chn_class.Channel):
 
         url = "https://at5news.vinsontv.com/api/news?source=web&externalid={}".format(result_set["externalId"])
         item = MediaItem(result_set["title"], url)
-        item.icon = self.icon
-        item.thumb = self.noImage
         item.complete = True
-        item.description = result_set.get("text")
+        item.description = HtmlHelper.to_text(result_set.get("text"))
 
         date_time = DateHelper.get_date_from_posix(time_stamp)
         item.set_date(date_time.year, date_time.month, date_time.day)
@@ -194,10 +193,9 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(result_set["title"], url)
         item.type = "video"
-        item.icon = self.icon
         item.thumb = thumb or self.noImage
         item.complete = True
-        item.description = result_set.get("text")
+        item.description = HtmlHelper.to_text(result_set.get("text"))
         part = item.create_new_empty_media_part()
         M3u8.update_part_with_m3u8_streams(part, url, proxy=self.proxy, channel=self)
 

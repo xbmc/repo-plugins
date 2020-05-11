@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.curiositystream" name="Curiositystream" version="1.0.0" provider-name="GMaxera">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="main.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Curiositystream Kodi Plugin</summary>
+    <description lang="en_GB">
+This add-on enables playing content from the CuriosityStream website.
+It requires the user to be subscribed to one of the CuriosityStream plans.
+It is not created, maintained or in any way affiliated with CuriosityStream.
+The add-on only provides an interface to access CuriosityStream media from Kodi.
+    </description>
+    <language>en</language>
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <email>gmaxera@gmail.com</email>
+    <source>https://github.com/GMaxera/repo-plugins/tree/curiositystream-leia/plugin.video.curiositystream</source>
+    <news>
+v1.0.0
+First version of the add-on
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

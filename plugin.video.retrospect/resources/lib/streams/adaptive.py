@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
+from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 
 
@@ -10,7 +11,7 @@ class Adaptive(object):
 
     @staticmethod
     def get_license_key(key_url, key_type="R", key_headers=None, key_value=None, json_filter=""):
-        """ Generates a propery license key value
+        """ Generates a property license key value
 
         # A{SSM} -> not implemented
         # R{SSM} -> raw format
@@ -25,11 +26,11 @@ class Adaptive(object):
         :param str key_url:                 The URL where the license key can be obtained.
         :param str|None key_type:           The key type (A, R, B or D).
         :param dict[str,str] key_headers:   A dictionary that contains the HTTP headers to pass.
-        :param str key_value:               The value that is beging passed on as the key value.
+        :param str key_value:               The value that is being passed on as the key value.
         :param str json_filter:             If specified selects that json element to extract the
                                             key response.
 
-        :return: A formated license string that can be passed to the adaptive input add-on.
+        :return: A formatted license string that can be passed to the adaptive input add-on.
         :rtype: str
 
         """
@@ -58,8 +59,7 @@ class Adaptive(object):
                                      persist_storage=False,
                                      service_certificate=None,
                                      manifest_update=None):
-        """ Parsers standard M3U8 lists and returns a list of tuples with streams and bitrates that
-        can be used by other methods.
+        """ Updates an existing stream with parameters for the inputstream adaptive add-on.
 
         :param strm:                    (MediaStream) the MediaStream to update
         :param proxy:                   (Proxy) The proxy to use for opening
@@ -72,6 +72,9 @@ class Adaptive(object):
         :param bool persist_storage:    Should we store certificates? And request server certificates?
         :param str service_certificate: Use the specified server certificate
         :param str manifest_update:     How should the manifest be updated
+
+        :returns: The updated stream
+        :rtype: MediaStream
 
         Can be used like this:
 
@@ -90,8 +93,13 @@ class Adaptive(object):
 
         strm.Adaptive = True    # NOSONAR
 
+        # See https://forum.kodi.tv/showthread.php?tid=353560
+        if AddonSettings.is_min_version(AddonSettings.KodiMatrix):
+            strm.add_property("inputstream", addon)
+        else:
+            strm.add_property("inputstreamaddon", addon)
+
         # See https://github.com/peak3d/inputstream.adaptive/blob/master/inputstream.adaptive/addon.xml.in
-        strm.add_property("inputstreamaddon", addon)
         strm.add_property("inputstream.adaptive.manifest_type", manifest_type)
         if license_key:
             strm.add_property("inputstream.adaptive.license_key", license_key)

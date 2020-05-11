@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category label="General">
+    <setting id="playback" type="enum" lvalues="30015|30016|30017|30018" label="30014" default="1" />
+    <setting id="download" type="folder" source="files" label="30037"  option="writeable" default=""/>
+  </category>
+  <category label="30001">
+    <setting id="twit_live" label="30001" type="select" lvalues="30003|30004|30005" default="0" />
+    <setting id="run_chat" type="bool" label="30020" default="false" />
+    <setting id="nickname" type="text" label="30021" default="" />
+    <setting id="username" type="text" label="30022" default="" />
+    <setting id="password" type="text" label="30023" default="" option="hidden" />
+  </category>
+</settings>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.snagfilms"
+       name="Snagfilms"
+       version="3.0.8"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.t1mlib" version="1.0.18"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Snagfilms Video Addon</summary>
+    <description lang="en_GB">SnagFilms offers a broad collection of great movies you can watch right now</description>
+    <disclaimer lang="en_GB">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GPL-2.0-or-later</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=198859</forum>
+    <website>http://www.snagfilms.com</website>
+    <source>https://github.com/learningit</source>
+    <news>Version 3.0.7 Update/Leia Release
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <broken>The snagfilms website has shutdown. This add-on is no longer supported.</broken>
+  </extension>
+</addon>

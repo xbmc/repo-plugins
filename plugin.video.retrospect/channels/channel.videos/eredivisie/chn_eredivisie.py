@@ -102,8 +102,6 @@ class Channel(chn_class.Channel):
 
         url = "%s/%s/%s" % (current_page[0], int(current_page[1]) + 1, current_page[2])
         page_item = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.MorePages), url)
-        page_item.fanart = self.parentItem.fanart
-        page_item.thumb = self.parentItem.thumb
         page_item.dontGroup = True
         items.append(page_item)
 
@@ -139,8 +137,6 @@ class Channel(chn_class.Channel):
             title = "%s%s" % (title[0].upper(), title[1:])
         item = MediaItem(title, url)
         item.complete = True
-        item.thumb = self.noImage
-        item.fanart = self.fanart
         return item
 
     def create_video_item(self, result_set):
@@ -169,10 +165,6 @@ class Channel(chn_class.Channel):
         item.type = "video"
         item.thumb = result_set["Thumb"]
         item.complete = False
-        if self.parentItem is None:
-            item.fanart = self.fanart
-        else:
-            item.fanart = self.parentItem.fanart
         return item
 
     def update_video_item(self, item):

@@ -168,7 +168,6 @@ class Channel(chn_class.Channel):
         name = result_set[1]
 
         item = MediaItem(name.capitalize(), url)
-        item.icon = self.icon
         item.type = "folder"
         item.complete = True
         return item
@@ -231,7 +230,6 @@ class Channel(chn_class.Channel):
         item = MediaItem(name, url)
         item.thumb = thumb
         item.description = desc
-        item.icon = self.icon
         item.type = 'video'
         item.complete = False
 

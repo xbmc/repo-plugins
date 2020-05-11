@@ -71,8 +71,6 @@ class Channel(chn_class.Channel):
         items = []
 
         live_items = MediaItem("\a.: Live TV :.", "")
-        live_items.thumb = self.noImage
-        live_items.icon = self.icon
         items.append(live_items)
 
         live_base = "http://il.srgssr.ch/integrationlayer/1.0/ue/srf/video/play/%s.json"
@@ -82,7 +80,6 @@ class Channel(chn_class.Channel):
         for live_item in live_channels.keys():
             item = MediaItem(live_item, live_base % (live_channels[live_item][0],))
             item.thumb = self.get_image_location(live_channels[live_item][1])
-            item.icon = self.icon
             item.isGeoLocked = True
             item.type = "video"
             live_items.items.append(item)
@@ -108,7 +105,6 @@ class Channel(chn_class.Channel):
         url = "http://il.srgssr.ch/integrationlayer/1.0/ue/srf/assetSet/listByAssetGroup/%s.json" % (result_set["id"],)
         item = MediaItem(result_set["title"], url)
         item.description = result_set.get("description", "")
-        item.icon = self.icon
         item.httpHeaders = self.httpHeaders
 
         # the 0005 seems to be a quality thing: 0001, 0003, 0004, 0005
@@ -143,7 +139,6 @@ class Channel(chn_class.Channel):
         url = "http://il.srgssr.ch/integrationlayer/1.0/ue/srf/assetSet/listByAssetGroup/%s.json?pageSize=100" % (result_set["id"],)
         item = MediaItem(result_set["title"], url)
         item.description = result_set.get("description", "")
-        item.icon = self.icon
         item.httpHeaders = self.httpHeaders
         item.thumb = self.__get_nested_value(result_set, "Image", "ImageRepresentations", "ImageRepresentation", 0, "url")
         item.complete = True
@@ -198,8 +193,6 @@ class Channel(chn_class.Channel):
         # 2015-01-20 22:17:59"
         date_time = DateHelper.get_date_from_string(date_value, "%Y-%m-%d %H:%M:%S")
         item.set_date(*date_time[0:6])
-
-        item.icon = self.icon
         item.httpHeaders = self.httpHeaders
         item.complete = False
         return item
@@ -252,8 +245,6 @@ class Channel(chn_class.Channel):
         # 2015-01-20T22:17:59"
         date_time = DateHelper.get_date_from_string(date_value, "%Y-%m-%dT%H:%M:%S")
         item.set_date(*date_time[0:6])
-
-        item.icon = self.icon
         item.httpHeaders = self.httpHeaders
         item.complete = False
         return item

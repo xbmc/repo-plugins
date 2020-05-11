@@ -27,6 +27,7 @@ def locked_read_write(origfunc):
 
         cacheLock.acquire()
         try:
+            # noinspection PyArgumentList
             return origfunc(*args, **kwargs)
         finally:
             cacheLock.release()

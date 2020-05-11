@@ -4,21 +4,16 @@ import datetime
 
 from resources.lib import chn_class
 from resources.lib.mediaitem import MediaItem
-from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.htmlhelper import HtmlHelper
 from resources.lib.regexer import Regexer
 from resources.lib.parserdata import ParserData
 from resources.lib.logger import Logger
 from resources.lib.urihandler import UriHandler
-from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
-from resources.lib.streams.m3u8 import M3u8
-from resources.lib.streams.mpd import Mpd
 from resources.lib.vault import Vault
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.textures import TextureHandler
-from resources.lib.helpers.subtitlehelper import SubtitleHelper
 
 
 class Channel(chn_class.Channel):
@@ -87,8 +82,8 @@ class Channel(chn_class.Channel):
 
         video_regex = r'<a[^>]+href="(?<url>/vrtnu/(?:[^/]+/){2}[^/]*?(?<year2>\d*)/[^"]+)"[^>]*>' \
                       r'\W*(?<title>[^<]+)(?:<br\s*/>\s*)?</a>\s*</h3>\s*<p[^>]*>\W*(?<channel>[^<]+)' \
-                      r'</p>\s*(?:<p[^<]+</p>\s*)?<div[^>]*class="meta[^>]*>\s*<time[^>]+datetime=' \
-                      r'"(?<year>\d+)-(?<month>\d+)-(?<day>\d+)[\w\W]{0,1000}?ata-responsive-image=' \
+                      r'</p>\s*(?:<p[^<]+</p>\s*)?<div[^>]*class="meta[^>]*>\s*(?:<time[^>]+datetime=' \
+                      r'"(?<year>\d+)-(?<month>\d+)-(?<day>\d+))?[\w\W]{0,1000}?ata-responsive-image=' \
                       r'"(?<thumburl>[^"]+)'
 
         # No need for a subtitle for now as it only includes the textual date
@@ -288,25 +283,16 @@ class Channel(chn_class.Channel):
             return data, items
 
         cat = MediaItem("\a.: Categori&euml;n :.", "https://www.vrt.be/vrtnu/categorieen.model.json")
-        cat.fanart = self.fanart
-        cat.thumb = self.noImage
-        cat.icon = self.icon
         cat.dontGroup = True
         items.append(cat)
 
         live = MediaItem("\a.: Live Streams :.", "https://services.vrt.be/videoplayer/r/live.json")
-        live.fanart = self.fanart
-        live.thumb = self.noImage
-        live.icon = self.icon
         live.dontGroup = True
         live.isLive = True
         items.append(live)
 
         channel_text = LanguageHelper.get_localized_string(30010)
         channels = MediaItem("\a.: %s :." % (channel_text, ), "#channels")
-        channels.fanart = self.fanart
-        channels.thumb = self.noImage
-        channels.icon = self.icon
         channels.dontGroup = True
         items.append(channels)
 
@@ -365,9 +351,7 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url)
         item.description = title
         item.thumb = thumb
-        item.icon = self.icon
         item.type = 'folder'
-        item.fanart = self.fanart
         item.HttpHeaders = self.httpHeaders
         item.complete = True
         return item
@@ -462,9 +446,11 @@ class Channel(chn_class.Channel):
         # update artswork
         if item.thumb and item.thumb.startswith("//"):
             item.thumb = "https:%s" % (item.thumb, )
-        else:
-            item.thumb = self.noImage
-        item.fanart = self.fanart
+
+        # API url's
+        # item.url = "https://vrtnu-api.vrt.be/search?i=video&facets[programUrl]={}&size=300".format(
+        #     item.url.replace("https:", "").replace(".relevant", ""))
+
         return item
 
     def create_folder_item(self, result_set):
@@ -519,8 +505,6 @@ class Channel(chn_class.Channel):
         description = HtmlHelper.to_text(json_data.get_value("description"))
         item = MediaItem(title, url, type="video")
         item.description = description
-        item.thumb = self.parentItem.thumb
-        item.fanart = self.parentItem.fanart
         return item
 
     def create_video_item(self, result_set):
@@ -560,7 +544,6 @@ class Channel(chn_class.Channel):
             item.thumb = "https:%s" % (item.thumb, )
 
         self.__hasAlreadyVideoItems = True
-        item.fanart = self.parentItem.fanart
         return item
 
     def update_live_video(self, item):
@@ -631,95 +614,11 @@ class Channel(chn_class.Channel):
 
         """
 
-        # region New URL retrieval with DRM protection
-        # We need a player token
-        token_data = UriHandler.open("https://media-services-public.vrt.be/"
-                                     "vualto-video-aggregator-web/rest/external/v1/tokens", data="",
-                                     additional_headers={"Content-Type": "application/json"})
+        hls_over_dash = self._get_setting("hls_over_dash", 'false') == 'true'
 
-        token = JsonHelper(token_data).get_value("vrtPlayerToken")
-
-        asset_url = "https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/" \
-                    "external/v1/videos/{0}?vrtPlayerToken={1}&client=vrtvideo"\
-            .format(HtmlEntityHelper.url_encode(mzid), HtmlEntityHelper.url_encode(token))
-        asset_data = UriHandler.open(asset_url, proxy=self.proxy, no_cache=True)
-        asset_data = JsonHelper(asset_data)
-
-        drm_key = asset_data.get_value("drm")
-        drm_protected = drm_key is not None
-        adaptive_available = AddonSettings.use_adaptive_stream_add_on(
-            with_encryption=drm_protected, channel=self)
-        part = item.create_new_empty_media_part()
-        srt = None
-
-        # see if we prefer hls over dash
-        hls_prio = 2 if self._get_setting("hls_over_dash", 'false') == 'true' else 0
-
-        for target_url in asset_data.get_value("targetUrls"):
-            video_type = target_url["type"]
-            video_url = target_url["url"]
-
-            if video_type == "hls_aes" and drm_protected and adaptive_available:
-                # no difference in encrypted or not.
-                Logger.debug("Found HLS AES encrypted stream and a DRM key")
-                stream = part.append_media_stream(video_url, hls_prio)
-                M3u8.set_input_stream_addon_input(stream, self.proxy)
-
-            elif video_type == "hls" and not drm_protected:
-                # no difference in encrypted or not.
-                if adaptive_available:
-                    Logger.debug("Found standard HLS stream and without DRM protection")
-                    stream = part.append_media_stream(video_url, hls_prio)
-                    M3u8.set_input_stream_addon_input(stream, self.proxy)
-                else:
-                    m3u8_data = UriHandler.open(video_url, self.proxy)
-                    for s, b, a in M3u8.get_streams_from_m3u8(video_url, self.proxy,
-                                                              play_list_data=m3u8_data, map_audio=True):
-                        item.complete = True
-                        if a:
-                            audio_part = a.rsplit("-", 1)[-1]
-                            audio_part = "-%s" % (audio_part, )
-                            s = s.replace(".m3u8", audio_part)
-                        part.append_media_stream(s, b)
-
-                    srt = M3u8.get_subtitle(video_url, play_list_data=m3u8_data, proxy=self.proxy)
-                    if not srt or live:
-                        # If there is not SRT don't download it. If it a live stream with subs,
-                        # don't use it as it is not supported by Kodi
-                        continue
-
-                    srt = srt.replace(".m3u8", ".vtt")
-                    part.Subtitle = SubtitleHelper.download_subtitle(srt, format="webvtt")
-
-            elif video_type == "mpeg_dash" and adaptive_available:
-                if not drm_protected:
-                    Logger.debug("Found standard MPD stream and without DRM protection")
-                    stream = part.append_media_stream(video_url, 1)
-                    Mpd.set_input_stream_addon_input(stream, self.proxy)
-                else:
-                    stream = part.append_media_stream(video_url, 1)
-                    encryption_json = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}'\
-                        .format(drm_key)
-                    encryption_key = Mpd.get_license_key(
-                        key_url="https://widevine-proxy.drm.technology/proxy",
-                        key_type="D",
-                        key_value=encryption_json,
-                        key_headers={"Content-Type": "text/plain;charset=UTF-8"}
-                    )
-                    Mpd.set_input_stream_addon_input(stream, self.proxy, license_key=encryption_key)
-
-            if video_type.startswith("hls") and srt is None:
-                srt = M3u8.get_subtitle(video_url, proxy=self.proxy)
-                if not srt or live:
-                    # If there is not SRT don't download it. If it a live stream with subs,
-                    # don't use it as it is not supported by Kodi
-                    continue
-
-                srt = srt.replace(".m3u8", ".vtt")
-                part.Subtitle = SubtitleHelper.download_subtitle(srt, format="webvtt")
-
-            item.complete = True
-        # endregion
+        from resources.lib.streams.vualto import Vualto
+        v = Vualto(self, "vrtvideo")
+        item = v.get_stream_info(item, mzid, live=live, hls_over_dash=hls_over_dash)
         return item
 
     def __extract_session_data(self, logon_data):

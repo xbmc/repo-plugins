@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.heiseshowrss" version="1.0" name="#heiseshow HD" provider-name="Unofficial - Oscar Open">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.feedparser" version="5.1.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="de_DE">#heiseshow Videopodcast</summary>
+        <description lang="de_DE">heise online spricht mit Gästen über aktuelle technische Entwicklungen und Netzpolitik.</description>
+        <summary lang="en_GB">#heiseshow Videopodcast</summary>
+        <description lang="en_GB">Watch the weekly news discussion #heiseshow from heise online</description>
+        <platform>all</platform>
+        <license>GPL-3.0-only</license>
+        <source>https://github.com/oscaropenness/plugin.video.heiseshowrss</source>
+	<news>v1.0 (2020-03-29)
+		- initial release</news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+	    <screenshot>resources/media/screenshot-01.png</screenshot>
+	    <screenshot>resources/media/screenshot-02.png</screenshot>
+	    <screenshot>resources/media/screenshot-03.png</screenshot>
+        </assets>
+    </extension>
+</addon>

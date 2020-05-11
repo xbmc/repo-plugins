@@ -276,7 +276,6 @@ class Channel(chn_class.Channel):
             recent_text = LanguageHelper.get_localized_string(LanguageHelper.Recent)
             recent = MediaItem("\b.: {} :.".format(recent_text), self.recentUrl)
             recent.dontGroup = True
-            recent.fanart = self.fanart
             items.append(recent)
 
         # live items
@@ -286,13 +285,11 @@ class Channel(chn_class.Channel):
             live.dontGroup = True
             live.isGeoLocked = True
             live.isLive = True
-            live.fanart = self.fanart
             items.append(live)
 
         search = MediaItem("\a.: S&ouml;k :.", "searchSite")
         search.type = "folder"
         search.dontGroup = True
-        search.fanart = self.fanart
         items.append(search)
 
         return data, items
@@ -314,7 +311,7 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
         url_format = "https://{0}/content/videos?decorators=viewingHistory&" \
                      "include=images%2CprimaryChannel%2Cshow&" \
-                     "filter%5BvideoType%5D=EPISODE%2CLIVE%2CFOLLOW_UP&" \
+                     "filter%5BvideoType%5D=EPISODE%2CLIVE%2CFOLLOW_UP%2CSTANDALONE&" \
                      "filter%5Bshow.id%5D={{0}}&" \
                      "page%5Bsize%5D={1}&" \
                      "page%5Bnumber%5D=1&" \
@@ -380,8 +377,6 @@ class Channel(chn_class.Channel):
         title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
         url = url_format.format(page + 1)
         item = MediaItem(title, url)
-        item.fanart = self.parentItem.fanart
-        item.thumb = self.parentItem.thumb
         return item
 
     def search_site(self, url=None):
@@ -504,15 +499,11 @@ class Channel(chn_class.Channel):
             item.name = "s{0:02d}e{1:02d} - {2}".format(season, episode, item.name)
             item.set_season_info(season, episode)
 
-        item.fanart = self.parentItem.fanart
         if include_show_title:
             show_id = result_set["relationships"].get("show", {}).get("data", {}).get("id")
             if show_id:
                 show = self.showLookup[show_id]
                 item.name = "{0} - {1}".format(show, item.name)
-
-            if item.thumb != self.noImage:
-                item.fanart = item.thumb
 
         if "videoDuration" in video_info:
             item.set_info_label(MediaItem.LabelDuration, video_info["videoDuration"] / 1000)

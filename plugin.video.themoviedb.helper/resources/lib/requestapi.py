@@ -15,12 +15,14 @@ class RequestAPI(object):
         self.req_api_key = req_api_key or ''
         self.req_api_name = req_api_name or ''
         self.req_wait_time = req_wait_time or 0
+        self.req_connect_err_prop = 'TMDbHelper.ConnectionError.{}'.format(self.req_api_name)
+        self.req_connect_err = utils.try_parse_float(xbmcgui.Window(10000).getProperty(self.req_connect_err_prop)) or 0
         self.cache_long = 14 if not cache_long or cache_long < 14 else cache_long
         self.cache_short = 1 if not cache_short or cache_short < 1 else cache_short
         self.cache_name = 'plugin.video.themoviedb.helper'
         self.addon_name = 'plugin.video.themoviedb.helper'
         self.addon = xbmcaddon.Addon(self.addon_name)
-        self.dialog_noapikey_header = '{0} {1} {2}'.format(self.addon.getLocalizedString(32007), self.req_api_name, self.addon.getLocalizedString(32008))
+        self.dialog_noapikey_header = u'{0} - {1}'.format(self.addon.getLocalizedString(32007), self.req_api_name)
         self.dialog_noapikey_text = self.addon.getLocalizedString(32009)
         self.dialog_noapikey_check = None
 
@@ -71,15 +73,27 @@ class RequestAPI(object):
         """
         Make the request to the API by passing a url request string
         """
+        if utils.get_timestamp(self.req_connect_err):
+            return {} if dictify else None  # Connection error in last minute for this api so don't keep trying
         if self.req_wait_time:
             utils.rate_limiter(addon_name=self.cache_name, wait_time=self.req_wait_time, api_name=self.req_api_name)
-        response = requests.post(request, data=postdata, headers=headers) if postdata else requests.get(request, headers=headers)  # Request our data
-        if not response.status_code == requests.codes.ok:  # Error Checking
+        try:
+            response = requests.post(request, data=postdata, headers=headers) if postdata else requests.get(request, headers=headers)  # Request our data
+        except Exception as err:
+            self.req_connect_err = utils.set_timestamp()
+            xbmcgui.Window(10000).setProperty(self.req_connect_err_prop, str(self.req_connect_err))
+            utils.kodi_log(u'ConnectionError: {}\nSuppressing retries for 1 minute'.format(err), 1)
+            return {} if dictify else None
+        if not response.status_code == requests.codes.ok and utils.try_parse_int(response.status_code) >= 400:  # Error Checking
             if response.status_code == 401:
-                utils.kodi_log('HTTP Error Code: {0}'.format(response.status_code), 1)
+                utils.kodi_log(u'HTTP Error Code: {0}\nRequest: {1}\nPostdata: {2}\nHeaders: {3}\nResponse: {4}'.format(response.status_code, request, postdata, headers, response), 1)
                 self.invalid_apikey()
-            elif not response.status_code == 400:  # Don't write 400 error to log
-                utils.kodi_log('HTTP Error Code: {0}\nRequest: {1}'.format(response.status_code, request), 1)
+            elif response.status_code == 500:
+                self.req_connect_err = utils.set_timestamp()
+                xbmcgui.Window(10000).setProperty(self.req_connect_err_prop, str(self.req_connect_err))
+                utils.kodi_log(u'HTTP Error Code: {0}\nRequest: {1}\nSuppressing retries for 1 minute'.format(response.status_code, request), 1)
+            elif utils.try_parse_int(response.status_code) > 400:  # Don't write 400 error to log
+                utils.kodi_log(u'HTTP Error Code: {0}\nRequest: {1}'.format(response.status_code, request), 1)
             return {} if dictify else None
         if dictify and is_json:
             response = response.json()  # Make the response nice
@@ -96,7 +110,8 @@ class RequestAPI(object):
         for arg in args:
             if arg:  # Don't add empty args
                 request = u'{0}/{1}'.format(request, arg)
-        request = u'{0}{1}'.format(request, self.req_api_key)
+        sep = '?' if '?' not in request else '&'
+        request = u'{0}{1}{2}'.format(request, sep, self.req_api_key)
         for key, value in kwargs.items():
             if value:  # Don't add empty kwargs
                 sep = '?' if '?' not in request else ''

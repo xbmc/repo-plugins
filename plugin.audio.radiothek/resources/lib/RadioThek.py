@@ -69,7 +69,7 @@ class RadioThek:
     def build_stream_url(host_station, loop_stream_id, offset):
         return {'channel': host_station,
                 'id': loop_stream_id,
-                'shoutcast': 1,
+                'shoutcast': 0,
                 'player': 'radiothek_v1',
                 'referer': 'radiothek.orf.at',
                 'offset': offset}
@@ -105,7 +105,7 @@ class RadioThek:
             (host, host_channel, loopStreamId, offset) = self.get_stream_base(station, json_item['start'], json_item['streams'])
         parameters = {'channel': host_channel,
                       'id': loopStreamId,
-                      'shoutcast': 1,
+                      'shoutcast': 0,
                       'player': 'radiothek_v1',
                       'referer': 'radiothek.orf.at',
                       'offset': offset}

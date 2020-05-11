@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#  Copyright 2019 Amir Ammari
+#  Copyright 2020 Muhammad Hussein Ammari
 #
 #  This file is part of the Navahang kodi plugin.
 #
@@ -43,7 +43,7 @@ ADDONVERSION = ADDON.getAddonInfo('version')
 CWD = ADDON.getAddonInfo('path')
 LANGUAGE = ADDON.getLocalizedString
 
-DataLink = 'http://navahang.com/webservice/GetMp3?type=Featured&from=0&to=50'
+DataLink = 'https://navaapi1.b-cdn.net/navaapi2/GetMp3?type=Featured&from=0&to=50'
 
 class LoadLister:
 
@@ -64,7 +64,7 @@ class LoadLister:
                 json_text = response.read()
                 loaded_json = json.loads(json_text)
                 otext = loaded_json['data'][0]['track']
-                self.addLink('[B]' + otext['title'] + "[/B][CR]" + otext['artist'], loaded_json['data'][0]['tuneinurl'], otext['imageurl'], {'Artist': otext['artist'],'Title': otext['title'],'Album': otext['album'] if otext['album']!='' else 'Single'})
+                self.addLink('Play Radio Navahang[CR][B]' + otext['title'] + "[/B] by " + otext['artist'], loaded_json['data'][0]['tuneinurl'], otext['imageurl'], {'Artist': otext['artist'],'Title': otext['title'],'Album': otext['album'] if otext['album']!='' else 'Single'})
 
                 request = urllib.request.Request(DataLink, headers={'User-Agent' : 'Kodi'})
                 response = urllib.request.urlopen(request)

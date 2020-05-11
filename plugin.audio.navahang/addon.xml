@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.navahang" name="Navahang" version="2.4" provider-name="MohammadHosein Ammari">
+<addon id="plugin.audio.navahang" name="Navahang" version="2.5" provider-name="Muhammad Hussein Ammari">
 	<requires>
         <import addon="xbmc.python"                     version="2.26.0"/>
         <import addon="script.module.beautifulsoup4"    version="4.3.2"/>
@@ -22,9 +22,9 @@
 	<license>GPL-2.0-only</license>
 	<forum></forum>
 	<website>https://www.navahang.com</website>
-	<email>amirrammari@gmail.com</email>
-	<source>https://github.com/amirrammari/kodi-repo-plugins/tree/master/plugin.audio.navahang</source>
-	<news>Compatible with Python 3</news>
+	<email>xmha97@gmail.com</email>
+	<source>https://github.com/xmha97/kodi-repo-plugins/tree/master/plugin.audio.navahang</source>
+	<news>Solve the problem of censorship in Iran</news>
 	<assets>
 		<icon>resources/media/icon.png</icon>
 			<fanart>resources/media/fanart.jpg</fanart>

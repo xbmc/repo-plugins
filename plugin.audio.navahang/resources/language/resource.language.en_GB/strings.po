@@ -1,7 +1,7 @@
 # Kodi Media Center language file
-# Addon Name: IRIB TV3
-# Addon id: plugin.video.iribtv
-# Addon Provider: Amir Ammari
+# Addon Name: Navahang
+# Addon id: plugin.audio.navahang
+# Addon Provider: Muhammad Hussein Ammari
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Addons\n"

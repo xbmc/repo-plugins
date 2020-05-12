@@ -7,7 +7,6 @@ import sys
 import xbmcgui
 
 
-from resources.lib.environments import Environments
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.logger import Logger
@@ -22,7 +21,7 @@ class ChannelInfo(object):
 
     def __init__(self, guid, name, description, icon, category, path,
                  channel_code=None, sort_order=255, language=None,
-                 compatible_platforms=Environments.All, fanart=None):
+                 ignore=False, fanart=None):
         """ Creates a ChannelInfo object with basic information for a channel
 
         :param str guid:                    A unique GUID.
@@ -32,11 +31,10 @@ class ChannelInfo(object):
         :param str category:                The category it belongs to.
         :param str path:                    Path of the channel.
         :param str channel_code:            A code that distinguishes a channel within a module.
-                                            Default is None.
+                                             Default is None.
         :param int sort_order:              The sortorder (0-255). Default is 255.
         :param str language:                The language of the channel. Default is None.
-        :param int compatible_platforms:    The supported Platform ID taken from Environments.
-                                            Default is Environments.All
+        :param bool ignore:                 Should the channel be ignored? Defaults to False
         :param str fanart:                  A fanart url/path.
 
         """
@@ -47,6 +45,8 @@ class ChannelInfo(object):
         self.moduleName = os.path.splitext(path_parts[-1])[0]
 
         self.id = ("%s.%s.%s" % (path_parts[-3], path_parts[-2], channel_code or "")).rstrip(".")
+        self.url_id = ("%s.%s-%s" % (path_parts[-3], path_parts[-2], channel_code or "")).rstrip("-")
+
         # TODO: the GUID could be replaced by the self.id in the future.
         self.guid = guid
         self.channelName = name
@@ -54,7 +54,7 @@ class ChannelInfo(object):
         self.channelDescription = description
 
         self.category = category
-        self.compatiblePlatforms = compatible_platforms
+        self.ignore = ignore
         self.language = language
         self.sortOrder = sort_order
         # I am Dutch, sorry about that
@@ -70,7 +70,6 @@ class ChannelInfo(object):
 
         self.icon = icon
         self.fanart = fanart
-        self.version = "x.x.x.x"
         self.enabled = False                  # enabled from the settings
         self.visible = False                  # hidden/visible due to country settings
         self.adaptiveAddonSelectable = False  # can the InputStream Adaptive be selected
@@ -157,13 +156,13 @@ class ChannelInfo(object):
         """
 
         if self.channelCode is None:
-            return "%s [%s-%s=%s, %s=%s, %s, %s] (Order: %s)" % (
-                self.channelName, self.id, self.version, self.enabled, self.language,
+            return "%s [%s=%s, %s=%s, %s, %s] (Order: %s)" % (
+                self.channelName, self.id, self.enabled, self.language,
                 self.visible, self.category, self.guid, self.sortOrderPerCountry
             )
         else:
-            return "%s (%s) [%s-%s=%s, %s=%s, %s, %s] (Order: %s)" % (
-                self.channelName, self.channelCode, self.id, self.version, self.enabled,
+            return "%s (%s) [%s=%s, %s=%s, %s, %s] (Order: %s)" % (
+                self.channelName, self.channelCode, self.id, self.enabled,
                 self.language, self.visible, self.category, self.guid, self.sortOrderPerCountry
             )
 
@@ -175,9 +174,9 @@ class ChannelInfo(object):
 
         """
 
-        return "%s @ %s\nmoduleName: %s\nicon: %s\ncompatiblePlatforms: %s" % (
+        return "%s @ %s\nmoduleName: %s\nicon: %s\nignore: %s" % (
             self, self.path, self.moduleName,
-            self.icon, self.compatiblePlatforms
+            self.icon, self.ignore
         )
 
     def __eq__(self, other):
@@ -214,11 +213,10 @@ class ChannelInfo(object):
         return self.addonUrl is not None
 
     @staticmethod
-    def from_json(path, version="x.x.x.x"):
+    def from_json(path):
         """ Generates a list of ChannelInfo objects present in the json meta data file.
 
         :param str path: The path of the json file.
-        :param str version: Version of the channel set that contains the channel info file.
 
         :return: The channel info objects within the json file.
         :rtype: list[ChannelInfo]
@@ -235,7 +233,7 @@ class ChannelInfo(object):
             json_data = json_file.read()
 
         json = JsonHelper(json_data, logger=Logger.instance())
-        channels = json.get_value("channels")
+        channels = json.get_value("channels")  # type: dict
 
         if "settings" in json.json:
             settings = json.get_value("settings")
@@ -255,7 +253,7 @@ class ChannelInfo(object):
                                        channel.get("channelcode", None),
                                        channel.get("sortorder", 255),
                                        channel.get("language", None),
-                                       eval(channel.get("compatible", "Environments.All")),
+                                       channel.get("ignore", False),
                                        channel.get("fanart", None))
             channel_info.firstTimeMessage = channel.get("message", None)
             channel_info.addonUrl = channel.get("addonUrl", None)
@@ -263,7 +261,6 @@ class ChannelInfo(object):
             # Disable spoofing for the moment
             # channel_info.localIPSupported = channel.get("localIPSupported", False)
             channel_info.settings = settings
-            channel_info.version = version
 
             # validate a bit
             if channel_info.channelCode == "None":

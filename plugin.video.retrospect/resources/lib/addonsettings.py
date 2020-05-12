@@ -636,6 +636,22 @@ class AddonSettings(object):
         return
 
     @staticmethod
+    def get_notification_level():
+        """ Retrieves the level for displaying notifications to the end user:
+
+        0: Information.
+        1: Warning.
+        2: Error.
+
+        :return: Array with the levels that we are showing to the end user
+        :rtype: list[str]
+
+        """
+        values = ['info', 'warning', 'error']
+        minimum_level = AddonSettings.store(KODI).get_integer_setting("minimum_notification_level")
+        return values[minimum_level:]
+
+    @staticmethod
     def get_user_agent():
         """ Retrieves a user agent string for this Kodi instance.
 

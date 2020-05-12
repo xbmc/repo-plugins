@@ -57,7 +57,6 @@
       "channelcode": "tv6lt",
       "sortorder": 6,
       "language": "lt",
-      "compatible": "Environments.All",
       "fanart": "tv6viasatfanart.png",
       "localIPSupported": true
     },

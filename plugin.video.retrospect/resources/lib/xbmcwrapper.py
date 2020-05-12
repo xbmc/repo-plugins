@@ -6,6 +6,7 @@ import xbmcgui
 import xbmc
 import xbmcaddon
 
+from resources.lib.addonsettings import AddonSettings
 from resources.lib.backtothefuture import unichr
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.retroconfig import Config
@@ -232,6 +233,9 @@ class XbmcWrapper:
             notification_icon = notification_icon.replace("\\", "/")
         else:
             notification_icon = notification_type
+
+        if notification_type not in AddonSettings.get_notification_level():
+            return
 
         if logger:
             logger.debug("Showing notification: %s - %s", notification_title, notification_content)

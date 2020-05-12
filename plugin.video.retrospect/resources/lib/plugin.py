@@ -1,8 +1,6 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
-import os
-
 from resources.lib import envcontroller
 from resources.lib.logger import Logger
 from resources.lib.addonsettings import AddonSettings
@@ -86,14 +84,14 @@ class Plugin(ActionParser):
             # Determine what action to perform based on the parameters
             if keyword.CHANNEL in self.params:
                 # retrieve channel characteristics
-                channel_file = os.path.splitext(self.params[keyword.CHANNEL])[0]
+                channel_url_id = self.params[keyword.CHANNEL]
                 channel_code = self.params[keyword.CHANNEL_CODE]
                 Logger.debug("Found Channel data in URL: channel='%s', code='%s'",
-                             channel_file, channel_code)
+                             channel_url_id, channel_code)
 
                 # import the channel
                 channel_register = ChannelIndex.get_register()
-                channel = channel_register.get_channel(channel_file, channel_code)
+                channel = channel_register.get_channel(channel_url_id, channel_code)
 
                 if channel is not None:
                     channel_object = channel

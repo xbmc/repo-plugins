@@ -187,22 +187,23 @@ class EnvController:
         else:
             return EnvController.__CurrentPlatform
 
-    @staticmethod
-    def is_platform(platform):
-        """Checks if the current platform matches the requested on
-
-        :param int platform: The requested platform
-
-        :return: True if the <platform> matches EnvController.get_platform().
-        :rtype: bool
-
-        """
-
-        plat = EnvController.get_platform()
-
-        # check if the actual platform is in the platform bitmask
-        # return plat & platform  == platform
-        return platform & plat == plat
+    # Deprecated: check on what platform we are running is no longer needed.
+    # @staticmethod
+    # def is_platform(platform):
+    #     """Checks if the current platform matches the requested on
+    #
+    #     :param int platform: The requested platform
+    #
+    #     :return: True if the <platform> matches EnvController.get_platform().
+    #     :rtype: bool
+    #
+    #     """
+    #
+    #     plat = EnvController.get_platform()
+    #
+    #     # check if the actual platform is in the platform bitmask
+    #     # return plat & platform  == platform
+    #     return platform & plat == plat
 
     @staticmethod
     def cache_check():

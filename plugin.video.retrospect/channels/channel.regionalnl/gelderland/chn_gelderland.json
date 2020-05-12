@@ -9,7 +9,7 @@
       "channelcode": "tv1",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.NoPlatform"
+      "ignore": true
     }
   ]
 }

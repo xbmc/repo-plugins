@@ -10,8 +10,7 @@
       "sortorder": 1,
       "language": "no",
       "fanart": "nrkfanart.jpg",
-      "localIPSupported": true,
-      "compatible": "Environments.All"
+      "localIPSupported": true
     }
   ],
   "settings": [

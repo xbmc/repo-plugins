@@ -278,13 +278,13 @@ class Menu(ActionParser):
             self.refresh()
 
     def __get_channel(self):
-        chn = self.params.get(keyword.CHANNEL, None)
-        code = self.params.get(keyword.CHANNEL_CODE, None)
-        if not chn:
+        channel_url_id = self.params.get(keyword.CHANNEL, None)
+        channel_code = self.params.get(keyword.CHANNEL_CODE, None)
+        if not channel_url_id:
             return None
 
-        Logger.debug("Fetching channel %s - %s", chn, code)
-        channel = ChannelIndex.get_register().get_channel(chn, code, info_only=True)
+        Logger.debug("Fetching channel %s - %s", channel_url_id, channel_code)
+        channel = ChannelIndex.get_register().get_channel(channel_url_id, channel_code, info_only=True)
         Logger.debug("Created channel: %s", channel)
         return channel
 

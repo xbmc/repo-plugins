@@ -1281,7 +1281,7 @@ class Channel(chn_class.Channel):
                 # NPO3 has apparently switched the normal and hearing impaired streams?
                 json_urls = Regexer.do_regex('<div class="video-player-container"[^>]+data-alt-prid="([^"]+)"', html_data)
             else:
-                json_urls = Regexer.do_regex('<npo-player media-id="([^"]+)"', html_data)
+                json_urls = Regexer.do_regex('<npo-player[^>]*media-id="([^"]+)"', html_data)
 
             for episode_id in json_urls:
                 return self.__update_video_item(item, episode_id, False)

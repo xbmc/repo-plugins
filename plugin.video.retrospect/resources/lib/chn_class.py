@@ -59,19 +59,19 @@ class Channel:
         # Initialize channel stuff from ChannelInfo object
         self.guid = channel_info.guid
         self.id = channel_info.id
+        self.url_id = channel_info.url_id
 
         self.channelName = channel_info.channelName
         self.safeName = channel_info.safe_name
         self.channelCode = channel_info.channelCode
         self.channelDescription = channel_info.channelDescription
         self.moduleName = channel_info.moduleName
-        self.compatiblePlatforms = channel_info.compatiblePlatforms
+        self.ignore = channel_info.ignore
         self.sortOrder = channel_info.sortOrder
         self.sortOrderPerCountry = channel_info.sortOrderPerCountry
         self.category = channel_info.category
         self.language = channel_info.language
         self.path = channel_info.path
-        self.version = channel_info.version
         self.adaptiveAddonSelectable = channel_info.adaptiveAddonSelectable
         self.hasSettings = channel_info.settings is not None and len(channel_info.settings) > 0
 
@@ -990,12 +990,12 @@ class Channel:
         """Returns a string representation of the current channel."""
 
         if self.channelCode is None:
-            return "%s [%s-%s, %s, %s, %s] (Order: %s)" % (
-                self.channelName, self.id, self.version, self.language, self.category, self.guid,
+            return "%s [%s, %s, %s, %s] (Order: %s)" % (
+                self.channelName, self.id, self.language, self.category, self.guid,
                 self.sortOrder)
         else:
-            return "%s (%s) [%s-%s, %s, %s, %s] (Order: %s)" % (
-                self.channelName, self.channelCode, self.id, self.version, self.language,
+            return "%s (%s) [%s, %s, %s, %s] (Order: %s)" % (
+                self.channelName, self.channelCode, self.id, self.language,
                 self.category, self.guid, self.sortOrder)
 
     def __eq__(self, other):

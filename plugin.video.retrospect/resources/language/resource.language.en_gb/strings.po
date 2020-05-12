@@ -1044,3 +1044,19 @@ msgstr ""
 msgctxt "#30605"
 msgid "Are you sure you want to clean all of Retrospect's cache and cookies? This action cannot be undone."
 msgstr ""
+
+msgctxt "#30606"
+msgid "Minimum level for showing notifications"
+msgstr ""
+
+msgctxt "#30607"
+msgid "Info"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Warning"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Error"
+msgstr ""

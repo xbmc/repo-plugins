@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="debug" type="bool" label="30101" default="false"/>
+    <setting id="all_programmes" type="enum" label="30102" lvalues="30103|30104" default="0"/>
+</settings>

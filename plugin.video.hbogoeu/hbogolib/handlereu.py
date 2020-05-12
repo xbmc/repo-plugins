@@ -1156,12 +1156,18 @@ class HbogoHandler_eu(HbogoHandler):
         license_headers = 'dt-custom-data=' + dt_custom_data + '&x-dt-auth-token=' + x_dt_auth_token + '&Origin=' + self.API_HOST_ORIGIN + '&Content-Type='
         license_key = self.LICENSE_SERVER + '|' + license_headers + '|R{SSM}|JBlicense'
         self.log('Licence key: ' + self.mask_sensitive_data(str(license_key)))
+
         protocol = 'ism'
         drm = 'com.widevine.alpha'
+        list_item.setContentLookup(False)
+        list_item.setMimeType('application/vnd.ms-sstr+xml')
         from inputstreamhelper import Helper  # type: ignore
         is_helper = Helper(protocol, drm=drm)
         if is_helper.check_inputstream():
-            list_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+            if sys.version_info < (3, 0):  # if python version < 3 is safe to assume we are running on Kodi 18
+                list_item.setProperty('inputstreamaddon', 'inputstream.adaptive')   # compatible with Kodi 18 API
+            else:
+                list_item.setProperty('inputstream', 'inputstream.adaptive')  # compatible with recent builds Kodi 19 API
             list_item.setProperty('inputstream.adaptive.manifest_type', protocol)
             list_item.setProperty('inputstream.adaptive.license_type', drm)
             list_item.setProperty('inputstream.adaptive.license_data', 'ZmtqM2xqYVNkZmFsa3Izag==')

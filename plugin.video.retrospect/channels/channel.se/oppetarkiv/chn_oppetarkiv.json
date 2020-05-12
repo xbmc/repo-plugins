@@ -9,7 +9,6 @@
       "channelcode": "oppetarkiv",
       "sortorder": 1,
       "language": "se",
-      "compatible": "Environments.All",
       "fanart": "oppetarkivfanart.jpg",
       "localIPSupported": true
     }

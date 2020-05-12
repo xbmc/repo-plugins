@@ -10,7 +10,6 @@
       "channelcode": "rtvutrecht",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "rtvutrechtfanart.png"
     },
     {
@@ -22,7 +21,6 @@
       "channelcode": "omroepzeeland",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "omroepzeelandfanart.jpg"
     }
   ]

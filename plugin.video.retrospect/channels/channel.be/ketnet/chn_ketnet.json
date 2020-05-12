@@ -9,7 +9,6 @@
       "channelcode": "ketnet",
       "sortorder": 12,
       "language": "be",
-      "compatible": "Environments.All",
       "fanart": "ketnetfanart.jpg"
     },
     {
@@ -21,7 +20,7 @@
       "channelcode": "cobra",
       "sortorder": 14,
       "language": "be",
-      "compatible": "Environments.NoPlatform"
+      "ignore": true
     }
   ],
   "settings": [

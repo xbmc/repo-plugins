@@ -9,7 +9,7 @@
       "channelcode": "pathe",
       "sortorder": 50,
       "language": "nl",
-      "compatible": "Environments.NoPlatform"
+      "ignore": true
     },
     {
       "guid": "66252BE4-E952-4AE5-B8EB-43E6271C688B",
@@ -20,7 +20,6 @@
       "channelcode": "pathejson",
       "sortorder": 50,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "pathefanart.jpg"
     }
   ]

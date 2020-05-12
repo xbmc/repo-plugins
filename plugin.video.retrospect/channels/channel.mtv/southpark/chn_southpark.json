@@ -8,7 +8,7 @@
       "category": "Video",
       "channelcode": "southpark.se",
       "language": "se",
-      "compatible": "Environments.NoPlatform"
+      "ignore": true
     },
     {
       "guid": "3ac3d6d0-5b2a-11dd-ae16-0800200c9a66",
@@ -18,7 +18,7 @@
       "category": "Video",
       "channelcode": "southpark",
       "language": "nl",
-      "compatible": "Environments.NoPlatform"
+      "ignore": true
     }
   ]
 }

@@ -109,7 +109,7 @@
       "sortorder": 7,
       "language": "no",
       "fanart": "dplayfanart.jpg",
-      "compatible": "Environments.NoPlatform"
+      "ignore": true
     },
     {
       "guid": "1A272A28-3655-4991-B983-5EEBC1282534",
@@ -121,7 +121,7 @@
       "sortorder": 7,
       "language": "no",
       "fanart": "dplayfanart.jpg",
-      "compatible": "Environments.NoPlatform"
+      "ignore": true
     },
     {
       "guid": "5141DFDF-3B9D-4368-8943-2F8D500BC2D1",

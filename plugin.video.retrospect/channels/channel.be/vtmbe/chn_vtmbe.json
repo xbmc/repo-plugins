@@ -19,7 +19,7 @@
       "icon": "q2belogo.png",
       "category": "National",
       "channelcode": "q2",
-      "compatible": "Environments.NoPlatform",
+      "ignore": true,
       "sortorder": 11,
       "language": "be",
       "fanart": "q2befanart.jpg",

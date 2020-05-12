@@ -9,7 +9,6 @@
       "channelcode": "rtvdrenthe",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "rtvdrenthefanart.jpg"
     },
     {
@@ -21,7 +20,6 @@
       "channelcode": "rtvoost",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "rtvoostfanart.jpg"
     },
     {
@@ -33,7 +31,6 @@
       "channelcode": "rtvnoord",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "rtvnoordfanart.png"
     },
     {
@@ -45,7 +42,6 @@
       "channelcode": "rtvnh",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "rtvnhfanart.jpg"
     },
     {
@@ -57,7 +53,6 @@
       "channelcode": "rtvrijnmond",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "rtvrijnmondfanart.png"
     },
     {
@@ -69,7 +64,6 @@
       "channelcode": "omroepwest",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "omroepwestfanart.jpg"
     },
     {
@@ -81,7 +75,6 @@
       "channelcode": "omroepgelderland",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "omroepgelderlandfanart.jpg"
     },
     {
@@ -93,7 +86,6 @@
       "channelcode": "omroepbrabant",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "omroepbrabantfanart.png"
     },
     {
@@ -105,7 +97,6 @@
       "channelcode": "omropfryslan",
       "sortorder": 100,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "omropfryslanfanart.jpg"
     }
   ]

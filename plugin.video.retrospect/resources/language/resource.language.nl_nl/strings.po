@@ -1102,3 +1102,19 @@ msgid ""
 msgstr ""
 "Weet je zeker dat je alle cache en cookies van Retrospect wilt opschonen? "
 "Deze actie kan niet ongedaan gemaakt worden."
+
+msgctxt "#30606"
+msgid "Minimum level for showing notifications"
+msgstr "Minimum niveau voor het tonen van notificaties"
+
+msgctxt "#30607"
+msgid "Information"
+msgstr "Informatie"
+
+msgctxt "#30608"
+msgid "Warning"
+msgstr "Waarschuwing"
+
+msgctxt "#30609"
+msgid "Error"
+msgstr "Foutmelding"

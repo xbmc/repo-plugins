@@ -9,7 +9,6 @@
       "channelcode": "sbs",
       "sortorder": 6,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "sbs6fanart.jpg",
       "adaptiveAddonSelectable": true
     },
@@ -22,7 +21,6 @@
       "channelcode": "net5",
       "sortorder": 5,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "net5fanart.jpg",
       "adaptiveAddonSelectable": true
     },
@@ -35,7 +33,6 @@
       "channelcode": "veronica",
       "sortorder": 10,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "veronicafanart.png",
       "adaptiveAddonSelectable": true
     },
@@ -48,7 +45,6 @@
       "channelcode": "sbs9",
       "sortorder": 9,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "sbs9fanart.jpg",
       "adaptiveAddonSelectable": true
     },
@@ -61,7 +57,6 @@
       "channelcode": null,
       "sortorder": 5,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "kijkfanart.png",
       "adaptiveAddonSelectable": true
     }

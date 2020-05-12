@@ -9,7 +9,6 @@
       "channelcode": "mtvnl",
       "sortorder": 20,
       "language": "nl",
-      "compatible": "Environments.All",
       "fanart": "mtvfanart2.jpg"
     },
     {
@@ -21,7 +20,6 @@
       "channelcode": "mtvde",
       "sortorder": 20,
       "language": "de",
-      "compatible": "Environments.All",
       "fanart": "mtvfanart2.jpg"
     }
   ]

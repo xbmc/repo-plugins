@@ -1,6 +1,4 @@
 {
-  "id": "channel.rtlnl",
-  "version": "5.2.0",
   "textures": {
     "channel.rtlnl.rtl/rtl.png": "46f410339e8e23162a5dc0075fbae1fb",
     "channel.rtlnl.rtl/rtl4large.png": "c48507f68edc430c086c3bf8912dff2f",

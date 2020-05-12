@@ -1,4 +1,4 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.6.0+matrix.1">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.6.1+matrix.1">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
@@ -44,10 +44,9 @@ If an official app is available for your platform, use it instead of this.
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-- Updated and improved subtitle support for Spain/Nordic region (major ttml2srt update)
-- Improve elapsed time function (prevent failed report play status to Hbo in some cases)
-- Alternative method to retrieve season listing (slower) in case standard one fail for some reason (happen rarely, usually its just temporary error, but the add-on can deal with it now without bothering the user)
-- Translations update
+- Recent Kodi 19 API compatibility changes
+- Swedish translation by @Sopor
+- Minor changes
     </news>
     <assets>
      <icon>resources/icon.png</icon>

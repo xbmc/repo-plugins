@@ -420,16 +420,19 @@ class HbogoHandler_sp(HbogoHandler):
 
         protocol = 'mpd'
         drm = 'com.widevine.alpha'
+        li.setContentLookup(False)
+        li.setMimeType('application/dash+xml')
         from inputstreamhelper import Helper  # type: ignore
         is_helper = Helper(protocol, drm=drm)
         if is_helper.check_inputstream():
-            li.setProperty('inputstreamaddon', 'inputstream.adaptive')
+            if sys.version_info < (3, 0):  # if python version < 3 is safe to assume we are running on Kodi 18
+                li.setProperty('inputstreamaddon', 'inputstream.adaptive')  # compatible with Kodi 18 API
+            else:
+                li.setProperty('inputstream', 'inputstream.adaptive')  # compatible with recent builds Kodi 19 API
             li.setProperty('inputstream.adaptive.license_type', drm)
             li.setProperty('inputstream.adaptive.manifest_type', protocol)
             li.setProperty('inputstream.adaptive.license_key', license_url)
 
-            li.setMimeType('application/dash+xml')
-            li.setContentLookup(False)
             # GET SUBTITLES
             folder = xbmc.translatePath(self.addon.getAddonInfo('profile'))
             folder = folder + 'subs' + os.sep + media_guid + os.sep

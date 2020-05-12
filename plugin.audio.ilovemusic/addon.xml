@@ -14,7 +14,6 @@
 		<description lang="en_GB">I Love Music - Webstream player \n https://www.ilovemusic.de </description>
 		<language>de</language>	
 		<source>https://github.com/adiko01/plugin.audio.ilovemusic</source>
-		<email></email>
 	<assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.jpg</fanart>

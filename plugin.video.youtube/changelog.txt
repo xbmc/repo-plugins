@@ -1,3 +1,17 @@
+6.8.2
+[fixup] recommendations with > 50 channels
+
+6.8.1
+[fix] playback failing
+[fix] viewing comments when logged in
+[fix] intermittent issue with Subscriptions
+[fix] encoding of video unavailable messages
+[upd] updates to recommendations
+[upd] update logging for Kodi 19
+[lang] fr_fr strings |contrib: alan7000|
+[lang] pl_pl strings |contrib: drrak|
+[lang] nl_nl strings |contrib: Markman-B|
+
 6.8.0
 [add] support for video comments, Comments in the More... dialog |contrib: doko-desuka|
 [add] simulate deprecated recommended home API |contrib: hedleyroos|

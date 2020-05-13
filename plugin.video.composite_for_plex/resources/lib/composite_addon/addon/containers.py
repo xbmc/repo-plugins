@@ -189,8 +189,6 @@ class Item:
 
     @property
     def url(self):
-        if not self._url:
-            raise ItemPropertyUnavailable
         return self._url
 
     @url.setter

@@ -41,7 +41,7 @@
         <!-- Video Quality -->
         <setting id="video_quality" type="enum" label="30040" lvalues="30102|30136|30201|30254" default="0"/>
         <setting id="bandwidth" type="number" label="30201" default="2500000" enable="eq(-1,2)" visible="eq(-1,2)" subsetting="true"/>
-        <setting id="framerate_limit" type="bool" label="30260" default="false" enable="eq(-2,0)" visible="eq(-2,0)" subsetting="true"/>
+        <setting label="30263" type="slider" id="source_frame_rate_limit" default="0" range="0,30,60" option="int"  enable="eq(-2,0)" visible="eq(-2,0)" subsetting="true"/>
         <setting id="video_support_ia_builtin" type="bool" label="" visible="false" enable="true" default="false"/>
         <setting id="video_support_ia_addon" type="bool" label="" visible="false" enable="true" default="false"/>
         <setting id="video_quality_ia" type="bool" label="30223" default="false" enable="eq(-1,true)|eq(-2,true)"/>
@@ -70,8 +70,7 @@
         <setting label="30233" id="live_notify_group_start" type="bool" default="false" enable="eq(-1,true)" visible="eq(-1,true)"/>
 
         <setting label="30090" type="lsep"/>
-        <setting label="30189" id="add_language" type="action" action="RunPlugin(plugin://$ID/?mode=edit_languages&amp;action=add)"/>
-        <setting label="30190" id="remove_language" type="action" action="RunPlugin(plugin://$ID/?mode=edit_languages&amp;action=remove)"/>
+        <setting label="30262" id="change_language" type="action" action="RunPlugin(plugin://$ID/?mode=edit_languages&amp;action=change)"/>
 
         <setting label="30120" type="lsep"/>
         <setting label="30234" id="refresh_cache" type="bool" default="false"/>

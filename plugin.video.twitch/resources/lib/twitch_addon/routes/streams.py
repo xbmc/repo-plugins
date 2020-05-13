@@ -31,8 +31,8 @@ def route(api, stream_type=StreamType.LIVE, offset=0, platform=Platform.ALL):
 
     while (per_page >= (len(all_items) + 1)) and (requests < MAX_REQUESTS) and (int(offset) <= 900):
         requests += 1
-        languages = ','.join(utils.get_languages())
-        streams = api.get_all_streams(stream_type=stream_type, platform=platform, offset=offset, limit=REQUEST_LIMIT, language=languages)
+        language = utils.get_language()
+        streams = api.get_all_streams(stream_type=stream_type, platform=platform, offset=offset, limit=REQUEST_LIMIT, language=language)
 
         if (total > 0) and (Keys.STREAMS in streams):
             filtered = \

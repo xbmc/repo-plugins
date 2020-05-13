@@ -409,7 +409,13 @@ def get_stored_json():
         json_data['sorting'] = _sorting_defaults
         needs_save = True
     if 'languages' not in json_data:
-        json_data['languages'] = [Language.ALL]
+        json_data['languages'] = Language.ALL
+        needs_save = True
+    if 'languages' in json_data and isinstance(json_data['languages'], list):
+        if len(json_data['languages']) == 1:
+            json_data['languages'] = json_data['languages'][0]
+        else:
+            json_data['languages'] = Language.ALL
         needs_save = True
     if needs_save:
         storage.save(json_data)
@@ -455,35 +461,15 @@ def remove_blacklist(list_type='user'):
         return result
 
 
-def get_languages():
+def get_language():
     json_data = get_stored_json()
     return json_data['languages']
 
 
-def add_language(language):
+def change_language(language=Language.ALL):
     json_data = get_stored_json()
     language = Language.validate(language)
-    if language == Language.ALL:
-        json_data['languages'] = [language]
-    json_data['languages'].append(language)
-    new_languages = list(set(json_data['languages']))
-    try:
-        index_of_all = new_languages.index(Language.ALL)
-    except ValueError:
-        index_of_all = -1
-    if (index_of_all > -1) and len(new_languages) > 1:
-        new_languages.remove(Language.ALL)
-    json_data['languages'] = new_languages
-    storage.save(json_data)
-
-
-def remove_language(language):
-    json_data = get_stored_json()
-    language = Language.validate(language)
-    new_languages = [lang for lang in json_data['languages'] if lang != language]
-    if len(new_languages) == 0:
-        new_languages.append(Language.ALL)
-    json_data['languages'] = new_languages
+    json_data['languages'] = language
     storage.save(json_data)
 
 

@@ -14,7 +14,9 @@ import time
 
 from . import kodi
 
-from xbmc import LOGDEBUG, LOGERROR, LOGFATAL, LOGINFO, LOGNONE, LOGNOTICE, LOGSEVERE, LOGWARNING  # @UnusedImport
+from xbmc import LOGDEBUG, LOGERROR, LOGFATAL, LOGINFO, LOGNONE, LOGSEVERE, LOGWARNING  # @UnusedImport
+
+LOGNOTICE = LOGINFO
 
 
 def log(msg, level=LOGDEBUG):
@@ -24,7 +26,7 @@ def log(msg, level=LOGDEBUG):
         kodi.__log('%s: %s' % (kodi.get_name(), msg), level)
     except Exception as e:
         try:
-            kodi.__log('Logging Failure: %s' % e, level)
+            kodi.__log('Logging Failure: %s' % e, LOGERROR)
         except:
             pass  # just give up
 

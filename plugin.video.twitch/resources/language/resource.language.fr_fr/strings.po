@@ -1,18 +1,17 @@
-
 msgid ""
 msgstr ""
-
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2020-04-28 18:44+0200\n"
 "Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr_FR\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Last-Translator: \n"
+"X-Generator: Poedit 2.0.6\n"
 
 msgctxt "#30001"
 msgid "Games"
@@ -284,644 +283,655 @@ msgstr "Le nom d'utilisateur est nécessaire"
 
 msgctxt "#30096"
 msgid "API"
-msgstr ""
+msgstr "API"
 
 msgctxt "#30097"
 msgid "OAuth Client ID"
-msgstr ""
+msgstr "ID du client OAuth"
 
 msgctxt "#30098"
 msgid "Select Video by ID or URL"
-msgstr ""
+msgstr "Sélectionnez la vidéo par son ID ou son URL"
 
 msgctxt "#30099"
 msgid "OAuth Token"
-msgstr ""
+msgstr "Jeton OAuth"
 
 msgctxt "#30100"
 msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
-msgstr ""
+msgstr "Visitez www.twitch.tv/settings/connections et [CR] \"Enregistrez votre demande\" pour obtenir un ID-client OAuth"
 
 msgctxt "#30101"
 msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
-msgstr ""
+msgstr "Visitez www.twitchapps.com/tmi pour générer un jeton OAuth"
 
 msgctxt "#30102"
 msgid "Source"
-msgstr ""
+msgstr "Source"
 
 msgctxt "#30103"
 msgid "1080p60"
-msgstr ""
+msgstr "1080p60"
 
 msgctxt "#30104"
 msgid "1080p30"
-msgstr ""
+msgstr "1080p30"
 
 msgctxt "#30105"
 msgid "720p60"
-msgstr ""
+msgstr "720p60"
 
 msgctxt "#30106"
 msgid "720p30"
-msgstr ""
+msgstr "720p30"
 
 msgctxt "#30107"
 msgid "540p30"
-msgstr ""
+msgstr "540p30"
 
 msgctxt "#30108"
 msgid "480p30"
-msgstr ""
+msgstr "480p30"
 
 msgctxt "#30109"
 msgid "360p30"
-msgstr ""
+msgstr "360p30"
 
 msgctxt "#30110"
 msgid "240p30"
-msgstr ""
+msgstr "240p30"
 
 msgctxt "#30111"
 msgid "144p30"
-msgstr ""
+msgstr "144p30"
 
 msgctxt "#30112"
 msgid "Quality may result in best match"
-msgstr ""
+msgstr "La qualité peut donner lieu à une meilleure adaptation"
 
 msgctxt "#30114"
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmer"
 
 msgctxt "#30115"
 msgid "Function cache has been reset"
-msgstr ""
+msgstr "Le fonction de cache a été réinitialisée"
 
 msgctxt "#30116"
 msgid "Function cache reset failed"
-msgstr ""
+msgstr "Échec de la réinitialisation de la fonctionnalité de cache"
 
 msgctxt "#30117"
 msgid "Reset function cache?"
-msgstr ""
+msgstr "Réinitialiser la fonctionnalité du cache ?"
 
 msgctxt "#30118"
 msgid "Developer"
-msgstr ""
+msgstr "Développeur"
 
 msgctxt "#30120"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "#30121"
 msgid "Cache expire time (minutes)"
-msgstr ""
+msgstr "Durée d'expiration du cache (en minutes)"
 
 msgctxt "#30122"
 msgid "Reset function cache"
-msgstr ""
+msgstr "Réinitialisation de la fonctionnalité du cache"
 
 msgctxt "#30123"
 msgid "Items per page"
-msgstr ""
+msgstr "Éléments par page"
 
 msgctxt "#30124"
 msgid "Video Id/Url"
-msgstr ""
+msgstr "Id/Url de la vidéo"
 
 msgctxt "#30125"
 msgid "Streams"
-msgstr ""
+msgstr "Flux"
 
 msgctxt "#30126"
 msgid "Refresh"
-msgstr ""
+msgstr "Actualiser"
 
 msgctxt "#30127"
 msgid "Login"
-msgstr ""
+msgstr "Connexion"
 
 msgctxt "#30128"
 msgid "OAuth token is required"
-msgstr ""
+msgstr "Le jeton OAuth est requis"
 
 msgctxt "#30129"
 msgid "Error"
-msgstr ""
+msgstr "Erreur"
 
 msgctxt "#30130"
 msgid "Go to %s"
-msgstr ""
+msgstr "Aller à %s"
 
 msgctxt "#30131"
 msgid "No results returned"
-msgstr ""
+msgstr "Aucun résultat n'a été communiqué"
 
 msgctxt "#30132"
 msgid "OAuth token is required for access to authorized user functions."
-msgstr ""
+msgstr "Le jeton OAuth est nécessaire pour avoir accès aux fonctions utilisateur autorisées."
 
 msgctxt "#30133"
 msgid "Authorize"
-msgstr ""
+msgstr "Autoriser"
 
 msgctxt "#30134"
 msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
-msgstr ""
+msgstr "Get your OAuth token by logging in/signing up to Twitch.tv here:"
 
 msgctxt "#30135"
 msgid "Get OAuth token"
-msgstr ""
+msgstr "Obtenir un jeton OAuth"
 
 msgctxt "#30136"
 msgid "Always ask"
-msgstr ""
+msgstr "Toujours demander"
 
 msgctxt "#30138"
 msgid "*** Do NOT share your OAuth token. ***"
-msgstr ""
+msgstr "*** Ne partagez pas votre jeton OAuth. ***"
 
 msgctxt "#30139"
 msgid "Toggle follow"
-msgstr ""
+msgstr "Basculer pour suivre"
 
 msgctxt "#30140"
 msgid "Now following %s"
-msgstr ""
+msgstr "Actuellement suivi %s"
 
 msgctxt "#30141"
 msgid "Unfollowed %s"
-msgstr ""
+msgstr "Non suivi %s"
 
 msgctxt "#30142"
 msgid "Redirect URI"
-msgstr ""
+msgstr "Rediriger l'URI"
 
 msgctxt "#30143"
 msgid "Would you like to follow %s?"
-msgstr ""
+msgstr "Souhaitez-vous suivre %s"
 
 msgctxt "#30144"
 msgid "Are you sure you want to unfollow %s?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir ne plus suivre %s?"
 
 msgctxt "#30145"
 msgid "Toggle block user"
-msgstr ""
+msgstr "Modifier le blocage de l'utilisateur"
 
 msgctxt "#30146"
 msgid "Blocked %s"
-msgstr ""
+msgstr "Bloqué %s"
 
 msgctxt "#30147"
 msgid "Unblocked %s"
-msgstr ""
+msgstr "Débloqué %s"
 
 msgctxt "#30148"
 msgid "Would you like to block %s?"
-msgstr ""
+msgstr "Souhaitez-vous bloquer %s?"
 
 msgctxt "#30149"
 msgid "Are you sure you want to unblock %s?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir débloquer %s?"
 
 msgctxt "#30150"
 msgid "Blacklist %s"
-msgstr ""
+msgstr "Liste noire %s"
 
 msgctxt "#30151"
 msgid "Blacklisted %s"
-msgstr ""
+msgstr "Sur la liste noire %s"
 
 msgctxt "#30152"
 msgid "Lists"
-msgstr ""
+msgstr "Listes"
 
 msgctxt "#30153"
 msgid "Blacklist"
-msgstr ""
+msgstr "Liste noire"
 
 msgctxt "#30154"
 msgid "Remove a user"
-msgstr ""
+msgstr "Supprimer un utilisateur"
 
 msgctxt "#30155"
 msgid "Remove a game"
-msgstr ""
+msgstr "Supprimer un jeu"
 
 msgctxt "#30156"
 msgid "Remove all users"
-msgstr ""
+msgstr "Supprimer tous les utilisateurs"
 
 msgctxt "#30157"
 msgid "Remove all games"
-msgstr ""
+msgstr "Supprimer tous les jeux"
 
 msgctxt "#30158"
 msgid "Remove %s from blacklist"
-msgstr ""
+msgstr "Supprimer %s de la liste noire"
 
 msgctxt "#30159"
 msgid "Removed %s from blacklist"
-msgstr ""
+msgstr "Supprimé %s de la liste noire"
 
 msgctxt "#30160"
 msgid "Cleared %s %s"
-msgstr ""
+msgstr "Classé %s %s"
 
 msgctxt "#30161"
 msgid "Are you sure you want to clear %s %s?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir classer %s %s?"
 
 msgctxt "#30162"
 msgid "Clear list"
-msgstr ""
+msgstr "Nettoyage de la liste"
 
 msgctxt "#30163"
 msgid "Set default quality"
-msgstr ""
+msgstr "Définir la qualité par défaut"
 
 msgctxt "#30164"
 msgid "Default '%s' quality '%s' set for %s"
-msgstr ""
+msgstr "Qualité '%s' par défaut '%s' fixé pour %s"
 
 msgctxt "#30165"
 msgid "Removed default '%s' quality for %s"
-msgstr ""
+msgstr "Suppression de la qualité '%s' par défaut pour les %s"
 
 msgctxt "#30166"
 msgid "Remove %s quality"
-msgstr ""
+msgstr "Supprimer les %s de qualité"
 
 msgctxt "#30167"
 msgid "Default Qualities"
-msgstr ""
+msgstr "Définir la qualité par défaut"
 
 msgctxt "#30168"
 msgid "Clear default quality"
-msgstr ""
+msgstr "Supprimer la qualité par défaut"
 
 msgctxt "#30169"
 msgid "Choose Quality"
-msgstr ""
+msgstr "Choisir la qualité"
 
 msgctxt "#30170"
 msgid "Playlists"
-msgstr ""
+msgstr "Playlists"
 
 msgctxt "#30171"
 msgid "Collections"
-msgstr ""
+msgstr "Collections"
 
 msgctxt "#30172"
 msgid "Browse"
-msgstr ""
+msgstr "Parcourir"
 
 msgctxt "#30173"
 msgid "Xbox One"
-msgstr ""
+msgstr "Xbox One"
 
 msgctxt "#30174"
 msgid "Playstation 4"
-msgstr ""
+msgstr "Playstation 4"
 
 msgctxt "#30175"
 msgid "Videos"
-msgstr ""
+msgstr "Vidéos"
 
 msgctxt "#30176"
 msgid "Clips"
-msgstr ""
+msgstr "Clips"
 
 msgctxt "#30177"
 msgid "Invalid OAuth token"
-msgstr ""
+msgstr "Jeton OAuth invalide"
 
+#, fuzzy
 msgctxt "#30178"
 msgid "Missing required scopes: %s"
-msgstr ""
+msgstr "Portées requises manquantes : %s"
 
 msgctxt "#30179"
 msgid "Client id mismatch"
-msgstr ""
+msgstr "Non-concordance de l'ID du client"
 
 msgctxt "#30180"
 msgid "Go to '%s' - '%s' - '%s' to generate a new token"
-msgstr ""
+msgstr "Allez sur '%s' - '%s' - '%s' pour générer un nouveau jeton"
 
 msgctxt "#30181"
 msgid "Are you sure you want to blacklist %s?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir mettre %s sur liste noire ?"
 
 msgctxt "#30184"
 msgid "Change sort by"
-msgstr ""
+msgstr "Changer le tri par"
 
 msgctxt "#30185"
 msgid "Change sort direction"
-msgstr ""
+msgstr "Changer la direction du tri"
 
 msgctxt "#30186"
 msgid "Change period"
-msgstr ""
+msgstr "Période de changement"
 
 msgctxt "#30187"
 msgid "Popular"
-msgstr ""
+msgstr "Populaire"
 
 msgctxt "#30188"
 msgid "Views"
-msgstr ""
+msgstr "Vues"
 
 msgctxt "#30189"
 msgid "Add a language"
-msgstr ""
+msgstr "Ajouter une langue"
 
 msgctxt "#30190"
 msgid "Remove a language"
-msgstr ""
+msgstr "Supprimer une langue"
 
 msgctxt "#30191"
 msgid "Remove a stream quality"
-msgstr ""
+msgstr "Supprimer la qualité d'un flux"
 
 msgctxt "#30192"
 msgid "Remove a video quality"
-msgstr ""
+msgstr "Supprimer la qualité d'une vidéo"
 
 msgctxt "#30193"
 msgid "Remove a clip quality"
-msgstr ""
+msgstr "Supprimer la qualité d'un clip"
 
 msgctxt "#30194"
 msgid "Remove all stream qualities"
-msgstr ""
+msgstr "Supprimer toutes les qualités de flux"
 
 msgctxt "#30195"
 msgid "Remove all video qualities"
-msgstr ""
+msgstr "Supprimer toutes les qualités vidéo"
 
 msgctxt "#30196"
 msgid "Remove all clip qualities"
-msgstr ""
+msgstr "Supprimer toutes les qualités de clip"
 
 msgctxt "#30197"
 msgid "Requires confirmation"
-msgstr ""
+msgstr "Nécessite une confirmation"
 
 msgctxt "#30198"
 msgid "Requires subscription to %s"
-msgstr ""
+msgstr "Nécessite un abonnement à %s"
 
 msgctxt "#30199"
 msgid "Connection failed"
-msgstr ""
+msgstr "Échec de la connexion"
 
 msgctxt "#30200"
 msgid "No %s found"
-msgstr ""
+msgstr "Pas de %s trouvés"
 
 msgctxt "#30201"
 msgid "Bandwidth"
-msgstr ""
+msgstr "Bande passante"
 
 msgctxt "#30202"
 msgid "Currently Live"
-msgstr ""
+msgstr "Actuellement en direct"
 
 msgctxt "#30203"
 msgid "Went Live"
-msgstr ""
+msgstr "En direct"
 
 msgctxt "#30204"
 msgid "Live notifications"
-msgstr ""
+msgstr "Notifications d'un événement en direct"
 
 msgctxt "#30205"
 msgid "Audible"
-msgstr ""
+msgstr "Audible"
 
 msgctxt "#30206"
 msgid "Playback failed"
-msgstr ""
+msgstr "Echec de la lecture"
 
 msgctxt "#30207"
 msgid "Retrying in %d seconds"
-msgstr ""
+msgstr "Essai dans %d secondes"
 
 msgctxt "#30208"
 msgid "Attempting to reconnect to %s"
-msgstr ""
+msgstr "Tentative de reconnexion dans %s"
 
+#, fuzzy
 msgctxt "#30209"
 msgid "Attempt #%d"
-msgstr ""
+msgstr "Tentative #%d"
 
 msgctxt "#30210"
 msgid "Attempt reconnection to live streams"
-msgstr ""
+msgstr "Tentative de reconnexion aux flux en direct"
 
 msgctxt "#30211"
 msgid "Enabled"
-msgstr ""
+msgstr "Activé"
 
 msgctxt "#30212"
 msgid "Failed to connect to Twitch API"
-msgstr ""
+msgstr "Échec de la connexion à l'API Twitch"
 
 msgctxt "#30213"
 msgid "Followers"
-msgstr ""
+msgstr "Suivis"
 
 msgctxt "#30214"
 msgid "Items"
-msgstr ""
+msgstr "Éléments"
 
 msgctxt "#30215"
 msgid "Duration"
-msgstr ""
+msgstr "Durée"
 
+#, fuzzy
 msgctxt "#30216"
 msgid "Curated"
-msgstr ""
+msgstr "Conservée"
 
 msgctxt "#30217"
 msgid "Press OK to resolve"
-msgstr ""
+msgstr "Appuyez sur OK pour résoudre"
 
 msgctxt "#30218"
 msgid "Supported video ids: a123435, c123435, v123435, videos123435[CR]Example urls:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
-msgstr ""
+msgstr "Identifiants vidéo pris en charge : a123435, c123435, v123435, videos123435[CR]Exemples d'urls :[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
 
 msgctxt "#30219"
 msgid "Main Menu"
-msgstr ""
+msgstr "Menu principal"
 
 msgctxt "#30220"
 msgid "Failed to get url, try again shortly."
-msgstr ""
+msgstr "Vous n'avez pas réussi à obtenir d'url, réessayez dans un instant."
 
 msgctxt "#30221"
 msgid "Unknown"
-msgstr ""
+msgstr "Inconnu"
 
 msgctxt "#30222"
 msgid "VODCast highlight color"
-msgstr ""
+msgstr "Couleur de surbrillance de VODCast"
 
 msgctxt "#30223"
 msgid "Use inputstream.adaptive"
-msgstr ""
+msgstr "Utiliser inputstream.adaptive"
 
 msgctxt "#30224"
 msgid "Configure inputstream.adaptive"
-msgstr ""
+msgstr "Configurer inputstream.adaptive"
 
 msgctxt "#30225"
 msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
-msgstr ""
+msgstr "inputstream.adaptive est activé dans les paramètres de Twitch, cependant inputstream.adaptive semble être désactivé. Souhaitez-vous activer inputstream.adaptive maintenant ?"
 
 msgctxt "#30226"
 msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
-msgstr ""
+msgstr "L'add-on inputstream.adaptive installé ne répond pas aux exigences de la version (%s), et a été désactivé dans les paramètres de l'add-on Twitch."
 
 msgctxt "#30227"
 msgid "Revoke Token"
-msgstr ""
+msgstr "Révoquer le jeton"
 
 msgctxt "#30228"
 msgid "Are you sure you want to revoke your OAuth token?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir révoquer votre jeton OAuth ?"
 
 msgctxt "#30229"
 msgid "OAuth token has been revoked"
-msgstr ""
+msgstr "Le jeton OAuth a été révoqué"
 
 msgctxt "#30230"
 msgid "OAuth token has been updated"
-msgstr ""
+msgstr "Le jeton OAuth a été mis à jour"
 
 msgctxt "#30231"
 msgid "%s started streaming %s"
-msgstr ""
+msgstr "%s a commencé un direct %s"
 
 msgctxt "#30232"
 msgid "Notify at start"
-msgstr ""
+msgstr "Notifier au démarrage"
 
 msgctxt "#30233"
 msgid "Group notifications at start"
-msgstr ""
+msgstr "Notifications de groupe au lancement"
 
 msgctxt "#30234"
 msgid "Reset cache on Refresh"
-msgstr ""
+msgstr "Réinitialisation du cache sur Rafraîchissement"
 
 msgctxt "#30235"
 msgid "New search"
-msgstr ""
+msgstr "Nouvelle recherche"
 
 msgctxt "#30236"
 msgid "Search history size"
-msgstr ""
+msgstr "Taille de l'historique de recherche"
 
 msgctxt "#30237"
 msgid "Clear search history?"
-msgstr ""
+msgstr "Nettoyer l'historique de recherche ?"
 
 msgctxt "#30238"
 msgid "Remove %s from search history?"
-msgstr ""
+msgstr "Supprimer %s de l'historique de recherche ?"
 
 msgctxt "#30239"
 msgid "Remove %s"
-msgstr ""
+msgstr "Supprimer %s"
 
 msgctxt "#30240"
 msgid "Clear search history"
-msgstr ""
+msgstr "Nettoyer l'historique de recherche"
 
 msgctxt "#30241"
 msgid "Search history cleared"
-msgstr ""
+msgstr "Historique de recherche effacé"
 
 msgctxt "#30242"
 msgid "Removed %s from search history"
-msgstr ""
+msgstr "Suppression %s de l'historique de recherche"
 
 msgctxt "#30243"
 msgid "Maintenance"
-msgstr ""
+msgstr "Maintenance"
 
 msgctxt "#30244"
 msgid "Search History"
-msgstr ""
+msgstr "Historique de recherche"
 
 msgctxt "#30245"
 msgid "Delete streams search history"
-msgstr ""
+msgstr "Effacer l'historique de recherche des lives"
 
 msgctxt "#30246"
 msgid "Delete channels search history"
-msgstr ""
+msgstr "Effacer l'historique de recherche des chaînes"
 
 msgctxt "#30247"
 msgid "Delete games search history"
-msgstr ""
+msgstr "Effacer l'historique de recherche des jeux"
 
 msgctxt "#30248"
 msgid "Delete video id/url search history"
-msgstr ""
+msgstr "Supprimer l'ID vidéo/url de l'historique de recherche"
 
 msgctxt "#30249"
 msgid "Other"
-msgstr ""
+msgstr "Autre"
 
 msgctxt "#30250"
 msgid "Delete storage.json"
-msgstr ""
+msgstr "Supprimer stockage.json"
 
 msgctxt "#30251"
 msgid "Are you sure you want to delete %s?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir supprimer %s ?"
 
 msgctxt "#30252"
 msgid "Deleting %s succeeded"
-msgstr ""
+msgstr "La suppression %s a réussi"
 
 msgctxt "#30253"
 msgid "Deleting %s failed"
-msgstr ""
+msgstr "La suppression %s a échoué"
 
 msgctxt "#30254"
 msgid "Adaptive"
-msgstr ""
+msgstr "Adaptative"
 
 msgctxt "#30255"
 msgid "Thumbnail size"
-msgstr ""
+msgstr "Taille des miniatures"
 
 msgctxt "#30256"
 msgid "Large"
-msgstr ""
+msgstr "Grand"
 
 msgctxt "#30257"
 msgid "Medium"
-msgstr ""
+msgstr "Moyen"
 
 msgctxt "#30258"
 msgid "Small"
-msgstr ""
+msgstr "Petit"
 
 msgctxt "#30259"
 msgid "Live preview refresh interval (minutes)"
-msgstr ""
+msgstr "Intervalle de rafraîchissement de l'aperçu du direct (minutes)"
 
 msgctxt "#30260"
 msgid "Limit to 30 fps"
-msgstr ""
+msgstr "Limite à 30 fps"
 
 msgctxt "#30261"
 msgid "Private API Credentials"
+msgstr "Références de l'API privée"
+
+msgctxt "#30262"
+msgid "Change languages"
+msgstr "Changer de langue"
+
+msgctxt "#30263"
+msgid "Frame rate limit"
 msgstr ""

@@ -26,6 +26,7 @@ def route(api, content, offset=0, cursor='MA=='):
     per_page = utils.get_items_per_page()
     if content == StreamType.LIVE or content == StreamType.PLAYLIST:
         if content == StreamType.LIVE:
+            content = StreamType.ALL
             utils.refresh_previews()
         kodi.set_view('videos', set_sort=True)
 
@@ -165,10 +166,10 @@ def route(api, content, offset=0, cursor='MA=='):
         sort_by = utils.get_sort('clips', 'by')
         all_items = list()
         requests = 0
-        languages = ','.join(utils.get_languages())
+        language = utils.get_language()
         while (CURSOR_LIMIT >= (len(all_items) + 1)) and cursor and (requests < MAX_REQUESTS):
             requests += 1
-            clips = api.get_followed_clips(cursor=cursor, limit=CURSOR_LIMIT, trending=sort_by, language=languages)
+            clips = api.get_followed_clips(cursor=cursor, limit=CURSOR_LIMIT, trending=sort_by, language=language)
             cursor = clips[Keys.CURSOR]
             if Keys.CLIPS in clips and len(clips[Keys.CLIPS]) > 0:
                 filtered = \

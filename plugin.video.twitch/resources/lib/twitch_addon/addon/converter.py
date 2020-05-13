@@ -611,9 +611,10 @@ class JsonListItemConverter(object):
                         return video
 
             elif source and not clip:
-                limit_framerate = kodi.get_setting('framerate_limit') == 'true'
-                if limit_framerate:
-                    fps_videos = [video for video in videos if video.get('fps') and video['fps'] < 31.0]  # use < 31, 30 fps may be > 30 ie. 30.211
+                limit_framerate = int(kodi.get_setting('source_frame_rate_limit'))
+                if limit_framerate >= 30:
+                    adjusted_limit = limit_framerate + 0.999  # use + 0.999 because 30 fps may be > 30 ie. 30.211
+                    fps_videos = [video for video in videos if video.get('fps') and video['fps'] < adjusted_limit]
                     if fps_videos:
                         return fps_videos[0]
 

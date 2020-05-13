@@ -715,7 +715,9 @@ def play_playlist(context, server, data):
     for track in track_tags:
         LOG.debug('Adding playlist item')
         item = Item(server, None, tree, track)
-        url, details = create_track_item(context, item, listing=False)
+        track = create_track_item(context, item, listing=False)
+        url = track[0]
+        details = track[1]
         if CONFIG['kodi_version'] >= 18:
             list_item = item_constructor(details.get('title', i18n('Unknown')), offscreen=True)
         else:

@@ -114,7 +114,7 @@ def search(url):
 
 def process(context, url, tree, last_bit):
     view_group = None
-    if tree:
+    if tree is not None:
         view_group = tree.get('viewGroup')
 
     if last_bit in ['folder', 'playlists']:

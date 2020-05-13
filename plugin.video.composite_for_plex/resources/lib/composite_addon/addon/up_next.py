@@ -220,7 +220,7 @@ class UpNext:
 
         try:
             episode["runtime"] = math.floor(int(metadata.get('duration')) / 1000)
-        except ValueError:
+        except (TypeError, ValueError):
             pass
 
         return episode

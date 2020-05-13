@@ -89,8 +89,6 @@ class CacheControl:
             if isinstance(cache_data, text_type):
                 cache_data = cache_data.encode('utf-8')
             LOG.debug('CACHE [%s]: read' % cache_name)
-            LOG.debugplus('CACHE [%s]: data: [%s]' %
-                          (cache_name, cache_data.decode('utf-8', 'ignore')))
             try:
                 cache_object = pickle.loads(cache_data)
             except (ValueError, TypeError):

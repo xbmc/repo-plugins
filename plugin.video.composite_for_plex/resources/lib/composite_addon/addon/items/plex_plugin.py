@@ -21,6 +21,9 @@ from .gui import create_gui_item
 
 
 def create_plex_plugin_item(context, item):
+    if not item.data.get('title'):
+        return None
+
     info_labels = {
         'title': encode_utf8(item.data.get('title'))
     }

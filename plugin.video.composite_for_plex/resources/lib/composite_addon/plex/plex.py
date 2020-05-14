@@ -11,6 +11,7 @@
 """
 
 import base64
+import hashlib
 import socket
 import traceback
 import xml.etree.ElementTree as ETree
@@ -216,8 +217,19 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
             self.effective_token = self.myplex_token
             self.save_tokencache()
 
-        LOG.debug('myPlex user id: %s' % self.myplex_user)
-        LOG.debug('effective user id: %s' % self.effective_user)
+        myplex_user = self.myplex_user
+        effective_user = self.effective_user
+        if self.settings.privacy():
+            myplex_user = hashlib.md5()
+            myplex_user.update(self.myplex_user.encode('utf-8'))
+            myplex_user = myplex_user.hexdigest()
+
+            effective_user = hashlib.md5()
+            effective_user.update(self.effective_user.encode('utf-8'))
+            effective_user = effective_user.hexdigest()
+
+        LOG.debug('myPlex user id: %s' % myplex_user)
+        LOG.debug('Effective user id: %s' % effective_user)
 
     def load_tokencache(self):
 
@@ -793,3 +805,7 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
         LOG.debug('Gathered information: %s' % result)
 
         return result
+
+    @staticmethod
+    def _tree_tostring(tree):
+        return ETree.tostring(tree)

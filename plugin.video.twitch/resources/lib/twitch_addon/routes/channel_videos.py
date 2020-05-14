@@ -36,8 +36,8 @@ def route(api, broadcast_type, channel_id=None, game=None, offset=0):
                 videos = api.get_top_videos(offset, limit=REQUEST_LIMIT, broadcast_type=broadcast_type, period=period)
             else:
                 sort_by = utils.get_sort('channel_videos', 'by')
-                languages = ','.join(utils.get_languages())
-                videos = api.get_channel_videos(channel_id, offset, limit=REQUEST_LIMIT, broadcast_type=broadcast_type, sort_by=sort_by, language=languages)
+                language = utils.get_language()
+                videos = api.get_channel_videos(channel_id, offset, limit=REQUEST_LIMIT, broadcast_type=broadcast_type, sort_by=sort_by, language=language)
         if Keys.VODS in videos or ((videos[Keys.TOTAL] > 0) and (Keys.VIDEOS in videos)):
             key = Keys.VODS if Keys.VODS in videos else Keys.VIDEOS
             filtered = \

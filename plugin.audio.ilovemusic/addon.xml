@@ -8,17 +8,18 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<platform>all</platform>
+		<license>CC-BY-SA-4.0</license>
 		<summary lang="de_DE">I Love Music</summary>
 		<description lang="de_DE">I Love Music - Webstreams \n https://www.ilovemusic.de </description>
 		<summary lang="en_GB">I Love Music</summary>
 		<description lang="en_GB">I Love Music - Webstream player \n https://www.ilovemusic.de </description>
 		<language>de</language>	
 		<source>https://github.com/adiko01/plugin.audio.ilovemusic</source>
-	<assets>
-        <icon>resources/icon.png</icon>
-        <fanart>resources/fanart.jpg</fanart>
-		<screenshot>resources/screenshot-1.jpg</screenshot>
-		<screenshot>resources/screenshot-2.jpg</screenshot>
-    </assets>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+			<screenshot>resources/screenshot-1.jpg</screenshot>
+			<screenshot>resources/screenshot-2.jpg</screenshot>
+		</assets>
 	</extension>
 </addon>

@@ -86,3 +86,19 @@ msgstr "Titel suchen"
 msgctxt "#30207"
 msgid "Clear Cache"
 msgstr "Cache leeren"
+
+msgctxt "#30208"
+msgid "Trending Trailers"
+msgstr "Trending Trailers"
+
+msgctxt "#30209"
+msgid "Most Anticipated"
+msgstr "Am meisten erwartet"
+
+msgctxt "#30210"
+msgid "Most Popular"
+msgstr "Am beliebtesten"
+
+msgctxt "#30211"
+msgid "Recently Added"
+msgstr "Kürzlich hinzugefügt"

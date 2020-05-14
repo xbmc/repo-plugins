@@ -167,7 +167,10 @@ def route(api, seek_time=0, channel_id=None, video_id=None, slug=None, ask=False
                     except AttributeError:
                         pass
                 if quality_label == 'Adaptive' and use_ia:
-                    playback_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+                    inputstream_property = 'inputstream'
+                    if kodi.get_kodi_version().major < 19:
+                        inputstream_property += 'addon'
+                    playback_item.setProperty(inputstream_property, 'inputstream.adaptive')
                     playback_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
                 if (seek_time > 0) and (video_id):
                     _set_seek_time(seek_time)

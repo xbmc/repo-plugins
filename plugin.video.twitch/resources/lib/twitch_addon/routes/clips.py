@@ -23,10 +23,10 @@ def route(api, cursor='MA==', channel_name=None, game=None):
     sorting = utils.get_sort('clips')
     all_items = list()
     requests = 0
-    languages = ','.join(utils.get_languages())
+    language = utils.get_language()
     while (CURSOR_LIMIT >= (len(all_items) + 1)) and cursor and (requests < MAX_REQUESTS):
         requests += 1
-        clips = api.get_top_clips(cursor, limit=CURSOR_LIMIT, channel=channel_name, game=game, period=sorting['period'], trending=sorting['by'], language=languages)
+        clips = api.get_top_clips(cursor, limit=CURSOR_LIMIT, channel=channel_name, game=game, period=sorting['period'], trending=sorting['by'], language=language)
         cursor = clips[Keys.CURSOR]
         if Keys.CLIPS in clips and len(clips[Keys.CLIPS]) > 0:
             filtered = \

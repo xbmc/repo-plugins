@@ -128,5 +128,6 @@ STRINGS = {
     'removed_from_search_history': 30242,
     'confirm_file_delete_': 30251,
     'delete_succeeded_': 30252,
-    'delete_failed_': 30253
+    'delete_failed_': 30253,
+    'change_languages': 30262
 }

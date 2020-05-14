@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="2.4.10+matrix.1" name="Twitch" provider-name="A Talented Community">
+<addon id="plugin.video.twitch" version="2.5.0+matrix.1" name="Twitch" provider-name="A Talented Community">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.six" version="1.11.0"/>
-        <import addon="script.module.python.twitch" version="2.0.12"/>
+        <import addon="script.module.python.twitch" version="2.0.14"/>
         <import addon="script.module.requests" version="2.9.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="resources/lib/addon_runner.py">
@@ -13,9 +13,11 @@
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <news>
-[fix] fix live notifications
-[fix] fix clips
-[fix] double entries in followed live streams
+[fix] language setting
+[fix] show vodcasts in Following Live Channels
+[fix] logging in Kodi 19
+[upd] frame rate limiting to allow for 60 fps limit
+[lang] fr_FR |contrib: alan7000|
         </news>
         <assets>
             <icon>icon.png</icon>

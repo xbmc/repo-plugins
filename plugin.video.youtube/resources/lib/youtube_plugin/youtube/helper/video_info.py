@@ -688,7 +688,7 @@ class VideoInfo(object):
             fl = []
             if len(_fmts) > 0:
                 try:
-                    fl = _fmts[0].get('cipher').split(',')
+                    fl = _fmts[0].get('signatureCipher',  _fmts[0].get('cipher')).split(',')
                 except AttributeError:
                     fl = _fmts[0].get('url', '').split('&')
             return (len(fl) > 0) and ('s' in dict(urllib.parse.parse_qsl(fl[0])))
@@ -853,6 +853,11 @@ class VideoInfo(object):
                 if not reason:
                     reason = 'UNKNOWN'
 
+                try:
+                    reason = reason.encode('raw_unicode_escape').decode('utf-8')
+                except:
+                    pass
+
                 raise YouTubeException(reason)
 
         meta_info['subtitles'] = Subtitles(self._context, video_id, captions).get_subtitles()
@@ -985,7 +990,7 @@ class VideoInfo(object):
         def parse_to_stream_list(streams):
             for item in streams:
                 stream_map = item
-                stream_map.update(dict(urllib.parse.parse_qsl(item.get('cipher', ''))))
+                stream_map.update(dict(urllib.parse.parse_qsl(item.get('signatureCipher', item.get('cipher', '')))))
 
                 url = stream_map.get('url', None)
                 conn = stream_map.get('conn', None)
@@ -1184,7 +1189,7 @@ class VideoInfo(object):
         data = dict()
         for item in adaptive_fmts:
             stream_map = item
-            stream_map.update(dict(urllib.parse.parse_qsl(item.get('cipher', ''))))
+            stream_map.update(dict(urllib.parse.parse_qsl(item.get('signatureCipher', item.get('cipher', '')))))
             stream_map['itag'] = str(stream_map.get('itag'))
 
             t = stream_map.get('mimeType')

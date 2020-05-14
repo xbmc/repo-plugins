@@ -27,7 +27,10 @@ class ContextMenu:
         self.context = context
         self.server = server
         self.data = data
-        self.parsed_url = urlparse(url)
+
+        self.parsed_url = None
+        if url:
+            self.parsed_url = urlparse(url)
 
         self.item_id = self.data.get('ratingKey', '0')
         self.item_type = self.data.get('type', '').lower()
@@ -40,6 +43,9 @@ class ContextMenu:
         return self._context_menu
 
     def create(self):
+        if not self.parsed_url:
+            return
+
         self._add_go_to_season()
         self._add_go_to_show()
         self._add_mark_watched()

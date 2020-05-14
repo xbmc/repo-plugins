@@ -20,6 +20,9 @@ from .gui import create_gui_item
 
 
 def create_plex_online_item(context, item):
+    if not item.data.get('title', item.data.get('name')):
+        return None
+
     info_labels = {
         'title': encode_utf8(item.data.get('title', item.data.get('name', i18n('Unknown'))))
     }

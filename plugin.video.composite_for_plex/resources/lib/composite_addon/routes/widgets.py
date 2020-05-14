@@ -30,7 +30,7 @@ def run(context, url):
     for section in sections:
         if section.is_movie():
             details = {
-                'title': '%s: %s' % (server.get_name(), i18n('Movies on Deck'))
+                'title': '%s: %s' % (section.get_title(), i18n('On Deck'))
             }
             extra_data = {
                 'mode': MODES.TXT_MOVIES_ON_DECK,
@@ -42,7 +42,7 @@ def run(context, url):
             append_item(create_gui_item(context, gui_item))
 
             details = {
-                'title': '%s: %s' % (server.get_name(), i18n('Recently Added Movies'))
+                'title': '%s: %s' % (section.get_title(), i18n('Recently Added'))
             }
             extra_data = {
                 'mode': MODES.TXT_MOVIES_RECENT_ADDED,
@@ -54,7 +54,7 @@ def run(context, url):
             append_item(create_gui_item(context, gui_item))
 
             details = {
-                'title': '%s: %s' % (server.get_name(), i18n('Recently Released Movies'))
+                'title': '%s: %s' % (section.get_title(), i18n('Recently Released'))
             }
             extra_data = {
                 'mode': MODES.TXT_MOVIES_RECENT_RELEASE,
@@ -67,7 +67,7 @@ def run(context, url):
 
         if section.is_show():
             details = {
-                'title': '%s: %s' % (server.get_name(), i18n('TV Shows on Deck'))
+                'title': '%s: %s' % (section.get_title(), i18n('On Deck'))
             }
             extra_data = {
                 'mode': MODES.TXT_TVSHOWS_ON_DECK,
@@ -79,7 +79,7 @@ def run(context, url):
             append_item(create_gui_item(context, gui_item))
 
             details = {
-                'title': '%s: %s' % (server.get_name(), i18n('Recently Added TV Shows'))
+                'title': '%s: %s' % (section.get_title(), i18n('Recently Added'))
             }
             extra_data = {
                 'mode': MODES.TXT_TVSHOWS_RECENT_ADDED,
@@ -91,7 +91,7 @@ def run(context, url):
             append_item(create_gui_item(context, gui_item))
 
             details = {
-                'title': '%s: %s' % (server.get_name(), i18n('Recently Aired TV Shows'))
+                'title': '%s: %s' % (section.get_title(), i18n('Recently Aired'))
             }
             extra_data = {
                 'mode': MODES.TXT_TVSHOWS_RECENT_AIRED,

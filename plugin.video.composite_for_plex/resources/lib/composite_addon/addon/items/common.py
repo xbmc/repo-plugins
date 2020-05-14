@@ -179,7 +179,7 @@ def get_metadata(context, data):
     }
 
     media_tag = data.find('Media')
-    if media_tag:
+    if media_tag is not None:
         metadata['attributes'] = dict(media_tag.items())
 
     if not context.settings.skip_metadata():

@@ -40,7 +40,7 @@ msgctxt "#30015"
 msgid "Search"
 msgstr "Buscar"
 
-#empty strings from id 30016 to 30100
+# Empty strings from id 30016 to 30100
 
 msgctxt "#30101"
 msgid "Debug (enable logs)"

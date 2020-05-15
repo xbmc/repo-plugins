@@ -51,7 +51,7 @@ def get_categories():
 
 def get_videolist(url, cat_menu=""):
     """This function gets the video list from the FFA website and returns them in a pretty data format."""
-    video_entry_sep        = 'content-type-video'
+    video_entry_sep        = 'content-view'
     video_url_pattern      = '["\'](/watch/[^/]*?/)'
     video_thumb_pattern    = '["\'](/img/[^"\']*?)["\']'
     video_title_pattern    = '<a href=["\']/watch/[^/]*?/["\'][ ]*?>([^<]+?)</a>'
@@ -81,6 +81,8 @@ def get_videolist(url, cat_menu=""):
     category = "Video" # The category is no longer included in the latest website change.
     for video_section in buffer_url.split(video_entry_sep)[1:]:
         url           = l.find_first(video_section, video_url_pattern)
+        if not url:
+            continue  # Sometimes in the search menu can appear articles and other sort of entries rather than videos.
         thumb         = l.find_first(video_section, video_thumb_pattern)
         title         = l.find_first(video_section, video_title_pattern)
         plot          = l.find_first(video_section, video_plot_pattern)

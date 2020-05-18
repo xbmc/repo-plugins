@@ -721,7 +721,7 @@ msgid "Integration with other Kodi add-ons"
 msgstr ""
 
 msgctxt "#30863"
-msgid "Install YouTube add-on"
+msgid "Install YouTube add-on…"
 msgstr ""
 
 msgctxt "#30864"
@@ -737,7 +737,7 @@ msgid "YouTube settings…"
 msgstr ""
 
 msgctxt "#30869"
-msgid "Install Up Next add-on"
+msgid "Install Up Next add-on…"
 msgstr ""
 
 msgctxt "#30870"
@@ -757,19 +757,19 @@ msgid "Open Up Next service add-on settings."
 msgstr ""
 
 msgctxt "#30875"
-msgid "Install Twitter add-on"
+msgid "Install IPTV Manager add-on…"
 msgstr ""
 
 msgctxt "#30877"
-msgid "Enable Twitter integration"
+msgid "Enable IPTV Manager integration (experimental)"
 msgstr ""
 
 msgctxt "#30879"
-msgid "Twitter settings…"
+msgid "IPTV Manager settings…"
 msgstr ""
 
 msgctxt "#30881"
-msgid "Install PySocks library"
+msgid "Install PySocks library…"
 msgstr ""
 
 msgctxt "#30900"

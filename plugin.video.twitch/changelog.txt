@@ -1,3 +1,6 @@
+2.5.1
+[fix] encoding issue causing streams/videos/live notifications to be inaccessible with some languages
+
 2.5.0
 [fix] language setting
 [fix] show vodcasts in Following Live Channels

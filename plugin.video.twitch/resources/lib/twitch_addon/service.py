@@ -19,7 +19,7 @@ import threading
 
 from .addon.common import kodi, log_utils
 from .addon.constants import Keys
-from .addon.utils import BlacklistFilter, i18n, get_stamp_diff, get_vodcast_color
+from .addon.utils import BlacklistFilter, i18n, get_stamp_diff, get_vodcast_color, to_string
 from .addon.player import TwitchPlayer
 from .addon import api, cache
 
@@ -168,12 +168,12 @@ class LiveNotificationsThread(threading.Thread):
             if stream.get(Keys.STREAM_TYPE) != 'live':
                 color = get_vodcast_color()
                 if stream[Keys.CHANNEL].get(Keys.DISPLAY_NAME):
-                    stream[Keys.CHANNEL][Keys.DISPLAY_NAME] = u'[COLOR={color}]{name}[/COLOR]'.format(name=stream[Keys.CHANNEL][Keys.DISPLAY_NAME], color=color)
+                    stream[Keys.CHANNEL][Keys.DISPLAY_NAME] = u'[COLOR={color}]{name}[/COLOR]'.format(name=to_string(stream[Keys.CHANNEL][Keys.DISPLAY_NAME]), color=color)
                 if stream[Keys.CHANNEL].get(Keys.NAME):
-                    stream[Keys.CHANNEL][Keys.NAME] = u'[COLOR={color}]{name}[/COLOR]'.format(name=stream[Keys.CHANNEL][Keys.NAME], color=color)
+                    stream[Keys.CHANNEL][Keys.NAME] = u'[COLOR={color}]{name}[/COLOR]'.format(name=to_string(stream[Keys.CHANNEL][Keys.NAME]), color=color)
             colorized.append(stream)
-        followed_tuples = [(stream[Keys.CHANNEL][Keys._ID], stream[Keys.CHANNEL][Keys.NAME],
-                            stream[Keys.CHANNEL][Keys.DISPLAY_NAME], stream[Keys.GAME])
+        followed_tuples = [(stream[Keys.CHANNEL][Keys._ID], to_string(stream[Keys.CHANNEL][Keys.NAME]),
+                            to_string(stream[Keys.CHANNEL][Keys.DISPLAY_NAME]), to_string(stream[Keys.GAME]))
                            for stream in colorized]
         return followed_tuples
 

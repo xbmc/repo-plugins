@@ -17,7 +17,7 @@ from kodiutils import (delete_cached_thumbnail, get_cached_url_json, get_global_
                        get_proxies, get_setting_bool, get_setting_int, get_url_json, has_addon, localize,
                        localize_from_data, log, ttl, url_for)
 from metadata import Metadata
-from utils import (html_to_kodilabel, find_entry, from_unicode, play_url_to_id,
+from utils import (html_to_kodi, find_entry, from_unicode, play_url_to_id,
                    program_to_url, realpage, url_to_program, youtube_to_plugin_url)
 
 
@@ -145,7 +145,7 @@ class ApiHelper:
             highlight = episode.get('highlight')
             if highlight:
                 for key in highlight:
-                    episode[key] = html_to_kodilabel(highlight.get(key)[0])
+                    episode[key] = html_to_kodi(highlight.get(key)[0])
 
             list_item, sort, ascending = self.episode_to_listitem(episode, program, cache_file, titletype)
             episode_items.append(list_item)

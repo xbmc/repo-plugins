@@ -87,32 +87,32 @@ class SafeDict(dict):
 
 
 def addon_icon():
-    """Cache and return add-on icon"""
+    """Return add-on icon"""
     return get_addon_info('icon')
 
 
 def addon_id():
-    """Cache and return add-on ID"""
+    """Return add-on ID"""
     return get_addon_info('id')
 
 
 def addon_fanart():
-    """Cache and return add-on fanart"""
+    """Return add-on fanart"""
     return get_addon_info('fanart')
 
 
 def addon_name():
-    """Cache and return add-on name"""
+    """Return add-on name"""
     return get_addon_info('name')
 
 
 def addon_path():
-    """Cache and return add-on path"""
+    """Return add-on path"""
     return get_addon_info('path')
 
 
 def addon_profile():
-    """Cache and return add-on profile"""
+    """Return add-on profile"""
     return to_unicode(xbmc.translatePath(ADDON.getAddonInfo('profile')))
 
 
@@ -358,9 +358,17 @@ def localize(string_id, **kwargs):
 
 
 def localize_time(time):
-    """Return localized time"""
-    time_format = xbmc.getRegion('time').replace(':%S', '')  # Strip off seconds
-    return time.strftime(time_format).lstrip('0')  # Remove leading zero on all platforms
+    """Localize time format"""
+    time_format = xbmc.getRegion('time')
+
+    # Fix a bug in Kodi v18.5 and older causing double hours
+    # https://github.com/xbmc/xbmc/pull/17380
+    time_format = time_format.replace('%H%H:', '%H:')
+
+    # Strip off seconds
+    time_format = time_format.replace(':%S', '')
+
+    return time.strftime(time_format)
 
 
 def localize_date(date, strftime):
@@ -873,10 +881,9 @@ def log(level=1, message='', **kwargs):
     xbmc.log(from_unicode(message), level % 3 if debug_logging else 2)
 
 
-def log_access(url, query_string=None):
+def log_access(argv):
     """Log addon access"""
-    message = 'Access: %s' % (url + ('?' + query_string if query_string else ''))
-    log(1, message)
+    log(1, 'Access: {url}{qs}', url=argv[0], qs=argv[2] if len(argv) > 2 else '')
 
 
 def log_error(message, **kwargs):

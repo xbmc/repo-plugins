@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.3.3+matrix.1" provider-name="Martijn Moreel, dagwieers">
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.3.4+matrix.1" provider-name="Martijn Moreel, dagwieers">
 <requires>
   <import addon="resource.images.studios.white" version="0.0.22"/>
   <import addon="script.module.beautifulsoup4" version="4.6.2"/>
@@ -42,6 +42,11 @@
   <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
   <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
   <news>
+v2.3.4 (2020-05-18)
+- Fix token issue caused by new cross-site request forgery (XSRF) checks
+- Add experimental IPTV Manager support
+- Always unescape HTML in outline and description
+
 v2.3.3 (2020-04-30)
 - Fix Radio 1 livestream
 - Fix watching VRT NU abroad
@@ -71,17 +76,6 @@ v2.3.0 (2020-01-01)
 - Add integration for Up Next add-on
 - Fixes to "Go to program", "TV guide" and "Live TV" entries
 - Fix Python 3.5 support
-
-v2.2.3 (2019-10-01)
-- Integrate new inputstreamhelper
-- Support user paths with unicode characters
-- Manage My favorites
-- Improve breadcrumbs support
-- Various translation fixes
-
-v2.2.2 (2019-09-01)
-- "Go to program" will now got to "All seasons" listing
-- Rename "My programs" to "My favorites"
   </news>
   <assets>
     <icon>resources/media/icon.png</icon>

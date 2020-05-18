@@ -14,7 +14,7 @@ except ImportError:  # Python 2
 from data import CHANNELS, SECONDS_MARGIN
 from kodiutils import colour, get_setting_bool, localize, localize_datelong, log, url_for
 from utils import (add_https_proto, assetpath_to_id, capitalize, find_entry, from_unicode,
-                   html_to_kodilabel, reformat_url, shorten_link, to_unicode, unescape,
+                   html_to_kodi, reformat_url, shorten_link, to_unicode, unescape,
                    url_to_episode)
 
 
@@ -269,7 +269,7 @@ class Metadata:
         # VRT NU Search API
         if api_data.get('type') == 'episode':
             if season:
-                plot = html_to_kodilabel(api_data.get('programDescription', ''))
+                plot = html_to_kodi(api_data.get('programDescription', ''))
 
                 # Add additional metadata to plot
                 plot_meta = ''
@@ -310,7 +310,7 @@ class Metadata:
                     plot_meta += '  '
                 plot_meta += localize(30201)  # Geo-blocked
 
-            plot = html_to_kodilabel(api_data.get('description', ''))
+            plot = html_to_kodi(api_data.get('description', ''))
 
             if plot_meta:
                 plot = '%s\n\n%s' % (plot_meta, plot)
@@ -336,7 +336,7 @@ class Metadata:
                 datelong=localize_datelong(epg),
                 start=api_data.get('start'),
                 end=api_data.get('end'),
-                description=html_to_kodilabel(api_data.get('description', '')),
+                description=html_to_kodi(api_data.get('description', '')),
             )
             return colour(plot)
 
@@ -349,14 +349,14 @@ class Metadata:
         # VRT NU Search API
         if api_data.get('type') == 'episode':
             if season:
-                plotoutline = html_to_kodilabel(api_data.get('programDescription', ''))
+                plotoutline = html_to_kodi(api_data.get('programDescription', ''))
                 return plotoutline
 
             if api_data.get('displayOptions', {}).get('showShortDescription'):
-                plotoutline = html_to_kodilabel(api_data.get('shortDescription', ''))
+                plotoutline = html_to_kodi(api_data.get('shortDescription', ''))
                 return plotoutline
 
-            plotoutline = api_data.get('subtitle')
+            plotoutline = html_to_kodi(api_data.get('subtitle'))
             return plotoutline
 
         # VRT NU Suggest API
@@ -365,7 +365,7 @@ class Metadata:
 
         # VRT NU Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
-            return html_to_kodilabel(api_data.get('shortDescription', '') or api_data.get('subtitle', ''))
+            return html_to_kodi(api_data.get('shortDescription', '') or api_data.get('subtitle', ''))
 
         # Not Found
         return ''
@@ -657,7 +657,7 @@ class Metadata:
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
-            title = api_data.get('title') or api_data.get('shortDescription', '???')
+            title = html_to_kodi(api_data.get('title') or api_data.get('shortDescription', '???'))
 
         # VRT NU Suggest API
         elif api_data.get('type') == 'program':
@@ -665,7 +665,7 @@ class Metadata:
 
         # VRT NU Schedule API (some are missing vrt.whatson-id)
         elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
-            title = api_data.get('subtitle', '???')
+            title = html_to_kodi(api_data.get('subtitle', '???'))
 
         return title
 
@@ -685,11 +685,11 @@ class Metadata:
                 titletype = program_type
 
             if display_options.get('showEpisodeTitle'):
-                label = html_to_kodilabel(api_data.get('title', '') or api_data.get('shortDescription', ''))
+                label = html_to_kodi(api_data.get('title', '') or api_data.get('shortDescription', ''))
             elif display_options.get('showShortDescription'):
-                label = html_to_kodilabel(api_data.get('shortDescription', '') or api_data.get('title', ''))
+                label = html_to_kodi(api_data.get('shortDescription', '') or api_data.get('title', ''))
             else:
-                label = html_to_kodilabel(api_data.get('title', '') or api_data.get('shortDescription', ''))
+                label = html_to_kodi(api_data.get('title', '') or api_data.get('shortDescription', ''))
 
             sort = 'unsorted'
             ascending = True
@@ -742,7 +742,7 @@ class Metadata:
             from datetime import datetime
             import dateutil.parser
             import dateutil.tz
-            title = html_to_kodilabel(api_data.get('subtitle', '') or api_data.get('shortDescription', ''))
+            title = html_to_kodi(api_data.get('subtitle', '') or api_data.get('shortDescription', ''))
             label = '{start} - [B]{program}[/B]{title}'.format(
                 start=api_data.get('start'),
                 program=api_data.get('title'),

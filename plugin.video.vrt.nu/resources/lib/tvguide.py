@@ -20,7 +20,7 @@ from kodiutils import (colour, get_cached_url_json, get_proxies, get_url_json, h
                        localize_datelong, show_listing, themecolour, ttl, url_for)
 from metadata import Metadata
 from resumepoints import ResumePoints
-from utils import add_https_proto, find_entry, url_to_program
+from utils import add_https_proto, find_entry, html_to_kodi, url_to_program
 
 
 class TVGuide:
@@ -202,6 +202,30 @@ class TVGuide:
                 is_playable=is_playable,
             ))
         return episode_items
+
+    def get_epg_data(self):
+        """Return EPG data"""
+        now = datetime.now(dateutil.tz.tzlocal())
+
+        epg_data = dict()
+        for date in ['yesterday', 'today', 'tomorrow']:
+            epg = self.parse(date, now)
+            epg_url = epg.strftime(self.VRT_TVGUIDE)
+            schedule = get_url_json(url=epg_url, fail={})
+            for channel_id, episodes in schedule.iteritems():
+                channel = find_entry(CHANNELS, 'id', channel_id)
+                epg_id = channel.get('epg_id')
+                if epg_id not in epg_data:
+                    epg_data[epg_id] = []
+                for episode in episodes:
+                    epg_data[epg_id].append(dict(
+                        start=episode.get('startTime'),
+                        stop=episode.get('endTime'),
+                        image=add_https_proto(episode.get('image', '')),
+                        title=episode.get('title'),
+                        description=html_to_kodi(episode.get('description', '')),
+                    ))
+        return epg_data
 
     def playing_now(self, channel):
         """Return the EPG information for what is playing now"""

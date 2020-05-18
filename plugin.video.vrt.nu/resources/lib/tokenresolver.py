@@ -226,18 +226,21 @@ class TokenResolver:
         if login_json.get('errorCode') != 0:
             return None
 
+        cookiejar = cookielib.CookieJar()
+        opener = build_opener(HTTPCookieProcessor(cookiejar), ProxyHandler(self._proxies))
+        log(2, 'URL get: {url}', url=unquote(self._USER_TOKEN_GATEWAY_URL))
+        opener.open(self._USER_TOKEN_GATEWAY_URL)
+
+        xsrf = next((cookie for cookie in cookiejar if cookie.name == 'XSRF-TOKEN'), None).value
         payload = dict(
             UID=login_json.get('UID'),
             UIDSignature=login_json.get('UIDSignature'),
             signatureTimestamp=login_json.get('signatureTimestamp'),
             client_id='vrtnu-site',
-            submit='submit',
+            _csrf=xsrf
         )
         data = urlencode(payload).encode()
-        cookiejar = cookielib.CookieJar()
-        opener = build_opener(HTTPCookieProcessor(cookiejar), ProxyHandler(self._proxies))
-        log(2, 'URL get: {url}', url=unquote(self._USER_TOKEN_GATEWAY_URL))
-        opener.open(self._USER_TOKEN_GATEWAY_URL)
+
         log(2, 'URL post: {url}', url=unquote(self._VRT_LOGIN_URL))
         opener.open(self._VRT_LOGIN_URL, data=data)
         xvrttoken = TokenResolver._create_token_dictionary(cookiejar)

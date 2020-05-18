@@ -47,6 +47,9 @@ CHANNELS = [
             dict(label='Muziek bij Eén', url='https://www.youtube.com/channel/UC7mPNmdg7ADGt0gH8xOrXpQ'),
         ],
         has_tvguide=True,
+        logo='https://images.vrt.be/orig/logo/een/een_LOGO_zwart.png',
+        epg_id='een.be',
+        preset=1,
     ),
     dict(
         id='1H',
@@ -61,6 +64,9 @@ CHANNELS = [
             dict(label='Terzake', url='https://www.youtube.com/user/terzaketv'),
         ],
         has_tvguide=True,
+        logo='https://images.vrt.be/orig/logo/canvas/CANVAS_logo_lichtblauw.jpg',
+        epg_id='canvas.be',
+        preset=2,
     ),
     dict(
         id='O9',
@@ -75,6 +81,9 @@ CHANNELS = [
             dict(label='Karrewiet', url='https://www.youtube.com/channel/UCCUHHJrtsoC1oyihO86mnMg'),
         ],
         has_tvguide=True,
+        logo='https://images.vrt.be/orig/logo/ketnet/ketnet_LOGO_rood_geel.png',
+        epg_id='ketnet.be',
+        preset=12,
     ),
     dict(
         id='',
@@ -85,6 +94,9 @@ CHANNELS = [
         youtube=[
             dict(label='Ketnet Junior', url='https://www.youtube.com/channel/UCTxm_H52WlKWBEB_h7PjzFA'),
         ],
+        logo='https://images.vrt.be/orig/2019/07/19/c309360a-aa10-11e9-abcc-02b7b76bf47f.png',
+        epg_id='ketnetjr.be',
+        preset=11,
     ),
     dict(
         id='12',
@@ -95,6 +107,9 @@ CHANNELS = [
         youtube=[
             dict(label='Sporza', url='https://www.youtube.com/user/SporzaOfficial'),
         ],
+        logo='https://images.vrt.be/orig/logo/sporza/sporza_logo_zwart.png',
+        epg_id='sporza.be',
+        preset=801,
     ),
     dict(
         id='13',
@@ -107,6 +122,9 @@ CHANNELS = [
             dict(label='VRT NWS', url='https://www.youtube.com/channel/UC59gT3bFTFNSqafRcluDIsQ'),
             dict(label='Terzake', url='https://www.youtube.com/user/terzaketv'),
         ],
+        logo='https://images.vrt.be/orig/logos/vrtnws.png',
+        epg_id='vrtnws.be',
+        preset=802,
     ),
     dict(
         id='11',
@@ -118,9 +136,12 @@ CHANNELS = [
             dict(label='Radio 1', url='https://www.youtube.com/user/vrtradio1'),
             dict(label='Universiteit van Vlaanderen', url='https://www.youtube.com/channel/UC7WpOKbKfzOOnD0PyUN_SYg'),
         ],
+        logo='https://images.vrt.be/orig/logos/radio1.png',
+        epg_id='radio1.be',
+        preset=901,
     ),
     dict(
-        id='24',
+        id='22',
         name='radio2',
         label='Radio 2',
         studio='Radio 2',
@@ -129,6 +150,9 @@ CHANNELS = [
             dict(label='Radio 2', url='https://www.youtube.com/user/radio2inbeeld'),
             dict(label='Aha!', url='https://www.youtube.com/channel/UCa9lGLvXB-xJg3d0BjK_tIQ'),
         ],
+        logo='https://images.vrt.be/orig/logos/radio2.png',
+        epg_id='radio2vlb.be',
+        preset=902,
     ),
     dict(
         id='31',
@@ -140,6 +164,9 @@ CHANNELS = [
             dict(label='Klara', url='https://www.youtube.com/user/klararadio'),
             dict(label='Iedereen klassiek', url='https://www.youtube.com/channel/UCgyfqQgt5_K8_zrxHgh_J2w'),
         ],
+        logo='https://images.vrt.be/orig/logos/klara.png',
+        epg_id='klara.be',
+        preset=903,
     ),
     dict(
         id='41',
@@ -151,6 +178,9 @@ CHANNELS = [
         youtube=[
             dict(label='Studio Brussel', url='https://www.youtube.com/user/StuBru'),
         ],
+        logo='https://images.vrt.be/orig/2019/03/12/1e383cf5-44a7-11e9-abcc-02b7b76bf47f.png',
+        epg_id='stubru.be',
+        preset=904,
     ),
     dict(
         id='55',
@@ -162,6 +192,9 @@ CHANNELS = [
         youbube=[
             dict(label='MNM', url='https://www.youtube.com/user/MNMbe'),
         ],
+        logo='https://images.vrt.be/orig/logo/mnm/logo_witte_achtergrond.png',
+        epg_id='mnm.be',
+        preset=905,
     ),
     dict(
         id='',
@@ -184,23 +217,32 @@ CHANNELS = [
     dict(
         id='',
         name='vrt-events1',
-        label='VRT Events stream 1',
+        label='VRT Events 1',
         studio='VRT',
         live_stream_id='vualto_events1_geo',
+        logo='https://images.vrt.be/orig/logo/vrt.png',
+        epg_id='vrtevents1.be',
+        preset=851,
     ),
     dict(
         id='',
         name='vrt-events2',
-        label='VRT Events stream 2',
+        label='VRT Events 2',
         studio='VRT',
         live_stream_id='vualto_events2_geo',
+        logo='https://images.vrt.be/orig/logo/vrt.png',
+        epg_id='vrtevents2.be',
+        preset=852,
     ),
     dict(
         id='',
         name='vrt-events3',
-        label='VRT Events stream 3',
+        label='VRT Events 3',
         studio='VRT',
         live_stream_id='vualto_events3_geo',
+        logo='https://images.vrt.be/orig/logo/vrt.png',
+        epg_id='vrtevents3.be',
+        preset=853,
     ),
 ]
 

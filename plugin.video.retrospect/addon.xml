@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.4+matrix.1"
+        version="5.2.5+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -127,20 +127,21 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.4 - Changelog - 2020-05-12[/B]
+        <news>[B]Retrospect v5.2.5 - Changelog - 2020-05-18[/B]
 
-This new version of Retrospect shuffles some of the channel load logic and mostly fixes an issue in the NPO live channels.
+This version of Retrospect fixes some login related issues for VRT.nu and Dplay.se and squashes a minor bug for kijk.nl.
 
 [B]Framework related[/B]
-* Changed: the full channel ID&#x27;s are now added to the url&#x27;s
-* Changed: load channels based on their full ID&#x27;s instead of the channelindex.json
-* Added: option to set a level for showing notifications
+* Added: option to limit certain settings to only some channel in a channel set
+* Added: option to generate a channel guid for a setting in a channel set
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Fixed: NPO Live streams (Fixes #1374)
+* Added: option to specify a login for Dplay.se (Fixes #1364)
+* Fixed: don&#x27;t group special folders for kijk.nl (Fixes #1377)
+* Fixed: VRT.nu changed their login code (Fixes #1379)
 
         </news>
         <assets>

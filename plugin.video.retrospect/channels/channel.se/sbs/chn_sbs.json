@@ -134,5 +134,40 @@
       "language": "dk",
       "fanart": "dplayfanart.jpg"
     }
+  ],
+  "settings": [
+    {
+      "order": 1,
+      "value": "id=\"dplayse_username\" type=\"text\" label=\"30094\" default=\"\"",
+      "id": "dplayse_username",
+      "channels": [
+        "230A2F56-572B-470B-AD53-AFD20A768D54",
+        "C72D24F6-5FAE-11E0-9935-5F41E0D72085",
+        "32B4A9AB-583C-4F78-A057-6D79C797B45C",
+        "64E1CA5E-BC3C-4763-9A63-02BE76754BD3"
+      ]
+    },
+    {
+      "order": 2,
+      "value": "id=\"dplayse_password_set\" label=\"30093\" type=\"action\" action=\"RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=dplayse_password&amp;settingname=Dplay password&amp;tabfocus=102)\" option=\"close\"",
+      "id": "dplayse_password_set",
+      "channels": [
+        "230A2F56-572B-470B-AD53-AFD20A768D54",
+        "C72D24F6-5FAE-11E0-9935-5F41E0D72085",
+        "32B4A9AB-583C-4F78-A057-6D79C797B45C",
+        "64E1CA5E-BC3C-4763-9A63-02BE76754BD3"
+      ]
+    },
+    {
+      "order": 3,
+      "value": "id=\"dplayse_password\" default=\"\"",
+      "id": "dplayse_password",
+      "channels": [
+        "230A2F56-572B-470B-AD53-AFD20A768D54",
+        "C72D24F6-5FAE-11E0-9935-5F41E0D72085",
+        "32B4A9AB-583C-4F78-A057-6D79C797B45C",
+        "64E1CA5E-BC3C-4763-9A63-02BE76754BD3"
+      ]
+    }
   ]
 }

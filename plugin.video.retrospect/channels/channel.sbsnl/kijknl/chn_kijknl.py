@@ -839,6 +839,7 @@ class Channel(chn_class.Channel):
             "\a.: {} :.".format(popular_title),
             popular_url
         )
+        popular.dontGroup = True
         items.append(popular)
 
         # https://graph.kijk.nl/graphql?operationName=programsByDate&variables={"date":"2020-04-19","numOfDays":7}&extensions={"persistedQuery":{"version":1,"sha256Hash":"1445cc0d283e10fa21fcdf95b127207d5f8c22834c1d0d17df1aacb8a9da7a8e"}}
@@ -848,10 +849,12 @@ class Channel(chn_class.Channel):
             "\a.: {} :.".format(recent_title),
             recent_url
         )
+        recent.dontGroup = True
         items.append(recent)
 
         search_title = LanguageHelper.get_localized_string(LanguageHelper.Search)
-        search = MediaItem("\b.: {} :.".format(search_title), "#searchSite")
+        search = MediaItem("\a.: {} :.".format(search_title), "#searchSite")
+        search.dontGroup = True
         items.append(search)
 
         return data, items

@@ -211,6 +211,9 @@ class Channel(chn_class.Channel):
 
         self.imageLookup = {}
         self.showLookup = {}
+        self.__REQUIRES_LOGIN = "requires_login"
+        self.__now = datetime.datetime.utcnow()
+        self.__has_premium = False
 
         #===========================================================================================
         # Test cases:
@@ -537,6 +540,148 @@ class Channel(chn_class.Channel):
         item.complete = self.__get_video_streams(video_id, part)
         return item
 
+    def log_on(self, username=None, password=None):
+        """ Logs on to a website, using an url.
+
+        :param username:    If provided overrides the Kodi stored username
+        :param password:    If provided overrides the Kodi stored username
+
+        :return: indication if the login was successful.
+        :rtype: bool
+
+        First checks if the channel requires log on. If so and it's not already
+        logged on, it should handle the log on. That part should be implemented
+        by the specific channel.
+
+        More arguments can be passed on, but must be handled by custom code.
+
+        After a successful log on the self.loggedOn property is set to True and
+        True is returned.
+
+        """
+
+        username = username or AddonSettings.get_setting("dplayse_username")
+        if self.__is_already_logged_on(username):
+            return True
+
+        # Local import to not slow down any other stuff
+        import os
+        import binascii
+        try:
+            # If running on Leia
+            import pyaes
+        except:
+            # If running on Pre-Leia
+            from resources.lib import pyaes
+        import random
+
+        now = int(time.time())
+        b64_now = binascii.b2a_base64(str(now).encode()).decode().strip()
+
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " \
+                     "(KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36"
+        device_id = AddonSettings.get_client_id().replace("-", "")
+        window_id = "{}|{}".format(
+            binascii.hexlify(os.urandom(16)).decode(), binascii.hexlify(os.urandom(16)).decode())
+
+        data = [
+            {"key": "api_type", "value": "js"},
+            {"key": "p", "value": 1},  # constant
+            {"key": "f", "value": device_id},  # browser instance ID
+            {"key": "n", "value": b64_now},  # base64 encoding of time.now()
+            {"key": "wh", "value": window_id},  # WindowHandle ID
+            # {"key": "fe", "value": fe},                     # browser properties
+            # {"key": "ife_hash", "value": fs_murmur_hash},   # hash of browser properties
+            {"key": "cs", "value": 1},  # canvas supported 0/1
+            {"key": "jsbd", "value": "{\"HL\":41,\"NCE\":true,\"DMTO\":1,\"DOTO\":1}"}
+        ]
+        data_value = JsonHelper.dump(data)
+
+        stamp = now - (now % (60 * 60 * 6))
+        key_password = "{}{}".format(user_agent, stamp)
+
+        salt_bytes = os.urandom(8)
+        key_iv = self.__evp_kdf(key_password.encode(), salt_bytes, key_size=8, iv_size=4,
+                                iterations=1, hash_algorithm="md5")
+        key = key_iv["key"]
+        iv = key_iv["iv"]
+
+        encrypter = pyaes.Encrypter(pyaes.AESModeOfOperationCBC(key, iv))
+        encrypted = encrypter.feed(data_value)
+        # Again, make a final call to flush any remaining bytes and strip padding
+        encrypted += encrypter.feed()
+
+        salt_hex = binascii.hexlify(salt_bytes)
+        iv_hex = binascii.hexlify(iv)
+        encrypted_b64 = binascii.b2a_base64(encrypted)
+        bda = {
+            "ct": encrypted_b64.decode(),
+            "iv": iv_hex.decode(),
+            "s": salt_hex.decode()
+        }
+        bda_str = JsonHelper.dump(bda)
+        bda_base64 = binascii.b2a_base64(bda_str.encode())
+
+        req_dict = {
+            "bda": bda_base64.decode(),
+            "public_key": "FE296399-FDEA-2EA2-8CD5-50F6E3157ECA",
+            "site": "https://client-api.arkoselabs.com",
+            "userbrowser": user_agent,
+            "simulate_rate_limit": "0",
+            "simulated": "0",
+            "rnd": "{}".format(random.random())
+        }
+
+        req_data = ""
+        for k, v in req_dict.items():
+            req_data = "{}{}={}&".format(req_data, k, HtmlEntityHelper.url_encode(v))
+        req_data = req_data.rstrip("&")
+
+        arkose_data = UriHandler.open(
+            "https://client-api.arkoselabs.com/fc/gt2/public_key/FE296399-FDEA-2EA2-8CD5-50F6E3157ECA",
+            proxy=self.proxy, data=req_data,
+            additional_headers={"user-agent": user_agent}, no_cache=True
+        )
+        arkose_json = JsonHelper(arkose_data)
+        arkose_token = arkose_json.get_value("token")
+        if "rid=" not in arkose_token:
+            Logger.error("Error logging in. Invalid Arkose token.")
+            return False
+        Logger.debug("Succesfully required a login token from Arkose.")
+
+        UriHandler.open(
+            "https://disco-api.dplay.se/token?realm=dplayse&deviceId={}&shortlived=true".format(device_id),
+            proxy=self.proxy, no_cache=True
+        )
+
+        if username is None or password is None:
+            from resources.lib.vault import Vault
+            v = Vault()
+            password = v.get_setting("dplayse_password")
+
+        dplay_username = username
+        dplay_password = password
+        creds = {"credentials": {"username": dplay_username, "password": dplay_password}}
+        headers = {
+                "x-disco-arkose-token": arkose_token,
+                "Origin": "https://auth.dplay.se",
+                "x-disco-client": "WEB:10:AUTH_DPLAY_V1:2.4.1",
+                # is not specified a captcha is required
+                # "Sec-Fetch-Site": "same-site",
+                # "Sec-Fetch-Mode": "cors",
+                # "Sec-Fetch-Dest": "empty",
+                "Referer": "https://auth.dplay.se/login",
+                "User-Agent": user_agent
+            }
+        result = UriHandler.open("https://disco-api.dplay.se/login", proxy=self.proxy,
+                                 json=creds, additional_headers=headers)
+        if UriHandler.instance().status.code > 200:
+            Logger.error("Failed to log in: %s", result)
+            return False
+
+        Logger.debug("Succesfully logged in")
+        return True
+
     def update_video_item(self, item):
         """ Updates an existing MediaItem with more data.
 
@@ -559,13 +704,22 @@ class Channel(chn_class.Channel):
 
         """
 
-        video_data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=self.localIP)
+        if item.metaData.get(self.__REQUIRES_LOGIN, False):
+            logged_in = self.log_on()
+            if not logged_in:
+                XbmcWrapper.show_dialog(LanguageHelper.LoginErrorTitle, LanguageHelper.LoginErrorText)
+                return item
 
+        video_data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=self.localIP)
         if not video_data:
             return item
 
         video_data = JsonHelper(video_data)
         video_info = video_data.get_value("data", "attributes")
+        errors = video_data.get_value("errors")
+        Logger.error("Error updating items: %s", errors)
+        if errors:
+            return item
 
         part = item.create_new_empty_media_part()
 
@@ -598,7 +752,81 @@ class Channel(chn_class.Channel):
         # https://dplaynordics-vod-80.akamaized.net/dplaydni/259/0/hls/243241001/1112635959-prog_index.m3u8?version_hash=bb753129&hdnts=st=1518218118~exp=1518304518~acl=/*~hmac=bdeefe0ec880f8614e14af4d4a5ca4d3260bf2eaa8559e1eb8ba788645f2087a
         vtt_url = vtt_url.replace("-prog_index.m3u8", "-0.vtt")
         part.Subtitle = SubtitleHelper.download_subtitle(vtt_url, format='srt', proxy=self.proxy)
+
+        # if the user has premium, don't show any warnings
+        if self.__has_premium:
+            item.isPaid = False
         return item
+
+    def _is_paid_or_logged_on_item(self, result_set):
+        """ Check whether an item is paid or not?
+
+        :param dict result_set:
+
+        :return: Indication if the item is paid?
+        :rtype: tuple[bool,bool]
+
+        """
+
+        active = set()
+        date_format = "%Y-%m-%dT%H:%M:%SZ"
+
+        availability_windows = result_set.get("attributes", {}).get("availabilityWindows")
+
+        if availability_windows is not None:
+            for availability in availability_windows:
+                start = availability["playableStart"]
+                start_date = DateHelper.get_datetime_from_string(start, date_format)
+                end = availability.get("playableEnd")
+                if end is None:
+                    end_date = datetime.datetime.max
+                else:
+                    end_date = DateHelper.get_datetime_from_string(end, date_format)
+                package = availability["package"].lower()
+
+                if start_date < self.__now < end_date:
+                    active.add(package)
+        else:
+            content_packages = result_set.get("relationships", {}).get("contentPackages")
+            if content_packages is not None:
+                for account_info in result_set["relationships"]["contentPackages"]["data"]:
+                    account_type = account_info.get("id", "free").lower()
+                    active.add(account_type)
+
+        if "free" in active:
+            return False, False
+        if "registered" in active:
+            return False, True
+        return True, True
+
+    def __is_already_logged_on(self, username):
+        """ Check if the given user is logged on and sets what packages he/she has.
+
+        :param str username:
+        :return: Indicator if the user is alreadly logged in
+        :rtype: bool
+
+        """
+
+        me = UriHandler.open("https://disco-api.dplay.se/users/me", proxy=self.proxy, no_cache=True)
+        if UriHandler.instance().status.code >= 300:
+            return False
+
+        account_data = JsonHelper(me)
+        signed_in_user = account_data.get_value("data", "attributes", "username")
+        if signed_in_user is not None and signed_in_user != username:
+            # Log out
+            UriHandler.open("https://disco-api.dplay.se/logout", data="", proxy=self.proxy, no_cache=True)
+            return False
+
+        logged_in = not account_data.get_value("data", "attributes", "anonymous")
+        if logged_in:
+            Logger.debug("Already logged in")
+            packages = account_data.get_value("data", "attributes", "packages", fallback=[])
+            self.__has_premium = "Premium" in packages
+            return True
+        else:
+            return False
 
     def __get_images_from_meta_data(self, data):
         items = []
@@ -694,13 +922,55 @@ class Channel(chn_class.Channel):
                 Logger.warning("No thumb found for %s", thumb_id)
 
         # paid or not?
-        if "contentPackages" in result_set["relationships"]:
-            item.isPaid = not any(
-                filter(
-                    lambda p: p["id"].lower() == "free", result_set["relationships"]["contentPackages"]["data"]
-                )
-            )
-        else:
-            item.isPaid = False
+        item.isPaid, logon_required = self._is_paid_or_logged_on_item(result_set)
+        if logon_required:
+            item.metaData[self.__REQUIRES_LOGIN] = True
 
         return item
+
+    def __evp_kdf(self, passwd, salt, key_size=8, iv_size=4, iterations=1, hash_algorithm="md5"):
+        """
+        https://gist.github.com/adrianlzt/d5c9657e205b57f687f528a5ac59fe0e
+
+        :param byte passwd:
+        :param byte salt:
+        :param int key_size:
+        :param int iv_size:
+        :param int iterations:
+        :param str hash_algorithm:
+
+        :return:
+
+        """
+
+        import hashlib
+
+        target_key_size = key_size + iv_size
+        derived_bytes = b""
+        number_of_derived_words = 0
+        block = None
+        hasher = hashlib.new(hash_algorithm)
+
+        while number_of_derived_words < target_key_size:
+            if block is not None:
+                hasher.update(block)
+
+            hasher.update(passwd)
+            hasher.update(salt)
+            block = hasher.digest()
+
+            hasher = hashlib.new(hash_algorithm)
+
+            for _ in range(1, iterations):
+                hasher.update(block)
+                block = hasher.digest()
+                hasher = hashlib.new(hash_algorithm)
+
+            derived_bytes += block[0: min(len(block), (target_key_size - number_of_derived_words) * 4)]
+
+            number_of_derived_words += len(block)/4
+
+        return {
+            "key": derived_bytes[0: key_size * 4],
+            "iv": derived_bytes[key_size * 4:]
+        }

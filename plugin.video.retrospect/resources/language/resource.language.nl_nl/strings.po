@@ -1108,7 +1108,7 @@ msgid "Minimum level for showing notifications"
 msgstr "Minimum niveau voor het tonen van notificaties"
 
 msgctxt "#30607"
-msgid "Information"
+msgid "Info"
 msgstr "Informatie"
 
 msgctxt "#30608"

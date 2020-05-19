@@ -1195,7 +1195,7 @@ class AddonSettings(object):
         return contents
 
     @staticmethod
-    def __update_add_on_settings_with_channel_settings(contents, channels):
+    def __update_add_on_settings_with_channel_settings(contents, channels):  # NOSONAR
         """ Adds the channel specific settings
 
         This method first aggregates the settings and then adds them.
@@ -1232,6 +1232,11 @@ class AddonSettings(object):
                 for channel_settings in channel.settings:
                     setting_id = channel_settings["id"]
                     setting_value = channel_settings["value"]
+                    if "channels" in channel_settings and channel.guid not in channel_settings["channels"]:
+                        Logger.debug("Setting not enabled for: %s", channel)
+                        continue
+                    if "{channel_guid}" in setting_value:
+                        setting_value = setting_value.replace("{channel_guid}", channel.guid)
                     Logger.debug("Adding setting: '%s' with value '%s'", setting_id,
                                  setting_value)
 
@@ -1243,15 +1248,6 @@ class AddonSettings(object):
                         setting_xml_id = "channel_{0}_{1}".format(channel.guid, setting_id)
                         setting_xml = '<setting id="%s" %s visible=\"eq(-{0},%s)\" />' % \
                                       (setting_xml_id, setting_value, channel.safe_name)
-
-                    # existing_setting_xml_index = []
-                    # for i, elem in enumerate(settings[channel.moduleName]):
-                    #     if 'aa' in elem:
-                    #         existing_setting_xml_index.append(i)
-                    #
-                    # Alternatively, as a list comprehension:
-                    #
-                    # indices = [i for i, elem in enumerate(settings[channel.moduleName]) if 'aa' in elem]
 
                     existing_setting_xml_index = [i for i, s in
                                                   enumerate(settings[channel.moduleName]) if

@@ -1,4 +1,0 @@
-xbmcswift2
-requests
-BeautifulSoup
-python-dateutil

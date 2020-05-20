@@ -1,7 +1,0 @@
-language: python
-install:
-  - pip install tox
-  - pip install coveralls
-script: tox -c resources/lib/tox.ini
-after_success:
-  mv resources/lib/.coverage ./ && coveralls

@@ -9,6 +9,7 @@
     See LICENSES/GPL-3.0-only for more information.
 """
 
+from six import PY2, PY3
 from six import iteritems, string_types
 from six.moves.urllib.parse import quote_plus
 
@@ -41,6 +42,14 @@ def show_menu(menu, parent=None):
         setting_id += '_%s' % parent
     setting_id += '_%s' % menu
     return kodi.get_setting(setting_id) == 'true'
+
+
+def to_string(value):
+    if PY3:
+        return kodi.decode_utf8(value)
+    elif PY2:
+        return value.encode('utf-8')
+    return value
 
 
 def loose_version(v):

@@ -18,7 +18,7 @@ from six.moves.urllib_parse import quote
 from . import menu_items
 from .common import kodi
 from .constants import Keys, Images, MODES, ADAPTIVE_SOURCE_TEMPLATE
-from .utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, get_thumbnail_size, get_refresh_stamp
+from .utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, get_thumbnail_size, get_refresh_stamp, to_string
 
 
 class PlaylistConverter(object):
@@ -156,14 +156,16 @@ class JsonListItemConverter(object):
         broadcaster = clip[Keys.BROADCASTER]
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        name = broadcaster.get(Keys.DISPLAY_NAME) if broadcaster.get(Keys.DISPLAY_NAME) else broadcaster.get(Keys.NAME)
+        display_name = to_string(broadcaster.get(Keys.DISPLAY_NAME) if broadcaster.get(Keys.DISPLAY_NAME) else broadcaster.get(Keys.NAME))
+        channel_name = to_string(broadcaster[Keys.NAME])
+        game_name = to_string(clip[Keys.GAME])
         if self.has_token:
-            context_menu.extend(menu_items.edit_follow(broadcaster[Keys.ID], name))
+            context_menu.extend(menu_items.edit_follow(broadcaster[Keys.ID], display_name))
             # context_menu.extend(menu_items.edit_block(broadcaster[Keys.ID], name))
-        context_menu.extend(menu_items.channel_videos(broadcaster[Keys.ID], broadcaster[Keys.NAME], name))
+        context_menu.extend(menu_items.channel_videos(broadcaster[Keys.ID], channel_name, display_name))
         if clip[Keys.GAME]:
-            context_menu.extend(menu_items.go_to_game(clip[Keys.GAME]))
-        context_menu.extend(menu_items.add_blacklist(broadcaster[Keys.ID], name))
+            context_menu.extend(menu_items.go_to_game(game_name))
+        context_menu.extend(menu_items.add_blacklist(broadcaster[Keys.ID], display_name))
         context_menu.extend(menu_items.add_blacklist(b64encode(clip[Keys.GAME].encode('utf-8', 'ignore')), clip[Keys.GAME], list_type='game'))
         context_menu.extend(menu_items.set_default_quality('clip', broadcaster[Keys.ID], broadcaster[Keys.NAME], clip_id=clip[Keys.SLUG]))
         context_menu.extend(menu_items.run_plugin(i18n('play_choose_quality'),
@@ -188,14 +190,16 @@ class JsonListItemConverter(object):
         owner = video[Keys.OWNER]
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        name = owner.get(Keys.DISPLAY_NAME) if owner.get(Keys.DISPLAY_NAME) else owner.get(Keys.NAME)
+        display_name = to_string(owner.get(Keys.DISPLAY_NAME) if owner.get(Keys.DISPLAY_NAME) else owner.get(Keys.NAME))
+        channel_name = to_string(owner[Keys.NAME])
+        game_name = to_string(video[Keys.GAME])
         if self.has_token:
-            context_menu.extend(menu_items.edit_follow(owner[Keys._ID], name))
+            context_menu.extend(menu_items.edit_follow(owner[Keys._ID], display_name))
             # context_menu.extend(menu_items.edit_block(owner[Keys._ID], name))
-        context_menu.extend(menu_items.channel_videos(owner[Keys._ID], owner[Keys.NAME], name))
+        context_menu.extend(menu_items.channel_videos(owner[Keys._ID], channel_name, display_name))
         if video[Keys.GAME]:
-            context_menu.extend(menu_items.go_to_game(video[Keys.GAME]))
-        context_menu.extend(menu_items.add_blacklist(owner[Keys._ID], name))
+            context_menu.extend(menu_items.go_to_game(game_name))
+        context_menu.extend(menu_items.add_blacklist(owner[Keys._ID], display_name))
         context_menu.extend(menu_items.add_blacklist(b64encode(video[Keys.GAME].encode('utf-8', 'ignore')), video[Keys.GAME], list_type='game'))
         context_menu.extend(menu_items.set_default_quality('video', owner[Keys._ID], owner[Keys.NAME], video[Keys.ITEM_ID]))
         context_menu.extend(menu_items.run_plugin(i18n('play_choose_quality'),
@@ -218,14 +222,16 @@ class JsonListItemConverter(object):
         channel = video[Keys.CHANNEL]
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        name = channel.get(Keys.DISPLAY_NAME) if channel.get(Keys.DISPLAY_NAME) else channel.get(Keys.NAME)
+        display_name = to_string(channel.get(Keys.DISPLAY_NAME) if channel.get(Keys.DISPLAY_NAME) else channel.get(Keys.NAME))
+        channel_name = to_string(channel[Keys.NAME])
+        game_name = to_string(video[Keys.GAME])
         if self.has_token:
-            context_menu.extend(menu_items.edit_follow(channel[Keys._ID], name))
+            context_menu.extend(menu_items.edit_follow(channel[Keys._ID], display_name))
             # context_menu.extend(menu_items.edit_block(channel[Keys._ID], name))
-        context_menu.extend(menu_items.channel_videos(channel[Keys._ID], channel[Keys.NAME], name))
+        context_menu.extend(menu_items.channel_videos(channel[Keys._ID], channel_name, display_name))
         if video[Keys.GAME]:
-            context_menu.extend(menu_items.go_to_game(video[Keys.GAME]))
-        context_menu.extend(menu_items.add_blacklist(channel[Keys._ID], name))
+            context_menu.extend(menu_items.go_to_game(game_name))
+        context_menu.extend(menu_items.add_blacklist(channel[Keys._ID], display_name))
         context_menu.extend(menu_items.add_blacklist(b64encode(video[Keys.GAME].encode('utf-8', 'ignore')), video[Keys.GAME], list_type='game'))
         context_menu.extend(menu_items.set_default_quality('video', channel[Keys._ID], channel[Keys.NAME], video[Keys._ID]))
         context_menu.extend(menu_items.run_plugin(i18n('play_choose_quality'),
@@ -258,14 +264,16 @@ class JsonListItemConverter(object):
         info.update({'mediatype': 'video', 'playcount': 0})
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        name = channel.get(Keys.DISPLAY_NAME) if channel.get(Keys.DISPLAY_NAME) else channel.get(Keys.NAME)
+        display_name = to_string(channel.get(Keys.DISPLAY_NAME) if channel.get(Keys.DISPLAY_NAME) else channel.get(Keys.NAME))
+        channel_name = to_string(channel[Keys.NAME])
+        game_name = to_string(channel[Keys.GAME])
         if self.has_token:
-            context_menu.extend(menu_items.edit_follow(channel[Keys._ID], name))
+            context_menu.extend(menu_items.edit_follow(channel[Keys._ID], display_name))
             # context_menu.extend(menu_items.edit_block(channel[Keys._ID], name))
-        context_menu.extend(menu_items.channel_videos(channel[Keys._ID], channel[Keys.NAME], name))
+        context_menu.extend(menu_items.channel_videos(channel[Keys._ID], channel_name, display_name))
         if channel[Keys.GAME]:
-            context_menu.extend(menu_items.go_to_game(channel[Keys.GAME]))
-        context_menu.extend(menu_items.add_blacklist(channel[Keys._ID], name))
+            context_menu.extend(menu_items.go_to_game(game_name))
+        context_menu.extend(menu_items.add_blacklist(channel[Keys._ID], display_name))
         context_menu.extend(menu_items.add_blacklist(b64encode(channel[Keys.GAME].encode('utf-8', 'ignore')), channel[Keys.GAME], list_type='game'))
         context_menu.extend(menu_items.set_default_quality('stream', channel[Keys._ID], channel[Keys.NAME]))
         context_menu.extend(menu_items.run_plugin(i18n('play_choose_quality'),

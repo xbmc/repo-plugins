@@ -26,7 +26,7 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
@@ -40,7 +40,7 @@ from hashlib import md5
 import re
 import json
 import time
-import urlquick
+from resources.lib import urlquick
 
 # TO DO
 # Improve Live TV (Title, picture, plot)

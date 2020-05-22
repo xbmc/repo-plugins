@@ -27,7 +27,7 @@ from __future__ import unicode_literals
 
 import os
 from kodi_six import xbmcvfs
-from codequick import Script
+from resources.lib.codequick import Script
 from resources.lib.addon_utils import get_quality_YTDL
 from resources.lib.kodi_utils import get_selected_item_label
 
@@ -49,6 +49,10 @@ def download_video(video_url):
         video_url,
         quality=get_quality_YTDL(download_mode=True),
         resolve_redirects=True)
+
+    if vid is None:
+        Script.log('YDStreamExtractor.getVideoInfo() failed for video URL: %s' % video_url)
+        return False
 
     path = Script.setting.get_string('dl_folder')
     download_ok = False

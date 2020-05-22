@@ -23,7 +23,7 @@
 from random import randint
 
 import json
-import urlquick
+from resources.lib import urlquick
 
 user_agents = [
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'

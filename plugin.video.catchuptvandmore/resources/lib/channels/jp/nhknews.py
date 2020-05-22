@@ -26,7 +26,7 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
@@ -34,7 +34,7 @@ from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 
 import json
-import urlquick
+from resources.lib import urlquick
 
 URL_ROOT = 'https://www3.nhk.or.jp/'
 

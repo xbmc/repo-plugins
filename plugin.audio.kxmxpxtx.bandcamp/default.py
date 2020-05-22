@@ -58,11 +58,17 @@ def build_subgenre_list(genre):
     xbmcplugin.endOfDirectory(addon_handle)
 
 
-def build_song_list(band, album, tracks):
+def build_song_list(band, album, tracks, autoplay=False):
     track_list = list_items.get_track_items(band=band, album=album, tracks=tracks)
     xbmcplugin.addDirectoryItems(addon_handle, track_list, len(track_list))
     xbmcplugin.setContent(addon_handle, 'songs')
     xbmcplugin.endOfDirectory(addon_handle)
+    if autoplay:
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+        playlist.clear()
+        for url, list_item, folder in track_list:
+            playlist.add(url, list_item)
+        xbmc.Player().play(item=playlist)
 
 
 def build_search_result_list(items):
@@ -148,11 +154,7 @@ def main():
             search(query)
     elif mode[0] == 'url':
         url = args.get("url", None)[0]
-        build_song_list(*bandcamp.get_album_by_url(url))
-        xbmc.executeJSONRPC(
-            '{"jsonrpc":"2.0","method":"Input.Down","id":1}')
-        xbmc.executeJSONRPC(
-            '{"jsonrpc":"2.0","method":"Input.Select","id":1}')
+        build_song_list(*bandcamp.get_album_by_url(url), autoplay=True)
     elif mode[0] == 'settings':
         addon.openSettings()
 

@@ -33,8 +33,8 @@ def build_main_menu():
     xbmcplugin.endOfDirectory(addon_handle)
 
 
-def build_band_list(bands):
-    band_list = list_items.get_band_items(bands)
+def build_band_list(bands, from_wishlist=False):
+    band_list = list_items.get_band_items(bands, from_wishlist)
     xbmcplugin.addDirectoryItems(addon_handle, band_list, len(band_list))
     xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
     xbmcplugin.endOfDirectory(addon_handle)
@@ -58,11 +58,17 @@ def build_subgenre_list(genre):
     xbmcplugin.endOfDirectory(addon_handle)
 
 
-def build_song_list(album, tracks):
-    track_list = list_items.get_track_items(band=None, album=album, tracks=tracks)
+def build_song_list(band, album, tracks, autoplay=False):
+    track_list = list_items.get_track_items(band=band, album=album, tracks=tracks)
     xbmcplugin.addDirectoryItems(addon_handle, track_list, len(track_list))
     xbmcplugin.setContent(addon_handle, 'songs')
     xbmcplugin.endOfDirectory(addon_handle)
+    if autoplay:
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+        playlist.clear()
+        for url, list_item, folder in track_list:
+            playlist.add(url, list_item)
+        xbmc.Player().play(item=playlist)
 
 
 def build_search_result_list(items):
@@ -105,6 +111,12 @@ def main():
         build_genre_list()
     elif mode[0] == 'list_collection':
         build_band_list(bandcamp.get_collection(bandcamp.get_fan_id()))
+    elif mode[0] == 'list_wishlist':
+        build_band_list(bandcamp.get_wishlist(bandcamp.get_fan_id()), from_wishlist=True)
+    elif mode[0] == 'list_wishlist_albums':
+        bands = bandcamp.get_wishlist(bandcamp.get_fan_id())
+        band = Band(band_id=args.get('band_id', None)[0])
+        build_album_list(bands[band])
     elif mode[0] == 'list_albums':
         bands = bandcamp.get_collection(bandcamp.get_fan_id())
         band = Band(band_id=args.get('band_id', None)[0])
@@ -140,11 +152,15 @@ def main():
             query = xbmcgui.Dialog().input(addon.getLocalizedString(30103))
         if query:
             search(query)
+    elif mode[0] == 'url':
+        url = args.get("url", None)[0]
+        build_song_list(*bandcamp.get_album_by_url(url), autoplay=True)
     elif mode[0] == 'settings':
         addon.openSettings()
 
 
 if __name__ == '__main__':
+    xbmc.log("sys.argv:" + str(sys.argv), xbmc.LOGDEBUG)
     addon = xbmcaddon.Addon()
     list_items = ListItems(addon)
     username = addon.getSetting('username')

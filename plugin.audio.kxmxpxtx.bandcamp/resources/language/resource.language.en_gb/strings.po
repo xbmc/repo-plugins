@@ -59,6 +59,10 @@ msgctxt "#30104"
 msgid "Add your username to access the collection"
 msgstr ""
 
+msgctxt "#30105"
+msgid "Wishlist"
+msgstr ""
+
 # GUI - Discover
 msgctxt "#30201"
 msgid "All"

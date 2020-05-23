@@ -1,17 +1,22 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
+
+from future.moves import urllib
 from future.utils import (PY2)
 
 import json
 import time
+from future.standard_library import install_aliases
+install_aliases()
 
+from urllib.parse import unquote
 import requests
 from builtins import *
 from html.parser import HTMLParser
 
 
 class Band:
-    def __init__(self, band_id, band_name=""):
+    def __init__(self, band_id=None, band_name=""):
         self.band_name = band_name
         self.band_id = str(band_id)
 
@@ -50,7 +55,7 @@ class _DataBlobParser(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         for attr in attrs:
-            if attr[0] == "data-blob":
+            if attr[0] == "data-blob" and self.data_blob is None:
                 data_html = attr[1]
                 self.data_blob = json.loads(data_html)
 
@@ -117,6 +122,23 @@ class Bandcamp:
             bands[band].update({album: [None]})
         return bands
 
+    def get_wishlist(self, fan_id, count=1000):
+        url = "https://bandcamp.com/api/fancollection/1/wishlist_items"
+        token = self._get_token()
+        body = '{{"fan_id": "{fan_id}", "older_than_token": "{token}", "count":"{count}"}}' \
+            .format(fan_id=fan_id, token=token, count=count)
+        x = requests.post(url, data=body)
+        items = json.loads(x.text)['items']
+        bands = {}
+        for item in items:
+            album = Album(album_id=item['item_id'], album_name=item['item_title'],
+                          art_id=item['item_art_id'], item_type=item['item_type'])
+            band = Band(band_id=item['band_id'], band_name=item['band_name'])
+            if band not in bands:
+                bands[band] = {}
+            bands[band].update({album: [None]})
+        return bands
+
     def get_album(self, album_id, item_type="album"):
         url = "https://bandcamp.com/EmbeddedPlayer/{item_type}={album_id}" \
             .format(album_id=album_id, item_type=item_type)
@@ -134,8 +156,22 @@ class Bandcamp:
         art_id = player_data['album_art_id']
         if item_type == "track":
             art_id = track['art_id']
+        band = Band(band_name=player_data['artist'])
         album = Album(album_id, player_data['album_title'], art_id)
-        return album, track_list
+        return band, album, track_list
+
+    def get_album_by_url(self, url):
+        url = unquote(url)
+        request = requests.get(url)
+        parser = _DataBlobParser()
+        parser.feed(request.text)
+        if '/album/' in url:
+            album_id = parser.data_blob['album_id']
+            item_type = 'album'
+        elif '/track/' in url:
+            album_id = parser.data_blob['track_id']
+            item_type = 'track'
+        return self.get_album(album_id, item_type)
 
     def get_band(self, band_id):
         url = "https://bandcamp.com/api/mobile/24/band_details"

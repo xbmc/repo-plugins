@@ -32,6 +32,10 @@ class ListItems:
             li = xbmcgui.ListItem(label=self.addon.getLocalizedString(30102))
             url = self._build_url({'mode': 'list_collection'})
             items.append((url, li, True))
+
+            li = xbmcgui.ListItem(label=self.addon.getLocalizedString(30105))
+            url = self._build_url({'mode': 'list_wishlist'})
+            items.append((url, li, True))
         # search
         li = xbmcgui.ListItem(label=self.addon.getLocalizedString(30103))
         url = self._build_url({'mode': 'search', 'action': 'new'})
@@ -72,13 +76,11 @@ class ListItems:
     def get_track_items(self, band, album, tracks, to_album=False):
         items = []
         for track in tracks:
-            if track.number is None:
-                title = u"{band} - {track}".format(band=band.band_name, track=track.track_name)
-            else:
-                title = u"{number}. {track}".format(number=track.number, track=track.track_name)
+            title = u"{band} - {track}".format(band=band.band_name, track=track.track_name)
             li = xbmcgui.ListItem(label=title)
             li.setInfo('music', {'duration': int(track.duration), 'album': album.album_name, 'genre': album.genre,
-                                 'mediatype': 'song', 'tracknumber': track.number, 'title': track.track_name})
+                                 'mediatype': 'song', 'tracknumber': track.number, 'title': track.track_name,
+                                 'artist': band.band_name})
             li.setArt({'thumb': album.get_art_img(), 'fanart': album.get_art_img()})
             li.setProperty('IsPlayable', 'true')
             url = self._build_url({'mode': 'stream', 'url': track.file, 'title': title})
@@ -90,10 +92,13 @@ class ListItems:
             items.append((url, li, False))
         return items
 
-    def get_band_items(self, bands):
+    def get_band_items(self, bands, from_wishlist=False):
         items = []
+        mode = 'list_albums'
+        if from_wishlist:
+            mode = 'list_wishlist_albums'
         for band in bands:
             li = xbmcgui.ListItem(label=band.band_name)
-            url = self._build_url({'mode': 'list_albums', 'band_id': band.band_id})
+            url = self._build_url({'mode': mode, 'band_id': band.band_id})
             items.append((url, li, True))
         return items

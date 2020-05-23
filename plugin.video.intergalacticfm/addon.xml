@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.intergalacticfm" name="Intergalactic FM TV" version="2.1.2" provider-name="Dreamer, Pander">
+<addon id="plugin.video.intergalacticfm" name="Intergalactic FM TV" version="2.3.0" provider-name="Dreamer, Pander">
 <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.requests" version="2.19.1"/>
+    <import addon="plugin.video.youtube" version="5.3.10"/>
 </requires>
 <extension point="xbmc.python.pluginsource" library="main.py">
     <provides>video</provides>
@@ -10,29 +11,17 @@
 <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <summary lang="en">No Station Such Dedication</summary>
-    <summary lang="de">No Station Such Dedication</summary>
-    <summary lang="nl">No Station Such Dedication</summary>
     <description lang="en"><![CDATA[
-Video add-on of listener-supported, commercial-free video streams from Intergalacic FM.
+Video add-on with live video streams from Intergalacic FM and hundreds of recorded live sets via its YouTube channel.
 
 See also the audio plugin. Please consider donating at https://intergalactic.fm to keep Intergalactic FM in orbit.
-    ]]></description>
-    <description lang="de"><![CDATA[
-Videoadd-on vom hörergetragenen, werbefreien Videostreams von Intergalactic FM.
-
-Siehe auch die Audio-Plugin. Bitte denk über eine Spende auf https://intergalactic.fm nach, um Intergalactic FM in der Umlaufbahn zu erhalte.
-    ]]></description>
-    <description lang="nl"><![CDATA[
-Video-add-on van luisteraarondersteunde, reclamevrije videostreams van Intergalactic FM.
-
-Zie ook de audioplugin. Overweeg a.u.b. een donatie te doen op https://intergalactic.fm om Intergalactic FM in haar baan te houden.
     ]]></description>
     <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.jpg</fanart>
         <screenshot>screenshots/s1.png</screenshot>
         <screenshot>screenshots/s2.png</screenshot>
-        <screenshot>screenshots/s3.png</screenshot>    
+        <screenshot>screenshots/s3.png</screenshot>
     </assets>
     <news>Updated with latest artwork metadata</news>
     <license>The GNU General Public License (GPL)</license>

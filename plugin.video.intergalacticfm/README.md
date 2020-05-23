@@ -17,6 +17,7 @@ Stepts to take to install from the Kodi main repository are:
 5. Navigate to **Intergalactic FM TV** and select it
 6. Choose **Install**
 
+
 ### Installing Kodi
 
 Instructions for installing Kodi can be found here: https://kodi.tv/download

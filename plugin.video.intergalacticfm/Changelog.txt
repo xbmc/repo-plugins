@@ -1,3 +1,10 @@
+Version 2.3.0
+Added Austin Cassel and The Dream Machine
+Temp disable YouTube channels (needs API key)
+
+Version 2.2.0
+Added IFM and Viewlexx YouTube channels
+
 Version 2.1.2
 Fixes for kodi release
 

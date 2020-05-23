@@ -6,11 +6,18 @@
         "plot": "Cybernetic Broadcasting System dominates 24/7 our galaxy for over a decade. This stream is non-commercial, non-conventional and nothing like it can be encountered on any planet. You can run all you want, but there is no escaping CBS TV.",
         "genre": "electro, acid, italo, disco"
     },
+    "tdmtv": {
+        "label": "The Dream Machine TV",
+        "url": "show/tdmtv/",
+        "tagline": "You Are Not Alone",
+        "plot": "This stream is Intergalactic FM's video channel called The Dream Machine for soundtracks, ambient and experimental music.",
+        "genre": "ambient, experimental, soundtracks"
+    },
     "mtv": {
         "label": "Murder Capital TV",
         "url": "live/mtv/",
         "tagline": "No Station Such Dedication",
-        "plot": "This stream is Murder Capital's TV channel. Delivering a mix of live recordings from the Panama Racing Club, the best B movies and keeping you updated on UFO sighings. This is the apex of the West Coast Sound of Holland.",
+        "plot": "This stream is Murder Capital's TV channel. Delivering a mix of live recordings from the Panama Racing Club, the best B movies and keeping you updated on UFO sightings. This is the apex of dangerous television.",
         "genre": "electro, acid, italo, B movies"
     },
     "mw": {
@@ -40,6 +47,13 @@
         "tagline": "D on the TV",
         "plot": "Streaming live and direct from the Woolwich triangle, London. Aural and visual stimulation from the studio featuring Discotto and guests.",
         "genre": "italo, disco, electro"
+    },
+    "elcamino": {
+        "label": "El Camino",
+        "url": "show/elcamino/",
+        "tagline": "Es el Camino",
+        "plot": "Miqkael has been a dj since 1997 and lived in Barcelona from 2000 until 2011, playing at Moog and other clubs. Since that time he has been also performing around Europe. Streaming from his Basque homeland, he shows you the way by mixing love and anger.",
+        "genre": "techno, disco, chicago, electro"
     },
     "shipwrec": {
         "label": "Shipwrec",
@@ -89,5 +103,12 @@
         "tagline": "Cocktailbar Scheveningen",
         "plot": "Live stream from Zahara cocktail bar which is located directly at the beach in Scheveningen, the Netherlands. A frequent location for Intergalactic FM djs and has hosted for many of the IFM's infamous top 100. The most West you can go on Holland's Coast.",
         "genre": "electronic music"
+    },
+    "djaustincassell": {
+        "label": "Austin Cassell",
+        "url": "show/djaustincassell/",
+        "tagline": "Austin Cassell's stream",
+        "plot": "UK radio host and dj specialising in braindance, experimental, old school techno and multigenre dj sets. He has been part of the IFM krew since 2012 curating the very best of new music, classic tracks and exclusive guest sets. Previous guests include Wisp, Global Goon, NEZ, VLR and Impakt",
+        "genre": "braindance, experimental, old school techno"
     }
 }

@@ -193,41 +193,44 @@ class CuriosityStream(object):
             # label returned by curiositystream media API seems to be always emtpy
             return u"{} ({} episodes)".format(m["title"], m["media_count"])
 
-        def format_duration(m):
-            duration = max(m.get("duration", 0), m.get("media_duration", 0))
-            minutes = floor(duration / 60.0 % 60)
-            hours = round((duration / 60.0 - minutes) / 60.0)
-            return "{} {}m".format(
-                "{}h".format(int(hours)) if hours > 0 else "", int(minutes)
-            )
-
         def enhanced_description(m):
-            return (
-                u"{dur_epi}\n"
-                u"Year {year}\n"
-                u"Quality {quality}\n"
-                u"{episode_number}\n"
-                u"{description}\n"
-                u"{producer}"
-            ).format(
+            return (u"{episode_number}\n{description}\n{producer}").format(
                 description=m["description"],
                 producer=m["producer"],
-                year=m["year_produced"],
-                dur_epi="{} episodes".format(m["media_count"])
-                if m.get("is_collection", False)
-                else "Duration {}".format(format_duration(m)),
-                quality=m["quality"],
                 episode_number="Episode {} of {}\n".format(
                     m["collection_order"] + 1,
                     self._get_collection_details(m["collection_id"])["title"],
                 )
                 if m.get("collection_id", 0) > 0
-                else "\n",
+                else "",
+            )
+
+        def is_bookmarked(media):
+            is_collection = media["obj_type"] == "collection"
+            response = self._session.get(
+                "{}{}".format(
+                    self._base_url,
+                    "user_collection"
+                    if is_collection
+                    else "user_media",
+                )
+            )
+            response.raise_for_status()
+            data = response.json()["data"]
+            key_id = "collection_id" if is_collection else "media_id"
+            return bool(
+                [
+                    m
+                    for m in data
+                    if m.get(key_id, 0) == media["id"]
+                    and m.get("is_bookmarked", False)
+                ]
             )
 
         return [
             {
                 "id": media["id"],
+                "is_bookmarked": is_bookmarked(media),
                 "label": title_with_episodes(media),
                 "name": media["title"],
                 "is_folder": media["obj_type"] == "collection",
@@ -246,9 +249,11 @@ class CuriosityStream(object):
                     "plot": enhanced_description(media),
                     "plotoutline": media["description"],
                     "rating": float(media["rating_percentage"]) / 10.0,
-                    "overlay": xbmcgui.ICON_OVERLAY_HD
-                    if media["quality"] in ["HD", "4K"]
-                    else xbmcgui.ICON_OVERLAY_NONE,
+                    "overlay": xbmcgui.ICON_OVERLAY_HD,
+                    "mediatype": "movie",
+                    "duration": max(
+                        media.get("duration", 0), media.get("media_duration", 0)
+                    ),
                 },
             }
             for media in media_data
@@ -280,6 +285,23 @@ class CuriosityStream(object):
         return data, prev_page, next_page
 
     @_authenticate_and_retry_on_401
+    def update_user_media(self, media_id, bookmarked, is_collection):
+        # for future, it's possible to pass "progress_in_seconds"
+        # to update how much has been viewed by user during play
+        response = self._session.post(
+            "{}{}{}&is_bookmarked={}".format(
+                self._base_url,
+                "user_collection?collection_id="
+                if is_collection
+                else "user_media?media_id=",
+                media_id,
+                "true" if bookmarked else "false",
+            )
+        )
+        response.raise_for_status()
+        return
+
+    @_authenticate_and_retry_on_401
     def media(self, category=None, page=None):
         params = {"collections": True, "limit": 20}
         if category:
@@ -306,6 +328,21 @@ class CuriosityStream(object):
         params = {
             "filterBy": "recently_added",
             "term": "recently-added",
+            "collections": True,
+            "limit": 20,
+        }
+        data, prev_page, next_page = self._get_data("media", params, page)
+        return (
+            self._extract_media_data(data["data"]),
+            prev_page,
+            next_page,
+        )
+
+    @_authenticate_and_retry_on_401
+    def search(self, query, page=None):
+        params = {
+            "filterBy": "keyword",
+            "term": query,
             "collections": True,
             "limit": 20,
         }
@@ -434,23 +471,7 @@ class CuriosityStream(object):
         return resp.json()["data"]
 
     @_authenticate_and_retry_on_401
-    def featured(self, label="NEW THIS WEEK"):
-        response = self._session.get("{}featured".format(self._base_url))
-        response.raise_for_status()
-        media = [
-            self._get_media_details(media_id)
-            for featured in response.json()
-            for media_id in featured["media_ids"]
-            if featured["label"] == label
-        ]
-        return (
-            self._extract_media_data(media),
-            False,
-            False,
-        )
-
-    @_authenticate_and_retry_on_401
-    def media_playlist_url(self, media):
+    def media_stream_info(self, media):
         def get_media():
             response = self._session.get("{}media/{}".format(self._base_url, media))
             response.raise_for_status()
@@ -460,9 +481,13 @@ class CuriosityStream(object):
         if data["data"]["status"] != "full_featured":
             self.authenticate(force=True)
         data = get_media()
-        hd_encodings = [
-            encoding
-            for encoding in data["data"]["encodings"]
-            if encoding["type"] == "hd"
-        ]
-        return hd_encodings[0]["master_playlist_url"]
+        return {
+            "streams": [
+                encoding
+                for encoding in data["data"]["encodings"]
+                if encoding["type"] == "hd"
+            ],
+            "subtitles": data["data"]["closed_captions"]
+            if "closed_captions" in data["data"]
+            else [],
+        }

@@ -83,3 +83,27 @@ msgstr ""
 msgctxt "#30021"
 msgid "We Suggest for You"
 msgstr ""
+
+msgctxt "#30022"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Remove from Watchlist"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Add to Watchlist"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Watchlist updated"
+msgstr ""
+
+msgctxt "#30026"
+msgid "The media has been removed from the watchlist"
+msgstr ""
+
+msgctxt "#30027"
+msgid "The media has been added to the watchlist"
+msgstr ""

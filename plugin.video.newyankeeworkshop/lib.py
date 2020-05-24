@@ -2,6 +2,7 @@ import requests
 from BeautifulSoup import BeautifulSoup as BS
 
 BASE_URL="https://www.newyankee.com/watch/"
+session = requests.session()
 
 
 def get_first_select_options(dom):
@@ -17,26 +18,25 @@ def get_second_select_options(dom):
     keypairs = [[x[0],x[1]['value']] for x in options_objs]
     return keypairs
 
-def extract_mp4(resp_text):
-    mp4_url_start = resp_text.find('https://content.jwplatform.com')
-    resp_sub1 = resp_text[mp4_url_start:]
-    mp4_url_end = resp_sub1.find('.mp4') + 4
-    mp4_url = resp_sub1[:mp4_url_end]
-    return mp4_url
+def extract_m3u8(video_js_uri):
+    resp_text = session.get(video_js_uri).text
+    m3u8_pos = resp_text.find('https://content.uplynk.com')
+    m3u8_uri = resp_text[m3u8_pos:].split("'),")[0]
+    return m3u8_uri
 
 def get_season_list():
-    resp_text = requests.get(BASE_URL).text
+    resp_text = session.get(BASE_URL).text
     dom = BS(resp_text)
     return get_first_select_options(dom)
 
 def get_episode_list(season):
-    resp_text = requests.post(BASE_URL, data={'nyw_season':season}).text
+    resp_text = session.post(BASE_URL, data={'nyw_season':season}).text
     dom = BS(resp_text)
     return get_second_select_options(dom)
 
 def get_episode(season, episode):
-    resp_text = requests.post(BASE_URL, data={'nyw_season':season, 'nyw_episode':episode}).text
-    return extract_mp4(resp_text)
-
-
+    resp_text = session.post(BASE_URL, data={'nyw_season':season, 'nyw_episode':episode}).text
+    video_js_pos = resp_text.find('https://player.zype.com')
+    video_js_uri = resp_text[video_js_pos:].split('">')[0]
+    return extract_m3u8(video_js_uri)
 

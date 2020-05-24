@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.curiositystream" name="Curiositystream" version="1.0.0" provider-name="GMaxera">
+<addon id="plugin.video.curiositystream" name="Curiositystream" version="2.0.0" provider-name="GMaxera">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
     <import addon="script.module.requests" version="2.22.0"/>
@@ -21,8 +21,12 @@ The add-on only provides an interface to access CuriosityStream media from Kodi.
     <email>gmaxera@gmail.com</email>
     <source>https://github.com/GMaxera/repo-plugins/tree/curiositystream-leia/plugin.video.curiositystream</source>
     <news>
-v1.0.0
-First version of the add-on
+v2.0.0
+- Added search
+- Added subtitles
+- Removed "News this week"
+- Added Add/Remove watchlist context menu action
+- Improvements on video description
     </news>
     <assets>
         <icon>resources/icon.png</icon>

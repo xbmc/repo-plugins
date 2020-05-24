@@ -2,6 +2,7 @@ import functools
 from contextlib import contextmanager
 
 from sys import version_info
+
 if version_info.major > 2:
     from urllib.parse import parse_qsl
 else:
@@ -66,13 +67,22 @@ class Router(object):
             "history",
             "list_popular",
             "recently_added",
-            "new_this_week",
             "watching",
             "recommended",
         ]:
             self._list_media_or_collections(action, parent, page)
         elif action == "play":
             self._play_media(params["media"])
+        elif action == "change_watchlist":
+            self._change_watchlist(
+                params["media"], params["is_bookmarked"], params["is_collection"]
+            )
+        elif action == "search":
+            query = params.get("query", None)
+            query = xbmcgui.Dialog().input(tr(30022)) if not query else query
+            if not query:
+                return
+            self._list_media_or_collections(action, parent, page, query)
 
     def _list_root(self):
         """
@@ -81,7 +91,6 @@ class Router(object):
         * Browse Categories
         * Collections: the curated collections (v2 in the API)
         * History
-        * New this week
         * Trending Today
         * Pick Up where you left off
         * Newest Additions
@@ -100,11 +109,11 @@ class Router(object):
             root_entry("list_categories", tr(30014)),
             root_entry("list_collections2", tr(30015)),
             root_entry("history", tr(30016)),
-            root_entry("new_this_week", tr(30017)),
             root_entry("list_popular", tr(30018)),
             root_entry("watching", tr(30019)),
             root_entry("recently_added", tr(30020)),
             root_entry("recommended", tr(30021)),
+            root_entry("search", tr(30022)),
         ]
         xbmcplugin.addDirectoryItems(self._plugin_handle, listing, len(listing))
         xbmcplugin.addSortMethod(self._plugin_handle, xbmcplugin.SORT_METHOD_NONE)
@@ -138,7 +147,7 @@ class Router(object):
         )
         xbmcplugin.endOfDirectory(self._plugin_handle)
 
-    def _list_media_or_collections(self, action, parent, page):
+    def _list_media_or_collections(self, action, parent, page, query=None):
         listing = []
         api_by_action = {
             "list_media": functools.partial(self._cs_api.media, parent, page),
@@ -152,17 +161,18 @@ class Router(object):
             "history": functools.partial(self._cs_api.history, page),
             "list_popular": functools.partial(self._cs_api.popular, page),
             "recently_added": functools.partial(self._cs_api.recently_added, page),
-            "new_this_week": functools.partial(self._cs_api.featured),
             "watching": functools.partial(self._cs_api.watching, page),
             "recommended": functools.partial(self._cs_api.recommended, page),
+            "search": functools.partial(self._cs_api.search, query, page),
         }
         media, prev_page, next_page = api_by_action[action]()
 
         def pagination_entry(new_page, label):
             return (
-                "{}?action={}{}{}".format(
+                "{}?action={}{}{}{}".format(
                     self._plugin_url,
                     action,
+                    "&query={}".format(query) if query else "",
                     "&parent={}".format(parent) if parent else "",
                     "&page={}".format(new_page),
                 ),
@@ -187,6 +197,21 @@ class Router(object):
             list_item.setArt(m["art"])
             list_item.setInfo("video", m["video"])
             list_item.setProperty("IsPlayable", "false" if m["is_folder"] else "true")
+            list_item.addContextMenuItems(
+                [
+                    (
+                        tr(30023) if m["is_bookmarked"] else tr(30024),
+                        "RunPlugin({}?action=change_watchlist"
+                        "&media={}&is_bookmarked={}&is_collection={})".format(
+                            self._plugin_url,
+                            m["id"],
+                            m["is_bookmarked"],
+                            m["is_folder"],
+                        ),
+                    )
+                ]
+            )
+
             url = "{}?action={}{}".format(
                 self._plugin_url,
                 "{}&parent=".format(folder_action) if m["is_folder"] else "play&media=",
@@ -202,5 +227,17 @@ class Router(object):
         xbmcplugin.endOfDirectory(self._plugin_handle, updateListing=page is not None)
 
     def _play_media(self, media):
-        play_item = xbmcgui.ListItem(path=self._cs_api.media_playlist_url(media))
+        stream = self._cs_api.media_stream_info(media)
+        play_item = xbmcgui.ListItem(path=stream["streams"][0]["master_playlist_url"])
+        play_item.setSubtitles([c["file"] for c in stream["subtitles"]])
         xbmcplugin.setResolvedUrl(self._plugin_handle, True, listitem=play_item)
+
+    def _change_watchlist(self, media_id, is_bookmarked, is_collection):
+        self._cs_api.update_user_media(
+            media_id, is_bookmarked != "True", is_collection == "True"
+        )
+        dialog = xbmcgui.Dialog()
+        dialog.notification(
+            tr(30025), tr(30026) if is_bookmarked == "True" else tr(30027),
+        )
+        xbmc.executebuiltin("Container.Refresh()")

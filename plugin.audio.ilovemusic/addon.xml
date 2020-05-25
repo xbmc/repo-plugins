@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.ilovemusic" name="[COLOR white]I Love Music[/COLOR]" version="2.0.2.2" provider-name="adiko01">
+<addon id="plugin.audio.ilovemusic" name="I Love Music" version="2.1.1" provider-name="adiko01">
     <requires>
 		<import addon="xbmc.python" version="2.26.0"/>
 	</requires>
@@ -10,16 +10,23 @@
 		<platform>all</platform>
 		<license>CC-BY-SA-4.0</license>
 		<summary lang="de_DE">I Love Music</summary>
-		<description lang="de_DE">I Love Music - Webstreams \n https://www.ilovemusic.de </description>
+		<description lang="de_DE">
+			I Love Music - Webstreams
+		</description>
 		<summary lang="en_GB">I Love Music</summary>
-		<description lang="en_GB">I Love Music - Webstream player \n https://www.ilovemusic.de </description>
-		<language>de</language>	
+		<description lang="en_GB">
+			I Love Music - Webstream player
+		</description>
+		<language>de</language>
+		<website>https://www.ilovemusic.de</website>
+		<email>dev@adiko01.de</email>
 		<source>https://github.com/adiko01/plugin.audio.ilovemusic</source>
 		<assets>
 			<icon>resources/icon.png</icon>
 			<fanart>resources/fanart.jpg</fanart>
 			<screenshot>resources/screenshot-1.jpg</screenshot>
-			<screenshot>resources/screenshot-2.jpg</screenshot>
+			<screenshot>resources/screenshot-3.jpg</screenshot>
+			<screenshot>resources/screenshot-4.jpg</screenshot>
 		</assets>
 	</extension>
 </addon>

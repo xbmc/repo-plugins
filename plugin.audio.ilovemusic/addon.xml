@@ -12,14 +12,13 @@
 		<summary lang="de_DE">I Love Music</summary>
 		<description lang="de_DE">
 			I Love Music - Webstreams
-			https://www.ilovemusic.de
 		</description>
 		<summary lang="en_GB">I Love Music</summary>
 		<description lang="en_GB">
 			I Love Music - Webstream player
-			https://www.ilovemusic.de
 		</description>
 		<language>de</language>
+		<website>https://www.ilovemusic.de</website>
 		<email>dev@adiko01.de</email>
 		<source>https://github.com/adiko01/plugin.audio.ilovemusic</source>
 		<assets>

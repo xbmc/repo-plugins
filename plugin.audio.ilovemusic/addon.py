@@ -8,8 +8,9 @@ icons_path = os.path.join(addon_path,'resources','senderlogos')
 xbmcplugin.setContent(handle=int(sys.argv[1]), content='songs')
 				
 def add_item(url,infolabels,img=''):
-    listitem = xbmcgui.ListItem(infolabels['title'],iconImage=img,thumbnailImage=img)
+    listitem = xbmcgui.ListItem(infolabels['title'])
     listitem.setInfo('audio',infolabels)
+    listitem.setArt({ 'thumb': img , 'icon' : img })
     listitem.setProperty('IsPlayable','true')
     xbmcplugin.addDirectoryItem(int(sys.argv[1]),url,listitem)
 

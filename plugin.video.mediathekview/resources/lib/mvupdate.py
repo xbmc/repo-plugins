@@ -11,8 +11,9 @@ import os
 import sys
 import argparse
 import datetime
-import defusedxml.ElementTree as ET
+import resources.lib.mvutils as mvutils
 
+from xml.etree import ElementTree as ET
 from resources.lib.base.logger import Logger
 from resources.lib.updater import MediathekViewUpdater
 
@@ -111,12 +112,12 @@ class AppLogger(Logger):
         parts = []
         for arg in args:
             part = arg
-            if isinstance(arg, basestring):
-                part = arg  # arg.decode('utf-8')
+            if isinstance(arg, str):
+                part = mvutils.py2_encode(arg)
             parts.append(part)
         output = '{} {} {}{}'.format(
             datetime.datetime.now(),
-            {-1: 'ERROR', 0: 'WARNING', 1: 'NOTICE', 2: 'DEBUG'}.get(level, 2),
+            {-1: 'ERROR', 0: 'WARNING', 1: 'INFO', 2: 'DEBUG'}.get(level, 2),
             self.prefix,
             message.format(*parts)
         )
@@ -391,20 +392,26 @@ class UpdateApp(AppLogger):
     """ The standalone updater application class """
 
     def __init__(self):
+        scriptpath, scriptname = os.path.split(sys.argv[0])
+        storederr = None
+        version = '0.0'
         try:
-            self.mypath = os.path.dirname(sys.argv[0])
-            tree = ET.parse(self.mypath + '/addon.xml')
+            tree = ET.parse(os.path.join(scriptpath, 'addon.xml'))
             version = tree.getroot().attrib['version']
-            AppLogger.__init__(self, os.path.basename(sys.argv[0]), version)
-            self.args = None
-            self.verbosity = 0
-            self.notifier = None
-            self.monitor = None
-            self.updater = None
-            self.settings = None
         # pylint: disable=broad-except
         except Exception:
-            AppLogger.__init__(self, os.path.basename(sys.argv[0]), '0.0')
+            # cannot self.warn before super.__init__, so store for later
+            storederr = sys.exc_info()
+        AppLogger.__init__(self, scriptname, version)
+        self.args = None
+        self.verbosity = 0
+        self.notifier = None
+        self.monitor = None
+        self.updater = None
+        self.settings = None
+        if storederr is not None:
+            self.warn("Unable to find version information: {} {}", storederr[0].__name__, storederr[1])
+        self.info('Python Version' + sys.version)
 
     def init(self):
         """ Startup of the application """

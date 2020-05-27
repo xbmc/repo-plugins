@@ -73,7 +73,7 @@ class MediathekViewService(KodiService):
                 self.settings.save_update_instance(self.monitor.instance_id)
                 self.updater.update(False)
             # Sleep/wait for abort for 60 seconds
-            if self.monitor.wait_for_abort(15):
+            if self.monitor.wait_for_abort(self.settings.updateCheckInterval):
                 # Abort was requested while waiting. We should exit
                 break
         self.info('Shutting down... (instance id: {})',

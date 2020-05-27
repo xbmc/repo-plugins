@@ -49,18 +49,6 @@ v.0.6.2 (2019-03-10):
 - [fix] Implemented Workaround for broken gzip module support in Kodi 18 running on Android
 - [fix] Fixed crash in mvupdate tool when invoked with MySQL support
 - [new] Improved compatibility with future Kodi versions with Python 3 support
-v.0.6.1 (2019-03-08):
-- [fix] Fixed module exception due to case error
-v0.6.0 (2019-03-01):
-- [new] Query Cache for slow systems
-- [new] Native SQLite fast update
-- [fix] It was possible to "download" the live stream
-- [fix] Automatic DB update did not work any more on Kodi 18
-- [new] Possibility to force a full update from the command line
-- [new] New database update mode "Continously"
-- [fix] Implemented some improvements suggested by Kodi Team in xbmc/repo-plugins#1979 (comment)
-- [new] New Menu Icons
-- [new] Source code now complies to PEP8 specification
 </news>
 		<platform>all</platform>
 		<language>de fr</language>
@@ -76,7 +64,6 @@ v0.6.0 (2019-03-01):
 			<screenshot>resources/screenshot2.png</screenshot>
 			<screenshot>resources/screenshot3.png</screenshot>
 			<screenshot>resources/screenshot4.png</screenshot>
-			<screenshot>resources/screenshot5.png</screenshot>
 		</assets>
 	</extension>
 </addon>

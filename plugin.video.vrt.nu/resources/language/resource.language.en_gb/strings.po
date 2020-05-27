@@ -521,7 +521,7 @@ msgid "Email address"
 msgstr ""
 
 msgctxt "#30704"
-msgid "Provide your VRT NU email address. In case this is a Google or Facebook account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
+msgid "Provide your VRT NU email address. In case this is a Google, Facebook or Apple account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
 msgstr ""
 
 msgctxt "#30705"
@@ -859,7 +859,7 @@ msgid "Login succeeded."
 msgstr ""
 
 msgctxt "#30953"
-msgid "Invalid email address or password. Only VRT logins are supported, no Google or Facebook logins."
+msgid "Invalid email address or password. Only VRT logins are supported, no Google, Facebook or Apple logins."
 msgstr ""
 
 msgctxt "#30954"

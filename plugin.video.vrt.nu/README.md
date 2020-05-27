@@ -59,6 +59,11 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.3.5 (2020-05-27)
+- Fix watching VRT NU abroad (@mediaminister)
+- Improve and fix user authentication (@mediaminister, @dagwieers)
+- Add support for playing from the Guide with IPTV Manager (@michaelarnauts)
+
 ### v2.3.4 (2020-05-18)
 - Fix token issue caused by new cross-site request forgery (XSRF) checks (@mediaminister)
 - Add experimental IPTV Manager support (@dagwieers)

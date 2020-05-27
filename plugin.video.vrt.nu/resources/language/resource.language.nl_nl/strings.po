@@ -521,8 +521,8 @@ msgid "Email address"
 msgstr "E-mailadres"
 
 msgctxt "#30704"
-msgid "Provide your VRT NU email address. In case this is a Google or Facebook account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
-msgstr "Geef je VRT NU e-mailadres in. In het geval je een Google of Facebook account gebruikt, controleer dat deze login geactiveerd werd voor normale gebruikersnaam/wachtwoord authenticatie. Zie de wiki pagina voor meer informatie."
+msgid "Provide your VRT NU email address. In case this is a Google, Facebook or Apple account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
+msgstr "Geef je VRT NU e-mailadres in. In het geval je een Google-, Facebook- of Apple-account gebruikt, controleer dat deze login geactiveerd werd voor normale gebruikersnaam/wachtwoord authenticatie. Zie de wiki pagina voor meer informatie."
 
 msgctxt "#30705"
 msgid "Password"
@@ -859,8 +859,8 @@ msgid "Login succeeded."
 msgstr "Inloggen gelukt."
 
 msgctxt "#30953"
-msgid "Invalid email address or password. Only VRT logins are supported, no Google or Facebook logins."
-msgstr "Ongeldig e-mailadres of wachtwoord. Alleen VRT-logins worden ondersteund, geen Google- of Facebook-logins."
+msgid "Invalid email address or password. Only VRT logins are supported, no Google, Facebook or Apple logins."
+msgstr "Ongeldig e-mailadres of wachtwoord. Alleen VRT-logins worden ondersteund, geen Google-, Facebook- of Apple-logins."
 
 msgctxt "#30954"
 msgid "Whoops something went wrong, check the kodi log for more details."

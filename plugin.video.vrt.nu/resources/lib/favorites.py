@@ -38,7 +38,7 @@ class Favorites:
         favorites_json = get_cache('favorites.json', ttl)
         if not favorites_json:
             from tokenresolver import TokenResolver
-            xvrttoken = TokenResolver().get_xvrttoken(token_variant='user')
+            xvrttoken = TokenResolver().get_token('X-VRT-Token', variant='user')
             if xvrttoken:
                 headers = {
                     'authorization': 'Bearer ' + xvrttoken,
@@ -61,7 +61,7 @@ class Favorites:
             return True
 
         from tokenresolver import TokenResolver
-        xvrttoken = TokenResolver().get_xvrttoken(token_variant='user')
+        xvrttoken = TokenResolver().get_token('X-VRT-Token', variant='user')
         if xvrttoken is None:
             log_error('Failed to get favorites token from VRT NU')
             notification(message=localize(30975))

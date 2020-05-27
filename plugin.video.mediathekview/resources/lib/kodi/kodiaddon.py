@@ -13,6 +13,7 @@ import xbmc
 import xbmcgui
 import xbmcaddon
 import xbmcplugin
+import resources.lib.mvutils as mvutils
 
 try:
     # Python 3.x
@@ -35,9 +36,8 @@ class KodiAddon(KodiLogger):
         self.icon = self.addon.getAddonInfo('icon')
         self.fanart = self.addon.getAddonInfo('fanart')
         self.version = self.addon.getAddonInfo('version')
-        self.path = self.addon.getAddonInfo('path')
-        self.datapath = xbmc.translatePath(
-            self.addon.getAddonInfo('profile').decode('utf-8'))
+        self.path = mvutils.py2_decode(self.addon.getAddonInfo('path')) ##TODO self.unicodePath = unicode(self.path, 'utf-8')
+        self.datapath = mvutils.py2_decode(xbmc.translatePath(self.addon.getAddonInfo('profile'))) ### TODO.decode('utf-8')
         self.language = self.addon.getLocalizedString
         KodiLogger.__init__(self, self.addon_id, self.version)
 
@@ -48,7 +48,9 @@ class KodiAddon(KodiLogger):
         Args:
             info_id(str): id of the property that the module needs to access.
         """
-        return self.addon.getAddonInfo(info_id)
+        argument = self.addon.getAddonInfo(info_id)
+        argument = mvutils.py2_decode(argument)
+        return argument
 
     def get_setting(self, setting_id):
         """
@@ -57,7 +59,9 @@ class KodiAddon(KodiLogger):
         Args:
             setting_id(int): id number of the setting
         """
-        return self.addon.getSetting(setting_id)
+        argument = self.addon.getSetting(setting_id)
+        argument = mvutils.py2_decode(argument)
+        return argument
 
     def set_setting(self, setting_id, value):
         """
@@ -118,25 +122,11 @@ class KodiPlugin(KodiAddon):
                 parameter was specified
         """
         try:
-            return self.args[argname][0]
+            argument = self.args[argname][0]
+            argument = mvutils.py2_decode(argument)
+            return argument
         except TypeError:
             return default
-        except KeyError:
-            return default
-
-    def get_args(self, argname, default):
-        """
-        Get specific parameters passed to the plugin.
-        This function returns an array.
-
-        Args:
-            argname(str): the name of the parameter
-
-            default(str): the value to return if no such
-                parameter was specified. Must be an array.
-        """
-        try:
-            return self.args[argname]
         except KeyError:
             return default
 
@@ -148,7 +138,9 @@ class KodiPlugin(KodiAddon):
         Args:
             params(object): an object containing parameters
         """
-        return self.base_url + '?' + urlencode(params)
+        ### BUG in urlencode which is solved in python 3
+        utfEnsuredParams = mvutils.dict_to_utf(params)
+        return self.base_url + '?' + urlencode(utfEnsuredParams)
 
     def run_plugin(self, params):
         """

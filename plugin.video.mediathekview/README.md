@@ -137,23 +137,24 @@ Standalone Datenbank Update Prozess
 -----------------------------------
 
 Um die Datenbankaktualisierung von der Kommandozeile auszuführen, muss das
-Zielsystem einen python2-Interpreter bereitstellen. Des weiteren müssen noch
-folgende zwei Bibliotheken zur Verfügung stehen, sowie das Entpackprogramm
+Zielsystem einen python-Interpreter bereitstellen. Des weiteren müssen noch
+folgende Bibliotheke zur Verfügung stehen, sowie das Entpackprogramm
 'xz' (optional):
 
-* ijson
-* defusedxml
 * mysql-connector
 
 Die Installation dieser Bibliotheken erfolgt durch Eingabe folgender Befehle:
 
 ````
-pip install ijson
-pip install defusedxml
-pip install mysql-connector==2.1.4
+Python 2:
+sudo apt install python-pip
+pip install mysql-connector==2.2.9
+Python 3:
+sudo apt install python3-pip
+pip3 install mysql-connector==2.2.9
 ````
 
-Das Aktualisierungsprogramm heisst `mvupdate` und liegt im Hauptverzeichnis
+Das Aktualisierungsprogramm heisst `mvupdate` (`mvupdate3` für Python 3) und liegt im Hauptverzeichnis
 des Addons und muss auch von dort ausgeführt werden. Aus diesem Grunde muss
 das Addon in einem Verzeichnis aus der ausführenden Maschine kopiert werden.
 
@@ -309,23 +310,24 @@ the database server or another machine).
 Standalone Database Update Process
 ----------------------------------
 
-A python2 interpreter as well as the unpacker 'xz' is requirered on the
+A python interpreter as well as the unpacker 'xz' is requirered on the
 target system in order to execute the commandline update process. Additionally
-the following python libraries are required:
+the following python library is required:
 
-* ijson
-* defusedxml
 * mysql-connector
 
-The required libraries can be installed via pip:
+The required library can be installed via pip:
 
 ````
-pip install ijson
-pip install defusedxml
-pip install mysql-connector==2.1.4
+Python 2:
+sudo apt install python-pip
+pip install mysql-connector==2.2.9
+Python 3:
+sudo apt install python3-pip
+pip3 install mysql-connector==2.2.9
 ````
 
-The update program is called `mvupdate` and is located in the root directory
+The update program is called `mvupdate` (`mvupdate3` for Python 3) and is located in the root directory
 of the addon and must be executed from there. The whole addon has to be copied
 to the target machine.
 
@@ -480,22 +482,23 @@ Processo esterno di aggiornamento del database
 
 Per eseguire il processo esterno di aggiornamento del database, è necessario
 che sul sistema sul quale il processo viene eseguito sia istallato un
-interprete python2, il programma di decompressione 'xz' e le seguenti
+interprete python, il programma di decompressione 'xz' e le seguenti
 librerie python:
 
-* ijson
-* defusedxml
 * mysql-connector
 
 QUeste potranno essere istallate mediante il programma pip:
 
 ````
-pip install ijson
-pip install defusedxml
-pip install mysql-connector==2.1.4
+Python 2:
+sudo apt install python-pip
+pip install mysql-connector==2.2.9
+Python 3:
+sudo apt install python3-pip
+pip3 install mysql-connector==2.2.9
 ````
 
-Il programma di aggiornamento si chiama `mvupdate` e si trova nella directory
+Il programma di aggiornamento si chiama `mvupdate` (`mvupdate3` per Python 3) e si trova nella directory
 principale dell'addon e dovrà essere lanciato da questa directory. L'intero
 addon dovrà essere copiato sul sistema di destinazione.
 

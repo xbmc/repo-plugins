@@ -14,6 +14,7 @@ import sqlite3
 import hashlib
 
 from contextlib import closing
+from codecs import open
 
 import resources.lib.mvutils as mvutils
 
@@ -47,7 +48,6 @@ class StoreSQLite(object):
         self.dbfile = os.path.join(self.settings.datapath, 'filmliste-v2.db')
         # useful query fragments
         self.sql_query_films = "SELECT film.id,title,show,channel,description,duration,size,datetime(aired, 'unixepoch', 'localtime'),url_sub,url_video,url_video_sd,url_video_hd FROM film LEFT JOIN show ON show.id=film.showid LEFT JOIN channel ON channel.id=film.channelid"
-        self.sql_query_filmcnt = "SELECT COUNT(*) FROM film LEFT JOIN show ON show.id=film.showid LEFT JOIN channel ON channel.id=film.channelid"
         self.sql_cond_recent = "( ( UNIX_TIMESTAMP() - {} ) <= {} )".format(
             "aired" if settings.recentmode == 0 else "film.dtCreated",
             settings.maxage
@@ -60,7 +60,7 @@ class StoreSQLite(object):
         self.ft_show = None
         self.ft_showid = None
 
-    def init(self, reset=False, convert=False):
+    def init(self, reset=False, convert=False, failedCount = 0):
         """
         Startup of the database system
 
@@ -101,16 +101,36 @@ class StoreSQLite(object):
                 self.conn = sqlite3.connect(self.dbfile, timeout=60)
                 self._handle_database_initialization()
         else:
-            self._handle_update_substitution()
             try:
+                if self._handle_update_substitution():
+                    self._handle_not_update_to_date_dbfile()
                 self.conn = sqlite3.connect(self.dbfile, timeout=60)
             except sqlite3.DatabaseError as err:
                 self.logger.error(
                     'Error while opening database: {}. trying to fully reset the Database...', err)
                 return self.init(reset=True, convert=convert)
+        try:
 
-        # 3x speed-up, check mode 'WAL'
-        self.conn.execute('pragma journal_mode=off')
+            # 3x speed-up, check mode 'WAL'
+            self.conn.execute('pragma journal_mode=off')
+            # check if DB is ready or broken
+            cursor = self.conn.cursor()
+            cursor.execute('SELECT * FROM `status` LIMIT 1')
+            rs = cursor.fetchall()
+            ##
+            self.logger.info('Current DB Status Last modified {} ({})', time.ctime(rs[0][0]), rs[0][0])
+            self.logger.info('Current DB Status Last lastupdate {} ({})', time.ctime(rs[0][2]), rs[0][2])
+            self.logger.info('Current DB Status Last filmupdate {} ({})', time.ctime(rs[0][3]), rs[0][3])
+            self.logger.info('Current DB Status Last fullupdate {}', rs[0][4])
+            ##
+            cursor.close()
+        except sqlite3.DatabaseError as err:
+            failedCount += 1
+            if (failedCount > 3):
+                self.logger.error('Failed to restore database, please uninstall plugin, delete user profile and reinstall')
+                raise err
+            self.logger.error('Error on first query: {}. trying to fully reset the Database...trying {} times', err, failedCount)
+            return self.init(reset=True, convert=convert, failedCount=failedCount)
         # that is a bit dangerous :-) but faaaast
         self.conn.execute('pragma synchronous=off')
         self.conn.create_function('UNIX_TIMESTAMP', 0, get_unix_timestamp)
@@ -138,7 +158,7 @@ class StoreSQLite(object):
                 performed also on film descriptions. Default is
                 `False`
         """
-        searchmask = '%' + search.decode('utf-8') + '%'
+        searchmask = '%' + search + '%'
         searchcond = '( ( title LIKE ? ) OR ( show LIKE ? ) OR ( description LIKE ? ) )' if extendedsearch is True else '( ( title LIKE ? ) OR ( show LIKE ? ) )'
         searchparm = (searchmask, searchmask, searchmask) if extendedsearch is True else (
             searchmask, searchmask, )
@@ -478,17 +498,6 @@ class StoreSQLite(object):
             start = time.time()
             cursor = self.conn.cursor()
             cursor.execute(
-                self.sql_query_filmcnt +
-                ' WHERE ' +
-                condition +
-                sql_cond_limit +
-                (' LIMIT {}'.format(maxresults + 1) if maxresults else ''),
-                params
-            )
-            (results, ) = cursor.fetchone()
-            if maxresults and results > maxresults:
-                self.notifier.show_limit_results(maxresults)
-            cursor.execute(
                 self.sql_query_films +
                 ' WHERE ' +
                 condition +
@@ -499,11 +508,21 @@ class StoreSQLite(object):
             )
             self.logger.info('QUERY_TIME:{}', time.time() - start)
             start = time.time()
-            filmui.begin(showshows, showchannels)
+            resultCount = 0
             for (filmui.filmid, filmui.title, filmui.show, filmui.channel, filmui.description, filmui.seconds, filmui.size, filmui.aired, filmui.url_sub, filmui.url_video, filmui.url_video_sd, filmui.url_video_hd) in cursor:
+                resultCount += 1
+                if maxresults and resultCount > maxresults:
+                    break;
+                cached_data.append(filmui.get_as_dict()) #write data to dict anyway because we want the total number of rows to be passed to add function
+            ###
+            results = len(cached_data)
+            filmui.begin(showshows, showchannels)
+            for film_data in cached_data:
+                filmui.set_from_dict(film_data)
                 filmui.add(total_items=results)
-                if caching and self.settings.caching:
-                    cached_data.append(filmui.get_as_dict())
+            filmui.end()
+            if maxresults and resultCount > maxresults:
+                self.notifier.show_limit_results(maxresults)        
             filmui.end()
             self.logger.info('FILL_KODI_LIST:{}', time.time() - start)
             cursor.close()
@@ -985,8 +1004,8 @@ class StoreSQLite(object):
                     self.ft_showid = cursor.lastrowid
 
             # check if the movie is there
-            idhash = hashlib.md5("{}:{}:{}".format(
-                self.ft_channelid, self.ft_showid, film['url_video'])).hexdigest()
+            checkString = "{}:{}:{}".format(self.ft_channelid, self.ft_showid, film['url_video'])
+            idhash = hashlib.md5(checkString.encode('utf-8')).hexdigest()
             cursor.execute("""
                 SELECT      `id`,
                             `touched`
@@ -1068,20 +1087,23 @@ class StoreSQLite(object):
             raise DatabaseCorrupted(
                 'Database error during critical operation: {} - Database will be rebuilt from scratch.'.format(err))
 
-    def _load_cache(self, reqtype, condition, maxage=7200):
+    def _load_cache(self, reqtype, condition):
         filename = os.path.join(self.settings.datapath, reqtype + '.cache')
+        dbLastUpdate = self.get_status()['modified']
         try:
-            with closing(open(filename)) as json_file:
+            with closing(open(filename, encoding='utf-8')) as json_file:
                 data = json.load(json_file)
                 if isinstance(data, dict):
                     if data.get('type', '') != reqtype:
                         return None
                     if data.get('condition') != condition:
                         return None
-                    if time.time() - data.get('time', 0) > maxage:
+                    if int(dbLastUpdate) != data.get('time', 0):
                         return None
                     data = data.get('data', [])
-                    return data if isinstance(data, list) else None
+                    if isinstance(data, list):
+                        return data
+                    return None
         # pylint: disable=broad-except
         except Exception as err:
             self.logger.error(
@@ -1092,14 +1114,15 @@ class StoreSQLite(object):
         if not isinstance(data, list):
             return False
         filename = os.path.join(self.settings.datapath, reqtype + '.cache')
+        dbLastUpdate = self.get_status()['modified']
         cache = {
             "type": reqtype,
-            "time": int(time.time()),
+            "time": int(dbLastUpdate),
             "condition": condition,
             "data": data
         }
         try:
-            with closing(open(filename, 'w')) as json_file:
+            with closing(open(filename, 'w', encoding='utf-8')) as json_file:
                 json.dump(cache, json_file)
             return True
         # pylint: disable=broad-except
@@ -1122,6 +1145,30 @@ class StoreSQLite(object):
         self.notifier.show_database_error(err)
         self.exit()
         self.init(reset=True, convert=False)
+
+    def _handle_not_update_to_date_dbfile(self):
+        ###
+        try:
+            if self.conn is None:
+                self.conn = sqlite3.connect(self.dbfile, timeout=60)
+            cursor = self.conn.cursor()
+            cursor.execute('SELECT modified FROM `status` LIMIT 1')
+            rs = cursor.fetchall()
+            modified = rs[0][0]
+            current_time = int(time.time())
+            target_time = modified + 8 * 60 * 60;
+            if (target_time < current_time):
+                self.logger.info("Outdated DB after full refresh! DB modified time is {} ({}) which is less than allowed {} ({})",time.ctime(modified),modified,time.ctime(target_time),target_time)
+                cursor = self.conn.cursor()
+                cursor.execute('UPDATE status SET modified = ?,lastupdate = ?, filmupdate = ?', (int(time.time()),int(time.time()),int(time.time())))
+                cursor.close()
+                self.conn.commit()
+                return True
+            self.conn.close()
+            self.conn = None
+        except sqlite3.DatabaseError as err:
+            self.logger.error('HUST: {}', err)     
+        return False
 
     def _handle_database_initialization(self):
         self.conn.executescript("""

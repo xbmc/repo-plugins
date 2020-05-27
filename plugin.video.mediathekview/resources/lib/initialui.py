@@ -58,6 +58,11 @@ class InitialUI(object):
         else:
             resultingname = altname
         list_item = xbmcgui.ListItem(label=resultingname)
+        info_labels = {
+            'title': resultingname,
+            'sorttitle': resultingname.lower()
+        }
+        list_item.setInfo(type='video', infoLabels=info_labels)
         xbmcplugin.addDirectoryItem(
             handle=self.handle,
             url=mvutils.build_url({

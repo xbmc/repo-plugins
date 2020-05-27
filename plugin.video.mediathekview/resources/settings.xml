@@ -5,10 +5,12 @@
 		<setting id="autosub"			type="bool"		label="30111"	default="false"										/>
 		<setting id="nofuture"			type="bool"		label="30112"	default="true"										/>
 		<setting id="minlength"			type="slider"	label="30113"	default="0"		range="0,30"						/>
+		<setting id="filmuisortmethod"  type="enum"		label="30119"	default="0"		lvalues="30120|30121|30122|30123|30124"	/>
 		<setting id="groupshows"		type="bool"		label="30114"	default="true"										/>
 		<setting id="maxresults"		type="slider"	label="30115"	default="1000"	range="100,100,3000" option="int"	/>
 		<setting id="maxage"			type="slider"	label="30116"	default="2"		range="1,30" option="int"			/>
 		<setting id="recentmode"		type="enum"		label="30117"	default="0"		lvalues="30171|30172"				/>
+		<setting id="updateCheckInterval" type="slider"	label="30118"	default="15"	range="15,600" option="int"			/>
 	</category>
 	<category label="30002">
 		<setting id="dbtype"			type="enum"		label="30210"	default="0"	lvalues="30221|30222"					/>

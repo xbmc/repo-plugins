@@ -66,12 +66,21 @@ class StoreMySQL(object):
         if reset:
             self.logger.warn('Reset not supported')
         try:
-            self.conn = mysql.connector.connect(
-                host=self.settings.host,
-                port=self.settings.port,
-                user=self.settings.user,
-                password=self.settings.password
-            )
+            # TODO Kodi 19 - we can update to mysql connector which supports auth_plugin parameter
+            connectargs = {
+                'host': self.settings.host,
+                'port': self.settings.port,
+                'user': self.settings.user,
+                'password': self.settings.password
+            }
+            if mysql.connector.__version_info__ > (1, 2):
+                connectargs['auth_plugin'] = 'mysql_native_password'
+            else:
+                self.logger.debug('Not using auth_plugin parameter')
+            if mysql.connector.__version_info__ > (2, 1) and mysql.connector.HAVE_CEXT:
+                connectargs['use_pure'] = True
+                self.logger.debug('Forcefully disabling C extension')
+            self.conn = mysql.connector.connect(**connectargs)
             try:
                 cursor = self.conn.cursor()
                 cursor.execute('SELECT VERSION()')
@@ -82,10 +91,17 @@ class StoreMySQL(object):
             except Exception:
                 self.logger.info('Connected to server {}', self.settings.host)
             self.conn.database = self.settings.database
+            ## check tables
+            cursor.execute('SELECT * FROM status')
+            cursor.fetchone()
         except mysql.connector.Error as err:
             if err.errno == mysql.connector.errorcode.ER_BAD_DB_ERROR:
                 self.logger.info(
                     '=== DATABASE {} DOES NOT EXIST. TRYING TO CREATE IT ===', self.settings.database)
+                return self._handle_database_initialization()
+            if err.errno == mysql.connector.errorcode.ER_NO_SUCH_TABLE:
+                self.logger.info(
+                    '=== TABLE DOES NOT EXIST. TRYING TO CREATE IT ===')
                 return self._handle_database_initialization()
             self.conn = None
             self.logger.error('Database error: {}, {}', err.errno, err)
@@ -116,7 +132,7 @@ class StoreMySQL(object):
                 performed also on film descriptions. Default is
                 `False`
         """
-        searchmask = '%' + search.decode('utf-8') + '%'
+        searchmask = '%' + search + '%'
         searchcond = '( ( `title` LIKE %s ) OR ( `show` LIKE %s ) OR ( `description` LIKE %s ) )' if extendedsearch is True else '( ( `title` LIKE %s ) OR ( `show` LIKE %s ) )'
         searchparm = (searchmask, searchmask, searchmask) if extendedsearch is True else (
             searchmask, searchmask, )
@@ -999,7 +1015,7 @@ class StoreMySQL(object):
         dbcreated = False
         try:
             cursor = self.conn.cursor()
-            cursor.execute('CREATE DATABASE `{}` DEFAULT CHARACTER SET utf8'.format(
+            cursor.execute('CREATE DATABASE IF NOT EXISTS `{}` DEFAULT CHARACTER SET utf8'.format(
                 self.settings.database))
             dbcreated = True
             self.conn.database = self.settings.database

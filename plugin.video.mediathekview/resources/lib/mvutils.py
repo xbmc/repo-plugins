@@ -33,6 +33,56 @@ except ImportError:
     IS_KODI = False
 
 
+PY2 = sys.version_info[0] == 2
+
+def py2_encode(s, encoding='utf-8'):
+   """
+   Encode Python 2 ``unicode`` to ``str``
+
+   In Python 3 the string is not changed.   
+   """
+   if PY2 and isinstance(s, unicode):
+       s = s.encode(encoding)
+   return s
+
+
+def py2_decode(s, encoding='utf-8'):
+   """
+   Decode Python 2 ``str`` to ``unicode``
+
+   In Python 3 the string is not changed.
+   """
+   if PY2 and isinstance(s, str):
+       s = s.decode(encoding)
+   return s
+
+def array_to_utf(a):
+    autf = []
+    i = 0
+    for v in a:
+        if PY2 and isinstance(v, unicode):
+            autf.append(py2_encode(v))
+        elif PY2 and isinstance(v, dict):
+            autf.append(dict_to_utf(v))
+        elif PY2 and isinstance(v, list):
+            autf.append(array_to_utf(v))
+        else:
+            autf.append(v)
+    return autf
+
+def dict_to_utf(d):
+    dutf = {}
+    for k,v in d.items():
+        if PY2 and isinstance(v, unicode):
+            dutf[k] = py2_encode(v)
+        elif PY2 and isinstance(v, list):
+            dutf[k] = array_to_utf(v)
+        elif PY2 and isinstance(v, dict):
+            dutf[k] = dict_to_utf(v)
+        else:
+            dutf[k] = v
+    return dutf
+
 def dir_exists(name):
     """
     Tests if a directory exists
@@ -202,7 +252,7 @@ def url_retrieve(url, filename, reporthook, chunk_size=8192, aborthook=None):
             each block read thereafter. If specified the operation will be
             aborted if the hook function returns `True`
     """
-    with closing(urlopen(url)) as src, closing(open(filename, 'wb')) as dst:
+    with closing(urlopen(url, timeout = 10)) as src, closing(open(filename, 'wb')) as dst:
         _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook)
 
 
@@ -230,7 +280,7 @@ def url_retrieve_vfs(url, filename, reporthook, chunk_size=8192, aborthook=None)
             each block read thereafter. If specified the operation will be
             aborted if the hook function returns `True`
     """
-    with closing(urlopen(url)) as src, closing(xbmcvfs.File(filename, 'wb')) as dst:
+    with closing(urlopen(url, timeout = 10)) as src, closing(xbmcvfs.File(filename, 'wb')) as dst:
         _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook)
 
 
@@ -247,17 +297,17 @@ def build_url(query):
 def _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook):
     aborthook = aborthook if aborthook is not None else lambda: False
     total_size = int(
-        src.info().getheader('Content-Length').strip()
-    ) if src.info() and src.info().getheader('Content-Length') else 0
+        src.info().get('Content-Length').strip()
+    ) if src.info() and src.info().get('Content-Length') else 0
     total_chunks = 0
 
     while not aborthook():
         reporthook(total_chunks, chunk_size, total_size)
-        chunk = src.read(chunk_size)
-        if not chunk:
+        byteStringchunk = src.read(chunk_size)
+        if not byteStringchunk:
             # operation has finished
             return
-        dst.write(chunk)
+        dst.write(bytearray(byteStringchunk))
         total_chunks += 1
     # abort requested
     raise ExitRequested('Reception interrupted.')

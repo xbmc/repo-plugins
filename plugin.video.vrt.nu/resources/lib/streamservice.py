@@ -143,9 +143,9 @@ class StreamService:
             return None
         token_url = api_data.media_api_url + '/tokens'
         if api_data.is_live_stream:
-            playertoken = self._tokenresolver.get_playertoken(token_url, token_variant='live', roaming=roaming)
+            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'live', token_url, roaming=roaming)
         else:
-            playertoken = self._tokenresolver.get_playertoken(token_url, token_variant='ondemand', roaming=roaming)
+            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'ondemand', token_url, roaming=roaming)
 
         # Construct api_url and get video json
         if not playertoken:
@@ -210,11 +210,6 @@ class StreamService:
             elif vudrm_token:
                 protocol = 'hls_aes'
             else:
-                protocol = 'hls'
-
-            # Workaround for Radio 1 live stream slow starts with HTTP 415
-            # https://github.com/add-ons/plugin.video.vrt.nu/issues/735
-            if video.get('video_id') == 'vualto_radio1':
                 protocol = 'hls'
 
             # Get stream manifest url

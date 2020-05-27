@@ -4,8 +4,9 @@
 """Implementation of IPTVManager class"""
 
 from __future__ import absolute_import, division, unicode_literals
-from kodiutils import log
+
 from data import CHANNELS
+from kodiutils import log
 
 
 class IPTVManager:
@@ -39,13 +40,17 @@ class IPTVManager:
         for channel in CHANNELS:
             if not channel.get('live_stream_id'):
                 continue
-            streams.append(dict(
+            item = dict(
                 id=channel.get('epg_id'),
                 name=channel.get('label'),
                 logo=channel.get('logo'),
                 preset=channel.get('preset'),
                 stream='plugin://plugin.video.vrt.nu/play/id/{live_stream_id}'.format(**channel),
-            ))
+            )
+            if channel.get('has_tvguide'):
+                item.update(dict(vod='plugin://plugin.video.vrt.nu/play/airdate/{name}/{{date}}'.format(**channel)))
+
+            streams.append(item)
         return dict(version=1, streams=streams)
 
     @via_socket

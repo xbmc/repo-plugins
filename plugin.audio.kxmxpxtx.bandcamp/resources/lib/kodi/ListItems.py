@@ -86,7 +86,8 @@ class ListItems:
             url = self._build_url({'mode': 'stream', 'url': track.file, 'title': title})
             li.setPath(url)
             if to_album:
-                album_url = self._build_url({'mode': 'list_songs', 'album_id': album.album_id, 'item_type': 'album'})
+                album_url = self._build_url(
+                    {'mode': 'list_songs', 'album_id': album.album_id, 'item_type': album.item_type})
                 cmd = 'Container.Update({album_url})'.format(album_url=album_url)
                 commands = [(self.addon.getLocalizedString(30202), cmd)]
                 li.addContextMenuItems(commands)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.kxmxpxtx.bandcamp" name="Bandcamp" version="0.0.3" provider-name="kxmxpxtx">
+<addon id="plugin.audio.kxmxpxtx.bandcamp" name="Bandcamp" version="0.0.4" provider-name="kxmxpxtx">
     <requires>
         <import addon="xbmc.python" version="2.7.0"/>
         <import addon="script.module.requests" version="2.9.1"/>
@@ -14,8 +14,8 @@
         <license>MIT</license>
         <description lang="en_GB">Discover new artists and browse your collection</description>
         <platform>all</platform>
-        <news>v0.0.3  (2020-05-17)
-                - Added wishlist
+        <news>v0.0.4 (2020-05-27)
+            - Fix click opening a band in the search
         </news>
         <assets>
             <icon>icon.png</icon>

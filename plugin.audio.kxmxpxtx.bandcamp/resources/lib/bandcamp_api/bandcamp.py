@@ -1,12 +1,12 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 
-from future.moves import urllib
-from future.utils import (PY2)
-
 import json
 import time
+
 from future.standard_library import install_aliases
+from future.utils import (PY2)
+
 install_aliases()
 
 from urllib.parse import unquote
@@ -175,7 +175,7 @@ class Bandcamp:
 
     def get_band(self, band_id):
         url = "https://bandcamp.com/api/mobile/24/band_details"
-        body = '{"band_id": {band_id}}'.format(band_id=band_id)
+        body = '{{"band_id": "{band_id}"}}'.format(band_id=band_id)
         request = requests.post(url, data=body)
         band_details = json.loads(request.text)
         band = Band(band_id=band_details['id'], band_name=band_details['name'])

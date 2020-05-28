@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mediathekview"
 	name="MediathekView"
-	version="0.6.2"
+	version="0.6.4"
 	provider-name="MediathekView.de, Leo Moll">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0"/>
-		<import addon="script.module.requests" version="2.12.4"/>
 		<import addon="script.module.myconnpy" version="1.1.7"/>
-		<import addon="script.module.ijson" version="2.3"/>
-		<import addon="script.module.defusedxml" version="0.5.0"/>
 	</requires>
 	<extension
 		point="xbmc.python.pluginsource"
@@ -26,22 +23,32 @@
 		<description lang="de_DE">Ermöglicht den Zugriff auf fast alle deutschen Mediatheken der öffentlich Rechtlichen basierend auf der Datenbank von MediathekView.de</description>
 		<description lang="en_GB">Gives access to most video-platforms from German public service broadcasters using the database of MediathekView.de</description>
 		<description lang="it_IT">Fornisce l'accesso a gran parte delle piattaforme video operate dalle emittenti pubbliche tedesche usando la banca dati di MediathekView.de</description>
-		<news>v.0.6.2 (2019-03-10):
+		<news>v.0.6.4 (2020-05-26):
+[fix]
+- #143 ijson issue on FireTvStick
+- #136 MySql caching_sha2_password issue
+- #135 HTTPMessage Header issue
+- #134 ijson issue
+- #124 Corrupt database
+- #166 Sorttitle missing in shows and channel list
+- #168 Added urlopen timeout
+- Fixed heading on DB-Status-Dialog
+[new]
+- #140 / #131 Datenbank check interval
+- #71 Default Sort
+- #95 Sort by time, date
+- #147 Show error message for 8 sec
+[others]
+- Update 3rd party code for Py3 (subtitles SRT-Files)
+- Update cache for sqlListe for invalidate after DB update
+- RBTV logo add
+- Python 3 compat
+- Kodi loglevel change (notice to info)
+- Add User Agent String for all request to fix issue with ORF
+v.0.6.2 (2019-03-10):
 - [fix] Implemented Workaround for broken gzip module support in Kodi 18 running on Android
 - [fix] Fixed crash in mvupdate tool when invoked with MySQL support
 - [new] Improved compatibility with future Kodi versions with Python 3 support
-v.0.6.1 (2019-03-08):
-- [fix] Fixed module exception due to case error
-v0.6.0 (2019-03-01):
-- [new] Query Cache for slow systems
-- [new] Native SQLite fast update
-- [fix] It was possible to "download" the live stream
-- [fix] Automatic DB update did not work any more on Kodi 18
-- [new] Possibility to force a full update from the command line
-- [new] New database update mode "Continously"
-- [fix] Implemented some improvements suggested by Kodi Team in xbmc/repo-plugins#1979 (comment)
-- [new] New Menu Icons
-- [new] Source code now complies to PEP8 specification
 </news>
 		<platform>all</platform>
 		<language>de fr</language>
@@ -57,7 +64,6 @@ v0.6.0 (2019-03-01):
 			<screenshot>resources/screenshot2.png</screenshot>
 			<screenshot>resources/screenshot3.png</screenshot>
 			<screenshot>resources/screenshot4.png</screenshot>
-			<screenshot>resources/screenshot5.png</screenshot>
 		</assets>
 	</extension>
 </addon>

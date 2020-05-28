@@ -40,12 +40,23 @@ class FilmUI(Film):
         self.plugin = plugin
         self.handle = plugin.addon_handle
         self.settings = Settings()
-        self.sortmethods = sortmethods if sortmethods is not None else [
+        # define sortmethod for films
+        # all av. sort method and put the default sortmethod on first place to be used by UI
+        allSortMethods = [
             xbmcplugin.SORT_METHOD_TITLE,
             xbmcplugin.SORT_METHOD_DATE,
-            xbmcplugin.SORT_METHOD_DURATION,
-            xbmcplugin.SORT_METHOD_SIZE
+            xbmcplugin.SORT_METHOD_DATEADDED,
+            xbmcplugin.SORT_METHOD_SIZE,
+            xbmcplugin.SORT_METHOD_DURATION
         ]
+        if sortmethods is not None:
+            self.sortmethods = sortmethods
+        else:
+            method = allSortMethods[0]
+            allSortMethods[0] = allSortMethods[self.settings.filmSortMethod]
+            allSortMethods[self.settings.filmSortMethod]=method
+            self.sortmethods = allSortMethods
+
         self.showshows = False
         self.showchannels = False
 
@@ -186,6 +197,8 @@ class FilmUI(Film):
         if videourl == "":
             return None
 
+        videourl = videourl + u'|user-agent=' + u'Mozilla%2F5.0%20%28X11%3B%20Ubuntu%3B%20Linux%20x86_64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F79.0.3945.130%20Safari%2F537.36%20RuxitSynthetic%2F1.0%20v4800390946%20t55095'
+
         if alttitle is not None:
             resultingtitle = alttitle
         else:
@@ -203,10 +216,10 @@ class FilmUI(Film):
             'plot': film.description
         }
 
-        if film.size > 0:
+        if film.size is not None and film.size > 0:
             info_labels['size'] = film.size * 1024 * 1024
 
-        if film.seconds > 0:
+        if film.seconds is not None and film.seconds > 0:
             info_labels['duration'] = film.seconds
 
         if film.aired is not None:
@@ -214,8 +227,9 @@ class FilmUI(Film):
             if airedstring[:4] != '1970':
                 info_labels['date'] = airedstring[8:10] + '-' + \
                     airedstring[5:7] + '-' + airedstring[:4]
-                info_labels['aired'] = airedstring
+                info_labels['aired'] = airedstring[:10]
                 info_labels['dateadded'] = airedstring
+                info_labels['plot'] = self.plugin.language(30990).format(airedstring) + info_labels['plot']
 
         icon = os.path.join(
             self.plugin.path,

@@ -40,6 +40,7 @@ class Downloader(object):
         self.database = plugin.database
         self.settings = plugin.settings
         self.notifier = plugin.notifier
+        self.plugin.datapath = self.plugin.datapath
 
     def play_movie_with_subs(self, filmid):
         """
@@ -92,7 +93,8 @@ class Downloader(object):
                 mvutils.url_retrieve_vfs(
                     film.url_sub, ttmname, progress.url_retrieve_hook)
                 try:
-                    ttml2srt(xbmcvfs.File(ttmname, 'r'),
+                    ttml2srtConverter = ttml2srt()
+                    ttml2srtConverter.do(xbmcvfs.File(ttmname, 'r'),
                              xbmcvfs.File(srtname, 'w'))
                     ret = True
                 except Exception as err:
@@ -136,7 +138,7 @@ class Downloader(object):
         # review name
         if self.settings.reviewname:
             (namestem, confirmed) = self.notifier.get_entered_text(namestem, 30986)
-            namestem = mvutils.cleanup_filename(namestem.decode('utf-8'))
+            namestem = mvutils.cleanup_filename(namestem)
             if len(namestem) < 1 or confirmed is False:
                 return
         # build year postfix
@@ -155,7 +157,7 @@ class Downloader(object):
         # check for duplicate
         while xbmcvfs.exists(pathname + filename + extension):
             (filename, confirmed) = self.notifier.get_entered_text(filename, 30987)
-            filename = mvutils.cleanup_filename(filename.decode('utf-8'))
+            filename = mvutils.cleanup_filename(filename)
             if len(filename) < 1 or confirmed is False:
                 return
 
@@ -197,7 +199,7 @@ class Downloader(object):
         # review name
         if self.settings.reviewname:
             (namestem, confirmed) = self.notifier.get_entered_text(namestem, 30986)
-            namestem = mvutils.cleanup_filename(namestem.decode('utf-8'))
+            namestem = mvutils.cleanup_filename(namestem)
             if len(namestem) < 1 or confirmed is False:
                 return
 

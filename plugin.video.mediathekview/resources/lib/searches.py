@@ -11,7 +11,7 @@ import time
 
 from contextlib import closing
 from operator import itemgetter
-
+from codecs import open
 # pylint: disable=import-error
 import xbmcplugin
 
@@ -46,7 +46,7 @@ class RecentSearches(object):
     def load(self):
         """ Loads the recent searches list """
         try:
-            with closing(open(self.datafile)) as json_file:
+            with closing(open(self.datafile, encoding='utf-8')) as json_file:
                 data = json.load(json_file)
                 if isinstance(data, list):
                     self.recents = sorted(
@@ -61,7 +61,7 @@ class RecentSearches(object):
         """ Saves the recent searches list """
         data = sorted(self.recents, key=itemgetter('when'), reverse=True)
         try:
-            with closing(open(self.datafile, 'w')) as json_file:
+            with closing(open(self.datafile, 'w', encoding='utf-8')) as json_file:
                 json.dump(data, json_file)
         # pylint: disable=broad-except
         except Exception as err:
@@ -76,7 +76,7 @@ class RecentSearches(object):
         Args:
             search(str): search string
         """
-        slow = search.decode('utf-8').lower()
+        slow = search.lower()
         try:
             for entry in self.recents:
                 if entry['search'].lower() == slow:
@@ -88,7 +88,7 @@ class RecentSearches(object):
                 'Recent searches list is broken (error {}) - cleaning up', err)
             self.recents = []
         self.recents.append({
-            'search':			search.decode('utf-8'),
+            'search':			search,
             'when':				int(time.time())
         })
         return self
@@ -100,7 +100,7 @@ class RecentSearches(object):
         Args:
             search(str): search string
         """
-        slow = search.decode('utf-8').lower()
+        slow = search.lower()
         try:
             for entry in self.recents:
                 if entry['search'].lower() == slow:
@@ -120,7 +120,7 @@ class RecentSearches(object):
                 entry['search'],
                 {
                     'mode': "research",
-                    'search': entry['search'].encode('utf-8'),
+                    'search': entry['search'],
                     'extendedsearch': self.extendedsearch
                 },
                 [
@@ -129,7 +129,7 @@ class RecentSearches(object):
                         'RunPlugin({})'.format(
                             self.plugin.build_url({
                                 'mode': "delsearch",
-                                'search': entry['search'].encode('utf-8'),
+                                'search': entry['search'],
                                 'extendedsearch': self.extendedsearch
                             })
                         )

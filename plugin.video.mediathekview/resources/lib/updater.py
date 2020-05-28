@@ -20,8 +20,9 @@ except ImportError:
     from urllib2 import URLError
 
 from contextlib import closing
+from codecs import open
 
-import ijson
+import json
 
 import resources.lib.mvutils as mvutils
 
@@ -208,6 +209,13 @@ class MediathekViewUpdater(object):
                     self.cycle += 1
             self.delete_list(full)
 
+    def _object_pairs_hook(self, inputArg):
+        """
+        We need this because the default handler would convert everything to dict
+        and the same key would be overwritten and lost (e.g. X) 
+        """
+        return inputArg
+
     def import_database(self, full):
         """
         Performs a database update when a
@@ -226,66 +234,83 @@ class MediathekViewUpdater(object):
             self.logger.warn(
                 'Failed to initialize update. Maybe a concurrency problem?')
             return False
+        
         # pylint: disable=broad-except
         try:
             starttime = time.time()
-            self.logger.info(
-                'Starting import of approx. {} records from {}', records, destfile)
-            with closing(open(destfile, 'r')) as updatefile:
-                parser = ijson.parse(updatefile)
+            with closing( open(destfile, 'r', encoding="utf-8") ) as updatefile:
+                jsonDoc = json.load( updatefile, object_pairs_hook=self._object_pairs_hook )
+                self.logger.info( 'Starting import of {} records from {}', (len(jsonDoc)-2), destfile )
                 flsm = 0
                 flts = 0
                 (self.tot_chn, self.tot_shw, self.tot_mov) = self._update_start(full)
                 self.notifier.show_update_progress()
-                for prefix, event, value in parser:
-                    if (prefix, event) == ("X", "start_array"):
+                
+                ####
+                flsm = 0
+                sender = ""
+                thema = ""
+                ### ROOT LIST
+                for atuple in jsonDoc:
+                    if (atuple[0] == 'Filmliste' and flsm == 0):
+                        ### META
+                        ### "Filmliste":["23.04.2020, 18:23","23.04.2020, 16:23","3","MSearch [Vers.: 3.1.129]","3c90946f05eb1e2fa6cf2327cca4f1d4"],
+                        flsm +=1
+                        # this is the timestamp of this database update
+                        value = atuple[1][0]
+                        try:
+                            fldt = datetime.datetime.strptime(
+                                value.strip(), "%d.%m.%Y, %H:%M")
+                            flts = int(time.mktime(fldt.timetuple()))
+                            self.database.update_status(filmupdate=flts)
+                            self.logger.info(
+                                'Filmliste dated {}', value.strip())
+                        except TypeError:
+                            # pylint: disable=line-too-long
+                            # SEE: https://forum.kodi.tv/showthread.php?tid=112916&pid=1214507#pid1214507
+                            # Wonderful. His name is also Leopold
+                            try:
+                                flts = int(time.mktime(time.strptime(
+                                    value.strip(), "%d.%m.%Y, %H:%M")))
+                                self.database.update_status(
+                                    filmupdate=flts)
+                                self.logger.info(
+                                    'Filmliste dated {}', value.strip())
+                                # pylint: disable=broad-except
+                            except Exception as err:
+                                # If the universe hates us...
+                                self.logger.debug(
+                                    'Could not determine date "{}" of filmliste: {}', value.strip(), err)
+                        except ValueError as err:
+                            pass
+                                        
+                    elif (atuple[0] == 'filmliste' and flsm == 1):
+                        flsm +=1
+                        # VOID - we do not need column names
+                        # "Filmliste":["Sender","Thema","Titel","Datum","Zeit","Dauer","Größe [MB]","Beschreibung","Url","Website","Url Untertitel","Url RTMP","Url Klein","Url RTMP Klein","Url HD","Url RTMP HD","DatumL","Url History","Geo","neu"],
+                    elif (atuple[0] == 'X'):
                         self._init_record()
-                    elif (prefix, event) == ("X", "end_array"):
+                        # behaviour of the update list
+                        if (len(atuple[1][0]) > 0):
+                            sender = atuple[1][0]
+                        else:
+                            atuple[1][0] = sender
+                        # same for thema
+                        if (len(atuple[1][1]) > 0):
+                            thema = atuple[1][1]
+                        else:
+                            atuple[1][1] = thema
+                        ##
+                        self._add_value( atuple[1] )
                         self._end_record(records)
                         if self.count % 100 == 0 and self.monitor.abort_requested():
                             # kodi is shutting down. Close all
                             self._update_end(full, 'ABORTED')
                             self.notifier.close_update_progress()
                             return True
-                    elif (prefix, event) == ("X.item", "string"):
-                        if value is not None:
-                            #						self._add_value( value.strip().encode('utf-8') )
-                            self._add_value(value.strip())
-                        else:
-                            self._add_value("")
-                    elif (prefix, event) == ("Filmliste", "start_array"):
-                        flsm += 1
-                    elif (prefix, event) == ("Filmliste.item", "string"):
-                        flsm += 1
-                        if flsm == 2 and value is not None:
-                            # this is the timestmap of this database update
-                            try:
-                                fldt = datetime.datetime.strptime(
-                                    value.strip(), "%d.%m.%Y, %H:%M")
-                                flts = int(time.mktime(fldt.timetuple()))
-                                self.database.update_status(filmupdate=flts)
-                                self.logger.info(
-                                    'Filmliste dated {}', value.strip())
-                            except TypeError:
-                                # pylint: disable=line-too-long
-                                # SEE: https://forum.kodi.tv/showthread.php?tid=112916&pid=1214507#pid1214507
-                                # Wonderful. His name is also Leopold
-                                try:
-                                    flts = int(time.mktime(time.strptime(
-                                        value.strip(), "%d.%m.%Y, %H:%M")))
-                                    self.database.update_status(
-                                        filmupdate=flts)
-                                    self.logger.info(
-                                        'Filmliste dated {}', value.strip())
-                                    # pylint: disable=broad-except
-                                except Exception as err:
-                                    # If the universe hates us...
-                                    self.logger.debug(
-                                        'Could not determine date "{}" of filmliste: {}', value.strip(), err)
-                            except ValueError as err:
-                                pass
-
+                    
             self._update_end(full, 'IDLE')
+            self.logger.info('{} records processed',self.count)
             self.logger.info(
                 'Import of {} in update cycle {} finished. Duration: {} seconds',
                 destfile,
@@ -357,7 +382,7 @@ class MediathekViewUpdater(object):
             self.notifier.show_download_error(url, err)
             return False
         except Exception as err:
-            self.logger.error('Failure writng {}', url)
+            self.logger.error('Failure writing {}', url)
             self.notifier.close_download_progress()
             self.notifier.show_download_error(url, err)
             return False
@@ -532,46 +557,31 @@ class MediathekViewUpdater(object):
         self.add_shw += cnt_shw
         self.add_mov += cnt_mov
 
-    def _add_value(self, val):
-        if self.index == 0:
-            if val != "":
-                self.film["channel"] = val
-        elif self.index == 1:
-            if val != "":
-                self.film["show"] = val[:255]
-        elif self.index == 2:
-            self.film["title"] = val[:255]
-        elif self.index == 3:
-            if len(val) == 10:
-                self.film["aired"] = val[6:] + '-' + val[3:5] + '-' + val[:2]
-        elif self.index == 4:
-            if (self.film["aired"] != "1980-01-01 00:00:00") and (len(val) == 8):
-                self.film["aired"] = self.film["aired"] + " " + val
-        elif self.index == 5:
-            if len(val) == 8:
-                self.film["duration"] = val
-        elif self.index == 6:
-            if val != "":
-                self.film["size"] = int(val)
-        elif self.index == 7:
-            self.film["description"] = val
-        elif self.index == 8:
-            self.film["url_video"] = val
-        elif self.index == 9:
-            self.film["website"] = val
-        elif self.index == 10:
-            self.film["url_sub"] = val
-        elif self.index == 12:
-            self.film["url_video_sd"] = self._make_url(val)
-        elif self.index == 14:
-            self.film["url_video_hd"] = self._make_url(val)
-        elif self.index == 16:
-            if val != "":
-                self.film["airedepoch"] = int(val)
-        elif self.index == 18:
-            self.film["geo"] = val
-        self.index = self.index + 1
-
+    def _add_value(self, valueArray):
+        self.film["channel"] = valueArray[0]
+        self.film["show"] = valueArray[1][:255]
+        self.film["title"] = valueArray[2][:255]
+        ##
+        if len(valueArray[3]) == 10:
+            self.film["aired"] = valueArray[3][6:] + '-' + valueArray[3][3:5] + '-' + valueArray[3][:2]  
+            if (len(valueArray[4]) == 8):
+                self.film["aired"] = self.film["aired"] + " " + valueArray[4]
+        ##
+        if len(valueArray[5]) > 0:
+            self.film["duration"] = valueArray[5]
+        if len(valueArray[6]) > 0:
+            self.film["size"] = int(valueArray[6])
+        if len(valueArray[7]) > 0:
+            self.film["description"] = valueArray[7]
+        self.film["url_video"] = valueArray[8]
+        self.film["website"] = valueArray[9]
+        self.film["url_sub"] = valueArray[10]    
+        self.film["url_video_sd"] = self._make_url(valueArray[12])
+        self.film["url_video_hd"] = self._make_url(valueArray[14])
+        if len(valueArray[16]) > 0:
+            self.film["airedepoch"] = int(valueArray[16])
+        self.film["geo"] = valueArray[18]
+        
     def _make_url(self, val):
         parts = val.split('|')
         if len(parts) == 2:

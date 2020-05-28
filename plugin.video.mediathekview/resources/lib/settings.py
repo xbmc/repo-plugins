@@ -5,15 +5,15 @@ The addon settings module
 Copyright 2017-2018, Leo Moll and Dominik Schlösser
 Licensed under MIT License
 """
-
 # -- Imports ------------------------------------------------
 import time
-
 # pylint: disable=import-error
 import xbmc
 import xbmcaddon
+import resources.lib.mvutils as mvutils
 
 # -- Classes ------------------------------------------------
+
 
 
 class Settings(object):
@@ -26,8 +26,7 @@ class Settings(object):
         """ Loads the settings of the addon """
         # pylint: disable=attribute-defined-outside-init
         addon = xbmcaddon.Addon()
-        self.datapath = xbmc.translatePath(
-            addon.getAddonInfo('profile').decode('utf-8'))
+        self.datapath = mvutils.py2_decode(xbmc.translatePath(addon.getAddonInfo('profile')))  ### TODO .decode('utf-8')
         self.firstrun = addon.getSetting('firstrun') == 'true'
         # general
         self.preferhd = addon.getSetting('quality') == 'true'
@@ -38,6 +37,8 @@ class Settings(object):
         self.maxresults = int(addon.getSetting('maxresults'))
         self.maxage = int(addon.getSetting('maxage')) * 86400
         self.recentmode = int(addon.getSetting('recentmode'))
+        self.filmSortMethod = int(addon.getSetting('filmuisortmethod'))
+        self.updateCheckInterval = int(addon.getSetting('updateCheckInterval'))
         # database
         self.type = int(addon.getSetting('dbtype'))
         self.host = addon.getSetting('dbhost')
@@ -50,8 +51,10 @@ class Settings(object):
         self.caching = addon.getSetting('caching') == 'true'
         self.updinterval = int(float(addon.getSetting('updinterval'))) * 3600
         # download
-        self.downloadpathep = addon.getSetting('downloadpathep')
-        self.downloadpathmv = addon.getSetting('downloadpathmv')
+        self.downloadpathep = mvutils.py2_decode(addon.getSetting('downloadpathep'))
+        #TODO self.downloadpathep = unicode(self.downloadpathep, 'utf-8')
+        self.downloadpathmv = mvutils.py2_decode(addon.getSetting('downloadpathmv'))
+        #TODO self.downloadpathmv = unicode(self.downloadpathmv, 'utf-8')
         self.moviefolders = addon.getSetting('moviefolders') == 'true'
         self.movienamewithshow = addon.getSetting(
             'movienamewithshow') == 'true'

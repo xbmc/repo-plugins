@@ -10,6 +10,7 @@ Licensed under MIT License
 import xbmc
 import xbmcgui
 import xbmcaddon
+import resources.lib.mvutils as mvutils
 
 
 class KodiUI(object):
@@ -37,15 +38,15 @@ class KodiUI(object):
                 desplayed. Placeholders are used for every char. Default
                 is `False`
         """
-        heading = self.language(heading).encode(
-            'utf-8') if isinstance(heading, int) else heading if heading is not None else ''
-        deftext = self.language(deftext).encode(
-            'utf-8') if isinstance(deftext, int) else deftext if deftext is not None else ''
+        heading = self.language(heading) if isinstance(heading, int) else heading if heading is not None else ''
+        deftext = self.language(deftext) if isinstance(deftext, int) else deftext if deftext is not None else ''
         keyboard = xbmc.Keyboard(deftext, heading, 1 if hidden else 0)
         keyboard.doModal()
         if keyboard.isConfirmed():
-            return (keyboard.getText(), True, )
-        return (deftext.encode('utf-8'), False, )
+            enteredText = keyboard.getText();
+            enteredText = mvutils.py2_decode(enteredText);
+            return (enteredText, True, )
+        return (deftext, False, ) ##TODO deftext.encode('utf-8')
 
     def show_ok_dialog(self, heading=None, line1=None, line2=None, line3=None):
         """
@@ -64,16 +65,12 @@ class KodiUI(object):
             line3(str|int, optional): Third text line of the OK Dialog.
                 Can be a string or a numerical id to a localized text.
         """
-        heading = self.language(heading).decode(
-            'utf-8') if isinstance(heading, int) else heading if heading is not None else ''
-        line1 = self.language(line1).decode(
-            'utf-8') if isinstance(line1, int) else line1 if line1 is not None else ''
-        line2 = self.language(line2).decode(
-            'utf-8') if isinstance(line2, int) else line2 if line2 is not None else ''
-        line3 = self.language(line3).decode(
-            'utf-8') if isinstance(line3, int) else line3 if line3 is not None else ''
+        heading = self.language(heading) if isinstance(heading, int) else heading if heading is not None else ''
+        line1 = self.language(line1) if isinstance(line1, int) else line1 if line1 is not None else ''
+        line2 = self.language(line2) if isinstance(line2, int) else line2 if line2 is not None else ''
+        line3 = self.language(line3) if isinstance(line3, int) else line3 if line3 is not None else ''
         dialog = xbmcgui.Dialog()
-        retval = dialog.ok(heading, line1, line2, line3)
+        retval = dialog.ok(heading, line1 + "\n" + line2 + "\n" + line3)
         del dialog
         return retval
 
@@ -123,7 +120,7 @@ class KodiUI(object):
         self.show_notification(
             heading, message, xbmcgui.NOTIFICATION_WARNING, time, sound)
 
-    def show_error(self, heading, message, time=5000, sound=True):
+    def show_error(self, heading, message, time=8000, sound=True):
         """
         Shows an error notification to the user
 

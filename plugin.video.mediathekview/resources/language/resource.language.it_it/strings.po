@@ -62,6 +62,34 @@ msgctxt "#30117"
 msgid "Recent calculated by"
 msgstr "Novità calcolate con"
 
+msgctxt "#30118"
+msgid "Up-to-Date check interval [sec]"
+msgstr "intervallo di controllo [sec]"
+
+msgctxt "#30119"
+msgid "Default Sort Method for film list"
+msgstr "Ordinamento predefinito per l'elenco dei film"
+
+msgctxt "#30120"
+msgid "Sort by title"
+msgstr "Ordina per titolo"
+
+msgctxt "#30121"
+msgid "Sort by date"
+msgstr "Ordinare per data"
+
+msgctxt "#30122"
+msgid "Sort by added"
+msgstr "Entrata"
+
+msgctxt "#30123"
+msgid "Sort by size"
+msgstr "Ordina per dimensione"
+
+msgctxt "#30124"
+msgid "Sort by duration"
+msgstr "Ordina per durata"
+
 msgctxt "#30171"
 msgid "Aired Date"
 msgstr "Data di Trasmissione"
@@ -433,3 +461,7 @@ msgstr "Errore di Riproduzione"
 msgctxt "#30989"
 msgid "Cannot retrieve Movie Information"
 msgstr "Non è stato possibile trovare il film"
+
+msgctxt "#30990"
+msgid "Airdate: [COLOR chartreuse]{0:s}[/COLOR][CR][CR]"
+msgstr "In onda: [COLOR chartreuse]{0:s}[/COLOR][CR][CR]"

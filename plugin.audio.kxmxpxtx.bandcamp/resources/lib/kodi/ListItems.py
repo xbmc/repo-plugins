@@ -84,19 +84,23 @@ class ListItems:
             li.setArt({'thumb': album.get_art_img(), 'fanart': album.get_art_img()})
             li.setProperty('IsPlayable', 'true')
             url = self._build_url({'mode': 'stream', 'url': track.file, 'title': title})
+            li.setPath(url)
             if to_album:
-                album_url = self._build_url({'mode': 'list_songs', 'album_id': album.album_id, 'item_type': 'album'})
+                album_url = self._build_url(
+                    {'mode': 'list_songs', 'album_id': album.album_id, 'item_type': album.item_type})
                 cmd = 'Container.Update({album_url})'.format(album_url=album_url)
                 commands = [(self.addon.getLocalizedString(30202), cmd)]
                 li.addContextMenuItems(commands)
             items.append((url, li, False))
         return items
 
-    def get_band_items(self, bands, from_wishlist=False):
+    def get_band_items(self, bands, from_wishlist=False, from_search=False):
         items = []
         mode = 'list_albums'
         if from_wishlist:
             mode = 'list_wishlist_albums'
+        elif from_search:
+            mode = 'list_search_albums'
         for band in bands:
             li = xbmcgui.ListItem(label=band.band_name)
             url = self._build_url({'mode': mode, 'band_id': band.band_id})

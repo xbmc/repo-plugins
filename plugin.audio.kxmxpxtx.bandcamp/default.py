@@ -60,22 +60,24 @@ def build_subgenre_list(genre):
 
 def build_song_list(band, album, tracks, autoplay=False):
     track_list = list_items.get_track_items(band=band, album=album, tracks=tracks)
-    xbmcplugin.addDirectoryItems(addon_handle, track_list, len(track_list))
-    xbmcplugin.setContent(addon_handle, 'songs')
-    xbmcplugin.endOfDirectory(addon_handle)
     if autoplay:
+        ## Few hacks, check for more info: https://forum.kodi.tv/showthread.php?tid=354733&pid=2952379#pid2952379
         playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
-        playlist.clear()
-        for url, list_item, folder in track_list:
+        xbmcplugin.setResolvedUrl(addon_handle, True, listitem=track_list[0][1])
+        xbmc.sleep(2000)
+        for url, list_item, folder in track_list[1:]:
             playlist.add(url, list_item)
-        xbmc.Player().play(item=playlist)
+    else:
+        xbmcplugin.addDirectoryItems(addon_handle, track_list, len(track_list))
+        xbmcplugin.setContent(addon_handle, 'songs')
+        xbmcplugin.endOfDirectory(addon_handle)
 
 
 def build_search_result_list(items):
     item_list = []
     for item in items:
         if isinstance(item, Band):
-            item_list += list_items.get_band_items([item])
+            item_list += list_items.get_band_items([item], from_search=True)
         elif isinstance(item, Album):
             item_list += list_items.get_album_items([item])
     xbmcplugin.addDirectoryItems(addon_handle, item_list, len(item_list))
@@ -117,6 +119,9 @@ def main():
         bands = bandcamp.get_wishlist(bandcamp.get_fan_id())
         band = Band(band_id=args.get('band_id', None)[0])
         build_album_list(bands[band])
+    elif mode[0] == 'list_search_albums':
+        band, albums = bandcamp.get_band(args.get('band_id', None)[0])
+        build_album_list(albums)
     elif mode[0] == 'list_albums':
         bands = bandcamp.get_collection(bandcamp.get_fan_id())
         band = Band(band_id=args.get('band_id', None)[0])

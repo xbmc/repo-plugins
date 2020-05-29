@@ -34,7 +34,7 @@ Our city chapters screen documentaries at independent theaters and other venues 
 
 Our local city chapter sub-sites offer several tools to connect and inform people through our website, including a calendar of local activist events, a directory of local progressive and radical groups, and a blog for writers to contribute local news and perspectives.
 
-All in all, through the screenings, public access TV, this website, and our Lending Library, our City Chapters aim to provide an information and resource network that will reduce its city's dependence on corporate media, providing more meaningful and reliable ways to stay informed on the issues that matter. >>  (citation: http://www.filmsforaction.org/about/)
+All in all, through the screenings, public access TV, this website, and our Lending Library, our City Chapters aim to provide an information and resource network that will reduce its city's dependence on corporate media, providing more meaningful and reliable ways to stay informed on the issues that matter. >>  (citation: https://www.filmsforaction.org/about/)
 
 To install it simply download the zip file, and then proceed as with any other plugin from XBMC:
  System->Settings->Add-ons->Install from zip file.

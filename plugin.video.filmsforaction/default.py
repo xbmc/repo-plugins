@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-   XBMC Films For Action video add-on.
+   KODI Films For Action video add-on.
    Copyright (C) 2014 José Antonio Montes (jamontes)
 
    This program is free software: you can redistribute it and/or modify
@@ -13,17 +13,17 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-   
-   This is the first trial of the Films For Action video add-on for XBMC.
+
+   This is the first trial of the Films For Action video add-on for KODI.
    This add-on gets the videos from Films For Action web site and shows them properly ordered.
    You can choose the preferred language for the videos, if it is available.
    This plugin depends on the lutil library functions.
 '''
 
-from resources.lib.plugin import Plugin 
+from resources.lib.plugin import Plugin
 import resources.lib.ffa_api as api
 
 plugin_id = 'plugin.video.filmsforaction'
@@ -59,7 +59,7 @@ if sort_param == '&sort=views':
 
 def get_located_string(string_name):
     return translation(localized_strings.get(string_name)).encode('utf-8') or string_name if string_name in localized_strings else string_name
-            
+
 
 # Entry point
 def run():

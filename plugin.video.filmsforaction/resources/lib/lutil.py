@@ -31,7 +31,9 @@ debug_enable = False # The debug logs are disabled by default.
 
 
 def local_log(message):
-    """This function logs the messages into the main KODI log file. Called from the libraries module by other functions."""
+    """This function logs the debug messages under development and testing process.
+    It is never invoked when the add-on is run under KODI.
+    Called from the library modules by other functions."""
 
     if debug_enable:
         print("%s" % message)

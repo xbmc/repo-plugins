@@ -1,3 +1,5 @@
+1.1.1 (2020.05.06)
+- Quick fix due to website changes.
 1.1.0 (2019.01.27)
 - Updated add-on for Isengard+ due to missing add-on dependency.
 1.0.10 (2018.09.05)
@@ -42,12 +44,12 @@
 1.0.1
 - Added mail tag into addon.xml file.
 - Added settings.xml encoding line.
-- Modified add-on logging system according to recommendations. 
+- Modified add-on logging system according to recommendations.
 - Modified categories parser due to website changes.
 1.0.0
 - Fixed Vimeo custom scraper due to API change.
 - Modified video list parser due to website changes.
-- Added support for SnagFilms videos thanks to the SnagFilms add-on (credits: t1m) 
+- Added support for SnagFilms videos thanks to the SnagFilms add-on (credits: t1m).
 - Updated version number for official repo bump.
 0.1.0
 - Remove the Vimeo add-on dependency due to a problem found running on Gotham.

@@ -241,10 +241,9 @@ class SvtPlay:
                 urlToShow = self.plugin_url + '?' + urlencode(context_go_to_params)
                 list_item.addContextMenuItems([(self.localize(30602), 'ActivateWindow(Videos,'+urlToShow+')')])            
         if info:
-            info["playcount"] = 0
             list_item.setInfo("video", info)
         else:
-            list_item.setInfo("video", { "title" : title, "playcount" : 0 })
+            list_item.setInfo("video", { "title" : title })
         list_item.setArt({
             "fanart": fanart,
             "thumb": thumbnail

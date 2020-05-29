@@ -203,7 +203,7 @@ class Metadata:
                 if position and total and SECONDS_MARGIN < position < total - SECONDS_MARGIN:
                     properties['resumetime'] = position
                     properties['totaltime'] = total
-                    log(2, '[Metadata] manual resumetime set to %d' % position)
+                    log(2, '[Metadata] manual resumetime set to {position}', position=position)
 
             episode = self.get_episode(api_data)
             season = self.get_season(api_data)

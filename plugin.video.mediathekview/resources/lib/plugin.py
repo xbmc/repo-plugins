@@ -154,7 +154,7 @@ class MediathekViewPlugin(KodiPlugin):
     def show_db_info(self):
         """ Displays current information about the database """
         info = self.database.get_status()
-        heading = self.language(30907)
+        heading = self.language(30908)
         infostr = self.language({
             'NONE': 30941,
             'UNINIT': 30942,

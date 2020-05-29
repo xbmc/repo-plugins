@@ -62,6 +62,13 @@ class ChannelUI(Channel):
             'thumb': icon,
             'icon': icon
         })
+
+        info_labels = {
+            'title': resultingname,
+            'sorttitle': resultingname.lower()
+        }
+        list_item.setInfo(type='video', infoLabels=info_labels)
+
         xbmcplugin.addDirectoryItem(
             handle=self.handle,
             url=mvutils.build_url({

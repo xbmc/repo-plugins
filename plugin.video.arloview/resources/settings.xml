@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="32001">
+	    <setting label="30002" id="userid"   	 type="text"       default=""/>
+	    <setting label="30003" id="password" 	 type="text"       default="" option="hidden"/>
+	    <setting label="30004" id="show_snapshots" type="bool"     default="true" />
+ 	    <setting label="30007" id="enable_debug" type="bool"       default="false"/>
+        <setting label="30008" id="snapshot_type"  type="labelenum" default="presignedLastImageUrl" 
+						values="presignedFullFrameSnapshotUrl|presignedSnapshotUrl|presignedLastImageUrl"/>
+	</category>
+</settings>

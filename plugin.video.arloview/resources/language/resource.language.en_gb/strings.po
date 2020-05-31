@@ -1,0 +1,46 @@
+# Arlo Stream Plugin language file
+# Addon Name: Arlo Stream
+# Addon id: plugin.video.arloview
+# Addon Provider: JavaWiz1
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.arloview Addons\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: JavaWiz1\n"
+"Language-Team: JavaWiz1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "General"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Arlo View General Settings"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Arlo Userid"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Arlo Password"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Show Camera Snapshot"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Debug_Mode"
+msgstr ""
+
+msgctxt "#30008"
+msgid "SnapShot Type"
+msgstr ""
+

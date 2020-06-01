@@ -1,3 +1,6 @@
+v1.4.0 (2020-5-31)
+- Fix YT video link parsing, various other fixes and upgrades
+
 v1.3.5 (2018-6-9)
 - Prevent errors caused by 'ghost' threads
 

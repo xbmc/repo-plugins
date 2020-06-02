@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.liveleak"
     name="LiveLeak"
-    version="1.3.5"
+    version="1.4.0"
     provider-name="Botster">
     <requires>
-        <import addon="xbmc.python" version="2.14.0"/>
+        <import addon="xbmc.python" version="2.24.0"/>
         <import addon="script.module.requests" version="2.12.4"/>
         <import addon="script.module.beautifulsoup4" version="4.3.2"/>
     </requires>
@@ -19,6 +19,6 @@
         <license>GNU General Public License Version 3</license>
         <source>https://github.com/botster/plugin.video.liveleak</source>
         <website>https://www.liveleak.com/</website>
-        <news>v1.3.5 (2018-6-9) - Prevent errors caused by 'ghost' threads</news>
+        <news>v1.4.0 (2020-5-31) - Fix YT video link parsing, various other fixes and upgrades</news>
     </extension>
 </addon>

@@ -16,8 +16,6 @@ msgstr ""
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#empty strings from id 30000 to 30009
-
 msgctxt "#30000"
 msgid "Featured"
 msgstr ""

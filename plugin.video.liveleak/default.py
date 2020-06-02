@@ -1,45 +1,75 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 # Standard libraries - Python 2 & 3
-import sys, re, requests, json
+import sys, io, re, requests, json
 from os import path
 from bs4 import BeautifulSoup as bs
 
-# Fallback if multiprocessing module is not available
-slow_mode = False
-try:
-    from multiprocessing.dummy import Pool
-except:
-    slow_mode = True
+if sys.platform.startswith('win'): # For file function argument discrimination
+    WIN = True
+else:
+    WIN = False
 
-# Do LBYL version identity instead of idomatic EAFP
+# Do LBYL version identity instead of idiomatic EAFP
 if sys.version_info.major > 2: # Python 3
+    PY2 = False
     from html import unescape
     from urllib.parse import quote_plus, unquote_plus, urlencode
     from urllib.parse import parse_qsl, urlparse, urlunparse
 else: # Python 2
+    PY2 = True
     from HTMLParser import HTMLParser
     from urllib import quote_plus, unquote_plus, urlencode
     from urlparse import parse_qsl, urlparse, urlunparse
     unescape = HTMLParser().unescape # Standardize unescape function name
 
-#TODO: Implement unicode conversion functions for both Python 2 & 3
+# Universal unicode conversion functions for Python 2/3. Defined here for early use.
+def py23_encode(s, encoding='utf-8'):
+   if PY2 and isinstance(s, unicode):
+       s = s.encode(encoding)
+   return s
+
+
+def py23_decode(s, encoding='utf-8'):
+   if PY2 and isinstance(s, str):
+       s = s.decode(encoding)
+   return s
+
+
+# Fallback if multiprocessing module is not available
+slow_mode = False
+try:
+    from multiprocessing.dummy import Pool, cpu_count
+except:
+    slow_mode = True
 
 # Kodi libraries
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs
 
 # Identifiers
-BASE_URL = sys.argv[0].encode('utf-8')
+BASE_URL = py23_decode(sys.argv[0])
 ADDON_HANDLE = int(sys.argv[1])
 addon         = xbmcaddon.Addon()
-ADDON_NAME = addon.getAddonInfo('name')
-ADDON_PROFILE = addon.getAddonInfo('profile')
+ADDON_NAME = py23_decode(addon.getAddonInfo('name'))
+ADDON_PROFILE = addon.getAddonInfo('profile') # Unicode decoding not needed for this
 _localString = addon.getLocalizedString
+#addon.setSetting('user_prefs', 'enabled')
 
 # Per profile preference
-userProfilePath = xbmc.translatePath(ADDON_PROFILE)
-leakPostersFile = u'leakposters.json'
+userProfilePath = py23_decode(xbmc.translatePath(ADDON_PROFILE))
+leakPostersFile = 'leakposters.json'
 leakPostersFileLocation = path.join(userProfilePath, leakPostersFile)
+# Try to ensure userdata folder is available
+if not xbmcvfs.exists(userProfilePath):
+    try:
+        _ = xbmcvfs.mkdirs(userProfilePath)
+    except:
+        try:
+            os.makedirs(userProfilePath)
+        except:
+            pass
 
 # HTTP constants
 user_agent = ['Mozilla/5.0 (Windows NT 6.1; Win64; x64)',
@@ -47,14 +77,16 @@ user_agent = ['Mozilla/5.0 (Windows NT 6.1; Win64; x64)',
                 'Chrome/55.0.2883.87',
                 'Safari/537.36']
 user_agent = ' '.join(user_agent)
-http_headers = {'User-Agent':user_agent, 
-            'Accept':"text/html", 
-            'Accept-Encoding':'identity', 
+http_headers = {'User-Agent':user_agent,
+            'Accept':"text/html",
+            'Accept-Encoding':'identity',
             'Accept-Language':'en-US,en;q=0.8',
             'Accept-Charset':'utf-8'
             }
 
-http_timeout = 10
+http_timeout = 15
+
+monitor = xbmc.Monitor() # For abort-aware sleep
 
 # Where our targets live
 domain_home = "https://www.liveleak.com/"
@@ -66,7 +98,7 @@ domain_home = "https://www.liveleak.com/"
 
 # --- Helper functions ---
 
-def log(txt, level='debug'):
+def log(txt, level='debug'): # Default must be 'debug' for production use
     #Write text to Kodi log file.
     levels = {
         'debug': xbmc.LOGDEBUG,
@@ -75,7 +107,7 @@ def log(txt, level='debug'):
         }
     logLevel = levels.get(level, xbmc.LOGDEBUG)
 
-    message = '%s: %s' % (ADDON_NAME, txt)
+    message = py23_encode('%s: %s' % (ADDON_NAME, txt))
     xbmc.log(msg=message, level=logLevel)
 
 def notify(message):
@@ -90,22 +122,35 @@ def findAllMediaItems(block):
     media = []
     # Consolidate liveleak and Youtube video sources
     liveleak_vids = block.select('video > source')
-    for vid in liveleak_vids:
-        media.append(vid['src'])
+    # Select 'default' video if more than one
+    if len(liveleak_vids) > 1:
+      for vid in liveleak_vids:
+        # Select 'default' video and exclude duplicates retaining original order
+        if vid.has_attr('default') and vid['src'] not in media:
+          media.append(vid['src'])
+    elif len(liveleak_vids) == 1:
+      media.append(liveleak_vids[0]['src'])
 
     youtubes = []
     youtube_vids = block.select('iframe[src*="youtube.com/embed/"]')
     for vid in youtube_vids:
-        # Extract youtube video id and append to list
-        youtubes.append(re.search(r'youtube.com/embed/(.+?)\?rel=0.*$', vid['src']).group(1))
-    youtubes = list(set(youtubes)) # remove duplicates
+        # Extract youtube video id
+        vid_id = re.search(r'youtube.com/embed/(.+?)\?.*$', vid['src']).group(1)
+        if vid_id not in youtubes: # exclude duplicates retaining original order
+          youtubes.append(vid_id)
 
     media.extend(youtubes) #concatenate liveleak & youtube media references
 
     return media
 
-def fetchItemDetails((url, meta)):
+def fetchItemDetails(url_meta):
+    (url, meta) = url_meta
     page = requests.get(url)
+
+    if page.status_code == 503: #Service temporarily unavailable, try one more time
+        monitor.waitForAbort(2)
+        if not monitor.abortRequested():
+            page = requests.get(url)
 
     if page.status_code != requests.codes.ok: # Uh-oh!
         log("Error: %s: %s" % (page.status_code, url))
@@ -125,7 +170,12 @@ def fetchItemDetails((url, meta)):
         style.decompose()
 
     # Get post description
-    meta['description'] = vid_block.get_text().strip()
+    description = vid_block.get_text().strip()
+    # Strip extraneous lines
+    description = re.sub(r'(?m)^\.\r?\n?$', '\n', description) # single period on line
+    description = re.sub(r'(?m) +\r?\n?$', '\n', description) # line with only blanks
+    meta['description'] = re.sub(r'\n{3,}', '\n\n', description) # multiple blank lines
+
 
     media = findAllMediaItems(vid_block)
     if media:
@@ -137,14 +187,15 @@ def fetchItemDetails((url, meta)):
         else:
             return ((url, media[0], meta)) # single item
 
-def buildListItem((url, medium, meta)):
+def buildListItem(url_medium_meta):
+    (url, medium, meta) = url_medium_meta
     #Extract meta info
     title = meta['title']
     thumbnail = meta['thumbnail']
     credit = meta['credit']
     description = meta['description']
     mpaa = meta['mpaa']
-    rating = meta['rating']
+    rating = "Rating: " + meta['rating']
 
     leakPosters = loadLeakPosters() # Preferences for coloring titles
 
@@ -154,14 +205,16 @@ def buildListItem((url, medium, meta)):
         url = buildUrl({'mode': 'play', 'url': medium, 'src': src})
     else:
         url = 'plugin://plugin.video.youtube/play/?video_id=%s' % medium
-        url = url.encode('utf-8')
+    url = py23_encode(url)
 
     # Build list item
-    user_mod = leakPosters.get(credit, 0)
-    if user_mod == 1:
+    user_label = leakPosters.get(credit, 0)
+    if user_label == 1:
         title = "[COLOR limegreen]%s[/COLOR]" % title
-    elif user_mod == 2:
+    elif user_label == 2:
         title = "[COLOR dimgray]%s[/COLOR]" % title
+    elif user_label == 3:
+        title = "[COLOR dodgerblue]%s[/COLOR]" % title
     liz = xbmcgui.ListItem(label=title)
     info = {"title":title,"credits":credit,"plot":description}
     info.update({'mpaa':mpaa,'tagline':rating})
@@ -170,25 +223,34 @@ def buildListItem((url, medium, meta)):
     liz.setArt( {'thumb': thumbnail} )
     liz.setProperty('IsPlayable', 'true')
     cmd = "XBMC.RunPlugin({})"
-    cmd = cmd.format( buildUrl( {'mode': 'mod_user', 'user': credit.encode('utf-8')} ) )
-    liz.addContextMenuItems([('Moderate user: %s' % credit, cmd)])
+    cmd = cmd.format( buildUrl( {'mode': 'label_user', 'user': credit} ) )
+    liz.addContextMenuItems([('Label user: %s' % credit, cmd)])
 
     return (url, liz)
 
 def saveLeakPosters(leakPosters):
-    # Kludge to force auto-creation of the required userdata folder
-    addon.setSetting('user_prefs', 'enabled')
+    if WIN: # Use unicode
+        myEncoding = None
+    else:
+        myEncoding = 'utf-8'
     try:
-        with open(leakPostersFileLocation, 'w') as f:
-            f.write(json.dumps(leakPosters))
+        with io.open(leakPostersFileLocation, 'w', encoding=myEncoding) as f:
+            j_string = json.dumps(leakPosters, ensure_ascii=False)
+            if isinstance(j_string, str):
+                j_string = py23_decode(j_string)
+            f.write(j_string)
         return True
     except Exception as e:
         log(e)
         return False
 
 def loadLeakPosters():
+    if WIN: # Use unicode
+        myEncoding = None
+    else:
+        myEncoding = 'utf-8'
     try:
-        with open(leakPostersFileLocation, 'r') as f:
+        with io.open(leakPostersFileLocation, 'r', encoding=myEncoding) as f:
             return json.loads(f.read())
     except:
         saveLeakPosters({})
@@ -212,8 +274,9 @@ def addDir(title, qKey, qVal, pVal='1'):
 # --- GUI director (Main Event) functions ---
 
 def categories():
+    #TODO Update for newly rearranged categories
     addDir(_localString(30000), 'in_bookmark_folder_id', '1')
-    addDir(_localString(30001), 'tag_string', 'news, politics')
+    addDir(_localString(30001), 'tag_string', 'news, politics, trump')
     addDir(_localString(30002), 'tag_string', 'yoursay,your say')
     addDir(_localString(30003), 'in_bookmark_folder_id', '2')
     addDir(_localString(30004), 'tag_string', 'ukraine')
@@ -244,7 +307,14 @@ def index(url):
     pagedUrl = buildUrl({'mode': 'indx', 'url': pagedUrl})
 
     url = domain_home + realUrl # full working url
-    page = requests.get(url, headers=http_headers, timeout=http_timeout).text
+
+    page = requests.get(url, headers=http_headers, timeout=http_timeout)
+    if page.status_code == 503: #Service temporarily unavailable, try one more time
+        monitor.waitForAbort(1)
+        if not monitor.abortRequested():
+            page = requests.get(url, headers=http_headers, timeout=http_timeout)
+
+    page = page.text
     if page is None:
         notify("The server is not cooperating at the moment")
         return
@@ -260,7 +330,7 @@ def index(url):
         # Handle possibly multiple-coded html entities in title
         meta['title'] = unescape(unescape(title.strip()))
         # Parental Guide rating
-        meta['mpaa'] = item.a.div.div.get_text() 
+        meta['mpaa'] = item.a.div.div.get_text()
         # user rating
         meta['rating'] = item.find('samp', class_='thing_score').get_text()
         # ID of user that posted item
@@ -275,9 +345,9 @@ def index(url):
             items.append(fetchItemDetails(post))
     else:
         # Fetch post details via multiple threads
-        pool = Pool(8)
+        pool = Pool(cpu_count() * 2)
         items = pool.map(fetchItemDetails, posts)
-        pool.close() 
+        pool.close()
         pool.join()
 
     if items:
@@ -324,7 +394,7 @@ def viewPlay(url):
         item = match[1]
         if not 'cdn.liveleak.com' in item:
             item = 'plugin://plugin.video.youtube/play/?video_id=%s' % item
-        play_item = xbmcgui.ListItem(path=item.encode('utf-8'))
+        play_item = xbmcgui.ListItem(path=py23_encode(item))
         # Pass the item to the Kodi player.
         xbmcplugin.setResolvedUrl(ADDON_HANDLE, True, listitem=play_item)
     else:
@@ -354,7 +424,7 @@ def playVideo(url, src):
         page = requests.get(domain_home + src, headers=http_headers, timeout=http_timeout).text
         match = re.search(regexp, page)
         if match:
-            url = match.group(1).encode('utf-8')
+            url = py23_encode(match.group(1))
         else:
             notify("Video has disappeared")
             return False
@@ -373,7 +443,7 @@ def playVideo(url, src):
 try:
     params = dict(parse_qsl(sys.argv[2][1:]))
     for key in params:
-        try: params[key] = unquote_plus(params[key]).decode('utf-8')
+        try: params[key] = py23_decode(unquote_plus(params[key]))
         except: pass
 except:
     params = {}
@@ -396,28 +466,32 @@ elif mode == 'play':
     src = params.get('src', None) # path of page containing video URL
     if url and src: playVideo(url, src)
 
-elif mode == 'mod_user':
+elif mode == 'label_user':
     leakPosters = loadLeakPosters()
 
-    user = params.get('user', '???').decode('utf-8')
+    user = py23_decode(params.get('user', '???'))
 
-    select_title = "For items posted by %s:" % user
-    select_list = ['reset to normal', 'highlight', 'subdue']
-    choice = xbmcgui.Dialog().select(select_title, select_list)
+    select_title = "Label items posted by %s:" % user
+    select_list = ['Remove label', 'Like', 'Dislike', 'Known, Neutral-ish']
+    # Remove the user's current label from choice list
+    choice = xbmcgui.Dialog().select(select_title, select_list, preselect=leakPosters.get(user, 0))
 
     if choice >= 0:
-        if leakPosters.get(user, 0) == choice:
-            message = "Setting not changed."
-        else:
-            if choice == 0:
-                message = "... will be displayed normally on next page load."
-            elif choice == 1:
-                message = "... will be highlighted on next page load."
-            elif choice == 2:
-                message = "... will be subdued on next page load."
+        if choice == 0:
+            message = "normally"
+        elif choice == 1:
+            message = "in green"
+        elif choice == 2:
+            message = "in grey"
+        elif choice == 3:
+            message = "in blue"
 
-            leakPosters[user] = choice
-            if not saveLeakPosters(leakPosters):
-                message = "Error saving setting."
+        caption = "Success"
+        message = "Postings by %s will be displayed %s on subsequent page loads." % (user, message)
 
-        xbmcgui.Dialog().ok("Postings by %s ..." % user, message)
+        leakPosters[user] = choice
+        if not saveLeakPosters(leakPosters):
+            caption = "ERROR"
+            message = "Setting could not be saved."
+
+        xbmcgui.Dialog().ok(caption, message)

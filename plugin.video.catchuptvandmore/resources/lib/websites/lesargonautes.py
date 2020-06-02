@@ -22,8 +22,8 @@ from __future__ import unicode_literals
 
 import re
 
-from codequick import Route, Resolver, Listitem, utils
-import urlquick
+from resources.lib.codequick import Route, Resolver, Listitem, utils
+from resources.lib import urlquick
 import json
 
 from resources.lib.labels import LABELS

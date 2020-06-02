@@ -28,7 +28,7 @@ from __future__ import unicode_literals
 
 from builtins import str
 from builtins import range
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
@@ -44,7 +44,7 @@ import inputstreamhelper
 import json
 import os
 import re
-import urlquick
+from resources.lib import urlquick
 from kodi_six import xbmc
 from kodi_six import xbmcgui
 

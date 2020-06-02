@@ -24,10 +24,10 @@ from builtins import str
 import json
 import re
 
-from codequick import Route, Resolver, Listitem
+from resources.lib.codequick import Route, Resolver, Listitem
 import htmlement
 import requests
-import urlquick
+from resources.lib import urlquick
 
 from resources.lib.labels import LABELS
 from resources.lib import download

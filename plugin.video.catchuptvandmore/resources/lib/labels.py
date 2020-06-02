@@ -25,7 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Script, utils
+from resources.lib.codequick import Script, utils
 
 import resources.lib.mem_storage as mem_storage
 
@@ -413,8 +413,7 @@ def save_labels_in_mem_storage():
         'tva':
         'TVA',
         'icitele':
-        'ICI Télé (' +
-        utils.ensure_unicode(Script.setting['icitele.language']) + ')',
+        'ICI Télé (' + utils.ensure_unicode(Script.setting['icitele.language']) + ')',
         'ntvca':
         'NTV',
         'icitoutv':
@@ -424,8 +423,7 @@ def save_labels_in_mem_storage():
         'noovo':
         'NOOVO',
         'cbc':
-        'CBC (' +
-        utils.ensure_unicode(Script.setting['cbc.language']) + ')',
+        'CBC (' + utils.ensure_unicode(Script.setting['cbc.language']) + ')',
         'vtele':
         'V Télé',
         'lcn':
@@ -529,8 +527,7 @@ def save_labels_in_mem_storage():
         'cherie25':
         'Chérie 25',
         'la_1ere':
-        'La 1ère (' + utils.ensure_unicode(Script.setting['la_1ere.language']) +
-        ')',
+        'La 1ère (' + utils.ensure_unicode(Script.setting['la_1ere.language']) + ')',
         'franceinfo':
         'France Info',
         'bfmbusiness':
@@ -552,8 +549,7 @@ def save_labels_in_mem_storage():
         'publicsenat':
         'Public Sénat',
         'france3regions':
-        'France 3 Régions (' +
-        utils.ensure_unicode(Script.setting['france3regions.language']) + ')',
+        'France 3 Régions (' + utils.ensure_unicode(Script.setting['france3regions.language']) + ')',
         'francetvsport':
         'France TV Sport (francetv)',
         'histoire':
@@ -733,6 +729,10 @@ def save_labels_in_mem_storage():
         '関西テレビ',
         'weathernewsjp':
         '株式会社ウェザーニューズ',
+        'nhk':
+        'NHK',
+        'tvo':
+        'テレビ大阪株式会社',
 
         # United Kingdom channels / live TV
         'blaze':

@@ -32,8 +32,8 @@ import importlib
 import sys
 
 # Kodi imports
-from codequick import Route, Resolver, Listitem, Script
-import urlquick
+from resources.lib.codequick import Route, Resolver, Listitem, Script
+from resources.lib import urlquick
 from kodi_six import xbmcgui
 from kodi_six import xbmcplugin
 from six import string_types

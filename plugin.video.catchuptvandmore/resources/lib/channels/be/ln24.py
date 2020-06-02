@@ -26,13 +26,13 @@
 from __future__ import unicode_literals
 
 
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 
 import re
-import urlquick
+from resources.lib import urlquick
 # Working for Python 2/3
 try:
     from urllib.parse import unquote_plus

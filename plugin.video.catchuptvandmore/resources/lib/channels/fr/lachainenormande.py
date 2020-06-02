@@ -25,7 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
@@ -35,7 +35,7 @@ from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_la
 import inputstreamhelper
 import json
 import re
-import urlquick
+from resources.lib import urlquick
 
 # TODO
 # Add Replay

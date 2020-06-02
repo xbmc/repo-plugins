@@ -25,14 +25,14 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 
 import re
-import urlquick
+from resources.lib import urlquick
 
 # TO DO
 # Replay add emissions

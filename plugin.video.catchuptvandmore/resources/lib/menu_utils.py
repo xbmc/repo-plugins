@@ -31,7 +31,7 @@ import json
 import importlib
 
 # Kodi imports
-from codequick import Script, utils
+from resources.lib.codequick import Script, utils
 from kodi_six import xbmc
 from kodi_six import xbmcvfs
 from kodi_six import xbmcgui

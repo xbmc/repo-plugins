@@ -26,7 +26,7 @@
 from __future__ import unicode_literals
 
 
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
@@ -38,7 +38,7 @@ from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, ge
 import inputstreamhelper
 import re
 import json
-import urlquick
+from resources.lib import urlquick
 from kodi_six import xbmc
 from kodi_six import xbmcgui
 import requests

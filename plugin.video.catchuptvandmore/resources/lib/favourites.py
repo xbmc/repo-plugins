@@ -33,7 +33,7 @@ from kodi_six import xbmc
 from kodi_six import xbmcgui
 from kodi_six import xbmcvfs
 
-from codequick import utils, storage, Script, listing
+from resources.lib.codequick import utils, storage, Script, listing
 from hashlib import md5
 
 from resources.lib.labels import LABELS

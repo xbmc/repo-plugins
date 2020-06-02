@@ -23,8 +23,8 @@ from __future__ import unicode_literals
 import re
 import json
 
-from codequick import Route, Resolver, Listitem
-import urlquick
+from resources.lib.codequick import Route, Resolver, Listitem
+from resources.lib import urlquick
 
 from resources.lib import download
 from resources.lib.labels import LABELS

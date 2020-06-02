@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from codequick import Script
+from resources.lib.codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -124,5 +124,22 @@ menu = {
         'module': 'resources.lib.channels.jp.tver',
         'enabled': True,
         'order': 13
+    },
+    'tvo': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/jp/tvo.png',
+        'fanart': 'channels/jp/tvo_fanart.jpg',
+        'module': 'resources.lib.channels.jp.tver',
+        'enabled': True,
+        'order': 15
+    },
+    'nhk': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/jp/nhk.png',
+        'fanart': 'channels/jp/nhk_fanart.jpg',
+        'module': 'resources.lib.channels.jp.tver',
+        'enabled': True,
+        'order': 16
     }
+
 }

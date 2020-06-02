@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from codequick import Script
+from resources.lib.codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -628,6 +628,14 @@ menu = {
         'module': 'resources.lib.channels.fr.tebeo',
         'enabled': True,
         'order': 103
+    },
+    'telegrenoble': {
+        'callback': 'replay_bridge',
+        'thumb': 'channels/fr/telegrenoble.png',
+        'fanart': 'channels/fr/telegrenoble_fanart.jpg',
+        'module': 'resources.lib.channels.fr.telegrenoble',
+        'enabled': True,
+        'order': 105
     },
     'bfmlyon': {
         'callback': 'replay_bridge',

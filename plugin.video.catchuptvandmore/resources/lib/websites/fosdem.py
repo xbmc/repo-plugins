@@ -22,8 +22,8 @@ from __future__ import unicode_literals
 
 from builtins import str
 from builtins import range
-from codequick import Route, Resolver, Listitem, utils
-import urlquick
+from resources.lib.codequick import Route, Resolver, Listitem, utils
+from resources.lib import urlquick
 import xml.etree.ElementTree as ET
 
 from resources.lib.labels import LABELS

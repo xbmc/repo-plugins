@@ -25,7 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
@@ -33,7 +33,7 @@ from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
 import re
-import urlquick
+from resources.lib import urlquick
 
 # TO DO
 # Add FUJITV Replay in Kodi 18 is out (DRM protected) 'cx' channel
@@ -75,17 +75,16 @@ def list_videos(plugin, item_id, category_url, **kwargs):
 
     resp = urlquick.get(category_url)
     root = resp.parse()
-    if item_id == 'cx':
-        list_videos_datas = root.find(".//div[@class='listinner']").findall(
-            './/li')
-    else:
-        list_videos_datas = root.findall(".//li[@class='resumable']")
+    list_videos_datas = root.find(".//div[@class='listinner']").findall(
+        './/li')
 
     for video_data in list_videos_datas:
         video_title = video_data.find('.//h3').text
         video_image = re.compile(r'url\((.*?)\);').findall(
             video_data.find(".//div[@class='picinner']").get('style'))[0]
-        video_plot = video_data.find(".//p[@class='summary']").text
+        video_plot = ''
+        if video_data.find(".//p[@class='summary']") is not None:
+            video_plot = video_data.find(".//p[@class='summary']").text
         video_url = URL_ROOT + video_data.find('.//a').get('href')
 
         item = Listitem()

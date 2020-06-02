@@ -21,8 +21,7 @@
 """
 
 import importlib
-from codequick import run
-from resources.lib.kodi_utils import import_needed_module
+from resources.lib.codequick import run
 
 
 def main():
@@ -31,14 +30,7 @@ def main():
     """
 
     """
-    Before calling run() function of
-    codequick, we need to check if there
-    is any module to load on the fly
-    """
-    import_needed_module()
-
-    """
-    Then we let CodeQuick check for
+    Let CodeQuick check for
     functions to register and call
     the correct function according to
     the Kodi URL

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.20" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.21" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.youtube.dl" version="18.225.0"/>
     <import addon="script.module.requests" version="2.12.4"/>
-    <import addon="script.module.codequick" version="0.9.10"/>
     <import addon="script.module.pytz" version="2014.2"/>
     <import addon="script.module.inputstreamhelper" version="0.3.3"/>
     <import addon="script.module.six" version="1.11.0"/>
@@ -12,6 +11,7 @@
     <import addon="script.module.tzlocal" version="2.0.0"/>
     <import addon="script.module.future" version="0.17.1"/>
     <import addon="script.module.kodi-six" version="0.0.4"/>
+    <import addon="script.module.htmlement" version="0.2.3"/>
     <import addon="resource.images.catchuptvandmore" version="1.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
@@ -21,7 +21,7 @@
   <extension point="xbmc.addon.metadata">
     <!-- Set reuselanguageinvoker to false while developing the addon, making it only true for the production version -->
     <!-- See https://kodi.wiki/view/Addon.xml#.3Creuselanguageinvoker.3E -->
-    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <!-- <reuselanguageinvoker>true</reuselanguageinvoker> -->
     <summary lang="fr_FR">Catch-Up TV &amp; More : Replay TV, Live TV et bien plus encore.</summary>
     <description lang="fr_FR">Catch-Up TV &amp; More regroupe dans un même plugin Kodi l'ensemble des vidéos des différents services et chaînes de Replay TV (rattrapage TV) ainsi que l'accès au direct. De plus, cette extension vous permet d'accéder rapidement aux vidéos et contenus proposés par certains sites internet.</description>
     <disclaimer lang="fr_FR">Retours de bugs, propositions d'améliorations ou d'ajout de contenus sont les bienvenue ! GitHub ou e-mail.</disclaimer>
@@ -42,9 +42,15 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.20]
-[Fix] Dailymotion + LibreElec - Fix HTTP Error 403
-[Fix] Dailymotion + LibreElec - Fix HTTP Error 403 bis
+[Version 0.2.21]
+[Fix/Add] Catch-up TV - Japaneses channels (JP)
+[Add] Catch-up TV - Télé Grenoble (FR)
+[Fix] Catch-up TV - Arte (WO)
+[Fix] Add check for download mode
+[Fix] Disable reuselanguageinvoker to fix Youtube-DL download feature
+[Fix] Catch-up TV - La 1ère (FR)
+[Other] Include Codequick framework
+[Fix] Live TV - RTLPLAY BE (BE)
     </news>
     <assets>
       <icon>icon.png</icon>

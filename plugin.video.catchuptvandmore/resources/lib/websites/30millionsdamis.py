@@ -21,14 +21,14 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Route, Resolver, Listitem
+from resources.lib.codequick import Route, Resolver, Listitem
 
 from resources.lib.labels import LABELS
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
 import re
-import urlquick
+from resources.lib import urlquick
 
 URL_ROOT = 'http://www.30millionsdamis.fr'
 

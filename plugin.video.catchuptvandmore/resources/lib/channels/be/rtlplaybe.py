@@ -27,7 +27,7 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
@@ -38,7 +38,7 @@ from resources.lib.menu_utils import item_post_treatment
 import inputstreamhelper
 import json
 import re
-import urlquick
+from resources.lib import urlquick
 from kodi_six import xbmc
 from kodi_six import xbmcgui
 
@@ -85,7 +85,7 @@ URL_JSON_VIDEO = 'https://pc.middleware.6play.fr/6play/v2/platforms/' \
 
 URL_IMG = 'https://images.6play.fr/v1/images/%s/raw'
 
-URL_COMPTE_LOGIN = 'https://sso-login.rtl.be/accounts.login'
+URL_COMPTE_LOGIN = 'https://accounts.eu1.gigya.com/accounts.login'
 # https://login.6play.fr/accounts.login?loginID=*****&password=*******&targetEnv=mobile&format=jsonp&apiKey=3_hH5KBv25qZTd_sURpixbQW6a4OsiIzIEF2Ei_2H7TXTGLJb_1Hr4THKZianCQhWK&callback=jsonp_3bbusffr388pem4
 # TODO get value Callback
 # callback: jsonp_3bbusffr388pem4
@@ -385,7 +385,7 @@ def get_video_url(plugin,
         resp = urlquick.get(URL_API_KEY % js_id)
 
         api_key = re.compile(
-            r'\"sso-login.rtl.be\"\,cdn\:\"eu1.gigya.com\"\,key\:\"(.*?)\"').findall(
+            r'login.rtl.be\"\,key\:\"(.*?)\"').findall(
                 resp.text)[0]
 
         if plugin.setting.get_string('rtlplaybe.login') == '' or\
@@ -402,7 +402,7 @@ def get_video_url(plugin,
             "password": plugin.setting.get_string('rtlplaybe.password'),
             "apiKey": api_key,
             "format": "jsonp",
-            "callback": "jsonp_3bbusffr388pem4"
+            "callback": "gigya.callback"
         }
         # LOGIN
         resp2 = urlquick.post(URL_COMPTE_LOGIN,
@@ -412,7 +412,7 @@ def get_video_url(plugin,
                                   'referer': 'https://www.rtlplay.be/connexion'
                               })
         json_parser = json.loads(
-            resp2.text.replace('jsonp_3bbusffr388pem4(', '').replace(');', ''))
+            resp2.text.replace('gigya.callback(', '').replace(');', ''))
         if "UID" not in json_parser:
             plugin.notify('ERROR', 'RTLPlay (BE) : ' + plugin.localize(30711))
             return None
@@ -491,7 +491,7 @@ def get_live_url(plugin, item_id, video_id, **kwargs):
     resp = urlquick.get(URL_API_KEY % js_id)
 
     api_key = re.compile(
-        r'\"sso-login.rtl.be\"\,cdn\:\"eu1.gigya.com\"\,key\:\"(.*?)\"').findall(
+        r'login.rtl.be\"\,key\:\"(.*?)\"').findall(
             resp.text)[0]
 
     if plugin.setting.get_string('rtlplaybe.login') == '' or\
@@ -508,7 +508,7 @@ def get_live_url(plugin, item_id, video_id, **kwargs):
         "password": plugin.setting.get_string('rtlplaybe.password'),
         "apiKey": api_key,
         "format": "jsonp",
-        "callback": "jsonp_3bbusffr388pem4"
+        "callback": "gigya.callback"
     }
     # LOGIN
     resp2 = urlquick.post(URL_COMPTE_LOGIN,
@@ -518,7 +518,7 @@ def get_live_url(plugin, item_id, video_id, **kwargs):
                               'referer': 'https://www.rtlplay.be/connexion'
                           })
     json_parser = json.loads(
-        resp2.text.replace('jsonp_3bbusffr388pem4(', '').replace(');', ''))
+        resp2.text.replace('gigya.callback(', '').replace(');', ''))
 
     if "UID" not in json_parser:
         plugin.notify('ERROR', 'RTLPlay (BE) : ' + plugin.localize(30711))

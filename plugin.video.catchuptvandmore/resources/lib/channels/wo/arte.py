@@ -25,7 +25,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
@@ -34,7 +34,7 @@ from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
-import urlquick
+from resources.lib import urlquick
 from kodi_six import xbmcgui
 
 # TO DO
@@ -99,19 +99,17 @@ def list_categories(plugin, item_id, **kwargs):
     # print 'json_value : ' + repr(json_value)
     json_parser = json.loads(json_value + '}')
 
-    value_code = json_parser['pages']['currentCode']
-    for category_datas in json_parser['pages']['list'][value_code]['zones']:
-        if 'category' in category_datas['code']['name']:
-            category_title = category_datas['title']
-            category_url = category_datas['link']['url']
+    for category_datas in json_parser['categories']:
+        category_title = category_datas['label']
+        category_url = category_datas['url']
 
-            item = Listitem()
-            item.label = category_title
-            item.set_callback(list_sub_categories,
-                              item_id=item_id,
-                              category_url=category_url)
-            item_post_treatment(item)
-            yield item
+        item = Listitem()
+        item.label = category_title
+        item.set_callback(list_sub_categories,
+                          item_id=item_id,
+                          category_url=category_url)
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register

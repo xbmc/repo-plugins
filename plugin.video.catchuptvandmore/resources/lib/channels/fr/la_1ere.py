@@ -26,7 +26,7 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Route, Resolver, Listitem, utils, Script
+from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib.labels import LABELS
 from resources.lib import web_utils
@@ -36,7 +36,7 @@ from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_la
 
 import json
 import re
-import urlquick
+from resources.lib import urlquick
 '''
 Channels:
     * La 1ère (JT, Météo, Live TV)
@@ -104,7 +104,9 @@ def list_programs(plugin, item_id, **kwargs):
 
     for program_datas in root.iterfind(".//div[@class='block-fr3-content']"):
         program_title = program_datas.find('.//a').get('title')
-        program_image = program_datas.find('.//img').get('src')
+        program_image = ''
+        if program_datas.find('.//img') is not None:
+            program_image = program_datas.find('.//img').get('src')
         if 'http' in program_datas.find('.//a').get('href'):
             program_url = program_datas.find('.//a').get('href')
         else:

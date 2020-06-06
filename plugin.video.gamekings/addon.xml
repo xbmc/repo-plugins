@@ -2,7 +2,7 @@
 <addon 
     id="plugin.video.gamekings"
     name="GameKings"
-    version="1.2.17"
+    version="1.2.18"
     provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="2.26.0"/>
@@ -28,8 +28,8 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=161375</forum>
     <website>https://www.gamekings.tv</website>
     <source>https://github.com/skipmodea1/plugin.video.gamekings</source>
-    <news>v1.2.17 (2020-05-02)
-    - added video on frontpage category
+    <news>v1.2.18 (2020-06-05)
+    - fixed playback for youtube videos
     </news>
     <assets>
       <icon>resources/icon.png</icon>

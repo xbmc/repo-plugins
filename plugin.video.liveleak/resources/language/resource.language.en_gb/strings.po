@@ -16,6 +16,9 @@ msgstr ""
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+# strings 30000 thru 30999 reserved for plugins and plugin settings
+
+# Categories
 msgctxt "#30000"
 msgid "Featured"
 msgstr ""
@@ -55,3 +58,37 @@ msgstr ""
 msgctxt "#30009"
 msgid "Search"
 msgstr ""
+
+msgctxt "#30010"
+msgid "Law Enforcement"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Weather"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Liveleakers"
+msgstr ""
+
+# Errors
+msgctxt "#30020"
+msgid "Server error"
+msgstr ""
+
+msgctxt "#30021"
+msgid "No threads found"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Invalid URL format"
+msgstr ""
+
+msgctxt "#30023"
+msgid "No playable media found"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Video link expired - reload page"
+msgstr ""
+

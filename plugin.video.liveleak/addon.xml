@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.liveleak"
     name="LiveLeak"
-    version="1.4.0"
+    version="1.4.1"
     provider-name="Botster">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
@@ -16,9 +16,9 @@
         <description lang="en_GB">Redefining The Media</description>
         <language>en</language>
         <platform>all</platform>
-        <license>GNU General Public License Version 3</license>
+        <license>GPL-3.0-or-later</license>
         <source>https://github.com/botster/plugin.video.liveleak</source>
         <website>https://www.liveleak.com/</website>
-        <news>v1.4.0 (2020-5-31) - Fix YT video link parsing, various other fixes and upgrades</news>
+        <news>v1.4.1 (2020-6-6) - Gracefully handle anomalous missing element exceptions; Add new categories</news>
     </extension>
 </addon>

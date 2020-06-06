@@ -74,7 +74,7 @@ if not xbmcvfs.exists(userProfilePath):
 # HTTP constants
 user_agent = ['Mozilla/5.0 (Windows NT 6.1; Win64; x64)',
                 'AppleWebKit/537.36 (KHTML, like Gecko)',
-                'Chrome/55.0.2883.87',
+                'Chrome/60.0.3112.90',
                 'Safari/537.36']
 user_agent = ' '.join(user_agent)
 http_headers = {'User-Agent':user_agent,
@@ -170,11 +170,14 @@ def fetchItemDetails(url_meta):
         style.decompose()
 
     # Get post description
-    description = vid_block.get_text().strip()
-    # Strip extraneous lines
-    description = re.sub(r'(?m)^\.\r?\n?$', '\n', description) # single period on line
-    description = re.sub(r'(?m) +\r?\n?$', '\n', description) # line with only blanks
-    meta['description'] = re.sub(r'\n{3,}', '\n\n', description) # multiple blank lines
+    try:
+        description = vid_block.get_text().strip()
+        # Strip extraneous lines
+        description = re.sub(r'(?m)^\.\r?\n?$', '\n', description) # single period on line
+        description = re.sub(r'(?m) +\r?\n?$', '\n', description) # line with only blanks
+        meta['description'] = re.sub(r'\n{3,}', '\n\n', description) # multiple blank lines
+    except:
+        meta['description'] = ''
 
 
     media = findAllMediaItems(vid_block)
@@ -220,11 +223,15 @@ def buildListItem(url_medium_meta):
     info.update({'mpaa':mpaa,'tagline':rating})
     liz.setInfo("Video", info)
     liz.addStreamInfo('video', {'codec': 'h264'}) #Helps prevent multiple fetch
-    liz.setArt( {'thumb': thumbnail} )
+    # Consider possibly that a thumbnail src was not fetched
+    if thumbnail:
+        liz.setArt( {'thumb': thumbnail} )
     liz.setProperty('IsPlayable', 'true')
-    cmd = "XBMC.RunPlugin({})"
-    cmd = cmd.format( buildUrl( {'mode': 'label_user', 'user': credit} ) )
-    liz.addContextMenuItems([('Label user: %s' % credit, cmd)])
+    # If user not Unknown, allow labeling of distinct LL users
+    if credit != 'Unknown':
+        cmd = "RunPlugin({})"
+        cmd = cmd.format( buildUrl( {'mode': 'label_user', 'user': credit} ) )
+        liz.addContextMenuItems([('Label user: %s' % credit, cmd)])
 
     return (url, liz)
 
@@ -274,15 +281,17 @@ def addDir(title, qKey, qVal, pVal='1'):
 # --- GUI director (Main Event) functions ---
 
 def categories():
-    #TODO Update for newly rearranged categories
-    addDir(_localString(30000), 'in_bookmark_folder_id', '1')
+    addDir(_localString(30000), 'featured', '1')
     addDir(_localString(30001), 'tag_string', 'news, politics, trump')
+    addDir(_localString(30010), 'tag_string', 'police, law enforcement, cops, bodycam')
+    addDir(_localString(30003), 'in_bookmark_folder_id', '2') # Must See
+    addDir(_localString(30011), 'tag_string', 'weather,storm,thunder,wind,hurricane,tornado,rainbow,hail,snow,ice')
+    addDir(_localString(30006), 'tag_string', 'entertainment')
     addDir(_localString(30002), 'tag_string', 'yoursay,your say')
-    addDir(_localString(30003), 'in_bookmark_folder_id', '2')
+    addDir(_localString(30012), 'tag_string', 'liveleakers')
+    addDir(_localString(30007), 'tag_string', 'wtf')
     addDir(_localString(30004), 'tag_string', 'ukraine')
     addDir(_localString(30005), 'tag_string', 'syria,afghanistan,iraq')
-    addDir(_localString(30006), 'by_user_token', '9ee5fbcb8e0b7990d586')
-    addDir(_localString(30007), 'tag_string', 'wtf')
     addDir(_localString(30008), 'tag_string', 'russia')
     addDir(_localString(30009), 'q', '')
 
@@ -316,25 +325,50 @@ def index(url):
 
     page = page.text
     if page is None:
-        notify("The server is not cooperating at the moment")
+        notify(_localString(30020))
         return
 
     # Get list of individual posts from indexing page
     listing = bs(page, 'html.parser')
     posts = []
-    for item in listing.find_all('div', class_='featured_items_outer'):
+    try:
+        featured_items_outer = listing.find_all('div', class_='featured_items_outer')
+    except:
+        notify(_localString(30021))
+        return
+
+    for item in featured_items_outer:
         meta = {}
-        url = item.a['href'] # item page url
-        meta['thumbnail'] = item.a.div.img['src'] # thumbnail image
-        title = item.a.div.img['alt']
-        # Handle possibly multiple-coded html entities in title
-        meta['title'] = unescape(unescape(title.strip()))
+        try:
+            url = item.a['href'] # item page url
+        except:
+            continue
+        try:
+            meta['thumbnail'] = item.a.div.img['src'] # thumbnail image
+        except:
+            meta['thumbnail'] = None
+        try:
+            title = item.a.div.img['alt']
+            # Handle possibly multiple-coded html entities in title
+            meta['title'] = unescape(unescape(title.strip()))
+        except:
+            title = 'Title unknown'
         # Parental Guide rating
-        meta['mpaa'] = item.a.div.div.get_text()
+        try:
+            meta['mpaa'] = item.a.div.div.get_text()
+        except:
+            meta['mpaa'] = '?'
         # user rating
-        meta['rating'] = item.find('samp', class_='thing_score').get_text()
+        try:
+            meta['rating'] = item.find('samp', class_='thing_score').get_text()
+        except:
+            meta['rating'] = '?'
         # ID of user that posted item
-        meta['credit'] = item.find('div', class_='featured_text_con').a.get_text()
+        try:
+            meta['credit'] = item.find('div', class_='featured_text_con').a.get_text()
+        except:
+            meta['credit'] = 'Unknown'
+
         posts.append((url, meta))
 
     # Fallback to slow mode?
@@ -383,7 +417,7 @@ def viewPlay(url):
 
     # Verify it's actually a "view" page
     if not any(x in url for x in url_patterns):
-        notify("Invalid URL format")
+        notify(_localString(30022))
         return
 
     match = fetchItemDetails((url, '')) # (url, media, meta)
@@ -398,7 +432,7 @@ def viewPlay(url):
         # Pass the item to the Kodi player.
         xbmcplugin.setResolvedUrl(ADDON_HANDLE, True, listitem=play_item)
     else:
-        notify("Sorry, no playable media found.")
+        notify(_localString(30023))
         return
 
 def playVideo(url, src):
@@ -415,7 +449,7 @@ def playVideo(url, src):
     content_type = response.headers.get('content-type')
 
     if content_type is None:
-        notify("The server is not cooperating at the moment")
+        notify(_localString(30020))
         return False
 
     if 'text/html' in content_type: # Link has expired else would be video type
@@ -426,7 +460,7 @@ def playVideo(url, src):
         if match:
             url = py23_encode(match.group(1))
         else:
-            notify("Video has disappeared")
+            notify(_localString(30024))
             return False
 
     # Create a playable item with a url to play.

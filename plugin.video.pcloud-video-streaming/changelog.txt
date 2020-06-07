@@ -1,3 +1,7 @@
+v1.4.2 -- 07-Jun-2020
+- Fixed issue #27: In certain locales (such as en-nz), the "Back to parent folder" list item would sort
+  after folders starting with a number. Now it sorts correctly at the top of the list.
+
 v1.4.1 -- 27-Mar-2020
 - Now also made available as a Music add-on.
 

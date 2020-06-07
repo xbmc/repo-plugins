@@ -172,6 +172,7 @@ class Main(object):
 
         have_valid_url = False
         no_url_found = True
+        youtube_id = ''
 
         # encoded container with the m3u8 url:
         # "c34696670236c6163737d32256d6265646d236f6e6471696e6562722e3c396662716d656027796464786d3226343032202865696768647d3223363032202372736d322
@@ -294,9 +295,26 @@ class Main(object):
                     have_valid_url = True
                     no_url_found = False
 
+        # Maybe it's something like this. Let's try and find the youtube id
+        # <div id="videoplayer" data-autoplay="false" data-type="youtube" data-color="0567D8" data-url='https://youtu.be/hmGe65Wf9Hw' data-thumb='https://www.gamekings.tv/wp-content/uploads/robocop-terminator-mortal-kombat-11-1280x720.jpg' style='background-image: url(https://www.gamekings.tv/wp-content/uploads/robocop-terminator-mortal-kombat-11-1280x720.jpg);'>
         if have_valid_url:
             pass
-        # I guess we try the old way
+        else:
+            start_pos_video_url = html_source.find("https://youtu.be/")
+            if start_pos_video_url >= 0:
+                end_pos_video_url = html_source.find("'", start_pos_video_url)
+                if end_pos_video_url >= 0:
+                    youtube_id = html_source[start_pos_video_url:end_pos_video_url]
+                    youtube_id = youtube_id.replace("https://youtu.be/","")
+
+                    log("youtube_id", youtube_id)
+
+                    have_valid_url = True
+                    no_url_found = False
+
+        if have_valid_url:
+            pass
+        # I guess we try another way
         else:
             # Get the video url
             # <div class="content  content--page  content--bglight  content--blue">
@@ -333,7 +351,7 @@ class Main(object):
             # Try to make a valid video url
             if have_valid_url:
 
-                # log("html_source[start_pos_video_url:]", html_source[start_pos_video_url:])
+                #log("html_source[start_pos_video_url:]", html_source[start_pos_video_url:])
 
                 # Let's only use the video_url part
                 html_source_split = str(html_source[start_pos_video_url:]).split()
@@ -374,16 +392,19 @@ class Main(object):
             if video_url.find("player.vimeo.com/video/") > 0:
                 # no need to do anything with the vimeo addon, we can use the video_url directly
                 pass
-            elif video_url.find("youtube") > 0:
-                youtube_id = str(video_url)
-                youtube_id = youtube_id.replace("https://www.youtube.com/embed/", "")
-                youtube_id = youtube_id.replace("https://www.youtube.com/watch?v=", "")
-                youtube_id = youtube_id.replace("https://www.youtube.com/watch", "")
-                youtube_id = youtube_id.replace("https://www.youtube.com/", "")
-                youtube_id = youtube_id[0:youtube_id.find("?")]
+            if youtube_id == '':
+                if video_url.find("youtube") > 0:
+                    youtube_id = str(video_url)
+                    youtube_id = youtube_id.replace("https://www.youtube.com/embed/", "")
+                    youtube_id = youtube_id.replace("https://www.youtube.com/watch?v=", "")
+                    youtube_id = youtube_id.replace("https://www.youtube.com/watch", "")
+                    youtube_id = youtube_id.replace("https://www.youtube.com/", "")
+                    youtube_id = youtube_id[0:youtube_id.find("?")]
 
-                log("youtube_id", youtube_id)
+                    log("youtube_id2", youtube_id)
 
+                    video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
+            else:
                 video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
 
             log("final video_url", video_url)

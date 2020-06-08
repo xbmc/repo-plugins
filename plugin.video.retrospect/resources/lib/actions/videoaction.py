@@ -139,7 +139,7 @@ class VideoAction(AddonAction):
         play_list.clear()
         for i in range(0, start_index):
             Logger.debug("Adding existing PlayList item")
-            play_list.add(current_play_list_items[i].getfilename(), current_play_list_items[i])
+            play_list.add(current_play_list_items[i].getPath(), current_play_list_items[i])
 
         # The current item to play (we need to store te starting url for later)
         Logger.debug("Adding Main PlayList item")
@@ -156,6 +156,6 @@ class VideoAction(AddonAction):
         # add the remaining items
         for i in range(start_index + 1, len(current_play_list_items)):
             Logger.debug("Adding existing PlayList item")
-            play_list.add(current_play_list_items[i].getfilename(), current_play_list_items[i])
+            play_list.add(current_play_list_items[i].getPath(), current_play_list_items[i])
 
         return start_url

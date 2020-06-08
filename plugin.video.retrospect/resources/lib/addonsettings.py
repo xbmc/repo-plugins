@@ -709,9 +709,11 @@ class AddonSettings(object):
     def get_max_stream_bitrate(channel=None):
         """Returns the maximum bitrate (kbps) for streams specified by the user
 
+        :param Channel|ChannelInfo channel:     The channel to use for channel specific bitrates.
+
         :rtype: int
-        :returns: the maximum stream bitrate. If channel was provided, it will return the configured
-                  value for that channel.
+        :return: The maximum stream bitrate. If channel was provided, it will return the configured
+                  value for that channel. It will return 0 if not limit should be used.
 
         """
 
@@ -720,11 +722,11 @@ class AddonSettings(object):
             setting = AddonSettings.get_max_channel_bitrate(channel)
 
         if setting == "Retrospect":
-            setting = AddonSettings.store(KODI).get_setting("stream_bitrate")
+            setting = AddonSettings.store(KODI).get_setting("stream_bitrate_limit", 0)
             Logger.debug("Using the Retrospect Default Bitrate: %s", setting)
         else:
             Logger.debug("Using the Channel Specific Bitrate: %s", setting)
-        return int(setting or 8000)
+        return int(setting or 0)
 
     @staticmethod
     def get_max_channel_bitrate(channel):

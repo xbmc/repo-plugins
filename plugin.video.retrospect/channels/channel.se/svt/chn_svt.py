@@ -1129,7 +1129,9 @@ class Channel(chn_class.Channel):
                 video_format = video.get("playerType", "")
             video_format = video_format.lower()
 
-            if ("dash" in video_format and not video_format == "dash") or "hds" in video_format:
+            # Dictionary with supported video formats and their priority.
+            supported_formats = {"dash": 2, "dash-avc-51": 3, "hls": 0, "hls-ts-avc-51": 1}
+            if video_format not in supported_formats:
                 Logger.debug("Skipping video format: %s", video_format)
                 continue
             Logger.debug("Found video item for format: %s", video_format)
@@ -1139,8 +1141,8 @@ class Channel(chn_class.Channel):
                 Logger.debug("Skippping duplicate Stream url: %s", url)
                 continue
 
-            if video_format == "dash" and use_input_stream:
-                stream = part.append_media_stream(video['url'], 1)
+            if "dash" in video_format and use_input_stream:
+                stream = part.append_media_stream(video['url'], supported_formats[video_format])
                 Mpd.set_input_stream_addon_input(stream, self.proxy)
 
             elif "m3u8" in url:
@@ -1158,7 +1160,8 @@ class Channel(chn_class.Channel):
                     encrypted=False,
                     proxy=self.proxy,
                     headers=part.HttpHeaders,
-                    channel=self
+                    channel=self,
+                    bitrate=supported_formats[video_format]
                 )
 
             elif video["url"].startswith("rtmp"):

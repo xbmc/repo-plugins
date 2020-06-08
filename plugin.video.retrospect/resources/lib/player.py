@@ -82,7 +82,7 @@ class Player(xbmc.Player):
 
         Logger.trace("Player: [onAVStarted] called")
 
-        if self.subs:
+        if len(self.subs) > 0 and self.subs[0]:
             Logger.debug("Player: Setting subtitle: %s", self.subs[0])
             self.setSubtitles(self.subs[0])
 

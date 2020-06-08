@@ -1,6 +1,7 @@
 # Kodi Media Center language file
 # Translators:
 # Bas Rieter <basrieter@gmail.com>, 2020
+# Snah <dynggrep@gmail.com>, 2020
 # Sopor, 2020
 # 
 msgid ""
@@ -98,8 +99,8 @@ msgid "Show DRM/Paid warning before playback"
 msgstr "Visa DRM-/betalvarningar innan uppspelning"
 
 msgctxt "#30020"
-msgid "Maximum Stream Bitrate"
-msgstr "Högsta bithastighet för strömmar"
+msgid "Maximum Stream Bitrate [COLOR=gray](0=disabled)[/COLOR]"
+msgstr "Maximal strömbithastighet [COLOR=gray](0=inaktiverad)[/COLOR]"
 
 msgctxt "#30021"
 msgid "Enable subtitles by default when available"
@@ -289,7 +290,7 @@ msgstr "Inställningar"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
-msgstr "Låt Kodi välja bästa bithastighet"
+msgstr "Låt Kodi välja bithastighet om det går"
 
 msgctxt "#30071"
 msgid "Set the proxy and local IP to all channels related to this country"
@@ -314,7 +315,7 @@ msgstr "Vid tom lista"
 
 msgctxt "#30076"
 msgid "Show error"
-msgstr "visa felet"
+msgstr "visa fel"
 
 msgctxt "#30077"
 msgid "Show empty list"
@@ -366,20 +367,20 @@ msgstr "Visa miniatyrbild som fanart om ingen fanart är tillgänglig"
 
 msgctxt "#30089"
 msgid "Password Vault"
-msgstr "Lösenordsskydd"
+msgstr "Huvudlösenord"
 
 msgctxt "#30090"
 msgid ""
 "The 'Password Vault' protects stored password with encryption using a PIN."
-msgstr "Lösenordet skyddar lagrade lösenord krypterat med hjälp av en kod."
+msgstr "Huvudlösenordet lagrar lösenord krypterat med hjälp av en PIN-kod."
 
 msgctxt "#30091"
 msgid "Change Vault Pin"
-msgstr "Ändra koden"
+msgstr "Ändra huvudlösenord"
 
 msgctxt "#30092"
 msgid "Reset Vault"
-msgstr "Återställ alla koder"
+msgstr "Återställ huvudlösenordet"
 
 msgctxt "#30093"
 msgid "Password"
@@ -1045,8 +1046,8 @@ msgid ""
 "Resetting the vault will invalidate all existing encrypted values. Are you "
 "sure?"
 msgstr ""
-"Om du återställer koden går alla sparade inloggningar förlorade. Är du "
-"säker?"
+"Om du återställer huvudlösenordet går alla sparade inloggningar förlorade. "
+"Är du säker?"
 
 msgctxt "#30598"
 msgid "Send retrospect.log »"
@@ -1086,3 +1087,31 @@ msgstr ""
 "måste Kodi startas om. Efter omstarten måste eventuella genvägar till "
 "Retrospect förnyas. Du kan avinstallera den Retrospect som är markerad som "
 "\"trasig\" i \"Mina tillägg\"."
+
+msgctxt "#30604"
+msgid "Clean-up cache and cookies »"
+msgstr "Rensa buffert och kakor »"
+
+msgctxt "#30605"
+msgid ""
+"Are you sure you want to clean all of Retrospect's cache and cookies? This "
+"action cannot be undone."
+msgstr ""
+"Är du säker på att du helt vill rensa Retrospects buffert och kakor? Detta "
+"kan inte ångras."
+
+msgctxt "#30606"
+msgid "Minimum level for showing notifications"
+msgstr "Minsta nivå för att visa aviseringar"
+
+msgctxt "#30607"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "#30608"
+msgid "Warning"
+msgstr "Varning"
+
+msgctxt "#30609"
+msgid "Error"
+msgstr "Fel"

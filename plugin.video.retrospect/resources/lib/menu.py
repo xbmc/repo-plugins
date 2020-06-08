@@ -215,7 +215,7 @@ class Menu(ActionParser):
             raise ValueError("Missing channel")
 
         # taken from the settings.xml
-        bitrate_options = "Retrospect|100|250|500|750|1000|1500|2000|2500|4000|8000|20000"\
+        bitrate_options = "Retrospect|0|100|250|500|750|1000|1500|2000|2500|4000|8000|20000"\
             .split("|")
 
         current_bitrate = AddonSettings.get_max_channel_bitrate(self.channelObject)

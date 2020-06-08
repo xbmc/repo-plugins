@@ -97,8 +97,8 @@ msgid "Show DRM/Paid warning before playback"
 msgstr "Toon DRM waarschuwing voor het afspelen"
 
 msgctxt "#30020"
-msgid "Maximum Stream Bitrate"
-msgstr "Maximale stream bitrate"
+msgid "Maximum Stream Bitrate [COLOR=gray](0=disabled)[/COLOR]"
+msgstr "Maximale stream bitrate [COLOR=gray](0=uitgeschakeld)[/COLOR]"
 
 msgctxt "#30021"
 msgid "Enable subtitles by default when available"

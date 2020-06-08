@@ -551,7 +551,7 @@ class Channel(chn_class.Channel):
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param dict[str,str|None] result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
@@ -833,8 +833,8 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-        :param bool for_epg: use this item in an EPG listing
+        :param dict[str,Any] result_set:    The result_set of the self.episodeItemRegex
+        :param bool for_epg:                Use this item in an EPG listing
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -900,6 +900,8 @@ class Channel(chn_class.Channel):
             elif image_type == "grid.tile":
                 item.thumb = image_data["formats"]["web"]["source"]
 
+        region_restrictions = result_set.get('regionRestrictions', [])
+        item.isGeoLocked = len(region_restrictions) > 0
         return item
 
     def extract_epi_epg_items(self, data):
@@ -943,7 +945,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param dict[str,dict[str,str]] result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -1281,7 +1283,7 @@ class Channel(chn_class.Channel):
                 # NPO3 has apparently switched the normal and hearing impaired streams?
                 json_urls = Regexer.do_regex('<div class="video-player-container"[^>]+data-alt-prid="([^"]+)"', html_data)
             else:
-                json_urls = Regexer.do_regex('<npo-player[^>]*media-id="([^"]+)"', html_data)
+                json_urls = Regexer.do_regex('<npo-player [^>]*media-id="([^"]+)"', html_data)
 
             for episode_id in json_urls:
                 return self.__update_video_item(item, episode_id, False)

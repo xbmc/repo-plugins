@@ -1,3 +1,6 @@
+v1.4.1 (2020-6-6)
+- Gracefully handle anomalous missing element exceptions; Add new categories
+
 v1.4.0 (2020-5-31)
 - Fix YT video link parsing, various other fixes and upgrades
 

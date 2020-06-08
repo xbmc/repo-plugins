@@ -88,7 +88,7 @@ class NpoStream(object):
         stream_data = JsonHelper(data)
         error = stream_data.get_value("html")
         if error:
-            error = Regexer.do_regex(r'message">\s*<p>([^<]+)', error)
+            error = Regexer.do_regex(r'message">\s*<p[^>]*>([^<]+)', error)
             if bool(error):
                 return error[0]
             return "Unspecified error retrieving streams"

@@ -267,6 +267,8 @@ class Channel(chn_class.Channel):
 
         """
 
+        from resources.lib.streams.m3u8 import M3u8
+
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
         meta_data = UriHandler.open(item.url, proxy=self.proxy, referer=self.baseUrl)
@@ -274,24 +276,18 @@ class Channel(chn_class.Channel):
         stream_parts = meta.get_value("feed", "items")
         for stream_part in stream_parts:
             stream_url = stream_part["group"]["content"]
-            stream_url = stream_url.replace("{device}", "html5")
-            stream_url = "%s&format=json" % (stream_url, )
+            stream_url = stream_url.replace("&device={device}", "")
+            stream_url = "%s&format=json&acceptMethods=hls" % (stream_url, )
             stream_data = UriHandler.open(stream_url, proxy=self.proxy)
             stream = JsonHelper(stream_data)
 
             # subUrls = stream.get_value("package", "video", "item", 0, "transcript", 0, "typographic")  # NOSONAR
             part = item.create_new_empty_media_part()
 
-            # m3u8Url = stream.get_value("package", "video", "item", 0, "rendition", 0, "src")  # NOSONAR
-            # for s, b in M3u8.get_streams_from_m3u8(m3u8Url, self.proxy):
-            #     item.complete = True
-            #     part.append_media_stream(s, b)
-
-            rtmp_datas = stream.get_value("package", "video", "item", 0, "rendition")
-            for rtmp_data in rtmp_datas:
-                rtmp_url = rtmp_data["src"]
-                bitrate = rtmp_data["bitrate"]
-                part.append_media_stream(rtmp_url, bitrate)
+            hls_streams = stream.get_value("package", "video", "item", 0, "rendition")
+            for hls_stream in hls_streams:
+                hls_url = hls_stream["src"]
+                item.complete |= M3u8.update_part_with_m3u8_streams(part, hls_url, proxy=self.proxy)
 
         item.complete = True
         Logger.trace("Media url: %s", item)

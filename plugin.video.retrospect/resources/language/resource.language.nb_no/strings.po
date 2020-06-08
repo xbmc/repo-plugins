@@ -57,7 +57,7 @@ msgid "Show DRM/Paid warning before playback"
 msgstr "Vis advarsel om DRM/Betalt innhold før avspilling"
 
 msgctxt "#30020"
-msgid "Maximum stream bitrate"
+msgid "Maximum Stream Bitrate [COLOR=gray](0=disabled)[/COLOR]"
 msgstr "Maksimal strømbitrate"
 
 msgctxt "#30021"

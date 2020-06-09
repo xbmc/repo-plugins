@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.5"
+        version="5.2.6"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,21 +132,23 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.5 - Changelog - 2020-05-18[/B]
+        <news>[B]Retrospect v5.2.6 - Changelog - 2020-06-09[/B]
 
-This version of Retrospect fixes some login related issues for VRT.nu and Dplay.se and squashes a minor bug for kijk.nl.
+This new version of Retrospect addresses a number of channel bugs. Besides this the behavior of the bitrate limiting was changed and by default no limit is set. Users can still change this via the add-on settings. There was also a fix for changed Kodi Matrix Python API.
 
 [B]Framework related[/B]
-* Added: option to limit certain settings to only some channel in a channel set
-* Added: option to generate a channel guid for a setting in a channel set
+* Fixed: Some Kodi Matrix Python API changes (Fixes #1384)
+* Changed: By default no bitrates are limited. This can be changed via the Retrospect add-on settings
+* Fixed: A bug was introduced to that sometimes sets an empty subtitle to the Kodi player (Fixes #1390)
 
 [B]GUI/Settings/Language related[/B]
-_None_
+* Added: Different color for &quot;Geo-locked&quot; items
 
 [B]Channel related[/B]
-* Added: option to specify a login for Dplay.se (Fixes #1364)
-* Fixed: don&#x27;t group special folders for kijk.nl (Fixes #1377)
-* Fixed: VRT.nu changed their login code (Fixes #1379)
+* Added: Try to add a geo-locked indicator to NPO Start (See #1380)
+* Fixed: Nick Jr stream resolving (Fixes #1382)
+* Changed: Enabled Dolby Digital audio stream for SVT.se
+* Fixed: NPO Live streams that contain GEO locked content would not play at all (Fixes #1389)
 
         </news>
         <assets>

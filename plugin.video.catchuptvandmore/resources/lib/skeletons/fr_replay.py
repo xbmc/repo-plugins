@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script, utils
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'tf1': {
         'callback': 'replay_bridge',
+        'label': 'TF1',
         'thumb': 'channels/fr/tf1.png',
         'fanart': 'channels/fr/tf1_fanart.jpg',
         'module': 'resources.lib.channels.fr.mytf1',
@@ -47,6 +48,7 @@ menu = {
     },
     'france-2': {
         'callback': 'replay_bridge',
+        'label': 'France 2',
         'thumb': 'channels/fr/france2.png',
         'fanart': 'channels/fr/france2_fanart.jpg',
         'module': 'resources.lib.channels.fr.francetv',
@@ -55,6 +57,7 @@ menu = {
     },
     'france-3': {
         'callback': 'replay_bridge',
+        'label': 'France 3',
         'thumb': 'channels/fr/france3.png',
         'fanart': 'channels/fr/france3_fanart.jpg',
         'module': 'resources.lib.channels.fr.francetv',
@@ -63,6 +66,7 @@ menu = {
     },
     'canalplus': {
         'callback': 'replay_bridge',
+        'label': 'Canal +',
         'thumb': 'channels/fr/canalplus.png',
         'fanart': 'channels/fr/canalplus_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -71,6 +75,7 @@ menu = {
     },
     'france-5': {
         'callback': 'replay_bridge',
+        'label': 'France 5',
         'thumb': 'channels/fr/france5.png',
         'fanart': 'channels/fr/france5_fanart.jpg',
         'module': 'resources.lib.channels.fr.francetv',
@@ -79,6 +84,7 @@ menu = {
     },
     'm6': {
         'callback': 'replay_bridge',
+        'label': 'M6',
         'thumb': 'channels/fr/m6.png',
         'fanart': 'channels/fr/m6_fanart.jpg',
         'module': 'resources.lib.channels.fr.6play',
@@ -87,6 +93,7 @@ menu = {
     },
     'c8': {
         'callback': 'replay_bridge',
+        'label': 'C8',
         'thumb': 'channels/fr/c8.png',
         'fanart': 'channels/fr/c8_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -95,6 +102,7 @@ menu = {
     },
     'w9': {
         'callback': 'replay_bridge',
+        'label': 'W9',
         'thumb': 'channels/fr/w9.png',
         'fanart': 'channels/fr/w9_fanart.jpg',
         'module': 'resources.lib.channels.fr.6play',
@@ -103,6 +111,7 @@ menu = {
     },
     'tmc': {
         'callback': 'replay_bridge',
+        'label': 'TMC',
         'thumb': 'channels/fr/tmc.png',
         'fanart': 'channels/fr/tmc_fanart.jpg',
         'module': 'resources.lib.channels.fr.mytf1',
@@ -111,6 +120,7 @@ menu = {
     },
     'tfx': {
         'callback': 'replay_bridge',
+        'label': 'TFX',
         'thumb': 'channels/fr/tfx.png',
         'fanart': 'channels/fr/tfx_fanart.jpg',
         'module': 'resources.lib.channels.fr.mytf1',
@@ -119,6 +129,7 @@ menu = {
     },
     'nrj12': {
         'callback': 'replay_bridge',
+        'label': 'NRJ 12',
         'thumb': 'channels/fr/nrj12.png',
         'fanart': 'channels/fr/nrj12_fanart.jpg',
         'module': 'resources.lib.channels.fr.nrj',
@@ -127,6 +138,7 @@ menu = {
     },
     'france-4': {
         'callback': 'replay_bridge',
+        'label': 'France 4',
         'thumb': 'channels/fr/france4.png',
         'fanart': 'channels/fr/france4_fanart.jpg',
         'module': 'resources.lib.channels.fr.francetv',
@@ -135,6 +147,7 @@ menu = {
     },
     'bfmtv': {
         'callback': 'replay_bridge',
+        'label': 'BFM TV',
         'thumb': 'channels/fr/bfmtv.png',
         'fanart': 'channels/fr/bfmtv_fanart.jpg',
         'module': 'resources.lib.channels.fr.bfmtv',
@@ -143,6 +156,7 @@ menu = {
     },
     'cnews': {
         'callback': 'replay_bridge',
+        'label': 'CNews',
         'thumb': 'channels/fr/cnews.png',
         'fanart': 'channels/fr/cnews_fanart.jpg',
         'module': 'resources.lib.channels.fr.cnews',
@@ -151,6 +165,7 @@ menu = {
     },
     'cstar': {
         'callback': 'replay_bridge',
+        'label': 'CStar',
         'thumb': 'channels/fr/cstar.png',
         'fanart': 'channels/fr/cstar_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -159,6 +174,7 @@ menu = {
     },
     'gulli': {
         'callback': 'replay_bridge',
+        'label': 'Gulli',
         'thumb': 'channels/fr/gulli.png',
         'fanart': 'channels/fr/gulli_fanart.jpg',
         'module': 'resources.lib.channels.fr.gulli',
@@ -167,6 +183,7 @@ menu = {
     },
     'france-o': {
         'callback': 'replay_bridge',
+        'label': 'France Ô',
         'thumb': 'channels/fr/franceo.png',
         'fanart': 'channels/fr/franceo_fanart.jpg',
         'module': 'resources.lib.channels.fr.francetv',
@@ -175,6 +192,7 @@ menu = {
     },
     'tf1-series-films': {
         'callback': 'replay_bridge',
+        'label': 'TF1 Séries Films',
         'thumb': 'channels/fr/tf1seriesfilms.png',
         'fanart': 'channels/fr/tf1seriesfilms_fanart.jpg',
         'module': 'resources.lib.channels.fr.mytf1',
@@ -183,6 +201,7 @@ menu = {
     },
     'lequipe': {
         'callback': 'replay_bridge',
+        'label': 'L\'Équipe',
         'thumb': 'channels/fr/lequipe.png',
         'fanart': 'channels/fr/lequipe_fanart.jpg',
         'module': 'resources.lib.channels.fr.lequipe',
@@ -191,6 +210,7 @@ menu = {
     },
     '6ter': {
         'callback': 'replay_bridge',
+        'label': '6ter',
         'thumb': 'channels/fr/6ter.png',
         'fanart': 'channels/fr/6ter_fanart.jpg',
         'module': 'resources.lib.channels.fr.6play',
@@ -199,14 +219,16 @@ menu = {
     },
     'rmcstory': {
         'callback': 'replay_bridge',
+        'label': 'RMC Story',
         'thumb': 'channels/fr/rmcstory.png',
         'fanart': 'channels/fr/rmcstory_fanart.jpg',
-        'module': 'resources.lib.channels.fr.rmcstory',
+        'module': 'resources.lib.channels.fr.rmc',
         'enabled': True,
         'order': 21
     },
     'cherie25': {
         'callback': 'replay_bridge',
+        'label': 'Chérie 25',
         'thumb': 'channels/fr/cherie25.png',
         'fanart': 'channels/fr/cherie25_fanart.jpg',
         'module': 'resources.lib.channels.fr.nrj',
@@ -215,6 +237,7 @@ menu = {
     },
     'la_1ere': {
         'callback': 'replay_bridge',
+        'label': 'La 1ère (' + utils.ensure_unicode(Script.setting['la_1ere.language']) + ')',
         'thumb': 'channels/fr/la1ere.png',
         'fanart': 'channels/fr/la1ere_fanart.jpg',
         'module': 'resources.lib.channels.fr.la_1ere',
@@ -223,6 +246,7 @@ menu = {
     },
     'franceinfo': {
         'callback': 'replay_bridge',
+        'label': 'France Info',
         'thumb': 'channels/fr/franceinfo.png',
         'fanart': 'channels/fr/franceinfo_fanart.jpg',
         'module': 'resources.lib.channels.fr.franceinfo',
@@ -231,6 +255,7 @@ menu = {
     },
     'bfmbusiness': {
         'callback': 'replay_bridge',
+        'label': 'BFM Business',
         'thumb': 'channels/fr/bfmbusiness.png',
         'fanart': 'channels/fr/bfmbusiness_fanart.jpg',
         'module': 'resources.lib.channels.fr.bfmtv',
@@ -239,6 +264,7 @@ menu = {
     },
     'rmc': {
         'callback': 'replay_bridge',
+        'label': 'RMC',
         'thumb': 'channels/fr/rmc.png',
         'fanart': 'channels/fr/rmc_fanart.jpg',
         'module': 'resources.lib.channels.fr.bfmtv',
@@ -247,6 +273,7 @@ menu = {
     },
     '01net': {
         'callback': 'replay_bridge',
+        'label': '01Net TV',
         'thumb': 'channels/fr/01net.png',
         'fanart': 'channels/fr/01net_fanart.jpg',
         'module': 'resources.lib.channels.fr.bfmtv',
@@ -255,6 +282,7 @@ menu = {
     },
     'lci': {
         'callback': 'replay_bridge',
+        'label': 'LCI',
         'thumb': 'channels/fr/lci.png',
         'fanart': 'channels/fr/lci_fanart.jpg',
         'module': 'resources.lib.channels.fr.lci',
@@ -263,6 +291,7 @@ menu = {
     },
     'lcp': {
         'callback': 'replay_bridge',
+        'label': 'LCP Assemblée Nationale',
         'thumb': 'channels/fr/lcp.png',
         'fanart': 'channels/fr/lcp_fanart.jpg',
         'module': 'resources.lib.channels.fr.lcp',
@@ -271,14 +300,16 @@ menu = {
     },
     'rmcdecouverte': {
         'callback': 'replay_bridge',
+        'label': 'RMC Découverte',
         'thumb': 'channels/fr/rmcdecouverte.png',
         'fanart': 'channels/fr/rmcdecouverte_fanart.jpg',
-        'module': 'resources.lib.channels.fr.rmcdecouverte',
+        'module': 'resources.lib.channels.fr.rmc',
         'enabled': True,
         'order': 32
     },
     'publicsenat': {
         'callback': 'replay_bridge',
+        'label': 'Public Sénat',
         'thumb': 'channels/fr/publicsenat.png',
         'fanart': 'channels/fr/publicsenat_fanart.jpg',
         'module': 'resources.lib.channels.fr.publicsenat',
@@ -287,6 +318,7 @@ menu = {
     },
     'france3regions': {
         'callback': 'replay_bridge',
+        'label': 'France 3 Régions (' + utils.ensure_unicode(Script.setting['france3regions.language']) + ')',
         'thumb': 'channels/fr/france3regions.png',
         'fanart': 'channels/fr/france3regions_fanart.jpg',
         'module': 'resources.lib.channels.fr.france3regions',
@@ -295,6 +327,7 @@ menu = {
     },
     'francetvsport': {
         'callback': 'replay_bridge',
+        'label': 'France TV Sport (francetv)',
         'thumb': 'channels/fr/francetvsport.png',
         'fanart': 'channels/fr/francetvsport_fanart.jpg',
         'module': 'resources.lib.channels.fr.francetvsport',
@@ -303,6 +336,7 @@ menu = {
     },
     'histoire': {
         'callback': 'replay_bridge',
+        'label': 'Histoire',
         'thumb': 'channels/fr/histoire.png',
         'fanart': 'channels/fr/histoire_fanart.jpg',
         'module': 'resources.lib.channels.fr.tf1thematiques',
@@ -311,6 +345,7 @@ menu = {
     },
     'tvbreizh': {
         'callback': 'replay_bridge',
+        'label': 'TV Breizh',
         'thumb': 'channels/fr/tvbreizh.png',
         'fanart': 'channels/fr/tvbreizh_fanart.jpg',
         'module': 'resources.lib.channels.fr.tf1thematiques',
@@ -319,6 +354,7 @@ menu = {
     },
     'ushuaiatv': {
         'callback': 'replay_bridge',
+        'label': 'Ushuaïa TV',
         'thumb': 'channels/fr/ushuaiatv.png',
         'fanart': 'channels/fr/ushuaiatv_fanart.jpg',
         'module': 'resources.lib.channels.fr.tf1thematiques',
@@ -327,6 +363,7 @@ menu = {
     },
     'seasons': {
         'callback': 'replay_bridge',
+        'label': 'Seasons',
         'thumb': 'channels/fr/seasons.png',
         'fanart': 'channels/fr/seasons_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -335,6 +372,7 @@ menu = {
     },
     'comedie': {
         'callback': 'replay_bridge',
+        'label': 'Comédie +',
         'thumb': 'channels/fr/comedie.png',
         'fanart': 'channels/fr/comedie_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -343,6 +381,7 @@ menu = {
     },
     'les-chaines-planete': {
         'callback': 'replay_bridge',
+        'label': 'Les chaînes planètes +',
         'thumb': 'channels/fr/leschainesplanete.png',
         'fanart': 'channels/fr/leschainesplanete_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -351,6 +390,7 @@ menu = {
     },
     'golfplus': {
         'callback': 'replay_bridge',
+        'label': 'Golf +',
         'thumb': 'channels/fr/golfplus.png',
         'fanart': 'channels/fr/golfplus_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -359,6 +399,7 @@ menu = {
     },
     'cineplus': {
         'callback': 'replay_bridge',
+        'label': 'Ciné +',
         'thumb': 'channels/fr/cineplus.png',
         'fanart': 'channels/fr/cineplus_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -367,6 +408,7 @@ menu = {
     },
     'infosportplus': {
         'callback': 'replay_bridge',
+        'label': 'INFOSPORT+',
         'thumb': 'channels/fr/infosportplus.png',
         'fanart': 'channels/fr/infosportplus_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -375,6 +417,7 @@ menu = {
     },
     'gameone': {
         'callback': 'replay_bridge',
+        'label': 'Game One',
         'thumb': 'channels/fr/gameone.png',
         'fanart': 'channels/fr/gameone_fanart.jpg',
         'module': 'resources.lib.channels.fr.gameone',
@@ -383,6 +426,7 @@ menu = {
     },
     'lumni': {
         'callback': 'replay_bridge',
+        'label': 'Lumni (francetv)',
         'thumb': 'channels/fr/lumni.png',
         'fanart': 'channels/fr/lumni_fanart.jpg',
         'module': 'resources.lib.channels.fr.lumni',
@@ -391,6 +435,7 @@ menu = {
     },
     'gong': {
         'callback': 'replay_bridge',
+        'label': 'Gong',
         'thumb': 'channels/fr/gong.png',
         'fanart': 'channels/fr/gong_fanart.jpg',
         'module': 'resources.lib.channels.fr.gong',
@@ -399,6 +444,7 @@ menu = {
     },
     'bfmparis': {
         'callback': 'replay_bridge',
+        'label': 'BFM Paris',
         'thumb': 'channels/fr/bfmparis.png',
         'fanart': 'channels/fr/bfmparis_fanart.jpg',
         'module': 'resources.lib.channels.fr.bfmregion',
@@ -407,6 +453,7 @@ menu = {
     },
     'fun_radio': {
         'callback': 'replay_bridge',
+        'label': 'Fun Radio',
         'thumb': 'channels/fr/funradio.png',
         'fanart': 'channels/fr/funradio_fanart.jpg',
         'module': 'resources.lib.channels.fr.6play',
@@ -415,6 +462,7 @@ menu = {
     },
     'slash': {
         'callback': 'replay_bridge',
+        'label': 'France tv slash',
         'thumb': 'channels/fr/slash.png',
         'fanart': 'channels/fr/slash_fanart.jpg',
         'module': 'resources.lib.channels.fr.francetv',
@@ -423,6 +471,7 @@ menu = {
     },
     'polar-plus': {
         'callback': 'replay_bridge',
+        'label': 'Polar+',
         'thumb': 'channels/fr/polarplus.png',
         'fanart': 'channels/fr/polarplus_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -431,6 +480,7 @@ menu = {
     },
     'kto': {
         'callback': 'replay_bridge',
+        'label': 'KTO',
         'thumb': 'channels/fr/kto.png',
         'fanart': 'channels/fr/kto_fanart.jpg',
         'module': 'resources.lib.channels.fr.kto',
@@ -439,6 +489,7 @@ menu = {
     },
     'antennereunion': {
         'callback': 'replay_bridge',
+        'label': 'Antenne Réunion',
         'thumb': 'channels/fr/antennereunion.png',
         'fanart': 'channels/fr/antennereunion_fanart.jpg',
         'module': 'resources.lib.channels.fr.antennereunion',
@@ -447,6 +498,7 @@ menu = {
     },
     'ouatchtv': {
         'callback': 'replay_bridge',
+        'label': 'Ouatch TV',
         'thumb': 'channels/fr/ouatchtv.png',
         'fanart': 'channels/fr/ouatchtv_fanart.jpg',
         'module': 'resources.lib.channels.fr.ouatchtv',
@@ -455,6 +507,7 @@ menu = {
     },
     'rtl2': {
         'callback': 'replay_bridge',
+        'label': 'RTL 2',
         'thumb': 'channels/fr/rtl2.png',
         'fanart': 'channels/fr/rtl2_fanart.jpg',
         'module': 'resources.lib.channels.fr.6play',
@@ -463,6 +516,7 @@ menu = {
     },
     'lachainemeteo': {
         'callback': 'replay_bridge',
+        'label': 'La Chaîne Météo',
         'thumb': 'channels/fr/lachainemeteo.png',
         'fanart': 'channels/fr/lachainemeteo_fanart.jpg',
         'module': 'resources.lib.channels.fr.lachainemeteo',
@@ -471,6 +525,7 @@ menu = {
     },
     'j_one': {
         'callback': 'replay_bridge',
+        'label': 'J-One',
         'thumb': 'channels/fr/jone.png',
         'fanart': 'channels/fr/jone_fanart.jpg',
         'module': 'resources.lib.channels.fr.j_one',
@@ -479,6 +534,7 @@ menu = {
     },
     'via93': {
         'callback': 'replay_bridge',
+        'label': 'vià93',
         'thumb': 'channels/fr/via93.png',
         'fanart': 'channels/fr/via93_fanart.jpg',
         'module': 'resources.lib.channels.fr.via',
@@ -487,6 +543,7 @@ menu = {
     },
     'jack': {
         'callback': 'replay_bridge',
+        'label': 'Jack (mycanal)',
         'thumb': 'channels/fr/jack.png',
         'fanart': 'channels/fr/jack_fanart.jpg',
         'module': 'resources.lib.channels.fr.jack',
@@ -495,6 +552,7 @@ menu = {
     },
     'caledonia': {
         'callback': 'replay_bridge',
+        'label': 'Caledonia',
         'thumb': 'channels/fr/caledonia.png',
         'fanart': 'channels/fr/caledonia_fanart.jpg',
         'module': 'resources.lib.channels.fr.caledonia',
@@ -503,6 +561,7 @@ menu = {
     },
     'tebeo': {
         'callback': 'replay_bridge',
+        'label': 'Tébéo',
         'thumb': 'channels/fr/tebeo.png',
         'fanart': 'channels/fr/tebeo_fanart.jpg',
         'module': 'resources.lib.channels.fr.tebeo',
@@ -511,6 +570,7 @@ menu = {
     },
     'tl7': {
         'callback': 'replay_bridge',
+        'label': 'Télévision Loire 7',
         'thumb': 'channels/fr/tl7.png',
         'fanart': 'channels/fr/tl7_fanart.jpg',
         'module': 'resources.lib.channels.fr.tl7',
@@ -519,6 +579,7 @@ menu = {
     },
     'mblivetv': {
         'callback': 'replay_bridge',
+        'label': 'Mont Blanc Live TV',
         'thumb': 'channels/fr/mblivetv.png',
         'fanart': 'channels/fr/mblivetv_fanart.jpg',
         'module': 'resources.lib.channels.fr.mblivetv',
@@ -527,6 +588,7 @@ menu = {
     },
     'tv8montblanc': {
         'callback': 'replay_bridge',
+        'label': '8 Mont-Blanc',
         'thumb': 'channels/fr/tv8montblanc.png',
         'fanart': 'channels/fr/tv8montblanc_fanart.jpg',
         'module': 'resources.lib.channels.fr.tv8montblanc',
@@ -535,6 +597,7 @@ menu = {
     },
     'luxetv': {
         'callback': 'replay_bridge',
+        'label': 'Luxe.TV',
         'thumb': 'channels/fr/luxetv.png',
         'fanart': 'channels/fr/luxetv_fanart.jpg',
         'module': 'resources.lib.channels.fr.luxetv',
@@ -543,6 +606,7 @@ menu = {
     },
     'alsace20': {
         'callback': 'replay_bridge',
+        'label': 'Alsace 20',
         'thumb': 'channels/fr/alsace20.png',
         'fanart': 'channels/fr/alsace20_fanart.jpg',
         'module': 'resources.lib.channels.fr.alsace20',
@@ -551,6 +615,7 @@ menu = {
     },
     'francetvspectaclesetculture': {
         'callback': 'replay_bridge',
+        'label': 'Spectacles et Culture (francetv)',
         'thumb': 'channels/fr/francetvspectaclesetculture.png',
         'fanart': 'channels/fr/francetvspectaclesetculture_fanart.jpg',
         'module': 'resources.lib.channels.fr.francetvspectaclesetculture',
@@ -559,6 +624,7 @@ menu = {
     },
     'tvpifr': {
         'callback': 'replay_bridge',
+        'label': 'TVPI télévision d\'ici',
         'thumb': 'channels/fr/tvpifr.png',
         'fanart': 'channels/fr/tvpifr_fanart.jpg',
         'module': 'resources.lib.channels.fr.tvpifr',
@@ -567,6 +633,7 @@ menu = {
     },
     'cliquetv': {
         'callback': 'replay_bridge',
+        'label': 'Clique TV',
         'thumb': 'channels/fr/cliquetv.png',
         'fanart': 'channels/fr/cliquetv_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -575,6 +642,7 @@ menu = {
     },
     'piwiplus': {
         'callback': 'replay_bridge',
+        'label': 'Piwi +',
         'thumb': 'channels/fr/piwiplus.png',
         'fanart': 'channels/fr/piwiplus_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -583,6 +651,7 @@ menu = {
     },
     'teletoonplus': {
         'callback': 'replay_bridge',
+        'label': 'TéléToon +',
         'thumb': 'channels/fr/teletoonplus.png',
         'fanart': 'channels/fr/teletoonplus_fanart.jpg',
         'module': 'resources.lib.channels.fr.mycanal',
@@ -591,6 +660,7 @@ menu = {
     },
     'paramountchannel_fr': {
         'callback': 'replay_bridge',
+        'label': 'Paramount Channel (FR)',
         'thumb': 'channels/fr/paramountchannel_fr.png',
         'fanart': 'channels/fr/paramountchannel_fr_fanart.jpg',
         'module': 'resources.lib.channels.fr.paramountchannel_fr',
@@ -599,6 +669,7 @@ menu = {
     },
     'mtv_fr': {
         'callback': 'replay_bridge',
+        'label': 'MTV (FR)',
         'thumb': 'channels/fr/mtv_fr.png',
         'fanart': 'channels/fr/mtv_fr_fanart.jpg',
         'module': 'resources.lib.channels.fr.mtv_fr',
@@ -607,6 +678,7 @@ menu = {
     },
     'bfmlille': {
         'callback': 'replay_bridge',
+        'label': 'BFM Lille',
         'thumb': 'channels/fr/bfmlille.png',
         'fanart': 'channels/fr/bfmlille_fanart.jpg',
         'module': 'resources.lib.channels.fr.bfmregion',
@@ -615,6 +687,7 @@ menu = {
     },
     'bfmgrandlittoral': {
         'callback': 'replay_bridge',
+        'label': 'BFM Littoral',
         'thumb': 'channels/fr/bfmgrandlittoral.png',
         'fanart': 'channels/fr/bfmgrandlittoral_fanart.jpg',
         'module': 'resources.lib.channels.fr.bfmregion',
@@ -623,6 +696,7 @@ menu = {
     },
     'tebesud': {
         'callback': 'replay_bridge',
+        'label': 'TébéSud',
         'thumb': 'channels/fr/tebesud.png',
         'fanart': 'channels/fr/tebesud_fanart.jpg',
         'module': 'resources.lib.channels.fr.tebeo',
@@ -631,6 +705,7 @@ menu = {
     },
     'telegrenoble': {
         'callback': 'replay_bridge',
+        'label': 'TéléGrenoble',
         'thumb': 'channels/fr/telegrenoble.png',
         'fanart': 'channels/fr/telegrenoble_fanart.jpg',
         'module': 'resources.lib.channels.fr.telegrenoble',
@@ -639,6 +714,7 @@ menu = {
     },
     'bfmlyon': {
         'callback': 'replay_bridge',
+        'label': 'BFM Lyon',
         'thumb': 'channels/fr/bfmlyon.png',
         'fanart': 'channels/fr/bfmlyon_fanart.jpg',
         'module': 'resources.lib.channels.fr.bfmregion',
@@ -647,6 +723,7 @@ menu = {
     },
     'enfants': {
         'callback': 'replay_bridge',
+        'label': 'Okoo (France TV)',
         'thumb': 'channels/fr/okoo.png',
         'fanart': 'channels/fr/okoo_fanart.jpg',
         'module': 'resources.lib.channels.fr.francetv',
@@ -655,6 +732,7 @@ menu = {
     },
     'courses': {
         'callback': 'replay_bridge',
+        'label': 'M6 Courses (6play)',
         'thumb': 'channels/fr/m6courses.png',
         'fanart': 'channels/fr/m6courses_fanart.jpg',
         'module': 'resources.lib.channels.fr.6play',
@@ -663,10 +741,11 @@ menu = {
     },
     '100foot': {
         'callback': 'replay_bridge',
+        'label': '100% Foot (6play)',
         'thumb': 'channels/fr/100foot.png',
         'fanart': 'channels/fr/100foot_fanart.jpg',
         'module': 'resources.lib.channels.fr.6play',
-        'enabled': True,
+        'enabled': False,
         'order': 121
     }
 }

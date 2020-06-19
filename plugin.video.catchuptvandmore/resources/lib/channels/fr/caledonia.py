@@ -25,18 +25,18 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
 import re
-from resources.lib import urlquick
+import urlquick
 
 # TO DO
-# Add Next Button
+# Add Next Button (More videos to get)
 # Readd date without beautiful soup
 
 URL_ROOT = 'https://www.caledonia.nc'
@@ -87,10 +87,11 @@ def list_videos(plugin, item_id, program_url, **kwargs):
             ".//div[@class='block-yt-playlist col-lg-4 col-12 mb-4']"):
         video_title = video_datas.find('.//h3').text.strip()
         video_image = video_datas.find(
-            ".//div[@class='bg-img rounded d-flex align-items-center justify-content-center position-relative']"
-        ).get('style')
-        video_image = re.compile(r'url\(\'(.*?)\'').findall(video_image)[0]
-        video_url = 'https:' + video_datas.find('.//a').get('href')
+            ".//div[@class='wrapper-gdpr-yt block-video-yt']"
+        ).get('data-ytthumbnail')
+        video_id = video_datas.find(
+            ".//div[@class='wrapper-gdpr-yt block-video-yt']"
+        ).get('data-ytid')
         # date_value = utils.strip_tags(video_datas.find(".//div[@class='wrap-infos mt-3']")).text
 
         item = Listitem()
@@ -108,7 +109,7 @@ def list_videos(plugin, item_id, program_url, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_url=video_url)
+                          video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -116,10 +117,8 @@ def list_videos(plugin, item_id, program_url, **kwargs):
 @Resolver.register
 def get_video_url(plugin,
                   item_id,
-                  video_url,
+                  video_id,
                   download_mode=False,
                   **kwargs):
 
-    resp = urlquick.get(video_url)
-    video_id = re.compile(r'youtube\.com\/embed\/(.*)\"').findall(resp.text)[0]
     return resolver_proxy.get_stream_youtube(plugin, video_id, download_mode)

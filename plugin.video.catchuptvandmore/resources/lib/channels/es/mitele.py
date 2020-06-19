@@ -26,16 +26,16 @@
 from __future__ import unicode_literals
 
 from builtins import range
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
 import requests
-from resources.lib import urlquick
+import urlquick
 from kodi_six import xbmcgui
 
 # TO DO
@@ -304,7 +304,7 @@ def get_live_url(plugin, item_id, video_id, **kwargs):
                 else:
                     all_datas_videos_path.append(root + '/' + lines[k + 1])
         seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(LABELS['choose_video_quality']),
+            plugin.localize(30709),
             all_datas_videos_quality)
         if seleted_item > -1:
             return all_datas_videos_path[seleted_item]

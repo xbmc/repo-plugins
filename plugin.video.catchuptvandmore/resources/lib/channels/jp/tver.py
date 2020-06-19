@@ -25,15 +25,18 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info
 
+import inputstreamhelper
+import json
 import re
-from resources.lib import urlquick
+import urlquick
 
 # TO DO
 # Add FUJITV Replay in Kodi 18 is out (DRM protected) 'cx' channel
@@ -42,6 +45,13 @@ URL_ROOT = 'https://tver.jp'
 
 URL_REPLAY_BY_TV = URL_ROOT + '/%s'
 # channel
+
+URL_BRIGHTCOVE_POLICY_KEY = 'http://players.brightcove.net/%s/%s_default/index.min.js'
+# AccountId, PlayerId
+
+URL_BRIGHTCOVE_VIDEO_JSON = 'https://edge.api.brightcove.com/'\
+                            'playback/v1/accounts/%s/videos/%s'
+# AccountId, VideoId
 
 
 def replay_entry(plugin, item_id, **kwargs):
@@ -60,7 +70,7 @@ def list_categories(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    category_title = plugin.localize(LABELS['All videos'])
+    category_title = plugin.localize(30701)
     category_url = URL_REPLAY_BY_TV % item_id
 
     item = Listitem()
@@ -95,8 +105,16 @@ def list_videos(plugin, item_id, category_url, **kwargs):
         item.set_callback(get_video_url,
                           item_id=item_id,
                           video_url=video_url)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        item_post_treatment(item, is_playable=True, is_downloadable=False)
         yield item
+
+
+# BRIGHTCOVE Part
+def get_brightcove_policy_key(data_account, data_player):
+    """Get policy key"""
+    file_js = urlquick.get(URL_BRIGHTCOVE_POLICY_KEY %
+                           (data_account, data_player))
+    return re.compile('policyKey:"(.+?)"').findall(file_js.text)[0]
 
 
 @Resolver.register
@@ -105,6 +123,10 @@ def get_video_url(plugin,
                   video_url,
                   download_mode=False,
                   **kwargs):
+
+    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+    if not is_helper.check_inputstream():
+        return False
 
     resp = urlquick.get(video_url,
                         headers={'User-Agent': web_utils.get_random_ua()},
@@ -117,6 +139,40 @@ def get_video_url(plugin,
         data_video_id = stream_datas[4].strip().replace("'", "")
     else:
         data_video_id = 'ref:' + stream_datas[4].strip().replace("'", "")
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id,
-                                                    download_mode)
+
+    # Method to get JSON from 'edge.api.brightcove.com'
+    resp = urlquick.get(
+        URL_BRIGHTCOVE_VIDEO_JSON % (data_account, data_video_id),
+        headers={
+            'User-Agent':
+            web_utils.get_random_ua(),
+            'Accept':
+            'application/json;pk=%s' %
+            (get_brightcove_policy_key(data_account, data_player)),
+            'X-Forwarded-For':
+            plugin.setting.get_string('header_x-forwarded-for')
+        })
+    json_parser = json.loads(resp.text)
+
+    video_url = ''
+    if 'sources' in json_parser:
+        for url in json_parser["sources"]:
+            if 'src' in url:
+                if 'manifest.mpd' in url["src"]:
+                    video_url = url["src"]
+    else:
+        if json_parser[0]['error_code'] == "ACCESS_DENIED":
+            plugin.notify('ERROR', plugin.localize(30713))
+            return False
+
+    if video_url == '':
+        return False
+
+    item = Listitem()
+    item.path = video_url
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
+    item.property['inputstreamaddon'] = 'inputstream.adaptive'
+    item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+    return item

@@ -20,14 +20,14 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from resources.lib.codequick import Route, Resolver, Listitem
+from codequick import Route, Resolver, Listitem
 
-from resources.lib.labels import LABELS
+
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 
 import re
-from resources.lib import urlquick
+import urlquick
 
 # TO DO
 # Download Mode
@@ -45,7 +45,7 @@ def website_entry(plugin, item_id, **kwargs):
 def root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     item = Listitem()
-    item.label = plugin.localize(LABELS['All videos'])
+    item.label = plugin.localize(30701)
     category_url = URL_ROOT + '/search?scope=media&types[0]=video&page=%s'
 
     item.set_callback(list_videos,

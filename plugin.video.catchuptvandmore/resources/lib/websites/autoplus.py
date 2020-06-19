@@ -23,10 +23,10 @@ from __future__ import unicode_literals
 import re
 import json
 
-from resources.lib.codequick import Route, Resolver, Listitem, Script
-from resources.lib import urlquick
+from codequick import Route, Resolver, Listitem, Script
+import urlquick
 
-from resources.lib.labels import LABELS
+
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
@@ -45,7 +45,7 @@ def website_entry(plugin, item_id, **kwargs):
 def root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     item = Listitem()
-    item.label = plugin.localize(LABELS['All videos'])
+    item.label = plugin.localize(30701)
 
     item.set_callback(list_videos, item_id=item_id, page=1)
     item_post_treatment(item)

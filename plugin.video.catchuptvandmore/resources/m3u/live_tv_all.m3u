@@ -116,12 +116,12 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=6
 ##	RMC Story
 ##	rmcstory
 #EXTINF:-1 tvg-id="C1402.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rmcstory.png" group-title="France",RMC Story
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcstory&item_module=resources.lib.channels.fr.rmcstory&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcstory&item_module=resources.lib.channels.fr.rmc&item_dict={}
 
 ##	RMC Découverte
 ##	rmcdecouverte
 #EXTINF:-1 tvg-id="C1400.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rmcdecouverte.png" group-title="France",RMC Découverte
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcdecouverte&item_module=resources.lib.channels.fr.rmcdecouverte&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcdecouverte&item_module=resources.lib.channels.fr.rmc&item_dict={}
 
 ##	Chérie 25
 ##	cherie25
@@ -568,14 +568,14 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=r
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtscouleur3.png" group-title="Switzerland",RTS Couleur 3
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtscouleur3&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
-##	RSI La 1
+##	RTS La 1
 ##	rsila1
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rsila1.png" group-title="Switzerland",RSI La 1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rsila1.png" group-title="Switzerland",RTS La 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rsila1&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
-##	RSI La 2
+##	RTS La 2
 ##	rsila2
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rsila2.png" group-title="Switzerland",RSI La 2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rsila2.png" group-title="Switzerland",RTS La 2
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rsila2&item_module=resources.lib.channels.ch.srgssr&item_dict={}
 
 ##	SRF 1
@@ -1087,6 +1087,11 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=l
 ##	latrois
 #EXTINF:-1 tvg-id="C892.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/latrois.png" group-title="Belgium",La Trois
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=latrois&item_module=resources.lib.channels.be.rtbf&item_dict={}
+
+##	Antenne Centre TV
+##	actv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/actv.png" group-title="Belgium",Antenne Centre TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=actv&item_module=resources.lib.channels.be.actv&item_dict={}
 
 
 
@@ -1707,6 +1712,211 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=c
 ##	crtvnews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cm/crtvnews.png" group-title="Cameroon",CRTV News
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=crtvnews&item_module=resources.lib.channels.cm.crtv&item_dict={}
+
+
+
+# Slovenia
+# si_live
+
+##	TV SLO 1
+##	slo1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/slo1.png" group-title="Slovenia",TV SLO 1
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=slo1&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+##	TV SLO 2
+##	slo2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/slo2.png" group-title="Slovenia",TV SLO 2
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=slo2&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+##	TV SLO 3
+##	slo3
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/slo3.png" group-title="Slovenia",TV SLO 3
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=slo3&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+##	Koper
+##	koper
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/koper.png" group-title="Slovenia",Koper
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=koper&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+##	Maribor
+##	maribor
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/maribor.png" group-title="Slovenia",Maribor
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=maribor&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+##	MMC
+##	mmc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/mmc.png" group-title="Slovenia",MMC
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=mmc&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+
+
+# Ethiopia
+# et_live
+
+##	ECTV
+##	ectv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/ectv.png" group-title="Ethiopia",ECTV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ectv&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Amhara TV
+##	amma
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/amma.png" group-title="Ethiopia",Amhara TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=amma&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Fana TV
+##	fbctv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/fbctv.png" group-title="Ethiopia",Fana TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=fbctv&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Walta TV
+##	walta
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/walta.png" group-title="Ethiopia",Walta TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=walta&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	EBC ZENA
+##	etvz
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/etvz.png" group-title="Ethiopia",EBC ZENA
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=etvz&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	EBC MEZINAGNA
+##	etvm
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/etvm.png" group-title="Ethiopia",EBC MEZINAGNA
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=etvm&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	EBC QUANQUAWOCH
+##	etvq
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/etvq.png" group-title="Ethiopia",EBC QUANQUAWOCH
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=etvq&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	LTV
+##	ltv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/ltv.png" group-title="Ethiopia",LTV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ltv&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	ARTS TV
+##	arts
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/arts.png" group-title="Ethiopia",ARTS TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arts&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	MoE
+##	moe
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/moe.png" group-title="Ethiopia",MoE
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=moe&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Nahoo TV
+##	nahoo
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/nahoo.png" group-title="Ethiopia",Nahoo TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nahoo&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	OBN
+##	obn
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/obn.png" group-title="Ethiopia",OBN
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=obn&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	OBS
+##	obs
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/obs.png" group-title="Ethiopia",OBS
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=obs&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Tigrai TV
+##	tigrai
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/tigrai.png" group-title="Ethiopia",Tigrai TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tigrai&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	JTV ETHIOPIA
+##	jtv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/jtv.png" group-title="Ethiopia",JTV ETHIOPIA
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=jtv&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	ESAT
+##	esat
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/esat.png" group-title="Ethiopia",ESAT
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=esat&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	OMN
+##	omn
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/omn.png" group-title="Ethiopia",OMN
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=omn&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Aleph TV
+##	aleph
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/aleph.png" group-title="Ethiopia",Aleph TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=aleph&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Bisrat TV
+##	bisrat
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/bisrat.png" group-title="Ethiopia",Bisrat TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bisrat&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	ONN TV
+##	onn
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/onn.png" group-title="Ethiopia",ONN TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=onn&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	DW TV
+##	dws
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/dws.png" group-title="Ethiopia",DW TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dws&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Addis TV
+##	adis
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/adis.png" group-title="Ethiopia",Addis TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=adis&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	ES TV
+##	estv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/estv.png" group-title="Ethiopia",ES TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=estv&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Southern TV
+##	south
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/south.png" group-title="Ethiopia",Southern TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=south&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Eritrea TV
+##	eritr
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/eritr.png" group-title="Ethiopia",Eritrea TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=eritr&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Afrihealth
+##	afri
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/afri.png" group-title="Ethiopia",Afrihealth
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=afri&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Asham TV
+##	asham
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/asham.png" group-title="Ethiopia",Asham TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=asham&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Ahadu TV
+##	ahadu
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/ahadu.png" group-title="Ethiopia",Ahadu TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ahadu&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Balageru
+##	balage
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/balage.png" group-title="Ethiopia",Balageru
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=balage&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	AVA TV
+##	ava
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/ava.png" group-title="Ethiopia",AVA TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ava&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	ASRAT MEDIA
+##	asrat
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/asrat.png" group-title="Ethiopia",ASRAT MEDIA
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=asrat&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Holy Spirit TV
+##	holys
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/holys.png" group-title="Ethiopia",Holy Spirit TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=holys&item_module=resources.lib.channels.et.video2b&item_dict={}
+
+##	Glory of GOD TV
+##	gloryg
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/gloryg.png" group-title="Ethiopia",Glory of GOD TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=gloryg&item_module=resources.lib.channels.et.video2b&item_dict={}
 
 
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.21" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.22" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.codequick" version="0.9.12"/>
     <import addon="script.module.youtube.dl" version="18.225.0"/>
     <import addon="script.module.requests" version="2.12.4"/>
     <import addon="script.module.pytz" version="2014.2"/>
@@ -11,7 +12,6 @@
     <import addon="script.module.tzlocal" version="2.0.0"/>
     <import addon="script.module.future" version="0.17.1"/>
     <import addon="script.module.kodi-six" version="0.0.4"/>
-    <import addon="script.module.htmlement" version="0.2.3"/>
     <import addon="resource.images.catchuptvandmore" version="1.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
@@ -42,15 +42,23 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.21]
-[Fix/Add] Catch-up TV - Japaneses channels (JP)
-[Add] Catch-up TV - Télé Grenoble (FR)
-[Fix] Catch-up TV - Arte (WO)
-[Fix] Add check for download mode
-[Fix] Disable reuselanguageinvoker to fix Youtube-DL download feature
-[Fix] Catch-up TV - La 1ère (FR)
-[Other] Include Codequick framework
-[Fix] Live TV - RTLPLAY BE (BE)
+[Version 0.2.22]
+[Fix/Improve] Website - INA
+[Fix] Catch-up - TVER (JP)
+[Fix] Live TV - Télé Quebec (CA)
+[Improve] France TV - Add default sorting order (fix #302)
+[Add] Live TV - RTVSLO channels (SI) (fix #308)
+[Fix] Catch-up - Africa 24 (WO)
+[Fix] Catch-up - NHK World (WO)
+[Remove] Catch-up - 6play 100% Foot (FR)
+[Fix] Catch-up - LCI (FR) - Missing video title
+[Fix] Catch-up - TBS News (JP) - Still need work for the image
+[Fix] Catch-up - GameOne (FR)
+[Fix] Catch-up - Paramount Channel (FR)
+[Fix] Catch-up - Caledonia (FR)
+[Add] Live TV - Ethiopian channels (ET) (fix #305)
+[Merge] RMC Story and RMC Découverte module (FR)
+[Add] Live TV - Antenne Centre TV (BE) (fix #286)
     </news>
     <assets>
       <icon>icon.png</icon>

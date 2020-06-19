@@ -188,6 +188,14 @@ msgctxt "#30064"
 msgid "Cameroon"
 msgstr ""
 
+msgctxt "#30065"
+msgid "Slovenia"
+msgstr ""
+
+msgctxt "#30066"
+msgid "Ethiopia"
+msgstr ""
+
 
 # Channels (from 30080 to 30129)
 
@@ -250,6 +258,14 @@ msgstr "Chinese kanalen"
 msgctxt "#30094"
 msgid "Cameroon channels"
 msgstr "Cameroon kanalen"
+
+msgctxt "#30095"
+msgid "Slovenian channels"
+msgstr ""
+
+msgctxt "#30096"
+msgid "Ethiopian channels"
+msgstr ""
 
 # Websites (from 30130 to 30149)
 

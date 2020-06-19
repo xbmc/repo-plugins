@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script, utils
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'telequebec': {
         'callback': 'live_bridge',
+        'label': 'Télé-Québec',
         'thumb': 'channels/ca/telequebec.png',
         'fanart': 'channels/ca/telequebec_fanart.jpg',
         'module': 'resources.lib.channels.ca.telequebec',
@@ -47,6 +48,7 @@ menu = {
     },
     'tva': {
         'callback': 'live_bridge',
+        'label': 'TVA',
         'thumb': 'channels/ca/tva.png',
         'fanart': 'channels/ca/tva_fanart.jpg',
         'module': 'resources.lib.channels.ca.tva',
@@ -55,6 +57,7 @@ menu = {
     },
     'icitele': {
         'callback': 'live_bridge',
+        'label': 'ICI Télé (' + utils.ensure_unicode(Script.setting['icitele.language']) + ')',
         'thumb': 'channels/ca/icitele.png',
         'fanart': 'channels/ca/icitele_fanart.jpg',
         'module': 'resources.lib.channels.ca.icitele',
@@ -68,6 +71,7 @@ menu = {
     },
     'ntvca': {
         'callback': 'live_bridge',
+        'label': 'NTV',
         'thumb': 'channels/ca/ntvca.png',
         'fanart': 'channels/ca/ntvca_fanart.jpg',
         'module': 'resources.lib.channels.ca.ntvca',
@@ -76,6 +80,7 @@ menu = {
     },
     'telemag': {
         'callback': 'live_bridge',
+        'label': 'Télé-Mag',
         'thumb': 'channels/ca/telemag.png',
         'fanart': 'channels/ca/telemag_fanart.jpg',
         'module': 'resources.lib.channels.ca.telemag',
@@ -84,6 +89,7 @@ menu = {
     },
     'vtele': {
         'callback': 'live_bridge',
+        'label': 'V Télé',
         'thumb': 'channels/ca/vtele.png',
         'fanart': 'channels/ca/vtele_fanart.jpg',
         'module': 'resources.lib.channels.ca.noovo',
@@ -92,6 +98,7 @@ menu = {
     },
     'cbc': {
         'callback': 'live_bridge',
+        'label': 'CBC (' + utils.ensure_unicode(Script.setting['cbc.language']) + ')',
         'thumb': 'channels/ca/cbc.png',
         'fanart': 'channels/ca/cbc_fanart.jpg',
         'module': 'resources.lib.channels.ca.cbc',
@@ -106,6 +113,7 @@ menu = {
     },
     'lcn': {
         'callback': 'live_bridge',
+        'label': 'LCN',
         'thumb': 'channels/ca/lcn.png',
         'fanart': 'channels/ca/lcn_fanart.jpg',
         'module': 'resources.lib.channels.ca.tva',
@@ -114,6 +122,7 @@ menu = {
     },
     'yoopa': {
         'callback': 'live_bridge',
+        'label': 'Yoopa',
         'thumb': 'channels/ca/yoopa.png',
         'fanart': 'channels/ca/yoopa_fanart.jpg',
         'module': 'resources.lib.channels.ca.tva',

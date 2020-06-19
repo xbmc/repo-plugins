@@ -38,24 +38,28 @@ the addon's tree architecture.
 menu = {
     'live_tv': {
         'callback': 'generic_menu',
+        'label': 30030,
         'thumb': 'live_tv.png',
         'enabled': True,
         'order': 1
     },
     'replay': {
         'callback': 'generic_menu',
+        'label': 30031,
         'thumb': 'replay.png',
         'enabled': True,
         'order': 2
     },
     'websites': {
         'callback': 'generic_menu',
+        'label': 30032,
         'thumb': 'websites.png',
         'enabled': True,
         'order': 3
     },
     'favourites': {
         'callback': 'favourites',
+        'label': 30033,
         'thumb': 'favourites.png',
         'enabled': True,
         'order': 4

@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'la7': {
         'callback': 'replay_bridge',
+        'label': 'La7',
         'thumb': 'channels/it/la7.png',
         'fanart': 'channels/it/la7_fanart.jpg',
         'module': 'resources.lib.channels.it.la7',
@@ -47,6 +48,7 @@ menu = {
     },
     'la7d': {
         'callback': 'replay_bridge',
+        'label': 'La7d',
         'thumb': 'channels/it/la7d.png',
         'fanart': 'channels/it/la7d_fanart.jpg',
         'module': 'resources.lib.channels.it.la7',
@@ -55,6 +57,7 @@ menu = {
     },
     'raiplay': {
         'callback': 'replay_bridge',
+        'label': 'Rai Play',
         'thumb': 'channels/it/raiplay.png',
         'fanart': 'channels/it/raiplay_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',

@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'npo-start': {
         'callback': 'replay_bridge',
+        'label': 'NPO Start',
         'thumb': 'channels/nl/npostart.png',
         'fanart': 'channels/nl/npostart_fanart.jpg',
         'module': 'resources.lib.channels.nl.npo',
@@ -47,6 +48,7 @@ menu = {
     },
     'at5': {
         'callback': 'replay_bridge',
+        'label': 'AT5',
         'thumb': 'channels/nl/at5.png',
         'fanart': 'channels/nl/at5_fanart.jpg',
         'module': 'resources.lib.channels.nl.at5',

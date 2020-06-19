@@ -27,7 +27,7 @@ from __future__ import unicode_literals
 
 import os
 from kodi_six import xbmcvfs
-from resources.lib.codequick import Script
+from codequick import Script
 from resources.lib.addon_utils import get_quality_YTDL
 from resources.lib.kodi_utils import get_selected_item_label
 

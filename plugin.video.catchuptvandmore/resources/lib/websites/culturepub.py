@@ -23,11 +23,11 @@ from __future__ import unicode_literals
 import re
 import json
 
-from resources.lib.codequick import Route, Resolver, Listitem, Script
-from resources.lib import urlquick
+from codequick import Route, Resolver, Listitem, Script
+import urlquick
 from kodi_six import xbmcgui
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
@@ -238,7 +238,7 @@ def get_video_url(plugin,
     url = ''
     if desired_quality == "DIALOG":
         seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(LABELS['choose_video_quality']),
+            plugin.localize(30709),
             all_datas_videos_quality)
         if seleted_item == -1:
             url = ''

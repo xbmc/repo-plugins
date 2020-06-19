@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script, utils
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'telecinco': {
         'callback': 'live_bridge',
+        'label': 'Telecinco',
         'thumb': 'channels/es/telecinco.png',
         'fanart': 'channels/es/telecinco_fanart.jpg',
         'module': 'resources.lib.channels.es.mitele',
@@ -47,6 +48,7 @@ menu = {
     },
     'cuatro': {
         'callback': 'live_bridge',
+        'label': 'Cuatro',
         'thumb': 'channels/es/cuatro.png',
         'fanart': 'channels/es/cuatro_fanart.jpg',
         'module': 'resources.lib.channels.es.mitele',
@@ -55,6 +57,7 @@ menu = {
     },
     'fdf': {
         'callback': 'live_bridge',
+        'label': 'Factoria de Ficcion',
         'thumb': 'channels/es/fdf.png',
         'fanart': 'channels/es/fdf_fanart.jpg',
         'module': 'resources.lib.channels.es.mitele',
@@ -63,6 +66,7 @@ menu = {
     },
     'boing': {
         'callback': 'live_bridge',
+        'label': 'Boing',
         'thumb': 'channels/es/boing.png',
         'fanart': 'channels/es/boing_fanart.jpg',
         'module': 'resources.lib.channels.es.mitele',
@@ -71,6 +75,7 @@ menu = {
     },
     'energy': {
         'callback': 'live_bridge',
+        'label': 'Energy TV',
         'thumb': 'channels/es/energy.png',
         'fanart': 'channels/es/energy_fanart.jpg',
         'module': 'resources.lib.channels.es.mitele',
@@ -79,6 +84,7 @@ menu = {
     },
     'divinity': {
         'callback': 'live_bridge',
+        'label': 'Divinity',
         'thumb': 'channels/es/divinity.png',
         'fanart': 'channels/es/divinity_fanart.jpg',
         'module': 'resources.lib.channels.es.mitele',
@@ -87,6 +93,7 @@ menu = {
     },
     'bemad': {
         'callback': 'live_bridge',
+        'label': 'Be Mad',
         'thumb': 'channels/es/bemad.png',
         'fanart': 'channels/es/bemad_fanart.jpg',
         'module': 'resources.lib.channels.es.mitele',
@@ -95,6 +102,7 @@ menu = {
     },
     'realmadridtv': {
         'callback': 'live_bridge',
+        'label': 'Realmadrid TV (' + utils.ensure_unicode(Script.setting['realmadridtv.language']) + ')',
         'thumb': 'channels/es/realmadridtv.png',
         'fanart': 'channels/es/realmadridtv_fanart.jpg',
         'module': 'resources.lib.channels.es.realmadridtv',
@@ -104,6 +112,7 @@ menu = {
     },
     'paramountchannel_es': {
         'callback': 'live_bridge',
+        'label': 'Paramount Channel (ES)',
         'thumb': 'channels/es/paramountchannel_es.png',
         'fanart': 'channels/es/paramountchannel_es_fanart.jpg',
         'module': 'resources.lib.channels.es.paramountchannel_es',

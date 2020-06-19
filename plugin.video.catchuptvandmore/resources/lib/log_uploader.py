@@ -31,10 +31,8 @@ from kodi_six import xbmcvfs
 from kodi_six import xbmcgui
 import pyqrcode
 
-from resources.lib.codequick import Script
-from resources.lib import urlquick
-
-from resources.lib.labels import LABELS
+from codequick import Script
+import urlquick
 
 PROFILE = Script.get_info('profile')
 CWD = Script.get_info('path')
@@ -124,7 +122,7 @@ def ask_to_share_log():
     or by sharing the pastebin URL by mail,
     on github or forum
     """
-    r = xbmcgui.Dialog().yesno(Script.localize(LABELS['Information']),
+    r = xbmcgui.Dialog().yesno(Script.localize(30600),
                                Script.localize(30860))
     if not r:
         return
@@ -159,7 +157,7 @@ def ask_to_share_log():
 
     if print_error:
         xbmcgui.Dialog().ok(
-            Script.localize(LABELS['Information']),
+            Script.localize(30600),
             Script.localize(30862) + ': ' + error_message)
 
     return

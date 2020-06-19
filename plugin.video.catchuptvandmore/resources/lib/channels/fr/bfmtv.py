@@ -28,9 +28,9 @@ from __future__ import division
 
 from builtins import str
 import sys
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib import download
@@ -40,7 +40,7 @@ from resources.lib.py_utils import old_div
 import json
 import time
 import re
-from resources.lib import urlquick
+import urlquick
 from kodi_six import xbmcgui
 
 # TO DO
@@ -186,7 +186,7 @@ def get_video_url(plugin,
             all_datas_videos_path.append(datas['video_url'])
 
         seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(LABELS['choose_video_quality']),
+            plugin.localize(30709),
             all_datas_videos_quality)
 
         if seleted_item > -1:

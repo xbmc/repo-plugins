@@ -37,12 +37,11 @@ try:
 except ImportError:
     from urlparse import urlunsplit
 
-from resources.lib.codequick.script import Script
-from resources.lib.codequick.utils import ensure_native_str, parse_qs
+from codequick.script import Script
+from codequick.utils import ensure_native_str, parse_qs
 
 from kodi_six import xbmc
 
-from resources.lib.labels import LABELS
 
 PY3 = sys.version_info[0] >= 3
 

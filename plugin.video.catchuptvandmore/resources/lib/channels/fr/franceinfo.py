@@ -27,9 +27,9 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib import download
@@ -38,7 +38,7 @@ from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_la
 
 import json
 import time
-from resources.lib import urlquick
+import urlquick
 from kodi_six import xbmcgui
 '''
 Channels:
@@ -190,7 +190,7 @@ def list_videos(plugin, item_id, next_url, page, **kwargs):
                                  next_url=next_url,
                                  page=str(int(page) + 1))
     else:
-        plugin.notify(plugin.localize(LABELS['No videos found']), '')
+        plugin.notify(plugin.localize(30718), '')
         yield False
 
 
@@ -235,7 +235,7 @@ def get_video_url(plugin,
             for url in urls:
                 items.append(url[0])
             seleted_item = xbmcgui.Dialog().select(
-                plugin.localize(LABELS['choose_video_quality']), items)
+                plugin.localize(30709), items)
 
             if seleted_item == -1:
                 return False

@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'rtl_tvi': {
         'callback': 'live_bridge',
+        'label': 'RTL-TVI',
         'thumb': 'channels/be/rtltvi.png',
         'fanart': 'channels/be/rtltvi_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -49,6 +50,7 @@ menu = {
     },
     'plug_rtl': {
         'callback': 'live_bridge',
+        'label': 'PLUG RTL',
         'thumb': 'channels/be/plugrtl.png',
         'fanart': 'channels/be/plugrtl_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -59,6 +61,7 @@ menu = {
     },
     'club_rtl': {
         'callback': 'live_bridge',
+        'label': 'CLUB RTL',
         'thumb': 'channels/be/clubrtl.png',
         'fanart': 'channels/be/clubrtl_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -69,6 +72,7 @@ menu = {
     },
     'telemb': {
         'callback': 'live_bridge',
+        'label': 'Télé MB',
         'thumb': 'channels/be/telemb.png',
         'fanart': 'channels/be/telemb_fanart.jpg',
         'module': 'resources.lib.channels.be.telemb',
@@ -78,6 +82,7 @@ menu = {
     },
     'rtc': {
         'callback': 'live_bridge',
+        'label': 'RTC Télé Liège',
         'thumb': 'channels/be/rtc.png',
         'fanart': 'channels/be/rtc_fanart.jpg',
         'module': 'resources.lib.channels.be.rtc',
@@ -87,6 +92,7 @@ menu = {
     },
     'auvio': {
         'callback': 'multi_live_bridge',
+        'label': 'RTBF Auvio',
         'thumb': 'channels/be/auvio.png',
         'fanart': 'channels/be/auvio_fanart.jpg',
         'module': 'resources.lib.channels.be.rtbf',
@@ -95,6 +101,7 @@ menu = {
     },
     'tvlux': {
         'callback': 'live_bridge',
+        'label': 'TV Lux',
         'thumb': 'channels/be/tvlux.png',
         'fanart': 'channels/be/tvlux_fanart.jpg',
         'module': 'resources.lib.channels.be.tvlux',
@@ -104,6 +111,7 @@ menu = {
     },
     'rtl_info': {
         'callback': 'live_bridge',
+        'label': 'RTL INFO',
         'thumb': 'channels/be/rtlinfo.png',
         'fanart': 'channels/be/rtlinfo_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -113,6 +121,7 @@ menu = {
     },
     'bel_rtl': {
         'callback': 'live_bridge',
+        'label': 'BEL RTL',
         'thumb': 'channels/be/belrtl.png',
         'fanart': 'channels/be/belrtl_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -122,6 +131,7 @@ menu = {
     },
     'contact': {
         'callback': 'live_bridge',
+        'label': 'Contact',
         'thumb': 'channels/be/contact.png',
         'fanart': 'channels/be/contact_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -131,6 +141,7 @@ menu = {
     },
     'bx1': {
         'callback': 'live_bridge',
+        'label': 'BX1',
         'thumb': 'channels/be/bx1.png',
         'fanart': 'channels/be/bx1_fanart.jpg',
         'module': 'resources.lib.channels.be.bx1',
@@ -140,6 +151,7 @@ menu = {
     },
     'een': {
         'callback': 'live_bridge',
+        'label': 'Één',
         'thumb': 'channels/be/een.png',
         'fanart': 'channels/be/een_fanart.jpg',
         'module': 'resources.lib.channels.be.vrt',
@@ -150,6 +162,7 @@ menu = {
     },
     'canvas': {
         'callback': 'live_bridge',
+        'label': 'Canvas',
         'thumb': 'channels/be/canvas.png',
         'fanart': 'channels/be/canvas_fanart.jpg',
         'module': 'resources.lib.channels.be.vrt',
@@ -159,6 +172,7 @@ menu = {
     },
     'ketnet': {
         'callback': 'live_bridge',
+        'label': 'Ketnet',
         'thumb': 'channels/be/ketnet.png',
         'fanart': 'channels/be/ketnet_fanart.jpg',
         'module': 'resources.lib.channels.be.vrt',
@@ -169,6 +183,7 @@ menu = {
     },
     'nrjhitstvbe': {
         'callback': 'live_bridge',
+        'label': 'NRJ Hits TV',
         'thumb': 'channels/be/nrjhitstvbe.png',
         'fanart': 'channels/be/nrjhitstvbe_fanart.jpg',
         'module': 'resources.lib.channels.be.nrjhitstvbe',
@@ -178,6 +193,7 @@ menu = {
     },
     'rtl_sport': {
         'callback': 'live_bridge',
+        'label': 'RTL Sport',
         'thumb': 'channels/be/rtlsport.png',
         'fanart': 'channels/be/rtlsport_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -187,6 +203,7 @@ menu = {
     },
     'tvcom': {
         'callback': 'live_bridge',
+        'label': 'TV Com',
         'thumb': 'channels/be/tvcom.png',
         'fanart': 'channels/be/tvcom_fanart.jpg',
         'module': 'resources.lib.channels.be.tvcom',
@@ -196,6 +213,7 @@ menu = {
     },
     'canalc': {
         'callback': 'live_bridge',
+        'label': 'Canal C',
         'thumb': 'channels/be/canalc.png',
         'fanart': 'channels/be/canalc_fanart.jpg',
         'module': 'resources.lib.channels.be.canalc',
@@ -205,6 +223,7 @@ menu = {
     },
     'abxplore': {
         'callback': 'live_bridge',
+        'label': 'ABXPLORE',
         'thumb': 'channels/be/abxplore.png',
         'fanart': 'channels/be/abxplore_fanart.jpg',
         'module': 'resources.lib.channels.be.abbe',
@@ -214,6 +233,7 @@ menu = {
     },
     'ab3': {
         'callback': 'live_bridge',
+        'label': 'AB3',
         'thumb': 'channels/be/ab3.png',
         'fanart': 'channels/be/ab3_fanart.jpg',
         'module': 'resources.lib.channels.be.abbe',
@@ -223,6 +243,7 @@ menu = {
     },
     'ln24': {
         'callback': 'live_bridge',
+        'label': 'LN24',
         'thumb': 'channels/be/ln24.png',
         'fanart': 'channels/be/ln24_fanart.jpg',
         'module': 'resources.lib.channels.be.ln24',
@@ -232,6 +253,7 @@ menu = {
     },
     'laune': {
         'callback': 'live_bridge',
+        'label': 'La Une',
         'thumb': 'channels/be/laune.png',
         'fanart': 'channels/be/laune_fanart.jpg',
         'module': 'resources.lib.channels.be.rtbf',
@@ -241,6 +263,7 @@ menu = {
     },
     'ladeux': {
         'callback': 'live_bridge',
+        'label': 'La Deux',
         'thumb': 'channels/be/ladeux.png',
         'fanart': 'channels/be/ladeux_fanart.jpg',
         'module': 'resources.lib.channels.be.rtbf',
@@ -250,11 +273,21 @@ menu = {
     },
     'latrois': {
         'callback': 'live_bridge',
+        'label': 'La Trois',
         'thumb': 'channels/be/latrois.png',
         'fanart': 'channels/be/latrois_fanart.jpg',
         'module': 'resources.lib.channels.be.rtbf',
         'xmltv_id': 'C892.api.telerama.fr',
         'enabled': True,
         'order': 26
+    },
+    'actv': {
+        'callback': 'live_bridge',
+        'label': 'Antenne Centre TV',
+        'thumb': 'channels/be/actv.png',
+        'fanart': 'channels/be/actv_fanart.jpg',
+        'module': 'resources.lib.channels.be.actv',
+        'enabled': True,
+        'order': 27
     }
 }

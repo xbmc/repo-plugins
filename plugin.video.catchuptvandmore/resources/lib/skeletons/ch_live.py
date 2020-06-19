@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'rougetv': {
         'callback': 'live_bridge',
+        'label': 'Rouge TV',
         'thumb': 'channels/ch/rougetv.png',
         'fanart': 'channels/ch/rougetv_fanart.jpg',
         'module': 'resources.lib.channels.ch.rougetv',
@@ -47,6 +48,7 @@ menu = {
     },
     'tvm3': {
         'callback': 'live_bridge',
+        'label': 'TVM3',
         'thumb': 'channels/ch/tvm3.png',
         'fanart': 'channels/ch/tvm3_fanart.jpg',
         'module': 'resources.lib.channels.ch.tvm3',
@@ -55,6 +57,7 @@ menu = {
     },
     'rtsun': {
         'callback': 'live_bridge',
+        'label': 'RTS Un',
         'thumb': 'channels/ch/rtsun.png',
         'fanart': 'channels/ch/rtsun_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -63,6 +66,7 @@ menu = {
     },
     'rtsdeux': {
         'callback': 'live_bridge',
+        'label': 'RTS Deux',
         'thumb': 'channels/ch/rtsdeux.png',
         'fanart': 'channels/ch/rtsdeux_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -71,6 +75,7 @@ menu = {
     },
     'rtsinfo': {
         'callback': 'live_bridge',
+        'label': 'RTS Info',
         'thumb': 'channels/ch/rtsinfo.png',
         'fanart': 'channels/ch/rtsinfo_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -79,6 +84,7 @@ menu = {
     },
     'rtscouleur3': {
         'callback': 'live_bridge',
+        'label': 'RTS Couleur 3',
         'thumb': 'channels/ch/rtscouleur3.png',
         'fanart': 'channels/ch/rtscouleur3_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -87,6 +93,7 @@ menu = {
     },
     'rsila1': {
         'callback': 'live_bridge',
+        'label': 'RTS La 1',
         'thumb': 'channels/ch/rsila1.png',
         'fanart': 'channels/ch/rsila1_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -95,6 +102,7 @@ menu = {
     },
     'rsila2': {
         'callback': 'live_bridge',
+        'label': 'RTS La 2',
         'thumb': 'channels/ch/rsila2.png',
         'fanart': 'channels/ch/rsila2_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -103,6 +111,7 @@ menu = {
     },
     'srf1': {
         'callback': 'live_bridge',
+        'label': 'SRF 1',
         'thumb': 'channels/ch/srf1.png',
         'fanart': 'channels/ch/srf1_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -111,6 +120,7 @@ menu = {
     },
     'srfinfo': {
         'callback': 'live_bridge',
+        'label': 'SRF Info',
         'thumb': 'channels/ch/srfinfo.png',
         'fanart': 'channels/ch/srfinfo_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -119,6 +129,7 @@ menu = {
     },
     'srfzwei': {
         'callback': 'live_bridge',
+        'label': 'SRF Zwei',
         'thumb': 'channels/ch/srfzwei.png',
         'fanart': 'channels/ch/srfzwei_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -127,6 +138,7 @@ menu = {
     },
     'rtraufsrf1': {
         'callback': 'live_bridge',
+        'label': 'RTR auf SRF 1',
         'thumb': 'channels/ch/rtraufsrf1.png',
         'fanart': 'channels/ch/rtraufsrf1_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -135,6 +147,7 @@ menu = {
     },
     'rtraufsrfinfo': {
         'callback': 'live_bridge',
+        'label': 'RTR auf SRF Info',
         'thumb': 'channels/ch/rtraufsrfinfo.png',
         'fanart': 'channels/ch/rtraufsrfinfo_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -143,6 +156,7 @@ menu = {
     },
     'rtraufsrf2': {
         'callback': 'live_bridge',
+        'label': 'RTR auf SRF 2',
         'thumb': 'channels/ch/rtraufsrf2.png',
         'fanart': 'channels/ch/rtraufsrf2_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -151,6 +165,7 @@ menu = {
     },
     'teleticino': {
         'callback': 'live_bridge',
+        'label': 'Teleticino',
         'thumb': 'channels/ch/teleticino.png',
         'fanart': 'channels/ch/teleticino_fanart.jpg',
         'module': 'resources.lib.channels.ch.teleticino',
@@ -159,6 +174,7 @@ menu = {
     },
     'lemanbleu': {
         'callback': 'live_bridge',
+        'label': 'Léman Bleu',
         'thumb': 'channels/ch/lemanbleu.png',
         'fanart': 'channels/ch/lemanbleu_fanart.jpg',
         'module': 'resources.lib.channels.ch.lemanbleu',
@@ -167,6 +183,7 @@ menu = {
     },
     'telem1': {
         'callback': 'live_bridge',
+        'label': 'Tele M1',
         'thumb': 'channels/ch/telem1.png',
         'fanart': 'channels/ch/telem1_fanart.jpg',
         'module': 'resources.lib.channels.ch.telem1',

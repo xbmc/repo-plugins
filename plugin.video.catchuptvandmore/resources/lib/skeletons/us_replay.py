@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'tbd': {
         'callback': 'replay_bridge',
+        'label': 'TBD',
         'thumb': 'channels/us/tbd.png',
         'fanart': 'channels/us/tbd_fanart.jpg',
         'module': 'resources.lib.channels.us.tbd',
@@ -47,6 +48,7 @@ menu = {
     },
     'nycmedia': {
         'callback': 'replay_bridge',
+        'label': 'NYC Media',
         'thumb': 'channels/us/nycmedia.png',
         'fanart': 'channels/us/nycmedia_fanart.jpg',
         'module': 'resources.lib.channels.us.nycmedia',
@@ -55,6 +57,7 @@ menu = {
     },
     'abcnews': {
         'callback': 'replay_bridge',
+        'label': 'ABC News',
         'thumb': 'channels/us/abcnews.png',
         'fanart': 'channels/us/abcnews_fanart.jpg',
         'module': 'resources.lib.channels.us.abcnews',

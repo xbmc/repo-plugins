@@ -1,0 +1,35 @@
+#EXTM3U tvg-shift=0
+
+# Slovenia
+# si_live
+
+##	TV SLO 1
+##	slo1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/slo1.png" group-title="Slovenia",TV SLO 1
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=slo1&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+##	TV SLO 2
+##	slo2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/slo2.png" group-title="Slovenia",TV SLO 2
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=slo2&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+##	TV SLO 3
+##	slo3
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/slo3.png" group-title="Slovenia",TV SLO 3
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=slo3&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+##	Koper
+##	koper
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/koper.png" group-title="Slovenia",Koper
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=koper&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+##	Maribor
+##	maribor
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/maribor.png" group-title="Slovenia",Maribor
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=maribor&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+
+##	MMC
+##	mmc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/si/mmc.png" group-title="Slovenia",MMC
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=mmc&item_module=resources.lib.channels.si.rtvslo&item_dict={}
+

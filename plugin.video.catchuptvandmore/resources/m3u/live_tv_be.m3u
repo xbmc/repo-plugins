@@ -118,3 +118,8 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=l
 #EXTINF:-1 tvg-id="C892.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/latrois.png" group-title="Belgium",La Trois
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=latrois&item_module=resources.lib.channels.be.rtbf&item_dict={}
 
+##	Antenne Centre TV
+##	actv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/actv.png" group-title="Belgium",Antenne Centre TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=actv&item_module=resources.lib.channels.be.actv&item_dict={}
+

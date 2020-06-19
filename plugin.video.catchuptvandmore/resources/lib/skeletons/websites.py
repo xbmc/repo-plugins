@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'allocine': {
         'callback': 'website_bridge',
+        'label': 'Allociné',
         'thumb': 'websites/allocine.png',
         'fanart': 'websites/allocine_fanart.jpg',
         'module': 'resources.lib.websites.allocine',
@@ -47,6 +48,7 @@ menu = {
     },
     'tetesaclaques': {
         'callback': 'website_bridge',
+        'label': 'Au pays des Têtes à claques',
         'thumb': 'websites/tetesaclaques.png',
         'fanart': 'websites/tetesaclaques_fanart.jpg',
         'module': 'resources.lib.websites.tetesaclaques',
@@ -55,6 +57,7 @@ menu = {
     },
     'taratata': {
         'callback': 'website_bridge',
+        'label': 'Taratata',
         'thumb': 'websites/taratata.png',
         'fanart': 'websites/taratata_fanart.jpg',
         'module': 'resources.lib.websites.taratata',
@@ -63,6 +66,7 @@ menu = {
     },
     'noob': {
         'callback': 'website_bridge',
+        'label': 'Noob TV',
         'thumb': 'websites/noob.png',
         'fanart': 'websites/noob_fanart.jpg',
         'module': 'resources.lib.websites.noob',
@@ -71,6 +75,7 @@ menu = {
     },
     'culturepub': {
         'callback': 'website_bridge',
+        'label': 'Culturepub',
         'thumb': 'websites/culturepub.png',
         'fanart': 'websites/culturepub_fanart.jpg',
         'module': 'resources.lib.websites.culturepub',
@@ -79,6 +84,7 @@ menu = {
     },
     'autoplus': {
         'callback': 'website_bridge',
+        'label': 'Auto Plus',
         'thumb': 'websites/autoplus.png',
         'fanart': 'websites/autoplus_fanart.jpg',
         'module': 'resources.lib.websites.autoplus',
@@ -87,6 +93,7 @@ menu = {
     },
     'notrehistoirech': {
         'callback': 'website_bridge',
+        'label': 'Notre Histoire',
         'thumb': 'websites/notrehistoirech.png',
         'fanart': 'websites/notrehistoirech_fanart.jpg',
         'module': 'resources.lib.websites.notrehistoirech',
@@ -95,6 +102,7 @@ menu = {
     },
     '30millionsdamis': {
         'callback': 'website_bridge',
+        'label': '30 Millions d\'Amis',
         'thumb': 'websites/30millionsdamis.png',
         'fanart': 'websites/30millionsdamis_fanart.jpg',
         'module': 'resources.lib.websites.30millionsdamis',
@@ -103,6 +111,7 @@ menu = {
     },
     'elle': {
         'callback': 'website_bridge',
+        'label': 'Elle',
         'thumb': 'websites/elle.png',
         'fanart': 'websites/elle_fanart.jpg',
         'module': 'resources.lib.websites.elle',
@@ -111,6 +120,7 @@ menu = {
     },
     'nytimes': {
         'callback': 'website_bridge',
+        'label': 'New York Times',
         'thumb': 'websites/nytimes.png',
         'fanart': 'websites/nytimes_fanart.jpg',
         'module': 'resources.lib.websites.nytimes',
@@ -119,6 +129,7 @@ menu = {
     },
     'fosdem': {
         'callback': 'website_bridge',
+        'label': 'Fosdem',
         'thumb': 'websites/fosdem.png',
         'fanart': 'websites/fosdem_fanart.jpg',
         'module': 'resources.lib.websites.fosdem',
@@ -127,6 +138,7 @@ menu = {
     },
     'ina': {
         'callback': 'website_bridge',
+        'label': 'Ina',
         'thumb': 'websites/ina.png',
         'fanart': 'websites/ina_fanart.jpg',
         'module': 'resources.lib.websites.ina',
@@ -135,6 +147,7 @@ menu = {
     },
     'onf': {
         'callback': 'website_bridge',
+        'label': 'Office National du Film du Canada',
         'thumb': 'websites/onf.png',
         'fanart': 'websites/onf_fanart.jpg',
         'module': 'resources.lib.websites.onf',
@@ -143,6 +156,7 @@ menu = {
     },
     'nfb': {
         'callback': 'website_bridge',
+        'label': 'National Film Board Of Canada',
         'thumb': 'websites/nfb.png',
         'fanart': 'websites/nfb_fanart.jpg',
         'module': 'resources.lib.websites.nfb',
@@ -151,6 +165,7 @@ menu = {
     },
     'marmiton': {
         'callback': 'website_bridge',
+        'label': 'Marmiton',
         'thumb': 'websites/marmiton.png',
         'fanart': 'websites/marmiton_fanart.jpg',
         'module': 'resources.lib.websites.marmiton',
@@ -159,6 +174,7 @@ menu = {
     },
     'lesargonautes': {
         'callback': 'website_bridge',
+        'label': 'Les Argonautes',
         'thumb': 'websites/lesargonautes.png',
         'fanart': 'websites/lesargonautes_fanart.jpg',
         'module': 'resources.lib.websites.lesargonautes',
@@ -167,6 +183,7 @@ menu = {
     },
     'nationalfff': {
         'callback': 'website_bridge',
+        'label': 'National FFF',
         'thumb': 'websites/nationalfff.png',
         'fanart': 'websites/nationalfff_fanart.jpg',
         'module': 'resources.lib.websites.nationalfff',
@@ -175,6 +192,7 @@ menu = {
     },
     'philharmoniedeparis': {
         'callback': 'website_bridge',
+        'label': 'Philharmonie de Paris',
         'thumb': 'websites/philharmoniedeparis.png',
         'fanart': 'websites/philharmoniedeparis_fanart.jpg',
         'module': 'resources.lib.websites.philharmoniedeparis',

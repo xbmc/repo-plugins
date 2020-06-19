@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'blaze': {
         'callback': 'replay_bridge',
+        'label': 'Blaze',
         'thumb': 'channels/uk/blaze.png',
         'fanart': 'channels/uk/blaze_fanart.jpg',
         'module': 'resources.lib.channels.uk.blaze',
@@ -47,6 +48,7 @@ menu = {
     },
     'skynews': {
         'callback': 'replay_bridge',
+        'label': 'Sky News',
         'thumb': 'channels/uk/skynews.png',
         'fanart': 'channels/uk/skynews_fanart.jpg',
         'module': 'resources.lib.channels.uk.sky',
@@ -55,6 +57,7 @@ menu = {
     },
     'skysports': {
         'callback': 'replay_bridge',
+        'label': 'Sky Sports',
         'thumb': 'channels/uk/skysports.png',
         'fanart': 'channels/uk/skysports_fanart.jpg',
         'module': 'resources.lib.channels.uk.sky',
@@ -63,6 +66,7 @@ menu = {
     },
     'stv': {
         'callback': 'replay_bridge',
+        'label': 'STV',
         'thumb': 'channels/uk/stv.png',
         'fanart': 'channels/uk/stv_fanart.jpg',
         'module': 'resources.lib.channels.uk.stv',
@@ -71,6 +75,7 @@ menu = {
     },
     'questod': {
         'callback': 'replay_bridge',
+        'label': 'Quest OD',
         'thumb': 'channels/uk/questod.png',
         'fanart': 'channels/uk/questod_fanart.jpg',
         'module': 'resources.lib.channels.uk.questod',
@@ -79,6 +84,7 @@ menu = {
     },
     'uktvplay': {
         'callback': 'replay_bridge',
+        'label': 'UKTV Play',
         'thumb': 'channels/uk/uktvplay.png',
         'fanart': 'channels/uk/uktvplay_fanart.jpg',
         'module': 'resources.lib.channels.uk.uktvplay',
@@ -87,6 +93,7 @@ menu = {
     },
     'fiveusa': {
         'callback': 'replay_bridge',
+        'label': '5USA',
         'thumb': 'channels/uk/fiveusa.png',
         'fanart': 'channels/uk/fiveusa_fanart.jpg',
         'module': 'resources.lib.channels.uk.my5',
@@ -95,6 +102,7 @@ menu = {
     },
     'bristoltv': {
         'callback': 'replay_bridge',
+        'label': 'Bristol TV',
         'thumb': 'channels/uk/bristoltv.png',
         'fanart': 'channels/uk/bristoltv_fanart.jpg',
         'module': 'resources.lib.channels.uk.bristoltv',

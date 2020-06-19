@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'brf': {
         'callback': 'replay_bridge',
+        'label': 'BRF Mediathek',
         'thumb': 'channels/be/brf.png',
         'fanart': 'channels/be/brf_fanart.jpg',
         'module': 'resources.lib.channels.be.brf',
@@ -47,6 +48,7 @@ menu = {
     },
     'rtl_tvi': {
         'callback': 'replay_bridge',
+        'label': 'RTL TVI',
         'thumb': 'channels/be/rtltvi.png',
         'fanart': 'channels/be/rtltvi_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -55,6 +57,7 @@ menu = {
     },
     'plug_rtl': {
         'callback': 'replay_bridge',
+        'label': 'PLUG RTL',
         'thumb': 'channels/be/plugrtl.png',
         'fanart': 'channels/be/plugrtl_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -63,6 +66,7 @@ menu = {
     },
     'club_rtl': {
         'callback': 'replay_bridge',
+        'label': 'CLUB RTL',
         'thumb': 'channels/be/clubrtl.png',
         'fanart': 'channels/be/clubrtl_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -71,6 +75,7 @@ menu = {
     },
     'vrt': {
         'callback': 'replay_bridge',
+        'label': 'VRT NU',
         'thumb': 'channels/be/vrt.png',
         'fanart': 'channels/be/vrt_fanart.jpg',
         'module': 'resources.lib.channels.be.vrt',
@@ -79,6 +84,7 @@ menu = {
     },
     'telemb': {
         'callback': 'replay_bridge',
+        'label': 'Télé MB',
         'thumb': 'channels/be/telemb.png',
         'fanart': 'channels/be/telemb_fanart.jpg',
         'module': 'resources.lib.channels.be.telemb',
@@ -87,6 +93,7 @@ menu = {
     },
     'rtc': {
         'callback': 'replay_bridge',
+        'label': 'RTC Télé Liège',
         'thumb': 'channels/be/rtc.png',
         'fanart': 'channels/be/rtc_fanart.jpg',
         'module': 'resources.lib.channels.be.rtc',
@@ -95,6 +102,7 @@ menu = {
     },
     'auvio': {
         'callback': 'replay_bridge',
+        'label': 'RTBF Auvio',
         'thumb': 'channels/be/auvio.png',
         'fanart': 'channels/be/auvio_fanart.jpg',
         'module': 'resources.lib.channels.be.rtbf',
@@ -103,6 +111,7 @@ menu = {
     },
     'tvlux': {
         'callback': 'replay_bridge',
+        'label': 'TV Lux',
         'thumb': 'channels/be/tvlux.png',
         'fanart': 'channels/be/tvlux_fanart.jpg',
         'module': 'resources.lib.channels.be.tvlux',
@@ -111,6 +120,7 @@ menu = {
     },
     'rtl_info': {
         'callback': 'replay_bridge',
+        'label': 'RTL INFO',
         'thumb': 'channels/be/rtlinfo.png',
         'fanart': 'channels/be/rtlinfo_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -119,6 +129,7 @@ menu = {
     },
     'bel_rtl': {
         'callback': 'replay_bridge',
+        'label': 'BEL RTL',
         'thumb': 'channels/be/belrtl.png',
         'fanart': 'channels/be/belrtl_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -127,6 +138,7 @@ menu = {
     },
     'contact': {
         'callback': 'replay_bridge',
+        'label': 'Contact',
         'thumb': 'channels/be/contact.png',
         'fanart': 'channels/be/contact_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -135,6 +147,7 @@ menu = {
     },
     'bx1': {
         'callback': 'replay_bridge',
+        'label': 'BX1',
         'thumb': 'channels/be/bx1.png',
         'fanart': 'channels/be/bx1_fanart.jpg',
         'module': 'resources.lib.channels.be.bx1',
@@ -143,6 +156,7 @@ menu = {
     },
     'nrjhitstvbe': {
         'callback': 'replay_bridge',
+        'label': 'NRJ Hits TV',
         'thumb': 'channels/be/nrjhitstvbe.png',
         'fanart': 'channels/be/nrjhitstvbe_fanart.jpg',
         'module': 'resources.lib.channels.be.nrjhitstvbe',
@@ -151,6 +165,7 @@ menu = {
     },
     'rtl_sport': {
         'callback': 'replay_bridge',
+        'label': 'RTL Sport',
         'thumb': 'channels/be/rtlsport.png',
         'fanart': 'channels/be/rtlsport_fanart.jpg',
         'module': 'resources.lib.channels.be.rtlplaybe',
@@ -159,6 +174,7 @@ menu = {
     },
     'tvcom': {
         'callback': 'replay_bridge',
+        'label': 'TV Com',
         'thumb': 'channels/be/tvcom.png',
         'fanart': 'channels/be/tvcom_fanart.jpg',
         'module': 'resources.lib.channels.be.tvcom',
@@ -167,6 +183,7 @@ menu = {
     },
     'canalc': {
         'callback': 'replay_bridge',
+        'label': 'Canal C',
         'thumb': 'channels/be/canalc.png',
         'fanart': 'channels/be/canalc_fanart.jpg',
         'module': 'resources.lib.channels.be.canalc',

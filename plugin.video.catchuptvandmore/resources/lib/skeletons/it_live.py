@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'la7': {
         'callback': 'live_bridge',
+        'label': 'La7',
         'thumb': 'channels/it/la7.png',
         'fanart': 'channels/it/la7_fanart.jpg',
         'module': 'resources.lib.channels.it.la7',
@@ -48,6 +49,7 @@ menu = {
     },
     'rainews24': {
         'callback': 'live_bridge',
+        'label': 'Rai News 24',
         'thumb': 'channels/it/rainews24.png',
         'fanart': 'channels/it/rainews24_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -57,6 +59,7 @@ menu = {
     },
     'rai1': {
         'callback': 'live_bridge',
+        'label': 'Rai 1',
         'thumb': 'channels/it/rai1.png',
         'fanart': 'channels/it/rai1_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -66,6 +69,7 @@ menu = {
     },
     'rai2': {
         'callback': 'live_bridge',
+        'label': 'Rai 2',
         'thumb': 'channels/it/rai2.png',
         'fanart': 'channels/it/rai2_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -75,6 +79,7 @@ menu = {
     },
     'rai3': {
         'callback': 'live_bridge',
+        'label': 'Rai 3',
         'thumb': 'channels/it/rai3.png',
         'fanart': 'channels/it/rai3_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -84,6 +89,7 @@ menu = {
     },
     'rai4': {
         'callback': 'live_bridge',
+        'label': 'Rai 4',
         'thumb': 'channels/it/rai4.png',
         'fanart': 'channels/it/rai4_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -93,6 +99,7 @@ menu = {
     },
     'rai5': {
         'callback': 'live_bridge',
+        'label': 'Rai 5',
         'thumb': 'channels/it/rai5.png',
         'fanart': 'channels/it/rai5_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -102,6 +109,7 @@ menu = {
     },
     'raisportpiuhd': {
         'callback': 'live_bridge',
+        'label': 'Rai Sport',
         'thumb': 'channels/it/raisportpiuhd.png',
         'fanart': 'channels/it/raisportpiuhd_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -111,6 +119,7 @@ menu = {
     },
     'raimovie': {
         'callback': 'live_bridge',
+        'label': 'Rai Movie',
         'thumb': 'channels/it/raimovie.png',
         'fanart': 'channels/it/raimovie_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -120,6 +129,7 @@ menu = {
     },
     'raipremium': {
         'callback': 'live_bridge',
+        'label': 'Rai Premium',
         'thumb': 'channels/it/raipremium.png',
         'fanart': 'channels/it/raipremium_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -129,6 +139,7 @@ menu = {
     },
     'raiyoyo': {
         'callback': 'live_bridge',
+        'label': 'Rai Yoyo',
         'thumb': 'channels/it/raiyoyo.png',
         'fanart': 'channels/it/raiyoyo_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -138,6 +149,7 @@ menu = {
     },
     'raigulp': {
         'callback': 'live_bridge',
+        'label': 'Rai Gulp',
         'thumb': 'channels/it/raigulp.png',
         'fanart': 'channels/it/raigulp_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -147,6 +159,7 @@ menu = {
     },
     'raistoria': {
         'callback': 'live_bridge',
+        'label': 'Rai Storia',
         'thumb': 'channels/it/raistoria.png',
         'fanart': 'channels/it/raistoria_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -156,6 +169,7 @@ menu = {
     },
     'raiscuola': {
         'callback': 'live_bridge',
+        'label': 'Rai Scuola',
         'thumb': 'channels/it/raiscuola.png',
         'fanart': 'channels/it/raiscuola_fanart.jpg',
         'module': 'resources.lib.channels.it.raiplay',
@@ -165,6 +179,7 @@ menu = {
     },
     'paramountchannel_it': {
         'callback': 'live_bridge',
+        'label': 'Paramount Channel (IT)',
         'thumb': 'channels/it/paramountchannel_it.png',
         'fanart': 'channels/it/paramountchannel_it_fanart.jpg',
         'module': 'resources.lib.channels.it.paramountchannel_it',

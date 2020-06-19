@@ -21,7 +21,7 @@
 """
 
 import importlib
-from resources.lib.codequick import run
+from codequick import run
 
 
 def main():

@@ -33,10 +33,10 @@ from kodi_six import xbmc
 from kodi_six import xbmcgui
 from kodi_six import xbmcvfs
 
-from resources.lib.codequick import utils, storage, Script, listing
+from codequick import utils, storage, Script, listing
 from hashlib import md5
 
-from resources.lib.labels import LABELS
+
 import resources.lib.mem_storage as mem_storage
 from resources.lib.migration_utils import migrate_from_pickled_fav
 from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_params, get_selected_item_stream, get_selected_item_info
@@ -84,11 +84,11 @@ def guess_fav_prefix(item_id):
 
     prefix = 'empty'
     if item_id == 'live_tv':
-        prefix = Script.localize(LABELS['live_tv'])
+        prefix = Script.localize(30030)
     elif item_id == 'replay':
-        prefix = Script.localize(LABELS['replay'])
+        prefix = Script.localize(30031)
     elif item_id == 'websites':
-        prefix = Script.localize(LABELS['websites'])
+        prefix = Script.localize(30032)
     elif item_id == 'root':
         prefix = ''
     if prefix != 'empty':
@@ -141,7 +141,7 @@ def add_item_to_favourites(plugin, is_playable=False, item_infos={}):
         # elements
 
         item_id = item_dict['params']['item_id']
-        item_dict['label'] = get_item_label(item_id)
+        item_dict['label'] = get_item_label(item_id, item_infos)
 
         item_dict['art']["thumb"] = ''
         if 'thumb' in item_infos:
@@ -173,7 +173,7 @@ def add_item_to_favourites(plugin, is_playable=False, item_infos={}):
 
     # Ask the user to edit the label
     label = utils.keyboard(
-        plugin.localize(LABELS['Favorite name']), label_proposal)
+        plugin.localize(30801), label_proposal)
 
     # If user aborded do not add this item to favourite
     if label == '':
@@ -210,7 +210,7 @@ def rename_favourite_item(plugin, item_hash):
         item_hash (str): Item hash of the favourite item to rename
     """
 
-    item_label = utils.keyboard(plugin.localize(LABELS['Favorite name']),
+    item_label = utils.keyboard(plugin.localize(30801),
                                 xbmc.getInfoLabel('ListItem.Label'))
 
     # If user aborded do not edit this item
@@ -305,7 +305,7 @@ def ask_to_delete_error_fav_item(item_hash):
         item_hash (str): Item hash that trigger an error
     """
 
-    r = xbmcgui.Dialog().yesno(Script.localize(LABELS['Information']),
+    r = xbmcgui.Dialog().yesno(Script.localize(30600),
                                Script.localize(30807))
     if r:
         remove_favourite_item(plugin=None, item_hash=item_hash)

@@ -121,12 +121,12 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=6
 ##	RMC Story
 ##	rmcstory
 #EXTINF:-1 tvg-id="C1402.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rmcstory.png" group-title="France TNT",RMC Story
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcstory&item_module=resources.lib.channels.fr.rmcstory&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcstory&item_module=resources.lib.channels.fr.rmc&item_dict={}
 
 ##	RMC Découverte
 ##	rmcdecouverte
 #EXTINF:-1 tvg-id="C1400.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rmcdecouverte.png" group-title="France TNT",RMC Découverte
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcdecouverte&item_module=resources.lib.channels.fr.rmcdecouverte&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcdecouverte&item_module=resources.lib.channels.fr.rmc&item_dict={}
 
 ##	Chérie 25
 ##	cherie25

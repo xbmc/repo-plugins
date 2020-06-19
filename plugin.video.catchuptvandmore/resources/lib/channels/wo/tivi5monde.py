@@ -26,16 +26,16 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
-from resources.lib import urlquick
+import urlquick
 
 # TO DO
 # Download Mode / QUality Mode
@@ -178,7 +178,7 @@ def list_videos_search(plugin, search_query, item_id, page, **kwargs):
                                  search_query=search_query,
                                  page=str(int(page) + 1))
     else:
-        plugin.notify(plugin.localize(LABELS['No videos found']), '')
+        plugin.notify(plugin.localize(30718), '')
         yield False
 
 

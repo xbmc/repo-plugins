@@ -27,9 +27,9 @@ from __future__ import unicode_literals
 
 
 from builtins import str
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script, youtube
+from codequick import Route, Resolver, Listitem, utils, Script, youtube
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib import download
@@ -43,7 +43,7 @@ try:
     from urllib.parse import quote_plus
 except ImportError:
     from urllib import quote_plus
-from resources.lib import urlquick
+import urlquick
 
 # TO DO
 # Some video Sky sports required account (add account)
@@ -168,7 +168,7 @@ def list_videos_sports(plugin, item_id, category_url, page, **kwargs):
                                  category_url=category_url,
                                  page=str(int(page) + 1))
     else:
-        plugin.notify(plugin.localize(LABELS['No videos found']), '')
+        plugin.notify(plugin.localize(30718), '')
         yield False
 
 

@@ -25,24 +25,26 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
-from resources.lib import urlquick
+import urlquick
 
 # TODO
 # Get informations of replay ?
 
-URL_ROOT = 'https://rmcdecouverte.bfmtv.com'
+URL_ROOT = 'https://%s.bfmtv.com'
 
-# RMC Decouverte
-URL_REPLAY_RMCDECOUVERTE = URL_ROOT + '/mediaplayer-replay/'
+URL_REPLAY = {
+    'rmcstory': URL_ROOT + '/mediaplayer-replay/nouveautes/',
+    'rmcdecouverte': URL_ROOT + '/mediaplayer-replay/'
+}
 
-URL_LIVE_RMCDECOUVERTE = URL_ROOT + '/mediaplayer-direct/'
+URL_LIVE = URL_ROOT + '/mediaplayer-direct/'
 
 
 def replay_entry(plugin, item_id, **kwargs):
@@ -61,12 +63,13 @@ def list_categories(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    resp = urlquick.get(URL_REPLAY_RMCDECOUVERTE)
+
+    resp = urlquick.get(URL_REPLAY[item_id] % item_id)
     root = resp.parse("div", attrs={"class": "list_21XUu"})
 
     for category_datas in root.iterfind(".//a"):
         category_title = category_datas.text
-        category_url = URL_ROOT + category_datas.get('href')
+        category_url = URL_ROOT % item_id + category_datas.get('href')
 
         item = Listitem()
         item.label = category_title
@@ -85,20 +88,23 @@ def list_videos(plugin, item_id, category_url, **kwargs):
     root = resp.parse()
 
     for video_datas in root.iterfind(".//div[@class='root_qT0Me']"):
-        if video_datas.find(".//p[@class='subtitle_1hI_I']") is not None:
-            if video_datas.find(".//p[@class='title_1APl2']").text is not None:
-                video_title = video_datas.find(
-                    ".//p[@class='title_1APl2']").text + ' - ' + video_datas.find(
-                        ".//p[@class='subtitle_1hI_I']").text
-            else:
-                video_title = video_datas.find(".//p[@class='subtitle_1hI_I']").text
-        else:
-            video_title = video_datas.find(".//p[@class='title_1APl2']").text
-        video_image = video_datas.find('.//img').get('src')
-        video_url = URL_ROOT + video_datas.find('.//a').get('href')
+        subtitle = video_datas.find(".//p[@class='subtitle_1hI_I']")
+        subtitle = subtitle.text if subtitle is not None else None
+
+        title = video_datas.find(".//p[@class='title_1APl2']")
+        title = title.text if title is not None else None
 
         item = Listitem()
-        item.label = video_title
+
+        if title is not None and subtitle is not None:
+            item.label = title + ' - ' + subtitle
+        elif title is not None:
+            item.label = title
+        else:
+            item.label = 'No title'
+
+        video_image = video_datas.find('.//img').get('src')
+        video_url = URL_ROOT % item_id + video_datas.find('.//a').get('href')
         item.art['thumb'] = item.art['landscape'] = video_image
 
         item.set_callback(get_video_url,
@@ -137,7 +143,7 @@ def live_entry(plugin, item_id, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, video_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE_RMCDECOUVERTE,
+    resp = urlquick.get(URL_LIVE % item_id,
                         headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
 

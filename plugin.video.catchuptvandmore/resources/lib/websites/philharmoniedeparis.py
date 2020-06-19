@@ -24,12 +24,12 @@ from builtins import str
 import json
 import re
 
-from resources.lib.codequick import Route, Resolver, Listitem
+from codequick import Route, Resolver, Listitem
 import htmlement
 import requests
-from resources.lib import urlquick
+import urlquick
 
-from resources.lib.labels import LABELS
+
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 
@@ -57,7 +57,7 @@ def root(plugin, item_id, **kwargs):
     - ...
     """
     item = Listitem()
-    item.label = plugin.localize(LABELS['All videos'])
+    item.label = plugin.localize(30701)
     item.set_callback(list_videos, item_id=item_id, page='1')
     item_post_treatment(item)
     yield item

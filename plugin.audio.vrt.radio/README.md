@@ -17,11 +17,21 @@ You can report issues at [our GitHub project](https://github.com/add-ons/plugin.
 
 ## Releases
 
-#### v0.1.1 (2020-04-12)
+### v0.1.3 (2020-06-17)
+- Small fix to IPTV Manager support
+
+### v0.1.2 (2020-06-02)
+- Switch from MP3 to AAC by default
+- Added channel Radio 2 Bene Bene
+- Added channel StuBru Hooray
+- Added channel StuBru Bruut
+- Added support for IPTV Manager
+
+### v0.1.1 (2020-04-12)
 - Added channel Radio 1 Classics
 - Added channel StuBru #ikluisterbelgisch
 - Added channel MNM Back to the 90's & 00's
 - Removed channel Sporza
 
-#### v0.1.0 (2019-05-01)
+### v0.1.0 (2019-05-01)
 - Initial working release

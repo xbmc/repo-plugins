@@ -21,14 +21,14 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from resources.lib.codequick import Route, Resolver, Listitem, utils
-from resources.lib import urlquick
+from codequick import Route, Resolver, Listitem, utils
+import urlquick
 
 import json
 import re
 from kodi_six import xbmcgui
 
-from resources.lib.labels import LABELS
+
 from resources.lib import download
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
@@ -254,7 +254,7 @@ def list_videos_bonus(plugin, item_id, category_url, page, **kwargs):
                                  category_url=category_url,
                                  page=page + 1)
     else:
-        plugin.notify(plugin.localize(LABELS['No videos found']), '')
+        plugin.notify(plugin.localize(30718), '')
         yield False
 
 
@@ -315,7 +315,7 @@ def get_video_url(plugin,
     final_url = ''
     if len(all_datas_videos_quality) > 1:
         seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(LABELS['choose_video_quality']),
+            plugin.localize(30709),
             all_datas_videos_quality)
         if seleted_item == -1:
             return False

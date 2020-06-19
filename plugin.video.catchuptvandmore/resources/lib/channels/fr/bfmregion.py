@@ -26,15 +26,15 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
 import re
-from resources.lib import urlquick
+import urlquick
 
 # TODO
 # Add more button
@@ -65,7 +65,7 @@ def list_categories(plugin, item_id, **kwargs):
     - ...
     """
     item = Listitem()
-    item.label = plugin.localize(LABELS['All videos'])
+    item.label = plugin.localize(30701)
     item.set_callback(list_videos, item_id=item_id, page='1')
     item_post_treatment(item)
     yield item

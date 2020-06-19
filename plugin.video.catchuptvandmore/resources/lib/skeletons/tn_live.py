@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'watania1': {
         'callback': 'live_bridge',
+        'label': 'التلفزة التونسية الوطنية 1',
         'thumb': 'channels/tn/watania1.png',
         'fanart': 'channels/tn/watania1_fanart.jpg',
         'module': 'resources.lib.channels.tn.watania',
@@ -47,6 +48,7 @@ menu = {
     },
     'watania2': {
         'callback': 'live_bridge',
+        'label': 'التلفزة التونسية الوطنية 2',
         'thumb': 'channels/tn/watania2.png',
         'fanart': 'channels/tn/watania2_fanart.jpg',
         'module': 'resources.lib.channels.tn.watania',
@@ -55,6 +57,7 @@ menu = {
     },
     'nessma': {
         'callback': 'live_bridge',
+        'label': 'نسمة تي في',
         'thumb': 'channels/tn/nessma.png',
         'fanart': 'channels/tn/nessma_fanart.jpg',
         'module': 'resources.lib.channels.tn.nessma',

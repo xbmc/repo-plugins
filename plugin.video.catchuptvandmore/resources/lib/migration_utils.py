@@ -33,7 +33,7 @@ from builtins import range
 from kodi_six import xbmcvfs
 
 
-from resources.lib.codequick import storage, Script, listing
+from codequick import storage, Script, listing
 
 
 def migrate_from_pickled_fav():

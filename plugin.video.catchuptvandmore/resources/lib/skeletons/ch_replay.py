@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'rts': {
         'callback': 'replay_bridge',
+        'label': 'RTS',
         'thumb': 'channels/ch/rts.png',
         'fanart': 'channels/ch/rts_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -47,6 +48,7 @@ menu = {
     },
     'rsi': {
         'callback': 'replay_bridge',
+        'label': 'RSI',
         'thumb': 'channels/ch/rsi.png',
         'fanart': 'channels/ch/rsi_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -55,6 +57,7 @@ menu = {
     },
     'srf': {
         'callback': 'replay_bridge',
+        'label': 'SRF',
         'thumb': 'channels/ch/srf.png',
         'fanart': 'channels/ch/srf_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -63,6 +66,7 @@ menu = {
     },
     'rtr': {
         'callback': 'replay_bridge',
+        'label': 'RTR',
         'thumb': 'channels/ch/rtr.png',
         'fanart': 'channels/ch/rtr_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -71,6 +75,7 @@ menu = {
     },
     'swissinfo': {
         'callback': 'replay_bridge',
+        'label': 'SWISSINFO',
         'thumb': 'channels/ch/swissinfo.png',
         'fanart': 'channels/ch/swissinfo_fanart.jpg',
         'module': 'resources.lib.channels.ch.srgssr',
@@ -79,6 +84,7 @@ menu = {
     },
     'tvm3': {
         'callback': 'replay_bridge',
+        'label': 'TVM3',
         'thumb': 'channels/ch/tvm3.png',
         'fanart': 'channels/ch/tvm3_fanart.jpg',
         'module': 'resources.lib.channels.ch.tvm3',
@@ -87,6 +93,7 @@ menu = {
     },
     'becurioustv': {
         'callback': 'replay_bridge',
+        'label': 'BeCurious TV',
         'thumb': 'channels/ch/becurioustv.png',
         'fanart': 'channels/ch/becurioustv_fanart.jpg',
         'module': 'resources.lib.channels.ch.becurioustv',
@@ -95,6 +102,7 @@ menu = {
     },
     'lemanbleu': {
         'callback': 'replay_bridge',
+        'label': 'Léman Bleu',
         'thumb': 'channels/ch/lemanbleu.png',
         'fanart': 'channels/ch/lemanbleu_fanart.jpg',
         'module': 'resources.lib.channels.ch.lemanbleu',

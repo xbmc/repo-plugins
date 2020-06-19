@@ -27,9 +27,9 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
@@ -39,7 +39,7 @@ from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, ge
 import inputstreamhelper
 import json
 import re
-from resources.lib import urlquick
+import urlquick
 from kodi_six import xbmc
 from kodi_six import xbmcgui
 
@@ -255,7 +255,7 @@ def list_videos(plugin, item_id, program_id, sub_category_id, **kwargs):
     json_parser = json.loads(resp.text)
 
     if not json_parser:
-        plugin.notify(plugin.localize(LABELS['No videos found']), '')
+        plugin.notify(plugin.localize(30718), '')
         yield False
 
     for video in json_parser:
@@ -332,7 +332,7 @@ def get_video_url(plugin,
         else:
             if DESIRED_QUALITY == "DIALOG":
                 seleted_item = xbmcgui.Dialog().select(
-                    plugin.localize(LABELS['choose_video_quality']),
+                    plugin.localize(30709),
                     all_datas_videos_quality)
                 if seleted_item == -1:
                     return False

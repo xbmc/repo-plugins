@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'blaze': {
         'callback': 'live_bridge',
+        'label': 'Blaze',
         'thumb': 'channels/uk/blaze.png',
         'fanart': 'channels/uk/blaze_fanart.jpg',
         'module': 'resources.lib.channels.uk.blaze',
@@ -48,6 +49,7 @@ menu = {
     },
     'dave': {
         'callback': 'live_bridge',
+        'label': 'Dave',
         'thumb': 'channels/uk/dave.png',
         'fanart': 'channels/uk/dave_fanart.jpg',
         'module': 'resources.lib.channels.uk.uktvplay',
@@ -57,6 +59,7 @@ menu = {
     },
     'yesterday': {
         'callback': 'live_bridge',
+        'label': 'Yesterday',
         'thumb': 'channels/uk/yesterday.png',
         'fanart': 'channels/uk/yesterday_fanart.jpg',
         'module': 'resources.lib.channels.uk.uktvplay',
@@ -66,6 +69,7 @@ menu = {
     },
     'drama': {
         'callback': 'live_bridge',
+        'label': 'Drama',
         'thumb': 'channels/uk/drama.png',
         'fanart': 'channels/uk/drama_fanart.jpg',
         'module': 'resources.lib.channels.uk.uktvplay',
@@ -75,6 +79,7 @@ menu = {
     },
     'skynews': {
         'callback': 'live_bridge',
+        'label': 'Sky News',
         'thumb': 'channels/uk/skynews.png',
         'fanart': 'channels/uk/skynews_fanart.jpg',
         'module': 'resources.lib.channels.uk.sky',
@@ -84,6 +89,7 @@ menu = {
     },
     'stv': {
         'callback': 'live_bridge',
+        'label': 'STV',
         'thumb': 'channels/uk/stv.png',
         'fanart': 'channels/uk/stv_fanart.jpg',
         'module': 'resources.lib.channels.uk.stv',
@@ -93,6 +99,7 @@ menu = {
     },
     'kerrang': {
         'callback': 'live_bridge',
+        'label': 'Kerrang',
         'thumb': 'channels/uk/kerrang.png',
         'fanart': 'channels/uk/kerrang_fanart.jpg',
         'module': 'resources.lib.channels.uk.boxplus',
@@ -102,6 +109,7 @@ menu = {
     },
     'magic': {
         'callback': 'live_bridge',
+        'label': 'Magic',
         'thumb': 'channels/uk/magic.png',
         'fanart': 'channels/uk/magic_fanart.jpg',
         'module': 'resources.lib.channels.uk.boxplus',
@@ -111,6 +119,7 @@ menu = {
     },
     'kiss': {
         'callback': 'live_bridge',
+        'label': 'Kiss',
         'thumb': 'channels/uk/kiss.png',
         'fanart': 'channels/uk/kiss_fanart.jpg',
         'module': 'resources.lib.channels.uk.boxplus',
@@ -120,6 +129,7 @@ menu = {
     },
     'the-box': {
         'callback': 'live_bridge',
+        'label': 'The Box',
         'thumb': 'channels/uk/thebox.png',
         'fanart': 'channels/uk/thebox_fanart.jpg',
         'module': 'resources.lib.channels.uk.boxplus',
@@ -129,6 +139,7 @@ menu = {
     },
     'box-hits': {
         'callback': 'live_bridge',
+        'label': 'Box Hits',
         'thumb': 'channels/uk/boxhits.png',
         'fanart': 'channels/uk/boxhits_fanart.jpg',
         'module': 'resources.lib.channels.uk.boxplus',
@@ -138,6 +149,7 @@ menu = {
     },
     'box-upfront': {
         'callback': 'live_bridge',
+        'label': 'Box Upfront',
         'thumb': 'channels/uk/boxupfront.png',
         'fanart': 'channels/uk/boxupfront_fanart.jpg',
         'module': 'resources.lib.channels.uk.boxplus',
@@ -146,6 +158,7 @@ menu = {
     },
     'questtv': {
         'callback': 'live_bridge',
+        'label': 'Quest TV',
         'thumb': 'channels/uk/questtv.png',
         'fanart': 'channels/uk/questtv_fanart.jpg',
         'module': 'resources.lib.channels.uk.questod',
@@ -155,6 +168,7 @@ menu = {
     },
     'questred': {
         'callback': 'live_bridge',
+        'label': 'Quest RED',
         'thumb': 'channels/uk/questred.png',
         'fanart': 'channels/uk/questred_fanart.jpg',
         'module': 'resources.lib.channels.uk.questod',
@@ -164,6 +178,7 @@ menu = {
     },
     'bristoltv': {
         'callback': 'live_bridge',
+        'label': 'Bristol TV',
         'thumb': 'channels/uk/bristoltv.png',
         'fanart': 'channels/uk/bristoltv_fanart.jpg',
         'module': 'resources.lib.channels.uk.bristoltv',
@@ -172,6 +187,7 @@ menu = {
     },
     'freesports': {
         'callback': 'live_bridge',
+        'label': 'Free Sports',
         'thumb': 'channels/uk/freesports.png',
         'fanart': 'channels/uk/freesports_fanart.jpg',
         'module': 'resources.lib.channels.uk.stv',
@@ -180,6 +196,7 @@ menu = {
     },
     'stv_plusone': {
         'callback': 'live_bridge',
+        'label': 'STV+1',
         'thumb': 'channels/uk/stv_plusone.png',
         'fanart': 'channels/uk/stv_plusone_fanart.jpg',
         'module': 'resources.lib.channels.uk.stv',
@@ -188,6 +205,7 @@ menu = {
     },
     'edgesport': {
         'callback': 'live_bridge',
+        'label': 'EDGE Sport',
         'thumb': 'channels/uk/edgesport.png',
         'fanart': 'channels/uk/edgesport_fanart.jpg',
         'module': 'resources.lib.channels.uk.stv',

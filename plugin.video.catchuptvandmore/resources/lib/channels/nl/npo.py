@@ -26,9 +26,9 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
 from resources.lib.menu_utils import item_post_treatment
@@ -37,7 +37,7 @@ import htmlement
 import inputstreamhelper
 import json
 import re
-from resources.lib import urlquick
+import urlquick
 from kodi_six import xbmc
 from kodi_six import xbmcgui
 

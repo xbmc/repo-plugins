@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'npo-1': {
         'callback': 'live_bridge',
+        'label': 'NPO 1',
         'thumb': 'channels/nl/npo1.png',
         'fanart': 'channels/nl/npo1_fanart.jpg',
         'module': 'resources.lib.channels.nl.npo',
@@ -47,6 +48,7 @@ menu = {
     },
     'npo-2': {
         'callback': 'live_bridge',
+        'label': 'NPO 2',
         'thumb': 'channels/nl/npo2.png',
         'fanart': 'channels/nl/npo2_fanart.jpg',
         'module': 'resources.lib.channels.nl.npo',
@@ -55,6 +57,7 @@ menu = {
     },
     'npo-zapp': {
         'callback': 'live_bridge',
+        'label': 'NPO Zapp',
         'thumb': 'channels/nl/npozapp.png',
         'fanart': 'channels/nl/npozapp_fanart.jpg',
         'module': 'resources.lib.channels.nl.npo',
@@ -63,6 +66,7 @@ menu = {
     },
     'npo-1-extra': {
         'callback': 'live_bridge',
+        'label': 'NPO 1 Extra',
         'thumb': 'channels/nl/npo1extra.png',
         'fanart': 'channels/nl/npo1extra_fanart.jpg',
         'module': 'resources.lib.channels.nl.npo',
@@ -71,6 +75,7 @@ menu = {
     },
     'npo-2-extra': {
         'callback': 'live_bridge',
+        'label': 'NPO 2 Extra',
         'thumb': 'channels/nl/npo2extra.png',
         'fanart': 'channels/nl/npo2extra_fanart.jpg',
         'module': 'resources.lib.channels.nl.npo',
@@ -79,6 +84,7 @@ menu = {
     },
     'npo-zappelin-extra': {
         'callback': 'live_bridge',
+        'label': 'NPO Zappelin Extra',
         'thumb': 'channels/nl/npozappelinextra.png',
         'fanart': 'channels/nl/npozappelinextra_fanart.jpg',
         'module': 'resources.lib.channels.nl.npo',
@@ -87,6 +93,7 @@ menu = {
     },
     'npo-nieuws': {
         'callback': 'live_bridge',
+        'label': 'NPO Nieuws',
         'thumb': 'channels/nl/nponieuws.png',
         'fanart': 'channels/nl/nponieuws_fanart.jpg',
         'module': 'resources.lib.channels.nl.npo',
@@ -95,6 +102,7 @@ menu = {
     },
     'npo-politiek': {
         'callback': 'live_bridge',
+        'label': 'NPO Politiek',
         'thumb': 'channels/nl/npopolitiek.png',
         'fanart': 'channels/nl/npopolitiek_fanart.jpg',
         'module': 'resources.lib.channels.nl.npo',
@@ -103,6 +111,7 @@ menu = {
     },
     'at5': {
         'callback': 'live_bridge',
+        'label': 'AT5',
         'thumb': 'channels/nl/at5.png',
         'fanart': 'channels/nl/at5_fanart.jpg',
         'module': 'resources.lib.channels.nl.at5',

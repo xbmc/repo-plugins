@@ -23,11 +23,11 @@ from __future__ import unicode_literals
 import re
 import json
 
-from resources.lib.codequick import Route, Resolver, Listitem
-from resources.lib import urlquick
+from codequick import Route, Resolver, Listitem
+import urlquick
 
 from resources.lib import download
-from resources.lib.labels import LABELS
+
 from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = 'http://www.elle.fr'

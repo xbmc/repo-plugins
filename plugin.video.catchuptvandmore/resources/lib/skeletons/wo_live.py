@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script, utils
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -40,6 +40,7 @@ menu = {
     'euronews': {
         'callback':
         'live_bridge',
+        'label': 'Euronews (' + utils.ensure_unicode(Script.setting['euronews.language']) + ')',
         'thumb':
         'channels/wo/euronews.png',
         'fanart':
@@ -55,6 +56,7 @@ menu = {
     },
     'arte': {
         'callback': 'live_bridge',
+        'label': 'Arte (' + utils.ensure_unicode(Script.setting['arte.language']) + ')',
         'thumb': 'channels/wo/arte.png',
         'fanart': 'channels/wo/arte_fanart.jpg',
         'module': 'resources.lib.channels.wo.arte',
@@ -73,6 +75,7 @@ menu = {
     },
     'france24': {
         'callback': 'live_bridge',
+        'label': 'France 24 (' + utils.ensure_unicode(Script.setting['france24.language']) + ')',
         'thumb': 'channels/wo/france24.png',
         'fanart': 'channels/wo/france24_fanart.jpg',
         'module': 'resources.lib.channels.wo.france24',
@@ -82,6 +85,7 @@ menu = {
     },
     'nhkworld': {
         'callback': 'live_bridge',
+        'label': 'NHK World (' + utils.ensure_unicode(Script.setting['nhkworld.language']) + ')',
         'thumb': 'channels/wo/nhkworld.png',
         'fanart': 'channels/wo/nhkworld_fanart.jpg',
         'module': 'resources.lib.channels.wo.nhkworld',
@@ -91,6 +95,7 @@ menu = {
     },
     'tivi5monde': {
         'callback': 'live_bridge',
+        'label': 'Tivi 5Monde',
         'thumb': 'channels/wo/tivi5monde.png',
         'fanart': 'channels/wo/tivi5monde_fanart.jpg',
         'module': 'resources.lib.channels.wo.tivi5monde',
@@ -99,6 +104,7 @@ menu = {
     },
     'bvn': {
         'callback': 'live_bridge',
+        'label': 'BVN',
         'thumb': 'channels/wo/bvn.png',
         'fanart': 'channels/wo/bvn_fanart.jpg',
         'module': 'resources.lib.channels.wo.bvn',
@@ -107,6 +113,7 @@ menu = {
     },
     'icitelevision': {
         'callback': 'live_bridge',
+        'label': 'ICI Télévision',
         'thumb': 'channels/wo/icitelevision.png',
         'fanart': 'channels/wo/icitelevision_fanart.jpg',
         'module': 'resources.lib.channels.wo.icitelevision',
@@ -115,6 +122,7 @@ menu = {
     },
     'arirang': {
         'callback': 'live_bridge',
+        'label': 'Arirang (아리랑)',
         'thumb': 'channels/wo/arirang.png',
         'fanart': 'channels/wo/arirang_fanart.jpg',
         'module': 'resources.lib.channels.wo.arirang',
@@ -123,6 +131,7 @@ menu = {
     },
     'dw': {
         'callback': 'live_bridge',
+        'label': 'DW (' + utils.ensure_unicode(Script.setting['dw.language']) + ')',
         'thumb': 'channels/wo/dw.png',
         'fanart': 'channels/wo/dw_fanart.jpg',
         'module': 'resources.lib.channels.wo.dw',
@@ -132,6 +141,7 @@ menu = {
     },
     'qvc': {
         'callback': 'live_bridge',
+        'label': 'QVC (' + utils.ensure_unicode(Script.setting['qvc.language']) + ')',
         'thumb': 'channels/wo/qvc.png',
         'fanart': 'channels/wo/qvc_fanart.jpg',
         'module': 'resources.lib.channels.wo.qvc',
@@ -141,6 +151,7 @@ menu = {
     },
     'icirdi': {
         'callback': 'live_bridge',
+        'label': 'ICI RDI',
         'thumb': 'channels/wo/icirdi.png',
         'fanart': 'channels/wo/icirdi_fanart.jpg',
         'module': 'resources.lib.channels.wo.icirdi',
@@ -149,6 +160,7 @@ menu = {
     },
     'cgtn': {
         'callback': 'live_bridge',
+        'label': 'CGTN (' + utils.ensure_unicode(Script.setting['cgtn.language']) + ')',
         'thumb': 'channels/wo/cgtn.png',
         'fanart': 'channels/wo/cgtn_fanart.jpg',
         'module': 'resources.lib.channels.wo.cgtn',
@@ -158,6 +170,7 @@ menu = {
     },
     'cgtndocumentary': {
         'callback': 'live_bridge',
+        'label': 'CGTN Documentary',
         'thumb': 'channels/wo/cgtndocumentary.png',
         'fanart': 'channels/wo/cgtndocumentary_fanart.jpg',
         'module': 'resources.lib.channels.wo.cgtn',
@@ -166,6 +179,7 @@ menu = {
     },
     'afriquemedia': {
         'callback': 'live_bridge',
+        'label': 'Afrique Media',
         'thumb': 'channels/wo/afriquemedia.png',
         'fanart': 'channels/wo/afriquemedia_fanart.jpg',
         'module': 'resources.lib.channels.wo.afriquemedia',
@@ -174,6 +188,7 @@ menu = {
     },
     'tv5mondefbs': {
         'callback': 'live_bridge',
+        'label': 'TV5Monde France Belgique Suisse',
         'thumb': 'channels/wo/tv5mondefbs.png',
         'fanart': 'channels/wo/tv5mondefbs_fanart.jpg',
         'module': 'resources.lib.channels.wo.tv5monde',
@@ -182,6 +197,7 @@ menu = {
     },
     'tv5mondeinfo': {
         'callback': 'live_bridge',
+        'label': 'TV5Monde Info',
         'thumb': 'channels/wo/tv5mondeinfo.png',
         'fanart': 'channels/wo/tv5mondeinfo_fanart.jpg',
         'module': 'resources.lib.channels.wo.tv5monde',
@@ -190,6 +206,7 @@ menu = {
     },
     'channelnewsasia': {
         'callback': 'live_bridge',
+        'label': 'Channel NewsAsia',
         'thumb': 'channels/wo/channelnewsasia.png',
         'fanart': 'channels/wo/channelnewsasia_fanart.jpg',
         'module': 'resources.lib.channels.wo.channelnewsasia',
@@ -198,6 +215,7 @@ menu = {
     },
     'rt': {
         'callback': 'live_bridge',
+        'label': 'RT (' + utils.ensure_unicode(Script.setting['rt.language']) + ')',
         'thumb': 'channels/wo/rt.png',
         'fanart': 'channels/wo/rt_fanart.jpg',
         'module': 'resources.lib.channels.wo.rt',
@@ -207,6 +225,7 @@ menu = {
     },
     'africa24': {
         'callback': 'live_bridge',
+        'label': 'Africa 24',
         'thumb': 'channels/wo/africa24.png',
         'fanart': 'channels/wo/africa24_fanart.jpg',
         'module': 'resources.lib.channels.wo.africa24',

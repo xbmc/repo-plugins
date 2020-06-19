@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script, utils
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'tv5mondeafrique': {
         'callback': 'replay_bridge',
+        'label': 'TV5Monde Afrique',
         'thumb': 'channels/wo/tv5mondeafrique.png',
         'fanart': 'channels/wo/tv5mondeafrique_fanart.jpg',
         'module': 'resources.lib.channels.wo.tv5mondeafrique',
@@ -47,6 +48,7 @@ menu = {
     },
     'arte': {
         'callback': 'replay_bridge',
+        'label': 'Arte (' + utils.ensure_unicode(Script.setting['arte.language']) + ')',
         'thumb': 'channels/wo/arte.png',
         'fanart': 'channels/wo/arte_fanart.jpg',
         'module': 'resources.lib.channels.wo.arte',
@@ -55,6 +57,7 @@ menu = {
     },
     'france24': {
         'callback': 'replay_bridge',
+        'label': 'France 24 (' + utils.ensure_unicode(Script.setting['france24.language']) + ')',
         'thumb': 'channels/wo/france24.png',
         'fanart': 'channels/wo/france24_fanart.jpg',
         'module': 'resources.lib.channels.wo.france24',
@@ -63,6 +66,7 @@ menu = {
     },
     'nhkworld': {
         'callback': 'replay_bridge',
+        'label': 'NHK World (' + utils.ensure_unicode(Script.setting['nhkworld.language']) + ')',
         'thumb': 'channels/wo/nhkworld.png',
         'fanart': 'channels/wo/nhkworld_fanart.jpg',
         'module': 'resources.lib.channels.wo.nhkworld',
@@ -71,6 +75,7 @@ menu = {
     },
     'tv5monde': {
         'callback': 'replay_bridge',
+        'label': 'TV5Monde',
         'thumb': 'channels/wo/tv5monde.png',
         'fanart': 'channels/wo/tv5monde_fanart.jpg',
         'module': 'resources.lib.channels.wo.tv5monde',
@@ -79,6 +84,7 @@ menu = {
     },
     'tivi5monde': {
         'callback': 'replay_bridge',
+        'label': 'Tivi 5Monde',
         'thumb': 'channels/wo/tivi5monde.png',
         'fanart': 'channels/wo/tivi5monde_fanart.jpg',
         'module': 'resources.lib.channels.wo.tivi5monde',
@@ -87,6 +93,7 @@ menu = {
     },
     'bvn': {
         'callback': 'replay_bridge',
+        'label': 'BVN',
         'thumb': 'channels/wo/bvn.png',
         'fanart': 'channels/wo/bvn_fanart.jpg',
         'module': 'resources.lib.channels.wo.bvn',
@@ -95,6 +102,7 @@ menu = {
     },
     'arirang': {
         'callback': 'replay_bridge',
+        'label': 'Arirang (아리랑)',
         'thumb': 'channels/wo/arirang.png',
         'fanart': 'channels/wo/arirang_fanart.jpg',
         'module': 'resources.lib.channels.wo.arirang',
@@ -103,6 +111,7 @@ menu = {
     },
     'beinsports': {
         'callback': 'replay_bridge',
+        'label': 'Bein Sports',
         'thumb': 'channels/wo/beinsports.png',
         'fanart': 'channels/wo/beinsports_fanart.jpg',
         'module': 'resources.lib.channels.wo.beinsports',
@@ -111,6 +120,7 @@ menu = {
     },
     'afriquemedia': {
         'callback': 'replay_bridge',
+        'label': 'Afrique Media',
         'thumb': 'channels/wo/afriquemedia.png',
         'fanart': 'channels/wo/afriquemedia_fanart.jpg',
         'module': 'resources.lib.channels.wo.afriquemedia',
@@ -119,6 +129,7 @@ menu = {
     },
     'channelnewsasia': {
         'callback': 'replay_bridge',
+        'label': 'Channel NewsAsia',
         'thumb': 'channels/wo/channelnewsasia.png',
         'fanart': 'channels/wo/channelnewsasia_fanart.jpg',
         'module': 'resources.lib.channels.wo.channelnewsasia',
@@ -127,6 +138,7 @@ menu = {
     },
     'rt': {
         'callback': 'replay_bridge',
+        'label': 'RT (' + utils.ensure_unicode(Script.setting['rt.language']) + ')',
         'thumb': 'channels/wo/rt.png',
         'fanart': 'channels/wo/rt_fanart.jpg',
         'module': 'resources.lib.channels.wo.rt',
@@ -136,6 +148,7 @@ menu = {
     },
     'africa24': {
         'callback': 'replay_bridge',
+        'label': 'Africa 24',
         'thumb': 'channels/wo/africa24.png',
         'fanart': 'channels/wo/africa24_fanart.jpg',
         'module': 'resources.lib.channels.wo.africa24',

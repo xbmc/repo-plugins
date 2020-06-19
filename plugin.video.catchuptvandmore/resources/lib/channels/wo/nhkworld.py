@@ -26,9 +26,9 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
@@ -36,7 +36,7 @@ from resources.lib.menu_utils import item_post_treatment
 import json
 import time
 import re
-from resources.lib import urlquick
+import urlquick
 
 URL_ROOT = 'http://www3.nhk.or.jp/'
 
@@ -46,10 +46,10 @@ URL_LIVE_NHK = 'https://www3.nhk.or.jp/nhkworld/app/tv/hlslive_web.json'
 URL_COMMONJS_NHK = 'http://www3.nhk.or.jp/%s/common/js/common.js'
 # Channel_Name...
 
-URL_CATEGORIES_NHK = 'https://api.nhk.or.jp/%s/vodcatlist/v7/all/en/ondemand/list.json?apikey=%s'
+URL_CATEGORIES_NHK = 'https://api.nhk.or.jp/%s/vodcatlist/v7a/all/en/ondemand/list.json?apikey=%s'
 # Channel_Name, apikey
 
-URL_ALL_VOD_NHK = 'https://api.nhk.or.jp/%s/vodesdlist/v7/category/%s/en/all/all.json?apikey=%s'
+URL_ALL_VOD_NHK = 'https://api.nhk.or.jp/%s/vodesdlist/v7a/category/%s/en/all/all.json?apikey=%s'
 # Channel_Name, apikey
 
 URL_VIDEO_VOD = 'https://movie-s.nhk.or.jp/v/refid/nhkworld/prefid/%s'

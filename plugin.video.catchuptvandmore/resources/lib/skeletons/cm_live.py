@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'crtv': {
         'callback': 'live_bridge',
+        'label': 'CRTV',
         'thumb': 'channels/cm/crtv.png',
         'fanart': 'channels/cm/crtv_fanart.jpg',
         'module': 'resources.lib.channels.cm.crtv',
@@ -47,6 +48,7 @@ menu = {
     },
     'crtvnews': {
         'callback': 'live_bridge',
+        'label': 'CRTV News',
         'thumb': 'channels/cm/crtvnews.png',
         'fanart': 'channels/cm/crtvnews_fanart.jpg',
         'module': 'resources.lib.channels.cm.crtv',

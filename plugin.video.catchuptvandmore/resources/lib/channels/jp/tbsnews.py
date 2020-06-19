@@ -25,21 +25,21 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 
-from resources.lib import urlquick
+import urlquick
 
-URL_ROOT = 'http://news.tbs.co.jp'
+URL_ROOT = 'https://news.tbs.co.jp'
 
 URL_CONTENT = URL_ROOT + '/digest/%s.html'
 # content
 
-URL_STREAM = 'http://flvstream.tbs.co.jp/flvfiles/_definst_/newsi/digest/%s_1m.mp4/playlist.m3u8'
+URL_STREAM = 'https://flvstream.tbs.co.jp/flvfiles/_definst_/newsi/digest/%s_1m.mp4/playlist.m3u8'
 # content
 
 NEWS_CONTENT = ['nb', '23', 'nst', 'jnn']
@@ -82,12 +82,13 @@ def list_videos_news(plugin, item_id, **kwargs):
     for content in NEWS_CONTENT:
         resp = urlquick.get(URL_CONTENT % content)
         root = resp.parse()
-        video_news_datas = root.find(".//article[@class='md-mainArticle']")
+        video_news_datas = root.find(".//div[@class='cp-digestMovie']")
 
-        video_title = video_news_datas.findall(".//img[@class='lazy']")[0].get(
-            'alt')
-        video_image = URL_ROOT + video_news_datas.findall(
-            ".//img[@class='lazy']")[0].get('data-original')
+        video_title = video_news_datas.findall(".//div[@class='ls__label']")[0].text
+        video_image = ''
+        for video_image_datas in video_news_datas.findall(".//div"):
+            if video_image_datas.get("tbs-player") is not None:
+                video_image = URL_ROOT + video_image_datas.get('splashUrl')
         video_url = URL_STREAM % content
 
         item = Listitem()
@@ -106,12 +107,13 @@ def list_videos_weather(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_CONTENT % 'weather')
     root = resp.parse()
-    video_weather_datas = root.find(".//article[@class='md-mainArticle']")
+    video_weather_datas = root.find(".//div[@class='cp-digestMovie']")
 
-    video_title = video_weather_datas.findall(".//img[@class='lazy']")[0].get(
-        'alt')
-    video_image = URL_ROOT + video_weather_datas.findall(
-        ".//img[@class='lazy']")[0].get('data-original')
+    video_title = video_weather_datas.findall(".//div[@class='ls__label']")[0].text
+    video_image = ''
+    for video_image_datas in video_weather_datas.findall(".//div"):
+        if video_image_datas.get("tbs-player") is not None:
+            video_image = URL_ROOT + video_image_datas.get('splashUrl')
     video_url = URL_STREAM % 'weather'
 
     item = Listitem()

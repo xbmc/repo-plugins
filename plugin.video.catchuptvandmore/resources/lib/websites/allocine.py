@@ -25,13 +25,13 @@ import json
 import re
 import requests
 
-from resources.lib.codequick import Route, Resolver, Listitem, Script, utils
-from resources.lib import urlquick
+from codequick import Route, Resolver, Listitem, Script, utils
+import urlquick
 from kodi_six import xbmcgui
 
 from resources.lib import resolver_proxy
 from resources.lib import download
-from resources.lib.labels import LABELS
+
 from resources.lib.menu_utils import item_post_treatment
 
 # TO DO
@@ -504,7 +504,7 @@ def get_video_url(plugin,
                 all_datas_videos_quality.append(media["bandwidth"]["$"])
                 all_datas_videos_path.append(media["href"])
             seleted_item = xbmcgui.Dialog().select(
-                plugin.localize(LABELS['choose_video_quality']),
+                plugin.localize(30709),
                 all_datas_videos_quality)
             if seleted_item == -1:
                 return False
@@ -516,7 +516,7 @@ def get_video_url(plugin,
             for media in video_json_parser["media"]["rendition"][0]:
                 final_url = media["href"]
         if requests.get(final_url, stream=True).status_code == 404:
-            label = plugin.localize(LABELS['Video stream no longer exists'])
+            label = plugin.localize(30710)
             Script.notify(label, label)
             return False
         if download_mode:
@@ -603,7 +603,7 @@ def list_videos_news_videos(plugin, item_id, category_url, page, **kwargs):
                         item.info['plot'] = episode.find(
                             ".//div[@class='meta-body']").text
                     item.context.script(get_video_url_news_videos,
-                                        plugin.localize(LABELS['Download']),
+                                        plugin.localize(30503),
                                         video_url=video_url,
                                         item_id=item_id,
                                         download_mode=True)

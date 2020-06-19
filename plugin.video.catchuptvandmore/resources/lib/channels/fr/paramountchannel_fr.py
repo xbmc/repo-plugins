@@ -25,16 +25,16 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
-from resources.lib import urlquick
+import urlquick
 
 # TO DO
 # Video Infos (date, duration)
@@ -66,7 +66,7 @@ def list_programs(plugin, item_id, **kwargs):
     resp = urlquick.get(URL_PROGRAMS)
     root = resp.parse()
 
-    for program_datas in root.iterfind(".//li[@class='item poster css-1u1rran-Wrapper e19yuxbf0']"):
+    for program_datas in root.iterfind(".//li[@class='item poster css-q2f74n-Wrapper e19yuxbf0']"):
         program_title = program_datas.find(".//div[@class='header']/span").text
         program_image = ''
         list_images = program_datas.findall(".//img")

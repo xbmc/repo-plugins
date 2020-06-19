@@ -26,16 +26,16 @@
 from __future__ import unicode_literals
 
 from builtins import str
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
 import json
 import re
-from resources.lib import urlquick
+import urlquick
 try:
     from urllib.parse import quote
 except ImportError:
@@ -73,13 +73,13 @@ def list_categories(plugin, item_id, **kwargs):
     - ...
     """
     item = Listitem()
-    item.label = plugin.localize(LABELS['All videos'])
+    item.label = plugin.localize(30701)
     item.set_callback(list_videos, item_id=item_id, next_url=URL_VIDEOS)
     item_post_treatment(item)
     yield item
 
     item = Listitem()
-    item.label = plugin.localize(LABELS['All programs'])
+    item.label = plugin.localize(30717)
     item.set_callback(list_programs, item_id=item_id)
     item_post_treatment(item)
     yield item

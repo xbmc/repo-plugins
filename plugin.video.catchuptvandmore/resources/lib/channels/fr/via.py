@@ -25,9 +25,9 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib import download
@@ -37,7 +37,7 @@ from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_la
 import inputstreamhelper
 import json
 import re
-from resources.lib import urlquick
+import urlquick
 '''
 TODO Add Replay
 '''
@@ -75,7 +75,7 @@ def list_categories(plugin, item_id, **kwargs):
     - ...
     """
     if item_id == 'via93':
-        category_title = plugin.localize(LABELS['All videos'])
+        category_title = plugin.localize(30701)
         category_url = URL_ROOT % item_id + '/plus30/'
 
         item = Listitem()

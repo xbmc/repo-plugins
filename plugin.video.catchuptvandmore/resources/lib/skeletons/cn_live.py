@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'cctv1': {
         'callback': 'live_bridge',
+        'label': 'CCTV-1 综合',
         'thumb': 'channels/cn/cctv1.png',
         'fanart': 'channels/cn/cctv1_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -47,6 +48,7 @@ menu = {
     },
     'cctv2': {
         'callback': 'live_bridge',
+        'label': 'CCTV-2 财经',
         'thumb': 'channels/cn/cctv2.png',
         'fanart': 'channels/cn/cctv2_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -55,6 +57,7 @@ menu = {
     },
     'cctv3': {
         'callback': 'live_bridge',
+        'label': 'CCTV-3 综艺',
         'thumb': 'channels/cn/cctv3.png',
         'fanart': 'channels/cn/cctv3_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -63,6 +66,7 @@ menu = {
     },
     'cctv4': {
         'callback': 'live_bridge',
+        'label': 'CCTV-4 中文国际（亚）',
         'thumb': 'channels/cn/cctv4.png',
         'fanart': 'channels/cn/cctv4_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -71,6 +75,7 @@ menu = {
     },
     'cctveurope': {
         'callback': 'live_bridge',
+        'label': 'CCTV-4 中文国际（欧）',
         'thumb': 'channels/cn/cctveurope.png',
         'fanart': 'channels/cn/cctveurope_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -79,6 +84,7 @@ menu = {
     },
     'cctvamerica': {
         'callback': 'live_bridge',
+        'label': 'CCTV-4 中文国际（美）',
         'thumb': 'channels/cn/cctvamerica.png',
         'fanart': 'channels/cn/cctvamerica_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -87,6 +93,7 @@ menu = {
     },
     'cctv5': {
         'callback': 'live_bridge',
+        'label': 'CCTV-5 体育',
         'thumb': 'channels/cn/cctv5.png',
         'fanart': 'channels/cn/cctv5_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -95,6 +102,7 @@ menu = {
     },
     'cctv5plus': {
         'callback': 'live_bridge',
+        'label': 'CCTV-5+ 体育赛事',
         'thumb': 'channels/cn/cctv5plus.png',
         'fanart': 'channels/cn/cctv5plus_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -103,6 +111,7 @@ menu = {
     },
     'cctv6': {
         'callback': 'live_bridge',
+        'label': 'CCTV-6 电影',
         'thumb': 'channels/cn/cctv6.png',
         'fanart': 'channels/cn/cctv6_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -111,6 +120,7 @@ menu = {
     },
     'cctv7': {
         'callback': 'live_bridge',
+        'label': 'CCTV-7 军事农业',
         'thumb': 'channels/cn/cctv7.png',
         'fanart': 'channels/cn/cctv7_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -119,6 +129,7 @@ menu = {
     },
     'cctv8': {
         'callback': 'live_bridge',
+        'label': 'CCTV-8 电视剧',
         'thumb': 'channels/cn/cctv8.png',
         'fanart': 'channels/cn/cctv8_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -127,6 +138,7 @@ menu = {
     },
     'cctvjilu': {
         'callback': 'live_bridge',
+        'label': 'CCTV-9 纪录',
         'thumb': 'channels/cn/cctvjilu.png',
         'fanart': 'channels/cn/cctvjilu_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -135,6 +147,7 @@ menu = {
     },
     'cctv10': {
         'callback': 'live_bridge',
+        'label': 'CCTV-10 科教',
         'thumb': 'channels/cn/cctv10.png',
         'fanart': 'channels/cn/cctv10_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -143,6 +156,7 @@ menu = {
     },
     'cctv11': {
         'callback': 'live_bridge',
+        'label': 'CCTV-11 戏曲',
         'thumb': 'channels/cn/cctv11.png',
         'fanart': 'channels/cn/cctv11_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -151,6 +165,7 @@ menu = {
     },
     'cctv12': {
         'callback': 'live_bridge',
+        'label': 'CCTV-12 社会与法',
         'thumb': 'channels/cn/cctv12.png',
         'fanart': 'channels/cn/cctv12_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -159,6 +174,7 @@ menu = {
     },
     'cctv13': {
         'callback': 'live_bridge',
+        'label': 'CCTV-13 新闻',
         'thumb': 'channels/cn/cctv13.png',
         'fanart': 'channels/cn/cctv13_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -167,6 +183,7 @@ menu = {
     },
     'cctvchild': {
         'callback': 'live_bridge',
+        'label': 'CCTV-14 少儿',
         'thumb': 'channels/cn/cctvchild.png',
         'fanart': 'channels/cn/cctvchild_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',
@@ -175,6 +192,7 @@ menu = {
     },
     'cctv15': {
         'callback': 'live_bridge',
+        'label': 'CCTV-15 音乐',
         'thumb': 'channels/cn/cctv15.png',
         'fanart': 'channels/cn/cctv15_fanart.jpg',
         'module': 'resources.lib.channels.cn.cctv',

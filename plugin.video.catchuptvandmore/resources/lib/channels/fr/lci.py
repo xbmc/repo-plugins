@@ -28,9 +28,9 @@ from __future__ import unicode_literals
 
 from builtins import str
 from builtins import range
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
@@ -42,7 +42,7 @@ from hashlib import md5
 import json
 import os
 import re
-from resources.lib import urlquick
+import urlquick
 from kodi_six import xbmcgui
 
 # TO DO
@@ -112,7 +112,7 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
     for replay in root.iterfind(
             ".//article[@class='grid-blk__item']"):
 
-        title = replay.find('.//img').get('alt')
+        title = replay.find('.//h2').text
         img = ''
         for img in replay.findall('.//source'):
             try:
@@ -184,7 +184,7 @@ def get_video_url(plugin,
                                 'User-Agent': web_utils.get_random_ua()},
                             max_age=-1).text
     if 'drm' in manifest:
-        Script.notify("TEST", plugin.localize(LABELS['drm_notification']),
+        Script.notify("TEST", plugin.localize(30702),
                       Script.NOTIFY_INFO)
         return False
 
@@ -205,7 +205,7 @@ def get_video_url(plugin,
             all_datas_videos_path.append(root + '/' + lines[k + 1])
     if DESIRED_QUALITY == "DIALOG":
         seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(LABELS['choose_video_quality']),
+            plugin.localize(30709),
             all_datas_videos_quality)
         final_video_url = all_datas_videos_path[seleted_item]
     elif DESIRED_QUALITY == 'BEST':

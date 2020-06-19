@@ -20,17 +20,19 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from resources.lib.codequick import Route, Resolver, Listitem, utils
-
-from resources.lib import download
-from resources.lib.labels import LABELS
-from resources.lib.menu_utils import item_post_treatment
-
-import htmlement
+import base64
 import json
 import re
-from resources.lib import urlquick
+import string
 import xml.etree.ElementTree as ET
+import htmlement
+
+from codequick import Route, Resolver, Listitem, utils
+
+from resources.lib import download
+
+from resources.lib.menu_utils import item_post_treatment
+import urlquick
 
 # TO DO
 # Add Premium Account (purchase an account to test)
@@ -38,15 +40,6 @@ import xml.etree.ElementTree as ET
 # Fix Info add Premium Content
 
 URL_ROOT = 'http://www.ina.fr'
-
-URL_PROGRAMS = URL_ROOT + '/blocs/rubrique_sommaire/196?order=asc&page=%s&nbResults=48&mode=%s&range=Toutes'
-# Page, Mode
-
-URL_VIDEOS = URL_ROOT + '/layout/set/ajax/recherche/result?q=%s&autopromote=0&typeBlock=ina_resultat_exalead&s=date_diffusion&sa=0&b=%s&type=Video&r=&hf=48&c=ina_emission'
-# Name Program, Nb Video (+ 48)
-
-URL_VIDEOS_SEARCH = URL_ROOT + '/layout/set/ajax/recherche/result?q=%s&autopromote=&b=%s&type=Video&r=&hf=48'
-# Query, Nb Video (+ 48)
 
 URL_STREAM = 'https://player.ina.fr/notices/%s'
 # VideoId
@@ -56,175 +49,291 @@ def website_entry(plugin, item_id, **kwargs):
     """
     First executed function after website_bridge
     """
-    return root(plugin, item_id)
+    return root(plugin)
 
 
-CATEGORIES = {'Toutes les Emissions': 'classic', 'Toutes les séries': 'serie'}
+def root(plugin, **kwargs):
+    """Build root listing"""
+    categories = [
+        ('Thèmes', list_subcategories, 'themes', ''),
+        ('Toutes les Personnalités', list_alpha, '184', 'classic'),
+        ('Toutes les Émissions', list_alpha, '196', 'classic'),
+        ('Toutes les Séries', list_alpha, '196', 'series'),
+        ('Dossiers', list_subcategories, 'dossiers', '')
+    ]
 
-
-def root(plugin, item_id, **kwargs):
-    """Add modes in the listing"""
-    for category_name, category_mode in list(CATEGORIES.items()):
+    for category in categories:
         item = Listitem()
-
-        item.label = category_name
-        item.set_callback(list_shows,
-                          item_id=item_id,
-                          category_mode=category_mode,
-                          page=1)
+        item.label = category[0]
+        item.set_callback(category[1], category[2], category[3])
         item_post_treatment(item)
         yield item
 
     # Search videos
-    item = Listitem.search(list_videos_search, item_id=item_id, nb_videos=0)
+    item = Listitem.search(list_types, URL_ROOT)
     item_post_treatment(item)
     yield item
 
 
 @Route.register
-def list_shows(plugin, item_id, category_mode, page, **kwargs):
-    """Build categories listing"""
-    list_programs_json = urlquick.get(URL_PROGRAMS % (page, category_mode))
-    list_programs_jsonparser = json.loads(list_programs_json.text)
-    parser = htmlement.HTMLement()
-    parser.feed(list_programs_jsonparser["html"])
-    root = parser.close()
-
-    for program_datas in root.iterfind(".//div[@class='media']"):
-        item = Listitem()
-        item.label = program_datas.find('.//img').get('alt')
-        item.art['thumb'] = item.art['landscape'] = URL_ROOT + program_datas.find('.//img').get('src')
-        program_url = URL_ROOT + program_datas.find('.//a').get('href')
-
-        item.set_callback(list_videos,
-                          item_id=item_id,
-                          program_url=program_url,
-                          nb_videos=0)
-        item_post_treatment(item)
-        yield item
-
-    # More programs...
-    yield Listitem.next_page(item_id=item_id,
-                             category_mode=category_mode,
-                             page=page + 1)
+def list_subcategories(plugin, subcategory, **kwargs):
+    """Build subcateory listing"""
+    ina_html = urlquick.get(URL_ROOT).text.encode('utf-8')
+    ina = htmlement.fromstring(ina_html)
+    if subcategory == 'themes':
+        ina = ina.find('.//div[@class="menusThemes"]')
+        for sub in ina.iterfind('.//a'):
+            url = sub.get('href')
+            label = sub.text.encode('utf-8')
+            if url[-1] != '/' or label == 'Voir tout':
+                continue
+            item = Listitem()
+            item.label = label
+            item.set_callback(list_subsubcategories, url=URL_ROOT + url)
+            yield item
+    elif subcategory == 'dossiers':
+        ina = ina.find('.//div[@class="secondary-nav__dossiers"]')
+        for sub in ina.iterfind('.//a'):
+            url = sub.get('href')
+            label = sub.text.encode('utf-8')
+            if url.count('/') != 3 or url[-1] != '/' or label == 'Voir tout':
+                continue
+            item = Listitem()
+            item.label = label
+            item.set_callback(list_types, url=URL_ROOT + url)
+            yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, program_url, nb_videos, **kwargs):
-    """Build videos listing"""
-    replay_episodes_html = urlquick.get(program_url).text
-    program_title = re.compile(r'&q=(.*?)&auto').findall(
-        replay_episodes_html)[0]
-    replay_episodes_json = urlquick.get(URL_VIDEOS %
-                                        (program_title, nb_videos)).text
-    list_episodes_jsonparser = json.loads(replay_episodes_json)
-    parser = htmlement.HTMLement()
-    parser.feed(list_episodes_jsonparser["content"])
-    root = parser.close()
-    at_least_one_item = False
-    for episode in root.iterfind(
-            ".//div[@class='media zoomarticle afficheNotices']"):
-        at_least_one_item = True
+def list_alpha(plugin, js_file, mode, **kwargs):
+    """Build alpha listing choice (A, B, C, ..."""
+    range_l = [
+        ('Toutes', 'Toutes'),
+        ('#', '')
+    ]
+    for letter in list(string.ascii_uppercase):
+        range_l.append((letter, letter))
+
+    for range_elt in range_l:
         item = Listitem()
-        item.label = 'No title'
-        if episode.find(".//div[@class='media-inapremium-slide']") is not None:
-            item.label = '[Ina Premium] ' + episode.find('.//img').get('alt')
-        else:
-            item.label = episode.find('.//img').get('alt')
-        video_id = episode.find('.//a').get('href').split('/')[2]
-        item.art['thumb'] = item.art['landscape'] = URL_ROOT + episode.find('.//img').get('src')
-        video_duration_text_datas = episode.find(
-            ".//span[@class='duration']").text.split(' ')
-        video_duration = 0
-        for video_duration_datas in video_duration_text_datas:
-            if 's' in video_duration_datas:
-                video_duration_datas = video_duration_datas.replace('s', '')
-                video_duration = video_duration + int(video_duration_datas)
-            elif 'm' in video_duration_datas:
-                video_duration_datas = video_duration_datas.replace('m', '')
-                video_duration = video_duration + (int(video_duration_datas) *
-                                                   60)
-            elif 'h' in video_duration_datas:
-                video_duration_datas = video_duration_datas.replace('h', '')
-                video_duration = video_duration + (int(video_duration_datas) *
-                                                   3600)
-        item.info['duration'] = video_duration
-
-        if episode.find(".//span[@class='broadcast']") is not None:
-            video_date = episode.find(".//span[@class='broadcast']").text
-            item.info.date(video_date, '%d/%m/%Y')
-
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_id=video_id)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        item.label = range_elt[0]
+        item.set_callback(
+            list_alpha2,
+            js_file=js_file,
+            mode=mode,
+            range_elt=range_elt[1])
         yield item
 
-    if at_least_one_item:
-        # More videos...
-        yield Listitem.next_page(item_id=item_id,
-                                 program_url=program_url,
-                                 nb_videos=nb_videos + 48)
-    else:
-        plugin.notify(plugin.localize(LABELS['No videos found']), '')
+
+@Route.register
+def list_alpha2(plugin, js_file, mode, range_elt, page=1, **kwargs):
+    """Build categories listing after range choice"""
+    params_l = [
+        'order=asc',
+        'page=' + str(page),
+        'nbResults=48',
+        'mode=' + mode,
+        'range=' + range_elt
+    ]
+
+    url = URL_ROOT + '/blocs/rubrique_sommaire/' + js_file \
+        + '?' + '&'.join(params_l)
+
+    list_categories_text = urlquick.get(url).text.encode('utf-8')
+    list_categories_json = json.loads(list_categories_text)
+    categories = htmlement.fromstring(list_categories_json["html"])
+    cnt = 0
+    for categroy in categories.iterfind(".//div[@class='media']"):
+        cnt = cnt + 1
+        item = Listitem()
+        item.label = categroy.find('.//img').get('alt')
+        item.art['thumb'] = item.art['landscape'] = URL_ROOT + \
+            categroy.find('.//img').get('src')
+        url = URL_ROOT + categroy.find('.//a').get('href')
+
+        item.set_callback(list_types,
+                          url=url)
+        item_post_treatment(item)
+        yield item
+
+    if cnt == 48:
+        # More categories...
+        yield Listitem.next_page(
+            js_file=js_file,
+            mode=mode,
+            range_elt=range_elt,
+            page=page + 1)
+    elif cnt == 0:
+        plugin.notify(plugin.localize(30718), '')
         yield False
 
 
 @Route.register
-def list_videos_search(plugin, item_id, nb_videos, search_query, **kwargs):
-    replay_episodes_json = urlquick.get(URL_VIDEOS_SEARCH %
-                                        (search_query, nb_videos)).text
-    list_episodes_jsonparser = json.loads(replay_episodes_json)
-    parser = htmlement.HTMLement()
-    parser.feed(list_episodes_jsonparser["content"])
-    root = parser.close()
-
-    for episode in root.iterfind(".//div[@class='media zoomarticle']"):
+def list_subsubcategories(plugin, url, **kwargs):
+    """Build subsubcategories listing"""
+    sub_html = urlquick.get(url).text.encode('utf-8')
+    sub = htmlement.fromstring(sub_html)
+    sub = sub.find('.//section[@id="stackSousThemes"]')
+    for fig in sub.iterfind('.//figure'):
         item = Listitem()
-        item.label = 'No title'
-        if episode.find(
-                ".//div[@class='media-inapremium-search']") is not None:
-            item.label = '[Ina Premium] ' + episode.find('.//img').get('alt')
-        else:
-            item.label = episode.find('.//img').get('alt')
-        video_id = episode.find('.//a').get('href').split('/')[2]
-        item.art['thumb'] = item.art['landscape'] = URL_ROOT + episode.find('.//img').get('src')
-        video_duration_text_datas = episode.find(
-            ".//span[@class='duration']").text.split(' ')
-        video_duration = 0
-        for video_duration_datas in video_duration_text_datas:
-            if 's' in video_duration_datas:
-                video_duration_datas = video_duration_datas.replace('s', '')
-                video_duration = video_duration + int(video_duration_datas)
-            elif 'm' in video_duration_datas:
-                video_duration_datas = video_duration_datas.replace('m', '')
-                video_duration = video_duration + (int(video_duration_datas) *
-                                                   60)
-            elif 'h' in video_duration_datas:
-                video_duration_datas = video_duration_datas.replace('h', '')
-                video_duration = video_duration + (int(video_duration_datas) *
-                                                   3600)
-        item.info['duration'] = video_duration
-
-        if episode.find(".//span[@class='broadcast']") is not None:
-            video_date = episode.find(".//span[@class='broadcast']").text
-            item.info.date(video_date, '%d/%m/%Y')
-
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_id=video_id)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        img = fig.find('.//img')
+        item.label = img.get('alt')
+        item.art['thumb'] = item.art['landscape'] = URL_ROOT + img.get('src')
+        url = fig.find('.//a').get('href')
+        item.set_callback(list_types, url=URL_ROOT + url)
         yield item
 
-    # More videos...
-    yield Listitem.next_page(item_id=item_id,
-                             nb_videos=nb_videos + 48,
-                             search_query=search_query)
+
+@Route.register
+def list_types(plugin, url, search_query='', **kwargs):
+    """Build listing to choose contents type"""
+    # type=
+    content_types = [
+        ('Vidéos', 'video'),
+        ('Audios', 'audio'),
+        ('Pubs', 'pub')
+        # ('Dossiers', 'dossier')
+        # ('Créations Web', 'creationWeb')
+    ]
+    for content_type in content_types:
+        item = Listitem()
+        item.label = content_type[0]
+        item.set_callback(
+            list_sort,
+            url=url,
+            content_type=content_type[1],
+            search_query=search_query)
+        item_post_treatment(item)
+        yield item
+
+
+@Route.register
+def list_sort(plugin, url, content_type, search_query, **kwargs):
+    """Build listing to choose sort method"""
+    # s=
+    # sa=
+    sort_methods = [
+        ('Trier par : Pertinence', 'pertinence', 'desc'),
+        ('Trier par : Nombre de vues croissant', 'compteur_vue', 'asc'),
+        ('Trier par : Nombre de vues décroissant', 'compteur_vue', 'desc'),
+        ('Trier par : Date croissante', 'date_diffusion', 'asc'),
+        ('Trier par : Date décroissante', 'date_diffusion', 'desc'),
+        ('Trier par : Durée croissante', 'duree_totale', 'asc'),
+        ('Trier par : Durée décroissante', 'duree_totale', 'desc')
+    ]
+    for sort_method in sort_methods:
+        item = Listitem()
+        item.label = sort_method[0]
+        item.set_callback(
+            list_videos,
+            url=url,
+            content_type=content_type,
+            sort_method=sort_method[1],
+            sort_method_order=sort_method[2],
+            search_query=search_query)
+        item_post_treatment(item)
+        yield item
+
+
+@Route.register
+def list_videos(plugin, url, content_type, sort_method,
+                sort_method_order, search_query, start=0, **kwargs):
+    """Build videos listing"""
+    videos_html = urlquick.get(url).text
+    query = ''
+    must = ''
+    madelen_page = False
+    if search_query == '':
+        if 'executeQuery' in videos_html:
+            query = re.compile(r'OGP\.Search\.executeQuery(.*?);').findall(videos_html)[0]
+            if 'must' in query:
+                must = re.compile(r'must=(.*?)&').findall(query)[0]
+        else:
+            madelen_page = True
+
+    if madelen_page:
+        plugin.notify(plugin.localize(30712), '')
+        yield False
+    else:
+        query_l = [
+            'b=' + str(start),
+            'type=' + content_type,
+            'q=' + search_query,
+            's=' + sort_method,
+            'sa=' + sort_method_order,
+            'hf=48',
+            'must=' + must,
+            'block=true',
+            'target=www',
+            'resetParams=false'
+        ]
+
+        query_s = '%'.join(query_l)
+
+        videos_url = URL_ROOT + '/layout/set/ajax/recherche/result?' + base64.b64encode(query_s)
+        videos_html = urlquick.get(videos_url).text.encode('utf-8')
+        videos_html = videos_html.decode('unicode_escape')
+        videos_html = videos_html.replace('\\/', '/')
+        videos = htmlement.fromstring(videos_html)
+        cnt = 0
+        for episode in videos.iterfind(
+                ".//div[@class='media zoomarticle afficheNotices']"):
+            cnt = cnt + 1
+            item = Listitem()
+            item.label = 'No title'
+            if episode.find(".//div[@class='media-inapremium-slide']") is not None:
+                item.label = '[Ina Premium] ' + episode.find('.//img').get('alt')
+            else:
+                item.label = episode.find('.//img').get('alt')
+            try:
+                video_id = episode.find('.//a').get('href').split('/')[2]
+            except Exception:
+                continue
+            item.art['thumb'] = item.art['landscape'] = URL_ROOT + episode.find('.//img').get('src')
+            try:
+                video_duration_text_datas = episode.find(
+                    ".//span[@class='duration']").text.split(' ')
+                video_duration = 0
+                for video_duration_datas in video_duration_text_datas:
+                    if 's' in video_duration_datas:
+                        video_duration_datas = video_duration_datas.replace('s', '')
+                        video_duration = video_duration + int(video_duration_datas)
+                    elif 'm' in video_duration_datas:
+                        video_duration_datas = video_duration_datas.replace('m', '')
+                        video_duration = video_duration + (int(video_duration_datas) *
+                                                           60)
+                    elif 'h' in video_duration_datas:
+                        video_duration_datas = video_duration_datas.replace('h', '')
+                        video_duration = video_duration + (int(video_duration_datas) *
+                                                           3600)
+                item.info['duration'] = video_duration
+            except Exception:
+                pass
+
+            if episode.find(".//span[@class='broadcast']") is not None:
+                video_date = episode.find(".//span[@class='broadcast']").text
+                item.info.date(video_date, '%d/%m/%Y')
+
+            item.set_callback(get_video_url,
+                              video_id=video_id)
+            item_post_treatment(item, is_playable=True, is_downloadable=True)
+            yield item
+
+        if cnt == 48:
+            # More videos...
+            yield Listitem.next_page(
+                url=url,
+                content_type=content_type,
+                sort_method=sort_method,
+                sort_method_order=sort_method_order,
+                start=start + 48)
+        elif cnt == 0:
+            plugin.notify(plugin.localize(30718), '')
+            yield False
 
 
 @Resolver.register
 def get_video_url(plugin,
-                  item_id,
                   video_id,
                   download_mode=False,
                   **kwargs):

@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'ntvnews24': {
         'callback': 'live_bridge',
+        'label': '日テレ News24',
         'thumb': 'channels/jp/ntvnews24.png',
         'fanart': 'channels/jp/ntvnews24_fanart.jpg',
         'module': 'resources.lib.channels.jp.ntvnews24',
@@ -47,6 +48,7 @@ menu = {
     },
     'japanetshoppingdx': {
         'callback': 'live_bridge',
+        'label': 'ジャパネットチャンネルDX',
         'thumb': 'channels/jp/japanetshoppingdx.png',
         'fanart': 'channels/jp/japanetshoppingdx_fanart.jpg',
         'module': 'resources.lib.channels.jp.japanetshoppingdx',
@@ -55,6 +57,7 @@ menu = {
     },
     'weathernewsjp': {
         'callback': 'live_bridge',
+        'label': '株式会社ウェザーニューズ',
         'thumb': 'channels/jp/weathernewsjp.png',
         'fanart': 'channels/jp/weathernewsjp_fanart.jpg',
         'module': 'resources.lib.channels.jp.weathernewsjp',

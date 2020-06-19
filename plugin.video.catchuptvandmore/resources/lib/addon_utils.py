@@ -32,27 +32,28 @@ import os
 from kodi_six import xbmcgui
 from kodi_six import xbmc
 from kodi_six import xbmcvfs
-from resources.lib.codequick import Script, utils
-from resources.lib import urlquick
+from codequick import Script, utils
+import urlquick
 
 
 # Local imports
-from resources.lib.labels import LABELS
 
-
-def get_item_label(item_id):
+def get_item_label(item_id, item_infos={}):
     """Get (translated) label of 'item_id'
 
     Args:
         item_id (str)
+        item_infos (dict): Information from the skeleton 'menu' dict
     Returns:
         str: (translated) label of 'item_id'
     """
-    label = item_id
-    if item_id in LABELS:
-        label = LABELS[item_id]
-        if isinstance(label, int):
-            label = Script.localize(label)
+    if 'label' in item_infos:
+        label = item_infos['label']
+    else:
+        label = item_id
+
+    if isinstance(label, int):
+        label = Script.localize(label)
     return label
 
 
@@ -101,7 +102,7 @@ def get_quality_YTDL(download_mode=False):
         elif quality == 'DIALOG':
             youtubeDL_qualiy = ['SD', '720p', '1080p', 'Highest Available']
             seleted_item = xbmcgui.Dialog().select(
-                Script.localize(LABELS['choose_video_quality']),
+                Script.localize(30709),
                 youtubeDL_qualiy)
             return seleted_item
 

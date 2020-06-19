@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script, utils
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -39,6 +39,7 @@ the addon's tree architecture.
 menu = {
     'tv5unis': {
         'callback': 'replay_bridge',
+        'label': 'TV5 Unis',
         'thumb': 'channels/ca/tv5unis.png',
         'fanart': 'channels/ca/tv5unis_fanart.jpg',
         'module': 'resources.lib.channels.ca.tv5unis',
@@ -47,6 +48,7 @@ menu = {
     },
     'telequebec': {
         'callback': 'replay_bridge',
+        'label': 'Télé-Québec',
         'thumb': 'channels/ca/telequebec.png',
         'fanart': 'channels/ca/telequebec_fanart.jpg',
         'module': 'resources.lib.channels.ca.telequebec',
@@ -55,6 +57,7 @@ menu = {
     },
     'tva': {
         'callback': 'replay_bridge',
+        'label': 'TVA',
         'thumb': 'channels/ca/tva.png',
         'fanart': 'channels/ca/tva_fanart.jpg',
         'module': 'resources.lib.channels.ca.tva',
@@ -63,6 +66,7 @@ menu = {
     },
     'icitele': {
         'callback': 'replay_bridge',
+        'label': 'ICI Télé (' + utils.ensure_unicode(Script.setting['icitele.language']) + ')',
         'thumb': 'channels/ca/icitele.png',
         'fanart': 'channels/ca/icitele_fanart.jpg',
         'module': 'resources.lib.channels.ca.icitele',
@@ -71,6 +75,7 @@ menu = {
     },
     'icitoutv': {
         'callback': 'replay_bridge',
+        'label': 'ICI Tou.tv',
         'thumb': 'channels/ca/icitoutv.png',
         'fanart': 'channels/ca/icitoutv_fanart.jpg',
         'module': 'resources.lib.channels.ca.icitoutv',
@@ -79,6 +84,7 @@ menu = {
     },
     'telemag': {
         'callback': 'replay_bridge',
+        'label': 'Télé-Mag',
         'thumb': 'channels/ca/telemag.png',
         'fanart': 'channels/ca/telemag_fanart.jpg',
         'module': 'resources.lib.channels.ca.telemag',
@@ -87,6 +93,7 @@ menu = {
     },
     'noovo': {
         'callback': 'replay_bridge',
+        'label': 'NOOVO',
         'thumb': 'channels/ca/noovo.png',
         'fanart': 'channels/ca/noovo_fanart.jpg',
         'module': 'resources.lib.channels.ca.noovo',

@@ -24,7 +24,7 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from resources.lib.codequick import Script
+from codequick import Script
 """
 The following dictionaries describe
 the addon's tree architecture.
@@ -42,12 +42,14 @@ menu = {
     'fr_live': {
         'callback': 'tv_guide_menu'
         if TV_GUIDE else 'generic_menu',
+        'label': 30050,
         'thumb': 'channels/fr.png',
         'enabled': True,
         'order': 1
     },
     'ch_live': {
         'callback': 'generic_menu',
+        'label': 30051,
         'thumb': 'channels/ch.png',
         'enabled': True,
         'order': 2
@@ -55,12 +57,14 @@ menu = {
     'uk_live': {
         'callback': 'tv_guide_menu'
         if TV_GUIDE else 'generic_menu',
+        'label': 30052,
         'thumb': 'channels/uk.png',
         'enabled': True,
         'order': 3
     },
     'wo_live': {
         'callback': 'generic_menu',
+        'label': 30053,
         'thumb': 'channels/wo.png',
         'enabled': True,
         'order': 4
@@ -68,42 +72,49 @@ menu = {
     'be_live': {
         'callback': 'tv_guide_menu'
         if TV_GUIDE else 'generic_menu',
+        'label': 30054,
         'thumb': 'channels/be.png',
         'enabled': True,
         'order': 5
     },
     'jp_live': {
         'callback': 'generic_menu',
+        'label': 30055,
         'thumb': 'channels/jp.png',
         'enabled': True,
         'order': 6
     },
     'ca_live': {
         'callback': 'generic_menu',
+        'label': 30056,
         'thumb': 'channels/ca.png',
         'enabled': True,
         'order': 7
     },
     'us_live': {
         'callback': 'generic_menu',
+        'label': 30057,
         'thumb': 'channels/us.png',
         'enabled': True,
         'order': 8
     },
     'pl_live': {
         'callback': 'generic_menu',
+        'label': 30058,
         'thumb': 'channels/pl.png',
         'enabled': True,
         'order': 9
     },
     'es_live': {
         'callback': 'generic_menu',
+        'label': 30059,
         'thumb': 'channels/es.png',
         'enabled': True,
         'order': 10
     },
     'tn_live': {
         'callback': 'generic_menu',
+        'label': 30060,
         'thumb': 'channels/tn.png',
         'enabled': True,
         'order': 11
@@ -111,26 +122,44 @@ menu = {
     'it_live': {
         'callback': 'tv_guide_menu'
         if TV_GUIDE else 'generic_menu',
+        'label': 30061,
         'thumb': 'channels/it.png',
         'enabled': True,
         'order': 12
     },
     'nl_live': {
         'callback': 'generic_menu',
+        'label': 30062,
         'thumb': 'channels/nl.png',
         'enabled': True,
         'order': 13
     },
     'cn_live': {
         'callback': 'generic_menu',
+        'label': 30063,
         'thumb': 'channels/cn.png',
         'enabled': True,
         'order': 14
     },
     'cm_live': {
         'callback': 'generic_menu',
+        'label': 30064,
         'thumb': 'channels/cm.png',
         'enabled': True,
         'order': 15
+    },
+    'si_live': {
+        'callback': 'generic_menu',
+        'label': 30065,
+        'thumb': 'channels/si.png',
+        'enabled': True,
+        'order': 16
+    },
+    'et_live': {
+        'callback': 'generic_menu',
+        'label': 30066,
+        'thumb': 'channels/et.png',
+        'enabled': True,
+        'order': 17
     }
 }

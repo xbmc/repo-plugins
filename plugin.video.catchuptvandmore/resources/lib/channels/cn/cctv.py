@@ -26,29 +26,19 @@
 from __future__ import unicode_literals
 
 
-from resources.lib.codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem, utils, Script
 
-from resources.lib.labels import LABELS
+
 from resources.lib import web_utils
 from resources.lib.menu_utils import item_post_treatment
 
 import json
-from resources.lib import urlquick
-import requests
+import urlquick
 import socket
-# Working for Python 2/3
-try:
-    from urllib.parse import urlparse, urlencode
-    from urllib.request import urlopen, Request
-    from urllib.error import HTTPError
-except ImportError:
-    from urlparse import urlparse
-    from urllib import urlencode
-    from urllib2 import urlopen, Request, HTTPError
+import requests
 
 # TO DO
 # Add Replay
-# Ask Wilforde to add an option not to encode (params) - use requests for the moment
 
 URL_LIVE = "https://vdn.live.cntv.cn/api2/liveHtml5.do"
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.image.qwantz" name="Dinosaur Comics" version="1.0.1" provider-name="macica2">
+	<requires>
+		<import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.1"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="plugin.py">
+		<provides>image</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en_GB">Dinosaur Comics</summary>
+		<description lang="en_GB">Dinosaur Comics is a humorous comic about talking dinosaurs. It was created by Ryan North and can be viewed freely at www.qwantz.com.</description>
+		<license>GPL-2.0-or-later</license>
+		<language>en</language>
+		<email>maxxmacica@gmail.com</email>
+		<source>https://github.com/macica2/plugin.image.qwantz</source>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+		</assets>
+		<news>v1.0.1 (2020-5-25) - Updated to resolve minor code issues</news>
+	</extension>
+</addon>

@@ -15,6 +15,7 @@ class UpNextPlayer(Player):
     def __init__(self):
         self.api = Api()
         self.state = State()
+        self.monitor = Monitor()
         Player.__init__(self)
 
     def set_last_file(self, filename):
@@ -31,7 +32,7 @@ class UpNextPlayer(Player):
 
     def onPlayBackStarted(self):  # pylint: disable=invalid-name
         """Will be called when kodi starts playing a file"""
-        Monitor().waitForAbort(5000)
+        self.monitor.waitForAbort(5)
         if not getCondVisibility('videoplayer.content(episodes)'):
             return
         self.state.track = True

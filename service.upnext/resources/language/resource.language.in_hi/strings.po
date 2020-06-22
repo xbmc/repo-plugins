@@ -1,0 +1,201 @@
+# Service Up Next language file
+# Addon Name: Up Next
+# Addon id: service.upnext
+# Addon Provider: im85288
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: service.upnext\n"
+"Report-Msgid-Bugs-To: https://github.com/im85288/service.upnext\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-04-02 09:09+0100\n"
+"Last-Translator: tahirdon \n"
+"Language-Team: Hindi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+### APPLICATION
+msgctxt "#30006"
+msgid "Watch Now"
+msgstr "अभी देखे"
+
+msgctxt "#30008"
+msgid "Up Next"
+msgstr "आने वाला "
+
+msgctxt "#30009"
+msgid "Ends at: $INFO[Window.Property(endtime)]"
+msgstr "समाप्ति : $INFO[Window.Property(endtime)]"
+
+msgctxt "#30010"
+msgid "Continue watching"
+msgstr "जारी रखें"
+
+msgctxt "#30024"
+msgid "Still there?"
+msgstr "मौजूद?"
+
+msgctxt "#30032"
+msgid "Enable on playlists"
+msgstr "प्लेलिस्ट पर सक्षम करें"
+
+msgctxt "#30033"
+msgid "Stop"
+msgstr "रुकें"
+
+msgctxt "#30034"
+msgid "Close"
+msgstr "बंद करे"
+
+msgctxt "#30035"
+msgid "Continue watching in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "जारी रखें [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] सेकंड में"
+
+msgctxt "#30036"
+msgid "Up next in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "आने वाला  [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] सेकंड में"
+
+msgctxt "#30037"
+msgid "Next episode in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "अगला एपिसोड [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] सेकंड में"
+
+msgctxt "#30038"
+msgid "Simple"
+msgstr "सरल"
+
+msgctxt "#30039"
+msgid "Fancy"
+msgstr "रोचक"
+
+msgctxt "#30040"
+msgid "Play next"
+msgstr "अगला चलाये"
+
+msgctxt "#30041"
+msgid "Stop playing"
+msgstr "रोके"
+
+msgctxt "#30042"
+msgid "None"
+msgstr "कोई नहीं"
+
+msgctxt "#30043"
+msgid "Info"
+msgstr "जानकारी"
+
+msgctxt "#30044"
+msgid "Debug"
+msgstr "डिबग"
+
+msgctxt "#30049"
+msgid "Next Episode"
+msgstr "अगला एपिसोड"
+
+
+### SETTINGS
+msgctxt "#30500"
+msgid "Interface"
+msgstr "इंटरफेस"
+
+msgctxt "#30501"
+msgid "Features"
+msgstr "विशेषताएं"
+
+msgctxt "#30503"
+msgid "Set the display mode for the notifications"
+msgstr "सूचनाओं के लिए प्रदर्शन मोड सेट करें"
+
+msgctxt "#30505"
+msgid "Show a \"Stop\" button instead of a \"Close\" button"
+msgstr "बंद करने के पहले रुकने का बटन दिखाए"
+
+msgctxt "#30600"
+msgid "Behaviour"
+msgstr "व्यवहार"
+
+msgctxt "#30601"
+msgid "Features"
+msgstr "विशेषताएं"
+
+msgctxt "#30603"
+msgid "Default action when nothing selected"
+msgstr "कुछ नहीं चुने जाने पर डिफ़ॉल्ट कार्रवाई"
+
+msgctxt "#30605"
+msgid "Include already watched episodes"
+msgstr "पहले से देखे गए एपिसोड शामिल करें"
+
+msgctxt "#30607"
+msgid "Number of episodes before \"Still there?\" query"
+msgstr "\"मौजूद?\" से पहले एपिसोड की संख्या"
+
+msgctxt "#30609"
+msgid "Duration in seconds for notification to be shown"
+msgstr "सूचना दिखाने के लिए सेकंड में अवधि"
+
+msgctxt "#30611"
+msgid "Customize autoplay duration by episode length"
+msgstr "एपिसोड की लंबाई के आधार पर ऑटोप्ले की अवधि को अनुकूलित करें"
+
+msgctxt "#30613"
+msgid "All episodes  [COLOR gray]any length[/COLOR]"
+msgstr "सारे एपिसोड  [COLOR gray]quelque soit la durée[/COLOR]"
+
+msgctxt "#30615"
+msgid "Very short episodes  [COLOR gray]< 10 mins[/COLOR]"
+msgstr "बहुत छोटे एपिसोड  [COLOR gray]< 10 min[/COLOR]"
+
+msgctxt "#30617"
+msgid "Short episodes  [COLOR gray]> 10 mins[/COLOR]"
+msgstr "छोटे एपिसोड  [COLOR gray]> 10 min[/COLOR]"
+
+msgctxt "#30619"
+msgid "Medium episodes  [COLOR gray]> 20 mins[/COLOR]"
+msgstr "मध्यम एपिसोड  [COLOR gray]> 20 min[/COLOR]"
+
+msgctxt "#30621"
+msgid "Long episodes  [COLOR gray]> 40 mins[/COLOR]"
+msgstr "लम्बे एपिसोड  [COLOR gray]> 40 min[/COLOR]"
+
+msgctxt "#30623"
+msgid "Very long episodes  [COLOR gray]> 60 mins[/COLOR]"
+msgstr "काफी लम्बे एपिसोड  [COLOR gray]> 60 min[/COLOR]"
+
+msgctxt "#30700"
+msgid "Expert"
+msgstr "विशेषज्ञ"
+
+msgctxt "#30703"
+msgid "Disable Up Next"
+msgstr "अगला अक्षम करें"
+
+msgctxt "#30705"
+msgid "Log level"
+msgstr "जानकारी का स्तर"
+
+msgctxt "#30800"
+msgid "Developer"
+msgstr "विकासक"
+
+msgctxt "#30801"
+msgid "Test how the user interface looks"
+msgstr "परीक्षण करें कि उपयोगकर्ता इंटरफ़ेस कैसा दिखता है"
+
+msgctxt "#30805"
+msgid "Show an UpNext pop-up…"
+msgstr "एक आगामी पॉप-अप देखे"
+
+msgctxt "#30807"
+msgid "Show an UpNextSimple pop-up…"
+msgstr "एक आगामी सरल पॉप-अप देखे"
+
+msgctxt "#30809"
+msgid "Show a StillWatching pop-up…"
+msgstr "एक अभी भी देख रहे पॉप-अप देखे"
+
+msgctxt "#30811"
+msgid "Show a StillWatchingSimple pop-up…"
+msgstr "एक अभी भी देख रहे सरल पॉप-अप देखे"

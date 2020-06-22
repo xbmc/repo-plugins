@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <defaultcontrol always="true">20</defaultcontrol>
+    <onload>Dialog.Close(fullscreeninfo,true)</onload>
+    <onload>Dialog.Close(videoosd,true)</onload>
+    <controls>
+        <control type="group">
+            <animation type="WindowOpen" reversible="false">
+                <effect type="fade" start="0" end="100" time="400" />
+                <effect type="slide" start="0,-181" end="0,0" time="400" />
+            </animation>
+            <animation type="WindowClose" reversible="false">
+                <effect type="fade" start="100" end="0" time="400" />
+                <effect type="slide" start="0,0" end="0,-181" time="400" />
+            </animation>
+            <control type="group">
+                <height>181</height>
+                <!-- Background -->
+                <control type="image">
+                    <top>0</top>
+                    <width>100%</width>
+                    <height>181</height>
+                    <texture colordiffuse="dd000000">bg.png</texture>
+                </control>
+                <!-- Thumb -->
+                <control type="group">
+                    <top>20</top>
+                    <left>20</left>
+                    <control type="image">
+                        <top>-2</top>
+                        <left>-2</left>
+                        <width>254</width>
+                        <height>144</height>
+                        <texture>shadow.png</texture>
+                    </control>
+                    <control type="image">
+                        <width>250</width>
+                        <height>141</height>
+                        <texture colordiffuse="FF12A0C7">white.jpg</texture>
+                        <visible>String.IsEmpty(Window.Property(thumb)) + String.IsEmpty(Window.Property(landscape)) + String.IsEmpty(Window.Property(fanart))</visible>
+                    </control>
+                    <control type="textbox">
+                        <top>10</top>
+                        <left>10</left>
+                        <width>230</width>
+                        <height>121</height>
+                        <font>font12</font>
+                        <textcolor>ffffffff</textcolor>
+                        <shadowcolor>00000000</shadowcolor>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <label>$INFO[Window.Property(tvshowtitle)]</label>
+                        <visible>String.IsEmpty(Window.Property(thumb)) + String.IsEmpty(Window.Property(landscape)) + String.IsEmpty(Window.Property(fanart))</visible>
+                    </control>
+                    <control type="image">
+                        <width>250</width>
+                        <height>141</height>
+                        <texture>$INFO[Window.Property(landscape)]</texture>
+                        <aspectratio>scale</aspectratio>
+                    </control>
+                    <control type="image">
+                        <width>250</width>
+                        <height>141</height>
+                        <texture>$INFO[Window.Property(fanart)]</texture>
+                        <aspectratio>scale</aspectratio>
+                        <visible>String.IsEmpty(Window.Property(landscape))</visible>
+                    </control>
+                    <control type="image">
+                        <width>250</width>
+                        <height>141</height>
+                        <texture>$INFO[Window.Property(thumb)]</texture>
+                        <aspectratio>scale</aspectratio>
+                        <visible>String.IsEmpty(Window.Property(landscape)) + String.IsEmpty(Window.Property(fanart))</visible>
+                    </control>
+                    <control type="progress" id="3014">
+                        <width>250</width>
+                        <top>136</top>
+                        <height>5</height>
+                        <reveal>true</reveal>
+                        <righttexture></righttexture>
+                        <overlaytexture></overlaytexture>
+                        <lefttexture></lefttexture>
+                        <texturebg colordiffuse="00ffffff">white.jpg</texturebg>
+                        <midtexture colordiffuse="FFFF4081">white.jpg</midtexture>
+                    </control>
+                </control>
+                <!-- Labels -->
+                <control type="group">
+                    <top>20</top>
+                    <left>290</left>
+                    <right>20</right>
+                    <!-- Time -->
+                    <control type="label">
+                        <width>auto</width>
+                        <height>35</height>
+                        <aligny>center</aligny>
+                        <font>font30_title</font>
+                        <textcolor>ffffffff</textcolor>
+                        <shadowcolor>00000000</shadowcolor>
+                        <label>$ADDON[service.upnext 30024]</label>
+                    </control>
+                    <!-- Details -->
+                    <control type="grouplist">
+                        <orientation>horizontal</orientation>
+                        <height>35</height>
+                        <top>40</top>
+                        <itemgap>0</itemgap>
+                        <control type="label">
+                            <width>auto</width>
+                            <height>30</height>
+                            <aligny>center</aligny>
+                            <font>font12</font>
+                            <textcolor>eeffffff</textcolor>
+                            <shadowcolor>00000000</shadowcolor>
+                            <label>$INFO[Window.Property(tvshowtitle),, - ]$INFO[Window.Property(season),S,]$INFO[Window.Property(episode),E, - ]$INFO[Window.Property(title)]   </label>
+                            <visible>!String.IsEmpty(Window.Property(title))</visible>
+                        </control>
+                        <control type="label">
+                            <width>auto</width>
+                            <height>35</height>
+                            <aligny>center</aligny>
+                            <font>font12</font>
+                            <textcolor>eeffffff</textcolor>
+                            <shadowcolor>00000000</shadowcolor>
+                            <label>$INFO[Window.Property(year),(,)   ]</label>
+                            <visible>!String.IsEmpty(Window.Property(year))</visible>
+                        </control>
+                        <control type="image">
+                            <width>19</width>
+                            <height>19</height>
+                            <aspect>keep</aspect>
+                            <texture colordiffuse="FFFF4081">star.png</texture>
+                            <animation effect="slide" end="0,8" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(Window.Property(rating))</visible>
+                        </control>
+                        <control type="label">
+                            <width>auto</width>
+                            <height>35</height>
+                            <aligny>center</aligny>
+                            <label>$INFO[Window.Property(rating), ,   ]</label>
+                            <font>font12</font>
+                            <textcolor>eeffffff</textcolor>
+                            <shadowcolor>00000000</shadowcolor>
+                            <visible>!String.IsEmpty(Window.Property(rating))</visible>
+                        </control>
+                    </control>
+                    <!-- Buttons -->
+                    <control type="button" id="3012">
+                        <left>-1000</left>
+                        <top>-1000</top>
+                        <height>1</height>
+                        <width>1</width>
+                    </control>
+                    <control type="grouplist" id="20">
+                        <orientation>horizontal</orientation>
+                        <height>56</height>
+                        <bottom>20</bottom>
+                        <itemgap>10</itemgap>
+                        <control type="button" id="10">
+                            <label>    $ADDON[service.upnext 30010]</label>
+                            <onclick>SendClick(3012)</onclick>
+                            <visible>Integer.IsGreater(Player.TimeRemaining,59)</visible>
+                            <height>56</height>
+                            <width min="50">auto</width>
+                            <font>font20_title</font>
+                            <textoffsetx>55</textoffsetx>
+                            <textcolor>ddffffff</textcolor>
+                            <focusedcolor>eeffffff</focusedcolor>
+                            <selectedcolor>ddffffff</selectedcolor>
+                            <shadowcolor>22000000</shadowcolor>
+                            <aligny>center</aligny>
+                            <align>center</align>
+                            <texturefocus border="10" colordiffuse="FF172A91">button.png</texturefocus>
+                            <texturenofocus border="10" colordiffuse="FF212121">button.png</texturenofocus>
+                            <alttexturefocus border="10" colordiffuse="FF172A91">button.png</alttexturefocus>
+                            <alttexturenofocus border="10" colordiffuse="FF212121">button.png</alttexturenofocus>
+                            <pulseonselect>no</pulseonselect>
+                        </control>
+                        <control type="button" id="11">
+                            <label>    $ADDON[service.upnext 30035]</label>
+                            <onclick>SendClick(3012)</onclick>
+                            <visible>!Integer.IsGreater(Player.TimeRemaining,59)</visible>
+                            <height>56</height>
+                            <width min="50">auto</width>
+                            <font>font20_title</font>
+                            <textoffsetx>55</textoffsetx>
+                            <textcolor>ddffffff</textcolor>
+                            <focusedcolor>eeffffff</focusedcolor>
+                            <selectedcolor>ddffffff</selectedcolor>
+                            <shadowcolor>22000000</shadowcolor>
+                            <aligny>center</aligny>
+                            <align>center</align>
+                            <texturefocus border="10" colordiffuse="FF172A91">button.png</texturefocus>
+                            <texturenofocus border="10" colordiffuse="FF212121">button.png</texturenofocus>
+                            <alttexturefocus border="10" colordiffuse="FF172A91">button.png</alttexturefocus>
+                            <alttexturenofocus border="10" colordiffuse="FF212121">button.png</alttexturenofocus>
+                            <pulseonselect>no</pulseonselect>
+                        </control>
+                        <control type="button" id="3013">
+                            <label>$ADDON[service.upnext 30034]</label>
+                            <height>56</height>
+                            <width min="50">auto</width>
+                            <font>font20_title</font>
+                            <textoffsetx>15</textoffsetx>
+                            <textcolor>ddffffff</textcolor>
+                            <focusedcolor>eeffffff</focusedcolor>
+                            <selectedcolor>ddffffff</selectedcolor>
+                            <shadowcolor>22000000</shadowcolor>
+                            <aligny>center</aligny>
+                            <align>center</align>
+                            <texturefocus border="10" colordiffuse="FF172A91">button.png</texturefocus>
+                            <texturenofocus border="10" colordiffuse="FF212121">button.png</texturenofocus>
+                            <alttexturefocus border="10" colordiffuse="FF172A91">button.png</alttexturefocus>
+                            <alttexturenofocus border="10" colordiffuse="FF212121">button.png</alttexturenofocus>
+                            <pulseonselect>no</pulseonselect>
+                        </control>
+                    </control>
+                    <control type="image">
+                        <bottom>20</bottom>
+                        <width>46</width>
+                        <height>46</height>
+                        <aspect>keep</aspect>
+                        <texture colordiffuse="ddffffff">nextupicons/00.png</texture>
+                        <animation effect="slide" end="13,-5" time="0" condition="true">Conditional</animation>
+                    </control>
+                    <control type="group">
+                        <visible>!Window.IsVisible(extendedprogressdialog)</visible>
+                        <animation effect="fade" time="150">VisibleChange</animation>
+                        <control type="label">
+                            <font>font_clock</font>
+                            <shadowcolor>text_shadow</shadowcolor>
+                            <top>0</top>
+                            <right>20</right>
+                            <height>200</height>
+                            <width>600</width>
+                            <align>right</align>
+                            <label>$INFO[System.Time]</label>
+                        </control>
+                        <control type="label">
+                            <right>24</right>
+                            <top>74</top>
+                            <width>800</width>
+                            <height>100</height>
+                            <align>right</align>
+                            <itemgap>5</itemgap>
+                            <orientation>horizontal</orientation>
+                            <usecontrolcoords>true</usecontrolcoords>
+                            <label>$ADDON[service.upnext 30009]</label>
+                            <shadowcolor>text_shadow</shadowcolor>
+                            <visible>!String.IsEmpty(Window.Property(endtime))</visible>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </control>
+    </controls>
+</window>

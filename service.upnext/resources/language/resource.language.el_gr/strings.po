@@ -1,0 +1,201 @@
+# Service Up Next language file
+# Addon Name: Up Next
+# Addon id: service.upnext
+# Addon Provider: im85288
+msgid ""
+msgstr ""
+"Project-Id-Version: service.upnext\n"
+"Report-Msgid-Bugs-To: https://github.com/im85288/service.upnext\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2018-02-26 13:31+0000\n"
+"Last-Translator: Twilight0\n"
+"Language-Team: Greek\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7\n"
+
+### APPLICATION
+msgctxt "#30006"
+msgid "Watch Now"
+msgstr "Παρακολούθηση τώρα"
+
+msgctxt "#30008"
+msgid "Up Next"
+msgstr "Επόμενο"
+
+msgctxt "#30009"
+msgid "Ends at: $INFO[Window.Property(endtime)]"
+msgstr "Τελειώνει σε: $INFO[Window.Property(endtime)]"
+
+msgctxt "#30010"
+msgid "Continue watching"
+msgstr "Συνέχιση παρακολούθησης"
+
+msgctxt "#30024"
+msgid "Still there?"
+msgstr "Ακόμα εδώ;"
+
+msgctxt "#30032"
+msgid "Enable on playlists"
+msgstr "Ενεργοποίησε σε λίστες αναπαραγωγής"
+
+msgctxt "#30033"
+msgid "Stop"
+msgstr "Σταμάτημα"
+
+msgctxt "#30034"
+msgid "Close"
+msgstr "Κλείσιμο"
+
+msgctxt "#30035"
+msgid "Continue watching in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Συνέχιση παρακολούθησης σε [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] δευτερόλεπτα"
+
+msgctxt "#30036"
+msgid "Up next in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Επόμενο σε [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] δευτερόλεπτα"
+
+msgctxt "#30037"
+msgid "Next episode in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Επόμενο επεισόδιο σε [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] δευτερόλεπτα"
+
+msgctxt "#30038"
+msgid "Simple"
+msgstr "Απλό"
+
+msgctxt "#30039"
+msgid "Fancy"
+msgstr "Φανταχτερό"
+
+msgctxt "#30040"
+msgid "Play next"
+msgstr "Αναπαραγωγή επόμενου"
+
+msgctxt "#30041"
+msgid "Stop playing"
+msgstr "Σταμάτημα αναπαραγωγής"
+
+msgctxt "#30042"
+msgid "None"
+msgstr "Κανένα"
+
+msgctxt "#30043"
+msgid "Info"
+msgstr "Πληροφορίες"
+
+msgctxt "#30044"
+msgid "Debug"
+msgstr "Αποσφαλμάτωση"
+
+msgctxt "#30049"
+msgid "Next Episode"
+msgstr "Επόμενο επεισόδιο"
+
+
+### SETTINGS
+msgctxt "#30500"
+msgid "Interface"
+msgstr "Περιβάλλον"
+
+msgctxt "#30501"
+msgid "Features"
+msgstr "Χαρακτηριστικά"
+
+msgctxt "#30503"
+msgid "Set the display mode for the notifications"
+msgstr "Ρύθμισε την λειτουργία οθόνης για τις ειδοποιήσεις"
+
+msgctxt "#30505"
+msgid "Show a \"Stop\" button instead of a \"Close\" button"
+msgstr "Δείξε ενα κουμπί \"Σταματήματος\" αντί του κουμπιού \"Κλεισίματος\""
+
+msgctxt "#30600"
+msgid "Behaviour"
+msgstr "Συμπεριφορά"
+
+msgctxt "#30601"
+msgid "Features"
+msgstr "Χαρακτηριστικά"
+
+msgctxt "#30603"
+msgid "Default action when nothing selected"
+msgstr "Εξ'ορισμού ενέργεια όταν δεν είναι κάτι επιλεγμένο"
+
+msgctxt "#30605"
+msgid "Include already watched episodes"
+msgstr "Συμπερίλεψε τα επεισόδια που έχουν ήδη παρακολουθηθεί"
+
+msgctxt "#30607"
+msgid "Number of episodes before \"Still there?\" query"
+msgstr "Αριθμός επεισοδίων πριν από την ερώτηση \"Ακόμα εδώ;\""
+
+msgctxt "#30609"
+msgid "Duration in seconds for notification to be shown"
+msgstr "Διάρκεια σε δευτερόλεπτα για την απεικόνιση της ειδοποίησης"
+
+msgctxt "#30611"
+msgid "Customize autoplay duration by episode length"
+msgstr "Τροποίηση διάρκειας αυτόματης αναπαραγωγής με βαση το μήκος του επεισοδίου"
+
+msgctxt "#30613"
+msgid "All episodes  [COLOR gray]any length[/COLOR]"
+msgstr "Όλα τα επεισόδια  [COLOR gray]οποιοδήποτε μήκος[/COLOR]"
+
+msgctxt "#30615"
+msgid "Very short episodes  [COLOR gray]< 10 mins[/COLOR]"
+msgstr "Πολύ σύντομα επεισόδια [COLOR gray]< 10 λεπτά[/COLOR]"
+
+msgctxt "#30617"
+msgid "Short episodes  [COLOR gray]> 10 mins[/COLOR]"
+msgstr "Σύντομα επεισόδια  [COLOR gray]> 10 λεπτά[/COLOR]"
+
+msgctxt "#30619"
+msgid "Medium episodes  [COLOR gray]> 20 mins[/COLOR]"
+msgstr "Μέτριας διάρκειας επεισόδια  [COLOR gray]> 20 λεπτά[/COLOR]"
+
+msgctxt "#30621"
+msgid "Long episodes  [COLOR gray]> 40 mins[/COLOR]"
+msgstr "Μεγάλης διάρκειας επεισόδια  [COLOR gray]> 40 λεπτά[/COLOR]"
+
+msgctxt "#30623"
+msgid "Very long episodes  [COLOR gray]> 60 mins[/COLOR]"
+msgstr "Πολύ μεγάλης διάρκειας επεισόδια  [COLOR gray]> 60 λεπτά[/COLOR]"
+
+msgctxt "#30700"
+msgid "Expert"
+msgstr "Ειδικός"
+
+msgctxt "#30703"
+msgid "Disable Up Next"
+msgstr "Απενεργοποίηση επομένου"
+
+msgctxt "#30705"
+msgid "Log level"
+msgstr "Επίπεδο καταγραφής"
+
+msgctxt "#30800"
+msgid "Developer"
+msgstr "Προγραμματιστής"
+
+msgctxt "#30801"
+msgid "Test how the user interface looks"
+msgstr "Δοκιμή του πως μοιάζει το περιβάλλον"
+
+msgctxt "#30805"
+msgid "Show an UpNext pop-up…"
+msgstr "Δείξε ένα αναδυόμενο παράθυρο για το επόμενο"
+
+msgctxt "#30807"
+msgid "Show an UpNextSimple pop-up…"
+msgstr "Δείξε ένα αναδυόμενο παράθυρο για το επόμενο σε απλή μορφή"
+
+msgctxt "#30809"
+msgid "Show a StillWatching pop-up…"
+msgstr "Δείξε ένα αναδυόμενο παράθυρο για την συνεχιζόμενη παρακολούθηση"
+
+msgctxt "#30811"
+msgid "Show a StillWatchingSimple pop-up…"
+msgstr "Δείξε ένα αναδυόμενο παράθυρο για την συνεχιζόμενη παρακολούθηση σε απλή μορφή"

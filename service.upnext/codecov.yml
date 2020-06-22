@@ -1,0 +1,11 @@
+coverage:
+  round: nearest
+  status:
+    project:
+      default:
+        target: 30%
+        threshold: 6%
+    patch: false
+comment: false
+ignore:
+- tests/

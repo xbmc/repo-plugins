@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30500"> <!-- Interface -->
+        <setting label="30503" type="enum" id="simpleMode" lvalues="30038|30039" default="1"/>
+        <setting label="30505" type="bool" id="stopAfterClose" default="false"/>
+    </category>
+    <category label="30600"> <!-- Behaviour -->
+        <setting label="30603" type="enum" id="autoPlayMode" lvalues="30040|30041" default="0"/>
+        <setting label="30032" type="bool" id="enablePlaylist" default="false"/>
+        <setting label="30605" type="bool" id="includeWatched" default="false"/>
+        <setting label="30607" type="slider" id="playedInARow" default="3" range="0,1,15" option="int"/>
+        <setting label="30609" type="lsep"/> <!-- Autoplay duration -->
+        <setting label="30611" type="bool" id="customAutoPlayTime" default="false"/>
+        <setting label="30613" type="slider" id="autoPlaySeasonTime" default="30" range="0,5,120" option="int" subsetting="true" visible="eq(-1,false)"/>
+        <setting label="30615" type="slider" id="autoPlayTimeXS" default="15" range="0,5,120" option="int" subsetting="true" visible="eq(-2,true)"/>
+        <setting label="30617" type="slider" id="autoPlayTimeS" default="30" range="0,5,120" option="int" subsetting="true" visible="eq(-3,true)"/>
+        <setting label="30619" type="slider" id="autoPlayTimeM" default="40" range="0,5,120" option="int" subsetting="true" visible="eq(-4,true)"/>
+        <setting label="30621" type="slider" id="autoPlayTimeL" default="50" range="0,5,120" option="int" subsetting="true" visible="eq(-5,true)"/>
+        <setting label="30623" type="slider" id="autoPlayTimeXL" default="60" range="0,5,120" option="int" subsetting="true" visible="eq(-6,true)"/>
+    </category>
+    <category label="30700"> <!-- Expert -->
+        <setting label="30703" type="bool" id="disableNextUp" default="false"/>
+        <setting label="30705" type="enum" id="logLevel" lvalues="30042|30043|30044" default="0"/>
+    </category>
+    <category label="30800"> <!-- Developer -->
+        <setting label="30801" type="lsep"/> <!-- Test the GUI -->
+        <setting label="30805" type="action" action="RunScript(service.upnext,test_window,script-upnext-upnext.xml)"/>
+        <setting label="30807" type="action" action="RunScript(service.upnext,test_window,script-upnext-upnext-simple.xml)"/>
+        <setting label="30809" type="action" action="RunScript(service.upnext,test_window,script-upnext-stillwatching.xml)"/>
+        <setting label="30811" type="action" action="RunScript(service.upnext,test_window,script-upnext-stillwatching-simple.xml)"/>
+    </category>
+</settings>

@@ -1,0 +1,202 @@
+# Service Up Next language file
+# Addon Name: Up Next
+# Addon id: service.upnext
+# Addon Provider: im85288
+# Romanian translation: tmihai20
+msgid ""
+msgstr ""
+"Project-Id-Version: service.upnext\n"
+"Report-Msgid-Bugs-To: https://github.com/im85288/service.upnext\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-03-29 16:59+0000\n"
+"Last-Translator: tmihai20\n"
+"Language-Team: Română\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ro\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7\n"
+
+### APPLICATION
+msgctxt "#30006"
+msgid "Watch Now"
+msgstr "Vizionează acum"
+
+msgctxt "#30008"
+msgid "Up Next"
+msgstr "Urmează"
+
+msgctxt "#30009"
+msgid "Ends at: $INFO[Window.Property(endtime)]"
+msgstr "Se termină la: $INFO[Window.Property(endtime)]"
+
+msgctxt "#30010"
+msgid "Continue watching"
+msgstr "Continuă vizionarea"
+
+msgctxt "#30024"
+msgid "Still there?"
+msgstr "Mai sunteți aici?"
+
+msgctxt "#30032"
+msgid "Enable on playlists"
+msgstr "Activați în liste"
+
+msgctxt "#30033"
+msgid "Stop"
+msgstr "Oprește"
+
+msgctxt "#30034"
+msgid "Close"
+msgstr "Închide"
+
+msgctxt "#30035"
+msgid "Continue watching in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Continuă vizionarea în [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] secunde"
+
+msgctxt "#30036"
+msgid "Up next in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Urmează în [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] secunde"
+
+msgctxt "#30037"
+msgid "Next episode in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Următorul episod în [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] secunde"
+
+msgctxt "#30038"
+msgid "Simple"
+msgstr "Simplu"
+
+msgctxt "#30039"
+msgid "Fancy"
+msgstr "Îmbogățit"
+
+msgctxt "#30040"
+msgid "Play next"
+msgstr "Redă"
+
+msgctxt "#30041"
+msgid "Stop playing"
+msgstr "Oprește redarea"
+
+msgctxt "#30042"
+msgid "None"
+msgstr "Nici unul"
+
+msgctxt "#30043"
+msgid "Info"
+msgstr "Informații"
+
+msgctxt "#30044"
+msgid "Debug"
+msgstr "Depanare"
+
+msgctxt "#30049"
+msgid "Next Episode"
+msgstr "Următorul episod"
+
+
+### SETTINGS
+msgctxt "#30500"
+msgid "Interface"
+msgstr "Interfață"
+
+msgctxt "#30501"
+msgid "Features"
+msgstr "Caracteristici"
+
+msgctxt "#30503"
+msgid "Set the display mode for the notifications"
+msgstr "Configurează modul de afișare al notificărilor"
+
+msgctxt "#30505"
+msgid "Show a \"Stop\" button instead of a \"Close\" button"
+msgstr "Arată un buton <Oprește> în locul unuia <Închide>"
+
+msgctxt "#30600"
+msgid "Behaviour"
+msgstr "Comportament"
+
+msgctxt "#30601"
+msgid "Features"
+msgstr "Caracteristici"
+
+msgctxt "#30603"
+msgid "Default action when nothing selected"
+msgstr "Acțiune implicită atunci când nu e selectat ceva"
+
+msgctxt "#30605"
+msgid "Include already watched episodes"
+msgstr "Include episoade deja urmărite"
+
+msgctxt "#30607"
+msgid "Number of episodes before \"Still there?\" query"
+msgstr "Număr de episoade înainte de a întreba <Mai sunteți aici?>"
+
+msgctxt "#30609"
+msgid "Duration in seconds for notification to be shown"
+msgstr "Durata de afișare a notificării (în secunde)"
+
+msgctxt "#30611"
+msgid "Customize autoplay duration by episode length"
+msgstr "Personalizare durată auto-redare în funcție de durata episodului"
+
+msgctxt "#30613"
+msgid "All episodes  [COLOR gray]any length[/COLOR]"
+msgstr "Toate episoadele  [COLOR gray]any length[/COLOR]"
+
+msgctxt "#30615"
+msgid "Very short episodes  [COLOR gray]< 10 mins[/COLOR]"
+msgstr "Episoade foarte scurte  [COLOR gray]< 10 mins[/COLOR]"
+
+msgctxt "#30617"
+msgid "Short episodes  [COLOR gray]> 10 mins[/COLOR]"
+msgstr "Episoade scurte  [COLOR gray]> 10 mins[/COLOR]"
+
+msgctxt "#30619"
+msgid "Medium episodes  [COLOR gray]> 20 mins[/COLOR]"
+msgstr "Episoade medii  [COLOR gray]> 20 mins[/COLOR]"
+
+msgctxt "#30621"
+msgid "Long episodes  [COLOR gray]> 40 mins[/COLOR]"
+msgstr "Episoade lungi  [COLOR gray]> 40 mins[/COLOR]"
+
+msgctxt "#30623"
+msgid "Very long episodes  [COLOR gray]> 60 mins[/COLOR]"
+msgstr "Episoade foarte lungi  [COLOR gray]> 60 mins[/COLOR]"
+
+msgctxt "#30700"
+msgid "Expert"
+msgstr "Avansat"
+
+msgctxt "#30703"
+msgid "Disable Up Next"
+msgstr "Dezactivează <Urmează>"
+
+msgctxt "#30705"
+msgid "Log level"
+msgstr "Nivel jurnal"
+
+msgctxt "#30800"
+msgid "Developer"
+msgstr "Dezvoltator"
+
+msgctxt "#30801"
+msgid "Test how the user interface looks"
+msgstr "Testează cum arată interfața utilizator"
+
+msgctxt "#30805"
+msgid "Show an UpNext pop-up…"
+msgstr "Arată o notificare <Urmează>"
+
+msgctxt "#30807"
+msgid "Show an UpNextSimple pop-up…"
+msgstr "Arată o notificare simplă <Urmează>"
+
+msgctxt "#30809"
+msgid "Show a StillWatching pop-up…"
+msgstr "Arată o notificare <Mai urmăriți?>"
+
+msgctxt "#30811"
+msgid "Show a StillWatchingSimple pop-up…"
+msgstr "Arată o notificare simplă <Mai urmăriți?>"

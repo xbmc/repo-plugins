@@ -1,0 +1,200 @@
+# Service Up Next language file
+# Addon Name: Up Next
+# Addon id: service.upnext
+# Addon Provider: im85288
+msgid ""
+msgstr ""
+"Project-Id-Version: service.upnext\n"
+"Report-Msgid-Bugs-To: https://github.com/im85288/service.upnext\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-01-20 7:15+0000\n"
+"Last-Translator: frodo\n"
+"Language-Team: Hungarian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7\n"
+
+msgctxt "#30006"
+msgid "Watch Now"
+msgstr "Lejátszás most"
+
+msgctxt "#30008"
+msgid "Up Next"
+msgstr "Következő rész"
+
+msgctxt "#30009"
+msgid "Ends at: $INFO[Window.Property(endtime)]"
+msgstr "Befejezési időpont: $INFO[Window.Property(endtime)]"
+
+msgctxt "#30010"
+msgid "Continue watching"
+msgstr "Lejátszás folytatása"
+
+msgctxt "#30024"
+msgid "Still there?"
+msgstr "Még itt vagy?"
+
+msgctxt "#30032"
+msgid "Enable on playlists"
+msgstr "Lejátszólistán engedélyezve"
+
+msgctxt "#30033"
+msgid "Stop"
+msgstr "Állj"
+
+msgctxt "#30034"
+msgid "Close"
+msgstr "Bezár"
+
+msgctxt "#30035"
+msgid "Continue watching in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Lejátszás folytatásának indítása [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] másodperc múlva"
+
+msgctxt "#30036"
+msgid "Up next in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr " indítása [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] másodperc múlva"
+
+msgctxt "#30037"
+msgid "Next episode in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr " indítása [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] másodperc múlva"
+
+msgctxt "#30038"
+msgid "Simple"
+msgstr "Egyszerű"
+
+msgctxt "#30039"
+msgid "Fancy"
+msgstr "Divatos"
+
+msgctxt "#30040"
+msgid "Play next"
+msgstr "Lejátszás"
+
+msgctxt "#30041"
+msgid "Stop playing"
+msgstr "Ne játszd le"
+
+msgctxt "#30042"
+msgid "None"
+msgstr "Nincs"
+
+msgctxt "#30043"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "#30044"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "#30049"
+msgid "Next Episode"
+msgstr "Következő rész"
+
+
+### SETTINGS
+msgctxt "#30500"
+msgid "Interface"
+msgstr "Felület"
+
+msgctxt "#30501"
+msgid "Features"
+msgstr "Funkciók"
+
+msgctxt "#30503"
+msgid "Set the display mode for the notifications"
+msgstr "Értesitések típusa"
+
+msgctxt "#30505"
+msgid "Show a \"Stop\" button instead of a \"Close\" button"
+msgstr "A \"Stop\" gomb mutatása a \"Bezárás\" gomb helyett"
+
+msgctxt "#30600"
+msgid "Behaviour"
+msgstr "Viselkedés"
+
+msgctxt "#30601"
+msgid "Features"
+msgstr "Funkciók"
+
+msgctxt "#30603"
+msgid "Default action when nothing selected"
+msgstr "Viselkedés ha semmi sincs kiválasztva"
+
+msgctxt "#30605"
+msgid "Include already watched episodes"
+msgstr "Megnézett epizódokat is beleértve"
+
+msgctxt "#30607"
+msgid "Number of episodes before \"Still there?\" query"
+msgstr "Epizódok a még nézed kérdés és a leállás előtt"
+
+msgctxt "#30609"
+msgid "Duration in seconds for notification to be shown"
+msgstr "Végén mikor jelenik meg az értesítés (mp)"
+
+msgctxt "#30611"
+msgid "Customize autoplay duration by episode length"
+msgstr "Beállíthatod az automatikus lejátszás időtartamát az epizód hossza alapján"
+
+msgctxt "#30613"
+msgid "All episodes  [COLOR gray]any length[/COLOR]"
+msgstr "Minden epizód  [COLOR gray]bármilyen hossz[/COLOR]"
+
+msgctxt "#30615"
+msgid "Very short episodes  [COLOR gray]< 10 mins[/COLOR]"
+msgstr "Nagyon rövid epizódok  [COLOR gray]< 10 perc[/COLOR]"
+
+msgctxt "#30617"
+msgid "Short episodes  [COLOR gray]> 10 mins[/COLOR]"
+msgstr "Rövid epizódok  [COLOR gray]> 10 perc[/COLOR]"
+
+msgctxt "#30619"
+msgid "Medium episodes  [COLOR gray]> 20 mins[/COLOR]"
+msgstr "Közepes epizódok  [COLOR gray]> 20 perc[/COLOR]"
+
+msgctxt "#30621"
+msgid "Long episodes  [COLOR gray]> 40 mins[/COLOR]"
+msgstr "Hosszú epizódok  [COLOR gray]> 40 perc[/COLOR]"
+
+msgctxt "#30623"
+msgid "Very long episodes  [COLOR gray]> 60 mins[/COLOR]"
+msgstr "Nagyon hosszú epizódok  [COLOR gray]> 60 perc[/COLOR]"
+
+msgctxt "#30700"
+msgid "Expert"
+msgstr "Haladó"
+
+msgctxt "#30703"
+msgid "Disable Up Next"
+msgstr "Up Next kikapcsolása"
+
+msgctxt "#30705"
+msgid "Log level"
+msgstr "Naplózási szint"
+
+msgctxt "#30800"
+msgid "Developer"
+msgstr "Fejlesztő"
+
+msgctxt "#30801"
+msgid "Test how the user interface looks"
+msgstr "Felhasználói felület kinézet tesztelése"
+
+msgctxt "#30805"
+msgid "Show an UpNext pop-up…"
+msgstr "UpNext pop-up mutatása"
+
+msgctxt "#30807"
+msgid "Show an UpNextSimple pop-up…"
+msgstr "UpNext egyszerű pop-up mutatása"
+
+msgctxt "#30809"
+msgid "Show a StillWatching pop-up…"
+msgstr "Még nézed pop-up mutatása"
+
+msgctxt "#30811"
+msgid "Show a StillWatchingSimple pop-up…"
+msgstr "Még nézed egyszerű pop-up mutatása"

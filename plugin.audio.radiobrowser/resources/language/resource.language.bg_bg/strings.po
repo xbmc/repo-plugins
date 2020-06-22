@@ -42,8 +42,8 @@ msgid "Countries"
 msgstr "Държави"
 
 msgctxt "#32006"
-msgstr "Всички"
 msgid "All"
+msgstr "Всички"
 
 msgctxt "#32007"
 msgid "Search..."

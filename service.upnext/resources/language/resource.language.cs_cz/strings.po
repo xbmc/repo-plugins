@@ -1,0 +1,201 @@
+# Service Up Next language file
+# Addon Name: Up Next
+# Addon id: service.upnext
+# Addon Provider: im85288
+msgid ""
+msgstr ""
+"Project-Id-Version: service.upnext\n"
+"Report-Msgid-Bugs-To: https://github.com/im85288/service.upnext\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-01-14 20:16+0100\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
+"X-Generator: Poedit 2.2.4\n"
+"Last-Translator: Jaroslav Lichtblau <jlichtblau@seznam.cz>\n"
+"Language: cs_CZ\n"
+
+### APPLICATION
+msgctxt "#30006"
+msgid "Watch Now"
+msgstr "Sledovat teď"
+
+msgctxt "#30008"
+msgid "Up Next"
+msgstr "Další bude"
+
+msgctxt "#30009"
+msgid "Ends at: $INFO[Window.Property(endtime)]"
+msgstr "Končí v: $INFO[Window.Property(endtime)]"
+
+msgctxt "#30010"
+msgid "Continue watching"
+msgstr "Pokračovat ve sledování"
+
+msgctxt "#30024"
+msgid "Still there?"
+msgstr "Stále sleduješ?"
+
+msgctxt "#30032"
+msgid "Enable on playlists"
+msgstr "Povolit pro playlisty"
+
+msgctxt "#30033"
+msgid "Stop"
+msgstr "Zastavit"
+
+msgctxt "#30034"
+msgid "Close"
+msgstr "Zavřít"
+
+msgctxt "#30035"
+msgid "Continue watching in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Pokračovat ve sledování za [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] sekund"
+
+msgctxt "#30036"
+msgid "Up next in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Další za [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] sekund"
+
+msgctxt "#30037"
+msgid "Next episode in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Další epizoda za [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] sekund"
+
+msgctxt "#30038"
+msgid "Simple"
+msgstr "Jednoduchý"
+
+msgctxt "#30039"
+msgid "Fancy"
+msgstr "Rozšířený"
+
+msgctxt "#30040"
+msgid "Play next"
+msgstr "Přehrát další"
+
+msgctxt "#30041"
+msgid "Stop playing"
+msgstr "Zastavit přehrávání"
+
+msgctxt "#30042"
+msgid "None"
+msgstr "Žádný"
+
+msgctxt "#30043"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "#30044"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "#30049"
+msgid "Next Episode"
+msgstr "Další epizoda"
+
+
+### SETTINGS
+msgctxt "#30500"
+msgid "Interface"
+msgstr "Rozhraní"
+
+msgctxt "#30501"
+msgid "Features"
+msgstr "Funkce"
+
+msgctxt "#30503"
+msgid "Set the display mode for the notifications"
+msgstr "Nastavit vzhled pro upozornění"
+
+msgctxt "#30505"
+msgid "Show a \"Stop\" button instead of a \"Close\" button"
+msgstr "Zobrazit tlačítko \"Zastavení\" místo \"Zavření\""
+
+msgctxt "#30600"
+msgid "Behaviour"
+msgstr "Chování"
+
+msgctxt "#30601"
+msgid "Features"
+msgstr "Funkce"
+
+msgctxt "#30603"
+msgid "Default action when nothing selected"
+msgstr "Výchozí akce pokud není nic vybráno"
+
+msgctxt "#30605"
+msgid "Include already watched episodes"
+msgstr "Zahrnout i zhlédnuté epizody"
+
+msgctxt "#30607"
+msgid "Number of episodes before \"Still there?\" query"
+msgstr "Počet epizod před zobrazením dotazu \"Stále sleduješ?\""
+
+msgctxt "#30609"
+msgid "Duration in seconds for notification to be shown"
+msgstr "Počet sekund zobrazení upozornění"
+
+msgctxt "#30611"
+msgid "Customize autoplay duration by episode length"
+msgstr "Upravit trvání automatického přehrávání podle délky epizod"
+
+msgctxt "#30613"
+msgid "All episodes  [COLOR gray]any length[/COLOR]"
+msgstr "Všechny epizodyv  [COLOR gray]jakékoliv délce[/COLOR]"
+
+msgctxt "#30615"
+msgid "Very short episodes  [COLOR gray]< 10 mins[/COLOR]"
+msgstr "Velmi krátké epizody  [COLOR gray]< 10 min[/COLOR]"
+
+msgctxt "#30617"
+msgid "Short episodes  [COLOR gray]> 10 mins[/COLOR]"
+msgstr "Krátké epizody  [COLOR gray]> 10 min[/COLOR]"
+
+msgctxt "#30619"
+msgid "Medium episodes  [COLOR gray]> 20 mins[/COLOR]"
+msgstr "Středně dlouhé epizody  [COLOR gray]> 20 min[/COLOR]"
+
+msgctxt "#30621"
+msgid "Long episodes  [COLOR gray]> 40 mins[/COLOR]"
+msgstr "Dlouhé epizody  [COLOR gray]> 40 min[/COLOR]"
+
+msgctxt "#30623"
+msgid "Very long episodes  [COLOR gray]> 60 mins[/COLOR]"
+msgstr "Velmi dlouhé epizody  [COLOR gray]> 60 min[/COLOR]"
+
+msgctxt "#30700"
+msgid "Expert"
+msgstr "Expert"
+
+msgctxt "#30703"
+msgid "Disable Up Next"
+msgstr "Vypnout plugin Up Next"
+
+msgctxt "#30705"
+msgid "Log level"
+msgstr "Úroveň logování"
+
+msgctxt "#30800"
+msgid "Developer"
+msgstr "Vývojář"
+
+msgctxt "#30801"
+msgid "Test how the user interface looks"
+msgstr "Otestovat vzhled uživatelského rozhraní"
+
+msgctxt "#30805"
+msgid "Show an UpNext pop-up…"
+msgstr "Zobrazit UpNext pop-up…"
+
+msgctxt "#30807"
+msgid "Show an UpNextSimple pop-up…"
+msgstr "Zobrazit jednoduchý UpNext pop-up…"
+
+msgctxt "#30809"
+msgid "Show a StillWatching pop-up…"
+msgstr "Zobrazit pop-up ověření pozornosti…"
+
+msgctxt "#30811"
+msgid "Show a StillWatchingSimple pop-up…"
+msgstr "Zobrazit jednoduchý pop-up ověření pozornosti…"

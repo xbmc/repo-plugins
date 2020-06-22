@@ -1,0 +1,201 @@
+# Service Up Next language file
+# Addon Name: Up Next
+# Addon id: service.upnext
+# Addon Provider: im85288
+msgid ""
+msgstr ""
+"Project-Id-Version: service.upnext\n"
+"Report-Msgid-Bugs-To: https://github.com/im85288/service.upnext\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2018-02-26 13:31+0000\n"
+"Last-Translator: Wanilton"
+"Language-Team: Portuguese (Brazil)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_br\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7\n"
+
+### APPLICATION
+msgctxt "#30006"
+msgid "Watch Now"
+msgstr "Assistir Agora"
+
+msgctxt "#30008"
+msgid "Up Next"
+msgstr "A seguir"
+
+msgctxt "#30009"
+msgid "Ends at: $INFO[Window.Property(endtime)]"
+msgstr "Finaliza às: $INFO[Window.Property(endtime)]"
+
+msgctxt "#30010"
+msgid "Continue watching"
+msgstr "Continuar assistindo"
+
+msgctxt "#30024"
+msgid "Still there?"
+msgstr "Ainda aí?"
+
+msgctxt "#30032"
+msgid "Enable on playlists"
+msgstr "Ativar nas listas de reproduções"
+
+msgctxt "#30033"
+msgid "Stop"
+msgstr "Parar"
+
+msgctxt "#30034"
+msgid "Close"
+msgstr "Fechar"
+
+msgctxt "#30035"
+msgid "Continue watching in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Continue assistindo em [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] segundos"
+
+msgctxt "#30036"
+msgid "Up next in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Up next em [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] segundos"
+
+msgctxt "#30037"
+msgid "Next episode in [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] seconds"
+msgstr "Próximo episódio em [COLOR FFFF4081]$INFO[Window.Property(remaining)][/COLOR] segundos"
+
+msgctxt "#30038"
+msgid "Simple"
+msgstr "Simples"
+
+msgctxt "#30039"
+msgid "Fancy"
+msgstr "Elegante"
+
+msgctxt "#30040"
+msgid "Play next"
+msgstr "Reproduzir próximo"
+
+msgctxt "#30041"
+msgid "Stop playing"
+msgstr "Pare a reprodução"
+
+msgctxt "#30042"
+msgid "None"
+msgstr "Nenhum"
+
+msgctxt "#30043"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "#30044"
+msgid "Debug"
+msgstr "Depurar"
+
+msgctxt "#30049"
+msgid "Next Episode"
+msgstr "Próximo Episódio"
+
+
+### SETTINGS
+msgctxt "#30500"
+msgid "Interface"
+msgstr "Interface"
+
+msgctxt "#30501"
+msgid "Features"
+msgstr "Recursos"
+
+msgctxt "#30503"
+msgid "Set the display mode for the notifications"
+msgstr "Definir o modo da tela para a notificação"
+
+msgctxt "#30505"
+msgid "Show a \"Stop\" button instead of a \"Close\" button"
+msgstr "Mostrar um botão \"Pare\" ao invés de um botão \"Fechar\""
+
+msgctxt "#30600"
+msgid "Behaviour"
+msgstr "Comportamento"
+
+msgctxt "#30601"
+msgid "Features"
+msgstr "Recursos"
+
+msgctxt "#30603"
+msgid "Default action when nothing selected"
+msgstr "Ação padrão quando nada for selecionado"
+
+msgctxt "#30605"
+msgid "Include already watched episodes"
+msgstr "Incluir episódios já assistidos"
+
+msgctxt "#30607"
+msgid "Number of episodes before \"Still there?\" query"
+msgstr "Número de episódios antes da consulta \"Ainda aí?\""
+
+msgctxt "#30609"
+msgid "Duration in seconds for notification to be shown"
+msgstr "Duração em segundos para a notificação ser mostrada"
+
+msgctxt "#30611"
+msgid "Customize autoplay duration by episode length"
+msgstr "Personalizar a duração da reprodução automática por duração do episódio"
+
+msgctxt "#30613"
+msgid "All episodes  [COLOR gray]any length[/COLOR]"
+msgstr "Todos os episódios [COLOR gray]qualquer duração[/COLOR]"
+
+msgctxt "#30615"
+msgid "Very short episodes  [COLOR gray]< 10 mins[/COLOR]"
+msgstr "Episódios curtíssimos [COLOR gray]< 10 min[/COLOR]"
+
+msgctxt "#30617"
+msgid "Short episodes  [COLOR gray]> 10 mins[/COLOR]"
+msgstr "Episódios curtos [COLOR gray]> 10 min[/COLOR]"
+
+msgctxt "#30619"
+msgid "Medium episodes  [COLOR gray]> 20 mins[/COLOR]"
+msgstr "Episódios médios [COLOR gray]> 20 min[/COLOR]"
+
+msgctxt "#30621"
+msgid "Long episodes  [COLOR gray]> 40 mins[/COLOR]"
+msgstr "Episódios longos [COLOR gray]> 40 min[/COLOR]"
+
+msgctxt "#30623"
+msgid "Very long episodes  [COLOR gray]> 60 mins[/COLOR]"
+msgstr "Episódios longuíssimos [COLOR gray]> 60 min[/COLOR]"
+
+msgctxt "#30700"
+msgid "Expert"
+msgstr "Especialista"
+
+msgctxt "#30703"
+msgid "Disable Up Next"
+msgstr "Desativar Up Next"
+
+msgctxt "#30705"
+msgid "Log level"
+msgstr "Nível do log"
+
+msgctxt "#30800"
+msgid "Developer"
+msgstr "Desenvolvedor"
+
+msgctxt "#30801"
+msgid "Test how the user interface looks"
+msgstr "Teste a aparência da interface do usuário"
+
+msgctxt "#30805"
+msgid "Show an UpNext pop-up…"
+msgstr "mostrar um pop up UpNext"
+
+msgctxt "#30807"
+msgid "Show an UpNextSimple pop-up…"
+msgstr "Mostrar um pop up simples do NextUp"
+
+msgctxt "#30809"
+msgid "Show a StillWatching pop-up…"
+msgstr "Mostrar um pop up Ainda Reproduzindo"
+
+msgctxt "#30811"
+msgid "Show a StillWatchingSimple pop-up…"
+msgstr "Mostrar um pop up Ainda Reproduzindo simples..."

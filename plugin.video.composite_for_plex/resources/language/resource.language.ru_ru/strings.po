@@ -1267,3 +1267,107 @@ msgstr ""
 msgctxt "#30730"
 msgid "Kodi"
 msgstr ""
+
+msgctxt "#30731"
+msgid "Manage Servers"
+msgstr ""
+
+msgctxt "#30732"
+msgid "Set as Master"
+msgstr ""
+
+msgctxt "#30733"
+msgid "Connection Test Results"
+msgstr ""
+
+msgctxt "#30734"
+msgid "Default to forced subtitles"
+msgstr ""
+
+msgctxt "#30735"
+msgid "Mixed content type"
+msgstr ""
+
+msgctxt "#30736"
+msgid "Default"
+msgstr ""
+
+msgctxt "#30737"
+msgid "Majority"
+msgstr ""
+
+msgctxt "#30738"
+msgid "Add custom access url"
+msgstr ""
+
+msgctxt "#30739"
+msgid "Custom access urls"
+msgstr ""
+
+msgctxt "#30740"
+msgid "Edit"
+msgstr ""
+
+msgctxt "#30741"
+msgid "Edit custom access url"
+msgstr ""
+
+msgctxt "#30742"
+msgid "Custom"
+msgstr ""
+
+msgctxt "#30743"
+msgid "All Artists"
+msgstr ""
+
+msgctxt "#30744"
+msgid "All Photos"
+msgstr ""
+
+msgctxt "#30745"
+msgid "All Shows"
+msgstr ""
+
+msgctxt "#30746"
+msgid "All Movies"
+msgstr ""
+
+msgctxt "#30747"
+msgid "Preferred lyrics format"
+msgstr ""
+
+msgctxt "#30748"
+msgid "Lyrics"
+msgstr ""
+
+msgctxt "#30749"
+msgid "lrc"
+msgstr ""
+
+msgctxt "#30750"
+msgid "txt"
+msgstr ""
+
+msgctxt "#30751"
+msgid "Skip intro"
+msgstr ""
+
+msgctxt "#30752"
+msgid "Intro skipping"
+msgstr ""
+
+msgctxt "#30753"
+msgid "Plex Pass Required"
+msgstr ""
+
+msgctxt "#30754"
+msgid "Plex powered by LyricFind"
+msgstr ""
+
+msgctxt "#30755"
+msgid "Show skip intro dialog"
+msgstr ""
+
+msgctxt "#30756"
+msgid "All %s"
+msgstr ""

@@ -16,6 +16,7 @@ from kodi_six import xbmc  # pylint: disable=import-error
 from .constants import CONFIG
 from .constants import StreamControl
 from .logger import Logger
+from .skip_intro import SkipIntroDialog
 from .strings import encode_utf8
 from .strings import i18n
 from .up_next import UpNext
@@ -29,13 +30,16 @@ class PlaybackMonitorThread(threading.Thread):
     MONITOR = xbmc.Monitor()
     PLAYER = xbmc.Player()
 
-    def __init__(self, settings, monitor_dict):
+    def __init__(self, settings, monitor_dict, window):
         super(PlaybackMonitorThread, self).__init__()
         self._stopped = threading.Event()
         self._ended = threading.Event()
 
         self.settings = settings
+        self._window = window
+
         self._monitor_dict = monitor_dict
+        self._dialog_skip_intro = None
 
         self.daemon = True
         self.start()
@@ -61,6 +65,19 @@ class PlaybackMonitorThread(threading.Thread):
 
     def stream(self):
         return self._monitor_dict.get('stream')
+
+    def _markers(self):
+        return self.stream().get('intro_markers')
+
+    def _intro_start(self):
+        if isinstance(self._markers(), list) and len(self._markers()) == 2:
+            return int(self._markers()[0])
+        return None
+
+    def _intro_end(self):
+        if isinstance(self._markers(), list) and len(self._markers()) == 2:
+            return int(self._markers()[1])
+        return None
 
     def full_data(self):
         _stream = self.stream()
@@ -154,6 +171,13 @@ class PlaybackMonitorThread(threading.Thread):
             pass
         return True
 
+    def _get_time_ms(self):
+        try:
+            current_time = self.PLAYER.getTime()
+        except RuntimeError:
+            current_time = 0.0
+        return 1000 * current_time
+
     def _get_playback_progress(self, total_time):
         try:
             current_time = int(self.PLAYER.getTime())
@@ -183,6 +207,32 @@ class PlaybackMonitorThread(threading.Thread):
 
         return False
 
+    def _skip_intro_dialog(self):
+        if self._dialog_skip_intro is not None:
+            return
+
+        self._dialog_skip_intro = SkipIntroDialog('skip_intro.xml',
+                                                  CONFIG['addon'].getAddonInfo('path'),
+                                                  'default', '720p', intro_end=self._intro_end())
+
+    def skip_intro(self):
+        if (self.settings.intro_skipping() and
+                self._intro_start() is not None and self._intro_end() is not None):
+            if (self._dialog_skip_intro and self._dialog_skip_intro.on_hold and
+                    (self._intro_start() > self._get_time_ms() or
+                     self._get_time_ms() > self._intro_end())):
+                self._dialog_skip_intro.on_hold = False
+
+            if self._intro_start() <= self._get_time_ms() < self._intro_end():
+                self._skip_intro_dialog()
+                self._dialog_skip_intro.show()
+
+            elif self._dialog_skip_intro and self._get_time_ms() >= self._intro_end():
+                self._dialog_skip_intro.close()
+
+            elif self._dialog_skip_intro and self._get_time_ms() < self._intro_start():
+                self._dialog_skip_intro.close()
+
     def run(self):
         current_time = 0
         played_time = 0
@@ -211,6 +261,8 @@ class PlaybackMonitorThread(threading.Thread):
 
             current_time, total_time, progress = self._get_playback_progress(total_time)
 
+            self.skip_intro()
+
             try:
                 report = int((float(waited) / 10.0)) >= 1
             except ZeroDivisionError:
@@ -235,6 +287,9 @@ class PlaybackMonitorThread(threading.Thread):
             waited += wait_time
 
         _ = self.report_playback_progress(current_time, total_time, progress)
+
+        if self._dialog_skip_intro and self._dialog_skip_intro.showing:
+            self._dialog_skip_intro.close()
 
         if self.session() is not None:
             self.LOG.debug('Stopping PMS transcode job with session %s' % self.session())
@@ -297,7 +352,7 @@ class CallbackPlayer(xbmc.Player):
 
         self.cleanup_threads()
         if monitor_playback and playback_dict:
-            self.threads.append(PlaybackMonitorThread(self.settings, playback_dict))
+            self.threads.append(PlaybackMonitorThread(self.settings, playback_dict, self.window))
 
         elif not monitor_playback:
             self.LOG('Playback monitoring is disabled ...')

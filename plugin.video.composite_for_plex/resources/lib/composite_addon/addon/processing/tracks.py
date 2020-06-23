@@ -37,24 +37,37 @@ def process_tracks(context, url, tree=None):
 
     server = context.plex_network.get_server_from_url(url)
 
-    content_type = 'songs'
+    content_counter = {
+        'photo': 0,
+        'track': 0,
+        'video': 0,
+    }
     items = []
     append_item = items.append
     branches = tree.getiterator()
     for branch in branches:
+        tag = branch.tag.lower()
         item = Item(server, url, tree, branch)
-        if branch.tag.lower() == 'track':
+        if tag == 'track':
             append_item(create_track_item(context, item))
-        elif branch.tag.lower() == 'photo':  # mixed content audio playlist
-            content_type = 'movies'  # use movies for mixed content playlists
+        elif tag == 'photo':  # mixed content audio playlist
             append_item(create_photo_item(context, item))
-        elif branch.tag.lower() == 'video':  # mixed content audio playlist
-            content_type = 'movies'  # use movies for mixed content playlists
+        elif tag == 'video':  # mixed content audio playlist
             append_item(create_movie_item(context, item))
 
-    xbmcplugin.setContent(get_handle(), content_type)
+        if isinstance(content_counter.get(tag), int):
+            content_counter[tag] += 1
 
     if items:
+        content_type = 'songs'
+        if context.settings.mixed_content_type() == 'majority':
+            majority = max(content_counter, key=content_counter.get)
+            if majority == 'photo':
+                content_type = 'images'
+            elif majority == 'video':
+                content_type = 'movies'
+
+        xbmcplugin.setContent(get_handle(), content_type)
         xbmcplugin.addDirectoryItems(get_handle(), items, len(items))
 
     xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=context.settings.cache_directory())

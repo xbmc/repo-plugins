@@ -169,7 +169,7 @@ class UpNext:
         if not url:
             return ''
         if url.startswith('/'):
-            url = self.server.get_url_location() + url
+            url = self.server.join_url(self.server.get_url_location(), url)
         return self.server.get_kodi_header_formatted_url(url)
 
     @staticmethod
@@ -198,8 +198,8 @@ class UpNext:
         tvshow_image = self.get_image(metadata.get('grandparentThumb'))
 
         episode = {
-            "episodeid": metadata.get('ratingKey', -1),
-            "tvshowid": metadata.get('grandparentRatingKey', -1),
+            "episodeid": str(metadata.get('ratingKey', -1)),
+            "tvshowid": str(metadata.get('grandparentRatingKey', -1)),
             "title": metadata.get('title', ''),
             "art": {
                 "tvshow.poster": tvshow_image,

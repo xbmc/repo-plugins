@@ -170,6 +170,20 @@ STRINGS = {
     'Delete playlist': 30724,
     'Confirm playlist delete?': 30725,
     'Are you sure you want to delete this playlist?': 30726,
+    'Manage Servers': 30731,
+    'Set as Master': 30732,
+    'Connection Test Results': 30733,
+    'Add custom access url': 30738,
+    'Custom access urls': 30739,
+    'Edit': 30740,
+    'Edit custom access url': 30741,
+    'Custom': 30742,
+    'All Artists': 30743,
+    'All Photos': 30744,
+    'All Shows': 30745,
+    'All Movies': 30746,
+    'Plex powered by LyricFind': 30754,
+    'All_': 30756,
 }
 
 
@@ -208,7 +222,7 @@ def directory_item_translate(title, thumb):
 
     if thumb.endswith('show.png'):
         translation_map = {
-            'All Shows': 'All',
+            'All Shows': 'All Shows',
             'Unplayed': 'Unplayed',
             'Unwatched': 'Unwatched',
             'Recently Aired': 'Recently Aired',
@@ -228,7 +242,7 @@ def directory_item_translate(title, thumb):
 
     elif thumb.endswith('artist.png'):
         translation_map = {
-            'All Artists': 'All',
+            'All Artists': 'All Artists',
             'By Album': 'By Album',
             'By Genre': 'By Genre',
             'By Year': 'By Year',
@@ -242,6 +256,7 @@ def directory_item_translate(title, thumb):
 
     elif thumb.endswith('movie.png') or thumb.endswith('video.png'):
         translation_map = {
+            'All Movies': 'All Movies',
             'Unplayed': 'Unplayed',
             'Unwatched': 'Unwatched',
             'Recently Released': 'Recently Released',
@@ -262,12 +277,12 @@ def directory_item_translate(title, thumb):
             'By Folder': 'By Folder',
             'Search...': 'Search...',
         }
-        if title.startswith('All '):
-            return i18n('All')
+        if thumb.endswith('video.png') and title.startswith('All '):
+            return i18n('All_') % title.replace('All ', '')
 
     elif thumb.endswith('photo.png'):
         translation_map = {
-            'All Photos': 'All',
+            'All Photos': 'All Photos',
             'By Year': 'By Year',
             'Recently Added': 'Recently Added',
             'Camera Make': 'Camera Make',

@@ -29,6 +29,7 @@ from ..addon.common import get_platform_ip
 from ..addon.common import is_ip
 from ..addon.constants import CONFIG
 from ..addon.logger import Logger
+from ..addon.server_config import ServerConfigStore
 from ..addon.strings import encode_utf8
 from ..addon.strings import i18n
 from .plexcommon import create_plex_identification
@@ -64,6 +65,8 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
             'plexhome_user_cache': '',
             'plexhome_user_avatar': ''
         }
+
+        self.server_configs = ServerConfigStore()
 
         self.setup_user_token()
         if load:
@@ -478,6 +481,10 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
                     LOG.debug('[%s] Dropping back to http' % device.get('name'))
                     discovered_server.set_protocol('http')
 
+            discovered_server.add_custom_access_urls(
+                self.server_configs.access_urls(device.get('clientIdentifier'))
+            )
+
             discovered_server.set_best_address()  # Default to external address
 
             temp_servers[discovered_server.get_uuid()] = discovered_server
@@ -638,14 +645,13 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
 
         return token
 
-    def get_server_from_ip(self, uri):
+    def get_server_from_parts(self, scheme, uri):
         LOG.debug('IP to lookup: %s' % uri)
 
-        if ':' in uri:
+        port = None
+        if ':' in uri.split('@')[-1]:
             # We probably have an address:port being passed
             uri, port = uri.split(':')
-        else:
-            port = 32400
 
         if is_ip(uri):
             LOG.debug('IP address detected - passing through')
@@ -659,7 +665,6 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
                 uri = clean_address
             else:
                 LOG.debug('Unable to clean plex.direct name')
-
         else:
             try:
                 socket.gethostbyname(uri)
@@ -674,7 +679,7 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
             LOG.debug('[%s] - checking ip:%s against server ip %s' %
                       (server.get_name(), uri, server.get_address()))
 
-            if server.find_address_match(uri, port):
+            if server.find_address_match(scheme, uri, port):
                 return server
 
         LOG.debug('Unable to translate - Returning new plex server set to %s' % uri)
@@ -683,14 +688,14 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
 
     def get_server_from_url(self, url):
         url_parts = urlparse(url)
-        return self.get_server_from_ip(url_parts.netloc)
+        return self.get_server_from_parts(url_parts.scheme, url_parts.netloc)
 
     def get_server_from_uuid(self, _uuid):
         return self.server_list[_uuid]
 
     def get_processed_xml(self, url):
         url_parts = urlparse(url)
-        server = self.get_server_from_ip(url_parts.netloc)
+        server = self.get_server_from_parts(url_parts.scheme, url_parts.netloc)
 
         if server:
             return server.processed_xml(url)
@@ -698,7 +703,7 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
 
     def talk_to_server(self, url):
         url_parts = urlparse(url)
-        server = self.get_server_from_ip(url_parts.netloc)
+        server = self.get_server_from_parts(url_parts.scheme, url_parts.netloc)
 
         if server:
             return server.raw_xml(url)

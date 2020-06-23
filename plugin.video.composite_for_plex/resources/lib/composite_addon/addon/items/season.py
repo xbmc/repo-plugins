@@ -67,7 +67,7 @@ def create_season_item(context, item, library=False):
     else:
         extra_data['partialTV'] = 1
 
-    item_url = '%s%s' % (item.server.get_url_location(), extra_data['key'])
+    item_url = item.server.join_url(item.server.get_url_location(), extra_data['key'])
 
     context_menu = None
     if not context.settings.skip_context_menus():

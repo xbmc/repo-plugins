@@ -36,10 +36,12 @@ class Logger:
     }
 
     token_regex = re.compile(r'-Token=[a-zA-Z0-9|\-_]+([\s&|\'"])+')
+    token2_regex = re.compile(r'-Token=[a-zA-Z0-9|\-_]+$')
     access_token_regex = re.compile(r'accessToken="[^"]+?"')
     ip_regex = re.compile(r'\.\d{1,3}\.\d{1,3}\.')
     ip_dom_regex = re.compile(r'-\d{1,3}-\d{1,3}-')
     user_regex = re.compile(r'-User=[a-zA-Z0-9|\-_]+([\s&|\'"])+')
+    user2_regex = re.compile(r'-User=[a-zA-Z0-9|\-_]+$')
 
     def __init__(self, sub=None):
 
@@ -101,10 +103,12 @@ class Logger:
         if self.privacy and not no_privacy:
             try:
                 msg = self.token_regex.sub(r'-Token=XXXXXXXXXX\g<1>', msg)
+                msg = self.token2_regex.sub(r'-Token=XXXXXXXXXX', msg)
                 msg = self.access_token_regex.sub(r'accessToken="XXXXXXXXXX"', msg)
                 msg = self.ip_regex.sub(r'.X.X.', msg)
                 msg = self.ip_dom_regex.sub(r'-X-X-', msg)
                 msg = self.user_regex.sub(r'-User=XXXXXXX\g<1>', msg)
+                msg = self.user2_regex.sub(r'-User=XXXXXXX', msg)
             except:  # pylint: disable=bare-except
                 msg = 'Logging failure:\n%s' % traceback.format_exc()
 

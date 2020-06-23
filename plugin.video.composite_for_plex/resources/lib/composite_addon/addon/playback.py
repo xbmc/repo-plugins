@@ -76,6 +76,10 @@ def play_library_media(context, data):
     server = context.plex_network.get_server_from_url(data['url'])
     media_id = data['url'].split('?')[0].split('&')[0].split('/')[-1]
 
+    if 'includeMarkers' not in data['url']:
+        data['url'] += '&' if '?' in data['url'] else '?'
+        data['url'] += 'includeMarkers=1'
+
     tree = get_xml(context, data['url'])
     if tree is None:
         return
@@ -186,6 +190,9 @@ def create_playback_item(url, streams, data, details):
                                                         float(details['duration'])))
         LOG.debug('Playback from resume point: %s' % details['resume'])
 
+    if streams['type'] == 'music':
+        list_item.setProperty('culrc.source', i18n('Plex powered by LyricFind'))
+
     return list_item
 
 
@@ -255,7 +262,8 @@ class StreamData:
             'audio_offset': -1,  # Stream index for select audio
             'full_data': {},  # Full metadata extract if requested
             'type': 'video',  # Type of metadata
-            'extra': {}
+            'intro_markers': [],
+            'extra': {},
         }
 
         self.update_data()
@@ -350,11 +358,15 @@ class StreamData:
                 self.data['full_data']['genre'] = \
                     list(map(lambda x: encode_utf8(x.get('tag', '')), tree_genres))
 
+        self.data['intro_markers'] = self._get_intro_markers()
+
     def _get_track_data(self):
 
         track_title = '%s. %s' % \
                       (str(self._content.get('index', 0)).zfill(2),
                        encode_utf8(self._content.get('title', i18n('Unknown'))))
+        lyrics = self._get_lyrics()
+
         self.data['full_data'] = {
             'TrackNumber': int(self._content.get('index', 0)),
             'discnumber': int(self._content.get('parentIndex', 0)),
@@ -365,10 +377,47 @@ class StreamData:
             'artist': encode_utf8(self._content.get('grandparentTitle',
                                                     self.tree.get('grandparentTitle', ''))),
             'duration': int(self._content.get('duration', 0)) / 1000,
+            'lyrics': lyrics,
         }
 
         self.data['extra']['album'] = self._content.get('parentKey')
         self.data['extra']['index'] = self._content.get('index')
+
+    def _get_intro_markers(self):
+        for marker in self._content.iter('Marker'):
+            if (marker.get('type') == 'intro' and
+                    marker.get('startTimeOffset') and marker.get('endTimeOffset')):
+                return [marker.get('startTimeOffset'), marker.get('endTimeOffset')]
+
+        return []
+
+    def _get_lyrics(self):
+        lyrics = []
+
+        lyric_priorities = self.context.settings.get_lyrics_priorities()
+        if not lyric_priorities:
+            return ''
+
+        for stream in self._content.iter('Stream'):
+            if (stream.get('provider') == 'com.plexapp.agents.lyricfind' and
+                    stream.get('streamType') == '4'):
+                lyric = {
+                    'codec': stream.get('codec', ''),
+                    'title': stream.get('displayTitle', ''),
+                    'format': stream.get('format', ''),
+                    'id': stream.get('id', ''),
+                    'key': stream.get('key', ''),
+                    'provider': stream.get('provider', 'com.plexapp.agents.lyricfind'),
+                    'streamType': stream.get('streamType', '4'),
+                }
+                lyric['priority'] = lyric_priorities.get(lyric.get('codec', 'none'), 0)
+                lyrics.append(lyric)
+
+        if lyrics:
+            lyrics = sorted(lyrics, key=lambda l: l['priority'], reverse=True)
+            return self.server.get_lyrics(lyrics[0]['id'])
+
+        return ''
 
     def _get_art(self):
         art = {
@@ -467,6 +516,8 @@ class StreamData:
                 self.data['parts_count'] += 1
 
     def _get_audio_and_subtitles(self):
+        default_to_forced = self.context.settings.default_forced_subtitles()
+
         audio_offset = 0
         sub_offset = 0
 
@@ -476,6 +527,7 @@ class StreamData:
 
         tags = self.tree.getiterator('Stream')
 
+        forced_subtitle = False
         for bits in tags:
             stream = dict(bits.items())
 
@@ -491,13 +543,20 @@ class StreamData:
             # Subtitle Streams
             elif stream['streamType'] == '3':
 
+                if forced_subtitle:
+                    continue
+
                 if sub_offset == -1:
                     sub_offset = int(stream.get('index', -1))
                 elif 0 < int(stream.get('index', -1)) < sub_offset:
                     sub_offset = int(stream.get('index', -1))
 
-                if stream.get('selected') == '1':
-                    LOG.debug('Found preferred subtitles id : %s ' % stream['id'])
+                forced_subtitle = stream.get('forced') == '1' and default_to_forced
+                selected = stream.get('selected') == '1'
+
+                if forced_subtitle or selected:
+                    LOG.debug('Found %s subtitles id : %s ' %
+                              ('preferred' if not forced_subtitle else 'forced', stream['id']))
                     self.data['sub_count'] += 1
                     self.data['subtitle'] = stream
                     if stream.get('key'):
@@ -703,7 +762,8 @@ def play_playlist(context, server, data):
     playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
     playlist.clear()
 
-    tree = get_xml(context, server.get_url_location() + data['extra'].get('album') + '/children')
+    url = server.join_url(server.get_url_location(), data['extra'].get('album'), 'children')
+    tree = get_xml(context, url)
 
     if tree is None:
         return

@@ -116,7 +116,7 @@ def create_episode_item(context, item, library=False):
     if library:
         extra_data['path_mode'] = MODES.TXT_TVSHOWS_LIBRARY
 
-    item_url = '%s%s' % (item.server.get_url_location(), extra_data['key'])
+    item_url = item.server.join_url(item.server.get_url_location(), extra_data['key'])
 
     gui_item = GUIItem(item_url, info_labels, extra_data, context_menu)
     gui_item.is_folder = False

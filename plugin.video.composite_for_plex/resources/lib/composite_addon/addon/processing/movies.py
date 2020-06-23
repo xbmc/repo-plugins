@@ -26,8 +26,6 @@ LOG = Logger()
 
 
 def process_movies(context, url, tree=None):
-    xbmcplugin.setContent(get_handle(), 'movies')
-
     xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_UNSORTED)
     xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE)
     xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_DATEADDED)
@@ -45,6 +43,11 @@ def process_movies(context, url, tree=None):
     if tree is None:
         return
 
+    content_counter = {
+        'photo': 0,
+        'track': 0,
+        'video': 0,
+    }
     # Find all the video tags, as they contain the data we need to link to a file.
     start_time = time.time()
     items = []
@@ -60,7 +63,17 @@ def process_movies(context, url, tree=None):
             append_item(create_photo_item(context, item))
 
     if items:
+        content_type = 'movies'
+        if context.settings.mixed_content_type() == 'majority':
+            majority = max(content_counter, key=content_counter.get)
+            if majority == 'photo':
+                content_type = 'images'
+            elif majority == 'track':
+                content_type = 'songs'
+
+        xbmcplugin.setContent(get_handle(), content_type)
         xbmcplugin.addDirectoryItems(get_handle(), items, len(items))
+
     LOG.debug('PROCESS: It took %s seconds to process %s items' %
               (time.time() - start_time, len(items)))
 

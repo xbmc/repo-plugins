@@ -49,28 +49,28 @@ def run(context, url):
 
         if content_type == 'video':
             extra_data['mode'] = MODES.PLEXPLUGINS
-            url = '%s%s' % (media_server.get_url_location(), '/video')
+            url = media_server.join_url(media_server.get_url_location(), 'video')
             if servers_list == 1:
                 process_plex_plugins(context, url)
                 return
 
         elif content_type == 'online':
             extra_data['mode'] = MODES.PLEXONLINE
-            url = '%s%s' % (media_server.get_url_location(), '/system/plexonline')
+            url = media_server.join_url(media_server.get_url_location(), 'system/plexonline')
             if servers_list == 1:
                 process_plex_online(context, url)
                 return
 
         elif content_type == 'music':
             extra_data['mode'] = MODES.MUSIC
-            url = '%s%s' % (media_server.get_url_location(), '/music')
+            url = media_server.join_url(media_server.get_url_location(), 'music')
             if servers_list == 1:
                 process_music(context, url)
                 return
 
         elif content_type == 'photo':
             extra_data['mode'] = MODES.PHOTOS
-            url = '%s%s' % (media_server.get_url_location(), '/photos')
+            media_server.join_url(media_server.get_url_location(), 'photos')
             if servers_list == 1:
                 process_photos(context, url)
                 return

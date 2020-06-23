@@ -61,7 +61,8 @@ def run(context, url, prefix=None, indirect=None, transcode=False):
 
             server = context.plex_network.get_server_from_url(url)
             session = playlist.split()[-1]
-            url = '%s/video/:/transcode/segmented/%s?t=1' % (server.get_url_location(), session)
+            url = server.join_url(server.get_url_location(),
+                                  'video/:/transcode/segmented/%s?t=1' % session)
 
     LOG.debug('URL to Play: %s ' % url)
     LOG.debug('Prefix is: %s' % prefix)

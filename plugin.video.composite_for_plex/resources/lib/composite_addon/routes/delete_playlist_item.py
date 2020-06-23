@@ -41,7 +41,9 @@ def run(context):
 
     item = tree[0]
     item_title = item.get('title', '')
-    item_image = server.get_kodi_header_formatted_url(server.get_url_location() + item.get('thumb'))
+    item_image = server.get_kodi_header_formatted_url(
+        server.join_url(server.get_url_location(), item.get('thumb'))
+    )
 
     result = xbmcgui.Dialog().yesno(i18n('Confirm playlist item delete?'),
                                     i18n('Delete from the playlist?') %

@@ -32,8 +32,14 @@ LOG = Logger()
 def create_movie_item(context, item, library=False):
     metadata = get_metadata(context, item.data)
     LOG.debug('Media attributes are %s' % json.dumps(metadata['attributes'], indent=4))
-
     # Required listItem entries for Kodi
+
+    try:
+        date_added = str(datetime.datetime.fromtimestamp(int(item.data.get('addedAt', 86400))))
+    except ValueError:
+        # ValueError: timestamp out of range for platform localtime()/gmtime() function
+        date_added = str(datetime.datetime.fromtimestamp(86400))
+
     info_labels = {
         'plot': encode_utf8(item.data.get('summary', '')),
         'title': encode_utf8(item.data.get('title', i18n('Unknown'))),
@@ -46,7 +52,7 @@ def create_movie_item(context, item, library=False):
         'date': item.data.get('originallyAvailableAt', '1970-01-01'),
         'premiered': item.data.get('originallyAvailableAt', '1970-01-01'),
         'tagline': item.data.get('tagline', ''),
-        'dateAdded': str(datetime.datetime.fromtimestamp(int(item.data.get('addedAt', 0)))),
+        'dateAdded': date_added,
         'mediatype': 'movie',
         'playcount': int(int(item.data.get('viewCount', 0)) > 0),
         'cast': metadata['cast'],
@@ -107,7 +113,7 @@ def create_movie_item(context, item, library=False):
     if library:
         extra_data['path_mode'] = MODES.TXT_MOVIES_LIBRARY
 
-    item_url = '%s%s' % (item.server.get_url_location(), extra_data['key'])
+    item_url = item.server.join_url(item.server.get_url_location(), extra_data['key'])
 
     gui_item = GUIItem(item_url, info_labels, extra_data, context_menu)
     gui_item.is_folder = False

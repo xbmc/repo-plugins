@@ -78,7 +78,7 @@ def create_track_item(context, item, listing=True):
         })
 
     # If we are streaming, then get the virtual location
-    item_url = '%s%s' % (item.server.get_url_location(), extra_data['key'])
+    item_url = item.server.join_url(item.server.get_url_location(), extra_data['key'])
 
     # Build any specific context menu entries
     context_menu = None

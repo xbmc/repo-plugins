@@ -46,7 +46,9 @@ def run(context):
         if not playlist_title:
             return
 
-    item_image = server.get_kodi_header_formatted_url(server.get_url_location() + item.get('thumb'))
+    item_image = server.get_kodi_header_formatted_url(
+        server.join_url(server.get_url_location(), item.get('thumb'))
+    )
     if playlist_type and playlist_title:
         selected['title'] = playlist_title
         response = server.create_playlist(metadata_id, playlist_title, playlist_type)
@@ -88,7 +90,8 @@ def playlist_user_select(server):
     for playlist in tree.getiterator('Playlist'):
         image = ''
         if playlist.get('composite'):
-            image = get_formatted_url(server.get_url_location() + playlist.get('composite'))
+            image = get_formatted_url(server.join_url(server.get_url_location(),
+                                                      playlist.get('composite')))
         append_playlist({
             'title': playlist.get('title'),
             'key': playlist.get('ratingKey'),

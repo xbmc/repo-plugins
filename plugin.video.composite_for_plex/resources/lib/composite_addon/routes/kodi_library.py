@@ -59,8 +59,9 @@ def run(context):
                 if section.get_type() in content_type:
                     if content_type in ['movies', 'tvshows']:
                         set_content(get_handle(), content_type)
-                        _list_content(context, server, '%s%s/all' %
-                                      (server.get_url_location(), section.get_path()))
+                        _list_content(context, server,
+                                      server.join_url(server.get_url_location(),
+                                                      section.get_path(), 'all'))
 
         xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=False)
 

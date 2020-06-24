@@ -85,9 +85,9 @@ def run(start_time):  # pylint: disable=too-many-locals, too-many-statements, to
         manage_my_plex.run(context)
         return _finished(start_time)
 
-    if command == COMMANDS.DISPLAYSERVER:
-        from .routes import display_known_servers  # pylint: disable=import-outside-toplevel
-        display_known_servers.run(context)
+    if command == COMMANDS.MANAGESERVERS:
+        from .routes import manage_servers  # pylint: disable=import-outside-toplevel
+        manage_servers.run(context)
         return _finished(start_time)
 
     if command == COMMANDS.DELETEREFRESH:
@@ -143,6 +143,11 @@ def run(start_time):  # pylint: disable=too-many-locals, too-many-statements, to
     if command == COMMANDS.ADDTOPLAYLIST:
         from .routes import add_playlist_item  # pylint: disable=import-outside-toplevel
         add_playlist_item.run(context)
+        return _finished(start_time)
+
+    if command == COMMANDS.TEST_SKIP_INTRO_DIALOG:
+        from .routes import test_skip_intro_dialog  # pylint: disable=import-outside-toplevel
+        test_skip_intro_dialog.run()
         return _finished(start_time)
 
     if mode in [MODES.TXT_OPEN, MODES.TXT_PLAY]:

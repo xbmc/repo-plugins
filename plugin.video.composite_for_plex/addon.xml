@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.composite_for_plex" name="Composite" version="1.1.1" provider-name="anxdpanic">
+<addon id="plugin.video.composite_for_plex" name="Composite" version="1.2.0" provider-name="anxdpanic">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.kodi-six" version="0.0.2"/>
@@ -15,11 +15,15 @@
     <extension point="xbmc.service" library="resources/lib/service_entry_point.py"/>
     <extension point="xbmc.addon.metadata">
         <news>
-[add] end-point to search for movies/episodes from all available servers for external use ie. TheMovieDb Helper
-[fix] browsing By Folder
-[fix] login on Kodi 19/Matrix due to removal of deprecated isPassword
-[fix] Up Next when duration is unavailable
-[upd] improve debug logging and masking of private data
+[add] added intro skipping (Requires Plex Pass)
+[add] added lyrics info label for lyrics provided by Plex (Requires Plex Pass)
+[add] added setting to configure forced subtitles as default(forced)
+[add] added setting to configure mixed content type behavior
+[add] added support for custom access urls (ie. nginx)
+      - Main Menu - Manage Servers - &lt;server&gt; - Custom access urls - Add custom access url
+[fix] possible timestamp out of range for movies
+[chg] All Movies, All Shows, All Artists, and All Photos are no longer shortened to All
+[lang] German (de_DE) |contrib: Maven85|
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

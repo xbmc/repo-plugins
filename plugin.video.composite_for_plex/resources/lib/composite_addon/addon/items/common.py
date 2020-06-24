@@ -36,7 +36,7 @@ def get_link_url(server, url, path_data):
     # If key starts with a / then prefix with server address
     if path.startswith('/'):
         LOG.debug('Detected base path link')
-        return '%s%s' % (server.get_url_location(), path)
+        return server.join_url(server.get_url_location(), path)
 
     # If key starts with plex:// then it requires transcoding
     if path.startswith('plex:'):
@@ -59,7 +59,7 @@ def get_link_url(server, url, path_data):
 
     # Any thing else is assumed to be a relative path and is built on existing url
     LOG.debug('Detected relative link')
-    return '%s/%s' % (url, path)
+    return server.join_url(url, path)
 
 
 def get_thumb_image(context, server, data, width=720, height=720):

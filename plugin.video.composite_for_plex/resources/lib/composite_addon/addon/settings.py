@@ -123,6 +123,9 @@ class AddonSettings:  # pylint: disable=too-many-public-methods
     def set_stream(self, value):
         self.stream = value
 
+    def default_forced_subtitles(self):
+        return self._get_setting('default_forced_subs')
+
     def master_server(self):
         return self._get_setting('masterServer')
 
@@ -169,6 +172,14 @@ class AddonSettings:  # pylint: disable=too-many-public-methods
             return 'plex'
         raise Exception('Unknown sort method')
 
+    def mixed_content_type(self):
+        method = self._get_setting('mixed_content_type')
+        if method == '0':
+            return 'default'
+        if method == '1':
+            return 'majority'
+        raise Exception('Unknown mixed content type method')
+
     def device_name(self):
         return self._get_setting('devicename')
 
@@ -198,6 +209,28 @@ class AddonSettings:  # pylint: disable=too-many-public-methods
 
     def set_replacement(self, value):
         self._set_setting('replacement', value)
+
+    def intro_skipping(self):
+        return self._get_setting('intro_skipping')
+
+    def get_lyrics_priorities(self):
+        if not self._get_setting('lyrics'):
+            return None
+
+        formats = {
+            '0': 'lrc',
+            '1': 'txt',
+        }
+
+        fmt = formats.get(self._get_setting('default_lyrics_format'))
+
+        priorities = {
+            'lrc': 100 if fmt == 'lrc' else 50,
+            'txt': 100 if fmt == 'txt' else 50,
+            'none': 0,
+        }
+
+        return priorities
 
     def override_info(self):
         return {

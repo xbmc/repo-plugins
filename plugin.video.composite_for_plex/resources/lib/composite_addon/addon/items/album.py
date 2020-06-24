@@ -42,7 +42,7 @@ def create_album_item(context, item):
     if extra_data['fanart_image'] == '':
         extra_data['fanart_image'] = get_fanart_image(context, item.server, item.tree)
 
-    url = '%s%s' % (item.server.get_url_location(), extra_data['key'])
+    url = item.server.join_url(item.server.get_url_location(), extra_data['key'])
 
     gui_item = GUIItem(url, info_labels, extra_data)
     return create_gui_item(context, gui_item)

@@ -28,26 +28,40 @@ def process_photos(context, url, tree=None):
     if tree is None:
         return
 
-    content_type = 'images'
+    content_counter = {
+        'photo': 0,
+        'track': 0,
+        'video': 0,
+    }
     items = []
     append_item = items.append
+
     branches = tree.getiterator()
     for branch in branches:
         item = Item(server, url, tree, branch)
-        if branch.tag.lower() == 'photo':
+        tag = branch.tag.lower()
+        if tag == 'photo':
             append_item(create_photo_item(context, item))
-        elif branch.tag.lower() == 'directory':
+        elif tag == 'directory':
             append_item(create_directory_item(context, item))
-        elif branch.tag.lower() == 'track':  # mixed content photo playlist
-            content_type = 'movies'  # use movies for mixed content playlists
+        elif tag == 'track':  # mixed content photo playlist
             append_item(create_track_item(context, item))
-        elif branch.tag.lower() == 'video':  # mixed content photo playlist
-            content_type = 'movies'  # use movies for mixed content playlists
+        elif tag == 'video':  # mixed content photo playlist
             append_item(create_movie_item(context, item))
 
-    xbmcplugin.setContent(get_handle(), content_type)
+        if isinstance(content_counter.get(tag), int):
+            content_counter[tag] += 1
 
     if items:
+        content_type = 'images'
+        if context.settings.mixed_content_type() == 'majority':
+            majority = max(content_counter, key=content_counter.get)
+            if majority == 'track':
+                content_type = 'songs'
+            elif majority == 'video':
+                content_type = 'movies'
+
+        xbmcplugin.setContent(get_handle(), content_type)
         xbmcplugin.addDirectoryItems(get_handle(), items, len(items))
 
     xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=context.settings.cache_directory())

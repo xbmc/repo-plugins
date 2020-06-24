@@ -75,11 +75,11 @@ def create_show_item(context, item, library=False):
     if context.settings.flatten_seasons() == '2':
         LOG.debug('Flattening all shows')
         extra_data['mode'] = MODES.TVEPISODES
-        item_url = '%s%s' % (item.server.get_url_location(),
-                             extra_data['key'].replace('children', 'allLeaves'))
+        item_url = item.server.join_url(item.server.get_url_location(),
+                                        extra_data['key'].replace('children', 'allLeaves'))
     else:
         extra_data['mode'] = MODES.TVSEASONS
-        item_url = '%s%s' % (item.server.get_url_location(), extra_data['key'])
+        item_url = item.server.join_url(item.server.get_url_location(), extra_data['key'])
 
     context_menu = None
     if not context.settings.skip_context_menus():

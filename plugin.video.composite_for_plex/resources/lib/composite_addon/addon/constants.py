@@ -32,7 +32,7 @@ COMMANDS = __enum(
     DELETEPLAYLIST='delete_playlist',
     DELETEFROMPLAYLIST='delete_playlist_item',
     DELETEREFRESH='delete_refresh',
-    DISPLAYSERVER='displayservers',
+    MANAGESERVERS='manageservers',
     MANAGEMYPLEX='managemyplex',
     MASTER='master',
     REFRESH='refresh',
@@ -42,6 +42,7 @@ COMMANDS = __enum(
     SWITCHUSER='switchuser',
     UPDATE='update',
     WATCH='watch',
+    TEST_SKIP_INTRO_DIALOG='test_skip_intro_dialog',
 )
 
 MODES = __enum(

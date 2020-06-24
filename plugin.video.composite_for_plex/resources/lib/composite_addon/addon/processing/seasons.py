@@ -28,7 +28,8 @@ def process_seasons(context, url, rating_key=None, library=False):
     if not url.startswith(('http', 'file')) and rating_key:
         # Get URL, XML and parse
         server = context.plex_network.get_server_from_uuid(url)
-        url = server.get_url_location() + '/library/metadata/%s/children' % str(rating_key)
+        url = server.join_url(server.get_url_location(),
+                              'library/metadata/%s/children' % str(rating_key))
     else:
         server = context.plex_network.get_server_from_url(url)
 
@@ -52,7 +53,7 @@ def process_seasons(context, url, rating_key=None, library=False):
     for season in seasons:
 
         if will_flatten:
-            url = server.get_url_location() + season.get('key')
+            url = server.join_url(server.get_url_location(), season.get('key'))
             process_episodes(context, url)
             return
 

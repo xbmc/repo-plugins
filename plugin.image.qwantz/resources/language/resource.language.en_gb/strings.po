@@ -1,0 +1,41 @@
+# Kodi Media Center language file
+# Addon Name: Dinosaur Comics
+# Addon id: plugin.image.qwantz
+# Addon Provider: macica2
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.image.qwantz\n"
+"Report-Msgid-Bugs-To: N/A\n"
+"POT-Creation-Date: 2020-05-09 18:00-6\n"
+"PO-Revision-Date: 2020-05-09 18:00-6\n"
+"Last-Translator: macica2\n"
+"Language-Team: N/A\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "Latest Comic"
+msgstr "Latest Comic"
+
+msgctxt "#32002"
+msgid "Random Comic"
+msgstr "Random Comic"
+
+msgctxt "#32003"
+msgid "Previous Comic"
+msgstr "Previous Comic"
+
+msgctxt "#32004"
+msgid "Next Comic"
+msgstr "Next Comic"
+
+msgctxt "#32005"
+msgid "Browse by ID"
+msgstr "Browse by ID"
+
+msgctxt "#32006"
+msgid "Browse Range"
+msgstr "Browse Range"

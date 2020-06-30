@@ -32,12 +32,10 @@ import rollbar
 from resources.lib import youtube
 
 
-CLIP_HOST = "http://bbc.co.uk"
-CLIP_URL_FMT = CLIP_HOST + "/programmes/b00lvdrj/clips/?page={0}"
+CLIP_HOST = "https://bbc.co.uk"
+CLIP_URL_FMT = CLIP_HOST + "/programmes/b00lvdrj/clips?page={0}"
 
-CLIP_THUMB_SIZE_RE = re.compile("/\d{3,}x\d{3,}/")
 CLIP_THUMB_WIDTH = 640
-CLIP_THUMB_HEIGHT = 360
 
 CLIP_JSON_FMT = CLIP_HOST + "/programmes/{0}.json"
 CLIP_XML_FMT = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/{0}"
@@ -52,15 +50,13 @@ def get_soup(url):
     response = requests.get(url)
     return BeautifulSoup(response.text, 'html.parser')
 
-def clip_item(pid, title, duration_str, thumb_src):
-    thumb_url = CLIP_THUMB_SIZE_RE.sub("/{0}x{1}/".format(CLIP_THUMB_WIDTH,
-                                                          CLIP_THUMB_HEIGHT), thumb_src)
 
+def clip_item(pid, title, duration_str, thumb_src):
     minutes, seconds = duration_str.split(':')
     duration = timedelta(minutes=int(minutes), seconds=int(seconds))
 
     item = {'label': title,
-            'thumbnail': thumb_url,
+            'thumbnail': thumb_src,
             'is_playable': True,
             'path': plugin.url_for('play_clip', pid=pid),
             'info': {'title': title,
@@ -96,9 +92,12 @@ def get_clips(soup, page):
     for clip in soup('div', 'programme--clip'):
         pid = clip['data-pid']
         title = clip.find('span', 'programme__title').text.strip()
-        duration_str = clip.find('p', 'programme__service').string.split(" ")[1]
-        thumb_src = clip.find('div', 'programme__img').meta['content']
-
+        _, duration_str = clip.find(
+            'p', 'programme__service').string.strip().split()
+        thumbs = clip.find(
+            'div', 'programme__img-box').img['data-srcset'].split(', ')
+        thumb_src, _ = next(
+            thumb for thumb in thumbs if thumb.endswith("{}w".format(CLIP_THUMB_WIDTH))).split()
         yield clip_item(pid, title, duration_str, thumb_src)
 
 def get_podcasts():

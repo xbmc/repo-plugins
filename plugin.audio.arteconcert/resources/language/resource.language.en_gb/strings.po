@@ -1,0 +1,100 @@
+# KODI Media Center language file
+# Addon Name: arteconcert
+# Addon id: plugin.video.arteconcert
+# Addon version: 1.0.0
+# Addon Provider: sarbes
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30010"
+msgid "Language"
+msgstr "Language"
+
+msgctxt "#30011"
+msgid "System (if available)"
+msgstr "System (if available)"
+
+msgctxt "#30012"
+msgid "English"
+msgstr "English"
+
+msgctxt "#30013"
+msgid "German"
+msgstr "German"
+
+msgctxt "#30014"
+msgid "Spanish"
+msgstr "Spanish"
+
+msgctxt "#30015"
+msgid "French"
+msgstr "French"
+
+msgctxt "#30016"
+msgid "Hungarian"
+msgstr "Hungarian"
+
+msgctxt "#30017"
+msgid "Italian"
+msgstr "Italian"
+
+msgctxt "#30018"
+msgid "Polish"
+msgstr "Polish"
+
+msgctxt "#30019"
+msgid "Portuguese"
+msgstr "Portuguese"
+
+msgctxt "#30020"
+msgid "Romainian"
+msgstr "Romainian"
+
+msgctxt "#30021"
+msgid "Ukrainian"
+msgstr "Ukrainian"
+
+msgctxt "#30503"
+msgid "Categories"
+msgstr "Categories"
+
+msgctxt "#30510"
+msgid "Pop & Rock"
+msgstr "Pop & Rock"
+
+msgctxt "#30511"
+msgid "Electronic"
+msgstr "Electronic"
+
+msgctxt "#30512"
+msgid "Hip-Hop"
+msgstr "Hip-Hop"
+
+msgctxt "#30513"
+msgid "Metal"
+msgstr "Metal"
+
+msgctxt "#30514"
+msgid "Classical"
+msgstr "Classical"
+
+msgctxt "#30515"
+msgid "Opera"
+msgstr "Opera"
+
+msgctxt "#30516"
+msgid "Jazz"
+msgstr "Jazz"
+
+msgctxt "#30517"
+msgid "World Music"
+msgstr "World Music"
+
+msgctxt "#30518"
+msgid "Performing Arts"
+msgstr "Performing Arts"

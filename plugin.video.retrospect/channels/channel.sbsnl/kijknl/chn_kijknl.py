@@ -6,7 +6,6 @@ from resources.lib import chn_class
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.helpers.subtitlehelper import SubtitleHelper
-from resources.lib.parserdata import ParserData
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.streams.m3u8 import M3u8
@@ -37,30 +36,8 @@ class Channel(chn_class.Channel):
         # ============== Actual channel setup STARTS here and should be overwritten from derived classes ===============
         # setup the urls
         self.baseUrl = "https://www.kijk.nl"
-        # Just retrieve a single page with 500 items (should be all)
 
-        use_html = False
-        if use_html:
-            self.mainListUri = "https://www.kijk.nl/programmas"
-        else:
-            self.mainListUri = "https://api.kijk.nl/v1/default/sections/programs-abc-0123456789abcdefghijklmnopqrstuvwxyz?limit=350&offset=0"
-
-        self.__channelId = self.channelCode
-        if self.channelCode == 'veronica':
-            self.noImage = "veronicaimage.png"
-            self.__channelId = "veronicatv"
-
-        elif self.channelCode == 'sbs':
-            self.noImage = "sbs6image.jpg"
-            self.__channelId = "sbs6"
-
-        elif self.channelCode == 'sbs9':
-            self.noImage = "sbs9image.png"
-
-        elif self.channelCode == 'net5':
-            self.noImage = "net5image.png"
-
-        else:
+        if self.channelCode is None:
             self.noImage = "kijkimage.png"
             self.mainListUri = self.__get_api_query_url(
                 "programs(programTypes:[SERIES],limit:1000)",
@@ -103,41 +80,13 @@ class Channel(chn_class.Channel):
             self._add_data_parser("https://graph.kijk.nl/graphql-video",
                                   updater=self.update_graphql_item)
 
+        else:
+            raise ValueError("Channel with code '{}' not supported".format(self.channelCode))
+
         # setup the main parsing data
-        self._add_data_parser("https://api.kijk.nl/v1/default/sections/programs-abc",
-                              name="Mainlist Json", json=True,
-                              preprocessor=self.add_others,
-                              parser=["items", ], creator=self.create_json_episode_item)
-
-        self._add_data_parser("https://www.kijk.nl/programmas", match_type=ParserData.MatchExact,
-                              name="Mainlist from HTML", json=True,
-                              preprocessor=self.extract_main_list_json)
-
-        self._add_data_parser("https://api.kijk.nl/v2/templates/page/format/",
-                              name="Videos from the main show format page", json=True,
-                              parser=["components", 3, "data", "items", 2, "data", "items"],
-                              creator=self.create_json_season_item)
-
         self._add_data_parser("#lastweek",
                               name="Last week listing", json=True,
                               preprocessor=self.list_dates)
-
-        self._add_data_parsers(["https://api.kijk.nl/v2/templates/page/missed/all/",
-                               "https://api.kijk.nl/v1/default/sections/missed-all-"],
-                               name="Day listing", json=True, preprocessor=self.extract_day_items)
-
-        self._add_data_parser("https://api.kijk.nl/v1/default/searchresultsgrouped",
-                              name="VideoItems Json", json=True,
-                              parser=[], creator=self.create_json_search_item)
-
-        self._add_data_parsers(["https://api.kijk.nl/v1/default/sections/series",
-                               "https://api.kijk.nl/v1/default/seasons/"],
-                               name="VideoItems Json", json=True,
-                               parser=["items", ], creator=self.create_json_video_item)
-
-        self._add_data_parser("https://api.kijk.nl/v2/default/sections/popular",
-                              name="Popular items Json", json=True,
-                              parser=["items", ], creator=self.create_json_popular_item)
 
         self._add_data_parser("https://embed.kijk.nl/",
                               updater=self.update_json_video_item)
@@ -147,105 +96,14 @@ class Channel(chn_class.Channel):
         self.__video_fields = \
             "{items{__typename,title,description,guid,updated,seriesTvSeasons{id}," \
             "imageMedia{url,label},type,sources{type,drm,file},series{title}," \
-            "seasonNumber,tvSeasonEpisodeNumber,lastPubDate,duration,displayGenre}}"
+            "seasonNumber,tvSeasonEpisodeNumber,lastPubDate,duration,displayGenre,tracks{type,file}}}"
         
         #===============================================================================================================
         # Test cases:
-        #  Piets Weer: no clips
-        #  Achter gesloten deuren: seizoenen
-        #  Wegmisbruikers: episodes and clips and both pages
-        #  Utopia: no clips
-        #  Grand Designs has almost all encrypted/non-encrypted/brigthcove streams
 
         # ====================================== Actual channel setup STOPS here =======================================
         UriHandler.set_cookie(name="OPTOUTMULTI", value="0:0%7Cc5:0%7Cc1:0%7Cc4:0%7Cc3:0%7Cc2:0", domain=".kijk.nl")
         return
-
-    def extract_main_list_json(self, data):
-        """ Extracts the main list JSON data from the HTML response.
-
-        Accepts an data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
-
-        The return values should always be instantiated in at least ("", []).
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        data, items = self.add_others(data)
-        start_string = "window.__REDUX_STATE__ = "
-        start_data = data.index(start_string)
-        end_data = data.index("</script><script async=")
-        data = data[start_data + len(start_string):end_data]
-        data = JsonHelper(data)
-        letters = data.get_value("reduxAsyncConnect", "page", "components", 1, "data", "items", 1, "data", "items")
-        for letter_data in letters:
-            letter_data = letter_data["data"]
-            Logger.trace("Processing '%s'", letter_data["title"])
-            for item in letter_data["items"]:
-                episode = self.create_json_episode_item(item)
-                items.append(episode)
-        return data, items
-
-    def add_others(self, data):
-        """ Performs pre-process actions for data processing.
-
-        Accepts an data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
-
-        The return values should always be instantiated in at least ("", []).
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        Logger.info("Performing Pre-Processing")
-        items = []
-
-        others = MediaItem("\b.: Populair :.", "https://api.kijk.nl/v2/default/sections/popular_PopularVODs?offset=0")
-        items.append(others)
-
-        days = MediaItem("\b.: Deze week :.", "#lastweek")
-        items.append(days)
-
-        search = MediaItem("\b.: Zoeken :.", "searchSite")
-        search.complete = True
-        search.dontGroup = True
-        search.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
-        items.append(search)
-
-        if self.channelCode == "veronica":
-            live = LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId)
-            live_radio = MediaItem("Radio Veronica {}".format(live), "")
-            live_radio.type = "video"
-            live_radio.dontGroup = True
-
-            part = live_radio.create_new_empty_media_part()
-            live_stream = "https://talparadiohls-i.akamaihd.net/hls/live/585615/VR-Veronica-1/playlist.m3u8"
-            if AddonSettings.use_adaptive_stream_add_on(with_encryption=False, channel=self):
-                stream = part.append_media_stream(live_stream, 0)
-                M3u8.set_input_stream_addon_input(stream, self.proxy)
-                live_radio.complete = True
-            else:
-                for s, b in M3u8.get_streams_from_m3u8(live_stream, self.proxy):
-                    live_radio.complete = True
-                    part.append_media_stream(s, b)
-
-            items.append(live_radio)
-
-        Logger.debug("Pre-Processing finished")
-        return data, items
 
     # noinspection PyUnusedLocal
     def search_site(self, url=None):  # @UnusedVariable
@@ -265,15 +123,12 @@ class Channel(chn_class.Channel):
 
         """
 
-        if self.channelCode is None:
-            url = self.__get_api_query_url(
-                "search(searchParam:\"----\",programTypes:[SERIES,EPISODE],limit:50)",
-                "{items{__typename,title,description,guid,updated,seriesTvSeasons{id},"
-                "imageMedia{url,label},type,sources{type,file,drm},seasonNumber,"
-                "tvSeasonEpisodeNumber,series{title},lastPubDate}}"
-            ).replace("%", "%%").replace("----", "%s")
-        else:
-            url = "https://api.kijk.nl/v1/default/searchresultsgrouped?search=%s"
+        url = self.__get_api_query_url(
+            "search(searchParam:\"----\",programTypes:[SERIES,EPISODE],limit:50)",
+            "{items{__typename,title,description,guid,updated,seriesTvSeasons{id},"
+            "imageMedia{url,label},type,sources{type,file,drm},seasonNumber,"
+            "tvSeasonEpisodeNumber,series{title},lastPubDate}}"
+        ).replace("%", "%%").replace("----", "%s")
         return chn_class.Channel.search_site(self, url)
 
     def list_dates(self, data):
@@ -319,212 +174,6 @@ class Channel(chn_class.Channel):
 
         Logger.debug("Pre-Processing finished")
         return data, items
-
-    def extract_day_items(self, data):
-        """ Performs pre-process actions for data processing.
-
-        Accepts an data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
-
-        The return values should always be instantiated in at least ("", []).
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        items = []
-        json = JsonHelper(data)
-        page_items = json.get_value('items')
-        for item in page_items:
-            video_item = self.create_json_video_item(item, prepend_serie=True)
-            if video_item:
-                items.append(video_item)
-
-        return data, items
-
-    def create_json_search_item(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        if 'type' in result_set:
-            item_type = result_set['type']
-            if item_type == 'series':
-                return self.create_json_episode_item(result_set)
-            elif item_type == 'episode' or item_type == 'clip':
-                return self.create_json_video_item(result_set, prepend_serie=True)
-        return None
-
-    def create_json_season_item(self, result_set):
-        """ Creates a MediaItem of type 'folder' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-        # {
-        #     "seasonNumber": 3,
-        #     "id": "season-3",
-        #     "episodesId": "achtergeslotendeuren.net5-season-3-episodes",
-        #     "clipsId": "achtergeslotendeuren.net5-season-3-clips",
-        #     "title": "Seizoen 3",
-        #     "format": "achtergeslotendeuren",
-        #     "channel": "net5",
-        #     "episodesLink": "https://api.kijk.nl/v1/default/seasons/achtergeslotendeuren.net5/3/episodes",
-        #     "clipsLink": "https://api.kijk.nl/v1/default/seasons/achtergeslotendeuren.net5/3/clips"
-        # }
-        # https://api.kijk.nl/v1/default/seasons/achtergeslotendeuren.net5/2/episodes?limit=100&offset=1
-
-        url = "{}?limit=100&offset=1".format(result_set["episodesLink"])
-        item = MediaItem(result_set["title"], url)
-        return item
-
-    def create_json_episode_item(self, result_set):
-        """ Creates a new MediaItem for an episode.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        channel_id = result_set["channel"]
-        if self.__channelId and channel_id != self.__channelId:
-            return None
-
-        title = result_set["title"]
-
-        use_season = False
-        if use_season:
-            url = "https://api.kijk.nl/v2/templates/page/format/{}".format(result_set["id"])
-        else:
-            url = "https://api.kijk.nl/v1/default/sections/series-%(id)s_Episodes-season-0?limit=100&offset=0" % result_set
-
-        item = MediaItem(title, url)
-        item.description = result_set.get("synopsis", None)
-
-        if "retina_image_pdp_header" in result_set["images"]:
-            # noinspection PyTypeChecker
-            item.fanart = result_set["images"]["retina_image_pdp_header"]
-        if "retina_image" in result_set["images"]:
-            # noinspection PyTypeChecker
-            item.thumb = result_set["images"]["retina_image"]
-        elif "nonretina_image" in result_set["images"]:
-            # noinspection PyTypeChecker
-            item.thumb = result_set["images"]["nonretina_image"]
-
-        return item
-
-    def create_json_popular_item(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        item = self.create_json_video_item(result_set, prepend_serie=True)
-        if item is None:
-            return None
-
-        item.name = "%s - %s" % (item.name, result_set["seriesTitle"])
-        return item
-
-    def create_json_video_item(self, result_set, prepend_serie=False):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        if not result_set.get("available", True):
-            Logger.warning("Item not available: %s", result_set)
-            return None
-
-        item = self.create_json_episode_item(result_set)
-        if item is None:
-            return None
-
-        if prepend_serie and 'seriesTitle' in result_set:
-            item.name = "{0} - {1}".format(item.name, result_set['seriesTitle'])
-        elif 'seriesTitle' in result_set:
-            item.name = result_set['seriesTitle']
-
-        item.type = "video"
-        # Older URL
-        item.url = "https://embed.kijk.nl/api/video/%(id)s?id=kijkapp&format=DASH&drm=CENC" % result_set
-        # New URL
-        # item.url = "https://embed.kijk.nl/video/%(id)s" % result_set
-
-        if 'subtitle' in result_set:
-            item.name = "{0} - {1}".format(item.name, result_set['subtitle'])
-
-        if "date" in result_set:
-            date = result_set["date"].split("+")[0]
-            # 2016-12-25T17:58:00+01:00
-            time_stamp = DateHelper.get_date_from_string(date, "%Y-%m-%dT%H:%M:%S")
-            item.set_date(*time_stamp[0:6])
-
-        return item
 
     def update_json_video_item(self, item):
         """ Updates an existing MediaItem with more data.
@@ -580,7 +229,7 @@ class Channel(chn_class.Channel):
         use_adaptive = AddonSettings.use_adaptive_stream_add_on(channel=self)
 
         # with the Accept: application/vnd.sbs.ovp+json; version=2.0 header, the m3u8 streams that
-        # are brightcove based have an url paramter instead of an empty m3u8 file
+        # are brightcove based have an url parameter instead of an empty m3u8 file
         Logger.debug("Trying standard M3u8 streams.")
         if m3u8_url != "https://embed.kijk.nl/api/playlist/.m3u8" \
                 and "hostingervice=brightcove" not in m3u8_url:
@@ -816,6 +465,7 @@ class Channel(chn_class.Channel):
         return item
 
     #region GraphQL data
+    # noinspection SpellCheckingInspection
     def add_graphql_extras(self, data):
         """ Adds additional items to the main listings
 
@@ -879,9 +529,7 @@ class Channel(chn_class.Channel):
             recent_url = self.__get_api_query_url(
                 "programsByDate(date:\"{:04d}-{:02d}-{:02d}\",numOfDays:0)".format(
                     air_date.year, air_date.month, air_date.day),
-                "{items{__typename,title,description,guid,updated,seriesTvSeasons{id},"
-                "imageMedia{url,label},type,sources{type,drm,file},series{title},seasonNumber,"
-                "tvSeasonEpisodeNumber,lastPubDate}}"
+                self.__video_fields
             )
             extra = MediaItem(title, recent_url)
             extra.complete = True
@@ -974,7 +622,7 @@ class Channel(chn_class.Channel):
         item.thumb = self.__get_thumb(result_set.get("imageMedia"))
         item.description = result_set.get("description")
 
-        # In the mainlist we should set the fanart too
+        # In the main list we should set the fanart too
         if self.parentItem is None:
             item.fanart = item.thumb
 
@@ -1001,9 +649,7 @@ class Channel(chn_class.Channel):
         season_id = result_set["id"].rsplit("/", 1)[-1]
         url = self.__get_api_query_url(
             query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:100)'.format(season_id),
-            fields="{items{__typename,title,description,guid,updated,seriesTvSeasons{id},"
-                   "imageMedia{url,label},type,sources{type,drm,file},series{title},seasonNumber,"
-                   "tvSeasonEpisodeNumber,lastPubDate}}")
+            fields=self.__video_fields)
 
         item = MediaItem(title, url)
         return item
@@ -1072,7 +718,7 @@ class Channel(chn_class.Channel):
 
         sources = item.metaData["sources"]
         part = item.create_new_empty_media_part()
-        hls_over_dash = self._get_setting("hls_over_dash", False)
+        hls_over_dash = self._get_setting("hls_over_dash") == "true"
 
         for src in sources:
             stream_type = src["type"]

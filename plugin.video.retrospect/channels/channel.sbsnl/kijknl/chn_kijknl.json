@@ -10,7 +10,8 @@
       "sortorder": 6,
       "language": "nl",
       "fanart": "sbs6fanart.jpg",
-      "adaptiveAddonSelectable": true
+      "adaptiveAddonSelectable": true,
+      "ignore": true
     },
     {
       "guid": "658A5A36-60A4-11E2-A236-8CE36188709B",
@@ -22,7 +23,8 @@
       "sortorder": 5,
       "language": "nl",
       "fanart": "net5fanart.jpg",
-      "adaptiveAddonSelectable": true
+      "adaptiveAddonSelectable": true,
+      "ignore": true
     },
     {
       "guid": "6B32718A-60A4-11E2-87B1-A6E36188709B",
@@ -34,7 +36,8 @@
       "sortorder": 10,
       "language": "nl",
       "fanart": "veronicafanart.png",
-      "adaptiveAddonSelectable": true
+      "adaptiveAddonSelectable": true,
+      "ignore": true
     },
     {
       "guid": "C77710DE-21B6-467A-A547-0F64C6C6186E",
@@ -46,7 +49,8 @@
       "sortorder": 9,
       "language": "nl",
       "fanart": "sbs9fanart.jpg",
-      "adaptiveAddonSelectable": true
+      "adaptiveAddonSelectable": true,
+      "ignore": true
     },
     {
       "guid": "271456ED-6E84-4FAB-A7AF-77A1C669F942",
@@ -65,7 +69,7 @@
     {
       "order": 1,
       "id": "hls_over_dash",
-      "value": "label=\"30099\" type=\"bool\" default=\"\""
+      "value": "label=\"30099\" type=\"bool\" default=\"false\""
     }
   ]
 }

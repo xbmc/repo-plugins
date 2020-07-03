@@ -244,35 +244,30 @@ class FolderAction(AddonAction):
 
         """
 
+        sort_methods = []
+
+        # Add the default sorting options
         if AddonSettings.mix_folders_and_videos():
-            label_sort_method = xbmcplugin.SORT_METHOD_LABEL_IGNORE_FOLDERS
+            sort_methods.append(xbmcplugin.SORT_METHOD_LABEL_IGNORE_FOLDERS)
         else:
-            label_sort_method = xbmcplugin.SORT_METHOD_LABEL
+            sort_methods.append(xbmcplugin.SORT_METHOD_LABEL)
+        sort_methods.append(xbmcplugin.SORT_METHOD_EPISODE)
+        sort_methods.append(xbmcplugin.SORT_METHOD_UNSORTED)
 
+        # And then the specialized ones ad default sort options
         if items:
-            has_dates = len(list([i for i in items if i.has_date()])) > 0
+            has_dates = any([i for i in items if i.has_date()])
             if has_dates:
-                Logger.debug("Sorting method: Dates")
-                xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
-                xbmcplugin.addSortMethod(handle=handle, sortMethod=label_sort_method)
-                xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_TRACKNUM)
-                xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_UNSORTED)
-                return
+                sort_methods.insert(0, xbmcplugin.SORT_METHOD_DATE)
 
-            has_tracks = len(list([i for i in items if i.has_track()])) > 0
+            has_tracks = any([i for i in items if i.has_track()])
             if has_tracks:
-                Logger.debug("Sorting method: Tracks")
-                xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_TRACKNUM)
-                xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
-                xbmcplugin.addSortMethod(handle=handle, sortMethod=label_sort_method)
-                xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_UNSORTED)
-                return
+                sort_methods.insert(0, xbmcplugin.SORT_METHOD_TRACKNUM)
 
-        Logger.debug("Sorting method: Default (Label)")
-        xbmcplugin.addSortMethod(handle=handle, sortMethod=label_sort_method)
-        xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
-        xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_TRACKNUM)
-        xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_UNSORTED)
+        # Actually add them
+        Logger.debug("Sorting methods: %s", sort_methods)
+        for sort_method in sort_methods:
+            xbmcplugin.addSortMethod(handle=handle, sortMethod=sort_method)
         return
 
     # noinspection PyUnusedLocal

@@ -901,7 +901,8 @@ class Channel(chn_class.Channel):
                 item.thumb = image_data["formats"]["web"]["source"]
 
         region_restrictions = result_set.get('regionRestrictions', [])
-        item.isGeoLocked = len(region_restrictions) > 0
+        # The PLUSVOD:EU is not a regional restriction as it seems (See #1392)
+        item.isGeoLocked = any([r for r in region_restrictions if r != "PLUSVOD:EU"])
         return item
 
     def extract_epi_epg_items(self, data):

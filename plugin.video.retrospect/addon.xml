@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.6+matrix.1"
+        version="5.2.7+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -127,23 +127,22 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.6 - Changelog - 2020-06-09[/B]
+        <news>[B]Retrospect v5.2.7 - Changelog - 2020-07-04[/B]
 
-This new version of Retrospect addresses a number of channel bugs. Besides this the behavior of the bitrate limiting was changed and by default no limit is set. Users can still change this via the add-on settings. There was also a fix for changed Kodi Matrix Python API.
+This new version of Retrospect addresses a number of small issues in Retrospect. It also fixes a number of channel related bugs for kijk.nl, vrt.nu and NPO.
 
 [B]Framework related[/B]
-* Fixed: Some Kodi Matrix Python API changes (Fixes #1384)
-* Changed: By default no bitrates are limited. This can be changed via the Retrospect add-on settings
-* Fixed: A bug was introduced to that sometimes sets an empty subtitle to the Kodi player (Fixes #1390)
+* Fixed: cleaning up cache and cookies sometimes did not clean cookies
 
 [B]GUI/Settings/Language related[/B]
-* Added: Different color for &quot;Geo-locked&quot; items
+* Fixed: Regression bug that caused the description prefixes to not be on a new line
+* Changed: sorting code optimized and added an sort by &#x27;episode&#x27; option that users can select per folder
 
 [B]Channel related[/B]
-* Added: Try to add a geo-locked indicator to NPO Start (See #1380)
-* Fixed: Nick Jr stream resolving (Fixes #1382)
-* Changed: Enabled Dolby Digital audio stream for SVT.se
-* Fixed: NPO Live streams that contain GEO locked content would not play at all (Fixes #1389)
+* Fixed: VRT.nu could not log in any more (Fixes #1400)
+* Removed: SBS6, SBS9, Veronica, NET5 as they all moved to kijk.nl (Fixes #1401)
+* Fixed: Kijk.nl subtitles were missing (Fixes #1402)
+* Fixed: Too many episodes show as geo restricted in NPO
 
         </news>
         <assets>

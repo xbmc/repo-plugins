@@ -511,3 +511,8 @@ sorted chronologically):
 - Peter Werkander
 - Erik Koole
 - Robin Lövgren
+- Johan Lundin
+- Yennick Trevels
+- Cor Kuin
+- Ingos Data o PPDesign
+- Jules Harms

@@ -700,11 +700,11 @@ class MediaItem:
             See https://forum.kodi.tv/showthread.php?tid=210837
             """
 
-            return "".join([text_format.format(clr, text.lstrip()) for clr, text in texts])
+            return "".join([text_format.format(clr, text.lstrip()) for clr, text in texts]).strip()
 
         # actually update it
         if description_prefix:
-            description = __color_text(description_prefix)
+            description = __color_text(description_prefix, text_format="[COLOR {}]{}[/COLOR]\n")
 
         if title_postfix:
             title = __color_text(title_postfix)

@@ -252,7 +252,10 @@ class Channel(chn_class.Channel):
 
         # Now get the actual VRT tokens (X-VRT-Token....). Valid for 1 hour. So we call the actual
         # perform_login url which will redirect and get cookies.
-        csrf = UriHandler.get_cookie("XSRF-TOKEN", "login.vrt.be")
+        csrf = UriHandler.get_cookie("OIDCXSRF", "login.vrt.be")
+        if csrf is None:
+            csrf = UriHandler.get_cookie("XSRF-TOKEN", "login.vrt.be")
+
         token_data = {
             "UID": user_id,
             "UIDSignature": signature,

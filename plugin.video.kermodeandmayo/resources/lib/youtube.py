@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import json
 import time
@@ -12,7 +13,7 @@ HOST = "www.googleapis.com"
 PATH = "/youtube/v3/"
 
 CHANNEL_ID = "UCCxKPNMqjnqbxVEt1tyDUsA"
-API_KEY = "AIzaSyCr9pspr1lMJg0AKxRYNW6T_HfaIJcYcL4"
+API_KEY = "AIzaSyDc9qkxPf5Bl3KhjuWUQ_6WDx3TqCAp4OE"
 
 QS_FMT = "part=snippet&key={0}&{{0}}Id={{1}}&maxResults={{2}}&q={{3}}&order={{4}}&type=video".format(API_KEY)
 
@@ -23,8 +24,8 @@ def date_from_str(date_str, date_format):
 def _get_items(resource, key="channel", id=CHANNEL_ID, max_results=50, order='date', query=""):
     qs = QS_FMT.format(key, id, max_results, query, order)
     url = urlunparse((SCHEME, HOST, os.path.join(PATH, resource), None, qs, None))
-    response = json.loads(requests.get(url).text)
-    
+    response = json.loads(requests.get(url, headers={'referer': 'kermodeandmayo'}).text)
+
     for item in response['items']:
         snippet = item['snippet']
         thumbnail = snippet['thumbnails']['high']['url']
@@ -59,7 +60,7 @@ def get_search_results(query):
         
 if __name__ == "__main__":
     for playlist_id, title, thumbnail, published_at in get_playlists():
-        print
-        print title
+        print()
+        print(title)
         for item_id, title, thumbnail, published_at in get_playlist_items(playlist_id):
-            print '\t', title
+            print('\t', title)

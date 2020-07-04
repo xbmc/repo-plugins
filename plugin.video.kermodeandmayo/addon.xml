@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.kermodeandmayo" name="Kermode and Mayo's Film Review" version="0.5.3" provider-name="Leopold">
+<addon id="plugin.video.kermodeandmayo" name="Kermode and Mayo's Film Review" version="0.5.4" provider-name="Leopold">
   <requires>
     <import addon="xbmc.python" version="2.23.0"/>
     <import addon="script.module.kodiswift" version="0.0.8" optional="false"/>
@@ -21,13 +21,20 @@
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <language>en</language>
-    <summary lang="en_gb">Mark Kermode joins Simon Mayo to give his verdict on the week's movies</summary>
-    <description lang="en_gb">This plugin provides access to the full episode podcasts and video clips from Kermode and Mayo's Film Review at bbc.co.uk and YouTube. The videos contain film reviews and interviews which are broadcast live on Fridays at 2pm on BBC Radio 5 live. "Kermode Uncut" is a twice-weekly video blog where Mark airs his personal views on the things that most fire him up about cinema.
+    <summary lang="en_GB">Mark Kermode joins Simon Mayo to give his verdict on the week's movies</summary>
+    <description lang="en_GB">This plugin provides access to the full episode podcasts and video clips from Kermode and Mayo's Film Review at bbc.co.uk and YouTube. The videos contain film reviews and interviews which are broadcast live on Fridays at 2pm on BBC Radio 5 live. "Kermode Uncut" is a twice-weekly video blog where Mark airs his personal views on the things that most fire him up about cinema.
 
 Outspoken, opinionated and never lost for words, Mark Kermode is the UK's leading film critic. Feted as one of the finest film reviewers of his generation as well as for his impeccably-coiffured quiff, Mark Kermode presents the film review on Radio 5 live with Simon Mayo in a broadcast partnership that has lasted nearly 20 years.</description>
     <website>http://www.bbc.co.uk/programmes/b00lvdrj</website>
     <forum>http://forum.kodi.tv/showthread.php?tid=187996</forum>
     <source>https://github.com/LS80/plugin.video.kermodeandmayo.git</source>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <license>GPL-3.0-or-later</license>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+    <news>
+      Fixed errors with clips and YouTube listings
+    </news>
   </extension>
 </addon>

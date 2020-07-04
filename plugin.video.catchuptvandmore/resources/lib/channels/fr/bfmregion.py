@@ -85,13 +85,13 @@ def list_videos(plugin, item_id, page, **kwargs):
     root = resp.parse()
 
     for video_datas in root.iterfind(
-            ".//article[@class='art-c modulx3 no-border  bg-color-4 relative']"
+            ".//article[@class='duo_liste content_item content_type content_type_video']"
     ):
         if 'https' not in video_datas.find('.//a').get('href'):
-            video_url = 'https:' + video_datas.find('.//a').get('href')
+            video_url = URL_ROOT + video_datas.find('.//a').get('href')
         else:
             video_url = video_datas.find('.//a').get('href')
-        video_image = video_datas.find('.//img').get('data-original')
+        video_image = ''  # TODO image
         video_title = video_datas.find('.//img').get('alt')
 
         item = Listitem()
@@ -118,9 +118,9 @@ def get_video_url(plugin,
 
     resp = urlquick.get(video_url)
 
-    data_account = re.compile(r'data-account="(.*?)"').findall(resp.text)[0]
-    data_video_id = re.compile(r'data-video-id="(.*?)"').findall(resp.text)[0]
-    data_player = re.compile(r'data-player="(.*?)"').findall(resp.text)[0]
+    data_account = re.compile(r'accountid="(.*?)"').findall(resp.text)[0]
+    data_video_id = re.compile(r'videoid="(.*?)"').findall(resp.text)[0]
+    data_player = re.compile(r'playerid="(.*?)"').findall(resp.text)[0]
 
     return resolver_proxy.get_brightcove_video_json(plugin, data_account,
                                                     data_player, data_video_id,
@@ -144,9 +144,9 @@ def get_live_url(plugin, item_id, video_id, **kwargs):
                             max_age=-1)
 
     root = resp.parse()
-    live_datas = root.find(".//div[@class='next-player']")
-    data_account = live_datas.get('data-account')
-    data_video_id = live_datas.get('data-video-id')
-    data_player = live_datas.get('data-player')
+    live_datas = root.find(".//div[@class='video_block']")
+    data_account = live_datas.get('accountid')
+    data_video_id = live_datas.get('videoid')
+    data_player = live_datas.get('playerid')
     return resolver_proxy.get_brightcove_video_json(plugin, data_account,
                                                     data_player, data_video_id)

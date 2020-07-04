@@ -583,7 +583,7 @@ def get_video_url(plugin,
 def list_videos_news_videos(plugin, item_id, category_url, page, **kwargs):
 
     resp = urlquick.get(category_url + '?page=%s' % page)
-    root = resp.parse("div", attrs={"class": "col-left"})
+    root = resp.parse("div", attrs={"class": "gd-col-left"})
 
     for episode in root.iterfind(".//div"):
         if episode.get('class') is not None:

@@ -67,7 +67,7 @@ def list_letters(plugin, item_id, **kwargs):
     resp = urlquick.get(URL_REPLAYS)
     json_parser = json.loads(resp.text)
 
-    for letter_title in list(json_parser.keys()):
+    for letter_title in sorted(json_parser.keys()):
         item = Listitem()
         item.label = letter_title
         item.set_callback(list_programs,
@@ -93,9 +93,11 @@ def list_programs(plugin, item_id, letter_title, **kwargs):
             program_image = ''
             if "images" in program_datas:
                 if 'landscape' in program_datas["images"]:
-                    program_image = program_datas["images"][
+                    program_image = URL_ROOT + program_datas["images"][
                         "landscape"].replace('/resizegd/[RESOLUTION]', '')
             program_url = program_datas["PathID"]
+            # replace trailing '/?json' by '.json'
+            program_url = '.'.join(program_url.rsplit('/?', 1))
 
             item = Listitem()
             item.label = program_title
@@ -114,13 +116,13 @@ def list_videos(plugin, item_id, program_url, **kwargs):
     json_parser = json.loads(resp.text)
 
     # Get Program Name and Program Plot
-    program_name = json_parser["Name"]
-    program_plot = json_parser["infoProg"]["description"]
+    program_name = json_parser["name"]
+    program_plot = json_parser["program_info"]["description"]
 
     has_contents = False
 
     try:
-        url_videos = URL_ROOT + json_parser["Blocks"][0]["Sets"][0]["url"]
+        url_videos = URL_ROOT + json_parser["blocks"][0]["sets"][0]["path_id"]
         has_contents = True
     except Exception:
         pass
@@ -132,7 +134,7 @@ def list_videos(plugin, item_id, program_url, **kwargs):
         for video_datas in json_parser2["items"]:
             video_title = program_name + ' ' + video_datas[
                 'name'] + ' ' + video_datas['subtitle']
-            video_image = video_datas["images"]["landscape"].replace(
+            video_image = URL_ROOT + video_datas["images"]["landscape"].replace(
                 '/resizegd/[RESOLUTION]', '')
             duration_value = video_datas['duration'].split(':')
             video_duration = 0
@@ -142,13 +144,25 @@ def list_videos(plugin, item_id, program_url, **kwargs):
             elif len(duration_value) > 1:
                 video_duration = int(duration_value[0]) * 60 + int(
                     duration_value[1])
-            video_url = URL_ROOT + video_datas['pathID']
+            video_url = video_datas['video_url']
 
             item = Listitem()
             item.label = video_title
             item.art['thumb'] = item.art['landscape'] = video_image
             item.info['duration'] = video_duration
             item.info['plot'] = program_plot
+            item.params['title'] = video_title
+
+            # subtitles
+            try:
+                weblink = video_datas['weblink']
+                weblink = weblink.rsplit('.', 1)[0] + '.json'
+                resp3 = urlquick.get(URL_ROOT + weblink)
+                json_parser3 = json.loads(resp3.text)
+                subtitles = json_parser3['video']['subtitlesArray']
+                item.params['subtitles'] = subtitles
+            except Exception:
+                Script.log('[raiplay.py] Problem getting subtitles.')
 
             item.set_callback(get_video_url,
                               item_id=item_id,
@@ -164,12 +178,15 @@ def get_video_url(plugin,
                   download_mode=False,
                   **kwargs):
 
-    resp = urlquick.get(video_url)
-    json_parser = json.loads(resp.text)
-
     if download_mode:
-        return download.download_video(json_parser["video"]["contentUrl"])
-    return json_parser["video"]["contentUrl"]
+        return download.download_video(video_url)
+
+    item = Listitem()
+    item.label = kwargs.get('title', 'unknown')
+    item.path = video_url
+    if kwargs.get('subtitles') and plugin.setting.get_boolean('active_subtitle'):
+        item.subtitles = [URL_ROOT + sub['url'] for sub in kwargs['subtitles']]
+    return item
 
 
 def live_entry(plugin, item_id, **kwargs):

@@ -93,6 +93,26 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=s
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/edgesport.png" group-title="United Kingdom",EDGE Sport
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=edgesport&item_module=resources.lib.channels.uk.stv&item_dict={}
 
+##	The Pet Collective
+##	thepetcollective
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/thepetcollective.png" group-title="United Kingdom",The Pet Collective
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=thepetcollective&item_module=resources.lib.channels.uk.stv&item_dict={}
+
+##	Fail Army
+##	failarmy
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/failarmy.png" group-title="United Kingdom",Fail Army
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=failarmy&item_module=resources.lib.channels.uk.stv&item_dict={}
+
+##	Qello
+##	qello
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/qello.png" group-title="United Kingdom",Qello
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qello&item_module=resources.lib.channels.uk.stv&item_dict={}
+
+##	DUST
+##	dust
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/dust.png" group-title="United Kingdom",DUST
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dust&item_module=resources.lib.channels.uk.stv&item_dict={}
+
 ##	QVC
 ##	qvc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="United Kingdom",QVC

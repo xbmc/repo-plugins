@@ -398,11 +398,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=t
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/luckyjack.png" group-title="France",Lucky Jack
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=luckyjack&item_module=resources.lib.channels.fr.abweb&item_dict={}
 
-##	Mont Blanc Live TV
-##	mblivetv
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/mblivetv.png" group-title="France",Mont Blanc Live TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=mblivetv&item_module=resources.lib.channels.fr.mblivetv&item_dict={}
-
 ##	8 Mont-Blanc
 ##	tv8montblanc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tv8montblanc.png" group-title="France",8 Mont-Blanc
@@ -532,6 +527,11 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=r
 ##	europe1
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/europe1.png" group-title="France",Europe 1
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=europe1&item_module=resources.lib.channels.fr.europe1&item_dict={}
+
+##	01Net TV
+##	01net
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/01net.png" group-title="France",01Net TV
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=01net&item_module=resources.lib.channels.fr.01net&item_dict={}
 
 
 
@@ -717,6 +717,26 @@ plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=s
 ##	edgesport
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/edgesport.png" group-title="United Kingdom",EDGE Sport
 plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=edgesport&item_module=resources.lib.channels.uk.stv&item_dict={}
+
+##	The Pet Collective
+##	thepetcollective
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/thepetcollective.png" group-title="United Kingdom",The Pet Collective
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=thepetcollective&item_module=resources.lib.channels.uk.stv&item_dict={}
+
+##	Fail Army
+##	failarmy
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/failarmy.png" group-title="United Kingdom",Fail Army
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=failarmy&item_module=resources.lib.channels.uk.stv&item_dict={}
+
+##	Qello
+##	qello
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/qello.png" group-title="United Kingdom",Qello
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qello&item_module=resources.lib.channels.uk.stv&item_dict={}
+
+##	DUST
+##	dust
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/dust.png" group-title="United Kingdom",DUST
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dust&item_module=resources.lib.channels.uk.stv&item_dict={}
 
 
 

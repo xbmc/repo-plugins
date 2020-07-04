@@ -614,7 +614,7 @@ menu = {
         'fanart': 'channels/fr/mblivetv_fanart.jpg',
         'module': 'resources.lib.channels.fr.mblivetv',
         'm3u_group': 'Satellite/FAI',
-        'enabled': True,
+        'enabled': False,
         'order': 84
     },
     'tv8montblanc': {
@@ -876,5 +876,15 @@ menu = {
         'm3u_group': 'Radio',
         'enabled': True,
         'order': 120
+    },
+    '01net': {
+        'callback': 'live_bridge',
+        'label': '01Net TV',
+        'thumb': 'channels/fr/01net.png',
+        'fanart': 'channels/fr/01net_fanart.jpg',
+        'module': 'resources.lib.channels.fr.01net',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 121
     }
 }

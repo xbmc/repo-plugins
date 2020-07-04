@@ -37,14 +37,12 @@ import json
 import urlquick
 
 # TO DO
-# ....
+# Add More Pages
 
 URL_API = 'https://api.canalplus.pro'
 # ChannelName
 
 URL_VIDEOS = URL_API + '/creativemedia/video'
-
-# PageId
 
 
 def replay_entry(plugin, item_id, **kwargs):
@@ -64,13 +62,12 @@ def list_programs(plugin, item_id, **kwargs):
     - ...
     """
     headers = {
-        'X-MINISITE-DOMAIN':
-        'jack.mycanal.fr',
+        'x-minisite-domain':
+        'jack.canalplus.com',
         'User-Agent':
         web_utils.get_random_ua()
     }
     resp = urlquick.get(URL_VIDEOS, headers=headers)
-    print(repr(resp.text))
     json_parser = json.loads(resp.text)
 
     for program_datas in json_parser["blocks"]:
@@ -91,7 +88,7 @@ def list_videos(plugin, item_id, program_title, **kwargs):
 
     headers = {
         'X-MINISITE-DOMAIN':
-        'jack.mycanal.fr',
+        'jack.canalplus.com',
         'User-Agent':
         web_utils.get_random_ua()
     }

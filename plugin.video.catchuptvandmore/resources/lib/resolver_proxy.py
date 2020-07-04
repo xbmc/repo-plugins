@@ -112,45 +112,45 @@ def get_stream_dailymotion(plugin,
                            video_id,
                            download_mode=False):
 
-    # TODO reactivate when youtubedl is fixed
-    # url_dailymotion = URL_DAILYMOTION_EMBED % video_id
-    # return get_stream_default(plugin, url_dailymotion, download_mode)
-    if download_mode:
-        return False
-    url_dmotion = URL_DAILYMOTION_EMBED_2 % (video_id)
-    resp = urlquick.get(url_dmotion, max_age=-1)
-    json_parser = json.loads(resp.text)
+    url_dailymotion = URL_DAILYMOTION_EMBED % video_id
+    return get_stream_default(plugin, url_dailymotion, download_mode)
+    # Code to reactivate when youtubedl is KO for dailymotion
+    # if download_mode:
+    #     return False
+    # url_dmotion = URL_DAILYMOTION_EMBED_2 % (video_id)
+    # resp = urlquick.get(url_dmotion, max_age=-1)
+    # json_parser = json.loads(resp.text)
 
-    if "qualities" not in json_parser:
-        plugin.notify('ERROR', plugin.localize(30716))
+    # if "qualities" not in json_parser:
+    #     plugin.notify('ERROR', plugin.localize(30716))
 
-    all_datas_videos_path = []
-    if "auto" in json_parser["qualities"]:
-        all_datas_videos_path.append(json_parser["qualities"]["auto"][0]["url"])
-    if "144" in json_parser["qualities"]:
-        all_datas_videos_path.append(json_parser["qualities"]["144"][1]["url"])
-    if "240" in json_parser["qualities"]:
-        all_datas_videos_path.append(json_parser["qualities"]["240"][1]["url"])
-    if "380" in json_parser["qualities"]:
-        all_datas_videos_path.append(json_parser["qualities"]["380"][1]["url"])
-    if "480" in json_parser["qualities"]:
-        all_datas_videos_path.append(json_parser["qualities"]["480"][1]["url"])
-    if "720" in json_parser["qualities"]:
-        all_datas_videos_path.append(json_parser["qualities"]["720"][1]["url"])
-    if "1080" in json_parser["qualities"]:
-        all_datas_videos_path.append(json_parser["qualities"]["1080"][1]["url"])
+    # all_datas_videos_path = []
+    # if "auto" in json_parser["qualities"]:
+    #     all_datas_videos_path.append(json_parser["qualities"]["auto"][0]["url"])
+    # if "144" in json_parser["qualities"]:
+    #     all_datas_videos_path.append(json_parser["qualities"]["144"][1]["url"])
+    # if "240" in json_parser["qualities"]:
+    #     all_datas_videos_path.append(json_parser["qualities"]["240"][1]["url"])
+    # if "380" in json_parser["qualities"]:
+    #     all_datas_videos_path.append(json_parser["qualities"]["380"][1]["url"])
+    # if "480" in json_parser["qualities"]:
+    #     all_datas_videos_path.append(json_parser["qualities"]["480"][1]["url"])
+    # if "720" in json_parser["qualities"]:
+    #     all_datas_videos_path.append(json_parser["qualities"]["720"][1]["url"])
+    # if "1080" in json_parser["qualities"]:
+    #     all_datas_videos_path.append(json_parser["qualities"]["1080"][1]["url"])
 
-    url_stream = ''
-    for video_path in all_datas_videos_path:
-        url_stream = video_path
+    # url_stream = ''
+    # for video_path in all_datas_videos_path:
+    #     url_stream = video_path
 
-    manifest = urlquick.get(url_stream, max_age=-1)
-    lines = manifest.text.splitlines()
-    inside_m3u8 = ''
-    for k in range(0, len(lines) - 1):
-        if 'RESOLUTION=' in lines[k]:
-            inside_m3u8 = lines[k + 1]
-    return inside_m3u8.split('#cell')[0]
+    # manifest = urlquick.get(url_stream, max_age=-1)
+    # lines = manifest.text.splitlines()
+    # inside_m3u8 = ''
+    # for k in range(0, len(lines) - 1):
+    #     if 'RESOLUTION=' in lines[k]:
+    #         inside_m3u8 = lines[k + 1]
+    # return inside_m3u8.split('#cell')[0]
 
 
 # Vimeo Part

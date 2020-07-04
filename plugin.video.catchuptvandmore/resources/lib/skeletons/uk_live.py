@@ -211,5 +211,41 @@ menu = {
         'module': 'resources.lib.channels.uk.stv',
         'enabled': True,
         'order': 25
+    },
+    'thepetcollective': {
+        'callback': 'live_bridge',
+        'label': 'The Pet Collective',
+        'thumb': 'channels/uk/thepetcollective.png',
+        'fanart': 'channels/uk/thepetcollective_fanart.jpg',
+        'module': 'resources.lib.channels.uk.stv',
+        'enabled': True,
+        'order': 27
+    },
+    'failarmy': {
+        'callback': 'live_bridge',
+        'label': 'Fail Army',
+        'thumb': 'channels/uk/failarmy.png',
+        'fanart': 'channels/uk/failarmy_fanart.jpg',
+        'module': 'resources.lib.channels.uk.stv',
+        'enabled': True,
+        'order': 28
+    },
+    'qello': {
+        'callback': 'live_bridge',
+        'label': 'Qello',
+        'thumb': 'channels/uk/qello.png',
+        'fanart': 'channels/uk/qello_fanart.jpg',
+        'module': 'resources.lib.channels.uk.stv',
+        'enabled': True,
+        'order': 29
+    },
+    'dust': {
+        'callback': 'live_bridge',
+        'label': 'DUST',
+        'thumb': 'channels/uk/dust.png',
+        'fanart': 'channels/uk/dust_fanart.jpg',
+        'module': 'resources.lib.channels.uk.stv',
+        'enabled': True,
+        'order': 30
     }
 }

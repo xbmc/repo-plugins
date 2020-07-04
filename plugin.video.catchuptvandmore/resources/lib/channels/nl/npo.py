@@ -365,7 +365,7 @@ def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE_ID % item_id, max_age=-1)
 
-    video_id = re.compile(r'\"iframe\-(.*?)\"').findall(resp.text)[0]
+    video_id = re.compile(r'media-id\=\"(.*?)\"').findall(resp.text)[0]
 
     # Build PAYLOAD
     payload = {"_token": api_token}

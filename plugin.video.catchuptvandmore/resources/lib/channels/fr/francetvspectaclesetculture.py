@@ -78,20 +78,53 @@ def list_categories(plugin, item_id, **kwargs):
         item = Listitem()
         item.label = category_title
         item.set_callback(
-            list_videos, item_id=item_id, category_url=category_url, page='0')
+            list_programs, item_id=item_id, category_url=category_url, page='0')
         item_post_treatment(item)
         yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, category_url, page, **kwargs):
+def list_programs(plugin, item_id, category_url, page, **kwargs):
 
     resp = urlquick.get(category_url + '?page=%s' % page)
     root = resp.parse()
 
+    for program_datas in root.iterfind(
+            ".//div[@class='c-card-program js-card c-wall__item']"):
+        program_title = program_datas.find('.//a').get('title')
+        program_image = ''
+        if program_datas.find('.//img') is not None:
+            program_image = 'https:' + program_datas.find('.//img').get('data-src')
+        program_url = URL_ROOT + program_datas.find('.//a').get('href')
+
+        item = Listitem()
+        item.label = program_title
+        item.art['thumb'] = item.art['landscape'] = program_image
+
+        item.set_callback(
+            list_videos,
+            item_id=item_id,
+            program_url=program_url,
+            page='0')
+        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        yield item
+
+    # More videos...
+    yield Listitem.next_page(item_id=item_id,
+                             category_url=category_url,
+                             page=str(int(page) + 1))
+
+
+@Route.register
+def list_videos(plugin, item_id, program_url, page, **kwargs):
+
+    resp = urlquick.get(program_url + '/toutes-les-videos/?page=%s' % page)
+    root = resp.parse()
+
     for video_data in root.iterfind(
             ".//div[@class='c-card-video js-card h-flex c-wall__item']"):
-        video_title = video_data.get('title')
+        video_title = video_data.get('title') + \
+            ' - ' + video_data.find(".//div[@class='c-card-video__description']").text.strip()
         video_image = ''
         if video_data.find('.//img') is not None:
             video_image = 'https:' + video_data.find('.//img').get('data-src')
@@ -112,7 +145,7 @@ def list_videos(plugin, item_id, category_url, page, **kwargs):
 
     # More videos...
     yield Listitem.next_page(item_id=item_id,
-                             category_url=category_url,
+                             program_url=program_url,
                              page=str(int(page) + 1))
 
 

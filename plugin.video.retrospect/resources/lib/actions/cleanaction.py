@@ -6,6 +6,7 @@ from resources.lib.actions.addonaction import AddonAction
 from resources.lib.envcontroller import EnvController
 from resources.lib.logger import Logger
 from resources.lib.retroconfig import Config
+from resources.lib.urihandler import UriHandler
 from resources.lib.xbmcwrapper import XbmcWrapper
 from resources.lib.helpers.languagehelper import LanguageHelper
 
@@ -21,7 +22,6 @@ class CleanAction(AddonAction):
 
         files_to_remove = {
             "channelindex.json": "Cleaning: Channel Index",
-            "cookiejar.dat": "Cleaning: Cookies in cookiejar.dat",
             "xot.session.lock": "Cleaning: Session lock"
         }
         for file_name, log_line in files_to_remove.items():
@@ -29,6 +29,9 @@ class CleanAction(AddonAction):
             files_to_remove = os.path.join(Config.profileDir, file_name)
             if os.path.isfile(files_to_remove):
                 os.remove(files_to_remove)
+
+        Logger.info("Clearing cookies")
+        UriHandler.clear_cookies()
 
         Logger.info("Cleaning: PickeStore objects")
         self.parameter_parser.pickler.purge_store(Config.addonId, age=0)

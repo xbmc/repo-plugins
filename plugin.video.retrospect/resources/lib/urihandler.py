@@ -251,6 +251,26 @@ class UriHandler(object):
             cookie_jar.save()
 
     @staticmethod
+    def clear_cookies(session_only=False):
+        """ Clears the current cookies from the CookieJar.
+
+        :param bool session_only:  Only clear session cookies
+        """
+        cookie_jar = UriHandler.instance().cookieJar
+
+        if session_only:
+            Logger.debug("Clearing session cookies")
+            cookie_jar.clear_session_cookies()
+        else:
+            Logger.debug("Clearing all cookies")
+            cookie_jar.clear()
+
+        if UriHandler.instance().cookieJarFile:
+            Logger.debug("Saving cookies to cookie jar file")
+            # noinspection PyUnresolvedReferences
+            cookie_jar.save()
+
+    @staticmethod
     def get_extension_from_url(url):
         """ determines the file extension for a certain URL
 

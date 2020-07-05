@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.ytchannels" name="Youtube Channels" version="0.2.0" provider-name="natko1412,mintsoft">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.beautifulsoup" version="3.2.1"/>
+    	<import addon="script.module.youtube" optional="true" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch your favourite youtube channels</summary>
+		<description lang="en">Watch your favourite youtube channels and organize them in folders.</description>
+		<platform>all</platform>
+		<website>https://github.com/mintsoft/kodi.plugin.ytchannels</website>
+		<source>https://github.com/mintsoft/kodi.plugin.ytchannels</source>
+	</extension>
+</addon>

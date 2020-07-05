@@ -1,0 +1,36 @@
+===============================
+Youtube Channels addon by mintsoft/natko1412
+===============================
+v0.2.0 [05-July-2020]
+-Patched to support user provided API Keys
+-Fixed for Kodi Eden Support
+-Now maintained here: https://github.com/mintsoft/kodi.plugin.ytchannels
+
+v0.1.0 [26-May-2015]
+-added support for channel playlists
+
+v0.0.31 [25-May-2015]
+-use unicode instead of ascii (fix arabix symbols)
+
+v0.0.30 [22-May-2015]
+-added channels import from the old addon
+-you can now add channels to root folder
+-added more options
+
+
+v0.0.22 [20-May-2015]
+-hopefully fixed script failed in openelec
+-moved database to userdata/Database
+-you won't lose your settings and folders
+-fixed some script errors when channel had only one page
+
+
+v0.0.21 [18-May-2015]
+-you can now add channel by searching or entering a username 
+-added "TOP Channels" and "Categories" (by views) charts from vidstatx.com
+-added my icons
+-fixed videos (now able to play like a playlist)
+-fixed some code and bugs
+
+v0.0.1 [17-May-2015]
+-initial release

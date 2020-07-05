@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	
+    <category label="General">
+		<setting id="enable_playlists" type="bool" default="true" label="Enable playlists"/>
+		<setting id="show_lists" type="bool" default="true" label="Show charts and categories"/>
+		<setting id="show_adds" type="bool" default="true" label="Show 'Add folder/channel' options"/>
+		
+		<setting id="result_number" type="slider" default="20" range="10,5,100" option="int" label="Number of videos per page"/>
+		<setting id="result_number_channels" type="slider" default="20" range="10,5,100" option="int" label="Number of channel search results"/>
+		<setting id="result_number_channels_cat" type="slider" default="20" range="10,5,100" option="int" label="Number of channels in top and categories"/>
+		<setting label="Erase database" type="action" action="RunPlugin(plugin://plugin.video.ytchannels/?mode=erase_all)" enable="true" option="close"/>
+    </category>
+
+    <category label="Import">    
+		<setting label="Import channels from old addon" type="action" action="RunPlugin(plugin://plugin.video.ytchannels/?mode=import)" enable="true" option="close"/>
+    </category>
+	
+	<category label="API Key">
+		<setting id="youtube_api_key" type="text" default="AIzaSyDIwXfF0WjgTUwuazYIc7SFDqr576b_xs4" label="YouTube API Key"/>
+	</category>
+</settings>
+

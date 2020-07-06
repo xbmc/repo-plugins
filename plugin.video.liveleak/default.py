@@ -202,7 +202,7 @@ def buildListItem(url_medium_meta):
 
     leakPosters = loadLeakPosters() # Preferences for coloring titles
 
-    if 'cdn.liveleak.com' in medium:
+    if 'liveleak.com' in medium:
         # Capture source of this medium
         src = url.replace(domain_home, '')
         url = buildUrl({'mode': 'play', 'url': medium, 'src': src})

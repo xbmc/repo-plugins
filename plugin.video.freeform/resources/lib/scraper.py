@@ -22,12 +22,12 @@ class myAddon(t1mAddon):
           infoList ={'mediatype':'tvshow',
                      'Title': name,
                      'TvShowTitle': name}
-          contextMenu = [(self.addon.getLocalizedString(30002),'RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
+          contextMenu = [(self.addon.getLocalizedString(30002),'RunPlugin(%s?mode=AS&url=%s)' % (sys.argv[0], url))]
           ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
       return(ilist)
 
 
-  def getAddonEpisodes(self,url,ilist, getFileData=False):
+  def getAddonEpisodes(self,url,ilist):
       if not url.startswith('http'):
          url = ''.join(['https://freeform.go.com', url])
       html = requests.get(url, headers=self.defaultHeaders).text
@@ -48,10 +48,7 @@ class myAddon(t1mAddon):
                       'MPAA':'TV-PG',
                       'TVShowTitle': xbmc.getInfoLabel('ListItem.TVShowTitle'),
                       'Studio':'Freeform'}
-          if getFileData == False:
-              ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
-          else:
-              ilist.append((infoList['Season'], infoList['Episode'], url))
+          ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
       return(ilist)
 
 

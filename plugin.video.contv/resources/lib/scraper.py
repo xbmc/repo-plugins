@@ -13,7 +13,7 @@ import requests
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      ilist = self.addMenuItem('Live TV','GV', ilist, 'livetv', self.addonIcon, self.addonFanart, {}, isFolder=False)
+      ilist = self.addMenuItem(self.addon.getLocalizedString(30006),'GV', ilist, 'livetv', self.addonIcon, self.addonFanart, {}, isFolder=False)
       a = requests.get('https://contv-metax.service.junctiontv.net/metax/2.5/shelf/nav/newgenres/NO_SUB?allowBook=true&jloc=us', headers=self.defaultHeaders).json()
       a = a["subCategories"]
       for b in a[:-1]:
@@ -39,10 +39,12 @@ class myAddon(t1mAddon):
           infoList['Plot'] = b.get("description")
           if b["type"] == 'vod':
               infoList['mediatype'] = 'movie'
-              ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
+              contextMenu = [(self.addon.getLocalizedString(30002),''.join(['RunPlugin(',sys.argv[0],'?mode=AM&url=',url,')']))]
+              ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False, cm=contextMenu)
           elif b["type"] == 'episodic':
               infoList['mediatype'] = 'tvshow'
-              ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
+              contextMenu = [(self.addon.getLocalizedString(30002),''.join(['RunPlugin(',sys.argv[0],'?mode=AS&url=',url,')']))]
+              ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
       return(ilist)
       
   def getAddonEpisodes(self,url,ilist):

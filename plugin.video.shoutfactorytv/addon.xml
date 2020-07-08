@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.shoutfactorytv"
+       name="Shout Factory TV"
+       version="4.0.0"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.t1mlib" version="4.0.2"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+    <import addon="inputstream.adaptive" version="2.6.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Shout Factory TV Video Addon</summary>
+    <description lang="en_GB">SHOUT! FACTORY TV is a premiere digital entertainment streaming service that brings timeless and contemporary cult favorites to pop culture fans.</description>
+    <disclaimer lang="en_GB">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GPL-2.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=308959</forum>
+    <website>http://www.shoutfactorytv.com/</website>
+    <source>https://github.com/learningit/repo-plugins</source>
+    <news>Version 4.0.0 Initial release for Matrix
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

@@ -96,6 +96,18 @@ msgctxt "#30019"
 msgid "does not exist."
 msgstr ""
 
+msgctxt "#30020"
+msgid "API Key Error"
+msgstr ""
+
+msgctxt "#30021"
+msgid "You must enter a YouTube API Key to continue. Please use the addon settings to set the API key."
+msgstr ""
+
+msgctxt "#30022"
+msgid "A YouTube API Key is required for this addon to work, please enter your API key now."
+msgstr ""
+
 msgctxt "#30099"
 msgid "Youtube Channels"
 msgstr ""

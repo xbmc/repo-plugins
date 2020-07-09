@@ -48,7 +48,7 @@ class Channel(chn_class.Channel):
         # Match Videos (programs)
         self._add_data_parser("https://urplay.se/api/bff/v1/search?product_type=program",
                               name="Most viewed", json=True,
-                              parser=["results"], creator=self.create_video_item_json)
+                              parser=["results"], creator=self.create_video_item_json_with_show_title)
 
         self._add_data_parser("*", json=True,
                               name="Json based video parser",
@@ -274,7 +274,7 @@ class Channel(chn_class.Channel):
         item.fanart = fanart
         return item
 
-    def create_video_item_json(self, result_set):
+    def create_video_item_json_with_show_title(self, result_set):
         """ Creates a MediaItem of type 'video' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -286,7 +286,29 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set:             The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        """
+
+        return self.create_video_item_json(result_set, include_show_title=True)
+
+    def create_video_item_json(self, result_set, include_show_title=False):
+        """ Creates a MediaItem of type 'video' using the result_set from the regex.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param dict result_set:             The result_set of the self.episodeItemRegex
+        :param bool include_show_title:     Should we include the show title in the title
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -297,11 +319,17 @@ class Channel(chn_class.Channel):
 
         title = result_set["title"]
         # We could add the main title
-        # show_title = result_set.get('mainTitle')
-        # if show_title:
-        #     title = "{} - {}".format(show_title, title)
+
+        show_title = result_set.get('mainTitle')
         episode = result_set.get('episodeNumber')
-        if bool(episode):
+
+        if show_title and include_show_title:
+            if bool(episode):
+                title = "{} - {} {:02d} - {}".format(show_title, self.__episode_text, episode, title)
+            else:
+                title = "{} - {}".format(show_title, title)
+
+        elif bool(episode):
             title = "{} {:02d} - {}".format(self.__episode_text, episode, title)
 
         slug = result_set['slug']
@@ -338,12 +366,14 @@ class Channel(chn_class.Channel):
             end_date = result_set["accessiblePlatforms"]["urplay"]["endTime"]
 
             if start_date:
+                start_date = start_date.replace(".000Z", "Z")
                 date_time = DateHelper.get_datetime_from_string(
                     start_date, date_format="%Y-%m-%dT%H:%M:%SZ", time_zone="UTC")
                 date_time = date_time.astimezone(self.__timezone)
                 item.set_date(date_time.year, date_time.month, date_time.day,
                               date_time.hour, date_time.minute, date_time.second)
             if end_date:
+                end_date = end_date.replace(".000Z", "Z")
                 end_date_time = DateHelper.get_datetime_from_string(
                     end_date, date_format="%Y-%m-%dT%H:%M:%SZ", time_zone="UTC")
                 end_date_time = end_date_time.astimezone(self.__timezone)

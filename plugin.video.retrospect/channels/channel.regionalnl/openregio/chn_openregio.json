@@ -1,0 +1,64 @@
+{
+  "channels": [
+    {
+      "guid": "7018D677-000B-4EDD-9AA6-6D823A6F10E6",
+      "name": "WOS Westland, Midden-Delfland, Hoek van Holland, Maassluis",
+      "description": "WOS Uitzendinggemist",
+      "icon": "wosnlicon.png",
+      "category": "Regional",
+      "channelcode": "wosnl",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "wosnlfanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "BE475CCB-1031-4B8E-B69E-F5DA3CA33BCA",
+      "name": "DTV Oss-Bernheze, ’s-Hertogenbosch en Uden",
+      "description": "DTV Uitzendinggemist",
+      "icon": "dtvnlicon.png",
+      "category": "Regional",
+      "channelcode": "dtvnl",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "dtvnlfanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "8F501417-99FD-4E55-89AA-18B0BD3C25BC",
+      "name": "Omroep Venlo",
+      "description": "Omroep Venlo Uitzendinggemist",
+      "icon": "venlonlicon.png",
+      "category": "Regional",
+      "channelcode": "venlonl",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "venlonlfanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "E737DB6F-8741-4B89-BD04-8874DE050131",
+      "name": "Omroep Horst aan de Maas",
+      "description": "Omroep Horst aan de Maas Uitzendinggemist",
+      "icon": "horstnlicon.png",
+      "category": "Regional",
+      "channelcode": "horstnl",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "horstnlfanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "E1F58AD4-C970-49AB-9B38-7FA9F6D1AFC3",
+      "name": "Studio 040",
+      "description": "Studio 040 Uitzendinggemist",
+      "icon": "studio040icon.png",
+      "category": "Regional",
+      "channelcode": "studio040",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "studio040fanart.jpg",
+      "adaptiveAddonSelectable": true
+    }
+  ]
+}

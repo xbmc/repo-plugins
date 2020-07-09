@@ -88,7 +88,7 @@ _NOTE: Keep in mind that you might need to try multiple recovery images before y
 
 # Acknowledgement #
 The first idea for Retrospect/XBMC Online TV/XOT-Uzg came from a script by
-by BaKMaN.
+BaKMaN.
 
 # Copyrights and Licenses #
 Retrospect is licensed under a _Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International_, see: [LICENSE.md](./LICENSE.md)
@@ -516,3 +516,4 @@ sorted chronologically):
 - Cor Kuin
 - Ingos Data o PPDesign
 - Jules Harms
+- Reinier 

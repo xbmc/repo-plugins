@@ -34,17 +34,6 @@
       "fanart": "rtvnoordfanart.png"
     },
     {
-      "guid": "EF46E726-92F4-42FC-A6D4-68A888E23E96",
-      "name": "RTV Noord-Holland",
-      "description": "RTV Noord-Holland Uitzendinggemist",
-      "icon": "rtvnhlarge.png",
-      "category": "Regional",
-      "channelcode": "rtvnh",
-      "sortorder": 100,
-      "language": "nl",
-      "fanart": "rtvnhfanart.jpg"
-    },
-    {
       "guid": "AF2B907D-D437-46DB-B802-F946850098FB",
       "name": "RTV Rijnmond",
       "description": "RTV Rijnmond Uitzendinggemist",

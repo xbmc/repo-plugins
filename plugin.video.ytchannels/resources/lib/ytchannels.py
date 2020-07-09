@@ -6,7 +6,7 @@ import xbmcplugin
 import xbmcaddon
 import xbmc
 import os
-from .functions import build_url, delete_database, get_folders, add_folder, remove_folder, get_channels, get_channel_id_from_uploads_id, add_channel, remove_channel, search_channel, search_channel_by_username, get_latest_from_channel, get_playlists, local_string
+from .functions import local_string
 
 def ytchannels_main():
 
@@ -26,6 +26,20 @@ def ytchannels_main():
 	folder_img = os.path.join(addon_path,'resources/img/folder.png')
 	plus_img = os.path.join(addon_path,'resources/img/plus.png')
 	playlist_img = os.path.join(addon_path,'resources/img/playlist.png')
+	
+	YOUTUBE_API_KEY = my_addon.getSetting('youtube_api_key')
+	if YOUTUBE_API_KEY == 'SETME':
+		xbmcgui.Dialog().ok(local_string(30207), local_string(30022))
+		new_api_key = xbmcgui.Dialog().input(local_string(30207), type=xbmcgui.INPUT_ALPHANUM)
+		
+		if new_api_key:
+			my_addon.setSetting(id='youtube_api_key', value=new_api_key)
+		else:
+			xbmcgui.Dialog().ok(local_string(30020), local_string(30021))
+			
+		YOUTUBE_API_KEY = my_addon.getSetting('youtube_api_key')
+		
+	from .functions import build_url, delete_database, get_folders, add_folder, remove_folder, get_channels, get_channel_id_from_uploads_id, add_channel, remove_channel, search_channel, search_channel_by_username, get_latest_from_channel, get_playlists
 
 	if mode is None:
 		folders=get_folders()

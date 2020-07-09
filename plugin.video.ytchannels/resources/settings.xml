@@ -8,6 +8,6 @@
 		<setting label="30205" type="action" action="RunPlugin(plugin://plugin.video.ytchannels/?mode=erase_all)" enable="true" option="close"/>
 	</category>
 	<category label="30206">
-		<setting id="youtube_api_key" type="text" default="AIzaSyDIwXfF0WjgTUwuazYIc7SFDqr576b_xs4" label="30207"/>
+		<setting id="youtube_api_key" type="text" default="SETME" label="30207"/>
 	</category>
 </settings>

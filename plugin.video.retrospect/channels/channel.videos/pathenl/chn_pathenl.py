@@ -131,7 +131,9 @@ class Channel(chn_class.Channel):
         movie_id = result_set['id']
         url = "%s/movies/%s" % (self.baseUrl, movie_id)
         item = MediaItem(result_set["name"], url)
-        item.thumb = result_set["thumb"].replace("nocropthumb/[format]/", "")
+        item.thumb = result_set["thumb"]
+        if item.thumb:
+            item.thumb = item.thumb.replace("nocropthumb/[format]/", "")
         item.complete = True
         item.HttpHeaders = self.httpHeaders
 
@@ -193,6 +195,8 @@ class Channel(chn_class.Channel):
         url = self.parentItem.url
         item = MediaItem(result_set["caption"], url, "video")
         item.thumb = result_set["still"].replace("nocropthumb/[format]/", "")
+        if item.thumb:
+            item.thumb = item.thumb.replace(" ", "%20")
         item.fanart = item.thumb
         item.append_single_stream(result_set['filename'])
         item.complete = True

@@ -2,9 +2,13 @@
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
 
+v0.2.2 [11-July-2020]
+-Video duration and description now provided on the listing page
+
 v0.2.1 [08-July-2020]
 -User must now provide the API key for the plugin to work, same as the official YouTube addon (https://github.com/jdf76/plugin.video.youtube/wiki/Personal-API-Keys)
 -Updated icon
+-Matrix support
 
 v0.2.0 [05-July-2020]
 -Patched to support user provided API Keys

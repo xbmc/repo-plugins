@@ -6,6 +6,7 @@ import xbmc
 import sqlite3
 import json
 import sys
+import re
 from six.moves import urllib
 
 addonID = xbmcaddon.Addon().getAddonInfo("id")
@@ -23,6 +24,32 @@ base_url = sys.argv[0]
 my_addon = xbmcaddon.Addon()
 YOUTUBE_API_KEY = my_addon.getSetting('youtube_api_key')
 addon_handle = int(sys.argv[1])
+
+# https://stackoverflow.com/a/49976787
+def yt_time(duration="P1W2DT6H21M32S"):
+    """
+    Converts YouTube duration (ISO 8061)
+    into Seconds
+
+    see http://en.wikipedia.org/wiki/ISO_8601#Durations
+    """
+    ISO_8601 = re.compile(
+        'P'   # designates a period
+        '(?:(?P<years>\d+)Y)?'   # years
+        '(?:(?P<months>\d+)M)?'  # months
+        '(?:(?P<weeks>\d+)W)?'   # weeks
+        '(?:(?P<days>\d+)D)?'    # days
+        '(?:T' # time part must begin with a T
+        '(?:(?P<hours>\d+)H)?'   # hours
+        '(?:(?P<minutes>\d+)M)?' # minutes
+        '(?:(?P<seconds>\d+)S)?' # seconds
+        ')?')   # end of time part
+    # Convert regex matches into a short list of time units
+    units = list(ISO_8601.match(duration).groups()[-3:])
+    # Put list in ascending order & remove 'None' types
+    units = list(reversed([int(x) if x != None else 0 for x in units]))
+    # Do the maths
+    return sum([x*60**units.index(x) for x in units])
 
 def build_url(query):
 	return base_url + '?' + urllib.parse.urlencode(query)
@@ -220,6 +247,7 @@ def get_latest_from_channel(channel_id, page):
 	read=read_url(req_url)
 	decoded_data=json.loads(read)
 	listout=[]
+	videoids=[]
 	try:
 		next_page=decoded_data['nextPageToken']
 	except:
@@ -230,7 +258,16 @@ def get_latest_from_channel(channel_id, page):
 		video_id=decoded_data['items'][x]['snippet']['resourceId']['videoId']
 		thumb=decoded_data['items'][x]['snippet']['thumbnails']['high']['url']
 		desc=decoded_data['items'][x]['snippet']['description']
+		videoids.append(video_id)
 		listout.append([title,video_id,thumb,desc])
+	video_req_url = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&fields=items/contentDetails/duration&id=%s&key=%s'%(','.join(videoids),YOUTUBE_API_KEY)
+	video_read = read_url(video_req_url)
+	video_decoded = json.loads(video_read)
+	
+	for x in range(0, len(video_decoded['items'])):
+		duration = video_decoded['items'][x]['contentDetails']['duration']
+		seconds = yt_time(duration)
+		listout[x+1].append(seconds)
 	return listout
 
 def get_playlists(channelID,page):

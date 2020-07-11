@@ -1,64 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<settings version="1">
-	<section id="plugin.video.ytchannels">
-		<category id="general" label="30200">
-			<group id="0">
-				<setting id="enable_playlists" type="boolean" label="30201">
-					<level>0</level>
-					<default>true</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="show_adds" type="boolean" label="30202">
-					<level>0</level>
-					<default>true</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="result_number" type="integer" label="30203">
-					<level>0</level>
-					<default>20</default>
-					<constraints>
-						<minimum>10</minimum>
-						<step>5</step>
-						<maximum>100</maximum>
-					</constraints>
-					<control type="slider" format="integer">
-						<popup>false</popup>
-					</control>
-				</setting>
-				<setting id="result_number_channels" type="integer" label="30204">
-					<level>0</level>
-					<default>20</default>
-					<constraints>
-						<minimum>10</minimum>
-						<step>5</step>
-						<maximum>100</maximum>
-					</constraints>
-					<control type="slider" format="integer">
-						<popup>false</popup>
-					</control>
-				</setting>
-				<setting id="erase_all" type="action" label="30205">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.ytchannels/?mode=erase_all)</data>
-					<control type="button" format="action">
-						<close>true</close>
-					</control>
-				</setting>
-			</group>
-		</category>
-		<category id="apikey" label="30206">
-			<group id="0">
-				<setting id="youtube_api_key" type="string" label="30207">
-					<level>0</level>
-					<default>SETME</default>
-					<constraints>
-						<allowempty>false</allowempty>
-					</constraints>
-					<control type="edit" format="string">
-						<heading>30207</heading>
-					</control>
-				</setting>
-			</group>
-		</category>
-	</section>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30200">
+		<setting id="enable_playlists" type="bool" default="true" label="30201"/>
+		<setting id="show_adds" type="bool" default="true" label="30202"/>
+		<setting id="result_number" type="slider" default="20" range="10,5,100" option="int" label="30203"/>
+		<setting id="result_number_channels" type="slider" default="20" range="10,5,100" option="int" label="30204"/>
+		<setting label="30205" type="action" action="RunPlugin(plugin://plugin.video.ytchannels/?mode=erase_all)" enable="true" option="close"/>
+	</category>
+	<category label="30206">
+		<setting id="youtube_api_key" type="text" default="SETME" label="30207"/>
+	</category>
 </settings>

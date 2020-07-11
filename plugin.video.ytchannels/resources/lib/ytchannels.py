@@ -177,12 +177,13 @@ def ytchannels_main():
 			video_id=game_list[i][1]
 			thumb=game_list[i][2]
 			desc=game_list[i][3]
+			seconds=game_list[i][4]
 
 			uri='plugin://plugin.video.youtube/play/?video_id='+video_id
 			li = xbmcgui.ListItem('%s'%title)
 			li.setArt({'icon':thumb})
 			li.setProperty('IsPlayable', 'true')
-			li.setInfo('video', { 'genre': 'YouTube' } )
+			li.setInfo('video', { 'genre': 'YouTube', 'plot': desc, 'duration': seconds } )
 
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=uri, listitem=li)#,isFolder=True)
 

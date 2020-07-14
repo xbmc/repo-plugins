@@ -1,6 +1,9 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.2.3 [11-July-2020]
+-Changed search maximum to 50
+-Sorted the videos list by published date
 
 v0.2.2 [11-July-2020]
 -Video duration and description now provided on the listing page

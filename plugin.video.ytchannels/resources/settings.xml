@@ -29,9 +29,9 @@
 					<level>0</level>
 					<default>20</default>
 					<constraints>
-						<minimum>10</minimum>
+						<minimum>5</minimum>
 						<step>5</step>
-						<maximum>100</maximum>
+						<maximum>50</maximum>
 					</constraints>
 					<control type="slider" format="integer">
 						<popup>false</popup>

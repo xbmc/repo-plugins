@@ -3,8 +3,8 @@
 	<category label="30200">
 		<setting id="enable_playlists" type="bool" default="true" label="30201"/>
 		<setting id="show_adds" type="bool" default="true" label="30202"/>
-		<setting id="result_number" type="slider" default="20" range="10,5,100" option="int" label="30203"/>
-		<setting id="result_number_channels" type="slider" default="20" range="10,5,100" option="int" label="30204"/>
+		<setting id="result_number" type="slider" default="20" range="5,5,50" option="int" label="30203"/>
+		<setting id="result_number_channels" type="slider" default="20" range="5,5,50" option="int" label="30204"/>
 		<setting label="30205" type="action" action="RunPlugin(plugin://plugin.video.ytchannels/?mode=erase_all)" enable="true" option="close"/>
 	</category>
 	<category label="30206">

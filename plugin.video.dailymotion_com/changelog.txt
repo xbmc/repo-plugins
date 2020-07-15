@@ -1,3 +1,7 @@
+2.4.2 [20200715]
+ - Rewrite with six library instead of future
+ - Fix playback issues
+
 2.4.1 [20191208]
  - Fix Search (Thanks to johngf)
  - Add Search keyword History (Thanks to johngf)

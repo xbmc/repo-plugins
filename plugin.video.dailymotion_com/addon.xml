@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="2.4.1" provider-name="gujal">
+<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="2.4.2" provider-name="gujal">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
-		<import addon="script.module.future" version="0.0.1"/>
+		<import addon="script.module.six" version="0.0.1"/>
+		<import addon="script.module.kodi-six" version="0.0.1"/>
         <import addon="script.module.requests" version="2.4.3"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
@@ -24,9 +25,9 @@
 		<disclaimer lang="he">ייתכן שחלק מהתוספות האלו אינן חוקיות בארץ המגורים שלך - אנא בדוק את החוקים המקומיים שלך לפני ההתקנה.</disclaimer>
 	    
         <news>
-[B]Version 2.4.1 - 17 Dec 2019[/B] 
- - Fix Search (Thanks to johngf)
- - Add Search keyword History (Thanks to johngf)
+[B]Version 2.4.2 - 15 July 2019[/B] 
+ - Rewrite with six library instead of future
+ - Fix playback issues
 		</news>
 		<website>https://www.dailymotion.com</website>
         <source>https://github.com/Gujal00/plugin.video.dailymotion_com</source>

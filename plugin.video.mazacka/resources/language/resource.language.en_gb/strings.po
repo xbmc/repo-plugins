@@ -16,6 +16,10 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#31080"
+msgid "Watch the live stream in 1080p."
+msgstr ""
+
 msgctxt "#30720"
 msgid "Watch the live stream in 720p."
 msgstr ""

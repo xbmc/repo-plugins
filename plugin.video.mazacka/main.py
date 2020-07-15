@@ -20,7 +20,7 @@ _url = sys.argv[0]
 _handle = int(sys.argv[1])
 PLUGIN_ID = 'plugin.video.mazacka'
 MEDIA_URL = 'special://home/addons/{0}/resources/media/'.format(PLUGIN_ID)
-STREAM_URL = 'https://www.mall.tv/embed/slow-tv-8'
+STREAM_URL = 'https://www.mall.tv/embed/vlaky-a-tramvaje/mazacka-jizda-prahou?autoplay=true'
 _lang = xbmcaddon.Addon(PLUGIN_ID).getLocalizedString
 
 UTF8 = 'utf-8'
@@ -54,8 +54,14 @@ def router(paramstring):
         html = getRequest(STREAM_URL)
         if not checkStream(html):
             return
-        out = re.findall(r'<source src=(.+?)\s', html)[0]
-        res = ['720', '360']
+        try:
+            out = re.findall(r'<source src=(.+?)\s', html)[0]
+            if out.startswith('http') == False:
+                out = 'https://' + out.replace('//', '')
+        except Exception:
+            raise ValueError('Stream URL not found!')
+            return
+        res = ['1080', '720', '360']
         fanart = 'special://home/addons/{0}/fanart.jpg'.format(PLUGIN_ID)
         xbmcplugin.setContent(_handle, 'movies')
         for r in res:

@@ -259,3 +259,7 @@ msgstr "Suchverlauf"
 msgctxt "#30116"
 msgid "Clear search history"
 msgstr "Suchverlauf löschen"
+
+msgctxt "#30117"
+msgid "New Search term"
+msgstr "Neuer Suchbegriff"

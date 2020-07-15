@@ -261,3 +261,7 @@ msgstr "היסטוריית החיפושים"
 msgctxt "#30116"
 msgid "Clear search history"
 msgstr "נקה את היסטוריית החיפוש"
+
+msgctxt "#30117"
+msgid "New Search term"
+msgstr "מונח חיפוש חדש"

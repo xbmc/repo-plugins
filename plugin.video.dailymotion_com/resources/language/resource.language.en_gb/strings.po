@@ -1,0 +1,270 @@
+# XBMC Media Center language file
+# Addon Name: DailyMotion.com
+# Addon id: plugin.video.dailymotion_com
+
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-11-03 00:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
+msgstr "Movies, TV, Music, User-Clips, 3D and Livestreams"
+
+msgctxt "Addon Description"
+msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
+msgstr "Movies, TV, Music, User-Clips, 3D and Livestreams"
+
+msgctxt "Addon Disclaimer"
+msgid "Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing."
+msgstr "Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing."
+
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr "Next Page"
+
+msgctxt "#30002"
+msgid "Search"
+msgstr "Search"
+
+msgctxt "#30003"
+msgid "Live"
+msgstr "Live"
+
+msgctxt "#30004"
+msgid "Movies"
+msgstr "Movies"
+
+msgctxt "#30005"
+msgid "Popular"
+msgstr "Popular"
+
+msgctxt "#30006"
+msgid "Channels"
+msgstr "Channels"
+
+msgctxt "#30007"
+msgid "Users"
+msgstr "Users"
+
+msgctxt "#30008"
+msgid "Most Recent"
+msgstr "Most Recent"
+
+msgctxt "#30009"
+msgid "Most Viewed"
+msgstr "Most Viewed"
+
+msgctxt "#30010"
+msgid "Hour"
+msgstr "Hour"
+
+msgctxt "#30011"
+msgid "Today"
+msgstr "Today"
+
+msgctxt "#30012"
+msgid "Week"
+msgstr "Week"
+
+msgctxt "#30013"
+msgid "Month"
+msgstr "Month"
+
+msgctxt "#30014"
+msgid "All Time"
+msgstr "All Time"
+
+msgctxt "#30015"
+msgid "Trending"
+msgstr "Trending"
+
+msgctxt "#30016"
+msgid "Featured"
+msgstr "Featured"
+
+msgctxt "#30017"
+msgid "Official"
+msgstr "Official"
+
+msgctxt "#30018"
+msgid "Creative"
+msgstr "Creative"
+
+msgctxt "#30019"
+msgid "Most Popular"
+msgstr "Most Popular"
+
+msgctxt "#30020"
+msgid "Most Commented"
+msgstr "Most Commented"
+
+msgctxt "#30021"
+msgid "Top Rated"
+msgstr "Top Rated"
+
+msgctxt "#30022"
+msgid "Video not available"
+msgstr "Video not available"
+
+msgctxt "#30023"
+msgid "Added"
+msgstr "Added"
+
+msgctxt "#30024"
+msgid "Favourites"
+msgstr "Favourites"
+
+msgctxt "#30025"
+msgid "What to Watch"
+msgstr "What to Watch"
+
+# empty strings from id 30026 to 30027
+
+msgctxt "#30028"
+msgid "Add user to favourites"
+msgstr "Add user to favourites"
+
+msgctxt "#30029"
+msgid "Remove from favourites"
+msgstr "Remove from favourites"
+
+msgctxt "#30030"
+msgid "Added user to favourites"
+msgstr "Added user to favourites"
+
+msgctxt "#30031"
+msgid "Are you over 18 and would like to turn off the family filter?"
+msgstr "Are you over 18 and would like to turn off the family filter?"
+
+msgctxt "#30032"
+msgid "Turn the family filter on?"
+msgstr "Turn the family filter on?"
+
+msgctxt "#30033"
+msgid "Add user"
+msgstr "Add user"
+
+msgctxt "#30034"
+msgid "My stuff"
+msgstr "My stuff"
+
+msgctxt "#30035"
+msgid "Contacts"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Following"
+msgstr "Following"
+
+msgctxt "#30037"
+msgid "Favourites"
+msgstr "Favourites"
+
+msgctxt "#30038"
+msgid "Playlists"
+msgstr "Playlists"
+
+msgctxt "#30039"
+msgid "3D"
+msgstr "3D"
+
+msgctxt "#30040"
+msgid "All"
+msgstr "All"
+
+msgctxt "#30041"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30042"
+msgid "Groups"
+msgstr "Groups"
+
+msgctxt "#30043"
+msgid "Add to queue"
+msgstr "Add to queue"
+
+msgctxt "#30044"
+msgid "Download video"
+msgstr "Download video"
+
+# empty strings from id 30045 to 30100
+
+msgctxt "#30101"
+msgid "Country"
+msgstr "Country"
+
+msgctxt "#30102"
+msgid "Force View"
+msgstr "Force View"
+
+msgctxt "#30103"
+msgid "ViewID"
+msgstr "ViewID"
+
+msgctxt "#30104"
+msgid "Family Filter"
+msgstr "Family Filter"
+
+msgctxt "#30105"
+msgid "Maximum resolution"
+msgstr "Maximum resolution"
+
+msgctxt "#30106"
+msgid "Dailymotion Username"
+msgstr "Dailymotion Username"
+
+msgctxt "#30107"
+msgid "Items per page"
+msgstr "Items per page"
+
+msgctxt "#30108"
+msgid "Download directory"
+msgstr "Download directory"
+
+msgctxt "#30109"
+msgid "File already exists"
+msgstr "File already exists"
+
+msgctxt "#30110"
+msgid "Choose download directory in Settings"
+msgstr "Choose download directory in Settings"
+
+msgctxt "#30111"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30112"
+msgid "Download"
+msgstr "Download"
+
+msgctxt "#30113"
+msgid "Miscellaneous"
+msgstr "Miscellaneous"
+
+msgctxt "#30114"
+msgid "Mature Content"
+msgstr "Mature Content"
+
+msgctxt "#30115"
+msgid "Search history"
+msgstr "Search history"
+
+msgctxt "#30116"
+msgid "Clear search history"
+msgstr "Clear search history"
+
+msgctxt "#30117"
+msgid "New Search term"
+msgstr "New Search term"

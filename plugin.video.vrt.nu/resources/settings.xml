@@ -69,6 +69,11 @@
         <!-- PySocks -->
         <setting label="30881" help="30882" type="action" action="InstallAddon(script.module.pysocks)" option="close" visible="!System.HasAddon(script.module.pysocks)"/>
     </category>
+    <category label="30890"> <!-- Updates -->
+        <setting label="30891" type="lsep"/> <!-- Update the VRT NU add-on -->
+        <setting label="30893" help="30894" type="action" action="RunPlugin(plugin://plugin.video.vrt.nu/update/repos)" option="close"/>
+        <setting label="30895" help="30896" type="action" action="RunPlugin(plugin://plugin.video.vrt.nu/show/settings/addons)" option="close"/>
+    </category>
     <category label="30900"> <!-- Expert -->
         <setting label="30901" type="lsep"/> <!-- InputStream Adaptive -->
         <setting label="30903" type="action" visible="!System.HasAddon(inputstream.adaptive)" enable="false"/>

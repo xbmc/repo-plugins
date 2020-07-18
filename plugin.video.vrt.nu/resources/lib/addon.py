@@ -10,7 +10,7 @@ try:  # Python 3
 except ImportError:  # Python 2
     from urllib import unquote_plus
 
-from kodiutils import end_of_directory, localize, log_access, notification, refresh_caches
+from kodiutils import end_of_directory, execute_builtin, get_global_setting, localize, log_access, notification, ok_dialog, refresh_caches
 from utils import from_unicode, to_unicode
 
 plugin = Plugin()  # pylint: disable=invalid-name
@@ -308,10 +308,17 @@ def play_upnext(video_id):
 
 @plugin.route('/play/airdate/<channel>/<start_date>')
 @plugin.route('/play/airdate/<channel>/<start_date>/<end_date>')
-def play_by_air_date(channel, start_date, end_date=None):
-    """The API interface to play an episode of a program given the channel and the air date in iso format (2019-07-06T19:35:00)"""
+def play_air_date(channel, start_date, end_date=None):
+    """The API interface to play an episode of a program given the channel, start (and end) timestamp(s) in ISO 8601 format (e.g. 2020-06-15T10:35:00)"""
     from vrtplayer import VRTPlayer
     VRTPlayer().play_episode_by_air_date(channel, start_date, end_date)
+
+
+@plugin.route('/play/whatson/<whatson_id>')
+def play_whatson_id(whatson_id):
+    """The API interface to play a video by using a whatson_id"""
+    from vrtplayer import VRTPlayer
+    VRTPlayer().play_episode_by_whatson_id(whatson_id=whatson_id)
 
 
 @plugin.route('/iptv/channels')
@@ -328,6 +335,23 @@ def iptv_epg():
     from iptvmanager import IPTVManager
     port = int(plugin.args.get('port')[0])
     IPTVManager(port).send_epg()
+
+
+@plugin.route('/update/repos')
+def update_repos():
+    """Force an update of the repositories"""
+    if get_global_setting('general.addonupdates') == 0:  # Automatic updates is enabled
+        execute_builtin('UpdateAddonRepos')
+        ok_dialog(heading=localize(30450), message=localize(30451))  # Repositories are being updated
+    else:
+        ok_dialog(heading=localize(30452), message=localize(30453))  # Automatic updates is disabled
+        show_settings_addons()
+
+
+@plugin.route('/show/settings/addons')
+def show_settings_addons():
+    """Open the Kodi System Settings in the Add-ons category"""
+    execute_builtin('ActivateWindow(SystemSettings,addons)')
 
 
 def run(argv):

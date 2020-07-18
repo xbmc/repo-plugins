@@ -8,11 +8,10 @@ from __future__ import absolute_import, division, unicode_literals
 try:  # Python 3
     from urllib.error import HTTPError
     from urllib.parse import unquote
-    from urllib.request import build_opener, install_opener, ProxyHandler
 except ImportError:  # Python 2
-    from urllib2 import build_opener, HTTPError, install_opener, ProxyHandler, unquote
+    from urllib2 import unquote
 
-from kodiutils import (container_refresh, get_cache, get_proxies, get_setting_bool, get_url_json,
+from kodiutils import (container_refresh, get_cache, get_setting_bool, get_url_json,
                        has_credentials, input_down, invalidate_caches, localize, log_error,
                        multiselect, notification, ok_dialog, update_cache)
 from utils import program_to_id
@@ -24,7 +23,6 @@ class Favorites:
     def __init__(self):
         """Initialize favorites, relies on XBMC vfs and a special VRT token"""
         self._data = dict()  # Our internal representation
-        install_opener(build_opener(ProxyHandler(get_proxies())))
 
     @staticmethod
     def is_activated():
@@ -79,7 +77,7 @@ class Favorites:
         data = dumps(payload).encode('utf-8')
         program_id = program_to_id(program)
         try:
-            get_url_json('https://video-user-data.vrt.be/favorites/{program_id}'.format(program_id=program_id), headers=headers, data=data)
+            get_url_json('https://video-user-data.vrt.be/favorites/{program_id}'.format(program_id=program_id), headers=headers, data=data, raise_errors='all')
         except HTTPError as exc:
             log_error("Failed to (un)follow program '{program}' at VRT NU ({error})", program=program, error=exc)
             notification(message=localize(30976, program=program))

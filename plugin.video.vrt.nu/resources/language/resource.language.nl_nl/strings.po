@@ -209,8 +209,8 @@ msgid "Comedy"
 msgstr "Humor"
 
 msgctxt "#30077"
-msgid "Children"
-msgstr "Kinderen"
+msgid "Children and youth"
+msgstr "Kinderen en jongeren"
 
 msgctxt "#30078"
 msgid "Cooking"
@@ -247,6 +247,10 @@ msgstr "Vlaamse Gebarentaal"
 msgctxt "#30086"
 msgid "Science and nature"
 msgstr "Wetenschap en natuur"
+
+msgctxt "#30087"
+msgid "Worldview"
+msgstr "Levensbeschouwing"
 
 ### FEATURED
 msgctxt "#30100"
@@ -506,6 +510,26 @@ msgctxt "#30440"
 msgid "A-Z"
 msgstr "A-Z"
 
+msgctxt "#30450"
+msgid "Update add-on repositories"
+msgstr "Add-on repositories worden bijgewerkt"
+
+msgctxt "#30451"
+msgid "If a VRT NU add-on update is available, it should now be updating and you will be notified.\nMake sure you have [I]Auto-update[/I] enabled for the VRT NU add-on."
+msgstr "Als een VRT NU update beschikbaar is, zal deze nu geïnstalleerd worden en krijg je hiervan een melding.\nControleer wel dat [I]Automatische update[/I] is ingesteld voor de VRT NU add-on."
+
+msgctxt "#30452"
+msgid "Automatic updates are disabled"
+msgstr "Automatische updates zijn uitgeschakeld"
+
+msgctxt "#30453"
+msgid "Kodi is configured to not update add-ons automatically, so you will not get VRT NU updates unless you fix this setting.\nWe will open de Kodi settings, please change this setting."
+msgstr "Kodi is ingesteld om add-ons niet automatisch bij te werken, dus je zal geen VRT NU updates ontvangen tenzij je deze instelling aanpast.\nWe openen nu de Kodi-instellingen zodat je dit kan wijzigen."
+
+msgctxt "#30454"
+msgid "from livestream cache"
+msgstr "uit de livestream-cache"
+
 
 ### SETTINGS
 msgctxt "#30700"
@@ -641,8 +665,8 @@ msgid "Streaming and DRM"
 msgstr "Streaming en DRM"
 
 msgctxt "#30787"
-msgid "Use Widevine DRM [COLOR=gray][I](for protected content)[/I][/COLOR]"
-msgstr "Gebruik Widevine DRM [COLOR=gray][I](voor beveiligde video's)[/I][/COLOR]"
+msgid "Use Widevine DRM [COLOR=gray](for protected content)[/COLOR]"
+msgstr "Gebruik Widevine DRM [COLOR=gray](voor beveiligde video's)[/COLOR]"
 
 msgctxt "#30788"
 msgid "Most live streams are available in 720p HD-quality, but may require DRM to be enabled."
@@ -772,6 +796,26 @@ msgctxt "#30881"
 msgid "Install PySocks library…"
 msgstr "Installeer de PySocks library…"
 
+msgctxt "#30890"
+msgid "Updates"
+msgstr "Updates"
+
+msgctxt "#30891"
+msgid "Update the VRT NU add-on"
+msgstr "Bijwerken van de VRT NU add-on"
+
+msgctxt "#30893"
+msgid "Install the latest add-on updates…"
+msgstr "Installeer de nieuwste add-on updates…"
+
+msgctxt "#30895"
+msgid "Open Kodi add-ons settings… [COLOR=gray]to enable Kodi auto-updates)[/COLOR]"
+msgstr "Open de Kodi add-ons instellingen… [COLOR=gray](voor Kodi automatische updates)[/COLOR]"
+
+msgctxt "#30897"
+msgid "Open VRT NU add-on information…"
+msgstr "Open VRT NU add-on informatie… [COLOR=gray](voor VRT NU automatisch updates)[/COLOR]"
+
 msgctxt "#30900"
 msgid "Expert"
 msgstr "Expert"
@@ -797,8 +841,8 @@ msgid "InputStream Helper information"
 msgstr "InputStream Helper informatie"
 
 msgctxt "#30911"
-msgid "InputStream Helper settings… [COLOR=gray][I](for protected content)[/I][/COLOR]"
-msgstr "InputStream Helper instellingen… [COLOR=gray][I](voor beveiligde video's)[/I][/COLOR]"
+msgid "InputStream Helper settings… [COLOR=gray](for protected content)[/COLOR]"
+msgstr "InputStream Helper instellingen… [COLOR=gray](voor beveiligde video's)[/COLOR]"
 
 msgctxt "#30913"
 msgid "Cache"
@@ -917,6 +961,26 @@ msgstr "Het gebruik van SOCKS proxies vereist dat de PySocks library (script.mod
 msgctxt "#30967"
 msgid "Could not retrieve this program list. VRT Search API url is too long. Go to [B]VRT NU settings » Interface » Manage My favorites…[/B] and unfollow older favorite programs to fix this problem."
 msgstr "Deze programmalijst kan niet opgehaald worden. VRT Search API url is te lang. Ga naar [B]VRT NU instellingen » Interface » Beheer Mijn favorieten[/B] en verwijder een aantal favoriete programma's om dit probleem op te lossen. "
+
+msgctxt "#30968"
+msgid "No connection"
+msgstr "Geen verbinding"
+
+msgctxt "#30969"
+msgid "There is a problem connecting to the Internet. This could be related to Kodi, your network, your ISP or VRT NU. Check out the Kodi log for more details."
+msgstr "Er is een probleem met het verbinden met internet. Dit kan liggen aan Kodi, aan jouw netwerk, aan jouw ISP of aan VRT NU. Bekijk de Kodi-log voor meer details."
+
+msgctxt "#30970"
+msgid "VRT NU authentication failed"
+msgstr "VRT NU-verificatie is mislukt"
+
+msgctxt "#30971"
+msgid "There is an unknown problem authenticating your user credentials at VRT NU. Please check your VRT NU account at https://www.vrt.be/vrtnu/"
+msgstr "Er is een onbekend probleem bij het verifiëren van je gebruikersgegevens bij VRT NU. Controleer je VRT NU-account op https://www.vrt.be/vrtnu/"
+
+msgctxt "#30972"
+msgid "There is a problem authenticating at VRT NU to enable favorites. Please check your VRT NU account at https://www.vrt.be/vrtnu/ or disable favorites in the add-on settings."
+msgstr "Er is een probleem met de authenticatie bij VRT NU om favorieten in te schakelen. Controleer je VRT NU-account op https://www.vrt.be/vrtnu/ of schakel favorieten uit in de add-on-instellingen."
 
 msgctxt "#30975"
 msgid "Failed to get user token from VRT NU"

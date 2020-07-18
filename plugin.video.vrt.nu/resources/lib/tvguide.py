@@ -8,15 +8,10 @@ from datetime import datetime, timedelta
 import dateutil.parser
 import dateutil.tz
 
-try:  # Python 3
-    from urllib.request import build_opener, install_opener, ProxyHandler
-except ImportError:  # Python 2
-    from urllib2 import build_opener, install_opener, ProxyHandler
-
 from data import CHANNELS, RELATIVE_DATES
 from favorites import Favorites
 from helperobjects import TitleItem
-from kodiutils import (colour, get_cached_url_json, get_proxies, get_url_json, has_addon, localize,
+from kodiutils import (colour, get_cached_url_json, get_url_json, has_addon, localize,
                        localize_datelong, show_listing, themecolour, ttl, url_for)
 from metadata import Metadata
 from resumepoints import ResumePoints
@@ -33,7 +28,6 @@ class TVGuide:
         self._favorites = Favorites()
         self._resumepoints = ResumePoints()
         self._metadata = Metadata(self._favorites, self._resumepoints)
-        install_opener(build_opener(ProxyHandler(get_proxies())))
 
     def show_tvguide(self, date=None, channel=None):
         """Offer a menu depending on the information provided"""
@@ -177,17 +171,26 @@ class TVGuide:
         episode_items = []
         for episode in episodes:
             program = url_to_program(episode.get('url', ''))
-            if episode.get('url'):
-                video_url = add_https_proto(episode.get('url'))
-                path = url_for('play_url', video_url=video_url)
-                context_menu, favorite_marker, watchlater_marker = self._metadata.get_context_menu(episode, program, cache_file)
-                label = self._metadata.get_label(episode) + favorite_marker + watchlater_marker
+            context_menu, favorite_marker, watchlater_marker = self._metadata.get_context_menu(episode, program, cache_file)
+            label = self._metadata.get_label(episode)
+            path = self.get_episode_path(episode, channel)
+            # Playable item
+            if '/play/' in path:
                 is_playable = True
+                label += favorite_marker + watchlater_marker
+            # Non-actionable item
             else:
-                label = '[COLOR={greyedout}]%s[/COLOR]' % self._metadata.get_label(episode)
-                path = url_for('noop')
-                context_menu, _, _ = self._metadata.get_context_menu(episode, program, cache_file)
                 is_playable = False
+                label = '[COLOR={greyedout}]%s[/COLOR]' % label
+
+            # Now playing
+            start_date = dateutil.parser.parse(episode.get('startTime'))
+            end_date = dateutil.parser.parse(episode.get('endTime'))
+            if start_date <= now <= end_date:
+                if is_playable:
+                    label = '[COLOR={highlighted}]%s[/COLOR] %s' % (label, localize(30301))
+                else:
+                    label += localize(30301)
 
             info_labels = self._metadata.get_info_labels(episode, date=date, channel=entry)
             # FIXME: Due to a bug in Kodi, ListItem.Title is used when Sort methods are used, not ListItem.Label
@@ -203,6 +206,17 @@ class TVGuide:
             ))
         return episode_items
 
+    @staticmethod
+    def get_episode_path(episode, channel):
+        """Return a playable plugin:// path for an episode"""
+        now = datetime.now(dateutil.tz.tzlocal())
+        end_date = dateutil.parser.parse(episode.get('endTime'))
+        if episode.get('url') and episode.get('vrt.whatson-id'):
+            return url_for('play_whatson_id', whatson_id=episode.get('vrt.whatson-id'))
+        if now - timedelta(hours=24) <= end_date <= now:
+            return url_for('play_air_date', channel, episode.get('startTime')[:19], episode.get('endTime')[:19])
+        return url_for('noop', whatsonid=episode.get('vrt.whatson-id', ''))
+
     def get_epg_data(self):
         """Return EPG data"""
         now = datetime.now(dateutil.tz.tzlocal())
@@ -212,18 +226,24 @@ class TVGuide:
             epg = self.parse(date, now)
             epg_url = epg.strftime(self.VRT_TVGUIDE)
             schedule = get_url_json(url=epg_url, fail={})
-            for channel_id, episodes in schedule.iteritems():
+            for channel_id, episodes in list(schedule.items()):
                 channel = find_entry(CHANNELS, 'id', channel_id)
                 epg_id = channel.get('epg_id')
                 if epg_id not in epg_data:
                     epg_data[epg_id] = []
                 for episode in episodes:
+                    if episode.get('url') and episode.get('vrt.whatson-id'):
+                        path = url_for('play_whatson_id', whatson_id=episode.get('vrt.whatson-id'))
+                    else:
+                        path = None
                     epg_data[epg_id].append(dict(
                         start=episode.get('startTime'),
                         stop=episode.get('endTime'),
                         image=add_https_proto(episode.get('image', '')),
                         title=episode.get('title'),
+                        subtitle=html_to_kodi(episode.get('subtitle', '')),
                         description=html_to_kodi(episode.get('description', '')),
+                        stream=path,
                     ))
         return epg_data
 
@@ -276,6 +296,7 @@ class TVGuide:
         episodes = iter(schedule.get(entry.get('id'), []))
 
         description = ''
+        episode = None
         while True:
             try:
                 episode = next(episodes)
@@ -297,7 +318,7 @@ class TVGuide:
                 except StopIteration:
                     break
                 break
-        if not description:
+        if episode and not description:
             # Add a final 'No transmission' program
             description = '[COLOR={highlighted}][B]%s[/B] %s - 06:00\n» %s[/COLOR]' % (localize(30421), episode.get('end'), localize(30423))
         return colour(description)

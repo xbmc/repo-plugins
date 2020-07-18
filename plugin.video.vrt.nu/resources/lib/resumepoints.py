@@ -7,13 +7,12 @@ from __future__ import absolute_import, division, unicode_literals
 
 try:  # Python 3
     from urllib.error import HTTPError
-    from urllib.request import build_opener, install_opener, ProxyHandler, Request, urlopen
 except ImportError:  # Python 2
-    from urllib2 import build_opener, HTTPError, install_opener, ProxyHandler, Request, urlopen
+    from urllib2 import HTTPError
 
 from data import SECONDS_MARGIN
-from kodiutils import (container_refresh, get_cache, get_proxies, get_setting_bool, get_url_json, has_credentials,
-                       input_down, invalidate_caches, localize, log, log_error, notification, update_cache)
+from kodiutils import (container_refresh, get_cache, get_setting_bool, get_url_json, has_credentials, input_down,
+                       invalidate_caches, localize, log, log_error, notification, open_url, update_cache)
 
 
 class ResumePoints:
@@ -22,12 +21,11 @@ class ResumePoints:
     def __init__(self):
         """Initialize resumepoints, relies on XBMC vfs and a special VRT token"""
         self._data = dict()  # Our internal representation
-        install_opener(build_opener(ProxyHandler(get_proxies())))
 
     @staticmethod
     def is_activated():
         """Is resumepoints activated in the menu and do we have credentials ?"""
-        return get_setting_bool('useresumepoints', default=True) and has_credentials()
+        return get_setting_bool('usefavorites', default=True) and get_setting_bool('useresumepoints', default=True) and has_credentials()
 
     @staticmethod
     def resumepoint_headers(url=None):
@@ -179,10 +177,9 @@ class ResumePoints:
 
     def delete_online(self, asset_id):
         """Delete resumepoint online"""
-        req = Request('https://video-user-data.vrt.be/resume_points/{asset_id}'.format(asset_id=asset_id), headers=self.resumepoint_headers())
-        req.get_method = lambda: 'DELETE'
         try:
-            result = urlopen(req)
+            result = open_url('https://video-user-data.vrt.be/resume_points/{asset_id}'.format(asset_id=asset_id),
+                              headers=self.resumepoint_headers(), method='DELETE', raise_errors='all')
             log(3, "[Resumepoints] '{asset_id}' online deleted: {code}", asset_id=asset_id, code=result.getcode())
         except HTTPError as exc:
             log_error("Failed to remove '{asset_id}' from resumepoints: {error}", asset_id=asset_id, error=exc)

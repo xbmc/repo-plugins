@@ -6,15 +6,14 @@ from __future__ import absolute_import, division, unicode_literals
 
 try:  # Python 3
     from urllib.parse import quote_plus, unquote
-    from urllib.request import build_opener, install_opener, ProxyHandler
 except ImportError:  # Python 2
     from urllib import quote_plus
-    from urllib2 import build_opener, install_opener, ProxyHandler, unquote
+    from urllib2 import unquote
 
 from data import CHANNELS
 from helperobjects import TitleItem
-from kodiutils import (delete_cached_thumbnail, get_cached_url_json, get_global_setting,
-                       get_proxies, get_setting_bool, get_setting_int, get_url_json, has_addon, localize,
+from kodiutils import (delete_cached_thumbnail, get_cache, get_cached_url_json, get_global_setting,
+                       get_setting_bool, get_setting_int, get_url_json, has_addon, localize,
                        localize_from_data, log, ttl, url_for)
 from metadata import Metadata
 from utils import (html_to_kodi, find_entry, from_unicode, play_url_to_id,
@@ -34,7 +33,6 @@ class ApiHelper:
         self._favorites = _favorites
         self._resumepoints = _resumepoints
         self._metadata = Metadata(_favorites, _resumepoints)
-        install_opener(build_opener(ProxyHandler(get_proxies())))
 
     def get_tvshows(self, category=None, channel=None, feature=None):
         """Get all TV shows for a given category, channel or feature, optionally filtered by favorites"""
@@ -157,10 +155,9 @@ class ApiHelper:
         season_items = []
         sort = 'label'
         ascending = True
-        content = 'seasons'
+        content = 'files'
 
         episode = random.choice(episodes)
-        info_labels = self._metadata.get_info_labels(episode, season=True)
         program_type = episode.get('programType')
 
         # Reverse sort seasons if program_type is 'reeksaflopend' or 'daily'
@@ -173,7 +170,13 @@ class ApiHelper:
                 label=localize(30133),  # All seasons
                 path=url_for('programs', program=program, season='allseasons'),
                 art_dict=self._metadata.get_art(episode, season='allseasons'),
-                info_dict=info_labels,
+                info_dict=dict(tvshowtitle=self._metadata.get_tvshowtitle(episode),
+                               plot=self._metadata.get_plot(episode, season='allseasons'),
+                               plotoutline=self._metadata.get_plotoutline(episode, season='allseasons'),
+                               tagline=self._metadata.get_plotoutline(episode, season='allseasons'),
+                               mediatype=self._metadata.get_mediatype(episode, season='allseasons'),
+                               studio=self._metadata.get_studio(episode),
+                               tag=self._metadata.get_tag(episode)),
             ))
 
         # NOTE: Sort the episodes ourselves, because Kodi does not allow to set to 'ascending'
@@ -192,7 +195,7 @@ class ApiHelper:
                 label=label,
                 path=url_for('programs', program=program, season=season_key),
                 art_dict=self._metadata.get_art(episode, season=True),
-                info_dict=info_labels,
+                info_dict=self._metadata.get_info_labels(episode, season=True),
                 prop_dict=self._metadata.get_properties(episode),
             ))
         return season_items, sort, ascending, content
@@ -400,7 +403,6 @@ class ApiHelper:
             except ValueError:
                 return None
         video = None
-        episode_guess_off = None
         now = datetime.now(dateutil.tz.gettz('Europe/Brussels'))
         if onairdate.hour < 6:
             schedule_date = onairdate - timedelta(days=1)
@@ -412,36 +414,51 @@ class ApiHelper:
         episodes = schedule_json.get(channel.get('id'), [])
         if not episodes:
             return None
-        if offairdate:
-            mindate = min(abs(offairdate - dateutil.parser.parse(episode.get('endTime'))) for episode in episodes)
-            episode_guess_off = next((episode for episode in episodes if abs(offairdate - dateutil.parser.parse(episode.get('endTime'))) == mindate), None)
 
-        mindate = min(abs(onairdate - dateutil.parser.parse(episode.get('startTime'))) for episode in episodes)
-        episode_guess_on = next((episode for episode in episodes if abs(onairdate - dateutil.parser.parse(episode.get('startTime'))) == mindate), None)
-        offairdate_guess = dateutil.parser.parse(episode_guess_on.get('endTime'))
-        if (episode_guess_off and episode_guess_on.get('vrt.whatson-id') == episode_guess_off.get('vrt.whatson-id')
-                or (not episode_guess_off and episode_guess_on)):
-            video = self.get_single_episode(whatson_id=episode_guess_on.get('vrt.whatson-id'))
+        # Guess the episode
+        episode_guess = None
+        if not offairdate:
+            mindate = min(abs(onairdate - dateutil.parser.parse(episode.get('startTime'))) for episode in episodes)
+            episode_guess = next((episode for episode in episodes if abs(onairdate - dateutil.parser.parse(episode.get('startTime'))) == mindate), None)
+        else:
+            duration = offairdate - onairdate
+            midairdate = onairdate + timedelta(seconds=duration.total_seconds() / 2)
+            mindate = min(abs(midairdate
+                              - (dateutil.parser.parse(episode.get('startTime'))
+                                 + timedelta(seconds=(dateutil.parser.parse(episode.get('endTime'))
+                                                      - dateutil.parser.parse(episode.get('startTime'))).total_seconds() / 2))) for episode in episodes)
+            episode_guess = next((episode for episode in episodes
+                                  if abs(midairdate
+                                         - (dateutil.parser.parse(episode.get('startTime'))
+                                            + timedelta(seconds=(dateutil.parser.parse(episode.get('endTime'))
+                                                                 - dateutil.parser.parse(episode.get('startTime'))).total_seconds() / 2))) == mindate), None)
+
+        if episode_guess and episode_guess.get('vrt.whatson-id', None):
+            offairdate_guess = dateutil.parser.parse(episode_guess.get('endTime'))
+            video = self.get_single_episode(whatson_id=episode_guess.get('vrt.whatson-id'))
             if video:
                 return video
 
             # Airdate live2vod feature: use livestream cache of last 24 hours if no video was found
 
-            if now - timedelta(hours=24) <= dateutil.parser.parse(episode_guess_on.get('endTime')) <= now:
+            if now - timedelta(hours=24) <= dateutil.parser.parse(episode_guess.get('endTime')) <= now:
                 start_date = onairdate.astimezone(dateutil.tz.UTC).isoformat()[0:19]
                 end_date = offairdate_guess.astimezone(dateutil.tz.UTC).isoformat()[0:19]
 
             # Offairdate defined
             if offairdate and now - timedelta(hours=24) <= offairdate <= now:
-                start_date = onairdate.astimezone(dateutil.tz.UTC).isoformat()[0:19]
-                end_date = offairdate.astimezone(dateutil.tz.UTC).isoformat()[0:19]
+                start_date = onairdate.astimezone(dateutil.tz.UTC).isoformat()[:19]
+                end_date = offairdate.astimezone(dateutil.tz.UTC).isoformat()[:19]
 
             if start_date and end_date:
+                info = self._metadata.get_info_labels(episode_guess, channel=channel, date=start_date)
+                live2vod_title = '{} ({})'.format(info.get('tvshowtitle'), localize(30454))  # from livestream cache
+                info.update(tvshowtitle=live2vod_title)
                 video_item = TitleItem(
-                    label=self._metadata.get_label(episode_guess_on),
-                    art_dict=self._metadata.get_art(episode_guess_on),
-                    info_dict=self._metadata.get_info_labels(episode_guess_on, channel=channel, date=start_date),
-                    prop_dict=self._metadata.get_properties(episode_guess_on),
+                    label=self._metadata.get_label(episode_guess),
+                    art_dict=self._metadata.get_art(episode_guess),
+                    info_dict=info,
+                    prop_dict=self._metadata.get_properties(episode_guess),
                 )
                 video = dict(
                     listitem=video_item,
@@ -452,7 +469,7 @@ class ApiHelper:
                 return video
 
             video = dict(
-                errorlabel=episode_guess_on.get('title')
+                errorlabel=episode_guess.get('title')
             )
         return video
 
@@ -751,8 +768,19 @@ class ApiHelper:
 
     def list_categories(self):
         """Construct a list of category ListItems"""
-        from webscraper import get_categories
+        from webscraper import get_categories, valid_categories
         categories = get_categories()
+
+        # Use the cache anyway (better than hard-coded)
+        if not valid_categories(categories):
+            categories = get_cache('categories.json', ttl=None)
+
+        # Fall back to internal hard-coded categories
+        if not valid_categories(categories):
+            from data import CATEGORIES
+            log(2, 'Fall back to internal hard-coded categories')
+            categories = CATEGORIES
+
         category_items = []
         from data import CATEGORIES
         for category in self.localize_categories(categories, CATEGORIES):

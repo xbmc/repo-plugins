@@ -342,6 +342,16 @@ class VRTPlayer:
             return
         self.play(video)
 
+    def play_episode_by_whatson_id(self, whatson_id):
+        """Play an episode of a program given the whatson_id"""
+        video = self._apihelper.get_single_episode(whatson_id=whatson_id)
+        if not video:
+            log_error('Play episode by whatson_id failed, whatson_id {whatson_id}', whatson_id=whatson_id)
+            ok_dialog(message=localize(30954))
+            end_of_directory()
+            return
+        self.play(video)
+
     def play_upnext(self, video_id):
         """Play the next episode of a program by video_id"""
         video = self._apihelper.get_single_episode(video_id=video_id)
@@ -361,5 +371,6 @@ class VRTPlayer:
         _streamservice = StreamService(_tokenresolver)
         stream = _streamservice.get_stream(video)
         if stream is None:
+            end_of_directory()
             return
         play(stream, video.get('listitem'))

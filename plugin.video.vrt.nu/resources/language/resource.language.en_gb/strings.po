@@ -209,7 +209,7 @@ msgid "Comedy"
 msgstr ""
 
 msgctxt "#30077"
-msgid "Children"
+msgid "Children and youth"
 msgstr ""
 
 msgctxt "#30078"
@@ -246,6 +246,10 @@ msgstr ""
 
 msgctxt "#30086"
 msgid "Science and nature"
+msgstr ""
+
+msgctxt "#30087"
+msgid "Worldview"
 msgstr ""
 
 ### FEATURED
@@ -506,6 +510,26 @@ msgctxt "#30440"
 msgid "A-Z"
 msgstr ""
 
+msgctxt "#30450"
+msgid "Update add-on repositories"
+msgstr ""
+
+msgctxt "#30451"
+msgid "If a VRT NU add-on update is available, it should now be updating and you will be notified.\nMake sure you have [I]Auto-update[/I] enabled for the VRT NU add-on."
+msgstr ""
+
+msgctxt "#30452"
+msgid "Automatic updates are disabled"
+msgstr ""
+
+msgctxt "#30453"
+msgid "Kodi is configured to not update add-ons automatically, so you will not get VRT NU updates unless you fix this setting.\nWe will open de Kodi settings, please change this setting."
+msgstr ""
+
+msgctxt "#30454"
+msgid "from livestream cache"
+msgstr ""
+
 
 ### SETTINGS
 msgctxt "#30700"
@@ -641,7 +665,7 @@ msgid "Streaming and DRM"
 msgstr ""
 
 msgctxt "#30787"
-msgid "Use Widevine DRM [COLOR=gray][I](for protected content)[/I][/COLOR]"
+msgid "Use Widevine DRM [COLOR=gray](for protected content)[/COLOR]"
 msgstr ""
 
 msgctxt "#30788"
@@ -772,6 +796,26 @@ msgctxt "#30881"
 msgid "Install PySocks library…"
 msgstr ""
 
+msgctxt "#30890"
+msgid "Updates"
+msgstr ""
+
+msgctxt "#30891"
+msgid "Update the VRT NU add-on"
+msgstr ""
+
+msgctxt "#30893"
+msgid "Install the latest add-on updates…"
+msgstr ""
+
+msgctxt "#30895"
+msgid "Open Kodi add-ons settings… [COLOR=gray]to enable Kodi auto-updates)[/COLOR]"
+msgstr ""
+
+msgctxt "#30897"
+msgid "Open VRT NU add-on information…"
+msgstr ""
+
 msgctxt "#30900"
 msgid "Expert"
 msgstr ""
@@ -797,7 +841,7 @@ msgid "InputStream Helper information"
 msgstr ""
 
 msgctxt "#30911"
-msgid "InputStream Helper settings… [COLOR=gray][I](for protected content)[/I][/COLOR]"
+msgid "InputStream Helper settings… [COLOR=gray](for protected content)[/COLOR]"
 msgstr ""
 
 msgctxt "#30913"
@@ -916,6 +960,26 @@ msgstr ""
 
 msgctxt "#30967"
 msgid "Could not retrieve this program list. VRT Search API url is too long. Go to [B]VRT NU settings » Interface » Manage My favorites…[/B] and unfollow older favorite programs to fix this problem."
+msgstr ""
+
+msgctxt "#30968"
+msgid "No connection"
+msgstr ""
+
+msgctxt "#30969"
+msgid "There is a problem connecting to the Internet. This could be related to Kodi, your network, your ISP or VRT NU. Check out the Kodi log for more details."
+msgstr ""
+
+msgctxt "#30970"
+msgid "VRT NU authentication failed"
+msgstr ""
+
+msgctxt "#30971"
+msgid "There is an unknown problem authenticating your user credentials at VRT NU. Please check your VRT NU account at https://www.vrt.be/vrtnu/"
+msgstr ""
+
+msgctxt "#30972"
+msgid "There is a problem authenticating at VRT NU to enable favorites. Please check your VRT NU account at https://www.vrt.be/vrtnu/ or disable favorites in the add-on settings."
 msgstr ""
 
 msgctxt "#30975"

@@ -59,6 +59,14 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.4.0 (2020-07-18)
+- Show error messages when connections fail (@mediaminister, @dagwieers)
+- Improve user authentication cache (@mediaminister)
+- Fix missing "Worldview" category (@mediaminister)
+- Improve playing programs using the TV guide (@mediaminister)
+- Improve IPTV Manager support (@michaelarnauts)
+- Add user setting to update the VRT NU add-on easily (@dagwieers)
+
 ### v2.3.5 (2020-05-27)
 - Fix watching VRT NU abroad (@mediaminister)
 - Improve and fix user authentication (@mediaminister, @dagwieers)

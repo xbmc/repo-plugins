@@ -739,27 +739,12 @@ class Metadata:
 
         # VRT NU Schedule API (some are missing vrt.whatson-id)
         elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
-            from datetime import datetime
-            import dateutil.parser
-            import dateutil.tz
             title = html_to_kodi(api_data.get('subtitle', '') or api_data.get('shortDescription', ''))
             label = '{start} - [B]{program}[/B]{title}'.format(
                 start=api_data.get('start'),
                 program=api_data.get('title'),
                 title=' - ' + title if title else '',
             )
-            now = datetime.now(dateutil.tz.tzlocal())
-            start_date = dateutil.parser.parse(api_data.get('startTime'))
-            end_date = dateutil.parser.parse(api_data.get('endTime'))
-            if api_data.get('url'):
-                if start_date <= now <= end_date:  # Now playing
-                    label = '[COLOR={highlighted}]%s[/COLOR] %s' % (label, localize(30301))
-            else:
-                # This is a non-actionable item
-                if start_date < now <= end_date:  # Now playing
-                    label = '[COLOR={greyedout}]%s[/COLOR] %s' % (label, localize(30301))
-                else:
-                    label = '[COLOR={greyedout}]%s[/COLOR]' % label
 
         # Not Found
         else:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.3.5" provider-name="Martijn Moreel, dagwieers">
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.4.0" provider-name="Martijn Moreel, dagwieers">
 <requires>
   <import addon="resource.images.studios.white" version="0.0.22"/>
   <import addon="script.module.beautifulsoup4" version="4.6.2"/>
@@ -42,6 +42,14 @@
   <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
   <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
   <news>
+v2.4.0 (2020-07-18)
+- Show error messages when connections fail
+- Improve user authentication cache
+- Fix missing "Worldview" category
+- Improve playing programs using the TV guide
+- Improve IPTV Manager support
+- Add user setting to update the VRT NU add-on easily
+
 v2.3.5 (2020-05-27)
 - Fix watching VRT NU abroad
 - Improve and fix user authentication
@@ -72,15 +80,6 @@ v2.3.1 (2020-01-14)
 - Small fix for livestreams
 - Improvements to metadata handling specific to Kodi rendering
 - Support multiple YouTube links per channel
-
-v2.3.0 (2020-01-01)
-- Cosmetic changes to metadata and plot
-- Store resume points and watchlater at VRT NU
-- Implement "Watch later"
-- Implement "Continue watching"
-- Add integration for Up Next add-on
-- Fixes to "Go to program", "TV guide" and "Live TV" entries
-- Fix Python 3.5 support
   </news>
   <assets>
     <icon>resources/media/icon.png</icon>

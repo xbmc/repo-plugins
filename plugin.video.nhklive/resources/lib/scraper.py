@@ -9,8 +9,10 @@ import datetime
 import sys
 import xbmcgui
 import requests
+import urllib.parse
 
 NHKBASE = 'https://www3.nhk.or.jp'
+qp = urllib.parse.quote_plus
 
 
 class myAddon(t1mAddon):
@@ -30,9 +32,11 @@ class myAddon(t1mAddon):
          if not fanart.startswith('http'): fanart = ''.join([NHKBASE,a['image_l']])
          infoList = {'mediatype':'tvshow',
                     'Title': name,
+                    'TVShowTitle':name,
                     'Plot': a['description'],
                     'studio':'NHK'}
-         ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
+         contextMenu = [('Add Show To Library','RunPlugin(%s?mode=AD&url=%s)' % (sys.argv[0], qp(url)))]
+         ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
       return(ilist)
 
 
@@ -60,6 +64,7 @@ class myAddon(t1mAddon):
          if dt != None:
              aired = datetime.datetime.fromtimestamp(dt/1000)
              infoList['aired'] = aired.strftime("%Y-%m-%d")
+             infoList['FirstAired'] = infoList['aired']
          ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
       return(ilist)
 

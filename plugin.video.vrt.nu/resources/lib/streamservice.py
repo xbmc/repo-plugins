@@ -6,17 +6,16 @@ from __future__ import absolute_import, division, unicode_literals
 
 try:  # Python 3
     from urllib.error import HTTPError
-    from urllib.parse import quote, unquote, urlencode
-    from urllib.request import build_opener, install_opener, urlopen, ProxyHandler
+    from urllib.parse import quote, urlencode
 except ImportError:  # Python 2
     from urllib import urlencode
-    from urllib2 import build_opener, install_opener, urlopen, ProxyHandler, quote, unquote, HTTPError
+    from urllib2 import quote, HTTPError
 
 from helperobjects import ApiData, StreamURLS
 from kodiutils import (addon_profile, can_play_drm, container_reload, exists, end_of_directory, get_max_bandwidth,
-                       get_proxies, get_setting_bool, get_url_json, has_inputstream_adaptive,
-                       invalidate_caches, kodi_version_major, localize, log, log_error, mkdir, ok_dialog, open_settings,
-                       supports_drm, to_unicode)
+                       get_setting_bool, get_url_json, has_inputstream_adaptive, invalidate_caches,
+                       kodi_version_major, localize, log, log_error, mkdir, ok_dialog, open_settings,
+                       open_url, supports_drm, to_unicode)
 
 
 class StreamService:
@@ -32,7 +31,6 @@ class StreamService:
 
     def __init__(self, _tokenresolver):
         """Initialize Stream Service class"""
-        install_opener(build_opener(ProxyHandler(get_proxies())))
         self._tokenresolver = _tokenresolver
         self._create_settings_dir()
         self._can_play_drm = can_play_drm()
@@ -309,14 +307,14 @@ class StreamService:
         hls_audio_id = None
         hls_subtitle_id = None
         hls_base_url = master_hls_url.split('.m3u8')[0]
-        log(2, 'URL get: {url}', url=unquote(master_hls_url))
         try:
-            hls_playlist = to_unicode(urlopen(master_hls_url).read())
+            response = open_url(master_hls_url, raise_errors=[415])
         except HTTPError as exc:
-            if exc.code == 415:
-                self._handle_bad_stream_error(protocol, exc.code, exc.reason)
-                return None
-            raise
+            self._handle_bad_stream_error(protocol, exc.code, exc.reason)
+            return None
+        if response is None:
+            return None
+        hls_playlist = to_unicode(response.read())
         max_bandwidth = get_max_bandwidth()
         stream_bandwidth = None
 

@@ -10,7 +10,7 @@ msgstr ""
 "X-Generator: Poedit 2.2.4\n"
 "Last-Translator: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: en_US\n"
+"Language: en_GB\n"
 
 msgctxt "#30000"
 msgid "New"

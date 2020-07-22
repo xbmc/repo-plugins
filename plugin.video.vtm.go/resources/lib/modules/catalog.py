@@ -3,10 +3,14 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
-from resources.lib.kodiwrapper import TitleItem, LOG_ERROR
+import logging
+
+from resources.lib.kodiwrapper import TitleItem
 from resources.lib.modules import CHANNELS
 from resources.lib.modules.menu import Menu
 from resources.lib.vtmgo.vtmgo import VtmGo, UnavailableException, CACHE_PREVENT, ApiUpdateRequired
+
+_LOGGER = logging.getLogger('catalog')
 
 
 class Catalog:
@@ -29,7 +33,7 @@ class Catalog:
             return
 
         except Exception as ex:  # pylint: disable=broad-except
-            self._kodi.log("%s" % ex, LOG_ERROR)
+            _LOGGER.error("%s", ex)
             self._kodi.show_ok_dialog(message="%s" % ex)
             return
 
@@ -57,7 +61,7 @@ class Catalog:
             return
 
         except Exception as ex:  # pylint: disable=broad-except
-            self._kodi.log("%s" % ex, LOG_ERROR)
+            _LOGGER.error("%s", ex)
             self._kodi.show_ok_dialog(message="%s" % ex)
             return
 
@@ -80,7 +84,7 @@ class Catalog:
             return
 
         except Exception as ex:  # pylint: disable=broad-except
-            self._kodi.log("%s" % ex, LOG_ERROR)
+            _LOGGER.error("%s", ex)
             self._kodi.show_ok_dialog(message="%s" % ex)
             return
 
@@ -187,7 +191,7 @@ class Catalog:
             return
 
         except Exception as ex:  # pylint: disable=broad-except
-            self._kodi.log("%s" % ex, LOG_ERROR)
+            _LOGGER.error("%s", ex)
             self._kodi.show_ok_dialog(message="%s" % ex)
             return
 
@@ -215,7 +219,7 @@ class Catalog:
             return
 
         except Exception as ex:  # pylint: disable=broad-except
-            self._kodi.log("%s" % ex, LOG_ERROR)
+            _LOGGER.error("%s", ex)
             self._kodi.show_ok_dialog(message="%s" % ex)
             return
 
@@ -240,7 +244,7 @@ class Catalog:
             return
 
         except Exception as ex:  # pylint: disable=broad-except
-            self._kodi.log("%s" % ex, LOG_ERROR)
+            _LOGGER.error("%s", ex)
             self._kodi.show_ok_dialog(message="%s" % ex)
             return
 
@@ -278,7 +282,7 @@ class Catalog:
             return
 
         except Exception as ex:  # pylint: disable=broad-except
-            self._kodi.log("%s" % ex, LOG_ERROR)
+            _LOGGER.error("%s", ex)
             self._kodi.show_ok_dialog(message="%s" % ex)
             return
 

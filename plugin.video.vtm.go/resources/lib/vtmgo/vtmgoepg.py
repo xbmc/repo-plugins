@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """ VTM GO EPG API """
-
 from __future__ import absolute_import, division, unicode_literals
 
 import json
+import logging
 from datetime import datetime, timedelta
 
 import dateutil.parser
@@ -11,6 +11,8 @@ import dateutil.tz
 import requests
 
 from resources.lib.vtmgo.vtmgo import UnavailableException
+
+_LOGGER = logging.getLogger('vtmgoepg')
 
 
 class EpgChannel:
@@ -38,7 +40,7 @@ class EpgBroadcast:
     """ Defines an EPG broadcast"""
 
     def __init__(self, uuid=None, playable_type=None, title=None, time=None, duration=None, image=None, description=None, live=None, rerun=None, tip=None,
-                 program_uuid=None, playable_uuid=None, channel_uuid=None, airing=None):
+                 program_uuid=None, playable_uuid=None, channel_uuid=None, airing=None, genre=None):
         """
         :type uuid: str
         :type playable_type: str
@@ -54,6 +56,7 @@ class EpgBroadcast:
         :type playable_uuid: str
         :type channel_uuid: str
         :type airing: bool
+        :type genre: str
         """
         self.uuid = uuid
         self.playable_type = playable_type
@@ -69,6 +72,7 @@ class EpgBroadcast:
         self.playable_uuid = playable_uuid
         self.channel_uuid = channel_uuid
         self.airing = airing
+        self.genre = genre
 
     def __repr__(self):
         return "%r" % self.__dict__
@@ -77,6 +81,8 @@ class EpgBroadcast:
 class VtmGoEpg:
     """ VTM GO EPG API """
     EPG_URL = 'https://vtm.be/tv-gids/api/v2/broadcasts/{date}'
+
+    EPG_NO_BROADCAST = 'Geen uitzending'
 
     def __init__(self, kodi):
         """ Initialise object
@@ -94,15 +100,7 @@ class VtmGoEpg:
         :type date: str
         :rtype: EpgChannel
         """
-        if date is None:
-            # Fetch today when no date is specified
-            date = datetime.today().strftime('%Y-%m-%d')
-        elif date == 'yesterday':
-            date = (datetime.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
-        elif date == 'today':
-            date = datetime.today().strftime('%Y-%m-%d')
-        elif date == 'tomorrow':
-            date = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+        date = self._parse_date(date)
 
         response = self._get_url(self.EPG_URL.format(date=date))
         epg = json.loads(response)
@@ -115,10 +113,54 @@ class VtmGoEpg:
                     key=epg_channel.get('seoKey'),
                     logo=epg_channel.get('channelLogoUrl'),
                     uuid=epg_channel.get('uuid'),
-                    broadcasts=[self._parse_broadcast(broadcast) for broadcast in epg_channel.get('broadcasts', [])]
+                    broadcasts=[
+                        self._parse_broadcast(broadcast)
+                        for broadcast in epg_channel.get('broadcasts', [])
+                        if broadcast.get('title', '') != self.EPG_NO_BROADCAST
+                    ]
                 )
 
         raise Exception('Channel %s not found in the EPG' % channel)
+
+    def get_epgs(self, date=None):
+        """ Load EPG information for the specified date.
+        :type date: str
+        :rtype: EpgChannel[]
+        """
+        date = self._parse_date(date)
+
+        response = self._get_url(self.EPG_URL.format(date=date))
+        epg = json.loads(response)
+
+        # We get an EPG for all channels
+        return [
+            EpgChannel(
+                name=epg_channel.get('name'),
+                key=epg_channel.get('seoKey'),
+                logo=epg_channel.get('channelLogoUrl'),
+                uuid=epg_channel.get('uuid'),
+                broadcasts=[
+                    self._parse_broadcast(broadcast)
+                    for broadcast in epg_channel.get('broadcasts', [])
+                    if broadcast.get('title', '') != self.EPG_NO_BROADCAST
+                ]
+            )
+            for epg_channel in epg.get('channels', [])
+        ]
+
+    @staticmethod
+    def _parse_date(date):
+        """ Parse the passed date to a real date """
+        if date is None:
+            # Fetch today when no date is specified
+            return datetime.today().strftime('%Y-%m-%d')
+        if date == 'yesterday':
+            return (datetime.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
+        if date == 'today':
+            return datetime.today().strftime('%Y-%m-%d')
+        if date == 'tomorrow':
+            return (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+        return date
 
     def get_broadcast(self, channel, timestamp):
         """ Load EPG information for the specified channel and date.
@@ -127,7 +169,7 @@ class VtmGoEpg:
         :rtype: EpgBroadcast
         """
         # Parse to a real datetime
-        timestamp = dateutil.parser.parse(timestamp)
+        timestamp = dateutil.parser.parse(timestamp).replace(tzinfo=dateutil.tz.gettz('CET'))
 
         # Load guide info for this date
         epg = self.get_epg(channel=channel, date=timestamp.strftime('%Y-%m-%d'))
@@ -153,6 +195,12 @@ class VtmGoEpg:
         start = dateutil.parser.parse(broadcast_json.get('fromIso') + 'Z').astimezone(dateutil.tz.gettz('CET'))
         airing = bool(start <= timestamp < (start + timedelta(seconds=duration)))
 
+        # Genre
+        if broadcast_json.get('subGenres'):
+            genre = broadcast_json.get('subGenres', [])[0]
+        else:
+            genre = broadcast_json.get('genre')
+
         return EpgBroadcast(
             uuid=broadcast_json.get('uuid'),
             playable_type=broadcast_json.get('playableType'),
@@ -168,6 +216,7 @@ class VtmGoEpg:
             program_uuid=broadcast_json.get('programUuid'),
             channel_uuid=broadcast_json.get('channelUuid'),
             airing=airing,
+            genre=genre,
         )
 
     def get_dates(self, date_format):
@@ -217,7 +266,7 @@ class VtmGoEpg:
         :type url: str
         :rtype str
         """
-        self._kodi.log('Sending GET {url}...', url=url)
+        _LOGGER.debug('Sending GET %s...', url)
 
         response = self._session.get(url)
 

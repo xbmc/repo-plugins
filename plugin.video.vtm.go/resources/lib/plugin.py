@@ -3,12 +3,18 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
+import logging
+
 import routing
 
+from resources.lib import kodilogging
 from resources.lib.kodiwrapper import KodiWrapper
 
+kodilogging.config()
 routing = routing.Plugin()  # pylint: disable=invalid-name
 kodi = KodiWrapper(globals())  # pylint: disable=invalid-name
+
+_LOGGER = logging.getLogger('plugin')
 
 
 @routing.route('/')
@@ -191,6 +197,20 @@ def play(category, item):
     """ Play the requested item """
     from resources.lib.modules.player import Player
     Player(kodi).play(category, item)
+
+
+@routing.route('/iptv/channels')
+def iptv_channels():
+    """ Generate channel data for the Kodi PVR integration """
+    from resources.lib.modules.iptvmanager import IPTVManager
+    IPTVManager(kodi, int(routing.args['port'][0])).send_channels()
+
+
+@routing.route('/iptv/epg')
+def iptv_epg():
+    """ Generate EPG data for the Kodi PVR integration """
+    from resources.lib.modules.iptvmanager import IPTVManager
+    IPTVManager(kodi, int(routing.args['port'][0])).send_epg()
 
 
 def run(params):

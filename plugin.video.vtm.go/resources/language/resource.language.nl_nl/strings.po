@@ -287,12 +287,12 @@ msgid "Local metadata is cleared."
 msgstr "De lokale metadata is verwijderd."
 
 msgctxt "#30715"
-msgid "Updating metadata"
-msgstr "Vernieuwen metadata"
+msgid "Updating metadata..."
+msgstr "Vernieuwen metadata..."
 
 msgctxt "#30716"
-msgid "Updating metadata ({index}/{total})"
-msgstr "Vernieuwen metadata ({index}/{total})"
+msgid "Updating metadata ({index}/{total})..."
+msgstr "Vernieuwen metadata ({index}/{total})..."
 
 msgctxt "#30717"
 msgid "This program is not available in the VTM GO catalogue."
@@ -304,8 +304,8 @@ msgid "Credentials"
 msgstr "Inloggegevens"
 
 msgctxt "#30801"
-msgid "VTM GO credentials"
-msgstr "VTM GO inloggegevens"
+msgid "Credentials"
+msgstr "Inloggegevens"
 
 msgctxt "#30803"
 msgid "Email address"
@@ -356,48 +356,69 @@ msgid "Periodically refresh metadata in the background"
 msgstr "Vernieuw de metadata automatisch in de achtergrond"
 
 msgctxt "#30831"
-msgid "Update local metadata now"
-msgstr "De lokale metadata nu vernieuwen"
+msgid "Update local metadata now…"
+msgstr "De lokale metadata nu vernieuwen…"
 
 msgctxt "#30833"
-msgid "Clear local metadata"
-msgstr "De lokale metadata verwijderen"
+msgid "Clear local metadata…"
+msgstr "De lokale metadata verwijderen…"
 
-msgctxt "#30860"
+msgctxt "#30840"
 msgid "Playback"
 msgstr "Afspelen"
 
-msgctxt "#30861"
+msgctxt "#30841"
 msgid "Subtitles"
 msgstr "Ondertiteling"
 
-msgctxt "#30862"
+msgctxt "#30842"
 msgid "Always show subtitles when available"
 msgstr "Toon ondertiteling indien beschikbaar"
 
-msgctxt "#30863"
+msgctxt "#30843"
 msgid "Streaming"
 msgstr "Streaming"
 
-msgctxt "#30864"
+msgctxt "#30844"
 msgid "Maximum bandwidth (kbps)"
 msgstr "Maximale bandbreedte (kbps)"
 
-msgctxt "#30865"
+
+msgctxt "#30860"
+msgid "Integrations"
+msgstr "Integraties"
+
+msgctxt "#30861"
 msgid "Up Next"
 msgstr "Up Next"
 
-msgctxt "#30866"
+msgctxt "#30862"
 msgid "Install Up Next add-on"
 msgstr "Installeer de Up Next add-on"
 
-msgctxt "#30867"
-msgid "Use Up Next to play next episode automatically"
-msgstr "Gebruik Up Next om automatisch de volgende aflevering te spelen"
+msgctxt "#30863"
+msgid "Enable Up Next integration"
+msgstr "Activeer Up Next integratie"
 
-msgctxt "#30868"
+msgctxt "#30864"
 msgid "Up Next settings…"
 msgstr "Up Next instellingen…"
+
+msgctxt "#30866"
+msgid "IPTV Manager"
+msgstr "IPTV Manager"
+
+msgctxt "#30867"
+msgid "Install IPTV Manager add-on…"
+msgstr "Installeer de IPTV Manager add-on…"
+
+msgctxt "#30868"
+msgid "Enable IPTV Manager integration"
+msgstr "Activeer IPTV Manager integratie"
+
+msgctxt "#30869"
+msgid "IPTV Manager settings…"
+msgstr "IPTV Manager instellingen…"
 
 msgctxt "#30880"
 msgid "Expert"
@@ -408,8 +429,8 @@ msgid "Streaming"
 msgstr "Streaming"
 
 msgctxt "#30883"
-msgid "InputStream Helper information"
-msgstr "InputStream Helper informatie"
+msgid "InputStream Helper information…"
+msgstr "InputStream Helper informatie…"
 
 msgctxt "#30885"
 msgid "InputStream Adaptive settings…"

@@ -3,9 +3,13 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
+import logging
+
 from resources.lib.kodiwrapper import TitleItem, to_unicode
 from resources.lib.vtmgo.vtmgo import VtmGo, ApiUpdateRequired
 from resources.lib.vtmgo.vtmgoauth import InvalidLoginException, LoginErrorException
+
+_LOGGER = logging.getLogger('authentication')
 
 
 class Authentication:
@@ -56,7 +60,7 @@ class Authentication:
         # Save the selected profile
         if key:
             profile = [x for x in profiles if x.key == key][0]
-            self._kodi.log('Setting profile to %s' % profile)
+            _LOGGER.debug('Setting profile to %s', profile)
             self._kodi.set_setting('profile', '%s:%s' % (profile.key, profile.product))
             self._kodi.set_setting('profile_name', profile.name)
 

@@ -3,7 +3,11 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
+import logging
+
 from resources.lib.vtmgo.vtmgo import VtmGo, Movie, Program
+
+_LOGGER = logging.getLogger('metadata')
 
 
 class Metadata:

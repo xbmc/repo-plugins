@@ -3,9 +3,13 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
+import logging
+
 from resources.lib.kodiwrapper import TitleItem
 from resources.lib.modules import CHANNELS
 from resources.lib.vtmgo.vtmgo import Movie, Program, Episode, VtmGo
+
+_LOGGER = logging.getLogger('menu')
 
 
 class Menu:

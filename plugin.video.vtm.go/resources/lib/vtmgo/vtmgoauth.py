@@ -4,11 +4,15 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import hashlib
+import logging
+import os
 import re
 
 import requests
 
-from resources.lib.kodiwrapper import LOG_DEBUG, from_unicode, LOG_INFO
+from resources.lib.kodiwrapper import from_unicode
+
+_LOGGER = logging.getLogger('vtmgoauth')
 
 
 class InvalidLoginException(Exception):
@@ -48,31 +52,32 @@ class VtmGoAuth:
 
     def clear_token(self):
         """ Remove the cached JWT. """
-        self._kodi.log('Clearing token cache', LOG_DEBUG)
-        self._token = None
-        path = self._kodi.get_userdata_path() + 'token.json'
+        _LOGGER.debug('Clearing token cache')
+        path = os.path.join(self._kodi.get_userdata_path(), 'token.json')
         if self._kodi.check_if_path_exists(path):
             self._kodi.delete_file(path)
-        self._kodi.set_setting('profile', None)
+        self._token = None
 
     def get_token(self):
         """ Return a JWT that can be used to authenticate the user.
         :rtype str
         """
+        userdata_path = self._kodi.get_userdata_path()
+
         # Don't return a token when we have no password or username.
         if not self._kodi.get_setting('username') or not self._kodi.get_setting('password'):
-            self._kodi.log('Skipping since we have no username or password', LOG_INFO)
+            _LOGGER.debug('Skipping since we have no username or password')
             return None
 
         # Return if we already have the token in memory.
         if self._token:
-            self._kodi.log('Returning token from memory', LOG_DEBUG)
+            _LOGGER.debug('Returning token from memory')
             return self._token
 
         # Try to load from cache
-        path = self._kodi.get_userdata_path() + 'token.json'
+        path = os.path.join(userdata_path, 'token.json')
         if self._kodi.check_if_path_exists(path):
-            self._kodi.log('Returning token from cache', LOG_DEBUG)
+            _LOGGER.debug('Returning token from cache')
 
             with self._kodi.open_file(path) as fdesc:
                 self._token = fdesc.read()
@@ -82,7 +87,11 @@ class VtmGoAuth:
 
         # Authenticate with VTM GO and store the token
         self._token = self._login()
-        self._kodi.log('Returning token from VTM GO', LOG_DEBUG)
+        _LOGGER.debug('Returning token from VTM GO')
+
+        # Make sure the path exists
+        if not self._kodi.check_if_path_exists(userdata_path):
+            self._kodi.mkdirs(userdata_path)
 
         with self._kodi.open_file(path, 'w') as fdesc:
             fdesc.write(from_unicode(self._token))
@@ -94,7 +103,7 @@ class VtmGoAuth:
         profile = self._kodi.get_setting('profile')
         try:
             return profile.split(':')[0]
-        except IndexError:
+        except (IndexError, AttributeError):
             return None
 
     def _login(self):

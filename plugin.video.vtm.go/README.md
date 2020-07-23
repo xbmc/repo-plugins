@@ -32,6 +32,7 @@ The following features are supported:
 * Browse a TV Guide
 * Search the catalogue
 * Watch YouTube content from some of the DPG Media channels
+* Integration with [IPTV Manager](https://github.com/add-ons/service.iptv.manager)
 
 ## Screenshots
 

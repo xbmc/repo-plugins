@@ -4,11 +4,13 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import json
+import logging
 
 import requests
 
-from resources.lib.kodiwrapper import LOG_DEBUG
-from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
+from resources.lib.vtmgo.vtmgoauth import VtmGoAuth, InvalidLoginException
+
+_LOGGER = logging.getLogger('vtmgo')
 
 try:  # Python 3
     from urllib.parse import quote
@@ -56,12 +58,13 @@ class Profile:
 class LiveChannel:
     """ Defines a tv channel that can be streamed live """
 
-    def __init__(self, key=None, channel_id=None, name=None, logo=None, epg=None, geoblocked=False):
+    def __init__(self, key=None, channel_id=None, name=None, logo=None, background=None, epg=None, geoblocked=False):
         """
         :type key: str
         :type channel_id: str
         :type name: str
         :type logo: str
+        :type background: str
         :type epg: list[LiveChannelEpg]
         :type geoblocked: bool
         """
@@ -69,6 +72,7 @@ class LiveChannel:
         self.channel_id = channel_id
         self.name = name
         self.logo = logo
+        self.background = background
         self.epg = epg
         self.geoblocked = geoblocked
 
@@ -113,8 +117,8 @@ class Category:
 class Movie:
     """ Defines a Movie """
 
-    def __init__(self, movie_id=None, name=None, description=None, year=None, cover=None, image=None, duration=None, remaining=None, geoblocked=None,
-                 channel=None, legal=None, aired=None, my_list=None):
+    def __init__(self, movie_id=None, name=None, description=None, year=None, cover=None, image=None, duration=None,
+                 remaining=None, geoblocked=None, channel=None, legal=None, aired=None, my_list=None):
         """
         :type movie_id: str
         :type name: str
@@ -151,8 +155,8 @@ class Movie:
 class Program:
     """ Defines a Program """
 
-    def __init__(self, program_id=None, name=None, description=None, cover=None, image=None, seasons=None, geoblocked=None, channel=None, legal=None,
-                 my_list=None):
+    def __init__(self, program_id=None, name=None, description=None, cover=None, image=None, seasons=None,
+                 geoblocked=None, channel=None, legal=None, my_list=None):
         """
         :type program_id: str
         :type name: str
@@ -206,8 +210,9 @@ class Season:
 class Episode:
     """ Defines an Episode """
 
-    def __init__(self, episode_id=None, program_id=None, program_name=None, number=None, season=None, name=None, description=None, cover=None, duration=None,
-                 remaining=None, geoblocked=None, channel=None, legal=None, aired=None, progress=None, watched=False, next_episode=None):
+    def __init__(self, episode_id=None, program_id=None, program_name=None, number=None, season=None, name=None,
+                 description=None, cover=None, duration=None, remaining=None, geoblocked=None, channel=None, legal=None,
+                 aired=None, progress=None, watched=False, next_episode=None):
         """
         :type episode_id: str
         :type program_id: str
@@ -255,24 +260,38 @@ class Episode:
 
 class VtmGo:
     """ VTM GO API """
+    API_ENDPOINT = 'https://api.vtmgo.be'
+
     CONTENT_TYPE_MOVIE = 'MOVIE'
     CONTENT_TYPE_PROGRAM = 'PROGRAM'
     CONTENT_TYPE_EPISODE = 'EPISODE'
-
-    _HEADERS = {
-        'x-app-version': '8',
-        'x-persgroep-mobile-app': 'true',
-        'x-persgroep-os': 'android',
-        'x-persgroep-os-version': '23',
-    }
 
     def __init__(self, kodi):
         """ Initialise object
         :type kodi: resources.lib.kodiwrapper.KodiWrapper
         """
         self._kodi = kodi
-        self._proxies = kodi.get_proxies()
         self._auth = VtmGoAuth(kodi)
+
+        self._session = requests.session()
+        self._session.proxies = kodi.get_proxies()
+        self._authenticate()
+
+    def _authenticate(self):
+        """ Apply authentication headers in the session """
+        self._session.headers = {
+            'x-app-version': '8',
+            'x-persgroep-mobile-app': 'true',
+            'x-persgroep-os': 'android',
+            'x-persgroep-os-version': '23',
+        }
+        token = self._auth.get_token()
+        if token:
+            self._session.headers['x-dpp-jwt'] = token
+
+        profile = self._auth.get_profile()
+        if profile:
+            self._session.headers['x-dpp-profile'] = profile
 
     def _mode(self):
         """ Return the mode that should be used for API calls """
@@ -315,7 +334,7 @@ class VtmGo:
         categories = []
         for cat in recommendations.get('rows', []):
             if cat.get('rowType') not in ['SWIMLANE_DEFAULT']:
-                self._kodi.log('Skipping recommendation {name} with type={type}', name=cat.get('title'), type=cat.get('rowType'))
+                _LOGGER.debug('Skipping recommendation %s with type %s', cat.get('title'), cat.get('rowType'))
                 continue
 
             items = []
@@ -446,7 +465,8 @@ class VtmGo:
             channels.append(LiveChannel(
                 key=item.get('seoKey'),
                 channel_id=item.get('channelId'),
-                logo=self._parse_channel(item.get('channelLogoUrl')),
+                logo=item.get('channelLogoUrl'),
+                background=item.get('channelPosterUrl'),
                 name=item.get('name'),
                 epg=epg,
             ))
@@ -606,7 +626,8 @@ class VtmGo:
             seasons[item_season.get('index')] = Season(
                 number=item_season.get('index'),
                 episodes=episodes,
-                cover=item_season.get('episodes', [{}])[0].get('bigPhotoUrl') if episodes else program.get('bigPhotoUrl'),
+                cover=item_season.get('episodes', [{}])[0].get('bigPhotoUrl')
+                if episodes else program.get('bigPhotoUrl'),
                 geoblocked=program.get('geoBlocked'),
                 channel=channel,
                 legal=program.get('legalIcons'),
@@ -727,7 +748,7 @@ class VtmGo:
         profile = self._kodi.get_setting('profile')
         try:
             return profile.split(':')[1]
-        except IndexError:
+        except (IndexError, AttributeError):
             return None
 
     @staticmethod
@@ -746,122 +767,84 @@ class VtmGo:
     def _get_url(self, url, params=None):
         """ Makes a GET request for the specified URL.
         :type url: str
+        :type params: dict
         :rtype str
         """
-        headers = self._HEADERS
-        token = self._auth.get_token()
-        if token:
-            headers['x-dpp-jwt'] = token
+        try:
+            return self._request('GET', url, params=params)
+        except InvalidLoginException:
+            self._auth.clear_token()
+            self._authenticate()
+            # Retry the same request
+            return self._request('GET', url, params=params)
 
-        profile = self._auth.get_profile()
-        if profile:
-            headers['x-dpp-profile'] = profile
+    def _put_url(self, url, params=None):
+        """ Makes a PUT request for the specified URL.
+        :type url: str
+        :type params: dict
+        :rtype str
+        """
+        try:
+            return self._request('PUT', url, params=params)
+        except InvalidLoginException:
+            self._auth.clear_token()
+            self._authenticate()
+            # Retry the same request
+            return self._request('PUT', url, params=params)
 
-        self._kodi.log('Sending GET {url}...', url=url)
+    def _post_url(self, url, params=None, data=None):
+        """ Makes a POST request for the specified URL.
+        :type url: str
+        :type params: dict
+        :type data: dict
+        :rtype str
+        """
+        try:
+            return self._request('POST', url, params=params, data=data)
+        except InvalidLoginException:
+            self._auth.clear_token()
+            self._authenticate()
+            # Retry the same request
+            return self._request('POST', url, params=params)
 
-        response = requests.session().get('https://lfvp-api.dpgmedia.net' + url, params=params, headers=headers, proxies=self._proxies)
+    def _delete_url(self, url, params=None):
+        """ Makes a DELETE request for the specified URL.
+        :type url: str
+        :type params: dict
+        :rtype str
+        """
+        try:
+            return self._request('DELETE', url, params=params)
+        except InvalidLoginException:
+            self._auth.clear_token()
+            self._authenticate()
+            # Retry the same request
+            return self._request('DELETE', url, params=params)
+
+    def _request(self, method, url, params=None, data=None):
+        """ Makes a request for the specified URL.
+        :type url: str
+        :type params: dict
+        :type data: dict
+        :rtype str
+        """
+        _LOGGER.debug('Sending %s %s...', method, url)
+        response = self._session.request(method,
+                                         self.API_ENDPOINT + url,
+                                         params=params,
+                                         json=data)
 
         # Set encoding to UTF-8 if no charset is indicated in http headers (https://github.com/psf/requests/issues/1604)
         if not response.encoding:
             response.encoding = 'utf-8'
 
-        self._kodi.log('Got response (status={code}): {response}', LOG_DEBUG, code=response.status_code, response=response.text)
+        _LOGGER.debug('Got response (status=%s): %s', response.status_code, response.text)
 
         if response.status_code == 404:
             raise UnavailableException()
 
-        if response.status_code == 426:
-            raise ApiUpdateRequired()
-
-        if response.status_code not in [200, 204]:
-            raise Exception('Error %s.' % response.status_code)
-
-        return response.text
-
-    def _put_url(self, url):
-        """ Makes a PUT request for the specified URL.
-        :type url: str
-        :rtype str
-        """
-        headers = self._HEADERS
-        token = self._auth.get_token()
-        if token:
-            headers['x-dpp-jwt'] = token
-
-        profile = self._auth.get_profile()
-        if profile:
-            headers['x-dpp-profile'] = profile
-
-        self._kodi.log('Sending PUT {url}...', url=url)
-
-        response = requests.session().put('https://api.vtmgo.be' + url, headers=headers, proxies=self._proxies)
-
-        self._kodi.log('Got response: {response}', LOG_DEBUG, response=response.text)
-
-        if response.status_code == 404:
-            raise UnavailableException()
-
-        if response.status_code == 426:
-            raise ApiUpdateRequired()
-
-        if response.status_code not in [200, 204]:
-            raise Exception('Error %s.' % response.status_code)
-
-        return response.text
-
-    def _post_url(self, url):
-        """ Makes a POST request for the specified URL.
-        :type url: str
-        :rtype str
-        """
-        headers = self._HEADERS
-        token = self._auth.get_token()
-        if token:
-            headers['x-dpp-jwt'] = token
-
-        profile = self._auth.get_profile()
-        if profile:
-            headers['x-dpp-profile'] = profile
-
-        self._kodi.log('Sending POST {url}...', url=url)
-
-        response = requests.session().post('https://api.vtmgo.be' + url, headers=headers, proxies=self._proxies)
-
-        self._kodi.log('Got response: {response}', LOG_DEBUG, response=response.text)
-
-        if response.status_code == 404:
-            raise UnavailableException()
-
-        if response.status_code == 426:
-            raise ApiUpdateRequired()
-
-        if response.status_code not in [200, 204]:
-            raise Exception('Error %s.' % response.status_code)
-
-        return response.text
-
-    def _delete_url(self, url):
-        """ Makes a DELETE request for the specified URL.
-        :type url: str
-        :rtype str
-        """
-        headers = self._HEADERS
-        token = self._auth.get_token()
-        if token:
-            headers['x-dpp-jwt'] = token
-
-        profile = self._auth.get_profile()
-        if profile:
-            headers['x-dpp-profile'] = profile
-
-        self._kodi.log('Sending DELETE {url}...', url=url)
-
-        response = requests.session().delete('https://api.vtmgo.be' + url, headers=headers, proxies=self._proxies)
-
-        self._kodi.log('Got response: {response}', LOG_DEBUG, response=response.text)
-
-        if response.status_code == 404:
-            raise UnavailableException()
+        if response.status_code == 401:
+            raise InvalidLoginException()
 
         if response.status_code == 426:
             raise ApiUpdateRequired()

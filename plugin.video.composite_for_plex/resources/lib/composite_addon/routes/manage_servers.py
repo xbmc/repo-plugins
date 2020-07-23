@@ -35,6 +35,8 @@ def run(context):
 class ServerManager:  # pylint: disable=too-many-instance-attributes, too-few-public-methods
 
     def __init__(self, context):
+        self._dialog = xbmcgui.Dialog()
+
         self.context = context
         self.context.plex_network = plex.Plex(context.settings, load=True)
 
@@ -57,7 +59,7 @@ class ServerManager:  # pylint: disable=too-many-instance-attributes, too-few-pu
         server_labels = server_data.get('labels', [])
         server_test_results = server_data.get('test_results', [])
 
-        chosen_server = xbmcgui.Dialog().select(i18n('Manage Servers'), server_labels)
+        chosen_server = self._dialog.select(i18n('Manage Servers'), server_labels)
         if chosen_server < 0:
             self._refresh()
             return
@@ -68,7 +70,7 @@ class ServerManager:  # pylint: disable=too-many-instance-attributes, too-few-pu
         self.test_results = server_test_results[chosen_server]
 
         management_choices = self._management_choices()
-        management_choice = xbmcgui.Dialog().select(i18n('Manage Servers'), management_choices)
+        management_choice = self._dialog.select(i18n('Manage Servers'), management_choices)
         if management_choice < 0:
             self._refresh()
             return
@@ -150,7 +152,7 @@ class ServerManager:  # pylint: disable=too-many-instance-attributes, too-few-pu
         for url in self.access_urls:
             append_choice(url)
 
-        choice = xbmcgui.Dialog().select(i18n('Custom access urls'), choices)
+        choice = self._dialog.select(i18n('Custom access urls'), choices)
         if choice < 0:
             self._refresh()
             return
@@ -183,7 +185,7 @@ class ServerManager:  # pylint: disable=too-many-instance-attributes, too-few-pu
             return
 
     def _modify_custom_access_url(self, url_index):
-        choice = xbmcgui.Dialog().yesno(
+        choice = self._dialog.yesno(
             i18n('Custom access urls'),
             self.access_urls[url_index],
             nolabel=i18n('Delete'),
@@ -204,7 +206,7 @@ class ServerManager:  # pylint: disable=too-many-instance-attributes, too-few-pu
             append_address('[COLOR %s]%s://%s/[/COLOR]' %
                            ('lightgreen' if address[3] else 'pink', address[1], address[2]))
 
-        xbmcgui.Dialog().select(i18n('Connection Test Results'), addresses)
+        self._dialog.select(i18n('Connection Test Results'), addresses)
 
     @staticmethod
     def _validate_url(url):

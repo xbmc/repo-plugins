@@ -222,6 +222,9 @@ def get_playback_url_and_session(server, url, streams, transcode, transcode_prof
 
 
 def is_transcode_required(context, stream_details, default=False):
+    if context.settings.always_transcode():
+        return True
+
     codec = stream_details[0].get('codec')
     resolution = stream_details[0].get('videoResolution')
     try:

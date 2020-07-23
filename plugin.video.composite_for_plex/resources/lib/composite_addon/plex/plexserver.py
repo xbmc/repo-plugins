@@ -613,48 +613,52 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
         self.section_list = list(map(plex_section, self.processed_xml('/library/sections')))
 
     def get_recently_added(self, section=-1, start=0, size=0, hide_watched=True):
-
-        if hide_watched:
-            arguments = '?unwatched=1'
-        else:
-            arguments = '?unwatched=0'
+        arguments = {
+            'unwatched': 1 if hide_watched else 0,
+        }
 
         if section < 0:
-            return self.processed_xml('/library/recentlyAdded%s' % arguments)
+            url = '?'.join(['/library/recentlyAdded', urlencode(arguments)])
+            return self.processed_xml(self._update_path(url))
 
         if size > 0:
-            arguments = '%s&X-Plex-Container-Start=%s&X-Plex-Container-Size=%s' % \
-                        (arguments, start, size)
+            arguments.update({
+                'X-Plex-Container-Start': start,
+                'X-Plex-Container-Size': size,
+            })
 
-        return self.processed_xml('/library/sections/%s/recentlyAdded%s' %
-                                  (section, arguments))
+        url = '?'.join(['/library/sections/%s/recentlyAdded' % section, urlencode(arguments)])
+        return self.processed_xml(self._update_path(url))
 
     def get_ondeck(self, section=-1, start=0, size=0):
-
-        arguments = ''
+        arguments = {}
 
         if section < 0:
-            return self.processed_xml('/library/onDeck%s' % arguments)
+            return self.processed_xml(self._update_path('/library/onDeck'))
 
         if size > 0:
-            arguments = '%s?X-Plex-Container-Start=%s&X-Plex-Container-Size=%s' % \
-                        (arguments, start, size)
+            arguments.update({
+                'X-Plex-Container-Start': start,
+                'X-Plex-Container-Size': size,
+            })
 
-        return self.processed_xml('/library/sections/%s/onDeck%s' % (section, arguments))
+        url = '?'.join(['/library/sections/%s/onDeck' % section, urlencode(arguments)])
+        return self.processed_xml(self._update_path(url))
 
     def get_recently_viewed_shows(self, section=-1, start=0, size=0):
-
-        arguments = ''
+        arguments = {}
 
         if section < 0:
-            return self.processed_xml('/library/recentlyViewedShows%s' % arguments)
+            return self.processed_xml('/library/recentlyViewedShows')
 
         if size > 0:
-            arguments = '%s?X-Plex-Container-Start=%s&X-Plex-Container-Size=%s' % \
-                        (arguments, start, size)
+            arguments.update({
+                'X-Plex-Container-Start': start,
+                'X-Plex-Container-Size': size,
+            })
 
-        return self.processed_xml('/library/sections/%s/recentlyViewedShows%s' %
-                                  (section, arguments))
+        url = '?'.join(['/library/sections/%s/recentlyViewedShows' % section, urlencode(arguments)])
+        return self.processed_xml(self._update_path(url))
 
     def get_server_recentlyadded(self):
         return self.get_recently_added(section=-1)
@@ -663,7 +667,7 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
         return self.get_ondeck(section=-1)
 
     def get_channel_recentlyviewed(self):
-        return self.processed_xml('/channels/recentlyViewed')
+        return self.processed_xml(self._update_path('/channels/recentlyViewed'))
 
     def process_xml(self, data):
         start_time = time.time()
@@ -686,7 +690,6 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
 
             if url_parts.query:
                 url = '%s?%s' % (url, url_parts.query)
-
         data = self.talk(url)
         tree = self.process_xml(data)
         if tree is not None:
@@ -981,5 +984,13 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
     def _update_path(self, url, options=None):
         if options is None:
             options = {}
+
         location = self.join_url(self.get_url_location(), url)
-        return '?'.join([urlparse(location).path, urlencode(options, True)])
+        parsed_url = urlparse(location)
+        if parsed_url.query:
+            options.update(dict(parse_qsl(parsed_url.query)))
+
+        if options:
+            return '?'.join([parsed_url.path, urlencode(options, True)])
+
+        return parsed_url.path

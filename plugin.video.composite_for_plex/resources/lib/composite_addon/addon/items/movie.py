@@ -13,6 +13,7 @@
 import datetime
 import json
 
+from ..constants import COMBINED_SECTIONS
 from ..constants import CONFIG
 from ..constants import MODES
 from ..containers import GUIItem
@@ -61,6 +62,12 @@ def create_movie_item(context, item, library=False):
         'set': ' / '.join(metadata['collections']),
         'writer': ' / '.join(metadata['writer']),
     }
+
+    prefix_server = (context.params.get('mode') in COMBINED_SECTIONS and
+                     context.settings.prefix_server_in_combined())
+
+    if prefix_server:
+        info_labels['title'] = '%s: %s' % (item.server.get_name(), info_labels['title'])
 
     if item.data.get('primaryExtraKey') is not None:
         info_labels['trailer'] = 'plugin://' + CONFIG['id'] + '/?url=%s%s?mode=%s' % \

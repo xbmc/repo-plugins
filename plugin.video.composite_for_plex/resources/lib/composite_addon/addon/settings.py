@@ -137,6 +137,12 @@ class AddonSettings:  # pylint: disable=too-many-public-methods
     def prefix_server(self):
         return self._get_setting('prefix_server') == '1'
 
+    def prefix_server_in_combined(self):
+        return self._get_setting('prefix_server_sections')
+
+    def recently_added_item_count(self):
+        return int(self._get_setting('ra_sections_items_per_server'))
+
     def flatten_seasons(self):
         return self._get_setting('flatten')
 
@@ -240,6 +246,9 @@ class AddonSettings:  # pylint: disable=too-many-public-methods
             'user_id': self._get_setting('nasuserid'),
             'password': self._get_setting('naspass'),
         }
+
+    def always_transcode(self):
+        return self._get_setting('transcode')
 
     def transcode_hevc(self):
         return self._get_setting('transcode_hevc')

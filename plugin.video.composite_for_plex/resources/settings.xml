@@ -1,128 +1,1099 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="30516"> <!-- Media Sources -->
-        <setting id="devicename" type="text" label="30660" default="Composite"/>
-        <setting id="discovery" type="enum" label="30504" lvalues="30594|30570" default="1"/>
-        <setting id="ipaddress" type="text" label="30500" default="localhost" visible="eq(-1,0)" enable="eq(-1,0)"/>
-        <setting id="port" type="text" label="30530" default="30400" visible="eq(-2,0)" enable="eq(-2,0)"/>
-        <setting id="secureconn" type="bool" label="30610" default="true"/>
-        <setting id="verify_cert" type="bool" label="30647" default="true"/>
-        <setting type="sep"/>
-        <setting id="managemyplex" label="30605" type="action" action="RunScript($ID, managemyplex)" option="close"/>
-        <setting id="selectMaster" label="30526" type="action" action="RunScript($ID, master)"/>
-        <setting id="masterServer" label="30571" type="text" default=""/>
-        <setting id="detected_notification" label="30663" type="bool" default="false"/>
-        <setting id="client_id" type="text" visible="false" option="hidden"/>
-        <setting type="sep"/>
-        <setting id="wolon" type="bool" label="30523" default="false"/>
-        <setting id="wol1" type="text" label="30613" visible="eq(-1,true)" enable="eq(-1,true)" default=""/>
-        <setting id="wol2" type="text" label="30613" visible="eq(-2,true)" enable="eq(-2,true)" default=""/>
-        <setting id="wol3" type="text" label="30613" visible="eq(-3,true)" enable="eq(-3,true)" default=""/>
-        <setting id="wol4" type="text" label="30613" visible="eq(-4,true)" enable="eq(-4,true)" default=""/>
-        <setting id="wol5" type="text" label="30613" visible="eq(-5,true)" enable="eq(-5,true)" default=""/>
-        <setting id="wol6" type="text" label="30613" visible="eq(-6,true)" enable="eq(-6,true)" default=""/>
-        <setting id="wol7" type="text" label="30613" visible="eq(-7,true)" enable="eq(-7,true)" default=""/>
-        <setting id="wol8" type="text" label="30613" visible="eq(-8,true)" enable="eq(-8,true)" default=""/>
-        <setting id="wol9" type="text" label="30613" visible="eq(-9,true)" enable="eq(-9,true)" default=""/>
-        <setting id="wol10" type="text" label="30613" visible="eq(-10,true)" enable="eq(-10,true)" default=""/>
-        <setting id="wol11" type="text" label="30613" visible="eq(-11,true)" enable="eq(-11,true)" default=""/>
-    </category>
-    <category label="30517"> <!-- Playback -->
-        <setting id="streaming" type="enum" label="30501" lvalues="30511|30512|30513|30563" default="0"/>
-        <setting id="streamControl" type="enum" label="30538" lvalues="30536|30567|30539" default="1"/>
-        <setting id="default_forced_subs" type="bool" label="30734" default="true"/>
-        <setting id="forcedvd" type="bool" label="30560" default="false"/>
-        <setting id="nasoverride" type="bool" label="30561" default="false"/>
-        <setting id="nasoverrideip" type="text" label="30562" default="" subsetting="true" visible="eq(-1,true)" enable="eq(-1,true)"/>
-        <setting id="nasuserid" type="text" label="30564" default="" subsetting="true" visible="eq(-2,true)" enable="eq(-2,true)"/>
-        <setting id="naspass" type="text" label="30565" option="hidden" subsetting="true" default="" visible="eq(-3,true)" enable="eq(-3,true)"/>
-        <setting id="nasroot" type="text" label="30566" default="" subsetting="true" visible="eq(-4,true)" enable="eq(-4,true)"/>
-        <setting type="lsep" label="30753"/>
-        <setting id="intro_skipping" type="bool" label="30752" default="true"/>
-        <setting id="lyrics" type="bool" label="30748" default="true"/>
-        <setting id="default_lyrics_format" type="enum" label="30747" lvalues="30749|30750" default="0" subsetting="true" visible="eq(-1,true)" enable="eq(-1,true)"/>
-        <setting type="lsep" label="30721"/>
-        <setting id="transcode" type="bool" label="30507" default="false"/>
-        <setting id="transcode_g8bit" type="bool" label="30659" default="false"/>
-        <setting id="transcode_g1080" type="bool" label="30611" default="false"/>
-        <setting id="transcode_hevc" type="bool" label="30612" default="false"/>
-        <setting type="lsep" label="30641"/>
-        <setting id="transcode_target_quality_0" type="labelenum" label="30540" values="420x420, 320Kbps|576x320, 720Kbps|720x480, 1.5Mbps|1024x768, 2Mbps|1280x720, 3Mbps|1280x720, 4Mbps|1920x1080, 8Mbps|1920x1080, 10Mbps|1920x1080, 12Mbps|1920x1080, 20Mbps|1920x1080, 40Mbps|1920x1080, unlimited"
-                 default="1280x720, 4Mbps"/>
-        <setting id="transcode_target_sub_size_0" label="30568" type="slider" option="int" range="0,325" default="100"/>
-        <setting id="transcode_target_audio_size_0" label="30569" type="slider" option="int" range="0,325" default="0"/>
-        <setting id="transcode_target_enabled_1" label="30640" type="bool" default="false"/>
-        <setting id="transcode_target_quality_1" visible="eq(-1,true)" type="labelenum" label="30540" values="420x420, 320Kbps|576x320, 720Kbps|720x480, 1.5Mbps|1024x768, 2Mbps|1280x720, 3Mbps|1280x720, 4Mbps|1920x1080, 8Mbps|1920x1080, 10Mbps|1920x1080, 12Mbps|1920x1080, 20Mbps|1920x1080, 40Mbps|1920x1080, unlimited"
-                 subsetting="true" default="1280x720, 4Mbps"/>
-        <setting id="transcode_target_sub_size_1" visible="eq(-2,true)" label="30568" type="slider" option="int" range="0,325" default="100" subsetting="true"/>
-        <setting id="transcode_target_audio_size_1" visible="eq(-3,true)" label="30569" type="slider" option="int" range="0,325" default="0" subsetting="true"/>
-        <setting id="transcode_target_enabled_2" label="30640" type="bool" default="false"/>
-        <setting id="transcode_target_quality_2" visible="eq(-1,true)" type="labelenum" label="30540" values="420x420, 320Kbps|576x320, 720Kbps|720x480, 1.5Mbps|1024x768, 2Mbps|1280x720, 3Mbps|1280x720, 4Mbps|1920x1080, 8Mbps|1920x1080, 10Mbps|1920x1080, 12Mbps|1920x1080, 20Mbps|1920x1080, 40Mbps|1920x1080, unlimited"
-                 subsetting="true" default="1280x720, 4Mbps"/>
-        <setting id="transcode_target_sub_size_2" visible="eq(-2,true)" label="30568" type="slider" option="int" range="0,325" default="100" subsetting="true"/>
-        <setting id="transcode_target_audio_size_2" visible="eq(-3,true)" label="30569" type="slider" option="int" range="0,325" default="0" subsetting="true"/>
-    </category>
-    <category label="30520"> <!-- Look and feel -->
-        <setting id="secondary" type="bool" label="30503" default="true"/>
-        <setting id="flatten" type="enum" label="30543" lvalues="30553|30558|30559" default="0"/>
-        <setting id="disable_all_season" type="bool" label="30603" default="false"/>
-        <setting id="ep_sort_method" type="enum" label="30728" lvalues="30730|30729" default="0"/>
-        <setting id="mixed_content_type" type="enum" label="30735" lvalues="30736|30737" default="0"/>
-        <setting type="lsep" label="30714"/>
-        <setting id="prefix_server" type="enum" label="30669" lvalues="30670|30671" default="1"/>
-        <setting id="show_myplex_queue_menu" type="bool" label="30715" default="true"/>
-        <setting id="show_channels_menu" type="bool" label="30716" default="true"/>
-        <setting id="show_plex_online_menu" type="bool" label="30717" default="true"/>
-        <setting id="show_playlists_menu" type="bool" label="30718" default="true"/>
-        <setting id="show_widget_menu" type="bool" label="30693" default="true"/>
-        <setting type="lsep" label="30719"/>
-        <setting id="skipcontextmenus" type="bool" label="30552" default="false"/>
-        <setting id="showdeletecontextmenu" type="bool" label="30683" default="false" enable="eq(-1,false)"/>
-    </category>
-    <category label="30684">
-        <setting id="use_up_next" type="bool" label="30685" default="false" enable="System.HasAddon(service.upnext)"/>
-        <setting id="up_next_settings" label="30686" type="action" action="Addon.OpenSettings(service.upnext)" option="close" enable="eq(-1,true)"/>
-        <setting id="up_next_episode_thumbs" type="bool" label="30691" default="false" enable="eq(-2,true)"/>
-        <setting id="up_next_data_encoding" type="labelenum" label="30727" values="hex|base64" default="hex" enable="eq(-3,true)"/>
-        <setting type="lsep" label="30689"/>
-        <setting id="up_next_install" label="30687" type="action" action="InstallAddon(service.upnext)" option="close" enable="!System.HasAddon(service.upnext)"/>
-    </category>
-    <category label="30707">
-        <setting type="lsep" label="30711"/>
-        <setting id="use_companion_receiver" type="bool" label="30708" default="false"/>
-        <setting id="receiver_name" type="text" label="30660" default="Kodi-Composite" enable="eq(-1,true)"/>
-        <setting id="receiver_port" type="number" label="30709" default="3005" enable="eq(-2,true)"/>
-        <setting type="lsep" label="30710"/>
-        <setting id="web_server_username" type="text" label="30712" default="kodi" enable="eq(-4,true)"/>
-        <setting id="web_server_password" type="text" option="hidden" label="30713" default="" enable="eq(-5,true)"/>
-        <setting id="web_server_port" type="number" label="30709" default="8080" enable="eq(-6,true)"/>
-        <setting id="receiver_uuid" type="text" visible="false" option="hidden"/>
-        <setting id="replacement" type="bool" visible="false" default="false"/>
-    </category>
-    <category label="30522"> <!-- advanced -->
-        <setting id="monitoroff" type="bool" label="30609" default="false"/>
-        <setting type="lsep" label="30720"/>
-        <setting id="fullres_thumbs" type="bool" label="30595" default="true"/>
-        <setting id="fullres_fanart" type="bool" label="30596" default="true"/>
-        <setting id="skipmetadata" type="bool" label="30549" default="false"/>
-        <setting id="skipimages" type="bool" label="30550" default="false"/>
-        <setting id="skipflags" type="bool" label="30551" default="false"/>
-    </category>
-    <category label="30661"> <!-- cache -->
-        <setting id="cache" type="bool" label="30593" default="true" visible="false"/>
-        <setting id="cache_ttl" label="30662" type="slider" option="int" range="60,720" default="60"/>
-        <setting id="data_cache" type="bool" label="30703" default="true"/>
-        <setting id="data_cache_ttl" label="30695" type="slider" option="int" range="1,120" default="15" enable="eq(-1,true)" subsetting="true"/>
-        <setting id="clear_data_cache_refresh" type="bool" label="30696" default="true" enable="eq(-2,true)" subsetting="true"/>
-        <setting id="kodicache" type="bool" label="30604" default="false"/>
-        <setting type="sep"/>
-        <setting id="refresh_data" label="30694" type="action" action="RunScript($ID, delete_refresh)" option="close"/>
-    </category>
-    <category label="30599"> <!-- debug -->
-        <setting id="debug" type="enum" label="30514" lvalues="30599|30600" default="0"/>
-        <setting type="sep"/>
-        <setting id="privacy" type="bool" label="30607" default="true"/>
-        <setting type="sep"/>
-        <setting id="test_skip_intro_dialog" label="30755" type="action" action="RunScript($ID, test_skip_intro_dialog)" option="close"/>
-    </category>
+<?xml version="1.0" ?>
+<settings version="1">
+    <section id="plugin.video.composite_for_plex">
+        <category help="" id="server" label="30516">
+            <group id="1">
+                <setting help="" id="devicename" label="30660" type="string">
+                    <level>0</level>
+                    <default>Composite</default>
+                    <control format="string" type="edit">
+                        <heading>30660</heading>
+                    </control>
+                </setting>
+                <setting help="" id="discovery" label="30504" type="integer">
+                    <level>0</level>
+                    <default>1</default>
+                    <constraints>
+                        <options>
+                            <option label="30594">0</option>
+                            <option label="30570">1</option>
+                        </options>
+                    </constraints>
+                    <control format="string" type="spinner"/>
+                </setting>
+                <setting help="" id="ipaddress" label="30500" type="string">
+                    <level>0</level>
+                    <default>localhost</default>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="discovery">0</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="discovery">0</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30500</heading>
+                    </control>
+                </setting>
+                <setting help="" id="port" label="30530" type="string">
+                    <level>0</level>
+                    <default>30400</default>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="discovery">0</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="discovery">0</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30530</heading>
+                    </control>
+                </setting>
+                <setting help="" id="secureconn" label="30610" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="verify_cert" label="30647" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+            <group id="2">
+                <setting help="" id="managemyplex" label="30605" type="action">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.composite_for_plex, managemyplex)</data>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control format="action" type="button">
+                        <close>true</close>
+                    </control>
+                </setting>
+                <setting help="" id="selectMaster" label="30526" type="action">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.composite_for_plex, master)</data>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control format="action" type="button"/>
+                </setting>
+                <setting help="" id="masterServer" label="30571" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control format="string" type="edit">
+                        <heading>30571</heading>
+                    </control>
+                </setting>
+                <setting help="" id="detected_notification" label="30663" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="client_id" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition name="InfoBool" on="property">false</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading/>
+                        <hidden>true</hidden>
+                    </control>
+                </setting>
+            </group>
+            <group id="3">
+                <setting help="" id="wolon" label="30523" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="wol1" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+                <setting help="" id="wol2" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+                <setting help="" id="wol3" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+                <setting help="" id="wol4" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+                <setting help="" id="wol5" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+                <setting help="" id="wol6" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+                <setting help="" id="wol7" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+                <setting help="" id="wol8" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+                <setting help="" id="wol9" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+                <setting help="" id="wol10" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+                <setting help="" id="wol11" label="30613" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="wolon">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30613</heading>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category help="" id="playback" label="30517">
+            <group id="1">
+                <setting help="" id="streaming" label="30501" type="integer">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30511">0</option>
+                            <option label="30512">1</option>
+                            <option label="30513">2</option>
+                            <option label="30563">3</option>
+                        </options>
+                    </constraints>
+                    <control format="string" type="spinner"/>
+                </setting>
+                <setting help="" id="streamControl" label="30538" type="integer">
+                    <level>0</level>
+                    <default>1</default>
+                    <constraints>
+                        <options>
+                            <option label="30536">0</option>
+                            <option label="30567">1</option>
+                            <option label="30539">2</option>
+                        </options>
+                    </constraints>
+                    <control format="string" type="spinner"/>
+                </setting>
+                <setting help="" id="default_forced_subs" label="30734" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="forcedvd" label="30560" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="nasoverride" label="30561" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="nasoverrideip" label="30562" parent="nasoverride" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="nasoverride">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="nasoverride">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30562</heading>
+                    </control>
+                </setting>
+                <setting help="" id="nasuserid" label="30564" parent="nasoverrideip" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="nasoverride">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="nasoverride">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30564</heading>
+                    </control>
+                </setting>
+                <setting help="" id="naspass" label="30565" parent="nasuserid" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="nasoverride">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="nasoverride">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30565</heading>
+                        <hidden>true</hidden>
+                    </control>
+                </setting>
+                <setting help="" id="nasroot" label="30566" parent="naspass" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="nasoverride">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="nasoverride">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30566</heading>
+                    </control>
+                </setting>
+            </group>
+            <group id="2" label="30753">
+                <setting help="" id="intro_skipping" label="30752" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="lyrics" label="30748" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="default_lyrics_format" label="30747" parent="lyrics" type="integer">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30749">0</option>
+                            <option label="30750">1</option>
+                        </options>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="lyrics">true</condition>
+                        </dependency>
+                        <dependency type="visible">
+                            <condition operator="is" setting="lyrics">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="spinner"/>
+                </setting>
+            </group>
+            <group id="3" label="30721">
+                <setting help="" id="transcode" label="30507" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="transcode_g8bit" label="30659" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="transcode_g1080" label="30611" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="transcode_hevc" label="30612" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+            <group id="4" label="30641">
+                <setting help="" id="transcode_target_quality_0" label="30540" type="string">
+                    <level>0</level>
+                    <default>1280x720, 4Mbps</default>
+                    <constraints>
+                        <options>
+                            <option label="420x420, 320Kbps">420x420, 320Kbps</option>
+                            <option label="576x320, 720Kbps">576x320, 720Kbps</option>
+                            <option label="720x480, 1.5Mbps">720x480, 1.5Mbps</option>
+                            <option label="1024x768, 2Mbps">1024x768, 2Mbps</option>
+                            <option label="1280x720, 3Mbps">1280x720, 3Mbps</option>
+                            <option label="1280x720, 4Mbps">1280x720, 4Mbps</option>
+                            <option label="1920x1080, 8Mbps">1920x1080, 8Mbps</option>
+                            <option label="1920x1080, 10Mbps">1920x1080, 10Mbps</option>
+                            <option label="1920x1080, 12Mbps">1920x1080, 12Mbps</option>
+                            <option label="1920x1080, 20Mbps">1920x1080, 20Mbps</option>
+                            <option label="1920x1080, 40Mbps">1920x1080, 40Mbps</option>
+                            <option label="1920x1080, unlimited">1920x1080, unlimited</option>
+                        </options>
+                    </constraints>
+                    <control format="string" type="spinner"/>
+                </setting>
+                <setting help="" id="transcode_target_sub_size_0" label="30568" type="integer">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <maximum>325</maximum>
+                    </constraints>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting help="" id="transcode_target_audio_size_0" label="30569" type="integer">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <maximum>325</maximum>
+                    </constraints>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting help="" id="transcode_target_enabled_1" label="30640" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="transcode_target_quality_1" label="30540" parent="transcode_target_enabled_1" type="string">
+                    <level>0</level>
+                    <default>1280x720, 4Mbps</default>
+                    <constraints>
+                        <options>
+                            <option label="420x420, 320Kbps">420x420, 320Kbps</option>
+                            <option label="576x320, 720Kbps">576x320, 720Kbps</option>
+                            <option label="720x480, 1.5Mbps">720x480, 1.5Mbps</option>
+                            <option label="1024x768, 2Mbps">1024x768, 2Mbps</option>
+                            <option label="1280x720, 3Mbps">1280x720, 3Mbps</option>
+                            <option label="1280x720, 4Mbps">1280x720, 4Mbps</option>
+                            <option label="1920x1080, 8Mbps">1920x1080, 8Mbps</option>
+                            <option label="1920x1080, 10Mbps">1920x1080, 10Mbps</option>
+                            <option label="1920x1080, 12Mbps">1920x1080, 12Mbps</option>
+                            <option label="1920x1080, 20Mbps">1920x1080, 20Mbps</option>
+                            <option label="1920x1080, 40Mbps">1920x1080, 40Mbps</option>
+                            <option label="1920x1080, unlimited">1920x1080, unlimited</option>
+                        </options>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition operator="is" setting="transcode_target_enabled_1">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="spinner"/>
+                </setting>
+                <setting help="" id="transcode_target_sub_size_1" label="30568" parent="transcode_target_quality_1" type="integer">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <maximum>325</maximum>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition operator="is" setting="transcode_target_enabled_1">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting help="" id="transcode_target_audio_size_1" label="30569" parent="transcode_target_sub_size_1" type="integer">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <maximum>325</maximum>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition operator="is" setting="transcode_target_enabled_1">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting help="" id="transcode_target_enabled_2" label="30640" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="transcode_target_quality_2" label="30540" parent="transcode_target_enabled_2" type="string">
+                    <level>0</level>
+                    <default>1280x720, 4Mbps</default>
+                    <constraints>
+                        <options>
+                            <option label="420x420, 320Kbps">420x420, 320Kbps</option>
+                            <option label="576x320, 720Kbps">576x320, 720Kbps</option>
+                            <option label="720x480, 1.5Mbps">720x480, 1.5Mbps</option>
+                            <option label="1024x768, 2Mbps">1024x768, 2Mbps</option>
+                            <option label="1280x720, 3Mbps">1280x720, 3Mbps</option>
+                            <option label="1280x720, 4Mbps">1280x720, 4Mbps</option>
+                            <option label="1920x1080, 8Mbps">1920x1080, 8Mbps</option>
+                            <option label="1920x1080, 10Mbps">1920x1080, 10Mbps</option>
+                            <option label="1920x1080, 12Mbps">1920x1080, 12Mbps</option>
+                            <option label="1920x1080, 20Mbps">1920x1080, 20Mbps</option>
+                            <option label="1920x1080, 40Mbps">1920x1080, 40Mbps</option>
+                            <option label="1920x1080, unlimited">1920x1080, unlimited</option>
+                        </options>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition operator="is" setting="transcode_target_enabled_2">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="spinner"/>
+                </setting>
+                <setting help="" id="transcode_target_sub_size_2" label="30568" parent="transcode_target_quality_2" type="integer">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <maximum>325</maximum>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition operator="is" setting="transcode_target_enabled_2">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting help="" id="transcode_target_audio_size_2" label="30569" parent="transcode_target_sub_size_2" type="integer">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <maximum>325</maximum>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition operator="is" setting="transcode_target_enabled_2">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category help="" id="look and feel" label="30520">
+            <group id="1">
+                <setting help="" id="secondary" label="30503" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="flatten" label="30543" type="integer">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30553">0</option>
+                            <option label="30558">1</option>
+                            <option label="30559">2</option>
+                        </options>
+                    </constraints>
+                    <control format="string" type="spinner"/>
+                </setting>
+                <setting help="" id="disable_all_season" label="30603" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="ep_sort_method" label="30728" type="integer">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30730">0</option>
+                            <option label="30729">1</option>
+                        </options>
+                    </constraints>
+                    <control format="string" type="spinner"/>
+                </setting>
+                <setting help="" id="mixed_content_type" label="30735" type="integer">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30736">0</option>
+                            <option label="30737">1</option>
+                        </options>
+                    </constraints>
+                    <control format="string" type="spinner"/>
+                </setting>
+            </group>
+            <group id="2" label="30714">
+                <setting help="" id="prefix_server" label="30669" type="integer">
+                    <level>0</level>
+                    <default>1</default>
+                    <constraints>
+                        <options>
+                            <option label="30670">0</option>
+                            <option label="30671">1</option>
+                        </options>
+                    </constraints>
+                    <control format="string" type="spinner"/>
+                </setting>
+                <setting help="" id="prefix_server_sections" label="30762" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="ra_sections_items_per_server" label="30763" type="integer">
+                    <level>0</level>
+                    <default>10</default>
+                    <constraints>
+                        <minimum>5</minimum>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting help="" id="show_myplex_queue_menu" label="30715" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="show_channels_menu" label="30716" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="show_plex_online_menu" label="30717" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="show_playlists_menu" label="30718" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="show_widget_menu" label="30693" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+            <group id="3" label="30719">
+                <setting help="" id="skipcontextmenus" label="30552" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="showdeletecontextmenu" label="30683" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="skipcontextmenus">false</condition>
+                        </dependency>
+                    </dependencies>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+        <category help="" id="up next" label="30684">
+            <group id="1">
+                <setting help="" id="use_up_next" label="30685" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition name="InfoBool" on="property">System.HasAddon(service.upnext)</condition>
+                        </dependency>
+                    </dependencies>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="up_next_settings" label="30686" type="action">
+                    <level>0</level>
+                    <data>Addon.OpenSettings(service.upnext)</data>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="use_up_next">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="action" type="button">
+                        <close>true</close>
+                    </control>
+                </setting>
+                <setting help="" id="up_next_episode_thumbs" label="30691" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="use_up_next">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="up_next_data_encoding" label="30727" type="string">
+                    <level>0</level>
+                    <default>hex</default>
+                    <constraints>
+                        <options>
+                            <option label="hex">hex</option>
+                            <option label="base64">base64</option>
+                        </options>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="use_up_next">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="spinner"/>
+                </setting>
+            </group>
+            <group id="2" label="30689">
+                <setting help="" id="up_next_install" label="30687" type="action">
+                    <level>0</level>
+                    <data>InstallAddon(service.upnext)</data>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition name="InfoBool" on="property">!System.HasAddon(service.upnext)</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="action" type="button">
+                        <close>true</close>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category help="" id="companion receiver" label="30707">
+            <group id="1" label="30711">
+                <setting help="" id="use_companion_receiver" label="30708" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="receiver_name" label="30660" type="string">
+                    <level>0</level>
+                    <default>Kodi-Composite</default>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="use_companion_receiver">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30660</heading>
+                    </control>
+                </setting>
+                <setting help="" id="receiver_port" label="30709" type="integer">
+                    <level>0</level>
+                    <default>3005</default>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="use_companion_receiver">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="integer" type="edit">
+                        <heading>30709</heading>
+                    </control>
+                </setting>
+            </group>
+            <group id="2" label="30710">
+                <setting help="" id="web_server_username" label="30712" type="string">
+                    <level>0</level>
+                    <default>kodi</default>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="use_companion_receiver">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30712</heading>
+                    </control>
+                </setting>
+                <setting help="" id="web_server_password" label="30713" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="use_companion_receiver">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading>30713</heading>
+                        <hidden>true</hidden>
+                    </control>
+                </setting>
+                <setting help="" id="web_server_port" label="30709" type="integer">
+                    <level>0</level>
+                    <default>8080</default>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="use_companion_receiver">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="integer" type="edit">
+                        <heading>30709</heading>
+                    </control>
+                </setting>
+                <setting help="" id="receiver_uuid" type="string">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition name="InfoBool" on="property">false</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="string" type="edit">
+                        <heading/>
+                        <hidden>true</hidden>
+                    </control>
+                </setting>
+                <setting help="" id="replacement" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition name="InfoBool" on="property">false</condition>
+                        </dependency>
+                    </dependencies>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+        <category help="" id="advanced" label="30522">
+            <group id="1">
+                <setting help="" id="monitoroff" label="30609" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+            <group id="2" label="30720">
+                <setting help="" id="fullres_thumbs" label="30595" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="fullres_fanart" label="30596" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="skipmetadata" label="30549" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="skipimages" label="30550" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="skipflags" label="30551" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+        <category help="" id="cache" label="30661">
+            <group id="1">
+                <setting help="" id="cache" label="30593" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition name="InfoBool" on="property">false</condition>
+                        </dependency>
+                    </dependencies>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="cache_ttl" label="30662" type="integer">
+                    <level>0</level>
+                    <default>60</default>
+                    <constraints>
+                        <minimum>60</minimum>
+                        <maximum>720</maximum>
+                    </constraints>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting help="" id="data_cache" label="30703" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="data_cache_ttl" label="30695" parent="data_cache" type="integer">
+                    <level>0</level>
+                    <default>15</default>
+                    <constraints>
+                        <minimum>1</minimum>
+                        <maximum>120</maximum>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="data_cache">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting help="" id="clear_data_cache_refresh" label="30696" parent="data_cache_ttl" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <dependencies>
+                        <dependency type="enable">
+                            <condition operator="is" setting="data_cache">true</condition>
+                        </dependency>
+                    </dependencies>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="kodicache" label="30604" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+            <group id="2">
+                <setting help="" id="refresh_data" label="30694" type="action">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.composite_for_plex, delete_refresh)</data>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control format="action" type="button">
+                        <close>true</close>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category help="" id="debug" label="30599">
+            <group id="1">
+                <setting help="" id="debug" label="30514" type="integer">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30599">0</option>
+                            <option label="30600">1</option>
+                        </options>
+                    </constraints>
+                    <control format="string" type="spinner"/>
+                </setting>
+            </group>
+            <group id="2">
+                <setting help="" id="privacy" label="30607" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+            <group id="3">
+                <setting help="" id="test_skip_intro_dialog" label="30755" type="action">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.composite_for_plex, test_skip_intro_dialog)</data>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control format="action" type="button">
+                        <close>true</close>
+                    </control>
+                </setting>
+            </group>
+        </category>
+    </section>
 </settings>

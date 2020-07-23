@@ -26,17 +26,7 @@ LOG = Logger()
 
 
 def process_movies(context, url, tree=None):
-    xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_UNSORTED)
-    xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE)
-    xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_DATEADDED)
-    xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_DATE)
-    xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_RATING)
-    xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-    xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_RUNTIME)
-    xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_MPAA_RATING)
-
     # get the server name from the URL, which was passed via the on screen listing..
-
     server = context.plex_network.get_server_from_url(url)
 
     tree = get_xml(context, url, tree)
@@ -71,6 +61,17 @@ def process_movies(context, url, tree=None):
             elif majority == 'track':
                 content_type = 'songs'
 
+        if content_type == 'movies' and '/collection/' in url:
+            xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+        xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE)
+        xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_DATEADDED)
+        xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_DATE)
+        xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_RATING)
+        if content_type != 'movies' and '/collection/' not in url:
+            xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+        xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_VIDEO_RUNTIME)
+        xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_MPAA_RATING)
         xbmcplugin.setContent(get_handle(), content_type)
         xbmcplugin.addDirectoryItems(get_handle(), items, len(items))
 

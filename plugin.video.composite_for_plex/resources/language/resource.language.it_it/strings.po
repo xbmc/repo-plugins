@@ -1327,3 +1327,31 @@ msgstr ""
 msgctxt "#30756"
 msgid "All %s"
 msgstr ""
+
+msgctxt "#30757"
+msgid "All Servers: TV Shows On Deck"
+msgstr ""
+
+msgctxt "#30758"
+msgid "All Servers: Movies On Deck"
+msgstr ""
+
+msgctxt "#30759"
+msgid "Recently Added Episodes"
+msgstr ""
+
+msgctxt "#30760"
+msgid "All Servers: Recently Added Episodes"
+msgstr ""
+
+msgctxt "#30761"
+msgid "All Servers: Recently Added Movies"
+msgstr ""
+
+msgctxt "#30762"
+msgid "Server name prefix on combined sections"
+msgstr ""
+
+msgctxt "#30763"
+msgid "Recently Added item count (per server section)"
+msgstr ""

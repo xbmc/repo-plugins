@@ -21,6 +21,7 @@ from ..addon.strings import i18n
 from ..plex import plex
 
 LOG = Logger()
+DIALOG = xbmcgui.Dialog()
 
 
 def run(context):
@@ -63,17 +64,17 @@ def run(context):
             success = leaf_added > 0 and leaf_added == leaf_requested
 
         if success:
-            xbmcgui.Dialog().notification(CONFIG['name'], i18n('Added to the playlist') %
-                                          (item_title, selected.get('title')), item_image)
+            DIALOG.notification(CONFIG['name'], i18n('Added to the playlist') %
+                                (item_title, selected.get('title')), item_image)
             DATA_CACHE.delete_cache(True)
             return
 
-        xbmcgui.Dialog().notification(CONFIG['name'], i18n('is already in the playlist') %
-                                      (item_title, selected.get('title')), item_image)
+        DIALOG.notification(CONFIG['name'], i18n('is already in the playlist') %
+                            (item_title, selected.get('title')), item_image)
         return
 
-    xbmcgui.Dialog().notification(CONFIG['name'], i18n('Failed to add to the playlist') %
-                                  (item_title, selected.get('title')), item_image)
+    DIALOG.notification(CONFIG['name'], i18n('Failed to add to the playlist') %
+                        (item_title, selected.get('title')), item_image)
 
 
 def playlist_user_select(server):
@@ -114,11 +115,11 @@ def playlist_user_select(server):
             })
             append_item(list_item)
 
-        return_value = xbmcgui.Dialog().select(i18n('Select playlist'), select_items,
-                                               useDetails=True)
+        return_value = DIALOG.select(i18n('Select playlist'), select_items,
+                                     useDetails=True)
     else:
         select_items = list(map(lambda x: x.get('title'), playlists))
-        return_value = xbmcgui.Dialog().select(i18n('Select playlist'), select_items)
+        return_value = DIALOG.select(i18n('Select playlist'), select_items)
 
     if return_value == -1:
         LOG.debug('Dialog cancelled')

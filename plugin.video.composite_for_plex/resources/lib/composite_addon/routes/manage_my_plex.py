@@ -21,23 +21,24 @@ LOG = Logger()
 
 
 def run(context):
+    _dialog = xbmcgui.Dialog()
     context.plex_network = plex.Plex(context.settings, load=False)
 
     has_access = True
     if not context.plex_network.is_myplex_signedin():
         has_access = False
-        result = xbmcgui.Dialog().yesno(i18n('Manage myPlex'),
-                                        i18n('You are not currently logged into myPlex. '
-                                             'Continue to sign in, or cancel to return'))
+        result = _dialog.yesno(i18n('Manage myPlex'),
+                               i18n('You are not currently logged into myPlex. '
+                                    'Continue to sign in, or cancel to return'))
         if result:
             has_access = plexsignin.sign_in_to_plex(context, refresh=False)
             context.plex_network = plex.Plex(context.settings, load=False)
 
     elif not context.plex_network.is_admin():
         has_access = False
-        _ = xbmcgui.Dialog().ok(i18n('Manage myPlex'),
-                                i18n('To access these screens you must be logged in as '
-                                     'an admin user. Switch user and try again'))
+        _ = _dialog.ok(i18n('Manage myPlex'),
+                       i18n('To access these screens you must be logged in as '
+                            'an admin user. Switch user and try again'))
 
     if has_access:
         plexsignin.manage_plex(context)

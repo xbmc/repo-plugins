@@ -12,6 +12,7 @@
 
 import json
 
+from ..constants import COMBINED_SECTIONS
 from ..constants import MODES
 from ..containers import GUIItem
 from ..logger import Logger
@@ -64,12 +65,18 @@ def create_episode_item(context, item, library=False):
     prefix_tvshow = (item.tree.get('parentIndex') != '1' and
                      context.params.get('mode') == '0')
 
+    prefix_server = (context.params.get('mode') in COMBINED_SECTIONS and
+                     context.settings.prefix_server_in_combined())
+
     if prefix_sxee:
         info_labels['title'] = '%sx%s %s' % (info_labels['season'],
                                              str(info_labels['episode']).zfill(2),
                                              info_labels['title'])
         if prefix_tvshow:
             info_labels['title'] = '%s - %s' % (info_labels['tvshowtitle'], info_labels['title'])
+
+    if prefix_server:
+        info_labels['title'] = '%s: %s' % (item.server.get_name(), info_labels['title'])
 
     # Gather some data
     view_offset = item.data.get('viewOffset', 0)

@@ -338,6 +338,30 @@ def run(start_time):  # pylint: disable=too-many-locals, too-many-statements, to
         search_all.run(context)
         return _finished(start_time)
 
+    if mode == MODES.TVSHOWS_ON_DECK:
+        from .routes import on_deck_all_servers  # pylint: disable=import-outside-toplevel
+        context.params['content_type'] = 'tvshows'
+        on_deck_all_servers.run(context)
+        return _finished(start_time)
+
+    if mode == MODES.MOVIES_ON_DECK:
+        from .routes import on_deck_all_servers  # pylint: disable=import-outside-toplevel
+        context.params['content_type'] = 'movies'
+        on_deck_all_servers.run(context)
+        return _finished(start_time)
+
+    if mode == MODES.EPISODES_RECENTLY_ADDED:
+        from .routes import recently_added_all_servers  # pylint: disable=import-outside-toplevel
+        context.params['content_type'] = 'tvshows'
+        recently_added_all_servers.run(context)
+        return _finished(start_time)
+
+    if mode == MODES.MOVIES_RECENTLY_ADDED:
+        from .routes import recently_added_all_servers  # pylint: disable=import-outside-toplevel
+        context.params['content_type'] = 'movies'
+        recently_added_all_servers.run(context)
+        return _finished(start_time)
+
     return _finished(start_time)
 
 

@@ -158,11 +158,14 @@ class ContextMenu:
             )
 
     def _add_update_library(self):
-        section = self.parsed_url.path.split('/')[3]
-        self._context_menu.append(
-            (i18n('Update library'), 'RunScript(' + CONFIG['id'] + ', %s, %s, %s)' %
-             (COMMANDS.UPDATE, self.server.get_uuid(), section))
-        )
+        try:
+            section = self.parsed_url.path.split('/')[3]
+            self._context_menu.append(
+                (i18n('Update library'), 'RunScript(' + CONFIG['id'] + ', %s, %s, %s)' %
+                 (COMMANDS.UPDATE, self.server.get_uuid(), section))
+            )
+        except IndexError:
+            pass
 
     def _add_refresh(self):
         self._context_menu.append(

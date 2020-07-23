@@ -24,6 +24,7 @@ LOG = Logger()
 
 
 def run(context):
+    _dialog = xbmcgui.Dialog()
     context.plex_network = plex.Plex(context.settings, load=True)
 
     server_uuid = get_argv()[2]
@@ -45,18 +46,18 @@ def run(context):
         server.join_url(server.get_url_location(), item.get('thumb'))
     )
 
-    result = xbmcgui.Dialog().yesno(i18n('Confirm playlist item delete?'),
-                                    i18n('Delete from the playlist?') %
-                                    (item_title, playlist_title))
+    result = _dialog.yesno(i18n('Confirm playlist item delete?'),
+                           i18n('Delete from the playlist?') %
+                           (item_title, playlist_title))
     if result:
         LOG.debug('Deleting....')
         response = server.delete_playlist_item(playlist_item_id, path)
         if response and not response.get('status'):
-            xbmcgui.Dialog().notification(CONFIG['name'], i18n('has been removed the playlist') %
-                                          (item_title, playlist_title), item_image)
+            _dialog.notification(CONFIG['name'], i18n('has been removed the playlist') %
+                                 (item_title, playlist_title), item_image)
             DATA_CACHE.delete_cache(True)
             xbmc.executebuiltin('Container.Refresh')
             return
 
-    xbmcgui.Dialog().notification(CONFIG['name'], i18n('Unable to remove from the playlist') %
-                                  (item_title, playlist_title), item_image)
+    _dialog.notification(CONFIG['name'], i18n('Unable to remove from the playlist') %
+                         (item_title, playlist_title), item_image)

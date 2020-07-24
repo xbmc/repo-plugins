@@ -24,6 +24,7 @@ LOG = Logger()
 
 
 def run(context, url, name):
+    _dialog = xbmcgui.Dialog()
     context.plex_network = plex.Plex(context.settings, load=True)
 
     tree = get_xml(context, url)
@@ -44,7 +45,7 @@ def run(context, url, name):
         if operations[idx].lower() == 'install':
             LOG.debug('Not installed.  Print dialog')
             result = \
-                xbmcgui.Dialog().yesno(i18n('Plex Online'), i18n('About to install') + ' ' + name)
+                _dialog.yesno(i18n('Plex Online'), i18n('About to install') + ' ' + name)
 
             if result:
                 LOG.debug('Installing....')
@@ -53,8 +54,8 @@ def run(context, url, name):
             return
 
     # Else continue to a selection dialog box
-    result = xbmcgui.Dialog().select(i18n('This plugin is already installed'),
-                                     list(operations.values()))
+    result = _dialog.select(i18n('This plugin is already installed'),
+                            list(operations.values()))
 
     if result == -1:
         LOG.debug('No option selected, cancelling')

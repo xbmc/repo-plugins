@@ -19,6 +19,7 @@ from ..addon.logger import Logger
 from ..addon.strings import i18n
 
 LOG = Logger('plex_signin')
+DIALOG = xbmcgui.Dialog()
 MEDIA_PATH = xbmc.translatePath(CONFIG['media_path'] + 'dialogs/')
 
 
@@ -438,7 +439,7 @@ def sign_in_to_plex(context, refresh=True):
         message = \
             i18n('From your computer, go to [B]%s[/B] and enter the following code: [B]%s[/B]') % \
             ('https://www.plex.tv/link/', ' '.join(response.get('code', [])))
-        xbmcgui.Dialog().ok(i18n('myPlex Login'), message)
+        DIALOG.ok(i18n('myPlex Login'), message)
         xbmc.sleep(500)
         result = context.plex_network.check_signin_status(response.get('id', ''))
         if result:
@@ -457,13 +458,13 @@ def sign_out(context, refresh=True):
     can_signout = True
     if not context.plex_network.is_admin():
         can_signout = False
-        _ = xbmcgui.Dialog().ok(i18n('Sign Out'),
-                                i18n('To sign out you must be logged in as an admin user. '
-                                     'Switch user and try again'))
+        _ = DIALOG.ok(i18n('Sign Out'),
+                      i18n('To sign out you must be logged in as an admin user. '
+                           'Switch user and try again'))
     if can_signout:
-        result = xbmcgui.Dialog().yesno(i18n('myPlex'),
-                                        i18n('You are currently signed into myPlex.'
-                                             ' Are you sure you want to sign out?'))
+        result = DIALOG.yesno(i18n('myPlex'),
+                              i18n('You are currently signed into myPlex.'
+                                   ' Are you sure you want to sign out?'))
         if result:
             context.plex_network.signout()
             if refresh:
@@ -482,7 +483,7 @@ def switch_user(context, refresh=True):
     # Get rid of currently logged in user.
     user_list.pop(context.plex_network.get_myplex_user(), None)
 
-    result = xbmcgui.Dialog().select(i18n('Switch User'), user_list.keys())
+    result = DIALOG.select(i18n('Switch User'), user_list.keys())
     if result == -1:
         LOG.debug('Dialog cancelled')
         return False
@@ -493,13 +494,13 @@ def switch_user(context, refresh=True):
     pin = None
     if user['protected'] == '1':
         LOG.debug('Protected user [%s], requesting password' % user['title'])
-        pin = xbmcgui.Dialog().input(i18n('Enter PIN'), type=xbmcgui.INPUT_NUMERIC,
-                                     option=xbmcgui.ALPHANUM_HIDE_INPUT)
+        pin = DIALOG.input(i18n('Enter PIN'), type=xbmcgui.INPUT_NUMERIC,
+                           option=xbmcgui.ALPHANUM_HIDE_INPUT)
 
     success, message = context.plex_network.switch_plex_home_user(user['id'], pin)
 
     if not success:
-        xbmcgui.Dialog().ok(i18n('Switch Failed'), message)
+        DIALOG.ok(i18n('Switch Failed'), message)
         LOG.debug('Switch User Failed')
         return False
 

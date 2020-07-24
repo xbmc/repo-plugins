@@ -26,83 +26,153 @@ def run(context, url):
     sections = server.get_sections()
 
     items = []
-    append_item = items.append
     for section in sections:
         if section.is_movie():
-            details = {
-                'title': '%s: %s' % (section.get_title(), i18n('On Deck'))
-            }
-            extra_data = {
-                'mode': MODES.TXT_MOVIES_ON_DECK,
-                'parameters': {
-                    'server_uuid': server.get_uuid()
-                }
-            }
-            gui_item = GUIItem(section.get_path(), details, extra_data)
-            append_item(create_gui_item(context, gui_item))
-
-            details = {
-                'title': '%s: %s' % (section.get_title(), i18n('Recently Added'))
-            }
-            extra_data = {
-                'mode': MODES.TXT_MOVIES_RECENT_ADDED,
-                'parameters': {
-                    'server_uuid': server.get_uuid()
-                }
-            }
-            gui_item = GUIItem(section.get_path(), details, extra_data)
-            append_item(create_gui_item(context, gui_item))
-
-            details = {
-                'title': '%s: %s' % (section.get_title(), i18n('Recently Released'))
-            }
-            extra_data = {
-                'mode': MODES.TXT_MOVIES_RECENT_RELEASE,
-                'parameters': {
-                    'server_uuid': server.get_uuid()
-                }
-            }
-            gui_item = GUIItem(section.get_path(), details, extra_data)
-            append_item(create_gui_item(context, gui_item))
+            items += movie_widgets(context, server, section)
 
         if section.is_show():
-            details = {
-                'title': '%s: %s' % (section.get_title(), i18n('On Deck'))
-            }
-            extra_data = {
-                'mode': MODES.TXT_TVSHOWS_ON_DECK,
-                'parameters': {
-                    'server_uuid': server.get_uuid()
-                }
-            }
-            gui_item = GUIItem(section.get_path(), details, extra_data)
-            append_item(create_gui_item(context, gui_item))
+            items += tvshow_widgets(context, server, section)
 
-            details = {
-                'title': '%s: %s' % (section.get_title(), i18n('Recently Added'))
-            }
-            extra_data = {
-                'mode': MODES.TXT_TVSHOWS_RECENT_ADDED,
-                'parameters': {
-                    'server_uuid': server.get_uuid()
-                }
-            }
-            gui_item = GUIItem(section.get_path(), details, extra_data)
-            append_item(create_gui_item(context, gui_item))
-
-            details = {
-                'title': '%s: %s' % (section.get_title(), i18n('Recently Aired'))
-            }
-            extra_data = {
-                'mode': MODES.TXT_TVSHOWS_RECENT_AIRED,
-                'parameters': {
-                    'server_uuid': server.get_uuid()
-                }
-            }
-            gui_item = GUIItem(section.get_path(), details, extra_data)
-            append_item(create_gui_item(context, gui_item))
+    if items:
+        items += all_server_widgets(context)
 
     if items:
         xbmcplugin.addDirectoryItems(get_handle(), items, len(items))
 
     xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=context.settings.cache_directory())
+
+
+def movie_widgets(context, server, section):
+    items = []
+    append_item = items.append
+    details = {
+        'title': '%s: %s' % (section.get_title(), i18n('On Deck'))
+    }
+    extra_data = {
+        'mode': MODES.TXT_MOVIES_ON_DECK,
+        'parameters': {
+            'server_uuid': server.get_uuid()
+        }
+    }
+    gui_item = GUIItem(section.get_path(), details, extra_data)
+    append_item(create_gui_item(context, gui_item))
+
+    details = {
+        'title': '%s: %s' % (section.get_title(), i18n('Recently Added'))
+    }
+    extra_data = {
+        'mode': MODES.TXT_MOVIES_RECENT_ADDED,
+        'parameters': {
+            'server_uuid': server.get_uuid()
+        }
+    }
+    gui_item = GUIItem(section.get_path(), details, extra_data)
+    append_item(create_gui_item(context, gui_item))
+
+    details = {
+        'title': '%s: %s' % (section.get_title(), i18n('Recently Released'))
+    }
+    extra_data = {
+        'mode': MODES.TXT_MOVIES_RECENT_RELEASE,
+        'parameters': {
+            'server_uuid': server.get_uuid()
+        }
+    }
+    gui_item = GUIItem(section.get_path(), details, extra_data)
+    append_item(create_gui_item(context, gui_item))
+
+    return items
+
+
+def tvshow_widgets(context, server, section):
+    items = []
+    append_item = items.append
+
+    details = {
+        'title': '%s: %s' % (section.get_title(), i18n('On Deck'))
+    }
+    extra_data = {
+        'mode': MODES.TXT_TVSHOWS_ON_DECK,
+        'parameters': {
+            'server_uuid': server.get_uuid()
+        }
+    }
+    gui_item = GUIItem(section.get_path(), details, extra_data)
+    append_item(create_gui_item(context, gui_item))
+
+    details = {
+        'title': '%s: %s' % (section.get_title(), i18n('Recently Added'))
+    }
+    extra_data = {
+        'mode': MODES.TXT_TVSHOWS_RECENT_ADDED,
+        'parameters': {
+            'server_uuid': server.get_uuid()
+        }
+    }
+    gui_item = GUIItem(section.get_path(), details, extra_data)
+    append_item(create_gui_item(context, gui_item))
+
+    details = {
+        'title': '%s: %s' % (section.get_title(), i18n('Recently Aired'))
+    }
+    extra_data = {
+        'mode': MODES.TXT_TVSHOWS_RECENT_AIRED,
+        'parameters': {
+            'server_uuid': server.get_uuid()
+        }
+    }
+    gui_item = GUIItem(section.get_path(), details, extra_data)
+    append_item(create_gui_item(context, gui_item))
+
+    return items
+
+
+def all_server_widgets(context):
+    items = []
+    append_item = items.append
+
+    details = {
+        'title': i18n('All Servers: TV Shows On Deck')
+    }
+    extra_data = {
+        'type': 'Folder',
+        'mode': MODES.TVSHOWS_ON_DECK
+    }
+
+    gui_item = GUIItem('/library/onDeck', details, extra_data)
+    append_item(create_gui_item(context, gui_item))
+
+    details = {
+        'title': i18n('All Servers: Movies On Deck')
+    }
+    extra_data = {
+        'type': 'Folder',
+        'mode': MODES.MOVIES_ON_DECK
+    }
+
+    gui_item = GUIItem('/library/onDeck', details, extra_data)
+    append_item(create_gui_item(context, gui_item))
+
+    details = {
+        'title': i18n('All Servers: Recently Added Episodes')
+    }
+    extra_data = {
+        'type': 'Folder',
+        'mode': MODES.EPISODES_RECENTLY_ADDED
+    }
+
+    gui_item = GUIItem('/library/recentlyAdded', details, extra_data)
+    append_item(create_gui_item(context, gui_item))
+
+    details = {
+        'title': i18n('All Servers: Recently Added Movies')
+    }
+    extra_data = {
+        'type': 'Folder',
+        'mode': MODES.MOVIES_RECENTLY_ADDED
+    }
+
+    gui_item = GUIItem('/library/recentlyAdded', details, extra_data)
+    append_item(create_gui_item(context, gui_item))
+
+    return items

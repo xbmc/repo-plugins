@@ -79,6 +79,10 @@ MODES = __enum(
     PLAYLISTS=30,
     WIDGETS=31,
     SEARCHALL=32,
+    TVSHOWS_ON_DECK=33,
+    MOVIES_ON_DECK=34,
+    EPISODES_RECENTLY_ADDED=35,
+    MOVIES_RECENTLY_ADDED=36,
     TXT_MOVIES='movies',
     TXT_MOVIES_ON_DECK='movies_on_deck',
     TXT_MOVIES_RECENT_ADDED='movies_recent_added',
@@ -92,6 +96,14 @@ MODES = __enum(
     TXT_MOVIES_LIBRARY='library/movies',
     TXT_TVSHOWS_LIBRARY='library/tvshows',
 )
+
+COMBINED_SECTIONS = [
+    # Used to check for all server modes
+    str(MODES.TVSHOWS_ON_DECK),
+    str(MODES.MOVIES_ON_DECK),
+    str(MODES.EPISODES_RECENTLY_ADDED),
+    str(MODES.MOVIES_RECENTLY_ADDED),
+]
 
 CONFIG = {
     'addon': __ADDON,

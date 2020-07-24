@@ -70,7 +70,7 @@ def run(context, url):
 
         elif content_type == 'photo':
             extra_data['mode'] = MODES.PHOTOS
-            media_server.join_url(media_server.get_url_location(), 'photos')
+            url = media_server.join_url(media_server.get_url_location(), 'photos')
             if servers_list == 1:
                 process_photos(context, url)
                 return

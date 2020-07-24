@@ -70,6 +70,8 @@
         <setting id="mixed_content_type" type="enum" label="30735" lvalues="30736|30737" default="0"/>
         <setting type="lsep" label="30714"/>
         <setting id="prefix_server" type="enum" label="30669" lvalues="30670|30671" default="1"/>
+        <setting id="prefix_server_sections" type="bool" label="30762" default="false"/>
+        <setting id="ra_sections_items_per_server" label="30763" type="slider" option="int" range="5,100" default="10"/>
         <setting id="show_myplex_queue_menu" type="bool" label="30715" default="true"/>
         <setting id="show_channels_menu" type="bool" label="30716" default="true"/>
         <setting id="show_plex_online_menu" type="bool" label="30717" default="true"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.composite_for_plex" name="Composite" version="1.2.0" provider-name="anxdpanic">
+<addon id="plugin.video.composite_for_plex" name="Composite" version="1.3.0" provider-name="anxdpanic">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.kodi-six" version="0.0.2"/>
@@ -15,15 +15,14 @@
     <extension point="xbmc.service" library="resources/lib/service_entry_point.py"/>
     <extension point="xbmc.addon.metadata">
         <news>
-[add] added intro skipping (Requires Plex Pass)
-[add] added lyrics info label for lyrics provided by Plex (Requires Plex Pass)
-[add] added setting to configure forced subtitles as default(forced)
-[add] added setting to configure mixed content type behavior
-[add] added support for custom access urls (ie. nginx)
-      - Main Menu - Manage Servers - &lt;server&gt; - Custom access urls - Add custom access url
-[fix] possible timestamp out of range for movies
-[chg] All Movies, All Shows, All Artists, and All Photos are no longer shortened to All
-[lang] German (de_DE) |contrib: Maven85|
+[add] menu items 'TV Shows/Movies on Deck' and widgets 'All Servers: TV Shows/Movies on Deck'
+    for on deck results from all servers
+[add] menu items 'Recently Added Episodes/Movies' and widgets
+    'All Servers: Recently Added Episodes/Movies' for recently added results from all servers
+[chg] movie collections default to sorting by year
+[fix] 'Always Transcode' setting is now applied
+[fix] minor fixups
+[upd] use new settings format for Kodi 19
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

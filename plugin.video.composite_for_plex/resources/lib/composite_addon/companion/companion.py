@@ -36,6 +36,7 @@ class CompanionReceiverThread(threading.Thread):  # pylint: disable=too-many-ins
         super(CompanionReceiverThread, self).__init__()
         self._stopped = threading.Event()
         self._ended = threading.Event()
+        self._dialog = xbmcgui.Dialog()
 
         self.settings = settings
         self.client = gdm_client
@@ -83,10 +84,10 @@ class CompanionReceiverThread(threading.Thread):  # pylint: disable=too-many-ins
 
             if count == 3:
                 self.LOG.debug('Unable to start web receiver. Giving up.')
-                xbmcgui.Dialog().notification(CONFIG['name'],
-                                              i18n('Companion receiver is unable to start '
-                                                   'due to a port conflict'),
-                                              CONFIG['icon'], sound=False)
+                self._dialog.notification(CONFIG['name'],
+                                          i18n('Companion receiver is unable to start '
+                                               'due to a port conflict'),
+                                          CONFIG['icon'], sound=False)
                 self.httpd = None
                 break
 
@@ -118,9 +119,9 @@ class CompanionReceiverThread(threading.Thread):  # pylint: disable=too-many-ins
 
                     if not running:
                         self.LOG.debug('Receiver has started')
-                        xbmcgui.Dialog().notification(CONFIG['name'],
-                                                      i18n('Companion receiver has started'),
-                                                      CONFIG['icon'], sound=False)
+                        self._dialog.notification(CONFIG['name'],
+                                                  i18n('Companion receiver has started'),
+                                                  CONFIG['icon'], sound=False)
 
                     running = True
                     if count % 1 == 0:
@@ -144,8 +145,8 @@ class CompanionReceiverThread(threading.Thread):  # pylint: disable=too-many-ins
         self.client.stop_all()
         self.end()
         self.LOG.debug('Receiver has been stopped')
-        xbmcgui.Dialog().notification(CONFIG['name'], i18n('Companion receiver has been stopped'),
-                                      CONFIG['icon'], sound=False)
+        self._dialog.notification(CONFIG['name'], i18n('Companion receiver has been stopped'),
+                                  CONFIG['icon'], sound=False)
 
 
 def shutdown(companion_thread):

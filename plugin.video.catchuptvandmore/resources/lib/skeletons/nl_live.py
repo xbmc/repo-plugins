@@ -55,9 +55,9 @@ menu = {
         'enabled': True,
         'order': 2
     },
-    'npo-zapp': {
+    'npo-3zapp': {
         'callback': 'live_bridge',
-        'label': 'NPO Zapp',
+        'label': 'NPO 3',
         'thumb': 'channels/nl/npozapp.png',
         'fanart': 'channels/nl/npozapp_fanart.jpg',
         'module': 'resources.lib.channels.nl.npo',

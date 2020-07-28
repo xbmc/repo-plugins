@@ -46,23 +46,14 @@ menu = {
         'enabled': True,
         'order': 1
     },
-    'france-2': {
+    'francetv': {
         'callback': 'replay_bridge',
-        'label': 'France 2',
-        'thumb': 'channels/fr/france2.png',
-        'fanart': 'channels/fr/france2_fanart.jpg',
+        'label': 'france.tv',
+        'thumb': 'channels/fr/francetv.png',
+        'fanart': 'channels/fr/francetv_fanart.jpg',
         'module': 'resources.lib.channels.fr.francetv',
         'enabled': True,
         'order': 2
-    },
-    'france-3': {
-        'callback': 'replay_bridge',
-        'label': 'France 3',
-        'thumb': 'channels/fr/france3.png',
-        'fanart': 'channels/fr/france3_fanart.jpg',
-        'module': 'resources.lib.channels.fr.francetv',
-        'enabled': True,
-        'order': 3
     },
     'canalplus': {
         'callback': 'replay_bridge',
@@ -72,15 +63,6 @@ menu = {
         'module': 'resources.lib.channels.fr.mycanal',
         'enabled': True,
         'order': 4
-    },
-    'france-5': {
-        'callback': 'replay_bridge',
-        'label': 'France 5',
-        'thumb': 'channels/fr/france5.png',
-        'fanart': 'channels/fr/france5_fanart.jpg',
-        'module': 'resources.lib.channels.fr.francetv',
-        'enabled': True,
-        'order': 5
     },
     'm6': {
         'callback': 'replay_bridge',
@@ -136,15 +118,6 @@ menu = {
         'enabled': True,
         'order': 11
     },
-    'france-4': {
-        'callback': 'replay_bridge',
-        'label': 'France 4',
-        'thumb': 'channels/fr/france4.png',
-        'fanart': 'channels/fr/france4_fanart.jpg',
-        'module': 'resources.lib.channels.fr.francetv',
-        'enabled': True,
-        'order': 12
-    },
     'bfmtv': {
         'callback': 'replay_bridge',
         'label': 'BFM TV',
@@ -180,15 +153,6 @@ menu = {
         'module': 'resources.lib.channels.fr.gulli',
         'enabled': True,
         'order': 16
-    },
-    'france-o': {
-        'callback': 'replay_bridge',
-        'label': 'France Ô',
-        'thumb': 'channels/fr/franceo.png',
-        'fanart': 'channels/fr/franceo_fanart.jpg',
-        'module': 'resources.lib.channels.fr.francetv',
-        'enabled': True,
-        'order': 17
     },
     'tf1-series-films': {
         'callback': 'replay_bridge',
@@ -241,7 +205,7 @@ menu = {
         'thumb': 'channels/fr/la1ere.png',
         'fanart': 'channels/fr/la1ere_fanart.jpg',
         'module': 'resources.lib.channels.fr.la_1ere',
-        'enabled': True,
+        'enabled': False,
         'order': 23
     },
     'franceinfo': {
@@ -322,7 +286,7 @@ menu = {
         'thumb': 'channels/fr/france3regions.png',
         'fanart': 'channels/fr/france3regions_fanart.jpg',
         'module': 'resources.lib.channels.fr.france3regions',
-        'enabled': True,
+        'enabled': False,
         'order': 40
     },
     'francetvsport': {
@@ -459,15 +423,6 @@ menu = {
         'module': 'resources.lib.channels.fr.6play',
         'enabled': True,
         'order': 58
-    },
-    'slash': {
-        'callback': 'replay_bridge',
-        'label': 'France tv slash',
-        'thumb': 'channels/fr/slash.png',
-        'fanart': 'channels/fr/slash_fanart.jpg',
-        'module': 'resources.lib.channels.fr.francetv',
-        'enabled': True,
-        'order': 60
     },
     'polar-plus': {
         'callback': 'replay_bridge',
@@ -613,15 +568,6 @@ menu = {
         'enabled': True,
         'order': 87
     },
-    'francetvspectaclesetculture': {
-        'callback': 'replay_bridge',
-        'label': 'Spectacles et Culture (francetv)',
-        'thumb': 'channels/fr/francetvspectaclesetculture.png',
-        'fanart': 'channels/fr/francetvspectaclesetculture_fanart.jpg',
-        'module': 'resources.lib.channels.fr.francetvspectaclesetculture',
-        'enabled': True,
-        'order': 88
-    },
     'tvpifr': {
         'callback': 'replay_bridge',
         'label': 'TVPI télévision d\'ici',
@@ -720,15 +666,6 @@ menu = {
         'module': 'resources.lib.channels.fr.bfmregion',
         'enabled': True,
         'order': 107
-    },
-    'enfants': {
-        'callback': 'replay_bridge',
-        'label': 'Okoo (France TV)',
-        'thumb': 'channels/fr/okoo.png',
-        'fanart': 'channels/fr/okoo_fanart.jpg',
-        'module': 'resources.lib.channels.fr.francetv',
-        'enabled': True,
-        'order': 117
     },
     'courses': {
         'callback': 'replay_bridge',

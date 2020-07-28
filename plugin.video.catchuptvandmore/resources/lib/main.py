@@ -270,21 +270,9 @@ def live_bridge(plugin, item_id, item_module, **kwargs):
         Iterator[codequick.listing.Listitem]: Kodi 'item_id' menu
     """
 
-    # If we come from a M3U file, we need to
-    # convert the dict string to the real dict object
-    # and get the language value
-    lang = ''
-    if 'item_dict' in kwargs and \
-            isinstance(kwargs['item_dict'], string_types):
-        kwargs['item_dict'] = eval(kwargs['item_dict'])
-        lang = kwargs['item_dict'].get('language', '')
-
     # Let's go to the module file ...
     module = importlib.import_module(item_module)
-    if lang == '':
-        return module.live_entry(plugin, item_id)
-    else:
-        return module.live_entry(plugin, item_id, language=lang)
+    return module.live_entry(plugin, item_id, **kwargs)
 
 
 @Route.register
@@ -310,7 +298,7 @@ def favourites(plugin, start=0, **kwargs):
     # We sort the menu according to the item_order values
     sorted_menu = sorted(menu, key=lambda x: x[0])
 
-    # Notify the user if there is not item in favourites
+    # Notify the user if there is no item in favourites
     if len(sorted_menu) == 0:
         Script.notify(Script.localize(30033), Script.localize(30806), display_time=7000)
         yield False
@@ -328,59 +316,48 @@ def favourites(plugin, start=0, **kwargs):
             break
 
         cnt += 1
-        # Listitem.from_dict fails with subtitles
-        # See https://github.com/willforde/script.module.codequick/issues/30
-        if 'subtitles' in item_dict:
-            item_dict.pop('subtitles')
-
-        # Listitem.from_dict only works if context is a list
-        if 'context' in item_dict and not isinstance(item_dict['context'], list):
-            item_dict.pop('context')
-
-        # Remove original move and hide contexts:
-        if 'context' in item_dict:
-            new_context = []
-            for context in item_dict['context']:
-                if 'move_item' not in context[1] and 'hide' not in context[1]:
-                    new_context.append(context)
-            item_dict['context'] = new_context
 
         item_dict['params']['from_fav'] = True
         item_dict['params']['item_hash'] = item_hash
 
-        item = Listitem.from_dict(**item_dict)
-        url = build_kodi_url(item_dict['callback'], item_dict['params'])
+        try:
+            # Build item from dict
+            item = Listitem.from_dict(**item_dict)
 
-        item.set_callback(url)
+            # Generate a valid callback
+            url = build_kodi_url(item_dict['callback'], item_dict['params'])
+            item.set_callback(url, is_folder=item_dict['params']['is_folder'], is_playbale=item_dict['params']['is_playable'])
 
-        item.is_folder = item_dict['params']['is_folder']
-        item.is_playbale = item_dict['params']['is_playable']
+            item.is_folder = item_dict['params']['is_folder']
+            item.is_playbale = item_dict['params']['is_playable']
 
-        # Rename
-        item.context.script(fav.rename_favourite_item,
-                            plugin.localize(30804),
-                            item_hash=item_hash)
-
-        # Remove
-        item.context.script(fav.remove_favourite_item,
-                            plugin.localize(30802),
-                            item_hash=item_hash)
-
-        # Move up
-        if item_dict['params']['order'] > 0:
-            item.context.script(fav.move_favourite_item,
-                                plugin.localize(30501),
-                                direction='up',
+            # Rename
+            item.context.script(fav.rename_favourite_item,
+                                plugin.localize(30804),
                                 item_hash=item_hash)
 
-        # Move down
-        if item_dict['params']['order'] < len(fav_dict) - 1:
-            item.context.script(fav.move_favourite_item,
-                                plugin.localize(30500),
-                                direction='down',
+            # Remove
+            item.context.script(fav.remove_favourite_item,
+                                plugin.localize(30802),
                                 item_hash=item_hash)
 
-        yield item
+            # Move up
+            if item_dict['params']['order'] > 0:
+                item.context.script(fav.move_favourite_item,
+                                    plugin.localize(30501),
+                                    direction='up',
+                                    item_hash=item_hash)
+
+            # Move down
+            if item_dict['params']['order'] < len(fav_dict) - 1:
+                item.context.script(fav.move_favourite_item,
+                                    plugin.localize(30500),
+                                    direction='down',
+                                    item_hash=item_hash)
+
+            yield item
+        except Exception:
+            fav.remove_favourite_item(plugin, item_hash)
 
 
 def error_handler(exception):

@@ -31,13 +31,22 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib import download
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
 from resources.lib.menu_utils import item_post_treatment
 
+import inputstreamhelper
 import htmlement
 import re
 import json
 import time
 import urlquick
+from kodi_six import xbmc
+from kodi_six import xbmcgui
+# Working for Python 2/3
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    from urllib import urlencode
 
 # TO DO
 # Add geoblock (info in JSON)
@@ -66,6 +75,10 @@ URL_JSON_LIVE = 'https://www.rtbf.be/api/partner/generic/live/' \
 URL_JSON_LIVE_CHANNEL = 'http://www.rtbf.be/api/partner/generic/live/' \
                         'planningcurrent?v=8&channel=%s&target_site=mediaz&partner_key=%s'
 
+URL_LICENCE_KEY = 'https://wv-keyos.licensekeyserver.com/|%s|R{SSM}|'
+
+URL_TOKEN = 'https://www.rtbf.be/api/partner/generic/drm/encauthxml?planning_id=%s&partner_key=%s'
+
 # partener_key
 
 URL_ROOT_LIVE = 'https://www.rtbf.be/auvio/direct#/'
@@ -73,7 +86,7 @@ URL_ROOT_LIVE = 'https://www.rtbf.be/auvio/direct#/'
 
 def get_partener_key():
     # Get partener key
-    resp = urlquick.get(URL_ROOT_LIVE)
+    resp = urlquick.get(URL_ROOT_LIVE, max_age=-1)
     list_js_files = re.compile(
         r'<script type="text\/javascript" src="(.*?)">').findall(resp.text)
 
@@ -393,7 +406,14 @@ def set_live_url(plugin, item_id, video_id, **kwargs):
     json_parser = json.loads(resp.text)
 
     if "url_streaming" in json_parser:
-        live_url = json_parser["url_streaming"]["url_hls"]
+        if 'url_dash' in json_parser["url_streaming"]:
+            live_url = json_parser["url_streaming"]["url_dash"]
+            live_id = json_parser["id"]
+            is_drm = True
+        else:
+            live_url = json_parser["url_streaming"]["url_hls"]
+            live_id = json_parser["id"]
+            is_drm = False
     live_channel_title = json_parser["channel"]["label"]
     # start_time_value = format_hours(json_parser["start_date"])
     # end_time_value = format_hours(json_parser["end_date"])
@@ -408,7 +428,7 @@ def set_live_url(plugin, item_id, video_id, **kwargs):
     item.label = live_title
     item.art['thumb'] = item.art['landscape'] = live_image
     item.info['plot'] = live_plot
-    item.set_callback(get_live_url, item_id=item_id, live_url=live_url)
+    item.set_callback(get_live_url, item_id=item_id, live_url=live_url, is_drm=is_drm, live_id=live_id)
     item_post_treatment(item, is_playable=True)
     yield item
 
@@ -423,7 +443,14 @@ def list_lives(plugin, item_id, **kwargs):
 
         if "url_streaming" in live_datas:
             # check if we can add prochainnement if stream is not present
-            live_url = live_datas["url_streaming"]["url_hls"]
+            if 'url_dash' in live_datas["url_streaming"]:
+                live_url = live_datas["url_streaming"]["url_dash"]
+                live_id = live_datas["id"]
+                is_drm = True
+            else:
+                live_url = live_datas["url_streaming"]["url_hls"]
+                live_id = live_datas["id"]
+                is_drm = False
 
         if type(live_datas["channel"]) is dict:
             live_channel_title = live_datas["channel"]["label"]
@@ -450,14 +477,42 @@ def list_lives(plugin, item_id, **kwargs):
         # commented this line because othrewie sorting is made by date and then by title
         # and doesn't help to find the direct
         # item.info.date(date_time_value, '%Y/%m/%d')
-        item.set_callback(get_live_url, item_id=item_id, live_url=live_url)
+        item.set_callback(get_live_url, item_id=item_id, live_url=live_url, is_drm=is_drm, live_id=live_id)
         item_post_treatment(item, is_playable=True)
         yield item
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, live_url, **kwargs):
+def get_live_url(plugin, item_id, live_url, is_drm, live_id, **kwargs):
 
-    if 'drm' in live_url:
-        return live_url.replace('_drm.m3u8', '_aes.m3u8')
-    return live_url
+    if is_drm:
+        if get_kodi_version() < 18:
+            xbmcgui.Dialog().ok('Info', plugin.localize(30602))
+            return False
+
+        is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+        if not is_helper.check_inputstream():
+            return False
+
+        token_url = URL_TOKEN % (live_id, get_partener_key())
+        token_value = urlquick.get(token_url, max_age=-1)
+        json_parser_token = json.loads(token_value.text)
+
+        item = Listitem()
+        item.path = live_url
+        item.property['inputstreamaddon'] = 'inputstream.adaptive'
+        item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+        item.property[
+            'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+        headers2 = {
+            'customdata':
+            json_parser_token["auth_encoded_xml"],
+        }
+        item.property[
+            'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % urlencode(headers2)
+        item.label = get_selected_item_label()
+        item.art.update(get_selected_item_art())
+        item.info.update(get_selected_item_info())
+        return item
+    else:
+        return live_url

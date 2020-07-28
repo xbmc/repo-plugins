@@ -93,7 +93,7 @@ def list_videos_1(plugin, item_id, category_url, page, **kwargs):
     resp = urlquick.get(category_url + '/par_date/%s' % str(page))
 
     at_least_one_item = False
-    if 'serietele' in category_url:
+    if 'serietele' in category_url or 'zarbi' in category_url:
         root = resp.parse("div", attrs={"class": "serieTele"})
 
         for episode in root.iterfind(".//div"):

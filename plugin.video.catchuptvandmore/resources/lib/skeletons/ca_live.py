@@ -117,7 +117,7 @@ menu = {
         'thumb': 'channels/ca/lcn.png',
         'fanart': 'channels/ca/lcn_fanart.jpg',
         'module': 'resources.lib.channels.ca.tva',
-        'enabled': True,
+        'enabled': False,
         'order': 12
     },
     'yoopa': {
@@ -126,7 +126,7 @@ menu = {
         'thumb': 'channels/ca/yoopa.png',
         'fanart': 'channels/ca/yoopa_fanart.jpg',
         'module': 'resources.lib.channels.ca.tva',
-        'enabled': True,
+        'enabled': False,
         'order': 13
     }
 }

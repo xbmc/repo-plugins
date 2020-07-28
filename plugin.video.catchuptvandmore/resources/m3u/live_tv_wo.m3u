@@ -6,245 +6,245 @@
 ##	Euronews FR
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews FR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"FR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=FR
 
 ##	Euronews EN
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews EN
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"EN"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=EN
 
 ##	Euronews AR
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews AR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"AR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=AR
 
 ##	Euronews DE
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews DE
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"DE"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=DE
 
 ##	Euronews IT
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews IT
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"IT"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=IT
 
 ##	Euronews ES
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews ES
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"ES"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=ES
 
 ##	Euronews PT
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews PT
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"PT"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=PT
 
 ##	Euronews RU
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews RU
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"RU"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=RU
 
 ##	Euronews TR
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews TR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"TR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=TR
 
 ##	Euronews FA
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews FA
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"FA"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=FA
 
 ##	Euronews GR
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews GR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"GR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=GR
 
 ##	Euronews HU
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="International",Euronews HU
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"HU"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=HU
 
 ##	Arte FR
 ##	arte
 #EXTINF:-1 tvg-id="C111.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/arte.png" group-title="International",Arte FR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arte&item_module=resources.lib.channels.wo.arte&item_dict={"language":"FR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arte&item_module=resources.lib.channels.wo.arte&language=FR
 
 ##	Arte DE
 ##	arte
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/arte.png" group-title="International",Arte DE
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arte&item_module=resources.lib.channels.wo.arte&item_dict={"language":"DE"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arte&item_module=resources.lib.channels.wo.arte&language=DE
 
 ##	France 24 FR
 ##	france24
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/france24.png" group-title="International",France 24 FR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"FR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&language=FR
 
 ##	France 24 EN
 ##	france24
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/france24.png" group-title="International",France 24 EN
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"EN"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&language=EN
 
 ##	France 24 AR
 ##	france24
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/france24.png" group-title="International",France 24 AR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"AR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&language=AR
 
 ##	France 24 ES
 ##	france24
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/france24.png" group-title="International",France 24 ES
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&item_dict={"language":"ES"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&language=ES
 
 ##	NHK World Outside Japan
 ##	nhkworld
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/nhkworld.png" group-title="International",NHK World Outside Japan
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nhkworld&item_module=resources.lib.channels.wo.nhkworld&item_dict={"language":"Outside Japan"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nhkworld&item_module=resources.lib.channels.wo.nhkworld&language=Outside+Japan
 
 ##	NHK World In Japan
 ##	nhkworld
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/nhkworld.png" group-title="International",NHK World In Japan
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nhkworld&item_module=resources.lib.channels.wo.nhkworld&item_dict={"language":"In Japan"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nhkworld&item_module=resources.lib.channels.wo.nhkworld&language=In+Japan
 
 ##	Tivi 5Monde
 ##	tivi5monde
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/tivi5monde.png" group-title="International",Tivi 5Monde
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tivi5monde&item_module=resources.lib.channels.wo.tivi5monde&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tivi5monde&item_module=resources.lib.channels.wo.tivi5monde
 
 ##	BVN
 ##	bvn
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/bvn.png" group-title="International",BVN
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bvn&item_module=resources.lib.channels.wo.bvn&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bvn&item_module=resources.lib.channels.wo.bvn
 
 ##	ICI Télévision
 ##	icitelevision
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/icitelevision.png" group-title="International",ICI Télévision
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitelevision&item_module=resources.lib.channels.wo.icitelevision&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icitelevision&item_module=resources.lib.channels.wo.icitelevision
 
 ##	Arirang (아리랑)
 ##	arirang
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/arirang.png" group-title="International",Arirang (아리랑)
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arirang&item_module=resources.lib.channels.wo.arirang&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arirang&item_module=resources.lib.channels.wo.arirang
 
 ##	DW EN
 ##	dw
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/dw.png" group-title="International",DW EN
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"EN"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&language=EN
 
 ##	DW AR
 ##	dw
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/dw.png" group-title="International",DW AR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"AR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&language=AR
 
 ##	DW ES
 ##	dw
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/dw.png" group-title="International",DW ES
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"ES"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&language=ES
 
 ##	DW DE
 ##	dw
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/dw.png" group-title="International",DW DE
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&item_dict={"language":"DE"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dw&item_module=resources.lib.channels.wo.dw&language=DE
 
 ##	QVC JP
 ##	qvc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="International",QVC JP
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"JP"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&language=JP
 
 ##	QVC DE
 ##	qvc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="International",QVC DE
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"DE"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&language=DE
 
 ##	QVC IT
 ##	qvc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="International",QVC IT
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"IT"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&language=IT
 
 ##	QVC UK
 ##	qvc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="International",QVC UK
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"UK"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&language=UK
 
 ##	QVC US
 ##	qvc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="International",QVC US
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"US"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&language=US
 
 ##	ICI RDI
 ##	icirdi
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/icirdi.png" group-title="International",ICI RDI
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icirdi&item_module=resources.lib.channels.wo.icirdi&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=icirdi&item_module=resources.lib.channels.wo.icirdi
 
 ##	CGTN FR
 ##	cgtn
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="International",CGTN FR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"FR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&language=FR
 
 ##	CGTN EN
 ##	cgtn
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="International",CGTN EN
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"EN"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&language=EN
 
 ##	CGTN AR
 ##	cgtn
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="International",CGTN AR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"AR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&language=AR
 
 ##	CGTN ES
 ##	cgtn
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="International",CGTN ES
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"ES"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&language=ES
 
 ##	CGTN RU
 ##	cgtn
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="International",CGTN RU
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&item_dict={"language":"RU"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&language=RU
 
 ##	CGTN Documentary
 ##	cgtndocumentary
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtndocumentary.png" group-title="International",CGTN Documentary
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtndocumentary&item_module=resources.lib.channels.wo.cgtn&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtndocumentary&item_module=resources.lib.channels.wo.cgtn
 
 ##	Afrique Media
 ##	afriquemedia
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/afriquemedia.png" group-title="International",Afrique Media
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=afriquemedia&item_module=resources.lib.channels.wo.afriquemedia&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=afriquemedia&item_module=resources.lib.channels.wo.afriquemedia
 
 ##	TV5Monde France Belgique Suisse
 ##	tv5mondefbs
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/tv5mondefbs.png" group-title="International",TV5Monde France Belgique Suisse
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv5mondefbs&item_module=resources.lib.channels.wo.tv5monde&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv5mondefbs&item_module=resources.lib.channels.wo.tv5monde
 
 ##	TV5Monde Info
 ##	tv5mondeinfo
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/tv5mondeinfo.png" group-title="International",TV5Monde Info
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv5mondeinfo&item_module=resources.lib.channels.wo.tv5monde&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv5mondeinfo&item_module=resources.lib.channels.wo.tv5monde
 
 ##	Channel NewsAsia
 ##	channelnewsasia
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/channelnewsasia.png" group-title="International",Channel NewsAsia
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=channelnewsasia&item_module=resources.lib.channels.wo.channelnewsasia&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=channelnewsasia&item_module=resources.lib.channels.wo.channelnewsasia
 
 ##	RT FR
 ##	rt
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/rt.png" group-title="International",RT FR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&item_dict={"language":"FR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&language=FR
 
 ##	RT EN
 ##	rt
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/rt.png" group-title="International",RT EN
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&item_dict={"language":"EN"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&language=EN
 
 ##	RT AR
 ##	rt
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/rt.png" group-title="International",RT AR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&item_dict={"language":"AR"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&language=AR
 
 ##	RT ES
 ##	rt
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/rt.png" group-title="International",RT ES
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&item_dict={"language":"ES"}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&language=ES
 
 ##	Africa 24
 ##	africa24
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/africa24.png" group-title="International",Africa 24
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=africa24&item_module=resources.lib.channels.wo.africa24&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=africa24&item_module=resources.lib.channels.wo.africa24
 

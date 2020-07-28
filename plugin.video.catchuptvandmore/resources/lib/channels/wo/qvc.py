@@ -52,11 +52,11 @@ DESIRED_LANGUAGE = Script.setting['qvc.language']
 
 
 def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
+    return get_live_url(plugin, item_id, **kwargs)
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
     final_language = kwargs.get('language', Script.setting['qvc.language'])
 
     if final_language == 'IT':

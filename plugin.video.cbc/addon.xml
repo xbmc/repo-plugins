@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.cbc"
+       name="Canadian Broadcasting Corp (CBC)"
+       version="4.0.6+matrix.1"
+       provider-name="micahg,t1m,smf007,oshanrube">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+    <import addon="script.module.inputstreamhelper" version="0.4.4"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+	<provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+    <summary lang="en">CBC TV Kodi Plugin</summary>
+    <description lang="en">View online content from the Canadian Broadcasting Corporation.</description>
+    <platform>all</platform>
+    <language>en</language>
+    <disclaimer lang="en">For bugs, requests or general questions visit the CBC TV thread on the Kodi forum.</disclaimer>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=328421</forum>
+    <website>https://watch.cbc.ca/</website>
+    <source>https://github.com/micahg/plugin.video.cbc</source>
+    <news>- Add ability to ignore in show names (find "The National" sorted under N). Thanks to github.com/zim514.
+- Add option to not sort shows ignoring "The"</news>
+  </extension>
+</addon>

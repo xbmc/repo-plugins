@@ -1,0 +1,956 @@
+9
+19
+28
+38
+47
+57
+66
+76
+85
+95
+100
+ff5079cf-eff5-4c9f-9e70-1ce17fea456d) 21 Thunder: 21 Thunder is the story of the Montreal Thunder U21 team and the obstacles –both on and off the field– that the players and coaches must overcome to make it to the pros.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/ff5079cf-eff5-4c9f-9e70-1ce17fea456d
+
+528aafd0-e9f7-47f9-b27a-dd61030d5491) Absolutely Canadian: Absolutely Canadian is a national weekly one-hour series showcasing documentaries and performance programs that tell unique stories from communities across Canada. All programs are produced locally.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/528aafd0-e9f7-47f9-b27a-dd61030d5491
+
+06dca7f1-976d-47ff-9f7a-f94b6e2d6273) Ackley Bridge: This British drama series offers a gritty, funny, and truthful look into the daily drama of teachers, teenagers, and families whose lives and cultures collide when two schools are integrated after years of racial segregation in a small Yorkshire town.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/06dca7f1-976d-47ff-9f7a-f94b6e2d6273
+
+92df749d-eb5b-43d9-9c86-8c7ea7c1c476) Africa & Britain: A Forgotten History: This landmark series presents a new history of Britain with black people written back into its pages. Spanning from Roman times to the present.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/92df749d-eb5b-43d9-9c86-8c7ea7c1c476
+
+a183bbc8-3c39-47fd-9395-ac7727b8c3be) Air Farce: May the Farce be with you! A comedy staple for Canadians looking for homegrown laughs, AIR FARCE is one of the most popular and enduring comedy troupes in Canadian history.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a183bbc8-3c39-47fd-9395-ac7727b8c3be
+
+cc0fe87c-2bef-4ca9-8aa0-1d270440b7b7) Air Farce New Year's Eve 2019: 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/cc0fe87c-2bef-4ca9-8aa0-1d270440b7b7
+
+9a6b865e-a4f0-4c7c-a501-f67463ae0680) Alias Grace: Based on the bestselling novel by Margaret Atwood, the six-hour mini-series tells the story of Grace Marks: A young, poor Irish immigrant and domestic servant in 1843 Upper Canada who finds herself accused and convicted of two heinous murders.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9a6b865e-a4f0-4c7c-a501-f67463ae0680
+
+a7a81c86-e1da-4283-ba6d-ce9a0eedd592) Anne with an E: Anne is a coming-of-age story about an outsider who, against all odds and many challenges, fights for love, acceptance and her place in the world.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a7a81c86-e1da-4283-ba6d-ce9a0eedd592
+
+281a8cf1-61bc-4bed-8522-905e4eec91d8) Art Hurts: ART HURTS travels the country to find some of the most innovative tattoo artists working today - and all of them happen to be female or non-binary.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/281a8cf1-61bc-4bed-8522-905e4eec91d8
+
+1d44d997-140e-4352-bc82-6f14eb1ea225) Art is My Country: New from CBC Arts, we profile ten Canadian artists from different cultural backgrounds, exploring their identity through dance, music, poetry, visual and performance art, and how they are redefining and reshaping Canadian art. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/1d44d997-140e-4352-bc82-6f14eb1ea225
+
+7fb5faa7-adf6-4ef9-ab2d-750c87410123) Ashbridge: A series of fictional stories about the mosaic of new Canadians who interact with a Refugee Settlement Agency called Ashbridge.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/7fb5faa7-adf6-4ef9-ab2d-750c87410123
+
+b6af03f8-607e-4c72-914f-8d34c156ed7b) At The Table: A late-night Maritimes television series featuring compelling guests from all walks of life.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/b6af03f8-607e-4c72-914f-8d34c156ed7b
+
+6246ebbf-8504-4ff4-8e0d-bf99324b04c3) Back in Time for Christmas: On the heels of the highly successful Back in Time for Dinner comes Back in Time for Christmas, revealing how family life has been shaped by the way people celebrate the holidays.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/6246ebbf-8504-4ff4-8e0d-bf99324b04c3
+
+6aa69b7d-baf6-4fff-b184-4e5866d531fb) Back in Time for Dinner: One family takes on a dramatic social experiment - their home becomes a virtual time machine, transformed week by week, they eat their way through 70 years of Canadian home life and national history.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/6aa69b7d-baf6-4fff-b184-4e5866d531fb
+
+9074e6c8-8d71-4004-83d3-adff42c91213) Back In Time for Dinner (UK): Fast-forwarding through six decades of culinary revolution, Back in Time for Dinner turns one modern British family's kitchen into a time machine.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9074e6c8-8d71-4004-83d3-adff42c91213
+
+55e63055-d472-4bb7-b476-12a20b482faf) Back in Time for School: Fifteen pupils and their teachers embark on an extraordinary time-travelling adventure as they fast-forward through more than 100 years of school life.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/55e63055-d472-4bb7-b476-12a20b482faf
+
+39b348e0-d989-42b8-a94b-2a2e259f7071) Back In Time for Tea: The Ellis family from Bradford are embarking on an extraordinary time-traveling adventure to discover how a transformation in the food eaten in the north of England can reveal how life has changed for northern working class families over the past 100 years.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/39b348e0-d989-42b8-a94b-2a2e259f7071
+
+967fef89-cec6-415d-b824-fc27bee723ab) Back in Time for the Weekend: For one summer, the Ashby Hawkins family give up their 21st-century technology and travel back in time to discover the radical transformation of our leisure time since 1950.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/967fef89-cec6-415d-b824-fc27bee723ab
+
+6b02aed1-d79a-4bc5-b278-0213a4f8a62d) Back In Time for Winter: It’s time to go Back In Time For Winter to experience how 60 years of cold have shaped the way we live. How has it impacted our diets, our fashions, our activities, and our lifestyles?
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/6b02aed1-d79a-4bc5-b278-0213a4f8a62d
+
+32e84742-6177-4f7e-8d1e-15ae1696d90a) Backstage Pass: CBC Music Backstage Pass is a weekly music program that airs coast-to-coast on CBC Television and online at CBCMusic.ca.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/32e84742-6177-4f7e-8d1e-15ae1696d90a
+
+d12d8c4e-13dd-442b-b8d2-7969c4f01bd5) Banished: British convicts have been sent to Australia as punishment for their crimes. As they try to live their new lives, they have to live with the new rules. The soldiers also have to adjust.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d12d8c4e-13dd-442b-b8d2-7969c4f01bd5
+
+a72e15ec-af04-468b-aad3-f7caee4c38ff) Baroness Von Sketch Show: A subversive all-female ensemble, that features some of Canada's best sketch comedians as they take aim right down the barrel of contemporary social trends and office politics.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a72e15ec-af04-468b-aad3-f7caee4c38ff
+
+d099a0dc-082d-421f-a35a-811ffeea00aa) Battle of the Blades: Experience the excitement of CBC’s returning hit BATTLE OF THE BLADES live and in-person. Athletes from two of Canada’s favourite sports - figure skating and hockey - pair up and perform in a live, high-stakes figure skating competition for the charity of their choice.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d099a0dc-082d-421f-a35a-811ffeea00aa
+
+600e6eac-a3a5-464e-9173-cf0ab68e6dfb) Becoming Canadian: Every new Canadian has a story. “Becoming Canadian” travels to citizenship ceremonies right across the country to capture some of those stories.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/600e6eac-a3a5-464e-9173-cf0ab68e6dfb
+
+3503afbf-1f80-4f8f-b26d-581082617c5a) Being Erica: BEING ERICA is a funny and magical comedy/drama series where the classic fantasy of revisiting the past offers 30-something year old Erica Strange a chance to come to terms with her choices in life.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3503afbf-1f80-4f8f-b26d-581082617c5a
+
+51fd0ea4-5e58-475d-9c7d-d11064a224d7) Bellevue: A one-hour drama series in which past and present collide to unravel the murder of a transgender teen in a remote northern mining town.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/51fd0ea4-5e58-475d-9c7d-d11064a224d7
+
+6dc216de-d7db-4eb7-a349-7a378376b44a) Best Laid Plans: Based on author Terry Fallis’ award-winning novel of the same name and the 2011 Canada Reads winner, Best Laid Plans is a humourous and satirical journey into the world of Canadian national politics.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/6dc216de-d7db-4eb7-a349-7a378376b44a
+
+7cb2cdef-ee17-4e6f-b91d-390abcf07762) Bit Playas: BIT PLAYAS follows Ahmed and Leon as they spend their days hustling in the casting room, working jobs in the real world, deflecting the occasional “soft racism” and dealing with their own identity crises.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/7cb2cdef-ee17-4e6f-b91d-390abcf07762
+
+24af0649-86f2-44ca-8402-d583562adecb) Bondi Vet: Bondi Vet is a touching look at the connection between man and animal filled with heartwarming, and heartbreaking stories, that families will love.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/24af0649-86f2-44ca-8402-d583562adecb
+
+0a2f955f-44e1-4b40-8c4f-75fa44164214) Born to Kill: An intense and powerful psychological thriller about a teenage boy trying to hide his psychopathic desires while falling in love for the first time.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0a2f955f-44e1-4b40-8c4f-75fa44164214
+
+3f8fd393-b3c1-4c4a-b56a-6eda51a674ae) Brand Canada: A kaleidoscopic exploration of Canada the 'brand' - from the images that first symbolized Canada, through the building of a collective identity, to how the country is viewed today.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3f8fd393-b3c1-4c4a-b56a-6eda51a674ae
+
+130f2872-b6e4-49f9-8617-3184c3d73904) Broad Appeal: Living with E's: Some pre-posthumous lifestyle advice from a couple of brassy bits of aging crumpet who have very definitely been there, and no doubt, done that.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/130f2872-b6e4-49f9-8617-3184c3d73904
+
+7b174c3e-9f6c-4c3f-91f4-25b3a43d2a8f) Burden of Truth: One year later…Joanna Chang and Billy Crawford are working together in their new boutique law firm, Crawford Chang, but they’re discovering that living and litigating together has its challenges.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/7b174c3e-9f6c-4c3f-91f4-25b3a43d2a8f
+
+4b03f619-07ff-420d-bac1-eb27d264c3b0) But I'm Chris Jericho!: In this tongue-in-cheek portrayal of his life, Chris Jericho is a former wrestler struggling to make it big as an actor.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/4b03f619-07ff-420d-bac1-eb27d264c3b0
+
+62da5fe4-c55e-42a6-b072-962e135f70ae) Butterfly: Butterfly is about the acrimonious relationship between separated parents, Vicky, and Stephen, and their division in opinion over how to support their gender variant child, Max. From a young age, their now 11-year-old son has identified as a girl and presented signs of gender dysphoria.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/62da5fe4-c55e-42a6-b072-962e135f70ae
+
+89bc3953-775f-48a7-917e-7e40a80c9863) Camelot: Camelot is a historical-fantasy-drama television series based on the Arthurian legend.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/89bc3953-775f-48a7-917e-7e40a80c9863
+
+f17bb71f-fc6a-4ce8-a70f-38502ea6cf2a) Canada: A People's History: Canada: A People's History is a 2-hour documentary television series spanning the recent history of Canada. It first aired on CBC Television from October 2000 to November 2001.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/f17bb71f-fc6a-4ce8-a70f-38502ea6cf2a
+
+1df25c8b-0c7d-4b86-ab9e-72ac020c645c) Canada: The Story of Us: Canada: The Story of Us captures the people and events that forged our country in an entirely new epic and cinematic style.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/1df25c8b-0c7d-4b86-ab9e-72ac020c645c
+
+68e73a6a-c22d-4a26-83ea-4d12bc7c2126) Canada Reads: Canada Reads is an annual "battle of the books" competition organized and broadcast by the CBC pitting five personalities each championing a different book.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/68e73a6a-c22d-4a26-83ea-4d12bc7c2126
+
+584cca4d-fbd8-4206-a846-68001625cf48) Canada Votes: CBC Explains: How do political parties control their message and sway public opinion? We'll help you navigate the election by pulling back the curtain to reveal some of the tools and tactics used by political parties, why politicians do and say certain things, and what you should watch for. With Power & Politics host Vassy Kapelos.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/584cca4d-fbd8-4206-a846-68001625cf48
+
+07a6786a-343d-4295-8771-1aa62317e797) Canada's A Drag: Canada’s a Drag returns with a 12-episode second season that highlights a diverse array of drag queens and kings from coast to coast. The CBC Arts series makes it clear that drag is as Canadian as poutine or hockey - and a whole lot more fabulous.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/07a6786a-343d-4295-8771-1aa62317e797
+
+35ad1288-bd20-4c3b-bce6-6cd9839ea50e) Canada's Smartest Person: Canada's Smartest Person is a whole new way of looking at SMART. Four participants are challenged with various tasks that will redefine what it means to be smart based on multiple intelligence theory.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/35ad1288-bd20-4c3b-bce6-6cd9839ea50e
+
+90683853-5cc6-4f36-bbca-30304c4949db) Canada's Smartest Person Junior: Canadian kids compete in unique intelligence challenges in this version of Canada's Smartest Person: Junior.  Hosted by Paul Sun-Hyung Lee.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/90683853-5cc6-4f36-bbca-30304c4949db
+
+e5914022-b54a-4419-93c7-953e1d7b366a) Canadian Improv Games: Laugh, cry and be wowed by the country’s top student improvisers as Kim’s Convenience star Andrew Phung hosts this 6-part series. Teams from across the country share how improv has taught them to be funny - and so much more.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e5914022-b54a-4419-93c7-953e1d7b366a
+
+a2f1c889-8595-49fd-a881-cbeca2d647fa) Canadian Reflections: Canada’s longest running showcase of independent short film. For over thirty years, we have given Canada’s best and brightest filmmakers a national audience.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a2f1c889-8595-49fd-a881-cbeca2d647fa
+
+29c4dde5-649d-442d-bd2b-d3e26070c4b0) Canadian Screen Awards: The Academy of Canadian Cinema & Television is a national association dedicated to the promotion, recognition and celebration of Canadian film, television and digital media.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/29c4dde5-649d-442d-bd2b-d3e26070c4b0
+
+d5c225ee-8d28-4602-ba38-f327ad7ac24d) Catastrophe: Rob Delaney and Sharon Horgan write and star in Catastrophe, a comedy following an Irish woman and an American man who make a bloody mess as they struggle to fall in love in London. Clumsy lust, instant pregnancy, and genuine disaster provide the foundation for this flaming hovel of a relationship.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d5c225ee-8d28-4602-ba38-f327ad7ac24d
+
+c7d17b16-ae29-40ef-989c-7ecdae331cd7) Caught: A new drama from Allan Hawco, based on the novel by Lisa Moore. Locked up after a drug deal goes wrong, David Slaney breaks out of prison, hoping to build a new life for himself. But there are no clean getaways…
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/c7d17b16-ae29-40ef-989c-7ecdae331cd7
+
+ccb2afe9-e7f9-409d-97a2-16ea1c0ade42) Cavendish: Cavendish is... not like other towns, as brothers Mark (Mark Little) and Andy (Andy Bush) discover when they return for the first time since childhood to care for their grumbling, malcontent father who runs a Museum of the Strange and Fantastic.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/ccb2afe9-e7f9-409d-97a2-16ea1c0ade42
+
+533d23d6-a63c-4b08-a676-54f6b96904e5) CBC Arts: Exhibitionists: Hosted by actor, playwright and educator Amanda Parris, CBC Arts: Exhibitionists explores the diverse artists who are refreshing, reimagining and revolutionizing art in Canada. From throat singers to ballerinas, sculptors to Instagrammers, CBC Arts: Exhibitionists is a TV show about people who create and why they do it.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/533d23d6-a63c-4b08-a676-54f6b96904e5
+
+5ecc12ee-03f7-439d-9871-e61d4b9e1f69) CBC Arts Specials: Offers award-winning documentary films and specials from Canada and around the world.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/5ecc12ee-03f7-439d-9871-e61d4b9e1f69
+
+668983c3-fc3c-41c5-aaab-ef9d52c9c2c8) CBC Docs POV: CBC’s point of view documentary series takes a unique and often intimate look at issues that matter to Canadians
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/668983c3-fc3c-41c5-aaab-ef9d52c9c2c8
+
+d0f517c2-22d5-422d-a739-42d41c607f8a) CBC Music: First Play Live: CBC Music First Play Live brings you Canadian music like you’ve never seen it before - featuring intimate and exclusive performances from emerging and established Canadian acts.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d0f517c2-22d5-422d-a739-42d41c607f8a
+
+f56143ad-0a59-463e-a47f-8a6742dc6838) CBC Music: Junos Sessions: The biggest Canadian songs over the past 50 years are covered in a series of exclusive sessions for CBC Music.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/f56143ad-0a59-463e-a47f-8a6742dc6838
+
+85210d4f-842e-456a-9e0a-92c5b8ddb80e) CBC Music Specials: 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/85210d4f-842e-456a-9e0a-92c5b8ddb80e
+
+49abfc23-767a-4d13-9c6b-9cce5c62a299) CBC News Specials: 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/49abfc23-767a-4d13-9c6b-9cce5c62a299
+
+5b6ce47e-695c-4775-91df-b3676a26213c) In Our Backyard: Climate Change: Climate change is real, it’s happening now and it’s in our backyard in devastating, even deadly ways.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/5b6ce47e-695c-4775-91df-b3676a26213c
+
+9590508a-dbfb-40a4-9241-a1dd38dc265c) Coming In: The story of Mitchell, a confidently gay man who wakes up straight on the morning of his wedding. The series is a comical skewering of sexual identity.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9590508a-dbfb-40a4-9241-a1dd38dc265c
+
+0fdc17d8-9d74-4136-a641-459043ea7c22) Cooking with Joy: Welcome to Cooking with Joy! Each week Joy McCarthy of Joyous Health is sharing a recipe that is both mouth-watering - and mindfully made.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0fdc17d8-9d74-4136-a641-459043ea7c22
+
+ebc258f5-ee40-4cca-b66b-ba6bd55b7235) Coronation Street: Now streaming the uncut  "full English" UK version! The world's longest-running primetime serial drama, Coronation Street is the story of everyday life in a small, tightly knit community, and all the love, passion, deception, greed, and intrigue that entails.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/ebc258f5-ee40-4cca-b66b-ba6bd55b7235
+
+b32f8752-e1db-4fe0-94c1-56a90337877a) Coroner: Coroner is a one-hour character procedural about a female coroner who investigates suspicious deaths.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/b32f8752-e1db-4fe0-94c1-56a90337877a
+
+41b2803d-5765-410e-bcd2-0bf34b7e1c59) Cracked: CRACKED is a procedural crime drama inspired by real life experiences of frontline police officers and mental-health workers.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/41b2803d-5765-410e-bcd2-0bf34b7e1c59
+
+fe228603-83a4-44ef-a698-32f7089f949f) Crash Gallery: This art challenge series showcases 15 artists from across Canada: from painters to illustrators, graffiti artists to puppet makers, featuring a diverse group of artists from all backgrounds.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/fe228603-83a4-44ef-a698-32f7089f949f
+
+8466bf43-081b-4e34-a4f0-96afa0f33306) Crawford: From the creator of Trailer Park Boys - When raccoons invade the world’s most functioning dysfunctional family’s home, they help breathe life and new meaning into the odd behaviours of the family. Starring an ensemble cast led by Jill Hennessy, Kyle Mac and John Carroll Lynch.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/8466bf43-081b-4e34-a4f0-96afa0f33306
+
+3e3b53be-9fdf-4496-9d1f-b0ce0181ea2e) Daryn Jones Live: Daryn Jones is let loose in the CBC offices and on the town to embroil co-workers, celebrities and people on the street in a series of pranks, stunts, rants and games. He riffs of everything from whether social media is ruining the world, to how long until the robots take over, to the way we raise our children.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3e3b53be-9fdf-4496-9d1f-b0ce0181ea2e
+
+ef0bf1b3-1b14-48b7-86c1-4334eb94d440) Das Boot: During the Autumn of 1942, in occupied France, U-612 is now ready for its maiden voyage, preparing to head into the increasingly brutal warfare with its young crewmen, including the new captain, Klaus Hoffmann.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/ef0bf1b3-1b14-48b7-86c1-4334eb94d440
+
+cdd07a7f-83da-42c8-b505-54e72f5585cd) Devout and Out: After being rejected by the churches of their youth, these three openly LGBTQ pastors have renewed their faith and are bringing new life and new perspectives to Christianity in Canada.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/cdd07a7f-83da-42c8-b505-54e72f5585cd
+
+0894bb03-a063-4cee-8740-5155b121799c) Diggstown: Diggstown follows Marcie Diggs, a star corporate lawyer who reconsiders her priorities after her beloved aunt commits suicide following a malicious prosecution. The team of lawyers that Marcie works with are a curious band of do-gooders, cynics and scrappers - messy souls struggling to keep personal disappointment and demons out of their practice.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0894bb03-a063-4cee-8740-5155b121799c
+
+521f9844-5024-4a6f-a9da-3175ebf43c7c) Disrupting Design: Disrupting Design celebrates innovations in Canadian industrial, urban and graphic design and the ingenious renegades that create them. This digital series is hosted by Matt Galloway.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/521f9844-5024-4a6f-a9da-3175ebf43c7c
+
+53d542c5-f3e2-4467-b330-4b322054c2c8) Documentary Now!: Created by and starring Fred Armisen, Bill Hader, Seth Meyers, and Rhys Thomas, Documentary Now! is a comedy series that pays loving homage to the world's best-known documentaries. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/53d542c5-f3e2-4467-b330-4b322054c2c8
+
+0681ded2-cca3-4736-bdf5-70de80c4f0aa) Documentary Specials: Offers award-winning documentary films and series from Canada and around the world.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0681ded2-cca3-4736-bdf5-70de80c4f0aa
+
+68dcee00-0f8f-43b7-a8e7-c586934589e7) Doc Zone: CBC's flagship documentary series explores and expands on the major issues of our time. Around the corner, around the world, our cameras bring viewers to the center of the stories.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/68dcee00-0f8f-43b7-a8e7-c586934589e7
+
+f60a242c-65f4-404a-88d6-e367051bcc1d) Dragons' Den: Dragons' Den is a reality TV show where aspiring entrepreneurs pitch their business concepts and products to a panel of Canadian business moguls who have the cash and the know-how to make it happen.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/f60a242c-65f4-404a-88d6-e367051bcc1d
+
+0c253b02-48d7-477e-81b9-c9d91caa78a8) Drake's Plan: As 2019 comes to a close, CBC Music explores the rise of one of Canadian music’s biggest success stories of the past decade: Drake.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0c253b02-48d7-477e-81b9-c9d91caa78a8
+
+2d735f8e-2a39-40ee-adaf-511f72dc1026) Dreaming of a Jewish Christmas: An exploration of how the great Christmas songs of the 20th Century were actually written by Jews.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/2d735f8e-2a39-40ee-adaf-511f72dc1026
+
+0d525d6a-ffcc-44e7-8464-84368d9da20e) Earthling House Huntress: An optimistic young real estate agent is on a quest to help extraterrestrials find their forever homes in the Greater Toronto Area, however bizarre, perplexing or impossible their housing needs.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0d525d6a-ffcc-44e7-8464-84368d9da20e
+
+2122b269-3ce0-4d32-92b4-dd25d6dff883) Elizabeth: The life story of Queen Elizabeth II. Where the popular Netflix series “The Crown” dramatized her life, Elizabeth is the real thing - a decade by decade, uniquely personal picture of the the longest reigning monarch in British history.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/2122b269-3ce0-4d32-92b4-dd25d6dff883
+
+d47b8284-8934-44e6-8235-c5c4d4b274be) Embarrassing Pets: A team of experts helps desperate owners from across the UK with their beloved pets' embarrassing behavioual or health problems.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d47b8284-8934-44e6-8235-c5c4d4b274be
+
+7ee30597-36dc-4083-9b61-be1fd909dc27) Equus: Story of the Horse: What is it that makes humans and horses so perfect for each other?   Anthropologist turned filmmaker Niobe Thompson discovers how our ancestors tamed the horse and learns fascinating new insights into the body and mind of this unique animal.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/7ee30597-36dc-4083-9b61-be1fd909dc27
+
+be83b46d-cc42-49cd-bc55-e703306352fe) Escape to the Chateau: Dick Strawbridge and his partner Angel Adoree swap their two-bed flat in Essex for an abandoned French chateau. Can they bring its 45 rooms and acres of land back to life in under a year?
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/be83b46d-cc42-49cd-bc55-e703306352fe
+
+d1dd21c4-402c-4dbf-869a-d73a723c1a41) Escape to the Chateau DIY: DIY follows sixteen British owners of beautiful but run-down chateaus spread throughout every nook and cranny of France, as they try to renovate and convert their castles into amazing fairy-tale homes and money-making businesses.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d1dd21c4-402c-4dbf-869a-d73a723c1a41
+
+cad7671e-c0dc-4e80-b61d-6fcc9987a062) Escape to the Country: A series which helps prospective buyers find their dream home in the country.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/cad7671e-c0dc-4e80-b61d-6fcc9987a062
+
+fc9505b4-0cb5-4a16-aadf-863654041afb) Everything Indigenous: Programs that explore the Indigenous experience across Canada, from docs to interviews to dramas.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/fc9505b4-0cb5-4a16-aadf-863654041afb
+
+2cb1163e-a0df-4811-acad-96869dc3cdf1) Extraordinary Canadians: In each episode a Canadian writer presents a biography of an extraordinary Canadian.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/2cb1163e-a0df-4811-acad-96869dc3cdf1
+
+05952541-a5ce-4ac2-a42c-9dbeefe49b50) Family Feud Canada: We asked 100 game show-loving Canadians: Name the only iconic TV show featuring two families competing to guess popular answers to fun survey questions. Top answer on the board? Survey says...
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/05952541-a5ce-4ac2-a42c-9dbeefe49b50
+
+5b22e626-009b-4849-9a65-4bccbf2de4a1) Farm Crime: From brazen beehive heists to contemporary cattle rustling, FARM CRIME is a true crime documentary series that investigates unconventional offences perpetrated against largely rural victims.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/5b22e626-009b-4849-9a65-4bccbf2de4a1
+
+e6d2c900-6a1a-4b02-b520-baa213013a44) Firsthand: New documentary program gets to the heart of current affairs and social issues that matter to Canadians. With unique and often unexpected access, these stories will ignite discussions.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e6d2c900-6a1a-4b02-b520-baa213013a44
+
+3232b8eb-5abf-4b45-a330-40d777369308) Fortitude: Fortitude is a place like nowhere else - a small mining town in the wild and savage landscape of the Arctic Circle. Fortitude's warmth of community contrasts with the remote, cold, but beautifully harsh surroundings providing a unique setting for a gripping, emotional and shocking story.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3232b8eb-5abf-4b45-a330-40d777369308
+
+9f62aedd-3507-4b18-99ff-3062c105f180) Fortunate Son: A one-hour drama about changing the world: draft dodgers, civil rights, rock and roll, free love and the other impossible dreams of 1968. It’s about war, spies, cops, abusive power and the dark side of unchecked idealism.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9f62aedd-3507-4b18-99ff-3062c105f180
+
+299f50e8-39d8-4d4a-b165-8adbd8590470) Four in the Morning: Four In The Morning is an edgy comedy that follows four friends in their twenties as they navigate life at the unpredictable, emotional, and bewitching hour of 4AM.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/299f50e8-39d8-4d4a-b165-8adbd8590470
+
+8ee5c695-9dd7-4d5f-add4-9e00fb33f571) Frankie Drake Mysteries: Set in 1920s Toronto, the series follows the adventures of Frankie Drake and her partner Trudy Clarke at Drake Private Detectives, the city’s only all-female detective agency, as they find themselves fighting crime in the age of flyboys, gangsters, rum-runners, and speakeasies.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/8ee5c695-9dd7-4d5f-add4-9e00fb33f571
+
+9f241b2d-9634-4cc3-9703-c47b6499dedb) From The Vaults: A visually exciting and entertaining in-depth series that goes beyond music and uses the CBC Music Archived recordings as a window into Canadian history and values.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9f241b2d-9634-4cc3-9703-c47b6499dedb
+
+0f2fa254-a514-4fad-bb1e-5de7662b19a5) Further Back in Time for Dinner: Further Back in Time for Dinner offers a lively, intelligent and revealing look at one British family as it travels even further back - to the early 20th century.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0f2fa254-a514-4fad-bb1e-5de7662b19a5
+
+d326800c-db6a-49bf-aed5-b10636d95fee) Future History: Future History follows two passionate, and polar opposite, Anishinaabe (Ojibway) hosts as they venture into their community to gain a deeper understanding of Indigenous Knowledge and the movement of cultural revitalization.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d326800c-db6a-49bf-aed5-b10636d95fee
+
+b485b942-a226-47bd-98e1-fc55ace92bc4) GameFace: Comedy series following Marcella as she spiritedly crashes her way through life, assisted by her dubious life-coach, best friends, and ever-patient driving instructor.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/b485b942-a226-47bd-98e1-fc55ace92bc4
+
+415224e1-3904-4884-808b-7b8c97c50d1c) Gary and His Demons: Gary and His Demons is an animated comedy about a cantankerous aging demon slayer who has nothing left to lose.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/415224e1-3904-4884-808b-7b8c97c50d1c
+
+b13a60b9-91d0-42cc-963a-ed7cf0a6dac4) Gender Stories: A selection of documentaries about gender identity and expression.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/b13a60b9-91d0-42cc-963a-ed7cf0a6dac4
+
+b723f928-e3fc-47a6-bfd4-2941118981a5) Grand Designs: Designer and writer Kevin McCloud guides us through the trials and tribulations – physical, financial and emotional – of those obsessively trying to create a unique place to live.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/b723f928-e3fc-47a6-bfd4-2941118981a5
+
+06d8f0d7-e67d-4d08-adf0-f51548eed7ef) Grand Designs (Australia): No design is too ambitious when it comes to creating your dream home. But discovering the hard realities that complicate your plans can often be too much to bear.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/06d8f0d7-e67d-4d08-adf0-f51548eed7ef
+
+0e4502ca-6184-4f5c-a4cf-9706f8b2c4c2) Grand Designs: House of the Year: Every year the RIBA runs a competition to find the UK’s best new house. From hundreds of entries, they whittle it down to a long list, then a short list and finally name a winner.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0e4502ca-6184-4f5c-a4cf-9706f8b2c4c2
+
+4fb7f963-9193-4b35-9bb9-7e817c7c1f0e) Greyzone: When retaining a suspicious truck from Denmark at Gothenburg Harbor, the Swedish police officer Eva makes a terrifying discovery in a hidden compartment - a fully armed missile.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/4fb7f963-9193-4b35-9bb9-7e817c7c1f0e
+
+8e5a769f-fbe3-4b23-b511-776b9eadbd39) Halifax Comedy Festival: Shot in various locations in and around Halifax the series features the best in stand-up comedy from Canada and the United States hosted by Mark Critch (22 Minutes).
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/8e5a769f-fbe3-4b23-b511-776b9eadbd39
+
+659e8e6a-d4c9-48f6-9987-6ff46344e1e1) Hang Ups: HANG UPS is a new comedy series about an unconventional therapist whose own life is more chaotic than that of any his patients.  Richard Pitt, a therapist, who is trying to relaunch his career online after the disastrous collapse of his group therapy practice.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/659e8e6a-d4c9-48f6-9987-6ff46344e1e1
+
+b4df11df-e267-46c9-a5f9-f46ca6edb689) Hannah Gadsby's Nakedy Nudes: “The Nude” is one of the most enduring subjects in western art. In this two-part Arts-doc series, comedian Hannah Gadsby speaks art heavyweights such as Ben Quilty, Bill Henson, and Julie Rrap, to try to get to the bottom of our ongoing fascination with the nakedy nude.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/b4df11df-e267-46c9-a5f9-f46ca6edb689
+
+2d57421c-bb12-417f-96dd-17ae790ba7c1) Hannah Gadsby’s OZ: Australian stand-up comedian Hannah Gadsby is a closet art scholar. Armed with a rapier wit and desire to pick beneath the paint, she travels across the continent on a mission to debunk the myths of the Australian identity as defined by their art canon.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/2d57421c-bb12-417f-96dd-17ae790ba7c1
+
+14cddcf4-d8da-49e3-8009-434fd68039e6) Hatching, Matching, and Dispatching: In outport Newfoundland, it is often left to one enterprising family to literally taxi the residents of the town from cradle to grave - offering wedding, funeral and ambulance services. A classic comedy starring Mary Walsh, Mark McKinney, Shaun Majumder, and Jonny Harris.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/14cddcf4-d8da-49e3-8009-434fd68039e6
+
+e425dd6e-8379-44be-a3c4-b91d19b6c9eb) Heartland: HEARTLAND is a sprawling multi-generational saga about a family getting through the highs and lows of life on a horse ranch, set against the stunning vistas of the foothills of Alberta.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e425dd6e-8379-44be-a3c4-b91d19b6c9eb
+
+fe510576-2883-48c0-b652-7d187fbd223e) High Arctic Haulers: High above the Arctic Circle, tugboat crews battle ice and treacherous tides through a two-month window to keep the towns at the top of the world supplied and alive.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/fe510576-2883-48c0-b652-7d187fbd223e
+
+e95b934f-2371-4f61-a7f1-63749f79a57b) Holiday Programming: A collection of seasonal programming.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e95b934f-2371-4f61-a7f1-63749f79a57b
+
+e01423b6-26a9-455b-9e03-9dabca3a0699) Hoop Talks: Hoop Talks brings together the most interesting voices from the world of basketball for uncensored, unscripted discussions on stage in front of a live audience.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e01423b6-26a9-455b-9e03-9dabca3a0699
+
+45fab029-9fa4-41d8-96a3-ada5f496ecc3) How to Buy a Baby: An infertile couple struggles to conceive with the help of a doctor, and a nurse, and a financial planner, and unsolicited advice from everyone they know.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/45fab029-9fa4-41d8-96a3-ada5f496ecc3
+
+0e45da71-5497-4bb8-bfb3-a3eca151faee) Hudson: Set in the world of CBC’s long-running hit, Heartland, Hudson explores friendship, love and the work-life balance of several friends living in a small Alberta town.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0e45da71-5497-4bb8-bfb3-a3eca151faee
+
+2594aa4b-7ca0-405a-a680-cb960a7bce80) HumanTown: Story-driven sketch series that depicts everyday life in a deranged and eccentric town.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/2594aa4b-7ca0-405a-a680-cb960a7bce80
+
+0a36fdec-220b-4487-a217-af325f0a7008) I Ship It: I Ship It is a new musical-adventure created, written and directed by YouTube creator Yulin Kuang. After a devastating breakup, Ella Spencer enlists her roommate/best friend Tim to help her seek revenge on her ex.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0a36fdec-220b-4487-a217-af325f0a7008
+
+142ee7ad-e18a-452e-9534-0b26f48809d1) In The Long Run: Created by and featuring Idris Elba with an ensemble cast including Bill Bailey, IN THE LONG RUN is a comedy about family, community and what home really means.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/142ee7ad-e18a-452e-9534-0b26f48809d1
+
+4ac54a44-56e9-4a47-9426-19890f5568ef) In the Making: In the Making is an immersive journey inside the creative process of some of Canada’s leading artists, hosted by Sean O'Neill.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/4ac54a44-56e9-4a47-9426-19890f5568ef
+
+789e869f-086f-47ba-9eae-9d5205cf1930) In the Studio with Steven Sabados: Step inside Steven Sabados' studio and learn how to create original art, DIYs, fashion, and home decor pieces while unlocking your inner artist!
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/789e869f-086f-47ba-9eae-9d5205cf1930
+
+fbfd24d9-27ca-48ed-bef1-331c98ce74f0) Inside an Athlete's Head: INSIDE AN ATHLETE'S HEAD gives you unprecedented access to the thoughts, anxieties and obsessions of some of today's most celebrated athletes, in their own voices.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/fbfd24d9-27ca-48ed-bef1-331c98ce74f0
+
+2ae9e4d3-ddc1-486d-805a-4a40ae9c25d7) Interrupt this Program: Interrupt this Program explores the underground art scenes of cities under pressure, with point-of-view docs that feature artists working amid tension, dissent or political unrest.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/2ae9e4d3-ddc1-486d-805a-4a40ae9c25d7
+
+a3e6be91-5cb8-4de6-9326-af76523c0858) Jackie Robinson: JACKIE ROBINSON, directed by Ken Burns, Sarah Burns, and David McMahon, tells the story of Jack Roosevelt Robinson, who rose from humble origins to break baseball’s colour barrier.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a3e6be91-5cb8-4de6-9326-af76523c0858
+
+4687df71-64d6-4133-ac65-9c86e67e76f6) Jade of Death: Small town girl Jade has a powerful ability. She can hear when and how people are going to die. She ran away from her hometown and gets by working at a seedy freak show carnival as the "Fortune-Teller of Death", but now people are after her. There's more to her past than she lets on, and there's more to her abilities than she knows.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/4687df71-64d6-4133-ac65-9c86e67e76f6
+
+cde0fe38-55f6-4a11-82be-bbbfef83b888) Jamie and Jimmy's Food Fight Club: Jamie Oliver and Jimmy Doherty have been best mates since before school and have always shared a passion for good food. That’s why - now they’re all grown up, - they’ve come home to Essex, and opened their own little pop-up café at the end of Southend Pier.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/cde0fe38-55f6-4a11-82be-bbbfef83b888
+
+70dcff00-2aa0-46e5-82d4-0fcf70d1466d) Jamie's 15 Minute Meals: Building on the success of the previous series, Jamie’s Fifteen Minute Meals pushes the concept of fast, everyday food to the next level.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/70dcff00-2aa0-46e5-82d4-0fcf70d1466d
+
+923ca512-0554-41d3-8c82-c43f7dfec9ed) Jamie's 30 Minute Meals: A rockin’ 40 x half-hour food series that sees Jamie Oliver giving solid instruction to the culinary uninspired. In a tough-talking, fast paced, as-live style, he creates great home-cooked meals from scratch - substantial mains, delicious sides and salads, gorgeous puddings and refreshing drinks - adding his own unique twist to each element.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/923ca512-0554-41d3-8c82-c43f7dfec9ed
+
+be48970d-ce7b-45dd-a519-09c29f07f857) Jamie's Christmas with Bells On: Jamie Oliver is the person most of us turn to for advice on how to cook the most important meal of the year: Christmas dinner.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/be48970d-ce7b-45dd-a519-09c29f07f857
+
+792a5782-ce94-443f-8b60-ff5187e62771) Jamie’s Cracking Christmas: In this flavour-packed Christmas special, Jamie will be cooking up a bunch of epic dishes - both sweet and savoury - perfect for the festive season.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/792a5782-ce94-443f-8b60-ff5187e62771
+
+69c53ea0-8a2a-4977-acc4-999a05c0c1c5) Jamie's Super Food: In this new six-part series, Jamie Oliver is travelling to some of the healthiest places in the world to uncover the secrets of how people there live longer and healthier lives.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/69c53ea0-8a2a-4977-acc4-999a05c0c1c5
+
+6ec4f687-858d-4a47-8c50-02a449853c37) Jamie's Super Food Family Classics: In Jamie’s Super Food Family Classics, world-renowned chef, Jamie Oliver, is on a mission to freshen up all our family favourites to ensure they are packed with goodness.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/6ec4f687-858d-4a47-8c50-02a449853c37
+
+75a2634b-aa7e-40eb-af78-e2d3cb8f0151) Jekyll and Hyde: Set in 1930s London focusing on Robert Jekyll, the grandson of the original doctor. The show will follow Robert Jekyll's quest to discover his real identity and the true nature of his family's curse.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/75a2634b-aa7e-40eb-af78-e2d3cb8f0151
+
+10b4271d-b23d-4c3c-800b-4e404b2841bf) Jensplaining: Dr. Jen Gunter is “Twitter’s Gynecologist.” Through humour and expertise, she helps us understand how celebrity endorsed popular pseudoscience "wellness" products and trends are anything but harmless.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/10b4271d-b23d-4c3c-800b-4e404b2841bf
+
+69b083cf-ac6b-4bf3-b3d9-f4152562c66a) Jet Age: Jet Age considers the evolution of airports from generic atriums into bonafide art galleries that surround and engage their visitors with stunning sculptures, architecture, and paintings.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/69b083cf-ac6b-4bf3-b3d9-f4152562c66a
+
+8d22ef63-ffc3-4fc9-ab63-34d53c9c43a3) Jonah: The man, the myth, the legend. JONAH tells the once in a lifetime story of the greatest rugby player the world has ever known, Jonah Lomu. This two-part series follows Lomu's rise to the top, but also his devastating battle behind the scenes.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/8d22ef63-ffc3-4fc9-ab63-34d53c9c43a3
+
+986686f3-9d20-4e67-88c6-2bbebba6abbc) Just For Laughs Gags: There's no sound, but there sure are plenty of laughs. This crazy Quebec-based troupe uses the city as its stage, and its inhabitants, or victims, as characters!
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/986686f3-9d20-4e67-88c6-2bbebba6abbc
+
+81400caa-fa5a-4c96-8eb7-495cad7a2329) Just for Laughs Galas: THIS is where comedy happens! Direct from the world's biggest comedy event - JUST FOR LAUGHS - catch the funniest stars alongside the most talented breakout comics.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/81400caa-fa5a-4c96-8eb7-495cad7a2329
+
+752d6662-e7f8-4755-aec3-a3d558b42cb4) Karena & Kasey's Foreign Flavours: MasterChef winners Karena and Kasey Bird step outside their comfort zone to brave an ambitious global gastronomic journey. The youngest ever winners of MasterChef, these self-taught Mori cooking sensations are taking on the world one plate at a time! In this exciting series, Kasey and Karena who have barely traveled in their own country, let alone the rest of the world, pack their bags and embark on an epic 10-stop tour around the globe; promoting their language and culture along the way.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/752d6662-e7f8-4755-aec3-a3d558b42cb4
+
+74eb925a-dd90-4786-9aa3-64b60828d085) Keep Calm and Decolonize: Five filmmakers respond to Buffy Sainte-Marie's call to "Keep Calm and Decolonize" as Canada marks 150 years of Confederation. From shadow puppets to documentary, these stories explore what a "decolonized" country might look like. Curated by Jesse Wente for CBC Arts.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/74eb925a-dd90-4786-9aa3-64b60828d085
+
+6db1b59c-84f7-4d00-af35-5df949f0d144) Kids in the Hall: The TV series of the Canadian sketch comedy troupe that, more often than not, puts bizarre, unique, and insane twists in their skits. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/6db1b59c-84f7-4d00-af35-5df949f0d144
+
+35de0f94-fd39-4c3e-a463-e39820eac2fb) Kim's Convenience: KIM'S CONVENIENCE is the funny, heartfelt story of The Kims, a Korean-Canadian family, running a convenience store in downtown Toronto.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/35de0f94-fd39-4c3e-a463-e39820eac2fb
+
+1d46c681-0fc6-4344-82af-cb312d7df8ac) Kim's Convenience (Korean Subtitles): KIM'S CONVENIENCE is the funny, heartfelt story of The Kims, a Korean-Canadian family, running a convenience store in downtown Toronto (with Korean Subtitles).
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/1d46c681-0fc6-4344-82af-cb312d7df8ac
+
+a328ecad-f7c1-4c08-adc8-5eb25961e6ff) Kiri: Kiri is a young black girl in the process of being adopted by a middle-class white family. She goes missing on an unsupervised visit to her birth family.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a328ecad-f7c1-4c08-adc8-5eb25961e6ff
+
+facc649e-1d2f-47cb-9a0e-c9098ef177d7) Land and Sea Network: The series documents the lives of Canadians who live on the natural resources of the eastern coast of the country. They are the stories of people who keep the oldest traditions alive.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/facc649e-1d2f-47cb-9a0e-c9098ef177d7
+
+e1ba845f-33b8-4078-aea9-e1c51dcad7d4) Land and Sea NFLD: A locally produced Canadian documentary television show that has been on the air since 1964 (with a brief interruption in the early 1990s).
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e1ba845f-33b8-4078-aea9-e1c51dcad7d4
+
+cd8cf60d-3b2d-47a4-9364-8f35ea9529b5) Les Beaux Malaises: French Canada’s answer to Seinfeld, Martin Matte’s new television series is about, well...nothing - Rien du tout! Add a maid, a dentist, a doctor, a toaster salesman, a filthy rich star...and what have you got??
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/cd8cf60d-3b2d-47a4-9364-8f35ea9529b5
+
+dfa2b9de-4b3a-40c0-9e28-7289e51a92c4) Little Dog: Season two picks up immediately afterward and Tommy is on the run. Eventually forced to face his family and the boxing ring.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/dfa2b9de-4b3a-40c0-9e28-7289e51a92c4
+
+e9b268a7-26ff-45f6-acf9-e84fd8ab682d) Little Dorrit: This gripping series by Andrew Davies brings to life Dickens’s powerful story of struggle and hardship in 1820s London. When Arthur Clennam returns to England after many years abroad.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e9b268a7-26ff-45f6-acf9-e84fd8ab682d
+
+746683b3-e9d3-47cb-b98d-6b761b08741c) Little Women: In this coming-of-age story, Little Women follows the March sisters on their journey from childhood to adulthood under the guidance of their mother Marmee while their father is away at war.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/746683b3-e9d3-47cb-b98d-6b761b08741c
+
+44ffb551-b1d5-46aa-90f6-05b7d6f5b152) Local News Specials: 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/44ffb551-b1d5-46aa-90f6-05b7d6f5b152
+
+f9d3d0ca-8ae8-4a83-a6dd-ceb9710aa834) Luther: Idris Elba stars as maverick detective John Luther in this gripping, smart and entertaining thriller. A detective working for London’s Serious Crime Unit, Luther is a dedicated policeman, an inspired maker of connections and a whirlwind genius. He is dazzling, obsessive and sometimes dangerous in the violence of his fixations.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/f9d3d0ca-8ae8-4a83-a6dd-ceb9710aa834
+
+31806501-1e98-4f91-874a-f61afd1d8158) Maamuitaau: Documentary series that brings the stories of the James Bay Crees to life. In English, Maamuitaau means "Let's Get Together," which reflects the spirit of the show covering a broad range of subjects.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/31806501-1e98-4f91-874a-f61afd1d8158
+
+1b59e663-c20b-4ce2-b2f6-6e3ceb1c2059) Madiba: “Madiba” takes an intimate look at the early ties that shaped Nelson Mandela: his close friendships, personal relationships, and political alliances through his lifelong struggle as Xhosa human rights activist, lawyer, political prisoner, and eventual president of South Africa.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/1b59e663-c20b-4ce2-b2f6-6e3ceb1c2059
+
+97640a61-872a-4b89-b24f-ace209e528f8) Man of the Kitchen: Welcome to Man of the Kitchen! Chef Shahir Massoud from CBC's The Goods proves that being a new parent doesn't mean you have to give up cooking and socializing - it just means you have to find clever ways to save time and effort in the kitchen.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/97640a61-872a-4b89-b24f-ace209e528f8
+
+2f36d0bc-e1d3-4ca7-a18b-64cd6f8d549f) Mansbridge One on One: Peter Mansbridge presents a weekly interview program featuring conversations with the people who shape this country. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/2f36d0bc-e1d3-4ca7-a18b-64cd6f8d549f
+
+3af406db-ca14-4d06-b483-dd8a7cdb9c18) Marchlands: A supernatural drama telling the story of three different families living in the same house in 1968, 1987 and the present day, linked by the spirit of the young daughter of the 1960s family, who drowned in mysterious circumstances.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3af406db-ca14-4d06-b483-dd8a7cdb9c18
+
+a072f214-8835-46a8-9a98-24d31526010e) Marketplace: Whether it is a slick scam, misleading marketing claim, a product that could put your health at risk, or maddening customer service, Marketplace has got your back.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a072f214-8835-46a8-9a98-24d31526010e
+
+4b2ed25b-4024-476b-90c5-6b93bc5643d9) Meet Your Maker: Fronted by entertainer Sean Jordan, Meet Your Maker is a docu-series that explores the maker culture. Meet the most colourful and compelling makers and see their making process first hand.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/4b2ed25b-4024-476b-90c5-6b93bc5643d9
+
+3686c672-d688-45c6-85ac-c1d2f2290791) Michael: Every Day: Every Day picks up five years after Micheal: Tuesdays & Thursdays, with Michael well established in his new city, and David struggling to continue his practice.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3686c672-d688-45c6-85ac-c1d2f2290791
+
+415b2f45-d86d-4567-b800-6af34e9b48c7) Mind Fudge: Mind Fudge is a highly ambitious, cinematic ride through Justine’s hyper-real, 20-something imagination as she juggles life, love, and what it all means, before landing back in reality with a punchline.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/415b2f45-d86d-4567-b800-6af34e9b48c7
+
+9a4c2caf-6849-4da5-9f39-d0865d8f8af0) Ming's Dynasty: Fledgling Toronto rappers Whyte Wyne and Young Riesling return to Riesling's home in small-town Alberta to run the family business: a Chinese restaurant. Will they chase the beats or be loyal to the eats?
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9a4c2caf-6849-4da5-9f39-d0865d8f8af0
+
+faf4a303-cb5a-4bb8-bc8b-a6741b190501) Misfits: Kelly, Nathan, Curtis, Alisha, and Simon have one thing in common: they’ve all committed a crime and have all been handed out Community Service Orders. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/faf4a303-cb5a-4bb8-bc8b-a6741b190501
+
+e0e091ca-1fc3-4e30-b322-3176bee300f7) Moone Boy: A warm family comedy series about a young boy growing up in a chaotic and creative household in late 1980s Ireland. This semi-autobiographical series is written by and stars Chris O’Dowd.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e0e091ca-1fc3-4e30-b322-3176bee300f7
+
+076dd614-96a8-4544-9db0-ec31c7a0d8c8) Mr. D: Based on Gerry Dee's real-life experiences as a teacher before he moved to comedy full-time, MR. D is the story of a charming, under-qualified teacher trying to fake his way through a teaching job.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/076dd614-96a8-4544-9db0-ec31c7a0d8c8
+
+a88d450e-821a-45a0-9040-7a34a1d48e0b) Mr. Student Body President: Tyler Prendergast is the most ambitious student body president in the history of Berenger High. With his Machiavellian chief of Prendergast runs the school like a slick politician on Capitol Hill, as he maintains power by any means necessary. School is now is session.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a88d450e-821a-45a0-9040-7a34a1d48e0b
+
+97d553e7-389d-49de-882c-882263a31a7f) Murdoch Mysteries: Set in the late 1890s and early 1900s, critically-acclaimed series MURDOCH MYSTERIES explores the world of William Murdoch, a dashing detective who uses inventive forensic techniques to solve crimes.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/97d553e7-389d-49de-882c-882263a31a7f
+
+9c0fccc7-0a86-4703-a2f9-a5dbd243d249) My 90 Year Old Roommate: Joe (Paul Soles), a 90-year-old widower, is living alone when his misguided adult grandson moves in with nothing but a backpack, a box of condoms and a sense of entitlement.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9c0fccc7-0a86-4703-a2f9-a5dbd243d249
+
+2c3b4a8c-3625-4250-81bc-1ac7a5145b1e) My Family and the Galapagos: Follow award-winning TV host, marine biologist, and conservationist Monty Halls as he returns to his "favourite place on Earth" - The Galapagos Islands - but this time accompanied by his young family.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/2c3b4a8c-3625-4250-81bc-1ac7a5145b1e
+
+3ecfdad5-34f2-441e-902c-c3eb6954dd69) My Kitchen Can Be Anything: A fantasy comedy series shot in Pat Thornton’s kitchen that takes place anywhere but in Pat Thornton’s kitchen.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3ecfdad5-34f2-441e-902c-c3eb6954dd69
+
+39ab1c5a-5549-4c81-b25a-f46b89218ff3) My Mad Fat Diary: My Fat Mad Diary takes a warm, hilarious and honest look at teenage life from the perspective of an overweight sixteen-year-old girl in mid 90s Lincolnshire.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/39ab1c5a-5549-4c81-b25a-f46b89218ff3
+
+65482577-3929-46cb-bf14-c9d152d52419) Nadiya's Asian Odyssey: Nadiya Hussain makes a surprising discovery about her DNA which sees her travel solo for the first time, exploring the people, places, and food of Thailand, Cambodia, and Nepal.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/65482577-3929-46cb-bf14-c9d152d52419
+
+ff12e253-396f-4c82-9f10-469f66051804) Nadiya's Family Favourites: Nadiya shows that being a good cook isn’t just about mastering technique, the real secret is knowing just what to muster up for each occasion.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/ff12e253-396f-4c82-9f10-469f66051804
+
+ecbf5aa8-68e2-48be-971c-80ec6580572c) Nadiya's Food Adventure: Nadiya Hussain embarks on a culinary road trip around Britain which sees her travel the length and breadth of the country seeking out all that is great about British food today.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/ecbf5aa8-68e2-48be-971c-80ec6580572c
+
+17cfd4e5-2053-4214-8310-dabb9cab6b16) Narcoleap: When college student Kelsey Atkins unexpectedly begins to leap into the bodies of other people during her bouts of narcolepsy, she becomes a target in the deadly world of military espionage.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/17cfd4e5-2053-4214-8310-dabb9cab6b16
+
+d65a5a7f-ef28-44af-b2a0-f67920059abd) National Treasure: National Treasure follows Paul Finchley, an aging, beloved comedian, a hero to TV audiences and peers alike after he is arrested following an allegation of rape dating back to the 90s.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d65a5a7f-ef28-44af-b2a0-f67920059abd
+
+41b2df50-9032-4c71-9c1f-1ef1948eaabb) Newborn Moms: Newborn Moms is the comedic untold story of what it’s like to be a new parent struggling with sleepless nights, self-doubt, and swollen boobs.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/41b2df50-9032-4c71-9c1f-1ef1948eaabb
+
+de06c01c-acbf-44d1-8d03-7fcf0d3fb775) Nikola Tesla and the End of the World: Two academics and a lost boyfriend use Nikola Tesla’s multiverse device to travel through parallel Brooklyns and bring him home, if they can get him out of debt, and avoid an interdimensional death cult.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/de06c01c-acbf-44d1-8d03-7fcf0d3fb775
+
+a3496a67-98ae-40a5-a50a-7e1fcf331cd2) Nirvanna the Band the Show: Two lifelong best friends and roommates are planning the greatest musical act in the history of the modern world. Without ever playing a note, Nirvanna the Band plan to take Toronto by storm, one scheme at a time.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a3496a67-98ae-40a5-a50a-7e1fcf331cd2
+
+6b454351-fbee-4d5d-a2d1-da3e81acc33c) Northern Rescue: A family drama starring William Baldwin as a father who, after the death of his wife, uproots his three children from the big city to return to his hometown to take command of the local search and rescue service.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/6b454351-fbee-4d5d-a2d1-da3e81acc33c
+
+20baa0e6-cee4-4e74-8597-92b32e9ab7c8) Off Kilter: A comedy that lingers in the awkward silences as much as it does on the stunning choreography of the acclaimed Shawn Hounsell, OFF KILTER documents a man re-making himself into the critically acclaimed jerk he never got to be in the ‘90s.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/20baa0e6-cee4-4e74-8597-92b32e9ab7c8
+
+16a25531-6fb7-4d63-83d9-8a609ac37242) On The Ropes: On The Ropes is a sexy, gritty drama that is fast-paced and full of heart. It follows aspiring Iraqi-Australian boxing trainer Amirah Al Amir who has idolised her world champion father Sami her entire life.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/16a25531-6fb7-4d63-83d9-8a609ac37242
+
+12428328-7554-4933-aad1-36c5567e3c21) Ordeal By Innocence: Christmas 1954. Wealthy philanthropist Rachel Argyll is murdered at her family estate Sunny Point. Her adopted son Jack Argyll is arrested for her murder. He vehemently protests his innocence.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/12428328-7554-4933-aad1-36c5567e3c21
+
+54e99687-fcf9-427a-8922-8f55b8e1c7ad) Paul O'Grady: For the Love of Dogs: For the Love of Dogs is a multi-award winning British reality documentary television series set at Battersea Dogs & Cats Home presented by Paul O'Grady.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/54e99687-fcf9-427a-8922-8f55b8e1c7ad
+
+845477b7-b3b9-4203-a188-171a27b60e4c) Paul O'Grady: For the Love of Dogs (India): Comedian Paul O'Grady is swapping Battersea Dogs' Home in London for Delhi, India as he meets some of the people who care for sick and abandoned dogs in the country.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/845477b7-b3b9-4203-a188-171a27b60e4c
+
+3ae992f9-80f5-4ff4-b9c8-5ab0b6078786) PEN15: PEN15 is middle school as it really happened, in all its cringe-worthy glory. Show creators, Maya Erskine, and Anna Konkle, who are full-on adults, play fictionalized depictions of their younger selves as awkward 7th-grade outcasts, surrounded by actual 13-year-olds.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3ae992f9-80f5-4ff4-b9c8-5ab0b6078786
+
+4af94b73-af1b-44c7-bb02-aebaa6c693b7) Portlandia: The award-winning sketch comedy series starring Fred Armisen and Carrie Brownstein. Each episode's character-based shorts draw viewers into "Portlandia," a dreamy —and absurd— rendering of Portland, Oregon.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/4af94b73-af1b-44c7-bb02-aebaa6c693b7
+
+96b0e596-4eb4-41c1-a90f-144ec9251361) Power & Politics with Vassy Kapelos: Every weekday, Power & Politics host Vassy Kapelos guides Canadians through the country's political news, with a regular cast of political panelists and the continuously unfolding drama of the Canadian political scene.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/96b0e596-4eb4-41c1-a90f-144ec9251361
+
+42c3a440-9ce5-401e-a140-949f977b8717) Pure: After discovering that a small but powerful clique within his Old Order Mennonite community are part of an international cocaine smuggling ring, newly appointed pastor Noah Funk must make a decision.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/42c3a440-9ce5-401e-a140-949f977b8717
+
+a72f7343-778a-44a5-bf97-ed73918ed997) Pure (UK): Twenty-four-year-old Marnie is witty, smart and ‘normal’, apart from the relentless barrage of x-rated thoughts in her head. Unbeknown to Marnie, she’s in the grip of a remarkable form of obsessive-compulsive disorder - nicknamed ‘Pure O’.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a72f7343-778a-44a5-bf97-ed73918ed997
+
+7300eda6-ff5f-460b-87fc-80f592a9e1dd) q with Tom Power: Get ready to meet the artists you're talking about, and the ones you'll soon love. Whatever you're into -- music, TV, film, visual art, theatre, or comedy -- q is there. Expect deep insight, and big surprises. Because on q, arts and entertainment get personal.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/7300eda6-ff5f-460b-87fc-80f592a9e1dd
+
+15eead94-5bed-405b-8d20-b0d8ee52ef29) Queer (Self) Portraits: A series of short documentary portraits of ten LGBTQ+ artists or supporters of the arts.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/15eead94-5bed-405b-8d20-b0d8ee52ef29
+
+41b30feb-2134-47b8-a43f-cf0bb9b2f18b) Rachel Khoo's Kitchen Notebook: Cosmopolitan Cook: Passionate and creative cook Rachel Khoo goes in search of new ideas in this vibrant and fascinating series. Rachel travels to some of the most beautiful foodie countries in the world!
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/41b30feb-2134-47b8-a43f-cf0bb9b2f18b
+
+f903c7b8-dcea-4939-b8e1-4a890423403a) Rachel Khoo's Kitchen Notebook: Melbourne: World traveller and global food creator Rachel Khoo heads into the heart of Australia’s most stimulating food destination.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/f903c7b8-dcea-4939-b8e1-4a890423403a
+
+36f011ba-959e-48ae-8fce-109cdd685524) RBC Training Ground: RBC Training Ground follows the stories of young Canadian athletes as they vie for a chance to become Future Olympians through this unique training program.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/36f011ba-959e-48ae-8fce-109cdd685524
+
+9ecf1a03-357e-4686-ab78-733fd7830885) Red Button: A groundbreaking approach to storytelling where young documentary subjects turn the camera on themselves to break down the misconceptions, prejudices or stereotypes they face. Each episode focuses on one young person who gives us an unflinchingly honest portrayal of their life. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9ecf1a03-357e-4686-ab78-733fd7830885
+
+e57e66c5-6e5c-42fd-9679-9ffc391ad316) Red Bull: Comprehensive coverage of the most innovative tournaments in the world of action sports including events such as Crashed Ice, Joyride, Rampage, Hare Scramble and more.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e57e66c5-6e5c-42fd-9679-9ffc391ad316
+
+dadc7b07-be61-44d8-b8b6-9e5877e87391) Reel East Coast: Great short films by filmmakers from Newfoundland and Nova Scotia.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/dadc7b07-be61-44d8-b8b6-9e5877e87391
+
+e4703ee2-686d-42de-a404-2922a62f6da4) Remembrance Day: A selection of programming created in remembrance for the men and women who have served, and continue to serve our country during times of war, conflict, and peace.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e4703ee2-686d-42de-a404-2922a62f6da4
+
+d5fe3058-8930-4b61-9b60-59c929139a4d) RePlay: What if you could repeat the most important day of your life until you perfected every moment? Receiving her one birthday wish, Allison Lee gets more than she asked for when she's stuck repeating an epic 25th birthday bash that just went down in flames.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d5fe3058-8930-4b61-9b60-59c929139a4d
+
+349f0d1a-e62d-4138-88b3-330e6027fb1d) Republic of Doyle: Republic of Doyle, set against the backdrop of contemporary St. John's, Newfoundland, is a father-and-son P.I. series starring Allan Hawco as the unpredictable and irresistible private investigator.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/349f0d1a-e62d-4138-88b3-330e6027fb1d
+
+bb1aa53b-8b6f-4dad-b132-30f84d600e40) Rick Mercer Report: Canada's number one political satirist, Rick Mercer hosts The RICK MERCER REPORT, providing a unique viewpoint on Canada from coast to coast to coast.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/bb1aa53b-8b6f-4dad-b132-30f84d600e40
+
+1d1d9d73-50bf-4836-a1f6-1dead864153f) Riftworld Chronicles: A struggling journalist teams up with a dimension-traveling wizard who is stuck in our world without his magic powers.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/1d1d9d73-50bf-4836-a1f6-1dead864153f
+
+ebb1aada-43cd-43d1-913f-c535f7225891) Road to the Olympic Games: With less than two years until Tokyo 2020, we're showcasing the journey of Canada's athletes, on and off the field of play. Hosts Scott Russell and Andi Petrillo are joined by an all-star roster of expert commentators and analysts including some of Canada’s most well-known Olympians.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/ebb1aada-43cd-43d1-913f-c535f7225891
+
+357c5282-cce5-4f36-9cb6-e8d6fc17c8a8) Ronny Chieng: International Student: He’s a Malaysian student who’s come to Australia to study law. He’s smart, driven and competitive, which would make him the perfect law student, if he actually wanted to be a lawyer.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/357c5282-cce5-4f36-9cb6-e8d6fc17c8a8
+
+e1d3c087-8be4-4fdb-853f-5470f34b1059) Safe Harbour: A boat of desperate asylum seekers is found by a group on a yachting holiday. The rescue mission is sabotaged with deadly consequence, but who is responsible? Streaming now for Premium members only. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e1d3c087-8be4-4fdb-853f-5470f34b1059
+
+b5a32474-c573-4f79-a38e-2f46c3cb3b47) Save Me: A comedy-drama that follows the lives of people right before they have to call 911, and the paramedics who show up after all hell breaks loose.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/b5a32474-c573-4f79-a38e-2f46c3cb3b47
+
+02ac9c97-1f1e-48df-b9b3-0c15787eb60d) Save Me (UK): A gritty thriller starring Lennie James as Nelly Rowe, a man who has his world turned upside down when he is accused of kidnapping his estranged 13-year-old daughter. Determined to clear his name, Nelly embarks on a mission to find her real abductor and face up to his past.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/02ac9c97-1f1e-48df-b9b3-0c15787eb60d
+
+4861aee3-3b8c-47cf-980b-9297a611f369) Save with Jamie: Keen to inspire us all to eat better AND spend less on our weekly food bills, Jamie Oliver’s back with this optimistic, inventive and super-helpful new food series.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/4861aee3-3b8c-47cf-980b-9297a611f369
+
+4d0f9a23-8de2-47cf-900e-4a3b5bf69f2d) Schitt's Creek: When the filthy-rich Roses suddenly find themselves broke they're forced to rebuild their empire within their only remaining asset - Schitt's Creek, an arm pit of a town they once bought as a joke.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/4d0f9a23-8de2-47cf-900e-4a3b5bf69f2d
+
+d63d2d7a-20fc-4c31-ac0c-dfdde8c1ebc2) Scotiabank Giller Prize: Canada's most distinguished literary prize awards the author of the best Canadian novel or short story collection.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d63d2d7a-20fc-4c31-ac0c-dfdde8c1ebc2
+
+6c17a648-d220-417a-a1c6-1cc0cf25ddf8) Secret Life Of...: Secret Life Of...is a cheeky and provocative biography series that deliciously dishes dirt on icons of the past. Think Napoleon, Catherine the Great, and Casanova.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/6c17a648-d220-417a-a1c6-1cc0cf25ddf8
+
+bbbd777c-04ab-49d5-902d-949d4b55c774) Secret Life of Farm Animals: Cows, sheep, chickens. They’re simple creatures. Or are they? Meet the sheep who thinks he’s a dog, the lonely goose who’s in love with his own reflection and the cows who love music. Each episode is set against the backdrop of a farming season and follows the birth and development of one animal character - a lamb, a calf and a piglet.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/bbbd777c-04ab-49d5-902d-949d4b55c774
+
+acd2515f-3641-4305-bacc-4e27806f1ba8) Seen & Heard: What happens when a Deaf amateur theatre director and his hearing girlfriend unite a group of 30 Deaf and hearing people to mount a unique adaptation of The Little Mermaid?
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/acd2515f-3641-4305-bacc-4e27806f1ba8
+
+80ebfe15-086e-4268-952a-02ae3835e39f) Shitty Boyfriends: Amanda is a talented cartoonist and ardent feminist with a problem. She’s fortunate enough to intern at her dream company - a hip, up-and-coming animation house, populated by talented millennials - so she assumes her career will fall into place somehow, eventually.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/80ebfe15-086e-4268-952a-02ae3835e39f
+
+816f6651-9267-48ed-9b9a-79deba029290) Shoot the Messenger: Suspenseful drama by the talented team Sudz Sutherland & Jennifer Holness that follows a young journalist working on her first murder case who becomes embroiled in a web that extends much deeper.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/816f6651-9267-48ed-9b9a-79deba029290
+
+8844b939-df74-491a-b2c0-89ca3b79478f) Short Docs: CBC Short Docs is a foray into the world of short-form digital documentary, acting as an innovative incubator for burgeoning Canadian voices.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/8844b939-df74-491a-b2c0-89ca3b79478f
+
+a058a666-85ff-4358-afb2-f369bf46470c) Short Film Face Off: Short Film Face Off is a magazine program showcasing short films from across the country.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a058a666-85ff-4358-afb2-f369bf46470c
+
+0cbb32bc-8f10-4de2-85f2-0ba0371e2070) Sick of It: Karl Pilkington has always seen the world in a different way. Now he stars in a unique comedy that serves up a double helping of Karl Pilkington - with Karl playing himself as well as the grumpy voice inside his head who appears as a doppelgänger only he can see.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0cbb32bc-8f10-4de2-85f2-0ba0371e2070
+
+f7d5c378-1da5-493e-b1ae-a1ccbc1010ec) Skindigenous: Skindigenous explores one of the oldest art form and its relationship to Indigenous culture; tattooing.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/f7d5c378-1da5-493e-b1ae-a1ccbc1010ec
+
+0dbecd51-efb9-4f3d-9786-d9d679ada607) SS-GB: The Battle of Britain has ended in victory for Hitler’s Germany and the population of 1940s Britain struggles to adjust to life under Nazi occupation. Renowned London detective Douglas Archer is caught between his brutal new SS bosses and a ruthless British resistance movement.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0dbecd51-efb9-4f3d-9786-d9d679ada607
+
+8936f1dc-be23-43ee-84db-58279f88c7f4) Still Standing: Comedian Jonny Harris is on a mission to find humour in, well, the funniest of places. He's taking a journey across Canada to explore small towns on the ropes and to meet the people.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/8936f1dc-be23-43ee-84db-58279f88c7f4
+
+91c029aa-6998-482d-adae-12564647ff87) Stockholm: This darkly comedic series is the story of a leading contender for the Nobel Prize in Economics who is found dead in his bed of an apparent heart attack just before the winners are announced. His four closest friends, eager to cement his legacy, decide to keep him "alive" until the announcement
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/91c029aa-6998-482d-adae-12564647ff87
+
+c0952b54-3e8e-4ef3-ad85-25518c9b453e) Strange Empire: Strange Empire is a drama revolving around the daily struggle of three women to survive and to build a decent community in the lawless land of southern Alberta in 1869.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/c0952b54-3e8e-4ef3-ad85-25518c9b453e
+
+8d5898e8-9215-4c97-8fe3-a10b30c89d58) Stratford Presents: North America's largest classical repertory theatre presenting the works of William Shakespeare and other great writers.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/8d5898e8-9215-4c97-8fe3-a10b30c89d58
+
+84d79937-8216-4015-b71d-1923d1629df5) Street Legal: Lilly Rue, Adam Darling, and Mina Lee are the named partners and only lawyers of RDL Legal - three tenacious young lawyers whose mutual respect and admiration challenges Olivia and her usual method.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/84d79937-8216-4015-b71d-1923d1629df5
+
+d330e141-3aab-4870-8504-31e911be7d69) Succulent Six: They are big. They are loud. They are beautiful. And they are ready to make their mark on the world by bringing body positivity to the media forefront.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/d330e141-3aab-4870-8504-31e911be7d69
+
+7fb9631f-c6e2-48f5-9410-c2300ed2abda) Sunshine Kings: Sunshine Kings is a high stakes crime drama set in a working-class suburb of Melbourne, Australia. The story focuses on a young South Sudanese immigrant, Jacob, who has the talent and drive to better the lives of himself and his family through a career in basketball.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/7fb9631f-c6e2-48f5-9410-c2300ed2abda
+
+fe244cce-c003-443c-b5ea-932d8ceb8465) Taken: A true crime series focusing on solving the mysteries behind Canada’s missing and murdered indigenous women.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/fe244cce-c003-443c-b5ea-932d8ceb8465
+
+1326db74-e87b-487e-9ae8-81121f9a908f) Talent Drivers: Talent Drivers is a blue collar "working class" satirical comedy about the Film & TV industry - told from the drivers' perspective.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/1326db74-e87b-487e-9ae8-81121f9a908f
+
+9f961221-aed3-413c-8059-ec8e9ade2891) TallBoyz: TALLBOYZ is a new sketch comedy of epic proportions. Measuring in at a whopping 25'2" (collectively), this crew has quite the perspective to share. Nothing is off-limits or out of reach.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9f961221-aed3-413c-8059-ec8e9ade2891
+
+dda34752-41b9-4675-af41-9a0479c37a45) Terrific Women: A comedy set in the seventies about two clueless and often inebriated feminists who co­-host their own late-night, local cable access television show.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/dda34752-41b9-4675-af41-9a0479c37a45
+
+dfb7b47a-90fa-438f-b96c-60ab5f6b35a9) The 410: Broke, wanna-be Influencer, Suri Deol (Indian, blonde and bougie) must bail her truck driver father out of jail after he’s arrested for smuggling narcotics or move back to Brampton to her own personal prison: her family home.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/dfb7b47a-90fa-438f-b96c-60ab5f6b35a9
+
+12bd9d00-e4e6-492f-8664-1b44fcdbf53d) The A Word: The Hughes family work and love and fight like every other family. Then, their youngest son is diagnosed with autism, and they don't feel like every other family anymore.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/12bd9d00-e4e6-492f-8664-1b44fcdbf53d
+
+443907cb-109e-457d-9227-6b56eec95dc9) The Amazing Gayl Pile: One man's misguided quest to conquer the world of home shopping. Gayl Pile (Morgan Waters) finds himself stuck in the daily grind as a host on the Shop-At-Home-Channel in Hamilton, ON.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/443907cb-109e-457d-9227-6b56eec95dc9
+
+96c98c83-4771-40c2-af69-dab46e53fab8) The Artists: The Artists is the story of the creators that were at the forefront of the early video game revolution. It explores the first three decades of video game history.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/96c98c83-4771-40c2-af69-dab46e53fab8
+
+8c86ba91-ca1d-4811-98ca-0afb9fa89c97) The Beautiful Lie: Tolstoy's Anna Karenina is the greatest ever relationship drama. The Beautiful Lie is a re-imagining of this story set in contemporary middle-class life, exploring the love-lives of both happy and unhappy families in all their mess and grandeur. The Beautiful Lie is more than a great love story. Its a sprawling saga of adultery, scandal, manners and mayhem about the fates of three enmeshed families across three generations.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/8c86ba91-ca1d-4811-98ca-0afb9fa89c97
+
+67f5a129-5f68-4a41-9f90-b8a1c87468fc) The Biggest Little Railway in the World: Dick Strawbridge leads a team of enthusiasts in an attempt to set a new world record, to build the longest model railway in history stretching 71 miles across Scotland from Fort William to Inverness.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/67f5a129-5f68-4a41-9f90-b8a1c87468fc
+
+c01764ec-4615-4273-bdeb-7a936d1e89cb) The Book of Negroes: A six-part miniseries that follows the harrowing journey of Aminata Diallo and her return home after being forced into slavery as a child.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/c01764ec-4615-4273-bdeb-7a936d1e89cb
+
+00fe8cb3-7a28-458f-b5b4-1795ce5dfd1e) The Detectives: THE DETECTIVES is a gripping eight-part factual series that brings to life the work of real detectives by blending the best of documentary storytelling with fully dramatized re-enactments.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/00fe8cb3-7a28-458f-b5b4-1795ce5dfd1e
+
+0c7db926-93c6-4602-9af2-d25845853342) The Durrells: Set in 1935 when the Englishwoman Louisa Durrell, whose life had fallen apart, decided to move from Bournemouth to the Greek island of Corfu.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0c7db926-93c6-4602-9af2-d25845853342
+
+c7595078-2a3d-4135-b803-3964775d4b9a) The Family Law: The Family Law gives a vivid glimpse inside the gloriously dysfunctional world of a hilarious and heart-warming Chinese- Australian family through the eyes of 14-year-old Benjamin.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/c7595078-2a3d-4135-b803-3964775d4b9a
+
+79368eef-3e93-4a90-89df-b62f534cdeba) The Fifth Estate: The fifth estate brings you Canada's top investigative stories. From across the country and around the world, the fifth estate journalists dig deeper to get you the stories that matter.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/79368eef-3e93-4a90-89df-b62f534cdeba
+
+cd490b2b-c181-4c97-bd74-8f0010a35c7e) The Filmmakers: A 30-minute hosted series that centers on a fun, candid master class with some of the minds behind the greatest Canadian films of the last 20 years.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/cd490b2b-c181-4c97-bd74-8f0010a35c7e
+
+758b36f7-bc77-4de2-8fa3-3d303af0bbf3) The Goods: Every weekday The Goods will deliver all the inspiration and information Canadians need in one jam-packed and entertaining hour of daily television.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/758b36f7-bc77-4de2-8fa3-3d303af0bbf3
+
+794d3e0c-7c53-4567-8112-34d285c8239a) The Great British Baking Show: Watch full, uncut episodes right here. Bakers attempt three challenges each week trying to impress the judges enough to go through to the next round and eventually are crowned Britain's best amateur baker. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/794d3e0c-7c53-4567-8112-34d285c8239a
+
+b428d77e-285c-417c-aabc-3e61778b93e9) The Great British Baking Show: Masterclass: Mary and Paul take over the tent for the ultimate baking Masterclass. The Great British Baking Show judges take on the same challenges which they set the bakers.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/b428d77e-285c-417c-aabc-3e61778b93e9
+
+79f5fd34-55b5-43c5-993b-853ce283596a) The Great Canadian Baking Show: Amateur bakers take part in a baking competition which will test every aspect of their baking skills.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/79f5fd34-55b5-43c5-993b-853ce283596a
+
+108b5fa0-533c-4fd0-8f64-cd32cec8e378) The Great Human Odyssey: Anthropologist Dr. Niobe Thompson is travelling the world to tell the story of the human odyssey.  With cutting-edge camera technology and a team of adventure cinematography specialists, this three-part series explores how new discoveries are redrawing our knowledge of human origins.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/108b5fa0-533c-4fd0-8f64-cd32cec8e378
+
+82a78e23-f6b6-4370-b100-e60108d9ea7d) The Investigators: The Investigators with Diana Swain pulls back the curtain on journalism, connecting with the journalists who break big stories.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/82a78e23-f6b6-4370-b100-e60108d9ea7d
+
+3c8d8c59-301e-4ba3-9a79-9614e659796b) The JUNO Awards: All of CBC's JUNO Awards programing in one place. Specials, exclusive performances, the gala, and more!
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3c8d8c59-301e-4ba3-9a79-9614e659796b
+
+e6f6de0b-335d-4666-a384-419396ca88a4) The Last Post: Set in the mid-sixties, a unit of Royal Military Police officers and their families deal with the dangers and challenges of politics, love, and war in British-controlled Aden.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e6f6de0b-335d-4666-a384-419396ca88a4
+
+66568167-e691-4fdd-9c31-0d8c8bc5f314) The Little Drummer Girl: Charlie, a fiery and brilliant young actress (Florence Pugh), meets a mysterious stranger in Greece (Alexander Skarsgård) and he draws her into a high-stakes international espionage operation.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/66568167-e691-4fdd-9c31-0d8c8bc5f314
+
+a0c12df3-2e64-4b16-9997-86c8fd4b439e) The Little Paris Kitchen: Cooking with Rachel Khoo: Rachel Khoo believes that delicious French food is no longer the preserve of fancy Michelin starred restaurants. For the last year, this unconventional Cordon Bleu-trained cook and writer has run the smallest restaurant in Paris from her charming little flat.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a0c12df3-2e64-4b16-9997-86c8fd4b439e
+
+b08b6afc-2053-4897-bbdd-f42bd4a89a53) The Loch: On the beautiful, haunting shores of Scotland’s iconic Loch Ness, amid a community sustained by myth and bordered by untamed nature, the search for the truth becomes a matter of life and death in this gripping murder mystery. Here the monster doesn’t lurk in the depths - it walks amongst men, a serial killer who must be stopped. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/b08b6afc-2053-4897-bbdd-f42bd4a89a53
+
+6d0941c2-9d88-4638-ab46-e6fbcf770f76) The Mile Enders: The Mile Enders is a coming of “middle” age story about co-dependent frenemies and neighbours, Lori and Adam, as they navigate aging, gentrification, and the world of start-ups; dating in one of the world’s most lit neighbourhoods - The Mile End.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/6d0941c2-9d88-4638-ab46-e6fbcf770f76
+
+757fe6b0-e110-4c8d-b67c-6c9ee00ccd61) The Miniaturist: In 1686, a young woman marries a wealthy man to save her family fortunes. As a wedding present he gives her a dollhouse, which she furnishes with items sent by an anonymous miniaturist, and the lifelike miniatures start eerily foreshadowing her fate.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/757fe6b0-e110-4c8d-b67c-6c9ee00ccd61
+
+3c0e9909-7c33-440d-8873-6d79b85feae9) The Misadventures of Romesh Ranganath: Romesh is not an adventurous man. His idea of an exotic holiday is a European villa break. But Romesh needs some more material for his stand-up career.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3c0e9909-7c33-440d-8873-6d79b85feae9
+
+5e679175-f60f-42b7-9ccb-54b0118d4658) The Move: Eight of Canada's top choreographers share their astonishing moves - and the incredible stories behind why they dance.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/5e679175-f60f-42b7-9ccb-54b0118d4658
+
+7edf3b97-b615-483a-842c-6c168d68c0ba) The National: Canada's destination for original journalism. Welcome to The National, the flagship nightly newscast of CBC News.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/7edf3b97-b615-483a-842c-6c168d68c0ba
+
+7cfbf48b-1e61-4b16-a663-9e30412b6146) The Nature of Things: From the search for other life in the universe to the psychology of babies, from the furry animals that invade your backyard to the consequences of human progress, The Nature of Things throws open the door to the wonder and accomplishments of science. Hosted by world-renowned geneticist and environmentalist David Suzuki.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/7cfbf48b-1e61-4b16-a663-9e30412b6146
+
+84172489-fa80-47cc-b60b-34bc59026652) The Neddeaus of Duqesne Island: The Neddeaus of Duqesne Island is a 1970s documentary homage about a family living isolated on an island in Northern Canada.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/84172489-fa80-47cc-b60b-34bc59026652
+
+e906cac1-b65b-4067-a032-155a8824d209) The Ninth: Why the hell would you want to play for the Toronto Boxsprings? They’re a bad team in a lousy inter-county league. They’re owned by a crappy discount mattress store. Even their locker room sucks - stuck in the leaky basement of a local dive bar. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/e906cac1-b65b-4067-a032-155a8824d209
+
+a987b56b-fbb1-4753-b5ed-32e07bb81c19) The Passionate Eye: The Passionate Eye is a curated playlist of thought-provoking documentaries based on news and current affairs topics. As Canada's longest-running showcase for international documentaries, it offers viewers a selection of the world's best and most newsworthy political and social issue documentaries.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a987b56b-fbb1-4753-b5ed-32e07bb81c19
+
+0ead8609-b97e-44f4-8511-893579569817) The Plateaus: Just as their musical star begins to rise, The Plateaus unexpectedly lose their lead singer to a tragic accident during a band practice.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0ead8609-b97e-44f4-8511-893579569817
+
+1ef09b8d-dadf-4620-aab8-fa91ad76fd07) The Reluctant Landlord: A man reluctantly serves as the proprietor of a pub, which he inherited from his late father.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/1ef09b8d-dadf-4620-aab8-fa91ad76fd07
+
+403db739-1faa-43b2-82eb-6994043e81c8) The Romeo Section: A Vancouver-based contemporary espionage thriller that centres on a veteran agent who sets out to recruit a high-value informant.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/403db739-1faa-43b2-82eb-6994043e81c8
+
+5d745c14-bebf-4141-bd5b-56d2847e1fc3) The Secret: Colin Howell is a leading member of the Baptist community, but when he meets Hazel Buchanan, they embark on an affair which will have consequences for themselves and their families.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/5d745c14-bebf-4141-bd5b-56d2847e1fc3
+
+9b3ea985-cccf-45a8-9c87-8745cbcba48f) The Secret Path: The Secret Path tells the true story of Chanie Wenjack, a 12-year-old boy who died while trying to escape from a residential school and travel back home to his family over 400 miles away. Watch the animated film, a series of shorts on the subject, and the memorable live concert from 2016, right here.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9b3ea985-cccf-45a8-9c87-8745cbcba48f
+
+990fbe43-9103-4970-90c2-93bf5fbb9c41) The Slap: The Slap is a bold, provocative television drama that forensically examines the mores and morality of contemporary middle class life.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/990fbe43-9103-4970-90c2-93bf5fbb9c41
+
+69ac6a13-dec9-4601-90cd-be86f900c69a) The Stats of Life: A factual series that reveals surprising truths about how Canadians are living today based on recent population statistics asking what it means to be an average Canadian family.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/69ac6a13-dec9-4601-90cd-be86f900c69a
+
+a288c378-410f-4936-aed0-222ea9236447) The Story of Rugby: The Story of Rugby is an epic six-part global documentary series about the key individuals and main events which have shaped the sport of rugby for the past 200 years.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a288c378-410f-4936-aed0-222ea9236447
+
+3c11b50f-6feb-4301-849b-0bf4d875c097) The Tudors: The Tudors tells the incredible tale of the young, powerful, seductive King Henry VIII, focusing on the tumultuous early years of his nearly 40-year reign.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3c11b50f-6feb-4301-849b-0bf4d875c097
+
+dfa1f54f-662b-41e2-8981-6a3199556d9b) The Tunnel: The Tunnel is set against the backdrop of Europe in crisis. When a prominent French politician is found dead on the border between the UK and France.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/dfa1f54f-662b-41e2-8981-6a3199556d9b
+
+308a4058-0f89-4520-96ff-2a3009a2d24a) The Victim: A mother seeks the whereabouts of her son's killer after he is released from prison, unleashing a series of events that surface tragic memories and unexpected consequences.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/308a4058-0f89-4520-96ff-2a3009a2d24a
+
+b287a972-4ab9-41cf-b4e8-855e9458f37b) The Weekly: What’s "really" at play behind the big stories of the day? The Weekly with Wendy Mesley takes you behind the headlines to reveal hidden and sometimes surprising forces shaping the news.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/b287a972-4ab9-41cf-b4e8-855e9458f37b
+
+9fe190e3-ce4b-4d1a-afc3-2f51ea40e7f9) The Whole Truths: Three self-proclaimed knowledge experts reveal the mind-blowing truths that will help you survive our deadly world.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/9fe190e3-ce4b-4d1a-afc3-2f51ea40e7f9
+
+4632cf7b-3b88-4569-a5ce-e467f5223654) The Wild Canadian Year: The Wild Canadian Year showcases the most amazing and rare natural wonders of Canada. From the filmmakers of the acclaimed series Wild Canada, this stunning five-part documentary series views Canada's extraordinary wildlife through the lens of its four distinct seasons.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/4632cf7b-3b88-4569-a5ce-e467f5223654
+
+bda4d832-d171-48ed-9de1-3bf5c4d056d1) The Woodstock Diaries: The definitive film celebration of the music event that reflected the 1960's cultural revolution, and fifty years later still holds a lasting influence on popular music culture worldwide.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/bda4d832-d171-48ed-9de1-3bf5c4d056d1
+
+1b922cac-961e-43ed-8d39-ddd03bbde9de) The Writers' Block: A writing team working on a new TV series struggle to deal with script deadlines, network interference, and procrastination as their personal lives become increasingly complicated. Starring Aurora Browne, Matt Watts, and David Benjamin Tomlinson.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/1b922cac-961e-43ed-8d39-ddd03bbde9de
+
+7896fabb-d32c-469f-9f4b-5ca336a277db) The Wrong Mans: Ordinary office workers Sam and Phil find themselves unwittingly caught up in a deadly criminal conspiracy when Sam answers an abandoned mobile phone after witnessing a horrific car crash.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/7896fabb-d32c-469f-9f4b-5ca336a277db
+
+6086dea5-b1a5-476f-88fc-81a8da520e4b) This Art Works!: THIS ART WORKS! profiles Canadian artists with an absurdist comedic bent, creating a bizarre world unlike any other.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/6086dea5-b1a5-476f-88fc-81a8da520e4b
+
+f022fb8f-f5fd-48b1-961c-1921b2d52975) This Blows: This Blows follows the people-pleasing struggling actress Anna Gowen (Aleita Northey), as she grapples with her newfound ability to blow people up every time she’s angry.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/f022fb8f-f5fd-48b1-961c-1921b2d52975
+
+724c10b7-47fa-4b72-8c66-c99641173ff1) This Country: Quirky and hilarious, this award-winning mockumentary explores the lives of young people in modern rural Britain, focusing on cousins Kerry and Kurtan from the Cotswolds.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/724c10b7-47fa-4b72-8c66-c99641173ff1
+
+80ef6a36-235d-4f61-92f4-b3e7f00b4067) This Hour Has 22 Minutes: CBC's 22 MINUTES is an award winning hit comedy series armed with satire, ambush, sketch comedy, parody, weekly news and Canadian political events.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/80ef6a36-235d-4f61-92f4-b3e7f00b4067
+
+c04528a4-2972-44d8-bc4a-625fe863d62d) This Life: Set in contemporary Montreal, This Life is a funny, honest, heartfelt series about a regular family whose world turns upside down overnight.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/c04528a4-2972-44d8-bc4a-625fe863d62d
+
+ac44a0ae-0eb8-4b9c-969c-79c76679c2e9) This Time With Alan Partridge: Knowledgeable, insightful, sophisticated. Alan Partridge is none of these.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/ac44a0ae-0eb8-4b9c-969c-79c76679c2e9
+
+49e1596f-58c9-423f-9799-486ddedec3b4) Through Our Eyes: Indigenous Short Docs: A compilation of CBC Short Docs by some of the best emerging Indigenous storytellers from across the country. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/49e1596f-58c9-423f-9799-486ddedec3b4
+
+2820b248-f13d-48a8-99ac-ce117ed318aa) Thunderbirds Are Go: 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/dc4f729b-62e1-4aaa-8865-9f189e44bd3f
+
+84ed9f2c-6093-40c7-b09e-6e373bfc49de) Thunder Blanket: Thunder Blanket is a 5 part digital series that explores a young Mohawk woman’s battle against breast cancer and the complexity of being a traditionalist searching for a cure in a modern world.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/84ed9f2c-6093-40c7-b09e-6e373bfc49de
+
+29f1eb35-2654-4ae9-aa42-eca183abf2a8) Tom Green's Snow Jam: Comedian, actor and extreme sports enthusiast Tom Green travels across the beautiful provinces of Alberta and British Columbia on a snowboarding, comedy, and hip-hop tour to explore the local culture.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/29f1eb35-2654-4ae9-aa42-eca183abf2a8
+
+63accb9b-f3b2-4ead-8d1b-f48387a6cfd8) Top of the Lake: Obsessed with the disappearance of a 12-year-old pregnant girl near a freezing lake in New Zealand, a detective finds herself up against small-town secrets and a side of herself that she’s kept at bay. A powerful and haunting mystery starring Elizabeth Moss. And don't miss series 2, Top of the Lake: China Girl.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/63accb9b-f3b2-4ead-8d1b-f48387a6cfd8
+
+96436f08-e062-41d8-aec7-363bf7a845db) Top of the Lake: China Girl: After the events in Laketop (series one, Top of the Lake), Detective Robin Griffin returns to Sydney for a fresh start, but when a body in a suitcase washes up on shore, there appears little hope of finding the killer, until Griffith realizes the victim didn't die alone... Starring Elizabeth Moss, Gwendoline Christie, and Nicole Kidman. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/96436f08-e062-41d8-aec7-363bf7a845db
+
+f60699da-ef6b-45d3-ae61-9a786d7e5fe9) Top Ten Event: Ten celebrated Canadians each get ten minutes on stage to share an idea that will help you boycott what you thought! From comedians to authors to entrepreneurs these ten-minute talks will inspire you to rise above your old way of thinking on life’s biggest topics and embrace a new perspective that will lead you to a greater success and happiness!
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/f60699da-ef6b-45d3-ae61-9a786d7e5fe9
+
+2589f637-c204-44d8-b994-170631ac2fc1) Travel Man: 48 Hours in...: Richard Ayoade and a celebrity guest spend 48 hours in a popular city to discover the must-see tourist attractions.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/2589f637-c204-44d8-b994-170631ac2fc1
+
+c12ff86f-318a-4950-bc58-6017ee1c4373) True Dating Stories: Real people tell their wildest and most shocking dating stories while hilarious recreations bring them life.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/c12ff86f-318a-4950-bc58-6017ee1c4373
+
+5f7edf6f-8fef-4da5-8292-143f9669220a) True North Calling: True North Calling shows life in the country’s harshest environment, while discovering who’s making it "up there," why they love it, and how they not only get by, but thrive.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/5f7edf6f-8fef-4da5-8292-143f9669220a
+
+f65c3941-125a-4848-8f5e-c0ed4047e1c7) Trust Me: Driven to desperate measures, nurse Cath Hardacre steals the identity of her best friend, an A&E doctor and begins a new life in Edinburgh as Dr. Ally Sutton.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/f65c3941-125a-4848-8f5e-c0ed4047e1c7
+
+a494bed9-1c98-4e2a-96db-4b2537f5ffcb) Uncle: Follow the comic misadventures and growing pains of an irresponsible out-of work musician who forges an unlikely alliance with his neurotic 12 year old nephew.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/a494bed9-1c98-4e2a-96db-4b2537f5ffcb
+
+3a418391-60e0-49e7-9d74-ab32153e4145) Under New Management: Arlene Dickinson, one of Canada’s most renowned & influential venture capitalists, takes budding entrepreneurs on a roller coaster ride as she introduces them to three prospective businesses for sale.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/3a418391-60e0-49e7-9d74-ab32153e4145
+
+24051801-20d7-4a5e-a642-663a7f54af83) Undercover: A gripping legal drama from the BBC. Defense lawyer Maya Cobbina fights for the truth, while her husband will go to any lengths to conceal it. 
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/24051801-20d7-4a5e-a642-663a7f54af83
+
+94f124e2-f792-42e4-ad9f-ddf1a6a35c2b) Unspeakable: A limited series about the tainted blood scandal in Canada, seen from multiple points of view.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/94f124e2-f792-42e4-ad9f-ddf1a6a35c2b
+
+8de69338-1d58-4959-8eaf-60be8e1d349f) Vanity Fair: Thackeray’s literary classic is set against the backdrop of the Napoleonic Wars, and follows Becky Sharp as she attempts to claw her way out of poverty and scale English Society.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/8de69338-1d58-4959-8eaf-60be8e1d349f
+
+956e549f-6869-4555-b77e-edbd3ecab94f) Versailles: Louis XIV is twenty-eight years old. In order to rule over the nobility and to permanently impose his absolute power, he launches the construction of Versailles, like one sets a trap. Louis XIV is a young king haunted by childhood trauma, the Fronde, a rebellion of the nobility against his father Louis XIII…
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/956e549f-6869-4555-b77e-edbd3ecab94f
+
+337fbafc-d12d-4153-b52f-aee38a2a96fd) Vet on the Hill: Set in the outskirts of London in the quiet village of Richmond upon Thames, Dr. Scott's veterinary clinic is anything but. The hustle and bustle of friendly regulars keeps him on his toes, while his home visits are always rewarding and full of surprises.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/337fbafc-d12d-4153-b52f-aee38a2a96fd
+
+0ef92a82-ed2c-4144-9211-abb4767af72b) Wallander: Based on the award-winning Wallander novels by Henning Mankell. Kurt Wallander is a sensitive but brilliant detective - a man who takes each murder case he works on personally and will stop at nothing in his search for the truth, even at the expense of his health and his family life.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/0ef92a82-ed2c-4144-9211-abb4767af72b
+
+7c225c1d-0274-49cf-a460-35a26647d6b0) Warigami: Wendy Ohata has just made three startling realizations: One, she has a twin brother named Vincent. Two, she’s a kami-jin - a descendant of an ancient Japanese people who can turn paper into deadly weapons. And three, there’s a kami-jin warrior named Sadako hunting her down for reasons she doesn’t understand.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/7c225c1d-0274-49cf-a460-35a26647d6b0
+
+eced902f-296f-47ed-9901-066eef46be03) We Are Canada: We Are Canada celebrates the future of Canada by profiling the next generation of change-makers, who are shaping the future of those around them.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/eced902f-296f-47ed-9901-066eef46be03
+
+5ab6d13d-bd6e-4374-ad44-a2515663219c) When Calls the Heart: When Calls the Heart follows the story of a young schoolteacher who has just arrived in Coal Valley, a 19th century coal mining town in the Western Frontier.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/5ab6d13d-bd6e-4374-ad44-a2515663219c
+
+41d2e6f3-0e09-4f60-9df9-24821894c4c6) Wisting: Premium members can enjoy this exclusive pre-release. Homicide detective William Wisting’s investigation into a serial killer crosses paths with his journalist daughter’s news story.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/41d2e6f3-0e09-4f60-9df9-24821894c4c6
+
+07f43020-96cc-453c-a721-9886feb81c44) Why Slavery?: A series of groundbreaking documentary films uncover the lives of men, women and children living as modern slaves in all corners of the world. From the deeply flawed Kafala System in the Middle East to the prolific number of children bought and sold in India, WHY SLAVERY? shines a light on the millions of lives lived in the shadow of enslavement.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/07f43020-96cc-453c-a721-9886feb81c44
+
+08f4f9fd-e998-4893-8460-e2ac4ce6f980) Wild Canada: WILD CANADA takes an awe-inspiring look at the world around us, shot with ultra-high-definition cameras that capture sweeping panoramas and extraordinary close-ups of Canada’s majestic terrain and diverse species. This is the largest natural history survey of Canada in our generation - filmed across the country, showing animal behaviour never before captured.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/08f4f9fd-e998-4893-8460-e2ac4ce6f980
+
+888b6bfc-90b2-42a4-90ae-e72e1ed00d02) Winnipeg Comedy Festival: Five hilarious one-hour television specials, featuring some of Canada’s finest comedians, taped in front of a live audience at the historic Pantages Theater in Winnipeg.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/888b6bfc-90b2-42a4-90ae-e72e1ed00d02
+
+932e6c63-6aa8-43fb-8116-4b1242e0c6ff) Winston Rowntree's peopleWatching: A show about 20-something people in the year 20-something, stuck in that seemingly-endless limbo between school and adulthood, between nothing and friendship, and between expectations and reality...
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/932e6c63-6aa8-43fb-8116-4b1242e0c6ff
+
+5a1c0323-7d30-40b9-b867-b70c98b2d868) Woodstock: Three Days that Changed a Generation: Fifty years ago, in August 1969, nearly half a million people gathered at a farm in upstate New York to hear music. What happened over the next three days, however, was far more than just a concert.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/5a1c0323-7d30-40b9-b867-b70c98b2d868
+
+18ad7707-f0f3-49b3-b684-83fdcb4ccf4a) Workin' Moms: Follows four women in a mommies' group wanting to have it all as they juggle relationships, insatiable babies, horrific co-workers, and postpartum depression.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/18ad7707-f0f3-49b3-b684-83fdcb4ccf4a
+
+f0953732-d08d-48d0-addd-35f31b05b0f4) X Company: An emotionally-driven character drama, set in the thrilling and dangerous world of WWII espionage and covert operations. It follows the stories of five highly skilled young recruits.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/f0953732-d08d-48d0-addd-35f31b05b0f4
+
+8734790f-5704-487a-bbe0-2ef9f5c2a769) You Can't Ask That: Each episode asks a group of	people with the same disability the	awkward,	inappropriate or uncomfortable questions you are too afraid to ask. It’s an audacious, touching and funny series that is guaranteed to challenge everyone’s assumptions about life with a disability.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/8734790f-5704-487a-bbe0-2ef9f5c2a769
+
+1f02f829-1522-4af2-8d57-f39cdc320f2c) Young Drunk Punk: Created by Bruce McCulloch based on his autobiographical theatrical show of the same title, the series stars Tim Carlson as Ian McKay, a young punk rocker coming of age in Calgary, Alberta.
+	https://api-cbc.cloud.clearleap.com/cloffice/client/web/browse/1f02f829-1522-4af2-8d57-f39cdc320f2c
+

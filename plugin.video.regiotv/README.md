@@ -1,8 +1,8 @@
-[![GitHub release](https://img.shields.io/github/release/dagwieers/plugin.video.regiotv.svg)](https://github.com/dagwieers/plugin.video.regiotv/releases)
-[![Build Status](https://travis-ci.org/dagwieers/plugin.video.regiotv.svg?branch=master)](https://travis-ci.org/dagwieers/plugin.video.regiotv)
-[![Codecov status](https://img.shields.io/codecov/c/github/dagwieers/plugin.video.regiotv/master)](https://codecov.io/gh/dagwieers/plugin.video.regiotv/branch/master)
+[![GitHub release](https://img.shields.io/github/release/add-ons/plugin.video.regiotv.svg)](https://github.com/add-ons/plugin.video.regiotv/releases)
+[![Build Status](https://travis-ci.org/add-ons/plugin.video.regiotv.svg?branch=master)](https://travis-ci.org/add-ons/plugin.video.regiotv)
+[![Codecov status](https://img.shields.io/codecov/c/github/add-ons/plugin.video.regiotv/master)](https://codecov.io/gh/add-ons/plugin.video.regiotv/branch/master)
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
-[![Contributors](https://img.shields.io/github/contributors/dagwieers/plugin.video.regiotv.svg)](https://github.com/dagwieers/plugin.video.regiotv/graphs/contributors)
+[![Contributors](https://img.shields.io/github/contributors/add-ons/plugin.video.regiotv.svg)](https://github.com/add-ons/plugin.video.regiotv/graphs/contributors)
 
 # Regio TV Kodi add-on
 **plugin.video.regiotv** is a [Kodi](https://kodi.tv/) add-on for watching live Flemish regional channels.
@@ -21,12 +21,17 @@ Available channels:
 ## Installing
 In Kodi, simply search the add-ons for `Regio TV` and install the Regio TV video add-on.
 
-> Note: Detailed information about installing and updating the Regio TV add-on is available on [our Wiki](https://github.com/dagwieers/plugin.video.regiotv/wiki).
+> Note: Detailed information about installing and updating the Regio TV add-on is available on [our Wiki](https://github.com/add-ons/plugin.video.regiotv/wiki).
 
 ## Reporting issues
-You can report issues at [our GitHub project](https://github.com/dagwieers/plugin.video.regiotv).
+You can report issues at [our GitHub project](https://github.com/add-ons/plugin.video.regiotv).
 
 ## Releases
+### v0.1.2 (2020-08-01)
+- Add support for IPTV Manager
+- Add support for referer
+- Add RegioTV artwork
+
 ### v0.1.1 (2020-02-11)
 - Fix regional channels BRUZZ, Focus TV and WTV
 

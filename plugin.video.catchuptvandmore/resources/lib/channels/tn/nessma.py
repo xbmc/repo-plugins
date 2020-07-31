@@ -42,7 +42,7 @@ import urlquick
 # Live
 URL_ROOT = 'https://www.nessma.tv'
 
-URL_LIVE = URL_ROOT + '/live'
+URL_LIVE = URL_ROOT + '/ar/live'
 
 URL_REPLAY = URL_ROOT + '/ar/replays'
 

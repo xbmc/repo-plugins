@@ -318,8 +318,7 @@ def list_videos_films_series_1(plugin, item_id, page, show_url, **kwargs):
         item = Listitem()
         item.label = episode.find('.//img').get('alt')
         try:
-            video_id = re.compile('cmedia=(.*?)&').findall(
-                episode.find(".//a[@class='meta-title-link']").get('href'))[0]
+            video_url = URL_ROOT + episode.find(".//a[@class='meta-title-link']").get('href')
         except IndexError:
             continue
         if episode.find('.//img').get('data-src') is not None:
@@ -329,7 +328,7 @@ def list_videos_films_series_1(plugin, item_id, page, show_url, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_id=video_id)
+                          video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -356,19 +355,14 @@ def list_videos_emissions_1(plugin, item_id, show_url,
         else:
             item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('src')
 
-        if '?cmedia=' in episode.find('.//a').get('href'):
-            video_id = episode.find('.//a').get('href').split('?cmedia=')[1]
-        elif 'cfilm=' in episode.find('.//a').get('href') or \
-                'cserie=' in episode.find('.//a').get('href'):
-            video_id = episode.find('.//a').get(
-                'href').split('_cmedia=')[1].split('&')[0]
-        else:
-            video_id = episode.find('.//a').get('href').split('-')[1].replace(
-                '/', '')
+        try:
+            video_url = URL_ROOT + episode.find(".//a[@class='meta-title-link']").get('href')
+        except IndexError:
+            continue
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_id=video_id)
+                          video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -389,31 +383,28 @@ def list_videos_emissions_2(plugin, item_id, page, show_url, last_page,
     for episode in episodes:
         item = Listitem()
         if episode.find('.//h3') is not None:
-            item.label = episode.find('.//h3').find('.//span').find(
+            video_title = episode.find('.//h3').find('.//span').find(
                 './/a').find('.//strong').text.strip() + ' - ' + episode.find(
                     './/h3').find('.//span').find('.//a').find(
                         './/strong').tail.strip()
         else:
             if episode.find('.//h2/span/a/strong') is not None:
-                item.label = episode.find('.//h2/span/a/strong').text.strip() \
+                video_title = episode.find('.//h2/span/a/strong').text.strip() \
                     + ' - ' + episode.find('.//h2/span/a/strong').tail.strip()
             elif episode.find('.//h2/span/span') is not None:
-                item.label = episode.find('.//h2/span/span').text.strip()
+                video_title = episode.find('.//h2/span/span').text.strip()
             elif episode.find('.//h2/span/a') is not None:
-                item.label = episode.find('.//h2/span/a').text.strip()
+                video_title = episode.find('.//h2/span/a').text.strip()
             else:
-                item.label = ''
+                video_title = ''
+        item.label = video_title
 
-        if episode.find('.//a') is not None:
-            if '?cmedia=' in episode.find('.//a').get('href'):
-                video_id = episode.find('.//a').get('href').split('?cmedia=')[1]
-            elif 'cfilm=' in episode.find('.//a').get('href') or \
-                    'cserie=' in episode.find('.//a').get('href'):
-                video_id = episode.find('.//h2').find('.//span').find('.//a').get(
-                    'href').split('_cmedia=')[1].split('&')[0]
-            else:
-                video_id = episode.find('.//a').get('href').split('-')[1].replace(
-                    '/', '')
+        if episode.find(".//a") is not None:
+            video_urls_datas = episode.findall(".//a")
+            video_url = ''
+            for video_url_datas in video_urls_datas:
+                if 'program' not in video_url_datas.get('href'):
+                    video_url = URL_ROOT + video_url_datas.get('href')
         else:
             # TODO: ↪ Root menu (1) ➡ Websites (3) ➡ Allociné (1) ➡ Les émissions (1) ➡ Stars (6) ➡ Clips musicaux (3) ➡ # Les videos (1) ➡ [B]Next page 2[/B]
             continue
@@ -434,7 +425,7 @@ def list_videos_emissions_2(plugin, item_id, page, show_url, last_page,
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_id=video_id)
+                          video_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -468,7 +459,7 @@ def list_videos_search(plugin, item_id, page, search_query, **kwargs):
 
             item.set_callback(get_video_url,
                               item_id=item_id,
-                              video_id=video_id)
+                              video_url=video_id)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
 
@@ -481,64 +472,31 @@ def list_videos_search(plugin, item_id, page, search_query, **kwargs):
 @Resolver.register
 def get_video_url(plugin,
                   item_id,
-                  video_id,
+                  video_url,
                   download_mode=False,
                   **kwargs):
     """Get video URL and start video player"""
 
-    video_json = urlquick.get(URL_API_MEDIA % (video_id, PARTNER)).text
-    video_json_parser = json.loads(video_json)
-    # print(repr(video_json_parser))
-    desired_quality = Script.setting.get_string('quality')
+    resp = urlquick.get(video_url, max_age=-1)
+    root = resp.parse()
 
-    if 'media' not in video_json_parser:
-        return False
+    if root.find(".//figure[@class='player player-auto-play js-player']") is not None:
+        stream_datas_json = root.find(".//figure[@class='player player-auto-play js-player']").get('data-model')
+        json_parser = json.loads(stream_datas_json)
 
-    final_url = ''
-    if 'rendition' in video_json_parser["media"]:
-        # (Video Hosted By Allocine)
-        if desired_quality == "DIALOG":
-            all_datas_videos_quality = []
-            all_datas_videos_path = []
-            for media in video_json_parser["media"]["rendition"]:
-                all_datas_videos_quality.append(media["bandwidth"]["$"])
-                all_datas_videos_path.append(media["href"])
-            seleted_item = xbmcgui.Dialog().select(
-                plugin.localize(30709),
-                all_datas_videos_quality)
-            if seleted_item == -1:
-                return False
-            final_url = all_datas_videos_path[seleted_item]
-        elif desired_quality == "BEST":
-            for media in video_json_parser["media"]["rendition"]:
-                final_url = media["href"]
+        if 'high' in json_parser["videos"][0]["sources"]:
+            return 'https:' + json_parser["videos"][0]["sources"]["high"]
         else:
-            for media in video_json_parser["media"]["rendition"][0]:
-                final_url = media["href"]
-        if requests.get(final_url, stream=True).status_code == 404:
-            label = plugin.localize(30710)
-            Script.notify(label, label)
-            return False
-        if download_mode:
-            return download.download_video(final_url)
-
-        return final_url
-    else:
-        # (Video Not Hosted By Allocine)
-        url_video_embeded = re.compile('src=\'(.*?)\'').findall(
-            video_json_parser["media"]["trailerEmbed"])[0]
-        if 'allocine' in url_video_embeded:
-            url_video_embeded_html = urlquick.get(url_video_embeded).text
-            url_video_resolver = re.compile('data-model="(.*?)"').findall(
-                url_video_embeded_html)[0]
-            url_video_resolver = url_video_resolver.replace('&quot;', '"')
-            url_video_resolver = url_video_resolver.replace('\\', '')
-            url_video_resolver = url_video_resolver.replace('&amp;', '&')
-            url_video_resolver = url_video_resolver.replace('%2F', '/')
-            # Case Youtube
+            return json_parser["videos"][0]["sources"]["standard"]
+    elif root.find(".//div[@class='more-overlay-item social-export light']") is not None:
+        stream_datas_json = root.find(".//div[@class='more-overlay-item social-export light']").get('data-model')
+        print(repr(stream_datas_json))
+        json_parser = json.loads(stream_datas_json)
+        if 'code' in json_parser["videos"][0]["sources"]:
+            url_video_resolver = json_parser["videos"][0]["sources"]["code"]
             if 'youtube' in url_video_resolver:
-                video_id = re.compile(r'www.youtube.com/embed/(.*?)[\?\"\&]'
-                                      ).findall(url_video_resolver)[0]
+                video_id = re.compile(
+                    r'www.youtube.com/embed/(.*?)[\?\"\&]').findall(url_video_resolver)[0]
                 return resolver_proxy.get_stream_youtube(
                     plugin, video_id, download_mode)
 
@@ -551,32 +509,21 @@ def get_video_url(plugin,
 
             # Case Facebook
             elif 'facebook' in url_video_resolver:
-                video_id = re.compile('www.facebook.com/allocine/videos/(.*?)/'
-                                      ).findall(url_video_resolver)[0]
+                video_id = re.compile(
+                    r'www.facebook.com/allocine/videos/(.*?)/').findall(url_video_resolver)[0]
                 return resolver_proxy.get_stream_facebook(
                     plugin, video_id, download_mode)
 
             # Case Vimeo
             elif 'vimeo' in url_video_resolver:
-                video_id = re.compile('player.vimeo.com/video/(.*?)[\?\"]'
-                                      ).findall(url_video_resolver)[0]
-                return resolver_proxy.get_stream_vimeo(plugin, video_id,
-                                                       download_mode)
-
-            # TO DO ? (return an error)
-            else:
-                return False
-        else:
-            # Case Youtube
-            if 'youtube' in url_video_embeded:
-                video_id = re.compile('www.youtube.com/embed/(.*?)[\?\"\&]'
-                                      ).findall(url_video_embeded)[0]
-                return resolver_proxy.get_stream_youtube(
+                video_id = re.compile(
+                    r'player.vimeo.com/video/(.*?)[\?\"]').findall(url_video_resolver)[0]
+                return resolver_proxy.get_stream_vimeo(
                     plugin, video_id, download_mode)
 
-            # TO DO ? (return an error)
-            else:
-                return False
+        # TO DO ? (return an error)
+        else:
+            return False
 
 
 @Route.register

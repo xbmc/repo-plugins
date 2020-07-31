@@ -20,6 +20,7 @@
     with Catch-up TV & More; if not, write to the Free Software Foundation,
     Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """
+from codequick import Script
 from random import randint
 
 import json
@@ -71,7 +72,8 @@ def geoip():
         data = json.loads(resp.text)
         if 'reponse' in data:
             return data['reponse']['geo_info']['country_code']
-        else:
-            return None
     except Exception:
-        return None
+        pass
+    Script.notify(Script.get_info('name'), Script.localize(30724), icon=Script.NOTIFY_WARNING)
+    Script.log('Failed to get country code based on IP address', lvl=Script.WARNING)
+    return None

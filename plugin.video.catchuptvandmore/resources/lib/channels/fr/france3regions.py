@@ -186,11 +186,11 @@ def get_video_url(plugin,
 
 
 def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
+    return get_live_url(plugin, item_id, **kwargs)
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
     final_region = kwargs.get('language', Script.setting['france3regions.language'])
 
     resp = urlquick.get(URL_LIVES_JSON,

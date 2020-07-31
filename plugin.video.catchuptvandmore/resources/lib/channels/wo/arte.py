@@ -424,7 +424,7 @@ def list_videos_program_concert(plugin, item_id, program_url,
                                 **kwargs):
 
     if '/api/' in program_url:
-        resp = urlquick.get(program_url.replace('https://api-internal.arte.tv', 'https://www.arte.tv/guide'))
+        resp = urlquick.get(program_url.replace('https://api-internal.arte.tv', 'https://www.arte.tv/guide').replace(" ", ""))
         json_parser = json.loads(resp.text)
         for video_datas in json_parser['data']:
             if video_datas['subtitle'] is not None:
@@ -459,7 +459,7 @@ def list_videos_program_concert(plugin, item_id, program_url,
             yield Listitem.next_page(item_id=item_id,
                                      program_url=json_parser['nextPage'])
     else:
-        resp = urlquick.get(program_url)
+        resp = urlquick.get(program_url.replace(" ", ""))
         json_value = re.compile(r'_INITIAL_STATE__ \= (.*?)\}\;').findall(
             resp.text)[0]
         json_parser = json.loads(json_value + '}')
@@ -544,11 +544,11 @@ def get_video_url(plugin,
 
 
 def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
+    return get_live_url(plugin, item_id, **kwargs)
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
     final_language = kwargs.get('language', DESIRED_LANGUAGE)
 
     resp = urlquick.get(URL_LIVE_ARTE % final_language.lower())

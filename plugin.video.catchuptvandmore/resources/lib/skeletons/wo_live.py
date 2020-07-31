@@ -62,13 +62,13 @@ menu = {
         'module': 'resources.lib.channels.wo.arte',
         'available_languages': ['FR', 'DE'],
         'xmltv_ids': {
-            'fr': 'C111.api.telerama.fr'
+            'FR': 'C111.api.telerama.fr'
         },
         'm3u_groups': {
-            'fr': 'France TNT'
+            'FR': 'France TNT'
         },
         'm3u_orders': {
-            'fr': 7
+            'FR': 7
         },
         'enabled': True,
         'order': 3

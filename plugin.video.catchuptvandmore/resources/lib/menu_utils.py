@@ -41,8 +41,6 @@ from resources.lib.kodi_utils import get_kodi_version
 import resources.lib.favourites as fav
 
 from resources.lib.addon_utils import get_item_label
-from resources.lib.migration_utils import migrate_old_menus_settings
-
 
 MENUS_SETTINGS_FP = os.path.join(Script.get_info('profile'), "menus_settings.json")
 """
@@ -63,10 +61,6 @@ def get_menus_settings():
     Returns:
         dict: Menus settings
     """
-    try:
-        migrate_old_menus_settings(MENUS_SETTINGS_FP)  # Migrate old Kodi settings (from settings.xml)
-    except Exception:
-        Script.log('Failed to migrate old settings to json file')
     if not xbmcvfs.exists(MENUS_SETTINGS_FP):
         return {}
     with open(MENUS_SETTINGS_FP) as f:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.23" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.24" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.codequick" version="0.9.12"/>
@@ -42,18 +42,23 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.23]
-[Fix] Live TV / Catchup TV - BFM (TV, Region, ...)
-[Add] Live TV - OneNet TV (FR)
-[Add] Live TV - The Pet Collective, Fail Army, ... from STV (UK)
-[Fix] Catchup TV - LCP (FR)
-[Update] YT-dl - Reactivate Dailymotion stream and Download mode
-[Fix] Catchup TV - Jack (mycanal) (FR)
-[Remove] Live TV - Mont Blanc Live TV (FR)
-[Fix] Live TV - NPO channels (NL)
-[Fix] Catchup TV - Raiplay (IT) - Work from jmzambon !
-[Fix] Catchup TV - Spectacle et Culture (FranceTV) (FR)
-[Fix] Catchup TV - Swiss national channels (CH)
+[Version 0.2.24]
+[Fix/DRM] Live TV - RTBF (LaUne, LaDeux, ...) (BE)
+[Fix] Live TV - Télé Quebec (CA)
+[Remove] Live TV - Yoopa and LCN (CA) - No present in the website of TVA.ca
+[Rename] Live TV - NPO Zapp to NPO 3 (NL) - Need more work
+[Fix] Live TV - BFM Business (FR)
+[Fix] Website - Allocine (FR)
+[Move] Catch-Up TV - France TV (FR) - All France TV channels are now in 'france.tv' folder like the official website
+[Add] Live TV - Equidia (FR)
+[Fix] Website - Têtes à claques (CA) - Add Zarbi videos
+[Fix] Live TV - Nessan (TN)
+[Fix] Catch-Up TV - Guilli (FR)
+[Add] Live TV - B Smart (FR)
+[Fix] Catch-up TV - NYC Media (US)
+[Fix] Cathc-up TV - Arte Concert (FR)
+[Move] Catch-Up TV - France TV (FR) - FR3 régions and 1ère outre-mer are now in 'france.tv' folder
+----
 Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
     </news>
     <assets>

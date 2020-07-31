@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     Catch-up TV & More
-    Copyright (C) 2017  SylvainCecchetto
+    Copyright (C) 2019  SylvainCecchetto
 
     This file is part of Catch-up TV & More.
 
@@ -27,47 +27,34 @@ from __future__ import unicode_literals
 
 from codequick import Route, Resolver, Listitem, utils, Script
 
-
 from resources.lib import web_utils
+from resources.lib import resolver_proxy
+from resources.lib.menu_utils import item_post_treatment
 
-import json
+import re
 import urlquick
 
-# TO DO
-# Replay add emissions
+# TODO
+# Add Replay
 
-URL_LIVE_API = 'http://%s.euronews.com/api/watchlive.json'
-# Language
+URL_ROOT = "https://www.bsmart.fr"
 
-DESIRED_LANGUAGE = Script.setting['euronews.language']
+URL_LIVE_DATAS = URL_ROOT + "/static/js/bundle.%s.js"
 
 
 def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, **kwargs)
+    return get_live_url(plugin, item_id, item_id.upper())
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, **kwargs):
-    final_language = kwargs.get('language', Script.setting['euronews.language'])
+def get_live_url(plugin, item_id, video_id, **kwargs):
 
-    if final_language == 'EN':
-        url_live_json = URL_LIVE_API % 'www'
-    elif final_language == 'AR':
-        url_live_json = URL_LIVE_API % 'arabic'
-    else:
-        url_live_json = URL_LIVE_API % final_language.lower()
-
-    resp = urlquick.get(url_live_json,
-                        headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
-    json_parser = json.loads(resp.text)
-    if 'http' in json_parser["url"]:
-        url2_live_json = json_parser["url"]
-    else:
-        url2_live_json = 'https:' + json_parser["url"]
-
-    resp2 = urlquick.get(url2_live_json,
-                         headers={'User-Agent': web_utils.get_random_ua()},
-                         max_age=-1)
-    json_parser_2 = json.loads(resp2.text)
-    return json_parser_2["primary"]
+    resp = urlquick.get(
+        URL_ROOT, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
+    js_id = re.compile(r'js\/bundle\.(.*?)\.js').findall(resp.text)[0]
+    resp2 = urlquick.get(
+        URL_LIVE_DATAS % js_id, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
+    live_id = re.compile(r'\(Fi\,\{id\:\"(.*?)\"').findall(resp2.text)[1]
+    return resolver_proxy.get_stream_dailymotion(plugin,
+                                                 live_id,
+                                                 False)

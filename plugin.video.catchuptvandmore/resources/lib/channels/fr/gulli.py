@@ -195,18 +195,10 @@ def get_video_url(plugin,
                   video_url,
                   download_mode=False,
                   **kwargs):
-    url_root = video_url.replace('playlist.m3u8', '')
-    m3u8_content = urlquick.get(
-        video_url, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
-    last_url = ''
-
-    for line in m3u8_content.text.splitlines():
-        if 'm3u8' in line and 'video' in line:
-            last_url = line
 
     if download_mode:
-        return download.download_video(url_root + last_url)
-    return url_root + last_url
+        return download.download_video(video_url)
+    return video_url
 
 
 def live_entry(plugin, item_id, **kwargs):

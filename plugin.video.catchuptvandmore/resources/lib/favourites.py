@@ -38,7 +38,6 @@ from hashlib import md5
 
 
 import resources.lib.mem_storage as mem_storage
-from resources.lib.migration_utils import migrate_from_pickled_fav
 from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_params, get_selected_item_stream, get_selected_item_info
 from resources.lib.addon_utils import get_item_label, get_item_media_path
 
@@ -53,7 +52,6 @@ def get_fav_dict_from_json():
         dict: Favourites dict
     """
 
-    migrate_from_pickled_fav()
     if not xbmcvfs.exists(FAV_JSON_FP):
         return {}
     try:
@@ -81,19 +79,15 @@ def guess_fav_prefix(item_id):
     This category label will be used as a prefix when the user add a favourite
 
     """
-
-    prefix = 'empty'
-    if item_id == 'live_tv':
-        prefix = Script.localize(30030)
-    elif item_id == 'replay':
-        prefix = Script.localize(30031)
-    elif item_id == 'websites':
-        prefix = Script.localize(30032)
-    elif item_id == 'root':
-        prefix = ''
-    if prefix != 'empty':
+    prefixes = {
+        'root': '',
+        'live_tv': Script.localize(30030),
+        'replay': Script.localize(30031),
+        'websites': Script.localize(30032)
+    }
+    if item_id in prefixes:
         s = mem_storage.MemStorage('fav')
-        s['prefix'] = prefix
+        s['prefix'] = prefixes[item_id]
 
 
 @Script.register
@@ -111,29 +105,33 @@ def add_item_to_favourites(plugin, is_playable=False, item_infos={}):
     # in order to be able to directly use `Listitem.from_dict` later
     item_dict = {}
 
-    # --> subtitles (TODO)
-    # item_dict['subtitles'] = list(item.subtitles)
+    # --> callback (string)
+    item_dict['callback'] = xbmc.getInfoLabel('ListItem.Path').replace(
+        'plugin://plugin.video.catchuptvandmore', '')
 
-    # --> art
+    # --> label (string)
+    item_dict['label'] = get_selected_item_label()
+
+    # --> art (dict)
     item_dict['art'] = get_selected_item_art()
 
-    # --> info
+    # --> info (dict)
     item_dict['info'] = get_selected_item_info()
 
-    # --> stream
+    # --> stream (dict)
     item_dict['stream'] = get_selected_item_stream()
 
-    # --> context (TODO)
+    # --> context (list) (TODO)
     item_dict['context'] = []
 
-    # --> properties (TODO)
+    # --> properties (dict) (TODO)
     item_dict['properties'] = {}
 
-    # --> params
+    # --> params (dict)
     item_dict['params'] = get_selected_item_params()
 
-    # --> label
-    item_dict['label'] = get_selected_item_label()
+    # --> subtitles (list) (TODO)
+    item_dict['subtitles'] = []
 
     if item_infos:
         # This item comes from tv_guide_menu
@@ -155,17 +153,11 @@ def add_item_to_favourites(plugin, is_playable=False, item_infos={}):
 
         item_dict['info']['plot'] = ''
 
-    # Extract the callback
-    item_path = xbmc.getInfoLabel('ListItem.Path')
-    item_dict['callback'] = item_path.replace(
-        'plugin://plugin.video.catchuptvandmore', '')
-
     s = mem_storage.MemStorage('fav')
-    prefix = ''
     try:
         prefix = s['prefix']
     except KeyError:
-        pass
+        prefix = ''
 
     label_proposal = item_dict['label']
     if prefix != '':
@@ -320,6 +312,5 @@ def delete_favourites(plugin):
     """
 
     Script.log('Delete favourites db')
-    xbmcvfs.delete(os.path.join(Script.get_info('profile'), 'favourites.pickle'))
     xbmcvfs.delete(os.path.join(Script.get_info('profile'), 'favourites.json'))
     Script.notify(Script.localize(30374), '')

@@ -227,28 +227,32 @@ class Channel:
             data_parsers.remove(data_parser)
 
             # and process it
-            Logger.debug("Processing %s", data_parser)
+            Logger.debug("[DataParsers] Pre-Processing %s", data_parser)
             (data, pre_items) = data_parser.PreProcessor(data)
             items += pre_items
 
             if isinstance(data, JsonHelper):
                 Logger.debug("Generic preprocessor resulted in JsonHelper data")
 
+        # Split normal and post-processor data parsers
+        generic_post_procs = [p for p in data_parsers if p.is_generic_post_processor()]
+        data_parsers = [p for p in data_parsers if p not in generic_post_procs]
+
         # The the other handlers
         Logger.trace("Processing %s Normal DataParsers", len(data_parsers))
         handler_json = None
         for data_parser in data_parsers:
-            Logger.debug("Processing %s", data_parser)
+            Logger.debug("[DataParsers] Processing %s", data_parser)
 
             # Check for preprocessors
             if data_parser.PreProcessor:
-                Logger.debug("Processing DataParser.PreProcessor")
+                Logger.debug("[DataParsers] Processing DataParser.PreProcessor")
                 (handler_data, pre_items) = data_parser.PreProcessor(data)
                 items += pre_items
             else:
                 handler_data = data
 
-            Logger.debug("Processing DataParser.Parser")
+            Logger.debug("[DataParsers] Processing DataParser.Parser")
             if data_parser.Parser is None or (data_parser.Parser == "" and not data_parser.IsJson):
                 if data_parser.Creator:
                     Logger.warning("No <parser> found for %s. Skipping.", data_parser.Creator)
@@ -275,7 +279,7 @@ class Channel:
                 else:
                     parser_results = Regexer.do_regex(data_parser.Parser, handler_data)
 
-            Logger.debug("Processing DataParser.Creator for %s items", len(parser_results))
+            Logger.debug("[DataParsers] Processing DataParser.Creator for %s items", len(parser_results))
             for parser_result in parser_results:
                 handler_result = data_parser.Creator(parser_result)
                 if handler_result is not None:
@@ -283,6 +287,28 @@ class Channel:
                         items += handler_result
                     else:
                         items.append(handler_result)
+
+            if data_parser.PostProcessor:
+                Logger.debug("[DataParsers] Processing DataParser.PostProcessor")
+                if data_parser.IsJson:
+                    items = data_parser.PostProcessor(handler_json, items)
+                else:
+                    items = data_parser.PostProcessor(handler_data, items)
+                Logger.trace("Post-processing returned %d items", len(items))
+
+        # The post processors
+        num_post_procs = len(generic_post_procs)
+        Logger.trace("Processing %s Generic Post-Processors DataParsers", num_post_procs)
+        if num_post_procs > 1:
+            # warn for strange results if more than 1 generic pre-processor is present.
+            Logger.warning(
+                "More than one Generic Post-Processor is found (%s). They are being processed in the "
+                "order that Python likes which might result in unexpected result.", num_post_procs)
+
+        for data_parser in generic_post_procs:
+            Logger.debug("[DataParsers] Post-processing Generic %s", data_parser)
+            items = data_parser.PostProcessor(data, items)
+            Logger.trace("Post-processing returned %d items", len(items))
 
         # should we exclude DRM/GEO?
         hide_geo_locked = AddonSettings.hide_geo_locked_items_for_location(self.language)
@@ -518,6 +544,30 @@ class Channel:
         items = []
         Logger.debug("Pre-Processing finished")
         return data, items
+
+    # noinspection PyUnusedLocal
+    def post_process_folder_list(self, data, items):
+        """ Performs post-process actions for data processing.
+
+        Accepts an data from the process_folder_list method, BEFORE the items are
+        processed. Allows setting of parameters (like title etc) for the channel.
+        Inside this method the <data> could be changed and additional items can
+        be created.
+
+        The return values should always be instantiated in at least ("", []).
+
+        :param str|JsonHelper data:     The retrieve data that was loaded for the
+                                         current item and URL.
+        :param list[MediaItem] items:   The currently available items
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: list[MediaItem]
+
+        """
+
+        Logger.info("Performing Post-Processing")
+        Logger.debug("Post-Processing finished")
+        return items
 
     def create_page_item(self, result_set):
         """ Creates a MediaItem of type 'page' using the result_set from the regex.
@@ -767,16 +817,22 @@ class Channel:
 
     def _add_data_parsers(self, urls, name=None, preprocessor=None,
                           parser=None, creator=None, updater=None,
+                          postprocessor=None,
                           json=False, match_type=ParserData.MatchStart,
                           requires_logon=False):
         """ Adds a DataParser to the handlers dictionary for the  given urls
 
         :param list[str] urls:              The URLs that triggers these handlers
         :param str name:                    The name of the DataParser
-        :param function preprocessor:       The pre-processor called
+        :param preprocessor:                The pre-processor called
+        :type preprocessor:                 (str) -> (str|JsonHelper,list[MediaItem])
         :param str|list[str|int] parser:    The parser (regex or json)
-        :param function creator:            The creator called with the results from the parser
-        :param function updater:            The updater called for updating a item
+        :param creator:                     The creator called with the results from the parser
+        :type creator:                      (list[str]|dict) -> MediaItem|None
+        :param updater:                     The updater called for updating a item
+        :type updater:                      MediaItem -> MediaItem
+        :param postprocessor:               The post-processor called
+        :type postprocessor:                (JsonHelper|str,list[MediaItems]) -> list[MediaItems]
         :param bool json:                   Indication whether the parsers are JSON (True) or Regex (False)
         :param str match_type:              The type of matching to use
         :param bool requires_logon:         Do we need to be logged on?
@@ -784,22 +840,28 @@ class Channel:
         """
 
         for url in urls:
-            self._add_data_parser(url, name, preprocessor, parser, creator, updater, json,
-                                  match_type=match_type, requires_logon=requires_logon)
+            self._add_data_parser(url, name, preprocessor, parser, creator, updater, postprocessor,
+                                  json, match_type=match_type, requires_logon=requires_logon)
         return
 
     # noinspection PyPropertyAccess
     def _add_data_parser(self, url, name=None, preprocessor=None,
                          parser=None, creator=None, updater=None,
+                         postprocessor=None,
                          json=False, match_type=ParserData.MatchStart, requires_logon=False):
         """ Adds a DataParser to the handlers dictionary
 
-        :param function preprocessor:       The pre-processor called
+        :param preprocessor:                The pre-processor called
+        :type preprocessor:                 (str) -> (str|JsonHelper,list[MediaItem])
         :param str name:                    The name of the DataParser
         :param str url:                     The URLs that triggers these handlers
         :param str|list[str|int] parser:    The parser (regex or json)
-        :param function creator:            The creator called with the results from the parser
-        :param function updater:            The updater called for updating a item
+        :param creator:                     The creator called with the results from the parser
+        :type creator:                      (list[str]|dict) -> MediaItem|None
+        :param updater:                     The updater called for updating a item
+        :type updater:                      MediaItem -> MediaItem
+        :param postprocessor:               The post-processor called
+        :type postprocessor:                (JsonHelper|str,list[MediaItems]) -> list[MediaItems]
         :param bool json:                   Indication whether the parsers are JSON (True) or Regex (False)
         :param str match_type:              The type of matching to use
         :param bool requires_logon:         Do we need to be logged on?
@@ -812,6 +874,7 @@ class Channel:
         data.Parser = parser
         data.Creator = creator
         data.Updater = updater
+        data.PostProcessor = postprocessor
         data.IsJson = json
         data.MatchType = match_type
         data.LogOnRequired = requires_logon

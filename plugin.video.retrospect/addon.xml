@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.8"
+        version="5.2.9"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,26 +132,21 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.8 - Changelog - 2020-07-09[/B]
+        <news>[B]Retrospect v5.2.9 - Changelog - 2020-08-02[/B]
 
-A small release for Retrospect that includes a number of new Dutch regional channels and fixes some minor issues with some of the existing channels.
+A bug fix release for Retrospect that fixes some minor issues with some of the existing channels. It also adds some minor stuff under the hood.
 
 [B]Framework related[/B]
-_None_
+* Added: Option for post-processing of retrieved items
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Added: WOS regional videos
-* Added: DTV Nieuws regional videos
-* Added: Omroep Venlo
-* Added: Omroep Horst aan de Maas
-* Added: Studio 040
-* Fixed: Pathe.nl missing thumbs caused some trailers to not list
-* Fixed: UR Play changed date format which broke parsing (Fixes #1403)
-* Fixed: Cleanup the titles in UR Play for recent and popular lists
-* Fixed: AT5 updated their API which broke listings (Fixes #1406)
+* Fixed: Use GraphQL for tags/categories (Fixes #1340)
+* Added: Separate TV4 Group channel for TV4play.se (Fixes# 965)
+* Fixed: Nickelodeon did not list (Fixes #1412)
+* Added: &#x27;Latest news&#x27; option to SVT
 
         </news>
         <assets>

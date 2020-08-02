@@ -10,7 +10,6 @@ from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.jsonhelper import JsonHelper
 
-from resources.lib.parserdata import ParserData
 from resources.lib.regexer import Regexer
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
@@ -38,15 +37,26 @@ class Channel(chn_class.Channel):
 
         # ============== Actual channel setup STARTS here and should be overwritten from derived classes ===============
         self.__channelId = "tv4"
-        if self.channelCode == "tv4se":
+        self.mainListUri = "https://api.tv4play.se/play/programs?is_active=true&platform=tablet" \
+                           "&per_page=1000" \
+                           "&fl=nid,name,program_image,is_premium,updated_at,channel&start=0"
+
+        if self.channelCode == "tv4segroup":
+            self.noImage = "tv4image.png"
+            self.mainListUri = "#mainlisting"
+
+        elif self.channelCode == "tv4se":
             self.noImage = "tv4image.png"
             self.__channelId = "tv4"
+
         elif self.channelCode == "tv7se":
             self.noImage = "tv7image.png"
             self.__channelId = "sjuan"
+
         elif self.channelCode == "tv12se":
             self.noImage = "tv12image.png"
             self.__channelId = "tv12"
+
         else:
             raise Exception("Invalid channel code")
 
@@ -54,21 +64,31 @@ class Channel(chn_class.Channel):
         # self.mainListUri = "https://api.tv4play.se/play/programs?is_active=true&platform=tablet&per_page=1000" \
         #                    "&fl=nid,name,program_image&start=0"
 
-        self.mainListUri = "#mainlisting"
-
         self.baseUrl = "http://www.tv4play.se"
         self.swfUrl = "http://www.tv4play.se/flash/tv4playflashlets.swf"
 
-        self._add_data_parser(self.mainListUri, preprocessor=self.add_categories_and_specials)
+        self._add_data_parser("#mainlisting", preprocessor=self.add_categories_and_specials)
+
+        program_graph_ql = self.__get_api_url("ProgramSearch", "78cdda0280f7e6b21dea52021406cc44ef0ce37102cb13571804b1a5bd3b9aa1")
+        self._add_data_parser(program_graph_ql, json=True,
+                              name="JSON GraphQL program parser",
+                              parser=["data", "programSearch", "programs"],
+                              creator=self.create_api_typed_item)
+
+        self._add_data_parser("https://graphql.tv4play.se/graphql?query=query%7BprogramSearch",
+                              name="JSON GraphQL manual program search", json=True,
+                              parser=["data", "programSearch", "programs"],
+                              creator=self.create_api_typed_item)
+
+        self._add_data_parser("https://graphql.tv4play.se/graphql?query=query%7Btags%7D",
+                              name="Tag overview", json=True,
+                              parser=["data", "tags"], creator=self.create_api_tag)
 
         self.episodeItemJson = ["results", ]
         self._add_data_parser("https://api.tv4play.se/play/programs?", json=True,
                               # No longer used:  requiresLogon=True,
                               parser=self.episodeItemJson, creator=self.create_episode_item)
 
-        self._add_data_parser("https://api.tv4play.se/play/categories.json",
-                              json=True, match_type=ParserData.MatchExact,
-                              parser=[], creator=self.create_category_item)
         self._add_data_parser("https://api.tv4play.se/play/programs?platform=tablet&category=",
                               json=True,
                               parser=self.episodeItemJson, creator=self.create_episode_item)
@@ -85,7 +105,8 @@ class Channel(chn_class.Channel):
 
         #===============================================================================================================
         # non standard items
-        self.maxPageSize = 100  # The Android app uses a page size of 20
+        self.__maxPageSize = 100  # The Android app uses a page size of 20
+        self.__program_fields = '{__typename,description,displayCategory,id,image,images{main16x9},name,nid,genres}'
 
         #===============================================================================================================
         # Test cases:
@@ -222,7 +243,7 @@ class Channel(chn_class.Channel):
         program_id = HtmlEntityHelper.url_encode(program_id)
         url = "https://api.tv4play.se/play/video_assets" \
               "?platform=tablet&per_page=%s&is_live=false&type=episode&" \
-              "page=1&node_nids=%s&start=0" % (self.maxPageSize, program_id, )
+              "page=1&node_nids=%s&start=0" % (self.__maxPageSize, program_id,)
 
         if "channel" in json and json["channel"]:
             # noinspection PyTypeChecker
@@ -242,6 +263,98 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url)
         item.thumb = result_set.get("program_image", self.noImage)
         item.fanart = result_set.get("program_image", self.fanart)
+        item.isPaid = result_set.get("is_premium", False)
+        return item
+
+    def create_api_tag(self, result_set):
+        """ Creates a new MediaItem for tag listing items
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param str result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'folder'.
+        :rtype: MediaItem|None
+
+        """
+
+        Logger.trace(result_set)
+        query = 'query{programSearch(tag:"%s",per_page:1000){__typename,programs' \
+                '%s,' \
+                'totalHits}}' % (result_set, self.__program_fields)
+        query = HtmlEntityHelper.url_encode(query)
+        url = "https://graphql.tv4play.se/graphql?query={}".format(query)
+        item = MediaItem(result_set, url)
+        return item
+
+    def create_api_typed_item(self, result_set):
+        """ Creates a new MediaItem based on the __typename attribute.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'folder'.
+        :rtype: MediaItem|None
+
+        """
+
+        api_type = result_set["__typename"]
+        Logger.trace("%s: %s", api_type, result_set)
+
+        if api_type == "Program":
+            item = self.create_api_program_type(result_set)
+        elif api_type == "ProgramCard":
+            item = self.create_api_program_type(result_set.get("program"))
+        else:
+            Logger.warning("Missing type: %s", api_type)
+            return None
+
+        return item
+
+    def create_api_program_type(self, result_set):
+        """ Creates a new MediaItem for an episode.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param list[str]|dict result_set:   The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'folder'.
+        :rtype: MediaItem|None
+
+        """
+
+        # Logger.Trace(result_set)
+        json = result_set
+        title = json["name"]
+
+        program_id = json["nid"]
+        program_id = HtmlEntityHelper.url_encode(program_id)
+        url = "https://api.tv4play.se/play/video_assets" \
+              "?platform=tablet&per_page=%s&is_live=false&type=episode&" \
+              "page=1&node_nids=%s&start=0" % (self.__maxPageSize, program_id,)
+
+        item = MediaItem(title, url)
+        item.description = result_set.get("description", None)
+
+        item.thumb = result_set.get("image")
+        if item.thumb is not None:
+            item.thumb = "https://imageproxy.b17g.services/?format=jpg&shape=cut" \
+                         "&quality=70&resize=520x293&source={}"\
+                .format(HtmlEntityHelper.url_encode(item.thumb))
+
+        item.fanart = result_set.get("image")
+        if item.fanart is not None:
+            item.fanart = "https://imageproxy.b17g.services/?format=jpg&shape=cut" \
+                         "&quality=70&resize=1280x720&source={}" \
+                .format(HtmlEntityHelper.url_encode(item.fanart))
+
         item.isPaid = result_set.get("is_premium", False)
         return item
 
@@ -265,68 +378,58 @@ class Channel(chn_class.Channel):
         Logger.info("Performing Pre-Processing")
         items = []
 
+        # TV4 Group specific items
+        query = 'query{programSearch(per_page:1000){__typename,programs' \
+                '%s,' \
+                'totalHits}}' % (self.__program_fields,)
+        query = HtmlEntityHelper.url_encode(query)
+        tv_shows_url = "https://graphql.tv4play.se/graphql?query={}".format(query)
+
         extras = {
             LanguageHelper.get_localized_string(LanguageHelper.Search): ("searchSite", None, False),
             LanguageHelper.get_localized_string(LanguageHelper.TvShows): (
-                "https://api.tv4play.se/play/programs?is_active=true&platform=tablet"
-                "&per_page=1000&fl=nid,name,program_image,is_premium,updated_at,channel&start=0",
-                None,
-                False
-            )
+                tv_shows_url,
+                None, False
+            ),
+            LanguageHelper.get_localized_string(LanguageHelper.Categories): (
+                "https://graphql.tv4play.se/graphql?query=query%7Btags%7D", None, False
+            ),
+            LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes): (
+                "https://api.tv4play.se/play/video_assets/most_viewed?type=episode"
+                "&platform=tablet&is_live=false&per_page=%s&start=0" % (self.__maxPageSize,),
+                None, False
+            ),
         }
 
-        # Channel 4 specific items
-        if self.channelCode == "tv4se":
-            extras.update({
-                LanguageHelper.get_localized_string(LanguageHelper.Categories): (
-                    "https://api.tv4play.se/play/categories.json", None, False
-                ),
-                LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes): (
-                    "https://api.tv4play.se/play/video_assets/most_viewed?type=episode"
-                    "&platform=tablet&is_live=false&per_page=%s&start=0" % (self.maxPageSize,),
-                    None, False
-                ),
-            })
+        today = datetime.datetime.now()
+        days = [LanguageHelper.get_localized_string(LanguageHelper.Monday),
+                LanguageHelper.get_localized_string(LanguageHelper.Tuesday),
+                LanguageHelper.get_localized_string(LanguageHelper.Wednesday),
+                LanguageHelper.get_localized_string(LanguageHelper.Thursday),
+                LanguageHelper.get_localized_string(LanguageHelper.Friday),
+                LanguageHelper.get_localized_string(LanguageHelper.Saturday),
+                LanguageHelper.get_localized_string(LanguageHelper.Sunday)]
+        for i in range(0, 7, 1):
+            start_date = today - datetime.timedelta(i)
+            end_date = start_date + datetime.timedelta(1)
 
-            today = datetime.datetime.now()
-            days = [LanguageHelper.get_localized_string(LanguageHelper.Monday),
-                    LanguageHelper.get_localized_string(LanguageHelper.Tuesday),
-                    LanguageHelper.get_localized_string(LanguageHelper.Wednesday),
-                    LanguageHelper.get_localized_string(LanguageHelper.Thursday),
-                    LanguageHelper.get_localized_string(LanguageHelper.Friday),
-                    LanguageHelper.get_localized_string(LanguageHelper.Saturday),
-                    LanguageHelper.get_localized_string(LanguageHelper.Sunday)]
-            for i in range(0, 7, 1):
-                start_date = today - datetime.timedelta(i)
-                end_date = start_date + datetime.timedelta(1)
+            day = days[start_date.weekday()]
+            if i == 0:
+                day = LanguageHelper.get_localized_string(LanguageHelper.Today)
+            elif i == 1:
+                day = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
 
-                day = days[start_date.weekday()]
-                if i == 0:
-                    day = LanguageHelper.get_localized_string(LanguageHelper.Today)
-                elif i == 1:
-                    day = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
-
-                Logger.trace("Adding item for: %s - %s", start_date, end_date)
-                # Old URL:
-                # url = "https://api.tv4play.se/play/video_assets?exclude_node_nids=" \
-                #       "nyheterna,v%C3%A4der,ekonomi,lotto,sporten,nyheterna-blekinge,nyheterna-bor%C3%A5s," \
-                #       "nyheterna-dalarna,nyheterna-g%C3%A4vle,nyheterna-g%C3%B6teborg,nyheterna-halland," \
-                #       "nyheterna-helsingborg,nyheterna-j%C3%B6nk%C3%B6ping,nyheterna-kalmar,nyheterna-link%C3%B6ping," \
-                #       "nyheterna-lule%C3%A5,nyheterna-malm%C3%B6,nyheterna-norrk%C3%B6ping,nyheterna-skaraborg," \
-                #       "nyheterna-skellefte%C3%A5,nyheterna-stockholm,nyheterna-sundsvall,nyheterna-ume%C3%A5," \
-                #       "nyheterna-uppsala,nyheterna-v%C3%A4rmland,nyheterna-v%C3%A4st,nyheterna-v%C3%A4ster%C3%A5s," \
-                #       "nyheterna-v%C3%A4xj%C3%B6,nyheterna-%C3%B6rebro,nyheterna-%C3%B6stersund,tv4-tolken," \
-                #       "fotbollskanalen-europa" \
-                #       "&platform=tablet&per_page=32&is_live=false&product_groups=2&type=episode&per_page=100"
-                url = "https://api.tv4play.se/play/video_assets?exclude_node_nids=" \
-                      "&platform=tablet&per_page=32&is_live=false&product_groups=2&type=episode&per_page=100"
-                url = "%s&broadcast_from=%s&broadcast_to=%s&" % (url, start_date.strftime("%Y%m%d"), end_date.strftime("%Y%m%d"))
-                extras[day] = (url, start_date, False)
+            Logger.trace("Adding item for: %s - %s", start_date, end_date)
+            url = "https://api.tv4play.se/play/video_assets?exclude_node_nids=" \
+                  "&platform=tablet&is_live=false&product_groups=2&type=episode&per_page=100"
+            url = "%s&broadcast_from=%s&broadcast_to=%s&" % (url, start_date.strftime("%Y%m%d"), end_date.strftime("%Y%m%d"))
+            extras[day] = (url, start_date, False)
 
         extras[LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes)] = (
             "https://api.tv4play.se/play/video_assets?exclude_node_nids=&platform=tablet&"
-            "per_page=32&is_live=true&product_groups=2&type=episode&per_page=100", None, False)
+            "is_live=true&product_groups=2&type=episode&per_page=100", None, False)
 
+        # Actually add the extra items
         for name in extras:
             title = name
             url, date, is_live = extras[name]
@@ -340,19 +443,6 @@ class Channel(chn_class.Channel):
                 item.set_date(date.year, date.month, date.day, 0, 0, 0, text=date.strftime("%Y-%m-%d"))
 
             items.append(item)
-
-        if not self.channelCode == "tv4se":
-            return data, items
-
-        # Add Live TV
-        # live = MediaItem("\a.: Live-TV :.",
-        #                            "http://tv4events1-lh.akamaihd.net/i/EXTRAEVENT5_1@324055/master.m3u8",
-        #                            type="video")
-        # live.dontGroup = True
-        # # live.isDrmProtected = True
-        # live.isGeoLocked = True
-        # live.isLive = True
-        # items.append(live)
 
         Logger.debug("Pre-Processing finished")
         return data, items
@@ -375,7 +465,7 @@ class Channel(chn_class.Channel):
         """
 
         url = "https://api.tv4play.se/play/video_assets?platform=tablet&per_page=%s&page=1" \
-              "&sort_order=desc&type=episode&q=%%s&start=0" % (self.maxPageSize, )
+              "&sort_order=desc&type=episode&q=%%s&start=0" % (self.__maxPageSize,)
         return chn_class.Channel.search_site(self, url)
 
     def pre_process_folder_list(self, data):
@@ -408,7 +498,7 @@ class Channel(chn_class.Channel):
             Logger.debug("Currently doing CatId: '%s'", cat_id)
 
             url = "https://api.tv4play.se/play/video_assets?platform=tablet&per_page=%s&" \
-                  "type=clip&page=1&node_nids=%s&start=0" % (self.maxPageSize, cat_id,)
+                  "type=clip&page=1&node_nids=%s&start=0" % (self.__maxPageSize, cat_id,)
             clips_title = LanguageHelper.get_localized_string(LanguageHelper.Clips)
             clips = MediaItem(clips_title, url)
             clips.complete = True
@@ -416,8 +506,8 @@ class Channel(chn_class.Channel):
 
         # find the max number of items ("total_hits":2724)
         total_items = int(Regexer.do_regex(r'total_hits\W+(\d+)', data)[-1])
-        Logger.debug("Found total of %s items. Only showing %s.", total_items, self.maxPageSize)
-        if total_items > self.maxPageSize and "&page=1&" in self.parentItem.url:
+        Logger.debug("Found total of %s items. Only showing %s.", total_items, self.__maxPageSize)
+        if total_items > self.__maxPageSize and "&page=1&" in self.parentItem.url:
             # create a group item
             more_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
             more = MediaItem(more_title, "")
@@ -427,7 +517,7 @@ class Channel(chn_class.Channel):
             # what are the total number of pages?
             current_page = 1
             # noinspection PyTypeChecker
-            total_pages = int(math.ceil(1.0 * total_items / self.maxPageSize))
+            total_pages = int(math.ceil(1.0 * total_items / self.__maxPageSize))
 
             current_url = self.parentItem.url
             needle = "&page="
@@ -520,7 +610,7 @@ class Channel(chn_class.Channel):
         # some images need to come via a proxy:
         if thumb_url and "://img.b17g.net/" in thumb_url:
             item.thumb = "https://imageproxy.b17g.services/?format=jpg&shape=cut" \
-                         "&quality=90&resize=520x293&source={}"\
+                         "&quality=70&resize=520x293&source={}"\
                 .format(HtmlEntityHelper.url_encode(thumb_url))
         else:
             item.thumb = thumb_url
@@ -557,31 +647,6 @@ class Channel(chn_class.Channel):
             item.url = "{}&drm=widevine&is_drm=true".format(item.url)
 
         item.set_info_label("duration", int(result_set.get("duration", 0)))
-        return item
-
-    def create_category_item(self, result_set):
-        """ Creates a MediaItem of type 'folder' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        cat = HtmlEntityHelper.url_encode(result_set['nid'])
-        url = "https://api.tv4play.se/play/programs?platform=tablet&category=%s" \
-              "&fl=nid,name,program_image,category,logo,is_premium" \
-              "&per_page=1000&is_active=true&start=0" % (cat, )
-        item = MediaItem(result_set['name'], url)
-        item.type = 'folder'
-        item.complete = True
         return item
 
     def update_video_item(self, item):
@@ -714,6 +779,32 @@ class Channel(chn_class.Channel):
         if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
             expire_date = DateHelper.get_datetime_from_string(expire_date)
             item.set_expire_datetime(timestamp=expire_date)
+
+    def __get_api_url(self, operation, hash_value, variables=None):
+        """ Generates a GraphQL url
+
+        :param str operation:   The operation to use
+        :param str hash_value:  The hash of the Query
+        :param dict variables:  Any variables to pass
+
+        :return: A GraphQL string
+        :rtype: str
+
+        """
+
+        extensions = {"persistedQuery": {"version": 1, "sha256Hash": hash_value}}
+        extensions = HtmlEntityHelper.url_encode(JsonHelper.dump(extensions, pretty_print=False))
+
+        final_vars = {"order_by": "NAME", "per_page": 1000}
+        if variables:
+            final_vars = variables
+        final_vars = HtmlEntityHelper.url_encode(JsonHelper.dump(final_vars, pretty_print=False))
+
+        url = "https://graphql.tv4play.se/graphql?" \
+              "operationName={}&" \
+              "variables={}&" \
+              "extensions={}".format(operation, final_vars, extensions)
+        return url
 
     def __update_dash_video(self, item, stream_info):
         """

@@ -4,7 +4,7 @@ import re
 
 
 class ParserData(object):
-    __slots__ = ["Name", "Match", "PreProcessor",
+    __slots__ = ["Name", "Match", "PreProcessor", "PostProcessor",
                  "Parser", "Creator", "Updater",
                  "IsJson", "MatchType", "LogOnRequired"]
 
@@ -25,6 +25,7 @@ class ParserData(object):
         self.Parser = None
         self.Creator = None
         self.Updater = None
+        self.PostProcessor = None
         self.IsJson = False
         self.LogOnRequired = False
         self.MatchType = ParserData.MatchStart
@@ -39,6 +40,7 @@ class ParserData(object):
 
         return \
             self.PreProcessor is None \
+            and self.PostProcessor is None \
             and self.Parser is None \
             and self.Creator is None \
             and self.Updater is not None
@@ -54,6 +56,19 @@ class ParserData(object):
 
         return \
             (self.PreProcessor is not None) \
+            and self.Parser is None and self.Creator is None and self.Updater is None
+
+    def is_generic_post_processor(self):
+        """ Returns True if only a post-processor is defined. In that case it should be considered a generic
+        post-processor that needs to be processed after other data.
+
+        :return: Indication of this instance is only used for pre-processing.
+        :rtype: bool
+
+        """
+
+        return \
+            (self.PostProcessor is not None) \
             and self.Parser is None and self.Creator is None and self.Updater is None
 
     def matches(self, url):
@@ -96,13 +111,15 @@ class ParserData(object):
                    "Pre:     %s\n" \
                    "Parser:  %s\n" \
                    "Creator: %s\n" \
-                   "Updater: %s\n" % \
+                   "Updater: %s\n" \
+                   "Post:    %s\n" % \
                    (generic, self.Name, self.IsJson, self.is_generic_pre_processor(),
                     self.MatchType,
                     self.LogOnRequired,
                     self.Match,
                     self.PreProcessor,
-                    self.Parser, self.Creator, self.Updater)
+                    self.Parser, self.Creator, self.Updater,
+                    self.PostProcessor)
 
         return "%sDataParser (Json=%s, Generic=%s, MatchType=%s, Logon=%s):\n" \
                "Match:   %s\n" \

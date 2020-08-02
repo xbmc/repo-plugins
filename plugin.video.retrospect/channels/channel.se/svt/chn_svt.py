@@ -42,6 +42,9 @@ class Channel(chn_class.Channel):
         self.__show_program_folder = self._get_setting("show_programs_folder", "true") == "true"
         self.__program_url = self.__get_api_url(
             "ProgramsListing", "1eeb0fb08078393c17658c1a22e7eea3fbaa34bd2667cec91bbc4db8d778580f", {})
+        self.__nyheter_url = self.__get_api_url(
+            "GenreLists", "90dca0b51b57904ccc59a418332e43e17db21c93a2346d1c73e05583a9aa598c",
+            variables={"genre": ["nyheter"]})
         self.mainListUri = "#mainlist"
 
         # Setup the urls
@@ -79,6 +82,10 @@ class Channel(chn_class.Channel):
         self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=GridPage",
                               name="Default GraphQL GridePage parsers", json=True,
                               parser=["data", "startForSvtPlay", "selections", 0, "items"],
+                              creator=self.create_api_typed_item)
+
+        self._add_data_parser(self.__nyheter_url, name="Latest news", json=True,
+                              parser=["data", "genres", 0, "selectionsForWeb", 1, "items"],
                               creator=self.create_api_typed_item)
 
         self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=AllGenres",
@@ -180,7 +187,13 @@ class Channel(chn_class.Channel):
                 self.__get_api_url("GridPage",
                                    "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
                                    variables={"selectionId": "popular"}),
-                False)
+                False),
+
+            # https://api.svt.se/contento/graphql?operationName=GenreLists&variables=%7B%22genre%22:%5B%22nyheter%22%5D%7D&extensions=%7B%22persistedQuery%22:%7B%22version%22:1,%22sha256Hash%22:%2290dca0b51b57904ccc59a418332e43e17db21c93a2346d1c73e05583a9aa598c%22%7D%7D&ua=svtplaywebb-play-render-prod-client
+            LanguageHelper.get_localized_string(LanguageHelper.LatestNews): (
+                self.__nyheter_url,
+                False
+            )
         }
 
         for title, (url, include_subheading) in extra_items.items():

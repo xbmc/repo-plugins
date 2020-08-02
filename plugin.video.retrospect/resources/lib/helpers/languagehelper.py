@@ -64,6 +64,7 @@ class LanguageHelper(object):
     Tags = 30361
     LastChance = 30362
     Popular = 30363
+    LatestNews = 30364
 
     ChannelSelection = 30507
     # Unused:

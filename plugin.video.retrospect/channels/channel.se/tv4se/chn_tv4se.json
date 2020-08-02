@@ -2,15 +2,25 @@
   "channels": [
     {
       "guid": "98506F58-CD6F-11DE-99BA-187F55D89593",
-      "name": "TV4 Play",
-      "description": "Sändningar från TV4Play.se.",
+      "name": "TV4",
+      "description": "Sändningar från TV4 (TV4Play.se).",
       "icon": "tv4large.png",
       "category": "National",
       "channelcode": "tv4se",
       "sortorder": 4,
       "language": "se",
-      "fanart": "tv4playsefanart.jpg",
-      "localIPSupported": true
+      "fanart": "tv4playsefanart.jpg"
+    },
+    {
+      "guid": "68E5476E-DC92-4312-9C57-29FCE428EF20",
+      "name": "TV4 Play",
+      "description": "Innehåller kanalerna TV4, Sjuan och TV12. Här kan du också söka, lista mest visade avsnitt, se kategorier, titta på livesändningar och lista program utifrån veckodag.",
+      "icon": "tv4large.png",
+      "category": "National",
+      "channelcode": "tv4segroup",
+      "sortorder": 3,
+      "language": "se",
+      "fanart": "tv4playsefanart.jpg"
     },
     {
       "guid": "66174057-D5E3-4102-AF46-B2D8E800E0D9",
@@ -21,8 +31,7 @@
       "channelcode": "tv7se",
       "sortorder": 7,
       "language": "se",
-      "fanart": "tv7fanart.png",
-      "localIPSupported": true
+      "fanart": "tv7fanart.png"
     },
     {
       "guid": "F2D31759-71BD-4DD1-A1FB-FF8FD99CE03E",
@@ -33,8 +42,7 @@
       "channelcode": "tv12se",
       "sortorder": 12,
       "language": "se",
-      "fanart": "tv12playfanart.jpg",
-      "localIPSupported": true
+      "fanart": "tv12playfanart.jpg"
     }
   ],
   "settings_old": [

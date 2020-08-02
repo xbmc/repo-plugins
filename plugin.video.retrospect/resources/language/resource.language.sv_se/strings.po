@@ -612,7 +612,11 @@ msgctxt "#30363"
 msgid "Popular"
 msgstr "Populära"
 
-# empty strings from id 30364 to 30400
+msgctxt "#30364"
+msgid "Latest news"
+msgstr "Senaste nyhetsprogram"
+
+# empty strings from id 30365 to 30400
 msgctxt "#30401"
 msgid "Dutch"
 msgstr "Nederländska"

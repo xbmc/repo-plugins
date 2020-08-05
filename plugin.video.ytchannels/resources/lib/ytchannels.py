@@ -26,24 +26,24 @@ def ytchannels_main():
 	folder_img = os.path.join(addon_path,'resources/img/folder.png')
 	plus_img = os.path.join(addon_path,'resources/img/plus.png')
 	playlist_img = os.path.join(addon_path,'resources/img/playlist.png')
-	
+
 	YOUTUBE_API_KEY = my_addon.getSetting('youtube_api_key')
 	if YOUTUBE_API_KEY == 'SETME':
 		xbmcgui.Dialog().ok(local_string(30207), local_string(30022))
 		new_api_key = xbmcgui.Dialog().input(local_string(30207), type=xbmcgui.INPUT_ALPHANUM)
-		
+
 		if new_api_key:
 			my_addon.setSetting(id='youtube_api_key', value=new_api_key)
 		else:
 			xbmcgui.Dialog().ok(local_string(30020), local_string(30021))
-			
+
 		YOUTUBE_API_KEY = my_addon.getSetting('youtube_api_key')
-		
+
 	from .functions import build_url, delete_database, get_folders, add_folder, remove_folder, get_channels, get_channel_id_from_uploads_id, add_channel, remove_channel, search_channel, search_channel_by_username, get_latest_from_channel, get_playlists
 
 	if mode is None:
 		folders=get_folders()
-	
+
 		for i in range(len(folders)):
 			if folders[i]!='Other':
 				url = build_url({'mode': 'open_folder', 'foldername': '%s'%folders[i]})
@@ -51,18 +51,16 @@ def ytchannels_main():
 				li.setArt({'icon':folder_img})
 
 				rem_uri = build_url({'mode': 'rem_folder', 'foldername': '%s'%str(folders[i])})
-			
+
 				add_uri = build_url({'mode': 'add_folder'})
 				addch_uri = build_url({'mode': 'add_channel', 'foldername': 'Other'})
 				li.addContextMenuItems([ (local_string(30000), 'RunPlugin(%s)'%rem_uri),
 									(local_string(30001), 'RunPlugin(%s)'%add_uri),
 									(local_string(30002), 'RunPlugin(%s)'%addch_uri)])
 
-			
-
 				xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 									listitem=li,isFolder=True)
-	
+
 		channels=get_channels('Other')
 		for i in range(len(channels)):
 			url = build_url({'mode': 'open_channel', 'foldername': '%s'%str(channels[i][1]), 'page':'1'})
@@ -100,7 +98,6 @@ def ytchannels_main():
 
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 									listitem=li,isFolder=True)
-							  
 
 		xbmcplugin.endOfDirectory(addon_handle)
 
@@ -111,7 +108,7 @@ def ytchannels_main():
 	elif mode[0]=='add_folder':
 		keyboard = xbmc.Keyboard('', '%s:'%local_string(30011), False)
 		keyboard.doModal()
-	
+
 		if keyboard.isConfirmed():
 			folder_name = keyboard.getText()
 
@@ -122,9 +119,9 @@ def ytchannels_main():
 
 		dicti=urllib.parse.parse_qs(sys.argv[2][1:])
 		foldername=dicti['foldername'][0]
-	
+
 		channels=get_channels(foldername)
-	
+
 		for i in range(len(channels)):
 			url = build_url({'mode': 'open_channel', 'foldername': '%s'%str(channels[i][1]), 'page':'1'})
 			li = xbmcgui.ListItem('%s'%channels[i][0])
@@ -137,7 +134,6 @@ def ytchannels_main():
 			url = build_url({'mode': 'add_channel', 'foldername': '%s'%foldername})
 			li = xbmcgui.ListItem('[COLOR green]%s[/COLOR] [COLOR blue]%s[/COLOR]'%(local_string(30009),local_string(30010)))
 			li.setArt({'icon':plus_img})
-		
 
 		url = build_url({'mode': 'add_channel', 'foldername': '%s'%foldername})
 		li = xbmcgui.ListItem('[COLOR green]%s[/COLOR] [COLOR blue]%s[/COLOR]'%(local_string(30009),foldername))
@@ -160,7 +156,6 @@ def ytchannels_main():
 		except:
 			playlista=False
 
-	
 		if not playlista and enable_playlists=='true':
 
 			url = build_url({'mode': 'open_playlists', 'id':'%s'%id, 'page':'1'})
@@ -196,7 +191,8 @@ def ytchannels_main():
 			li = xbmcgui.ListItem('%s >>'%local_string(30005))
 			li.setArt({'icon':thumb})
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=uri, listitem=li,isFolder=True)
-			xbmcplugin.endOfDirectory(addon_handle)
+
+		xbmcplugin.endOfDirectory(addon_handle)
 
 	elif mode[0]=='open_playlists':
 		dicti=urllib.parse.parse_qs(sys.argv[2][1:])
@@ -217,14 +213,13 @@ def ytchannels_main():
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li,isFolder=True)
 
 		if next_page!='1':
-		
 			uri = build_url({'mode': 'open_playlists', 'id': '%s'%id, 'page' : '%s'%next_page ,'playlist':'yes'})
 
 			li = xbmcgui.ListItem('%s >>'%local_string(30005))
 			li.setArt({'icon':thumb})
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=uri, listitem=li,isFolder=True)
-			xbmcplugin.endOfDirectory(addon_handle)
-	
+
+		xbmcplugin.endOfDirectory(addon_handle)
 
 	elif mode[0]=='add_channel':
 		options=[local_string(30006),local_string(30007)]
@@ -233,15 +228,15 @@ def ytchannels_main():
 
 			dicti=urllib.parse.parse_qs(sys.argv[2][1:])
 			foldername=dicti['foldername'][0]
-		
+
 			keyboard = xbmc.Keyboard('', '%s:'%local_string(30012), False)
 			keyboard.doModal()
-		
+
 			if keyboard.isConfirmed():
 				channel_name = keyboard.getText()
 
 				results=search_channel(channel_name)
-			
+
 				result_list=[]
 				for i in range(len(results)):
 					result_list+=[results[i][0]]
@@ -288,10 +283,8 @@ def ytchannels_main():
 		xbmc.executebuiltin("Container.Refresh")
 
 	elif mode[0]=='erase_all':
-		ret = xbmcgui.Dialog().yesno(local_string(30015), local_string(30016)) 
-	
-		if ret:
+		ret = xbmcgui.Dialog().yesno(local_string(30015), local_string(30016))
 
+		if ret:
 			delete_database()
 			xbmcgui.Dialog().ok(local_string(30099), local_string(30017))
-

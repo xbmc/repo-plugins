@@ -1,6 +1,10 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.2.4 [03-August-2020]
+-Fixed bug with certain channels and playlists not opening
+-Also fixes issue where next page link was added on the last page
+
 v0.2.3 [11-July-2020]
 -Changed search maximum to 50
 -Sorted the videos list by published date

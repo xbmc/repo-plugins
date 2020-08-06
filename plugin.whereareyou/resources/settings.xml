@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+	<category label="32000">
+		<setting label="hidden_upgrade" type="text" id="version_upgrade" default="" visible="false" />
+		<setting label="hidden_mappings" type="text" id="mappings" default="" visible="false" />
+		<setting label="32102" type="bool" id="harmonycontrol" default="false" />
+		<setting label="32103" type="ipaddress" id="hub_ip" visible="eq(-1,true)" subsetting="true" />
+		<setting label="32106" type="number" id="delay" default="250" visible="eq(-2,true)" subsetting="true" />
+		<setting label="32105" type="number" id="timeout" default="30" visible="eq(-3,true)" subsetting="true" />
+		<setting label="32104" type="bool" id="harmonyadvanced" default="false" visible="eq(-4,true)" subsetting="true" />
+		<setting label="32101" type="action" option="close" action="RunScript(plugin.whereareyou,fromsettings)" visible="eq(-5,true)" subsetting="true" />
+		<setting label="32100" type="bool" id="debug" default="false" />
+	</category>
+</settings>

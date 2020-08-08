@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.tvo"
+       name="TV Ontario"
+       version="4.0.0"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.t1mlib" version="4.0.6"/>
+    <import addon="script.module.requests" version="2.6.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">TV Ontario Videos</summary>
+    <description lang="en_GB">TVO is Ontario's public educational media organization and a trusted source of interactive educational content that informs, inspires, and stimulates curiosity.</description>
+    <disclaimer lang="en_GB">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>LGPL-2.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=222346</forum>
+    <website>tvo.org</website>
+    <source>https://github.com/learningit/repo-plugins</source>
+    <news>Version 4.0
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

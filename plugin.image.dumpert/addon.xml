@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon
+	id="plugin.image.dumpert"
+	name="Dumpert"
+	version="1.0.4+matrix.1"
+	provider-name="Skipmode A1">
+  <requires>
+    <import addon="xbmc.python"                     version="3.0.0"/>
+	<import addon="script.module.beautifulsoup4"    version="4.3.2"/>
+    <import addon="script.module.requests"          version="2.4.3"/>
+    <import addon="script.module.future"            version="0.0.1"/>
+  	<import addon="script.module.html5lib"          version="0.999.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" 	library="addon.py">
+    <provides>image</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	<summary lang="en_GB">Watch funny pictures from Dumpert.nl (dutch)</summary>
+	<description lang="en_GB">Watch funny pictures from Dumpert.nl (dutch)</description>
+	<disclaimer lang="en_GB">For bugs, requests or general questions visit the Dumpert.nl thread on the Kodi forum.</disclaimer>
+	<summary lang="nl_NL">Bekijk grappige plaatjes van Dumpert.nl (dutch)</summary>
+	<description lang="nl_NL">Bekijk grappige plaatjes van Dumpert.nl (dutch)</description>
+	<disclaimer lang="nl_NL">Bugs of andere feedback op deze plugin kan geplaatst worden in de Dumpert.nl thread op het Kodi forum.</disclaimer>
+    <language>nl</language>
+    <platform>all</platform>
+    <license>GNU General Public License v3.0 only</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=315439</forum>
+    <website>https://dumpert.nl</website>
+    <source>https://github.com/skipmodea1/plugin.image.dumpert</source>
+    <news>v1.0.4 (2019-09-21)
+    - MAJOR changes in the addon due to redesigned website
+    - moved to Krypton
+    - updated logos
+    </news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

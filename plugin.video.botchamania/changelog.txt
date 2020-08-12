@@ -1,3 +1,8 @@
+v1.1.8 (2020-08-12)
+- removing non-ascii characters in title in parameters to prevent UnicodeDecodeError: 'ascii' codec can't decode ...
+The error occured when doing urllib.parse.parse_qs of the parameters
+- Due to changes on website, removed archive, archive specials, oswreviews and nerdslam
+
 v1.1.7 (2018-01-25)
 - fix to prevent import error on youtubedl
 

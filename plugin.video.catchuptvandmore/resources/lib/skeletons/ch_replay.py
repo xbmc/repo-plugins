@@ -30,82 +30,73 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'rts': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ch/srgssr:list_categories',
         'label': 'RTS',
         'thumb': 'channels/ch/rts.png',
         'fanart': 'channels/ch/rts_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 1
     },
     'rsi': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ch/srgssr:list_categories',
         'label': 'RSI',
         'thumb': 'channels/ch/rsi.png',
         'fanart': 'channels/ch/rsi_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 2
     },
     'srf': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ch/srgssr:list_categories',
         'label': 'SRF',
         'thumb': 'channels/ch/srf.png',
         'fanart': 'channels/ch/srf_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 3
     },
     'rtr': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ch/srgssr:list_categories',
         'label': 'RTR',
         'thumb': 'channels/ch/rtr.png',
         'fanart': 'channels/ch/rtr_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 4
     },
     'swissinfo': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ch/srgssr:list_categories',
         'label': 'SWISSINFO',
         'thumb': 'channels/ch/swissinfo.png',
         'fanart': 'channels/ch/swissinfo_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 5
     },
     'tvm3': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ch/tvm3:list_programs',
         'label': 'TVM3',
         'thumb': 'channels/ch/tvm3.png',
         'fanart': 'channels/ch/tvm3_fanart.jpg',
-        'module': 'resources.lib.channels.ch.tvm3',
         'enabled': True,
         'order': 7
     },
     'becurioustv': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ch/becurioustv:list_categories',
         'label': 'BeCurious TV',
         'thumb': 'channels/ch/becurioustv.png',
         'fanart': 'channels/ch/becurioustv_fanart.jpg',
-        'module': 'resources.lib.channels.ch.becurioustv',
         'enabled': True,
         'order': 8
     },
     'lemanbleu': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ch/lemanbleu:list_programs',
         'label': 'Léman Bleu',
         'thumb': 'channels/ch/lemanbleu.png',
         'fanart': 'channels/ch/lemanbleu_fanart.jpg',
-        'module': 'resources.lib.channels.ch.lemanbleu',
         'enabled': True,
         'order': 22
     }

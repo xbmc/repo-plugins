@@ -53,13 +53,6 @@ CATEGORIES = {
 }
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """
@@ -130,12 +123,8 @@ def get_video_url(plugin,
     return stream_url
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     live_html = urlquick.get(URL_LIVE,
                              headers={'User-Agent': web_utils.get_random_ua()},

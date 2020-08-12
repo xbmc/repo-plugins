@@ -42,12 +42,8 @@ URL_ROOT = 'http://teleticino.ch'
 URL_LIVE = URL_ROOT + '/diretta'
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE)
     list_lives = re.compile(r'file":  "(.*?)"').findall(resp.text)

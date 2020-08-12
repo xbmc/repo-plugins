@@ -30,46 +30,41 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'cbsnews': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/us/cbsnews:get_live_url',
         'label': 'CBS News',
         'thumb': 'channels/us/cbsnews.png',
         'fanart': 'channels/us/cbsnews_fanart.jpg',
-        'module': 'resources.lib.channels.us.cbsnews',
         'enabled': True,
         'order': 1
     },
     'tbd': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/us/tbd:get_live_url',
         'label': 'TBD',
         'thumb': 'channels/us/tbd.png',
         'fanart': 'channels/us/tbd_fanart.jpg',
-        'module': 'resources.lib.channels.us.tbd',
         'enabled': True,
         'order': 2
     },
     'abcnews': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/us/abcnews:get_live_url',
         'label': 'ABC News',
         'thumb': 'channels/us/abcnews.png',
         'fanart': 'channels/us/abcnews_fanart.jpg',
-        'module': 'resources.lib.channels.us.abcnews',
         'enabled': True,
         'order': 4
     },
     'pbskids': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/us/pbskids:get_live_url',
         'label': 'PBS Kids',
         'thumb': 'channels/us/pbskids.png',
         'fanart': 'channels/us/pbskids_fanart.jpg',
-        'module': 'resources.lib.channels.us.pbskids',
         'enabled': True,
         'order': 5
     }

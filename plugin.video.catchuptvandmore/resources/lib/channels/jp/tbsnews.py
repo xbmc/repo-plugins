@@ -45,13 +45,6 @@ URL_STREAM = 'https://flvstream.tbs.co.jp/flvfiles/_definst_/newsi/digest/%s_1m.
 NEWS_CONTENT = ['nb', '23', 'nst', 'jnn']
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """

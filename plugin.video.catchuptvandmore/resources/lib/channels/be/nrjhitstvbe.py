@@ -47,13 +47,6 @@ URL_STREAM = 'https://services.brid.tv/services/get/video/%s/%s.json'
 URL_VIDEOS = URL_ROOT + '/replay/videos'
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_videos(plugin, item_id)
-
-
 @Route.register
 def list_videos(plugin, item_id, **kwargs):
 
@@ -99,12 +92,8 @@ def get_video_url(plugin,
     return 'https:' + json_parser2["Video"][0]["source"]["hd"]
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE, max_age=-1)
     data_player = re.compile(r'data-video-player-id\=\"(.*?)\"').findall(

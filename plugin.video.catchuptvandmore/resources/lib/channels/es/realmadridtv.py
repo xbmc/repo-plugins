@@ -42,12 +42,8 @@ URL_ROOT = 'https://www.realmadrid.com'
 URL_LIVE = URL_ROOT + '/real-madrid-tv'
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     url_live = ''
     final_language = kwargs.get('language', Script.setting['realmadridtv.language'])

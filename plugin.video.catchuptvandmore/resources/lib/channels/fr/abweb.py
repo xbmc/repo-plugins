@@ -49,12 +49,8 @@ URL_LIVES = URL_ROOT + '/BIS-TV-Online/bistvo-tele-universal.aspx'
 # channel (lucky jack, ...)
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     # Live TV Not working / find a way to dump html received
 

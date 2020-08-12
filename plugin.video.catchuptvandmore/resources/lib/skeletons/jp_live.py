@@ -30,37 +30,33 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'ntvnews24': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/jp/ntvnews24:get_live_url',
         'label': '日テレ News24',
         'thumb': 'channels/jp/ntvnews24.png',
         'fanart': 'channels/jp/ntvnews24_fanart.jpg',
-        'module': 'resources.lib.channels.jp.ntvnews24',
         'enabled': True,
         'order': 11
     },
     'japanetshoppingdx': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/jp/japanetshoppingdx:get_live_url',
         'label': 'ジャパネットチャンネルDX',
         'thumb': 'channels/jp/japanetshoppingdx.png',
         'fanart': 'channels/jp/japanetshoppingdx_fanart.jpg',
-        'module': 'resources.lib.channels.jp.japanetshoppingdx',
         'enabled': True,
         'order': 12
     },
     'weathernewsjp': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/jp/weathernewsjp:get_live_url',
         'label': '株式会社ウェザーニューズ',
         'thumb': 'channels/jp/weathernewsjp.png',
         'fanart': 'channels/jp/weathernewsjp_fanart.jpg',
-        'module': 'resources.lib.channels.jp.weathernewsjp',
         'enabled': True,
         'order': 14
     }

@@ -50,13 +50,6 @@ URL_FRANCETV_SPORT = 'https://api-sport-events.webservices.' \
                      'francetelevisions.fr/%s'
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """
@@ -134,13 +127,6 @@ def get_video_url(plugin,
                                                     download_mode)
 
 
-def multi_live_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_lives(plugin, item_id)
-
-
 @Route.register
 def list_lives(plugin, item_id, **kwargs):
 
@@ -200,5 +186,4 @@ def list_lives(plugin, item_id, **kwargs):
 
 @Resolver.register
 def get_live_url(plugin, item_id, id_diffusion, **kwargs):
-
     return resolver_proxy.get_francetv_live_stream(plugin, id_diffusion)

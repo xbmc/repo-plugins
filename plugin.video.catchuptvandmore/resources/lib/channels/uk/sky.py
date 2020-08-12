@@ -67,13 +67,6 @@ URL_OOYALA_VOD = 'https://player.ooyala.com/sas/player_api/v2/authorization/' \
 URL_PCODE_EMBED_TOKEN = 'http://www.skysports.com/watch/video/auth/v4/23'
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
 
@@ -200,12 +193,8 @@ def get_video_url(plugin,
     return False
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE_SKYNEWS)
     live_id = re.compile(r'www.youtube.com/embed/(.*?)\?').findall(

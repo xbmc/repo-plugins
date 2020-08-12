@@ -66,13 +66,6 @@ URL_IMAGE = 'https://images.poms.omroep.nl/image/s1280/c1280x720/%s.jpg'
 # ImageId
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """
@@ -202,12 +195,20 @@ def list_videos_franchise(plugin, item_id, program_url, **kwargs):
         json_parser = json.loads(resp.text)
 
         for video_datas in json_parser["items"]:
-            if 'seasonNumber' in video_datas and video_datas['seasonNumber'] is not None:
-                video_title = video_datas["title"] + " - S%sE%s" % (
-                    str(video_datas['seasonNumber']),
-                    str(video_datas['episodeNumber']))
-            else:
-                video_title = video_datas["title"]
+            if 'title' not in video_datas:
+                continue
+
+            if not video_datas['title']:
+                continue
+
+            subtitle = ''
+            if 'seasonNumber' in video_datas and 'episodeNumber' in video_datas:
+                if video_datas['seasonNumber'] is not None and video_datas['episodeNumber'] is not None:
+                    subtitle = " - S%sE%s" % (
+                        str(video_datas['seasonNumber']),
+                        str(video_datas['episodeNumber']))
+
+            video_title = video_datas["title"] + subtitle
             if 'header' in video_datas["images"]:
                 video_image = URL_IMAGE % video_datas["images"]["header"]["id"]
             else:
@@ -340,12 +341,8 @@ def get_video_url(plugin,
     return item
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     if get_kodi_version() < 18:
         xbmcgui.Dialog().ok('Info', plugin.localize(30602))
@@ -365,7 +362,11 @@ def get_live_url(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE_ID % item_id, max_age=-1)
 
-    video_id = re.compile(r'media-id\=\"(.*?)\"').findall(resp.text)[0]
+    video_id = ''
+    list_media_id = re.compile(r'media-id\=\"(.*?)\"').findall(resp.text)
+    for media_id in list_media_id:
+        if 'LI_' in media_id:
+            video_id = media_id
 
     # Build PAYLOAD
     payload = {"_token": api_token}
@@ -403,6 +404,7 @@ def get_live_url(plugin, item_id, video_id, **kwargs):
     item.property['inputstreamaddon'] = 'inputstream.adaptive'
     item.property['inputstream.adaptive.manifest_type'] = 'mpd'
     item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+    item.property['inputstream.adaptive.manifest_update_parameter'] = 'full'
     item.property[
         'inputstream.adaptive.license_key'] = licence_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&x-custom-data=%s|R{SSM}|' % xcdata_value
 

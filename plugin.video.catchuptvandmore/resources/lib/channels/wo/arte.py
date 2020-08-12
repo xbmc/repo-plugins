@@ -77,13 +77,6 @@ CORRECT_MONTH = {
 }
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """
@@ -541,10 +534,6 @@ def get_video_url(plugin,
         return download.download_video(url_selected)
 
     return url_selected
-
-
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, **kwargs)
 
 
 @Resolver.register

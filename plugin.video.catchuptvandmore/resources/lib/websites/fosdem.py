@@ -40,14 +40,8 @@ BEGINING_YEAR_XML = 2012
 LAST_YEAR_XML = 2020
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     for i in range(BEGINING_YEAR_XML, LAST_YEAR_XML + 1):
         item = Listitem()

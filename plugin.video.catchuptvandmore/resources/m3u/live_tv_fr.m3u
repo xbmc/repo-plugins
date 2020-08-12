@@ -6,565 +6,565 @@
 ##	TF1
 ##	tf1
 #EXTINF:-1 tvg-id="C192.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tf1.png" group-title="France TNT",TF1
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tf1&item_module=resources.lib.channels.fr.mytf1
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/mytf1/get_live_url/?item_id=tf1
 
 ##	France 2
 ##	france-2
 #EXTINF:-1 tvg-id="C4.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france2.png" group-title="France TNT",France 2
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france-2&item_module=resources.lib.channels.fr.francetv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/francetv/get_live_url/?item_id=france-2
 
 ##	France 3
 ##	france-3
 #EXTINF:-1 tvg-id="C80.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3.png" group-title="France TNT",France 3
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france-3&item_module=resources.lib.channels.fr.francetv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/francetv/get_live_url/?item_id=france-3
 
 ##	Canal +
 ##	canalplus
 #EXTINF:-1 tvg-id="C34.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/canalplus.png" group-title="France TNT",Canal +
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=canalplus&item_module=resources.lib.channels.fr.mycanal
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/mycanal/get_live_url/?item_id=canalplus
 
 ##	France 5
 ##	france-5
 #EXTINF:-1 tvg-id="C47.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france5.png" group-title="France TNT",France 5
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france-5&item_module=resources.lib.channels.fr.francetv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/francetv/get_live_url/?item_id=france-5
 
 ##	M6
 ##	m6
 #EXTINF:-1 tvg-id="C118.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/m6.png" group-title="France TNT",M6
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=m6&item_module=resources.lib.channels.fr.6play
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/6play/get_live_url/?item_id=m6
 
 ##	Arte
 ##	arte
 #EXTINF:-1 tvg-id="C111.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/arte.png" group-title="France TNT",Arte
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=arte&item_module=resources.lib.channels.wo.arte&language=FR
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/arte/get_live_url/?item_id=arte&language=FR
 
 ##	C8
 ##	c8
 #EXTINF:-1 tvg-id="C445.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/c8.png" group-title="France TNT",C8
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=c8&item_module=resources.lib.channels.fr.mycanal
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/mycanal/get_live_url/?item_id=c8
 
 ##	W9
 ##	w9
 #EXTINF:-1 tvg-id="C119.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/w9.png" group-title="France TNT",W9
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=w9&item_module=resources.lib.channels.fr.6play
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/6play/get_live_url/?item_id=w9
 
 ##	TMC
 ##	tmc
 #EXTINF:-1 tvg-id="C195.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tmc.png" group-title="France TNT",TMC
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tmc&item_module=resources.lib.channels.fr.mytf1
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/mytf1/get_live_url/?item_id=tmc
 
 ##	TFX
 ##	tfx
 #EXTINF:-1 tvg-id="C446.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tfx.png" group-title="France TNT",TFX
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tfx&item_module=resources.lib.channels.fr.mytf1
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/mytf1/get_live_url/?item_id=tfx
 
 ##	NRJ 12
 ##	nrj12
 #EXTINF:-1 tvg-id="C444.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/nrj12.png" group-title="France TNT",NRJ 12
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=nrj12&item_module=resources.lib.channels.fr.nrj
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/nrj/get_live_url/?item_id=nrj12
 
 ##	LCP Assemblée Nationale
 ##	lcp
 #EXTINF:-1 tvg-id="C234.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/lcp.png" group-title="France TNT",LCP Assemblée Nationale
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lcp&item_module=resources.lib.channels.fr.lcp
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/lcp/get_live_url/?item_id=lcp
 
 ##	Public Sénat
 ##	publicsenat
 #EXTINF:-1 tvg-id="C234.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/publicsenat.png" group-title="France TNT",Public Sénat
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=publicsenat&item_module=resources.lib.channels.fr.publicsenat
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/publicsenat/get_live_url/?item_id=publicsenat
 
 ##	France 4
 ##	france-4
 #EXTINF:-1 tvg-id="C78.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france4.png" group-title="France TNT",France 4
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france-4&item_module=resources.lib.channels.fr.francetv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/francetv/get_live_url/?item_id=france-4
 
 ##	BFM TV
 ##	bfmtv
 #EXTINF:-1 tvg-id="C481.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmtv.png" group-title="France TNT",BFM TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmtv&item_module=resources.lib.channels.fr.bfmtv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/bfmtv/get_live_url/?item_id=bfmtv
 
 ##	CNews
 ##	cnews
 #EXTINF:-1 tvg-id="C226.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/cnews.png" group-title="France TNT",CNews
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cnews&item_module=resources.lib.channels.fr.cnews
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/cnews/get_live_url/?item_id=cnews
 
 ##	CStar
 ##	cstar
 #EXTINF:-1 tvg-id="C458.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/cstar.png" group-title="France TNT",CStar
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cstar&item_module=resources.lib.channels.fr.mycanal
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/mycanal/get_live_url/?item_id=cstar
 
 ##	Gulli
 ##	gulli
 #EXTINF:-1 tvg-id="C482.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/gulli.png" group-title="France TNT",Gulli
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=gulli&item_module=resources.lib.channels.fr.gulli
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/gulli/get_live_url/?item_id=gulli
 
 ##	France Ô
 ##	france-o
 #EXTINF:-1 tvg-id="C160.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/franceo.png" group-title="France TNT",France Ô
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france-o&item_module=resources.lib.channels.fr.francetv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/francetv/get_live_url/?item_id=france-o
 
 ##	TF1 Séries Films
 ##	tf1-series-films
 #EXTINF:-1 tvg-id="C1404.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tf1seriesfilms.png" group-title="France TNT",TF1 Séries Films
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tf1-series-films&item_module=resources.lib.channels.fr.mytf1
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/mytf1/get_live_url/?item_id=tf1-series-films
 
 ##	L'Équipe
 ##	lequipe
 #EXTINF:-1 tvg-id="C1401.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/lequipe.png" group-title="France TNT",L'Équipe
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lequipe&item_module=resources.lib.channels.fr.lequipe
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/lequipe/get_live_url/?item_id=lequipe
 
 ##	6ter
 ##	6ter
 #EXTINF:-1 tvg-id="C1403.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/6ter.png" group-title="France TNT",6ter
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=6ter&item_module=resources.lib.channels.fr.6play
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/6play/get_live_url/?item_id=6ter
 
 ##	RMC Story
 ##	rmcstory
 #EXTINF:-1 tvg-id="C1402.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rmcstory.png" group-title="France TNT",RMC Story
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcstory&item_module=resources.lib.channels.fr.rmc
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/rmc/get_live_url/?item_id=rmcstory
 
 ##	RMC Découverte
 ##	rmcdecouverte
 #EXTINF:-1 tvg-id="C1400.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rmcdecouverte.png" group-title="France TNT",RMC Découverte
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rmcdecouverte&item_module=resources.lib.channels.fr.rmc
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/rmc/get_live_url/?item_id=rmcdecouverte
 
 ##	Chérie 25
 ##	cherie25
 #EXTINF:-1 tvg-id="C1399.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/cherie25.png" group-title="France TNT",Chérie 25
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cherie25&item_module=resources.lib.channels.fr.nrj
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/nrj/get_live_url/?item_id=cherie25
 
 ##	LCI
 ##	lci
 #EXTINF:-1 tvg-id="C112.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/lci.png" group-title="France TNT",LCI
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lci&item_module=resources.lib.channels.fr.lci
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/lci/get_live_url/?item_id=lci
 
 ##	France Info
 ##	franceinfo
 #EXTINF:-1 tvg-id="C2111.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/franceinfo.png" group-title="France TNT",France Info
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=franceinfo&item_module=resources.lib.channels.fr.franceinfo
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/franceinfo/get_live_url/?item_id=franceinfo
 
 ##	La 1ère Guadeloupe
 ##	la_1ere
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France Région",La 1ère Guadeloupe
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&language=Guadeloupe
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/la_1ere/get_live_url/?item_id=la_1ere&language=Guadeloupe
 
 ##	La 1ère Guyane
 ##	la_1ere
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France Région",La 1ère Guyane
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&language=Guyane
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/la_1ere/get_live_url/?item_id=la_1ere&language=Guyane
 
 ##	La 1ère Martinique
 ##	la_1ere
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France Région",La 1ère Martinique
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&language=Martinique
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/la_1ere/get_live_url/?item_id=la_1ere&language=Martinique
 
 ##	La 1ère Mayotte
 ##	la_1ere
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France Région",La 1ère Mayotte
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&language=Mayotte
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/la_1ere/get_live_url/?item_id=la_1ere&language=Mayotte
 
 ##	La 1ère Nouvelle Calédonie
 ##	la_1ere
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France Région",La 1ère Nouvelle Calédonie
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&language=Nouvelle+Cal%C3%A9donie
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/la_1ere/get_live_url/?item_id=la_1ere&language=Nouvelle+Cal%C3%A9donie
 
 ##	La 1ère Polynésie
 ##	la_1ere
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France Région",La 1ère Polynésie
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&language=Polyn%C3%A9sie
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/la_1ere/get_live_url/?item_id=la_1ere&language=Polyn%C3%A9sie
 
 ##	La 1ère Réunion
 ##	la_1ere
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France Région",La 1ère Réunion
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&language=R%C3%A9union
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/la_1ere/get_live_url/?item_id=la_1ere&language=R%C3%A9union
 
 ##	La 1ère St-Pierre et Miquelon
 ##	la_1ere
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France Région",La 1ère St-Pierre et Miquelon
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&language=St-Pierre+et+Miquelon
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/la_1ere/get_live_url/?item_id=la_1ere&language=St-Pierre+et+Miquelon
 
 ##	La 1ère Wallis et Futuna
 ##	la_1ere
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/la1ere.png" group-title="France Région",La 1ère Wallis et Futuna
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la_1ere&item_module=resources.lib.channels.fr.la_1ere&language=Wallis+et+Futuna
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/la_1ere/get_live_url/?item_id=la_1ere&language=Wallis+et+Futuna
 
 ##	BFM Business
 ##	bfmbusiness
 #EXTINF:-1 tvg-id="C1073.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmbusiness.png" group-title="France Satellite/FAI",BFM Business
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmbusiness&item_module=resources.lib.channels.fr.bfmtv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/bfmtv/get_live_url/?item_id=bfmbusiness
 
 ##	France 3 Régions Alpes
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Alpes
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Alpes
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Alpes
 
 ##	France 3 Régions Alsace
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Alsace
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Alsace
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Alsace
 
 ##	France 3 Régions Aquitaine
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Aquitaine
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Aquitaine
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Aquitaine
 
 ##	France 3 Régions Auvergne
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Auvergne
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Auvergne
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Auvergne
 
 ##	France 3 Régions Bourgogne
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Bourgogne
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Bourgogne
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Bourgogne
 
 ##	France 3 Régions Bretagne
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Bretagne
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Bretagne
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Bretagne
 
 ##	France 3 Régions Centre-Val de Loire
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Centre-Val de Loire
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Centre-Val+de+Loire
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Centre-Val+de+Loire
 
 ##	France 3 Régions Chapagne-Ardenne
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Chapagne-Ardenne
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Chapagne-Ardenne
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Chapagne-Ardenne
 
 ##	France 3 Régions Corse
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Corse
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Corse
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Corse
 
 ##	France 3 Régions Côte d'Azur
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Côte d'Azur
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=C%C3%B4te+d%27Azur
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=C%C3%B4te+d%27Azur
 
-##	France 3 Régions Franche-Compté
+##	France 3 Régions Franche-Comté
 ##	france3regions
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Franche-Compté
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Franche-Compt%C3%A9
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Franche-Comté
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Franche-Comt%C3%A9
 
 ##	France 3 Régions Languedoc-Roussillon
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Languedoc-Roussillon
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Languedoc-Roussillon
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Languedoc-Roussillon
 
 ##	France 3 Régions Limousin
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Limousin
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Limousin
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Limousin
 
 ##	France 3 Régions Lorraine
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Lorraine
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Lorraine
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Lorraine
 
 ##	France 3 Régions Midi-Pyrénées
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Midi-Pyrénées
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Midi-Pyr%C3%A9n%C3%A9es
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Midi-Pyr%C3%A9n%C3%A9es
 
 ##	France 3 Régions Nord-Pas-de-Calais
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Nord-Pas-de-Calais
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Nord-Pas-de-Calais
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Nord-Pas-de-Calais
 
 ##	France 3 Régions Basse-Normandie
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Basse-Normandie
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Basse-Normandie
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Basse-Normandie
 
 ##	France 3 Régions Haute-Normandie
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Haute-Normandie
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Haute-Normandie
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Haute-Normandie
 
 ##	France 3 Régions Paris Île-de-France
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Paris Île-de-France
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Paris+%C3%8Ele-de-France
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Paris+%C3%8Ele-de-France
 
 ##	France 3 Régions Pays de la Loire
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Pays de la Loire
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Pays+de+la+Loire
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Pays+de+la+Loire
 
 ##	France 3 Régions Picardie
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Picardie
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Picardie
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Picardie
 
 ##	France 3 Régions Poitou-Charentes
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Poitou-Charentes
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Poitou-Charentes
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Poitou-Charentes
 
 ##	France 3 Régions Provence-Alpes
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Provence-Alpes
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Provence-Alpes
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Provence-Alpes
 
 ##	France 3 Régions Rhône-Alpes
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Rhône-Alpes
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Rh%C3%B4ne-Alpes
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Rh%C3%B4ne-Alpes
 
 ##	France 3 Régions Nouvelle-Aquitaine
 ##	france3regions
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/france3regions.png" group-title="France Région",France 3 Régions Nouvelle-Aquitaine
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france3regions&item_module=resources.lib.channels.fr.france3regions&language=Nouvelle-Aquitaine
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/france3regions/get_live_url/?item_id=france3regions&language=Nouvelle-Aquitaine
 
 ##	Gong
 ##	gong
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/gong.png" group-title="France Satellite/FAI",Gong
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=gong&item_module=resources.lib.channels.fr.gong
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/gong/get_live_url/?item_id=gong
 
 ##	BFM Paris
 ##	bfmparis
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmparis.png" group-title="France Région",BFM Paris
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmparis&item_module=resources.lib.channels.fr.bfmregion
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/bfmregion/get_live_url/?item_id=bfmparis
 
 ##	Fun Radio
 ##	fun_radio
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/funradio.png" group-title="France Radio",Fun Radio
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=fun_radio&item_module=resources.lib.channels.fr.6play
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/6play/get_live_url/?item_id=fun_radio
 
 ##	KTO
 ##	kto
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/kto.png" group-title="France Satellite/FAI",KTO
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=kto&item_module=resources.lib.channels.fr.kto
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/kto/get_live_url/?item_id=kto
 
 ##	Antenne Réunion
 ##	antennereunion
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/antennereunion.png" group-title="France Région",Antenne Réunion
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=antennereunion&item_module=resources.lib.channels.fr.antennereunion
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/antennereunion/get_live_url/?item_id=antennereunion
 
 ##	viàOccitanie
 ##	viaoccitanie
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viaoccitanie.png" group-title="France Région",viàOccitanie
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viaoccitanie&item_module=resources.lib.channels.fr.via
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viaoccitanie
 
 ##	Ouatch TV
 ##	ouatchtv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/ouatchtv.png" group-title="France Satellite/FAI",Ouatch TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ouatchtv&item_module=resources.lib.channels.fr.ouatchtv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/ouatchtv/get_live_url/?item_id=ouatchtv
 
 ##	RTL 2
 ##	rtl2
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rtl2.png" group-title="France Radio",RTL 2
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtl2&item_module=resources.lib.channels.fr.6play
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/6play/get_live_url/?item_id=rtl2
 
 ##	viàATV
 ##	viaatv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viaatv.png" group-title="France Région",viàATV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viaatv&item_module=resources.lib.channels.fr.via
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viaatv
 
 ##	viàGrandParis
 ##	viagrandparis
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viagrandparis.png" group-title="France Région",viàGrandParis
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viagrandparis&item_module=resources.lib.channels.fr.via
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viagrandparis
 
 ##	Tébéo
 ##	tebeo
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tebeo.png" group-title="France Région",Tébéo
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tebeo&item_module=resources.lib.channels.fr.tebeo
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tebeo/get_live_url/?item_id=tebeo
 
 ##	M6 Boutique
 ##	mb
 #EXTINF:-1 tvg-id="C184.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/mb.png" group-title="France Satellite/FAI",M6 Boutique
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=mb&item_module=resources.lib.channels.fr.6play
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/6play/get_live_url/?item_id=mb
 
 ##	viàLMTv Sarthe
 ##	vialmtv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/vialmtv.png" group-title="France Région",viàLMTv Sarthe
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=vialmtv&item_module=resources.lib.channels.fr.via
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=vialmtv
 
 ##	viàMirabelle
 ##	viamirabelle
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viamirabelle.png" group-title="France Région",viàMirabelle
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viamirabelle&item_module=resources.lib.channels.fr.via
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viamirabelle
 
 ##	viàVosges
 ##	viavosges
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viavosges.png" group-title="France Région",viàVosges
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viavosges&item_module=resources.lib.channels.fr.via
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viavosges
 
 ##	Télévision Loire 7
 ##	tl7
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tl7.png" group-title="France Région",Télévision Loire 7
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tl7&item_module=resources.lib.channels.fr.tl7
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tl7/get_live_url/?item_id=tl7
 
 ##	Lucky Jack
 ##	luckyjack
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/luckyjack.png" group-title="France Satellite/FAI",Lucky Jack
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=luckyjack&item_module=resources.lib.channels.fr.abweb
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/abweb/get_live_url/?item_id=luckyjack
 
 ##	8 Mont-Blanc
 ##	tv8montblanc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tv8montblanc.png" group-title="France Région",8 Mont-Blanc
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv8montblanc&item_module=resources.lib.channels.fr.tv8montblanc
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tv8montblanc/get_live_url/?item_id=tv8montblanc
 
 ##	Alsace 20
 ##	alsace20
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/alsace20.png" group-title="France Région",Alsace 20
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=alsace20&item_module=resources.lib.channels.fr.alsace20
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/alsace20/get_live_url/?item_id=alsace20
 
 ##	TVPI télévision d'ici
 ##	tvpifr
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tvpifr.png" group-title="France Région",TVPI télévision d'ici
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvpifr&item_module=resources.lib.channels.fr.tvpifr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tvpifr/get_live_url/?item_id=tvpifr
 
 ##	IDF 1
 ##	idf1
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/idf1.png" group-title="France Région",IDF 1
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=idf1&item_module=resources.lib.channels.fr.idf1
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/idf1/get_live_url/?item_id=idf1
 
 ##	Azur TV
 ##	azurtv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/azurtv.png" group-title="France Région",Azur TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=azurtv&item_module=resources.lib.channels.fr.azurtv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/azurtv/get_live_url/?item_id=azurtv
 
 ##	BIP TV
 ##	biptv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/biptv.png" group-title="France Région",BIP TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=biptv&item_module=resources.lib.channels.fr.biptv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/biptv/get_live_url/?item_id=biptv
 
 ##	BFM Lille
 ##	bfmlille
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmlille.png" group-title="France Région",BFM Lille
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmlille&item_module=resources.lib.channels.fr.bfmregion
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/bfmregion/get_live_url/?item_id=bfmlille
 
 ##	BFM Littoral
 ##	bfmgrandlittoral
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmgrandlittoral.png" group-title="France Région",BFM Littoral
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmgrandlittoral&item_module=resources.lib.channels.fr.bfmregion
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/bfmregion/get_live_url/?item_id=bfmgrandlittoral
 
 ##	La Chaine Normande
 ##	lachainenormande
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/lachainenormande.png" group-title="France Région",La Chaine Normande
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lachainenormande&item_module=resources.lib.channels.fr.lachainenormande
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/lachainenormande/get_live_url/?item_id=lachainenormande
 
 ##	Sport en France
 ##	sportenfrance
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/sportenfrance.png" group-title="France Satellite/FAI",Sport en France
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=sportenfrance&item_module=resources.lib.channels.fr.sportenfrance
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/sportenfrance/get_live_url/?item_id=sportenfrance
 
 ##	Provence Azur TV
 ##	provenceazurtv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/provenceazurtv.png" group-title="France Région",Provence Azur TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=provenceazurtv&item_module=resources.lib.channels.fr.azurtv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/azurtv/get_live_url/?item_id=provenceazurtv
 
 ##	TébéSud
 ##	tebesud
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tebesud.png" group-title="France Région",TébéSud
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tebesud&item_module=resources.lib.channels.fr.tebeo
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tebeo/get_live_url/?item_id=tebesud
 
 ##	TéléGrenoble
 ##	telegrenoble
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/telegrenoble.png" group-title="France Région",TéléGrenoble
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telegrenoble&item_module=resources.lib.channels.fr.telegrenoble
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/telegrenoble/get_live_url/?item_id=telegrenoble
 
 ##	TéléNantes
 ##	telenantes
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/telenantes.png" group-title="France Région",TéléNantes
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telenantes&item_module=resources.lib.channels.fr.telenantes
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/telenantes/get_live_url/?item_id=telenantes
 
 ##	BFM Lyon
 ##	bfmlyon
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bfmlyon.png" group-title="France Région",BFM Lyon
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bfmlyon&item_module=resources.lib.channels.fr.bfmregion
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/bfmregion/get_live_url/?item_id=bfmlyon
 
 ##	TLC
 ##	tlc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tlc.png" group-title="France Région",TLC
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tlc&item_module=resources.lib.channels.fr.tlc
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tlc/get_live_url/?item_id=tlc
 
 ##	TV Vendée
 ##	tvvendee
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tvvendee.png" group-title="France Région",TV Vendée
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvvendee&item_module=resources.lib.channels.fr.tvvendee
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tvvendee/get_live_url/?item_id=tvvendee
 
 ##	TV7 Bordeaux
 ##	tv7bordeaux
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tv7bordeaux.png" group-title="France Région",TV7 Bordeaux
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tv7bordeaux&item_module=resources.lib.channels.fr.tv7bordeaux
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tv7bordeaux/get_live_url/?item_id=tv7bordeaux
 
 ##	TVT Val de Loire
 ##	tvt
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tvt.png" group-title="France Région",TVT Val de Loire
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvt&item_module=resources.lib.channels.fr.tvt
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tvt/get_live_url/?item_id=tvt
 
 ##	TVR
 ##	tvr
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tvr.png" group-title="France Région",TVR
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvr&item_module=resources.lib.channels.fr.tvr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tvr/get_live_url/?item_id=tvr
 
 ##	Wéo TV
 ##	weo
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/weo.png" group-title="France Région",Wéo TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=weo&item_module=resources.lib.channels.fr.weo
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/weo/get_live_url/?item_id=weo
 
 ##	DiCi TV
 ##	dicitv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/dicitv.png" group-title="France Région",DiCi TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=dicitv&item_module=resources.lib.channels.fr.dicitv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/dicitv/get_live_url/?item_id=dicitv
 
 ##	viàMaTélé
 ##	viamatele
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viamatele.png" group-title="France Région",viàMaTélé
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=viamatele&item_module=resources.lib.channels.fr.via
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viamatele
 
 ##	France Inter
 ##	franceinter
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/franceinter.png" group-title="France Radio",France Inter
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=franceinter&item_module=resources.lib.channels.fr.franceinter
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/franceinter/get_live_url/?item_id=franceinter
 
 ##	RTL
 ##	rtl
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rtl.png" group-title="France Radio",RTL
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtl&item_module=resources.lib.channels.fr.rtl
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/rtl/get_live_url/?item_id=rtl
 
 ##	Europe 1
 ##	europe1
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/europe1.png" group-title="France Radio",Europe 1
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=europe1&item_module=resources.lib.channels.fr.europe1
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/europe1/get_live_url/?item_id=europe1
 
 ##	01Net TV
 ##	01net
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/01net.png" group-title="France Satellite/FAI",01Net TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=01net&item_module=resources.lib.channels.fr.01net
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/01net/get_live_url/?item_id=01net
 
 ##	Equidia
 ##	equidia
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/equidia.png" group-title="France Satellite/FAI",Equidia
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=equidia&item_module=resources.lib.channels.fr.equidia
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/equidia/get_live_url/?item_id=equidia
 
 ##	B Smart
 ##	bsmart
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bsmart.png" group-title="France Satellite/FAI",B Smart
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=bsmart&item_module=resources.lib.channels.fr.bsmart
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/bsmart/get_live_url/?item_id=bsmart
 
 ##	Euronews
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="France",Euronews
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&language=FR
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/euronews/get_live_url/?item_id=euronews&language=FR
 
 ##	France 24
 ##	france24
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/france24.png" group-title="France",France 24
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=france24&item_module=resources.lib.channels.wo.france24&language=FR
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/france24/get_live_url/?item_id=france24&language=FR
 
 ##	CGTN
 ##	cgtn
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="France",CGTN
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=cgtn&item_module=resources.lib.channels.wo.cgtn&language=FR
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/cgtn/get_live_url/?item_id=cgtn&language=FR
 
 ##	RT
 ##	rt
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/rt.png" group-title="France",RT
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rt&item_module=resources.lib.channels.wo.rt&language=FR
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/rt/get_live_url/?item_id=rt&language=FR
 

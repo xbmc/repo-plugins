@@ -30,73 +30,65 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'tv5unis': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ca/tv5unis:list_categories',
         'label': 'TV5 Unis',
         'thumb': 'channels/ca/tv5unis.png',
         'fanart': 'channels/ca/tv5unis_fanart.jpg',
-        'module': 'resources.lib.channels.ca.tv5unis',
         'enabled': True,
         'order': 1
     },
     'telequebec': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ca/telequebec:list_programs',
         'label': 'Télé-Québec',
         'thumb': 'channels/ca/telequebec.png',
         'fanart': 'channels/ca/telequebec_fanart.jpg',
-        'module': 'resources.lib.channels.ca.telequebec',
         'enabled': True,
         'order': 4
     },
     'tva': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ca/tva:list_categories',
         'label': 'TVA',
         'thumb': 'channels/ca/tva.png',
         'fanart': 'channels/ca/tva_fanart.jpg',
-        'module': 'resources.lib.channels.ca.tva',
         'enabled': True,
         'order': 5
     },
     'icitele': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ca/icitele:list_programs',
         'label': 'ICI Télé (' + utils.ensure_unicode(Script.setting['icitele.language']) + ')',
         'thumb': 'channels/ca/icitele.png',
         'fanart': 'channels/ca/icitele_fanart.jpg',
-        'module': 'resources.lib.channels.ca.icitele',
         'enabled': True,
         'order': 6
     },
     'icitoutv': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ca/icitoutv:list_categories',
         'label': 'ICI Tou.tv',
         'thumb': 'channels/ca/icitoutv.png',
         'fanart': 'channels/ca/icitoutv_fanart.jpg',
-        'module': 'resources.lib.channels.ca.icitoutv',
         'enabled': True,
         'order': 8
     },
     'telemag': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ca/telemag:list_programs',
         'label': 'Télé-Mag',
         'thumb': 'channels/ca/telemag.png',
         'fanart': 'channels/ca/telemag_fanart.jpg',
-        'module': 'resources.lib.channels.ca.telemag',
         'enabled': True,
         'order': 9
     },
     'noovo': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/ca/noovo:list_programs',
         'label': 'NOOVO',
         'thumb': 'channels/ca/noovo.png',
         'fanart': 'channels/ca/noovo_fanart.jpg',
-        'module': 'resources.lib.channels.ca.noovo',
         'enabled': True,
         'order': 10
     }

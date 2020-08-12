@@ -63,7 +63,7 @@ LIVE_FR3_REGIONS = {
     "Chapagne-Ardenne": "champagne-ardenne",
     "Corse": "corse",
     "Côte d'Azur": "cote-d-azur",
-    "Franche-Compté": "franche-comte",
+    "Franche-Comté": "franche-comte",
     "Haute-Normandie": "haute-normandie",
     "Languedoc-Roussillon": "languedoc-roussillon",
     "Limousin": "limousin",
@@ -93,13 +93,6 @@ CORRECT_MONTH = {
     'Novembre': '11',
     'Décembre': '12'
 }
-
-
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_programs(plugin, item_id)
 
 
 @Route.register
@@ -183,10 +176,6 @@ def get_video_url(plugin,
 
     return resolver_proxy.get_francetv_video_stream(plugin, id_diffusion,
                                                     download_mode)
-
-
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, **kwargs)
 
 
 @Resolver.register

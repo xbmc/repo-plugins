@@ -6,85 +6,85 @@
 ##	Rouge TV
 ##	rougetv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rougetv.png" group-title="Switzerland",Rouge TV
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rougetv&item_module=resources.lib.channels.ch.rougetv
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/rougetv/get_live_url/?item_id=rougetv
 
 ##	TVM3
 ##	tvm3
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/tvm3.png" group-title="Switzerland",TVM3
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=tvm3&item_module=resources.lib.channels.ch.tvm3
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/tvm3/get_live_url/?item_id=tvm3
 
 ##	RTS Un
 ##	rtsun
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtsun.png" group-title="Switzerland",RTS Un
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtsun&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=rtsun
 
 ##	RTS Deux
 ##	rtsdeux
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtsdeux.png" group-title="Switzerland",RTS Deux
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtsdeux&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=rtsdeux
 
 ##	RTS Info
 ##	rtsinfo
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtsinfo.png" group-title="Switzerland",RTS Info
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtsinfo&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=rtsinfo
 
 ##	RTS Couleur 3
 ##	rtscouleur3
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtscouleur3.png" group-title="Switzerland",RTS Couleur 3
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtscouleur3&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=rtscouleur3
 
 ##	RTS La 1
 ##	rsila1
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rsila1.png" group-title="Switzerland",RTS La 1
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rsila1&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=rsila1
 
 ##	RTS La 2
 ##	rsila2
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rsila2.png" group-title="Switzerland",RTS La 2
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rsila2&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=rsila2
 
 ##	SRF 1
 ##	srf1
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/srf1.png" group-title="Switzerland",SRF 1
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=srf1&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=srf1
 
 ##	SRF Info
 ##	srfinfo
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/srfinfo.png" group-title="Switzerland",SRF Info
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=srfinfo&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=srfinfo
 
 ##	SRF Zwei
 ##	srfzwei
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/srfzwei.png" group-title="Switzerland",SRF Zwei
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=srfzwei&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=srfzwei
 
 ##	RTR auf SRF 1
 ##	rtraufsrf1
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtraufsrf1.png" group-title="Switzerland",RTR auf SRF 1
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtraufsrf1&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=rtraufsrf1
 
 ##	RTR auf SRF Info
 ##	rtraufsrfinfo
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtraufsrfinfo.png" group-title="Switzerland",RTR auf SRF Info
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtraufsrfinfo&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=rtraufsrfinfo
 
 ##	RTR auf SRF 2
 ##	rtraufsrf2
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/rtraufsrf2.png" group-title="Switzerland",RTR auf SRF 2
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rtraufsrf2&item_module=resources.lib.channels.ch.srgssr
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/srgssr/get_live_url/?item_id=rtraufsrf2
 
 ##	Teleticino
 ##	teleticino
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/teleticino.png" group-title="Switzerland",Teleticino
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=teleticino&item_module=resources.lib.channels.ch.teleticino
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/teleticino/get_live_url/?item_id=teleticino
 
 ##	Léman Bleu
 ##	lemanbleu
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/lemanbleu.png" group-title="Switzerland",Léman Bleu
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=lemanbleu&item_module=resources.lib.channels.ch.lemanbleu
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/lemanbleu/get_live_url/?item_id=lemanbleu
 
 ##	Tele M1
 ##	telem1
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ch/telem1.png" group-title="Switzerland",Tele M1
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=telem1&item_module=resources.lib.channels.ch.telem1
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ch/telem1/get_live_url/?item_id=telem1
 

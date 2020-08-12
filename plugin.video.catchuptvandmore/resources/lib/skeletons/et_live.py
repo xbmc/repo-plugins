@@ -30,307 +30,273 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'ectv': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'ECTV',
         'thumb': 'channels/et/ectv.png',
         'fanart': 'channels/et/ectv_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 1
     },
     'amma': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Amhara TV',
         'thumb': 'channels/et/amma.png',
         'fanart': 'channels/et/amma_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 2
     },
     'fbctv': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Fana TV',
         'thumb': 'channels/et/fbctv.png',
         'fanart': 'channels/et/fbctv_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 3
     },
     'walta': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Walta TV',
         'thumb': 'channels/et/walta.png',
         'fanart': 'channels/et/walta_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 4
     },
     'etvz': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'EBC ZENA',
         'thumb': 'channels/et/etvz.png',
         'fanart': 'channels/et/etvz_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 5
     },
     'etvm': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'EBC MEZINAGNA',
         'thumb': 'channels/et/etvm.png',
         'fanart': 'channels/et/etvz_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 6
     },
     'etvq': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'EBC QUANQUAWOCH',
         'thumb': 'channels/et/etvq.png',
         'fanart': 'channels/et/etvq_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 7
     },
     'ltv': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'LTV',
         'thumb': 'channels/et/ltv.png',
         'fanart': 'channels/et/ltv_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 8
     },
     'arts': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'ARTS TV',
         'thumb': 'channels/et/arts.png',
         'fanart': 'channels/et/arts_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 9
     },
     'moe': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'MoE',
         'thumb': 'channels/et/moe.png',
         'fanart': 'channels/et/moe_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 10
     },
     'nahoo': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Nahoo TV',
         'thumb': 'channels/et/nahoo.png',
         'fanart': 'channels/et/nahoo_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 11
     },
     'obn': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'OBN',
         'thumb': 'channels/et/obn.png',
         'fanart': 'channels/et/obn_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 12
     },
     'obs': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'OBS',
         'thumb': 'channels/et/obs.png',
         'fanart': 'channels/et/obs_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 13
     },
     'tigrai': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Tigrai TV',
         'thumb': 'channels/et/tigrai.png',
         'fanart': 'channels/et/tigrai_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 14
     },
     'jtv': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'JTV ETHIOPIA',
         'thumb': 'channels/et/jtv.png',
         'fanart': 'channels/et/jtv_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 15
     },
     'esat': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'ESAT',
         'thumb': 'channels/et/esat.png',
         'fanart': 'channels/et/esat_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 16
     },
     'omn': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'OMN',
         'thumb': 'channels/et/omn.png',
         'fanart': 'channels/et/omn_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 17
     },
     'aleph': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Aleph TV',
         'thumb': 'channels/et/aleph.png',
         'fanart': 'channels/et/aleph_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 18
     },
     'bisrat': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Bisrat TV',
         'thumb': 'channels/et/bisrat.png',
         'fanart': 'channels/et/bisrat_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 19
     },
     'onn': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'ONN TV',
         'thumb': 'channels/et/onn.png',
         'fanart': 'channels/et/onn_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 20
     },
     'dws': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'DW TV',
         'thumb': 'channels/et/dws.png',
         'fanart': 'channels/et/dws_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 21
     },
     'adis': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Addis TV',
         'thumb': 'channels/et/adis.png',
         'fanart': 'channels/et/adis_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 22
     },
     'estv': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'ES TV',
         'thumb': 'channels/et/estv.png',
         'fanart': 'channels/et/estv_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 23
     },
     'south': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Southern TV',
         'thumb': 'channels/et/south.png',
         'fanart': 'channels/et/south_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 24
     },
     'eritr': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Eritrea TV',
         'thumb': 'channels/et/eritr.png',
         'fanart': 'channels/et/eritr_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 25
     },
     'afri': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Afrihealth',
         'thumb': 'channels/et/afri.png',
         'fanart': 'channels/et/afri_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 26
     },
     'asham': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Asham TV',
         'thumb': 'channels/et/asham.png',
         'fanart': 'channels/et/asham_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 27
     },
     'ahadu': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Ahadu TV',
         'thumb': 'channels/et/ahadu.png',
         'fanart': 'channels/et/ahadu_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 28
     },
     'balage': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Balageru',
         'thumb': 'channels/et/balage.png',
         'fanart': 'channels/et/balage_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 29
     },
     'ava': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'AVA TV',
         'thumb': 'channels/et/ava.png',
         'fanart': 'channels/et/ava_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 30
     },
     'asrat': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'ASRAT MEDIA',
         'thumb': 'channels/et/asrat.png',
         'fanart': 'channels/et/asrat_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 31
     },
     'holys': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Holy Spirit TV',
         'thumb': 'channels/et/holys.png',
         'fanart': 'channels/et/holys_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 32
     },
     'gloryg': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/et/video2b:get_live_url',
         'label': 'Glory of GOD TV',
         'thumb': 'channels/et/gloryg.png',
         'fanart': 'channels/et/gloryg_fanart.jpg',
-        'module': 'resources.lib.channels.et.video2b',
         'enabled': True,
         'order': 33
     }

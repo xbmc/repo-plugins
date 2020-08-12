@@ -29,36 +29,35 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'live_tv': {
-        'callback': 'generic_menu',
+        'route': '/resources/lib/main:generic_menu',
         'label': 30030,
         'thumb': 'live_tv.png',
         'enabled': True,
         'order': 1
     },
     'replay': {
-        'callback': 'generic_menu',
+        'route': '/resources/lib/main:generic_menu',
         'label': 30031,
         'thumb': 'replay.png',
         'enabled': True,
         'order': 2
     },
     'websites': {
-        'callback': 'generic_menu',
+        'route': '/resources/lib/main:generic_menu',
         'label': 30032,
         'thumb': 'websites.png',
         'enabled': True,
         'order': 3
     },
     'favourites': {
-        'callback': 'favourites',
+        'route': '/resources/lib/main:favourites',
         'label': 30033,
         'thumb': 'favourites.png',
         'enabled': True,

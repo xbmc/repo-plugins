@@ -74,13 +74,6 @@ URL_LIVE_BFMBUSINESS = 'http://bfmbusiness.bfmtv.com/mediaplayer/live-video/'
 DESIRED_QUALITY = Script.setting['quality']
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_programs(plugin, item_id)
-
-
 def get_token(item_id):
     """Get session token"""
     resp = urlquick.get(URL_TOKEN % item_id)
@@ -225,12 +218,8 @@ def get_video_url(plugin,
         return final_video_url
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     if item_id == 'bfmtv':
         resp = urlquick.get(URL_LIVE_BFMTV,

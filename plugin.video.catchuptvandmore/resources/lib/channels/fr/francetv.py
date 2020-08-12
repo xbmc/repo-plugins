@@ -59,16 +59,8 @@ URL_API_MOBILE = utils.urljoin_partial("https://api-mobile.yatta.francetv.fr/")
 URL_API_FRONT = utils.urljoin_partial("http://api-front.yatta.francetv.fr")
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return francetv_root(plugin)
-
-
 @Route.register
-def francetv_root(plugin):
-
+def francetv_root(plugin, **kwargs):
     # Channels
     item = Listitem()
     item.label = Script.localize(30006)
@@ -90,7 +82,7 @@ def francetv_root(plugin):
 
 
 @Route.register
-def channels(plugin):
+def channels(plugin, **kwargs):
     """
     List all france.tv channels
     """
@@ -119,7 +111,7 @@ def channels(plugin):
 
 
 @Route.register
-def channel_homepage(plugin, item_id):
+def channel_homepage(plugin, item_id, **kwargs):
     """
     List channel homepage elements
     (e.g. https://www.france.tv/france-2/)
@@ -280,7 +272,7 @@ def populate_video_item(item, video):
 
 
 @Route.register
-def search(plugin, search_query):
+def search(plugin, search_query, **kwargs):
     r = urlquick.get(URL_API_MOBILE('/apps/search'),
                      params={'platform': 'apps',
                              'filters': 'with-collections',
@@ -293,7 +285,7 @@ def search(plugin, search_query):
 
 
 @Route.register
-def categories(plugin):
+def categories(plugin, **kwargs):
     """
     List all ctagories
     (e.g. séries & fictions, documentaires, ...)
@@ -320,7 +312,7 @@ def categories(plugin):
 
 
 @Route.register
-def outre_mer_root(plugin, region_path):
+def outre_mer_root(plugin, region_path, **kwargs):
     menu_items = [
         (Script.localize(30704), '/generic/taxonomy/%s/contents'),  # Last videos
         (Script.localize(30717), '/apps/regions/%s/programs')  # All programs
@@ -334,7 +326,7 @@ def outre_mer_root(plugin, region_path):
 
 
 @Route.register
-def list_generic_items(plugin, generic_items, next_page_item):
+def list_generic_items(plugin, generic_items, next_page_item, **kwargs):
     """
     List items of a generic type
     """
@@ -350,7 +342,7 @@ def list_generic_items(plugin, generic_items, next_page_item):
 
 
 @Route.register
-def grab_json_collections(plugin, json_url, page=0, collection_position=None):
+def grab_json_collections(plugin, json_url, page=0, collection_position=None, **kwargs):
     plugin.add_sort_methods(xbmcplugin.SORT_METHOD_UNSORTED)
     r = urlquick.get(json_url,
                      params={'platform': 'apps',
@@ -409,12 +401,8 @@ def get_video_url(plugin,
                                                     download_mode)
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     broadcast_id = 'SIM_France%s'
     return resolver_proxy.get_francetv_live_stream(

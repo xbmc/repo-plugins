@@ -23,7 +23,7 @@ or a movie:
     My.Great.Movie (2020).strm
 ```
 
-Place the stream file in a location you have defined as a source and then scan them stream files into your library. Now when you play them you'll get a dialog box telling you were to find the TV show or movie (like the Disney+ app on your Smart TV).
+Place the stream file in a location you have defined as a source and then scan the stream files into your library. Now when you play them you'll get a dialog box telling you were to find the TV show or movie (like the Disney+ app on your Smart TV).
 
 ## Generating the Stream Files
 

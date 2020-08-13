@@ -35,19 +35,9 @@ if len(sys.argv[2]) == 0:
 else:
     action = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['action'][0]
     #
-    # archive
-    #
-    if action == 'list-archive':
-        import botchamania_list_archive as plugin
-    #
-    # archive specials
-    #
-    if action == 'list-archive-specials':
-        import botchamania_list_archive_specials as plugin
-    #
     # List
     #
-    elif action == 'list':
+    if action == 'list':
         import botchamania_list as plugin
     #
     # Play

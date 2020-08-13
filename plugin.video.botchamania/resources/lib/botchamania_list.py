@@ -186,6 +186,10 @@ class Main(object):
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
+
+            # let's remove any non-ascii characters
+            title = title.encode('ascii', 'ignore')
+
             parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
             url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False

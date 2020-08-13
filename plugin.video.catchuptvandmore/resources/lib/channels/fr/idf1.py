@@ -47,12 +47,8 @@ JSON_LIVE = 'https://playback.dacast.com/content/access?contentId=%s&provider=da
 # Id in 3 part
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE, max_age=-1)
     list_id_values = re.compile(r'contentId\=(.*?)\"').findall(resp.text)[0]

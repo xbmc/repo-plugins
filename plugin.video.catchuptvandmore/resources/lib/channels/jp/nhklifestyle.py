@@ -47,13 +47,6 @@ URL_API_STREAM_NHK = 'http://movie-s.nhk.or.jp/ws/ws_program/api/%s/apiv/5/mode/
 # Api_Key, VideoId
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """

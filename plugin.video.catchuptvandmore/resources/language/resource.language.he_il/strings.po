@@ -671,6 +671,10 @@ msgctxt "#30725"
 msgid "Categories"
 msgstr ""
 
+msgctxt "#30726"
+msgid "Races"
+msgstr ""
+
 
 # Favourites (from 30800 to 30859)
 

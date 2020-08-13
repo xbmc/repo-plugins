@@ -32,13 +32,6 @@ import urlquick
 URL_ROOT = 'http://noob-tv.com'
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
 CATEGORIES = {
     'Noob': URL_ROOT + '/videos.php?id=1',
     'WarpZone Project': URL_ROOT + '/videos.php?id=4',
@@ -50,7 +43,8 @@ CATEGORIES = {
 }
 
 
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     for category_name, category_url in list(CATEGORIES.items()):
         item = Listitem()

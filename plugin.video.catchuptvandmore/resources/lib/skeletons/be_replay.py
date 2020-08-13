@@ -30,163 +30,97 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'brf': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/be/brf:list_categories',
         'label': 'BRF Mediathek',
         'thumb': 'channels/be/brf.png',
         'fanart': 'channels/be/brf_fanart.jpg',
-        'module': 'resources.lib.channels.be.brf',
         'enabled': True,
         'order': 1
     },
-    'rtl_tvi': {
-        'callback': 'replay_bridge',
-        'label': 'RTL TVI',
-        'thumb': 'channels/be/rtltvi.png',
-        'fanart': 'channels/be/rtltvi_fanart.jpg',
-        'module': 'resources.lib.channels.be.rtlplaybe',
+    'rtlplay': {
+        'route': '/resources/lib/channels/be/rtlplaybe:rtlplay_root',
+        'label': 'RTLplay',
+        'thumb': 'channels/be/rtlplay.png',
+        'fanart': 'channels/be/rtlplay_fanart.jpg',
         'enabled': True,
         'order': 2
     },
-    'plug_rtl': {
-        'callback': 'replay_bridge',
-        'label': 'PLUG RTL',
-        'thumb': 'channels/be/plugrtl.png',
-        'fanart': 'channels/be/plugrtl_fanart.jpg',
-        'module': 'resources.lib.channels.be.rtlplaybe',
-        'enabled': True,
-        'order': 3
-    },
-    'club_rtl': {
-        'callback': 'replay_bridge',
-        'label': 'CLUB RTL',
-        'thumb': 'channels/be/clubrtl.png',
-        'fanart': 'channels/be/clubrtl_fanart.jpg',
-        'module': 'resources.lib.channels.be.rtlplaybe',
-        'enabled': True,
-        'order': 4
-    },
     'vrt': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/be/vrt:list_root',
         'label': 'VRT NU',
         'thumb': 'channels/be/vrt.png',
         'fanart': 'channels/be/vrt_fanart.jpg',
-        'module': 'resources.lib.channels.be.vrt',
         'enabled': True,
         'order': 5
     },
     'telemb': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/be/telemb:list_programs',
         'label': 'Télé MB',
         'thumb': 'channels/be/telemb.png',
         'fanart': 'channels/be/telemb_fanart.jpg',
-        'module': 'resources.lib.channels.be.telemb',
         'enabled': True,
         'order': 6
     },
     'rtc': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/be/rtc:list_categories',
         'label': 'RTC Télé Liège',
         'thumb': 'channels/be/rtc.png',
         'fanart': 'channels/be/rtc_fanart.jpg',
-        'module': 'resources.lib.channels.be.rtc',
         'enabled': True,
         'order': 7
     },
     'auvio': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/be/rtbf:list_categories',
         'label': 'RTBF Auvio',
         'thumb': 'channels/be/auvio.png',
         'fanart': 'channels/be/auvio_fanart.jpg',
-        'module': 'resources.lib.channels.be.rtbf',
         'enabled': True,
         'order': 8
     },
     'tvlux': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/be/tvlux:list_categories',
         'label': 'TV Lux',
         'thumb': 'channels/be/tvlux.png',
         'fanart': 'channels/be/tvlux_fanart.jpg',
-        'module': 'resources.lib.channels.be.tvlux',
         'enabled': True,
         'order': 9
     },
-    'rtl_info': {
-        'callback': 'replay_bridge',
-        'label': 'RTL INFO',
-        'thumb': 'channels/be/rtlinfo.png',
-        'fanart': 'channels/be/rtlinfo_fanart.jpg',
-        'module': 'resources.lib.channels.be.rtlplaybe',
-        'enabled': True,
-        'order': 10
-    },
-    'bel_rtl': {
-        'callback': 'replay_bridge',
-        'label': 'BEL RTL',
-        'thumb': 'channels/be/belrtl.png',
-        'fanart': 'channels/be/belrtl_fanart.jpg',
-        'module': 'resources.lib.channels.be.rtlplaybe',
-        'enabled': True,
-        'order': 11
-    },
-    'contact': {
-        'callback': 'replay_bridge',
-        'label': 'Contact',
-        'thumb': 'channels/be/contact.png',
-        'fanart': 'channels/be/contact_fanart.jpg',
-        'module': 'resources.lib.channels.be.rtlplaybe',
-        'enabled': True,
-        'order': 12
-    },
     'bx1': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/be/bx1:list_programs',
         'label': 'BX1',
         'thumb': 'channels/be/bx1.png',
         'fanart': 'channels/be/bx1_fanart.jpg',
-        'module': 'resources.lib.channels.be.bx1',
         'enabled': True,
         'order': 13
     },
     'nrjhitstvbe': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/be/nrjhitstvbe:list_videos',
         'label': 'NRJ Hits TV',
         'thumb': 'channels/be/nrjhitstvbe.png',
         'fanart': 'channels/be/nrjhitstvbe_fanart.jpg',
-        'module': 'resources.lib.channels.be.nrjhitstvbe',
         'enabled': True,
         'order': 17
     },
-    'rtl_sport': {
-        'callback': 'replay_bridge',
-        'label': 'RTL Sport',
-        'thumb': 'channels/be/rtlsport.png',
-        'fanart': 'channels/be/rtlsport_fanart.jpg',
-        'module': 'resources.lib.channels.be.rtlplaybe',
-        'enabled': True,
-        'order': 18
-    },
     'tvcom': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/be/tvcom:list_categories',
         'label': 'TV Com',
         'thumb': 'channels/be/tvcom.png',
         'fanart': 'channels/be/tvcom_fanart.jpg',
-        'module': 'resources.lib.channels.be.tvcom',
         'enabled': True,
         'order': 19
     },
     'canalc': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/be/canalc:list_programs',
         'label': 'Canal C',
         'thumb': 'channels/be/canalc.png',
         'fanart': 'channels/be/canalc_fanart.jpg',
-        'module': 'resources.lib.channels.be.canalc',
         'enabled': True,
         'order': 20
     }

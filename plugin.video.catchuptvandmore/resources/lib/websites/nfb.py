@@ -39,13 +39,6 @@ URL_VIDEOS = URL_ROOT + '/remote/explore-all-films/?language=en&genre=%s&availab
 # Genre, Page
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
 GENRE_VIDEOS = {
     '61': 'Animation',
     '63': 'Children\'s film',
@@ -58,7 +51,8 @@ GENRE_VIDEOS = {
 }
 
 
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     for category_id, category_title in list(GENRE_VIDEOS.items()):
         item = Listitem()

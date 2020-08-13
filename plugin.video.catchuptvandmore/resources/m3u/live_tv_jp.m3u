@@ -6,20 +6,20 @@
 ##	日テレ News24
 ##	ntvnews24
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/jp/ntvnews24.png" group-title="Japan",日テレ News24
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=ntvnews24&item_module=resources.lib.channels.jp.ntvnews24
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/jp/ntvnews24/get_live_url/?item_id=ntvnews24
 
 ##	ジャパネットチャンネルDX
 ##	japanetshoppingdx
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/jp/japanetshoppingdx.png" group-title="Japan",ジャパネットチャンネルDX
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=japanetshoppingdx&item_module=resources.lib.channels.jp.japanetshoppingdx
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/jp/japanetshoppingdx/get_live_url/?item_id=japanetshoppingdx
 
 ##	株式会社ウェザーニューズ
 ##	weathernewsjp
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/jp/weathernewsjp.png" group-title="Japan",株式会社ウェザーニューズ
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=weathernewsjp&item_module=resources.lib.channels.jp.weathernewsjp
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/jp/weathernewsjp/get_live_url/?item_id=weathernewsjp
 
 ##	QVC
 ##	qvc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="Japan",QVC
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&language=JP
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/qvc/get_live_url/?item_id=qvc&language=JP
 

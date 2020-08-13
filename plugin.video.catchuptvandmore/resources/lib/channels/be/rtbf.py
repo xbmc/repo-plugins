@@ -117,13 +117,6 @@ def format_day(date, **kwargs):
     return date_dmy
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
 
@@ -385,22 +378,8 @@ def get_video_url(plugin,
     return stream_url
 
 
-def multi_live_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_lives(plugin, item_id)
-
-
-def live_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after live_bridge
-    """
-    return set_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def set_live_url(plugin, item_id, video_id, **kwargs):
+def set_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_JSON_LIVE_CHANNEL % (item_id, get_partener_key()), max_age=-1)
     json_parser = json.loads(resp.text)
@@ -510,6 +489,7 @@ def get_live_url(plugin, item_id, live_url, is_drm, live_id, **kwargs):
         }
         item.property[
             'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % urlencode(headers2)
+        item.property['inputstream.adaptive.manifest_update_parameter'] = 'full'
         item.label = get_selected_item_label()
         item.art.update(get_selected_item_art())
         item.info.update(get_selected_item_info())

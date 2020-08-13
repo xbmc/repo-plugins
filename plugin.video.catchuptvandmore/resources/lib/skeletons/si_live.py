@@ -30,64 +30,57 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'slo1': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/si/rtvslo:get_live_url',
         'label': 'TV SLO 1',
         'thumb': 'channels/si/slo1.png',
         'fanart': 'channels/si/slo1_fanart.jpg',
-        'module': 'resources.lib.channels.si.rtvslo',
         'enabled': True,
         'order': 1
     },
     'slo2': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/si/rtvslo:get_live_url',
         'label': 'TV SLO 2',
         'thumb': 'channels/si/slo2.png',
         'fanart': 'channels/si/slo2_fanart.jpg',
-        'module': 'resources.lib.channels.si.rtvslo',
         'enabled': True,
         'order': 2
     },
     'slo3': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/si/rtvslo:get_live_url',
         'label': 'TV SLO 3',
         'thumb': 'channels/si/slo3.png',
         'fanart': 'channels/si/slo3_fanart.jpg',
-        'module': 'resources.lib.channels.si.rtvslo',
         'enabled': True,
         'order': 3
     },
     'koper': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/si/rtvslo:get_live_url',
         'label': 'Koper',
         'thumb': 'channels/si/koper.png',
         'fanart': 'channels/si/koper_fanart.jpg',
-        'module': 'resources.lib.channels.si.rtvslo',
         'enabled': True,
         'order': 4
     },
     'maribor': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/si/rtvslo:get_live_url',
         'label': 'Maribor',
         'thumb': 'channels/si/maribor.png',
         'fanart': 'channels/si/maribor_fanart.jpg',
-        'module': 'resources.lib.channels.si.rtvslo',
         'enabled': True,
         'order': 5
     },
     'mmc': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/si/rtvslo:get_live_url',
         'label': 'MMC',
         'thumb': 'channels/si/mmc.png',
         'fanart': 'channels/si/mmc_fanart.jpg',
-        'module': 'resources.lib.channels.si.rtvslo',
         'enabled': True,
         'order': 6
     }

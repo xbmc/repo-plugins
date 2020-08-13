@@ -44,14 +44,8 @@ URL_STREAM = 'https://mnmedias.api.telequebec.tv/m3u8/%s.m3u8'
 # VideoId
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     resp = urlquick.get(URL_VIDEOS)
     list_seasons_datas = re.compile(r'li path\=\"(.*?)\"').findall(resp.text)

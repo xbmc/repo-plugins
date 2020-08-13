@@ -54,13 +54,6 @@ URL_BRIGHTCOVE_VIDEO_JSON = 'https://edge.api.brightcove.com/'\
 # AccountId, VideoId
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """

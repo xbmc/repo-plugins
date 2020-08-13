@@ -43,13 +43,9 @@ from kodi_six import xbmcgui
 URL_REPLAY = 'https://api.dailymotion.com/user/%s/videos?fields=description,duration,id,taken_time,thumbnail_large_url,title&limit=20&sort=recent&page=1'
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    url = URL_REPLAY % (item_id.replace('_', '-'))
-    return list_videos(plugin, item_id, url)
-
-
 @Route.register
-def list_videos(plugin, item_id, url, **kwargs):
+def list_videos(plugin, item_id, **kwargs):
+    url = URL_REPLAY % (item_id.replace('_', '-'))
     headers = {'User-Agent': 'Android'}
     r = urlquick.get(url, headers=headers)
     json_parser = json.loads(r.text)

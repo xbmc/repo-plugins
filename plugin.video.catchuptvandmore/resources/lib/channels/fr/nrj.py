@@ -31,6 +31,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib.addon_utils import get_item_media_path
 
 import htmlement
 import json
@@ -55,11 +56,23 @@ URL_LIVE_WITH_TOKEN = URL_ROOT + '/compte/live?channel=%s'
 # call this url after get session (url live with token inside this page)
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
+@Route.register
+def nrjplay_root(plugin, **kwargs):
+
+    # (item_id, label, thumb, fanart)
+    channels = [
+        ('nrj12', 'NRJ 12', 'nrj12.png', 'nrj12_fanart.jpg'),
+        ('cherie25', 'Chérie 25', 'cherie25.png', 'cherie25_fanart.jpg')
+    ]
+
+    for channel_infos in channels:
+        item = Listitem()
+        item.label = channel_infos[1]
+        item.art["thumb"] = get_item_media_path('channels/fr/' + channel_infos[2])
+        item.art["fanart"] = get_item_media_path('channels/fr/' + channel_infos[3])
+        item.set_callback(list_categories, channel_infos[0])
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register
@@ -183,12 +196,8 @@ def get_video_url(plugin,
     return stream_url
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     # Live TV Not working / find a way to dump html received
 

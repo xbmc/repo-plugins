@@ -42,13 +42,6 @@ import urlquick
 URL_TV5MAF_ROOT = 'https://afrique.tv5monde.com'
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """

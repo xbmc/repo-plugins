@@ -42,13 +42,6 @@ URL_VIDEOS = URL_ROOT + '/videos-meteo/videos-la-chaine-meteo'
 URL_BRIGHTCOVE_DATAS = URL_ROOT + '/jsdyn/lcmjs.js'
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_programs(plugin, item_id)
-
-
 @Route.register
 def list_programs(plugin, item_id, **kwargs):
     """

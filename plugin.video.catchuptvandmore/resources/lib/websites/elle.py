@@ -41,14 +41,8 @@ URL_VIDEOS_JSON = 'https://content.jwplatform.com/v2/playlists/%s'
 # CategoryId
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     categories_html = urlquick.get(URL_CATEGORIES).text
     categories_js_id = re.compile(

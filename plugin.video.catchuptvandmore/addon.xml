@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.24" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.25" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.codequick" version="0.9.12"/>
+    <import addon="script.module.codequick" version="0.9.13"/>
     <import addon="script.module.youtube.dl" version="18.225.0"/>
     <import addon="script.module.requests" version="2.12.4"/>
     <import addon="script.module.pytz" version="2014.2"/>
@@ -42,22 +42,24 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.24]
-[Fix/DRM] Live TV - RTBF (LaUne, LaDeux, ...) (BE)
-[Fix] Live TV - Télé Quebec (CA)
-[Remove] Live TV - Yoopa and LCN (CA) - No present in the website of TVA.ca
-[Rename] Live TV - NPO Zapp to NPO 3 (NL) - Need more work
-[Fix] Live TV - BFM Business (FR)
-[Fix] Website - Allocine (FR)
-[Move] Catch-Up TV - France TV (FR) - All France TV channels are now in 'france.tv' folder like the official website
-[Add] Live TV - Equidia (FR)
-[Fix] Website - Têtes à claques (CA) - Add Zarbi videos
-[Fix] Live TV - Nessan (TN)
-[Fix] Catch-Up TV - Guilli (FR)
-[Add] Live TV - B Smart (FR)
-[Fix] Catch-up TV - NYC Media (US)
-[Fix] Cathc-up TV - Arte Concert (FR)
-[Move] Catch-Up TV - France TV (FR) - FR3 régions and 1ère outre-mer are now in 'france.tv' folder
+[Version 0.2.25]
+[FR - MYTF1] Move all TF1 group channels in MYTF1 folder
+[FR - MYTF1] Add search feature
+[FR - 6play] Move all M6 group channels in 6play folder
+[FR - myCANAL] Move all Canal+ group channels in myCANAL folder
+[FR - NRJ Play] Move NRJ 12 and Chérie 25 in NRJ Play folder
+[FR - FR3 Régions] Fix typo Franche-Comté
+[BE - RTLplay] Move all RTL group channels in RTLplay folder
+[BE - RTBF] Fix Live TV with no audio (DRM)
+[CH - RTS] Fix Live TV with no audio (DRM)
+[Core] Bump CodeQuick 0.9.13 - Kill xxxx_bridge functions
+[NL - NPO] Fix Lives TV (Audio drop, NPO 1 and 2, Rename NPO 3 to NPO Zapp)
+[FR - Equidia] Add Catchup-TV (Courses and Emissions)
+[CA - NOOVO.TV] Fix Catchup-TV
+[UK - STV] Fix catch up entry error
+[NL - NPO] Fix Next Page error
+[FR - B Smart] Add Catchup-TV
+[FR - Sport En France] Fix Live TV
 ----
 Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
     </news>

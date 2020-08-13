@@ -34,6 +34,7 @@ from resources.lib import resolver_proxy
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
+from resources.lib.addon_utils import get_item_media_path
 
 import inputstreamhelper
 import re
@@ -85,11 +86,34 @@ LIVE_DAILYMOTION_ID = {
 }
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
+@Route.register
+def mycanal_root(plugin, **kwargs):
+
+    # (item_id, label, thumb, fanart)
+    channels = [
+        ('canalplus', 'Canal +', 'canalplus.png', 'canalplus_fanart.jpg'),
+        ('c8', 'C8', 'c8.png', 'c8_fanart.jpg'),
+        ('cstar', 'CStar', 'cstar.png', 'cstar_fanart.jpg'),
+        ('seasons', 'Seasons', 'seasons.png', 'seasons_fanart.jpg'),
+        ('comedie', 'Comédie +', 'comedie.png', 'comedie_fanart.jpg'),
+        ('les-chaines-planete', 'Les chaînes planètes +', 'leschainesplanete.png', 'leschainesplanete_fanart.jpg'),
+        ('golfplus', 'Golf +', 'golfplus.png', 'golfplus_fanart.jpg'),
+        ('cineplus', 'Ciné +', 'cineplus.png', 'cineplus_fanart.jpg'),
+        ('infosportplus', 'INFOSPORT+', 'infosportplus.png', 'infosportplus_fanart.jpg'),
+        ('polar-plus', 'Polar+', 'polarplus.png', 'polarplus_fanart.jpg'),
+        ('cliquetv', 'Clique TV', 'cliquetv.png', 'cliquetv_fanart.jpg'),
+        ('piwiplus', 'Piwi +', 'piwiplus.png', 'piwiplus_fanart.jpg'),
+        ('teletoonplus', 'TéléToon +', 'teletoonplus.png', 'teletoonplus_fanart.jpg'),
+    ]
+
+    for channel_infos in channels:
+        item = Listitem()
+        item.label = channel_infos[1]
+        item.art["thumb"] = get_item_media_path('channels/fr/' + channel_infos[2])
+        item.art["fanart"] = get_item_media_path('channels/fr/' + channel_infos[3])
+        item.set_callback(list_categories, channel_infos[0])
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register
@@ -472,6 +496,10 @@ def get_video_url(plugin,
         hash_value = ''
         idKey_value = ''
         quality_value = ''
+
+        if 'available' not in value_datas_jsonparser:
+            return False
+
         for stream_datas in value_datas_jsonparser["available"]:
             if 'Widevine' in stream_datas["drmType"]:
                 comMode_value = stream_datas['comMode']
@@ -572,12 +600,8 @@ def get_video_url(plugin,
         return json_parser["detail"]["informations"]["playsets"]["available"][0]["videoURL"]
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     return resolver_proxy.get_stream_dailymotion(
         plugin, LIVE_DAILYMOTION_ID[item_id], False)

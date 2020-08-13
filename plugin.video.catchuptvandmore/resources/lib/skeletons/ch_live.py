@@ -30,163 +30,145 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'rougetv': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/rougetv:get_live_url',
         'label': 'Rouge TV',
         'thumb': 'channels/ch/rougetv.png',
         'fanart': 'channels/ch/rougetv_fanart.jpg',
-        'module': 'resources.lib.channels.ch.rougetv',
         'enabled': True,
         'order': 6
     },
     'tvm3': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/tvm3:get_live_url',
         'label': 'TVM3',
         'thumb': 'channels/ch/tvm3.png',
         'fanart': 'channels/ch/tvm3_fanart.jpg',
-        'module': 'resources.lib.channels.ch.tvm3',
         'enabled': True,
         'order': 7
     },
     'rtsun': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'RTS Un',
         'thumb': 'channels/ch/rtsun.png',
         'fanart': 'channels/ch/rtsun_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 9
     },
     'rtsdeux': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'RTS Deux',
         'thumb': 'channels/ch/rtsdeux.png',
         'fanart': 'channels/ch/rtsdeux_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 10
     },
     'rtsinfo': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'RTS Info',
         'thumb': 'channels/ch/rtsinfo.png',
         'fanart': 'channels/ch/rtsinfo_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 11
     },
     'rtscouleur3': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'RTS Couleur 3',
         'thumb': 'channels/ch/rtscouleur3.png',
         'fanart': 'channels/ch/rtscouleur3_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 12
     },
     'rsila1': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'RTS La 1',
         'thumb': 'channels/ch/rsila1.png',
         'fanart': 'channels/ch/rsila1_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 13
     },
     'rsila2': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'RTS La 2',
         'thumb': 'channels/ch/rsila2.png',
         'fanart': 'channels/ch/rsila2_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 14
     },
     'srf1': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'SRF 1',
         'thumb': 'channels/ch/srf1.png',
         'fanart': 'channels/ch/srf1_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 15
     },
     'srfinfo': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'SRF Info',
         'thumb': 'channels/ch/srfinfo.png',
         'fanart': 'channels/ch/srfinfo_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 16
     },
     'srfzwei': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'SRF Zwei',
         'thumb': 'channels/ch/srfzwei.png',
         'fanart': 'channels/ch/srfzwei_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 17
     },
     'rtraufsrf1': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'RTR auf SRF 1',
         'thumb': 'channels/ch/rtraufsrf1.png',
         'fanart': 'channels/ch/rtraufsrf1_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 18
     },
     'rtraufsrfinfo': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'RTR auf SRF Info',
         'thumb': 'channels/ch/rtraufsrfinfo.png',
         'fanart': 'channels/ch/rtraufsrfinfo_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 19
     },
     'rtraufsrf2': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
         'label': 'RTR auf SRF 2',
         'thumb': 'channels/ch/rtraufsrf2.png',
         'fanart': 'channels/ch/rtraufsrf2_fanart.jpg',
-        'module': 'resources.lib.channels.ch.srgssr',
         'enabled': True,
         'order': 20
     },
     'teleticino': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/teleticino:get_live_url',
         'label': 'Teleticino',
         'thumb': 'channels/ch/teleticino.png',
         'fanart': 'channels/ch/teleticino_fanart.jpg',
-        'module': 'resources.lib.channels.ch.teleticino',
         'enabled': True,
         'order': 21
     },
     'lemanbleu': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/lemanbleu:get_live_url',
         'label': 'Léman Bleu',
         'thumb': 'channels/ch/lemanbleu.png',
         'fanart': 'channels/ch/lemanbleu_fanart.jpg',
-        'module': 'resources.lib.channels.ch.lemanbleu',
         'enabled': True,
         'order': 22
     },
     'telem1': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ch/telem1:get_live_url',
         'label': 'Tele M1',
         'thumb': 'channels/ch/telem1.png',
         'fanart': 'channels/ch/telem1_fanart.jpg',
-        'module': 'resources.lib.channels.ch.telem1',
         'enabled': True,
         'order': 23
     }

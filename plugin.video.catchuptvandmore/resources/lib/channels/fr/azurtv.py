@@ -43,12 +43,8 @@ URL_ROOT = "https://www.%s-tv.fr"
 URL_LIVE = URL_ROOT + "/live/"
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     if 'provenceazur' in item_id:
         resp = urlquick.get(

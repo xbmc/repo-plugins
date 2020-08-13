@@ -40,10 +40,6 @@ import urlquick
 URL_ROOT = 'http://www.dw.com'
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, **kwargs)
-
-
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
     final_language = kwargs.get('language', Script.setting['dw.language'])

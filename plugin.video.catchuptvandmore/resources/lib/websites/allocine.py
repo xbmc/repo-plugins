@@ -51,13 +51,6 @@ URL_SEARCH_VIDEOS = URL_ROOT + '/recherche/18/?p=%s&q=%s'
 # Page, Query
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
 CATEGORIES = {
     'Les émissions': URL_ROOT + '/video/',
     'Videos Films (Bandes-Annonces, Extraits, ...)':
@@ -70,7 +63,8 @@ CATEGORIES = {
 CATEGORIES_LANGUAGE = {'VF': 'version-0/', 'VO': 'version-1/'}
 
 
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     for category_name, category_url in list(CATEGORIES.items()):
 

@@ -43,6 +43,28 @@ from resources.lib.addon_utils import get_item_label, get_item_media_path
 
 
 FAV_JSON_FP = os.path.join(Script.get_info('profile'), "favourites.json")
+FAV_FORMAT_VERSION = 1
+
+
+def migrate_fav_format(current_fav_format, fav_dict):
+    """Migrate favourites dict in last format version
+
+    Args:
+        current_fav_format (int): Current format version of the favourites json file
+        fav_dict (dict): Favourites dict in old format
+    Returns:
+        dict: Updated favourites dict in latest format version
+    """
+    Script.log('Migrate favourites dict in last format version')
+    new_dict = fav_dict
+    if current_fav_format == 0:
+        items = fav_dict
+        new_dict = {
+            'items': items,
+            'format_version': 1
+        }
+        current_fav_format = 1
+    return new_dict
 
 
 def get_fav_dict_from_json():
@@ -52,15 +74,25 @@ def get_fav_dict_from_json():
         dict: Favourites dict
     """
 
+    def get_fresh_dict():
+        return {
+            'items': {},
+            'format_version': FAV_FORMAT_VERSION
+        }
+
     if not xbmcvfs.exists(FAV_JSON_FP):
-        return {}
+        return get_fresh_dict()
     try:
         with open(FAV_JSON_FP) as f:
-            return json.load(f)
+            fav_dict = json.load(f)
+            current_fav_format = fav_dict.get('format_version', 0)
+            if current_fav_format < FAV_FORMAT_VERSION:
+                fav_dict = migrate_fav_format(current_fav_format, fav_dict)
+            return fav_dict
     except Exception:
         Script.log('Failed to load favourites json data')
         xbmcvfs.delete(FAV_JSON_FP)
-        return {}
+        return get_fresh_dict()
 
 
 def save_fav_dict_in_json(fav_dict):
@@ -185,7 +217,7 @@ def add_item_to_favourites(plugin, is_playable=False, item_infos={}):
     fav_dict = get_fav_dict_from_json()
     item_dict['params']['order'] = len(fav_dict)
 
-    fav_dict[item_hash] = item_dict
+    fav_dict['items'][item_hash] = item_dict
 
     # Save json file with new fav_dict
     save_fav_dict_in_json(fav_dict)
@@ -209,9 +241,9 @@ def rename_favourite_item(plugin, item_hash):
     if item_label == '':
         return False
     fav_dict = get_fav_dict_from_json()
-    fav_dict[item_hash]['label'] = item_label
-    fav_dict[item_hash]['params']['_title_'] = item_label
-    fav_dict[item_hash]['info']['title'] = item_label
+    fav_dict['items'][item_hash]['label'] = item_label
+    fav_dict['items'][item_hash]['params']['_title_'] = item_label
+    fav_dict['items'][item_hash]['info']['title'] = item_label
     save_fav_dict_in_json(fav_dict)
     xbmc.executebuiltin('Container.Refresh()')
 
@@ -226,12 +258,12 @@ def remove_favourite_item(plugin, item_hash):
     """
 
     fav_dict = get_fav_dict_from_json()
-    del fav_dict[item_hash]
+    del fav_dict['items'][item_hash]
 
     # We need to fix the order param
     # in order to not break the move up/down action
     menu = []
-    for item_hash, item_dict in list(fav_dict.items()):
+    for item_hash, item_dict in list(fav_dict['items'].items()):
         item = (item_dict['params']['order'], item_hash)
 
         menu.append(item)
@@ -240,7 +272,7 @@ def remove_favourite_item(plugin, item_hash):
     for k in range(0, len(menu)):
         item = menu[k]
         item_hash = item[1]
-        fav_dict[item_hash]['params']['order'] = k
+        fav_dict['items'][item_hash]['params']['order'] = k
     save_fav_dict_in_json(fav_dict)
     xbmc.executebuiltin('Container.Refresh()')
 
@@ -262,10 +294,10 @@ def move_favourite_item(plugin, direction, item_hash):
 
     fav_dict = get_fav_dict_from_json()
     item_to_move_id = item_hash
-    item_to_move_order = fav_dict[item_hash]['params']['order']
+    item_to_move_order = fav_dict['items'][item_hash]['params']['order']
 
     menu = []
-    for item_hash, item_dict in list(fav_dict.items()):
+    for item_hash, item_dict in list(fav_dict['items'].items()):
         item = (item_dict['params']['order'], item_hash, item_dict)
 
         menu.append(item)
@@ -278,8 +310,8 @@ def move_favourite_item(plugin, direction, item_hash):
             item_to_swap = menu[k + offset]
             item_to_swap_order = item_to_swap[0]
             item_to_swap_id = item_to_swap[1]
-            fav_dict[item_to_move_id]['params']['order'] = item_to_swap_order
-            fav_dict[item_to_swap_id]['params']['order'] = item_to_move_order
+            fav_dict['items'][item_to_move_id]['params']['order'] = item_to_swap_order
+            fav_dict['items'][item_to_swap_id]['params']['order'] = item_to_move_order
             save_fav_dict_in_json(fav_dict)
             xbmc.executebuiltin('Container.Refresh()')
             break

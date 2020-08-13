@@ -46,15 +46,8 @@ SHOW_INFO_FTV = 'https://api-embed.webservices.francetelevisions.fr/v2/key/%s'
 # idEmbeded
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root_taratata(plugin, item_id)
-
-
 @Route.register
-def root_taratata(plugin, item_id, **kwargs):
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     resp = urlquick.get(URL_ROOT(''))
     root = resp.parse("ul", attrs={"class": "nav navbar-nav"})

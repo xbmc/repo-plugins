@@ -30,92 +30,82 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'telecinco': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/es/mitele:get_live_url',
         'label': 'Telecinco',
         'thumb': 'channels/es/telecinco.png',
         'fanart': 'channels/es/telecinco_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
         'enabled': True,
         'order': 1
     },
     'cuatro': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/es/mitele:get_live_url',
         'label': 'Cuatro',
         'thumb': 'channels/es/cuatro.png',
         'fanart': 'channels/es/cuatro_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
         'enabled': True,
         'order': 2
     },
     'fdf': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/es/mitele:get_live_url',
         'label': 'Factoria de Ficcion',
         'thumb': 'channels/es/fdf.png',
         'fanart': 'channels/es/fdf_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
         'enabled': True,
         'order': 3
     },
     'boing': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/es/mitele:get_live_url',
         'label': 'Boing',
         'thumb': 'channels/es/boing.png',
         'fanart': 'channels/es/boing_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
         'enabled': True,
         'order': 4
     },
     'energy': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/es/mitele:get_live_url',
         'label': 'Energy TV',
         'thumb': 'channels/es/energy.png',
         'fanart': 'channels/es/energy_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
         'enabled': True,
         'order': 5
     },
     'divinity': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/es/mitele:get_live_url',
         'label': 'Divinity',
         'thumb': 'channels/es/divinity.png',
         'fanart': 'channels/es/divinity_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
         'enabled': True,
         'order': 6
     },
     'bemad': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/es/mitele:get_live_url',
         'label': 'Be Mad',
         'thumb': 'channels/es/bemad.png',
         'fanart': 'channels/es/bemad_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
         'enabled': True,
         'order': 7
     },
     'realmadridtv': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/es/realmadridtv:get_live_url',
         'label': 'Realmadrid TV (' + utils.ensure_unicode(Script.setting['realmadridtv.language']) + ')',
         'thumb': 'channels/es/realmadridtv.png',
         'fanart': 'channels/es/realmadridtv_fanart.jpg',
-        'module': 'resources.lib.channels.es.realmadridtv',
         'available_languages': ['EN', 'ES'],
         'enabled': True,
         'order': 8
     },
     'paramountchannel_es': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/es/paramountchannel_es:get_live_url',
         'label': 'Paramount Channel (ES)',
         'thumb': 'channels/es/paramountchannel_es.png',
         'fanart': 'channels/es/paramountchannel_es_fanart.jpg',
-        'module': 'resources.lib.channels.es.paramountchannel_es',
         'enabled': True,
         'order': 16
     }

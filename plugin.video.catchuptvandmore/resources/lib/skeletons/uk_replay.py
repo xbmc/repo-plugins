@@ -30,82 +30,73 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'blaze': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/uk/blaze:list_categories',
         'label': 'Blaze',
         'thumb': 'channels/uk/blaze.png',
         'fanart': 'channels/uk/blaze_fanart.jpg',
-        'module': 'resources.lib.channels.uk.blaze',
         'enabled': True,
         'order': 1
     },
     'skynews': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/uk/sky:list_categories',
         'label': 'Sky News',
         'thumb': 'channels/uk/skynews.png',
         'fanart': 'channels/uk/skynews_fanart.jpg',
-        'module': 'resources.lib.channels.uk.sky',
         'enabled': True,
         'order': 6
     },
     'skysports': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/uk/sky:list_categories',
         'label': 'Sky Sports',
         'thumb': 'channels/uk/skysports.png',
         'fanart': 'channels/uk/skysports_fanart.jpg',
-        'module': 'resources.lib.channels.uk.sky',
         'enabled': True,
         'order': 7
     },
     'stv': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/uk/stv:list_programs',
         'label': 'STV',
         'thumb': 'channels/uk/stv.png',
         'fanart': 'channels/uk/stv_fanart.jpg',
-        'module': 'resources.lib.channels.uk.stv',
         'enabled': True,
         'order': 8
     },
     'questod': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/uk/questod:list_categories',
         'label': 'Quest OD',
         'thumb': 'channels/uk/questod.png',
         'fanart': 'channels/uk/questod_fanart.jpg',
-        'module': 'resources.lib.channels.uk.questod',
         'enabled': True,
         'order': 9
     },
     'uktvplay': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/uk/uktvplay:list_categories',
         'label': 'UKTV Play',
         'thumb': 'channels/uk/uktvplay.png',
         'fanart': 'channels/uk/uktvplay_fanart.jpg',
-        'module': 'resources.lib.channels.uk.uktvplay',
         'enabled': True,
         'order': 17
     },
     'fiveusa': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/uk/my5:list_programs',
         'label': '5USA',
         'thumb': 'channels/uk/fiveusa.png',
         'fanart': 'channels/uk/fiveusa_fanart.jpg',
-        'module': 'resources.lib.channels.uk.my5',
         'enabled': False,
         'order': 20
     },
     'bristoltv': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/uk/bristoltv:list_categories',
         'label': 'Bristol TV',
         'thumb': 'channels/uk/bristoltv.png',
         'fanart': 'channels/uk/bristoltv_fanart.jpg',
-        'module': 'resources.lib.channels.uk.bristoltv',
         'enabled': True,
         'order': 21
     }

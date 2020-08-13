@@ -36,14 +36,8 @@ from resources.lib.menu_utils import item_post_treatment
 URL_ROOT = utils.urljoin_partial('https://www.tetesaclaques.tv')
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     resp = urlquick.get(URL_ROOT(''))
     root = resp.parse("li", attrs={"id": "menu-videos"})

@@ -30,37 +30,33 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'tbd': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/us/tbd:list_programs',
         'label': 'TBD',
         'thumb': 'channels/us/tbd.png',
         'fanart': 'channels/us/tbd_fanart.jpg',
-        'module': 'resources.lib.channels.us.tbd',
         'enabled': True,
         'order': 2
     },
     'nycmedia': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/us/nycmedia:list_programs',
         'label': 'NYC Media',
         'thumb': 'channels/us/nycmedia.png',
         'fanart': 'channels/us/nycmedia_fanart.jpg',
-        'module': 'resources.lib.channels.us.nycmedia',
         'enabled': True,
         'order': 3
     },
     'abcnews': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/us/abcnews:list_programs',
         'label': 'ABC News',
         'thumb': 'channels/us/abcnews.png',
         'fanart': 'channels/us/abcnews_fanart.jpg',
-        'module': 'resources.lib.channels.us.abcnews',
         'enabled': True,
         'order': 4
     }

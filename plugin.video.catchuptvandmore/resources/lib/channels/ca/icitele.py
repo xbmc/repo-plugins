@@ -73,13 +73,6 @@ LIVE_ICI_TELE_REGIONS = {
 }
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_programs(plugin, item_id)
-
-
 @Route.register
 def list_programs(plugin, item_id, **kwargs):
 
@@ -159,12 +152,8 @@ def get_video_url(plugin,
     return final_video_url
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     resp2 = urlquick.get(
         URL_CLIENT_VALUE,

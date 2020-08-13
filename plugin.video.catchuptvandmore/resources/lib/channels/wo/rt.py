@@ -63,13 +63,6 @@ CATEGORIES_VIDEOS_FR = {
 CATEGORIES_VIDEOS_EN = {URL_ROOT_EN + '/shows/': 'Shows'}
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """
@@ -354,10 +347,6 @@ def get_video_url(plugin,
             return download.download_video(final_url)
 
         return final_url
-
-
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, **kwargs)
 
 
 @Resolver.register

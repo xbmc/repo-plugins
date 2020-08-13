@@ -42,10 +42,6 @@ URL_LIVE_API = 'http://%s.euronews.com/api/watchlive.json'
 DESIRED_LANGUAGE = Script.setting['euronews.language']
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, **kwargs)
-
-
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
     final_language = kwargs.get('language', Script.setting['euronews.language'])

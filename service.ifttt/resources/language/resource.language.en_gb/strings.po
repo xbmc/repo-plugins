@@ -1,0 +1,65 @@
+# Kodi Media Center language file
+# Addon Name: BP Film
+# Addon id: plugin.video.bp
+# Addon Provider: fraser
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30100"
+msgid "IFTTT"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Enter your IFTTT event names, seperate multiple with ,"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Event Start:"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Event Resume:"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Event Pause:"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Event Stop:"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30201"
+msgid "IFTTT defaults as https://maker.IFTTT.com/trigger/{event}/with/key/{key}"
+msgstr ""
+
+msgctxt "#30202"
+msgid "IFTTT Key:"
+msgstr ""
+
+msgctxt "#30203"
+msgid "IFTTT Url:"
+msgstr ""
+
+msgctxt "#30204"
+msgid "IFTTT Path:"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Log Level"
+msgstr ""

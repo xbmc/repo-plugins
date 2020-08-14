@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<!-- 
+    This language file
+-->
+
+<strings>
+    
+  <!-- English -->
+  
+  <!-- Script Settings -->
+    <string id="30100">IFTTT</string>
+	<string id="30101">Enter your IFTTT event names, seperate multiple with ,</string>
+	<string id="30102">Event Start:</string>
+	<string id="30103">Event Resume:</string>
+	<string id="30104">Event Pause:</string>
+	<string id="30105">Event Stop:</string>
+    <string id="30200">Advanced</string>
+	<string id="30201">IFTTT defaults as https://maker.IFTTT.com/trigger/{event}/with/key/{key}</string>
+	<string id="30202">IFTTT Key:</string>
+	<string id="30203">IFTTT Url:</string>
+	<string id="30204">IFTTT Path:</string>
+	<string id="30205">Log Level:</string>
+</strings>

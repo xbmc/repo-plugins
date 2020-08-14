@@ -1,0 +1,17 @@
+<settings>
+	<category label="30100">
+		<setting type="lsep" label="30101"/>
+		<setting id="eventStart" type="text" label="30102" default="LightsOff" />
+		<setting id="eventResume" type="text" label="30103" default="LightsOff" />
+		<setting id="eventPause" type="text" label="30104" default="LightsOn" />
+		<setting id="eventStop" type="text" label="30105" default="LightsOn" />
+	</category>
+	
+	<category label="30200">
+		<setting type="lsep" label="30201"/>
+		<setting id="iftttKey" type="text" label="30202" default="b3MK_abcdefghijklmnopq" />
+		<setting id="iftttUrl" type="text" label="30203" default="https://maker.ifttt.com/trigger/"/>
+		<setting id="iftttPath" type="text" label="30204" default="/with/key/"/>
+		<setting id="log_level" type="enum" label="30205" option="hidden" values="NONE|ERROR|INFO|DEBUG" default="1"/>
+	</category>
+</settings>

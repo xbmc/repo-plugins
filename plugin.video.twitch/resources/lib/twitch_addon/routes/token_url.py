@@ -22,6 +22,6 @@ def route(api):
     except:
         short_url = None
     prompt_url = short_url if short_url else i18n('authorize_url_fail')
-    result = kodi.Dialog().ok(heading=i18n('authorize_heading'), line1=i18n('authorize_message'),
-                              line2=' %s' % prompt_url)
+    result = kodi.Dialog().ok(i18n('authorize_heading'),
+                              i18n('authorize_message') + '[CR]%s' % prompt_url)
     kodi.show_settings()

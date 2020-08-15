@@ -48,6 +48,7 @@ def route(api, seek_time=0, channel_id=None, video_id=None, slug=None, ask=False
         videos = item_dict = name = None
         seek_time = int(seek_time)
         is_live = False
+        result = None
         if video_id:
             seek_id, _seek_time = _get_seek()
             if seek_id == video_id:
@@ -154,6 +155,18 @@ def route(api, seek_time=0, channel_id=None, video_id=None, slug=None, ask=False
                 log_utils.log('Attempting playback using quality |%s| @ |%s|' % (quality_label, play_url), log_utils.LOGDEBUG)
                 item_dict['path'] = play_url
                 playback_item = kodi.create_item(item_dict, add=False)
+                stream_info = {
+                    'video': {},
+                    'audio': {
+                        'channels': '2'
+                    }
+                }
+                if result:
+                    language = result.get(Keys.CHANNEL, {}).get(Keys.BROADCASTER_LANGUAGE)
+                    if language:
+                        stream_info['audio']['language'] = language
+                playback_item.addStreamInfo('video', stream_info.get('video'))
+                playback_item.addStreamInfo('audio', stream_info.get('audio'))
                 if not clip:
                     try:
                         playback_item.setContentLookup(False)

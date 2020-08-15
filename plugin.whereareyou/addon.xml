@@ -1,15 +1,18 @@
-<addon id="plugin.whereareyou" name="Where Are You" provider-name="pkscout" version="0.2.1">
+<addon id="plugin.whereareyou" name="Where Are You" provider-name="pkscout" version="0.4.0">
 	<requires>
 		<import addon="xbmc.python" version="2.26.0" />
 		<import addon="script.module.kodi-six" version="0.0.3" />
+		<import addon="script.module.requests" version="2.22.0" />
+		<import addon="script.module.websocket" version="0.5.7" />
 	</requires>
 	<extension library="default.py" point="xbmc.python.pluginsource">
 		<provides>executable</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<news>
-v.0.2.0
-- initial public version
+v.0.4.0
+- added ability to open external apps using Harmony Hub
+- fix for looping dialog box if called from home window
 		</news>
 		<assets>
 			<icon>icon.png</icon>

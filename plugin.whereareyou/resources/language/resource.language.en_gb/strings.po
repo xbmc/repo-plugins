@@ -1,0 +1,94 @@
+# plugin.whereareyou language file
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+#: Settings Heading
+msgctxt "#32000"
+msgid "General"
+msgstr ""
+
+#: Settings
+msgctxt "#32100"
+msgid "Enable debug logging"
+msgstr ""
+
+#: Settings
+msgctxt "#32101"
+msgid "Edit mappings"
+msgstr ""
+
+#: Settings
+msgctxt "#32102"
+msgid "Enable Harmony hub control"
+msgstr ""
+
+#: Settings
+msgctxt "#32103"
+msgid "Harmony hub IP address"
+msgstr ""
+
+#: Settings
+msgctxt "#32104"
+msgid "Enable advanced Harmony hub control"
+msgstr ""
+
+#: Settings
+msgctxt "#32105"
+msgid "Timeout (in seconds)"
+msgstr ""
+
+#: Settings
+msgctxt "#32106"
+msgid "Delay between remote commands (in milliseconds)"
+msgstr ""
+
+
+#: Dialog Heading
+msgctxt "#32200"
+msgid "Select action"
+msgstr ""
+
+#: Dialog Heading
+msgctxt "#32201"
+msgid "Title or message string to match"
+msgstr ""
+
+#: Dialog Heading
+msgctxt "#32202"
+msgid "Additional commands to run"
+msgstr ""
+
+#: Dialog Heading
+msgctxt "#32203"
+msgid "Enter Harmony activity"
+msgstr ""
+
+#: Dialog Heading
+msgctxt "#32204"
+msgid "Select mapping"
+msgstr ""
+
+#: Dialog
+msgctxt "#32300"
+msgid "Add mapping"
+msgstr ""
+
+#: Dialog
+msgctxt "#32301"
+msgid "Edit mapping"
+msgstr ""
+
+#: Dialog
+msgctxt "#32302"
+msgid "Delete mapping"
+msgstr ""
+
+#: Dialog
+msgctxt "#32303"
+msgid "Would you like to open the app?"
+msgstr ""
+
+

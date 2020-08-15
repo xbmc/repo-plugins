@@ -1,0 +1,96 @@
+# XBMC Media Center language file
+# Addon Name: CNET Podcasts
+# Addon id: plugin.video.cnet.podcasts
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-06-05 15:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "CNET Podcast Central"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "www.cnet.com/who-we-are/[CR]CNET shows you the exciting possibilities of how technology can enhance and enrich your life. We provide you with information, tools, and advice that help you decide what to buy and how to get the most out of your tech.\n    "
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "For bugs, requests or general questions visit the CNET Podcasts thread on the XBMC Video Add-ons forum."
+msgstr ""
+
+msgctxt "#30001"
+msgid "Audio"
+msgstr ""
+
+msgctxt "#30002"
+msgid "HD"
+msgstr ""
+
+msgctxt "#30003"
+msgid "SD"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Preferred playback type"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Default view mode for episodes"
+msgstr ""
+
+msgctxt "#30006"
+msgid "List"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Big list"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Thumbnail"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Media info"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Media info 2"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Media info 3"
+msgstr ""
+
+msgctxt "#30012"
+msgid "None"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Preferred type is not available"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Episode Info"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Error getting page: %s"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Only show All video category"
+msgstr ""

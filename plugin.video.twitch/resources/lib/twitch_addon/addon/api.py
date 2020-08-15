@@ -57,7 +57,7 @@ class Twitch:
                 log_utils.log('Error: Current OAuth token is invalid.', log_utils.LOGERROR)
                 return False
             else:
-                if token_check['token']['client_id'] == self.client_id:
+                if token_check['token']['client_id'] in (self.client_id, utils.get_client_id(default=True, old=True)):
                     if token_check['token']['authorization']:
                         token_scopes = token_check['token']['authorization']['scopes']
                         missing_scopes = [value for value in scopes if value not in token_scopes]
@@ -72,12 +72,19 @@ class Twitch:
                         return False
                 else:
                     matches_default = token_check['token']['client_id'] == utils.get_client_id(default=True)
-                    message = 'Token created using default Client-ID |%s|' % str(matches_default)
+                    matches_old = token_check['token']['client_id'] == utils.get_client_id(default=True, old=True)
+                    message = 'Token created using %s Client-ID |%s|' % ('default' if matches_default else 'old' if matches_old else 'none', str(matches_default))
                     log_utils.log('Error: OAuth Client-ID mismatch: %s' % message, log_utils.LOGERROR)
                     if matches_default:
                         result = kodi.Dialog().ok(heading=i18n('oauth_token'), line1=i18n('client_id_mismatch'), line2=i18n('ok_to_resolve'))
                         utils.clear_client_id()
                         self.client_id = utils.get_client_id(default=True)
+                        self.queries.CLIENT_ID = self.client_id
+                        self.client = oauth.clients.MobileClient(self.client_id, self.client_secret)
+                    elif matches_old:
+                        result = kodi.Dialog().ok(heading=i18n('oauth_token'), line1=i18n('client_id_mismatch'), line2=i18n('ok_to_resolve'))
+                        utils.clear_client_id()
+                        self.client_id = utils.get_client_id(default=True, old=True)
                         self.queries.CLIENT_ID = self.client_id
                         self.client = oauth.clients.MobileClient(self.client_id, self.client_secret)
                     else:

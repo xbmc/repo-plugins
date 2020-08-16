@@ -21,7 +21,7 @@ from datetime import datetime
 
 from .common import kodi, json_store
 from .strings import STRINGS
-from .constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT, COLORS, Keys
+from .constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT, COLORS, Keys, OLD_CLIENT_ID
 from .search_history import StreamsSearchHistory, ChannelsSearchHistory, GamesSearchHistory, IdUrlSearchHistory
 
 from twitch.api.parameters import Boolean, Period, ClipPeriod, Direction, Language, SortBy, VideoSort
@@ -123,7 +123,7 @@ def get_redirect_uri():
         return kodi.decode_utf8(REDIRECT_URI)
 
 
-def get_client_id(default=False):
+def get_client_id(default=False, old=False):
     settings_id = kodi.get_setting('oauth_clientid')
     stripped_id = settings_id.strip()
     if settings_id != stripped_id:
@@ -132,7 +132,10 @@ def get_client_id(default=False):
     if settings_id and not default:
         return kodi.decode_utf8(settings_id)
     else:
-        return kodi.decode_utf8(b64decode(CLIENT_ID))
+        if old:
+            return kodi.decode_utf8(b64decode(OLD_CLIENT_ID))
+        else:
+            return kodi.decode_utf8(b64decode(CLIENT_ID))
 
 
 def get_private_client_id():

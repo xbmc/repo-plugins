@@ -1,3 +1,9 @@
+2.5.2
+[add] Add additional stream properties at playback
+[fix] Get OAuth token on Kodi 19
+[upd] Use new settings format on Kodi 19
+[upd] Update material to reflect repository changes
+
 2.5.1
 [fix] encoding issue causing streams/videos/live notifications to be inaccessible with some languages
 

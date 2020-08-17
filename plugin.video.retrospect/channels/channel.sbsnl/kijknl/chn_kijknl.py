@@ -736,7 +736,8 @@ class Channel(chn_class.Channel):
                 stream = part.append_media_stream(url, bitrate)
 
                 # fetch the authentication token:
-                url = self.__get_api_persisted_url("drmToken", "634c83ae7588a877e2bb67d078dda618cfcfc70ac073aef5e134e622686c0bb6", variables={})
+                # url = self.__get_api_persisted_url("drmToken", "634c83ae7588a877e2bb67d078dda618cfcfc70ac073aef5e134e622686c0bb6", variables={})
+                url = self.__get_api_query_url("drmToken", "{token,expiration}")
                 token_data = UriHandler.open(url, proxy=self.proxy, no_cache=True)
                 token_json = JsonHelper(token_data)
                 token = token_json.get_value("data", "drmToken", "token")
@@ -796,7 +797,7 @@ class Channel(chn_class.Channel):
         result = "query{%s%s}" % (query, fields)
         return "https://graph.kijk.nl/graphql?query={}".format(HtmlEntityHelper.url_encode(result))
 
-    def __get_api_persisted_url(self, operation, hash_value, variables):
+    def __get_api_persisted_url(self, operation, hash_value, variables):  # NOSONAR
         """ Generates a GraphQL url
 
         :param str operation:   The operation to use

@@ -584,15 +584,21 @@ class Channel(chn_class.Channel):
         window_id = "{}|{}".format(
             binascii.hexlify(os.urandom(16)).decode(), binascii.hexlify(os.urandom(16)).decode())
 
+        fe = ["DNT:1", "L:en-NL", "D:24", "PR:1", "S:1920,1080", "AS:1920,1040", "TO:-120",
+              "SS:true", "LS:true", "IDB:true", "B:false", "ODB:true", "CPUC:unknown",
+              "PK:Win32", "CFP:-1524337346", "FR:false", "FOS:false", "FB:false", "JSF:", "P:",
+              "T:1,false,false", "H:12", "SWF:false"]
+        fs_murmur_hash = "d6530c9b538110be929394f85bfad515"
+
         data = [
             {"key": "api_type", "value": "js"},
-            {"key": "p", "value": 1},  # constant
-            {"key": "f", "value": device_id},  # browser instance ID
-            {"key": "n", "value": b64_now},  # base64 encoding of time.now()
-            {"key": "wh", "value": window_id},  # WindowHandle ID
-            # {"key": "fe", "value": fe},                     # browser properties
-            # {"key": "ife_hash", "value": fs_murmur_hash},   # hash of browser properties
-            {"key": "cs", "value": 1},  # canvas supported 0/1
+            {"key": "p", "value": 1},                       # constant
+            {"key": "f", "value": device_id},               # browser instance ID
+            {"key": "n", "value": b64_now},                 # base64 encoding of time.now()
+            {"key": "wh", "value": window_id},              # WindowHandle ID
+            {"key": "fe", "value": fe},                     # browser properties
+            {"key": "ife_hash", "value": fs_murmur_hash},   # hash of browser properties
+            {"key": "cs", "value": 1},                      # canvas supported 0/1
             {"key": "jsbd", "value": "{\"HL\":41,\"NCE\":true,\"DMTO\":1,\"DOTO\":1}"}
         ]
         data_value = JsonHelper.dump(data)

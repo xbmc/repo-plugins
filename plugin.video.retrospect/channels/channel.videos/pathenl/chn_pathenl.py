@@ -38,8 +38,10 @@ class Channel(chn_class.Channel):
 
             self.baseUrl = "https://connect.pathe.nl/v1"
             # set the default headers
-            self.httpHeaders = {"X-Client-Token": "2d1411a8ec9842988e2700a1e3180dd3",
-                                "Accept": "application/json"}
+            self.httpHeaders = {
+                "X-Client-Token": "03f9f5feb3734c94831a972c932a7007",
+                "Accept": "application/json"
+            }
             self.mainListUri = "https://connect.pathe.nl/v1/cinemas"
 
             self._add_data_parser("https://connect.pathe.nl/v1/cinemas", json=True,

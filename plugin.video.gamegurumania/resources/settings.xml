@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting id="onlyshowallvideoscategory" 		label="30610" type="bool" default="false"/>
+</settings>

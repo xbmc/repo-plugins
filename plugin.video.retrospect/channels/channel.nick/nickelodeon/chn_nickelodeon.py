@@ -183,7 +183,9 @@ class Channel(chn_class.Channel):
         item = MediaItem(name, url)
         item.description = meta.get("description")
         item.isGeoLocked = True
-        item.thumb = result_set.get("media", {}).get("image", {}).get("url")
+        media_info = result_set.get("media")
+        if media_info is not None:
+            item.thumb = media_info.get("image", {}).get("url")
         return item
 
     def create_json_season_item(self, result_set):

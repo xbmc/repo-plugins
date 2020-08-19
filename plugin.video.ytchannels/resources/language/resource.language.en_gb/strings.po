@@ -108,6 +108,14 @@ msgctxt "#30022"
 msgid "A YouTube API Key is required for this addon to work, please enter your API key now."
 msgstr ""
 
+msgctxt "#30023"
+msgid "Move Up"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Move Down"
+msgstr ""
+
 msgctxt "#30099"
 msgid "Youtube Channels"
 msgstr ""

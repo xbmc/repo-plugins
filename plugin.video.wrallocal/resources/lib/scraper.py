@@ -55,14 +55,15 @@ class myAddon(t1mAddon):
                      'plot': UNESCAPE(plot)}
           dtstr = dtstr.upper().replace('.','')
           z = dtstr.split(' ')
-          if z[1][1] == ',':
-              z[1] = ''.join(['0',z[1]])
-          if z[3][1] == ':':
-              z[3] = ''.join(['0',z[3]])
-          dtstr = ' '.join(z[0:-1])
-          aired = datetime(*(time.strptime(dtstr, "%B %d, %Y %I:%S %p")[0:6]))
-          infoList['aired'] = aired.strftime("%Y-%m-%d")
-          infoList['FirstAired'] = infoList['aired']
+          if len(z) >= 4:
+              if z[1][1] == ',':
+                  z[1] = ''.join(['0',z[1]])
+              if z[3][1] == ':':
+                  z[3] = ''.join(['0',z[3]])
+              dtstr = ' '.join(z[0:-1])
+              aired = datetime(*(time.strptime(dtstr, "%B %d, %Y %I:%S %p")[0:6]))
+              infoList['aired'] = aired.strftime("%Y-%m-%d")
+              infoList['FirstAired'] = infoList['aired']
           ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
       if nexturl is not None:
           url = nexturl.group(1)

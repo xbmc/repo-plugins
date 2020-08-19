@@ -1,0 +1,46 @@
+v1.0.8 (2018-01-20) :
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+
+v1.0.7 (2017-07-12) :
+- added listitem.setInfo video for Kodi 18 and up
+- added sorting
+- added context item episode info
+- using requests
+
+v1.0.6 (2017-03-12) :
+- changed addon debugging info to kodi debugging info
+- using po-files
+- fixed url in addon.xml as per request
+- changed text from xbmc to kodi
+
+v1.0.5 (2016-03-12) :
+- changed the listing and playing of videos
+- the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
+- updated to latest requirements for a Kodi-addon
+- added fanart-blurred
+- added 'refresh' in contextual menu
+
+v1.0.4 (2015-08-15) :
+- updated youtube dependency version
+- added some utf8 stuff
+
+v1.0.3 (2014-09-06) :
+- fixed GNU licence
+- added youtube as dependency
+
+v1.0.2 (2013-07-03) :
+- using different page to get the video items
+- removed the 'losse items' category 
+- the plugin now starts by displaying the available video's
+- using hi res thumbnails
+- using hi res background
+- using different icon
+- added beautiful soup as dependency
+- added dutch strings
+
+v1.0.1 (2013-04-10) :
+- added optional fields addon.xml
+
+v1.0.0 (2013-04-10) :
+- initial version

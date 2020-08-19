@@ -1,0 +1,196 @@
+# XBMC Media Center language file
+# Addon Name: GameKings
+# Addon id: plugin.video.gamekings
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-05-29 15:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Watch videos from Gamekings.tv (dutch)"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch videos from Gamekings.tv (dutch)"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "For bugs, requests or general questions visit the Gamekings.tv thread on the Kodi forum."
+msgstr ""
+
+msgctxt "#30000"
+msgid "Videos"
+msgstr ""
+
+msgctxt "#30001"
+msgid "TV Episodes"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Gamekings Extra"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Trailers"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Search in Videos"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Premium Videos"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Videos on Frontpage"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Version"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Author"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Website"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Base Url"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Gamekings Premium Member"
+msgstr ""
+
+msgctxt "#30105"
+msgid "User Name"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Video player"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Auto"
+msgstr ""
+
+msgctxt "#30202"
+msgid "DVDPlayer"
+msgstr ""
+
+msgctxt "#30203"
+msgid "MPlayer"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Episode"
+msgstr ""
+
+msgctxt "#30300"
+msgid "Maximum Video quality"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Standard"
+msgstr ""
+
+msgctxt "#30302"
+msgid "High"
+msgstr ""
+
+msgctxt "#30400"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#30021"
+msgid "4K"
+msgstr ""
+
+msgctxt "#30022"
+msgid "1080P"
+msgstr ""
+
+msgctxt "#30023"
+msgid "720P"
+msgstr ""
+
+msgctxt "#30024"
+msgid "480P"
+msgstr ""
+
+msgctxt "#30025"
+msgid "360P"
+msgstr ""
+
+msgctxt "#30501"
+msgid "%s to %s"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Page %u"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Next page"
+msgstr ""
+
+msgctxt "#30504"
+msgid "Getting video location..."
+msgstr ""
+
+msgctxt "#30505"
+msgid "No video found."
+msgstr ""
+
+msgctxt "#30506"
+msgid "Error playing media file."
+msgstr ""
+
+msgctxt "#30507"
+msgid "Error getting page: %s"
+msgstr ""
+
+msgctxt "#30601"
+msgid "Login has failed for this Premium video. In settings "
+msgstr ""
+
+msgctxt "#30602"
+msgid "enter the correct username and password. Or turn off"
+msgstr ""
+
+msgctxt "#30603"
+msgid "the Gamekings-Premium-membership-switch if you are not a member."
+msgstr ""
+
+msgctxt "#30604"
+msgid "Login Failed: %s."
+msgstr ""
+
+msgctxt "#30605"
+msgid "Sorry. You must be a Premium member to see this video."
+msgstr ""
+
+msgctxt "#30610"
+msgid "Only show Videos category"
+msgstr ""
+
+msgctxt "#30611"
+msgid "Start the Kodi twitch video addon and go to the Gamekings channel to see the live stream."
+msgstr ""

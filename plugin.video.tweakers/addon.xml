@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon 
+	id="plugin.video.tweakers" 
+	name="Tweakers" 
+	version="1.1.10+matrix.1"
+	provider-name="Skipmode A1">
+  <requires>
+    <import addon="xbmc.python"                     version="3.0.0"/>
+	<import addon="script.module.beautifulsoup4"    version="4.3.2"/>
+    <import addon="script.module.requests"          version="2.4.3"/>
+    <import addon="script.module.future"            version="0.16.0.1"/>
+  	<import addon="script.module.html5lib"          version="0.999.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" 	library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	<summary lang="en_GB">Watch tech videos from Tweakers.net (dutch)</summary>
+	<description lang="en_GB">Watch tech videos from Tweakers.net (dutch)</description>
+	<disclaimer lang="en_GB">For bugs, requests or general questions visit the tweakers.net thread on the Kodi forum.</disclaimer>
+	<summary lang="nl_NL">Bekijk technologie videos van Tweakers.net (dutch)</summary>
+	<description lang="nl_NL">Bekijk technologie videos van Tweakers.net (dutch)</description>
+	<disclaimer lang="nl_NL">Bugs of andere feedback op deze plugin kan geplaatst worden in de Tweakers.net thread op het Kodi forum.</disclaimer>
+    <language>nl</language>
+	<license>GPL-2.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=167812</forum>
+    <website>https://www.tweakers.net</website>
+    <source>https://github.com/skipmodea1/plugin.video.tweakers.python3</source>
+  	<platform>all</platform>
+    <news>v1.1.10 (2018-10-01)
+    - removing non-ascii characters in title in parameters to prevent UnicodeDecodeError: 'ascii' codec can't decode ...
+    The error occured when doing urllib.parse.parse_qs of the parameters
+    - using youtube now (website change)
+    - removed video quality setting as the youtube addon is used
+    </news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

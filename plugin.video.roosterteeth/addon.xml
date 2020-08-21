@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.roosterteeth"
+       name="Rooster Teeth"
+       version="1.5.0+matrix.1"
+       provider-name="Skipmode A1">
+  <requires>
+    <import addon="xbmc.python"                     version="3.0.0"/>
+    <import addon="script.module.beautifulsoup4"    version="4.3.2"/>
+    <import addon="script.module.requests"          version="2.4.3"/>
+    <import addon="script.module.future"            version="0.0.1"/>
+  	<import addon="script.module.html5lib"          version="0.999.0"/>
+  	<import addon="inputstream.adaptive"            version="2.3.17"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Watch funny videos from RoosterTeeth.com</summary>
+      <description lang="en_GB">Watch funny videos from RoosterTeeth.com</description>
+      <disclaimer lang="en_GB">For bugs, requests or general questions visit the Roosterteeth.com thread on the Kodi forum</disclaimer>
+    <language>en</language>
+    <platform>all</platform>
+	<license>GPL-2.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=235071</forum>
+    <website>https://roosterteeth.com</website>
+    <source>https://github.com/skipmodea1/plugin.video.roosterteeth.python3</source>
+    <news>1.5.0 (2020-05-02)
+    - dynamic channels instead of hardcoded channels
+    - set initial sorting, changing the sort order in Kodi now seems to actually do something
+    - added channel shows
+    - changes due to sponsership to First membership change
+    </news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

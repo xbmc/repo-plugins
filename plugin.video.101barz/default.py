@@ -24,8 +24,8 @@ IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'reso
 PLUGIN_HANDLE = int(sys.argv[1])
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10115) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 COOKIES = {}
-DATE = "2020-01-15"
-VERSION = "1.1.0"
+DATE = "2020-08-20"
+VERSION = "1.1.1"
 
 APIURL = "https://api.bnnvara.nl/bff/graphql"
 HEADERSJSON = {'content-type': 'application/json'}

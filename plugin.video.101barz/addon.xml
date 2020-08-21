@@ -2,7 +2,7 @@
 <addon
 	id="plugin.video.101barz"
 	name="101barz"
-	version="1.1.0"
+	version="1.1.1"
 	provider-name="Skipmode A1">
     <requires>
         <import addon="xbmc.python"                     version="2.26.0"/>
@@ -30,12 +30,13 @@
         <source>https://github.com/skipmodea1/plugin.video.101barz</source>
         <email></email>
         <platform>all</platform>
-        <news>1.1.0 (2020-01-15)
-        - changes due to major website changes
+        <news>1.1.1 (2020-08-20)
+        - Marked addon BROKEN due to major website update. No idea how to fix it :(.
         </news>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
         </assets>
+        <broken>Marked addon BROKEN due to major website update</broken>
     </extension>
 </addon>

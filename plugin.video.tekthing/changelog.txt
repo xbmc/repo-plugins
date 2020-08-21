@@ -1,0 +1,22 @@
+v1.0.4 (2019-03-13)
+- fixed finding of videos
+- removing non-ascii characters in title in parameters to prevent UnicodeDecodeError: 'ascii' codec can't decode ...
+The error occured when doing urllib.parse.parse_qs of the parameters
+- removed youtube dependency
+
+v1.0.3 (2018-02-07)
+- not using xbmc.player.play anymore
+
+v1.0.2 (2018-01-21)
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+
+v1.0.1 (2017-03-12):
+- changed addon debugging info to kodi debugging info
+- using po-files
+- fixed url in addon.xml as per request
+- Removed lib directory
+- not using addon-name in xbmcaddon.Addon() anymore (thanks enen92)
+
+Version 1.0.0 (2015-08-06):
+- Initial version 

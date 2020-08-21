@@ -1,0 +1,149 @@
+# XBMC Media Center language file
+# Addon Name: Rooster Teeth
+# Addon id: plugin.video.roosterteeth
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-05-30 03:54+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Watch funny videos from RoosterTeeth.com"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch funny videos from RoosterTeeth.com"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "For bugs, requests or general questions visit the Roosterteeth.com thread on the Kodi forum"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Rooster Teeth First member"
+msgstr ""
+
+msgctxt "#30016"
+msgid "User Name"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Use Adaptive Inputstream (Video Quality chosen by that Addon)"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Maximum Video Quality"
+msgstr ""
+
+msgctxt "#30021"
+msgid "4K"
+msgstr ""
+
+msgctxt "#30022"
+msgid "1080P"
+msgstr ""
+
+msgctxt "#30023"
+msgid "720P"
+msgstr ""
+
+msgctxt "#30024"
+msgid "480P"
+msgstr ""
+
+msgctxt "#30025"
+msgid "360P"
+msgstr ""
+
+msgctxt "#30026"
+msgid "240P"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Getting video location..."
+msgstr ""
+
+msgctxt "#30101"
+msgid "Login has failed for this First video. In settings enter"
+msgstr ""
+
+msgctxt "#30102"
+msgid "the correct username and password. Or turn off the Rooster"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Teeth First-switch if you haven't signed up to First membership."
+msgstr ""
+
+msgctxt "#30104"
+msgid "Login Failed."
+msgstr ""
+
+msgctxt "#30105"
+msgid "Sorry. You must be a First member to see this video."
+msgstr ""
+
+msgctxt "#30106"
+msgid "Error getting page: %s"
+msgstr ""
+
+msgctxt "#30107"
+msgid "No video found."
+msgstr ""
+
+msgctxt "#30108"
+msgid "Error playing media file."
+msgstr ""
+
+msgctxt "#30109"
+msgid "Error loading Json file."
+msgstr ""
+
+msgctxt "#30110"
+msgid "Sorry. The video is not yet available for non-First members."
+msgstr ""
+
+msgctxt "#30111"
+msgid "In settings enter the correct username and password."
+msgstr ""
+
+msgctxt "#30120"
+msgid "Sorry. The login was successful, but the video is not yet available to non-First members."
+msgstr ""
+
+msgctxt "#30130"
+msgid "Sorry. The login was successful, but the video is only available for First members."
+msgstr ""
+
+msgctxt "#30200"
+msgid "Next page"
+msgstr ""
+
+msgctxt "#30318"
+msgid "First aired on"
+msgstr ""
+
+msgctxt "#30319"
+msgid "Latest episode date: "
+msgstr ""
+
+msgctxt "#30302"
+msgid "Series"
+msgstr ""
+
+msgctxt "#30321"
+msgid "Recently Added Episodes"
+msgstr ""
+

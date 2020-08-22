@@ -1,0 +1,48 @@
+v1.0.12 (2018-01-20)
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+
+v1.0.11 (2017-09-23)
+- removed looking for video dialogue
+- skipping items without videolink
+
+v1.0.10 (2017-06-18):
+- changed getting title due to website changes
+- refactored getting video- and thumbnail-url
+
+v1.0.9 (2017-04-08):
+- adjusted video detection to website changes
+
+v1.0.8 (2017-03-12):
+- fixed url in addon.xml as per request
+- changed 'xbmc' to 'kodi' in some text
+- not using addon-name in xbmcaddon.Addon() anymore (thanks enen92)
+- fixed po-file
+
+v1.0.7 (2016-09-21):
+- added support for youtube videos
+- changed addon debugging info to kodi debugging info
+- using po-files
+
+v1.0.6 (2016-03-12):
+- changed the listing and playing of videos
+- the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
+- updated to latest requirements for a Kodi-addon
+- added fanart-blurred
+- added 'refresh' in contextual menu
+- fix for next page in the result page of a search
+
+v1.0.5 (2015-09-05):
+- added support for uncut 18+ videos
+
+v1.0.4 (2015-08-15):
+- changed some utf-8 stuff
+
+v1.0.2/3 (2015-08-05):
+- fixed characterset bug when listing videos
+
+v1.0.1 (2015-07-01):
+- added Search
+
+v1.0.0 (2015-06-06):
+- initial version

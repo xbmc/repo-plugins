@@ -1,0 +1,73 @@
+# Kodi Media Center language file
+# Addon Name: Formula 1
+# Addon id: plugin.video.formula1
+# Addon Provider: jaylinski
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings - General
+msgctxt "#30001"
+msgid "General"
+msgstr ""
+
+msgctxt "#30010"
+msgid "General"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Items per page"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Video"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Streaming"
+msgstr ""
+
+# GUI - Root
+msgctxt "#30101"
+msgid "Videos"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Standings"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Racing"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Settings"
+msgstr ""
+
+# GUI - Standings
+msgctxt "#30120"
+msgid "Drivers"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Constructors"
+msgstr ""
+
+msgctxt "#30122"
+msgid "Race results"
+msgstr ""
+
+# GUI - Generic
+msgctxt "#30901"
+msgid "Next page"
+msgstr ""

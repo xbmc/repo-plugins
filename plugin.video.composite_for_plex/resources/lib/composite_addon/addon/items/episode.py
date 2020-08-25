@@ -68,15 +68,17 @@ def create_episode_item(context, item, library=False):
     prefix_server = (context.params.get('mode') in COMBINED_SECTIONS and
                      context.settings.prefix_server_in_combined())
 
-    if prefix_sxee:
-        info_labels['title'] = '%sx%s %s' % (info_labels['season'],
-                                             str(info_labels['episode']).zfill(2),
-                                             info_labels['title'])
-        if prefix_tvshow:
-            info_labels['title'] = '%s - %s' % (info_labels['tvshowtitle'], info_labels['title'])
+    if not library:
+        if prefix_sxee:
+            info_labels['title'] = '%sx%s %s' % \
+                                   (info_labels['season'],
+                                    str(info_labels['episode']).zfill(2), info_labels['title'])
+            if prefix_tvshow:
+                info_labels['title'] = '%s - %s' % \
+                                       (info_labels['tvshowtitle'], info_labels['title'])
 
-    if prefix_server:
-        info_labels['title'] = '%s: %s' % (item.server.get_name(), info_labels['title'])
+        if prefix_server:
+            info_labels['title'] = '%s: %s' % (item.server.get_name(), info_labels['title'])
 
     # Gather some data
     view_offset = item.data.get('viewOffset', 0)
@@ -104,6 +106,11 @@ def create_episode_item(context, item, library=False):
             'go_to': item.url.endswith(('onDeck', 'recentlyAdded', 'recentlyViewed', 'newest'))
         },
     }
+
+    if item.up_next is False:
+        extra_data['parameters'] = {
+            'up_next': str(item.up_next).lower()
+        }
 
     if item.tree.tag == 'MediaContainer':
         extra_data.update({

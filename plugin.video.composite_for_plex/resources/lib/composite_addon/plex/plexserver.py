@@ -43,7 +43,7 @@ LOG.debug('Using Requests version for HTTP: %s' % requests.__version__)
 
 class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-instance-attributes
 
-    def __init__(self, server_uuid=None, name=None, address=None, port=32400,  # pylint: disable=too-many-arguments
+    def __init__(self, server_uuid=None, name=None, address=None, port=32400,
                  token=None, discovery=None, class_type='primary'):
 
         self.settings = None
@@ -69,6 +69,8 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
         self.access_address = '%s:%s' % (address, port)
         self.access_path = '/'
         self.access_uri = '%s://%s:%s%s' % (self.protocol, address, port, self.access_path)
+
+        self._ssl_certificate_verification = True
 
         self.section_list = []
         self.token = token
@@ -138,9 +140,20 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
         }
 
     def create_plex_identification_string(self):
-        header = map(lambda x: '='.join((x[0], quote(x[1]))),
-                     self.plex_identification_header.items())
-        return '&'.join(header)
+        headers = self.plex_identification_header
+        if not self.ssl_certificate_verification:
+            headers.update({
+                'verifypeer': 'false'
+            })
+        return '&'.join(self._create_kodi_header(headers))
+
+    @property
+    def ssl_certificate_verification(self):
+        return self.protocol == 'https' and self._ssl_certificate_verification
+
+    @ssl_certificate_verification.setter
+    def ssl_certificate_verification(self, verification):
+        self._ssl_certificate_verification = bool(verification)
 
     def get_uuid(self):
         return self.uuid
@@ -248,6 +261,12 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
     def set_protocol(self, value):
         self.protocol = value
 
+        if value == 'https':
+            self.access_uri = self.access_uri.replace('http://', 'https://')
+
+        if value == 'http':
+            self.access_uri = self.access_uri.replace('https://', 'http://')
+
     def set_plex_home_enabled(self):
         self.plex_home_enabled = True
 
@@ -275,9 +294,17 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
         url_parts = urlparse(uri)
         status_code = requests.codes.not_found  # pylint: disable=no-member
         try:
-            verify_cert = uri.startswith('https') and self.get_settings().verify_certificates()
-            response = requests.head(uri, params=self.plex_identification_header,
-                                     verify=verify_cert, timeout=(2, 60))
+            if uri.startswith('http') and not uri.startswith('https'):
+                if ((tag, 'https', url_parts.netloc, url_parts.path, uri, True) in
+                        self.connection_test_results):
+                    # https was already successful, report http as gone and move on
+                    LOG.debug('[%s] Head status |%s| -> |%s|' %
+                              (self.uuid, uri, str(requests.codes.gone)))  # pylint: disable=no-member
+                    self.connection_test_results.append((tag, url_parts.scheme, url_parts.netloc,
+                                                         url_parts.path, uri, False))
+                    return
+            response = requests.get(uri, params=self.plex_identification_header,
+                                    verify=self.ssl_certificate_verification, timeout=(2, 60))
             status_code = response.status_code
             LOG.debug('[%s] Head status |%s| -> |%s|' % (self.uuid, uri, str(status_code)))
             if status_code in [requests.codes.ok, requests.codes.unauthorized]:  # pylint: disable=no-member
@@ -319,42 +346,43 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
 
     def _get_connection_uris_and_tags(self, address, external_uri,
                                       internal_address, external_address):
-        tags = []
-        uris = []
-
-        use_https = self.get_settings().secure_connection()
+        http_tags = []
+        https_tags = []
+        http_uris = []
+        https_uris = []
 
         if address:
-            if use_https:
-                uris.append('%s://%s/' % ('https', address))
-                tags.append('user')
-            uris.append('%s://%s/' % ('http', address))
-            tags.append('user')
+            https_uris.append('%s://%s/' % ('https', address))
+            https_tags.append('user')
+            http_uris.append('%s://%s/' % ('http', address))
+            http_tags.append('user')
+
         else:
             if external_uri:
-                if use_https:
-                    uris.append('%s://%s/' % ('https', external_uri))
-                    tags.append('external_uri')
-                uris.append('%s://%s/' % ('http', external_uri))
-                tags.append('external_uri')
+                https_uris.append('%s://%s/' % ('https', external_uri))
+                https_tags.append('external_uri')
+                http_uris.append('%s://%s/' % ('http', external_uri))
+                http_tags.append('external_uri')
             if internal_address:
-                if use_https:
-                    uris.append('%s://%s/' % ('https', internal_address))
-                    tags.append('internal')
-                uris.append('%s://%s/' % ('http', internal_address))
-                tags.append('internal')
+                https_uris.append('%s://%s/' % ('https', internal_address))
+                https_tags.append('internal')
+                http_uris.append('%s://%s/' % ('http', internal_address))
+                http_tags.append('internal')
             if external_address:
-                if use_https:
-                    uris.append('%s://%s/' % ('https', external_address))
-                    tags.append('external')
-                uris.append('%s://%s/' % ('http', external_address))
-                tags.append('external')
+                https_uris.append('%s://%s/' % ('https', external_address))
+                https_tags.append('external')
+                http_uris.append('%s://%s/' % ('http', external_address))
+                http_tags.append('external')
 
         for url in self.custom_access_urls:
-            uris.append(url)
-            tags.append('user')
+            if url.startswith('https'):
+                https_uris.append('%s://%s/' % ('https', address))
+                https_tags.append('user')
+                continue
+            http_uris.append('%s://%s/' % ('http', address))
+            http_tags.append('user')
 
-        return uris, tags
+        return (https_uris, https_tags), (http_uris, http_tags)
 
     def _set_best_https(self):
         if any(conn[0] == 'user' and conn[1] == 'https' and conn[5]
@@ -412,7 +440,6 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
             self.access_address = conn[2]
             self.access_path = conn[3]
             self.access_uri = conn[4]
-            self.set_protocol('http')
             LOG.debug('[%s] Server [%s] not found in existing lists.  '
                       'selecting as default' % (self.uuid, self.access_address))
             return True
@@ -425,7 +452,6 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
             self.access_address = conn[2]
             self.access_path = conn[3]
             self.access_uri = conn[4]
-            self.set_protocol('http')
             LOG.debug('[%s] Server [%s] found in existing external list.  '
                       'selecting as default' % (self.uuid, self.access_address))
             return True
@@ -437,7 +463,6 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
             self.access_address = conn[2]
             self.access_path = conn[3]
             self.access_uri = conn[4]
-            self.set_protocol('http')
             LOG.debug('[%s] Server [%s] found on existing internal list.  '
                       'selecting as default' % (self.uuid, self.access_address))
             return True
@@ -449,7 +474,6 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
             self.access_address = conn[2]
             self.access_path = conn[3]
             self.access_uri = conn[4]
-            self.set_protocol('http')
             LOG.debug('[%s] Server [%s] found in existing external list.  '
                       'selecting as default' % (self.uuid, self.access_address))
             return True
@@ -463,30 +487,31 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
         self.offline = False
         self.update_identification()
 
-        if not self.get_settings().secure_connection():
-            self.set_protocol('http')
-
         tested = []
-        append_tested = tested.append
-        threads = []
-        append_thread = threads.append
 
         address, external_uri, internal_address, external_address = \
             self._get_formatted_uris(address)
 
-        uris, tags = self._get_connection_uris_and_tags(address, external_uri,
-                                                        internal_address, external_address)
-        number_of_uris = len(uris)
-        thread = threading.Thread
-        for idx in xrange(number_of_uris):
-            uri = uris[idx]
-            if uri in tested:
-                continue
-            append_tested(uri)
-            append_thread(thread(target=self.connection_test, args=(tags[idx], uri)))
+        connection_details = self._get_connection_uris_and_tags(address, external_uri,
+                                                                internal_address, external_address)
+        connection_details = [connection_details[0], connection_details[1]]
 
-        _ = [thread.start() for thread in threads]
-        _ = [thread.join() for thread in threads]
+        for details in connection_details:
+            uris = details[0]
+            tags = details[1]
+
+            threads = []
+            number_of_uris = len(uris)
+            thread = threading.Thread
+            for uri_idx in xrange(number_of_uris):
+                uri = uris[uri_idx]
+                if uri in tested:
+                    continue
+                tested.append(uri)
+                threads.append(thread(target=self.connection_test, args=(tags[uri_idx], uri)))
+
+            _ = [thread.start() for thread in threads]
+            _ = [thread.join() for thread in threads]
 
         LOG.debug('[%s] Server connection test results |%s|' %
                   (self.uuid, str(self.connection_test_results)))
@@ -494,21 +519,25 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
         #  connection preference https
         #  (user provided, external uri, internal address, external address)
         found_connection = self._set_best_https()
+        if found_connection:
+            self.set_protocol('https')
 
-        if not found_connection:
+        else:
             # connection preference http
             #  (user provided, external uri, internal address, external address)
             found_connection = self._set_best_http()
+            if found_connection:
+                self.set_protocol('http')
 
         if not found_connection:
             self.offline = True
+            self.set_protocol('https')
             LOG.debug('[%s] Server appears to be offline' % self.uuid)
 
     def _request(self, uri, params, method):
-        verify_cert = self.protocol == 'https' and self.get_settings().verify_certificates()
-
         try:
-            response = getattr(requests, method)(uri, params=params, verify=verify_cert,
+            response = getattr(requests, method)(uri, params=params,
+                                                 verify=self.ssl_certificate_verification,
                                                  timeout=(2, 60))
         except AttributeError:
             response = None
@@ -645,6 +674,58 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
         url = '?'.join(['/library/sections/%s/onDeck' % section, urlencode(arguments)])
         return self.processed_xml(self._update_path(url))
 
+    def get_section_all(self, section=-1, start=0, size=0, item_type=None):
+        if section < 0:
+            return None
+
+        arguments = {}
+
+        if size > 0:
+            arguments.update({
+                'X-Plex-Container-Start': start,
+                'X-Plex-Container-Size': size,
+            })
+
+        if item_type is not None:
+            arguments.update({
+                'type': str(item_type)
+            })
+        url = '?'.join(['/library/sections/%s/all' % section, urlencode(arguments)])
+        return self.processed_xml(self._update_path(url))
+
+    def get_search(self, query, item_type, section=-1, start=0, size=0):
+        if section < 0:
+            return None
+
+        arguments = {
+            'query': query,
+            'type': str(item_type)
+        }
+
+        if size > 0:
+            arguments.update({
+                'X-Plex-Container-Start': start,
+                'X-Plex-Container-Size': size,
+            })
+
+        url = '?'.join(['/library/sections/%s/search' % section, urlencode(arguments)])
+        return self.processed_xml(self._update_path(url))
+
+    def get_newest(self, section=-1, start=0, size=0):
+        arguments = {}
+
+        if section < 0:
+            return self.processed_xml(self._update_path('/library/newest'))
+
+        if size > 0:
+            arguments.update({
+                'X-Plex-Container-Start': start,
+                'X-Plex-Container-Size': size,
+            })
+
+        url = '?'.join(['/library/sections/%s/newest' % section, urlencode(arguments)])
+        return self.processed_xml(self._update_path(url))
+
     def get_recently_viewed_shows(self, section=-1, start=0, size=0):
         arguments = {}
 
@@ -756,7 +837,6 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
                            url_parts.params, new_query_args, url_parts.fragment))
 
     def get_kodi_header_formatted_url(self, url, options=None):
-
         if options is None:
             options = {}
 
@@ -900,6 +980,9 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
     def get_children(self, media_id):
         return self.processed_xml(self._update_path('/library/metadata/%s/children' % media_id))
 
+    def get_all_leaves(self, media_id):
+        return self.processed_xml(self._update_path('/library/metadata/%s/allLeaves' % media_id))
+
     def get_lyrics(self, media_id):
         path = '/library/streams/{id}'.format(id=media_id)
         path = self._update_path(path)
@@ -994,3 +1077,7 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
             return '?'.join([parsed_url.path, urlencode(options, True)])
 
         return parsed_url.path
+
+    @staticmethod
+    def _create_kodi_header(headers):
+        return map(lambda x: '='.join((x[0], quote(x[1]))), headers.items())

@@ -35,11 +35,13 @@ def run(context, content_filter=None, display_shared=False):
     items = []
     append_item = items.append
 
-    server_section_menus = server_section_menus_items(context, server_list,
-                                                      content_filter, display_shared)
+    menus = context.settings.show_menus()
+
+    server_section_menus = server_section_menus_items(context, server_list, content_filter,
+                                                      display_shared, menus)
+
     if server_section_menus:
-        items += all_server_on_deck_menu_items(context)
-        items += all_server_recently_added_menu_items(context)
+        items += combined_sections_item(context)
 
     items += server_section_menus
 
@@ -51,7 +53,8 @@ def run(context, content_filter=None, display_shared=False):
                                   cacheToDisc=context.settings.cache_directory())
         return
 
-    menus = context.settings.show_menus()
+    if menus.get('composite_playlist') and context.plex_network.is_myplex_signedin():
+        items += composite_playlist_item(context)
 
     # For each of the servers we have identified
     if menus.get('queue') and context.plex_network.is_myplex_signedin():
@@ -74,65 +77,32 @@ def run(context, content_filter=None, display_shared=False):
     xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=context.settings.cache_directory())
 
 
-def all_server_on_deck_menu_items(context):
-    items = []
-    append_item = items.append
-
+def composite_playlist_item(context):
     details = {
-        'title': i18n('TV Shows on Deck')
+        'title': i18n('Composite Playlist')
+    }
+    extra_data = {
+        'type': 'file'
+    }
+
+    item_url = 'cmd:' + COMMANDS.COMPOSITE_PLAYLIST
+    gui_item = GUIItem(item_url, details, extra_data)
+    return [create_gui_item(context, gui_item)]
+
+
+def combined_sections_item(context):
+    details = {
+        'title': i18n('Combined Sections')
     }
     extra_data = {
         'type': 'Folder',
-        'mode': MODES.TVSHOWS_ON_DECK
+        'mode': MODES.COMBINED_SECTIONS
     }
-
-    gui_item = GUIItem('/library/onDeck', details, extra_data)
-    append_item(create_gui_item(context, gui_item))
-
-    details = {
-        'title': i18n('Movies on Deck')
-    }
-    extra_data = {
-        'type': 'Folder',
-        'mode': MODES.MOVIES_ON_DECK
-    }
-
-    gui_item = GUIItem('/library/onDeck', details, extra_data)
-    append_item(create_gui_item(context, gui_item))
-
-    return items
+    gui_item = GUIItem('http://combined_sections', details, extra_data)
+    return [create_gui_item(context, gui_item)]
 
 
-def all_server_recently_added_menu_items(context):
-    items = []
-    append_item = items.append
-
-    details = {
-        'title': i18n('Recently Added Episodes')
-    }
-    extra_data = {
-        'type': 'Folder',
-        'mode': MODES.EPISODES_RECENTLY_ADDED
-    }
-
-    gui_item = GUIItem('/library/recentlyAdded', details, extra_data)
-    append_item(create_gui_item(context, gui_item))
-
-    details = {
-        'title': i18n('Recently Added Movies')
-    }
-    extra_data = {
-        'type': 'Folder',
-        'mode': MODES.MOVIES_RECENTLY_ADDED
-    }
-
-    gui_item = GUIItem('/library/recentlyAdded', details, extra_data)
-    append_item(create_gui_item(context, gui_item))
-
-    return items
-
-
-def server_section_menus_items(context, server_list, content_filter, display_shared):
+def server_section_menus_items(context, server_list, content_filter, display_shared, menus):
     settings = {
         'picture_mode': context.settings.get_picture_mode(),
         'prefix_server': context.settings.prefix_server(),
@@ -140,7 +110,6 @@ def server_section_menus_items(context, server_list, content_filter, display_sha
     }
 
     items = []
-    append_item = items.append
     for server in server_list:
 
         sections = server.get_sections()
@@ -148,6 +117,13 @@ def server_section_menus_items(context, server_list, content_filter, display_sha
         server_uuid = server.get_uuid()
         server_name = server.get_name()
 
+        prefix_server = context.settings.prefix_server()
+        if not prefix_server or (prefix_server and len(server_list) > 1):
+            prefix = server.get_name() + ': '
+        else:
+            prefix = ''
+
+        server_items = []
         for section in sections:
 
             if ((display_shared and server.is_owned()) or
@@ -163,15 +139,9 @@ def server_section_menus_items(context, server_list, content_filter, display_sha
                 # photos only work from the picture add-ons
                 continue
 
-            if not settings.get('prefix_server') or \
-                    (settings.get('prefix_server') and len(server_list) > 1):
-                details = {
-                    'title': '%s: %s' % (server_name, section.get_title())
-                }
-            else:
-                details = {
-                    'title': section.get_title()
-                }
+            details = {
+                'title': prefix + section.get_title()
+            }
 
             extra_data = {
                 'fanart_image': server.get_fanart(section),
@@ -196,7 +166,23 @@ def server_section_menus_items(context, server_list, content_filter, display_sha
 
             # Build that listing..
             gui_item = GUIItem(section_url, details, extra_data, context_menu)
-            append_item(create_gui_item(context, gui_item))
+            server_items.append(create_gui_item(context, gui_item))
+
+        if server_items:
+            if menus.get('playlists'):
+                # create playlist link
+                details = {
+                    'title': prefix + i18n('Playlists')
+                }
+                extra_data = {
+                    'type': 'Folder',
+                    'mode': MODES.PLAYLISTS
+                }
+                item_url = server.join_url(url_location, 'playlists')
+                gui_item = GUIItem(item_url, details, extra_data)
+                server_items.append(create_gui_item(context, gui_item))
+
+            items += server_items
 
     return items
 

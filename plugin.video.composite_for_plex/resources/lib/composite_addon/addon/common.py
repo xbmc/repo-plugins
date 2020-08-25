@@ -84,7 +84,7 @@ def _get_command_parameter(url):
     try:
         _ = int(command)
         command = COMMANDS.UNSET
-    except ValueError:
+    except (ValueError, TypeError):
         pass
 
     return command

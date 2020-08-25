@@ -96,18 +96,18 @@ def get_banner_image(context, server, data, width=720, height=720):
     if context.settings.skip_images():
         return ''
 
-    thumbnail = encode_utf8(data.get('banner', '').split('?t')[0])
+    banner = encode_utf8(data.get('banner', '').split('?t')[0])
 
-    if thumbnail.startswith('http'):
-        return thumbnail
+    if banner.startswith('http'):
+        return banner
 
-    if thumbnail.startswith('/'):
+    if banner.startswith('/'):
         if context.settings.full_resolution_thumbnails():
-            return server.get_kodi_header_formatted_url(thumbnail)
+            return server.get_kodi_header_formatted_url(banner)
 
-        thumbnail = quote_plus('http://localhost:32400' + thumbnail)
+        banner = quote_plus('http://localhost:32400' + banner)
         return server.get_kodi_header_formatted_url('/photo/:/transcode?url=%s&width=%s&height=%s' %
-                                                    (thumbnail, width, height))
+                                                    (banner, width, height))
 
     return ''
 

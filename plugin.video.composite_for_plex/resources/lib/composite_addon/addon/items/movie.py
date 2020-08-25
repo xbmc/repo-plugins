@@ -92,6 +92,11 @@ def create_movie_item(context, item, library=False):
         'resume': int(int(view_offset) / 1000)
     }
 
+    if item.up_next is False:
+        extra_data['parameters'] = {
+            'up_next': str(item.up_next).lower()
+        }
+
     if item.tree.get('playlistType'):
         playlist_key = str(item.tree.get('ratingKey', 0))
         if item.data.get('playlistItemID') and playlist_key:

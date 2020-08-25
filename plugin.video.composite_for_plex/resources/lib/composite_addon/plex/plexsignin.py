@@ -32,7 +32,7 @@ class PlexSignin(pyxbmct.AddonFullWindow):  # pylint: disable=too-many-instance-
     def __init__(self, title='', window=None):
         """Class constructor"""
         # Call the base class' constructor.
-        super(PlexSignin, self).__init__(title)
+        super(PlexSignin, self).__init__(title)  # pylint: disable=super-with-arguments
         # Set width, height and the grid parameters
         self.setGeometry(800, 400, 9, 21)
         # Call set controls method
@@ -63,7 +63,7 @@ class PlexSignin(pyxbmct.AddonFullWindow):  # pylint: disable=too-many-instance-
     def set_context(self, context):
         self.context = context
 
-    def set_controls(self):  # pylint: disable=too-many-statements
+    def set_controls(self):
         """Set up UI controls"""
         # Description Text
         self.description = pyxbmct.TextBox()
@@ -298,7 +298,7 @@ class PlexManage(pyxbmct.AddonFullWindow):  # pylint: disable=too-many-instance-
     def __init__(self, title='', window=None):
         """Class constructor"""
         # Call the base class' constructor.
-        super(PlexManage, self).__init__(title)
+        super(PlexManage, self).__init__(title)  # pylint: disable=super-with-arguments
         # Set width, height and the grid parameters
         self.setGeometry(800, 400, 9, 21)
         # Call set controls method

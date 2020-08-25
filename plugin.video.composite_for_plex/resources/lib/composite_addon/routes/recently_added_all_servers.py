@@ -42,8 +42,10 @@ def run(context):
 
 
 def _list_content(context, server, section):
-    tree = server.get_recently_added(section=section,
-                                     size=context.settings.recently_added_item_count())
+    _size = context.settings.recently_added_item_count()
+    _hide_watched = not context.settings.recently_added_include_watched()
+
+    tree = server.get_recently_added(section=section, size=_size, hide_watched=_hide_watched)
     if tree is None:
         return []
 

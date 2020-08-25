@@ -12,7 +12,7 @@
 from kodi_six import xbmc  # pylint: disable=import-error
 
 from ..addon.constants import CONFIG
-from ..addon.skip_intro import SkipIntroDialog
+from ..addon.dialogs.skip_intro import SkipIntroDialog
 
 
 def run():

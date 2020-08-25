@@ -15,8 +15,8 @@ from kodi_six import xbmc  # pylint: disable=import-error
 
 from .constants import CONFIG
 from .constants import StreamControl
+from .dialogs.skip_intro import SkipIntroDialog
 from .logger import Logger
-from .skip_intro import SkipIntroDialog
 from .strings import encode_utf8
 from .strings import i18n
 from .up_next import UpNext
@@ -31,7 +31,7 @@ class PlaybackMonitorThread(threading.Thread):
     PLAYER = xbmc.Player()
 
     def __init__(self, settings, monitor_dict, window):
-        super(PlaybackMonitorThread, self).__init__()
+        super(PlaybackMonitorThread, self).__init__()  # pylint: disable=super-with-arguments
         self._stopped = threading.Event()
         self._ended = threading.Event()
 
@@ -65,6 +65,9 @@ class PlaybackMonitorThread(threading.Thread):
 
     def stream(self):
         return self._monitor_dict.get('stream')
+
+    def _up_next(self):
+        return self._monitor_dict.get('up_next')
 
     def _markers(self):
         return self.stream().get('intro_markers')
@@ -122,8 +125,12 @@ class PlaybackMonitorThread(threading.Thread):
     def notify_upnext(self):
         if self.settings.use_up_next() and self.media_type() == 'episode':
             self.LOG('Using Up Next ...')
-            UpNext(self.settings, server=self.server(), media_id=self.media_id(),
-                   callback_args=self.callback_arguments()).run()
+            if self._up_next():
+                UpNext(self.settings, server=self.server(), media_id=self.media_id(),
+                       callback_args=self.callback_arguments()).run()
+            else:
+                self.LOG('Up Next silenced ...')
+
         elif self.media_type() != 'episode':
             self.LOG('Up Next [%s] is not an episode ...' % self.media_type())
         else:

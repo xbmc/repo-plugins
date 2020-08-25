@@ -73,6 +73,11 @@ def play_media_id_from_uuid(context, data):
 
 
 def play_library_media(context, data):
+    up_next = True
+    if '&upnext=false' in data['url']:
+        up_next = False
+        data['url'] = data['url'].replace('&upnext=false', '')
+
     server = context.plex_network.get_server_from_url(data['url'])
     media_id = data['url'].split('?')[0].split('&')[0].split('/')[-1]
 
@@ -135,6 +140,7 @@ def play_library_media(context, data):
             'session': session,
             'server': server,
             'stream': stream,
+            'up_next': up_next,
             'callback_args': {
                 'transcode': transcode,
                 'transcode_profile': transcode_profile

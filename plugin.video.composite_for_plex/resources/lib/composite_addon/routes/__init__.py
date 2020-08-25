@@ -9,13 +9,14 @@
     See LICENSES/GPL-2.0-or-later.txt for more information.
 """
 
-__all__ = ['add_playlist_item', 'channel_search', 'channel_settings', 'channel_view',
-           'delete_media', 'delete_playlist', 'delete_playlist_item', 'delete_refresh',
+__all__ = ['add_playlist_item', 'all_all_servers', 'channel_search', 'channel_settings',
+           'channel_view', 'composite_playlist', 'delete_media', 'delete_playlist',
+           'delete_playlist_item', 'delete_refresh', 'display_combined_sections',
            'display_plex_servers', 'display_sections', 'get_content', 'install_plugin',
            'kodi_library', 'manage_my_plex', 'myplex_queue', 'manage_servers', 'play_library_media',
            'play_media_stream', 'play_video_channel', 'plex_online', 'process_albums',
            'process_artists', 'process_movies', 'process_music', 'process_photos',
            'process_plex_online', 'process_plex_plugins', 'process_tracks', 'process_episodes',
            'process_seasons', 'process_shows', 'process_xml', 'refresh', 'refresh_library',
-           'set_audio', 'set_master_server', 'set_subtitles', 'sign_in', 'sign_out',
-           'switch_user', 'test_skip_intro_dialog', 'watch_status']
+           'search_all', 'search_all_servers', 'set_audio', 'set_master_server', 'set_subtitles',
+           'sign_in', 'sign_out', 'switch_user', 'test_skip_intro_dialog', 'watch_status']

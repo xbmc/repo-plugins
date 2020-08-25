@@ -16,6 +16,7 @@ from ..addon.common import get_handle
 from ..addon.containers import Item
 from ..addon.items.movie import create_movie_item
 from ..addon.items.show import create_show_item
+from ..addon.library_sections import LibrarySectionsStore
 from ..addon.logger import Logger
 from ..plex import plex
 
@@ -23,6 +24,7 @@ LOG = Logger()
 
 
 def run(context):
+    section_storage = LibrarySectionsStore()
     content_type = _get_content_type(context.params.get('path_mode'))
     kodi_action = context.params.get('kodi_action')
 
@@ -56,6 +58,20 @@ def run(context):
         for server in server_list:
             sections = server.get_sections()
             for section in sections:
+                selected_sections = []
+                if section.is_movie():
+                    selected_sections = section_storage.get_movie_sections(server.get_uuid())
+
+                elif section.is_show():
+                    selected_sections = section_storage.get_tvshow_sections(server.get_uuid())
+
+                if not selected_sections:
+                    selected_sections = [] if section_storage.exists() else None
+
+                if (selected_sections == [] or
+                        (selected_sections and section.get_uuid() not in selected_sections)):
+                    continue
+
                 if section.get_type() in content_type:
                     if content_type in ['movies', 'tvshows']:
                         set_content(get_handle(), content_type)

@@ -1424,3 +1424,147 @@ msgstr ""
 msgctxt "#30763"
 msgid "Recently Added item count (per server section)"
 msgstr ""
+
+msgctxt "#30764"
+msgid "Recently Added include watched"
+msgstr ""
+
+msgctxt "#30765"
+msgid "Composite Playlist"
+msgstr ""
+
+msgctxt "#30766"
+msgid "Generate a playlist from the information below"
+msgstr ""
+
+msgctxt "#30767"
+msgid "Mixed"
+msgstr ""
+
+msgctxt "#30768"
+msgid "Play"
+msgstr ""
+
+msgctxt "#30769"
+msgid "Item Count"
+msgstr ""
+
+msgctxt "#30770"
+msgid "All Servers"
+msgstr ""
+
+msgctxt "#30771"
+msgid "Shuffle"
+msgstr ""
+
+msgctxt "#30772"
+msgid "Source"
+msgstr ""
+
+msgctxt "#30773"
+msgid "None"
+msgstr ""
+
+msgctxt "#30774"
+msgid "Generating Playlist"
+msgstr ""
+
+msgctxt "#30775"
+msgid "This may take a while..."
+msgstr ""
+
+msgctxt "#30776"
+msgid "Retrieving server list..."
+msgstr ""
+
+msgctxt "#30777"
+msgid "Retrieving server sections..."
+msgstr ""
+
+msgctxt "#30778"
+msgid "Retrieving content metadata..."
+msgstr ""
+
+msgctxt "#30779"
+msgid "Retrieving final sample..."
+msgstr ""
+
+msgctxt "#30780"
+msgid "Adding items to playlist..."
+msgstr ""
+
+msgctxt "#30781"
+msgid "Adding %s to playlist..."
+msgstr ""
+
+msgctxt "#30782"
+msgid "Completed."
+msgstr ""
+
+msgctxt "#30783"
+msgid "Checking section %s on %s..."
+msgstr ""
+
+msgctxt "#30784"
+msgid "Retrieving %s from %s for sample..."
+msgstr ""
+
+msgctxt "#30785"
+msgid "Retrieving %s episodes for sample..."
+msgstr ""
+
+msgctxt "#30786"
+msgid "Creating samples..."
+msgstr ""
+
+msgctxt "#30787"
+msgid "Retrieving metadata for %s..."
+msgstr ""
+
+msgctxt "#30788"
+msgid "Show [B]Composite Playlist[/B] menu"
+msgstr ""
+
+msgctxt "#30789"
+msgid "Server(s)"
+msgstr ""
+
+msgctxt "#30790"
+msgid "Combined Sections"
+msgstr ""
+
+msgctxt "#30791"
+msgid "Search Movies..."
+msgstr ""
+
+msgctxt "#30792"
+msgid "Mark as watched"
+msgstr ""
+
+msgctxt "#30793"
+msgid "Mark as unwatched"
+msgstr ""
+
+msgctxt "#30794"
+msgid "Library - Movie Sections"
+msgstr ""
+
+msgctxt "#30795"
+msgid "Library - TV Show Sections"
+msgstr ""
+
+msgctxt "#30796"
+msgid "Kodi Library"
+msgstr ""
+
+msgctxt "#30797"
+msgid "Select sections to include in library scans"
+msgstr ""
+
+msgctxt "#30798"
+msgid "Reset selected sections"
+msgstr ""
+
+msgctxt "#30799"
+msgid "Configured library sections have been reset"
+msgstr ""

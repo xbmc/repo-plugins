@@ -28,12 +28,12 @@ from .listener import ThreadedHTTPServer
 from .subscribers import SubscriptionManager
 
 
-class CompanionReceiverThread(threading.Thread):  # pylint: disable=too-many-instance-attributes
+class CompanionReceiverThread(threading.Thread):
     LOG = Logger('CompanionReceiverThread')
     MONITOR = xbmc.Monitor()
 
     def __init__(self, gdm_client, settings):
-        super(CompanionReceiverThread, self).__init__()
+        super(CompanionReceiverThread, self).__init__()  # pylint: disable=super-with-arguments
         self._stopped = threading.Event()
         self._ended = threading.Event()
         self._dialog = xbmcgui.Dialog()

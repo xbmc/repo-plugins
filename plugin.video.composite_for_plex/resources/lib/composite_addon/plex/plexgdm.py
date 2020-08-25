@@ -200,6 +200,9 @@ class PlexGDM:  # pylint: disable=too-many-instance-attributes
 
             lines = response.get('data').split('\n')
             for pairs in lines:
+                if ':' not in pairs:
+                    continue
+
                 key, value = pairs.split(':')
                 value = value.strip()
                 if key == 'Content-Type':

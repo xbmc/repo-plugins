@@ -143,6 +143,9 @@ class AddonSettings:  # pylint: disable=too-many-public-methods
     def recently_added_item_count(self):
         return int(self._get_setting('ra_sections_items_per_server'))
 
+    def recently_added_include_watched(self):
+        return self._get_setting('ra_sections_include_watched')
+
     def flatten_seasons(self):
         return self._get_setting('flatten')
 
@@ -151,12 +154,6 @@ class AddonSettings:  # pylint: disable=too-many-public-methods
 
     def playback_monitor_disabled(self, fresh=False):
         return self._get_setting('monitoroff', fresh=fresh)
-
-    def secure_connection(self):
-        return self._get_setting('secureconn')
-
-    def verify_certificates(self):
-        return self._get_setting('verify_cert')
 
     def secondary_menus(self):
         return self._get_setting('secondary')
@@ -168,6 +165,7 @@ class AddonSettings:  # pylint: disable=too-many-public-methods
             'online': self._get_setting('show_plex_online_menu'),
             'playlists': self._get_setting('show_playlists_menu'),
             'widgets': self._get_setting('show_widget_menu'),
+            'composite_playlist': self._get_setting('show_composite_playlist_menu'),
         }
 
     def episode_sort_method(self):
@@ -200,6 +198,12 @@ class AddonSettings:  # pylint: disable=too-many-public-methods
 
     def port(self):
         return self._get_setting('port')
+
+    def https(self):
+        return self._get_setting('manual_https')
+
+    def certificate_verification(self):
+        return self._get_setting('manual_certificate_verification')
 
     def discovery(self):
         return self._get_setting('discovery')

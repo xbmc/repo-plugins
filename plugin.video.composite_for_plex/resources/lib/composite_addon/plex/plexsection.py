@@ -26,6 +26,7 @@ class PlexSection:
         self.art = None
         self.type = None
         self.location = 'local'
+        self.server_uuid = None
 
         if data is not None:
             self.populate(data)
@@ -33,8 +34,12 @@ class PlexSection:
     def populate(self, data):
 
         path = data.get('key')
-        if not path[0] == '/':
+        if not path.startswith(('/', 'http')):
             path = '/library/sections/%s' % path
+
+        if (path.startswith('http') and data.get('path', '') and
+                data.get('path', '').startswith('/')):
+            path = data.get('path')
 
         self.title = encode_utf8(self.translate(data.get('title')))
         self.sectionuuid = data.get('uuid', '')
@@ -42,6 +47,7 @@ class PlexSection:
         self.key = data.get('key')
         self.art = encode_utf8(data.get('art', ''))
         self.type = data.get('type', '')
+        self.server_uuid = data.get('machineIdentifier')
 
     def content_type(self):
         if self.type == 'show':
@@ -77,6 +83,7 @@ class PlexSection:
             'type': self.type,
             'content_type': self.content_type(),
             'mode': self.mode(),
+            'server_uuid': self.get_server_uuid(),
         }
 
     def get_title(self):
@@ -116,6 +123,9 @@ class PlexSection:
         if self.type == 'photo':
             return True
         return False
+
+    def get_server_uuid(self):
+        return self.server_uuid
 
     @staticmethod
     def translate(value):

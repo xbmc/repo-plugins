@@ -79,6 +79,9 @@ class Logger:
         return xbmc.LOGDEBUG
 
     def __print_message(self, msg, level=0, no_privacy=False):
+        if self.level == 2:
+            return
+
         if not isinstance(msg, string_types):
             try:
                 msg = str(msg)

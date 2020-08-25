@@ -14,6 +14,7 @@ import platform
 import sys
 import time
 
+from .addon.common import get_handle
 from .addon.common import get_params
 from .addon.constants import COMMANDS
 from .addon.constants import CONFIG
@@ -150,6 +151,21 @@ def run(start_time):  # pylint: disable=too-many-locals, too-many-statements, to
         test_skip_intro_dialog.run()
         return _finished(start_time)
 
+    if command == COMMANDS.COMPOSITE_PLAYLIST:
+        from .routes import composite_playlist  # pylint: disable=import-outside-toplevel
+        composite_playlist.run(context)
+        return _finished(start_time)
+
+    if command == COMMANDS.SELECT_LIBRARY_SECTIONS:
+        from .routes import configure_library_sections  # pylint: disable=import-outside-toplevel
+        configure_library_sections.run(context, reset=False)
+        return _finished(start_time)
+
+    if command == COMMANDS.RESET_LIBRARY_SECTIONS:
+        from .routes import configure_library_sections  # pylint: disable=import-outside-toplevel
+        configure_library_sections.run(context, reset=True)
+        return _finished(start_time)
+
     if mode in [MODES.TXT_OPEN, MODES.TXT_PLAY]:
         from .routes import trakttokodi  # pylint: disable=import-outside-toplevel
         trakttokodi.run(context)
@@ -159,13 +175,6 @@ def run(start_time):  # pylint: disable=too-many-locals, too-many-statements, to
          (mode is None or mode == MODES.UNSET)) or context.params.get('kodi_action')):
         from .routes import kodi_library  # pylint: disable=import-outside-toplevel
         kodi_library.run(context)
-        return _finished(start_time)
-
-    # Run a function based on the mode variable that was passed in the URL
-    if (((isinstance(mode, int) and mode < 0) or (not url and (not server_uuid and not media_id)))  # pylint: disable=too-many-boolean-expressions
-            and mode not in [MODES.SEARCHALL]):
-        from .routes import display_sections  # pylint: disable=import-outside-toplevel
-        display_sections.run(context)
         return _finished(start_time)
 
     if mode in [MODES.GETCONTENT, MODES.TXT_TVSHOWS, MODES.TXT_MOVIES,
@@ -338,6 +347,11 @@ def run(start_time):  # pylint: disable=too-many-locals, too-many-statements, to
         search_all.run(context)
         return _finished(start_time)
 
+    if mode == MODES.COMBINED_SECTIONS:
+        from .routes import display_combined_sections  # pylint: disable=import-outside-toplevel
+        display_combined_sections.run(context)
+        return _finished(start_time)
+
     if mode == MODES.TVSHOWS_ON_DECK:
         from .routes import on_deck_all_servers  # pylint: disable=import-outside-toplevel
         context.params['content_type'] = 'tvshows'
@@ -362,6 +376,26 @@ def run(start_time):  # pylint: disable=too-many-locals, too-many-statements, to
         recently_added_all_servers.run(context)
         return _finished(start_time)
 
+    if MODES.MOVIES_ALL <= mode <= MODES.PHOTOS_ALL:
+        from .routes import all_all_servers  # pylint: disable=import-outside-toplevel
+        all_all_servers.run(context)
+        return _finished(start_time)
+
+    if MODES.MOVIES_SEARCH_ALL <= mode <= MODES.TRACKS_SEARCH_ALL:
+        from .routes import search_all_servers  # pylint: disable=import-outside-toplevel
+        search_all_servers.run(context)
+        return _finished(start_time)
+
+    #
+    # default actions below
+    #
+
+    if get_handle() == -1:
+        CONFIG['addon'].openSettings()
+        return _finished(start_time)
+
+    from .routes import display_sections  # pylint: disable=import-outside-toplevel
+    display_sections.run(context)
     return _finished(start_time)
 
 

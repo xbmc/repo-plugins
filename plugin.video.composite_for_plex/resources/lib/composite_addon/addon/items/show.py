@@ -12,6 +12,7 @@
 
 import hashlib
 
+from ..constants import COMBINED_SECTIONS
 from ..constants import MODES
 from ..containers import GUIItem
 from ..logger import Logger
@@ -47,6 +48,12 @@ def create_show_item(context, item, library=False):
         'genre': ' / '.join(metadata['genre']),
         'mediatype': 'tvshow'
     }
+
+    prefix_server = (context.params.get('mode') in COMBINED_SECTIONS and
+                     context.settings.prefix_server_in_combined())
+
+    if prefix_server:
+        info_labels['title'] = '%s: %s' % (item.server.get_name(), info_labels['title'])
 
     _watched = int(item.data.get('viewedLeafCount', 0))
 

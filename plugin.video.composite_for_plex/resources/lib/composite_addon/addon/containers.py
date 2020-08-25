@@ -142,11 +142,12 @@ class Item:
     Used to simplify passing items to functions/methods
     """
 
-    def __init__(self, server=None, url=None, tree=None, data=None):
+    def __init__(self, server=None, url=None, tree=None, data=None, up_next=True):
         self._data = data
         self._server = server
         self._tree = tree
         self._url = url
+        self._up_next = up_next
 
     @property
     def data(self):
@@ -197,6 +198,17 @@ class Item:
         :param value:
         """
         self._url = value
+
+    @property
+    def up_next(self):
+        return self._up_next
+
+    @up_next.setter
+    def up_next(self, value):
+        """
+        :param value:
+        """
+        self._up_next = bool(value)
 
 
 class ItemPropertyUnavailable(Exception):

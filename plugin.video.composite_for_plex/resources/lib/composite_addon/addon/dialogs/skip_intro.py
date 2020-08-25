@@ -12,7 +12,7 @@
 from kodi_six.xbmc import Player  # pylint: disable=import-error
 from kodi_six.xbmcgui import WindowXMLDialog  # pylint: disable=import-error
 
-from .logger import Logger
+from ..logger import Logger
 
 
 class SkipIntroDialog(WindowXMLDialog):

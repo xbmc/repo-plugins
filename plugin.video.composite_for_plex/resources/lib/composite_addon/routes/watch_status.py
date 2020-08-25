@@ -30,7 +30,10 @@ def run(context):
     except:  # pylint: disable=bare-except
         watch_status = 'watch'
 
-    server = context.plex_network.get_server_from_uuid(server_uuid)
+    if server_uuid.startswith('http'):
+        server = context.plex_network.get_server_from_url(server_uuid)
+    else:
+        server = context.plex_network.get_server_from_uuid(server_uuid)
 
     if watch_status == 'watch':
         LOG.debug('Marking %s as watched' % metadata_id)

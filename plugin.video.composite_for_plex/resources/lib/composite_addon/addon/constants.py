@@ -43,6 +43,9 @@ COMMANDS = __enum(
     UPDATE='update',
     WATCH='watch',
     TEST_SKIP_INTRO_DIALOG='test_skip_intro_dialog',
+    COMPOSITE_PLAYLIST='composite_playlist',
+    SELECT_LIBRARY_SECTIONS='select_library_sections',
+    RESET_LIBRARY_SECTIONS='reset_library_sections',
 )
 
 MODES = __enum(
@@ -83,6 +86,17 @@ MODES = __enum(
     MOVIES_ON_DECK=34,
     EPISODES_RECENTLY_ADDED=35,
     MOVIES_RECENTLY_ADDED=36,
+    COMBINED_SECTIONS=37,
+    MOVIES_ALL=38,
+    TVSHOWS_ALL=39,
+    ARTISTS_ALL=40,
+    PHOTOS_ALL=41,
+    MOVIES_SEARCH_ALL=42,
+    TVSHOWS_SEARCH_ALL=43,
+    EPISODES_SEARCH_ALL=44,
+    ARTISTS_SEARCH_ALL=45,
+    ALBUMS_SEARCH_ALL=46,
+    TRACKS_SEARCH_ALL=47,
     TXT_MOVIES='movies',
     TXT_MOVIES_ON_DECK='movies_on_deck',
     TXT_MOVIES_RECENT_ADDED='movies_recent_added',
@@ -99,10 +113,21 @@ MODES = __enum(
 
 COMBINED_SECTIONS = [
     # Used to check for all server modes
+    str(MODES.SEARCHALL),
     str(MODES.TVSHOWS_ON_DECK),
     str(MODES.MOVIES_ON_DECK),
     str(MODES.EPISODES_RECENTLY_ADDED),
     str(MODES.MOVIES_RECENTLY_ADDED),
+    str(MODES.MOVIES_ALL),
+    str(MODES.TVSHOWS_ALL),
+    str(MODES.ARTISTS_ALL),
+    str(MODES.PHOTOS_ALL),
+    str(MODES.MOVIES_SEARCH_ALL),
+    str(MODES.TVSHOWS_SEARCH_ALL),
+    str(MODES.EPISODES_SEARCH_ALL),
+    str(MODES.ARTISTS_SEARCH_ALL),
+    str(MODES.ALBUMS_SEARCH_ALL),
+    str(MODES.TRACKS_SEARCH_ALL),
 ]
 
 CONFIG = {

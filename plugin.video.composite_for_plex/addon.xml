@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.composite_for_plex" name="Composite" version="1.3.0+matrix.1" provider-name="anxdpanic">
+<addon id="plugin.video.composite_for_plex" name="Composite" version="1.4.0+matrix.1" provider-name="anxdpanic">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.kodi-six" version="0.0.2"/>
@@ -13,16 +13,38 @@
         <medialibraryscanpath content="tvshows">library/tvshows/</medialibraryscanpath>
     </extension>
     <extension point="xbmc.service" library="resources/lib/service_entry_point.py"/>
+    <extension point="xbmc.python.script" library="resources/lib/entry_point.py"/>
+    <extension point="kodi.context.item">
+        <menu id="kodi.core.main">
+            <menu>
+                <label>Composite</label>
+                <item library="resources/lib/composite_addon/context_menu_transcoded.py">
+                    <!-- Play Transcoded -->
+                    <label>30086</label>
+                    <visible>[Window.IsActive(10000) | Window.IsActive(10025)] + String.IsEmpty(Container.PluginName) + String.StartsWith(ListItem.FileNameAndPath,plugin://plugin.video.composite_for_plex/) + [String.IsEqual(ListItem.DBTYPE,video) | String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,episode)]</visible>
+                </item>
+                <item library="resources/lib/composite_addon/context_menu_watched.py">
+                    <!-- Mark as watched -->
+                    <label>30792</label>
+                    <visible>[Window.IsActive(10000) | Window.IsActive(10025)] + String.IsEmpty(Container.PluginName) + String.StartsWith(ListItem.FileNameAndPath,plugin://plugin.video.composite_for_plex/) + [String.IsEqual(ListItem.DBTYPE,video) | String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,episode)]</visible>
+                </item>
+                <item library="resources/lib/composite_addon/context_menu_unwatched.py">
+                    <!-- Mark as unwatched -->
+                    <label>30793</label>
+                    <visible>[Window.IsActive(10000) | Window.IsActive(10025)] + String.IsEmpty(Container.PluginName) + String.StartsWith(ListItem.FileNameAndPath,plugin://plugin.video.composite_for_plex/) + [String.IsEqual(ListItem.DBTYPE,video) | String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,episode)]</visible>
+                </item>
+            </menu>
+        </menu>
+    </extension>
     <extension point="xbmc.addon.metadata">
         <news>
-[add] menu items 'TV Shows/Movies on Deck' and widgets 'All Servers: TV Shows/Movies on Deck'
-    for on deck results from all servers
-[add] menu items 'Recently Added Episodes/Movies' and widgets
-    'All Servers: Recently Added Episodes/Movies' for recently added results from all servers
-[chg] movie collections default to sorting by year
-[fix] 'Always Transcode' setting is now applied
-[fix] minor fixups
-[upd] use new settings format for Kodi 19
+[add] Combined Sections to main menu
+[add] Composite Playlist to main menu, create a playlist based the information you provide
+[add] Composite context menu for library and widgets
+    - adds Play Transcoded, Mark as un/watched
+[add] Section selection for Kodi Library support
+[add] settings to included watched content in combined 'Recently Added Episodes/Movies' sections
+[chg] Remove HTTPS from settings and move Certificate Verification from settings to Manage Servers
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

@@ -32,7 +32,7 @@ def run(context):
     manager.run()
 
 
-class ServerManager:  # pylint: disable=too-many-instance-attributes, too-few-public-methods
+class ServerManager:
 
     def __init__(self, context):
         self._dialog = xbmcgui.Dialog()
@@ -126,6 +126,12 @@ class ServerManager:  # pylint: disable=too-many-instance-attributes, too-few-pu
             append_choice(i18n('Set as Master'))
 
         append_choice(i18n('Connection Test Results'))
+
+        if self.server_configs.ssl_certificate_verification(self.server.get_uuid()):
+            append_choice('[COLOR=lightgreen]%s[/COLOR]' % i18n('Certificate Verification'))
+        else:
+            append_choice('[COLOR=orange]%s[/COLOR]' % i18n('Certificate Verification'))
+
         append_choice(i18n('Custom access urls'))
 
         return management_choices
@@ -142,7 +148,13 @@ class ServerManager:  # pylint: disable=too-many-instance-attributes, too-few-pu
             self._show_connection_test()
 
         elif choice == 2:
+            self._certificate_verification()
+
+        elif choice == 3:
             self._custom_access_urls()
+
+    def _certificate_verification(self):
+        self.server_configs.toggle_certificate_verification(self.server.get_uuid())
 
     def _custom_access_urls(self):
         choices = []

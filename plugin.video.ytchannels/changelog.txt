@@ -1,6 +1,9 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.3.0 [11-August-2020]
+-Add ability to move channels up and down in list of channels
+
 v0.2.4 [03-August-2020]
 -Fixed bug with certain channels and playlists not opening
 -Also fixes issue where next page link was added on the last page

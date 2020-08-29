@@ -131,8 +131,7 @@ class Channel(chn_class.Channel):
                               match_type=ParserData.MatchExact,
                               name="Genres",
                               parser=r'<a\W+class="close-dropdown"\W+href="/collectie/([^"]+)"\W+'
-                                     r'title="([^"]+)"[^>]+data-value="([^"]+)"[^>]+'
-                                     r'data-argument="genreId',
+                                     r'title="([^"]+)"[^>]+data-value="([^"]+)"[^>]+',
                               creator=self.create_genre_item)
 
         # Favourites

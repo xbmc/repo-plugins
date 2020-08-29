@@ -112,6 +112,8 @@ class Channel(chn_class.Channel):
             ]
             if seasons:
                 seasons = [s for s in seasons[0] if s["url"]]
+                # Inject them
+                json_data.json["seasons"] = seasons
 
         # Find the actual
         line_lists = [lst for lst in main_container[0]["children"] if lst["type"] == "LineList"]
@@ -125,7 +127,7 @@ class Channel(chn_class.Channel):
                 data = UriHandler.open(url_all_episodes)
                 json_data = JsonHelper(data)
 
-                # And append seasons
+                # And append seasons again
                 if seasons:
                     json_data.json["seasons"] = seasons
                 return json_data, items

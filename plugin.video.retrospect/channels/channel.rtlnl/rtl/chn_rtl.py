@@ -5,12 +5,10 @@ import datetime
 from resources.lib import chn_class
 
 from resources.lib.mediaitem import MediaItem
-from resources.lib.regexer import Regexer
 from resources.lib.logger import Logger
 from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
-from resources.lib.streams.m3u8 import M3u8
 from resources.lib.parserdata import ParserData
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.xbmcwrapper import XbmcWrapper
@@ -58,8 +56,9 @@ class Channel(chn_class.Channel):
         self.folderItemJson = ["seasons", ]
         self._add_data_parser("*", preprocessor=self.pre_process_folder_list)
         self._add_data_parser("*", json=True,
-                              parser=self.videoItemJson, creator=self.create_video_item, updater=self.update_video_item)
+                              parser=self.videoItemJson, creator=self.create_video_item)
         self._add_data_parser("*", parser=self.folderItemJson, creator=self.create_folder_item, json=True)
+        self._add_data_parser("*", updater=self.update_video_item, requires_logon=True)
 
         #===============================================================================================================
         # non standard items
@@ -77,11 +76,47 @@ class Channel(chn_class.Channel):
         self.posterBase = None
         self.thumbBase = None
 
+        self.__authenticator = None
+
         #===============================================================================================================
         # Test cases:
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
+
+    def log_on(self):
+        """ Logs on to a website, using an url.
+
+        First checks if the channel requires log on. If so and it's not already
+        logged on, it should handle the log on. That part should be implemented
+        by the specific channel.
+
+        More arguments can be passed on, but must be handled by custom code.
+
+        After a successful log on the self.loggedOn property is set to True and
+        True is returned.
+
+        :return: indication if the login was successful.
+        :rtype: bool
+
+        """
+
+        from resources.lib.authentication.rtlxlhandler import RtlXlHandler
+        from resources.lib.authentication.authenticator import Authenticator
+        handler = RtlXlHandler("rtlxl.nl", "3_R0XjstXd4MpkuqdK3kKxX20icLSE3FB27yQKl4zQVjVpqmgSyRCPKKLGdn5kjoKq")
+        self.__authenticator = Authenticator(handler)
+
+        # Always try to log on. If the username was changed to empty, we should clear the current
+        # log in.
+        username = self._get_setting("rtlxl_username", value_for_none=None)
+        result = self.__authenticator.log_on(username=username, channel_guid=self.guid, setting_id="rtlxl_password")
+
+        if not username:
+            Logger.info("No username for RTL specified. Not logging in.")
+            # Return True to prevent unwanted messages
+            return True
+
+        return result.logged_on
 
     def add_live_streams_and_recent(self, data):
         """ Adds the live streams for RTL-Z.
@@ -392,9 +427,7 @@ class Channel(chn_class.Channel):
                         break
 
         uuid = result_set["uuid"]
-        url = "http://www.rtl.nl/system/s4m/xldata/ux/%s?context=rtlxl&d=pc&fmt=adaptive&version=3" % (uuid,)
-        # The JSON urls do not yet work
-        # url = "http://www.rtl.nl/system/s4m/vfd/version=1/d=pc/output=json/fun=abstract/uuid=%s/fmt=smooth" % (uuid,)
+        url = "https://api.rtl.nl/watch/play/api/play/xl/%s?device=web&drm=widevine&format=dash" % (uuid,)
 
         item = MediaItem(title.title(), url)
         item.type = "video"
@@ -518,11 +551,7 @@ class Channel(chn_class.Channel):
         description = result_set.get("synopsis")
 
         uuid = result_set["uuid"]
-        url = "http://www.rtl.nl/system/s4m/xldata/ux/%s?context=rtlxl&" \
-              "d=pc&fmt=adaptive&version=3" % (uuid, )
-        # The JSON urls do not yet work
-        # url = "http://www.rtl.nl/system/s4m/vfd/version=1/d=pc/output=json/" \
-        #       "fun=abstract/uuid=%s/fmt=smooth" % (uuid,)
+        url = "https://api.rtl.nl/watch/play/api/play/xl/%s?device=web&drm=widevine&format=dash" % (uuid,)
 
         item = MediaItem(title.title(), url)
         item.type = "video"
@@ -578,26 +607,28 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        xml_data = UriHandler.open(item.url, proxy=self.proxy)
-        # <ref type='adaptive' device='pc' host='http://manifest.us.rtl.nl' href='/rtlxl/network/pc/adaptive/components/videorecorder/27/278629/278630/d009c025-6e8c-3d11-8aba-dc8579373134.ssm/d009c025-6e8c-3d11-8aba-dc8579373134.m3u8' />
-        m3u8_urls = Regexer.do_regex("<ref type='adaptive' device='pc' host='([^']+)' href='/([^']+)' />", xml_data)
-        if not m3u8_urls:
-            Logger.warning("No m3u8 data found for: %s", item)
-            return item
-        m3u8_url = "%s/%s" % (m3u8_urls[0][0], m3u8_urls[0][1])
+        # Get the authentication part right.
+        token = self.__authenticator.get_authentication_token()
+        headers = {
+            "Authorization": "Bearer {}".format(token)
+        }
+        video_data = UriHandler.open(item.url, additional_headers=headers)
+        video_json = JsonHelper(video_data)
+        license_url = video_json.get_value("licenseUrl")
+        video_manifest = video_json.get_value("manifest")
+        token = video_json.get_value("token")
+        key_headers = {
+            "Authorization": "Bearer {0}".format(token),
+            "content-type": "application/octet-stream"
+        }
 
         part = item.create_new_empty_media_part()
-        # prevent the "418 I'm a teapot" error
-        part.HttpHeaders["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0"
+        stream = part.append_media_stream(video_manifest, 0)
 
-        # Remove the Range header to make all streams start at the beginning.
-        # Logger.debug("Setting an empty 'Range' http header to force playback at the start of a stream")
-        # part.HttpHeaders["Range"] = ''
-
-        item.complete = M3u8.update_part_with_m3u8_streams(part, m3u8_url,
-                                                           proxy=self.proxy,
-                                                           headers=part.HttpHeaders,
-                                                           channel=self)
+        from resources.lib.streams.mpd import Mpd
+        license_key = Mpd.get_license_key(license_url, key_headers=key_headers, key_type="A")
+        Mpd.set_input_stream_addon_input(stream, license_key=license_key)
+        item.complete = True
         return item
 
     def __ignore_cookie_law(self):

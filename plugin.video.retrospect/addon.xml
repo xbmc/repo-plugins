@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.10+matrix.1"
+        version="5.2.11+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -127,9 +127,9 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.10 - Changelog - 2020-08-17[/B]
+        <news>[B]Retrospect v5.2.11 - Changelog - 2020-08-29[/B]
 
-Just some minor fixes for DPlay.se, Nickelodeon, Pathe.nl and kijk.nl.
+A minor update that includes fixes for RTL XL, SVT Play, NPO Start and Nickelodeon channels.
 
 [B]Framework related[/B]
 _None_
@@ -138,10 +138,10 @@ _None_
 _None_
 
 [B]Channel related[/B]
-* Changed: Add browser fingerprint to DPlay log in (Fixes #1413)
-* Fixed: Issue where Nickelodeon would break on missing images
-* Fixed: Pathe.nl updated their API version
-* Fixed: DRM token could not always be retrieved for kijk.nl
+* Fixed: SVT Play could not resolve Single Episode videos (Fixes #1414)
+* Fixed: RTL XL requires logging in since this week (Fixes #1416)
+* Fixed: NPO Genres broke
+* Fixed: Nickelodeon would fail on shows with an empty season
 
         </news>
         <assets>

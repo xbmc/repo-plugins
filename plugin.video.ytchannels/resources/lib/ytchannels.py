@@ -39,7 +39,15 @@ def ytchannels_main():
 
 		YOUTUBE_API_KEY = my_addon.getSetting('youtube_api_key')
 
-	from .functions import build_url, delete_database, get_folders, add_folder, remove_folder, get_channels, get_channel_id_from_uploads_id, add_channel, remove_channel, search_channel, search_channel_by_username, get_latest_from_channel, get_playlists
+	from .functions import build_url, delete_database, get_folders, add_folder, remove_folder, get_channels, get_channel_id_from_uploads_id, add_channel, remove_channel, search_channel, search_channel_by_username, get_latest_from_channel, get_playlists, add_sort_db, init_sort, move_up, move_down, check_sort_db
+
+	SORT_INIT = check_sort_db()
+	if not SORT_INIT:
+		add_sort_db()
+		folders = get_folders()
+		init_sort('Other')
+		for i in range(len(folders)):
+			init_sort(folders[i])
 
 	if mode is None:
 		folders=get_folders()
@@ -70,8 +78,22 @@ def ytchannels_main():
 			rem_uri = build_url({'mode': 'rem_channel', 'channel_id': '%s'%str(channels[i][1])})
 			add_uri = build_url({'mode': 'add_folder'})
 			addch_uri = build_url({'mode': 'add_channel', 'foldername': 'Other'})
-			li.addContextMenuItems([(local_string(30003), 'RunPlugin(%s)'%rem_uri),('Add folder', 'RunPlugin(%s)'%add_uri),
-									(local_string(30002), 'RunPlugin(%s)'%addch_uri)])
+			move_down_uri = build_url({'mode': 'move_down', 'id': '%s'%channels[i][4]})
+			move_up_uri = build_url({'mode': 'move_up', 'id': '%s'%channels[i][4]})
+			items = []
+			items.append((local_string(30003), 'RunPlugin(%s)'%rem_uri))
+			items.append(('Add folder', 'RunPlugin(%s)'%add_uri))
+			items.append((local_string(30002), 'RunPlugin(%s)'%addch_uri))
+			if len(channels) > 1:
+				if channels[i][3] == 1:
+					items.append((local_string(30024), 'RunPlugin(%s)'%move_down_uri))
+				elif channels[i][3] == len(channels):
+					items.append((local_string(30023), 'RunPlugin(%s)'%move_up_uri))
+				else:
+					items.append((local_string(30023), 'RunPlugin(%s)'%move_up_uri))
+					items.append((local_string(30024), 'RunPlugin(%s)'%move_down_uri))
+
+			li.addContextMenuItems(items)
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 								listitem=li,isFolder=True)
 
@@ -105,6 +127,16 @@ def ytchannels_main():
 		delete_database()
 		xbmc.executebuiltin("Container.Refresh")
 
+	elif mode[0] == 'move_up':
+		id = args.get('id', None)
+		move_up(id[0])
+		xbmc.executebuiltin("Container.Refresh")
+
+	elif mode[0] == 'move_down':
+		id = args.get('id', None)
+		move_down(id[0])
+		xbmc.executebuiltin("Container.Refresh")
+
 	elif mode[0]=='add_folder':
 		keyboard = xbmc.Keyboard('', '%s:'%local_string(30011), False)
 		keyboard.doModal()
@@ -128,12 +160,21 @@ def ytchannels_main():
 			li.setArt({'icon':'%s'%channels[i][2]})
 
 			rem_uri = build_url({'mode': 'rem_channel', 'channel_id': '%s'%str(channels[i][1])})
-			li.addContextMenuItems([ (local_string(30003), 'RunPlugin(%s)'%rem_uri)])
+			move_down_uri = build_url({'mode': 'move_down', 'id': '%s'%channels[i][4]})
+			move_up_uri = build_url({'mode': 'move_up', 'id': '%s'%channels[i][4]})
+			items = []
+			items.append((local_string(30003), 'RunPlugin(%s)'%rem_uri))
+			if len(channels) > 1:
+				if channels[i][3] == 1:
+					items.append((local_string(30024), 'RunPlugin(%s)'%move_down_uri))
+				elif channels[i][3] == len(channels):
+					items.append((local_string(30023), 'RunPlugin(%s)'%move_up_uri))
+				else:
+					items.append((local_string(30023), 'RunPlugin(%s)'%move_up_uri))
+					items.append((local_string(30024), 'RunPlugin(%s)'%move_down_uri))
+			li.addContextMenuItems(items)
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 								listitem=li,isFolder=True)
-			url = build_url({'mode': 'add_channel', 'foldername': '%s'%foldername})
-			li = xbmcgui.ListItem('[COLOR green]%s[/COLOR] [COLOR blue]%s[/COLOR]'%(local_string(30009),local_string(30010)))
-			li.setArt({'icon':plus_img})
 
 		url = build_url({'mode': 'add_channel', 'foldername': '%s'%foldername})
 		li = xbmcgui.ListItem('[COLOR green]%s[/COLOR] [COLOR blue]%s[/COLOR]'%(local_string(30009),foldername))

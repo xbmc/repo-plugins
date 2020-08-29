@@ -51,11 +51,70 @@ def yt_time(duration="P1W2DT6H21M32S"):
 	# Do the maths
 	return sum([x*60**units.index(x) for x in units])
 
+def move_up(id):
+	cur = db.cursor()
+	cur.execute('SELECT folder, sort FROM Channels WHERE ROWID = ?',(id,))
+	rows = cur.fetchall()
+	for row in rows:
+		folder = row[0]
+		sort = row[1]
+		new_sort = sort - 1
+		cur.execute('UPDATE Channels SET sort = ? WHERE SORT = ?',(sort, new_sort))
+		cur.execute('UPDATE Channels SET sort = ? WHERE ROWID = ?',(new_sort, id))
+		db.commit()
+		cur.close()
+	return
+
+def move_down(id):
+	cur = db.cursor()
+	cur.execute('SELECT folder, sort FROM Channels WHERE ROWID = ?',(id,))
+	rows = cur.fetchall()
+	for row in rows:
+		folder = row[0]
+		sort = row[1]
+		new_sort = sort + 1
+		cur.execute('UPDATE Channels SET sort = ? WHERE SORT = ?',(sort, new_sort))
+		cur.execute('UPDATE Channels SET sort = ? WHERE ROWID = ?',(new_sort, id))
+		db.commit()
+		cur.close()
+	return
+
 def build_url(query):
 	return base_url + '?' + urllib.parse.urlencode(query)
 
+def check_sort_db():
+	cur = db.cursor()
+	cur.execute("SELECT 1 FROM pragma_table_info('Channels') WHERE name = 'sort';")
+	if cur.fetchall():
+		return True
+	else:
+		return False
+	
+def add_sort_db():
+	# Add sort column to existing database if it doesn't already exist and set initial sort values
+	cur = db.cursor()
+	try: # This should always succeed since this should only get called if the column hasn't been added but using try just in-case
+		cur.execute('ALTER TABLE Channels ADD COLUMN sort INT;')
+	except:
+		pass
+	db.commit()
+	cur.close()
+	return
+
+def init_sort(folder):
+	cur = db.cursor()
+	cur.execute('SELECT Channel, ROWID FROM Channels WHERE Folder = ? AND sort IS NULL',(folder,))
+	null_rows = cur.fetchall()
+	i = 1
+	for row in null_rows:
+		cur.execute("UPDATE Channels SET sort = ? WHERE ROWID = ?;",(i,row[1]))
+		i+=1
+	db.commit()
+	cur.close()
+	return
+
 def delete_database():
-	with db:	
+	with db:
 		cur = db.cursor()
 		cur.execute("drop table if exists Folders")
 		cur.execute("drop table if exists Channels")
@@ -73,19 +132,19 @@ def read_url(url):
 
 def init_database():
 	with db:
-		cur = db.cursor()    
-		cur.execute("begin") 
+		cur = db.cursor()
+		cur.execute("begin")
 		cur.execute("create table if not exists Folders (Name TEXT, Channel TEXT)")
-		cur.execute("create table if not exists Channels (Folder TEXT, Channel TEXT, Channel_ID TEXT,thumb TEXT)")
+		cur.execute("create table if not exists Channels (Folder TEXT, Channel TEXT, Channel_ID TEXT,thumb TEXT,sort INT)")
 		db.commit()
 		cur.close()
 	return
-	
+
 def get_folders():
 	init_database()
 
 	cur = db.cursor()
-	cur.execute("begin")     
+	cur.execute("begin")
 	cur.execute("SELECT Name FROM Folders")
 
 	rows = cur.fetchall()
@@ -95,21 +154,21 @@ def get_folders():
 	for i in range (len(rows)):
 		folder=rows[i]
 		folders+=folder
-		
+
 	return folders
 
 def add_folder(foldername):
 	init_database()
 
-	cur = db.cursor()  
-	cur.execute("begin")   
+	cur = db.cursor()
+	cur.execute("begin")
 	cur.execute('INSERT INTO Folders(Name) VALUES ("%s");'%foldername)
 	db.commit()
 	cur.close()
 
 def remove_folder(name):
-	cur = db.cursor()  
-	cur.execute("begin")  
+	cur = db.cursor()
+	cur.execute("begin")
 	cur.execute("DELETE FROM Folders WHERE Name = ?;",(name,))
 	cur.execute("DELETE FROM Channels WHERE Folder = ?;",(name,))
 
@@ -117,16 +176,16 @@ def remove_folder(name):
 	cur.close()
 
 def get_channels(foldername):
-	cur = db.cursor()    
-	cur.execute("begin")  
+	cur = db.cursor()
+	cur.execute("begin")
 
-	cur.execute("SELECT Channel,Channel_ID,thumb FROM Channels WHERE Folder=?",(foldername,))
+	cur.execute("SELECT Channel,Channel_ID,thumb,sort,ROWID FROM Channels WHERE Folder=? ORDER BY sort ASC",(foldername,))
 
 	rows = cur.fetchall()
 	db.commit
 	cur.close()
 	channels=[]
-	
+
 	for i in range (len(rows)):
 		channel=list(rows[i])
 		channels+=[channel]
@@ -139,17 +198,18 @@ def get_channel_id_from_uploads_id(uploads_id):
 	channel_id=decoded_data['items'][0]['snippet']['channelId']
 
 	return channel_id
-	
 
 def add_channel(foldername,channel_name,channel_id,thumb):
-	cur = db.cursor() 
-	cur.execute("begin")   
+	cur = db.cursor()
+	cur.execute("begin")
 	try:
 		cur.execute("DELETE FROM Channels WHERE Folder = ? AND Channel = ? AND Channel_ID = ? AND thumb = ?",(foldername,channel_name,channel_id,thumb))
 	except:
 		pass
 
-	cur.execute("INSERT INTO Channels(Folder,Channel,Channel_ID,thumb) VALUES (?,?,?,?);",(foldername,channel_name,channel_id,thumb))
+	cur.execute("SELECT * FROM Channels WHERE Folder = ?",(foldername,))
+	sort = len(cur.fetchall()) + 1
+	cur.execute("INSERT INTO Channels(Folder,Channel,Channel_ID,thumb,sort) VALUES (?,?,?,?,?);",(foldername,channel_name,channel_id,thumb,sort))
 	db.commit()
 	cur.close()
 
@@ -199,7 +259,7 @@ def search_channel_by_username(username):
 		req2='https://www.googleapis.com/youtube/v3/channels?part=snippet&id=%s&key=%s'%(channel_id,YOUTUBE_API_KEY)
 		read=read_url(req2)
 		decoded_data=json.loads(read)
-		
+
 		title=decoded_data['items'][0]['snippet']['title']
 		thumb=decoded_data['items'][0]['snippet']['thumbnails']['high']['url']
 		channel_uplid=uploads_id
@@ -215,7 +275,7 @@ def get_channel_id(channel_username):
 	req_url='https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forUsername=%s&key=%s'%(channel_username,YOUTUBE_API_KEY)
 	read=read_url(req_url)
 	decoded_data=json.loads(read)
-	
+
 	if decoded_data['pageInfo']['totalResults']==1:
 		uploads_id=decoded_data['items'][0]['contentDetails']['relatedPlaylists']['uploads']
 		return uploads_id
@@ -262,7 +322,7 @@ def get_latest_from_channel(channel_id, page):
 def get_playlists(channelID,page):
 	if page=='1':
 		url='https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=%s&maxResults=10&key=%s'%(channelID,YOUTUBE_API_KEY)
-	else:#
+	else:
 		url='https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=%s&maxResults=10&pageToken=%s&key=%s'%(channelID,page,YOUTUBE_API_KEY)
 	read=read_url(url)
 	decoded_data=json.loads(read)

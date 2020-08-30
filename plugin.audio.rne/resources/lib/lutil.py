@@ -70,7 +70,7 @@ def get_url_encoded(url):
 def get_parms_encoded(**kwars):
     """This function returns the params encoded to form an URL or data post."""
 
-    param_list = urllib.urlencode(kwars)
+    param_list = urlencode(kwars)
     log('get_parms_encoded params: "%s"' % param_list)
     return param_list
 

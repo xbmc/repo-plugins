@@ -74,9 +74,9 @@ class Plugin():
         This method is called from the main add-on module."""
         if self.debug_enable:
             try:
-                xbmc.log(msg=message, level=xbmc.LOGNOTICE)
+                xbmc.log(msg=message, level=xbmc.LOGINFO)
             except:
-                xbmc.log('%s: log this line is not possible due to encoding string problems' % self.plugin_id, level=xbmc.LOGNOTICE)
+                xbmc.log('%s: log this line is not possible due to encoding string problems' % self.plugin_id, level=xbmc.LOGINFO)
 
 
     def _log(self, message):
@@ -84,9 +84,9 @@ class Plugin():
         This method is privated and only called from other methods within the class."""
         if self.debug_enable:
             try:
-                xbmc.log(msg=message, level=xbmc.LOGNOTICE)
+                xbmc.log(msg=message, level=xbmc.LOGINFO)
             except:
-                xbmc.log('%s: _log this line is not possible due to encoding string problems' % self.plugin_id, level=xbmc.LOGNOTICE)
+                xbmc.log('%s: _log this line is not possible due to encoding string problems' % self.plugin_id, level=xbmc.LOGINFO)
 
 
     def get_plugin_parms(self):

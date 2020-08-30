@@ -1,3 +1,5 @@
+1.3.1+matrix.1 (2020.08.29)
+- Quick fix due to loglevel deprecation on matrix release.
 1.3.0+matrix.1 (2020.05.07)
 - Code updated for matrix onwards.
 1.1.1 (2020.05.06)

@@ -253,7 +253,7 @@ class VtmGoStream:
         :rtype list[str]
         """
         # Clean up old subtitles
-        temp_dir = os.path.join(self._kodi.get_userdata_path(), 'temp')
+        temp_dir = os.path.join(self._kodi.get_userdata_path(), 'temp', '')
         _, files = self._kodi.listdir(temp_dir)
         if files:
             for item in files:
@@ -280,7 +280,7 @@ class VtmGoStream:
             )
 
         for subtitle in subtitles:
-            output_file = temp_dir + '/' + subtitle.get('name') + '.' + subtitle.get('url').split('.')[-1]
+            output_file = temp_dir + subtitle.get('name') + '.' + subtitle.get('url').split('.')[-1]
             webvtt_content = requests.get(subtitle.get('url')).text
             webvtt_content = webvtt_timing_regex.sub(lambda match: self._delay_webvtt_timing(match, ad_breaks), webvtt_content)
             with self._kodi.open_file(output_file, 'w') as webvtt_output:

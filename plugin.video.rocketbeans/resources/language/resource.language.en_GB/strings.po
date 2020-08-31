@@ -55,3 +55,15 @@ msgstr ""
 msgctxt "#32009"
 msgid "Kino Plus"
 msgstr ""
+
+msgctxt "#32010"
+msgid "YouTube"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Twitch"
+msgstr ""
+
+msgctxt "#32012"
+msgid "General"
+msgstr ""

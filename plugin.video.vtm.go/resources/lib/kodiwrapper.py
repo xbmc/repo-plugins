@@ -110,7 +110,7 @@ class KodiWrapper:
             self._url = None
         self._addon_name = ADDON.getAddonInfo('name')
         self._addon_id = ADDON.getAddonInfo('id')
-        self._cache_path = os.path.join(self.get_userdata_path(), 'cache')
+        self._cache_path = os.path.join(self.get_userdata_path(), 'cache', '')
 
     def url_for(self, name, *args, **kwargs):
         """ Wrapper for routing.url_for() to lookup by name """
@@ -526,9 +526,10 @@ class KodiWrapper:
 
     @staticmethod
     def listdir(path):
-        """ Return all files in a directory (using xbmcvfs)"""
-        from xbmcvfs import listdir
-        return listdir(path)
+        """Return all files in a directory (using xbmcvfs)"""
+        from xbmcvfs import listdir as vfslistdir
+        dirs, files = vfslistdir(from_unicode(path))
+        return [to_unicode(item) for item in dirs], [to_unicode(item) for item in files]
 
     @staticmethod
     def mkdir(path):

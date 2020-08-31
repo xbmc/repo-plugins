@@ -140,25 +140,25 @@ class Channels:
         if channel_data and channel_data.get('epg'):
             listing.append(
                 TitleItem(
-                    title=self._kodi.localize(30053, channel=channel.name),  # TV Guide for {channel}
+                    title=self._kodi.localize(30053, channel=channel_data.get('label')),  # TV Guide for {channel}
                     path=self._kodi.url_for('show_tvguide_channel', channel=channel_data.get('epg')),
                     art_dict=dict(
                         icon='DefaultAddonTvInfo.png',
                     ),
                     info_dict=dict(
-                        plot=self._kodi.localize(30054, channel=channel.name),  # Browse the TV Guide for {channel}
+                        plot=self._kodi.localize(30054, channel=channel_data.get('label')),  # Browse the TV Guide for {channel}
                     ),
                 )
             )
 
         listing.append(TitleItem(
-            title=self._kodi.localize(30055, channel=channel.name),  # Catalog for {channel}
+            title=self._kodi.localize(30055, channel=channel_data.get('label')),  # Catalog for {channel}
             path=self._kodi.url_for('show_catalog_channel', channel=key),
             art_dict=dict(
                 icon='DefaultMovieTitle.png'
             ),
             info_dict=dict(
-                plot=self._kodi.localize(30056, channel=channel.name),
+                plot=self._kodi.localize(30056, channel=channel_data.get('label')),  # Browse the Catalog for {channel}
             ),
         ))
 

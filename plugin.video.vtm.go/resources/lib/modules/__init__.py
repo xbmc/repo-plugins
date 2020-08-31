@@ -40,43 +40,43 @@ CHANNELS = OrderedDict([
             ),
         ]
     )),
-    ('vitaya', dict(
-        label='Vitaya',
-        epg='vitaya',
+    ('vtm2', dict(
+        label='VTM 2',
+        epg='vtm2',
         iptv_preset=7,
-        iptv_id='vitaya.be',
-        studio_icon='Vitaya',
+        iptv_id='vtm2.be',
+        studio_icon='VTM 2',
         youtube=[
             dict(
-                # Vitaya: https://www.youtube.com/user/VITAYAvideokanaal
-                label='Vitaya',
-                logo='vitaya',
-                path='plugin://plugin.video.youtube/user/VITAYAvideokanaal/',
-            ),
-        ]
-    )),
-    ('q2', dict(
-        label='Q2',
-        epg='q2',
-        iptv_preset=8,
-        iptv_id='q2.be',
-        studio_icon='Q2',
-        youtube=[
-            dict(
-                # Q2: https://www.youtube.com/user/2BEvideokanaal
-                label='Q2',
-                logo='q2',
+                # VTM 2: https://www.youtube.com/user/2BEvideokanaal
+                label='VTM 2',
+                logo='vtm2',
                 path='plugin://plugin.video.youtube/user/2BEvideokanaal/',
             ),
         ]
     )),
-    ('caz', dict(
-        label='CAZ',
-        epg='caz',
+    ('vtm3', dict(
+        label='VTM 3',
+        epg='vtm3',
+        iptv_preset=8,
+        iptv_id='vtm3.be',
+        studio_icon='VTM 3',
+        youtube=[
+            dict(
+                # VTM 3: https://www.youtube.com/user/VITAYAvideokanaal
+                label='VTM 3',
+                logo='vtm3',
+                path='plugin://plugin.video.youtube/user/VITAYAvideokanaal/',
+            ),
+        ]
+    )),
+    ('vtm4', dict(
+        label='VTM 4',
+        epg='vtm4',
         iptv_preset=9,
-        iptv_id='caz.be',
-        stream='caz',
-        studio_icon='CAZ',
+        iptv_id='vtm4.be',
+        stream='vtm4',
+        studio_icon='VTM 4',
     )),
     ('caz2', dict(
         label='CAZ 2',

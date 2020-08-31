@@ -20,7 +20,7 @@ class YoutubeStream:
         lines = string_data.decode('utf-8').splitlines()
 
         re_video_url = re.compile(r'https://i.ytimg.com/vi/(?P<video_id>[^\/]+)/maxresdefault_live.jpg')
-        re_video_title = re.compile(r'<title>(?P<title>[^\?]+) - YouTube</title>')
+        re_video_title = re.compile(r'"title":"(?P<title>[^\?]+)","lengthSeconds":".","isLive":true')
 
         re_video_url_match = ""
         re_video_title_match = ""

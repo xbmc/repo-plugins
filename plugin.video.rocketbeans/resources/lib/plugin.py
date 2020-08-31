@@ -57,7 +57,7 @@ def index():
         True
     )
 
-    url = "plugin://plugin.video.youtube/channel/%s/" % config.LETS_PLAY_CHANNEL_ID
+    url = "plugin://plugin.video.youtube/channel/%s/" % config.ROCKET_BEANS_GAMING_CHANNEL_ID
     addDirectoryItem(
         plugin.handle,
         url,
@@ -88,7 +88,7 @@ def index():
 
     addDirectoryItem(
         plugin.handle,
-        "plugin://plugin.video.youtube/channel/%s/" % config.HAENGI_HQ_CHANNEL_ID,
+        "plugin://plugin.video.youtube/channel/%s/" % config.LETS_PLAY_CHANNEL_ID,
         ListItem(getString(32008)),
         True
     )

@@ -41,7 +41,7 @@ msgid "Game-Two-Library"
 msgstr ""
 
 msgctxt "#32006"
-msgid "Gaming Library"
+msgid "Rocket Beans Gaming"
 msgstr ""
 
 msgctxt "#32007"
@@ -49,7 +49,7 @@ msgid "Library"
 msgstr ""
 
 msgctxt "#32008"
-msgid "Rocket Beans TV Hängi"
+msgid "Rocket Beans Let’s Play & Streams"
 msgstr ""
 
 msgctxt "#32009"

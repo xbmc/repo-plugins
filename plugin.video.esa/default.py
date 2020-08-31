@@ -139,7 +139,7 @@ def main_list(params):
     buffer_web = lutil.carga_web(page_url)
     
     # Extract video items from the html content
-    video_entry_sep     = '<div class="grid-item video">'
+    video_entry_sep     = '<div class="grid-item video"'
     pattern_videolink   = ' href="([^"]*?)"'
     pattern_thumbnail   = '<img class="image-bg" src="([^"]*?)"'
     pattern_title       = '<h3 class="heading">([^<]+)</h3>'

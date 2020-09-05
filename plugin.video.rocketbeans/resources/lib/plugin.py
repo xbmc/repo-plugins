@@ -22,7 +22,7 @@ def getString(string_id):
     return __addon__.getLocalizedString(string_id).encode('utf-8', 'ignore')
 
 def get_livestream():
-    if __addon__.getSetting("stream") == "Twitch":
+    if __addon__.getSetting("stream") == 0:
         t = TwitchStream(config.TWITCH_USER_LOGIN)
         livestream_url, title, livestream_thumbnail = t.url, t.title, t.thumbnail
     else:

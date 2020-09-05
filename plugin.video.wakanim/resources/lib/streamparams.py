@@ -128,7 +128,7 @@ def get_stream_params_from_json(data):
         drm = drm[u'widevine']
     else:
         # if no 'widewine' get first license type from drm list
-        result['drm'], drm = next(iter(drm.items()))
+        result['drm'], drm = next(iter(list(drm.items())))
         result['drm'] = enc(result['drm'])
     result['key'] = enc(drm[u'url'])
     result['headers'] = {enc(h[u'name']): enc(h[u'value']) for h in drm.get(u'headers', [])}

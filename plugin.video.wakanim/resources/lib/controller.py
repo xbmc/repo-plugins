@@ -60,20 +60,20 @@ def showCatalog(args):
         plot  = li.find("p", {"class": "tooltip_text"})
         stars = li.find("div", {"class": "stars"})
         star  = stars.find_all("span", {"class": "-no"})
-        thumb = li.img["src"].replace(" ", "%20")
+        thumb = li.img["data-src"].replace(" ", "%20")
         if thumb[:4] != "http":
             thumb = "https:" + thumb
 
         # add to view
         view.add_item(args,
                       {"url":         li.a["href"],
-                       "title":       li.find("div", {"class": "slider_item_description"}).span.strong.string.strip(),
-                       "tvshowtitle": li.find("div", {"class": "slider_item_description"}).span.strong.string.strip(),
+                       "title":       li.find("p", {"class": "tooltip_title"}).string.strip(),
+                       "tvshowtitle": li.find("p", {"class": "tooltip_title"}).string.strip(),
                        "mode":        "list_season",
                        "thumb":       thumb,
                        "fanart":      thumb,
                        "rating":      str(10 - len(star) * 2),
-                       "plot":        plot.contents[3].string.strip(),
+                       "plot":        plot.contents[-1].string.strip(),
                        "year":        li.time.string.strip()},
                       isFolder=True, mediatype="video")
 
@@ -102,7 +102,7 @@ def listLastEpisodes(args):
     for li in container.find_all("li"):
         # get values
         progress = int(li.find("div", {"class": "ProgressBar"}).get("data-progress"))
-        thumb = li.img["src"].replace(" ", "%20")
+        thumb = li.img["data-src"].replace(" ", "%20")
         if thumb[:4] != "http":
             thumb = "https:" + thumb
 
@@ -145,7 +145,7 @@ def listLastSimulcasts(args):
         plot  = li.find("p", {"class": "tooltip_text"})
         stars = li.find("div", {"class": "stars"})
         star  = stars.find_all("span", {"class": "-no"})
-        thumb = li.img["src"].replace(" ", "%20")
+        thumb = li.img["data-src"].replace(" ", "%20")
         if thumb[:4] != "http":
             thumb = "https:" + thumb
 

@@ -52,7 +52,8 @@ class YouTubeRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if not conn_allowed:
             logger.log_debug('HTTPServer: Connection from |%s| not allowed' % client_ip)
         else:
-            logger.log_debug(' '.join(log_lines))
+            if self.path != '/ping':
+                logger.log_debug(' '.join(log_lines))
         return conn_allowed
 
     # noinspection PyPep8Naming
@@ -69,7 +70,8 @@ class YouTubeRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(client_json.encode('utf-8'))
 
-        logger.log_debug('HTTPServer: Request uri path |{proxy_path}|'.format(proxy_path=self.path))
+        if self.path != '/ping':
+            logger.log_debug('HTTPServer: Request uri path |{proxy_path}|'.format(proxy_path=self.path))
 
         if not self.connection_allowed():
             self.send_error(403)
@@ -476,8 +478,10 @@ def is_httpd_live(address=None, port=None):
     url = 'http://{address}:{port}/ping'.format(address=address, port=port)
     try:
         response = requests.get(url)
-        logger.log_debug('HTTPServer: Ping |{address}:{port}| |{response}|'.format(address=address, port=port, response=response.status_code))
-        return response.status_code == 204
+        result = response.status_code == 204
+        if not result:
+            logger.log_debug('HTTPServer: Ping |{address}:{port}| |{response}|'.format(address=address, port=port, response=response.status_code))
+        return result
     except:
         logger.log_debug('HTTPServer: Ping |{address}:{port}| |{response}|'.format(address=address, port=port, response='failed'))
         return False

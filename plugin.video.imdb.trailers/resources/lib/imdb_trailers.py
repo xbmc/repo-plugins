@@ -467,6 +467,8 @@ def fetch(url):
     headers = {'User-Agent': USER_AGENT,
                'Referer': 'https://www.imdb.com/',
                'Origin': 'https://www.imdb.com'}
+    if 'graphql' in url:
+        headers.update({'content-type': 'application/json'})
     data = requests.get(url, headers=headers)
     return data
 
@@ -487,6 +489,7 @@ def fetchdata3(key):
                      "  }"
                      "}")
         ptoken = "60"
+        opname = "TrendingTitles"
     elif key == 'recent':
         query_pt1 = ("query RecentVideos($limit: Int!, $paginationToken: String, $queryFilter: RecentVideosQueryFilter!) {"
                      "  recentVideos(limit: $limit, paginationToken: $paginationToken, queryFilter: $queryFilter) {"
@@ -500,6 +503,7 @@ def fetchdata3(key):
                      "  }"
                      "}")
         ptoken = "blank"
+        opname = "RecentVideos"
         vpar.update({'queryFilter': {"contentTypes": ["TRAILER"]}})
     elif key == 'anticipated' or key == 'popular':
         query_pt1 = ("query PopularTitles($limit: Int!, $paginationToken: String, $queryFilter: PopularTitlesQueryFilter!) {"
@@ -514,6 +518,7 @@ def fetchdata3(key):
                      "  }"
                      "}")
         ptoken = "blank"
+        opname = "PopularTitles"
         d1 = datetime.date.today().isoformat()
         if key == 'anticipated':
             vpar.update({'queryFilter': {"releaseDateRange": {"start": d1}}})
@@ -561,7 +566,7 @@ def fetchdata3(key):
             vpar.update({"paginationToken": ptoken})
 
         vtxt = urllib.parse.quote(json.dumps(vpar).replace(" ", ""))
-        r = fetch("{0}?query={1}&variables={2}".format(api_url, qstr, vtxt))
+        r = fetch("{0}?operationName={1}&query={2}&variables={3}".format(api_url, opname, qstr, vtxt))
         data = r.json().get('data')
 
         if key == 'trending' or key == 'anticipated' or key == 'popular':

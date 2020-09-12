@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rivedila7" name="La7-La7d" version="4.2.0" provider-name="Luivit, Testato">
+<addon id="plugin.video.rivedila7" name="La7-La7d" version="4.4.0" provider-name="Luivit, Testato">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.requests"/>
-    <import addon="script.module.inputstreamhelper"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+    <import addon="script.module.inputstreamhelper" version="0.5.0"/>
     <import addon="script.module.beautifulsoup4" version="4.5.3"/>
     <import addon="script.module.html5lib" version="0.999.0"/>
   </requires>
@@ -19,17 +19,19 @@
     <platform>all</platform>
     <license>GNU General Public License v3.0</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=331064</forum>
-    <website>http://www.la7.it</website>
-    <email>luivit39@gmail.com</email>
+    <website>https://www.la7.it</website>
+    <email>luivit39@gmail.com, speednpower@gmail.com</email>
     <source>https://github.com/luivit/plugin.video.rivedila7</source>
-	<assets>
-        <icon>resources/icon.png</icon>
-		<fanart>resources/fanart.jpg</fanart>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+      <screenshot>resources/screenshots/screenshot-00.jpg</screenshot>
+      <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
+      <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     </assets>
-    <news>4.2.0 (2020-02-08)
-- Fixed Week video scraping for On-Demand
-- Fixed episodes thumbnail
-- Moved some program to Landpage scraping
-</news>
+    <news>4.4.0 (2020-05-24)
+      - Added Landpage scraping on all on-demand programs
+      - Separated on-demand programs episodes by Home-Settimana-Archivio
+    </news>
   </extension>
 </addon>

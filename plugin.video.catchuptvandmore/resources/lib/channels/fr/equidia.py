@@ -71,7 +71,7 @@ def list_categories(plugin, item_id, **kwargs):
     )):
         category_url = URL_API_SEARCH + category_context
         item = Listitem()
-        if 'Courses' in category_title:
+        if 'courses' in category_context:
             next_value = 'list_videos_courses'
         else:
             next_value = 'list_videos_emissions'
@@ -127,7 +127,9 @@ def list_videos_courses(plugin, item_id, category_url, page, **kwargs):
     for video_datas in json_parser["results"]:
         video_title = 'R%s - C%s - %s' % (
             video_datas["reunion"]["num_reunion"], video_datas["num_course_pmu"], video_datas["libcourt_prix_course"])
-        video_image = URL_IMAGE % video_datas["photo"]["slug"]
+        video_image = ''
+        if 'photo' in video_datas:
+            video_image = URL_IMAGE % video_datas["photo"]["slug"]
         video_url = URL_ROOT + '/courses/%s/R%s/C%s' % (
             video_datas["reunion"]["date_reunion"], video_datas["reunion"]["num_reunion"], video_datas["num_course_pmu"])
 

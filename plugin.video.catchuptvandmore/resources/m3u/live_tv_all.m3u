@@ -343,11 +343,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/antennereunion/
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viaoccitanie.png" group-title="France",viàOccitanie
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viaoccitanie
 
-##	Ouatch TV
-##	ouatchtv
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/ouatchtv.png" group-title="France",Ouatch TV
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/ouatchtv/get_live_url/?item_id=ouatchtv
-
 ##	RTL 2
 ##	rtl2
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rtl2.png" group-title="France",RTL 2
@@ -368,20 +363,15 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_ur
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tebeo.png" group-title="France",Tébéo
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tebeo/get_live_url/?item_id=tebeo
 
-##	M6 Boutique
-##	mb
-#EXTINF:-1 tvg-id="C184.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/mb.png" group-title="France",M6 Boutique
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/6play/get_live_url/?item_id=mb
-
 ##	viàLMTv Sarthe
 ##	vialmtv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/vialmtv.png" group-title="France",viàLMTv Sarthe
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=vialmtv
 
-##	viàMirabelle
-##	viamirabelle
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viamirabelle.png" group-title="France",viàMirabelle
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viamirabelle
+##	viàMoselle
+##	viamoselle
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viamoselle.png" group-title="France",viàMoselle
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viamoselle
 
 ##	viàVosges
 ##	viavosges
@@ -708,10 +698,10 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/questod/get_liv
 #EXTINF:-1 tvg-id="1014.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/questred.png" group-title="United Kingdom",Quest RED
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/questod/get_live_url/?item_id=questred
 
-##	Bristol TV
-##	bristoltv
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/bristoltv.png" group-title="United Kingdom",Bristol TV
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/bristoltv/get_live_url/?item_id=bristoltv
+##	Bristol Local TV
+##	bristollocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/bristollocal.png" group-title="United Kingdom",Bristol Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=bristollocal
 
 ##	Free Sports
 ##	freesports
@@ -747,6 +737,41 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/stv/get_live_ur
 ##	dust
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/dust.png" group-title="United Kingdom",DUST
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/stv/get_live_url/?item_id=dust
+
+##	Birmingham Local TV
+##	birminghamlocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/birminghamlocal.png" group-title="United Kingdom",Birmingham Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=birminghamlocal
+
+##	Cardiff Local TV
+##	cardifflocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/cardifflocal.png" group-title="United Kingdom",Cardiff Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=cardifflocal
+
+##	Leeds Local TV
+##	leedslocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/leedslocal.png" group-title="United Kingdom",Leeds Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=leedslocal
+
+##	Liverpool Local TV
+##	liverpoollocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/liverpoollocal.png" group-title="United Kingdom",Liverpool Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=liverpoollocal
+
+##	North Whales Local TV
+##	northwaleslocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/northwaleslocal.png" group-title="United Kingdom",North Whales Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=northwaleslocal
+
+##	Teesside Local TV
+##	teessidelocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/teessidelocal.png" group-title="United Kingdom",Teesside Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=teessidelocal
+
+##	Tyne & Wear Local TV
+##	twlocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/twlocal.png" group-title="United Kingdom",Tyne & Wear Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=twlocal
 
 
 
@@ -1108,10 +1133,10 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/ln24/get_live_u
 #EXTINF:-1 tvg-id="C164.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/laune.png" group-title="Belgium",La Une
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=laune
 
-##	La Deux
-##	ladeux
-#EXTINF:-1 tvg-id="C187.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/ladeux.png" group-title="Belgium",La Deux
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=ladeux
+##	Tipik
+##	tipik
+#EXTINF:-1 tvg-id="C187.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/tipik.png" group-title="Belgium",Tipik
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=tipik
 
 ##	La Trois
 ##	latrois
@@ -1423,41 +1448,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/pl/tvp/get_live_ur
 # Spain
 # es_live
 
-##	Telecinco
-##	telecinco
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/telecinco.png" group-title="Spain",Telecinco
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/mitele/get_live_url/?item_id=telecinco
-
-##	Cuatro
-##	cuatro
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/cuatro.png" group-title="Spain",Cuatro
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/mitele/get_live_url/?item_id=cuatro
-
-##	Factoria de Ficcion
-##	fdf
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/fdf.png" group-title="Spain",Factoria de Ficcion
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/mitele/get_live_url/?item_id=fdf
-
-##	Boing
-##	boing
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/boing.png" group-title="Spain",Boing
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/mitele/get_live_url/?item_id=boing
-
-##	Energy TV
-##	energy
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/energy.png" group-title="Spain",Energy TV
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/mitele/get_live_url/?item_id=energy
-
-##	Divinity
-##	divinity
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/divinity.png" group-title="Spain",Divinity
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/mitele/get_live_url/?item_id=divinity
-
-##	Be Mad
-##	bemad
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/bemad.png" group-title="Spain",Be Mad
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/mitele/get_live_url/?item_id=bemad
-
 ##	Realmadrid TV EN
 ##	realmadridtv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/realmadridtv.png" group-title="Spain",Realmadrid TV EN
@@ -1472,6 +1462,31 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/realmadridtv/ge
 ##	paramountchannel_es
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/paramountchannel_es.png" group-title="Spain",Paramount Channel (ES)
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/paramountchannel_es/get_live_url/?item_id=paramountchannel_es
+
+##	La 1
+##	la1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/la1.png" group-title="Spain",La 1
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/rtve/get_live_url/?item_id=la1
+
+##	La 2
+##	la2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/la2.png" group-title="Spain",La 2
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/rtve/get_live_url/?item_id=la2
+
+##	Teledeporte
+##	tdp
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/tdp.png" group-title="Spain",Teledeporte
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/rtve/get_live_url/?item_id=tdp
+
+##	Canal 24 horas
+##	24h
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/24h.png" group-title="Spain",Canal 24 horas
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/rtve/get_live_url/?item_id=24h
+
+##	Trece
+##	trece
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/trece.png" group-title="Spain",Trece
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/trece/get_live_url/?item_id=trece
 
 
 

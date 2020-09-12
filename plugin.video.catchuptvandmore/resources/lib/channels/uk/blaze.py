@@ -25,11 +25,10 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem
 
 
 from resources.lib import web_utils
-from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 
 import json
@@ -50,7 +49,8 @@ URL_LIVE_JSON = 'https://live.blaze.tv/stream-live.php?key=%s&platform=chrome'
 # Replay
 URL_REPLAY = URL_ROOT + '/replay/'
 # pageId
-URL_REPLAY_JSON = 'https://vod.blaze.tv/stream-vod.php?key=%s&platform=chrome'
+URL_REPLAY_TOKEN = URL_API + '/stream/replay/widevine/%s'
+# video ID
 
 
 @Route.register
@@ -80,9 +80,11 @@ def list_videos(plugin, item_id, **kwargs):
         if video_datas.find('.//h3') is not None:
             video_title = video_datas.find('.//h3').text
         if video_datas.find(".//span[@class='pull-left']") is not None:
-            video_title = video_title + ' - ' + video_datas.find(".//span[@class='pull-left']").text
+            video_title = '{} - {}'.format(
+                video_title,
+                video_datas.find(".//span[@class='pull-left']").text)
         video_image = video_datas.find('.//img').get('data-src')
-        video_url = URL_API + video_datas.find('.//a').get('href')
+        video_id = video_datas.find('.//a').get('data-video-id')
 
         item = Listitem()
         item.label = video_title
@@ -90,7 +92,7 @@ def list_videos(plugin, item_id, **kwargs):
 
         item.set_callback(get_video_url,
                           item_id=item_id,
-                          video_url=video_url)
+                          video_id=video_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
@@ -98,29 +100,24 @@ def list_videos(plugin, item_id, **kwargs):
 @Resolver.register
 def get_video_url(plugin,
                   item_id,
-                  video_url,
+                  video_id,
                   download_mode=False,
                   **kwargs):
 
-    resp = urlquick.get(video_url)
+    resp = urlquick.get(URL_REPLAY_TOKEN % video_id,
+                        headers={'X-Requested-With': 'XMLHttpRequest'})
+    json_parser = json.loads(resp.text)
 
-    key_value = re.compile(
-        r'data-key\=\"(.*?)\"').findall(resp.text)[0]
-    token_value = re.compile(
-        r'data-token\=\"(.*?)\"').findall(resp.text)[0]
-    token_expiry_value = re.compile(
-        r'data-expiry\=\"(.*?)\"').findall(resp.text)[0]
-    uvid_value = re.compile(
-        r'data-uvid\=\"(.*?)\"').findall(resp.text)[0]
-    resp2 = urlquick.get(
-        URL_REPLAY_JSON % key_value,
-        headers={
-            'User-Agent': web_utils.get_random_ua(),
-            'token': token_value,
-            'token-expiry': token_expiry_value,
-            'uvid': uvid_value
-        },
-        max_age=-1)
+    video_url = json_parser['tokenizer']['url']
+    token_value = json_parser['tokenizer']['token']
+    token_expiry_value = json_parser['tokenizer']['expiry']
+    uvid_value = json_parser['tokenizer']['uvid']
+    resp2 = urlquick.get(video_url,
+                         headers={'User-Agent': web_utils.get_random_ua(),
+                                  'token': token_value,
+                                  'token-expiry': token_expiry_value,
+                                  'uvid': uvid_value},
+                         max_age=-1)
     json_parser2 = json.loads(resp2.text)
     return json_parser2["Streams"]["Adaptive"]
 

@@ -31,6 +31,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib import resolver_proxy
 
 import json
 import re
@@ -45,9 +46,6 @@ from kodi_six import xbmcgui
 URL_ROOT = 'https://www.arte.tv/%s/'
 # Language
 
-URL_REPLAY_ARTE = 'https://api.arte.tv/api/player/v1/config/%s/%s'
-# desired_language, videoid
-
 URL_LIVE_ARTE = 'https://api.arte.tv/api/player/v1/livestream/%s'
 # Langue, ...
 
@@ -58,8 +56,6 @@ URL_VIDEOS_2 = 'http://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/videos/
 # VideosCode, Page, language
 
 DESIRED_LANGUAGE = Script.setting['arte.language']
-
-DESIRED_QUALITY = Script.setting['quality']
 
 CORRECT_MONTH = {
     'Jan': '01',
@@ -500,40 +496,10 @@ def get_video_url(plugin,
                   download_mode=False,
                   **kwargs):
 
-    resp = urlquick.get(URL_REPLAY_ARTE % (DESIRED_LANGUAGE.lower(), video_id))
-    json_parser = json.loads(resp.text)
-
-    url_selected = ''
-    stream_datas = json_parser['videoJsonPlayer']['VSR']
-
-    if DESIRED_QUALITY == "DIALOG":
-        all_datas_videos_quality = []
-        all_datas_videos_path = []
-
-        for video in stream_datas:
-            if not video.find("HLS"):
-                datas = json_parser['videoJsonPlayer']['VSR'][video]
-                all_datas_videos_quality.append(datas['mediaType'] + " (" +
-                                                datas['versionLibelle'] + ")")
-                all_datas_videos_path.append(datas['url'])
-
-        seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(30709),
-            all_datas_videos_quality)
-        if seleted_item > -1:
-            url_selected = all_datas_videos_path[seleted_item]
-        else:
-            return False
-
-    elif DESIRED_QUALITY == "BEST":
-        url_selected = stream_datas['HTTPS_SQ_1']['url']
-    else:
-        url_selected = stream_datas['HTTPS_HQ_1']['url']
-
-    if download_mode:
-        return download.download_video(url_selected)
-
-    return url_selected
+    return resolver_proxy.get_arte_video_stream(plugin,
+                                                DESIRED_LANGUAGE.lower(),
+                                                video_id,
+                                                download_mode)
 
 
 @Resolver.register

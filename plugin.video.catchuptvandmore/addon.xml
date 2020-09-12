@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.25" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.26" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.codequick" version="0.9.13"/>
@@ -42,24 +42,36 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.25]
-[FR - MYTF1] Move all TF1 group channels in MYTF1 folder
-[FR - MYTF1] Add search feature
-[FR - 6play] Move all M6 group channels in 6play folder
-[FR - myCANAL] Move all Canal+ group channels in myCANAL folder
-[FR - NRJ Play] Move NRJ 12 and Chérie 25 in NRJ Play folder
-[FR - FR3 Régions] Fix typo Franche-Comté
-[BE - RTLplay] Move all RTL group channels in RTLplay folder
-[BE - RTBF] Fix Live TV with no audio (DRM)
-[CH - RTS] Fix Live TV with no audio (DRM)
-[Core] Bump CodeQuick 0.9.13 - Kill xxxx_bridge functions
-[NL - NPO] Fix Lives TV (Audio drop, NPO 1 and 2, Rename NPO 3 to NPO Zapp)
-[FR - Equidia] Add Catchup-TV (Courses and Emissions)
-[CA - NOOVO.TV] Fix Catchup-TV
-[UK - STV] Fix catch up entry error
-[NL - NPO] Fix Next Page error
-[FR - B Smart] Add Catchup-TV
-[FR - Sport En France] Fix Live TV
+[Version 0.2.26]
+[US - ABC News] Fix Catch-Up TV
+[WO - France 24] Fix Catch-Up TV
+[FR - MyCanal] Fix Catch-up TV (More videos are available - DRM still not working)
+[FR - Tébéo/TébéSud] Fix Live TV
+[FR - TVR] Fix Live TV
+[FR - M6 Boutique] Remove Live TV not present in 6Play
+[FR - Equidia] Fix Catch-up TV
+[CH - Rouge TV] Fix Live TV
+[FR - viàMoselle] Rename viàMirabelle to viàMoselle
+[CH - BeCurious TV] Remove Channel - DNS Error to access https://becurious.ch
+[FR - Ouatch TV] Remove Channel
+[FR - france.tv] Add 'All videos/programs' items
+[FR - B Smart] Fix Live TV And Catch-up TV
+[UK - UK Local TV] Add more channels for Live TV and Catch-up TV (Cardiff, Leeds, ...)
+[ES - MiTélé] Remove Lives (Telecinco, Cuatro, ...)
+[ES - RTVE] Add Live TV (La 1, La 2, Teledeporte, Canal 24 Horas)
+[BE - VRTNu] Fix Catch-up TV
+[ES - Trece] Add Live TV
+[BE - TV Lux] Fix Live TV And Catch-up TV
+[BE - TéléMB] Fix Live TV
+[BE - RTC Télé Liège] Fix Live TV
+[UK - Blaze TV] Fix Catch-up TV
+[BE - RTBF] Improvements used API
+[Change] Move Arte code to resolver_proxy
+[UK - Sky Sports] Fix Catch-up TV
+[FR - BFM Business] Fix Live TV
+[FR - Allocine] Fix Search
+[BE - RTBF] Fix Catch-up TV
+[BE - RTBF] Rename La Deux to Tipik
 ----
 Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
     </news>

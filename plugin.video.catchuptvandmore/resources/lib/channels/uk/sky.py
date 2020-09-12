@@ -25,12 +25,9 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
+import htmlement
+from codequick import Route, Resolver, Listitem
 
-from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script, youtube
-
-
-from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
@@ -65,6 +62,8 @@ URL_OOYALA_VOD = 'https://player.ooyala.com/sas/player_api/v2/authorization/' \
 # pcode, Videoid, embed_token
 
 URL_PCODE_EMBED_TOKEN = 'http://www.skysports.com/watch/video/auth/v4/23'
+
+VIDEO_PER_PAGE = 12
 
 
 @Route.register
@@ -108,18 +107,30 @@ def list_categories(plugin, item_id, **kwargs):
         resp = urlquick.get(URL_VIDEOS_SKYSPORTS)
         root = resp.parse()
 
+        categories = []
         for category_datas in root.iterfind(".//a[@class='page-nav__link']"):
             category_title = category_datas.text
-            category_url = URL_ROOT_SKYSPORTS + category_datas.get('href')
+            if category_title not in categories:
+                categories.append(category_title)
+                _category_url = URL_ROOT_SKYSPORTS + category_datas.get('href')
+                resp2 = urlquick.get(_category_url)
+                root2 = resp2.parse()
+                try:
+                    category_url = URL_ROOT_SKYSPORTS + root2.find(
+                        './/div[@class-id="loadmore1"]').get("data-url")
+                    category_url = category_url.replace('#', '')
+                except AttributeError:
+                    continue
 
-            item = Listitem()
-            item.label = category_title
-            item.set_callback(list_videos_sports,
-                              item_id=item_id,
-                              category_url=category_url,
-                              page='1')
-            item_post_treatment(item)
-            yield item
+                item = Listitem()
+                item.label = category_title
+                item.set_callback(list_videos_sports,
+                                  item_id=item_id,
+                                  category_url=category_url,
+                                  start=0,
+                                  end=VIDEO_PER_PAGE)
+                item_post_treatment(item)
+                yield item
 
 
 @Route.register
@@ -130,37 +141,39 @@ def list_videos_youtube(plugin, item_id, channel_youtube, **kwargs):
 
 
 @Route.register
-def list_videos_sports(plugin, item_id, category_url, page, **kwargs):
+def list_videos_sports(plugin, item_id, category_url, start, end, **kwargs):
 
-    resp = urlquick.get(category_url + '/more/%s' % page)
-    root = resp.parse()
+    parser = htmlement.HTMLement()
+    resp = urlquick.get(category_url.format(start=start, end=end))
+    parser.feed(resp.json())  # json unescaped string needed
+    root = parser.close()
 
-    at_least_one_item = False
+    at_least_one_item = 0
 
     for video_datas in root.iterfind(".//div[@class='polaris-tile__inner']"):
         video_title = video_datas.find('.//h2').find('.//a').text.strip()
         video_image = video_datas.find('.//img').get('data-src')
-        video_id_list = re.compile(r'216\/(.*?)\.jpg').findall(
-            video_datas.find('.//img').get('data-src'))
+        video_url = URL_ROOT_SKYSPORTS + video_datas.find(
+            './/h2').find('.//a').get('href')
 
-        if len(video_id_list) > 0:
-            at_least_one_item = True
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
+        at_least_one_item += 1
+        item = Listitem()
+        item.label = video_title
+        item.art['thumb'] = item.art['landscape'] = video_image
 
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_id=video_id_list[0])
-            item_post_treatment(item, is_playable=True, is_downloadable=True)
-            yield item
+        item.set_callback(get_video_url,
+                          item_id=item_id,
+                          video_url=video_url)
+        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        yield item
 
-    if at_least_one_item:
+    if at_least_one_item == VIDEO_PER_PAGE:
         # More videos...
         yield Listitem.next_page(item_id=item_id,
                                  category_url=category_url,
-                                 page=str(int(page) + 1))
-    else:
+                                 start=end,
+                                 end=end + VIDEO_PER_PAGE)
+    elif at_least_one_item == 0:
         plugin.notify(plugin.localize(30718), '')
         yield False
 
@@ -168,29 +181,40 @@ def list_videos_sports(plugin, item_id, category_url, page, **kwargs):
 @Resolver.register
 def get_video_url(plugin,
                   item_id,
-                  video_id,
+                  video_url,
                   download_mode=False,
                   **kwargs):
 
-    data_embed_token = urlquick.get(URL_PCODE_EMBED_TOKEN).text
-    pcode = re.compile(r'sas\\/embed_token\\/(.*?)\\/all').findall(
-        data_embed_token)[0]
+    data_embed_token = urlquick.get(URL_PCODE_EMBED_TOKEN).json()
+    pcode = re.compile(
+        r'sas/embed_token/(.*?)/all').findall(data_embed_token)[0]
     data_embed_token = quote_plus(data_embed_token.replace('"', ''))
+
+    resp = urlquick.get(video_url)
+    root = resp.parse()
+    try:
+        video_id = root.find(
+            './/div[@data-provider="ooyala"]').get('data-sdc-video-id')
+    except AttributeError:
+        plugin.notify('ERROR', plugin.localize(30712))
+        return False
+
     video_vod = urlquick.get(URL_OOYALA_VOD %
                              (pcode, video_id, data_embed_token)).text
     json_parser = json.loads(video_vod)
+    streams_base64 = []
     if 'streams' in json_parser["authorization_data"][video_id]:
         for stream in json_parser["authorization_data"][video_id]["streams"]:
             url_base64 = stream["url"]["data"]
+            if url_base64:
+                streams_base64.append(url_base64)
 
-        final_video_url = base64.standard_b64decode(url_base64)
+        final_video_url = base64.standard_b64decode(streams_base64[-1])
 
         if download_mode:
             return download.download_video(final_video_url)
 
         return final_video_url
-    plugin.notify('ERROR', plugin.localize(30712))
-    return False
 
 
 @Resolver.register

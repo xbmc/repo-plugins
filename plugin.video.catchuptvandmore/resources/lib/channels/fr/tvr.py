@@ -39,12 +39,12 @@ import urlquick
 
 URL_ROOT = "https://www.tvr.bzh"
 
-URL_LIVE = URL_ROOT + '/interactiv_video_player/direct?ap=1'
+URL_LIVE = URL_ROOT + '/direct'
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(
-        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, verify=False, max_age=-1)
-    return re.compile(r'base_m3u8_url \= \"(.*?)\"').findall(resp.text)[0]
+        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
+    return re.compile(r'data-source\=\"(.*?)\"').findall(resp.text)[0]

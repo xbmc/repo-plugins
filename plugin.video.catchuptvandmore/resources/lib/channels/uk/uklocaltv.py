@@ -32,13 +32,41 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib.addon_utils import get_item_media_path
 
 import re
 import urlquick
 
 # TO DO
 
-URL_ROOT = 'https://www.bristollocal.tv'
+URL_ROOT = 'https://www.%s.tv'
+
+
+@Route.register
+def channels(plugin, **kwargs):
+    """
+    List all france.tv channels
+    """
+    # (item_id, label, thumb, fanart)
+    channels = [
+        ('birminghamlocal', 'Birmingham Local TV', 'birminghamlocal.png', 'birminghamlocal_fanart.jpg'),
+        ('bristollocal', 'Bristol Local TV', 'bristollocal.png', 'bristollocal_fanart.jpg'),
+        ('cardifflocal', 'Cardiff Local TV', 'cardifflocal.png', 'cardifflocal_fanart.jpg'),
+        ('leedslocal', 'Leeds Local TV', 'leedslocal.png', 'leedslocal_fanart.jpg'),
+        ('liverpoollocal', 'Liverpool Local TV', 'liverpoollocal.png', 'liverpoollocal_fanart.jpg'),
+        ('northwaleslocal', 'North Whales Local TV', 'northwaleslocal.png', 'northwaleslocal_fanart.jpg'),
+        ('teessidelocal', 'Teesside Local TV', 'teessidelocal.png', 'teessidelocal_fanart.jpg'),
+        ('twlocal', 'Tyne & Wear Local TV', 'twlocal.png', 'twlocal_fanart.jpg')
+    ]
+
+    for channel_infos in channels:
+        item = Listitem()
+        item.label = channel_infos[1]
+        item.art["thumb"] = get_item_media_path('channels/uk/' + channel_infos[2])
+        item.art["fanart"] = get_item_media_path('channels/uk/' + channel_infos[3])
+        item.set_callback(list_categories, channel_infos[0])
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register
@@ -46,14 +74,14 @@ def list_categories(plugin, item_id, **kwargs):
     """
     - ...
     """
-    resp = urlquick.get(URL_ROOT)
+    resp = urlquick.get(URL_ROOT % item_id)
     root = resp.parse("section", attrs={"class": "grid-container grid-40"})
 
     for category_datas in root.iterfind(".//a"):
         if 'Live' not in category_datas.find('.//img').get('title'):
             category_title = category_datas.find('.//img').get('title')
-            category_image = URL_ROOT + category_datas.find('.//img').get('src')
-            category_url = URL_ROOT + '/' + category_datas.get('href')
+            category_image = URL_ROOT % item_id + category_datas.find('.//img').get('src')
+            category_url = URL_ROOT % item_id + '/' + category_datas.get('href')
 
             item = Listitem()
             item.label = category_title
@@ -78,9 +106,9 @@ def list_sub_categories(plugin, item_id, category_url, **kwargs):
             if sub_category_datas.find('.//h2').text is not None:
                 sub_category_title = sub_category_datas.find('.//h2').text
                 if 'Weather' in sub_category_datas.find('.//h2').text:
-                    sub_category_url = URL_ROOT + '/video-category/weather/'
+                    sub_category_url = URL_ROOT % item_id + '/video-category/weather/'
                 else:
-                    sub_category_url = URL_ROOT + sub_category_datas.find('.//p/a').get('href')
+                    sub_category_url = URL_ROOT % item_id + sub_category_datas.find('.//p/a').get('href')
 
                 item = Listitem()
                 item.label = sub_category_title
@@ -102,7 +130,7 @@ def list_videos(plugin, item_id, sub_category_url, page, **kwargs):
 
         if 'single-video' in video_datas.get('class'):
             video_title = video_datas.find('.//img').get('title')
-            video_image = URL_ROOT + video_datas.find('.//img').get('src')
+            video_image = URL_ROOT % item_id + video_datas.find('.//img').get('src')
             video_url = video_datas.find('.//a').get('href')
 
             item = Listitem()
@@ -140,7 +168,7 @@ def get_video_url(plugin,
 def get_live_url(plugin, item_id, **kwargs):
     """Get video URL and start video player"""
 
-    resp = urlquick.get(URL_ROOT,
+    resp = urlquick.get(URL_ROOT % item_id,
                         headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
     live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]',

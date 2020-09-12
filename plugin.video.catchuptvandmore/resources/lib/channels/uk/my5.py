@@ -30,6 +30,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib import web_utils
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib.addon_utils import get_item_media_path
 
 import json
 import urlquick
@@ -57,6 +58,49 @@ URL_VIDEO_DATAS = URL_ROOT + "/isl/api/v1/dataservice/Items('%s')?$expand=Offers
 
 URL_IMAGES = URL_ROOT + "/isl/api/v1/dataservice/ResizeImage/$value?ImageId='%s'&EntityId='%s'&EntityType='Item'"
 # ImageId, EntityId
+
+
+@Route.register
+def channels(plugin, **kwargs):
+    """
+    List all france.tv channels
+    """
+    # (item_id, label, thumb, fanart)
+    channels = [
+        ('timeline', 'Channel Timeline', 'timeline.png', 'timeline_fanart.jpg'),
+        ('plutotvparanormal', 'Pluto TV Paranormal', 'plutotvparanormal.png', 'plutotvparanormal_fanart.jpg'),
+        ('plutotvretro', 'Pluto TV Retro', 'plutotvretro.png', 'plutotvretro_fanart.jpg'),
+        ('reeltruthcrime', 'Reel Truth Crime', 'reeltruthcrime.png', 'reeltruthcrime_fanart.jpg'),
+        ('five', 'Channel 5', 'five.png', 'five_fanart.jpg'),
+        ('fiveusa', '5 USA', 'fiveusa.png', 'fiveusa_fanart.jpg'),
+        ('fivestar', '5 Star', 'fivestar.png', 'fivestar_fanart.jpg'),
+        ('spike', 'Spike', 'spike.png', 'spike_fanart.jpg'),
+        ('blaze', 'Blaze', 'blaze.png', 'blaze_fanart.jpg'),
+        ('5spike', '5Spike', '5spike.png', '5spike_fanart.jpg'),
+        ('5select', '5Select', '5select.png', '5select_fanart.jpg'),
+        ('bet', 'Channel BET', 'bet.png', 'bet_fanart.jpg'),
+        ('paramount', 'Channel Paramount Network', 'paramount.png', 'paramount_fanart.jpg'),
+        ('pbsamerica', 'Channel PBS America', 'pbsamerica.png', 'pbsamerica_fanart.jpg'),
+        ('realstories', 'Channel Real Stories', 'realstories.png', 'realstories_fanart.jpg'),
+        ('plutotvchristmas', 'Pluto TV Christmas', 'plutotvchristmas.png', 'plutotvchristmas_fanart.jpg'),
+        ('togethertv', 'Channel Together TV', 'togethertv.png', 'togethertv_fanart.jpg'),
+        ('nextbyhot', 'NEXT by HOT', 'nextbyhot.png', 'nextbyhot_fanart.jpg'),
+        ('plutotvdrama', 'PLUTO TV DRAMA', 'plutotvdrama.png', 'plutotvdrama_fanart.jpg'),
+        ('plutotvmovies', 'PLUTO TV MOVIES', 'plutotvmovies.png', 'plutotvmovies_fanart.jpg'),
+        ('plutotvfood', 'PLUTO TV Food', 'plutotvfood.png', 'plutotvfood_fanart.jpg'),
+        ('mastersoffood', 'Masters of Food', 'mastersoffood.png', 'mastersoffood_fanart.jpg'),
+        ('wwe', 'WWE', 'wwe.png', 'wwe_fanart.jpg'),
+        ('smithsonian', 'Smithsonian', 'smithsonian.png', 'smithsonian_fanart.jpg')
+    ]
+
+    for channel_infos in channels:
+        item = Listitem()
+        item.label = channel_infos[1]
+        item.art["thumb"] = get_item_media_path('channels/uk/' + channel_infos[2])
+        item.art["fanart"] = get_item_media_path('channels/uk/' + channel_infos[3])
+        item.set_callback(list_programs, channel_infos[0])
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register
@@ -147,12 +191,11 @@ def list_videos(plugin, item_id, season_id, **kwargs):
 @Resolver.register
 def get_video_url(plugin, item_id, video_id, **kwargs):
 
-    # TO UNCOMMENT
+    # To Uncomment
     # resp = urlquick.get(URL_VIDEO_DATAS % video_id)
     # json_parser = json.loads(resp.text)
 
     # stream_id = json_parser["CustomId"]
-
     return False
     # TODO get information of MPD and DRM
 

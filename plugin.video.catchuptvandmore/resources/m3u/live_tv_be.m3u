@@ -108,10 +108,10 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/ln24/get_live_u
 #EXTINF:-1 tvg-id="C164.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/laune.png" group-title="Belgium",La Une
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=laune
 
-##	La Deux
-##	ladeux
-#EXTINF:-1 tvg-id="C187.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/ladeux.png" group-title="Belgium",La Deux
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=ladeux
+##	Tipik
+##	tipik
+#EXTINF:-1 tvg-id="C187.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/tipik.png" group-title="Belgium",Tipik
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=tipik
 
 ##	La Trois
 ##	latrois

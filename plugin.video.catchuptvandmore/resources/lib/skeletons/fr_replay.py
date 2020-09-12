@@ -281,7 +281,7 @@ menu = {
         'label': 'Ouatch TV',
         'thumb': 'channels/fr/ouatchtv.png',
         'fanart': 'channels/fr/ouatchtv_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 67
     },
     'lachainemeteo': {

@@ -29,7 +29,6 @@ from __future__ import unicode_literals
 from codequick import Route, Resolver, Listitem, utils, Script, youtube
 import urlquick
 
-
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
@@ -41,7 +40,8 @@ TOKEN_APP = '66b85dad-3ad5-40f3-ab32-2305fc2357ea'
 URL_API = utils.urljoin_partial('http://apis.france24.com')
 
 
-def root(plugin, item_id, **kwargs):
+@Route.register
+def root_catchup_tv(plugin, item_id, **kwargs):
     # http://apis.france24.com/products/get_product/78dcf358-9333-4fb2-a035-7b91e9705b13?token_application=66b85dad-3ad5-40f3-ab32-2305fc2357ea
     root_json_url = 'products/get_product/78dcf358-9333-4fb2-a035-7b91e9705b13'
     root_json_r = urlquick.get(URL_API(root_json_url),

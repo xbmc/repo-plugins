@@ -41,7 +41,7 @@ menu = {
         'label': 'Telecinco',
         'thumb': 'channels/es/telecinco.png',
         'fanart': 'channels/es/telecinco_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 1
     },
     'cuatro': {
@@ -49,7 +49,7 @@ menu = {
         'label': 'Cuatro',
         'thumb': 'channels/es/cuatro.png',
         'fanart': 'channels/es/cuatro_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 2
     },
     'fdf': {
@@ -57,7 +57,7 @@ menu = {
         'label': 'Factoria de Ficcion',
         'thumb': 'channels/es/fdf.png',
         'fanart': 'channels/es/fdf_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 3
     },
     'boing': {
@@ -65,7 +65,7 @@ menu = {
         'label': 'Boing',
         'thumb': 'channels/es/boing.png',
         'fanart': 'channels/es/boing_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 4
     },
     'energy': {
@@ -73,7 +73,7 @@ menu = {
         'label': 'Energy TV',
         'thumb': 'channels/es/energy.png',
         'fanart': 'channels/es/energy_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 5
     },
     'divinity': {
@@ -81,7 +81,7 @@ menu = {
         'label': 'Divinity',
         'thumb': 'channels/es/divinity.png',
         'fanart': 'channels/es/divinity_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 6
     },
     'bemad': {
@@ -89,7 +89,7 @@ menu = {
         'label': 'Be Mad',
         'thumb': 'channels/es/bemad.png',
         'fanart': 'channels/es/bemad_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 7
     },
     'realmadridtv': {
@@ -108,5 +108,45 @@ menu = {
         'fanart': 'channels/es/paramountchannel_es_fanart.jpg',
         'enabled': True,
         'order': 16
+    },
+    'la1': {
+        'resolver': '/resources/lib/channels/es/rtve:get_live_url',
+        'label': 'La 1',
+        'thumb': 'channels/es/la1.png',
+        'fanart': 'channels/es/la1_fanart.jpg',
+        'enabled': True,
+        'order': 17
+    },
+    'la2': {
+        'resolver': '/resources/lib/channels/es/rtve:get_live_url',
+        'label': 'La 2',
+        'thumb': 'channels/es/la2.png',
+        'fanart': 'channels/es/la2_fanart.jpg',
+        'enabled': True,
+        'order': 18
+    },
+    'tdp': {
+        'resolver': '/resources/lib/channels/es/rtve:get_live_url',
+        'label': 'Teledeporte',
+        'thumb': 'channels/es/tdp.png',
+        'fanart': 'channels/es/tdp_fanart.jpg',
+        'enabled': True,
+        'order': 19
+    },
+    '24h': {
+        'resolver': '/resources/lib/channels/es/rtve:get_live_url',
+        'label': 'Canal 24 horas',
+        'thumb': 'channels/es/24h.png',
+        'fanart': 'channels/es/24h_fanart.jpg',
+        'enabled': True,
+        'order': 20
+    },
+    'trece': {
+        'resolver': '/resources/lib/channels/es/trece:get_live_url',
+        'label': 'Trece',
+        'thumb': 'channels/es/trece.png',
+        'fanart': 'channels/es/trece_fanart.jpg',
+        'enabled': True,
+        'order': 20
     }
 }

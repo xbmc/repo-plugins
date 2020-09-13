@@ -56,6 +56,8 @@ def router(paramstring):
             return
         try:
             out = re.findall(r'<source src=(.+?)\s', html)[0]
+            if out.startswith('http') == False:
+                out = 'https://' + out.replace('//', '')
         except Exception:
             raise ValueError('Stream URL not found!')
             return

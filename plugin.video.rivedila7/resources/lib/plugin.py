@@ -21,6 +21,7 @@ addon = xbmcaddon.Addon()
 language = addon.getLocalizedString
 handle = int(sys.argv[1])
 url_base = "https://www.la7.it"
+url_base_la7d = "https://www.la7.it/la7d"
 url_live_la7 = "https://www.la7.it/dirette-tv"
 url_live_la7d = "https://www.la7.it/live-la7d"
 url_tgla7d = "https://tg.la7.it/listing/tgla7d"
@@ -51,6 +52,7 @@ plot_global = ''
 link_global = ''
 pagenum = 0
 list_programmi = []
+#list_puntate = []
 tg_cronache = False
 filtro_cronache = 'TG LA7 Cronache'
 omnibus_news = False
@@ -60,7 +62,9 @@ thumb_path = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', '
 
 
 
+
 def parameters_string_to_dict(parameters):
+    #xbmc.log('PARAMETERS------: '+str(parameters),xbmc.LOGNOTICE)
     paramDict = dict(urlparse.parse_qsl(parameters[1:]))
     return paramDict
 
@@ -79,23 +83,25 @@ def show_root_menu():
     liStyle = xbmcgui.ListItem('[B]'+language(32004)+'[/B]')
     liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'rivedila7d.jpg'), 'fanart' : fanart_path })
     addDirectoryItem_nodup({"mode": "rivedi_la7d"},liStyle)
-    liStyle = xbmcgui.ListItem('[B]'+language(32006)+'[/B]')
-    liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'programmila7la7d.jpg'), 'fanart' : fanart_path })
-    addDirectoryItem_nodup({"mode": "tutti_programmi"},liStyle)
     liStyle = xbmcgui.ListItem('[B]'+language(32007)+'[/B]')
     liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'tgmeteo.jpg'), 'fanart' : fanart_path })
     addDirectoryItem_nodup({"mode": "tg_meteo"},liStyle) 
+    liStyle = xbmcgui.ListItem('[B]'+language(32006)+'[/B]')
+    liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'programmila7la7d.jpg'), 'fanart' : fanart_path })
+    addDirectoryItem_nodup({"mode": "tutti_programmi"},liStyle)
     liStyle = xbmcgui.ListItem('[B]'+language(32008)+'[/B]')
     liStyle.setArt({ 'thumb': os.path.join(thumb_path, 'techela7.jpg'), 'fanart' : fanart_path })
     addDirectoryItem_nodup({"mode": "teche_la7"},liStyle)
-
 
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 
 def addDirectoryItem_nodup(parameters, li, title=titolo_global, folder=True):
+    #xbmc.log('LIST PUNTATE------: '+str(list_puntate),xbmc.LOGNOTICE)
     if title in list_programmi:
-        xbmc.log('DUPLICATE TV SHOW',xbmc.LOGNOTICE)
+        xbmc.log('PROGRAMMA DUPLICATO',xbmc.LOGNOTICE)
+    #elif title in list_puntate:
+        #xbmc.log('PUNTATA DUPLICATA',xbmc.LOGNOTICE)        
     else:
         url = sys.argv[0] + '?' + urllib.urlencode(parameters, 'utf-8')
         #xbmc.log('LIST------: '+str(url),xbmc.LOGNOTICE)
@@ -105,7 +111,23 @@ def addDirectoryItem_nodup(parameters, li, title=titolo_global, folder=True):
         return xbmcplugin.addDirectoryItem(handle=handle, url=url, listitem=li, isFolder=folder)
 
 
-def play_dirette(url):
+def play_dirette(url,live):
+    if live:
+        regex5 = 'emissioneString =  "(.*?)"'
+
+        if url == url_live_la7:
+            url_title = url_base
+        elif url == url_live_la7d:
+            url_title = url_base_la7d
+        #xbmc.log('URL TITLE-----: '+str(url_title),xbmc.LOGNOTICE)
+        
+        req = urllib2.Request(url_title,headers={'user-agent': headers_set['user-agent']})
+        page=urllib2.urlopen(req)
+        html=page.read()
+        #xbmc.log('REGEX5-----: '+str(re.findall(regex5, html)),xbmc.LOGNOTICE)
+        titolo_diretta=re.findall(regex5, html)[0]
+        #xbmc.log('TITOLO DIRETTA-----: '+str(titolo_diretta),xbmc.LOGNOTICE)
+
     response = requests.get(url, headers={'user-agent': headers_set['user-agent']},verify=False).content
     preulr = re.findall('preTokenUrl = "(.+?)"',response)[0]
     response=response.replace("\'",'"')
@@ -141,20 +163,23 @@ def play_dirette(url):
     #xbmc.log('LICENSE2------: '+str(lic_url),xbmc.LOGNOTICE)
     is_helper = inputstreamhelper.Helper(PROTOCOL, drm=DRM)
     if is_helper.check_inputstream():
-        newItem = xbmcgui.ListItem(path=mpdurl) 
-        newItem.setProperty("inputstreamaddon", is_helper.inputstream_addon)
-        newItem.setProperty("inputstream.adaptive.manifest_type", PROTOCOL)
-        newItem.setProperty("inputstream.adaptive.license_type", DRM)
-        newItem.setProperty("inputstream.adaptive.license_key", lic_url)
-        newItem.setMimeType('application/dash+xml')
-        xbmcplugin.setResolvedUrl(handle, True, listitem=newItem)  
-
+        listitem = xbmcgui.ListItem()
+        listitem.setPath(mpdurl)
+        if live:
+            #listitem.setLabel(titolo_diretta)
+            listitem.setInfo('video', {'plot': titolo_diretta, 'title': titolo_diretta})
+        listitem.setProperty("inputstreamaddon", is_helper.inputstream_addon)
+        listitem.setProperty("inputstream.adaptive.manifest_type", PROTOCOL)
+        listitem.setProperty("inputstream.adaptive.license_type", DRM)
+        listitem.setProperty("inputstream.adaptive.license_key", lic_url)
+        listitem.setMimeType('application/dash+xml')
+        xbmcplugin.setResolvedUrl(handle, True, listitem)
 
 
 def play_video(page_video,live):
     #xbmc.log('PAGE VIDEO-----: '+str(page_video),xbmc.LOGNOTICE)
     link_video = ''
-    # regex1 = 'vS = "(.*?)"'
+    #regex1 = 'vS = "(.*?)"'
     regex2 = '/content/(.*?).mp4'
     regex3 = 'm3u8: "(.*?)"'
     #regex4 = '  <iframe src="(.*?)"'
@@ -175,7 +200,8 @@ def play_video(page_video,live):
             #xbmc.log('REGEX3-----: '+str(re.findall(regex3, html)),xbmc.LOGNOTICE)
             link_video = re.findall(regex3, html)[0]
         else:
-            play_dirette(page_video)
+            #xbmc.log('DECODIFICA DRM',xbmc.LOGNOTICE)
+            play_dirette(page_video, False)
             exit()
         # elif re.findall(regex4, html):
         #     #xbmc.log('REGEX4-----: '+str(re.findall(regex4, html)),xbmc.LOGNOTICE)
@@ -367,11 +393,11 @@ def programmi_lettera():
                 'url': '/la-mala-educaxxxion',
                 'img': 'https://kdam.iltrovatore.it/p/103/sp/10300/thumbnail/entry_id/0_j0z82ps2/version/100001/type/5/width/600/height/360/quality/100/name/0_j0z82ps2.jpg'
                 },           
-            'Ω Video non catalogati 1': {
+            'NON CLASSIFICATI': {
                 'url': '/non-classificati',
                 'img': '',
                 },
-            'Ω Video non catalogati 2': {
+            'FILM': {
                 'url': '/film',
                 'img': '',
                 },
@@ -470,10 +496,6 @@ def video_programma():
     global tg_cronache
     global omnibus_news
 
-    #xbmc.log('LINK GLOBAL----: '+str(link_global),xbmc.LOGNOTICE)
-    if link_global == url_base+'/atlantide' or link_global == url_base+'/atlantidefiles' or link_global == url_base+'/film-e-fiction' or link_global == url_base+'/giardinieri-in-affitto' or link_global == url_base+'/hawthorne' or link_global == url_base+'/il-commissario-cordier' or link_global == url_base+'/indovina-cosa-sceglie-la-sposa' or link_global == url_base+'/italia-fashion-show' or link_global == url_base+'/josephineangegardien' or link_global == url_base+'/lunionefalaforza' or link_global == url_base+'/little-murders' or link_global == url_base+'/mister-nat' or link_global == url_base+'/professort' or link_global == url_base+'/sfera' or link_global == url_base+'/specialguest' or link_global == url_base+'/tagada-doc' or link_global == url_base+'/the-dr-oz-show':
-        video_programma_landpage()
-
     if link_global == 'flag_tg_cronache':
         tg_cronache = True
         link_global = url_base+'/tgla7'
@@ -481,7 +503,10 @@ def video_programma():
     if link_global == 'flag_omnibus_news':
         omnibus_news = True
         link_global = url_base+'/omnibus'
-    
+
+    if (pagenum == 0) and (link_global != url_base+'/film') and (link_global != url_base+'/omnibus'):
+        video_programma_landpage()
+
     if link_global != url_tgla7d:
         req = urllib2.Request(link_global+"/rivedila7",headers={'user-agent': headers_set['user-agent']})
         try:
@@ -494,6 +519,7 @@ def video_programma():
         html=BeautifulSoup(page,'html5lib')
 
         if pagenum == 0:
+            xbmcplugin.addDirectoryItem(handle=handle, url='', listitem=xbmcgui.ListItem("[B][COLOR blue]"+'SETTIMANA'+"[/COLOR][/B]"))
             # FIRST VIDEO
             if html.find('div',class_='ultima_puntata'):
                 first = html.find('div',class_='ultima_puntata')
@@ -528,9 +554,12 @@ def video_programma():
             else:
                 xbmc.log('NO WEEK VIDEO',xbmc.LOGNOTICE)
 
+            if html.findAll(text="Puntate Cult"):
+                xbmcplugin.addDirectoryItem(handle=handle, url='', listitem=xbmcgui.ListItem("[B][COLOR blue]"+'ARCHIVIO'+"[/COLOR][/B]"))
+
         # CULT VIDEO
         if html.findAll(text="Puntate Cult"):
-            if link_global == url_base+'/chi-sceglie-la-seconda-casa':
+            if (link_global == url_base+'/chi-sceglie-la-seconda-casa') or (link_global == url_base+'/lingrediente-perfetto'):
                 req2 = urllib2.Request(link_global+"/rivedila7",headers={'user-agent': headers_set['user-agent']})
             else:
                 req2 = urllib2.Request(link_global+"/rivedila7/archivio?page="+str(pagenum),headers={'user-agent': headers_set['user-agent']})
@@ -540,7 +569,7 @@ def video_programma():
             if video_archivio:
                 get_rows_video(video_archivio)
 
-                if (link_global != url_base+'/tgla7') and (link_global != url_base+'/omnibus'):
+                if not omnibus_news:
                     page=html2.find('li',class_='pager-next')
                     pagenext(page)
     #Tg La7d
@@ -592,7 +621,8 @@ def first_video(first, titolo, filtro):
         else:
             thumb=thumblink
         #xbmc.log('THUMB 1------: '+str(thumb),xbmc.LOGNOTICE)
-        data='[I] - ('+first.find('div',class_='scritta_ultima').text.encode('utf-8').strip()+')[/I]'
+        data_orig = first.find('div',class_='scritta_ultima').text.encode('utf-8').strip()
+        data = '[I] - ('+data_orig.replace('/', '.')+')[/I]'
         try:
             plot=first.find('div',class_='occhiello').text.encode('utf-8').strip()
         except Exception as e:
@@ -603,8 +633,9 @@ def first_video(first, titolo, filtro):
         liStyle = xbmcgui.ListItem(titolo+data)
         liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
         liStyle.setInfo('video', { 'plot': plot })
-        addDirectoryItem_nodup({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle, folder=False)
-
+        addDirectoryItem_nodup({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle, titolo+data, folder=False)
+        #if not titolo+data in list_puntate:
+            #list_puntate.append(titolo+data)
 
 def video_list(div, titolo, filtro):
     if filtro:
@@ -617,7 +648,8 @@ def video_list(div, titolo, filtro):
         #subdata=div.find('a').get('href').encode('utf-8')
         #data='[I] - ('+subdata[24:34]+')[/I]'
         try:
-            data='[I] - ('+div.find('div',class_='data').text.encode('utf-8').strip()+')[/I]'
+            data_orig = div.find('div',class_='data').text.encode('utf-8').strip()
+            data = '[I] - ('+data_orig.replace('/', '.')+')[/I]'
         except Exception as e:
             e = sys.exc_info()[0]
             xbmc.log('EXCEP DATA_1: '+str(e),xbmc.LOGNOTICE)
@@ -627,8 +659,9 @@ def video_list(div, titolo, filtro):
         liStyle = xbmcgui.ListItem(titolo+data)
         liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
         liStyle.setInfo('video', { 'plot': plot })
-        addDirectoryItem_nodup({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle, folder=False)
-
+        addDirectoryItem_nodup({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle, titolo+data, folder=False)
+        #if not titolo+data in list_puntate:
+            #list_puntate.append(titolo+data)
 
 def get_rows_video(video):
     for div in video:
@@ -701,8 +734,23 @@ def get_rows_video_techela7(video):
 
 def video_programma_landpage():
     global link_global
-    #xbmc.log('LINK GLOBAL------: '+str(link_global),xbmc.LOGNOTICE)
-    req = urllib2.Request(link_global,headers={'user-agent': headers_set['user-agent']})
+    #xbmc.log('LINK GLOBAL_LAND------: '+str(link_global),xbmc.LOGNOTICE)
+    xbmcplugin.addDirectoryItem(handle=handle, url='', listitem=xbmcgui.ListItem("[B][COLOR blue]"+'HOME'+"[/COLOR][/B]"))
+
+    if link_global == url_base+'/faccia-a-faccia':
+        link_landpage=url_base+'/facciaafaccia'
+        req = urllib2.Request(link_landpage,headers={'user-agent': headers_set['user-agent']})
+    elif link_global == url_base+'/boss-dei-comici':
+        link_landpage=url_base+'/il-boss-dei-comici'
+        req = urllib2.Request(link_landpage,headers={'user-agent': headers_set['user-agent']})
+    elif link_global == url_base+'/laria-destate':
+        link_landpage=url_base+'/lariadestate'
+        req = urllib2.Request(link_landpage,headers={'user-agent': headers_set['user-agent']})
+    elif link_global == url_base+'/tagada-doc':
+        link_landpage=url_base+'/taga-doc'
+        req = urllib2.Request(link_landpage,headers={'user-agent': headers_set['user-agent']})
+    else:
+        req = urllib2.Request(link_global,headers={'user-agent': headers_set['user-agent']})
     page = urllib2.urlopen(req)
     html=BeautifulSoup(page,'html5lib')
     
@@ -723,7 +771,7 @@ def video_programma_landpage():
             get_rows_video_landpage(video_puntate_2r)
             
     xbmcplugin.setContent(handle, 'episodes')
-    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
+    #xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 
 def get_rows_video_landpage_preview(video):
@@ -740,7 +788,9 @@ def get_rows_video_landpage_preview(video):
     liStyle = xbmcgui.ListItem(titolo+data)
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', { 'plot': plot })
-    addDirectoryItem_nodup({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle, folder=False)
+    addDirectoryItem_nodup({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle, titolo+data, folder=False)
+    #if not titolo+data in list_puntate:
+        #list_puntate.append(titolo+data)
 
 
 def get_rows_video_landpage(video):
@@ -758,14 +808,16 @@ def get_rows_video_landpage(video):
         liStyle = xbmcgui.ListItem(titolo+data)
         liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
         liStyle.setInfo('video', { 'plot': plot })
-        addDirectoryItem_nodup({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle, folder=False)
+        addDirectoryItem_nodup({"mode": mode,"play": link,"titolo": titolo+data,"thumb":thumb,"plot":plot}, liStyle, titolo+data, folder=False)
+        #if not titolo+data in list_puntate:
+            #list_puntate.append(titolo+data)
 
 
 def pagenext(pagenb):
-            if pagenb:
-                liStyle = xbmcgui.ListItem('[B]'+language(32003)+'[/B]')
-                liStyle.setArt({ 'fanart' : fanart_path })
-                addDirectoryItem_nodup({"mode": mode,"link":link_global,"page":pagenum+1}, liStyle)
+    if pagenb:
+        liStyle = xbmcgui.ListItem('[B]'+language(32003)+'[/B]')
+        liStyle.setArt({ 'fanart' : fanart_path })
+        addDirectoryItem_nodup({"mode": mode,"link":link_global,"page":pagenum+1}, liStyle)
 
 
 
@@ -787,13 +839,10 @@ else:
     pagenum=int(params.get("page", ""))
 
 if mode=="diretta_la7":
-    titolo_global=language(32002)
-    #play_video(url_live,True)    
-    play_dirette(url_live_la7)
+    play_dirette(url_live_la7,True)
 
-if mode=="diretta_la7d":
-    titolo_global=language(32009)    
-    play_dirette(url_live_la7d)
+if mode=="diretta_la7d":  
+    play_dirette(url_live_la7d,True)
 
 elif mode=="tg_meteo":
     if play=="":

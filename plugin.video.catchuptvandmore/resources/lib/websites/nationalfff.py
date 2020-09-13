@@ -38,14 +38,8 @@ URL_REPLAY = URL_ROOT + '/playback/loadmore/national/%s'
 # TODO Add Live
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     item = Listitem()
     item.label = plugin.localize(30701)

@@ -44,14 +44,8 @@ INFO_STREAM = 'http://cbnews.ondemand.flumotion.com/video/mp4/%s/%s.mp4'
 QUALITIES_STREAM = ['low', 'hd']
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
 
     resp = urlquick.get(URL_ROOT)

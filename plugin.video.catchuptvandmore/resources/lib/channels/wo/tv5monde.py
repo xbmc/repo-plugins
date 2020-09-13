@@ -46,13 +46,6 @@ URL_TV5MONDE_ROOT = 'https://revoir.tv5monde.com'
 LIST_LIVE_TV5MONDE = {'tv5mondefbs': 'fbs', 'tv5mondeinfo': 'infoplus'}
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """
@@ -193,12 +186,8 @@ def get_video_url(plugin,
     return final_video_url
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     live_id = ''
     for channel_name, live_id_value in list(LIST_LIVE_TV5MONDE.items()):

@@ -59,13 +59,6 @@ URL_IMAGES = URL_ROOT + "/isl/api/v1/dataservice/ResizeImage/$value?ImageId='%s'
 # ImageId, EntityId
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_programs(plugin, item_id)
-
-
 @Route.register
 def list_programs(plugin, item_id, **kwargs):
     """

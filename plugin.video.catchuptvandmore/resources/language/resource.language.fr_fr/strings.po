@@ -663,6 +663,18 @@ msgctxt "#30723"
 msgid "An error occurred while getting TV guide"
 msgstr "Une erreur s'est produite lors de l'obtention du guide TV"
 
+msgctxt "#30724"
+msgid "Failed to guess your country based on your IP"
+msgstr "Impossible de deviner votre pays en fonction de votre adresse IP"
+
+msgctxt "#30725"
+msgid "Categories"
+msgstr "Catégories"
+
+msgctxt "#30726"
+msgid "Races"
+msgstr "Courses"
+
 
 # Favourites (from 30800 to 30859)
 

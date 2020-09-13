@@ -49,13 +49,6 @@ URL_LIVE = URL_ROOT + '/dirette/%s'
 URL_REPLAYS = URL_ROOT + '/dl/RaiTV/RaiPlayMobile/Prod/Config/programmiAZ-elenco.json'
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_letters(plugin, item_id)
-
-
 @Route.register
 def list_letters(plugin, item_id, **kwargs):
     """
@@ -189,12 +182,8 @@ def get_video_url(plugin,
     return item
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE % item_id, max_age=-1)
     return re.compile(r'\"content_url\"\:\"(.*?)\"').findall(

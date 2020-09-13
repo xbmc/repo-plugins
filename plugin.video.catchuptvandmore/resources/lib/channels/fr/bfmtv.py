@@ -74,13 +74,6 @@ URL_LIVE_BFMBUSINESS = 'http://bfmbusiness.bfmtv.com/mediaplayer/live-video/'
 DESIRED_QUALITY = Script.setting['quality']
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_programs(plugin, item_id)
-
-
 def get_token(item_id):
     """Get session token"""
     resp = urlquick.get(URL_TOKEN % item_id)
@@ -225,26 +218,28 @@ def get_video_url(plugin,
         return final_video_url
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     if item_id == 'bfmtv':
         resp = urlquick.get(URL_LIVE_BFMTV,
                             headers={'User-Agent': web_utils.get_random_ua()},
                             max_age=-1)
+        root = resp.parse()
+        live_datas = root.find(".//div[@class='video_block']")
+        data_account = live_datas.get('accountid')
+        data_video_id = live_datas.get('videoid')
+        data_player = live_datas.get('playerid')
+        return resolver_proxy.get_brightcove_video_json(plugin, data_account,
+                                                        data_player, data_video_id)
     elif item_id == 'bfmbusiness':
         resp = urlquick.get(URL_LIVE_BFMBUSINESS,
                             headers={'User-Agent': web_utils.get_random_ua()},
                             max_age=-1)
-
-    root = resp.parse()
-    live_datas = root.find(".//div[@class='video_block']")
-    data_account = live_datas.get('accountid')
-    data_video_id = live_datas.get('videoid')
-    data_player = live_datas.get('playerid')
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id)
+        root = resp.parse()
+        live_datas = root.find(".//div[@class='next-player']")
+        data_account = live_datas.get('data-account')
+        data_video_id = live_datas.get('data-video-id')
+        data_player = live_datas.get('data-player')
+        return resolver_proxy.get_brightcove_video_json(plugin, data_account,
+                                                        data_player, data_video_id)

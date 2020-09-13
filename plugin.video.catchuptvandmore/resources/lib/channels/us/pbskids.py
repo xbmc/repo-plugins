@@ -43,12 +43,8 @@ URL_ROOT = 'http://pbskids.org'
 URL_LIVE = URL_ROOT + '/api/video/v1/livestream?station=KIDS'
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE)
     json_parser = json.loads(resp.text)

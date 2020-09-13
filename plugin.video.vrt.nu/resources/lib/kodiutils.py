@@ -5,13 +5,21 @@
 from __future__ import absolute_import, division, unicode_literals
 from contextlib import contextmanager
 from sys import version_info
+from socket import timeout
+from ssl import SSLError
 
 import xbmc
 import xbmcaddon
 import xbmcplugin
 from utils import from_unicode, to_unicode
 
+try:  # Python 3
+    from urllib.request import HTTPErrorProcessor
+except ImportError:  # Python 2
+    from urllib2 import HTTPErrorProcessor
+
 ADDON = xbmcaddon.Addon()
+DEFAULT_CACHE_DIR = 'cache'
 
 SORT_METHODS = dict(
     # date=xbmcplugin.SORT_METHOD_DATE,
@@ -77,6 +85,15 @@ MONTH_SHORT = {
     '11': xbmc.getLocalizedString(61),
     '12': xbmc.getLocalizedString(62),
 }
+
+
+class NoRedirection(HTTPErrorProcessor):
+    """Prevent urllib from following http redirects"""
+
+    def http_response(self, request, response):
+        return response
+
+    https_response = http_response
 
 
 class SafeDict(dict):
@@ -679,13 +696,6 @@ def supports_drm():
     return kodi_version_major() > 17
 
 
-def get_tokens_path():
-    """Cache and return the userdata tokens path"""
-    if not hasattr(get_tokens_path, 'cached'):
-        get_tokens_path.cached = addon_profile() + 'tokens/'
-    return getattr(get_tokens_path, 'cached')
-
-
 COLOUR_THEMES = dict(
     dark=dict(highlighted='yellow', availability='blue', geoblocked='red', greyedout='gray'),
     light=dict(highlighted='brown', availability='darkblue', geoblocked='darkred', greyedout='darkgray'),
@@ -712,11 +722,18 @@ def colour(text):
     return text
 
 
-def get_cache_path():
-    """Cache and return the userdata cache path"""
-    if not hasattr(get_cache_path, 'cached'):
-        get_cache_path.cached = addon_profile() + 'cache/'
-    return getattr(get_cache_path, 'cached')
+def get_cache_path(cache_file, cache_dir=DEFAULT_CACHE_DIR):
+    """Return a specified cache path"""
+    import os
+    cache_dir = get_cache_dir(cache_dir)
+    return os.path.join(cache_dir, cache_file)
+
+
+def get_cache_dir(cache_dir=DEFAULT_CACHE_DIR):
+    """Create and return a specified cache directory"""
+    import os
+    cache_dir = os.path.join(addon_profile(), cache_dir, '')
+    return cache_dir
 
 
 def get_addon_info(key):
@@ -844,6 +861,11 @@ def container_reload(url=None):
     container_update(url)
 
 
+def execute_builtin(builtin):
+    """Run an internal Kodi builtin"""
+    xbmc.executebuiltin(builtin)
+
+
 def end_of_directory():
     """Close a virtual directory, required to avoid a waiting Kodi"""
     from addon import plugin
@@ -855,10 +877,10 @@ def wait_for_resumepoints():
     update = get_property('vrtnu_resumepoints')
     if update == 'busy':
         import time
-        timeout = time.time() + 5  # 5 seconds timeout
+        time_out = time.time() + 5  # 5 seconds timeout
         log(3, 'Resumepoint update is busy, wait')
         while update != 'ready':
-            if time.time() > timeout:  # Exit loop in case something goes wrong
+            if time.time() > time_out:  # Exit loop in case something goes wrong
                 break
             xbmc.sleep(50)
             update = get_property('vrtnu_resumepoints')
@@ -939,40 +961,59 @@ def human_delta(seconds):
     return '%d second%s' % (seconds, 's' if seconds != 1 else '')
 
 
-def get_cache(path, ttl=None):  # pylint: disable=redefined-outer-name
+def get_cache(cache_file, ttl=None, cache_dir=DEFAULT_CACHE_DIR):  # pylint: disable=redefined-outer-name
     """Get the content from cache, if it is still fresh"""
     if not get_setting_bool('usehttpcaching', default=True):
         return None
 
-    fullpath = get_cache_path() + path
+    fullpath = get_cache_path(cache_file, cache_dir)
     if not exists(fullpath):
         return None
 
-    from time import localtime, mktime
-    mtime = stat_file(fullpath).st_mtime()
-    now = mktime(localtime())
-    if ttl is not None and now >= mtime + ttl:
-        return None
+    if ttl is not None:
+        from time import localtime, mktime
+        mtime = stat_file(fullpath).st_mtime()
+        now = mktime(localtime())
+        if now >= mtime + ttl:
+            return None
 
 #    if ttl is None:
 #        log(3, "Cache '{path}' is forced from cache.", path=path)
 #    else:
 #        log(3, "Cache '{path}' is fresh, expires in {time}.", path=path, time=human_delta(mtime + ttl - now))
     with open_file(fullpath, 'r') as fdesc:
-        return get_json_data(fdesc)
+        json = get_json_data(fdesc)
+
+    if json is None:
+        return None
+
+    if ttl is None and isinstance(json, dict):
+        expiration_date = json.get('expirationDate', None)
+        if expiration_date:
+            from datetime import datetime
+            import dateutil.parser
+            import dateutil.tz
+            now = datetime.now(dateutil.tz.tzlocal())
+            exp = dateutil.parser.parse(expiration_date)
+            if exp <= now:
+                log(2, "Cache expired: '{path}'", path=fullpath)
+                return None
+    log(2, "Got item from cache '{path}'", path=fullpath)
+    return json
 
 
-def update_cache(path, data):
+def update_cache(cache_file, data, cache_dir=DEFAULT_CACHE_DIR):
     """Update the cache, if necessary"""
     if not get_setting_bool('usehttpcaching', default=True):
         return
 
-    fullpath = get_cache_path() + path
+    fullpath = get_cache_path(cache_file, cache_dir)
     if not exists(fullpath):
         # Create cache directory if missing
-        if not exists(get_cache_path()):
-            mkdirs(get_cache_path())
-        write_cache(path, data)
+        directory = get_cache_dir(cache_dir)
+        if not exists(directory):
+            mkdirs(directory)
+        write_cache(fullpath, data)
         return
 
     with open_file(fullpath, 'r') as fdesc:
@@ -980,26 +1021,23 @@ def update_cache(path, data):
 
     # Avoid writes if possible (i.e. SD cards)
     if cache == data:
-        update_timestamp(path)
+        update_timestamp(fullpath)
         return
 
-    write_cache(path, data)
+    write_cache(fullpath, data)
 
 
-def write_cache(path, data):
+def write_cache(fullpath, data):
     """Write data to cache"""
-    log(3, "Write cache '{path}'.", path=path)
-    fullpath = get_cache_path() + path
+    log(3, "Write cache '{path}'.", path=fullpath)
     with open_file(fullpath, 'w') as fdesc:
-        # dump(data, fdesc, encoding='utf-8')
         fdesc.write(data)
 
 
-def update_timestamp(path):
+def update_timestamp(fullpath):
     """Update a file's timestamp"""
     from os import utime
-    fullpath = get_cache_path() + path
-    log(3, "Cache '{path}' has not changed, updating mtime only.", path=path)
+    log(3, "Cache '{path}' has not changed, updating mtime only.", path=fullpath)
     utime(fullpath, None)
 
 
@@ -1010,6 +1048,85 @@ def ttl(kind='direct'):
     if kind == 'indirect':
         return get_setting_int('httpcachettlindirect', default=60) * 60
     return 5 * 60
+
+
+def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_redirects=True, raise_errors=None):
+    """Return a urllib http response"""
+    try:  # Python 3
+        from urllib.error import HTTPError, URLError
+        from urllib.parse import unquote
+        from urllib.request import build_opener, HTTPCookieProcessor, ProxyHandler, Request
+    except ImportError:  # Python 2
+        from urllib2 import build_opener, HTTPError, HTTPCookieProcessor, ProxyHandler, Request, URLError, unquote
+
+    opener_args = []
+    if not follow_redirects:
+        opener_args.append(NoRedirection)
+    if cookiejar is not None:
+        opener_args.append(HTTPCookieProcessor(cookiejar))
+    proxies = get_proxies()
+    if proxies:
+        opener_args.append(ProxyHandler(proxies))
+    opener = build_opener(*opener_args)
+
+    if not headers:
+        headers = dict()
+    req = Request(url, headers=headers)
+    if data is not None:
+        req.data = data
+        log(2, 'URL post: {url}', url=unquote(url))
+        log(2, 'URL post data: {data}', data=data)
+    else:
+        log(2, 'URL get: {url}', url=unquote(url))
+
+    if method is not None:
+        req.get_method = lambda: method
+
+    if raise_errors is None:
+        raise_errors = list()
+    try:
+        return opener.open(req)
+    except HTTPError as exc:
+        if isinstance(raise_errors, list) and 401 in raise_errors or raise_errors == 'all':
+            raise
+        if hasattr(req, 'selector'):  # Python 3.4+
+            url_length = len(req.selector)
+        else:  # Python 2.7
+            url_length = len(req.get_selector())
+        if exc.code == 400 and 7600 <= url_length <= 8192:
+            ok_dialog(heading='HTTP Error 400', message=localize(30967))
+            log_error('HTTP Error 400: Probably exceeded maximum url length: '
+                      'VRT Search API url has a length of {length} characters.', length=url_length)
+            return None
+        if exc.code == 413 and url_length > 8192:
+            ok_dialog(heading='HTTP Error 413', message=localize(30967))
+            log_error('HTTP Error 413: Exceeded maximum url length: '
+                      'VRT Search API url has a length of {length} characters.', length=url_length)
+            return None
+        if exc.code == 431:
+            ok_dialog(heading='HTTP Error 431', message=localize(30967))
+            log_error('HTTP Error 431: Request header fields too large: '
+                      'VRT Search API url has a length of {length} characters.', length=url_length)
+            return None
+        if exc.code == 401:
+            ok_dialog(heading='HTTP Error {code}'.format(code=exc.code), message='{}\n{}'.format(url, exc.reason))
+            log_error('HTTP Error {code}: {reason}', code=exc.code, reason=exc.reason)
+            return None
+        if exc.code in (400, 403) and exc.headers.get('Content-Type') and 'application/json' in exc.headers.get('Content-Type'):
+            return exc
+        reason = exc.reason
+        code = exc.code
+        ok_dialog(heading='HTTP Error {code}'.format(code=code), message='{}\n{}'.format(url, reason))
+        log_error('HTTP Error {code}: {reason}', code=code, reason=reason)
+        return None
+    except URLError as exc:
+        ok_dialog(heading=localize(30968), message=localize(30969))
+        log_error('URLError: {error}\nurl: {url}', error=exc.reason, url=url)
+        return None
+    except (timeout, SSLError) as exc:
+        ok_dialog(heading=localize(30968), message=localize(30969))
+        log_error('{error}\nurl: {url}', error=exc.reason, url=url)
+        return None
 
 
 def get_json_data(response, fail=None):
@@ -1027,55 +1144,24 @@ def get_json_data(response, fail=None):
         return fail
 
 
-def get_url_json(url, cache=None, headers=None, data=None, fail=None):
+def get_url_json(url, cache=None, headers=None, data=None, fail=None, raise_errors=None):
     """Return HTTP data"""
-    try:  # Python 3
-        from urllib.error import HTTPError
-        from urllib.parse import unquote
-        from urllib.request import urlopen, Request
-    except ImportError:  # Python 2
-        from urllib2 import HTTPError, unquote, urlopen, Request
+    response = open_url(url, headers=headers, data=data, raise_errors=raise_errors)
+    if response:
+        json_data = get_json_data(response, fail=fail)
+        if json_data:
+            if cache:
+                from json import dumps
+                update_cache(cache, dumps(json_data))
+            return json_data
+    return fail
 
-    if headers is None:
-        headers = dict()
-    req = Request(url, headers=headers)
 
-    if data is not None:
-        log(2, 'URL post: {url}', url=unquote(url))
-        log(2, 'URL post data: {data}', data=data)
-        req.data = data
-    else:
-        log(2, 'URL get: {url}', url=unquote(url))
-    try:
-        json_data = get_json_data(urlopen(req), fail=fail)
-    except HTTPError as exc:
-        if hasattr(req, 'selector'):  # Python 3.4+
-            url_length = len(req.selector)
-        else:  # Python 2.7
-            url_length = len(req.get_selector())
-        if exc.code == 400 and 7600 <= url_length <= 8192:
-            ok_dialog(heading='HTTP Error 400', message=localize(30967))
-            log_error('HTTP Error 400: Probably exceeded maximum url length: '
-                      'VRT Search API url has a length of {length} characters.', length=url_length)
-            return fail
-        if exc.code == 413 and url_length > 8192:
-            ok_dialog(heading='HTTP Error 413', message=localize(30967))
-            log_error('HTTP Error 413: Exceeded maximum url length: '
-                      'VRT Search API url has a length of {length} characters.', length=url_length)
-            return fail
-        if exc.code == 431:
-            ok_dialog(heading='HTTP Error 431', message=localize(30967))
-            log_error('HTTP Error 431: Request header fields too large: '
-                      'VRT Search API url has a length of {length} characters.', length=url_length)
-            return fail
-        json_data = get_json_data(exc, fail=fail)
-        if json_data is None:
-            raise
-    else:
-        if cache:
-            from json import dumps
-            update_cache(cache, dumps(json_data))
-    return json_data
+def delete_cache(cache_file, cache_dir=DEFAULT_CACHE_DIR):
+    """Delete a cached file"""
+    path = get_cache_path(cache_file, cache_dir)
+    if exists(path):
+        delete(path)
 
 
 def get_cached_url_json(url, cache, headers=None, ttl=None, fail=None):  # pylint: disable=redefined-outer-name
@@ -1100,10 +1186,10 @@ def refresh_caches(cache_file=None):
 def invalidate_caches(*caches):
     """Invalidate multiple cache files"""
     import fnmatch
-    _, files = listdir(get_cache_path())
+    _, files = listdir(get_cache_dir())
     # Invalidate caches related to menu list refreshes
     removes = set()
     for expr in caches:
         removes.update(fnmatch.filter(files, expr))
     for filename in removes:
-        delete(get_cache_path() + filename)
+        delete(get_cache_path(filename))

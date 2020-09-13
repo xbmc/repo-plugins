@@ -177,7 +177,7 @@
             <setting label="30080" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <!--<setting label="" type="bool" id="fr" default="true" visible="false"/>-->
 
-                <setting label="30158" type="labelenum" id="france3regions.language" values="Alpes|Alsace|Aquitaine|Auvergne|Bourgogne|Bretagne|Centre-Val de Loire|Chapagne-Ardenne|Corse|Côte d'Azur|Franche-Compté|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrénées|Nord-Pas-de-Calais|Basse-Normandie|Haute-Normandie|Paris Île-de-France|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes|Rhône-Alpes|Nouvelle-Aquitaine" default="Alpes"/>
+                <setting label="30158" type="labelenum" id="france3regions.language" values="Alpes|Alsace|Aquitaine|Auvergne|Bourgogne|Bretagne|Centre-Val de Loire|Chapagne-Ardenne|Corse|Côte d'Azur|Franche-Comté|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrénées|Nord-Pas-de-Calais|Basse-Normandie|Haute-Normandie|Paris Île-de-France|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes|Rhône-Alpes|Nouvelle-Aquitaine" default="Alpes"/>
                 <setting label="30159" type="labelenum" id="la_1ere.language" values="Guadeloupe|Guyane|Martinique|Mayotte|Nouvelle Calédonie|Polynésie|Réunion|St-Pierre et Miquelon|Wallis et Futuna|Outre-mer" default="Guadeloupe"/>
 
             <!-- Spain channels -->

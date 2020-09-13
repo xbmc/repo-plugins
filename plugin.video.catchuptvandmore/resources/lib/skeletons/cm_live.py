@@ -30,28 +30,25 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'crtv': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cm/crtv:get_live_url',
         'label': 'CRTV',
         'thumb': 'channels/cm/crtv.png',
         'fanart': 'channels/cm/crtv_fanart.jpg',
-        'module': 'resources.lib.channels.cm.crtv',
         'enabled': True,
         'order': 1
     },
     'crtvnews': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cm/crtv:get_live_url',
         'label': 'CRTV News',
         'thumb': 'channels/cm/crtvnews.png',
         'fanart': 'channels/cm/crtvnews_fanart.jpg',
-        'module': 'resources.lib.channels.cm.crtv',
         'enabled': True,
         'order': 2
     }

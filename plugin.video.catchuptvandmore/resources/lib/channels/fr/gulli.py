@@ -91,13 +91,6 @@ def get_api_key():
     return 'iphoner_' + key
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """
@@ -195,26 +188,14 @@ def get_video_url(plugin,
                   video_url,
                   download_mode=False,
                   **kwargs):
-    url_root = video_url.replace('playlist.m3u8', '')
-    m3u8_content = urlquick.get(
-        video_url, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
-    last_url = ''
-
-    for line in m3u8_content.text.splitlines():
-        if 'm3u8' in line and 'video' in line:
-            last_url = line
 
     if download_mode:
-        return download.download_video(url_root + last_url)
-    return url_root + last_url
-
-
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
+        return download.download_video(video_url)
+    return video_url
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     url_live = ''
     live_html = urlquick.get(URL_LIVE_TV,

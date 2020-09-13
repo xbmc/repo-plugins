@@ -1,4 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting id="stream" type="select" label="32000" values="YouTube|Twitch" default="YouTube" />
+<?xml version="1.0" encoding="utf-8" ?>
+<settings version="1">
+  <section id="rbtvsettings">
+    <category id="general" label="32012">
+      <group id="1">
+        <setting id="stream" type="string" label="32000">
+          <constraints>
+            <options>
+              <option label="32010">0</option> <!-- YouTube -->
+              <option label="32011">1</option> <!-- Twitch -->
+            </options>
+            <delimiter>,</delimiter>
+          </constraints>
+          <level>0</level>
+          <default>0</default>
+          <control type="list" format="string" />
+        </setting>
+      </group>
+    </category>
+  </section>
 </settings>

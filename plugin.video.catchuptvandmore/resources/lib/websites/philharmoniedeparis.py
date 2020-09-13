@@ -40,14 +40,8 @@ URL_REPLAYS = URL_ROOT + '/misc/AjaxListVideo.ashx?/Concerts/%s'
 URL_STREAM = URL_ROOT + '/otoPlayer/config.ashx?id=%s'
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     """
     Build categories listing

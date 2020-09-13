@@ -56,12 +56,8 @@ def get_ip():
     return IP
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     live_id = 'cctv_p2p_hd%s' % item_id
     resp = requests.get(

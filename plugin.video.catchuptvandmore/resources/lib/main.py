@@ -107,20 +107,21 @@ def generic_menu(plugin, item_id=None, **kwargs):
                 item.art["fanart"] = get_item_media_path(
                     item_infos['fanart'])
 
-            # Set item params
-            # If this item requires a module to work, get
-            # the module path to be loaded
-            if 'module' in item_infos:
-                item.params['item_module'] = item_infos['module']
-
+            # Set item additional params
             if 'xmltv_id' in item_infos:
                 item.params['xmltv_id'] = item_infos['xmltv_id']
 
             item.params['item_id'] = item_id
 
-            # Get cllback function of this item
-            item_callback = eval(item_infos['callback'])
-            item.set_callback(item_callback)
+            # Set callback function for this item
+            if 'route' in item_infos:
+                item.set_callback((Route.ref(item_infos['route'])))
+            elif 'resolver' in item_infos:
+                item.set_callback((Resolver.ref(item_infos['resolver'])))
+            else:
+                # This case should not happen
+                # Ignore this item to prevent any error for this menu
+                continue
 
             # Add needed context menus to this item
             add_context_menus_to_item(item,
@@ -128,7 +129,7 @@ def generic_menu(plugin, item_id=None, **kwargs):
                                       index,
                                       menu_id,
                                       len(menu),
-                                      is_playable=(item_infos['callback'] == 'live_bridge'),
+                                      is_playable='resolver' in item_infos,
                                       item_infos=item_infos)
 
             yield item
@@ -209,85 +210,6 @@ def tv_guide_menu(plugin, item_id, **kwargs):
 
 
 @Route.register
-def replay_bridge(plugin, item_id, item_module, **kwargs):
-    """Bridge between main.py file and each channel modules files
-
-    Args:
-        plugin (codequick.script.Script)
-        item_id (str): Catch-up TV channel menu to build (e.g. tf1)
-        item_module (str): Channel module (e.g. resources.lib.channels.fr.mytf1)
-    Returns:
-        Iterator[codequick.listing.Listitem]: Kodi 'item_id' menu
-    """
-
-    module = importlib.import_module(item_module)
-    return module.replay_entry(plugin, item_id)
-
-
-@Route.register
-def website_bridge(plugin, item_id, item_module, **kwargs):
-    """Bridge between main.py file and each website modules files
-
-    Args:
-        plugin (codequick.script.Script)
-        item_id (str): Website menu to build (e.g. allocine)
-        item_module (str): Channel module (e.g. resources.lib.websites.allocine)
-    Returns:
-        Iterator[codequick.listing.Listitem]: Kodi 'item_id' menu
-    """
-
-    module = importlib.import_module(item_module)
-    return module.website_entry(plugin, item_id)
-
-
-@Route.register
-def multi_live_bridge(plugin, item_id, item_module, **kwargs):
-    """Bridge between main.py file and each channel modules files
-
-    Args:
-        plugin (codequick.script.Script)
-        item_id (str): Multi live TV channel menu to build (e.g. auvio)
-        item_module (str): Channel module (e.g. resources.lib.channels.be.rtbf)
-    Returns:
-        Iterator[codequick.listing.Listitem]: Kodi 'item_id' menu
-    """
-
-    # Let's go to the module file ...
-    module = importlib.import_module(item_module)
-    return module.multi_live_entry(plugin, item_id)
-
-
-@Resolver.register
-def live_bridge(plugin, item_id, item_module, **kwargs):
-    """Bridge between main.py file and each channel modules files
-
-    Args:
-        plugin (codequick.script.Script)
-        item_id (str): Live TV channel menu to build (e.g. tf1)
-        item_module (str): Channel module (e.g. resources.lib.channels.fr.mytf1)
-        **kwargs: Arbitrary keyword arguments
-    Returns:
-        Iterator[codequick.listing.Listitem]: Kodi 'item_id' menu
-    """
-
-    # If we come from a M3U file, we need to
-    # convert the dict string to the real dict object
-    # and get the language value
-    lang = ''
-    if 'item_dict' in kwargs and \
-            isinstance(kwargs['item_dict'], string_types):
-        kwargs['item_dict'] = eval(kwargs['item_dict'])
-        lang = kwargs['item_dict'].get('language', '')
-
-    # Let's go to the module file ...
-    module = importlib.import_module(item_module)
-    if lang == '':
-        return module.live_entry(plugin, item_id)
-    else:
-        return module.live_entry(plugin, item_id, language=lang)
-
-
-@Route.register
 def favourites(plugin, start=0, **kwargs):
     """Build 'favourites' menu of the addon ('favourites' menu callback function)
 
@@ -303,14 +225,14 @@ def favourites(plugin, start=0, **kwargs):
     sorted_menu = []
     fav_dict = fav.get_fav_dict_from_json()
     menu = []
-    for item_hash, item_dict in list(fav_dict.items()):
+    for item_hash, item_dict in list(fav_dict['items'].items()):
         item = (item_dict['params']['order'], item_hash, item_dict)
         menu.append(item)
 
     # We sort the menu according to the item_order values
     sorted_menu = sorted(menu, key=lambda x: x[0])
 
-    # Notify the user if there is not item in favourites
+    # Notify the user if there is no item in favourites
     if len(sorted_menu) == 0:
         Script.notify(Script.localize(30033), Script.localize(30806), display_time=7000)
         yield False
@@ -328,59 +250,48 @@ def favourites(plugin, start=0, **kwargs):
             break
 
         cnt += 1
-        # Listitem.from_dict fails with subtitles
-        # See https://github.com/willforde/script.module.codequick/issues/30
-        if 'subtitles' in item_dict:
-            item_dict.pop('subtitles')
-
-        # Listitem.from_dict only works if context is a list
-        if 'context' in item_dict and not isinstance(item_dict['context'], list):
-            item_dict.pop('context')
-
-        # Remove original move and hide contexts:
-        if 'context' in item_dict:
-            new_context = []
-            for context in item_dict['context']:
-                if 'move_item' not in context[1] and 'hide' not in context[1]:
-                    new_context.append(context)
-            item_dict['context'] = new_context
 
         item_dict['params']['from_fav'] = True
         item_dict['params']['item_hash'] = item_hash
 
-        item = Listitem.from_dict(**item_dict)
-        url = build_kodi_url(item_dict['callback'], item_dict['params'])
+        try:
+            # Build item from dict
+            item = Listitem.from_dict(**item_dict)
 
-        item.set_callback(url)
+            # Generate a valid callback
+            url = build_kodi_url(item_dict['callback'], item_dict['params'])
+            item.set_callback(url, is_folder=item_dict['params']['is_folder'], is_playbale=item_dict['params']['is_playable'])
 
-        item.is_folder = item_dict['params']['is_folder']
-        item.is_playbale = item_dict['params']['is_playable']
+            item.is_folder = item_dict['params']['is_folder']
+            item.is_playbale = item_dict['params']['is_playable']
 
-        # Rename
-        item.context.script(fav.rename_favourite_item,
-                            plugin.localize(30804),
-                            item_hash=item_hash)
-
-        # Remove
-        item.context.script(fav.remove_favourite_item,
-                            plugin.localize(30802),
-                            item_hash=item_hash)
-
-        # Move up
-        if item_dict['params']['order'] > 0:
-            item.context.script(fav.move_favourite_item,
-                                plugin.localize(30501),
-                                direction='up',
+            # Rename
+            item.context.script(fav.rename_favourite_item,
+                                plugin.localize(30804),
                                 item_hash=item_hash)
 
-        # Move down
-        if item_dict['params']['order'] < len(fav_dict) - 1:
-            item.context.script(fav.move_favourite_item,
-                                plugin.localize(30500),
-                                direction='down',
+            # Remove
+            item.context.script(fav.remove_favourite_item,
+                                plugin.localize(30802),
                                 item_hash=item_hash)
 
-        yield item
+            # Move up
+            if item_dict['params']['order'] > 0:
+                item.context.script(fav.move_favourite_item,
+                                    plugin.localize(30501),
+                                    direction='up',
+                                    item_hash=item_hash)
+
+            # Move down
+            if item_dict['params']['order'] < len(fav_dict) - 1:
+                item.context.script(fav.move_favourite_item,
+                                    plugin.localize(30500),
+                                    direction='down',
+                                    item_hash=item_hash)
+
+            yield item
+        except Exception:
+            fav.remove_favourite_item(plugin, item_hash)
 
 
 def error_handler(exception):

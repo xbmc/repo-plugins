@@ -57,13 +57,6 @@ URL_STREAM = URL_ROOT + '/videos/%s'
 # slug_video
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """

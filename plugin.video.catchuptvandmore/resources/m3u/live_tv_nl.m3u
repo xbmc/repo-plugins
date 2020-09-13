@@ -6,45 +6,45 @@
 ##	NPO 1
 ##	npo-1
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npo1.png" group-title="Netherlands",NPO 1
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-1&item_module=resources.lib.channels.nl.npo&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/nl/npo/get_live_url/?item_id=npo-1
 
 ##	NPO 2
 ##	npo-2
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npo2.png" group-title="Netherlands",NPO 2
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-2&item_module=resources.lib.channels.nl.npo&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/nl/npo/get_live_url/?item_id=npo-2
 
 ##	NPO Zapp
 ##	npo-zapp
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npozapp.png" group-title="Netherlands",NPO Zapp
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-zapp&item_module=resources.lib.channels.nl.npo&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/nl/npo/get_live_url/?item_id=npo-zapp
 
 ##	NPO 1 Extra
 ##	npo-1-extra
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npo1extra.png" group-title="Netherlands",NPO 1 Extra
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-1-extra&item_module=resources.lib.channels.nl.npo&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/nl/npo/get_live_url/?item_id=npo-1-extra
 
 ##	NPO 2 Extra
 ##	npo-2-extra
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npo2extra.png" group-title="Netherlands",NPO 2 Extra
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-2-extra&item_module=resources.lib.channels.nl.npo&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/nl/npo/get_live_url/?item_id=npo-2-extra
 
 ##	NPO Zappelin Extra
 ##	npo-zappelin-extra
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npozappelinextra.png" group-title="Netherlands",NPO Zappelin Extra
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-zappelin-extra&item_module=resources.lib.channels.nl.npo&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/nl/npo/get_live_url/?item_id=npo-zappelin-extra
 
 ##	NPO Nieuws
 ##	npo-nieuws
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/nponieuws.png" group-title="Netherlands",NPO Nieuws
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-nieuws&item_module=resources.lib.channels.nl.npo&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/nl/npo/get_live_url/?item_id=npo-nieuws
 
 ##	NPO Politiek
 ##	npo-politiek
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/npopolitiek.png" group-title="Netherlands",NPO Politiek
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=npo-politiek&item_module=resources.lib.channels.nl.npo&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/nl/npo/get_live_url/?item_id=npo-politiek
 
 ##	AT5
 ##	at5
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/nl/at5.png" group-title="Netherlands",AT5
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=at5&item_module=resources.lib.channels.nl.at5&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/nl/at5/get_live_url/?item_id=at5
 

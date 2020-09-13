@@ -286,6 +286,8 @@ def get_francetv_video_stream(plugin,
                               download_mode=False):
 
     geoip_value = web_utils.geoip()
+    if not geoip_value:
+        geoip_value = 'FR'
     resp = urlquick.get(URL_FRANCETV_CATCHUP_PROGRAM_INFO % (id_diffusion, geoip_value),
                         max_age=-1)
     json_parser = json.loads(resp.text)
@@ -343,6 +345,8 @@ def get_francetv_live_stream(plugin, live_id):
 
     final_url = ''
     geoip_value = web_utils.geoip()
+    if not geoip_value:
+        geoip_value = 'FR'
     for video in json_parser_liveId['videos']:
         if 'format' in video:
             if 'hls_v' in video['format'] or video['format'] == 'hls':

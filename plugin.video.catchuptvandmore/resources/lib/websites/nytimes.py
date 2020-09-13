@@ -46,14 +46,8 @@ URL_STREAM = URL_ROOT + '/svc/video/api/v3/video/%s'
 # videoId
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     resp = urlquick.get(URL_VIDEOS)
     root = resp.parse()

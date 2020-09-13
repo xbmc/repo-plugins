@@ -35,14 +35,8 @@ from resources.lib.menu_utils import item_post_treatment
 URL_ROOT = 'https://www.autoplus.fr/video/'
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
     item = Listitem()
     item.label = plugin.localize(30701)

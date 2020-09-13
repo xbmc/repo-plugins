@@ -78,13 +78,6 @@ def get_api_key():
     return '3_qhEcPa5JGFROVwu5SWKqJ4mVOIkwlFNMSKwzPDAh8QZOtHqu6L4nD5Q7lk0eXOOG'
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_root(plugin, item_id)
-
-
 @Route.register
 def list_root(plugin, item_id, **kwargs):
     """
@@ -289,12 +282,8 @@ def get_video_url(plugin,
     return stream_url
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.post(URL_TOKEN_LIVE, max_age=-1)
     json_parser_token = json.loads(resp.text)

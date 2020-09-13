@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.ustvnow" name="USTVnow" provider-name="Lunatixz" version="2019.04.12">
+<addon id="plugin.video.ustvnow" name="USTVnow" provider-name="Lunatixz" version="2020.08.26">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/> 
         <import addon="script.module.requests" version="2.7.0"/> 
@@ -11,6 +11,7 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>Backend changed</broken>
         <summary lang="en_GB">The Official plugin for the USTVnow Service.</summary>
         <description lang="en_GB">Entirely Legal and Free! Start watching instantly or record shows for later. Signup for one of three packages today!</description>
         <platform>all</platform>

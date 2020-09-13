@@ -6,85 +6,85 @@
 ##	La7
 ##	la7
 #EXTINF:-1 tvg-id="www.la7.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/la7.png" group-title="Italia",La7
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=la7&item_module=resources.lib.channels.it.la7&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/la7/get_live_url/?item_id=la7
 
 ##	Rai News 24
 ##	rainews24
 #EXTINF:-1 tvg-id="rainews.guidatv.sky.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rainews24.png" group-title="Italia",Rai News 24
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rainews24&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=rainews24
 
 ##	Rai 1
 ##	rai1
 #EXTINF:-1 tvg-id="www.raiuno.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rai1.png" group-title="Italia",Rai 1
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rai1&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=rai1
 
 ##	Rai 2
 ##	rai2
 #EXTINF:-1 tvg-id="www.raidue.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rai2.png" group-title="Italia",Rai 2
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rai2&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=rai2
 
 ##	Rai 3
 ##	rai3
 #EXTINF:-1 tvg-id="www.raitre.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rai3.png" group-title="Italia",Rai 3
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rai3&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=rai3
 
 ##	Rai 4
 ##	rai4
 #EXTINF:-1 tvg-id="rai4.raisat.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rai4.png" group-title="Italia",Rai 4
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rai4&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=rai4
 
 ##	Rai 5
 ##	rai5
 #EXTINF:-1 tvg-id="rai5.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/rai5.png" group-title="Italia",Rai 5
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=rai5&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=rai5
 
 ##	Rai Sport
 ##	raisportpiuhd
 #EXTINF:-1 tvg-id="raisport.guidatv.sky.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raisportpiuhd.png" group-title="Italia",Rai Sport
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raisportpiuhd&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=raisportpiuhd
 
 ##	Rai Movie
 ##	raimovie
 #EXTINF:-1 tvg-id="raimovie.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raimovie.png" group-title="Italia",Rai Movie
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raimovie&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=raimovie
 
 ##	Rai Premium
 ##	raipremium
 #EXTINF:-1 tvg-id="raipremium.guidatv.sky.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raipremium.png" group-title="Italia",Rai Premium
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raipremium&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=raipremium
 
 ##	Rai Yoyo
 ##	raiyoyo
 #EXTINF:-1 tvg-id="yoyo.raisat.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raiyoyo.png" group-title="Italia",Rai Yoyo
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raiyoyo&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=raiyoyo
 
 ##	Rai Gulp
 ##	raigulp
 #EXTINF:-1 tvg-id="raigulp.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raigulp.png" group-title="Italia",Rai Gulp
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raigulp&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=raigulp
 
 ##	Rai Storia
 ##	raistoria
 #EXTINF:-1 tvg-id="raistoria.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raistoria.png" group-title="Italia",Rai Storia
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raistoria&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=raistoria
 
 ##	Rai Scuola
 ##	raiscuola
 #EXTINF:-1 tvg-id="raiscuola.rai.it" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/raiscuola.png" group-title="Italia",Rai Scuola
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=raiscuola&item_module=resources.lib.channels.it.raiplay&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/raiplay/get_live_url/?item_id=raiscuola
 
 ##	Paramount Channel (IT)
 ##	paramountchannel_it
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/it/paramountchannel_it.png" group-title="Italia",Paramount Channel (IT)
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=paramountchannel_it&item_module=resources.lib.channels.it.paramountchannel_it&item_dict={}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/it/paramountchannel_it/get_live_url/?item_id=paramountchannel_it
 
 ##	Euronews
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="Italia",Euronews
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=euronews&item_module=resources.lib.channels.wo.euronews&item_dict={"language":"IT"}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/euronews/get_live_url/?item_id=euronews&language=IT
 
 ##	QVC
 ##	qvc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="Italia",QVC
-plugin://plugin.video.catchuptvandmore/resources/lib/main/live_bridge/?item_id=qvc&item_module=resources.lib.channels.wo.qvc&item_dict={"language":"IT"}
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/qvc/get_live_url/?item_id=qvc&language=IT
 

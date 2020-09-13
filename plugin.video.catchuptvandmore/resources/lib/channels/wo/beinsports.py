@@ -51,13 +51,6 @@ URL_VIDEOS = URL_API_ROOT + '/contents?itemsPerPage=30&type=3&site=%s&page=%s&ta
 # siteId, page
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_sites(plugin, item_id)
-
-
 @Route.register
 def list_sites(plugin, item_id, **kwargs):
     """

@@ -30,37 +30,33 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'telequebec': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ca/telequebec:get_live_url',
         'label': 'Télé-Québec',
         'thumb': 'channels/ca/telequebec.png',
         'fanart': 'channels/ca/telequebec_fanart.jpg',
-        'module': 'resources.lib.channels.ca.telequebec',
         'enabled': True,
         'order': 4
     },
     'tva': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ca/tva:get_live_url',
         'label': 'TVA',
         'thumb': 'channels/ca/tva.png',
         'fanart': 'channels/ca/tva_fanart.jpg',
-        'module': 'resources.lib.channels.ca.tva',
         'enabled': True,
         'order': 5
     },
     'icitele': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ca/icitele:get_live_url',
         'label': 'ICI Télé (' + utils.ensure_unicode(Script.setting['icitele.language']) + ')',
         'thumb': 'channels/ca/icitele.png',
         'fanart': 'channels/ca/icitele_fanart.jpg',
-        'module': 'resources.lib.channels.ca.icitele',
         'available_languages': [
             'Vancouver', 'Regina', 'Toronto', 'Edmonton', 'Rimouski',
             'Québec', 'Winnipeg', 'Moncton', 'Ottawa',
@@ -70,38 +66,34 @@ menu = {
         'order': 6
     },
     'ntvca': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ca/ntvca:get_live_url',
         'label': 'NTV',
         'thumb': 'channels/ca/ntvca.png',
         'fanart': 'channels/ca/ntvca_fanart.jpg',
-        'module': 'resources.lib.channels.ca.ntvca',
         'enabled': True,
         'order': 7
     },
     'telemag': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ca/telemag:get_live_url',
         'label': 'Télé-Mag',
         'thumb': 'channels/ca/telemag.png',
         'fanart': 'channels/ca/telemag_fanart.jpg',
-        'module': 'resources.lib.channels.ca.telemag',
         'enabled': True,
         'order': 9
     },
     'vtele': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ca/noovo:get_live_url',
         'label': 'V Télé',
         'thumb': 'channels/ca/vtele.png',
         'fanart': 'channels/ca/vtele_fanart.jpg',
-        'module': 'resources.lib.channels.ca.noovo',
         'enabled': True,
         'order': 10
     },
     'cbc': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ca/cbc:get_live_url',
         'label': 'CBC (' + utils.ensure_unicode(Script.setting['cbc.language']) + ')',
         'thumb': 'channels/ca/cbc.png',
         'fanart': 'channels/ca/cbc_fanart.jpg',
-        'module': 'resources.lib.channels.ca.cbc',
         'available_languages': [
             'Ottawa', 'Montreal', 'Charlottetown', 'Fredericton',
             'Halifax', 'Windsor', 'Yellowknife', 'Winnipeg',
@@ -112,21 +104,19 @@ menu = {
         'order': 11
     },
     'lcn': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ca/tva:get_live_url',
         'label': 'LCN',
         'thumb': 'channels/ca/lcn.png',
         'fanart': 'channels/ca/lcn_fanart.jpg',
-        'module': 'resources.lib.channels.ca.tva',
-        'enabled': True,
+        'enabled': False,
         'order': 12
     },
     'yoopa': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/ca/tva:get_live_url',
         'label': 'Yoopa',
         'thumb': 'channels/ca/yoopa.png',
         'fanart': 'channels/ca/yoopa_fanart.jpg',
-        'module': 'resources.lib.channels.ca.tva',
-        'enabled': True,
+        'enabled': False,
         'order': 13
     }
 }

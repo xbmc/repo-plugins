@@ -65,13 +65,6 @@ URL_CLIENT_KEY_VIDEO_JS = URL_ROOT + '/media/player/client/toutv_beta'
 # TODO Get client key for
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
 

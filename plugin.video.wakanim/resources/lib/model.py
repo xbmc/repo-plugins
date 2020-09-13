@@ -51,6 +51,6 @@ class Args(object):
         self._addonid   = sys.modules["__main__"]._plugId
         self._cj        = None
 
-        for key, value in kwargs.items():
+        for key, value in list(kwargs.items()):
             if value:
                 setattr(self, key, unquote_plus(value[0]))

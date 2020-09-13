@@ -33,14 +33,8 @@ import urlquick
 URL_ROOT = 'http://www.30millionsdamis.fr'
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin, item_id)
-
-
-def root(plugin, item_id, **kwargs):
+@Route.register
+def website_root(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_ROOT + '/actualites/videos')
     root = resp.parse("select", attrs={"class": "selecttourl"})

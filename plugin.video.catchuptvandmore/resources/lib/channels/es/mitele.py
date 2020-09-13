@@ -69,13 +69,6 @@ LIST_PROGRAMS = {
 }
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_categories(plugin, item_id)
-
-
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
     """
@@ -236,12 +229,8 @@ def get_video_url(plugin,
     return url_stream + '?' + json_parser4["tokens"]["2"]["cdn"]
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     session_requests = requests.session()
     resp = session_requests.get(URL_LIVE_DATAS % item_id)

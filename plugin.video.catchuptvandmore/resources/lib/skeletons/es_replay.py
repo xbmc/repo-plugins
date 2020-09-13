@@ -30,19 +30,17 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'mitele': {
-        'callback': 'replay_bridge',
+        'route': '/resources/lib/channels/es/mitele:list_categories',
         'label': 'mitele',
         'thumb': 'channels/es/mitele.png',
         'fanart': 'channels/es/mitele_fanart.jpg',
-        'module': 'resources.lib.channels.es.mitele',
         'enabled': True,
         'order': 1
     }

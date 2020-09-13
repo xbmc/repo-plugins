@@ -30,172 +30,153 @@ The following dictionaries describe
 the addon's tree architecture.
 * Key: item id
 * Value: item infos
-    - callback: Callback function to run once this item is selected
+    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
     - thumb: Item thumb path relative to "media" folder
     - fanart: Item fanart path relative to "meia" folder
-    - module: Item module to load in order to work (like 6play.py)
 """
 
 menu = {
     'cctv1': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-1 综合',
         'thumb': 'channels/cn/cctv1.png',
         'fanart': 'channels/cn/cctv1_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 1
     },
     'cctv2': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-2 财经',
         'thumb': 'channels/cn/cctv2.png',
         'fanart': 'channels/cn/cctv2_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 2
     },
     'cctv3': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-3 综艺',
         'thumb': 'channels/cn/cctv3.png',
         'fanart': 'channels/cn/cctv3_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 3
     },
     'cctv4': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-4 中文国际（亚）',
         'thumb': 'channels/cn/cctv4.png',
         'fanart': 'channels/cn/cctv4_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 4
     },
     'cctveurope': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-4 中文国际（欧）',
         'thumb': 'channels/cn/cctveurope.png',
         'fanart': 'channels/cn/cctveurope_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 5
     },
     'cctvamerica': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-4 中文国际（美）',
         'thumb': 'channels/cn/cctvamerica.png',
         'fanart': 'channels/cn/cctvamerica_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 6
     },
     'cctv5': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-5 体育',
         'thumb': 'channels/cn/cctv5.png',
         'fanart': 'channels/cn/cctv5_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 7
     },
     'cctv5plus': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-5+ 体育赛事',
         'thumb': 'channels/cn/cctv5plus.png',
         'fanart': 'channels/cn/cctv5plus_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 8
     },
     'cctv6': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-6 电影',
         'thumb': 'channels/cn/cctv6.png',
         'fanart': 'channels/cn/cctv6_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 9
     },
     'cctv7': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-7 军事农业',
         'thumb': 'channels/cn/cctv7.png',
         'fanart': 'channels/cn/cctv7_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 10
     },
     'cctv8': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-8 电视剧',
         'thumb': 'channels/cn/cctv8.png',
         'fanart': 'channels/cn/cctv8_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 11
     },
     'cctvjilu': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-9 纪录',
         'thumb': 'channels/cn/cctvjilu.png',
         'fanart': 'channels/cn/cctvjilu_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 12
     },
     'cctv10': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-10 科教',
         'thumb': 'channels/cn/cctv10.png',
         'fanart': 'channels/cn/cctv10_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 13
     },
     'cctv11': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-11 戏曲',
         'thumb': 'channels/cn/cctv11.png',
         'fanart': 'channels/cn/cctv11_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 14
     },
     'cctv12': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-12 社会与法',
         'thumb': 'channels/cn/cctv12.png',
         'fanart': 'channels/cn/cctv12_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 15
     },
     'cctv13': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-13 新闻',
         'thumb': 'channels/cn/cctv13.png',
         'fanart': 'channels/cn/cctv13_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 16
     },
     'cctvchild': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-14 少儿',
         'thumb': 'channels/cn/cctvchild.png',
         'fanart': 'channels/cn/cctvchild_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 17
     },
     'cctv15': {
-        'callback': 'live_bridge',
+        'resolver': '/resources/lib/channels/cn/cctv:get_live_url',
         'label': 'CCTV-15 音乐',
         'thumb': 'channels/cn/cctv15.png',
         'fanart': 'channels/cn/cctv15_fanart.jpg',
-        'module': 'resources.lib.channels.cn.cctv',
         'enabled': True,
         'order': 18
     }

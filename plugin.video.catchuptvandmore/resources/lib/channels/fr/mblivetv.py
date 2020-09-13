@@ -44,10 +44,6 @@ URL_LIVES = 'https://api.dailymotion.com/user/%s/videos?fields=id,thumbnail_larg
 URL_REPLAY = 'https://api.dailymotion.com/user/%s/videos?fields=description,duration,id,taken_time,thumbnail_large_url,title&limit=20&sort=recent&page=1'
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id)
-
-
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
     headers = {'User-Agent': 'Android'}
@@ -59,13 +55,10 @@ def get_live_url(plugin, item_id, **kwargs):
     return False
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    url = URL_REPLAY % (item_id)
-    return list_videos(plugin, item_id, url)
-
-
 @Route.register
-def list_videos(plugin, item_id, url, **kwargs):
+def list_videos(plugin, item_id, url=None, **kwargs):
+    if not url:
+        url = URL_REPLAY % (item_id)
     headers = {'User-Agent': 'Android'}
     r = urlquick.get(url, headers=headers)
     json_parser = json.loads(r.text)

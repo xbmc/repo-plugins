@@ -27,14 +27,8 @@ from codequick import Route, Resolver, Listitem, youtube
 from resources.lib.menu_utils import item_post_treatment
 
 
-def website_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after website_bridge
-    """
-    return root(plugin)
-
-
-def root(plugin, **kwargs):
+@Route.register
+def website_root(plugin, **kwargs):
     item = Listitem()
     item.label = 'Marmiton (youtube)'
     item.set_callback(list_videos_youtube,

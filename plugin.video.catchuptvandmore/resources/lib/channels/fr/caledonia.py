@@ -42,13 +42,6 @@ import urlquick
 URL_ROOT = 'https://www.caledonia.nc'
 
 
-def replay_entry(plugin, item_id, **kwargs):
-    """
-    First executed function after replay_bridge
-    """
-    return list_programs(plugin, item_id)
-
-
 @Route.register
 def list_programs(plugin, item_id, **kwargs):
     """

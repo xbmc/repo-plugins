@@ -29,7 +29,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 
 @Resolver.register
-def live_entry(plugin, item_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
     m3u8 = {
         'slo1': 'https://31-rtvslo-tv-slo1-int.cdn.eurovisioncdn.net/playlist.m3u8',
         'slo2': 'https://21-rtvslo-tv-slo2-int.cdn.eurovisioncdn.net/playlist.m3u8',

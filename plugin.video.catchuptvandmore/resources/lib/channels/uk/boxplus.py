@@ -42,12 +42,8 @@ URL_ROOT = 'https://www.boxplus.com'
 URL_LIVE_ID = URL_ROOT + '/live-tv-guide/?channel=%s'
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
     """Get video URL and start video player"""
     resp = urlquick.get(URL_LIVE_ID % item_id)
     return re.compile('src: \'(.*?)\'').findall(resp.text)[0]

@@ -44,12 +44,8 @@ URL_STREAM = 'https://livevideo.infomaniak.com/player_config/%s.json'
 # player_id
 
 
-def live_entry(plugin, item_id, **kwargs):
-    return get_live_url(plugin, item_id, item_id.upper())
-
-
 @Resolver.register
-def get_live_url(plugin, item_id, video_id, **kwargs):
+def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_ROOT,
                         headers={'User-Agent': web_utils.get_random_ua()},

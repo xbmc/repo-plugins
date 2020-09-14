@@ -25,10 +25,8 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Route, Resolver, Listitem
 
-
-from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 
@@ -55,10 +53,9 @@ URL_LOGIN = 'https://accounts.eu1.gigya.com/accounts.login'
 
 URL_TOKEN = 'https://token.vrt.be'
 
-URL_STREAM_JSON = 'https://mediazone.vrt.be/api/v1/vrtvideo/assets/%s'
-# VideoID
-
-# Live
+URL_STREAM_JSON = ('https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/'
+                   'external/v1/videos/%s%%24%s?vrtPlayerToken=%s&client=vrtvideo@PROD')
+# publicationid, videoid, vrtplayertoken
 
 URL_API = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1'
 
@@ -173,48 +170,74 @@ def list_videos(plugin, item_id, next_url, **kwargs):
     resp = urlquick.get(next_url)
     root = resp.parse()
 
-    if root.find(".//ul[@class='vrtnu-list']") is not None:
-        list_videos_datas = root.find(".//ul[@class='vrtnu-list']").findall(
-            './/li')
-        for video_datas in list_videos_datas:
-            video_title = video_datas.find('.//h3').text.strip()
-            video_image = 'https:' + video_datas.find('.//img').get(
-                'srcset').split('1x')[0].strip()
-            video_plot = ''
-            if video_datas.find('.//p').text is not None:
-                video_plot = video_datas.find('.//p').text.strip()
-            video_url = URL_ROOT + video_datas.find('.//a').get('href')
+    if root.find(".//ul[@id='seasons-list']") is not None:
+        # show has multiple seasons
+        list_videos_datas = root.find(".//ul[@id='seasons-list']")
+        for season_item in list_videos_datas.iterfind('.//li/a'):
+            season_name = season_item.find('nui-replace-text').text.strip('\n\t\r ')
+            try:
+                season_name = 'Seizoen %d' % int(season_name)
+            except (TypeError, ValueError):
+                pass
+
+            season_url = URL_ROOT + season_item.get('href')
+            season_image = 'https:' + root.find('.//nui-media').get('posterimage')
+            season_plot = root.find('.//h1[@class="title"]').text.strip()
+
+            item = Listitem()
+            item.label = season_name
+            item.art['thumb'] = item.art['landscape'] = season_image
+            item.info['plot'] = season_plot
+
+            item.set_callback(list_videos,
+                              item_id=item_id,
+                              next_url=season_url)
+            item_post_treatment(item)
+            yield item
+    elif root.find(".//nui-tile") is not None:
+        for video_datas in root.iterfind(".//nui-tile"):
+            video_url = URL_ROOT + video_datas.get('href')
+            video_title = video_datas.find('.//h3/a').text.strip()
+            video_image = 'https:' + video_datas.find('.//img').get('data-responsive-image')
 
             item = Listitem()
             item.label = video_title
             item.art['thumb'] = item.art['landscape'] = video_image
-            item.info['plot'] = video_plot
+            try:
+                video_duration = video_datas.find('.//span[@class="duration"]').text
+                item.info['duration'] = video_duration
+            except AttributeError:
+                pass
+            # try:
+            #     date_value = video_datas.find(
+            #         './/time[@class="date-long"]').get('datetime').split('T')[0]
+            #     item.info.date(date_value, '%Y-%m-%d')
+            # except AttributeError:
+            #     pass
 
             item.set_callback(get_video_url,
                               item_id=item_id,
                               video_url=video_url)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
+
     else:
-        if root.find(".//div[@class='nui-content-area']") is not None:
-            video_datas = root.find(".//div[@class='nui-content-area']")
-            video_title = video_datas.find('.//h1').text.strip()
-            video_image = 'https:' + video_datas.find('.//img').get(
-                'srcset').strip()
-            video_plot = video_datas.find(
-                ".//div[@class='content__shortdescription']").text.strip()
-            video_url = re.compile(r'page_url":"(.*?)"').findall(resp.text)[0]
+        video_title = root.find('.//h1[@class="title"]').text.strip()
+        video_image = root.find('.//meta[@property="og:image"]').get('content')
+        video_plot = root.find('.//meta[@property="og:description"]').get('content')
+        video_duration = root.find('.//meta[@property="og:video:duration"]').get('content').rstrip('imn')
 
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
-            item.info['plot'] = video_plot
+        item = Listitem()
+        item.label = video_title
+        item.art['thumb'] = item.art['landscape'] = video_image
+        item.info['plot'] = video_plot
+        item.info['duration'] = video_duration
 
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_url=video_url)
-            item_post_treatment(item, is_playable=True, is_downloadable=True)
-            yield item
+        item.set_callback(get_video_url,
+                          item_id=item_id,
+                          video_url=next_url)
+        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        yield item
 
 
 @Resolver.register
@@ -262,24 +285,33 @@ def get_video_url(plugin,
             json_parser['signatureTimestamp'],
             plugin.setting.get_string('vrt.login'))
     session_requests.post(URL_TOKEN, data=data, headers=headers)
-    # Video ID
-    video_id_datas_url = video_url[:-1] + '.mssecurevideo.json'
-    resp3 = session_requests.get(video_id_datas_url)
-    json_parser2 = json.loads(resp3.text)
-    video_id = ''
-    for video_id_datas in list(json_parser2.items()):
-        video_id = json_parser2[video_id_datas[0]]['videoid']
-    # Stream Url
-    resp4 = session_requests.get(URL_STREAM_JSON % video_id)
-    json_parser3 = json.loads(resp4.text)
-    stream_url = ''
-    for stream_datas in json_parser3['targetUrls']:
-        if 'HLS' in stream_datas['type']:
-            stream_url = stream_datas['url']
 
-    if download_mode:
-        return download.download_video(stream_url)
-    return stream_url
+    resp2 = session_requests.post(URL_TOKEN_LIVE)
+    json_parser_token = json.loads(resp2.text)
+    vrtplayertoken = json_parser_token["vrtPlayerToken"]
+
+    resp3 = urlquick.get(video_url)
+    root = resp3.parse()
+    if root.find(".//nui-media") is not None:
+        publicationid = root.find(".//nui-media").get('publicationid')
+        videoid = root.find(".//nui-media").get('videoid')
+
+        resp4 = session_requests.get(URL_STREAM_JSON % (publicationid, videoid, vrtplayertoken))
+        json_parser4 = json.loads(resp4.text)
+
+        if "targetUrls" not in json_parser4:
+            plugin.notify('ERROR', plugin.localize(30713))
+            return False
+
+        for stream_datas in json_parser4['targetUrls']:
+            if 'hls' in stream_datas['type']:
+                stream_url = stream_datas['url']
+
+        if download_mode:
+            return download.download_video(stream_url)
+        return stream_url
+
+    return False
 
 
 @Resolver.register

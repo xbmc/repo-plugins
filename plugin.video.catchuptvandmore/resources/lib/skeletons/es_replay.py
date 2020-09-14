@@ -36,11 +36,11 @@ the addon's tree architecture.
 """
 
 menu = {
-    'mitele': {
-        'route': '/resources/lib/channels/es/mitele:list_categories',
-        'label': 'mitele',
-        'thumb': 'channels/es/mitele.png',
-        'fanart': 'channels/es/mitele_fanart.jpg',
+    'rtve': {
+        'route': '/resources/lib/channels/es/rtve:list_categories',
+        'label': 'RTVE Alacarta',
+        'thumb': 'channels/es/rtve.png',
+        'fanart': 'channels/es/rtve_fanart.jpg',
         'enabled': True,
         'order': 1
     }

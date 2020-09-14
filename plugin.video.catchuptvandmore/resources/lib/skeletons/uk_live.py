@@ -161,11 +161,11 @@ menu = {
         'enabled': True,
         'order': 19
     },
-    'bristoltv': {
-        'resolver': '/resources/lib/channels/uk/bristoltv:get_live_url',
-        'label': 'Bristol TV',
-        'thumb': 'channels/uk/bristoltv.png',
-        'fanart': 'channels/uk/bristoltv_fanart.jpg',
+    'bristollocal': {
+        'resolver': '/resources/lib/channels/uk/uklocaltv:get_live_url',
+        'label': 'Bristol Local TV',
+        'thumb': 'channels/uk/bristollocal.png',
+        'fanart': 'channels/uk/bristollocal_fanart.jpg',
         'enabled': True,
         'order': 21
     },
@@ -224,5 +224,61 @@ menu = {
         'fanart': 'channels/uk/dust_fanart.jpg',
         'enabled': True,
         'order': 30
+    },
+    'birminghamlocal': {
+        'resolver': '/resources/lib/channels/uk/uklocaltv:get_live_url',
+        'label': 'Birmingham Local TV',
+        'thumb': 'channels/uk/birminghamlocal.png',
+        'fanart': 'channels/uk/birminghamlocal_fanart.jpg',
+        'enabled': True,
+        'order': 31
+    },
+    'cardifflocal': {
+        'resolver': '/resources/lib/channels/uk/uklocaltv:get_live_url',
+        'label': 'Cardiff Local TV',
+        'thumb': 'channels/uk/cardifflocal.png',
+        'fanart': 'channels/uk/cardifflocal_fanart.jpg',
+        'enabled': True,
+        'order': 32
+    },
+    'leedslocal': {
+        'resolver': '/resources/lib/channels/uk/uklocaltv:get_live_url',
+        'label': 'Leeds Local TV',
+        'thumb': 'channels/uk/leedslocal.png',
+        'fanart': 'channels/uk/leedslocal_fanart.jpg',
+        'enabled': True,
+        'order': 33
+    },
+    'liverpoollocal': {
+        'resolver': '/resources/lib/channels/uk/uklocaltv:get_live_url',
+        'label': 'Liverpool Local TV',
+        'thumb': 'channels/uk/liverpoollocal.png',
+        'fanart': 'channels/uk/liverpoollocal_fanart.jpg',
+        'enabled': True,
+        'order': 33
+    },
+    'northwaleslocal': {
+        'resolver': '/resources/lib/channels/uk/uklocaltv:get_live_url',
+        'label': 'North Whales Local TV',
+        'thumb': 'channels/uk/northwaleslocal.png',
+        'fanart': 'channels/uk/northwaleslocal_fanart.jpg',
+        'enabled': True,
+        'order': 34
+    },
+    'teessidelocal': {
+        'resolver': '/resources/lib/channels/uk/uklocaltv:get_live_url',
+        'label': 'Teesside Local TV',
+        'thumb': 'channels/uk/teessidelocal.png',
+        'fanart': 'channels/uk/teessidelocal_fanart.jpg',
+        'enabled': True,
+        'order': 35
+    },
+    'twlocal': {
+        'resolver': '/resources/lib/channels/uk/uklocaltv:get_live_url',
+        'label': 'Tyne & Wear Local TV',
+        'thumb': 'channels/uk/twlocal.png',
+        'fanart': 'channels/uk/twlocal_fanart.jpg',
+        'enabled': True,
+        'order': 36
     }
 }

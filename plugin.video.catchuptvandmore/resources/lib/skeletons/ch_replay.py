@@ -89,7 +89,7 @@ menu = {
         'label': 'BeCurious TV',
         'thumb': 'channels/ch/becurioustv.png',
         'fanart': 'channels/ch/becurioustv_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 8
     },
     'lemanbleu': {

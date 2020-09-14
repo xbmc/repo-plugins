@@ -348,11 +348,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/antennereunion/
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viaoccitanie.png" group-title="France Région",viàOccitanie
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viaoccitanie
 
-##	Ouatch TV
-##	ouatchtv
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/ouatchtv.png" group-title="France Satellite/FAI",Ouatch TV
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/ouatchtv/get_live_url/?item_id=ouatchtv
-
 ##	RTL 2
 ##	rtl2
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/rtl2.png" group-title="France Radio",RTL 2
@@ -373,20 +368,15 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_ur
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/tebeo.png" group-title="France Région",Tébéo
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/tebeo/get_live_url/?item_id=tebeo
 
-##	M6 Boutique
-##	mb
-#EXTINF:-1 tvg-id="C184.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/mb.png" group-title="France Satellite/FAI",M6 Boutique
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/6play/get_live_url/?item_id=mb
-
 ##	viàLMTv Sarthe
 ##	vialmtv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/vialmtv.png" group-title="France Région",viàLMTv Sarthe
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=vialmtv
 
-##	viàMirabelle
-##	viamirabelle
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viamirabelle.png" group-title="France Région",viàMirabelle
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viamirabelle
+##	viàMoselle
+##	viamoselle
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/viamoselle.png" group-title="France Région",viàMoselle
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/via/get_live_url/?item_id=viamoselle
 
 ##	viàVosges
 ##	viavosges

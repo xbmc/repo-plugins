@@ -238,11 +238,11 @@ menu = {
         'enabled': True,
         'order': 24
     },
-    'ladeux': {
+    'tipik': {
         'resolver': '/resources/lib/channels/be/rtbf:set_live_url',
-        'label': 'La Deux',
-        'thumb': 'channels/be/ladeux.png',
-        'fanart': 'channels/be/ladeux_fanart.jpg',
+        'label': 'Tipik',
+        'thumb': 'channels/be/tipik.png',
+        'fanart': 'channels/be/tipik_fanart.jpg',
         'xmltv_id': 'C187.api.telerama.fr',
         'enabled': True,
         'order': 25

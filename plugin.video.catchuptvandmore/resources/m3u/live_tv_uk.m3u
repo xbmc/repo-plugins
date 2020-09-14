@@ -73,10 +73,10 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/questod/get_liv
 #EXTINF:-1 tvg-id="1014.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/questred.png" group-title="United Kingdom",Quest RED
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/questod/get_live_url/?item_id=questred
 
-##	Bristol TV
-##	bristoltv
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/bristoltv.png" group-title="United Kingdom",Bristol TV
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/bristoltv/get_live_url/?item_id=bristoltv
+##	Bristol Local TV
+##	bristollocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/bristollocal.png" group-title="United Kingdom",Bristol Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=bristollocal
 
 ##	Free Sports
 ##	freesports
@@ -112,6 +112,41 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/stv/get_live_ur
 ##	dust
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/dust.png" group-title="United Kingdom",DUST
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/stv/get_live_url/?item_id=dust
+
+##	Birmingham Local TV
+##	birminghamlocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/birminghamlocal.png" group-title="United Kingdom",Birmingham Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=birminghamlocal
+
+##	Cardiff Local TV
+##	cardifflocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/cardifflocal.png" group-title="United Kingdom",Cardiff Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=cardifflocal
+
+##	Leeds Local TV
+##	leedslocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/leedslocal.png" group-title="United Kingdom",Leeds Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=leedslocal
+
+##	Liverpool Local TV
+##	liverpoollocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/liverpoollocal.png" group-title="United Kingdom",Liverpool Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=liverpoollocal
+
+##	North Whales Local TV
+##	northwaleslocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/northwaleslocal.png" group-title="United Kingdom",North Whales Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=northwaleslocal
+
+##	Teesside Local TV
+##	teessidelocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/teessidelocal.png" group-title="United Kingdom",Teesside Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=teessidelocal
+
+##	Tyne & Wear Local TV
+##	twlocal
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/twlocal.png" group-title="United Kingdom",Tyne & Wear Local TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=twlocal
 
 ##	QVC
 ##	qvc

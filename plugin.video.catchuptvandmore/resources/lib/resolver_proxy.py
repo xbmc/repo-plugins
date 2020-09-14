@@ -89,6 +89,9 @@ URL_FRANCETV_HDFAUTH_URL = 'https://hdfauthftv-a.akamaihd.net/esi/TA?format=json
 
 URL_DAILYMOTION_EMBED_2 = 'https://www.dailymotion.com/player/metadata/video/%s?integration=inline&GK_PV5_NEON=1'
 
+URL_REPLAY_ARTE = 'https://api.arte.tv/api/player/v1/config/%s/%s'
+# desired_language, videoid
+
 
 def get_stream_default(plugin,
                        video_url,
@@ -364,3 +367,45 @@ def get_francetv_live_stream(plugin, live_id):
         urlquick.get(URL_FRANCETV_HDFAUTH_URL % (final_url), max_age=-1).text)
 
     return json_parser2['url']
+
+
+# Arte Part
+def get_arte_video_stream(plugin,
+                          desired_language,
+                          video_id,
+                          download_mode=False):
+
+    resp = urlquick.get(URL_REPLAY_ARTE % (desired_language, video_id))
+    json_parser = json.loads(resp.text)
+
+    url_selected = ''
+    stream_datas = json_parser['videoJsonPlayer']['VSR']
+
+    if DESIRED_QUALITY == "DIALOG":
+        all_datas_videos_quality = []
+        all_datas_videos_path = []
+
+        for video in stream_datas:
+            if not video.find("HLS"):
+                datas = json_parser['videoJsonPlayer']['VSR'][video]
+                all_datas_videos_quality.append(datas['mediaType'] + " (" +
+                                                datas['versionLibelle'] + ")")
+                all_datas_videos_path.append(datas['url'])
+
+        seleted_item = xbmcgui.Dialog().select(
+            plugin.localize(30709),
+            all_datas_videos_quality)
+        if seleted_item > -1:
+            url_selected = all_datas_videos_path[seleted_item]
+        else:
+            return False
+
+    elif DESIRED_QUALITY == "BEST":
+        url_selected = stream_datas['HTTPS_SQ_1']['url']
+    else:
+        url_selected = stream_datas['HTTPS_HQ_1']['url']
+
+    if download_mode:
+        return download.download_video(url_selected)
+
+    return url_selected

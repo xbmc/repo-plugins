@@ -53,7 +53,7 @@ menu = {
         'order': 3
     },
     'france24': {
-        'route': '/resources/lib/channels/wo/france24:root',
+        'route': '/resources/lib/channels/wo/france24:root_catchup_tv',
         'label': 'France 24 (' + utils.ensure_unicode(Script.setting['france24.language']) + ')',
         'thumb': 'channels/wo/france24.png',
         'fanart': 'channels/wo/france24_fanart.jpg',

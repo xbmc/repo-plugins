@@ -46,7 +46,7 @@ URL_ROOT = 'https://%s.tv'
 
 URL_LIVE = URL_ROOT + '/direct-tv/'
 
-URL_LIVE_VIAMIRABELLE = URL_ROOT + '/direct/'
+URL_LIVE_VIAMOSELLE = URL_ROOT + '/direct/'
 
 URL_ROOT_VIAVOSGES = 'https://www.viavosges.tv'
 
@@ -152,9 +152,9 @@ def get_live_url(plugin, item_id, **kwargs):
         item.info.update(get_selected_item_info())
         return item
     else:
-        if item_id == 'viamirabelle':
+        if item_id == 'viamoselle':
             live_html = urlquick.get(
-                URL_LIVE_VIAMIRABELLE % item_id,
+                URL_LIVE_VIAMOSELLE % item_id,
                 headers={'User-Agent': web_utils.get_random_ua()},
                 max_age=-1)
         else:

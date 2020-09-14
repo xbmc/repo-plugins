@@ -130,7 +130,8 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(video_url, max_age=-1)
-    list_streams_datas = re.compile(r'src\: "(.*?)"').findall(resp.text)
+    list_streams_datas = re.compile(
+        r'source src\=\"(.*?)\"').findall(resp.text)
     stream_url = ''
     for stream_datas in list_streams_datas:
         if 'm3u8' in stream_datas or \
@@ -146,4 +147,9 @@ def get_video_url(plugin,
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE, max_age=-1)
-    return re.compile(r'"sourceURL":"(.*?)"').findall(resp.text)[0]
+    root = resp.parse()
+    live_datas = root.findall('.//iframe')[0].get('src')
+
+    resp2 = urlquick.get(live_datas, max_age=-1)
+    return re.compile(
+        r'file\"\:\"(.*?)\"').findall(resp2.text)[0]

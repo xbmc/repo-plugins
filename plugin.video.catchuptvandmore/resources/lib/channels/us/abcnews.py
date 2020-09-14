@@ -79,30 +79,39 @@ def list_videos(plugin, item_id, program_url, **kwargs):
 
     resp = urlquick.get(program_url)
     root = resp.parse()
-    list_videos_datas = {}
-    if root.find(
-            ".//article[@class='carousel-item row-item fe-top']") is not None:
-        list_videos_datas = root.find(
-            ".//article[@class='carousel-item row-item fe-top']").findall(
-                ".//div[@class='item']")
+    for script_data in root.iterfind(".//script[@type='text/javascript']"):
+        if script_data.text and "__abcnews__" in script_data.text:
+            script = script_data.text
+            page_data = script[script.find('{'):script.rfind('}') + 1]
+            json_parser = json.loads(page_data)
+            for element in json_parser['page']['content']['section']['bands']:
+                try:
+                    block = element['blocks'][0]
+                    if block['componentKey'] == 'fullEpisodesBlock':
+                        list_videos_datas = block['items']['latestVideos']
+                        for video_datas in list_videos_datas:
+                            video_title = video_datas['title']
+                            video_id = video_datas['id']
+                            video_image = video_datas['image']
+                            video_thumb = video_datas['videos']['thumbnail']
+                            video_duration = video_datas['videos']['duration']
 
-    for video_datas in list_videos_datas:
-        video_title = ''
-        if video_datas.find('.//img').get('alt'):
-            video_title = video_datas.find('.//img').get('alt').replace(
-                'VIDEO: ', '')
-        video_image = video_datas.find('.//img').get('data-src')
-        video_id = video_datas.find('.//figure').get('data-id')
-
-        item = Listitem()
-        item.label = video_title
-        item.art['thumb'] = item.art['landscape'] = video_image
-
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_id=video_id)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
-        yield item
+                            item = Listitem()
+                            item.label = video_title
+                            item.art['thumb'] = video_thumb
+                            item.art['landscape'] = video_image
+                            item.info['duration'] = video_duration
+                            item.set_callback(get_video_url,
+                                              item_id=item_id,
+                                              video_id=video_id)
+                            item_post_treatment(item,
+                                                is_playable=True,
+                                                is_downloadable=True)
+                            yield item
+                        break
+                except KeyError:
+                    continue
+            break
 
 
 @Resolver.register

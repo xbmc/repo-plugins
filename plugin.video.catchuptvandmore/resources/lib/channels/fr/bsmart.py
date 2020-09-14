@@ -62,7 +62,7 @@ def list_categories(plugin, item_id, **kwargs):
     )):
         category_url = URL_API + category_context
         item = Listitem()
-        if 'Vidéos' in category_title:
+        if 'videos' in category_context:
             next_value = 'list_videos'
         else:
             next_value = 'list_programs'
@@ -83,7 +83,9 @@ def list_programs(plugin, item_id, next_url, page, **kwargs):
 
     for program_datas in json_parser["results"]:
         program_title = program_datas["title"]
-        program_image = program_datas["banner"]
+        program_image = ''
+        if 'banners' in program_datas:
+            program_image = program_datas["banners"]["vertical"]["x1000"]
         program_plot = program_datas["description"]
         program_url = URL_API + '/program/' + program_datas["slug"]
 
@@ -168,7 +170,7 @@ def get_live_url(plugin, item_id, **kwargs):
     js_id = re.compile(r'js\/bundle\.(.*?)\.js').findall(resp.text)[0]
     resp2 = urlquick.get(
         URL_LIVE_DATAS % js_id, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    live_id = re.compile(r'\(Fi\,\{id\:\"(.*?)\"').findall(resp2.text)[1]
+    live_id = re.compile(r'\,\{id\:\"(.*?)\"').findall(resp2.text)[1]
     return resolver_proxy.get_stream_dailymotion(plugin,
                                                  live_id,
                                                  False)

@@ -96,7 +96,7 @@ def channels(plugin, **kwargs):
         ('regions/outre-mer', 'Outre-mer la 1ère', 'la1ere.png', 'la1ere_fanart.jpg'),
         ('channels/franceinfo', 'franceinfo:', 'franceinfo.png', 'franceinfo_fanart.jpg'),
         ('channels/slash', 'France tv Slash', 'slash.png', 'slash_fanart.jpg'),
-        ('channels/enfants', 'Okoo', 'okoo.png', 'okoo_fanart.jpg'),
+        ('categories/enfants', 'Okoo', 'okoo.png', 'okoo_fanart.jpg'),
         ('channels/spectacles-et-culture', 'Culturebox', 'culturebox.png', 'culturebox_fanart.jpg')
     ]
 
@@ -126,13 +126,24 @@ def channel_homepage(plugin, item_id, **kwargs):
         if set_item_callback_based_on_type(item, collection['type'], collection):
             yield item
 
+    menu_items = [
+        (Script.localize(30701), '/generic/taxonomy/%s/contents'),  # All videos
+        (Script.localize(30717), '/apps/regions/%s/programs')  # All programs
+    ]
+    for menu_item in menu_items:
+        item = Listitem()
+        item.label = menu_item[0]
+        item.set_callback(grab_json_collections, URL_API_MOBILE(menu_item[1] % item_id.split('/')[1]), page=0, collection_position=0)
+        item_post_treatment(item)
+        yield item
+
 
 def set_item_callback_based_on_type(item, type_, j, next_page_item=None):
     # First try to populate label
     if 'label' in j:
-        item.label = j['label']
+        item.label = j['label'].capitalize()
     elif 'title' in j:
-        item.label = j['title']
+        item.label = j['title'].capitalize()
     else:
         item.label = 'No title'
 
@@ -372,12 +383,22 @@ def grab_json_collections(plugin, json_url, page=0, collection_position=None, **
             item = Listitem()
             if set_item_callback_based_on_type(item, collection['type'], collection, next_page_item):
                 items.append(item)
-    if 'item' in j and 'program_path' in j['item']:
-        item = Listitem()
-        item.label = Script.localize(30701)  # All videos
-        item.set_callback(grab_json_collections, URL_API_MOBILE('/generic/taxonomy/%s/contents' % j['item']['program_path']), page=0, collection_position=0)
-        item_post_treatment(item)
-        items.append(item)
+    if 'item' in j:
+        if 'program_path' in j['item'] or 'url_complete' in j['item']:
+            if 'program_path' in j['item']:
+                path = j['item']['program_path']
+            elif 'url_complete' in j['item']:
+                path = j['item']['url_complete']
+            menu_items = [
+                (Script.localize(30701), '/generic/taxonomy/%s/contents'),  # All videos
+                (Script.localize(30717), '/apps/regions/%s/programs')  # All programs
+            ]
+            for menu_item in menu_items:
+                item = Listitem()
+                item.label = menu_item[0]
+                item.set_callback(grab_json_collections, URL_API_MOBILE(menu_item[1] % path), page=0, collection_position=0)
+                item_post_treatment(item)
+                items.append(item)
 
     return items
 

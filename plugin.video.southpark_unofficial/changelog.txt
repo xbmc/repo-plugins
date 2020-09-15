@@ -1,3 +1,6 @@
+0.5.8
+- fixed issue with DE episode streaming.
+- fixed issue with PY3
 0.5.7
 - fixed issue with DE random episode.
 0.5.6

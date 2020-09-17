@@ -14,6 +14,7 @@ from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.regexer import Regexer
 from resources.lib.logger import Logger
 from resources.lib.streams.m3u8 import M3u8
+from resources.lib.streams.mpd import Mpd
 from resources.lib.urihandler import UriHandler
 
 
@@ -277,17 +278,41 @@ class Channel(chn_class.Channel):
             if self.localIP:
                 part.HttpHeaders.update(self.localIP)
 
-            # get the videos
-            video_urls = video_data.get("videoReferences")
-            for video_url in video_urls:
-                # Logger.Trace(videoUrl)
-                stream_info = video_url['url']
-                if "manifest.f4m" in stream_info:
+            # Get the videos
+            video_infos = video_data.get("videoReferences")
+            # Similar to SVT
+            supported_formats = {
+                "dash": 2,
+                "dash-avc-51": 3,
+                "hls": 0,
+                "hls-ts-avc-51": 1,
+                "ios": 0
+            }
+            for video_info in video_infos:
+
+                video_type = video_info["playerType"]
+                video_url = video_info['url']
+                if video_type not in supported_formats:
+                    Logger.debug("Ignoring %s: %s", video_type, video_url)
                     continue
-                elif "master.m3u8" in stream_info:
-                    for s, b in M3u8.get_streams_from_m3u8(stream_info, self.proxy, headers=part.HttpHeaders):
-                        item.complete = True
-                        part.append_media_stream(s, b)
+
+                if "hls" in video_type or "ios" in video_type:
+                    M3u8.update_part_with_m3u8_streams(part, video_url)
+
+                elif "dash" in video_type:
+                    stream = part.append_media_stream(video_url, supported_formats[video_type])
+                    Mpd.set_input_stream_addon_input(stream, self.proxy)
+
+                else:
+                    continue
+
+                # stream_info = video_info['url']
+                # if "manifest.f4m" in stream_info:
+                #     continue
+                # elif "master.m3u8" in stream_info:
+                #     for s, b in M3u8.get_streams_from_m3u8(stream_info, self.proxy, headers=part.HttpHeaders):
+                #         item.complete = True
+                #         part.append_media_stream(s, b)
 
             # subtitles
             subtitles = video_data.get("subtitleReferences")

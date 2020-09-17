@@ -103,6 +103,14 @@ class Channel(chn_class.Channel):
             if len(item_data) < json_data.get_value("pageSize"):
                 break
 
+        amsterdam_vandaag = MediaItem(
+            "Amsterdam Vandaag",
+            "https://ditisdesupercooleappapi.at5.nl/api/article/p123")
+        amsterdam_vandaag.thumb = "https://media.at5.nl/cache/i/459000/images/459628.w1600.r16-9.6ef7807.q90.jpg"
+        now = datetime.datetime.now() - datetime.timedelta(days=1)
+        amsterdam_vandaag.set_date(now.year, now.month, now.day)
+        items.append(amsterdam_vandaag)
+
         dummy = JsonHelper("{}")
         dummy.json = episodes_json
         return dummy, items
@@ -131,7 +139,7 @@ class Channel(chn_class.Channel):
         item = MediaItem("\a.: {} :.".format(title), "")
         item.type = "folder"
         now = datetime.datetime.now()
-        item.set_date(now.year, now.month, now.day, 23, 59, 59)
+        item.set_date(now.year, now.month, now.day, 23, 59, 58)
         items.append(item)
 
         live_item = MediaItem(title, "#livestream")

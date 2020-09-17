@@ -5,6 +5,6 @@ import sys
 import southpark
 
 socket.setdefaulttimeout(30)
-plugin = southpark.SouthParkAddon(argv=sys.argv, last_season=23)
+plugin = southpark.SouthParkAddon(argv=sys.argv)
 plugin.handle()
 plugin = None

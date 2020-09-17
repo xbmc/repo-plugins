@@ -120,6 +120,8 @@ class LanguageHelper(object):
     VaultIncorrectPin = 30596
     VaultResetConfirm = 30597
     VaultReset = 30092
+    VaultHowToTitle = 30089
+    VaultHowToText = 30054
 
     LogPostSetting = 30598
     LogPostLogUrl = 30599

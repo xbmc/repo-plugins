@@ -20,6 +20,7 @@ class Vault(object):
     # bytes representation of the key. Use bytes.decode() to get string representation
     __Key = None  # type: bytes
     __APPLICATION_KEY_SETTING = "application_key"
+    __VAULT_HOWTO_SETTING = "vault_shown"
 
     def __init__(self):
         """ Creates a new instance of the Vault class """
@@ -28,11 +29,17 @@ class Vault(object):
 
         # ask for PIN of no key is present
         if Vault.__Key is None:
+            howto_shown = self.__show_howto()
             key = self.__get_application_key()  # type: bytes
 
             # was there a key? No, let's initialize it.
             if key is None:
                 Logger.warning("No Application Key present. Initializing a new one.")
+
+                # Show the how to if it was not already shown during this __init__()
+                if not howto_shown:
+                    self.__show_howto(force=True)
+
                 key = self.__get_new_key()
                 if not self.change_pin(key):
                     raise RuntimeError("Error creating Application Key.")
@@ -209,6 +216,26 @@ class Vault(object):
             AddonSettings.set_setting(setting_action_id, "")
         Logger.info("Successfully encrypted value for setting '%s'", setting_id)
         return
+
+    def __show_howto(self, force=False):
+        """ Shows the Vault howto if it was not already shown.
+
+        :param bool force:  Force the howto to show
+
+        :returns: indicator if the howto was shown
+        :rtype: bool
+
+        """
+
+        if not force:
+            vault_shown = AddonSettings.store(LOCAL).get_boolean_setting(
+                Vault.__VAULT_HOWTO_SETTING, default=False)
+            if vault_shown:
+                return False
+
+        XbmcWrapper.show_text(LanguageHelper.VaultHowToTitle, LanguageHelper.VaultHowToText)
+        AddonSettings.store(LOCAL).set_setting(Vault.__VAULT_HOWTO_SETTING, True)
+        return True
 
     def __get_application_key(self):
         """ Gets the decrypted application key that is used for all the encryption.

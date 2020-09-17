@@ -1038,7 +1038,7 @@ class Channel(chn_class.Channel):
         """
 
         data = UriHandler.open(item.url, proxy=self.proxy)
-        video_id = Regexer.do_regex(r'{\s*"id"\s*:\s*"([^"]+)"\s*}', data)[0]
+        video_id = Regexer.do_regex(r'\s*"videoSvtId"\s*:\s*"([^"]+)"\s*', data)[0]
         item.url = "https://api.svt.se/video/{}".format(video_id)
         return self.update_video_api_item(item)
 

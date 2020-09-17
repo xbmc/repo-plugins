@@ -298,6 +298,35 @@ class XbmcWrapper:
         return ok
 
     @staticmethod
+    def show_text(title, message):
+        """ Shows a dialog box with title and text
+
+        :param str|None|int title:      The title of the box or its language ID.
+        :param str|int message:         The lines to display or its language ID.
+
+        :return: True for OK, False for cancelled.
+        :rtype: bool
+
+        """
+
+        if isinstance(title, int):
+            title = LanguageHelper.get_localized_string(title)
+        if isinstance(message, int):
+            message = LanguageHelper.get_localized_string(message)
+
+        # let's just unlock the interface, in case it's locked.
+        LockWithDialog.close_busy_dialog()
+
+        text_box = xbmcgui.Dialog()
+        if not title:
+            header = Config.appName
+        else:
+            header = "%s - %s" % (Config.appName, title)
+
+        ok = text_box.textviewer(header, message or "")
+        return ok
+
+    @staticmethod
     def show_dialog(title, message):
         """ Shows a dialog box with title and text
 

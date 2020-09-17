@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.11+matrix.1"
+        version="5.2.12+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -127,21 +127,23 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.11 - Changelog - 2020-08-29[/B]
+        <news>[B]Retrospect v5.2.12 - Changelog - 2020-09-17[/B]
 
-A minor update that includes fixes for RTL XL, SVT Play, NPO Start and Nickelodeon channels.
+This update contains fixes for AT5, SVT, TV4, SVT Oppet Arkiv and NPO. It also adds a bit more clarification on the Retrospect Vault that is used to secure credentials.
 
 [B]Framework related[/B]
 _None_
 
 [B]GUI/Settings/Language related[/B]
-_None_
+* Added: More explanation for the Retrospect Vault.
+* Fixed: Issue with grouping of items that start with HTML entities
 
 [B]Channel related[/B]
-* Fixed: SVT Play could not resolve Single Episode videos (Fixes #1414)
-* Fixed: RTL XL requires logging in since this week (Fixes #1416)
-* Fixed: NPO Genres broke
-* Fixed: Nickelodeon would fail on shows with an empty season
+* Fixed: &quot;Amsterdam Vandaag&quot; was missing from the AT5 channel (Fixes #1418)
+* Fixed: Some SVT videos would not play.
+* Fixed: SVT Oppet Arkiv could not play all streams (Fixes #1421)
+* Fixed: Updated the NPO Start subtitle url (Fixes #1424)
+* Added: More explanation for the Retrospect Vault.
 
         </news>
         <assets>

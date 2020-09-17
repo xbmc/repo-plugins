@@ -370,6 +370,10 @@ class Channel:
                     continue
 
                 char = sub_item.name[0].upper()
+                if char == "&":
+                    title = HtmlEntityHelper.convert_html_entities(sub_item.name)
+                    char = title[0].upper()
+
                 # Should we de-prefix?
                 # for p in prefixes:
                 #     if sub_item.name.lower().startswith(p + " "):

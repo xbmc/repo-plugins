@@ -29,7 +29,7 @@ SP_SEASONS_EPS = [
 	17,15,14,14,14,
 	14,14,14,14,14,
 	14,10,10,10,10,
-	10,10,10
+	10,10,10,1
 ]
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0'
@@ -351,13 +351,13 @@ class Video(object):
 
 class SouthParkAddon(object):
 	"""South Park Addon"""
-	def __init__(self, argv, last_season, addon_id='plugin.video.southpark_unofficial'):
+	def __init__(self, argv, addon_id='plugin.video.southpark_unofficial'):
 		super(SouthParkAddon, self).__init__()
 		self.addon_id  = addon_id
 		self.addon_obj = xbmcaddon.Addon(id=self.addon_id)
 		self.argv      = argv
 		self.phandle   = int(argv[1])
-		self.seasons   = last_season + 1
+		self.seasons   = len(SP_SEASONS_EPS) + 1
 		self.options = SP_Options(self.addon_obj)
 		self.i18n    = SP_I18N   (self.addon_obj)
 		self.helper  = SP_Helper (self.options  )

@@ -16,10 +16,11 @@ Contributors:
   - gordielachance
   - understatement
   - peat8
+  - ronan-ln
 
 ============================================
 
-Current version: 2.4.3
+Current version: 2.5.1
   - Leia
   - Krypton
   - Jarvis
@@ -46,9 +47,9 @@ Features:
     - Cloudcasts
     - Users
   - Play cloudcasts
-    - Local resolver
+    - Local resolver (broken)
     - Offliberty resolver
-    - Mixcloud-Downloader resolver
+    - Mixcloud-Downloader resolver (broken)
     - Low quality m4a resolver (broken)
   - Thumbnails
   - History
@@ -59,6 +60,5 @@ Features:
     - Dutch
     - French
     - German
-  - jackyNIX's own cloudcasts :p
 
 ============================================

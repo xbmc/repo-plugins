@@ -148,10 +148,13 @@ class Resolver:
     mixclouddownloader1=4
     mixclouddownloader2=5
 
-resolver_order=[Resolver.local,
-                Resolver.mixclouddownloader1,
-                Resolver.offliberty,
-                Resolver.mixclouddownloader2]
+resolver_order=[Resolver.offliberty]
+
+# TODO: fix resolvers
+# resolver_order=[Resolver.local,
+                # Resolver.mixclouddownloader1,
+                # Resolver.offliberty,
+                # Resolver.mixclouddownloader2]
 
 
 
@@ -245,19 +248,19 @@ def add_folder_item(name,infolabels={},parameters={},img=''):
 
 def show_home_menu():
     if access_token!='':
-        add_folder_item(name=STRLOC_MAINMENU_FOLLOWINGS,parameters={STR_MODE:MODE_FOLLOWINGS},img=get_icon('yourfollowings.png'))
-        add_folder_item(name=STRLOC_MAINMENU_FOLLOWERS,parameters={STR_MODE:MODE_FOLLOWERS},img=get_icon('yourfollowers.png'))
-        add_folder_item(name=STRLOC_MAINMENU_FAVORITES,parameters={STR_MODE:MODE_FAVORITES},img=get_icon('yourfavorites.png'))
-        add_folder_item(name=STRLOC_MAINMENU_LISTENS,parameters={STR_MODE:MODE_LISTENS},img=get_icon('yourlistens.png'))
-        add_folder_item(name=STRLOC_MAINMENU_UPLOADS,parameters={STR_MODE:MODE_UPLOADS},img=get_icon('youruploads.png'))
-        add_folder_item(name=STRLOC_MAINMENU_PLAYLISTS,parameters={STR_MODE:MODE_PLAYLISTS},img=get_icon('yourplaylists.png'))
-        add_folder_item(name=STRLOC_MAINMENU_LISTENLATER,parameters={STR_MODE:MODE_LISTENLATER},img=get_icon('listenlater.png'))
+        add_folder_item(name=STRLOC_MAINMENU_FOLLOWINGS,parameters={STR_MODE:MODE_FOLLOWINGS},img=get_icon('kodi_highlight.png'))
+        add_folder_item(name=STRLOC_MAINMENU_FOLLOWERS,parameters={STR_MODE:MODE_FOLLOWERS},img=get_icon('kodi_highlight.png'))
+        add_folder_item(name=STRLOC_MAINMENU_FAVORITES,parameters={STR_MODE:MODE_FAVORITES},img=get_icon('kodi_favorites.png'))
+        add_folder_item(name=STRLOC_MAINMENU_LISTENS,parameters={STR_MODE:MODE_LISTENS},img=get_icon('kodi_history.png'))
+        add_folder_item(name=STRLOC_MAINMENU_UPLOADS,parameters={STR_MODE:MODE_UPLOADS},img=get_icon('kodi_uploads.png'))
+        add_folder_item(name=STRLOC_MAINMENU_PLAYLISTS,parameters={STR_MODE:MODE_PLAYLISTS},img=get_icon('kodi_playlists.png'))
+        add_folder_item(name=STRLOC_MAINMENU_LISTENLATER,parameters={STR_MODE:MODE_LISTENLATER},img=get_icon('kodi_listenlater.png'))
         add_folder_item(name=STRLOC_MAINMENU_LOGOFF+'...',parameters={STR_MODE:MODE_LOGOFF})
     else:
-        add_folder_item(name=STRLOC_MAINMENU_LOGIN,parameters={STR_MODE:MODE_LOGIN})
-    add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0},img=get_icon('categories.png'))
-    add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH},img=get_icon('search.png'))
-    add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY},img=get_icon('history.png'))
+        add_folder_item(name=STRLOC_MAINMENU_LOGIN,parameters={STR_MODE:MODE_LOGIN},img=get_icon('kodi_profile.png'))
+    add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0},img=get_icon('kodi_categories.png'))
+    add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH},img=get_icon('kodi_search.png'))
+    add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY},img=get_icon('kodi_history.png'))
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -606,18 +609,16 @@ def get_stream_offliberty(cloudcast_key):
     for retry in range(1, 2):
         try:
             values={
-                    'track' : ck,
-                    'refext' : 'https://www.google.com/'
+                    'url' : ck
                    }
             headers={
                      'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
-                     'Referer' : 'http://offliberty.com/'
                     }
-            postdata = urllib.urlencode(values)
-            request = urllib2.Request('http://offliberty.com/off04.php', postdata, headers, 'http://offliberty.com/')
+            getparams = urllib.urlencode(values)
+            request = urllib2.Request('https://offliberty.online/download?' + getparams, headers=headers)
             response = urllib2.urlopen(request)
             data=response.read()
-            match=re.search('href="(.*)" class="download"', data)
+            match=re.search('href="(.*)" download="', data)
             if match:
                 return match.group(1)
             else:
@@ -630,86 +631,14 @@ def get_stream_offliberty(cloudcast_key):
 def get_stream_local(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
     log_if_debug('Locally resolving cloudcast stream for '+ck)
-    try:
-        headers={
-                 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
-                 'Referer' : URL_MIXCLOUD
-                }
-        request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
-        response = urllib2.urlopen(request)
-        data=response.read()
-        match=re.search('<script id="relay-data" type="text/x-mixcloud">\[(.*)', data)
-        if match:
-            match=re.search('(.*)\]</script>', match.group(1))
-            if match:
-                decoded=match.group(1).replace('&quot;','"')
-                json_content=json.loads(decoded)
-                json_isexclusive=False
-                json_url=None
-                for json_item in json_content:
-                    if STR_CLOUDCASTLOOKUP in json_item and json_item[STR_CLOUDCASTLOOKUP]:
-                        json_cloudcastLookupA = json_item[STR_CLOUDCASTLOOKUP]
-                        if STR_DATA in json_cloudcastLookupA and json_cloudcastLookupA[STR_DATA]:
-                            json_data = json_cloudcastLookupA[STR_DATA]
-                            if STR_CLOUDCASTLOOKUP in json_data and json_data[STR_CLOUDCASTLOOKUP]:
-                                json_cloudcastLookupB = json_data[STR_CLOUDCASTLOOKUP]
-                                if STR_ISEXCLUSIVE in json_cloudcastLookupB and json_cloudcastLookupB[STR_ISEXCLUSIVE]:
-                                    json_isexclusive = json_cloudcastLookupB[STR_ISEXCLUSIVE]
-                                if STR_STREAMINFO in json_cloudcastLookupB and json_cloudcastLookupB[STR_STREAMINFO]:
-                                    json_streaminfo = json_cloudcastLookupB[STR_STREAMINFO]
-                                    if STR_URL in json_streaminfo and json_streaminfo[STR_URL]:
-                                        json_url = json_streaminfo[STR_URL]
-                                    elif STR_HLSURL in json_streaminfo and json_streaminfo[STR_HLSURL]:
-                                        json_url = json_streaminfo[STR_HLSURL]
-                                    elif STR_DASHURL in json_streaminfo and json_streaminfo[STR_DASHURL]:
-                                        json_url = json_streaminfo[STR_DASHURL]
-                    if json_url:
-                        break
-
-                if json_url:
-                    log_if_debug('encoded url: '+json_url)
-                    decoded_url=base64.b64decode(json_url)
-                    url=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(decoded_url,cycle(STR_MAGICSTRING)))
-                    log_if_debug('url: '+url)
-                    return url
-                elif json_isexclusive:
-                    log_if_debug('Cloudcast is exclusive')
-                    return STR_ISEXCLUSIVE
-                else:
-                    log_if_debug('Unable to find url in json')
-            else:
-                log_if_debug('Unable to resolve (match 2)')
-        else:
-            log_if_debug('Unable to resolve (match 1)')
-    except Exception as e:
-        log_if_debug('Unable to resolve: ' + str(e))
+    # TODO: fix local resolver
 
 
 
 def get_stream_m4a(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
     log_if_debug('Resolving m4a cloudcast stream for '+ck)
-#    headers={
-#             'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
-#             'Referer' : URL_MIXCLOUD
-#            }
-#    request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
-#    response = urllib2.urlopen(request)
-#    data=response.read()
-#    match=re.search('m-preview="(.*)" m-preview-light', data)
-#    if match:
-#        try:
-#            log_if_debug('m-preview = '+match.group(1))
-#            m4aurl=match.group(1).replace('audiocdn','stream')
-#            m4aurl=m4aurl.replace('https/','http')
-#            m4aurl=m4aurl.replace('/previews/','/secure/c/m4a/64/')
-#            m4aurl=m4aurl.replace('mp3','m4a?sig=***TODO***')
-#            log_if_debug('m4a url = '+m4aurl)
-#            return m4aurl
-#        except:
-#            log_always('Unexpected error resolving m4a error=%s' % (sys.exc_info()[0]))
-#    else:
-#        log_if_debug('Unable to resolve (match)')
+    # todo: fix m4a resolver
 
 
 
@@ -717,32 +646,7 @@ def get_stream_mixclouddownloader(cloudcast_key,linknr):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
     log_if_debug('Resolving mixcloud-downloader cloudcast stream for '+ck)
     log_if_debug('Link version %d' % linknr)
-    try:
-        headers={
-                    'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
-                    'Referer' : 'http://www.mixcloud-downloader.com/'
-                }
-
-        values={
-                    'url' : ck,
-               }
-        postdata = urllib.urlencode(values)
-        request = urllib2.Request('http://www.mixcloud-downloader.com/download/', postdata, headers, 'http://www.mixcloud-downloader.com/')
-        response = urllib2.urlopen(request)
-        data=response.read()
-        if linknr==1:
-            match=re.search('a class="btn btn-secondary btn-sm"(.*)', data, re.DOTALL)
-            if match:
-                match=re.search('href="(.*)"', match.group(1))
-        if linknr==2:
-            match=re.search('URL from Mixcloud: <br /> <a href="(.*)"', data)
-        if match:
-            log_if_debug('match found ' + match.group(1))
-            return match.group(1)
-        else:
-            log_if_debug('Wrong response code=%s len=%s' % (response.getcode(), len(data)))
-    except Exception as e:
-        log_if_debug('Unable to resolve: ' + str(e))
+    # todo: fix mixcloud downloader resolver
 
 
 
@@ -945,7 +849,7 @@ def add_to_settinglist(name,value,maxname):
 
 def log_if_debug(message):
     if debugenabled:
-        xbmc.log(msg='MIXCLOUD '+message,level=xbmc.LOGNOTICE)
+        xbmc.log(msg='MIXCLOUD '+message,level=xbmc.LOGINFO)
 
 
 

@@ -1,3 +1,11 @@
+2.5.1
+- local resolver is broken
+- mixcloud-downloader resolver is broken
+
+2.5.0
+- new logo and icons
+- fixed offliberty resolver
+
 2.4.3
 - handle exclusive cloudcasts
 - removed obsolete menu items

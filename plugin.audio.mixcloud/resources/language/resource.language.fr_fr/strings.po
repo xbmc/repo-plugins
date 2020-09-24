@@ -132,6 +132,10 @@ msgctxt "#30403"
 msgid "Clear history?"
 msgstr "Effacer l'historique?"
 
+msgctxt "#30404"
+msgid "No active resolvers found. Please check your settings."
+msgstr "Aucun résolveur actif trouvé. Veuillez vérifier vos paramètres."
+
 
 
 # general settings
@@ -182,19 +186,19 @@ msgstr "Se déconnecter..."
 
 msgctxt "#30920"
 msgid "Resolvers"
-msgstr ""
+msgstr "Résolveurs"
 
 msgctxt "#30921"
-msgid "mixcloud.com"
+msgid "mixcloud.com [BROKEN]"
 msgstr ""
 
 msgctxt "#30922"
-msgid "mixcloud-downloader.com"
+msgid "mixcloud-downloader.com [BROKEN]"
 msgstr ""
 
 msgctxt "#30923"
-msgid "offliberty.com (slower)"
-msgstr "offliberty.com (plus lent)"
+msgid "offliberty.online"
+msgstr "offliberty.online"
 
 
 

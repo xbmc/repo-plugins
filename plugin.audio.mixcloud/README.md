@@ -10,9 +10,10 @@
   - gordielachance
   - understatement
   - peat8
+  - ronan-ln
 
 ### Current version: 
-  3.0.0
+  3.0.1
   - Matrix
 
 ### Features:
@@ -31,8 +32,8 @@
     - Users
     - Search history
   - Play cloudcasts
-    - Mixcloud resolver
-    - Mixcloud-Downloader resolver
+    - Mixcloud resolver (broken)
+    - Mixcloud-Downloader resolver (broken)
     - Offliberty resolver
   - Thumbnails
   - History

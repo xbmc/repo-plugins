@@ -62,5 +62,6 @@ class Lang:
     ENTER_OATH_CODE = __addon__.getLocalizedString(30401) 
     ASK_PROFILE_LOGOUT = __addon__.getLocalizedString(30402)
     ASK_CLEAR_HISTORY = __addon__.getLocalizedString(30403)
+    NO_ACTIVE_RESOLVERS = __addon__.getLocalizedString(30404)
 
     # settings (309xx)

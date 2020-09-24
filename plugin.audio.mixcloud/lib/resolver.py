@@ -27,6 +27,7 @@ from .utils import Utils
 from .history import History
 from .mixcloud import MixcloudInterface
 from .base import BaseBuilder
+from .lang import Lang
 from urllib import request, parse
 import xbmc
 import xbmcgui
@@ -187,18 +188,16 @@ class OfflibertyResolver(BaseResolver):
 
             try:
                 values = {
-                    'track' : ck,
-                    'refext' : 'https://www.google.com/'
+                    'url' : ck
                 }
                 headers = {
-                    'User-Agent' : STR_USERAGENT,
-                    'Referer' : 'http://offliberty.com/'
+                    'User-Agent' : STR_USERAGENT
                 }
-                postdata = parse.urlencode(values).encode('utf-8')
-                req = request.Request('http://offliberty.com/off04.php', postdata, headers, 'http://offliberty.com/')
+                getparams = parse.urlencode(values)
+                req = request.Request('https://offliberty.online/download?' + getparams, headers = headers)
                 response = request.urlopen(req)
                 data = response.read().decode('utf-8')
-                match = re.search(r'href="(.*)" class="download"', data)
+                match = re.search(r'href="(.*)" download="', data)
                 if match:
                     url = match.group(1)
                     Utils.log('url found: ' + url)
@@ -237,24 +236,28 @@ class ResolverBuilder(BaseBuilder):
 
         # resolvers
         activeResolvers = []
-        if Utils.getSetting('resolver_mixcloud') == 'true':
-            activeResolvers.append(MixcloudResolver)
-        if Utils.getSetting('resolver_mixclouddownloader') == 'true':
-            activeResolvers.append(MixcloudDownloaderResolver)
+        # todo: these 2 resolvers are currently broken, will fix them again later
+        # if Utils.getSetting('resolver_mixcloud') == 'true':
+        #     activeResolvers.append(MixcloudResolver)
+        # if Utils.getSetting('resolver_mixclouddownloader') == 'true':
+        #     activeResolvers.append(MixcloudDownloaderResolver)
         if Utils.getSetting('resolver_offliberty') == 'true':
             activeResolvers.append(OfflibertyResolver)
         Utils.log('active resolvers: ' + str(activeResolvers))
 
-        mon = xbmc.Monitor()            
-        for resolver in activeResolvers:
-            # user aborted
-            if mon.abortRequested():
-                break
-                
-            strm_url = resolver(self.key).resolve()
+        if len(activeResolvers) > 0:
+            mon = xbmc.Monitor()            
+            for resolver in activeResolvers:
+                # user aborted
+                if mon.abortRequested():
+                    break
+                    
+                strm_url = resolver(self.key).resolve()
 
-            # stream found!
-            if strm_url:
-                break
+                # stream found!
+                if strm_url:
+                    break
+        else:
+            xbmcgui.Dialog().ok('Mixcloud', Lang.NO_ACTIVE_RESOLVERS)
 
         return strm_url

@@ -118,6 +118,10 @@ msgctxt "#30403"
 msgid "Clear history?"
 msgstr "Geschiedenis wissen?"
 
+msgctxt "#30404"
+msgid "No active resolvers found. Please check your settings."
+msgstr "Geen actieve resolvers gevonden. Controleer uw instellingen."
+
 
 
 # general settings
@@ -171,16 +175,16 @@ msgid "Resolvers"
 msgstr ""
 
 msgctxt "#30921"
-msgid "mixcloud.com"
+msgid "mixcloud.com [BROKEN]"
 msgstr ""
 
 msgctxt "#30922"
-msgid "mixcloud-downloader.com"
+msgid "mixcloud-downloader.com [BROKEN]"
 msgstr ""
 
 msgctxt "#30923"
-msgid "offliberty.com (slower)"
-msgstr "offliberty.com (trager)"
+msgid "offliberty.online"
+msgstr "offliberty.online"
 
 
 

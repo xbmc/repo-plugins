@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.mixcloud"
        name="Mixcloud"
-       version="3.0.0"
+       version="3.0.1"
        provider-name="jackyNIX">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
@@ -19,9 +19,10 @@
     <description lang="fr_FR">Mixcloud redéfinit la radio. Écoutez les émissions radio, podcasts et mixes DJ sur demande.</description>
     <description lang="de_DE">Mixcloud erfindet Radio neu. Höre Radioshows, Podcasts und DJ Mixe wann immer Du willst.</description>
     <news>
-      v3.0.0 (2020-03-04)
-      [new] python 3 migration
-      [new] new logo, icons and other art
+      v3.0.1 (2020-09-24)
+      [fix] fixed offliberty resolver
+      [fix] deactivate broken resolvers
+      [fix] changed lognotice to loginfo
     </news>
     <platform>all</platform>
     <language>en</language>

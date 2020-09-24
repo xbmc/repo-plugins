@@ -49,7 +49,7 @@ class Utils:
             xbmc.log(msg = 'MIXCLOUD ' + message, level = xbmc.LOGERROR)
             xbmc.log(msg = 'MIXCLOUD ' + traceback.format_exc(), level = xbmc.LOGERROR)
         elif __addon__.getSetting('debug') == 'true':
-            xbmc.log(msg = 'MIXCLOUD ' + message, level = xbmc.LOGNOTICE)
+            xbmc.log(msg = 'MIXCLOUD ' + message, level = xbmc.LOGINFO)
 
 
 

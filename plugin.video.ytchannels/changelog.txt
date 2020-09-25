@@ -1,6 +1,9 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.3.1 [25-Sept-2020]
+-Videos are now sorted by PublishedTime rather than the old implicit order
+
 v0.3.0 [11-August-2020]
 -Add ability to move channels up and down in list of channels
 

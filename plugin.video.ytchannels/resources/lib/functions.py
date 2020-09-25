@@ -89,7 +89,7 @@ def check_sort_db():
 		return True
 	else:
 		return False
-	
+
 def add_sort_db():
 	# Add sort column to existing database if it doesn't already exist and set initial sort values
 	cur = db.cursor()
@@ -288,9 +288,9 @@ def get_latest_from_channel(channel_id, page):
 	result_num = my_addon.getSetting('result_number')
 
 	if page=='1':
-		req_url='https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=%s&playlistId=%s&key='%(str(result_num),channel_id)+YOUTUBE_API_KEY
+		req_url='https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&fields=items/snippet/resourceId/videoId,nextPageToken&maxResults=%s&playlistId=%s&key='%(str(result_num),channel_id)+YOUTUBE_API_KEY
 	else:
-		req_url='https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&pageToken=%s&maxResults=%s&playlistId=%s&key='%(page,str(result_num),channel_id)+YOUTUBE_API_KEY
+		req_url='https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&fields=items/snippet/resourceId/videoId,nextPageToken&pageToken=%s&maxResults=%s&playlistId=%s&key='%(page,str(result_num),channel_id)+YOUTUBE_API_KEY
 	read=read_url(req_url)
 	decoded_data=json.loads(read)
 	listout=[]
@@ -300,23 +300,24 @@ def get_latest_from_channel(channel_id, page):
 	except:
 		next_page='1'
 	listout.append(next_page)
-	sorted_data = sorted((decoded_data['items']), key=(lambda x: x['snippet']['publishedAt']), reverse=True)
-	for x in range(0, len(sorted_data)):
-		title = sorted_data[x]['snippet']['title']
-		video_id = sorted_data[x]['snippet']['resourceId']['videoId']
-		thumb = sorted_data[x]['snippet']['thumbnails']['high']['url']
-		desc = sorted_data[x]['snippet']['description']
-		videoids.append(video_id)
-		listout.append([title, video_id, thumb, desc])
 
-	video_req_url = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&fields=items/contentDetails/duration&id=%s&key=%s' % (','.join(videoids), YOUTUBE_API_KEY)
+	for x in range(0, len(decoded_data['items'])):
+		video_id = decoded_data['items'][x]['snippet']['resourceId']['videoId']
+		videoids.append(video_id)
+
+	video_req_url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=%s&key=%s' % (','.join(videoids), YOUTUBE_API_KEY)
 	video_read = read_url(video_req_url)
 	video_decoded = json.loads(video_read)
+	sorted_data = sorted((video_decoded['items']), key=(lambda x: x['snippet']['publishedAt']), reverse=True)
 	for x in range(0, len(sorted_data)):
-		duration = video_decoded['items'][x]['contentDetails']['duration']
+		title = sorted_data[x]['snippet']['title']
+		video_id = sorted_data[x]['id']
+		thumb = sorted_data[x]['snippet']['thumbnails']['high']['url']
+		desc = sorted_data[x]['snippet']['description']
+		duration = sorted_data[x]['contentDetails']['duration']
 		seconds = yt_time(duration)
-		listout[(x + 1)].append(seconds)
-
+		date = re.search("[0-9]{4}-[0-9]{2}-[0-9]{2}", sorted_data[x]['snippet']['publishedAt'])
+		listout.append([title, video_id, thumb, desc, seconds, date.group()])
 	return listout
 
 def get_playlists(channelID,page):

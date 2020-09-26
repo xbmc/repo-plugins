@@ -6,7 +6,16 @@ import xbmcplugin
 import xbmcaddon
 import xbmc
 import os
+import datetime
 from .functions import local_string
+
+#fix for datatetime.strptime returns None
+class proxydt(datetime.datetime):
+	@staticmethod
+	def strptime(date_string, format):
+		import time
+		return datetime.datetime(*(time.strptime(date_string, format)[0:6]))
+datetime.datetime = proxydt
 
 def ytchannels_main():
 
@@ -208,18 +217,27 @@ def ytchannels_main():
 		game_list=get_latest_from_channel(id,page)
 		next_page=game_list[0]
 
+		xbmc_region = xbmc.getRegion('dateshort')
+
 		for i in range(1,len(game_list)):
 			title=game_list[i][0]
 			video_id=game_list[i][1]
 			thumb=game_list[i][2]
 			desc=game_list[i][3]
 			seconds=game_list[i][4]
+			date=game_list[i][5]
+
+			try:
+				pub = datetime.datetime.strftime(datetime.datetime.strptime(date, '%Y-%m-%d'), xbmc_region)
+				plot = "Published: " + pub + "\r\n\r\n" +  desc
+			except:
+				plot = desc
 
 			uri='plugin://plugin.video.youtube/play/?video_id='+video_id
 			li = xbmcgui.ListItem('%s'%title)
 			li.setArt({'icon':thumb})
 			li.setProperty('IsPlayable', 'true')
-			li.setInfo('video', { 'genre': 'YouTube', 'plot': desc, 'duration': seconds } )
+			li.setInfo('video', { 'genre': 'YouTube', 'plot': plot, 'duration': seconds } )
 
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=uri, listitem=li)#,isFolder=True)
 
@@ -230,7 +248,7 @@ def ytchannels_main():
 				uri = build_url({'mode': 'open_channel', 'foldername': '%s'%id, 'page' : '%s'%next_page })
 
 			li = xbmcgui.ListItem('%s >>'%local_string(30005))
-			li.setArt({'icon':thumb})
+			li.setArt({'icon':folder_img})
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=uri, listitem=li,isFolder=True)
 
 		xbmcplugin.endOfDirectory(addon_handle)
@@ -257,7 +275,7 @@ def ytchannels_main():
 			uri = build_url({'mode': 'open_playlists', 'id': '%s'%id, 'page' : '%s'%next_page ,'playlist':'yes'})
 
 			li = xbmcgui.ListItem('%s >>'%local_string(30005))
-			li.setArt({'icon':thumb})
+			li.setArt({'icon':folder_img})
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=uri, listitem=li,isFolder=True)
 
 		xbmcplugin.endOfDirectory(addon_handle)

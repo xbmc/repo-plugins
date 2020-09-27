@@ -3,6 +3,7 @@
 import xbmc
 import xbmcaddon
 import xbmcgui
+import xbmcvfs
 import sys
 import os
 import logging
@@ -18,8 +19,13 @@ else:
 
 # read settings
 ADDON = xbmcaddon.Addon()
-ICON = xbmc.translatePath(ADDON.getAddonInfo("icon"))
-FANART = xbmc.translatePath(ADDON.getAddonInfo("fanart"))
+
+if PY3:
+    ICON = xbmcvfs.translatePath(ADDON.getAddonInfo("icon"))
+    FANART = xbmcvfs.translatePath(ADDON.getAddonInfo("fanart"))
+else:
+    ICON = xbmc.translatePath(ADDON.getAddonInfo("icon"))
+    FANART = xbmc.translatePath(ADDON.getAddonInfo("fanart"))
 
 logger = logging.getLogger(__name__)
 

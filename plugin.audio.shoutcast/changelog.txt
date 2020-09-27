@@ -1,3 +1,6 @@
+2.5.1+matrix.0 (27/09/2020)
+ - Add stationname property (matrix only)
+
 2.5.0+matrix.1 (12.4.2020) - matrix edition
  - Remove python2 support
  - Remove simplejson

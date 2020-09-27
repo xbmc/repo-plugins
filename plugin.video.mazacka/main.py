@@ -89,7 +89,7 @@ def checkStream(html):
     if html == '':
         xbmcgui.Dialog().ok(PLUGIN_ID, _lang(30003))
         return(False)
-    if html.find('bude brzy') != -1:
+    if html.find('Vys&#237;l&#225;n&#237; bude brzy zah&#225;jeno') != -1:
         xbmcgui.Dialog().ok(PLUGIN_ID, _lang(30002))
         return(False)
     return(True)

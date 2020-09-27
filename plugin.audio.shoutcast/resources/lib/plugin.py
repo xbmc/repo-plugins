@@ -183,7 +183,7 @@ def __add_stations(stations):
                 'RunPlugin(%s)' % plugin.url_for(
                     endpoint='add_to_my_stations',
                     station_id=station_id,
-                    station_name=station['name'].encode('utf-8')
+                    station_name=station.get('name', '')
                 )
             )]
         else:
@@ -197,7 +197,7 @@ def __add_stations(stations):
         if show_bitrate and station.get('bitrate'):
             name = '%s  [%s kbps]' % (station['name'], station['bitrate'])
         else:
-            name = station['name']
+            name = station.get('name', '')
         item = {
             'label': name,
             'thumbnail': icon,
@@ -216,7 +216,10 @@ def __add_stations(stations):
             'path': plugin.url_for(
                 endpoint='resolve_play_url',
                 station_id=station['id'],
-            )
+            ),
+            'properties': {
+                'StationName': station.get('name', '') # Matrix++ only
+            }
         }
         items.append(item)
     finish_kwargs = {

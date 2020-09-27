@@ -542,6 +542,9 @@ def __add_stations(stations, add_custom=False, browse_more=None):
                 station_id=station_id,
             ),
             'is_playable': True,
+            'properties': {
+                'StationName': station.get('name', '') # Matrix++ only
+            }
         })
     if add_custom:
         items.append({

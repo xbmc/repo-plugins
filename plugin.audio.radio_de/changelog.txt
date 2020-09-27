@@ -1,3 +1,6 @@
+v3.0.4+matrix.0 (27/9/2020)
+    - [new] Add stationname property
+
 v3.0.3+matrix.6 (1/5/2020)
     - [fix] Custom stations if the url is not a playlist
     - [new] Spanish website radio.es and improved translations

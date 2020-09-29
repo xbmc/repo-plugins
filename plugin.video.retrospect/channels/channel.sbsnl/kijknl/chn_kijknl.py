@@ -724,6 +724,8 @@ class Channel(chn_class.Channel):
             stream_type = src["type"]
             url = src["file"]
             drm = src["drm"]
+            if "?filter=" in url:
+                url = url[:url.index("?filter=")]
 
             if stream_type == "dash" and not drm:
                 bitrate = 0 if hls_over_dash else 2

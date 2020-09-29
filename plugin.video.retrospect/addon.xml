@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.12"
+        version="5.2.13"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,23 +132,20 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.12 - Changelog - 2020-09-17[/B]
+        <news>[B]Retrospect v5.2.13 - Changelog - 2020-09-29[/B]
 
-This update contains fixes for AT5, SVT, TV4, SVT Oppet Arkiv and NPO. It also adds a bit more clarification on the Retrospect Vault that is used to secure credentials.
+This update contains fixes for DPlay login, missing items for VRT.nu and 1080p Kijk.nl streams.
 
 [B]Framework related[/B]
 _None_
 
 [B]GUI/Settings/Language related[/B]
-* Added: More explanation for the Retrospect Vault.
-* Fixed: Issue with grouping of items that start with HTML entities
+_None_
 
 [B]Channel related[/B]
-* Fixed: &quot;Amsterdam Vandaag&quot; was missing from the AT5 channel (Fixes #1418)
-* Fixed: Some SVT videos would not play.
-* Fixed: SVT Oppet Arkiv could not play all streams (Fixes #1421)
-* Fixed: Updated the NPO Start subtitle url (Fixes #1424)
-* Added: More explanation for the Retrospect Vault.
+* Fixed: DPlay login broke. Should now work for Swedish IP&#x27;s (Fixes #1426)
+* Fixed: VRT.nu was missing some shows (Fixes #1427)
+* Fixed: Kijk.nl did not have 1080p streams (Fixes #1428)
 
         </news>
         <assets>

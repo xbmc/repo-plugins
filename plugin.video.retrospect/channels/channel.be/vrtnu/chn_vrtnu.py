@@ -40,8 +40,8 @@ class Channel(chn_class.Channel):
 
         # first regex is a bit tighter than the second one.
         episode_regex = r'<nui-tile href="(?<url>/vrtnu[^"]+)"[^>]*>\s*<h3[^>]*>\s*<a[^>]+>' \
-                        r'(?<title>[^<]+)</a>\s*</h3>\s*<div[^>]+>(?:\s*<p>)?(?<description>[^<]*)' \
-                        r'(?:<br[^>]*>)?(?<descriptionMore>[^<]*)?(?:</p>)?\W*</div>\s*(?:<p[^>]*' \
+                        r'(?<title>[^<]+)</a>\s*</h3>\s*<div[^>]+>(?:\s*<p>)?(?<description>' \
+                        r'[\w\W]{0,2000}?)(?:</p>)?\W*</div>\s*(?:<p[^>]*' \
                         r'data-brand="(?<channel>[^"]+)"[^>]*>[^<]+</p>)?\s*(?:<img[\w\W]{0,100}?' \
                         r'data-responsive-image="(?<thumburl>//[^" ]+)")?'
         episode_regex = Regexer.from_expresso(episode_regex)
@@ -445,8 +445,7 @@ class Channel(chn_class.Channel):
         if item is None:
             return None
 
-        if result_set["descriptionMore"]:
-            item.description += result_set["descriptionMore"]
+        item.description = HtmlHelper.to_text(item.description)
 
         # update artswork
         if item.thumb and item.thumb.startswith("//"):

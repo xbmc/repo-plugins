@@ -584,11 +584,11 @@ class Channel(chn_class.Channel):
         window_id = "{}|{}".format(
             binascii.hexlify(os.urandom(16)).decode(), binascii.hexlify(os.urandom(16)).decode())
 
-        fe = ["DNT:1", "L:en-NL", "D:24", "PR:1", "S:1920,1080", "AS:1920,1040", "TO:-120",
+        fe = ["DNT:unknown", "L:en-US", "D:24", "PR:1", "S:1920,975", "AS:1920,935", "TO:-120",
               "SS:true", "LS:true", "IDB:true", "B:false", "ODB:true", "CPUC:unknown",
-              "PK:Win32", "CFP:-1524337346", "FR:false", "FOS:false", "FB:false", "JSF:", "P:",
-              "T:1,false,false", "H:12", "SWF:false"]
-        fs_murmur_hash = "d6530c9b538110be929394f85bfad515"
+              "PK:Win32", "CFP:990181251", "FR:false", "FOS:false", "FB:false", "JSF:Arial",
+              "P:Chrome PDF Plugin", "T:0,false,false", "H:4", "SWF:false"]
+        fs_murmur_hash = '48bf49e1796939175b0406859d00baec'
 
         data = [
             {"key": "api_type", "value": "js"},

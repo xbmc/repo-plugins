@@ -57,7 +57,7 @@ msgid "Check your internet connection!"
 msgstr ""
 
 msgctxt "#30011"
-msgid "Banned Episode! It's not available, sorry"
+msgid "It's not available, sorry"
 msgstr ""
 
 msgctxt "#30012"

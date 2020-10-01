@@ -1,0 +1,65 @@
+# Kodi Media Center language file
+# Addon Name: Channels DVR
+# Addon id: plugin.video.channelsdvr
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.channelsdvr\n"
+"Report-Msgid-Bugs-To: http://forum.kodi.tv/showthread.php?tid=315513\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lunatixz Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Something went wrong, Try Again..."
+msgstr ""
+
+msgctxt "#30002"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Lineup"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Enable M3U/XMLTV Generator Service"
+msgstr ""
+
+msgctxt "#30005"
+msgid "M3U/XMLTV Path"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Use MPEG Video Streams"
+msgstr ""
+
+msgctxt "#30007"
+msgid "M3U/XMLTV Updated"
+msgstr ""
+
+msgctxt "#30008"
+msgid "General"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Enter Channels DVR Server IP"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Enter Channels DVR Server Port"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Allow this plugin to automatically configure IPTV Simple PVR Backend?"
+msgstr ""

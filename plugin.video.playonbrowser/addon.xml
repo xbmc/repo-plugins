@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.playonbrowser" name="PlayOn Browser" version="2.0.8" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.six" version="1.0.0"/>
+        <import addon="script.module.kodi-six" version="0.1.3.1"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.xmltodict" version="0.9.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Browse PlayOn from Kodi.</summary>
+        <description lang="en_GB">PlayOn is a streaming media brand and software suite that enables users to view and record videos from numerous online content providers.</description>
+        <disclaimer lang="en_GB">Requires Playon Server Software</disclaimer>
+        <platform>all</platform>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <license>GPL-3.0-or-later</license>
+        <forum>http://forum.kodi.tv/showthread.php?tid=233136</forum>
+        <website>https://www.playon.tv</website>
+        <source>https://github.com/Lunatixz/KODI_Addons/tree/master/plugin.video.playonbrowser</source>
+        <news>>v.2.0.8[CR]- Matrix[CR]v.2.0.4[CR]- Updated Auto-IP detection[CR]v.2.0.3[CR]- Added Search function[CR]- Added Auto-IP detection[CR]-v.2.0.2[CR]- Improved UPNPID detection[CR]- URL caching improvements[CR]v.2.0.1[CR]- Fixed PlayLater playback[CR]v.2.0.0[CR]- Refactored and optimized Code.[CR]- Added PlayLater Recording via Context Menu.</news>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+            <screenshot>resources/images/screenshot03.png</screenshot>
+            <screenshot>resources/images/screenshot04.png</screenshot>
+        </assets>
+    </extension>
+</addon>

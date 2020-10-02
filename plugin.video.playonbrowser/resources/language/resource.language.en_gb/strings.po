@@ -1,0 +1,77 @@
+# Playon Browser Media Center language file
+# Addon Name: Playon Browser
+# Addon id: plugin.video.playonbrowser
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.playonbrowser Addons\n"
+"Report-Msgid-Bugs-To: http://forum.kodi.tv/showthread.php?tid=233136\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lunatixz Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Navigate to m.playon.tv in a browser to get the resolved IP."
+msgstr ""
+
+msgctxt "#30002"
+msgid "Playon IP:Port"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Preferred Playback Method"
+msgstr ""
+
+msgctxt "#30004"
+msgid "UPNP Server"
+msgstr ""
+
+msgctxt "#30005"
+msgid ""
+msgstr ""
+
+msgctxt "#30010"
+msgid "Something went wrong, Try again..."
+msgstr ""
+
+msgctxt "#30011"
+msgid "Connect to PlayOn: %s"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Please Check Playon Server and IP:Port settings."
+msgstr ""
+
+msgctxt "#30013"
+msgid "Found Playon UPNP Server"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Navigate to UPNP, locate Playon Server"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Kodi UPNP Enabled"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Enter Search Term"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Add to PlayLater"
+msgstr ""
+
+msgctxt "#30018"
+msgid "General"
+msgstr ""

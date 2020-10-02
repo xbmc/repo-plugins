@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30008">
+    <setting id="User_IP"          type="ipaddress" label="30009" default="127.0.0.1"/>
+    <setting id="User_Port"        type="number"    label="30010" default="57000"/>
+    <setting id="Enable_Debugging" type="bool"      label="30000" default="false"/>
+    <setting id="Enable_TS"        type="bool"      label="30006" default="false"/>
+    <setting id="Enable_M3UXMLTV"  type="bool"      label="30004" default="false"/>
+    <setting id="Enable_Config"    type="bool"      label="30011" default="false" visible="eq(-1,true)" />     
+    <setting id="User_Folder"      type="folder"    label="30005" default="special://profile/addon_data/plugin.video.channelsdvr/" source="files" visible="eq(-2,true)" />    
+  </category>
+</settings>

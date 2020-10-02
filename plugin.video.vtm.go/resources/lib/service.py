@@ -7,8 +7,9 @@ import logging
 from time import time
 
 from xbmc import getInfoLabel, Monitor, Player
+from xbmcaddon import Addon
 
-from resources.lib import kodilogging
+from resources.lib import kodilogging, kodiwrapper
 from resources.lib.kodiwrapper import KodiWrapper
 from resources.lib.vtmgo.vtmgo import VtmGo
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
@@ -47,6 +48,7 @@ class BackgroundService(Monitor):
     def onSettingsChanged(self):  # pylint: disable=invalid-name
         """ Callback when a setting has changed """
         # Refresh our VtmGo instance
+        kodiwrapper.ADDON = Addon()
         self.vtm_go = VtmGo(self._kodi)
 
         if self.vtm_go_auth.has_credentials_changed():

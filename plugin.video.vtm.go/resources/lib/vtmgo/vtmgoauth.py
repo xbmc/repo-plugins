@@ -7,6 +7,7 @@ import hashlib
 import logging
 import os
 import re
+from uuid import uuid4
 
 import requests
 
@@ -114,8 +115,7 @@ class VtmGoAuth:
         session = requests.sessions.session()
 
         # Yes, we have accepted the cookies
-        session.cookies.set('pws', 'functional|analytics|content_recommendation|targeted_advertising|social_media')
-        session.cookies.set('pwv', '1')
+        session.cookies.set('authId', str(uuid4()))
 
         # Start login flow
         response = session.get('https://vtm.be/vtmgo/aanmelden?redirectUrl=https://vtm.be/vtmgo', proxies=self._proxies)

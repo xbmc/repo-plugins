@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, unicode_literals
 import json
 import logging
 from datetime import datetime, timedelta
+from uuid import uuid4
 
 import dateutil.parser
 import dateutil.tz
@@ -91,8 +92,7 @@ class VtmGoEpg:
         self._kodi = kodi
 
         self._session = requests.session()
-        self._session.cookies.set('pws', 'functional|analytics|content_recommendation|targeted_advertising|social_media')
-        self._session.cookies.set('pwv', '1')
+        self._session.cookies.set('authId', str(uuid4()))
 
     def get_epg(self, channel, date=None):
         """ Load EPG information for the specified channel and date.

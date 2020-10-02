@@ -289,9 +289,13 @@ class VtmGo:
         if token:
             self._session.headers['x-dpp-jwt'] = token
 
-        profile = self._auth.get_profile()
-        if profile:
-            self._session.headers['x-dpp-profile'] = profile
+            profile = self._auth.get_profile()
+            if profile:
+                self._session.headers['x-dpp-profile'] = profile
+            else:
+                # Select default profile
+                default_profile = self.get_profiles()[0]
+                self._session.headers['x-dpp-profile'] = default_profile.key
 
     def _mode(self):
         """ Return the mode that should be used for API calls """

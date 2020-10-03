@@ -275,9 +275,6 @@ def _parse_episodes(data, season, domain):
 
 def _download_data(url, link_in_html):
 	webpage = _http_get(url)
-	with open("/tmp/test.html",'wb') as output:
-		output.truncate()
-		output.write(webpage)
 	if "window.__DATA__" in webpage:
 		dataidx  = webpage.index("window.__DATA__")
 		data     = webpage[dataidx:]

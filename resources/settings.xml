@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="30100">
-        <setting id="PLAY"          type="bool"   label="30101" default="false"/>
-        <setting id="STREAM"        type="select" label="30102" values="Auto|64kbps|128kbps|192kbps" />
-        <setting id="VERSION"       type="text"   label=""      default="0.0.0" visible="false"/>
-    </category>  
-</settings>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+        <setting id="podcast_images"        type="bool"   label="30102" default="false"/>
+        <setting id="VERSION"               type="text"   label=""      default="3.0.1" visible="false"/>
+</settings>

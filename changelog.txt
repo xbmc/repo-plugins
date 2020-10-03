@@ -1,6 +1,0 @@
-v1.0.0:
-  - initial release
-  - fixed retrieval of podcast
-  - cleaned up menu 
-  - stream can be choosen from settings
-  - reworked the translations

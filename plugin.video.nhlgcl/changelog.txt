@@ -1,0 +1,186 @@
+2017.2.24
+- Patched bug released in previous version that affected Kodi 16.x users
+
+2017.2.22
+- Added Classic Games Section under Featured Videos
+- Renamed "No Spoilers" to "Hide Scores"
+- Bumped the xbmc.python version
+- Restructered the addon as per the Kodi addon structure wiki
+
+2017.1.24
+- Updated addon icon and fanart images
+- Updated favorite team image
+- Added player mugshot to goal notifications
+- Fixed Cache issue with adding favorite team link to the Kodi home screen
+- Fixed addon.xml forum link
+
+2016.11.18
+- Added option to disabled goal description in scoring notifications
+- Fixed logout not clearing cookies
+
+2016.11.15
+- Added "No Preference" to CDN setting
+- Added goal description to scoring notifications (goal scorer and assists, if any, appear in notification now)
+
+2016.11.11.2
+- Fixed CDN bug that could potentionally cause a too many sign-on restriction
+
+2016.11.11
+- Added a CDN option in settings (Under Login)
+
+2016.10.18
+- Fixed bug introduced in last version
+
+2016.10.17
+- Escape special characters in username and password (thanks Rel1k for pointing this out)
+
+2016.10.13
+- Fixed scoring notification error
+- Updated login url
+
+2016.7.27
+- Fixed bug with Full Game Archive (Winter Classics didn't work)
+- Goto date now employs select dialogs instead of text input
+- Updated game thumbnails to incorporate latest team logos
+
+2016.4.13
+- Fixed bug
+
+2016.4.12
+- Fixed error when no games were available for date
+
+2016.4.1
+- Fixed debug code in Favorite Team' Game Today
+
+2016.3.31
+- Fixed some bugs with Favorite Team's Game Today
+- Added favorite teams logo as icon for Favorite Teams list items
+- Replaced "Favorite Team's..." with teams actual city in main menu
+- Re-wrote favorite team code so favorite team variables are stored (less calls to the web)
+
+2016.3.30
+- Added Favorite Team's Game Today item that launches your favorite team's game and the team's feed. You can then add this as a favorite to make it easy to start your team's game and have it autopick your team's feed. (Thanks to Str8AWay for adding this feature!)
+- Added setting to disable Game Preview Info (Today's Game fanart, game preview), which should help speed up load times for the Today's Games section
+- Removed PIL requirement
+- Added Score to Game Update notifications
+
+2016.3.11
+- Change today roll over to occur at 3 AM EST
+- Added Game updates to scoring notifications. This displays a notification when a game starts or period starts (including OT & SO starts)
+- To prevent any spoilers if the user is watching a game the "All games have finished notification" won't display now
+- Fixed Featured Videos not playing when best available stream quality was selected
+- Support free game of the day *Requires a nhl.com account (game will be highlighted in green)
+
+2016.3.1
+- Fix for scoring notifications not shutting down when all live games have finished
+- Fix for Todays games rolling to the next day (est) when late games are still live
+
+2016.2.24
+- Fix for no spoilers in scoring notifications
+- Fix for other bugs in scoring notificications
+- User selected view mode is now saved and used throughout the addon
+- Renamed NHL Videos to Featured Videos
+- Added description info for the date list item (play all highlights item)
+
+2016.2.19
+- Fix for Todays Games saved to favorites
+- Added new artwork
+- Fix for scoring notification error
+- Added game preview paragraph to todays games
+
+2016.2.16
+- Brought back scoring notifications
+- Added Favorite Team Recent Games option (past 30 days)
+- Added ability to view all recaps, extended highlights for a single day. Simply select the date list item and an option will pop on the screen to play recaps or extended highlights
+
+2016.2.14
+- Fixed Recap and Extended Highlights stream quality issue
+- Added station identification to stream selection list items when applicable
+
+2016.2.13
+- Added No spoilers setting for archive games only
+- Fix the way session keys are retrieved and stored
+- Label Free game of the day
+- Added Best Available for Stream Quality settings
+
+2016.2.11
+- Yet Another attempt to fix usage errors
+- Added yesterday's games selection from main menu
+- Added NHL Videos section
+- Added No spoilers setting for live games only
+- Added video info for archive games
+- Switched default display to media info
+
+2016.2.9
+- Another attempt to fix usage errors
+
+2016.2.6
+- Fix for Usage errors
+- Changed fanart
+- New Color scheme for game types
+- Code clean up
+
+2016.2.3
+- beta testing for nhl.tv overhaul
+
+2016.1.29
+- Added support for addition camera angles (i.e. Rogers Cams) *most games don't offer these*
+- Added 5000kbps support for full and condensed archived games
+- Convert local date to eastern when calling score notifications
+- Fixed bug that caused score notifications to crash if no games were scheduled for the day
+- Added audio and video stream info for display purposes
+
+2016.1.20
+- Favorite team color uses teams dominant color for highlighting
+- Fixed favorite team bugs for certain teams
+- Set default view mode for quick picks to media info 1
+- Added previous and next icons
+
+2016.1.16
+*** Big thanks to mcruise40 for adding the following features ***
+- Added ability to choose team naming style
+- Added ability to choose time format
+- Added ability to hide spoilers only for the favorite team
+- favorite team will be in red in order to stick out even more :-)
+- if no spoilers set to true, games decided in OT or SO will be shown as FINAL instead of FINAL (OT) or FINAL (SO)
+
+2015.12.30
+- Added team name to the two New York teams to distinguish them in the list
+- Added ability to choose favorite team, so that there list title will be in bold in order to stick out more
+- Bumped python version
+- Added source to addon.xml
+
+2015.10.29
+- Minor Bug fix
+
+2015.10.28
+- Added user settings for seconds to display notifications
+
+2015.10.27.2
+- Fix notifications bug attempt #2
+
+2015.10.27.1
+- Fix notifications bug
+
+2015.10.27
+- Organized settings into groups
+- Code cleanup / organization
+- Added Score notifications option under settings
+
+2015.10.21.1
+- Added game images
+
+2015.10.21
+- Convert game start times from eastern to local time
+
+2015.10.16
+- Added Quick Picks Section
+- Added highlights and condensed options for archive games
+
+2015.10.15
+- Added Rogers login support
+- Fixed default quality setting bug
+- Fixed stream quality when selecting French or goalie cam feeds
+
+2015.10.14
+- Initial version

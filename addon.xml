@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.pureradio" name="PureRadio.One" version="1.0.0" provider-name="cubitus">
+<addon id="plugin.audio.pureradio" name="Pureradio.One Player" version="2.0.0" provider-name="Cubitus">
 	<requires>
-		<import addon="xbmc.python" version="2.20.0"/>
+		<import addon="xbmc.python" version="3.0.0"/>
 	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
+	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>audio</provides>
-	</extension>
+	</extension>	
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en">PureRadio.One.</summary>
-		<description lang="en">PureRadio is an internet station with just good music from the 70s till the 90s. We love music and like to share it with our listeners.&#13;&#10;Tune in, join us on Facebook and get involved.</description>
-		<disclaimer lang="en"></disclaimer>
-		<language>en</language>
+		<summary lang="en_GB">Pureradio.One Player</summary>
+		<description lang="en_GB">Pureradio.One is an internet radiostation which plays music from the 60's till today, commercial free and in great quality.</description>
+		<summary lang="nl_NL">Pureradio.One Player</summary>
+		<description lang="nl_NL">Pureradio.One is een internet radiostation met een brede mix van de beste hits, wereldwijd te volgen via een van onze streams.</description>
 		<platform>all</platform>
-		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-		<forum></forum>
-		<website>http://pureradio.one</website>
-		<email>pureradio.one@gmail.com</email>
-		<source>https://github.com/bdommel/plugin.audio.pureradio</source>
+		<license>GPL-2.0-only</license>
+		<assets>
+			<icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+			<screenshot>resources/screenshot1.jpg</screenshot>
+			<screenshot>resources/screenshot2.jpg</screenshot>
+		</assets>
+		<news>v2.0.0 (01-OCT-2020) 
+			- Support for Kodi 19 Matrix
+		</news>
 	</extension>
 </addon>

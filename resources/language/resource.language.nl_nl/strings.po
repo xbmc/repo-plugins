@@ -7,21 +7,21 @@ msgid ""
 msgstr ""
 
 msgctxt "#30001"
-msgid "Listen to Stream"
-msgstr ""
+msgid "Play Stream"
+msgstr "Afspelen"
 
 msgctxt "#30002"
 msgid "Podcasts"
-msgstr ""
+msgstr "Podcasts"
 
 msgctxt "#30100"
 msgid "General"
-msgstr ""
+msgstr "Algemeen"
 
 msgctxt "#30101"
 msgid "Play stream automatically"
-msgstr ""
+msgstr "Automatisch afspelen"
 
 msgctxt "#30102"
-msgid "Stream quality"
-msgstr ""
+msgid "Podcast Images"
+msgstr "Podcast afbeeldingen gebruiken (kost bandbreedte)"

@@ -184,6 +184,10 @@ class CuriosityStream(object):
         resp = self._session.get(
             "{}collections/{}".format(self._base_url, collection_id)
         )
+        try:
+            resp.raise_for_status()
+        except requests.HTTPError:
+            return {"title": ""}
         return resp.json()["data"]
 
     def _extract_media_data(self, media_data):
@@ -194,7 +198,7 @@ class CuriosityStream(object):
             return u"{} ({} episodes)".format(m["title"], m["media_count"])
 
         def enhanced_description(m):
-            return (u"{episode_number}\n{description}\n{producer}").format(
+            return u"{episode_number}\n{description}\n{producer}".format(
                 description=m["description"],
                 producer=m["producer"],
                 episode_number="Episode {} of {}\n".format(

@@ -63,3 +63,19 @@ msgstr ""
 msgctxt "#30011"
 msgid "Allow this plugin to automatically configure IPTV Simple PVR Backend?"
 msgstr ""
+
+msgctxt "#30012"
+msgid "Coming Up Later..."
+msgstr ""
+
+msgctxt "#30013"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Enter Search Term"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Recordings"
+msgstr ""

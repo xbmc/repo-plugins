@@ -56,7 +56,6 @@ CONTENT_TYPE  = 'episodes'
 DISC_CACHE    = False
 DTFORMAT      = '%Y%m%d%H%M%S'
 PVR_CLIENT    = 'pvr.iptvsimple'
-PTVL_RUN      = xbmcgui.Window(10000).getProperty('PseudoTVRunning') == 'True'
 DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 M3UXMLTV      = REAL_SETTINGS.getSetting('Enable_M3UXMLTV') == 'true'
 ENABLE_TS     = REAL_SETTINGS.getSetting('Enable_TS') == 'true'
@@ -67,14 +66,23 @@ BASE_URL      = 'http://%s:%s'%(REAL_SETTINGS.getSetting('User_IP'),REAL_SETTING
 TS            = '?format=ts' if ENABLE_TS else ''
 M3U_URL       = '%s/devices/ANY/channels.m3u%s'%(BASE_URL,TS)
 GUIDE_URL     = '%s/devices/ANY/guide'%(BASE_URL)
+UPNEXT_URL    = '%s/dvr/recordings/upnext'%(BASE_URL)
+GROUPS_URL    = '%s/dvr/groups'%(BASE_URL)
+SEARCH_URL    = '%s/dvr/guide/search/groups?q={query}'%(BASE_URL)
+SUMMARY_URL   = '%s/dvr/recordings/summary'%(BASE_URL)
 M3U_FILE      = os.path.join(USER_PATH,'channelsdvr.m3u')
 XMLTV_FILE    = os.path.join(USER_PATH,'channelsdvr.xml')
 MENU          = [(LANGUAGE(30002), '', 0),
                 (LANGUAGE(30003), '', 1)]
+                # (LANGUAGE(30015), '', 2)]
+                #(LANGUAGE(30013), '', 8)]
                 
 xmltv.locale      = 'UTF-8'
 xmltv.date_format = DTFORMAT
 
+def getPTVL():
+    return xbmcgui.Window(10000).getProperty('PseudoTVRunning') == 'True'
+    
 def notificationDialog(message, header=ADDON_NAME, show=True, sound=False, time=1000, icon=ICON):
     try:    xbmcgui.Dialog().notification(header, message, icon, time, sound=False)
     except: xbmc.executebuiltin("Notification(%s, %s, %d, %s)" % (header, message, time, icon))
@@ -96,23 +104,35 @@ def log(msg, level=xbmc.LOGDEBUG):
     except Exception as e: 'log str failed! %s'%(str(e))
     if not DEBUG and level != xbmc.LOGERROR: return
     try:   xbmc.log('%s-%s-%s'%(ADDON_ID,ADDON_VERSION,msg),level)
-    except Exception as e: 'log failed! %s'%(str(e))
-   
+    except Exception as e: 'log failed! %s'%(e)
+
+def getKeyboard(default='',header=ADDON_NAME):
+    kb = xbmc.Keyboard(default,header)
+    xbmc.sleep(1000)
+    kb.doModal()
+    if kb.isConfirmed(): return kb.getText()
+    return False
+    
+    
 class Service(object):
     def __init__(self, sysARG=sys.argv):
+        self.running    = False
         self.myMonitor  = xbmc.Monitor()
-        self.myChannels = Channels()
+        self.myChannels = Channels(sysARG)
         
         
     def run(self):
         while not self.myMonitor.abortRequested():
             if self.myMonitor.waitForAbort(2): break
-            elif not M3UXMLTV: continue
+            elif not M3UXMLTV or self.running: continue
             lastCheck = float(REAL_SETTINGS.getSetting('Last_Scan') or 0)
-            if (time.time() > (lastCheck + 3600)):
+            conditions = [xbmcvfs.exists(M3U_FILE),xbmcvfs.exists(XMLTV_FILE)]
+            if (time.time() > (lastCheck + 3600)) or False in conditions:
+                self.running = True
                 if self.myChannels.buildService(): 
                     REAL_SETTINGS.setSetting('Last_Scan',str(time.time()))
                     notificationDialog(LANGUAGE(30007))
+                self.running = False
 
 
 class Channels(object):
@@ -341,13 +361,19 @@ class Channels(object):
         
     def playVideo(self, name, url):
         log('playVideo, url = %s'%url)
-        liz = xbmcgui.ListItem(name, path=url)
-        liz.setProperty("IsPlayable","true")
-        liz.setProperty("IsInternetStream","true")
-        # if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream():
-            # liz.setProperty('inputstreamaddon','inputstream.adaptive')
-            # liz.setProperty('inputstream.adaptive.manifest_type','hls')
-        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
+        if url is None: 
+            notificationDialog(LANGUAGE(30012), time=4000)
+            found = False
+            liz   = xbmcgui.ListItem(name)
+        else:
+            found = True
+            liz   = xbmcgui.ListItem(name, path=url)
+            liz.setProperty("IsPlayable","true")
+            liz.setProperty("IsInternetStream","true")
+            if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream():
+                liz.setProperty('inputstreamaddon','inputstream.adaptive')
+                liz.setProperty('inputstream.adaptive.manifest_type','hls')
+        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), found, liz)
 
 
     def addLink(self, name, path, mode='',icon=ICON, liz=None, total=0):
@@ -415,51 +441,176 @@ class Channels(object):
         
     def buildLive(self):
         log('buildLive')
-        self.poolList(self.buildPlayItem, self.programmes, True)
+        self.poolList(self.buildPlayItem, self.programmes, 'live')
         
         
     def buildPlayItem(self, data):
-        content, live = data
+        content, opt = data
         liveMatch  = False
         channel    = content['Channel']
         programmes = content['Airings']
         if channel['Hidden'] == True: return
         now = (datetime.datetime.fromtimestamp(float(getLocalTime())))
         for program in programmes:
+            url   = ''
             stop  = (strpTime(program['Raw']['endTime']))
             start = (strpTime(program['Raw']['startTime']))
-            if live: 
-                label = '%s: %s'%(channel['Number'],channel['Name'])
-            else:
+            label = program.get('Title','')
+            url   = program.get('Path','')
+            if opt == 'live': 
+                label = '%s| %s'%(channel['Number'],channel['Name'])
+            elif opt == 'lineup':
                 label = '%s - %s'%(start.strftime('%I:%M %p').lstrip('0'),program.get('Title',''))
-            if now >= start and now < stop:
-                if live: liveMatch = True
+            if opt in ['live','lineup'] and now >= start and now < stop:
+                url = self.getLiveURL(channel['Number'], self.channels)
+                if opt == 'live': liveMatch = True
                 if program.get('Title',''):
-                    if live:
-                        label = '%s: %s - %s'%(channel['Number'],channel['Name'],program['Title'])
-                    else:
+                    if opt == 'live':
+                        label = '%s| %s: [B]%s[/B]'%(channel['Number'],channel['Name'],program['Title'])
+                    elif opt == 'lineup':
                         label = '%s - [B]%s[/B]'%(start.strftime('%I:%M %p').lstrip('0'),program.get('Title',''))
-
-            url   = self.getLiveURL(channel['Number'], self.channels)
+            
             icon  = channel.get('Image',ICON)
             thumb = program.get('Image',icon)
             info  = {'label':label,'title':label,'duration':program.get('Duration',0),'genre':program.get('Genres',[]),'plot':program.get('Summary',xbmc.getLocalizedString(161)),'aired':program.get('OriginalDate','')}
             art   = {'icon':icon, 'thumb':thumb}
             self.addLink(channel['Name'], url, '9', liz=self.buildItemListItem(label, url, info, art))
-            if live and liveMatch: break
+            if opt == 'live' and liveMatch: break
+            
+            
+    def buildRecordingItem(self, item):
+        item['Airings']  = [item['Airing'].copy()]
+        item['Channel'] = {'Hidden':False,'Number':0,'Name':'','Image':''}
+        self.buildPlayItem((item,'recordings'))
+        
+   
+        
+    # {
+	# 'ID': '28904',
+	# 'JobID': '1599865190-ch6070',
+	# 'RuleID': '',
+	# 'GroupID': '248379',
+	# 'Path': 'TV\\Inside 9-11 War on America\\Inside 9-11 War on America 2005-08-21 2020-09-11-1859.mpg',
+	# 'Checksum': '',
+	# 'CreatedAt': 1599865190,
+	# 'Watched': False,
+	# 'Deleted': False,
+	# 'PlaybackTime': 0,
+	# 'Duration': 7234.961933,
+	# 'Commercials': [839.79, 989.84, 1413.81, 1659.18, 2137.23, 2352.71, 2686.46, 2907.73, 3437.7200000000003, 3707.59, 4401.52, 4635.47, 5091.42, 5331.6, 5810.4400000000005, 6020.59, 6351.610000000001, 6591.22],
+	# 'Delayed': False,
+	# 'Corrupted': False,
+	# 'Cancelled': False,
+	# 'Completed': True,
+	# 'Processed': True,
+	# 'Favorited': False,
+	# 'Locked': False,
+	# 'Airing': {
+		# 'Source': 'tms',
+		# 'Channel': '6070',
+		# 'OriginalDate': '2005-08-21',
+		# 'Time': 1599865200,
+		# 'Duration': 7200,
+		# 'Title': 'Inside 9/11: War on America',
+		# 'Summary': 'Investigation of the events leading up to the terrorist attacks of Sept. 11, 2001.',
+		# 'Image': 'https://tmsimg.fancybits.co/assets/p248379_b_h6_ak.jpg',
+		# 'Categories': ['Show', 'Special'],
+		# 'Genres': ['Documentary', 'Special'],
+		# 'Tags': ['CC', 'HD 1080i', 'HDTV'],
+		# 'SeriesID': '248379',
+		# 'ProgramID': 'SH007602260000-1599865200',
+		# 'TeamIDs': None,
+		# 'SeasonNumber': 0,
+		# 'EpisodeNumber': 0,
+		# 'Directors': None,
+		# 'Cast': None,
+		# 'Raw': {
+			# 'startTime': '2020-09-11T23:00Z',
+			# 'endTime': '2020-09-12T01:00Z',
+			# 'duration': 120,
+			# 'channels': ['6070'],
+			# 'stationId': '49438',
+			# 'qualifiers': ['CC', 'HD 1080i', 'HDTV'],
+			# 'ratings': [{
+				# 'body': 'USA Parental Rating',
+				# 'code': 'TVPG'
+			# }],
+			# 'program': {
+				# 'tmsId': 'SH007602260000',
+				# 'rootId': '248379',
+				# 'seriesId': '248379',
+				# 'entityType': 'Show',
+				# 'subType': 'Special',
+				# 'title': 'Inside 9/11: War on America',
+				# 'titleLang': 'en',
+				# 'releaseYear': 2005,
+				# 'releaseDate': '2005-08-21',
+				# 'origAirDate': '2005-08-21',
+				# 'descriptionLang': 'en',
+				# 'shortDescription': 'Investigation of the events leading up to the terrorist attacks of Sept. 11, 2001.',
+				# 'longDescription': 'Investigation of the events leading up to the terrorist attacks of Sept. 11, 2001.',
+				# 'topCast': None,
+				# 'genres': ['Documentary', 'Special'],
+				# 'preferredImage': {
+					# 'uri': 'https://tmsimg.fancybits.co/assets/p248379_b_h6_ak.jpg',
+					# 'height': '540',
+					# 'width': '720',
+					# 'primary': 'true',
+					# 'category': 'Banner-L2',
+					# 'text': 'yes',
+					# 'tier': ''
+				# }
+			# }
+		# }
+	# },
+	# 'ChannelNumber': '6070',
+	# 'DeviceID': 'TVE-Spectrum',
+	# 'PlayedAt': 0,
+	# 'UpdatedAt': 1599879912739,
+	# 'DeletedAt': 0,
+	# 'FavoritedAt': 0,
+	# 'DeletedReason': '',
+	# 'DeleteNow': False,
+	# 'HighestPTS': 651147881,
+	# 'SignalStats': None,
+	# 'CommercialsAligned': True,
+	# 'CommercialsEdited': False,
+	# 'CommercialsVerified': False,
+	# 'CommercialDetectSource': 'local',
+	# 'CloudComskip': {
+		# 'Successful': False
+	# },
+	# 'ImportPath': '',
+	# 'ImportQuery': '',
+	# 'ImportGroup': '',
+	# 'ImportedAt': 0,
+	# 'DeleteScheduledFor': 259200000
+# }
+    
+            
+    def buildRecordings(self):
+        self.poolList(self.buildRecordingItem, json.loads(self.saveURL(UPNEXT_URL)))
             
         
+    def search(self, term=None):
+        #todo match id with programmes
+        if term is None: term = getKeyboard(header=LANGUAGE(30014))
+        if term:
+            log('search, term = %s'%(term))
+            query = json.loads(self.saveURL(SEARCH_URL.format(query=term)))
+
+
     def buildLineup(self, chid=None):
         log('buildLineup, chid = %s'%(chid))
         if chid is None:
             self.poolList(self.buildLineupItem, self.programmes)
         else:
-            self.poolList(self.buildPlayItem, [program for program in self.programmes if program['Channel']['Number'] == chid], False)
+            self.poolList(self.buildPlayItem, [program for program in self.programmes if program['Channel']['Number'] == chid], 'lineup')
 
   
     def buildLineupItem(self, content):
         channel = content['Channel']
-        label = '%s: %s'%(channel['Number'],channel['Name'])
+        label = '%s| %s'%(channel['Number'],channel['Name'])
         self.addDir(label, channel['Number'], '1', channel.get('Image',ICON), liz=None)
         
         
@@ -527,6 +678,8 @@ class Channels(object):
         if   mode==None: self.mainMenu()
         elif mode == 0:  self.buildLive()
         elif mode == 1:  self.buildLineup(url)
+        elif mode == 2:  self.buildRecordings()
+        elif mode == 8:  self.search(name)
         elif mode == 9:  self.playVideo(name, url)
         
         xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)

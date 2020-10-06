@@ -2,7 +2,7 @@
 <settings>
 	<category label="30008">
     <setting id="User_IP"          type="ipaddress" label="30009" default="127.0.0.1"/>
-    <setting id="User_Port"        type="number"    label="30010" default="57000"/>
+    <setting id="User_Port"        type="number"    label="30010" default="8089"/>
     <setting id="Enable_Debugging" type="bool"      label="30000" default="false"/>
     <setting id="Enable_TS"        type="bool"      label="30006" default="false"/>
     <setting id="Enable_M3UXMLTV"  type="bool"      label="30004" default="false"/>

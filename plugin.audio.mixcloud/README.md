@@ -13,7 +13,7 @@
   - ronan-ln
 
 ### Current version: 
-  3.0.1
+  3.0.2
   - Matrix
 
 ### Features:
@@ -32,9 +32,9 @@
     - Users
     - Search history
   - Play cloudcasts
-    - Mixcloud resolver (broken)
-    - Mixcloud-Downloader resolver (broken)
+    - Mixcloud resolver
     - Offliberty resolver
+    - Mixcloud-Downloader resolver (broken)
   - Thumbnails
   - History
     - Profile

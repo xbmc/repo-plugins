@@ -189,7 +189,7 @@ msgid "Resolvers"
 msgstr "Résolveurs"
 
 msgctxt "#30921"
-msgid "mixcloud.com [BROKEN]"
+msgid "mixcloud.com"
 msgstr ""
 
 msgctxt "#30922"

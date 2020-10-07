@@ -128,8 +128,7 @@ def get_episodes(channel):
 
         add_stream(title,id,'tvshows',icon,fanart,info)
 
-    xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_LABEL)
-    xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+    xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_EPISODE)
 
 
 def get_movie_id(channel):

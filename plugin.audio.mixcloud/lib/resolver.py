@@ -62,59 +62,79 @@ class MixcloudResolver(BaseResolver):
         Utils.log('resolving cloudcast stream via mixcloud: ' + ck)
 
         try:
-            headers = {
-                    'User-Agent' : STR_USERAGENT,
-                    'Referer' : 'https://www.mixcloud.com/'
-                    }
-            req = request.Request(ck, headers = headers, origin_req_host = 'https://www.mixcloud.com/')
-            response = request.urlopen(req).read().decode('utf-8').replace('&quot;','"')
-            match = re.search(r'<script id="relay-data" type="text/x-mixcloud">\[(.*)', response, re.MULTILINE)
-            if match:
-                match = re.search(r'(.*)\]</script>', match.group(1), re.MULTILINE)
-                if match:
-                    decoded = '[' + match.group(1) + ']'
-                    content = json.loads(decoded)
-                    isexclusive = False
-                    mon = xbmc.Monitor()            
-                    for item in content:
-                        # user aborted
-                        if mon.abortRequested():
-                            break
-                
-                        if 'cloudcastLookup' in item and item['cloudcastLookup']:
-                            cloudcastLookupA = item['cloudcastLookup']
-                            if 'data' in cloudcastLookupA and cloudcastLookupA['data']:
-                                data = cloudcastLookupA['data']
-                                if 'cloudcastLookup' in data and data['cloudcastLookup']:
-                                    cloudcastLookupB = data['cloudcastLookup']
-                                    if 'isExclusive' in cloudcastLookupB and cloudcastLookupB['isExclusive']:
-                                        isexclusive = cloudcastLookupB['isExclusive']
-                                    if 'streamInfo' in cloudcastLookupB and cloudcastLookupB['streamInfo']:
-                                        streaminfo = cloudcastLookupB['streamInfo']
-                                        if 'url' in streaminfo and streaminfo['url']:
-                                            url = streaminfo['url']
-                                        elif 'hlsUrl' in streaminfo and streaminfo['hlsUrl']:
-                                            url = streaminfo['hlsUrl']
-                                        elif 'dashUrl' in streaminfo and streaminfo['dashUrl']:
-                                            url = streaminfo['dashUrl']
-                        if url:
-                            break
+            keysplit = self.key.split('/')
+            Utils.log('keysplit [empty, username, slug, empty] = %s' % (keysplit))
 
-                    if url:
-                        decoded_url = base64.b64decode(url).decode('utf-8')
-                        url = ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(decoded_url, cycle('IFYOUWANTTHEARTISTSTOGETPAIDDONOTDOWNLOADFROMMIXCLOUD')))
-                        Utils.log('url found: '+url)
-                        if not Utils.isValidURL(url):
-                            Utils.log('invalid url')
-                            url = None
-                    elif isexclusive:
-                        Utils.log('Cloudcast is exclusive')
-                    else:
-                        Utils.log('Unable to find url in json')
-                else:
-                    Utils.log('Unable to resolve (match 2)')
+            # get crsf token
+            csrf_token = None
+            response = request.urlopen('https://www.mixcloud.com')
+            headers = response.info()
+            for header in headers.get_all('Set-Cookie', []):
+                attributes = header.split('; ')
+                for attribute in attributes:
+                    pair = attribute.split('=')
+                    if pair[0] == 'csrftoken':
+                        csrf_token = pair[1]
+            Utils.log('csrf_token = %s' % (csrf_token))
+
+            # create graphql
+            graphql = {
+                'query' : 'query HeaderQuery(\n  $lookup: CloudcastLookup!\n) {\n  cloudcast: cloudcastLookup(lookup: $lookup) {\n    id\n    isExclusive\n    ...PlayButton_cloudcast\n  }\n}\n\nfragment PlayButton_cloudcast on Cloudcast {\n  streamInfo {\n    hlsUrl\n    dashUrl\n    url\n    uuid\n  }\n}\n',
+                'variables' : {
+                    'lookup' : {
+                        'username' : keysplit[1],
+                        'slug' : keysplit[2]
+                    }
+                }
+            }
+            Utils.log('graphql = %s' % (graphql))
+
+            # request graphql
+            postdata = json.dumps(graphql).encode()
+            headers = {
+                'Referer' : 'https://www.mixcloud.com',
+                'X-CSRFToken' : csrf_token,
+                'Cookie' : 'csrftoken=' + csrf_token,
+                'Content-Type' : 'application/json'
+            }
+
+            req = request.Request('https://www.mixcloud.com/graphql', postdata, headers, 'https://www.mixcloud.com')
+            response = request.urlopen(req)
+            content = response.read()
+            json_content = json.loads(content)
+            Utils.log('response = %s' % (json_content))
+
+            # parse json
+            json_isexclusive=False
+            json_url=None
+            if 'data' in json_content and json_content['data']:
+                json_data = json_content['data']
+                if 'cloudcast' in json_data and json_data['cloudcast']:
+                    json_cloudcast = json_data['cloudcast']
+                    if 'isExclusive' in json_cloudcast and json_cloudcast['isExclusive']:
+                        json_isexclusive = json_cloudcast['isExclusive']
+                    if 'streamInfo' in json_cloudcast and json_cloudcast['streamInfo']:
+                        json_streaminfo = json_cloudcast['streamInfo']
+                        if 'url' in json_streaminfo and json_streaminfo['url']:
+                            json_url = json_streaminfo['url']
+                        elif 'hlsUrl' in json_streaminfo and json_streaminfo['hlsUrl']:
+                            json_url = json_streaminfo['hlsUrl']
+                        elif 'dashUrl' in json_streaminfo and json_streaminfo['dashUrl']:
+                            json_url = json_streaminfo['dashUrl']
+
+            if json_url:
+                Utils.log('encoded url: ' + json_url)
+                decoded_url = base64.b64decode(json_url).decode('utf-8')
+                url = ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(decoded_url, cycle('IFYOUWANTTHEARTISTSTOGETPAIDDONOTDOWNLOADFROMMIXCLOUD')))
+                Utils.log('url found: ' + url)
+                if not Utils.isValidURL(url):
+                    Utils.log('invalid url')
+                    url = None
+            elif json_isexclusive:
+                Utils.log('Cloudcast is exclusive')
             else:
-                Utils.log('Unable to resolve (match 1)')
+                Utils.log('Unable to find url in json')
+
         except Exception as e:
             Utils.log('Unable to resolve', e)
         return url
@@ -236,9 +256,9 @@ class ResolverBuilder(BaseBuilder):
 
         # resolvers
         activeResolvers = []
-        # todo: these 2 resolvers are currently broken, will fix them again later
-        # if Utils.getSetting('resolver_mixcloud') == 'true':
-        #     activeResolvers.append(MixcloudResolver)
+        if Utils.getSetting('resolver_mixcloud') == 'true':
+            activeResolvers.append(MixcloudResolver)
+        # todo: this resolvers is currently broken, uncomment when back online
         # if Utils.getSetting('resolver_mixclouddownloader') == 'true':
         #     activeResolvers.append(MixcloudDownloaderResolver)
         if Utils.getSetting('resolver_offliberty') == 'true':

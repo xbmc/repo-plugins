@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="Enable_Debugging" type="bool"      label="30000" default="false"/>
+    <setting id="Enable_M3UXMLTV"  type="bool"      label="30033" default="false"/>
+    <setting id="Enable_Config"    type="bool"      label="30030" default="false" visible="eq(-1,true)" />     
+    <setting id="User_Folder"      type="folder"    label="30032" default="special://profile/addon_data/plugin.video.plutotv/" source="files" visible="eq(-2,true)" />    
+</settings>

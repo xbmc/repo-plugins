@@ -1,0 +1,109 @@
+# Kodi Media Center language file
+# Addon Name: Pluto.TV
+# Addon id: plugin.video.plutotv
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.plutotv\n"
+"Report-Msgid-Bugs-To: http://forum.kodi.tv/showthread.php?tid=315513\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lunatixz Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30012"
+msgid "OnDemand"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Guide"
+msgstr ""
+
+msgctxt "#30014"
+msgid "All Channels"
+msgstr ""
+
+msgctxt "#30015"
+msgid ">> Next"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Featured"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Lineup"
+msgstr ""
+
+msgctxt "#30019"
+msgid "&deviceMake=&deviceModel=&sid"
+msgstr ""
+
+msgctxt "#30020"
+msgid "&deviceMake=&deviceModel=&sid=%s&deviceId=%s"
+msgstr ""
+
+msgctxt "#30021"
+msgid ""
+msgstr ""
+
+msgctxt "#30022"
+msgid "sid=%s&deviceId=%s"
+msgstr ""
+
+msgctxt "#30023"
+msgid "On Now"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Channel lineup"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Channel by genre"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Video On Demand"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Coming Up Later..."
+msgstr ""
+
+msgctxt "#30030"
+msgid "Allow this plugin to automatically configure IPTV Simple PVR Backend?"
+msgstr ""
+
+msgctxt "#30031"
+msgid "M3U/XMLTV Updated"
+msgstr ""
+
+msgctxt "#30032"
+msgid "M3U/XMLTV Path"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Enable M3U/XMLTV Generator Service"
+msgstr ""
+
+msgctxt "#30034"
+msgid "?terminate=false&deviceType=web&deviceMake=web&deviceModel=web&sid=246&deviceId=5331d5fb753499095a00045a&deviceVersion=DNT&appVersion=DNT&deviceDNT=0&userId=&advertisingId=&deviceLat=&deviceLon=&app_name=&appName=web&buildVersion=&appStoreUrl=&architecture=&includeExtendedEvents=false&marketingRegion=US&serverSideAds=false"
+msgstr ""

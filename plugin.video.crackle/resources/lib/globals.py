@@ -1,12 +1,16 @@
-import sys, os
+import sys, os, re
 import urllib, requests
 import base64, hmac, hashlib, inputstreamhelper
 from time import gmtime, strftime
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+from kodi_six import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+
+if sys.version_info[0] > 2:
+    urllib = urllib.parse
 
 addon_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 ADDON = xbmcaddon.Addon()
+KODI_VERSION = float(re.findall(r'\d{2}\.\d{1}', xbmc.getInfoLabel("System.BuildVersion"))[0])
 ROOTDIR = ADDON.getAddonInfo('path')
 FANART = os.path.join(ROOTDIR,"resources","media","fanart.jpg")
 ICON = os.path.join(ROOTDIR,"resources","media","icon.png")
@@ -124,8 +128,7 @@ def get_episodes(channel):
 
         add_stream(title,id,'tvshows',icon,fanart,info)
 
-    xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_LABEL)
-    xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+    xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_EPISODE)
 
 
 def get_movie_id(channel):
@@ -155,7 +158,10 @@ def get_stream(id):
         if not is_helper.check_inputstream():
             sys.exit()
         listitem.setPath(stream_url)
-        listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
+        if KODI_VERSION >= 19:
+            listitem.setProperty('inputstream', 'inputstream.adaptive')
+        else:
+            listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
         listitem.setProperty('inputstream.adaptive.manifest_type', 'mpd')
         listitem.setProperty('inputstream.adaptive.stream_headers', 'User-Agent=%s' % UA_WEB)
         listitem.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')

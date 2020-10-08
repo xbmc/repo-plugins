@@ -446,36 +446,38 @@ class Channels(object):
         
     def buildPlayItem(self, data):
         content, opt = data
-        liveMatch  = False
         channel    = content['Channel']
         programmes = content['Airings']
+        liveMatch  = False
         if channel['Hidden'] == True: return
-        now = (datetime.datetime.fromtimestamp(float(getLocalTime())))
+        tz  = (timezone()//100)*60*60
+        now = (datetime.datetime.fromtimestamp(float(getLocalTime()))) + datetime.timedelta(seconds=tz)
+        url = self.getLiveURL(channel['Number'], self.channels)
         for program in programmes:
-            url   = ''
-            stop  = (strpTime(program['Raw']['endTime']))
-            start = (strpTime(program['Raw']['startTime']))
             label = program.get('Title','')
-            url   = program.get('Path','')
-            if opt == 'live': 
-                label = '%s| %s'%(channel['Number'],channel['Name'])
+            path  = program.get('Path','')
+            stop  = (strpTime(program['Raw']['endTime']))  + datetime.timedelta(seconds=tz)
+            start = (strpTime(program['Raw']['startTime']))+ datetime.timedelta(seconds=tz)
+            if now > stop: continue
+            elif now >= start and now < stop:
+                if opt == 'live':
+                    if label:
+                        label = '%s| %s: [B]%s[/B]'%(channel['Number'],channel['Name'],program.get('Title',''))
+                    else: 
+                        label = '%s| %s'%(channel['Number'],channel['Name'])
+                    liveMatch = True
+                elif opt == 'lineup':
+                    label = '%s - [B]%s[/B]'%(start.strftime('%I:%M %p').lstrip('0'),program.get('Title',''))
+            elif opt == 'live': continue
             elif opt == 'lineup':
                 label = '%s - %s'%(start.strftime('%I:%M %p').lstrip('0'),program.get('Title',''))
-            if opt in ['live','lineup'] and now >= start and now < stop:
-                url = self.getLiveURL(channel['Number'], self.channels)
-                if opt == 'live': liveMatch = True
-                if program.get('Title',''):
-                    if opt == 'live':
-                        label = '%s| %s: [B]%s[/B]'%(channel['Number'],channel['Name'],program['Title'])
-                    elif opt == 'lineup':
-                        label = '%s - [B]%s[/B]'%(start.strftime('%I:%M %p').lstrip('0'),program.get('Title',''))
-            
+                   
             icon  = channel.get('Image',ICON)
             thumb = program.get('Image',icon)
             info  = {'label':label,'title':label,'duration':program.get('Duration',0),'genre':program.get('Genres',[]),'plot':program.get('Summary',xbmc.getLocalizedString(161)),'aired':program.get('OriginalDate','')}
             art   = {'icon':icon, 'thumb':thumb}
             self.addLink(channel['Name'], url, '9', liz=self.buildItemListItem(label, url, info, art))
-            if opt == 'live' and liveMatch: break
+            if liveMatch: break
             
             
     def buildRecordingItem(self, item):

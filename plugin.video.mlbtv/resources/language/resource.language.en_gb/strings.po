@@ -16,6 +16,14 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30010"
+msgid "Previous"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Next"
+msgstr ""
+
 msgctxt "#30100"
 msgid "Login"
 msgstr ""
@@ -136,3 +144,44 @@ msgstr ""
 msgctxt "#30250"
 msgid "Password"
 msgstr ""
+
+msgctxt "#30360"
+msgid "Today's Games"
+msgstr ""
+
+msgctxt "#30361"
+msgid "Yesterday's Games"
+msgstr ""
+
+msgctxt "#30362"
+msgid "Goto Date"
+msgstr ""
+
+msgctxt "#30370"
+msgid "Playback Conflict"
+msgstr ""
+
+msgctxt "#30371"
+msgid "Always Ask stream quality will not work when inputstream adaptive is enabled. Either disable inputstream adaptive or switch stream quality to Best Available."
+msgstr ""
+
+msgctxt "#30372"
+msgid "Choose Stream Quality"
+msgstr ""
+
+msgctxt "#30375"
+msgid "Watch all the days highlights for "
+msgstr ""
+
+msgctxt "#30380"
+msgid "MLB Highlights"
+msgstr ""
+
+msgctxt "#30381"
+msgid "Retrieving Streams..."
+msgstr ""
+
+msgctxt "#30382"
+msgid "Downloading "
+msgstr ""
+

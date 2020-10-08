@@ -1,19 +1,16 @@
 # coding=utf-8
-import sys
-import re, os, time
-import calendar
-import pytz
-import urllib, urllib2, requests
-import json
-import cookielib
-import time
-import math
-from bs4 import BeautifulSoup 
+import sys, re, os, time
+import calendar, pytz
+import urllib, requests
 from datetime import date, datetime, timedelta
-from urllib2 import URLError, HTTPError
-#from PIL import Image
-from cStringIO import StringIO
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+from kodi_six import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+
+if sys.version_info[0] > 2:
+    import http
+    cookielib = http.cookiejar
+    urllib = urllib.parse
+else:
+    import cookielib
 
 addon_handle = int(sys.argv[1])
 
@@ -22,9 +19,8 @@ addon_handle = int(sys.argv[1])
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_VERSION = ADDON.getAddonInfo('version')
-ADDON_PATH = xbmc.translatePath(ADDON.getAddonInfo('path'))
 ADDON_PATH_PROFILE = xbmc.translatePath(ADDON.getAddonInfo('profile'))
-XBMC_VERSION = float(re.findall(r'\d{2}\.\d{1}', xbmc.getInfoLabel("System.BuildVersion"))[0])
+KODI_VERSION = float(re.findall(r'\d{2}\.\d{1}', xbmc.getInfoLabel("System.BuildVersion"))[0])
 LOCAL_STRING = ADDON.getLocalizedString
 ROOTDIR = ADDON.getAddonInfo('path')
 
@@ -34,7 +30,6 @@ USERNAME = str(settings.getSetting(id="username"))
 PASSWORD = str(settings.getSetting(id="password"))
 OLD_USERNAME = str(settings.getSetting(id="old_username"))
 OLD_PASSWORD = str(settings.getSetting(id="old_password"))
-ROGERS_SUBSCRIBER = str(settings.getSetting(id="rogers"))
 QUALITY = str(settings.getSetting(id="quality"))
 CDN = str(settings.getSetting(id="cdn"))
 IN_MARKET = str(settings.getSetting(id="in_market"))
@@ -82,12 +77,9 @@ else:
 
 
 #User Agents
-UA_IPHONE = 'AppleCoreMedia/1.0.0.13D15 (iPhone; U; CPU OS 9_2_1 like Mac OS X; en_us)'
 UA_IPAD = 'AppleCoreMedia/1.0 ( iPad; compatible; 3ivx HLS Engine/2.0.0.382; Win8; x64; 264P AACP AC3P AESD CLCP HTPC HTPI HTSI MP3P MTKA)'
-UA_PC = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36'         
-UA_PS4 = 'PS4Application libhttp/1.000 (PS4) libhttp/3.15 (PlayStation 4)'
-UA_ATBAT = 'At Bat/13268 CFNetwork/758.2.8 Darwin/15.0.0'
-UA_ANDROID = 'okhttp/3.9.0'
+UA_PC = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+UA_ANDROID = 'okhttp/3.12.1'
 
 #Playlists
 RECAP_PLAYLIST = xbmc.PlayList(0)
@@ -196,7 +188,6 @@ def easternToUTC(eastern_time):
     return utc_time
 
 
-
 def get_params():
     param=[]
     paramstring=sys.argv[2]
@@ -220,16 +211,9 @@ def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_in
     ok=True
     u=sys.argv[0]+"?mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))
 
-    #if icon != None:
-    liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=icon) 
-    #else:
-    #liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON) 
-    
-    if fanart is not None:
-        liz.setProperty('fanart_image', fanart)       
-    else:
-        liz.setProperty('fanart_image', FANART)
-
+    liz=xbmcgui.ListItem(name)
+    if icon is None: icon = ICON
+    if fanart is None: fanart = FANART
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": title } )
     if info is not None:
@@ -245,16 +229,15 @@ def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_in
     return ok
 
 
-def addLink(name,url,title,iconimage,info=None,video_info=None,audio_info=None,fanart=None):
+def addLink(name,url,title,icon,info=None,video_info=None,audio_info=None,fanart=None):
     ok=True
-    liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)    
+    liz=xbmcgui.ListItem(name)
+    if icon is None: icon = ICON
+    if fanart is None: fanart = FANART
+    liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": title } )
     liz.setProperty('fanart_image', FANART)
-    #if iconimage != None:
-    liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage) 
-    #else:
-    #liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON) 
 
     if info is not None:
         liz.setInfo( type="Video", infoLabels=info)
@@ -273,9 +256,7 @@ def addLink(name,url,title,iconimage,info=None,video_info=None,audio_info=None,f
     return ok
 
 
-
-
-def addDir(name,mode,iconimage,fanart=None,game_day=None):       
+def addDir(name,mode,icon,fanart=None,game_day=None):
     ok=True    
     
     #Set day to today if none given
@@ -283,46 +264,32 @@ def addDir(name,mode,iconimage,fanart=None,game_day=None):
     #game_day = localToEastern()
     #game_day = '2016-01-27'
 
-    u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(iconimage)
+    u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)
     if game_day is not None:
         u = u+"&game_day="+urllib.quote_plus(game_day)
 
-    if iconimage is not None:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage) 
-    else:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON) 
+    liz = xbmcgui.ListItem(name)
+    if icon is None: icon = ICON
+    if fanart is None: fanart = FANART
+    liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
 
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
-
-    if fanart is not None:
-        liz.setProperty('fanart_image', fanart)
-    else:
-        liz.setProperty('fanart_image', FANART)
-
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)    
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
 
-def addPlaylist(name,game_day,mode,iconimage,fanart=None):       
+def addPlaylist(name,game_day,mode,icon,fanart=None):
     ok=True    
-    u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(iconimage)+"&stream_date="+urllib.quote_plus(str(game_day))
+    u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)+"&stream_date="+urllib.quote_plus(str(game_day))
 
-    if iconimage is not None:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage) 
-    else:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON) 
-
+    liz = xbmcgui.ListItem(name)
+    if icon is None: icon = ICON
+    if fanart is None: fanart = FANART
+    liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
-
-    if fanart is not None:
-        liz.setProperty('fanart_image', fanart)
-    else:
-        liz.setProperty('fanart_image', FANART)
-
-    
-    info = {'plot':'Watch all the days highlights for '+game_day,'tvshowtitle':'MLB','title':name,'originaltitle':name,'aired':game_day,'genre':LOCAL_STRING(700),'mediatype':'video'}
+    info = {'plot': LOCAL_STRING(30375)+game_day,'tvshowtitle':'MLB','title':name,'originaltitle':name,'aired':game_day,'genre':LOCAL_STRING(700),'mediatype':'video'}
     audio_info, video_info = getAudioVideoInfo()
 
     if info is not None:
@@ -331,54 +298,45 @@ def addPlaylist(name,game_day,mode,iconimage,fanart=None):
         liz.addStreamInfo('video', video_info)
     if audio_info is not None:
         liz.addStreamInfo('audio', audio_info)
-    
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)    
     #xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
 
-def scoreUpdates():
-    #http://gdx.mlb.com/components/game/mlb/year_2016/month_03/day_08/miniscoreboard.json
-    #grid.poll=15
-    #s = ScoreThread()
-    t = threading.Thread(target = scoringUpdates)
-    t.start() 
-
 def getFavTeamColor():
     #Hex code taken from http://jim-nielsen.com/teamcolors/    
-    team_colors = {'Arizona Diamondbacks':'FFA71930',
-                'Atlanta Braves':'FFCE1141',
-                'Baltimore Orioles':'FFDF4601',
-                'Boston Red Sox':'FFBD3039',
-                'Chicago Cubs':'FFCC3433',
-                'Chicago White Sox':'FFC4CED4',
-                'Cincinnati Reds':'FFC6011F',
-                'Cleveland Indians':'FFE31937',
-                'Colorado Rockies':'FFC4CED4',
-                'Detroit Tigers':'FF0C2C56',
-                'Houston Astros':'FFEB6E1F',
-                'Kansas City Royals':'FFC09A5B',
-                'Los Angeles Angels':'FFBA0021',
-                'Los Angeles Dodgers':'FFEF3E42',
-                'Miami Marlins':'FFFF6600',
-                'Milwaukee Brewers':'FFB6922E',
-                'Minnesota Twins':'FFD31145',
-                'New York Mets':'FFFF5910',
-                'New York Yankees':'FFE4002B',
-                'Oakland Athletics':'FFEFB21E',
-                'Philadelphia Phillies':'FFE81828',
-                'Pittsburgh Pirates':'FFFDB827',
-                'St. Louis Cardinals':'FFC41E3A',
-                'San Diego Padres':'FF05143F',
-                'San Francisco Giants':'FFFD5A1E',
-                'Seattle Mariners':'FFC4CED4',
-                'Tampa Bay Rays':'FF8FBCE6',
-                'Texas Rangers':'FFC0111F',
-                'Toronto Blue Jays':'FFE8291C',
-                'Washington Nationals':'FFAB0003'}
+    team_colors = {'Arizona Diamondbacks': 'FFA71930',
+                   'Atlanta Braves': 'FFCE1141',
+                   'Baltimore Orioles': 'FFDF4601',
+                   'Boston Red Sox': 'FFBD3039',
+                   'Chicago Cubs': 'FFCC3433',
+                   'Chicago White Sox': 'FFC4CED4',
+                   'Cincinnati Reds': 'FFC6011F',
+                   'Cleveland Indians': 'FFE31937',
+                   'Colorado Rockies': 'FFC4CED4',
+                   'Detroit Tigers': 'FF0C2C56',
+                   'Houston Astros': 'FFEB6E1F',
+                   'Kansas City Royals': 'FFC09A5B',
+                   'Los Angeles Angels': 'FFBA0021',
+                   'Los Angeles Dodgers': 'FFEF3E42',
+                   'Miami Marlins': 'FFFF6600',
+                   'Milwaukee Brewers': 'FFB6922E',
+                   'Minnesota Twins': 'FFD31145',
+                   'New York Mets': 'FFFF5910',
+                   'New York Yankees': 'FFE4002B',
+                   'Oakland Athletics': 'FFEFB21E',
+                   'Philadelphia Phillies': 'FFE81828',
+                   'Pittsburgh Pirates': 'FFFDB827',
+                   'St. Louis Cardinals': 'FFC41E3A',
+                   'San Diego Padres': 'FF05143F',
+                   'San Francisco Giants': 'FFFD5A1E',
+                   'Seattle Mariners': 'FFC4CED4',
+                   'Tampa Bay Rays': 'FF8FBCE6',
+                   'Texas Rangers': 'FFC0111F',
+                   'Toronto Blue Jays': 'FFE8291C',
+                   'Washington Nationals': 'FFAB0003'}
 
-    
     fav_team_color = team_colors[FAV_TEAM]
     
     return fav_team_color
@@ -387,40 +345,41 @@ def getFavTeamColor():
 def getFavTeamId():
     #possibly use the xml file in the future
     #http://mlb.mlb.com/shared/properties/mlb_properties.xml  
-    team_ids = {'Arizona Diamondbacks':'109',
-                'Atlanta Braves':'144',
-                'Baltimore Orioles':'110',
-                'Boston Red Sox':'111',
-                'Chicago Cubs':'112',
-                'Chicago White Sox':'145',
-                'Cincinnati Reds':'113',
-                'Cleveland Indians':'114',
-                'Colorado Rockies':'115',
-                'Detroit Tigers':'116',
-                'Houston Astros':'117',
-                'Kansas City Royals':'118',
-                'Los Angeles Angels':'108',
-                'Los Angeles Dodgers':'119',
-                'Miami Marlins':'146',
-                'Milwaukee Brewers':'158',
-                'Minnesota Twins':'142',
-                'New York Mets':'121',
-                'New York Yankees':'147',
-                'Oakland Athletics':'133',
-                'Philadelphia Phillies':'143',
-                'Pittsburgh Pirates':'134',
-                'St. Louis Cardinals':'138',
-                'San Diego Padres':'135',
-                'San Francisco Giants':'137',
-                'Seattle Mariners':'136',
-                'Tampa Bay Rays':'139',
-                'Texas Rangers':'140',
-                'Toronto Blue Jays':'141',
-                'Washington Nationals':'120'}
+    team_ids = {'Arizona Diamondbacks': '109',
+                'Atlanta Braves': '144',
+                'Baltimore Orioles': '110',
+                'Boston Red Sox': '111',
+                'Chicago Cubs': '112',
+                'Chicago White Sox': '145',
+                'Cincinnati Reds': '113',
+                'Cleveland Indians': '114',
+                'Colorado Rockies': '115',
+                'Detroit Tigers': '116',
+                'Houston Astros': '117',
+                'Kansas City Royals': '118',
+                'Los Angeles Angels': '108',
+                'Los Angeles Dodgers': '119',
+                'Miami Marlins': '146',
+                'Milwaukee Brewers': '158',
+                'Minnesota Twins': '142',
+                'New York Mets': '121',
+                'New York Yankees': '147',
+                'Oakland Athletics': '133',
+                'Philadelphia Phillies': '143',
+                'Pittsburgh Pirates': '134',
+                'St. Louis Cardinals': '138',
+                'San Diego Padres': '135',
+                'San Francisco Giants': '137',
+                'Seattle Mariners': '136',
+                'Tampa Bay Rays': '139',
+                'Texas Rangers': '140',
+                'Toronto Blue Jays': '141',
+                'Washington Nationals': '120'}
     
     fav_team_id = team_ids[FAV_TEAM]
 
     return  fav_team_id
+
 
 def getAudioVideoInfo():
     #SD (800 kbps)|SD (1600 kbps)|HD (3000 kbps)|HD (5000 kbps)
@@ -435,23 +394,6 @@ def getAudioVideoInfo():
     audio_info = { 'codec': 'aac', 'language': 'en', 'channels': 2 }
     return audio_info, video_info
 
-
-def getConfigFile():
-    '''
-    GET http://lwsa.mlb.com/partner-config/config?company=sony-tri&type=nhl&productYear=2015&model=PS4&firmware=default&app_version=1_0 HTTP/1.0
-    Host: lwsa.mlb.com
-    User-Agent: PS4Application libhttp/1.000 (PS4) libhttp/3.15 (PlayStation 4)
-    Connection: close
-    '''
-    url = 'http://lwsa.mlb.com/partner-config/config?company=sony-tri&type=nhl&productYear=2015&model=PS4&firmware=default&app_version=1_0'
-    req = urllib2.Request(url)       
-    req.add_header("Connection", "close")
-    req.add_header("User-Agent", UA_PS4)
-
-    response = urllib2.urlopen(req, '')
-    json_source = json.load(response)   
-    response.close()
-    
 
 def convertSubtitles(suburl):
     #suburl = subtitles url
@@ -485,11 +427,9 @@ def convertSubtitles(suburl):
 
 
 def getStreamQuality(stream_url):    
-    stream_title = []         
-    req = urllib2.Request(stream_url)
-    response = urllib2.urlopen(req)                    
-    master = response.read()
-    response.close()
+    stream_title = []
+    r = reguests.get(stream_url, headers={'User-Agent': UA_PC})
+    master = r.text()
             
     line = re.compile("(.+?)\n").findall(master)  
 
@@ -506,7 +446,7 @@ def getStreamQuality(stream_url):
 
     stream_title.sort(key=natural_sort_key,reverse=True) 
     dialog = xbmcgui.Dialog() 
-    ret = dialog.select('Choose Stream Quality', stream_title)    
+    ret = dialog.select(LOCAL_STRING(30372), stream_title)
     if ret >=0:        
         bandwidth = find(stream_title[ret],'',' kbps')
     else:
@@ -518,47 +458,6 @@ def natural_sort_key(s):
     _nsre = re.compile('([0-9]+)')
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)] 
-
-def getBlackoutLiftTime(url):
-    #"http://mediadownloads.mlb.com/ttml/2016/04/14/584182283.ttml"
-    #url = 'http://mediadownloads.mlb.com/ttml/2016/04/14/584182283.ttml'    
-    req = urllib2.Request(url)    
-    req.add_header('Connection', 'close')
-    req.add_header('User-Agent', UA_IPAD)
-    try:    
-        response = urllib2.urlopen(req)            
-        xml_data = response.read()                                 
-        response.close()                
-    except HTTPError as e:
-        xbmc.log('The server couldn\'t fulfill the request.')
-        xbmc.log('Error code: ', e.code)
-        sys.exit()
-    
-    
-    #<p begin="19:59:16;28" end="19:59:20;06">PRESENTED BY THE ALLEGHENY HEALTH NETWORK.</p>
-    #match = re.compile("<p begin='(.+?)' end='(.+?)'>",re.DOTALL).findall(xml_data)       
-    match = re.compile('<inningTime type="SCAST" start="(.+?)" end="(.+?)"/>',re.DOTALL).findall(xml_data) 
-    
-    last_end_time = ''
-    for begin_time, end_time in match:        
-        last_end_time = end_time
-
-
-    #ex 19:59:20;06
-    game_end_time = datetime.strptime(last_end_time,'%H:%M:%S')
-    blackout_lift_time = game_end_time + timedelta(minutes = 90)
-    now = datetime.strptime(datetime.utcnow().strftime('%H:%M:%S'),'%H:%M:%S')
-    
-    minutes_until_lift = int(math.ceil((blackout_lift_time - now).total_seconds() / 60))
-    lift_time = datetime.utcnow() + timedelta(minutes = minutes_until_lift)
-    local_lift_time = UTCToLocal(lift_time)
-
-    if TIME_FORMAT == '0':
-         local_lift_time = local_lift_time.strftime('%I:%M %p').lstrip('0')
-    else:
-         local_lift_time = local_lift_time.strftime('%H:%M')
-    
-    return minutes_until_lift, local_lift_time
 
 
 def save_cookies(cookiejar):
@@ -591,7 +490,10 @@ def load_cookies():
 def stream_to_listitem(stream_url, headers):
     if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
         listitem = xbmcgui.ListItem(path=stream_url)
-        listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
+        if KODI_VERSION >= 19:
+            listitem.setProperty('inputstream', 'inputstream.adaptive')
+        else:
+            listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
         listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
         listitem.setProperty('inputstream.adaptive.stream_headers', headers)
         listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)

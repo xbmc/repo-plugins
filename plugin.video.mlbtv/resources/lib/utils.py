@@ -1,7 +1,11 @@
-import cookielib
-import os
-import re
-import xbmc, xbmcaddon
+import os, re, sys
+from kodi_six import xbmc, xbmcaddon
+
+if sys.version_info[0] > 2:
+    import http
+    cookielib = http.cookiejar
+else:
+    import cookielib
 
 
 class Util:

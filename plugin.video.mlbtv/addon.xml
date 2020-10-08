@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2019.3.31" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2020.10.8" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
-        <import addon="script.module.pytz" version="2014.2"/>
-        <import addon="script.module.beautifulsoup4" version="4.3.1"/>
-        <import addon="script.module.requests" version="2.9.1"/>
-        <import addon="inputstream.adaptive" version="2.0.10" optional="true"/>
+        <import addon="script.module.pytz" />
+        <import addon="script.module.beautifulsoup4" />
+        <import addon="script.module.requests" />
+        <import addon="inputstream.adaptive" optional="true"/>
+        <import addon="script.module.kodi-six" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
@@ -19,11 +20,12 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - Fixed Login for 2019 season
+            - Matrix compatibility updates
+            - Code clean up
         </news>
         <language>en</language>
         <platform>all</platform>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <license>GPL-2.0-or-later</license>
         <forum>https://forum.kodi.tv/showthread.php?tid=262745</forum>
         <website>https://www.mlb.com/live-stream-games</website>
         <source>https://github.com/eracknaphobia/plugin.video.mlbtv</source>

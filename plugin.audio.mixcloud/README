@@ -20,7 +20,7 @@ Contributors:
 
 ============================================
 
-Current version: 2.5.1
+Current version: 2.5.2
   - Leia
   - Krypton
   - Jarvis
@@ -47,7 +47,7 @@ Features:
     - Cloudcasts
     - Users
   - Play cloudcasts
-    - Local resolver (broken)
+    - Local resolver
     - Offliberty resolver
     - Mixcloud-Downloader resolver (broken)
     - Low quality m4a resolver (broken)

@@ -49,12 +49,11 @@ URL_LISTENS=        'https://api.mixcloud.com/me/listens/'
 URL_UPLOADS=        'https://api.mixcloud.com/me/cloudcasts/'
 URL_LISTENLATER=    'https://api.mixcloud.com/me/listen-later/'
 URL_PLAYLISTS=      'https://api.mixcloud.com/me/playlists/'
-URL_JACKYNIX=       'http://api.mixcloud.com/jackyNIX/'
-URL_STREAM=         'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
 URL_FAVORITE=       'https://api.mixcloud.com{0}favorite/'
 URL_FOLLOW=         'https://api.mixcloud.com{0}/follow/'
 URL_ADDLISTENLATER= 'https://api.mixcloud.com{0}listen-later/'
 URL_TOKEN=          'https://www.mixcloud.com/oauth/access_token'
+URL_GRAPHQL=        'https://www.mixcloud.com/graphql'
 
 
 
@@ -148,13 +147,7 @@ class Resolver:
     mixclouddownloader1=4
     mixclouddownloader2=5
 
-resolver_order=[Resolver.offliberty]
-
-# TODO: fix resolvers
-# resolver_order=[Resolver.local,
-                # Resolver.mixclouddownloader1,
-                # Resolver.offliberty,
-                # Resolver.mixclouddownloader2]
+resolver_order=[Resolver.local,Resolver.offliberty]
 
 
 
@@ -631,8 +624,79 @@ def get_stream_offliberty(cloudcast_key):
 def get_stream_local(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
     log_if_debug('Locally resolving cloudcast stream for '+ck)
-    # TODO: fix local resolver
 
+    keysplit=cloudcast_key.split('/')
+    log_if_debug('keysplit[empty, username, slug, empty]=%s' % (keysplit))
+
+    # get crsf token
+    csrf_token=None
+    response=urllib2.urlopen(URL_MIXCLOUD)
+    headers=response.info()
+    for header in headers.getallmatchingheaders('Set-Cookie'):
+        cookie=header.split(': ',1)[1]
+        attributes=cookie.split('; ')
+        for attribute in attributes:
+            pair=attribute.split('=')
+            if pair[0]=='csrftoken':
+                csrf_token=pair[1]
+    log_if_debug('csrf_token=%s' % (csrf_token))
+
+    # create graphql
+    graphql={
+        'query' : 'query HeaderQuery(\n  $lookup: CloudcastLookup!\n) {\n  cloudcast: cloudcastLookup(lookup: $lookup) {\n    id\n    isExclusive\n    ...PlayButton_cloudcast\n  }\n}\n\nfragment PlayButton_cloudcast on Cloudcast {\n  streamInfo {\n    hlsUrl\n    dashUrl\n    url\n    uuid\n  }\n}\n',
+        'variables' : {
+            'lookup' : {
+                'username' : keysplit[1],
+                'slug' : keysplit[2]
+            }
+        }
+    }
+    log_if_debug('graphql=%s' % (graphql))
+
+    # request graphql
+    postdata=json.dumps(graphql)
+    headers={
+        'Referer' : URL_MIXCLOUD,
+        'X-CSRFToken' : csrf_token,
+        'Cookie' : 'csrftoken=' + csrf_token,
+        'Content-Type' : 'application/json'
+    }
+
+    request=urllib2.Request(URL_GRAPHQL, postdata, headers, URL_MIXCLOUD)
+    response=urllib2.urlopen(request)
+    content=response.read()
+    json_content=json.loads(content)
+    log_if_debug('response=%s' % (json_content))
+
+    # parse json
+    json_isexclusive=False
+    json_url=None
+    if STR_DATA in json_content and json_content[STR_DATA]:
+        json_data = json_content[STR_DATA]
+        if STR_CLOUDCAST in json_data and json_data[STR_CLOUDCAST]:
+            json_cloudcast = json_data[STR_CLOUDCAST]
+            if STR_ISEXCLUSIVE in json_cloudcast and json_cloudcast[STR_ISEXCLUSIVE]:
+                json_isexclusive = json_cloudcast[STR_ISEXCLUSIVE]
+            if STR_STREAMINFO in json_cloudcast and json_cloudcast[STR_STREAMINFO]:
+                json_streaminfo = json_cloudcast[STR_STREAMINFO]
+                if STR_URL in json_streaminfo and json_streaminfo[STR_URL]:
+                    json_url = json_streaminfo[STR_URL]
+                elif STR_HLSURL in json_streaminfo and json_streaminfo[STR_HLSURL]:
+                    json_url = json_streaminfo[STR_HLSURL]
+                elif STR_DASHURL in json_streaminfo and json_streaminfo[STR_DASHURL]:
+                    json_url = json_streaminfo[STR_DASHURL]
+
+    if json_url:
+        log_if_debug('encoded url: '+json_url)
+        decoded_url=base64.b64decode(json_url)
+        url=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(decoded_url,cycle(STR_MAGICSTRING)))
+        log_if_debug('url: '+url)
+        return url
+    elif json_isexclusive:
+        log_if_debug('Cloudcast is exclusive')
+        return STR_ISEXCLUSIVE
+    else:
+        log_if_debug('Unable to find url in json')
 
 
 def get_stream_m4a(cloudcast_key):
@@ -870,7 +934,7 @@ log_if_debug("Offset: %s" % offset)
 log_if_debug("Key: %s" % key)
 log_if_debug("Query: %s" % query)
 log_if_debug("##########################################################")
-	
+    
 if not sys.argv[2] or mode==MODE_HOME:
     ok=show_home_menu()
 elif mode==MODE_LOGIN:

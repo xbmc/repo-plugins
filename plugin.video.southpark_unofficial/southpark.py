@@ -9,7 +9,7 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 import time
-import re
+import base64
 
 # .major cannot be used in older versions, like kodi 16.
 IS_PY3 = sys.version_info[0] > 2
@@ -102,6 +102,25 @@ def _decode_dictionary(string):
 				newd[split[0]] = split[1]
 	return newd
 
+def _translation(addon, id):
+	return _encode(addon.getLocalizedString(id))
+
+def _premier_timeout(premiere):
+	try:
+		diff = int(premiere) - int(time.time())
+	except ValueError:
+		date = time.strptime(premiere, "%d.%m.%Y") # 30.09.2015
+		diff = int(time.mktime(date)) - int(time.time())
+		
+	if diff < 0:
+		diff = 0;
+	days = int(diff / 86400)
+	hours = int((diff % 86400) / 3600)
+	mins =  int((diff % 3600) / 60)
+	if KODI_VERSION_MAJOR < 17:
+		return "%02dd %02dh %02dm".format(days, hours, mins)
+	return "{:02d}d {:02d}h {:02d}m".format(days, hours, mins)
+
 def _dk(obj, keys, default=None):
 	if not isinstance(obj, list) and not isinstance(obj, dict):
 		return default
@@ -129,24 +148,38 @@ def _dk(obj, keys, default=None):
 			obj = obj[k]
 	return obj
 
-def _translation(addon, id):
-	return _encode(addon.getLocalizedString(id))
+def _load_data(lang, path):
+	path = path.format(lang)
+	addon_data = None
+	if os.path.isfile(path):
+		try:
+			with open(path, "r") as fp:
+				addon_data = _json.load(fp, strict=False)
+			if "date" in addon_data:
+				if addon_data["date"] != None:
+					now   = datetime.datetime.now()
+					date  = _datetime(addon_data["date"])
+					delta = now - date
+					if (delta.seconds/3600) > 12:
+						addon_data = None
+				else:
+					addon_data = None
+			elif "seasons" not in addon_data or not isinstance(addon_data["seasons"], list):
+				addon_data = None
+		except Exception as e:
+			log_error(e)
+			addon_data = None
 
-def _premier_timeout(premiere):
-	try:
-		diff = int(premiere) - int(time.time())
-	except ValueError:
-		date = time.strptime(premiere, "%d.%m.%Y") # 30.09.2015
-		diff = int(time.mktime(date)) - int(time.time())
-		
-	if diff < 0:
-		diff = 0;
-	days = int(diff / 86400)
-	hours = int((diff % 86400) / 3600)
-	mins =  int((diff % 3600) / 60)
-	if KODI_VERSION_MAJOR < 17:
-		return "%02dd %02dh %02dm".format(days, hours, mins)
-	return "{:02d}d {:02d}h {:02d}m".format(days, hours, mins)
+	if addon_data == None:
+		url = "https://raw.githubusercontent.com/wargio/plugin.video.southpark_unofficial/addon-data/addon-data-{}.json".format(lang)
+		addon_data = _http_get(url, True)
+		addon_data["date"] = "{}".format(datetime.datetime.now()),
+
+		with open(path,'w') as output:
+			output.truncate()
+			_json.dump(addon_data, output)
+
+	return SP_Data(addon_data["seasons"], addon_data["created"])
 
 class SP_I18N(object):
 	"""South Park plugin I18N"""
@@ -200,13 +233,12 @@ class SP_Paths(object):
 			return xbmcvfs.translatePath(path)
 		return xbmc.translatePath(path)
 
-
 class SP_Options(object):
 	"""South Park plugin Options"""
 	def __init__(self, addon):
 		super(SP_Options, self).__init__()
 		self.addon = addon
-		self.AUDIO_AVAILABLE = ["en", "es", "de", "se"]
+		self.AUDIO_AVAILABLE = ["en", "es", "de", "se", "it"]
 		self.VIDEO_QUALITY   = ["high", "low"]
 
 	def debug(self):
@@ -224,169 +256,13 @@ class SP_Options(object):
 		return self.addon.getSetting('cc') == "true"
 
 	def audio(self, as_string=False):
-		#au = int(self.addon.getSetting('audio_lang'))
-		#ES/DE/SE are disabled for now
-		au = 0
+		au = int(self.addon.getSetting('audio_lang'))
 		if as_string:
 			return self.AUDIO_AVAILABLE[au] 
 		return au
 
 	def playrandom(self):
 		return self.addon.getSetting('playrandom') == "true"
-
-def _make_episode(data, season, episode):
-	ep = {
-		"image":   _dk(data, ["media", "image", "url"], ""),
-		"uuid":    _dk(data, ["id"], ""),
-		"locked":  _dk(data, ["media", "lockedLabel"], ""),
-		"details": _dk(data, ["meta", "description"], ""),
-		"date":    _dk(data, ["meta", "date"], ""),
-		"title":   _dk(data, ["meta", "subHeader"], ""),
-		"url":     _dk(data, ["url"], ""),
-		"season":  "{}".format(season  + 1),
-		"episode": "{}".format(episode + 1)
-	}
-	return ep
-
-def _has_extra(x):
-	return "loadMore" in x and x["loadMore"] != None and "type" in x and x["type"] == "video-guide"
-
-def _parse_episodes(data, season, domain):
-	lists = _dk(data,["children", "type|MainContainer", "children"], [])
-	lists = list(filter(lambda x: "type" in x and x["type"] == "LineList", lists))
-
-	extra = list(filter(lambda x: _has_extra(x), [ _dk(s, ["props"], []) for s in lists ]))
-
-	lists = list(filter(lambda x: len(x) > 0 and "url" in x[0], [ _dk(s, ["props", "items"], []) for s in lists ]))[0]
-	lists = [_make_episode(lists[i], season, i) for i in range(0, len(lists))]
-
-	if len(extra) > 0:
-		url = _dk(extra[0], ["loadMore", "url"], "")
-		if len(url) > 0:
-			extra = []
-			try:
-				extra = _http_get(domain + url, True)
-			except Exception as e:
-				log_error(e)
-			lists.extend([_make_episode(extra["items"][i], season, i + len(lists)) for i in range(0, len(extra["items"]))])
-		else:
-			raise Exception("Cannot fetch all episodes")
-	return lists
-
-def _download_data(url, link_in_html):
-	webpage = _http_get(url)
-	if "window.__DATA__" in webpage:
-		dataidx  = webpage.index("window.__DATA__")
-		data     = webpage[dataidx:]
-		endidx   = data.index("};")
-		equalidx = data.index("=")
-		data     = data[equalidx + 1:endidx + 1].strip()
-		data     = _json.loads(data, strict=False)
-		if link_in_html:
-			links = re.findall(r"href=\"/seasons/south-park/[\w]+/[\w]+-\d+", webpage, flags=re.M)
-			links = [x.split('"')[1] for x in links]
-			data["links_found"] = links
-		return data
-	return None
-
-def _load_data(audio, path):
-	domain = [
-		"https://southparkstudios.com", ## en
-		"https://southparkstudios.com", ## es
-		"https://southpark.de",         ## de
-		"https://southparkstudios.nu"   ## se
-	][audio]
-	domain_api = [
-		"https://southpark.cc.com",   ## en
-		"https://southpark.cc.com",   ## es
-		"https://southpark.de",       ## de
-		"https://southparkstudios.nu" ## se
-	][audio]
-	uri = [
-		"/seasons/south-park/",    ## en
-		"/es/seasons/south-park/", ## es
-		"/seasons/south-park/",    ## de
-		"/seasons/south-park/"     ## se
-	][audio]
-	link_in_html = [
-		False, ## en
-		False, ## es
-		True,  ## de
-		False, ## se
-	][audio]
-	lang = ["en", "es", "de", "se"][audio]
-	path = path.format(lang)
-	addon_data = None
-
-	#log_debug("link_in_html {}".format(link_in_html))
-	#log_debug("domain       {}".format(domain))
-	#log_debug("domain_api   {}".format(domain_api))
-	#log_debug("uri          {}".format(uri))
-
-	if os.path.isfile(path):
-		try:
-			with open(path, "rb") as fp:
-				addon_data = _json.load(fp, strict=False)
-			if "created" in addon_data:
-				if addon_data["created"] != None:
-					now   = datetime.datetime.now()
-					date  = _datetime(addon_data["created"])
-					delta = now - date
-					if (delta.seconds/3600) > 12:
-						addon_data = None
-				else:
-					addon_data = None
-			elif "seasons" not in addon_data or not isinstance(addon_data["seasons"], list):
-				addon_data = None
-		except Exception as e:
-			log_error(e)
-			addon_data = None
-
-	if addon_data == None:
-		progress = xbmcgui.DialogProgress()
-		progress.create("South Park Addon", "Updating addon data...")
-		progress.update(0)
-
-		try:
-			data = _download_data(domain + uri, link_in_html)
-
-			main = _dk(data,["children", "type|MainContainer", "children"])
-			seasons_urls = []
-			if "links_found" in data:
-				seasons_urls = data["links_found"]
-			else:
-				seasons_urls = [ _dk(s, ["url"]) for s in _dk(main, ["type|SeasonSelector", "props", "items"], [])]
-
-			seasons = [_parse_episodes(data, len(seasons_urls) - 1, domain_api)]
-			index = 0
-
-			for url in seasons_urls:
-				if progress.iscanceled():
-					raise Exception("Can't cancel this.")
-				progress.update(int((100 * index) / len(seasons_urls)))
-				index += 1
-				if url == None:
-					continue
-				data = _download_data(domain + url, False)
-				seasons.append(_parse_episodes(data, len(seasons_urls) - index, domain_api))
-
-			seasons.reverse()
-			addon_data = {
-				"created": "{}".format(datetime.datetime.now()),
-				"seasons": seasons
-			}
-
-			progress.update(99)
-			with open(path,'wb') as output:
-				output.truncate()
-				_json.dump(addon_data, output)
-			progress.update(100)
-		except Exception as e:
-			log_error(e)
-			progress.close()
-		progress.close()
-
-	return SP_Data(addon_data["seasons"], addon_data["created"])
 
 class SP_Data(object):
 	"""Contains the data that is needed by the addon"""
@@ -417,7 +293,7 @@ class SouthParkAddon(object):
 		self.paths     = SP_Paths    (self.addon_id )
 		self.options   = SP_Options  (self.addon_obj)
 		self.i18n      = SP_I18N   (self.addon_obj)
-		self.data      = _load_data(self.options.audio(), self.paths.PLUGIN_DATA)
+		self.data      = _load_data(self.options.audio(True), self.paths.PLUGIN_DATA)
 
 	def notify(self, text, utime=WARNING_TIMEOUT_SHORT):
 		utext      = _encode(text)
@@ -474,12 +350,9 @@ class SouthParkAddon(object):
 		ep_aird    = episode['date']
 		ep_uuid    = episode['uuid']
 
-		if episode['locked'] == "currently unavailable":
+		if len(episode['mediagen']) < 1:
 			ep_title += " [Unavailable]"
-		#elif episode['locked'] == "beforepremiere":
-		#	ep_title += " [Premiere]"
-		#	ep_mode   = PLUGIN_MODE_PREMIERE
-		#	ep_desc   = "Premiere in {0}\n{1}".format(_premier_timeout(ep_aird), ep_desc)
+			ep_mode = PLUGIN_MODE_UNAVAILABLE
 
 		self.add_entry(ep_title, ep_uuid, ep_mode, ep_image, ep_desc, ep_seas, ep_numb, ep_aird, is_playable=True)
 
@@ -499,7 +372,7 @@ class SouthParkAddon(object):
 		while retries < 10:
 			retries += 1
 			episode_data = self.data.random()
-			if episode_data['locked'] != None and len(episode_data['locked']) > 0:
+			if len(episode_data['mediagen']) < 1:
 				log_error("Found locked episode '{0}'. trying again!".format(episode_data["title"]))
 				continue
 			if self.options.playrandom():
@@ -515,58 +388,75 @@ class SouthParkAddon(object):
 	def play_episode(self, season, episode):
 		data = self.data.episode(int(season) - 1, int(episode) - 1)
 		self.notify("{0} {1}".format(self.i18n.WARNING_LOADING, _encode(data["title"])), WARNING_TIMEOUT_SHORT)
-
-		domain = [
-			"southparkstudios.com", ## en
-			"southparkstudios.com", ## es
-			"southpark.intl",       ## de
-			"southpark.intl"        ## se
-		][self.options.audio()]
-		mediagen = None
+		streams   = []
+		subtitles = []
 		try:
-			mediagen = _http_get("https://seamless.mtvnservices.com/api/mgid:arc:episode:{}:{}/package.json?proxy=true".format(domain, data["uuid"]), True)
+			for url in data["mediagen"]:
+				url = base64.b64decode(url.encode('ascii')).decode('ascii')
+				mediagen = _http_get(url, True)
+
+				subs = _dk(mediagen, ["package", "video", "item", 0, "transcript", 0, "typographic"], [])
+				subs = list(filter(lambda x: "format" in x and x["format"] == "vtt", subs))
+				if len(subs) > 0:
+					subtitles.append(subs[0]["src"])
+				else:
+					subtitles.append(None)
+
+				m3u8 = None
+				try:
+					m3u8 = _dk(mediagen, ["package", "video", "item", 0, "rendition", "src"], None)
+				except TypeError:
+					m3u8 = _dk(mediagen, ["package", "video", "item", 0, "rendition", 0, "src"], None)
+
+				if m3u8 == None:
+					raise Exception("invalid m3u8")
+				streams.append(m3u8)
 		except Exception as e:
+			streams = []
 			log_error(e)
-			mediagen = None
 
-		if mediagen == None:
+		if len(streams) < 1:
 			self.notify(self.i18n.WARNING_UNAVAILABLE_EPISODE, WARNING_TIMEOUT_LONG)
+			xbmcplugin.endOfDirectory(self.phandle)
 			return
 
-		m3u8 = _dk(mediagen, ["package", "video", "item", 0, "rendition", "src"], None)
-		if m3u8 == None:
-			self.notify("Can't play {}".format(data["title"]))
-			xbmcplugin.setResolvedUrl(handle=self.phandle, succeeded=True, listitem=None)
-			return
+		playlist = None
+		parts = len(streams)
+		if parts > 1:
+			playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+			playlist.clear()
 
-		subs = _dk(mediagen, ["package", "video", "item", 0, "transcript", 0, "typographic"], [])
-		subs = list(filter(lambda x: "format" in x and x["format"] == "vtt", subs))
-		if len(subs) > 0:
-			subs = subs[0]["src"]
-		else:
-			subs = None
+		firstitem = None
+		show_subs = self.options.show_subtitles()
+		for i in range(0, parts):
+			playitem = xbmcgui.ListItem(path=streams[i])
+			title = data["title"]
+			if len(streams) > 1:
+				title = "{title} ({i}/{n})".format(title=title, i=(i + 1), n=parts)
 
-		playitem = xbmcgui.ListItem(path=m3u8)
-		playitem.setArt({'icon': data["image"], 'thumb': data["image"]})
-		playitem.setInfo('video', {'Title': data["title"], 'Plot': data["details"]})
-		playitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
-		playitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-		if subs:
-			playitem.setSubtitles([subs])
+			playitem.setArt({'icon': data["image"], 'thumb': data["image"]})
+			playitem.setInfo('video', {'Title': title, 'Plot': data["details"]})
+			playitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
+			playitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+
+			if subtitles[i] != None and show_subs:
+				playitem.setSubtitles([subtitles[i]])
+
+			if i == 0:
+				firstitem = playitem
+			if playlist != None:
+				playlist.add(url=streams[i], listitem=playitem, index=i)
 
 		player = xbmc.Player()
+		player.showSubtitles(show_subs)
 		if self.phandle == -1:
 			## this could be removed..
-			player.play(listitem=playitem)
+			if playlist != None:
+				player.play(playlist)
+			else:
+				player.play(listitem=firstitem)
 		else:
-			xbmcplugin.setResolvedUrl(handle=self.phandle, succeeded=True, listitem=playitem)
-
-		for s in range(1):
-			if player.isPlaying():
-				break
-			time.sleep(1)
-
-		player.showSubtitles(self.options.show_subtitles())
+			xbmcplugin.setResolvedUrl(handle=self.phandle, succeeded=True, listitem=firstitem)
 		xbmcplugin.endOfDirectory(self.phandle)
 
 

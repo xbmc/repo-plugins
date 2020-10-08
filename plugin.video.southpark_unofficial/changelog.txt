@@ -1,3 +1,7 @@
+0.6.2
+- Use new apis
+- Added back all languages
+- Unfortunately some streams might contain ads (based by location)
 0.6.1
 - Removed debug lines.
 0.6.0

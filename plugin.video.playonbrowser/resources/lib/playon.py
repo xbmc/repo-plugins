@@ -291,7 +291,11 @@ class PlayOn:
 
             timeData  = (dict(result.get('time','')).get('@name','') or '')
             if len(timeData) > 0:
-                duration = (sum(x*y for x, y in zip(list(list(map(int, timeData.split(':')[::-1])), (1, 60, 3600, 86400)))))
+                timeList = timeData.split(':')
+                hours = int(timeList[0])
+                mins  = int(timeList[1])
+                secs  = int(timeList[2])
+                duration = ((hours * 60 * 60) + (mins * 60) + secs)
             else: duration = 0 
 
             if URLTYPE == 'm3u8' and 'playlaterrecordings' not in result['@href']: 

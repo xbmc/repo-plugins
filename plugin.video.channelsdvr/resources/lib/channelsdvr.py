@@ -17,7 +17,7 @@
 # along with Channels DVR.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, _strptime, datetime, re, traceback, json, inputstreamhelper, threading
+import os, sys, time, _strptime, datetime, re, traceback, json, inputstreamhelper, threading, requests
 
 from itertools     import repeat, cycle, chain, zip_longest
 from resources.lib import xmltv
@@ -56,10 +56,12 @@ CONTENT_TYPE  = 'episodes'
 DISC_CACHE    = False
 DTFORMAT      = '%Y%m%d%H%M%S'
 PVR_CLIENT    = 'pvr.iptvsimple'
+DNS_CLIENT    = '_channels_app._tcp'
 DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 M3UXMLTV      = REAL_SETTINGS.getSetting('Enable_M3UXMLTV') == 'true'
 ENABLE_TS     = REAL_SETTINGS.getSetting('Enable_TS') == 'true'
 ENABLE_CONFIG = REAL_SETTINGS.getSetting('Enable_Config') == 'true'
+BUILD_FAVS    = REAL_SETTINGS.getSetting('Build_Favorites') == 'true'
 USER_PATH     = REAL_SETTINGS.getSetting('User_Folder') 
 
 BASE_URL      = 'http://%s:%s'%(REAL_SETTINGS.getSetting('User_IP'),REAL_SETTINGS.getSetting('User_Port')) #todo dns discovery?
@@ -67,13 +69,20 @@ TS            = '?format=ts' if ENABLE_TS else ''
 M3U_URL       = '%s/devices/ANY/channels.m3u%s'%(BASE_URL,TS)
 GUIDE_URL     = '%s/devices/ANY/guide'%(BASE_URL)
 UPNEXT_URL    = '%s/dvr/recordings/upnext'%(BASE_URL)
-GROUPS_URL    = '%s/dvr/groups'%(BASE_URL)
 SEARCH_URL    = '%s/dvr/guide/search/groups?q={query}'%(BASE_URL)
+
 SUMMARY_URL   = '%s/dvr/recordings/summary'%(BASE_URL)
+GROUPS_URL    = '%s/dvr/groups'%(BASE_URL)
+MOVIES_URL    = '%s/dvr/groups/movies/files'%(BASE_URL)
+SOURCES_URL   = '%s/dvr/lineup'%(BASE_URL)
+PROGRAMS_URL  = '%s/dvr/programs'%(BASE_URL)
+
+M3U_TEMP      = os.path.join(SETTINGS_LOC,'channelsdvr.tmp')
 M3U_FILE      = os.path.join(USER_PATH,'channelsdvr.m3u')
 XMLTV_FILE    = os.path.join(USER_PATH,'channelsdvr.xml')
 MENU          = [(LANGUAGE(30002), '', 0),
-                (LANGUAGE(30003), '', 1)]
+                 (LANGUAGE(30017), '', 1),
+                 (LANGUAGE(30003), '', 2)]
                 # (LANGUAGE(30015), '', 2)]
                 #(LANGUAGE(30013), '', 8)]
                 
@@ -112,20 +121,26 @@ def getKeyboard(default='',header=ADDON_NAME):
     kb.doModal()
     if kb.isConfirmed(): return kb.getText()
     return False
-    
-    
+
+def slugify(text):
+    non_url_safe = [' ','"', '#', '$', '%', '&', '+',',', '/', ':', ';', '=', '?','@', '[', '\\', ']', '^', '`','{', '|', '}', '~', "'"]
+    non_url_safe_regex = re.compile(r'[{}]'.format(''.join(re.escape(x) for x in non_url_safe)))
+    text = non_url_safe_regex.sub('', text).strip()
+    text = u'_'.join(re.split(r'\s+', text))
+    return text
+     
 class Service(object):
     def __init__(self, sysARG=sys.argv):
         self.running    = False
         self.myMonitor  = xbmc.Monitor()
         self.myChannels = Channels(sysARG)
-        
-        
+
+
     def run(self):
         while not self.myMonitor.abortRequested():
             if self.myMonitor.waitForAbort(2): break
             elif not M3UXMLTV or self.running: continue
-            lastCheck = float(REAL_SETTINGS.getSetting('Last_Scan') or 0)
+            lastCheck  = float(REAL_SETTINGS.getSetting('Last_Scan') or 0)
             conditions = [xbmcvfs.exists(M3U_FILE),xbmcvfs.exists(XMLTV_FILE)]
             if (time.time() > (lastCheck + 3600)) or False in conditions:
                 self.running = True
@@ -138,46 +153,90 @@ class Service(object):
 class Channels(object):
     def __init__(self, sysARG=sys.argv):
         log('__init__, sysARG = %s'%(sysARG))
-        if ENABLE_POOL: self.pool = ThreadPool(CORES)
         self.sysARG     = sysARG
         self.cache      = SimpleCache()
+        self.m3uList    = []
         self.xmltvList  = {'data'       : self.getData(),
                            'channels'   : [],
                            'programmes' : []}
-        self.channels   = self.parseM3U(self.loadM3U())
-        self.programmes = self.getGuidedata() 
+        self.channels   = self.getChannels(self.getM3U(),ADDON_VERSION)
+        self.programmes = self.getGuidedata(ADDON_VERSION)
         
-
-    def saveURL(self, url, file=None, life=datetime.timedelta(minutes=1)):
-        log('saveURL, url = %s, file = %s'%(url,file))
+        
+    def openURL(self, url, life=datetime.timedelta(minutes=5)):
+        log('openURL, url = %s'%(url))
         try:
-            cacheName = '%s.saveURL.%s'%(ADDON_ID,url)
+            cacheName = '%s.%s.openURL.%s'%(ADDON_ID,ADDON_VERSION,url)
             cacheResponse = self.cache.get(cacheName)
-            if cacheResponse is None:
-                response = urllib.request.urlopen(url).read()
-                cacheResponse = response.decode("utf-8")
+            if not cacheResponse:
+                req = requests.get(url)
+                cacheResponse = req.text
+                req.close()
                 self.cache.set(cacheName, cacheResponse, checksum=len(cacheResponse), expiration=life)
-                if file is not None:
-                    fle = xbmcvfs.File(file, 'w')
-                    fle.write(cacheResponse)
-                    fle.close()
             return cacheResponse
         except Exception as e: 
-            log("saveURL, Failed! %s"%(e), xbmc.LOGERROR)
+            log("openURL, Failed! %s"%(e), xbmc.LOGERROR)
             notificationDialog(LANGUAGE(30001))
             return ''
         
 
-    def loadM3U(self):
-        m3uListTMP = self.saveURL(M3U_URL,M3U_FILE).split('\n')
+    def saveURL(self, url, file):
+        log('saveURL, url = %s, file = %s'%(url,file))
+        try:
+            #grab unadulterated m3u, option to preserve?
+            response = self.openURL(url)
+            fle = xbmcvfs.File(file, 'w')
+            fle.write(response)
+            fle.close()
+            return response
+        except Exception as e: 
+            log("saveURL, Failed! %s"%(e), xbmc.LOGERROR)
+            return ''
+        
+
+    def getM3U(self):
+        log('getM3U')
+        m3uListTMP = self.saveURL(M3U_URL,M3U_TEMP).split('\n')
         return ['%s\n%s'%(line,m3uListTMP[idx+1]) for idx, line in enumerate(m3uListTMP) if line.startswith('#EXTINF:')]
 
 
-    def getGuidedata(self):
-        return json.loads(self.saveURL(GUIDE_URL))
+    # @use_cache(1)
+    def getChannels(self, lines, version=ADDON_VERSION):
+        log('getChannels')
+        items = []
+        for line in lines:
+            if line.startswith('#EXTINF:'):
+                groups = re.compile('tvg-chno=\"(.*?)\" tvg-logo=\"(.*?)\" tvg-name=\"(.*?)\" group-title=\"(.*?)\",(.*)\\n(.*)', re.IGNORECASE).search(line)
+                items.append({'number':groups.group(1),'logo':groups.group(2),'name':groups.group(3),'groups':groups.group(4),'title':groups.group(5),'url':groups.group(6)})
+        try: xbmcvfs.delete(M3U_TEMP)
+        except: pass
+        return sorted(items, key=lambda k: k['number'])
+        
+
+    def buildM3U(self, channel):
+        litem = '#EXTINF:-1 tvg-chno="%s" tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s" radio="%s",%s\n%s\n'
+        logo  = (channel.get('logo','') or ICON)
+        group = channel.get('groups','').split(';')
+        if BUILD_FAVS and 'Favorites' not in group: return False
+        group.append(ADDON_NAME)
+        radio = False
+        self.m3uList.append(litem%(channel['number'],'%s@%s'%(channel['number'],slugify(ADDON_NAME)),channel['name'],logo,';'.join(group),str(radio).lower(),channel['title'],channel['url']))
+        return True
+        
+        
+    def loadM3U(self):
+        self.poolList(self.buildM3U, self.getChannels(self.getM3U()))
+        return self.saveM3U(M3U_FILE)
+        
+
+    # @use_cache(1)
+    def getGuidedata(self, version=ADDON_VERSION):
+        log('getGuidedata')
+        return json.loads(self.openURL(GUIDE_URL))
 
 
     def loadXMLTV(self):
+        log('loadXMLTV')
         self.poolList(self.buildXMLTV, self.programmes)
         return self.saveXMLTV()
         
@@ -185,7 +244,8 @@ class Channels(object):
     def buildXMLTV(self, content):
         channel    = content['Channel']
         programmes = content['Airings']
-        if channel['Hidden'] == True: return False
+        if channel.get('Hidden',False): return False
+        elif BUILD_FAVS and not channel.get('Favorite',False): return False
         self.addChannel(channel)
         [self.addProgram(program) for program in  programmes]
         return True
@@ -198,7 +258,14 @@ class Channels(object):
                 'generator-info-url'  : ADDON_ID,
                 'source-info-name'    : ADDON_NAME,
                 'source-info-url'     : ADDON_ID}
-
+                
+    
+    def saveM3U(self, file):
+        fle = xbmcvfs.File(M3U_FILE, 'w')
+        [fle.write(m3uList) for m3uList in self.m3uList]
+        fle.close()
+        return True
+        
 
     def saveXMLTV(self, reset=True):
         log('saveXMLTV')
@@ -232,7 +299,7 @@ class Channels(object):
 
 
     def addChannel(self, channel):
-        citem    = ({'id'           : channel['Number'],
+        citem    = ({'id'           : '%s@%s'%(channel['Number'],slugify(ADDON_NAME)),
                      'display-name' : [(channel['Name'], LANG)],
                      'icon'         : [{'src':channel.get('Image',ICON)}]})
         log('addChannel = %s'%(citem))
@@ -241,84 +308,23 @@ class Channels(object):
 
 
     def addProgram(self, program):
-        # {
-            # 'Source': 'tms',
-            # 'Channel': '6070',
-            # 'OriginalDate': '2016-04-11',
-            # 'Time': 1601568000,
-            # 'Duration': 3600,
-            # 'Title': 'Wicked Tuna',
-            # 'EpisodeTitle': 'Doubling Down',
-            # 'Summary': 'Two captains make the long trip to Georges Bank after a huge haul offshore.',
-            # 'Image': 'https://tmsimg.fancybits.co/assets/p9072643_b_h6_be.jpg',
-            # 'Categories': ['Episode', 'Series'],
-            # 'Genres': ['Reality', 'Outdoors', 'Adventure', 'Fishing'],
-            # 'Tags': ['CC', 'HD 1080i', 'HDTV'],
-            # 'SeriesID': '9072643',
-            # 'ProgramID': 'EP015291270089',
-            # 'TeamIDs': None,
-            # 'SeasonNumber': 5,
-            # 'EpisodeNumber': 10,
-            # 'Directors': None,
-            # 'Cast': ['T.J. Ott', 'Paul Hebert', 'Bill Monte'],
-            # 'Raw': {
-                # 'startTime': '2020-10-01T16:00Z',
-                # 'endTime': '2020-10-01T17:00Z',
-                # 'duration': 60,
-                # 'channels': ['6070'],
-                # 'stationId': '49438',
-                # 'qualifiers': ['CC', 'HD 1080i', 'HDTV'],
-                # 'ratings': [{
-                    # 'body': 'USA Parental Rating',
-                    # 'code': 'TV14'
-                # }],
-                # 'program': {
-                    # 'tmsId': 'EP015291270089',
-                    # 'rootId': '12694133',
-                    # 'seriesId': '9072643',
-                    # 'entityType': 'Episode',
-                    # 'subType': 'Series',
-                    # 'title': 'Wicked Tuna',
-                    # 'titleLang': 'en',
-                    # 'episodeTitle': 'Doubling Down',
-                    # 'episodeNum': 10,
-                    # 'seasonNum': 5,
-                    # 'releaseYear': 2016,
-                    # 'releaseDate': '2016-04-11',
-                    # 'origAirDate': '2016-04-11',
-                    # 'descriptionLang': 'en',
-                    # 'shortDescription': 'Two captains make the long trip to Georges Bank after a huge haul offshore.',
-                    # 'longDescription': 'After successful and massive haul offshore on Georges Bank, the captains of FV-Tuna.com and Hot Tuna decide to make the trip again.',
-                    # 'topCast': ['T.J. Ott', 'Paul Hebert', 'Bill Monte'],
-                    # 'genres': ['Reality', 'Outdoors', 'Adventure', 'Fishing'],
-                    # 'preferredImage': {
-                        # 'uri': 'https://tmsimg.fancybits.co/assets/p9072643_b_h6_be.jpg',
-                        # 'height': '540',
-                        # 'width': '720',
-                        # 'primary': 'true',
-                        # 'category': 'Banner-L1',
-                        # 'text': 'yes',
-                        # 'tier': 'Series'
-                    # },
-                    # 'sportsId': '110'
-                # }
-            # }
-        # }, 
-        pitem      = {'channel'     : program['Channel'],
-                      # 'credits'     : {'director': [program.get('Directors',[])], 'cast': [program.get('Cast',[])]},
-                      'category'    : [(genre,LANG) for genre in program.get('Categories',['Undefined'])],
-                      'title'       : [(program['Title'], LANG)],
-                      'desc'        : [((program['Summary'] or xbmc.getLocalizedString(161)), LANG)],
-                      'stop'        : (strpTime(program['Raw']['endTime']).strftime(xmltv.date_format)),
-                      'start'       : (strpTime(program['Raw']['startTime']).strftime(xmltv.date_format)),
-                      'icon'        : [{'src': program.get('Image',FANART)}]}
+        pitem = {'channel'     : '%s@%s'%(program['Channel'],slugify(ADDON_NAME)),
+                # 'credits'     : {'director': [program.get('Directors',[])], 'cast': [program.get('Cast',[])]},
+                 'category'    : [(genre,LANG) for genre in program.get('Categories',['Undefined'])],
+                 'title'       : [(self.cleanString(program['Title']), LANG)],
+                 'desc'        : [((self.cleanString(program.get('Summary','')) or xbmc.getLocalizedString(161)), LANG)],
+                 'stop'        : (strpTime(program['Raw']['endTime']).strftime(xmltv.date_format)),
+                 'start'       : (strpTime(program['Raw']['startTime']).strftime(xmltv.date_format)),
+                 'icon'        : [{'src': program.get('Image',FANART)}]}
                       
         if program.get('EpisodeTitle',''):
-            pitem['sub-title'] = [(program['EpisodeTitle'], LANG)]
+            pitem['sub-title'] = [(self.cleanString(program['EpisodeTitle']), LANG)]
             
         if program.get('OriginalDate',''):
-            pitem['date'] = (strpTime(program['OriginalDate'], '%Y-%m-%d')).strftime('%Y%m%d')
-
+            try:
+                pitem['date'] = (strpTime(program['OriginalDate'], '%Y-%m-%d')).strftime('%Y%m%d')
+            except: pass
+            
         if program.get('Tags',None):
             if 'New' in program.get('Tags',[]): pitem['new'] = '' #write blank tag, tag == True
         if program['Raw'].get('ratings',None):
@@ -331,37 +337,19 @@ class Channels(object):
         if program.get('EpisodeNumber',''): 
             SElabel = 'S%sE%s'%(str(program.get("SeasonNumber",0)).zfill(2),str(program.get("EpisodeNumber",0)).zfill(2))
             pitem['episode-num'] = [(SElabel, 'onscreen')]
-         ##### TODO #####
-           # 'country'     : [('USA', LANG)],#todo
-           # 'language': (u'English', u''),
-           #  'length': {'units': u'minutes', 'length': '22'},
-           # 'orig-language': (u'English', u''),
-           # 'premiere': (u'Not really. Just testing', u'en'),
-           # 'previously-shown': {'channel': u'C12whdh.zap2it.com', 'start': u'19950921103000 ADT'},
-           # 'audio'       : {'stereo': u'stereo'},#todo                 
-           # 'subtitles'   : [{'type': u'teletext', 'language': (u'English', u'')}],#todo
-           # 'url'         : [(u'http://www.nbc.com/')],#todo
-           # 'review'      : [{'type': 'url', 'value': 'http://some.review/'}],
-           # 'video'       : {'colour': True, 'aspect': u'4:3', 'present': True, 'quality': 'standard'}},#todo
-            
+
         log('addProgram = %s'%(pitem))
         self.xmltvList['programmes'].append(pitem)
         return True
         
-        
-    def parseM3U(self, lines):
-        log('parseM3U')
-        items = []
-        for line in lines:
-            if line.startswith('#EXTINF:'):
-                groups = re.compile('tvg-chno=\"(.*?)\" tvg-logo=\"(.*?)\" tvg-name=\"(.*?)\" group-title=\"(.*?)\",(.*)\\n(.*)', re.IGNORECASE).search(line)
-                items.append({'number':groups.group(1),'logo':groups.group(2),'name':groups.group(3),'groups':groups.group(4),'title':groups.group(5),'url':groups.group(6)})
-        return sorted(items, key=lambda k: k['number'])
-        
+
+    def cleanString(self, text):
+        return text.encode("ascii", errors="replace").decode()
+
         
     def playVideo(self, name, url):
         log('playVideo, url = %s'%url)
-        if url is None: 
+        if url.lower() == 'next_show': 
             notificationDialog(LANGUAGE(30012), time=4000)
             found = False
             liz   = xbmcgui.ListItem(name)
@@ -373,6 +361,10 @@ class Channels(object):
             if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream():
                 liz.setProperty('inputstreamaddon','inputstream.adaptive')
                 liz.setProperty('inputstream.adaptive.manifest_type','hls')
+            # elif 'mpg' in url.lower():
+                # liz.setProperty('inputstreamaddon','inputstream.ffmpegdirect')
+                # liz.setProperty('inputstream.ffmpegdirect.stream_mode','timeshift')
+                # liz.setProperty('inputstream.ffmpegdirect.is_realtime_stream','true')
         xbmcplugin.setResolvedUrl(int(self.sysARG[1]), found, liz)
 
 
@@ -402,12 +394,13 @@ class Channels(object):
         log("poolList")
         results = []
         if ENABLE_POOL:
+            pool = ThreadPool(CORES)
             if args is not None: 
-                results = self.pool.map(method, zip(items,repeat(args)))
+                results = pool.map(method, zip(items,repeat(args)))
             elif items: 
-                results = self.pool.map(method, items)#, chunksize=chunk)
-            self.pool.close()   
-            self.pool.join()
+                results = pool.map(method, items)#, chunksize=chunk)
+            pool.close()   
+            pool.join()
         else:
             if args is not None: 
                 results = [method((item, args)) for item in items]
@@ -439,17 +432,19 @@ class Channels(object):
         return ''
         
         
-    def buildLive(self):
+    def buildLive(self, favorites=False):
         log('buildLive')
-        self.poolList(self.buildPlayItem, self.programmes, 'live')
+        self.poolList(self.buildPlayItem, self.programmes, ('live',favorites))
         
         
     def buildPlayItem(self, data):
-        content, opt = data
+        content, opt   = data
+        opt, favorites = opt
         channel    = content['Channel']
         programmes = content['Airings']
         liveMatch  = False
         if channel['Hidden'] == True: return
+        elif favorites and not channel.get('Favorite',False): return
         tz  = (timezone()//100)*60*60
         now = (datetime.datetime.fromtimestamp(float(getLocalTime()))) + datetime.timedelta(seconds=tz)
         url = self.getLiveURL(channel['Number'], self.channels)
@@ -470,6 +465,7 @@ class Channels(object):
                     label = '%s - [B]%s[/B]'%(start.strftime('%I:%M %p').lstrip('0'),program.get('Title',''))
             elif opt == 'live': continue
             elif opt == 'lineup':
+                url   = 'next_show'
                 label = '%s - %s'%(start.strftime('%I:%M %p').lstrip('0'),program.get('Title',''))
                    
             icon  = channel.get('Image',ICON)
@@ -485,113 +481,9 @@ class Channels(object):
         item['Channel'] = {'Hidden':False,'Number':0,'Name':'','Image':''}
         self.buildPlayItem((item,'recordings'))
         
-   
-        
-    # {
-	# 'ID': '28904',
-	# 'JobID': '1599865190-ch6070',
-	# 'RuleID': '',
-	# 'GroupID': '248379',
-	# 'Path': 'TV\\Inside 9-11 War on America\\Inside 9-11 War on America 2005-08-21 2020-09-11-1859.mpg',
-	# 'Checksum': '',
-	# 'CreatedAt': 1599865190,
-	# 'Watched': False,
-	# 'Deleted': False,
-	# 'PlaybackTime': 0,
-	# 'Duration': 7234.961933,
-	# 'Commercials': [839.79, 989.84, 1413.81, 1659.18, 2137.23, 2352.71, 2686.46, 2907.73, 3437.7200000000003, 3707.59, 4401.52, 4635.47, 5091.42, 5331.6, 5810.4400000000005, 6020.59, 6351.610000000001, 6591.22],
-	# 'Delayed': False,
-	# 'Corrupted': False,
-	# 'Cancelled': False,
-	# 'Completed': True,
-	# 'Processed': True,
-	# 'Favorited': False,
-	# 'Locked': False,
-	# 'Airing': {
-		# 'Source': 'tms',
-		# 'Channel': '6070',
-		# 'OriginalDate': '2005-08-21',
-		# 'Time': 1599865200,
-		# 'Duration': 7200,
-		# 'Title': 'Inside 9/11: War on America',
-		# 'Summary': 'Investigation of the events leading up to the terrorist attacks of Sept. 11, 2001.',
-		# 'Image': 'https://tmsimg.fancybits.co/assets/p248379_b_h6_ak.jpg',
-		# 'Categories': ['Show', 'Special'],
-		# 'Genres': ['Documentary', 'Special'],
-		# 'Tags': ['CC', 'HD 1080i', 'HDTV'],
-		# 'SeriesID': '248379',
-		# 'ProgramID': 'SH007602260000-1599865200',
-		# 'TeamIDs': None,
-		# 'SeasonNumber': 0,
-		# 'EpisodeNumber': 0,
-		# 'Directors': None,
-		# 'Cast': None,
-		# 'Raw': {
-			# 'startTime': '2020-09-11T23:00Z',
-			# 'endTime': '2020-09-12T01:00Z',
-			# 'duration': 120,
-			# 'channels': ['6070'],
-			# 'stationId': '49438',
-			# 'qualifiers': ['CC', 'HD 1080i', 'HDTV'],
-			# 'ratings': [{
-				# 'body': 'USA Parental Rating',
-				# 'code': 'TVPG'
-			# }],
-			# 'program': {
-				# 'tmsId': 'SH007602260000',
-				# 'rootId': '248379',
-				# 'seriesId': '248379',
-				# 'entityType': 'Show',
-				# 'subType': 'Special',
-				# 'title': 'Inside 9/11: War on America',
-				# 'titleLang': 'en',
-				# 'releaseYear': 2005,
-				# 'releaseDate': '2005-08-21',
-				# 'origAirDate': '2005-08-21',
-				# 'descriptionLang': 'en',
-				# 'shortDescription': 'Investigation of the events leading up to the terrorist attacks of Sept. 11, 2001.',
-				# 'longDescription': 'Investigation of the events leading up to the terrorist attacks of Sept. 11, 2001.',
-				# 'topCast': None,
-				# 'genres': ['Documentary', 'Special'],
-				# 'preferredImage': {
-					# 'uri': 'https://tmsimg.fancybits.co/assets/p248379_b_h6_ak.jpg',
-					# 'height': '540',
-					# 'width': '720',
-					# 'primary': 'true',
-					# 'category': 'Banner-L2',
-					# 'text': 'yes',
-					# 'tier': ''
-				# }
-			# }
-		# }
-	# },
-	# 'ChannelNumber': '6070',
-	# 'DeviceID': 'TVE-Spectrum',
-	# 'PlayedAt': 0,
-	# 'UpdatedAt': 1599879912739,
-	# 'DeletedAt': 0,
-	# 'FavoritedAt': 0,
-	# 'DeletedReason': '',
-	# 'DeleteNow': False,
-	# 'HighestPTS': 651147881,
-	# 'SignalStats': None,
-	# 'CommercialsAligned': True,
-	# 'CommercialsEdited': False,
-	# 'CommercialsVerified': False,
-	# 'CommercialDetectSource': 'local',
-	# 'CloudComskip': {
-		# 'Successful': False
-	# },
-	# 'ImportPath': '',
-	# 'ImportQuery': '',
-	# 'ImportGroup': '',
-	# 'ImportedAt': 0,
-	# 'DeleteScheduledFor': 259200000
-# }
-    
             
     def buildRecordings(self):
-        self.poolList(self.buildRecordingItem, json.loads(self.saveURL(UPNEXT_URL)))
+        self.poolList(self.buildRecordingItem, json.loads(self.openURL(UPNEXT_URL)))
             
         
     def search(self, term=None):
@@ -599,7 +491,7 @@ class Channels(object):
         if term is None: term = getKeyboard(header=LANGUAGE(30014))
         if term:
             log('search, term = %s'%(term))
-            query = json.loads(self.saveURL(SEARCH_URL.format(query=term)))
+            query = json.loads(self.openURL(SEARCH_URL.format(query=term)))
 
 
     def buildLineup(self, chid=None):
@@ -618,13 +510,9 @@ class Channels(object):
         
     def buildService(self):
         log('buildService')
-        try:
-            self.loadM3U()
-            self.loadXMLTV()
+        if self.loadM3U() and self.loadXMLTV():
             self.chkSettings()
             return True
-        except:
-            return False
         
         
     def togglePVR(self, state='true'):
@@ -679,8 +567,9 @@ class Channels(object):
 
         if   mode==None: self.mainMenu()
         elif mode == 0:  self.buildLive()
-        elif mode == 1:  self.buildLineup(url)
-        elif mode == 2:  self.buildRecordings()
+        elif mode == 1:  self.buildLive(favorites=True)
+        elif mode == 2:  self.buildLineup(url)
+        elif mode == 3:  self.buildRecordings()
         elif mode == 8:  self.search(name)
         elif mode == 9:  self.playVideo(name, url)
         

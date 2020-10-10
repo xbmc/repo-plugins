@@ -464,16 +464,21 @@ class PlutoTV(object):
        
         
     def playVideo(self, name, url, liz=None):
-        if url.lower() == 'next_show': return notificationDialog(LANGUAGE(30029), time=4000)
-        if url.endswith('?deviceType='): url = url.replace('deviceType=','deviceType=&deviceMake=&deviceModel=&&deviceVersion=unknown&appVersion=unknown&deviceDNT=0&userId=&advertisingId=&app_name=&appName=&buildVersion=&appStoreUrl=&architecture=&includeExtendedEvents=false')#todo lazy fix replace
-        if 'sid' not in url: url = url.replace('deviceModel=&','deviceModel=&' + LANGUAGE(30022)%(getUUID()))
-        url = url.replace('deviceType=&','deviceType=web&').replace('deviceMake=&','deviceMake=Chrome&') .replace('deviceModel=&','deviceModel=Chrome&').replace('appName=&','appName=web&')#todo replace with regex!
-        log('playVideo, url = %s'%url)
-        if liz is None: liz = xbmcgui.ListItem(name, path=url)
-        if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream() and not DEBUG:
-            liz.setProperty('inputstreamaddon','inputstream.adaptive')
-            liz.setProperty('inputstream.adaptive.manifest_type','hls')
-        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
+        if url.lower() == 'next_show': 
+            found = False
+            liz   = xbmcgui.ListItem(name)
+            return notificationDialog(LANGUAGE(30029), time=4000)
+        else:
+            found = True
+            if url.endswith('?deviceType='): url = url.replace('deviceType=','deviceType=&deviceMake=&deviceModel=&&deviceVersion=unknown&appVersion=unknown&deviceDNT=0&userId=&advertisingId=&app_name=&appName=&buildVersion=&appStoreUrl=&architecture=&includeExtendedEvents=false')#todo lazy fix replace
+            if 'sid' not in url: url = url.replace('deviceModel=&','deviceModel=&' + LANGUAGE(30022)%(getUUID()))
+            url = url.replace('deviceType=&','deviceType=web&').replace('deviceMake=&','deviceMake=Chrome&') .replace('deviceModel=&','deviceModel=Chrome&').replace('appName=&','appName=web&')#todo replace with regex!
+            log('playVideo, url = %s'%url)
+            if liz is None: liz = xbmcgui.ListItem(name, path=url)
+            if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream() and not DEBUG:
+                liz.setProperty('inputstreamaddon','inputstream.adaptive')
+                liz.setProperty('inputstream.adaptive.manifest_type','hls')
+        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), found, liz)
 
            
     def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0):
@@ -588,7 +593,7 @@ class PlutoTV(object):
         
         
     def buildM3U(self, channel):
-        litem = '#EXTINF:-1 tvg-chno=%s tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s" radio="%s",%s\n%s'
+        litem = '#EXTINF:-1 tvg-chno="%s" tvg-id="%s" tvg-name="%s" tvg-logo="%s" group-title="%s" radio="%s",%s\n%s'
         logo  = (channel.get('logo',{}).get('path',LOGO) or LOGO)
         group = [channel.get('category','')]
         radio = False#True if "Music" in group else False

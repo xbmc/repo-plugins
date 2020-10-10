@@ -138,6 +138,10 @@ class VtmGoAuth:
         if 'OIDC-999' in response.text:  # Ongeldige login.
             raise InvalidLoginException()
 
+        # Follow login
+        response = session.get('https://login2.vtm.be/authorize/continue?client_id=vtm-go-web', proxies=self._proxies)
+        response.raise_for_status()
+
         # Extract state and code
         matches_state = re.search(r'name="state" value="([^"]+)', response.text)
         if matches_state:

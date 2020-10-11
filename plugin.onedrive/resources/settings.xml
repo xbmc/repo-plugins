@@ -8,6 +8,7 @@
     	<setting label="32017" type="bool" id="ask_resume" default="true" visible="String.IsEmpty(window(home).property(iskrypton))" />
     	<setting label="32001" type="lsep"/>
     	<setting label="32003" type="bool" id="clean_folder" default="true" value="true"/>
+    	<setting label="32019" type="bool" id="no_extension_strm" default="false" value="false"/>
     	<setting label="32002" type="lsep"/>
 		<setting label="32068" type="bool" id="allow_directory_listing" default="true"/>
 		<setting label="32069" type="number" id="port_directory_listing" default="8586"/>

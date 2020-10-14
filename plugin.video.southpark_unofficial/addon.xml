@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.southpark_unofficial" name="South Park" version="0.6.2+matrix.1" provider-name="Deroad">
+<addon id="plugin.video.southpark_unofficial" name="South Park" version="0.6.3+matrix.1" provider-name="Deroad">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
     </requires>

@@ -75,3 +75,7 @@ msgstr "Questo episodio non è ancora stato rilasciato!"
 msgctxt "#30015"
 msgid "Play directly the random episode"
 msgstr "Riproduci direttamente l'episodio casuale"
+
+msgctxt "#30016"
+msgid "Clear cache"
+msgstr "Rimuovi la cache"

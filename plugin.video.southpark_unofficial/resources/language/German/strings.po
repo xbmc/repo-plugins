@@ -57,8 +57,8 @@ msgid "Check your internet connection!"
 msgstr "Prüfe deine Internetverbindung!"
 
 msgctxt "#30011"
-msgid "Banned Episode! It's not available, sorry"
-msgstr "Gebannte Episode! Leider nicht verfügbar, sorry!"
+msgid "It's not available, sorry"
+msgstr "Leider nicht verfügbar, sorry!"
 
 msgctxt "#30012"
 msgid "Enable CC"
@@ -75,3 +75,7 @@ msgstr "Diese Episode ist noch nicht freigegeben!"
 msgctxt "#30015"
 msgid "Play directly the random episode"
 msgstr "Spielen Sie direkt die zufällige Folge"
+
+msgctxt "#30016"
+msgid "Clear cache"
+msgstr "Cache leeren"

@@ -1,6 +1,9 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.3.2 [08-October-2020]
+-Changed the function that determines if the sort column exists
+
 v0.3.1 [25-Sept-2020]
 -Videos are now sorted by PublishedTime rather than the old implicit order
 

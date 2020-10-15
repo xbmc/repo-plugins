@@ -1,3 +1,5 @@
+0.6.3
+- Cleanup, generic european stream and clear cache features.
 0.6.2
 - Use new apis
 - Added back all languages

@@ -37,6 +37,7 @@ PLUGIN_MODE_SEARCH      = "sp:search"
 PLUGIN_MODE_PLAY_EP     = "sp:play"
 PLUGIN_MODE_UNAVAILABLE = "sp:unavailable"
 PLUGIN_MODE_PREMIERE    = "sp:beforepremiere"
+PLUGIN_MODE_CLEARCACHE  = "sp:clearcache"
 
 def log_debug(message):
 	xbmc.log("[sp.addon] {}".format(message), xbmc.LOGDEBUG)
@@ -228,6 +229,17 @@ class SP_Paths(object):
 		if not os.path.isdir(self.TEMPORARY_FOLDER):
 			os.mkdir(self.TEMPORARY_FOLDER, 0o755)
 
+	def clear_cache(self):
+		if KODI_VERSION_MAJOR > 18:
+			dirs, files = xbmcvfs.listdir(self.TEMPORARY_FOLDER)
+			for file in files:
+				xbmcvfs.delete(self.TEMPORARY_FOLDER + "/" + file)
+		else:
+			for file in os.listdir(self.TEMPORARY_FOLDER):
+				fpath = self.TEMPORARY_FOLDER + "/" + file
+				if os.path.isfile(fpath):
+					os.remove(fpath)
+
 	def translate_path(self, path):
 		if KODI_VERSION_MAJOR > 18:
 			return xbmcvfs.translatePath(path)
@@ -238,19 +250,12 @@ class SP_Options(object):
 	def __init__(self, addon):
 		super(SP_Options, self).__init__()
 		self.addon = addon
-		self.AUDIO_AVAILABLE = ["en", "es", "de", "se", "it"]
-		self.VIDEO_QUALITY   = ["high", "low"]
+		self.geolocation = ["en", "es", "de", "se", "eu"]
 
 	def debug(self):
-		log_error("OPTIONS Audio                {0}".format(self.audio(True)))
+		log_error("OPTIONS Geolocation          {0}".format(self.audio(True)))
 		log_error("OPTIONS Show Subtitles       {0}".format(self.show_subtitles()))
 		log_error("OPTIONS Play Random Directly {0}".format(self.playrandom()))
-
-	def geolocation(self, as_string=False):
-		geo = int(self.addon.getSetting('geolocation'))
-		if as_string:
-			return self.GEO_LOCATIONS[geo] 
-		return geo
 
 	def show_subtitles(self):
 		return self.addon.getSetting('cc') == "true"
@@ -258,7 +263,7 @@ class SP_Options(object):
 	def audio(self, as_string=False):
 		au = int(self.addon.getSetting('audio_lang'))
 		if as_string:
-			return self.AUDIO_AVAILABLE[au] 
+			return self.geolocation[au] 
 		return au
 
 	def playrandom(self):
@@ -479,6 +484,8 @@ class SouthParkAddon(object):
 			self.notify(self.i18n.WARNING_UNAVAILABLE_EPISODE, WARNING_TIMEOUT_LONG)
 		elif kodi.PARAM_MODE == PLUGIN_MODE_PREMIERE:
 			self.notify(self.i18n.WARNING_PREMIERE, WARNING_TIMEOUT_LONG)
+		elif kodi.PARAM_MODE == PLUGIN_MODE_CLEARCACHE:
+			self.paths.clear_cache()
 		elif kodi.PARAM_MODE == '':
 			self.create_menu()
 		else:

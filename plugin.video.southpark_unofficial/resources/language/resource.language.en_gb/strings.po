@@ -75,3 +75,7 @@ msgstr ""
 msgctxt "#30015"
 msgid "Play directly the random episode"
 msgstr ""
+
+msgctxt "#30016"
+msgid "Clear cache"
+msgstr ""

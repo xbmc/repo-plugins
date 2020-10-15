@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<setting default="0" id="audio_lang" label="30000" type="enum" values="EN|ES|DE|SE"/>
-	<setting default="0" id="geolocation" label="30001" type="enum" values="US|UK|ES|DE|IT|SE"/>
+	<setting default="0" id="audio_lang" label="30001" type="enum" values="North America[EN]|North America[ES]|Germany|Sweden|Europe"/>
 	<setting default="false" id="cc" label="30012" type="bool"/>
 	<setting default="false" id="playrandom" label="30015" type="bool"/>
+	<setting action="RunPlugin(plugin://$ID?mode=sp:clearcache)" option="close" label="30016" type="action"/>
 </settings>

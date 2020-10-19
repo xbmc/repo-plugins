@@ -1,19 +1,18 @@
 # coding=utf-8
 
 ##################################
-# Zappylib V1.0.6
+# Zappylib V1.0.7
 # ZapiSession
 # (c) 2014-2020 Pascal Nançoz
 ##################################
 
-import os, re, base64
+import os, re, base64, uuid
 import urllib, urllib2
 import json
 
 class ZapiSession:
 	ZAPI_URL = 'https://zattoo.com'
-	ZAPI_UUID = 'd7512e98-38a0-4f01-b820-5a5cf98141fe'
-	ZAPI_APP_VERSION = '2.12.3'
+	ZAPI_UUID = None
 	CACHE_ENABLED = False
 	CACHE_FOLDER = None
 	COOKIE_FILE = None
@@ -29,6 +28,7 @@ class ZapiSession:
 			self.CACHE_FOLDER = cacheFolder
 			self.COOKIE_FILE = os.path.join(cacheFolder, 'session.cache')
 			self.ACCOUNT_FILE = os.path.join(cacheFolder, 'account.cache')
+		self.ZAPI_UUID = uuid.uuid4()
 		self.HttpHandler = urllib2.build_opener()
 		self.HttpHandler.addheaders = [('Content-type', 'application/x-www-form-urlencoded'),('Accept', 'application/json')]
 
@@ -98,14 +98,6 @@ class ZapiSession:
 
 	def fetch_appToken(self):
 		try:
-			handle = urllib2.urlopen(self.ZAPI_URL + '/int')
-			html = handle.read()
-			reMatch = re.search("window\.appToken\s*=\s*'(.*)'", html)
-			if reMatch is not None:
-				return reMatch.group(1)
-		except Exception:
-			pass
-		try:
 			handle = urllib2.urlopen(self.ZAPI_URL + '/token-46a1dfccbd4c3bdaf6182fea8f8aea3f.json')
 			resultData = json.loads(handle.read())
 			return resultData['session_token']
@@ -115,12 +107,11 @@ class ZapiSession:
 		
 
 	def announce(self):
-		api = '/zapi/v2/session/hello'
+		api = '/zapi/session/hello'
 		params = {"client_app_token" : self.fetch_appToken(),
 				  "uuid"    : self.ZAPI_UUID,
 				  "lang"    : "en",
-				  "app_version" : self.ZAPI_APP_VERSION,
-				  "format"	: "json"}
+				  "format"  : "json"}
 		resultData = self.exec_zapiCall(api, params, 'session')
 		return resultData is not None
 

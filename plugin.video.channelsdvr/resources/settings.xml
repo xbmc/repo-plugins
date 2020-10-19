@@ -6,7 +6,8 @@
     <setting id="Enable_Debugging" type="bool"      label="30000" default="false"/>
     <setting id="Enable_TS"        type="bool"      label="30006" default="false"/>
     <setting id="Enable_M3UXMLTV"  type="bool"      label="30004" default="false"/>
-    <setting id="Enable_Config"    type="bool"      label="30011" default="false" visible="eq(-1,true)" />     
-    <setting id="User_Folder"      type="folder"    label="30005" default="special://profile/addon_data/plugin.video.channelsdvr/" source="files" visible="eq(-2,true)" />    
+    <setting id="Build_Favorites"  type="bool"      label="30016" default="false" visible="eq(-1,true)" subsetting="true"/>
+    <setting id="Enable_Config"    type="bool"      label="30011" default="false" visible="eq(-2,true)" subsetting="true"/>
+    <setting id="User_Folder"      type="folder"    label="30005" default="special://profile/addon_data/plugin.video.channelsdvr/" source="files" visible="eq(-3,true)" subsetting="true"/>
   </category>
 </settings>

@@ -871,16 +871,18 @@ class Channel(chn_class.Channel):
             title = "%s: %s - %s (%02d:%02d - %02d:%02d)" \
                     % (channel_title, title, episode,
                        start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
-            description = "{:02d}:{:02d} - {:02d}:{:02d}: {} - {}\n\n{}".format(
-                start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min,
-                title, episode or "", description)
+            # Hide the description for now
+            # description = "{:02d}:{:02d} - {:02d}:{:02d}: {} - {}\n\n{}".format(
+            #     start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min,
+            #     title, episode or "", description)
         else:
             title = "%s: %s (%02d:%02d - %02d:%02d)" \
                     % (channel_title, title,
                        start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
-            description = "{:02d}:{:02d} - {:02d}:{:02d}: {}\n\n{}".format(
-                start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min,
-                title, description)
+            # Hide the description for now
+            # description = "{:02d}:{:02d} - {:02d}:{:02d}: {}\n\n{}".format(
+            #     start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min,
+            #     title, description)
 
         channel_item = MediaItem(
             title,

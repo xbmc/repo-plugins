@@ -4,7 +4,14 @@ import os
 
 import xbmcgui
 import xbmc
+import xbmcvfs
 import xbmcaddon
+
+# Code to map the old translatePath
+try:
+    translatePath = xbmcvfs.translatePath
+except AttributeError:
+    translatePath = xbmc.translatePath
 
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.backtothefuture import unichr
@@ -378,7 +385,7 @@ class XbmcWrapper:
             title = LanguageHelper.get_localized_string(title)
 
         if default_path is None:
-            default_path = xbmc.translatePath("special://home")
+            default_path = translatePath("special://home")
 
         browse_dialog = xbmcgui.Dialog()
         dest_folder = browse_dialog.browse(dialog_type, title, 'files', mask, False, False, default_path)

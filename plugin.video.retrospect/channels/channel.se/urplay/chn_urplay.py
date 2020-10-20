@@ -6,11 +6,11 @@ from resources.lib import chn_class
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.helpers.subtitlehelper import SubtitleHelper
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.parserdata import ParserData
 from resources.lib.regexer import Regexer
-from resources.lib.helpers import subtitlehelper
 from resources.lib.logger import Logger
 from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -34,7 +34,7 @@ class Channel(chn_class.Channel):
         self.noImage = "urplayimage.png"
 
         # setup the urls
-        self.mainListUri = "https://urplay.se/api/bff/v1/search?product_type=series&rows=10000&start=0"
+        self.mainListUri = "#mainlist_merge"
         self.baseUrl = "https://urplay.se"
         self.swfUrl = "https://urplay.se/assets/jwplayer-6.12-17973009ab259c1dea1258b04bde6e53.swf"
 
@@ -42,7 +42,7 @@ class Channel(chn_class.Channel):
         self._add_data_parser(self.mainListUri, json=True,
                               name="Show parser with categories",
                               match_type=ParserData.MatchExact,
-                              preprocessor=self.add_categories_and_search,
+                              preprocessor=self.merge_add_categories_and_search,
                               parser=["results"], creator=self.create_episode_json_item)
 
         # Match Videos (programs)
@@ -59,7 +59,8 @@ class Channel(chn_class.Channel):
         self._add_data_parser("*", updater=self.update_video_item)
 
         # Categories
-        cat_reg = r'<a[^>]+href="(?<url>/blad[^"]+/(?<slug>[^"]+))"[^>]*>(?<title>[^<]+)<'
+        cat_reg = r'<a[^>]+href="(?<url>/blad[^"]+/(?<slug>[^"]+))"[^>]*>' \
+                  r'(?:<svg[\w\W]{0,2000}?</svg>)?(?<title>[^<]+)<'
         cat_reg = Regexer.from_expresso(cat_reg)
         self._add_data_parser("https://urplay.se/", name="Category parser",
                               match_type=ParserData.MatchExact,
@@ -67,8 +68,13 @@ class Channel(chn_class.Channel):
                               creator=self.create_category_item)
 
         self._add_data_parsers(["https://urplay.se/api/bff/v1/search?play_category",
-                                "https://urplay.se/api/bff/v1/search?response_type=category"],
+                                "https://urplay.se/api/bff/v1/search?main_genre",
+                                "https://urplay.se/api/bff/v1/search?response_type=category",
+                                "https://urplay.se/api/bff/v1/search?type=programradio",
+                                "https://urplay.se/api/bff/v1/search?age=",
+                                "https://urplay.se/api/bff/v1/search?response_type=limited"],
                                name="Category content", json=True,
+                               preprocessor=self.merge_category_items,
                                parser=["results"], creator=self.create_json_item)
 
         # Searching
@@ -82,28 +88,155 @@ class Channel(chn_class.Channel):
         #===========================================================================================
         # non standard items
         self.__videoItemFound = False
+
+        # There is either a slug lookup or an url lookup
         self.__cateogory_slugs = {
-            "dokumentarfilmer": "dokument%C3%A4rfilmer",
-            "forelasningar": "f%C3%B6rel%C3%A4sningar",
-            "kultur-och-historia": "kultur%20och%20historia",
-            "reality-och-livsstil": "reality%20och%20livsstil",
-            "samhalle": "samh%C3%A4lle"
         }
+
         self.__cateogory_urls = {
-            "radio": "https://urplay.se/api/bff/v1/search?response_type=category"
-                     "&singles_and_series=true"
-                     "&rows=1000&start=0"
-                     "&type=programradio&view=title",
-            "syntolkat": "https://urplay.se/api/bff/v1/search?response_type=category"
-                         "&singles_and_series=true"
-                         "&rows=1000&start=0"
-                         "&view=title"
-                         "&with_audio_description=true",
-            "teckensprak": "https://urplay.se/api/bff/v1/search?response_type=category"
-                           "&language=sgn-SWE"
-                           "&rows=1000&start=0"
-                           "&view=title"                         
-                           "&singles_and_series=true&view=title"
+            "alla-program":
+                "https://urplay.se/api/bff/v1/search?"
+                "response_type=limited&"
+                "product_type=series&"
+                "rows={}&start={}&view=title",
+
+            "barn":
+                "https://urplay.se/api/bff/v1/search?"
+                "age=children&"
+                "platform=urplay&"
+                "rows={}&"
+                "singles_and_series=true&"
+                "start={}"
+                "&view=title",
+
+            "dokumentarfilmer":
+                "https://urplay.se/api/bff/v1/search?"
+                "main_genre[]=dokument%C3%A4rfilm&main_genre[]=dokument%C3%A4rserie&"
+                # "platform=urplay&"
+                "singles_and_series=true&view=title&"
+                "rows={}&"
+                "singles_and_series=true&"
+                "start={}"
+                "&view=title",
+
+            "drama":
+                "https://urplay.se/api/bff/v1/search?"
+                "main_genre[]=drama&main_genre[]=kortfilm&main_genre[]=fiktiva%20ber%C3%A4ttelser&"
+                "platform=urplay&"
+                "rows={}&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+
+            "forelasningar":
+                "https://urplay.se/api/bff/v1/search?"
+                "main_genre[]=f%C3%B6rel%C3%A4sning&main_genre[]=panelsamtal&"
+                "platform=urplay&"
+                "rows={}&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+
+            "halsa-och-relationer":
+                "https://urplay.se/api/bff/v1/search?"
+                "main_genre_must_not[]=forelasning&"
+                "main_genre_must_not[]=panelsamtal&"
+                "platform=urplay&"
+                "rows={}&"
+                "sab_category=kropp%20%26%20sinne&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+            
+            "kultur-och-historia":
+                "https://urplay.se/api/bff/v1/search?"
+                "main_genre_must_not[]=forelasning&main_genre_must_not[]=panelsamtal&"
+                "platform=urplay&"
+                "rows={}&"
+                "sab_category=kultur%20%26%20historia&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+
+            "natur-och-resor":
+                "https://urplay.se/api/bff/v1/search?"
+                "main_genre_must_not[]=forelasning&main_genre_must_not[]=panelsamtal&"
+                "platform=urplay&"
+                "rows={}&"
+                "sab_category=natur%20%26%20resor&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+
+            "radio":
+                "https://urplay.se/api/bff/v1/search?"
+                "type=programradio&"
+                "platform=urplay&"
+                "rows={}&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+
+            "samhalle":
+                "https://urplay.se/api/bff/v1/search?"
+                "main_genre_must_not[]=forelasning&main_genre_must_not[]=panelsamtal&"
+                "platform=urplay&"
+                "rows={}&"
+                "sab_category=samh%C3%A4lle&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+
+            "sprak":
+                "https://urplay.se/api/bff/v1/search?"
+                "main_genre_must_not[]=forelasning&main_genre_must_not[]=panelsamtal&"
+                "platform=urplay&"
+                "rows={}&"
+                "sab_category=spr%C3%A5k&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+
+            "syntolkat":
+                "https://urplay.se/api/bff/v1/search?"
+                "response_type=category&"
+                "is_audio_described=true&"
+                "platform=urplay&"
+                "rows={}&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+
+            "teckensprak":
+                "https://urplay.se/api/bff/v1/search?"
+                "response_type=category&"
+                "language=sgn-SWE&"
+                "platform=urplay&"
+                "rows={}&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+
+            "utbildning-och-media":
+                "https://urplay.se/api/bff/v1/search?"
+                "main_genre_must_not[]=forelasning&"
+                "main_genre_must_not[]=panelsamtal&"
+                "platform=urplay&"
+                "rows={}&"
+                "sab_category=utbildning%20%26%20media&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title",
+
+            "vetenskap":
+                "https://urplay.se/api/bff/v1/search?"
+                "main_genre_must_not[]=forelasning&main_genre_must_not[]=panelsamtal&"
+                "platform=urplay&"
+                "rows={}&"
+                "sab_category=vetenskap%20%26%20teknik&"
+                "singles_and_series=true&"
+                "start={}&"
+                "view=title"
         }
 
         self.__timezone = pytz.timezone("Europe/Amsterdam")
@@ -114,6 +247,24 @@ class Channel(chn_class.Channel):
 
         # ====================================== Actual channel setup STOPS here ===================
         return
+
+    def merge_category_items(self, data):
+        """ Merge the multipage category result items into a single list.
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        items = []
+        url = self.parentItem.url
+        if "{" not in url:
+            return data, items
+
+        data = self.__iterate_results(url, max_iterations=10, results_per_page=150)
+        return data, items
 
     def create_category_item(self, result_set):
         """ Creates a MediaItem of type 'folder' using the result_set from the regex.
@@ -134,21 +285,16 @@ class Channel(chn_class.Channel):
 
         slug = result_set["slug"]
         url = self.__cateogory_urls.get(slug)
-        slug = self.__cateogory_slugs.get(slug, slug)
 
         if url is None:
-            result_set["url"] = "https://urplay.se/api/bff/v1/search?play_category={}" \
-                                "&response_type=category" \
-                                "&rows=1000" \
-                                "&singles_and_series=true" \
-                                "&start=0" \
-                                "&view=title".format(slug)
-        else:
-            result_set["url"] = url
+            Logger.warning("Missing category in list: %s", slug)
+            return None
 
+        result_set["url"] = url
         return chn_class.Channel.create_folder_item(self, result_set)
 
-    def add_categories_and_search(self, data):
+    # noinspection PyUnusedLocal
+    def merge_add_categories_and_search(self, data):
         """ Adds some generic items such as search and categories to the main listing.
 
         The return values should always be instantiated in at least ("", []).
@@ -162,7 +308,15 @@ class Channel(chn_class.Channel):
 
         Logger.info("Performing Pre-Processing")
         items = []
-        max_items = 200
+        max_items = 150
+
+        # merge the main list items:
+        data = self.__iterate_results(
+            "https://urplay.se/api/bff/v1/search?product_type=series&rows={}&start={}",
+            results_per_page=max_items,
+            max_iterations=11
+        )
+
         categories = {
             LanguageHelper.Popular: "https://urplay.se/api/bff/v1/search?product_type=program&query=&rows={}&start=0&view=most_viewed".format(max_items),
             LanguageHelper.MostRecentEpisodes: "https://urplay.se/api/bff/v1/search?product_type=program&rows={}&start=0&view=published".format(max_items),
@@ -424,108 +578,40 @@ class Channel(chn_class.Channel):
 
         data = UriHandler.open(item.url, proxy=self.proxy)
         # Extract stream JSON data from HTML
-        streams = Regexer.do_regex(self.mediaUrlRegex, data)
+        streams = Regexer.do_regex(r'Player"[^>]+data-react-props="({[^"]+})"', data)
         json_data = streams[0]
+        json_data = HtmlEntityHelper.convert_html_entities(json_data)
         json = JsonHelper(json_data, logger=Logger.instance())
         Logger.trace(json.json)
 
         item.MediaItemParts = []
-        part = item.create_new_empty_media_part()
-
-        streams = {
-            # No longer used I think
-            "file_flash": 900,
-            "file_mobile": 750,
-            "file_hd": 2000,
-            "file_html5": 850,
-            "file_html5_hd": 2400,
-
-            'file_rtmp': 900,
-            'file_rtmp_hd': 2400,
-            'file_http_sub': 750,
-            'file_http': 900,
-            'file_http_sub_hd': 2400,
-            'file_http_hd': 2500
-        }
-
-        # u'file_rtmp_hd': u'urplay/mp4: 178000-178999/178963-7.mp4',
-        # u'file_rtmp': u'urplay/mp4: 178000-178999/178963-11.mp4',
-        #
-        # u'file_http': u'urplay/_definst_/mp4: 178000-178999/178963-11.mp4/',
-        # u'file_http_sub_hd': u'urplay/_definst_/mp4: 178000-178999/178963-25.mp4/',
-        # u'file_http_sub': u'urplay/_definst_/mp4: 178000-178999/178963-28.mp4/',
-        # u'file_http_hd': u'urplay/_definst_/mp4: 178000-178999/178963-7.mp4/',
 
         # generic server information
-        proxy = json.get_value("streaming_config", "streamer", "redirect")
-        if proxy is None:
-            proxy_data = UriHandler.open("https://streaming-loadbalancer.ur.se/loadbalancer.json",
-                                         proxy=self.proxy, no_cache=True)
-            proxy_json = JsonHelper(proxy_data)
-            proxy = proxy_json.get_value("redirect")
+        proxy_data = UriHandler.open("https://streaming-loadbalancer.ur.se/loadbalancer.json",
+                                     proxy=self.proxy, no_cache=True)
+        proxy_json = JsonHelper(proxy_data)
+        proxy = proxy_json.get_value("redirect")
         Logger.trace("Found RTMP Proxy: %s", proxy)
 
-        rtmp_application = json.get_value("streaming_config", "rtmp", "application")
-        Logger.trace("Found RTMP Application: %s", rtmp_application)
+        stream_infos = json.get_value("currentProduct", "streamingInfo")
+        part = item.create_new_empty_media_part()
+        for stream_type, stream_info in stream_infos.items():
+            Logger.trace(stream_info)
+            default_stream = stream_info.get("default", False)
+            bitrates = {"mp3": 400, "m4a": 250, "sd": 1200, "hd": 2000, "tt": None}
+            for quality, bitrate in bitrates.items():
+                stream = stream_info.get(quality)
+                if stream is None:
+                    continue
+                stream_url = stream["location"]
+                if quality == "tt":
+                    part.Subtitle = SubtitleHelper.download_subtitle(
+                        stream_url, format="webvtt", proxy=self.proxy)
+                    continue
 
-        # find all streams
-        for stream_type in streams:
-            if stream_type not in json.json:
-                Logger.debug("%s was not found as stream.", stream_type)
-                continue
-
-            bitrate = streams[stream_type]
-            stream_url = json.get_value(stream_type)
-            Logger.trace(stream_url)
-            if not stream_url:
-                Logger.debug("%s was found but was empty as stream.", stream_type)
-                continue
-
-            if stream_url.startswith("se/") or ":se/" in stream_url:
-                # or json.get_value("only_in_sweden"): -> will be in the future
-
-                only_sweden = True
-                Logger.warning("Streams are only available in Sweden: onlySweden=%s", only_sweden)
-                # No need to replace the se/ part. Just log.
-                # streamUrl = streamUrl.replace("se/", "", 1)
-
-            # although all urls can be handled via RTMP, let's not do that and make
-            # the HTTP ones HTTP
-            always_rtmp = False
-            if always_rtmp or "_rtmp" in stream_type:
-                url = "rtmp://%s/%s/?slist=mp4:%s" % (proxy, rtmp_application, stream_url)
-                url = self.get_verifiable_video_url(url)
-            elif "_http" in stream_type:
+                bitrate = bitrate if default_stream else bitrate + 1
                 url = "https://%s/%smaster.m3u8" % (proxy, stream_url)
-            else:
-                Logger.warning("Unsupported Stream Type: %s", stream_type)
-                continue
-            part.append_media_stream(url.strip("/"), bitrate)
-
-        # get the subtitles
-        captions = json.get_value("subtitles")
-        subtitle = None
-        for caption in captions:
-            language = caption["label"]
-            default = caption["default"]
-            url = caption["file"]
-            if url.startswith("//"):
-                url = "https:%s" % (url, )
-            Logger.debug("Found subtitle language: %s [Default=%s]", language, default)
-            if "Svenska" in language:
-                Logger.debug("Selected subtitle language: %s", language)
-                file_name = caption["file"]
-                file_name = file_name[file_name.rindex("/") + 1:] + ".srt"
-                if url.endswith("vtt"):
-                    subtitle = subtitlehelper.SubtitleHelper.download_subtitle(
-                        url, file_name, "webvtt", proxy=self.proxy)
-                else:
-                    subtitle = subtitlehelper.SubtitleHelper.download_subtitle(
-                        url, file_name, "ttml", proxy=self.proxy)
-                break
-
-        if subtitle is not None:
-            part.Subtitle = subtitle
+                part.append_media_stream(url, bitrate)
 
         item.complete = True
         return item
@@ -563,3 +649,34 @@ class Channel(chn_class.Channel):
             item.set_info_label("duration", result_set["duration"] * 60)
             item.type = "video"
         return item
+
+    def __iterate_results(self, url_format, results_per_page=150, max_iterations=10):
+        """ Retrieves the full dataset for a multi-set search action.
+
+        :param str url_format:             The url format with start and count placeholders
+        :param int results_per_page:       The maximum results per request
+        :param int max_iterations:         The maximum number of iterations
+
+        :returns A Json response with all results
+        :rtype JsonHelper
+
+        Url format should be like:
+            https://urplay.se/api/bff/v1/search?product_type=series&rows={}&start={}
+
+        """
+
+        results = None
+        for p in range(0, max_iterations):
+            url = url_format.format(results_per_page, p * results_per_page)
+            data = UriHandler.open(url)
+            json_data = JsonHelper(data)
+            result_items = json_data.get_value("results", fallback=[])
+            if results is None:
+                results = json_data
+            else:
+                results.json["results"] += result_items
+
+            if len(result_items) < results_per_page:
+                break
+
+        return results or ""

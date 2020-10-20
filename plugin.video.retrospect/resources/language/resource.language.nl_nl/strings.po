@@ -706,6 +706,11 @@ msgid "Finnish"
 msgstr "Fins"
 
 # empty strings from id 30412 to 30499
+
+msgctxt "#30499"
+msgid "Contains all the Retrospect favourites that are available across all channels."
+msgstr "Bevat al de Retrospect favorieten de beschikbaar zijn binnen de aanwezige kanalen."
+
 msgctxt "#30500"
 msgid "All Favourites"
 msgstr "Alle favorieten"

@@ -34,8 +34,7 @@ class OneDriveAddon(CloudDriveAddon):
         return self._provider
     
     def get_custom_drive_folders(self, driveid):
-        self._account_manager.load()
-        drive = self._account_manager.get_drive_by_driveid(driveid)
+        drive = self._account_manager.get_by_driveid('drive', driveid)
         drive_folders = []
         if drive['type'] == 'personal':
             if self._content_type == 'image':

@@ -189,7 +189,7 @@ class OneDrive(Provider):
         files = self.get(search_url)
         for f in files['value']:
             subtitle = self._extract_item(f, include_download_info)
-            if subtitle['name_extension'] == 'srt' or subtitle['name_extension'] == 'sub' or subtitle['name_extension'] == 'sbv':
+            if subtitle['name_extension'].lower() in ('srt','idx','sub','sbv','ass','ssa','smi'):
                 subtitles.append(subtitle)
         return subtitles
                 

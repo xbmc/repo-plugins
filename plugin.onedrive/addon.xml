@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.onedrive" name="OneDrive" version="2.1.6" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.onedrive" name="OneDrive" version="2.2.2" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0" />
-		<import addon="script.module.clouddrive.common" version="1.2.8"/>
+		<import addon="script.module.clouddrive.common" version="1.3.2"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>image audio video</provides>
@@ -30,32 +30,18 @@ Play all your media from OneDrive including Videos, Music and Pictures.
   - שימוש ב-OneDrive כמקור
   - תוכנית זו אינה מזוהה עם או בחסות מיקרוסופט.
 		</description>		
-		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<license>GPL-3.0-or-later</license>
 		<source>https://github.com/cguZZman/plugin.onedrive</source>
 		<forum>https://github.com/cguZZman/plugin.onedrive/issues</forum>
 		<website>https://addons.kodi.tv/show/plugin.onedrive</website>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.jpg</fanart>
+		</assets>
 		<news>
-v2.1.6 released Sep 20, 2018:
-- Resume points and watched status for strm files in library
-v2.1.5 released Sep 12, 2018:
-- Sign-in fix
-v2.1.4 released Sep 10, 2018:
-- Subtitles assigned in source mode
-- Fixes
-v2.1.3 released Aug 24, 2018:
-- strm files saved in the cloud are exported as is.
-v2.1.2 released Aug 15, 2018:
-- Auto export and watch export folder.
-v2.1.1 released Jul 14, 2018:
-- Source mode fix
-v2.1.0 released Jul 11, 2018:
-- New mode for source and download services. Both moved to respective addons.
-- Source service fixed.
-v2.0.1 released Nov 30, 2017:
-- Bug fixes
-v2.0.0 released Nov 06, 2017:
-- Remake using script.module.clouddrive.common library
-- Fix OneDrive for Business functionality
+v2.2.2 released Oct 11, 2020:
+- New export functionality
+- Multiple fixes
 		</news>
 		<disclaimer lang="en_GB">
 This cloud drive addon uses a third-party authentication mechanism commonly known as OAuth 2.0.

@@ -3,7 +3,10 @@
     {
       "guid": "16A5C86D-52C5-48C1-B894-1CC23EBF1CD8",
       "name": "Eén",
-      "description": "Online uitzendingen van www.een.be.",
+      "description": {
+        "en": "Online broadcasts of www.een.be.",
+        "nl": "Online uitzendingen van www.een.be."
+      },
       "icon": "eenlarge.png",
       "category": "National",
       "channelcode": null,

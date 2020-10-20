@@ -3,7 +3,10 @@
     {
       "guid": "21D74788-8084-11E0-9A28-39E64824019B",
       "name": "MSDN Channel 9",
-      "description": "Channel 9 videos @ MSDN.com",
+      "description": {
+        "en": "Channel 9 provides videos for developers, delivered by the people who work behind the scenes at Microsoft.\n\nChannel 9 is a community. We bring forward the people behind our products and connect them with those who use them.\nWe think there is a great future in software and we're excited about it. We want the community to participate in the ongoing conversation.\nThis is the heart of Channel 9. We talk about our work but listen to the customer.",
+        "nl": "Channel 9 biedt video's voor ontwikkelaars aan, geleverd door de mensen die achter de schermen bij Microsoft werken.\n\nChannel 9 is een community. We brengen de mensen achter onze producten naar voren en brengen ze in contact met degenen die deze producten gebruiken.\nWij vinden dat software een geweldige toekomst biedt en zijn er enthousiast over. We willen dat de gemeenschap hieraan deelneemt.\nDit is het hart van Channel 9. We praten over ons werk maar luisteren naar de klant."
+      },
       "icon": "channel9large.png",
       "category": "Tech",
       "channelcode": "channel9",

@@ -45,7 +45,9 @@ class ChannelListAction(AddonAction):
                 icon = Config.icon
                 fanart = Config.fanart
                 name = LanguageHelper.get_localized_string(LanguageHelper.AllFavouritesId)
+                description = LanguageHelper.get_localized_string(LanguageHelper.AllFavouritesDescriptionId)
                 kodi_item = xbmcgui.ListItem(name, name)
+                kodi_item.setInfo("video", {"Plot": description})
 
                 # set art
                 try:

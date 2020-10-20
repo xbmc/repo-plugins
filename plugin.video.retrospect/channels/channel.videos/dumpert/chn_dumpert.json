@@ -3,7 +3,10 @@
     {
       "guid": "80726A74-42F3-11DD-BBA6-A1F055D89593",
       "name": "Dumpert.nl",
-      "description": "Filmpjes van Dumpert.nl",
+      "description": {
+        "en": "Dumpert.nl: Main sponsor of Dutch attic rooms.\n\nThe place for your daily entertainment. Including the most funny videos and photos for whenever you don't feel like work, study or human contact.",
+        "nl": "Dumpert.nl: Hoofdsponsor van Nederlandse zolderkamers.\n\nDe plek voor je dagelijkse entertainment. Met de leukste filmpjes en foto's voor als je even geen zin hebt in werk, studie of menselijk contact."
+      },
       "icon": "dumperticonlarge.png",
       "category": "Video",
       "channelcode": "dumpert",

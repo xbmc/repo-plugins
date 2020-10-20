@@ -4,6 +4,13 @@ import os
 import xml.dom.minidom
 
 import xbmc
+import xbmcvfs
+
+# Code to map the old translatePath
+try:
+    translatePath = xbmcvfs.translatePath
+except AttributeError:
+    translatePath = xbmc.translatePath
 
 from .version import Version
 
@@ -42,10 +49,10 @@ class Config:
 
     # determine the profile directory, where user data is stored.
     if xbmc.getCondVisibility("system.platform.xbox"):
-        profileDir = os.path.join(xbmc.translatePath("special://profile/script_data/"), addonDir)
+        profileDir = os.path.join(translatePath("special://profile/script_data/"), addonDir)
         profileUri = os.path.join("special://profile/script_data/", addonDir)
     else:
-        profileDir = os.path.join(xbmc.translatePath("special://profile/addon_data/"), addonDir)
+        profileDir = os.path.join(translatePath("special://profile/addon_data/"), addonDir)
         profileUri = os.path.join("special://profile/addon_data/", addonDir)
 
     # the XBMC libs return unicode info, so we need to convert this

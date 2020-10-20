@@ -3,7 +3,11 @@
     {
       "guid": "79569D55-6298-402A-8AF0-A16955EA052F",
       "name": "RTBF",
-      "description": "Émissions de RTBF Auvio",
+      "description": {
+        "en": "Broadcasts of the RTBF Audio.",
+        "fr": "Émissions de RTBF Auvio.",
+        "nl": "Uitzendingen van de RTBF Auvio."
+      },
       "icon": "rtbficon.png",
       "category": "National",
       "channelcode": null,

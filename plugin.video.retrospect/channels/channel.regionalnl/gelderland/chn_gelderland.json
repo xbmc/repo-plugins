@@ -3,7 +3,10 @@
     {
       "guid": "B797D9BA-F06B-11E1-9CD5-9F7D6188709B",
       "name": "Omroep Gelderland",
-      "description": "Omroep Gelderland uitzendinggemist",
+      "description": {
+        "en": "Video on demand for Omroep Gelderland. Always up to date with the latest news from Gelderland.",
+        "nl": "Omroep Gelderland uitzendinggemist. Altijd op de hoogte van het laatste Gelderse nieuws."
+      },
       "icon": "gelderlandlarge.png",
       "category": "Regional",
       "channelcode": "tv1",

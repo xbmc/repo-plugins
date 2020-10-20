@@ -3,7 +3,10 @@
     {
       "guid": "50E04907-8983-4552-A775-E70F3D91FB99",
       "name": "Vier",
-      "description": "Online uitzendingen van www.vier.be.",
+      "description": {
+        "en": "Online video on demand from van www.vier.be.\n\nA username and password can be configured for this channel. This enables you to watch all shows to which you are eligible.",
+        "nl": "Online uitzendingen van www.vier.be.\n\nHet is mogelijk een gebruikersnaam en wachtwoord te configuren voor dit kanaal. Zo is het mogelijk om alle content te bekijken waarvoor het account is gerechtigd."
+      },
       "icon": "viericon.png",
       "category": "National",
       "channelcode": null,
@@ -15,7 +18,10 @@
     {
      "guid": "9F44A86D-D62F-4775-A5BC-B99D1AE038FE",
       "name": "Vijf",
-      "description": "Online uitzendingen van www.vijf.be.",
+      "description": {
+        "en": "Online Online video on demand from www.vijf.be.\n\nA username and password can be configured for this channel. This enables you to watch all shows to which you are eligible.",
+        "nl": "Online uitzendingen van www.vijf.be.\n\nHet is mogelijk een gebruikersnaam en wachtwoord te configuren voor dit kanaal. Zo is het mogelijk om alle content te bekijken waarvoor het account is gerechtigd."
+      },
       "icon": "vijficon.png",
       "category": "National",
       "channelcode": "vijfbe",
@@ -27,7 +33,10 @@
     {
      "guid": "AF79856C-95E1-4181-8636-C479E447F092",
       "name": "Zes",
-      "description": "Online uitzendingen van www.zestv.be.",
+      "description": {
+        "en": "Online Online video on demand from www.zestv.be.\n\nA username and password can be configured for this channel. This enables you to watch all shows to which you are eligible.",
+        "nl": "Online uitzendingen van www.zestv.be.\n\nHet is mogelijk een gebruikersnaam en wachtwoord te configuren voor dit kanaal. Zo is het mogelijk om alle content te bekijken waarvoor het account is gerechtigd."
+      },
       "icon": "zesiconlight.png",
       "category": "National",
       "channelcode": "zesbe",

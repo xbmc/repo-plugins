@@ -3,7 +3,10 @@
     {
       "guid": "8D4EBAE8-F3C6-11DD-92EE-F2FE55D89593",
       "name": "Nickelodeon",
-      "description": "Afleveringen van Nickelodeon",
+      "description": {
+        "en": "The Dutch Nickelodeon channel with all your favorite episodes and clips from shows like SpongeBob, Henry Danger, De Thundermans, Victorious, iCarly and more.",
+        "nl": "Hier vind je nieuwe afleveringen van al je favoriete series en cartoons. Bekijk gratis online videos van al je favoriete Nickelodeon shows SpongeBob, Henry Danger, De Thundermans, Victorious, iCarly en nog veel meer!"
+      },
       "icon": "nickelodeonlarge.png",
       "category": "Kids",
       "channelcode": "nickelodeon",
@@ -14,7 +17,10 @@
     {
       "guid": "47AA717E-F919-11E1-977F-0DEC6188709B",
       "name": "Nickelodeon (Norge)",
-      "description": "Sendinger fra Nickelodeon.no.",
+      "description": {
+        "en": "The Norwegian Nickelodeon channel with episodes and clips from your favorite shows.",
+        "no": "Sendinger fra Nickelodeon.no. Her finner du alle dine favoritt TV-serier og TV-programmer."
+      },
       "icon": "nickelodeonlarge.png",
       "category": "Kids",
       "channelcode": "nickno",

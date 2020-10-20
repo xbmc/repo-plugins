@@ -3,7 +3,10 @@
     {
       "guid": "B7EB69DF-18C4-4935-BA83-0B2A89295178",
       "name": "RTV Drenthe",
-      "description": "RTV Drenthe Uitzendinggemist",
+      "description": {
+        "en": "Video on demand for RTV Drenthe.\n\nRTV Drenthe is thé newssource of the province of Drenthe. They keep the inhabitants of Drenthe up-to-date with the news of the provice.",
+        "nl": "RTV Drenthe Uitzendinggemist.\n\nRTV Drenthe is dé nieuwsbron van de provincie Drenthe. Ze houden de inwoners van Drenthe op de hoogte van het nieuws uit de provincie."
+      },
       "icon": "rtvdrenthelarge.png",
       "category": "Regional",
       "channelcode": "rtvdrenthe",
@@ -14,7 +17,10 @@
     {
       "guid": "B099990E-5749-44FC-A5C5-A40427A9A5C9",
       "name": "RTV Oost",
-      "description": "RTV Oost Uitzendinggemist",
+      "description": {
+        "en": "Video on demand for RTV Oost.\n\nNews and messages from RTV Oost, the regional broadcaster for Overijssel. If something happened in Overijssel, you will see it at RTV Oost.",
+        "nl": "RTV Oost Uitzendinggemist.\n\nNieuws en berichten van RTV Oost, de regionale omroep voor Overijssel. Gebeurt er iets in Overijssel? Dan zie je het bij RTV Oost."
+      },
       "icon": "rtvoostlarge.png",
       "category": "Regional",
       "channelcode": "rtvoost",
@@ -25,7 +31,10 @@
     {
       "guid": "7C40EEE7-40F4-40ED-8A70-FAAB42B7A2B1",
       "name": "RTV Noord",
-      "description": "RTV Noord Uitzendinggemist",
+      "description": {
+        "en": "Video on demand for RTV Noord.\n\nNews, weather sports and opinions at RTV Noord, the regional broadcaster for Groningen.",
+        "nl": "RTV Noord Uitzendinggemist.\n\nNieuws, weer, sport en opinie op RTV Noord, de regionale omroep voor Groningen."
+      },
       "icon": "rtvnoordlarge.png",
       "category": "Regional",
       "channelcode": "rtvnoord",
@@ -36,7 +45,10 @@
     {
       "guid": "AF2B907D-D437-46DB-B802-F946850098FB",
       "name": "RTV Rijnmond",
-      "description": "RTV Rijnmond Uitzendinggemist",
+      "description": {
+        "en": "Video on demand for RTV Rijnmond.\n\n\"We are always on. We are there where it happens. Since 1983 via radio, since 1997 on TV and since 2000 online. We are Rijnmond. We are there!\"",
+        "nl": "RTV Rijnmond Uitzendinggemist.\n\n\"Wij staan altijd aan. Wij zijn daar waar het gebeurt. Sinds 1983 op de radio. Sinds 1997 op tv. Sinds 2000 online. Wij zijn Rijnmond. Wij zijn erbij!\""
+      },
       "icon": "rtvrijnmondlarge.png",
       "category": "Regional",
       "channelcode": "rtvrijnmond",
@@ -47,7 +59,10 @@
     {
       "guid": "EFE57022-9F52-41F9-8775-13CCD001FA56",
       "name": "Omroep West",
-      "description": "Omroep West Uitzendinggemist",
+      "description": {
+        "en": "Video on demand for Omroep West.\n\nThe latest news, weather, traffic from the The Hague region, Zoetermeer, Westland, Delft, Leiden, Alphen aan den Rijn en Gouda.",
+        "nl": "Omroep West Uitzendinggemist.\n\nHet laatste nieuws, weer, verkeer uit regio Den Haag, Zoetermeer, Westland, Delft, Leiden, Alphen aan den Rijn en Gouda."
+      },
       "icon": "omroepwestlarge.png",
       "category": "Regional",
       "channelcode": "omroepwest",
@@ -58,7 +73,10 @@
     {
       "guid": "B2AF5744-4697-44CD-9A54-CFD6A4273207",
       "name": "Omroep Gelderland",
-      "description": "Omroep Gelderland Uitzendinggemist",
+      "description": {
+        "en": "Video on demand for Omroep Gelderland.\n\nKeep up-to-date with the latest news from Gelderland.",
+        "nl": "Omroep Gelderland Uitzendinggemist.\n\nAltijd op de hoogte van het laatste Gelderse nieuws."
+      },
       "icon": "omroepgelderlandlarge.png",
       "category": "Regional",
       "channelcode": "omroepgelderland",
@@ -69,7 +87,10 @@
     {
       "guid": "770D3385-2EC9-4B87-9BC8-3A7190248A9C",
       "name": "Omroep Brabant",
-      "description": "Omroep Brabant Uitzendinggemist",
+      "description": {
+        "en": "Video on demand for Omroep Brabant.\n\nDiscover news videos of all topics in and around Noord-Brabant, crime, entertainment, sports and events from the province.",
+        "nl": "Omroep Brabant Uitzendinggemist.\n\nHier vind je nieuwsvideo's over alle actualiteiten in en rondom Noord-Brabant, misdaad, entertainment, sport en evenementen uit de provincie. In Brabant is Omroep Brabant dé regionale omroep. Omroep Brabant is in alle opzichten de grootste regionale omroep in Nederland. Dagelijks luisteren 340.000 Brabanders naar \"hun\" omroep en kijken 540.000 personen naar de tv-programma's. "
+      },
       "icon": "omroepbrabantlarge.png",
       "category": "Regional",
       "channelcode": "omroepbrabant",
@@ -80,7 +101,10 @@
     {
       "guid": "81CD5339-0D59-4019-9171-12A98815311C",
       "name": "Omrop Fryslân",
-      "description": "Omrop Fryslân Uitzendinggemist",
+      "description": {
+        "en": "Video on demand for Omrop Fryslân.\n\nOmrop Fryslân is the regional broadcaster of Friesland. The broadcaster brings news on the internet, radio and TV.",
+        "nl": "Omrop Fryslân Uitzendinggemist.\n\nOmrop Fryslân is de regionale stjoerder fan Fryslân. De omrop bringt nijs op ynternet, radio en tv."
+      },
       "icon": "omropfryslanlarge.png",
       "category": "Regional",
       "channelcode": "omropfryslan",

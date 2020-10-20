@@ -3,7 +3,10 @@
     {
       "guid": "7C52452A-F2F9-11DD-BE3F-3F7356D89593",
       "name": "MTV.nl",
-      "description": "MTV.nl Episodes",
+      "description": {
+        "en": "Episodes and videos from MTV.nl.",
+        "nl": "Afleveringen en video's van MTV.nl."
+      },
       "icon": "mtvnllarge.png",
       "category": "Video",
       "channelcode": "mtvnl",
@@ -14,7 +17,11 @@
     {
       "guid": "55635AAA-183C-11E2-ABEC-36706188709B",
       "name": "MTV.de",
-      "description": "MTV.de Episodes",
+      "description": {
+        "en": "Episodes and videos from MTV.de.",
+        "de": "Episoden und Videos von MTV.de.",
+        "nl": "Afleveringen en video's vna MTV.de."
+      },
       "icon": "mtvnllarge.png",
       "category": "Video",
       "channelcode": "mtvde",

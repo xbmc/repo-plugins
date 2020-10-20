@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.13"
+        version="5.2.14"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -13,7 +13,7 @@
         <import addon="script.module.inputstreamhelper" version="0.3.5" />
         <import addon="script.module.pyscrypt" version="1.6.2" />
         <import addon="script.module.pyaes" version="1.6.1" />
-        <import addon="resource.images.retrospect" version="1.0.4" />
+        <import addon="resource.images.retrospect" version="1.0.5" />
     </requires>
 
     <extension  point="xbmc.python.pluginsource"
@@ -131,21 +131,25 @@
         <disclaimer lang="sv_SE">Retrospect tillgängliggörs i befintligt skick. Vi tar inget som helst ansvar för möjliga (men högst osannolika) skador på ditt system. Vi tar inte heller ansvar för innehållet som kan ses med detta tillägg eller konsekvenser av att använda tillägget för att se innehållet via innehållsleverantörernas plattformar.</disclaimer>
 
         <license>CC-BY-NC-SA-4.0</license>
-        <language>en nl de se no lt lv fi</language>
-        <news>[B]Retrospect v5.2.13 - Changelog - 2020-09-29[/B]
+        <language>en nl de sv no lt lv fi</language>
+        <news>[B]Retrospect v5.2.14 - Changelog - 2020-10-20[/B]
 
-This update contains fixes for DPlay login, missing items for VRT.nu and 1080p Kijk.nl streams.
+This update introduces a new feature that allows the translation of channel descriptions. This will result in the descriptions to be in the same language as the Kodi GUI. Besides this some minor channel fixes were done for the UR Play (Swedish) and ViaFree (Norwegian) channels.
 
 [B]Framework related[/B]
-_None_
+* Changed: use `xbmcvfs.translatePath` instead of `xbmc.translatePath`
 
 [B]GUI/Settings/Language related[/B]
-_None_
+* Added: Show the channel descriptions in the same language as the Kodi GUI.
 
 [B]Channel related[/B]
-* Fixed: DPlay login broke. Should now work for Swedish IP&#x27;s (Fixes #1426)
-* Fixed: VRT.nu was missing some shows (Fixes #1427)
-* Fixed: Kijk.nl did not have 1080p streams (Fixes #1428)
+* Fixed: TV3 Play (Norge) had missing shows (Fixes #1430)
+* Added: ViaFree (Norge) channel with all ViaFree.no content (See #1430)
+* Fixed: Wrong subtitle language selected for ViaFree (Fixes #1431)
+* Fixed: Hide the description for SVT Play channels (Fixes #1422)
+* Fixed: UR Play (Sweden) not playing (Fixes #1435)
+* Fixed: UR Play (Sweden) main list items were missing (See #1435)
+* Fixed: Categories did not list in UR Play (Sweden) (See #1435 See #1436)
 
         </news>
         <assets>

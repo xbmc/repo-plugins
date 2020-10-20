@@ -7,6 +7,15 @@ import struct
 
 import xbmc
 import xbmcaddon
+import xbmcvfs
+
+# Code to map the old translatePath
+try:
+    translatePath = xbmcvfs.translatePath
+    translate_path_method = "xbmcvfs.translatePath"
+except AttributeError:
+    translatePath = xbmc.translatePath
+    translate_path_method = "xbmc.translatePath"
 
 from resources.lib.logger import Logger
 from resources.lib.environments import Environments
@@ -68,9 +77,11 @@ class EnvController:
             info_string = "%s\n%s: %s" % (info_string, "Path", config.rootDir)
             info_string = "%s\n%s: %s" % (info_string, "ProfilePath", config.profileDir)
             info_string = "%s\n%s: %s" % (info_string, "PathDetection", config.pathDetection)
+            info_string = "%s\n%s: %s" % (info_string, "TranslatePath", translate_path_method)
             info_string = "%s\n%s: %s" % (info_string, "Encoding", sys.getdefaultencoding())
             info_string = "%s\n%s: %s" % (info_string, "Widevine Path", self.widevine_lib())
             info_string = "%s\n%s: %s" % (info_string, "TextureMode", config.textureMode)
+
             if config.textureUrl:
                 info_string = "%s\n%s: %s" % (info_string, "TextureUrl", config.textureUrl)
 
@@ -128,9 +139,9 @@ class EnvController:
             addon = xbmcaddon.Addon(input_stream_adaptive_id)
             decrypter_path_from_settings = addon.getSetting('DECRYPTERPATH')
             if decrypter_path_from_settings:
-                cdm_path = xbmc.translatePath(decrypter_path_from_settings)
+                cdm_path = translatePath(decrypter_path_from_settings)
             else:
-                cdm_path = os.path.join(xbmc.translatePath("special://home/"), "cdm")
+                cdm_path = os.path.join(translatePath("special://home/"), "cdm")
 
             if not os.path.isdir(cdm_path):
                 return "<none>"

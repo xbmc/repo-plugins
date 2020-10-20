@@ -35,10 +35,7 @@ def run_addon():
                                         dual_logger=lambda x, y=4: xbmc.log(x, y))
 
         from resources.lib.urihandler import UriHandler
-
         from resources.lib.addonsettings import AddonSettings
-        AddonSettings.set_language()
-
         from resources.lib.textures import TextureHandler
 
         # update the loglevel

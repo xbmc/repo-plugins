@@ -2,8 +2,11 @@
   "channels": [
     {
       "guid": "887F773F-E4E5-4E80-AD7D-65F627D1CA44",
-      "name": "Apple Movie Trailers",
-      "description": "Trailers from the AMT site.",
+      "name": "iTunes Movie Trailers",
+      "description": {
+        "en": "iTunes Movie Trailers: View the latest movie trailers for many current and upcoming releases.",
+        "nl": "iTunes Movie Trailers: Bekijk de nieuwse film trailers van huidige en toekomstige films"
+      },
       "icon": "amtlarge.png",
       "category": "Video",
       "channelcode": null,

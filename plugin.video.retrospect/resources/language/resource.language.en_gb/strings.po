@@ -692,7 +692,11 @@ msgctxt "#30411"
 msgid "Finnish"
 msgstr ""
 
-# empty strings from id 30412 to 30499
+# empty strings from id 30412 to 30498
+
+msgctxt "#30499"
+msgid "Contains all the Retrospect favourites that are available across all channels."
+msgstr ""
 
 msgctxt "#30500"
 msgid "All Favourites"

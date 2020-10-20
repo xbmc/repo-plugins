@@ -409,16 +409,19 @@ class AddonSettings(object):
 
     #region Language caching
     @staticmethod
-    def set_language():
-        """ Sets the language of the current Plugin run. The value is taken from the Kodi API """
+    def get_gui_language():
+        """ Returns the two character ISO 639-1 value for the Kodi language
 
-        language = xbmc.getLanguage()
-        if AddonSettings.__language_current != language:
-            AddonSettings.__language_strings = {}
-            Logger.info("Setting language from %s to %s", AddonSettings.__language_current, language)
-            AddonSettings.__language_current = language
+        :return: Two character ISO 639-1 value
+        :rtype: str
 
-        return
+        """
+
+        if AddonSettings.__language_current is None:
+            AddonSettings.__language_current = xbmc.getLanguage(xbmc.ISO_639_1, region=False)
+            Logger.info("Setting GUI language to: %s", AddonSettings.__language_current)
+
+        return AddonSettings.__language_current
 
     @staticmethod
     def get_localized_string(string_id):

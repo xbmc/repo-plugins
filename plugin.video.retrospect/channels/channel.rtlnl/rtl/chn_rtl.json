@@ -3,12 +3,14 @@
     {
       "guid": "15D92364-42F4-11DD-AF9B-7BFF55D89593",
       "name": "RTL XL (RTL 4,5,7 &amp; 8)",
-      "description": "Uitzendingen van de zenders RTL 4,5,7 &amp; 8.",
+      "description": {
+        "en": "Broadcasts of the channels RTL 4,5,7 &amp; 8.\n\nWatch all RTL shows and episodes of the past 7 days via RTL XL.\n\n[B]Most of the streams of RTL XL are protected by DRM and can only be streamed from inside The Netherlands.[/B]",
+        "nl": "Uitzendingen van de zenders RTL 4,5,7 &amp; 8.\n\nAlle RTL programma’s 7 dagen terugkijken via RTL XL\n\n[B]De meeste streams van RTL XL zijn beschermd met behulp van DRM en kunnen enkel binnen Nederland worden afgespeeld.[/B]"
+      },
       "icon": "rtl.png",
       "category": "National",
       "sortorder": 4,
       "language": "nl",
-      "message": "De meeste streams van RTL Gemist zijn beschermd met behulp van DRM. Deze items kunnen enkel binnen Nederland worden afgespeeld.",
       "fanart": "rtlfanart.png",
       "adaptiveAddonSelectable": false
     }

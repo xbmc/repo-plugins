@@ -2,7 +2,10 @@
   "channels": [ {
       "guid": "8BFC5538-FB78-11E2-9D7C-61DE6088709B",
       "name": "TWiT.TV",
-      "description": "The TWiT.tv Netcast Network with Leo Laporte features the #1 ranked technology podcast This Week in Tech, along with over 20 other top-ranked online shows.",
+      "description": {
+        "en": "The TWiT.tv Netcast Network with Leo Laporte features the #1 ranked technology podcast 'This Week in Tech', along with over 20 other top-ranked online shows.",
+        "nl": "De TWiT.tv Netcast Network met Leo Laporte verzorgt de #1 technologie postcast 'This Week in Tech' en meer dan 20 andere top beoordeelde online shows."
+      },
       "icon": "twitlarge.png",
       "category": "Tech",
       "channelcode": "twit",

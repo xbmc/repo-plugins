@@ -87,7 +87,7 @@ class Channel(chn_class.Channel):
         elif self.channelCode == "no3":
             self.mainListUri = "https://www.viafree.no/programmer"
             self.noImage = "tv3noimage.png"
-            self.channelId = (1550, 6100, 6101)
+            self.channelId = (1550, 6100, 6101, 8000)
 
         elif self.channelCode == "no4":
             self.mainListUri = "https://www.viafree.no/programmer"
@@ -98,6 +98,11 @@ class Channel(chn_class.Channel):
             self.mainListUri = "https://www.viafree.no/programmer"
             self.noImage = "viasat4noimage.png"
             self.channelId = (1337,)
+
+        elif self.channelCode == "viafreeno":
+            self.mainListUri = "https://www.viafree.no/programmer"
+            self.noImage = "viafreethumb.png"
+            self.channelId = None
 
         self.baseUrl = self.mainListUri.rsplit("/", 1)[0]
         self.searchInfo = {
@@ -815,10 +820,18 @@ class Channel(chn_class.Channel):
         M3u8.set_input_stream_addon_input(stream, self.proxy)
         item.complete = True
 
-        subtitle_urls = embedded_data["subtitles"]
-        if subtitle_urls:
-            subtitle_url = subtitle_urls[0]["link"]["href"]
-            sub_format = subtitle_urls[0].get("data", {}).get("format", "").lower()
+        # Some language codes need translation:
+        languages = {"sv": "se"}
+
+        subtitle_urls = embedded_data["subtitles"] or []
+        for subtitle_info in subtitle_urls:
+            language = subtitle_info.get("data", {}).get("language")
+            language = languages.get(language, language)
+            if not language.lower() == self.language:
+                Logger.trace("Skipping subtitle for language: %s", language)
+                continue
+            sub_format = subtitle_info.get("data", {}).get("format", "").lower()
+            subtitle_url = subtitle_info["link"]["href"]
             part.Subtitle = SubtitleHelper.download_subtitle(subtitle_url, format=sub_format)
 
         return item

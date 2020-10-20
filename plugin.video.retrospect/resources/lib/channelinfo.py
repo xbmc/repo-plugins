@@ -24,18 +24,18 @@ class ChannelInfo(object):
                  ignore=False, fanart=None):
         """ Creates a ChannelInfo object with basic information for a channel
 
-        :param str guid:                    A unique GUID.
-        :param str name:                    The channel name.
-        :param str description:             The channel description.
-        :param str icon:                    Name of the icon.
-        :param str category:                The category it belongs to.
-        :param str path:                    Path of the channel.
-        :param str channel_code:            A code that distinguishes a channel within a module.
-                                             Default is None.
-        :param int sort_order:              The sortorder (0-255). Default is 255.
-        :param str language:                The language of the channel. Default is None.
-        :param bool ignore:                 Should the channel be ignored? Defaults to False
-        :param str fanart:                  A fanart url/path.
+        :param str guid:                        A unique GUID.
+        :param str name:                        The channel name.
+        :param str|dict[str,str] description:   The channel description.
+        :param str icon:                        Name of the icon.
+        :param str category:                    The category it belongs to.
+        :param str path:                        Path of the channel.
+        :param str channel_code:                A code that distinguishes a channel within a module.
+                                                Default is None.
+        :param int sort_order:                  The sortorder (0-255). Default is 255.
+        :param str language:                    The language of the channel. Default is None.
+        :param bool ignore:                     Should the channel be ignored? Defaults to False
+        :param str fanart:                      A fanart url/path.
 
         """
 
@@ -51,7 +51,7 @@ class ChannelInfo(object):
         self.guid = guid
         self.channelName = name
         self.channelCode = channel_code
-        self.channelDescription = description
+        self.channelDescription = description.get(AddonSettings.get_gui_language(), description["en"])
 
         self.category = category
         self.ignore = ignore

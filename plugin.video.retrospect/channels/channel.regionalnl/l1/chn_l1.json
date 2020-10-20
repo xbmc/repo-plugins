@@ -3,7 +3,10 @@
     {
       "guid": "29D36E00-730B-11E2-AD39-B0F06188709B",
       "name": "L1",
-      "description": "L1.nl Uitzendinggemist",
+      "description": {
+        "en": "Video on demand for L1: Regional news, sport, weather and traffic from Limburg, via radio, tv, website and social media and with its motto 'Love for Limburg'.",
+        "nl": "Uitzendinggemist voor L1: Regionaal nieuws, sport, weer en verkeer uit Limburg, via radio, tv, website en social media, onder het motto 'Liefde voor Limburg'. "
+      },
       "icon": "l1large.png",
       "category": "Regional",
       "sortorder": 100,

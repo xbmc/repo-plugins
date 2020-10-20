@@ -3,7 +3,11 @@
     {
       "guid": "98506F58-CD6F-11DE-99BA-187F55D89593",
       "name": "TV4",
-      "description": "Sändningar från TV4 (TV4Play.se).",
+      "description": {
+        "en": "Broadcasts from TV4 (TV4Play.se).",
+        "sv": "Sändningar från TV4 (TV4Play.se).",
+        "nl": "Uitzendingen van TV4 (TV4Play.se)."
+      },
       "icon": "tv4large.png",
       "category": "National",
       "channelcode": "tv4se",
@@ -14,7 +18,10 @@
     {
       "guid": "68E5476E-DC92-4312-9C57-29FCE428EF20",
       "name": "TV4 Play",
-      "description": "Innehåller kanalerna TV4, Sjuan och TV12. Här kan du också söka, lista mest visade avsnitt, se kategorier, titta på livesändningar och lista program utifrån veckodag.",
+      "description": {
+        "en": "Contains the channels TV4, Sjuan and TV12. Here you can also search, list most viewed episodes, see categories, view live broadcasts and list programs by weekday.",
+        "sv": "Innehåller kanalerna TV4, Sjuan och TV12. Här kan du också söka, lista mest visade avsnitt, se kategorier, titta på livesändningar och lista program utifrån veckodag."
+      },
       "icon": "tv4large.png",
       "category": "National",
       "channelcode": "tv4segroup",
@@ -25,7 +32,10 @@
     {
       "guid": "66174057-D5E3-4102-AF46-B2D8E800E0D9",
       "name": "Sjuan",
-      "description": "Sändningar från Sjuan (TV4Play.se).",
+      "description": {
+        "en": "Broadcasts and show from Sjuan (TV4Play.se).",
+        "sv": "Sändningar från Sjuan (TV4Play.se)."
+      },
       "icon": "tv7large.png",
       "category": "National",
       "channelcode": "tv7se",
@@ -36,7 +46,10 @@
     {
       "guid": "F2D31759-71BD-4DD1-A1FB-FF8FD99CE03E",
       "name": "TV12",
-      "description": "Sändningar från TV12 (TV4Play.se).",
+      "description": {
+        "en": "Broadcasts and show from TV12 (TV4Play.se).",
+        "sv": "Sändningar från TV12 (TV4Play.se)."
+      },
       "icon": "tv12large.png",
       "category": "National",
       "channelcode": "tv12se",

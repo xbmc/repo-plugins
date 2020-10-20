@@ -5,6 +5,7 @@ from resources.lib.addonsettings import AddonSettings
 
 class LanguageHelper(object):
     UnknownId = 1
+    AllFavouritesDescriptionId = 30499
     AllFavouritesId = 30500
     FavouriteId = 30501
     FavouritesId = 30502

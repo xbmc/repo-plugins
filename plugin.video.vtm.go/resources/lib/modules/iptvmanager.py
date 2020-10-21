@@ -8,23 +8,30 @@ import logging
 import socket
 from datetime import timedelta
 
+from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
 from resources.lib.vtmgo.vtmgo import VtmGo
 from resources.lib.vtmgo.vtmgoepg import VtmGoEpg
+from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
-_LOGGER = logging.getLogger('iptv-manager')
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class IPTVManager:
     """ Code related to the Kodi PVR integration """
 
-    def __init__(self, kodi, port):
+    def __init__(self, port):
         """ Initialise object
-        :type kodi: resources.lib.kodiwrapper.KodiWrapper
+        :type port: int
         """
-        self._kodi = kodi
-        self._vtm_go = VtmGo(self._kodi)
-        self._vtm_go_epg = VtmGoEpg(self._kodi)
+        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
+                               kodiutils.get_setting('password'),
+                               'VTM',
+                               kodiutils.get_setting('profile'),
+                               kodiutils.get_tokens_path())
+        self._vtm_go = VtmGo(self._auth)
+        self._vtm_go_epg = VtmGoEpg()
         self.port = port
 
     def via_socket(func):  # pylint: disable=no-self-argument
@@ -59,10 +66,10 @@ class IPTVManager:
                 name=channel_data.get('label') if channel_data else channel.name,
                 id=channel_data.get('iptv_id'),
                 preset=channel_data.get('iptv_preset'),
-                logo='special://home/addons/{addon}/resources/logos/{logo}.png'.format(addon=self._kodi.get_addon_id(), logo=channel.key)
+                logo='special://home/addons/{addon}/resources/logos/{logo}.png'.format(addon=kodiutils.addon_id(), logo=channel.key)
                 if channel_data else channel.logo,
-                stream=self._kodi.url_for('play', category='channels', item=channel.channel_id),
-                vod=self._kodi.url_for('play_epg_datetime', channel=channel.key, timestamp='{date}'),
+                stream=kodiutils.url_for('play', category='channels', item=channel.channel_id),
+                vod=kodiutils.url_for('play_epg_datetime', channel=channel.key, timestamp='{date}'),
             ))
 
         return dict(version=1, streams=results)
@@ -100,9 +107,9 @@ class IPTVManager:
                         # epsiode=None,  # Not available in the API
                         genre=broadcast.genre,
                         image=broadcast.image,
-                        stream=self._kodi.url_for('play',
-                                                  category=broadcast.playable_type,
-                                                  item=broadcast.playable_uuid) if broadcast.playable_uuid else None)
+                        stream=kodiutils.url_for('play',
+                                                 category=broadcast.playable_type,
+                                                 item=broadcast.playable_uuid) if broadcast.playable_uuid else None)
                     for broadcast in channel.broadcasts
                 ])
 

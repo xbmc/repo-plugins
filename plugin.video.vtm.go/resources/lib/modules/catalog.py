@@ -5,50 +5,53 @@ from __future__ import absolute_import, division, unicode_literals
 
 import logging
 
-from resources.lib.kodiwrapper import TitleItem
+from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
 from resources.lib.modules.menu import Menu
 from resources.lib.vtmgo.vtmgo import VtmGo, UnavailableException, CACHE_PREVENT, ApiUpdateRequired
+from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
-_LOGGER = logging.getLogger('catalog')
+_LOGGER = logging.getLogger(__name__)
 
 
 class Catalog:
     """ Menu code related to the catalog """
 
-    def __init__(self, kodi):
-        """ Initialise object
-        :type kodi: resources.lib.kodiwrapper.KodiWrapper
-        """
-        self._kodi = kodi
-        self._vtm_go = VtmGo(self._kodi)
-        self._menu = Menu(self._kodi)
+    def __init__(self):
+        """ Initialise object """
+        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
+                               kodiutils.get_setting('password'),
+                               'VTM',
+                               kodiutils.get_setting('profile'),
+                               kodiutils.get_tokens_path())
+        self._vtm_go = VtmGo(self._auth)
+        self._menu = Menu()
 
     def show_catalog(self):
         """ Show the catalog """
         try:
             categories = self._vtm_go.get_categories()
         except ApiUpdateRequired:
-            self._kodi.show_ok_dialog(message=self._kodi.localize(30705))  # The VTM GO Service has been updated...
+            kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return
 
         except Exception as ex:  # pylint: disable=broad-except
             _LOGGER.error("%s", ex)
-            self._kodi.show_ok_dialog(message="%s" % ex)
+            kodiutils.ok_dialog(message="%s" % ex)
             return
 
         listing = []
         for cat in categories:
-            listing.append(TitleItem(
+            listing.append(kodiutils.TitleItem(
                 title=cat.title,
-                path=self._kodi.url_for('show_catalog_category', category=cat.category_id),
+                path=kodiutils.url_for('show_catalog_category', category=cat.category_id),
                 info_dict=dict(
                     plot='[B]{category}[/B]'.format(category=cat.title),
                 ),
             ))
 
         # Sort categories by default like in VTM GO.
-        self._kodi.show_listing(listing, 30003, content='files')
+        kodiutils.show_listing(listing, 30003, content='files')
 
     def show_catalog_category(self, category=None):
         """ Show a category in the catalog
@@ -57,12 +60,12 @@ class Catalog:
         try:
             items = self._vtm_go.get_items(category)
         except ApiUpdateRequired:
-            self._kodi.show_ok_dialog(message=self._kodi.localize(30705))  # The VTM GO Service has been updated...
+            kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return
 
         except Exception as ex:  # pylint: disable=broad-except
             _LOGGER.error("%s", ex)
-            self._kodi.show_ok_dialog(message="%s" % ex)
+            kodiutils.ok_dialog(message="%s" % ex)
             return
 
         listing = []
@@ -71,7 +74,7 @@ class Catalog:
 
         # Sort items by label, but don't put folders at the top.
         # Used for A-Z listing or when movies and episodes are mixed.
-        self._kodi.show_listing(listing, 30003, content='movies' if category == 'films' else 'tvshows', sort=['label', 'year', 'duration'])
+        kodiutils.show_listing(listing, 30003, content='movies' if category == 'films' else 'tvshows', sort=['label', 'year', 'duration'])
 
     def show_catalog_channel(self, channel):
         """ Show a category in the catalog
@@ -80,12 +83,12 @@ class Catalog:
         try:
             items = self._vtm_go.get_items()
         except ApiUpdateRequired:
-            self._kodi.show_ok_dialog(message=self._kodi.localize(30705))  # The VTM GO Service has been updated...
+            kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return
 
         except Exception as ex:  # pylint: disable=broad-except
             _LOGGER.error("%s", ex)
-            self._kodi.show_ok_dialog(message="%s" % ex)
+            kodiutils.ok_dialog(message="%s" % ex)
             return
 
         listing = []
@@ -95,7 +98,7 @@ class Catalog:
 
         # Sort items by label, but don't put folders at the top.
         # Used for A-Z listing or when movies and episodes are mixed.
-        self._kodi.show_listing(listing, 30003, content='tvshows', sort='label')
+        kodiutils.show_listing(listing, 30003, content='tvshows', sort='label')
 
     def show_program(self, program):
         """ Show a program from the catalog
@@ -104,8 +107,8 @@ class Catalog:
         try:
             program_obj = self._vtm_go.get_program(program, cache=CACHE_PREVENT)  # Use CACHE_PREVENT since we want fresh data
         except UnavailableException:
-            self._kodi.show_ok_dialog(message=self._kodi.localize(30717))  # This program is not available in the VTM GO catalogue.
-            self._kodi.end_of_directory()
+            kodiutils.ok_dialog(message=kodiutils.localize(30717))  # This program is not available in the VTM GO catalogue.
+            kodiutils.end_of_directory()
             return
 
         # Go directly to the season when we have only one season
@@ -118,45 +121,45 @@ class Catalog:
         listing = []
 
         # Add an '* All seasons' entry when configured in Kodi
-        if self._kodi.get_global_setting('videolibrary.showallitems') is True:
-            listing.append(TitleItem(
-                title='* %s' % self._kodi.localize(30204),  # * All seasons
-                path=self._kodi.url_for('show_catalog_program_season', program=program, season=-1),
+        if kodiutils.get_global_setting('videolibrary.showallitems') is True:
+            listing.append(kodiutils.TitleItem(
+                title='* %s' % kodiutils.localize(30204),  # * All seasons
+                path=kodiutils.url_for('show_catalog_program_season', program=program, season=-1),
                 art_dict=dict(
                     thumb=program_obj.cover,
                     fanart=program_obj.cover,
                 ),
                 info_dict=dict(
                     tvshowtitle=program_obj.name,
-                    title=self._kodi.localize(30204),  # All seasons
+                    title=kodiutils.localize(30204),  # All seasons
                     tagline=program_obj.description,
                     set=program_obj.name,
                     studio=studio,
-                    mpaa=', '.join(program_obj.legal) if hasattr(program_obj, 'legal') and program_obj.legal else self._kodi.localize(30216),  # All ages
+                    mpaa=', '.join(program_obj.legal) if hasattr(program_obj, 'legal') and program_obj.legal else kodiutils.localize(30216),  # All ages
                 ),
             ))
 
         # Add the seasons
         for season in list(program_obj.seasons.values()):
-            listing.append(TitleItem(
-                title=self._kodi.localize(30205, season=season.number),  # Season {season}
-                path=self._kodi.url_for('show_catalog_program_season', program=program, season=season.number),
+            listing.append(kodiutils.TitleItem(
+                title=kodiutils.localize(30205, season=season.number),  # Season {season}
+                path=kodiutils.url_for('show_catalog_program_season', program=program, season=season.number),
                 art_dict=dict(
                     thumb=season.cover,
                     fanart=program_obj.cover,
                 ),
                 info_dict=dict(
                     tvshowtitle=program_obj.name,
-                    title=self._kodi.localize(30205, season=season.number),  # Season {season}
+                    title=kodiutils.localize(30205, season=season.number),  # Season {season}
                     tagline=program_obj.description,
                     set=program_obj.name,
                     studio=studio,
-                    mpaa=', '.join(program_obj.legal) if hasattr(program_obj, 'legal') and program_obj.legal else self._kodi.localize(30216),  # All ages
+                    mpaa=', '.join(program_obj.legal) if hasattr(program_obj, 'legal') and program_obj.legal else kodiutils.localize(30216),  # All ages
                 ),
             ))
 
         # Sort by label. Some programs return seasons unordered.
-        self._kodi.show_listing(listing, 30003, content='tvshows', sort=['label'])
+        kodiutils.show_listing(listing, 30003, content='tvshows', sort=['label'])
 
     def show_program_season(self, program, season):
         """ Show the episodes of a program from the catalog
@@ -166,8 +169,8 @@ class Catalog:
         try:
             program_obj = self._vtm_go.get_program(program)  # Use CACHE_AUTO since the data is just refreshed in show_program
         except UnavailableException:
-            self._kodi.show_ok_dialog(message=self._kodi.localize(30717))  # This program is not available in the VTM GO catalogue.
-            self._kodi.end_of_directory()
+            kodiutils.ok_dialog(message=kodiutils.localize(30717))  # This program is not available in the VTM GO catalogue.
+            kodiutils.end_of_directory()
             return
 
         if season == -1:
@@ -180,33 +183,33 @@ class Catalog:
         listing = [self._menu.generate_titleitem(e) for s in seasons for e in list(s.episodes.values())]
 
         # Sort by episode number by default. Takes seasons into account.
-        self._kodi.show_listing(listing, 30003, content='episodes', sort=['episode', 'duration'])
+        kodiutils.show_listing(listing, 30003, content='episodes', sort=['episode', 'duration'])
 
     def show_recommendations(self):
         """ Show the recommendations """
         try:
             recommendations = self._vtm_go.get_recommendations()
         except ApiUpdateRequired:
-            self._kodi.show_ok_dialog(message=self._kodi.localize(30705))  # The VTM GO Service has been updated...
+            kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return
 
         except Exception as ex:  # pylint: disable=broad-except
             _LOGGER.error("%s", ex)
-            self._kodi.show_ok_dialog(message="%s" % ex)
+            kodiutils.ok_dialog(message="%s" % ex)
             return
 
         listing = []
         for cat in recommendations:
-            listing.append(TitleItem(
+            listing.append(kodiutils.TitleItem(
                 title=cat.title,
-                path=self._kodi.url_for('show_recommendations_category', category=cat.category_id),
+                path=kodiutils.url_for('show_recommendations_category', category=cat.category_id),
                 info_dict=dict(
                     plot='[B]{category}[/B]'.format(category=cat.title),
                 ),
             ))
 
         # Sort categories by default like in VTM GO.
-        self._kodi.show_listing(listing, 30015, content='files')
+        kodiutils.show_listing(listing, 30015, content='files')
 
     def show_recommendations_category(self, category):
         """ Show the items in a recommendations category
@@ -215,12 +218,12 @@ class Catalog:
         try:
             recommendations = self._vtm_go.get_recommendations()
         except ApiUpdateRequired:
-            self._kodi.show_ok_dialog(message=self._kodi.localize(30705))  # The VTM GO Service has been updated...
+            kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return
 
         except Exception as ex:  # pylint: disable=broad-except
             _LOGGER.error("%s", ex)
-            self._kodi.show_ok_dialog(message="%s" % ex)
+            kodiutils.ok_dialog(message="%s" % ex)
             return
 
         listing = []
@@ -233,19 +236,19 @@ class Catalog:
                 listing.append(self._menu.generate_titleitem(item))
 
         # Sort categories by default like in VTM GO.
-        self._kodi.show_listing(listing, 30015, content='tvshows')
+        kodiutils.show_listing(listing, 30015, content='tvshows')
 
     def show_mylist(self):
         """ Show the items in "My List" """
         try:
             mylist = self._vtm_go.get_swimlane('my-list')
         except ApiUpdateRequired:
-            self._kodi.show_ok_dialog(message=self._kodi.localize(30705))  # The VTM GO Service has been updated...
+            kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return
 
         except Exception as ex:  # pylint: disable=broad-except
             _LOGGER.error("%s", ex)
-            self._kodi.show_ok_dialog(message="%s" % ex)
+            kodiutils.ok_dialog(message="%s" % ex)
             return
 
         listing = []
@@ -254,7 +257,7 @@ class Catalog:
             listing.append(self._menu.generate_titleitem(item))
 
         # Sort categories by default like in VTM GO.
-        self._kodi.show_listing(listing, 30017, content='tvshows')
+        kodiutils.show_listing(listing, 30017, content='tvshows')
 
     def mylist_add(self, video_type, content_id):
         """ Add an item to "My List"
@@ -262,7 +265,7 @@ class Catalog:
         :type content_id: str
          """
         self._vtm_go.add_mylist(video_type, content_id)
-        self._kodi.end_of_directory()
+        kodiutils.end_of_directory()
 
     def mylist_del(self, video_type, content_id):
         """ Remove an item from "My List"
@@ -270,20 +273,20 @@ class Catalog:
         :type content_id: str
         """
         self._vtm_go.del_mylist(video_type, content_id)
-        self._kodi.end_of_directory()
-        self._kodi.container_refresh()
+        kodiutils.end_of_directory()
+        kodiutils.container_refresh()
 
     def show_continuewatching(self):
         """ Show the items in "Continue Watching" """
         try:
             mylist = self._vtm_go.get_swimlane('continue-watching')
         except ApiUpdateRequired:
-            self._kodi.show_ok_dialog(message=self._kodi.localize(30705))  # The VTM GO Service has been updated...
+            kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return
 
         except Exception as ex:  # pylint: disable=broad-except
             _LOGGER.error("%s", ex)
-            self._kodi.show_ok_dialog(message="%s" % ex)
+            kodiutils.ok_dialog(message="%s" % ex)
             return
 
         listing = []
@@ -298,4 +301,4 @@ class Catalog:
             listing.append(titleitem)
 
         # Sort categories by default like in VTM GO.
-        self._kodi.show_listing(listing, 30019, content='episodes', sort='label')
+        kodiutils.show_listing(listing, 30019, content='episodes', sort='label')

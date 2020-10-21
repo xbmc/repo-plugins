@@ -9,11 +9,10 @@ import os
 import random
 from datetime import timedelta
 
-import requests
+from resources.lib import kodiutils
+from resources.lib.vtmgo import util
 
-from resources.lib.kodiwrapper import from_unicode
-
-_LOGGER = logging.getLogger('vtmgostream')
+_LOGGER = logging.getLogger(__name__)
 
 
 class StreamGeoblockedException(Exception):
@@ -58,13 +57,8 @@ class VtmGoStream:
     _ANVATO_API_KEY = 'HOydnxEYtxXYY1UfT3ADuevMP7xRjPg6XYNrPLhFISL'
     _ANVATO_USER_AGENT = 'ANVSDK Android/5.0.39 (Linux; Android 6.0.1; Nexus 5)'
 
-    def __init__(self, kodi):
-        """ Initialise object
-        :type kodi: resources.lib.kodiwrapper.KodiWrapper
-        """
-        self._kodi = kodi
-
-        self._session = requests.session()
+    def __init__(self):
+        """ Initialise object """
 
     def get_stream(self, stream_type, stream_id):
         """ Return a ResolvedStream based on the stream type and id.
@@ -115,7 +109,7 @@ class VtmGoStream:
                 url=url,
                 subtitles=subtitles,
                 license_url=license_url,
-                cookies=self._session.cookies.get_dict()
+                cookies=util.SESSION.cookies.get_dict()
             )
 
         if stream_type in ['movies', 'oneoffs']:
@@ -127,7 +121,7 @@ class VtmGoStream:
                 url=url,
                 subtitles=subtitles,
                 license_url=license_url,
-                cookies=self._session.cookies.get_dict()
+                cookies=util.SESSION.cookies.get_dict()
             )
 
         if stream_type == 'channels':
@@ -144,7 +138,7 @@ class VtmGoStream:
                 url=url,
                 subtitles=subtitles,
                 license_url=license_url,
-                cookies=self._session.cookies.get_dict()
+                cookies=util.SESSION.cookies.get_dict()
             )
 
         raise Exception('Unknown video type {type}'.format(type=stream_type))
@@ -157,17 +151,17 @@ class VtmGoStream:
         """
         url = 'https://videoplayer-service.api.persgroep.cloud/config/%s/%s' % (strtype, stream_id)
         _LOGGER.debug('Getting stream info from %s', url)
-        response = self._session.get(url,
-                                     params={
-                                         'startPosition': '0.0',
-                                         'autoPlay': 'true',
-                                     },
-                                     headers={
-                                         'x-api-key': self._VTM_API_KEY,
-                                         'Popcorn-SDK-Version': '2',
-                                         'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Nexus 5 Build/M4B30Z)',
-                                     },
-                                     proxies=self._kodi.get_proxies())
+        response = util.http_get(url,
+                                 params={
+                                     'startPosition': '0.0',
+                                     'autoPlay': 'true',
+                                 },
+                                 headers={
+                                     'x-api-key': self._VTM_API_KEY,
+                                     'Popcorn-SDK-Version': '2',
+                                     'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Nexus 5 Build/M4B30Z)',
+                                 },
+                                 proxies=kodiutils.get_proxies())
 
         _LOGGER.debug('Got response (status=%s): %s', response.status_code, response.text)
 
@@ -253,20 +247,20 @@ class VtmGoStream:
         :rtype list[str]
         """
         # Clean up old subtitles
-        temp_dir = os.path.join(self._kodi.get_userdata_path(), 'temp', '')
-        _, files = self._kodi.listdir(temp_dir)
+        temp_dir = os.path.join(kodiutils.addon_profile(), 'temp', '')
+        _, files = kodiutils.listdir(temp_dir)
         if files:
             for item in files:
-                if item.endswith('.vtt'):
-                    self._kodi.delete_file(temp_dir + item)
+                if kodiutils.to_unicode(item).endswith('.vtt'):
+                    kodiutils.delete(temp_dir + kodiutils.to_unicode(item))
 
         # Return if there are no subtitles available
         if not subtitles:
             return None
 
         import re
-        if not self._kodi.check_if_path_exists(temp_dir):
-            self._kodi.mkdirs(temp_dir)
+        if not kodiutils.exists(temp_dir):
+            kodiutils.mkdirs(temp_dir)
 
         ad_breaks = list()
         delayed_subtitles = list()
@@ -281,10 +275,10 @@ class VtmGoStream:
 
         for subtitle in subtitles:
             output_file = temp_dir + subtitle.get('name') + '.' + subtitle.get('url').split('.')[-1]
-            webvtt_content = requests.get(subtitle.get('url')).text
+            webvtt_content = util.http_get(subtitle.get('url')).text
             webvtt_content = webvtt_timing_regex.sub(lambda match: self._delay_webvtt_timing(match, ad_breaks), webvtt_content)
-            with self._kodi.open_file(output_file, 'w') as webvtt_output:
-                webvtt_output.write(from_unicode(webvtt_content))
+            with kodiutils.open_file(output_file, 'w') as webvtt_output:
+                webvtt_output.write(kodiutils.from_unicode(webvtt_content))
             delayed_subtitles.append(output_file)
         return delayed_subtitles
 
@@ -295,13 +289,13 @@ class VtmGoStream:
         """
         url = 'https://access-prod.apis.anvato.net/anvacks/{key}'.format(key=access_key)
         _LOGGER.debug('Getting anvacks from %s', url)
-        response = self._session.get(url,
-                                     params={
-                                         'apikey': self._ANVATO_API_KEY,
-                                     },
-                                     headers={
-                                         'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
-                                     })
+        response = util.http_get(url,
+                                 params={
+                                     'apikey': self._ANVATO_API_KEY,
+                                 },
+                                 headers={
+                                     'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
+                                 })
 
         _LOGGER.debug('Got response (status=%s): %s', response.status_code, response.text)
 
@@ -318,15 +312,15 @@ class VtmGoStream:
         """
         url = 'https://tkx.apis.anvato.net/rest/v2/server_time'
         _LOGGER.debug('Getting servertime from %s with access_key %s', url, access_key)
-        response = self._session.get(url,
-                                     params={
-                                         'anvack': access_key,
-                                         'anvtrid': self._generate_random_id(),
-                                     },
-                                     headers={
-                                         'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
-                                         'User-Agent': self._ANVATO_USER_AGENT,
-                                     })
+        response = util.http_get(url,
+                                 params={
+                                     'anvack': access_key,
+                                     'anvtrid': self._generate_random_id(),
+                                 },
+                                 headers={
+                                     'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
+                                     'User-Agent': self._ANVATO_USER_AGENT,
+                                 })
 
         _LOGGER.debug('Got response (status=%s): %s', response.status_code, response.text)
 
@@ -344,53 +338,53 @@ class VtmGoStream:
         """
         url = 'https://tkx.apis.anvato.net/rest/v2/mcp/video/{video}'.format(**anvato_info)
         _LOGGER.debug('Getting stream info from %s with access_key %s and token %s', url, anvato_info['accessKey'], anvato_info['token'])
-        response = self._session.post(url,
-                                      json={
-                                          "ads": {
-                                              "freewheel": {
-                                                  "custom": {
-                                                      "ml_userid": "",  # TODO: fill in
-                                                      "ml_dmp_userid": "",  # TODO: fill in
-                                                      "ml_gdprconsent": "",
-                                                      "ml_apple_advertising_id": "",
-                                                      "ml_google_advertising_id": "",
-                                                  },
-                                                  "network_id": stream_info['video']['ads']['freewheel']['networkId'],
-                                                  "profile_id": stream_info['video']['ads']['freewheel']['profileId'],
-                                                  "server_url": stream_info['video']['ads']['freewheel']['serverUrl'],
-                                                  "site_section_id": "mdl_vtmgo_phone_android_default",
-                                                  "video_asset_id": stream_info['video']['ads']['freewheel'].get('assetId', ''),
-                                              }
-                                          },
-                                          "api": {
-                                              "anvstk2": anvato_info['token']
-                                          },
-                                          "content": {
-                                              "mcp_video_id": anvato_info['video'],
-                                          },
-                                          "sdkver": "5.0.39",
-                                          "user": {
-                                              "adobepass": {
-                                                  "err_msg": "",
-                                                  "maxrating": "",
-                                                  "mvpd": "",
-                                                  "resource": "",
-                                                  "short_token": ""
+        response = util.http_post(url,
+                                  data={
+                                      "ads": {
+                                          "freewheel": {
+                                              "custom": {
+                                                  "ml_userid": "",  # TODO: fill in
+                                                  "ml_dmp_userid": "",  # TODO: fill in
+                                                  "ml_gdprconsent": "",
+                                                  "ml_apple_advertising_id": "",
+                                                  "ml_google_advertising_id": "",
                                               },
-                                              "device": "android",
-                                              "device_id": "",
+                                              "network_id": stream_info['video']['ads']['freewheel']['networkId'],
+                                              "profile_id": stream_info['video']['ads']['freewheel']['profileId'],
+                                              "server_url": stream_info['video']['ads']['freewheel']['serverUrl'],
+                                              "site_section_id": "mdl_vtmgo_phone_android_default",
+                                              "video_asset_id": stream_info['video']['ads']['freewheel'].get('assetId', ''),
+                                          }
+                                      },
+                                      "api": {
+                                          "anvstk2": anvato_info['token']
+                                      },
+                                      "content": {
+                                          "mcp_video_id": anvato_info['video'],
+                                      },
+                                      "sdkver": "5.0.39",
+                                      "user": {
+                                          "adobepass": {
+                                              "err_msg": "",
+                                              "maxrating": "",
+                                              "mvpd": "",
+                                              "resource": "",
+                                              "short_token": ""
                                           },
-                                          "version": "3.0"
+                                          "device": "android",
+                                          "device_id": "",
                                       },
-                                      params={
-                                          'anvack': anvato_info['accessKey'],
-                                          'anvtrid': self._generate_random_id(),
-                                          'rtyp': 'fp',
-                                      },
-                                      headers={
-                                          'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
-                                          'User-Agent': self._ANVATO_USER_AGENT,
-                                      })
+                                      "version": "3.0"
+                                  },
+                                  params={
+                                      'anvack': anvato_info['accessKey'],
+                                      'anvtrid': self._generate_random_id(),
+                                      'rtyp': 'fp',
+                                  },
+                                  headers={
+                                      'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
+                                      'User-Agent': self._ANVATO_USER_AGENT,
+                                  })
 
         _LOGGER.debug('Got response (status=%s): %s', response.status_code, response.text)
 
@@ -419,11 +413,11 @@ class VtmGoStream:
         :rtype str
         """
         _LOGGER.debug('Downloading text from %s', url)
-        response = self._session.get(url,
-                                     headers={
-                                         'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
-                                         'User-Agent': self._ANVATO_USER_AGENT,
-                                     })
+        response = util.http_get(url,
+                                 headers={
+                                     'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
+                                     'User-Agent': self._ANVATO_USER_AGENT,
+                                 })
         if response.status_code != 200:
             raise Exception('Error %s.' % response.status_code)
 

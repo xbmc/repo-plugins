@@ -3,128 +3,162 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
-import hashlib
+import json
 import logging
 import os
 import re
 from uuid import uuid4
+from hashlib import md5
 
-import requests
+from resources.lib import kodiutils
+from resources.lib.vtmgo import API_ENDPOINT, Profile, util
+from resources.lib.vtmgo.exceptions import InvalidLoginException, LoginErrorException, NoLoginException
 
-from resources.lib.kodiwrapper import from_unicode
+try:  # Python 3
+    import jwt
+except ImportError:  # Python 2
+    # The package is named pyjwt in Kodi 18: https://github.com/lottaboost/script.module.pyjwt/pull/1
+    import pyjwt as jwt
 
-_LOGGER = logging.getLogger('vtmgoauth')
+_LOGGER = logging.getLogger(__name__)
 
 
-class InvalidLoginException(Exception):
-    """ Is thrown when the credentials are invalid """
+class AccountStorage:
+    """ Data storage for account info """
+    login_token = ''
+    jwt_token = ''
+    profile = ''
+    product = ''
 
+    # Credentials hash
+    hash = ''
 
-class LoginErrorException(Exception):
-    """ Is thrown when we could not login """
+    def is_valid_token(self):
+        """ Validate the JWT to see if it's still valid.
 
-    def __init__(self, code):
-        super(LoginErrorException, self).__init__()
-        self.code = code
+        :rtype: boolean
+        """
+        if not self.jwt_token:
+            # We have no token
+            return False
+
+        try:
+            # Verify our token to see if it's still valid.
+            jwt.decode(self.jwt_token,
+                       algorithms=['HS256'],
+                       options={'verify_signature': False, 'verify_aud': False})
+        except Exception as exc:  # pylint: disable=broad-except
+            _LOGGER.debug('JWT is NOT valid: %s', exc)
+            return False
+
+        _LOGGER.debug('JWT is valid')
+        return True
 
 
 class VtmGoAuth:
     """ VTM GO Authentication API """
 
-    def __init__(self, kodi):
-        """ Initialise object
-        :type kodi: resources.lib.kodiwrapper.KodiWrapper
-        """
-        self._kodi = kodi
-        self._proxies = kodi.get_proxies()
+    TOKEN_FILE = 'auth-tokens.json'
 
-        self._token = None
+    def __init__(self, username, password, loginprovider, profile, token_path):
+        """ Initialise object """
+        self._username = username
+        self._password = password
+        self._loginprovider = loginprovider
+        self._profile = profile
+        self._proxies = kodiutils.get_proxies()
+        self._token_path = token_path
 
-    def has_credentials_changed(self):
+        if not self._username or not self._password:
+            raise NoLoginException()
+
+        # Load existing account data
+        self._account = AccountStorage()
+        self._load_cache()
+
+        # Do login so we have valid tokens
+        self.login()
+
+        # Apply profile and product
+        if self._profile:
+            parts = self._profile.split(':')
+            try:
+                self._account.profile = parts[0]
+            except (IndexError, AttributeError):
+                self._account.profile = None
+            try:
+                self._account.product = parts[1]
+            except (IndexError, AttributeError):
+                self._account.product = None
+
+    def check_credentials_change(self):
         """ Check if credentials have changed """
-        old_hash = self._kodi.get_setting('credentials_hash')
-        new_hash = ''
-        if self._kodi.get_setting('username') or self._kodi.get_setting('password'):
-            new_hash = hashlib.md5((self._kodi.get_setting('username') + self._kodi.get_setting('password')).encode('utf-8')).hexdigest()
+        old_hash = self._account.hash
+        new_hash = md5((self._username + ':' + self._password + ':' + self._loginprovider).encode('utf-8')).hexdigest()
         if new_hash != old_hash:
-            self._kodi.set_setting('credentials_hash', new_hash)
-            return True
-        return False
+            _LOGGER.debug('Credentials have changed, clearing tokens.')
+            self._account.hash = new_hash
+            self.logout()
 
-    def clear_token(self):
-        """ Remove the cached JWT. """
-        _LOGGER.debug('Clearing token cache')
-        path = os.path.join(self._kodi.get_userdata_path(), 'token.json')
-        if self._kodi.check_if_path_exists(path):
-            self._kodi.delete_file(path)
-        self._token = None
+    def get_profiles(self, products='VTM_GO,VTM_GO_KIDS'):
+        """ Returns the available profiles """
+        response = util.http_get(API_ENDPOINT + '/profiles', {'products': products}, token=self._account.jwt_token)
+        result = json.loads(response.text)
 
-    def get_token(self):
-        """ Return a JWT that can be used to authenticate the user.
-        :rtype str
+        profiles = [
+            Profile(
+                key=profile.get('id'),
+                product=profile.get('product'),
+                name=profile.get('name'),
+                gender=profile.get('gender'),
+                birthdate=profile.get('birthDate'),
+                color=profile.get('color', {}).get('start'),
+                color2=profile.get('color', {}).get('end'),
+            )
+            for profile in result
+        ]
+
+        return profiles
+
+    def login(self, force=False):
+        """ Make a login request.
+
+        :param bool force:              Force authenticating from scratch without cached tokens.
+
+        :return:
+        :rtype: AccountStorage
         """
-        userdata_path = self._kodi.get_userdata_path()
+        # Check if credentials have changed
+        self.check_credentials_change()
 
-        # Don't return a token when we have no password or username.
-        if not self._kodi.get_setting('username') or not self._kodi.get_setting('password'):
-            _LOGGER.debug('Skipping since we have no username or password')
-            return None
+        # Use cached token if it is still valid
+        if force or not self._account.is_valid_token():
+            # Do actual login
+            self._web_login()
 
-        # Return if we already have the token in memory.
-        if self._token:
-            _LOGGER.debug('Returning token from memory')
-            return self._token
+        return self._account
 
-        # Try to load from cache
-        path = os.path.join(userdata_path, 'token.json')
-        if self._kodi.check_if_path_exists(path):
-            _LOGGER.debug('Returning token from cache')
+    def logout(self):
+        """ Clear the session tokens. """
+        self._account.jwt_token = None
+        self._save_cache()
 
-            with self._kodi.open_file(path) as fdesc:
-                self._token = fdesc.read()
-
-            if self._token:
-                return self._token
-
-        # Authenticate with VTM GO and store the token
-        self._token = self._login()
-        _LOGGER.debug('Returning token from VTM GO')
-
-        # Make sure the path exists
-        if not self._kodi.check_if_path_exists(userdata_path):
-            self._kodi.mkdirs(userdata_path)
-
-        with self._kodi.open_file(path, 'w') as fdesc:
-            fdesc.write(from_unicode(self._token))
-
-        return self._token
-
-    def get_profile(self):
-        """ Return the profile that is currently selected. """
-        profile = self._kodi.get_setting('profile')
-        try:
-            return profile.split(':')[0]
-        except (IndexError, AttributeError):
-            return None
-
-    def _login(self):
+    def _web_login(self):
         """ Executes a login and returns the JSON Web Token.
         :rtype str
         """
-        # Create new session object. This keeps the cookies across requests.
-        session = requests.sessions.session()
 
         # Yes, we have accepted the cookies
-        session.cookies.set('authId', str(uuid4()))
+        util.SESSION.cookies.set('authId', str(uuid4()))
 
         # Start login flow
-        response = session.get('https://vtm.be/vtmgo/aanmelden?redirectUrl=https://vtm.be/vtmgo', proxies=self._proxies)
+        response = util.http_get('https://vtm.be/vtmgo/aanmelden?redirectUrl=https://vtm.be/vtmgo', proxies=self._proxies)
         response.raise_for_status()
 
         # Send login credentials
-        response = session.post('https://login2.vtm.be/login/emailfirst/password?client_id=vtm-go-web', data={
-            'userName': self._kodi.get_setting('username'),
-            'password': self._kodi.get_setting('password'),
+        response = util.http_post('https://login2.vtm.be/login?client_id=vtm-go-web', form={
+            'userName': kodiutils.get_setting('username'),
+            'password': kodiutils.get_setting('password'),
             'jsEnabled': 'true',
         }, proxies=self._proxies)
         response.raise_for_status()
@@ -139,7 +173,7 @@ class VtmGoAuth:
             raise InvalidLoginException()
 
         # Follow login
-        response = session.get('https://login2.vtm.be/authorize/continue?client_id=vtm-go-web', proxies=self._proxies)
+        response = util.http_get('https://login2.vtm.be/authorize/continue?client_id=vtm-go-web', proxies=self._proxies)
         response.raise_for_status()
 
         # Extract state and code
@@ -156,13 +190,39 @@ class VtmGoAuth:
             raise LoginErrorException(code=101)  # Could not extract authentication code
 
         # Okay, final stage. We now need to POST our state and code to get a valid JWT.
-        response = session.post('https://vtm.be/vtmgo/login-callback', data={
+        response = util.http_post('https://vtm.be/vtmgo/login-callback', form={
             'state': state,
             'code': code,
         }, proxies=self._proxies)
         response.raise_for_status()
 
         # Get JWT from cookies
-        self._token = session.cookies.get('lfvp_auth')
+        self._account.jwt_token = util.SESSION.cookies.get('lfvp_auth')
 
-        return self._token
+        self._save_cache()
+
+        return self._account
+
+    def _load_cache(self):
+        """ Load tokens from cache """
+        try:
+            with open(os.path.join(self._token_path, self.TOKEN_FILE), 'r') as fdesc:
+                self._account.__dict__ = json.loads(fdesc.read())  # pylint: disable=attribute-defined-outside-init
+        except (IOError, TypeError, ValueError):
+            _LOGGER.warning('We could not use the cache since it is invalid or non-existent.')
+
+    def _save_cache(self):
+        """ Store tokens in cache """
+        if not os.path.exists(self._token_path):
+            os.makedirs(self._token_path)
+
+        with open(os.path.join(self._token_path, self.TOKEN_FILE), 'w') as fdesc:
+            json.dump(self._account.__dict__, fdesc, indent=2)
+
+    def clear_token(self):
+        """ Remove the cached JWT. """
+        _LOGGER.debug('Clearing token cache')
+        path = os.path.join(self._token_path, self.TOKEN_FILE)
+        if kodiutils.exists(path):
+            kodiutils.delete(path)
+        self._account = AccountStorage()

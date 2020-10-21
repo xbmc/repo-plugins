@@ -5,24 +5,27 @@ from __future__ import absolute_import, division, unicode_literals
 
 import logging
 
-from resources.lib.kodiwrapper import TitleItem
+from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
 from resources.lib.modules.menu import Menu
 from resources.lib.vtmgo.vtmgo import VtmGo
+from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
-_LOGGER = logging.getLogger('channels')
+_LOGGER = logging.getLogger(__name__)
 
 
 class Channels:
     """ Menu code related to channels """
 
-    def __init__(self, kodi):
-        """ Initialise object
-        :type kodi: resources.lib.kodiwrapper.KodiWrapper
-        """
-        self._kodi = kodi
-        self._vtm_go = VtmGo(self._kodi)
-        self._menu = Menu(self._kodi)
+    def __init__(self):
+        """ Initialise object """
+        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
+                               kodiutils.get_setting('password'),
+                               'VTM',
+                               kodiutils.get_setting('profile'),
+                               kodiutils.get_tokens_path())
+        self._vtm_go = VtmGo(self._auth)
+        self._menu = Menu()
 
     def show_channels(self):
         """ Shows TV channels """
@@ -37,26 +40,26 @@ class Channels:
             fanart = channel.background
             title = channel.name
             if channel_data:
-                icon = '{path}/resources/logos/{logo}-white.png'.format(path=self._kodi.get_addon_path(), logo=channel.key)
+                icon = '{path}/resources/logos/{logo}-white.png'.format(path=kodiutils.addon_path(), logo=channel.key)
                 title = channel_data.get('label')
 
             context_menu = [(
-                self._kodi.localize(30052, channel=title),  # Watch live {channel}
+                kodiutils.localize(30052, channel=title),  # Watch live {channel}
                 'PlayMedia(%s)' %
-                self._kodi.url_for('play', category='channels', item=channel.channel_id),
+                kodiutils.url_for('play', category='channels', item=channel.channel_id),
             )]
 
             if channel_data and channel_data.get('epg'):
                 context_menu.append((
-                    self._kodi.localize(30053, channel=title),  # TV Guide for {channel}
+                    kodiutils.localize(30053, channel=title),  # TV Guide for {channel}
                     'Container.Update(%s)' %
-                    self._kodi.url_for('show_tvguide_channel', channel=channel_data.get('epg'))
+                    kodiutils.url_for('show_tvguide_channel', channel=channel_data.get('epg'))
                 ))
 
             context_menu.append((
-                self._kodi.localize(30055, channel=title),  # Catalog for {channel}
+                kodiutils.localize(30055, channel=title),  # Catalog for {channel}
                 'Container.Update(%s)' %
-                self._kodi.url_for('show_catalog_channel', channel=channel.key)
+                kodiutils.url_for('show_catalog_channel', channel=channel.key)
             ))
 
             if channel.epg:
@@ -67,9 +70,9 @@ class Channels:
             else:
                 label = title
 
-            listing.append(TitleItem(
+            listing.append(kodiutils.TitleItem(
                 title=label,
-                path=self._kodi.url_for('show_channel_menu', channel=channel.key),
+                path=kodiutils.url_for('show_channel_menu', channel=channel.key),
                 art_dict=dict(
                     icon=icon,
                     thumb=icon,
@@ -89,7 +92,7 @@ class Channels:
                 context_menu=context_menu,
             ))
 
-        self._kodi.show_listing(listing, 30007)
+        kodiutils.show_listing(listing, 30007)
 
     def show_channel_menu(self, key):
         """ Shows a TV channel
@@ -103,10 +106,10 @@ class Channels:
         fanart = channel.background
         title = channel.name
         if channel_data:
-            icon = '{path}/resources/logos/{logo}-white.png'.format(path=self._kodi.get_addon_path(), logo=channel.key)
+            icon = '{path}/resources/logos/{logo}-white.png'.format(path=kodiutils.addon_path(), logo=channel.key)
             title = channel_data.get('label')
 
-        title = self._kodi.localize(30052, channel=title)  # Watch live {channel}
+        title = kodiutils.localize(30052, channel=title)  # Watch live {channel}
         if channel.epg:
             label = title + '[COLOR gray] | {title} ({start} - {end})[/COLOR]'.format(
                 title=channel.epg[0].title,
@@ -116,9 +119,9 @@ class Channels:
             label = title
 
         # The .pvr suffix triggers some code paths in Kodi to mark this as a live channel
-        listing = [TitleItem(
+        listing = [kodiutils.TitleItem(
             title=label,
-            path=self._kodi.url_for('play', category='channels', item=channel.channel_id) + '?.pvr',
+            path=kodiutils.url_for('play', category='channels', item=channel.channel_id) + '?.pvr',
             art_dict=dict(
                 icon=icon,
                 thumb=icon,
@@ -139,38 +142,38 @@ class Channels:
 
         if channel_data and channel_data.get('epg'):
             listing.append(
-                TitleItem(
-                    title=self._kodi.localize(30053, channel=channel_data.get('label')),  # TV Guide for {channel}
-                    path=self._kodi.url_for('show_tvguide_channel', channel=channel_data.get('epg')),
+                kodiutils.TitleItem(
+                    title=kodiutils.localize(30053, channel=channel_data.get('label')),  # TV Guide for {channel}
+                    path=kodiutils.url_for('show_tvguide_channel', channel=channel_data.get('epg')),
                     art_dict=dict(
                         icon='DefaultAddonTvInfo.png',
                     ),
                     info_dict=dict(
-                        plot=self._kodi.localize(30054, channel=channel_data.get('label')),  # Browse the TV Guide for {channel}
+                        plot=kodiutils.localize(30054, channel=channel_data.get('label')),  # Browse the TV Guide for {channel}
                     ),
                 )
             )
 
-        listing.append(TitleItem(
-            title=self._kodi.localize(30055, channel=channel_data.get('label')),  # Catalog for {channel}
-            path=self._kodi.url_for('show_catalog_channel', channel=key),
+        listing.append(kodiutils.TitleItem(
+            title=kodiutils.localize(30055, channel=channel_data.get('label')),  # Catalog for {channel}
+            path=kodiutils.url_for('show_catalog_channel', channel=key),
             art_dict=dict(
                 icon='DefaultMovieTitle.png'
             ),
             info_dict=dict(
-                plot=self._kodi.localize(30056, channel=channel_data.get('label')),  # Browse the Catalog for {channel}
+                plot=kodiutils.localize(30056, channel=channel_data.get('label')),  # Browse the Catalog for {channel}
             ),
         ))
 
         # Add YouTube channels
-        if channel_data and self._kodi.get_cond_visibility('System.HasAddon(plugin.video.youtube)') != 0:
+        if channel_data and kodiutils.get_cond_visibility('System.HasAddon(plugin.video.youtube)') != 0:
             for youtube in channel_data.get('youtube', []):
-                listing.append(TitleItem(
-                    title=self._kodi.localize(30206, label=youtube.get('label')),  # Watch {label} on YouTube
+                listing.append(kodiutils.TitleItem(
+                    title=kodiutils.localize(30206, label=youtube.get('label')),  # Watch {label} on YouTube
                     path=youtube.get('path'),
                     info_dict=dict(
-                        plot=self._kodi.localize(30206, label=youtube.get('label')),  # Watch {label} on YouTube
+                        plot=kodiutils.localize(30206, label=youtube.get('label')),  # Watch {label} on YouTube
                     )
                 ))
 
-        self._kodi.show_listing(listing, 30007, sort=['unsorted'])
+        kodiutils.show_listing(listing, 30007, sort=['unsorted'])

@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
-""" Addon entry point """
+"""Service entry point"""
 
 from __future__ import absolute_import, division, unicode_literals
 
 from xbmcaddon import Addon
 
-from resources.lib import kodiwrapper, kodilogging
+from resources.lib import kodiutils, kodilogging
 
 # Reinitialise ADDON every invocation to fix an issue that settings are not fresh.
-kodiwrapper.ADDON = Addon()
+kodiutils.ADDON = Addon()
 kodilogging.ADDON = Addon()
 
 if __name__ == '__main__':
-    import sys
-    from resources.lib import plugin  # pylint: disable=ungrouped-imports
+    from resources.lib.service import run
 
-    plugin.run(sys.argv)
+    run()

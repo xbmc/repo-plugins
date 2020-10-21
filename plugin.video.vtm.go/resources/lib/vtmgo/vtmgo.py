@@ -6,11 +6,11 @@ from __future__ import absolute_import, division, unicode_literals
 import json
 import logging
 
-import requests
+from resources.lib import kodiutils
+from resources.lib.vtmgo import (API_ENDPOINT, Category, Movie, Program, Episode, Season, LiveChannelEpg, LiveChannel,
+                                 CONTENT_TYPE_MOVIE, CONTENT_TYPE_PROGRAM, CONTENT_TYPE_EPISODE, util)
 
-from resources.lib.vtmgo.vtmgoauth import VtmGoAuth, InvalidLoginException
-
-_LOGGER = logging.getLogger('vtmgo')
+_LOGGER = logging.getLogger(__name__)
 
 try:  # Python 3
     from urllib.parse import quote
@@ -30,272 +30,13 @@ class ApiUpdateRequired(Exception):
     """ Is thrown when the an API update is required. """
 
 
-class Profile:
-    """ Defines a profile under your account. """
-
-    def __init__(self, key=None, product=None, name=None, gender=None, birthdate=None, color=None, color2=None):
-        """
-        :type key: str
-        :type product: str
-        :type name: str
-        :type gender: str
-        :type birthdate: str
-        :type color: str
-        :type color2: str
-        """
-        self.key = key
-        self.product = product
-        self.name = name
-        self.gender = gender
-        self.birthdate = birthdate
-        self.color = color
-        self.color2 = color2
-
-    def __repr__(self):
-        return "%r" % self.__dict__
-
-
-class LiveChannel:
-    """ Defines a tv channel that can be streamed live """
-
-    def __init__(self, key=None, channel_id=None, name=None, logo=None, background=None, epg=None, geoblocked=False):
-        """
-        :type key: str
-        :type channel_id: str
-        :type name: str
-        :type logo: str
-        :type background: str
-        :type epg: list[LiveChannelEpg]
-        :type geoblocked: bool
-        """
-        self.key = key
-        self.channel_id = channel_id
-        self.name = name
-        self.logo = logo
-        self.background = background
-        self.epg = epg
-        self.geoblocked = geoblocked
-
-    def __repr__(self):
-        return "%r" % self.__dict__
-
-
-class LiveChannelEpg:
-    """ Defines a program that is broadcast on a live tv channel"""
-
-    def __init__(self, title=None, start=None, end=None):
-        """
-        :type title: str
-        :type start: datetime.datetime
-        :type end: datetime.datetime
-        """
-        self.title = title
-        self.start = start
-        self.end = end
-
-    def __repr__(self):
-        return "%r" % self.__dict__
-
-
-class Category:
-    """ Defines a category from the catalog """
-
-    def __init__(self, category_id=None, title=None, content=None):
-        """
-        :type category_id: str
-        :type title: str
-        :type content: list[Union[Movie, Program, Episode]]
-        """
-        self.category_id = category_id
-        self.title = title
-        self.content = content
-
-    def __repr__(self):
-        return "%r" % self.__dict__
-
-
-class Movie:
-    """ Defines a Movie """
-
-    def __init__(self, movie_id=None, name=None, description=None, year=None, cover=None, image=None, duration=None,
-                 remaining=None, geoblocked=None, channel=None, legal=None, aired=None, my_list=None):
-        """
-        :type movie_id: str
-        :type name: str
-        :type description: str
-        :type year: int
-        :type cover: str
-        :type image: str
-        :type duration: int
-        :type remaining: str
-        :type geoblocked: bool
-        :type channel: Optional[str]
-        :type legal: str
-        :type aired: str
-        :type my_list: bool
-        """
-        self.movie_id = movie_id
-        self.name = name
-        self.description = description if description else ''
-        self.year = year
-        self.cover = cover
-        self.image = image
-        self.duration = duration
-        self.remaining = remaining
-        self.geoblocked = geoblocked
-        self.channel = channel
-        self.legal = legal
-        self.aired = aired
-        self.my_list = my_list
-
-    def __repr__(self):
-        return "%r" % self.__dict__
-
-
-class Program:
-    """ Defines a Program """
-
-    def __init__(self, program_id=None, name=None, description=None, cover=None, image=None, seasons=None,
-                 geoblocked=None, channel=None, legal=None, my_list=None):
-        """
-        :type program_id: str
-        :type name: str
-        :type description: str
-        :type cover: str
-        :type image: str
-        :type seasons: dict[int, Season]
-        :type geoblocked: bool
-        :type channel: str
-        :type legal: str
-        :type my_list: bool
-        """
-        self.program_id = program_id
-        self.name = name
-        self.description = description if description else ''
-        self.cover = cover
-        self.image = image
-        self.seasons = seasons if seasons else {}
-        self.geoblocked = geoblocked
-        self.channel = channel
-        self.legal = legal
-        self.my_list = my_list
-
-    def __repr__(self):
-        return "%r" % self.__dict__
-
-
-class Season:
-    """ Defines a Season """
-
-    def __init__(self, number=None, episodes=None, cover=None, geoblocked=None, channel=None, legal=None):
-        """
-        :type number: str
-        :type episodes: dict[int, Episode]
-        :type cover: str
-        :type geoblocked: bool
-        :type channel: str
-        :type legal: str
-        """
-        self.number = int(number)
-        self.episodes = episodes if episodes else {}
-        self.cover = cover
-        self.geoblocked = geoblocked
-        self.channel = channel
-        self.legal = legal
-
-    def __repr__(self):
-        return "%r" % self.__dict__
-
-
-class Episode:
-    """ Defines an Episode """
-
-    def __init__(self, episode_id=None, program_id=None, program_name=None, number=None, season=None, name=None,
-                 description=None, cover=None, duration=None, remaining=None, geoblocked=None, channel=None, legal=None,
-                 aired=None, progress=None, watched=False, next_episode=None):
-        """
-        :type episode_id: str
-        :type program_id: str
-        :type program_name: str
-        :type number: int
-        :type season: str
-        :type name: str
-        :type description: str
-        :type cover: str
-        :type duration: int
-        :type remaining: int
-        :type geoblocked: bool
-        :type channel: str
-        :type legal: str
-        :type aired: str
-        :type progress: int
-        :type watched: bool
-        :type next_episode: Episode
-        """
-        import re
-        self.episode_id = episode_id
-        self.program_id = program_id
-        self.program_name = program_name
-        self.number = int(number) if number else None
-        self.season = int(season) if season else None
-        if number:
-            self.name = re.compile('^%d. ' % number).sub('', name)  # Strip episode from name
-        else:
-            self.name = name
-        self.description = description if description else ''
-        self.cover = cover
-        self.duration = int(duration) if duration else None
-        self.remaining = int(remaining) if remaining is not None else None
-        self.geoblocked = geoblocked
-        self.channel = channel
-        self.legal = legal
-        self.aired = aired
-        self.progress = progress
-        self.watched = watched
-        self.next_episode = next_episode
-
-    def __repr__(self):
-        return "%r" % self.__dict__
-
-
 class VtmGo:
     """ VTM GO API """
-    API_ENDPOINT = 'https://api.vtmgo.be'
 
-    CONTENT_TYPE_MOVIE = 'MOVIE'
-    CONTENT_TYPE_PROGRAM = 'PROGRAM'
-    CONTENT_TYPE_EPISODE = 'EPISODE'
-
-    def __init__(self, kodi):
-        """ Initialise object
-        :type kodi: resources.lib.kodiwrapper.KodiWrapper
-        """
-        self._kodi = kodi
-        self._auth = VtmGoAuth(kodi)
-
-        self._session = requests.session()
-        self._session.proxies = kodi.get_proxies()
-        self._authenticate()
-
-    def _authenticate(self):
-        """ Apply authentication headers in the session """
-        self._session.headers = {
-            'x-app-version': '8',
-            'x-persgroep-mobile-app': 'true',
-            'x-persgroep-os': 'android',
-            'x-persgroep-os-version': '23',
-        }
-        token = self._auth.get_token()
-        if token:
-            self._session.headers['x-dpp-jwt'] = token
-
-            profile = self._auth.get_profile()
-            if profile:
-                self._session.headers['x-dpp-profile'] = profile
-            else:
-                # Select default profile
-                default_profile = self.get_profiles()[0]
-                self._session.headers['x-dpp-profile'] = default_profile.key
+    def __init__(self, auth):
+        """ Initialise object """
+        self._auth = auth
+        self._tokens = self._auth.login()
 
     def _mode(self):
         """ Return the mode that should be used for API calls """
@@ -304,36 +45,18 @@ class VtmGo:
     def get_config(self):
         """ Returns the config for the app """
         # This is currently not used
-        response = self._get_url('/config')
-        info = json.loads(response)
+        response = util.http_get(API_ENDPOINT + '/config', token=self._tokens.jwt_token)
+        info = json.loads(response.text)
 
         # This contains a player.updateIntervalSeconds that could be used to notify VTM GO about the playing progress
         return info
 
-    def get_profiles(self, products='VTM_GO,VTM_GO_KIDS'):
-        """ Returns the available profiles """
-        response = self._get_url('/profiles', {'products': products})
-        result = json.loads(response)
-
-        profiles = [
-            Profile(
-                key=profile.get('id'),
-                product=profile.get('product'),
-                name=profile.get('name'),
-                gender=profile.get('gender'),
-                birthdate=profile.get('birthDate'),
-                color=profile.get('color', {}).get('start'),
-                color2=profile.get('color', {}).get('end'),
-            )
-            for profile in result
-        ]
-
-        return profiles
-
     def get_recommendations(self):
         """ Returns the config for the dashboard """
-        response = self._get_url('/%s/main' % self._mode())
-        recommendations = json.loads(response)
+        response = util.http_get(API_ENDPOINT + '/%s/main' % self._mode(),
+                                 token=self._tokens.jwt_token,
+                                 profile=self._tokens.profile)
+        recommendations = json.loads(response.text)
 
         categories = []
         for cat in recommendations.get('rows', []):
@@ -343,10 +66,10 @@ class VtmGo:
 
             items = []
             for item in cat.get('teasers'):
-                if item.get('target', {}).get('type') == self.CONTENT_TYPE_MOVIE:
+                if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE:
                     items.append(self._parse_movie_teaser(item))
 
-                elif item.get('target', {}).get('type') == self.CONTENT_TYPE_PROGRAM:
+                elif item.get('target', {}).get('type') == CONTENT_TYPE_PROGRAM:
                     items.append(self._parse_program_teaser(item))
 
             categories.append(Category(
@@ -359,42 +82,50 @@ class VtmGo:
 
     def get_swimlane(self, swimlane=None):
         """ Returns the contents of My List """
-        response = self._get_url('/%s/main/swimlane/%s' % (self._mode(), swimlane))
+        response = util.http_get(API_ENDPOINT + '/%s/main/swimlane/%s' % (self._mode(), swimlane),
+                                 token=self._tokens.jwt_token,
+                                 profile=self._tokens.profile)
 
         # Result can be empty
-        if not response:
+        if not response.text:
             return []
 
-        result = json.loads(response)
+        result = json.loads(response.text)
 
         items = []
         for item in result.get('teasers'):
-            if item.get('target', {}).get('type') == self.CONTENT_TYPE_MOVIE:
+            if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE:
                 items.append(self._parse_movie_teaser(item))
 
-            elif item.get('target', {}).get('type') == self.CONTENT_TYPE_PROGRAM:
+            elif item.get('target', {}).get('type') == CONTENT_TYPE_PROGRAM:
                 items.append(self._parse_program_teaser(item))
 
-            elif item.get('target', {}).get('type') == self.CONTENT_TYPE_EPISODE:
+            elif item.get('target', {}).get('type') == CONTENT_TYPE_EPISODE:
                 items.append(self._parse_episode_teaser(item))
 
         return items
 
     def add_mylist(self, video_type, content_id):
         """ Add an item to My List """
-        self._put_url('/%s/userData/myList/%s/%s' % (self._mode(), video_type, content_id))
+        util.http_put(API_ENDPOINT + '/%s/userData/myList/%s/%s' % (self._mode(), video_type, content_id),
+                      token=self._tokens.jwt_token,
+                      profile=self._tokens.profile)
 
     def del_mylist(self, video_type, content_id):
         """ Delete an item from My List """
-        self._delete_url('/%s/userData/myList/%s/%s' % (self._mode(), video_type, content_id))
+        util.http_delete(API_ENDPOINT + '/%s/userData/myList/%s/%s' % (self._mode(), video_type, content_id),
+                         token=self._tokens.jwt_token,
+                         profile=self._tokens.profile)
 
     def get_live_channels(self):
         """ Get a list of all the live tv channels.
         :rtype list[LiveChannel]
         """
         import dateutil.parser
-        response = self._get_url('/%s/live' % self._mode())
-        info = json.loads(response)
+        response = util.http_get(API_ENDPOINT + '/%s/live' % self._mode(),
+                                 token=self._tokens.jwt_token,
+                                 profile=self._tokens.profile)
+        info = json.loads(response.text)
 
         channels = []
         for item in info.get('channels'):
@@ -427,8 +158,10 @@ class VtmGo:
         """ Get a list of all the categories.
         :rtype list[Category]
         """
-        response = self._get_url('/%s/catalog/filters' % self._mode())
-        info = json.loads(response)
+        response = util.http_get(API_ENDPOINT + '/%s/catalog/filters' % self._mode(),
+                                 token=self._tokens.jwt_token,
+                                 profile=self._tokens.profile)
+        info = json.loads(response.text)
 
         categories = []
         for item in info.get('catalogFilters', []):
@@ -446,18 +179,22 @@ class VtmGo:
         """
         # Fetch from API
         if category is None:
-            response = self._get_url('/%s/catalog' % self._mode(), {'pageSize': 1000})
+            response = util.http_get(API_ENDPOINT + '/%s/catalog' % self._mode(), {'pageSize': 1000},
+                                     token=self._tokens.jwt_token,
+                                     profile=self._tokens.profile)
         else:
-            response = self._get_url('/%s/catalog' % self._mode(), {'pageSize': 1000, 'filter': quote(category)})
-        info = json.loads(response)
+            response = util.http_get(API_ENDPOINT + '/%s/catalog' % self._mode(), {'pageSize': 1000, 'filter': quote(category)},
+                                     token=self._tokens.jwt_token,
+                                     profile=self._tokens.profile)
+        info = json.loads(response.text)
         content = info.get('pagedTeasers', {}).get('content', [])
 
         items = []
         for item in content:
-            if item.get('target', {}).get('type') == self.CONTENT_TYPE_MOVIE:
+            if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE:
                 items.append(self._parse_movie_teaser(item))
 
-            elif item.get('target', {}).get('type') == self.CONTENT_TYPE_PROGRAM:
+            elif item.get('target', {}).get('type') == CONTENT_TYPE_PROGRAM:
                 items.append(self._parse_program_teaser(item))
 
         return items
@@ -470,7 +207,7 @@ class VtmGo:
         """
         if cache in [CACHE_AUTO, CACHE_ONLY]:
             # Try to fetch from cache
-            movie = self._kodi.get_cache(['movie', movie_id])
+            movie = kodiutils.get_cache(['movie', movie_id])
             if movie is None and cache == CACHE_ONLY:
                 return None
         else:
@@ -478,10 +215,12 @@ class VtmGo:
 
         if movie is None:
             # Fetch from API
-            response = self._get_url('/%s/movies/%s' % (self._mode(), movie_id))
-            info = json.loads(response)
+            response = util.http_get(API_ENDPOINT + '/%s/movies/%s' % (self._mode(), movie_id),
+                                     token=self._tokens.jwt_token,
+                                     profile=self._tokens.profile)
+            info = json.loads(response.text)
             movie = info.get('movie', {})
-            self._kodi.set_cache(['movie', movie_id], movie)
+            kodiutils.set_cache(['movie', movie_id], movie)
 
         return Movie(
             movie_id=movie.get('id'),
@@ -506,7 +245,7 @@ class VtmGo:
         """
         if cache in [CACHE_AUTO, CACHE_ONLY]:
             # Try to fetch from cache
-            program = self._kodi.get_cache(['program', program_id])
+            program = kodiutils.get_cache(['program', program_id])
             if program is None and cache == CACHE_ONLY:
                 return None
         else:
@@ -514,10 +253,12 @@ class VtmGo:
 
         if program is None:
             # Fetch from API
-            response = self._get_url('/%s/programs/%s' % (self._mode(), program_id))
-            info = json.loads(response)
+            response = util.http_get(API_ENDPOINT + '/%s/programs/%s' % (self._mode(), program_id),
+                                     token=self._tokens.jwt_token,
+                                     profile=self._tokens.profile)
+            info = json.loads(response.text)
             program = info.get('program', {})
-            self._kodi.set_cache(['program', program_id], program)
+            kodiutils.set_cache(['program', program_id], program)
 
         channel = self._parse_channel(program.get('channelLogoUrl'))
 
@@ -610,8 +351,10 @@ class VtmGo:
         :type episode_id: str
         :rtype Episode
         """
-        response = self._get_url('/%s/play/episode/%s' % (self._mode(), episode_id))
-        episode = json.loads(response)
+        response = util.http_get(API_ENDPOINT + '/%s/play/episode/%s' % (self._mode(), episode_id),
+                                 token=self._tokens.jwt_token,
+                                 profile=self._tokens.profile)
+        episode = json.loads(response.text)
 
         # Extract next episode info if available
         next_playable = episode.get('nextPlayable')
@@ -639,22 +382,25 @@ class VtmGo:
         :type search: str
         :rtype list[Union[Movie, Program]]
         """
-        response = self._get_url('/%s/search/?query=%s' % (self._mode(), quote(search)))
-        results = json.loads(response)
+        response = util.http_get(API_ENDPOINT + '/%s/search/?query=%s' % (self._mode(), quote(search)),
+                                 token=self._tokens.jwt_token,
+                                 profile=self._tokens.profile)
+        results = json.loads(response.text)
 
         items = []
         for category in results.get('results', []):
             for item in category.get('teasers'):
-                if item.get('target', {}).get('type') == self.CONTENT_TYPE_MOVIE:
+                if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE:
                     items.append(self._parse_movie_teaser(item))
 
-                elif item.get('target', {}).get('type') == self.CONTENT_TYPE_PROGRAM:
+                elif item.get('target', {}).get('type') == CONTENT_TYPE_PROGRAM:
                     items.append(self._parse_program_teaser(item))
         return items
 
-    def get_product(self):
+    @staticmethod
+    def get_product():
         """ Return the product that is currently selected. """
-        profile = self._kodi.get_setting('profile')
+        profile = kodiutils.get_setting('profile')
         try:
             return profile.split(':')[1]
         except (IndexError, AttributeError):
@@ -731,93 +477,3 @@ class VtmGo:
         import os.path
         # The channels id's we use in resources.lib.modules.CHANNELS neatly matches this part in the url.
         return str(os.path.basename(url).split('-')[0])
-
-    def _get_url(self, url, params=None):
-        """ Makes a GET request for the specified URL.
-        :type url: str
-        :type params: dict
-        :rtype str
-        """
-        try:
-            return self._request('GET', url, params=params)
-        except InvalidLoginException:
-            self._auth.clear_token()
-            self._authenticate()
-            # Retry the same request
-            return self._request('GET', url, params=params)
-
-    def _put_url(self, url, params=None):
-        """ Makes a PUT request for the specified URL.
-        :type url: str
-        :type params: dict
-        :rtype str
-        """
-        try:
-            return self._request('PUT', url, params=params)
-        except InvalidLoginException:
-            self._auth.clear_token()
-            self._authenticate()
-            # Retry the same request
-            return self._request('PUT', url, params=params)
-
-    def _post_url(self, url, params=None, data=None):
-        """ Makes a POST request for the specified URL.
-        :type url: str
-        :type params: dict
-        :type data: dict
-        :rtype str
-        """
-        try:
-            return self._request('POST', url, params=params, data=data)
-        except InvalidLoginException:
-            self._auth.clear_token()
-            self._authenticate()
-            # Retry the same request
-            return self._request('POST', url, params=params)
-
-    def _delete_url(self, url, params=None):
-        """ Makes a DELETE request for the specified URL.
-        :type url: str
-        :type params: dict
-        :rtype str
-        """
-        try:
-            return self._request('DELETE', url, params=params)
-        except InvalidLoginException:
-            self._auth.clear_token()
-            self._authenticate()
-            # Retry the same request
-            return self._request('DELETE', url, params=params)
-
-    def _request(self, method, url, params=None, data=None):
-        """ Makes a request for the specified URL.
-        :type url: str
-        :type params: dict
-        :type data: dict
-        :rtype str
-        """
-        _LOGGER.debug('Sending %s %s...', method, url)
-        response = self._session.request(method,
-                                         self.API_ENDPOINT + url,
-                                         params=params,
-                                         json=data)
-
-        # Set encoding to UTF-8 if no charset is indicated in http headers (https://github.com/psf/requests/issues/1604)
-        if not response.encoding:
-            response.encoding = 'utf-8'
-
-        _LOGGER.debug('Got response (status=%s): %s', response.status_code, response.text)
-
-        if response.status_code == 404:
-            raise UnavailableException()
-
-        if response.status_code == 401:
-            raise InvalidLoginException()
-
-        if response.status_code == 426:
-            raise ApiUpdateRequired()
-
-        if response.status_code not in [200, 204]:
-            raise Exception('Error %s.' % response.status_code)
-
-        return response.text

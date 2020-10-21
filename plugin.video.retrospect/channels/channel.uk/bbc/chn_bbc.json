@@ -3,7 +3,10 @@
     {
       "guid": "F1E2E7DA-5710-4455-8EEF-CEAF16AF1121",
       "name": "BBC iPlayer",
-      "description": "BBC iPlayer available shows",
+      "description": {
+        "en": "Enjoy TV programmes you missed and view exclusive content on BBC iPlayer.",
+        "nl": "Kijk TV programma's die je gemist hebt en bekijk exclusieve content met BBC iPlayer."
+      },
       "icon": "bbciplayerlarge.png",
       "category": "National",
       "channelcode": "bbciplayer",

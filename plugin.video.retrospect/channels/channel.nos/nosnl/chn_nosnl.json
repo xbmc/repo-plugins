@@ -3,7 +3,10 @@
     {
       "guid": "EE33E7EC-FDAB-11E0-AA09-1EED4724019B",
       "name": "NOS.nl",
-      "description": "Video en audio van NOS.nl.",
+      "description": {
+        "en": "Video and audio from NOS.nl.\n\nNOS.nl - News, sport and events on radio, TV and internet.",
+        "nl": "Video en audio van NOS.nl.\n\nNOS.nl - Nieuws, sport en evenementen op radio, TV en internet"
+      },
       "icon": "nosnllarge.png",
       "category": "National",
       "channelcode": "nosnl",

@@ -3,40 +3,45 @@
     {
       "guid": "7F92EAEE-6066-4ED5-911A-2C3DCF964D19",
       "name": "VTM.be",
-      "description": "Online uitzendingen van VTM.be.",
+      "description": {
+        "en": "Online broadcasts from VTM.be.\n\n[B]Streams from VTM.be require a Medialaan account[/B]. It can be configured via the Channel settings.",
+        "nl": "Online uitzendingen van VTM.be.\n\n[B]Voor het bekijken van streams van VTM.be is een Medialaan account nodig[/B]. Deze kan worden geconfigueerd via de kanaal instellingen."
+      },
       "icon": "vtmbelogo.png",
       "category": "National",
       "channelcode": "vtm",
       "sortorder": 10,
       "language": "be",
-      "fanart": "vtmbefanart.jpg",
-      "message": "Streams from VTM.be require a Medialaan account. It can be configured via the Channel settings."
+      "fanart": "vtmbefanart.jpg"
     },
     {
       "guid": "01C7064B-7E7A-4742-A042-E6F2F4EC5966",
       "name": "Q2.be",
-      "description": "Online uitzendingen van Q2.be.",
+      "description": {
+        "en": "Online broadcasts from Q2.be.\n\n[B]Streams from Q2.be require a Medialaan account[/B]. It can be configured via the Channel settings.",
+        "nl": "Online uitzendingen van Q2.be.\n\n[B]Voor het bekijken van streams van Q2.be is een Medialaan account nodig[/B]. Deze kan worden geconfigueerd via de kanaal instellingen."
+      },
       "icon": "q2belogo.png",
       "category": "National",
       "channelcode": "q2",
       "ignore": true,
       "sortorder": 11,
       "language": "be",
-      "fanart": "q2befanart.jpg",
-      "message": "Streams from VTM.be require a Medialaan account. It can be configured via the Channel settings."
+      "fanart": "q2befanart.jpg"
     },
     {
       "guid": "61AA2559-7D64-40A2-A3BE-56DD3F6BBD4A",
       "name": "Stievie",
-      "description": "Online uitzendingen van Stievie.",
+      "description": {
+        "en": "Online broadcasts from Stievie.\n\n[B]Streams from Stievie require a Medialaan account[/B]. It can be configured via the Channel settings.",
+        "nl": "Online uitzendingen van Stievie.\n\n[B]Voor het bekijken van streams van Stievie is een Medialaan account nodig[/B]. Deze kan worden geconfigueerd via de kanaal instellingen."
+      },
       "icon": "stievielogo.png",
       "category": "National",
       "channelcode": "stievie",
       "sortorder": 11,
       "language": "be",
-      "fanart": "stieviefanart2.jpg",
-      "message": "Streams from Stievie.be require a Medialaan account. It can be configured via the Channel settings.",
-      "localIPSupported": true
+      "fanart": "stieviefanart2.jpg"
     }
   ],
   "settings": [

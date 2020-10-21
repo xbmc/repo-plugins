@@ -3,14 +3,16 @@
     {
       "guid": "F530A9EC-3C0D-49B6-96C2-480273417460",
       "name": "VRT NU",
-      "description": "VRT NU is het online videoplatform van VRT waarop je je favoriete programma’s van de VRT-merken kan bekijken. Je kan live naar de televisiezenders Eén, Canvas en Ketnet kijken en naar een selectie video’s van radiozenders MNM en Studio Brussel. Een groot aantal van de programma’s van deze merken kan je ook achteraf herbekijken.",
+      "description": {
+        "en": "VRT NU is an online video platform for VRT. With this platform it is possible to watch your favourite shows of the VRT brands. You can watch live streams of Eén, Canvas and Ketnet and listen to MNM en Studio Brussel radio. A large number of these videos are also available as video on demand.\n\n[B]Streams from VRT NU require a VRT account.[/B] It can be configured via the Channel settings.",
+        "nl": "VRT NU is het online videoplatform van VRT waarop je je favoriete programma’s van de VRT-merken kan bekijken. Je kan live naar de televisiezenders Eén, Canvas en Ketnet kijken en naar een selectie video’s van radiozenders MNM en Studio Brussel. Een groot aantal van de programma’s van deze merken kan je ook achteraf herbekijken.\n\n[B]Om stream te bekijken via VRT NU is een account nodig[/B]. Deze kan worden geconfigureerd via de add-on instellingen."
+      },
       "icon": "vrtnuicon.png",
       "category": "National",
       "channelcode": "vrtnu",
       "sortorder": 11,
       "language": "be",
       "fanart": "vrtnufanart.jpg",
-      "message": "Streams from VRT NU require a VRT account. It can be configured via the Channel settings.",
       "adaptiveAddonSelectable": true
     }
   ],

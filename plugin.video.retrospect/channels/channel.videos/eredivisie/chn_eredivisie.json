@@ -3,7 +3,10 @@
     {
       "guid": "CC524DC0-C846-11E0-871B-984F4824019B",
       "name": "Fox Sports",
-      "description": "Videos van de foxsports.nl website.",
+      "description": {
+        "en": "FOX Sports: The latest sport news, videos and scores.",
+        "nl": "FOX Sports: Het laatste sportnieuws, video's en scores."
+      },
       "icon": "foxsportlarge.png",
       "category": "Sport",
       "channelcode": "eredivisie",

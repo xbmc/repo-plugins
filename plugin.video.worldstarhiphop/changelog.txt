@@ -1,3 +1,6 @@
+v1.0.13 (2030-10-25)
+- changes due to website changes
+
 v1.0.12 (2018-01-20)
 - addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
 Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.

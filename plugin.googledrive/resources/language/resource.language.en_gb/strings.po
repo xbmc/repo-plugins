@@ -29,7 +29,7 @@ msgid "Source Service"
 msgstr ""
 
 msgctxt "#32003"
-msgid "Before export to library, remove previous files and folders"
+msgid "Before full export, remove previous local files and folders"
 msgstr ""
 
 msgctxt "#32004"
@@ -92,6 +92,10 @@ msgctxt "#32018"
 msgid "Save resume points and watched status in library"
 msgstr ""
 
+msgctxt "#32019"
+msgid "Do not include filename extension in a .strm"
+msgstr ""
+
 msgctxt "#32030"
 msgid "Collaboration"
 msgstr ""
@@ -145,9 +149,13 @@ msgid "Response code: %s"
 msgstr ""
 
 msgctxt "#32074"
-msgid "Export .nfo files"
+msgid "Download metadata files (.nfo, .strm)"
 msgstr ""
 
 msgctxt "#32075"
 msgid "Skip unmodified files"
+msgstr ""
+
+msgctxt "#32076"
+msgid "Play choosing stream format"
 msgstr ""

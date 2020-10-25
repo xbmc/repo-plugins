@@ -55,7 +55,7 @@ def router(paramstring):
         if not checkStream(html):
             return
         try:
-            out = re.findall(r'<source src=(.+?)\s', html)[0]
+            out = re.findall(r'"VideoSource":"([^"]+)"', html)[0]
             if out.startswith('http') == False:
                 out = 'https://' + out.replace('//', '')
         except Exception:

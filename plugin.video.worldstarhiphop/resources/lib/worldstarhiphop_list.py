@@ -94,18 +94,19 @@ class Main(object):
         # Parse response
         soup = getSoup(html_source)
 
-        # <section class="box" itemscope itemtype="http://schema.org/ImageObject">
-        #     <a itemprop="url" href="/videos/video.php?v=wshh2CJS555r6b1C9wYW" class="video-box">
-        #         <img class="lazy" data-original="http://hw-static.worldstarhiphop.com/u/pic/2017/06/RQuaJkNGpDn1.jpg" width="222" height="125" alt="XXXTentacion Punches A Fan In The Face For Touching Him During Salt Lake City Performance!" itemprop="thumbnailUrl">
-        #         <noscript><img src="http://hw-static.worldstarhiphop.com/u/pic/2017/06/RQuaJkNGpDn1.jpg" width="222" height="125" alt="XXXTentacion Punches A Fan In The Face For Touching Him During Salt Lake City Performance!" itemprop="thumbnailUrl"></noscript>
-        #     </a>
-        #     <strong class="title" itemprop="name"><a href="/videos/video.php?v=wshh2CJS555r6b1C9wYW">XXXTentacion Punches A Fan In The Face For Touching Him During Salt Lake City Performance!</a></strong>
-        #     <div>
-        #         <span class="views">104,000</span>
-        #         <span class="comments"><a href="http://www.worldstarhiphop.com/videos/video.php?v=wshh2CJS555r6b1C9wYW#disqus_thread" data-disqus-identifier="108305"></a></span>
-        #     </div>
-        # </section>
-
+        # <section class="box" itemscope="" itemtype="http://schema.org/ImageObject">
+        #   <a itemprop="url" class="video-box" href="https://worldstar.com/video.php?v=wshhZazSI845PGtaW3In">
+        # 	    <img class="lazy" data-original="https://hw-static.worldstarhiphop.com/u/pic/2020/10/tjTbMYTEAZPf.jpg" alt="Busted: Husband Calls Cell Phone Store About His Wife's Call Logs &amp; Finds Out She Belongs To The Streets! " itemprop="thumbnailUrl" src="https://hw-static.worldstarhiphop.com/u/pic/2020/10/tjTbMYTEAZPf.jpg" style="display: block;" width="222" height="125">
+        # 		<noscript><img src="https://hw-static.worldstarhiphop.com/u/pic/2020/10/tjTbMYTEAZPf.jpg" width="222" height="125" alt="Busted: Husband Calls Cell Phone Store About His Wife&#039;s Call Logs &amp; Finds Out She Belongs To The Streets! " itemprop="thumbnailUrl"></noscript>
+        # 	</a>
+        # 	<strong class="title" itemprop="name"><a itemprop="url" href="https://worldstar.com/video.php?v=wshhZazSI845PGtaW3In">Busted: Husband Calls Cell Phone Store About His Wife's Call Logs &amp; Finds Out She Belongs To The Streets! </a></strong>
+        # 	<div>
+        # 		<span class="views">231,089</span>
+        # 		<span class="comments">
+        # 			<a href="https://worldstarhiphop.com/videos/video.php?v=wshhZazSI845PGtaW3In#disqus_thread" data-disqus-identifier="158920">3084</a>
+        # 		</span>
+        # 	</div>
+        #</section>
         items = soup.findAll('section', attrs={'class': re.compile("^box")})
 
         log("len(items)", len(items))
@@ -123,7 +124,7 @@ class Main(object):
 
         for item in items:
             try:
-                video_page_url = BASEURL + str(item.a['href'])
+                video_page_url = str(item.a['href'])
             except:
                 # skip the item if it does not have a href
 
@@ -134,7 +135,7 @@ class Main(object):
             log("video_page_url", video_page_url)
 
             # skip the item if the video page url isn't a real video page url
-            if str(video_page_url).find('/videos/video.php?v=') == -1:
+            if str(video_page_url).find('/video.php?v=') == -1:
 
                 log("skipping item because no video could be found", video_page_url)
 

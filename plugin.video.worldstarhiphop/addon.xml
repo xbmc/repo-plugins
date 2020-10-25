@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon 
+	id="plugin.video.worldstarhiphop" 
+	name="World Star Hip Hop" 
+	version="1.0.13+matrix.1"
+	provider-name="Skipmode A1">
+  <requires>
+    <import addon="xbmc.python"                     version="3.0.0"/>
+    <import addon="script.module.beautifulsoup4"    version="4.3.2"/>
+    <import addon="script.module.requests"          version="2.4.3"/>
+    <import addon="script.module.future"            version="0.0.1"/>
+  	<import addon="script.module.html5lib"          version="0.999.0"/>
+	<import addon="script.module.youtube.dl"        version="20.616.0+matrix.1"/>
+  </requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+  <extension point="xbmc.addon.metadata">
+	<platform>all</platform>
+	<summary lang="en">Worldstarhiphop is home to everything entertainment and hip hop</summary>
+    <description lang="en">Worldstarhiphop is home to everything entertainment and hip hop</description>
+    <disclaimer lang="en">For bugs, requests or general questions visit the Worldstarhiphop thread on the Kodi forum</disclaimer>
+    <language>en</language>
+    <platform>all</platform>
+	<license>GPL-2.0-or-later</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=229385</forum>
+    <website>http://worldstarhiphop.com/</website>
+    <source>https://github.com/skipmodea1/plugin.video.worldstarhiphop.python3</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <news>v1.0.13 (2030-10-25)
+    - changes due to website changes
+    </news>
+  </extension>
+</addon>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.mazacka"
-version="1.2.2"
+version="1.2.3"
 name="Mazačka - Streets of Prague"
 provider-name="Radek Homola">
 <requires>
@@ -22,7 +22,7 @@ provider-name="Radek Homola">
     <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     <screenshot>resources/screenshots/screenshot-03.jpg</screenshot>    
   </assets>
-  <news>v1.2.2 (2020-09-27)
+  <news>v1.2.3 (2020-10-25)
   - Fixed streaming error
   </news>
 </extension>

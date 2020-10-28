@@ -153,6 +153,9 @@ def play_library_media(context, data):
 
 
 def create_playback_item(url, streams, data, details):
+    if not data:
+        data = {}
+
     stream_art = streams.get('art', {})
 
     if CONFIG['kodi_version'] >= 18:
@@ -179,7 +182,6 @@ def create_playback_item(url, streams, data, details):
             if not poster:
                 poster = stream_art.get('show_thumb', '')
 
-        list_item.setInfo(type=streams['type'], infoLabels=data)
         list_item.setArt({
             'icon': thumb,
             'thumb': thumb,
@@ -188,13 +190,14 @@ def create_playback_item(url, streams, data, details):
             'banner': stream_art.get('banner')
         })
 
-    list_item.setProperty('TotalTime', str(details['duration']))
+    list_item.setProperty('TotalTime', '%.1f' % details['duration'])
     if details.get('resuming') and details.get('resume'):
-        list_item.setProperty('ResumeTime', str(details['resume']))
-        list_item.setProperty('StartOffset', str(details['resume']))
-        list_item.setProperty('StartPercent', '%.2f' % (float(details['resume']) /
-                                                        float(details['duration'])))
+        list_item.setProperty('ResumeTime', '%.1f' % details['resume'])
+        data['playcount'] = '0'
+
         LOG.debug('Playback from resume point: %s' % details['resume'])
+
+    list_item.setInfo(type=streams['type'], infoLabels=data)
 
     if streams['type'] == 'music':
         list_item.setProperty('culrc.source', i18n('Plex powered by LyricFind'))

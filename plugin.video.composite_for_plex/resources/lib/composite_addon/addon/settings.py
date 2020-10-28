@@ -22,6 +22,11 @@ from kodi_six import xbmcvfs  # pylint: disable=import-error
 
 from .constants import CONFIG
 
+try:
+    xbmc.translatePath = xbmcvfs.translatePath
+except AttributeError:
+    pass
+
 
 class AddonSettings:  # pylint: disable=too-many-public-methods
 

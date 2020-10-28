@@ -90,7 +90,13 @@ def mark_tvshow_unwatched(tvshow_id):
 
 
 if __name__ == '__main__':
-    plugin_url = xbmc.getInfoLabel('ListItem.FileNameAndPath')
+    info_tag = sys.listitem.getVideoInfoTag()  # pylint: disable=no-member
+
+    try:
+        plugin_url = info_tag.getFilenameAndPath()
+    except AttributeError:
+        plugin_url = xbmc.getInfoLabel('ListItem.FileNameAndPath')
+
     params = parse_qs(plugin_url.split('?')[-1])
     plex_url = params.get('url', [''])[0]
 
@@ -103,7 +109,6 @@ if __name__ == '__main__':
     xbmc.executebuiltin('RunScript(plugin.video.composite_for_plex, watch, %s, %s, unwatch)' %
                         (plex_url, metadata_id))
 
-    info_tag = sys.listitem.getVideoInfoTag()  # pylint: disable=no-member
     database_id = info_tag.getDbId()
     media_type = info_tag.getMediaType()
 

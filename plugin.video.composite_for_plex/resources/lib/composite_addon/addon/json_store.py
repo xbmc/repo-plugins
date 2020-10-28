@@ -19,6 +19,11 @@ from kodi_six import xbmc  # pylint: disable=import-error
 from .common import CONFIG
 from .logger import Logger
 
+try:
+    xbmc.translatePath = xbmcvfs.translatePath
+except AttributeError:
+    pass
+
 LOG = Logger('json_store')
 
 

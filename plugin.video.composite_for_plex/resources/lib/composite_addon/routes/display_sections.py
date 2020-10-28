@@ -37,8 +37,8 @@ def run(context, content_filter=None, display_shared=False):
 
     menus = context.settings.show_menus()
 
-    server_section_menus = server_section_menus_items(context, server_list, content_filter,
-                                                      display_shared, menus)
+    server_section_menus, playlist_section_menus = \
+        server_section_menus_items(context, server_list, content_filter, display_shared, menus)
 
     if server_section_menus:
         items += combined_sections_item(context)
@@ -52,6 +52,9 @@ def run(context, content_filter=None, display_shared=False):
         xbmcplugin.endOfDirectory(get_handle(),
                                   cacheToDisc=context.settings.cache_directory())
         return
+
+    if menus.get('playlists') and context.plex_network.is_myplex_signedin():
+        items += playlist_section_menus
 
     if menus.get('composite_playlist') and context.plex_network.is_myplex_signedin():
         items += composite_playlist_item(context)
@@ -110,6 +113,7 @@ def server_section_menus_items(context, server_list, content_filter, display_sha
     }
 
     items = []
+    playlist_items = []
     for server in server_list:
 
         sections = server.get_sections()
@@ -180,11 +184,11 @@ def server_section_menus_items(context, server_list, content_filter, display_sha
                 }
                 item_url = server.join_url(url_location, 'playlists')
                 gui_item = GUIItem(item_url, details, extra_data)
-                server_items.append(create_gui_item(context, gui_item))
+                playlist_items.append(create_gui_item(context, gui_item))
 
             items += server_items
 
-    return items
+    return items, playlist_items
 
 
 def server_additional_menu_items(context, server_list, content_filter, menus):
@@ -229,19 +233,6 @@ def server_additional_menu_items(context, server_list, content_filter, menus):
                 'mode': MODES.PLEXONLINE
             }
             item_url = server.join_url(server.get_url_location(), 'system/plexonline')
-            gui_item = GUIItem(item_url, details, extra_data)
-            append_item(create_gui_item(context, gui_item))
-
-        if menus.get('playlists'):
-            # create playlist link
-            details = {
-                'title': prefix + i18n('Playlists')
-            }
-            extra_data = {
-                'type': 'Folder',
-                'mode': MODES.PLAYLISTS
-            }
-            item_url = server.join_url(server.get_url_location(), 'playlists')
             gui_item = GUIItem(item_url, details, extra_data)
             append_item(create_gui_item(context, gui_item))
 

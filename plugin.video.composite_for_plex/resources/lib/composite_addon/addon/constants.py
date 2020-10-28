@@ -15,6 +15,12 @@ import os
 
 from kodi_six import xbmc  # pylint: disable=import-error
 from kodi_six import xbmcaddon  # pylint: disable=import-error
+from kodi_six import xbmcvfs  # pylint: disable=import-error
+
+try:
+    xbmc.translatePath = xbmcvfs.translatePath
+except AttributeError:
+    pass
 
 __ID = 'plugin.video.composite_for_plex'
 __ADDON = xbmcaddon.Addon(id=__ID)

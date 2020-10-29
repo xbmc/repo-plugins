@@ -9,6 +9,8 @@
     See LICENSES/GPL-2.0-or-later.txt for more information.
 """
 
+import sys
+
 from kodi_six import xbmc  # pylint: disable=import-error
 
 
@@ -19,7 +21,13 @@ def strip_transcode(url):
 
 
 if __name__ == '__main__':
-    plugin_url = xbmc.getInfoLabel('ListItem.FileNameAndPath')
+    info_tag = sys.listitem.getVideoInfoTag()  # pylint: disable=no-member
+
+    try:
+        plugin_url = info_tag.getFilenameAndPath()
+    except AttributeError:
+        plugin_url = xbmc.getInfoLabel('ListItem.FileNameAndPath')
+
     plugin_url = strip_transcode(plugin_url)
     plugin_url += '&transcode=1'
     xbmc.executebuiltin('PlayMedia(%s)' % plugin_url)

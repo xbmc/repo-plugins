@@ -13,10 +13,16 @@
 import pyxbmct.addonwindow as pyxbmct  # pylint: disable=import-error
 from kodi_six import xbmc  # pylint: disable=import-error
 from kodi_six import xbmcgui  # pylint: disable=import-error
+from kodi_six import xbmcvfs  # pylint: disable=import-error
 
 from ..addon.constants import CONFIG
 from ..addon.logger import Logger
 from ..addon.strings import i18n
+
+try:
+    xbmc.translatePath = xbmcvfs.translatePath
+except AttributeError:
+    pass
 
 LOG = Logger('plex_signin')
 DIALOG = xbmcgui.Dialog()

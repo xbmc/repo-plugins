@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.composite_for_plex" name="Composite" version="1.4.0" provider-name="anxdpanic">
+<addon id="plugin.video.composite_for_plex" name="Composite" version="1.4.1" provider-name="anxdpanic">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.kodi-six" version="0.0.2"/>
@@ -38,13 +38,11 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <news>
-[add] Combined Sections to main menu
-[add] Composite Playlist to main menu, create a playlist based the information you provide
-[add] Composite context menu for library and widgets
-    - adds Play Transcoded, Mark as un/watched
-[add] Section selection for Kodi Library support
-[add] settings to included watched content in combined 'Recently Added Episodes/Movies' sections
-[chg] Remove HTTPS from settings and move Certificate Verification from settings to Manage Servers
+[fix] xbmc.translatePath -&gt; xbmcvfs.translatePath |Kodi 19|
+[upd] improve resuming playback
+[upd] improve accuracy of library context menus |Kodi 19|
+[chg] group playlist sections on main menu
+[chg] always used cached servers during playback
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>
@@ -53,7 +51,7 @@
         <platform>all</platform>
         <license>GPL-2.0-or-later</license>
         <source>https://github.com/anxdpanic/plugin.video.composite_for_plex</source>
-        <forum>https://forum.kodi.tv/showthread.php?tid=351179</forum>
+        <forum>https://composite.panicked.xyz/forum</forum>
         <description lang="en_GB">Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay</description>
         <disclaimer lang="en_GB">Composite is NOT an official Plex add-on and is not supported or endorsed by Plex.</disclaimer>
         <description lang="de_DE">Durchsuchen und Abspielen von Videos, Musik und Fotos, die vom Plex Media Server verwaltet werden.[CR][CR]Fork von Hippojay's PleXBMC</description>

@@ -22,6 +22,7 @@ from six import iteritems
 from six import string_types
 from six.moves.urllib_parse import urlparse
 
+from kodi_six import xbmc  # pylint: disable=import-error
 from kodi_six import xbmcgui  # pylint: disable=import-error
 
 from ..addon import cache_control
@@ -179,6 +180,16 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
             ttl = self.settings.cache_ttl()
         except ValueError:
             ttl = 3600
+
+        if xbmc.Player().isPlaying():
+            data_ok, self.server_list = self.cache.read_cache(self.server_list_cache)
+
+            if not data_ok or not self.server_list:
+                LOG.debug('unsuccessful during playback')
+                self.server_list = {}
+
+            LOG.debug('Server list is now: %s' % self.server_list)
+            return
 
         data_ok, self.server_list = self.cache.check_cache(self.server_list_cache, ttl)
 

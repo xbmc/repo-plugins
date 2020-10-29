@@ -1,0 +1,14 @@
+language: python
+python:
+  - "2.7"
+
+install:
+  - pip install pylint
+
+before_script:
+  - pylint --version
+
+# command to run tests
+script:
+  - find . -iname "*.py" | xargs pylint --output-format=colorized --disable=line-too-long,wrong-import-position
+  - python -B -m unittest discover

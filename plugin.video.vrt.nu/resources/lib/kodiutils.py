@@ -368,6 +368,8 @@ def set_locale():
 
 def localize(string_id, **kwargs):
     """Return the translated string from the .po language files, optionally translating variables"""
+    if not isinstance(string_id, int) and not string_id.isdecimal():
+        return string_id
     if kwargs:
         from string import Formatter
         return Formatter().vformat(ADDON.getLocalizedString(string_id), (), SafeDict(**kwargs))
@@ -1114,18 +1116,26 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
             return None
         if exc.code in (400, 403) and exc.headers.get('Content-Type') and 'application/json' in exc.headers.get('Content-Type'):
             return exc
-        reason = exc.reason
-        code = exc.code
-        ok_dialog(heading='HTTP Error {code}'.format(code=code), message='{}\n{}'.format(url, reason))
-        log_error('HTTP Error {code}: {reason}', code=code, reason=reason)
+        ok_dialog(heading='HTTP Error {code}'.format(code=exc.code), message='{}\n{}'.format(url, exc.reason))
+        log_error('HTTP Error {code}: {reason}', code=exc.code, reason=exc.reason)
         return None
     except URLError as exc:
         ok_dialog(heading=localize(30968), message=localize(30969))
         log_error('URLError: {error}\nurl: {url}', error=exc.reason, url=url)
         return None
-    except (timeout, SSLError) as exc:
+    except SSLError as exc:
+        # TODO: Include the error message in the notification window
         ok_dialog(heading=localize(30968), message=localize(30969))
-        log_error('{error}\nurl: {url}', error=exc.reason, url=url)
+        if hasattr(exc, 'reason'):  # Python 2.7.9+, but still failed on Python 2.7.16
+            log_error('SSLError: {error} ({library})\nurl: {url}', error=exc.reason, library=exc.library, url=url)
+        elif isinstance(exc, list):
+            log_error('SSLError: {error} ({errno})\nurl: {url}', errno=exc[0], error=exc[1], url=url)
+        else:
+            log_error('SSLError: {error}\nurl: {url}', error=str(exc), url=url)
+        return None
+    except timeout as exc:
+        ok_dialog(heading=localize(30968), message=localize(30969))
+        log_error('Timeout: {error}\nurl: {url}', error=exc.reason, url=url)
         return None
 
 

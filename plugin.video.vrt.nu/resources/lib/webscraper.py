@@ -9,60 +9,8 @@ try:  # Python 3
 except ImportError:  # Python 2
     from urllib2 import HTTPError
 
-from kodiutils import get_cache, get_setting_bool, log_error, open_url, ttl, update_cache
-from utils import assetpath_to_id, add_https_proto, strip_newlines
-
-
-def valid_categories(categories):
-    """Check if categories contain all necessary keys and values"""
-    return bool(categories) and all(item.get('id') and item.get('name') for item in categories)
-
-
-def get_categories():
-    """Return a list of categories by scraping the VRT NU website"""
-
-    cache_file = 'categories.json'
-    categories = []
-
-    # Try the cache if it is fresh
-    categories = get_cache(cache_file, ttl=7 * 24 * 60 * 60)
-
-    # Try to scrape from the web
-    if not valid_categories(categories):
-        from bs4 import BeautifulSoup, SoupStrainer
-        response = open_url('https://www.vrt.be/vrtnu/categorieen/')
-        tiles = SoupStrainer('nui-list--content')
-        soup = BeautifulSoup(response.read(), 'html.parser', parse_only=tiles)
-
-        categories = []
-        for tile in soup.find_all('nui-tile'):
-            categories.append(dict(
-                id=tile.get('href').split('/')[-2],
-                thumbnail=get_category_thumbnail(tile),
-                name=get_category_title(tile),
-            ))
-        if categories:
-            from json import dumps
-            update_cache('categories.json', dumps(categories))
-
-    return categories
-
-
-def get_category_thumbnail(element):
-    """Return a category thumbnail, if available"""
-    if get_setting_bool('showfanart', default=True):
-        raw_thumbnail = element.find(class_='media').get('data-responsive-image', 'DefaultGenre.png')
-        return add_https_proto(raw_thumbnail)
-    return 'DefaultGenre.png'
-
-
-def get_category_title(element):
-    """Return a category title, if available"""
-    found_element = element.find('h3')
-    if found_element:
-        return strip_newlines(found_element.a.contents[0])
-    # FIXME: We should probably fall back to something sensible here, or raise an exception instead
-    return ''
+from kodiutils import get_cache, log_error, open_url, ttl, update_cache
+from utils import assetpath_to_id
 
 
 def get_video_attributes(vrtnu_url):
@@ -79,10 +27,13 @@ def get_video_attributes(vrtnu_url):
     # Scrape video attributes
     from bs4 import BeautifulSoup, SoupStrainer
     try:
-        html_page = open_url(vrtnu_url, raise_errors='all').read()
+        response = open_url(vrtnu_url, raise_errors='all')
     except HTTPError as exc:
         log_error('Web scraping video attributes failed: {error}', error=exc)
         return None
+    if response is None:
+        return None
+    html_page = response.read()
     strainer = SoupStrainer(['section', 'div'], {'class': ['video-player', 'livestream__inner']})
     soup = BeautifulSoup(html_page, 'html.parser', parse_only=strainer)
     item = None

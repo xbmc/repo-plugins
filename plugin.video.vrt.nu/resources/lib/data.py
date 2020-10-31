@@ -12,22 +12,23 @@ SECONDS_MARGIN = 30
 CATEGORIES = [
     dict(name='Audiodescriptie', id='met-audiodescriptie', msgctxt=30070),
     dict(name='Cultuur', id='cultuur', msgctxt=30071),
-    dict(name='Docu', id='docu', msgctxt=30072),
+    dict(name='Documentaire', id='docu', msgctxt=30072),
     dict(name='Entertainment', id='entertainment', msgctxt=30073),
-    dict(name='Films', id='films', msgctxt=30074),
+    dict(name='Film', id='films', msgctxt=30074),
     dict(name='Human interest', id='human-interest', msgctxt=30075),
     dict(name='Humor', id='humor', msgctxt=30076),
-    dict(name='Kinderen en jongeren', id='voor-kinderen', msgctxt=30077),
+    dict(name='Kinderen & jongeren', id='voor-kinderen', msgctxt=30077),
     dict(name='Koken', id='koken', msgctxt=30078),
     dict(name='Levensbeschouwing', id='levensbeschouwing', msgctxt=30087),
     dict(name='Lifestyle', id='lifestyle', msgctxt=30079),
     dict(name='Muziek', id='muziek', msgctxt=30080),
     dict(name='Nieuws en actua', id='nieuws-en-actua', msgctxt=30081),
-    dict(name='Series', id='series', msgctxt=30082),
+    dict(name='Nostalgie', id='nostalgie', msgctxt=30088),
+    dict(name='Serie', id='series', msgctxt=30082),
     dict(name='Sport', id='sport', msgctxt=30083),
     dict(name='Talkshows', id='talkshows', msgctxt=30084),
     dict(name='Vlaamse Gebarentaal', id='met-gebarentaal', msgctxt=30085),
-    dict(name='Wetenschap en natuur', id='wetenschap-en-natuur', msgctxt=30086),
+    dict(name='Wetenschap & natuur', id='wetenschap-en-natuur', msgctxt=30086),
 ]
 
 # TODO: Find a solution for the below VRT YouTube channels

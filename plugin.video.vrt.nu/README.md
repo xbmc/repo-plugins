@@ -59,6 +59,16 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.4.1 (2020-10-31)
+- Add new category "Nostalgia" (@dagwieers)
+- Add poster support (@dagwieers)
+- Add product placement and "kijkwijzer" metadata (@mediaminister)
+- Get categories from online JSON (@mediaminister)
+- Improvements to connection error handling (@dagwieers)
+- Improvements to virtual subclip support (@mediaminister)
+- Extend soon offline menu to seven days (@mediaminster)
+- Improve Up Next support (@mediaminister)
+
 ### v2.4.0 (2020-07-18)
 - Show error messages when connections fail (@mediaminister, @dagwieers)
 - Improve user authentication cache (@mediaminister)

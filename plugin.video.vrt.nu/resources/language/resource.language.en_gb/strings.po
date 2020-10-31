@@ -252,6 +252,11 @@ msgctxt "#30087"
 msgid "Worldview"
 msgstr ""
 
+msgctxt "#30088"
+msgid "Nostalgia"
+msgstr ""
+
+
 ### FEATURED
 msgctxt "#30100"
 msgid "Online exclusive"

@@ -154,25 +154,35 @@ class StreamService:
 
     @staticmethod
     def _fix_virtualsubclip(manifest_url, duration):
-        '''VRT NU uses virtual subclips to provide on demand programs (mostly current affair programs)
-           already from a livestream while or shortly after live broadcasting them.
-           But this feature doesn't work always as expected because Kodi doesn't play the program from
-           the beginning when the ending timestamp of the program is missing from the stream_url.
-           When begintime is present in the stream_url and endtime is missing, we must add endtime
-           to the stream_url so Kodi treats the program as an on demand program and starts the stream
-           from the beginning like a real on demand program.'''
-        begin = manifest_url.split('?t=')[1] if '?t=' in manifest_url else None
-        if begin and len(begin) == 19:
-            from datetime import datetime, timedelta
-            import dateutil.parser
-            begin_time = dateutil.parser.parse(begin)
-            end_time = begin_time + duration
-            # If on demand program is not yet broadcasted completely,
-            # use current time minus 5 seconds safety margin as endtime.
-            now = datetime.utcnow()
-            if end_time > now:
-                end_time = now - timedelta(seconds=5)
-                manifest_url += '-' + end_time.strftime('%Y-%m-%dT%H:%M:%S')
+        """VRT NU already offers some programs (mostly current affairs programs) as video on demand from the moment the live broadcast has started.
+           To do so, VRT NU adds start (and stop) timestamps to the livestream url to indicate the beginning (and the end) of a program.
+           So Unified Origin streaming platform knows it should return a time bounded manifest file, this is called a Live-to-VOD stream or virtual subclip:
+           https://docs.unified-streaming.com/documentation/vod/player-urls.html#virtual-subclips
+           e.g. https://live-cf-vrt.akamaized.net/groupc/live/8edf3bdf-7db3-41c3-a318-72cb7f82de66/live.isml/.mpd?t=2020-07-20T11:07:00
+
+           Right after a program is completely broadcasted, the stop timestamp is usually missing and should be added to the manifest_url.
+        """
+        if '?t=' in manifest_url:
+            try:  # Python 3
+                from urllib.parse import parse_qs, urlsplit
+            except ImportError:  # Python 2
+                from urlparse import parse_qs, urlsplit
+            import re
+
+            # Detect single start timestamp
+            begin = parse_qs(urlsplit(manifest_url).query).get('t')[0]
+            rgx = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$')
+            is_single_start_timestamp = bool(re.match(rgx, begin))
+            if begin and is_single_start_timestamp:
+                from datetime import datetime, timedelta
+                import dateutil.parser
+                begin_time = dateutil.parser.parse(begin)
+                # Calculate end_time with a safety margin
+                end_time = begin_time + duration + timedelta(seconds=10)
+                # Add stop timestamp if a program is broadcasted completely
+                now = datetime.utcnow()
+                if end_time < now:
+                    manifest_url += '-' + end_time.strftime('%Y-%m-%dT%H:%M:%S')
         return manifest_url
 
     def get_stream(self, video, roaming=False, api_data=None):
@@ -243,7 +253,7 @@ class StreamService:
             else:
                 log(2, 'Protocol: {protocol}', protocol=protocol)
                 # Fix 720p quality for HLS livestreams
-                manifest_url += '?hd' if '.m3u8?' not in manifest_url else '&hd'
+                manifest_url = manifest_url.replace('.m3u8?', '.m3u8?hd&') if '.m3u8?' in manifest_url else manifest_url + '?hd'
                 stream = self._select_hls_substreams(manifest_url, protocol)
             return stream
 

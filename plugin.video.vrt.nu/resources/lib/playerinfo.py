@@ -9,7 +9,7 @@ from xbmc import getInfoLabel, Player, PlayList
 from apihelper import ApiHelper
 from data import CHANNELS
 from favorites import Favorites
-from kodiutils import addon_id, get_setting_bool, has_addon, kodi_version_major, log, notify, set_property
+from kodiutils import addon_id, get_setting_bool, has_addon, jsonrpc, kodi_version_major, log, log_error, notify, set_property, url_for
 from resumepoints import ResumePoints
 from utils import play_url_to_id, to_unicode, url_to_episode
 
@@ -102,6 +102,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         if not self.listen:
             return
         log(3, '[PlayerInfo {id}] Event onAVStarted', id=self.thread_id)
+        self.virtualsubclip_seektozero()
         self.quit.clear()
         self.update_position()
         self.update_total()
@@ -189,7 +190,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         # Reset vrtnu_resumepoints property
         set_property('vrtnu_resumepoints', None)
 
-        url = 'plugin://plugin.video.vrt.nu/play/upnext/{video_id}'.format(video_id=video_id)
+        url = url_for('play_upnext', video_id=video_id)
         self.update_position()
         self.update_total()
         if self.isPlaying() and self.total - self.last_pos < 1:
@@ -223,6 +224,43 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             self.last_pos = self.getTime()
         except RuntimeError:
             pass
+
+    def virtualsubclip_seektozero(self):
+        """VRT NU already offers some programs (mostly current affairs programs) as video on demand while the program is still being broadcasted live.
+           To do so, a start timestamp is added to the livestream url so the Unified Origin streaming platform knows
+           it should return a time bounded manifest file that indicates the beginning of the program.
+           This is called a Live-to-VOD stream or virtual subclip: https://docs.unified-streaming.com/documentation/vod/player-urls.html#virtual-subclips
+           e.g. https://live-cf-vrt.akamaized.net/groupc/live/8edf3bdf-7db3-41c3-a318-72cb7f82de66/live.isml/.mpd?t=2020-07-20T11:07:00
+
+           For some unclear reason the virtual subclip defined by a single start timestamp still behaves as a ordinary livestream
+           and starts at the live edge of the stream. It seems this is not a Kodi or Inputstream Adaptive bug, because other players
+           like THEOplayer or DASH-IF's reference player treat this kind of manifest files the same way.
+           The only difference is that seeking to the beginning of the program is possible. So if the url contains a single start timestamp,
+           we can work around this problem by automatically seeking to the beginning of the program.
+        """
+        playing_file = self.getPlayingFile()
+        if '?t=' in playing_file:
+            try:  # Python 3
+                from urllib.parse import parse_qs, urlsplit
+            except ImportError:  # Python 2
+                from urlparse import parse_qs, urlsplit
+            import re
+            # Detect single start timestamp
+            timestamp = parse_qs(urlsplit(playing_file).query).get('t')[0]
+            rgx = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$')
+            is_single_start_timestamp = bool(re.match(rgx, timestamp))
+            if is_single_start_timestamp:
+                # Check resume status
+                resume_info = jsonrpc(method='Player.GetItem', params=dict(playerid=1, properties=['resume'])).get('result')
+                if resume_info:
+                    resume_position = resume_info.get('item').get('resume').get('position')
+                    is_resumed = abs(resume_position - self.getTime()) < 1
+                    # Seek to zero if the user didn't resume the program
+                    if not is_resumed:
+                        log(3, '[PlayerInfo {id}] Virtual subclip: seeking to the beginning of the program', id=self.thread_id)
+                        self.seekTime(0)
+                else:
+                    log_error('Failed to start virtual subclip {playing_file} at start timestamp', playing_file=playing_file)
 
     def update_total(self):
         """Update the total video time"""

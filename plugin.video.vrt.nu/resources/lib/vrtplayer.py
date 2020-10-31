@@ -284,10 +284,13 @@ class VRTPlayer:
         self._favorites.refresh(ttl=ttl('direct' if use_favorites else 'indirect'))
         self._resumepoints.refresh(ttl=ttl('direct' if use_favorites else 'indirect'))
         page = realpage(page)
-        episode_items, sort, ascending, content = self._apihelper.list_episodes(page=page, use_favorites=use_favorites, variety='offline')
+        items_per_page = get_setting_int('itemsperpage', default=50)
+        sort_key = 'assetOffTime'
+        episode_items, sort, ascending, content = self._apihelper.list_episodes(page=page, items_per_page=items_per_page, use_favorites=use_favorites,
+                                                                                variety='offline', sort_key=sort_key)
 
         # Add 'More...' entry at the end
-        if len(episode_items) == get_setting_int('itemsperpage', default=50):
+        if len(episode_items) == items_per_page:
             offline = 'favorites_offline' if use_favorites else 'offline'
             episode_items.append(TitleItem(
                 label=localize(30300),

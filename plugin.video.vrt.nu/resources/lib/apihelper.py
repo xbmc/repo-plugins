@@ -14,9 +14,9 @@ from data import CHANNELS
 from helperobjects import TitleItem
 from kodiutils import (delete_cached_thumbnail, get_cache, get_cached_url_json, get_global_setting,
                        get_setting_bool, get_setting_int, get_url_json, has_addon, localize,
-                       localize_from_data, log, ttl, url_for)
+                       localize_from_data, log, ttl, update_cache, url_for)
 from metadata import Metadata
-from utils import (html_to_kodi, find_entry, from_unicode, play_url_to_id,
+from utils import (add_https_proto, html_to_kodi, find_entry, from_unicode, play_url_to_id,
                    program_to_url, realpage, url_to_program, youtube_to_plugin_url)
 
 
@@ -78,7 +78,6 @@ class ApiHelper:
 
     def tvshow_to_listitem(self, tvshow, program, cache_file):
         """Return a ListItem based on a Suggests API result"""
-
         label = self._metadata.get_label(tvshow)
 
         if program:
@@ -93,15 +92,18 @@ class ApiHelper:
             context_menu=context_menu,
         )
 
-    def list_episodes(self, program=None, season=None, category=None, feature=None, programtype=None, page=None, use_favorites=False, variety=None):
+    def list_episodes(self, program=None, season=None, category=None, feature=None, programtype=None,
+                      page=None, items_per_page=None, use_favorites=False, variety=None, sort_key=None):
         """Construct a list of episode or season TitleItems from VRT NU Search API data and filtered by favorites"""
         # Caching
         if not variety:
             cache_file = None
-        elif use_favorites:
-            cache_file = 'my-{variety}-{page}.json'.format(variety=variety, page=page)
         else:
-            cache_file = '{variety}-{page}.json'.format(variety=variety, page=page)
+            cache_file = '{my}{variety}{page}.json'.format(
+                my='my-' if use_favorites else '',
+                variety=variety,
+                page='-{}'.format(page) if sort_key is None else '',
+            )
 
         # Titletype
         titletype = None
@@ -109,8 +111,13 @@ class ApiHelper:
             titletype = variety
 
         # Get data from api or cache
-        episodes = self.get_episodes(program=program, season=season, category=category, feature=feature, programtype=programtype,
-                                     page=page, use_favorites=use_favorites, variety=variety, cache_file=cache_file)
+        if sort_key:
+            episodes = self.get_episodes(program=program, season=season, category=category, feature=feature, programtype=programtype,
+                                         use_favorites=use_favorites, variety=variety, cache_file=cache_file)
+            episodes = sorted(episodes, key=lambda k: k[sort_key])[(page * items_per_page) - items_per_page:page * items_per_page]
+        else:
+            episodes = self.get_episodes(program=program, season=season, category=category, feature=feature, programtype=programtype,
+                                         page=page, use_favorites=use_favorites, variety=variety, cache_file=cache_file)
 
         if isinstance(episodes, tuple):
             seasons = episodes[0]
@@ -280,7 +287,7 @@ class ApiHelper:
                 except IndexError:
                     pass
                 else:
-                    if next_episode.get('program') == program:
+                    if next_episode.get('program') == program and next_episode.get('episodeNumber') != current_ep_no:
                         upnext['next'] = next_episode
 
         current_ep = upnext.get('current')
@@ -299,9 +306,9 @@ class ApiHelper:
 
         art = self._metadata.get_art(current_ep)
         current_episode = dict(
-            episodeid=current_ep.get('whatsonId'),
-            tvshowid=current_ep.get('programWhatsonId'),
-            title=self._metadata.get_plotoutline(current_ep),
+            episodeid=current_ep.get('videoId'),
+            tvshowid=current_ep.get('programUrl'),
+            title=self._metadata.get_title(current_ep),
             art={
                 'tvshow.poster': art.get('thumb'),
                 'thumb': art.get('thumb'),
@@ -322,9 +329,9 @@ class ApiHelper:
 
         art = self._metadata.get_art(next_ep)
         next_episode = dict(
-            episodeid=next_ep.get('whatsonId'),
-            tvshowid=next_ep.get('programWhatsonId'),
-            title=self._metadata.get_plotoutline(next_ep),
+            episodeid=next_ep.get('videoId'),
+            tvshowid=next_ep.get('programUrl'),
+            title=self._metadata.get_title(next_ep),
             art={
                 'tvshow.poster': art.get('thumb'),
                 'thumb': art.get('thumb'),
@@ -520,9 +527,11 @@ class ApiHelper:
             season = 'allseasons'
 
             if variety == 'offline':
-                from datetime import datetime
+                from datetime import datetime, timedelta
                 import dateutil.tz
-                params['facets[assetOffTime]'] = datetime.now(dateutil.tz.gettz('Europe/Brussels')).strftime('%Y-%m-%d')
+                now = datetime.now(dateutil.tz.gettz('Europe/Brussels'))
+                off_dates = [(now + timedelta(days=day)).strftime('%Y-%m-%d') for day in range(0, 7)]
+                params['facets[assetOffTime]'] = '[%s]' % (','.join(off_dates))
 
             if variety == 'oneoff':
                 params['facets[episodeNumber]'] = '[0,1]'  # This to avoid VRT NU metadata errors (see #670)
@@ -766,21 +775,50 @@ class ApiHelper:
 
         return sorted(features, key=lambda x: x.get('name'))
 
-    def list_categories(self):
-        """Construct a list of category ListItems"""
-        from webscraper import get_categories, valid_categories
-        categories = get_categories()
+    @staticmethod
+    def valid_categories(categories):
+        """Check if categories contain all necessary keys and values"""
+        return bool(categories) and all(item.get('id') and item.get('name') for item in categories)
 
-        # Use the cache anyway (better than hard-coded)
-        if not valid_categories(categories):
-            categories = get_cache('categories.json', ttl=None)
+    @staticmethod
+    def get_online_categories():
+        """Return a list of categories from the VRT NU website"""
+        categories = []
+        categories_json = get_url_json('https://www.vrt.be/vrtnu/categorieen/jcr:content/par/categories.model.json')
+        if categories_json is not None:
+            categories = []
+            for category in categories_json.get('items'):
+                categories.append(dict(
+                    id=category.get('name'),
+                    thumbnail=add_https_proto(category.get('image').get('src')),
+                    name=category.get('title'),
+                ))
+        return categories
+
+    def get_categories(self):
+        """Return a list of categories"""
+        cache_file = 'categories.json'
+
+        # Try the cache if it is fresh
+        categories = get_cache(cache_file, ttl=7 * 24 * 60 * 60)
+        if self.valid_categories(categories):
+            return categories
+
+        # Try online categories json
+        categories = self.get_online_categories()
+        if self.valid_categories(categories):
+            from json import dumps
+            update_cache(cache_file, dumps(categories))
+            return categories
 
         # Fall back to internal hard-coded categories
-        if not valid_categories(categories):
-            from data import CATEGORIES
-            log(2, 'Fall back to internal hard-coded categories')
-            categories = CATEGORIES
+        from data import CATEGORIES
+        log(2, 'Fall back to internal hard-coded categories')
+        return CATEGORIES
 
+    def list_categories(self):
+        """Construct a list of category ListItems"""
+        categories = self.get_categories()
         category_items = []
         from data import CATEGORIES
         for category in self.localize_categories(categories, CATEGORIES):

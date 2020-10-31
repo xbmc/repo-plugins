@@ -158,7 +158,11 @@ class TokenResolver:
             _csrf=xsrf.value
         )
         data = urlencode(payload).encode()
-        destination = open_url(self._VRT_LOGIN_URL, data=data, cookiejar=cookiejar).geturl()
+        response = open_url(self._VRT_LOGIN_URL, data=data, cookiejar=cookiejar)
+        if response is None:
+            return None
+
+        destination = response.geturl()
         usertoken = TokenResolver._create_token_dictionary(cookiejar, name)
         if not usertoken and not destination.startswith('https://www.vrt.be/vrtnu'):
             if roaming is False:
@@ -195,7 +199,10 @@ class TokenResolver:
         )
         data = dumps(payload).encode()
         headers = {'Content-Type': 'application/json', 'Cookie': login_cookie}
-        setcookie_header = open_url(self._TOKEN_GATEWAY_URL, data=data, headers=headers).info().get('Set-Cookie')
+        response = open_url(self._TOKEN_GATEWAY_URL, data=data, headers=headers)
+        if response is None:
+            return None
+        setcookie_header = response.info().get('Set-Cookie')
         xvrttoken = TokenResolver._create_token_dictionary(setcookie_header)
         if xvrttoken is None:
             return None
@@ -209,13 +216,22 @@ class TokenResolver:
             return None
         cookie_value = 'vrtlogin-at=' + vrtlogin_at
         headers = {'Cookie': cookie_value}
-        req_info = open_url(self._ROAMING_TOKEN_GATEWAY_URL, headers=headers, follow_redirects=False).info()
+        response = open_url(self._ROAMING_TOKEN_GATEWAY_URL, headers=headers, follow_redirects=False)
+        if response is None:
+            return None
+        req_info = response.info()
         cookie_value += '; state=' + req_info.get('Set-Cookie').split('state=')[1].split('; ')[0]
-        url = open_url(req_info.get('Location'), follow_redirects=False).info().get('Location')
+        response = open_url(req_info.get('Location'), follow_redirects=False)
+        if response is None:
+            return None
+        url = response.info().get('Location')
         headers = {'Cookie': cookie_value}
         if url is None:
             return None
-        setcookie_header = open_url(url, headers=headers, follow_redirects=False).info().get('Set-Cookie')
+        response = open_url(url, headers=headers, follow_redirects=False)
+        if response is None:
+            return None
+        setcookie_header = response.info().get('Set-Cookie')
         return TokenResolver._create_token_dictionary(setcookie_header)
 
     def get_token(self, name, variant=None, url=None, roaming=False):

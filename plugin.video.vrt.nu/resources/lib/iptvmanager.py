@@ -6,7 +6,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 from data import CHANNELS
-from kodiutils import log
+from kodiutils import log, url_for
 
 
 class IPTVManager:
@@ -45,10 +45,10 @@ class IPTVManager:
                 name=channel.get('label'),
                 logo=channel.get('logo'),
                 preset=channel.get('preset'),
-                stream='plugin://plugin.video.vrt.nu/play/id/{live_stream_id}'.format(**channel),
+                stream=url_for('play_id', video_id=channel.get('live_stream_id')),
             )
             if channel.get('has_tvguide'):
-                item.update(dict(vod='plugin://plugin.video.vrt.nu/play/airdate/{name}/{{start}}/{{stop}}'.format(**channel)))
+                item.update(dict(vod=url_for('play_air_date', channel=channel.get('name'), start_date='{{start}}', end_date='{{stop}}')))
 
             streams.append(item)
         return dict(version=1, streams=streams)

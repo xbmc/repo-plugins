@@ -1,0 +1,97 @@
+# Red bull TV language file
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.redbull.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/add-ons/plugin.video.redbull.tv\n"
+"POT-Creation-Date: 2018-01-12 21:43+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+
+### MAIN MENU
+msgctxt "#30010"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Discover"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Events"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Search"
+msgstr ""
+
+
+msgctxt "#30200"
+msgid "General"
+msgstr ""
+
+
+msgctxt "#30220"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30221"
+msgid "Error getting data from Redbull server.[BR]Try again shortly."
+msgstr ""
+
+msgctxt "#30222"
+msgid "No Results"
+msgstr ""
+
+msgctxt "#30223"
+msgid "No results found.[BR]Please try another menu or search string."
+msgstr ""
+
+msgctxt "#30224"
+msgid "Upcoming Event"
+msgstr ""
+
+msgctxt "#30225"
+msgid "This event is scheduled to start on:"
+msgstr ""
+
+msgctxt "#30228"
+msgid "Best of Red Bull TV"
+msgstr ""
+
+### SETTINGS
+msgctxt "#30860"
+msgid "Integration"
+msgstr ""
+
+msgctxt "#30861"
+msgid "Integration with other Kodi add-ons"
+msgstr ""
+
+msgctxt "#30875"
+msgid "Install IPTV Manager add-on…"
+msgstr ""
+
+msgctxt "#30877"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30879"
+msgid "IPTV Manager settings…"
+msgstr ""
+
+
+### MESSAGES
+msgctxt "#30966"
+msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
+msgstr ""

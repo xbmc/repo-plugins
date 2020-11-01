@@ -1,0 +1,784 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.twitch">
+		<category help="" id="login" label="30127">
+			<group id="1">
+				<setting help="" id="oauth_token" label="30099" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="string" type="edit">
+						<heading>30099</heading>
+					</control>
+				</setting>
+			</group>
+			<group id="2" label="30132">
+				<setting help="" id="show_token_url" label="30135" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=get_token_url)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button">
+						<close>true</close>
+					</control>
+				</setting>
+			</group>
+			<group id="3" label="30138">
+				<setting help="" id="revoke_token" label="30227" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=revoke_token)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button">
+						<close>true</close>
+					</control>
+				</setting>
+			</group>
+			<group id="4" label="30261">
+				<setting help="" id="private_oauth_clientid" label="30097" type="string">
+					<level>0</level>
+					<default>kimne78kx3ncx6brgo4mv6wki5h1ko</default>
+					<control format="string" type="edit">
+						<heading>30097</heading>
+					</control>
+				</setting>
+				<setting help="" id="private_oauth_token" label="30099" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="string" type="edit">
+						<heading>30099</heading>
+					</control>
+				</setting>
+			</group>
+		</category>
+		<category help="" id="main menu" label="30219">
+			<group id="1">
+				<setting help="" id="menu_featured" label="30005" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_following" label="30002" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_browse" label="30172" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_search" label="30003" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_settings" label="30004" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+			<group id="2" label="30002">
+				<setting help="" id="menu_following_live" label="30009" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_following_channels" label="30008" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_following_games" label="30001" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_following_clips" label="30176" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+			<group id="3" label="30172">
+				<setting help="" id="menu_browse_live" label="30009" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_browse_xbox_one" label="30173" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_browse_ps4" label="30174" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_browse_videos" label="30175" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_browse_clips" label="30176" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_browse_games" label="30001" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+			<group id="4" label="30003">
+				<setting help="" id="menu_search_streams" label="30125" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_search_channels" label="30008" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_search_games" label="30001" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_search_url" label="30124" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
+		<category help="" id="general" label="30076">
+			<group id="1">
+				<setting help="" id="video_quality" label="30040" type="integer">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="30102">0</option>
+							<option label="30136">1</option>
+							<option label="30201">2</option>
+							<option label="30254">3</option>
+						</options>
+					</constraints>
+					<control format="string" type="spinner"/>
+				</setting>
+				<setting help="" id="bandwidth" label="30201" parent="video_quality" type="integer">
+					<level>0</level>
+					<default>2500000</default>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="video_quality">2</condition>
+						</dependency>
+						<dependency type="visible">
+							<condition operator="is" setting="video_quality">2</condition>
+						</dependency>
+					</dependencies>
+					<control format="integer" type="edit">
+						<heading>30201</heading>
+					</control>
+				</setting>
+				<setting help="" id="source_frame_rate_limit" label="30263" parent="bandwidth" type="integer">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<minimum>0</minimum>
+						<step>30</step>
+						<maximum>60</maximum>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="video_quality">0</condition>
+						</dependency>
+						<dependency type="visible">
+							<condition operator="is" setting="video_quality">0</condition>
+						</dependency>
+					</dependencies>
+					<control format="integer" type="slider">
+						<popup>false</popup>
+					</control>
+				</setting>
+				<setting help="" id="video_support_ia_builtin" label="" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="enable">
+							<condition name="InfoBool" on="property">true</condition>
+						</dependency>
+						<dependency type="visible">
+							<condition name="InfoBool" on="property">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="video_support_ia_addon" label="" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="enable">
+							<condition name="InfoBool" on="property">true</condition>
+						</dependency>
+						<dependency type="visible">
+							<condition name="InfoBool" on="property">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="video_quality_ia" label="30223" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="enable">
+							<or>
+								<condition operator="is" setting="video_support_ia_addon">true</condition>
+								<condition operator="is" setting="video_support_ia_builtin">true</condition>
+							</or>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="video_quality_ia_configure" label="30224" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=configure_ia)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<and>
+								<condition operator="is" setting="video_quality_ia">true</condition>
+								<condition operator="is" setting="video_support_ia_addon">true</condition>
+							</and>
+						</dependency>
+						<dependency type="visible">
+							<and>
+								<condition operator="is" setting="video_quality_ia">true</condition>
+								<condition operator="is" setting="video_support_ia_addon">true</condition>
+							</and>
+						</dependency>
+					</dependencies>
+					<control format="action" type="button">
+						<close>true</close>
+					</control>
+				</setting>
+				<setting help="" id="title_display" label="30045" type="integer">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="30046">0</option>
+							<option label="30047">1</option>
+							<option label="30048">2</option>
+							<option label="30049">3</option>
+							<option label="30051">4</option>
+							<option label="30067">5</option>
+							<option label="30054">6</option>
+						</options>
+					</constraints>
+					<control format="string" type="spinner"/>
+				</setting>
+				<setting help="" id="title_truncate" label="30065" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="thumbnail_size" label="30255" type="integer">
+					<level>0</level>
+					<default>2</default>
+					<constraints>
+						<options>
+							<option label="30102">0</option>
+							<option label="30256">1</option>
+							<option label="30257">2</option>
+							<option label="30258">3</option>
+						</options>
+					</constraints>
+					<control format="string" type="spinner"/>
+				</setting>
+				<setting help="" id="refresh_interval" label="30259" type="integer">
+					<level>0</level>
+					<default>10</default>
+					<constraints>
+						<minimum>0</minimum>
+						<step>1</step>
+						<maximum>180</maximum>
+					</constraints>
+					<control format="integer" type="slider">
+						<popup>false</popup>
+					</control>
+				</setting>
+				<setting help="" id="vodcast_highlight" label="30222" type="integer">
+					<level>0</level>
+					<default>79</default>
+					<constraints>
+						<options>
+							<option label="aliceblue">0</option>
+							<option label="antiquewhite">1</option>
+							<option label="aqua">2</option>
+							<option label="aquamarine">3</option>
+							<option label="azure">4</option>
+							<option label="beige">5</option>
+							<option label="bisque">6</option>
+							<option label="black">7</option>
+							<option label="blanchedalmond">8</option>
+							<option label="blue">9</option>
+							<option label="blueviolet">10</option>
+							<option label="brown">11</option>
+							<option label="burlywood">12</option>
+							<option label="cadetblue">13</option>
+							<option label="chartreuse">14</option>
+							<option label="chocolate">15</option>
+							<option label="coral">16</option>
+							<option label="cornflowerblue">17</option>
+							<option label="cornsilk">18</option>
+							<option label="crimson">19</option>
+							<option label="cyan">20</option>
+							<option label="darkblue">21</option>
+							<option label="darkcyan">22</option>
+							<option label="darkgoldenrod">23</option>
+							<option label="darkgray">24</option>
+							<option label="darkgreen">25</option>
+							<option label="darkkhaki">26</option>
+							<option label="darkmagenta">27</option>
+							<option label="darkolivegreen">28</option>
+							<option label="darkorange">29</option>
+							<option label="darkorchid">30</option>
+							<option label="darkred">31</option>
+							<option label="darksalmon">32</option>
+							<option label="darkseagreen">33</option>
+							<option label="darkslateblue">34</option>
+							<option label="darkslategray">35</option>
+							<option label="darkturquoise">36</option>
+							<option label="darkviolet">37</option>
+							<option label="deeppink">38</option>
+							<option label="deepskyblue">39</option>
+							<option label="dimgray">40</option>
+							<option label="dodgerblue">41</option>
+							<option label="firebrick">42</option>
+							<option label="floralwhite">43</option>
+							<option label="forestgreen">44</option>
+							<option label="fuchsia">45</option>
+							<option label="gainsboro">46</option>
+							<option label="ghostwhite">47</option>
+							<option label="gold">48</option>
+							<option label="goldenrod">49</option>
+							<option label="gray">50</option>
+							<option label="green">51</option>
+							<option label="greenyellow">52</option>
+							<option label="honeydew">53</option>
+							<option label="hotpink">54</option>
+							<option label="indianred">55</option>
+							<option label="indigo">56</option>
+							<option label="ivory">57</option>
+							<option label="khaki">58</option>
+							<option label="lavender">59</option>
+							<option label="lavenderblush">60</option>
+							<option label="lawngreen">61</option>
+							<option label="lemonchiffon">62</option>
+							<option label="lightblue">63</option>
+							<option label="lightcoral">64</option>
+							<option label="lightcyan">65</option>
+							<option label="lightgoldenrodyellow">66</option>
+							<option label="lightgrey">67</option>
+							<option label="lightgreen">68</option>
+							<option label="lightpink">69</option>
+							<option label="lightsalmon">70</option>
+							<option label="lightseagreen">71</option>
+							<option label="lightskyblue">72</option>
+							<option label="lightslategray">73</option>
+							<option label="lightsteelblue">74</option>
+							<option label="lightyellow">75</option>
+							<option label="lime">76</option>
+							<option label="limegreen">77</option>
+							<option label="linen">78</option>
+							<option label="magenta">79</option>
+							<option label="maroon">80</option>
+							<option label="mediumaquamarine">81</option>
+							<option label="mediumblue">82</option>
+							<option label="mediumorchid">83</option>
+							<option label="mediumpurple">84</option>
+							<option label="mediumseagreen">85</option>
+							<option label="mediumslateblue">86</option>
+							<option label="mediumspringgreen">87</option>
+							<option label="mediumturquoise">88</option>
+							<option label="mediumvioletred">89</option>
+							<option label="midnightblue">90</option>
+							<option label="mintcream">91</option>
+							<option label="mistyrose">92</option>
+							<option label="moccasin">93</option>
+							<option label="navajowhite">94</option>
+							<option label="navy">95</option>
+							<option label="none">96</option>
+							<option label="oldlace">97</option>
+							<option label="olive">98</option>
+							<option label="olivedrab">99</option>
+							<option label="orange">100</option>
+							<option label="orangered">101</option>
+							<option label="orchid">102</option>
+							<option label="palegoldenrod">103</option>
+							<option label="palegreen">104</option>
+							<option label="paleturquoise">105</option>
+							<option label="palevioletred">106</option>
+							<option label="papayawhip">107</option>
+							<option label="peachpuff">108</option>
+							<option label="peru">109</option>
+							<option label="pink">110</option>
+							<option label="plum">111</option>
+							<option label="powderblue">112</option>
+							<option label="purple">113</option>
+							<option label="red">114</option>
+							<option label="rosybrown">115</option>
+							<option label="royalblue">116</option>
+							<option label="saddlebrown">117</option>
+							<option label="salmon">118</option>
+							<option label="sandybrown">119</option>
+							<option label="seagreen">120</option>
+							<option label="seashell">121</option>
+							<option label="sienna">122</option>
+							<option label="silver">123</option>
+							<option label="skyblue">124</option>
+							<option label="slateblue">125</option>
+							<option label="slategray">126</option>
+							<option label="snow">127</option>
+							<option label="springgreen">128</option>
+							<option label="steelblue">129</option>
+							<option label="tan">130</option>
+							<option label="teal">131</option>
+							<option label="thistle">132</option>
+							<option label="tomato">133</option>
+							<option label="turquoise">134</option>
+							<option label="violet">135</option>
+							<option label="wheat">136</option>
+							<option label="white">137</option>
+							<option label="whitesmoke">138</option>
+							<option label="yellow">139</option>
+							<option label="yellowgreen">140</option>
+						</options>
+					</constraints>
+					<control format="string" type="spinner"/>
+				</setting>
+				<setting help="" id="items_per_page" label="30123" type="integer">
+					<level>0</level>
+					<default>25</default>
+					<constraints>
+						<minimum>10</minimum>
+						<maximum>100</maximum>
+					</constraints>
+					<control format="integer" type="slider">
+						<popup>false</popup>
+					</control>
+				</setting>
+				<setting help="" id="search_history_size" label="30236" type="integer">
+					<level>0</level>
+					<default>25</default>
+					<constraints>
+						<minimum>0</minimum>
+						<maximum>200</maximum>
+					</constraints>
+					<control format="integer" type="slider">
+						<popup>false</popup>
+					</control>
+				</setting>
+				<setting help="" id="live_reconnect" label="30210" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+			<group id="2" label="30204">
+				<setting help="" id="live_notify" label="30211" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="live_notify_audible" label="30205" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="live_notify">true</condition>
+						</dependency>
+						<dependency type="visible">
+							<condition operator="is" setting="live_notify">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="live_notify_at_start" label="30232" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="live_notify">true</condition>
+						</dependency>
+						<dependency type="visible">
+							<condition operator="is" setting="live_notify">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="live_notify_group_start" label="30233" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="live_notify_at_start">true</condition>
+						</dependency>
+						<dependency type="visible">
+							<condition operator="is" setting="live_notify_at_start">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+			</group>
+			<group id="3" label="30090">
+				<setting help="" id="change_language" label="30262" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=edit_languages&amp;action=change)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+			</group>
+			<group id="4" label="30120">
+				<setting help="" id="refresh_cache" label="30234" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="cache_expire_time" label="30121" type="integer">
+					<level>0</level>
+					<default>3</default>
+					<constraints>
+						<minimum>0</minimum>
+						<maximum>60</maximum>
+					</constraints>
+					<control format="integer" type="slider">
+						<popup>false</popup>
+					</control>
+				</setting>
+			</group>
+		</category>
+		<category help="" id="default qualities" label="30167">
+			<group id="1">
+				<setting help="" id="remove_default_stream_quality" label="30191" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=edit_qualities&amp;remove=true&amp;content_type=stream)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="remove_default_video_quality" label="30192" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=edit_qualities&amp;remove=true&amp;content_type=video)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="remove_default_clip_quality" label="30193" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=edit_qualities&amp;remove=true&amp;content_type=clip)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="clear_default_stream_qualities" label="30194" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=clear_list&amp;list_type=stream&amp;list_name=qualities)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="clear_default_video_qualities" label="30195" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=clear_list&amp;list_type=video&amp;list_name=qualities)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="clear_default_clip_qualities" label="30196" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=clear_list&amp;list_type=clip&amp;list_name=qualities)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+			</group>
+		</category>
+		<category help="" id="blacklist" label="30153">
+			<group id="1">
+				<setting help="" id="blacklist_confirm_toggle" label="30197" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="remove_user_blacklist" label="30154" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=edit_blacklist&amp;list_type=user&amp;remove=true)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="remove_game_blacklist" label="30155" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=edit_blacklist&amp;list_type=game&amp;remove=true)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="clear_user_blacklist" label="30156" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=clear_list&amp;list_type=user&amp;list_name=blacklist)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="clear_game_blacklist" label="30157" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=clear_list&amp;list_type=game&amp;list_name=blacklist)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+			</group>
+		</category>
+		<category help="" id="irc chat" label="30081">
+			<group id="1">
+				<setting help="" id="irc_enable" label="30052" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="enable">
+							<condition name="InfoBool" on="property">System.HasAddon(script.ircchat)</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="install_ircscript" label="30075" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=install_ircchat)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition name="InfoBool" on="property">!System.HasAddon(script.ircchat)</condition>
+						</dependency>
+						<dependency type="visible">
+							<condition name="InfoBool" on="property">!System.HasAddon(script.ircchat)</condition>
+						</dependency>
+					</dependencies>
+					<control format="action" type="button">
+						<close>true</close>
+					</control>
+				</setting>
+			</group>
+		</category>
+		<category help="" id="maintenance" label="30243">
+			<group id="1" label="30120">
+				<setting help="" id="reset_cache" label="30122" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=reset_cache)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+			</group>
+			<group id="2" label="30244">
+				<setting help="" id="delete_streams_search" label="30245" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=maintain&amp;sub_mode=delete&amp;file_type=streams_search)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="delete_channels_search" label="30246" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=maintain&amp;sub_mode=delete&amp;file_type=channels_search)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="delete_games_search" label="30247" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=maintain&amp;sub_mode=delete&amp;file_type=games_search)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+				<setting help="" id="delete_idurl_search" label="30248" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=maintain&amp;sub_mode=delete&amp;file_type=id_url_search)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+			</group>
+			<group id="3" label="30249">
+				<setting help="" id="delete_storage_json" label="30250" type="action">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.twitch/?mode=maintain&amp;sub_mode=delete&amp;file_type=storage_json)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+			</group>
+		</category>
+		<category help="" id="developer" label="30118">
+			<group id="1">
+				<setting help="" id="oauth_clientid" label="30097" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="string" type="edit">
+						<heading>30097</heading>
+					</control>
+				</setting>
+				<setting help="" id="oauth_redirecturi" label="30142" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="string" type="edit">
+						<heading>30142</heading>
+					</control>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>

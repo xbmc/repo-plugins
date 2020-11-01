@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.library.node.editor" name="Library Node Editor" version="2.0.0" provider-name="Unfledged, Team-Kodi">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.unidecode" version="1.1.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="de_DE">Benutzerdefinierte Bibliotheksknoten verwalten.</summary>
+        <summary lang="en_GB">Manage custom library nodes.</summary>
+        <summary lang="en_NZ">Manage custom library nodes.</summary>
+        <summary lang="en_US">Manage custom library nodes.</summary>
+        <summary lang="fr_FR">Gére des nœuds de médiathèque personnalisés.</summary>
+        <summary lang="fr_CA">Gérer des nœuds de médiathèque personnalisés.</summary>
+        <summary lang="it_IT">Gestisci nodi libreria personalizzati</summary>
+        <summary lang="ko_KR">사용자 라이브러리 노드 관리자</summary>
+        <summary lang="lt_LT">Tvarkykite savus bibliotekos mazgus.</summary>
+        <summary lang="nl_NL">Beheer aangepaste bibliotheek nodes. </summary>
+        <summary lang="pl_PL">Zarządzanie niestandardowymi węzłami biblioteki.</summary>
+        <summary lang="pt_BR">Gerenciar nós customizados da biblioteca</summary>
+        <summary lang="ro_RO">Administrați noduri mediatecă personalizate</summary>
+        <description lang="de_DE">Benutzerdefinierte Bibliotheksknoten erstellen und bearbeiten.</description>
+        <description lang="en_GB">Create and edit custom library nodes.</description>
+        <description lang="en_NZ">Create and edit custom library nodes.</description>
+        <description lang="en_US">Create and edit custom library nodes.</description>
+        <description lang="fr_FR">Crée et modifie des nœuds de médiathèque personnalisés.</description>
+        <description lang="fr_CA">Créer et modifier des nœuds de médiathèque personnalisés.</description>
+        <description lang="it_IT">Crea e modifica nodi libreria personalizzati.</description>
+        <description lang="ko_KR">사용자 라이브러리 노드를 생성하고 편집합니다.</description>
+        <description lang="lt_LT">Sukurkite ir keiskite savus bibliotekos mazgus.</description>
+        <description lang="nl_NL">Creëer en wijzig aangepaste bibliotheek nodes.</description>
+        <description lang="pl_PL">Tworzenie i edytowanie niestandardowych węzłów biblioteki.</description>
+        <description lang="pt_BR">Crie e edite nós customizados na biblioteca</description>
+        <platform>all</platform>
+        <license>GPL-2.0-only</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=224512</forum>
+        <source>https://github.com/XBMC-Addons/plugin.library.node.editor</source>
+        <assets>
+            <icon>icon.png</icon>
+        </assets>
+        <news>
+            2.0.0 (21/3/2020)
+            - Dropped Python 2 code for Matrix
+        </news>
+    </extension>
+</addon>

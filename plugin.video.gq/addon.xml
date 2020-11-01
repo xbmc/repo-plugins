@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.gq"
+       name="GQ"
+       version="4.0.0"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.t1mlib" version="4.0.6"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">GQ Magazine HD Video Addon</summary>
+    <description lang="en_GB">GQ (formerly Gentlemen's Quarterly) is an American monthly men's magazine focusing on fashion, style, and culture for men, through articles on food, movies, fitness, sex, music, travel, sports, technology, and books.</description>
+    <disclaimer lang="en_GB">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <forum>https://forum.xbmc.org/showthread.php?tid=193395</forum>
+    <website>https://www.gq.com/</website>
+    <license>GPL-2.0-or-later</license>
+    <source>https://github.com/learningit/repo-plugins</source>
+    <news>Version 4.0.0 Initial Matrix Release
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

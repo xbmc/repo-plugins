@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<settings version="1">
+    <section id="plugin.video.mms">
+        <category id="general">
+            <group id="1">
+                <setting id="blacklisted_extensions" type="string" label="30001">
+                    <level>0</level>
+                    <default>.bin|.dat|.rar|.url|.zip</default>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control type="edit" format="string">
+                        <heading>30001</heading>
+                    </control>
+                </setting>
+                <setting id="blacklisted_directories" type="string" label="30002">
+                    <level>0</level>
+                    <default>sample|subs|extras</default>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control type="edit" format="string">
+                        <heading>30002</heading>
+                    </control>
+                </setting>
+                <setting id="blacklisted_words" type="string" label="30003">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control type="edit" format="string">
+                        <heading>30003</heading>
+                    </control>
+                </setting>
+                <setting id="scan_recursively" type="boolean" label="30004">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>

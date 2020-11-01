@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+   <setting id="username"  type="text" label="30007"/>
+   <setting id="password"  type="text" label="30008" option="hidden"/>
+   <setting id="ffmpeg"    type="bool" label="30013" default="true"/>
+   <setting id="logout" option="close" label="30009" type="action" action="RunScript(plugin.video.cbc, logout)"/>
+</settings>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.4.1+matrix.1" provider-name="Martijn Moreel, dagwieers, mediaminister">
+  <requires>
+    <import addon="resource.images.studios.white" version="0.0.22"/>
+    <import addon="script.module.beautifulsoup4" version="4.6.2"/>
+    <import addon="script.module.dateutil" version="2.8.0"/>
+    <import addon="script.module.inputstreamhelper" version="0.4.3"/>
+    <import addon="script.module.routing" version="0.2.3"/>
+    <import addon="xbmc.python" version="3.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="resources/lib/addon_entry.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.service" library="resources/lib/service_entry.py"/>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Watch videos from VRT NU</summary>
+    <description lang="en_GB">VRT NU is the video-on-demand platform of the Flemish public broadcaster (VRT).
+
+  - Track the programs you like
+  - List all videos alphabetically by program, category, channel or feature
+  - Watch live streams from Eén, Canvas, Ketnet, Ketnet Junior and Sporza
+  - Discover recently added or soon offline content
+  - Browse the online TV guides or search VRT NU
+
+[I]The VRT NU add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.[/I]</description>
+    <disclaimer lang="en_GB">The VRT NU add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.</disclaimer>
+    <summary lang="nl_NL">VRT NU videos bekijken.</summary>
+    <description lang="nl_NL">VRT NU is het video-on-demand platform van de Vlaamse publieke omroep (VRT).
+
+  - Volg je favoriete tv-programma's
+  - Raadpleeg video's op basis van programma, categorie, kanaal of feature
+  - Bekijk de livestreams van Eén, Canvas, Ketnet, Ketnet Junior en Sporza
+  - Ontdek recent toegevoegde of binnenkort offline video's
+  - Doorblader de online tv-gids of doorzoek VRT NU
+
+[I]Deze VRT NU add-on wordt niet ondersteund door de VRT, en wordt aangeboden 'as is', zonder enige garantie.[/I]</description>
+    <disclaimer lang="nl_NL">Deze VRT NU add-on wordt niet ondersteund door de VRT, en wordt aangeboden 'as is', zonder enige garantie.</disclaimer>
+    <language>en nl</language>
+    <platform>all</platform>
+    <license>GPL-3.0-only</license>
+    <forum>https://www.facebook.com/kodivrtnu/</forum>
+    <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
+    <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
+    <news>
+v2.4.1 (2020-10-31)
+- Add new category "Nostalgia"
+- Add poster support
+- Add product placement and "kijkwijzer" metadata
+- Get categories from online JSON
+- Improvements to connection error handling
+- Improvements to virtual subclip support
+- Extend soon offline menu to seven days
+- Improve Up Next support
+
+v2.4.0 (2020-07-18)
+- Show error messages when connections fail
+- Improve user authentication cache
+- Fix missing "Worldview" category
+- Improve playing programs using the TV guide
+- Improve IPTV Manager support
+- Add user setting to update the VRT NU add-on easily
+    </news>
+    <assets>
+      <icon>resources/media/icon.png</icon>
+      <fanart>resources/media/fanart.png</fanart>
+      <screenshot>resources/media/screenshot01.jpg</screenshot>
+      <screenshot>resources/media/screenshot02.jpg</screenshot>
+      <screenshot>resources/media/screenshot03.jpg</screenshot>
+      <screenshot>resources/media/screenshot04.jpg</screenshot>
+    </assets>
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+  </extension>
+</addon>

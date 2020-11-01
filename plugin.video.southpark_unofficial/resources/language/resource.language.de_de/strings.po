@@ -1,0 +1,81 @@
+# Kodi Media Center language file
+# Addon Name: South Park Unofficial Player
+# Addon id: plugin.video.southpark_unofficial
+# Addon Provider: wargio
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Audio Language"
+msgstr "Wiedergabesprache"
+
+msgctxt "#30001"
+msgid "Geo Location"
+msgstr "Standort"
+
+msgctxt "#30002"
+msgid "You seem to be geoblocked. I'll ignore it but be aware of it"
+msgstr "In deinem Land nicht verfügbar! Wird ignoriert, aber nimm es zur Kenntnis!"
+
+msgctxt "#30003"
+msgid "Loading Random Episode"
+msgstr "Lade zufällige Episode"
+
+msgctxt "#30004"
+msgid "Cannot open the stream. Bad internet connection?"
+msgstr "Stream kann nicht geöffnet werden. Prüfe Internetverbindung!"
+
+msgctxt "#30005"
+msgid "Featured"
+msgstr "Besondere Episode"
+
+msgctxt "#30006"
+msgid "Random Episode"
+msgstr "Zufällige Episode"
+
+msgctxt "#30007"
+msgid "Season"
+msgstr "Staffel"
+
+msgctxt "#30009"
+msgid "Loading"
+msgstr "Lade"
+
+msgctxt "#30010"
+msgid "Check your internet connection!"
+msgstr "Prüfe deine Internetverbindung!"
+
+msgctxt "#30011"
+msgid "It's not available, sorry"
+msgstr "Leider nicht verfügbar, sorry!"
+
+msgctxt "#30012"
+msgid "Enable CC"
+msgstr "Aktiviere Untertitel"
+
+msgctxt "#30013"
+msgid "Search"
+msgstr "Suchen"
+
+msgctxt "#30014"
+msgid "This episode hasn't been released yet!"
+msgstr "Diese Episode ist noch nicht freigegeben!"
+
+msgctxt "#30015"
+msgid "Play directly the random episode"
+msgstr "Spielen Sie direkt die zufällige Folge"
+
+msgctxt "#30016"
+msgid "Clear cache"
+msgstr "Cache leeren"

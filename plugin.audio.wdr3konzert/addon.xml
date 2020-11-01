@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.wdr3konzert" name="WDR3 Konzertplayer" version="2.0.1" provider-name="sarbes">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.libwdr" version="2.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <language>de</language>
+        <license>GPL-2.0-only</license>
+        <source>https://github.com/sarbes/plugin.audio.wdr3konzert</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=353899</forum>
+        <website>https://www1.wdr.de/radio/wdr3/konzertplayer/index.html</website>
+        <summary lang="en_GB">Play concert content from the German tv broadcaster "WDR3".</summary>
+        <description lang="en_GB">This add-on lists the concert content of the WD3.</description>
+        <summary lang="de_DE">Die Konzerte des WDR3.</summary>
+        <description lang="de_DE">Dieses Add-on bietet Zugriff auf Konzerte des WDR3.</description>
+        <disclaimer lang="de_DE">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

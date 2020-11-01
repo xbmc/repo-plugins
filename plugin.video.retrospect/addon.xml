@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon  id="plugin.video.retrospect"
+        version="5.2.14+matrix.1"
+        name="Retrospect"
+        provider-name="Bas Rieter">
+
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.requests" version="2.18.0" />
+        <import addon="script.module.pytz" version="2014.2" />
+        <import addon="inputstream.adaptive" version="2.0.19" />
+        <import addon="plugin.video.youtube" version="6.0.0" optional="true" />
+        <import addon="script.module.inputstreamhelper" version="0.3.5" />
+        <import addon="script.module.pyscrypt" version="1.6.2" />
+        <import addon="script.module.pyaes" version="1.6.1" />
+        <import addon="resource.images.retrospect" version="1.0.5" />
+    </requires>
+
+    <extension  point="xbmc.python.pluginsource"
+                library="retroaddon.py">
+        <provides>video</provides>
+    </extension>
+
+    <extension point="xbmc.service" library="retroservice.py" />
+
+
+    <extension point="kodi.context.item">
+        <menu id="kodi.core.main">
+            <item library="retromenu.py" args="queue">
+                <label>30541</label>
+                <visible>ListItem.Property(RetrospectVideo)|ListItem.Property(RetrospectFolder)</visible>
+            </item>
+
+            <item library="retromenu.py" args="hidechannel">
+                <label>30574</label>
+                <visible>ListItem.Property(RetrospectChannel)</visible>
+            </item>
+
+            <item library="retromenu.py" args="cloak">
+                <label>30563</label>
+                <visible>ListItem.Property(RetrospectFolder)+!ListItem.Property(RetrospectCloaked)+!ListItem.Property(RetrospectFavorite)</visible>
+            </item>
+
+            <item library="retromenu.py" args="uncloak">
+                <label>30564</label>
+                <visible>ListItem.Property(RetrospectCloaked)</visible>
+            </item>
+
+            <!-- Channel settings -->
+            <menu>
+                <label>30580</label>
+
+                <item library="retromenu.py" args="bitrate">
+                    <label>30577</label>
+                    <visible>ListItem.Property(Retrospect)+!ListItem.Property(RetrospectCategory)+!ListItem.Property(RetrospectFavorite)</visible>
+                </item>
+
+                <item library="retromenu.py" args="adaptive">
+                    <label>30579</label>
+                    <visible>ListItem.Property(RetrospectAdaptive)+System.HasAddon(inputstream.adaptive)</visible>
+                </item>
+
+                <item library="retromenu.py" args="channel_settings">
+                    <label>30069</label>
+                    <visible>ListItem.Property(RetrospectChannelSettings)+!ListItem.Property(RetrospectCategory)</visible>
+                </item>
+            </menu>
+
+            <!-- Favorites menu -->
+            <menu>
+                <label>30575</label>
+
+                <item library="retromenu.py" args="channel_favs">
+                    <label>30503</label>
+                    <visible>ListItem.Property(RetrospectVideo)|ListItem.Property(RetrospectFolder)|ListItem.Property(RetrospectChannel)</visible>
+                </item>
+
+                <item library="retromenu.py" args="all_favs">
+                    <label>30500</label>
+                    <visible>ListItem.Property(RetrospectChannel)</visible>
+                </item>
+
+                <item library="retromenu.py" args="add_fav">
+                    <label>30504</label>
+                    <visible>ListItem.Property(RetrospectFolder)+!ListItem.Property(RetrospectFavorite)</visible>
+                </item>
+
+                <item library="retromenu.py" args="remove_fav">
+                    <label>30506</label>
+                    <visible>ListItem.Property(RetrospectFavorite)</visible>
+                </item>
+            </menu>
+
+            <!-- Retrospect Menu -->
+            <menu>
+                <label>30572</label>
+
+                <item library="retromenu.py" args="channel_selection">
+                    <label>30507</label>
+                    <visible>ListItem.Property(RetrospectChannel)</visible>
+                </item>
+
+                <item library="retromenu.py" args="country_selection">
+                    <label>30576</label>
+                    <visible>ListItem.Property(RetrospectChannel)</visible>
+                </item>
+
+                <item library="retromenu.py" args="settings">
+                    <label>30528</label>
+                    <visible>ListItem.Property(Retrospect)</visible>
+                </item>
+            </menu>
+        </menu>
+    </extension>
+
+    <extension point="xbmc.addon.metadata">
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <platform>all</platform>
+
+        <summary lang="en_GB">Retrospect enables playback of re-runs/catch-ups of TV shows available online. Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.</summary>
+        <description lang="en_GB">Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform.[CR][CR]More information can be found at https://rieter.net or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
+        <disclaimer lang="en_GB">Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms.</disclaimer>
+
+        <summary lang="sv_SE">Retrospect möjliggör att visa playkanaler.</summary>
+        <description lang="sv_SE">Retrospect använder olika TV-kanalers (framförallt nederländska, belgiska, brittiska, norska och svenska) officiella webbsidor och fritt tillgängliga strömmar för att göra deras playkanaler tillgängliga i Kodi.[CR][CR]Mer information finns på https://rieter.net eller Retrospects wiki på https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
+        <disclaimer lang="sv_SE">Retrospect tillgängliggörs i befintligt skick. Vi tar inget som helst ansvar för möjliga (men högst osannolika) skador på ditt system. Vi tar inte heller ansvar för innehållet som kan ses med detta tillägg eller konsekvenser av att använda tillägget för att se innehållet via innehållsleverantörernas plattformar.</disclaimer>
+
+        <license>CC-BY-NC-SA-4.0</license>
+        <language>en nl de sv no lt lv fi</language>
+        <news>[B]Retrospect v5.2.14 - Changelog - 2020-10-20[/B]
+
+This update introduces a new feature that allows the translation of channel descriptions. This will result in the descriptions to be in the same language as the Kodi GUI. Besides this some minor channel fixes were done for the UR Play (Swedish) and ViaFree (Norwegian) channels.
+
+[B]Framework related[/B]
+* Changed: use `xbmcvfs.translatePath` instead of `xbmc.translatePath`
+
+[B]GUI/Settings/Language related[/B]
+* Added: Show the channel descriptions in the same language as the Kodi GUI.
+
+[B]Channel related[/B]
+* Fixed: TV3 Play (Norge) had missing shows (Fixes #1430)
+* Added: ViaFree (Norge) channel with all ViaFree.no content (See #1430)
+* Fixed: Wrong subtitle language selected for ViaFree (Fixes #1431)
+* Fixed: Hide the description for SVT Play channels (Fixes #1422)
+* Fixed: UR Play (Sweden) not playing (Fixes #1435)
+* Fixed: UR Play (Sweden) main list items were missing (See #1435)
+* Fixed: Categories did not list in UR Play (Sweden) (See #1435 See #1436)
+
+        </news>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+            <screenshot>resources/media/retrospect01.jpg</screenshot>
+            <screenshot>resources/media/retrospect02.jpg</screenshot>
+            <screenshot>resources/media/retrospect03.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

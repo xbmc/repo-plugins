@@ -1,0 +1,14 @@
+{
+    "name"              : "YouTube",
+    "plugin"            : "plugin.video.youtube",
+    "play_movie"        : [
+                            "plugin://plugin.video.youtube/search/?q={name}&search_type=notvalid",
+                            {"title": "(?i){title}"}
+                          ],
+    "play_episode"      : [
+                            "plugin://plugin.video.youtube/search/?q={name}&search_type=notvalid",
+                            {"title": "(?i).*{showname}.*S.*{season}E.*{episode}|(?i).*S.*{season}E.*{episode}.*{showname}|(?i).*{showname}.*{title}"}
+                          ],
+    "search_movie"      : "plugin://plugin.video.youtube/search/?q={name}&search_type=notvalid",
+    "search_episode"    : "plugin://plugin.video.youtube/search/?q={name}&search_type=notvalid"
+}

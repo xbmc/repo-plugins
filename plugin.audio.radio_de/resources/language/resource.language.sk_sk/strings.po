@@ -1,0 +1,114 @@
+# Kodi Media Center language file
+# Addon Name: Radio
+# Addon id: plugin.audio.radio_de
+# Addon Provider: Tristan Fischer, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sk_SK\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+msgctxt "#30100"
+msgid "Editorials Recommendations"
+msgstr "Redakcia odporúča"
+
+msgctxt "#30101"
+msgid "Top Stations"
+msgstr "Top staníc"
+
+msgctxt "#30102"
+msgid "Browse by genre"
+msgstr "Prehliadať podľa žánra"
+
+msgctxt "#30103"
+msgid "Browse by topic"
+msgstr "Prehliadať podľa témy"
+
+msgctxt "#30104"
+msgid "Browse by country"
+msgstr "Prehliadať podľa krajiny"
+
+msgctxt "#30105"
+msgid "Browse by city"
+msgstr "Prehliadať podľa mesta"
+
+msgctxt "#30106"
+msgid "Browse by language"
+msgstr "Prehliadať podľa jazyka"
+
+msgctxt "#30107"
+msgid "Local Stations"
+msgstr "Lokálne stanice"
+
+msgctxt "#30108"
+msgid "My Stations"
+msgstr "Moje stanice"
+
+msgctxt "#30200"
+msgid "Search for station"
+msgstr "Hľadať stanice"
+
+msgctxt "#30300"
+msgid "Language"
+msgstr "Jazyk"
+
+msgctxt "#30301"
+msgid "English"
+msgstr "Angličtina"
+
+msgctxt "#30302"
+msgid "German"
+msgstr "Nemčina"
+
+msgctxt "#30303"
+msgid "French"
+msgstr "Francúzština"
+
+msgctxt "#30310"
+msgid "Force ViewMode to Thumbnail"
+msgstr "Vynútiť zobrazenie náhľadov"
+
+msgctxt "#30400"
+msgid "Add to 'My Stations'"
+msgstr "Pridať do 'Moje stanice'"
+
+msgctxt "#30401"
+msgid "Remove from 'My Stations'"
+msgstr "Odstrániť z 'Moje stanice'"
+
+msgctxt "#30402"
+msgid "Edit custom Station"
+msgstr "Upraviť vlastné stanice"
+
+msgctxt "#30500"
+msgid "Please enter %s"
+msgstr "Prosím zadajte %s"
+
+msgctxt "#30501"
+msgid "title"
+msgstr "Titul"
+
+msgctxt "#30502"
+msgid "thumbnail url or path"
+msgstr "URL alebo cesta k náhľadu"
+
+msgctxt "#30503"
+msgid "stream url"
+msgstr "URL streamu"
+
+msgctxt "#30504"
+msgid "Add custom Station..."
+msgstr "Pridať vlastné stanice..."
+
+msgctxt "#30600"
+msgid "Network Error"
+msgstr "Sieťová chyba"
+

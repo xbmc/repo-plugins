@@ -1,0 +1,16 @@
+{
+  "channels": [
+    {
+      "guid": "DB6A5104-30B0-11E1-A995-AF324924019B",
+      "name": "Hardware.info",
+      "description": {
+        "en": "Hardware Info - hardware reviews and comparisons\n\nEverything there is know about computer hardware and consumer electronics: 6.016 reviews, 417.211 products, 54.586 news items, compare prices with 178 shops.",
+        "nl": "Hardware Info - hardware reviews en vergelijken\n\nAlles over computerhardware en consumentenelektronica: 6.016 reviews, 417.211 producten, 54.586 nieuwsberichten, prijsvergelijking met 178 shops."
+      },
+      "icon": "hardwareinfolarge.png",
+      "category": "Tech",
+      "language": "nl",
+      "fanart": "hardwareinfofanart.jpg"
+    }
+  ]
+}

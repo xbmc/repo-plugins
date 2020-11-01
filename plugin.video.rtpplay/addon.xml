@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rtpplay" name="RTP Play" version="5.0.10+matrix.1" provider-name="enen92, guipenedo">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="script.module.inputstreamhelper" version="0.4.2"/>
+        <import addon="script.module.beautifulsoup4" version="4.6.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Play live and on-demand broadcasts from RTP Play</summary>
+        <description lang="en_GB">Play live and on-demand broadcasts from RTP Play</description>
+        <summary lang="pt_PT">Emissões em direto e em diferido da RTP Play</summary>
+        <description lang="pt_PT">Emissões em direto e em diferido da RTP Play</description>
+        <language>pt</language>
+        <platform>all</platform>
+        <license>GPL-3.0</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=154645</forum>
+        <website>http://rtp.pt/play</website>
+        <email>enen92@kodi.tv</email>
+        <source>https://github.com/enen92/plugin.video.rtpplay</source>
+        <news>
+            - Move xbmc.translatepath to xbmcvfs.translatepath
+        </news>
+        <disclaimer lang="en_GB">The plugin is unofficial and not endorsed by RTP. Expect it to break. </disclaimer>
+        <disclaimer lang="pt_PT">Este plugin não é oficial nem desenvolvido pela RTP. </disclaimer>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

@@ -1,0 +1,103 @@
+# XBMC Media Center language file
+# Addon Name: IMDb Trailers
+# Addon id: plugin.video.imdb.trailers
+
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-11-03 00:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr_TR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "IMDb Trailers video add-on"
+msgstr "IMDb Fragmanları video eklentisi"
+
+msgctxt "Addon Description"
+msgid "Watch movie trailers available on IMDb"
+msgstr "IMDb'de bulunan film fragmanlarını izle"
+
+msgctxt "Addon Disclaimer"
+msgid "This third party addon is not in any way commissioned or endorsed by Amazon or IMDb"
+msgstr "Bu üçüncü taraf eklentisi, Amazon veya IMDb tarafından hiçbir şekilde görevlendirilmemiştir veya onaylanmamıştır"
+
+msgctxt "#30000"
+msgid "IMDb Trailers"
+msgstr "IMDb Fragmanlar"
+
+msgctxt "#30001"
+msgid "Video Quality"
+msgstr "Video kalitesi"
+
+msgctxt "#30002"
+msgid "Cache Timeout in hours"
+msgstr "Önbellek Zaman Aşımı, saat olarak"
+
+msgctxt "#30003"
+msgid "View Mode"
+msgstr "Görünüm modu"
+
+msgctxt "#30004"
+msgid "Force View Mode"
+msgstr "Görünümü zorla modu"
+
+msgctxt "#30005"
+msgid "Main Menu Mode"
+msgstr "Ana Menü Modu"
+
+msgctxt "#30006"
+msgid "Video Menu Mode"
+msgstr "Video Menüsü Modu"
+
+# empty strings from id 30007 to 30200
+
+msgctxt "#30201"
+msgid "In Cinemas"
+msgstr "Sinemalarda"
+
+msgctxt "#30202"
+msgid "Coming Soon"
+msgstr "Çok yakında"
+
+msgctxt "#30203"
+msgid "Popular Trailers"
+msgstr "Popüler Fragmanlar"
+
+msgctxt "#30204"
+msgid "Recent Trailers"
+msgstr "Son Fragmanlar"
+
+msgctxt "#30205"
+msgid "Television Tonight"
+msgstr "Bu akşam televizyon"
+
+msgctxt "#30206"
+msgid "Search Title"
+msgstr "Başlık Ara"
+
+msgctxt "#30207"
+msgid "Clear Cache"
+msgstr "Önbelleği Temizle"
+
+msgctxt "#30208"
+msgid "Trending Trailers"
+msgstr "Trend Olan Fragmanlar"
+
+msgctxt "#30209"
+msgid "Most Anticipated"
+msgstr "En Çok Beklenen"
+
+msgctxt "#30210"
+msgid "Most Popular"
+msgstr "En Popüler"
+
+msgctxt "#30211"
+msgid "Recently Added"
+msgstr "Son Eklenenler"

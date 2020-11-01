@@ -1,0 +1,79 @@
+{
+  "channels": [
+    {
+      "guid": "7018D677-000B-4EDD-9AA6-6D823A6F10E6",
+      "name": "WOS Westland, Midden-Delfland, Hoek van Holland, Maassluis",
+      "description": {
+        "en": "Video on demand for WOS.\n\nThe WOS is the local broadcaster for the municipality of Westland, Midden-Delfland, Maassluis and Hoek van Holland.",
+        "nl": "WOS Uitzendinggemist.\n\nDe WOS is de lokale omroep voor de gemeenten Westland, Midden-Delfland, Maassluis en deelgemeente Hoek van Holland."
+      },
+      "icon": "wosnlicon.png",
+      "category": "Regional",
+      "channelcode": "wosnl",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "wosnlfanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "BE475CCB-1031-4B8E-B69E-F5DA3CA33BCA",
+      "name": "DTV Oss-Bernheze, ’s-Hertogenbosch en Uden",
+      "description": {
+        "en": "Video on demand for DTV  Oss-Bernheze, ’s-Hertogenbosch en Uden.\n\nThe broadcasters of Oss-Bernheze, ’s-Hertogenbosch and Uden work together closely. The do this under a common brand: Dtv and MFM Brabant.",
+        "nl": "DTV  Oss-Bernheze, ’s-Hertogenbosch en Uden Uitzendinggemist.\n\nDe publieke omroepen van Oss-Bernheze, ’s-Hertogenbosch en Uden werken nauw met elkaar samen. Dat doen ze onder de merknamen Dtv en MFM Brabant."
+      },
+      "icon": "dtvnlicon.png",
+      "category": "Regional",
+      "channelcode": "dtvnl",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "dtvnlfanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "8F501417-99FD-4E55-89AA-18B0BD3C25BC",
+      "name": "Omroep Venlo",
+      "description": {
+        "en": "Video on demand for Omroep Venlo.\n\nThe local broadcaster of the municipality of Venlo. Located in the Nedinsco Factory.",
+        "nl": "Omroep Venlo Uitzendinggemist.\n\nLokale omroep van de gemeente Venlo. Gevestigd in de Nedinsco Fabriek."
+      },
+      "icon": "venlonlicon.png",
+      "category": "Regional",
+      "channelcode": "venlonl",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "venlonlfanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "E737DB6F-8741-4B89-BD04-8874DE050131",
+      "name": "Omroep Horst aan de Maas",
+      "description": {
+        "en": "Video on demand for Omroep Horst aan de Maas.\n\nOmroep Horst aan de Maas brings you daily local news via TV, radio and internet.",
+        "nl": "Omroep Horst aan de Maas Uitzendinggemist.\n\nOmroep Horst aan de Maas brengt dagelijks het laatste lokale nieuws via tv, radio en online."
+      },
+      "icon": "horstnlicon.png",
+      "category": "Regional",
+      "channelcode": "horstnl",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "horstnlfanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "E1F58AD4-C970-49AB-9B38-7FA9F6D1AFC3",
+      "name": "Studio 040",
+      "description": {
+        "en": "Studio 040 video on demand.\n\nStudio 040 is the public broadcaster of Eindhoven, Geldrop-Mierlo and Waalre.",
+        "nl": "Studio 040 Uitzendinggemist.\n\nStudio 040 is de publieke omroep van Eindhoven, Geldrop-Mierlo en Waalre."
+      },
+      "icon": "studio040icon.png",
+      "category": "Regional",
+      "channelcode": "studio040",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "studio040fanart.jpg",
+      "adaptiveAddonSelectable": true
+    }
+  ]
+}

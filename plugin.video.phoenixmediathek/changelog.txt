@@ -1,0 +1,11 @@
+2.0.1
+- Adjusted for API change
+2.0.0
+- Complete rewrite 
+1.2.0
+- Misc improvements
+1.1.0
+- Added archive
+- Added icon
+- Added fanart
+- Added description

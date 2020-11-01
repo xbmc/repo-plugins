@@ -1,0 +1,90 @@
+0.6.3
+- Cleanup, generic european stream and clear cache features.
+0.6.2
+- Use new apis
+- Added back all languages
+- Unfortunately some streams might contain ads (based by location)
+0.6.1
+- Removed debug lines.
+0.6.0
+- New api. for now only english will work.
+0.5.9
+- Added season 24 (pandemic special)
+0.5.8
+- fixed issue with DE episode streaming.
+- fixed issue with PY3
+0.5.7
+- fixed issue with DE random episode.
+0.5.6
+- fixed issue with Kodi 16.
+0.5.5
+- fixed issue with Debian buster (Kodi 17.6) missing xbmcgui.ListItem.setIsFolder method. 
+0.5.4
+- Added southparkstudios.co.uk and fixed issue with season 23 on southparkstudios.nu and video playback on southpark.de
+0.5.3
+- Added southparkstudios.nu support and fixed issue with Premiere episodes
+0.5.2
+- Added season 23, Python3 support and downgraded LICENSE to GPLv2
+0.5.1
+- Fixed issues with http to https redirects
+0.5.0
+- Refactoring of the code to make it more readable
+0.4.8
+- Fixed busy dialog during playback (kudos to anxdpanic)
+0.4.7
+- Added season 22 and cover for 21 and 22 (custom).
+0.4.6
+- Added season 21.
+0.4.5
+- Fixed EN/ES streams due RTMPE bad behaviour.
+0.4.4
+- Fixed EN/DE/ES streams.
+0.4.3
+- Added Season 20
+0.4.2
+- Fixed DE language (thanks to JinJin @kodi forums)
+0.4.1
+- Fixed DE/EN/ES and carousel
+0.4.0
+- Fixed again DE support
+- Added DE descriptions/titles on seasons and random episodes.
+0.3.9
+- Added a timer before release on premiere episodes on the description.
+- Added seasons covers.
+0.3.8
+- Fixed premiere episodes
+- Added [Banned]/[Premiere] tags
+0.3.7
+- Fixed german support.
+0.3.6
+- Added Season 19.
+0.3.5
+- Added Search and new links.
+0.3.4
+- Pseudo-fix for missing cc
+0.3.3
+- Fixed stop on slow connections
+0.3.2
+- added spanish language. it looks like it's easy to add it, less work for me! some episodes will still be in english for de/es languages. not my fault. they have errors on their DB.
+0.3.1
+- removed old mediagen method, and added German translation.
+0.3.0
+- adding pre Python 2.7 support.
+0.2.7
+- FireTV fix
+0.2.6
+- re-added playlist. now works with SUBS! next/back now works and perma cc can be enabled via options.
+0.2.5
+- better loading time.
+0.2.4
+- fixed new mediagen url
+0.2.3
+- added CC and Added warning on Banned Episodes (ep 200/201 - season 14)
+0.2.2
+- fixed bug on 'de' lang (season 18 is in english)
+0.2.1
+- added support to southpark.de
+0.1.3
+- added langs and fixed geolocation
+0.1.0
+- Initial release

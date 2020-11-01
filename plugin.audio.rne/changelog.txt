@@ -1,0 +1,67 @@
+1.3.1+matrix.1 (2020.08.29)
+- Quick fix due to loglevel deprecation on matrix release.
+1.3.0+matrix.1 (2020.05.03)
+- Code updated for matrix onwards.
+- Several code fixes due to website changes.
+1.0.13 (2020.05.01)
+- Several code fixes due to website changes.
+1.0.12 (2019.05.02)
+- Quick fix for direct channels due to website changes (full credits and great thanks to vicglez).
+1.0.11 (2018.12.22)
+- Recover podcast playback due to website changes (thanks to cgg1969).
+- Updated search feature due to website changes.
+- Updated integration tests due to code changes.
+1.0.10 (2018.03.25)
+- Quick fix for direct channels.
+- Fixed playback and search podcasts.
+1.0.9 (2018.01.30)
+- Quick fix for direct channels.
+- Added search option for each program (thanks to crashillo for his suggestion).
+- Updated integration tests due to code changes.
+- Minor changes and fixes.
+1.0.8 (2017.10.10)
+- Quick fix for direct channels due to website changes (credits and great thanks to vicglez).
+- Quick fix for media URL (thanks to crashillo and vicglez).
+- Updated search feature due to website changes.
+- Updated integration tests due to code changes.
+1.0.7 (2016.05.02)
+- Quick fix for direct channels due to website changes (credits: vicglez).
+1.0.6 (2016.04.11)
+- Got the direct channels back to their original source (credits: vicglez).
+1.0.5 (2016.02.14)
+- Quick fix for direct channels due to website changes.
+1.0.4 (2016.01.21)
+- Updated the direct channels sources (great thanks to vicglez).
+1.0.3 (2016.01.17)
+- Recover all of the direct channels play (credits: vicglez).
+1.0.2 (2015.12.31)
+- Fixed half of the direct channels play (credits: vicglez).
+- Search code vamped due to website changes.
+1.0.1
+- Quick fix for direct channels play detected in some platforms.
+1.0.0
+- Updated version number for official repo bump.
+- Updated french translations (credits: Emil). 
+0.0.9
+- Added forum thread to addon and README files.
+- Added Travis-CI integration support for scraper API testing.
+0.0.8
+- Cleaned up code and documentation.
+- prepared everything for first bump into git repo.
+0.0.7
+- Added Search option for audios.
+0.0.6
+- Improved info tags presentation into audios lists.
+- Improved main index generation.
+0.0.5
+- Added support for direct emissions.
+0.0.4
+- Added filter option for All The Programmes or Only On Emission from settings menu, 
+0.0.3
+- Improved audio list parser function.
+- Added suport for info tags in audios and programs.
+0.0.2
+- Added multilevel menu options for "Podcast por cadena" and "Podcast por género".
+- Added internationalization support.
+0.0.1
+- First Try.

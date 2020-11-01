@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30000"> <!-- Server -->
+		<setting id="serverUrl" label="30001" type="text" default="http://"/>
+		<setting id="serverPort" label="30002" type="number" default="1556" option="int"/>
+		<setting id="username" label="30003" type="text" default=""/>
+		<setting id="password" label="30004" type="text" option="hidden" default=""/>
+	</category>
+
+	<category label="30020"> <!-- Transcode -->
+		<setting id="videoQuality" label="30021" type="enum" values="240p|360p|480p|576p|720p|1080p" default="576p"/>
+		<setting id="audioQuality" label="30022" type="enum" lvalues="30040|30041|30042|30043" default="30042"/>
+		<setting id="maxSampleRate" label="30023" type="labelenum" values="44100|48000|96000|192000" default="48000"/>
+		<setting id="multichannel" label="30024" type="bool" default="false"/>
+		<setting id="directPlay" label="30025" type="bool" default="false"/>
+	</category>
+
+	<category label="30030"> <!-- Service -->
+		<setting id="servicePort" label="30031" type="number" default="1556" option="int"/>
+	</category>
+
+</settings>

@@ -1,0 +1,156 @@
+# Kodi Media Center language file
+# Addon Name: YouTube
+# Addon id: plugin.video.youtube
+# Addon Provider: bromix
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2015-09-21 11:01+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30000"
+msgid "Remove folder"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Add folder"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Add channel to root"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Remove channel"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Playlists"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Next page"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Search for channel"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Add by username"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Choose option"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Add channel to"
+msgstr ""
+
+msgctxt "#30010"
+msgid "root"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Folder name"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Search channel"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Choose channel"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Enter username"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Erase database"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Do you wish to erase your Youtube Channels database?"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Successfully erased folder database!"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Channel with username"
+msgstr ""
+
+msgctxt "#30019"
+msgid "does not exist."
+msgstr ""
+
+msgctxt "#30020"
+msgid "API Key Error"
+msgstr ""
+
+msgctxt "#30021"
+msgid "You must enter a YouTube API Key to continue. Please use the addon settings to set the API key."
+msgstr ""
+
+msgctxt "#30022"
+msgid "A YouTube API Key is required for this addon to work, please enter your API key now."
+msgstr ""
+
+msgctxt "#30023"
+msgid "Move Up"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Move Down"
+msgstr ""
+
+msgctxt "#30099"
+msgid "Youtube Channels"
+msgstr ""
+
+msgctxt "#30200"
+msgid "General"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Enable playlists"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Show 'Add folder/channel' options"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Number of videos per page"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Number of channel search results"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Erase database"
+msgstr ""
+
+msgctxt "#30206"
+msgid "API Key"
+msgstr ""
+
+msgctxt "#30207"
+msgid "YouTube API Key"
+msgstr ""
+
+
+

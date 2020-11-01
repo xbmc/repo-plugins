@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.southpark_unofficial" name="South Park" version="0.6.3+matrix.1" provider-name="Deroad">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_US">South Park Unofficial Player</summary>
+        <language>en_US</language>
+        <description lang="en_US">Watch South Park episodes. The supported countries are the one that can view videos from https://southpark.cc.com, https://southparkstudios.co.uk, https://southparkstudios.nu or https://www.southpark.de.</description>
+        <disclaimer lang="en_US">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <license>GPL-2.0-or-later</license>
+        <source>https://github.com/wargio/plugin.video.southpark_unofficial</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=224662</forum>
+        <email>wargio at libero dot it</email>
+        <website>https://southpark.cc.com</website>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>
+

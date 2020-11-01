@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.phoenixmediathek" name="Phoenix Mediathek" version="3.0.0" provider-name="sarbes">
+    <requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.libmediathek4" version="1.0.0"/>
+		<import addon="script.module.requests" version="2.19.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<license>GPL-2.0-only</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=353903</forum>
+		<source>https://github.com/sarbes/plugin.video.phoenixmediathek</source>
+        <website>https://www.phoenix.de/</website>
+        <summary lang="en_GB">This video add-on provides access to videos of the German broadcaster Phoenix.</summary>
+        <description lang="en_GB">This video add-on provides access to videos of the German broadcaster Phoenix.</description>
+        <summary lang="de_DE">Die Phoenix Mediathek bietet Zugriff auf Talks, Interviews und weiterer Beiträge.</summary>
+        <description lang="de_DE">Die Phoenix Mediathek bietet Zugriff auf Talks, Interviews und weiterer Beiträge.</description>
+        <disclaimer lang="de_DE">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

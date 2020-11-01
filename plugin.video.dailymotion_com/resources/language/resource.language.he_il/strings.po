@@ -1,0 +1,267 @@
+# XBMC Media Center language file
+# Addon Name: DailyMotion.com
+# Addon id: plugin.video.dailymotion_com
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-11-03 00:21+0000\n"
+"PO-Revision-Date: 2017-10-23 14:08+0300\n"
+"Last-Translator: A. Dambledore\n"
+"Language-Team: Eng2Heb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: he_IL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgctxt "Addon Summary"
+msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
+msgstr "סרטים, טלוויזיה, מוסיקה, סירטונים של המשתמש, תלת מימד והזרמה חיה"
+
+msgctxt "Addon Description"
+msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
+msgstr "סרטים, טלוויזיה, מוסיקה, סירטונים של המשתמש, תלת מימד והזרמה חיה"
+
+msgctxt "Addon Disclaimer"
+msgid "Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing."
+msgstr "חלקים שונים בתוסף זה עשויים להיות לא חוקיים באיזור מגוריך - אנא בדוק את החוקים לפני ההתקנה."
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr "לעמוד הבא"
+
+msgctxt "#30002"
+msgid "Search"
+msgstr "חיפוש"
+
+msgctxt "#30003"
+msgid "Live"
+msgstr "שידור חי"
+
+msgctxt "#30004"
+msgid "Movies"
+msgstr "סרטים"
+
+msgctxt "#30005"
+msgid "Popular"
+msgstr "פופולרי"
+
+msgctxt "#30006"
+msgid "Channels"
+msgstr "סרטים מערוצים"
+
+msgctxt "#30007"
+msgid "Users"
+msgstr "משתמשים"
+
+msgctxt "#30008"
+msgid "Most Recent"
+msgstr "העדכניים ביותר"
+
+msgctxt "#30009"
+msgid "Most Viewed"
+msgstr "נצפים ביותר"
+
+msgctxt "#30010"
+msgid "Hour"
+msgstr "שָׁעָה"
+
+msgctxt "#30011"
+msgid "Today"
+msgstr "יום בשבוע"
+
+msgctxt "#30012"
+msgid "Week"
+msgstr "שבוע"
+
+msgctxt "#30013"
+msgid "Month"
+msgstr "חודש"
+
+msgctxt "#30014"
+msgid "All Time"
+msgstr "בכל זמן"
+
+msgctxt "#30015"
+msgid "Trending"
+msgstr "מגמות"
+
+msgctxt "#30016"
+msgid "Featured"
+msgstr "מוצגים"
+
+msgctxt "#30017"
+msgid "Official"
+msgstr "רשמי"
+
+msgctxt "#30018"
+msgid "Creative"
+msgstr "יצירתי"
+
+msgctxt "#30019"
+msgid "Most Popular"
+msgstr "הכי פופולרי"
+
+msgctxt "#30020"
+msgid "Most Commented"
+msgstr "עם הכי הרבה תגובות"
+
+msgctxt "#30021"
+msgid "Top Rated"
+msgstr "מדורגים הכי גבוה"
+
+msgctxt "#30022"
+msgid "Video not available"
+msgstr "וידאו לא זמין"
+
+msgctxt "#30023"
+msgid "Added"
+msgstr "נוסף"
+
+msgctxt "#30024"
+msgid "Favourites"
+msgstr "מועדפים"
+
+msgctxt "#30025"
+msgid "What to Watch"
+msgstr "מה לצפות"
+
+# empty strings from id 30026 to 30027
+msgctxt "#30028"
+msgid "Add user to favourites"
+msgstr "הוספת משתמש למועדפים"
+
+msgctxt "#30029"
+msgid "Remove from favourites"
+msgstr "הסרה ממועדפים"
+
+msgctxt "#30030"
+msgid "Added user to favourites"
+msgstr "המשתמש נוסף למועדפים"
+
+msgctxt "#30031"
+msgid "Are you over 18 and would like to turn off the family filter?"
+msgstr "האם אתה מעל 18 ואת רוצה לכבות את מסנן המשפחה?"
+
+msgctxt "#30032"
+msgid "Turn the family filter on?"
+msgstr "להפעיל את מסנן המשפחה?"
+
+msgctxt "#30033"
+msgid "Add user"
+msgstr "הוספת משתמש"
+
+msgctxt "#30034"
+msgid "My stuff"
+msgstr "החומר שלי"
+
+msgctxt "#30035"
+msgid "Contacts"
+msgstr "אנשי קשר"
+
+msgctxt "#30036"
+msgid "Following"
+msgstr "עוקב"
+
+msgctxt "#30037"
+msgid "Favourites"
+msgstr "מועדפים"
+
+msgctxt "#30038"
+msgid "Playlists"
+msgstr "רשימות השמעה"
+
+msgctxt "#30039"
+msgid "3D"
+msgstr "תלת מימד"
+
+msgctxt "#30040"
+msgid "All"
+msgstr "All"
+
+msgctxt "#30041"
+msgid "Videos"
+msgstr "סרטי וידאו"
+
+msgctxt "#30042"
+msgid "Groups"
+msgstr "קבוצות"
+
+msgctxt "#30043"
+msgid "Add to queue"
+msgstr "הכנס פריט לתור"
+
+msgctxt "#30044"
+msgid "Download video"
+msgstr "הורד וידאו"
+
+# empty strings from id 30045 to 30100
+msgctxt "#30101"
+msgid "Country"
+msgstr "מדינה"
+
+msgctxt "#30102"
+msgid "Force View"
+msgstr "כפה תצוגה"
+
+msgctxt "#30103"
+msgid "ViewID"
+msgstr "מזהה תצוגה"
+
+msgctxt "#30104"
+msgid "Family Filter"
+msgstr "מסנן המשפחה"
+
+msgctxt "#30105"
+msgid "Maximum resolution"
+msgstr "הרזולוציה המרבית"
+
+msgctxt "#30106"
+msgid "Dailymotion Username"
+msgstr "שם משתמש ב-Dailymotion"
+
+msgctxt "#30107"
+msgid "Items per page"
+msgstr "פריטים בכל עמוד"
+
+msgctxt "#30108"
+msgid "Download directory"
+msgstr "תיקיית הורדות"
+
+msgctxt "#30109"
+msgid "File already exists"
+msgstr "הקובץ כבר קיים"
+
+msgctxt "#30110"
+msgid "Choose download directory in Settings"
+msgstr "בחירת תיקיית הורדות בהגדרות"
+
+msgctxt "#30111"
+msgid "General"
+msgstr "כללי"
+
+msgctxt "#30112"
+msgid "Download"
+msgstr "הורד"
+
+msgctxt "#30113"
+msgid "Miscellaneous"
+msgstr "שונות"
+
+msgctxt "#30114"
+msgid "Mature Content"
+msgstr "תוכן למבוגרים"
+
+msgctxt "#30115"
+msgid "Search history"
+msgstr "היסטוריית החיפושים"
+
+msgctxt "#30116"
+msgid "Clear search history"
+msgstr "נקה את היסטוריית החיפוש"
+
+msgctxt "#30117"
+msgid "New Search term"
+msgstr "מונח חיפוש חדש"

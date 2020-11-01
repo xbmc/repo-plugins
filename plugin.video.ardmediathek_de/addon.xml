@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.ardmediathek_de" name="ARD Mediathek" version="6.0.0" provider-name="sarbes">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.libard" version="6.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<language>de</language>
+        <license>GPL-2.0-only</license>
+        <source>https://github.com/sarbes/plugin.video.ardmediathek_de</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=353903</forum>
+        <website>https://www.ardmediathek.de/</website>
+        <summary lang="en_GB">Watch videos on demand from the ARD Mediathek.</summary>
+        <description lang="en_GB">Watch videos on demand from the ARD Mediathek.</description>
+        <summary lang="de_DE">Videos aus der Mediathek des ARD.</summary>
+        <description lang="de_DE">Dieses Add-on bietet Zugriff auf die Inhalte der ARD Mediathek. Vergangene Serien, Filme und Nachrichten können hier abgerufen werden.</description>
+        <disclaimer lang="de_DE">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

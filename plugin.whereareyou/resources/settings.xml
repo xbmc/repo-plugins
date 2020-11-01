@@ -1,0 +1,113 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.whereareyou">
+		<category help="" id="general" label="32000">
+			<group id="1">
+				<setting help="" id="version_upgrade" label="hidden_upgrade" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition name="InfoBool" on="property">false</condition>
+						</dependency>
+					</dependencies>
+					<control format="string" type="edit">
+						<heading>hidden_upgrade</heading>
+					</control>
+				</setting>
+				<setting help="" id="mappings" label="hidden_mappings" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition name="InfoBool" on="property">false</condition>
+						</dependency>
+					</dependencies>
+					<control format="string" type="edit">
+						<heading>hidden_mappings</heading>
+					</control>
+				</setting>
+				<setting help="" id="harmonycontrol" label="32102" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="hub_ip" label="32103" parent="harmonycontrol" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="harmonycontrol">true</condition>
+						</dependency>
+					</dependencies>
+					<control format="ip" type="edit">
+						<heading>32103</heading>
+					</control>
+				</setting>
+				<setting help="" id="delay" label="32106" parent="hub_ip" type="integer">
+					<level>0</level>
+					<default>250</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="harmonycontrol">true</condition>
+						</dependency>
+					</dependencies>
+					<control format="integer" type="edit">
+						<heading>32106</heading>
+					</control>
+				</setting>
+				<setting help="" id="timeout" label="32105" parent="delay" type="integer">
+					<level>0</level>
+					<default>30</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="harmonycontrol">true</condition>
+						</dependency>
+					</dependencies>
+					<control format="integer" type="edit">
+						<heading>32105</heading>
+					</control>
+				</setting>
+				<setting help="" id="harmonyadvanced" label="32104" parent="timeout" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="harmonycontrol">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="olxtfmmphzxyvyuceobduduprajrbixk" label="32101" parent="harmonyadvanced" type="action">
+					<level>0</level>
+					<data>RunScript(plugin.whereareyou,fromsettings)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="harmonycontrol">true</condition>
+						</dependency>
+					</dependencies>
+					<control format="action" type="button">
+						<close>true</close>
+					</control>
+				</setting>
+				<setting help="" id="debug" label="32100" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>

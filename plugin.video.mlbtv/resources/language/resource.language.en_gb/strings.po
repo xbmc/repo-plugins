@@ -1,0 +1,187 @@
+# Kodi Media Center language file
+# Addon Name: MLB.TV
+# Addon id: plugin.video.mlbtv
+# Addon Provider: eracknaphobia
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "Previous"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Next"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Login"
+msgstr ""
+
+msgctxt "#30140"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30150"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30151"
+msgid "Single Team / Free Game Subscription"
+msgstr ""
+
+msgctxt "#30156"
+msgid "Logout"
+msgstr ""
+
+msgctxt "#30159"
+msgid "Visual"
+msgstr ""
+
+msgctxt "#30160"
+msgid "Stream Quality"
+msgstr ""
+
+msgctxt "#30165"
+msgid "CDN"
+msgstr ""
+
+msgctxt "#30170"
+msgid "Hide Scores"
+msgstr ""
+
+msgctxt "#30171"
+msgid "Off"
+msgstr ""
+
+msgctxt "#30172"
+msgid "On"
+msgstr ""
+
+msgctxt "#30173"
+msgid "Favorite Team Only"
+msgstr ""
+
+msgctxt "#30174"
+msgid "Live Games Only"
+msgstr ""
+
+msgctxt "#30175"
+msgid "Archive Games Only"
+msgstr ""
+
+msgctxt "#30180"
+msgid "Favorite Team"
+msgstr ""
+
+msgctxt "#30190"
+msgid "Display Team Name as"
+msgstr ""
+
+msgctxt "#30191"
+msgid "Team (ex. Pirates)"
+msgstr ""
+
+msgctxt "#30192"
+msgid "Abbreviated (ex. PIT)"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Time Format"
+msgstr ""
+
+msgctxt "#30302"
+msgid "12 Hour Clock (ex. 6:00 pm)"
+msgstr ""
+
+msgctxt "#30303"
+msgid "24 Hour Clock (ex. 18:00)"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Catch Up"
+msgstr ""
+
+
+msgctxt "#30300"
+msgid "In Market Streams"
+msgstr ""
+
+msgctxt "#30700"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Proxy Settings"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Enabled"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Server"
+msgstr ""
+
+msgctxt "#30230"
+msgid "Port"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Today's Games"
+msgstr ""
+
+msgctxt "#30361"
+msgid "Yesterday's Games"
+msgstr ""
+
+msgctxt "#30362"
+msgid "Goto Date"
+msgstr ""
+
+msgctxt "#30370"
+msgid "Playback Conflict"
+msgstr ""
+
+msgctxt "#30371"
+msgid "Always Ask stream quality will not work when inputstream adaptive is enabled. Either disable inputstream adaptive or switch stream quality to Best Available."
+msgstr ""
+
+msgctxt "#30372"
+msgid "Choose Stream Quality"
+msgstr ""
+
+msgctxt "#30375"
+msgid "Watch all the days highlights for "
+msgstr ""
+
+msgctxt "#30380"
+msgid "MLB Highlights"
+msgstr ""
+
+msgctxt "#30381"
+msgid "Retrieving Streams..."
+msgstr ""
+
+msgctxt "#30382"
+msgid "Downloading "
+msgstr ""
+

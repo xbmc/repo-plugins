@@ -1,0 +1,81 @@
+# Kodi Media Center language file
+# Addon Name: South Park Unofficial Player
+# Addon id: plugin.video.southpark_unofficial
+# Addon Provider: wargio
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Audio Language"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Geo Location"
+msgstr ""
+
+msgctxt "#30002"
+msgid "You seem to be geoblocked. I'll ignore it but be aware of it"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Loading Random Episode"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Cannot open the stream. Bad internet connection?"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Featured"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Random Episode"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Season"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Loading"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Check your internet connection!"
+msgstr ""
+
+msgctxt "#30011"
+msgid "It's not available, sorry"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Enable CC"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30014"
+msgid "This episode hasn't been released yet!"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Play directly the random episode"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Clear cache"
+msgstr ""

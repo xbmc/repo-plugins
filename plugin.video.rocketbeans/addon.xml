@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rocketbeans" version="1.2.2" name="Rocket Beans TV" provider-name="Razzeee">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="plugin.video.youtube" version="5.2.1" />
+        <import addon="plugin.video.twitch" version="2.2.0" />
+        <import addon="script.module.routing" version="0.2.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Rocket Beans TV | 24/7 Entertainment</summary>
+        <summary lang="de_DE">Rocket Beans TV | 24/7 Entertainment</summary>
+        <description lang="en_GB">Rocket Beans TV is 24/7 Entertainment focusing on digital topics like gaming and digital popculture.</description>
+        <description lang="de_DE">Willkommen bei Rocket Beans TV, dem ersten deutschen, unabhängigen und Community-getriebenem 24/7-Web-Sender!
+
+Auf YouTube senden die Beans 24 Stunden am Tag und versorgen euch mit geilem Content rund um Gaming und digitaler Popkultur.
+
+Wir machen nur, auf was wir Bock haben – und das mit Erfolg! Egal ob spannende Let’s Plays, interaktive Formate wie „Chat Duell“, unser Kinomagazin „Kino+“ oder exklusive Events: Mit unseren ehemaligen Game One-Moderatoren Budi, Etienne, Nils und Simon, dem fantastischen Einsatz unseres hochmotivierten Raketenteams und dem beispiellosen Support unserer Bohnen-Community liefern wir euch bestes TV-Entertainment abseits ausgetretener Pfade – spontan, authentisch und unabhängig.</description>
+        <language>de</language>
+        <disclaimer lang="en_GB">Make sure to enable MPEG-DASH in your YouTube addon</disclaimer>
+        <disclaimer lang="de_DE">Bitte aktiviere den MPEG-DASH Support im YouTube addon</disclaimer>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <website>www.rocketbeans.tv</website>
+        <source>https://github.com/Razzeee/plugin.video.rocketbeans</source>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+            <screenshot>resources/screenshot-01.png</screenshot>
+            <screenshot>resources/screenshot-02.png</screenshot>
+        </assets>
+        <news>- Readded guide</news>
+    </extension>
+</addon>

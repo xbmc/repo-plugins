@@ -1,0 +1,19 @@
+{
+  "channels": [
+    {
+      "guid": "19B126B1-4896-4378-A345-A0ABA313CB75",
+      "name": "NTR: School TV",
+      "description": {
+        "en": "Materiaal van NTR:School TV.",
+        "nl": "Clips and videos from NTR:School TV."
+      },
+      "icon": "schooltvlarge.png",
+      "category": "National",
+      "channelcode": "schooltv",
+      "sortorder": 25,
+      "language": "nl",
+      "ignore": true,
+      "fanart": "schooltvfanart.jpg"
+    }
+  ]
+}

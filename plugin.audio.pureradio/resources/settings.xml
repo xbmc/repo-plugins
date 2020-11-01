@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="30100">
-        <setting id="PLAY"                  type="bool"   label="30101" default="false"/>
-        <setting id="SHOW_PODCAST_IMAGES"   type="bool"   label="30102" default="false"/>
-        <setting id="VERSION"               type="text"   label=""      default="2.0.0" visible="false"/>
-    </category>  
-</settings>

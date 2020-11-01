@@ -236,6 +236,18 @@ class Metadata:
         return ''
 
     @staticmethod
+    def get_mpaa(api_data):
+        """Get film rating string from single item json api data"""
+
+        # VRT NU Search API
+        if api_data.get('type') == 'episode':
+            if api_data.get('ageGroup'):
+                return api_data.get('ageGroup')
+
+        # Not Found
+        return ''
+
+    @staticmethod
     def get_duration(api_data):
         """Get duration int from single item json api data"""
 
@@ -309,6 +321,19 @@ class Metadata:
                 if plot_meta:
                     plot_meta += '  '
                 plot_meta += localize(30201)  # Geo-blocked
+
+            # Add product placement
+            if api_data.get('productPlacement') is True:
+                if plot_meta:
+                    plot_meta += '  '
+                plot_meta += '[B]PP[/B]'
+
+            # Add film rating
+            rating = self.get_mpaa(api_data)
+            if rating:
+                if plot_meta:
+                    plot_meta += '  '
+                plot_meta += '[B]%s[/B]' % rating
 
             plot = html_to_kodi(api_data.get('description', ''))
 
@@ -555,11 +580,14 @@ class Metadata:
             if season:
                 if get_setting_bool('showfanart', default=True):
                     art_dict['fanart'] = add_https_proto(api_data.get('programImageUrl', 'DefaultSets.png'))
-                    art_dict['banner'] = art_dict.get('fanart')
                     if season != 'allseasons':
                         art_dict['thumb'] = add_https_proto(api_data.get('videoThumbnailUrl', art_dict.get('fanart')))
                     else:
                         art_dict['thumb'] = art_dict.get('fanart')
+                    art_dict['banner'] = art_dict.get('fanart')
+                    if api_data.get('programAlternativeImageUrl'):
+                        art_dict['cover'] = add_https_proto(api_data.get('programAlternativeImageUrl'))
+                        art_dict['poster'] = add_https_proto(api_data.get('programAlternativeImageUrl'))
                 else:
                     art_dict['thumb'] = 'DefaultSets.png'
             else:
@@ -567,6 +595,9 @@ class Metadata:
                     art_dict['thumb'] = add_https_proto(api_data.get('videoThumbnailUrl', 'DefaultAddonVideo.png'))
                     art_dict['fanart'] = add_https_proto(api_data.get('programImageUrl', art_dict.get('thumb')))
                     art_dict['banner'] = art_dict.get('fanart')
+                    if api_data.get('programAlternativeImageUrl'):
+                        art_dict['cover'] = add_https_proto(api_data.get('programAlternativeImageUrl'))
+                        art_dict['poster'] = add_https_proto(api_data.get('programAlternativeImageUrl'))
                 else:
                     art_dict['thumb'] = 'DefaultAddonVideo.png'
 
@@ -578,6 +609,9 @@ class Metadata:
                 art_dict['thumb'] = add_https_proto(api_data.get('thumbnail', 'DefaultAddonVideo.png'))
                 art_dict['fanart'] = art_dict.get('thumb')
                 art_dict['banner'] = art_dict.get('fanart')
+                if api_data.get('alternativeImage'):
+                    art_dict['cover'] = add_https_proto(api_data.get('alternativeImage'))
+                    art_dict['poster'] = add_https_proto(api_data.get('alternativeImage'))
             else:
                 art_dict['thumb'] = 'DefaultAddonVideo.png'
 
@@ -614,6 +648,7 @@ class Metadata:
                 playcount=self.get_playcount(api_data),
                 plot=self.get_plot(api_data, season=season),
                 plotoutline=self.get_plotoutline(api_data, season=season),
+                mpaa=self.get_mpaa(api_data),
                 tagline=self.get_plotoutline(api_data, season=season),
                 duration=self.get_duration(api_data),
                 mediatype=self.get_mediatype(api_data, season=season),
@@ -762,8 +797,8 @@ class Metadata:
         # VRT NU Search API
         if api_data.get('type') == 'episode':
             from data import CATEGORIES
-            return sorted([localize(find_entry(CATEGORIES, 'id', category).get('msgctxt'))
-                           for category in api_data.get('categories')])
+            return sorted([localize(find_entry(CATEGORIES, 'id', category, {}).get('msgctxt', category))
+                           for category in api_data.get('categories', [])])
 
         # VRT NU Suggest API
         if api_data.get('type') == 'program':

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.14+matrix.1"
+        version="5.2.15+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -127,24 +127,19 @@
 
         <license>CC-BY-NC-SA-4.0</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.2.14 - Changelog - 2020-10-20[/B]
+        <news>[B]Retrospect v5.2.15 - Changelog - 2020-11-02[/B]
 
-This update introduces a new feature that allows the translation of channel descriptions. This will result in the descriptions to be in the same language as the Kodi GUI. Besides this some minor channel fixes were done for the UR Play (Swedish) and ViaFree (Norwegian) channels.
+This is a quick fix update for VRT.nu that broke with current site changes.
 
 [B]Framework related[/B]
-* Changed: use `xbmcvfs.translatePath` instead of `xbmc.translatePath`
+_None_
 
 [B]GUI/Settings/Language related[/B]
-* Added: Show the channel descriptions in the same language as the Kodi GUI.
+* Added: Option to set the TV Show Title to MediaItems.
 
 [B]Channel related[/B]
-* Fixed: TV3 Play (Norge) had missing shows (Fixes #1430)
-* Added: ViaFree (Norge) channel with all ViaFree.no content (See #1430)
-* Fixed: Wrong subtitle language selected for ViaFree (Fixes #1431)
-* Fixed: Hide the description for SVT Play channels (Fixes #1422)
-* Fixed: UR Play (Sweden) not playing (Fixes #1435)
-* Fixed: UR Play (Sweden) main list items were missing (See #1435)
-* Fixed: Categories did not list in UR Play (Sweden) (See #1435 See #1436)
+* Fixed: VRT.nu changed stream urls which broke the channel (Fixes 1440)
+* Fixed: Folders were no longer showing for VRT.nu (Fixes 1440)
 
         </news>
         <assets>

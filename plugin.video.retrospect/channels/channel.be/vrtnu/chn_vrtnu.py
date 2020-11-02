@@ -74,8 +74,7 @@ class Channel(chn_class.Channel):
                               parser=[":items", "par", ":items", "categories", "items"],
                               creator=self.create_category)
 
-        folder_regex = r'<li class="vrt-labelnav--item "[^>]*>\s*(?:<h2[^<]*>\s*)?<a[^>]*href="' \
-                       r'(?<url>[^"]+)"[^>]*>(?<title>[^<]+)</a>'
+        folder_regex = r'<li class="vrt-labelnav--item "[^>]*>\s*(?:<h2[^<]*>\s*)?<a[^>]*href="(?<url>[^"]+)"[^>]*>(?:\W*<nui[^>]*>\W*)?(?<title>[^<]+)</'
         folder_regex = Regexer.from_expresso(folder_regex)
         self._add_data_parser("*", name="Folder/Season parser",
                               parser=folder_regex, creator=self.create_folder_item)
@@ -599,15 +598,14 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        # we need to fetch the actual url as it might differ for single video items
-        data, secure_url = UriHandler.header(item.url, proxy=self.proxy)
-
         # Get the MZID
-        secure_url = secure_url.rstrip("/")
-        secure_url = "%s.mssecurevideo.json" % (secure_url, )
-        data = UriHandler.open(secure_url, proxy=self.proxy, additional_headers=item.HttpHeaders)
-        secure_data = JsonHelper(data, logger=Logger.instance())
-        mzid = secure_data.get_value(list(secure_data.json.keys())[0], "videoid")
+        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=item.HttpHeaders)
+        json_data = Regexer.do_regex(r'<script type="application/ld\+json">(.*?)</script>', data)
+        json_info = JsonHelper(json_data[-1])
+        video_id = json_info.get_value("video", "@id")
+        publication_id = json_info.get_value("publication", -1, "@id")
+
+        mzid = "{}${}".format(publication_id, video_id)
         return self.update_video_for_mzid(item, mzid)
 
     def update_video_for_mzid(self, item, mzid, live=False):  # NOSONAR

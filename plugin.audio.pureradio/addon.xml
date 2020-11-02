@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.pureradio" name="Pureradio.One" version="3.0.0+matrix.0" provider-name="Bart van Dommelen">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>	
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en_GB">Pureradio.One stream and podcast</summary>
+		<summary lang="nl_NL">Pureradio.One stream en podcasts</summary>
+		<description lang="en_GB">Pureradio.One is an internet radiostation which plays music from the 60's till today, commercial free and in great quality streaming and podcasts.</description>
+		<description lang="nl_NL">Pureradio.One is een internet radiostation met een brede mix van de beste hits, wereldwijd te volgen via een van onze streams en podcast.</description>
+        <license>GPL-3.0-or-later</license>
+        <source>https://github.com/bdommel/plugin.audio.pureradio</source>
+		<language>en</language>	
+		<assets>
+			<icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+		</assets>
+		<news>
+			Version 2.0.0 (01-OCT-2020) 
+				[*] Support for Kodi 19 Matrix.
+				[*] Spreaker podcast section updated, much faster and optional artwork.
+		</news>
+	</extension>
+</addon>

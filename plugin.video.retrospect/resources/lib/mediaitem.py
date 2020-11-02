@@ -65,7 +65,7 @@ class MediaItem:
                 "guidValue"]
 
     #noinspection PyShadowingBuiltins
-    def __init__(self, title, url, type="folder"):
+    def __init__(self, title, url, type="folder", tv_show_title=None):
         """ Creates a new MediaItem.
 
         The `url` can contain an url to a site more info about the item can be
@@ -76,15 +76,18 @@ class MediaItem:
         the item. This is all taken care of when creating Kodi items in the
         different methods.
 
-        :param str|unicode title:   The title of the item, used for appearance in lists.
-        :param str|unicode url:     Url that used for further information retrieval.
-        :param str type:            Type of MediaItem (folder, video, audio). Defaults to 'folder'.
+        :param str|unicode title:       The title of the item, used for appearance in lists.
+        :param str|unicode url:         Url that used for further information retrieval.
+        :param str type:                Type of MediaItem (folder, video, audio).
+                                         Defaults to 'folder'.
+        :param str|None tv_show_title:  The title of the TV Show to which the episode belongs.
 
         """
 
         name = title.strip()
 
         self.name = name
+        self.tv_show_title = tv_show_title
         self.url = url
         self.actionUrl = None
         self.MediaItemParts = []
@@ -390,6 +393,8 @@ class MediaItem:
             info_labels["Aired"] = kodi_date
         if self.type != "audio":
             info_labels["Plot"] = description
+        if self.tv_show_title:
+            info_labels["TVShowTitle"] = self.tv_show_title
 
         # now create the Kodi item
         item = xbmcgui.ListItem(name or "<unknown>", self.__date)
@@ -497,6 +502,10 @@ class MediaItem:
     @property
     def uses_external_addon(self):
         return self.url is not None and self.url.startswith("plugin://")
+
+    @property
+    def title(self):
+        return self.name
 
     def __set_kodi_proxy_info(self, kodi_item, stream, stream_url, kodi_params, proxy):
         """ Updates a Kodi ListItem with the correct Proxy configuration taken from the ProxyInfo

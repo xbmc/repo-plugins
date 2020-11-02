@@ -27,8 +27,8 @@ settings = p.get_plugin_settings()
 translation = p.get_plugin_translation()
 
 localized_strings =  {
-        'Play'     : 30010,
-        'Podcasts' : 30011,
+        'Play'     : 30001,
+        'Podcasts' : 30002,
 }
 
 # Entry point
@@ -40,8 +40,11 @@ def run():
     # Get the params
     params = p.get_plugin_parms()
     action = params.get("action", '')
-    if action:
-        eval("%s(params)" % action)
+    # changed this to static function calls
+    if (action == 'play_audio'):
+        play_audio(params)
+    elif (action == 'retrieve_podcasts'):
+        retrieve_podcasts(params)
     else:
         create_index(params)    # default menu
 
@@ -80,6 +83,7 @@ def create_podcast_items(url):
     p.add_items(main_menu)
 
 def podcast_image(item):
+    """This function return the image location if show images is set."""
     image = ''
     if (settings.getSetting('podcast_images')=='true'):
          image = item[8].attrib['href'] 

@@ -93,7 +93,7 @@ class Plugin():
     def showWarning(self, message):
         """Shows a popup window in the XBMC GUI for 5 seconds"""
         self._log("showWarning message: %s" % message)
-        xbmc.executebuiltin('XBMC.Notification(Info:,' + message + ',6000)')
+        xbmcgui.Dialog().notification(self.plugin_id, message, xbmcgui.NOTIFICATION_INFO, 6000)
 
     def play_resolved_url(self, url = ""):
         """Plays the media file pointed by the URL passed as argument."""

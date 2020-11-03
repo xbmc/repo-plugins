@@ -1,0 +1,54 @@
+# -*- coding: utf-8 -*-
+""" Search module """
+
+from __future__ import absolute_import, division, unicode_literals
+
+import logging
+
+from resources.lib import kodiutils
+from resources.lib.modules.menu import Menu
+from resources.lib.streamz.api import Api
+from resources.lib.streamz.auth import Auth
+
+_LOGGER = logging.getLogger(__name__)
+
+
+class Search:
+    """ Menu code related to search """
+
+    def __init__(self,):
+        """ Initialise object """
+        self._auth = Auth(kodiutils.get_setting('username'),
+                          kodiutils.get_setting('password'),
+                          kodiutils.get_setting('loginprovider'),
+                          kodiutils.get_setting('profile'),
+                          kodiutils.get_tokens_path())
+        self._api = Api(self._auth)
+
+    def show_search(self, query=None):
+        """ Shows the search dialog.
+
+        :type query: str
+        """
+        if not query:
+            # Ask for query
+            query = kodiutils.get_search_string(heading=kodiutils.localize(30009))  # Search Streamz
+            if not query:
+                kodiutils.end_of_directory()
+                return
+
+        # Do search
+        try:
+            items = self._api.do_search(query)
+        except Exception as ex:  # pylint: disable=broad-except
+            kodiutils.notification(message=str(ex))
+            kodiutils.end_of_directory()
+            return
+
+        # Display results
+        listing = []
+        for item in items:
+            listing.append(Menu.generate_titleitem(item))
+
+        # Sort like we get our results back.
+        kodiutils.show_listing(listing, 30009, content='tvshows')

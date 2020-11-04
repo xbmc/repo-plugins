@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.pureradio" name="Pureradio.One" version="2.0.0" provider-name="Cubitus">
+<addon id="plugin.audio.pureradio" name="Pureradio.One" version="3.0.2+matrix.0" provider-name="Bart van Dommelen">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 	</requires>
-	<extension point="xbmc.python.pluginsource" library="addon.py">
+	<extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>audio</provides>
 	</extension>	
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en_GB">Pureradio.One</summary>
-		<description lang="en_GB">Pureradio.One is an internet radiostation which plays music from the 60's till today, commercial free and in great quality.</description>
-		<summary lang="nl_NL">Pureradio.One</summary>
-		<description lang="nl_NL">Pureradio.One is een internet radiostation met een brede mix van de beste hits, wereldwijd te volgen via een van onze streams.</description>
 		<platform>all</platform>
-		<license>GPL-2.0-only</license>
+		<summary lang="en_GB">Pureradio.One stream and podcast</summary>
+		<summary lang="nl_NL">Pureradio.One stream en podcasts</summary>
+		<description lang="en_GB">Pureradio.One is an internet radiostation which plays music from the 60's till today, commercial free and in great quality streaming and podcasts.</description>
+		<description lang="nl_NL">Pureradio.One is een internet radiostation met een brede mix van de beste hits, wereldwijd te volgen via een van onze streams en podcast.</description>
+        <license>GPL-3.0-or-later</license>
+        <source>https://github.com/bdommel/plugin.audio.pureradio</source>
+		<language>en</language>	
 		<assets>
 			<icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
-			<screenshot>resources/screenshot1.jpg</screenshot>
-			<screenshot>resources/screenshot2.jpg</screenshot>
 		</assets>
-		<news>v2.0.0 (01-OCT-2020) 
-			- Support for Kodi 19 Matrix
+		<news>
+			Version 2.0.0 (01-OCT-2020)
+				[*] Python3 used for matrix			
+				[*] Spreaker podcast section optimalisation
+			Version 3.0.0 (01-NOV-2020) 
+				[*] Rewrite based on current Kodi guidelines
+				[*] Removed screenshots
+			Version 3.0.1 (02-NOV-2020)
+				[*] Removed static strings from API
+				[*] Dynamic Streaming and podcast urls
+				[*] Replaced eval function for static function calls
+			Version 3.0.2 (04-NOV-2020)
+				[*] Commit to matrix branch
 		</news>
 	</extension>
 </addon>

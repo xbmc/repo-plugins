@@ -23,5 +23,5 @@ msgid "Play stream automatically"
 msgstr ""
 
 msgctxt "#30102"
-msgid "Show Podcast Images (costs bandwidth)"
+msgid "Show Podcast Images (bandwidth)"
 msgstr ""

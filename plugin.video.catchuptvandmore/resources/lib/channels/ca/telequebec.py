@@ -29,9 +29,10 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 
 from resources.lib import web_utils
-from resources.lib import download
+from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
+import json
 import re
 import urlquick
 
@@ -44,7 +45,7 @@ URL_LIVE = 'https://player.telequebec.tv/Tq_VideoPlayer.js'
 
 URL_EMISSIONS = URL_ROOT + '/a-z/'
 
-URL_STREAM = 'https://mnmedias.api.telequebec.tv/m3u8/%s.m3u8'
+URL_STREAM_DATAS = 'https://mnmedias.api.telequebec.tv/api/v4/player/%s'
 # VideoId
 
 
@@ -105,20 +106,29 @@ def get_video_url(plugin,
                   download_mode=False,
                   **kwargs):
 
-    final_video_url = URL_STREAM % video_id
+    resp = urlquick.get(URL_STREAM_DATAS % video_id)
+    json_parser = json.loads(resp.text)
 
-    if download_mode:
-        return download.download_video(final_video_url)
-    return final_video_url
+    resp2 = urlquick.get(URL_LIVE)
+    data_account = re.compile(r'data-account\"\,(.*?)\)\,').findall(resp2.text)[0]
+    data_player = 'default'
+    data_video_id = ''
+    for stream_datas in json_parser["streamInfos"]:
+        if 'Brightcove' in stream_datas["source"]:
+            data_video_id = stream_datas["sourceId"]
+
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
+                                                    data_player, data_video_id,
+                                                    download_mode)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE)
-    list_live_datas = re.compile(r'liveGPManifestUrl:"(.*?)"').findall(resp.text)
-    url_stream = ''
-    for live_datas in list_live_datas:
-        if 'm3u8' in live_datas:
-            url_stream = live_datas
-    return url_stream
+
+    data_account = re.compile(r'accountId:"(.*?)"').findall(resp.text)[0]
+    data_player = re.compile(r'livePlayerId:"(.*?)"').findall(resp.text)[0]
+    data_live_id = re.compile(r'liveVideoId:"(.*?)"').findall(resp.text)[0]
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
+                                                    data_player, data_live_id)

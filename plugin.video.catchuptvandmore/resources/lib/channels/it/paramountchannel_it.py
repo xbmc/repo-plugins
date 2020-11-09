@@ -50,4 +50,4 @@ def get_live_url(plugin, item_id, **kwargs):
     ep = 'be84d1a2'
 
     return resolver_proxy.get_mtvnservices_stream(
-        plugin, video_uri, False, '', account_override, ep)
+        plugin, video_uri, False, account_override, ep)

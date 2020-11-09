@@ -197,7 +197,6 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    url_live = ''
     live_html = urlquick.get(URL_LIVE_TV,
                              headers={'User-Agent': web_utils.get_random_ua()},
                              max_age=-1)
@@ -207,10 +206,5 @@ def get_live_url(plugin, item_id, **kwargs):
         url_live_embeded,
         headers={'User-Agent': web_utils.get_random_ua()},
         max_age=-1)
-    all_url_video = re.compile(r'file: \'(.*?)\'').findall(
-        root_live_embeded_html.text)
-
-    for url_video in all_url_video:
-        if url_video.count('m3u8') > 0:
-            url_live = url_video
-    return url_live
+    return re.compile(r'url \= \"(.*?)\"').findall(
+        root_live_embeded_html.text)[0]

@@ -80,23 +80,36 @@ def list_programs(plugin, item_id, **kwargs):
     json_value = re.compile(r'/\*bns\*/ (.*?) /\*bne\*/').findall(resp.text)[0]
     json_parser = json.loads(json_value)
 
+    # Regional programms
+    for programs_datas in json_parser["pagesV2"]["pages"]["/tele/emissions"][
+            "data"]["programmesForRegion"]:
+
+        if '/tele/' in programs_datas["url"]:
+            program_title = programs_datas["title"]
+            program_image = programs_datas["picture"]["url"]
+            program_url = programs_datas["url"] + '/site/episodes'
+
+            item = Listitem()
+            item.label = program_title
+            item.art['thumb'] = item.art['landscape'] = program_image
+            item.set_callback(list_videos,
+                              item_id=item_id,
+                              program_url=program_url,
+                              page='1')
+            item_post_treatment(item)
+            yield item
     # All programs
-    for programs_datas in json_parser["pages"]["teleShowsList"]["pageModel"][
+    for programs_datas in json_parser["pagesV2"]["pages"]["/tele/emissions"][
             "data"]["programmes"]:
 
         if '/tele/' in programs_datas["url"]:
             program_title = programs_datas["title"]
-            program_url = ''
-            if 'telejournal-22h' in programs_datas["url"] or \
-                    'telejournal-18h' in programs_datas["url"]:
-                program_url = URL_ROOT + programs_datas[
-                    "url"] + '/2016-2017/episodes'
-            else:
-                program_url = URL_ROOT + programs_datas[
-                    "url"] + '/site/episodes'
+            program_image = programs_datas["picture"]["url"]
+            program_url = URL_ROOT + programs_datas["url"] + '/site/episodes'
 
             item = Listitem()
             item.label = program_title
+            item.art['thumb'] = item.art['landscape'] = program_image
             item.set_callback(list_videos,
                               item_id=item_id,
                               program_url=program_url,

@@ -170,7 +170,7 @@ def get_live_url(plugin, item_id, **kwargs):
     js_id = re.compile(r'js\/bundle\.(.*?)\.js').findall(resp.text)[0]
     resp2 = urlquick.get(
         URL_LIVE_DATAS % js_id, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    live_id = re.compile(r'\,\{id\:\"(.*?)\"').findall(resp2.text)[1]
+    live_id = re.compile(r'mi\,\{id\:\"(.*?)\"').findall(resp2.text)[0]
     return resolver_proxy.get_stream_dailymotion(plugin,
                                                  live_id,
                                                  False)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.26" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.27" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.codequick" version="0.9.13"/>
@@ -42,36 +42,25 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.26]
-[US - ABC News] Fix Catch-Up TV
-[WO - France 24] Fix Catch-Up TV
-[FR - MyCanal] Fix Catch-up TV (More videos are available - DRM still not working)
-[FR - Tébéo/TébéSud] Fix Live TV
-[FR - TVR] Fix Live TV
-[FR - M6 Boutique] Remove Live TV not present in 6Play
-[FR - Equidia] Fix Catch-up TV
-[CH - Rouge TV] Fix Live TV
-[FR - viàMoselle] Rename viàMirabelle to viàMoselle
-[CH - BeCurious TV] Remove Channel - DNS Error to access https://becurious.ch
-[FR - Ouatch TV] Remove Channel
-[FR - france.tv] Add 'All videos/programs' items
-[FR - B Smart] Fix Live TV And Catch-up TV
-[UK - UK Local TV] Add more channels for Live TV and Catch-up TV (Cardiff, Leeds, ...)
-[ES - MiTélé] Remove Lives (Telecinco, Cuatro, ...)
-[ES - RTVE] Add Live TV (La 1, La 2, Teledeporte, Canal 24 Horas)
-[BE - VRTNu] Fix Catch-up TV
-[ES - Trece] Add Live TV
-[BE - TV Lux] Fix Live TV And Catch-up TV
-[BE - TéléMB] Fix Live TV
-[BE - RTC Télé Liège] Fix Live TV
-[UK - Blaze TV] Fix Catch-up TV
-[BE - RTBF] Improvements used API
-[Change] Move Arte code to resolver_proxy
-[UK - Sky Sports] Fix Catch-up TV
-[FR - BFM Business] Fix Live TV
-[FR - Allocine] Fix Search
-[BE - RTBF] Fix Catch-up TV
-[BE - RTBF] Rename La Deux to Tipik
+[Version 0.2.27]
+[CA - ICI Télé] Fix Catch-Up TV
+[CA - TéléQuebec] Fix Catch-Up TV (New contents)
+[BE - RTBF] Fix Live TV (Tipik)
+[US - NY Times] Fix Website
+[BE - Télésambre] Add Live TV
+[BE - RTBF] Fix HTTP 400 during play catchup TV
+[CA - Noovo] Fix Live TV and Rename V Télé to Noovo
+[CH - RTS] Add DRM support for catchup TV
+[WO - Arte] Fix some sub-categories not shown on Catchup TV
+[FR - FranceTV] Add DRM support for catchup TV
+[CA - TeleQuebec] Fix Live TV
+[FR - MyCanal] Fix Catch-up TV
+[FR - Gulli] Fix Live TV
+[FR - BSmart] Fix Live TV
+[FR - BFM Business] Fix Catch-up TV
+[UK - DPLAY] Add Live TV and Catch-up TV (Quest, Quest Red, Really, ...)
+[UK - QuestOD] Move code to Dplay
+[CA - TV5Unis] Fix Catch-up TV
 ----
 Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
     </news>

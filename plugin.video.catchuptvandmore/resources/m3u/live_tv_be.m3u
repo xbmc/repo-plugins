@@ -109,9 +109,9 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/ln24/get_live_u
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=laune
 
 ##	Tipik
-##	tipik
+##	tipiktv
 #EXTINF:-1 tvg-id="C187.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/tipik.png" group-title="Belgium",Tipik
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=tipik
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=tipiktv
 
 ##	La Trois
 ##	latrois
@@ -122,4 +122,9 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_u
 ##	actv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/actv.png" group-title="Belgium",Antenne Centre TV
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/actv/get_live_url/?item_id=actv
+
+##	Télésambre
+##	telesambre
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/telesambre.png" group-title="Belgium",Télésambre
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/telesambre/get_live_url/?item_id=telesambre
 

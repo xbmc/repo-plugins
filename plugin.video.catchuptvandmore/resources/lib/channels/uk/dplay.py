@@ -1,23 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-    Catch-up TV & More
-    Copyright (C) 2018  SylvainCecchetto
-
+    Copyright (C) 2016-2020 Team Catch-up TV & More
     This file is part of Catch-up TV & More.
-
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 # The unicode_literals import only has
@@ -36,6 +21,7 @@ from resources.lib.kodi_utils import get_kodi_version
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info
+from resources.lib.addon_utils import get_item_media_path
 
 import inputstreamhelper
 import json
@@ -46,7 +32,7 @@ from kodi_six import xbmcgui
 
 # TO DO
 
-URL_ROOT = 'https://www.questod.co.uk'
+URL_ROOT = 'https://www.dplay.co.uk'
 
 URL_SHOWS = URL_ROOT + '/api/shows/%s'
 # mode
@@ -60,7 +46,7 @@ URL_VIDEOS = URL_ROOT + '/api/show-detail/%s'
 URL_STREAM = URL_ROOT + '/api/video-playback/%s'
 # path
 
-URL_LIVE = 'https://www.questod.co.uk/channel/%s'
+URL_LIVE = URL_ROOT + '/api/channel-playback/%s'
 
 URL_LICENCE_KEY = 'https://lic.caas.conax.com/nep/wv/license|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&PreAuthorization=%s&Host=lic.caas.conax.com|R{SSM}|'
 # videoId
@@ -69,10 +55,35 @@ CATEGORIES_MODE = {
     'FEATURED': 'featured',
     'MOST POPULAR': 'most-popular',
     'NEW': 'new',
-    'LEAVING SOON': 'last-chance'
+    'LEAVING SOON': 'last-chance',
+    'Box Sets': 'box-set'
 }
 
 CATEGORIES_MODE_AZ = {'A-Z': '-az'}
+
+
+@Route.register
+def dplay_root(plugin, **kwargs):
+
+    # (item_id, label, thumb, fanart)
+    channels = [
+        ('all', 'ALL', 'all.png', 'all_fanart.jpg'),
+        ('quest', 'Quest', 'questtv.png', 'questtv_fanart.jpg'),
+        ('really', 'Really', 'really.png', 'really_fanart.jpg'),
+        ('quest-red', 'Quest Red', 'questred.png', 'questred_fanart.jpg'),
+        ('food-network', 'Food Network', 'foodnetwork.png', 'foodnetwork_fanart.jpg'),
+        ('dmax', 'DMAX', 'dmax.png', 'dmax_fanart.jpg'),
+        ('home', 'HGTV', 'hgtv.png', 'hgtv_fanart.jpg')
+    ]
+
+    for channel_infos in channels:
+        item = Listitem()
+        item.label = channel_infos[1]
+        item.art["thumb"] = get_item_media_path('channels/uk/' + channel_infos[2])
+        item.art["fanart"] = get_item_media_path('channels/uk/' + channel_infos[3])
+        item.set_callback(list_categories, channel_infos[0])
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register
@@ -114,7 +125,10 @@ def list_programs_mode(plugin, item_id, category_name_value, **kwargs):
     - Les feux de l'amour
     - ...
     """
-    resp = urlquick.get(URL_SHOWS % category_name_value)
+    if item_id == 'all':
+        resp = urlquick.get(URL_SHOWS % category_name_value)
+    else:
+        resp = urlquick.get(URL_SHOWS % category_name_value + '?channel=%s' % item_id)
     json_parser = json.loads(resp.text)
 
     for program_datas in json_parser["items"]:
@@ -141,7 +155,10 @@ def list_programs_mode_az(plugin, item_id, category_name_value, **kwargs):
     - Les feux de l'amour
     - ...
     """
-    resp = urlquick.get(URL_SHOWS_AZ % category_name_value)
+    if item_id == 'all':
+        resp = urlquick.get(URL_SHOWS_AZ % category_name_value)
+    else:
+        resp = urlquick.get(URL_SHOWS_AZ % category_name_value + '?channel=%s' % item_id)
     json_parser = json.loads(resp.text)
 
     for program_datas_letter in json_parser["items"]:
@@ -288,10 +305,7 @@ def get_live_url(plugin, item_id, **kwargs):
     if not is_helper.check_inputstream():
         return False
 
-    if item_id == 'questtv':
-        resp = urlquick.get(URL_LIVE % 'quest', max_age=-1)
-    elif item_id == 'questred':
-        resp = urlquick.get(URL_LIVE % 'quest-red', max_age=-1)
+    resp = urlquick.get(URL_LIVE % item_id, max_age=-1)
 
     if len(re.compile(r'drmToken\"\:\"(.*?)\"').findall(resp.text)) > 0:
         token = re.compile(r'drmToken\"\:\"(.*?)\"').findall(resp.text)[0]

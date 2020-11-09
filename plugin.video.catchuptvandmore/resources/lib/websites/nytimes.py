@@ -20,10 +20,9 @@
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from builtins import str
-import re
 from codequick import Route, Resolver, Listitem
 import urlquick
+import base64
 import json
 
 from resources.lib import download
@@ -32,8 +31,6 @@ from resources.lib.menu_utils import item_post_treatment
 
 # TO DO
 # Get sub-playlist
-# Add video info (date, duration)
-# Add More video button
 
 URL_ROOT = 'https://www.nytimes.com'
 
@@ -42,50 +39,121 @@ URL_VIDEOS = URL_ROOT + '/video'
 URL_PLAYLIST = URL_ROOT + '/svc/video/api/v2/playlist/%s'
 # playlistId
 
+URL_REQUESTS = 'https://samizdat-graphql.nytimes.com/graphql/v2'
+
 URL_STREAM = URL_ROOT + '/svc/video/api/v3/video/%s'
 # videoId
+
+HEADERS = {'Content-Type': 'application/json',
+           'nyt-app-type': 'project-vi',
+           'nyt-app-version': '0.0.5',
+           'nyt-token': ('MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+/oU'
+                         'CTBmD/cLdmcecrnBMHiU/pxQCn2DDyaPKUOXxi4p0uUSZQzsu'
+                         'q1pJ1m5z1i0YGPd1U1OeGHAChWtqoxC7bFMCXcwnE1oyui9G1'
+                         'uobgpm1GdhtwkR7ta7akVTcsF8zxiXx7DNXIPd2nIJFH83rmk'
+                         'ZueKrC4JVaNzjvD+Z03piLn5bHWU6+w+rA+kyJtGgZNTXKyPh'
+                         '6EC6o5N+rknNMG5+CdTq35p8f99WjFawSvYgP9V64kgckbTbt'
+                         'dJ6YhVP58TnuYgr12urtwnIqWP9KSJ1e5vmgf3tunMqWNm6+A'
+                         'nsqNj8mCLdCuc5cEB74CwUeQcP2HQQmbCddBy2y0mEwIDAQAB')}
+
+
+def video_query(videoid='', playlistid='', genericid='', cursor=""):
+    _json = {"operationName": "VideoQuery",
+             "variables": {"id": videoid,
+                           "playlistId": playlistid,
+                           "genericId": genericid,
+                           "magazineId": "",
+                           "opinionId": "",
+                           "cursor": cursor},
+             "extensions": {"persistedQuery": {
+                 "version": 1,
+                 "sha256Hash": "8af145c6645fb9be8f7ee65c76c652169c41b7f3294b5c45654b20a6b6a1925b"}}}
+    return urlquick.request('POST', URL_REQUESTS, data=json.dumps(_json), headers=HEADERS, max_age=-1)
+
+
+def additional_playlists_query(playlistids=[]):
+    _json = {"operationName": "AdditionalPlaylistsQuery",
+             "variables": {"playlistIds": playlistids},
+             "extensions": {"persistedQuery": {
+                 "version": 1,
+                 "sha256Hash": "768d2ef43ccae636ecc867da4f16825f7d2b94f7b37631e2ebd625f44f030f6c"}}}
+    return urlquick.request('POST', URL_REQUESTS, data=json.dumps(_json), headers=HEADERS, max_age=-1)
+
+
+def format_day(date, **kwargs):
+    """Format day"""
+    date_list = date.split('T')
+    date_dmy = date_list[0].replace('-', '/')
+    return date_dmy
 
 
 @Route.register
 def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
-    resp = urlquick.get(URL_VIDEOS)
-    root = resp.parse()
 
-    for category_datas in root.iterfind(".//a[@class='css-1fxy2ba']"):
+    # import web_pdb; web_pdb.set_trace()
+    json_parser = video_query(genericid="/video/embedded/admin/100000006681488/main-video-navigation.html").json()
+    categories = json_parser['data']['genericVideoPlaylists']['summary'].split(',')
+
+    playlist = []
+    for category in categories:
+        playlist.append('/video/{}'.format(category.strip()))
+
+    json_parser2 = additional_playlists_query(playlistids=playlist).json()
+    for anywork in json_parser2['data']['anyWorks']:
         item = Listitem()
-
-        item.label = category_datas.text
-        category_url = URL_ROOT + category_datas.get('href')
-
+        item.label = anywork['promotionalHeadline']
         item.set_callback(list_videos,
                           item_id=item_id,
-                          category_url=category_url)
+                          playlistid='/video/{}'.format(anywork['slug']))
         item_post_treatment(item)
         yield item
 
+    for channel in json_parser['data']['videoNavigationChannels']:
+        if channel['publishUrl'] not in playlist:
+            item = Listitem()
+            item.label = channel['displayName']
+            item.set_callback(list_videos,
+                              item_id=item_id,
+                              playlistid=channel['publishUrl'])
+            item_post_treatment(item)
+            yield item
+
 
 @Route.register
-def list_videos(plugin, item_id, category_url, **kwargs):
+def list_videos(plugin, item_id, playlistid, cursor="", **kwargs):
     """Build videos listing"""
 
-    return False
-    # videos_json = urlquick.get(URL_PLAYLIST % category_playlist).text
-    # videos_jsonparser = json.loads(videos_json)
+    videos_jsonparser = video_query(playlistid=playlistid, cursor=cursor).json()
 
-    # for video_data in videos_jsonparser["videos"]:
-    #     item = Listitem()
-    #     item.label = video_data["headline"]
-    #     video_id = str(video_data["id"])
-    #     for image in video_data["images"]:
-    #         item.art['thumb'] = item.art['landscape'] = URL_ROOT + '/' + image["url"]
-    #     item.info['plot'] = video_data["summary"]
+    try:
+        for video_data in videos_jsonparser['data']['playlist']['relatedVideos']['edges']:
+            item = Listitem()
+            video_id = video_data['node']['url']
+            item.label = video_data['node']['headline']['default']
+            item.info['duration'] = video_data['node']['duration']
+            item.info['plot'] = video_data['node']['summary']
+            video_img = video_data['node']['promotionalMedia']['crops'][0]['renditions'][0]['url']
+            item.art['thumb'] = item.art['landscape'] = video_img
+            date_value = format_day(video_data['node']['firstPublished'])
+            item.info.date(date_value, '%Y/%m/%d')
 
-    #     item.set_callback(get_video_url,
-    #                       item_id=item_id,
-    #                       video_id=video_id)
-    #     item_post_treatment(item, is_playable=True, is_downloadable=True)
-    #     yield item
+            item.set_callback(get_video_url,
+                              item_id=item_id,
+                              video_id=video_id)
+            item_post_treatment(item, is_playable=True, is_downloadable=True)
+            yield item
+
+        endcursor = videos_jsonparser['data']['playlist']['relatedVideos']['pageInfo']['endCursor']
+        nb_videos = int(base64.b64decode(endcursor).split(':')[1]) + 1
+        if nb_videos % 12 == 0:
+            yield Listitem.next_page(
+                item_id=item_id,
+                playlistid=playlistid,
+                cursor=endcursor)
+
+    except IndexError:
+        yield None
 
 
 @Resolver.register
@@ -95,16 +163,14 @@ def get_video_url(plugin,
                   download_mode=False,
                   **kwargs):
     """Get video URL and start video player"""
-    return False
-    # video_json = urlquick.get(URL_STREAM % video_id).text
-    # video_jsonparser = json.loads(video_json)
+    video_jsonparser = video_query(videoid=video_id).json()
 
-    # video_url = ''
-    # for video in video_jsonparser["renditions"]:
-    #     if video["type"] == 'hls':
-    #         video_url = video["url"]
+    video_url = ''
+    for video in video_jsonparser['data']['video']['renditions']:
+        if video["type"] == 'hls':
+            video_url = video["url"]
 
-    # if download_mode:
-    #     return download.download_video(video_url)
+    if download_mode:
+        return download.download_video(video_url)
 
-    # return video_url
+    return video_url

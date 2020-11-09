@@ -688,15 +688,15 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/boxplus/get_liv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/boxupfront.png" group-title="United Kingdom",Box Upfront
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/boxplus/get_live_url/?item_id=box-upfront
 
-##	Quest TV
-##	questtv
-#EXTINF:-1 tvg-id="1230.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/questtv.png" group-title="United Kingdom",Quest TV
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/questod/get_live_url/?item_id=questtv
+##	Quest
+##	quest
+#EXTINF:-1 tvg-id="1230.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/questtv.png" group-title="United Kingdom",Quest
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=quest
 
 ##	Quest RED
-##	questred
+##	quest-red
 #EXTINF:-1 tvg-id="1014.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/questred.png" group-title="United Kingdom",Quest RED
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/questod/get_live_url/?item_id=questred
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=quest-red
 
 ##	Bristol Local TV
 ##	bristollocal
@@ -772,6 +772,26 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_l
 ##	twlocal
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/twlocal.png" group-title="United Kingdom",Tyne & Wear Local TV
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=twlocal
+
+##	Really
+##	really
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/really.png" group-title="United Kingdom",Really
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=really
+
+##	Food Network
+##	food-network
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/foodnetwork.png" group-title="United Kingdom",Food Network
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=food-network
+
+##	DMAX
+##	dmax
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/dmax.png" group-title="United Kingdom",DMAX
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=dmax
+
+##	HGTV
+##	home
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/hgtv.png" group-title="United Kingdom",HGTV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=home
 
 
 
@@ -1134,9 +1154,9 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/ln24/get_live_u
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=laune
 
 ##	Tipik
-##	tipik
+##	tipiktv
 #EXTINF:-1 tvg-id="C187.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/tipik.png" group-title="Belgium",Tipik
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=tipik
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=tipiktv
 
 ##	La Trois
 ##	latrois
@@ -1147,6 +1167,11 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_u
 ##	actv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/actv.png" group-title="Belgium",Antenne Centre TV
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/actv/get_live_url/?item_id=actv
+
+##	Télésambre
+##	telesambre
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/telesambre.png" group-title="Belgium",Télésambre
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/telesambre/get_live_url/?item_id=telesambre
 
 
 
@@ -1243,10 +1268,10 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/ca/ntvca/get_live_
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/telemag.png" group-title="Canada",Télé-Mag
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/ca/telemag/get_live_url/?item_id=telemag
 
-##	V Télé
-##	vtele
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/vtele.png" group-title="Canada",V Télé
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/ca/noovo/get_live_url/?item_id=vtele
+##	Noovo
+##	noovo
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/noovo.png" group-title="Canada",Noovo
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ca/noovo/get_live_url/?item_id=noovo
 
 ##	CBC Ottawa
 ##	cbc

@@ -101,21 +101,19 @@ def list_programs(plugin, item_id, category_slug, **kwargs):
                 if "slug" in json_entry[json_key]:
                     if category_slug in json_entry[json_key]["slug"]:
                         for item_data in json_entry[json_key]["items"]:
-                            productset_id = item_data["id"]
-                            product_id = json_entry[productset_id]["product"]["id"]
+                            product_ref = item_data["product"]["__ref"]
 
-                            product_slug_id = ''
-                            if json_entry[product_id]['collection'] is not None:
-                                product_slug_id = json_entry[product_id]['collection']['id']
-                                program_title = json_entry[product_slug_id]['title'] + \
-                                    ' - ' + json_entry[product_id]["title"]
+                            product_slug_ref = ''
+                            if json_entry[product_ref]['collection'] is not None:
+                                product_slug_ref = json_entry[product_ref]['collection']['__ref']
+                                program_title = json_entry[product_slug_ref]['title'] + \
+                                    ' - ' + json_entry[product_ref]["title"]
                             else:
-                                program_title = json_entry[product_id]["title"]
+                                program_title = json_entry[product_ref]["title"]
 
-                            program_image_id = json_entry[product_id]["mainLandscapeImage"]["id"]
-                            program_image = json_entry[program_image_id]["url"]
-                            program_plot = json_entry[product_id]["shortSummary"]
-                            program_type = json_entry[product_id]["productType"]
+                            program_image = json_entry[product_ref]["mainLandscapeImage"]["url"]
+                            program_plot = json_entry[product_ref]["shortSummary"]
+                            program_type = json_entry[product_ref]["productType"]
 
                             item = Listitem()
                             item.label = program_title
@@ -123,23 +121,23 @@ def list_programs(plugin, item_id, category_slug, **kwargs):
                             item.info['plot'] = program_plot
                             if 'EPISODE' in program_type or 'MOVIE' in program_type or 'TRAILER' in program_type:
                                 isVideo = False
-                                if json_entry[product_id]['slug'] is not None:
-                                    video_slug = json_entry[product_id]['slug']
+                                if json_entry[product_ref]['slug'] is not None:
+                                    video_slug = json_entry[product_ref]['slug']
                                     isVideo = True
-                                elif json_entry[product_id]['collection'] is not None:
-                                    video_slug = json_entry[product_slug_id]['slug']
+                                elif json_entry[product_ref]['collection'] is not None:
+                                    video_slug = json_entry[product_slug_ref]['slug']
                                     isVideo = True
                                 if isVideo:
                                     video_duration = ''
-                                    if 'duration' in json_entry[product_id]:
-                                        video_duration = json_entry[product_id]['duration']
+                                    if 'duration' in json_entry[product_ref]:
+                                        video_duration = json_entry[product_ref]['duration']
                                     item.info['duration'] = video_duration
                                     video_season_number = ''
-                                    if json_entry[product_id]["seasonNumber"] is not None:
-                                        video_season_number = str(json_entry[product_id]["seasonNumber"])
+                                    if json_entry[product_ref]["seasonNumber"] is not None:
+                                        video_season_number = str(json_entry[product_ref]["seasonNumber"])
                                     video_episode_number = ''
-                                    if json_entry[product_id]["episodeNumber"] is not None:
-                                        video_episode_number = str(json_entry[product_id]["episodeNumber"])
+                                    if json_entry[product_ref]["episodeNumber"] is not None:
+                                        video_episode_number = str(json_entry[product_ref]["episodeNumber"])
                                     item.set_callback(
                                         get_video_url,
                                         item_id=item_id,
@@ -149,13 +147,13 @@ def list_programs(plugin, item_id, category_slug, **kwargs):
                                     item_post_treatment(item, is_playable=True, is_downloadable=True)
                                     yield item
                             else:
-                                if json_entry[product_id]['slug'] is not None:
-                                    program_slug = json_entry[product_id]['slug']
-                                elif json_entry[product_id]['collection'] is not None:
-                                    program_slug = json_entry[product_slug_id]['slug']
+                                if json_entry[product_ref]['slug'] is not None:
+                                    program_slug = json_entry[product_ref]['slug']
+                                elif json_entry[product_ref]['collection'] is not None:
+                                    program_slug = json_entry[product_slug_ref]['slug']
                                 program_season_number = ''
-                                if json_entry[product_id]["seasonNumber"] is not None:
-                                    program_season_number = str(json_entry[product_id]["seasonNumber"])
+                                if json_entry[product_ref]["seasonNumber"] is not None:
+                                    program_season_number = str(json_entry[product_ref]["seasonNumber"])
                                 item.set_callback(list_videos,
                                                   item_id=item_id,
                                                   program_slug=program_slug,
@@ -184,18 +182,17 @@ def list_videos(plugin, item_id, program_slug, program_season_number, **kwargs):
                 video_episode_number = ''
                 if json_entry[json_key]["episodeNumber"] is not None:
                     video_episode_number = str(json_entry[json_key]["episodeNumber"])
-                product_slug_id = ''
+                product_slug_ref = ''
                 if json_entry[json_key]['collection'] is not None:
-                    product_slug_id = json_entry[json_key]['collection']['id']
-                    video_title = json_entry[product_slug_id]['title']
+                    product_slug_ref = json_entry[json_key]['collection']['__ref']
+                    video_title = json_entry[product_slug_ref]['title']
                     if program_season_number != '':
                         video_title = video_title + ' - S%sE%s' % (program_season_number, video_episode_number)
                     if json_entry[json_key]["title"] is not None:
                         video_title = video_title + ' - ' + json_entry[json_key]['title']
                 else:
                     video_title = json_entry[json_key]["title"]
-                video_image_id = json_entry[json_key]["mainLandscapeImage"]["id"]
-                video_image = json_entry[video_image_id]["url"]
+                video_image = json_entry[json_key]["mainLandscapeImage"]["url"]
                 video_plot = ''
                 if 'shortSummary' in json_entry[json_key]:
                     video_plot = json_entry[json_key]["shortSummary"]

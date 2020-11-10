@@ -149,7 +149,10 @@ def list_sub_categories(plugin, item_id, category_url, **kwargs):
         elif 'playlists' in sub_category_datas['code']['name'] or \
                 'collections' in sub_category_datas['code']['name'] or \
                 'magazines' in sub_category_datas['code']['name'] or \
-                'ARTE_CONCERT' in sub_category_datas['code']['name']:
+                'ARTE_CONCERT' in sub_category_datas['code']['name'] or \
+                'highlights_category' in sub_category_datas['code']['name'] or \
+                '-' in sub_category_datas['code']['name'] or \
+                'collection_subcollection' in sub_category_datas['code']['name']:
             sub_category_title = sub_category_datas['title']
             sub_category_code_name = sub_category_datas['code']['name']
             sub_category_url = category_url
@@ -187,7 +190,31 @@ def list_programs(plugin, item_id, sub_category_code_name, sub_category_url,
             'zones']:
         if sub_category_datas['code']['name'] == sub_category_code_name:
             for program_datas in sub_category_datas['data']:
-                if program_datas['programId'] is not None and 'RC-' in program_datas['programId']:
+                if program_datas["kind"]["isCollection"]:
+                    program_title = program_datas['title']
+                    program_url = program_datas['url']
+                    program_image = ''
+                    if program_datas['images']['landscape'] is not None:
+                        if 'resolutions' in program_datas['images']['landscape']:
+                            for image_datas in program_datas['images']['landscape'][
+                                    'resolutions']:
+                                program_image = image_datas['url']
+                    elif program_datas['images']['square'] is not None:
+                        if 'resolutions' in program_datas['images']['square']:
+                            for image_datas in program_datas['images']['square'][
+                                    'resolutions']:
+                                program_image = image_datas['url']
+
+                    item = Listitem()
+                    item.label = program_title
+                    item.art['thumb'] = item.art['landscape'] = program_image
+                    item.set_callback(
+                        list_sub_categories,
+                        item_id=item_id,
+                        category_url=program_url)
+                    item_post_treatment(item)
+                    yield item
+                elif program_datas['programId'] is not None and 'RC-' in program_datas['programId']:
                     program_title = program_datas['title']
                     program_id = program_datas['programId']
                     program_image = ''

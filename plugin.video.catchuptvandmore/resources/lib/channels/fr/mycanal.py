@@ -62,7 +62,7 @@ URL_REPLAY = URL_ROOT_SITE + '/chaines/%s'
 
 URL_TOKEN = 'https://pass-api-v2.canal-plus.com/services/apipublique/createToken'
 
-URL_VIDEO_DATAS = 'https://secure-gen-hapi.canal-plus.com/conso/playset?contentId=%s'
+URL_VIDEO_DATAS = 'https://secure-gen-hapi.canal-plus.com/conso/playset/unit/%s'
 
 URL_STREAM_DATAS = 'https://secure-gen-hapi.canal-plus.com/conso/view'
 
@@ -134,7 +134,7 @@ def list_categories(plugin, item_id, **kwargs):
     for category in json_parser["templates"]["landing"]["strates"]:
         if category["type"] == "carrousel":
             title = category['context']['context_page_title']
-            key_value = category['key']
+            key_value = category['reactKey']
             item = Listitem()
             item.label = title
             item.set_callback(
@@ -146,7 +146,7 @@ def list_categories(plugin, item_id, **kwargs):
                 title = category['title']
             else:
                 title = json_parser["page"]["displayName"]
-            key_value = category['key']
+            key_value = category['reactKey']
             item = Listitem()
             item.label = title
             item.set_callback(
@@ -164,7 +164,7 @@ def list_contents(plugin, item_id, key_value, **kwargs):
     json_parser = json.loads(json_replay)
 
     for category in json_parser["templates"]["landing"]["strates"]:
-        if category['key'] == key_value:
+        if category['reactKey'] == key_value:
             for content in category["contents"]:
                 if content["type"] != 'article':
                     content_title = content["onClick"]["displayName"]

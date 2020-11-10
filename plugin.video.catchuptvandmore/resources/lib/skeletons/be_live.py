@@ -238,7 +238,7 @@ menu = {
         'enabled': True,
         'order': 24
     },
-    'tipik': {
+    'tipiktv': {
         'resolver': '/resources/lib/channels/be/rtbf:set_live_url',
         'label': 'Tipik',
         'thumb': 'channels/be/tipik.png',
@@ -263,5 +263,13 @@ menu = {
         'fanart': 'channels/be/actv_fanart.jpg',
         'enabled': True,
         'order': 27
+    },
+    'telesambre': {
+        'resolver': '/resources/lib/channels/be/telesambre:get_live_url',
+        'label': 'Télésambre',
+        'thumb': 'channels/be/telesambre.png',
+        'fanart': 'channels/be/telesambre_fanart.jpg',
+        'enabled': True,
+        'order': 28
     }
 }

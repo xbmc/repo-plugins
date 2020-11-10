@@ -165,7 +165,7 @@ def get_video_url(plugin,
     resp = urlquick.get(URL_VIDEO % (item_id, get_token(item_id), video_id))
     json_parser = json.loads(resp.text)
 
-    if item_id == 'bfmtv':
+    if item_id == 'bfmtv' or item_id == 'bfmbusiness':
         stream_infos_url = json_parser['video']['long_url']
 
         resp2 = urlquick.get(stream_infos_url,

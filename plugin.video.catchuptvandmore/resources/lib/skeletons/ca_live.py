@@ -81,11 +81,11 @@ menu = {
         'enabled': True,
         'order': 9
     },
-    'vtele': {
+    'noovo': {
         'resolver': '/resources/lib/channels/ca/noovo:get_live_url',
-        'label': 'V Télé',
-        'thumb': 'channels/ca/vtele.png',
-        'fanart': 'channels/ca/vtele_fanart.jpg',
+        'label': 'Noovo',
+        'thumb': 'channels/ca/noovo.png',
+        'fanart': 'channels/ca/noovo_fanart.jpg',
         'enabled': True,
         'order': 10
     },

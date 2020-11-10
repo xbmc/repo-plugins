@@ -39,6 +39,11 @@ import re
 import urlquick
 from kodi_six import xbmcgui
 
+try:
+    from urllib.parse import quote_plus
+except ImportError:
+    from urllib import quote_plus
+
 # TO DO
 # Quality VIMEO
 # Download Mode with Facebook (the video has no audio)
@@ -81,7 +86,7 @@ URL_MTVNSERVICES_STREAM_ACCOUNT_EP = 'https://media-utils.mtvnservices.com/servi
 URL_FRANCETV_LIVE_PROGRAM_INFO = 'https://sivideo.webservices.francetelevisions.fr/tools/getInfosOeuvre/v2/?idDiffusion=%s'
 # VideoId
 
-URL_FRANCETV_CATCHUP_PROGRAM_INFO = 'https://player.webservices.francetelevisions.fr/v1/videos/%s?country_code=%s&device_type=mobile&browser=chrome'
+URL_FRANCETV_CATCHUP_PROGRAM_INFO = 'https://player.webservices.francetelevisions.fr/v1/videos/%s?country_code=%s&device_type=desktop&browser=chrome'
 # VideoId
 
 URL_FRANCETV_HDFAUTH_URL = 'https://hdfauthftv-a.akamaihd.net/esi/TA?format=json&url=%s'
@@ -293,7 +298,7 @@ def get_francetv_video_stream(plugin,
         geoip_value = 'FR'
     resp = urlquick.get(URL_FRANCETV_CATCHUP_PROGRAM_INFO % (id_diffusion, geoip_value),
                         max_age=-1)
-    json_parser = json.loads(resp.text)
+    json_parser = resp.json()
 
     if 'video' not in json_parser:
         plugin.notify('ERROR', plugin.localize(30716))
@@ -304,9 +309,9 @@ def get_francetv_video_stream(plugin,
     # Implementer Caption (found case)
     # Implement DRM (found case)
     if video_datas['drm'] is not None:
-        all_video_datas.append((video_datas['format'], 'True', video_datas['token']))
+        all_video_datas.append((video_datas['format'], video_datas['drm'], video_datas['token']))
     else:
-        all_video_datas.append((video_datas['format'], 'False', video_datas['token']))
+        all_video_datas.append((video_datas['format'], None, video_datas['token']))
 
     url_selected = all_video_datas[0][2]
     if 'hls' in all_video_datas[0][0]:
@@ -318,20 +323,32 @@ def get_francetv_video_stream(plugin,
         return final_video_url
     elif 'dash' in all_video_datas[0][0]:
         if download_mode:
-            xbmcgui.Dialog().ok('Info', plugin.localize(30603))
+            xbmcgui.Dialog().ok(plugin.localize(14116), plugin.localize(30603))
             return False
+
         is_helper = inputstreamhelper.Helper('mpd')
         if not is_helper.check_inputstream():
             return False
-        json_parser2 = json.loads(
-            urlquick.get(url_selected, max_age=-1).text)
+
         item = Listitem()
-        item.path = json_parser2['url']
         item.property['inputstreamaddon'] = 'inputstream.adaptive'
         item.property['inputstream.adaptive.manifest_type'] = 'mpd'
         item.label = get_selected_item_label()
         item.art.update(get_selected_item_art())
         item.info.update(get_selected_item_info())
+
+        if all_video_datas[0][1]:
+            item.path = video_datas['url']
+            token_request = json.loads('{"id": "%s", "drm_type": "%s", "license_type": "%s"}' % (id_diffusion, video_datas['drm_type'], video_datas['license_type']))
+            token = urlquick.post(video_datas['token'], json=token_request).json()['token']
+            license_request = '{"token": "%s", "drm_info": [D{SSM}]}' % token
+            license_key = 'https://widevine-proxy.drm.technology/proxy|Content-Type=application%%2Fjson|%s|' % quote_plus(license_request)
+            item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+            item.property['inputstream.adaptive.license_key'] = license_key
+        else:
+            json_parser2 = json.loads(
+                urlquick.get(url_selected, max_age=-1).text)
+            item.path = json_parser2['url']
 
         return item
     else:

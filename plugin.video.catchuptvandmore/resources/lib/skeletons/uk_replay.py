@@ -68,11 +68,11 @@ menu = {
         'enabled': True,
         'order': 8
     },
-    'questod': {
-        'route': '/resources/lib/channels/uk/questod:list_categories',
-        'label': 'Quest OD',
-        'thumb': 'channels/uk/questod.png',
-        'fanart': 'channels/uk/questod_fanart.jpg',
+    'dplay': {
+        'route': '/resources/lib/channels/uk/dplay:dplay_root',
+        'label': '*Dplay',
+        'thumb': 'channels/uk/dplay.png',
+        'fanart': 'channels/uk/dplay_fanart.jpg',
         'enabled': True,
         'order': 9
     },

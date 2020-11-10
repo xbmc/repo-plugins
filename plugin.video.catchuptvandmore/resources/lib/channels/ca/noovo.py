@@ -173,7 +173,7 @@ def get_live_url(plugin, item_id, **kwargs):
         URL_LIVE_INFOS % live_info_id, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
 
     data_account = re.compile(r'data-account\=\"(.*?)\"').findall(resp2.text)[0]
-    data_player = re.compile(r'data-player\=\"(.*?)\"').findall(resp2.text)[0]
+    data_player = re.compile(r'data-embed\=\"(.*?)\"').findall(resp2.text)[0]
     data_video_id = re.compile(r'data-video-id\=\"(.*?)\"').findall(
         resp2.text)[0]
     return resolver_proxy.get_brightcove_video_json(plugin, data_account,

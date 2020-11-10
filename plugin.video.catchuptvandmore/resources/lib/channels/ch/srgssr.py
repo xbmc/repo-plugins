@@ -347,32 +347,74 @@ def get_video_url(plugin,
     resp = urlquick.get(URL_INFO_VIDEO % (channel_name_value, video_id))
     json_parser = json.loads(resp.text)
 
-    # build url
+    # build stream_url
     stream_url = ''
+    is_drm = False
     for stream_datas in json_parser["chapterList"]:
         if video_id in stream_datas["id"]:
             for stream_datas_url in stream_datas["resourceList"]:
-                if 'HD' in stream_datas_url["quality"] and \
-                        'mpegURL' in stream_datas_url["mimeType"]:
-                    stream_url = stream_datas_url["url"]
-                    break
-                else:
-                    if 'mpegURL' in stream_datas_url["mimeType"]:
+                if 'drmList' in stream_datas_url:
+                    is_drm = True
+
+    if is_drm:
+        if get_kodi_version() < 18:
+            xbmcgui.Dialog().ok(plugin.localize(14116), plugin.localize(30602))
+            return False
+
+        is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+        if not is_helper.check_inputstream():
+            return False
+
+        if download_mode:
+            return False
+
+        licence_drm_url = ''
+        for stream_datas in json_parser["chapterList"]:
+            if video_id in stream_datas["id"]:
+                for stream_datas_url in stream_datas["resourceList"]:
+                    if 'DASH' in stream_datas_url["streaming"]:
                         stream_url = stream_datas_url["url"]
-    acl_value = '/i/%s/*' % (
-        re.compile(r'\/i\/(.*?)\/master').findall(stream_url)[0])
-    token_datas = urlquick.get(URL_TOKEN % acl_value)
-    token_jsonparser = json.loads(token_datas.text)
-    token = token_jsonparser["token"]["authparams"]
+                        for licence_drm_datas in stream_datas_url["drmList"]:
+                            if 'WIDEVINE' in licence_drm_datas["type"]:
+                                licence_drm_url = licence_drm_datas["licenseUrl"]
 
-    if '?' in stream_url:
-        final_video_url = stream_url + '&' + token
+        item = Listitem()
+        item.path = stream_url
+        item.property['inputstreamaddon'] = 'inputstream.adaptive'
+        item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+        item.property[
+            'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+        item.property[
+            'inputstream.adaptive.license_key'] = licence_drm_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=srg.live.ott.irdeto.com|R{SSM}|'
+        item.label = get_selected_item_label()
+        item.art.update(get_selected_item_art())
+        item.info.update(get_selected_item_info())
+        return item
     else:
-        final_video_url = stream_url + '?' + token
+        for stream_datas in json_parser["chapterList"]:
+            if video_id in stream_datas["id"]:
+                for stream_datas_url in stream_datas["resourceList"]:
+                    if 'HD' in stream_datas_url["quality"] and \
+                            'mpegURL' in stream_datas_url["mimeType"]:
+                        stream_url = stream_datas_url["url"]
+                        break
+                    else:
+                        if 'mpegURL' in stream_datas_url["mimeType"]:
+                            stream_url = stream_datas_url["url"]
+        acl_value = '/i/%s/*' % (
+            re.compile(r'\/i\/(.*?)\/master').findall(stream_url)[0])
+        token_datas = urlquick.get(URL_TOKEN % acl_value)
+        token_jsonparser = json.loads(token_datas.text)
+        token = token_jsonparser["token"]["authparams"]
 
-    if download_mode:
-        return download.download_video(final_video_url)
-    return final_video_url
+        if '?' in stream_url:
+            final_video_url = stream_url + '&' + token
+        else:
+            final_video_url = stream_url + '?' + token
+
+        if download_mode:
+            return download.download_video(final_video_url)
+        return final_video_url
 
 
 @Resolver.register
@@ -401,7 +443,7 @@ def get_live_url(plugin, item_id, **kwargs):
 
     if is_drm:
         if get_kodi_version() < 18:
-            xbmcgui.Dialog().ok('Info', plugin.localize(30602))
+            xbmcgui.Dialog().ok(plugin.localize(14116), plugin.localize(30602))
             return False
 
         is_helper = inputstreamhelper.Helper('mpd', drm='widevine')

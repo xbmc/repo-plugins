@@ -17,7 +17,7 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from gamekings_const import ADDON, LANGUAGE, IMAGES_PATH, BASE_URL_GAMEKINGS_TV, PREMIUM_ONLY_VIDEO_TITLE_PREFIX, \
+from resources.lib.gamekings_const import ADDON, LANGUAGE, IMAGES_PATH, BASE_URL_GAMEKINGS_TV, PREMIUM_ONLY_VIDEO_TITLE_PREFIX, \
     convertToUnicodeString, log, getSoup
 
 #

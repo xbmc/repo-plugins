@@ -13,7 +13,7 @@ import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
 
-from gamekings_const import LANGUAGE, IMAGES_PATH, BASE_URL_GAMEKINGS_TV
+from resources.lib.gamekings_const import LANGUAGE, IMAGES_PATH, BASE_URL_GAMEKINGS_TV
 
 
 #

@@ -6,7 +6,7 @@ from __future__ import absolute_import, division, unicode_literals
 import logging
 
 from resources.lib import kodiutils
-from resources.lib.vtmgo.vtmgo import UnavailableException
+from resources.lib.vtmgo.exceptions import UnavailableException
 from resources.lib.vtmgo.vtmgoepg import VtmGoEpg
 
 _LOGGER = logging.getLogger(__name__)

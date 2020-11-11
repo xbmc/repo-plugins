@@ -7,6 +7,7 @@ import logging
 
 import xbmc
 import xbmcaddon
+
 from resources.lib import kodiutils
 
 ADDON = xbmcaddon.Addon()

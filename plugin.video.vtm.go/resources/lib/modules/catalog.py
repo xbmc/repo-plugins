@@ -8,7 +8,8 @@ import logging
 from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
 from resources.lib.modules.menu import Menu
-from resources.lib.vtmgo.vtmgo import VtmGo, UnavailableException, CACHE_PREVENT, ApiUpdateRequired
+from resources.lib.vtmgo.exceptions import UnavailableException
+from resources.lib.vtmgo.vtmgo import CACHE_PREVENT, ApiUpdateRequired, VtmGo
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
 _LOGGER = logging.getLogger(__name__)
@@ -185,10 +186,13 @@ class Catalog:
         # Sort by episode number by default. Takes seasons into account.
         kodiutils.show_listing(listing, 30003, content='episodes', sort=['episode', 'duration'])
 
-    def show_recommendations(self):
-        """ Show the recommendations """
+    def show_recommendations(self, storefront):
+        """ Show the recommendations.
+
+        :type storefront: str
+        """
         try:
-            recommendations = self._vtm_go.get_recommendations()
+            recommendations = self._vtm_go.get_recommendations(storefront)
         except ApiUpdateRequired:
             kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return
@@ -202,7 +206,7 @@ class Catalog:
         for cat in recommendations:
             listing.append(kodiutils.TitleItem(
                 title=cat.title,
-                path=kodiutils.url_for('show_recommendations_category', category=cat.category_id),
+                path=kodiutils.url_for('show_recommendations_category', storefront=storefront, category=cat.category_id),
                 info_dict=dict(
                     plot='[B]{category}[/B]'.format(category=cat.title),
                 ),
@@ -211,12 +215,14 @@ class Catalog:
         # Sort categories by default like in VTM GO.
         kodiutils.show_listing(listing, 30015, content='files')
 
-    def show_recommendations_category(self, category):
-        """ Show the items in a recommendations category
+    def show_recommendations_category(self, storefront, category):
+        """ Show the items in a recommendations category.
+
+        :type storefront: str
         :type category: str
         """
         try:
-            recommendations = self._vtm_go.get_recommendations()
+            recommendations = self._vtm_go.get_recommendations(storefront)
         except ApiUpdateRequired:
             kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return

@@ -4,7 +4,7 @@
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
 [![Contributors](https://img.shields.io/github/contributors/add-ons/plugin.video.vtm.go.svg)](https://github.com/add-ons/plugin.video.vtm.go/graphs/contributors)
 
-# VTM GO Kodi add-on
+# VTM GO Kodi Add-on
 
 *plugin.video.vtm.go* is a Kodi add-on for watching live video streams and video-on-demand content available on the VTM GO platform. 
 
@@ -33,6 +33,35 @@ The following features are supported:
 * Search the catalogue
 * Watch YouTube content from some of the DPG Media channels
 * Integration with [IPTV Manager](https://github.com/add-ons/service.iptv.manager)
+* Integratie met Kodi bibliotheek
+
+## Integratie met Kodi
+
+Je kan deze Add-on gebruiken als medialocatie in Kodi zodat de films en series ook in je Kodi bibliotheek geindexeerd staan. Ze worden uiteraard nog steeds
+gewoon gestreamed.
+
+Ga hiervoor naar **Instellingen** > **Media** > **Bibliotheek** > **Video's...** (bij bronnen beheren). Kies vervolgens **Toevoegen video's...** en geef
+onderstaande locatie in door **< Geen >** te kiezen. Geef vervolgens de naam op en kies OK. Stel daarna de opties in zoals hieronder opgegeven en bevestig met OK.
+Stem daarna toe om deze locaties te scannen.
+
+* Films:
+  * Locatie: `plugin://plugin.video.vtm.go/library/movies/`
+  * Naam: **VTM GO - Films**
+  * Opties:
+    * Deze map bevat: **Speelfilms**
+    * Kies informatieleverancier: **Local information only**
+    * Films staan in aparte folders die overeenkomen met de filmtitel: **Uit**
+    * Ook onderliggende mappen scannen : **Uit**
+    * Locatie uitsluiten van bibliotheekupdates: **Uit**
+
+* Series:
+  * Locatie: `plugin://plugin.video.vtm.go/library/tvshows/`
+  * Naam: **VTM GO - Series**
+  * Opties:
+    * Deze map bevat: **Series**
+    * Kies informatieleverancier: **Local information only**
+    * Geselecteerde map bevat één enkele serie: **Uit**
+    * Locatie uitsluiten van bibliotheekupdates: **Uit**
 
 ## Screenshots
 

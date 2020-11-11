@@ -6,9 +6,10 @@ from __future__ import absolute_import, division, unicode_literals
 import logging
 
 import routing
+from requests import HTTPError
 
-from resources.lib import kodiutils
-from resources.lib import kodilogging
+from resources.lib import kodilogging, kodiutils
+from resources.lib.vtmgo.exceptions import InvalidLoginException, LoginErrorException
 
 kodilogging.config()
 routing = routing.Plugin()  # pylint: disable=invalid-name
@@ -19,13 +20,39 @@ _LOGGER = logging.getLogger('plugin')
 @routing.route('/')
 def index():
     """ Show the profile selection, or go to the main menu. """
-    if not kodiutils.has_credentials() or (kodiutils.get_setting_bool('auto_login') and bool(kodiutils.get_setting('profile'))):
-        # If we have no credentials (browse only mode) or we have autologin and a profile, go directly to the main menu
-        show_main_menu()
+    while True:
+        if not kodiutils.has_credentials():
+            if not kodiutils.yesno_dialog(message=kodiutils.localize(30701)):  # You need to configure your credentials...
+                # We have no credentials
+                kodiutils.end_of_directory()
+                kodiutils.execute_builtin('ActivateWindow(Home)')
+                return
 
-    else:
-        # Ask the user for the profile to use
-        select_profile()
+            kodiutils.open_settings()
+        else:
+            break
+
+    try:
+        if kodiutils.get_setting_bool('auto_login') and kodiutils.get_setting('profile'):
+            # We have a profile
+            show_main_menu()
+
+        else:
+            # Ask the user for the profile to use
+            select_profile()
+
+    except InvalidLoginException:
+        kodiutils.ok_dialog(message=kodiutils.localize(30203))  # Your credentials are not valid!
+        kodiutils.open_settings()
+        kodiutils.end_of_directory()
+
+    except LoginErrorException as exc:
+        kodiutils.ok_dialog(message=kodiutils.localize(30702, code=exc.code))  # Unknown error while logging in: {code}
+        kodiutils.end_of_directory()
+
+    except HTTPError as exc:
+        kodiutils.ok_dialog(message=kodiutils.localize(30702, code='HTTP %d' % exc.response.status_code))  # Unknown error while logging in: {code}
+        kodiutils.end_of_directory()
 
 
 @routing.route('/menu')
@@ -113,18 +140,86 @@ def show_catalog_program_season(program, season):
     Catalog().show_program_season(program, int(season))
 
 
-@routing.route('/catalog/recommendations')
-def show_recommendations():
-    """ Shows the programs of a specific date in the tv guide """
+@routing.route('/library/movies/')
+def library_movies():
+    """ Show a list of all movies for integration into the Kodi Library """
+    from resources.lib.modules.library import Library
+
+    # Library seems to have issues with folder mode
+    movie = routing.args.get('movie', [])[0] if routing.args.get('movie') else None
+
+    if 'check_exists' in routing.args.get('kodi_action', []):
+        Library().check_library_movie(movie)
+        return
+
+    if 'refresh_info' in routing.args.get('kodi_action', []):
+        Library().show_library_movies(movie)
+        return
+
+    if movie:
+        play('movies', movie)
+    else:
+        Library().show_library_movies()
+
+
+@routing.route('/library/tvshows/')
+def library_tvshows():
+    """ Show a list of all tv series for integration into the Kodi Library """
+    from resources.lib.modules.library import Library
+
+    # Library seems to have issues with folder mode
+    program = routing.args.get('program', [])[0] if routing.args.get('program') else None
+    episode = routing.args.get('episode', [])[0] if routing.args.get('episode') else None
+
+    if 'check_exists' in routing.args.get('kodi_action', []):
+        Library().check_library_tvshow(program)
+        return
+
+    if 'refresh_info' in routing.args.get('kodi_action', []):
+        Library().show_library_tvshows(program)
+        return
+
+    if episode:
+        play('episodes', episode)
+    elif program:
+        Library().show_library_tvshows_program(program)
+    else:
+        Library().show_library_tvshows()
+
+
+@routing.route('/library/configure')
+def library_configure():
+    """ Show information on how to enable the library integration """
+    from resources.lib.modules.library import Library
+    Library().configure()
+
+
+@routing.route('/library/update')
+def library_update():
+    """ Refresh the library. """
+    from resources.lib.modules.library import Library
+    Library().update()
+
+
+@routing.route('/library/clean')
+def library_clean():
+    """ Clean the library. """
+    from resources.lib.modules.library import Library
+    Library().clean()
+
+
+@routing.route('/catalog/recommendations/<storefront>')
+def show_recommendations(storefront):
+    """ Shows the recommendations of a storefront """
     from resources.lib.modules.catalog import Catalog
-    Catalog().show_recommendations()
+    Catalog().show_recommendations(storefront)
 
 
-@routing.route('/catalog/recommendations/<category>')
-def show_recommendations_category(category):
+@routing.route('/catalog/recommendations/<storefront>/<category>')
+def show_recommendations_category(storefront, category):
     """ Show the items in a recommendations category """
     from resources.lib.modules.catalog import Catalog
-    Catalog().show_recommendations_category(category)
+    Catalog().show_recommendations_category(storefront, category)
 
 
 @routing.route('/catalog/mylist')
@@ -140,12 +235,18 @@ def mylist_add(video_type, content_id):
     from resources.lib.modules.catalog import Catalog
     Catalog().mylist_add(video_type, content_id)
 
+    from resources.lib.modules.library import Library
+    Library().mylist_added(video_type, content_id)
+
 
 @routing.route('/catalog/mylist/del/<video_type>/<content_id>')
 def mylist_del(video_type, content_id):
     """ Remove an item from "My List" """
     from resources.lib.modules.catalog import Catalog
     Catalog().mylist_del(video_type, content_id)
+
+    from resources.lib.modules.library import Library
+    Library().mylist_removed(video_type, content_id)
 
 
 @routing.route('/catalog/continuewatching')

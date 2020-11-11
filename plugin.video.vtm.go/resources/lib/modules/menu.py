@@ -7,7 +7,9 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
-from resources.lib.vtmgo import CONTENT_TYPE_MOVIE, CONTENT_TYPE_PROGRAM, Movie, Program, Episode
+from resources.lib.vtmgo import (Episode, Movie, Program, STOREFRONT_MAIN, STOREFRONT_MOVIES, STOREFRONT_SERIES, STOREFRONT_KIDS, STOREFRONT_KIDS_MAIN)
+from resources.lib.vtmgo.vtmgo import CONTENT_TYPE_MOVIE, CONTENT_TYPE_PROGRAM
+from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -17,33 +19,18 @@ class Menu:
 
     def __init__(self):
         """ Initialise object """
+        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
+                               kodiutils.get_setting('password'),
+                               'VTM',
+                               kodiutils.get_setting('profile'),
+                               kodiutils.get_tokens_path())
 
-    @staticmethod
-    def show_mainmenu():
+    def show_mainmenu(self):
         """ Show the main menu """
         listing = []
-        listing.append(kodiutils.TitleItem(
-            title=kodiutils.localize(30001),  # A-Z
-            path=kodiutils.url_for('show_catalog_all'),
-            art_dict=dict(
-                icon='DefaultMovieTitle.png',
-                fanart=kodiutils.get_addon_info('fanart'),
-            ),
-            info_dict=dict(
-                plot=kodiutils.localize(30002),
-            ),
-        ))
-        listing.append(kodiutils.TitleItem(
-            title=kodiutils.localize(30003),  # Catalogue
-            path=kodiutils.url_for('show_catalog'),
-            art_dict=dict(
-                icon='DefaultGenre.png',
-                fanart=kodiutils.get_addon_info('fanart'),
-            ),
-            info_dict=dict(
-                plot=kodiutils.localize(30004),
-            ),
-        ))
+
+        account = self._auth.login()
+
         listing.append(kodiutils.TitleItem(
             title=kodiutils.localize(30007),  # TV Channels
             path=kodiutils.url_for('show_channels'),
@@ -56,10 +43,10 @@ class Menu:
             ),
         ))
 
-        if kodiutils.get_setting_bool('interface_show_recommendations'):
+        if account.product == 'VTM_GO':
             listing.append(kodiutils.TitleItem(
                 title=kodiutils.localize(30015),  # Recommendations
-                path=kodiutils.url_for('show_recommendations'),
+                path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_MAIN),
                 art_dict=dict(
                     icon='DefaultFavourites.png',
                     fanart=kodiutils.get_addon_info('fanart'),
@@ -68,6 +55,79 @@ class Menu:
                     plot=kodiutils.localize(30016),
                 ),
             ))
+
+            listing.append(kodiutils.TitleItem(
+                title=kodiutils.localize(30003),  # Movies
+                path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_MOVIES),
+                art_dict=dict(
+                    icon='DefaultMovies.png',
+                    fanart=kodiutils.get_addon_info('fanart'),
+                ),
+                info_dict=dict(
+                    plot=kodiutils.localize(30004),
+                ),
+            ))
+
+            listing.append(kodiutils.TitleItem(
+                title=kodiutils.localize(30005),  # Series
+                path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_SERIES),
+                art_dict=dict(
+                    icon='DefaultTVShows.png',
+                    fanart=kodiutils.get_addon_info('fanart'),
+                ),
+                info_dict=dict(
+                    plot=kodiutils.localize(30006),
+                ),
+            ))
+
+            listing.append(kodiutils.TitleItem(
+                title=kodiutils.localize(30021),  # Kids
+                path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_KIDS),
+                art_dict=dict(
+                    icon='DefaultFavourites.png',
+                    fanart=kodiutils.get_addon_info('fanart'),
+                ),
+                info_dict=dict(
+                    plot=kodiutils.localize(30022),
+                ),
+            ))
+
+        elif account.product == 'VTM_GO_KIDS':
+            listing.append(kodiutils.TitleItem(
+                title=kodiutils.localize(30015),  # Recommendations
+                path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_KIDS_MAIN),
+                art_dict=dict(
+                    icon='DefaultFavourites.png',
+                    fanart=kodiutils.get_addon_info('fanart'),
+                ),
+                info_dict=dict(
+                    plot=kodiutils.localize(30016),
+                ),
+            ))
+
+        listing.append(kodiutils.TitleItem(
+            title=kodiutils.localize(30001),  # A-Z
+            path=kodiutils.url_for('show_catalog_all'),
+            art_dict=dict(
+                icon='DefaultMovieTitle.png',
+                fanart=kodiutils.get_addon_info('fanart'),
+            ),
+            info_dict=dict(
+                plot=kodiutils.localize(30002),
+            ),
+        ))
+
+        # listing.append(kodiutils.TitleItem(
+        #     title=kodiutils.localize(30003),  # Catalogue
+        #     path=kodiutils.url_for('show_catalog'),
+        #     art_dict=dict(
+        #         icon='DefaultGenre.png',
+        #         fanart=kodiutils.get_addon_info('fanart'),
+        #     ),
+        #     info_dict=dict(
+        #         plot=kodiutils.localize(30004),
+        #     ),
+        # ))
 
         if kodiutils.get_setting_bool('interface_show_mylist') and kodiutils.has_credentials():
             listing.append(kodiutils.TitleItem(
@@ -158,7 +218,8 @@ class Menu:
 
         return plot.rstrip()
 
-    def generate_titleitem(self, item, progress=False):
+    @classmethod
+    def generate_titleitem(cls, item, progress=False):
         """ Generate a TitleItem based on a Movie, Program or Episode.
         :type item: Union[Movie, Program, Episode]
         :type progress: bool
@@ -170,7 +231,7 @@ class Menu:
         }
         info_dict = {
             'title': item.name,
-            'plot': self.format_plot(item),
+            'plot': cls.format_plot(item),
             'studio': CHANNELS.get(item.channel, {}).get('studio_icon'),
             'mpaa': ', '.join(item.legal) if hasattr(item, 'legal') and item.legal else kodiutils.localize(30216),  # All ages
         }
@@ -215,6 +276,7 @@ class Menu:
                 art_dict=art_dict,
                 info_dict=info_dict,
                 stream_dict=stream_dict,
+                prop_dict=prop_dict,
                 context_menu=context_menu,
                 is_playable=True,
             )
@@ -240,8 +302,11 @@ class Menu:
                 'fanart': item.image,
             })
             info_dict.update({
-                'mediatype': None,
+                'mediatype': 'tvshow',
                 'season': len(item.seasons),
+            })
+            prop_dict.update({
+                'hash': item.content_hash,
             })
 
             return kodiutils.TitleItem(
@@ -249,6 +314,7 @@ class Menu:
                 path=kodiutils.url_for('show_catalog_program', program=item.program_id),
                 art_dict=art_dict,
                 info_dict=info_dict,
+                prop_dict=prop_dict,
                 context_menu=context_menu,
             )
 

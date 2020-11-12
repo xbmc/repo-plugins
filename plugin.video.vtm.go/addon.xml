@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vtm.go" name="VTM GO" version="1.1.5" provider-name="Michaël Arnauts">
+<addon id="plugin.video.vtm.go" name="VTM GO" version="1.2.0" provider-name="Michaël Arnauts">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.dateutil" version="2.6.0"/>
@@ -12,6 +12,8 @@
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon_entry.py">
         <provides>video</provides>
+        <medialibraryscanpath content="movies">library/movies/</medialibraryscanpath>
+        <medialibraryscanpath content="tvshows">library/tvshows/</medialibraryscanpath>
     </extension>
     <extension point="xbmc.service" library="service_entry.py"/>
     <extension point="xbmc.addon.metadata">
@@ -23,8 +25,11 @@
         <disclaimer lang="nl_NL">Deze add-on wordt niet ondersteund door DPG Media en wordt aangeboden 'as is', zonder enige garantie. De VTM GO naam, VTM GO logo en de kanaallogo's zijn eigendom van DPG Media en worden gebruikt in overeenstemming met de fair use policy.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-	<news>v1.1.5
-- Fix authentication.</news>
+	<news>v1.2.0 (2020-11-11)
+- Implement Kodi Library support.
+- Use new Movies and Series categories.
+- Bugfixes and improved error handling.
+</news>
         <source>https://github.com/add-ons/plugin.video.vtm.go</source>
         <assets>
             <icon>resources/icon.png</icon>

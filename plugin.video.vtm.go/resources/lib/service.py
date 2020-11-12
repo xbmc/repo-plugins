@@ -6,12 +6,10 @@ from __future__ import absolute_import, division, unicode_literals
 import logging
 from time import time
 
-from xbmc import getInfoLabel, Monitor, Player
+from xbmc import Monitor, Player, getInfoLabel
 
-from resources.lib import kodilogging
-from resources.lib import kodiutils
-from resources.lib.vtmgo.vtmgo import VtmGo
-from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
+from resources.lib import kodilogging, kodiutils
+from resources.lib.vtmgo.exceptions import NoLoginException
 
 kodilogging.config()
 _LOGGER = logging.getLogger('service')
@@ -23,12 +21,6 @@ class BackgroundService(Monitor):
     def __init__(self):
         Monitor.__init__(self)
         self._player = PlayerMonitor()
-        self.vtm_go_auth = VtmGoAuth(kodiutils.get_setting('username'),
-                                     kodiutils.get_setting('password'),
-                                     'VTM',
-                                     kodiutils.get_setting('profile'),
-                                     kodiutils.get_tokens_path())
-        self.vtm_go = VtmGo(self.vtm_go_auth)
         self.update_interval = 24 * 3600  # Every 24 hours
         self.cache_expiry = 30 * 24 * 3600  # One month
 
@@ -47,15 +39,6 @@ class BackgroundService(Monitor):
 
         _LOGGER.debug('Service stopped')
 
-    def onSettingsChanged(self):  # pylint: disable=invalid-name
-        """ Callback when a setting has changed """
-        if self.vtm_go_auth.check_credentials_change():
-            _LOGGER.debug('Clearing auth tokens due to changed credentials')
-            self.vtm_go_auth.clear_token()
-
-            # Refresh container
-            kodiutils.container_refresh()
-
     def _update_metadata(self):
         """ Update the metadata for the listings """
         from resources.lib.modules.metadata import Metadata
@@ -67,7 +50,11 @@ class BackgroundService(Monitor):
             """ Allow to cancel the background job """
             return self.abortRequested() or not kodiutils.get_setting_bool('metadata_update')
 
-        success = Metadata().fetch_metadata(callback=update_status)
+        try:
+            success = Metadata().fetch_metadata(callback=update_status)
+        except NoLoginException:
+            # We have no login yet, but that's okay, we will retry later
+            success = True
 
         # Update metadata_last_updated
         if success:

@@ -44,7 +44,7 @@ class Metadata:
         """ Fetch the metadata for all the items in the catalog
         :type callback: callable
         """
-        # Fetch all items from the catalog
+        # Fetch a list of all items from the catalog
         items = self._vtm_go.get_items()
         count = len(items)
 

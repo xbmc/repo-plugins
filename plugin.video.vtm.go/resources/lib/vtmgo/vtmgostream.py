@@ -10,44 +10,10 @@ import random
 from datetime import timedelta
 
 from resources.lib import kodiutils
-from resources.lib.vtmgo import util
+from resources.lib.vtmgo import util, ResolvedStream
+from resources.lib.vtmgo.exceptions import StreamGeoblockedException, StreamUnavailableException
 
 _LOGGER = logging.getLogger(__name__)
-
-
-class StreamGeoblockedException(Exception):
-    """ Is thrown when a geoblocked item is played. """
-
-
-class StreamUnavailableException(Exception):
-    """ Is thrown when an unavailable item is played. """
-
-
-class ResolvedStream:
-    """ Defines a stream that we can play"""
-
-    def __init__(self, program=None, program_id=None, title=None, duration=None, url=None, license_url=None, subtitles=None, cookies=None):
-        """
-        :type program: str|None
-        :type program_id: int|None
-        :type title: str
-        :type duration: str|None
-        :type url: str
-        :type license_url: str
-        :type subtitles: list[str]
-        :type cookies: dict
-        """
-        self.program = program
-        self.program_id = program_id
-        self.title = title
-        self.duration = duration
-        self.url = url
-        self.license_url = license_url
-        self.subtitles = subtitles
-        self.cookies = cookies
-
-    def __repr__(self):
-        return "%r" % self.__dict__
 
 
 class VtmGoStream:
@@ -446,6 +412,7 @@ class VtmGoStream:
         :rtype str
         """
         import re
+
         # Follow when a <Location>url</Location> tag is found.
         # https://github.com/peak3d/inputstream.adaptive/issues/286
         download = self._download_text(url)
@@ -467,9 +434,9 @@ class VtmGoStream:
         :rtype str
         """
         try:  # Python 3
-            from urllib.parse import urlencode, quote
+            from urllib.parse import quote, urlencode
         except ImportError:  # Python 2
-            from urllib import urlencode, quote
+            from urllib import quote, urlencode
 
         header = ''
         if key_headers:

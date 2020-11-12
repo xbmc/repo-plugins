@@ -15,19 +15,19 @@ msgid "Alphabetically sorted list of programs"
 msgstr ""
 
 msgctxt "#30003"
-msgid "Catalogue"
+msgid "Movies"
 msgstr ""
 
 msgctxt "#30004"
-msgid "TV Shows and Movies listed by category"
+msgid "Browse through the movie-catalogue"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Live TV"
+msgid "Series"
 msgstr ""
 
 msgctxt "#30006"
-msgid "Watch TV channels live via Internet"
+msgid "Browse through the series-catalogue"
 msgstr ""
 
 msgctxt "#30007"
@@ -84,6 +84,14 @@ msgstr ""
 
 msgctxt "#30020"
 msgid "Continue watching where you left off"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Kids"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Show the VTM GO recommendations for Kids"
 msgstr ""
 
 
@@ -335,10 +343,6 @@ msgctxt "#30821"
 msgid "Features"
 msgstr ""
 
-msgctxt "#30822"
-msgid "Show recommendations"
-msgstr ""
-
 msgctxt "#30823"
 msgid "Show My List"
 msgstr ""
@@ -392,7 +396,7 @@ msgid "Up Next"
 msgstr ""
 
 msgctxt "#30862"
-msgid "Install Up Next add-on"
+msgid "Install Up Next add-on…"
 msgstr ""
 
 msgctxt "#30863"
@@ -417,6 +421,46 @@ msgstr ""
 
 msgctxt "#30869"
 msgid "IPTV Manager settings…"
+msgstr ""
+
+msgctxt "#30870"
+msgid "Kodi Library"
+msgstr ""
+
+msgctxt "#30871"
+msgid "Indexing"
+msgstr ""
+
+msgctxt "#30872"
+msgid "Add video locations to the Kodi Library… [COLOR gray](See README.md)[/COLOR]"
+msgstr ""
+
+msgctxt "#30873"
+msgid "Index the following movies"
+msgstr ""
+
+msgctxt "#30874"
+msgid "Index the following series"
+msgstr ""
+
+msgctxt "#30875"
+msgid "Full catalog"
+msgstr ""
+
+msgctxt "#30876"
+msgid "Items on 'My List' only"
+msgstr ""
+
+msgctxt "#30877"
+msgid "Maintenance"
+msgstr ""
+
+msgctxt "#30878"
+msgid "Refresh Library…"
+msgstr ""
+
+msgctxt "#30879"
+msgid "Clean Library…"
 msgstr ""
 
 msgctxt "#30880"
@@ -445,4 +489,12 @@ msgstr ""
 
 msgctxt "#30891"
 msgid "Enable debug logging"
+msgstr ""
+
+msgctxt "#30892"
+msgid "Install Kodi Logfile Uploader…"
+msgstr ""
+
+msgctxt "#30893"
+msgid "Open Kodi Logfile Uploader…"
 msgstr ""

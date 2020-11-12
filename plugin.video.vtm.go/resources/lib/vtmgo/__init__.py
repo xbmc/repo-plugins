@@ -3,10 +3,14 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
-API_ENDPOINT = 'https://api.vtmgo.be'
-CONTENT_TYPE_MOVIE = 'MOVIE'
-CONTENT_TYPE_PROGRAM = 'PROGRAM'
-CONTENT_TYPE_EPISODE = 'EPISODE'
+API_ENDPOINT = 'https://lfvp-api.dpgmedia.net'
+
+# These seem to be hardcoded
+STOREFRONT_MAIN = '9620cc0b-0f97-4d96-902a-827dcfd0b227'
+STOREFRONT_MOVIES = 'e3fc0750-f110-4808-ae5f-246846ff940f'
+STOREFRONT_SERIES = '1c683de4-3fb0-4cc4-9d9c-c365eba1b155'
+STOREFRONT_KIDS = '73f34fbf-301c-4deb-b366-13ba39e25996'
+STOREFRONT_KIDS_MAIN = '11575a66-af71-4025-8e57-d691a7520773'
 
 
 class Profile:
@@ -135,7 +139,7 @@ class Program:
     """ Defines a Program """
 
     def __init__(self, program_id=None, name=None, description=None, cover=None, image=None, seasons=None,
-                 geoblocked=None, channel=None, legal=None, my_list=None):
+                 geoblocked=None, channel=None, legal=None, my_list=None, content_hash=None):
         """
         :type program_id: str
         :type name: str
@@ -147,6 +151,7 @@ class Program:
         :type channel: str
         :type legal: str
         :type my_list: bool
+        :type content_hash: str
         """
         self.program_id = program_id
         self.name = name
@@ -158,6 +163,7 @@ class Program:
         self.channel = channel
         self.legal = legal
         self.my_list = my_list
+        self.content_hash = content_hash
 
     def __repr__(self):
         return "%r" % self.__dict__
@@ -232,6 +238,33 @@ class Episode:
         self.progress = progress
         self.watched = watched
         self.next_episode = next_episode
+
+    def __repr__(self):
+        return "%r" % self.__dict__
+
+
+class ResolvedStream:
+    """ Defines a stream that we can play"""
+
+    def __init__(self, program=None, program_id=None, title=None, duration=None, url=None, license_url=None, subtitles=None, cookies=None):
+        """
+        :type program: str|None
+        :type program_id: int|None
+        :type title: str
+        :type duration: str|None
+        :type url: str
+        :type license_url: str
+        :type subtitles: list[str]
+        :type cookies: dict
+        """
+        self.program = program
+        self.program_id = program_id
+        self.title = title
+        self.duration = duration
+        self.url = url
+        self.license_url = license_url
+        self.subtitles = subtitles
+        self.cookies = cookies
 
     def __repr__(self):
         return "%r" % self.__dict__

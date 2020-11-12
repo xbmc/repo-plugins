@@ -112,7 +112,11 @@ def addon_path():
 
 def addon_profile():
     """Cache and return add-on profile"""
-    return to_unicode(xbmc.translatePath(ADDON.getAddonInfo('profile')))
+    if kodi_version_major() >= 19:
+        translate_path = xbmcvfs.translatePath
+    else:
+        translate_path = xbmc.translatePath
+    return to_unicode(translate_path(ADDON.getAddonInfo('profile')))
 
 
 def url_for(name, *args, **kwargs):
@@ -221,6 +225,14 @@ def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, pr
     xbmcplugin.setResolvedUrl(routing.handle, True, listitem=play_item)
 
 
+def library_return_status(success):
+    """Notify Kodi about the status of a listitem."""
+    from resources.lib.addon import routing
+
+    _LOGGER.debug('Returning status %s', success)
+    xbmcplugin.setResolvedUrl(routing.handle, success, listitem=xbmcgui.ListItem())
+
+
 def get_search_string(heading='', message=''):
     """Ask the user for a search string"""
     search_string = None
@@ -312,7 +324,7 @@ def set_locale():
     """Load the proper locale for date strings, only once"""
     if hasattr(set_locale, 'cached'):
         return getattr(set_locale, 'cached')
-    from locale import Error, LC_ALL, setlocale
+    from locale import LC_ALL, Error, setlocale
     locale_lang = get_global_setting('locale.language').split('.')[-1]
     locale_lang = locale_lang[:-2] + locale_lang[-2:].upper()
     # NOTE: setlocale() only works if the platform supports the Kodi configured locale
@@ -536,6 +548,11 @@ def get_addon_info(key):
     return to_unicode(ADDON.getAddonInfo(key))
 
 
+def execute_builtin(function):
+    """ Execute a Kodi Builtin """
+    xbmc.executebuiltin(function)
+
+
 def container_refresh(url=None):
     """Refresh the current container or (re)load a container by URL"""
     if url:
@@ -645,9 +662,10 @@ def get_cache(key, ttl=None):
 
     fdesc = xbmcvfs.File(fullpath, 'r')
 
+    import json
     try:
-        import json
         value = json.load(fdesc)
+        fdesc.close()
         _LOGGER.debug('Fetching %s from cache', fullpath)
         return value
     except (ValueError, TypeError):
@@ -657,12 +675,19 @@ def get_cache(key, ttl=None):
 def set_cache(key, data):
     """ Store an item in the cache
     :type key: list[str]
-    :type data: str
+    :type data: any
     """
-    if not xbmcvfs.exists(get_cache_path()):
-        xbmcvfs.mkdirs(get_cache_path())
+    fullpath = get_cache_path() + '/'
 
-    fullpath = os.path.join(get_cache_path(), '.'.join(key))
+    if not xbmcvfs.exists(fullpath):
+        xbmcvfs.mkdirs(fullpath)
+
+    fullpath = os.path.join(fullpath, '.'.join(key))
+
+    if data is None:
+        # Remove from cache
+        xbmcvfs.delete(fullpath)
+        return
 
     fdesc = xbmcvfs.File(fullpath, 'w')
 
@@ -670,12 +695,12 @@ def set_cache(key, data):
     _LOGGER.debug('Storing to cache as %s', fullpath)
     json.dump(data, fdesc)
 
-    # fdesc.close()
+    fdesc.close()
 
 
 def invalidate_cache(ttl=None):
     """ Clear the cache """
-    fullpath = get_cache_path()
+    fullpath = get_cache_path() + '/'
 
     if not xbmcvfs.exists(fullpath):
         return

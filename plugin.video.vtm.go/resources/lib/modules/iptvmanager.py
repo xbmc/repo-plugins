@@ -11,9 +11,8 @@ from datetime import timedelta
 from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
 from resources.lib.vtmgo.vtmgo import VtmGo
-from resources.lib.vtmgo.vtmgoepg import VtmGoEpg
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
-
+from resources.lib.vtmgo.vtmgoepg import VtmGoEpg
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -15,8 +15,9 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from gamekings_const import SETTINGS, LANGUAGE, LOGIN_URL, convertToUnicodeString, log, TWITCH_URL_GAMEKINGS_TV, \
-    VQ4K, VQ1080P, VQ720P, VQ480P, VQ360P, decodeString, MASTER_DOT_M3U8, HTTPSCOLONSLASHSLASH_ENCODED, END_TAG, STREAM
+from resources.lib.gamekings_const import SETTINGS, LANGUAGE, LOGIN_URL, convertToUnicodeString, log, TWITCH_URL_GAMEKINGS_TV, \
+    VQ4K, VQ1080P, VQ720P, VQ480P, VQ360P, VQ1080N, VQ720N, VQ480N, VQ360N, decodeString, MASTER_DOT_M3U8, \
+    HTTPSCOLONSLASHSLASH_ENCODED, END_TAG, STREAM
 
 #
 # Main class
@@ -216,23 +217,23 @@ class Main(object):
 
                     response = session.get(decoded_m3u8_url)
 
-                    # determine the wanted video quality
+                    # determine the wanted video max_video_quality
                     if self.PREFERRED_QUALITY == '0':  # Low
-                        quality = VQ360P
+                        max_video_quality = VQ360P
                     elif self.PREFERRED_QUALITY == '1':  # Medium
-                        quality = VQ480P
+                        max_video_quality = VQ480P
                     elif self.PREFERRED_QUALITY == '2':  # High Quality
-                        quality = VQ720P
+                        max_video_quality = VQ720P
                     elif self.PREFERRED_QUALITY == '3':  # Very High Quality
-                        quality = VQ1080P
+                        max_video_quality = VQ1080P
                     elif self.PREFERRED_QUALITY == '4':  # Ultra High Quality
-                        quality = VQ4K
-                    else:  # Default in case quality is not found
-                        quality = VQ720P
+                        max_video_quality = VQ4K
+                    else:  # Default in case max_video_quality is not found
+                        max_video_quality = VQ720P
 
-                    # log("wanted quality", quality)
+                    # log("wanted max_video_quality", max_video_quality)
 
-                    # an example of the content of a m3u8 file:
+                    # an example of the content of a m3u8 file (2019):
                     # #EXTM3U
                     # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=464000,RESOLUTION=640x360,FRAME-RATE=60.000,CODECS="avc1.4d401f,mp4a.40.2"
                     # index-s360p-v1-a1.m3u8
@@ -247,31 +248,50 @@ class Main(object):
                     #EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=92824,RESOLUTION=1280x720,CODECS="avc1.4d4020",URI="iframes-s720p-v1-a1.m3u8"
                     #EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=240783,RESOLUTION=1920x1080,CODECS="avc1.4d402a",URI="iframes-s1080p-v1-a1.m3u8"
 
-                    # Let's try and find a video of the desired video quality.
-                    # If that can't be found, try to find a video with less than the desired video quality
+                    # an example of the content of a m3u8 file (2020/11/10):
+                    # #EXTM3U
+                    # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=464000,RESOLUTION=640x360,FRAME-RATE=30.000,CODECS="avc1.64001e,mp4a.40.2"
+                    # index-svod360n-v1-a1.m3u8
+                    # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=928000,RESOLUTION=854x480,FRAME-RATE=30.000,CODECS="avc1.64001f,mp4a.40.2"
+                    # index-svod480n-v1-a1.m3u8
+                    # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2128000,RESOLUTION=1280x720,FRAME-RATE=30.000,CODECS="avc1.64001f,mp4a.40.2"
+                    # index-svod720n-v1-a1.m3u8
+                    # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=6128000,RESOLUTION=1920x1080,FRAME-RATE=30.000,CODECS="avc1.640028,mp4a.40.2"
+                    # index-svod1080n-v1-a1.m3u8
+                    #EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=65908,RESOLUTION=640x360,CODECS="avc1.64001e",URI="iframes-svod360n-v1-a1.m3u8"
+                    #EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=978632,RESOLUTION=854x480,CODECS="avc1.64001f",URI="iframes-svod480n-v1-a1.m3u8"
+                    #EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=235616,RESOLUTION=1280x720,CODECS="avc1.64001f",URI="iframes-svod720n-v1-a1.m3u8"
+                    #EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=488781,RESOLUTION=1920x1080,CODECS="avc1.640028",URI="iframes-svod1080n-v1-a1.m3u8"
+
+                    # Let's try and find a video of the desired video max_video_quality.
+                    # If that can't be found, try to find a video with less than the desired video max_video_quality
                     # 4K doesn't seem to be available as of now (september 2019) but it may be in the future
                     video_quality_url = ''
                     if video_quality_url == '':
-                        if quality in [VQ4K]:
+                        if max_video_quality in [VQ4K]:
                             video_quality_url = self.find_video_quality_url(VQ4K, response, decoded_m3u8_url)
-
                     if video_quality_url == '':
-                        if quality in [VQ4K, VQ1080P]:
+                        if max_video_quality in [VQ4K, VQ1080P]:
                             video_quality_url = self.find_video_quality_url(VQ1080P, response, decoded_m3u8_url)
-
+                            if video_quality_url == '':
+                                video_quality_url = self.find_video_quality_url(VQ1080N, response, decoded_m3u8_url)
                     if video_quality_url == '':
-                        if quality in [VQ4K, VQ1080P, VQ720P]:
+                        if max_video_quality in [VQ4K, VQ1080P, VQ720P]:
                             video_quality_url = self.find_video_quality_url(VQ720P, response, decoded_m3u8_url)
-
+                            if video_quality_url == '':
+                                video_quality_url = self.find_video_quality_url(VQ720N, response, decoded_m3u8_url)
                     if video_quality_url == '':
-                        if quality in [VQ4K, VQ1080P, VQ720P, VQ480P]:
+                        if max_video_quality in [VQ4K, VQ1080P, VQ720P, VQ480P]:
                             video_quality_url = self.find_video_quality_url(VQ480P, response, decoded_m3u8_url)
-
+                            if video_quality_url == '':
+                                video_quality_url = self.find_video_quality_url(VQ480N, response, decoded_m3u8_url)
                     if video_quality_url == '':
-                        if quality in [VQ4K, VQ1080P, VQ720P, VQ480P, VQ360P]:
+                        if max_video_quality in [VQ4K, VQ1080P, VQ720P, VQ480P, VQ360P]:
                             video_quality_url = self.find_video_quality_url(VQ360P, response, decoded_m3u8_url)
+                            if video_quality_url == '':
+                                video_quality_url = self.find_video_quality_url(VQ360N, response, decoded_m3u8_url)
 
-                    # If we didn't find a video url with the desired video quality or lower, use the m3u8 file url
+                    # If we didn't find a video url with the desired video max_video_quality or lower, use the m3u8 file url
                     if video_quality_url == '':
                         video_url = decoded_m3u8_url
                     else:
@@ -425,9 +445,11 @@ class Main(object):
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30505))
 
 
-    def find_video_quality_url(self, quality, response, video_quality_url):
+    def find_video_quality_url(self, quality, response, decoded_m3u8_url):
 
-        # log("starting find_video_quality_url, this is the input", quality + "/" + str(response)+ "/" + video_url)
+        video_quality_url = ''
+
+        log("starting find_video_quality_url, this is the input", quality + "/" + str(response)+ "/" + decoded_m3u8_url)
 
         # the video url will be something like this:
         # https://gamekings.gcdn.co/videos//4457_Xp2EEOmd3SpDPb2S/master.m3u8
@@ -440,10 +462,10 @@ class Main(object):
         # the line found in the m3u8 of the corresponding quality (f.e. index-s1080p-v1-a1.m3u8)
 
         # lets determine part 1 and 2
-        pos_last_slash = video_quality_url.rfind("/")
+        pos_last_slash = decoded_m3u8_url.rfind("/")
         if pos_last_slash >= 0:
-            first_part = video_quality_url[0:pos_last_slash + 1]
-            second_part = video_quality_url[pos_last_slash:]
+            first_part = decoded_m3u8_url[0:pos_last_slash + 1]
+            second_part = decoded_m3u8_url[pos_last_slash:]
 
             # read the m3u8 file line for line and search for the quality. If found: replace the second part with the
             # value of the line in m3u8 file

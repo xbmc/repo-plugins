@@ -7,17 +7,11 @@
 from future import standard_library
 standard_library.install_aliases()
 from builtins import str
-import os
 import sys
 import urllib.parse
 import xbmc
-import xbmcaddon
 
-LIB_DIR = xbmc.translatePath(
-    os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'lib'))
-sys.path.append(LIB_DIR)
-
-from gamekings_const import ADDON, SETTINGS, DATE, VERSION
+from resources.lib.gamekings_const import ADDON, SETTINGS, DATE, VERSION
 
 # Parse parameters
 if len(sys.argv[2]) == 0:
@@ -29,9 +23,9 @@ if len(sys.argv[2]) == 0:
                  xbmc.LOGDEBUG)
 
     if SETTINGS.getSettingBool('onlyshowvideoscategory'):
-        import gamekings_list as plugin
+        import resources.lib.gamekings_list as plugin
     else:
-        import gamekings_main as plugin
+        import resources.lib.gamekings_main as plugin
 
 else:
     action = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['action'][0]
@@ -39,16 +33,16 @@ else:
     # List
     #
     if action == 'list':
-        import gamekings_list as plugin
+        import resources.lib.gamekings_list as plugin
     #
     # Play
     #
     elif action == 'play':
-        import gamekings_play as plugin
+        import resources.lib.gamekings_play as plugin
     #
     # Play
     #
     elif action == 'search':
-        import gamekings_search as plugin
+        import resources.lib.gamekings_search as plugin
 
 plugin.Main()

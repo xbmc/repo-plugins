@@ -1,3 +1,6 @@
+v1.2.19 (2020-11-10)
+- fixed premium videos after a website change
+
 v1.2.18 (2020-06-05)
 - fixed playback for youtube videos
 

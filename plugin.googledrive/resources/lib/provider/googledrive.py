@@ -116,7 +116,7 @@ class GoogleDrive(Provider):
             file_fileds = file_fileds + ',description,hasThumbnail,thumbnailLink,owners(permissionId),parents,trashed,imageMediaMetadata(width),videoMediaMetadata,shortcutDetails'
         return file_fileds
         
-    def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False):
+    def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False, on_before_add_item=None):
         item_driveid = Utils.default(item_driveid, self._driveid)
         is_album = item_id and item_id[:6] == 'album-'
         if is_album:
@@ -163,7 +163,7 @@ class GoogleDrive(Provider):
         files = provider_method(url, parameters = parameters)
         if self.cancel_operation():
             return
-        items.extend(self.process_files(files, parameters, on_items_page_completed, include_download_info))
+        items.extend(self.process_files(files, parameters, on_items_page_completed, include_download_info, on_before_add_item=on_before_add_item))
         return items
     
     def search(self, query, item_driveid=None, item_id=None, on_items_page_completed=None):
@@ -180,7 +180,7 @@ class GoogleDrive(Provider):
             return
         return self.process_files(files, parameters, on_items_page_completed)
     
-    def process_files(self, files, parameters, on_items_page_completed=None, include_download_info=False, extra_info=None):
+    def process_files(self, files, parameters, on_items_page_completed=None, include_download_info=False, extra_info=None, on_before_add_item=None):
         items = []
         if files:
             kind = Utils.get_safe_value(files, 'kind', '')
@@ -200,6 +200,8 @@ class GoogleDrive(Provider):
                     f['kind'] = Utils.get_safe_value(f, 'kind', kind)
                     item = self._extract_item(f, include_download_info)
                     if item:
+                        if on_before_add_item:
+                            on_before_add_item(item)
                         items.append(item)
                 if on_items_page_completed:
                     on_items_page_completed(items)
@@ -221,7 +223,7 @@ class GoogleDrive(Provider):
                 next_files = provider_method(url, parameters = parameters)
                 if self.cancel_operation():
                     return
-                items.extend(self.process_files(next_files, parameters, on_items_page_completed, include_download_info, extra_info))
+                items.extend(self.process_files(next_files, parameters, on_items_page_completed, include_download_info, extra_info, on_before_add_item))
         return items
     
     def _extract_item(self, f, include_download_info=False):

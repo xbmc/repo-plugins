@@ -1,0 +1,381 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+### MENUS
+msgctxt "#30001"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30002"
+msgid "Alphabetically sorted list of all movies and series"
+msgstr "Volledige lijst van programma's"
+
+msgctxt "#30003"
+msgid "Movies"
+msgstr "Films"
+
+msgctxt "#30004"
+msgid "Browse through the movie-catalogue"
+msgstr "Doorblader de filmcatalogus"
+
+msgctxt "#30005"
+msgid "Series"
+msgstr "Series"
+
+msgctxt "#30006"
+msgid "Browse through the series-catalogue"
+msgstr "Doorblader de seriecatalogus"
+
+msgctxt "#30009"
+msgid "Search Streamz"
+msgstr "Doorzoek Streamz"
+
+msgctxt "#30010"
+msgid "Search the Streamz catalogue"
+msgstr "Doorzoek de Streamz catalogus"
+
+msgctxt "#30015"
+msgid "Recommendations"
+msgstr "Aanbevelingen"
+
+msgctxt "#30016"
+msgid "Browse your recommendations"
+msgstr "Bekijk uw aanbevelingen"
+
+msgctxt "#30017"
+msgid "My List"
+msgstr "Mijn lijst"
+
+msgctxt "#30018"
+msgid "Show your personal favourites"
+msgstr "Bekijk uw persoonlijke favorieten"
+
+msgctxt "#30019"
+msgid "Continue watching"
+msgstr "Verder kijken"
+
+msgctxt "#30020"
+msgid "Continue watching where you left off"
+msgstr "Kijk verder waar u gebleven was"
+
+msgctxt "#30021"
+msgid "Kids"
+msgstr "Kids"
+
+msgctxt "#30022"
+msgid "Show the Streamz recommendations for Kids"
+msgstr "Bekijk de Streamz aanbevelingen voor kinderen"
+
+
+### SUBMENUS
+
+msgctxt "#30057"
+msgid "Select Profile"
+msgstr "Selecteer profiel"
+
+
+### CONTEXT MENU
+
+msgctxt "#30100"
+msgid "Add to My List"
+msgstr "Toevoegen aan mijn lijst"
+
+msgctxt "#30101"
+msgid "Remove from My List"
+msgstr "Verwijderen uit mijn lijst"
+
+msgctxt "#30102"
+msgid "Go to Program"
+msgstr "Ga naar programma"
+
+
+### CODE
+msgctxt "#30201"
+msgid "Your Streamz account has no active subscription!"
+msgstr "Uw Streamz account heeft geen geldig abbonement!"
+
+msgctxt "#30202"
+msgid "Your Telenet account has no active subscription!"
+msgstr "Uw Telenet account heeft geen geldig abbonement!"
+
+msgctxt "#30203"
+msgid "Your credentials are not valid!"
+msgstr "De inloggegevens zijn onjuist!"
+
+msgctxt "#30204"
+msgid "All seasons"
+msgstr "Alle seizoenen"
+
+msgctxt "#30205"
+msgid "Season {season}"
+msgstr "Seizoen {season}"
+
+msgctxt "#30207"
+msgid "[COLOR red]Geo-blocked[/COLOR]\n"
+msgstr "[COLOR red]Geo-geblokkeerd[/COLOR]\n"
+
+msgctxt "#30208"
+msgid "Available [B]until midnight[/B]"
+msgstr "Beschikbaar [B]tot middernacht[/B]"
+
+msgctxt "#30209"
+msgid "[B]One more day[/B] remaining"
+msgstr "Nog [B]één dag[/B] beschikbaar"
+
+msgctxt "#30210"
+msgid "[B]{years} more years[/B] remaining"
+msgstr "Nog [B]{years} jaren[/B] beschikbaar"
+
+msgctxt "#30211"
+msgid "[B]{months} more months[/B] remaining"
+msgstr "Nog [B]{months} maanden[/B] beschikbaar"
+
+msgctxt "#30212"
+msgid "[B]{days} more days[/B] remaining"
+msgstr "Nog [B]{days} dagen[/B] beschikbaar"
+
+msgctxt "#30216"
+msgid "All ages"
+msgstr "Alle leeftijden"
+
+
+### MESSAGES
+
+msgctxt "#30701"
+msgid "You need to configure your credentials before you can access the content of Streamz. Do you want to enter them now?"
+msgstr "U moet uw inloggegevens configureren voordat u Streamz kan gebruiken. Wilt u dit nu doen?"
+
+msgctxt "#30702"
+msgid "Unknown error while logging in: {code}"
+msgstr "Onbekende fout bij het inloggen: {code}"
+
+msgctxt "#30703"
+msgid "Your account has no profiles defined. Please login on www.streamz.be and create a profile."
+msgstr "Uw account heeft geen profielen. Gelieve in te loggen op www.streamz.be en een profiel aan te maken."
+
+msgctxt "#30708"
+msgid "Please restart Kodi."
+msgstr "Gelieve Kodi te herstarten."
+
+msgctxt "#30710"
+msgid "This video is geo-blocked and can't be played from your location."
+msgstr "Deze video is geografisch geblokkeerd en kan niet worden afgespeeld vanaf uw locatie."
+
+msgctxt "#30712"
+msgid "The video is unavailable and can't be played right now."
+msgstr "Deze video is niet beschikbaar en kan nu niet worden afgespeeld."
+
+msgctxt "#30713"
+msgid "You have reached the maximum amount of concurrent streams. Please stop streaming on another device to start watching here."
+msgstr "U heeft het maximum aantal gelijktijdige streams bereikt. Gelieve te stoppen met streamen op een ander apparaat om hier te beginnen kijken."
+
+msgctxt "#30714"
+msgid "Local metadata is cleared."
+msgstr "De lokale metadata is verwijderd."
+
+msgctxt "#30715"
+msgid "Updating metadata..."
+msgstr "Vernieuwen metadata..."
+
+msgctxt "#30716"
+msgid "Updating metadata ({index}/{total})..."
+msgstr "Vernieuwen metadata ({index}/{total})..."
+
+### SETTINGS
+msgctxt "#30800"
+msgid "Credentials"
+msgstr "Inloggegevens"
+
+msgctxt "#30801"
+msgid "Credentials"
+msgstr "Inloggegevens"
+
+msgctxt "#30803"
+msgid "Email address"
+msgstr "E-mailadres"
+
+msgctxt "#30805"
+msgid "Password"
+msgstr "Wachtwoord"
+
+msgctxt "#30807"
+msgid "Login provider"
+msgstr "Loginaanbieder"
+
+msgctxt "#30809"
+msgid "Streamz"
+msgstr "Streamz"
+
+msgctxt "#30810"
+msgid "Telenet"
+msgstr "Telenet"
+
+msgctxt "#30811"
+msgid "Profile"
+msgstr "Profiel"
+
+msgctxt "#30812"
+msgid "Always use the current profile"
+msgstr "Altijd het huidige profiel gebruiken"
+
+msgctxt "#30813"
+msgid "Current profile"
+msgstr "Huidig profiel"
+
+msgctxt "#30820"
+msgid "Interface"
+msgstr "Interface"
+
+msgctxt "#30821"
+msgid "Features"
+msgstr "Functionaliteit"
+
+msgctxt "#30822"
+msgid "Show A-Z"
+msgstr "Toon 'A-Z' menu"
+
+msgctxt "#30823"
+msgid "Show My List"
+msgstr "Toon 'Mijn lijst' menu"
+
+msgctxt "#30826"
+msgid "Show Continue watching"
+msgstr "Toon 'Verder kijken' menu"
+
+msgctxt "#30827"
+msgid "Metadata"
+msgstr "Metadata"
+
+msgctxt "#30829"
+msgid "Periodically refresh metadata in the background"
+msgstr "Vernieuw de metadata automatisch in de achtergrond"
+
+msgctxt "#30831"
+msgid "Update local metadata now…"
+msgstr "De lokale metadata nu vernieuwen…"
+
+msgctxt "#30833"
+msgid "Clear local metadata…"
+msgstr "De lokale metadata verwijderen…"
+
+msgctxt "#30840"
+msgid "Playback"
+msgstr "Afspelen"
+
+msgctxt "#30841"
+msgid "Subtitles"
+msgstr "Ondertiteling"
+
+msgctxt "#30842"
+msgid "Always show subtitles when available"
+msgstr "Toon ondertiteling indien beschikbaar"
+
+msgctxt "#30843"
+msgid "Streaming"
+msgstr "Streaming"
+
+msgctxt "#30844"
+msgid "Maximum bandwidth (kbps)"
+msgstr "Maximale bandbreedte (kbps)"
+
+
+msgctxt "#30860"
+msgid "Integrations"
+msgstr "Integraties"
+
+msgctxt "#30861"
+msgid "Up Next"
+msgstr "Up Next"
+
+msgctxt "#30862"
+msgid "Install Up Next add-on"
+msgstr "Installeer de Up Next add-on"
+
+msgctxt "#30863"
+msgid "Enable Up Next integration"
+msgstr "Activeer Up Next integratie"
+
+msgctxt "#30864"
+msgid "Up Next settings…"
+msgstr "Up Next instellingen…"
+
+msgctxt "#30870"
+msgid "Kodi Library"
+msgstr "Kodi-bibliotheek"
+
+msgctxt "#30871"
+msgid "Indexing"
+msgstr "Indexeren"
+
+msgctxt "#30872"
+msgid "Add video locations to the Kodi Library… [COLOR gray](See README.md)[/COLOR]"
+msgstr "Videolocaties toevoegen aan de Kodi-bibliotheek… [COLOR gray](Zie README.md)[/COLOR]"
+
+msgctxt "#30873"
+msgid "Index the following movies"
+msgstr "Indexeer de volgende films"
+
+msgctxt "#30874"
+msgid "Index the following series"
+msgstr "Indexeer de volgende series"
+
+msgctxt "#30875"
+msgid "Full catalog"
+msgstr "Volledige catalogus"
+
+msgctxt "#30876"
+msgid "Items on 'My List' only"
+msgstr "Enkel items op 'Mijn lijst'"
+
+msgctxt "#30877"
+msgid "Maintenance"
+msgstr "Onderhoud"
+
+msgctxt "#30878"
+msgid "Refresh Library…"
+msgstr "Verniew bibliotheek…"
+
+msgctxt "#30879"
+msgid "Clean Library…"
+msgstr "Bibliotheek opkuisen…"
+
+msgctxt "#30880"
+msgid "Expert"
+msgstr "Expert"
+
+msgctxt "#30881"
+msgid "Streaming"
+msgstr "Streaming"
+
+msgctxt "#30883"
+msgid "InputStream Helper information…"
+msgstr "InputStream Helper informatie…"
+
+msgctxt "#30885"
+msgid "InputStream Adaptive settings…"
+msgstr "InputStream Adaptive configuratie…"
+
+msgctxt "#30887"
+msgid "InputStream Helper settings…"
+msgstr "InputStream Helper configuratie…"
+
+msgctxt "#30889"
+msgid "Logging"
+msgstr "Logboek"
+
+msgctxt "#30891"
+msgid "Enable debug logging"
+msgstr "Activeer debug logging"
+
+msgctxt "#30892"
+msgid "Install Kodi Logfile Uploader…"
+msgstr "Installeer Kodi Logfile Uploader…"
+
+msgctxt "#30893"
+msgid "Open Kodi Logfile Uploader…"
+msgstr "Open Kodi Logfile Uploader…"

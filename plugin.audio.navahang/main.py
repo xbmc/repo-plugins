@@ -58,14 +58,6 @@ class LoadLister:
                 return addDirectoryItem(int(argv[1]), url, item, False, totalItems)
 
         def buildIndex(self):
-                rdLink = 'http://173.236.47.154:2199/rpc/radionavahang/streaminfo.get'
-                request = urllib.request.Request(rdLink, headers={'User-Agent' : 'Kodi'})
-                response = urllib.request.urlopen(request)
-                json_text = response.read()
-                loaded_json = json.loads(json_text)
-                otext = loaded_json['data'][0]['track']
-                self.addLink('Play Radio Navahang[CR][B]' + otext['title'] + "[/B] by " + otext['artist'], loaded_json['data'][0]['tuneinurl'], otext['imageurl'], {'Artist': otext['artist'],'Title': otext['title'],'Album': otext['album'] if otext['album']!='' else 'Single'})
-
                 request = urllib.request.Request(DataLink, headers={'User-Agent' : 'Kodi'})
                 response = urllib.request.urlopen(request)
                 json_text = response.read()

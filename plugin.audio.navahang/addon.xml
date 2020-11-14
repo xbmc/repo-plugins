@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.navahang" name="Navahang" version="2.5" provider-name="Muhammad Hussein Ammari">
+<addon id="plugin.audio.navahang" name="Navahang" version="2.6" provider-name="Muhammad Hussein Ammari">
 	<requires>
         <import addon="xbmc.python"                     version="2.26.0"/>
         <import addon="script.module.beautifulsoup4"    version="4.3.2"/>

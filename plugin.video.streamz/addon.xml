@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.streamz" name="Streamz" version="1.0.0" provider-name="Michaël Arnauts">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.dateutil" version="2.6.0"/>
+        <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.pyjwt" version="1.6.4"/>
+        <import addon="script.module.inputstreamhelper" version="0.3.4"/>
+        <import addon="inputstream.adaptive" version="2.4.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon_entry.py">
+        <provides>video</provides>
+        <medialibraryscanpath content="movies">library/movies/</medialibraryscanpath>
+        <medialibraryscanpath content="tvshows">library/tvshows/</medialibraryscanpath>
+    </extension>
+    <extension point="xbmc.service" library="service_entry.py"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Access the Streamz catalogue</summary>
+        <description lang="en_GB">Streamz is a video-on-demand platform offering Flemish content from DPG Media, Telenet and VRT, but also including 'Home of HBO' content and blockbuster movies.</description>
+        <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by Streamz BV and is provided 'as is' without any warranty of any kind. The Streamz name and Streamz logo are property of Streamz BV and are used according to the 'fair use' policy.</disclaimer>
+        <summary lang="nl_NL">Krijg toegang tot de Streamz catalogus</summary>
+        <description lang="nl_NL">Streamz is een video-on-demand platform dat toegang biedt tot Vlaamse series en films van DPG Media, Telenet en VRT, maar ook films en series van 'Home of HBO' en de laatste blockbuster films.</description>
+        <disclaimer lang="nl_NL">Deze add-on wordt niet ondersteund door Streamz BV, en wordt aangeboden 'as is', zonder enige garantie. De Streamz naam en Streamz logo zijn eigendom van Streamz BV en worden gebruikt in overeenstemming met de 'fair use' regels.</disclaimer>
+        <platform>all</platform>
+        <license>GPL-3.0-only</license>
+        <news>v1.0.0 (2020-11-03)
+- Initial release</news>
+        <source>https://github.com/add-ons/plugin.video.streamz</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/screenshot01.jpg</screenshot>
+            <screenshot>resources/screenshot02.jpg</screenshot>
+            <screenshot>resources/screenshot03.jpg</screenshot>
+        </assets>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+    </extension>
+</addon>

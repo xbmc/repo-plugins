@@ -80,6 +80,10 @@ msgctxt "#32019"
 msgid "Do not include filename extension in a .strm"
 msgstr ""
 
+msgctxt "#32020"
+msgid "Hide exporting progress dialog"
+msgstr ""
+
 msgctxt "#32030"
 msgid "Collaboration"
 msgstr ""

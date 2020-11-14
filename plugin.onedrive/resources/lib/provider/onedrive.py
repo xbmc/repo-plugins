@@ -80,7 +80,7 @@ class OneDrive(Provider):
             return ' SharePoint Document Library'
         return drive_type
     
-    def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False):
+    def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False, on_before_add_item=None):
         item_driveid = Utils.default(item_driveid, self._driveid)
         if item_id:
             files = self.get('/drives/'+item_driveid+'/items/' + item_id + '/children', parameters = self._extra_parameters)
@@ -96,13 +96,15 @@ class OneDrive(Provider):
             files = self.get('/drives/'+self._driveid+'/' + path + '/children', parameters = self._extra_parameters)
         if self.cancel_operation():
             return
-        return self.process_files(files, on_items_page_completed, include_download_info)
+        return self.process_files(files, on_items_page_completed, include_download_info, on_before_add_item=on_before_add_item)
     
-    def process_files(self, files, on_items_page_completed=None, include_download_info=False, extra_info=None):
+    def process_files(self, files, on_items_page_completed=None, include_download_info=False, extra_info=None, on_before_add_item=None):
         items = []
         for f in files['value']:
             f = Utils.get_safe_value(f, 'remoteItem', f)
             item = self._extract_item(f, include_download_info)
+            if on_before_add_item:
+                on_before_add_item(item)
             items.append(item)
         if on_items_page_completed:
             on_items_page_completed(items)
@@ -114,7 +116,7 @@ class OneDrive(Provider):
             next_files = self.get(files['@odata.nextLink'])
             if self.cancel_operation():
                 return
-            items.extend(self.process_files(next_files, on_items_page_completed, include_download_info, extra_info))
+            items.extend(self.process_files(next_files, on_items_page_completed, include_download_info, extra_info, on_before_add_item))
         return items
     
     def _extract_item(self, f, include_download_info=False):

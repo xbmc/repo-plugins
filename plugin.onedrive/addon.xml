@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.onedrive" name="OneDrive" version="2.2.2" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.onedrive" name="OneDrive" version="2.2.8" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0" />
-		<import addon="script.module.clouddrive.common" version="1.3.2"/>
+		<import addon="script.module.clouddrive.common" version="1.3.9"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>image audio video</provides>
@@ -39,9 +39,8 @@ Play all your media from OneDrive including Videos, Music and Pictures.
 			<fanart>fanart.jpg</fanart>
 		</assets>
 		<news>
-v2.2.2 released Oct 11, 2020:
-- New export functionality
-- Multiple fixes
+v2.2.8 released Nov 13, 2020:
+- Export improvements
 		</news>
 		<disclaimer lang="en_GB">
 This cloud drive addon uses a third-party authentication mechanism commonly known as OAuth 2.0.

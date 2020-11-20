@@ -3,7 +3,7 @@
 The local SQlite database module
 
 Copyright 2017-2019, Leo Moll
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 # pylint: disable=too-many-lines,line-too-long
 
@@ -52,8 +52,8 @@ class StoreSQLite(object):
             "aired" if settings.recentmode == 0 else "film.dtCreated",
             settings.maxage
         )
-        self.sql_cond_nofuture = " AND ( ( aired IS NULL ) OR ( ( UNIX_TIMESTAMP() - aired ) > 0 ) )" if settings.nofuture else ""
-        self.sql_cond_minlength = " AND ( ( duration IS NULL ) OR ( duration >= %d ) )" % settings.minlength if settings.minlength > 0 else ""
+        self.sql_cond_nofuture = " AND ( aired < UNIX_TIMESTAMP() )" if settings.nofuture else ""
+        self.sql_cond_minlength = " AND ( duration >= %d )" % settings.minlength if settings.minlength > 0 else ""
         # update helper
         self.ft_channel = None
         self.ft_channelid = None
@@ -162,7 +162,14 @@ class StoreSQLite(object):
         searchcond = '( ( title LIKE ? ) OR ( show LIKE ? ) OR ( description LIKE ? ) )' if extendedsearch is True else '( ( title LIKE ? ) OR ( show LIKE ? ) )'
         searchparm = (searchmask, searchmask, searchmask) if extendedsearch is True else (
             searchmask, searchmask, )
-        return self._search_condition(searchcond, searchparm, filmui, True, True, self.settings.maxresults)
+        return self._search_condition(
+            condition=searchcond,
+            params=searchparm,
+            filmui=filmui,
+            showshows=True,
+            showchannels=True,
+            maxresults=self.settings.maxresults,
+            order='film.aired desc')
 
     def get_recents(self, channelid, filmui):
         """
@@ -178,22 +185,23 @@ class StoreSQLite(object):
         """
         if channelid != '0':
             return self._search_condition(
-                self.sql_cond_recent + ' AND ( film.channelid=? )',
-                (int(channelid), ),
-                filmui,
-                True,
-                False,
-                self.settings.maxresults,
-                order='film.aired'
+                condition=self.sql_cond_recent + ' AND ( film.channelid=? )',
+                params=(int(channelid), ),
+                filmui=filmui,
+                showshows=True,
+                showchannels=False,
+                maxresults=self.settings.maxresults,
+                order='film.aired desc'
             )
+
         return self._search_condition(
-            self.sql_cond_recent,
-            (),
-            filmui,
-            True,
-            False,
-            self.settings.maxresults,
-            order='film.aired'
+            condition=self.sql_cond_recent,
+            params=(),
+            filmui=filmui,
+            showshows=True,
+            showchannels=False,
+            maxresults=self.settings.maxresults,
+            order='film.aired desc'
         )
 
     def get_live_streams(self, filmui):
@@ -206,13 +214,13 @@ class StoreSQLite(object):
                 for populating the directory
         """
         return self._search_condition(
-            '( show.search="LIVESTREAM" )',
-            (),
-            filmui,
-            False,
-            False,
-            0,
-            False
+            condition='( show.search="LIVESTREAM" )',
+            params=(),
+            filmui=filmui,
+            showshows=False,
+            showchannels=False,
+            maxresults=0,
+            limiting=False
         )
 
     def get_channels(self, channelui):
@@ -402,21 +410,24 @@ class StoreSQLite(object):
         if showid.find(',') == -1:
             # only one channel id
             return self._search_condition(
-                '( showid=? )',
-                (int(showid),),
-                filmui,
-                False,
-                False,
-                10000
+                condition='( showid=? )',
+                params=(int(showid),),
+                filmui=filmui,
+                showshows=False,
+                showchannels=False,
+                maxresults=10000,
+                order='film.aired desc'
             )
+
         # multiple channel ids
         return self._search_condition(
-            '( showid IN ( {} ) )'.format(showid),
-            (),
-            filmui,
-            False,
-            True,
-            10000
+            condition='( showid IN ( {} ) )'.format(showid),
+            params=(),
+            filmui=filmui,
+            showshows=False,
+            showchannels=True,
+            maxresults=10000,
+            order='film.aired desc'
         )
 
     def _search_channels_condition(self, condition, channelui, caching=True):

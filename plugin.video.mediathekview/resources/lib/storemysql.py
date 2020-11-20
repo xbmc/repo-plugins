@@ -42,8 +42,112 @@ class StoreMySQL(object):
         self.sql_query_filmcnt = "SELECT COUNT(*) FROM `film` LEFT JOIN `show` ON show.id=film.showid LEFT JOIN `channel` ON channel.id=film.channelid"
         self.sql_cond_recent = "( TIMESTAMPDIFF(SECOND,{},CURRENT_TIMESTAMP()) <= {} )".format(
             "aired" if settings.recentmode == 0 else "film.dtCreated", settings.maxage)
-        self.sql_cond_nofuture = " AND ( ( `aired` IS NULL ) OR ( TIMESTAMPDIFF(HOUR,`aired`,CURRENT_TIMESTAMP()) > 0 ) )" if settings.nofuture else ""
-        self.sql_cond_minlength = " AND ( ( `duration` IS NULL ) OR ( TIME_TO_SEC(`duration`) >= %d ) )" % settings.minlength if settings.minlength > 0 else ""
+        self.sql_cond_nofuture = " AND ( `aired` < CURRENT_DATE() )" if settings.nofuture else ""
+        self.sql_cond_minlength = " AND ( TIME_TO_SEC(`duration`) >= %d )" % settings.minlength if settings.minlength > 0 else ""
+
+        self.films_to_insert = []
+        self.sql_films_prepareTT = """
+CREATE TEMPORARY TABLE IF NOT EXISTS `t_film`(
+  `channelid`      INT(11),
+  `showid`         INT(11),
+  `title`          VARCHAR(128),
+  `search`         VARCHAR(128),
+  `aired`          DATETIME,
+  `duration`       TIME,
+  `size`           INT(11),
+  `description`    LONGTEXT,
+  `website`        VARCHAR(384),
+  `url_sub`        VARCHAR(384),
+  `url_video`      VARCHAR(384),
+  `url_video_sd`   VARCHAR(384),
+  `url_video_hd`   VARCHAR(384),
+  `airedepoch`     INT(11),
+  `_idhash`        CHAR(32)
+);
+
+TRUNCATE TABLE `t_film`;
+"""
+        self.sql_films_insertTT = """
+INSERT INTO `t_film` (
+  `channelid`,
+  `showid`,
+  `title`,
+  `search`,
+  `aired`,
+  `duration`,
+  `size`,
+  `description`,
+  `website`,
+  `url_sub`,
+  `url_video`,
+  `url_video_sd`,
+  `url_video_hd`,
+  `airedepoch`
+  ) VALUES (
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s)
+"""
+        self.sql_films_process = """
+UPDATE `t_film`
+  SET `_idhash` = MD5(CONCAT(channelid, ':', showid, ':', url_video));
+
+UPDATE `t_film`
+  INNER JOIN `film` ON
+    `t_film`.`_idhash` = `film`.`idhash`
+  SET `film`.`touched` = 1;
+
+INSERT INTO `film` (
+    `idhash`,
+    `channelid`,
+    `showid`,
+    `title`,
+    `search`,
+    `aired`,
+    `duration`,
+    `size`,
+    `description`,
+    `website`,
+    `url_sub`,
+    `url_video`,
+    `url_video_sd`,
+    `url_video_hd`,
+    `airedepoch`
+  )
+  SELECT
+      `t_film`.`_idhash`,
+      `t_film`.`channelid`,
+      `t_film`.`showid`,
+      `t_film`.`title`,
+      `t_film`.`search`,
+      `t_film`.`aired`,
+      `t_film`.`duration`,
+      `t_film`.`size`,
+      `t_film`.`description`,
+      `t_film`.`website`,
+      `t_film`.`url_sub`,
+      `t_film`.`url_video`,
+      `t_film`.`url_video_sd`,
+      `t_film`.`url_video_hd`,
+      `t_film`.`airedepoch`
+    FROM `t_film`
+    LEFT JOIN `film` ON
+      `t_film`.`_idhash` = `film`.`idhash`
+	WHERE `film`.`idhash` IS NULL;
+
+DROP TEMPORARY TABLE IF EXISTS `t_film`;
+"""
 
     def init(self, reset=False, convert=False):
         """
@@ -136,7 +240,14 @@ class StoreMySQL(object):
         searchcond = '( ( `title` LIKE %s ) OR ( `show` LIKE %s ) OR ( `description` LIKE %s ) )' if extendedsearch is True else '( ( `title` LIKE %s ) OR ( `show` LIKE %s ) )'
         searchparm = (searchmask, searchmask, searchmask) if extendedsearch is True else (
             searchmask, searchmask, )
-        return self._search_condition(searchcond, searchparm, filmui, True, True, self.settings.maxresults)
+        return self._search_condition(
+            condition=searchcond,
+            params=searchparm,
+            filmui=filmui,
+            showshows=True,
+            showchannels=True,
+            maxresults=self.settings.maxresults,
+            order='film.aired desc')
 
     def get_recents(self, channelid, filmui):
         """
@@ -152,20 +263,22 @@ class StoreMySQL(object):
         """
         if channelid != '0':
             return self._search_condition(
-                self.sql_cond_recent + ' AND ( film.channelid=%s )',
-                (int(channelid), ),
-                filmui,
-                True,
-                False,
-                10000
+                condition=self.sql_cond_recent + ' AND ( film.channelid=%s )',
+                params=(int(channelid), ),
+                filmui=filmui,
+                showshows=True,
+                showchannels=False,
+                maxresults=self.settings.maxresults,
+                order='film.aired desc'
             )
         return self._search_condition(
-            self.sql_cond_recent,
-            (),
-            filmui,
-            True,
-            False,
-            10000
+            condition=self.sql_cond_recent,
+            params=(),
+            filmui=filmui,
+            showshows=True,
+            showchannels=False,
+            maxresults=self.settings.maxresults,
+            order='film.aired desc'
         )
 
     def get_live_streams(self, filmui):
@@ -178,13 +291,13 @@ class StoreMySQL(object):
                 for populating the directory
         """
         return self._search_condition(
-            '( show.search="LIVESTREAM" )',
-            (),
-            filmui,
-            False,
-            False,
-            0,
-            False
+            condition='( show.search="LIVESTREAM" )',
+            params=(),
+            filmui=filmui,
+            showshows=False,
+            showchannels=False,
+            maxresults=0,
+            limiting=False
         )
 
     def get_channels(self, channelui):
@@ -351,21 +464,23 @@ class StoreMySQL(object):
         if showid.find(',') == -1:
             # only one channel id
             return self._search_condition(
-                '( `showid` = %s )',
-                (int(showid), ),
-                filmui,
-                False,
-                False,
-                10000
+                condition='( `showid` = %s )',
+                params=(int(showid), ),
+                filmui=filmui,
+                showshows=False,
+                showchannels=False,
+                maxresults=self.settings.maxresults,
+                order='film.aired desc'
             )
         # multiple channel ids
         return self._search_condition(
-            '( `showid` IN ( {} ) )'.format(showid),
-            (),
-            filmui,
-            False,
-            True,
-            10000
+            condition='( `showid` IN ( {} ) )'.format(showid),
+            params=(),
+            filmui=filmui,
+            showshows=False,
+            showchannels=True,
+            maxresults=self.settings.maxresults,
+            order='film.aired desc'
         )
 
     def _search_channels_condition(self, condition, channelui):
@@ -392,10 +507,12 @@ class StoreMySQL(object):
             self.logger.error('Database error: {}, {}', err.errno, err)
             self.notifier.show_database_error(err)
 
-    def _search_condition(self, condition, params, filmui, showshows, showchannels, maxresults, limiting=True):
+    def _search_condition(self, condition, params, filmui, showshows, showchannels, maxresults, limiting=True, order=''):
         if self.conn is None:
             return 0
         try:
+            if len(order) > 0:
+                order = ' ORDER BY ' + order
             if limiting:
                 sql_cond_limit = self.sql_cond_nofuture + self.sql_cond_minlength
             else:
@@ -405,7 +522,8 @@ class StoreMySQL(object):
                 self.sql_query_films +
                 ' WHERE ' +
                 condition +
-                sql_cond_limit
+                sql_cond_limit +
+                order
             )
             cursor = self.conn.cursor()
             cursor.execute(
@@ -413,6 +531,7 @@ class StoreMySQL(object):
                 ' WHERE ' +
                 condition +
                 sql_cond_limit +
+                order +
                 (' LIMIT {}'.format(maxresults + 1) if maxresults else ''),
                 params
             )
@@ -424,6 +543,7 @@ class StoreMySQL(object):
                 ' WHERE ' +
                 condition +
                 sql_cond_limit +
+                order +
                 (' LIMIT {}'.format(maxresults + 1) if maxresults else ''),
                 params
             )
@@ -799,6 +919,10 @@ class StoreMySQL(object):
             delete(bool): if `True` all records not updated
                 will be deleted
         """
+        # Close the batch update
+        if (len(self.films_to_insert) > 0):
+            self.ft_insert_film(None, True)
+
         param = (1, ) if delete else (0, )
         try:
             cursor = self.conn.cursor()
@@ -821,72 +945,109 @@ class StoreMySQL(object):
         Inserts a film emtry into the database
 
         Args:
-            film(Film): a film entry
+            film(Film): a film entry or a tuple of values for insert
 
-            commit(bool, optional): the operation will be
-                commited immediately. Default is `True`
+            commit(bool, optional): If true, collected content in
+            self.sql_films_to_insert is bulk-inserted into database
+            and processed there.
+            Default is `True`
         """
         newchn = False
         inschn = 0
         insshw = 0
         insmov = 0
-        channel = film['channel'][:64]
-        show = film['show'][:128]
-        title = film['title'][:128]
 
-        # handle channel
-        if self.ft_channel != channel:
-            # process changed channel
-            newchn = True
-            self.ft_channel = channel
-            (self.ft_channelid, inschn) = self._insert_channel(self.ft_channel)
-            if self.ft_channelid == 0:
-                self.logger.info(
-                    'Undefined error adding channel "{}"', self.ft_channel)
-                return (0, 0, 0, 0, )
+        if (film is not None):
+            if isinstance(film, tuple):
+                self.films_to_insert.append(film)
+            else:
+                channel = film['channel'][:64]
+                show = film['show'][:128]
+                title = film['title'][:128]
+    
+                # handle channel
+                if self.ft_channel != channel:
+                    # process changed channel
+                    newchn = True
+                    self.ft_channel = channel
+                    (self.ft_channelid, inschn) = self._insert_channel(self.ft_channel)
+                    if self.ft_channelid == 0:
+                        self.logger.info(
+                            'Undefined error adding channel "{}"', self.ft_channel)
+                        return (0, 0, 0, 0, )
+    
+                if newchn or self.ft_show != show:
+                    # process changed show
+                    self.ft_show = show
+                    (self.ft_showid, insshw) = self._insert_show(self.ft_channelid,
+                                                                 self.ft_show, mvutils.make_search_string(self.ft_show))
+                    if self.ft_showid == 0:
+                        self.logger.info(
+                            'Undefined error adding show "{}"', self.ft_show)
+                        return (0, 0, 0, 0, )
+    
+                self.films_to_insert.append((
+                        self.ft_channelid,
+                        self.ft_showid,
+                        title,
+                        mvutils.make_search_string(title),
+                        film["aired"],
+                        film["duration"],
+                        film["size"],
+                        film["description"],
+                        film["website"],
+                        film["url_sub"],
+                        film["url_video"],
+                        film["url_video_sd"],
+                        film["url_video_hd"],
+                        film["airedepoch"],
+                      ))
 
-        if newchn or self.ft_show != show:
-            # process changed show
-            self.ft_show = show
-            (self.ft_showid, insshw) = self._insert_show(self.ft_channelid,
-                                                         self.ft_show, mvutils.make_search_string(self.ft_show))
-            if self.ft_showid == 0:
-                self.logger.info(
-                    'Undefined error adding show "{}"', self.ft_show)
-                return (0, 0, 0, 0, )
-
-        try:
+        if commit:
             cursor = self.conn.cursor()
-            cursor.callproc('ftInsertFilm', (
-                self.ft_channelid,
-                self.ft_showid,
-                title,
-                mvutils.make_search_string(title),
-                film["aired"],
-                film["duration"],
-                film["size"],
-                film["description"],
-                film["website"],
-                film["url_sub"],
-                film["url_video"],
-                film["url_video_sd"],
-                film["url_video_hd"],
-                film["airedepoch"],
-            ))
-            for result in cursor.stored_results():
-                for (filmid, insmov) in result:
-                    cursor.close()
-                    if commit:
-                        self.conn.commit()
-                    return (filmid, inschn, insshw, insmov)
-                # should never happen
-                cursor.close()
-                if commit:
-                    self.conn.commit()
-        except mysql.connector.Error as err:
-            self.logger.error('Database error: {}, {}', err.errno, err)
-            self.notifier.show_database_error(err)
-        return (0, 0, 0, 0, )
+            try:
+                for result in cursor.execute(self.sql_films_prepareTT, multi=True): pass
+
+                if len(self.films_to_insert) == 1:
+                    # For single row inserts use execute instead of executemany
+                    # in hope of failing single row inserts give us more detailed
+                    # feedback about a violating value.
+                    cursor.execute(self.sql_films_insertTT, self.films_to_insert[0])
+                else :
+                    cursor.executemany(self.sql_films_insertTT, self.films_to_insert)
+
+                for result in cursor.execute(self.sql_films_process, multi=True):
+                    if not result.with_rows:
+                        if result.statement.startswith("INSERT INTO `film`"):
+                            insmov = result.rowcount
+
+                self.films_to_insert = []
+            except mysql.connector.Error as err:
+                self.logger.error('Database error: {}, {}', err.errno, err)
+                # pop up databse error only on single row inserts
+                if len(self.films_to_insert) == 1:
+                    self.notifier.show_database_error(err)
+                else:
+                    # If in multirow mode, step down to single row mode by
+                    # feeding content of self.films_to_insert row by row
+                    # to ft_insert_film to isolate the failing dataset.
+
+                    # At first of all clone self.films_to_insert into _rows
+                    # because it has to be emptyed for this process.
+                    _rows = []
+                    for row in self.films_to_insert:
+                        insmov += _rows.append(row)[3]
+
+                    self.films_to_insert = []
+
+                    for row in _rows:
+                        self.ft_insert_film(row, True)
+
+                self.films_to_insert = []
+
+            cursor.close()
+
+        return (0, inschn, insshw, insmov)
 
     def _insert_channel(self, channel):
         try:
@@ -945,8 +1106,59 @@ class StoreMySQL(object):
             # should never happen - something went wrong...
             self.exit()
             return False
-        elif version == 2:
+        elif version == 3:
             # current version
+            return True
+        elif version == 2:
+            self.logger.info('Converting database to version ')
+            self.notifier.show_update_scheme_progress()
+            try:
+                cursor = self.conn.cursor()
+                cursor.execute('SELECT @@SESSION.sql_mode')
+                (sql_mode, ) = cursor.fetchone()
+                self.logger.info('Current SQL mode is {}', sql_mode)
+                cursor.execute('SET SESSION sql_mode = ""')
+                ##
+                self.logger.info('Change airdate to datetime...')
+                self.logger.info('add column')
+                cursor.execute('ALTER TABLE `film` ADD COLUMN `aired2` DATETIME')
+                self.notifier.update_update_scheme_progress(5)
+                self.logger.info('update column')
+                cursor.execute('UPDATE `film` SET `aired2` = FROM_UNIXTIME(UNIX_TIMESTAMP(`aired`))')
+                self.notifier.update_update_scheme_progress(30)
+                self.logger.info('drop old column')
+                cursor.execute('ALTER TABLE `film` DROP COLUMN `aired`')
+                self.notifier.update_update_scheme_progress(60)
+                self.logger.info('rename column')
+                cursor.execute('ALTER TABLE `film` CHANGE `aired2` `aired` DATETIME')
+                self.notifier.update_update_scheme_progress(70)
+                ##
+                self.logger.info('change column idHash to char')
+                cursor.execute('ALTER TABLE `film` CHANGE `idhash` `idhash` CHAR(32)')
+                self.notifier.update_update_scheme_progress(80)
+                ##
+                self.logger.info('Update duration')
+                cursor.execute("UPDATE `film` SET `duration` = '00:00:00' where `duration` is null")
+                self.notifier.update_update_scheme_progress(90)
+                ##
+                self.logger.info('drop procedure')
+                cursor.execute('DROP PROCEDURE IF EXISTS `ftInsertFilm`')
+                self.notifier.update_update_scheme_progress(95)
+                ##
+                self.logger.info('Update Version')
+                cursor.execute('UPDATE `status` SET `version` = 3')
+                #
+                self.logger.info('Resetting SQL mode to {}', sql_mode)
+                cursor.execute('SET SESSION sql_mode = %s', (sql_mode, ))
+                self.logger.info('Scheme successfully updated to version 2')
+                self.notifier.close_update_scheme_progress()
+            except mysql.connector.Error as err:
+                self.logger.error(
+                    '=== DATABASE SCHEME UPDATE ERROR: {} ===', err)
+                self.exit()
+                self.notifier.close_update_scheme_progress()
+                self.notifier.show_database_error(err)
+                return False
             return True
         elif convert is False:
             # do not convert (Addon threads)
@@ -955,7 +1167,7 @@ class StoreMySQL(object):
             return False
         elif version == 1:
             # convert from 1 to 2
-            self.logger.info('Converting database to version 2')
+            self.logger.info('Converting database from version 2 to version 3')
             self.notifier.show_update_scheme_progress()
             try:
                 cursor = self.conn.cursor()
@@ -1038,14 +1250,14 @@ CREATE TABLE `channel` (
             cursor.execute("""
 CREATE TABLE `film` (
     `id`            int(11)         NOT NULL AUTO_INCREMENT,
-    `idhash`        varchar(32)     DEFAULT NULL,
+    `idhash`        char(32)        DEFAULT NULL,
     `dtCreated`     timestamp       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `touched`       smallint(1)     NOT NULL DEFAULT '1',
     `channelid`     int(11)         NOT NULL,
     `showid`        int(11)         NOT NULL,
     `title`         varchar(128)    NOT NULL,
     `search`        varchar(128)    NOT NULL,
-    `aired`         timestamp       NULL DEFAULT NULL,
+    `aired`         datetime        NULL DEFAULT NULL,
     `duration`      time            DEFAULT NULL,
     `size`          int(11)         DEFAULT NULL,
     `description`   longtext,
@@ -1105,7 +1317,7 @@ CREATE TABLE `status` (
             self.conn.commit()
 
             cursor.execute(
-                'INSERT INTO `status` VALUES (0,"IDLE",0,0,0,0,0,0,0,0,0,0,0,0,2);')
+                'INSERT INTO `status` VALUES (0,"IDLE",0,0,0,0,0,0,0,0,0,0,0,0,3);')
             self.conn.commit()
 
             cursor.execute('SET FOREIGN_KEY_CHECKS=1')
@@ -1143,83 +1355,6 @@ BEGIN
     END IF;
 
     SELECT  channelid_  AS `id`,
-            added_      AS `added`;
-END
-            """)
-            self.conn.commit()
-
-            cursor.execute("""
-CREATE PROCEDURE `ftInsertFilm`(
-    _channelid      INT(11),
-    _showid         INT(11),
-    _title          VARCHAR(255),
-    _search         VARCHAR(255),
-    _aired          TIMESTAMP,
-    _duration       TIME,
-    _size           INT(11),
-    _description    LONGTEXT,
-    _website        VARCHAR(384),
-    _url_sub        VARCHAR(384),
-    _url_video      VARCHAR(384),
-    _url_video_sd   VARCHAR(384),
-    _url_video_hd   VARCHAR(384),
-    _airedepoch     INT(11)
-)
-BEGIN
-    DECLARE     id_         INT;
-    DECLARE     added_      INT DEFAULT 0;
-    DECLARE     idhash_     VARCHAR(32);
-
-    SET idhash_ = MD5( CONCAT( _channelid, ':', _showid, ':', _url_video ) );
-
-    SELECT      `id`
-    INTO        id_
-    FROM        `film` AS f
-    WHERE       ( f.idhash = idhash_ );
-
-    IF ( id_ IS NULL ) THEN
-        INSERT INTO `film` (
-            `idhash`,
-            `channelid`,
-            `showid`,
-            `title`,
-            `search`,
-            `aired`,
-            `duration`,
-            `size`,
-            `description`,
-            `website`,
-            `url_sub`,
-            `url_video`,
-            `url_video_sd`,
-            `url_video_hd`,
-            `airedepoch`
-        )
-        VALUES (
-            idhash_,
-            _channelid,
-            _showid,
-            _title,
-            _search,
-            IF(_aired = "1980-01-01 00:00:00", NULL, _aired),
-            IF(_duration = "00:00:00", NULL, _duration),
-            _size,
-            _description,
-            _website,
-            _url_sub,
-            _url_video,
-            _url_video_sd,
-            _url_video_hd,
-            _airedepoch
-        );
-        SET id_         = LAST_INSERT_ID();
-        SET added_      = 1;
-    ELSE
-        UPDATE  `film`
-        SET     `touched` = 1
-        WHERE   ( `id` = id_ );
-    END IF;
-    SELECT  id_         AS `id`,
             added_      AS `added`;
 END
             """)
@@ -1331,6 +1466,18 @@ BEGIN
     DECLARE     cnt_shw_        INT DEFAULT 0;
     DECLARE     cnt_mov_        INT DEFAULT 0;
 
+    SELECT  COUNT(id)
+    INTO    cnt_chn_
+    FROM    `channel`;
+
+    SELECT  COUNT(id)
+    INTO    cnt_shw_
+    FROM    `show`;
+
+    SELECT  COUNT(id)
+    INTO    cnt_mov_
+    FROM    `film`;
+
     IF ( _full = 1 ) THEN
         UPDATE  `channel`
         SET     `touched` = 0;
@@ -1341,19 +1488,7 @@ BEGIN
         UPDATE  `film`
         SET     `touched` = 0;
     END IF;
-
-    SELECT  COUNT(*)
-    INTO    cnt_chn_
-    FROM    `channel`;
-
-    SELECT  COUNT(*)
-    INTO    cnt_shw_
-    FROM    `show`;
-
-    SELECT  COUNT(*)
-    INTO    cnt_mov_
-    FROM    `film`;
-
+    
     SELECT  cnt_chn_    AS `cnt_chn`,
             cnt_shw_    AS `cnt_shw`,
             cnt_mov_    AS `cnt_mov`;

@@ -3,7 +3,7 @@
 The initial grouping model UI module
 
 Copyright 2017-2018, Leo Moll and Dominik Schlösser
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 
 # pylint: disable=import-error
@@ -44,6 +44,7 @@ class InitialUI(object):
         self.channelid = channelid
         for method in self.sortmethods:
             xbmcplugin.addSortMethod(self.handle, method)
+        xbmcplugin.setContent(self.handle, '')
 
     def add(self, altname=None):
         """

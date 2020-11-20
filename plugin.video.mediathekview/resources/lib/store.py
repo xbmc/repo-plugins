@@ -3,7 +3,7 @@
 The database wrapper module
 
 Copyright 2017-2019, Leo Moll
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 
 import time

@@ -3,15 +3,18 @@
 Utilities module
 
 Copyright (c) 2017-2019, Leo Moll
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import unicode_literals
 
 import os
+import re
 import sys
 import stat
 import string
+from contextlib import closing
+from codecs import open
 
 # pylint: disable=import-error
 try:
@@ -139,7 +142,6 @@ def file_remove(name):
         except OSError:
             pass
     return False
-
 
 def file_rename(srcname, dstname):
     """
@@ -293,7 +295,6 @@ def build_url(query):
     """
     return sys.argv[0] + '?' + urlencode(query)
 
-
 def _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook):
     aborthook = aborthook if aborthook is not None else lambda: False
     total_size = int(
@@ -311,3 +312,41 @@ def _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook):
         total_chunks += 1
     # abort requested
     raise ExitRequested('Reception interrupted.')
+
+def fileSplitter(inputFilename, defaultSize = 40000000):
+    outputFiles = []
+    chunkSize = defaultSize
+    filename = inputFilename
+    cnt = 0
+    curentSize = 0
+    with closing( open(inputFilename, 'rb', encoding="utf-8") ) as fin:
+        overflowBuffer = None
+        buffer = None
+        while True:
+            #
+            fout = open(inputFilename + str(cnt),"wb", encoding="utf-8")
+            outputFiles.append(inputFilename + str(cnt))
+            cnt += 1
+            #
+            if overflowBuffer is not None and len(overflowBuffer) > 0:
+                fout.write(overflowBuffer)
+            buffer = fin.read(chunkSize)
+            if not buffer:
+                break;
+            #
+            lastElement = buffer.rfind(',"X":')
+            if lastElement != -1:
+                fout.write(buffer[:lastElement])
+                fout.write(u'}')
+            else:
+                fout.write(buffer)
+            fout.close()
+            #
+            if lastElement < len(buffer):
+                lastElement += 1
+                overflowBuffer = buffer[lastElement:]
+                overflowBuffer = u'{' + overflowBuffer
+            else:
+                overflowBuffer = None
+        fout.close()
+    return outputFiles

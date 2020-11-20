@@ -3,7 +3,7 @@
 The film model UI module
 
 Copyright 2017-2019, Leo Moll and Dominik Schlösser
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 
 import os
@@ -43,6 +43,7 @@ class FilmUI(Film):
         # define sortmethod for films
         # all av. sort method and put the default sortmethod on first place to be used by UI
         allSortMethods = [
+            xbmcplugin.SORT_METHOD_UNSORTED,
             xbmcplugin.SORT_METHOD_TITLE,
             xbmcplugin.SORT_METHOD_DATE,
             xbmcplugin.SORT_METHOD_DATEADDED,
@@ -73,9 +74,9 @@ class FilmUI(Film):
         """
         self.showshows = showshows
         self.showchannels = showchannels
-        # xbmcplugin.setContent( self.handle, 'tvshows' )
         for method in self.sortmethods:
             xbmcplugin.addSortMethod(self.handle, method)
+        xbmcplugin.setContent(self.handle, self.settings.contentType)
 
     def add(self, alttitle=None, total_items=None):
         """

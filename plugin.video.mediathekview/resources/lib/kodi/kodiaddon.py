@@ -3,7 +3,7 @@
 The Kodi addons module
 
 Copyright 2017-2019, Leo Moll and Dominik Schlösser
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 import os
 import sys

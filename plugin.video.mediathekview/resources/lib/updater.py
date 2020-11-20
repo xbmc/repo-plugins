@@ -11,6 +11,8 @@ import os
 import time
 import datetime
 import subprocess
+import resources.lib.updateFileParser as UpdateFileParser
+
 
 # pylint: disable=import-error
 try:
@@ -210,13 +212,6 @@ class MediathekViewUpdater(object):
                     self.cycle += 1
             self.delete_list(full)
 
-    def _object_pairs_hook(self, inputArg):
-        """
-        We need this because the default handler would convert everything to dict
-        and the same key would be overwritten and lost (e.g. X) 
-        """
-        return inputArg
-
     def import_database(self, full):
         """
         Performs a database update when a
@@ -230,7 +225,9 @@ class MediathekViewUpdater(object):
             self.logger.error('File {} does not exists', destfile)
             return False
         # estimate number of records in update file
-        records = int(mvutils.file_size(destfile) / avgrecsize)
+        fileSizeInByte = mvutils.file_size(destfile)
+        records = int(fileSizeInByte / avgrecsize)
+        self.logger.info( 'Starting import of {} records from {}', records, destfile )
         if not self.database.ft_init():
             self.logger.warn(
                 'Failed to initialize update. Maybe a concurrency problem?')
@@ -239,77 +236,84 @@ class MediathekViewUpdater(object):
         # pylint: disable=broad-except
         try:
             starttime = time.time()
-            with closing( open(destfile, 'r', encoding="utf-8") ) as updatefile:
-                jsonDoc = json.load( updatefile, object_pairs_hook=self._object_pairs_hook )
-                self.logger.info( 'Starting import of {} records from {}', (len(jsonDoc)-2), destfile )
-                flsm = 0
-                flts = 0
-                (self.tot_chn, self.tot_shw, self.tot_mov) = self._update_start(full)
-                self.notifier.show_update_progress()
-                
-                ####
-                flsm = 0
-                sender = ""
-                thema = ""
-                ### ROOT LIST
-                for atuple in jsonDoc:
-                    if (atuple[0] == 'Filmliste' and flsm == 0):
-                        ### META
-                        ### "Filmliste":["23.04.2020, 18:23","23.04.2020, 16:23","3","MSearch [Vers.: 3.1.129]","3c90946f05eb1e2fa6cf2327cca4f1d4"],
-                        flsm +=1
-                        # this is the timestamp of this database update
-                        value = atuple[1][0]
-                        try:
-                            fldt = datetime.datetime.strptime(
-                                value.strip(), "%d.%m.%Y, %H:%M")
-                            flts = int(time.mktime(fldt.timetuple()))
-                            self.database.update_status(filmupdate=flts)
-                            self.logger.info(
-                                'Filmliste dated {}', value.strip())
-                        except TypeError:
-                            # pylint: disable=line-too-long
-                            # SEE: https://forum.kodi.tv/showthread.php?tid=112916&pid=1214507#pid1214507
-                            # Wonderful. His name is also Leopold
-                            try:
-                                flts = int(time.mktime(time.strptime(
-                                    value.strip(), "%d.%m.%Y, %H:%M")))
-                                self.database.update_status(
-                                    filmupdate=flts)
-                                self.logger.info(
-                                    'Filmliste dated {}', value.strip())
-                                # pylint: disable=broad-except
-                            except Exception as err:
-                                # If the universe hates us...
-                                self.logger.debug(
-                                    'Could not determine date "{}" of filmliste: {}', value.strip(), err)
-                        except ValueError as err:
-                            pass
-                                        
-                    elif (atuple[0] == 'filmliste' and flsm == 1):
-                        flsm +=1
-                        # VOID - we do not need column names
-                        # "Filmliste":["Sender","Thema","Titel","Datum","Zeit","Dauer","Größe [MB]","Beschreibung","Url","Website","Url Untertitel","Url RTMP","Url Klein","Url RTMP Klein","Url HD","Url RTMP HD","DatumL","Url History","Geo","neu"],
-                    elif (atuple[0] == 'X'):
-                        self._init_record()
-                        # behaviour of the update list
-                        if (len(atuple[1][0]) > 0):
-                            sender = atuple[1][0]
-                        else:
-                            atuple[1][0] = sender
-                        # same for thema
-                        if (len(atuple[1][1]) > 0):
-                            thema = atuple[1][1]
-                        else:
-                            atuple[1][1] = thema
-                        ##
-                        self._add_value( atuple[1] )
-                        self._end_record(records)
-                        if self.count % 100 == 0 and self.monitor.abort_requested():
-                            # kodi is shutting down. Close all
-                            self._update_end(full, 'ABORTED')
-                            self.notifier.close_update_progress()
-                            return True
-                    
+            flsm = 0
+            flts = 0
+            ####
+            flsm = 0
+            sender = ""
+            thema = ""
+            self.notifier.show_update_progress()
+            (self.tot_chn, self.tot_shw, self.tot_mov) = self._update_start(full)
+            
+            
+            ufp = UpdateFileParser.UpdateFileParser(self.logger, 512000, destfile)
+            ufp.init()
+            fileHeader = ufp.next(',"X":');
+            ### META
+            ## {"Filmliste":["30.08.2020, 11:13","30.08.2020, 09:13","3","MSearch [Vers.: 3.1.139]","d93c9794acaf3e482d42c24e513f78a8"],"Filmliste":["Sender","Thema","Titel","Datum","Zeit","Dauer","Größe [MB]","Beschreibung","Url","Website","Url Untertitel","Url RTMP","Url Klein","Url RTMP Klein","Url HD","Url RTMP HD","DatumL","Url History","Geo","neu"]
+            # this is the timestamp of this database update
+            #value = jsonDoc['Filmliste'][0]
+            value = fileHeader[15:32]
+            #self.logger.info( 'update date ' + value )
+            try:
+                fldt = datetime.datetime.strptime(
+                    value.strip(), "%d.%m.%Y, %H:%M")
+                flts = int(time.mktime(fldt.timetuple()))
+                self.database.update_status(filmupdate=flts)
+                self.logger.info(
+                    'Filmliste dated {}', value.strip())
+            except TypeError:
+                # pylint: disable=line-too-long
+                # SEE: https://forum.kodi.tv/showthread.php?tid=112916&pid=1214507#pid1214507
+                # Wonderful. His name is also Leopold
+                try:
+                    flts = int(time.mktime(time.strptime(
+                        value.strip(), "%d.%m.%Y, %H:%M")))
+                    self.database.update_status(
+                        filmupdate=flts)
+                    self.logger.info(
+                        'Filmliste dated {}', value.strip())
+                    # pylint: disable=broad-except
+                except Exception as err:
+                    # If the universe hates us...
+                    self.logger.debug(
+                        'Could not determine date "{}" of filmliste: {}', value.strip(), err)
+            except ValueError as err:
+                pass            
+
+            ###
+            while (True):
+                aPart = ufp.next(',"X":');
+                if (len(aPart) == 0):
+                    break;
+                ##
+                aPart = '{"X":' + aPart;
+                if (not(aPart.endswith("}"))):
+                    aPart = aPart + "}";
+                ##
+                jsonDoc = json.loads(aPart)
+                jsonDoc = jsonDoc['X']
+                self._init_record()
+                # behaviour of the update list
+                if (len(jsonDoc[0]) > 0):
+                    sender = jsonDoc[0]
+                else:
+                    jsonDoc[0] = sender
+                # same for thema
+                if (len(jsonDoc[1]) > 0):
+                    thema = jsonDoc[1]
+                else:
+                    jsonDoc[1] = thema
+                ##
+                self._add_value( jsonDoc )
+                self._end_record(records)
+                if self.count % 100 == 0 and self.monitor.abort_requested():
+                    # kodi is shutting down. Close all
+                    self._update_end(full, 'ABORTED')
+                    self.notifier.close_update_progress()
+                    return True                
+
+            ufp.close()        
             self._update_end(full, 'IDLE')
             self.logger.info('{} records processed',self.count)
             self.logger.info(

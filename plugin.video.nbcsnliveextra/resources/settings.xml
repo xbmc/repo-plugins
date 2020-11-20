@@ -2,16 +2,16 @@
 <settings>
   <!-- General -->
   <category label="30200">
-    <setting id="clear_data" type="bool" label="30210" default="false"/>
+    <setting id="deauthorize" type="action" label="30210" action="RunPlugin(plugin://plugin.video.nbcsnliveextra/?url=junk&amp;mode=999)" option="close" />
     <setting id="free_only" type="bool" label="30220" default="false" />
   </category>
   <!-- Visual -->
-  <category label="30300">
-    <setting id="quality" type="labelenum" label="30310" values="SD (508 kbit/s)|SD (906 kbit/s)|SD (1296 kbit/s)|SD (1937 kbit/s)|SD (2947 kbit/s)|HD (5172 kbit/s)|HD (8801 kbit/s)|None" default="None" />
-    <setting id="cdn" type="enum" label="30320" values="East|West" default="0" />
-    <setting id="play_main" type="bool" label="30230" default="true" />
-    <setting id="play_best" type="bool" label="30240" default="true" />
-  </category>
+<!--  <category label="30300">-->
+<!--    &lt;!&ndash;<setting id="quality" type="labelenum" label="30310" values="SD (508 kbit/s)|SD (906 kbit/s)|SD (1296 kbit/s)|SD (1937 kbit/s)|SD (2947 kbit/s)|HD (5172 kbit/s)|HD (8801 kbit/s)|None" default="None" /> &ndash;&gt;-->
+<!--&lt;!&ndash;    <setting id="cdn" type="enum" label="30320" values="East|West" default="0" />&ndash;&gt;-->
+<!--    &lt;!&ndash; <setting id="play_main" type="bool" label="30230" default="true" /> &ndash;&gt;-->
+<!--    <setting id="play_best" type="bool" label="30240" default="true" />-->
+<!--  </category>-->
   <category label="30400">
     <setting type="lsep" label="Filter by Sport / Category"/>
     <!--<setting id="filter" type="select" label="410" default="Show All" values="Show All|NFL|Premier League|NASCAR|NHL|Golf|PGA|Notre Dame|College Football|F1|NBA|MLB|Rugby|Horse racing|Tennis|IndyCar|Pro Motocross|Olympic Sports|CSN Bay Area|CSN California|CSN Chicago|CSN Mid-Atlantic|CSN New England|CSN Philadelphia"  /> -->

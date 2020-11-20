@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="2018.2.10" provider-name="eracknaphobia">
+<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="2020.11.6" provider-name="eracknaphobia">
   <requires>
-   <import addon="xbmc.python" version="2.19.0"/>
-   <import addon="script.module.simplejson" version="3.3.0"/>
+    <import addon="xbmc.python" version="2.19.0"/>
+    <import addon="script.module.simplejson" />
+    <import addon="script.module.adobepass" />
+    <import addon="script.module.requests" />
+    <import addon="script.module.kodi-six" />
   </requires>
   <extension point="xbmc.python.pluginsource" library="nbcsn.py">
         <provides>video</provides>
@@ -10,15 +13,18 @@
 
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary lang="en">Watch NBCSN Live Extra</summary>
-    <description lang="en">NBC Sports Live Extra is a service that allows you to watch NBC Sports coverage of live events from NBC and NBCSports Network</description>
-    <disclaimer lang="en"></disclaimer>
+    <summary lang="en_GB">Watch NBCSN Live Extra</summary>
+    <description lang="en_GB">NBC Sports Live Extra is a service that allows you to watch NBC Sports coverage of live events from NBC and NBCSports Network</description>
+    <news>
+        - Updates for python 3 compatibility
+    </news>
     <language>en</language>
     <platform>all</platform>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <license>GPL-2.0-or-later</license>
     <forum>http://forum.kodi.tv/showthread.php?tid=207159</forum>
-    <website></website>
-    <email></email>
-    <source></source>
+    <assets>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
+    </assets>
   </extension>
 </addon>

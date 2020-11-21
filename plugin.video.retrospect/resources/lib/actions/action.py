@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 CHANNEL_FAVOURITES = "favourites"           # : Used to show favorites for a channel
 ALL_FAVOURITES = "allfavourites"            # : Used to show all favorites

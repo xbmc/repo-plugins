@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 __all__ = ["addon", "addonsettings", "backtothefuture", "channelinfo", "chn_class", "cloaker",
            "contextmenu", "envcontroller", "environments", "favourites", "initializer", "locker",

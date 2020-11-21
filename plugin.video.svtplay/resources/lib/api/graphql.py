@@ -113,6 +113,9 @@ class GraphQL:
         continue
       for item in content["items"]:
         item = item["item"]
+        season_title = ""
+        if content["type"] == "Season" and content["name"] and item["positionInSeason"]:
+          season_title = content["name"]
         title = item["name"]
         video_id = item["urls"]["svtplay"]
         geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
@@ -122,7 +125,7 @@ class GraphQL:
           "plot" : item["longDescription"],
           "duration" : item.get("duration", 0)
         }
-        video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info, fanart)
+        video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info, fanart, season_title)
         video_items.append(video_item)
     return video_items
 

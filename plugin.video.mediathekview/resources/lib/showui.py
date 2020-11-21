@@ -45,6 +45,7 @@ class ShowUI(Show):
         self.querychannelid = int(channelid)
         for method in self.sortmethods:
             xbmcplugin.addSortMethod(self.handle, method)
+        xbmcplugin.setContent(self.handle, '')
 
     def add(self, altname=None):
         """

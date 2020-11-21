@@ -28,7 +28,7 @@ verändernden Webseiten der Mediatheken der Öffentlich Rechtlichen durchsuchen.
 
 Für Fragen und Anregungen zu diesem Addon steht das [deutschsprachige Forum][1]
 zur Verfügung. Fehlermeldungen und Vorschläge für neue Features können auch
-direkt als [GitHub Issue][3] gemeldet werden. Der Quelltext steht ebenfalls in
+direkt als [GitHub Issue][3] gemeldet werden. Der Quelltext steht ebenfalls auf 
 [GitHub][4] zur Verfügung.
 
 
@@ -46,11 +46,11 @@ Funktionsweise
 --------------
 
 Das Addon lädt die Datenbank von MediathekView herunter und importiert diese
-entweder in einer lokalen SQLite Datenbank, oder wahlweise in einer lokalen
-oder entfernten MySQL Datenbank (zur Benutzung durch mehrere Kodi-Clients).
+entweder in eine lokale SQLite Datenbank, oder wahlweise in eine lokale
+oder entfernte MySQL Datenbank (zur Benutzung durch mehrere Kodi-Clients).
 Während der Laufzeit von Kodi werden in einem konfigurierbaren Intervall
 (Standard: 2 Stunden) die Differenzdateien von MediathekView heruntergeladen
-und in die Datenbank integriert. Spätestens beim nächsten Kalendertag nach
+und in die Datenbank integriert. Spätestens am nächsten Kalendertag nach
 dem letzten Update wird die Aktualisierung wieder mittels des vollständigen
 Updates von Mediathekview ausgeführt.
 
@@ -81,7 +81,7 @@ Funktionsweise der Aktualisierungsmethoden
 
 Das Addon unterstützt 5 verschiedene Aktualisierungsmethoden:
 * **Zeitgesteuert:** Bei dieser Methode erfolgt die Aktualisierung ein mal
-pro eingestelltem Zeitintervall (Standard: 2 Stunden).  Die erste
+pro eingestelltem Zeitintervall (Standard: 2 Stunden). Die erste
 Aktualisierung eines Kalendertages ist eine vollständige Aktualisierung, alle
 weiteren sind Differenz-Aktualisierungen.
 * **Automatisch (Standard):** Bei dieser Methode wird die Aktualisierung der
@@ -120,8 +120,8 @@ die Installation eines solchen anbieten.
 
 Ist das Addon so konfiguriert, dass eine MySQL/MariaDB Datenbank genutzt werden
 soll, erzeugt dieses die Datenbank selbsttätig, falls diese auf dem
-Datenbankserver noch nicht existiert. Der angegebene Datenabankbenutzer muss
-dafür allerdings auch die Rechte besitzen.
+Datenbankserver noch nicht existiert. Der angegebene Datenbankbenutzer muss
+dafür allerdings auch die Rechte dafür besitzen.
 
 Die Verbindung zur Datenbank kann in den Addon-Einstellungen im Abschnitt
 _"Datenbank Einstellungen"_ vorgenommen werden.
@@ -138,20 +138,20 @@ Standalone Datenbank Update Prozess
 
 Um die Datenbankaktualisierung von der Kommandozeile auszuführen, muss das
 Zielsystem einen python-Interpreter bereitstellen. Des weiteren müssen noch
-folgende Bibliotheke zur Verfügung stehen, sowie das Entpackprogramm
+folgende Bibliotheken zur Verfügung stehen, sowie das Entpackprogramm
 'xz' (optional):
 
 * mysql-connector
 
-Die Installation dieser Bibliotheken erfolgt durch Eingabe folgender Befehle:
+Die Installation dieser Bibliotheken unter Debian/Ubuntu erfolgt durch Eingabe folgender Befehle:
 
 ````
 Python 2:
 sudo apt install python-pip
-pip install mysql-connector==2.2.9
+pip install mysql-connector-python
 Python 3:
 sudo apt install python3-pip
-pip3 install mysql-connector==2.2.9
+pip3 install mysql-connector-python
 ````
 
 Das Aktualisierungsprogramm heisst `mvupdate` (`mvupdate3` für Python 3) und liegt im Hauptverzeichnis
@@ -321,10 +321,10 @@ The required library can be installed via pip:
 ````
 Python 2:
 sudo apt install python-pip
-pip install mysql-connector==2.2.9
+pip install mysql-connector-python
 Python 3:
 sudo apt install python3-pip
-pip3 install mysql-connector==2.2.9
+pip3 install mysql-connector-python
 ````
 
 The update program is called `mvupdate` (`mvupdate3` for Python 3) and is located in the root directory
@@ -492,10 +492,10 @@ QUeste potranno essere istallate mediante il programma pip:
 ````
 Python 2:
 sudo apt install python-pip
-pip install mysql-connector==2.2.9
+pip install mysql-connector-python
 Python 3:
 sudo apt install python3-pip
-pip3 install mysql-connector==2.2.9
+pip3 install mysql-connector-python
 ````
 
 Il programma di aggiornamento si chiama `mvupdate` (`mvupdate3` per Python 3) e si trova nella directory

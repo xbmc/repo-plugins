@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mediathekview"
 	name="MediathekView"
-	version="0.6.4+matrix.1"
+	version="0.6.6+matrix.1"
 	provider-name="MediathekView.de, Leo Moll">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
@@ -14,7 +14,7 @@
 	</extension>
 	<extension
 		point="xbmc.service"
-		library="service.py"/>
+		library="service.py" />
 	<extension point="xbmc.addon.metadata">
 		<summary lang="de_DE">Öffentlich-Rechtliche Mediatheken</summary>
 		<summary lang="en_GB">Public service video-platforms</summary>
@@ -22,7 +22,15 @@
 		<description lang="de_DE">Ermöglicht den Zugriff auf fast alle deutschen Mediatheken der öffentlich Rechtlichen basierend auf der Datenbank von MediathekView.de</description>
 		<description lang="en_GB">Gives access to most video-platforms from German public service broadcasters using the database of MediathekView.de</description>
 		<description lang="it_IT">Fornisce l'accesso a gran parte delle piattaforme video operate dalle emittenti pubbliche tedesche usando la banca dati di MediathekView.de</description>
-		<news>v.0.6.4 (2020-05-26):
+		<news>
+v.0.6.6 (2020-11-20):
+- [fix] #175 fix for airdate 1969 (update mySql DB structure)
+- [other] #173 delay service startup by 10 sec to avoid error message 
+- [other] #171 / #170 improved memory usage
+- [new] #169 new sort order (airdate desc)
+- [new] define content type in settings to enable more skins
+- [new] Bulk insert for mySQL / update to latest mySql driver
+v.0.6.4 (2020-05-26):
 [fix]
 - #143 ijson issue on FireTvStick
 - #136 MySql caching_sha2_password issue
@@ -44,10 +52,6 @@
 - Python 3 compat
 - Kodi loglevel change (notice to info)
 - Add User Agent String for all request to fix issue with ORF
-v.0.6.2 (2019-03-10):
-- [fix] Implemented Workaround for broken gzip module support in Kodi 18 running on Android
-- [fix] Fixed crash in mvupdate tool when invoked with MySQL support
-- [new] Improved compatibility with future Kodi versions with Python 3 support
 </news>
 		<platform>all</platform>
 		<language>de fr</language>

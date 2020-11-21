@@ -9,6 +9,7 @@ SPDX-License-Identifier: MIT
 import time
 # pylint: disable=import-error
 import xbmc
+import xbmcvfs
 import xbmcaddon
 import resources.lib.mvutils as mvutils
 
@@ -26,7 +27,12 @@ class Settings(object):
         """ Loads the settings of the addon """
         # pylint: disable=attribute-defined-outside-init
         addon = xbmcaddon.Addon()
-        self.datapath = mvutils.py2_decode(xbmc.translatePath(addon.getAddonInfo('profile')))  ### TODO .decode('utf-8')
+        ## TODO fix me
+        try:
+            self.datapath = mvutils.py2_decode(xbmc.translatePath(addon.getAddonInfo('profile'))) 
+        except Exception as err:
+            self.datapath = mvutils.py2_decode(xbmcvfs.translatePath(addon.getAddonInfo('profile')))
+        ##
         self.firstrun = addon.getSetting('firstrun') == 'true'
         # general
         self.preferhd = addon.getSetting('quality') == 'true'
@@ -61,6 +67,16 @@ class Settings(object):
         self.reviewname = addon.getSetting('reviewname') == 'true'
         self.downloadsrt = addon.getSetting('downloadsrt') == 'true'
         self.makenfo = int(addon.getSetting('makenfo'))
+        ##
+        self.contentType = ''
+        if addon.getSetting('contentType') == '1':
+            self.contentType = 'videos'
+        elif addon.getSetting('contentType') == '2':
+            self.contentType = 'movies'
+        elif addon.getSetting('contentType') == '3':
+            self.contentType = 'episodes'
+        elif addon.getSetting('contentType') == '4':
+            self.contentType = 'tvshows'
         # update stuff from 0.4.3
         if not self.downloadpathep:
             self.downloadpathep = addon.getSetting('downloadpath')

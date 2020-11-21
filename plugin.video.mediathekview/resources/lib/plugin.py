@@ -49,6 +49,7 @@ class MediathekViewPlugin(KodiPlugin):
 
     def show_main_menu(self):
         """ Creates the main menu of the plugin """
+        xbmcplugin.setContent(self.addon_handle, '')
         # Search
         self.add_folder_item(
             30901,
@@ -113,6 +114,7 @@ class MediathekViewPlugin(KodiPlugin):
                 are performed both in show title and description.
                 Default is `False`
         """
+        xbmcplugin.setContent(self.addon_handle, '')
         self.add_folder_item(
             30931,
             {'mode': "newsearch", 'extendedsearch': extendedsearch},

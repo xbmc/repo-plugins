@@ -54,6 +54,9 @@ class MediathekViewService(KodiService):
     def run(self):
         """ Execution of the service """
         self.info('Starting up... (instance id: {})', self.monitor.instance_id)
+        # Wait for Kodi to retrieve network
+        self.monitor.wait_for_abort(10)
+        #
         while not self.monitor.abort_requested():
             if self.settings.reload() is True:
                 # database configuration changed

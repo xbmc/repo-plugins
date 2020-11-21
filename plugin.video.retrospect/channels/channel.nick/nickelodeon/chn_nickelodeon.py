@@ -1,5 +1,5 @@
 # coding=utf-8  # NOSONAR
-# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from resources.lib import chn_class
 from resources.lib.helpers.datehelper import DateHelper

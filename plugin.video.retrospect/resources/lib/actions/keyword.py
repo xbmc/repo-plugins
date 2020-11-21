@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 PICKLE = "pickle"                       # : Used for the pickle item
 ACTION = "action"                       # : Used for specifying the action

@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# SPDX-License-Identifier: GPL-3.0-or-later
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.jsonhelper import JsonHelper

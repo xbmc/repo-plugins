@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
 import pytz
@@ -467,23 +467,26 @@ class Channel(chn_class.Channel):
             live_streams = {
                 "3FM Live": {
                     "url": "http://e.omroep.nl/metadata/LI_3FM_300881",
-                    "thumb": "http://www.3fm.nl/data/thumb/abc_media_image/113000/113453/w210.1b764.jpg"
+                    "thumb": self.get_image_location("3fm-artwork.jpg")
                 },
                 "Radio 2 Live": {
                     "url": "http://e.omroep.nl/metadata/LI_RADIO2_300879",
-                    "thumb": self.get_image_location("radio2.png")
+                    "thumb": self.get_image_location("radio2image.jpg")
                     # "thumb": "http://www.radio2.nl/image/rm/48254/NPO_RD2_Logo_RGB_1200dpi.jpg?width=848&height=477"
-                },
-                "Radio 6 Live": {
-                    "url": "http://e.omroep.nl/metadata/LI_RADIO6_300883",
-                    # "thumb": "http://www.radio6.nl/data/thumb/abc_media_image/3000/3882/w500.1daa0.png"
-                    "thumb": self.get_image_location("radio6.png")
                 },
                 "Radio 1 Live": {
                     "url": "http://e.omroep.nl/metadata/LI_RADIO1_300877",
                     # "thumb": "http://statischecontent.nl/img/tweederdevideo/1e7db3df-030a-4e5a-b2a2-840bd0fd8242.jpg"
-                    "thumb": self.get_image_location("radio1.png")
+                    "thumb": self.get_image_location("radio1image.jpg")
                 },
+                "Radio 4 Live": {
+                    "url": "http://e.omroep.nl/metadata/LI_RA4_698901",
+                    "thumb": self.get_image_location("radio4image.jpg")
+                },
+                "FunX": {
+                    "url": "http://e.omroep.nl/metadata/LI_3FM_603983",
+                    "thumb": self.get_image_location("funx.jpg")
+                }
             }
 
             for stream in live_streams:

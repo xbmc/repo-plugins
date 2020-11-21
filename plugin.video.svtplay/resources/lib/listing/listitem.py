@@ -34,7 +34,8 @@ class VideoItem(PlayItem):
     """
     A video list item.
     """
-    def __init__(self, title, video_id, thumbnail, geo_restricted, info={}, fanart=""):
+    def __init__(self, title, video_id, thumbnail, geo_restricted, info={}, fanart="", season_title=""):
+        self.season_title = season_title
         super(VideoItem, self).__init__(title, video_id, PlayItem.VIDEO_ITEM, thumbnail, geo_restricted, info, fanart)
 
 class ShowItem(PlayItem):

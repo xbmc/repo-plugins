@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.regexer import Regexer

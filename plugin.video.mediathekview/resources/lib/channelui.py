@@ -3,10 +3,11 @@
 The channel model UI module
 
 Copyright 2017-2018, Leo Moll and Dominik Schlösser
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 
 # pylint: disable=import-error
+import os
 import xbmcgui
 import xbmcplugin
 
@@ -44,6 +45,7 @@ class ChannelUI(Channel):
         """
         for method in self.sortmethods:
             xbmcplugin.addSortMethod(self.handle, method)
+        xbmcplugin.setContent(self.handle, '')
 
     def add(self, altname=None):
         """
@@ -56,8 +58,12 @@ class ChannelUI(Channel):
             self.channel, self.count, )
         list_item = xbmcgui.ListItem(
             label=resultingname if altname is None else altname)
-        icon = 'special://home/addons/' + self.plugin.addon_id + \
-            '/resources/icons/' + self.channel.lower() + '-m.png'
+        icon = os.path.join(
+            self.plugin.path,
+            'resources',
+            'icons',
+            self.channel.lower() + '-m.png'
+        )
         list_item.setArt({
             'thumb': icon,
             'icon': icon

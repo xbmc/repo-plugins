@@ -2,7 +2,7 @@
 Management of recent searches
 
 Copyright (c) 2018, Leo Moll
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 
 import os

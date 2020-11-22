@@ -3,7 +3,7 @@
 The addon settings module
 
 Copyright 2017-2018, Leo Moll and Dominik Schlösser
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 # -- Imports ------------------------------------------------
 import time
@@ -61,6 +61,16 @@ class Settings(object):
         self.reviewname = addon.getSetting('reviewname') == 'true'
         self.downloadsrt = addon.getSetting('downloadsrt') == 'true'
         self.makenfo = int(addon.getSetting('makenfo'))
+        ##
+        self.contentType = ''
+        if addon.getSetting('contentType') == '1':
+            self.contentType = 'videos'
+        elif addon.getSetting('contentType') == '2':
+            self.contentType = 'movies'
+        elif addon.getSetting('contentType') == '3':
+            self.contentType = 'episodes'
+        elif addon.getSetting('contentType') == '4':
+            self.contentType = 'tvshows'
         # update stuff from 0.4.3
         if not self.downloadpathep:
             self.downloadpathep = addon.getSetting('downloadpath')

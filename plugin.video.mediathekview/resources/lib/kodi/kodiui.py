@@ -3,7 +3,7 @@
 The Kodi addons module
 
 Copyright 2017-2018, Leo Moll and Dominik Schlösser
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 
 # pylint: disable=import-error

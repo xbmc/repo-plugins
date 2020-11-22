@@ -3,7 +3,7 @@
 UI Notifier module
 
 Copyright (c) 2017-2018, Leo Moll
-Licensed under MIT License
+SPDX-License-Identifier: MIT
 """
 
 # -- Imports ------------------------------------------------

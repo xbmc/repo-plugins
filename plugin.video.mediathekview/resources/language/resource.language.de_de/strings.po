@@ -90,6 +90,30 @@ msgctxt "#30124"
 msgid "Sort by duration"
 msgstr "Dauer"
 
+msgctxt "#30130"
+msgid "Content Type Filmliste"
+msgstr "Content Type Filmliste"
+
+msgctxt "#30131"
+msgid "none"
+msgstr "none"
+
+msgctxt "#30132"
+msgid "videos"
+msgstr "videos"
+
+msgctxt "#30133"
+msgid "movies"
+msgstr "movies"
+
+msgctxt "#30134"
+msgid "episodes"
+msgstr "episodes"
+
+msgctxt "#30135"
+msgid "tvshows"
+msgstr "tvshows"
+
 msgctxt "#30171"
 msgid "Aired Date"
 msgstr "Sendedatum"
@@ -97,6 +121,10 @@ msgstr "Sendedatum"
 msgctxt "#30172"
 msgid "Added to Database"
 msgstr "Hinzugefügt zur Datenbank"
+
+msgctxt "#30173"
+msgid "Default"
+msgstr "Default"
 
 # Settings Page 2
 msgctxt "#30210"
@@ -462,5 +490,5 @@ msgid "Cannot retrieve Movie Information"
 msgstr "Es war nicht möglich die Sendung zu finden"
 
 msgctxt "#30990"
-msgid "Airdate: [COLOR chartreuse]{0:s}[/COLOR][CR][CR]"
-msgstr "Ausgestrahlt: [COLOR chartreuse]{0:s}[/COLOR][CR][CR]"
+msgid "Airdate: {0:s}[CR][CR]"
+msgstr "Ausgestrahlt: {0:s}[CR][CR]"

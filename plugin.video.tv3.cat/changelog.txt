@@ -1,7 +1,10 @@
-v1.4.6
+﻿v1.4.7
+- Fixed direct channels urls
+
+1.4.6
 - Fixed server changes
 
-v1.4.5
+1.4.5
 - Fixed server changes
 
 v1.4.4
@@ -30,7 +33,6 @@ v1.3.9
 
 v1.3.8
 - Corregits canvis al website
-
 - Fixed website changes
 
 v1.3.7

@@ -1,3 +1,6 @@
+v2.3.1 (2020-11-24) Omer Murat Yildirim <omermuratyildirim@gmail.com>>
+    * Video resume improvements and bug fixes
+
 v2.3.0 (2019-08-05) Cenk Alti <cenk@put.io>
     * Add support for loading all available subtitles
 

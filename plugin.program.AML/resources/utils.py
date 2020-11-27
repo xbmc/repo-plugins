@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Advanced MAME Launcher miscellaneous functions.
-
 # Copyright (c) 2016-2020 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -13,526 +11,90 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
 
-# --- Python standard library ---
+# Advanced MAME Launcher Kodi utility functions.
+#
+# The idea if this module is to share it between AEL and AML.
+#
+# All functions that depends on Kodi modules are here. This includes IO functions
+# and logging functions.
+#
+# Low-level filesystem and IO functions are here. disk_IO module contains high level functions.
+#
+# When Kodi modules are not available replaces can be provided. This is useful to use addon
+# modules with CPython.
+#
+# This module must NOT include any other addon modules to avoid circular dependencies. The
+# only exception to this rule is the module .constants. This module is virtually included
+# by every other addon module.
+#
+# How to report errors on the low-level filesystem functions??? See the end of the file.
+
+# --- Be prepared for the future ---
 from __future__ import unicode_literals
-import sys
-import os
-import shutil
-import time
-import random
-import hashlib
-import urlparse
-import re
-import string
-import fnmatch
+from __future__ import division
+
+# --- Addon modules ---
+from .constants import *
 
 # --- Kodi modules ---
-# >> FileName class uses xbmc.translatePath()
 try:
     import xbmc
+    import xbmcgui
     KODI_RUNTIME_AVAILABLE_UTILS = True
 except:
     KODI_RUNTIME_AVAILABLE_UTILS = False
 
-# --- AEL modules ---
-# This module must only include utils_kodi.py to avoid circular dependencies.
-from .utils_kodi import *
+# --- Python standard library ---
+# Check what modules are really used and remove not used ones.
+import fnmatch
+import io
+import json
+import math
+import os
+import sys
+import threading
+import time
+
+# --- Determine interpreter running platform ---
+# Cache all possible platform values in global variables for maximum speed.
+# See http://stackoverflow.com/questions/446209/possible-values-from-sys-platform
+cached_sys_platform = sys.platform
+def _aux_is_android():
+    if not cached_sys_platform.startswith('linux'): return False
+    return 'ANDROID_ROOT' in os.environ or 'ANDROID_DATA' in os.environ or 'XBMC_ANDROID_APK' in os.environ
+
+is_windows_bool = cached_sys_platform == 'win32' or cached_sys_platform == 'win64' or cached_sys_platform == 'cygwin'
+is_osx_bool = cached_sys_platform.startswith('darwin')
+is_android_bool = _aux_is_android()
+is_linux_bool = cached_sys_platform.startswith('linux') and not is_android_bool
+
+def is_windows(): return is_windows_bool
+
+def is_osx(): return is_osx_bool
+
+def is_android(): return is_android_bool
+
+def is_linux(): return is_linux_bool
 
 # -------------------------------------------------------------------------------------------------
-# Strings and text
-# -------------------------------------------------------------------------------------------------
+# Filesystem helper class.
+# The addon must not use any Python IO functions, only this class. This class can be changed
+# to use Kodi IO functions or Python IO functions.
 #
-# If max_length == -1 do nothing (no length limit).
-#
-def text_limit_string(string, max_length):
-  if max_length > 5 and len(string) > max_length:
-    string = string[0:max_length-3] + '...'
-
-  return string
-
-#
-# Given a Category/Launcher name clean it so the cleaned srt can be used as a filename.
-#  1) Convert any non-printable character into '_'
-#  2) Convert spaces ' ' into '_'
-#
-def text_title_to_filename_str(title_str):
-    cleaned_str_1 = ''.join([i if i in string.printable else '_' for i in title_str])
-    cleaned_str_2 = cleaned_str_1.replace(' ', '_')
-
-    return cleaned_str_2
-
-#
-# Writes a XML text tag line, indented 2 spaces by default.
-# Both tag_name and tag_text must be Unicode strings.
-# Returns an Unicode string.
-#
-def XML_text(tag_name, tag_text, num_spaces = 2):
-    if tag_text:
-        tag_text = text_escape_XML(tag_text)
-        line = '{0}<{1}>{2}</{3}>\n'.format(' ' * num_spaces, tag_name, tag_text, tag_name)
-    else:
-        # >> Empty tag    
-        line = '{0}<{1} />\n'.format(' ' * num_spaces, tag_name)
-
-    return line
-
-#
-# First row            column aligment 'right' or 'left'
-# Second row           column titles
-# Third and next rows  table data
-#
-# Returns a list of strings that must be joined with '\n'.join()
-#
-def text_render_table_str(table_str):
-    rows = len(table_str)
-    cols = len(table_str[0])
-    table_str_list = []
-    col_sizes = text_get_table_str_col_sizes(table_str, rows, cols)
-    col_padding = table_str[0]
-
-    # --- Table header ---
-    row_str = ''
-    for j in range(cols):
-        if j < cols - 1:
-            row_str += text_print_padded_left(table_str[1][j], col_sizes[j]) + '  '
-        else:
-            row_str += text_print_padded_left(table_str[1][j], col_sizes[j])
-    table_str_list.append(row_str)
-    # >> Table -----
-    total_size = sum(col_sizes) + 2*(cols-1)
-    table_str_list.append('{0}'.format('-' * total_size))
-
-    # --- Data rows ---
-    for i in range(2, rows):
-        row_str = ''
-        for j in range(cols):
-            if j < cols - 1:
-                if col_padding[j] == 'right':
-                    row_str += text_print_padded_right(table_str[i][j], col_sizes[j]) + '  '
-                else:
-                    row_str += text_print_padded_left(table_str[i][j], col_sizes[j]) + '  '
-            else:
-                if col_padding[j] == 'right':
-                    row_str += text_print_padded_right(table_str[i][j], col_sizes[j])
-                else:
-                    row_str += text_print_padded_left(table_str[i][j], col_sizes[j])
-        table_str_list.append(row_str)
-
-    return table_str_list
-
-#
-# First row             column aligment 'right' or 'left'
-# Second and next rows  table data
-#
-def text_render_table_str_NO_HEADER(table_str):
-    rows = len(table_str)
-    cols = len(table_str[0])
-    table_str_list = []
-    # >> Ignore row 0 when computing sizes.
-    col_sizes = text_get_table_str_col_sizes(table_str, rows, cols)
-    col_padding = table_str[0]
-
-    # --- Data rows ---
-    for i in range(1, rows):
-        row_str = ''
-        for j in range(cols):
-            if j < cols - 1:
-                if col_padding[j] == 'right':
-                    row_str += text_print_padded_right(table_str[i][j], col_sizes[j]) + '  '
-                else:
-                    row_str += text_print_padded_left(table_str[i][j], col_sizes[j]) + '  '
-            else:
-                if col_padding[j] == 'right':
-                    row_str += text_print_padded_right(table_str[i][j], col_sizes[j])
-                else:
-                    row_str += text_print_padded_left(table_str[i][j], col_sizes[j])
-        table_str_list.append(row_str)
-
-    return table_str_list
-
-#
-# Removed Kodi colour tags before computing size (substitute by ''):
-#   A) [COLOR skyblue]
-#   B) [/COLOR]
-#
-def text_get_table_str_col_sizes(table_str, rows, cols):
-    col_sizes = [0] * cols
-    for j in range(cols):
-        col_max_size = 0
-        for i in range(1, rows):
-            cell_str = re.sub(r'\[COLOR \w+?\]', '', table_str[i][j])
-            cell_str = re.sub(r'\[/COLOR\]', '', cell_str)
-            str_size = len('{0}'.format(cell_str))
-            if str_size > col_max_size: col_max_size = str_size
-        col_sizes[j] = col_max_size
-
-    return col_sizes
-
-def text_str_list_size(str_list):
-    max_str_size = 0
-    for str_item in str_list:
-        str_size = len('{0}'.format(str_item))
-        if str_size > max_str_size: max_str_size = str_size
-
-    return max_str_size
-
-def text_str_dic_max_size(dictionary_list, dic_key, title_str = ''):
-    max_str_size = 0
-    for item in dictionary_list:
-        str_size = len('{0}'.format(item[dic_key]))
-        if str_size > max_str_size: max_str_size = str_size
-    if title_str:
-        str_size = len(title_str)
-        if str_size > max_str_size: max_str_size = str_size
-
-    return max_str_size
-
-def text_print_padded_left(str, str_max_size):
-    formatted_str = '{0}'.format(str)
-    padded_str =  formatted_str + ' ' * (str_max_size - len(formatted_str))
-
-    return padded_str
-
-def text_print_padded_right(str, str_max_size):
-    formatted_str = '{0}'.format(str)
-    padded_str = ' ' * (str_max_size - len(formatted_str)) + formatted_str
-
-    return padded_str
-
-def text_remove_color_tags_slist(slist):
-    # Iterate list of strings and remove the following tags
-    # 1) [COLOR colorname]
-    # 2) [/COLOR]
-    #
-    # Modifying list already seen is OK when iterating the list. Do not change the size of the
-    # list when iterating.
-    for i, s in enumerate(slist):
-        modified = False
-        s_temp = s
-
-        # >> Remove [COLOR colorname]
-        m = re.search('(\[COLOR \w+?\])', s_temp)
-        if m:
-            s_temp = s_temp.replace(m.group(1), '')
-            modified = True
-
-        # >> Remove [/COLOR]
-        if s_temp.find('[/COLOR]') >= 0:
-            s_temp = s_temp.replace('[/COLOR]', '')
-            modified = True
-
-        # >> Update list
-        if modified:
-            slist[i] = s_temp
-
-# Some XML encoding of special characters:
-#   {'\n': '&#10;', '\r': '&#13;', '\t':'&#9;'}
-#
-# See http://stackoverflow.com/questions/1091945/what-characters-do-i-need-to-escape-in-xml-documents
-# See https://wiki.python.org/moin/EscapingXml
-# See https://github.com/python/cpython/blob/master/Lib/xml/sax/saxutils.py
-# See http://stackoverflow.com/questions/2265966/xml-carriage-return-encoding
-#
-def text_escape_XML(data_str):
-    # Ampersand MUST BE replaced FIRST
-    data_str = data_str.replace('&', '&amp;')
-    data_str = data_str.replace('>', '&gt;')
-    data_str = data_str.replace('<', '&lt;')
-
-    data_str = data_str.replace("'", '&apos;')
-    data_str = data_str.replace('"', '&quot;')
-    
-    # --- Unprintable characters ---
-    data_str = data_str.replace('\n', '&#10;')
-    data_str = data_str.replace('\r', '&#13;')
-    data_str = data_str.replace('\t', '&#9;')
-
-    return data_str
-
-def text_unescape_XML(data_str):
-    data_str = data_str.replace('&quot;', '"')
-    data_str = data_str.replace('&apos;', "'")
-
-    data_str = data_str.replace('&lt;', '<')
-    data_str = data_str.replace('&gt;', '>')
-    # Ampersand MUST BE replaced LAST
-    data_str = data_str.replace('&amp;', '&')
-    
-    # --- Unprintable characters ---
-    data_str = data_str.replace('&#10;', '\n')
-    data_str = data_str.replace('&#13;', '\r')
-    data_str = data_str.replace('&#9;', '\t')
-    
-    return data_str
-
-#
-# http://www.w3schools.com/tags/ref_urlencode.asp
-#
-def text_decode_HTML(s):
-    # >> Must be done first
-    s = s.replace('%25', '%')
-    
-    s = s.replace('%20', ' ')
-    s = s.replace('%23', '#')
-    s = s.replace('%26', '&')
-    s = s.replace('%28', '(')
-    s = s.replace('%29', ')')
-    s = s.replace('%2C', ',')
-    s = s.replace('%2F', '/')
-    s = s.replace('%3B', ';')
-    s = s.replace('%3A', ':')
-    s = s.replace('%3D', '=')
-    s = s.replace('%3F', '?')
-
-    return s
-
-def text_unescape_HTML(s):
-    # >> Replace single HTML characters by their Unicode equivalent
-    s = s.replace('<br>',   '\n')
-    s = s.replace('<br/>',  '\n')
-    s = s.replace('<br />', '\n')
-    s = s.replace('&lt;',   '<')
-    s = s.replace('&gt;',   '>')
-    s = s.replace('&quot;', '"')
-    s = s.replace('&nbsp;', ' ')
-    s = s.replace('&copy;', '©')
-    s = s.replace('&amp;',  '&') # >> Must be done last
-
-    # >> Complex HTML entities. Single HTML chars must be already replaced.
-    s = s.replace('&#039;', "'")
-    s = s.replace('&#149;', "•")
-    s = s.replace('&#x22;', '"')
-    s = s.replace('&#x26;', '&')
-    s = s.replace('&#x27;', "'")
-
-    s = s.replace('&#x101;', "ā")
-    s = s.replace('&#x113;', "ē")
-    s = s.replace('&#x12b;', "ī")
-    s = s.replace('&#x12B;', "ī")
-    s = s.replace('&#x14d;', "ō")
-    s = s.replace('&#x14D;', "ō")
-    s = s.replace('&#x16b;', "ū")
-    s = s.replace('&#x16B;', "ū")
-    
-    return s
-
-#    
-# Remove HTML tags
-#
-def text_remove_HTML_tags(s):
-    p = re.compile(r'<.*?>')
-    s = p.sub('', s)
-
-    return s
-
-def text_unescape_and_untag_HTML(s):
-    s = text_unescape_HTML(s)
-    s = text_remove_HTML_tags(s)
-
-    return s
-
-def text_dump_str_to_file(filename, full_string):
-    file_obj = open(filename, 'w')
-    file_obj.write(full_string.encode('utf-8'))
-    file_obj.close()
-
-# -------------------------------------------------------------------------------------------------
-# ROM name cleaning and formatting
-# -------------------------------------------------------------------------------------------------
-#
-# This function is used to clean the ROM name to be used as search string for the scraper.
-#
-# 1) Cleans ROM tags: [BIOS], (Europe), (Rev A), ...
-# 2) Substitutes some characters by spaces
-#
-def text_format_ROM_name_for_scraping(title):
-    title = re.sub('\[.*?\]', '', title)
-    title = re.sub('\(.*?\)', '', title)
-    title = re.sub('\{.*?\}', '', title)
-    
-    title = title.replace('_', '')
-    title = title.replace('-', '')
-    title = title.replace(':', '')
-    title = title.replace('.', '')
-    title = title.strip()
-
-    return title
-
-#
-# Format ROM file name when scraping is disabled.
-# 1) Remove No-Intro/TOSEC tags (), [], {} at the end of the file
-#
-# title      -> Unicode string
-# clean_tags -> bool
-#
-# Returns a Unicode string.
-#
-def text_format_ROM_title(title, clean_tags):
-    #
-    # Regexp to decompose a string in tokens
-    #
-    if clean_tags:
-        reg_exp = '\[.+?\]\s?|\(.+?\)\s?|\{.+?\}|[^\[\(\{]+'
-        tokens = re.findall(reg_exp, title)
-        str_list = []
-        for token in tokens:
-            stripped_token = token.strip()
-            if (stripped_token[0] == '[' or stripped_token[0] == '(' or stripped_token[0] == '{') and \
-               stripped_token != '[BIOS]':
-                continue
-            str_list.append(stripped_token)
-        cleaned_title = ' '.join(str_list)
-    else:
-        cleaned_title = title
-
-    # if format_title:
-    #     if (title.startswith("The ")): new_title = title.replace("The ","", 1)+", The"
-    #     if (title.startswith("A ")): new_title = title.replace("A ","", 1)+", A"
-    #     if (title.startswith("An ")): new_title = title.replace("An ","", 1)+", An"
-    # else:
-    #     if (title.endswith(", The")): new_title = "The "+"".join(title.rsplit(", The", 1))
-    #     if (title.endswith(", A")): new_title = "A "+"".join(title.rsplit(", A", 1))
-    #     if (title.endswith(", An")): new_title = "An "+"".join(title.rsplit(", An", 1))
-
-    return cleaned_title
-
-# -------------------------------------------------------------------------------------------------
-# URLs
-# -------------------------------------------------------------------------------------------------
-#
-# Get extension of URL. Returns '' if not found.
-#
-def text_get_URL_extension(url):
-    path = urlparse.urlparse(url).path
-    ext = os.path.splitext(path)[1]
-    
-    return ext
-
-#
-# Defaults to .jpg if URL extension cannot be determined
-#
-def text_get_image_URL_extension(url):
-    path = urlparse.urlparse(url).path
-    ext = os.path.splitext(path)[1]
-    ret = '.jpg' if ext == '' else ext
-
-    return ret
-
-# -------------------------------------------------------------------------------------------------
-# File cache
-# -------------------------------------------------------------------------------------------------
-file_cache = {}
-
-def misc_clear_file_cache(verbose = True):
-    global file_cache
-    if verbose: log_debug('misc_clear_file_cache() Clearing file cache')
-    file_cache = {}
-
-def misc_add_file_cache(dir_str, verbose = True):
-    global file_cache
-
-    # >> Create a set with all the files in the directory
-    if not dir_str:
-        log_warning('misc_add_file_cache() Empty dir_str. Exiting')
-        return
-    dir_FN = FileName(dir_str)
-    if not dir_FN.exists():
-        log_debug('misc_add_file_cache() Does not exist "{0}"'.format(dir_str))
-        file_cache[dir_str] = set()
-        return
-    if not dir_FN.isdir():
-        log_warning('misc_add_file_cache() Not a directory "{0}"'.format(dir_str))
-        return
-    if verbose:
-        # log_debug('misc_add_file_cache() Scanning OP "{0}"'.format(dir_FN.getOriginalPath()))
-        log_debug('misc_add_file_cache() Scanning  P "{0}"'.format(dir_FN.getPath()))
-    # >> A recursive scanning function is needed. os.listdir() is not.
-    # file_list = os.listdir(dir_FN.getPath())
-    # >> os.walk() is recursive
-    file_list = []
-    root_dir_str = dir_FN.getPath()
-    # >> For unicode errors in os.walk() see
-    # >> https://stackoverflow.com/questions/21772271/unicodedecodeerror-when-performing-os-walk
-    for root, dirs, files in os.walk(str(root_dir_str)):
-        # log_debug('----------')
-        # log_debug('root = {0}'.format(root))
-        # log_debug('dirs = {0}'.format(unicode(dirs)))
-        # log_debug('files = {0}'.format(unicode(files)))
-        # log_debug('\n')
-        for f in files:
-            my_file = os.path.join(root, f).decode('utf-8')
-            cache_file = my_file.replace(root_dir_str, '')
-            # >> In the cache always store paths as '/' and not as '\'
-            cache_file = cache_file.replace('\\', '/')
-            # >> Remove '/' character at the beginning of the file. If the directory dir_str
-            # >> is like '/example/dir/' then the slash at the beginning will be removed. However,
-            # >> if dir_str is like '/example/dir' it will be present.
-            if cache_file.startswith('/'): cache_file = cache_file[1:]
-            file_list.append(cache_file)
-    file_set = set(file_list)
-    if verbose:
-        # for file in file_set: log_debug('File "{0}"'.format(file))
-        log_debug('misc_add_file_cache() Adding {0} files to cache'.format(len(file_set)))
-    file_cache[dir_str] = file_set
-
-#
-# See misc_look_for_file() documentation below.
-#
-def misc_search_file_cache(dir_str, filename_noext, file_exts):
-    # Check for empty, unconfigured dirs
-    if not dir_str: return None
-    current_cache_set = file_cache[dir_str]
-    # if filename_noext == '005':
-    #     log_debug('misc_search_file_cache() Searching in "{0}"'.format(dir_str))
-    #     log_debug('misc_search_file_cache() current_cache_set "{0}"'.format(unicode(current_cache_set)))
-    for ext in file_exts:
-        file_base = filename_noext + '.' + ext
-        # log_debug('misc_search_file_cache() file_Base = "{0}"'.format(file_base))
-        if file_base in current_cache_set:
-            # log_debug('misc_search_file_cache() Found in cache')
-            return FileName(dir_str).pjoin(file_base)
-
-    return None
-
-# -------------------------------------------------------------------------------------------------
-# Misc stuff
-# -------------------------------------------------------------------------------------------------
-#
-# Given the image path, image filename with no extension and a list of file extensions search for 
-# a file.
-#
-# rootPath       -> FileName object
-# filename_noext -> Unicode string
-# file_exts      -> list of extenstions with no dot [ 'zip', 'rar' ]
-#
-# Returns a FileName object if a valid filename is found.
-# Returns None if no file was found.
-#
-def misc_look_for_file(rootPath, filename_noext, file_exts):
-    for ext in file_exts:
-        file_path = rootPath.join(filename_noext + '.' + ext)
-        if file_path.exists():
-            return file_path
-
-    return None
-
-#
-# Generates a random an unique MD5 hash and returns a string with the hash
-#
-def misc_generate_random_SID():
-    t1 = time.time()
-    t2 = t1 + random.getrandbits(32)
-    base = hashlib.md5( str(t1 + t2) )
-    sid = base.hexdigest()
-
-    return sid
-
-# -------------------------------------------------------------------------------------------------
-# Filesystem helper class
 # This class always takes and returns Unicode string paths. Decoding to UTF-8 must be done in
 # caller code.
+#
 # A) Transform paths like smb://server/directory/ into \\server\directory\
 # B) Use xbmc.translatePath() for paths starting with special://
+#
+# Decomposes a file name path or directory into its constituents
+#   FileName.getOriginalPath()  Full path                                     /home/Wintermute/Sonic.zip
+#   FileName.getPath()          Full path                                     /home/Wintermute/Sonic.zip
+#   FileName.getPath_noext()    Full path with no extension                   /home/Wintermute/Sonic
+#   FileName.getDir()           Directory name of file. Does not end in '/'   /home/Wintermute/
+#   FileName.getBase()          File name with no path                        Sonic.zip
+#   FileName.getBase_noext()    File name with no path and no extension       Sonic
+#   FileName.getExt()           File extension                                .zip
 # -------------------------------------------------------------------------------------------------
 class FileName:
     # pathString must be a Unicode string object
@@ -578,14 +140,7 @@ class FileName:
         self.path = self.path.replace('"', '\\"')
 
     # ---------------------------------------------------------------------------------------------
-    # Decomposes a file name path or directory into its constituents
-    #   FileName.getOriginalPath()  Full path                                     /home/Wintermute/Sonic.zip
-    #   FileName.getPath()          Full path                                     /home/Wintermute/Sonic.zip
-    #   FileName.getPath_noext()    Full path with no extension                   /home/Wintermute/Sonic
-    #   FileName.getDir()           Directory name of file. Does not end in '/'   /home/Wintermute/
-    #   FileName.getBase()          File name with no path                        Sonic.zip
-    #   FileName.getBase_noext()    File name with no path and no extension       Sonic
-    #   FileName.getExt()           File extension                                .zip
+    # Filename decomposition.
     # ---------------------------------------------------------------------------------------------
     def getOriginalPath(self):
         return self.originalPath
@@ -678,3 +233,734 @@ class FileName:
 
     def rename(self, to):
         os.rename(self.path, to.getPath())
+
+#
+# How to report errors in these IO functions? That's the eternal question.
+# 1) Raise an exception and make the addon crash? Crashes are always reported in the GUI.
+# 2) Use AEL approach and report status in a control dictionary? Caller code is responsible
+#    to report the error in the GUI.
+#
+# -------------------------------------------------------------------------------------------------
+# Low level filesystem functions.
+# -------------------------------------------------------------------------------------------------
+def utils_write_str_to_file(filename, full_string):
+    log_debug('utils_write_str_to_file() File "{}"'.format(filename))
+    with io.open(filename, 'wt', encoding = 'utf-8') as f:
+        f.write(full_string)
+
+def utils_load_file_to_str(filename):
+    log_debug('utils_load_file_to_str() File "{}"'.format(filename))
+    with io.open(filename, 'rt', encoding = 'utf-8') as f:
+        string = f.read()
+    return string
+
+# -------------------------------------------------------------------------------------------------
+# Generic text file writer.
+# slist is a list of Unicode strings that will be joined and written to a file encoded in UTF-8.
+# Joining command is '\n'.join()
+# -------------------------------------------------------------------------------------------------
+def utils_write_slist_to_file(filename, slist):
+    log_debug('utils_write_slist_to_file() File "{}"'.format(filename))
+    try:
+        file_obj = io.open(filename, 'wt', encoding = 'utf-8')
+        file_obj.write('\n'.join(slist))
+        file_obj.close()
+    except OSError:
+        log_error('(OSError) exception in utils_write_slist_to_file()')
+        log_error('Cannot write {} file'.format(filename))
+        raise AEL_Error('(OSError) Cannot write {} file'.format(filename))
+    except IOError:
+        log_error('(IOError) exception in utils_write_slist_to_file()')
+        log_error('Cannot write {} file'.format(filename))
+        raise AEL_Error('(IOError) Cannot write {} file'.format(filename))
+
+def utils_load_file_to_slist(filename):
+    log_debug('utils_load_file_to_slist() File "{}"'.format(filename))
+    with io.open(filename, 'rt', encoding = 'utf-8') as f:
+        slist = f.readlines()
+    return slist
+
+# -------------------------------------------------------------------------------------------------
+# JSON write/load
+# -------------------------------------------------------------------------------------------------
+def utils_load_JSON_file_dic(json_filename, verbose = True):
+    # --- If file does not exist return empty dictionary ---
+    data_dic = {}
+    if not os.path.isfile(json_filename):
+        log_warning('utils_load_JSON_file_dic() Not found "{}"'.format(json_filename))
+        return data_dic
+    if verbose:
+        log_debug('utils_load_JSON_file_dic() "{}"'.format(json_filename))
+    with io.open(json_filename, 'rt', encoding = 'utf-8') as file:
+        data_dic = json.load(file)
+
+    return data_dic
+
+def utils_load_JSON_file_list(json_filename, verbose = True):
+    # --- If file does not exist return empty dictionary ---
+    data_list = []
+    if not os.path.isfile(json_filename):
+        log_warning('utils_load_JSON_file_list() Not found "{}"'.format(json_filename))
+        return data_list
+    if verbose:
+        log_debug('utils_load_JSON_file_list() "{}"'.format(json_filename))
+    with io.open(json_filename, 'rt', encoding = 'utf-8') as file:
+        data_list = json.load(file)
+
+    return data_list
+
+# This consumes a lot of memory but it is fast.
+# See https://stackoverflow.com/questions/24239613/memoryerror-using-json-dumps
+def utils_write_JSON_file(json_filename, json_data, verbose = True):
+    l_start = time.time()
+    if verbose:
+        log_debug('utils_write_JSON_file() "{}"'.format(json_filename))
+    try:
+        with io.open(json_filename, 'wt', encoding = 'utf-8') as file:
+            if OPTION_COMPACT_JSON:
+                file.write(text_type(json.dumps(json_data, ensure_ascii = False, sort_keys = True)))
+            else:
+                file.write(text_type(json.dumps(json_data, ensure_ascii = False, sort_keys = True,
+                    indent = 1, separators = (',', ':'))))
+    except OSError:
+        kodi_notify('Advanced MAME Launcher',
+                    'Cannot write {} file (OSError)'.format(json_filename))
+    except IOError:
+        kodi_notify('Advanced MAME Launcher',
+                    'Cannot write {} file (IOError)'.format(json_filename))
+    l_end = time.time()
+    if verbose:
+        write_time_s = l_end - l_start
+        log_debug('utils_write_JSON_file() Writing time {:f} s'.format(write_time_s))
+
+def utils_write_JSON_file_pprint(json_filename, json_data, verbose = True):
+    l_start = time.time()
+    if verbose:
+        log_debug('utils_write_JSON_file_pprint() "{}"'.format(json_filename))
+    try:
+        with io.open(json_filename, 'wt', encoding = 'utf-8') as file:
+            file.write(text_type(json.dumps(json_data, ensure_ascii = False, sort_keys = True,
+                indent = 1, separators = (', ', ' : '))))
+    except OSError:
+        kodi_notify('Advanced MAME Launcher',
+                    'Cannot write {} file (OSError)'.format(json_filename))
+    except IOError:
+        kodi_notify('Advanced MAME Launcher',
+                    'Cannot write {} file (IOError)'.format(json_filename))
+    l_end = time.time()
+    if verbose:
+        write_time_s = l_end - l_start
+        log_debug('utils_write_JSON_file_pprint() Writing time {:f} s'.format(write_time_s))
+
+def utils_write_JSON_file_lowmem(json_filename, json_data, verbose = True):
+    l_start = time.time()
+    if verbose:
+        log_debug('utils_write_JSON_file_lowmem() "{}"'.format(json_filename))
+    try:
+        if OPTION_COMPACT_JSON:
+            jobj = json.JSONEncoder(ensure_ascii = False, sort_keys = True)
+        else:
+            jobj = json.JSONEncoder(ensure_ascii = False, sort_keys = True,
+                indent = 1, separators = (',', ':'))
+        # --- Chunk by chunk JSON writer ---
+        with io.open(json_filename, 'wt', encoding = 'utf-8') as file:
+            for chunk in jobj.iterencode(json_data):
+                file.write(text_type(chunk))
+    except OSError:
+        kodi_notify('Advanced MAME Launcher',
+                    'Cannot write {} file (OSError)'.format(json_filename))
+    except IOError:
+        kodi_notify('Advanced MAME Launcher',
+                    'Cannot write {} file (IOError)'.format(json_filename))
+    l_end = time.time()
+    if verbose:
+        write_time_s = l_end - l_start
+        log_debug('utils_write_JSON_file_lowmem() Writing time {:f} s'.format(write_time_s))
+
+# -------------------------------------------------------------------------------------------------
+# Threaded JSON loader
+# -------------------------------------------------------------------------------------------------
+# How to use this code:
+#     render_thread = Threaded_Load_JSON(cfg.RENDER_DB_PATH.getPath())
+#     assets_thread = Threaded_Load_JSON(cfg.MAIN_ASSETS_DB_PATH.getPath())
+#     render_thread.start()
+#     assets_thread.start()
+#     render_thread.join()
+#     assets_thread.join()
+#     MAME_db_dic = render_thread.output_dic
+#     MAME_assets_dic = assets_thread.output_dic
+class Threaded_Load_JSON(threading.Thread):
+    def __init__(self, json_filename): 
+        threading.Thread.__init__(self) 
+        self.json_filename = json_filename
+ 
+    def run(self): 
+        self.output_dic = utils_load_JSON_file_dic(self.json_filename)
+
+# -------------------------------------------------------------------------------------------------
+# File cache functions.
+# Depends on the FileName class.
+# -------------------------------------------------------------------------------------------------
+file_cache = {}
+
+def utils_file_cache_clear(verbose = True):
+    global file_cache
+    if verbose: log_debug('utils_file_cache_clear() Clearing file cache')
+    file_cache = {}
+
+def utils_file_cache_add_dir(dir_str, verbose = True):
+    global file_cache
+
+    # Create a set with all the files in the directory
+    if not dir_str:
+        log_warning('file_cache_add_dir() Empty dir_str. Exiting')
+        return
+    dir_FN = FileName(dir_str)
+    if not dir_FN.exists():
+        log_debug('file_cache_add_dir() Does not exist "{}"'.format(dir_str))
+        file_cache[dir_str] = set()
+        return
+    if not dir_FN.isdir():
+        log_warning('file_cache_add_dir() Not a directory "{}"'.format(dir_str))
+        return
+    if verbose:
+        # log_debug('file_cache_add_dir() Scanning OP "{}"'.format(dir_FN.getOriginalPath()))
+        log_debug('file_cache_add_dir() Scanning  P "{}"'.format(dir_FN.getPath()))
+    # A recursive scanning function is needed. os.listdir() is not. os.walk() is recursive
+    # file_list = os.listdir(dir_FN.getPath())
+    file_list = []
+    root_dir_str = dir_FN.getPath()
+    # For Unicode errors in os.walk() see
+    # https://stackoverflow.com/questions/21772271/unicodedecodeerror-when-performing-os-walk
+    for root, dirs, files in os.walk(text_type(root_dir_str)):
+        # log_debug('----------')
+        # log_debug('root = {}'.format(root))
+        # log_debug('dirs = {}'.format(text_type(dirs)))
+        # log_debug('files = {}'.format(text_type(files)))
+        # log_debug('\n')
+        for f in files:
+            my_file = os.path.join(root, f)
+            cache_file = my_file.replace(root_dir_str, '')
+            # >> In the cache always store paths as '/' and not as '\'
+            cache_file = cache_file.replace('\\', '/')
+            # >> Remove '/' character at the beginning of the file. If the directory dir_str
+            # >> is like '/example/dir/' then the slash at the beginning will be removed. However,
+            # >> if dir_str is like '/example/dir' it will be present.
+            if cache_file.startswith('/'): cache_file = cache_file[1:]
+            file_list.append(cache_file)
+    file_set = set(file_list)
+    if verbose:
+        # for file in file_set: log_debug('File "{}"'.format(file))
+        log_debug('file_cache_add_dir() Adding {} files to cache'.format(len(file_set)))
+    file_cache[dir_str] = file_set
+
+#
+# See misc_look_for_file() documentation below.
+#
+def utils_file_cache_search(dir_str, filename_noext, file_exts):
+    # Check for empty, unconfigured dirs
+    if not dir_str: return None
+    current_cache_set = file_cache[dir_str]
+    # if filename_noext == '005':
+    #     log_debug('utils_file_cache_search() Searching in "{}"'.format(dir_str))
+    #     log_debug('utils_file_cache_search() current_cache_set "{}"'.format(text_type(current_cache_set)))
+    for ext in file_exts:
+        file_base = filename_noext + '.' + ext
+        # log_debug('utils_file_cache_search() file_Base = "{}"'.format(file_base))
+        if file_base in current_cache_set:
+            # log_debug('utils_file_cache_search() Found in cache')
+            return FileName(dir_str).pjoin(file_base)
+
+    return None
+
+# -------------------------------------------------------------------------------------------------
+# Logging functions
+# Kodi Matrix has changed the log levels. See
+# https://forum.kodi.tv/showthread.php?tid=344263&pid=2943703#pid2943703
+# -------------------------------------------------------------------------------------------------
+# Constants
+LOG_ERROR   = 0
+LOG_WARNING = 1
+LOG_INFO    = 2
+LOG_VERB    = 3
+LOG_DEBUG   = 4
+
+# Internal globals
+current_log_level = LOG_INFO
+
+def set_log_level(level):
+    global current_log_level
+
+    current_log_level = level
+
+def log_variable(var_name, var):
+    if current_log_level < LOG_DEBUG: return
+    log_text = 'AML DUMP : Dumping variable "{}"\n{}'.format(var_name, pprint.pformat(var))
+    xbmc.log(log_text, level = xbmc.LOGERROR)
+
+# For Unicode stuff in Kodi log see https://github.com/romanvm/kodi.six
+def log_debug_KR(text_line):
+    if current_log_level < LOG_DEBUG: return
+
+    # If it is bytes we assume it's "utf-8" encoded.
+    # will fail if called with other encodings (latin, etc).
+    if isinstance(text_line, binary_type): text_line = text_line.decode('utf-8')
+
+    # At this point we are sure text_line is a Unicode string.
+    # Kodi functions (Python 3) require Unicode strings as arguments.
+    # Kodi functions (Python 2) require UTF-8 encoded bytes as arguments.
+    log_text = 'AML DEBUG: ' + text_line
+    xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGNOTICE)
+
+def log_verb_KR(text_line):
+    if current_log_level < LOG_VERB: return
+    if isinstance(text_line, binary_type): text_line = text_line.decode('utf-8')
+    log_text = 'AML VERB : ' + text_line
+    xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGNOTICE)
+
+def log_info_KR(text_line):
+    if current_log_level < LOG_INFO: return
+    if isinstance(text_line, binary_type): text_line = text_line.decode('utf-8')
+    log_text = 'AML INFO : ' + text_line
+    xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGNOTICE)
+
+def log_warning_KR(text_line):
+    if current_log_level < LOG_WARNING: return
+    if isinstance(text_line, binary_type): text_line = text_line.decode('utf-8')
+    log_text = 'AML WARN : ' + text_line
+    xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGWARNING)
+
+def log_error_KR(text_line):
+    if current_log_level < LOG_ERROR: return
+    if isinstance(text_line, binary_type): text_line = text_line.decode('utf-8')
+    log_text = 'AML ERROR: ' + text_line
+    xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGERROR)
+
+#
+# Replacement functions when running outside Kodi with the standard Python interpreter.
+#
+def log_debug_Python(text_line): print(text_line)
+
+def log_verb_Python(text_line): print(text_line)
+
+def log_info_Python(text_line): print(text_line)
+
+def log_warning_Python(text_line): print(text_line)
+
+def log_error_Python(text_line): print(text_line)
+
+# -------------------------------------------------------------------------------------------------
+# Kodi notifications and dialogs
+# -------------------------------------------------------------------------------------------------
+# Displays a modal dialog with an OK button. Dialog can have up to 3 rows of text, however first
+# row is multiline.
+# Call examples:
+#  1) ret = kodi_dialog_OK('Launch ROM?')
+#  2) ret = kodi_dialog_OK('Launch ROM?', title = 'AML - Launcher')
+def kodi_dialog_OK(text, title = 'Advanced MAME Launcher'):
+    xbmcgui.Dialog().ok(title, text)
+
+# Returns True is YES was pressed, returns False if NO was pressed or dialog canceled.
+def kodi_dialog_yesno(text, title = 'Advanced MAME Launcher'):
+    return xbmcgui.Dialog().yesno(title, text)
+
+# Returns a directory.
+def kodi_dialog_get_directory(dialog_heading):
+    return xbmcgui.Dialog().browse(0, dialog_heading, '').decode('utf-8')
+
+def kodi_dialog_get_file(dialog_heading):
+    return xbmcgui.Dialog().browse(1, dialog_heading, '').decode('utf-8')
+
+def kodi_dialog_get_image(dialog_heading):
+    return xbmcgui.Dialog().browse(2, dialog_heading, '').decode('utf-8')
+
+# Returns a writable directory.
+# Arg 1: type 3 ShowAndGetWriteableDirectory
+# Arg 2: heading
+# Arg 3: shares
+#     shares  'files'  list file sources (added through filemanager)
+#     shares  'local'  list local drives
+#     shares  ''       list local drives and network shares
+def kodi_dialog_get_wdirectory(dialog_heading):
+    return xbmcgui.Dialog().browse(3, dialog_heading, '').decode('utf-8')
+
+# Displays a small box in the bottom right corner
+def kodi_notify(text, title = 'Advanced MAME Launcher', time = 5000):
+    xbmcgui.Dialog().notification(title, text, xbmcgui.NOTIFICATION_INFO, time)
+
+def kodi_notify_warn(text, title = 'Advanced MAME Launcher warning', time = 7000):
+    xbmcgui.Dialog().notification(title, text, xbmcgui.NOTIFICATION_WARNING, time)
+
+# Do not use this function much because it is the same icon displayed when Python fails
+# with an exception and that may confuse the user.
+def kodi_notify_error(text, title = 'Advanced MAME Launcher error', time = 7000):
+    xbmcgui.Dialog().notification(title, text, xbmcgui.NOTIFICATION_ERROR, time)
+
+def kodi_refresh_container():
+    log_debug('kodi_refresh_container()')
+    xbmc.executebuiltin('Container.Refresh')
+
+# Progress dialog that can be closed and reopened.
+# Messages and progress in the dialog are always remembered, even if closed and reopened.
+# If the dialog is canceled this class remembers it forever.
+# Kodi Matrix change: Renamed option line1 to message. Removed option line2. Removed option line3.
+#
+# --- Example 1 ---
+# pDialog = KodiProgressDialog()
+# pDialog.startProgress('Doing something...', step_total)
+# for ...
+#     pDialog.updateProgressInc()
+#     # Do stuff...
+# pDialog.endProgress()
+class KodiProgressDialog(object):
+    def __init__(self):
+        self.heading = 'Advanced MAME Launcher'
+        self.progress = 0
+        self.flag_dialog_canceled = False
+        self.dialog_active = False
+        self.progressDialog = xbmcgui.DialogProgress()
+
+    # Creates a new progress dialog.
+    def startProgress(self, message, step_total = 100, step_counter = 0):
+        if self.dialog_active: raise TypeError
+        self.step_total = step_total
+        self.step_counter = step_counter
+        try:
+            self.progress = int(math.floor((self.step_counter * 100) / self.step_total))
+        except ZeroDivisionError:
+            # Fix case when step_total is 0.
+            self.step_total = 0.001
+            self.progress = int(math.floor((self.step_counter * 100) / self.step_total))
+        self.dialog_active = True
+        self.message = message
+        self.progressDialog.create(self.heading, self.message, ' ', ' ') # Workaround for Kodi Leia
+        # self.progressDialog.create(self.heading, self.message) # Code for Krypton and up.
+        self.progressDialog.update(self.progress)
+
+    # Changes message and resets progress.
+    def resetProgress(self, message, step_total = 100, step_counter = 0):
+        if not self.dialog_active: raise TypeError
+        self.step_total = step_total
+        self.step_counter = step_counter
+        try:
+            self.progress = int(math.floor((self.step_counter * 100) / self.step_total))
+        except ZeroDivisionError:
+            # Fix case when step_total is 0.
+            self.step_total = 0.001
+            self.progress = int(math.floor((self.step_counter * 100) / self.step_total))
+        self.message = message
+        self.progressDialog.update(self.progress, self.message, ' ', ' ') # Workaround for Kodi Leia
+        # self.progressDialog.update(self.progress, self.message) # Code for Krypton and up.
+
+    # Update progress and optionally update message as well.
+    def updateProgress(self, step_counter, message = None):
+        if not self.dialog_active: raise TypeError
+        self.step_counter = step_counter
+        self.progress = int(math.floor((self.step_counter * 100) / self.step_total))
+        if message is None:
+            self.progressDialog.update(self.progress)
+        else:
+            if type(message) is not text_type: raise TypeError
+            self.message = message
+            self.progressDialog.update(self.progress, self.message, ' ', ' ') # Workaround for Kodi Leia
+            # self.progressDialog.update(self.progress, self.message) # Code for Krypton and up.
+
+    # Update progress, optionally update message as well, and autoincrements.
+    # Progress is incremented AFTER dialog is updated.
+    def updateProgressInc(self, message = None):
+        if not self.dialog_active: raise TypeError
+        self.progress = int(math.floor((self.step_counter * 100) / self.step_total))
+        self.step_counter += 1
+        if message is None:
+            self.progressDialog.update(self.progress)
+        else:
+            if type(message) is not text_type: raise TypeError
+            self.message = message
+            self.progressDialog.update(self.progress, self.message, ' ', ' ') # Workaround for Kodi Leia
+            # self.progressDialog.update(self.progress, self.message) # Code for Matrix and up.
+
+    # Update dialog message but keep same progress.
+    def updateMessage(self, message):
+        if not self.dialog_active: raise TypeError
+        if type(message) is not text_type: raise TypeError
+        self.message = message
+        self.progressDialog.update(self.progress, self.message, ' ', ' ') # Workaround for Kodi Leia
+        # self.progressDialog.update(self.progress, self.message) # Code for Matrix and up.
+
+    def isCanceled(self):
+        # If the user pressed the cancel button before then return it now.
+        if self.flag_dialog_canceled: return True
+        # If not check and set the flag.
+        if not self.dialog_active: raise TypeError
+        self.flag_dialog_canceled = self.progressDialog.iscanceled()
+        return self.flag_dialog_canceled
+
+    # Before closing the dialog check if the user pressed the Cancel button and remember
+    # the user decision.
+    def endProgress(self):
+        if not self.dialog_active: raise TypeError
+        if self.progressDialog.iscanceled(): self.flag_dialog_canceled = True
+        self.progressDialog.update(100)
+        self.progressDialog.close()
+        self.dialog_active = False
+
+    # Reopens a previously closed dialog with endProgress(), remembering the messages
+    # and the progress it had when it was closed.
+    def reopen(self):
+        if self.dialog_active: raise TypeError
+        self.progressDialog.create(self.heading, self.message, ' ', ' ') # Workaround for Kodi Leia
+        # self.progressDialog.create(self.heading, self.message) # Code for Matrix and up.
+        self.progressDialog.update(self.progress)
+        self.dialog_active = True
+
+def kodi_toogle_fullscreen():
+    kodi_jsonrpc_dict('Input.ExecuteAction', {'action' : 'togglefullscreen'})
+
+def kodi_get_screensaver_mode():
+    r_dic = kodi_jsonrpc_dict('Settings.getSettingValue', {'setting' : 'screensaver.mode'})
+    screensaver_mode = r_dic['value']
+    return screensaver_mode
+
+g_screensaver_mode = None # Global variable to store screensaver status.
+def kodi_disable_screensaver():
+    global g_screensaver_mode
+    g_screensaver_mode = kodi_get_screensaver_mode()
+    log_debug('kodi_disable_screensaver() g_screensaver_mode "{}"'.format(g_screensaver_mode))
+    p_dic = {
+        'setting' : 'screensaver.mode',
+        'value' : '',
+    }
+    kodi_jsonrpc_dict('Settings.setSettingValue', p_dic)
+    log_debug('kodi_disable_screensaver() Screensaver disabled.')
+
+# kodi_disable_screensaver() must be called before this function or bad things will happen.
+def kodi_restore_screensaver():
+    if g_screensaver_mode is None:
+        log_error('kodi_disable_screensaver() must be called before kodi_restore_screensaver()')
+        raise RuntimeError
+    log_debug('kodi_restore_screensaver() Screensaver mode "{}"'.format(g_screensaver_mode))
+    p_dic = {
+        'setting' : 'screensaver.mode',
+        'value' : g_screensaver_mode,
+    }
+    kodi_jsonrpc_dict('Settings.setSettingValue', p_dic)
+    log_debug('kodi_restore_screensaver() Restored previous screensaver status.')
+
+# Access Kodi JSON-RPC interface in an easy way.
+# Returns a dictionary with the parsed response 'result' field.
+#
+# Query input:
+#
+# {
+#     "id" : 1,
+#     "jsonrpc" : "2.0",
+#     "method" : "Application.GetProperties",
+#     "params" : { "properties" : ["name", "version"] }
+# }
+#
+# Query response:
+#
+# {
+#     "id" : 1,
+#     "jsonrpc" : "2.0",
+#     "result" : {
+#         "name" : "Kodi",
+#         "version" : {"major":17,"minor":6,"revision":"20171114-a9a7a20","tag":"stable"}
+#     }
+# }
+#
+# Query response ERROR:
+# {
+#     "id" : null,
+#     "jsonrpc" : "2.0",
+#     "error" : { "code":-32700, "message" : "Parse error."}
+# }
+#
+def kodi_jsonrpc_dict(method_str, params_dic, verbose = False):
+    params_str = json.dumps(params_dic)
+    if verbose:
+        log_debug('kodi_jsonrpc_dict() method_str "{}"'.format(method_str))
+        log_debug('kodi_jsonrpc_dict() params_dic = \n{}'.format(pprint.pformat(params_dic)))
+        log_debug('kodi_jsonrpc_dict() params_str "{}"'.format(params_str))
+
+    # --- Do query ---
+    header = '"id" : 1, "jsonrpc" : "2.0"'
+    query_str = '{{{}, "method" : "{}", "params" : {} }}'.format(header, method_str, params_str)
+    response_json_str = xbmc.executeJSONRPC(query_str)
+
+    # --- Parse JSON response ---
+    response_dic = json.loads(response_json_str)
+    if 'error' in response_dic:
+        result_dic = response_dic['error']
+        log_warning('kodi_jsonrpc_dict() JSONRPC ERROR {}'.format(result_dic['message']))
+    else:
+        result_dic = response_dic['result']
+    if verbose:
+        log_debug('kodi_jsonrpc_dict() result_dic = \n{}'.format(pprint.pformat(result_dic)))
+
+    return result_dic
+
+# Displays a text window and requests a monospaced font.
+# v18 Leia change: New optional param added usemono.
+def kodi_display_text_window_mono(window_title, info_text):
+    xbmcgui.Dialog().textviewer(window_title, info_text, True)
+
+# Displays a text window with a proportional font (default).
+def kodi_display_text_window(window_title, info_text):
+    xbmcgui.Dialog().textviewer(window_title, info_text)
+
+# -------------------------------------------------------------------------------------------------
+# Astraction layer for settings to easy the Leia-Matrix transition.
+# Settings are only read once on every execution and they are not performance critical.
+# -------------------------------------------------------------------------------------------------
+def kodi_get_int_setting(cfg, setting_str):
+    return int(cfg.__addon__.getSetting(setting_str))
+
+def kodi_get_float_setting_as_int(cfg, setting_str):
+    return int(round(float(cfg.__addon__.getSetting(setting_str))))
+
+def kodi_get_bool_setting(cfg, setting_str):
+    return True if cfg.__addon__.getSetting(setting_str) == 'true' else False
+
+def kodi_get_str_setting(cfg, setting_str):
+    return cfg.__addon__.getSetting(setting_str).decode('utf-8')
+
+# -------------------------------------------------------------------------------------------------
+# Determine Kodi version and create some constants to allow version-dependent code.
+# This if useful to work around bugs in Kodi core.
+# -------------------------------------------------------------------------------------------------
+# Version constants. Minimum required version is Kodi Krypton.
+KODI_VERSION_ISENGARD = 15
+KODI_VERSION_JARVIS = 16
+KODI_VERSION_KRYPTON = 17
+KODI_VERSION_LEIA = 18
+KODI_VERSION_MATRIX = 19
+
+def kodi_get_Kodi_major_version():
+    r_dic = kodi_jsonrpc_dict('Application.GetProperties', {'properties' : ['version']})
+    return int(r_dic['version']['major'])
+
+# Execute the Kodi version query when module is loaded and store results in global variable.
+kodi_running_version = kodi_get_Kodi_major_version()
+
+# -------------------------------------------------------------------------------------------------
+# If running with Kodi Python interpreter use Kodi proper functions.
+# If running with the standard Python interpreter use replacement functions.
+# 
+# Functions here in the same order as in the Function List browser.
+# -------------------------------------------------------------------------------------------------
+if KODI_RUNTIME_AVAILABLE_UTILS:
+    log_debug   = log_debug_KR
+    log_verb    = log_verb_KR
+    log_info    = log_info_KR
+    log_warning = log_warning_KR
+    log_error   = log_error_KR
+else:
+    log_debug   = log_debug_Python
+    log_verb    = log_verb_Python
+    log_info    = log_info_Python
+    log_warning = log_warning_Python
+    log_error   = log_error_Python
+
+# -------------------------------------------------------------------------------------------------
+# Kodi GUI error reporting.
+# * Errors can be reported up in the function backtrace with `if not st_dic['status']: return` after
+#   every function call.
+# * Warnings and non-fatal messages are printed in the callee function.
+# * If st_dic['status'] is True but st_dic['dialog'] is not KODI_MESSAGE_NONE then display
+#   the message but do not abort execution (success information message).
+# * When kodi_display_status_message() is used to display the last message on a chaing of
+#   function calls it is irrelevant its return value because addon always finishes.
+#
+# How to use:
+# def high_level_function():
+#     st_dic = kodi_new_status_dic()
+#     function_that_does_something_that_may_fail(..., st_dic)
+#     if kodi_display_status_message(st_dic): return # Display error message and abort addon execution.
+#     if not st_dic['status']: return # Alternative code to return to caller function.
+#
+# def function_that_does_something_that_may_fail(..., st_dic):
+#     code_that_fails
+#     kodi_set_error_status(st_dic, 'Message') # Or change st_dic manually.
+#     return
+# -------------------------------------------------------------------------------------------------
+KODI_MESSAGE_NONE        = 100
+# Kodi notifications must be short.
+KODI_MESSAGE_NOTIFY      = 200
+KODI_MESSAGE_NOTIFY_WARN = 300
+# Kodi OK dialog to display a message.
+KODI_MESSAGE_DIALOG      = 400
+
+# If st_dic['abort'] is False then everything is OK.
+# If st_dic['abort'] is True then execution must be aborted and error displayed.
+# Success message can also be displayed (st_dic['abort'] False and 
+# st_dic['dialog'] is different from KODI_MESSAGE_NONE).
+def kodi_new_status_dic():
+    return {
+        'abort' : False,
+        'dialog' : KODI_MESSAGE_NONE,
+        'msg' : '',
+    }
+
+# Display an error message in the GUI.
+# Returns True in case of error and addon must abort immediately.
+# Returns False if no error.
+def kodi_display_status_message(st_dic):
+    # Display (error) message and return status.
+    if st_dic['dialog'] == KODI_MESSAGE_NONE:
+        pass
+    elif st_dic['dialog'] == KODI_MESSAGE_NOTIFY:
+        kodi_notify(st_dic['msg'])
+    elif st_dic['dialog'] == KODI_MESSAGE_NOTIFY_WARN:
+        kodi_notify(st_dic['msg'])
+    elif st_dic['dialog'] == KODI_MESSAGE_DIALOG:
+        kodi_dialog_OK(st_dic['msg'])
+    else:
+        raise TypeError('st_dic["dialog"] = {}'.format(st_dic['dialog']))
+
+    return st_dic['abort']
+
+def kodi_is_error_status(st_dic): return st_dic['abort']
+
+# Utility function to write more compact code.
+# By default error messages are shown in modal OK dialogs.
+def kodi_set_error_status(st_dic, msg, dialog = KODI_MESSAGE_DIALOG):
+    st_dic['abort'] = True
+    st_dic['msg'] = msg
+    st_dic['dialog'] = dialog
+
+def kodi_reset_status(st_dic):
+    st_dic['abort'] = False
+    st_dic['msg'] = ''
+    st_dic['dialog'] = KODI_MESSAGE_NONE
+
+# -------------------------------------------------------------------------------------------------
+# Alternative Kodi GUI error reporting.
+# This is a more phytonic way of reporting errors than using st_dic.
+# -------------------------------------------------------------------------------------------------
+# Create a Exception-derived class and use that for reporting.
+#
+# Example code:
+# try:
+#     function_that_may_fail()
+# except KodiAddonError as ex:
+#     kodi_display_status_message(ex)
+# else:
+#     kodi_notify('Operation completed')
+#
+# def function_that_may_fail():
+#     raise KodiAddonError(msg, dialog)
+class KodiAddonError(Exception):
+    def __init__(self, msg, dialog = KODI_MESSAGE_DIALOG):
+        self.dialog = dialog
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
+
+def kodi_display_exception(ex):
+    st_dic = kodi_new_status_dic()
+    st_dic['abort'] = True
+    st_dic['dialog'] = ex.dialog
+    st_dic['msg'] = ex.msg
+    kodi_display_status_message(st_dic)

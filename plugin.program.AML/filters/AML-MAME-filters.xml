@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Example Advanced MAME Launcher custom filters
 -->
@@ -36,6 +37,13 @@
 </MAMEFilter>
 
 <MAMEFilter>
+    <Name>Cave arcade games</Name>
+    <Plot>Machines in [COLOR orange]Cave[/COLOR] arcade boards.</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Cave</Manufacturer>
+</MAMEFilter>
+
+<MAMEFilter>
     <Name>Data East arcade games</Name>
     <Plot>Arcade games by [COLOR orange]Data East[/COLOR].</Plot>
     <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
@@ -47,6 +55,13 @@
     <Plot>Arcade games by [COLOR orange]Gaelco[/COLOR].</Plot>
     <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
     <Manufacturer>has Gaelco</Manufacturer>
+</MAMEFilter>
+
+<MAMEFilter>
+    <Name>IGS arcade games</Name>
+    <Plot>Arcade games by [COLOR orange]IGS[/COLOR].</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Igs or has IGS</Manufacturer>
 </MAMEFilter>
 
 <MAMEFilter>
@@ -93,6 +108,13 @@
 </MAMEFilter>
 
 <MAMEFilter>
+    <Name>Mitchell arcade games</Name>
+    <Plot>Arcade games by [COLOR orange]Mitchell[/COLOR].</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Mitchell</Manufacturer>
+</MAMEFilter>
+
+<MAMEFilter>
     <Name>Midway arcade games</Name>
     <Plot>Arcade games by [COLOR orange]Midway[/COLOR].</Plot>
     <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
@@ -117,6 +139,13 @@
 </MAMEFilter>
 
 <MAMEFilter>
+    <Name>Sammy arcade games</Name>
+    <Plot>Arcade games by [COLOR orange]Sammy[/COLOR].</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Sammy</Manufacturer>
+</MAMEFilter>
+
+<MAMEFilter>
     <Name>SEGA arcade games</Name>
     <Plot>Arcade games by [COLOR orange]SEGA[/COLOR].</Plot>
     <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
@@ -124,10 +153,18 @@
 </MAMEFilter>
 
 <MAMEFilter>
+    <Name>Seta arcade games</Name>
+    <Plot>Arcade games by [COLOR orange]Seta[/COLOR].</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Seta or has SETA</Manufacturer>
+</MAMEFilter>
+
+<MAMEFilter>
     <Name>SNK arcade games</Name>
     <Plot>Arcade games by [COLOR orange]SNK[/COLOR].</Plot>
     <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
     <Manufacturer>has SNK or has Snk</Manufacturer>
+    <!-- Exclude the Neo Geo BIOS machines -->
     <Exclude>ng_mv1, ng_mv2f, ng_mv4f, neogeo</Exclude>
 </MAMEFilter>
 
@@ -136,7 +173,15 @@
     <Plot>Machines in [COLOR orange]SNK Neo Geo MVS[/COLOR] arcade board.</Plot>
     <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
     <Driver>NEOGEO_MVS_DRIVER</Driver>
+    <!-- Exclude the Neo Geo BIOS machines -->
     <Exclude>ng_mv1, ng_mv2f, ng_mv4f, neogeo</Exclude>
+</MAMEFilter>
+
+<MAMEFilter>
+    <Name>TAD Corporation arcade games</Name>
+    <Plot>Arcade games by [COLOR orange]TAD Corporation[/COLOR].</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Tad or has TAD</Manufacturer>
 </MAMEFilter>
 
 <MAMEFilter>
@@ -144,6 +189,34 @@
     <Plot>Arcade games by [COLOR orange]Taito[/COLOR].</Plot>
     <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
     <Manufacturer>has Taito</Manufacturer>
+</MAMEFilter>
+
+<MAMEFilter>
+    <Name>Tecmo arcade games</Name>
+    <Plot>Arcade games by [COLOR orange]Tecmo[/COLOR].</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Tecmo</Manufacturer>
+</MAMEFilter>
+
+<MAMEFilter>
+    <Name>Technos arcade games</Name>
+    <Plot>Arcade games by [COLOR orange]Technos[/COLOR].</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Technos</Manufacturer>
+</MAMEFilter>
+
+<MAMEFilter>
+    <Name>Toaplan arcade games</Name>
+    <Plot>Arcade games by [COLOR orange]Toaplan[/COLOR].</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Toaplan</Manufacturer>
+</MAMEFilter>
+
+<MAMEFilter>
+    <Name>Visco arcade games</Name>
+    <Plot>Arcade games by [COLOR orange]Visco[/COLOR].</Plot>
+    <Options>NoClones, NoCoinLess, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Manufacturer>has Visco</Manufacturer>
 </MAMEFilter>
 
 <MAMEFilter>
@@ -237,4 +310,12 @@
     <Controls>STANDARD_CONTROLS</Controls>
 </MAMEFilter>
 
+<MAMEFilter>
+    <Name>Complete machines</Name>
+    <Plot>Complete arcade machines, that is, machines with no missing ROMs, CHDs, or Samples, with standard genres and controls, excluding mature, BIOSes, mechanical and non-working machines.</Plot>
+    <Options>NoClones, NoCoinLess, NoMature, NoBIOS, NoMechanical, NoNonworking</Options>
+    <Options>NoMissingROMs, NoMissingCHDs, NoMissingSamples</Options>
+    <Genre>STANDARD_GENRES</Genre>
+    <Controls>STANDARD_CONTROLS</Controls>
+</MAMEFilter>
 </Advanced_MAME_Launcher_custom_filters>

@@ -1,19 +1,20 @@
 <settings>
 <category label="Main operation">
-    <setting label="Mode" type="enum" id="op_mode_raw" default="0" values="Vanilla MAME|Retroarch MAME 2003 Plus" />
+    <setting label="Operation mode" type="enum" id="op_mode_raw" default="0" values="Vanilla MAME|Retroarch MAME 2003 Plus" />
 
-    <setting id="separator" type="lsep" label="Vanilla MAME" />
+    <setting id="separator" type="lsep" label="Vanilla MAME settings" />
+    <setting label="MAME ROMs path" type="folder" id="rom_path_vanilla" source="" />
     <setting label="Enable Software Lists" type="bool" id="enable_SL" default="true" />
     <setting label="MAME executable path" type="file" id="mame_prog" />
     <setting label="Software Lists hash path" type="folder" id="SL_hash_path" source="" />
 
-    <setting id="separator" type="lsep" label="Retroarch MAME 2003 Plus" />
+    <setting id="separator" type="lsep" label="Retroarch MAME 2003 Plus settings" />
+    <setting label="MAME ROMs path" type="folder" id="rom_path_2003_plus" source="" />
     <setting label="Retroarch executable path" type="file" id="retroarch_prog" />
-    <setting label="Libretro path" type="file" id="libretro_dir" />
+    <setting label="Libretro path" type="folder" id="libretro_dir" source="" />
     <setting label="MAME XML path" type="file" id="xml_2003_path" />
 </category>
 <category label="Optional paths">
-    <setting label="MAME ROMs path" type="folder" id="rom_path" source="" />
     <setting label="MAME Assets path" type="folder" id="assets_path" source="" />
     <setting label="MAME INI/DAT path" type="folder" id="dats_path" source="" />
     <setting label="MAME CHDs path" type="folder" id="chd_path" source="" />
@@ -75,6 +76,7 @@
     <setting label="Action on Kodi playing media" type="enum" id="media_state_action" default="0" values="Stop|Pause|Keep playing" />
     <setting label="After/before launch delay (ms)" type="slider" id="delay_tempo" default="100" range="0,100,15000" option="int" />
     <setting label="Suspend/resume Kodi audio engine" type="bool" id="suspend_audio_engine" default="false" />
+    <setting label="Suspend/resume Kodi screensaver" type="bool" id="suspend_screensaver" default="false" />
     <setting label="Toggle Kodi into windowed mode" type="bool" id="toggle_window" default="false" />
     <setting label="Log level" type="enum" id="log_level" default="2" values="ERROR|WARNING|INFO|VERBOSE|DEBUG" />
 
@@ -83,7 +85,7 @@
     <setting label="Enable MAME asset cache" type="bool" default="false" id="debug_enable_MAME_asset_cache" />
 
     <setting id="separator" type="lsep" label="Information dump" />
-    <setting label="Write MAME item data" type="bool" default="false" id="debug_MAME_item_data" />
+    <setting label="Write MAME machine data" type="bool" default="false" id="debug_MAME_machine_data" />
     <setting label="Write MAME ROMs DB data" type="bool" default="false" id="debug_MAME_ROM_DB_data" />
     <setting label="Write MAME Audit DB data" type="bool" default="false" id="debug_MAME_Audit_DB_data" />
     <setting label="Write SL item data" type="bool" default="false" id="debug_SL_item_data" />

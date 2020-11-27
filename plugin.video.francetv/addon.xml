@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.francetv" name="france.tv" version="2.0.0" provider-name="melmorabity">
+  <requires>
+    <import addon="xbmc.python" version="2.26.0"/>
+    <import addon="script.module.beautifulsoup4" version="4.6.2"/>
+    <import addon="script.module.inputstreamhelper" version="0.5.1"/>
+    <import addon="script.module.requests" version="2.18.4"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon_entry.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <summary lang="en_GB">france.tv</summary>
+    <summary lang="fr_FR">france.tv</summary>
+    <description lang="en_GB">Live and catchup TV for France Télévisions channels</description>
+    <description lang="fr_FR">Direct et replay TV des chaînes France Télévisions</description>
+    <disclaimer lang="en_GB">Some streams may be georestricted to France</disclaimer>
+    <disclaimer lang="fr_FR">Certains contenus ne sont disponibles que depuis la France</disclaimer>
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <website>https://www.france.tv/</website>
+    <source>https://github.com/melmorabity/plugin.video.francetv/</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <news>v2.0.0 (2020-11-27)
+    - Complete rewrite for france.tv mobile API switch
+    - Addon now follows the france.tv mobile application clickstream in terms of ergonomy
+
+v1.1.0 (2019-11-18)
+    - Fixes for Python 3 support
+    - Update Slash icon
+
+v1.0.0 (2018-04-14)
+    - Initial version</news>
+  </extension>
+</addon>

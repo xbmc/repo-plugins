@@ -85,14 +85,16 @@ def populate_dir(files):
                 duration = metadata['duration']
                 video_offset = item.start_from if hasattr(item, 'start_from') else 0
 
+                # mark the video as watched if there is 5% progress left
+                video_finished = duration and ((duration - video_offset) <= (duration * 0.05))
+
                 if duration:
                     info_labels['duration'] = duration
-                    # mark the video as watched if there is %20 progress left
-                    if (duration - video_offset) <= (duration * 0.2):
-                        info_labels['playcount'] = 1
+                    if video_finished:
+                        info_labels['playcount'] = str(1)
 
                 # resumetime and totaltime are the undocumented properties to show resumable icon.
-                if video_offset:
+                if (not video_finished) and video_offset:
                     li.setProperty(key='resumetime', value=str(video_offset))
                 if duration:
                     li.setProperty(key='totaltime', value=str(duration))

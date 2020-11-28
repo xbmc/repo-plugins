@@ -1,0 +1,645 @@
+[B]AML ideas and planned features (more futuristic ideas)[/B]
+
+WIP      [CORE] JSON database files (specially MAME_DB_main.json, MAME_DB_render.json and 
+         MAME_assets.json) could be compressed with DEFLATE to reduce the size on disk. They
+         will decompressed on the fly. I have to test if this is faster than no compression at all.
+         Use low values of compression in the deflate algorithm. Maximum compression is very
+         slow but less compression is fast and may reduce the JSON file size a lot.
+
+         According to Zachmorris, MessagePack is the fastest serialization method in Python 3.
+
+         The module xmltodict is also very interesting and the performance very good in Python 3.
+
+         See https://forum.kodi.tv/showthread.php?tid=329315&pid=2975588#pid2975588
+         See https://github.com/vsergeev/u-msgpack-python
+         See https://github.com/martinblech/xmltodict
+
+WIP      [AUDIT] Samples distributed with MAME are uncompressed and not stored into ZIP files.
+         The MAME audit engine must take this into account.
+         See comments in mame_scan_MAME_ROMs() @mame.py
+
+WIP      [CORE] AML/AEL must report the aspect ratio of artwork to the skin.
+         How to implement this? Using PIL?
+         I think best way is that core developers expose the image aspect ratio to the
+         skin using infolabels.
+
+
+[B]AML ideas and planned features (read to implement)[/B]
+
+WIP      [CORE] Implement the "Read-only launchers". ROLs are XML files that include the
+         launcher information as well as the ROMs information. ROLs are generated with AML,
+         can be exported as XML and then used with AEL. AEL will handle ROLs as read-only
+         (cannot be edited). If a ROL should be changed, then the XML is edited or regenerated
+         and then imported again into AML.
+
+WIP      [MANUALS] Increase the number of supported PDF filters.
+         This may require A LOT of Python coding.
+
+WIP      [MANUALS] Support for CBZ/CBR manuals.
+         In theory Kodi VFS is able to read RAR files.
+         Wait until this is implemented in AEL and then port it from AEL into AML?
+
+WIP      [CORE] Recursive context menus.
+         Pay attention to the select() bug in Kodi Krypton.
+         This requires Kodi version detection and having different code for Krypton/Leia.
+         Start with the context menu in which recursiveness ir more useful.
+
+WIP      [GRAPHICS] Optimize the generation of 3D boxes.
+         Cache the background images used in all boxes.
+
+WIP      [GRAPHICS] Respect the aspect ratio in 3D boxes. For example, if the poster in the
+         front size of the 3D box is square the 3D box must be square, do not strech the
+         poster texture. ScreenScraper respects the aspect ratio of the 3D boxes, have
+         a look at examples there (for example, see Mega Drive 3D box and PSX 3D box).
+
+WIP      Retroarch core MAME 2003 Plus allows to save the MAME XML file needed by AML.
+         In this core, the XML is extracted using the MAME internal menu, which must be
+         opened with the Retroarch core options menu. The XML file is saved in the SAVES
+         directory with name mame2003-plus/mame2003-plus.xml
+         Exploit this to give support to MAME 2003 and then Android. According to
+         Chrisism, Retroarch is currently the best way to use MAME in Android.
+         TTBOMK, currently it is the only core to support this feature. Investigate if there
+         are more Retroarch cores with this feature.
+
+         See https://github.com/libretro/mame2003-libretro/pull/348
+         See https://github.com/libretro/mame2003-plus-libretro/pull/8
+         See https://github.com/libretro/mame2010-libretro/pull/123
+         See https://github.com/libretro/mame2010-libretro/tree/master/metadata
+
+
+[B]Advanced MAME Launcher | version 1.0.1 | xx xxxxxx 2021[/B]
+
+WIP      [DOCS] Improve the AML wiki in Github and move documentation from Kodi forum to
+         Github wiki.
+
+
+[B]Advanced MAME Launcher | version 1.0.0 | 10 November 2020[/B]
+
+FEATURE  [CORE] Port the addon to Kodi Matrix and Python 3.
+
+FEATURE  [CORE] xbmc.translatePath is deprecated in Matrix, use xbmcvfs.translatePath instead.
+
+FIX      [MANUALS] The pdfwr library is not working well with Python 3. PDF image extraction
+         have been disabled until this issue is fixed.
+
+
+[B]Advanced MAME Launcher | version 0.10.0 | xx November 2020[/B]
+
+FEATURE  [CORE] Big code refactoring to prepare Kodi Python API changes.
+
+FEATURE  [CORE] Include Software Lists that have no associated MAME machines in "Machines
+         by Software List" filter.
+
+FEATURE  [CORE] Create branch python2 and place series 0.10.x into this branch.
+
+FEATURE  [CORE] Support Retroarch MAME 2003 Plus.
+
+FEATURE  [FILTERS] Implement filtering options NoMissingROMs, NoMissingCHDs and NoMissingSamples.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2964109#pid2964109
+
+FEATURE  [CORE] Different colours for different filters in the root window.
+
+FEATURE  [CORE] In the Setup Plugin CM, Build Fanarts and 3D boxes: add an option to
+         build all the Fanarts and 3D boxes at once.
+
+FEATURE  [CORE] Reorganised the Setup Plugin context menu a bit.
+
+FEATURE  [CORE] Export MAME info with billyc999s XML format.
+
+FEATURE  [CORE] New Utility "Show machines with biggest ROMs"
+
+FEATURE  [CORE] New Utility "Show machines with smallest ROMs"
+
+FEATURE  [CORE] Disable Kodi screensaver when launching MAME and reenable after MAME finishes.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2934194#pid2934194
+
+FIX      [CORE] Fixed crash when creating ROM audit database when MAME CHD set was SPLIT.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2975566#pid2975566
+
+FIX      [CORE] Fix parsing of mameinfo.dat 0.226.
+
+
+[B]Advanced MAME Launcher | version 0.9.12 | 10 February 2020[/B]
+
+FEATURE  Create a new infolabel $INFO[ListItem.Property(history)] which shows the contents
+         of history.dat for a machine. Add an option to include the contents of History.DAT
+         in the asset database.
+         Once this is tested remove the code to include History.DAT in the plot.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2916270#pid2916270
+
+FEATURE  Option to hide MAME machine flags.
+         Contributed by Rychem28.
+
+FEATURE  Option to hide SL item flags.
+         Contributed by Rychem28.
+
+FEATURE  Option to display only SL items with ROMs/CHDs available.
+         Contributed by Rychem28.
+
+FIX      Fixed parsing of History.dat 2.17.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2913592#pid2913592
+
+
+[B]Advanced MAME Launcher | version 0.9.11 | 26 November 2019[/B]
+
+FEATURE  [CORE] For Software Lists, instead of showing the number of ROMs show the number
+         of Items in Flat display mode or Parents in Parent/Clone display mode.
+
+FEATURE  [CORE] Support for MASH's Alltime.ini.
+
+FEATURE  [CORE] Improvements in the JSON index of DAT files. Use dictionaries and not list
+         to reduce JSON file size and speed up data access.
+
+FEATURE  [CORE] Improved main statistics.
+
+FEATURE  [CORE] Improve some Software List long names until they are fixed in MAME repository.
+
+FIX      Fixed conversion to int of addon version str in fs_AML_version_str_to_int()
+
+FIX      New history.dat makes AML to crash because one entry could be for more than one
+         machine. In addition, the same description can be used over several SLs.
+
+
+[B]Advanced MAME Launcher | version 0.9.10 | 10 May 2019[/B]
+
+FEATURE  Option to disable Software Lists at all in Vanilla MAME mode.
+
+FEATURE  Management of MAME Favourite objects (delete missing, delete single).
+
+FEATURE  Management of SL Favourite objects (delete missing, delete single).
+
+FEATURE  Initial support for Retroarch MAME 2003 Plus core.
+
+FEATURE  [CORE] Ability to export DAT files in Logiqx format for MAME ROMs and MAME CHDs.
+
+FEATURE  [CORE] Differentiate between Non-merged and Fully non-merged MAME ROM sets.
+         Non-merged sets do not include BIOS and device ROMs.
+         Fully non-merged sets include BIOS and devices ROMs (every ROM required to run each
+         machine). Pleasuredome ROM sets are Fully non-merged.
+         This needs more testing.
+
+FEATURE  [FILTERING] Test the filters for errors. For example, test that all the drivers
+         defined in <Driver> exist. Another example, test that the genres defined in
+         <Genre> and the controls defined in <Controls> exist.
+
+FEATURE  [FILTERING] Warn the user if errors found in the XML filter definition, maybe in
+         a report the user can read later.
+
+FEATURE  [FILTERING] Make a filter report the user can read. Now, only the number of machines
+         after filtering is reported.
+
+FEATURE  [GRAPHICS] Generate MAME machines and SL items 3D Boxes.
+
+FEATURE  [GRAPHICS] Refactoring of the Fanart and 3D Box code generation. Creation of graphics.py.
+
+FEATURE  [GRAPHICS] Only generate 3D Boxes if both Fyler and Clearlogo (MAME) or Boxfront (SL)
+         are present. Avoid having empty 3D boxes.
+
+FEATURE  [CORE] Improved filter "Machines by Display Type" and removed filter
+         "Machines by Display Rotation."
+
+FEATURE  [CORE] New catalog filter "Machines by Display VSync freq." Inspired by
+         MASH's MAMEINFO Vsync.ini.
+
+FEATURE  [CORE] New catalog filter "Machines by Display Resolution" Inspired by
+         MASH's MAMEINFO Screen.ini.
+
+FEATURE  [CORE] New catalog filter "Machines by CPU" Inspired by
+         MASH's MAMEINFO CPU.ini.
+
+FEATURE  [CORE] Rewrite the INI loading engine.
+         See comments in header of function mame_load_INI_datfile().
+
+FEATURE  [CORE] New INI file Artwork.ini (produced by MASH's MAMEINFO).
+         Catalog filter "Machines by Artwork".
+         Note that Artwork.ini places the same machine in different categories. Maybe other
+         INIs do the same and currently AML does not support this. This requires
+         some changes in AML engine.
+
+FEATURE  New catalog "Version added"
+
+FEATURE  [CORE] New INI file Category.ini (produced by MASH's MAMEINFO).
+         Catalog filter "Machines by Category".
+
+FEATURE  [CORE] New "All in one (Extract, Build and Scan)" options:
+         1) Delete current to "All in one (Extract, Build, Scan)"
+         2) Add "All in one (Extract, Build, Scan, Filters)"
+         3) Add "All in one (Extract, Build, Scan, Filters, Audit)"
+
+FEATURE  [CORE] By request of Rufoo, support MAME 3dboxes.
+
+FIX      Fixed a couple of crashes when executing context menus, thanks to Dax9.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2838180#pid2838180
+
+FIX      Fix the render_skin_*() functions. These are called by skins to get a list of
+         filters.
+
+
+[B]Advanced MAME Launcher | version 0.9.9 | 22 March 2019[/B]
+
+FEATURE  [CORE] Improve statistics of working, non-working games, etc. for the Main filters.
+
+FEATURE  [CORE] [LEIA] Check out the ListItem constructor offscreen parameter in Leia.
+         The offscreen parameter increases the speed a bit.
+         This requires Kodi version detection and having different code for Krypton/Leia.
+         See https://forum.kodi.tv/showthread.php?tid=329315&pid=2711937#pid2711937
+         and https://forum.kodi.tv/showthread.php?tid=307394&pid=2531524
+
+FEATURE  [CORE] [LEIA] Use the new API function ListItem.setProperties({p1:v1, p2:v2, ...})
+         This requires Kodi version detection and having different code for Krypton/Leia.
+         See https://forum.kodi.tv/showthread.php?tid=332283
+
+FEATURE  [FANARTS] Set an order to print fanart assets. This will allow to have images printed
+         on top of each other.
+
+FEATURE  [CORE] Improve the Samples scanner and report.
+
+FEATURE  [CORE] MAME and SL plots build timestamp.
+
+FEATURE  [CORE] MAME and SL Fanart build timestamp.
+
+FEATURE  [CORE] MAME render and asset cache build timestamp.
+
+FEATURE  [CORE] Move the utilities from the addon settings into the root menu.
+
+FEATURE  [CORE] Move the report viewer from the context menu to the root menu. The context
+         menu is a little bit overloaded and this will alleviate the situation.
+
+FEATURE  [CORE] Use xbmcplugin.addDirectoryItems() instead of xbmcplugin.addDirectoryItem().
+         According to the docs "Large lists benefit over using the standard addDirectoryItem().
+         You may call this more than once to add items in chunks."
+
+FEATURE  [CORE] Configuring every DAT and INI file one by one is tedious. Instead, define
+         a directory where the DATs must be placed and pick the files from there automatically.
+
+FEATURE  [CORE] Add plots for entries in the root window.
+
+FEATURE  [CORE] Renamed the "Machines by Score" filter to "Machines by Rating", to avoid
+         confusing with scores in games.
+
+FEATURE  [CORE] Implement context menu "All in one (Extract, Build and Scan)"
+
+FEATURE  [CORE] Refactoring and code cleaning of the addon setup functions (DB build, scanner).
+
+FEATURE  [CORE] Remove redundant fields from MAME DB 'coins' and 'control_type'. Use new
+         'input' data structure to replace them.
+
+FEATURE  [CORE] At least two directories for samples are needed. MAME includes a default samples
+         directory with some samples used by some machines. Both directories must be configured
+         in mame.ini in order to get all the samples working.
+
+         NOTE This feature was cancelled. Only one Samples directory. If the user wants to have
+         a complete Good audit, then the samples shipped with MAME must be compressed and
+         the ZIP file placed in the unique samples directory. In any case, only three machines
+         are affected.
+
+FEATURE  [FILTERING] Implement <Include>, <Exclude> and <Change> tags.
+         This will require more work than expected. Currently, only parent machines are filtered
+         and clone machines are added after the filtering process. However, to implement
+         Include, Exclude and Change tags, all machines must be included in the filter list.
+         This will require modification of the filter render engine (must be rendered always in
+         flat mode and not in parent/clone mode).
+
+FEATURE  [MANUALS] Progress bar when extracting PDF pages.
+
+FEATURE  [MANUALS] When displaying manuals use cached extracted images if they exist.
+         When the manual is extracted, create a small JSON file with the timestamp of
+         the extraction so it can be compared with the timestamp of the PDF file to
+         test if images must be extracted again.
+
+FIX      In MAME 0.206, some clone merged ROMs are not present in the parent machine, only
+         in the BIOS. For example, in machine adonisce (clone of adonis). Before 0.206, such
+         ROMs were also present on the parent machine. This change in behaviour crashed AML.
+
+FIX      Fixed the AML addon and MAME numerical versioning scheme.
+
+FIX      Fix crash in "Build MAME databases".
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2822949#pid2822949
+
+FIX      Some Software List ROMs are compressed using non-ASCII characters and this make
+         the audit engine to crash. I have to investigate how to fix this issue.
+         Maybe use the chardet library https://github.com/Wintermute0110/chardet/tree/master/chardet
+         I think this should reported creating an issue in MAME project in Github.
+         Problematic SL ROM example: SL ibm5170, item wordfndr
+         https://github.com/mamedev/mame/blob/master/hash/ibm5170.xml#L7521
+         The current implementation just ignores non-ASCII files and the audit fails for those
+         SL items.
+
+
+[B]Advanced MAME Launcher | version 0.9.8 | 23 June 2018[/B]
+
+FEATURE  [DOCS] Documentation in README.md improved.
+
+FEATURE  [LEIA] Kodi Leia will cache the Python interpreter which means submodules will only
+         be executed once and cached. sys.argv must be propagated from the entry point code
+         into the submodules.
+         See https://github.com/xbmc/xbmc/pull/13814
+         and https://forum.kodi.tv/showthread.php?tid=303073&pid=2729071#pid2729071
+
+FIX      Changed source code files to remove BOM. This is necessary to pass Travis tests of
+         Kodi official repo.
+
+FIX      ActivateWindow(busydialog) and Dialog.Close(busydialog) have been deprecated.
+         Use DialogProgress() for all operations.
+         See https://github.com/xbmc/xbmc/pull/13958
+         and https://github.com/xbmc/xbmc/pull/13954
+         and https://github.com/xbmc/xbmc/pull/10699
+
+FIX      Do not use the xbmc.Player() in launcher addons. Instead, use functions like
+         xbmc.getCondVisibility("Player.HasMedia"), xbmc.executebuiltin("PlayerControl(stop)"), etc.
+         Change proposed by enen92.
+         See https://github.com/xbmc/repo-plugins/pull/1886#discussion_r196591764
+
+
+[B]Advanced MAME Launcher | version 0.9.7 | 09 June 2018[/B]
+
+FEATURE  Implemented settings "display_rom_available" and "display_chd_available".
+
+FEATURE  [LAUNCH] Implement "Action on Kodi playing media", "After/before launch delay (ms)", and
+         "Suspend/resume Kodi audio engine".
+         See https://github.com/Wintermute0110/plugin.program.AML/issues/3
+
+FEATURE  [MAME FILTERING] Improve the Custom Filters (add more filtering options as defined
+         in the reference filter file `AML-MAME-filters-reference.xml`).
+
+FEATURE  [CORE] Render the `In Favourites` flag for MAME machines.
+
+FEATURE  [CORE] Optimize the rendering of ROMs in 3 steps: a) Loading, b) Processing and c) Rendering.
+         Processing computes all data to render ROMs and Rendering calls Kodi functions. This will
+         allow to measure how long does it take to call the Kodi functions for ListItem generation.
+
+FEATURE  [CORE] Reduce the memory consumption during the database generation.
+         By default use the options OPTION_COMPACT_JSON = True and OPTION_LOWMEM_WRITE_JSON = True
+         See https://stackoverflow.com/questions/24239613/memoryerror-using-json-dumps
+
+FIX      Fix crash when executing "Check/Update all objects" if Favourites are empty.
+
+
+[B]Advanced MAME Launcher | version 0.9.6 | 25 May 2018[/B]
+
+FEATURE  Improve the user experience when the addon is just installed. Check if databases
+         have been built, check for errors, etc.
+
+FEATURE  Add a isMature field to MAME DB. Take the mature information from mature.ini included
+         in the Catver.ini ZIP file.
+
+FEATURE  Option in settings to completely hide Mature machines and filter categories.
+
+FEATURE  Asset hashed database. This will speed up launching MAME machines. Note that the asset
+         DB must be opened for the Most Played and Recently Played DBs.
+
+FEATURE  Prettify the "Display rotation" filter (use Horizontal/Vertical instead of numbers).
+
+FEATURE  Include number of buttons in controls and some other control information.
+
+FEATURE  Add the Samples of each machine to the ROM database.
+
+FEATURE  Audit the ROM samples inside ZIP files.
+
+FEATURE  Implement "Most played MAME machines"
+
+FEATURE  Implement "Recently played MAME machines"
+
+FEATURE  Option in settings to update all MAME and SL Favourite ROMs. Useful for plugin upgrades.
+
+FEATURE  Implement "Most played SL ROMs"
+
+FEATURE  Implement "Recently played SL ROMs"
+
+
+[B]Advanced MAME Launcher | version 0.9.5 | 11 May 2018[/B]
+
+FEATURE  Option to disable the ROM and asset caches.
+
+FEATURE  CRC32 hash collision detector for MAME and SL ROMs.
+
+FEATURE  MAME ROM and asset cache disable by default. They may be enabled by user that want to
+         increase the loading speed. This will be very useful for develpment because
+         cache rebuilding takes a long time.
+
+FEATURE  Check if AML configuration is OK or not, and warn the user about warnings/errors.
+
+FEATURE  Improved PDF manual rendering. Use the library pdfrw for image extraction.
+
+FEATURE  Clean ROM cache before rebuilding cache.
+
+FEATURE  Clean asset cache before rebuilding cache.
+
+FEATURE  Clean filters directory before rebuilding custom filters.
+
+FEATURE  MAME audit statistics.
+
+FEATURE  SL audit statistics.
+
+FEATURE  Support for SL Merged ROM/CHD sets (currently only Split).
+
+FEATURE  Added audit timestamps (MAME machines and Software Lists).
+
+FEATURE  Move driver aristmk5.cpp (Aristocrat gambling machines) from Standard to Unusual.
+         Also, adp.cpp, mpu4vid.cpp, cubo.cpp, sfbonus.cpp, peplus.cpp.
+
+FIX      Software List ROM size was stored as string and not as int. This made the SL Audit to
+         completely fail.
+
+FIX      Fixed audit of MAME machine ROMs (wrong function name).
+
+FIX      Lots of fixes to MAME ROM audit engine.
+
+FIX      Lots of fixes to Software Lists audit engine.
+
+
+[B]Advanced MAME Launcher | version 0.9.4 | 29 March 2018[/B]
+
+FEATURE  File cache for SL ROMs/CHDs and SL assets.
+
+FEATURE  Port the file scanner cache from AEL to AML. This will increase the scanning speed a lot!
+         Also, this will allow supporting more image types (currently only PNG), manual
+         types (currently only PDF) and trailer types (currently MP4 only).
+
+FEATURE  Create an AEL virtual launcher in XML from any AML filter.
+
+FEATURE  Use proper Software List name in "Machines by Software List" filter.
+
+FEATURE  Use proper short name in "Machines by MAME short name" filter.
+
+FEATURE  Clean Render and main machine JSON files. Currently, there are repeated fields on both
+         databases like nplayers.
+
+FEATURE  Move flags and plot from the render database to the assets database. Flags are modified
+         by the scanner only and plot generated after the scanner. If flags and plot are in
+         the asset DB, the ROM cache and hashed DB must be regenerated after the database building
+         only and not always like now.
+
+FEATURE  Render PDF manuals consisting of image scans (99% of game manuals are scans of images).
+         Thank you very much to i96751414 for allowing use of his PDF reader addon code.
+         Have a look at the PDF reader addon https://forum.kodi.tv/showthread.php?tid=187421
+         and https://github.com/i96751414/plugin.image.pdfreader
+         This initial implementation somewhat works for some PDFs but code can be improved a lot.
+
+FEATURE  Create a hased database for all catalog filter combination. This will require the
+         creation of about 5000 json files but will make AEL as fast as possible.
+
+FEATURE  Hashed database for assets, in a similar fashion to the catalog ROM hashed database.
+
+FEATURE  Make a ROM cache and a assets cache for the MAME filters. That will increase the
+         loading speed of the MAME filters a lot.
+
+FEATURE  Support MAME artwork by Mr. Do's. Note that Clones use Parent's artwork automatically.
+
+FEATURE  Use Parent/Clone substituted artwork in MAME. For example, most trailers are only available
+         for the Parent machine and can be used by Clone machines.
+
+FEATURE  Use Parent/Clone substituted artwork in Software Lists.
+
+FEATURE  Build Fanarts from other pieces of artwork for Software List items.
+
+FEATURE  Build Fanarts from other pieces of artwork for MAME machines.
+
+FEATURE  Test MAME and SL Fanart building.
+
+FEATURE  Custom MAME filters, using XML files. Merge some of the functionality of NARS into AML.
+         First, give to support to filter by driver. Later, more filters can be added.
+
+FEATURE  "Browse by MAME short name" and "Browse by MAME long name" alphabetical catalogs.
+
+FEATURE  Renamed plugin from plugin.program.advanced.MAME.launcher to plugin.program.AML.
+         Shorter name, shorter databases, higher speed.
+
+FEATURE  Some skin helper commands to display widgets.
+
+FEATURE  Support bestgames.ini and series.ini.
+
+FEATURE  Generate machine plot from MAME XML information.
+
+FEATURE  New Main filters Normal and Unusual.
+
+FEATURE  Show ROMs of a MAME machine that should be in a ZIP file. Supports Merged, Split and
+         Non-merged sets, CHDs, BIOS and Devices with ROMs.
+
+FEATURE  Audit MAME ROMs for all machines.
+
+FEATURE  Show SL ROMs of a SL entry. Supports Merged, Split and Non-merged sets and SL CHDs.
+
+FEATURE  Audit SL ROMs.
+
+FEATURE  Display MAMEINFO.DAT information.
+
+FEATURE  Display HISTORY.DAT in information.
+
+FEATURE  Display gameinit.dat in information.
+
+FEATURE  Display command.dat in information.
+
+FEATURE  At launching, do not check ROMs for machines which doesn't have ROMs.
+         Requires loading machines database, which will slow down launching process a lot!
+         A hashed database of machines is necessary to speed up plugin.
+         Better solution for now: do not do any check. Let MAME fail if there are ROM/CHD errors.
+
+FEATURE  Allow user to choose default assets as AEL does in addon seetings.
+
+FEATURE  Trailer support in MAME machines and Software Lists.
+
+FEATURE  Manage MAME Favourites context menu.
+
+FEATURE  Manage SL Favourites context menu.
+
+FEATURE  Create a hased database for main ROM database and Audit ROM database.
+
+
+[B]Advanced MAME Launcher | version 0.9.3 | 30 May 2017[/B]
+
+FEATURE  Ability to choose default Icon and Fanart for MAME and SL ROMs in addon settings.
+
+FEATURE  "Parent only" view mode.
+
+FEATURE  Plugin speed has been increased a lot owing to a brand new database design.
+
+FEATURE  Unified catalog system and new machine rendering method.
+         Requires wiping of ADDON_DATA_DIR to avoid problems.
+
+FEATURE  Properties can be configured for every individual list in AML.
+
+FEATURE  New Status Device flag. Marks wheter a device is mandatory or not.
+
+FEATURE  Show database statistics.
+
+FEATURE  Favourite MAME machines.
+
+FEATURE  Favourite Software Lists ROMs.
+
+FEATURE  Scan SL assets/artwork.
+
+FEATURE  Manage MAME Favourites.
+
+
+[B]Advanced MAME Launcher | version 0.9.2 | 12 February 2017[/B]
+
+FEATURE  Ability to sort cataloged filters by number of machines.
+
+FEATURE  New Main Filter "Machines with no ROMs".
+
+FEATURE  Launch parents with no clones from the parents list in Catalogued filters.
+
+FEATURE  Use a fancy name for well-known MAME drivers.
+
+FEATURE  On filter `Machines by Software List`, substitute short SL name by the proper SL name.
+
+FEATURE  Display MAME stdout/stderr.
+
+FEATURE  Scan Software Lists.
+
+FEATURE  Launch machines with software lists.
+        
+FIX      Use SORT_METHOD_LABEL_IGNORE_FOLDERS insead of SORT_METHOD_LABEL. This avoids folders
+         to be rendered first when sorting listitems alpahbetically.
+
+
+[B]Advanced MAME Launcher | version 0.9.1 | 04 February 2017[/B]
+
+FEATURE  AML only works on Krypton now. Updated addon.xml with new fields.
+
+FEATURE  Add support for nplayers.ini.
+
+FEATURE  Count machines in "Extract MAME.xml" step and not in "Build MAME database" step.
+
+FEATURE  Print the number of clones each machine has. In general, print the number of items
+         on a submenu.
+
+FEATURE  Add catalog by Devices. This will help launching software list machines.
+
+FEATURE  In a parent list, if there is not clones, then add the ability to launch games from the
+         parent list. Only coded for indexed machines and not for cataloged machines.
+         See http://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=108507#Post108507
+
+FEATURE  Switch in settings to diplay Working machines only.
+         See http://forum.kodi.tv/showthread.php?tid=304186&pid=2506150#pid2506150
+
+FEATURE  Improved categories in "Machines by Control Type catalog".
+
+FIX      "I get an error whenever trying to open any "Ball & Paddle" category. I'm pretty sure this 
+         is due to the ampersand, because all the other categories I've tried work. This issue doesn't 
+         affect ROMs with an ampersand in their name, like Cloak & Dagger."
+         See http://forum.kodi.tv/showthread.php?tid=304186&pid=2506150#pid2506150
+
+         Problem was that the '&' in the Kodi URL was not escaped.
+
+
+[B]Advanced MAME Launcher | version 0.9.0 | 15 January 2017[/B]
+
+         Initial release
+
+FEATURE  Extract MAME.xml from MAME executable. Tested only on Linux.
+
+FEATURE  Generate main MAME machine database, indices and catalogs from MAME.xml.
+
+FEATURE  Scan ROMs and tell the user about Have/Missing ROMs.
+
+FEATURE  Launch MAME non-Software List (arcade) machines.
+
+FEATURE  Scan CHDs and samples.
+
+FEATURE  Scan assets and build assets database.
+
+FEATURE  Display MAME machine metadata/artwork.
+
+FEATURE  Build Software List catalog.

@@ -1,0 +1,39 @@
+<!--
+    AML Software List Fanart template.
+    Images/assets are drawn in the order they appear in the XML.
+    Fanart size is 1920 x 1080.
+-->
+<Advanced_MAME_Launcher_SL_Fanart>
+    <!-- Software List item artwork images -->
+    <BoxFront>
+        <width>650</width>
+        <height>980</height>
+        <left>100</left>
+        <top>50</top>
+    </BoxFront>
+    <!-- Aspect ratio of screenshots 4:3 = 1.333 -->
+    <Snap>
+        <width>950</width>
+        <height>710</height>
+        <left>840</left>
+        <top>320</top>
+    </Snap>
+    <Title>
+        <width>350</width>
+        <height>262</height>
+        <left>1460</left>
+        <top>50</top>
+    </Title>
+
+    <!-- Software List text fields -->
+    <SLName>
+        <left>840</left>
+        <top>50</top>
+        <fontsize>76</fontsize>
+    </SLName>
+    <ItemName>
+        <left>840</left>
+        <top>130</top>
+        <fontsize>76</fontsize>
+    </ItemName>
+</Advanced_MAME_Launcher_SL_Fanart>

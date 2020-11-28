@@ -13,13 +13,15 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
 
-# --- Python standard library ---
+# --- Be prepared for the future ---
 from __future__ import unicode_literals
 from __future__ import division
-import sys
 
 # --- Modules/packages in this plugin ---
 import resources.main
+
+# --- Python standard library ---
+import sys
 
 # -------------------------------------------------------------------------------------------------
 # main()

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Advanced MAME Launcher PDF/CBZ/CBR manual image extraction.
-
 # Copyright (c) 2016-2020 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -13,37 +11,44 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
 
-# --- Python standard library ---
+# Advanced MAME Launcher PDF/CBZ/CBR manual image extraction.
+
+# --- Be prepared for the future ---
 # NOTE String literals are needed in this file so unicode_literals cannot be defined.
 # from __future__ import unicode_literals
+
+# --- Modules/packages in this plugin ---
+from .constants import *
+from .utils import *
+from .db import *
+
+# --- Kodi stuff ---
+import xbmcaddon
+
+# --- Load pdfrw module ---
+import sys
+__addon_id__ = xbmcaddon.Addon().getAddonInfo('id')
+sys.path.insert(0, FileName('special://home/addons').pjoin(__addon_id__).pjoin('pdfrw').getPath())
+from pdfrw import PdfReader
+from pdfrw.objects.pdfarray import PdfArray
+from pdfrw.objects.pdfname import BasePdfName
+
+# --- Python standard library ---
+# NOTE String literals are needed in this file so unicode_literals cannot be defined.
+#      Is this because of the PDF library???
+import io
 import pprint
-import StringIO
 import struct
 import time
 import types
 import zlib
-
+if ADDON_RUNNING_PYTHON_2:
+    import StringIO
 try:
     from PIL import Image
     PYTHON_PIL_AVAILABLE = True
 except:
     PYTHON_PIL_AVAILABLE = False
-
-# --- Kodi stuff ---
-import xbmcaddon
-
-# --- Modules/packages in this plugin ---
-from .utils import *
-from .utils_kodi import *
-from .disk_IO import *
-
-# --- Load pdfrw module ---
-__addon_id__ = xbmcaddon.Addon().getAddonInfo('id').decode('utf-8')
-pdfrw_FN = FileName('special://home/addons').pjoin(__addon_id__).pjoin('pdfrw')
-sys.path.insert(0, pdfrw_FN.getPath())
-from pdfrw import PdfReader
-from pdfrw.objects.pdfarray import PdfArray
-from pdfrw.objects.pdfname import BasePdfName
 
 # -------------------------------------------------------------------------------------------------
 # pdfrw module code
@@ -89,7 +94,7 @@ def _extract_image_from_XObject(xobj_dic):
     num_filters = 0
     filter_list = []
     if type(xobj_dic['/Filter']) is PdfArray:
-        # log_info('Filter list = "{0}"'.format(unicode(xobj_dic['/Filter'])))
+        # log_info('Filter list = "{}"'.format(text_type(xobj_dic['/Filter'])))
         for filter_name in xobj_dic['/Filter']:
             filter_list.append(filter_name)
         num_filters = len(xobj_dic['/Filter'])
@@ -103,7 +108,7 @@ def _extract_image_from_XObject(xobj_dic):
         log_info('----------------')
         return None
     else:
-        log_info('Unknown type(xobj_dic[\'/Filter\']) = "{0}"'.format(type(xobj_dic['/Filter'])))
+        log_info('Unknown type(xobj_dic[\'/Filter\']) = "{}"'.format(type(xobj_dic['/Filter'])))
         raise TypeError
     color_space = xobj_dic['/ColorSpace']
     bits_per_component = xobj_dic['/BitsPerComponent']
@@ -111,13 +116,13 @@ def _extract_image_from_XObject(xobj_dic):
     width = int(xobj_dic['/Width'])
 
     # --- Print info ---
-    log_debug('num_filters        {0}'.format(num_filters))
+    log_debug('num_filters        {}'.format(num_filters))
     for i, filter_name in enumerate(filter_list):
-        log_debug('/Filter[{0}]         {1}'.format(i, filter_name))
-    log_debug('/ColorSpace        {0}'.format(color_space))
-    log_debug('/BitsPerComponent  {0}'.format(bits_per_component))
-    log_debug('/Height            {0}'.format(height))
-    log_debug('/Width             {0}'.format(width))
+        log_debug('/Filter[{}]         {}'.format(i, filter_name))
+    log_debug('/ColorSpace        {}'.format(color_space))
+    log_debug('/BitsPerComponent  {}'.format(bits_per_component))
+    log_debug('/Height            {}'.format(height))
+    log_debug('/Width             {}'.format(width))
 
     # NOTE /Filter = /FlateDecode may be PNG images. Check for magic number.
     jpg_magic_number     = '\xff\xd8'
@@ -196,7 +201,7 @@ def _extract_image_from_XObject(xobj_dic):
         """
         log_debug('extract_image_from_XObject() Saving monochrome /CCITTFaxDecode')
         log_debug('/DecodeParms =')
-        log_debug('{0}'.format(pprint.pformat(xobj_dic['/DecodeParms'])))
+        log_debug('{}'.format(pprint.pformat(xobj_dic['/DecodeParms'])))
         K = int(xobj_dic['/DecodeParms']['/K'])
         if K == -1: CCITT_group = 4
         else:       CCITT_group = 3
@@ -204,14 +209,14 @@ def _extract_image_from_XObject(xobj_dic):
         tiff_header = _tiff_header_for_CCITT(width, height, img_size, CCITT_group)
         log_debug('img_size = {0:d}'.format(img_size))
         log_debug('CCITT_group = {0:d}'.format(CCITT_group))
-        log_debug('type(tiff_header) = {0}'.format(type(tiff_header)))
-        log_debug('type(xobj_dic.stream) = {0}'.format(type(xobj_dic.stream)))
+        log_debug('type(tiff_header) = {}'.format(type(tiff_header)))
+        log_debug('type(xobj_dic.stream) = {}'.format(type(xobj_dic.stream)))
 
-        # >> DEBUG file write
-        # with open('test.tiff', 'wb') as img_file:
+        # DEBUG file write
+        # with io.open('test.tiff', 'wb') as img_file:
         #     img_file.write(tiff_header + xobj_dic.stream)
 
-        # >> Open memory file with PIL
+        # Open memory file with PIL
         # img = Image.open(StringIO.StringIO(tiff_header + xobj_dic.stream))
 
     else:
@@ -224,14 +229,14 @@ def _extract_image_from_XObject(xobj_dic):
 def manuals_extract_pages_pdfrw(status_dic, PDF_file_FN, img_dir_FN):
     # --- Load and parse PDF ---
     reader = PdfReader(PDF_file_FN.getPath())
-    log_info('PDF file "{0}"'.format(PDF_file_FN.getPath()))
-    log_info('PDF has {0} pages'.format(reader.numPages))
+    log_info('PDF file "{}"'.format(PDF_file_FN.getPath()))
+    log_info('PDF has {} pages'.format(reader.numPages))
 
     # --- Iterate page by page ---
     image_counter = 0
     for page_index, page in enumerate(reader.pages):
         # --- Iterate /Resources in page ---
-        # log_debug('###### Processing page {0} ######'.format(page_index))
+        # log_debug('###### Processing page {} ######'.format(page_index))
         resource_dic = page['/Resources']
         for r_name, resource in resource_dic.iteritems():
             # >> Skip non /XObject keys in /Resources
@@ -261,9 +266,9 @@ def manuals_extract_pages_pdfrw(status_dic, PDF_file_FN, img_dir_FN):
 
                 # --- Print info ---
                 log_debug('------ Page {0:02d} Image {1:02d} ------'.format(page_index, img_index))
-                log_debug('xobj_name     {0}'.format(xobj_name))
-                log_debug('xobj_type     {0}'.format(xobj_type))
-                log_debug('xobj_subtype  {0}'.format(xobj_subtype))
+                log_debug('xobj_name     {}'.format(xobj_name))
+                log_debug('xobj_type     {}'.format(xobj_type))
+                log_debug('xobj_subtype  {}'.format(xobj_subtype))
                 # log_debug('--- xobj_dic ---')
                 # log_debug(pprint.pformat(xobj_dic))
                 # log_debug('----------------')
@@ -276,13 +281,13 @@ def manuals_extract_pages_pdfrw(status_dic, PDF_file_FN, img_dir_FN):
                 if img:
                     img_basename_str = 'Image_page{0:02d}_img{1:02d}.png'.format(i, img_index)
                     img_path_str = img_dir_FN.pjoin(img_basename_str).getPath()
-                    log_debug('Saving IMG "{0}"'.format(img_path_str))
+                    log_debug('Saving IMG "{}"'.format(img_path_str))
                     img.save(img_path_str, 'PNG')
                     image_counter += 1
                     img_index += 1
                 else:
                     log_warning('Error extracting image from /XObject')
-    log_info('Extracted {0} images from PDF'.format(image_counter))
+    log_info('Extracted {} images from PDF'.format(image_counter))
 
     # --- Initialise status_dic ---
     status_dic['manFormat'] = 'PDF'
@@ -311,13 +316,13 @@ def manuals_check_img_extraction_needed(PDF_file_FN, img_dir_FN):
     # Does the JSON INFO file exists?
     rom_name = PDF_file_FN.getBase_noext()
     info_FN = img_dir_FN.pjoin(rom_name + '.json')
-    log_info('manuals_check_img_extraction_needed() Info file "{0}"'.format(info_FN.getPath()))
+    log_info('manuals_check_img_extraction_needed() Info file "{}"'.format(info_FN.getPath()))
     if not info_FN.exists():
         status_dic['extraction_needed'] = True
         return status_dic
 
     # JSON INFO file exists. Open JSON file and check timestamps.
-    info_dic = fs_load_JSON_file_dic(info_FN.getPath())
+    info_dic = utils_load_JSON_file_dic(info_FN.getPath())
     man_file_mtime = PDF_file_FN.getmtime()
     if man_file_mtime > info_dic['IMG_timestamp']:
         status_dic['extraction_needed'] = True
@@ -349,9 +354,9 @@ def manuals_open_PDF_file(status_dic, PDF_file_FN, img_dir_FN):
     log_debug('manuals_open_PDF_file() Starting ...')
 
     # --- Load and parse PDF ---
-    log_info('PDF file "{0}"'.format(PDF_file_FN.getPath()))
+    log_info('PDF file "{}"'.format(PDF_file_FN.getPath()))
     PDF_reader = PdfReader(PDF_file_FN.getPath())
-    log_info('PDF has {0} pages'.format(PDF_reader.numPages))
+    log_info('PDF has {} pages'.format(PDF_reader.numPages))
 
     # --- Update status_dic ---
     status_dic['abort_extraction'] = False
@@ -370,7 +375,7 @@ def manuals_close_PDF_file():
 def manuals_create_INFO_file(status_dic, PDF_file_FN, img_dir_FN):
     rom_name = PDF_file_FN.getBase_noext()
     info_FN = img_dir_FN.pjoin(rom_name + '.json')
-    log_info('manuals_create_INFO_file() Info file "{0}"'.format(info_FN.getPath()))
+    log_info('manuals_create_INFO_file() Info file "{}"'.format(info_FN.getPath()))
     PDF_timestamp = PDF_file_FN.getmtime()
     IMG_timestamp = time.time()
 
@@ -388,7 +393,7 @@ def manuals_create_INFO_file(status_dic, PDF_file_FN, img_dir_FN):
         'IMG_timestamp' : IMG_timestamp,
         'IMG_time' : time.strftime('%a %d %b %Y %H:%M:%S', time.localtime(IMG_timestamp)),
     }
-    fs_write_JSON_file_pprint(info_FN.getPath(), info_dic)
+    utils_write_JSON_file_pprint(info_FN.getPath(), info_dic)
 
 #
 # Gets a list of filters (codecs) used in the PDF file.
@@ -401,7 +406,7 @@ def manuals_get_PDF_filter_list(status_dic, man_file_FN, img_dir_FN):
 
     # --- Iterate PDF pages ---
     for page_index, page in enumerate(PDF_reader.pages):
-        # log_debug('###### Processing page {0} ######'.format(page_index))
+        # log_debug('###### Processing page {} ######'.format(page_index))
         resource_dic = page['/Resources']
         # --- Iterate /Resources in page ---
         for resource_name, resource in resource_dic.iteritems():
@@ -432,9 +437,9 @@ def manuals_get_PDF_filter_list(status_dic, man_file_FN, img_dir_FN):
 
                 # --- Print info ---
                 log_debug('------ Page {0:02d} Image {1:02d} ------'.format(page_index, img_index))
-                log_debug('xobj_name     {0}'.format(xobj_name))
-                log_debug('xobj_type     {0}'.format(xobj_type))
-                log_debug('xobj_subtype  {0}'.format(xobj_subtype))
+                log_debug('xobj_name     {}'.format(xobj_name))
+                log_debug('xobj_type     {}'.format(xobj_type))
+                log_debug('xobj_subtype  {}'.format(xobj_subtype))
                 # log_debug('--- xobj_dic ---')
                 # log_debug(pprint.pformat(xobj_dic))
                 # log_debug('----------------')
@@ -443,7 +448,7 @@ def manuals_get_PDF_filter_list(status_dic, man_file_FN, img_dir_FN):
                 num_filters = 0
                 filter_list = []
                 if type(xobj_dic['/Filter']) is PdfArray:
-                    # log_info('Filter list = "{0}"'.format(unicode(xobj_dic['/Filter'])))
+                    # log_info('Filter list = "{}"'.format(text_type(xobj_dic['/Filter'])))
                     for filter_name in xobj_dic['/Filter']:
                         filter_list.append(filter_name)
                     num_filters = len(xobj_dic['/Filter'])
@@ -456,7 +461,7 @@ def manuals_get_PDF_filter_list(status_dic, man_file_FN, img_dir_FN):
                     log_info(pprint.pformat(xobj_dic))
                     log_info('----------------')
                 else:
-                    log_info('Unknown type(xobj_dic[\'/Filter\']) = "{0}"'.format(type(xobj_dic['/Filter'])))
+                    log_info('Unknown type(xobj_dic[\'/Filter\']) = "{}"'.format(type(xobj_dic['/Filter'])))
                     raise TypeError
                 img_filter_list_list.append(' and '.join(filter_list))
                 img_index += 1
@@ -471,7 +476,7 @@ def manuals_extract_PDF_page(status_dic, man_file_FN, img_dir_FN, page_index):
 
     # --- Iterate /Resources in page ---
     image_counter = 0
-    log_debug('###### Processing page {0} ######'.format(page_index))
+    log_debug('###### Processing page {} ######'.format(page_index))
     resource_dic = page['/Resources']
     for resource_name, resource in resource_dic.iteritems():
         # >> Skip non /XObject keys in /Resources
@@ -493,9 +498,9 @@ def manuals_extract_PDF_page(status_dic, man_file_FN, img_dir_FN, page_index):
 
             # --- Print info ---
             log_debug('------ Page {0:02d} Image {1:02d} ------'.format(page_index, img_index))
-            log_debug('xobj_name     {0}'.format(xobj_name))
-            log_debug('xobj_type     {0}'.format(xobj_type))
-            log_debug('xobj_subtype  {0}'.format(xobj_subtype))
+            log_debug('xobj_name     {}'.format(xobj_name))
+            log_debug('xobj_type     {}'.format(xobj_type))
+            log_debug('xobj_subtype  {}'.format(xobj_subtype))
 
             # --- Extract image ---
             # Returns a PIL image object or None
@@ -505,7 +510,7 @@ def manuals_extract_PDF_page(status_dic, man_file_FN, img_dir_FN, page_index):
             if img:
                 img_basename_str = 'Image_page{0:02d}_img{1:02d}.png'.format(page_index, img_index)
                 img_path_str = img_dir_FN.pjoin(img_basename_str).getPath()
-                log_debug('Saving IMG "{0}"'.format(img_path_str))
+                log_debug('Saving IMG "{}"'.format(img_path_str))
                 img.save(img_path_str, 'PNG')
                 image_counter += 1
                 img_index += 1
@@ -513,4 +518,4 @@ def manuals_extract_PDF_page(status_dic, man_file_FN, img_dir_FN, page_index):
                 log_warning('Error extracting image from /XObject')
     # --- Update info ---
     status_dic['numImages'] += image_counter
-    log_info('PDF page {0} extracted {1} images'.format(page_index, image_counter))
+    log_info('PDF page {} extracted {} images'.format(page_index, image_counter))

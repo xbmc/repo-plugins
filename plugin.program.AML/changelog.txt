@@ -4,7 +4,15 @@ WIP      [CORE] JSON database files (specially MAME_DB_main.json, MAME_DB_render
          MAME_assets.json) could be compressed with DEFLATE to reduce the size on disk. They
          will decompressed on the fly. I have to test if this is faster than no compression at all.
          Use low values of compression in the deflate algorithm. Maximum compression is very
-         slow but less compression is fast and may reduce the XML file size a lot.
+         slow but less compression is fast and may reduce the JSON file size a lot.
+
+         According to Zachmorris, MessagePack is the fastest serialization method in Python 3.
+
+         The module xmltodict is also very interesting and the performance very good in Python 3.
+
+         See https://forum.kodi.tv/showthread.php?tid=329315&pid=2975588#pid2975588
+         See https://github.com/vsergeev/u-msgpack-python
+         See https://github.com/martinblech/xmltodict
 
 WIP      [AUDIT] Samples distributed with MAME are uncompressed and not stored into ZIP files.
          The MAME audit engine must take this into account.
@@ -20,12 +28,9 @@ WIP      [CORE] AML/AEL must report the aspect ratio of artwork to the skin.
 
 WIP      [CORE] Implement the "Read-only launchers". ROLs are XML files that include the
          launcher information as well as the ROMs information. ROLs are generated with AML,
-         can be exported as XML and then used with AEL. AEL will trear ROLs are read-only
+         can be exported as XML and then used with AEL. AEL will handle ROLs as read-only
          (cannot be edited). If a ROL should be changed, then the XML is edited or regenerated
          and then imported again into AML.
-
-WIP      [DOCS] Improve the AML wiki in Github and move documentation from Kodi forum to
-         Github wiki.
 
 WIP      [MANUALS] Increase the number of supported PDF filters.
          This may require A LOT of Python coding.
@@ -45,7 +50,7 @@ WIP      [GRAPHICS] Optimize the generation of 3D boxes.
 WIP      [GRAPHICS] Respect the aspect ratio in 3D boxes. For example, if the poster in the
          front size of the 3D box is square the 3D box must be square, do not strech the
          poster texture. ScreenScraper respects the aspect ratio of the 3D boxes, have
-         a look at examples there.
+         a look at examples there (for example, see Mega Drive 3D box and PSX 3D box).
 
 WIP      Retroarch core MAME 2003 Plus allows to save the MAME XML file needed by AML.
          In this core, the XML is extracted using the MAME internal menu, which must be
@@ -60,6 +65,58 @@ WIP      Retroarch core MAME 2003 Plus allows to save the MAME XML file needed b
          See https://github.com/libretro/mame2003-plus-libretro/pull/8
          See https://github.com/libretro/mame2010-libretro/pull/123
          See https://github.com/libretro/mame2010-libretro/tree/master/metadata
+
+
+[B]Advanced MAME Launcher | version 1.0.1 | xx xxxxxx 2021[/B]
+
+WIP      [DOCS] Improve the AML wiki in Github and move documentation from Kodi forum to
+         Github wiki.
+
+
+[B]Advanced MAME Launcher | version 1.0.0 | 10 November 2020[/B]
+
+FEATURE  [CORE] Port the addon to Kodi Matrix and Python 3.
+
+FEATURE  [CORE] xbmc.translatePath is deprecated in Matrix, use xbmcvfs.translatePath instead.
+
+FIX      [MANUALS] The pdfwr library is not working well with Python 3. PDF image extraction
+         have been disabled until this issue is fixed.
+
+
+[B]Advanced MAME Launcher | version 0.10.0 | xx November 2020[/B]
+
+FEATURE  [CORE] Big code refactoring to prepare Kodi Python API changes.
+
+FEATURE  [CORE] Include Software Lists that have no associated MAME machines in "Machines
+         by Software List" filter.
+
+FEATURE  [CORE] Create branch python2 and place series 0.10.x into this branch.
+
+FEATURE  [CORE] Support Retroarch MAME 2003 Plus.
+
+FEATURE  [FILTERS] Implement filtering options NoMissingROMs, NoMissingCHDs and NoMissingSamples.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2964109#pid2964109
+
+FEATURE  [CORE] Different colours for different filters in the root window.
+
+FEATURE  [CORE] In the Setup Plugin CM, Build Fanarts and 3D boxes: add an option to
+         build all the Fanarts and 3D boxes at once.
+
+FEATURE  [CORE] Reorganised the Setup Plugin context menu a bit.
+
+FEATURE  [CORE] Export MAME info with billyc999s XML format.
+
+FEATURE  [CORE] New Utility "Show machines with biggest ROMs"
+
+FEATURE  [CORE] New Utility "Show machines with smallest ROMs"
+
+FEATURE  [CORE] Disable Kodi screensaver when launching MAME and reenable after MAME finishes.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2934194#pid2934194
+
+FIX      [CORE] Fixed crash when creating ROM audit database when MAME CHD set was SPLIT.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=2975566#pid2975566
+
+FIX      [CORE] Fix parsing of mameinfo.dat 0.226.
 
 
 [B]Advanced MAME Launcher | version 0.9.12 | 10 February 2020[/B]

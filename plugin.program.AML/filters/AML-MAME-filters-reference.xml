@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Advanced MAME Launcher XML MAME filter reference.
+-->
+<Advanced_MAME_Launcher_custom_filters>
+<MAMEFilter>
+    <Name>Example filter name</Name>
+
+    <!--
+        Device machines are removed automatically.
+        Separate multiple options with ','
+        Multiple <Options> tags allowed.
+      -->
+    <Options>NoClones, NoCoin, NoCoinLess, NoROMs, NoCHDs, NoSamples</Options>
+    <Options>NoMature, NoBIOS, NoMechanical, NoImperfect, NoNonworking</Options>
+    <Options>NoVertical, NoHorizontal</Options>
+
+    <!--
+        The following options rely on the ROM/CHD scanner.
+    -->
+    <Options>NoMissingROMs, NoMissingCHDs, NoMissingSamples</Options>
+
+    <!--
+        As shown in "Machines by Driver" filter.
+        Search is case sensitive.
+        If multiple <Driver> tags only the last one is used.
+        Literals with spaces must be enclosed in quotes ' or double quotes ".
+        LSP parser operators: and, or, not, has, lacks, '(', ')', literal.
+    -->
+    <Driver>has cps1.cpp or has cps2.cpp</Driver>
+
+    <!--
+        As shown in "Manufacturer" filter.
+        Search is case sensitive.
+        If multiple <Manufacturer> tags only last one is used.
+        SP operators: and, or, not, has, lacks, literal.
+    -->
+    <Manufacturer>has Konami or has Namco</Manufacturer>
+
+    <!--
+        As shown in "Machines by Category (Genre)" filter.
+        Search is case sensitive.
+        If multiple <Genre> tags only last one is used.
+        Literals with spaces must be enclosed in quotes ' or double quotes ".
+        LSP parser operators: and, or, not, has, lacks, '(', ')', literal.
+    -->
+    <Genre>has Driving and has "Board Game"</Genre>
+
+    <!--
+        As shown in "Machines by Controls (Compact)" filter.
+        Search is case sensitive.
+        If multiple <Controls> tags only last one is used.
+        Literals with spaces must be enclosed in quotes ' or double quotes ".
+        LSP parser operators: and, or, not, has, lacks, '(', ')', literal.
+    -->
+    <Controls>lacks Mahjong and lacks Gambling and lacks Hanafuda</Controls>
+
+    <!--
+        As shown in "Machines by Pluggable Devices (Compact)" filter.
+        Search is case sensitive.
+        If multiple <PluggableDevices> tags only last one is used.
+        Literals with spaces must be enclosed in quotes ' or double quotes ".
+        LSP parser operators: and, or, not, has, lacks, '(', ')', literal.
+    -->
+    <PluggableDevices>has Cartridge and has Harddisk</PluggableDevices>
+
+    <!--
+        As shown in "Machines by Year" filter.
+        If multiple <Year> tags only last one is used.
+        Invalid year strings (for example '19??') get converted to 0.
+        In XML files:
+            '>'  must be '&gt;'
+            '<'  must be '&lt;'
+            '>=' must be '&gt;='
+            '<=' must be '&lt;='
+        YP operators: ==, !=, >, <, >=, <=, and, or, not, (, ), literal.
+    -->
+    <Year>year &gt;= 1990 and year &lt; 2000</Year>
+
+    <!--
+        Separate multiple machines with ','.
+        Multiple <Include> tags allowed.
+    -->
+    <Include>005, 100lions, 10yard</Include>
+
+    <!--
+        Separate multiple machines with ','.
+        Multiple <Exclude> tags allowed.
+    -->
+    <Exclude>005, 100lions, 10yard</Exclude>
+
+    <!--
+        Only 1 machine per <Change> tag.
+        There may be multiple <Change> tags.
+    -->
+    <Change>dino with dinoj</Change>
+</MAMEFilter>
+</Advanced_MAME_Launcher_custom_filters>

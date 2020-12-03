@@ -1,0 +1,85 @@
+# Kodi Media Center language file
+# Addon Name: Google Drive
+# Addon id: plugin.googledrive
+# Addon Provider: Carlos Guzman (cguZZman)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Account"
+msgstr "Cuenta"
+
+msgctxt "#32001"
+msgid "Video Library Export Folder"
+msgstr "Directorio de exportación de la biblioteca de vídeos"
+
+msgctxt "#32002"
+msgid "Music Library Export Folder"
+msgstr "Directorio de exportación de la biblioteca de música"
+
+msgctxt "#32003"
+msgid "Before export to library, remove previous files and folders"
+msgstr "Antes de exportar a biblioteca, eliminar ficheros y directorios anteriores"
+
+msgctxt "#32004"
+msgid "When playing videos, set the subtitle file located next to the video (.srt)"
+msgstr "Durante la reproducción de vídeo, establecer el fichero de subítulos ubicado junto al vídeo (.srt)"
+
+msgctxt "#32005"
+msgid "Auto-Refreshed slideshow"
+msgstr "Actualizar automaticamente las diapositivas"
+
+msgctxt "#32006"
+msgid "Refresh interval in minutes"
+msgstr "Intervalo de actualización en minutos"
+
+msgctxt "#32007"
+msgid "Google Photos"
+msgstr "Google Photos"
+
+msgctxt "#32008"
+msgid "Always ask for the stream format before play"
+msgstr "Preguntar siempre por el formato de la reproducción"
+
+msgctxt "#32009"
+msgid "Loading stream formats..."
+msgstr "Cargando formatos de reproducción"
+
+msgctxt "#32010"
+msgid "Recursive auto-refreshed slideshow"
+msgstr "Auto-Actualizar recursivamente las diapositivas"
+
+msgctxt "#32011"
+msgid "Common Settings"
+msgstr "Ajustes"
+
+msgctxt "#32012"
+msgid "Open Cloud Drive Common Settings..."
+msgstr "Configuración de Drive..."
+
+msgctxt "#32013"
+msgid "My Drive"
+msgstr "Mi Disco"
+
+msgctxt "#32014"
+msgid "Starred"
+msgstr "Seleccionados"
+
+msgctxt "#32015"
+msgid "Original format"
+msgstr "Formato original"
+
+msgctxt "#32016"
+msgid "Select the stream format"
+msgstr "Seleccionar formato de la reproducción"

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.yelo" name="Yelo" version="0.0.9" provider-name="shycoderX">
+<addon id="plugin.video.yelo" name="Yelo" version="1.0.1" provider-name="shycoderX">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
-        <import addon="script.module.inputstreamhelper" version="0.3.4"/>
+        <import addon="script.module.dateutil" version="2.4.2"/>
+        <import addon="script.module.inputstreamhelper" version="0.5.1"/>
         <import addon="script.module.requests" version="2.18.0"/>
         <import addon="script.module.routing" version="0.2.3"/>
-        <import addon="script.module.future" version="0.17.1" />
-        <import addon="script.module.kodi-six" version="0.1.0" />
     </requires>
-    <extension point="xbmc.python.pluginsource" library="main.py">
+    <extension point="xbmc.python.pluginsource" library="resources/lib/addon_entry.py">
         <provides>video</provides>
     </extension>
+    <extension point="xbmc.service" library="resources/lib/yelo_bg_service.py"/>
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Stream live streams from Yelo Play</summary>
         <description lang="en_GB">This plugin makes it possible to watch live streams that are available on the Telenet Yelo application for your region.</description>
@@ -24,12 +24,23 @@
         </disclaimer>
         <language>nl</language>
         <platform>all</platform>
-        <license>GNU General Public License, v3</license>
+        <license>GPL-3.0-only</license>
         <email>shycoderX@protonmail.com</email>
-        <source>https://github.com/shycoderX/repo-plugins/tree/leia/plugin.video.yelo</source>
+        <source>https://github.com/add-ons/plugin.video.yelo</source>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
         </assets>
+        <news>
+v1.0.1 (2020-11-02)
+- Add Kodi 19 checks @shycoderX)
+- Load EPG in the background (@shycoderX)
+- Add device registration for Play subscription (@fripsy)
+- Use sock.sendall instead of sock.send (@michaelarnauts)
+
+### v1.0.0 (2020-05-22)
+- Add Dutch translations (@dagwieers)
+- Add support for IPTV Manager (@shycoderX, @dagwieers)
+        </news>
     </extension>
 </addon>

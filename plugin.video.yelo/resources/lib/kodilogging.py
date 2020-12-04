@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
+# GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import unicode_literals
-from resources.lib.utils.kodiutils import get_setting_as_bool
-
+from __future__ import absolute_import, division, unicode_literals
 import logging
 import xbmc
 import xbmcaddon
+
+from kodiutils import get_setting_as_bool
+
+logging.basicConfig()
 
 
 class KodiLogHandler(logging.StreamHandler):

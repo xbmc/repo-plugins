@@ -9,112 +9,111 @@ msgstr ""
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
-"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"Language-Team: Dutch (http://www.transifex.com/projects/p/xbmc-addons/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30860"
 msgid "Integration"
-msgstr ""
+msgstr "Integratie"
 
 msgctxt "#30861"
 msgid "Integration with other Kodi add-ons"
-msgstr ""
+msgstr "Integratie met andere Kodi add-ons"
 
 msgctxt "#30875"
 msgid "Install IPTV Manager add-on…"
-msgstr ""
+msgstr "Installeer de IPTV Manager add-on…"
 
 msgctxt "#30877"
 msgid "Enable IPTV Manager integration (experimental)"
-msgstr ""
+msgstr "Activeer IPTV Manager integratie (experimenteel)"
 
 msgctxt "#30879"
 msgid "IPTV Manager settings…"
-msgstr ""
+msgstr "IPTV Manager instellingen…"
 
 msgctxt "#31998"
 msgid "EPG"
-msgstr ""
+msgstr "EPG"
 
 msgctxt "#31999"
 msgid "EPG (disabled is faster essentially slower devices)"
-msgstr ""
+msgstr "EPG (indien uit zal de lijst sneller laden)"
 
 msgctxt "#32000"
 msgid "Credentials"
-msgstr ""
+msgstr "Aanmeldgegevens"
 
 msgctxt "#32001"
 msgid "Username"
-msgstr ""
+msgstr "Gebruikersnaam"
 
 msgctxt "#32002"
 msgid "Password"
-msgstr ""
+msgstr "Paswoord"
 
 msgctxt "#32003"
 msgid "Postal Code [COLOR=gray](Can be left at zero for default)[/COLOR]"
-msgstr ""
+msgstr "Postcode [COLOR=gray](Niet invullen voor standaardwaarde)[/COLOR]"
 
 msgctxt "#32004"
 msgid "Bandwidth"
-msgstr ""
+msgstr "Bandbreedte"
 
 msgctxt "#32005"
 msgid "Maximum bandwidth"
-msgstr ""
+msgstr "Maximale bandbreedte"
 
 msgctxt "#32006"
 msgid "Login failed"
-msgstr ""
+msgstr "Aanmelden mislukt"
 
 msgctxt "#32007"
 msgid "Please check your login details."
-msgstr ""
+msgstr "Gelieve je aanmeldgegevens na te kijken."
 
 msgctxt "#32014"
 msgid "Login"
-msgstr ""
+msgstr "Aanmelden"
 
 msgctxt "#32015"
 msgid "You need to fill in your credentials in settings."
-msgstr ""
+msgstr "Je aanmeldgegevens moeten ingevuld worden in de add-on instellingen."
 
 msgctxt "#32016"
-msgid "InputStream Helper"
-msgstr ""
+msgid "Extra"
+msgstr "InputStream Helper"
 
 msgctxt "#32017"
 msgid "InputStream Helper information"
-msgstr ""
+msgstr "InputStream Helper informatie"
 
 msgctxt "#32018"
 msgid "InputStream Adaptive settings"
-msgstr ""
+msgstr "InputStream Adaptive instellingen"
 
 msgctxt "#32019"
 msgid "InputStream Helper settings"
-msgstr ""
+msgstr "InputStream Helper instellingen"
 
 msgctxt "#40000"
 msgid "Refresh EPG"
-msgstr ""
+msgstr "Refresh EPG"
 
 msgctxt "#40001"
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 msgctxt "#40002"
 msgid "EPG has been renewed"
-msgstr ""
+msgstr "EPG is vernieuwt"
 
 msgctxt "#40003"
 msgid "This can take a moment. Press OK to continue"
-msgstr ""
-
+msgstr "Dit kan even duren. Druk op OK om door te gaan"
 
 

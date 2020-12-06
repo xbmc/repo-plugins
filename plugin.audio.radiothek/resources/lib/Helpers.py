@@ -3,6 +3,7 @@
 import re
 import json
 from datetime import datetime
+import xbmc
 
 try:
     from urllib.parse import urlencode,unquote
@@ -21,6 +22,13 @@ def parameters_string_to_dict(parameters):
             if (len(param_splits)) == 2:
                 param_dict[param_splits[0]] = param_splits[1]
     return param_dict
+
+
+def radiothek_log(msg, debug=False):
+    if debug:
+        xbmc.log(msg, xbmc.LOGDEBUG)
+    else:
+        xbmc.log(msg, xbmc.LOGNOTICE)
 
 
 def unquote_url(url):

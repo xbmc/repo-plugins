@@ -3,7 +3,6 @@ import hashlib
 import hmac
 import os
 import binascii
-import sys
 
 import datetime
 
@@ -349,11 +348,7 @@ class AwsIdp:
         days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
         time_now = datetime.datetime.utcnow()
-        if sys.platform.startswith('win'):
-            format_string = "{} {} %#d %H:%M:%S UTC %Y".format(days[time_now.weekday()], months[time_now.month])
-        else:
-            format_string = "{} {} %-d %H:%M:%S UTC %Y".format(days[time_now.weekday()], months[time_now.month])
-
+        format_string = "{} {} {} %H:%M:%S UTC %Y".format(days[time_now.weekday()], months[time_now.month], time_now.day)
         time_string = datetime.datetime.utcnow().strftime(format_string)
         Logger.debug("AWS Auth Timestamp: %s", time_string)
         return time_string

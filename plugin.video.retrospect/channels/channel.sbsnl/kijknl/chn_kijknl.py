@@ -97,6 +97,7 @@ class Channel(chn_class.Channel):
             "{items{__typename,title,description,guid,updated,seriesTvSeasons{id}," \
             "imageMedia{url,label},type,sources{type,drm,file},series{title}," \
             "seasonNumber,tvSeasonEpisodeNumber,lastPubDate,duration,displayGenre,tracks{type,file}}}"
+        self.__list_limit = 150
         
         #===============================================================================================================
         # Test cases:
@@ -609,7 +610,7 @@ class Channel(chn_class.Channel):
             # List the videos in that season
             season_id = seasons[0]["id"].rsplit("/", 1)[-1]
             url = self.__get_api_query_url(
-                query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:100)'.format(season_id),
+                query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:{})'.format(season_id, self.__list_limit),
                 fields=self.__video_fields)
         else:
             # Fetch the season information
@@ -648,7 +649,7 @@ class Channel(chn_class.Channel):
 
         season_id = result_set["id"].rsplit("/", 1)[-1]
         url = self.__get_api_query_url(
-            query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:100)'.format(season_id),
+            query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:{})'.format(season_id, self.__list_limit),
             fields=self.__video_fields)
 
         item = MediaItem(title, url)
@@ -688,7 +689,7 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url, type="video")
         item.thumb = self.__get_thumb(result_set.get("imageMedia"))
         item.description = result_set.get("longDescription", result_set.get("description"))
-        item.set_info_label("duration", int(result_set.get("duration", 0)))
+        item.set_info_label("duration", int(result_set.get("duration", 0) or 0))
         item.set_info_label("genre", result_set.get("displayGenre"))
 
         updated = result_set["lastPubDate"] / 1000

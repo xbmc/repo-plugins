@@ -6,10 +6,10 @@ msgstr ""
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Bas Rieter\n"
+"Language: nb-NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nb-NO\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "#30000"
@@ -28,6 +28,26 @@ msgctxt "#30003"
 msgid "High"
 msgstr "Høy"
 
+msgctxt "#30004"
+msgid "Release channel for update notifications"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Stable"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Alpha/Beta"
+msgstr ""
+
+msgctxt "#30007"
+msgid "via other add-on"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Retrospect"
+msgstr ""
+
 msgctxt "#30009"
 msgid "General"
 msgstr "Generelt"
@@ -39,6 +59,22 @@ msgstr "Kanaler"
 msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
 msgstr "Krever omstart av Retrospect."
+
+msgctxt "#30012"
+msgid "Login Failed"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Could not log on to the selected channel."
+msgstr ""
+
+msgctxt "#30014"
+msgid "Show info"
+msgstr ""
+
+msgctxt "#30015"
+msgid "via missing add-on"
+msgstr ""
 
 msgctxt "#30016"
 msgid "Sort by"
@@ -72,13 +108,21 @@ msgctxt "#30023"
 msgid "Never show"
 msgstr "Aldri vis"
 
+msgctxt "#30024"
+msgid "Recent"
+msgstr ""
+
 msgctxt "#30025"
 msgid "None"
 msgstr "Ingen"
 
 msgctxt "#30026"
-msgid "Group list if exceeds # folders"
-msgstr "Gruppér oppføringsliste hvis den overgår # mapper"
+msgid "Group list if it exceeds # folders"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Autorun Retrospect on Kodi start"
+msgstr ""
 
 msgctxt "#30028"
 msgid "Proxy"
@@ -99,6 +143,10 @@ msgstr "Mellomlagre HTTP(S)-forespørsler"
 msgctxt "#30032"
 msgid "Channel Settings"
 msgstr "Kanalinnstillinger"
+
+msgctxt "#30033"
+msgid "Expires at"
+msgstr ""
 
 msgctxt "#30034"
 msgid "No channel selected"
@@ -124,6 +172,10 @@ msgctxt "#30040"
 msgid "Channels"
 msgstr "Kanaler"
 
+msgctxt "#30041"
+msgid "Show \"All Favourites\" in main Channel listing"
+msgstr ""
+
 msgctxt "#30042"
 msgid "Enabled"
 msgstr "Aktivert"
@@ -132,13 +184,33 @@ msgctxt "#30043"
 msgid "Folder prefix"
 msgstr "Mappeprefiks"
 
+msgctxt "#30044"
+msgid "Kodi update required"
+msgstr ""
+
+msgctxt "#30045"
+msgid "This feature of Retrospect requires a more recent version of Kodi. Please install the most recent version of your current Kodi build. Depending on your installation this can either be a 'stable' or 'nightly' build."
+msgstr ""
+
 msgctxt "#30046"
-msgid "DRM/Geo Location/Premium filters"
-msgstr "DRM/Geo lokasjon/Premium filtre"
+msgid "DRM/Geo-blocked/Premium filters"
+msgstr ""
 
 msgctxt "#30048"
 msgid "Log level"
 msgstr "Loggnivå"
+
+msgctxt "#30049"
+msgid "Premium/Paid"
+msgstr ""
+
+msgctxt "#30050"
+msgid "DRM Protected"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Hidden item"
+msgstr ""
 
 msgctxt "#30052"
 msgid "Send usage statistics"
@@ -147,6 +219,10 @@ msgstr "Send bruksstatistikk"
 msgctxt "#30053"
 msgid "Appearance"
 msgstr "Utseende"
+
+msgctxt "#30054"
+msgid "[COLOR gold][B]The Retrospect Password Vault[/B][/COLOR][CR]'The Vault' enables storing sensitive data in a more secure way. How does this work:[CR][CR]* The users selects a simple Vault PIN that is used as the main code for accessing the Vault data.[CR]* This PIN can be rather simple and short and easy to remember: for example 3145.[CR]* That PIN is then used to generate a much stronger and complexer encryption key using Scrypt.[CR]* As a user you will not need to know this complex key.[CR][CR][COLOR gold][B]Storing sensitive data[/B][/COLOR][CR]Whenever sensitive data is being [B]stored[/B]:[CR][CR]* The user will be asked for their PIN first.[CR]* After a correct PIN the actual data to store will be asked.[CR][CR][COLOR gold][B]Retrieving sensitive data[/B][/COLOR][CR]Whenever sensitive data is being [B]retrieved[/B]:[CR][CR]* The user will only be asked for their PIN.[CR]* That PIN is then used to securely fetch the actual data.[CR][CR][COLOR gold][B]Resetting the Vault[/B][/COLOR][CR]If a user has forgotten the PIN, there is no way of recovering the data. The only solution is to reset the Vault and pick a new PIN and generate a new Vault Key. [B]This will invalidate all encrypted data[/B]. This data must be entered again."
+msgstr ""
 
 msgctxt "#30055"
 msgid "Advanced"
@@ -193,8 +269,8 @@ msgid "Active"
 msgstr "Aktiv"
 
 msgctxt "#30069"
-msgid "Channel Settings"
-msgstr "Kanalinnstillinger"
+msgid "Settings"
+msgstr ""
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
@@ -209,8 +285,8 @@ msgid "Proxy Type"
 msgstr "Type mellomtjener"
 
 msgctxt "#30073"
-msgid "- Geo-Locked = º, DRM protected = ^ and Premium = ª."
-msgstr "- Geo-Låst = º, DRM beskyttet = ^ og Premium = ª."
+msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
+msgstr ""
 
 msgctxt "#30074"
 msgid "Disabled"
@@ -268,6 +344,10 @@ msgctxt "#30087"
 msgid "Mix folders and streams while sorting"
 msgstr "Bland mapper og strømmer mens du sorterer"
 
+msgctxt "#30088"
+msgid "Show thumbnail as fanart if no fanart is available"
+msgstr ""
+
 msgctxt "#30089"
 msgid "Password Vault"
 msgstr "Passord hvelv"
@@ -308,6 +388,10 @@ msgctxt "#30098"
 msgid "Logging & Diagnostics"
 msgstr ""
 
+msgctxt "#30099"
+msgid "Use HLS instead of Dash for non-encrypted streams"
+msgstr ""
+
 msgctxt "#30100"
 msgid "None"
 msgstr "Ingen"
@@ -343,6 +427,36 @@ msgstr "Teknisk"
 msgctxt "#30108"
 msgid "Other"
 msgstr "Annet"
+
+# used for list limits
+# empty strings from id 30109 to 30189
+msgctxt "#30190"
+msgid "Monday"
+msgstr ""
+
+msgctxt "#30191"
+msgid "Tuesday"
+msgstr ""
+
+msgctxt "#30192"
+msgid "Wednesday"
+msgstr ""
+
+msgctxt "#30193"
+msgid "Thursday"
+msgstr ""
+
+msgctxt "#30194"
+msgid "Friday"
+msgstr ""
+
+msgctxt "#30195"
+msgid "Saturday"
+msgstr ""
+
+msgctxt "#30196"
+msgid "Sunday"
+msgstr ""
 
 msgctxt "#30199"
 msgid "10"
@@ -420,6 +534,67 @@ msgctxt "#30311"
 msgid "Finland"
 msgstr "Finland"
 
+# empty strings from id 30312 to 30349
+msgctxt "#30350"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30351"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30352"
+msgid "TV shows"
+msgstr ""
+
+msgctxt "#30353"
+msgid "Currently playing"
+msgstr ""
+
+msgctxt "#30354"
+msgid "Most viewed episodes"
+msgstr ""
+
+msgctxt "#30355"
+msgid "Most recent episodes"
+msgstr ""
+
+msgctxt "#30356"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30357"
+msgid "Live Radio"
+msgstr ""
+
+msgctxt "#30358"
+msgid "Episodes"
+msgstr ""
+
+msgctxt "#30359"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Full list"
+msgstr ""
+
+msgctxt "#30361"
+msgid "Tags"
+msgstr ""
+
+msgctxt "#30362"
+msgid "Last chance"
+msgstr ""
+
+msgctxt "#30363"
+msgid "Popular"
+msgstr ""
+
+msgctxt "#30364"
+msgid "Latest news"
+msgstr ""
+
 msgctxt "#30401"
 msgid "Dutch"
 msgstr "Nederlandsk"
@@ -463,6 +638,11 @@ msgstr "Dansk"
 msgctxt "#30411"
 msgid "Finnish"
 msgstr "Finsk"
+
+# empty strings from id 30412 to 30498
+msgctxt "#30499"
+msgid "Contains all the Retrospect favourites that are available across all channels."
+msgstr ""
 
 msgctxt "#30500"
 msgid "All Favourites"
@@ -552,6 +732,34 @@ msgctxt "#30530"
 msgid "Check for Retrospect updates"
 msgstr "Se etter etter Retrospect oppdateringer"
 
+msgctxt "#30531"
+msgid "Missing 'InputStream Helper' add-on. Cannot install."
+msgstr ""
+
+msgctxt "#30532"
+msgid "Install Widevine using 'InputStream Helper' add-on"
+msgstr ""
+
+msgctxt "#30533"
+msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and Retrospect is not responsible for any results. Nor is it guaranteed that Widevine will be installed correctly."
+msgstr ""
+
+msgctxt "#30534"
+msgid "Installation of Widevine failed!"
+msgstr ""
+
+msgctxt "#30535"
+msgid "Installation of Widevine completed!"
+msgstr ""
+
+msgctxt "#30536"
+msgid "This stream requires Kodi Leia, an enabled InputStream Adaptive add-on and the Widevine library to be installed. The latter can be installed from within the Retrospect add-on settings."
+msgstr ""
+
+msgctxt "#30537"
+msgid "Page"
+msgstr ""
+
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."
 msgstr "Den valgte direktesendingen har ikke startet ennå."
@@ -561,8 +769,8 @@ msgid "Live stream"
 msgstr "Direktesending"
 
 msgctxt "#30540"
-msgid "Geo-Locked"
-msgstr "Geo-låst"
+msgid "Geo-blocked"
+msgstr ""
 
 msgctxt "#30541"
 msgid "Queue item"
@@ -657,16 +865,16 @@ msgid "Hide Item"
 msgstr "Skjul oppføring"
 
 msgctxt "#30564"
-msgid "Show Item"
-msgstr "Gjør skjult oppføring synlig"
+msgid "Show Hidden Item"
+msgstr ""
 
 msgctxt "#30565"
-msgid "(Un-)Hiding items"
-msgstr "Skjuler/synliggjør oppføring"
+msgid "Hidden items"
+msgstr ""
 
 msgctxt "#30566"
-msgid "To un-hide an item, configure Retrospect to show hidden items first. Then un-hide them via the context menu."
-msgstr "For å synliggjøre en oppføring, konfigurér Retrospect til å vise skjulte oppføringer først. Deretter syngliggjør dem via kontekstmenyen."
+msgid "To show a hidden item, first configure Retrospect to show hidden items. Then use the context menu's \"Show hidden item\"."
+msgstr ""
 
 msgctxt "#30567"
 msgid "Add-on(s) disabled"
@@ -685,8 +893,8 @@ msgid "Hide channel initialisation messages"
 msgstr "Skjul kanal initialiseringsmeldinger"
 
 msgctxt "#30571"
-msgid "Use Kodi Adaptive Stream add-on when possible"
-msgstr "Bruk Kodi Adaptive Stream utvidelse når det er mulig"
+msgid "Use Kodi InputStream Adaptive add-on when possible"
+msgstr ""
 
 msgctxt "#30572"
 msgid "Retrospect Settings »"
@@ -709,11 +917,31 @@ msgid "Select Countries"
 msgstr "Select Countries"
 
 msgctxt "#30577"
-msgid "Channel Bitrate »"
+msgid "Bitrate »"
 msgstr ""
 
 msgctxt "#30578"
-msgid "Adaptive stream add-on settings"
+msgid "InputStream Adaptive add-on settings"
+msgstr ""
+
+msgctxt "#30579"
+msgid "InputStream Adaptive add-on »"
+msgstr ""
+
+msgctxt "#30580"
+msgid "Channel Options »"
+msgstr ""
+
+msgctxt "#30581"
+msgid "InputStream Adaptive add-on usage"
+msgstr ""
+
+msgctxt "#30582"
+msgid "Split TV shows and single episodes in separate folders"
+msgstr ""
+
+msgctxt "#30583"
+msgid "Single episodes"
 msgstr ""
 
 msgctxt "#30590"
@@ -753,8 +981,8 @@ msgid "Send retrospect.log »"
 msgstr "Send retrospect.log »"
 
 msgctxt "#30599"
-msgid "Logfile posted to: %s\n\nNote the URL (especially the last characters) and use them to refer to these log files in posts."
-msgstr "Loggfil sendt til: %s\n\nNotér URL-adressen (spesielt de siste tegnene) og bruk dem til å referere til disse loggfilene i innlegg."
+msgid "Logfile posted to: %s[CR][CR]Note the URL (especially the last characters) and use them to refer to these log files in posts."
+msgstr ""
 
 msgctxt "#30600"
 msgid "Logfile successfully posted"
@@ -767,3 +995,77 @@ msgstr "Feil ved posting av loggfil: %s"
 msgctxt "#30602"
 msgid "Error posting logfile"
 msgstr "Feil ved posting av loggfil"
+
+msgctxt "#30603"
+msgid "Retrospect changed add-on ID. To prevent data loss, your user data will now be migrated. After this has been done, please restart Kodi to complete migration. After the restart update any shortcut you had to Retrospect. The Retrospect marked as \"broken\" in \"My add-ons\" can be uninstalled."
+msgstr ""
+
+msgctxt "#30604"
+msgid "Clean-up cache and cookies »"
+msgstr ""
+
+msgctxt "#30605"
+msgid "Are you sure you want to clean all of Retrospect's cache and cookies? This action cannot be undone."
+msgstr ""
+
+msgctxt "#30606"
+msgid "Minimum level for showing notifications"
+msgstr ""
+
+msgctxt "#30607"
+msgid "Info"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Warning"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Error"
+msgstr ""
+
+#~ msgctxt "#30599"
+#~ msgid ""
+#~ "Logfile posted to: %s\n"
+#~ "\n"
+#~ "Note the URL (especially the last characters) and use them to refer to these log files in posts."
+#~ msgstr ""
+#~ "Loggfil sendt til: %s\n"
+#~ "\n"
+#~ "Notér URL-adressen (spesielt de siste tegnene) og bruk dem til å referere til disse loggfilene i innlegg."
+
+#~ msgctxt "#30026"
+#~ msgid "Group list if exceeds # folders"
+#~ msgstr "Gruppér oppføringsliste hvis den overgår # mapper"
+
+#~ msgctxt "#30046"
+#~ msgid "DRM/Geo Location/Premium filters"
+#~ msgstr "DRM/Geo lokasjon/Premium filtre"
+
+#~ msgctxt "#30069"
+#~ msgid "Channel Settings"
+#~ msgstr "Kanalinnstillinger"
+
+#~ msgctxt "#30073"
+#~ msgid "- Geo-Locked = º, DRM protected = ^ and Premium = ª."
+#~ msgstr "- Geo-Låst = º, DRM beskyttet = ^ og Premium = ª."
+
+#~ msgctxt "#30540"
+#~ msgid "Geo-Locked"
+#~ msgstr "Geo-låst"
+
+#~ msgctxt "#30564"
+#~ msgid "Show Item"
+#~ msgstr "Gjør skjult oppføring synlig"
+
+#~ msgctxt "#30565"
+#~ msgid "(Un-)Hiding items"
+#~ msgstr "Skjuler/synliggjør oppføring"
+
+#~ msgctxt "#30566"
+#~ msgid "To un-hide an item, configure Retrospect to show hidden items first. Then un-hide them via the context menu."
+#~ msgstr "For å synliggjøre en oppføring, konfigurér Retrospect til å vise skjulte oppføringer først. Deretter syngliggjør dem via kontekstmenyen."
+
+#~ msgctxt "#30571"
+#~ msgid "Use Kodi Adaptive Stream add-on when possible"
+#~ msgstr "Bruk Kodi Adaptive Stream utvidelse når det er mulig"

@@ -13,7 +13,8 @@
       "channelcode": "tv4se",
       "sortorder": 4,
       "language": "se",
-      "fanart": "tv4playsefanart.jpg"
+      "fanart": "tv4playsefanart.jpg",
+      "ignore": true
     },
     {
       "guid": "68E5476E-DC92-4312-9C57-29FCE428EF20",
@@ -41,7 +42,8 @@
       "channelcode": "tv7se",
       "sortorder": 7,
       "language": "se",
-      "fanart": "tv7fanart.png"
+      "fanart": "tv7fanart.png",
+      "ignore": true
     },
     {
       "guid": "F2D31759-71BD-4DD1-A1FB-FF8FD99CE03E",
@@ -55,7 +57,8 @@
       "channelcode": "tv12se",
       "sortorder": 12,
       "language": "se",
-      "fanart": "tv12playfanart.jpg"
+      "fanart": "tv12playfanart.jpg",
+      "ignore": true
     }
   ],
   "settings_old": [

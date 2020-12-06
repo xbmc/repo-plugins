@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.radiothek" name="ORF Radiothek" version="0.1.0" provider-name="sofaking">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">ORF Radiothek - Radio Streaming</summary>
+        <summary lang="de_DE">ORF Radiothek - Radio Streaming</summary>
+        <description lang="en_GB">This is a Kodi Addon to provides access to the ORF Radiothek (Austrian public service broadcaster) Streaming Portal (Live Radio, Podcasts, Archive, ...). </description>
+        <description lang="de_DE">Die ORF Radiothek stellt das Radiomaterial der öffentlich-rechtlichen Radiosender aus Österreich zur Verfügung. Neben Livestreaming können auch vergangene Sendungen und eine Vielzahl an Podcasts abgerufen werden.</description>
+        <language>de en</language>
+        <license>GPL-2.0-only</license>
+        <platform>all</platform>
+        <email>sofaking@gettingmoney.at</email>
+        <website>https://radiothek.orf.at</website>
+        <forum>https://forum.kodi.tv/showthread.php?tid=350090</forum>
+        <source>https://github.com/s0faking/plugin.audio.radiothek</source>
+        <news>v0.1.0 (06/12/2020)
+            [new] Compatible with Kodi Matrix
+        </news>
+        <assets>
+          <icon>icon.png</icon>
+      </assets>
+    </extension>
+</addon>

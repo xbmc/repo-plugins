@@ -3,8 +3,8 @@
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/retrospect-addon/plugin.video.retrospect/CI/master)](https://github.com/retrospect-addon/plugin.video.retrospect/actions)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=retrospect-addon:plugin.video.retrospect&metric=alert_status)](https://sonarcloud.io/dashboard?id=retrospect-addon:plugin.video.retrospect)
 [![License](https://img.shields.io/github/license/retrospect-addon/plugin.video.retrospect)](https://github.com/retrospect-addon/plugin.video.retrospect/blob/master/LICENSE.md)
-[![Python](https://img.shields.io/badge/python-2.7%20%7C%203.6%20%7C%203.7-blue?logo=python)](https://kodi.tv/article/attention-addon-developers-migration-python-3)
-[![Transifex](https://img.shields.io/badge/transifex-en|nl|sv|no|fi-blueviolet)](https://www.transifex.com/retrospect/public/)
+[![Python](https://img.shields.io/badge/python-2.7%20%7C%203.6-blue?logo=python)](https://kodi.tv/article/attention-addon-developers-migration-python-3)
+[![Weblate](https://kodi.weblate.cloud/widgets/kodi-add-ons-video/-/plugin-video-retrospect/svg-badge.svg)](https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/)
 
 This repository holds the main code for Retrospect. For more information on bug reporting, please visit https://github.com/retrospect-addon/plugin.video.retrospect or https://www.rieter.net/content/.
 
@@ -42,7 +42,7 @@ More detailed information can be found in the [Retrospect Wiki](https://github.c
 **Note:** Since Retrospect isn't available in the official Kodi add-on repository for Kodi Krypton (v17), it will not automagically update. Retrospect will notify you of new versions. You will then have to manually update Retrospect using the steps above.
 
 # Contributing #
-You can help developing Retrospect via our [Github](https://github.com/retrospect-addon/plugin.video.retrospect) page and/or help translating Retrospect via [Transifex](https://www.transifex.com/retrospect/public/) (A big thanks to Transifex for providing an OS license).
+You can help develop Retrospect via our [Github](https://github.com/retrospect-addon/plugin.video.retrospect) page and/or help translating Retrospect via the [Kodi Add-on Weblate](https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/).
 
 # Troubleshooting #
 

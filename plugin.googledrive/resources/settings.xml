@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings >
+    <category label="32067">
+        <setting label="32000" type="lsep"/>
+        <setting label="32004" type="bool" id="set_subtitle" default="true" value="true"/>
+        <setting label="32011" type="bool" id="resume_playing" default="true" visible="!String.IsEmpty(window(home).property(iskrypton))" />
+        <setting label="32018" type="bool" id="save_resume_watched" default="true" visible="!String.IsEmpty(window(home).property(iskrypton))" />
+        <setting label="32017" type="bool" id="ask_resume" default="true" visible="String.IsEmpty(window(home).property(iskrypton))" />
+        <setting label="32008" type="bool" id="ask_stream_format" default="false" value="false"/>
+        <setting label="32070" type="labelenum" id="default_stream_quality" subsetting="true" values="Original|1080p|720p|480p|360p" default="Original" value="Original"  enable="eq(-1,false)"/>
+        <setting label="32001" type="lsep"/>
+        <setting label="32003" type="bool" id="clean_folder" default="true" value="true"/>
+        <setting label="32019" type="bool" id="no_extension_strm" default="false" value="false"/>
+        <setting label="32020" type="bool" id="hide_export_progress" default="false" value="false"/>
+        <setting label="32002" type="lsep"/>
+        <setting label="32068" type="bool" id="allow_directory_listing" default="true"/>
+        <setting label="32069" type="number" id="port_directory_listing" default="8587"/>
+        <setting label="32005" type="lsep"/>
+        <setting label="32006" type="number" id="slideshow_refresh_interval" default="5" value="5"/>
+        <setting label="32010" type="bool" id="slideshow_recursive" default="false" value="false"/>
+    </category>
+    <category label="32032">
+        <setting label="32033" type="text" id="sign-in-server" default="https://drive-login.herokuapp.com"/>
+        <setting label="32034" type="number" id="cache-expiration-time" default="5"/>
+        <setting label="32035" type="action" option="close" action="RunPlugin(plugin://plugin.googledrive/?action=_clear_cache)"/>
+        <setting label="32012" type="action" option="close" action="RunPlugin(plugin://plugin.googledrive/?action=_open_common_settings)"/>
+    </category>
+    <category label="32030">
+        <setting label="32031" type="bool" id="report_error" default="false"/>
+    </category>
+</settings>

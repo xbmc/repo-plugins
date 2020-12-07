@@ -46,38 +46,69 @@ class Api:
         # This contains a player.updateIntervalSeconds that could be used to notify Streamz about the playing progress
         return info
 
-    def get_recommendations(self, storefront):
-        """ Returns the config for the dashboard.
+    def get_storefront(self, storefront):
+        """ Returns a storefront.
 
-         :param str storefront:         The ID of the listing.
-         :rtype: list[Category]
+         :param str storefront:         The ID of the storefront.
+         :rtype: list[Category|Program|Movie]
          """
         response = util.http_get(API_ENDPOINT + '/%s/storefronts/%s' % (self._mode(), storefront),
                                  token=self._tokens.jwt_token,
                                  profile=self._tokens.profile)
-        recommendations = json.loads(response.text)
+        result = json.loads(response.text)
 
-        categories = []
-        for cat in recommendations.get('rows', []):
-            if cat.get('rowType') not in ['SWIMLANE_DEFAULT']:
-                _LOGGER.debug('Skipping recommendation %s with type %s', cat.get('title'), cat.get('rowType'))
+        items = []
+        for row in result.get('rows', []):
+            if row.get('rowType') == 'SWIMLANE_DEFAULT':
+                items.append(Category(
+                    category_id=row.get('id'),
+                    title=row.get('title'),
+                ))
                 continue
 
-            items = []
-            for item in cat.get('teasers'):
+            if row.get('rowType') == 'CAROUSEL':
+                for item in row.get('teasers'):
+                    if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE:
+                        items.append(self._parse_movie_teaser(item))
+
+                    elif item.get('target', {}).get('type') == CONTENT_TYPE_PROGRAM:
+                        items.append(self._parse_program_teaser(item))
+                continue
+
+            if row.get('rowType') == 'MARKETING_BLOCK':
+                item = row.get('teaser')
                 if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE:
                     items.append(self._parse_movie_teaser(item))
 
                 elif item.get('target', {}).get('type') == CONTENT_TYPE_PROGRAM:
                     items.append(self._parse_program_teaser(item))
+                continue
 
-            categories.append(Category(
-                category_id=cat.get('id'),
-                title=cat.get('title'),
-                content=items,
-            ))
+            _LOGGER.debug('Skipping recommendation %s with type %s', row.get('title'), row.get('rowType'))
 
-        return categories
+        return items
+
+    def get_storefront_category(self, storefront, category):
+        """ Returns a storefront.
+
+         :param str storefront:         The ID of the storefront.
+         :param str category:           The ID of the category.
+         :rtype: Category
+         """
+        response = util.http_get(API_ENDPOINT + '/%s/storefronts/%s/detail/%s' % (self._mode(), storefront, category),
+                                 token=self._tokens.jwt_token,
+                                 profile=self._tokens.profile)
+        result = json.loads(response.text)
+
+        items = []
+        for item in result.get('row', {}).get('teasers'):
+            if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE:
+                items.append(self._parse_movie_teaser(item))
+
+            elif item.get('target', {}).get('type') == CONTENT_TYPE_PROGRAM:
+                items.append(self._parse_program_teaser(item))
+
+        return Category(category_id=category, title=result.get('row', {}).get('title'), content=items)
 
     def get_swimlane(self, swimlane, content_filter=None, cache=CACHE_ONLY):
         """ Returns the contents of My List """
@@ -419,8 +450,9 @@ class Api:
         """
         movie = self.get_movie(item.get('target', {}).get('id'), cache=cache)
         if movie:
-            # We have a cover from the overview that we don't have in the details
-            movie.cover = item.get('imageUrl')
+            # We might have a cover from the overview that we don't have in the details
+            if item.get('imageUrl'):
+                movie.cover = item.get('imageUrl')
             return movie
 
         return Movie(
@@ -439,8 +471,9 @@ class Api:
         """
         program = self.get_program(item.get('target', {}).get('id'), cache=cache)
         if program:
-            # We have a cover from the overview that we don't have in the details
-            program.cover = item.get('imageUrl')
+            # We might have a cover from the overview that we don't have in the details
+            if item.get('imageUrl'):
+                program.cover = item.get('imageUrl')
             return program
 
         return Program(

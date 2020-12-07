@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- General -->
+  <category label="30200">
+    <setting id="deauthorize" type="action" label="30210" action="RunPlugin(plugin://plugin.video.nbcsnliveextra/?url=junk&amp;mode=999)" option="close" />
+    <setting id="free_only" type="bool" label="30220" default="false" />
+  </category>
+  <!-- Visual -->
+<!--  <category label="30300">-->
+<!--    &lt;!&ndash;<setting id="quality" type="labelenum" label="30310" values="SD (508 kbit/s)|SD (906 kbit/s)|SD (1296 kbit/s)|SD (1937 kbit/s)|SD (2947 kbit/s)|HD (5172 kbit/s)|HD (8801 kbit/s)|None" default="None" /> &ndash;&gt;-->
+<!--&lt;!&ndash;    <setting id="cdn" type="enum" label="30320" values="East|West" default="0" />&ndash;&gt;-->
+<!--    &lt;!&ndash; <setting id="play_main" type="bool" label="30230" default="true" /> &ndash;&gt;-->
+<!--    <setting id="play_best" type="bool" label="30240" default="true" />-->
+<!--  </category>-->
+  <category label="30400">
+    <setting type="lsep" label="Filter by Sport / Category"/>
+    <!--<setting id="filter" type="select" label="410" default="Show All" values="Show All|NFL|Premier League|NASCAR|NHL|Golf|PGA|Notre Dame|College Football|F1|NBA|MLB|Rugby|Horse racing|Tennis|IndyCar|Pro Motocross|Olympic Sports|CSN Bay Area|CSN California|CSN Chicago|CSN Mid-Atlantic|CSN New England|CSN Philadelphia"  /> -->
+    <setting id="show-all" type="bool" label="30410" default="true" />
+    <setting id="nbc-nfl" type="bool" label="30411" default="false" />
+    <setting id="nbc-premier-league" type="bool" label="30412" default="false" />
+    <setting id="nbc-nascar" type="bool" label="30413" default="false" />
+    <setting id="nbc-nhl" type="bool" label="30414" default="false" />
+    <setting id="nbc-golf" type="bool" label="30415" default="false" />
+    <setting id="nbc-pga" type="bool" label="30416" default="false" />
+    <setting id="nbc-nd" type="bool" label="30417" default="false" />
+    <setting id="nbc-college-football" type="bool" label="30418" default="false" />
+    <setting id="nbc-f1" type="bool" label="30419" default="false" />
+    <setting id="nbc-nba" type="bool" label="30420" default="false" />
+    <setting id="nbc-mlb" type="bool" label="30421" default="false" />
+    <setting id="nbc-rugby" type="bool" label="30422" default="false" />
+    <setting id="nbc-horses" type="bool" label="30423" default="false" />
+    <setting id="nbc-tennis" type="bool" label="30424" default="false" />
+    <setting id="nbc-indy" type="bool" label="30425" default="false" />
+    <setting id="nbc-moto" type="bool" label="30426" default="false" />
+    <setting id="nbc-olympic-sports" type="bool" label="30427" default="false" />
+    <setting id="nbc-csn-bay-area" type="bool" label="30428" default="false" />
+    <setting id="nbc-csn-california" type="bool" label="30429" default="false" />
+    <setting id="nbc-csn-chicago" type="bool" label="30430" default="false" />
+    <setting id="nbc-csn-mid-atlantic" type="bool" label="30431" default="false" />
+    <setting id="nbc-csn-new-england" type="bool" label="30432" default="false" />
+    <setting id="nbc-csn-philadelphia" type="bool" label="30433" default="false" />
+    <setting id="nbc-sny" type="bool" label="30434" default="false" />
+ </category>
+</settings>

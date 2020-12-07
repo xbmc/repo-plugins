@@ -8,6 +8,7 @@ import logging
 from resources.lib import kodiutils
 from resources.lib.kodiutils import TitleItem
 from resources.lib.modules.menu import Menu
+from resources.lib.streamz import Category, STOREFRONT_SERIES, STOREFRONT_MOVIES
 from resources.lib.streamz.api import CACHE_PREVENT, Api
 from resources.lib.streamz.auth import Auth
 from resources.lib.streamz.exceptions import UnavailableException
@@ -57,7 +58,7 @@ class Catalog:
 
         # Sort items by label, but don't put folders at the top.
         # Used for A-Z listing or when movies and episodes are mixed.
-        kodiutils.show_listing(listing, 30003, content='movies' if category == 'films' else 'tvshows', sort=['label', 'year', 'duration'])
+        kodiutils.show_listing(listing, 30003, content='files', sort=['label', 'year', 'duration'])
 
     def show_program(self, program):
         """ Show a program from the catalog.
@@ -119,7 +120,7 @@ class Catalog:
             ))
 
         # Sort by label. Some programs return seasons unordered.
-        kodiutils.show_listing(listing, 30003, content='tvshows', sort=['label'])
+        kodiutils.show_listing(listing, program_obj.name, content='tvshows', sort=['label'])
 
     def show_program_season(self, program, season):
         """ Show the episodes of a program from the catalog.
@@ -144,27 +145,36 @@ class Catalog:
         listing = [Menu.generate_titleitem(e) for s in seasons for e in list(s.episodes.values())]
 
         # Sort by episode number by default. Takes seasons into account.
-        kodiutils.show_listing(listing, 30003, content='episodes', sort=['episode', 'duration'])
+        kodiutils.show_listing(listing, program_obj.name, content='episodes', sort=['episode', 'duration'])
 
     def show_recommendations(self, storefront):
         """ Show the recommendations.
 
         :type storefront: str
         """
-        recommendations = self._api.get_recommendations(storefront)
+        results = self._api.get_storefront(storefront)
 
         listing = []
-        for cat in recommendations:
-            listing.append(TitleItem(
-                title=cat.title,
-                path=kodiutils.url_for('show_recommendations_category', storefront=storefront, category=cat.category_id),
-                info_dict=dict(
-                    plot='[B]{category}[/B]'.format(category=cat.title),
-                ),
-            ))
+        for item in results:
+            if isinstance(item, Category):
+                listing.append(TitleItem(
+                    title=item.title,
+                    path=kodiutils.url_for('show_recommendations_category', storefront=storefront, category=item.category_id),
+                    info_dict=dict(
+                        plot='[B]{category}[/B]'.format(category=item.title),
+                    ),
+                ))
+            else:
+                listing.append(Menu.generate_titleitem(item))
 
-        # Sort categories by default like in Streamz.
-        kodiutils.show_listing(listing, 30015, content='files')
+        if storefront == STOREFRONT_SERIES:
+            label = 30005  # Series
+        elif storefront == STOREFRONT_MOVIES:
+            label = 30003  # Movies
+        else:
+            label = 30015  # Recommendations
+
+        kodiutils.show_listing(listing, label, content='files')
 
     def show_recommendations_category(self, storefront, category):
         """ Show the items in a recommendations category.
@@ -172,19 +182,20 @@ class Catalog:
         :type storefront: str
         :type category: str
         """
-        recommendations = self._api.get_recommendations(storefront)
+        result = self._api.get_storefront_category(storefront, category)
 
         listing = []
-        for cat in recommendations:
-            # Only show the requested category
-            if cat.category_id != category:
-                continue
+        for item in result.content:
+            listing.append(Menu.generate_titleitem(item))
 
-            for item in cat.content:
-                listing.append(Menu.generate_titleitem(item))
+        if storefront == STOREFRONT_SERIES:
+            content = 'tvshows'
+        elif storefront == STOREFRONT_MOVIES:
+            content = 'movies'
+        else:
+            content = 'files'
 
-        # Sort categories by default like in Streamz.
-        kodiutils.show_listing(listing, 30015, content='tvshows', sort=['unsorted', 'label', 'year', 'duration'])
+        kodiutils.show_listing(listing, result.title, content=content, sort=['unsorted', 'label', 'year', 'duration'])
 
     def show_mylist(self):
         """ Show the items in "My List". """
@@ -196,7 +207,7 @@ class Catalog:
             listing.append(Menu.generate_titleitem(item))
 
         # Sort categories by default like in Streamz.
-        kodiutils.show_listing(listing, 30017, content='tvshows', sort=['unsorted', 'label', 'year', 'duration'])
+        kodiutils.show_listing(listing, 30017, content='files', sort=['unsorted', 'label', 'year', 'duration'])
 
     def mylist_add(self, video_type, content_id):
         """ Add an item to "My List".

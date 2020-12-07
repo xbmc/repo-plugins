@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="2018.2.10" provider-name="eracknaphobia">
+<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="2020.12.7" provider-name="eracknaphobia">
   <requires>
    <import addon="xbmc.python" version="2.19.0"/>
    <import addon="script.module.simplejson" version="3.3.0"/>
@@ -19,6 +19,7 @@
     <forum>http://forum.kodi.tv/showthread.php?tid=207159</forum>
     <website></website>
     <email></email>
+    <broken>This add-on is broken and will no longer be under development.</broken>
     <source></source>
   </extension>
 </addon>

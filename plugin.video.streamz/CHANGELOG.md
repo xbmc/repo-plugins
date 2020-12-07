@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.0.1](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.1) (2020-12-07)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.0...v1.0.1)
+
+**Implemented enhancements:**
+
+- Allow displaying all items in a recommendation category [\#20](https://github.com/add-ons/plugin.video.streamz/pull/20) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Run tests for Python 3.9 [\#21](https://github.com/add-ons/plugin.video.streamz/pull/21) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.0](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.0) (2020-11-03)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v0.0.1...v1.0.0)

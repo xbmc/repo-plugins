@@ -111,11 +111,10 @@ def addon_path():
 
 def addon_profile():
     """Cache and return add-on profile"""
-    if kodi_version_major() >= 19:
-        translate_path = xbmcvfs.translatePath
-    else:
-        translate_path = xbmc.translatePath
-    return to_unicode(translate_path(ADDON.getAddonInfo('profile')))
+    try:  # Kodi 19
+        return to_unicode(xbmcvfs.translatePath(ADDON.getAddonInfo('profile')))
+    except AttributeError:  # Kodi 18
+        return to_unicode(xbmc.translatePath(ADDON.getAddonInfo('profile')))
 
 
 def url_for(name, *args, **kwargs):
@@ -244,58 +243,52 @@ def get_search_string(heading='', message=''):
 
 def ok_dialog(heading='', message=''):
     """Show Kodi's OK dialog"""
-    from xbmcgui import Dialog
     if not heading:
         heading = addon_name()
     if kodi_version_major() < 19:
         # pylint: disable=unexpected-keyword-arg,no-value-for-parameter
-        return Dialog().ok(heading=heading, line1=message)
-    return Dialog().ok(heading=heading, message=message)
+        return xbmcgui.Dialog().ok(heading=heading, line1=message)
+    return xbmcgui.Dialog().ok(heading=heading, message=message)
 
 
 def textviewer(heading='', text='', usemono=False):
     """Show Kodi's textviewer dialog"""
-    from xbmcgui import Dialog
     if not heading:
         heading = addon_name()
-    Dialog().textviewer(heading=heading, text=text, usemono=usemono)
+    xbmcgui.Dialog().textviewer(heading=heading, text=text, usemono=usemono)
 
 
 def show_context_menu(items):
     """Show Kodi's OK dialog"""
-    from xbmcgui import Dialog
-    return Dialog().contextmenu(items)
+    return xbmcgui.Dialog().contextmenu(items)
 
 
 def yesno_dialog(heading='', message='', nolabel=None, yeslabel=None, autoclose=0):
     """Show Kodi's Yes/No dialog"""
-    from xbmcgui import Dialog
     if not heading:
         heading = addon_name()
     if kodi_version_major() < 19:
         # pylint: disable=unexpected-keyword-arg,no-value-for-parameter
-        return Dialog().yesno(heading=heading, line1=message, nolabel=nolabel, yeslabel=yeslabel,
-                              autoclose=autoclose)
-    return Dialog().yesno(heading=heading, message=message, nolabel=nolabel, yeslabel=yeslabel, autoclose=autoclose)
+        return xbmcgui.Dialog().yesno(heading=heading, line1=message, nolabel=nolabel, yeslabel=yeslabel,
+                                      autoclose=autoclose)
+    return xbmcgui.Dialog().yesno(heading=heading, message=message, nolabel=nolabel, yeslabel=yeslabel, autoclose=autoclose)
 
 
 def notification(heading='', message='', icon='info', time=4000):
     """Show a Kodi notification"""
-    from xbmcgui import Dialog
     if not heading:
         heading = addon_name()
     if not icon:
         icon = addon_icon()
-    Dialog().notification(heading=heading, message=message, icon=icon, time=time)
+    xbmcgui.Dialog().notification(heading=heading, message=message, icon=icon, time=time)
 
 
 def multiselect(heading='', options=None, autoclose=0, preselect=None, use_details=False):
     """Show a Kodi multi-select dialog"""
-    from xbmcgui import Dialog
     if not heading:
         heading = addon_name()
-    return Dialog().multiselect(heading=heading, options=options, autoclose=autoclose, preselect=preselect,
-                                useDetails=use_details)
+    return xbmcgui.Dialog().multiselect(heading=heading, options=options, autoclose=autoclose, preselect=preselect,
+                                        useDetails=use_details)
 
 
 class progress(xbmcgui.DialogProgress, object):  # pylint: disable=invalid-name,useless-object-inheritance
@@ -560,14 +553,12 @@ def jsonrpc(*args, **kwargs):
 
 def listdir(path):
     """Return all files in a directory (using xbmcvfs)"""
-    from xbmcvfs import listdir as vfslistdir
-    return vfslistdir(path)
+    return xbmcvfs.listdir(path)
 
 
 def delete(path):
     """Remove a file (using xbmcvfs)"""
-    from xbmcvfs import delete as vfsdelete
-    return vfsdelete(path)
+    return xbmcvfs.delete(path)
 
 
 def get_cache(key, ttl=None):

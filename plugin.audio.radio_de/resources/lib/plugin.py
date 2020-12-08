@@ -1,21 +1,13 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-#     Copyright (C) 2012 Tristan Fischer (sphere@dersphere.de)
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
+'''
+ *  Copyright (C) 2019- enen92 (enen92@kodi.tv)
+ *  Copyright (C) 2012-2019 Tristan Fischer (sphere@dersphere.de)
+ *  This file is part of plugin.audio.radio_de
+ *
+ *  SPDX-License-Identifier: GPL-2.0-only
+ *  See LICENSE.txt for more information.
+'''
+
 from xbmcswift2 import Plugin, xbmc, listitem
 from resources.lib.api import RadioApi, RadioApiError
 
@@ -61,34 +53,54 @@ def show_root_menu():
     items = (
         {'label': _('local_stations'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
-         'path': plugin.url_for('show_local_stations', page=1)},
+         'path': plugin.url_for('show_local_stations', page=1),
+         'offscreen': True
+         },
         {'label': _('editorials_recommendations'),  'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
-         'path': plugin.url_for('show_recommendation_stations')},
+         'path': plugin.url_for('show_recommendation_stations'),
+         'offscreen': True
+         },
         {'label': _('top_stations'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
-         'path': plugin.url_for('show_top_stations', page=1)},
+         'path': plugin.url_for('show_top_stations', page=1),
+         'offscreen': True
+         },
         {'label': _('browse_by_genre'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
-         'path': plugin.url_for('show_genres')},
+         'path': plugin.url_for('show_genres'),
+         'offscreen': True
+         },
         {'label': _('browse_by_topic'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
-         'path': plugin.url_for('show_topics')},
+         'path': plugin.url_for('show_topics'),
+         'offscreen': True
+         },
         {'label': _('browse_by_country'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
-         'path': plugin.url_for('show_countries')},
+         'path': plugin.url_for('show_countries'),
+         'offscreen': True
+         },
         {'label': _('browse_by_city'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
-         'path': plugin.url_for('show_cities_submenu')},
+         'path': plugin.url_for('show_cities_submenu'),
+         'offscreen': True
+         },
         {'label': _('browse_by_language'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
-         'path': plugin.url_for('show_languages')},
+         'path': plugin.url_for('show_languages'),
+         'offscreen': True
+         },
         {'label': _('search_for_station'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
-         'path': plugin.url_for('search')},
+         'path': plugin.url_for('search'),
+         'offscreen': True
+         },
         {'label': _('my_stations'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
-         'path': plugin.url_for('show_my_stations')},
+         'path': plugin.url_for('show_my_stations'),
+         'offscreen': True
+         },
     )
     return plugin.finish(items)
 
@@ -106,7 +118,8 @@ def show_local_stations(page=1):
             'page': page,
             'total_pages': total_pages,
             'icon': plugin.icon,
-            'fanart': __get_plugin_fanart()
+            'fanart': __get_plugin_fanart(),
+            'offscreen': True
         }
 
     return __add_stations(stations, browse_more=next_page)
@@ -130,7 +143,8 @@ def show_top_stations(page=1):
             'page': page,
             'total_pages': total_pages,
             'icon': plugin.icon,
-            'fanart': __get_plugin_fanart()
+            'fanart': __get_plugin_fanart(),
+            'offscreen': True
         }
     return __add_stations(stations, browse_more=next_page)
 
@@ -156,7 +170,8 @@ def search_result(search_string, page):
             'page': page,
             'total_pages': total_pages,
             'icon': plugin.icon,
-            'fanart': __get_plugin_fanart()
+            'fanart': __get_plugin_fanart(),
+            'offscreen': True
         }
     return __add_stations(stations, browse_more=next_page)
 
@@ -215,6 +230,7 @@ def show_genres():
                 category='genres',
                 value=genre["systemEnglish"]
             ),
+            'offscreen': True
         })
     finish_kwargs = {
         'sort_methods': [
@@ -237,6 +253,7 @@ def show_topics():
                 category='topics',
                 value=topic["systemEnglish"]
             ),
+            'offscreen': True
         })
     finish_kwargs = {
         'sort_methods': [
@@ -259,6 +276,7 @@ def show_countries():
                 category='countries',
                 value=country["systemEnglish"]
             ),
+            'offscreen': True
         })
     finish_kwargs = {
         'sort_methods': [
@@ -281,6 +299,7 @@ def show_languages():
                 category='languages',
                 value=lang["systemEnglish"]
             ),
+            'offscreen': True
         })
     finish_kwargs = {
         'sort_methods': [
@@ -296,12 +315,16 @@ def show_cities_submenu():
          'fanart': __get_plugin_fanart(),
          'path': plugin.url_for(
              'show_cities_list',
-             option = 'country')},
+             option = 'country'),
+         'offscreen': True
+         },
         {'label': _('az'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
          'path': plugin.url_for(
              'show_cities_list',
-             option = 'az')}
+             option = 'az'),
+         'offscreen': True
+         }
     )
     finish_kwargs = {
         'sort_methods': [
@@ -324,6 +347,7 @@ def show_cities_list(option):
                     'show_cities_by_country',
                     country = country["systemEnglish"],
                 ),
+                'offscreen': True
             })
     else:
         cities = radio_api.get_cities()
@@ -337,6 +361,7 @@ def show_cities_list(option):
                     category = 'cities',
                     value = city["systemEnglish"],
                 ),
+                'offscreen': True
             })
     finish_kwargs = {
         'sort_methods': [
@@ -358,7 +383,8 @@ def show_cities_by_country(country):
                 'show_popular_and_az',
                 category = 'cities',
                 value = city["systemEnglish"],
-            )
+            ),
+            'offscreen': True
         })
     finish_kwargs = {
         'sort_methods': [
@@ -378,7 +404,9 @@ def show_popular_and_az(category, value):
              option = 'popular',
              category = category,
              value = value,
-             page = 1)},
+             page = 1),
+         'offscreen': True
+         },
         {'label': _('az'), 'icon': plugin.icon,
          'fanart': __get_plugin_fanart(),
          'path': plugin.url_for(
@@ -386,7 +414,9 @@ def show_popular_and_az(category, value):
              option = 'az',
              category=category,
              value = value,
-             page=1)}
+             page=1),
+         'offscreen': True
+         }
     )
     finish_kwargs = {
         'sort_methods': [
@@ -413,7 +443,8 @@ def list_stations_by_city(city, option, page=1):
             'page': page,
             'total_pages': total_pages,
             'icon': plugin.icon,
-            'fanart': __get_plugin_fanart()
+            'fanart': __get_plugin_fanart(),
+            'offscreen': True
         }
     return __add_stations(stations, browse_more=next_page)
 
@@ -467,7 +498,8 @@ def sub_menu_entry(option, category, value, page=1):
             'page': page,
             'total_pages': total_pages,
             'icon': plugin.icon,
-            'fanart': __get_plugin_fanart()
+            'fanart': __get_plugin_fanart(),
+            'offscreen': True
         }
     return __add_stations(stations, browse_more=next_page)
 
@@ -496,6 +528,7 @@ def get_stream_url(station_id):
                 icon=station['thumbnail'],
                 thumbnail=station['thumbnail'],
                 fanart=__get_plugin_fanart(),
+                offscreen=True
             )
         )
 
@@ -544,7 +577,8 @@ def __add_stations(stations, add_custom=False, browse_more=None):
             'is_playable': True,
             'properties': {
                 'StationName': station.get('name', '') # Matrix++ only
-            }
+            },
+            'offscreen': True
         })
     if add_custom:
         items.append({
@@ -557,7 +591,8 @@ def __add_stations(stations, add_custom=False, browse_more=None):
             'label': '[B]%s[/B]' % _('next_page') % (browse_more['page'], browse_more['total_pages']),
             'path': browse_more['url'],
             'icon': browse_more['icon'],
-            'fanart': browse_more['fanart']
+            'fanart': browse_more['fanart'],
+            'offscreen': True
         })
 
 

@@ -95,7 +95,8 @@ class Channel(chn_class.Channel):
                                parser=["data", "programSearch", "programs"],
                                creator=self.create_api_typed_item)
 
-        self._add_data_parser("https://www.tv4play.se/_next", json=True,
+        # self._add_data_parser("https://www.tv4play.se/_next", json=True,
+        self._add_data_parser("https://www.tv4play.se/alla-program", json=True,
                               name="Specific Program list API",
                               preprocessor=self.extract_tv_show_list,
                               parser=["pageProps", "initialApolloState"],
@@ -488,6 +489,10 @@ class Channel(chn_class.Channel):
 
         """
 
+        # Find the build id for the current CMS build
+        build_id = Regexer.do_regex(r'"buildId"\W*:\W*"([^"]+)"', data)[0]
+        data = UriHandler.open("https://www.tv4play.se/_next/data/{}/allprograms.json".format(build_id))
+
         json_data = JsonHelper(data)
         json_data.json["pageProps"]["initialApolloState"] = list(json_data.json["pageProps"]["initialApolloState"].values())
         return json_data, []
@@ -546,18 +551,10 @@ class Channel(chn_class.Channel):
         Logger.info("Performing Pre-Processing")
         items = []
 
-        # GraphQL url for TV Shows time out a lot
-        # query = 'query{programSearch(per_page:1000){__typename,programs' \
-        #         '%s,' \
-        #         'totalHits}}' % (self.__program_fields,)
-        # query = HtmlEntityHelper.url_encode(query)
-        # tv_shows_url = "https://graphql.tv4play.se/graphql?query={}".format(query)
-        tv_shows_url = "https://www.tv4play.se/_next/data/ss-4G6Rv-ZEyGL978Ro6Z/allprograms.json"
-
         extras = {
             LanguageHelper.get_localized_string(LanguageHelper.Search): ("searchSite", None, False),
             LanguageHelper.get_localized_string(LanguageHelper.TvShows): (
-                tv_shows_url,
+                "https://www.tv4play.se/alla-program",
                 None, False
             ),
             LanguageHelper.get_localized_string(LanguageHelper.Categories): (

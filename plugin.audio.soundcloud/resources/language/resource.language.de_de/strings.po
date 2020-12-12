@@ -1,0 +1,139 @@
+# Kodi Media Center language file
+# Addon Name: SoundCloud
+# Addon id: plugin.audio.soundcloud
+# Addon Provider: jaylinski
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings - General
+msgctxt "#30001"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30002"
+msgid "Audio"
+msgstr "Audio"
+
+msgctxt "#30003"
+msgid "Format"
+msgstr "Format"
+
+msgctxt "#30011"
+msgid "Search"
+msgstr "Suche"
+
+msgctxt "#30012"
+msgid "Items per page"
+msgstr "Einträge pro Seite"
+
+msgctxt "#30013"
+msgid "History size"
+msgstr "Größe der Suchhistorie"
+
+msgctxt "#30060"
+msgid "API v2"
+msgstr "API v2"
+
+msgctxt "#30061"
+msgid "Client-ID"
+msgstr "Client-ID"
+
+msgctxt "#30062"
+msgid "Localization"
+msgstr "Sprache"
+
+msgctxt "#30063"
+msgid "auto"
+msgstr "automatisch"
+
+msgctxt "#30064"
+msgid "disabled"
+msgstr "deaktiviert"
+
+msgctxt "#30070"
+msgid "Cache"
+msgstr "Cache"
+
+msgctxt "#30071"
+msgid "Clear cache"
+msgstr "Cache leeren"
+
+# GUI - Root
+msgctxt "#30101"
+msgid "Search"
+msgstr "Suche"
+
+msgctxt "#30102"
+msgid "Charts"
+msgstr "Charts"
+
+msgctxt "#30103"
+msgid "Discover"
+msgstr "Discover"
+
+msgctxt "#30108"
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgctxt "#30109"
+msgid "Sign in"
+msgstr "Anmelden"
+
+# GUI - Search
+msgctxt "#30201"
+msgid "New search"
+msgstr "Neue Suche"
+
+msgctxt "#30211"
+msgid "People"
+msgstr "Leute"
+
+msgctxt "#30212"
+msgid "Albums"
+msgstr "Alben"
+
+msgctxt "#30213"
+msgid "Playlists"
+msgstr "Playlists"
+
+msgctxt "#30214"
+msgid "Spotlight"
+msgstr "Spotlight"
+
+# GUI - Charts
+msgctxt "#30301"
+msgid "Top 50"
+msgstr "Top 50"
+
+msgctxt "#30302"
+msgid "New & hot"
+msgstr "Neu und angesagt"
+
+# GUI - Settings
+msgctxt "#30501"
+msgid "Cache cleared"
+msgstr "Cache gelöscht"
+
+# GUI - Generic
+msgctxt "#30901"
+msgid "Next page"
+msgstr "Nächste Seite"
+
+msgctxt "#30902"
+msgid "Not available in your country"
+msgstr "In deinem Land nicht verfügbar"
+
+msgctxt "#30903"
+msgid "Preview"
+msgstr "Vorschau"

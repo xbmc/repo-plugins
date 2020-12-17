@@ -97,16 +97,21 @@ class EpgApi:
         if not isinstance(channels, list):
             channels = [channels]
 
+        # Python 2.7 doesn't support .timestamp(), and windows doesn't do '%s', so we need to calculate it ourself
+        epoch = datetime(1970, 1, 1, tzinfo=dateutil.tz.gettz('UTC'))
+
         # Generate dates in UTC format
         if date_from is not None:
             date_from = self._parse_date(date_from)
         else:
             date_from = self._parse_date('today')
+        date_from_posix = str(int((date_from - epoch).total_seconds())) + '000'
 
         if date_to is not None:
             date_to = self._parse_date(date_to)
         else:
             date_to = (date_from + timedelta(days=1))
+        date_to_posix = str(int((date_to - epoch).total_seconds())) + '000'
 
         programs = {}
 
@@ -122,8 +127,8 @@ class EpgApi:
                     'u': self._tokens.device_serial,
                     'a': self._tenant.get('app'),
                     's': '!'.join(channels[i:i + self.EPG_CAPI_CHUNK_SIZE]),  # station id's separated with a !
-                    'f': date_from.strftime("%s") + '000',  # from timestamp
-                    't': date_to.strftime("%s") + '000',  # to timestamp
+                    'f': date_from_posix,  # from timestamp
+                    't': date_to_posix,  # to timestamp
                     # 736763 = BIT_EPG_DETAIL_ID | BIT_EPG_DETAIL_TITLE | BIT_EPG_DETAIL_DESCRIPTION | BIT_EPG_DETAIL_AGE |
                     #          BIT_EPG_DETAIL_CATEGORY | BIT_EPG_DETAIL_START | BIT_EPG_DETAIL_END | BIT_EPG_DETAIL_FLAGS |
                     #          BIT_EPG_DETAIL_COVER | BIT_EPG_DETAIL_SEASON_NO | BIT_EPG_DETAIL_EPISODE_NO |

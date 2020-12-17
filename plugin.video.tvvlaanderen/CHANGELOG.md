@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.1](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.1) (2020-12-17)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.0...v1.0.1)
+
+**Fixed bugs:**
+
+- Fix EPG on windows [\#28](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/28) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.0](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.0) (2020-12-05)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v0.0.1...v1.0.0)

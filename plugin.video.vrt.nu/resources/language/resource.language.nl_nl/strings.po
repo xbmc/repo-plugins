@@ -741,6 +741,10 @@ msgctxt "#30834"
 msgid "VRT NWS"
 msgstr "VRT NWS"
 
+msgctxt "#30835"
+msgid "De Warmste Week"
+msgstr "De Warmste Week"
+
 msgctxt "#30860"
 msgid "Integration"
 msgstr "Integratie"
@@ -790,8 +794,8 @@ msgid "Install IPTV Manager add-on…"
 msgstr "Installeer de IPTV Manager add-on…"
 
 msgctxt "#30877"
-msgid "Enable IPTV Manager integration (experimental)"
-msgstr "Activeer IPTV Manager integratie (experimenteel)"
+msgid "Enable IPTV Manager integration"
+msgstr "Activeer IPTV Manager integratie"
 
 msgctxt "#30879"
 msgid "IPTV Manager settings…"
@@ -896,6 +900,14 @@ msgstr "Logboek"
 msgctxt "#30933"
 msgid "Log level"
 msgstr "Log niveau"
+
+msgctxt "#30935"
+msgid "Install Kodi Logfile Uploader…"
+msgstr "Installeer Kodi Logfile Uploader…"
+
+msgctxt "#30937"
+msgid "Open Kodi Logfile Uploader…"
+msgstr "Open Kodi Logfile Uploader…"
 
 
 ### MESSAGES

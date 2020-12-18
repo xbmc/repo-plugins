@@ -280,7 +280,7 @@ class Metadata:
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
-            if season:
+            if season is not False:
                 plot = html_to_kodi(api_data.get('programDescription', ''))
 
                 # Add additional metadata to plot
@@ -373,7 +373,7 @@ class Metadata:
         """Get plotoutline string from single item json api data"""
         # VRT NU Search API
         if api_data.get('type') == 'episode':
-            if season:
+            if season is not False:
                 plotoutline = html_to_kodi(api_data.get('programDescription', ''))
                 return plotoutline
 
@@ -551,7 +551,7 @@ class Metadata:
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
-            if season:
+            if season is not False:
                 return 'season'
 
             # If this is a oneoff (e.g. movie) and we get a year of release, do not set 'aired'
@@ -577,7 +577,7 @@ class Metadata:
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':
-            if season:
+            if season is not False:
                 if get_setting_bool('showfanart', default=True):
                     art_dict['fanart'] = add_https_proto(api_data.get('programImageUrl', 'DefaultSets.png'))
                     if season != 'allseasons':
@@ -637,7 +637,7 @@ class Metadata:
         # VRT NU Search API
         if api_data.get('type') == 'episode':
             info_labels = dict(
-                title=self.get_title(api_data),
+                title=self.get_title(api_data, season=season),
                 # sorttitle=self.get_title(api_data),  # NOTE: Does not appear to work
                 tvshowtitle=self.get_tvshowtitle(api_data),
                 # date=self.get_date(api_data),  # NOTE: Not sure when or how this is used
@@ -687,8 +687,12 @@ class Metadata:
         return {}
 
     @staticmethod
-    def get_title(api_data):
+    def get_title(api_data, season=False):
         """Get an appropriate video title"""
+
+        if season is not False:
+            title = '%s %s' % (localize(30131), season)  # Season X
+            return title
 
         # VRT NU Search API
         if api_data.get('type') == 'episode':

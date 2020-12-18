@@ -59,6 +59,13 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.4.2 (2020-12-18)
+- Fix missing seasons (for 'Thuis') in TV Show menu (@mediaminister)
+- Fix missing favourite programs in 'My programs' menu (@mediaminister)
+- Allow IPTV Manager and Kodi Logfile Uploader installation from add-on settings (@michaelarnauts)
+- Updated Categories menu (@dagwieers)
+- Fix date parsing on Windows (@michaelarnauts)
+
 ### v2.4.1 (2020-10-31)
 - Add new category "Nostalgia" (@dagwieers)
 - Add poster support (@dagwieers)

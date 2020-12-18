@@ -130,6 +130,9 @@ def url_to_program(url):
     elif url.startswith('/vrtnu/a-z/'):
         # short programUrl
         program = url.split('/')[3]
+        # Workaround: when adding a favourite on https://www.vrt.be/vrtnu/ sometimes '.html' is wrongly added to the short program Url
+        if program.endswith('.html'):
+            program = program.replace('.html', '')
     if program.endswith('.relevant'):
         # targetUrl
         program = program.replace('.relevant', '')

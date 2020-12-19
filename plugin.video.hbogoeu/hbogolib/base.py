@@ -203,6 +203,11 @@ class hbogo(object):
             handler = HbogoHandler(self.handle, self.base_url)
             handler.clear_request_cache()
 
+        elif mode == HbogoConstants.ACTION_CLEAN_SUBTITLES_CACHE:  # clean subtitle cache
+            from hbogolib.handler import HbogoHandler
+            handler = HbogoHandler(self.handle, self.base_url)
+            handler.clean_sub_cache(silent=False)
+
         elif mode == HbogoConstants.ACTION_RESET_SESSION:  # reset session
             from hbogolib.handler import HbogoHandler
             handler = HbogoHandler(self.handle, self.base_url)

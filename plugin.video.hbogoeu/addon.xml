@@ -1,4 +1,4 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.6.1+matrix.1">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.6.2+matrix.1">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
@@ -6,7 +6,7 @@
     <import addon="script.module.pyaes" version="1.6.1" />
     <import addon="script.module.defusedxml" version="0.6.0" />
     <import addon="script.module.dateutil" version="2.8.1" />
-    <import addon="script.module.inputstreamhelper" version="0.4.2" />
+    <import addon="script.module.inputstreamhelper" version="0.5.2" />
   </requires>
   <extension library="main.py" point="xbmc.python.pluginsource">
     <provides>video</provides>
@@ -37,16 +37,17 @@ THERE IS NO WARRANTY FOR THE ADD-ON, IT MIGHT NOT WORK AT ALL AND IT CAN BREAK A
 
 If an official app is available for your platform, use it instead of this.
     </disclaimer>
-    <language>en</language>
+    <language>en bs bg hr cs hu mk pl pt ro sr sk sl es nb da sv fi cnr</language>
     <platform>all</platform>
     <license>GPL-2.0-or-later</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=339798</forum>
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-- Recent Kodi 19 API compatibility changes
-- Swedish translation by @Sopor
-- Minor changes
+- Subtitle cache autocleaning and manual subtitle cache cleaning
+- Translations updates
+- Optimize plot (show only "abstract" or "description")
+- Move from deprecated xbmc.translatePath to new xbmcvfs.translatePath for Kodi 19+
     </news>
     <assets>
      <icon>resources/icon.png</icon>

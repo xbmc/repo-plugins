@@ -7,18 +7,44 @@ import requests
 from requests.packages import urllib3
 #Below is required to get around an ssl issue
 urllib3.disable_warnings()
-import cookielib
+major_version = sys.version_info.major
 import urllib
-import HTMLParser
+if major_version == 2:
+    import HTMLParser
+elif major_version == 3:
+    import html
 import codecs
 import time
 
 import xbmc
+if major_version == 3:
+    import xbmcvfs
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
+try:
+    import cookielib
+except:
+    import http.cookiejar
+    cookielib = http.cookiejar
+
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
+
+
+def tp(path):
+    if major_version == 2:
+        return xbmc.translatePath(path)
+    elif major_version == 3:
+        return xbmcvfs.translatePath(path)
+
+
+def unescape(string):
+    if major_version == 2:
+        return HTMLParser.HTMLParser().unescape(string)
+    elif major_version == 3:
+        return html.unescape(string)
+
 
 
 def GetAddonInfo():
@@ -28,13 +54,13 @@ def GetAddonInfo():
     addon_info["language"] = addon_info["addon"].getLocalizedString
     addon_info["version"] = addon_info["addon"].getAddonInfo("version")
     addon_info["path"] = addon_info["addon"].getAddonInfo("path")
-    addon_info["profile"] = xbmc.translatePath(addon_info["addon"].getAddonInfo('profile'))
+    addon_info["profile"] = tp(addon_info["addon"].getAddonInfo('profile'))
     return addon_info
 
 
 addonid = "plugin.video.iplayerwww"
 addoninfo = GetAddonInfo()
-DIR_USERDATA = xbmc.translatePath(addoninfo["profile"])
+DIR_USERDATA = tp(addoninfo["profile"])
 cookie_jar = None
 user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0'
 headers = {'User-Agent': user_agent}
@@ -133,64 +159,86 @@ def download_subtitles(url):
     styles = []
     match = re.search(r'<styling>(.+?)</styling>', txt, re.DOTALL)
     if match:
-        match = re.findall(r'<style.*?id="(.*?)".*?color="(.*?)"', match.group(1), re.DOTALL)
+        match = re.findall(r'<style(.*?)>', match.group(1), re.DOTALL)
         if match:
-            for id, color in match:
-                styles.append((id, color))
-    span_replacer = make_span_replacer(styles)
+            for style_line in match:
+                match = re.search(r'id="(.*?)"', style_line, re.DOTALL)
+                id = None
+                if match:
+                    id = match.group(1)
+                color = None
+                match = re.search(r'color="(.*?)"', style_line, re.DOTALL)
+                if match:
+                    # Some of the subtitle files use #ffffff color coding, others use plain text.
+                    if match.group(1).startswith('#'):
+                        styles.append((id, match.group(1)[0:7]))
+                    else:
+                        styles.append((id, match.group(1)))
+                    # span_replacer = make_span_replacer(styles)
+    # print "Retrieved styles"
+    # print styles
 
-    i = 0
-    prev = None
+    # get body
+    body = []
+    body = re.search(r'<body.*?>(.+?)</body>', txt, re.DOTALL)
+    if body:
+        # print "Located body"
+        # print body.group(1).encode('utf-8')
+        frames = re.findall(r'<p(.*?)>(.*?)</p>', body.group(1), re.DOTALL)
+        # frames = re.findall(r'<p.*?begin=\"(.*?)".*?end=\"(.*?)".*?style="(.*?)".*?>(.*?)</p>', body.group(1), re.DOTALL)
+        if frames:
+            index = 1
+            # print "Found %s frames"%len(frames)
+            # print frames
+            for formatting, content in frames:
+                start = ''
+                match = re.search(r'begin=\"(.*?)"', formatting, re.DOTALL)
+                if match:
+                    start = match.group(1)
+                end = ''
+                match = re.search(r'end=\"(.*?)"', formatting, re.DOTALL)
+                if match:
+                    end = match.group(1)
+                style = None
+                match = re.search(r'style=\"(.*?)"', formatting, re.DOTALL)
+                if match:
+                    style = match.group(1)
+                else:
+                    style = False
+                start_split = re.split('\.',start)
+                # print start_split
+                if(len(start_split)>1):
+                    start_mil_f = start_split[1].ljust(3, '0')
+                else:
+                    start_mil_f = "000"
+                end_split = re.split('\.',end)
+                if(len(end_split)>1):
+                    end_mil_f = end_split[1].ljust(3, '0')
+                else:
+                    end_mil_f = "000"
 
-    # some of the subtitles are a bit rubbish in particular for live tv
-    # with lots of needless repeats. The follow code will collapse sequences
-    # of repeated subtitles into a single subtitles that covers the total time
-    # period. The downside of this is that it would mess up in the rare case
-    # where a subtitle actually needs to be repeated
-    for line in txt.split('\n'):
-        entry = None
-        m = re_subtitles.match(line)
-        # print line
-        # print m
-        if m:
-            if(m.group(3)):
-                start_mil = "%s000" % m.group(3) # pad out to ensure 3 digits
-            else:
-                start_mil = "000"
-            if(m.group(6)):
-                end_mil = "%s000" % m.group(6)
-            else:
-                end_mil = "000"
-
-            ma = {'start': m.group(1),
-                  'start_mil': start_mil[:3],
-                  'end': m.group(4),
-                  'end_mil': end_mil[:3],
-                  'text': m.group(7),
-                  'color': None}
-            ma['color'] = getSubColor(line, styles)
-            # print ma
-
-            if not prev:
-                # first match, wait till next line
-                prev = ma
-                continue
-
-            if prev['text'] == ma['text']:
-                # current line = previous line then start a sequence to be collapsed
-                prev['end'] = ma['end']
-                prev['end_mil'] = ma['end_mil']
-            else:
-                i += 1
-                entry = format_subtitle(prev, span_replacer, i)
-                prev = ma
-        elif prev:
-            i += 1
-            entry = format_subtitle(prev, span_replacer, i)
-            prev = None
-
-        if entry:
-            fw.write(entry)
+                spans = []
+                text = ''
+                spans = re.findall(r'<span.*?style="(.*?)">(.*?)</span>', content, re.DOTALL)
+                if (spans):
+                    num_spans = len(spans)
+                    for num, (substyle, line) in enumerate(spans):
+                        if num >0:
+                            text = text+'\n'
+                        color = [value for (style_id, value) in styles if substyle == style_id]
+                        # print substyle, color, line.encode('utf-8')
+                        text = text+'<font color="%s">%s</font>' %  (color[0], line)
+                else:
+                    if style:
+                        color = [value for (style_id, value) in styles if style == style_id]
+                        text = text+'<font color="%s">%s</font>' %  (color[0], content)
+                    else:
+                         text = text+content
+                    # print substyle, color, line.encode('utf-8')
+                entry = "%d\n%s,%s --> %s,%s\n%s\n\n" % (index, start_split[0], start_mil_f, end_split[0], end_mil_f, text)
+                if entry:
+                    fw.write(entry)
+                    index += 1
 
     fw.close()
     return outfile
@@ -232,7 +280,7 @@ def SignInBBCiD():
         m = p.search(resp.text)
         url = m.group(1)
 
-        url = "https://account.bbc.com%s" % HTMLParser.HTMLParser().unescape(url)
+        url = "https://account.bbc.com%s" % unescape(url)
         resp = s.post(url, data=post_data, headers=headers)
     
         for cookie in s.cookies:
@@ -248,7 +296,7 @@ def SignInBBCiD():
         m = p.search(resp.text)
         url = m.group(1)
 
-        url = "https://account.bbc.com%s" % HTMLParser.HTMLParser().unescape(url)
+        url = "https://account.bbc.com%s" % unescape(url)
         resp = s.post(url, data=post_data, headers=headers)
     
         for cookie in s.cookies:
@@ -320,7 +368,7 @@ def OpenURL(url):
         cookie_jar.save(ignore_discard=True)
     except:
         pass
-    return HTMLParser.HTMLParser().unescape(r.content.decode('utf-8'))
+    return unescape(r.content.decode('utf-8'))
 
 
 def OpenURLPost(url, post_data):
@@ -355,12 +403,18 @@ def GetCookieJar():
 
 # Creates a 'urlencoded' string from a unicode input
 def utf8_quote_plus(unicode):
-    return urllib.quote_plus(unicode.encode('utf-8'))
+    if major_version == 2:
+        return urllib.quote_plus(unicode.encode('utf-8'))
+    elif major_version == 3:
+        return urllib.parse.quote_plus(unicode.encode('utf-8'))
 
 
 # Gets a unicode string from a 'urlencoded' string
 def utf8_unquote_plus(str):
-    return urllib.unquote_plus(str).decode('utf-8')
+    if major_version == 2:
+        return urllib.unquote_plus(str).decode('utf-8')
+    elif major_version == 3:
+        return urllib.parse.unquote_plus(str)
 
 
 def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None, logged_in=False):
@@ -393,8 +447,9 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
     else:
         isFolder = True
 
-    listitem = xbmcgui.ListItem(label=name, label2=description,
-                                iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    listitem = xbmcgui.ListItem(label=name, label2=description)
+    listitem.setArt({'icon':'DefaultFolder.png', 'thumb':iconimage})
+
     if aired:
         listitem.setInfo("video", {
             "title": name,
@@ -468,27 +523,27 @@ def CreateBaseDirectory(content_type):
         else:
             live_mode = 123
         AddMenuEntry(translation(30329), 'cbeebies_hd', live_mode,
-                     xbmc.translatePath(
+                     tp(
                          'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30330), 'cbbc_hd', live_mode,
-                     xbmc.translatePath(
+                     tp(
                          'special://home/addons/plugin.video.iplayerwww/media/cbbc_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30331), 'cbeebies', 125,
-                     xbmc.translatePath(
+                     tp(
                          'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30332), 'cbbc', 125,
-                     xbmc.translatePath(
+                     tp(
                          'special://home/addons/plugin.video.iplayerwww/media/cbbc_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30333), 'p02pnn9d', 131,
-                     xbmc.translatePath(
+                     tp(
                          'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
                      ),
                      '', '')
@@ -498,128 +553,128 @@ def CreateBaseDirectory(content_type):
         ShowLicenceWarning()
         if ADDON.getSetting("menu_video_highlights") == 'true':
             AddMenuEntry(translation(30300), 'iplayer', 106,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_channel_highlights") == 'true':
             AddMenuEntry(translation(30317), 'url', 109,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_most_popular") == 'true':
             AddMenuEntry(translation(30301), 'url', 105,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/popular.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_az") == 'true':
             AddMenuEntry(translation(30302), 'url', 102,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/lists.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_channel_az") == 'true':
             AddMenuEntry(translation(30327), 'url', 120,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/lists.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_categories") == 'true':
             AddMenuEntry(translation(30303), 'url', 103,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/lists.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_search") == 'true':
             AddMenuEntry(translation(30304), 'url', 104,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/search.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_live") == 'true':
             AddMenuEntry(translation(30305), 'url', 101,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/tv.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_red_button") == 'true':
             AddMenuEntry(translation(30328), 'url', 118,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/tv.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_uhd_trial") == 'true':
             AddMenuEntry(translation(30335), 'url', 197,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/tv.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_watching") == 'true':
             AddMenuEntry(translation(30306), 'url', 107,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_added") == 'true':
             AddMenuEntry(translation(30307), 'url', 108,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
                                             ),
                          '', '')
         AddMenuEntry(translation(30325), 'url', 119,
-                     xbmc.translatePath(
+                     tp(
                        'special://home/addons/plugin.video.iplayerwww/media/settings.png'
                                         ), 
                      '', '')
     elif content_type == "audio":
         if ADDON.getSetting("menu_radio_live") == 'true':
             AddMenuEntry(translation(30321), 'url', 113,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/live.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_az") == 'true':
             AddMenuEntry(translation(30302), 'url', 112,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/lists.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_categories") == 'true':
             AddMenuEntry(translation(30303), 'url', 114,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/lists.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_search") == 'true':
             AddMenuEntry(translation(30304), 'url', 115,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/search.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_most_popular") == 'true':
             AddMenuEntry(translation(30301), 'url', 116,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/popular.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_added") == 'true':
             AddMenuEntry(translation(30307), 'url', 117,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
                                             ),
                          '', '')
         """
         if ADDON.getSetting("menu_radio_following") == 'true':
             AddMenuEntry(translation(30334), 'url', 199,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
                                             ),
                          '', '')
         """
         AddMenuEntry(translation(30325), 'url', 119,
-                     xbmc.translatePath(
+                     tp(
                        'special://home/addons/plugin.video.iplayerwww/media/settings.png'
                                         ),
                      '', '')
@@ -627,55 +682,55 @@ def CreateBaseDirectory(content_type):
         ShowLicenceWarning()
         if ADDON.getSetting("menu_video_highlights") == 'true':
             AddMenuEntry((translation(30323)+translation(30300)), 'iplayer', 106,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_channel_highlights") == 'true':
             AddMenuEntry((translation(30323)+translation(30317)), 'url', 109,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_most_popular") == 'true':
             AddMenuEntry((translation(30323)+translation(30301)), 'url', 105,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/popular.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_az") == 'true':
             AddMenuEntry((translation(30323)+translation(30302)), 'url', 102,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/lists.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_channel_az") == 'true':
             AddMenuEntry((translation(30323)+translation(30327)), 'url', 120,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/lists.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_categories") == 'true':
             AddMenuEntry((translation(30323)+translation(30303)), 'url', 103,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/lists.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_search") == 'true':
             AddMenuEntry((translation(30323)+translation(30304)), 'url', 104,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/search.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_live") == 'true':
             AddMenuEntry((translation(30323)+translation(30305)), 'url', 101,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/tv.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_red_button") == 'true':
             AddMenuEntry((translation(30323)+translation(30328)), 'url', 118,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/tv.png'
                                             ),
                          '', '')
@@ -687,61 +742,61 @@ def CreateBaseDirectory(content_type):
                          '', '')
         if ADDON.getSetting("menu_video_watching") == 'true':
             AddMenuEntry((translation(30323)+translation(30306)), 'url', 107,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_video_added") == 'true':
             AddMenuEntry((translation(30323)+translation(30307)), 'url', 108,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
                                             ),
                          '', '')
 
         if ADDON.getSetting("menu_radio_live") == 'true':
             AddMenuEntry((translation(30324)+translation(30321)), 'url', 113,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/live.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_az") == 'true':
             AddMenuEntry((translation(30324)+translation(30302)), 'url', 112,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/lists.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_categories") == 'true':
             AddMenuEntry((translation(30324)+translation(30303)), 'url', 114,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/lists.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_search") == 'true':
             AddMenuEntry((translation(30324)+translation(30304)), 'url', 115,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/search.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_most_popular") == 'true':
             AddMenuEntry((translation(30324)+translation(30301)), 'url', 116,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/popular.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_added") == 'true':
             AddMenuEntry((translation(30324)+translation(30307)), 'url', 117,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
                                             ),
                          '', '')
         if ADDON.getSetting("menu_radio_following") == 'true':
             AddMenuEntry((translation(30324)+translation(30334)), 'url', 199,
-                         xbmc.translatePath(
+                         tp(
                            'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
                                             ),
                          '', '')
         AddMenuEntry(translation(30325), 'url', 119,
-                     xbmc.translatePath(
+                     tp(
                        'special://home/addons/plugin.video.iplayerwww/media/settings.png'
                                         ),
                      '', '')

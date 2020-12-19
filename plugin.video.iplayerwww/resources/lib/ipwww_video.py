@@ -13,13 +13,23 @@ from ipwww_common import translation, AddMenuEntry, OpenURL, \
                          CheckLogin, CreateBaseDirectory, GetCookieJar, \
                          ParseImageUrl, download_subtitles
 
+major_version = sys.version_info.major
 import xbmc
+if major_version == 3:
+    import xbmcvfs
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
 from random import randint
 
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
+
+
+def tp(path):
+    if major_version == 2:
+        return xbmc.translatePath(path)
+    elif major_version == 3:
+        return xbmcvfs.translatePath(path)
 
 
 def CheckInputStreamAdaptiveAvailability():
@@ -41,8 +51,8 @@ def CheckInputStreamAdaptiveAvailability():
 def RedButtonDialog():
     if ADDON.getSetting('redbutton_warning') == 'true':
         dialog = xbmcgui.Dialog()
-        ret = dialog.yesno(translation(30405), translation(30406), '',
-                           translation(30407), translation(30409), translation(30408))
+        ret = dialog.yesno(translation(30405), translation(30406) + "\n" + translation(30407),
+                           translation(30409), translation(30408))
         if ret:
             ListRedButton()
     else:
@@ -100,7 +110,7 @@ def ListRedButton():
         ('sport_stream_23b', 'BBC Red Button 23b'),
         ('sport_stream_24b', 'BBC Red Button 24b'),
     ]
-    iconimage = xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/red_button.png')
+    iconimage = tp('special://home/addons/plugin.video.iplayerwww/media/red_button.png')
     for id, name in channel_list:
         if ADDON.getSetting('streams_autoplay') == 'true':
             AddMenuEntry(name, id, 203, iconimage, '', '')
@@ -123,7 +133,7 @@ def ListUHDTrial():
 
     ia_available = CheckInputStreamAdaptiveAvailability()
     if ia_available:
-        iconimage = xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/red_button.png')
+        iconimage = tp('special://home/addons/plugin.video.iplayerwww/media/red_button.png')
         for id, name in channel_list:
             AddMenuEntry(name, id, 205, iconimage, '', '')
     else:
@@ -182,7 +192,7 @@ def ListLive():
         ('bbc_one_yorks',                    'BBC One Yorks',),
     ]
     for id, name in channel_list:
-        iconimage = xbmc.translatePath(
+        iconimage = tp(
             os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
         if ADDON.getSetting('streams_autoplay') == 'true':
             AddMenuEntry(name, id, 203, iconimage, '', '')
@@ -236,7 +246,7 @@ def ListChannelAtoZ():
         ('tv/s4c',           's4cpbs',                      'S4C'),
     ]
     for id, img, name in channel_list:
-        iconimage = xbmc.translatePath(
+        iconimage = tp(
             os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
         url = "https://www.bbc.co.uk/%s/a-z" % id
         AddMenuEntry(name, url, 134, iconimage, '', '')
@@ -343,12 +353,15 @@ def ScrapeEpisodes(page_url):
                 else:
                     total_pages = current_page
             if current_page<total_pages:
-                split_page_url = page_url.split('?')
+                split_page_url = page_url.replace('&','?').split('?')
                 page_base_url = split_page_url[0]
-                for part in split_page_url[1:len(split_page_url)-1]:
+                for part in split_page_url[1:len(split_page_url)]:
                     if not part.startswith('page'):
                         page_base_url = page_base_url+'?'+part
-                page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
+                if '?' in page_base_url:
+                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'&page='
+                else:
+                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
                 next_page = current_page+1
             else:
                 next_page = current_page
@@ -358,12 +371,15 @@ def ScrapeEpisodes(page_url):
             if pages:
                 last = pages[-1]
                 last_page = re.search(r'page=(\d*)', last)
-                split_page_url = page_url.split('?')
+                split_page_url = page_url.replace('&','?').split('?')
                 page_base_url = split_page_url[0]
-                for part in split_page_url[1:len(split_page_url)-1]:
+                for part in split_page_url[1:len(split_page_url)]:
                     if not part.startswith('page'):
                         page_base_url = page_base_url+'?'+part
-                page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
+                if '?' in page_base_url:
+                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'&page='
+                else:
+                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
                 total_pages = int(last_page.group(1))
             page_range = list(range(1, total_pages+1))
 
@@ -515,7 +531,7 @@ def ListChannelHighlights():
         ('tv/s4c',           's4cpbs',                      'S4C'),
     ]
     for id, img, name in channel_list:
-        iconimage = xbmc.translatePath(
+        iconimage = tp(
             os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
         AddMenuEntry(name, id, 106, iconimage, '', '')
 
@@ -625,17 +641,25 @@ def ParseJSON(programme_data, current_url):
         if 'header' in programme_data:
             if 'title' in programme_data['header']:
                 name = programme_data['header']['title']
-            if 'availableSlices' in programme_data['header']:
-                current_series = programme_data['header']['currentSliceId']
-                slices = programme_data['header']['availableSlices']
-                if slices is not None:
-                    for series in slices:
-                        if series['id'] == current_series:
-                            continue
-                        base_url = current_url.split('?')[0]
-                        series_url = base_url + '?seriesId=' + series['id']
-                        AddMenuEntry('[B]%s: %s[/B]' % (name, series['title']),
-                                     series_url, 128, '', '', '')
+            url_split = current_url.replace('&','?').split('?')
+            is_paginated = False
+            """ Avoid duplicate entries by checking if we are on page >1
+            """
+            for part in url_split:
+                if part.startswith('page'):
+                    is_paginated = True
+            if not is_paginated:
+                if 'availableSlices' in programme_data['header']:
+                    current_series = programme_data['header']['currentSliceId']
+                    slices = programme_data['header']['availableSlices']
+                    if slices is not None:
+                        for series in slices:
+                            if series['id'] == current_series:
+                                continue
+                            base_url = url_split[0]
+                            series_url = base_url + '?seriesId=' + series['id']
+                            AddMenuEntry('[B]%s: %s[/B]' % (name, series['title']),
+                                         series_url, 128, '', '', '')
 
         programmes = None
         if 'currentLetter' in programme_data:
@@ -1000,7 +1024,8 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
         dialog = xbmcgui.Dialog()
         dialog.ok(translation(30400), translation(30401))
         raise
-    liz = xbmcgui.ListItem(name, iconImage='DefaultVideo.png', thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({'icon':'DefaultVideo.png', 'thumb':iconimage})
     liz.setInfo(type='Video', infoLabels={'Title': name})
     liz.setProperty("IsPlayable", "true")
     liz.setPath(url)
@@ -1009,16 +1034,8 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
         liz.setProperty('inputstream.adaptive.manifest_type', 'mpd')
     if subtitles_url and ADDON.getSetting('subtitles') == 'true':
         subtitles_file = download_subtitles(subtitles_url)
+        liz.setSubtitles([subtitles_file])
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
-    if subtitles_url and ADDON.getSetting('subtitles') == 'true':
-        # Successfully started playing something?
-        while True:
-            if xbmc.Player().isPlaying():
-                break
-            else:
-                xbmc.sleep(500)
-        xbmc.Player().setSubtitles(subtitles_file)
-
 
 def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     """Will create one menu entry for each available stream of a particular stream_id"""

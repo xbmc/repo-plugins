@@ -7,7 +7,10 @@ from operator import itemgetter
 from ipwww_common import translation, AddMenuEntry, OpenURL, \
                          CheckLogin, CreateBaseDirectory
 
+major_version = sys.version_info.major
 import xbmc
+if major_version == 3:
+    import xbmcvfs
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
@@ -428,7 +431,9 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
         dialog = xbmcgui.Dialog()
         dialog.ok(translation(30400), translation(30401))
         raise
-    liz = xbmcgui.ListItem(name, iconImage='DefaultVideo.png', thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({'icon':'DefaultVideo.png', 'thumb':iconimage})
+
     liz.setInfo(type='Audio', infoLabels={'Title': name})
     liz.setProperty("IsPlayable", "true")
     liz.setPath(url)
@@ -594,8 +599,12 @@ def ListLive():
         ('bbc_radio_york', 'BBC Radio York'),
     ]
     for id, name in channel_list:
-        iconimage = xbmc.translatePath(
-            os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
+        if major_version == 2:
+            iconimage = xbmc.translatePath(
+                os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
+        elif major_version == 3:
+            iconimage = xbmcvfs.translatePath(
+                os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
         if ADDON.getSetting('streams_autoplay') == 'true':
             AddMenuEntry(name, id, 213, iconimage, '', '')
         else:

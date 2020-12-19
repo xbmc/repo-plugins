@@ -289,12 +289,15 @@ def ScrapeEpisodes(page_url):
                 else:
                     total_pages = current_page
             if current_page<total_pages:
-                split_page_url = page_url.split('?')
+                split_page_url = page_url.replace('&','?').split('?')
                 page_base_url = split_page_url[0]
-                for part in split_page_url[1:len(split_page_url)-1]:
+                for part in split_page_url[1:len(split_page_url)]:
                     if not part.startswith('page'):
                         page_base_url = page_base_url+'?'+part
-                page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
+                if '?' in page_base_url:
+                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'&page='
+                else:
+                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
                 next_page = current_page+1
             else:
                 next_page = current_page
@@ -304,12 +307,15 @@ def ScrapeEpisodes(page_url):
             if pages:
                 last = pages[-1]
                 last_page = re.search(r'page=(\d*)', last)
-                split_page_url = page_url.split('?')
+                split_page_url = page_url.replace('&','?').split('?')
                 page_base_url = split_page_url[0]
-                for part in split_page_url[1:len(split_page_url)-1]:
+                for part in split_page_url[1:len(split_page_url)]:
                     if not part.startswith('page'):
                         page_base_url = page_base_url+'?'+part
-                page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
+                if '?' in page_base_url:
+                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'&page='
+                else:
+                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
                 total_pages = int(last_page.group(1))
             page_range = list(range(1, total_pages+1))
 
@@ -571,17 +577,25 @@ def ParseJSON(programme_data, current_url):
         if 'header' in programme_data:
             if 'title' in programme_data['header']:
                 name = programme_data['header']['title']
-            if 'availableSlices' in programme_data['header']:
-                current_series = programme_data['header']['currentSliceId']
-                slices = programme_data['header']['availableSlices']
-                if slices is not None:
-                    for series in slices:
-                        if series['id'] == current_series:
-                            continue
-                        base_url = current_url.split('?')[0]
-                        series_url = base_url + '?seriesId=' + series['id']
-                        AddMenuEntry('[B]%s: %s[/B]' % (name, series['title']),
-                                     series_url, 128, '', '', '')
+            url_split = current_url.replace('&','?').split('?')
+            is_paginated = False
+            """ Avoid duplicate entries by checking if we are on page >1
+            """
+            for part in url_split:
+                if part.startswith('page'):
+                    is_paginated = True
+            if not is_paginated:
+                if 'availableSlices' in programme_data['header']:
+                    current_series = programme_data['header']['currentSliceId']
+                    slices = programme_data['header']['availableSlices']
+                    if slices is not None:
+                        for series in slices:
+                            if series['id'] == current_series:
+                                continue
+                            base_url = url_split[0]
+                            series_url = base_url + '?seriesId=' + series['id']
+                            AddMenuEntry('[B]%s: %s[/B]' % (name, series['title']),
+                                         series_url, 128, '', '', '')
 
         programmes = None
         if 'currentLetter' in programme_data:
@@ -909,16 +923,8 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
     liz.setPath(url)
     if subtitles_url and ADDON.getSetting('subtitles') == 'true':
         subtitles_file = download_subtitles(subtitles_url)
+        liz.setSubtitles([subtitles_file])
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
-    if subtitles_url and ADDON.getSetting('subtitles') == 'true':
-        # Successfully started playing something?
-        while True:
-            if xbmc.Player().isPlaying():
-                break
-            else:
-                xbmc.sleep(500)
-        xbmc.Player().setSubtitles(subtitles_file)
-
 
 def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     """Will create one menu entry for each available stream of a particular stream_id"""

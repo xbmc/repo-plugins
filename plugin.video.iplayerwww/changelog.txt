@@ -1,3 +1,8 @@
+v2.5.56
+Fixes for new subtitle XML format.
+Added initial compatibility with Python 3 (does not work on 19 yet).
+Fixed issue for programmes with multiple pages.
+
 v2.5.55
 Added support for BBC Scotland.
 

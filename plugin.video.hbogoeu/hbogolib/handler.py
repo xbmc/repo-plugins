@@ -113,7 +113,7 @@ class HbogoHandler(object):
         self.API_PLATFORM = 'COMP'
 
         self.log("Starting database connection...")
-        self.db = sqlite3.connect(xbmc.translatePath(self.addon.getAddonInfo('profile')) + 'hgo.db')
+        self.db = sqlite3.connect(KodiUtil.translatePath(self.addon.getAddonInfo('profile')) + 'hgo.db')
         cur = self.db.cursor()
         try:
             cur.execute("SELECT val_int FROM settings WHERE set_id='db_ver'")
@@ -222,11 +222,11 @@ class HbogoHandler(object):
 
     @staticmethod
     def get_resource(resourcefile):
-        return py2_decode(xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path') + '/resources/' + resourcefile))
+        return py2_decode(KodiUtil.translatePath(xbmcaddon.Addon().getAddonInfo('path') + '/resources/' + resourcefile))
 
     @staticmethod
     def get_media_resource(resourcefile):
-        return py2_decode(xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path') + '/resources/media/' + resourcefile))
+        return py2_decode(KodiUtil.translatePath(xbmcaddon.Addon().getAddonInfo('path') + '/resources/media/' + resourcefile))
 
     def log(self, msg, level=xbmc.LOGDEBUG):
         try:
@@ -395,7 +395,7 @@ class HbogoHandler(object):
 
     def del_login(self):
         try:
-            folder = xbmc.translatePath(self.addon.getAddonInfo('profile'))
+            folder = KodiUtil.translatePath(self.addon.getAddonInfo('profile'))
             self.log("Removing stored session: " + folder + self.addon_id + "_session" + ".ecdata")
             os.remove(folder + self.addon_id + "_session" + ".ecdata")
         except Exception:
@@ -415,7 +415,7 @@ class HbogoHandler(object):
         self.log("Removed stored setup")
 
     def save_obj(self, obj, name):
-        folder = xbmc.translatePath(self.addon.getAddonInfo('profile'))
+        folder = KodiUtil.translatePath(self.addon.getAddonInfo('profile'))
         self.log("Saving: " + folder + name + '.ecdata')
         with open(folder + name + '.ecdata', 'wb') as f:
             try:
@@ -424,7 +424,7 @@ class HbogoHandler(object):
                 f.write(bytes(self.encrypt_credential_v1(json.dumps(obj)), 'utf8'))
 
     def load_obj(self, name):
-        folder = xbmc.translatePath(self.addon.getAddonInfo('profile'))
+        folder = KodiUtil.translatePath(self.addon.getAddonInfo('profile'))
         self.log("Trying to load: " + folder + name + '.ecdata')
         try:
             with open(folder + name + '.ecdata', 'rb') as f:
@@ -552,6 +552,15 @@ class HbogoHandler(object):
             liz.addContextMenuItems(items=[rem_search])
             xbmcplugin.addDirectoryItem(handle=self.handle, url=tmp_url, listitem=liz, isFolder=True)
         KodiUtil.endDir(self.handle, None, True)
+
+    def clean_sub_cache(self, silent=True):
+        import shutil
+        subs_folder = xbmc.translatePath(self.addon.getAddonInfo('profile'))
+        subs_folder = subs_folder + 'subs'
+        shutil.rmtree(subs_folder, ignore_errors=True)
+        if not silent:
+            icon = self.get_resource("icon.png")
+            xbmcgui.Dialog().notification(self.language(30814), self.LB_INFO, icon)
 
     # IMPLEMENT THESE IN SPECIFIC REGIONAL HANDLER
 

@@ -503,3 +503,11 @@ msgstr ""
 msgctxt "#30813"
 msgid "WARNING: Credential Encryption disabled"
 msgstr ""
+
+msgctxt "#30814"
+msgid "Subtitles cache cleaned"
+msgstr ""
+
+msgctxt "#30815"
+msgid "Clean subtitles cache"
+msgstr ""

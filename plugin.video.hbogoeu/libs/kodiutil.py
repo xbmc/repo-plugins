@@ -5,10 +5,22 @@
 
 from __future__ import absolute_import, division
 
+import sys
+
 from kodi_six import xbmcplugin  # type: ignore
+
+# import for translate path
+if sys.version_info < (3, 0):  # for Kodi 18 use old translatePath
+    from kodi_six.xbmc import translatePath  # type: ignore
+else:  # for Kodi 19+ use new translatePath
+    from kodi_six.xbmcvfs import translatePath  # type: ignore
 
 
 class KodiUtil(object):
+
+    @staticmethod
+    def translatePath(path):
+        return translatePath(path)
 
     @staticmethod
     def addSorting(handle, use_content_type):

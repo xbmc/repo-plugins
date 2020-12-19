@@ -1,4 +1,4 @@
 # plugin.video.iplayerwww
 BBC iPlayer for Kodi
-Support: http://forum.kodi.tv/showthread.php?tid=239378
+Support: https://forum.kodi.tv/showthread.php?tid=353349
 Author: CaptainT

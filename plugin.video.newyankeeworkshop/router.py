@@ -1,15 +1,16 @@
-import sys, urllib, urlparse, xbmc, xbmcgui, xbmcplugin, xbmcaddon, os
+import sys, urllib, xbmc, xbmcgui, xbmcplugin, xbmcaddon, os
 from lib import get_season_list, get_episode_list, get_episode
+from urllib.parse import parse_qs, urlencode
 
 base_url     = sys.argv[0]
 addon_handle = int(sys.argv[1])
-args         = urlparse.parse_qs(sys.argv[2][1:])
+args         = parse_qs(sys.argv[2][1:])
 ADDON_PATH = xbmcaddon.Addon().getAddonInfo('path')
 
 xbmcplugin.setContent(addon_handle, "movies")
 
 def build_url(query):
-    return base_url  + "?" + urllib.urlencode(query)
+    return base_url  + "?" + urlencode(query)
 
 mode = args.get('mode', None)
 

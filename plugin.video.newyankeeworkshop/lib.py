@@ -1,5 +1,5 @@
 import requests
-from BeautifulSoup import BeautifulSoup as BS
+from bs4 import BeautifulSoup as bs
 
 BASE_URL="https://www.newyankee.com/watch/"
 session = requests.session()
@@ -26,12 +26,12 @@ def extract_m3u8(video_js_uri):
 
 def get_season_list():
     resp_text = session.get(BASE_URL).text
-    dom = BS(resp_text)
+    dom = bs(resp_text,'html.parser')
     return get_first_select_options(dom)
 
 def get_episode_list(season):
     resp_text = session.post(BASE_URL, data={'nyw_season':season}).text
-    dom = BS(resp_text)
+    dom = bs(resp_text,'html.parser')
     return get_second_select_options(dom)
 
 def get_episode(season, episode):

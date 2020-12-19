@@ -479,3 +479,11 @@ msgstr "[NEšifrované]"
 msgctxt "#30813"
 msgid "WARNING: Credential Encryption disabled"
 msgstr "VAROVÁNÍ: Šifrování pověření vypnuté"
+
+msgctxt "#30814"
+msgid "Subtitles cache cleaned"
+msgstr ""
+
+msgctxt "#30815"
+msgid "Clean subtitles cache"
+msgstr ""

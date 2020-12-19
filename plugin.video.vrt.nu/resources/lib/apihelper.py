@@ -197,12 +197,11 @@ class ApiHelper:
             except IndexError:
                 episode = episodes[0]
 
-            label = '%s %s' % (localize(30131), season_key)  # Season X
             season_items.append(TitleItem(
-                label=label,
+                label=self._metadata.get_title(episode, season=season_key),
                 path=url_for('programs', program=program, season=season_key),
-                art_dict=self._metadata.get_art(episode, season=True),
-                info_dict=self._metadata.get_info_labels(episode, season=True),
+                art_dict=self._metadata.get_art(episode, season=season_key),
+                info_dict=self._metadata.get_info_labels(episode, season=season_key),
                 prop_dict=self._metadata.get_properties(episode),
             ))
         return season_items, sort, ascending, content
@@ -551,7 +550,10 @@ class ApiHelper:
                 program_urls = [program_to_url(p, 'medium') for p in self._favorites.programs()]
                 params['facets[programUrl]'] = '[%s]' % (','.join(program_urls))
             elif variety in ('offline', 'recent'):
-                channel_filter = [channel.get('name') for channel in CHANNELS if get_setting_bool(channel.get('name'), default=True)]
+                channel_filter = []
+                for channel in CHANNELS:
+                    if channel.get('vod') is True and get_setting_bool(channel.get('name'), default=True):
+                        channel_filter.append(channel.get('name'))
                 params['facets[programBrands]'] = '[%s]' % (','.join(channel_filter))
 
         if program:
@@ -601,6 +603,19 @@ class ApiHelper:
             facets = search_json.get('facets', {}).get('facets')
             if facets:
                 seasons = next((f.get('buckets', []) for f in facets if f.get('name') == 'seasons' and len(f.get('buckets', [])) > 1), None)
+            # Experimental: VRT Search API only returns a maximum of 10 seasons, to get all seasons we need to use the "model.json" API
+            if seasons and program and len(seasons) == 10:
+                season_json = get_url_json('https://www.vrt.be/vrtnu/a-z/%s.model.json' % program)
+                season_items = None
+                try:
+                    season_items = season_json.get(':items').get('parsys').get(':items').get('container') \
+                                              .get(':items').get('banner').get(':items').get('navigation').get(':items')
+                except AttributeError:
+                    pass
+                if season_items:
+                    seasons = []
+                    for item in season_items:
+                        seasons.append(dict(key=item.lstrip('0')))
 
         episodes = search_json.get('results', [{}])
         show_seasons = bool(season != 'allseasons')

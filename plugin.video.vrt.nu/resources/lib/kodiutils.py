@@ -11,6 +11,12 @@ from ssl import SSLError
 import xbmc
 import xbmcaddon
 import xbmcplugin
+
+try:  # Kodi 19 alpha 2 and higher
+    from xbmcvfs import translatePath
+except ImportError:  # Kodi 19 alpha 1 and lower
+    from xbmc import translatePath  # pylint: disable=ungrouped-imports
+
 from utils import from_unicode, to_unicode
 
 try:  # Python 3
@@ -128,9 +134,14 @@ def addon_path():
     return get_addon_info('path')
 
 
+def translate_path(path):
+    """Converts a Kodi special:// path to the corresponding OS-specific path"""
+    return to_unicode(translatePath(from_unicode(path)))
+
+
 def addon_profile():
     """Return add-on profile"""
-    return to_unicode(xbmc.translatePath(ADDON.getAddonInfo('profile')))
+    return translate_path(ADDON.getAddonInfo('profile'))
 
 
 def url_for(name, *args, **kwargs):
@@ -405,6 +416,11 @@ def localize_date(date, strftime):
         strftime = strftime.replace('%B', MONTH_LONG[date.strftime('%m')])
     elif '%b' in strftime:
         strftime = strftime.replace('%b', MONTH_SHORT[date.strftime('%m')])
+
+    # %e isn't supported on Python 2.7 on Windows
+    if '%e' in strftime:
+        strftime = strftime.replace('%e', str(int(date.strftime('%d'))))
+
     return date.strftime(strftime)
 
 
@@ -460,15 +476,12 @@ def get_setting_int(key, default=None):
 
 
 def get_setting_float(key, default=None):
-    """Get an add-on setting"""
+    """Get an add-on setting as float"""
+    value = get_setting(key, default)
     try:
-        return ADDON.getSettingNumber(key)
-    except (AttributeError, TypeError):  # On Krypton or older, or when not a float
-        value = get_setting(key, default)
-        try:
-            return float(value)
-        except ValueError:
-            return default
+        return float(value)
+    except ValueError:
+        return default
     except RuntimeError:  # Occurs when the add-on is disabled
         return default
 
@@ -519,7 +532,7 @@ def get_global_setting(key):
 
 def get_advanced_setting(key, default=None):
     """Get a setting from advancedsettings.xml"""
-    as_path = xbmc.translatePath('special://masterprofile/advancedsettings.xml')
+    as_path = translate_path('special://masterprofile/advancedsettings.xml')
     if not exists(as_path):
         return default
     from xml.etree.ElementTree import parse, ParseError
@@ -590,7 +603,7 @@ def get_playerid():
 
 def get_max_bandwidth():
     """Get the max bandwidth based on Kodi and add-on settings"""
-    vrtnu_max_bandwidth = get_setting_int('max_bandwidth', default=0)
+    vrtnu_max_bandwidth = int(get_setting('max_bandwidth', default='0'))
     global_max_bandwidth = int(get_global_setting('network.bandwidth'))
     if vrtnu_max_bandwidth != 0 and global_max_bandwidth != 0:
         return min(vrtnu_max_bandwidth, global_max_bandwidth)

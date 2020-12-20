@@ -1226,52 +1226,54 @@ class AddonSettings(object):
         # Let's make sure they are sorted by channel module. So we first go through them all and then create
         # the XML.
         for channel in channels:
+            if not channel.settings:
+                Logger.debug("Setting not enabled for: %s", channel)
+                continue
+
             if channel.moduleName not in settings:
                 settings[channel.moduleName] = []
 
-            # First any specific settings
-            if channel.settings:
-                # Sort the settings so they are really in the correct order, because this is not guaranteed by the
-                # json parser
-                channel.settings.sort(key=lambda a: a["order"])
-                for channel_settings in channel.settings:
-                    setting_id = channel_settings["id"]
-                    setting_value = channel_settings["value"]
-                    if "channels" in channel_settings and channel.guid not in channel_settings["channels"]:
-                        Logger.debug("Setting not enabled for: %s", channel)
-                        continue
-                    if "{channel_guid}" in setting_value:
-                        setting_value = setting_value.replace("{channel_guid}", channel.guid)
-                    Logger.debug("Adding setting: '%s' with value '%s'", setting_id,
-                                 setting_value)
+            # Sort the settings so they are really in the correct order, because this is not guaranteed by the
+            # json parser
+            channel.settings.sort(key=lambda a: a["order"])
+            for channel_settings in channel.settings:
+                setting_id = channel_settings["id"]
+                setting_value = channel_settings["value"]
 
-                    if setting_value.startswith("id="):
-                        setting_xml_id = setting_value[4:setting_value.index('"', 4)]
-                        setting_xml = "<setting %s visible=\"eq(-{0},%s)\" />" % \
-                                      (setting_value, channel.safe_name)
-                    else:
-                        setting_xml_id = "channel_{0}_{1}".format(channel.guid, setting_id)
-                        setting_xml = '<setting id="%s" %s visible=\"eq(-{0},%s)\" />' % \
-                                      (setting_xml_id, setting_value, channel.safe_name)
+                # Filtered in the channelinfo.py
+                # if "channels" in channel_settings and channel.guid not in channel_settings["channels"]:
+                #     Logger.debug("Setting not enabled for: %s", channel)
+                #     continue
 
-                    existing_setting_xml_index = [i for i, s in
-                                                  enumerate(settings[channel.moduleName]) if
-                                                  setting_xml_id in s]
-                    if not existing_setting_xml_index:
-                        settings[channel.moduleName].append((setting_xml_id, setting_xml))
-                    else:
-                        xml_index = existing_setting_xml_index[0]
-                        # we need to OR the visibility
-                        setting_tuple = settings[channel.moduleName][xml_index]
-                        setting = setting_tuple[1].replace(
-                            'visible="', 'visible="eq(-{0},%s)|' % (channel.safe_name,))
-                        settings[channel.moduleName][xml_index] = (setting_tuple[0], setting)
+                if "{channel_guid}" in setting_value:
+                    setting_value = setting_value.replace("{channel_guid}", channel.guid)
+                Logger.debug("Adding setting: '%s' with value '%s'", setting_id,
+                             setting_value)
 
-            # remove if no settings else, add them to the list with settings
-            if len(settings[channel.moduleName]) == 0:
-                settings.pop(channel.moduleName)
-            else:
-                channels_with_settings.append(channel)
+                if setting_value.startswith("id="):
+                    setting_xml_id = setting_value[4:setting_value.index('"', 4)]
+                    setting_xml = "<setting %s visible=\"eq(-{0},%s)\" />" % \
+                                  (setting_value, channel.safe_name)
+                else:
+                    setting_xml_id = "channel_{0}_{1}".format(channel.guid, setting_id)
+                    setting_xml = '<setting id="%s" %s visible=\"eq(-{0},%s)\" />' % \
+                                  (setting_xml_id, setting_value, channel.safe_name)
+
+                existing_setting_xml_index = [i for i, s in
+                                              enumerate(settings[channel.moduleName]) if
+                                              setting_xml_id in s]
+                if not existing_setting_xml_index:
+                    settings[channel.moduleName].append((setting_xml_id, setting_xml))
+                else:
+                    xml_index = existing_setting_xml_index[0]
+                    # we need to OR the visibility
+                    setting_tuple = settings[channel.moduleName][xml_index]
+                    setting = setting_tuple[1].replace(
+                        'visible="', 'visible="eq(-{0},%s)|' % (channel.safe_name,))
+                    settings[channel.moduleName][xml_index] = (setting_tuple[0], setting)
+
+            # Add it to channels with settings
+            channels_with_settings.append(channel)
 
         xml_content = '\n        <!-- begin of channel settings -->\n'
         # Sort them to make the result more consistent

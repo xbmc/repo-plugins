@@ -606,7 +606,7 @@ class Channel(chn_class.Channel):
                 stream_url = stream["location"]
                 if quality == "tt":
                     part.Subtitle = SubtitleHelper.download_subtitle(
-                        stream_url, format="webvtt", proxy=self.proxy)
+                        stream_url, format="ttml", proxy=self.proxy)
                     continue
 
                 bitrate = bitrate if default_stream else bitrate + 1

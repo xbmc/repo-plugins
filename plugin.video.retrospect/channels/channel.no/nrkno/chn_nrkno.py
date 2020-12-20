@@ -5,7 +5,6 @@ from resources.lib import chn_class
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.datehelper import DateHelper
-from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.helpers.subtitlehelper import SubtitleHelper
 from resources.lib.parserdata import ParserData
@@ -48,7 +47,7 @@ class Channel(chn_class.Channel):
                               name="Programs from AlphaListing",
                               parser=[], creator=self.create_episode_item)
 
-        self._add_data_parser("https://psapi.nrk.no/programs/", json=True,
+        self._add_data_parser("https://psapi.nrk.no/playback/", json=True,
                               name="Main program json video updater",
                               updater=self.update_json_video_item)
 
@@ -305,7 +304,7 @@ class Channel(chn_class.Channel):
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param list[str]|dict[str,Any] result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
@@ -366,7 +365,7 @@ class Channel(chn_class.Channel):
 
         item_id = result_set["id"]
         if program_type == "programme":
-            url = "https://psapi.nrk.no/programs/{}?apiKey={}".format(item_id, self.__api_key)
+            url = self.__get_video_url(item_id)
             item = MediaItem(title, url)
             item.type = 'video'
         else:
@@ -453,7 +452,7 @@ class Channel(chn_class.Channel):
             Logger.debug("Found '%s' without 'usageRights'", title)
             return None
 
-        url = "https://psapi.nrk.no/programs/{}?apiKey={}".format(result_set["id"], self.__api_key)
+        url = self.__get_video_url(result_set["id"])
         item = MediaItem(title, url)
         item.type = 'video'
 
@@ -524,7 +523,7 @@ class Channel(chn_class.Channel):
             Logger.debug("Found '%s' with a non-available status", title)
             return None
 
-        url = "https://psapi.nrk.no/programs/{}?apiKey={}".format(result_set["prfId"], self.__api_key)
+        url = self.__get_video_url(result_set["prfId"])
         item = MediaItem(title, url)
         item.type = 'video'
         item.thumb = self.__get_image(result_set["image"], "width", "url")
@@ -645,29 +644,48 @@ class Channel(chn_class.Channel):
 
         data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=headers)
         video_data = JsonHelper(data)
-        stream_data = video_data.get_value("mediaAssetsOnDemand")
+        stream_data = video_data.get_value("playable")
         if not stream_data:
             return item
 
-        use_adaptive = AddonSettings.use_adaptive_stream_add_on()
-        stream_data = stream_data[0]
         part = item.create_new_empty_media_part()
-        if "hlsUrl" in stream_data:
-            hls_url = stream_data["hlsUrl"]
-            if use_adaptive:
-                stream = part.append_media_stream(hls_url, 0)
-                M3u8.set_input_stream_addon_input(stream, self.proxy, headers=headers)
-                item.complete = True
+        for stream_info in stream_data["assets"]:
+            url = stream_info["url"]
+            stream_type = stream_info["format"]
+            if stream_type == "HLS":
+                item.complete = M3u8.update_part_with_m3u8_streams(part, url)
             else:
-                for s, b in M3u8.get_streams_from_m3u8(hls_url, self.proxy, headers=headers):
-                    item.complete = True
-                    part.append_media_stream(s, b)
+                Logger.warning("Found unknow stream type: %s", stream_type)
 
-        if "timedTextSubtitlesUrl" in stream_data and stream_data["timedTextSubtitlesUrl"]:
-            sub_url = stream_data["timedTextSubtitlesUrl"].replace(".ttml", ".vtt")
-            sub_url = HtmlEntityHelper.url_decode(sub_url)
-            part.Subtitle = SubtitleHelper.download_subtitle(sub_url, format="webvtt")
+        if "subtitles" not in stream_data or not stream_data["subtitles"]:
+            return item
+
+        for sub in stream_data["subtitles"]:
+            sub_url = None
+            sub_type = sub["type"]
+            default_sub = sub["defaultOn"]
+            if default_sub:
+                sub_url = sub["webVtt"]
+                sub_type = "webvtt"  # set Retrospect type
+
+            if sub_url:
+                part.Subtitle = SubtitleHelper.download_subtitle(sub_url, format=sub_type)
+                break
+
         return item
+
+    def __get_video_url(self, video_id):
+        """ Creates a valid video URL for a video ID.
+
+        :param str video_id:
+
+        :return: The video url for the given video ID
+        :rtype: str
+        """
+
+        # Old URL:
+        # return "https://psapi.nrk.no/programs/{}?apiKey={}".format(video_id, self.__api_key)
+        return "https://psapi.nrk.no/playback/manifest/program/{}?eea-portability=true".format(video_id)
 
     def __update_live_audio(self, item, manifest, headers):
         video_info = manifest.get_value("playable", "assets", 0)

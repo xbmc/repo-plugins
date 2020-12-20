@@ -1,40 +1,31 @@
-# Kodi Media Center language file
-# Addon Name: VRT Radio
-# Addon id: plugin.audio.vrt.radio
-# Addon Provider: dagwieers
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC Addons\n"
-"POT-Creation-Date: 2019-05-01 15:08+0001\n"
-"PO-Revision-Date: 2019-05-01 15:17+0001\n"
-"Last-Translator: Dag"
-"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30860"
 msgid "Integration"
-msgstr ""
+msgstr "Integratie"
 
 msgctxt "#30861"
 msgid "Integration with other Kodi add-ons"
-msgstr ""
+msgstr "Integratie met andere Kodi add-ons"
 
 msgctxt "#30875"
 msgid "Install IPTV Manager add-on…"
-msgstr ""
+msgstr "Installeer de IPTV Manager add-on…"
 
 msgctxt "#30877"
 msgid "Enable IPTV Manager integration"
-msgstr ""
+msgstr "Activeer IPTV Manager integratie"
 
 msgctxt "#30879"
 msgid "IPTV Manager settings…"
-msgstr ""
+msgstr "IPTV Manager instellingen…"
 
 msgctxt "#30966"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
-msgstr ""
+msgstr "Het gebruik van SOCKS proxies vereist dat de PySocks library (script.module.pysocks) geïnstalleerd is."

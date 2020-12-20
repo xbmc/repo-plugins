@@ -242,7 +242,8 @@ class ChannelInfo(object):
         Logger.debug("Found %s channels and %s settings in %s", len(channels), len(settings), path)
 
         for channel in channels:
-            channel_info = ChannelInfo(channel["guid"],
+            channel_guid = channel["guid"]
+            channel_info = ChannelInfo(channel_guid,
                                        channel["name"],
                                        channel["description"],
                                        channel["icon"],
@@ -260,7 +261,9 @@ class ChannelInfo(object):
             channel_info.adaptiveAddonSelectable = channel.get("adaptiveAddonSelectable", False)
             # Disable spoofing for the moment
             # channel_info.localIPSupported = channel.get("localIPSupported", False)
-            channel_info.settings = settings
+            channel_info.settings = [s for s in settings
+                                     if "channels" not in s  # setting has no filters for channels
+                                        or channel_guid in s["channels"]]  # setting applied to channel
 
             # validate a bit
             if channel_info.channelCode == "None":

@@ -12,7 +12,8 @@
       "channelcode": "oppetarkiv",
       "sortorder": 1,
       "language": "se",
-      "fanart": "oppetarkivfanart.jpg"
+      "fanart": "oppetarkivfanart.jpg",
+      "ignore": true
     }
   ],
   "settings": [

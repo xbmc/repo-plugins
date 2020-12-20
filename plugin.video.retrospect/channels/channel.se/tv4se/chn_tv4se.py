@@ -1,7 +1,6 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import math
 import pytz
 import datetime
 
@@ -95,6 +94,11 @@ class Channel(chn_class.Channel):
                                parser=["data", "programSearch", "programs"],
                                creator=self.create_api_typed_item)
 
+        self._add_data_parser("https://graphql.tv4play.se/graphql?operationName=LiveVideos",
+                              name="GraphQL currently playing", json=True,
+                              parser=["data", "liveVideos", "videoAssets"],
+                              creator=self.create_api_typed_item)
+
         # self._add_data_parser("https://www.tv4play.se/_next", json=True,
         self._add_data_parser("https://www.tv4play.se/alla-program", json=True,
                               name="Specific Program list API",
@@ -107,10 +111,7 @@ class Channel(chn_class.Channel):
         self._add_data_parser("http://tv4events1-lh.akamaihd.net/i/EXTRAEVENT5_1",
                               updater=self.update_live_item)
 
-        self.videoItemJson = ["results", ]
-        self._add_data_parser("*", preprocessor=self.pre_process_folder_list, json=True,
-                              parser=self.videoItemJson, creator=self.create_video_item,
-                              updater=self.update_video_item)
+        self._add_data_parser("*", updater=self.update_video_item)
 
         #===============================================================================================================
         # non standard items
@@ -373,7 +374,7 @@ class Channel(chn_class.Channel):
         elif title.startswith("Nyheter"):
             title = LanguageHelper.get_localized_string(LanguageHelper.LatestNews)
 
-        item = MediaItem(title, "")
+        item = MediaItem(title, "swipe://{}".format(HtmlEntityHelper.url_encode(title)))
         for card in result_set["cards"]:
             child = self.create_api_typed_item(card)
             if not child:
@@ -460,8 +461,13 @@ class Channel(chn_class.Channel):
         item.type = "video"
         item.complete = False
         item.isGeoLocked = True
-        item.isPaid = not result_set.get("freemium", True)
-        item.isDrmProtected = result_set["drmProtected"]
+        # For now, none are paid.
+        # item.isPaid = not result_set.get("freemium", False)
+        if "drmProtected" in result_set:
+            item.isDrmProtected = result_set["drmProtected"]
+        elif "is_drm_protected" in result_set:
+            item.isDrmProtected = result_set["is_drm_protected"]
+
         item.isLive = result_set.get("live", False)
         if item.isLive:
             item.name = "{:02d}:{:02d} - {}".format(broadcast_date.hour, broadcast_date.minute, name)
@@ -560,6 +566,10 @@ class Channel(chn_class.Channel):
             LanguageHelper.get_localized_string(LanguageHelper.Categories): (
                 "https://graphql.tv4play.se/graphql?query=query%7Btags%7D", None, False
             ),
+            LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes): (
+                self.__get_api_url("LiveVideos", "9b3d0d2f039089311cde2989760744844f7c4bb5033b0ce5643676ee60cb0901"),
+                None, False
+            )
         }
 
         # No more extras
@@ -630,187 +640,6 @@ class Channel(chn_class.Channel):
         url = url.replace("%", "%%")
         url = url.replace("%%22%%22", "%%22%s%%22")
         return chn_class.Channel.search_site(self, url)
-
-    def pre_process_folder_list(self, data):
-        """ Performs pre-process actions for data processing.
-
-        Accepts an data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
-
-        The return values should always be instantiated in at least ("", []).
-
-        :param str|unicode data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        Logger.info("Performing Pre-Processing")
-        items = []
-
-        # Add a klip folder only on the first page and only if it is not already a clip page
-        if "type=clip" not in self.parentItem.url \
-                and "&page=1&" in self.parentItem.url \
-                and "node_nids=" in self.parentItem.url:
-            # get the category ID
-            cat_start = self.parentItem.url.rfind("node_nids=")
-            cat_id = self.parentItem.url[cat_start + 10:]
-            Logger.debug("Currently doing CatId: '%s'", cat_id)
-
-            url = "https://api.tv4play.se/play/video_assets?platform=tablet&per_page=%s&" \
-                  "type=clip&page=1&node_nids=%s&start=0" % (self.__maxPageSize, cat_id,)
-            clips_title = LanguageHelper.get_localized_string(LanguageHelper.Clips)
-            clips = MediaItem(clips_title, url)
-            clips.complete = True
-            items.append(clips)
-
-        # find the max number of items ("total_hits":2724)
-        total_items = int(Regexer.do_regex(r'total_hits\W+(\d+)', data)[-1])
-        Logger.debug("Found total of %s items. Only showing %s.", total_items, self.__maxPageSize)
-        if total_items > self.__maxPageSize and "&page=1&" in self.parentItem.url:
-            # create a group item
-            more_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
-            more = MediaItem(more_title, "")
-            more.complete = True
-            items.append(more)
-
-            # what are the total number of pages?
-            current_page = 1
-            # noinspection PyTypeChecker
-            total_pages = int(math.ceil(1.0 * total_items / self.__maxPageSize))
-
-            current_url = self.parentItem.url
-            needle = "&page="
-            while current_page < total_pages:
-                # what is the current page
-                current_page += 1
-
-                url = current_url.replace("%s1" % (needle, ), "%s%s" % (needle, current_page))
-                Logger.debug("Adding next page: %s\n%s", current_page, url)
-                page = MediaItem(str(current_page), url)
-                page.type = "page"
-                page.complete = True
-
-                if total_pages == 2:
-                    items = [page]
-                    break
-                else:
-                    more.items.append(page)
-
-        Logger.debug("Pre-Processing finished")
-        return data, items
-
-    def create_video_item(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace('starting FormatVideoItem for %s', self.channelName)
-        # Logger.Trace(result_set)
-
-        # the vmanProgramId (like 1019976) leads to http://anytime.tv4.se/webtv/metafileFlash.smil?p=1019976&bw=1000&emulate=true&sl=true
-        program_id = result_set["id"]
-        # Logger.Debug("ProgId = %s", programId)
-
-        # We can either use M3u8 or Dash
-        # url = "https://playback-api.b17g.net/media/%s?service=tv4&device=browser&protocol=hls" % (program_id,)
-        url = "https://playback-api.b17g.net/media/%s?service=tv4&device=browser&protocol=dash" % (program_id,)
-        name = result_set["title"]
-        season = result_set.get("season", 0)
-        episode = result_set.get("episode", 0)
-        is_episodic = 0 < season < 1900 and not episode == 0
-        if is_episodic:
-            episode_text = None
-            if " del " in name:
-                name, episode_text = name.split(" del ", 1)
-                episode_text = episode_text.lstrip("0123456789")
-
-            if episode_text:
-                episode_text = episode_text.lstrip(" -")
-                name = "{} - s{:02d}e{:02d} - {}".format(name, season, episode, episode_text)
-            else:
-                name = "{} - s{:02d}e{:02d}".format(name, season, episode)
-
-        item = MediaItem(name, url)
-        item.description = result_set["description"]
-        if item.description is None:
-            item.description = item.name
-
-        if is_episodic:
-            item.set_season_info(season, episode)
-
-        # premium_expire_date_time=2099-12-31T00:00:00+01:00
-        expire_date = result_set.get("expire_date_time")
-        if bool(expire_date):
-            self.__set_expire_time(expire_date, item)
-
-        date = result_set["broadcast_date_time"]
-        (date_part, time_part) = date.split("T")
-        (year, month, day) = date_part.split("-")
-        (hour, minutes, rest1, zone) = time_part.split(":")
-        item.set_date(year, month, day, hour, minutes, 00)
-        broadcast_date = datetime.datetime(int(year), int(month), int(day), int(hour), int(minutes))
-
-        item.fanart = result_set.get("program_image", self.parentItem.fanart)
-        thumb_url = result_set.get("image", result_set.get("program_image"))
-        # some images need to come via a proxy:
-        if thumb_url and "://img.b17g.net/" in thumb_url:
-            item.thumb = "https://imageproxy.b17g.services/?format=jpg&shape=cut" \
-                         "&quality=70&resize=520x293&source={}"\
-                .format(HtmlEntityHelper.url_encode(thumb_url))
-        else:
-            item.thumb = thumb_url
-
-        availability = result_set["availability"]
-        # noinspection PyTypeChecker
-        free_period = availability["availability_group_free"]
-        # noinspection PyTypeChecker
-        premium_period = availability["availability_group_premium"]
-
-        now = datetime.datetime.now()
-        if False and not premium_period == "0":
-            # always premium
-            free_expired = now - datetime.timedelta(days=99 * 365)
-        elif free_period == "30+" or free_period is None:
-            free_expired = broadcast_date + datetime.timedelta(days=99 * 365)
-        else:
-            free_expired = broadcast_date + datetime.timedelta(days=int(free_period))
-        Logger.trace("Premium info for: %s\nPremium state: %s\nFree State:    %s\nBroadcast %s vs Expired %s",
-                     name, premium_period, free_period, broadcast_date, free_expired)
-
-        if now > free_expired:
-            item.isPaid = True
-
-        item.type = "video"
-        item.complete = False
-        item.isGeoLocked = result_set["is_geo_restricted"]
-        item.isDrmProtected = result_set["is_drm_protected"]
-        item.isLive = result_set.get("is_live", False)
-        if item.isLive:
-            item.name = "{:02d}:{:02d} - {}".format(hour, minutes, name)
-            item.url = "{0}&is_live=true".format(item.url)
-        if item.isDrmProtected:
-            item.url = "{}&drm=widevine&is_drm=true".format(item.url)
-
-        item.set_info_label("duration", int(result_set.get("duration", 0)))
-        return item
 
     def update_video_item(self, item):
         """ Updates an existing MediaItem with more data.
@@ -928,20 +757,6 @@ class Channel(chn_class.Channel):
 
         item.complete = True
         return item
-
-    def __set_expire_time(self, expire_date, item):
-        """ Parses and sets the correct expire date.
-
-        :param str expire_date:  The expire date value
-        :param MediaItem item:   The item to update
-
-        """
-
-        expire_date = expire_date.split("+")[0]  # .replace("T", " ")
-        year = expire_date.split("-", 1)[0]
-        if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
-            expire_date = DateHelper.get_datetime_from_string(expire_date)
-            item.set_expire_datetime(timestamp=expire_date)
 
     def __get_api_url(self, operation, hash_value, variables=None):  # NOSONAR
         """ Generates a GraphQL url

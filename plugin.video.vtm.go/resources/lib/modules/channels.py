@@ -25,7 +25,6 @@ class Channels:
                                kodiutils.get_setting('profile'),
                                kodiutils.get_tokens_path())
         self._vtm_go = VtmGo(self._auth)
-        self._menu = Menu()
 
     def show_channels(self):
         """ Shows TV channels """
@@ -79,7 +78,7 @@ class Channels:
                     fanart=fanart,
                 ),
                 info_dict=dict(
-                    plot=self._menu.format_plot(channel),
+                    plot=Menu.format_plot(channel),
                     playcount=0,
                     mediatype='video',
                     studio=channel_data.get('studio_icon') if channel_data else None,
@@ -128,7 +127,7 @@ class Channels:
                 fanart=fanart,
             ),
             info_dict=dict(
-                plot=self._menu.format_plot(channel),
+                plot=Menu.format_plot(channel),
                 playcount=0,
                 mediatype='video',
             ),

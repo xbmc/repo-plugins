@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.18"
+        version="5.2.19"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,21 +132,21 @@
 
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.2.18 - Changelog - 2020-12-09[/B]
+        <news>[B]Retrospect v5.2.19 - Changelog - 2020-12-20[/B]
 
-A new version with fixes for TV4 Play (Sweden) (twice) and Kijk.nl. We also started using the Kodi Weblate for translations which enables us to have more translations for the add-on.
+Some Swedish channels had to be updated, as did NRK.no. During the fix, a small bug surfaced that had to be squashed.
 
 [B]Framework related[/B]
 _None_
 
 [B]GUI/Settings/Language related[/B]
-* Updated: Use [CR] instead of \n in translations
-* Added: translation using Weblate (Kodi instance) (#1449)
+* Fixed: Some channels without settings did appear with settings in the context menu.
 
 [B]Channel related[/B]
-* Fixed: TV4 Play (Sweden) Playback broken (Fixes #1454)
-* Fixed: Some seasons would not list in Kijk.nl (Fixes #1455)
-* Fixed: TV4 Play (Sweden) broke again (Fixes #1454)
+* Fixed: UR Play moved to TTML subtitles, instead of WebSRT.
+* Changed: Moved Oppet Arkiv to SVT channel code as they are merging
+* Fixed: NRK.no did not play newer streams (Fixes #1459)
+* Updated: SVT Play categories (Fixes #1461)
 
         </news>
         <assets>

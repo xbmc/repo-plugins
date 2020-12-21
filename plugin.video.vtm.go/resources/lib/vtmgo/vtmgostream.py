@@ -10,7 +10,7 @@ import random
 from datetime import timedelta
 
 from resources.lib import kodiutils
-from resources.lib.vtmgo import util, ResolvedStream
+from resources.lib.vtmgo import ResolvedStream, util
 from resources.lib.vtmgo.exceptions import StreamGeoblockedException, StreamUnavailableException
 
 _LOGGER = logging.getLogger(__name__)

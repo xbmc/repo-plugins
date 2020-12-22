@@ -14,7 +14,7 @@ class VideoResource(RubricResource):
     def _isModule(self, class_):
         return class_.find('b-video-module') != -1
     
-    def _parseModule(self, pos, contentPattern, textPattern, datePattern):
+    def _parseModule(self, pos, contentPattern, textPattern, datePattern, moduleType):
         match = None
         
         teaser = Teaser()

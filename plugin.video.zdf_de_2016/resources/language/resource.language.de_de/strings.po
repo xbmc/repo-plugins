@@ -205,3 +205,16 @@ msgstr "Die Seite '{0}' wurde vom ZDF Server weitergeleitet zu '{1}'. Dies is ei
 msgctxt "#32043"
 msgid "Homepage zdf.de"
 msgstr "Startseite zdf.de"
+
+msgctxt "#32044"
+msgid "Downloading master playlist ..."
+msgstr "Lade Master Playlist ..."
+
+msgctxt "#32045"
+msgid "Player"
+msgstr "Player"
+
+msgctxt "#32046"
+msgid "Filter master playlist for best resolution"
+msgstr "Filtere Master Playlist nach höchster Auflösung"
+

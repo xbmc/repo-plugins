@@ -13,7 +13,6 @@ class Mediathek(Pagelet):
         response.addFolder(self._(32003), Action('RubricsPage'))
 
         response.addFolder(self._(32043), Action('RubricPage', {'rubricUrl': '/'}))
-        response.addFolder(self._(32031), Action('RubricPage', {'rubricUrl': '/bestbewertet'}))
         response.addFolder(self._(32032), Action('RubricPage', {'rubricUrl': '/meist-gesehen'}))
         response.addFolder(self._(32037), Action('ShowsAzPage'))
         #response.addFolder(self._(32034), Action('RubricPage', {'rubricUrl': '/barrierefreiheit-im-zdf'}))

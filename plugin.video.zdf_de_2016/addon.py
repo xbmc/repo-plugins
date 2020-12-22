@@ -132,7 +132,7 @@ class XbmcResponse(Response):
 
 class Settings(object):
     def __init__(self, handle):
-        # General
+        # Searching
         self.mergeCategoryAndTitle = xbmcplugin.getSetting(handle, 'mergeCategoryAndTitle') == 'true'
         self.loadAllSearchResults = xbmcplugin.getSetting(handle, 'loadAllSearchResults') == 'true'
         self.showOnlyPlayableSearchResults = xbmcplugin.getSetting(handle, 'showOnlyPlayableSearchResults') == 'true'
@@ -143,6 +143,8 @@ class Settings(object):
         self.showGenreInTitle = xbmcplugin.getSetting(handle, 'showGenreInTitle') == 'true'
         self.showPlayableInTitle = xbmcplugin.getSetting(handle, 'showPlayableInTitle') == 'true'
         self.showTagsInTitle = xbmcplugin.getSetting(handle, 'showTagsInTitle') == 'true'
+        # Player
+        self.filterMasterPlaylist = xbmcplugin.getSetting(handle, 'filterMasterPlaylist') == 'true'
 
 
 baseUrl = sys.argv[0]

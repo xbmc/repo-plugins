@@ -48,3 +48,17 @@ class Resource(object):
         request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:22.0) Gecko/20100101 Firefox/22.0')        
         request.add_header('Accept', self.accept)
         return request
+    
+    
+    def _getAbsoluteUrl(self, baseUrl, url):
+        if url.find("://") != -1:
+            return url
+       
+        parts = urlparse(baseUrl)        
+        if url.startswith("/"):
+            return parts.scheme + "://" + parts.hostname + url
+        
+        i = baseUrl.rfind("/")
+        if i != -1:
+            baseUrl = baseUrl[:i]
+        return baseUrl + "/" + url

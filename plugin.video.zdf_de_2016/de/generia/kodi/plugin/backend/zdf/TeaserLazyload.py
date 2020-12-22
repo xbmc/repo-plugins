@@ -66,6 +66,7 @@ class TeaserLazyload(object):
             value = match.group(1)
 
             if value is not None:
+                #print ("_parseAttr", value)
                 obj = '{"s":"' + value + '"}'
                 entry = jsonDecoder.decode(obj)
                 if entry is not None:

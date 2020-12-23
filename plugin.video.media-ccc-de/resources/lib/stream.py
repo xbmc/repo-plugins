@@ -1,4 +1,5 @@
-from __future__ import print_function
+# coding: utf-8
+from __future__ import print_function, division, absolute_import
 
 from .helpers import user_preference_sorter
 
@@ -31,14 +32,14 @@ class Room(object):
         self.slug = json["slug"]
         self.display = json["display"]
         if len(group) > 0:
-                self.display = group + ": " + self.display
+            self.display = group + ": " + self.display
 
-    def streams_sorted(self, quality, format, video=True):
+    def streams_sorted(self, quality, format, dash=False, video=True):
         print("Requested quality %s and format %s" % (quality, format))
-        typematch = "video" if video else "audio"
-        want = sorted(filter(lambda stream: stream.type == typematch,
+        typematch = ('video', 'dash') if video else ('audio', )
+        want = sorted(filter(lambda stream: stream.type in typematch,
                              self.streams),
-                      key=user_preference_sorter(quality, format))
+                      key=user_preference_sorter(quality, format, dash))
         return want
 
 
@@ -47,7 +48,8 @@ class Stream(object):
         self.format = name
         if self.format == 'hls':
             self.format = 'mp4'
-        if stream['videoSize'] != None:
+        self.hd = None
+        if stream['videoSize'] is not None:
             self.hd = stream['videoSize'][0] >= 1280
         self.url = data['url']
         self.translated = stream['isTranslated']

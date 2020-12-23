@@ -1,4 +1,5 @@
-from __future__ import print_function
+# coding: utf-8
+from __future__ import print_function, division, absolute_import
 
 from .helpers import user_preference_sorter, maybe_json
 
@@ -10,8 +11,8 @@ class Recordings(object):
     def recordings_sorted(self, quality, format, video=True):
         print("Requested quality %s and format %s" % (quality, format))
         typematch = "video" if video else "audio"
-        want = sorted(filter(lambda rec: (rec.type == typematch and
-            not rec.folder.startswith('slides')),
+        want = sorted(filter(lambda rec: (rec.type == typematch
+            and not rec.folder.startswith('slides')),
             self.recordings),
             key=user_preference_sorter(quality, format))
         print(want)

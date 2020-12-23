@@ -1,18 +1,18 @@
-from __future__ import print_function
+# coding: utf-8
+from __future__ import print_function, division, absolute_import
 
 import operator
+import sys
 
 import routing
 from xbmcgui import ListItem
-from xbmcplugin import addDirectoryItem, endOfDirectory, setResolvedUrl, getSetting, setContent
+from xbmcplugin import (addDirectoryItem, endOfDirectory, setResolvedUrl,
+    setContent)
 
-import resources.lib.http as http
+from resources.lib import http, kodi, settings
 from resources.lib.helpers import maybe_json, calc_aspect, json_date_to_info
 
 plugin = routing.Plugin()
-
-QUALITY = ["sd", "hd"]
-FORMATS = ["mp4", "webm"]
 
 
 @plugin.route('/')
@@ -97,10 +97,10 @@ def show_conference(conf):
 @plugin.route('/event/<event>')
 @plugin.route('/event/<event>/<quality>/<format>')
 def resolve_event(event, quality=None, format=None):
-    if quality not in QUALITY:
-        quality = get_set_quality()
-    if format not in FORMATS:
-        format = get_set_format()
+    if quality not in settings.QUALITY:
+        quality = settings.get_quality(plugin)
+    if format not in settings.FORMATS:
+        format = settings.get_format(plugin)
 
     data = None
     try:
@@ -116,12 +116,13 @@ def resolve_event(event, quality=None, format=None):
 
 @plugin.route('/live')
 def show_live():
-    quality = get_set_quality()
-    format = get_set_format()
+    quality = settings.get_quality(plugin)
+    format = settings.get_format(plugin)
+    prefer_dash = settings.prefer_dash(plugin)
 
     data = None
     try:
-        data = http.fetch_live(wants_insecure())
+        data = http.fetch_live()
     except http.FetchError:
         return
 
@@ -131,7 +132,7 @@ def show_live():
 
     for conference in data.conferences:
         for room in conference.rooms:
-            want = room.streams_sorted(quality, format)
+            want = room.streams_sorted(quality, format, prefer_dash)
 
             # Assumption: want now starts with the "best" alternative,
             # followed by an arbitrary number of translations, after which
@@ -145,8 +146,18 @@ def show_live():
                     extra = ' (Translated %i)' % id if id > 1 else ' (Translated)'
                 item = ListItem(conference.name + ': ' + room.display + extra)
                 item.setProperty('IsPlayable', 'true')
+                if stream.type == 'dash':
+                    dashproperty = 'inputstream'
+                    if kodi.major_version() < 19:
+                        dashproperty += 'addon'
+                    item.setProperty(dashproperty, 'inputstream.adaptive')
+                    item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+
                 addDirectoryItem(plugin.handle, stream.url, item, False)
-                hasItem = True
+
+                # MPEG-DASH includes all translated streams
+                if stream.type == 'dash':
+                    break
 
     endOfDirectory(plugin.handle)
 
@@ -163,7 +174,7 @@ def split_pathname(name, depth):
         down = path[depth]
     else:
         down = None
-    children = len(path)-1 > depth
+    children = len(path) - 1 > depth
     return (top, down, children)
 
 
@@ -174,24 +185,5 @@ def build_path(top, down):
         return '/'.join((top, down))
 
 
-def get_setting_int(name):
-    val = getSetting(plugin.handle, name)
-    if not val:
-        val = '0'
-    return int(val)
-
-
-def get_set_quality():
-    return QUALITY[get_setting_int('quality')]
-
-
-def get_set_format():
-    return FORMATS[get_setting_int('format')]
-
-
-def wants_insecure():
-    return getSetting(plugin.handle, 'insecure') == 'true'
-
-
 if __name__ == '__main__':
-    plugin.run()
+    plugin.run(argv=sys.argv)

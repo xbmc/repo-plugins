@@ -1,3 +1,8 @@
+v0.2.0 (2020-12-23)
+- The "F*** 2020" release
+- Remove option to fallback to unencrypted streams
+- Inital support for MPEG-DASH streams (#32)
+
 v0.1.2 (2018-01-01)
 - The guckwat! release
 - Select correct stream even when slides are present. (Fixes #20)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.locast" version="1.0.5" name="Locast" provider-name="Lunatixz">
+<addon id="plugin.video.locast" version="1.0.5a" name="Locast" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.requests" version="2.7.0"/> 
@@ -17,6 +17,7 @@
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
         <source>https://github.com/Lunatixz/KODI_ADDONS/tree/master/plugin.video.locast</source>
         <website>https://www.locast.org</website>
+        <broken>deprecated</broken>
         <forum>https://forum.kodi.tv/showthread.php?tid=334947</forum>
         <disclaimer lang="en_GB">Content is Geo-restricted and may not be available in your location.</disclaimer>
         <assets>

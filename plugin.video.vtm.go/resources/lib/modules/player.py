@@ -10,9 +10,7 @@ from resources.lib.kodiplayer import KodiPlayer
 from resources.lib.vtmgo.exceptions import UnavailableException
 from resources.lib.vtmgo.vtmgo import VtmGo
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
-from resources.lib.vtmgo.vtmgostream import (StreamGeoblockedException,
-                                             StreamUnavailableException,
-                                             VtmGoStream)
+from resources.lib.vtmgo.vtmgostream import StreamGeoblockedException, StreamUnavailableException, VtmGoStream
 
 _LOGGER = logging.getLogger(__name__)
 

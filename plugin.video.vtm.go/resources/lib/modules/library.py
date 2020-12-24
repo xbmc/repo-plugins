@@ -24,7 +24,7 @@ class Library:
         """ Initialise object """
         self._auth = VtmGoAuth(kodiutils.get_setting('username'),
                                kodiutils.get_setting('password'),
-                               kodiutils.get_setting('loginprovider'),
+                               'VTM',
                                kodiutils.get_setting('profile'),
                                kodiutils.get_tokens_path())
         self._api = VtmGo(self._auth)

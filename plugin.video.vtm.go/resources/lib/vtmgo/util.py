@@ -8,9 +8,7 @@ import logging
 import requests
 from requests import HTTPError
 
-from resources.lib.vtmgo.exceptions import (InvalidLoginException,
-                                            InvalidTokenException,
-                                            UnavailableException, LimitReachedException)
+from resources.lib.vtmgo.exceptions import InvalidLoginException, InvalidTokenException, LimitReachedException, UnavailableException
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -144,7 +142,12 @@ def _request(method, url, params=None, form=None, data=None, token=None, profile
     :rtype: requests.Response
     """
     if form or data:
-        _LOGGER.debug('Sending %s %s: %s', method, url, form or data)
+        # Make sure we don't log the password
+        debug_data = dict()
+        debug_data.update(form or data)
+        if 'password' in debug_data:
+            debug_data['password'] = '**redacted**'
+        _LOGGER.debug('Sending %s %s: %s', method, url, debug_data)
     else:
         _LOGGER.debug('Sending %s %s', method, url)
 

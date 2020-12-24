@@ -1,0 +1,55 @@
+# Kodi language file
+# Addon id: plugin.video.media-ccc-de
+# Addon Provider: Tobias Gruetzmacher
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi-Addons\n"
+"POT-Creation-Date: 2016-12-27 13:07+0000\n"
+"PO-Revision-Date: 2020-12-23 12:00+0200\n"
+"Last-Translator: Tobias Gruetzmacher <tobias-kodi@23.gs>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Videos of Chaos Computer Club events."
+msgstr "Videos von Chaos Computer Club Veranstaltungen."
+
+msgctxt "Addon Description"
+msgid "This addon provides access to videos published on https://media.ccc.de/ (mostly lecture recordings of CCC events) "
+msgstr "Dieses Add-On ermöglicht den Zugriff auf Videos, die auf https://media.ccc.de/ veröffentlicht wurden (größtenteils Vortragsmitschnitte von CCC-Veranstaltungen)"
+
+msgctxt "#30000"
+msgid "media.ccc.de"
+msgstr "media.ccc.de"
+
+msgctxt "#30100"
+msgid "Quality"
+msgstr "Qualität"
+
+msgctxt "#30101"
+msgid "Prefer SD"
+msgstr "Bevorzuge SD"
+
+msgctxt "#30102"
+msgid "Prefer HD"
+msgstr "Bevorzuge HD"
+
+msgctxt "#30110"
+msgid "Format"
+msgstr "Format"
+
+msgctxt "#30111"
+msgid "Prefer MPEG (hardware-accelerated)"
+msgstr "Bevorzuge MPEG (hardware-beschleunigt)"
+
+msgctxt "#30112"
+msgid "Prefer WEBM (libre)"
+msgstr "Bevorzuge WEBM (libre)"
+
+msgctxt "#30120"
+msgid "Prefer MPEG-DASH for live streams"
+msgstr "Bevorzuge MPEG-DASH für Live-Streams"
+

@@ -10,6 +10,7 @@ from de.generia.kodi.plugin.backend.zdf.VideoResource import VideoResource
 
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 from de.generia.kodi.plugin.backend.zdf.api.StreamInfoResource import StreamInfoResource
+from de.generia.kodi.plugin.backend.zdf.PlaylistResource import PlaylistResource        
 
 from de.generia.kodi.plugin.frontend.base.Pagelet import Action        
 from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet        
@@ -19,9 +20,10 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 
 class PlayVideo(Pagelet):
     
-    def __init__(self, tokenCache):
+    def __init__(self, playerStore, filterMasterPlaylist):
         super(Pagelet, self).__init__()
-        self.tokenCache = tokenCache
+        self.playerStore = playerStore
+        self.filterMasterPlaylist = filterMasterPlaylist
 
     def service(self, request, response):
         contentName = request.getParam('contentName')
@@ -34,7 +36,7 @@ class PlayVideo(Pagelet):
         self.videoUrl = request.getParam('videoUrl')
         self.apiToken = request.getParam('apiToken')
         if self.apiToken is None:
-            self.apiToken = self.tokenCache.getApiToken()
+            self.apiToken = self.playerStore.getApiToken()
             if self.apiToken is None:
                 self._refreshApiToken()
             
@@ -56,12 +58,17 @@ class PlayVideo(Pagelet):
                 self.debug("downloading stream-info-url '{1}' ...", videoContent.streamInfoUrl)
                 streamInfo = self._getStreamInfo(videoContent.streamInfoUrl)
                 
-                url = streamInfo.streamUrl
-                if url is None:
+                rawPlaylistUrl = streamInfo.streamUrl
+                if rawPlaylistUrl is None:
                     self.warn("can't find stream-url in stream-info-url '{1}' in content '{2}'", videoContent.streamInfoUrl, streamInfo.content)
                     response.sendError(self._(32012) + " '" + contentName +"'", Action('SearchPage'))
                     return
 
+                # finding best stream url
+                dialog.update(percent=70, message=self._(32044))
+                self.debug("downloading master playlist '{1}' ...", rawPlaylistUrl)
+                url = self._getPlaylistUrl(rawPlaylistUrl)
+                
                 title = videoContent.title
                 text = videoContent.text
                 infoLabels = {}
@@ -141,7 +148,7 @@ class PlayVideo(Pagelet):
         video = VideoResource(Constants.baseUrl + self.videoUrl)
         self._parse(video)
         apiToken = video.apiToken
-        self.tokenCache.setApiToken(apiToken)
+        self.playerStore.setApiToken(apiToken)
         self.apiToken = apiToken
         return True
     
@@ -155,4 +162,22 @@ class PlayVideo(Pagelet):
                 self.info("no sub-titles supported before Kodi 14.x 'Helix', skipping subtitles ...")
         else:
             self.info("no sub-titles-url available in stream-info, skipping subtitles ...")
-            
+ 
+    def _getPlaylistUrl(self, rawPlaylistUrl):
+        if not self.filterMasterPlaylist:
+            return rawPlaylistUrl
+        
+        masterResource = PlaylistResource(rawPlaylistUrl)
+        try:
+            self._parse(masterResource)
+        except HTTPError as e:
+            self.warn("could not load master playlist '{1}', falling back to raw playlist...", rawPlaylistUrl)
+            return rawPlaylistUrl
+
+        playlist = masterResource.getPlaylist()
+        if playlist is not None:
+            self.playerStore.storePlaylist(playlist)
+            return self.playerStore.getPlaylistUrl()
+        self.warn("could not filter playlist '{1}', falling back to raw playlist...", rawPlaylistUrl)
+        return rawPlaylistUrl
+    

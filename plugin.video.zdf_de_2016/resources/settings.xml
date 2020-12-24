@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 
-  <!-- General -->
+  <!-- Searching -->
   <category label="32014">
     <setting label="32018" id="loadAllSearchResults" type="bool" default="true"/>
     <setting label="32019" id="showOnlyPlayableSearchResults" type="bool" default="true"/>
@@ -16,6 +16,11 @@
     <setting label="32015" id="mergeCategoryAndTitle" type="bool" default="true" subsetting="true" enable="eq(-1,true)"/>
     <setting label="32026" id="showPlayableInTitle" type="bool" default="true"/>
     <setting label="32027" id="showTagsInTitle" type="bool" default="true"/>
+  </category>
+
+  <!-- Player -->
+  <category label="32045">
+    <setting label="32046" id="filterMasterPlaylist" type="bool" default="true"/>
   </category>
 </settings>
  

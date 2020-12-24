@@ -18,7 +18,7 @@ aPattern = compile('href="([^"]*)"[^>]*>')
 textPattern = compile('class="teaser-text"[^>]*>([^<]*)</[^>]*>')
 footPattern = compile('class="teaser-foot"[^>]*>')
 footIconPattern = compile('class="[^"]*icon-[0-9]*_(play)[^"]*">')
-datePattern = compile('class="teaser-info"[^>]*>([^<]*)</[^>]*>')
+datePattern = compile('class="teaser-info[^"]*"[^>]*>([^<]*)</[^>]*>')
 apiTokenPattern = compile('"apiToken"\s*:\s*"([^"]*)"')
 
     
@@ -207,16 +207,20 @@ class Teaser(object):
         
     def parseDuration(self, article, pos, pattern=datePattern):
         durationMatch = pattern.search(article, pos)
+        playable = False
         duration = None
         if durationMatch is not None:
             duration = durationMatch.group(1).strip()
             duration = duration.replace(' min', '')
             if duration.isdigit():
                 duration = int(duration) * 60
+                playable = True
             else:
-                uuration = None
+                duration = None
             pos = durationMatch.end(0)
     
+        if not self.playable and playable:
+            self.playable = playable
         self.duration = duration
         return pos
 

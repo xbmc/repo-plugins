@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="1.0.16" provider-name="Generia">
+<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="1.0.17" provider-name="Generia">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
   </requires>
@@ -21,9 +21,15 @@ Siehe auch https://github.com/generia/plugin.video.zdf_de_2016
 	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 	<source>https://github.com/generia/plugin.video.zdf_de_2016</source>
 	<email>alex at generia dot de</email>
-	<website>http://www.zdf.de</website>
+	<website>http://www.zdf.de/</website>
     <platform>all</platform>
     <news>
+1.0.17 (2020-12-22)
+- fix for low video quality in Kodi 18 (github issue #17)
+- fix for broken live-tv (github issue #15)
+- fix for broken video titles
+- improved page parsing
+
 1.0.16 (2019-12-12)
 - fix after zdf website updates
 
@@ -47,9 +53,10 @@ Siehe auch https://github.com/generia/plugin.video.zdf_de_2016
     </news>
     <assets>
         <icon>icon.png</icon>
-        <fanart>fanart.png</fanart>
-        <screenshot>icon.png</screenshot>
-        <screenshot>icon-mm.png</screenshot>
+        <fanart>fanart.jpg</fanart>
+        <screenshot>icon-mm.jpg</screenshot>
+        <screenshot>hgeins-100.jpg</screenshot>
+        <screenshot>hgvier-100.jpg</screenshot>
     </assets>
   </extension>
 </addon>

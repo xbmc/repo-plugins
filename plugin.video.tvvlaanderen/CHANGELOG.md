@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.2](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.2) (2020-12-21)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.1...v1.0.2)
+
+**Fixed bugs:**
+
+- Don't show the password in the debug log [\#29](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/29) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.1](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.1) (2020-12-17)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.0...v1.0.1)

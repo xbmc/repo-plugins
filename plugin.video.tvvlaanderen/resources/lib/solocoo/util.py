@@ -279,7 +279,15 @@ def _request(method, url, params=None, form=None, data=None, token_bearer=None, 
     :returns:                           The HTTP Response object.
     :rtype: requests.Response
     """
-    _LOGGER.debug('Sending %s %s... (%s)', method, url, form or data)
+    if form or data:
+        # Make sure we don't log the password
+        debug_data = dict()
+        debug_data.update(form or data)
+        if 'Password' in debug_data:
+            debug_data['Password'] = '**redacted**'
+        _LOGGER.debug('Sending %s %s: %s', method, url, debug_data)
+    else:
+        _LOGGER.debug('Sending %s %s', method, url)
 
     if token_bearer:
         headers = {

@@ -1,5 +1,24 @@
 # Changelog
 
+## [v1.2.1](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.1) (2020-12-21)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.0...v1.2.1)
+
+**Implemented enhancements:**
+
+- Allow displaying all items in a recommendation category [\#239](https://github.com/add-ons/plugin.video.vtm.go/pull/239) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Fix token invalidation when using the Library-feature [\#246](https://github.com/add-ons/plugin.video.vtm.go/pull/246) ([michaelarnauts](https://github.com/michaelarnauts))
+- Use xbmcvfs.translatePath when it is available [\#237](https://github.com/add-ons/plugin.video.vtm.go/pull/237) ([tatankat](https://github.com/tatankat))
+
+**Merged pull requests:**
+
+- Run CI on windows [\#244](https://github.com/add-ons/plugin.video.vtm.go/pull/244) ([michaelarnauts](https://github.com/michaelarnauts))
+- Fix typo's in Readme [\#242](https://github.com/add-ons/plugin.video.vtm.go/pull/242) ([MPParsley](https://github.com/MPParsley))
+- Run tests on Python 3.9 [\#240](https://github.com/add-ons/plugin.video.vtm.go/pull/240) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.2.0](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.0) (2020-11-11)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.1.5...v1.2.0)

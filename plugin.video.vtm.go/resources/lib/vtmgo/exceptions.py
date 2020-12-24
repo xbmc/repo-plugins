@@ -35,5 +35,6 @@ class StreamGeoblockedException(Exception):
 class StreamUnavailableException(Exception):
     """ Is thrown when an unavailable item is played. """
 
+
 class LimitReachedException(Exception):
     """ Is thrown when the limit is reached to play an stream. """

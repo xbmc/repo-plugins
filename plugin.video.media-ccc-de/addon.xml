@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.media-ccc-de" name="media.ccc.de" version="0.1.2" provider-name="Tobias Gruetzmacher">
+<addon id="plugin.video.media-ccc-de" name="media.ccc.de" version="0.2.0" provider-name="Tobias Gruetzmacher">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
-    <import addon="script.module.requests" version="2.3.0"/>
-    <import addon="script.module.routing" version="0.2.0"/>
+    <import addon="script.module.requests" version="2.15.1"/>
+    <import addon="script.module.routing" version="0.2.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -13,19 +13,19 @@
     <summary lang="de_DE">Videos von Chaos Computer Club Veranstaltungen.</summary>
     <description lang="en_GB">This addon provides access to videos published on https://media.ccc.de/ (mostly lecture recordings of CCC events) </description>
     <description lang="de_DE">Dieses Add-On ermöglicht den Zugriff auf Videos, die auf https://media.ccc.de/ veröffentlicht wurden (größtenteils Vortragsmitschnitte von CCC-Veranstaltungen)</description>
-    <disclaimer lang="en_GB"></disclaimer>
-    <news>v0.1.2 (2018-01-01)
-- The guckwat! release
-- Select correct stream even when slides are present. (Fixes #20)
-
-v0.1.1 (2017-12-20)
-- The tuwat! release
-- Supports multiple translated streams (if available)</news>
+    <news>v0.2.0 (2020-12-23)
+- The "F*** 2020" release
+- Remove option to fallback to unencrypted streams
+- Inital support for MPEG-DASH streams (#32)</news>
     <language>de en</language>
     <platform>all</platform>
     <license>MIT License</license>
     <website>https://media.ccc.de/</website>
     <email>tobias-kodi@23.gs</email>
-    <source>https://github.com/cccc/plugin.video.media-ccc-de</source>
+    <source>https://github.com/voc/plugin.video.media-ccc-de</source>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
   </extension>
 </addon>

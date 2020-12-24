@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.0.2](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.2) (2020-12-21)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.1...v1.0.2)
+
+**Fixed bugs:**
+
+- Don't show the password in the debug log [\#24](https://github.com/add-ons/plugin.video.streamz/pull/24) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Run CI on Windows [\#23](https://github.com/add-ons/plugin.video.streamz/pull/23) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.1](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.1) (2020-12-07)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.0...v1.0.1)

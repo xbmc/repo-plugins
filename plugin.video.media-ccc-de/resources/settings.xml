@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting id="quality" type="enum" label="30100" lvalues="30101|30102" default="0"/>
+	<setting id="format" type="enum" label="30110" lvalues="30111|30112" default="0"/>
+	<setting id="dash" type="bool" label="30120" default="false"/>
+</settings>

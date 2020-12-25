@@ -1,0 +1,48 @@
+v0.2.0 (2020-12-23)
+- The "F*** 2020" release
+- Remove option to fallback to unencrypted streams
+- Inital support for MPEG-DASH streams (#32)
+
+v0.1.2 (2018-01-01)
+- The guckwat! release
+- Select correct stream even when slides are present. (Fixes #20)
+
+v0.1.1 (2017-12-20)
+- The tuwat! release
+- Supports multiple translated streams (if available)
+
+v0.1.0 (2017-04-16)
+- EasterHegg 2017 release.
+- Use "slug" instead of obsolete "webgen_location".
+- Track coverage on Travis-CI.
+- Refactor GUI code into extra file. (also fixes #11)
+- Migrated translations from XML to PO.
+- Add "insecure" option for devices with old/broken TLS setup (fixes #2, #12).
+- Skip streams without urls.
+- Switch to streaming API v2.
+
+v0.0.5 (2016-02-29)
+- The everything-was-broken release
+- Fix route to capture complete path (fixes #5).
+- Update dependency to express required Kodi version.
+- Remove orig_mime since display_mime_type was dropped from the API.
+- Refactor recording code a bit (also fixes #9).
+- Use Travis-CI for some tests.
+- Make reading recording JSON a bit safer.
+- Add more metadata.
+
+v0.0.4 (2016-01-07)
+- The right-after-congress-release
+- switch to kodi-plugin-routing
+- better HTTP error handling
+- Prefer recordings with more audio streams (fixes #3)
+
+v0.0.3 (2015-08-13)
+- Live streaming of CCC events
+- Add a callback to increase view count on media.ccc.de
+
+v0.0.2 (2015-01-04)
+- Preferences for HD/SD and MP4/WEBM
+
+v0.0.1 (2014-12-26)
+- Initial version

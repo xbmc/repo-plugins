@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tvvlaanderen" name="TV Vlaanderen" version="1.0.1" provider-name="Michaël Arnauts">
+<addon id="plugin.video.tvvlaanderen" name="TV Vlaanderen" version="1.0.2" provider-name="Michaël Arnauts">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.dateutil" version="2.6.0"/>
@@ -22,8 +22,8 @@
         <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by TV Vlaanderen and is provided 'as is' without any warranty of any kind. TV Vlaanderen is a brand of Canal+ Luxembourg S. à r.l.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-        <news>v1.0.1
-- Fix TV Guide on Windows.</news>
+        <news>v1.0.2 (2020-12-21)
+- Don't leak credentials in the Kodi log when debug logging.</news>
         <source>https://github.com/add-ons/plugin.video.tvvlaanderen</source>
         <assets>
             <icon>resources/icon.png</icon>

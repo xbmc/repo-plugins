@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.media-ccc-de" name="media.ccc.de" version="0.2.0+matrix.1" provider-name="Tobias Gruetzmacher">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+    <import addon="script.module.routing" version="0.2.3"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Videos of Chaos Computer Club events.</summary>
+    <summary lang="de_DE">Videos von Chaos Computer Club Veranstaltungen.</summary>
+    <description lang="en_GB">This addon provides access to videos published on https://media.ccc.de/ (mostly lecture recordings of CCC events) </description>
+    <description lang="de_DE">Dieses Add-On ermöglicht den Zugriff auf Videos, die auf https://media.ccc.de/ veröffentlicht wurden (größtenteils Vortragsmitschnitte von CCC-Veranstaltungen)</description>
+    <news>v0.2.0 (2020-12-23)
+- The "F*** 2020" release
+- Remove option to fallback to unencrypted streams
+- Inital support for MPEG-DASH streams (#32)</news>
+    <language>de en</language>
+    <platform>all</platform>
+    <license>MIT</license>
+    <website>https://media.ccc.de/</website>
+    <email>tobias-kodi@23.gs</email>
+    <source>https://github.com/voc/plugin.video.media-ccc-de</source>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>
